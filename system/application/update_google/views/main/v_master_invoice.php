@@ -1,0 +1,1586 @@
+<?
+/* 	These code was generated using phpCIGen v 0.1.b (1/08/2009)
+	#zaqi 		zaqi.smart@gmail.com,http://zenzaqi.blogspot.com, 
+	#CV. Trust Solution, jl. Saronojiwo 19 Surabaya, http://www.ts.co.id
+	
+	+ Module  		: master_invoice View
+	+ Description	: For record view
+	+ Filename 		: v_master_invoice.php
+ 	+ Author  		: 
+ 	+ Created on 13/Oct/2009 15:51:36
+	
+*/
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+</head>
+<style type="text/css">
+        p { width:650px; }
+		.search-item {
+			font:normal 11px tahoma, arial, helvetica, sans-serif;
+			padding:3px 10px 3px 10px;
+			border:1px solid #fff;
+			border-bottom:1px solid #eeeeee;
+			white-space:normal;
+			color:#555;
+		}
+		.search-item h3 {
+			display:block;
+			font:inherit;
+			font-weight:bold;
+			color:#222;
+		}
+		
+		.search-item h3 span {
+			float: right;
+			font-weight:normal;
+			margin:0 0 5px 5px;
+			width:100px;
+			display:block;
+			clear:none;
+		}
+    </style>
+<script>
+/* declare function */		
+var master_invoice_DataStore;
+var master_invoice_ColumnModel;
+var master_invoiceListEditorGrid;
+var master_invoice_createForm;
+var master_invoice_createWindow;
+var master_invoice_searchForm;
+var master_invoice_searchWindow;
+var master_invoice_SelectedRow;
+var master_invoice_ContextMenu;
+//for detail data
+var detail_invoice_DataStor;
+var detail_invoiceListEditorGrid;
+var detail_invoice_ColumnModel;
+var detail_invoice_proxy;
+var detail_invoice_writer;
+var detail_invoice_reader;
+var editor_detail_invoice;
+
+//declare konstant
+var post2db = '';
+var msg = '';
+var pageS=15;
+
+/* declare variable here for Field*/
+var invoice_idField;
+var invoice_noField;
+var invoice_supplierField;
+var invoice_noterimaField;
+var invoice_tanggalField;
+var invoice_nilaiField;
+var invoice_jatuhtempoField;
+var invoice_penagihField;
+var invoice_idSearchField;
+var invoice_noSearchField;
+var invoice_supplierSearchField;
+var invoice_noterimaSearchField;
+var invoice_tanggalSearchField;
+var invoice_nilaiSearchField;
+var invoice_jatuhtempoSearchField;
+var invoice_penagihSearchField;
+
+/* on ready fuction */
+Ext.onReady(function(){
+  	Ext.QuickTips.init();	/* Initiate quick tips icon */
+  
+  	/* Function for Saving inLine Editing */
+	function master_invoice_update(oGrid_event){
+		var invoice_id_update_pk="";
+		var invoice_no_update=null;
+		var invoice_supplier_update=null;
+		var invoice_noterima_update=null;
+		var invoice_tanggal_update_date="";
+		var invoice_nilai_update=null;
+		var invoice_jatuhtempo_update_date="";
+		var invoice_penagih_update=null;
+
+		invoice_id_update_pk = oGrid_event.record.data.invoice_id;
+		if(oGrid_event.record.data.invoice_no!== null){invoice_no_update = oGrid_event.record.data.invoice_no;}
+		if(oGrid_event.record.data.invoice_supplier!== null){invoice_supplier_update = oGrid_event.record.data.invoice_supplier;}
+		if(oGrid_event.record.data.invoice_noterima!== null){invoice_noterima_update = oGrid_event.record.data.invoice_noterima;}
+	 	if(oGrid_event.record.data.invoice_tanggal!== ""){invoice_tanggal_update_date =oGrid_event.record.data.invoice_tanggal.format('Y-m-d');}
+		if(oGrid_event.record.data.invoice_nilai!== null){invoice_nilai_update = oGrid_event.record.data.invoice_nilai;}
+	 	if(oGrid_event.record.data.invoice_jatuhtempo!== ""){invoice_jatuhtempo_update_date =oGrid_event.record.data.invoice_jatuhtempo.format('Y-m-d');}
+		if(oGrid_event.record.data.invoice_penagih!== null){invoice_penagih_update = oGrid_event.record.data.invoice_penagih;}
+
+		Ext.Ajax.request({  
+			waitMsg: 'Please wait...',
+			url: 'index.php?c=c_master_invoice&m=get_action',
+			params: {
+				task: "UPDATE",
+				invoice_id	: invoice_id_update_pk, 
+				invoice_no	:invoice_no_update,  
+				invoice_supplier	:invoice_supplier_update,  
+				invoice_noterima	:invoice_noterima_update,  
+				invoice_tanggal	: invoice_tanggal_update_date, 
+				invoice_nilai	:invoice_nilai_update,  
+				invoice_jatuhtempo	: invoice_jatuhtempo_update_date, 
+				invoice_penagih	:invoice_penagih_update,  
+			}, 
+			success: function(response){							
+				var result=eval(response.responseText);
+				switch(result){
+					case 1:
+						master_invoice_DataStore.commitChanges();
+						master_invoice_DataStore.reload();
+						break;
+					default:
+						Ext.MessageBox.show({
+						   title: 'Warning',
+						   msg: 'We could\'t not save the master_invoice.',
+						   buttons: Ext.MessageBox.OK,
+						   animEl: 'save',
+						   icon: Ext.MessageBox.WARNING
+						});
+						break;
+				}
+			},
+			failure: function(response){
+				var result=response.responseText;
+				Ext.MessageBox.show({
+				   title: 'Error',
+				   msg: 'Could not connect to the database. retry later.',
+				   buttons: Ext.MessageBox.OK,
+				   animEl: 'database',
+				   icon: Ext.MessageBox.ERROR
+				});	
+			}									    
+		});   
+	}
+  	/* End of Function */
+  
+  	/* Function for add data, open window create form */
+	function master_invoice_create(){
+	
+		if(is_master_invoice_form_valid()){	
+		var invoice_id_create_pk=null; 
+		var invoice_no_create=null; 
+		var invoice_supplier_create=null; 
+		var invoice_noterima_create=null; 
+		var invoice_tanggal_create_date=""; 
+		var invoice_nilai_create=null; 
+		var invoice_jatuhtempo_create_date=""; 
+		var invoice_penagih_create=null; 
+
+		if(invoice_idField.getValue()!== null){invoice_id_create_pk = invoice_idField.getValue();}else{invoice_id_create_pk=get_pk_id();} 
+		if(invoice_noField.getValue()!== null){invoice_no_create = invoice_noField.getValue();} 
+		if(invoice_supplierField.getValue()!== null){invoice_supplier_create = invoice_supplier_idField.getValue();} 
+		if(invoice_noterimaField.getValue()!== null){invoice_noterima_create = invoice_noterimaField.getValue();} 
+		if(invoice_tanggalField.getValue()!== ""){invoice_tanggal_create_date = invoice_tanggalField.getValue().format('Y-m-d');} 
+		if(invoice_nilaiField.getValue()!== null){invoice_nilai_create = invoice_nilaiField.getValue();} 
+		if(invoice_jatuhtempoField.getValue()!== ""){invoice_jatuhtempo_create_date = invoice_jatuhtempoField.getValue().format('Y-m-d');} 
+		if(invoice_penagihField.getValue()!== null){invoice_penagih_create = invoice_penagihField.getValue();} 
+
+		Ext.Ajax.request({  
+			waitMsg: 'Please wait...',
+			url: 'index.php?c=c_master_invoice&m=get_action',
+			params: {
+				task: post2db,
+				invoice_id	: invoice_id_create_pk, 
+				invoice_no	: invoice_no_create, 
+				invoice_supplier	: invoice_supplier_create, 
+				invoice_noterima	: invoice_noterima_create, 
+				invoice_tanggal	: invoice_tanggal_create_date, 
+				invoice_nilai	: invoice_nilai_create, 
+				invoice_jatuhtempo	: invoice_jatuhtempo_create_date, 
+				invoice_penagih	: invoice_penagih_create, 
+			}, 
+			success: function(response){             
+				var result=eval(response.responseText);
+				switch(result){
+					case 1:
+						detail_invoice_purge()
+						detail_invoice_insert();
+						Ext.MessageBox.alert(post2db+' OK','The Master_invoice was '+msg+' successfully.');
+						master_invoice_DataStore.reload();
+						master_invoice_createWindow.hide();
+						break;
+					default:
+						Ext.MessageBox.show({
+						   title: 'Warning',
+						   msg: 'We could\'t not '+msg+' the Master_invoice.',
+						   buttons: Ext.MessageBox.OK,
+						   animEl: 'save',
+						   icon: Ext.MessageBox.WARNING
+						});
+						break;
+				}        
+			},
+			failure: function(response){
+				var result=response.responseText;
+				Ext.MessageBox.show({
+					   title: 'Error',
+					   msg: 'Could not connect to the database. retry later.',
+					   buttons: Ext.MessageBox.OK,
+					   animEl: 'database',
+					   icon: Ext.MessageBox.ERROR
+				});	
+			}                      
+		});
+		} else {
+			Ext.MessageBox.show({
+				title: 'Warning',
+				msg: 'Your Form is not valid!.',
+				buttons: Ext.MessageBox.OK,
+				animEl: 'save',
+				icon: Ext.MessageBox.WARNING
+			});
+		}
+	}
+ 	/* End of Function */
+  
+  	/* Function for get PK field */
+	function get_pk_id(){
+		if(post2db=='UPDATE')
+			return master_invoiceListEditorGrid.getSelectionModel().getSelected().get('invoice_id');
+		else 
+			return 0;
+	}
+	/* End of Function  */
+	
+	/* Reset form before loading */
+	function master_invoice_reset_form(){
+		invoice_idField.reset();
+		invoice_idField.setValue(null);
+		invoice_noField.reset();
+		invoice_noField.setValue(null);
+		invoice_supplierField.reset();
+		invoice_supplierField.setValue(null);
+		invoice_noterimaField.reset();
+		invoice_noterimaField.setValue(null);
+		invoice_tanggalField.reset();
+		invoice_tanggalField.setValue(null);
+		invoice_nilaiField.reset();
+		invoice_nilaiField.setValue(null);
+		invoice_jatuhtempoField.reset();
+		invoice_jatuhtempoField.setValue(null);
+		invoice_penagihField.reset();
+		invoice_penagihField.setValue(null);
+	}
+ 	/* End of Function */
+  
+	/* setValue to EDIT */
+	function master_invoice_set_form(){
+		invoice_idField.setValue(master_invoiceListEditorGrid.getSelectionModel().getSelected().get('invoice_id'));
+		invoice_noField.setValue(master_invoiceListEditorGrid.getSelectionModel().getSelected().get('invoice_no'));
+		invoice_supplierField.setValue(master_invoiceListEditorGrid.getSelectionModel().getSelected().get('invoice_supplier'));
+		invoice_noterimaField.setValue(master_invoiceListEditorGrid.getSelectionModel().getSelected().get('invoice_noterima'));
+		invoice_tanggalField.setValue(master_invoiceListEditorGrid.getSelectionModel().getSelected().get('invoice_tanggal'));
+		invoice_nilaiField.setValue(master_invoiceListEditorGrid.getSelectionModel().getSelected().get('invoice_nilai'));
+		invoice_jatuhtempoField.setValue(master_invoiceListEditorGrid.getSelectionModel().getSelected().get('invoice_jatuhtempo'));
+		invoice_penagihField.setValue(master_invoiceListEditorGrid.getSelectionModel().getSelected().get('invoice_penagih'));
+	}
+	/* End setValue to EDIT*/
+  
+	/* Function for Check if the form is valid */
+	function is_master_invoice_form_valid(){
+		return (true &&  true &&  invoice_supplierField.isValid() && invoice_noterimaField.isValid() && true &&  true &&  true &&  true &&  true &&  true &&  true &&  true &&  true  );
+	}
+  	/* End of Function */
+  
+  	/* Function for Displaying  create Window Form */
+	function display_form_window(){
+		if(!master_invoice_createWindow.isVisible()){
+			master_invoice_reset_form();
+			post2db='CREATE';
+			msg='created';
+			cbo_dinvoice_produkDataStore.load();
+			cbo_dinvoice_satuanDataStore.load();
+			master_invoice_createWindow.show();
+		} else {
+			master_invoice_createWindow.toFront();
+		}
+	}
+  	/* End of Function */
+ 
+  	/* Function for Delete Confirm */
+	function master_invoice_confirm_delete(){
+		// only one master_invoice is selected here
+		if(master_invoiceListEditorGrid.selModel.getCount() == 1){
+			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', master_invoice_delete);
+		} else if(master_invoiceListEditorGrid.selModel.getCount() > 1){
+			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', master_invoice_delete);
+		} else {
+			Ext.MessageBox.show({
+				title: 'Warning',
+				msg: 'You can\'t really delete something you haven\'t selected?',
+				buttons: Ext.MessageBox.OK,
+				animEl: 'save',
+				icon: Ext.MessageBox.WARNING
+			});
+		}
+	}
+  	/* End of Function */
+  
+	/* Function for Update Confirm */
+	function master_invoice_confirm_update(){
+		/* only one record is selected here */
+		if(master_invoiceListEditorGrid.selModel.getCount() == 1) {
+			master_invoice_set_form();
+			post2db='UPDATE';
+			detail_invoice_DataStore.load({params : {master_id : eval(get_pk_id()), start:0, limit:pageS}});
+			msg='updated';
+			master_invoice_createWindow.show();
+		} else {
+			Ext.MessageBox.show({
+				title: 'Warning',
+				msg: 'You can\'t really update something you haven\'t selected?',
+				buttons: Ext.MessageBox.OK,
+				animEl: 'save',
+				icon: Ext.MessageBox.WARNING
+			});
+		}
+	}
+  	/* End of Function */
+  
+  	/* Function for Delete Record */
+	function master_invoice_delete(btn){
+		if(btn=='yes'){
+			var selections = master_invoiceListEditorGrid.selModel.getSelections();
+			var prez = [];
+			for(i = 0; i< master_invoiceListEditorGrid.selModel.getCount(); i++){
+				prez.push(selections[i].json.invoice_id);
+			}
+			var encoded_array = Ext.encode(prez);
+			Ext.Ajax.request({ 
+				waitMsg: 'Please Wait',
+				url: 'index.php?c=c_master_invoice&m=get_action', 
+				params: { task: "DELETE", ids:  encoded_array }, 
+				success: function(response){
+					var result=eval(response.responseText);
+					switch(result){
+						case 1:  // Success : simply reload
+							master_invoice_DataStore.reload();
+							break;
+						default:
+							Ext.MessageBox.show({
+								title: 'Warning',
+								msg: 'Could not delete the entire selection',
+								buttons: Ext.MessageBox.OK,
+								animEl: 'save',
+								icon: Ext.MessageBox.WARNING
+							});
+							break;
+					}
+				},
+				failure: function(response){
+					var result=response.responseText;
+					Ext.MessageBox.show({
+					   title: 'Error',
+					   msg: 'Could not connect to the database. retry later.',
+					   buttons: Ext.MessageBox.OK,
+					   animEl: 'database',
+					   icon: Ext.MessageBox.ERROR
+					});	
+				}
+			});
+		}  
+	}
+  	/* End of Function */
+  
+	/* Function for Retrieve DataStore */
+	master_invoice_DataStore = new Ext.data.Store({
+		id: 'master_invoice_DataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_master_invoice&m=get_action', 
+			method: 'POST'
+		}),
+		baseParams:{task: "LIST"}, // parameter yang di $_POST ke Controller
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'invoice_id'
+		},[
+		/* dataIndex => insert intomaster_invoice_ColumnModel, Mapping => for initiate table column */ 
+			{name: 'invoice_id', type: 'int', mapping: 'invoice_id'}, 
+			{name: 'invoice_no', type: 'string', mapping: 'invoice_no'}, 
+			{name: 'invoice_supplier', type: 'string', mapping: 'supplier_nama'}, 
+			{name: 'invoice_noterima', type: 'string', mapping: 'terima_no'}, 
+			{name: 'invoice_tanggal', type: 'date', dateFormat: 'Y-m-d', mapping: 'invoice_tanggal'}, 
+			{name: 'invoice_nilai', type: 'float', mapping: 'invoice_nilai'},
+			{name: 'invoice_jumlah', type: 'float', mapping: 'jumlah_barang'},
+			{name: 'invoice_total', type: 'float', mapping: 'total_nilai'}, 
+			{name: 'invoice_jatuhtempo', type: 'date', dateFormat: 'Y-m-d', mapping: 'invoice_jatuhtempo'}, 
+			{name: 'invoice_penagih', type: 'string', mapping: 'invoice_penagih'}, 
+			{name: 'invoice_creator', type: 'string', mapping: 'invoice_creator'}, 
+			{name: 'invoice_date_create', type: 'date', dateFormat: 'Y-m-d', mapping: 'invoice_date_create'}, 
+			{name: 'invoice_update', type: 'string', mapping: 'invoice_update'}, 
+			{name: 'invoice_date_update', type: 'date', dateFormat: 'Y-m-d', mapping: 'invoice_date_update'}, 
+			{name: 'invoice_revised', type: 'int', mapping: 'invoice_revised'} 
+		]),
+		sortInfo:{field: 'invoice_id', direction: "DESC"}
+	});
+	/* End of Function */
+	
+	cbo_invoice_tbeliDataStore = new Ext.data.Store({
+		id: 'cbo_invoice_tbeliDataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_master_invoice&m=get_tbeli_list', 
+			method: 'POST'
+		}),
+		baseParams:{start: 0, limit: 10 }, // parameter yang di $_POST ke Controller
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'terima_id'
+		},[
+		/* dataIndex => insert intocustomer_note_ColumnModel, Mapping => for initiate table column */ 
+			{name: 'cbo_invoice_terima_id', type: 'int', mapping: 'terima_id'},
+			{name: 'cbo_invoice_terima_no', type: 'string', mapping: 'terima_no'},
+			{name: 'cbo_invoice_terima_supplier', type: 'string', mapping: 'supplier_nama'},
+			{name: 'cbo_invoice_terima_supplier_id', type: 'string', mapping: 'supplier_id'}
+		]),
+		sortInfo:{field: 'cbo_invoice_terima_no', direction: "ASC"}
+	});
+	var invoice_tbeli_tpl = new Ext.XTemplate(
+        '<tpl for="."><div class="search-item">',
+            '<span><b>{cbo_invoice_terima_no}</b><br /></span>',
+            'Supplier: {cbo_invoice_terima_supplier}',
+        '</div></tpl>'
+    );
+    
+  	/* Function for Identify of Window Column Model */
+	master_invoice_ColumnModel = new Ext.grid.ColumnModel(
+		[{
+			header: '#',
+			readOnly: true,
+			dataIndex: 'invoice_id',
+			width: 40,
+			renderer: function(value, cell){
+				cell.css = "readonlycell"; // Mengambil Value dari Class di dalam CSS 
+				return value;
+				},
+			hidden: false
+		},
+		{
+			header: 'No. Invoice',
+			dataIndex: 'invoice_no',
+			width: 150,
+			sortable: true,
+			editor: new Ext.form.TextField({
+				maxLength: 50
+          	})
+		}, 
+		{
+			header: 'Supplier',
+			dataIndex: 'invoice_supplier',
+			width: 150,
+			sortable: true,
+			editor: new Ext.form.NumberField({
+				allowBlank: false,
+				allowDecimals: false,
+				allowNegative: false,
+				blankText: '0',
+				maxLength: 11,
+				maskRe: /([0-9]+)$/
+			})
+		}, 
+		{
+			header: 'No. Terima',
+			dataIndex: 'invoice_noterima',
+			width: 150,
+			sortable: true,
+			editor: new Ext.form.NumberField({
+				allowBlank: false,
+				allowDecimals: false,
+				allowNegative: false,
+				blankText: '0',
+				maxLength: 11,
+				maskRe: /([0-9]+)$/
+			})
+		}, 
+		{
+			header: 'Tanggal',
+			dataIndex: 'invoice_tanggal',
+			width: 150,
+			sortable: true,
+			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
+			editor: new Ext.form.DateField({
+				format: 'Y-m-d'
+			})
+		},
+		{
+			header: 'Jumlah Item',
+			dataIndex: 'invoice_jumlah',
+			width: 150,
+			sortable: true,
+			readOnly: true,
+			renderer: Ext.util.Format.numberRenderer('0,000')
+		},
+		{
+			header: 'Total Nilai',
+			dataIndex: 'invoice_total',
+			width: 150,
+			sortable: true,
+			readOnly: true,
+			renderer: Ext.util.Format.numberRenderer('0,000')
+		},
+		{
+			header: 'Biaya',
+			dataIndex: 'invoice_nilai',
+			width: 150,
+			sortable: true,
+			editor: new Ext.form.NumberField({
+				allowDecimals: true,
+				allowNegative: false,
+				blankText: '0',
+				maxLength: 22,
+				maskRe: /([0-9]+)$/
+			})
+		}, 
+		{
+			header: 'Jatuh Tempo',
+			dataIndex: 'invoice_jatuhtempo',
+			width: 150,
+			sortable: true,
+			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
+			editor: new Ext.form.DateField({
+				format: 'Y-m-d'
+			})
+		}, 
+		{
+			header: 'Penagih',
+			dataIndex: 'invoice_penagih',
+			width: 150,
+			sortable: true,
+			editor: new Ext.form.TextField({
+				maxLength: 50
+          	})
+		}, 
+		{
+			header: 'Creator',
+			dataIndex: 'invoice_creator',
+			width: 150,
+			sortable: true,
+			hidden: true,
+			readOnly: true,
+		}, 
+		{
+			header: 'Date Create',
+			dataIndex: 'invoice_date_create',
+			width: 150,
+			sortable: true,
+			hidden: true,
+			readOnly: true,
+		}, 
+		{
+			header: 'Update',
+			dataIndex: 'invoice_update',
+			width: 150,
+			sortable: true,
+			hidden: true,
+			readOnly: true,
+		}, 
+		{
+			header: 'Date Update',
+			dataIndex: 'invoice_date_update',
+			width: 150,
+			sortable: true,
+			hidden: true,
+			readOnly: true,
+		}, 
+		{
+			header: 'Revised',
+			dataIndex: 'invoice_revised',
+			width: 150,
+			sortable: true,
+			hidden: true,
+			readOnly: true,
+		}	]);
+	
+	master_invoice_ColumnModel.defaultSortable= true;
+	/* End of Function */
+    
+	/* Declare DataStore and  show datagrid list */
+	master_invoiceListEditorGrid =  new Ext.grid.EditorGridPanel({
+		id: 'master_invoiceListEditorGrid',
+		el: 'fp_master_invoice',
+		title: 'List Of Master_invoice',
+		autoHeight: true,
+		store: master_invoice_DataStore, // DataStore
+		cm: master_invoice_ColumnModel, // Nama-nama Columns
+		enableColLock:false,
+		frame: true,
+		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
+		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
+		viewConfig: { forceFit:true },
+	  	width: 800,
+		bbar: new Ext.PagingToolbar({
+			pageSize: pageS,
+			store: master_invoice_DataStore,
+			displayInfo: true
+		}),
+		/* Add Control on ToolBar */
+		tbar: [
+		{
+			text: 'Add',
+			tooltip: 'Add new record',
+			iconCls:'icon-adds',    				// this is defined in our styles.css
+			handler: display_form_window
+		}, '-',{
+			text: 'Edit',
+			tooltip: 'Edit selected record',
+			iconCls:'icon-update',
+			handler: master_invoice_confirm_update   // Confirm before updating
+		}, '-',{
+			text: 'Delete',
+			tooltip: 'Delete selected record',
+			iconCls:'icon-delete',
+			handler: master_invoice_confirm_delete   // Confirm before deleting
+		}, '-', {
+			text: 'Search',
+			tooltip: 'Advanced Search',
+			iconCls:'icon-search',
+			handler: display_form_search_window 
+		}, '-', 
+			new Ext.app.SearchField({
+			store: master_invoice_DataStore,
+			params: {start: 0, limit: pageS},
+			width: 120
+		}),'-',{
+			text: 'Refresh',
+			tooltip: 'Refresh datagrid',
+			handler: master_invoice_reset_search,
+			iconCls:'icon-refresh'
+		},'-',{
+			text: 'Export Excel',
+			tooltip: 'Export to Excel(.xls) Document',
+			iconCls:'icon-xls',
+			handler: master_invoice_export_excel
+		}, '-',{
+			text: 'Print',
+			tooltip: 'Print Document',
+			iconCls:'icon-print',
+			handler: master_invoice_print  
+		}
+		]
+	});
+	master_invoiceListEditorGrid.render();
+	/* End of DataStore */
+     
+	/* Create Context Menu */
+	master_invoice_ContextMenu = new Ext.menu.Menu({
+		id: 'master_invoice_ListEditorGridContextMenu',
+		items: [
+		{ 
+			text: 'Edit', tooltip: 'Edit selected record', 
+			iconCls:'icon-update',
+			handler: master_invoice_editContextMenu 
+		},
+		{ 
+			text: 'Delete', 
+			tooltip: 'Delete selected record', 
+			iconCls:'icon-delete',
+			handler: master_invoice_confirm_delete 
+		},
+		'-',
+		{ 
+			text: 'Print',
+			tooltip: 'Print Document',
+			iconCls:'icon-print',
+			handler: master_invoice_print 
+		},
+		{ 
+			text: 'Export Excel', 
+			tooltip: 'Export to Excel(.xls) Document',
+			iconCls:'icon-xls',
+			handler: master_invoice_export_excel 
+		}
+		]
+	}); 
+	/* End of Declaration */
+	
+	/* Event while selected row via context menu */
+	function onmaster_invoice_ListEditGridContextMenu(grid, rowIndex, e) {
+		e.stopEvent();
+		var coords = e.getXY();
+		master_invoice_ContextMenu.rowRecord = grid.store.getAt(rowIndex);
+		grid.selModel.selectRow(rowIndex);
+		master_invoice_SelectedRow=rowIndex;
+		master_invoice_ContextMenu.showAt([coords[0], coords[1]]);
+  	}
+  	/* End of Function */
+	
+	/* function for editing row via context menu */
+	function master_invoice_editContextMenu(){
+		master_invoiceListEditorGrid.startEditing(master_invoice_SelectedRow,1);
+  	}
+	/* End of Function */
+  	
+	master_invoiceListEditorGrid.addListener('rowcontextmenu', onmaster_invoice_ListEditGridContextMenu);
+	master_invoice_DataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
+	master_invoiceListEditorGrid.on('afteredit', master_invoice_update); // inLine Editing Record
+	
+	/* Identify  invoice_id Field */
+	invoice_idField= new Ext.form.NumberField({
+		id: 'invoice_idField',
+		allowNegatife : false,
+		blankText: '0',
+		allowBlank: false,
+		allowDecimals: false,
+				hidden: true,
+		readOnly: true,
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
+	});
+	/* Identify  invoice_no Field */
+	invoice_noField= new Ext.form.TextField({
+		id: 'invoice_noField',
+		fieldLabel: 'No. Invoice',
+		maxLength: 50,
+		anchor: '95%'
+	});
+	/* Identify  invoice_supplier Field */
+	invoice_supplierField= new Ext.form.TextField({
+		id: 'invoice_supplierField',
+		fieldLabel: 'Supplier',
+		maxLength: 50,
+		editable: false,
+		anchor: '95%'
+	});
+	invoice_supplier_idField=new Ext.form.NumberField();
+	/* Identify  invoice_noterima Field */
+	invoice_noterimaField= new Ext.form.ComboBox({
+		id: 'invoice_noterimaField',
+		fieldLabel: 'No. Terima',
+		store: cbo_invoice_tbeliDataStore,
+		mode: 'remote',
+		displayField:'cbo_invoice_terima_no',
+		valueField: 'cbo_invoice_terima_id',
+        typeAhead: false,
+        loadingText: 'Searching...',
+        pageSize:10,
+        hideTrigger:false,
+        tpl: invoice_tbeli_tpl,
+        //applyTo: 'search',
+        itemSelector: 'div.search-item',
+		triggerAction: 'all',
+		lazyRender:true,
+		listClass: 'x-combo-list-small',
+		anchor: '95%'
+	});
+	/* Identify  invoice_tanggal Field */
+	invoice_tanggalField= new Ext.form.DateField({
+		id: 'invoice_tanggalField',
+		fieldLabel: 'Tanggal',
+		format : 'Y-m-d',
+	});
+	/* Identify  invoice_nilai Field */
+	invoice_nilaiField= new Ext.form.NumberField({
+		id: 'invoice_nilaiField',
+		fieldLabel: 'Biaya',
+		allowNegatife : false,
+		blankText: '0',
+		allowDecimals: true,
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
+	});
+	/* Identify  invoice_jatuhtempo Field */
+	invoice_jatuhtempoField= new Ext.form.DateField({
+		id: 'invoice_jatuhtempoField',
+		fieldLabel: 'Jatuhtempo',
+		format : 'Y-m-d',
+	});
+	/* Identify  invoice_penagih Field */
+	invoice_penagihField= new Ext.form.TextField({
+		id: 'invoice_penagihField',
+		fieldLabel: 'Penagih',
+		maxLength: 50,
+		anchor: '95%'
+	});
+	
+	invoice_dtbeliDataStore = new Ext.data.Store({
+		id: 'invoice_dtbeliDataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_master_invoice&m=get_dtbeli_list', 
+			method: 'POST'
+		}),
+		//baseParams:{start: 0, limit: 10 }, // parameter yang di $_POST ke Controller
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'dterima_id'
+		},[
+		/* dataIndex => insert intocustomer_note_ColumnModel, Mapping => for initiate table column */ 
+			{name: 'invoice_dterima_id', type: 'int', mapping: 'dterima_id'},
+			{name: 'invoice_dterima_produk', type: 'int', mapping: 'dterima_produk'},
+			{name: 'invoice_dterima_satuan', type: 'int', mapping: 'dterima_satuan'},
+			{name: 'invoice_dterima_jumlah', type: 'int', mapping: 'dterima_jumlah'},
+			{name: 'invoice_dorder_harga', type: 'int', mapping: 'dorder_harga'},
+			{name: 'invoice_dorder_diskon', type: 'int', mapping: 'dorder_diskon'}
+		]),
+		sortInfo:{field: 'invoice_dterima_produk', direction: "ASC"}
+	});
+	//invoice_dtbeliDataStore.load({params: {master:3}});
+	
+	invoice_noterimaField.on('select', function(){
+		
+		var j=cbo_invoice_tbeliDataStore.find('cbo_invoice_terima_id',invoice_noterimaField.getValue());
+		
+		if(cbo_invoice_tbeliDataStore.getCount()){
+			invoice_supplierField.setValue(cbo_invoice_tbeliDataStore.getAt(j).data.cbo_invoice_terima_supplier);
+			invoice_supplier_idField.setValue(cbo_invoice_tbeliDataStore.getAt(j).data.cbo_invoice_terima_supplier_id);
+			
+			invoice_dtbeliDataStore.load({
+				params: {master:invoice_noterimaField.getValue()},
+				callback: function(opts, success, response){
+					if(success){
+						for(i=0;i<invoice_dtbeliDataStore.getTotalCount();i++){
+							$di_produk = invoice_dtbeliDataStore.getAt(i).data.invoice_dterima_produk;
+							$di_satuan = invoice_dtbeliDataStore.getAt(i).data.invoice_dterima_satuan;
+							$di_jumlah = invoice_dtbeliDataStore.getAt(i).data.invoice_dterima_jumlah;
+							$di_harga = invoice_dtbeliDataStore.getAt(i).data.invoice_dorder_harga;
+							$di_diskon = invoice_dtbeliDataStore.getAt(i).data.invoice_dorder_diskon;
+							detail_invoice_add_bytbeli($di_produk, $di_satuan, $di_jumlah, $di_harga, $di_diskon);
+						}
+					}
+				}
+			});
+			
+			
+			//if(invoice_dtbeliDataStore.getCount()){
+//				//for($i=0;$i<=2;$i++){
+//					detail_invoice_add_bytbeli(100, 233);
+//				//}
+//			}
+			
+			//for($i=1;$i<=3;$i++){
+//				detail_invoice_add_bytbeli(invoice_noterimaField.getValue(), 233);
+//			}
+		}
+	});
+	
+  	/*Fieldset Master*/
+	master_invoice_masterGroup = new Ext.form.FieldSet({
+		title: 'Master',
+		autoHeight: true,
+		collapsible: true,
+		layout:'column',
+		items:[
+			{
+				columnWidth:0.5,
+				layout: 'form',
+				border:false,
+				items: [invoice_idField, invoice_noField, invoice_noterimaField, invoice_supplierField, invoice_tanggalField] 
+			},
+			{
+				columnWidth:0.5,
+				layout: 'form',
+				border:false,
+				items: [invoice_nilaiField, invoice_jatuhtempoField, invoice_penagihField, invoice_idField] 
+			}
+			]
+	
+	});
+	
+		
+	/*Detail Declaration */
+		
+	// Function for json reader of detail
+	var detail_invoice_reader=new Ext.data.JsonReader({
+		root: 'results',
+		totalProperty: 'total',
+		id: ''
+	},[
+	/* dataIndex => insert intoperawatan_ColumnModel, Mapping => for initiate table column */ 
+			{name: 'dinvoice_id', type: 'int', mapping: 'dinvoice_id'}, 
+			{name: 'dinvoice_master', type: 'int', mapping: 'dinvoice_master'}, 
+			{name: 'dinvoice_produk', type: 'int', mapping: 'dinvoice_produk'}, 
+			{name: 'dinvoice_satuan', type: 'int', mapping: 'dinvoice_satuan'}, 
+			{name: 'dinvoice_jumlah', type: 'int', mapping: 'dinvoice_jumlah'}, 
+			{name: 'dinvoice_harga', type: 'float', mapping: 'dinvoice_harga'}, 
+			{name: 'dinvoice_diskon', type: 'float', mapping: 'dinvoice_diskon'} 
+	]);
+	//eof
+	
+	//function for json writer of detail
+	var detail_invoice_writer = new Ext.data.JsonWriter({
+		encode: true,
+		writeAllFields: false
+	});
+	//eof
+	
+	/* Function for Retrieve DataStore of detail*/
+	detail_invoice_DataStore = new Ext.data.Store({
+		id: 'detail_invoice_DataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_master_invoice&m=detail_detail_invoice_list', 
+			method: 'POST'
+		}),
+		reader: detail_invoice_reader,
+		baseParams:{master_id: invoice_idField.getValue()},
+		sortInfo:{field: 'dinvoice_id', direction: "ASC"}
+	});
+	/* End of Function */
+	
+	//function for editor of detail
+	var editor_detail_invoice= new Ext.ux.grid.RowEditor({
+        saveText: 'Update'
+    });
+	//eof
+	
+	/*=== cbo_dproduk_byorderDataStore ==> mengambil "Detail Produk" dari detailList Modul Order Pembelian ===*/
+	cbo_dinvoice_produkDataStore = new Ext.data.Store({
+		id: 'cbo_dinvoice_produkDataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_master_invoice&m=get_produk_list', 
+			method: 'POST'
+		}),
+		//baseParams: {master_order_id: terima_order_idField.getValue()},
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'produk_id'
+		},[
+		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
+			{name: 'dinvoice_produk_value', type: 'int', mapping: 'produk_id'},
+			{name: 'dinvoice_produk_display', type: 'string', mapping: 'produk_nama'}
+		]),
+		sortInfo:{field: 'dinvoice_produk_display', direction: "ASC"}
+	});
+	/*======= END cbo_dproduk_byorderDataStore =======*/
+	
+	/*=== cbo_dproduk_byorderDataStore ==> mengambil "Detail Produk" dari detailList Modul Order Pembelian ===*/
+	cbo_dinvoice_satuanDataStore = new Ext.data.Store({
+		id: 'cbo_dinvoice_satuanDataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_master_invoice&m=get_satuan_list', 
+			method: 'POST'
+		}),
+		//baseParams: {master_order_id: terima_order_idField.getValue()},
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'satuan_id'
+		},[
+		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
+			{name: 'dinvoice_satuan_value', type: 'int', mapping: 'satuan_id'},
+			{name: 'dinvoice_satuan_display', type: 'string', mapping: 'satuan_nama'}
+		]),
+		sortInfo:{field: 'dinvoice_satuan_display', direction: "ASC"}
+	});
+	/*======= END cbo_dproduk_byorderDataStore =======*/
+	
+	Ext.util.Format.comboRenderer = function(combo){
+		//cbo_dproduk_byorderDataStore.load();
+		//cbo_dtbeli_satuanDataStore.load();
+		return function(value){
+			var record = combo.findRecord(combo.valueField, value);
+			return record ? record.get(combo.displayField) : combo.valueNotFoundText;
+		}
+	}
+	
+	var combo_dinvoice_produk=new Ext.form.ComboBox({
+			store: cbo_dinvoice_produkDataStore,
+			mode: 'remote',
+			typeAhead: true,
+			displayField: 'dinvoice_produk_display',
+			valueField: 'dinvoice_produk_value',
+			triggerAction: 'all',
+			lazyRender:true
+	});
+	
+	var combo_dinvoice_satuan=new Ext.form.ComboBox({
+			store: cbo_dinvoice_satuanDataStore,
+			mode: 'remote',
+			typeAhead: true,
+			displayField: 'dinvoice_satuan_display',
+			valueField: 'dinvoice_satuan_value',
+			triggerAction: 'all',
+			lazyRender:true
+	});
+	
+	//declaration of detail coloumn model
+	detail_invoice_ColumnModel = new Ext.grid.ColumnModel(
+		[
+		{
+			header: 'Produk',
+			dataIndex: 'dinvoice_produk',
+			width: 150,
+			sortable: true,
+			renderer: Ext.util.Format.comboRenderer(combo_dinvoice_produk)
+		},
+		{
+			header: 'Satuan',
+			dataIndex: 'dinvoice_satuan',
+			width: 150,
+			sortable: true,
+			renderer: Ext.util.Format.comboRenderer(combo_dinvoice_satuan)
+		},
+		{
+			header: 'Jumlah',
+			dataIndex: 'dinvoice_jumlah',
+			width: 150,
+			sortable: true,
+			editable: false
+		},
+		{
+			header: 'Harga',
+			dataIndex: 'dinvoice_harga',
+			width: 150,
+			sortable: true,
+			editor: new Ext.form.NumberField({
+				allowDecimals: true,
+				allowNegative: false,
+				blankText: '0',
+				maxLength: 22,
+				maskRe: /([0-9]+)$/
+			})
+		},
+		{
+			header: 'Diskon',
+			dataIndex: 'dinvoice_diskon',
+			width: 150,
+			sortable: true,
+			editor: new Ext.form.NumberField({
+				allowDecimals: true,
+				allowNegative: false,
+				blankText: '0',
+				maxLength: 12,
+				maskRe: /([0-9]+)$/
+			})
+		}]
+	);
+	detail_invoice_ColumnModel.defaultSortable= true;
+	//eof
+	
+	
+	
+	//declaration of detail list editor grid
+	detail_invoiceListEditorGrid =  new Ext.grid.EditorGridPanel({
+		id: 'detail_invoiceListEditorGrid',
+		el: 'fp_detail_invoice',
+		title: 'Detail detail_invoice',
+		height: 250,
+		width: 690,
+		autoScroll: true,
+		store: detail_invoice_DataStore, // DataStore
+		colModel: detail_invoice_ColumnModel, // Nama-nama Columns
+		enableColLock:false,
+		region: 'center',
+        margins: '0 5 5 5',
+		plugins: [editor_detail_invoice],
+		frame: true,
+		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
+		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
+		viewConfig: { forceFit:true},
+		bbar: new Ext.PagingToolbar({
+			pageSize: pageS,
+			store: detail_invoice_DataStore,
+			displayInfo: true
+		}),
+		/* Add Control on ToolBar */
+		tbar: [
+		{
+			text: 'Add',
+			tooltip: 'Add new detail record',
+			iconCls:'icon-adds',    				// this is defined in our styles.css
+			disabled: true,
+			handler: detail_invoice_add
+		}, '-',{
+			text: 'Delete',
+			tooltip: 'Delete detail selected record',
+			iconCls:'icon-delete',
+			disabled: true,
+			handler: detail_invoice_confirm_delete
+		}
+		]
+	});
+	//eof
+	
+	
+	//function of detail add
+	function detail_invoice_add(){
+		var edit_detail_invoice= new detail_invoiceListEditorGrid.store.recordType({
+			dinvoice_id	:'',		
+			dinvoice_master	:'',		
+			dinvoice_produk	:'',		
+			dinvoice_satuan	:'',		
+			dinvoice_jumlah	:'',		
+			dinvoice_harga	:'',		
+			dinvoice_diskon	:''		
+		});
+		editor_detail_invoice.stopEditing();
+		detail_invoice_DataStore.insert(0, edit_detail_invoice);
+		detail_invoiceListEditorGrid.getView().refresh();
+		detail_invoiceListEditorGrid.getSelectionModel().selectRow(0);
+		editor_detail_invoice.startEditing(0);
+	}
+	
+	function detail_invoice_add_bytbeli($dinvoice_produk, $dinvoice_satuan, $dinvoice_jumlah, $dinvoice_harga, $dinvoice_diskon){
+		var edit_detail_invoice= new detail_invoiceListEditorGrid.store.recordType({
+			dinvoice_id	:'',		
+			dinvoice_master	:'',		
+			dinvoice_produk	:$dinvoice_produk,		
+			dinvoice_satuan	:$dinvoice_satuan,		
+			dinvoice_jumlah	:$dinvoice_jumlah,		
+			dinvoice_harga	:$dinvoice_harga,		
+			dinvoice_diskon	:$dinvoice_diskon		
+		});
+		detail_invoice_DataStore.insert(0, edit_detail_invoice);
+		detail_invoiceListEditorGrid.getView().refresh();
+		detail_invoiceListEditorGrid.getSelectionModel().selectRow(0);
+		editor_detail_invoice.startEditing(0);
+		editor_detail_invoice.stopEditing();
+	}
+	
+	//function for refresh detail
+	function refresh_detail_invoice(){
+		detail_invoice_DataStore.commitChanges();
+		detail_invoiceListEditorGrid.getView().refresh();
+	}
+	//eof
+	
+	//function for insert detail
+	function detail_invoice_insert(){
+		for(i=0;i<detail_invoice_DataStore.getCount();i++){
+			detail_invoice_record=detail_invoice_DataStore.getAt(i);
+			Ext.Ajax.request({
+				waitMsg: 'Please wait...',
+				url: 'index.php?c=c_master_invoice&m=detail_detail_invoice_insert',
+				params:{
+				dinvoice_id	: detail_invoice_record.data.dinvoice_id, 
+				dinvoice_master	: eval(invoice_idField.getValue()), 
+				dinvoice_produk	: detail_invoice_record.data.dinvoice_produk, 
+				dinvoice_satuan	: detail_invoice_record.data.dinvoice_satuan, 
+				dinvoice_jumlah	: detail_invoice_record.data.dinvoice_jumlah, 
+				dinvoice_harga	: detail_invoice_record.data.dinvoice_harga, 
+				dinvoice_diskon	: detail_invoice_record.data.dinvoice_diskon 
+				
+				}
+			});
+		}
+	}
+	//eof
+	
+	//function for purge detail
+	function detail_invoice_purge(){
+		Ext.Ajax.request({
+			waitMsg: 'Please wait...',
+			url: 'index.php?c=c_master_invoice&m=detail_detail_invoice_purge',
+			params:{ master_id: eval(invoice_idField.getValue()) }
+		});
+	}
+	//eof
+	
+	/* Function for Delete Confirm of detail */
+	function detail_invoice_confirm_delete(){
+		// only one record is selected here
+		if(detail_invoiceListEditorGrid.selModel.getCount() == 1){
+			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', detail_invoice_delete);
+		} else if(detail_invoiceListEditorGrid.selModel.getCount() > 1){
+			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', detail_invoice_delete);
+		} else {
+			Ext.MessageBox.show({
+				title: 'Warning',
+				msg: 'You can\'t really delete something you haven\'t selected?',
+				buttons: Ext.MessageBox.OK,
+				animEl: 'save',
+				icon: Ext.MessageBox.WARNING
+			});
+		}
+	}
+	//eof
+	
+	//function for Delete of detail
+	function detail_invoice_delete(btn){
+		if(btn=='yes'){
+			var s = detail_invoiceListEditorGrid.getSelectionModel().getSelections();
+			for(var i = 0, r; r = s[i]; i++){
+				detail_invoice_DataStore.remove(r);
+			}
+		}  
+	}
+	//eof
+	
+	//event on update of detail data store
+	detail_invoice_DataStore.on('update', refresh_detail_invoice);
+	
+	/* Function for retrieve create Window Panel*/ 
+	master_invoice_createForm = new Ext.FormPanel({
+		labelAlign: 'left',
+		bodyStyle:'padding:5px',
+		autoHeight:true,
+		width: 700,        
+		items: [master_invoice_masterGroup,detail_invoiceListEditorGrid]
+		,
+		buttons: [{
+				text: 'Save and Close',
+				handler: master_invoice_create
+			}
+			,{
+				text: 'Cancel',
+				handler: function(){
+					master_invoice_createWindow.hide();
+				}
+			}
+		]
+	});
+	/* End  of Function*/
+	
+	/* Function for retrieve create Window Form */
+	master_invoice_createWindow= new Ext.Window({
+		id: 'master_invoice_createWindow',
+		title: post2db+'Master_invoice',
+		closable:true,
+		closeAction: 'hide',
+		autoWidth: true,
+		autoHeight: true,
+		x:0,
+		y:0,
+		plain:true,
+		layout: 'fit',
+		modal: true,
+		renderTo: 'elwindow_master_invoice_create',
+		items: master_invoice_createForm
+	});
+	/* End Window */
+	
+	/* Function for action list search */
+	function master_invoice_list_search(){
+		// render according to a SQL date format.
+		var invoice_id_search=null;
+		var invoice_no_search=null;
+		var invoice_supplier_search=null;
+		var invoice_noterima_search=null;
+		var invoice_tanggal_search_date="";
+		var invoice_nilai_search=null;
+		var invoice_jatuhtempo_search_date="";
+		var invoice_penagih_search=null;
+
+		if(invoice_idSearchField.getValue()!==null){invoice_id_search=invoice_idSearchField.getValue();}
+		if(invoice_noSearchField.getValue()!==null){invoice_no_search=invoice_noSearchField.getValue();}
+		if(invoice_supplierSearchField.getValue()!==null){invoice_supplier_search=invoice_supplierSearchField.getValue();}
+		if(invoice_noterimaSearchField.getValue()!==null){invoice_noterima_search=invoice_noterimaSearchField.getValue();}
+		if(invoice_tanggalSearchField.getValue()!==""){invoice_tanggal_search_date=invoice_tanggalSearchField.getValue().format('Y-m-d');}
+		if(invoice_nilaiSearchField.getValue()!==null){invoice_nilai_search=invoice_nilaiSearchField.getValue();}
+		if(invoice_jatuhtempoSearchField.getValue()!==""){invoice_jatuhtempo_search_date=invoice_jatuhtempoSearchField.getValue().format('Y-m-d');}
+		if(invoice_penagihSearchField.getValue()!==null){invoice_penagih_search=invoice_penagihSearchField.getValue();}
+		// change the store parameters
+		master_invoice_DataStore.baseParams = {
+			task: 'SEARCH',
+			//variable here
+			invoice_id	:	invoice_id_search, 
+			invoice_no	:	invoice_no_search, 
+			invoice_supplier	:	invoice_supplier_search, 
+			invoice_noterima	:	invoice_noterima_search, 
+			invoice_tanggal	:	invoice_tanggal_search_date, 
+			invoice_nilai	:	invoice_nilai_search, 
+			invoice_jatuhtempo	:	invoice_jatuhtempo_search_date, 
+			invoice_penagih	:	invoice_penagih_search, 
+		};
+		// Cause the datastore to do another query : 
+		master_invoice_DataStore.reload({params: {start: 0, limit: pageS}});
+	}
+		
+	/* Function for reset search result */
+	function master_invoice_reset_search(){
+		// reset the store parameters
+		master_invoice_DataStore.baseParams = { task: 'LIST' };
+		// Cause the datastore to do another query : 
+		master_invoice_DataStore.reload({params: {start: 0, limit: pageS}});
+		master_invoice_searchWindow.close();
+	};
+	/* End of Fuction */
+
+	function master_invoice_reset_SearchForm(){
+		invoice_noSearchField.reset();
+		invoice_supplierSearchField.reset();
+		invoice_noterimaSearchField.reset();
+		invoice_tanggalSearchField.reset();
+		invoice_nilaiSearchField.reset();
+		invoice_jatuhtempoSearchField.reset();
+		invoice_penagihSearchField.reset();
+	}
+	
+	/* Field for search */
+	/* Identify  invoice_id Search Field */
+	invoice_idSearchField= new Ext.form.NumberField({
+		id: 'invoice_idSearchField',
+		fieldLabel: 'Id',
+		allowNegatife : false,
+		blankText: '0',
+		allowDecimals: false,
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
+	
+	});
+	/* Identify  invoice_no Search Field */
+	invoice_noSearchField= new Ext.form.TextField({
+		id: 'invoice_noSearchField',
+		fieldLabel: 'No. Invoice',
+		maxLength: 50,
+		anchor: '95%'
+	
+	});
+	/* Identify  invoice_supplier Search Field */
+	invoice_supplierSearchField= new Ext.form.NumberField({
+		id: 'invoice_supplierSearchField',
+		fieldLabel: 'Supplier',
+		allowNegatife : false,
+		blankText: '0',
+		allowDecimals: false,
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
+	
+	});
+	/* Identify  invoice_noterima Search Field */
+	invoice_noterimaSearchField= new Ext.form.NumberField({
+		id: 'invoice_noterimaSearchField',
+		fieldLabel: 'No. Terima',
+		allowNegatife : false,
+		blankText: '0',
+		allowDecimals: false,
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
+	
+	});
+	/* Identify  invoice_tanggal Search Field */
+	invoice_tanggalSearchField= new Ext.form.DateField({
+		id: 'invoice_tanggalSearchField',
+		fieldLabel: 'Tanggal',
+		format : 'Y-m-d',
+	
+	});
+	/* Identify  invoice_nilai Search Field */
+	invoice_nilaiSearchField= new Ext.form.NumberField({
+		id: 'invoice_nilaiSearchField',
+		fieldLabel: 'Biaya',
+		allowNegatife : false,
+		blankText: '0',
+		allowDecimals: true,
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
+	
+	});
+	/* Identify  invoice_jatuhtempo Search Field */
+	invoice_jatuhtempoSearchField= new Ext.form.DateField({
+		id: 'invoice_jatuhtempoSearchField',
+		fieldLabel: 'Jatuh Tempo',
+		format : 'Y-m-d',
+	
+	});
+	/* Identify  invoice_penagih Search Field */
+	invoice_penagihSearchField= new Ext.form.TextField({
+		id: 'invoice_penagihSearchField',
+		fieldLabel: 'Penagih',
+		maxLength: 50,
+		anchor: '95%'
+	
+	});
+    
+	/* Function for retrieve search Form Panel */
+	master_invoice_searchForm = new Ext.FormPanel({
+		labelAlign: 'top',
+		bodyStyle:'padding:5px',
+		autoHeight:true,
+		width: 300,        
+		items: [{
+			layout:'column',
+			border:false,
+			items:[
+			{
+				columnWidth:1,
+				layout: 'form',
+				border:false,
+				items: [invoice_noSearchField, invoice_supplierSearchField, invoice_noterimaSearchField, invoice_tanggalSearchField, invoice_nilaiSearchField, invoice_jatuhtempoSearchField, invoice_penagihSearchField] 
+			}
+			]
+		}]
+		,
+		buttons: [{
+				text: 'Search',
+				handler: master_invoice_list_search
+			},{
+				text: 'Close',
+				handler: function(){
+					master_invoice_searchWindow.hide();
+				}
+			}
+		]
+	});
+    /* End of Function */ 
+	 
+	/* Function for retrieve search Window Form, used for andvaced search */
+	master_invoice_searchWindow = new Ext.Window({
+		title: 'master_invoice Search',
+		closable:true,
+		closeAction: 'hide',
+		autoWidth: true,
+		autoHeight: true,
+		plain:true,
+		layout: 'fit',
+		x: 0,
+		y: 0,
+		modal: true,
+		renderTo: 'elwindow_master_invoice_search',
+		items: master_invoice_searchForm
+	});
+    /* End of Function */ 
+	 
+  	/* Function for Displaying  Search Window Form */
+	function display_form_search_window(){
+		if(!master_invoice_searchWindow.isVisible()){
+			master_invoice_reset_SearchForm();
+			master_invoice_searchWindow.show();
+		} else {
+			master_invoice_searchWindow.toFront();
+		}
+	}
+  	/* End Function */
+	
+	/* Function for print List Grid */
+	function master_invoice_print(){
+		var searchquery = "";
+		var invoice_no_print=null;
+		var invoice_supplier_print=null;
+		var invoice_noterima_print=null;
+		var invoice_tanggal_print_date="";
+		var invoice_nilai_print=null;
+		var invoice_jatuhtempo_print_date="";
+		var invoice_penagih_print=null;
+		var win;              
+		// check if we do have some search data...
+		if(master_invoice_DataStore.baseParams.query!==null){searchquery = master_invoice_DataStore.baseParams.query;}
+		if(master_invoice_DataStore.baseParams.invoice_no!==null){invoice_no_print = master_invoice_DataStore.baseParams.invoice_no;}
+		if(master_invoice_DataStore.baseParams.invoice_supplier!==null){invoice_supplier_print = master_invoice_DataStore.baseParams.invoice_supplier;}
+		if(master_invoice_DataStore.baseParams.invoice_noterima!==null){invoice_noterima_print = master_invoice_DataStore.baseParams.invoice_noterima;}
+		if(master_invoice_DataStore.baseParams.invoice_tanggal!==""){invoice_tanggal_print_date = master_invoice_DataStore.baseParams.invoice_tanggal;}
+		if(master_invoice_DataStore.baseParams.invoice_nilai!==null){invoice_nilai_print = master_invoice_DataStore.baseParams.invoice_nilai;}
+		if(master_invoice_DataStore.baseParams.invoice_jatuhtempo!==""){invoice_jatuhtempo_print_date = master_invoice_DataStore.baseParams.invoice_jatuhtempo;}
+		if(master_invoice_DataStore.baseParams.invoice_penagih!==null){invoice_penagih_print = master_invoice_DataStore.baseParams.invoice_penagih;}
+
+		Ext.Ajax.request({   
+		waitMsg: 'Please Wait...',
+		url: 'index.php?c=c_master_invoice&m=get_action',
+		params: {
+			task: "PRINT",
+		  	query: searchquery,                    		// if we are doing a quicksearch, use this
+			//if we are doing advanced search, use this
+			invoice_no : invoice_no_print,
+			invoice_supplier : invoice_supplier_print,
+			invoice_noterima : invoice_noterima_print,
+		  	invoice_tanggal : invoice_tanggal_print_date, 
+			invoice_nilai : invoice_nilai_print,
+		  	invoice_jatuhtempo : invoice_jatuhtempo_print_date, 
+			invoice_penagih : invoice_penagih_print,
+		  	currentlisting: master_invoice_DataStore.baseParams.task // this tells us if we are searching or not
+		}, 
+		success: function(response){              
+		  	var result=eval(response.responseText);
+		  	switch(result){
+		  	case 1:
+				win = window.open('./master_invoicelist.html','master_invoicelist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
+				win.print();
+				break;
+		  	default:
+				Ext.MessageBox.show({
+					title: 'Warning',
+					msg: 'Unable to print the grid!',
+					buttons: Ext.MessageBox.OK,
+					animEl: 'save',
+					icon: Ext.MessageBox.WARNING
+				});
+				break;
+		  	}  
+		},
+		failure: function(response){
+		  	var result=response.responseText;
+			Ext.MessageBox.show({
+			   title: 'Error',
+			   msg: 'Could not connect to the database. retry later.',
+			   buttons: Ext.MessageBox.OK,
+			   animEl: 'database',
+			   icon: Ext.MessageBox.ERROR
+			});		
+		} 	                     
+		});
+	}
+	/* Enf Function */
+	
+	/* Function for print Export to Excel Grid */
+	function master_invoice_export_excel(){
+		var searchquery = "";
+		var invoice_no_2excel=null;
+		var invoice_supplier_2excel=null;
+		var invoice_noterima_2excel=null;
+		var invoice_tanggal_2excel_date="";
+		var invoice_nilai_2excel=null;
+		var invoice_jatuhtempo_2excel_date="";
+		var invoice_penagih_2excel=null;
+		var win;              
+		// check if we do have some search data...
+		if(master_invoice_DataStore.baseParams.query!==null){searchquery = master_invoice_DataStore.baseParams.query;}
+		if(master_invoice_DataStore.baseParams.invoice_no!==null){invoice_no_2excel = master_invoice_DataStore.baseParams.invoice_no;}
+		if(master_invoice_DataStore.baseParams.invoice_supplier!==null){invoice_supplier_2excel = master_invoice_DataStore.baseParams.invoice_supplier;}
+		if(master_invoice_DataStore.baseParams.invoice_noterima!==null){invoice_noterima_2excel = master_invoice_DataStore.baseParams.invoice_noterima;}
+		if(master_invoice_DataStore.baseParams.invoice_tanggal!==""){invoice_tanggal_2excel_date = master_invoice_DataStore.baseParams.invoice_tanggal;}
+		if(master_invoice_DataStore.baseParams.invoice_nilai!==null){invoice_nilai_2excel = master_invoice_DataStore.baseParams.invoice_nilai;}
+		if(master_invoice_DataStore.baseParams.invoice_jatuhtempo!==""){invoice_jatuhtempo_2excel_date = master_invoice_DataStore.baseParams.invoice_jatuhtempo;}
+		if(master_invoice_DataStore.baseParams.invoice_penagih!==null){invoice_penagih_2excel = master_invoice_DataStore.baseParams.invoice_penagih;}
+
+		Ext.Ajax.request({   
+		waitMsg: 'Please Wait...',
+		url: 'index.php?c=c_master_invoice&m=get_action',
+		params: {
+			task: "EXCEL",
+		  	query: searchquery,                    		// if we are doing a quicksearch, use this
+			//if we are doing advanced search, use this
+			invoice_no : invoice_no_2excel,
+			invoice_supplier : invoice_supplier_2excel,
+			invoice_noterima : invoice_noterima_2excel,
+		  	invoice_tanggal : invoice_tanggal_2excel_date, 
+			invoice_nilai : invoice_nilai_2excel,
+		  	invoice_jatuhtempo : invoice_jatuhtempo_2excel_date, 
+			invoice_penagih : invoice_penagih_2excel,
+		  	currentlisting: master_invoice_DataStore.baseParams.task // this tells us if we are searching or not
+		},
+		success: function(response){              
+		  	var result=eval(response.responseText);
+		  	switch(result){
+		  	case 1:
+				win = window.location=('./export2excel.php');
+				break;
+		  	default:
+				Ext.MessageBox.show({
+					title: 'Warning',
+					msg: 'Unable to convert excel the grid!',
+					buttons: Ext.MessageBox.OK,
+					animEl: 'save',
+					icon: Ext.MessageBox.WARNING
+				});
+				break;
+		  	}  
+		},
+		failure: function(response){
+		  	var result=response.responseText;
+			Ext.MessageBox.show({
+			   title: 'Error',
+			   msg: 'Could not connect to the database. retry later.',
+			   buttons: Ext.MessageBox.OK,
+			   animEl: 'database',
+			   icon: Ext.MessageBox.ERROR
+			});    
+		} 	                     
+		});
+	}
+	/*End of Function */
+	
+});
+	</script>
+<body>
+<div>
+	<div class="col">
+        <div id="fp_master_invoice"></div>
+         <div id="fp_detail_invoice"></div>
+		<div id="elwindow_master_invoice_create"></div>
+        <div id="elwindow_master_invoice_search"></div>
+    </div>
+</div>
+</body>

@@ -1,0 +1,1255 @@
+<?
+/* 	These code was generated using phpCIGen v 0.1.b (24/06/2009)
+	#zaqi 		zaqi.smart@gmail.com,http://zenzaqi.blogspot.com, 
+	#CV. Trust Solution, jl. Saronojiwo 19 Surabaya, http://www.ts.co.id
+	
+	+ Module  		: member View
+	+ Description	: For record view
+	+ Filename 		: v_member.php
+ 	+ Author  		: 
+ 	+ Created on 01/Sep/2009 10:36:44
+	
+*/
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+</head>
+<style type="text/css">
+        p { width:650px; }
+		.search-item {
+			font:normal 11px tahoma, arial, helvetica, sans-serif;
+			padding:3px 10px 3px 10px;
+			border:1px solid #fff;
+			border-bottom:1px solid #eeeeee;
+			white-space:normal;
+			color:#555;
+		}
+		.search-item h3 {
+			display:block;
+			font:inherit;
+			font-weight:bold;
+			color:#222;
+		}
+		
+		.search-item h3 span {
+			float: right;
+			font-weight:normal;
+			margin:0 0 5px 5px;
+			width:100px;
+			display:block;
+			clear:none;
+		}
+    </style>
+<script>
+/* declare function */		
+var member_DataStore;
+var member_ColumnModel;
+var memberListEditorGrid;
+var member_createForm;
+var member_createWindow;
+var member_searchForm;
+var member_searchWindow;
+var member_SelectedRow;
+var member_ContextMenu;
+//for detail data
+var _DataStor;
+var ListEditorGrid;
+var _ColumnModel;
+var _proxy;
+var _writer;
+var _reader;
+var editor_;
+
+//declare konstant
+var post2db = '';
+var msg = '';
+var pageS=15;
+
+/* declare variable here for Field*/
+var member_idField;
+var member_custField;
+var member_noField;
+var member_registerField;
+var member_validField;
+var member_nota_refField;
+var member_pointField;
+var member_jenisField;
+var member_statusField;
+var member_tglserahterimaField;
+var member_idSearchField;
+var member_custSearchField;
+var member_noSearchField;
+var member_registerSearchField;
+var member_validSearchField;
+var member_nota_refSearchField;
+var member_pointSearchField;
+var member_jenisSearchField;
+var member_statusSearchField;
+var member_tglserahterimaSearchField;
+
+/* on ready fuction */
+Ext.onReady(function(){
+  	Ext.QuickTips.init();	/* Initiate quick tips icon */
+  
+  	/* Function for Saving inLine Editing */
+	function member_update(oGrid_event){
+		var member_id_update_pk="";
+		var member_cust_update=null;
+		var member_no_update=null;
+		var member_register_update_date="";
+		var member_valid_update_date="";
+		var member_nota_ref_update=null;
+		var member_point_update=null;
+		var member_jenis_update=null;
+		var member_status_update=null;
+		var member_tglserahterima_update_date=null;
+
+		member_id_update_pk = oGrid_event.record.data.member_id;
+		if(oGrid_event.record.data.member_cust!== null){member_cust_update = oGrid_event.record.data.member_cust;}
+		if(oGrid_event.record.data.member_no!== null){member_no_update = oGrid_event.record.data.member_no;}
+	 	if(oGrid_event.record.data.member_register!== ""){member_register_update_date =oGrid_event.record.data.member_register.format('Y-m-d');}
+	 	if(oGrid_event.record.data.member_valid!== ""){member_valid_update_date =oGrid_event.record.data.member_valid.format('Y-m-d');}
+		if(oGrid_event.record.data.member_nota_ref!== null){member_nota_ref_update = oGrid_event.record.data.member_nota_ref;}
+		if(oGrid_event.record.data.member_point!== null){member_point_update = oGrid_event.record.data.member_point;}
+		if(oGrid_event.record.data.member_jenis!== null){member_jenis_update = oGrid_event.record.data.member_jenis;}
+		if(oGrid_event.record.data.member_status!== null){member_status_update = oGrid_event.record.data.member_status;}
+	 	if(oGrid_event.record.data.member_tglserahterima!== null){member_tglserahterima_update_date =oGrid_event.record.data.member_tglserahterima.format('Y-m-d');}
+
+		Ext.Ajax.request({  
+			waitMsg: 'Please wait...',
+			url: 'index.php?c=c_member&m=get_action',
+			params: {
+				task: "UPDATE",
+				member_id	: member_id_update_pk, 
+				member_cust	:member_cust_update,  
+				member_no	:member_no_update,  
+				member_register	: member_register_update_date, 
+				member_valid	: member_valid_update_date, 
+				member_nota_ref	:member_nota_ref_update,  
+				member_point	:member_point_update,  
+				member_jenis	:member_jenis_update,  
+				member_status	:member_status_update,  
+				member_tglserahterima	: member_tglserahterima_update_date, 
+			}, 
+			success: function(response){							
+				var result=eval(response.responseText);
+				switch(result){
+					case 1:
+						member_DataStore.commitChanges();
+						member_DataStore.reload();
+						break;
+					default:
+						Ext.MessageBox.show({
+						   title: 'Warning',
+						   msg: 'We could\'t not save the member.',
+						   buttons: Ext.MessageBox.OK,
+						   animEl: 'save',
+						   icon: Ext.MessageBox.WARNING
+						});
+						break;
+				}
+			},
+			failure: function(response){
+				var result=response.responseText;
+				Ext.MessageBox.show({
+				   title: 'Error',
+				   msg: 'Could not connect to the database. retry later.',
+				   buttons: Ext.MessageBox.OK,
+				   animEl: 'database',
+				   icon: Ext.MessageBox.ERROR
+				});	
+			}									    
+		});   
+	}
+  	/* End of Function */
+  
+  	/* Function for add data, open window create form */
+	function member_create(){
+	
+		if(is_member_form_valid()){	
+		var member_id_create_pk=null; 
+		var member_cust_create=null; 
+		var member_no_create=null; 
+		var member_register_create_date=""; 
+		var member_valid_create_date=""; 
+		var member_nota_ref_create=null; 
+		var member_point_create=null; 
+		var member_jenis_create=null; 
+		var member_status_create=null; 
+		var member_tglserahterima_create_date=""; 
+
+		if(member_idField.getValue()!== null){member_id_create = member_idField.getValue();}else{member_id_create_pk=get_pk_id();} 
+		if(member_custField.getValue()!== null){member_cust_create = member_custField.getValue();} 
+		if(member_noField.getValue()!== null){member_no_create = member_noField.getValue();} 
+		if(member_registerField.getValue()!== ""){member_register_create_date = member_registerField.getValue().format('Y-m-d');} 
+		if(member_validField.getValue()!== ""){member_valid_create_date = member_validField.getValue().format('Y-m-d');} 
+		if(member_nota_refField.getValue()!== null){member_nota_ref_create = member_nota_refField.getValue();} 
+		if(member_pointField.getValue()!== null){member_point_create = member_pointField.getValue();} 
+		if(member_jenisField.getValue()!== null){member_jenis_create = member_jenisField.getValue();} 
+		if(member_statusField.getValue()!== null){member_status_create = member_statusField.getValue();} 
+		if(member_tglserahterimaField.getValue()!== ""){member_tglserahterima_create_date = member_tglserahterimaField.getValue().format('Y-m-d');} 
+
+		Ext.Ajax.request({  
+			waitMsg: 'Please wait...',
+			url: 'index.php?c=c_member&m=get_action',
+			params: {
+				task: post2db,
+				member_id	: member_id_create_pk, 
+				member_cust	: member_cust_create, 
+				member_no	: member_no_create, 
+				member_register	: member_register_create_date, 
+				member_valid	: member_valid_create_date, 
+				member_nota_ref	: member_nota_ref_create, 
+				member_point	: member_point_create, 
+				member_jenis	: member_jenis_create, 
+				member_status	: member_status_create, 
+				member_tglserahterima	: member_tglserahterima_create_date, 
+			}, 
+			success: function(response){             
+				var result=eval(response.responseText);
+				switch(result){
+					case 1:
+						Ext.MessageBox.alert(post2db+' OK','The Member was '+msg+' successfully.');
+						member_DataStore.reload();
+						member_createWindow.hide();
+						break;
+					default:
+						Ext.MessageBox.show({
+						   title: 'Warning',
+						   msg: 'We could\'t not '+msg+' the Member.',
+						   buttons: Ext.MessageBox.OK,
+						   animEl: 'save',
+						   icon: Ext.MessageBox.WARNING
+						});
+						break;
+				}        
+			},
+			failure: function(response){
+				var result=response.responseText;
+				Ext.MessageBox.show({
+					   title: 'Error',
+					   msg: 'Could not connect to the database. retry later.',
+					   buttons: Ext.MessageBox.OK,
+					   animEl: 'database',
+					   icon: Ext.MessageBox.ERROR
+				});	
+			}                      
+		});
+		} else {
+			Ext.MessageBox.show({
+				title: 'Warning',
+				msg: 'Your Form is not valid!.',
+				buttons: Ext.MessageBox.OK,
+				animEl: 'save',
+				icon: Ext.MessageBox.WARNING
+			});
+		}
+	}
+ 	/* End of Function */
+  
+  	/* Function for get PK field */
+	function get_pk_id(){
+		if(post2db=='UPDATE')
+			return memberListEditorGrid.getSelectionModel().getSelected().get('member_id');
+		else 
+			return 0;
+	}
+	/* End of Function  */
+	
+	/* Reset form before loading */
+	function member_reset_form(){
+		member_idField.reset();
+		member_idField.setValue(null);
+		member_custField.reset();
+		member_custField.setValue(null);
+		member_noField.reset();
+		member_noField.setValue(null);
+		member_registerField.reset();
+		member_registerField.setValue(null);
+		member_validField.reset();
+		member_validField.setValue(null);
+		member_nota_refField.reset();
+		member_nota_refField.setValue(null);
+		member_pointField.reset();
+		member_pointField.setValue(null);
+		member_jenisField.reset();
+		member_jenisField.setValue(null);
+		member_statusField.reset();
+		member_statusField.setValue(null);
+		member_tglserahterimaField.reset();
+		member_tglserahterimaField.setValue(null);
+	}
+ 	/* End of Function */
+  
+	/* setValue to EDIT */
+	function member_set_form(){
+		member_idField.setValue(memberListEditorGrid.getSelectionModel().getSelected().get('member_id'));
+		member_custField.setValue(memberListEditorGrid.getSelectionModel().getSelected().get('member_cust'));
+		member_noField.setValue(memberListEditorGrid.getSelectionModel().getSelected().get('member_no'));
+		member_registerField.setValue(memberListEditorGrid.getSelectionModel().getSelected().get('member_register'));
+		member_validField.setValue(memberListEditorGrid.getSelectionModel().getSelected().get('member_valid'));
+		member_nota_refField.setValue(memberListEditorGrid.getSelectionModel().getSelected().get('member_nota_ref'));
+		member_pointField.setValue(memberListEditorGrid.getSelectionModel().getSelected().get('member_point'));
+		member_jenisField.setValue(memberListEditorGrid.getSelectionModel().getSelected().get('member_jenis'));
+		member_statusField.setValue(memberListEditorGrid.getSelectionModel().getSelected().get('member_status'));
+		member_tglserahterimaField.setValue(memberListEditorGrid.getSelectionModel().getSelected().get('member_tglserahterima'));
+	}
+	/* End setValue to EDIT*/
+  
+	/* Function for Check if the form is valid */
+	function is_member_form_valid(){
+		return ( true  );
+	}
+  	/* End of Function */
+  
+  	/* Function for Displaying  create Window Form */
+	function display_form_window(){
+		if(!member_createWindow.isVisible()){
+			member_reset_form();
+			post2db='CREATE';
+			msg='created';
+			member_createWindow.show();
+		} else {
+			member_createWindow.toFront();
+		}
+	}
+  	/* End of Function */
+ 
+  	/* Function for Delete Confirm */
+	function member_confirm_delete(){
+		// only one member is selected here
+		if(memberListEditorGrid.selModel.getCount() == 1){
+			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', member_delete);
+		} else if(memberListEditorGrid.selModel.getCount() > 1){
+			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', member_delete);
+		} else {
+			Ext.MessageBox.show({
+				title: 'Warning',
+				msg: 'You can\'t really delete something you haven\'t selected?',
+				buttons: Ext.MessageBox.OK,
+				animEl: 'save',
+				icon: Ext.MessageBox.WARNING
+			});
+		}
+	}
+  	/* End of Function */
+  
+	/* Function for Update Confirm */
+	function member_confirm_update(){
+		/* only one record is selected here */
+		if(memberListEditorGrid.selModel.getCount() == 1) {
+			member_set_form();
+			post2db='UPDATE';
+			msg='updated';
+			member_createWindow.show();
+		} else {
+			Ext.MessageBox.show({
+				title: 'Warning',
+				msg: 'You can\'t really update something you haven\'t selected?',
+				buttons: Ext.MessageBox.OK,
+				animEl: 'save',
+				icon: Ext.MessageBox.WARNING
+			});
+		}
+	}
+  	/* End of Function */
+  
+  	/* Function for Delete Record */
+	function member_delete(btn){
+		if(btn=='yes'){
+			var selections = memberListEditorGrid.selModel.getSelections();
+			var prez = [];
+			for(i = 0; i< memberListEditorGrid.selModel.getCount(); i++){
+				prez.push(selections[i].json.member_id);
+			}
+			var encoded_array = Ext.encode(prez);
+			Ext.Ajax.request({ 
+				waitMsg: 'Please Wait',
+				url: 'index.php?c=c_member&m=get_action', 
+				params: { task: "DELETE", ids:  encoded_array }, 
+				success: function(response){
+					var result=eval(response.responseText);
+					switch(result){
+						case 1:  // Success : simply reload
+							member_DataStore.reload();
+							break;
+						default:
+							Ext.MessageBox.show({
+								title: 'Warning',
+								msg: 'Could not delete the entire selection',
+								buttons: Ext.MessageBox.OK,
+								animEl: 'save',
+								icon: Ext.MessageBox.WARNING
+							});
+							break;
+					}
+				},
+				failure: function(response){
+					var result=response.responseText;
+					Ext.MessageBox.show({
+					   title: 'Error',
+					   msg: 'Could not connect to the database. retry later.',
+					   buttons: Ext.MessageBox.OK,
+					   animEl: 'database',
+					   icon: Ext.MessageBox.ERROR
+					});	
+				}
+			});
+		}  
+	}
+  	/* End of Function */
+  
+	/* Function for Retrieve DataStore */
+	member_DataStore = new Ext.data.Store({
+		id: 'member_DataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_member&m=get_action', 
+			method: 'POST'
+		}),
+		baseParams:{task: "LIST"}, // parameter yang di $_POST ke Controller
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'member_id'
+		},[
+		/* dataIndex => insert intomember_ColumnModel, Mapping => for initiate table column */ 
+			{name: 'member_id', type: 'int', mapping: 'member_id'}, 
+			{name: 'member_cust', type: 'string', mapping: 'cust_nama'}, 
+			{name: 'member_no', type: 'string', mapping: 'member_no'}, 
+			{name: 'member_register', type: 'date', dateFormat: 'Y-m-d', mapping: 'member_register'}, 
+			{name: 'member_valid', type: 'date', dateFormat: 'Y-m-d', mapping: 'member_valid'}, 
+			{name: 'member_nota_ref', type: 'string', mapping: 'member_nota_ref'}, 
+			{name: 'member_point', type: 'int', mapping: 'member_point'}, 
+			{name: 'member_jenis', type: 'string', mapping: 'member_jenis'}, 
+			{name: 'member_status', type: 'string', mapping: 'member_status'}, 
+			{name: 'member_tglserahterima', type: 'date', dateFormat: 'Y-m-d', mapping: 'member_tglserahterima'}, 
+			{name: 'member_creator', type: 'string', mapping: 'member_creator'}, 
+			{name: 'member_date_create', type: 'date', dateFormat: 'Y-m-d', mapping: 'member_date_create'}, 
+			{name: 'member_update', type: 'string', mapping: 'member_update'}, 
+			{name: 'member_date_update', type: 'date', dateFormat: 'Y-m-d', mapping: 'member_date_update'}, 
+			{name: 'member_revised', type: 'int', mapping: 'member_revised'} 
+		]),
+		sortInfo:{field: 'member_id', direction: "DESC"}
+	});
+	/* End of Function */
+    
+  	/* Function for Identify of Window Column Model */
+	member_ColumnModel = new Ext.grid.ColumnModel(
+		[{
+			header: '#',
+			readOnly: true,
+			dataIndex: 'member_id',
+			width: 40,
+			renderer: function(value, cell){
+				cell.css = "readonlycell"; // Mengambil Value dari Class di dalam CSS 
+				return value;
+				},
+			hidden: false
+		},
+		{
+			header: 'Customer',
+			dataIndex: 'member_cust',
+			width: 150,
+			sortable: true,
+			readOnly: true
+		}, 
+		{
+			header: 'Member No',
+			dataIndex: 'member_no',
+			width: 150,
+			sortable: true,
+			editor: new Ext.form.TextField({
+				allowBlank: false,
+				maxLength: 50
+          	})
+		}, 
+		{
+			header: 'Register',
+			dataIndex: 'member_register',
+			width: 100,
+			sortable: true,
+			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
+			readOnly: true
+		}, 
+		{
+			header: 'Valid',
+			dataIndex: 'member_valid',
+			width: 100,
+			sortable: true,
+			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
+			readOnly: true
+		}, 
+		{
+			header: 'Nota Ref',
+			dataIndex: 'member_nota_ref',
+			width: 150,
+			sortable: true,
+			editor: new Ext.form.TextField({
+				maxLength: 50
+          	})
+		}, 
+		{
+			header: 'Point',
+			dataIndex: 'member_point',
+			width: 80,
+			sortable: true,
+			editor: new Ext.form.NumberField({
+				allowBlank: false,
+				allowDecimals: false,
+				allowNegative: false,
+				blankText: '0',
+				maxLength: 11,
+				maskRe: /([0-9]+)$/
+			})
+		}, 
+		{
+			header: 'Jenis',
+			dataIndex: 'member_jenis',
+			width: 150,
+			sortable: true,
+			readOnly: true
+		}, 
+		{
+			header: 'Status Kartu',
+			dataIndex: 'member_status',
+			width: 150,
+			sortable: true,
+			editor: new Ext.form.ComboBox({
+				typeAhead: true,
+				triggerAction: 'all',
+				store:new Ext.data.SimpleStore({
+					fields:['member_status_value', 'member_status_display'],
+					data: [['tidak aktif','tidak aktif'],['print','print'],['aktif','aktif'],['register','register']]
+					}),
+				mode: 'local',
+               	displayField: 'member_status_display',
+               	valueField: 'member_status_value',
+               	lazyRender:true,
+               	listClass: 'x-combo-list-small'
+            })
+		}, 
+		{
+			header: 'Tgl penyerahan',
+			dataIndex: 'member_tglserahterima',
+			width: 150,
+			sortable: true,
+			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
+			editor: new Ext.form.DateField({
+				format: 'Y-m-d'
+			})
+		}, 
+		{
+			header: 'Creator',
+			dataIndex: 'member_creator',
+			width: 150,
+			sortable: true,
+			hidden: true,
+			readOnly: true,
+		}, 
+		{
+			header: 'Create om',
+			dataIndex: 'member_date_create',
+			width: 150,
+			sortable: true,
+			hidden: true,
+			readOnly: true,
+		}, 
+		{
+			header: 'Last Update by',
+			dataIndex: 'member_update',
+			width: 150,
+			sortable: true,
+			hidden: true,
+			readOnly: true,
+		}, 
+		{
+			header: 'Lat Update on',
+			dataIndex: 'member_date_update',
+			width: 150,
+			sortable: true,
+			hidden: true,
+			readOnly: true,
+		}, 
+		{
+			header: 'Revised',
+			dataIndex: 'member_revised',
+			width: 150,
+			sortable: true,
+			hidden: true,
+			readOnly: true,
+		}	]);
+	
+	member_ColumnModel.defaultSortable= true;
+	/* End of Function */
+    
+	/* Declare DataStore and  show datagrid list */
+	memberListEditorGrid =  new Ext.grid.EditorGridPanel({
+		id: 'memberListEditorGrid',
+		el: 'fp_member',
+		title: 'List Of Member',
+		autoHeight: true,
+		store: member_DataStore, // DataStore
+		cm: member_ColumnModel, // Nama-nama Columns
+		enableColLock:false,
+		frame: true,
+		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
+		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
+		viewConfig: { forceFit:true },
+	  	width: 800,
+		bbar: new Ext.PagingToolbar({
+			pageSize: pageS,
+			store: member_DataStore,
+			displayInfo: true
+		}),
+		/* Add Control on ToolBar */
+		tbar: [
+		/*{
+			text: 'Add',
+			tooltip: 'Add new record',
+			iconCls:'icon-adds',    				// this is defined in our styles.css
+			handler: display_form_window
+		}, '-',*/
+		{
+			text: 'Edit',
+			tooltip: 'Edit selected record',
+			iconCls:'icon-update',
+			handler: member_confirm_update   // Confirm before updating
+		},'-',{
+			text: 'Cetak Kartu',
+			tooltip: 'Aktifkan Member yang teregister dan set status masa pencetakan',
+			iconCls:'icon-aktivasi ',
+			handler: ''   // Confirm before updating
+		},'-',{
+			text: 'Aktivasi',
+			tooltip: 'Aktifkan Kartu Member',
+			iconCls:'icon-valid',
+			handler: ''   // Confirm before updating
+		}, '-',{
+			text: 'Delete',
+			tooltip: 'Delete selected record',
+			iconCls:'icon-delete',
+			handler: member_confirm_delete   // Confirm before deleting
+		}, '-', {
+			text: 'Search',
+			tooltip: 'Advanced Search',
+			iconCls:'icon-search',
+			handler: display_form_search_window 
+		}, '-', 
+			new Ext.app.SearchField({
+			store: member_DataStore,
+			params: {start: 0, limit: pageS},
+			width: 120
+		}),'-',{
+			text: 'Refresh',
+			tooltip: 'Refresh datagrid',
+			handler: member_reset_search,
+			iconCls:'icon-refresh'
+		},'-',{
+			text: 'Export Excel',
+			tooltip: 'Export to Excel(.xls) Document',
+			iconCls:'icon-xls',
+			handler: member_export_excel
+		}, '-',{
+			text: 'Print',
+			tooltip: 'Print Document',
+			iconCls:'icon-print',
+			handler: member_print  
+		}
+		]
+	});
+	memberListEditorGrid.render();
+	/* End of DataStore */
+     
+	/* Create Context Menu */
+	member_ContextMenu = new Ext.menu.Menu({
+		id: 'member_ListEditorGridContextMenu',
+		items: [
+		{ 
+			text: 'Edit', tooltip: 'Edit selected record', 
+			iconCls:'icon-update',
+			handler: member_editContextMenu 
+		},
+		{ 
+			text: 'Delete', 
+			tooltip: 'Delete selected record', 
+			iconCls:'icon-delete',
+			handler: member_confirm_delete 
+		},
+		'-',
+		{ 
+			text: 'Print',
+			tooltip: 'Print Document',
+			iconCls:'icon-print',
+			handler: member_print 
+		},
+		{ 
+			text: 'Export Excel', 
+			tooltip: 'Export to Excel(.xls) Document',
+			iconCls:'icon-xls',
+			handler: member_export_excel 
+		}
+		]
+	}); 
+	/* End of Declaration */
+	
+	/* Event while selected row via context menu */
+	function onmember_ListEditGridContextMenu(grid, rowIndex, e) {
+		e.stopEvent();
+		var coords = e.getXY();
+		member_ContextMenu.rowRecord = grid.store.getAt(rowIndex);
+		grid.selModel.selectRow(rowIndex);
+		member_SelectedRow=rowIndex;
+		member_ContextMenu.showAt([coords[0], coords[1]]);
+  	}
+  	/* End of Function */
+	
+	/* function for editing row via context menu */
+	function member_editContextMenu(){
+		memberListEditorGrid.startEditing(member_SelectedRow,1);
+  	}
+	/* End of Function */
+  	
+	memberListEditorGrid.addListener('rowcontextmenu', onmember_ListEditGridContextMenu);
+	member_DataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
+	memberListEditorGrid.on('afteredit', member_update); // inLine Editing Record
+	
+	/* Identify  member_id Field */
+	member_idField= new Ext.form.NumberField({
+		id: 'member_idField',
+		allowNegatife : false,
+		blankText: '0',
+		allowBlank: false,
+		allowDecimals: false,
+		hidden: true,
+		readOnly: true,
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
+	});
+	/* Identify  member_cust Field */
+	member_custField= new Ext.form.TextField({
+		id: 'member_custField',
+		fieldLabel: 'Customer',
+		anchor: '95%'
+	});
+	/* Identify  member_no Field */
+	member_noField= new Ext.form.TextField({
+		id: 'member_noField',
+		fieldLabel: 'Nomor Member',
+		emptyText: '(auto)',
+		maxLength: 50,
+		allowBlank: false,
+		anchor: '95%'
+	});
+	/* Identify  member_register Field */
+	member_registerField= new Ext.form.DateField({
+		id: 'member_registerField',
+		fieldLabel: 'Tanggal Register',
+		format : 'Y-m-d',
+		hideTrigger: true,
+		readOnly: true
+	});
+	/* Identify  member_valid Field */
+	member_validField= new Ext.form.DateField({
+		id: 'member_validField',
+		fieldLabel: 'Tanggal Valid',
+		format : 'Y-m-d',
+		hideTrigger: true,
+		readOnly: true
+	});
+	/* Identify  member_nota_ref Field */
+	member_nota_refField= new Ext.form.TextField({
+		id: 'member_nota_refField',
+		fieldLabel: 'Referensi Nota Pembelian',
+		maxLength: 50,
+		anchor: '95%'
+	});
+	/* Identify  member_point Field */
+	member_pointField= new Ext.form.NumberField({
+		id: 'member_pointField',
+		fieldLabel: 'Point',
+		allowNegatife : false,
+		blankText: '0',
+		allowBlank: false,
+		allowDecimals: false,
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
+	});
+	/* Identify  member_jenis Field */
+	member_jenisField= new Ext.form.ComboBox({
+		id: 'member_jenisField',
+		fieldLabel: 'Jenis',
+		store:new Ext.data.SimpleStore({
+			fields:['member_jenis_value', 'member_jenis_display'],
+			data:[['perpanjangan','perpanjangan'],['baru','baru']]
+		}),
+		mode: 'local',
+		displayField: 'member_jenis_display',
+		valueField: 'member_jenis_value',
+		anchor: '95%',
+		triggerAction: 'all'	
+	});
+	/* Identify  member_status Field */
+	member_statusField= new Ext.form.ComboBox({
+		id: 'member_statusField',
+		fieldLabel: 'Status Kartu',
+		store:new Ext.data.SimpleStore({
+			fields:['member_status_value', 'member_status_display'],
+			data:[['tidak aktif','tidak aktif'],['print','print'],['aktif','aktif'],['register','register']]
+		}),
+		mode: 'local',
+		displayField: 'member_status_display',
+		valueField: 'member_status_value',
+		anchor: '95%',
+		triggerAction: 'all'	
+	});
+	/* Identify  member_tglserahterima Field */
+	member_tglserahterimaField= new Ext.form.DateField({
+		id: 'member_tglserahterimaField',
+		fieldLabel: 'Tanggal Penyerahan',
+		format : 'Y-m-d'
+	});
+
+	
+	/* Function for retrieve create Window Panel*/ 
+	member_createForm = new Ext.FormPanel({
+		labelAlign: 'top',
+		bodyStyle:'padding:5px',
+		autoHeight:true,
+		layout: 'column',
+		width: 400,        
+		items:[
+			{
+				columnWidth:0.7,
+				layout: 'form',
+				border:false,
+				items: [member_custField, member_noField, member_registerField, member_validField,member_nota_refField] 
+			},
+			{
+				columnWidth:0.3,
+				layout: 'form',
+				border:false,
+				items: [ member_pointField, member_jenisField, member_statusField, member_tglserahterimaField,member_idField] 
+			}
+			],
+		buttons: [{
+				text: 'Save and Close',
+				handler: member_create
+			}
+			,{
+				text: 'Cancel',
+				handler: function(){
+					member_createWindow.hide();
+				}
+			}
+		]
+	});
+	/* End  of Function*/
+	
+	/* Function for retrieve create Window Form */
+	member_createWindow= new Ext.Window({
+		id: 'member_createWindow',
+		title: post2db+'Member',
+		closable:true,
+		closeAction: 'hide',
+		autoWidth: true,
+		autoHeight: true,
+		x:0,
+		y:0,
+		plain:true,
+		layout: 'fit',
+		modal: true,
+		renderTo: 'elwindow_member_create',
+		items: member_createForm
+	});
+	/* End Window */
+	
+	/* Function for action list search */
+	function member_list_search(){
+		// render according to a SQL date format.
+		var member_id_search=null;
+		var member_cust_search=null;
+		var member_no_search=null;
+		var member_register_search_date="";
+		var member_valid_search_date="";
+		var member_nota_ref_search=null;
+		var member_point_search=null;
+		var member_jenis_search=null;
+		var member_status_search=null;
+		var member_tglserahterima_search_date="";
+
+		if(member_idSearchField.getValue()!==null){member_id_search=member_idSearchField.getValue();}
+		if(member_custSearchField.getValue()!==null){member_cust_search=member_custSearchField.getValue();}
+		if(member_noSearchField.getValue()!==null){member_no_search=member_noSearchField.getValue();}
+		if(member_registerSearchField.getValue()!==""){member_register_search_date=member_registerSearchField.getValue().format('Y-m-d');}
+		if(member_validSearchField.getValue()!==""){member_valid_search_date=member_validSearchField.getValue().format('Y-m-d');}
+		if(member_nota_refSearchField.getValue()!==null){member_nota_ref_search=member_nota_refSearchField.getValue();}
+		if(member_pointSearchField.getValue()!==null){member_point_search=member_pointSearchField.getValue();}
+		if(member_jenisSearchField.getValue()!==null){member_jenis_search=member_jenisSearchField.getValue();}
+		if(member_statusSearchField.getValue()!==null){member_status_search=member_statusSearchField.getValue();}
+		if(member_tglserahterimaSearchField.getValue()!==""){member_tglserahterima_search_date=member_tglserahterimaSearchField.getValue().format('Y-m-d');}
+		// change the store parameters
+		member_DataStore.baseParams = {
+			task: 'SEARCH',
+			//variable here
+			member_id	:	member_id_search, 
+			member_cust	:	member_cust_search, 
+			member_no	:	member_no_search, 
+			member_register	:	member_register_search_date, 
+			member_valid	:	member_valid_search_date, 
+			member_nota_ref	:	member_nota_ref_search, 
+			member_point	:	member_point_search, 
+			member_jenis	:	member_jenis_search, 
+			member_status	:	member_status_search, 
+			member_tglserahterima	:	member_tglserahterima_search_date, 
+		};
+		// Cause the datastore to do another query : 
+		member_DataStore.reload({params: {start: 0, limit: pageS}});
+	}
+		
+	/* Function for reset search result */
+	function member_reset_search(){
+		// reset the store parameters
+		member_DataStore.baseParams = { task: 'LIST' };
+		// Cause the datastore to do another query : 
+		member_DataStore.reload({params: {start: 0, limit: pageS}});
+		member_searchWindow.close();
+	};
+	/* End of Fuction */
+
+	function member_reset_SearchForm(){
+		member_custSearchField.reset();
+		member_noSearchField.reset();
+		member_registerSearchField.reset();
+		member_validSearchField.reset();
+		member_nota_refSearchField.reset();
+		member_pointSearchField.reset();
+		member_jenisSearchField.reset();
+		member_statusSearchField.reset();
+		member_tglserahterimaSearchField.reset();
+	}
+
+	
+	/* Field for search */
+	/* Identify  member_id Search Field */
+	member_idSearchField= new Ext.form.NumberField({
+		id: 'member_idSearchField',
+		fieldLabel: 'Member Id',
+		allowNegatife : false,
+		blankText: '0',
+		allowDecimals: false,
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
+	
+	});
+	/* Identify  member_cust Search Field */
+	member_custSearchField= new Ext.form.NumberField({
+		id: 'member_custSearchField',
+		fieldLabel: 'Member Cust',
+		allowNegatife : false,
+		blankText: '0',
+		allowDecimals: false,
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
+	
+	});
+	/* Identify  member_no Search Field */
+	member_noSearchField= new Ext.form.TextField({
+		id: 'member_noSearchField',
+		fieldLabel: 'Member No',
+		maxLength: 50,
+		anchor: '95%'
+	
+	});
+	/* Identify  member_register Search Field */
+	member_registerSearchField= new Ext.form.DateField({
+		id: 'member_registerSearchField',
+		fieldLabel: 'Member Register',
+		format : 'Y-m-d',
+	
+	});
+	/* Identify  member_valid Search Field */
+	member_validSearchField= new Ext.form.DateField({
+		id: 'member_validSearchField',
+		fieldLabel: 'Member Valid',
+		format : 'Y-m-d',
+	
+	});
+	/* Identify  member_nota_ref Search Field */
+	member_nota_refSearchField= new Ext.form.TextField({
+		id: 'member_nota_refSearchField',
+		fieldLabel: 'Member Nota Ref',
+		maxLength: 50,
+		anchor: '95%'
+	
+	});
+	/* Identify  member_point Search Field */
+	member_pointSearchField= new Ext.form.NumberField({
+		id: 'member_pointSearchField',
+		fieldLabel: 'Member Point',
+		allowNegatife : false,
+		blankText: '0',
+		allowDecimals: false,
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
+	
+	});
+	/* Identify  member_jenis Search Field */
+	member_jenisSearchField= new Ext.form.ComboBox({
+		id: 'member_jenisSearchField',
+		fieldLabel: 'Member Jenis',
+		store:new Ext.data.SimpleStore({
+			fields:['value', 'member_jenis'],
+			data:[['perpanjangan','perpanjangan'],['baru','baru']]
+		}),
+		mode: 'local',
+		displayField: 'member_jenis',
+		valueField: 'value',
+		anchor: '50%',
+		triggerAction: 'all'	 
+	
+	});
+	/* Identify  member_status Search Field */
+	member_statusSearchField= new Ext.form.ComboBox({
+		id: 'member_statusSearchField',
+		fieldLabel: 'Member Status',
+		store:new Ext.data.SimpleStore({
+			fields:['value', 'member_status'],
+			data:[['tidak aktif','tidak aktif'],['print','print'],['aktif','aktif'],['register','register']]
+		}),
+		mode: 'local',
+		displayField: 'member_status',
+		valueField: 'value',
+		anchor: '50%',
+		triggerAction: 'all'	 
+	
+	});
+	/* Identify  member_tglserahterima Search Field */
+	member_tglserahterimaSearchField= new Ext.form.DateField({
+		id: 'member_tglserahterimaSearchField',
+		fieldLabel: 'Member Tglserahterima',
+		format : 'Y-m-d',
+	
+	});
+    
+	/* Function for retrieve search Form Panel */
+	member_searchForm = new Ext.FormPanel({
+		labelAlign: 'top',
+		bodyStyle:'padding:5px',
+		autoHeight:true,
+		width: 300,        
+		items: [{
+			layout:'column',
+			border:false,
+			items:[
+			{
+				columnWidth:1,
+				layout: 'form',
+				border:false,
+				items: [member_custSearchField, member_noSearchField, member_registerSearchField, member_validSearchField, member_nota_refSearchField, member_pointSearchField, member_jenisSearchField, member_statusSearchField, member_tglserahterimaSearchField] 
+			}
+			]
+		}]
+		,
+		buttons: [{
+				text: 'Search',
+				handler: member_list_search
+			},{
+				text: 'Close',
+				handler: function(){
+					member_searchWindow.hide();
+				}
+			}
+		]
+	});
+    /* End of Function */ 
+	 
+	/* Function for retrieve search Window Form, used for andvaced search */
+	member_searchWindow = new Ext.Window({
+		title: 'member Search',
+		closable:true,
+		closeAction: 'hide',
+		autoWidth: true,
+		autoHeight: true,
+		plain:true,
+		layout: 'fit',
+		x: 0,
+		y: 0,
+		modal: true,
+		renderTo: 'elwindow_member_search',
+		items: member_searchForm
+	});
+    /* End of Function */ 
+	 
+  	/* Function for Displaying  Search Window Form */
+	function display_form_search_window(){
+		if(!member_searchWindow.isVisible()){
+			member_reset_SearchForm();
+			member_searchWindow.show();
+		} else {
+			member_searchWindow.toFront();
+		}
+	}
+  	/* End Function */
+	
+	/* Function for print List Grid */
+	function member_print(){
+		var searchquery = "";
+		var member_cust_print=null;
+		var member_no_print=null;
+		var member_register_print_date="";
+		var member_valid_print_date="";
+		var member_nota_ref_print=null;
+		var member_point_print=null;
+		var member_jenis_print=null;
+		var member_status_print=null;
+		var member_tglserahterima_print_date="";
+		var win;              
+		// check if we do have some search data...
+		if(member_DataStore.baseParams.query!==null){searchquery = member_DataStore.baseParams.query;}
+		if(member_DataStore.baseParams.member_cust!==null){member_cust_print = member_DataStore.baseParams.member_cust;}
+		if(member_DataStore.baseParams.member_no!==null){member_no_print = member_DataStore.baseParams.member_no;}
+		if(member_DataStore.baseParams.member_register!==""){member_register_print_date = member_DataStore.baseParams.member_register;}
+		if(member_DataStore.baseParams.member_valid!==""){member_valid_print_date = member_DataStore.baseParams.member_valid;}
+		if(member_DataStore.baseParams.member_nota_ref!==null){member_nota_ref_print = member_DataStore.baseParams.member_nota_ref;}
+		if(member_DataStore.baseParams.member_point!==null){member_point_print = member_DataStore.baseParams.member_point;}
+		if(member_DataStore.baseParams.member_jenis!==null){member_jenis_print = member_DataStore.baseParams.member_jenis;}
+		if(member_DataStore.baseParams.member_status!==null){member_status_print = member_DataStore.baseParams.member_status;}
+		if(member_DataStore.baseParams.member_tglserahterima!==""){member_tglserahterima_print_date = member_DataStore.baseParams.member_tglserahterima;}
+
+		Ext.Ajax.request({   
+		waitMsg: 'Please Wait...',
+		url: 'index.php?c=c_member&m=get_action',
+		params: {
+			task: "PRINT",
+		  	query: searchquery,                    		// if we are doing a quicksearch, use this
+			//if we are doing advanced search, use this
+			member_cust : member_cust_print,
+			member_no : member_no_print,
+		  	member_register : member_register_print_date, 
+		  	member_valid : member_valid_print_date, 
+			member_nota_ref : member_nota_ref_print,
+			member_point : member_point_print,
+			member_jenis : member_jenis_print,
+			member_status : member_status_print,
+		  	member_tglserahterima : member_tglserahterima_print_date, 
+		  	currentlisting: member_DataStore.baseParams.task // this tells us if we are searching or not
+		}, 
+		success: function(response){              
+		  	var result=eval(response.responseText);
+		  	switch(result){
+		  	case 1:
+				win = window.open('./memberlist.html','memberlist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
+				win.print();
+				break;
+		  	default:
+				Ext.MessageBox.show({
+					title: 'Warning',
+					msg: 'Unable to print the grid!',
+					buttons: Ext.MessageBox.OK,
+					animEl: 'save',
+					icon: Ext.MessageBox.WARNING
+				});
+				break;
+		  	}  
+		},
+		failure: function(response){
+		  	var result=response.responseText;
+			Ext.MessageBox.show({
+			   title: 'Error',
+			   msg: 'Could not connect to the database. retry later.',
+			   buttons: Ext.MessageBox.OK,
+			   animEl: 'database',
+			   icon: Ext.MessageBox.ERROR
+			});		
+		} 	                     
+		});
+	}
+	/* Enf Function */
+	
+	/* Function for print Export to Excel Grid */
+	function member_export_excel(){
+		var searchquery = "";
+		var member_cust_2excel=null;
+		var member_no_2excel=null;
+		var member_register_2excel_date="";
+		var member_valid_2excel_date="";
+		var member_nota_ref_2excel=null;
+		var member_point_2excel=null;
+		var member_jenis_2excel=null;
+		var member_status_2excel=null;
+		var member_tglserahterima_2excel_date="";
+		var win;              
+		// check if we do have some search data...
+		if(member_DataStore.baseParams.query!==null){searchquery = member_DataStore.baseParams.query;}
+		if(member_DataStore.baseParams.member_cust!==null){member_cust_2excel = member_DataStore.baseParams.member_cust;}
+		if(member_DataStore.baseParams.member_no!==null){member_no_2excel = member_DataStore.baseParams.member_no;}
+		if(member_DataStore.baseParams.member_register!==""){member_register_2excel_date = member_DataStore.baseParams.member_register;}
+		if(member_DataStore.baseParams.member_valid!==""){member_valid_2excel_date = member_DataStore.baseParams.member_valid;}
+		if(member_DataStore.baseParams.member_nota_ref!==null){member_nota_ref_2excel = member_DataStore.baseParams.member_nota_ref;}
+		if(member_DataStore.baseParams.member_point!==null){member_point_2excel = member_DataStore.baseParams.member_point;}
+		if(member_DataStore.baseParams.member_jenis!==null){member_jenis_2excel = member_DataStore.baseParams.member_jenis;}
+		if(member_DataStore.baseParams.member_status!==null){member_status_2excel = member_DataStore.baseParams.member_status;}
+		if(member_DataStore.baseParams.member_tglserahterima!==""){member_tglserahterima_2excel_date = member_DataStore.baseParams.member_tglserahterima;}
+
+		Ext.Ajax.request({   
+		waitMsg: 'Please Wait...',
+		url: 'index.php?c=c_member&m=get_action',
+		params: {
+			task: "EXCEL",
+		  	query: searchquery,                    		// if we are doing a quicksearch, use this
+			//if we are doing advanced search, use this
+			member_cust : member_cust_2excel,
+			member_no : member_no_2excel,
+		  	member_register : member_register_2excel_date, 
+		  	member_valid : member_valid_2excel_date, 
+			member_nota_ref : member_nota_ref_2excel,
+			member_point : member_point_2excel,
+			member_jenis : member_jenis_2excel,
+			member_status : member_status_2excel,
+		  	member_tglserahterima : member_tglserahterima_2excel_date, 
+		  	currentlisting: member_DataStore.baseParams.task // this tells us if we are searching or not
+		},
+		success: function(response){              
+		  	var result=eval(response.responseText);
+		  	switch(result){
+		  	case 1:
+				win = window.location=('./export2excel.php');
+				break;
+		  	default:
+				Ext.MessageBox.show({
+					title: 'Warning',
+					msg: 'Unable to convert excel the grid!',
+					buttons: Ext.MessageBox.OK,
+					animEl: 'save',
+					icon: Ext.MessageBox.WARNING
+				});
+				break;
+		  	}  
+		},
+		failure: function(response){
+		  	var result=response.responseText;
+			Ext.MessageBox.show({
+			   title: 'Error',
+			   msg: 'Could not connect to the database. retry later.',
+			   buttons: Ext.MessageBox.OK,
+			   animEl: 'database',
+			   icon: Ext.MessageBox.ERROR
+			});    
+		} 	                     
+		});
+	}
+	/*End of Function */
+	
+});
+	</script>
+<body>
+<div>
+	<div class="col">
+        <div id="fp_member"></div>
+		<div id="elwindow_member_create"></div>
+        <div id="elwindow_member_search"></div>
+    </div>
+</div>
+</body>
