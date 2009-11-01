@@ -1,0 +1,433 @@
+<? /* 	These code was generated using phpCIGen v 0.1.a (21/04/2009)
+	#zaqi 		zaqi.smart@gmail.com,http://zenzaqi.blogspot.com, 
+    #songbee	mukhlisona@gmail.com
+	#CV. Trust Solution, jl. Saronojiwo 19 Surabaya, http://www.ts.co.id
+	
+	+ Module  		: master_terima_beli Model
+	+ Description	: For record model process back-end
+	+ Filename 		: c_master_terima_beli.php
+ 	+ Author  		: 
+ 	+ Created on 20/Aug/2009 15:44:15
+	
+*/
+
+class M_master_terima_beli extends Model{
+		
+		//constructor
+		function M_master_terima_beli() {
+			parent::Model();
+		}
+		
+		function get_dorder_satuan_by_produkorder($dorder_master, $dorder_produk){
+			if($dorder_master=="" OR $dorder_produk=="")
+				$sql="SELECT * FROM detail_order_beli,satuan WHERE dorder_satuan=satuan_id";
+			else if($dorder_master!="" AND $dorder_produk!="")
+				$sql="SELECT * FROM detail_order_beli,satuan WHERE dorder_satuan=satuan_id AND dorder_master='".$dorder_master."' AND dorder_produk='".$dorder_produk."'";
+			$query = $this->db->query($sql);
+			$nbrows = $query->num_rows();
+			if($nbrows>0){
+				foreach($query->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+		
+		function get_dorder_by_orderbeli($order_id){
+			$sql="SELECT * FROM detail_order_beli,produk,satuan WHERE dorder_produk=produk_id AND dorder_satuan=satuan_id AND dorder_master='".$order_id."'";
+			$query = $this->db->query($sql);
+			$nbrows = $query->num_rows();
+			if($nbrows>0){
+				foreach($query->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+		
+		function get_order_beli_list(){
+			$sql="SELECT * FROM master_order_beli,supplier WHERE order_supplier=supplier_id";
+			$query = $this->db->query($sql);
+			$nbrows = $query->num_rows();
+			if($nbrows>0){
+				foreach($query->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+		
+		//function for detail
+		//get record list
+		function detail_detail_terima_bonus_list($master_id,$query,$start,$end) {
+			$query = "SELECT * FROM detail_terima_bonus where dtbonus_master='".$master_id."'";
+			$result = $this->db->query($query);
+			$nbrows = $result->num_rows();
+			$limit = $query." LIMIT ".$start.",".$end;			
+			$result = $this->db->query($limit);  
+			
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+		//end of function
+		
+		//purge all detail from master
+		function detail_detail_terima_bonus_purge($master_id){
+			$sql="DELETE from detail_terima_bonus where dtbonus_master='".$master_id."'";
+			$result=$this->db->query($sql);
+			echo '1';
+		}
+		//*eof
+		
+		//insert detail record
+		function detail_detail_terima_bonus_insert($dtbonus_id ,$dtbonus_master ,$dtbonus_produk ,$dtbonus_satuan ,$dtbonus_jumlah ){
+			//if master id not capture from view then capture it from max pk from master table
+			if($dtbonus_master=="" || $dtbonus_master==NULL){
+				$dtbonus_master=$this->get_master_id();
+			}
+			
+			$data = array(
+				"dtbonus_master"=>$dtbonus_master, 
+				"dtbonus_produk"=>$dtbonus_produk, 
+				"dtbonus_satuan"=>$dtbonus_satuan, 
+				"dtbonus_jumlah"=>$dtbonus_jumlah 
+			);
+			$this->db->insert('detail_terima_bonus', $data); 
+			if($this->db->affected_rows())
+				return '1';
+			else
+				return '0';
+
+		}
+		//end of function
+		
+		//function for detail
+		//get record list
+		function detail_detail_terima_beli_list($master_id,$query,$start,$end) {
+			$query = "SELECT * FROM detail_terima_beli where dterima_master='".$master_id."'";
+			$result = $this->db->query($query);
+			$nbrows = $result->num_rows();
+			$limit = $query." LIMIT ".$start.",".$end;			
+			$result = $this->db->query($limit);  
+			
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+		//end of function
+		
+		//get master id, note : not done yet
+		function get_master_id() {
+			$query = "SELECT max(terima_id) as master_id from master_terima_beli";
+			$result = $this->db->query($query);
+			if($result->num_rows()){
+				$data=$result->row();
+				$master_id=$data->master_id;
+				return $master_id;
+			}else{
+				return '0';
+			}
+		}
+		//eof
+		
+		//purge all detail from master
+		function detail_detail_terima_beli_purge($master_id){
+			$sql="DELETE from detail_terima_beli where dterima_master='".$master_id."'";
+			$result=$this->db->query($sql);
+			echo '1';
+		}
+		//*eof
+		
+		//insert detail record
+		function detail_detail_terima_beli_insert($dterima_id ,$dterima_master ,$dterima_produk ,$dterima_satuan ,$dterima_jumlah ){
+			//if master id not capture from view then capture it from max pk from master table
+			if($dterima_master=="" || $dterima_master==NULL){
+				$dterima_master=$this->get_master_id();
+			}
+			
+			$data = array(
+				"dterima_master"=>$dterima_master, 
+				"dterima_produk"=>$dterima_produk, 
+				"dterima_satuan"=>$dterima_satuan, 
+				"dterima_jumlah"=>$dterima_jumlah 
+			);
+			$this->db->insert('detail_terima_beli', $data); 
+			if($this->db->affected_rows())
+				return '1';
+			else
+				return '0';
+
+		}
+		//end of function
+		
+		//function for get list record
+		function master_terima_beli_list($filter,$start,$end){
+			$query = "SELECT * FROM (master_terima_beli LEFT OUTER JOIN supplier on terima_supplier=supplier_id)  LEFT OUTER JOIN master_order_beli  ON terima_order=order_id LEFT OUTER JOIN vu_total_terima_group ON dterima_master=terima_id LEFT OUTER JOIN vu_total_terima_bonus_group 
+						ON dtbonus_master=terima_id";
+			
+			// For simple search
+			if ($filter<>""){
+				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
+				$query .= " (terima_id LIKE '%".addslashes($filter)."%' OR terima_no LIKE '%".addslashes($filter)."%' OR terima_order LIKE '%".addslashes($filter)."%' OR terima_supplier LIKE '%".addslashes($filter)."%' OR terima_surat_jalan LIKE '%".addslashes($filter)."%' OR terima_pengirim LIKE '%".addslashes($filter)."%' OR terima_tanggal LIKE '%".addslashes($filter)."%' OR terima_keterangan LIKE '%".addslashes($filter)."%' )";
+			}
+			
+			$result = $this->db->query($query);
+			$nbrows = $result->num_rows();
+			$limit = $query." LIMIT ".$start.",".$end;		
+			$result = $this->db->query($limit);  
+			
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+		
+		//function for update record
+		function master_terima_beli_update($terima_id ,$terima_no ,$terima_order ,$terima_supplier ,$terima_surat_jalan ,$terima_pengirim ,$terima_tanggal ,$terima_keterangan ){
+			$data = array(
+				"terima_id"=>$terima_id, 
+				"terima_no"=>$terima_no, 
+//				"terima_order"=>$terima_order, 
+//				"terima_supplier"=>$terima_supplier, 
+				"terima_surat_jalan"=>$terima_surat_jalan, 
+				"terima_pengirim"=>$terima_pengirim, 
+				"terima_tanggal"=>$terima_tanggal, 
+				"terima_keterangan"=>$terima_keterangan 
+			);
+			$sql="SELECT supplier_id FROM supplier WHERE supplier_id='".$terima_supplier."'";
+			$rs=$this->db->query($sql);
+			if($rs->num_rows())
+				$data["terima_supplier"]=$terima_supplier;
+			
+			$sql="SELECT order_id FROM master_order_beli WHERE order_id='".$terima_order."'";
+			$rs=$this->db->query($sql);
+			if($rs->num_rows())
+				$data["terima_order"]=$terima_order;
+			
+			$this->db->where('terima_id', $terima_id);
+			$this->db->update('master_terima_beli', $data);
+			
+			return '1';
+		}
+		
+		//function for create new record
+		function master_terima_beli_create($terima_no ,$terima_order ,$terima_supplier ,$terima_surat_jalan ,$terima_pengirim ,$terima_tanggal ,$terima_keterangan ){
+			$pattern="LPB/".date("y/m")."/";
+			$terima_no=$this->m_public_function->get_kode_1('master_terima_beli','terima_no',$pattern,14);
+			
+			$data = array(
+				"terima_no"=>$terima_no, 
+				"terima_order"=>$terima_order, 
+				"terima_supplier"=>$terima_supplier, 
+				"terima_surat_jalan"=>$terima_surat_jalan, 
+				"terima_pengirim"=>$terima_pengirim, 
+				"terima_tanggal"=>$terima_tanggal, 
+				"terima_keterangan"=>$terima_keterangan 
+			);
+			$this->db->insert('master_terima_beli', $data); 
+			if($this->db->affected_rows())
+				return '1';
+			else
+				return '0';
+		}
+		
+		//fcuntion for delete record
+		function master_terima_beli_delete($pkid){
+			// You could do some checkups here and return '0' or other error consts.
+			// Make a single query to delete all of the master_terima_belis at the same time :
+			if(sizeof($pkid)<1){
+				return '0';
+			} else if (sizeof($pkid) == 1){
+				$query = "DELETE FROM master_terima_beli WHERE terima_id = ".$pkid[0];
+				$this->db->query($query);
+			} else {
+				$query = "DELETE FROM master_terima_beli WHERE ";
+				for($i = 0; $i < sizeof($pkid); $i++){
+					$query = $query . "terima_id= ".$pkid[$i];
+					if($i<sizeof($pkid)-1){
+						$query = $query . " OR ";
+					}     
+				}
+				$this->db->query($query);
+			}
+			if($this->db->affected_rows()>0)
+				return '1';
+			else
+				return '0';
+		}
+		
+		//function for advanced search record
+		function master_terima_beli_search($terima_id ,$terima_no ,$terima_order ,$terima_supplier ,$terima_surat_jalan ,$terima_pengirim ,$terima_tanggal ,$terima_keterangan ,$start,$end){
+			//full query
+			$query="select * from master_terima_beli";
+			
+			if($terima_id!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " terima_id LIKE '%".$terima_id."%'";
+			};
+			if($terima_no!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " terima_no LIKE '%".$terima_no."%'";
+			};
+			if($terima_order!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " terima_order LIKE '%".$terima_order."%'";
+			};
+			if($terima_supplier!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " terima_supplier LIKE '%".$terima_supplier."%'";
+			};
+			if($terima_surat_jalan!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " terima_surat_jalan LIKE '%".$terima_surat_jalan."%'";
+			};
+			if($terima_pengirim!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " terima_pengirim LIKE '%".$terima_pengirim."%'";
+			};
+			if($terima_tanggal!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " terima_tanggal LIKE '%".$terima_tanggal."%'";
+			};
+			if($terima_keterangan!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " terima_keterangan LIKE '%".$terima_keterangan."%'";
+			};
+			$result = $this->db->query($query);
+			$nbrows = $result->num_rows();
+			
+			$limit = $query." LIMIT ".$start.",".$end;		
+			$result = $this->db->query($limit);    
+			
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+		
+		//function for print record
+		function master_terima_beli_print($terima_id ,$terima_no ,$terima_order ,$terima_supplier ,$terima_surat_jalan ,$terima_pengirim ,$terima_tanggal ,$terima_keterangan ,$option,$filter){
+			//full query
+			$query="select * from master_terima_beli";
+			if($option=='LIST'){
+				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
+				$query .= " (terima_id LIKE '%".addslashes($filter)."%' OR terima_no LIKE '%".addslashes($filter)."%' OR terima_order LIKE '%".addslashes($filter)."%' OR terima_supplier LIKE '%".addslashes($filter)."%' OR terima_surat_jalan LIKE '%".addslashes($filter)."%' OR terima_pengirim LIKE '%".addslashes($filter)."%' OR terima_tanggal LIKE '%".addslashes($filter)."%' OR terima_keterangan LIKE '%".addslashes($filter)."%' )";
+				$result = $this->db->query($query);
+			} else if($option=='SEARCH'){
+				if($terima_id!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " terima_id LIKE '%".$terima_id."%'";
+				};
+				if($terima_no!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " terima_no LIKE '%".$terima_no."%'";
+				};
+				if($terima_order!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " terima_order LIKE '%".$terima_order."%'";
+				};
+				if($terima_supplier!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " terima_supplier LIKE '%".$terima_supplier."%'";
+				};
+				if($terima_surat_jalan!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " terima_surat_jalan LIKE '%".$terima_surat_jalan."%'";
+				};
+				if($terima_pengirim!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " terima_pengirim LIKE '%".$terima_pengirim."%'";
+				};
+				if($terima_tanggal!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " terima_tanggal LIKE '%".$terima_tanggal."%'";
+				};
+				if($terima_keterangan!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " terima_keterangan LIKE '%".$terima_keterangan."%'";
+				};
+				$result = $this->db->query($query);
+			}
+			return $result;
+		}
+		
+		//function  for export to excel
+		function master_terima_beli_export_excel($terima_id ,$terima_no ,$terima_order ,$terima_supplier ,$terima_surat_jalan ,$terima_pengirim ,$terima_tanggal ,$terima_keterangan ,$option,$filter){
+			//full query
+			$query="select * from master_terima_beli";
+			if($option=='LIST'){
+				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
+				$query .= " (terima_id LIKE '%".addslashes($filter)."%' OR terima_no LIKE '%".addslashes($filter)."%' OR terima_order LIKE '%".addslashes($filter)."%' OR terima_supplier LIKE '%".addslashes($filter)."%' OR terima_surat_jalan LIKE '%".addslashes($filter)."%' OR terima_pengirim LIKE '%".addslashes($filter)."%' OR terima_tanggal LIKE '%".addslashes($filter)."%' OR terima_keterangan LIKE '%".addslashes($filter)."%' )";
+				$result = $this->db->query($query);
+			} else if($option=='SEARCH'){
+				if($terima_id!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " terima_id LIKE '%".$terima_id."%'";
+				};
+				if($terima_no!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " terima_no LIKE '%".$terima_no."%'";
+				};
+				if($terima_order!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " terima_order LIKE '%".$terima_order."%'";
+				};
+				if($terima_supplier!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " terima_supplier LIKE '%".$terima_supplier."%'";
+				};
+				if($terima_surat_jalan!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " terima_surat_jalan LIKE '%".$terima_surat_jalan."%'";
+				};
+				if($terima_pengirim!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " terima_pengirim LIKE '%".$terima_pengirim."%'";
+				};
+				if($terima_tanggal!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " terima_tanggal LIKE '%".$terima_tanggal."%'";
+				};
+				if($terima_keterangan!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " terima_keterangan LIKE '%".$terima_keterangan."%'";
+				};
+				$result = $this->db->query($query);
+			}
+			return $result;
+		}
+		
+}
+?>

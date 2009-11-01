@@ -1,0 +1,373 @@
+<? /* 	These code was generated using phpCIGen v 0.1.a (21/04/2009)
+	#zaqi 		zaqi.smart@gmail.com,http://zenzaqi.blogspot.com, 
+    #songbee	mukhlisona@gmail.com
+	#CV. Trust Solution, jl. Saronojiwo 19 Surabaya, http://www.ts.co.id
+	
+	+ Module  		: master_retur_beli Model
+	+ Description	: For record model process back-end
+	+ Filename 		: c_master_retur_beli.php
+ 	+ Author  		: 
+ 	+ Created on 20/Aug/2009 15:43:32
+	
+*/
+
+class M_master_retur_beli extends Model{
+		
+		//constructor
+		function M_master_retur_beli() {
+			parent::Model();
+		}
+		
+		function get_harga_on_order($dorder_master, $dorder_produk, $dorder_satuan){
+			$sql="SELECT * FROM detail_order_beli WHERE dorder_master='".$dorder_master."' AND dorder_produk='".$dorder_produk."' AND dorder_satuan='".$dorder_satuan."'";
+			$query = $this->db->query($sql);
+			$nbrows = $query->num_rows();
+			if($nbrows>0){
+				foreach($query->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+		
+		function get_satuan_by_produkid($dterima_master, $dterima_produk){
+			if($dterima_master=="" OR $dterima_produk==""){
+				$sql="SELECT * FROM detail_terima_beli,satuan WHERE dterima_satuan=satuan_id";
+			}else{
+				$sql="SELECT * FROM detail_terima_beli,satuan WHERE dterima_satuan=satuan_id AND dterima_master='".$dterima_master."' AND dterima_produk='".$dterima_produk."'";
+			}
+			/*$sql="SELECT * FROM detail_order_beli,satuan WHERE dorder_satuan=satuan_id AND dterima_master='".$dterima_master."' AND dterima_produk='".$dterima_produk."' AND dorder_master='".$dorder_master."'";*/
+			$query = $this->db->query($sql);
+			$nbrows = $query->num_rows();
+			if($nbrows>0){
+				foreach($query->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+		
+		function get_drbeli_by_terimabeli($terima_id){
+			$sql="SELECT * FROM detail_terima_beli,produk,satuan WHERE dterima_produk=produk_id AND dterima_satuan=satuan_id AND dterima_master='".$terima_id."'";
+			$query = $this->db->query($sql);
+			$nbrows = $query->num_rows();
+			if($nbrows>0){
+				foreach($query->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+		
+		function get_terima_beli_list(){
+			$sql="SELECT * FROM master_terima_beli,supplier WHERE terima_supplier=supplier_id";
+			$query = $this->db->query($sql);
+			$nbrows = $query->num_rows();
+			if($nbrows>0){
+				foreach($query->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+		
+		//function for detail
+		//get record list
+		function detail_detail_retur_beli_list($master_id,$query,$start,$end) {
+			$query = "SELECT * FROM detail_retur_beli where drbeli_master='".$master_id."'";
+			$result = $this->db->query($query);
+			$nbrows = $result->num_rows();
+			$limit = $query." LIMIT ".$start.",".$end;			
+			$result = $this->db->query($limit);  
+			
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+		//end of function
+		
+		//get master id, note : not done yet
+		function get_master_id() {
+			$query = "SELECT max(rbeli_id) as master_id from master_retur_beli";
+			$result = $this->db->query($query);
+			if($result->num_rows()){
+				$data=$result->row();
+				$master_id=$data->master_id;
+				return $master_id;
+			}else{
+				return '0';
+			}
+		}
+		//eof
+		
+		//purge all detail from master
+		function detail_detail_retur_beli_purge($master_id){
+			$sql="DELETE from detail_retur_beli where drbeli_master='".$master_id."'";
+			$result=$this->db->query($sql);
+		}
+		//*eof
+		
+		//insert detail record
+		function detail_detail_retur_beli_insert($drbeli_id ,$drbeli_master ,$drbeli_produk ,$drbeli_satuan ,$drbeli_jumlah ,$drbeli_harga ){
+			//if master id not capture from view then capture it from max pk from master table
+			if($drbeli_master=="" || $drbeli_master==NULL){
+				$drbeli_master=$this->get_master_id();
+			}
+			
+			$data = array(
+				"drbeli_master"=>$drbeli_master, 
+				"drbeli_produk"=>$drbeli_produk, 
+				"drbeli_satuan"=>$drbeli_satuan, 
+				"drbeli_jumlah"=>$drbeli_jumlah, 
+				"drbeli_harga"=>$drbeli_harga 
+			);
+			$this->db->insert('detail_retur_beli', $data); 
+			if($this->db->affected_rows())
+				return '1';
+			else
+				return '0';
+
+		}
+		//end of function
+		
+		//function for get list record
+		function master_retur_beli_list($filter,$start,$end){
+			$query = "SELECT master_retur_beli.*,supplier.supplier_id,supplier.supplier_nama,master_terima_beli.*,vu_total_retur_group.* 
+						FROM master_retur_beli,supplier,master_terima_beli,vu_total_retur_group
+						WHERE rbeli_supplier=supplier_id AND rbeli_terima=terima_id AND vu_total_retur_group.drbeli_master=rbeli_id";
+			
+			// For simple search
+			if ($filter<>""){
+				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
+				$query .= " (rbeli_id LIKE '%".addslashes($filter)."%' OR rbeli_terima LIKE '%".addslashes($filter)."%' OR rbeli_supplier LIKE '%".addslashes($filter)."%' OR rbeli_tanggal LIKE '%".addslashes($filter)."%' OR rbeli_keterangan LIKE '%".addslashes($filter)."%' )";
+			}
+			
+			$result = $this->db->query($query);
+			$nbrows = $result->num_rows();
+			$limit = $query." LIMIT ".$start.",".$end;		
+			$result = $this->db->query($limit);  
+			
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+		
+		//function for update record
+		function master_retur_beli_update($rbeli_id ,$rbeli_nobukti ,$rbeli_terima ,$rbeli_supplier ,$rbeli_tanggal ,$rbeli_keterangan ){
+			$data = array(
+				"rbeli_id"=>$rbeli_id, 
+				"rbeli_nobukti"=>$rbeli_nobukti, 
+//				"rbeli_terima"=>$rbeli_terima, 
+//				"rbeli_supplier"=>$rbeli_supplier, 
+				"rbeli_tanggal"=>$rbeli_tanggal, 
+				"rbeli_keterangan"=>$rbeli_keterangan 
+			);
+			$sql="SELECT supplier_id FROM supplier WHERE supplier_id='".$rbeli_supplier."'";
+			$rs=$this->db->query($sql);
+			if($rs->num_rows())
+				$data["rbeli_supplier"]=$rbeli_supplier;
+			
+			$sql="SELECT terima_id FROM master_terima_beli WHERE terima_id='".$rbeli_terima."'";
+			$rs=$this->db->query($sql);
+			if($rs->num_rows())
+				$data["rbeli_terima"]=$rbeli_terima;
+			
+			$this->db->where('rbeli_id', $rbeli_id);
+			$this->db->update('master_retur_beli', $data);
+			
+			return '1';
+		}
+		
+		//function for create new record
+		function master_retur_beli_create($rbeli_nobukti ,$rbeli_terima ,$rbeli_supplier ,$rbeli_tanggal ,$rbeli_keterangan ){
+			
+			$pattern="RB/".date("y/m")."/";
+			$rbeli_nobukti=$this->m_public_function->get_kode_1('master_retur_beli','rbeli_nobukti',$pattern,13);
+			
+			$data = array(
+				"rbeli_nobukti"=>$rbeli_nobukti, 
+				"rbeli_terima"=>$rbeli_terima, 
+				"rbeli_supplier"=>$rbeli_supplier, 
+				"rbeli_tanggal"=>$rbeli_tanggal, 
+				"rbeli_keterangan"=>$rbeli_keterangan 
+			);
+			$this->db->insert('master_retur_beli', $data); 
+			if($this->db->affected_rows())
+				return '1';
+			else
+				return '0';
+		}
+		
+		//fcuntion for delete record
+		function master_retur_beli_delete($pkid){
+			// You could do some checkups here and return '0' or other error consts.
+			// Make a single query to delete all of the master_retur_belis at the same time :
+			if(sizeof($pkid)<1){
+				return '0';
+			} else if (sizeof($pkid) == 1){
+				$query = "DELETE FROM master_retur_beli WHERE rbeli_id = ".$pkid[0];
+				$this->db->query($query);
+			} else {
+				$query = "DELETE FROM master_retur_beli WHERE ";
+				for($i = 0; $i < sizeof($pkid); $i++){
+					$query = $query . "rbeli_id= ".$pkid[$i];
+					if($i<sizeof($pkid)-1){
+						$query = $query . " OR ";
+					}     
+				}
+				$this->db->query($query);
+			}
+			if($this->db->affected_rows()>0)
+				return '1';
+			else
+				return '0';
+		}
+		
+		//function for advanced search record
+		function master_retur_beli_search($rbeli_id ,$rbeli_nobukti ,$rbeli_terima ,$rbeli_supplier ,$rbeli_tanggal ,$rbeli_keterangan ,$start,$end){
+			//full query
+			$query="select * from master_retur_beli";
+			
+			if($rbeli_id!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " rbeli_id LIKE '%".$rbeli_id."%'";
+			};
+			if($rbeli_nobukti!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " rbeli_nobukti = '".$rbeli_nobukti."'";
+			};
+			if($rbeli_terima!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " rbeli_terima LIKE '%".$rbeli_terima."%'";
+			};
+			if($rbeli_supplier!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " rbeli_supplier LIKE '%".$rbeli_supplier."%'";
+			};
+			if($rbeli_tanggal!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " rbeli_tanggal LIKE '%".$rbeli_tanggal."%'";
+			};
+			if($rbeli_keterangan!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " rbeli_keterangan LIKE '%".$rbeli_keterangan."%'";
+			};
+			$result = $this->db->query($query);
+			$nbrows = $result->num_rows();
+			
+			$limit = $query." LIMIT ".$start.",".$end;		
+			$result = $this->db->query($limit);    
+			
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+		
+		//function for print record
+		function master_retur_beli_print($rbeli_id ,$rbeli_nobukti ,$rbeli_terima ,$rbeli_supplier ,$rbeli_tanggal ,$rbeli_keterangan ,$option,$filter){
+			//full query
+			$query="select * from master_retur_beli";
+			if($option=='LIST'){
+				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
+				$query .= " (rbeli_id LIKE '%".addslashes($filter)."%' OR rbeli_nobukti LIKE '%".addslashes($filter)."%' OR rbeli_terima LIKE '%".addslashes($filter)."%' OR rbeli_supplier LIKE '%".addslashes($filter)."%' OR rbeli_tanggal LIKE '%".addslashes($filter)."%' OR rbeli_keterangan LIKE '%".addslashes($filter)."%' )";
+				$result = $this->db->query($query);
+			} else if($option=='SEARCH'){
+				if($rbeli_id!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " rbeli_id LIKE '%".$rbeli_id."%'";
+				};
+				if($rbeli_nobukti!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " rbeli_nobukti = '".$rbeli_nobukti."'";
+				};
+				if($rbeli_terima!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " rbeli_terima LIKE '%".$rbeli_terima."%'";
+				};
+				if($rbeli_supplier!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " rbeli_supplier LIKE '%".$rbeli_supplier."%'";
+				};
+				if($rbeli_tanggal!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " rbeli_tanggal LIKE '%".$rbeli_tanggal."%'";
+				};
+				if($rbeli_keterangan!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " rbeli_keterangan LIKE '%".$rbeli_keterangan."%'";
+				};
+				$result = $this->db->query($query);
+			}
+			return $result;
+		}
+		
+		//function  for export to excel
+		function master_retur_beli_export_excel($rbeli_id ,$rbeli_nobukti ,$rbeli_terima ,$rbeli_supplier ,$rbeli_tanggal ,$rbeli_keterangan ,$option,$filter){
+			//full query
+			$query="select * from master_retur_beli";
+			if($option=='LIST'){
+				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
+				$query .= " (rbeli_id LIKE '%".addslashes($filter)."%' OR rbeli_nobukti LIKE '%".addslashes($filter)."%' OR rbeli_terima LIKE '%".addslashes($filter)."%' OR rbeli_supplier LIKE '%".addslashes($filter)."%' OR rbeli_tanggal LIKE '%".addslashes($filter)."%' OR rbeli_keterangan LIKE '%".addslashes($filter)."%' )";
+				$result = $this->db->query($query);
+			} else if($option=='SEARCH'){
+				if($rbeli_id!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " rbeli_id LIKE '%".$rbeli_id."%'";
+				};
+				if($rbeli_nobukti!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " rbeli_nobukti = '".$rbeli_nobukti."'";
+				};
+				if($rbeli_terima!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " rbeli_terima LIKE '%".$rbeli_terima."%'";
+				};
+				if($rbeli_supplier!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " rbeli_supplier LIKE '%".$rbeli_supplier."%'";
+				};
+				if($rbeli_tanggal!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " rbeli_tanggal LIKE '%".$rbeli_tanggal."%'";
+				};
+				if($rbeli_keterangan!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " rbeli_keterangan LIKE '%".$rbeli_keterangan."%'";
+				};
+				$result = $this->db->query($query);
+			}
+			return $result;
+		}
+		
+}
+?>

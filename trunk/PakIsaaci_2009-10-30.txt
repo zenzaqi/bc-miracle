@@ -1,0 +1,112 @@
+Isaac Susanto SUSANTO: 'sore
+song_b33: silakan diupdate dr google pak
+Isaac Susanto SUSANTO: ok pak
+Isaac Susanto SUSANTO: ini untuk yg mana pak?
+song_b33: ini u/ appointment
+Isaac Susanto SUSANTO: ohh
+Isaac Susanto SUSANTO: ok ok
+song_b33: silakan ntar diliat dulu n klo ok baru aq lanjutin ke proses inputannya
+song_b33: trus jg silakan update database juga
+Isaac Susanto SUSANTO: ok sebentar
+song_b33: u/ update databasenya ini beda cara
+Isaac Susanto SUSANTO: gimana pak?
+song_b33: silakan buka menu.sql ntar copy isinya dan paste di phpmyadmin server
+song_b33: setelah buka database server klik tab=SQL dan paste kan ke situ nanti klik tombol GO
+Isaac Susanto SUSANTO: bentar pak
+song_b33: nanti di aplikasi muncul menu Appointment saja
+Isaac Susanto SUSANTO: menu.sql nya itu dimana pak
+song_b33: di folder biasanya UPDATE_DB
+Isaac Susanto SUSANTO: ok
+Isaac Susanto SUSANTO: brarti update_db nya saya tarik juga dr google?
+song_b33: iya
+Isaac Susanto SUSANTO: itu td ada yg vu_perawatan
+Isaac Susanto SUSANTO: tanda pentung merah
+Isaac Susanto SUSANTO: gpp yah?
+Isaac Susanto SUSANTO: update juga?
+song_b33: nggak2 pak
+Isaac Susanto SUSANTO: ok
+song_b33: yg menu.sql aja
+Isaac Susanto SUSANTO: wadoohhh
+Isaac Susanto SUSANTO: kok blom isa kluar yah pak?
+Isaac Susanto SUSANTO: habis add
+Isaac Susanto SUSANTO: mrgt ngga kluar di list
+Isaac Susanto SUSANTO: apa memang disengaja?
+song_b33: ini yg appointment?
+song_b33: memang yg appointment belum tak kasih proses add edit deletenya
+Isaac Susanto SUSANTO: iya
+song_b33: maksud saya silakan diliat dulu desain appointmentnya, apakah sudah benar seperti itu
+Isaac Susanto SUSANTO: pak itu field perawatannya kok ada 2 yah?
+Isaac Susanto SUSANTO: kategori itu apa juga ya pak?
+song_b33: field perawatan di mananya pak?
+song_b33: di detailkah?
+Isaac Susanto SUSANTO: di list nya
+song_b33: oh iya  perlu dihilangin, sory kelebihan satu
+Isaac Susanto SUSANTO: yg di detail udah ok si fieldnya
+Isaac Susanto SUSANTO: cuma default2nya yg perlu di set pak
+Isaac Susanto SUSANTO: pak
+song_b33: u/ kategori di list itu maksud saya agar operator sudah langsung tau klo itu adalah appointment perawatan kategori apa gt
+Isaac Susanto SUSANTO: tanggal datang yg di detail itu ngga perlu 
+Isaac Susanto SUSANTO: kategori itu isinya apa pak?>
+song_b33: kategori itu isinya perawatan yg dipilih itu termasuk perawatan medis ato non-medis.
+Isaac Susanto SUSANTO: loo pak
+Isaac Susanto SUSANTO: ini kan menunya udah dibedakan
+Isaac Susanto SUSANTO: ada app non medis
+Isaac Susanto SUSANTO: dan app medis
+Isaac Susanto SUSANTO: kan sendiri2 pak
+song_b33: ok di detail tgl datangnya bisa dihilangin
+Isaac Susanto SUSANTO: ok sip
+song_b33: ketika ada komplen dr karyawan di training yg ke-2 katanya koq lebih enak appointment dijadiin satu, karena satu kali appointment kadang client minta perawatan medis dan non medis
+song_b33: tp nanti secara otomatis di tindakan akan terpisah berdasarkan kategori medis/non-medis
+Isaac Susanto SUSANTO: oh bukan pka
+Isaac Susanto SUSANTO: itu untuk view saja
+Isaac Susanto SUSANTO: kalo input sendiri2
+Isaac Susanto SUSANTO: jadi untuk app
+Isaac Susanto SUSANTO: itu tetap inputnya dibedakan saja
+Isaac Susanto SUSANTO: yg maksud meeting kemarin itu untuk view nya saja pak
+Isaac Susanto SUSANTO: supaya memudahkan reception untuk melihat
+Isaac Susanto SUSANTO: ok?
+song_b33: tp apakah reception akan malah lebih mudah menggunakan satu inputan app, ketika reception memilih perawatan maka secara otomatis kategori medis/non-medis akan ketahuan dan dokter/terapis jg akan otomatis terfilter
+Isaac Susanto SUSANTO: jangan lha pak
+Isaac Susanto SUSANTO: itu soalnya kan 2 bagian yg berbeda
+Isaac Susanto SUSANTO: jamnya harus ngatur masing2
+Isaac Susanto SUSANTO: begitu juga therapis dan dokternta
+Isaac Susanto SUSANTO: nantinya ruangannya bisa dibedakan juga
+song_b33: apakah reception medis dan non-medis berbeda pak?
+song_b33: berbeda orang maksudnya
+Isaac Susanto SUSANTO: pengaturan jam nya pun sendiri sendiri
+Isaac Susanto SUSANTO: utk yg bisa lihat medis & non medis itu dikerjakan nanti aja gpp pak
+Isaac Susanto SUSANTO: itu utk cuma utk memudahkan aja, melihat seorang customer hari ini akan melakukan perawatan apa aja
+Isaac Susanto SUSANTO: yg penting bisa input dengan baik dulu appoinmentnya
+song_b33: ok dech
+Isaac Susanto SUSANTO: selanjutnya ini nilai defaultnya pak
+Isaac Susanto SUSANTO: 1. Master/Tanggal : hari ini
+Isaac Susanto SUSANTO: 2. Master/Cara : telpon
+Isaac Susanto SUSANTO: 3. Detail/Tgl Reservasi : hari ini
+Isaac Susanto SUSANTO: 4. Detail/Status:reservasi
+Isaac Susanto SUSANTO: udah pak
+Isaac Susanto SUSANTO: selamat berjuang
+Isaac Susanto SUSANTO: ganbatte
+Isaac Susanto SUSANTO: ciayo
+song_b33:  ok
+song_b33: merdeka
+Isaac Susanto SUSANTO: gimana pak?
+Isaac Susanto SUSANTO: ok kan?
+song_b33: ok.
+song_b33: tp saya ada satu pilihan lg sebenarnya tp belum saya upload
+Isaac Susanto SUSANTO: apa itu pak?
+song_b33: jadi ketika reception terima telp dr client u/ appointment, mk reception akan buka menu appointment nah di dalam appointment itu ada tab-detail appointment medis dan tab-detail appointment nonmedis
+Isaac Susanto SUSANTO: okkkkkkkkkkk
+Isaac Susanto SUSANTO: sip pak
+Isaac Susanto SUSANTO: jadi menunya satu
+Isaac Susanto SUSANTO: yaitu Appoinment
+Isaac Susanto SUSANTO: lalu
+Isaac Susanto SUSANTO: didalam halaman itu ada tab medis dan non medis
+song_b33: jadi ketika client minta medis maka buka tab-app_medis dan ketika client minta lagi yg nonmedis maka tinggal klik tab-app_nonmedis tanpa reception membuka menu baru lg
+Isaac Susanto SUSANTO: begitukah??
+song_b33: yup
+Isaac Susanto SUSANTO: siippppp
+Isaac Susanto SUSANTO: mantappp
+song_b33: mantap suratap
+Isaac Susanto SUSANTO is typing a message.
+Isaac Susanto SUSANTO: mantap suratap meratap
+song_b33: 
