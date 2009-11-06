@@ -183,12 +183,12 @@ class M_customer extends Model{
 		if ($cust_aktif=="")
 			$cust_aktif = "Aktif";
 			$date_now = date('Y-m-d H:i:s');
-			/*if($cust_kota=="")
+			if($cust_kota=="")
 				$cust_kota="Surabaya";
 			if($cust_propinsi=="")
 				$cust_propinsi="Jawa Timur";
 			if($cust_negara=="")
-				$cust_negara="Indonesia";*/
+				$cust_negara="Indonesia";
 			$data = array(
 				"cust_id"=>$cust_id,			
 				"cust_no"=>$cust_no,			
