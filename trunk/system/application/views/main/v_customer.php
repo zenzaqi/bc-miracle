@@ -2740,7 +2740,7 @@ Ext.onReady(function(){
 	
 	cust_update_confirmField=new Ext.form.Checkbox({
 		id: 'check_update',
-		boxLabel: 'Update data!',
+		boxLabel: 'Update data...',
 		handler: function(node,checked){
 			if (checked) {
 				//Ext.Msg.alert('Status', 'Changes saved successfully.');
