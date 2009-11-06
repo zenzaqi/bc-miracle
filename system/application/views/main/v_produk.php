@@ -1258,23 +1258,6 @@ Ext.onReady(function(){
 				maxLength: 11,
 				maskRe: /([0-9]+)$/
 			})
-		},
-		{
-			hea
-			editor: new Ext.form.ComboBox({
-				id: 'produk_aktifSearchField',
-				fieldLabel: 'Status',
-				store:new Ext.data.SimpleStore({
-					fields:['produk_aktif_value', 'produk_aktif_display'],
-					data:[['Aktif','Aktif'],['Tidak Aktif','Tidak Aktif']]
-				}),
-				mode: 'local',
-				emptyText: 'Aktif',
-				displayField: 'produk_aktif_display',
-				valueField: 'produk_aktif_value',
-				width: 80,
-				triggerAction: 'all'	
-			})
 		}]
 	);
 	satuan_konversi_ColumnModel.defaultSortable= true;
