@@ -2064,7 +2064,7 @@ Ext.onReady(function(){
 	cust_note_ColumnModel.defaultSortable= true;
 	
 	/* Declare DataStore and  show datagrid list */
-	customerListEditorGrid =  new Ext.grid.EditorGridPanel({
+	customerListEditorGrid =  new Ext.grid.GridPanel({
 		id: 'customerListEditorGrid',
 		el: 'fp_customer',
 		title: 'List Of Customer',
@@ -2073,7 +2073,7 @@ Ext.onReady(function(){
 		cm: customer_ColumnModel, // Nama-nama Columns
 		enableColLock:false,
 		frame: true,
-		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
+		//clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
 	  	width: 970,
