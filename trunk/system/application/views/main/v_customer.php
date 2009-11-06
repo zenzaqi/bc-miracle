@@ -1383,7 +1383,7 @@ Ext.onReady(function(){
 			{name: 'cust_alamat2', type: 'string', mapping: 'cust_alamat2'},
 			{name: 'cust_kota2', type: 'string', mapping: 'cust_kota2'},
 			{name: 'cust_kodepos2', type: 'string', mapping: 'cust_kodepos2'},
-			{name: 'cust_propinsi2', type: 'string', mapping: 'cust_propinsi'},
+			{name: 'cust_propinsi2', type: 'string', mapping: 'cust_propinsi2'},
 			{name: 'cust_negara', type: 'string', mapping: 'cust_negara'},
 			{name: 'cust_telprumah', type: 'string', mapping: 'cust_telprumah'},
 			{name: 'cust_telprumah2', type: 'string', mapping: 'cust_telprumah2'},
