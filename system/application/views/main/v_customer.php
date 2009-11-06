@@ -263,10 +263,10 @@ var editor_cust_note;
 		cust_propinsiField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_propinsi'));
 		cust_negaraField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_negara'));
 		cust_alamat2Field.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_alamat2'));
-		cust_kotaField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_kota2'));
-		cust_kodeposField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_kodepos2'));
-		cust_propinsiField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_propinsi2'));
-		cust_negaraField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_negara2'));
+		cust_kota2Field.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_kota2'));
+		cust_kodepos2Field.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_kodepos2'));
+		cust_propinsi2Field.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_propinsi2'));
+		cust_negara2Field.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_negara2'));
 		cust_telprumahField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_telprumah'));
 		cust_telprumah2Field.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_telprumah2'));
 		cust_telpkantorField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_telpkantor'));
@@ -300,7 +300,6 @@ var editor_cust_note;
 			callback: function(opts, success, response)  {
 				if (success) {
 					j=cust_member_DataStore.find('member_aktif','Y');
-					console.log("index : "+j);
 					if(j>-1) cust_memberField.setValue(cust_member_DataStore.getAt(j).data.member_no);
 				}
 			}
@@ -1061,8 +1060,6 @@ var editor_cust_note;
   
   	/* Function for add data, open window create form */
 	function customer_create(){
-		console.log('fb-1 = '+cust_fbField.getValue());
-		console.log('fb-2 = '+cust_fb2Field.getValue());
 		if(is_customer_form_valid()){
 		
 		var cust_id_create_pk=null;
@@ -1308,7 +1305,6 @@ var editor_cust_note;
 			timeout: 60000,
 			success: function(response){							
 				var result=eval(response.responseText);
-				console.log(result);
 				cust_note_insert();
 			},
 			failure: function(response){
@@ -1340,7 +1336,6 @@ var editor_cust_note;
 				timeout: 60000,
 				success: function(response){							
 					var result=eval(response.responseText);
-					console.log(result);
 				},
 				failure: function(response){
 					var result=response.responseText;
