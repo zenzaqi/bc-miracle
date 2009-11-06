@@ -43,6 +43,35 @@
 		}
     </style>
 <script>
+
+
+Ext.namespace('Ext.ux.plugin');
+
+Ext.ux.plugin.triggerfieldTooltip = function(config){
+    Ext.apply(this, config);
+};
+
+Ext.extend(Ext.ux.plugin.triggerfieldTooltip, Ext.util.Observable,{
+    init: function(component){
+        this.component = component;
+        this.component.on('render', this.onRender, this);
+    },
+    
+    //private
+    onRender: function(){
+        if(this.component.tooltip){
+            if(typeof this.component.tooltip == 'object'){
+                Ext.QuickTips.register(Ext.apply({
+                      target: this.component.trigger
+                }, this.component.tooltip));
+            } else {
+                this.component.trigger.dom[this.component.tooltipType] = this.component.tooltip;
+            }
+        }
+    }
+}); 
+
+
 /* declare function */		
 var appointment_DataStore;
 var appointment_ColumnModel;
@@ -85,6 +114,9 @@ var app_customerSearchField;
 var app_tanggalSearchField;
 var app_caraSearchField;
 var app_keteranganSearchField;
+var app_kategoriSearchField;
+var app_dokterSearchField;
+var app_terapisSearchField;
 
 var dt = new Date();
 
@@ -101,6 +133,7 @@ Ext.onReady(function(){
 		var app_keterangan_update=null;
 		var dapp_id_update="";
 		var dapp_status_update="";
+		var dapp_dokter_update="";
 
 		app_id_update_pk = oGrid_event.record.data.app_id;
 		if(oGrid_event.record.data.app_customer!== null){app_customer_update = oGrid_event.record.data.app_customer;}
@@ -109,6 +142,7 @@ Ext.onReady(function(){
 		if(oGrid_event.record.data.app_keterangan!== null){app_keterangan_update = oGrid_event.record.data.app_keterangan;}
 		if(oGrid_event.record.data.dapp_id!== ""){dapp_id_update = oGrid_event.record.data.dapp_id;}
 		if(oGrid_event.record.data.dapp_status!== ""){dapp_status_update = oGrid_event.record.data.dapp_status;}
+		if(oGrid_event.record.data.dokter_nama!== ""){dapp_dokter_update = oGrid_event.record.data.dokter_nama;}
 
 		Ext.Ajax.request({  
 			waitMsg: 'Please wait...',
@@ -121,7 +155,8 @@ Ext.onReady(function(){
 				app_cara	:app_cara_update,  
 				app_keterangan	:app_keterangan_update,
 				dapp_id	:dapp_id_update,  
-				dapp_status	:dapp_status_update
+				dapp_status	:dapp_status_update,
+				dokter_nama	:dapp_dokter_update
 			}, 
 			success: function(response){							
 				var result=eval(response.responseText);
@@ -220,8 +255,9 @@ Ext.onReady(function(){
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'Your Form is not valid!.',
+				msg: 'Ada DATA yang BELUM di-ISI!.',
 				buttons: Ext.MessageBox.OK,
+				minWidth: 250,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
 			});
@@ -265,7 +301,7 @@ Ext.onReady(function(){
   
 	/* Function for Check if the form is valid */
 	function is_appointment_form_valid(){
-		return (true &&  true &&  true &&  true &&  true &&  true &&  true &&  true &&  true &&  true  );
+		return (app_customerField.isValid());
 	}
   	/* End of Function */
   
@@ -310,9 +346,9 @@ Ext.onReady(function(){
 		/* only one record is selected here */
 		if(appointmentListEditorGrid.selModel.getCount() == 1) {
 			medis_orNonMedis=appointmentListEditorGrid.getSelectionModel().getSelected().get('kategori_nama');
-			if(medis_orNonMedis=="Perawatan Medis")
+			if(medis_orNonMedis=="Medis")
 				detail_tab_perawatan.setActiveTab(0);
-			if(medis_orNonMedis=="Perawatan Non Medis")
+			if(medis_orNonMedis=="Non Medis")
 				detail_tab_perawatan.setActiveTab(1);
 			appointment_set_form();
 			post2db='UPDATE';
@@ -384,7 +420,7 @@ Ext.onReady(function(){
 			url: 'index.php?c=c_appointment&m=get_action', 
 			method: 'POST'
 		}),
-		baseParams:{task: "LIST"}, // parameter yang di $_POST ke Controller
+		baseParams:{task: "LIST",start:0,limit:pageS}, // parameter yang di $_POST ke Controller
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total'//,
@@ -399,8 +435,9 @@ Ext.onReady(function(){
 			{name: 'terapis_nama', type: 'string', mapping: 'terapis_nama'},
 			{name: 'kategori_nama', type: 'string', mapping: 'kategori_nama'}, 
 			{name: 'dapp_id', type: 'int', mapping: 'dapp_id'},
-			{name: 'dapp_status', type: 'string', mapping: 'dapp_status'}, 
+			{name: 'dapp_status', type: 'string', mapping: 'dapp_status'},
 			{name: 'app_tanggal', type: 'date', dateFormat: 'Y-m-d', mapping: 'app_tanggal'}, 
+			{name: 'dapp_tglreservasi', type: 'date', dateFormat: 'Y-m-d', mapping: 'dapp_tglreservasi'}, 
 			{name: 'app_cara', type: 'string', mapping: 'app_cara'}, 
 			{name: 'app_keterangan', type: 'string', mapping: 'app_keterangan'}, 
 			{name: 'dapp_jamdatang', type: 'string', mapping: 'dapp_jamdatang'}, 
@@ -411,7 +448,7 @@ Ext.onReady(function(){
 			{name: 'app_revised', type: 'int', mapping: 'app_revised'} 
 		]),
 		sortInfo:{field: 'dapp_jamreservasi', direction: "ASC"},
-		groupField:'cust_nama'
+		groupField:'kategori_nama'
 	});
 	/* End of Function */
 	
@@ -445,6 +482,23 @@ Ext.onReady(function(){
             'Alamat: {cust_alamat}&nbsp;&nbsp;&nbsp;[Telp. {cust_telprumah}]',
         '</div></tpl>'
     );
+
+	dapp_dokterDataStore = new Ext.data.Store({
+		id: 'dapp_dokterDataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_appointment&m=get_dokter_list', 
+			method: 'POST'
+		}),baseParams: {start: 0, limit: 15 },
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total'
+		},[
+		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
+			{name: 'dokter_display', type: 'string', mapping: 'karyawan_nama'},
+			{name: 'dokter_value', type: 'int', mapping: 'karyawan_id'}
+		]),
+		sortInfo:{field: 'dokter_display', direction: "ASC"}
+	});
     
   	/* Function for Identify of Window Column Model */
 	appointment_ColumnModel = new Ext.grid.ColumnModel(
@@ -481,9 +535,15 @@ Ext.onReady(function(){
 			dataIndex: 'dokter_nama',
 			width: 150,
 			sortable: true,
-			editor: new Ext.form.TextField({
-				maxLength: 250
-          	})
+			editor: new Ext.form.ComboBox({
+				store: dapp_dokterDataStore,
+				mode: 'remote',
+				displayField: 'dokter_display',
+				valueField: 'dokter_value',
+				loadingText: 'Searching...',
+				triggerAction: 'all',
+				anchor: '95%'
+			})
 		}, 
 		{
 			header: 'Therapist',
@@ -513,7 +573,7 @@ Ext.onReady(function(){
 				triggerAction: 'all',
 				store:new Ext.data.SimpleStore({
 					fields:['dapp_status_value', 'dapp_status_display'],
-					data: [['reservasi','reservasi'],['datang','datang'],['selesai','selesai'],['batal','batal']]
+					data: [['reservasi','reservasi'],['konfirmasi','konfirmasi'],['datang','datang'],['batal','batal']]
 					}),
 				mode: 'local',
                	displayField: 'dapp_status_display',
@@ -532,8 +592,8 @@ Ext.onReady(function(){
           	})
 		}, 
 		{
-			header: 'Tanggal',
-			dataIndex: 'app_tanggal',
+			header: 'Tanggal Appointment',
+			dataIndex: 'dapp_tglreservasi',
 			width: 150,
 			sortable: true,
 			hidden: true,
@@ -633,8 +693,15 @@ Ext.onReady(function(){
 			handler: display_form_search_window 
 		}, '-', 
 			new Ext.app.SearchField({
+			id: 'simpleSearch',
 			store: appointment_DataStore,
 			params: {start: 0, limit: pageS},
+			listeners:{
+				render: function(c){
+				Ext.get(this.id).set({qtitle:'Search By'});
+				Ext.get(this.id).set({qtip:'- Default Tgl Sekarang<br>- Nama Customer<br>- Cara Appointment<br>- Keterangan'});
+				}
+			},
 			width: 120
 		}),'-',{
 			text: 'Refresh',
@@ -724,8 +791,8 @@ Ext.onReady(function(){
 	});
 	/* Identify  app_customer Field */
 	app_customerField= new Ext.form.ComboBox({
-		id: 'app_customerField',
-		fieldLabel: 'Customer',
+		//id: 'app_customerField',
+		fieldLabel: 'Customer <span id="help_customer" style="font-size:11px;color:#F00">[?]</span>',
 		store: cbo_app_cutomerDataStore,
 		mode: 'remote',
 		displayField:'cust_nama',
@@ -740,23 +807,25 @@ Ext.onReady(function(){
 		triggerAction: 'all',
 		lazyRender:true,
 		listClass: 'x-combo-list-small',
+		allowBlank: false,
 		anchor: '95%'
 	});
 	/* Identify  app_tanggal Field */
 	app_tanggalField= new Ext.form.DateField({
 		id: 'app_tanggalField',
-		fieldLabel: 'Tanggal',
+		fieldLabel: 'Tanggal Reservasi',
 		format : 'Y-m-d',
 	});
 	/* Identify  app_cara Field */
 	app_caraField= new Ext.form.ComboBox({
 		id: 'app_caraField',
-		fieldLabel: 'Cara',
+		fieldLabel: 'Cara',// <span id="tet">[?]</span>
 		store:new Ext.data.SimpleStore({
 			fields:['app_cara_value', 'app_cara_display'],
 			data:[['Datang','Datang'],['Telp','Telp'],['SMS','SMS']]
 		}),
 		mode: 'local',
+		name:'app_cara',
 		displayField: 'app_cara_display',
 		valueField: 'app_cara_value',
 		width: 94,
@@ -940,7 +1009,6 @@ Ext.onReady(function(){
 	var combo_dapp_rawat_medis=new Ext.form.ComboBox({
 			store: cbo_dapp_rawat_medisDataStore,
 			mode: 'remote',
-			typeAhead: true,
 			displayField: 'dapp_rawat_display',
 			valueField: 'dapp_rawat_value',
 			typeAhead: false,
@@ -952,6 +1020,7 @@ Ext.onReady(function(){
 			itemSelector: 'div.search-item',
 			triggerAction: 'all',
 			lazyRender:true,
+			allowBlank: false,
 			listClass: 'x-combo-list-small',
 			anchor: '95%'
 
@@ -982,17 +1051,17 @@ Ext.onReady(function(){
 	appointment_detail_medis_ColumnModel = new Ext.grid.ColumnModel(
 		[
 		{
-			header: 'Perawatan',
+			header: 'Perawatan <span id="medis" style="font-size:11px;color:#F00">| search by?</span>',
 			dataIndex: 'dapp_medis_perawatan',
-			width: 150,
+			width: 220,
 			sortable: true,
 			editor: combo_dapp_rawat_medis,
 			renderer: Ext.util.Format.comboRenderer(combo_dapp_rawat_medis)
 		},
 		{
-			header: 'Tgl Reservasi',
+			header: 'Tgl Appointment',
 			dataIndex: 'dapp_medis_tglreservasi',
-			width: 100,
+			width: 90,
 			sortable: true,
 			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
 			editor: new Ext.form.DateField({
@@ -1000,13 +1069,13 @@ Ext.onReady(function(){
 			})
 		},
 		{
-			header: 'Jam Reservasi',
+			header: 'Jam Appointment',
 			dataIndex: 'dapp_medis_jamreservasi',
-			width: 100,
+			width: 90,
 			sortable: true,
 			editor: new Ext.form.TimeField({
 				format: 'H:i:s',
-				minValue: '9:00',
+				minValue: '7:00',
 				maxValue: '21:00',
 				increment: 10,
 				width: 94
@@ -1015,7 +1084,7 @@ Ext.onReady(function(){
 		{
 			header: 'Dokter',
 			dataIndex: 'dapp_medis_petugas',
-			width: 150,
+			width: 160,
 			sortable: true,
 			editor: combo_dapp_dokter_medis,
 			renderer: Ext.util.Format.comboRenderer(combo_dapp_dokter_medis)
@@ -1023,14 +1092,14 @@ Ext.onReady(function(){
 		{
 			header: 'Status',
 			dataIndex: 'dapp_medis_status',
-			width: 100,
+			width: 90,
 			sortable: true,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
 				triggerAction: 'all',
 				store:new Ext.data.SimpleStore({
 					fields:['dapp_status_value', 'dapp_status_display'],
-					data: [['reservasi','reservasi'],['datang','datang'],['selesai','selesai'],['batal','batal']]
+					data: [['reservasi','reservasi'],['konfirmasi','konfirmasi'],['datang','datang'],['batal','batal']]
 					}),
 				mode: 'local',
                	displayField: 'dapp_status_display',
@@ -1038,27 +1107,6 @@ Ext.onReady(function(){
                	lazyRender:true,
                	listClass: 'x-combo-list-small'
             })
-		},
-		{
-			header: 'Tgl Datang',
-			dataIndex: 'dapp_medis_tgldatang',
-			width: 100,
-			sortable: true,
-			hidden: true,
-			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
-			editor: new Ext.form.DateField({
-				format: 'Y-m-d'
-			})
-		},
-		{
-			header: 'Jam Datang',
-			dataIndex: 'dapp_medis_jamdatang',
-			width: 100,
-			sortable: true,
-			hidden: true,
-			editor: new Ext.form.TextField({
-				maxLength: 8
-          	})
 		}]
 	);
 	appointment_detail_medis_ColumnModel.defaultSortable= true;
@@ -1072,7 +1120,7 @@ Ext.onReady(function(){
 		el: 'fp_appointment_detail_medis',
 		title: 'Detail PERAWATAN MEDIS',
 		height: 250,
-		width: 690,
+		width: 650,
 		autoScroll: true,
 		store: appointment_detail_medisDataStore, // DataStore
 		colModel: appointment_detail_medis_ColumnModel, // Nama-nama Columns
@@ -1319,17 +1367,17 @@ Ext.onReady(function(){
 	appointment_detail_nonmedis_ColumnModel = new Ext.grid.ColumnModel(
 		[
 		{
-			header: 'Perawatan',
+			header: 'Perawatan <span id="nonmedis" style="font-size:11px;color:#F00">| search by?</span>',
 			dataIndex: 'dapp_nonmedis_perawatan',
-			width: 150,
+			width: 220,
 			sortable: true,
 			editor: combo_dapp_rawat_nonmedis,
 			renderer: Ext.util.Format.comboRenderer(combo_dapp_rawat_nonmedis)
 		},
 		{
-			header: 'Tgl Reservasi',
+			header: 'Tgl Apointment',
 			dataIndex: 'dapp_nonmedis_tglreservasi',
-			width: 100,
+			width: 90,
 			sortable: true,
 			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
 			editor: new Ext.form.DateField({
@@ -1337,13 +1385,13 @@ Ext.onReady(function(){
 			})
 		},
 		{
-			header: 'Jam Reservasi',
+			header: 'Jam Appointment',
 			dataIndex: 'dapp_nonmedis_jamreservasi',
-			width: 100,
+			width: 90,
 			sortable: true,
 			editor: new Ext.form.TimeField({
 				format: 'H:i:s',
-				minValue: '9:00',
+				minValue: '7:00',
 				maxValue: '21:00',
 				increment: 10,
 				width: 94
@@ -1352,7 +1400,7 @@ Ext.onReady(function(){
 		{
 			header: 'Therapist',
 			dataIndex: 'dapp_nonmedis_petugas2',
-			width: 150,
+			width: 160,
 			sortable: true,
 			editor: combo_dapp_terapis_nonmedis,
 			renderer: Ext.util.Format.comboRenderer(combo_dapp_terapis_nonmedis)
@@ -1360,14 +1408,14 @@ Ext.onReady(function(){
 		{
 			header: 'Status',
 			dataIndex: 'dapp_nonmedis_status',
-			width: 100,
+			width: 90,
 			sortable: true,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
 				triggerAction: 'all',
 				store:new Ext.data.SimpleStore({
 					fields:['dapp_status_value', 'dapp_status_display'],
-					data: [['reservasi','reservasi'],['datang','datang'],['selesai','selesai'],['batal','batal']]
+					data: [['reservasi','reservasi'],['konfirmasi','konfirmasi'],['datang','datang'],['batal','batal']]
 					}),
 				mode: 'local',
                	displayField: 'dapp_status_display',
@@ -1375,27 +1423,6 @@ Ext.onReady(function(){
                	lazyRender:true,
                	listClass: 'x-combo-list-small'
             })
-		},
-		{
-			header: 'Tgl Datang',
-			dataIndex: 'dapp_nonmedis_tgldatang',
-			width: 100,
-			sortable: true,
-			hidden: true,
-			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
-			editor: new Ext.form.DateField({
-				format: 'Y-m-d'
-			})
-		},
-		{
-			header: 'Jam Datang',
-			dataIndex: 'dapp_nonmedis_jamdatang',
-			width: 100,
-			sortable: true,
-			hidden: true,
-			editor: new Ext.form.TextField({
-				maxLength: 8
-          	})
 		}]
 	);
 	appointment_detail_nonmedis_ColumnModel.defaultSortable= true;
@@ -1605,22 +1632,33 @@ Ext.onReady(function(){
 		var app_customer_search=null;
 		var app_tanggal_search_date="";
 		var app_cara_search=null;
-		var app_keterangan_search=null;
+		//var app_keterangan_search=null;
+		var app_kategori_search=null;
+		var app_dokter_search=null;
+		var app_terapis_search=null;
 
 		if(app_idSearchField.getValue()!==null){app_id_search=app_idSearchField.getValue();}
 		if(app_customerSearchField.getValue()!==null){app_customer_search=app_customerSearchField.getValue();}
 		if(app_tanggalSearchField.getValue()!==""){app_tanggal_search_date=app_tanggalSearchField.getValue().format('Y-m-d');}
 		if(app_caraSearchField.getValue()!==null){app_cara_search=app_caraSearchField.getValue();}
-		if(app_keteranganSearchField.getValue()!==null){app_keterangan_search=app_keteranganSearchField.getValue();}
+		//if(app_keteranganSearchField.getValue()!==null){app_keterangan_search=app_keteranganSearchField.getValue();}
+		if(app_kategoriSearchField.getValue()!==null){app_kategori_search=app_kategoriSearchField.getValue();}
+		if(app_dokterSearchField.getValue()!==null){app_dokter_search=app_dokterSearchField.getValue();}
+		if(app_terapisSearchField.getValue()!==null){app_terapis_search=app_terapisSearchField.getValue();}
 		// change the store parameters
 		appointment_DataStore.baseParams = {
 			task: 'SEARCH',
+			start: 0,
+			limit: pageS,
 			//variable here
 			app_id	:	app_id_search, 
 			app_customer	:	app_customer_search, 
 			app_tanggal	:	app_tanggal_search_date, 
 			app_cara	:	app_cara_search, 
-			app_keterangan	:	app_keterangan_search, 
+			//app_keterangan	:	app_keterangan_search,
+			app_kategori	:	app_kategori_search, 
+			app_dokter	:	app_dokter_search,
+			app_terapis	:	app_terapis_search
 		};
 		// Cause the datastore to do another query : 
 		appointment_DataStore.reload({params: {start: 0, limit: pageS}});
@@ -1629,7 +1667,7 @@ Ext.onReady(function(){
 	/* Function for reset search result */
 	function appointment_reset_search(){
 		// reset the store parameters
-		appointment_DataStore.baseParams = { task: 'LIST' };
+		appointment_DataStore.baseParams = { task: 'LIST',start:0,limit:pageS };
 		// Cause the datastore to do another query : 
 		appointment_DataStore.reload({params: {start: 0, limit: pageS}});
 		appointment_searchWindow.close();
@@ -1649,27 +1687,37 @@ Ext.onReady(function(){
 	
 	});
 	/* Identify  app_customer Search Field */
-	app_customerSearchField= new Ext.form.NumberField({
+	app_customerSearchField= new Ext.form.ComboBox({
 		id: 'app_customerSearchField',
-		fieldLabel: 'App Customer',
-		allowNegatife : false,
-		blankText: '0',
-		allowDecimals: false,
-		anchor: '95%',
-		maskRe: /([0-9]+)$/
-	
+		fieldLabel: 'Customer',
+		store: cbo_app_cutomerDataStore,
+		mode: 'remote',
+		displayField:'cust_nama',
+		valueField: 'cust_id',
+        typeAhead: false,
+        loadingText: 'Searching...',
+        pageSize:10,
+        hideTrigger:false,
+        tpl: customer_app_tpl,
+        //applyTo: 'search',
+        itemSelector: 'div.search-item',
+		triggerAction: 'all',
+		lazyRender:true,
+		listClass: 'x-combo-list-small',
+		allowBlank: true,
+		anchor: '95%'
 	});
 	/* Identify  app_tanggal Search Field */
 	app_tanggalSearchField= new Ext.form.DateField({
 		id: 'app_tanggalSearchField',
-		fieldLabel: 'App Tanggal',
+		fieldLabel: 'Tanggal Appointment',
 		format : 'Y-m-d',
 	
 	});
 	/* Identify  app_cara Search Field */
 	app_caraSearchField= new Ext.form.ComboBox({
 		id: 'app_caraSearchField',
-		fieldLabel: 'App Cara',
+		fieldLabel: 'Cara',
 		store:new Ext.data.SimpleStore({
 			fields:['value', 'app_cara'],
 			data:[['Datang','Datang'],['Telp','Telp'],['SMS','SMS']]
@@ -1681,21 +1729,63 @@ Ext.onReady(function(){
 		triggerAction: 'all'	 
 	
 	});
+	/* Identify  dokter Search Field */
+	app_kategoriSearchField= new Ext.form.ComboBox({
+		id: 'app_kategoriSearchField',
+		fieldLabel: 'Kategori',
+		store:new Ext.data.SimpleStore({
+			fields:['value', 'dokter_nama'],
+			data:[['Medis','Medis'],['Non Medis','Non Medis']]
+		}),
+		mode: 'local',
+		displayField: 'dokter_nama',
+		valueField: 'value',
+		anchor: '95%',
+		triggerAction: 'all'	 
+	
+	});
+	/* Identify  Dokter Search Field */
+	app_dokterSearchField= new Ext.form.ComboBox({
+		id: 'app_dokterSearchField',
+		fieldLabel: 'Dokter',
+		store: cbo_dapp_dokterDataStore,
+		mode: 'remote',
+		displayField:'dokter_display',
+		valueField: 'dokter_value',
+        loadingText: 'Searching...',
+        triggerAction: 'all',
+		allowBlank: true,
+		anchor: '95%'
+	});
+	/* Identify  Terapis Search Field */
+	app_terapisSearchField= new Ext.form.ComboBox({
+		id: 'app_terapisSearchField',
+		fieldLabel: 'Therapist',
+		store: cbo_dapp_terapisDataStore,
+		mode: 'remote',
+		displayField:'terapis_display',
+		valueField: 'terapis_value',
+        loadingText: 'Searching...',
+        triggerAction: 'all',
+		allowBlank: true,
+		anchor: '95%'
+	});
 	/* Identify  app_keterangan Search Field */
-	app_keteranganSearchField= new Ext.form.TextField({
+	/*app_keteranganSearchField= new Ext.form.TextArea({
 		id: 'app_keteranganSearchField',
-		fieldLabel: 'App Keterangan',
+		fieldLabel: 'Keterangan',
 		maxLength: 250,
 		anchor: '95%'
 	
-	});
+	});*/
     
 	/* Function for retrieve search Form Panel */
 	appointment_searchForm = new Ext.FormPanel({
-		labelAlign: 'top',
+		labelAlign: 'left',
+		labelWidth: 130,
 		bodyStyle:'padding:5px',
 		autoHeight:true,
-		width: 300,        
+		width: 450,        
 		items: [{
 			layout:'column',
 			border:false,
@@ -1704,7 +1794,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [app_customerSearchField, app_tanggalSearchField, app_caraSearchField, app_keteranganSearchField] 
+				items: [app_customerSearchField, app_tanggalSearchField, app_caraSearchField, app_kategoriSearchField, app_dokterSearchField, app_terapisSearchField] 
 			}
 			]
 		}]
@@ -1738,10 +1828,28 @@ Ext.onReady(function(){
 		items: appointment_searchForm
 	});
     /* End of Function */ 
+    
+	function appointment_reset_formSearch(){
+		app_idSearchField.reset();
+		app_idSearchField.setValue(null);
+		app_customerSearchField.reset();
+		app_customerSearchField.setValue(null);
+		app_tanggalSearchField.reset();
+		app_tanggalSearchField.setValue(null);
+		app_caraSearchField.reset();
+		app_caraSearchField.setValue(null);
+		app_kategoriSearchField.reset();
+		app_kategoriSearchField.setValue(null);
+		app_dokterSearchField.reset();
+		app_dokterSearchField.setValue(null);
+		app_terapisSearchField.reset();
+		app_terapisSearchField.setValue(null);
+	}
 	 
   	/* Function for Displaying  Search Window Form */
 	function display_form_search_window(){
 		if(!appointment_searchWindow.isVisible()){
+			appointment_reset_formSearch();
 			appointment_searchWindow.show();
 		} else {
 			appointment_searchWindow.toFront();
@@ -1868,6 +1976,29 @@ Ext.onReady(function(){
 	}
 	/*End of Function */
 	display_form_window();
+
+	new Ext.ToolTip({
+		target:Ext.get('help_customer'),
+		title: 'Search-By',
+		dismissDelay: 15000,
+		html: '- No.Customer<br>- Nama Customer<br>- Telp. Rumah<br>- Telp. Kantor<br>- HandPhone',
+		trackMouse: true
+		});
+	new Ext.ToolTip({
+		target:Ext.get('medis'),
+		title: 'Search-By',
+		dismissDelay: 15000,
+		html: '- Kode Perawatan<br>- Nama Perawatan',
+		trackMouse: true
+		});
+	new Ext.ToolTip({
+		target:Ext.get('nonmedis'),
+		title: 'Search-By',
+		dismissDelay: 15000,
+		html: '- Kode Perawatan<br>- Nama Perawatan',
+		trackMouse: true
+		});
+	Ext.QuickTips.init();
 	
 });
 	</script>

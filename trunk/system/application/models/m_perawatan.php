@@ -420,7 +420,7 @@ class M_perawatan extends Model{
 		//function for advanced search record
 		function perawatan_search($rawat_id ,$rawat_kode ,$rawat_kodelama ,$rawat_nama ,$rawat_group ,$rawat_kategori ,$rawat_jenis ,$rawat_keterangan ,$rawat_du ,$rawat_dm ,$rawat_point ,$rawat_harga ,$rawat_gudang ,$rawat_aktif ,$start,$end){
 			//full query
-			$query="select * from perawatan,produk_group,kategori,gudang,jenis WHERE rawat_group=group_id AND rawat_kategori=kategori_id AND rawat_gudang=gudang_id AND rawat_jenis=jenis_id";
+			$query="SELECT * FROM vu_perawatan";
 			
 			if($rawat_id!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";

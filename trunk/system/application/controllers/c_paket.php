@@ -36,6 +36,11 @@ class C_paket extends Controller {
 		echo $result;
 	}
 	
+	function get_group_paket_list(){
+		$result=$this->m_public_function->get_group_paket_list();
+		echo $result;
+	}
+	
 	function get_kategori_list(){
 		$result=$this->m_public_function->get_kategori_produk_list();
 		echo $result;
@@ -51,6 +56,10 @@ class C_paket extends Controller {
 		echo $result;
 	}
 	
+	function get_kategori_paket_list(){
+		$result=$this->m_public_function->get_kategori_paket_list();
+		echo $result;
+	}
 	
 	function get_group_by_id(){
 		$group_id = (integer) (isset($_POST['group_id']) ? $_POST['group_id'] : $_GET['group_id']);

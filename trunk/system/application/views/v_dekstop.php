@@ -6,7 +6,7 @@
     <?=css_asset('docs.css','main');?>
     <? //=css_asset('forms.css');?>
     <?=css_asset('mmcal.css');?>
-   	<?=css_asset('xtheme-olive.css');?>
+   	<?=css_asset('xtheme-slate.css');?>
 	<?=css_asset('file-upload.css');?>
 	
 	

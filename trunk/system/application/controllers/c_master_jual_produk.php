@@ -35,12 +35,21 @@ class C_master_jual_produk extends Controller {
 	}
 	
 	function get_produk_list(){
-		$result = $this->m_public_function->get_produk_list();
+		$query = isset($_POST['query']) ? $_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		$result = $this->m_public_function->get_produk_list($query,$start,$end);
 		echo $result;
 	}
 	
 	function get_satuan_list(){
 		$result = $this->m_public_function->get_satuan_list();
+		echo $result;
+	}
+	
+	function get_satuan_bydjproduk_list(){
+		$djproduk_id = (integer) (isset($_POST['djproduk_id']) ? $_POST['djproduk_id'] : $_GET['djproduk_id']);
+		$result = $this->m_public_function->get_satuan_bydjproduk_list($djproduk_id);
 		echo $result;
 	}
 	

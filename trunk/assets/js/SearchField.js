@@ -25,7 +25,7 @@ Ext.app.SearchField = Ext.extend(Ext.form.TwinTriggerField, {
     hasSearch : false,
     paramName : 'query',
 
-    onTrigger1Click : function(){
+    /*onTrigger1Click : function(){
         if(this.hasSearch){
             this.el.dom.value = '';
             var o = {start: 0};
@@ -35,7 +35,7 @@ Ext.app.SearchField = Ext.extend(Ext.form.TwinTriggerField, {
             this.triggers[0].hide();
             this.hasSearch = false;
         }
-    },
+    },*/
 
     onTrigger2Click : function(){
         var v = this.getRawValue();

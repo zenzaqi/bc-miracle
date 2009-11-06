@@ -27,7 +27,10 @@ class C_appointment extends Controller {
 	}
 	
 	function get_customer_list(){
-		$result=$this->m_public_function->get_customer_list();
+		$query = isset($_POST['query']) ? $_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		$result=$this->m_public_function->get_customer_list($query,$start,$end);
 		echo $result;
 	}
 	
@@ -49,13 +52,13 @@ class C_appointment extends Controller {
 	
 	function get_dokter_list(){
 		//ID dokter pada tabel departemen adalah 8
-		$result=$this->m_public_function->get_petugas_list(8);
+		$result=$this->m_public_function->get_petugas_list("Dokter");
 		echo $result;
 	}
 	
 	function get_terapis_list(){
 		//ID dokter pada tabel departemen adalah 9
-		$result=$this->m_public_function->get_petugas_list(9);
+		$result=$this->m_public_function->get_petugas_list("Therapist");
 		echo $result;
 	}
 	
@@ -240,13 +243,16 @@ class C_appointment extends Controller {
 		$app_cara=trim(@$_POST["app_cara"]);
 		$app_cara=str_replace("/(<\/?)(p)([^>]*>)", "",$app_cara);
 		$app_cara=str_replace("'", "\'",$app_cara);
-		$app_keterangan=trim(@$_POST["app_keterangan"]);
-		$app_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$app_keterangan);
-		$app_keterangan=str_replace("'", "\'",$app_keterangan);
+		//$app_keterangan=trim(@$_POST["app_keterangan"]);
+		//$app_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$app_keterangan);
+		//$app_keterangan=str_replace("'", "\'",$app_keterangan);
+		$app_kategori=trim(@$_POST["app_kategori"]);
+		$app_dokter=trim(@$_POST["app_dokter"]);
+		$app_terapis=trim(@$_POST["app_terapis"]);
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_appointment->appointment_search($app_id ,$app_customer ,$app_tanggal ,$app_cara ,$app_keterangan ,$start,$end);
+		$result = $this->m_appointment->appointment_search($app_id ,$app_customer ,$app_tanggal ,$app_cara ,$app_kategori, $app_dokter, $app_terapis, $start,$end);
 		echo $result;
 	}
 

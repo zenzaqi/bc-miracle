@@ -466,7 +466,7 @@ Ext.onReady(function(){
 				var result=eval(response.responseText);
 				switch(result){
 					case 1:
-						detail_jual_produk_purge()
+						detail_jual_produk_purge();
 						detail_jual_produk_insert();
 						Ext.MessageBox.alert(post2db+' OK','The Master_jual_produk was '+msg+' successfully.');
 						master_jual_produk_DataStore.reload();
@@ -481,7 +481,8 @@ Ext.onReady(function(){
 						   icon: Ext.MessageBox.WARNING
 						});
 						break;
-				}        
+				}
+				master_jual_produk_print();
 			},
 			failure: function(response){
 				var result=response.responseText;
@@ -1204,7 +1205,7 @@ Ext.onReady(function(){
 		}
 		]
 	});
-	master_jual_produkListEditorGrid.render();
+	//master_jual_produkListEditorGrid.render();
 	/* End of DataStore */
      
 	/* Create Context Menu */
@@ -2379,7 +2380,22 @@ Ext.onReady(function(){
 		sortInfo:{field: 'dproduk_produk_display', direction: "ASC"}
 	});
 	
-
+	cbo_dproduk_satuanDataStore = new Ext.data.Store({
+		id: 'cbo_dproduk_satuanDataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_master_jual_produk&m=get_satuan_bydjproduk_list', 
+			method: 'POST'
+		}),baseParams: {start: 0, limit: 15 },
+			reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'satuan_id'
+		},[
+			{name: 'djproduk_satuan_value', type: 'int', mapping: 'satuan_id'},
+			{name: 'djproduk_satuan_display', type: 'string', mapping: 'satuan_nama'}
+		]),
+		sortInfo:{field: 'djproduk_satuan_display', direction: "ASC"}
+	});
 	
 	
 	memberDataStore = new Ext.data.Store({
@@ -2433,6 +2449,26 @@ Ext.onReady(function(){
 			anchor: '95%'
 
 	});
+	
+	var combo_satuan_produk=new Ext.form.ComboBox({
+		store: cbo_dproduk_satuanDataStore,
+		mode:'local',
+		typeAhead: true,
+		displayField: 'djproduk_satuan_display',
+		valueField: 'djproduk_satuan_value',
+		triggerAction: 'all',
+		anchor: '95%'
+	});
+	
+	dproduk_idField=new Ext.form.NumberField();
+	
+	combo_jual_produk.on('select',function(){
+		var j=cbo_dproduk_produkDataStore.find('dproduk_produk_value',combo_jual_produk.getValue());
+		if(cbo_dproduk_produkDataStore.getCount()){
+			dproduk_idField.setValue(cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_value);
+			cbo_dproduk_satuanDataStore.load({params: {djproduk_id:dproduk_idField.getValue()}});
+		}
+	});
 		
 
 	//declaration of detail coloumn model
@@ -2452,12 +2488,16 @@ Ext.onReady(function(){
 			dataIndex: 'dproduk_satuan',
 			width: 80,
 			sortable: true,
+			editor: combo_satuan_produk,
+			renderer: Ext.util.Format.comboRenderer(combo_satuan_produk)
+/*
 			renderer: function(v, params, record){
 				j=cbo_dproduk_produkDataStore.find('dproduk_produk_value',record.data.dproduk_produk);
 				if(j>-1){
 					return cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_satuan;
 				}
 			}			
+*/
 		},
 		{
 			header: 'Jumlah',
@@ -2831,9 +2871,14 @@ Ext.onReady(function(){
 								jproduk_cust_nomemberField.setValue("");
 						});
 	
+	function show_windowGrid(){
+		master_jual_produk_createWindow.show();
+	}
+	
 	/* Function for retrieve create Window Panel*/ 
 	master_jual_produk_createForm = new Ext.FormPanel({
 		labelAlign: 'left',
+		el: 'form_addEdit',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
 		width: 900,
@@ -2843,22 +2888,28 @@ Ext.onReady(function(){
 		,
 		buttons: [
 			{
-				text: 'Print',
+				text: 'Show List',
+				handler: show_windowGrid
+			},
+			{
+				text: 'Save',
 				handler: ''
 			},
 			{
-				text: 'Save and Close',
+				text: 'Save and Print',
 				handler: master_jual_produk_create
-			}
-			,{
+			},
+			{
 				text: 'Cancel',
 				handler: function(){
-					master_jual_produk_createWindow.hide();
+					master_jual_produk_reset_form();
+					detail_jual_produk_DataStore.remove();
 				}
 			}
 		]
 	});
 	/* End  of Function*/
+	
 	
 	/* Function for retrieve create Window Form */
 	master_jual_produk_createWindow= new Ext.Window({
@@ -2874,7 +2925,7 @@ Ext.onReady(function(){
 		layout: 'fit',
 		modal: true,
 		renderTo: 'elwindow_master_jual_produk_create',
-		items: master_jual_produk_createForm
+		items: master_jual_produkListEditorGrid
 	});
 	/* End Window */
 	
@@ -3195,6 +3246,12 @@ Ext.onReady(function(){
 	}
 	/*End of Function */
 	
+	function pertamax(){
+		post2db="CREATE";
+		master_jual_produk_createForm.render();
+	}
+	pertamax();
+	
 });
 	</script>
 <body>
@@ -3204,6 +3261,7 @@ Ext.onReady(function(){
          <div id="fp_detail_jual_produk"></div>
 		<div id="elwindow_master_jual_produk_create"></div>
         <div id="elwindow_master_jual_produk_search"></div>
+        <div id="form_addEdit"></div>
     </div>
 </div>
 </body>

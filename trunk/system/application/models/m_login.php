@@ -28,6 +28,7 @@ class M_login extends Model{
 			if($row["user_passwd"]==$pw){
 				$_SESSION["userid"]=$u;
 				$_SESSION["usergroup"]=$row["user_groups"];
+				$_SESSION["userkaryawan"]=$row["user_karyawan"];
 				//cari group
 				$this->db->select('*');
 				$this->db->where('group_id',$_SESSION["usergroup"]);

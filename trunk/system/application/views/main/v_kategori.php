@@ -399,7 +399,7 @@ Ext.onReady(function(){
 				triggerAction: 'all',
 				store:new Ext.data.SimpleStore({
 					fields:['kategori_jenis_value', 'kategori_jenis_display'],
-					data: [['produk','produk'],['perawatan','perawatan']]
+					data: [['produk','produk'],['perawatan','perawatan'],['paket','paket']]
 					}),
 				mode: 'local',
                	displayField: 'kategori_jenis_display',
@@ -618,7 +618,7 @@ Ext.onReady(function(){
 		fieldLabel: 'Kelompok <span style="color: #ec0000">*</span>',
 		store:new Ext.data.SimpleStore({
 			fields:['kategori_jenis_value', 'kategori_jenis_display'],
-			data:[['produk','produk'],['perawatan','perawatan']]
+			data:[['produk','produk'],['perawatan','perawatan'],['paket','paket']]
 		}),
 		mode: 'local',
 		allowBlank: false,

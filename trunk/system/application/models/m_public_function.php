@@ -6,7 +6,7 @@ class M_public_function extends Model{
 		parent::Model();
 	}
 	
-	function get_petugas_list($rawat_kategori){
+	function get_petugas_list($karyawan_jabatan){
 		//$sql="SELECT karyawan_id,karyawan_no,karyawan_nama FROM karyawan WHERE karyawan_departemen='$departemen_id' AND karyawan_aktif='Aktif'";
 /*		if($rawat_kategori==2)
 			$departemen_id=8;
@@ -14,7 +14,7 @@ class M_public_function extends Model{
 			$departemen_id=9;
 		else
 			$departemen_id=0;*/
-		$sql="SELECT karyawan_id,karyawan_no,karyawan_nama FROM karyawan WHERE karyawan_departemen='$rawat_kategori' AND karyawan_aktif='Aktif'";
+		$sql="SELECT karyawan_id,karyawan_no,karyawan_nama FROM karyawan,jabatan WHERE karyawan_jabatan=jabatan_id AND jabatan_nama='$karyawan_jabatan' AND karyawan_aktif='Aktif'";
 		$query = $this->db->query($sql);
 		$nbrows = $query->num_rows();
 		if($nbrows>0){
@@ -235,12 +235,13 @@ class M_public_function extends Model{
 		}
 	}
 	
-	function get_customer_list($query="",$start=0,$end=10){
+	function get_customer_list($query,$start,$end){
 		$sql="SELECT cust_id,cust_no,cust_nama,cust_tgllahir,cust_alamat,cust_telprumah
 		FROM customer where cust_aktif='Aktif'";
 		if($query<>""){
-			$sql=$sql." and (cust_no like '%".$query."%' or cust_nama like '%".$query."%' or cust_alamat like '%".$query."%' or
-					cust_telprumah like '%".$query."%' or cust_tgllahir like '%".$query."%') ";
+			$sql=$sql." and (cust_no like '%".$query."%' or cust_nama like '%".$query."%' 
+			or cust_telprumah like '%".$query."%' or cust_telprumah2 like '%".$query."%' or cust_telpkantor like '%".$query."%' 
+			or cust_hp like '%".$query."%' or cust_hp2 like '%".$query."%' or cust_hp3 like '%".$query."%') ";
 		}
 		
 		$result = $this->db->query($sql);
@@ -381,8 +382,38 @@ class M_public_function extends Model{
 		}
 	}
 	
+	function get_satuan_bydjproduk_list($djproduk_id){
+		$sql="SELECT * FROM produk,satuan_konversi,satuan WHERE produk_id=konversi_produk AND konversi_satuan=satuan_id AND produk_id='$djproduk_id'";
+		$query = $this->db->query($sql);
+		$nbrows = $query->num_rows();
+		if($nbrows>0){
+			foreach($query->result() as $row){
+				$arr[] = $row;
+			}
+			$jsonresult = json_encode($arr);
+			return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+		} else {
+			return '({"total":"0", "results":""})';
+		}
+	}
+	
 	function get_kategori_produk_list(){
 		$sql="SELECT kategori_id,kategori_nama FROM kategori where kategori_jenis='produk' and kategori_aktif='Aktif'";
+		$query = $this->db->query($sql);
+		$nbrows = $query->num_rows();
+		if($nbrows>0){
+			foreach($query->result() as $row){
+				$arr[] = $row;
+			}
+			$jsonresult = json_encode($arr);
+			return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+		} else {
+			return '({"total":"0", "results":""})';
+		}
+	}
+	
+	function get_kategori_paket_list(){
+		$sql="SELECT kategori_id,kategori_nama FROM kategori where kategori_jenis='paket' and kategori_aktif='Aktif'";
 		$query = $this->db->query($sql);
 		$nbrows = $query->num_rows();
 		if($nbrows>0){
@@ -412,7 +443,7 @@ class M_public_function extends Model{
 	}
 	
 	function get_kategori_list(){
-		$sql="SELECT kategori_id,kategori_nama FROM kategori where kategori_aktif='Aktif'";
+		$sql="SELECT kategori_id,kategori_nama,kategori_jenis FROM kategori where kategori_aktif='Aktif'";
 		$query = $this->db->query($sql);
 		$nbrows = $query->num_rows();
 		if($nbrows>0){
@@ -457,18 +488,12 @@ class M_public_function extends Model{
 	}
 	
 	//Ambil Perawatan berdasarkan kategori MEDIS
-	function get_rawat_medis_list($query="",$start=0,$end=10){
-		return $this->get_perawatan_medis_list($query="",$start=0,$end=10);
-	}
-	
-	function get_perawatan_medis_list($query="",$start=0,$end=10){
-		$sql="SELECT rawat_id,rawat_kode,rawat_nama,rawat_kategori,rawat_harga,rawat_group,rawat_du,rawat_dm
-				,kategori_nama, group_nama 
-				FROM perawatan,kategori,produk_group where rawat_kategori=kategori_id
-				and rawat_group=group_id and rawat_aktif='Aktif' AND kategori_nama='Perawatan Medis'";
+	function get_rawat_medis_list($query,$start,$end){
+		$sql="SELECT rawat_id,rawat_kode,rawat_nama,rawat_kategori,rawat_harga,rawat_group,rawat_du,rawat_dm,kategori_nama, group_nama 
+		FROM perawatan,kategori,produk_group where rawat_kategori=kategori_id 
+		AND rawat_group=group_id AND rawat_aktif='Aktif' AND kategori_nama='Medis'";
 		if($query<>"")
-			$sql.=" and (rawat_kode like '%".$query."%' or rawat_nama like '%".$query."%' or satuan_nama like '%".$query."%'
-						 or kategori_nama like '%".$query."%' or group_nama like '%".$query."%')";
+			$sql.=" and (rawat_kode like '%".$query."%' or rawat_nama like '%".$query."%' or group_nama like '%".$query."%')";
 	
 		$result = $this->db->query($sql);
 		$nbrows = $result->num_rows();
@@ -484,10 +509,58 @@ class M_public_function extends Model{
 			return '({"total":"0", "results":""})';
 		}
 	}
+	/*function get_rawat_medis_list($query,$start,$end){
+		return $this->get_perawatan_medis_list($query,$start,$end);
+	}
+	
+	function get_perawatan_medis_list($query,$start,$end){
+		$sql="SELECT rawat_id,rawat_kode,rawat_nama,rawat_kategori,rawat_harga,rawat_group,rawat_du,rawat_dm
+				,kategori_nama, group_nama 
+				FROM perawatan,kategori,produk_group where rawat_kategori=kategori_id
+				and rawat_group=group_id and rawat_aktif='Tidak Aktif' AND kategori_nama='Medis'";
+		if($query<>"")
+			$sql.=" and (rawat_kode like '%".$query."%' or rawat_nama like '%".$query."%' or kategori_nama like '%".$query."%' or group_nama like '%".$query."%')";
+	
+		$result = $this->db->query($sql);
+		$nbrows = $result->num_rows();
+		$limit = $sql." LIMIT ".$start.",".$end;			
+		$result = $this->db->query($limit); 
+		if($nbrows>0){
+			foreach($result->result() as $row){
+				$arr[] = $row;
+			}
+			$jsonresult = json_encode($arr);
+			return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+		} else {
+			return '({"total":"0", "results":""})';
+		}
+	}*/
 	//END Ambil Perawatan berdasarkan kategori MEDIS
 	
+	
+	function get_rawat_nonmedis_list($query,$start,$end){
+		$sql="SELECT rawat_id,rawat_kode,rawat_nama,rawat_kategori,rawat_harga,rawat_group,rawat_du,rawat_dm,kategori_nama, group_nama 
+		FROM perawatan,kategori,produk_group where rawat_kategori=kategori_id 
+		AND rawat_group=group_id AND rawat_aktif='Aktif' AND kategori_nama='Non Medis'";
+		if($query<>"")
+			$sql.=" and (rawat_kode like '%".$query."%' or rawat_nama like '%".$query."%' or group_nama like '%".$query."%')";
+	
+		$result = $this->db->query($sql);
+		$nbrows = $result->num_rows();
+		$limit = $sql." LIMIT ".$start.",".$end;			
+		$result = $this->db->query($limit); 
+		if($nbrows>0){
+			foreach($result->result() as $row){
+				$arr[] = $row;
+			}
+			$jsonresult = json_encode($arr);
+			return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+		} else {
+			return '({"total":"0", "results":""})';
+		}
+	}
 	//Ambil Perawatan berdasarkan kategori NON-MEDIS
-	function get_rawat_nonmedis_list($query="",$start=0,$end=10){
+	/*function get_rawat_nonmedis_list($query="",$start=0,$end=10){
 		return $this->get_perawatan_nonmedis_list($query="",$start=0,$end=10);
 	}
 	
@@ -495,7 +568,7 @@ class M_public_function extends Model{
 		$sql="SELECT rawat_id,rawat_kode,rawat_nama,rawat_kategori,rawat_harga,rawat_group,rawat_du,rawat_dm
 				,kategori_nama, group_nama 
 				FROM perawatan,kategori,produk_group where rawat_kategori=kategori_id
-				and rawat_group=group_id and rawat_aktif='Aktif' AND kategori_nama='Perawatan Non Medis'";
+				AND rawat_group=group_id AND rawat_aktif='Aktif' AND kategori_nama='Non Medis'";
 		if($query<>"")
 			$sql.=" and (rawat_kode like '%".$query."%' or rawat_nama like '%".$query."%' or satuan_nama like '%".$query."%'
 						 or kategori_nama like '%".$query."%' or group_nama like '%".$query."%')";
@@ -513,7 +586,7 @@ class M_public_function extends Model{
 		} else {
 			return '({"total":"0", "results":""})';
 		}
-	}
+	}*/
 	//END Ambil Perawatan berdasarkan kategori NON-MEDIS
 	
 	function get_karyawan_list($query="",$start=0,$end=10){
@@ -608,14 +681,14 @@ class M_public_function extends Model{
 		}
 	}
 		
-	function get_produk_list($query="",$start=0,$end=10){
+	function get_produk_list($query,$start,$end){
 		/*$sql="SELECT produk_id,produk_kode,produk_nama,produk_kategori,produk_harga,produk_group,produk_du,produk_dm
 				,kategori_nama, group_nama, satuan_kode, satuan_nama 
 				FROM produk,satuan,kategori,produk_group where satuan_id=produk_satuan and kategori_id=produk_kategori
 				and produk_group=group_id and produk_aktif='Aktif'";*/
 		$sql="select * from vu_produk";
 		if($query<>"")
-			$sql.=" and (produk_kode like '%".$query."%' or produk_nama like '%".$query."%' or satuan_nama like '%".$query."%'
+			$sql.=" WHERE (produk_kode like '%".$query."%' or produk_nama like '%".$query."%' or satuan_nama like '%".$query."%'
 						 or kategori_nama like '%".$query."%' or group_nama like '%".$query."%') ";
 						 
 		$result = $this->db->query($sql);
@@ -660,6 +733,53 @@ class M_public_function extends Model{
 	
 	function get_group_list(){
 		$sql="SELECT group_id,group_nama,group_duproduk,group_dmproduk,group_durawat,group_dmrawat,group_dupaket,group_dmpaket FROM produk_group where group_aktif='Aktif'";
+		$query = $this->db->query($sql);
+		$nbrows = $query->num_rows();
+		if($nbrows>0){
+			foreach($query->result() as $row){
+				$arr[] = $row;
+			}
+			$jsonresult = json_encode($arr);
+			return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+		} else {
+			return '({"total":"0", "results":""})';
+		}
+	}
+	
+	function get_group_produk_list(){
+		$sql="SELECT group_id,group_nama,group_duproduk,group_dmproduk,group_durawat,group_dmrawat,group_dupaket,group_dmpaket FROM produk_group where group_kelompok='produk' AND group_aktif='Aktif'";
+		$query = $this->db->query($sql);
+		$nbrows = $query->num_rows();
+		if($nbrows>0){
+			foreach($query->result() as $row){
+				$arr[] = $row;
+			}
+			$jsonresult = json_encode($arr);
+			return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+		} else {
+			return '({"total":"0", "results":""})';
+		}
+	}
+	
+	function get_group_perawatan_list(){
+		$sql="SELECT group_id,group_nama,group_duproduk,group_dmproduk,group_durawat,group_dmrawat,group_dupaket,group_dmpaket FROM produk_group where group_kelompok='perawatan' AND group_aktif='Aktif'";
+		$query = $this->db->query($sql);
+		$nbrows = $query->num_rows();
+		if($nbrows>0){
+			foreach($query->result() as $row){
+				$arr[] = $row;
+			}
+			$jsonresult = json_encode($arr);
+			return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+		} else {
+			return '({"total":"0", "results":""})';
+		}
+	}
+	
+	function get_group_paket_list(){
+		$sql="SELECT group_id,group_nama,group_duproduk,group_dmproduk,group_durawat,group_dmrawat,group_dupaket,group_dmpaket 
+		FROM produk_group,kategori where group_kelompok=kategori_id and kategori_jenis='paket' AND group_aktif='Aktif' 
+		AND kategori_aktif='Aktif'";
 		$query = $this->db->query($sql);
 		$nbrows = $query->num_rows();
 		if($nbrows>0){

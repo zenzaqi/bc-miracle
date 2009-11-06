@@ -261,10 +261,14 @@ class M_master_jual_produk extends Model{
 				"jproduk_cashback"=>$jproduk_cashback,
 				"jproduk_bayar"=>$jproduk_bayar,
 				"jproduk_cara"=>$jproduk_cara, 
-				"jproduk_cara2"=>$jproduk_cara2, 
-				"jproduk_cara3"=>$jproduk_cara3, 
+				//"jproduk_cara2"=>$jproduk_cara2, 
+				//"jproduk_cara3"=>$jproduk_cara3, 
 				"jproduk_keterangan"=>$jproduk_keterangan 
 			);
+			if($jproduk_cara2!=null)
+				$data["jproduk_cara2"]=$jproduk_cara2;
+			if($jproduk_cara3!=null)
+				$data["jproduk_cara3"]=$jproduk_cara3;
 			$this->db->insert('master_jual_produk', $data); 
 			if($this->db->affected_rows()){
 				

@@ -26,6 +26,11 @@ class C_produk_group extends Controller {
 		$this->load->view('main/v_produk_group');
 	}
 	
+	function get_kategori_list(){
+		$result=$this->m_public_function->get_kategori_list();
+		echo $result;
+	}
+	
 	//event handler action
 	function get_action(){
 		$task = $_POST['task'];
@@ -86,6 +91,9 @@ class C_produk_group extends Controller {
 		$group_dmrawat=trim(@$_POST["group_dmrawat"]);
 		$group_dupaket=trim(@$_POST["group_dupaket"]);
 		$group_dmpaket=trim(@$_POST["group_dmpaket"]);
+		$group_kelompok=trim(@$_POST["group_kelompok"]);
+		$group_kelompok=str_replace("/(<\/?)(p)([^>]*>)", "",$group_kelompok);
+		$group_kelompok=str_replace("'", '"',$group_kelompok);
 		$group_keterangan=trim(@$_POST["group_keterangan"]);
 		$group_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$group_keterangan);
 		$group_keterangan=str_replace("'", '"',$group_keterangan);
@@ -101,7 +109,7 @@ class C_produk_group extends Controller {
 		$group_update=str_replace("'", '"',$group_update);
 		$group_date_update=trim(@$_POST["group_date_update"]);
 		$group_revised=trim(@$_POST["group_revised"]);
-		$result = $this->m_produk_group->produk_group_update($group_id , $group_kode, $group_nama ,$group_duproduk ,$group_dmproduk ,$group_durawat ,$group_dmrawat ,$group_dupaket ,$group_dmpaket ,$group_keterangan ,$group_aktif ,$group_creator ,$group_date_create ,$group_update ,$group_date_update ,$group_revised );
+		$result = $this->m_produk_group->produk_group_update($group_id , $group_kode, $group_nama ,$group_duproduk ,$group_dmproduk ,$group_durawat ,$group_dmrawat ,$group_dupaket ,$group_dmpaket ,$group_kelompok ,$group_keterangan ,$group_aktif ,$group_creator ,$group_date_create ,$group_update ,$group_date_update ,$group_revised );
 		echo $result;
 	}
 	
@@ -121,6 +129,9 @@ class C_produk_group extends Controller {
 		$group_dmrawat=trim(@$_POST["group_dmrawat"]);
 		$group_dupaket=trim(@$_POST["group_dupaket"]);
 		$group_dmpaket=trim(@$_POST["group_dmpaket"]);
+		$group_kelompok=trim(@$_POST["group_kelompok"]);
+		$group_kelompok=str_replace("/(<\/?)(p)([^>]*>)", "",$group_kelompok);
+		$group_kelompok=str_replace("'", '"',$group_kelompok);
 		$group_keterangan=trim(@$_POST["group_keterangan"]);
 		$group_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$group_keterangan);
 		$group_keterangan=str_replace("'", '"',$group_keterangan);
@@ -136,7 +147,7 @@ class C_produk_group extends Controller {
 		$group_update=str_replace("'", '"',$group_update);
 		$group_date_update=trim(@$_POST["group_date_update"]);
 		$group_revised=trim(@$_POST["group_revised"]);
-		$result=$this->m_produk_group->produk_group_create($group_kode, $group_nama ,$group_duproduk ,$group_dmproduk ,$group_durawat ,$group_dmrawat ,$group_dupaket ,$group_dmpaket ,$group_keterangan ,$group_aktif ,$group_creator ,$group_date_create ,$group_update ,$group_date_update ,$group_revised );
+		$result=$this->m_produk_group->produk_group_create($group_kode, $group_nama ,$group_duproduk ,$group_dmproduk ,$group_durawat ,$group_dmrawat ,$group_dupaket ,$group_dmpaket ,$group_kelompok ,$group_keterangan ,$group_aktif ,$group_creator ,$group_date_create ,$group_update ,$group_date_update ,$group_revised );
 		echo $result;
 	}
 
@@ -167,6 +178,7 @@ class C_produk_group extends Controller {
 		$group_keterangan=trim(@$_POST["group_keterangan"]);
 		$group_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$group_keterangan);
 		$group_keterangan=str_replace("'", '"',$group_keterangan);
+		$group_kelompok=trim(@$_POST["group_kelompok"]);
 		$group_aktif=trim(@$_POST["group_aktif"]);
 		$group_aktif=str_replace("/(<\/?)(p)([^>]*>)", "",$group_aktif);
 		$group_aktif=str_replace("'", '"',$group_aktif);
@@ -182,7 +194,7 @@ class C_produk_group extends Controller {
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_produk_group->produk_group_search($group_id, $group_kode ,$group_nama ,$group_duproduk ,$group_dmproduk ,$group_durawat ,$group_dmrawat ,$group_dupaket ,$group_dmpaket ,$group_keterangan ,$group_aktif ,$group_creator ,$group_date_create ,$group_update ,$group_date_update ,$group_revised ,$start,$end);
+		$result = $this->m_produk_group->produk_group_search($group_id, $group_kode ,$group_nama ,$group_duproduk ,$group_dmproduk ,$group_durawat ,$group_dmrawat ,$group_dupaket ,$group_dmpaket ,$group_keterangan ,$group_kelompok ,$group_aktif ,$group_creator ,$group_date_create ,$group_update ,$group_date_update ,$group_revised ,$start,$end);
 		echo $result;
 	}
 
