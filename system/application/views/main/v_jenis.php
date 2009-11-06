@@ -430,7 +430,7 @@ Ext.onReady(function(){
 				triggerAction: 'all',
 				store:new Ext.data.SimpleStore({
 					fields:['jenis_kelompok_value', 'jenis_kelompok_display'],
-					data: [['perawatan','perawatan'],['produk','produk']]
+					data: [['produk','produk'],['perawatan','perawatan'],['paket','paket']]
 					}),
 				mode: 'local',
                	displayField: 'jenis_kelompok_display',
@@ -665,7 +665,7 @@ Ext.onReady(function(){
 		fieldLabel: 'Kelompok <span style="color: #ec0000">*</span>',
 		store:new Ext.data.SimpleStore({
 			fields:['jenis_kelompok_value', 'jenis_kelompok_display'],
-			data:[['perawatan','perawatan'],['produk','produk']]
+			data:[['produk','produk'],['perawatan','perawatan'],['paket','paket']]
 		}),
 		mode: 'local',
 		allowBlank: false,
@@ -819,7 +819,7 @@ Ext.onReady(function(){
 		fieldLabel: 'Kelompok',
 		store:new Ext.data.SimpleStore({
 			fields:['value', 'jenis_kelompok'],
-			data:[['perawatan','perawatan'],['produk','produk']]
+			data:[['produk','produk'],['perawatan','perawatan'],['paket','paket']]
 		}),
 		mode: 'local',
 		displayField: 'jenis_kelompok',

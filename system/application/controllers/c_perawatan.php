@@ -54,6 +54,11 @@ class C_perawatan extends Controller {
 		echo $result;
 	}
 	
+	function get_group_perawatan_list(){
+		$result=$this->m_public_function->get_group_perawatan_list();
+		echo $result;
+	}
+	
 	function get_kategori_perawatan_list(){
 		$result=$this->m_public_function->get_kategori_perawatan_list();
 		echo $result;

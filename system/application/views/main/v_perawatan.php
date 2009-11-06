@@ -504,7 +504,7 @@ Ext.onReady(function(){
 	cbo_rawat_groupDataStore = new Ext.data.Store({
 		id: 'cbo_rawat_groupDataStore',
 		proxy: new Ext.data.HttpProxy({
-			url: 'index.php?c=c_perawatan&m=get_group_list', 
+			url: 'index.php?c=c_perawatan&m=get_group_perawatan_list', 
 			method: 'POST'
 		}),
 		baseParams:{task: "LIST"}, // parameter yang di $_POST ke Controller

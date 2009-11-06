@@ -68,6 +68,7 @@ var group_durawatField;
 var group_dmrawatField;
 var group_dupaketField;
 var group_dmpaketField;
+var group_kelompokField;
 var group_keteranganField;
 var group_aktifField;
 
@@ -98,6 +99,7 @@ Ext.onReady(function(){
 	var group_dmrawat_update=null;
 	var group_dupaket_update=null;
 	var group_dmpaket_update=null;
+	var group_kelompok_update=null;
 	var group_keterangan_update=null;
 	var group_aktif_update=null;
 
@@ -111,6 +113,7 @@ Ext.onReady(function(){
 	if(oGrid_event.record.data.group_dmrawat!== null){group_dmrawat_update = oGrid_event.record.data.group_dmrawat;}
 	if(oGrid_event.record.data.group_dupaket!== null){group_dupaket_update = oGrid_event.record.data.group_dupaket;}
 	if(oGrid_event.record.data.group_dmpaket!== null){group_dmpaket_update = oGrid_event.record.data.group_dmpaket;}
+	if(oGrid_event.record.data.group_kelompok!== null){group_kelompok_update = oGrid_event.record.data.group_kelompok;}
 	if(oGrid_event.record.data.group_keterangan!== null){group_keterangan_update = oGrid_event.record.data.group_keterangan;}
 	if(oGrid_event.record.data.group_aktif!== null){group_aktif_update = oGrid_event.record.data.group_aktif;}
 
@@ -127,7 +130,8 @@ Ext.onReady(function(){
 				group_durawat	:group_durawat_update,		
 				group_dmrawat	:group_dmrawat_update,		
 				group_dupaket	:group_dupaket_update,		
-				group_dmpaket	:group_dmpaket_update,		
+				group_dmpaket	:group_dmpaket_update,
+				group_kelompok	:group_kelompok_update,		
 				group_keterangan	:group_keterangan_update,		
 				group_aktif	:group_aktif_update	
 			}, 
@@ -176,6 +180,7 @@ Ext.onReady(function(){
 		var group_dmrawat_create=null;
 		var group_dupaket_create=null;
 		var group_dmpaket_create=null;
+		var group_kelompok_create=null;
 		var group_keterangan_create=null;
 		var group_aktif_create=null;
 
@@ -189,6 +194,7 @@ Ext.onReady(function(){
 		if(group_dmrawatField.getValue()!== null){group_dmrawat_create = group_dmrawatField.getValue();}
 		if(group_dupaketField.getValue()!== null){group_dupaket_create = group_dupaketField.getValue();}
 		if(group_dmpaketField.getValue()!== null){group_dmpaket_create = group_dmpaketField.getValue();}
+		if(group_kelompokField.getValue()!== null){group_kelompok_create = group_kelompokField.getValue();}
 		if(group_keteranganField.getValue()!== null){group_keterangan_create = group_keteranganField.getValue();}
 		if(group_aktifField.getValue()!== null){group_aktif_create = group_aktifField.getValue();}
 
@@ -206,7 +212,8 @@ Ext.onReady(function(){
 					group_durawat	: group_durawat_create,	
 					group_dmrawat	: group_dmrawat_create,	
 					group_dupaket	: group_dupaket_create,	
-					group_dmpaket	: group_dmpaket_create,	
+					group_dmpaket	: group_dmpaket_create,
+					group_kelompok	: group_kelompok_create,	
 					group_keterangan	: group_keterangan_create,	
 					group_aktif	: group_aktif_create
 				}, 
@@ -264,15 +271,27 @@ Ext.onReady(function(){
 	/* Reset form before loading */
 	function produk_group_reset_form(){
 		group_kodeField.reset();
+		group_kodeField.setValue(null);
 		group_namaField.reset();
+		group_namaField.setValue(null);
 		group_duprodukField.reset();
+		group_duprodukField.setValue(null);
 		group_dmprodukField.reset();
+		group_dmprodukField.setValue(null);
 		group_durawatField.reset();
+		group_durawatField.setValue(null);
 		group_dmrawatField.reset();
+		group_dmrawatField.setValue(null);
 		group_dupaketField.reset();
+		group_dupaketField.setValue(null);
 		group_dmpaketField.reset();
+		group_dmpaketField.setValue(null);
+		group_kelompokField.reset();
+		group_kelompokField.setValue(null);
 		group_keteranganField.reset();
+		group_keteranganField.setValue(null);
 		group_aktifField.reset();
+		group_aktifField.setValue(null);
 	}
  	/* End of Function */
   
@@ -286,6 +305,7 @@ Ext.onReady(function(){
 		group_dmrawatField.setValue(produk_groupListEditorGrid.getSelectionModel().getSelected().get('group_dmrawat'));
 		group_dupaketField.setValue(produk_groupListEditorGrid.getSelectionModel().getSelected().get('group_dupaket'));
 		group_dmpaketField.setValue(produk_groupListEditorGrid.getSelectionModel().getSelected().get('group_dmpaket'));
+		group_kelompokField.setValue(produk_groupListEditorGrid.getSelectionModel().getSelected().get('group_kelompok'));
 		group_keteranganField.setValue(produk_groupListEditorGrid.getSelectionModel().getSelected().get('group_keterangan'));
 		group_aktifField.setValue(produk_groupListEditorGrid.getSelectionModel().getSelected().get('group_aktif'));
 	}
@@ -417,6 +437,7 @@ Ext.onReady(function(){
 			{name: 'group_dmrawat', type: 'int', mapping: 'group_dmrawat'},
 			{name: 'group_dupaket', type: 'int', mapping: 'group_dupaket'},
 			{name: 'group_dmpaket', type: 'int', mapping: 'group_dmpaket'},
+			{name: 'group_kelompok', type: 'string', mapping: 'kategori_nama'},
 			{name: 'group_keterangan', type: 'string', mapping: 'group_keterangan'},
 			{name: 'group_aktif', type: 'string', mapping: 'group_aktif'},
 			{name: 'group_creator', type: 'string', mapping: 'group_creator'},
@@ -428,6 +449,26 @@ Ext.onReady(function(){
 		sortInfo:{field: 'group_id', direction: "ASC"}
 	});
 	/* End of Function */
+	
+	cbo_group_jenisDataStore = new Ext.data.Store({
+		id: 'cbo_group_jenisDataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_produk_group&m=get_kategori_list', 
+			method: 'POST'
+		}),
+		baseParams:{start: 0, limit: 10 }, // parameter yang di $_POST ke Controller
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'kategori_id'
+		},[
+		/* dataIndex => insert intocustomer_note_ColumnModel, Mapping => for initiate table column */ 
+			{name: 'cbo_jenis_id', type: 'int', mapping: 'kategori_id'},
+			{name: 'cbo_jenis_nama', type: 'string', mapping: 'kategori_nama'},
+			{name: 'cbo_jenis_kelompok', type: 'string', mapping: 'kategori_jenis'}
+		]),
+		sortInfo:{field: 'cbo_jenis_nama', direction: "ASC"}
+	});
     
   	/* Function for Identify of Window Column Model */
 	produk_group_ColumnModel = new Ext.grid.ColumnModel(
@@ -463,7 +504,7 @@ Ext.onReady(function(){
 		{
 			header: 'DU Produk',
 			dataIndex: 'group_duproduk',
-			width: 150,
+			width: 100,
 			sortable: true,
 			renderer: function(val){
 				return '<span>' + val + ' %</span>';
@@ -479,7 +520,7 @@ Ext.onReady(function(){
 		{
 			header: 'DM Produk',
 			dataIndex: 'group_dmproduk',
-			width: 150,
+			width: 100,
 			sortable: true,
 			renderer: function(val){
 				return '<span>' + val + ' %</span>';
@@ -495,7 +536,7 @@ Ext.onReady(function(){
 		{
 			header: 'DU Perawatan',
 			dataIndex: 'group_durawat',
-			width: 150,
+			width: 100,
 			sortable: true,
 			renderer: function(val){
 				return '<span>' + val + ' %</span>';
@@ -511,7 +552,7 @@ Ext.onReady(function(){
 		{
 			header: 'DM Perawatan',
 			dataIndex: 'group_dmrawat',
-			width: 150,
+			width: 100,
 			sortable: true,
 			renderer: function(val){
 				return '<span>' + val + ' %</span>';
@@ -527,7 +568,7 @@ Ext.onReady(function(){
 		{
 			header: 'DU Paket',
 			dataIndex: 'group_dupaket',
-			width: 150,
+			width: 100,
 			sortable: true,
 			renderer: function(val){
 				return '<span>' + val + ' %</span>';
@@ -543,7 +584,7 @@ Ext.onReady(function(){
 		{
 			header: 'DM Paket',
 			dataIndex: 'group_dmpaket',
-			width: 150,
+			width: 100,
 			sortable: true,
 			renderer: function(val){
 				return '<span>' + val + ' %</span>';
@@ -554,6 +595,29 @@ Ext.onReady(function(){
 				blankText: '0',
 				maxLength: 11,
 				maskRe: /([0-9]+)$/
+			})
+		},
+		{
+			header: 'Jenis',
+			dataIndex: 'group_kelompok',
+			width: 150,
+			sortable: true,
+			editor: new Ext.form.ComboBox({
+				store: cbo_group_jenisDataStore,
+				mode: 'remote',
+				displayField:'cbo_jenis_nama',
+				valueField: 'cbo_jenis_id',
+		        typeAhead: false,
+		        loadingText: 'Searching...',
+		        //pageSize:10,
+		        hideTrigger:false,
+		        //tpl: jenis_group_tpl,
+		        //applyTo: 'search',
+		        //itemSelector: 'div.search-item',
+				triggerAction: 'all',
+				lazyRender:true,
+				listClass: 'x-combo-list-small',
+				anchor: '95%'
 			})
 		},
 		{
@@ -638,7 +702,7 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 800,
+	  	width: 980,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: produk_group_DataStore,
@@ -828,6 +892,26 @@ Ext.onReady(function(){
 		anchor: '95%',
 		maskRe: /([0-9]+)$/
 	});
+	/* Identify  group_kelompok Field */
+	group_kelompokField= new Ext.form.ComboBox({
+		id: 'group_kelompokField',
+		fieldLabel: 'Jenis',
+		store: cbo_group_jenisDataStore,
+		mode: 'remote',
+		displayField:'cbo_jenis_nama',
+		valueField: 'cbo_jenis_id',
+        typeAhead: false,
+        loadingText: 'Searching...',
+        //pageSize:10,
+        hideTrigger:false,
+        //tpl: jenis_group_tpl,
+        //applyTo: 'search',
+        //itemSelector: 'div.search-item',
+		triggerAction: 'all',
+		lazyRender:true,
+		listClass: 'x-combo-list-small',
+		anchor: '95%'
+	});
 	/* Identify  group_keterangan Field */
 	group_keteranganField= new Ext.form.TextArea({
 		id: 'group_keteranganField',
@@ -918,7 +1002,7 @@ Ext.onReady(function(){
 								   }
 								   ]
 						}
-						,group_keteranganField, group_aktifField] 
+						,group_kelompokField,group_keteranganField, group_aktifField] 
 			}
 			
 			]
@@ -960,7 +1044,7 @@ Ext.onReady(function(){
 	/* Function for action list search */
 	function produk_group_list_search(){
 		// render according to a SQL date format.
-		var group_id_search=null;
+		//var group_id_search=null;
 		var group_kode_search=null;
 		var group_nama_search=null;
 		var group_duproduk_search=null;
@@ -971,9 +1055,10 @@ Ext.onReady(function(){
 		var group_dmpaket_search=null;
 		var group_keterangan_search=null;
 		var group_aktif_search=null;
+		var group_kelompok_search=null;
 
 
-		if(group_idSearchField.getValue()!==null){group_id_search=group_idSearchField.getValue();}
+		//if(group_idSearchField.getValue()!==null){group_id_search=group_idSearchField.getValue();}
 		if(group_kodeSearchField.getValue()!==null){group_kode_search=group_kodeSearchField.getValue();}
 		if(group_namaSearchField.getValue()!==null){group_nama_search=group_namaSearchField.getValue();}
 		if(group_duprodukSearchField.getValue()!==null){group_duproduk_search=group_duprodukSearchField.getValue();}
@@ -984,11 +1069,12 @@ Ext.onReady(function(){
 		if(group_dmpaketSearchField.getValue()!==null){group_dmpaket_search=group_dmpaketSearchField.getValue();}
 		if(group_keteranganSearchField.getValue()!==null){group_keterangan_search=group_keteranganSearchField.getValue();}
 		if(group_aktifSearchField.getValue()!==null){group_aktif_search=group_aktifSearchField.getValue();}
+		if(group_kelompokSearchField.getValue()!==null){group_kelompok_search=group_kelompokSearchField.getValue();}
 		// change the store parameters
 		produk_group_DataStore.baseParams = {
 			task: 'SEARCH',
 			//variable here
-			group_id	:	group_id_search, 
+			//group_id	:	group_id_search, 
 			group_kode	:	group_kode_search, 
 			group_nama	:	group_nama_search, 
 			group_duproduk	:	group_duproduk_search, 
@@ -998,7 +1084,8 @@ Ext.onReady(function(){
 			group_dupaket	:	group_dupaket_search, 
 			group_dmpaket	:	group_dmpaket_search, 
 			group_keterangan	:	group_keterangan_search, 
-			group_aktif	:	group_aktif_search
+			group_aktif	:	group_aktif_search,
+			group_kelompok	:	group_kelompok_search
 		};
 		// Cause the datastore to do another query : 
 		produk_group_DataStore.reload({params: {start: 0, limit: pageS}});
@@ -1025,128 +1112,168 @@ Ext.onReady(function(){
 		group_dmpaketSearchField.reset();
 		group_keteranganSearchField.reset();
 		group_aktifSearchField.reset();
+		group_kelompokSearchField.reset();
 	}
 	
 	/* Field for search */
-	/* Identify  group_id Search Field */
-	group_idSearchField= new Ext.form.NumberField({
-		id: 'group_idSearchField',
-		fieldLabel: 'Id',
+	/* Identify  group_nama Field */
+	group_kodeSearchField= new Ext.form.TextField({
+		id: 'group_kodeSearchField',
+		fieldLabel: 'Kode <span style="color: #ec0000">*</span>',
+		allowBlank: false,
+		maxLength: 5,
+		width: 100,
+		maskRe: /([a-zA-Z]+)$/
+	});
+	
+	group_namaSearchField= new Ext.form.TextField({
+		id: 'group_namaSearchField',
+		fieldLabel: 'Nama <span style="color: #ec0000">*</span>',
+		allowBlank: false,
+		maxLength: 250,
+		anchor: '95%'
+	});
+	/* Identify  group_duproduk Field */
+	group_duprodukSearchField= new Ext.form.NumberField({
+		id: 'group_duprodukSearchField',
+		fieldLabel: 'Produk',
 		allowNegatife : false,
-		blankText: '0',
+		emptyText: '0',
+		allowDecimals: false,
+		maxLength: 3,
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
+	});
+	/* Identify  group_dmproduk Field */
+	group_dmprodukSearchField= new Ext.form.NumberField({
+		id: 'group_dmprodukSearchField',
+		fieldLabel: 'Produk',
+		allowNegatife : false,
+		emptyText: '0',
+		allowDecimals: false,
+		maxLength: 3,
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
+	});
+	/* Identify  group_durawat Field */
+	group_durawatSearchField= new Ext.form.NumberField({
+		id: 'group_durawatSearchField',
+		fieldLabel: 'Perawatan',
+		allowNegatife : false,
+		emptyText: '0',
+		maxLength: 3,
 		allowDecimals: false,
 		anchor: '95%',
 		maskRe: /([0-9]+)$/
-	
 	});
-	
-	group_kodeSearchField= new Ext.form.NumberField({
-		id: 'group_kodeSearchField',
-		fieldLabel: 'Kode',
-		allowNegatife : false,
-		blankText: '0',
-		allowDecimals: false,
-		width: 100,
-		maskRe: /([a-zA-Z]+)$/
-	
-	});
-	
-	/* Identify  group_nama Search Field */
-	group_namaSearchField= new Ext.form.TextField({
-		id: 'group_namaSearchField',
-		fieldLabel: 'Nama Group',
-		maxLength: 250,
-		anchor: '95%'
-	
-	});
-	/* Identify  group_duproduk Search Field */
-	group_duprodukSearchField= new Ext.form.NumberField({
-		id: 'group_duprodukSearchField',
-		fieldLabel: 'Diskon Umum Produk',
-		allowNegatife : false,
-		blankText: '0',
-		allowDecimals: false,
-		width: 60,
-		maskRe: /([0-9]+)$/
-	
-	});
-	/* Identify  group_dmproduk Search Field */
-	group_dmprodukSearchField= new Ext.form.NumberField({
-		id: 'group_dmprodukSearchField',
-		fieldLabel: 'Diskon Member Produk',
-		allowNegatife : false,
-		blankText: '0',
-		allowDecimals: false,
-		width: 60,
-		maskRe: /([0-9]+)$/
-	
-	});
-	/* Identify  group_durawat Search Field */
-	group_durawatSearchField= new Ext.form.NumberField({
-		id: 'group_durawatSearchField',
-		fieldLabel: 'Diskon Umum Perawatan',
-		allowNegatife : false,
-		blankText: '0',
-		allowDecimals: false,
-		width: 60,
-		maskRe: /([0-9]+)$/
-	
-	});
-	/* Identify  group_dmrawat Search Field */
+	/* Identify  group_dmrawat Field */
 	group_dmrawatSearchField= new Ext.form.NumberField({
 		id: 'group_dmrawatSearchField',
-		fieldLabel: 'Diskon Member Perawatan',
+		fieldLabel: 'Perawatan',
 		allowNegatife : false,
-		blankText: '0',
+		emptyText: '0',
+		maxLength: 3,
 		allowDecimals: false,
-		width: 60,
+		anchor: '95%',
 		maskRe: /([0-9]+)$/
-	
 	});
-	/* Identify  group_dupaket Search Field */
+	/* Identify  group_dupaket Field */
 	group_dupaketSearchField= new Ext.form.NumberField({
 		id: 'group_dupaketSearchField',
-		fieldLabel: 'Diskon Umum Paket',
+		fieldLabel: 'Paket',
 		allowNegatife : false,
-		blankText: '0',
+		emptyText: '0',
+		maxLength: 3,
 		allowDecimals: false,
-		width: 60,
+		anchor: '95%',
 		maskRe: /([0-9]+)$/
-	
 	});
-	/* Identify  group_dmpaket Search Field */
+	/* Identify  group_dmpaket Field */
 	group_dmpaketSearchField= new Ext.form.NumberField({
 		id: 'group_dmpaketSearchField',
-		fieldLabel: 'Diskon Member Paket',
+		fieldLabel: 'Paket',
 		allowNegatife : false,
-		blankText: '0',
+		emptyText: '0',
+		maxLength: 3,
 		allowDecimals: false,
-		width: 60,
+		anchor: '95%',
 		maskRe: /([0-9]+)$/
-	
 	});
-	/* Identify  group_keterangan Search Field */
-	group_keteranganSearchField= new Ext.form.TextField({
+	/* Identify  group_kelompok Field */
+	group_kelompokSearchField= new Ext.form.ComboBox({
+		id: 'group_kelompokSearchField',
+		fieldLabel: 'Jenis',
+		store: cbo_group_jenisDataStore,
+		mode: 'remote',
+		displayField:'cbo_jenis_nama',
+		valueField: 'cbo_jenis_id',
+        typeAhead: false,
+        loadingText: 'Searching...',
+        //pageSize:10,
+        hideTrigger:false,
+        //tpl: jenis_group_tpl,
+        //applyTo: 'search',
+        //itemSelector: 'div.search-item',
+		triggerAction: 'all',
+		lazyRender:true,
+		listClass: 'x-combo-list-small',
+		anchor: '95%'
+	});
+	/* Identify  group_keterangan Field */
+	group_keteranganSearchField= new Ext.form.TextArea({
 		id: 'group_keteranganSearchField',
 		fieldLabel: 'Keterangan',
 		maxLength: 250,
 		anchor: '95%'
-	
 	});
-	/* Identify  group_aktif Search Field */
+	/* Identify  group_aktif Field */
 	group_aktifSearchField= new Ext.form.ComboBox({
 		id: 'group_aktifSearchField',
 		fieldLabel: 'Status',
 		store:new Ext.data.SimpleStore({
-			fields:['value', 'group_aktif'],
+			fields:['group_aktif_value', 'group_aktif_display'],
 			data:[['Aktif','Aktif'],['Tidak Aktif','Tidak Aktif']]
 		}),
 		mode: 'local',
-		displayField: 'group_aktif',
-		valueField: 'value',
-		width: 80,
-		triggerAction: 'all'	 
+		emptyText: 'Aktif/Tidak',
+		displayField: 'group_aktif_display',
+		valueField: 'group_aktif_value',
+		width: 90,
+		triggerAction: 'all'	
+	});
 	
+	group_diskon_umumSearchFielSet = new Ext.form.FieldSet({
+		title: 'Diskon Umum (%)',
+		labelWidth: 90,
+		autoHeight: true,
+		collapsible: true,
+		layout:'column',
+		anchor: '95%',
+		items:[
+			{
+				columnWidth:1,
+				layout: 'form',
+				border:false,
+				items: [group_duprodukSearchField,group_durawatSearchField,group_dupaketSearchField] 
+			}
+			]
+	});
+	
+	group_diskon_memberSearchFielSet = new Ext.form.FieldSet({
+		title: 'Diskon Member (%)',
+		labelWidth: 90,
+		autoHeight: true,
+		collapsible: true,
+		layout:'column',
+		anchor: '95%',
+		items:[
+			{
+				columnWidth:1,
+				layout: 'form',
+				border:false,
+				items: [group_dmprodukSearchField,group_dmrawatSearchField,group_dmpaketSearchField] 
+			}
+			]
 	});
 	
 	/* Function for retrieve search Form Panel */
@@ -1154,23 +1281,38 @@ Ext.onReady(function(){
 		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
-		width: 700,        
+		width: 400,        
 		items: [{
 			layout:'column',
 			border:false,
 			items:[
 			{
-				columnWidth:0.5,
+				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [group_kodeSearchField,group_namaSearchField, group_duprodukSearchField, group_dmprodukSearchField, group_durawatSearchField, group_dmrawatSearchField] 
-			},
-			{
-				columnWidth:0.5,
-				layout: 'form',
-				border:false,
-				items: [group_dupaketSearchField, group_dmpaketSearchField, group_keteranganSearchField, group_aktifSearchField] 
-			}]
+				items: [group_kodeSearchField,group_namaSearchField, 
+						{
+							layout:'column',
+							border:false,
+							items:[
+								   {
+									   columnWidth:0.5,
+									   layout: 'form',
+									   border:false,
+									   items:[group_diskon_umumSearchFielSet]
+								   },
+								   {
+									   columnWidth:0.5,
+									   layout: 'form',
+									   border:false,
+									   items:[group_diskon_memberSearchFielSet]
+								   }
+								   ]
+						}
+						,group_kelompokSearchField,group_keteranganSearchField, group_aktifSearchField] 
+			}
+			
+			]
 		}]
 		,
 		buttons: [{

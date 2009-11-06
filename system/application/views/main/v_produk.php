@@ -65,7 +65,7 @@ var editor_satuan_konversi;
 //declare konstant
 var post2db = '';
 var msg = '';
-var pageS=15;
+//var pageS=15;
 
 /* declare variable here for Field*/
 var produk_idField;
@@ -84,11 +84,13 @@ var produk_volumeField;
 var produk_hargaField;
 var produk_keteranganField;
 var produk_aktifField;
+
 var produk_idSearchField;
 var produk_kodeSearchField;
 var produk_kodelamaSearchField;
 var produk_groupSearchField;
 var produk_kategoriSearchField;
+var produk_kontribusiField;
 var produk_jenisSearchField;
 var produk_namaSearchField;
 var produk_satuanSearchField;
@@ -374,7 +376,7 @@ Ext.onReady(function(){
   
   	/* Function for Displaying  create Window Form */
 	function display_form_window(){
-		satuan_konversi_DataStore.load({params: {master_id: get_pk_id(), start:0, limit:pageS}});
+		satuan_konversi_DataStore.load({params: {master_id: get_pk_id(), start:0, limit:15}});
 		if(!produk_createWindow.isVisible()){
 			produk_reset_form();
 			post2db='CREATE';
@@ -411,7 +413,7 @@ Ext.onReady(function(){
 		if(produkListEditorGrid.selModel.getCount() == 1) {
 			produk_set_form();
 			post2db='UPDATE';
-			satuan_konversi_DataStore.load({params : {master_id : get_pk_id(), start:0, limit:pageS}});
+			satuan_konversi_DataStore.load({params : {master_id : get_pk_id(), start:0, limit:15}});
 			msg='updated';
 			produk_createWindow.show();
 		} else {
@@ -478,7 +480,7 @@ Ext.onReady(function(){
 			url: 'index.php?c=c_produk&m=get_action', 
 			method: 'POST'
 		}),
-		baseParams:{task: "LIST"}, // parameter yang di $_POST ke Controller
+		baseParams:{task: "LIST",start:0,limit:10}, // parameter yang di $_POST ke Controller
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
@@ -514,10 +516,10 @@ Ext.onReady(function(){
 	cbo_produk_groupDataSore = new Ext.data.Store({
 		id: 'cbo_produk_groupDataSore',
 		proxy: new Ext.data.HttpProxy({
-			url: 'index.php?c=c_produk&m=get_group_list', 
+			url: 'index.php?c=c_produk&m=get_group_produk_list', 
 			method: 'POST'
 		}),
-		baseParams:{task: "LIST"}, // parameter yang di $_POST ke Controller
+		//baseParams:{task: "LIST"}, // parameter yang di $_POST ke Controller
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
@@ -538,7 +540,7 @@ Ext.onReady(function(){
 			url: 'index.php?c=c_produk&m=get_kategori_produk_list', 
 			method: 'POST'
 		}),
-		baseParams:{task: "LIST"}, // parameter yang di $_POST ke Controller
+		//baseParams:{task: "LIST"}, // parameter yang di $_POST ke Controller
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
@@ -557,7 +559,7 @@ Ext.onReady(function(){
 			url: 'index.php?c=c_produk&m=get_kontribusi_produk_list', 
 			method: 'POST'
 		}),
-		baseParams:{task: "LIST"}, // parameter yang di $_POST ke Controller
+		//baseParams:{task: "LIST"}, // parameter yang di $_POST ke Controller
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
@@ -577,7 +579,7 @@ Ext.onReady(function(){
 			url: 'index.php?c=c_produk&m=get_jenis_produk_list', 
 			method: 'POST'
 		}),
-		baseParams:{task: "LIST"}, // parameter yang di $_POST ke Controller
+		//baseParams:{task: "LIST"}, // parameter yang di $_POST ke Controller
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
@@ -596,7 +598,7 @@ Ext.onReady(function(){
 			url: 'index.php?c=c_produk&m=get_satuan_list', 
 			method: 'POST'
 		}),
-		baseParams:{task: "LIST"}, // parameter yang di $_POST ke Controller
+		//baseParams:{task: "LIST"}, // parameter yang di $_POST ke Controller
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
@@ -841,7 +843,7 @@ Ext.onReady(function(){
 		viewConfig: { forceFit:true },
 	  	width: 1200,
 		bbar: new Ext.PagingToolbar({
-			pageSize: pageS,
+			pageSize: 15,
 			store: produk_DataStore,
 			displayInfo: true
 		}),
@@ -870,7 +872,7 @@ Ext.onReady(function(){
 		}, '-', 
 			new Ext.app.SearchField({
 			store: produk_DataStore,
-			params: {start: 0, limit: pageS},
+			//params: {start: 0, limit: 15},
 			width: 120
 		}),'-',{
 			text: 'Refresh',
@@ -943,7 +945,7 @@ Ext.onReady(function(){
 	/* End of Function */
   	
 	produkListEditorGrid.addListener('rowcontextmenu', onproduk_ListEditGridContextMenu);
-	produk_DataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
+	produk_DataStore.load({params: {start: 0, limit: 15}});	// load DataStore
 	produkListEditorGrid.on('afteredit', produk_update); // inLine Editing Record
 	
 	/* Identify  produk_id Field */
@@ -1256,6 +1258,23 @@ Ext.onReady(function(){
 				maxLength: 11,
 				maskRe: /([0-9]+)$/
 			})
+		},
+		{
+			hea
+			editor: new Ext.form.ComboBox({
+				id: 'produk_aktifSearchField',
+				fieldLabel: 'Status',
+				store:new Ext.data.SimpleStore({
+					fields:['produk_aktif_value', 'produk_aktif_display'],
+					data:[['Aktif','Aktif'],['Tidak Aktif','Tidak Aktif']]
+				}),
+				mode: 'local',
+				emptyText: 'Aktif',
+				displayField: 'produk_aktif_display',
+				valueField: 'produk_aktif_value',
+				width: 80,
+				triggerAction: 'all'	
+			})
 		}]
 	);
 	satuan_konversi_ColumnModel.defaultSortable= true;
@@ -1282,7 +1301,7 @@ Ext.onReady(function(){
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true},
 		bbar: new Ext.PagingToolbar({
-			pageSize: pageS,
+			pageSize: 15,
 			store: satuan_konversi_DataStore,
 			displayInfo: true
 		}),
@@ -1499,6 +1518,7 @@ Ext.onReady(function(){
 		var produk_dm_search=null;
 		var produk_point_search=null;
 		var produk_volume_search=null;
+		var produk_kontribusi_search=null;
 		var produk_harga_search=null;
 		var produk_keterangan_search=null;
 		var produk_aktif_search=null;
@@ -1514,10 +1534,12 @@ Ext.onReady(function(){
 		if(produk_duSearchField.getValue()!==null){produk_du_search=produk_duSearchField.getValue();}
 		if(produk_dmSearchField.getValue()!==null){produk_dm_search=produk_dmSearchField.getValue();}
 		if(produk_pointSearchField.getValue()!==null){produk_point_search=produk_pointSearchField.getValue();}
+		if(produk_kontribusiSearchField.getValue()!==null){produk_kontribusi_search=produk_kontribusiSearchField.getValue();}
 		if(produk_volumeSearchField.getValue()!==null){produk_volume_search=produk_volumeSearchField.getValue();}
 		if(produk_hargaSearchField.getValue()!==null){produk_harga_search=produk_hargaSearchField.getValue();}
 		if(produk_keteranganSearchField.getValue()!==null){produk_keterangan_search=produk_keteranganSearchField.getValue();}
 		if(produk_aktifSearchField.getValue()!==null){produk_aktif_search=produk_aktifSearchField.getValue();}
+		
 		// change the store parameters
 		produk_DataStore.baseParams = {
 			task: 'SEARCH',
@@ -1533,21 +1555,22 @@ Ext.onReady(function(){
 			produk_du	:	produk_du_search, 
 			produk_dm	:	produk_dm_search, 
 			produk_point	:	produk_point_search, 
-			produk_volume	:	produk_volume_search, 
+			produk_kontribusi	:	produk_kontribusi_search,
+			produk_volume	:	produk_volume_search,
 			produk_harga	:	produk_harga_search, 
 			produk_keterangan	:	produk_keterangan_search, 
 			produk_aktif	:	produk_aktif_search, 
 		};
 		// Cause the datastore to do another query : 
-		produk_DataStore.reload({params: {start: 0, limit: pageS}});
+		produk_DataStore.reload({params: {start: 0, limit: 15}});
 	}
 		
 	/* Function for reset search result */
 	function produk_reset_search(){
 		// reset the store parameters
-		produk_DataStore.baseParams = { task: 'LIST' };
+		produk_DataStore.baseParams = { task: 'LIST',start:0,limit:15 };
 		// Cause the datastore to do another query : 
-		produk_DataStore.reload({params: {start: 0, limit: pageS}});
+		produk_DataStore.reload({params: {start: 0, limit: 15}});
 		produk_searchWindow.close();
 	};
 	/* End of Fuction */
@@ -1575,6 +1598,8 @@ Ext.onReady(function(){
 		produk_dmSearchField.setValue(null);
 		produk_pointSearchField.reset();
 		produk_pointSearchField.setValue(null);
+		produk_kontribusiSearchField.reset();
+		produk_kontribusiSearchField.setValue(null);
 		produk_volumeSearchField.reset();
 		produk_volumeSearchField.setValue(null);
 		produk_hargaSearchField.reset();
@@ -1586,37 +1611,38 @@ Ext.onReady(function(){
 	}
 	
 	/* Field for search */
-	/* Identify  produk_id Search Field */
+	/* Identify  produk_id Field */
 	produk_idSearchField= new Ext.form.NumberField({
 		id: 'produk_idSearchField',
-		fieldLabel: 'Produk Id',
+		fieldLabel: 'ID',
 		allowNegatife : false,
 		blankText: '0',
 		allowDecimals: false,
+		hidden: true,
+		hideLabel: true,
+		readOnly: true,
 		anchor: '95%',
 		maskRe: /([0-9]+)$/
-	
 	});
-	/* Identify  produk_kode Search Field */
+	/* Identify  produk_kode Field */
 	produk_kodeSearchField= new Ext.form.TextField({
 		id: 'produk_kodeSearchField',
 		fieldLabel: 'Kode',
 		maxLength: 20,
+		emptyText: '(auto)',
 		width: 100
-	
 	});
-	/* Identify  produk_kodelama Search Field */
+	/* Identify  produk_kodelama Field */
 	produk_kodelamaSearchField= new Ext.form.TextField({
 		id: 'produk_kodelamaSearchField',
 		fieldLabel: 'Kode Lama',
 		maxLength: 20,
 		width: 100
-	
 	});
-	/* Identify  produk_group Search Field */
+	/* Identify  produk_group Field */
 	produk_groupSearchField= new Ext.form.ComboBox({
 		id: 'produk_groupSearchField',
-		fieldLabel: 'Group',
+		fieldLabel: 'Group <span style="color: #ec0000">*</span>',
 		store: cbo_produk_groupDataSore,
 		mode: 'remote',
 		displayField: 'produk_group_display',
@@ -1624,10 +1650,10 @@ Ext.onReady(function(){
 		width: 120,
 		triggerAction: 'all'
 	});
-	/* Identify  produk_kategori Search Field */
+	/* Identify  produk_kategori Field */
 	produk_kategoriSearchField= new Ext.form.ComboBox({
 		id: 'produk_kategoriSearchField',
-		fieldLabel: 'Kategori',
+		fieldLabel: 'Jenis <span style="color: #ec0000">*</span>',
 		store: cbo_produk_kategori_DataSore,
 		mode: 'remote',
 		displayField: 'produk_kategori_display',
@@ -1635,10 +1661,21 @@ Ext.onReady(function(){
 		width: 120,
 		triggerAction: 'all'
 	});
-	/* Identify  produk_jenis Search Field */
+	/* Identify  produk_kategori Field */
+	produk_kontribusiSearchField= new Ext.form.ComboBox({
+		id: 'produk_kontribusiSearchField',
+		fieldLabel: 'Contribution Category',
+		store: cbo_produk_kontribusi_DataSore,
+		mode: 'remote',
+		displayField: 'produk_kontribusi_display',
+		valueField: 'produk_kontribusi_value',
+		anchor: '95%',
+		triggerAction: 'all'
+	});
+	/* Identify  produk_jenis Field */
 	produk_jenisSearchField= new Ext.form.ComboBox({
 		id: 'produk_jenisSearchField',
-		fieldLabel: 'Jenis',
+		fieldLabel: 'Group 2 <span style="color: #ec0000">*</span>',
 		store: cbo_produk_jenis_DataSore,
 		mode: 'remote',
 		displayField: 'produk_jenis_display',
@@ -1646,104 +1683,95 @@ Ext.onReady(function(){
 		width: 120,
 		triggerAction: 'all'
 	});
-	/* Identify  produk_nama Search Field */
+	/* Identify  produk_nama Field */
 	produk_namaSearchField= new Ext.form.TextField({
 		id: 'produk_namaSearchField',
-		fieldLabel: 'Nama',
+		fieldLabel: 'Nama <span style="color: #ec0000">*</span>',
 		maxLength: 250,
 		anchor: '95%'
-	
 	});
-	/* Identify  produk_satuan Search Field */
-	produk_satuanSearchField= new Ext.form.NumberField({
+	/* Identify  produk_satuan Field */
+	produk_satuanSearchField= new Ext.form.ComboBox({
 		id: 'produk_satuanSearchField',
 		fieldLabel: 'Satuan',
-		allowNegatife : false,
-		blankText: '0',
-		allowDecimals: false,
+		store: cbo_produk_satuan_DataSore,
+		mode: 'remote',
+		displayField: 'produk_satuan_display',
+		valueField: 'produk_satuan_value',
 		anchor: '50%',
-		maskRe: /([0-9]+)$/
-	
+		triggerAction: 'all'
 	});
-	/* Identify  produk_du Search Field */
+	/* Identify  produk_du Field */
 	produk_duSearchField= new Ext.form.NumberField({
 		id: 'produk_duSearchField',
+		name: 'produk_duField',
 		fieldLabel: 'Diskon Umum (%)',
 		allowNegatife : false,
-		blankText: '0',
+		emptyText: '0',
 		allowDecimals: false,
 		width: 60,
 		maskRe: /([0-9]+)$/
-	
 	});
-	/* Identify  produk_dm Search Field */
+	/* Identify  produk_dm Field */
 	produk_dmSearchField= new Ext.form.NumberField({
 		id: 'produk_dmSearchField',
+		name: 'produk_dmField',
 		fieldLabel: 'Diskon Member (%)',
 		allowNegatife : false,
-		blankText: '0',
+		emptyText: '0',
 		allowDecimals: false,
 		width: 60,
 		maskRe: /([0-9]+)$/
-	
 	});
-	/* Identify  produk_point Search Field */
+	/* Identify  produk_point Field */
 	produk_pointSearchField= new Ext.form.NumberField({
 		id: 'produk_pointSearchField',
+		name: 'produk_pointField',
 		fieldLabel: 'Point',
 		allowNegatife : false,
-		blankText: '0',
+		emptyText: '0',
 		allowDecimals: false,
 		width: 60,
 		maskRe: /([0-9]+)$/
-	
 	});
-	/* Identify  produk_volume Search Field */
-	produk_volumeSearchField= new Ext.form.NumberField({
+	/* Identify  produk_volume Field */
+	produk_volumeSearchField= new Ext.form.TextField({
 		id: 'produk_volumeSearchField',
 		fieldLabel: 'Volume',
-		allowNegatife : false,
-		blankText: '0',
-		allowDecimals: false,
-		width: 60,
-		maskRe: /([0-9]+)$/
-	
+		maxLength: 250
 	});
-	/* Identify  produk_harga Search Field */
+	/* Identify  produk_harga Field */
 	produk_hargaSearchField= new Ext.form.NumberField({
 		id: 'produk_hargaSearchField',
-		fieldLabel: 'Harga',
+		name: 'produk_hargaField',
+		fieldLabel: 'Harga (Rp) <span style="color: #ec0000">*</span>',
 		allowNegatife : false,
-		blankText: '0',
+		emptyText: '0',
 		allowDecimals: true,
 		width: 60,
 		maskRe: /([0-9]+)$/
-	
 	});
-	/* Identify  produk_keterangan Search Field */
+	/* Identify  produk_keterangan Field */
 	produk_keteranganSearchField= new Ext.form.TextArea({
 		id: 'produk_keteranganSearchField',
 		fieldLabel: 'Keterangan',
-		allowBlank: true,
 		maxLength: 500,
-		width: 60
-	
+		anchor: '95%'
 	});
-	/* Identify  produk_aktif Search Field */
+	/* Identify  produk_aktif Field */
 	produk_aktifSearchField= new Ext.form.ComboBox({
 		id: 'produk_aktifSearchField',
 		fieldLabel: 'Status',
 		store:new Ext.data.SimpleStore({
-			fields:['value', 'produk_aktif'],
+			fields:['produk_aktif_value', 'produk_aktif_display'],
 			data:[['Aktif','Aktif'],['Tidak Aktif','Tidak Aktif']]
 		}),
 		mode: 'local',
-		displayField: 'produk_aktif',
-		valueField: 'value',
-		//anchor: '95%',
+		emptyText: 'Aktif',
+		displayField: 'produk_aktif_display',
+		valueField: 'produk_aktif_value',
 		width: 80,
-		triggerAction: 'all'	 
-	
+		triggerAction: 'all'	
 	});
     
 	/* Function for retrieve search Form Panel */
@@ -1760,14 +1788,14 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [produk_kodelamaSearchField, produk_kodeSearchField, produk_groupSearchField, produk_kategoriSearchField, produk_jenisSearchField, produk_namaSearchField] 
+				items: [produk_kodelamaSearchField, produk_kodeSearchField, produk_groupSearchField, produk_jenisSearchField, produk_kategoriSearchField, produk_namaSearchField, produk_hargaSearchField, produk_duSearchField, produk_dmSearchField] 
 			}
  
 			,{
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [produk_duSearchField, produk_dmSearchField, produk_pointSearchField, produk_volumeSearchField, produk_hargaSearchField, produk_keteranganSearchField, produk_aktifSearchField] 
+				items: [produk_pointSearchField, produk_volumeSearchField, produk_kontribusiSearchField, produk_keteranganSearchField, produk_aktifSearchField, produk_idSearchField] 
 			}
 			]
 		}]

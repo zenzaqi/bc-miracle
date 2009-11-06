@@ -432,13 +432,13 @@ Ext.onReady(function(){
 	/* End of Function */
 	
 	/* Function for Retrieve Supplier DataStore */
-	cbo_order_produk_DataSore = new Ext.data.Store({
-		id: 'cbo_order_produk_DataSore',
+	cbo_order_produk_DataStore = new Ext.data.Store({
+		id: 'cbo_order_produk_DataStore',
 		proxy: new Ext.data.HttpProxy({
 			url: 'index.php?c=c_master_order_beli&m=get_produk_list', 
 			method: 'POST'
 		}),
-		baseParams:{task: "LIST"}, // parameter yang di $_POST ke Controller
+		baseParams:{task: "LIST",start:0,limit:pageS}, // parameter yang di $_POST ke Controller
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
@@ -999,7 +999,7 @@ Ext.onReady(function(){
 	});
 	
 	Ext.util.Format.comboRenderer = function(combo){
-		cbo_order_produk_DataSore.load();
+		cbo_order_produk_DataStore.load();
 		cbo_order_satuanDataStore.load();
 		return function(value){
 			var record = combo.findRecord(combo.valueField, value);
@@ -1008,7 +1008,7 @@ Ext.onReady(function(){
 	}
 	
 	var combo_order_produk=new Ext.form.ComboBox({
-			store: cbo_order_produk_DataSore,
+			store: cbo_order_produk_DataStore,
 			mode: 'remote',
 			typeAhead: true,
 			displayField: 'order_produk_nama',

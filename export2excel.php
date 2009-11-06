@@ -1,5 +1,8 @@
 <?php header("Content-type: application/x-msdownload"); 
-header("Content-Disposition: attachment; filename=cabang.xls"); 
-echo "Cabang Id	Cabang Nama	Cabang Alamat	Cabang Kota	Cabang Propinsi	Cabang Keterangan	Cabang Aktif	Cabang Creator	Cabang Date Create	Cabang Update	Cabang Date Update	Cabang Revised	
-1	Miracle Pusat	Jl. M.H. Thamrin No. 55-56	Surabaya	Jawa Timur	Keterangan tidak ada	Aktif					0
+header("Content-Disposition: attachment; filename=customer.xls"); 
+echo "Cust Id	Cust No	Cust Member	Cust Nama	Cust Panggilan	Cust Kelamin	Cust Alamat	Cust Kota	Cust Kodepos	Cust Propinsi	Cust Negara	Cust Alamat2	Cust Kota2	Cust Kodepos2	Cust Propinsi2	Cust Negara2	Cust Telprumah	Cust Telprumah2	Cust Telpkantor	Cust Hp	Cust Hp2	Cust Hp3	Cust Email	Cust Fb	Cust Tweeter	Cust Email2	Cust Fb2	Cust Tweeter2	Cust Agama	Cust Pendidikan	Cust Profesi	Cust Tmptlahir	Cust Tgllahir	Cust Hobi	Cust Referensi	Cust Referensilain	Cust Keterangan	Cust Terdaftar	Cust Statusnikah	Cust Jmlanak	Cust Unit	Cust Cp	Cust Cptelp	Cust Aktif	Cust Creator	Cust Date Create	Cust Update	Cust Date Update	Cust Revised	
+24137	JHJ9899		songbee		L	sfasfa			Jawa Barat													sdfaf@yahoo.com	1	1		0	0	Katholik	SMA			10/31/1900		0			11/02/2009	menikah	0	1			Aktif		0000-00-00 00:00:00	admin	2009-11-06 05:25:17	3
+24139	JHH77		dsfasfasf		P	asfasf																kokokok@df.df	1	0		0	0	Islam	Diploma		ponorogo	11/01/2009		0			11/01/2009	belum menikah	0	1			Aktif		0000-00-00 00:00:00	admin	2009-11-05 23:33:29	2
+24140	JIJIK9898		Beeesong		L	sadfsadf										0567567						safdd@dgdf.cd	0	0		0	0	Katholik	Diploma			10/31/1900		0			11/01/2009	belum menikah	0	1			Aktif	admin	2009-11-06 05:34:01	admin	2009-11-06 05:35:49	4
+24141	POIUYT090		mukhlison		L	Jln. Raya Nginden II/24			Jawa Timur														0	0		0	0	Islam	Diploma			10/31/1900		0			11/01/2009	belum menikah	0	1			Aktif	admin	2009-11-06 05:58:42	admin	2009-11-06 06:02:09	3
 ";?>

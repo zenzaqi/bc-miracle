@@ -136,7 +136,7 @@ class M_customer extends Model{
 		
 				
 		function get_reflain_list(){
-			$sql="select distinct(cust_referensilain) from customer where cust_referensilain is NOT NULL";
+			$sql="select distinct(cust_referensilain) from customer where cust_referensilain!=null or cust_referensilain!=''";
 			$result = $this->db->query($sql);
 			$nbrows = $result->num_rows();
 			$result = $this->db->query($sql);  
@@ -179,9 +179,16 @@ class M_customer extends Model{
 		}
 		
 		//function for update record
-		function customer_update($cust_id, $cust_no ,$cust_nama, $cust_panggilan ,$cust_kelamin ,$cust_alamat ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara,$cust_alamat2 ,$cust_kota2 ,$cust_kodepos2 ,$cust_propinsi2 ,$cust_negara2 ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email, $cust_email2 ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tgllahir ,$cust_hobi ,$cust_referensi,$cust_referensilain ,$cust_keterangan ,$cust_member ,$cust_terdaftar ,$cust_statusnikah ,$cust_jmlanak ,$cust_unit ,$cust_aktif ,$cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ){
+		function customer_update($cust_id, $cust_no ,$cust_nama, $cust_panggilan ,$cust_kelamin ,$cust_alamat ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara,$cust_alamat2 ,$cust_kota2 ,$cust_kodepos2 ,$cust_propinsi2 ,$cust_negara2 ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_fb ,$cust_tweeter , $cust_email2 ,$cust_fb2 ,$cust_tweeter2 ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tmptlahir ,$cust_tgllahir ,$cust_hobi ,$cust_referensi,$cust_referensilain ,$cust_keterangan ,$cust_member ,$cust_terdaftar ,$cust_statusnikah ,$cust_jmlanak ,$cust_unit ,$cust_aktif ,$cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$cust_cp ,$cust_cptelp ){
 		if ($cust_aktif=="")
 			$cust_aktif = "Aktif";
+			$date_now = date('Y-m-d H:i:s');
+			/*if($cust_kota=="")
+				$cust_kota="Surabaya";
+			if($cust_propinsi=="")
+				$cust_propinsi="Jawa Timur";
+			if($cust_negara=="")
+				$cust_negara="Indonesia";*/
 			$data = array(
 				"cust_id"=>$cust_id,			
 				"cust_no"=>$cust_no,			
@@ -209,6 +216,7 @@ class M_customer extends Model{
 				"cust_agama"=>$cust_agama,			
 				"cust_pendidikan"=>$cust_pendidikan,			
 				"cust_profesi"=>$cust_profesi,			
+				"cust_tmptlahir"=>$cust_tmptlahir,
 				"cust_tgllahir"=>$cust_tgllahir,			
 				"cust_hobi"=>$cust_hobi,			
 				"cust_referensi"=>$cust_referensi,			
@@ -216,14 +224,30 @@ class M_customer extends Model{
 				"cust_keterangan"=>$cust_keterangan,			
 				"cust_terdaftar"=>$cust_terdaftar,			
 				"cust_statusnikah"=>$cust_statusnikah,			
-				"cust_jmlanak"=>$cust_jmlanak,						
-				"cust_aktif"=>$cust_aktif,			
-				"cust_creator"=>$cust_creator,			
-				"cust_date_create"=>$cust_date_create,			
-				"cust_update"=>$cust_update,			
-				"cust_date_update"=>$cust_date_update,			
-				"cust_revised"=>$cust_revised			
+				"cust_jmlanak"=>$cust_jmlanak,
+				"cust_aktif"=>$cust_aktif,
+				"cust_update"=>$_SESSION["userid"],
+				"cust_date_update"=>$date_now,			
+				//"cust_revised"=>"(cust_revised+1)",
+				"cust_cp"=>$cust_cp,
+				"cust_cptelp"=>$cust_cptelp
 			);
+			if($cust_fb=='true')
+				$data["cust_fb"]=1;
+			if($cust_fb=='false')
+				$data["cust_fb"]=0;
+			if($cust_tweeter=='true')
+				$data["cust_tweeter"]=1;
+			if($cust_tweeter=='false')
+				$data["cust_tweeter"]=0;
+			if($cust_fb2=='true')
+				$data["cust_fb2"]=1;
+			if($cust_fb2=='false')
+				$data["cust_fb2"]=0;
+			if($cust_tweeter2=='true')
+				$data["cust_tweeter2"]=1;
+			if($cust_tweeter2=='false')
+				$data["cust_tweeter2"]=0;
 			
 			$sql="select cabang_id from cabang where cabang_id='".$cust_unit."'";
 			$result=$this->db->query($sql);
@@ -232,15 +256,24 @@ class M_customer extends Model{
 				
 			$this->db->where('cust_id', $cust_id);
 			$this->db->update('customer', $data);
+			$sql="UPDATE customer SET cust_revised=(cust_revised+1) WHERE cust_id='$cust_id'";
+			$this->db->query($sql);
 			
 			return '1';
 		
 		}
 		
 		//function for create new record
-		function customer_create($cust_no ,$cust_nama, $cust_panggilan ,$cust_kelamin ,$cust_alamat ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara,$cust_alamat2 ,$cust_kota2 ,$cust_kodepos2 ,$cust_propinsi2 ,$cust_negara2 ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email, $cust_email2 ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tgllahir ,$cust_hobi ,$cust_referensi,$cust_referensilain ,$cust_keterangan ,$cust_member ,$cust_terdaftar ,$cust_statusnikah ,$cust_jmlanak ,$cust_unit ,$cust_aktif ,$cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ){
+		function customer_create($cust_no ,$cust_nama, $cust_panggilan ,$cust_kelamin ,$cust_alamat ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara,$cust_alamat2 ,$cust_kota2 ,$cust_kodepos2 ,$cust_propinsi2 ,$cust_negara2 ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_fb ,$cust_tweeter , $cust_email2 ,$cust_fb2 ,$cust_tweeter2 ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tmptlahir ,$cust_tgllahir ,$cust_hobi ,$cust_referensi,$cust_referensilain ,$cust_keterangan ,$cust_member ,$cust_terdaftar ,$cust_statusnikah ,$cust_jmlanak ,$cust_unit ,$cust_aktif ,$cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$cust_cp ,$cust_cptelp ){
 		if ($cust_aktif=="")
 			$cust_aktif = "Aktif";
+			$date_now = date('Y-m-d H:i:s');
+			if($cust_kota=="")
+				$cust_kota="Surabaya";
+			if($cust_propinsi=="")
+				$cust_propinsi="Jawa Timur";
+			if($cust_negara=="")
+				$cust_negara="Indonesia";
 			$data = array(
 				"cust_no"=>$cust_no,			
 				"cust_nama"=>$cust_nama,
@@ -266,7 +299,8 @@ class M_customer extends Model{
 				"cust_email2"=>$cust_email2,
 				"cust_agama"=>$cust_agama,			
 				"cust_pendidikan"=>$cust_pendidikan,			
-				"cust_profesi"=>$cust_profesi,			
+				"cust_profesi"=>$cust_profesi,
+				"cust_tmptlahir"=>$cust_tmptlahir,
 				"cust_tgllahir"=>$cust_tgllahir,			
 				"cust_hobi"=>$cust_hobi,			
 				"cust_referensi"=>$cust_referensi,			
@@ -274,14 +308,33 @@ class M_customer extends Model{
 				"cust_keterangan"=>$cust_keterangan,			
 				"cust_terdaftar"=>$cust_terdaftar,			
 				"cust_statusnikah"=>$cust_statusnikah,			
-				"cust_jmlanak"=>$cust_jmlanak,						
+				"cust_jmlanak"=>$cust_jmlanak,
+				"cust_unit"=>$cust_unit,
 				"cust_aktif"=>$cust_aktif,			
-				"cust_creator"=>$cust_creator,			
-				"cust_date_create"=>$cust_date_create,			
-				"cust_update"=>$cust_update,			
-				"cust_date_update"=>$cust_date_update,			
-				"cust_revised"=>$cust_revised	
+				"cust_creator"=>$_SESSION["userid"],
+				"cust_date_create"=>$date_now,
+				"cust_update"=>$_SESSION["userid"],
+				"cust_date_update"=>$date_now,
+				"cust_revised"=>0,
+				"cust_cp"=>$cust_cp,
+				"cust_cptelp"=>$cust_cptelp
 			);
+			if($cust_fb=='true')
+				$data["cust_fb"]=1;
+			if($cust_fb=='false')
+				$data["cust_fb"]=0;
+			if($cust_tweeter=='true')
+				$data["cust_tweeter"]=1;
+			if($cust_tweeter=='false')
+				$data["cust_tweeter"]=0;
+			if($cust_fb2=='true')
+				$data["cust_fb2"]=1;
+			if($cust_fb2=='false')
+				$data["cust_fb2"]=0;
+			if($cust_tweeter2=='true')
+				$data["cust_tweeter2"]=1;
+			if($cust_tweeter2=='false')
+				$data["cust_tweeter2"]=0;
 			$this->db->insert('customer', $data); 
 			if($this->db->affected_rows())
 				return '1';

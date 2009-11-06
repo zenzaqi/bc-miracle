@@ -36,6 +36,11 @@ class C_produk extends Controller {
 		echo $result;
 	}
 	
+	function get_group_produk_list(){
+		$result=$this->m_public_function->get_group_produk_list();
+		echo $result;
+	}
+	
 	function get_kategori_produk_list(){
 		$result=$this->m_public_function->get_kategori_produk_list();
 		echo $result;
@@ -229,6 +234,7 @@ class C_produk extends Controller {
 		$produk_du=trim(@$_POST["produk_du"]);
 		$produk_dm=trim(@$_POST["produk_dm"]);
 		$produk_point=trim(@$_POST["produk_point"]);
+		$produk_kontribusi=trim(@$_POST["produk_kontribusi"]);
 		$produk_volume=trim(@$_POST["produk_volume"]);
 		$produk_harga=trim(@$_POST["produk_harga"]);
 		$produk_keterangan=trim(@$_POST["produk_keterangan"]);
@@ -240,7 +246,7 @@ class C_produk extends Controller {
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_produk->produk_search($produk_id ,$produk_kode ,$produk_kodelama ,$produk_group ,$produk_kategori ,$produk_jenis ,$produk_nama ,$produk_satuan ,$produk_du ,$produk_dm ,$produk_point ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif ,$start,$end);
+		$result = $this->m_produk->produk_search($produk_id ,$produk_kode ,$produk_kodelama ,$produk_group ,$produk_kategori ,$produk_jenis ,$produk_nama ,$produk_satuan ,$produk_du ,$produk_dm ,$produk_point ,$produk_kontribusi ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif ,$start,$end);
 		echo $result;
 	}
 

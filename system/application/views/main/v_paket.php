@@ -73,6 +73,7 @@ var paket_kodeField;
 var paket_kodelamaField;
 var paket_namaField;
 var paket_groupField;
+var paket_kategoriField;
 var paket_keteranganField;
 var paket_duField;
 var paket_dmField;
@@ -490,7 +491,7 @@ Ext.onReady(function(){
 	cbo_paket_groupDataStore = new Ext.data.Store({
 	id: 'cbo_paket_groupDataStore',
 	proxy: new Ext.data.HttpProxy({
-			url: 'index.php?c=c_paket&m=get_group_list', 
+			url: 'index.php?c=c_paket&m=get_group_paket_list', 
 			method: 'POST'
 		}),
 			reader: new Ext.data.JsonReader({
@@ -505,6 +506,25 @@ Ext.onReady(function(){
 			{name: 'paket_group_dmpaket', type: 'int', mapping: 'group_dmpaket'}
 		]),
 	sortInfo:{field: 'paket_group_display', direction: "ASC"}
+	});
+
+	cbo_paket_kategori_DataSore = new Ext.data.Store({
+		id: 'cbo_paket_kategori_DataSore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_paket&m=get_kategori_paket_list', 
+			method: 'POST'
+		}),
+		baseParams:{task: "LIST"}, // parameter yang di $_POST ke Controller
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'kategori_id'
+		},[
+		/* dataIndex => insert intocustomer_note_ColumnModel, Mapping => for initiate table column */ 
+			{name: 'paket_kategori_value', type: 'int', mapping: 'kategori_id'},
+			{name: 'paket_kategori_display', type: 'string', mapping: 'kategori_nama'}
+		]),
+		sortInfo:{field: 'paket_kategori_display', direction: "ASC"}
 	});
 	
   	/* Function for Identify of Window Column Model */
@@ -555,6 +575,19 @@ Ext.onReady(function(){
                	lazyRender:true,
                	listClass: 'x-combo-list-small'
             })
+		}, 
+		{
+			header: 'Jenis',
+			dataIndex: 'produk_kategori',
+			width: 150,
+			sortable: true,
+			editor: new Ext.form.ComboBox({
+				store: cbo_paket_kategori_DataSore,
+				mode: 'remote',
+				displayField: 'paket_kategori_display',
+				valueField: 'paket_kategori_value',
+				triggerAction: 'all'
+			})
 		}, 
 		{
 			header: 'DU',
@@ -872,6 +905,18 @@ Ext.onReady(function(){
 		width: 120,
 		listClass: 'x-combo-list-small'
 	});
+	/* Identify  produk_kategori Field */
+	paket_kategoriField= new Ext.form.ComboBox({
+		id: 'paket_kategoriField',
+		fieldLabel: 'Jenis <span style="color: #ec0000">*</span>',
+		store: cbo_paket_kategori_DataSore,
+		mode: 'remote',
+		allowBlank: false,
+		displayField: 'paket_kategori_display',
+		valueField: 'paket_kategori_value',
+		width: 120,
+		triggerAction: 'all'
+	});
 	/* Identify  paket_keterangan Field */
 	paket_keteranganField= new Ext.form.TextArea({
 		id: 'paket_keteranganField',
@@ -980,7 +1025,7 @@ Ext.onReady(function(){
 				columnWidth: 0.5,
 				layout: 'form',
 				border:false,
-				items: [paket_kodelamaField, paket_kodeField, paket_namaField, paket_groupField, paket_hargaField, paket_duField, paket_dmField] 
+				items: [paket_kodelamaField, paket_kodeField, paket_namaField, paket_groupField, paket_kategoriField, paket_hargaField, paket_duField, paket_dmField] 
 			}
 			,{
 				columnWidth:0.5,
@@ -1674,45 +1719,43 @@ Ext.onReady(function(){
 	}
 	
 	/* Field for search */
-	/* Identify  paket_id Search Field */
+	/* Identify  paket_id Field */
 	paket_idSearchField= new Ext.form.NumberField({
 		id: 'paket_idSearchField',
-		fieldLabel: 'Id',
 		allowNegatife : false,
-		blankText: '0',
 		allowDecimals: false,
+		hidden: true,
+		readOnly: true,
 		anchor: '95%',
 		maskRe: /([0-9]+)$/
-	
 	});
-	/* Identify  paket_kode Search Field */
+	/* Identify  paket_kode Field */
 	paket_kodeSearchField= new Ext.form.TextField({
 		id: 'paket_kodeSearchField',
 		fieldLabel: 'Kode',
 		maxLength: 20,
+		readOnly: true,
+		emptyText: '(auto)',
 		width: 100
-	
 	});
-	/* Identify  paket_kodelama Search Field */
+	/* Identify  paket_kodelama Field */
 	paket_kodelamaSearchField= new Ext.form.TextField({
 		id: 'paket_kodelamaSearchField',
 		fieldLabel: 'Kode Lama',
 		maxLength: 20,
 		width: 100
-	
 	});
-	/* Identify  paket_nama Search Field */
+	/* Identify  paket_nama Field */
 	paket_namaSearchField= new Ext.form.TextField({
 		id: 'paket_namaSearchField',
-		fieldLabel: 'Nama Paket',
+		fieldLabel: 'Nama <span style="color: #ec0000">*</span>',
 		maxLength: 250,
 		anchor: '95%'
-	
 	});
-	/* Identify  paket_group Search Field */
+	/* Identify  paket_group Field */
 	paket_groupSearchField= new Ext.form.ComboBox({
 		id: 'paket_groupSearchField',
-		fieldLabel: 'Group',
+		fieldLabel: 'Group <span style="color: #ec0000">*</span>',
 		typeAhead: true,
 		triggerAction: 'all',
 		store: cbo_paket_groupDataStore,
@@ -1722,85 +1765,95 @@ Ext.onReady(function(){
 		lazyRender:true,
 		width: 120,
 		listClass: 'x-combo-list-small'
-	
 	});
-	/* Identify  paket_keterangan Search Field */
+	/* Identify  produk_kategori Field */
+	paket_kategoriSearchField= new Ext.form.ComboBox({
+		id: 'paket_kategoriSearchField',
+		fieldLabel: 'Jenis <span style="color: #ec0000">*</span>',
+		store: cbo_paket_kategori_DataSore,
+		mode: 'remote',
+		displayField: 'paket_kategori_display',
+		valueField: 'paket_kategori_value',
+		width: 120,
+		triggerAction: 'all'
+	});
+	/* Identify  paket_keterangan Field */
 	paket_keteranganSearchField= new Ext.form.TextArea({
 		id: 'paket_keteranganSearchField',
 		fieldLabel: 'Keterangan',
 		maxLength: 250,
 		anchor: '95%'
-	
 	});
-	/* Identify  paket_du Search Field */
+	/* Identify  paket_du Field */
 	paket_duSearchField= new Ext.form.NumberField({
 		id: 'paket_duSearchField',
 		fieldLabel: 'Diskon Umum (%)',
 		allowNegatife : false,
-		blankText: '0',
+		emptyText: '0',
 		allowDecimals: false,
+		maxLength: 3,
 		width: 60,
 		maskRe: /([0-9]+)$/
-	
 	});
-	/* Identify  paket_dm Search Field */
+	/* Identify  paket_dm Field */
 	paket_dmSearchField= new Ext.form.NumberField({
 		id: 'paket_dmSearchField',
 		fieldLabel: 'Diskon Member (%)',
 		allowNegatife : false,
-		blankText: '0',
+		emptyText: '0',
+		maxLength: 3,
 		allowDecimals: false,
 		width: 60,
 		maskRe: /([0-9]+)$/
-	
 	});
-	/* Identify  paket_point Search Field */
+	/* Identify  paket_point Field */
 	paket_pointSearchField= new Ext.form.NumberField({
 		id: 'paket_pointSearchField',
 		fieldLabel: 'Point',
 		allowNegatife : false,
-		blankText: '0',
+		emptyText: '0',
+		maxLength: 11,
 		allowDecimals: false,
 		width: 60,
 		maskRe: /([0-9]+)$/
-	
 	});
-	/* Identify  paket_harga Search Field */
+	/* Identify  paket_harga Field */
 	paket_hargaSearchField= new Ext.form.NumberField({
 		id: 'paket_hargaSearchField',
-		fieldLabel: 'Harga (Rp.)',
+		fieldLabel: 'Harga Jual (Rp.)',
 		allowNegatife : false,
-		blankText: '0',
+		emptyText: '0',
+		maxLength: 12,
 		allowDecimals: true,
 		width: 60,
 		maskRe: /([0-9]+)$/
-	
 	});
-	/* Identify  paket_expired Search Field */
+	/* Identify  paket_expired Field */
 	paket_expiredSearchField= new Ext.form.NumberField({
 		id: 'paket_expiredSearchField',
-		fieldLabel: 'Expired (hari)',
+		fieldLabel: 'Expired (hari) [0=unlimited]',
 		allowNegatife : false,
-		blankText: '0',
+		emptyText: '0',
+		maxLength: 3,
 		allowDecimals: false,
 		width: 60,
 		maskRe: /([0-9]+)$/
-	
 	});
-	/* Identify  paket_aktif Search Field */
+	/* Identify  paket_aktif Field */
 	paket_aktifSearchField= new Ext.form.ComboBox({
 		id: 'paket_aktifSearchField',
 		fieldLabel: 'Status',
 		store:new Ext.data.SimpleStore({
-			fields:['value', 'paket_aktif'],
+			fields:['paket_aktif_value', 'paket_aktif_display'],
 			data:[['Aktif','Aktif'],['Tidak Aktif','Tidak Aktif']]
 		}),
 		mode: 'local',
-		displayField: 'paket_aktif',
-		valueField: 'value',
+		emptyText: 'Aktif',
+		displayField: 'paket_aktif_display',
+		valueField: 'paket_aktif_value',
+		//anchor: '30%',
 		width: 80,
-		triggerAction: 'all'	 
-	
+		triggerAction: 'all'	
 	});
     
 	/* Function for retrieve search Form Panel */
@@ -1813,20 +1866,19 @@ Ext.onReady(function(){
 			layout:'column',
 			border:false,
 			items:[
-			{
-				columnWidth:0.5,
-				layout: 'form',
-				border:false,
-				items: [paket_kodeSearchField, paket_kodelamaSearchField, paket_namaSearchField, paket_groupSearchField, paket_keteranganSearchField, paket_expiredSearchField] 
-			}
- 
-			,{
-				columnWidth:0.5,
-				layout: 'form',
-				border:false,
-				items: [paket_duSearchField, paket_dmSearchField, paket_pointSearchField, paket_hargaSearchField, paket_aktifSearchField] 
-			}
-			]
+					{
+						columnWidth: 0.5,
+						layout: 'form',
+						border:false,
+						items: [paket_kodelamaSearchField, paket_kodeSearchField, paket_namaSearchField, paket_groupSearchField, paket_kategoriSearchField, paket_hargaSearchField, paket_duSearchField, paket_dmSearchField] 
+					}
+					,{
+						columnWidth:0.5,
+						layout: 'form',
+						border:false,
+						items: [paket_expiredSearchField, paket_pointSearchField, paket_keteranganSearchField, paket_aktifSearchField,paket_idSearchField] 
+					}
+					]
 		}]
 		,
 		buttons: [{

@@ -16,6 +16,7 @@ class C_customer extends Controller {
 	//constructor
 	function C_customer(){
 		parent::Controller();
+		session_start();
 		$this->load->model('m_customer', '', TRUE);
 		$this->load->plugin('to_excel');
 	}
@@ -194,9 +195,13 @@ class C_customer extends Controller {
 		$cust_email=trim(@$_POST["cust_email"]);
 		$cust_email=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_email);
 		$cust_email=str_replace("'", '"',$cust_email);
+		$cust_fb=trim(@$_POST["cust_fb"]);
+		$cust_tweeter=trim(@$_POST["cust_tweeter"]);
 		$cust_email2=trim(@$_POST["cust_email2"]);
 		$cust_email2=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_email2);
 		$cust_email2=str_replace("'", '"',$cust_email2);
+		$cust_fb2=trim(@$_POST["cust_fb2"]);
+		$cust_tweeter2=trim(@$_POST["cust_tweeter2"]);
 		$cust_agama=trim(@$_POST["cust_agama"]);
 		$cust_agama=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_agama);
 		$cust_agama=str_replace("'", '"',$cust_agama);
@@ -210,6 +215,9 @@ class C_customer extends Controller {
 			$cust_profesi=$cust_profesitxt;
 		else
 			$cust_profesi=$_POST["cust_profesi"];
+		$cust_tmptlahir=trim(@$_POST["cust_tmptlahir"]);
+		$cust_tmptlahir=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_tmptlahir);
+		$cust_tmptlahir=str_replace("'", '"',$cust_tmptlahir);
 		$cust_tgllahir=trim(@$_POST["cust_tgllahir"]);
 		$cust_hobitxt=trim(@$_POST["cust_hobitxt"]);
 		$cust_hobitxt=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_hobitxt);
@@ -254,7 +262,13 @@ class C_customer extends Controller {
 		$cust_update=str_replace("'", '"',$cust_update);
 		$cust_date_update=trim(@$_POST["cust_date_update"]);
 		$cust_revised=trim(@$_POST["cust_revised"]);
-		$result = $this->m_customer->customer_update($cust_id ,$cust_no ,$cust_nama, $cust_panggilan ,$cust_kelamin ,$cust_alamat ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara,$cust_alamat2 ,$cust_kota2 ,$cust_kodepos2 ,$cust_propinsi2 ,$cust_negara2 ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email, $cust_email2 ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tgllahir ,$cust_hobi ,$cust_referensi, $cust_referensilain ,$cust_keterangan ,$cust_member ,$cust_terdaftar ,$cust_statusnikah ,$cust_jmlanak ,$cust_unit ,$cust_aktif ,$cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised);
+		$cust_cp=trim(@$_POST["cust_cp"]);
+		$cust_cp=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_cp);
+		$cust_cp=str_replace("'", '"',$cust_cp);
+		$cust_cptelp=trim(@$_POST["cust_cptelp"]);
+		$cust_cptelp=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_cptelp);
+		$cust_cptelp=str_replace("'", '"',$cust_cptelp);
+		$result = $this->m_customer->customer_update($cust_id ,$cust_no ,$cust_nama, $cust_panggilan ,$cust_kelamin ,$cust_alamat ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara,$cust_alamat2 ,$cust_kota2 ,$cust_kodepos2 ,$cust_propinsi2 ,$cust_negara2 ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_fb ,$cust_tweeter , $cust_email2 ,$cust_fb2 ,$cust_tweeter2 ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tmptlahir ,$cust_tgllahir ,$cust_hobi ,$cust_referensi, $cust_referensilain ,$cust_keterangan ,$cust_member ,$cust_terdaftar ,$cust_statusnikah ,$cust_jmlanak ,$cust_unit ,$cust_aktif ,$cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$cust_cp ,$cust_cptelp );
 		echo $result;
 	}
 	
@@ -326,9 +340,13 @@ class C_customer extends Controller {
 		$cust_email=trim(@$_POST["cust_email"]);
 		$cust_email=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_email);
 		$cust_email=str_replace("'", '"',$cust_email);
+		$cust_fb=trim(@$_POST["cust_fb"]);
+		$cust_tweeter=trim(@$_POST["cust_tweeter"]);
 		$cust_email2=trim(@$_POST["cust_email2"]);
 		$cust_email2=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_email2);
 		$cust_email2=str_replace("'", '"',$cust_email2);
+		$cust_fb2=trim(@$_POST["cust_fb2"]);
+		$cust_tweeter2=trim(@$_POST["cust_tweeter2"]);
 		$cust_agama=trim(@$_POST["cust_agama"]);
 		$cust_agama=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_agama);
 		$cust_agama=str_replace("'", '"',$cust_agama);
@@ -342,6 +360,9 @@ class C_customer extends Controller {
 			$cust_profesi=$cust_profesitxt;
 		else
 			$cust_profesi=trim(@$_POST["cust_profesi"]);
+		$cust_tmptlahir=trim(@$_POST["cust_tmptlahir"]);
+		$cust_tmptlahir=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_tmptlahir);
+		$cust_tmptlahir=str_replace("'", '"',$cust_tmptlahir);
 		$cust_tgllahir=trim(@$_POST["cust_tgllahir"]);
 		$cust_hobitxt=trim(@$_POST["cust_hobitxt"]);
 		$cust_hobitxt=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_hobitxt);
@@ -386,7 +407,13 @@ class C_customer extends Controller {
 		$cust_update=str_replace("'", '"',$cust_update);
 		$cust_date_update=trim(@$_POST["cust_date_update"]);
 		$cust_revised=trim(@$_POST["cust_revised"]);
-		$result = $this->m_customer->customer_create($cust_no ,$cust_nama, $cust_panggilan ,$cust_kelamin ,$cust_alamat ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara,$cust_alamat2 ,$cust_kota2 ,$cust_kodepos2 ,$cust_propinsi2 ,$cust_negara2 ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email, $cust_email2 ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tgllahir ,$cust_hobi ,$cust_referensi, $cust_referensilain ,$cust_keterangan ,$cust_member ,$cust_terdaftar ,$cust_statusnikah ,$cust_jmlanak ,$cust_unit ,$cust_aktif ,$cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised );
+		$cust_cp=trim(@$_POST["cust_cp"]);
+		$cust_cp=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_cp);
+		$cust_cp=str_replace("'", '"',$cust_cp);
+		$cust_cptelp=trim(@$_POST["cust_cptelp"]);
+		$cust_cptelp=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_cptelp);
+		$cust_cptelp=str_replace("'", '"',$cust_cptelp);
+		$result = $this->m_customer->customer_create($cust_no ,$cust_nama, $cust_panggilan ,$cust_kelamin ,$cust_alamat ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara,$cust_alamat2 ,$cust_kota2 ,$cust_kodepos2 ,$cust_propinsi2 ,$cust_negara2 ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_fb ,$cust_tweeter , $cust_email2 ,$cust_fb2 ,$cust_tweeter2 ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tmptlahir ,$cust_tgllahir ,$cust_hobi ,$cust_referensi, $cust_referensilain ,$cust_keterangan ,$cust_member ,$cust_terdaftar ,$cust_statusnikah ,$cust_jmlanak ,$cust_unit ,$cust_aktif ,$cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$cust_cp ,$cust_cptelp );
 		echo $result;
 	}
 

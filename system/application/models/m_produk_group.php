@@ -20,7 +20,7 @@ class M_produk_group extends Model{
 		
 		//function for get list record
 		function produk_group_list($filter,$start,$end){
-			$query = "SELECT * FROM produk_group";
+			$query = "SELECT * FROM produk_group LEFT JOIN kategori ON group_kelompok=kategori_id";
 			
 			// For simple search
 			if ($filter<>""){
@@ -45,7 +45,7 @@ class M_produk_group extends Model{
 		}
 		
 		//function for update record
-		function produk_group_update($group_id ,$group_kode, $group_nama ,$group_duproduk ,$group_dmproduk ,$group_durawat ,$group_dmrawat ,$group_dupaket ,$group_dmpaket ,$group_keterangan ,$group_aktif ,$group_creator ,$group_date_create ,$group_update ,$group_date_update ,$group_revised ){
+		function produk_group_update($group_id ,$group_kode, $group_nama ,$group_duproduk ,$group_dmproduk ,$group_durawat ,$group_dmrawat ,$group_dupaket ,$group_dmpaket ,$group_kelompok ,$group_keterangan ,$group_aktif ,$group_creator ,$group_date_create ,$group_update ,$group_date_update ,$group_revised ){
 		if ($group_aktif=="")
 			$group_aktif = "Aktif";
 			$data = array(
@@ -57,7 +57,8 @@ class M_produk_group extends Model{
 				"group_durawat"=>$group_durawat,			
 				"group_dmrawat"=>$group_dmrawat,			
 				"group_dupaket"=>$group_dupaket,			
-				"group_dmpaket"=>$group_dmpaket,			
+				"group_dmpaket"=>$group_dmpaket,
+				"group_kelompok"=>$group_kelompok,
 				"group_keterangan"=>$group_keterangan,			
 				"group_aktif"=>$group_aktif,			
 				"group_creator"=>$group_creator,			
@@ -77,7 +78,7 @@ class M_produk_group extends Model{
 		}
 		
 		//function for create new record
-		function produk_group_create($group_kode, $group_nama ,$group_duproduk ,$group_dmproduk ,$group_durawat ,$group_dmrawat ,$group_dupaket ,$group_dmpaket ,$group_keterangan ,$group_aktif ,$group_creator ,$group_date_create ,$group_update ,$group_date_update ,$group_revised ){
+		function produk_group_create($group_kode, $group_nama ,$group_duproduk ,$group_dmproduk ,$group_durawat ,$group_dmrawat ,$group_dupaket ,$group_dmpaket ,$group_kelompok ,$group_keterangan ,$group_aktif ,$group_creator ,$group_date_create ,$group_update ,$group_date_update ,$group_revised ){
 		if ($group_aktif=="")
 			$group_aktif = "Aktif";
 			$data = array(
@@ -88,7 +89,8 @@ class M_produk_group extends Model{
 				"group_durawat"=>$group_durawat,	
 				"group_dmrawat"=>$group_dmrawat,	
 				"group_dupaket"=>$group_dupaket,	
-				"group_dmpaket"=>$group_dmpaket,	
+				"group_dmpaket"=>$group_dmpaket,
+				"group_kelompok"=>$group_kelompok,	
 				"group_keterangan"=>$group_keterangan,	
 				"group_aktif"=>$group_aktif,	
 				"group_creator"=>$group_creator,	
@@ -130,9 +132,9 @@ class M_produk_group extends Model{
 		}
 		
 		//function for advanced search record
-		function produk_group_search($group_id, $group_kode ,$group_nama ,$group_duproduk ,$group_dmproduk ,$group_durawat ,$group_dmrawat ,$group_dupaket ,$group_dmpaket ,$group_keterangan ,$group_aktif ,$group_creator ,$group_date_create ,$group_update ,$group_date_update ,$group_revised ,$start,$end){
+		function produk_group_search($group_id, $group_kode ,$group_nama ,$group_duproduk ,$group_dmproduk ,$group_durawat ,$group_dmrawat ,$group_dupaket ,$group_dmpaket ,$group_keterangan ,$group_kelompok ,$group_aktif ,$group_creator ,$group_date_create ,$group_update ,$group_date_update ,$group_revised ,$start,$end){
 			//full query
-			$query="select * from produk_group";
+			$query="SELECT * FROM produk_group LEFT JOIN kategori ON group_kelompok=kategori_id";
 			
 			if($group_id!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -174,9 +176,13 @@ class M_produk_group extends Model{
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " group_keterangan LIKE '%".$group_keterangan."%'";
 			};
+			if($group_kelompok!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " group_kelompok='".$group_kelompok."'";
+			};
 			if($group_aktif!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " group_aktif LIKE '%".$group_aktif."%'";
+				$query.= " group_aktif='".$group_aktif."'";
 			};
 			if($group_creator!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
