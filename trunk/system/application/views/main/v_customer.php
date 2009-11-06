@@ -1543,21 +1543,21 @@ Ext.onReady(function(){
 				cell.css = "readonlycell"; // Mengambil Value dari Class di dalam CSS 
 				return value;
 				},
-			hidden: false
+			hidden: true
 		},
 		{
 			header: 'No Customer',
 			dataIndex: 'cust_no',
-			width: 150,
+			width: 97,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 50
           	})
 		},
 		{
-			header: 'Nama',
+			header: 'Nama Lengkap',
 			dataIndex: 'cust_nama',
-			width: 150,
+			width: 167,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 50
@@ -1566,7 +1566,7 @@ Ext.onReady(function(){
 		{
 			header: 'L/P',
 			dataIndex: 'cust_kelamin',
-			width: 150,
+			width: 27,
 			sortable: true,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
@@ -1585,7 +1585,7 @@ Ext.onReady(function(){
 		{
 			header: 'Alamat',
 			dataIndex: 'cust_alamat',
-			width: 150,
+			width: 127,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 250
@@ -1604,12 +1604,11 @@ Ext.onReady(function(){
 		{
 			header: 'Kota',
 			dataIndex: 'cust_kota',
-			width: 150,
+			width: 97,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 100
-          	}),
-			hidden: true
+          	})
 		},
 		{
 			header: 'Kode Pos',
@@ -1645,7 +1644,7 @@ Ext.onReady(function(){
 		{
 			header: 'No. Telp. Rumah',
 			dataIndex: 'cust_telprumah',
-			width: 150,
+			width: 97,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 30,
@@ -1677,7 +1676,7 @@ Ext.onReady(function(){
 		{
 			header: 'No. Ponsel',
 			dataIndex: 'cust_hp',
-			width: 150,
+			width: 97,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 25,
@@ -1722,6 +1721,7 @@ Ext.onReady(function(){
 			dataIndex: 'cust_agama',
 			width: 150,
 			sortable: true,
+			hidden: true,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
 				triggerAction: 'all',
@@ -1761,6 +1761,7 @@ Ext.onReady(function(){
 			dataIndex: 'cust_profesi',
 			width: 150,
 			sortable: true,
+			hidden: true,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
 				triggerAction: 'all',
@@ -1775,7 +1776,7 @@ Ext.onReady(function(){
 		{
 			header: 'Tgl Lahir',
 			dataIndex: 'cust_tgllahir',
-			width: 150,
+			width: 67,
 			sortable: true,
 			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
 			editor: new Ext.form.DateField({
@@ -1830,7 +1831,7 @@ Ext.onReady(function(){
 		{
 			header: 'Status Nikah',
 			dataIndex: 'cust_statusnikah',
-			width: 150,
+			width: 97,
 			sortable: true,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
@@ -1865,6 +1866,7 @@ Ext.onReady(function(){
 			dataIndex: 'cust_terdaftar',
 			width: 150,
 			sortable: true,
+			hidden: true,
 			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
 			editor: new Ext.form.DateField({
 				format: 'Y-m-d'
@@ -1930,12 +1932,11 @@ Ext.onReady(function(){
 			hidden: true
 		},
 		{
-			header: 'Last Update on',
+			header: 'Update Data',
 			dataIndex: 'cust_date_update',
-			width: 150,
+			width: 97,
 			sortable: true,
-			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
-			hidden: true
+			renderer: Ext.util.Format.dateRenderer('Y-m-d')
 		},
 		{
 			header: 'Revised',
@@ -1960,7 +1961,7 @@ Ext.onReady(function(){
 				cell.css = "readonlycell"; // Mengambil Value dari Class di dalam CSS 
 				return value;
 				},
-			hidden: false
+			hidden: true
 		},
 		{
 			header: 'No. Member',
@@ -2075,7 +2076,7 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 900,
+	  	width: 970,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: customer_DataStore,
