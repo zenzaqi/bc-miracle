@@ -221,7 +221,7 @@ Ext.onReady(function(){
 		if(produk_kodeField.getValue()!== null){produk_kode_create = produk_kodeField.getValue();} 
 		if(produk_kodelamaField.getValue()!== null){produk_kodelama_create = produk_kodelamaField.getValue();} 
 		if(produk_groupField.getValue()!== null){produk_group_create = produk_groupField.getValue();} 
-		if(produk_kategoriField.getValue()!== null){produk_kategori_create = produk_kategoriField.getValue();} 
+		//if(produk_kategoriField.getValue()!== null){produk_kategori_create = produk_kategoriField.getValue();} 
 		if(produk_kontribusiField.getValue()!== null){produk_kontribusi_create = produk_kontribusiField.getValue();} 
 		if(produk_jenisField.getValue()!== null){produk_jenis_create = produk_jenisField.getValue();} 
 		if(produk_namaField.getValue()!== null){produk_nama_create = produk_namaField.getValue();} 
@@ -243,7 +243,7 @@ Ext.onReady(function(){
 				produk_kode	: produk_kode_create, 
 				produk_kodelama	: produk_kodelama_create, 
 				produk_group	: produk_group_create, 
-				produk_kategori	: produk_kategori_create,
+				//produk_kategori	: produk_kategori_create,
 				produk_kontribusi	: produk_kontribusi_create,
 				produk_jenis	: produk_jenis_create, 
 				produk_nama	: produk_nama_create, 
@@ -353,7 +353,7 @@ Ext.onReady(function(){
 		produk_kodeField.setValue(produkListEditorGrid.getSelectionModel().getSelected().get('produk_kode'));
 		produk_kodelamaField.setValue(produkListEditorGrid.getSelectionModel().getSelected().get('produk_kodelama'));
 		produk_groupField.setValue(produkListEditorGrid.getSelectionModel().getSelected().get('produk_group'));
-		produk_kategoriField.setValue(produkListEditorGrid.getSelectionModel().getSelected().get('produk_kategori'));
+		//produk_kategoriField.setValue(produkListEditorGrid.getSelectionModel().getSelected().get('produk_kategori'));
 		produk_kontribusiField.setValue(produkListEditorGrid.getSelectionModel().getSelected().get('produk_kontribusi'));
 		produk_jenisField.setValue(produkListEditorGrid.getSelectionModel().getSelected().get('produk_jenis'));
 		produk_namaField.setValue(produkListEditorGrid.getSelectionModel().getSelected().get('produk_nama'));
@@ -370,7 +370,7 @@ Ext.onReady(function(){
   
 	/* Function for Check if the form is valid */
 	function is_produk_form_valid(){
-		return (produk_kodeField.isValid() && produk_groupField.isValid() && produk_kategoriField.isValid() && produk_namaField.isValid() &&  produk_hargaField.isValid());
+		return (produk_kodeField.isValid() && produk_groupField.isValid() && produk_namaField.isValid() &&  produk_hargaField.isValid());
 	}
   	/* End of Function */
   
@@ -530,28 +530,29 @@ Ext.onReady(function(){
 			{name: 'produk_group_display', type: 'string', mapping: 'group_nama'},
 			{name: 'produk_group_duproduk', type: 'int', mapping: 'group_duproduk'},
 			{name: 'produk_group_dmproduk', type: 'int', mapping: 'group_dmproduk'},
+			{name: 'produk_group_kelompok', type: 'string', mapping: 'kategori_nama'}
 		]),
 		sortInfo:{field: 'produk_group_display', direction: "ASC"}
 	});
 	
-	cbo_produk_kategori_DataSore = new Ext.data.Store({
-		id: 'cbo_produk_kategori_DataSore',
-		proxy: new Ext.data.HttpProxy({
-			url: 'index.php?c=c_produk&m=get_kategori_produk_list', 
-			method: 'POST'
-		}),
-		//baseParams:{task: "LIST"}, // parameter yang di $_POST ke Controller
-		reader: new Ext.data.JsonReader({
-			root: 'results',
-			totalProperty: 'total',
-			id: 'kategori_id'
-		},[
-		/* dataIndex => insert intocustomer_note_ColumnModel, Mapping => for initiate table column */ 
-			{name: 'produk_kategori_value', type: 'int', mapping: 'kategori_id'},
-			{name: 'produk_kategori_display', type: 'string', mapping: 'kategori_nama'}
-		]),
-		sortInfo:{field: 'produk_kategori_display', direction: "ASC"}
-	});
+//	cbo_produk_kategori_DataSore = new Ext.data.Store({
+//		id: 'cbo_produk_kategori_DataSore',
+//		proxy: new Ext.data.HttpProxy({
+//			url: 'index.php?c=c_produk&m=get_kategori_produk_list', 
+//			method: 'POST'
+//		}),
+//		//baseParams:{task: "LIST"}, // parameter yang di $_POST ke Controller
+//		reader: new Ext.data.JsonReader({
+//			root: 'results',
+//			totalProperty: 'total',
+//			id: 'kategori_id'
+//		},[
+//		/* dataIndex => insert intocustomer_note_ColumnModel, Mapping => for initiate table column */ 
+//			{name: 'produk_kategori_value', type: 'int', mapping: 'kategori_id'},
+//			{name: 'produk_kategori_display', type: 'string', mapping: 'kategori_nama'}
+//		]),
+//		sortInfo:{field: 'produk_kategori_display', direction: "ASC"}
+//	});
 	
 	cbo_produk_kontribusi_DataSore = new Ext.data.Store({
 		id: 'cbo_produk_kontribusi_DataSore',
@@ -675,13 +676,7 @@ Ext.onReady(function(){
 			dataIndex: 'produk_kategori',
 			width: 150,
 			sortable: true,
-			editor: new Ext.form.ComboBox({
-				store: cbo_produk_kategori_DataSore,
-				mode: 'remote',
-				displayField: 'produk_kategori_display',
-				valueField: 'produk_kategori_value',
-				triggerAction: 'all'
-			})
+			readOnly: true
 		}, 
 		{
 			header: 'Satuan',
@@ -993,16 +988,12 @@ Ext.onReady(function(){
 		triggerAction: 'all'
 	});
 	/* Identify  produk_kategori Field */
-	produk_kategoriField= new Ext.form.ComboBox({
+	produk_kategoriField= new Ext.form.TextField({
 		id: 'produk_kategoriField',
-		fieldLabel: 'Jenis <span style="color: #ec0000">*</span>',
-		store: cbo_produk_kategori_DataSore,
-		mode: 'remote',
-		allowBlank: false,
-		displayField: 'produk_kategori_display',
-		valueField: 'produk_kategori_value',
-		width: 120,
-		triggerAction: 'all'
+		fieldLabel: 'Jenis',
+		maxLength: 20,
+		readOnly: true,
+		width: 120
 	});
 	/* Identify  produk_kategori Field */
 	produk_kontribusiField= new Ext.form.ComboBox({
@@ -1129,6 +1120,7 @@ Ext.onReady(function(){
 		if(cbo_produk_groupDataSore.getCount()){
 			produk_duField.setValue(cbo_produk_groupDataSore.getAt(record).data.produk_group_duproduk);
 			produk_dmField.setValue(cbo_produk_groupDataSore.getAt(record).data.produk_group_dmproduk);
+			produk_kategoriField.setValue(cbo_produk_groupDataSore.getAt(record).data.produk_group_kelompok);
 		}
 	});
 	

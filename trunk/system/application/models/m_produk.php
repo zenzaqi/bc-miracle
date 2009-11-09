@@ -134,7 +134,7 @@ class M_produk extends Model{
 		}
 		
 		//function for update record
-		function produk_update($produk_id ,$produk_kode ,$produk_kodelama ,$produk_group ,$produk_kategori, $produk_kontribusi, $produk_jenis ,$produk_nama ,$produk_satuan ,$produk_du ,$produk_dm ,$produk_point ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif ){
+		function produk_update($produk_id ,$produk_kode ,$produk_kodelama ,$produk_group ,$produk_kontribusi, $produk_jenis ,$produk_nama ,$produk_satuan ,$produk_du ,$produk_dm ,$produk_point ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif ){
 		if ($produk_aktif=="")
 			$produk_aktif = "Aktif";
 			$data = array(
@@ -163,10 +163,10 @@ class M_produk extends Model{
 				$data["produk_dm"]=$rs_sql->group_dmproduk;
 			}
 			
-			$sql="SELECT kategori_id FROM kategori WHERE kategori_id='".$produk_kategori."'";
-			$rs=$this->db->query($sql);
-			if($rs->num_rows())
-				$data["produk_kategori"]=$produk_kategori;
+//			$sql="SELECT kategori_id FROM kategori WHERE kategori_id='".$produk_kategori."'";
+//			$rs=$this->db->query($sql);
+//			if($rs->num_rows())
+//				$data["produk_kategori"]=$produk_kategori;
 			
 			$sql="SELECT kategori2_id FROM kategori2 WHERE kategori2_id='".$produk_kontribusi."'";
 			$rs=$this->db->query($sql);
@@ -252,12 +252,10 @@ class M_produk extends Model{
 					$jenis_kode=$rs_sql_j->jenis_kode;
 				}
 			}
-			$this->firephp->log($group_kode,'value_group_kode');
-			$this->firephp->log($jenis_kode,'value_jenis_kode');
 			$pattern=$group_kode.$jenis_kode;
 			//echo $jenis_kode;
 			$produk_kode=$this->get_kode($pattern);
-			if($pattern!=="" && strlen($pattern)==4)
+			if($produk_kode!=="" && strlen($produk_kode)==6)
 				$data["produk_kode"]=$produk_kode;
 				
 			$sql="SELECT produk_du FROM produk WHERE produk_du!='".$produk_du."' AND produk_id='".$produk_id."'";
@@ -277,12 +275,12 @@ class M_produk extends Model{
 		}
 		
 		//function for create new record
-		function produk_create($produk_kode ,$produk_kodelama ,$produk_group ,$produk_kategori, $produk_kontribusi ,$produk_jenis ,$produk_nama ,$produk_satuan ,$produk_du ,$produk_dm ,$produk_point ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif ){
+		function produk_create($produk_kode ,$produk_kodelama ,$produk_group ,$produk_kontribusi ,$produk_jenis ,$produk_nama ,$produk_satuan ,$produk_du ,$produk_dm ,$produk_point ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif ){
 		if ($produk_aktif=="")
 			$produk_aktif = "Aktif";
 			$data = array(
 				"produk_kodelama"=>$produk_kodelama, 
-				"produk_kategori"=>$produk_kategori, 
+				//"produk_kategori"=>$produk_kategori, 
 				"produk_kontribusi"=>$produk_kontribusi,
 				"produk_jenis"=>$produk_jenis, 
 				"produk_group"=>$produk_group,
@@ -293,6 +291,7 @@ class M_produk extends Model{
 				"produk_point"=>$produk_point, 
 				"produk_volume"=>$produk_volume, 
 				"produk_harga"=>$produk_harga, 
+				"produk_jenis"=>$produk_jenis,
 				"produk_keterangan"=>$produk_keterangan, 
 				"produk_aktif"=>$produk_aktif 
 			);
@@ -320,19 +319,20 @@ class M_produk extends Model{
 				$group_kode=$rs_sql_g->group_kode;
 				$data["produk_group"]=$produk_group;
 			}
-			//get jenis kode
-			$sql_j="SELECT jenis_id,jenis_kode FROM jenis WHERE jenis_id='".$produk_jenis."'";
-			$rs_j=$this->db->query($sql_j);
-			if($rs_j->num_rows()){
-				$rs_sql_j=$rs_j->row();
-				$jenis_kode=$rs_sql_j->jenis_kode;
+			//get group2 kode
+			$sql_g="SELECT jenis_id,jenis_kode FROM jenis WHERE jenis_id='".$produk_jenis."'";
+			$rs_g=$this->db->query($sql_g);
+			if($rs_g->num_rows()){
+				$rs_sql_g=$rs_g->row();
+				$jenis_kode=$rs_sql_g->jenis_kode;
 				$data["produk_jenis"]=$produk_jenis;
-			}	
-			$this->firephp->log($group_kode, value_group_kode);
-			$this->firephp->log($jenis_kode, value_jenis_kode);
+			}
+			$this->firephp->log($group_kode, 'value_group_kode');
+			$this->firephp->log($jenis_kode, 'value_jenis_kode');
 			$pattern=$group_kode.$jenis_kode;
 			$produk_kode=$this->get_kode($pattern);
-			if($produk_kode!=="" && strlen($produk_kode)==4)
+			$this->firephp->log($produk_kode, 'value_pattern_produk_kode');
+			if($produk_kode!=="" && strlen($produk_kode)==6)
 				$data["produk_kode"]=$produk_kode;
 				
 			$this->db->insert('produk', $data); 
