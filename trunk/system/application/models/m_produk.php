@@ -327,11 +327,8 @@ class M_produk extends Model{
 				$jenis_kode=$rs_sql_g->jenis_kode;
 				$data["produk_jenis"]=$produk_jenis;
 			}
-			$this->firephp->log($group_kode, 'value_group_kode');
-			$this->firephp->log($jenis_kode, 'value_jenis_kode');
 			$pattern=$group_kode.$jenis_kode;
 			$produk_kode=$this->get_kode($pattern);
-			$this->firephp->log($produk_kode, 'value_pattern_produk_kode');
 			if($produk_kode!=="" && strlen($produk_kode)==6)
 				$data["produk_kode"]=$produk_kode;
 				
