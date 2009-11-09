@@ -1655,15 +1655,11 @@ Ext.onReady(function(){
 		triggerAction: 'all'
 	});
 	/* Identify  produk_kategori Field */
-	produk_kategoriSearchField= new Ext.form.ComboBox({
+	produk_kategoriSearchField= new Ext.form.TextField({
 		id: 'produk_kategoriSearchField',
-		fieldLabel: 'Jenis <span style="color: #ec0000">*</span>',
-		store: cbo_produk_kategori_DataSore,
-		mode: 'remote',
-		displayField: 'produk_kategori_display',
-		valueField: 'produk_kategori_value',
-		width: 120,
-		triggerAction: 'all'
+		fieldLabel: 'Jenis',
+		maxLength: 250,
+		anchor: '95%'
 	});
 	/* Identify  produk_kategori Field */
 	produk_kontribusiSearchField= new Ext.form.ComboBox({
