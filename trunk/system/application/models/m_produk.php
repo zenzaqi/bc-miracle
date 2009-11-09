@@ -76,7 +76,7 @@ class M_produk extends Model{
 		//*eof
 		
 		//insert detail record
-		function detail_satuan_konversi_insert($konversi_id ,$konversi_produk ,$konversi_satuan ,$konversi_nilai ){
+		function detail_satuan_konversi_insert($konversi_id ,$konversi_produk ,$konversi_satuan ,$konversi_nilai ,$konversi_default){
 			//if master id not capture from view then capture it from max pk from master table
 			if($konversi_produk=="" || $konversi_produk==NULL){
 				$konversi_produk=$this->get_master_id();
@@ -85,7 +85,8 @@ class M_produk extends Model{
 			$data = array(
 				"konversi_produk"=>$konversi_produk, 
 				"konversi_satuan"=>$konversi_satuan, 
-				"konversi_nilai"=>$konversi_nilai 
+				"konversi_nilai"=>$konversi_nilai,
+				"konversi_default"=>$konversi_default
 			);
 			$this->db->insert('satuan_konversi', $data); 
 			if($this->db->affected_rows())
@@ -251,7 +252,8 @@ class M_produk extends Model{
 					$jenis_kode=$rs_sql_j->jenis_kode;
 				}
 			}
-			
+			$this->firephp->log($group_kode,'value_group_kode');
+			$this->firephp->log($jenis_kode,'value_jenis_kode');
 			$pattern=$group_kode.$jenis_kode;
 			//echo $jenis_kode;
 			$produk_kode=$this->get_kode($pattern);
@@ -326,9 +328,11 @@ class M_produk extends Model{
 				$jenis_kode=$rs_sql_j->jenis_kode;
 				$data["produk_jenis"]=$produk_jenis;
 			}	
+			$this->firephp->log($group_kode, value_group_kode);
+			$this->firephp->log($jenis_kode, value_jenis_kode);
 			$pattern=$group_kode.$jenis_kode;
 			$produk_kode=$this->get_kode($pattern);
-			if($produk_kode!=="" && strlen($produk)==4)
+			if($produk_kode!=="" && strlen($produk_kode)==4)
 				$data["produk_kode"]=$produk_kode;
 				
 			$this->db->insert('produk', $data); 

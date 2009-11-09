@@ -2888,8 +2888,12 @@ Ext.onReady(function(){
 		,
 		buttons: [
 			{
-				text: 'Show List',
+				text: '<span style="font-weight:bold">Show List</span>',
 				handler: show_windowGrid
+			},
+			{
+				xtype:'spacer',
+				width: 560
 			},
 			{
 				text: 'Save',

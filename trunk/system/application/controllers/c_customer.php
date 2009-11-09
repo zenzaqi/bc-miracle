@@ -16,9 +16,11 @@ class C_customer extends Controller {
 	//constructor
 	function C_customer(){
 		parent::Controller();
+		
 		session_start();
 		$this->load->model('m_customer', '', TRUE);
 		$this->load->plugin('to_excel');
+		
 	}
 	
 	//set index

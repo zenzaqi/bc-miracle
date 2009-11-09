@@ -18,6 +18,7 @@ class C_produk extends Controller {
 		parent::Controller();
 		$this->load->model('m_produk', '', TRUE);
 		$this->load->plugin('to_excel');
+		$this->load->library('firephp');
 	}
 	
 	//set index
@@ -90,7 +91,8 @@ class C_produk extends Controller {
 		$konversi_produk=trim(@$_POST["konversi_produk"]);
 		$konversi_satuan=trim(@$_POST["konversi_satuan"]);
 		$konversi_nilai=trim(@$_POST["konversi_nilai"]);
-		$result=$this->m_produk->detail_satuan_konversi_insert($konversi_id ,$konversi_produk ,$konversi_satuan ,$konversi_nilai );
+		$konversi_default=trim(@$_POST["konversi_default"]);
+		$result=$this->m_produk->detail_satuan_konversi_insert($konversi_id ,$konversi_produk ,$konversi_satuan ,$konversi_nilai ,$konversi_default);
 		echo $result;
 	}
 	

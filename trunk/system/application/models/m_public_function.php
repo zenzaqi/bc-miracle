@@ -747,7 +747,7 @@ class M_public_function extends Model{
 	}
 	
 	function get_group_produk_list(){
-		$sql="SELECT group_id,group_nama,group_duproduk,group_dmproduk,group_durawat,group_dmrawat,group_dupaket,group_dmpaket FROM produk_group where group_kelompok='produk' AND group_aktif='Aktif'";
+		$sql="SELECT group_id,group_nama,group_duproduk,group_dmproduk,group_durawat,group_dmrawat,group_dupaket,group_dmpaket FROM produk_group,kategori WHERE group_kelompok=kategori_id AND kategori_jenis='produk' AND group_aktif='Aktif'";
 		$query = $this->db->query($sql);
 		$nbrows = $query->num_rows();
 		if($nbrows>0){
