@@ -992,7 +992,7 @@ Ext.onReady(function(){
 		id: 'produk_kategoriField',
 		fieldLabel: 'Jenis',
 		maxLength: 20,
-		readOnly: true,
+		disabled: true,
 		width: 120
 	});
 	/* Identify  produk_kategori Field */
