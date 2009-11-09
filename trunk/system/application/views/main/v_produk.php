@@ -626,7 +626,18 @@ Ext.onReady(function(){
 			hidden: false
 		},
 		{
-			header: 'Kode',
+			header: 'Kode Lama',
+			dataIndex: 'produk_kodelama',
+			width: 150,
+			sortable: true,
+			editor: new Ext.form.TextField({
+				allowBlank: false,
+				maxLength: 20
+          	}),
+			hidden: true
+		},
+		{
+			header: 'Kode Baru',
 			dataIndex: 'produk_kode',
 			width: 150,
 			sortable: true,
@@ -960,7 +971,7 @@ Ext.onReady(function(){
 	/* Identify  produk_kode Field */
 	produk_kodeField= new Ext.form.TextField({
 		id: 'produk_kodeField',
-		fieldLabel: 'Kode',
+		fieldLabel: 'Kode Baru',
 		maxLength: 20,
 		allowBlank: true,
 		readOnly: true,
@@ -1083,10 +1094,10 @@ Ext.onReady(function(){
 	produk_hargaField= new Ext.form.NumberField({
 		id: 'produk_hargaField',
 		name: 'produk_hargaField',
-		fieldLabel: 'Harga (Rp) <span style="color: #ec0000">*</span>',
+		fieldLabel: 'Harga (Rp)',
 		allowNegatife : false,
 		emptyText: '0',
-		allowBlank: false,
+		allowBlank: true,
 		allowDecimals: true,
 		width: 60,
 		maskRe: /([0-9]+)$/
@@ -1631,7 +1642,7 @@ Ext.onReady(function(){
 	/* Identify  produk_kode Field */
 	produk_kodeSearchField= new Ext.form.TextField({
 		id: 'produk_kodeSearchField',
-		fieldLabel: 'Kode',
+		fieldLabel: 'Kode Baru',
 		maxLength: 20,
 		emptyText: '(auto)',
 		width: 100
