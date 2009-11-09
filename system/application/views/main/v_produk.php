@@ -1168,7 +1168,8 @@ Ext.onReady(function(){
 			{name: 'konversi_id', type: 'int', mapping: 'konversi_id'}, 
 			{name: 'konversi_produk', type: 'int', mapping: 'konversi_produk'}, 
 			{name: 'konversi_satuan', type: 'int', mapping: 'konversi_satuan'}, 
-			{name: 'konversi_nilai', type: 'float', mapping: 'konversi_nilai'} 
+			{name: 'konversi_nilai', type: 'float', mapping: 'konversi_nilai'},
+			{name: 'konversi_default', type: 'string', mapping: 'konversi_default'}
 	]);
 	//eof
 	
@@ -1238,18 +1239,18 @@ Ext.onReady(function(){
 	satuan_konversi_ColumnModel = new Ext.grid.ColumnModel(
 		[
 		{
-			header: 'Konversi Satuan',
+			header: 'Satuan',
 			dataIndex: 'konversi_satuan',
-			width: 150,
-			sortable: true,
+			width: 295,
+			sortable: false,
 			editor: combo_produk_satuan,
 			renderer: Ext.util.Format.comboRenderer(combo_produk_satuan)
 		},
 		{
-			header: 'Konversi Nilai',
+			header: 'Nilai',
 			dataIndex: 'konversi_nilai',
-			width: 150,
-			sortable: true,
+			width: 295,
+			sortable: false,
 			editor: new Ext.form.NumberField({
 				allowBlank: false,
 				allowDecimals: true,
@@ -1258,6 +1259,16 @@ Ext.onReady(function(){
 				maxLength: 11,
 				maskRe: /([0-9]+)$/
 			})
+		},
+		{
+			xtype: 'booleancolumn',
+			header: 'Setting Default<br>(<span style="color:#F00">pilih hanya satu</span>)',
+			dataIndex: 'konversi_default',
+			width: 100,
+			align: 'center',
+			trueText: 'Yes',
+			falseText: 'No',
+			editor: {xtype: 'checkbox'}
 		}]
 	);
 	satuan_konversi_ColumnModel.defaultSortable= true;
@@ -1312,7 +1323,8 @@ Ext.onReady(function(){
 			konversi_id	:'',		
 			konversi_produk	:'',		
 			konversi_satuan	:'',		
-			konversi_nilai	:''		
+			konversi_nilai	:'',
+			konversi_default :false
 		});
 		editor_satuan_konversi.stopEditing();
 		satuan_konversi_DataStore.insert(0, edit_satuan_konversi);
@@ -1328,6 +1340,21 @@ Ext.onReady(function(){
 	}
 	//eof
 	
+	function check_konversi_default(){
+		$count_default=0;
+		for ($i = 0; $i < satuan_konversi_DataStore.getCount(); $i++) {
+			satuan_konversi_default=satuan_konversi_DataStore.getAt($i);
+			//console.log("value konversi_default = "+satuan_konversi_default.data.konversi_default);
+			if(satuan_konversi_default.data.konversi_default==true || satuan_konversi_default.data.konversi_default=='true')
+				$count_default+=1;
+		}
+		//console.log('count = '+$count_default);
+		if($count_default==1)
+			master_detail_insert();
+		else {
+			Ext.MessageBox.alert('Warning','Setting Default harus hanya satu...');
+		}
+	}
 	function satuan_konversi_insert(){
 		for(i=0;i<satuan_konversi_DataStore.getCount();i++){
 			satuan_konversi_record=satuan_konversi_DataStore.getAt(i);
@@ -1339,7 +1366,8 @@ Ext.onReady(function(){
 					konversi_id	: satuan_konversi_record.data.konversi_id, 
 					konversi_produk	: get_pk_id(), 
 					konversi_satuan	: satuan_konversi_record.data.konversi_satuan, 
-					konversi_nilai	: satuan_konversi_record.data.konversi_nilai
+					konversi_nilai	: satuan_konversi_record.data.konversi_nilai,
+					konversi_default	: satuan_konversi_record.data.konversi_default
 					}
 				});
 			}
@@ -1456,7 +1484,8 @@ Ext.onReady(function(){
 		,
 		buttons: [{
 				text: 'Save and Close',
-				handler: master_detail_insert
+				handler: check_konversi_default
+				//handler: master_detail_insert
 			}
 			,{
 				text: 'Cancel',

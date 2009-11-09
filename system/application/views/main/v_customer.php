@@ -322,6 +322,7 @@ var editor_cust_note;
 	function display_form_window(){
 		if(!customer_createWindow.isVisible()){
 			customer_reset_form();
+			cust_terdaftarField.setValue(dt.format('Y-m-d'));
 			post2db='CREATE';
 			msg='created';
 			Ext.getCmp('check_update').setVisible(false);
