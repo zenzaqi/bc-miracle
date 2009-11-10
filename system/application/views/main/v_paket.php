@@ -1513,7 +1513,7 @@ Ext.onReady(function(){
 			timeout: 5000,
 			success: function(response){							
 				var result=eval(response.responseText);
-				/console.log(result);
+				//console.log(result);
 				paket_isi_produk_insert();
 			},
 			failure: function(response){
