@@ -1,0 +1,1 @@
+ALTER TABLE `customer` ADD `cust_nolama` VARCHAR( 50 ) NULL AFTER `cust_id`;

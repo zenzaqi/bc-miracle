@@ -2610,7 +2610,7 @@ Ext.onReady(function(){
 		el: 'fp_detail_jual_produk',
 		title: 'Detail detail_jual_produk',
 		height: 250,
-		width: 890,
+		width: 938,
 		autoScroll: true,
 		store: detail_jual_produk_DataStore, // DataStore
 		colModel: detail_jual_produk_ColumnModel, // Nama-nama Columns
@@ -2890,10 +2890,10 @@ Ext.onReady(function(){
 	/* Function for retrieve create Window Panel*/ 
 	master_jual_produk_createForm = new Ext.FormPanel({
 		labelAlign: 'left',
-		el: 'form_addEdit',
+		el: 'form_produk_addEdit',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
-		width: 900,
+		width: 950,
 		plain: true,
 		layout: 'fit',
 		items: [master_jual_produk_masterGroup,detail_jual_produkListEditorGrid,master_jual_produk_bayarGroup]
@@ -3277,7 +3277,7 @@ Ext.onReady(function(){
          <div id="fp_detail_jual_produk"></div>
 		<div id="elwindow_master_jual_produk_create"></div>
         <div id="elwindow_master_jual_produk_search"></div>
-        <div id="form_addEdit"></div>
+        <div id="form_produk_addEdit"></div>
     </div>
 </div>
 </body>

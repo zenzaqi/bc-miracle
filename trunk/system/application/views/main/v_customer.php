@@ -62,6 +62,7 @@ var pageS=15;
 
 /* declare variable here */
 var cust_idField;
+var cust_nolamaField;
 var cust_noField;
 var cust_memberField;
 var cust_namaField;
@@ -106,6 +107,7 @@ var cust_aktifField;
 var dt = new Date();
 
 var cust_idSearchField;
+var cust_nolamaSearchField;
 var cust_noSearchField;
 var cust_namaSearchField;
 var cust_kelaminSearchField;
@@ -155,6 +157,7 @@ var editor_cust_note;
 	/* Reset form before loading */
 	function customer_reset_form(){
 		cust_noField.reset();
+		cust_nolamaField.reset();
 		cust_memberField.reset();
 		cust_namaField.reset();
 		cust_panggilanField.reset();
@@ -202,6 +205,7 @@ var editor_cust_note;
 		cust_cptelpField.reset();
 		
 		cust_noField.setValue(null);
+		cust_nolamaField.setValue(null);
 		cust_memberField.setValue(null);
 		cust_namaField.setValue(null);
 		cust_panggilanField.setValue(null);
@@ -260,6 +264,7 @@ var editor_cust_note;
 	/* setValue to EDIT */
 	function customer_set_form(){
 		cust_noField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_no'));
+		cust_nolamaField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_nolama'));
 		cust_namaField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_nama'));
 		cust_panggilanField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_panggilan'));
 		cust_kelaminField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_kelamin'));
@@ -481,6 +486,7 @@ var editor_cust_note;
 		// render according to a SQL date format.
 		//var cust_id_search=null;
 		var cust_no_search=null;
+		var cust_nolama_search=null;
 		var cust_nama_search=null;
 		var cust_kelamin_search=null;
 		var cust_alamat_search=null;
@@ -513,6 +519,7 @@ var editor_cust_note;
 
 		///if(cust_idSearchField.getValue()!==null){cust_id_search=cust_idSearchField.getValue();}
 		if(cust_noSearchField.getValue()!==null){cust_no_search=cust_noSearchField.getValue();}
+		if(cust_nolamaSearchField.getValue()!==null){cust_nolama_search=cust_nolamaSearchField.getValue();}
 		if(cust_namaSearchField.getValue()!==null){cust_nama_search=cust_namaSearchField.getValue();}
 		if(cust_kelaminSearchField.getValue()!==null){cust_kelamin_search=cust_kelaminSearchField.getValue();}
 		if(cust_alamatSearchField.getValue()!==null){cust_alamat_search=cust_alamatSearchField.getValue();}
@@ -549,6 +556,7 @@ var editor_cust_note;
 			//variable here
 			//cust_id	:	cust_id_search, 
 			cust_no	:	cust_no_search, 
+			cust_nolama	:	cust_nolama_search, 
 			cust_nama	:	cust_nama_search, 
 			cust_kelamin	:	cust_kelamin_search, 
 			cust_alamat	:	cust_alamat_search, 
@@ -600,6 +608,7 @@ var editor_cust_note;
 
 	function customer_reset_SearchForm(){
 		cust_noSearchField.reset();
+		cust_nolamaSearchField.reset();
 		cust_namaSearchField.reset();
 		cust_kelaminSearchField.reset();
 		cust_alamatSearchField.reset();
@@ -635,6 +644,9 @@ var editor_cust_note;
 	function display_form_search_window(){
 		if(!customer_searchWindow.isVisible()){
 			customer_reset_SearchForm();
+			cust_kotaSearchField.setValue('Surabaya');
+			cust_propinsiSearchField.setValue('Jawa Timur');
+			cust_negaraSearchField.setValue('Indonesia');
 			customer_searchWindow.show();
 		} else {
 			customer_searchWindow.toFront();
@@ -646,6 +658,7 @@ var editor_cust_note;
 	function customer_print(){
 		var searchquery = "";
 		var cust_no_print=null;
+		var cust_nolama_print=null;
 		var cust_nama_print=null;
 		var cust_kelamin_print=null;
 		var cust_alamat_print=null;
@@ -678,6 +691,7 @@ var editor_cust_note;
 		// check if we do have some search data...
 		if(customer_DataStore.baseParams.query!==null){searchquery = customer_DataStore.baseParams.query;}
 		if(customer_DataStore.baseParams.cust_no!==null){cust_no_print = customer_DataStore.baseParams.cust_no;}
+		if(customer_DataStore.baseParams.cust_nolama!==null){cust_nolama_print = customer_DataStore.baseParams.cust_nolama;}
 		if(customer_DataStore.baseParams.cust_nama!==null){cust_nama_print = customer_DataStore.baseParams.cust_nama;}
 		if(customer_DataStore.baseParams.cust_kelamin!==null){cust_kelamin_print = customer_DataStore.baseParams.cust_kelamin;}
 		if(customer_DataStore.baseParams.cust_alamat!==null){cust_alamat_print = customer_DataStore.baseParams.cust_alamat;}
@@ -716,6 +730,7 @@ var editor_cust_note;
 		  	query: searchquery,                    		// if we are doing a quicksearch, use this
 			//if we are doing advanced search, use this
 			cust_no : cust_no_print,
+			cust_nolama : cust_nolama_print,
 			cust_nama : cust_nama_print,
 			cust_kelamin : cust_kelamin_print,
 			cust_alamat : cust_alamat_print,
@@ -782,6 +797,7 @@ var editor_cust_note;
 	function customer_export_excel(){
 		var searchquery = "";
 		var cust_no_2excel=null;
+		var cust_nolama_2excel=null;
 		var cust_nama_2excel=null;
 		var cust_kelamin_2excel=null;
 		var cust_alamat_2excel=null;
@@ -814,6 +830,7 @@ var editor_cust_note;
 		// check if we do have some search data...
 		if(customer_DataStore.baseParams.query!==null){searchquery = customer_DataStore.baseParams.query;}
 		if(customer_DataStore.baseParams.cust_no!==null){cust_no_2excel = customer_DataStore.baseParams.cust_no;}
+		if(customer_DataStore.baseParams.cust_nolama!==null){cust_nolama_2excel = customer_DataStore.baseParams.cust_nolama;}
 		if(customer_DataStore.baseParams.cust_nama!==null){cust_nama_2excel = customer_DataStore.baseParams.cust_nama;}
 		if(customer_DataStore.baseParams.cust_kelamin!==null){cust_kelamin_2excel = customer_DataStore.baseParams.cust_kelamin;}
 		if(customer_DataStore.baseParams.cust_alamat!==null){cust_alamat_2excel = customer_DataStore.baseParams.cust_alamat;}
@@ -852,6 +869,7 @@ var editor_cust_note;
 		  	query: searchquery,                    		// if we are doing a quicksearch, use this
 			//if we are doing advanced search, use this
 			cust_no : cust_no_2excel,
+			cust_nolama : cust_nolama_2excel,
 			cust_nama : cust_nama_2excel,
 			cust_kelamin : cust_kelamin_2excel,
 			cust_alamat : cust_alamat_2excel,
@@ -917,6 +935,7 @@ var editor_cust_note;
 	function customer_update(oGrid_event){
 		var cust_id_update_pk="";
 		var cust_no_update=null;
+		var cust_nolama_update=null;
 		var cust_nama_update=null;
 		var cust_panggilan_update=null;
 		var cust_kelamin_update=null;
@@ -954,6 +973,7 @@ var editor_cust_note;
 	
 		cust_id_update_pk = oGrid_event.record.data.cust_id;
 		if(oGrid_event.record.data.cust_no!== null){cust_no_update = oGrid_event.record.data.cust_no;}
+		if(oGrid_event.record.data.cust_nolama!== null){cust_nolama_update = oGrid_event.record.data.cust_nolama;}
 		if(oGrid_event.record.data.cust_nama!== null){cust_nama_update = oGrid_event.record.data.cust_nama;}
 		if(oGrid_event.record.data.cust_panggilan!== null){cust_panggilan_update = oGrid_event.record.data.cust_panggilan;}
 		if(oGrid_event.record.data.cust_kelamin!== null){cust_kelamin_update = oGrid_event.record.data.cust_kelamin;}
@@ -995,7 +1015,8 @@ var editor_cust_note;
 			params: {
 				task: "UPDATE",
 				cust_id			:cust_id_update_pk,				
-				cust_no			:cust_no_update,		
+				cust_no			:cust_no_update,
+				cust_nolama		:cust_nolama_update,
 				cust_nama		:cust_nama_update,
 				cust_panggilan	:cust_panggilan_update,	
 				cust_kelamin	:cust_kelamin_update,		
@@ -1072,6 +1093,7 @@ var editor_cust_note;
 		
 		var cust_id_create_pk=null;
 		var cust_no_create=null;
+		var cust_nolama_create=null;
 		var cust_nama_create=null;
 		var cust_panggilan_create=null;
 		var cust_kelamin_create=null;
@@ -1117,6 +1139,7 @@ var editor_cust_note;
 		
 		cust_id_create_pk=get_pk_id();
 		if(cust_noField.getValue()!== null){cust_no_create = cust_noField.getValue();}
+		if(cust_nolamaField.getValue()!== null){cust_nolama_create = cust_nolamaField.getValue();}
 		if(cust_namaField.getValue()!== null){cust_nama_create = cust_namaField.getValue();}
 		if(cust_panggilanField.getValue()!== null){cust_panggilan_create = cust_panggilanField.getValue();}
 		if(cust_kelaminField.getValue()!== null){cust_kelamin_create = cust_kelaminField.getValue();}
@@ -1168,7 +1191,8 @@ var editor_cust_note;
 				params: {
 					task: post2db,
 					cust_id			: cust_id_create_pk,	
-					cust_no			:cust_no_create,		
+					cust_no			:cust_no_create,
+					cust_nolama		:cust_nolama_create,
 					cust_nama		:cust_nama_create,
 					cust_panggilan	:cust_panggilan_create,	
 					cust_kelamin	:cust_kelamin_create,		
@@ -1380,6 +1404,7 @@ Ext.onReady(function(){
 		/* dataIndex => insert intocustomer_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'cust_id', type: 'int', mapping: 'cust_id'},
 			{name: 'cust_no', type: 'string', mapping: 'cust_no'},
+			{name: 'cust_nolama', type: 'string', mapping: 'cust_nolama'},
 			{name: 'cust_nama', type: 'string', mapping: 'cust_nama'},
 			{name: 'cust_panggilan', type: 'string', mapping: 'cust_panggilan'},
 			{name: 'cust_kelamin', type: 'string', mapping: 'cust_kelamin'},
@@ -1554,9 +1579,19 @@ Ext.onReady(function(){
 			hidden: true
 		},
 		{
+			header: 'No Customer (Lama)',
+			dataIndex: 'cust_nolama',
+			width: 110,
+			sortable: true,
+			hidden: true,
+			editor: new Ext.form.TextField({
+				maxLength: 50
+          	})
+		},
+		{
 			header: 'No Customer',
 			dataIndex: 'cust_no',
-			width: 97,
+			width: 90,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 50
@@ -1839,7 +1874,7 @@ Ext.onReady(function(){
 		{
 			header: 'Status Nikah',
 			dataIndex: 'cust_statusnikah',
-			width: 97,
+			width: 90,
 			sortable: true,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
@@ -1944,6 +1979,7 @@ Ext.onReady(function(){
 			dataIndex: 'cust_date_update',
 			width: 97,
 			sortable: true,
+			hidden: true,
 			renderer: Ext.util.Format.dateRenderer('Y-m-d')
 		},
 		{
@@ -2084,7 +2120,7 @@ Ext.onReady(function(){
 		//clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 970,
+	  	width: 940,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: customer_DataStore,
@@ -2116,6 +2152,12 @@ Ext.onReady(function(){
 			new Ext.app.SearchField({
 			store: customer_DataStore,
 			baseParams: {task:'LIST',start: 0, limit: pageS},
+			listeners:{
+				render: function(c){
+				Ext.get(this.id).set({qtitle:'Search By'});
+				Ext.get(this.id).set({qtip:'- No.Customer<br>- Nama Customer<br>- No.Telp dan HP<br>- No.Member'});
+				}
+			},
 			width: 120
 		}),'-',{
 			text: 'Refresh',
@@ -2273,6 +2315,7 @@ Ext.onReady(function(){
 		/* dataIndex => insert intocustomer_note_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'cust_id', type: 'int', mapping: 'cust_id'},
 			{name: 'cust_no', type: 'string', mapping: 'cust_no'},
+			{name: 'cust_nolama', type: 'string', mapping: 'cust_nolama'},
 			{name: 'cust_nama', type: 'string', mapping: 'cust_nama'},
 			{name: 'cust_tgllahir', type: 'date', dateFormat: 'Y-m-d', mapping: 'cust_tgllahir'},
 			{name: 'cust_alamat', type: 'string', mapping: 'cust_alamat'},
@@ -2310,6 +2353,12 @@ Ext.onReady(function(){
 	cust_noField= new Ext.form.TextField({
 		id: 'cust_noField',
 		fieldLabel: 'No Customer',
+		maxLength: 50,
+		anchor: '50%'
+	});
+	cust_nolamaField= new Ext.form.TextField({
+		id: 'cust_nolamaField',
+		fieldLabel: 'No Customer (Lama)',
 		maxLength: 50,
 		anchor: '50%'
 	});
@@ -2778,6 +2827,7 @@ Ext.onReady(function(){
 	
 	cust_kontak_group = new Ext.form.FieldSet({
 		title: 'Kontak',
+		labelWidth: 100,
 		anchor: '95%',
 		layout:'column',
 		items:[
@@ -2850,7 +2900,7 @@ Ext.onReady(function(){
 						columnWidth:0.5,
 						layout: 'form',
 						border:false,
-						items: [cust_noField, cust_memberField, cust_namaField, cust_panggilanField, cust_alamat_group, cust_alamat2_group, cust_kontak_group, contact_personGroup] 
+						items: [cust_nolamaField, cust_noField, cust_memberField, cust_namaField, cust_panggilanField, cust_alamat_group, cust_alamat2_group, cust_kontak_group, contact_personGroup] 
 					}
 					,{
 						columnWidth:0.5,
@@ -2889,7 +2939,7 @@ Ext.onReady(function(){
 		bodyStyle:'padding:5px',
 		autoHeight:true,
 		//height:680,
-		width: 900,        
+		width: 950,        
 		items: tab_customer
 		,buttons: [{
 				text: 'Save and Close',
@@ -2944,10 +2994,16 @@ Ext.onReady(function(){
 		maxLength: 50,
 		anchor: '50%'
 	});
+	cust_nolamaSearchField= new Ext.form.TextField({
+		id: 'cust_nolamaSearchField',
+		fieldLabel: 'No Customer (Lama)',
+		maxLength: 50,
+		anchor: '50%'
+	});
 	/* Identify  cust_nama Field */
 	cust_namaSearchField= new Ext.form.TextField({
 		id: 'cust_namaSearchField',
-		fieldLabel: 'Nama Lengkap <span style="color: #ec0000">*</span>',
+		fieldLabel: 'Nama Lengkap',
 		maxLength: 50,
 		anchor: '95%'
 	});
@@ -2962,7 +3018,7 @@ Ext.onReady(function(){
 	/* Identify  cust_kelamin Field */
 	cust_kelaminSearchField= new Ext.form.ComboBox({
 		id: 'cust_kelaminSearchField',
-		fieldLabel: 'Jenis Kelamin <span style="color: #ec0000">*</span>',
+		fieldLabel: 'Jenis Kelamin',
 		store:new Ext.data.SimpleStore({
 			fields:['cust_kelamin_value', 'cust_kelamin_display'],
 			data:[['L','Laki-laki'],['P','Perempuan']]
@@ -2976,7 +3032,7 @@ Ext.onReady(function(){
 	/* Identify  cust_alamat Field */
 	cust_alamatSearchField= new Ext.form.TextField({
 		id: 'cust_alamatSearchField',
-		fieldLabel: 'Alamat <span style="color: #ec0000">*</span>',
+		fieldLabel: 'Alamat',
 		maxLength: 250,
 		anchor: '95%'
 	});
@@ -2984,9 +3040,8 @@ Ext.onReady(function(){
 	/* Identify  cust_kota Field */
 	cust_kotaSearchField= new Ext.form.TextField({
 		id: 'cust_kotaSearchField',
-		fieldLabel: 'Kota <span style="color: #ec0000">*</span>',
+		fieldLabel: 'Kota',
 		maxLength: 100,
-		emptyText: 'Surabaya',
 		anchor: '95%'
 	});
 	/* Identify  cust_kodepos Field */
@@ -3000,9 +3055,7 @@ Ext.onReady(function(){
 	/* Identify  cust_propinsi Field */
 	cust_propinsiSearchField= new Ext.form.ComboBox({
 		id: 'cust_propinsiSearchField',
-		fieldLabel: 'Propinsi <span style="color: #ec0000">*</span>',
-		blankText: 'Jawa Timur',
-		emptyText: 'Jawa Timur',
+		fieldLabel: 'Propinsi',
 		maxLength: 100,
 		store: cbo_propinsi_DataStore,
 		mode: 'remote',
@@ -3015,8 +3068,6 @@ Ext.onReady(function(){
 	cust_negaraSearchField= new Ext.form.TextField({
 		id: 'cust_negaraSearchField',
 		fieldLabel: 'Negara',
-		blankText: 'Indonesia',
-		emptyText: 'Indonesia',
 		maxLength: 100,
 		anchor: '95%'
 	});
@@ -3048,8 +3099,6 @@ Ext.onReady(function(){
 	cust_propinsi2SearchField= new Ext.form.ComboBox({
 		id: 'cust_propinsi2SearchField',
 		fieldLabel: 'Propinsi',
-		blankText: 'Jawa Timur',
-		emptyText: 'Jawa Timur',
 		maxLength: 100,
 		store: cbo_propinsi_DataStore,
 		mode: 'remote',
@@ -3062,8 +3111,6 @@ Ext.onReady(function(){
 	cust_negara2SearchField= new Ext.form.TextField({
 		id: 'cust_negara2SearchField',
 		fieldLabel: 'Negara',
-		blankText: 'Indonesia',
-		emptyText: 'Indonesia',
 		maxLength: 100,
 		anchor: '95%'
 	});
@@ -3139,7 +3186,7 @@ Ext.onReady(function(){
 	/* Identify  cust_agama Field */
 	cust_agamaSearchField= new Ext.form.ComboBox({
 		id: 'cust_agamaSearchField',
-		fieldLabel: 'Agama <span style="color: #ec0000">*</span>',
+		fieldLabel: 'Agama',
 		maxLength: 50,
 		store:new Ext.data.SimpleStore({
 			fields:['cust_agama_value_display'],
@@ -3154,7 +3201,7 @@ Ext.onReady(function(){
 	/* Identify  cust_pendidikan Field */
 	cust_pendidikanSearchField= new Ext.form.ComboBox({
 		id: 'cust_pendidikanSearchField',
-		fieldLabel: 'Pendidikan <span style="color: #ec0000">*</span>',
+		fieldLabel: 'Pendidikan',
 		maxLength: 50,
 		store:new Ext.data.SimpleStore({
 			fields:['cust_pendidikan_value_display'],
@@ -3210,7 +3257,6 @@ Ext.onReady(function(){
 	cust_hobitxtSearchField= new Ext.form.TextField({
 		id: 'cust_hobitxtSearchField',
 		fieldLabel: '&nbsp;&nbsp;&nbsp;Tambah (Optional)',
-		style: 'padding-left:10px',
 		emptyText: 'Hobi lainnya...',
 		maxLength: 500,
 		anchor: '95%'
@@ -3283,15 +3329,14 @@ Ext.onReady(function(){
 	/* Identify  cust_terdaftar Field */
 	cust_terdaftarSearchField= new Ext.form.DateField({
 		id: 'cust_terdaftarSearchField',
-		fieldLabel: 'Tanggal Terdaftar <span style="color: #ec0000">*</span>',
+		fieldLabel: 'Tanggal Terdaftar',
 		format : 'Y-m-d',
-		emptyText: '<?=date('Y/m/d'); ?>',
 		anchor: '50%'
 	});
 	/* Identify  cust_statusnikah Field */
 	cust_statusnikahSearchField= new Ext.form.ComboBox({
 		id: 'cust_statusnikahSearchField',
-		fieldLabel: 'Status Pernikahan <span style="color: #ec0000">*</span>',
+		fieldLabel: 'Status Pernikahan',
 		store:new Ext.data.SimpleStore({
 			fields:['cust_statusnikah_value', 'cust_statusnikah_display'],
 			data:[['menikah','menikah'],['belum menikah','belum menikah']]
@@ -3318,7 +3363,7 @@ Ext.onReady(function(){
 	/* Identify  cust_unit Field */
 	cust_unitSearchField= new Ext.form.ComboBox({
 		id: 'cust_unitSearchField',
-		fieldLabel: 'Cabang <span style="color: #ec0000">*</span>',
+		fieldLabel: 'Cabang',
 		store: cbo_cust_cabang_DataStore,
 		mode: 'remote',
 		displayField: 'cust_cabang_display',
@@ -3329,13 +3374,12 @@ Ext.onReady(function(){
 	/* Identify  cust_aktif Field */
 	cust_aktifSearchField= new Ext.form.ComboBox({
 		id: 'cust_aktifSearchField',
-		fieldLabel: 'Status <span style="color: #ec0000">*</span>',
+		fieldLabel: 'Status',
 		store:new Ext.data.SimpleStore({
 			fields:['cust_aktif_value', 'cust_aktif_display'],
 			data:[['Aktif','Aktif'],['Tidak Aktif','Tidak Aktif']]
 		}),
 		mode: 'local',
-		emptyText: 'Aktif',
 		displayField: 'cust_aktif_display',
 		valueField: 'cust_aktif_value',
 		anchor: '50%',
@@ -3360,6 +3404,7 @@ Ext.onReady(function(){
 	
 	cust_kontak_groupSearch = new Ext.form.FieldSet({
 		title: 'Kontak',
+		labelWidth: 100,
 		anchor: '95%',
 		layout:'column',
 		items:[
@@ -3386,6 +3431,7 @@ Ext.onReady(function(){
 	/* Function for retrieve search Form Panel */
 	customer_searchForm = new Ext.FormPanel({
 		labelAlign: 'left',
+		labelWidth:120,
 		bodyStyle:'padding:5px',
 		autoHeight:true,
 		width: 900,        
@@ -3397,7 +3443,7 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [cust_noSearchField, cust_memberSearchField, cust_namaSearchField, cust_panggilanSearchField, cust_alamat_groupSearch, cust_alamat2_groupSearch, cust_kontak_groupSearch] 
+				items: [cust_nolamaSearchField, cust_noSearchField, cust_memberSearchField, cust_namaSearchField, cust_panggilanSearchField, cust_alamat_groupSearch, cust_alamat2_groupSearch, cust_kontak_groupSearch] 
 			}
 			,{
 				columnWidth:0.5,

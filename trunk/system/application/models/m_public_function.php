@@ -632,7 +632,7 @@ class M_public_function extends Model{
 	}
 	
 	function get_paket_list(){
-		$sql="SELECT paket_id, paket_nama, paket_group FROM paket where paket_aktif='Aktif'";
+		$sql="SELECT * FROM paket INNER JOIN produk_group ON paket.paket_group=produk_group.group_id INNER JOIN kategori ON produk_group.group_kelompok=kategori.kategori_id WHERE paket_aktif='Aktif'";
 		$query = $this->db->query($sql);
 		$nbrows = $query->num_rows();
 		if($nbrows>0){
