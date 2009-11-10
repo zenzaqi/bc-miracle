@@ -73,6 +73,7 @@ var produk_kodeField;
 var produk_kodelamaField;
 var produk_groupField;
 var produk_kategoriField;
+var produk_kategoritxtField;
 var produk_kontribusiField;
 var produk_jenisField;
 var produk_namaField;
@@ -221,7 +222,7 @@ Ext.onReady(function(){
 		if(produk_kodeField.getValue()!== null){produk_kode_create = produk_kodeField.getValue();} 
 		if(produk_kodelamaField.getValue()!== null){produk_kodelama_create = produk_kodelamaField.getValue();} 
 		if(produk_groupField.getValue()!== null){produk_group_create = produk_groupField.getValue();} 
-		//if(produk_kategoriField.getValue()!== null){produk_kategori_create = produk_kategoriField.getValue();} 
+		if(produk_kategoriField.getValue()!== null){produk_kategori_create = produk_kategoriField.getValue();} 
 		if(produk_kontribusiField.getValue()!== null){produk_kontribusi_create = produk_kontribusiField.getValue();} 
 		if(produk_jenisField.getValue()!== null){produk_jenis_create = produk_jenisField.getValue();} 
 		if(produk_namaField.getValue()!== null){produk_nama_create = produk_namaField.getValue();} 
@@ -243,7 +244,7 @@ Ext.onReady(function(){
 				produk_kode	: produk_kode_create, 
 				produk_kodelama	: produk_kodelama_create, 
 				produk_group	: produk_group_create, 
-				//produk_kategori	: produk_kategori_create,
+				produk_kategori	: produk_kategori_create,
 				produk_kontribusi	: produk_kontribusi_create,
 				produk_jenis	: produk_jenis_create, 
 				produk_nama	: produk_nama_create, 
@@ -353,7 +354,8 @@ Ext.onReady(function(){
 		produk_kodeField.setValue(produkListEditorGrid.getSelectionModel().getSelected().get('produk_kode'));
 		produk_kodelamaField.setValue(produkListEditorGrid.getSelectionModel().getSelected().get('produk_kodelama'));
 		produk_groupField.setValue(produkListEditorGrid.getSelectionModel().getSelected().get('produk_group'));
-		//produk_kategoriField.setValue(produkListEditorGrid.getSelectionModel().getSelected().get('produk_kategori'));
+		produk_kategoriField.setValue(produkListEditorGrid.getSelectionModel().getSelected().get('produk_kategori_id'));
+		produk_kategoritxtField.setValue(produkListEditorGrid.getSelectionModel().getSelected().get('produk_kategori_nama'));
 		produk_kontribusiField.setValue(produkListEditorGrid.getSelectionModel().getSelected().get('produk_kontribusi'));
 		produk_jenisField.setValue(produkListEditorGrid.getSelectionModel().getSelected().get('produk_jenis'));
 		produk_namaField.setValue(produkListEditorGrid.getSelectionModel().getSelected().get('produk_nama'));
@@ -491,7 +493,8 @@ Ext.onReady(function(){
 			{name: 'produk_kode', type: 'string', mapping: 'produk_kode'}, 
 			{name: 'produk_kodelama', type: 'string', mapping: 'produk_kodelama'}, 
 			{name: 'produk_group', type: 'string', mapping: 'group_nama'}, 
-			{name: 'produk_kategori', type: 'string', mapping: 'kategori_nama'}, 
+			{name: 'produk_kategori_nama', type: 'string', mapping: 'kategori_nama'}, 
+			{name: 'produk_kategori_id', type: 'int', mapping: 'produk_kategori'}, 
 			{name: 'produk_kontribusi', type: 'string', mapping: 'kategori2_nama'}, 
 			{name: 'produk_jenis', type: 'string', mapping: 'jenis_nama'}, 
 			{name: 'produk_nama', type: 'string', mapping: 'produk_nama'}, 
@@ -530,7 +533,8 @@ Ext.onReady(function(){
 			{name: 'produk_group_display', type: 'string', mapping: 'group_nama'},
 			{name: 'produk_group_duproduk', type: 'int', mapping: 'group_duproduk'},
 			{name: 'produk_group_dmproduk', type: 'int', mapping: 'group_dmproduk'},
-			{name: 'produk_group_kelompok', type: 'string', mapping: 'kategori_nama'}
+			{name: 'produk_group_kelompok', type: 'string', mapping: 'kategori_nama'},
+			{name: 'produk_group_kelompok_id', type: 'int', mapping: 'kategori_id'}
 		]),
 		sortInfo:{field: 'produk_group_display', direction: "ASC"}
 	});
@@ -657,7 +661,7 @@ Ext.onReady(function(){
           	})
 		}, 
 		{
-			header: 'Group',
+			header: 'Group 1',
 			dataIndex: 'produk_group',
 			width: 150,
 			sortable: true,
@@ -989,7 +993,7 @@ Ext.onReady(function(){
 	/* Identify  produk_group Field */
 	produk_groupField= new Ext.form.ComboBox({
 		id: 'produk_groupField',
-		fieldLabel: 'Group <span style="color: #ec0000">*</span>',
+		fieldLabel: 'Group 1 <span style="color: #ec0000">*</span>',
 		store: cbo_produk_groupDataSore,
 		mode: 'remote',
 		allowBlank: false,
@@ -999,8 +1003,9 @@ Ext.onReady(function(){
 		triggerAction: 'all'
 	});
 	/* Identify  produk_kategori Field */
-	produk_kategoriField= new Ext.form.TextField({
-		id: 'produk_kategoriField',
+	produk_kategoriField=new Ext.form.NumberField();
+	produk_kategoritxtField= new Ext.form.TextField({
+		id: 'produk_kategoritxtField',
 		fieldLabel: 'Jenis',
 		maxLength: 20,
 		disabled: true,
@@ -1131,7 +1136,8 @@ Ext.onReady(function(){
 		if(cbo_produk_groupDataSore.getCount()){
 			produk_duField.setValue(cbo_produk_groupDataSore.getAt(record).data.produk_group_duproduk);
 			produk_dmField.setValue(cbo_produk_groupDataSore.getAt(record).data.produk_group_dmproduk);
-			produk_kategoriField.setValue(cbo_produk_groupDataSore.getAt(record).data.produk_group_kelompok);
+			produk_kategoritxtField.setValue(cbo_produk_groupDataSore.getAt(record).data.produk_group_kelompok);
+			produk_kategoriField.setValue(cbo_produk_groupDataSore.getAt(record).data.produk_group_kelompok_id);
 		}
 	});
 	
@@ -1146,7 +1152,7 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [produk_kodelamaField, produk_kodeField, produk_groupField, produk_jenisField, produk_kategoriField, produk_namaField, produk_hargaField, produk_duField, produk_dmField] 
+				items: [produk_kodelamaField, produk_kodeField, produk_groupField, produk_jenisField, produk_kategoritxtField, produk_namaField, produk_hargaField, produk_duField, produk_dmField] 
 			}
 			,{
 				columnWidth:0.5,
@@ -1657,7 +1663,7 @@ Ext.onReady(function(){
 	/* Identify  produk_group Field */
 	produk_groupSearchField= new Ext.form.ComboBox({
 		id: 'produk_groupSearchField',
-		fieldLabel: 'Group <span style="color: #ec0000">*</span>',
+		fieldLabel: 'Group 1 <span style="color: #ec0000">*</span>',
 		store: cbo_produk_groupDataSore,
 		mode: 'remote',
 		displayField: 'produk_group_display',

@@ -73,9 +73,10 @@ var rawat_kodeField;
 var rawat_kodelamaField;
 var rawat_namaField;
 var rawat_groupField;
-var rawat_kategoriField;
-var rawat_kontribusiField;
 var rawat_jenisField;
+var rawat_kontribusiField;
+var rawat_kategoriField;
+var rawat_kategoritxtField;
 var rawat_keteranganField;
 var rawat_duField;
 var rawat_dmField;
@@ -214,9 +215,9 @@ Ext.onReady(function(){
 		if(rawat_kodelamaField.getValue()!== null){rawat_kodelama_create = rawat_kodelamaField.getValue();} 
 		if(rawat_namaField.getValue()!== null){rawat_nama_create = rawat_namaField.getValue();} 
 		if(rawat_groupField.getValue()!== null){rawat_group_create = rawat_groupField.getValue();} 
-		if(rawat_kategoriField.getValue()!== null){rawat_kategori_create = rawat_kategoriField.getValue();} 
-		if(rawat_kontribusiField.getValue()!== null){rawat_kontribusi_create = rawat_kontribusiField.getValue();} 
 		if(rawat_jenisField.getValue()!== null){rawat_jenis_create = rawat_jenisField.getValue();} 
+		if(rawat_kontribusiField.getValue()!== null){rawat_kontribusi_create = rawat_kontribusiField.getValue();} 
+		if(rawat_kategoriField.getValue()!== null){rawat_kategori_create = rawat_kategoriField.getValue();} 
 		if(rawat_keteranganField.getValue()!== null){rawat_keterangan_create = rawat_keteranganField.getValue();} 
 		if(rawat_duField.getValue()!== null){rawat_du_create = rawat_duField.getValue();} 
 		if(rawat_dmField.getValue()!== null){rawat_dm_create = rawat_dmField.getValue();} 
@@ -313,12 +314,12 @@ Ext.onReady(function(){
 		rawat_namaField.setValue(null);
 		rawat_groupField.reset();
 		rawat_groupField.setValue(null);
-		rawat_kategoriField.reset();
-		rawat_kategoriField.setValue(null);
-		rawat_kontribusiField.reset();
-		rawat_kontribusiField.setValue(null);
 		rawat_jenisField.reset();
 		rawat_jenisField.setValue(null);
+		rawat_kontribusiField.reset();
+		rawat_kontribusiField.setValue(null);
+		rawat_kategoriField.reset();
+		rawat_kategoriField.setValue(null);
 		rawat_keteranganField.reset();
 		rawat_keteranganField.setValue(null);
 		rawat_duField.reset();
@@ -343,9 +344,10 @@ Ext.onReady(function(){
 		rawat_kodelamaField.setValue(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_kodelama'));
 		rawat_namaField.setValue(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_nama'));
 		rawat_groupField.setValue(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_group'));
-		rawat_kategoriField.setValue(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_kategori'));
-		rawat_kontribusiField.setValue(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_kontribusi'));
 		rawat_jenisField.setValue(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_jenis'));
+		rawat_kontribusiField.setValue(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_kontribusi'));
+		rawat_kategoriField.setValue(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_kategori_id'));
+		rawat_kategoritxtField.setValue(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_kategori_nama'));
 		rawat_keteranganField.setValue(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_keterangan'));
 		rawat_duField.setValue(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_du'));
 		rawat_dmField.setValue(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_dm'));
@@ -358,7 +360,7 @@ Ext.onReady(function(){
   
 	/* Function for Check if the form is valid */
 	function is_perawatan_form_valid(){
-		return (rawat_namaField.isValid() && rawat_groupField.isValid() && rawat_jenisField.isValid() && rawat_kategoriField.isValid() );
+		return (rawat_namaField.isValid() && rawat_groupField.isValid() && rawat_jenisField.isValid() );
 	}
   	/* End of Function */
   
@@ -468,7 +470,7 @@ Ext.onReady(function(){
 			url: 'index.php?c=c_perawatan&m=get_action', 
 			method: 'POST'
 		}),
-		baseParams:{task: "LIST"}, // parameter yang di $_POST ke Controller
+		baseParams:{task: "LIST",start:0,limit:pageS}, // parameter yang di $_POST ke Controller
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
@@ -480,7 +482,8 @@ Ext.onReady(function(){
 			{name: 'rawat_kodelama', type: 'string', mapping: 'rawat_kodelama'}, 
 			{name: 'rawat_nama', type: 'string', mapping: 'rawat_nama'}, 
 			{name: 'rawat_group', type: 'string', mapping: 'group_nama'}, 
-			{name: 'rawat_kategori', type: 'string', mapping: 'kategori_nama'},
+			{name: 'rawat_kategori_nama', type: 'string', mapping: 'kategori_nama'},
+			{name: 'rawat_kategori_id', type: 'string', mapping: 'rawat_kategori'},
 			{name: 'rawat_kontribusi', type: 'string', mapping: 'kontribusi_nama'}, 
 			{name: 'rawat_jenis', type: 'string', mapping: 'jenis_nama'}, 
 			{name: 'rawat_keterangan', type: 'string', mapping: 'rawat_keterangan'}, 
@@ -517,7 +520,9 @@ Ext.onReady(function(){
 			{name: 'rawat_group_value', type: 'int', mapping: 'group_id'},
 			{name: 'rawat_group_display', type: 'string', mapping: 'group_nama'},
 			{name: 'rawat_group_durawat', type: 'int', mapping: 'group_durawat'},
-			{name: 'rawat_group_dmrawat', type: 'int', mapping: 'group_dmrawat'}
+			{name: 'rawat_group_dmrawat', type: 'int', mapping: 'group_dmrawat'},
+			{name: 'rawat_group_kelompok', type: 'string', mapping: 'kategori_nama'},
+			{name: 'rawat_group_kelompok_id', type: 'int', mapping: 'kategori_id'}
 		]),
 		sortInfo:{field: 'rawat_group_display', direction: "ASC"}
 	});
@@ -563,24 +568,24 @@ Ext.onReady(function(){
 	});
 	
 	/* Datastore Rawat Jenis */
-	cbo_rawat_kategoriDataSore = new Ext.data.Store({
-		id: 'cbo_rawat_kategoriDataSore',
-		proxy: new Ext.data.HttpProxy({
-			url: 'index.php?c=c_perawatan&m=get_kategori_perawatan_list', 
-			method: 'POST'
-		}),
-		baseParams:{task: "LIST"}, // parameter yang di $_POST ke Controller
-		reader: new Ext.data.JsonReader({
-			root: 'results',
-			totalProperty: 'total',
-			id: 'kategori_id'
-		},[
-		/* dataIndex => insert intocustomer_note_ColumnModel, Mapping => for initiate table column */ 
-			{name: 'rawat_kategori_value', type: 'int', mapping: 'kategori_id'},
-			{name: 'rawat_kategori_display', type: 'string', mapping: 'kategori_nama'}
-		]),
-		sortInfo:{field: 'rawat_kategori_display', direction: "ASC"}
-	});
+//	cbo_rawat_kategoriDataSore = new Ext.data.Store({
+//		id: 'cbo_rawat_kategoriDataSore',
+//		proxy: new Ext.data.HttpProxy({
+//			url: 'index.php?c=c_perawatan&m=get_kategori_perawatan_list', 
+//			method: 'POST'
+//		}),
+//		baseParams:{task: "LIST"}, // parameter yang di $_POST ke Controller
+//		reader: new Ext.data.JsonReader({
+//			root: 'results',
+//			totalProperty: 'total',
+//			id: 'kategori_id'
+//		},[
+//		/* dataIndex => insert intocustomer_note_ColumnModel, Mapping => for initiate table column */ 
+//			{name: 'rawat_kategori_value', type: 'int', mapping: 'kategori_id'},
+//			{name: 'rawat_kategori_display', type: 'string', mapping: 'kategori_nama'}
+//		]),
+//		sortInfo:{field: 'rawat_kategori_display', direction: "ASC"}
+//	});
 	
 	/* Datastore Rawat Gudang */
 	cbo_rawat_gudangDataSore = new Ext.data.Store({
@@ -636,7 +641,7 @@ Ext.onReady(function(){
           	})
 		}, 
 		{
-			header: 'Group',
+			header: 'Group 1',
 			dataIndex: 'rawat_group',
 			width: 150,
 			sortable: true,
@@ -666,13 +671,7 @@ Ext.onReady(function(){
 			dataIndex: 'rawat_kategori',
 			width: 150,
 			sortable: true,
-			editor: new Ext.form.ComboBox({
-				store: cbo_rawat_kategoriDataSore,
-				mode: 'remote',
-				displayField: 'rawat_kategori_display',
-				valueField: 'rawat_kategori_value',
-				triggerAction: 'all'
-			})
+			editable: false
 		}, 
 		{
 			header: 'DU',
@@ -974,7 +973,7 @@ Ext.onReady(function(){
 	/* Identify  rawat_group Field */
 	rawat_groupField= new Ext.form.ComboBox({
 		id: 'rawat_groupField',
-		fieldLabel: 'Group <span style="color: #ec0000">*</span>',
+		fieldLabel: 'Group 1 <span style="color: #ec0000">*</span>',
 		store: cbo_rawat_groupDataStore,
 		mode: 'remote',
 		allowBlank: false,
@@ -984,8 +983,8 @@ Ext.onReady(function(){
 		triggerAction: 'all'
 	});
 	/* Identify  rawat_kategori Field */
-	rawat_kategoriField= new Ext.form.ComboBox({
-		id: 'rawat_kategoriField',
+	rawat_jenisField= new Ext.form.ComboBox({
+		id: 'rawat_jenisField',
 		fieldLabel: 'Group 2 <span style="color: #ec0000">*</span>',
 		store: cbo_rawat_jenisDataSore,
 		mode: 'remote',
@@ -1007,16 +1006,12 @@ Ext.onReady(function(){
 	});
 	
 	/* Identify  rawat_jenis Field */
-	rawat_jenisField= new Ext.form.ComboBox({
-		id: 'rawat_jenisField',
-		fieldLabel: 'Jenis <span style="color: #ec0000">*</span>',
-		store: cbo_rawat_kategoriDataSore,
-		allowBlank: false,
-		mode: 'remote',
-		displayField: 'rawat_kategori_display',
-		valueField: 'rawat_kategori_value',
-		width: 120,
-		triggerAction: 'all'
+	rawat_kategoriField= new Ext.form.NumberField();
+	rawat_kategoritxtField= new Ext.form.TextField({
+		id: 'rawat_kategoritxtField',
+		fieldLabel: 'Jenis',
+		disabled: true,
+		width: 120
 	});
 	/* Identify  rawat_keterangan Field */
 	rawat_keteranganField= new Ext.form.TextArea({
@@ -1103,6 +1098,8 @@ Ext.onReady(function(){
 		if(cbo_rawat_groupDataStore.getCount()){
 			rawat_duField.setValue(cbo_rawat_groupDataStore.getAt(record).data.rawat_group_durawat);
 			rawat_dmField.setValue(cbo_rawat_groupDataStore.getAt(record).data.rawat_group_dmrawat);
+			rawat_kategoritxtField.setValue(cbo_rawat_groupDataStore.getAt(record).data.rawat_group_kelompok);
+			rawat_kategoriField.setValue(cbo_rawat_groupDataStore.getAt(record).data.rawat_group_kelompok_id);
 		}
 	});
 	
@@ -1117,7 +1114,7 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [rawat_kodelamaField, rawat_kodeField, rawat_namaField, rawat_groupField, rawat_kategoriField, rawat_jenisField, rawat_duField, rawat_dmField] 
+				items: [rawat_kodelamaField, rawat_kodeField, rawat_namaField, rawat_groupField, rawat_jenisField, rawat_kategoritxtField, rawat_duField, rawat_dmField] 
 			}
 			,{
 				columnWidth:0.5,
@@ -1273,7 +1270,7 @@ Ext.onReady(function(){
 	
 	var rawat_produk_tpl = new Ext.XTemplate(
         '<tpl for="."><div class="search-item">',
-            '<span><b>{rawat_produk_kode}</b>| {rawat_produk_display}<br/>Group: {rawat_produk_group}<br/>',
+            '<span><b>{rawat_produk_kode}</b>| {rawat_produk_display}<br/>Group 1: {rawat_produk_group}<br/>',
 			'Kategori: {rawat_produk_kategori}</span>',
 		'</div></tpl>'
     );
@@ -1868,7 +1865,7 @@ Ext.onReady(function(){
 	/* Identify  rawat_group Search Field */
 	rawat_groupSearchField= new Ext.form.ComboBox({
 		id: 'rawat_groupSearchField',
-		fieldLabel: 'Group',
+		fieldLabel: 'Group 1',
 		store: cbo_rawat_groupDataStore,
 		mode: 'remote',
 		displayField: 'rawat_group_display',
@@ -1888,15 +1885,10 @@ Ext.onReady(function(){
 		triggerAction: 'all'
 	});
 	/* Identify  rawat_jenis Search Field */
-	rawat_jenisSearchField= new Ext.form.ComboBox({
+	rawat_jenisSearchField= new Ext.form.TextField({
 		id: 'rawat_jenisSearchField',
 		fieldLabel: 'Jenis',
-		store: cbo_rawat_kategoriDataSore,
-		mode: 'remote',
-		displayField: 'rawat_jenis_display',
-		valueField: 'rawat_jenis_value',
-		width: 120,
-		triggerAction: 'all'
+		width: 120
 	});
 	/* Identify  rawat_keterangan Search Field */
 	rawat_keteranganSearchField= new Ext.form.TextArea({
