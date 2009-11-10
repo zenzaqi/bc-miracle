@@ -621,7 +621,17 @@ Ext.onReady(function(){
 			hidden: false
 		},
 		{
-			header: 'Kode',
+			header: 'Kode Lama',
+			dataIndex: 'rawat_kodelama',
+			width: 150,
+			sortable: true,
+			editor: new Ext.form.TextField({
+				allowBlank: false,
+				maxLength: 20
+          	})
+		},
+		{
+			header: 'Kode Baru',
 			dataIndex: 'rawat_kode',
 			width: 150,
 			sortable: true,
@@ -949,7 +959,7 @@ Ext.onReady(function(){
 	/* Identify  rawat_kode Field */
 	rawat_kodeField= new Ext.form.TextField({
 		id: 'rawat_kodeField',
-		fieldLabel: 'Kode',
+		fieldLabel: 'Kode Baru',
 		maxLength: 20,
 		readOnly: true,
 		emptyText: '(auto)',
@@ -1841,7 +1851,7 @@ Ext.onReady(function(){
 	/* Identify  rawat_kode Search Field */
 	rawat_kodeSearchField= new Ext.form.TextField({
 		id: 'rawat_kodeSearchField',
-		fieldLabel: 'Kode',
+		fieldLabel: 'Kode Baru',
 		maxLength: 20,
 		width: 100
 	

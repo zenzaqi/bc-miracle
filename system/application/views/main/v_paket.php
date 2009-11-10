@@ -546,7 +546,17 @@ Ext.onReady(function(){
 			hidden: false
 		},
 		{
-			header: 'Kode',
+			header: 'Kode Lama',
+			dataIndex: 'paket_kodelama',
+			width: 150,
+			sortable: true,
+			editor: new Ext.form.TextField({
+				allowBlank: false,
+				maxLength: 20
+          	})
+		}, 
+		{
+			header: 'Kode Baru',
 			dataIndex: 'paket_kode',
 			width: 150,
 			sortable: true,
@@ -866,7 +876,7 @@ Ext.onReady(function(){
 	/* Identify  paket_kode Field */
 	paket_kodeField= new Ext.form.TextField({
 		id: 'paket_kodeField',
-		fieldLabel: 'Kode',
+		fieldLabel: 'Kode Baru',
 		maxLength: 20,
 		allowBlank: true,
 		readOnly: true,
@@ -1729,7 +1739,7 @@ Ext.onReady(function(){
 	/* Identify  paket_kode Field */
 	paket_kodeSearchField= new Ext.form.TextField({
 		id: 'paket_kodeSearchField',
-		fieldLabel: 'Kode',
+		fieldLabel: 'Kode Baru',
 		maxLength: 20,
 		readOnly: true,
 		emptyText: '(auto)',
