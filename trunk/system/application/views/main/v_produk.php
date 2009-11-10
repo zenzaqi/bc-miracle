@@ -498,7 +498,7 @@ Ext.onReady(function(){
 			{name: 'produk_kontribusi', type: 'string', mapping: 'kategori2_nama'}, 
 			{name: 'produk_jenis', type: 'string', mapping: 'jenis_nama'}, 
 			{name: 'produk_nama', type: 'string', mapping: 'produk_nama'}, 
-			{name: 'produk_satuan', type: 'string', mapping: 'satuan_nama'}, 
+			{name: 'produk_satuan', type: 'string', mapping: 'satuan_kode'}, 
 			{name: 'produk_du', type: 'int', mapping: 'produk_du'}, 
 			{name: 'produk_dm', type: 'int', mapping: 'produk_dm'}, 
 			{name: 'produk_point', type: 'int', mapping: 'produk_point'}, 
@@ -1229,7 +1229,8 @@ Ext.onReady(function(){
 		},[
 		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
 			{name: 'produk_satuan_value', type: 'int', mapping: 'satuan_id'},
-			{name: 'produk_satuan_display', type: 'string', mapping: 'satuan_nama'}
+			{name: 'produk_satuan_nama', type: 'string', mapping: 'satuan_nama'},
+			{name: 'produk_satuan_display', type: 'string', mapping: 'satuan_kode'}
 		]),
 		sortInfo:{field: 'produk_satuan_value', direction: "ASC"}
 	});
