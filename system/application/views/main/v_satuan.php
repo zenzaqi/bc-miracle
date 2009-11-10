@@ -371,7 +371,7 @@ Ext.onReady(function(){
 			hidden: false
 		},
 		{
-			header: 'Nama',
+			header: 'Kode',
 			dataIndex: 'satuan_kode',
 			width: 150,
 			sortable: true,
@@ -381,7 +381,7 @@ Ext.onReady(function(){
           	})
 		},
 		{
-			header: 'Keterangan',
+			header: 'Nama',
 			dataIndex: 'satuan_nama',
 			width: 150,
 			sortable: true,

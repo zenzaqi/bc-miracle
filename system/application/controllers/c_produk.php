@@ -151,7 +151,7 @@ class C_produk extends Controller {
 		$produk_kodelama=str_replace(",", ",",$produk_kodelama);
 		$produk_kodelama=str_replace("'", "\'",$produk_kodelama);
 		$produk_group=trim(@$_POST["produk_group"]);
-		//$produk_kategori=trim(@$_POST["produk_kategori"]);
+		$produk_kategori=trim(@$_POST["produk_kategori"]);
 		$produk_kontribusi=trim(@$_POST["produk_kontribusi"]);
 		$produk_jenis=trim(@$_POST["produk_jenis"]);
 		$produk_nama=trim(@$_POST["produk_nama"]);
@@ -171,7 +171,7 @@ class C_produk extends Controller {
 		$produk_aktif=str_replace("/(<\/?)(p)([^>]*>)", "",$produk_aktif);
 		$produk_aktif=str_replace(",", ",",$produk_aktif);
 		$produk_aktif=str_replace("'", '"',$produk_aktif);
-		$result = $this->m_produk->produk_update($produk_id ,$produk_kode ,$produk_kodelama ,$produk_group ,$produk_kontribusi ,$produk_jenis ,$produk_nama ,$produk_satuan ,$produk_du ,$produk_dm ,$produk_point ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif      );
+		$result = $this->m_produk->produk_update($produk_id ,$produk_kode ,$produk_kodelama ,$produk_group ,$produk_kategori ,$produk_kontribusi ,$produk_jenis ,$produk_nama ,$produk_satuan ,$produk_du ,$produk_dm ,$produk_point ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif      );
 		echo $result;
 	}
 	
@@ -186,7 +186,7 @@ class C_produk extends Controller {
 		$produk_kodelama=str_replace("/(<\/?)(p)([^>]*>)", "",$produk_kodelama);
 		$produk_kodelama=str_replace("'", "\'",$produk_kodelama);
 		$produk_group=trim(@$_POST["produk_group"]);
-		//$produk_kategori=trim(@$_POST["produk_kategori"]);
+		$produk_kategori=trim(@$_POST["produk_kategori"]);
 		$produk_kontribusi=trim(@$_POST["produk_kontribusi"]);
 		$produk_jenis=trim(@$_POST["produk_jenis"]);
 		$produk_nama=trim(@$_POST["produk_nama"]);
@@ -204,7 +204,8 @@ class C_produk extends Controller {
 		$produk_aktif=trim(@$_POST["produk_aktif"]);
 		$produk_aktif=str_replace("/(<\/?)(p)([^>]*>)", "",$produk_aktif);
 		$produk_aktif=str_replace("'", '"',$produk_aktif);
-		$result=$this->m_produk->produk_create($produk_kode, $produk_kodelama ,$produk_group ,$produk_kontribusi ,$produk_jenis ,$produk_nama ,$produk_satuan ,$produk_du ,$produk_dm ,$produk_point ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif );
+		$this->firephp->log($produk_kategori, 'value_produk_kategori');
+		$result=$this->m_produk->produk_create($produk_kode, $produk_kodelama ,$produk_group ,$produk_kategori ,$produk_kontribusi ,$produk_jenis ,$produk_nama ,$produk_satuan ,$produk_du ,$produk_dm ,$produk_point ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif );
 		echo $result;
 	}
 

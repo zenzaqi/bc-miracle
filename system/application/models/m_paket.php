@@ -158,7 +158,10 @@ class M_paket extends Model{
 		
 		//function for get list record
 		function paket_list($filter,$start,$end){
-			$query = "SELECT * FROM paket,produk_group where paket_group=group_id";
+			//$query = "SELECT * FROM paket,produk_group where paket_group=group_id";
+			$query = "SELECT `paket`.*, `produk_group`.`group_id` AS `group_id`, `produk_group`.`group_kode` AS `group_kode`, `produk_group`.`group_nama` AS `group_nama`, `produk_group`.`group_dmpaket` AS `group_dmpaket`,
+`produk_group`.`group_dupaket` AS `group_dupaket`, `produk_group`.`group_kelompok` AS `group_kelompok`, `kategori`.`kategori_id` AS `kategori_id`, `kategori`.`kategori_nama` AS `kategori_nama`, `kategori2`.`kategori2_id` AS `kategori2_id`, `kategori2`.`kategori2_nama` AS `kategori2_nama`
+FROM ((`paket` INNER JOIN `produk_group` ON `paket`.`paket_group`=`produk_group`.`group_id` INNER JOIN `kategori` ON `produk_group`.`group_kelompok`=`kategori`.`kategori_id`) LEFT JOIN `kategori2` ON `paket`.`paket_kontribusi`=`kategori2`.`kategori2_id`)";
 			
 			// For simple search
 			if ($filter<>""){
@@ -208,19 +211,39 @@ class M_paket extends Model{
 				$data["paket_dm"]=$rs_sql->group_dmpaket;
 			}
 			
-			$sql="SELECT group_id, group_kode FROM paket,produk_group WHERE group_id='".$paket_group."' AND paket.paket_group!='".$paket_group."' AND paket_id='".$paket_id."'";
-			$rs=$this->db->query($sql);
-			if($rs->num_rows()){
-				$sql_2="SELECT paket_id,paket_kode FROM paket WHERE paket_id='".$produk_id."'";
-				$rs_2=$this->db->query($sql_2);
-				if($rs->num_rows()){
-					$rs_sql_2=$rs_2->row();
-					$data["paket_kodelama"]=$rs_sql_2->paket_kode;
-				}
-				
-				$row=$rs->row();
+//			$sql="SELECT group_id, group_kode FROM paket,produk_group WHERE group_id='".$paket_group."' AND paket.paket_group!='".$paket_group."' AND paket_id='".$paket_id."'";
+//			$rs=$this->db->query($sql);
+//			if($rs->num_rows()){
+//				$sql_2="SELECT paket_id,paket_kode FROM paket WHERE paket_id='".$paket_id."'";
+//				$rs_2=$this->db->query($sql_2);
+//				if($rs->num_rows()){
+//					$rs_sql_2=$rs_2->row();
+//					$data["paket_kodelama"]=$rs_sql_2->paket_kode;
+//				}
+//				
+//				$row=$rs->row();
+//				$data["paket_group"]=$paket_group;
+//				$data["paket_kode"]=$this->get_kode($row->group_kode);
+//			}
+			$sql_g="SELECT group_id,group_kode FROM produk_group WHERE group_id='".$paket_group."'";
+			$rs_g=$this->db->query($sql_g);
+			if($rs_g->num_rows()){
+				$rs_sql_g=$rs_g->row();
+				$group_kode=$rs_sql_g->group_kode;
 				$data["paket_group"]=$paket_group;
-				$data["paket_kode"]=$this->get_kode($row->group_kode);
+				
+				$pattern=$group_kode;
+				//echo $jenis_kode;
+				$paket_kode=$this->get_kode($pattern);
+				if($pattern!=="" && strlen($pattern)==2)
+					$data["paket_kode"]=$paket_kode;
+			}else{
+				$sql_q="select SUBSTRING(paket_kode,1,2) as group_kode from paket where paket_id='".$paket_id."'";
+				$rs_g=$this->db->query($sql_g);
+				if($rs_g->num_rows()){
+					$rs_sql_g=$rs_g->row();
+					$group_kode=$rs_sql_g->group_kode;
+				}
 			}
 			
 			$sql="SELECT paket_du FROM paket WHERE paket_du!='".$paket_du."' AND paket_id='".$paket_id."'";

@@ -250,6 +250,12 @@ var editor_cust_note;
 		
 	}
  	/* End of Function */
+	
+	function customer_set_defaultForm(){
+		cust_kotaField.setValue('Surabaya');
+		cust_propinsiField.setValue('Jawa Timur');
+		cust_negaraField.setValue('Indonesia');
+	}
   
 	/* setValue to EDIT */
 	function customer_set_form(){
@@ -322,6 +328,7 @@ var editor_cust_note;
 	function display_form_window(){
 		if(!customer_createWindow.isVisible()){
 			customer_reset_form();
+			customer_set_defaultForm();
 			cust_terdaftarField.setValue(dt.format('Y-m-d'));
 			post2db='CREATE';
 			msg='created';
@@ -2351,7 +2358,7 @@ Ext.onReady(function(){
 		id: 'cust_kotaField',
 		fieldLabel: 'Kota <span style="color: #ec0000">*</span>',
 		maxLength: 100,
-		emptyText: 'Surabaya',
+		//emptyText: 'Surabaya',
 		allowBlank: true,
 		anchor: '95%'
 	});
@@ -2367,8 +2374,8 @@ Ext.onReady(function(){
 	cust_propinsiField= new Ext.form.ComboBox({
 		id: 'cust_propinsiField',
 		fieldLabel: 'Propinsi <span style="color: #ec0000">*</span>',
-		blankText: 'Jawa Timur',
-		emptyText: 'Jawa Timur',
+		//blankText: 'Jawa Timur',
+		//emptyText: 'Jawa Timur',
 		maxLength: 100,
 		store: cbo_propinsi_DataStore,
 		mode: 'remote',
@@ -2381,8 +2388,8 @@ Ext.onReady(function(){
 	cust_negaraField= new Ext.form.TextField({
 		id: 'cust_negaraField',
 		fieldLabel: 'Negara',
-		blankText: 'Indonesia',
-		emptyText: 'Indonesia',
+		//blankText: 'Indonesia',
+		//emptyText: 'Indonesia',
 		maxLength: 100,
 		anchor: '95%'
 	});
