@@ -219,7 +219,7 @@ Ext.onReady(function(){
   
 	/* Function for Check if the form is valid */
 	function is_usergroups_form_valid(){
-		return (true &&  group_nameField.isValid() && group_descField.isValid() && group_activeField.isValid() );
+		return (true &&  group_nameField.isValid() && group_activeField.isValid() );
 	}
   	/* End of Function */
   
@@ -227,6 +227,7 @@ Ext.onReady(function(){
 	function display_form_window(){
 		if(!usergroups_createWindow.isVisible()){
 			usergroups_reset_form();
+			group_activeField.setValue('Aktif');
 			post2db='CREATE';
 			msg='created';
 			usergroups_createWindow.show();
@@ -532,7 +533,6 @@ Ext.onReady(function(){
 		id: 'group_descField',
 		fieldLabel: 'Keterangan',
 		maxLength: 250,
-		allowBlank: false,
 		anchor: '95%'
 	});
 	/* Identify  group_active Field */
