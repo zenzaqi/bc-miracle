@@ -1110,6 +1110,15 @@ Ext.onReady(function(){
 			rawat_dmField.setValue(cbo_rawat_groupDataStore.getAt(record).data.rawat_group_dmrawat);
 			rawat_kategoritxtField.setValue(cbo_rawat_groupDataStore.getAt(record).data.rawat_group_kelompok);
 			rawat_kategoriField.setValue(cbo_rawat_groupDataStore.getAt(record).data.rawat_group_kelompok_id);
+			if(cbo_rawat_groupDataStore.getAt(record).data.rawat_group_kelompok=="Medis" || cbo_rawat_groupDataStore.getAt(record).data.rawat_group_kelompok=="Surgery"){
+				cbo_rawat_gudangDataSore.load();
+				console.log("count gudang = "+cbo_rawat_gudangDataSore.getCount());
+				//rawat_gudangField.valueField(4);
+			}else if(cbo_rawat_groupDataStore.getAt(record).data.rawat_group_kelompok=="Non Medis"){
+				//rawat_gudangField.setValue(3);
+				cbo_rawat_gudangDataSore.load();
+				console.log("count gudang = "+cbo_rawat_gudangDataSore.getCount());
+			}
 		}
 	});
 	

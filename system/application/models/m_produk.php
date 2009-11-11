@@ -109,13 +109,7 @@ class M_produk extends Model{
 		//function for get list record
 		function produk_list($filter,$start,$end){
 			//$query = "SELECT * FROM produk,produk_group,kategori,satuan,jenis,kategori2 WHERE produk_group=group_id AND produk_kategori=kategori_id AND produk_satuan=satuan_id AND produk_jenis=jenis_id AND produk_kontribusi=kategori2_id";
-			$query="SELECT `produk`.`produk_id` AS `produk_id`,`produk`.`produk_kode` AS `produk_kode`,`produk`.`produk_kodelama` AS `produk_kodelama`,`produk`.`produk_group` AS `produk_group`,`produk_group`.`group_nama` AS `group_nama`,
-`produk`.`produk_kategori` AS `produk_kategori`,`kategori`.`kategori_nama` AS `kategori_nama`,`kategori`.`kategori_jenis` AS `kategori_jenis`,`kategori`.`kategori_akun` AS `kategori_akun`,`produk`.`produk_nama` AS `produk_nama`,
-`produk`.`produk_satuan` AS `produk_satuan`,`satuan`.`satuan_nama` AS `satuan_nama`,`satuan`.`satuan_id` AS `satuan_id`,`satuan`.`satuan_kode` AS `satuan_kode`,`produk`.`produk_du` AS `produk_du`,
-`produk`.`produk_dm` AS `produk_dm`,`produk`.`produk_point` AS `produk_point`,`produk`.`produk_harga` AS `produk_harga`,`produk`.`produk_aktif` AS `produk_aktif`,`produk`.`produk_jenis` AS `produk_jenis`,
-`jenis`.`jenis_kode` AS `jenis_kode`,`jenis`.`jenis_nama` AS `jenis_nama`,`jenis`.`jenis_kelompok` AS `jenis_kelompok`,`produk`.`produk_kontribusi` AS `produk_kontribusi`,`kategori2`.`kategori2_nama` AS `kategori2_nama`,
-`kategori2`.`kategori2_jenis` AS `kategori2_jenis` FROM (((((`produk` left join `produk_group` on((`produk`.`produk_group` = `produk_group`.`group_id`))) left join `kategori` on((`produk_group`.`group_kelompok` = `kategori`.`kategori_id`))) 
-left join `satuan` on((`produk`.`produk_satuan` = `satuan`.`satuan_id`))) left join `jenis` on((`produk`.`produk_jenis` = `jenis`.`jenis_id`))) left join `kategori2` on((`produk`.`produk_kontribusi` = `kategori2`.`kategori2_id`)))";
+			$query="select * from vu_produk";
 			
 			// For simple search
 			if ($filter<>""){
@@ -374,14 +368,7 @@ left join `satuan` on((`produk`.`produk_satuan` = `satuan`.`satuan_id`))) left j
 		//function for advanced search record
 		function produk_search($produk_id ,$produk_kode ,$produk_kodelama ,$produk_group ,$produk_kategori ,$produk_jenis ,$produk_nama ,$produk_satuan ,$produk_du ,$produk_dm ,$produk_point ,$produk_kontribusi ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif ,$start,$end){
 			//full query
-			//$query="select * from vu_produk";
-			$query="SELECT `produk`.`produk_id` AS `produk_id`,`produk`.`produk_kode` AS `produk_kode`,`produk`.`produk_kodelama` AS `produk_kodelama`,`produk`.`produk_group` AS `produk_group`,`produk_group`.`group_nama` AS `group_nama`,
-`produk`.`produk_kategori` AS `produk_kategori`,`kategori`.`kategori_nama` AS `kategori_nama`,`kategori`.`kategori_jenis` AS `kategori_jenis`,`kategori`.`kategori_akun` AS `kategori_akun`,`produk`.`produk_nama` AS `produk_nama`,
-`produk`.`produk_satuan` AS `produk_satuan`,`satuan`.`satuan_nama` AS `satuan_nama`,`satuan`.`satuan_id` AS `satuan_id`,`satuan`.`satuan_kode` AS `satuan_kode`,`produk`.`produk_du` AS `produk_du`,
-`produk`.`produk_dm` AS `produk_dm`,`produk`.`produk_point` AS `produk_point`,`produk`.`produk_harga` AS `produk_harga`,`produk`.`produk_aktif` AS `produk_aktif`,`produk`.`produk_jenis` AS `produk_jenis`,
-`jenis`.`jenis_kode` AS `jenis_kode`,`jenis`.`jenis_nama` AS `jenis_nama`,`jenis`.`jenis_kelompok` AS `jenis_kelompok`,`produk`.`produk_kontribusi` AS `produk_kontribusi`,`kategori2`.`kategori2_nama` AS `kategori2_nama`,
-`kategori2`.`kategori2_jenis` AS `kategori2_jenis` FROM (((((`produk` left join `produk_group` on((`produk`.`produk_group` = `produk_group`.`group_id`))) left join `kategori` on((`produk_group`.`group_kelompok` = `kategori`.`kategori_id`))) 
-left join `satuan` on((`produk`.`produk_satuan` = `satuan`.`satuan_id`))) left join `jenis` on((`produk`.`produk_jenis` = `jenis`.`jenis_id`))) left join `kategori2` on((`produk`.`produk_kontribusi` = `kategori2`.`kategori2_id`)))";
+			$query="select * from vu_produk";
 			
 			if($produk_id!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
