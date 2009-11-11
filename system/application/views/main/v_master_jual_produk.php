@@ -157,6 +157,8 @@ var jproduk_diskonSearchField;
 var jproduk_caraSearchField;
 var jproduk_keteranganSearchField;
 var dt= new Date();
+
+var printed=0;
 /* on ready fuction */
 Ext.onReady(function(){
   	Ext.QuickTips.init();	/* Initiate quick tips icon */
@@ -469,7 +471,7 @@ Ext.onReady(function(){
 						detail_jual_produk_purge();
 						detail_jual_produk_insert();
 						Ext.MessageBox.alert(post2db+' OK','The Master_jual_produk was '+msg+' successfully.');
-						master_jual_produk_DataStore.reload();
+						//master_jual_produk_DataStore.reload();
 						master_jual_produk_createWindow.hide();
 						break;
 					default:
@@ -482,7 +484,9 @@ Ext.onReady(function(){
 						});
 						break;
 				}
-				master_jual_produk_print();
+				if(printed==1)
+					master_jual_produk_print();
+				master_jual_produk_reset_allForm();
 			},
 			failure: function(response){
 				var result=response.responseText;
@@ -506,6 +510,11 @@ Ext.onReady(function(){
 		}
 	}
  	/* End of Function */
+	
+	function save_andPrint(){
+		printed=1;
+		master_jual_produk_create();
+	}
   
   	/* Function for get PK field */
 	function get_pk_id(){
@@ -629,6 +638,11 @@ Ext.onReady(function(){
 		update_group_carabayar3_jual_produk();
 	}
  	/* End of Function */
+	
+	function master_jual_produk_reset_allForm(){
+		master_jual_produk_reset_form();
+		
+	}
     
 	/* setValue to EDIT */
 	function master_jual_produk_set_form(){
@@ -2909,11 +2923,11 @@ Ext.onReady(function(){
 			},
 			{
 				text: 'Save',
-				handler: ''
+				handler: master_jual_produk_create
 			},
 			{
 				text: 'Save and Print',
-				handler: master_jual_produk_create
+				handler: save_andPrint
 			},
 			{
 				text: 'Cancel',

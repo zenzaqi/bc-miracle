@@ -222,7 +222,6 @@ class M_produk extends Model{
 			//get group kode
 			$group_kode="";
 			$jenis_kode="";
-			
 			$sql_g="SELECT group_id,group_kode FROM produk_group WHERE group_id='".$produk_group."'";
 			$rs_g=$this->db->query($sql_g);
 			if($rs_g->num_rows()){
@@ -230,7 +229,7 @@ class M_produk extends Model{
 				$group_kode=$rs_sql_g->group_kode;
 				$data["produk_group"]=$produk_group;
 			}else{
-				$sql_q="select SUBSTRING(produk_kode,1,2) as group_kode from produk where produk_id='".$produk_id."'";
+				$sql_g="select SUBSTRING(produk_kode,1,2) as group_kode from produk where produk_id='".$produk_id."'";
 				$rs_g=$this->db->query($sql_g);
 				if($rs_g->num_rows()){
 					$rs_sql_g=$rs_g->row();
