@@ -42,7 +42,7 @@
 			clear:none;
 		}
     </style>
-<script>
+<script><!--
 /* declare function */		
 var produk_DataStore;
 var produk_ColumnModel;
@@ -383,6 +383,7 @@ Ext.onReady(function(){
 			produk_reset_form();
 			post2db='CREATE';
 			msg='created';
+			satuan_konversi_DataStore.load({params: {master_id: 0, start:0, limit:15}});
 			produk_createWindow.show();
 		} else {
 			produk_createWindow.toFront();
@@ -597,8 +598,8 @@ Ext.onReady(function(){
 		sortInfo:{field: 'produk_jenis_display', direction: "ASC"}
 	});
 	
-	cbo_produk_satuan_DataSore = new Ext.data.Store({
-		id: 'cbo_produk_satuan_DataSore',
+	cbo_produk_satuan_DataStore = new Ext.data.Store({
+		id: 'cbo_produk_satuan_DataStore',
 		proxy: new Ext.data.HttpProxy({
 			url: 'index.php?c=c_produk&m=get_satuan_list', 
 			method: 'POST'
@@ -955,7 +956,7 @@ Ext.onReady(function(){
 	/* End of Function */
   	
 	produkListEditorGrid.addListener('rowcontextmenu', onproduk_ListEditGridContextMenu);
-	produk_DataStore.load({params: {start: 0, limit: 15}});	// load DataStore
+	//produk_DataStore.load({params: {start: 0, limit: 15}});	// load DataStore
 	produkListEditorGrid.on('afteredit', produk_update); // inLine Editing Record
 	
 	/* Identify  produk_id Field */
@@ -1046,7 +1047,7 @@ Ext.onReady(function(){
 	produk_satuanField= new Ext.form.ComboBox({
 		id: 'produk_satuanField',
 		fieldLabel: 'Satuan',
-		store: cbo_produk_satuan_DataSore,
+		store: cbo_produk_satuan_DataStore,
 		mode: 'remote',
 		displayField: 'produk_satuan_display',
 		valueField: 'produk_satuan_value',
@@ -1712,7 +1713,7 @@ Ext.onReady(function(){
 	produk_satuanSearchField= new Ext.form.ComboBox({
 		id: 'produk_satuanSearchField',
 		fieldLabel: 'Satuan',
-		store: cbo_produk_satuan_DataSore,
+		store: cbo_produk_satuan_DataStore,
 		mode: 'remote',
 		displayField: 'produk_satuan_display',
 		valueField: 'produk_satuan_value',
@@ -2039,7 +2040,7 @@ Ext.onReady(function(){
 	/*End of Function */
 	
 });
-	</script>
+	--></script>
 <body>
 <div>
 	<div class="col">

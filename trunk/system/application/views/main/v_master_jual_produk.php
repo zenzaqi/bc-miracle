@@ -1916,9 +1916,11 @@ Ext.onReady(function(){
 	
 	jproduk_transfer_nilaiField= new Ext.form.NumberField({
 		id: 'jproduk_transfer_nilaiField',
+		enableKeyEvents: true,
 		fieldLabel: 'Nilai',
 		allowBlank: true,
-		anchor: '95%'
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
 	});
 	
 	master_jual_produk_transferGroup= new Ext.form.FieldSet({
@@ -2869,7 +2871,7 @@ Ext.onReady(function(){
 		total_harga=total_harga*(100-jproduk_diskonField.getValue())/100 - jproduk_cashbackField.getValue();
 		total_harga=(total_harga>0?Math.round(total_harga):0);
 		jproduk_totalField.setValue(total_harga);
-		total_hutang=total_harga-jproduk_bayarField.getValue();
+		total_hutang=total_harga-jproduk_bayarField.getValue()-jproduk_transfer_nilaiField.getValue();
 		total_hutang=(total_hutang>0?Math.round(total_hutang):0);
 		jproduk_totalbayarField.setValue(total_hutang);
 	}
@@ -2885,6 +2887,7 @@ Ext.onReady(function(){
 	jproduk_bayarField.on("keyup",load_total_produk_bayar);
 	jproduk_diskonField.on("keyup",load_total_produk_bayar);
 	jproduk_cashbackField.on("keyup",load_total_produk_bayar);
+	jproduk_transfer_nilaiField.on("keyup",load_total_produk_bayar);
 	jproduk_caraField.on("select",update_group_carabayar_jual_produk);
 	jproduk_cara2Field.on("select",update_group_carabayar2_jual_produk);
 	jproduk_cara3Field.on("select",update_group_carabayar3_jual_produk);
