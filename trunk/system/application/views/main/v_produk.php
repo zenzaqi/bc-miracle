@@ -494,7 +494,7 @@ Ext.onReady(function(){
 			{name: 'produk_kodelama', type: 'string', mapping: 'produk_kodelama'}, 
 			{name: 'produk_group', type: 'string', mapping: 'group_nama'}, 
 			{name: 'produk_kategori_nama', type: 'string', mapping: 'kategori_nama'}, 
-			{name: 'produk_kategori_id', type: 'int', mapping: 'produk_kategori'}, 
+			{name: 'produk_kategori_id', type: 'int', mapping: 'kategori_id'}, 
 			{name: 'produk_kontribusi', type: 'string', mapping: 'kategori2_nama'}, 
 			{name: 'produk_jenis', type: 'string', mapping: 'jenis_nama'}, 
 			{name: 'produk_nama', type: 'string', mapping: 'produk_nama'}, 
