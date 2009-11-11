@@ -58,7 +58,7 @@ class M_produk_group extends Model{
 				"group_dmrawat"=>$group_dmrawat,			
 				"group_dupaket"=>$group_dupaket,			
 				"group_dmpaket"=>$group_dmpaket,
-				"group_kelompok"=>$group_kelompok,
+				//"group_kelompok"=>$group_kelompok,
 				"group_keterangan"=>$group_keterangan,			
 				"group_aktif"=>$group_aktif,			
 				"group_creator"=>$group_creator,			
@@ -67,6 +67,11 @@ class M_produk_group extends Model{
 				"group_date_update"=>$group_date_update,			
 				"group_revised"=>$group_revised			
 			);
+			$sql="SELECT kategori_id FROM kategori WHERE kategori_id='$group_kelompok'";
+			$rs=$this->db->query($sql);
+			if($rs->num_rows())
+				$data["group_kelompok"]=$group_kelompok;
+			
 			$this->db->where('group_id', $group_id);
 			$this->db->update('produk_group', $data);
 			
