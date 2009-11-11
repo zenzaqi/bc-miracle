@@ -688,7 +688,7 @@ Ext.onReady(function(){
 		}, 
 		{
 			header: 'Jenis',
-			dataIndex: 'produk_kategori',
+			dataIndex: 'produk_kategori_nama',
 			width: 150,
 			sortable: true,
 			readOnly: true
