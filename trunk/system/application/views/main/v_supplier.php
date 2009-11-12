@@ -478,7 +478,7 @@ Ext.onReady(function(){
 			url: 'index.php?c=c_supplier&m=get_action', 
 			method: 'POST'
 		}),
-		baseParams:{task: "LIST"}, // parameter yang di $_POST ke Controller
+		baseParams:{task: "LIST",start:0,limit:pageS}, // parameter yang di $_POST ke Controller
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
@@ -768,6 +768,7 @@ Ext.onReady(function(){
 			text: 'Delete',
 			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
+			disabled:true,
 			handler: supplier_confirm_delete   // Confirm before deleting
 		}, '-', {
 			text: 'Search',
@@ -850,17 +851,18 @@ Ext.onReady(function(){
 	/* End of Function */
   	
 	supplierListEditorGrid.addListener('rowcontextmenu', onsupplier_ListEditGridContextMenu);
-	supplier_DataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
+	//supplier_DataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
 	supplierListEditorGrid.on('afteredit', supplier_update); // inLine Editing Record
 	
-	cbo_supplier_kategoriDataStore.load();
+	//cbo_supplier_kategoriDataStore.load();
 	
 	/* Identify  supplier_kategori Field */
 	supplier_kategoriField= new Ext.form.ComboBox({
 		id: 'supplier_kategoriField',
 		fieldLabel: 'Kategori',
 		store:cbo_supplier_kategoriDataStore,
-		mode: 'local',
+		mode: 'remote',
+		editable:false,
 		displayField: 'supplier_kategori_display',
 		valueField: 'supplier_kategori_display',
 		allowBlank: true,
@@ -991,6 +993,7 @@ Ext.onReady(function(){
 			data:[['Aktif','Aktif'],['Tidak Aktif','Tidak Aktif']]
 		}),
 		mode: 'local',
+		editable:false,
 		emptyText: 'Aktif',
 		displayField: 'supplier_aktif_display',
 		valueField: 'supplier_aktif_value',
@@ -1123,7 +1126,7 @@ Ext.onReady(function(){
 	/* Function for reset search result */
 	function supplier_reset_search(){
 		// reset the store parameters
-		supplier_DataStore.baseParams = { task: 'LIST' };
+		supplier_DataStore.baseParams = { task: 'LIST',start:0,limit:pageS };
 		// Cause the datastore to do another query : 
 		supplier_DataStore.reload({params: {start: 0, limit: pageS}});
 		supplier_searchWindow.close();
@@ -1165,7 +1168,7 @@ Ext.onReady(function(){
 		id: 'supplier_kategoriSearchField',
 		fieldLabel: 'Kategori',
 		store:cbo_supplier_kategoriDataStore,
-		mode: 'local',
+		mode: 'remote',
 		displayField: 'supplier_kategori_display',
 		valueField: 'supplier_kategori_display',
 		allowBlank: true,

@@ -19,7 +19,7 @@ class M_customer extends Model{
 		}
 		
 		function get_profesi_list(){
-			$sql="select distinct(cust_profesi) from customer";
+			$sql="SELECT distinct(cust_profesi) FROM customer WHERE cust_profesi!=null or cust_profesi!=''";
 			$result = $this->db->query($sql);
 			$nbrows = $result->num_rows();
 			$result = $this->db->query($sql);  
@@ -118,7 +118,7 @@ class M_customer extends Model{
 		}
 		
 		function get_hobi_list(){
-			$sql="select distinct(cust_hobi) from customer where cust_hobi is NOT NULL";
+			$sql="select distinct(cust_hobi) from customer where cust_hobi!=null or cust_hobi!=''";
 			$result = $this->db->query($sql);
 			$nbrows = $result->num_rows();
 			$result = $this->db->query($sql);  

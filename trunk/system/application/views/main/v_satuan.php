@@ -490,6 +490,7 @@ Ext.onReady(function(){
 			text: 'Delete',
 			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
+			disabled:true,
 			handler: satuan_confirm_delete   // Confirm before deleting
 		}, '-', {
 			text: 'Search',
@@ -602,6 +603,7 @@ Ext.onReady(function(){
 			data:[['Aktif','Aktif'],['Tidak Aktif','Tidak Aktif']]
 		}),
 		mode: 'local',
+		editable:false,
 		displayField: 'satuan_aktif_display',
 		valueField: 'satuan_aktif_value',
 		width: 80,

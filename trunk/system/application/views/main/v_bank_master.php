@@ -492,6 +492,7 @@ Ext.onReady(function(){
 			text: 'Delete',
 			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
+			disabled:true,
 			handler: bank_master_confirm_delete   // Confirm before deleting
 		}, '-', {
 			text: 'Search',
@@ -613,6 +614,7 @@ Ext.onReady(function(){
 			data:[['Aktif','Aktif'],['Tidak Aktif','Tidak Aktif']]
 		}),
 		mode: 'local',
+		editable:false,
 		emptyText: 'Aktif',
 		displayField: 'mbank_aktif_display',
 		valueField: 'mbank_aktif_value',

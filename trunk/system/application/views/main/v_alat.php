@@ -233,6 +233,7 @@ Ext.onReady(function(){
 			alat_reset_form();
 			post2db='CREATE';
 			msg='created';
+			alat_aktifField.setValue('Aktif');
 			alat_createWindow.show();
 		} else {
 			alat_createWindow.toFront();
@@ -486,6 +487,7 @@ Ext.onReady(function(){
 			text: 'Delete',
 			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
+			disabled:true,
 			handler: alat_confirm_delete   // Confirm before deleting
 		}, '-', {
 			text: 'Search',
@@ -599,6 +601,7 @@ Ext.onReady(function(){
 			data:[['Aktif','Aktif'],['Tidak Aktif','Tidak Aktif']]
 		}),
 		mode: 'local',
+		editable:false,
 		displayField: 'alat_aktif_display',
 		valueField: 'alat_aktif_value',
 		width: 80,

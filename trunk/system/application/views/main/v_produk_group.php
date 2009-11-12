@@ -724,6 +724,7 @@ Ext.onReady(function(){
 			text: 'Delete',
 			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
+			disabled:true,
 			handler: produk_group_confirm_delete   // Confirm before deleting
 		}, '-', {
 			text: 'Search',
@@ -898,6 +899,7 @@ Ext.onReady(function(){
 		fieldLabel: 'Jenis',
 		store: cbo_group_jenisDataStore,
 		mode: 'remote',
+		editable:false,
 		displayField:'cbo_jenis_nama',
 		valueField: 'cbo_jenis_id',
         typeAhead: false,
@@ -928,6 +930,7 @@ Ext.onReady(function(){
 			data:[['Aktif','Aktif'],['Tidak Aktif','Tidak Aktif']]
 		}),
 		mode: 'local',
+		editable:false,
 		emptyText: 'Aktif',
 		displayField: 'group_aktif_display',
 		valueField: 'group_aktif_value',

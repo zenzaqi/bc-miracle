@@ -497,6 +497,7 @@ Ext.onReady(function(){
 			text: 'Delete',
 			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
+			disabled:true,
 			handler: gudang_confirm_delete   // Confirm before deleting
 		}, '-', {
 			text: 'Search',
@@ -613,6 +614,7 @@ Ext.onReady(function(){
 			data:[['Aktif','Aktif'],['Tidak Aktif','Tidak Aktif']]
 		}),
 		mode: 'local',
+		editable:false,
 		displayField: 'gudang_aktif_display',
 		valueField: 'gudang_aktif_value',
 		width: 80,

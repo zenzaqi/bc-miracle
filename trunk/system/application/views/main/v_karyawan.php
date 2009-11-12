@@ -357,7 +357,8 @@ Ext.onReady(function(){
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'Your Form is not valid!.',
+				width: 230,
+				msg: 'Data Belum Lengkap!.',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -471,6 +472,7 @@ Ext.onReady(function(){
 			karyawan_reset_form();
 			post2db='CREATE';
 			msg='created';
+			karyawan_aktifField.setValue('Aktif');
 			karyawan_createWindow.show();
 		} else {
 			karyawan_createWindow.toFront();
@@ -575,7 +577,7 @@ Ext.onReady(function(){
 			url: 'index.php?c=c_karyawan&m=get_action', 
 			method: 'POST'
 		}),
-		baseParams:{task: "LIST"}, // parameter yang di $_POST ke Controller
+		baseParams:{task: "LIST",start:0, limit: pageS }, // parameter yang di $_POST ke Controller
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
@@ -903,7 +905,7 @@ Ext.onReady(function(){
 				typeAhead: true,
 				triggerAction: 'all',
 				store: cbo_karyawan_cabang_DataStore,
-				mode: 'local',
+				mode: 'remote',
                	displayField: 'karyawan_cabang_display',
                	valueField: 'karyawan_cabang_value',
                	lazyRender:true,
@@ -921,7 +923,7 @@ Ext.onReady(function(){
 				typeAhead: true,
 				triggerAction: 'all',
 				store: cbo_karyawan_jabatan_DataStore,
-				mode: 'local',
+				mode: 'remote',
                	displayField: 'karyawan_jabatan_display',
                	valueField: 'karyawan_jabatan_value',
                	lazyRender:true,
@@ -939,7 +941,7 @@ Ext.onReady(function(){
 				typeAhead: true,
 				triggerAction: 'all',
 				store: cbo_karyawan_departemen_DataStore,
-				mode: 'local',
+				mode: 'remote',
                	displayField: 'karyawan_departemen_display',
                	valueField: 'karyawan_departemen_value',
                	lazyRender:true,
@@ -957,7 +959,7 @@ Ext.onReady(function(){
 				typeAhead: true,
 				triggerAction: 'all',
 				store: cbo_karyawan_golongan_DataStore,
-				mode: 'local',
+				mode: 'remote',
                	displayField: 'karyawan_golongan_display',
                	valueField: 'karyawan_golongan_display',
                	lazyRender:true,
@@ -987,7 +989,7 @@ Ext.onReady(function(){
 				typeAhead: true,
 				triggerAction: 'all',
 				store: cbo_karyawan_atasan_DataStore,
-				mode: 'local',
+				mode: 'remote',
                	displayField: 'karyawan_atasan_display',
                	valueField: 'karyawan_atasan_value',
                	lazyRender:true,
@@ -1102,6 +1104,7 @@ Ext.onReady(function(){
 			text: 'Delete',
 			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
+			disabled:true,
 			handler: karyawan_confirm_delete   // Confirm before deleting
 		}, '-', {
 			text: 'Search',
@@ -1194,14 +1197,14 @@ Ext.onReady(function(){
 	/* End of Function */
   	
 	karyawanListEditorGrid.addListener('rowcontextmenu', onkaryawan_ListEditGridContextMenu);
-	karyawan_DataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
+	//karyawan_DataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
 	karyawanListEditorGrid.on('afteredit', karyawan_update); // inLine Editing Record
 	
-	cbo_karyawan_golongan_DataStore.load();
-	cbo_karyawan_jabatan_DataStore.load();
-	cbo_karyawan_cabang_DataStore.load();
-	cbo_karyawan_departemen_DataStore.load();
-	cbo_karyawan_atasan_DataStore.load();
+	//cbo_karyawan_golongan_DataStore.load();
+	//cbo_karyawan_jabatan_DataStore.load();
+	//cbo_karyawan_cabang_DataStore.load();
+	//cbo_karyawan_departemen_DataStore.load();
+	//cbo_karyawan_atasan_DataStore.load();
 	
 	/* Identify  karyawan_no Field */
 	karyawan_noField= new Ext.form.TextField({
@@ -1243,6 +1246,7 @@ Ext.onReady(function(){
 			data:[['L','Laki-laki'],['P','Perempuan']]
 		}),
 		mode: 'local',
+		editable:false,
 		allowBlank: false,
 		displayField: 'karyawan_kelamin_display',
 		valueField: 'karyawan_kelamin_value',
@@ -1332,10 +1336,10 @@ Ext.onReady(function(){
 		fieldLabel: 'Cabang <span style="color: #ec0000">*</span>',
 		store:cbo_karyawan_cabang_DataStore,
 		mode: 'remote',
+		editable:false,
 		allowBlank: false,
 		displayField: 'karyawan_cabang_display',
 		valueField: 'karyawan_cabang_value',
-		allowBlank: true,
 		anchor: '95%',
 		triggerAction: 'all'
 	});
@@ -1345,10 +1349,10 @@ Ext.onReady(function(){
 		fieldLabel: 'Jabatan <span style="color: #ec0000">*</span>',
 		store:cbo_karyawan_jabatan_DataStore,
 		mode: 'remote',
+		editable:false,
 		allowBlank: false,
 		displayField: 'karyawan_jabatan_display',
 		valueField: 'karyawan_jabatan_value',
-		allowBlank: true,
 		anchor: '95%',
 		triggerAction: 'all'
 	});
@@ -1358,10 +1362,10 @@ Ext.onReady(function(){
 		fieldLabel: 'Departemen <span style="color: #ec0000">*</span>',
 		store:cbo_karyawan_departemen_DataStore,
 		mode: 'remote',
+		editable:false,
 		allowBlank: false,
 		displayField: 'karyawan_departemen_display',
 		valueField: 'karyawan_departemen_value',
-		allowBlank: true,
 		anchor: '95%',
 		triggerAction: 'all'
 	});
@@ -1371,10 +1375,10 @@ Ext.onReady(function(){
 		fieldLabel: 'Golongan',
 		store:cbo_karyawan_golongan_DataStore,
 		mode: 'remote',
+		editable:false,
 		allowBlank: true,
 		displayField: 'karyawan_golongan_display',
 		valueField: 'karyawan_golongan_display',
-		allowBlank: true,
 		anchor: '95%',
 		triggerAction: 'all'
 	});
@@ -1398,7 +1402,8 @@ Ext.onReady(function(){
 		id: 'karyawan_atasanField',
 		fieldLabel: 'Atasan',
 		store:cbo_karyawan_atasan_DataStore,
-		mode: 'local',
+		mode: 'remote',
+		editable:false,
 		displayField: 'karyawan_atasan_display',
 		valueField: 'karyawan_atasan_value',
 		allowBlank: true,
@@ -1414,6 +1419,7 @@ Ext.onReady(function(){
 			data:[['Aktif','Aktif'],['Tidak Aktif','Tidak Aktif']]
 		}),
 		mode: 'local',
+		editable:false,
 		displayField: 'karyawan_aktif_display',
 		valueField: 'karyawan_aktif_value',
 		width: 80,
@@ -1591,7 +1597,7 @@ Ext.onReady(function(){
 	/* Function for reset search result */
 	function karyawan_reset_search(){
 		// reset the store parameters
-		karyawan_DataStore.baseParams = { task: 'LIST' };
+		karyawan_DataStore.baseParams = { task: 'LIST',start:0, limit: pageS };
 		// Cause the datastore to do another query : 
 		karyawan_DataStore.reload({params: {start: 0, limit: pageS}});
 		cbo_karyawan_cabang_DataStore.reload();
@@ -1804,7 +1810,7 @@ Ext.onReady(function(){
 		id: 'karyawan_cabangSearchField',
 		fieldLabel: 'Cabang',
 		store:cbo_karyawan_cabang_DataStore,
-		mode: 'local',
+		mode: 'remote',
 		displayField: 'karyawan_cabang_display',
 		valueField: 'karyawan_cabang_value',
 		allowBlank: true,
@@ -1817,7 +1823,7 @@ Ext.onReady(function(){
 		id: 'karyawan_jabatanSearchField',
 		fieldLabel: 'Jabatan',
 		store:cbo_karyawan_jabatan_DataStore,
-		mode: 'local',
+		mode: 'remote',
 		displayField: 'karyawan_jabatan_display',
 		valueField: 'karyawan_jabatan_value',
 		allowBlank: true,
@@ -1830,7 +1836,7 @@ Ext.onReady(function(){
 		id: 'karyawan_departemenSearchField',
 		fieldLabel: 'Departemen',
 		store:cbo_karyawan_departemen_DataStore,
-		mode: 'local',
+		mode: 'remote',
 		displayField: 'karyawan_departemen_display',
 		valueField: 'karyawan_departemen_value',
 		allowBlank: true,
@@ -1843,7 +1849,7 @@ Ext.onReady(function(){
 		id: 'karyawan_golonganSearchField',
 		fieldLabel: 'Golongan',
 		store:cbo_karyawan_golongan_DataStore,
-		mode: 'local',
+		mode: 'remote',
 		displayField: 'karyawan_golongan_display',
 		valueField: 'karyawan_golongan_display',
 		allowBlank: true,
@@ -1863,7 +1869,7 @@ Ext.onReady(function(){
 		id: 'karyawan_atasanSearchField',
 		fieldLabel: 'Atasan',
 		store:cbo_karyawan_atasan_DataStore,
-		mode: 'local',
+		mode: 'remote',
 		displayField: 'karyawan_atasan_display',
 		valueField: 'karyawan_atasan_value',
 		allowBlank: true,

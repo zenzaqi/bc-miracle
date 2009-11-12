@@ -777,6 +777,7 @@ Ext.onReady(function(){
 			text: 'Delete',
 			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
+			disabled:true,
 			handler: paket_confirm_delete   // Confirm before deleting
 		}, '-', {
 			text: 'Search',
@@ -859,7 +860,7 @@ Ext.onReady(function(){
 	/* End of Function */
   	
 	paketListEditorGrid.addListener('rowcontextmenu', onpaket_ListEditGridContextMenu);
-	paket_DataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
+	//paket_DataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
 	paketListEditorGrid.on('afteredit', paket_update); // inLine Editing Record
 		
 	/* Identify  paket_id Field */
@@ -907,6 +908,7 @@ Ext.onReady(function(){
 		triggerAction: 'all',
 		store: cbo_paket_groupDataStore,
 		mode: 'remote',
+		editable:false,
 		displayField: 'paket_group_display',
 		valueField: 'paket_group_value',
 		lazyRender:true,
@@ -1003,6 +1005,7 @@ Ext.onReady(function(){
 			data:[['Aktif','Aktif'],['Tidak Aktif','Tidak Aktif']]
 		}),
 		mode: 'local',
+		editable:false,
 		emptyText: 'Aktif',
 		displayField: 'paket_aktif_display',
 		valueField: 'paket_aktif_value',
@@ -1691,7 +1694,7 @@ Ext.onReady(function(){
 	/* Function for reset search result */
 	function paket_reset_search(){
 		// reset the store parameters
-		paket_DataStore.baseParams = { task: 'LIST' };
+		paket_DataStore.baseParams = { task: 'LIST',start:0,limit:pageS };
 		// Cause the datastore to do another query : 
 		paket_DataStore.reload({params: {start: 0, limit: pageS}});
 		paket_searchWindow.close();

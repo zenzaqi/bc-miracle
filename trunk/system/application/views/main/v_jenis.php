@@ -546,6 +546,7 @@ Ext.onReady(function(){
 			text: 'Delete',
 			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
+			disabled:true,
 			handler: jenis_confirm_delete   // Confirm before deleting
 		}, '-', {
 			text: 'Search',
@@ -668,6 +669,7 @@ Ext.onReady(function(){
 			data:[['produk','produk'],['perawatan','perawatan'],['paket','paket']]
 		}),
 		mode: 'local',
+		editable:false,
 		allowBlank: false,
 		displayField: 'jenis_kelompok_display',
 		valueField: 'jenis_kelompok_value',
@@ -690,6 +692,7 @@ Ext.onReady(function(){
 			data:[['Aktif','Aktif'],['Tidak Aktif','Tidak Aktif']]
 		}),
 		mode: 'local',
+		editable:false,
 		emptyText: 'Aktif',
 		displayField: 'jenis_aktif_display',
 		valueField: 'jenis_aktif_value',

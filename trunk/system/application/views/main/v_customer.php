@@ -2142,6 +2142,7 @@ Ext.onReady(function(){
 			text: 'Delete',
 			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
+			disabled: true,
 			handler: customer_confirm_delete   // Confirm before deleting
 		}, '-', {
 			text: 'Search',
@@ -2387,6 +2388,7 @@ Ext.onReady(function(){
 			data:[['L','Laki-laki'],['P','Perempuan']]
 		}),
 		mode: 'local',
+		editable: false,
 		displayField: 'cust_kelamin_display',
 		valueField: 'cust_kelamin_value',
 		allowBlank: false,
@@ -2428,6 +2430,7 @@ Ext.onReady(function(){
 		maxLength: 100,
 		store: cbo_propinsi_DataStore,
 		mode: 'remote',
+		editable: false,
 		displayField: 'propinsi_nama',
 		valueField: 'propinsi_nama',
 		anchor: '95%',
@@ -2475,6 +2478,7 @@ Ext.onReady(function(){
 		maxLength: 100,
 		store: cbo_propinsi_DataStore,
 		mode: 'remote',
+		editable: false,
 		displayField: 'propinsi_nama',
 		valueField: 'propinsi_nama',
 		anchor: '95%',
@@ -2570,6 +2574,7 @@ Ext.onReady(function(){
 			data: [['Islam'],['Katholik'],['Kristen'],['Hindu'],['Budha'],['Konghucu'],['Lainnya']]
 		}),
 		mode: 'local',
+		editable: false,
 		displayField: 'cust_agama_value_display',
 		valueField: 'cust_agama_value_display',
 		anchor: '50%',
@@ -2586,6 +2591,7 @@ Ext.onReady(function(){
 			data: [['SMA'],['Diploma'],['Sarjana'],['Pasca Sarjana'],['Doktoral'],['Lainnya']]
 		}),
 		mode: 'local',
+		editable: false,
 		allowBlank: false,
 		displayField: 'cust_pendidikan_value_display',
 		valueField: 'cust_pendidikan_value_display',
@@ -2654,6 +2660,7 @@ Ext.onReady(function(){
 		fieldLabel: 'Referensi',
 		store: cbo_cust_ref_DataStore,
 		mode: 'remote',
+		editable: false,
 		displayField:'cust_nama',
 		valueField: 'cust_id',
         typeAhead: false,
@@ -2730,6 +2737,7 @@ Ext.onReady(function(){
 			data:[['menikah','menikah'],['belum menikah','belum menikah']]
 		}),
 		mode: 'local',
+		editable: false,
 		allowBlank: false,
 		displayField: 'cust_statusnikah_display',
 		valueField: 'cust_statusnikah_value',
@@ -2755,6 +2763,7 @@ Ext.onReady(function(){
 		fieldLabel: 'Cabang <span style="color: #ec0000">*</span>',
 		store: cbo_cust_cabang_DataStore,
 		mode: 'remote',
+		editable: false,
 		allowBlank: false,
 		displayField: 'cust_cabang_display',
 		valueField: 'cust_cabang_value',

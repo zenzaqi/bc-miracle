@@ -1,0 +1,1 @@
+DELETE `menus`,`permissions` FROM `menus`,`permissions` WHERE `menus`.`menu_id`=`permissions`.`perm_menu` AND (`menus`.`menu_link`='?c=c_appointment_medis' OR `menus`.`menu_link`='?c=c_appointment_nonmedis');
