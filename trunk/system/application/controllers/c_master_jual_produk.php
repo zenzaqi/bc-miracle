@@ -18,12 +18,18 @@ class C_master_jual_produk extends Controller {
 		parent::Controller();
 		$this->load->model('m_master_jual_produk', '', TRUE);
 		$this->load->plugin('to_excel');
+		$this->load->library('firephp');
 	}
 	
 	//set index
 	function index(){
 		$this->load->helper('asset');
 		$this->load->view('main/v_master_jual_produk');
+	}
+	
+	function get_bank_list(){
+		$result=$this->m_public_function->get_bank_list();
+		echo $result;
 	}
 	
 	function get_customer_list(){

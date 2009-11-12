@@ -162,6 +162,14 @@ var printed=0;
 /* on ready fuction */
 Ext.onReady(function(){
   	Ext.QuickTips.init();	/* Initiate quick tips icon */
+
+  	Ext.util.Format.comboRenderer = function(combo){
+  		jproduk_bankDataStore.load();
+  	    return function(value){
+  	        var record = combo.findRecord(combo.valueField, value);
+  	        return record ? record.get(combo.displayField) : combo.valueNotFoundText;
+  	    }
+  	}
   
   	/* Function for Saving inLine Editing */
 	function master_jual_produk_update(oGrid_event){
@@ -662,6 +670,8 @@ Ext.onReady(function(){
 		jproduk_keteranganField.setValue(master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_keterangan'));
 		load_membership();
 		update_group_carabayar_jual_produk();
+		update_group_carabayar2_jual_produk();
+		update_group_carabayar3_jual_produk();
 		
 		switch(jproduk_caraField.getValue()){
 			case 'kwitansi':
@@ -712,10 +722,14 @@ Ext.onReady(function(){
 				  });
 				break;								
 			case 'transfer' :
+				console.log("jproduk_nobukti = "+jproduk_nobuktiField.getValue());
 				transfer_jual_produk_DataStore.load({
 						params : { no_faktur: jproduk_nobuktiField.getValue() },
 					  	callback: function(opts, success, response)  {
 							if (success) {
+								console.log("sukses jtransfer");
+								jproduk_transfer_record=transfer_jual_produk_DataStore.getAt(0);
+								console.log("Count JTransfer = "+jproduk_transfer_record.data.jtransfer_bank);
 									if(transfer_jual_produk_DataStore.getCount()){
 										jproduk_transfer_record=transfer_jual_produk_DataStore.getAt(0);
 										jproduk_transfer_bankField.setValue(jproduk_transfer_record.data.jtransfer_bank);
@@ -726,6 +740,77 @@ Ext.onReady(function(){
 				  });
 				break;
 		}
+
+		switch(jproduk_cara2Field.getValue()){
+		case 'kwitansi':
+			kwitansi_jual_produk_DataStore.load({
+				params : { no_faktur: jproduk_nobuktiField.getValue() },
+				callback: function(opts, success, response)  {
+					  if (success) {
+						if(kwitansi_jual_produk_DataStore.getCount()){
+							jproduk_kwitansi_record=kwitansi_jual_produk_DataStore.getAt(0).data;
+							jproduk_kwitansi_noField.setValue(jproduk_kwitansi_record.jkwitansi_no);
+							jproduk_kwitansi_namaField.setValue(jproduk_kwitansi_record.jkwitansi_nama);
+							jproduk_kwitansi_nilaiField.setValue(jproduk_kwitansi_record.jkwitansi_nilai);
+						}
+					  }
+				  }
+			});
+			break;
+		case 'card' :
+			card_jual_produk_DataStore.load({
+				params : { no_faktur: jproduk_nobuktiField.getValue() },
+				callback: function(opts, success, response)  {
+					 if (success) { 
+						 console.log("sukses jcard");
+						 jproduk_card_record=card_jual_produk_DataStore.getAt(0);
+						 console.log("jcard_nama = "+jproduk_card_record.data.jcard_nama);
+						 if(card_jual_produk_DataStore.getCount()){
+							 jproduk_card_record=card_jual_produk_DataStore.getAt(0).data;
+							 jproduk_card_nama2Field.setValue(jproduk_card_record.jcard_nama);
+							 jproduk_card_edc2Field.setValue(jproduk_card_record.jcard_edc);
+							 jproduk_card_nilai2Field.setValue(jproduk_card_record.jcard_nilai);
+						 }
+					 }
+				}
+			});
+			break;
+		case 'cek/giro':
+			cek_jual_produk_DataStore.load({
+				params : { no_faktur: jproduk_nobuktiField.getValue() },
+				callback: function(opts, success, response)  {
+						if (success) {
+							if(cek_jual_produk_DataStore.getCount()){
+								jproduk_cek_record=cek_jual_produk_DataStore.getAt(0).data;
+								jproduk_cek_namaField.setValue(jproduk_cek_record.jcek_nama);
+								jproduk_cek_noField.setValue(jproduk_cek_record.jcek_no);
+								jproduk_cek_validField.setValue(jproduk_cek_record.jcek_valid);
+								jproduk_cek_bankField.setValue(jproduk_cek_record.jcek_bank);
+								jproduk_cek_nilaiField.setValue(jproduk_cek_record.jcek_nilai);
+							}
+						}
+				 	}
+			  });
+			break;								
+		case 'transfer' :
+			console.log("jproduk_nobukti = "+jproduk_nobuktiField.getValue());
+			transfer_jual_produk_DataStore.load({
+					params : { no_faktur: jproduk_nobuktiField.getValue() },
+				  	callback: function(opts, success, response)  {
+						if (success) {
+							console.log("sukses jtransfer");
+							jproduk_transfer_record=transfer_jual_produk_DataStore.getAt(0);
+							console.log("Count JTransfer = "+jproduk_transfer_record.data.jtransfer_bank);
+								if(transfer_jual_produk_DataStore.getCount()){
+									jproduk_transfer_record=transfer_jual_produk_DataStore.getAt(0);
+									jproduk_transfer_bankField.setValue(jproduk_transfer_record.data.jtransfer_bank);
+									jproduk_transfer_nilaiField.setValue(jproduk_transfer_record.data.jtransfer_nilai);
+								}
+						}
+				 	}
+			  });
+			break;
+	}
 		
 		detail_jual_produk_DataStore.load({params:{master_id: jproduk_idField.getValue()}});
 	}
@@ -1001,7 +1086,7 @@ Ext.onReady(function(){
 			{name: 'jcard_id', type: 'int', mapping: 'jcard_id'}, 
 			{name: 'jcard_nama', type: 'string', mapping: 'jcard_nama'},
 			{name: 'jcard_edc', type: 'string', mapping: 'jcard_edc'},
-			{name: 'jcard_nilai', type: 'double', mapping: 'jcard_nilai'}
+			{name: 'jcard_nilai', type: 'float', mapping: 'jcard_nilai'}
 		]),
 		sortInfo:{field: 'jcard_id', direction: "DESC"}
 	});
@@ -1045,12 +1130,32 @@ Ext.onReady(function(){
 		},[
 		/* dataIndex => insert intomaster_jual_produk_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'jtransfer_id', type: 'int', mapping: 'jtransfer_id'}, 
-			{name: 'jtransfer_bank', type: 'string', mapping: 'jtransfer_bank'},
-			{name: 'jtransfer_nilai', type: 'double', mapping: 'jtransfer_nilai'}
+			{name: 'jtransfer_bank', type: 'int', mapping: 'jtransfer_bank'},
+			{name: 'jtransfer_nilai', type: 'float', mapping: 'jtransfer_nilai'}
 		]),
 		sortInfo:{field: 'jtransfer_id', direction: "DESC"}
 	});
 	/* End of Function */
+	
+	/* GET Bank-List.Store */
+	jproduk_bankDataStore = new Ext.data.Store({
+		id:'jproduk_bankDataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_master_jual_produk&m=get_bank_list', 
+			method: 'POST'
+		}),
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'mbank_id'
+		},[
+		/* dataIndex => insert intomaster_jual_produk_ColumnModel, Mapping => for initiate table column */ 
+			{name: 'jproduk_bank_value', type: 'int', mapping: 'mbank_id'}, 
+			{name: 'jproduk_bank_display', type: 'string', mapping: 'mbank_nama'}
+		]),
+		sortInfo:{field: 'jproduk_bank_display', direction: "DESC"}
+		});
+	/* END GET Bank-List.Store */
 	
   	/* Function for Identify of Window Column Model */
 	master_jual_produk_ColumnModel = new Ext.grid.ColumnModel(
@@ -1913,12 +2018,18 @@ Ext.onReady(function(){
 	// END Field Cek-3
 	
 	// START Field Transfer
-	jproduk_transfer_bankField= new Ext.form.TextField({
+	jproduk_transfer_bankField= new Ext.form.ComboBox({
 		id: 'jproduk_transfer_bankField',
 		fieldLabel: 'Bank',
+		store: jproduk_bankDataStore,
+		mode: 'remote',
+		displayField: 'jproduk_bank_display',
+		valueField: 'jproduk_bank_value',
 		allowBlank: true,
-		anchor: '95%',
-		maxLength: 50
+		anchor: '50%',
+		triggerAction: 'all',
+		lazyRenderer: true,
+		renderer: Ext.util.Format.comboRenderer(jproduk_transfer_bankField)
 	});
 	
 	jproduk_transfer_nilaiField= new Ext.form.NumberField({
@@ -1948,12 +2059,17 @@ Ext.onReady(function(){
 	});
 	// END Field Transfer
 	// START Field Transfer-2
-	jproduk_transfer_bank2Field= new Ext.form.TextField({
+	jproduk_transfer_bank2Field= new Ext.form.ComboBox({
 		id: 'jproduk_transfer_bank2Field',
 		fieldLabel: 'Bank',
+		store: jproduk_bankDataStore,
+		mode: 'remote',
+		displayField: 'jproduk_bank_display',
+		valueField: 'jproduk_bank_value',
 		allowBlank: true,
-		anchor: '95%',
-		maxLength: 50
+		anchor: '50%',
+		triggerAction: 'all',
+		lazyRenderer: true
 	});
 	
 	jproduk_transfer_nilai2Field= new Ext.form.NumberField({
@@ -1983,12 +2099,17 @@ Ext.onReady(function(){
 	});
 	// END Field Transfer-2
 	// START Field Transfer-3
-	jproduk_transfer_bank3Field= new Ext.form.TextField({
+	jproduk_transfer_bank3Field= new Ext.form.ComboBox({
 		id: 'jproduk_transfer_bank3Field',
 		fieldLabel: 'Bank',
+		store: jproduk_bankDataStore,
+		mode: 'remote',
+		displayField: 'jproduk_bank_display',
+		valueField: 'jproduk_bank_value',
 		allowBlank: true,
-		anchor: '95%',
-		maxLength: 50
+		anchor: '50%',
+		triggerAction: 'all',
+		lazyRenderer: true
 	});
 	
 	jproduk_transfer_nilai3Field= new Ext.form.NumberField({
