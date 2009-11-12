@@ -516,6 +516,7 @@ Ext.onReady(function(){
 			text: 'Delete',
 			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
+			disabled: true,
 			handler: kategori2_confirm_delete   // Confirm before deleting
 		}, '-', {
 			text: 'Search',
@@ -629,6 +630,7 @@ Ext.onReady(function(){
 			data:[['produk','produk'],['perawatan','perawatan']]
 		}),
 		mode: 'local',
+		editable: false,
 		displayField: 'kategori2_jenis_display',
 		valueField: 'kategori2_jenis_value',
 		anchor: '95%',
@@ -650,6 +652,7 @@ Ext.onReady(function(){
 			data:[['Aktif','Aktif'],['Tidak Aktif','Tidak Aktif']]
 		}),
 		mode: 'local',
+		editable: false,
 		displayField: 'kategori2_aktif_display',
 		valueField: 'kategori2_aktif_value',
 		anchor: '95%',
@@ -659,7 +662,7 @@ Ext.onReady(function(){
 	
 	/* Function for retrieve create Window Panel*/ 
 	kategori2_createForm = new Ext.FormPanel({
-		labelAlign: 'top',
+		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
 		width: 300,        
@@ -802,7 +805,7 @@ Ext.onReady(function(){
     
 	/* Function for retrieve search Form Panel */
 	kategori2_searchForm = new Ext.FormPanel({
-		labelAlign: 'top',
+		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
 		width: 300,        

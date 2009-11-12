@@ -598,8 +598,8 @@ Ext.onReady(function(){
 		sortInfo:{field: 'produk_jenis_display', direction: "ASC"}
 	});
 	
-	cbo_produk_satuan_DataStore = new Ext.data.Store({
-		id: 'cbo_produk_satuan_DataStore',
+	cbo_produk_satuanDataStore = new Ext.data.Store({
+		id: 'cbo_produk_satuanDataStore',
 		proxy: new Ext.data.HttpProxy({
 			url: 'index.php?c=c_produk&m=get_satuan_list', 
 			method: 'POST'
@@ -612,7 +612,8 @@ Ext.onReady(function(){
 		},[
 		/* dataIndex => insert intocustomer_note_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'produk_satuan_value', type: 'int', mapping: 'satuan_id'},
-			{name: 'produk_satuan_display', type: 'string', mapping: 'satuan_nama'}
+			{name: 'produk_satuan_nama', type: 'string', mapping: 'satuan_nama'},
+			{name: 'produk_satuan_display', type: 'string', mapping: 'satuan_kode'}
 		]),
 		sortInfo:{field: 'produk_satuan_display', direction: "ASC"}
 	});
@@ -874,6 +875,7 @@ Ext.onReady(function(){
 			text: 'Delete',
 			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
+			disabled:true,
 			handler: produk_confirm_delete   // Confirm before deleting
 		}, '-', {
 			text: 'Search',
@@ -997,6 +999,7 @@ Ext.onReady(function(){
 		fieldLabel: 'Group 1 <span style="color: #ec0000">*</span>',
 		store: cbo_produk_groupDataSore,
 		mode: 'remote',
+		editable:false,
 		allowBlank: false,
 		displayField: 'produk_group_display',
 		valueField: 'produk_group_value',
@@ -1018,6 +1021,7 @@ Ext.onReady(function(){
 		fieldLabel: 'Contribution Category',
 		store: cbo_produk_kontribusi_DataSore,
 		mode: 'remote',
+		editable:false,
 		displayField: 'produk_kontribusi_display',
 		valueField: 'produk_kontribusi_value',
 		anchor: '95%',
@@ -1029,6 +1033,7 @@ Ext.onReady(function(){
 		fieldLabel: 'Group 2 <span style="color: #ec0000">*</span>',
 		store: cbo_produk_jenis_DataSore,
 		mode: 'remote',
+		editable:false,
 		allowBlank: false,
 		displayField: 'produk_jenis_display',
 		valueField: 'produk_jenis_value',
@@ -1047,7 +1052,7 @@ Ext.onReady(function(){
 	produk_satuanField= new Ext.form.ComboBox({
 		id: 'produk_satuanField',
 		fieldLabel: 'Satuan',
-		store: cbo_produk_satuan_DataStore,
+		store: cbo_produk_satuanDataStore,
 		mode: 'remote',
 		displayField: 'produk_satuan_display',
 		valueField: 'produk_satuan_value',
@@ -1125,6 +1130,7 @@ Ext.onReady(function(){
 			data:[['Aktif','Aktif'],['Tidak Aktif','Tidak Aktif']]
 		}),
 		mode: 'local',
+		editable:false,
 		emptyText: 'Aktif',
 		displayField: 'produk_aktif_display',
 		valueField: 'produk_aktif_value',
@@ -1217,24 +1223,24 @@ Ext.onReady(function(){
 		}
 	}
 	
-	cbo_produk_satuanDataStore = new Ext.data.Store({
-		id: 'cbo_produk_satuanDataStore',
-		proxy: new Ext.data.HttpProxy({
-			url: 'index.php?c=c_produk&m=get_satuan_list', 
-			method: 'POST'
-		}),
-			reader: new Ext.data.JsonReader({
-			root: 'results',
-			totalProperty: 'total',
-			id: 'satuan_id'
-		},[
-		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
-			{name: 'produk_satuan_value', type: 'int', mapping: 'satuan_id'},
-			{name: 'produk_satuan_nama', type: 'string', mapping: 'satuan_nama'},
-			{name: 'produk_satuan_display', type: 'string', mapping: 'satuan_kode'}
-		]),
-		sortInfo:{field: 'produk_satuan_value', direction: "ASC"}
-	});
+//	cbo_produk_satuanDataStore = new Ext.data.Store({
+//		id: 'cbo_produk_satuanDataStore',
+//		proxy: new Ext.data.HttpProxy({
+//			url: 'index.php?c=c_produk&m=get_satuan_list', 
+//			method: 'POST'
+//		}),
+//			reader: new Ext.data.JsonReader({
+//			root: 'results',
+//			totalProperty: 'total',
+//			id: 'satuan_id'
+//		},[
+//		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
+//			{name: 'produk_satuan_value', type: 'int', mapping: 'satuan_id'},
+//			{name: 'produk_satuan_nama', type: 'string', mapping: 'satuan_nama'},
+//			{name: 'produk_satuan_display', type: 'string', mapping: 'satuan_kode'}
+//		]),
+//		sortInfo:{field: 'produk_satuan_value', direction: "ASC"}
+//	});
 	
 	var combo_produk_satuan=new Ext.form.ComboBox({
 			store: cbo_produk_satuanDataStore,
@@ -1713,7 +1719,7 @@ Ext.onReady(function(){
 	produk_satuanSearchField= new Ext.form.ComboBox({
 		id: 'produk_satuanSearchField',
 		fieldLabel: 'Satuan',
-		store: cbo_produk_satuan_DataStore,
+		store: cbo_produk_satuanDataStore,
 		mode: 'remote',
 		displayField: 'produk_satuan_display',
 		valueField: 'produk_satuan_value',

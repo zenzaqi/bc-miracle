@@ -622,6 +622,7 @@ Ext.onReady(function(){
 			text: 'Delete',
 			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
+			disabled:true,
 			handler: bank_confirm_delete   // Confirm before deleting
 		}, '-', {
 			text: 'Search',
@@ -715,6 +716,7 @@ Ext.onReady(function(){
 		fieldLabel: 'Kode Akun',
 		store: cbo_bank_akunDataStore,
 		mode: 'remote',
+		editable:false,
 		displayField: 'bank_akun_display',
 		valueField: 'bank_akun_value',
 		anchor: '95%',
@@ -728,6 +730,7 @@ Ext.onReady(function(){
 		triggerAction: 'all',
 		store: cbo_bank_mbankDataStore,
 		mode: 'remote',
+		editable:false,
 		displayField: 'bank_mbank_display',
 		valueField: 'bank_mbank_value',
 		lazyRender:true,
@@ -779,7 +782,8 @@ Ext.onReady(function(){
 			data:[['Aktif','Aktif'],['Tidak Aktif','Tidak Aktif']]
 		}),
 		mode: 'local',
-		emptyText: '0',
+		editable:false,
+		emptyText: 'Aktif',
 		displayField: 'bank_aktif_display',
 		valueField: 'bank_aktif_value',
 		width: 80,

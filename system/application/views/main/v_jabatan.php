@@ -493,6 +493,7 @@ Ext.onReady(function(){
 			text: 'Delete',
 			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
+			disabled:true,
 			handler: jabatan_confirm_delete   // Confirm before deleting
 		}, '-', {
 			text: 'Search',
@@ -608,6 +609,7 @@ Ext.onReady(function(){
 			data:[['Aktif','Aktif'],['Tidak Aktif','Tidak Aktif']]
 		}),
 		mode: 'local',
+		editable: false,
 		emptyText: 'Aktif',
 		displayField: 'jabatan_aktif_display',
 		valueField: 'jabatan_aktif_value',

@@ -699,6 +699,7 @@ Ext.onReady(function(){
 			text: 'Delete',
 			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
+			disabled:true,
 			handler: akun_confirm_delete   // Confirm before deleting
 		}, '-', {
 			text: 'Search',
@@ -808,6 +809,7 @@ Ext.onReady(function(){
 		fieldLabel: 'Induk Akun',
 		store: cbo_akun_kodeDataStore,
 		mode: 'remote',
+		editable:false,
 		displayField: 'akun_kode_display',
 		valueField: 'akun_kode_value',
 		allowBlank: true,
@@ -823,6 +825,7 @@ Ext.onReady(function(){
 			data:[['Y','Y'],['T','T']]
 		}),
 		mode: 'local',
+		editable:false,
 		displayField: 'akun_neraca_display',
 		valueField: 'akun_neraca_value',
 		allowBlank: false,
@@ -838,6 +841,7 @@ Ext.onReady(function(){
 			data:[['Y','Y'],['T','T']]
 		}),
 		mode: 'local',
+		editable:false,
 		displayField: 'akun_rugilaba_display',
 		valueField: 'akun_rugilaba_value',
 		allowBlank: false,
@@ -853,6 +857,7 @@ Ext.onReady(function(){
 			data:[['+','+'],['-','-']]
 		}),
 		mode: 'local',
+		editable:false,
 		displayField: 'akun_debet_display',
 		valueField: 'akun_debet_value',
 		allowBlank: false,
@@ -868,6 +873,7 @@ Ext.onReady(function(){
 			data:[['+','+'],['-','-']]
 		}),
 		mode: 'local',
+		editable:false,
 		displayField: 'akun_kredit_display',
 		valueField: 'akun_kredit_value',
 		allowBlank: false,
@@ -901,6 +907,7 @@ Ext.onReady(function(){
 			data:[['Aktif','Aktif'],['Tidak Aktif','Tidak Aktif']]
 		}),
 		mode: 'local',
+		editable:false,
 		displayField: 'akun_aktif_display',
 		valueField: 'akun_aktif_value',
 		width: 80,

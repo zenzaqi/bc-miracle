@@ -370,6 +370,7 @@ Ext.onReady(function(){
 			perawatan_reset_form();
 			post2db='CREATE';
 			msg='created';
+			rawat_aktifField.setValue('Aktif');
 			perawatan_createWindow.show();
 		} else {
 			perawatan_createWindow.toFront();
@@ -859,6 +860,7 @@ Ext.onReady(function(){
 			text: 'Delete',
 			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
+			disabled:true,
 			handler: perawatan_confirm_delete   // Confirm before deleting
 		}, '-', {
 			text: 'Search',
@@ -941,7 +943,7 @@ Ext.onReady(function(){
 	/* End of Function */
   	
 	perawatanListEditorGrid.addListener('rowcontextmenu', onperawatan_ListEditGridContextMenu);
-	perawatan_DataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
+	//perawatan_DataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
 	perawatanListEditorGrid.on('afteredit', perawatan_update); // inLine Editing Record
 	
 	/* Identify  rawat_id Field */
@@ -986,6 +988,7 @@ Ext.onReady(function(){
 		fieldLabel: 'Group 1 <span style="color: #ec0000">*</span>',
 		store: cbo_rawat_groupDataStore,
 		mode: 'remote',
+		editable:false,
 		allowBlank: false,
 		displayField: 'rawat_group_display',
 		valueField: 'rawat_group_value',
@@ -998,6 +1001,7 @@ Ext.onReady(function(){
 		fieldLabel: 'Group 2 <span style="color: #ec0000">*</span>',
 		store: cbo_rawat_jenisDataSore,
 		mode: 'remote',
+		editable:false,
 		allowBlank: false,
 		displayField: 'rawat_jenis_display',
 		valueField: 'rawat_jenis_value',
@@ -1010,6 +1014,7 @@ Ext.onReady(function(){
 		fieldLabel: 'Contribution Category',
 		store: cbo_rawat_kontribusiDataSore,
 		mode: 'remote',
+		editable:false,
 		displayField: 'rawat_kontribusi_display',
 		valueField: 'rawat_kontribusi_value',
 		triggerAction: 'all'
@@ -1081,6 +1086,7 @@ Ext.onReady(function(){
 		fieldLabel: 'Gudang',
 		store: cbo_rawat_gudangDataSore,
 		mode: 'remote',
+		editable:false,
 		allowBlank: false,
 		displayField: 'rawat_gudang_display',
 		valueField: 'rawat_gudang_value',
@@ -1096,6 +1102,7 @@ Ext.onReady(function(){
 			data:[['Aktif','Aktif'],['Tidak Aktif','Tidak Aktif']]
 		}),
 		mode: 'local',
+		editable:false,
 		displayField: 'rawat_aktif_display',
 		valueField: 'rawat_aktif_value',
 		//anchor: '95%',
@@ -1807,7 +1814,7 @@ Ext.onReady(function(){
 	/* Function for reset search result */
 	function perawatan_reset_search(){
 		// reset the store parameters
-		perawatan_DataStore.baseParams = { task: 'LIST' };
+		perawatan_DataStore.baseParams = { task: 'LIST',start:0,limit:pageS };
 		// Cause the datastore to do another query : 
 		perawatan_DataStore.reload({params: {start: 0, limit: pageS}});
 		perawatan_searchWindow.close();

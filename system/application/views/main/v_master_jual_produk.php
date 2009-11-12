@@ -472,6 +472,7 @@ Ext.onReady(function(){
 						detail_jual_produk_insert();
 						Ext.MessageBox.alert(post2db+' OK','The Master_jual_produk was '+msg+' successfully.');
 						//master_jual_produk_DataStore.reload();
+						detail_jual_produk_DataStore.load({params: {master_id:0}});
 						master_jual_produk_createWindow.hide();
 						break;
 					default:
@@ -1457,6 +1458,12 @@ Ext.onReady(function(){
 		listClass: 'x-combo-list-small',
 		anchor: '95%'
 	});
+	jproduk_voucher_noField.on('select', function(){
+		j=cbo_voucher_jual_produkDataStore.find('voucher_nomor',jproduk_kwitansi_noField.getValue());
+		if(j>-1){
+			jproduk_kwitansi_namaField.setValue(cbo_kwitansi_jual_produk_DataStore.getAt(j).data.ckwitansi_cust_nama);
+		}
+	});
 	
 	jproduk_voucher_cashbackField= new Ext.form.NumberField({
 		id: 'jproduk_voucher_cashbackField',
@@ -1952,8 +1959,10 @@ Ext.onReady(function(){
 	jproduk_transfer_nilai2Field= new Ext.form.NumberField({
 		id: 'jproduk_transfer_nilai2Field',
 		fieldLabel: 'Nilai',
+		enableKeyEvents: true,
 		allowBlank: true,
-		anchor: '95%'
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
 	});
 	
 	master_jual_produk_transfer2Group= new Ext.form.FieldSet({
@@ -1985,8 +1994,10 @@ Ext.onReady(function(){
 	jproduk_transfer_nilai3Field= new Ext.form.NumberField({
 		id: 'jproduk_transfer_nilai3Field',
 		fieldLabel: 'Nilai',
+		enableKeyEvents: true,
 		allowBlank: true,
-		anchor: '95%'
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
 	});
 	
 	master_jual_produk_transfer3Group= new Ext.form.FieldSet({
@@ -2484,12 +2495,12 @@ Ext.onReady(function(){
 			var c_dtStore=0;
 			var j=cbo_dproduk_produkDataStore.find('dproduk_produk_value',combo_jual_produk.getValue());
 			//console.log("detail_harga = "+cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_harga);
-			console.log("combo_djproduk = "+j);
+			//console.log("combo_djproduk = "+j);
 			if(cbo_dproduk_produkDataStore.getCount()){
 				dproduk_idField.setValue(cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_value);
 				cbo_dproduk_satuanDataStore.load({params: {djproduk_id:dproduk_idField.getValue()}});
 				detail_jual_produk_record.data.dproduk_jumlah='2';
-				console.log("set_jumlah");
+				//console.log("set_jumlah");
 			}
 		}
 	});
@@ -2871,7 +2882,7 @@ Ext.onReady(function(){
 		total_harga=total_harga*(100-jproduk_diskonField.getValue())/100 - jproduk_cashbackField.getValue();
 		total_harga=(total_harga>0?Math.round(total_harga):0);
 		jproduk_totalField.setValue(total_harga);
-		total_hutang=total_harga-jproduk_bayarField.getValue()-jproduk_transfer_nilaiField.getValue();
+		total_hutang=total_harga-jproduk_bayarField.getValue()-jproduk_transfer_nilaiField.getValue()-jproduk_transfer_nilai2Field.getValue()-jproduk_transfer_nilai3Field.getValue()-jproduk_kwitansi_nilaiField.getValue()-jproduk_kwitansi_nilai2Field.getValue()-jproduk_kwitansi_nilai3Field.getValue()-jproduk_card_nilaiField.getValue()-jproduk_card_nilai2Field.getValue()-jproduk_card_nilai3Field.getValue()-jproduk_cek_nilaiField.getValue()-jproduk_cek_nilai2Field.getValue()-jproduk_cek_nilai3Field.getValue()-jproduk_voucher_cashbackField.getValue()-jproduk_voucher_cashback2Field.getValue()-jproduk_voucher_cashback3Field.getValue();
 		total_hutang=(total_hutang>0?Math.round(total_hutang):0);
 		jproduk_totalbayarField.setValue(total_hutang);
 	}
@@ -2888,6 +2899,8 @@ Ext.onReady(function(){
 	jproduk_diskonField.on("keyup",load_total_produk_bayar);
 	jproduk_cashbackField.on("keyup",load_total_produk_bayar);
 	jproduk_transfer_nilaiField.on("keyup",load_total_produk_bayar);
+	jproduk_transfer_nilai2Field.on("keyup",load_total_produk_bayar);
+	jproduk_transfer_nilai3Field.on("keyup",load_total_produk_bayar);
 	jproduk_caraField.on("select",update_group_carabayar_jual_produk);
 	jproduk_cara2Field.on("select",update_group_carabayar2_jual_produk);
 	jproduk_cara3Field.on("select",update_group_carabayar3_jual_produk);
@@ -2936,7 +2949,7 @@ Ext.onReady(function(){
 				text: 'Cancel',
 				handler: function(){
 					master_jual_produk_reset_form();
-					detail_jual_produk_DataStore.remove();
+					detail_jual_produk_DataStore.load({params: {master_id:0}});
 				}
 			}
 		]

@@ -519,6 +519,7 @@ Ext.onReady(function(){
 			text: 'Delete',
 			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
+			disabled: true,
 			handler: kategori_confirm_delete   // Confirm before deleting
 		}, '-', {
 			text: 'Search',
@@ -622,6 +623,7 @@ Ext.onReady(function(){
 		}),
 		mode: 'local',
 		allowBlank: false,
+		editable: false,
 		displayField: 'kategori_jenis_display',
 		valueField: 'kategori_jenis_value',
 		anchor: '95%',
@@ -639,6 +641,7 @@ Ext.onReady(function(){
 		id: 'kategori_aktifField',
 		name: 'kategori_aktifField',
 		fieldLabel: 'Status',
+		editable: false,
 		store:new Ext.data.SimpleStore({
 			fields:['kategori_aktif_value', 'kategori_aktif_display'],
 			data:[['Aktif','Aktif'],['Tidak Aktif','Tidak Aktif']]
