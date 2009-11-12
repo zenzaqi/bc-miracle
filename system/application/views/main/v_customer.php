@@ -644,9 +644,7 @@ var editor_cust_note;
 	function display_form_search_window(){
 		if(!customer_searchWindow.isVisible()){
 			customer_reset_SearchForm();
-			cust_kotaSearchField.setValue('Surabaya');
-			cust_propinsiSearchField.setValue('Jawa Timur');
-			cust_negaraSearchField.setValue('Indonesia');
+			cust_aktifSearchField.setValue('Aktif');
 			customer_searchWindow.show();
 		} else {
 			customer_searchWindow.toFront();

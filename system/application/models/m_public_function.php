@@ -6,6 +6,21 @@ class M_public_function extends Model{
 		parent::Model();
 	}
 	
+	function get_bank_list(){
+		$sql="SELECT * FROM bank_master WHERE mbank_aktif='Aktif'";
+		$query = $this->db->query($sql);
+		$nbrows = $query->num_rows();
+		if($nbrows>0){
+			foreach($query->result() as $row){
+				$arr[] = $row;
+			}
+			$jsonresult = json_encode($arr);
+			return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+		} else {
+			return '({"total":"0", "results":""})';
+		}
+	}
+	
 	function get_petugas_list($karyawan_jabatan){
 		//$sql="SELECT karyawan_id,karyawan_no,karyawan_nama FROM karyawan WHERE karyawan_departemen='$departemen_id' AND karyawan_aktif='Aktif'";
 /*		if($rawat_kategori==2)
@@ -162,7 +177,7 @@ class M_public_function extends Model{
 	}
 	
 	function get_card_by_ref($ref_id){
-		$sql="SELECT jcard_id,jcard_nama,jcard_no,jcard_valid,jcard_bank,jcard_nilai FROM jual_card where jcard_ref='".$ref_id."'";
+		$sql="SELECT jcard_id,jcard_nama,jcard_no,jcard_nilai FROM jual_card where jcard_ref='".$ref_id."'";
 		$query = $this->db->query($sql);
 		$nbrows = $query->num_rows();
 		if($nbrows>0){
@@ -192,7 +207,7 @@ class M_public_function extends Model{
 	}
 	
 	function get_transfer_by_ref($ref_id){
-		$sql="SELECT jtransfer_id,jtransfer_nama,jtransfer_no,jtransfer_bank,jtransfer_nilai FROM jual_transfer where jtransfer_ref='".$ref_id."'";
+		$sql="SELECT jtransfer_id,jtransfer_bank,jtransfer_nilai FROM jual_transfer where jtransfer_ref='".$ref_id."'";
 		$query = $this->db->query($sql);
 		$nbrows = $query->num_rows();
 		if($nbrows>0){
