@@ -476,6 +476,7 @@ Ext.onReady(function(){
 					data: [['Aktif','Aktif'],['Tidak Aktif','Tidak Aktif']]
 					}),
 				mode: 'local',
+				editable:false,
                	displayField: 'user_aktif_display',
                	valueField: 'user_aktif_value',
                	lazyRender:true,
@@ -658,6 +659,7 @@ Ext.onReady(function(){
 		triggerAction: 'all',
 		store: cbo_user_groupDataStore,
 		mode: 'remote',
+		editable:false,
 		displayField: 'user_group_display',
 		valueField: 'user_group_value',
 		lazyRender:true,
@@ -673,6 +675,7 @@ Ext.onReady(function(){
 			data:[['Aktif','Aktif'],['Tidak Aktif','Tidak Aktif']]
 		}),
 		mode: 'local',
+		editable:false,
 		displayField: 'user_aktif_display',
 		valueField: 'user_aktif_value',
 		allowBlank: false,
@@ -798,15 +801,24 @@ Ext.onReady(function(){
 	});
 	
 	/* Identify  user_karyawan Search Field */
-	user_karyawanSearchField= new Ext.form.NumberField({
+	user_karyawanSearchField= new Ext.form.ComboBox({
 		id: 'user_karyawanSearchField',
 		fieldLabel: 'Nama Karyawan',
-		allowNegatife : false,
-		blankText: '0',
-		allowDecimals: false,
-		anchor: '95%',
-		maskRe: /([0-9]+)$/
-	
+		store: cbo_user_karyawanDataStore,
+		mode: 'remote',
+		displayField:'karyawan_nama',
+		valueField: 'karyawan_id',
+        typeAhead: false,
+        loadingText: 'Searching...',
+        pageSize:10,
+        hideTrigger:false,
+        tpl: user_karyawan_tpl,
+        //applyTo: 'search',
+        itemSelector: 'div.search-item',
+		triggerAction: 'all',
+		lazyRender:true,
+		listClass: 'x-combo-list-small',
+		anchor: '95%'
 	});
 	/* Identify  user_log Search Field */
 	user_logSearchField= new Ext.form.DateField({
@@ -835,6 +847,7 @@ Ext.onReady(function(){
 			data:[['Aktif','Aktif'],['Tidak Aktif','Tidak Aktif']]
 		}),
 		mode: 'local',
+		editable:false,
 		displayField: 'user_aktif',
 		valueField: 'value',
 		width: 80,

@@ -789,7 +789,7 @@ Ext.onReady(function(){
 	
 	/* Function for retrieve create Window Panel*/ 
 	cetak_kwitansi_createForm = new Ext.FormPanel({
-		labelAlign: 'top',
+		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
 		width: 600,
@@ -950,7 +950,7 @@ Ext.onReady(function(){
     
 	/* Function for retrieve search Form Panel */
 	cetak_kwitansi_searchForm = new Ext.FormPanel({
-		labelAlign: 'top',
+		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
 		width: 300,        
