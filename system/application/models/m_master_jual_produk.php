@@ -312,7 +312,7 @@ left join jual_kwitansi on(master_jual_produk.jproduk_nobukti=jual_kwitansi.jkwi
 						$data=array(
 							"jcard_nama"=>$jproduk_card_nama,
 							"jcard_edc"=>$jproduk_card_edc,
-							"jcard_nilai"=>$jproduk_total_bayar,
+							"jcard_nilai"=>$jproduk_card_nilai,
 							"jcard_ref"=>$jproduk_nobukti
 							);
 						$this->db->insert('jual_card', $data); 
@@ -336,7 +336,7 @@ left join jual_kwitansi on(master_jual_produk.jproduk_nobukti=jual_kwitansi.jkwi
 							"jcek_no"=>$jproduk_cek_no,
 							"jcek_valid"=>$jproduk_cek_valid,
 							"jcek_bank"=>$jproduk_cek_bank,
-							"jcek_nilai"=>$jproduk_total_bayar,
+							"jcek_nilai"=>$jproduk_cek_nilai,
 							"jcek_ref"=>$jproduk_nobukti
 							);
 						$this->db->insert('jual_cek', $data); 
@@ -402,7 +402,7 @@ left join jual_kwitansi on(master_jual_produk.jproduk_nobukti=jual_kwitansi.jkwi
 							"jcek_no"=>$jproduk_cek_no2,
 							"jcek_valid"=>$jproduk_cek_valid2,
 							"jcek_bank"=>$jproduk_cek_bank2,
-							"jcek_nilai"=>$jproduk_total_bayar,
+							"jcek_nilai"=>$jproduk_cek_nilai,
 							"jcek_ref"=>$jproduk_nobukti
 							);
 						$this->db->insert('jual_cek', $data); 
@@ -467,7 +467,7 @@ left join jual_kwitansi on(master_jual_produk.jproduk_nobukti=jual_kwitansi.jkwi
 							"jcek_no"=>$jproduk_cek_no3,
 							"jcek_valid"=>$jproduk_cek_valid3,
 							"jcek_bank"=>$jproduk_cek_bank3,
-							"jcek_nilai"=>$jproduk_total_bayar,
+							"jcek_nilai"=>$jproduk_cek_nilai,
 							"jcek_ref"=>$jproduk_nobukti
 							);
 						$this->db->insert('jual_cek', $data); 

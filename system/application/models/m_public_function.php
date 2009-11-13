@@ -177,7 +177,7 @@ class M_public_function extends Model{
 	}
 	
 	function get_card_by_ref($ref_id){
-		$sql="SELECT jcard_id,jcard_nama,jcard_no,jcard_nilai FROM jual_card where jcard_ref='".$ref_id."'";
+		$sql="SELECT jcard_id,jcard_nama,jcard_edc,jcard_nilai FROM jual_card where jcard_ref='".$ref_id."'";
 		$query = $this->db->query($sql);
 		$nbrows = $query->num_rows();
 		if($nbrows>0){
@@ -274,12 +274,15 @@ class M_public_function extends Model{
 		}
 	}
 	
-	function get_kwitansi_list($query="",$start=0,$end=10){
+	function get_kwitansi_list($query,$start=0,$end=10,$kwitansi_cust){
 		$sql="SELECT kwitansi_id,kwitansi_no,kwitansi_nilai,cust_no,cust_nama,cust_tgllahir,cust_alamat,cust_telprumah  
-			FROM cetak_kwitansi,customer where kwitansi_cust=cust_id and cust_aktif='Aktif'";
+			FROM cetak_kwitansi,customer WHERE kwitansi_cust=cust_id AND cust_aktif='Aktif'";
 		if($query<>""){
 			$sql=$sql." and (cust_no like '%".$query."%' or cust_nama like '%".$query."%' or cust_alamat like '%".$query."%' or
 					cust_telprumah like '%".$query."%' or cust_tgllahir like '%".$query."%') ";
+		}
+		if($kwitansi_cust<>""){
+			$sql=$sql." AND kwitansi_cust='$kwitansi_cust'";
 		}
 		
 		$result = $this->db->query($sql);
@@ -625,7 +628,7 @@ class M_public_function extends Model{
 		}
 	}
 	
-	function get_user_karyawan_list($query="",$start=0,$end=10){
+	function get_user_karyawan_list($query,$start,$end){
 		$sql="SELECT karyawan_id,karyawan_no,karyawan_nama,jabatan_nama FROM karyawan,jabatan,users WHERE jabatan_id=karyawan_jabatan AND user_karyawan!=karyawan_id AND karyawan_aktif='Aktif'";
 		if($query<>"")
 			$sql.=" and (karyawan_id like '%".$query."%' or karyawan_no like '%".$query."%' or karyawan_nama like '%".$query."%'
