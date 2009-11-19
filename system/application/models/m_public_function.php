@@ -177,7 +177,7 @@ class M_public_function extends Model{
 	}
 	
 	function get_card_by_ref($ref_id){
-		$sql="SELECT jcard_id,jcard_nama,jcard_edc,jcard_nilai FROM jual_card where jcard_ref='".$ref_id."'";
+		$sql="SELECT jcard_id,jcard_no,jcard_nama,jcard_edc,jcard_nilai FROM jual_card where jcard_ref='".$ref_id."'";
 		$query = $this->db->query($sql);
 		$nbrows = $query->num_rows();
 		if($nbrows>0){
@@ -207,6 +207,36 @@ class M_public_function extends Model{
 	}
 	
 	function get_transfer_by_ref($ref_id){
+		$sql="SELECT jtransfer_id,jtransfer_bank,jtransfer_nama,jtransfer_nilai FROM jual_transfer where jtransfer_ref='".$ref_id."'";
+		$query = $this->db->query($sql);
+		$nbrows = $query->num_rows();
+		if($nbrows>0){
+			foreach($query->result() as $row){
+				$arr[] = $row;
+			}
+			$jsonresult = json_encode($arr);
+			return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+		} else {
+			return '({"total":"0", "results":""})';
+		}
+	}
+	
+	function get_tunai_by_ref($ref_id){
+		$sql="SELECT jtunai_id,jtunai_nilai FROM jual_tunai WHERE jtunai_ref='".$ref_id."'";
+		$query = $this->db->query($sql);
+		$nbrows = $query->num_rows();
+		if($nbrows>0){
+			foreach($query->result() as $row){
+				$arr[] = $row;
+			}
+			$jsonresult = json_encode($arr);
+			return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+		} else {
+			return '({"total":"0", "results":""})';
+		}
+	}
+	
+	function get_transfer_paket_by_ref($ref_id){
 		$sql="SELECT jtransfer_id,jtransfer_bank,jtransfer_nilai FROM jual_transfer where jtransfer_ref='".$ref_id."'";
 		$query = $this->db->query($sql);
 		$nbrows = $query->num_rows();

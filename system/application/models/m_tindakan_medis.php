@@ -87,7 +87,8 @@ class M_tindakan_medis extends Model{
 		
 		//function for get list record
 		function tindakan_list($filter,$start,$end){
-			$query = "SELECT * FROM tindakan,customer WHERE trawat_cust=cust_id";
+			$date_now=date('Y-m-d');
+			$query = "SELECT * FROM tindakan,customer WHERE trawat_cust=cust_id AND trawat_appointment='Medis' AND trawat_date_create='$date_now'";
 			
 			// For simple search
 			if ($filter<>""){

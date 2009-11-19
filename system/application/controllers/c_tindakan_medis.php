@@ -28,13 +28,13 @@ class C_tindakan_medis extends Controller {
 	
 	function get_dokter_list(){
 		//ID dokter pada tabel departemen adalah 8
-		$result=$this->m_public_function->get_petugas_list(8);
+		$result=$this->m_public_function->get_petugas_list("Dokter");
 		echo $result;
 	}
 	
 	function get_terapis_list(){
 		//ID dokter pada tabel departemen adalah 9
-		$result=$this->m_public_function->get_petugas_list(9);
+		$result=$this->m_public_function->get_petugas_list("Therapist");
 		echo $result;
 	}
 	

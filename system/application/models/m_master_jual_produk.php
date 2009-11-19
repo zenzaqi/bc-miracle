@@ -142,19 +142,23 @@ left join jual_kwitansi on(master_jual_produk.jproduk_nobukti=jual_kwitansi.jkwi
 		}
 		
 		//function for update record
-		function master_jual_produk_update($jproduk_id ,$jproduk_nobukti ,$jproduk_cust ,$jproduk_tanggal ,$jproduk_diskon ,$jproduk_cara ,$jproduk_cara2 ,$jproduk_cara3 ,$jproduk_keterangan , $jproduk_cashback, $jproduk_voucher_no, $jproduk_voucher_cashback, $jproduk_voucher_no2, $jproduk_voucher_cashback2, $jproduk_voucher_no3, $jproduk_voucher_cashback3, $jproduk_bayar, $jproduk_total, $jproduk_total_bayar, $jproduk_kwitansi_no, $jproduk_kwitansi_nama, $jproduk_kwitansi_nilai, $jproduk_kwitansi_no2, $jproduk_kwitansi_nama2, $jproduk_kwitansi_nilai2, $jproduk_kwitansi_no3, $jproduk_kwitansi_nama3, $jproduk_kwitansi_nilai3, $jproduk_card_nama, $jproduk_card_edc, $jproduk_card_nilai, $jproduk_card_nama2, $jproduk_card_edc2, $jproduk_card_nilai2, $jproduk_card_nama3, $jproduk_card_edc3, $jproduk_card_nilai3, $jproduk_cek_nama, $jproduk_cek_no, $jproduk_cek_valid, $jproduk_cek_bank, $jproduk_cek_nilai, $jproduk_cek_nama2, $jproduk_cek_no2, $jproduk_cek_valid2, $jproduk_cek_bank2, $jproduk_cek_nilai2, $jproduk_cek_nama3, $jproduk_cek_no3, $jproduk_cek_valid3, $jproduk_cek_bank3, $jproduk_cek_nilai3, $jproduk_transfer_bank, $jproduk_transfer_nilai, $jproduk_transfer_bank2, $jproduk_transfer_nilai2, $jproduk_transfer_bank3, $jproduk_transfer_nilai3){
+		function master_jual_produk_update($jproduk_id ,$jproduk_nobukti ,$jproduk_cust ,$jproduk_tanggal ,$jproduk_diskon ,$jproduk_cara ,$jproduk_cara2 ,$jproduk_cara3 ,$jproduk_keterangan , $jproduk_cashback, $jproduk_tunai_nilai, $jproduk_tunai_nilai2, $jproduk_tunai_nilai3, $jproduk_voucher_no, $jproduk_voucher_cashback, $jproduk_voucher_no2, $jproduk_voucher_cashback2, $jproduk_voucher_no3, $jproduk_voucher_cashback3, $jproduk_bayar, $jproduk_subtotal, $jproduk_hutang, $jproduk_kwitansi_no, $jproduk_kwitansi_nama, $jproduk_kwitansi_nilai, $jproduk_kwitansi_no2, $jproduk_kwitansi_nama2, $jproduk_kwitansi_nilai2, $jproduk_kwitansi_no3, $jproduk_kwitansi_nama3, $jproduk_kwitansi_nilai3, $jproduk_card_nama, $jproduk_card_edc, $jproduk_card_no, $jproduk_card_nilai, $jproduk_card_nama2, $jproduk_card_edc2, $jproduk_card_no2, $jproduk_card_nilai2, $jproduk_card_nama3, $jproduk_card_edc3, $jproduk_card_no3, $jproduk_card_nilai3, $jproduk_cek_nama, $jproduk_cek_no, $jproduk_cek_valid, $jproduk_cek_bank, $jproduk_cek_nilai, $jproduk_cek_nama2, $jproduk_cek_no2, $jproduk_cek_valid2, $jproduk_cek_bank2, $jproduk_cek_nilai2, $jproduk_cek_nama3, $jproduk_cek_no3, $jproduk_cek_valid3, $jproduk_cek_bank3, $jproduk_cek_nilai3, $jproduk_transfer_bank, $jproduk_transfer_nama, $jproduk_transfer_nilai, $jproduk_transfer_bank2, $jproduk_transfer_nama2, $jproduk_transfer_nilai2, $jproduk_transfer_bank3, $jproduk_transfer_nama3, $jproduk_transfer_nilai3){
 			$data = array(
 				"jproduk_id"=>$jproduk_id, 
 				"jproduk_nobukti"=>$jproduk_nobukti, 
 				"jproduk_tanggal"=>$jproduk_tanggal, 
 				"jproduk_diskon"=>$jproduk_diskon,
-				"jproduk_cashback"=>$jproduk_cashback,
-				"jproduk_bayar"=>$jproduk_bayar,
+				//"jproduk_cashback"=>$jproduk_cashback,
+				//"jproduk_bayar"=>$jproduk_bayar,
 				"jproduk_cara"=>$jproduk_cara, 
-				"jproduk_cara2"=>$jproduk_cara2, 
-				"jproduk_cara3"=>$jproduk_cara3,
+				//"jproduk_cara2"=>$jproduk_cara2, 
+				//"jproduk_cara3"=>$jproduk_cara3,
 				"jproduk_keterangan"=>$jproduk_keterangan 
 			);
+			if($jproduk_cara2!=null)
+				$data["jproduk_cara2"]=$jproduk_cara2;
+			if($jproduk_cara3!=null)
+				$data["jproduk_cara3"]=$jproduk_cara3;
 			$sql="select cust_id from customer where cust_id='".$jproduk_cust."'";
 			$query=$this->db->query($sql);
 			if($query->num_rows())
@@ -162,115 +166,6 @@ left join jual_kwitansi on(master_jual_produk.jproduk_nobukti=jual_kwitansi.jkwi
 				
 			$this->db->where('jproduk_id', $jproduk_id);
 			$this->db->update('master_jual_produk', $data);
-			
-			//delete all transaksi
-			$sql="delete from jual_kwitansi where jkwitansi_ref='".$jproduk_nobukti."'";
-			$this->db->query($sql);
-			$sql="delete from jual_card where jcard_ref='".$jproduk_nobukti."'";
-			$this->db->query($sql);
-			$sql="delete from jual_cek where jcek_ref='".$jproduk_nobukti."'";
-			$this->db->query($sql);
-			$sql="delete from jual_transfer where jtransfer_ref='".$jproduk_nobukti."'";
-			$this->db->query($sql);
-			$sql="delete from jual_kredit where jkredit_ref='".$jproduk_nobukti."'";
-			$this->db->query($sql);
-			
-			//kwitansi
-			if($jproduk_cara=='kwitansi'){
-				$data=array(
-					"jkwitansi_no"=>$jproduk_kwitansi_no,
-					"jkwitansi_nilai"=>$jproduk_total_bayar,
-					"jkwitansi_ref"=>$jproduk_nobukti
-					);
-				$this->db->insert('jual_kwitansi', $data); 
-			
-			}else if($jproduk_cara=='card'){
-				
-				$data=array(
-					"jcard_nama"=>$jproduk_card_nama,
-					"jcard_edc"=>$jproduk_card_edc,
-					"jcard_nilai"=>$jproduk_total_bayar,
-					"jcard_ref"=>$jproduk_nobukti
-					);
-				$this->db->insert('jual_card', $data); 
-			
-			}else if($jproduk_cara=='cek/giro'){
-				
-				if($jproduk_cek_nama=="" || $jproduk_cek_nama==NULL){
-					if(is_int($jproduk_cek_nama)){
-						$sql="select cust_nama from customer where cust_id='".$jproduk_cust."'";
-						$query=$this->db->query($sql);
-						if($query->num_rows()){
-							$data=$query->row();
-							$jproduk_cek_nama=$data->cust_nama;
-						}
-					}else{
-							$jproduk_cek_nama=$jproduk_cust;
-					}
-				}
-				$data=array(
-					"jcek_nama"=>$jproduk_cek_nama,
-					"jcek_no"=>$jproduk_cek_no,
-					"jcek_valid"=>$jproduk_cek_valid,
-					"jcek_bank"=>$jproduk_cek_bank,
-					"jcek_nilai"=>$jproduk_total_bayar,
-					"jcek_ref"=>$jproduk_nobukti
-					);
-				$this->db->insert('jual_cek', $data); 
-			}else if($jproduk_cara=='transfer'){
-				$data=array(
-					"jtransfer_bank"=>$jproduk_transfer_bank,
-					"jtransfer_nilai"=>$jproduk_total_bayar,
-					"jtransfer_ref"=>$jproduk_nobukti
-					);
-				$this->db->insert('jual_transfer', $data); 
-			}else if($jproduk_cara=='kredit'){
-				$jproduk_kredit_cust=0;
-				if(!is_int($jproduk_cust)){
-					$sql="select jproduk_cust from master_jual_produk where jproduk_id='".$jproduk_id."'";
-					$query=$this->db->query($sql);
-					if($query->num_rows()){
-						$data=$query->row();
-						$jproduk_kredit_cust=$data->jproduk_cust;
-					}
-				}else{
-						$jproduk_kredit_cust=$jproduk_cust;
-				}
-
-				$data=array(
-					"jkredit_cust"=>$jproduk_kredit_cust,
-					"jkredit_nilai"=>$jproduk_total_bayar,
-					"jkredit_ref"=>$jproduk_nobukti
-					);
-				$this->db->insert('jual_kredit', $data); 
-			}
-			
-			return '1';
-		}
-		
-		//function for create new record
-		function master_jual_produk_create($jproduk_nobukti ,$jproduk_cust ,$jproduk_tanggal ,$jproduk_diskon ,$jproduk_cara ,$jproduk_cara2 ,$jproduk_cara3 ,$jproduk_keterangan , $jproduk_cashback, $jproduk_voucher_no, $jproduk_voucher_cashback, $jproduk_voucher_no2, $jproduk_voucher_cashback2, $jproduk_voucher_no3, $jproduk_voucher_cashback3, $jproduk_bayar, $jproduk_total, $jproduk_total_bayar, $jproduk_kwitansi_no, $jproduk_kwitansi_nama, $jproduk_kwitansi_nilai, $jproduk_kwitansi_no2, $jproduk_kwitansi_nama2, $jproduk_kwitansi_nilai2, $jproduk_kwitansi_no3, $jproduk_kwitansi_nama3, $jproduk_kwitansi_nilai3, $jproduk_card_nama, $jproduk_card_edc, $jproduk_card_nilai, $jproduk_card_nama2, $jproduk_card_edc2, $jproduk_card_nilai2, $jproduk_card_nama3, $jproduk_card_edc3, $jproduk_card_nilai3, $jproduk_cek_nama, $jproduk_cek_no, $jproduk_cek_valid, $jproduk_cek_bank, $jproduk_cek_nilai, $jproduk_cek_nama2, $jproduk_cek_no2, $jproduk_cek_valid2, $jproduk_cek_bank2, $jproduk_cek_nilai2, $jproduk_cek_nama3, $jproduk_cek_no3, $jproduk_cek_valid3, $jproduk_cek_bank3, $jproduk_cek_nilai3, $jproduk_transfer_bank, $jproduk_transfer_nilai, $jproduk_transfer_bank2, $jproduk_transfer_nilai2, $jproduk_transfer_bank3, $jproduk_transfer_nilai3){
-			
-			$pattern="FT/".date("y/m")."/";
-			$jproduk_nobukti=$this->m_public_function->get_kode_1('master_jual_produk','jproduk_nobukti',$pattern,13);
-			
-			$data = array(
-				"jproduk_nobukti"=>$jproduk_nobukti, 
-				"jproduk_cust"=>$jproduk_cust, 
-				"jproduk_tanggal"=>$jproduk_tanggal, 
-				"jproduk_diskon"=>$jproduk_diskon, 
-				"jproduk_cashback"=>$jproduk_cashback,
-				"jproduk_bayar"=>$jproduk_bayar,
-				"jproduk_cara"=>$jproduk_cara, 
-				//"jproduk_cara2"=>$jproduk_cara2, 
-				//"jproduk_cara3"=>$jproduk_cara3, 
-				"jproduk_keterangan"=>$jproduk_keterangan 
-			);
-			if($jproduk_cara2!=null)
-				$data["jproduk_cara2"]=$jproduk_cara2;
-			if($jproduk_cara3!=null)
-				$data["jproduk_cara3"]=$jproduk_cara3;
-			$this->db->insert('master_jual_produk', $data); 
 			if($this->db->affected_rows()){
 				
 				//delete all transaksi
@@ -283,6 +178,8 @@ left join jual_kwitansi on(master_jual_produk.jproduk_nobukti=jual_kwitansi.jkwi
 				$sql="delete from jual_transfer where jtransfer_ref='".$jproduk_nobukti."'";
 				$this->db->query($sql);
 				$sql="delete from jual_kredit where jkredit_ref='".$jproduk_nobukti."'";
+				$this->db->query($sql);
+				$sql="delete from jual_tunai where jtunai_ref='".$jproduk_nobukti."'";
 				$this->db->query($sql);
 				
 				if($jproduk_cara!=null || $jproduk_cara!=''){
@@ -302,7 +199,276 @@ left join jual_kwitansi on(master_jual_produk.jproduk_nobukti=jual_kwitansi.jkwi
 						}
 						$data=array(
 							"jkwitansi_no"=>$jproduk_kwitansi_no,
-							"jkwitansi_nilai"=>$jproduk_total_bayar,
+							"jkwitansi_nilai"=>$jproduk_hutang
+						);
+						$this->db->where('jkwitansi_ref', $jproduk_nobukti);
+						$this->db->update('jual_kwitansi', $data); 
+					
+					}else if($jproduk_cara=='card'){
+						
+						$data=array(
+							"jcard_nama"=>$jproduk_card_nama,
+							"jcard_edc"=>$jproduk_card_edc,
+							"jcard_no"=>$jproduk_card_no,
+							"jcard_nilai"=>$jproduk_card_nilai
+							);
+						$this->db->where('jcard_ref', $jproduk_nobukti);
+						$this->db->insert('jual_card', $data); 
+					
+					}else if($jproduk_cara=='cek/giro'){
+						
+						if($jproduk_cek_nama=="" || $jproduk_cek_nama==NULL){
+							if(is_int($jproduk_cek_nama)){
+								$sql="select cust_nama from customer where cust_id='".$jproduk_cust."'";
+								$query=$this->db->query($sql);
+								if($query->num_rows()){
+									$data=$query->row();
+									$jproduk_cek_nama=$data->cust_nama;
+								}
+							}else{
+									$jproduk_cek_nama=$jproduk_cust;
+							}
+						}
+						$data=array(
+							"jcek_nama"=>$jproduk_cek_nama,
+							"jcek_no"=>$jproduk_cek_no,
+							"jcek_valid"=>$jproduk_cek_valid,
+							"jcek_bank"=>$jproduk_cek_bank,
+							"jcek_nilai"=>$jproduk_cek_nilai
+							);
+						$this->db->where('jcek_ref', $jproduk_nobukti);
+						$this->db->update('jual_cek', $data);
+						 
+					}else if($jproduk_cara=='transfer'){
+						
+						$data=array(
+							"jtransfer_bank"=>$jproduk_transfer_bank,
+							"jtransfer_nama"=>$jproduk_transfer_nama,
+							"jtransfer_nilai"=>$jproduk_transfer_nilai
+							);
+						$this->db->where('jtransfer_ref', $jproduk_nobukti);
+						$this->db->update('jual_transfer', $data); 
+					}else if($jproduk_cara=='tunai'){
+						
+						$data=array(
+							"jtunai_nilai"=>$jproduk_tunai_nilai
+							);
+						$this->db->where('jtunai_ref', $jproduk_nobukti);
+						$this->db->update('jual_tunai', $data); 
+					}
+				}
+				if($jproduk_cara2!=null || $jproduk_cara2!=''){
+					//kwitansi
+					if($jproduk_cara2=='kwitansi'){
+						if($jproduk_kwitansi_nama2=="" || $jproduk_kwitansi_nama2==NULL){
+							if(is_int($jproduk_kwitansi_nama2)){
+								$sql="select cust_nama from customer where cust_id='".$jproduk_cust."'";
+								$query=$this->db->query($sql);
+								if($query->num_rows()){
+									$data=$query->row();
+									$jproduk_kwitansi_nama2=$data->cust_nama;
+								}
+							}else{
+									$jproduk_kwitansi_nama2=$jproduk_cust;
+							}
+						}
+						$data=array(
+							"jkwitansi_no"=>$jproduk_kwitansi_no2,
+							"jkwitansi_nilai"=>$jproduk_hutang
+						);
+						$this->db->where('jkwitansi_ref', $jproduk_nobukti);
+						$this->db->update('jual_kwitansi', $data); 
+					
+					}else if($jproduk_cara2=='card'){
+						$this->firephp->log($jproduk_card_edc2, 'Card EDC-2');
+						$data=array(
+							"jcard_nama"=>$jproduk_card_nama2,
+							"jcard_edc"=>$jproduk_card_edc2,
+							"jcard_no"=>$jproduk_card_no2,
+							"jcard_nilai"=>$jproduk_card_nilai2
+							);
+						$this->db->where('jcard_ref', $jproduk_nobukti);
+						$this->db->update('jual_card', $data); 
+					
+					}else if($jproduk_cara2=='cek/giro'){
+						
+						if($jproduk_cek_nama2=="" || $jproduk_cek_nama2==NULL){
+							if(is_int($jproduk_cek_nama2)){
+								$sql="select cust_nama from customer where cust_id='".$jproduk_cust."'";
+								$query=$this->db->query($sql);
+								if($query->num_rows()){
+									$data=$query->row();
+									$jproduk_cek_nama2=$data->cust_nama;
+								}
+							}else{
+									$jproduk_cek_nama2=$jproduk_cust;
+							}
+						}
+						$data=array(
+							"jcek_nama"=>$jproduk_cek_nama2,
+							"jcek_no"=>$jproduk_cek_no2,
+							"jcek_valid"=>$jproduk_cek_valid2,
+							"jcek_bank"=>$jproduk_cek_bank2,
+							"jcek_nilai"=>$jproduk_cek_nilai
+							);
+						$this->db->where('jcek_ref', $jproduk_nobukti);
+						$this->db->update('jual_cek', $data); 
+					}else if($jproduk_cara2=='transfer'){
+						
+						$data=array(
+							"jtransfer_bank"=>$jproduk_transfer_bank2,
+							"jtransfer_nama"=>$jproduk_transfer_nama2,
+							"jtransfer_nilai"=>$jproduk_transfer_nilai2
+							);
+						$this->db->where('jtransfer_ref', $jproduk_nobukti);
+						$this->db->update('jual_transfer', $data); 
+					}else if($jproduk_cara2=='tunai'){
+						
+						$data=array(
+							"jtunai_nilai"=>$jproduk_tunai_nilai2
+							);
+						$this->db->where('jtunai_ref', $jproduk_nobukti);
+						$this->db->update('jual_tunai', $data); 
+					}
+				}
+				if($jproduk_cara3!=null || $jproduk_cara3!=''){
+					//kwitansi
+					if($jproduk_cara3=='kwitansi'){
+						if($jproduk_kwitansi_nama3=="" || $jproduk_kwitansi_nama3==NULL){
+							if(is_int($jproduk_kwitansi_nama3)){
+								$sql="select cust_nama from customer where cust_id='".$jproduk_cust."'";
+								$query=$this->db->query($sql);
+								if($query->num_rows()){
+									$data=$query->row();
+									$jproduk_kwitansi_nama3=$data->cust_nama;
+								}
+							}else{
+									$jproduk_kwitansi_nama3=$jproduk_cust;
+							}
+						}
+						$data=array(
+							"jkwitansi_no"=>$jproduk_kwitansi_no3,
+							"jkwitansi_nilai"=>$jproduk_hutang
+						);
+						$this->db->where('jkwitansi_ref', $jproduk_nobukti);
+						$this->db->update('jual_kwitansi', $data); 
+					
+					}else if($jproduk_cara3=='card'){
+						
+						$data=array(
+							"jcard_nama"=>$jproduk_card_nama3,
+							"jcard_edc"=>$jproduk_card_edc3,
+							"jcard_no"=>$jproduk_card_no3,
+							"jcard_nilai"=>$jproduk_hutang
+							);
+						$this->db->where('jcard_ref', $jproduk_nobukti);
+						$this->db->update('jual_card', $data); 
+					
+					}else if($jproduk_cara3=='cek/giro'){
+						
+						if($jproduk_cek_nama3=="" || $jproduk_cek_nama3==NULL){
+							if(is_int($jproduk_cek_nama3)){
+								$sql="select cust_nama from customer where cust_id='".$jproduk_cust."'";
+								$query=$this->db->query($sql);
+								if($query->num_rows()){
+									$data=$query->row();
+									$jproduk_cek_nama3=$data->cust_nama;
+								}
+							}else{
+									$jproduk_cek_nama3=$jproduk_cust;
+							}
+						}
+						$data=array(
+							"jcek_nama"=>$jproduk_cek_nama3,
+							"jcek_no"=>$jproduk_cek_no3,
+							"jcek_valid"=>$jproduk_cek_valid3,
+							"jcek_bank"=>$jproduk_cek_bank3,
+							"jcek_nilai"=>$jproduk_cek_nilai
+							);
+						$this->db->where('jcek_ref', $jproduk_nobukti);
+						$this->db->update('jual_cek', $data); 
+					}else if($jproduk_cara3=='transfer'){
+						
+						$data=array(
+							"jtransfer_bank"=>$jproduk_transfer_bank3,
+							"jtransfer_nama"=>$jproduk_transfer_nama3,
+							"jtransfer_nilai"=>$jproduk_transfer_nilai3
+							);
+						$this->db->where('jtransfer_ref', $jproduk_nobukti);
+						$this->db->update('jual_transfer', $data); 
+					}else if($jproduk_cara3=='tunai'){
+						
+						$data=array(
+							"jtunai_nilai"=>$jproduk_tunai_nilai3
+							);
+						$this->db->where('jtunai_ref', $jproduk_nobukti);
+						$this->db->update('jual_tunai', $data); 
+					}
+				}
+				
+				return '1';
+			}
+			else
+				return '0';
+		}
+		
+		//function for create new record
+		function master_jual_produk_create($jproduk_nobukti ,$jproduk_cust ,$jproduk_tanggal ,$jproduk_diskon ,$jproduk_cara ,$jproduk_cara2 ,$jproduk_cara3 ,$jproduk_keterangan , $jproduk_cashback, $jproduk_tunai_nilai, $jproduk_tunai_nilai2, $jproduk_tunai_nilai3, $jproduk_voucher_no, $jproduk_voucher_cashback, $jproduk_voucher_no2, $jproduk_voucher_cashback2, $jproduk_voucher_no3, $jproduk_voucher_cashback3, $jproduk_bayar, $jproduk_subtotal, $jproduk_hutang, $jproduk_kwitansi_no, $jproduk_kwitansi_nama, $jproduk_kwitansi_nilai, $jproduk_kwitansi_no2, $jproduk_kwitansi_nama2, $jproduk_kwitansi_nilai2, $jproduk_kwitansi_no3, $jproduk_kwitansi_nama3, $jproduk_kwitansi_nilai3, $jproduk_card_nama, $jproduk_card_edc, $jproduk_card_no, $jproduk_card_nilai, $jproduk_card_nama2, $jproduk_card_edc2, $jproduk_card_no2, $jproduk_card_nilai2, $jproduk_card_nama3, $jproduk_card_edc3, $jproduk_card_no3, $jproduk_card_nilai3, $jproduk_cek_nama, $jproduk_cek_no, $jproduk_cek_valid, $jproduk_cek_bank, $jproduk_cek_nilai, $jproduk_cek_nama2, $jproduk_cek_no2, $jproduk_cek_valid2, $jproduk_cek_bank2, $jproduk_cek_nilai2, $jproduk_cek_nama3, $jproduk_cek_no3, $jproduk_cek_valid3, $jproduk_cek_bank3, $jproduk_cek_nilai3, $jproduk_transfer_bank, $jproduk_transfer_nama, $jproduk_transfer_nilai, $jproduk_transfer_bank2, $jproduk_transfer_nama2, $jproduk_transfer_nilai2, $jproduk_transfer_bank3, $jproduk_transfer_nama3, $jproduk_transfer_nilai3){
+			
+			$pattern="FT/".date("y/m")."/";
+			$jproduk_nobukti=$this->m_public_function->get_kode_1('master_jual_produk','jproduk_nobukti',$pattern,13);
+			
+			$data = array(
+				"jproduk_nobukti"=>$jproduk_nobukti, 
+				"jproduk_cust"=>$jproduk_cust, 
+				"jproduk_tanggal"=>$jproduk_tanggal, 
+				"jproduk_diskon"=>$jproduk_diskon, 
+				//"jproduk_cashback"=>$jproduk_cashback,
+				//"jproduk_bayar"=>$jproduk_bayar,
+				"jproduk_cara"=>$jproduk_cara, 
+				//"jproduk_cara2"=>$jproduk_cara2, 
+				//"jproduk_cara3"=>$jproduk_cara3, 
+				"jproduk_keterangan"=>$jproduk_keterangan 
+			);
+			if($jproduk_cara2!=null)
+				$data["jproduk_cara2"]=$jproduk_cara2;
+			if($jproduk_cara3!=null)
+				$data["jproduk_cara3"]=$jproduk_cara3;
+			$this->db->insert('master_jual_produk', $data); 
+			if($this->db->affected_rows()){
+				
+				//delete all transaksi
+				/*$sql="delete from jual_kwitansi where jkwitansi_ref='".$jproduk_nobukti."'";
+				$this->db->query($sql);
+				$sql="delete from jual_card where jcard_ref='".$jproduk_nobukti."'";
+				$this->db->query($sql);
+				$sql="delete from jual_cek where jcek_ref='".$jproduk_nobukti."'";
+				$this->db->query($sql);
+				$sql="delete from jual_transfer where jtransfer_ref='".$jproduk_nobukti."'";
+				$this->db->query($sql);
+				$sql="delete from jual_kredit where jkredit_ref='".$jproduk_nobukti."'";
+				$this->db->query($sql);
+				$sql="delete from jual_tunai where jtunai_ref='".$jproduk_nobukti."'";
+				$this->db->query($sql);*/
+				
+				if($jproduk_cara!=null || $jproduk_cara!=''){
+					//kwitansi
+					if($jproduk_cara=='kwitansi'){
+						if($jproduk_kwitansi_nama=="" || $jproduk_kwitansi_nama==NULL){
+							if(is_int($jproduk_kwitansi_nama)){
+								$sql="select cust_nama from customer where cust_id='".$jproduk_cust."'";
+								$query=$this->db->query($sql);
+								if($query->num_rows()){
+									$data=$query->row();
+									$jproduk_kwitansi_nama=$data->cust_nama;
+								}
+							}else{
+									$jproduk_kwitansi_nama=$jproduk_cust;
+							}
+						}
+						$data=array(
+							"jkwitansi_no"=>$jproduk_kwitansi_no,
+							"jkwitansi_nilai"=>$jproduk_hutang,
 							"jkwitansi_ref"=>$jproduk_nobukti
 						);
 						$this->db->insert('jual_kwitansi', $data); 
@@ -312,6 +478,7 @@ left join jual_kwitansi on(master_jual_produk.jproduk_nobukti=jual_kwitansi.jkwi
 						$data=array(
 							"jcard_nama"=>$jproduk_card_nama,
 							"jcard_edc"=>$jproduk_card_edc,
+							"jcard_no"=>$jproduk_card_no,
 							"jcard_nilai"=>$jproduk_card_nilai,
 							"jcard_ref"=>$jproduk_nobukti
 							);
@@ -344,10 +511,18 @@ left join jual_kwitansi on(master_jual_produk.jproduk_nobukti=jual_kwitansi.jkwi
 						
 						$data=array(
 							"jtransfer_bank"=>$jproduk_transfer_bank,
+							"jtransfer_nama"=>$jproduk_transfer_nama,
 							"jtransfer_nilai"=>$jproduk_transfer_nilai,
 							"jtransfer_ref"=>$jproduk_nobukti
 							);
 						$this->db->insert('jual_transfer', $data); 
+					}else if($jproduk_cara=='tunai'){
+						
+						$data=array(
+							"jtunai_nilai"=>$jproduk_tunai_nilai,
+							"jtunai_ref"=>$jproduk_nobukti
+							);
+						$this->db->insert('jual_tunai', $data); 
 					}
 				}
 				if($jproduk_cara2!=null || $jproduk_cara2!=''){
@@ -367,7 +542,7 @@ left join jual_kwitansi on(master_jual_produk.jproduk_nobukti=jual_kwitansi.jkwi
 						}
 						$data=array(
 							"jkwitansi_no"=>$jproduk_kwitansi_no2,
-							"jkwitansi_nilai"=>$jproduk_total_bayar,
+							"jkwitansi_nilai"=>$jproduk_hutang,
 							"jkwitansi_ref"=>$jproduk_nobukti
 						);
 						$this->db->insert('jual_kwitansi', $data); 
@@ -377,6 +552,7 @@ left join jual_kwitansi on(master_jual_produk.jproduk_nobukti=jual_kwitansi.jkwi
 						$data=array(
 							"jcard_nama"=>$jproduk_card_nama2,
 							"jcard_edc"=>$jproduk_card_edc2,
+							"jcard_no"=>$jproduk_card_no2,
 							"jcard_nilai"=>$jproduk_card_nilai2,
 							"jcard_ref"=>$jproduk_nobukti
 							);
@@ -410,10 +586,18 @@ left join jual_kwitansi on(master_jual_produk.jproduk_nobukti=jual_kwitansi.jkwi
 						
 						$data=array(
 							"jtransfer_bank"=>$jproduk_transfer_bank2,
+							"jtransfer_nama"=>$jproduk_transfer_nama2,
 							"jtransfer_nilai"=>$jproduk_transfer_nilai2,
 							"jtransfer_ref"=>$jproduk_nobukti
 							);
 						$this->db->insert('jual_transfer', $data); 
+					}else if($jproduk_cara2=='tunai'){
+						
+						$data=array(
+							"jtunai_nilai"=>$jproduk_tunai_nilai2,
+							"jtunai_ref"=>$jproduk_nobukti
+							);
+						$this->db->insert('jual_tunai', $data); 
 					}
 				}
 				if($jproduk_cara3!=null || $jproduk_cara3!=''){
@@ -433,7 +617,7 @@ left join jual_kwitansi on(master_jual_produk.jproduk_nobukti=jual_kwitansi.jkwi
 						}
 						$data=array(
 							"jkwitansi_no"=>$jproduk_kwitansi_no3,
-							"jkwitansi_nilai"=>$jproduk_total_bayar,
+							"jkwitansi_nilai"=>$jproduk_hutang,
 							"jkwitansi_ref"=>$jproduk_nobukti
 						);
 						$this->db->insert('jual_kwitansi', $data); 
@@ -443,7 +627,8 @@ left join jual_kwitansi on(master_jual_produk.jproduk_nobukti=jual_kwitansi.jkwi
 						$data=array(
 							"jcard_nama"=>$jproduk_card_nama3,
 							"jcard_edc"=>$jproduk_card_edc3,
-							"jcard_nilai"=>$jproduk_total_bayar,
+							"jcard_no"=>$jproduk_card_no3,
+							"jcard_nilai"=>$jproduk_hutang,
 							"jcard_ref"=>$jproduk_nobukti
 							);
 						$this->db->insert('jual_card', $data); 
@@ -475,10 +660,18 @@ left join jual_kwitansi on(master_jual_produk.jproduk_nobukti=jual_kwitansi.jkwi
 						
 						$data=array(
 							"jtransfer_bank"=>$jproduk_transfer_bank3,
+							"jtransfer_nama"=>$jproduk_transfer_nama3,
 							"jtransfer_nilai"=>$jproduk_transfer_nilai3,
 							"jtransfer_ref"=>$jproduk_nobukti
 							);
 						$this->db->insert('jual_transfer', $data); 
+					}else if($jproduk_cara3=='tunai'){
+						
+						$data=array(
+							"jtunai_nilai"=>$jproduk_tunai_nilai3,
+							"jtunai_ref"=>$jproduk_nobukti
+							);
+						$this->db->insert('jual_tunai', $data); 
 					}
 				}
 				

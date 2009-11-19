@@ -118,6 +118,11 @@ var app_kategoriSearchField;
 var app_dokterSearchField;
 var app_terapisSearchField;
 
+var app_cust_namaBaruField;
+var app_cust_telpBaruField;
+var app_cust_hpBaruField;
+var app_cust_keteranganBaruField;
+
 var dt = new Date();
 
 /* on ready fuction */
@@ -134,6 +139,13 @@ Ext.onReady(function(){
 		var dapp_id_update="";
 		var dapp_status_update="";
 		var dapp_dokter_update="";
+		var dapp_terapis_update="";
+		var dapp_kategori_nama_update="";
+		var dapp_rawat_id_update="";
+		var dapp_dokter_id_update="";
+		var dapp_terapis_id_update="";
+		var dapp_jamreservasi_update="";
+		var app_cust_id_update="";
 
 		app_id_update_pk = oGrid_event.record.data.app_id;
 		if(oGrid_event.record.data.app_customer!== null){app_customer_update = oGrid_event.record.data.app_customer;}
@@ -143,6 +155,13 @@ Ext.onReady(function(){
 		if(oGrid_event.record.data.dapp_id!== ""){dapp_id_update = oGrid_event.record.data.dapp_id;}
 		if(oGrid_event.record.data.dapp_status!== ""){dapp_status_update = oGrid_event.record.data.dapp_status;}
 		if(oGrid_event.record.data.dokter_nama!== ""){dapp_dokter_update = oGrid_event.record.data.dokter_nama;}
+		if(oGrid_event.record.data.terapis_nama!== ""){dapp_terapis_update = oGrid_event.record.data.terapis_nama;}
+		if(oGrid_event.record.data.kategori_nama!== ""){dapp_kategori_nama_update = oGrid_event.record.data.kategori_nama;}
+		dapp_rawat_id_update = oGrid_event.record.data.rawat_id;
+		dapp_dokter_id_update = oGrid_event.record.data.dokter_id;
+		dapp_terapis_id_update = oGrid_event.record.data.terapis_id;
+		dapp_jamreservasi_update = oGrid_event.record.data.dapp_jamreservasi;
+		app_cust_id_update = oGrid_event.record.data.cust_id;
 
 		Ext.Ajax.request({  
 			waitMsg: 'Please wait...',
@@ -156,7 +175,14 @@ Ext.onReady(function(){
 				app_keterangan	:app_keterangan_update,
 				dapp_id	:dapp_id_update,  
 				dapp_status	:dapp_status_update,
-				dokter_nama	:dapp_dokter_update
+				dokter_nama	:dapp_dokter_update,
+				terapis_nama	:dapp_terapis_update,
+				kategori_nama :dapp_kategori_nama_update,
+				rawat_id	:dapp_rawat_id_update,
+				dokter_id	:dapp_dokter_id_update,
+				terapis_id	:dapp_terapis_id_update,
+				dapp_jamreservasi	:dapp_jamreservasi_update,
+				cust_id	:app_cust_id_update
 			}, 
 			success: function(response){							
 				var result=eval(response.responseText);
@@ -200,11 +226,21 @@ Ext.onReady(function(){
 		var app_cara_create=null; 
 		var app_keterangan_create=null; 
 
+		var app_cust_namaBaru_create;
+		var app_cust_telpBaru_create;
+		var app_cust_hpBaru_create;
+		var app_cust_keteranganBaru_create;
+
 		if(app_idField.getValue()!== null){app_id_create = app_idField.getValue();}else{app_id_create_pk=get_pk_id();} 
 		if(app_customerField.getValue()!== null){app_customer_create = app_customerField.getValue();} 
 		if(app_tanggalField.getValue()!== ""){app_tanggal_create_date = app_tanggalField.getValue().format('Y-m-d');} 
 		if(app_caraField.getValue()!== null){app_cara_create = app_caraField.getValue();} 
-		if(app_keteranganField.getValue()!== null){app_keterangan_create = app_keteranganField.getValue();} 
+		if(app_keteranganField.getValue()!== null){app_keterangan_create = app_keteranganField.getValue();}
+		if(app_cust_namaBaruField.getValue()!== null){app_cust_namaBaru_create = app_cust_namaBaruField.getValue();}  
+		if(app_cust_telpBaruField.getValue()!== null){app_cust_telpBaru_create = app_cust_telpBaruField.getValue();}
+		if(app_cust_hpBaruField.getValue()!== null){app_cust_hpBaru_create = app_cust_hpBaruField.getValue();}
+		if(app_cust_keteranganBaruField.getValue()!== null){app_cust_keteranganBaru_create = app_cust_keteranganBaruField.getValue();}
+		 
 
 		Ext.Ajax.request({  
 			waitMsg: 'Please wait...',
@@ -216,6 +252,11 @@ Ext.onReady(function(){
 				app_tanggal	: app_tanggal_create_date, 
 				app_cara	: app_cara_create, 
 				app_keterangan	: app_keterangan_create, 
+				app_cust_nama_baru	: app_cust_namaBaru_create,
+				app_cust_telp_baru	: app_cust_telpBaru_create,
+				app_cust_hp_baru	: app_cust_hpBaru_create,
+				app_cust_keterangan_baru	: app_cust_keteranganBaru_create
+				
 			}, 
 			success: function(response){             
 				var result=eval(response.responseText);
@@ -229,6 +270,15 @@ Ext.onReady(function(){
 						Ext.MessageBox.alert(post2db+' OK','The Appointment was '+msg+' successfully.');
 						appointment_DataStore.reload();
 						appointment_createWindow.hide();
+						break;
+					case 2:
+						Ext.MessageBox.show({
+						   title: 'Warning',
+						   msg: 'Maaf, Customer sudah Terdaftar.',
+						   buttons: Ext.MessageBox.OK,
+						   animEl: 'save',
+						   icon: Ext.MessageBox.WARNING
+						});
 						break;
 					default:
 						Ext.MessageBox.show({
@@ -301,7 +351,7 @@ Ext.onReady(function(){
   
 	/* Function for Check if the form is valid */
 	function is_appointment_form_valid(){
-		return (app_customerField.isValid());
+		return true;
 	}
   	/* End of Function */
   
@@ -428,10 +478,14 @@ Ext.onReady(function(){
 		},[
 		/* dataIndex => insert intoappointment_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'app_id', type: 'int', mapping: 'app_id'}, 
-			{name: 'cust_nama', type: 'string', mapping: 'cust_nama'}, 
+			{name: 'cust_id', type: 'int', mapping: 'cust_id'},
+			{name: 'cust_nama', type: 'string', mapping: 'cust_nama'},
+			{name: 'rawat_id', type: 'int', mapping: 'rawat_id'}, 
 			{name: 'rawat_nama', type: 'string', mapping: 'rawat_nama'}, 
 			{name: 'dapp_jamreservasi', type: 'string', mapping: 'dapp_jamreservasi'}, 
-			{name: 'dokter_nama', type: 'string', mapping: 'dokter_nama'}, 
+			{name: 'dokter_id', type: 'int', mapping: 'dokter_id'}, 
+			{name: 'dokter_nama', type: 'string', mapping: 'dokter_nama'},
+			{name: 'terapis_id', type: 'int', mapping: 'terapis_id'},
 			{name: 'terapis_nama', type: 'string', mapping: 'terapis_nama'},
 			{name: 'kategori_nama', type: 'string', mapping: 'kategori_nama'}, 
 			{name: 'dapp_id', type: 'int', mapping: 'dapp_id'},
@@ -807,7 +861,7 @@ Ext.onReady(function(){
 		triggerAction: 'all',
 		lazyRender:true,
 		listClass: 'x-combo-list-small',
-		allowBlank: false,
+		allowBlank: true,
 		anchor: '95%'
 	});
 	/* Identify  app_tanggal Field */
@@ -856,8 +910,61 @@ Ext.onReady(function(){
 				layout: 'form',
 				border:false,
 				items: [app_keteranganField, app_idField] 
+			},
+			{
+				
 			}
 			]
+	
+	});
+
+	app_cust_namaBaruField=new Ext.form.TextField({
+		id: 'app_cust_namaBaruField',
+		fieldLabel: 'Nama Customer',
+		maxLength: 30,
+		anchor: '95%'
+	});
+
+	app_cust_telpBaruField=new Ext.form.TextField({
+		id: 'app_cust_telpBaruField',
+		fieldLabel: 'No.Telp. Rumah',
+		maxLength: 30,
+		anchor: '95%'
+	});
+
+	app_cust_hpBaruField=new Ext.form.TextField({
+		id: 'app_cust_hpBaruField',
+		fieldLabel: 'No. HandPhone',
+		maxLength: 30,
+		anchor: '95%'
+	});
+
+	app_cust_keteranganBaruField= new Ext.form.TextArea({
+		id: 'app_cust_keteranganBaruField',
+		fieldLabel: 'Keterangan',
+		maxLength: 250,
+		anchor: '95%'
+	});
+
+	appointment_custBaruGroup = new Ext.form.FieldSet({
+		title: 'Customer Baru',
+		checkboxToggle:true,
+		autoHeight: true,
+		layout:'column',
+		collapsed: true,
+		items:[
+			{
+				columnWidth:0.5,
+				layout: 'form',
+				border:false,
+				items: [app_cust_namaBaruField, app_cust_telpBaruField, app_cust_hpBaruField, app_cust_keteranganBaruField] 
+			},
+			{
+				columnWidth:0.5,
+				layout: 'form',
+				border:false,
+				items: [app_cust_keteranganBaruField] 
+			} ]
 	
 	});
 	
@@ -1196,7 +1303,7 @@ Ext.onReady(function(){
 				dapp_medis_jamreservasi	: appointment_detail_medis_record.data.dapp_medis_jamreservasi, 
 				dapp_medis_petugas	: appointment_detail_medis_record.data.dapp_medis_petugas, 
 //				dapp_medis_petugas2	: appointment_detail_medis_record.data.dapp_medis_petugas2, 
-				dapp_medis_status	: appointment_detail_medis_record.data.dapp_medis_status
+				dapp_medis_status	: appointment_detail_medis_record.data.dapp_medis_status,
 				}
 			});
 		}
@@ -1591,7 +1698,7 @@ Ext.onReady(function(){
 		bodyStyle:'padding:5px',
 		autoHeight:true,
 		width: 800,        
-		items: [appointment_masterGroup,detail_tab_perawatan]
+		items: [appointment_masterGroup,appointment_custBaruGroup,detail_tab_perawatan]
 		,
 		buttons: [{
 				text: 'Save and Close',

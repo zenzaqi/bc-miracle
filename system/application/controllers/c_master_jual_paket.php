@@ -18,12 +18,18 @@ class C_master_jual_paket extends Controller {
 		parent::Controller();
 		$this->load->model('m_master_jual_paket', '', TRUE);
 		$this->load->plugin('to_excel');
+		$this->load->library('firephp');
 	}
 	
 	//set index
 	function index(){
 		$this->load->helper('asset');
 		$this->load->view('main/v_master_jual_paket');
+	}
+	
+	function get_bank_list(){
+		$result=$this->m_public_function->get_bank_list();
+		echo $result;
 	}
 	
 	function get_customer_list(){
@@ -67,6 +73,12 @@ class C_master_jual_paket extends Controller {
 	function get_transfer_by_ref(){
 		$ref_id = (isset($_POST['no_faktur']) ? $_POST['no_faktur'] : $_GET['no_faktur']);
 		$result = $this->m_public_function->get_transfer_by_ref($ref_id);
+		echo $result;
+	}
+	
+	function get_tunai_by_ref(){
+		$ref_id = (isset($_POST['no_faktur']) ? $_POST['no_faktur'] : $_GET['no_faktur']);
+		$result = $this->m_public_function->get_tunai_by_ref($ref_id);
 		echo $result;
 	}
 	
@@ -133,6 +145,7 @@ class C_master_jual_paket extends Controller {
 		$dpaket_sales=str_replace("\\", "",$dpaket_sales);
 		$dpaket_sales=str_replace("'", '"',$dpaket_sales);
 		$result=$this->m_master_jual_paket->detail_detail_jual_paket_insert($dpaket_id ,$dpaket_master ,$dpaket_paket, $dpaket_kadaluarsa ,$dpaket_jumlah ,$dpaket_harga ,$dpaket_diskon ,$dpaket_diskon_jenis ,$dpaket_sales );
+		echo $result;
 	}
 	
 	
@@ -183,48 +196,116 @@ class C_master_jual_paket extends Controller {
 		$jpaket_id=trim(@$_POST["jpaket_id"]);
 		$jpaket_nobukti=trim(@$_POST["jpaket_nobukti"]);
 		$jpaket_nobukti=str_replace("/(<\/?)(p)([^>]*>)", "",$jpaket_nobukti);
-		$jpaket_nobukti=str_replace(",", ",",$jpaket_nobukti);
 		$jpaket_nobukti=str_replace("'", '"',$jpaket_nobukti);
 		$jpaket_cust=trim(@$_POST["jpaket_cust"]);
 		$jpaket_tanggal=trim(@$_POST["jpaket_tanggal"]);
 		$jpaket_diskon=trim(@$_POST["jpaket_diskon"]);
-		$jpaket_cashback=trim(@$_POST["jpaket_cashback"]);
-		$jpaket_voucher=trim(@$_POST["jpaket_voucher"]);
-		$jpaket_voucher=str_replace("/(<\/?)(p)([^>]*>)", "",$jpaket_voucher);
-		$jpaket_voucher=str_replace(",", ",",$jpaket_voucher);
-		$jpaket_voucher=str_replace("'", '"',$jpaket_voucher);
 		$jpaket_cara=trim(@$_POST["jpaket_cara"]);
 		$jpaket_cara=str_replace("/(<\/?)(p)([^>]*>)", "",$jpaket_cara);
-		$jpaket_cara=str_replace(",", ",",$jpaket_cara);
 		$jpaket_cara=str_replace("'", '"',$jpaket_cara);
-		$jpaket_bayar=trim(@$_POST["jpaket_bayar"]);
+		
+		$jpaket_cara2=trim(@$_POST["jpaket_cara2"]);
+		$jpaket_cara2=str_replace("/(<\/?)(p)([^>]*>)", "",$jpaket_cara2);
+		$jpaket_cara2=str_replace("'", '"',$jpaket_cara2);
+		
+		$jpaket_cara3=trim(@$_POST["jpaket_cara3"]);
+		$jpaket_cara3=str_replace("/(<\/?)(p)([^>]*>)", "",$jpaket_cara3);
+		$jpaket_cara3=str_replace("'", '"',$jpaket_cara3);
+		
 		$jpaket_keterangan=trim(@$_POST["jpaket_keterangan"]);
 		$jpaket_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$jpaket_keterangan);
-		$jpaket_keterangan=str_replace(",", ",",$jpaket_keterangan);
 		$jpaket_keterangan=str_replace("'", '"',$jpaket_keterangan);
+		$jpaket_cashback=trim($_POST["jpaket_cashback"]);
+		
+		//tunai
+		$jpaket_tunai_nilai=trim($_POST["jpaket_tunai_nilai"]);
+		//tunai-2
+		$jpaket_tunai_nilai2=trim($_POST["jpaket_tunai_nilai2"]);
+		//tunai-3
+		$jpaket_tunai_nilai3=trim($_POST["jpaket_tunai_nilai3"]);
+		//voucher
 		$jpaket_voucher_no=trim($_POST["jpaket_voucher_no"]);
-
+		$jpaket_voucher_cashback=trim($_POST["jpaket_voucher_cashback"]);
+		//voucher-2
+		$jpaket_voucher_no2=trim($_POST["jpaket_voucher_no2"]);
+		$jpaket_voucher_cashback2=trim($_POST["jpaket_voucher_cashback2"]);
+		//voucher-3
+		$jpaket_voucher_no3=trim($_POST["jpaket_voucher_no3"]);
+		$jpaket_voucher_cashback3=trim($_POST["jpaket_voucher_cashback3"]);
+		
 		//bayar
 		$jpaket_bayar=trim($_POST["jpaket_bayar"]);
-		$jpaket_total=trim($_POST["jpaket_total"]);
-		$jpaket_total_bayar=trim($_POST["jpaket_total_bayar"]);
+		$jpaket_subtotal=trim($_POST["jpaket_subtotal"]);
+		$jpaket_hutang=trim($_POST["jpaket_hutang"]);
 		if($jpaket_cara=='tunai')
-			$jpaket_bayar=$jpaket_total;
+			$jpaket_bayar=$jpaket_subtotal;
 		//card
 		$jpaket_card_nama=trim($_POST["jpaket_card_nama"]);
 		$jpaket_card_edc=trim($_POST["jpaket_card_edc"]);
+		$jpaket_card_no=trim($_POST["jpaket_card_no"]);
+		$jpaket_card_nilai=trim($_POST["jpaket_card_nilai"]);
+		//card-2
+		$jpaket_card_nama2=trim($_POST["jpaket_card_nama2"]);
+		$jpaket_card_edc2=trim($_POST["jpaket_card_edc2"]);
+		$jpaket_card_no2=trim($_POST["jpaket_card_no2"]);
+		$jpaket_card_nilai2=trim($_POST["jpaket_card_nilai2"]);
+		//card-3
+		$jpaket_card_nama3=trim($_POST["jpaket_card_nama3"]);
+		$jpaket_card_edc3=trim($_POST["jpaket_card_edc3"]);
+		$jpaket_card_no3=trim($_POST["jpaket_card_no3"]);
+		$jpaket_card_nilai3=trim($_POST["jpaket_card_nilai3"]);
 		//kwitansi
 		$jpaket_kwitansi_no=trim($_POST["jpaket_kwitansi_no"]);
+		$jpaket_kwitansi_nama=trim(@$_POST["jpaket_kwitansi_nama"]);
+		$jpaket_kwitansi_nama=str_replace("/(<\/?)(p)([^>]*>)", "",$jpaket_kwitansi_nama);
+		$jpaket_kwitansi_nama=str_replace("'", '"',$jpaket_kwitansi_nama);
+		$jpaket_kwitansi_nilai=trim($_POST["jpaket_kwitansi_nilai"]);
+		//kwitansi-2
+		$jpaket_kwitansi_no2=trim($_POST["jpaket_kwitansi_no2"]);
+		$jpaket_kwitansi_nama2=trim(@$_POST["jpaket_kwitansi_nama2"]);
+		$jpaket_kwitansi_nama2=str_replace("/(<\/?)(p)([^>]*>)", "",$jpaket_kwitansi_nama2);
+		$jpaket_kwitansi_nama2=str_replace("'", '"',$jpaket_kwitansi_nama2);
+		$jpaket_kwitansi_nilai2=trim($_POST["jpaket_kwitansi_nilai2"]);
+		//kwitansi-3
+		$jpaket_kwitansi_no3=trim($_POST["jpaket_kwitansi_no3"]);
+		$jpaket_kwitansi_nama3=trim(@$_POST["jpaket_kwitansi_nama3"]);
+		$jpaket_kwitansi_nama3=str_replace("/(<\/?)(p)([^>]*>)", "",$jpaket_kwitansi_nama3);
+		$jpaket_kwitansi_nama3=str_replace("'", '"',$jpaket_kwitansi_nama3);
+		$jpaket_kwitansi_nilai3=trim($_POST["jpaket_kwitansi_nilai3"]);
 		//cek
 		$jpaket_cek_nama=trim($_POST["jpaket_cek_nama"]);
 		$jpaket_cek_no=trim($_POST["jpaket_cek_no"]);
 		$jpaket_cek_valid=trim($_POST["jpaket_cek_valid"]);
 		$jpaket_cek_bank=trim($_POST["jpaket_cek_bank"]);
+		$jpaket_cek_nilai=trim($_POST["jpaket_cek_nilai"]);
+		//cek-2
+		$jpaket_cek_nama2=trim($_POST["jpaket_cek_nama2"]);
+		$jpaket_cek_no2=trim($_POST["jpaket_cek_no2"]);
+		$jpaket_cek_valid2=trim($_POST["jpaket_cek_valid2"]);
+		$jpaket_cek_bank2=trim($_POST["jpaket_cek_bank2"]);
+		$jpaket_cek_nilai2=trim($_POST["jpaket_cek_nilai2"]);
+		//cek-3
+		$jpaket_cek_nama3=trim($_POST["jpaket_cek_nama3"]);
+		$jpaket_cek_no3=trim($_POST["jpaket_cek_no3"]);
+		$jpaket_cek_valid3=trim($_POST["jpaket_cek_valid3"]);
+		$jpaket_cek_bank3=trim($_POST["jpaket_cek_bank3"]);
+		$jpaket_cek_nilai3=trim($_POST["jpaket_cek_nilai3"]);
 		//transfer
 		$jpaket_transfer_bank=trim($_POST["jpaket_transfer_bank"]);
+		$jpaket_transfer_nama=trim($_POST["jpaket_transfer_nama"]);
+		$jpaket_transfer_nilai=trim($_POST["jpaket_transfer_nilai"]);
+		//transfer-2
+		$jpaket_transfer_bank2=trim($_POST["jpaket_transfer_bank2"]);
+		$jpaket_transfer_nama2=trim($_POST["jpaket_transfer_nama2"]);
+		$jpaket_transfer_nilai2=trim($_POST["jpaket_transfer_nilai2"]);
+		//transfer-3
+		$jpaket_transfer_bank3=trim($_POST["jpaket_transfer_bank3"]);
+		$jpaket_transfer_nama3=trim($_POST["jpaket_transfer_nama3"]);
+		$jpaket_transfer_nilai3=trim($_POST["jpaket_transfer_nilai3"]);
 		
 		
-		$result = $this->m_master_jual_paket->master_jual_paket_update($jpaket_id ,$jpaket_nobukti ,$jpaket_cust ,$jpaket_tanggal ,$jpaket_diskon ,$jpaket_cara ,$jpaket_keterangan , $jpaket_cashback, $jpaket_voucher, $jpaket_voucher_no, $jpaket_bayar, $jpaket_total, $jpaket_total_bayar, $jpaket_kwitansi_no, $jpaket_card_nama, $jpaket_card_edc, $jpaket_cek_nama, $jpaket_cek_no, $jpaket_cek_valid, $jpaket_cek_bank, $jpaket_transfer_bank);
+		$result = $this->m_master_jual_paket->master_jual_paket_update($jpaket_id ,$jpaket_nobukti ,$jpaket_cust ,$jpaket_tanggal ,$jpaket_diskon ,$jpaket_cara ,$jpaket_cara2 ,$jpaket_cara3 ,$jpaket_keterangan , $jpaket_cashback, $jpaket_tunai_nilai, $jpaket_tunai_nilai2, $jpaket_tunai_nilai3, $jpaket_voucher_no, $jpaket_voucher_cashback, $jpaket_voucher_no2, $jpaket_voucher_cashback2, $jpaket_voucher_no3, $jpaket_voucher_cashback3, $jpaket_bayar, $jpaket_subtotal, $jpaket_hutang, $jpaket_kwitansi_no, $jpaket_kwitansi_nama, $jpaket_kwitansi_nilai, $jpaket_kwitansi_no2, $jpaket_kwitansi_nama2, $jpaket_kwitansi_nilai2, $jpaket_kwitansi_no3, $jpaket_kwitansi_nama3, $jpaket_kwitansi_nilai3, $jpaket_card_nama, $jpaket_card_edc, $jpaket_card_no, $jpaket_card_nilai, $jpaket_card_nama2, $jpaket_card_edc2, $jpaket_card_no2, $jpaket_card_nilai2, $jpaket_card_nama3, $jpaket_card_edc3, $jpaket_card_no3, $jpaket_card_nilai3, $jpaket_cek_nama, $jpaket_cek_no, $jpaket_cek_valid, $jpaket_cek_bank, $jpaket_cek_nilai, $jpaket_cek_nama2, $jpaket_cek_no2, $jpaket_cek_valid2, $jpaket_cek_bank2, $jpaket_cek_nilai2, $jpaket_cek_nama3, $jpaket_cek_no3, $jpaket_cek_valid3, $jpaket_cek_bank3, $jpaket_cek_nilai3, $jpaket_transfer_bank, $jpaket_transfer_nama, $jpaket_transfer_nilai, $jpaket_transfer_bank2, $jpaket_transfer_nama2, $jpaket_transfer_nilai2, $jpaket_transfer_bank3, $jpaket_transfer_nama3, $jpaket_transfer_nilai3);
+		echo $result;
 	}
 	
 	//function for create new record
@@ -237,38 +318,109 @@ class C_master_jual_paket extends Controller {
 		$jpaket_cust=trim(@$_POST["jpaket_cust"]);
 		$jpaket_tanggal=trim(@$_POST["jpaket_tanggal"]);
 		$jpaket_diskon=trim(@$_POST["jpaket_diskon"]);
-		$jpaket_cashback=trim(@$_POST["jpaket_cashback"]);
-		$jpaket_voucher=trim(@$_POST["jpaket_voucher"]);
-		$jpaket_voucher=str_replace("/(<\/?)(p)([^>]*>)", "",$jpaket_voucher);
-		$jpaket_voucher=str_replace("'", '"',$jpaket_voucher);
 		$jpaket_cara=trim(@$_POST["jpaket_cara"]);
 		$jpaket_cara=str_replace("/(<\/?)(p)([^>]*>)", "",$jpaket_cara);
 		$jpaket_cara=str_replace("'", '"',$jpaket_cara);
-		$jpaket_bayar=trim(@$_POST["jpaket_bayar"]);
+		
+		$jpaket_cara2=trim(@$_POST["jpaket_cara2"]);
+		$jpaket_cara2=str_replace("/(<\/?)(p)([^>]*>)", "",$jpaket_cara2);
+		$jpaket_cara2=str_replace("'", '"',$jpaket_cara2);
+		
+		$jpaket_cara3=trim(@$_POST["jpaket_cara3"]);
+		$jpaket_cara3=str_replace("/(<\/?)(p)([^>]*>)", "",$jpaket_cara3);
+		$jpaket_cara3=str_replace("'", '"',$jpaket_cara3);
+		
 		$jpaket_keterangan=trim(@$_POST["jpaket_keterangan"]);
 		$jpaket_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$jpaket_keterangan);
 		$jpaket_keterangan=str_replace("'", '"',$jpaket_keterangan);
+		$jpaket_cashback=trim($_POST["jpaket_cashback"]);
+		//$jpaket_voucher=trim($_POST["jpaket_voucher"]);
+		//tunai
+		$jpaket_tunai_nilai=trim($_POST["jpaket_tunai_nilai"]);
+		//tunai-2
+		$jpaket_tunai_nilai2=trim($_POST["jpaket_tunai_nilai2"]);
+		//tunai-3
+		$jpaket_tunai_nilai3=trim($_POST["jpaket_tunai_nilai3"]);
+		//voucher
 		$jpaket_voucher_no=trim($_POST["jpaket_voucher_no"]);
+		$jpaket_voucher_cashback=trim($_POST["jpaket_voucher_cashback"]);
+		//voucher-2
+		$jpaket_voucher_no2=trim($_POST["jpaket_voucher_no2"]);
+		$jpaket_voucher_cashback2=trim($_POST["jpaket_voucher_cashback2"]);
+		//voucher-3
+		$jpaket_voucher_no3=trim($_POST["jpaket_voucher_no3"]);
+		$jpaket_voucher_cashback3=trim($_POST["jpaket_voucher_cashback3"]);
 		//bayar
 		$jpaket_bayar=trim($_POST["jpaket_bayar"]);
-		$jpaket_total=trim($_POST["jpaket_total"]);
-		$jpaket_total_bayar=trim($_POST["jpaket_total_bayar"]);
-		if($jpaket_cara=='tunai')
-			$jpaket_bayar=$jpaket_total;
+		$jpaket_subtotal=trim($_POST["jpaket_subtotal"]);
+		$jpaket_hutang=trim($_POST["jpaket_hutang"]);
+		//if($jpaket_cara=='tunai')
+			//$jpaket_bayar=$jpaket_subtotal;
 		//card
 		$jpaket_card_nama=trim($_POST["jpaket_card_nama"]);
 		$jpaket_card_edc=trim($_POST["jpaket_card_edc"]);
+		$jpaket_card_no=trim($_POST["jpaket_card_no"]);
+		$jpaket_card_nilai=trim($_POST["jpaket_card_nilai"]);
+		//card-2
+		$jpaket_card_nama2=trim($_POST["jpaket_card_nama2"]);
+		$jpaket_card_edc2=trim($_POST["jpaket_card_edc2"]);
+		$jpaket_card_no2=trim($_POST["jpaket_card_no2"]);
+		$jpaket_card_nilai2=trim($_POST["jpaket_card_nilai2"]);
+		//card-3
+		$jpaket_card_nama3=trim($_POST["jpaket_card_nama3"]);
+		$jpaket_card_edc3=trim($_POST["jpaket_card_edc3"]);
+		$jpaket_card_no3=trim($_POST["jpaket_card_no3"]);
+		$jpaket_card_nilai3=trim($_POST["jpaket_card_nilai3"]);
 		//kwitansi
 		$jpaket_kwitansi_no=trim($_POST["jpaket_kwitansi_no"]);
+		$jpaket_kwitansi_nama=trim(@$_POST["jpaket_kwitansi_nama"]);
+		$jpaket_kwitansi_nama=str_replace("/(<\/?)(p)([^>]*>)", "",$jpaket_kwitansi_nama);
+		$jpaket_kwitansi_nama=str_replace("'", '"',$jpaket_kwitansi_nama);
+		$jpaket_kwitansi_nilai=trim($_POST["jpaket_kwitansi_nilai"]);
+		//kwitansi-2
+		$jpaket_kwitansi_no2=trim($_POST["jpaket_kwitansi_no2"]);
+		$jpaket_kwitansi_nama2=trim(@$_POST["jpaket_kwitansi_nama2"]);
+		$jpaket_kwitansi_nama2=str_replace("/(<\/?)(p)([^>]*>)", "",$jpaket_kwitansi_nama2);
+		$jpaket_kwitansi_nama2=str_replace("'", '"',$jpaket_kwitansi_nama2);
+		$jpaket_kwitansi_nilai2=trim($_POST["jpaket_kwitansi_nilai2"]);
+		//kwitansi-3
+		$jpaket_kwitansi_no3=trim($_POST["jpaket_kwitansi_no3"]);
+		$jpaket_kwitansi_nama3=trim(@$_POST["jpaket_kwitansi_nama3"]);
+		$jpaket_kwitansi_nama3=str_replace("/(<\/?)(p)([^>]*>)", "",$jpaket_kwitansi_nama3);
+		$jpaket_kwitansi_nama3=str_replace("'", '"',$jpaket_kwitansi_nama3);
+		$jpaket_kwitansi_nilai3=trim($_POST["jpaket_kwitansi_nilai3"]);
 		//cek
 		$jpaket_cek_nama=trim($_POST["jpaket_cek_nama"]);
 		$jpaket_cek_no=trim($_POST["jpaket_cek_no"]);
 		$jpaket_cek_valid=trim($_POST["jpaket_cek_valid"]);
 		$jpaket_cek_bank=trim($_POST["jpaket_cek_bank"]);
+		$jpaket_cek_nilai=trim($_POST["jpaket_cek_nilai"]);
+		//cek-2
+		$jpaket_cek_nama2=trim($_POST["jpaket_cek_nama2"]);
+		$jpaket_cek_no2=trim($_POST["jpaket_cek_no2"]);
+		$jpaket_cek_valid2=trim($_POST["jpaket_cek_valid2"]);
+		$jpaket_cek_bank2=trim($_POST["jpaket_cek_bank2"]);
+		$jpaket_cek_nilai2=trim($_POST["jpaket_cek_nilai2"]);
+		//cek-3
+		$jpaket_cek_nama3=trim($_POST["jpaket_cek_nama3"]);
+		$jpaket_cek_no3=trim($_POST["jpaket_cek_no3"]);
+		$jpaket_cek_valid3=trim($_POST["jpaket_cek_valid3"]);
+		$jpaket_cek_bank3=trim($_POST["jpaket_cek_bank3"]);
+		$jpaket_cek_nilai3=trim($_POST["jpaket_cek_nilai3"]);
 		//transfer
 		$jpaket_transfer_bank=trim($_POST["jpaket_transfer_bank"]);
+		$jpaket_transfer_nama=trim($_POST["jpaket_transfer_nama"]);
+		$jpaket_transfer_nilai=trim($_POST["jpaket_transfer_nilai"]);
+		//transfer-2
+		$jpaket_transfer_bank2=trim($_POST["jpaket_transfer_bank2"]);
+		$jpaket_transfer_nama2=trim($_POST["jpaket_transfer_nama2"]);
+		$jpaket_transfer_nilai2=trim($_POST["jpaket_transfer_nilai2"]);
+		//transfer-3
+		$jpaket_transfer_bank3=trim($_POST["jpaket_transfer_bank3"]);
+		$jpaket_transfer_nama3=trim($_POST["jpaket_transfer_nama3"]);
+		$jpaket_transfer_nilai3=trim($_POST["jpaket_transfer_nilai3"]);
 				
-		$result=$this->m_master_jual_paket->master_jual_paket_create($jpaket_nobukti ,$jpaket_cust ,$jpaket_tanggal ,$jpaket_diskon ,$jpaket_cara ,$jpaket_keterangan , $jpaket_cashback, $jpaket_voucher, $jpaket_voucher_no, $jpaket_bayar, $jpaket_total, $jpaket_total_bayar, $jpaket_kwitansi_no, $jpaket_card_nama, $jpaket_card_edc, $jpaket_cek_nama, $jpaket_cek_no, $jpaket_cek_valid, $jpaket_cek_bank, $jpaket_transfer_bank);
+		$result=$this->m_master_jual_paket->master_jual_paket_create($jpaket_nobukti ,$jpaket_cust ,$jpaket_tanggal ,$jpaket_diskon ,$jpaket_cara ,$jpaket_cara2 ,$jpaket_cara3 ,$jpaket_keterangan , $jpaket_cashback, $jpaket_tunai_nilai, $jpaket_tunai_nilai2, $jpaket_tunai_nilai3, $jpaket_voucher_no, $jpaket_voucher_cashback, $jpaket_voucher_no2, $jpaket_voucher_cashback2, $jpaket_voucher_no3, $jpaket_voucher_cashback3, $jpaket_bayar, $jpaket_subtotal, $jpaket_hutang, $jpaket_kwitansi_no, $jpaket_kwitansi_nama, $jpaket_kwitansi_nilai, $jpaket_kwitansi_no2, $jpaket_kwitansi_nama2, $jpaket_kwitansi_nilai2, $jpaket_kwitansi_no3, $jpaket_kwitansi_nama3, $jpaket_kwitansi_nilai3, $jpaket_card_nama, $jpaket_card_edc, $jpaket_card_no, $jpaket_card_nilai, $jpaket_card_nama2, $jpaket_card_edc2, $jpaket_card_no2, $jpaket_card_nilai2, $jpaket_card_nama3, $jpaket_card_edc3, $jpaket_card_no3, $jpaket_card_nilai3, $jpaket_cek_nama, $jpaket_cek_no, $jpaket_cek_valid, $jpaket_cek_bank, $jpaket_cek_nilai, $jpaket_cek_nama2, $jpaket_cek_no2, $jpaket_cek_valid2, $jpaket_cek_bank2, $jpaket_cek_nilai2, $jpaket_cek_nama3, $jpaket_cek_no3, $jpaket_cek_valid3, $jpaket_cek_bank3, $jpaket_cek_nilai3, $jpaket_transfer_bank, $jpaket_transfer_nama, $jpaket_transfer_nilai, $jpaket_transfer_bank2, $jpaket_transfer_nama2, $jpaket_transfer_nilai2, $jpaket_transfer_bank3, $jpaket_transfer_nama3, $jpaket_transfer_nilai3);
 		echo $result;
 	}
 
