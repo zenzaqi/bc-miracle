@@ -18,6 +18,7 @@ class C_appointment extends Controller {
 		parent::Controller();
 		$this->load->model('m_appointment', '', TRUE);
 		$this->load->plugin('to_excel');
+		$this->load->library('firephp');
 	}
 	
 	//set index
@@ -206,7 +207,15 @@ class C_appointment extends Controller {
 		$dapp_status=trim(@$_POST["dapp_status"]);
 		$dapp_status=str_replace("/(<\/?)(p)([^>]*>)", "",$dapp_status);
 		$dapp_status=str_replace("'", "\'",$dapp_status);
-		$result = $this->m_appointment->appointment_update($app_id ,$app_customer ,$app_tanggal ,$app_cara ,$app_keterangan, $dapp_id, $dapp_status);
+		$dokter_nama=trim(@$_POST["dokter_nama"]);
+		$terapis_nama=trim(@$_POST["terapis_nama"]);
+		$kategori_nama=trim(@$_POST["kategori_nama"]);
+		$rawat_id=trim(@$_POST["rawat_id"]);
+		$dokter_id=trim(@$_POST["dokter_id"]);
+		$terapis_id=trim(@$_POST["terapis_id"]);
+		$dapp_jamreservasi=trim(@$_POST["dapp_jamreservasi"]);
+		$cust_id=trim(@$_POST["cust_id"]);
+		$result = $this->m_appointment->appointment_update($app_id ,$app_customer ,$app_tanggal ,$app_cara ,$app_keterangan, $dapp_id, $dapp_status, $dokter_nama, $terapis_nama, $kategori_nama, $rawat_id, $dokter_id, $terapis_id, $dapp_jamreservasi, $cust_id);
 		echo $result;
 	}
 	
@@ -222,7 +231,21 @@ class C_appointment extends Controller {
 		$app_keterangan=trim(@$_POST["app_keterangan"]);
 		$app_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$app_keterangan);
 		$app_keterangan=str_replace("'", "\'",$app_keterangan);
-		$result=$this->m_appointment->appointment_create($app_customer ,$app_tanggal ,$app_cara ,$app_keterangan );
+		
+		$app_cust_nama_baru=trim(@$_POST["app_cust_nama_baru"]);
+		$app_cust_nama_baru=str_replace("/(<\/?)(p)([^>]*>)", "",$app_cust_nama_baru);
+		$app_cust_nama_baru=str_replace("'", "\'",$app_cust_nama_baru);
+		$app_cust_telp_baru=trim(@$_POST["app_cust_telp_baru"]);
+		$app_cust_telp_baru=str_replace("/(<\/?)(p)([^>]*>)", "",$app_cust_telp_baru);
+		$app_cust_telp_baru=str_replace("'", "\'",$app_cust_telp_baru);
+		$app_cust_hp_baru=trim(@$_POST["app_cust_hp_baru"]);
+		$app_cust_hp_baru=str_replace("/(<\/?)(p)([^>]*>)", "",$app_cust_hp_baru);
+		$app_cust_hp_baru=str_replace("'", "\'",$app_cust_hp_baru);
+		$app_cust_keterangan_baru=trim(@$_POST["app_cust_keterangan_baru"]);
+		$app_cust_keterangan_baru=str_replace("/(<\/?)(p)([^>]*>)", "",$app_cust_keterangan_baru);
+		$app_cust_keterangan_baru=str_replace("'", "\'",$app_cust_keterangan_baru);
+		
+		$result=$this->m_appointment->appointment_create($app_customer ,$app_tanggal ,$app_cara ,$app_keterangan ,$app_cust_nama_baru ,$app_cust_telp_baru ,$app_cust_hp_baru ,$app_cust_keterangan_baru );
 		echo $result;
 	}
 

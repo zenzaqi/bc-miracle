@@ -136,7 +136,7 @@ class M_appointment extends Model{
 		function appointment_list($filter,$start,$end){
 			//$query = "SELECT * FROM appointment";
 			$dt=date('Y-m-d');
-			$query="SELECT app_id,cust_nama,karyawan_dokter.karyawan_nama as dokter_nama,karyawan_terapis.karyawan_nama as terapis_nama,rawat_nama,kategori_nama,dapp_id,dapp_status,dapp_tglreservasi,dapp_jamdatang,app_tanggal,app_cara,app_keterangan,dapp_jamreservasi,app_creator,app_date_create,app_update,app_date_update,app_revised 
+			$query="SELECT app_id,cust_nama,cust_id,karyawan_dokter.karyawan_nama as dokter_nama,karyawan_dokter.karyawan_id as dokter_id,karyawan_terapis.karyawan_nama as terapis_nama,karyawan_terapis.karyawan_id as terapis_id,rawat_id,rawat_nama,kategori_nama,dapp_id,dapp_status,dapp_tglreservasi,dapp_jamdatang,app_tanggal,app_cara,app_keterangan,dapp_jamreservasi,app_creator,app_date_create,app_update,app_date_update,app_revised 
 FROM (((appointment inner join appointment_detail on appointment.app_id=appointment_detail.dapp_master inner join perawatan on appointment_detail.dapp_perawatan=perawatan.rawat_id 
 inner join customer on appointment.app_customer=customer.cust_id inner join kategori on perawatan.rawat_kategori=kategori.kategori_id) 
 left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawan_dokter.karyawan_id) left join karyawan as karyawan_terapis on appointment_detail.dapp_petugas2=karyawan_terapis.karyawan_id)
@@ -165,21 +165,33 @@ WHERE dapp_tglreservasi='$dt'";
 		}
 		
 		//function for update record
-		function appointment_update($app_id ,$app_customer ,$app_tanggal ,$app_cara ,$app_keterangan,$dapp_id, $dapp_status ){
+		function appointment_update($app_id ,$app_customer ,$app_tanggal ,$app_cara ,$app_keterangan,$dapp_id, $dapp_status, $dokter_nama, $terapis_nama, $kategori_nama, $rawat_id, $dokter_id, $terapis_id, $dapp_jamreservasi, $cust_id){
+			//INSERT to Appointment-Detail
 			$data_dapp=array();
 			if($dapp_status=="datang"){
-				$data_dapp["dapp_tgldatang"]=date('Y-m-d');
-				$data_dapp["dapp_jamdatang"]=date('H:i:s');
+				$date_now=date('Y-m-d');
+				$time_now=date('H:i:s');
+				$data_dapp["dapp_tgldatang"]=$date_now;
+				$data_dapp["dapp_jamdatang"]=$time_now;
 				$data_dapp["dapp_status"]=$dapp_status;
 			}else{
 				$data_dapp["dapp_tgldatang"]="0000-00-00";
 				$data_dapp["dapp_jamdatang"]="";
 				$data_dapp["dapp_status"]=$dapp_status;
+				
+				//Menghapus Tindakan-DEtail WHERE 
+				$this->db->where('dtrawat_dapp', $dapp_id);
+				$this->db->delete('tindakan_detail');
 			}
+			$sql="SELECT cust_id FROM customer WHERE cust_id='$dokter_nama'";
+			$rs=$this->db->query($sql);
+			if($rs->num_rows())
+				$data_dapp["dapp_petugas"]=$dokter_nama;
 			$this->db->where('dapp_id',$dapp_id);
 			$this->db->where('dapp_master',$app_id);
 			$this->db->update('appointment_detail',$data_dapp);
 			
+			//INSERT to Appointment
 			$data = array(
 				"app_id"=>$app_id, 
 				//"app_customer"=>$app_customer, 
@@ -187,29 +199,139 @@ WHERE dapp_tglreservasi='$dt'";
 				"app_cara"=>$app_cara, 
 				"app_keterangan"=>$app_keterangan,
 			);
-			$sql="SELECT cust_id FROM customer WHERE cust_id='$app_customer'";
-			$rs=$this->db->query($sql);
-			if($rs->num_rows())
+			$sql_cust="SELECT cust_id FROM customer WHERE cust_id='$app_customer'";
+			$rs_cust=$this->db->query($sql_cust);
+			if($rs_cust->num_rows()){
+				$customer_id=$app_customer;
 				$data["app_customer"]=$app_customer;
+			}else{
+				$customer_id=$cust_id;
+			}
 			$this->db->where('app_id', $app_id);
 			$this->db->update('appointment', $data);
+			
+			//INSERT to Perawatan-Tindakan
+			if($dapp_status=="datang"){
+				$sql="SELECT * FROM tindakan WHERE trawat_cust='$customer_id' AND trawat_date_create='$date_now'";
+				$rs=$this->db->query($sql);
+				if($rs->num_rows()){
+					$rs_record=$rs->row_array();
+					$dtrawat_master=$rs_record["trawat_id"]; //ambil ID dr tabel tindakan
+					//Hanya INSERT to Tindakan-Detail
+					$this->firephp->log($dapp_jamreservasi, 'JAM-RESERVASI');
+					$data_dtindakan=array(
+					"dtrawat_master"=>$dtrawat_master,
+					"dtrawat_dapp"=>$dapp_id,
+					"dtrawat_perawatan"=>$rawat_id,
+					"dtrawat_jam"=>$dapp_jamreservasi,
+					"dtrawat_status"=>'reservasi'
+					);
+					$sql_petugas1="SELECT karyawan_id FROM karyawan WHERE karyawan_id='$dokter_nama'";
+					$rs_petugas1=$this->db->query($sql_petugas1);
+					if($rs_petugas1->num_rows())
+						$data_dtindakan["dtrawat_petugas1"]=$dokter_nama;
+					else
+						$data_dtindakan["dtrawat_petugas1"]=$dokter_id;
+					
+					$sql_petugas2="SELECT karyawan_id FROM karyawan WHERE karyawan_id='$terapis_nama'";
+					$rs_petugas2=$this->db->query($sql_petugas2);
+					if($rs_petugas2->num_rows())
+						$data_dtindakan["dtrawat_petugas2"]=$terapis_nama;
+					else
+						$data_dtindakan["dtrawat_petugas2"]=$terapis_id;
+					$this->db->insert('tindakan_detail', $data_dtindakan);
+				}else{
+					$data_tindakan=array(
+					"trawat_cust"=>$customer_id,
+					"trawat_jamdatang"=>$time_now,
+					"trawat_appointment"=>$kategori_nama,
+					"trawat_keterangan"=>$app_keterangan,
+					"trawat_date_create"=>$date_now
+					);
+					$this->db->insert('tindakan', $data_tindakan);
+					if($this->db->affected_rows()){
+						$sql="SELECT * FROM tindakan WHERE trawat_cust='$customer_id' AND trawat_date_create='$date_now'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							$rs_record=$rs->row_array();
+							$dtrawat_master=$rs_record["trawat_id"];
+						}
+						$this->firephp->log($dapp_jamreservasi, 'JAM-RESERVASI');
+						$data_dtindakan=array(
+						"dtrawat_master"=>$dtrawat_master,
+						"dtrawat_dapp"=>$dapp_id,
+						"dtrawat_perawatan"=>$rawat_id,
+						"dtrawat_jam"=>$dapp_jamreservasi,
+						"dtrawat_status"=>'reservasi'
+						);
+						$sql_petugas1="SELECT karyawan_id FROM karyawan WHERE karyawan_id='$dokter_nama'";
+						$rs_petugas1=$this->db->query($sql_petugas1);
+						if($rs_petugas1->num_rows())
+							$data_dtindakan["dtrawat_petugas1"]=$dokter_nama;
+						else
+							$data_dtindakan["dtrawat_petugas1"]=$dokter_id;
+						
+						$sql_petugas2="SELECT karyawan_id FROM karyawan WHERE karyawan_id='$terapis_nama'";
+						$rs_petugas2=$this->db->query($sql_petugas2);
+						if($rs_petugas2->num_rows())
+							$data_dtindakan["dtrawat_petugas2"]=$terapis_nama;
+						else
+							$data_dtindakan["dtrawat_petugas2"]=$terapis_id;
+						$this->db->insert('tindakan_detail', $data_dtindakan);
+					}
+				}
+			}
 			
 			return '1';
 		}
 		
 		//function for create new record
-		function appointment_create($app_customer ,$app_tanggal ,$app_cara ,$app_keterangan ){
-			$data = array(
-				"app_customer"=>$app_customer, 
-				"app_tanggal"=>$app_tanggal, 
-				"app_cara"=>$app_cara, 
-				"app_keterangan"=>$app_keterangan 
-			);
-			$this->db->insert('appointment', $data); 
+		function appointment_create($app_customer ,$app_tanggal ,$app_cara ,$app_keterangan ,$app_cust_nama_baru ,$app_cust_telp_baru ,$app_cust_hp_baru ,$app_cust_keterangan_baru ){
+			if($app_cust_nama_baru!=""){
+				$sql="SELECT * FROM customer WHERE cust_telprumah='$app_cust_telp_baru' OR cust_hp='$app_cust_hp_baru'";
+				$rs=$this->db->query($sql);
+				if($rs->num_rows()){
+					return '2';
+				}else{
+					$data_cust_baru=array(
+					"cust_nama"=>$app_cust_nama_baru,
+					"cust_telprumah"=>$app_cust_telp_baru,
+					"cust_hp"=>$app_cust_hp_baru,
+					"cust_keterangan"=>$app_cust_keterangan_baru,
+					"cust_aktif"=>'Aktif'
+					);
+					$this->db->insert('customer', $data_cust_baru);
+					if($this->db->affected_rows()){
+						$sql="SELECT cust_id FROM customer WHERE cust_telprumah='$app_cust_telp_baru' OR cust_hp='$app_cust_hp_baru'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							$rs_record=$rs->row_array();
+							$app_customer=$rs_record["cust_id"];
+						}
+						
+						$data = array(
+							"app_customer"=>$app_customer, 
+							"app_tanggal"=>$app_tanggal, 
+							"app_cara"=>$app_cara, 
+							"app_keterangan"=>$app_keterangan 
+						);
+						$this->db->insert('appointment', $data);
+					}
+				}
+			}else{
+				$data = array(
+					"app_customer"=>$app_customer, 
+					"app_tanggal"=>$app_tanggal, 
+					"app_cara"=>$app_cara, 
+					"app_keterangan"=>$app_keterangan 
+				);
+				$this->db->insert('appointment', $data);
+			} 
 			if($this->db->affected_rows())
 				return '1';
 			else
 				return '0';
+			
 		}
 		
 		//fcuntion for delete record

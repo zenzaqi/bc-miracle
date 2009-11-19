@@ -613,8 +613,7 @@ Ext.onReady(function(){
 			{name: 'dtrawat_master', type: 'int', mapping: 'dtrawat_master'}, 
 			{name: 'dtrawat_perawatan', type: 'int', mapping: 'dtrawat_perawatan'}, 
 			{name: 'dtrawat_petugas1', type: 'int', mapping: 'dtrawat_petugas1'}, 
-			{name: 'dtrawat_petugas2', type: 'int', mapping: 'dtrawat_petugas2'}, 
-			{name: 'dtrawat_jamreservasi', type: 'string', mapping: 'dtrawat_jamreservasi'}, 
+			{name: 'dtrawat_jam', type: 'string', mapping: 'dtrawat_jam'}, 
 			{name: 'dtrawat_kategori', type: 'string', mapping: 'dtrawat_kategori'}, 
 			{name: 'dtrawat_status', type: 'string', mapping: 'dtrawat_status'} 
 	]);
@@ -766,7 +765,7 @@ Ext.onReady(function(){
 		{
 			header: 'Perawatan',
 			dataIndex: 'dtrawat_perawatan',
-			width: 150,
+			width: 290,
 			sortable: true,
 			editor: combo_trawat_rawat,
 			renderer: Ext.util.Format.comboRenderer(combo_trawat_rawat)
@@ -774,51 +773,24 @@ Ext.onReady(function(){
 		{
 			header: 'Dokter',
 			dataIndex: 'dtrawat_petugas1',
-			width: 150,
+			width: 200,
 			sortable: true,
 			editor: combo_dapp_dokter,
 			renderer: Ext.util.Format.comboRenderer(combo_dapp_dokter)
 		},
 		{
-			header: 'Dokter/Therapist',
-			dataIndex: 'dtrawat_petugas2',
-			width: 150,
-			sortable: true,
-			editor: combo_dapp_terapis,
-			renderer: Ext.util.Format.comboRenderer(combo_dapp_terapis)
-		},
-		{
-			header: 'Jam Reservasi',
-			dataIndex: 'dtrawat_jamreservasi',
-			width: 150,
+			header: 'Jam Appointment',
+			dataIndex: 'dtrawat_jam',
+			width: 100,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 8
           	})
 		},
 		{
-			header: 'Kategori',
-			dataIndex: 'dtrawat_kategori',
-			width: 150,
-			sortable: true,
-			editor: new Ext.form.ComboBox({
-				typeAhead: true,
-				triggerAction: 'all',
-				store:new Ext.data.SimpleStore({
-					fields:['dtrawat_kategori_value', 'dtrawat_kategori_display'],
-					data: [['Medis','Medis'],['Non Medis','Non Medis']]
-					}),
-				mode: 'local',
-               	displayField: 'dtrawat_kategori_display',
-               	valueField: 'dtrawat_kategori_value',
-               	lazyRender:true,
-               	listClass: 'x-combo-list-small'
-            })
-		},
-		{
 			header: 'Status',
 			dataIndex: 'dtrawat_status',
-			width: 150,
+			width: 100,
 			sortable: true,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
