@@ -17,6 +17,7 @@ class C_tindakan_medis extends Controller {
 	function C_tindakan_medis(){
 		parent::Controller();
 		$this->load->model('m_tindakan_medis', '', TRUE);
+		$this->load->library('firephp');
 	}
 	
 	//set index
@@ -59,9 +60,9 @@ class C_tindakan_medis extends Controller {
 	//end of handler
 	
 	//purge all detail
-	function detail_tindakan_detail_purge(){
+	function detail_tindakan_medis_detail_purge(){
 		$master_id = (integer) (isset($_POST['master_id']) ? $_POST['master_id'] : $_GET['master_id']);
-		$result=$this->m_tindakan_medis->detail_tindakan_detail_purge($master_id);
+		$result=$this->m_tindakan_medis->detail_tindakan_medis_detail_purge($master_id);
 	}
 	//eof
 	
@@ -73,7 +74,7 @@ class C_tindakan_medis extends Controller {
 	//
 	
 	//add detail
-	function detail_tindakan_detail_insert(){
+	function detail_tindakan_medis_detail_insert(){
 	//POST variable here
 		$dtrawat_id=trim(@$_POST["dtrawat_id"]);
 		$dtrawat_master=trim(@$_POST["dtrawat_master"]);
@@ -92,7 +93,7 @@ class C_tindakan_medis extends Controller {
 		$dtrawat_status=str_replace("/(<\/?)(p)([^>]*>)", "",$dtrawat_status);
 		$dtrawat_status=str_replace("\\", "",$dtrawat_status);
 		$dtrawat_status=str_replace("'", "\'",$dtrawat_status);
-		$result=$this->m_tindakan_medis->detail_tindakan_detail_insert($dtrawat_id ,$dtrawat_master ,$dtrawat_perawatan ,$dtrawat_petugas1 ,$dtrawat_petugas2 ,$dtrawat_jamreservasi ,$dtrawat_kategori ,$dtrawat_status );
+		$result=$this->m_tindakan_medis->detail_tindakan_medis_detail_insert($dtrawat_id ,$dtrawat_master ,$dtrawat_perawatan ,$dtrawat_petugas1 ,$dtrawat_petugas2 ,$dtrawat_jamreservasi ,$dtrawat_kategori ,$dtrawat_status );
 	}
 	
 	
@@ -146,7 +147,16 @@ class C_tindakan_medis extends Controller {
 		$trawat_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$trawat_keterangan);
 		$trawat_keterangan=str_replace(",", "\,",$trawat_keterangan);
 		$trawat_keterangan=str_replace("'", "\'",$trawat_keterangan);
-		$result = $this->m_tindakan_medis->tindakan_update($trawat_id ,$trawat_cust ,$trawat_keterangan      );
+		$dtrawat_status=trim(@$_POST["dtrawat_status"]);
+		$trawat_cust_id=trim(@$_POST["trawat_cust_id"]);
+		$dtrawat_perawatan_id=trim(@$_POST["dtrawat_perawatan_id"]);
+		$dtrawat_perawatan=trim(@$_POST["dtrawat_perawatan"]);
+		$dtrawat_id=trim(@$_POST["dtrawat_id"]);
+		$rawat_harga=trim(@$_POST["rawat_harga"]);
+		$rawat_du=trim(@$_POST["rawat_du"]);
+		$rawat_dm=trim(@$_POST["rawat_dm"]);
+		$cust_member=trim(@$_POST["cust_member"]);
+		$result = $this->m_tindakan_medis->tindakan_update($trawat_id ,$trawat_cust ,$trawat_keterangan ,$dtrawat_status ,$trawat_cust_id ,$dtrawat_perawatan_id ,$dtrawat_perawatan ,$dtrawat_id ,$rawat_harga ,$rawat_du ,$rawat_dm ,$cust_member);
 		echo $result;
 	}
 	
