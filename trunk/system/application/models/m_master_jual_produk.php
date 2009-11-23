@@ -213,7 +213,7 @@ left join jual_kwitansi on(master_jual_produk.jproduk_nobukti=jual_kwitansi.jkwi
 							"jcard_nilai"=>$jproduk_card_nilai
 							);
 						$this->db->where('jcard_ref', $jproduk_nobukti);
-						$this->db->update('jual_card', $data); 
+						$this->db->insert('jual_card', $data); 
 					
 					}else if($jproduk_cara=='cek/giro'){
 						

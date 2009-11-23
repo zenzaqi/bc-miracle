@@ -86,10 +86,6 @@ class M_appointment extends Model{
 			if($dapp_medis_master=="" || $dapp_medis_master==NULL){
 				$dapp_medis_master=$this->get_master_id();
 			}
-			if($dapp_medis_status=="datang"){
-				$dapp_medis_tgldatang=date('Y-m-d');
-				$dapp_medis_jamdatang=date('H:i:s');
-			}
 			
 			$data = array(
 				"dapp_master"=>$dapp_medis_master, 
@@ -187,7 +183,7 @@ WHERE dapp_tglreservasi='$dt'";
 				$this->db->where('dtrawat_dapp', $dapp_id);
 				$this->db->delete('tindakan_detail');
 			}
-			$sql="SELECT karyawan_id FROM karyawan WHERE karyawan_id='$dokter_nama'";
+			$sql="SELECT cust_id FROM customer WHERE cust_id='$dokter_nama'";
 			$rs=$this->db->query($sql);
 			if($rs->num_rows())
 				$data_dapp["dapp_petugas"]=$dokter_nama;
@@ -222,12 +218,13 @@ WHERE dapp_tglreservasi='$dt'";
 					$rs_record=$rs->row_array();
 					$dtrawat_master=$rs_record["trawat_id"]; //ambil ID dr tabel tindakan
 					//Hanya INSERT to Tindakan-Detail
+					$this->firephp->log($dapp_jamreservasi, 'JAM-RESERVASI');
 					$data_dtindakan=array(
 					"dtrawat_master"=>$dtrawat_master,
 					"dtrawat_dapp"=>$dapp_id,
 					"dtrawat_perawatan"=>$rawat_id,
 					"dtrawat_jam"=>$dapp_jamreservasi,
-					"dtrawat_status"=>$dapp_status
+					"dtrawat_status"=>'reservasi'
 					);
 					$sql_petugas1="SELECT karyawan_id FROM karyawan WHERE karyawan_id='$dokter_nama'";
 					$rs_petugas1=$this->db->query($sql_petugas1);
@@ -259,12 +256,13 @@ WHERE dapp_tglreservasi='$dt'";
 							$rs_record=$rs->row_array();
 							$dtrawat_master=$rs_record["trawat_id"];
 						}
+						$this->firephp->log($dapp_jamreservasi, 'JAM-RESERVASI');
 						$data_dtindakan=array(
 						"dtrawat_master"=>$dtrawat_master,
 						"dtrawat_dapp"=>$dapp_id,
 						"dtrawat_perawatan"=>$rawat_id,
 						"dtrawat_jam"=>$dapp_jamreservasi,
-						"dtrawat_status"=>$dapp_status
+						"dtrawat_status"=>'reservasi'
 						);
 						$sql_petugas1="SELECT karyawan_id FROM karyawan WHERE karyawan_id='$dokter_nama'";
 						$rs_petugas1=$this->db->query($sql_petugas1);
@@ -337,38 +335,13 @@ WHERE dapp_tglreservasi='$dt'";
 		}
 		
 		//fcuntion for delete record
-		/*function appointment_delete($pkid){
-			// You could do some checkups here and return '0' or other error consts.
-			// Make a single query to delete all of the appointments at the same time :
-			if(sizeof($pkid)<1){
-				return '0';
-			} else if (sizeof($pkid) == 1){
-				$query = "DELETE FROM appointment WHERE app_id = ".$pkid[0];
-				$this->db->query($query);
-			} else {
-				$query = "DELETE FROM appointment WHERE ";
-				for($i = 0; $i < sizeof($pkid); $i++){
-					$query = $query . "app_id= ".$pkid[$i];
-					if($i<sizeof($pkid)-1){
-						$query = $query . " OR ";
-					}     
-				}
-				$this->db->query($query);
-			}
-			if($this->db->affected_rows()>0)
-				return '1';
-			else
-				return '0';
-		}*/
-		
-		/* Delete appointment_detail */
 		function appointment_delete($pkid){
 			// You could do some checkups here and return '0' or other error consts.
 			// Make a single query to delete all of the appointments at the same time :
 			if(sizeof($pkid)<1){
 				return '0';
 			} else if (sizeof($pkid) == 1){
-				$query = "DELETE FROM appointment_detail WHERE dapp_id = ".$pkid[0];
+				$query = "DELETE FROM appointment WHERE app_id = ".$pkid[0];
 				$this->db->query($query);
 			} else {
 				$query = "DELETE FROM appointment WHERE ";
