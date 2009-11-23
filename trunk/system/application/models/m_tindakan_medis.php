@@ -54,14 +54,14 @@ class M_tindakan_medis extends Model{
 		//eof
 		
 		//purge all detail from master
-		function detail_tindakan_detail_purge($master_id){
-			$sql="DELETE from tindakan_detail where dtrawat_master='".$master_id."'";
+		function detail_tindakan_medis_detail_purge($master_id){
+			$sql="DELETE tindakan_detail FROM tindakan_detail INNER JOIN perawatan ON dtrawat_perawatan=rawat_id LEFT JOIN kategori ON rawat_kategori=kategori_id WHERE kategori_nama='Medis' AND dtrawat_master='".$master_id."'";
 			$result=$this->db->query($sql);
 		}
 		//*eof
 		
 		//insert detail record
-		function detail_tindakan_detail_insert($dtrawat_id ,$dtrawat_master ,$dtrawat_perawatan ,$dtrawat_petugas1 ,$dtrawat_petugas2 ,$dtrawat_jamreservasi ,$dtrawat_kategori ,$dtrawat_status ){
+		function detail_tindakan_medis_detail_insert($dtrawat_id ,$dtrawat_master ,$dtrawat_perawatan ,$dtrawat_petugas1 ,$dtrawat_petugas2 ,$dtrawat_jamreservasi ,$dtrawat_kategori ,$dtrawat_status ){
 			//if master id not capture from view then capture it from max pk from master table
 			if($dtrawat_master=="" || $dtrawat_master==NULL){
 				$dtrawat_master=$this->get_master_id();
@@ -72,7 +72,7 @@ class M_tindakan_medis extends Model{
 				"dtrawat_perawatan"=>$dtrawat_perawatan, 
 				"dtrawat_petugas1"=>$dtrawat_petugas1, 
 				"dtrawat_petugas2"=>$dtrawat_petugas2, 
-				"dtrawat_jamreservasi"=>$dtrawat_jamreservasi, 
+				"dtrawat_jam"=>$dtrawat_jamreservasi, 
 				"dtrawat_kategori"=>$dtrawat_kategori, 
 				"dtrawat_status"=>$dtrawat_status 
 			);
@@ -88,7 +88,7 @@ class M_tindakan_medis extends Model{
 		//function for get list record
 		function tindakan_list($filter,$start,$end){
 			$date_now=date('Y-m-d');
-			$query = "SELECT * FROM tindakan,customer WHERE trawat_cust=cust_id AND trawat_appointment='Medis' AND trawat_date_create='$date_now'";
+			$query = "SELECT * FROM tindakan INNER JOIN customer ON trawat_cust=cust_id INNER JOIN tindakan_detail ON dtrawat_master=trawat_id LEFT JOIN perawatan ON dtrawat_perawatan=rawat_id LEFT JOIN karyawan ON dtrawat_petugas1=karyawan_id LEFT JOIN kategori ON rawat_kategori=kategori_id WHERE kategori_nama='Medis' AND trawat_date_create='$date_now'";
 			
 			// For simple search
 			if ($filter<>""){
@@ -113,14 +113,105 @@ class M_tindakan_medis extends Model{
 		}
 		
 		//function for update record
-		function tindakan_update($trawat_id ,$trawat_cust ,$trawat_keterangan ){
-			$data = array(
+		function tindakan_update($trawat_id ,$trawat_cust ,$trawat_keterangan ,$dtrawat_status ,$trawat_cust_id ,$dtrawat_perawatan_id ,$dtrawat_perawatan ,$dtrawat_id ,$rawat_harga ,$rawat_du ,$rawat_dm ,$cust_member){
+			/*$data = array(
 				"trawat_id"=>$trawat_id, 
-				"trawat_cust"=>$trawat_cust, 
+				//"trawat_cust"=>$trawat_cust, 
 				"trawat_keterangan"=>$trawat_keterangan 
 			);
 			$this->db->where('trawat_id', $trawat_id);
-			$this->db->update('tindakan', $data);
+			$this->db->update('tindakan', $data);*/
+			/*
+			 * Karena untuk perawatan-tindakan ini yg diUPDATE hanya dtrawat_status maka yg diUPDATE adalah
+			 * hanya table.tindakan_detail
+			 */ 
+			$data_dtindakan=array(
+			"dtrawat_status"=>$dtrawat_status
+			);
+			$this->db->where("dtrawat_id", $dtrawat_id);
+			$this->db->update("tindakan_detail", $data_dtindakan);
+			
+			//Jika dtrawat_status=="selesai" --> INSERT to table.master_jual_rawat
+			if($dtrawat_status=="selesai"){
+				$date_now=date('Y-m-d');
+				//Checking di table.master_jual_rawat WHERE jrawat_cust=$trawat_cust_id AND jrawat_tanggal=$date_now
+				//Jika SUDAH ADA maka INSERT hanya ke table.detail_jual_rawat
+				//Jika TIDAK ADA maka INSERT ke table.master_jual_rawat AND table.detail_jual_rawat
+				
+				$sql="SELECT jrawat_id FROM master_jual_rawat WHERE jrawat_cust='$trawat_cust_id' AND jrawat_tanggal='$date_now'";
+				$rs=$this->db->query($sql);
+				if($rs->num_rows()){
+					//Hanya INSERT to table.detail_jual_rawat
+					$rs_record=$rs->row_array();
+					$jrawat_id=$rs_record["jrawat_id"];
+					if($cust_member!=""){
+						$diskon_jenis="DM";
+						
+						$data_djrawat=array(
+						"drawat_master"=>$jrawat_id,
+						"drawat_rawat"=>$dtrawat_perawatan_id,
+						"drawat_harga"=>$rawat_harga,
+						"drawat_diskon"=>$rawat_dm,
+						"drawat_diskon_jenis"=>$diskon_jenis
+						);
+						$this->db->insert('detail_jual_rawat', $data_djrawat);
+					}else if($cust_member==""){
+						$diskon_jenis="DU";
+						
+						$data_djrawat=array(
+						"drawat_master"=>$jrawat_id,
+						"drawat_rawat"=>$dtrawat_perawatan_id,
+						"drawat_harga"=>$rawat_harga,
+						"drawat_diskon"=>$rawat_du,
+						"drawat_diskon_jenis"=>$diskon_jenis
+						);
+						$this->db->insert('detail_jual_rawat', $data_djrawat);
+					}
+				}else{
+					//INSERT to table.master_jual_rawat AND table.detail_jual_rawat
+					$pattern="PR/".date("y/m")."/";
+					$jrawat_nobukti=$this->m_public_function->get_kode_1('master_jual_rawat','jrawat_nobukti',$pattern,13);
+					$data_jrawat=array(
+					"jrawat_nobukti"=>$jrawat_nobukti,
+					"jrawat_cust"=>$trawat_cust_id,
+					"jrawat_tanggal"=>$date_now
+					);
+					$this->db->insert('master_jual_rawat', $data_jrawat);
+					if($this->db->affected_rows()){
+						//INSERT to table.detail_jual_rawat
+						$sql="SELECT jrawat_id FROM master_jual_rawat WHERE jrawat_cust='$trawat_cust_id' AND jrawat_tanggal='$date_now'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							$rs_record=$rs->row_array();
+							$jrawat_id=$rs_record["jrawat_id"];
+						}
+						
+						if($cust_member!=""){
+							$diskon_jenis="DM";
+							
+							$data_djrawat=array(
+							"drawat_master"=>$jrawat_id,
+							"drawat_rawat"=>$dtrawat_perawatan_id,
+							"drawat_harga"=>$rawat_harga,
+							"drawat_diskon"=>$rawat_dm,
+							"drawat_diskon_jenis"=>$diskon_jenis
+							);
+							$this->db->insert('detail_jual_rawat', $data_djrawat);
+						}else if($cust_member==""){
+							$diskon_jenis="DU";
+							
+							$data_djrawat=array(
+							"drawat_master"=>$jrawat_id,
+							"drawat_rawat"=>$dtrawat_perawatan_id,
+							"drawat_harga"=>$rawat_harga,
+							"drawat_diskon"=>$rawat_du,
+							"drawat_diskon_jenis"=>$diskon_jenis
+							);
+							$this->db->insert('detail_jual_rawat', $data_djrawat);
+						}
+					}
+				}
+			}
 			
 			return '1';
 		}

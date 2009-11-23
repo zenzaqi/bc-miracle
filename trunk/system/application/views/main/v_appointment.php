@@ -376,9 +376,9 @@ Ext.onReady(function(){
 	function appointment_confirm_delete(){
 		// only one appointment is selected here
 		if(appointmentListEditorGrid.selModel.getCount() == 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', appointment_delete);
+			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', appointment_detail_delete);
 		} else if(appointmentListEditorGrid.selModel.getCount() > 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', appointment_delete);
+			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', appointment_detail_delete);
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
@@ -425,6 +425,51 @@ Ext.onReady(function(){
 			var prez = [];
 			for(i = 0; i< appointmentListEditorGrid.selModel.getCount(); i++){
 				prez.push(selections[i].json.app_id);
+			}
+			var encoded_array = Ext.encode(prez);
+			Ext.Ajax.request({ 
+				waitMsg: 'Please Wait',
+				url: 'index.php?c=c_appointment&m=get_action', 
+				params: { task: "DELETE", ids:  encoded_array }, 
+				success: function(response){
+					var result=eval(response.responseText);
+					switch(result){
+						case 1:  // Success : simply reload
+							appointment_DataStore.reload();
+							break;
+						default:
+							Ext.MessageBox.show({
+								title: 'Warning',
+								msg: 'Could not delete the entire selection',
+								buttons: Ext.MessageBox.OK,
+								animEl: 'save',
+								icon: Ext.MessageBox.WARNING
+							});
+							break;
+					}
+				},
+				failure: function(response){
+					var result=response.responseText;
+					Ext.MessageBox.show({
+					   title: 'Error',
+					   msg: 'Could not connect to the database. retry later.',
+					   buttons: Ext.MessageBox.OK,
+					   animEl: 'database',
+					   icon: Ext.MessageBox.ERROR
+					});	
+				}
+			});
+		}  
+	}
+  	/* End of Function */
+  	
+	/* Function for Delete Record */
+	function appointment_detail_delete(btn){
+		if(btn=='yes'){
+			var selections = appointmentListEditorGrid.selModel.getSelections();
+			var prez = [];
+			for(i = 0; i< appointmentListEditorGrid.selModel.getCount(); i++){
+				prez.push(selections[i].json.dapp_id);
 			}
 			var encoded_array = Ext.encode(prez);
 			Ext.Ajax.request({ 
@@ -1296,7 +1341,7 @@ Ext.onReady(function(){
 				waitMsg: 'Please wait...',
 				url: 'index.php?c=c_appointment&m=detail_appointment_detail_medis_insert',
 				params:{
-				dapp_medis_id	: appointment_detail_medis_record.data.dapp_medis_id, 
+				//dapp_medis_id	: appointment_detail_medis_record.data.dapp_medis_id, 
 				dapp_medis_master	: eval(app_idField.getValue()), 
 				dapp_medis_perawatan	: appointment_detail_medis_record.data.dapp_medis_perawatan, 
 				dapp_medis_tglreservasi	: appointment_detail_medis_record.data.dapp_medis_tglreservasi.format('Y-m-d'),
@@ -1304,7 +1349,8 @@ Ext.onReady(function(){
 				dapp_medis_petugas	: appointment_detail_medis_record.data.dapp_medis_petugas, 
 //				dapp_medis_petugas2	: appointment_detail_medis_record.data.dapp_medis_petugas2, 
 				dapp_medis_status	: appointment_detail_medis_record.data.dapp_medis_status,
-				}
+				},
+				timeout:20000
 			});
 		}
 	}

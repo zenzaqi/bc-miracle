@@ -87,15 +87,29 @@ Ext.onReady(function(){
 	function tindakan_nonmedis_update(oGrid_event){
 		var trawat_id_update_pk="";
 		var trawat_cust_update=null;
-		var trawat_jamdatang_update=null;
-//		var trawat_appointment_update=null;
 		var trawat_keterangan_update=null;
+		var dtrawat_status_update=null;
+		var trawat_cust_id_update=null;
+		var dtrawat_perawatan_id_update=null;
+		var dtrawat_perawatan_update=null;
+		var dtrawat_id_update=null;
+		var perawatan_harga_update=null;
+		var perawatan_du_update=null;
+		var perawatan_dm_update=null;
+		var cust_member_update=null;
 
 		trawat_id_update_pk = oGrid_event.record.data.trawat_id;
 		if(oGrid_event.record.data.trawat_cust!== null){trawat_cust_update = oGrid_event.record.data.trawat_cust;}
-		if(oGrid_event.record.data.trawat_jamdatang!== null){trawat_jamdatang_update = oGrid_event.record.data.trawat_jamdatang;}
-//		if(oGrid_event.record.data.trawat_appointment!== null){trawat_appointment_update = oGrid_event.record.data.trawat_appointment;}
 		if(oGrid_event.record.data.trawat_keterangan!== null){trawat_keterangan_update = oGrid_event.record.data.trawat_keterangan;}
+		dtrawat_status_update = oGrid_event.record.data.dtrawat_status;
+		trawat_cust_id_update = oGrid_event.record.data.trawat_cust_id;
+		dtrawat_perawatan_id_update = oGrid_event.record.data.dtrawat_perawatan_id;
+		dtrawat_perawatan_update = oGrid_event.record.data.dtrawat_perawatan;
+		dtrawat_id_update = oGrid_event.record.data.dtrawat_id;
+		perawatan_harga_update = oGrid_event.record.data.perawatan_harga;
+		perawatan_du_update = oGrid_event.record.data.perawatan_du;
+		perawatan_dm_update = oGrid_event.record.data.perawatan_dm;
+		cust_member_update = oGrid_event.record.data.cust_member;
 
 		Ext.Ajax.request({  
 			waitMsg: 'Please wait...',
@@ -104,9 +118,16 @@ Ext.onReady(function(){
 				task: "UPDATE",
 				trawat_id	: trawat_id_update_pk, 
 				trawat_cust	:trawat_cust_update,  
-				trawat_jamdatang	:trawat_jamdatang_update,  
-//				trawat_appointment	:trawat_appointment_update,  
 				trawat_keterangan	:trawat_keterangan_update,  
+				dtrawat_status	:dtrawat_status_update,
+				trawat_cust_id	:trawat_cust_id_update,
+				dtrawat_perawatan_id	:dtrawat_perawatan_id_update,
+				dtrawat_perawatan	:dtrawat_perawatan_update,
+				dtrawat_id	:dtrawat_id_update,
+				rawat_harga	:perawatan_harga_update,
+				rawat_du	:perawatan_du_update,
+				rawat_dm	:perawatan_dm_update,
+				cust_member	:cust_member_update
 			}, 
 			success: function(response){							
 				var result=eval(response.responseText);
@@ -350,6 +371,13 @@ Ext.onReady(function(){
 		}  
 	}
   	/* End of Function */
+  	
+	Ext.util.Format.comboRenderer = function(combo){
+		return function(value){
+			var record = combo.findRecord(combo.valueField, value);
+			return record ? record.get(combo.displayField) : combo.valueNotFoundText;
+		}
+	}
   
 	/* Function for Retrieve DataStore */
 	tindakan_nonmedis_DataStore = new Ext.data.Store({
@@ -366,19 +394,68 @@ Ext.onReady(function(){
 		},[
 		/* dataIndex => insert intotindakan_nonmedis_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'trawat_id', type: 'int', mapping: 'trawat_id'}, 
+			{name: 'trawat_cust_id', type: 'int', mapping: 'trawat_cust'}, 
 			{name: 'trawat_cust', type: 'string', mapping: 'cust_nama'}, 
-			{name: 'trawat_jamdatang', type: 'string', mapping: 'trawat_jamdatang'}, 
-			{name: 'trawat_appointment', type: 'string', mapping: 'trawat_appointment'}, 
 			{name: 'trawat_keterangan', type: 'string', mapping: 'trawat_keterangan'}, 
 			{name: 'trawat_creator', type: 'string', mapping: 'trawat_creator'}, 
 			{name: 'trawat_date_create', type: 'date', dateFormat: 'Y-m-d', mapping: 'trawat_date_create'}, 
 			{name: 'trawat_update', type: 'string', mapping: 'trawat_update'}, 
 			{name: 'trawat_date_update', type: 'date', dateFormat: 'Y-m-d', mapping: 'trawat_date_update'}, 
-			{name: 'trawat_revised', type: 'int', mapping: 'trawat_revised'} 
+			{name: 'trawat_revised', type: 'int', mapping: 'trawat_revised'},
+			{name: 'dtrawat_id', type: 'int', mapping: 'dtrawat_id'},
+			{name: 'dtrawat_perawatan_id', type: 'int', mapping: 'dtrawat_perawatan'},
+			{name: 'dtrawat_perawatan', type: 'string', mapping: 'rawat_nama'},
+			{name: 'dtrawat_petugas2', type: 'string', mapping: 'karyawan_nama'},
+			{name: 'dtrawat_jam', type: 'string', mapping: 'dtrawat_jam'},
+			{name: 'dtrawat_status', type: 'string', mapping: 'dtrawat_status'},
+			{name: 'perawatan_harga', type: 'float', mapping: 'rawat_harga'},
+			{name: 'perawatan_du', type: 'int', mapping: 'rawat_du'},
+			{name: 'perawatan_dm', type: 'int', mapping: 'rawat_dm'},
+			{name: 'cust_member', type: 'string', mapping: 'cust_member'}
 		]),
 		sortInfo:{field: 'trawat_id', direction: "DESC"}
 	});
 	/* End of Function */
+	
+	dtrawat_perawatanDataStore = new Ext.data.Store({
+		id: 'dtrawat_perawatanDataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_tindakan_nonmedis&m=get_rawat_nonmedis_list', 
+			method: 'POST'
+		}),baseParams: {start: 0, limit: 15 },
+			reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'rawat_id'
+		},[
+			{name: 'perawatan_value', type: 'int', mapping: 'rawat_id'},
+			{name: 'perawatan_harga', type: 'float', mapping: 'rawat_harga'},
+			{name: 'perawatan_kode', type: 'string', mapping: 'rawat_kode'},
+			{name: 'perawatan_group', type: 'string', mapping: 'group_nama'},
+			{name: 'perawatan_kategori', type: 'string', mapping: 'kategori_nama'},
+			{name: 'perawatan_du', type: 'float', mapping: 'rawat_du'},
+			{name: 'perawatan_dm', type: 'float', mapping: 'rawat_dm'},
+			{name: 'perawatan_display', type: 'string', mapping: 'rawat_nama'}
+		]),
+		sortInfo:{field: 'perawatan_display', direction: "ASC"}
+	});
+
+	dtrawat_karyawanDataStore = new Ext.data.Store({
+		id: 'dtrawat_karyawanDataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_tindakan_nonmedis&m=get_terapis_list', 
+			method: 'POST'
+		}),baseParams: {start: 0, limit: 15 },
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total'
+		},[
+		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
+			{name: 'karyawan_display', type: 'string', mapping: 'karyawan_nama'},
+			{name: 'karyawan_value', type: 'int', mapping: 'karyawan_id'}
+		]),
+		sortInfo:{field: 'karyawan_display', direction: "ASC"}
+	});
     
   	/* Function for Identify of Window Column Model */
 	tindakan_nonmedis_ColumnModel = new Ext.grid.ColumnModel(
@@ -408,33 +485,60 @@ Ext.onReady(function(){
 			})
 		}, 
 		{
-			header: 'Jam Datang',
-			dataIndex: 'trawat_jamdatang',
+			header: 'Perawatan',
+			dataIndex: 'dtrawat_perawatan',
+			width: 150,
+			sortable: true/*,
+			editor: new Ext.form.ComboBox({
+				store: dtrawat_perawatanDataStore,
+				mode: 'remote',
+				displayField: 'perawatan_display',
+				valueField: 'perawatan_value',
+				loadingText: 'Searching...',
+				triggerAction: 'all',
+				anchor: '95%'
+			})*/
+		}, 
+		{
+			header: 'Therapist',
+			dataIndex: 'dtrawat_petugas2',
 			width: 150,
 			sortable: true,
-			editor: new Ext.form.TextField({
-				maxLength: 10
-          	})
+			editor: new Ext.form.ComboBox({
+				store: dtrawat_karyawanDataStore,
+				mode: 'remote',
+				displayField: 'karyawan_display',
+				valueField: 'karyawan_value',
+				loadingText: 'Searching...',
+				triggerAction: 'all',
+				anchor: '95%'
+			})
 		}, 
-//		{
-//			header: 'Appointment',
-//			dataIndex: 'trawat_appointment',
-//			width: 150,
-//			sortable: true,
-//			editor: new Ext.form.ComboBox({
-//				typeAhead: true,
-//				triggerAction: 'all',
-//				store:new Ext.data.SimpleStore({
-//					fields:['trawat_appointment_value', 'trawat_appointment_display'],
-//					data: [['Medis','Medis'],['Non Medis','Non Medis']]
-//					}),
-//				mode: 'local',
-//               	displayField: 'trawat_appointment_display',
-//               	valueField: 'trawat_appointment_value',
-//               	lazyRender:true,
-//               	listClass: 'x-combo-list-small'
-//            })
-//		}, 
+		{
+			header: 'Jam Appointment',
+			dataIndex: 'dtrawat_jam',
+			width: 150,
+			sortable: true
+		}, 
+		{
+			header: 'Status',
+			dataIndex: 'dtrawat_status',
+			width: 150,
+			sortable: true,
+			editor: new Ext.form.ComboBox({
+				typeAhead: true,
+				triggerAction: 'all',
+				store:new Ext.data.SimpleStore({
+					fields:['dtrawat_status_value', 'dtrawat_status_display'],
+					data: [['batal','batal'],['selesai','selesai'],['datang','datang']]
+					}),
+				mode: 'local',
+               	displayField: 'dtrawat_status_display',
+               	valueField: 'dtrawat_status_value',
+               	lazyRender:true,
+               	listClass: 'x-combo-list-small'
+            })
+		}, 
 		{
 			header: 'Keterangan',
 			dataIndex: 'trawat_keterangan',
@@ -501,7 +605,7 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 700,
+	  	width: 940,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: tindakan_nonmedis_DataStore,
@@ -739,7 +843,7 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'rawat_id'
 		},[
-		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
+			//dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column  
 			{name: 'dtrawat_perawatan_value', type: 'int', mapping: 'rawat_id'},
 			{name: 'dtrawat_perawatan_display', type: 'string', mapping: 'rawat_nama'}
 		]),
@@ -764,19 +868,19 @@ Ext.onReady(function(){
 		sortInfo:{field: 'dtrawat_karyawan_display', direction: "ASC"}
 	});
 	
-	Ext.util.Format.comboRenderer = function(combo){
+	/*Ext.util.Format.comboRenderer = function(combo){
 		return function(value){
 			var record = combo.findRecord(combo.valueField, value);
 			return record ? record.get(combo.displayField) : combo.valueNotFoundText;
 		}
-	}
+	}*/
 	
 	var combo_dtrawat_perawatan=new Ext.form.ComboBox({
-			store: cbo_dtrawat_perawatan_nonmedisDataSore,
+			store: dtrawat_perawatanDataStore,
 			mode: 'remote',
 			typeAhead: true,
-			displayField: 'dtrawat_perawatan_display',
-			valueField: 'dtrawat_perawatan_value',
+			displayField: 'perawatan_display',
+			valueField: 'perawatan_value',
 			triggerAction: 'all',
 			lazyRender:true,
 

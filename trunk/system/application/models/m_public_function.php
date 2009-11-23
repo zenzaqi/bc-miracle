@@ -264,6 +264,19 @@ class M_public_function extends Model{
 			return '0';
 		}
 	}
+	
+	function get_harga_rawat($rawat_id) {
+		
+		$query = "SELECT rawat_harga FROM perawatan WHERE rawat_id='".$rawat_id."'";
+		$result = $this->db->query($query);
+		if($result->num_rows()){
+			$data=$result->row();
+			$rawat_harga=$data->rawat_harga;
+			return $rawat_harga;
+		}else{
+			return '0';
+		}
+	}
 		
 	function get_member_by_cust($member_cust){
 		$sql = "SELECT * from member where member_cust='".$member_cust."' and member_status!='tidak aktif' order by member_id desc limit 1";
@@ -505,20 +518,62 @@ class M_public_function extends Model{
 		}
 	}
 	
-	function get_rawat_list($query="",$start=0,$end=10){
-		return $this->get_perawatan_list($query="",$start=0,$end=10);
-	}
-	
-	function get_perawatan_list($query="",$start=0,$end=10){
-/*		$sql="SELECT rawat_id,rawat_kode,rawat_nama,rawat_kategori,rawat_harga,rawat_group,rawat_du,rawat_dm
-				,kategori_nama, group_nama 
-				FROM perawatan,kategori,produk_group where kategori_id=rawat_kategori
-				and rawat_group=group_id and rawat_aktif='Aktif'";
-				*/
+	function get_rawat_list($query,$start,$end){
+	/*$sql="SELECT produk_id,produk_kode,produk_nama,produk_kategori,produk_harga,produk_group,produk_du,produk_dm
+				,kategori_nama, group_nama, satuan_kode, satuan_nama 
+				FROM produk,satuan,kategori,produk_group where satuan_id=produk_satuan and kategori_id=produk_kategori
+				and produk_group=group_id and produk_aktif='Aktif'";*/
+		$sql_drawat="SELECT drawat_rawat FROM detail_jual_rawat";
+		$rs=$this->db->query($sql_drawat);
+		$rs_rows=$rs->num_rows();
+		
 		$sql="SELECT * FROM vu_perawatan";//join dr tabel: perawatan,produk_group,kategori2,kategori,jenis,gudang
 		if($query<>"")
-			$sql.=" and (rawat_kode like '%".$query."%' or rawat_nama like '%".$query."%' or satuan_nama like '%".$query."%'
-						 or kategori_nama like '%".$query."%' or group_nama like '%".$query."%')";
+			$sql.=" WHERE (rawat_kode like '%".$query."%' or rawat_nama like '%".$query."%' or kategori_nama like '%".$query."%') ";
+		else{
+			if($rs_rows){
+				$filter="";
+				$sql.=eregi("WHERE",$query)? " OR ":" WHERE ";
+				foreach($rs->result() as $row_drawat){
+					
+					$filter.="OR drawat_rawat='".$row_drawat->drawat_rawat."' ";
+				}
+				$sql=$sql."(".substr($filter,2,strlen($filter)).")";
+			}
+		}
+		
+		/*if($query<>"")
+			$sql.=" WHERE (produk_kode like '%".$query."%' or produk_nama like '%".$query."%' or satuan_nama like '%".$query."%'
+						 or kategori_nama like '%".$query."%' or group_nama like '%".$query."%') ";*/
+		
+		$result = $this->db->query($sql);
+		$nbrows = $result->num_rows();
+		if($end!=0){
+			$limit = $sql." LIMIT ".$start.",".$end;			
+			$result = $this->db->query($limit);
+		}
+		if($nbrows>0){
+			foreach($result->result() as $row){
+				$arr[] = $row;
+			}
+			$jsonresult = json_encode($arr);
+			return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+		} else {
+			return '({"total":"0", "results":""})';
+		}
+	}
+	
+	/*function get_perawatan_list($query="",$start=0,$end=10){
+		//$sql="SELECT rawat_id,rawat_kode,rawat_nama,rawat_kategori,rawat_harga,rawat_group,rawat_du,rawat_dm
+		//		,kategori_nama, group_nama 
+		//		FROM perawatan,kategori,produk_group where kategori_id=rawat_kategori
+		//		and rawat_group=group_id and rawat_aktif='Aktif'";
+				
+		$sql="SELECT * FROM vu_perawatan";//join dr tabel: perawatan,produk_group,kategori2,kategori,jenis,gudang
+		if($query<>""){
+			$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+			$sql.=" rawat_kode like '%".$query."%' or rawat_nama like '%".$query."%' or kategori_nama like '%".$query."%' or group_nama like '%".$query."%'";
+		}
 	
 		$result = $this->db->query($sql);
 		$nbrows = $result->num_rows();
@@ -533,13 +588,14 @@ class M_public_function extends Model{
 		} else {
 			return '({"total":"0", "results":""})';
 		}
-	}
+	}*/
 	
 	//Ambil Perawatan berdasarkan kategori MEDIS
 	function get_rawat_medis_list($query,$start,$end){
-		$sql="SELECT rawat_id,rawat_kode,rawat_nama,rawat_kategori,rawat_harga,rawat_group,rawat_du,rawat_dm,kategori_nama, group_nama 
+		/*$sql="SELECT rawat_id,rawat_kode,rawat_nama,rawat_kategori,rawat_harga,rawat_group,rawat_du,rawat_dm,kategori_nama, group_nama 
 		FROM perawatan,kategori,produk_group where rawat_kategori=kategori_id 
-		AND rawat_group=group_id AND rawat_aktif='Aktif' AND kategori_nama='Medis'";
+		AND rawat_group=group_id AND rawat_aktif='Aktif' AND kategori_nama='Medis'";*/
+		$sql="SELECT * FROM vu_perawatan WHERE kategori_nama='Medis'";//join dr tabel: perawatan,produk_group,kategori2,kategori,jenis,gudang
 		if($query<>"")
 			$sql.=" and (rawat_kode like '%".$query."%' or rawat_nama like '%".$query."%' or group_nama like '%".$query."%')";
 	
@@ -587,9 +643,10 @@ class M_public_function extends Model{
 	
 	
 	function get_rawat_nonmedis_list($query,$start,$end){
-		$sql="SELECT rawat_id,rawat_kode,rawat_nama,rawat_kategori,rawat_harga,rawat_group,rawat_du,rawat_dm,kategori_nama, group_nama 
+		/*$sql="SELECT rawat_id,rawat_kode,rawat_nama,rawat_kategori,rawat_harga,rawat_group,rawat_du,rawat_dm,kategori_nama, group_nama 
 		FROM perawatan,kategori,produk_group where rawat_kategori=kategori_id 
-		AND rawat_group=group_id AND rawat_aktif='Aktif' AND kategori_nama='Non Medis'";
+		AND rawat_group=group_id AND rawat_aktif='Aktif' AND kategori_nama='Non Medis'";*/
+		$sql="SELECT * FROM vu_perawatan WHERE kategori_nama='Non Medis'";//join dr tabel: perawatan,produk_group,kategori2,kategori,jenis,gudang
 		if($query<>"")
 			$sql.=" and (rawat_kode like '%".$query."%' or rawat_nama like '%".$query."%' or group_nama like '%".$query."%')";
 	
@@ -734,15 +791,36 @@ class M_public_function extends Model{
 				,kategori_nama, group_nama, satuan_kode, satuan_nama 
 				FROM produk,satuan,kategori,produk_group where satuan_id=produk_satuan and kategori_id=produk_kategori
 				and produk_group=group_id and produk_aktif='Aktif'";*/
+		$sql_dproduk="SELECT dproduk_produk FROM detail_jual_produk";
+		$rs=$this->db->query($sql_dproduk);
+		$rs_rows=$rs->num_rows();
+		
 		$sql="select * from vu_produk";
 		if($query<>"")
 			$sql.=" WHERE (produk_kode like '%".$query."%' or produk_nama like '%".$query."%' or satuan_nama like '%".$query."%'
 						 or kategori_nama like '%".$query."%' or group_nama like '%".$query."%') ";
-						 
+		else{
+			if($rs_rows){
+				$filter="";
+				$sql.=eregi("WHERE",$query)? " OR ":" WHERE ";
+				foreach($rs->result() as $row_dproduk){
+					
+					$filter.="OR dproduk_produk='".$row_dproduk->dproduk_produk."' ";
+				}
+				$sql=$sql."(".substr($filter,2,strlen($filter)).")";
+			}
+		}
+		
+		/*if($query<>"")
+			$sql.=" WHERE (produk_kode like '%".$query."%' or produk_nama like '%".$query."%' or satuan_nama like '%".$query."%'
+						 or kategori_nama like '%".$query."%' or group_nama like '%".$query."%') ";*/
+		
 		$result = $this->db->query($sql);
 		$nbrows = $result->num_rows();
-		$limit = $sql." LIMIT ".$start.",".$end;			
-		$result = $this->db->query($limit); 
+		if($end!=0){
+			$limit = $sql." LIMIT ".$start.",".$end;			
+			$result = $this->db->query($limit);
+		}
 		if($nbrows>0){
 			foreach($result->result() as $row){
 				$arr[] = $row;
