@@ -264,19 +264,6 @@ class M_public_function extends Model{
 			return '0';
 		}
 	}
-	
-	function get_harga_rawat($rawat_id) {
-		
-		$query = "SELECT rawat_harga FROM perawatan WHERE rawat_id='".$rawat_id."'";
-		$result = $this->db->query($query);
-		if($result->num_rows()){
-			$data=$result->row();
-			$rawat_harga=$data->rawat_harga;
-			return $rawat_harga;
-		}else{
-			return '0';
-		}
-	}
 		
 	function get_member_by_cust($member_cust){
 		$sql = "SELECT * from member where member_cust='".$member_cust."' and member_status!='tidak aktif' order by member_id desc limit 1";
@@ -518,8 +505,8 @@ class M_public_function extends Model{
 		}
 	}
 	
-	function get_rawat_list($query,$start=0,$end=10){
-		return $this->get_perawatan_list($query,$start,$end);
+	function get_rawat_list($query="",$start=0,$end=10){
+		return $this->get_perawatan_list($query="",$start=0,$end=10);
 	}
 	
 	function get_perawatan_list($query="",$start=0,$end=10){
@@ -529,10 +516,9 @@ class M_public_function extends Model{
 				and rawat_group=group_id and rawat_aktif='Aktif'";
 				*/
 		$sql="SELECT * FROM vu_perawatan";//join dr tabel: perawatan,produk_group,kategori2,kategori,jenis,gudang
-		if($query<>""){
-			$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
-			$sql.=" rawat_kode like '%".$query."%' or rawat_nama like '%".$query."%' or kategori_nama like '%".$query."%' or group_nama like '%".$query."%'";
-		}
+		if($query<>"")
+			$sql.=" and (rawat_kode like '%".$query."%' or rawat_nama like '%".$query."%' or satuan_nama like '%".$query."%'
+						 or kategori_nama like '%".$query."%' or group_nama like '%".$query."%')";
 	
 		$result = $this->db->query($sql);
 		$nbrows = $result->num_rows();
