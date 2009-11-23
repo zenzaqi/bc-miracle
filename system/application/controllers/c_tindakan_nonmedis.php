@@ -26,6 +26,20 @@ class C_tindakan_nonmedis extends Controller {
 		$this->load->view('main/v_tindakan_nonmedis');
 	}
 	
+	function get_terapis_list(){
+		//ID dokter pada tabel departemen adalah 9
+		$result=$this->m_public_function->get_petugas_list("Therapist");
+		echo $result;
+	}
+	
+	function get_rawat_nonmedis_list(){
+		$query = isset($_POST['query']) ? $_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		$result = $this->m_public_function->get_rawat_nonmedis_list($query,$start,$end);
+		echo $result;
+	}
+	
 	function get_perawatan_nonmedis_list(){
 		$result=$this->m_public_function->get_perawatan_nonmedis_list();
 		echo $result;
@@ -132,19 +146,20 @@ class C_tindakan_nonmedis extends Controller {
 		//POST variable here
 		$trawat_id=trim(@$_POST["trawat_id"]);
 		$trawat_cust=trim(@$_POST["trawat_cust"]);
-		$trawat_jamdatang=trim(@$_POST["trawat_jamdatang"]);
-		$trawat_jamdatang=str_replace("/(<\/?)(p)([^>]*>)", "",$trawat_jamdatang);
-		$trawat_jamdatang=str_replace(",", "\,",$trawat_jamdatang);
-		$trawat_jamdatang=str_replace("'", "\'",$trawat_jamdatang);
-		$trawat_appointment=trim(@$_POST["trawat_appointment"]);
-		$trawat_appointment=str_replace("/(<\/?)(p)([^>]*>)", "",$trawat_appointment);
-		$trawat_appointment=str_replace(",", "\,",$trawat_appointment);
-		$trawat_appointment=str_replace("'", "\'",$trawat_appointment);
 		$trawat_keterangan=trim(@$_POST["trawat_keterangan"]);
 		$trawat_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$trawat_keterangan);
 		$trawat_keterangan=str_replace(",", "\,",$trawat_keterangan);
 		$trawat_keterangan=str_replace("'", "\'",$trawat_keterangan);
-		$result = $this->m_tindakan_nonmedis->tindakan_update($trawat_id ,$trawat_cust ,$trawat_jamdatang ,$trawat_appointment ,$trawat_keterangan      );
+		$dtrawat_status=trim(@$_POST["dtrawat_status"]);
+		$trawat_cust_id=trim(@$_POST["trawat_cust_id"]);
+		$dtrawat_perawatan_id=trim(@$_POST["dtrawat_perawatan_id"]);
+		$dtrawat_perawatan=trim(@$_POST["dtrawat_perawatan"]);
+		$dtrawat_id=trim(@$_POST["dtrawat_id"]);
+		$rawat_harga=trim(@$_POST["rawat_harga"]);
+		$rawat_du=trim(@$_POST["rawat_du"]);
+		$rawat_dm=trim(@$_POST["rawat_dm"]);
+		$cust_member=trim(@$_POST["cust_member"]);
+		$result = $this->m_tindakan_nonmedis->tindakan_update($trawat_id ,$trawat_cust ,$trawat_keterangan ,$dtrawat_status ,$trawat_cust_id ,$dtrawat_perawatan_id ,$dtrawat_perawatan ,$dtrawat_id ,$rawat_harga ,$rawat_du ,$rawat_dm ,$cust_member);
 		echo $result;
 	}
 	

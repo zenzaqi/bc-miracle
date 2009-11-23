@@ -152,12 +152,14 @@ class C_master_jual_produk extends Controller {
 		$dproduk_id=trim(@$_POST["dproduk_id"]);
 		$dproduk_master=trim(@$_POST["dproduk_master"]);
 		$dproduk_produk=trim(@$_POST["dproduk_produk"]);
+		$dproduk_satuan=trim(@$_POST["dproduk_satuan"]);
 		$dproduk_jumlah=trim(@$_POST["dproduk_jumlah"]);
 		$dproduk_harga=trim(@$_POST["dproduk_harga"]);
+		$dproduk_subtotal_net=trim(@$_POST["dproduk_subtotal_net"]);
 		$dproduk_diskon=trim(@$_POST["dproduk_diskon"]);
 		$dproduk_diskon_jenis=trim(@$_POST["dproduk_diskon_jenis"]);
 		$dproduk_sales=trim(@$_POST["dproduk_sales"]);
-		$result=$this->m_master_jual_produk->detail_detail_jual_produk_insert($dproduk_id ,$dproduk_master ,$dproduk_produk ,$dproduk_jumlah ,$dproduk_harga ,$dproduk_diskon,$dproduk_diskon_jenis,$dproduk_sales );
+		$result=$this->m_master_jual_produk->detail_detail_jual_produk_insert($dproduk_id ,$dproduk_master ,$dproduk_produk ,$dproduk_satuan ,$dproduk_jumlah ,$dproduk_harga ,$dproduk_subtotal_net ,$dproduk_diskon,$dproduk_diskon_jenis,$dproduk_sales );
 		echo $result;
 	}
 	
@@ -250,8 +252,8 @@ class C_master_jual_produk extends Controller {
 		$jproduk_bayar=trim($_POST["jproduk_bayar"]);
 		$jproduk_subtotal=trim($_POST["jproduk_subtotal"]);
 		$jproduk_hutang=trim($_POST["jproduk_hutang"]);
-		if($jproduk_cara=='tunai')
-			$jproduk_bayar=$jproduk_subtotal;
+		//if($jproduk_cara=='tunai')
+			//$jproduk_bayar=$jproduk_subtotal;
 		//card
 		$jproduk_card_nama=trim($_POST["jproduk_card_nama"]);
 		$jproduk_card_edc=trim($_POST["jproduk_card_edc"]);
