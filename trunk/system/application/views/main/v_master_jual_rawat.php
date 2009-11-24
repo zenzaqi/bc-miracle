@@ -1416,6 +1416,29 @@ Ext.onReady(function(){
 		});
 	/* END GET Bank-List.Store */
 	
+	cbo_drawat_rawatDataStore = new Ext.data.Store({
+		id: 'cbo_drawat_rawatDataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_master_jual_rawat&m=get_rawat_list', 
+			method: 'POST'
+		}),baseParams: {start: 0, limit: 15 },
+			reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'rawat_id'
+		},[
+			{name: 'drawat_rawat_value', type: 'int', mapping: 'rawat_id'},
+			{name: 'drawat_rawat_harga', type: 'float', mapping: 'rawat_harga'},
+			{name: 'drawat_rawat_kode', type: 'string', mapping: 'rawat_kode'},
+			{name: 'drawat_rawat_group', type: 'string', mapping: 'group_nama'},
+			{name: 'drawat_rawat_kategori', type: 'string', mapping: 'kategori_nama'},
+			{name: 'drawat_rawat_du', type: 'float', mapping: 'rawat_du'},
+			{name: 'drawat_rawat_dm', type: 'float', mapping: 'rawat_dm'},
+			{name: 'drawat_rawat_display', type: 'string', mapping: 'rawat_nama'}
+		]),
+		sortInfo:{field: 'drawat_rawat_display', direction: "ASC"}
+	});
+	
   	/* Function for Identify of Window Column Model */
 	master_jual_rawat_ColumnModel = new Ext.grid.ColumnModel(
 		[{
@@ -2966,29 +2989,6 @@ Ext.onReady(function(){
 		}*/
     });
 	//eof
-	
-	cbo_drawat_rawatDataStore = new Ext.data.Store({
-		id: 'cbo_drawat_rawatDataStore',
-		proxy: new Ext.data.HttpProxy({
-			url: 'index.php?c=c_master_jual_rawat&m=get_rawat_list', 
-			method: 'POST'
-		}),baseParams: {start: 0, limit: 15 },
-			reader: new Ext.data.JsonReader({
-			root: 'results',
-			totalProperty: 'total',
-			id: 'rawat_id'
-		},[
-			{name: 'drawat_rawat_value', type: 'int', mapping: 'rawat_id'},
-			{name: 'drawat_rawat_harga', type: 'float', mapping: 'rawat_harga'},
-			{name: 'drawat_rawat_kode', type: 'string', mapping: 'rawat_kode'},
-			{name: 'drawat_rawat_group', type: 'string', mapping: 'group_nama'},
-			{name: 'drawat_rawat_kategori', type: 'string', mapping: 'kategori_nama'},
-			{name: 'drawat_rawat_du', type: 'float', mapping: 'rawat_du'},
-			{name: 'drawat_rawat_dm', type: 'float', mapping: 'rawat_dm'},
-			{name: 'drawat_rawat_display', type: 'string', mapping: 'rawat_nama'}
-		]),
-		sortInfo:{field: 'drawat_rawat_display', direction: "ASC"}
-	});
 	
 	
 	memberDataStore = new Ext.data.Store({

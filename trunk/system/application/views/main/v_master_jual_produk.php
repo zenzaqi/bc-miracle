@@ -3524,10 +3524,10 @@ Ext.onReady(function(){
 		var detail_jual_produk_record;
 		for(i=0;i<detail_jual_produk_DataStore.getCount();i++){
 			detail_jual_produk_record=detail_jual_produk_DataStore.getAt(i);
-			console.log("dproduk_produk = "+detail_jual_produk_record.data.dproduk_produk);
+			//console.log("dproduk_produk = "+detail_jual_produk_record.data.dproduk_produk);
 			var j=cbo_dproduk_produkDataStore.find('dproduk_produk_value',detail_jual_produk_record.data.dproduk_produk);
 			if(j>=0){
-				console.log("set_dharga = "+cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_harga);
+				//console.log("set_dharga = "+cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_harga);
 				detail_jual_produk_record.data.dproduk_harga=cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_harga;
 				//detail_jual_produk_record.data.dproduk_satuan=cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_satuan;
 				if(detail_jual_produk_record.data.dproduk_diskon==""){
