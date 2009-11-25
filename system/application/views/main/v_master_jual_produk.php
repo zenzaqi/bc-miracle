@@ -2922,7 +2922,7 @@ Ext.onReady(function(){
 			{name: 'dproduk_id', type: 'int', mapping: 'dproduk_id'}, 
 			{name: 'dproduk_master', type: 'int', mapping: 'dproduk_master'}, 
 			{name: 'dproduk_produk', type: 'int', mapping: 'dproduk_produk'}, 
-			{name: 'dproduk_satuan', type: 'string', mapping: 'satuan_kode'}, 
+			{name: 'dproduk_satuan', type: 'int', mapping: 'dproduk_satuan'}, 
 			{name: 'dproduk_jumlah', type: 'int', mapping: 'dproduk_jumlah'}, 
 			{name: 'dproduk_harga', type: 'float', mapping: 'dproduk_harga'}, 
 			{name: 'dproduk_diskon', type: 'int', mapping: 'dproduk_diskon'},
@@ -3034,6 +3034,7 @@ Ext.onReady(function(){
 		
 	Ext.util.Format.comboRenderer = function(combo){
 		cbo_dproduk_produkDataStore.load({params: {limit:0}});
+		cbo_dproduk_satuanDataStore.load();
 		return function(value){
 			var record = combo.findRecord(combo.valueField, value);
 			return record ? record.get(combo.displayField) : combo.valueNotFoundText;
@@ -3071,6 +3072,7 @@ Ext.onReady(function(){
 	});
 	
 	dproduk_idField=new Ext.form.NumberField();
+	djproduk_satuan_nilaiField=new Ext.form.NumberField();
 	
 	combo_jual_produk.on('select',function(){
 		console.log("DETAIL_GRID_count = "+detail_jual_produkListEditorGrid.getStore().getCount());
@@ -3090,6 +3092,13 @@ Ext.onReady(function(){
 				//detail_jual_produk_record.data.dproduk_jumlah='2';
 				//console.log("set_jumlah");
 			}
+		}
+	});
+
+	combo_satuan_produk.on('select', function(){
+		var j=cbo_dproduk_satuanDataStore.find('djproduk_satuan_value',combo_satuan_produk.getValue());
+		for(i=0;i<cbo_dproduk_satuanDataStore.getCount();i++){
+			djproduk_satuan_nilaiField.setValue(cbo_dproduk_satuanDataStore.getAt(j).data.djproduk_satuan_nilai);
 		}
 	});
 		
@@ -3150,7 +3159,7 @@ Ext.onReady(function(){
 			sortable: true,
 			reaOnly: true,
 			renderer: function(v, params, record){
-					return Ext.util.Format.number(record.data.dproduk_harga* record.data.dproduk_jumlah,'0,000');
+					return Ext.util.Format.number(djproduk_satuan_nilaiField.getValue()*record.data.dproduk_harga* record.data.dproduk_jumlah,'0,000');
             }
 		},
 		{
@@ -3191,7 +3200,7 @@ Ext.onReady(function(){
 			sortable: true,
 			reaOnly: true,
 			renderer: function(v, params, record){
-					return Ext.util.Format.number(record.data.dproduk_harga* record.data.dproduk_jumlah*(100-record.data.dproduk_diskon)/100,'0,000');
+					return Ext.util.Format.number(djproduk_satuan_nilaiField.getValue()*record.data.dproduk_harga* record.data.dproduk_jumlah*(100-record.data.dproduk_diskon)/100,'0,000');
             }
 		},{
 			header: 'Sales',
@@ -3524,6 +3533,8 @@ Ext.onReady(function(){
 		var detail_jual_produk_record;
 		for(i=0;i<detail_jual_produk_DataStore.getCount();i++){
 			detail_jual_produk_record=detail_jual_produk_DataStore.getAt(i);
+			console.log("SATUAN = "+detail_jual_produk_record.data.dproduk_satuan);
+			console.log("PRODUK = "+detail_jual_produk_record.data.dproduk_produk);
 			//console.log("dproduk_produk = "+detail_jual_produk_record.data.dproduk_produk);
 			var j=cbo_dproduk_produkDataStore.find('dproduk_produk_value',detail_jual_produk_record.data.dproduk_produk);
 			if(j>=0){
@@ -3555,7 +3566,7 @@ Ext.onReady(function(){
 				console.log("JML-1 = "+detail_jual_produk_record.data.dproduk_jumlah);
 			}*/
 			jumlah_item=jumlah_item+eval(detail_jual_produk_record.data.dproduk_jumlah);
-			subtotal_harga=subtotal_harga+eval(detail_jual_produk_record.data.dproduk_jumlah*detail_jual_produk_record.data.dproduk_harga*(100-detail_jual_produk_record.data.dproduk_diskon)/100);
+			subtotal_harga=subtotal_harga+eval(djproduk_satuan_nilaiField.getValue()*detail_jual_produk_record.data.dproduk_jumlah*detail_jual_produk_record.data.dproduk_harga*(100-detail_jual_produk_record.data.dproduk_diskon)/100);
 		}
 		jproduk_jumlahField.setValue(jumlah_item);
 		jproduk_subTotalField.setValue(subtotal_harga);

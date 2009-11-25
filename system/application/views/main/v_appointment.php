@@ -574,7 +574,8 @@ Ext.onReady(function(){
 			{name: 'app_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'app_date_create'}, 
 			{name: 'app_update', type: 'string', mapping: 'app_update'}, 
 			{name: 'app_date_update', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'app_date_update'}, 
-			{name: 'app_revised', type: 'int', mapping: 'app_revised'} 
+			{name: 'app_revised', type: 'int', mapping: 'app_revised'},
+			{name: 'dapp_keterangan', type: 'string', mapping: 'dapp_keterangan'}
 		]),
 		sortInfo:{field: 'dapp_jamreservasi', direction: "ASC"},
 		groupField:'kategori_nama'
@@ -738,6 +739,15 @@ Ext.onReady(function(){
 			editor: new Ext.form.DateField({
 				format: 'Y-m-d'
 			})
+		}, 
+		{
+			header: 'Keterangan',
+			dataIndex: 'dapp_keterangan',
+			width: 100,
+			sortable: true,
+			editor: new Ext.form.TextField({
+				maxLength: 10
+          	})
 		}, 
 		{
 			header: 'App Creator',
