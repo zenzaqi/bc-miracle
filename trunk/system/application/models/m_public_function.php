@@ -444,7 +444,10 @@ class M_public_function extends Model{
 	}
 	
 	function get_satuan_bydjproduk_list($djproduk_id){
+		$this->firephp->log($djproduk_id, "DJPRODUK_ID");
 		$sql="SELECT * FROM produk,satuan_konversi,satuan WHERE produk_id=konversi_produk AND konversi_satuan=satuan_id AND produk_id='$djproduk_id'";
+		if($djproduk_id==0)
+			$sql="SELECT * FROM produk,satuan_konversi,satuan WHERE produk_id=konversi_produk AND konversi_satuan=satuan_id";
 		$query = $this->db->query($sql);
 		$nbrows = $query->num_rows();
 		if($nbrows>0){

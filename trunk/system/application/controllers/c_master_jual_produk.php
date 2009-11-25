@@ -54,7 +54,7 @@ class C_master_jual_produk extends Controller {
 	}
 	
 	function get_satuan_bydjproduk_list(){
-		$djproduk_id = (integer) (isset($_POST['djproduk_id']) ? $_POST['djproduk_id'] : $_GET['djproduk_id']);
+		$djproduk_id = (integer) (isset($_POST['djproduk_id']) ? $_POST['djproduk_id'] : 0);
 		$result = $this->m_public_function->get_satuan_bydjproduk_list($djproduk_id);
 		echo $result;
 	}
