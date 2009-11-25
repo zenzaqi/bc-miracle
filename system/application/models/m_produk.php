@@ -368,6 +368,8 @@ class M_produk extends Model{
 		//function for advanced search record
 		function produk_search($produk_id ,$produk_kode ,$produk_kodelama ,$produk_group ,$produk_kategori ,$produk_jenis ,$produk_nama ,$produk_satuan ,$produk_du ,$produk_dm ,$produk_point ,$produk_kontribusi ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif ,$start,$end){
 			//full query
+			if($produk_aktif=="")
+				$produk_aktif="Aktif";
 			$query="select * from vu_produk";
 			
 			if($produk_id!=''){
@@ -432,7 +434,7 @@ class M_produk extends Model{
 			};
 			if($produk_aktif!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " produk_aktif LIKE '%".$produk_aktif."%'";
+				$query.= " produk_aktif = '".$produk_aktif."'";
 			};
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();

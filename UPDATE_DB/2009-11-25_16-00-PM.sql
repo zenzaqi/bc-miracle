@@ -1,0 +1,1 @@
+ALTER TABLE `kategori2` CHANGE `kategori2_jenis` `kategori2_jenis` INT( 11 ) NULL DEFAULT NULL;

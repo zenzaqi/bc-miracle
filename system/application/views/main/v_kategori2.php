@@ -44,7 +44,7 @@
     </style>
 <script>
 /* declare function */		
-var kategori2_DataStoree;
+var kategori2_DataStore;
 var kategori2_ColumnModel;
 var kategori2ListEditorGrid;
 var kategori2_createForm;
@@ -75,6 +75,14 @@ var kategori2_aktifSearchField;
 /* on ready fuction */
 Ext.onReady(function(){
   	Ext.QuickTips.init();	/* Initiate quick tips icon */
+
+  	Ext.util.Format.comboRenderer = function(combo){
+  		kategori2_jenisDataStore.load();
+  	    return function(value){
+  	        var record = combo.findRecord(combo.valueField, value);
+  	        return record ? record.get(combo.displayField) : combo.valueNotFoundText;
+  	    }
+  	}
   
   	/* Function for Saving inLine Editing */
 	function kategori2_update(oGrid_event){
@@ -105,8 +113,8 @@ Ext.onReady(function(){
 				var result=eval(response.responseText);
 				switch(result){
 					case 1:
-						kategori2_DataStoree.commitChanges();
-						kategori2_DataStoree.reload();
+						kategori2_DataStore.commitChanges();
+						kategori2_DataStore.reload();
 						break;
 					default:
 						Ext.MessageBox.show({
@@ -165,7 +173,7 @@ Ext.onReady(function(){
 				switch(result){
 					case 1:
 						Ext.MessageBox.alert(post2db+' OK','The kategori2 was '+msg+' successfully.');
-						kategori2_DataStoree.reload();
+						kategori2_DataStore.reload();
 						kategori2_createWindow.hide();
 						break;
 					default:
@@ -311,7 +319,7 @@ Ext.onReady(function(){
 					var result=eval(response.responseText);
 					switch(result){
 						case 1:  // Success : simply reload
-							kategori2_DataStoree.reload();
+							kategori2_DataStore.reload();
 							break;
 						default:
 							Ext.MessageBox.show({
@@ -340,8 +348,8 @@ Ext.onReady(function(){
   	/* End of Function */
   
 	/* Function for Retrieve DataStoree */
-	kategori2_DataStoree = new Ext.data.Store({
-		id: 'kategori2_DataStoree',
+	kategori2_DataStore = new Ext.data.Store({
+		id: 'kategori2_DataStore',
 		proxy: new Ext.data.HttpProxy({
 			url: 'index.php?c=c_kategori2&m=get_action', 
 			method: 'POST'
@@ -355,7 +363,7 @@ Ext.onReady(function(){
 		/* dataIndex => insert intokategori2_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'kategori2_id', type: 'int', mapping: 'kategori2_id'}, 
 			{name: 'kategori2_nama', type: 'string', mapping: 'kategori2_nama'}, 
-			{name: 'kategori2_jenis', type: 'string', mapping: 'kategori2_jenis'}, 
+			{name: 'kategori2_jenis', type: 'int', mapping: 'kategori2_jenis'}, 
 			{name: 'kategori2_keterangan', type: 'string', mapping: 'kategori2_keterangan'}, 
 			{name: 'kategori2_aktif', type: 'string', mapping: 'kategori2_aktif'}, 
 			{name: 'kategori2_creator', type: 'string', mapping: 'kategori2_creator'}, 
@@ -367,6 +375,24 @@ Ext.onReady(function(){
 		sortInfo:{field: 'kategori2_id', direction: "DESC"}
 	});
 	/* End of Function */
+	
+	kategori2_jenisDataStore = new Ext.data.Store({
+		id: 'kategori2_jenisDataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_kategori2&m=get_kategori_list', 
+			method: 'POST'
+		}),
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'kategori_id'
+		},[
+		/* dataIndex => insert intokategori2_ColumnModel, Mapping => for initiate table column */ 
+			{name: 'kategori_id', type: 'int', mapping: 'kategori_id'}, 
+			{name: 'kategori_nama', type: 'string', mapping: 'kategori_nama'}
+		]),
+		sortInfo:{field: 'kategori_id', direction: "DESC"}
+	});
     
   	/* Function for Identify of Window Column Model */
 	kategori2_ColumnModel = new Ext.grid.ColumnModel(
@@ -391,23 +417,21 @@ Ext.onReady(function(){
           	})
 		}, 
 		{
-			header: 'Kelompok',
+			header: 'Jenis',
 			dataIndex: 'kategori2_jenis',
 			width: 150,
 			sortable: true,
 			editor: new Ext.form.ComboBox({
-				typeAhead: true,
-				triggerAction: 'all',
-				store:new Ext.data.SimpleStore({
-					fields:['kategori2_jenis_value', 'kategori2_jenis_display'],
-					data: [['produk','produk'],['perawatan','perawatan']]
-					}),
-				mode: 'local',
-               	displayField: 'kategori2_jenis_display',
-               	valueField: 'kategori2_jenis_value',
-               	lazyRender:true,
-               	listClass: 'x-combo-list-small'
-            })
+				id: 'kategori2_jenisField',
+				fieldLabel: 'Jenis',
+				store: kategori2_jenisDataStore,
+				mode: 'remote',
+				editable: false,
+				displayField: 'kategori_nama',
+				valueField: 'kategori_id',
+				anchor: '95%',
+				triggerAction: 'all'	
+			})
 		}, 
 		{
 			header: 'Keterangan',
@@ -487,7 +511,7 @@ Ext.onReady(function(){
 		el: 'fp_kategori2',
 		title: 'List Of Contribution Category',
 		autoHeight: true,
-		store: kategori2_DataStoree, // DataStoree
+		store: kategori2_DataStore, // DataStoree
 		cm: kategori2_ColumnModel, // Nama-nama Columns
 		enableColLock:false,
 		frame: true,
@@ -497,7 +521,7 @@ Ext.onReady(function(){
 	  	width: 700,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
-			store: kategori2_DataStoree,
+			store: kategori2_DataStore,
 			displayInfo: true
 		}),
 		/* Add Control on ToolBar */
@@ -525,7 +549,7 @@ Ext.onReady(function(){
 			handler: display_form_search_window 
 		}, '-', 
 			new Ext.app.SearchField({
-			store: kategori2_DataStoree,
+			store: kategori2_DataStore,
 			params: {start: 0, limit: pageS},
 			width: 120
 		}),'-',{
@@ -599,7 +623,7 @@ Ext.onReady(function(){
 	/* End of Function */
   	
 	kategori2ListEditorGrid.addListener('rowcontextmenu', onkategori2_ListEditGridContextMenu);
-	kategori2_DataStoree.load({params: {start: 0, limit: pageS}});	// load DataStoree
+	kategori2_DataStore.load({params: {start: 0, limit: pageS}});	// load DataStoree
 	kategori2ListEditorGrid.on('afteredit', kategori2_update); // inLine Editing Record
 	
 	/* Identify  kategori2_id Field */
@@ -624,15 +648,12 @@ Ext.onReady(function(){
 	/* Identify  kategori2_jenis Field */
 	kategori2_jenisField= new Ext.form.ComboBox({
 		id: 'kategori2_jenisField',
-		fieldLabel: 'Kelompok',
-		store:new Ext.data.SimpleStore({
-			fields:['kategori2_jenis_value', 'kategori2_jenis_display'],
-			data:[['produk','produk'],['perawatan','perawatan']]
-		}),
-		mode: 'local',
+		fieldLabel: 'Jenis',
+		store: kategori2_jenisDataStore,
+		mode: 'remote',
 		editable: false,
-		displayField: 'kategori2_jenis_display',
-		valueField: 'kategori2_jenis_value',
+		displayField: 'kategori_nama',
+		valueField: 'kategori_id',
 		anchor: '95%',
 		triggerAction: 'all'	
 	});
@@ -722,7 +743,7 @@ Ext.onReady(function(){
 		if(kategori2_keteranganSearchField.getValue()!==null){kategori2_keterangan_search=kategori2_keteranganSearchField.getValue();}
 		if(kategori2_aktifSearchField.getValue()!==null){kategori2_aktif_search=kategori2_aktifSearchField.getValue();}
 		// change the store parameters
-		kategori2_DataStoree.baseParams = {
+		kategori2_DataStore.baseParams = {
 			task: 'SEARCH',
 			//variable here
 			kategori2_id	:	kategori2_id_search, 
@@ -732,15 +753,15 @@ Ext.onReady(function(){
 			kategori2_aktif	:	kategori2_aktif_search, 
 		};
 		// Cause the DataStoree to do another query : 
-		kategori2_DataStoree.reload({params: {start: 0, limit: pageS}});
+		kategori2_DataStore.reload({params: {start: 0, limit: pageS}});
 	}
 		
 	/* Function for reset search result */
 	function kategori2_reset_search(){
 		// reset the store parameters
-		kategori2_DataStoree.baseParams = { task: 'LIST' };
+		kategori2_DataStore.baseParams = { task: 'LIST' };
 		// Cause the DataStoree to do another query : 
-		kategori2_DataStoree.reload({params: {start: 0, limit: pageS}});
+		kategori2_DataStore.reload({params: {start: 0, limit: pageS}});
 		kategori2_searchWindow.close();
 	};
 	/* End of Fuction */
@@ -768,7 +789,7 @@ Ext.onReady(function(){
 	/* Identify  kategori2_jenis Field */
 	kategori2_jenisSearchField= new Ext.form.ComboBox({
 		id: 'kategori2_jenisSearchField',
-		fieldLabel: 'Kelompok',
+		fieldLabel: 'Jenis',
 		store:new Ext.data.SimpleStore({
 			fields:['kategori2_jenis_value', 'kategori2_jenis_display'],
 			data:[['produk','produk'],['perawatan','perawatan']]
@@ -872,11 +893,11 @@ Ext.onReady(function(){
 		var kategori2_aktif_print=null;
 		var win;              
 		// check if we do have some search data...
-		if(kategori2_DataStoree.baseParams.query!==null){searchquery = kategori2_DataStoree.baseParams.query;}
-		if(kategori2_DataStoree.baseParams.kategori2_nama!==null){kategori2_nama_print = kategori2_DataStoree.baseParams.kategori2_nama;}
-		if(kategori2_DataStoree.baseParams.kategori2_jenis!==null){kategori2_jenis_print = kategori2_DataStoree.baseParams.kategori2_jenis;}
-		if(kategori2_DataStoree.baseParams.kategori2_keterangan!==null){kategori2_keterangan_print = kategori2_DataStoree.baseParams.kategori2_keterangan;}
-		if(kategori2_DataStoree.baseParams.kategori2_aktif!==null){kategori2_aktif_print = kategori2_DataStoree.baseParams.kategori2_aktif;}
+		if(kategori2_DataStore.baseParams.query!==null){searchquery = kategori2_DataStore.baseParams.query;}
+		if(kategori2_DataStore.baseParams.kategori2_nama!==null){kategori2_nama_print = kategori2_DataStore.baseParams.kategori2_nama;}
+		if(kategori2_DataStore.baseParams.kategori2_jenis!==null){kategori2_jenis_print = kategori2_DataStore.baseParams.kategori2_jenis;}
+		if(kategori2_DataStore.baseParams.kategori2_keterangan!==null){kategori2_keterangan_print = kategori2_DataStore.baseParams.kategori2_keterangan;}
+		if(kategori2_DataStore.baseParams.kategori2_aktif!==null){kategori2_aktif_print = kategori2_DataStore.baseParams.kategori2_aktif;}
 
 		Ext.Ajax.request({   
 		waitMsg: 'Please Wait...',
@@ -889,7 +910,7 @@ Ext.onReady(function(){
 			kategori2_jenis : kategori2_jenis_print,
 			kategori2_keterangan : kategori2_keterangan_print,
 			kategori2_aktif : kategori2_aktif_print,
-		  	currentlisting: kategori2_DataStoree.baseParams.task // this tells us if we are searching or not
+		  	currentlisting: kategori2_DataStore.baseParams.task // this tells us if we are searching or not
 		}, 
 		success: function(response){              
 		  	var result=eval(response.responseText);
@@ -932,11 +953,11 @@ Ext.onReady(function(){
 		var kategori2_aktif_2excel=null;
 		var win;              
 		// check if we do have some search data...
-		if(kategori2_DataStoree.baseParams.query!==null){searchquery = kategori2_DataStoree.baseParams.query;}
-		if(kategori2_DataStoree.baseParams.kategori2_nama!==null){kategori2_nama_2excel = kategori2_DataStoree.baseParams.kategori2_nama;}
-		if(kategori2_DataStoree.baseParams.kategori2_jenis!==null){kategori2_jenis_2excel = kategori2_DataStoree.baseParams.kategori2_jenis;}
-		if(kategori2_DataStoree.baseParams.kategori2_keterangan!==null){kategori2_keterangan_2excel = kategori2_DataStoree.baseParams.kategori2_keterangan;}
-		if(kategori2_DataStoree.baseParams.kategori2_aktif!==null){kategori2_aktif_2excel = kategori2_DataStoree.baseParams.kategori2_aktif;}
+		if(kategori2_DataStore.baseParams.query!==null){searchquery = kategori2_DataStore.baseParams.query;}
+		if(kategori2_DataStore.baseParams.kategori2_nama!==null){kategori2_nama_2excel = kategori2_DataStore.baseParams.kategori2_nama;}
+		if(kategori2_DataStore.baseParams.kategori2_jenis!==null){kategori2_jenis_2excel = kategori2_DataStore.baseParams.kategori2_jenis;}
+		if(kategori2_DataStore.baseParams.kategori2_keterangan!==null){kategori2_keterangan_2excel = kategori2_DataStore.baseParams.kategori2_keterangan;}
+		if(kategori2_DataStore.baseParams.kategori2_aktif!==null){kategori2_aktif_2excel = kategori2_DataStore.baseParams.kategori2_aktif;}
 
 		Ext.Ajax.request({   
 		waitMsg: 'Please Wait...',
@@ -949,7 +970,7 @@ Ext.onReady(function(){
 			kategori2_jenis : kategori2_jenis_2excel,
 			kategori2_keterangan : kategori2_keterangan_2excel,
 			kategori2_aktif : kategori2_aktif_2excel,
-		  	currentlisting: kategori2_DataStoree.baseParams.task // this tells us if we are searching or not
+		  	currentlisting: kategori2_DataStore.baseParams.task // this tells us if we are searching or not
 		},
 		success: function(response){              
 		  	var result=eval(response.responseText);

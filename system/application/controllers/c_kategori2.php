@@ -26,6 +26,11 @@ class C_kategori2 extends Controller {
 		$this->load->view('main/v_kategori2');
 	}
 	
+	function get_kategori_list(){
+		$result=$this->m_public_function->get_kategori_list();
+		echo $result;
+	}
+	
 	//event handler action
 	function get_action(){
 		$task = $_POST['task'];
