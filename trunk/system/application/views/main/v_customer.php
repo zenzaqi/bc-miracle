@@ -1787,7 +1787,7 @@ Ext.onReady(function(){
 				triggerAction: 'all',
 				store:new Ext.data.SimpleStore({
 					fields:['pendidikan_value_display'],
-					data: [['SMA'],['Diploma'],['Sarjana'],['Pasca Sarjana'],['Doktoral'],['Lainnya']]
+					data: [['SMA'],['Diploma/Akademi'],['Sarjana  (S1)'],['Pasca Sarjana  (S2)'],['Doktoral (S3)'],['Lainnya']]
 					}),
 				mode: 'local',
                	displayField: 'pendidikan_value_display',
@@ -2586,7 +2586,7 @@ Ext.onReady(function(){
 		maxLength: 50,
 		store:new Ext.data.SimpleStore({
 			fields:['cust_pendidikan_value_display'],
-			data: [['SMA'],['Diploma'],['Sarjana'],['Pasca Sarjana'],['Doktoral'],['Lainnya']]
+			data: [['SMA'],['Diploma/Akademi'],['Sarjana (S1)'],['Pasca Sarjana (S2)'],['Doktoral (S3)'],['Lainnya']]
 		}),
 		mode: 'local',
 		editable: false,
@@ -2921,7 +2921,7 @@ Ext.onReady(function(){
 							xtype: 'checkboxgroup',
 							fieldLabel:'',
 							items:[cust_fb2Field,cust_tweeter2Field]
-						},cust_kelaminField, cust_tmptlahirField, cust_tgllahirField, cust_agamaField, cust_pendidikanField,  cust_profesiField, cust_profesitxtField, cust_hobiField, cust_hobitxtField, cust_referensiField, cust_referensilainField,cust_referensilaintxtField, cust_keteranganField, cust_statusnikahField, cust_jmlanakField, cust_terdaftarField, cust_unitField, cust_aktifField, cust_update_confirmField] 
+						},cust_kelaminField, cust_tmptlahirField, cust_tgllahirField, cust_agamaField, cust_pendidikanField,  cust_profesiField, cust_profesitxtField, cust_hobiField, cust_hobitxtField, cust_referensiField, cust_referensilainField,cust_referensilaintxtField, cust_statusnikahField, cust_jmlanakField, cust_terdaftarField, cust_unitField, cust_keteranganField, cust_aktifField, cust_update_confirmField] 
 					}
 				]
 			},{
@@ -3212,7 +3212,7 @@ Ext.onReady(function(){
 		maxLength: 50,
 		store:new Ext.data.SimpleStore({
 			fields:['cust_pendidikan_value_display'],
-			data: [['SMA'],['Diploma'],['Sarjana'],['Pasca Sarjana'],['Doktoral'],['Lainnya']]
+			data: [['SMA'],['Diploma/Akademi'],['Sarjana (S1)'],['Pasca Sarjana (S2)'],['Doktoral (S3)'],['Lainnya']]
 		}),
 		mode: 'local',
 		displayField: 'cust_pendidikan_value_display',

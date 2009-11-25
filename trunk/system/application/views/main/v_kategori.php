@@ -766,53 +766,53 @@ Ext.onReady(function(){
 		maskRe: /([0-9]+)$/
 	
 	});
-	/* Identify  kategori_nama Search Field */
+	/* Identify  kategori_nama Field */
 	kategori_namaSearchField= new Ext.form.TextField({
 		id: 'kategori_namaSearchField',
 		fieldLabel: 'Nama',
 		maxLength: 250,
+		allowBlank: false,
 		anchor: '95%'
-	
 	});
-	/* Identify  kategori_jenis Search Field */
+	/* Identify  kategori_jenis Field */
 	kategori_jenisSearchField= new Ext.form.ComboBox({
 		id: 'kategori_jenisSearchField',
-		fieldLabel: 'Jenis',
+		fieldLabel: 'Kelompok',
 		store:new Ext.data.SimpleStore({
-			fields:['value', 'kategori_jenis'],
-			data:[['produk','produk'],['perawatan','perawatan']]
+			fields:['kategori_jenis_value', 'kategori_jenis_display'],
+			data:[['produk','produk'],['perawatan','perawatan'],['paket','paket']]
 		}),
 		mode: 'local',
-		displayField: 'kategori_jenis',
-		valueField: 'value',
+		allowBlank: false,
+		editable: false,
+		displayField: 'kategori_jenis_display',
+		valueField: 'kategori_jenis_value',
 		anchor: '95%',
-		triggerAction: 'all'	 
-	
+		triggerAction: 'all'	
 	});
-	/* Identify  kategori_keterangan Search Field */
-	kategori_keteranganSearchField= new Ext.form.TextField({
+	/* Identify  kategori_keterangan Field */
+	kategori_keteranganSearchField= new Ext.form.TextArea({
 		id: 'kategori_keteranganSearchField',
 		fieldLabel: 'Keterangan',
 		maxLength: 250,
 		anchor: '95%'
-	
 	});
-	/* Identify  kategori_aktif Search Field */
+	/* Identify  kategori_aktif Field */
 	kategori_aktifSearchField= new Ext.form.ComboBox({
 		id: 'kategori_aktifSearchField',
 		fieldLabel: 'Status',
+		editable: false,
 		store:new Ext.data.SimpleStore({
-			fields:['value', 'kategori_aktif'],
-			data:[['Y','Y'],['T','T']]
+			fields:['kategori_aktif_value', 'kategori_aktif_display'],
+			data:[['Aktif','Aktif'],['Tidak Aktif','Tidak Aktif']]
 		}),
 		mode: 'local',
-		displayField: 'kategori_aktif',
-		valueField: 'value',
+		emptyText: 'Aktif',
+		displayField: 'kategori_aktif_display',
+		valueField: 'kategori_aktif_value',
 		width: 80,
-		triggerAction: 'all'	 
-	
+		triggerAction: 'all'	
 	});
-	
     
 	/* Function for retrieve search Form Panel */
 	kategori_searchForm = new Ext.FormPanel({

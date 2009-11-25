@@ -1238,7 +1238,7 @@ Ext.onReady(function(){
 			data:[['Aktif','Aktif'],['Tidak Aktif','Tidak Aktif']]
 		}),
 		mode: 'local',
-		emptyText: 'Aktif/Tidak',
+		emptyText: 'Aktif',
 		displayField: 'group_aktif_display',
 		valueField: 'group_aktif_value',
 		width: 90,

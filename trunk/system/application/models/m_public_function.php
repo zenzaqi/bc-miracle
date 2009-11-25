@@ -29,7 +29,7 @@ class M_public_function extends Model{
 			$departemen_id=9;
 		else
 			$departemen_id=0;*/
-		$sql="SELECT karyawan_id,karyawan_no,karyawan_nama FROM karyawan,jabatan WHERE karyawan_jabatan=jabatan_id AND jabatan_nama='$karyawan_jabatan' AND karyawan_aktif='Aktif'";
+		$sql="SELECT karyawan_id,karyawan_no,karyawan_nama,karyawan_username FROM karyawan,jabatan WHERE karyawan_jabatan=jabatan_id AND jabatan_nama='$karyawan_jabatan' AND karyawan_aktif='Aktif'";
 		$query = $this->db->query($sql);
 		$nbrows = $query->num_rows();
 		if($nbrows>0){

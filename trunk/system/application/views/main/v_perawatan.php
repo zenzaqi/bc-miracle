@@ -1117,14 +1117,17 @@ Ext.onReady(function(){
 			rawat_dmField.setValue(cbo_rawat_groupDataStore.getAt(record).data.rawat_group_dmrawat);
 			rawat_kategoritxtField.setValue(cbo_rawat_groupDataStore.getAt(record).data.rawat_group_kelompok);
 			rawat_kategoriField.setValue(cbo_rawat_groupDataStore.getAt(record).data.rawat_group_kelompok_id);
+			console.log("Group Kelompok = "+cbo_rawat_groupDataStore.getAt(record).data.rawat_group_kelompok);
 			if(cbo_rawat_groupDataStore.getAt(record).data.rawat_group_kelompok=="Medis" || cbo_rawat_groupDataStore.getAt(record).data.rawat_group_kelompok=="Surgery"){
+				//rawat_gudangField.setValue("Gudang Besar");
 				cbo_rawat_gudangDataSore.load();
 				console.log("count gudang = "+cbo_rawat_gudangDataSore.getCount());
-				//rawat_gudangField.valueField(4);
 			}else if(cbo_rawat_groupDataStore.getAt(record).data.rawat_group_kelompok=="Non Medis"){
-				//rawat_gudangField.setValue(3);
+				//rawat_gudangField.setValue("Gudang BT");
 				cbo_rawat_gudangDataSore.load();
 				console.log("count gudang = "+cbo_rawat_gudangDataSore.getCount());
+			}else{
+				rawat_gudangField.setValue("");
 			}
 		}
 	});
@@ -1241,6 +1244,7 @@ Ext.onReady(function(){
 	Ext.util.Format.comboRenderer = function(combo){
 		cbo_rawat_produkDataStore.load();
 		cbo_rawat_alatDataStore.load();
+		cbo_rawat_gudangDataSore.load();
 		return function(value){
 			var record = combo.findRecord(combo.valueField, value);
 			return record ? record.get(combo.displayField) : combo.valueNotFoundText;

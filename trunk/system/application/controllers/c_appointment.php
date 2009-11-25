@@ -120,7 +120,11 @@ class C_appointment extends Controller {
 		$dapp_medis_jamdatang=str_replace("/(<\/?)(p)([^>]*>)", "",$dapp_medis_jamdatang);
 		$dapp_medis_jamdatang=str_replace("\\", "",$dapp_medis_jamdatang);
 		$dapp_medis_jamdatang=str_replace("'", "\'",$dapp_medis_jamdatang);
-		$result=$this->m_appointment->detail_appointment_detail_medis_insert($dapp_medis_id ,$dapp_medis_master ,$dapp_medis_perawatan ,$dapp_medis_tglreservasi ,$dapp_medis_jamreservasi ,$dapp_medis_petugas ,$dapp_medis_status ,$dapp_medis_tgldatang ,$dapp_medis_jamdatang );
+		$dapp_medis_keterangan=trim(@$_POST["dapp_medis_keterangan"]);
+		$dapp_medis_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$dapp_medis_keterangan);
+		$dapp_medis_keterangan=str_replace("\\", "",$dapp_medis_keterangan);
+		$dapp_medis_keterangan=str_replace("'", "\'",$dapp_medis_keterangan);
+		$result=$this->m_appointment->detail_appointment_detail_medis_insert($dapp_medis_id ,$dapp_medis_master ,$dapp_medis_perawatan ,$dapp_medis_tglreservasi ,$dapp_medis_jamreservasi ,$dapp_medis_petugas ,$dapp_medis_status ,$dapp_medis_tgldatang ,$dapp_medis_jamdatang ,$dapp_medis_keterangan);
 	}
 	
 	function detail_appointment_detail_nonmedis_insert(){
@@ -144,7 +148,11 @@ class C_appointment extends Controller {
 		$dapp_nonmedis_jamdatang=str_replace("/(<\/?)(p)([^>]*>)", "",$dapp_nonmedis_jamdatang);
 		$dapp_nonmedis_jamdatang=str_replace("\\", "",$dapp_nonmedis_jamdatang);
 		$dapp_nonmedis_jamdatang=str_replace("'", "\'",$dapp_nonmedis_jamdatang);
-		$result=$this->m_appointment->detail_appointment_detail_nonmedis_insert($dapp_nonmedis_id ,$dapp_nonmedis_master ,$dapp_nonmedis_perawatan ,$dapp_nonmedis_tglreservasi ,$dapp_nonmedis_jamreservasi ,$dapp_nonmedis_petugas2 ,$dapp_nonmedis_status ,$dapp_nonmedis_tgldatang ,$dapp_nonmedis_jamdatang );
+		$dapp_nonmedis_keterangan=trim(@$_POST["dapp_nonmedis_keterangan"]);
+		$dapp_nonmedis_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$dapp_nonmedis_keterangan);
+		$dapp_nonmedis_keterangan=str_replace("\\", "",$dapp_nonmedis_keterangan);
+		$dapp_nonmedis_keterangan=str_replace("'", "\'",$dapp_nonmedis_keterangan);
+		$result=$this->m_appointment->detail_appointment_detail_nonmedis_insert($dapp_nonmedis_id ,$dapp_nonmedis_master ,$dapp_nonmedis_perawatan ,$dapp_nonmedis_tglreservasi ,$dapp_nonmedis_jamreservasi ,$dapp_nonmedis_petugas2 ,$dapp_nonmedis_status ,$dapp_nonmedis_tgldatang ,$dapp_nonmedis_jamdatang ,$dapp_nonmedis_keterangan);
 	}
 	
 	
@@ -262,7 +270,6 @@ class C_appointment extends Controller {
 		//POST varibale here
 		$app_id=trim(@$_POST["app_id"]);
 		$app_customer=trim(@$_POST["app_customer"]);
-		$app_tanggal=trim(@$_POST["app_tanggal"]);
 		$app_cara=trim(@$_POST["app_cara"]);
 		$app_cara=str_replace("/(<\/?)(p)([^>]*>)", "",$app_cara);
 		$app_cara=str_replace("'", "\'",$app_cara);
@@ -272,10 +279,26 @@ class C_appointment extends Controller {
 		$app_kategori=trim(@$_POST["app_kategori"]);
 		$app_dokter=trim(@$_POST["app_dokter"]);
 		$app_terapis=trim(@$_POST["app_terapis"]);
+		if(trim(@$_POST["app_tgl_start_reservasi"])!="")
+			$app_tgl_start_reservasi=date('Y-m-d', strtotime(trim(@$_POST["app_tgl_start_reservasi"])));
+		else
+			$app_tgl_start_reservasi="";
+		if(trim(@$_POST["app_tgl_end_reservasi"])!="")
+			$app_tgl_end_reservasi=date('Y-m-d', strtotime(trim(@$_POST["app_tgl_end_reservasi"])));
+		else
+			$app_tgl_end_reservasi="";
+		if(trim(@$_POST["app_tgl_start_app"])!="")
+			$app_tgl_start_app=date('Y-m-d', strtotime(trim(@$_POST["app_tgl_start_app"])));
+		else
+			$app_tgl_start_app="";
+		if(trim(@$_POST["app_tgl_end_app"])!="")
+			$app_tgl_end_app=date('Y-m-d', strtotime(trim(@$_POST["app_tgl_end_app"])));
+		else
+			$app_tgl_end_app="";
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_appointment->appointment_search($app_id ,$app_customer ,$app_tanggal ,$app_cara ,$app_kategori, $app_dokter, $app_terapis, $start,$end);
+		$result = $this->m_appointment->appointment_search($app_id ,$app_customer ,$app_cara ,$app_kategori, $app_dokter, $app_terapis, $app_tgl_start_reservasi, $app_tgl_end_reservasi, $app_tgl_start_app, $app_tgl_end_app, $start,$end);
 		echo $result;
 	}
 
