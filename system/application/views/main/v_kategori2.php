@@ -637,7 +637,7 @@ Ext.onReady(function(){
 		triggerAction: 'all'	
 	});
 	/* Identify  kategori2_keterangan Field */
-	kategori2_keteranganField= new Ext.form.TextField({
+	kategori2_keteranganField= new Ext.form.TextArea({
 		id: 'kategori2_keteranganField',
 		fieldLabel: 'Keterangan',
 		maxLength: 250,
@@ -653,9 +653,10 @@ Ext.onReady(function(){
 		}),
 		mode: 'local',
 		editable: false,
+		emptyText: 'Aktif',
 		displayField: 'kategori2_aktif_display',
 		valueField: 'kategori2_aktif_value',
-		anchor: '95%',
+		width: 80,
 		triggerAction: 'all'	
 	});
 
@@ -745,62 +746,62 @@ Ext.onReady(function(){
 	/* End of Fuction */
 	
 	/* Field for search */
-	/* Identify  kategori2_id Search Field */
+	/* Identify  kategori2_id Field */
 	kategori2_idSearchField= new Ext.form.NumberField({
 		id: 'kategori2_idSearchField',
-		fieldLabel: 'Kategori2 Id',
 		allowNegatife : false,
 		blankText: '0',
+		allowBlank: false,
 		allowDecimals: false,
+				hidden: true,
+		readOnly: true,
 		anchor: '95%',
 		maskRe: /([0-9]+)$/
-	
 	});
-	/* Identify  kategori2_nama Search Field */
+	/* Identify  kategori2_nama Field */
 	kategori2_namaSearchField= new Ext.form.TextField({
 		id: 'kategori2_namaSearchField',
-		fieldLabel: 'Kategori2 Nama',
+		fieldLabel: 'Nama',
 		maxLength: 250,
 		anchor: '95%'
-	
 	});
-	/* Identify  kategori2_jenis Search Field */
+	/* Identify  kategori2_jenis Field */
 	kategori2_jenisSearchField= new Ext.form.ComboBox({
 		id: 'kategori2_jenisSearchField',
-		fieldLabel: 'Kategori2 Jenis',
+		fieldLabel: 'Kelompok',
 		store:new Ext.data.SimpleStore({
-			fields:['value', 'kategori2_jenis'],
+			fields:['kategori2_jenis_value', 'kategori2_jenis_display'],
 			data:[['produk','produk'],['perawatan','perawatan']]
 		}),
 		mode: 'local',
-		displayField: 'kategori2_jenis',
-		valueField: 'value',
+		editable: false,
+		displayField: 'kategori2_jenis_display',
+		valueField: 'kategori2_jenis_value',
 		anchor: '95%',
-		triggerAction: 'all'	 
-	
+		triggerAction: 'all'	
 	});
-	/* Identify  kategori2_keterangan Search Field */
-	kategori2_keteranganSearchField= new Ext.form.TextField({
+	/* Identify  kategori2_keterangan Field */
+	kategori2_keteranganSearchField= new Ext.form.TextArea({
 		id: 'kategori2_keteranganSearchField',
-		fieldLabel: 'Kategori2 Keterangan',
+		fieldLabel: 'Keterangan',
 		maxLength: 250,
 		anchor: '95%'
-	
 	});
-	/* Identify  kategori2_aktif Search Field */
+	/* Identify  kategori2_aktif Field */
 	kategori2_aktifSearchField= new Ext.form.ComboBox({
 		id: 'kategori2_aktifSearchField',
-		fieldLabel: 'Kategori2 Aktif',
+		fieldLabel: 'Aktif',
 		store:new Ext.data.SimpleStore({
-			fields:['value', 'kategori2_aktif'],
+			fields:['kategori2_aktif_value', 'kategori2_aktif_display'],
 			data:[['Aktif','Aktif'],['Tidak Aktif','Tidak Aktif']]
 		}),
 		mode: 'local',
-		displayField: 'kategori2_aktif',
-		valueField: 'value',
-		anchor: '95%',
-		triggerAction: 'all'	 
-	
+		editable: false,
+		emptyText: 'Aktif',
+		displayField: 'kategori2_aktif_display',
+		valueField: 'kategori2_aktif_value',
+		width: 80,
+		triggerAction: 'all'	
 	});
     
 	/* Function for retrieve search Form Panel */

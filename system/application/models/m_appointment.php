@@ -81,7 +81,7 @@ class M_appointment extends Model{
 		//*eof
 		
 		//insert detail record
-		function detail_appointment_detail_medis_insert($dapp_medis_id ,$dapp_medis_master ,$dapp_medis_perawatan ,$dapp_medis_tglreservasi ,$dapp_medis_jamreservasi ,$dapp_medis_petugas ,$dapp_medis_status ,$dapp_medis_tgldatang ,$dapp_medis_jamdatang ){
+		function detail_appointment_detail_medis_insert($dapp_medis_id ,$dapp_medis_master ,$dapp_medis_perawatan ,$dapp_medis_tglreservasi ,$dapp_medis_jamreservasi ,$dapp_medis_petugas ,$dapp_medis_status ,$dapp_medis_tgldatang ,$dapp_medis_jamdatang ,$dapp_medis_keterangan){
 			//if master id not capture from view then capture it from max pk from master table
 			if($dapp_medis_master=="" || $dapp_medis_master==NULL){
 				$dapp_medis_master=$this->get_master_id();
@@ -90,6 +90,7 @@ class M_appointment extends Model{
 				$dapp_medis_tgldatang=date('Y-m-d');
 				$dapp_medis_jamdatang=date('H:i:s');
 			}
+			$this->firephp->log($dapp_medis_keterangan, "Medis-Keternagan");
 			
 			$data = array(
 				"dapp_master"=>$dapp_medis_master, 
@@ -100,7 +101,8 @@ class M_appointment extends Model{
 //				"dapp_petugas2"=>$dapp_medis_petugas2, 
 				"dapp_status"=>$dapp_medis_status, 
 				"dapp_tgldatang"=>$dapp_medis_tgldatang, 
-				"dapp_jamdatang"=>$dapp_medis_jamdatang 
+				"dapp_jamdatang"=>$dapp_medis_jamdatang,
+				"dapp_keterangan"=>$dapp_medis_keterangan
 			);
 			$this->db->insert('appointment_detail', $data); 
 			if($this->db->affected_rows())
@@ -110,7 +112,7 @@ class M_appointment extends Model{
 
 		}
 		
-		function detail_appointment_detail_nonmedis_insert($dapp_nonmedis_id ,$dapp_nonmedis_master ,$dapp_nonmedis_perawatan ,$dapp_nonmedis_tglreservasi ,$dapp_nonmedis_jamreservasi ,$dapp_nonmedis_petugas2 ,$dapp_nonmedis_status ,$dapp_nonmedis_tgldatang ,$dapp_nonmedis_jamdatang ){
+		function detail_appointment_detail_nonmedis_insert($dapp_nonmedis_id ,$dapp_nonmedis_master ,$dapp_nonmedis_perawatan ,$dapp_nonmedis_tglreservasi ,$dapp_nonmedis_jamreservasi ,$dapp_nonmedis_petugas2 ,$dapp_nonmedis_status ,$dapp_nonmedis_tgldatang ,$dapp_nonmedis_jamdatang ,$dapp_nonmedis_keterangan){
 			//if master id not capture from view then capture it from max pk from master table
 			if($dapp_nonmedis_master=="" || $dapp_nonmedis_master==NULL){
 				$dapp_nonmedis_master=$this->get_master_id();
@@ -125,7 +127,8 @@ class M_appointment extends Model{
 				"dapp_petugas2"=>$dapp_nonmedis_petugas2, 
 				"dapp_status"=>$dapp_nonmedis_status, 
 				"dapp_tgldatang"=>$dapp_nonmedis_tgldatang, 
-				"dapp_jamdatang"=>$dapp_nonmedis_jamdatang 
+				"dapp_jamdatang"=>$dapp_nonmedis_jamdatang,
+				"dapp_keterangan"=>$dapp_nonmedis_keterangan
 			);
 			$this->db->insert('appointment_detail', $data); 
 			if($this->db->affected_rows())
@@ -387,7 +390,7 @@ WHERE dapp_tglreservasi='$dt'";
 		}
 		
 		//function for advanced search record
-		function appointment_search($app_id ,$app_customer ,$app_tanggal ,$app_cara ,$app_kategori ,$app_dokter ,$app_terapis ,$start,$end){
+		function appointment_search($app_id ,$app_customer ,$app_cara ,$app_kategori ,$app_dokter ,$app_terapis ,$app_tgl_start_reservasi, $app_tgl_end_reservasi, $app_tgl_start_app, $app_tgl_end_app, $start,$end){
 			//full query
 			//$query="select * from appointment";
 			$query="SELECT app_id,app_customer,cust_nama,karyawan_dokter.karyawan_nama as dokter_nama,karyawan_terapis.karyawan_nama as terapis_nama,rawat_nama,kategori_nama,dapp_id,dapp_status,dapp_tglreservasi,dapp_jamdatang,app_tanggal,app_cara,app_keterangan,dapp_jamreservasi,app_creator,app_date_create,app_update,app_date_update,app_revised 
@@ -403,10 +406,20 @@ left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawa
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " app_customer='".$app_customer."'";
 			};
-			if($app_tanggal!=''){
+			if($app_tgl_start_reservasi!='' && $app_tgl_end_reservasi!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " dapp_tglreservasi='".$app_tanggal."'";
-			};
+				$query.= " app_tanggal BETWEEN '".$app_tgl_start_reservasi."' AND '".$app_tgl_end_reservasi."'";
+			}else if($app_tgl_start_reservasi!='' && $app_tgl_end_reservasi==''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " app_tanggal='".$app_tgl_start_reservasi."'";
+			}
+			if($app_tgl_start_app!='' && $app_tgl_end_app!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " dapp_tglreservasi BETWEEN '".$app_tgl_start_app."' AND '".$app_tgl_end_app."'";
+			}else if($app_tgl_start_app!='' && $app_tgl_end_app==''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " dapp_tglreservasi='".$app_tgl_start_app."'";
+			}
 			if($app_cara!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " app_cara LIKE '%".$app_cara."%'";

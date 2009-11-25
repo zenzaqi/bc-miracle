@@ -1,0 +1,1 @@
+ALTER TABLE `appointment_detail` ADD `dapp_keterangan` VARCHAR( 250 ) NULL;

@@ -106,6 +106,8 @@ class M_kategori2 extends Model{
 		//function for advanced search record
 		function kategori2_search($kategori2_id ,$kategori2_nama ,$kategori2_jenis ,$kategori2_keterangan ,$kategori2_aktif ,$start,$end){
 			//full query
+			if($kategori2_aktif=="")
+				$kategori2_aktif="Aktif";
 			$query="select * from kategori2";
 			
 			if($kategori2_id!=''){
