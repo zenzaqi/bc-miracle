@@ -363,7 +363,7 @@ Ext.onReady(function(){
 		/* dataIndex => insert intokategori2_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'kategori2_id', type: 'int', mapping: 'kategori2_id'}, 
 			{name: 'kategori2_nama', type: 'string', mapping: 'kategori2_nama'}, 
-			{name: 'kategori2_jenis', type: 'int', mapping: 'kategori2_jenis'}, 
+			{name: 'kategori2_jenis', type: 'string', mapping: 'kategori_nama'}, 
 			{name: 'kategori2_keterangan', type: 'string', mapping: 'kategori2_keterangan'}, 
 			{name: 'kategori2_aktif', type: 'string', mapping: 'kategori2_aktif'}, 
 			{name: 'kategori2_creator', type: 'string', mapping: 'kategori2_creator'}, 
