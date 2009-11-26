@@ -3085,10 +3085,10 @@ Ext.onReady(function(){
 	combo_jual_produk.on('select',function(){
 		var t=detail_jual_produkListEditorGrid.getStore().getCount();
 		//console.log("DETAIL_GRID_count = "+detail_jual_produkListEditorGrid.getStore().getCount());
-		for(p=0;p<detail_jual_produkListEditorGrid.getStore().getCount();p++){
+		/*for(p=0;p<detail_jual_produkListEditorGrid.getStore().getCount();p++){
 			if(p==1)
-				//console.log("DETAIL_GRID_jumlah = "+detail_jual_produkListEditorGrid.getStore().getAt(1).data.dproduk_jumlah);
-		}
+				console.log("DETAIL_GRID_jumlah = "+detail_jual_produkListEditorGrid.getStore().getAt(1).data.dproduk_jumlah);
+		}*/
 		for(i=0;i<detail_jual_produk_DataStore.getCount();i++){	
 			detail_jual_produk_record=detail_jual_produk_DataStore.getAt(i);
 			var c_dtStore=0;
@@ -3314,7 +3314,7 @@ Ext.onReady(function(){
 	function detail_jual_produk_insert(){
 		for(i=0;i<detail_jual_produk_DataStore.getCount();i++){
 			detail_jual_produk_record=detail_jual_produk_DataStore.getAt(i);
-			//console.log("DETAIL SUBTOTAL NET = "+detail_jual_produk_record.data.dproduk_subtotal_net);
+			console.log("DETAIL SUBTOTAL NET = "+detail_jual_produk_record.data.dproduk_subtotal_net);
 			if(detail_jual_produk_record.data.dproduk_produk!==null&&detail_jual_produk_record.data.dproduk_produk.dproduk_produk!==""){
 				Ext.Ajax.request({
 					waitMsg: 'Please wait...',
