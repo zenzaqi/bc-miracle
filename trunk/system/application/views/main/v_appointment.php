@@ -560,8 +560,10 @@ Ext.onReady(function(){
 			{name: 'dapp_jamreservasi', type: 'string', mapping: 'dapp_jamreservasi'}, 
 			{name: 'dokter_id', type: 'int', mapping: 'dokter_id'}, 
 			{name: 'dokter_nama', type: 'string', mapping: 'dokter_nama'},
+			{name: 'dokter_username', type: 'string', mapping: 'dokter_username'},
 			{name: 'terapis_id', type: 'int', mapping: 'terapis_id'},
 			{name: 'terapis_nama', type: 'string', mapping: 'terapis_nama'},
+			{name: 'terapis_username', type: 'string', mapping: 'terapis_username'},
 			{name: 'kategori_nama', type: 'string', mapping: 'kategori_nama'}, 
 			{name: 'dapp_id', type: 'int', mapping: 'dapp_id'},
 			{name: 'dapp_status', type: 'string', mapping: 'dapp_status'},
@@ -668,14 +670,14 @@ Ext.onReady(function(){
 		}, 
 		{
 			header: 'Dokter',
-			dataIndex: 'dokter_nama',
+			dataIndex: 'dokter_username',
 			width: 200,
 			sortable: true,
 			editor: new Ext.form.ComboBox({
 				store: dapp_dokterDataStore,
 				mode: 'remote',
 				tpl: dapp_dokter_tpl,
-				displayField: 'dokter_display',
+				displayField: 'dokter_username',
 				valueField: 'dokter_value',
 				loadingText: 'Searching...',
 				itemSelector: 'div.search-item',
@@ -685,7 +687,7 @@ Ext.onReady(function(){
 		}, 
 		{
 			header: 'Therapist',
-			dataIndex: 'terapis_nama',
+			dataIndex: 'terapis_username',
 			width: 200,
 			sortable: true,
 			editor: new Ext.form.TextField({
@@ -842,8 +844,13 @@ Ext.onReady(function(){
 			new Ext.app.SearchField({
 			id: 'simpleSearch',
 			store: appointment_DataStore,
-			params: {start: 0, limit: pageS},
+			params: {task: 'LIST',start: 0, limit: pageS},
 			listeners:{
+				specialkey: function(f,e){
+					if(e.getKey() == e.ENTER){
+						appointment_DataStore.baseParams={task:'LIST',start: 0, limit: pageS};
+		            }
+				},
 				render: function(c){
 				Ext.get(this.id).set({qtitle:'Search By'});
 				Ext.get(this.id).set({qtip:'- Default Tgl Sekarang<br>- Nama Customer<br>- Cara Appointment<br>- Keterangan'});
@@ -1131,7 +1138,7 @@ Ext.onReady(function(){
 	});
 	var dokter_tpl = new Ext.XTemplate(
         '<tpl for="."><div class="search-item">',
-            '<span><b>{dokter_username}</b><br />{dokter_display}',
+            '<span><b>{dokter_username}</b> | {dokter_display}',
         '</div></tpl>'
     );
 	
@@ -1147,10 +1154,16 @@ Ext.onReady(function(){
 		},[
 		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
 			{name: 'terapis_display', type: 'string', mapping: 'karyawan_nama'},
+			{name: 'terapis_username', type: 'string', mapping: 'karyawan_username'},
 			{name: 'terapis_value', type: 'int', mapping: 'karyawan_id'}
 		]),
 		sortInfo:{field: 'terapis_display', direction: "ASC"}
 	});
+	var cbo_terapis_tpl = new Ext.XTemplate(
+        '<tpl for="."><div class="search-item">',
+            '<span><b>{terapis_username}</b> | {terapis_display}',
+        '</div></tpl>'
+    );
 	
 	Ext.util.Format.comboRenderer = function(combo){
 		cbo_dapp_rawat_medisDataStore.load();
@@ -1574,9 +1587,11 @@ Ext.onReady(function(){
 	var combo_dapp_terapis_nonmedis=new Ext.form.ComboBox({
 			store: cbo_dapp_terapisDataStore,
 			mode: 'remote',
+			tpl: cbo_terapis_tpl,
 			displayField: 'terapis_display',
 			valueField: 'terapis_value',
 			loadingText: 'Searching...',
+			itemSelector: 'div.search-item',
 			triggerAction: 'all',
 			anchor: '95%'
 
@@ -2287,7 +2302,7 @@ Ext.onReady(function(){
 		});
 	}
 	/*End of Function */
-	display_form_window();
+	//display_form_window();
 
 	new Ext.ToolTip({
 		target:Ext.get('help_customer'),

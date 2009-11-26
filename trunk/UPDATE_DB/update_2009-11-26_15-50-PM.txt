@@ -1,0 +1,6 @@
+Update tgl: 26 November 2009
+
+APPOINTMENT:
+- Therapist, untuk di combo boxnya, munculkan Nick Name & Nama nya (H) [OK]
+- form List & Edit, utk dokter & therapist, yg ditampilkan Nick Name nya aja (N) [OK]
+- default open (klik menu App): yg tampil form List saja (bukan form Add), dengan default load Tgl App hari ini + 7 hari ke depan (H) [OK]

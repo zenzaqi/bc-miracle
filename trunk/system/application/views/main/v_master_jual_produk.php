@@ -3220,6 +3220,7 @@ Ext.onReady(function(){
 		},{
 			header: 'Konversi Nilai',
 			dataIndex: 'konversi_nilai',
+			hidden: true,
 			width: 80,
 			sortable: true,
 			renderer: Ext.util.Format.numberRenderer('0,000')

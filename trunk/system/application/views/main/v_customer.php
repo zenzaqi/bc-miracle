@@ -2630,6 +2630,19 @@ Ext.onReady(function(){
 		format : 'Y-m-d',
 		anchor: '50%'
 	});
+	cust_umurField= new Ext.form.NumberField({
+		id: 'cust_umurField',
+		fieldLabel: 'Umur',
+		disabled:true,
+		width:50,
+		maskRe: /([0-9]+)$/
+	});
+	cust_tgllahirField.on('select',function(){
+		Ext.Msg.alert('Status', 'Date saved successfully.');
+	});
+	cust_tgllahirField.on('keyup',function(){
+		Ext.Msg.alert('Status', 'Date saved successfully.');
+	});
 	/* Identify  cust_hobi Field */
 	cust_hobiField= new Ext.form.ComboBox({
 		id: 'cust_hobiField',
