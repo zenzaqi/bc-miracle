@@ -142,18 +142,26 @@ class M_appointment extends Model{
 		//function for get list record
 		function appointment_list($filter,$start,$end){
 			//$query = "SELECT * FROM appointment";
+			$this->firephp->log($filter, "FILTER APP");
 			$dt=date('Y-m-d');
-			$query="SELECT app_id,cust_nama,cust_id,karyawan_dokter.karyawan_nama as dokter_nama,karyawan_dokter.karyawan_id as dokter_id,karyawan_terapis.karyawan_nama as terapis_nama,karyawan_terapis.karyawan_id as terapis_id,rawat_id,rawat_nama,kategori_nama,dapp_id,dapp_status,dapp_tglreservasi,dapp_jamdatang,app_tanggal,app_cara,app_keterangan,dapp_jamreservasi,app_creator,app_date_create,app_update,app_date_update,app_revised 
+			$dt_six=date('Y-m-d',mktime(0,0,0,date("m"),date("d")+6,date("Y")));
+			$query="SELECT app_id,cust_nama,cust_id,karyawan_dokter.karyawan_nama as dokter_nama,karyawan_dokter.karyawan_id as dokter_id,karyawan_dokter.karyawan_username as dokter_username,karyawan_terapis.karyawan_nama as terapis_nama,karyawan_terapis.karyawan_id as terapis_id,karyawan_terapis.karyawan_username as terapis_username,rawat_id,rawat_nama,kategori_nama,dapp_id,dapp_status,dapp_tglreservasi,dapp_jamdatang,app_tanggal,app_cara,app_keterangan,dapp_jamreservasi,app_creator,app_date_create,app_update,app_date_update,app_revised 
 FROM (((appointment inner join appointment_detail on appointment.app_id=appointment_detail.dapp_master inner join perawatan on appointment_detail.dapp_perawatan=perawatan.rawat_id 
 inner join customer on appointment.app_customer=customer.cust_id inner join kategori on perawatan.rawat_kategori=kategori.kategori_id) 
 left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawan_dokter.karyawan_id) left join karyawan as karyawan_terapis on appointment_detail.dapp_petugas2=karyawan_terapis.karyawan_id)
-WHERE dapp_tglreservasi='$dt'";
+WHERE dapp_tglreservasi BETWEEN '$dt' AND '$dt_six'";
 			
 			// For simple search
 			if ($filter<>""){
+				$query="SELECT app_id,cust_nama,cust_id,karyawan_dokter.karyawan_nama as dokter_nama,karyawan_dokter.karyawan_id as dokter_id,karyawan_dokter.karyawan_username as dokter_username,karyawan_terapis.karyawan_nama as terapis_nama,karyawan_terapis.karyawan_id as terapis_id,karyawan_terapis.karyawan_username as terapis_username,rawat_id,rawat_nama,kategori_nama,dapp_id,dapp_status,dapp_tglreservasi,dapp_jamdatang,app_tanggal,app_cara,app_keterangan,dapp_jamreservasi,app_creator,app_date_create,app_update,app_date_update,app_revised 
+FROM (((appointment inner join appointment_detail on appointment.app_id=appointment_detail.dapp_master inner join perawatan on appointment_detail.dapp_perawatan=perawatan.rawat_id 
+inner join customer on appointment.app_customer=customer.cust_id inner join kategori on perawatan.rawat_kategori=kategori.kategori_id) 
+left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawan_dokter.karyawan_id) left join karyawan as karyawan_terapis on appointment_detail.dapp_petugas2=karyawan_terapis.karyawan_id)";
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (cust_nama LIKE '%".addslashes($filter)."%' OR app_tanggal LIKE '%".addslashes($filter)."%' OR app_cara LIKE '%".addslashes($filter)."%' OR app_keterangan LIKE '%".addslashes($filter)."%' )";
+				//search customer,perawatan,dokter,therapist
+				$query .= " (cust_nama LIKE '%".addslashes($filter)."%')";
 			}
+			//echo $query;
 			
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
