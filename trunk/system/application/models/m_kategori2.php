@@ -20,7 +20,7 @@ class M_kategori2 extends Model{
 		
 		//function for get list record
 		function kategori2_list($filter,$start,$end){
-			$query = "SELECT * FROM kategori2";
+			$query = "SELECT * FROM kategori2,kategori WHERE kategori2_jenis=kategori_id";
 			
 			// For simple search
 			if ($filter<>""){
