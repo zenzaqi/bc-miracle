@@ -3712,12 +3712,12 @@ Ext.onReady(function(){
 		,
 		buttons: [
 			{
-				text: 'Save',
-				handler: master_jual_rawat_create
-			},
-			{
 				text: 'Save and Print',
 				handler: save_andPrint
+			},
+			{
+				text: 'Save',
+				handler: master_jual_rawat_create
 			},
 			{
 				text: 'Cancel',

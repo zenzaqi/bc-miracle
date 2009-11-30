@@ -1151,6 +1151,7 @@ Ext.onReady(function(){
   	/*Fieldset Master*/
 	produk_masterGroup = new Ext.form.FieldSet({
 		title: 'Master',
+		labelWidth:120,
 		autoHeight: true,
 		collapsible: true,
 		layout:'column',
@@ -1802,6 +1803,7 @@ Ext.onReady(function(){
 	/* Function for retrieve search Form Panel */
 	produk_searchForm = new Ext.FormPanel({
 		labelAlign: 'left',
+		labelWidth:120,
 		bodyStyle:'padding:5px',
 		autoHeight:true,
 		width: 600,        

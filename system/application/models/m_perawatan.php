@@ -139,7 +139,7 @@ class M_perawatan extends Model{
 		*/
 		
 		function get_kontribusi_rawat_list(){
-			$sql="SELECT kategori2_id,kategori2_nama FROM kategori2 where kategori2_jenis='perawatan' and kategori2_aktif='Aktif'";
+			$sql="SELECT kategori2_id,kategori2_nama FROM kategori2 LEFT JOIN kategori ON(kategori2.kategori2_jenis=kategori.kategori_id) WHERE kategori_jenis='perawatan' and kategori2_aktif='Aktif'";
 			$query = $this->db->query($sql);
 			$nbrows = $query->num_rows();
 			if($nbrows>0){

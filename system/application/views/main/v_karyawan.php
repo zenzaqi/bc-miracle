@@ -1689,7 +1689,7 @@ Ext.onReady(function(){
 	/* Identify  karyawan_username Search Field */
 	karyawan_usernameSearchField= new Ext.form.TextField({
 		id: 'karyawan_usernameSearchField',
-		fieldLabel: 'Nickname',
+		fieldLabel: '&nbsp;&nbsp;&nbsp;Nickname',
 		maxLength: 15,
 		width: 100
 	
@@ -1720,7 +1720,7 @@ Ext.onReady(function(){
 	/* Identify  karyawan_tgllahir Search Field */
 	karyawan_tgllahirSearchField= new Ext.form.DateField({
 		id: 'karyawan_tgllahirSearchField',
-		fieldLabel: 'Tanggal Lahir',
+		fieldLabel: 'Tgl Lahir',
 		format : 'Y-m-d',
 	
 	});
@@ -1888,6 +1888,7 @@ Ext.onReady(function(){
 		mode: 'local',
 		displayField: 'karyawan_aktif',
 		valueField: 'value',
+		emptyText: 'Aktif',
 		width: 80,
 		triggerAction: 'all'	 
 	
@@ -1906,7 +1907,7 @@ Ext.onReady(function(){
 		autoHeight: true,
 		defaultType: 'textfield',
 		anchor: '95%',
-		items:[karyawan_notelpSearchField ,karyawan_notelp2SearchField ,karyawan_notelp3SearchField,karyawan_notelp4SearchField ,karyawan_emailSearchField, karyawan_emiracleSearchField, karyawan_keteranganSearchField]
+		items:[karyawan_notelpSearchField ,karyawan_notelp2SearchField ,karyawan_notelp3SearchField,karyawan_notelp4SearchField ,karyawan_emailSearchField]
 	});
 	
 	group_search_pekerjaan = new Ext.form.FieldSet({
@@ -1914,7 +1915,7 @@ Ext.onReady(function(){
 		autoHeight: true,
 		defaultType: 'textfield',
 		anchor: '95%',
-		items:[karyawan_jabatanSearchField, karyawan_cabangSearchField ,karyawan_departemenSearchField, karyawan_golonganSearchField, karyawan_tglmasukSearchField, karyawan_atasanSearchField]
+		items:[karyawan_tglmasukSearchField, karyawan_cabangSearchField, karyawan_jabatanSearchField, karyawan_departemenSearchField, karyawan_golonganSearchField, karyawan_atasanSearchField, karyawan_emiracleSearchField]
 	});
     
 	/* Function for retrieve search Form Panel */
@@ -1922,7 +1923,7 @@ Ext.onReady(function(){
 		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
-		width: 600,        
+		width: 700,        
 		items: [{
 			layout:'column',
 			border:false,
@@ -1931,13 +1932,13 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [karyawan_noSearchField, karyawan_npwpSearchField, karyawan_namaSearchField, karyawan_usernameSearchField, karyawan_tgllahirSearchField, karyawan_kelaminSearchField, karyawan_aktifSearchField, group_search_kontak ] 
+				items: [karyawan_noSearchField, karyawan_npwpSearchField, karyawan_namaSearchField, karyawan_usernameSearchField, karyawan_tgllahirSearchField, karyawan_kelaminSearchField, group_search_alamat, group_search_kontak ] 
 			}
 			,{
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [group_search_alamat, group_search_pekerjaan] 
+				items: [group_search_pekerjaan, karyawan_keteranganSearchField, karyawan_aktifSearchField] 
 			}
 			]
 		}]

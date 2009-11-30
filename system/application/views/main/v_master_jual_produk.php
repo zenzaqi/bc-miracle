@@ -3810,12 +3810,12 @@ Ext.onReady(function(){
 				width: 560
 			},
 			{
-				text: 'Save',
-				handler: master_jual_produk_create
-			},
-			{
 				text: 'Save and Print',
 				handler: save_andPrint
+			},
+			{
+				text: 'Save',
+				handler: master_jual_produk_create
 			},
 			{
 				text: 'Cancel',
