@@ -1299,7 +1299,7 @@ Ext.onReady(function(){
 				format: 'H:i:s',
 				minValue: '7:00',
 				maxValue: '21:00',
-				increment: 10,
+				increment: 30,
 				width: 94
 			})
 		},
@@ -1627,7 +1627,7 @@ Ext.onReady(function(){
 				format: 'H:i:s',
 				minValue: '7:00',
 				maxValue: '21:00',
-				increment: 10,
+				increment: 30,
 				width: 94
 			})
 		},
@@ -1882,6 +1882,8 @@ Ext.onReady(function(){
 		var app_tgl_end_reservasi_search=null;
 		var app_tgl_start_app_search=null;
 		var app_tgl_end_app_search=null;
+		var app_rawat_medis_search=null;
+		var app_rawat_nonmedis_search=null;
 
 		if(app_idSearchField.getValue()!==null){app_id_search=app_idSearchField.getValue();}
 		if(app_customerSearchField.getValue()!==null){app_customer_search=app_customerSearchField.getValue();}
@@ -1890,6 +1892,8 @@ Ext.onReady(function(){
 		if(app_kategoriSearchField.getValue()!==null){app_kategori_search=app_kategoriSearchField.getValue();}
 		if(app_dokterSearchField.getValue()!==null){app_dokter_search=app_dokterSearchField.getValue();}
 		if(app_terapisSearchField.getValue()!==null){app_terapis_search=app_terapisSearchField.getValue();}
+		if(app_perawatan_medisSearchField.getValue()!==null){app_rawat_medis_search=app_perawatan_medisSearchField.getValue();}
+		if(app_perawatan_nonmedisSearchField.getValue()!==null){app_rawat_nonmedis_search=app_perawatan_nonmedisSearchField.getValue();}
 		if(Ext.getCmp('app_tgl_startReservasiSearchField').getValue()!==null){app_tgl_start_reservasi_search=Ext.getCmp('app_tgl_startReservasiSearchField').getValue();}
 		if(Ext.getCmp('app_tgl_endReservasiSearchField').getValue()!==null){app_tgl_end_reservasi_search=Ext.getCmp('app_tgl_endReservasiSearchField').getValue();}
 		if(Ext.getCmp('app_tgl_startAppSearchField').getValue()!==null){app_tgl_start_app_search=Ext.getCmp('app_tgl_startAppSearchField').getValue();}
@@ -1911,6 +1915,8 @@ Ext.onReady(function(){
 			app_tgl_end_reservasi	: app_tgl_end_reservasi_search,
 			app_tgl_start_app	: app_tgl_start_app_search,
 			app_tgl_end_app	: app_tgl_end_app_search,
+			app_rawat_medis	: app_rawat_medis_search,
+			app_rawat_nonmedis	: app_rawat_nonmedis_search
 		};
 		// Cause the datastore to do another query : 
 		appointment_DataStore.reload({params: {start: 0, limit: pageS}});
@@ -2015,6 +2021,48 @@ Ext.onReady(function(){
 		allowBlank: true,
 		anchor: '95%'
 	});
+	app_perawatan_medisSearchField= new Ext.form.ComboBox({
+		id: 'app_perawatan_medisSearchField',
+		fieldLabel: 'Perawatan Medis',
+		store: cbo_dapp_rawat_medisDataStore,
+		mode: 'remote',
+		displayField: 'dapp_rawat_display',
+		valueField: 'dapp_rawat_value',
+		typeAhead: false,
+		loadingText: 'Searching...',
+		pageSize:10,
+		hideTrigger:false,
+		tpl: rawat_jual_rawat_tpl,
+		//applyTo: 'search',
+		itemSelector: 'div.search-item',
+		triggerAction: 'all',
+		lazyRender:true,
+		allowBlank: false,
+		listClass: 'x-combo-list-small',
+		anchor: '95%'
+	
+	});
+	app_perawatan_nonmedisSearchField= new Ext.form.ComboBox({
+		id: 'app_perawatan_nonmedisSearchField',
+		fieldLabel: 'Perawatan Non-Medis',
+		store: cbo_dapp_rawat_nonmedisDataStore,
+		mode: 'remote',
+		typeAhead: true,
+		displayField: 'dapp_rawat_display',
+		valueField: 'dapp_rawat_value',
+		typeAhead: false,
+		loadingText: 'Searching...',
+		pageSize:10,
+		hideTrigger:false,
+		tpl: rawat_jual_rawat_tpl,
+		//applyTo: 'search',
+		itemSelector: 'div.search-item',
+		triggerAction: 'all',
+		lazyRender:true,
+		listClass: 'x-combo-list-small',
+		anchor: '95%'
+	
+	});
 	/* Identify  app_keterangan Search Field */
 	/*app_keteranganSearchField= new Ext.form.TextArea({
 		id: 'app_keteranganSearchField',
@@ -2115,7 +2163,7 @@ Ext.onReady(function(){
 									        endDateField: 'app_tgl_startAppSearchField' // id of the end date field
 									    }] 
 								}]
-					},app_caraSearchField, app_kategoriSearchField, app_dokterSearchField, app_terapisSearchField] 
+					},app_perawatan_medisSearchField ,app_perawatan_nonmedisSearchField ,app_caraSearchField, app_kategoriSearchField, app_dokterSearchField, app_terapisSearchField] 
 			}
 			]
 		}]

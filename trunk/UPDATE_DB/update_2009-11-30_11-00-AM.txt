@@ -1,0 +1,15 @@
+Update tgl: 30 November 2009
+
+APPOINTMENT:
+- form Add/Edit, jam App dibuat per 30 menit (H) [OK]
+- Advanced Search: + Perawatan [OK]
+- Simple Searh: Customer, Perawatan, Dokter, Therapist. (sementara default hari ininya jangan dulu) (N) [OK]
+
+Master Contribution Category:
+- Add: status defaultnya belum Aktif (L) [OK]
+- Add/Edit: keterangan pakai text area (note), jangan text field (cuma 1 baris) (L) [OK]
+- Contribution Category: field "Kelompok" diganti dengan field "Jenis", yang lookup dari Master Jenis (karena terutama digunakan utk membedakan perawatan medis & non medis) (H) [OK]
+
+Master Karyawan:
+- Advanced Search, formnya masih belum sesuai dengan form Add/Edit (N) [OK]
+- Search: Cabang, Jabatan, Department tidak muncul, ketika di-refresh baru muncul. Gawatnya, ketika kita klik Edit, field2 tsb seakan belum terisi (pdhl sudah) (H) [OK]

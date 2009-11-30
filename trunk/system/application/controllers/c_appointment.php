@@ -35,6 +35,14 @@ class C_appointment extends Controller {
 		echo $result;
 	}
 	
+	function get_perawatan_list(){
+		$query = isset($_POST['query']) ? $_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		$result=$this->m_public_function->get_perawatan_list($query,$start,$end);
+		echo $result;
+	}
+	
 	function get_rawat_medis_list(){
 		$query = isset($_POST['query']) ? $_POST['query'] : "";
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
@@ -53,7 +61,8 @@ class C_appointment extends Controller {
 	
 	function get_dokter_list(){
 		//ID dokter pada tabel departemen adalah 8
-		$result=$this->m_public_function->get_petugas_list("Dokter");
+		$query = isset($_POST['query']) ? $_POST['query'] : "";
+		$result=$this->m_public_function->get_petugas_list($query,"Dokter");
 		echo $result;
 	}
 	
@@ -279,6 +288,8 @@ class C_appointment extends Controller {
 		$app_kategori=trim(@$_POST["app_kategori"]);
 		$app_dokter=trim(@$_POST["app_dokter"]);
 		$app_terapis=trim(@$_POST["app_terapis"]);
+		$app_rawat_medis=trim(@$_POST["app_rawat_medis"]);
+		$app_rawat_nonmedis=trim(@$_POST["app_rawat_nonmedis"]);
 		if(trim(@$_POST["app_tgl_start_reservasi"])!="")
 			$app_tgl_start_reservasi=date('Y-m-d', strtotime(trim(@$_POST["app_tgl_start_reservasi"])));
 		else
@@ -298,7 +309,7 @@ class C_appointment extends Controller {
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_appointment->appointment_search($app_id ,$app_customer ,$app_cara ,$app_kategori, $app_dokter, $app_terapis, $app_tgl_start_reservasi, $app_tgl_end_reservasi, $app_tgl_start_app, $app_tgl_end_app, $start,$end);
+		$result = $this->m_appointment->appointment_search($app_id ,$app_customer ,$app_cara ,$app_kategori, $app_dokter, $app_terapis, $app_rawat_medis, $app_rawat_nonmedis, $app_tgl_start_reservasi, $app_tgl_end_reservasi, $app_tgl_start_app, $app_tgl_end_app, $start,$end);
 		echo $result;
 	}
 

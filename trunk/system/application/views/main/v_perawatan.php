@@ -1135,6 +1135,7 @@ Ext.onReady(function(){
   	/*Fieldset Master*/
 	perawatan_masterGroup = new Ext.form.FieldSet({
 		title: 'Master',
+		labelWidth:120,
 		autoHeight: true,
 		collapsible: true,
 		layout:'column',
@@ -1931,7 +1932,7 @@ Ext.onReady(function(){
 	/* Identify  rawat_du Search Field */
 	rawat_duSearchField= new Ext.form.NumberField({
 		id: 'rawat_duSearchField',
-		fieldLabel: 'Diskon Umum',
+		fieldLabel: 'Diskon Umum (%)',
 		allowNegatife : false,
 		blankText: '0',
 		allowDecimals: false,
@@ -1942,7 +1943,7 @@ Ext.onReady(function(){
 	/* Identify  rawat_dm Search Field */
 	rawat_dmSearchField= new Ext.form.NumberField({
 		id: 'rawat_dmSearchField',
-		fieldLabel: 'Diskon Member',
+		fieldLabel: 'Diskon Member (%)',
 		allowNegatife : false,
 		blankText: '0',
 		allowDecimals: false,
@@ -1964,7 +1965,7 @@ Ext.onReady(function(){
 	/* Identify  rawat_harga Search Field */
 	rawat_hargaSearchField= new Ext.form.NumberField({
 		id: 'rawat_hargaSearchField',
-		fieldLabel: 'Rawat Harga',
+		fieldLabel: 'Harga (Rp)',
 		allowNegatife : false,
 		blankText: '0',
 		allowDecimals: true,
@@ -2003,6 +2004,7 @@ Ext.onReady(function(){
 	/* Function for retrieve search Form Panel */
 	perawatan_searchForm = new Ext.FormPanel({
 		labelAlign: 'left',
+		labelWidth:120,
 		bodyStyle:'padding:5px',
 		autoHeight:true,
 		width: 600,        
@@ -2014,14 +2016,14 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [rawat_kodeSearchField, rawat_kodelamaSearchField, rawat_namaSearchField, rawat_groupSearchField, rawat_kategoriSearchField, rawat_jenisSearchField, rawat_keteranganSearchField, rawat_duSearchField] 
+				items: [rawat_kodelamaSearchField, rawat_kodeSearchField, rawat_namaSearchField, rawat_groupSearchField, rawat_kategoriSearchField, rawat_jenisSearchField, rawat_duSearchField, rawat_dmSearchField] 
 			}
  
 			,{
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [rawat_dmSearchField, rawat_pointSearchField, rawat_hargaSearchField, rawat_gudangSearchField, rawat_aktifSearchField] 
+				items: [rawat_pointSearchField, rawat_hargaSearchField, rawat_gudangSearchField, rawat_keteranganSearchField, rawat_aktifSearchField] 
 			}
 			]
 		}]

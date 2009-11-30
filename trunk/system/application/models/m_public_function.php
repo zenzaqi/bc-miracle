@@ -21,7 +21,7 @@ class M_public_function extends Model{
 		}
 	}
 	
-	function get_petugas_list($karyawan_jabatan){
+	function get_petugas_list($query, $karyawan_jabatan){
 		//$sql="SELECT karyawan_id,karyawan_no,karyawan_nama FROM karyawan WHERE karyawan_departemen='$departemen_id' AND karyawan_aktif='Aktif'";
 /*		if($rawat_kategori==2)
 			$departemen_id=8;
@@ -30,6 +30,10 @@ class M_public_function extends Model{
 		else
 			$departemen_id=0;*/
 		$sql="SELECT karyawan_id,karyawan_no,karyawan_nama,karyawan_username FROM karyawan,jabatan WHERE karyawan_jabatan=jabatan_id AND jabatan_nama='$karyawan_jabatan' AND karyawan_aktif='Aktif'";
+		if($query<>""){
+			$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
+			$sql .= " (karyawan_nama LIKE '%".addslashes($query)."%')";
+		}
 		$query = $this->db->query($sql);
 		$nbrows = $query->num_rows();
 		if($nbrows>0){

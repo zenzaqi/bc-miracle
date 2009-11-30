@@ -253,6 +253,8 @@ class M_karyawan extends Model{
 		//function for advanced search record
 		function karyawan_search($karyawan_id ,$karyawan_no ,$karyawan_npwp ,$karyawan_username ,$karyawan_nama ,$karyawan_kelamin ,$karyawan_tgllahir ,$karyawan_alamat ,$karyawan_kota ,$karyawan_kodepos ,$karyawan_email ,$karyawan_emiracle ,$karyawan_keterangan ,$karyawan_notelp ,$karyawan_notelp2 ,$karyawan_notelp3, $karyawan_notelp4 ,$karyawan_cabang ,$karyawan_jabatan ,$karyawan_departemen ,$karyawan_golongan ,$karyawan_tglmasuk ,$karyawan_atasan ,$karyawan_aktif ,$karyawan_creator ,$karyawan_date_create ,$karyawan_update ,$karyawan_date_update ,$karyawan_revised ,$start,$end){
 			//full query
+			if($karyawan_aktif=="")
+				$karyawan_aktif="Aktif";
 			$query="select * from karyawan";
 			
 			if($karyawan_id!=''){
@@ -349,7 +351,7 @@ class M_karyawan extends Model{
 			};
 			if($karyawan_aktif!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " karyawan_aktif LIKE '%".$karyawan_aktif."%'";
+				$query.= " karyawan_aktif='".$karyawan_aktif."'";
 			};
 			if($karyawan_creator!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
