@@ -113,7 +113,7 @@ class M_tindakan_medis extends Model{
 		}
 		
 		//function for update record
-		function tindakan_update($trawat_id ,$trawat_cust ,$trawat_keterangan ,$dtrawat_status ,$trawat_cust_id ,$dtrawat_perawatan_id ,$dtrawat_perawatan ,$dtrawat_id ,$rawat_harga ,$rawat_du ,$rawat_dm ,$cust_member){
+		function tindakan_update($trawat_id ,$trawat_cust ,$trawat_keterangan ,$dtrawat_status ,$trawat_cust_id ,$dtrawat_perawatan_id ,$dtrawat_perawatan ,$dtrawat_id ,$rawat_harga ,$rawat_du ,$rawat_dm ,$cust_member ,$dtrawat_petugas1_no){
 			/*$data = array(
 				"trawat_id"=>$trawat_id, 
 				//"trawat_cust"=>$trawat_cust, 
@@ -134,6 +134,7 @@ class M_tindakan_medis extends Model{
 			//Jika dtrawat_status=="selesai" --> INSERT to table.master_jual_rawat
 			if($dtrawat_status=="selesai"){
 				$date_now=date('Y-m-d');
+				$bln_now=date('Y-m');
 				//Checking di table.master_jual_rawat WHERE jrawat_cust=$trawat_cust_id AND jrawat_tanggal=$date_now
 				//Jika SUDAH ADA maka INSERT hanya ke table.detail_jual_rawat
 				//Jika TIDAK ADA maka INSERT ke table.master_jual_rawat AND table.detail_jual_rawat
@@ -166,6 +167,27 @@ class M_tindakan_medis extends Model{
 						"drawat_diskon_jenis"=>$diskon_jenis
 						);
 						$this->db->insert('detail_jual_rawat', $data_djrawat);
+					}
+					//Check AND INSERT history jumlah tindakan oleh Dokter
+					$sql="SELECT reportt_jmltindakan FROM report_tindakan WHERE reportt_nik='$dtrawat_petugas1_no' AND reportt_bln LIKE '$bln_now%'";
+					$rs=$this->db->query($sql);
+					if($rs->num_rows()){
+						$rs_record=$rs->row_array();
+						$reportt_jmltindakan=$rs_record["reportt_jmltindakan"];
+						//UPDATE jumlah_tindakan
+						$data_report_tindakan=array(
+						"reportt_jmltindakan"=>$reportt_jmltindakan+1
+						);
+						$this->db->where('reportt_nik', $dtrawat_petugas1_no);
+						$this->db->like('reportt_bln', $bln_now, 'after');
+						$this->db->update('report_tindakan', $data_report_tindakan);
+					}else{
+						$data_report_tindakan=array(
+						"reportt_nik"=>$dtrawat_petugas1_no,
+						"reportt_bln"=>$date_now,
+						"reportt_jmltindakan"=>1
+						);
+						$this->db->insert('report_tindakan', $data_report_tindakan);
 					}
 				}else{
 					//INSERT to table.master_jual_rawat AND table.detail_jual_rawat
@@ -208,6 +230,27 @@ class M_tindakan_medis extends Model{
 							"drawat_diskon_jenis"=>$diskon_jenis
 							);
 							$this->db->insert('detail_jual_rawat', $data_djrawat);
+						}
+						//Check AND INSERT history jumlah tindakan oleh Dokter
+						$sql="SELECT reportt_jmltindakan FROM report_tindakan WHERE reportt_nik='$dtrawat_petugas1_no' AND reportt_bln='$bln_now'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							$rs_record=$rs->row_array();
+							$reportt_jmltindakan=$rs_record["reportt_jmltindakan"];
+							//UPDATE jumlah_tindakan
+							$data_report_tindakan=array(
+							"reportt_jmltindakan"=>$reportt_jmltindakan+1
+							);
+							$this->db->where('reportt_nik', $dtrawat_petugas1_no);
+							$this->db->like('reportt_bln', $bln_now, 'after');
+							$this->db->update('report_tindakan', $data_report_tindakan);
+						}else{
+							$data_report_tindakan=array(
+							"reportt_nik"=>$dtrawat_petugas1_no,
+							"reportt_bln"=>$date_now,
+							"reportt_jmltindakan"=>1
+							);
+							$this->db->insert('report_tindakan', $data_report_tindakan);
 						}
 					}
 				}

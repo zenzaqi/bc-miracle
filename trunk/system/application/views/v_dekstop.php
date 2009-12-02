@@ -13,7 +13,7 @@
 	
     <?=js_asset('ext-base.js');?>
     <?=js_asset('ext-all.js');?>
-	<!-- <//?=js_asset('ext-all-debug.js');?> -->
+	<?=js_asset('ext-all-debug.js');?>
     <?=js_asset('App.js');?>
 	<?=js_asset('TabCloseMenu.js');?>
 	<?=js_asset('FileUploadField.js');?>

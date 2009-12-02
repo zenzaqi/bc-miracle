@@ -17,7 +17,6 @@ class C_tindakan_medis extends Controller {
 	function C_tindakan_medis(){
 		parent::Controller();
 		$this->load->model('m_tindakan_medis', '', TRUE);
-		$this->load->library('firephp');
 	}
 	
 	//set index
@@ -156,7 +155,8 @@ class C_tindakan_medis extends Controller {
 		$rawat_du=trim(@$_POST["rawat_du"]);
 		$rawat_dm=trim(@$_POST["rawat_dm"]);
 		$cust_member=trim(@$_POST["cust_member"]);
-		$result = $this->m_tindakan_medis->tindakan_update($trawat_id ,$trawat_cust ,$trawat_keterangan ,$dtrawat_status ,$trawat_cust_id ,$dtrawat_perawatan_id ,$dtrawat_perawatan ,$dtrawat_id ,$rawat_harga ,$rawat_du ,$rawat_dm ,$cust_member);
+		$dtrawat_petugas1_no=trim(@$_POST["dtrawat_petugas1_no"]);
+		$result = $this->m_tindakan_medis->tindakan_update($trawat_id ,$trawat_cust ,$trawat_keterangan ,$dtrawat_status ,$trawat_cust_id ,$dtrawat_perawatan_id ,$dtrawat_perawatan ,$dtrawat_id ,$rawat_harga ,$rawat_du ,$rawat_dm ,$cust_member ,$dtrawat_petugas1_no);
 		echo $result;
 	}
 	

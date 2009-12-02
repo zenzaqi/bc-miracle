@@ -18,7 +18,6 @@ class C_master_jual_rawat extends Controller {
 		parent::Controller();
 		$this->load->model('m_master_jual_rawat', '', TRUE);
 		$this->load->plugin('to_excel');
-		$this->load->library('firephp');
 	}
 	
 	//set index
@@ -117,7 +116,6 @@ class C_master_jual_rawat extends Controller {
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
 		$master_id = (integer) (isset($_POST['master_id']) ? $_POST['master_id'] : $_GET['master_id']);
-		$this->firephp->log($master_id, "MASTER-ID");
 		$result=$this->m_master_jual_rawat->detail_detail_jual_rawat_list($master_id,$query,$start,$end);
 		echo $result;
 	}

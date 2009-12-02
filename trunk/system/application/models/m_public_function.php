@@ -21,7 +21,7 @@ class M_public_function extends Model{
 		}
 	}
 	
-	function get_petugas_list($query, $karyawan_jabatan){
+	function get_petugas_list($query, $tgl_app, $karyawan_jabatan){
 		//$sql="SELECT karyawan_id,karyawan_no,karyawan_nama FROM karyawan WHERE karyawan_departemen='$departemen_id' AND karyawan_aktif='Aktif'";
 /*		if($rawat_kategori==2)
 			$departemen_id=8;
@@ -29,11 +29,17 @@ class M_public_function extends Model{
 			$departemen_id=9;
 		else
 			$departemen_id=0;*/
-		$sql="SELECT karyawan_id,karyawan_no,karyawan_nama,karyawan_username FROM karyawan,jabatan WHERE karyawan_jabatan=jabatan_id AND jabatan_nama='$karyawan_jabatan' AND karyawan_aktif='Aktif'";
+		$sql="SELECT karyawan_id,karyawan_no,karyawan_nama,karyawan_username,reportt_jmltindakan FROM karyawan INNER JOIN jabatan ON(karyawan_jabatan=jabatan_id) INNER JOIN absensi ON(karyawan_no=absensi_nik) LEFT JOIN report_tindakan ON(karyawan_no=reportt_nik) WHERE karyawan_jabatan=jabatan_id AND karyawan_no=absensi_nik AND absensi_shift!='OFF' AND jabatan_nama='$karyawan_jabatan' AND karyawan_aktif='Aktif'";
 		if($query<>""){
 			$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
 			$sql .= " (karyawan_nama LIKE '%".addslashes($query)."%')";
 		}
+		if($tgl_app<>""){
+			$tgl_app = date('Y-m-d', strtotime($tgl_app));
+			$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
+			$sql .= " (absensi_tgl='".addslashes($tgl_app)."')";
+		}
+		//echo $sql;
 		$query = $this->db->query($sql);
 		$nbrows = $query->num_rows();
 		if($nbrows>0){
@@ -448,7 +454,6 @@ class M_public_function extends Model{
 	}
 	
 	function get_satuan_bydjproduk_list($djproduk_id){
-		$this->firephp->log($djproduk_id, "DJPRODUK_ID");
 		$sql="SELECT * FROM produk,satuan_konversi,satuan WHERE produk_id=konversi_produk AND konversi_satuan=satuan_id AND produk_id='$djproduk_id'";
 		if($djproduk_id==0)
 			$sql="SELECT * FROM produk,satuan_konversi,satuan WHERE produk_id=konversi_produk AND konversi_satuan=satuan_id";

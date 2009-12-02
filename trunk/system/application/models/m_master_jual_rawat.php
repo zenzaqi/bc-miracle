@@ -89,7 +89,6 @@ class M_master_jual_rawat extends Model{
 				$drawat_master=$jrawat_id;
 			}
 			
-			$this->firephp->log($drawat_id, "DRAWAT-ID DETAIL");
 			$sql="SELECT drawat_id FROM detail_jual_rawat WHERE drawat_id='$drawat_id'";
 			$rs=$this->db->query($sql);
 			if($rs->num_rows()){
@@ -178,7 +177,6 @@ class M_master_jual_rawat extends Model{
 			$this->db->update('master_jual_rawat', $data);
 			
 			if($this->db->affected_rows() || $this->db->affected_rows()==0){
-				$this->firephp->log("PROSES Insert Detail_Jual_Rawat");
 				//delete all transaksi
 				/*$sql="delete from jual_kwitansi where jkwitansi_ref='".$jrawat_nobukti."'";
 				$this->db->query($sql);
@@ -192,7 +190,6 @@ class M_master_jual_rawat extends Model{
 				$this->db->query($sql);
 				$sql="delete from jual_tunai where jtunai_ref='".$jrawat_nobukti."'";
 				$this->db->query($sql);*/
-				$this->firephp->log($jrawat_cara, "JRAWAT_CARA");
 				if($jrawat_cara!=null || $jrawat_cara!=''){
 					//kwitansi
 					if($jrawat_cara=='kwitansi'){
@@ -740,7 +737,6 @@ class M_master_jual_rawat extends Model{
 						$this->db->insert('jual_kwitansi', $data); 
 					
 					}else if($jrawat_cara2=='card'){
-						$this->firephp->log($jrawat_card_edc2, 'Card EDC-2');
 						$data=array(
 							"jcard_nama"=>$jrawat_card_nama2,
 							"jcard_edc"=>$jrawat_card_edc2,
@@ -748,7 +744,6 @@ class M_master_jual_rawat extends Model{
 							"jcard_nilai"=>$jrawat_card_nilai2,
 							"jcard_ref"=>$jrawat_nobukti
 							);
-						$this->firephp->log($data, 'DATA-Card-2');
 						$this->db->insert('jual_card', $data); 
 					
 					}else if($jrawat_cara2=='cek/giro'){
