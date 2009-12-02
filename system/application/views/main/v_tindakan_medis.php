@@ -93,6 +93,7 @@ Ext.onReady(function(){
 		var perawatan_du_update=null;
 		var perawatan_dm_update=null;
 		var cust_member_update=null;
+		var dtrawat_petugas1_no_update=null;
 
 		trawat_id_update_pk = oGrid_event.record.data.trawat_id;
 		if(oGrid_event.record.data.trawat_cust!== null){trawat_cust_update = oGrid_event.record.data.trawat_cust;}
@@ -106,6 +107,7 @@ Ext.onReady(function(){
 		perawatan_du_update = oGrid_event.record.data.perawatan_du;
 		perawatan_dm_update = oGrid_event.record.data.perawatan_dm;
 		cust_member_update = oGrid_event.record.data.cust_member;
+		dtrawat_petugas1_no_update = oGrid_event.record.data.dtrawat_petugas1_no;
 
 		Ext.Ajax.request({  
 			waitMsg: 'Please wait...',
@@ -123,7 +125,8 @@ Ext.onReady(function(){
 				rawat_harga	:perawatan_harga_update,
 				rawat_du	:perawatan_du_update,
 				rawat_dm	:perawatan_dm_update,
-				cust_member	:cust_member_update
+				cust_member	:cust_member_update,
+				dtrawat_petugas1_no	: dtrawat_petugas1_no_update
 			}, 
 			success: function(response){							
 				var result=eval(response.responseText);
@@ -378,7 +381,7 @@ Ext.onReady(function(){
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
-			id: 'trawat_id'
+			id: 'dtrawat_id'
 		},[
 		/* dataIndex => insert intotindakan_medisColumnModel, Mapping => for initiate table column */ 
 			{name: 'trawat_id', type: 'int', mapping: 'trawat_id'}, 
@@ -394,6 +397,7 @@ Ext.onReady(function(){
 			{name: 'dtrawat_perawatan_id', type: 'int', mapping: 'dtrawat_perawatan'},
 			{name: 'dtrawat_perawatan', type: 'string', mapping: 'rawat_nama'},
 			{name: 'dtrawat_petugas1', type: 'string', mapping: 'karyawan_nama'},
+			{name: 'dtrawat_petugas1_no', type: 'string', mapping: 'karyawan_no'},
 			{name: 'dtrawat_jam', type: 'string', mapping: 'dtrawat_jam'},
 			{name: 'dtrawat_status', type: 'string', mapping: 'dtrawat_status'},
 			{name: 'perawatan_harga', type: 'float', mapping: 'rawat_harga'},
@@ -401,7 +405,7 @@ Ext.onReady(function(){
 			{name: 'perawatan_dm', type: 'int', mapping: 'rawat_dm'},
 			{name: 'cust_member', type: 'string', mapping: 'cust_member'}
 		]),
-		sortInfo:{field: 'trawat_id', direction: "DESC"}
+		sortInfo:{field: 'dtrawat_id', direction: "DESC"}
 	});
 	/* End of Function */
 	

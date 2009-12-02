@@ -18,7 +18,6 @@ class C_produk extends Controller {
 		parent::Controller();
 		$this->load->model('m_produk', '', TRUE);
 		$this->load->plugin('to_excel');
-		$this->load->library('firephp');
 	}
 	
 	//set index
@@ -204,7 +203,6 @@ class C_produk extends Controller {
 		$produk_aktif=trim(@$_POST["produk_aktif"]);
 		$produk_aktif=str_replace("/(<\/?)(p)([^>]*>)", "",$produk_aktif);
 		$produk_aktif=str_replace("'", '"',$produk_aktif);
-		$this->firephp->log($produk_kategori, 'value_produk_kategori');
 		$result=$this->m_produk->produk_create($produk_kode, $produk_kodelama ,$produk_group ,$produk_kategori ,$produk_kontribusi ,$produk_jenis ,$produk_nama ,$produk_satuan ,$produk_du ,$produk_dm ,$produk_point ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif );
 		echo $result;
 	}

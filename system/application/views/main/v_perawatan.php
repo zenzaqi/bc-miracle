@@ -1973,6 +1973,17 @@ Ext.onReady(function(){
 		maskRe: /([0-9]+)$/
 	
 	});
+	/* Identify  rawat_kontribusi Search Field */
+	rawat_kontribusiSearchField= new Ext.form.ComboBox({
+		id: 'rawat_kontribusiSearchField',
+		fieldLabel: 'Contribution Category',
+		store: cbo_rawat_kontribusiDataSore,
+		mode: 'remote',
+		editable:false,
+		displayField: 'rawat_kontribusi_display',
+		valueField: 'rawat_kontribusi_value',
+		triggerAction: 'all'
+	});
 	/* Identify  rawat_gudang Search Field */
 	rawat_gudangSearchField= new Ext.form.ComboBox({
 		id: 'rawat_gudangSearchField',
@@ -2023,7 +2034,7 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [rawat_pointSearchField, rawat_hargaSearchField, rawat_gudangSearchField, rawat_keteranganSearchField, rawat_aktifSearchField] 
+				items: [rawat_pointSearchField, rawat_hargaSearchField, rawat_kontribusiSearchField, rawat_gudangSearchField, rawat_keteranganSearchField, rawat_aktifSearchField] 
 			}
 			]
 		}]

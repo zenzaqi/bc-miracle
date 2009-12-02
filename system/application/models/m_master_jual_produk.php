@@ -21,7 +21,6 @@ class M_master_jual_produk extends Model{
 		//function for detail
 		//get record list
 		function detail_detail_jual_produk_list($master_id,$query,$start,$end) {
-			$this->firephp->log($master_id, "DETAIL MASTER-ID");
 			$query = "SELECT *,dproduk_harga*dproduk_jumlah as dproduk_subtotal, dproduk_harga*dproduk_jumlah*(100-dproduk_diskon)/100 as dproduk_subtotal_net,konversi_nilai FROM detail_jual_produk LEFT JOIN satuan_konversi ON(dproduk_produk=konversi_produk AND dproduk_satuan=konversi_satuan) WHERE dproduk_master='".$master_id."'";
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
@@ -731,7 +730,6 @@ left join jual_kwitansi on(master_jual_produk.jproduk_nobukti=jual_kwitansi.jkwi
 						$this->db->insert('jual_kwitansi', $data); 
 					
 					}else if($jproduk_cara2=='card'){
-						$this->firephp->log($jproduk_card_edc2, 'Card EDC-2');
 						$data=array(
 							"jcard_nama"=>$jproduk_card_nama2,
 							"jcard_edc"=>$jproduk_card_edc2,
@@ -739,7 +737,6 @@ left join jual_kwitansi on(master_jual_produk.jproduk_nobukti=jual_kwitansi.jkwi
 							"jcard_nilai"=>$jproduk_card_nilai2,
 							"jcard_ref"=>$jproduk_nobukti
 							);
-						$this->firephp->log($data, 'DATA-Card-2');
 						$this->db->insert('jual_card', $data); 
 					
 					}else if($jproduk_cara2=='cek/giro'){

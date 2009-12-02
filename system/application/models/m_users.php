@@ -51,7 +51,7 @@ class M_users extends Model{
 			$data = array(
 				"user_id"=>$user_id,			
 				"user_name"=>$user_name,			
-				"user_passwd"=>$user_passwd,			
+				"user_passwd"=>md5($user_passwd),			
 				"user_aktif"=>$user_aktif			
 			);
 			$sql="SELECT karyawan_id FROM karyawan WHERE karyawan_id='".$user_karyawan."'";

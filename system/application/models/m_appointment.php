@@ -90,7 +90,6 @@ class M_appointment extends Model{
 				$dapp_medis_tgldatang=date('Y-m-d');
 				$dapp_medis_jamdatang=date('H:i:s');
 			}
-			$this->firephp->log($dapp_medis_keterangan, "Medis-Keternagan");
 			
 			$data = array(
 				"dapp_master"=>$dapp_medis_master, 
@@ -142,7 +141,6 @@ class M_appointment extends Model{
 		//function for get list record
 		function appointment_list($filter,$start,$end){
 			//$query = "SELECT * FROM appointment";
-			$this->firephp->log($filter, "FILTER APP");
 			$dt=date('Y-m-d');
 			$dt_six=date('Y-m-d',mktime(0,0,0,date("m"),date("d")+6,date("Y")));
 			$query="SELECT app_id,cust_nama,cust_id,karyawan_dokter.karyawan_nama as dokter_nama,karyawan_dokter.karyawan_id as dokter_id,karyawan_dokter.karyawan_username as dokter_username,karyawan_terapis.karyawan_nama as terapis_nama,karyawan_terapis.karyawan_id as terapis_id,karyawan_terapis.karyawan_username as terapis_username,rawat_id,rawat_nama,kategori_nama,dapp_id,dapp_status,dapp_tglreservasi,dapp_jamdatang,app_tanggal,app_cara,app_keterangan,dapp_jamreservasi,app_creator,app_date_create,app_update,app_date_update,app_revised 

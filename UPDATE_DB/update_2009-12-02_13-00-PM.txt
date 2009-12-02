@@ -1,0 +1,4 @@
+Update tgl: 02 Desember 2009
+
+APPOINTMENT:
+- Therapist: tampilkan info jumlah perawatan yg sudah dihandle (tiap bulan reset 0), sort by jumlah terkecil (N) [OK]
