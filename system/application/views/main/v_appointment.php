@@ -657,6 +657,17 @@ Ext.onReady(function(){
 	appointment_ColumnModel = new Ext.grid.ColumnModel(
 		[
 		{
+			header: 'Tanggal Appointment',
+			dataIndex: 'dapp_tglreservasi',
+			width: 150,
+			sortable: true,
+			hidden: false,
+			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
+			editor: new Ext.form.DateField({
+				format: 'Y-m-d'
+			})
+		}, 
+		{
 			header: 'Jam Reservasi',
 			dataIndex: 'dapp_jamreservasi',
 			width: 100,
@@ -747,17 +758,6 @@ Ext.onReady(function(){
           	})
 		}, 
 		{
-			header: 'Tanggal Appointment',
-			dataIndex: 'dapp_tglreservasi',
-			width: 150,
-			sortable: true,
-			hidden: true,
-			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
-			editor: new Ext.form.DateField({
-				format: 'Y-m-d'
-			})
-		}, 
-		{
 			header: 'Keterangan',
 			dataIndex: 'dapp_keterangan',
 			width: 100,
@@ -809,6 +809,10 @@ Ext.onReady(function(){
 	
 	appointment_ColumnModel.defaultSortable= true;
 	/* End of Function */
+	var width_listGrid=500;
+	function width_list(){
+		return 1100;
+	}
     
 	/* Declare DataStore and  show datagrid list */
 	appointmentListEditorGrid =  new Ext.grid.EditorGridPanel({
@@ -1147,15 +1151,15 @@ Ext.onReady(function(){
 		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
 			{name: 'dokter_display', type: 'string', mapping: 'karyawan_nama'},
 			{name: 'dokter_username', type: 'string', mapping: 'karyawan_username'},
-			{name: 'dokter_value', type: 'int', mapping: 'karyawan_id'},
-			{name: 'dokter_jmltindakan', type: 'int', mapping: 'reportt_jmltindakan'}
+			{name: 'dokter_value', type: 'int', mapping: 'karyawan_id'}//,
+			//{name: 'dokter_jmltindakan', type: 'int', mapping: 'reportt_jmltindakan'}
 		]),
 		sortInfo:{field: 'dokter_display', direction: "ASC"}
 	});
 	var dokter_tpl = new Ext.XTemplate(
         '<tpl for="."><div class="search-item">',
             '<span><b>{dokter_username}</b> | {dokter_display}<br /></span>',
-            'Jml-Tindakan: {dokter_jmltindakan}',
+            //'Jml-Tindakan: {dokter_jmltindakan}',
         '</div></tpl>'
     );
 	
@@ -1172,15 +1176,15 @@ Ext.onReady(function(){
 		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
 			{name: 'terapis_display', type: 'string', mapping: 'karyawan_nama'},
 			{name: 'terapis_username', type: 'string', mapping: 'karyawan_username'},
-			{name: 'terapis_value', type: 'int', mapping: 'karyawan_id'},
-			{name: 'terapis_jmltindakan', type: 'int', mapping: 'reportt_jmltindakan'}
+			{name: 'terapis_value', type: 'int', mapping: 'karyawan_id'}//,
+			//{name: 'terapis_jmltindakan', type: 'int', mapping: 'reportt_jmltindakan'}
 		]),
 		sortInfo:{field: 'terapis_display', direction: "ASC"}
 	});
 	var cbo_terapis_tpl = new Ext.XTemplate(
         '<tpl for="."><div class="search-item">',
             '<span><b>{terapis_username}</b> | {terapis_display}<br /></span>',
-            'Jml-Tindakan: {terapis_jmltindakan}',
+            //'Jml-Tindakan: {terapis_jmltindakan}',
         '</div></tpl>'
     );
 	
@@ -1263,7 +1267,7 @@ Ext.onReady(function(){
 	
 	var combo_dapp_dokter_medis=new Ext.form.ComboBox({
 			store: cbo_dapp_dokterDataStore,
-			mode: 'local',
+			mode: 'remote',
 			tpl: dokter_tpl,
 			displayField: 'dokter_display',
 			valueField: 'dokter_value',
@@ -1291,7 +1295,7 @@ Ext.onReady(function(){
 		increment: 30,
 		width: 94
 	});
-	combo_dapp_jam_medis.on('select', function(){
+	/*combo_dapp_jam_medis.on('select', function(){
 		var dapp_medis_record;
 		var j=appointment_detail_medisListEditorGrid.getStore().getCount();
 		for(i=0;i<j;i++){
@@ -1299,14 +1303,14 @@ Ext.onReady(function(){
 			//cbo_dapp_dokterDataStore.load({params: {tgl_app:dapp_medis_record.data.dapp_medis_tglreservasi}});
 			cbo_dapp_dokterDataStore.load({params: {tgl_app:combo_dapp_tgl_medis.getValue()}});
 		}
-	});
+	});*/
 
 	var combo_dapp_tgl_medis=new Ext.form.DateField({
 		format: 'Y-m-d'
 	});
-	combo_dapp_tgl_medis.on('select', function(){
+	/*combo_dapp_tgl_medis.on('select', function(){
 		combo_dapp_tgl_medis.setValue(combo_dapp_tgl_medis.getValue().format('Y-m-d'));
-	});
+	});*/
 	
 	//declaration of detail coloumn model
 	appointment_detail_medis_ColumnModel = new Ext.grid.ColumnModel(
@@ -1635,7 +1639,7 @@ Ext.onReady(function(){
 		increment: 30,
 		width: 94
 	});
-	combo_dapp_jam_nonmedis.on('select', function(){
+	/*combo_dapp_jam_nonmedis.on('select', function(){
 		var dapp_nonmedis_record;
 		var j=appointment_detail_nonmedisListEditorGrid.getStore().getCount();
 		for(i=0;i<j;i++){
@@ -1643,14 +1647,14 @@ Ext.onReady(function(){
 			//cbo_dapp_dokterDataStore.load({params: {tgl_app:dapp_medis_record.data.dapp_medis_tglreservasi}});
 			cbo_dapp_terapisDataStore.load({params: {tgl_app:combo_dapp_tgl_nonmedis.getValue()}});
 		}
-	});
+	});*/
 
 	var combo_dapp_tgl_nonmedis=new Ext.form.DateField({
 		format: 'Y-m-d'
 	});
-	combo_dapp_tgl_nonmedis.on('select', function(){
+	/*combo_dapp_tgl_nonmedis.on('select', function(){
 		combo_dapp_tgl_nonmedis.setValue(combo_dapp_tgl_nonmedis.getValue().format('Y-m-d'));
-	});
+	});*/
 	
 	//declaration of detail nonmedis coloumn model
 	appointment_detail_nonmedis_ColumnModel = new Ext.grid.ColumnModel(
