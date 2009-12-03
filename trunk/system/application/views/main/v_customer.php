@@ -2638,8 +2638,8 @@ Ext.onReady(function(){
 		maskRe: /([0-9]+)$/
 	});
 	cust_tgllahirField.on('select',function(){
-		//var difference = Date('Y-m-d',"Jun 9 2009") - Date('Y-m-d',"Jun 9 2007");
-		//console.log("TEST = "+Date("Jun 9 2009"));
+		var datDate1=cust_tgllahirField.getValue();
+		console.log("TEST = "+datDate1.getFullYear());
 		
 		//cust_umurField.setValue(umur);
 	});
@@ -2937,7 +2937,7 @@ Ext.onReady(function(){
 							xtype: 'checkboxgroup',
 							fieldLabel:'',
 							items:[cust_fb2Field,cust_tweeter2Field]
-						},cust_kelaminField, cust_tmptlahirField, cust_tgllahirField, cust_agamaField, cust_pendidikanField,  cust_profesiField, cust_profesitxtField, cust_hobiField, cust_hobitxtField, cust_referensiField, cust_referensilainField,cust_referensilaintxtField, cust_statusnikahField, cust_jmlanakField, cust_terdaftarField, cust_unitField, cust_keteranganField, cust_aktifField, cust_update_confirmField] 
+						},cust_kelaminField, cust_tmptlahirField, cust_tgllahirField, cust_umurField, cust_agamaField, cust_pendidikanField,  cust_profesiField, cust_profesitxtField, cust_hobiField, cust_hobitxtField, cust_referensiField, cust_referensilainField,cust_referensilaintxtField, cust_statusnikahField, cust_jmlanakField, cust_terdaftarField, cust_unitField, cust_keteranganField, cust_aktifField, cust_update_confirmField] 
 					}
 				]
 			},{
