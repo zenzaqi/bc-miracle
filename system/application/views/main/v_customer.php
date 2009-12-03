@@ -2638,7 +2638,10 @@ Ext.onReady(function(){
 		maskRe: /([0-9]+)$/
 	});
 	cust_tgllahirField.on('select',function(){
-		Ext.Msg.alert('Status', 'Date saved successfully.');
+		//var difference = Date('Y-m-d',"Jun 9 2009") - Date('Y-m-d',"Jun 9 2007");
+		//console.log("TEST = "+Date("Jun 9 2009"));
+		
+		//cust_umurField.setValue(umur);
 	});
 	cust_tgllahirField.on('keyup',function(){
 		Ext.Msg.alert('Status', 'Date saved successfully.');
