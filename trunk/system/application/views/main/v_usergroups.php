@@ -79,7 +79,7 @@ Ext.onReady(function(){
 	var group_desc_update=null;
 	var group_active_update=null;
 
-	group_id_update_pk = get_pk_id();
+	group_id_update_pk = oGrid_event.record.data.group_id;
 	if(oGrid_event.record.data.group_name!== null){group_name_update = oGrid_event.record.data.group_name;}
 	if(oGrid_event.record.data.group_desc!== null){group_desc_update = oGrid_event.record.data.group_desc;}
 	if(oGrid_event.record.data.group_active!== null){group_active_update = oGrid_event.record.data.group_active;}
@@ -89,7 +89,7 @@ Ext.onReady(function(){
 			url: 'index.php?c=c_usergroups&m=get_action',
 			params: {
 				task: "UPDATE",
-				group_id	: get_pk_id(),				
+				group_id	: group_id_update_pk,				
 				group_name	:group_name_update,		
 				group_desc	:group_desc_update,		
 				group_active	:group_active_update		
@@ -373,7 +373,6 @@ Ext.onReady(function(){
 			width: 150,
 			sortable: true,
 			editor: new Ext.form.TextField({
-				allowBlank: false,
 				maxLength: 250
           	})
 		},
