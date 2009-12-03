@@ -657,7 +657,7 @@ Ext.onReady(function(){
 	appointment_ColumnModel = new Ext.grid.ColumnModel(
 		[
 		{
-			header: 'Tanggal Appointment',
+			header: 'Tgl App',
 			dataIndex: 'dapp_tglreservasi',
 			width: 150,
 			sortable: true,
@@ -668,7 +668,7 @@ Ext.onReady(function(){
 			})
 		}, 
 		{
-			header: 'Jam Reservasi',
+			header: 'Jam App',
 			dataIndex: 'dapp_jamreservasi',
 			width: 100,
 			sortable: true,
