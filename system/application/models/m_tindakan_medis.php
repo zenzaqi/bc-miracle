@@ -169,7 +169,7 @@ class M_tindakan_medis extends Model{
 						$this->db->insert('detail_jual_rawat', $data_djrawat);
 					}
 					//Check AND INSERT history jumlah tindakan oleh Dokter
-					/*$sql="SELECT reportt_jmltindakan FROM report_tindakan WHERE reportt_nik='$dtrawat_petugas1_no' AND reportt_bln LIKE '$bln_now%'";
+					$sql="SELECT reportt_jmltindakan FROM report_tindakan WHERE reportt_nik='$dtrawat_petugas1_no' AND reportt_bln LIKE '$bln_now%'";
 					$rs=$this->db->query($sql);
 					if($rs->num_rows()){
 						$rs_record=$rs->row_array();
@@ -188,7 +188,7 @@ class M_tindakan_medis extends Model{
 						"reportt_jmltindakan"=>1
 						);
 						$this->db->insert('report_tindakan', $data_report_tindakan);
-					}*/
+					}
 				}else{
 					//INSERT to table.master_jual_rawat AND table.detail_jual_rawat
 					$pattern="PR/".date("y/m")."/";
@@ -232,7 +232,7 @@ class M_tindakan_medis extends Model{
 							$this->db->insert('detail_jual_rawat', $data_djrawat);
 						}
 						//Check AND INSERT history jumlah tindakan oleh Dokter
-						/*$sql="SELECT reportt_jmltindakan FROM report_tindakan WHERE reportt_nik='$dtrawat_petugas1_no' AND reportt_bln='$bln_now'";
+						$sql="SELECT reportt_jmltindakan FROM report_tindakan WHERE reportt_nik='$dtrawat_petugas1_no' AND reportt_bln='$bln_now'";
 						$rs=$this->db->query($sql);
 						if($rs->num_rows()){
 							$rs_record=$rs->row_array();
@@ -251,7 +251,7 @@ class M_tindakan_medis extends Model{
 							"reportt_jmltindakan"=>1
 							);
 							$this->db->insert('report_tindakan', $data_report_tindakan);
-						}*/
+						}
 					}
 				}
 			}

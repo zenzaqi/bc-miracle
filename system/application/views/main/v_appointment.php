@@ -1151,15 +1151,15 @@ Ext.onReady(function(){
 		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
 			{name: 'dokter_display', type: 'string', mapping: 'karyawan_nama'},
 			{name: 'dokter_username', type: 'string', mapping: 'karyawan_username'},
-			{name: 'dokter_value', type: 'int', mapping: 'karyawan_id'}//,
-			//{name: 'dokter_jmltindakan', type: 'int', mapping: 'reportt_jmltindakan'}
+			{name: 'dokter_value', type: 'int', mapping: 'karyawan_id'},
+			{name: 'dokter_jmltindakan', type: 'int', mapping: 'reportt_jmltindakan'}
 		]),
 		sortInfo:{field: 'dokter_display', direction: "ASC"}
 	});
 	var dokter_tpl = new Ext.XTemplate(
         '<tpl for="."><div class="search-item">',
             '<span><b>{dokter_username}</b> | {dokter_display}<br /></span>',
-            //'Jml-Tindakan: {dokter_jmltindakan}',
+            'Jml-Tindakan: <b>{dokter_jmltindakan}</b>',
         '</div></tpl>'
     );
 	
@@ -1176,15 +1176,15 @@ Ext.onReady(function(){
 		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
 			{name: 'terapis_display', type: 'string', mapping: 'karyawan_nama'},
 			{name: 'terapis_username', type: 'string', mapping: 'karyawan_username'},
-			{name: 'terapis_value', type: 'int', mapping: 'karyawan_id'}//,
-			//{name: 'terapis_jmltindakan', type: 'int', mapping: 'reportt_jmltindakan'}
+			{name: 'terapis_value', type: 'int', mapping: 'karyawan_id'},
+			{name: 'terapis_jmltindakan', type: 'int', mapping: 'reportt_jmltindakan'}
 		]),
 		sortInfo:{field: 'terapis_display', direction: "ASC"}
 	});
 	var cbo_terapis_tpl = new Ext.XTemplate(
         '<tpl for="."><div class="search-item">',
             '<span><b>{terapis_username}</b> | {terapis_display}<br /></span>',
-            //'Jml-Tindakan: {terapis_jmltindakan}',
+            'Jml-Tindakan: <b>{terapis_jmltindakan}</b>',
         '</div></tpl>'
     );
 	
