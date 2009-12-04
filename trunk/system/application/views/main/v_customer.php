@@ -2637,15 +2637,15 @@ Ext.onReady(function(){
 		width:50,
 		maskRe: /([0-9]+)$/
 	});
-	cust_tgllahirField.on('select',function(){
+	/*cust_tgllahirField.on('select',function(){
 		var datDate1=cust_tgllahirField.getValue();
 		console.log("TEST = "+datDate1.getFullYear());
 		
 		//cust_umurField.setValue(umur);
-	});
-	cust_tgllahirField.on('keyup',function(){
+	});*/
+	/*cust_tgllahirField.on('keyup',function(){
 		Ext.Msg.alert('Status', 'Date saved successfully.');
-	});
+	});*/
 	/* Identify  cust_hobi Field */
 	cust_hobiField= new Ext.form.ComboBox({
 		id: 'cust_hobiField',
@@ -2937,7 +2937,7 @@ Ext.onReady(function(){
 							xtype: 'checkboxgroup',
 							fieldLabel:'',
 							items:[cust_fb2Field,cust_tweeter2Field]
-						},cust_kelaminField, cust_tmptlahirField, cust_tgllahirField, cust_umurField, cust_agamaField, cust_pendidikanField,  cust_profesiField, cust_profesitxtField, cust_hobiField, cust_hobitxtField, cust_referensiField, cust_referensilainField,cust_referensilaintxtField, cust_statusnikahField, cust_jmlanakField, cust_terdaftarField, cust_unitField, cust_keteranganField, cust_aktifField, cust_update_confirmField] 
+						},cust_kelaminField, cust_tmptlahirField, cust_tgllahirField, cust_agamaField, cust_pendidikanField,  cust_profesiField, cust_profesitxtField, cust_hobiField, cust_hobitxtField, cust_referensiField, cust_referensilainField,cust_referensilaintxtField, cust_statusnikahField, cust_jmlanakField, cust_terdaftarField, cust_unitField, cust_keteranganField, cust_aktifField, cust_update_confirmField] 
 					}
 				]
 			},{
