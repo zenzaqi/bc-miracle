@@ -234,7 +234,9 @@ class C_appointment extends Controller {
 		$terapis_id=trim(@$_POST["terapis_id"]);
 		$dapp_jamreservasi=trim(@$_POST["dapp_jamreservasi"]);
 		$cust_id=trim(@$_POST["cust_id"]);
-		$result = $this->m_appointment->appointment_update($app_id ,$app_customer ,$app_tanggal ,$app_cara ,$app_keterangan, $dapp_id, $dapp_status, $dokter_nama, $terapis_nama, $kategori_nama, $rawat_id, $dokter_id, $terapis_id, $dapp_jamreservasi, $cust_id);
+		$dapp_dokter_no=trim(@$_POST["dapp_dokter_no"]);
+		$dapp_terapis_no=trim(@$_POST["dapp_terapis_no"]);
+		$result = $this->m_appointment->appointment_update($app_id ,$app_customer ,$app_tanggal ,$app_cara ,$app_keterangan, $dapp_id, $dapp_status, $dokter_nama, $terapis_nama, $kategori_nama, $rawat_id, $dokter_id, $terapis_id, $dapp_jamreservasi, $cust_id, $dapp_dokter_no, $dapp_terapis_no);
 		echo $result;
 	}
 	
