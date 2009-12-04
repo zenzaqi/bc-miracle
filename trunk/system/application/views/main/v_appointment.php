@@ -417,6 +417,7 @@ Ext.onReady(function(){
   	/* Function for Displaying  create Window Form */
 	function display_form_window(){
 		appointment_custBaruGroup_reset();
+		cbo_dapp_dokterDataStore.load();
 		if(!appointment_createWindow.isVisible()){
 			appointment_detail_medisDataStore.load({params : {master_id : 0, start:0, limit:pageS}});
 			appointment_detail_nonmedisDataStore.load({params : {master_id : 0, start:0, limit:pageS}});
