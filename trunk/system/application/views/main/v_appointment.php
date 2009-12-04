@@ -187,6 +187,8 @@ Ext.onReady(function(){
 		var dapp_terapis_id_update="";
 		var dapp_jamreservasi_update="";
 		var app_cust_id_update="";
+		var dapp_dokter_no_update="";
+		var dapp_terapis_no_update="";
 
 		app_id_update_pk = oGrid_event.record.data.app_id;
 		if(oGrid_event.record.data.app_customer!== null){app_customer_update = oGrid_event.record.data.app_customer;}
@@ -203,6 +205,8 @@ Ext.onReady(function(){
 		dapp_terapis_id_update = oGrid_event.record.data.terapis_id;
 		dapp_jamreservasi_update = oGrid_event.record.data.dapp_jamreservasi;
 		app_cust_id_update = oGrid_event.record.data.cust_id;
+		if(oGrid_event.record.data.dokter_no!== ""){dapp_dokter_no_update = oGrid_event.record.data.dokter_no;}
+		if(oGrid_event.record.data.terapis_no!== ""){dapp_terapis_no_update = oGrid_event.record.data.terapis_no;}
 
 		Ext.Ajax.request({  
 			waitMsg: 'Please wait...',
@@ -223,7 +227,9 @@ Ext.onReady(function(){
 				dokter_id	:dapp_dokter_id_update,
 				terapis_id	:dapp_terapis_id_update,
 				dapp_jamreservasi	:dapp_jamreservasi_update,
-				cust_id	:app_cust_id_update
+				cust_id	:app_cust_id_update,
+				dapp_dokter_no	:dapp_dokter_no_update,
+				dapp_terapis_no	:dapp_terapis_no_update
 			}, 
 			success: function(response){							
 				var result=eval(response.responseText);
@@ -589,9 +595,11 @@ Ext.onReady(function(){
 			{name: 'dokter_id', type: 'int', mapping: 'dokter_id'}, 
 			{name: 'dokter_nama', type: 'string', mapping: 'dokter_nama'},
 			{name: 'dokter_username', type: 'string', mapping: 'dokter_username'},
+			{name: 'dokter_no', type: 'string', mapping: 'dokter_no'},
 			{name: 'terapis_id', type: 'int', mapping: 'terapis_id'},
 			{name: 'terapis_nama', type: 'string', mapping: 'terapis_nama'},
 			{name: 'terapis_username', type: 'string', mapping: 'terapis_username'},
+			{name: 'terapis_no', type: 'string', mapping: 'terapis_no'},
 			{name: 'kategori_nama', type: 'string', mapping: 'kategori_nama'}, 
 			{name: 'dapp_id', type: 'int', mapping: 'dapp_id'},
 			{name: 'dapp_status', type: 'string', mapping: 'dapp_status'},
@@ -1171,8 +1179,7 @@ Ext.onReady(function(){
 	});
 	var dokter_tpl = new Ext.XTemplate(
         '<tpl for="."><div class="search-item">',
-            '<span><b>{dokter_username}</b> | {dokter_display}<br /></span>',
-            'Jml-Tindakan: <b>{dokter_jmltindakan}</b>',
+            '<span><b>{dokter_username}</b> | {dokter_display} | <b>{dokter_jmltindakan}</b></span>',
         '</div></tpl>'
     );
 	
@@ -1196,8 +1203,7 @@ Ext.onReady(function(){
 	});
 	var cbo_terapis_tpl = new Ext.XTemplate(
         '<tpl for="."><div class="search-item">',
-            '<span><b>{terapis_username}</b> | {terapis_display}<br /></span>',
-            'Jml-Tindakan: <b>{terapis_jmltindakan}</b>',
+            '<span><b>{terapis_username}</b> | {terapis_display} | <b>{terapis_jmltindakan}</b></span>',
         '</div></tpl>'
     );
 	

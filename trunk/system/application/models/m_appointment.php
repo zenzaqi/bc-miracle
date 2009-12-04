@@ -143,7 +143,7 @@ class M_appointment extends Model{
 			//$query = "SELECT * FROM appointment";
 			$dt=date('Y-m-d');
 			$dt_six=date('Y-m-d',mktime(0,0,0,date("m"),date("d")+6,date("Y")));
-			$query="SELECT app_id,cust_nama,cust_id,karyawan_dokter.karyawan_nama as dokter_nama,karyawan_dokter.karyawan_id as dokter_id,karyawan_dokter.karyawan_username as dokter_username,karyawan_terapis.karyawan_nama as terapis_nama,karyawan_terapis.karyawan_id as terapis_id,karyawan_terapis.karyawan_username as terapis_username,rawat_id,rawat_nama,kategori_nama,dapp_id,dapp_status,dapp_tglreservasi,dapp_jamdatang,app_tanggal,app_cara,app_keterangan,dapp_jamreservasi,app_creator,app_date_create,app_update,app_date_update,app_revised 
+			$query="SELECT app_id,cust_nama,cust_id,karyawan_dokter.karyawan_nama as dokter_nama,karyawan_dokter.karyawan_id as dokter_id,karyawan_dokter.karyawan_username as dokter_username,karyawan_dokter.karyawan_no as dokter_no,karyawan_terapis.karyawan_nama as terapis_nama,karyawan_terapis.karyawan_id as terapis_id,karyawan_terapis.karyawan_username as terapis_username,karyawan_terapis.karyawan_no as terapis_no,rawat_id,rawat_nama,kategori_nama,dapp_id,dapp_status,dapp_tglreservasi,dapp_jamdatang,app_tanggal,app_cara,app_keterangan,dapp_jamreservasi,app_creator,app_date_create,app_update,app_date_update,app_revised 
 FROM (((appointment inner join appointment_detail on appointment.app_id=appointment_detail.dapp_master inner join perawatan on appointment_detail.dapp_perawatan=perawatan.rawat_id 
 inner join customer on appointment.app_customer=customer.cust_id inner join kategori on perawatan.rawat_kategori=kategori.kategori_id) 
 left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawan_dokter.karyawan_id) left join karyawan as karyawan_terapis on appointment_detail.dapp_petugas2=karyawan_terapis.karyawan_id)
@@ -151,7 +151,7 @@ WHERE dapp_tglreservasi BETWEEN '$dt' AND '$dt_six'";
 			
 			// For simple search
 			if ($filter<>""){
-				$query="SELECT app_id,cust_nama,cust_id,karyawan_dokter.karyawan_nama as dokter_nama,karyawan_dokter.karyawan_id as dokter_id,karyawan_dokter.karyawan_username as dokter_username,karyawan_terapis.karyawan_nama as terapis_nama,karyawan_terapis.karyawan_id as terapis_id,karyawan_terapis.karyawan_username as terapis_username,rawat_id,rawat_nama,kategori_nama,dapp_id,dapp_status,dapp_tglreservasi,dapp_jamdatang,app_tanggal,app_cara,app_keterangan,dapp_jamreservasi,app_creator,app_date_create,app_update,app_date_update,app_revised 
+				$query="SELECT app_id,cust_nama,cust_id,karyawan_dokter.karyawan_nama as dokter_nama,karyawan_dokter.karyawan_id as dokter_id,karyawan_dokter.karyawan_username as dokter_username,karyawan_dokter.karyawan_no as dokter_no,karyawan_terapis.karyawan_nama as terapis_nama,karyawan_terapis.karyawan_id as terapis_id,karyawan_terapis.karyawan_username as terapis_username,karyawan_terapis.karyawan_no as terapis_no,rawat_id,rawat_nama,kategori_nama,dapp_id,dapp_status,dapp_tglreservasi,dapp_jamdatang,app_tanggal,app_cara,app_keterangan,dapp_jamreservasi,app_creator,app_date_create,app_update,app_date_update,app_revised 
 FROM (((appointment inner join appointment_detail on appointment.app_id=appointment_detail.dapp_master inner join perawatan on appointment_detail.dapp_perawatan=perawatan.rawat_id 
 inner join customer on appointment.app_customer=customer.cust_id inner join kategori on perawatan.rawat_kategori=kategori.kategori_id) 
 left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawan_dokter.karyawan_id) left join karyawan as karyawan_terapis on appointment_detail.dapp_petugas2=karyawan_terapis.karyawan_id)";
@@ -178,8 +178,9 @@ left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawa
 		}
 		
 		//function for update record
-		function appointment_update($app_id ,$app_customer ,$app_tanggal ,$app_cara ,$app_keterangan,$dapp_id, $dapp_status, $dokter_nama, $terapis_nama, $kategori_nama, $rawat_id, $dokter_id, $terapis_id, $dapp_jamreservasi, $cust_id){
+		function appointment_update($app_id ,$app_customer ,$app_tanggal ,$app_cara ,$app_keterangan,$dapp_id, $dapp_status, $dokter_nama, $terapis_nama, $kategori_nama, $rawat_id, $dokter_id, $terapis_id, $dapp_jamreservasi, $cust_id, $dapp_dokter_no, $dapp_terapis_no){
 			//INSERT to Appointment-Detail
+			$bln_now=date('Y-m');
 			$data_dapp=array();
 			if($dapp_status=="datang"){
 				$date_now=date('Y-m-d');
@@ -195,6 +196,22 @@ left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawa
 				//Menghapus Tindakan-DEtail WHERE 
 				$this->db->where('dtrawat_dapp', $dapp_id);
 				$this->db->delete('tindakan_detail');
+				
+				//decounter table.report_tindakan
+				$sql="SELECT reportt_jmltindakan FROM report_tindakan WHERE reportt_bln LIKE '$bln_now%' AND (reportt_nik='$dapp_dokter_no' OR reportt_nik='$dapp_terapis_no')";
+				$rs=$this->db->query($sql);
+				if($rs->num_rows()){
+					$rs_record=$rs->row_array();
+					$reportt_jmltindakan=$rs_record["reportt_jmltindakan"];
+					//UPDATE jumlah_tindakan
+					$data_report_tindakan=array(
+					"reportt_jmltindakan"=>$reportt_jmltindakan-1
+					);
+					$this->db->where('reportt_nik', $dapp_dokter_no);
+					$this->db->or_where('reportt_nik', $dapp_terapis_no);
+					$this->db->like('reportt_bln', $bln_now, 'after');
+					$this->db->update('report_tindakan', $data_report_tindakan);
+				}
 			}
 			$sql="SELECT karyawan_id FROM karyawan WHERE karyawan_id='$dokter_nama'";
 			$rs=$this->db->query($sql);
@@ -290,6 +307,32 @@ left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawa
 							$data_dtindakan["dtrawat_petugas2"]=$terapis_id;
 						$this->db->insert('tindakan_detail', $data_dtindakan);
 					}
+				}
+				//Check AND INSERT history jumlah tindakan oleh Dokter
+				$sql="SELECT reportt_jmltindakan FROM report_tindakan WHERE reportt_bln LIKE '$bln_now%' AND (reportt_nik='$dapp_dokter_no' OR reportt_nik='$dapp_terapis_no')";
+				$rs=$this->db->query($sql);
+				if($rs->num_rows()){
+					$rs_record=$rs->row_array();
+					$reportt_jmltindakan=$rs_record["reportt_jmltindakan"];
+					//UPDATE jumlah_tindakan
+					$data_report_tindakan=array(
+					"reportt_jmltindakan"=>$reportt_jmltindakan+1
+					);
+					$this->db->where('reportt_nik', $dapp_dokter_no);
+					$this->db->or_where('reportt_nik', $dapp_terapis_no);
+					$this->db->like('reportt_bln', $bln_now, 'after');
+					$this->db->update('report_tindakan', $data_report_tindakan);
+				}else{
+					if($dapp_dokter_no!="")
+						$petugas_no=$dapp_dokter_no;
+					if($dapp_terapis_no!="")
+						$petugas_no=$dapp_terapis_no;
+					$data_report_tindakan=array(
+					"reportt_nik"=>$petugas_no,
+					"reportt_bln"=>$date_now,
+					"reportt_jmltindakan"=>1
+					);
+					$this->db->insert('report_tindakan', $data_report_tindakan);
 				}
 			}
 			
