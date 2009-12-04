@@ -379,6 +379,18 @@ Ext.onReady(function(){
 		app_keteranganField.setValue(null);
 	}
  	/* End of Function */
+ 	
+ 	function appointment_custBaruGroup_reset(){
+ 		appointment_custBaruGroup.collapse(true);
+ 		app_cust_namaBaruField.reset();
+ 		app_cust_namaBaruField.setValue(null);
+ 		app_cust_telpBaruField.reset();
+ 		app_cust_telpBaruField.setValue(null);
+ 		app_cust_hpBaruField.reset();
+ 		app_cust_hpBaruField.setValue(null);
+ 		app_cust_keteranganBaruField.reset();
+ 		app_cust_keteranganBaruField.setValue(null);
+ 	}
   
 	/* setValue to EDIT */
 	function appointment_set_form(){
@@ -398,6 +410,7 @@ Ext.onReady(function(){
   
   	/* Function for Displaying  create Window Form */
 	function display_form_window(){
+		appointment_custBaruGroup_reset();
 		if(!appointment_createWindow.isVisible()){
 			appointment_detail_medisDataStore.load({params : {master_id : 0, start:0, limit:pageS}});
 			appointment_detail_nonmedisDataStore.load({params : {master_id : 0, start:0, limit:pageS}});
@@ -1076,7 +1089,7 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [app_cust_namaBaruField, app_cust_telpBaruField, app_cust_hpBaruField, app_cust_keteranganBaruField] 
+				items: [app_cust_namaBaruField, app_cust_telpBaruField, app_cust_hpBaruField] 
 			},
 			{
 				columnWidth:0.5,
