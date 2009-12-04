@@ -159,7 +159,8 @@ class C_tindakan_nonmedis extends Controller {
 		$rawat_du=trim(@$_POST["rawat_du"]);
 		$rawat_dm=trim(@$_POST["rawat_dm"]);
 		$cust_member=trim(@$_POST["cust_member"]);
-		$result = $this->m_tindakan_nonmedis->tindakan_update($trawat_id ,$trawat_cust ,$trawat_keterangan ,$dtrawat_status ,$trawat_cust_id ,$dtrawat_perawatan_id ,$dtrawat_perawatan ,$dtrawat_id ,$rawat_harga ,$rawat_du ,$rawat_dm ,$cust_member);
+		$dtrawat_petugas2_no=trim(@$_POST["dtrawat_petugas2_no"]);
+		$result = $this->m_tindakan_nonmedis->tindakan_update($trawat_id ,$trawat_cust ,$trawat_keterangan ,$dtrawat_status ,$trawat_cust_id ,$dtrawat_perawatan_id ,$dtrawat_perawatan ,$dtrawat_id ,$rawat_harga ,$rawat_du ,$rawat_dm ,$cust_member ,$dtrawat_petugas2_no);
 		echo $result;
 	}
 	

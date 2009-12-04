@@ -114,7 +114,7 @@ class M_tindakan_nonmedis extends Model{
 		}
 		
 		//function for update record
-		function tindakan_update($trawat_id ,$trawat_cust ,$trawat_keterangan ,$dtrawat_status ,$trawat_cust_id ,$dtrawat_perawatan_id ,$dtrawat_perawatan ,$dtrawat_id ,$rawat_harga ,$rawat_du ,$rawat_dm ,$cust_member){
+		function tindakan_update($trawat_id ,$trawat_cust ,$trawat_keterangan ,$dtrawat_status ,$trawat_cust_id ,$dtrawat_perawatan_id ,$dtrawat_perawatan ,$dtrawat_id ,$rawat_harga ,$rawat_du ,$rawat_dm ,$cust_member ,$dtrawat_petugas2_no){
 			/*$data = array(
 				"trawat_id"=>$trawat_id, 
 				//"trawat_cust"=>$trawat_cust, 
@@ -168,6 +168,27 @@ class M_tindakan_nonmedis extends Model{
 						);
 						$this->db->insert('detail_jual_rawat', $data_djrawat);
 					}
+					//Check AND INSERT history jumlah tindakan oleh Dokter
+					$sql="SELECT reportt_jmltindakan FROM report_tindakan WHERE reportt_nik='$dtrawat_petugas2_no' AND reportt_bln LIKE '$bln_now%'";
+					$rs=$this->db->query($sql);
+					if($rs->num_rows()){
+						$rs_record=$rs->row_array();
+						$reportt_jmltindakan=$rs_record["reportt_jmltindakan"];
+						//UPDATE jumlah_tindakan
+						$data_report_tindakan=array(
+						"reportt_jmltindakan"=>$reportt_jmltindakan+1
+						);
+						$this->db->where('reportt_nik', $dtrawat_petugas2_no);
+						$this->db->like('reportt_bln', $bln_now, 'after');
+						$this->db->update('report_tindakan', $data_report_tindakan);
+					}else{
+						$data_report_tindakan=array(
+						"reportt_nik"=>$dtrawat_petugas2_no,
+						"reportt_bln"=>$date_now,
+						"reportt_jmltindakan"=>1
+						);
+						$this->db->insert('report_tindakan', $data_report_tindakan);
+					}
 				}else{
 					//INSERT to table.master_jual_rawat AND table.detail_jual_rawat
 					$pattern="PR/".date("y/m")."/";
@@ -210,6 +231,27 @@ class M_tindakan_nonmedis extends Model{
 							);
 							$this->db->insert('detail_jual_rawat', $data_djrawat);
 						}
+					}
+					//Check AND INSERT history jumlah tindakan oleh Dokter
+					$sql="SELECT reportt_jmltindakan FROM report_tindakan WHERE reportt_nik='$dtrawat_petugas2_no' AND reportt_bln LIKE '$bln_now%'";
+					$rs=$this->db->query($sql);
+					if($rs->num_rows()){
+						$rs_record=$rs->row_array();
+						$reportt_jmltindakan=$rs_record["reportt_jmltindakan"];
+						//UPDATE jumlah_tindakan
+						$data_report_tindakan=array(
+						"reportt_jmltindakan"=>$reportt_jmltindakan+1
+						);
+						$this->db->where('reportt_nik', $dtrawat_petugas2_no);
+						$this->db->like('reportt_bln', $bln_now, 'after');
+						$this->db->update('report_tindakan', $data_report_tindakan);
+					}else{
+						$data_report_tindakan=array(
+						"reportt_nik"=>$dtrawat_petugas2_no,
+						"reportt_bln"=>$date_now,
+						"reportt_jmltindakan"=>1
+						);
+						$this->db->insert('report_tindakan', $data_report_tindakan);
 					}
 				}
 			}
