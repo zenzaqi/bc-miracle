@@ -2117,8 +2117,9 @@ Ext.onReady(function(){
 		frame: true,
 		//clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
-		viewConfig: { forceFit:true },
+		viewConfig: { forceFit:false },
 	  	width: 940,
+	  	//autoWidth: true,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: customer_DataStore,
@@ -2628,24 +2629,65 @@ Ext.onReady(function(){
 		id: 'cust_tgllahirField',
 		fieldLabel: 'Tgl Lahir',
 		format : 'Y-m-d',
-		anchor: '50%'
+		anchor: '50%',
+		enableKeyEvents: 'true',
+		listeners:{
+			keyup: function(){
+				var datDate1=cust_tgllahirField.getValue();
+				var getBlnLahir=datDate1.getMonth()+1;
+				var getSelisihBln=(dt.getMonth()+1)-getBlnLahir;
+				var getUmur=(dt.getFullYear())-(datDate1.getFullYear());
+				
+				var tempBln=0;
+				if(getSelisihBln<0){
+					tempBln=12-getBlnLahir;
+					getSelisihBln=tempBln+(-(getSelisihBln));
+				}
+				var umur=getUmur+" Th, "+getSelisihBln+" Bln";
+				console.log("SELISIH = "+getSelisihBln);
+				console.log("Total UMUR = "+umur);
+				
+				cust_umurField.setValue(umur);
+			}
+		}
 	});
-	cust_umurField= new Ext.form.NumberField({
+	cust_umurField= new Ext.form.TextField({
 		id: 'cust_umurField',
-		fieldLabel: 'Umur',
+		fieldLabel: '&nbsp;&nbsp;&nbsp;Umur',
 		disabled:true,
-		width:50,
-		maskRe: /([0-9]+)$/
+		width:107
 	});
 	/*cust_tgllahirField.on('select',function(){
 		var datDate1=cust_tgllahirField.getValue();
-		console.log("TEST = "+datDate1.getFullYear());
+		var getBlnLahir=datDate1.getMonth()+1;
+		var getSelisihBln=(dt.getMonth()+1)-getBlnLahir;
+		var getUmur=(dt.getFullYear())-(datDate1.getFullYear());
+		
+		var tempBln=0;
+		if(getSelisihBln<0){
+			tempBln=12-getBlnLahir;
+			getSelisihBln=tempBln+(-(getSelisihBln));
+		}
+		var umur=getUmur+" Th, "+getSelisihBln+" Bln";
+		console.log("SELISIH = "+getSelisihBln);
+		console.log("Total UMUR = "+umur);
 		
 		//cust_umurField.setValue(umur);
 	});*/
-	/*cust_tgllahirField.on('keyup',function(){
-		Ext.Msg.alert('Status', 'Date saved successfully.');
-	});*/
+	tgl_lahir_group = new Ext.form.FieldSet({
+		title: '',
+		labelWidth: 100,
+		anchor: '95%',
+		layout:'column',
+		items:[
+			{
+				columnWidth:0.5,
+				layout: 'form',
+				border:false,
+				items: [cust_tgllahirField, cust_umurField]
+			}
+		]
+	});
 	/* Identify  cust_hobi Field */
 	cust_hobiField= new Ext.form.ComboBox({
 		id: 'cust_hobiField',
@@ -2937,7 +2979,7 @@ Ext.onReady(function(){
 							xtype: 'checkboxgroup',
 							fieldLabel:'',
 							items:[cust_fb2Field,cust_tweeter2Field]
-						},cust_kelaminField, cust_tmptlahirField, cust_tgllahirField, cust_agamaField, cust_pendidikanField,  cust_profesiField, cust_profesitxtField, cust_hobiField, cust_hobitxtField, cust_referensiField, cust_referensilainField,cust_referensilaintxtField, cust_statusnikahField, cust_jmlanakField, cust_terdaftarField, cust_unitField, cust_keteranganField, cust_aktifField, cust_update_confirmField] 
+						},cust_kelaminField, cust_tmptlahirField, cust_tgllahirField, cust_umurField, cust_agamaField, cust_pendidikanField,  cust_profesiField, cust_profesitxtField, cust_hobiField, cust_hobitxtField, cust_referensiField, cust_referensilainField,cust_referensilaintxtField, cust_statusnikahField, cust_jmlanakField, cust_terdaftarField, cust_unitField, cust_keteranganField, cust_aktifField, cust_update_confirmField] 
 					}
 				]
 			},{
