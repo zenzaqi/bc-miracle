@@ -208,17 +208,18 @@ left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawa
 				$this->db->delete('tindakan_detail');
 				
 				//decounter table.report_tindakan
-				$sql="SELECT reportt_jmltindakan FROM report_tindakan WHERE reportt_bln LIKE '$bln_now%' AND (reportt_nik='$dapp_dokter_no' OR reportt_nik='$dapp_terapis_no')";
+				$sql="SELECT reportt_jmltindakan FROM report_tindakan WHERE reportt_bln LIKE '$bln_now%' AND (reportt_karyawan_id='$dokter_id' OR reportt_karyawan_id='$terapis_id')";
 				$rs=$this->db->query($sql);
 				if($rs->num_rows()){
 					$rs_record=$rs->row_array();
 					$reportt_jmltindakan=$rs_record["reportt_jmltindakan"];
+					$this->firephp->log($reportt_jmltindakan,"JML-TINDAKAN");
 					//UPDATE jumlah_tindakan
 					$data_report_tindakan=array(
 					"reportt_jmltindakan"=>$reportt_jmltindakan-1
 					);
-					$this->db->where('reportt_nik', $dapp_dokter_no);
-					$this->db->or_where('reportt_nik', $dapp_terapis_no);
+					$this->db->where('reportt_karyawan_id', $dokter_id);
+					$this->db->or_where('reportt_karyawan_id', $terapis_id);
 					$this->db->like('reportt_bln', $bln_now, 'after');
 					$this->db->update('report_tindakan', $data_report_tindakan);
 				}
@@ -234,48 +235,50 @@ left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawa
 				$data_dapp["dapp_petugas2"]=$terapis_nama;
 			
 			//GANTI-DOKTER
-			if($dokter_id<>$dapp_dokter_ganti){//ada PerGANTIan Dokter
+			if($dokter_id<>$dapp_dokter_ganti && is_numeric($dapp_dokter_ganti)==true){//ada PerGANTIan Dokter
 				//decounter table.report_tindakan
-				$sql="SELECT reportt_jmltindakan FROM report_tindakan WHERE reportt_bln LIKE '$bln_now%' AND reportt_nik='$dapp_dokter_no'";
+				$sql="SELECT reportt_jmltindakan FROM report_tindakan WHERE reportt_bln LIKE '$bln_now%' AND reportt_karyawan_id='$dokter_id'";
 				$rs=$this->db->query($sql);
 				if($rs->num_rows()){
 					$rs_record=$rs->row_array();
 					$reportt_jmltindakan=$rs_record["reportt_jmltindakan"];
+					$this->firephp->log($reportt_jmltindakan, "GANTI-D-JML-TINDAKAN");
 					//UPDATE jumlah_tindakan
 					$data_report_tindakan=array(
 					"reportt_jmltindakan"=>$reportt_jmltindakan-1
 					);
-					$this->db->where('reportt_nik', $dapp_dokter_no);
+					$this->db->where('reportt_karyawan_id', $dokter_id);
 					$this->db->like('reportt_bln', $bln_now, 'after');
 					$this->db->update('report_tindakan', $data_report_tindakan);
 				}
-				$rs_karyawan=$this->db->query("SELECT karyawan_no FROM karyawan WHERE karyawan_id='$dapp_dokter_ganti'");
+				$rs_karyawan=$this->db->query("SELECT karyawan_id FROM karyawan WHERE karyawan_id='$dapp_dokter_ganti'");
 				$rs_krecord=$rs_karyawan->row_array();
 				if($rs_karyawan->num_rows()){
-					$dapp_dokter_no=$rs_krecord["karyawan_no"];
+					$dokter_id=$rs_krecord["karyawan_id"];
 					$data_dapp["dapp_petugas"]=$dapp_dokter_ganti;
 				}
 			}
 			//GANTI-TERAPIS
-			if($terapis_id<>$dapp_terapis_ganti){//ada PerGANTIan Dokter
+			if($terapis_id<>$dapp_terapis_ganti && is_numeric($dapp_terapis_ganti)==true){//ada PerGANTIan Dokter
 				//decounter table.report_tindakan
-				$sql="SELECT reportt_jmltindakan FROM report_tindakan WHERE reportt_bln LIKE '$bln_now%' AND reportt_nik='$dapp_terapis_no'";
+				$sql="SELECT reportt_jmltindakan FROM report_tindakan WHERE reportt_bln LIKE '$bln_now%' AND reportt_karyawan_id='$terapis_id'";
 				$rs=$this->db->query($sql);
 				if($rs->num_rows()){
 					$rs_record=$rs->row_array();
 					$reportt_jmltindakan=$rs_record["reportt_jmltindakan"];
+					$this->firephp->log($reportt_jmltindakan, "GANTI-T-JML-TINDAKAN");
 					//UPDATE jumlah_tindakan
 					$data_report_tindakan=array(
 					"reportt_jmltindakan"=>$reportt_jmltindakan-1
 					);
-					$this->db->where('reportt_nik', $dapp_terapis_no);
+					$this->db->where('reportt_karyawan_id', $terapis_id);
 					$this->db->like('reportt_bln', $bln_now, 'after');
 					$this->db->update('report_tindakan', $data_report_tindakan);
 				}
-				$rs_karyawan=$this->db->query("SELECT karyawan_no FROM karyawan WHERE karyawan_id='$dapp_terapis_ganti'");
+				$rs_karyawan=$this->db->query("SELECT karyawan_id FROM karyawan WHERE karyawan_id='$dapp_terapis_ganti'");
 				$rs_krecord=$rs_karyawan->row_array();
 				if($rs_karyawan->num_rows()){
-					$dapp_terapis_no=$rs_krecord["karyawan_no"];
+					$terapis_id=$rs_krecord["karyawan_id"];
 					$data_dapp["dapp_petugas2"]=$dapp_terapis_ganti;
 				}
 			}
@@ -372,7 +375,7 @@ left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawa
 					}
 				}
 				//Check AND INSERT history jumlah tindakan oleh Dokter
-				$sql="SELECT reportt_jmltindakan FROM report_tindakan WHERE reportt_bln LIKE '$bln_now%' AND (reportt_nik='$dapp_dokter_no' OR reportt_nik='$dapp_terapis_no')";
+				$sql="SELECT reportt_jmltindakan FROM report_tindakan WHERE reportt_bln LIKE '$bln_now%' AND (reportt_karyawan_id='$dokter_id' OR reportt_karyawan_id='$terapis_id')";
 				$rs=$this->db->query($sql);
 				if($rs->num_rows() && $check_dapp_status!=$dapp_status){
 					$rs_record=$rs->row_array();
@@ -381,17 +384,17 @@ left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawa
 					$data_report_tindakan=array(
 					"reportt_jmltindakan"=>$reportt_jmltindakan+1
 					);
-					$this->db->where('reportt_nik', $dapp_dokter_no);
-					$this->db->or_where('reportt_nik', $dapp_terapis_no);
+					$this->db->where('reportt_karyawan_id', $dokter_id);
+					$this->db->or_where('reportt_karyawan_id', $terapis_id);
 					$this->db->like('reportt_bln', $bln_now, 'after');
 					$this->db->update('report_tindakan', $data_report_tindakan);
 				}else if(!$rs->num_rows()){
-					if($dapp_dokter_no!="")
-						$petugas_no=$dapp_dokter_no;
-					if($dapp_terapis_no!="")
-						$petugas_no=$dapp_terapis_no;
+					if($dokter_id!="")
+						$petugas_id=$dokter_id;
+					if($terapis_id!="")
+						$petugas_id=$terapis_id;
 					$data_report_tindakan=array(
-					"reportt_nik"=>$petugas_no,
+					"reportt_karyawan_id"=>$petugas_id,
 					"reportt_bln"=>$date_now,
 					"reportt_jmltindakan"=>1
 					);
