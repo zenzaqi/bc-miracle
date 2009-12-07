@@ -439,20 +439,20 @@ Ext.onReady(function(){
 		cbo_dapp_dokterDataStore.load();
 		if(!appointment_createWindow.isVisible()){
 			appointment_detail_medisDataStore.load({
-				params : {master_id : 0, start:0, limit:pageS},
+				params : {master_id : 0, start:0, limit:pageS}/*,
 				callback: function(opts, success, response)  {
 					  if (success) {
 						  appointment_detail_medis_add();
 					  }
-				}
+				}*/
 			});
 			appointment_detail_nonmedisDataStore.load({
-				params : {master_id : 0, start:0, limit:pageS},
+				params : {master_id : 0, start:0, limit:pageS}/*,
 				callback: function(opts, success, response)  {
 					  if (success) {
 						  appointment_detail_nonmedis_add();
 					  }
-				}
+				}*/
 			});
 			appointment_reset_form();
 			app_tanggalField.setValue(dt.dateFormat('Y-m-d'));
