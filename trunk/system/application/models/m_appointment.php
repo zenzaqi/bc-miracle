@@ -213,7 +213,6 @@ left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawa
 				if($rs->num_rows()){
 					$rs_record=$rs->row_array();
 					$reportt_jmltindakan=$rs_record["reportt_jmltindakan"];
-					$this->firephp->log($reportt_jmltindakan,"JML-TINDAKAN");
 					//UPDATE jumlah_tindakan
 					$data_report_tindakan=array(
 					"reportt_jmltindakan"=>$reportt_jmltindakan-1
@@ -242,7 +241,6 @@ left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawa
 				if($rs->num_rows()){
 					$rs_record=$rs->row_array();
 					$reportt_jmltindakan=$rs_record["reportt_jmltindakan"];
-					$this->firephp->log($reportt_jmltindakan, "GANTI-D-JML-TINDAKAN");
 					//UPDATE jumlah_tindakan
 					$data_report_tindakan=array(
 					"reportt_jmltindakan"=>$reportt_jmltindakan-1
@@ -266,7 +264,6 @@ left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawa
 				if($rs->num_rows()){
 					$rs_record=$rs->row_array();
 					$reportt_jmltindakan=$rs_record["reportt_jmltindakan"];
-					$this->firephp->log($reportt_jmltindakan, "GANTI-T-JML-TINDAKAN");
 					//UPDATE jumlah_tindakan
 					$data_report_tindakan=array(
 					"reportt_jmltindakan"=>$reportt_jmltindakan-1
