@@ -20,7 +20,7 @@
         p { width:650px; }
 		.search-item {
 			font:normal 11px tahoma, arial, helvetica, sans-serif;
-			padding:3px 10px 3px 10px;
+			padding:1px 1px 1px 1px;
 			border:1px solid #fff;
 			border-bottom:1px solid #eeeeee;
 			white-space:normal;
@@ -36,7 +36,7 @@
 		.search-item h3 span {
 			float: right;
 			font-weight:normal;
-			margin:0 0 5px 5px;
+			margin:0 0 1px 1px;
 			width:100px;
 			display:block;
 			clear:none;
@@ -712,7 +712,7 @@ Ext.onReady(function(){
 		{
 			header: 'Tgl App',
 			dataIndex: 'dapp_tglreservasi',
-			width: 150,
+			width: 70,
 			sortable: true,
 			hidden: false,
 			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
@@ -723,7 +723,7 @@ Ext.onReady(function(){
 		{
 			header: 'Jam App',
 			dataIndex: 'dapp_jamreservasi',
-			width: 100,
+			width: 60,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 250
@@ -732,7 +732,7 @@ Ext.onReady(function(){
 		{
 			header: 'Perawatan',
 			dataIndex: 'rawat_nama',
-			width: 150,
+			width: 210,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 250
@@ -741,13 +741,13 @@ Ext.onReady(function(){
 		{
 			header: 'Customer',
 			dataIndex: 'cust_nama',
-			width: 150,
+			width: 210,
 			sortable: true
 		}, 
 		{
 			header: 'Dokter',
 			dataIndex: 'dokter_username',
-			width: 200,
+			width: 140,
 			sortable: true,
 			editor: new Ext.form.ComboBox({
 				store: dapp_dokterDataStore,
@@ -764,7 +764,7 @@ Ext.onReady(function(){
 		{
 			header: 'Therapist',
 			dataIndex: 'terapis_username',
-			width: 200,
+			width: 140,
 			sortable: true,
 			editor: new Ext.form.ComboBox({
 				store: dapp_terapisDataStore,
@@ -781,7 +781,7 @@ Ext.onReady(function(){
 		{
 			header: 'Kategori',
 			dataIndex: 'kategori_nama',
-			width: 150,
+			width: 70,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 250
@@ -790,7 +790,7 @@ Ext.onReady(function(){
 		{
 			header: 'Status',
 			dataIndex: 'dapp_status',
-			width: 100,
+			width: 70,
 			sortable: true,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
@@ -809,7 +809,7 @@ Ext.onReady(function(){
 		{
 			header: 'Jam Datang',
 			dataIndex: 'dapp_jamdatang',
-			width: 100,
+			width: 70,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 10
@@ -818,7 +818,7 @@ Ext.onReady(function(){
 		{
 			header: 'Keterangan',
 			dataIndex: 'dapp_keterangan',
-			width: 100,
+			width: 150,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 10
@@ -889,7 +889,8 @@ Ext.onReady(function(){
             forceFit:true,
             groupTextTpl: '{text} ({[values.rs.length]} {[values.rs.length > 1 ? "Items" : "Item"]})'
         }),
-	  	width: 950,
+	  	width: 1220,
+	  	//autoWidth: true,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: appointment_DataStore,
