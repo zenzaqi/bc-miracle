@@ -187,7 +187,6 @@ left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawa
 			if($rs_detail->num_rows()){
 				$rs_drecord=$rs_detail->row_array();
 				$check_dapp_status=$rs_drecord["dapp_status"];
-				$this->firephp->log($check_dapp_status, "STATUS AWAL");
 			}else{
 				$check_dapp_status=$dapp_status;
 			}
@@ -254,7 +253,6 @@ left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawa
 				$rs_krecord=$rs_karyawan->row_array();
 				if($rs_karyawan->num_rows()){
 					$dapp_dokter_no=$rs_krecord["karyawan_no"];
-					$this->firephp->log($dapp_dokter_no, "Karyawan_NO-ganti Dokter");
 					$data_dapp["dapp_petugas"]=$dapp_dokter_ganti;
 				}
 			}
@@ -278,7 +276,6 @@ left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawa
 				$rs_krecord=$rs_karyawan->row_array();
 				if($rs_karyawan->num_rows()){
 					$dapp_terapis_no=$rs_krecord["karyawan_no"];
-					$this->firephp->log($dapp_terapis_no, "Karyawan_NO-ganti Terapis");
 					$data_dapp["dapp_petugas2"]=$dapp_terapis_ganti;
 				}
 			}
