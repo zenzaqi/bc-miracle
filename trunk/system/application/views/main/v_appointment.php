@@ -189,6 +189,8 @@ Ext.onReady(function(){
 		var app_cust_id_update="";
 		var dapp_dokter_no_update="";
 		var dapp_terapis_no_update="";
+		var dapp_dokter_ganti_update="";
+		var dapp_terapis_ganti_update="";
 
 		app_id_update_pk = oGrid_event.record.data.app_id;
 		if(oGrid_event.record.data.app_customer!== null){app_customer_update = oGrid_event.record.data.app_customer;}
@@ -207,6 +209,8 @@ Ext.onReady(function(){
 		app_cust_id_update = oGrid_event.record.data.cust_id;
 		if(oGrid_event.record.data.dokter_no!== ""){dapp_dokter_no_update = oGrid_event.record.data.dokter_no;}
 		if(oGrid_event.record.data.terapis_no!== ""){dapp_terapis_no_update = oGrid_event.record.data.terapis_no;}
+		dapp_dokter_ganti_update = oGrid_event.record.data.dokter_username;
+		dapp_terapis_ganti_update = oGrid_event.record.data.terapis_username;
 
 		Ext.Ajax.request({  
 			waitMsg: 'Please wait...',
@@ -229,7 +233,9 @@ Ext.onReady(function(){
 				dapp_jamreservasi	:dapp_jamreservasi_update,
 				cust_id	:app_cust_id_update,
 				dapp_dokter_no	:dapp_dokter_no_update,
-				dapp_terapis_no	:dapp_terapis_no_update
+				dapp_terapis_no	:dapp_terapis_no_update,
+				dapp_dokter_ganti	:dapp_dokter_ganti_update,
+				dapp_terapis_ganti	:dapp_terapis_ganti_update
 			}, 
 			success: function(response){							
 				var result=eval(response.responseText);
@@ -665,13 +671,38 @@ Ext.onReady(function(){
 		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
 			{name: 'dokter_display', type: 'string', mapping: 'karyawan_nama'},
 			{name: 'dokter_username', type: 'string', mapping: 'karyawan_username'},
-			{name: 'dokter_value', type: 'int', mapping: 'karyawan_id'}
+			{name: 'dokter_value', type: 'int', mapping: 'karyawan_id'},
+			{name: 'dokter_jmltindakan', type: 'int', mapping: 'reportt_jmltindakan'}
 		]),
 		sortInfo:{field: 'dokter_display', direction: "ASC"}
 	});
 	var dapp_dokter_tpl = new Ext.XTemplate(
         '<tpl for="."><div class="search-item">',
-            '<span><b>{dokter_username}</b><br />{dokter_display}',
+            '<span><b>{dokter_username}</b> | {dokter_display} | <b>{dokter_jmltindakan}</b>',
+        '</div></tpl>'
+    );
+
+	dapp_terapisDataStore = new Ext.data.Store({
+		id: 'dapp_terapisDataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_appointment&m=get_terapis_list', 
+			method: 'POST'
+		}),baseParams: {start: 0, limit: 15 },
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total'
+		},[
+		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
+			{name: 'terapis_display', type: 'string', mapping: 'karyawan_nama'},
+			{name: 'terapis_username', type: 'string', mapping: 'karyawan_username'},
+			{name: 'terapis_value', type: 'int', mapping: 'karyawan_id'},
+			{name: 'terapis_jmltindakan', type: 'int', mapping: 'reportt_jmltindakan'}
+		]),
+		sortInfo:{field: 'terapis_display', direction: "ASC"}
+	});
+	var dapp_terapis_tpl = new Ext.XTemplate(
+        '<tpl for="."><div class="search-item">',
+            '<span><b>{terapis_username}</b> | {terapis_display} | <b>{terapis_jmltindakan}</b></span>',
         '</div></tpl>'
     );
     
@@ -711,10 +742,7 @@ Ext.onReady(function(){
 			header: 'Customer',
 			dataIndex: 'cust_nama',
 			width: 150,
-			sortable: true,
-			editor: new Ext.form.TextField({
-				maxLength: 250
-          	})
+			sortable: true
 		}, 
 		{
 			header: 'Dokter',
@@ -738,9 +766,17 @@ Ext.onReady(function(){
 			dataIndex: 'terapis_username',
 			width: 200,
 			sortable: true,
-			editor: new Ext.form.TextField({
-				maxLength: 250
-          	})
+			editor: new Ext.form.ComboBox({
+				store: dapp_terapisDataStore,
+				mode: 'remote',
+				tpl: dapp_terapis_tpl,
+				displayField: 'terapis_username',
+				valueField: 'terapis_value',
+				loadingText: 'Searching...',
+				itemSelector: 'div.search-item',
+				triggerAction: 'all',
+				anchor: '95%'
+			})
 		}, 
 		{
 			header: 'Kategori',
@@ -1888,7 +1924,7 @@ Ext.onReady(function(){
 	//eof
 	
 	//event on update of detail nonmedis data store
-	appointment_detail_nonmedisDataStore.on('update', refresh_appointment_detail_nonmedis);
+	//appointment_detail_nonmedisDataStore.on('update', refresh_appointment_detail_nonmedis);
 /** END Event DETAIL-NONMEDIS **/	
 	
 	var detail_tab_perawatan = new Ext.TabPanel({
@@ -2071,10 +2107,12 @@ Ext.onReady(function(){
 		id: 'app_dokterSearchField',
 		fieldLabel: 'Dokter',
 		store: cbo_dapp_dokterDataStore,
+		tpl: dokter_tpl,
 		mode: 'remote',
 		displayField:'dokter_display',
 		valueField: 'dokter_value',
         loadingText: 'Searching...',
+        itemSelector: 'div.search-item',
         triggerAction: 'all',
 		allowBlank: true,
 		anchor: '95%'
@@ -2084,10 +2122,12 @@ Ext.onReady(function(){
 		id: 'app_terapisSearchField',
 		fieldLabel: 'Therapist',
 		store: cbo_dapp_terapisDataStore,
+		tpl: cbo_terapis_tpl,
 		mode: 'remote',
 		displayField:'terapis_display',
 		valueField: 'terapis_value',
         loadingText: 'Searching...',
+        itemSelector: 'div.search-item',
         triggerAction: 'all',
 		allowBlank: true,
 		anchor: '95%'
