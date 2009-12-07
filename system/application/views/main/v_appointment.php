@@ -271,10 +271,9 @@ Ext.onReady(function(){
   
   	/* Function for add data, open window create form */
 	function appointment_create(){
-	
-		if(is_appointment_form_valid()){	
+		if(is_appointment_form_valid() && (app_customerField.getValue()!==null || app_cust_namaBaruField.getValue()!==null)){
 		var app_id_create_pk=null; 
-		var app_customer_create=null; 
+		var app_customer_create=""; 
 		var app_tanggal_create_date=""; 
 		var app_cara_create=null; 
 		var app_keterangan_create=null; 
@@ -416,7 +415,7 @@ Ext.onReady(function(){
   
 	/* Function for Check if the form is valid */
 	function is_appointment_form_valid(){
-		return true;
+		return (app_customerField.isValid() && app_cust_namaBaruField.isValid());
 	}
   	/* End of Function */
   
@@ -1506,22 +1505,24 @@ Ext.onReady(function(){
 	function appointment_detail_medis_insert(){
 		for(i=0;i<appointment_detail_medisDataStore.getCount();i++){
 			appointment_detail_medis_record=appointment_detail_medisDataStore.getAt(i);
-			Ext.Ajax.request({
-				waitMsg: 'Please wait...',
-				url: 'index.php?c=c_appointment&m=detail_appointment_detail_medis_insert',
-				params:{
-				//dapp_medis_id	: appointment_detail_medis_record.data.dapp_medis_id, 
-				dapp_medis_master	: eval(app_idField.getValue()), 
-				dapp_medis_perawatan	: appointment_detail_medis_record.data.dapp_medis_perawatan, 
-				dapp_medis_tglreservasi	: appointment_detail_medis_record.data.dapp_medis_tglreservasi.format('Y-m-d'),
-				dapp_medis_jamreservasi	: appointment_detail_medis_record.data.dapp_medis_jamreservasi, 
-				dapp_medis_petugas	: appointment_detail_medis_record.data.dapp_medis_petugas, 
-//				dapp_medis_petugas2	: appointment_detail_medis_record.data.dapp_medis_petugas2, 
-				dapp_medis_status	: appointment_detail_medis_record.data.dapp_medis_status,
-				dapp_medis_keterangan	: appointment_detail_medis_record.data.dapp_medis_keterangan
-				},
-				timeout:20000
-			});
+			if(appointment_detail_medis_record.data.dapp_medis_perawatan!=""){
+				Ext.Ajax.request({
+					waitMsg: 'Please wait...',
+					url: 'index.php?c=c_appointment&m=detail_appointment_detail_medis_insert',
+					params:{
+					//dapp_medis_id	: appointment_detail_medis_record.data.dapp_medis_id, 
+					dapp_medis_master	: eval(app_idField.getValue()), 
+					dapp_medis_perawatan	: appointment_detail_medis_record.data.dapp_medis_perawatan, 
+					dapp_medis_tglreservasi	: appointment_detail_medis_record.data.dapp_medis_tglreservasi.format('Y-m-d'),
+					dapp_medis_jamreservasi	: appointment_detail_medis_record.data.dapp_medis_jamreservasi, 
+					dapp_medis_petugas	: appointment_detail_medis_record.data.dapp_medis_petugas, 
+	//				dapp_medis_petugas2	: appointment_detail_medis_record.data.dapp_medis_petugas2, 
+					dapp_medis_status	: appointment_detail_medis_record.data.dapp_medis_status,
+					dapp_medis_keterangan	: appointment_detail_medis_record.data.dapp_medis_keterangan
+					},
+					timeout:20000
+				});
+			}
 		}
 	}
 	//eof
@@ -1850,21 +1851,23 @@ Ext.onReady(function(){
 	function appointment_detail_nonmedis_insert(){
 		for(i=0;i<appointment_detail_nonmedisDataStore.getCount();i++){
 			appointment_detail_nonmedis_record=appointment_detail_nonmedisDataStore.getAt(i);
-			Ext.Ajax.request({
-				waitMsg: 'Please wait...',
-				url: 'index.php?c=c_appointment&m=detail_appointment_detail_nonmedis_insert',
-				params:{
-				dapp_nonmedis_id	: appointment_detail_nonmedis_record.data.dapp_nonmedis_id, 
-				dapp_nonmedis_master	: eval(app_idField.getValue()), 
-				dapp_nonmedis_perawatan	: appointment_detail_nonmedis_record.data.dapp_nonmedis_perawatan, 
-				dapp_nonmedis_tglreservasi	: appointment_detail_nonmedis_record.data.dapp_nonmedis_tglreservasi.format('Y-m-d'),
-				dapp_nonmedis_jamreservasi	: appointment_detail_nonmedis_record.data.dapp_nonmedis_jamreservasi, 
-//				dapp_nonmedis_petugas	: appointment_detail_nonmedis_record.data.dapp_nonmedis_petugas, 
-				dapp_nonmedis_petugas2	: appointment_detail_nonmedis_record.data.dapp_nonmedis_petugas2, 
-				dapp_nonmedis_status	: appointment_detail_nonmedis_record.data.dapp_nonmedis_status,
-				dapp_nonmedis_keterangan	: appointment_detail_nonmedis_record.data.dapp_nonmedis_keterangan
-				}
-			});
+			if(appointment_detail_nonmedis_record.data.dapp_nonmedis_perawatan!=""){
+				Ext.Ajax.request({
+					waitMsg: 'Please wait...',
+					url: 'index.php?c=c_appointment&m=detail_appointment_detail_nonmedis_insert',
+					params:{
+					dapp_nonmedis_id	: appointment_detail_nonmedis_record.data.dapp_nonmedis_id, 
+					dapp_nonmedis_master	: eval(app_idField.getValue()), 
+					dapp_nonmedis_perawatan	: appointment_detail_nonmedis_record.data.dapp_nonmedis_perawatan, 
+					dapp_nonmedis_tglreservasi	: appointment_detail_nonmedis_record.data.dapp_nonmedis_tglreservasi.format('Y-m-d'),
+					dapp_nonmedis_jamreservasi	: appointment_detail_nonmedis_record.data.dapp_nonmedis_jamreservasi, 
+	//				dapp_nonmedis_petugas	: appointment_detail_nonmedis_record.data.dapp_nonmedis_petugas, 
+					dapp_nonmedis_petugas2	: appointment_detail_nonmedis_record.data.dapp_nonmedis_petugas2, 
+					dapp_nonmedis_status	: appointment_detail_nonmedis_record.data.dapp_nonmedis_status,
+					dapp_nonmedis_keterangan	: appointment_detail_nonmedis_record.data.dapp_nonmedis_keterangan
+					}
+				});
+			}
 		}
 	}
 	//eof

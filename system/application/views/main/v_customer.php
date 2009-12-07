@@ -2657,7 +2657,7 @@ Ext.onReady(function(){
 		disabled:true,
 		width:107
 	});
-	/*cust_tgllahirField.on('select',function(){
+	cust_tgllahirField.on('select',function(){
 		var datDate1=cust_tgllahirField.getValue();
 		var getBlnLahir=datDate1.getMonth()+1;
 		var getSelisihBln=(dt.getMonth()+1)-getBlnLahir;
@@ -2672,8 +2672,8 @@ Ext.onReady(function(){
 		console.log("SELISIH = "+getSelisihBln);
 		console.log("Total UMUR = "+umur);
 		
-		//cust_umurField.setValue(umur);
-	});*/
+		cust_umurField.setValue(umur);
+	});
 	tgl_lahir_group = new Ext.form.FieldSet({
 		title: '',
 		labelWidth: 100,
