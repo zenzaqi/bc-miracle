@@ -129,6 +129,8 @@ var editor_appointment_detail_nonmedis;
 var post2db = '';
 var msg = '';
 var pageS=15;
+var dmedis_record='';
+var dnonmedis_record='';
 
 /* declare variable here for Field*/
 var app_idField;
@@ -271,7 +273,19 @@ Ext.onReady(function(){
   
   	/* Function for add data, open window create form */
 	function appointment_create(){
-		if(is_appointment_form_valid() && (app_customerField.getValue()!==null || app_cust_namaBaruField.getValue()!==null)){
+		for(i=0;i<appointment_detail_medisDataStore.getCount();i++){
+			appointment_detail_medis_record=appointment_detail_medisDataStore.getAt(i);
+			if(appointment_detail_medis_record.data.dapp_medis_perawatan!="" && appointment_detail_medis_record.data.dapp_medis_petugas!="" && appointment_detail_medis_record.data.dapp_medis_jamreservasi!=""){
+				dmedis_record='ada';
+			}
+		}
+		for(i=0;i<appointment_detail_nonmedisDataStore.getCount();i++){
+			appointment_detail_nonmedis_record=appointment_detail_nonmedisDataStore.getAt(i);
+			if(appointment_detail_nonmedis_record.data.dapp_nonmedis_perawatan!="" && appointment_detail_nonmedis_record.data.dapp_nonmedis_petugas!="" && appointment_detail_medis_record.data.dapp_nonmedis_jamreservasi!=""){
+				dnonmedis_record='ada';
+			}
+		}
+		if(is_appointment_form_valid() && (app_customerField.getValue()!==null || app_cust_namaBaruField.getValue()!==null) && (dmedis_record=='ada' || dnonmedis_record=='ada')){
 		var app_id_create_pk=null; 
 		var app_customer_create=""; 
 		var app_tanggal_create_date=""; 
@@ -424,8 +438,22 @@ Ext.onReady(function(){
 		appointment_custBaruGroup_reset();
 		cbo_dapp_dokterDataStore.load();
 		if(!appointment_createWindow.isVisible()){
-			appointment_detail_medisDataStore.load({params : {master_id : 0, start:0, limit:pageS}});
-			appointment_detail_nonmedisDataStore.load({params : {master_id : 0, start:0, limit:pageS}});
+			appointment_detail_medisDataStore.load({
+				params : {master_id : 0, start:0, limit:pageS},
+				callback: function(opts, success, response)  {
+					  if (success) {
+						  appointment_detail_medis_add();
+					  }
+				}
+			});
+			appointment_detail_nonmedisDataStore.load({
+				params : {master_id : 0, start:0, limit:pageS},
+				callback: function(opts, success, response)  {
+					  if (success) {
+						  appointment_detail_nonmedis_add();
+					  }
+				}
+			});
 			appointment_reset_form();
 			app_tanggalField.setValue(dt.dateFormat('Y-m-d'));
 			app_caraField.setValue('Telp');
@@ -1315,7 +1343,7 @@ Ext.onReady(function(){
 			itemSelector: 'div.search-item',
 			triggerAction: 'all',
 			lazyRender:true,
-			allowBlank: false,
+			allowBlank: true,
 			listClass: 'x-combo-list-small',
 			anchor: '95%'
 
