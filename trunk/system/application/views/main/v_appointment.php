@@ -156,7 +156,6 @@ var app_cust_hpBaruField;
 var app_cust_keteranganBaruField;
 
 var dt = new Date();
-<?php $mode="";?>
 
 Ext.util.Format.comboRenderer = function(combo){
 //	cbo_dapp_rawat_medisDataStore.load();
@@ -286,7 +285,7 @@ Ext.onReady(function(){
 				dnonmedis_record='ada';
 			}
 		}
-		if(is_appointment_form_valid() && (app_customerField.getValue()!==null || app_cust_namaBaruField.getValue()!==null) && (dmedis_record=='ada' || dnonmedis_record=='ada')){
+		if(is_appointment_form_valid() && (app_customerField.getValue()!==null && /^\d+$/.test(app_customerField.getValue()) || app_cust_namaBaruField.getValue()!==null) && (dmedis_record=='ada' || dnonmedis_record=='ada')){
 		var app_id_create_pk=null; 
 		var app_customer_create=""; 
 		var app_tanggal_create_date=""; 
@@ -370,14 +369,25 @@ Ext.onReady(function(){
 			}                      
 		});
 		} else {
-			Ext.MessageBox.show({
-				title: 'Warning',
-				msg: 'Ada DATA yang BELUM di-ISI!.',
-				buttons: Ext.MessageBox.OK,
-				minWidth: 250,
-				animEl: 'save',
-				icon: Ext.MessageBox.WARNING
-			});
+			if(!/^\d+$/.test(app_customerField.getValue())){
+				Ext.MessageBox.show({
+					title: 'Warning',
+					msg: 'Customer harus di-Pilih <br>bukan isian!.',
+					buttons: Ext.MessageBox.OK,
+					minWidth: 250,
+					animEl: 'save',
+					icon: Ext.MessageBox.WARNING
+				});
+			}else {
+				Ext.MessageBox.show({
+					title: 'Warning',
+					msg: 'Ada DATA yang BELUM di-ISI!.',
+					buttons: Ext.MessageBox.OK,
+					minWidth: 250,
+					animEl: 'save',
+					icon: Ext.MessageBox.WARNING
+				});
+			}
 		}
 	}
  	/* End of Function */
