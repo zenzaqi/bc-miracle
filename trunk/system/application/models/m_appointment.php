@@ -254,6 +254,24 @@ left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawa
 				if($rs_karyawan->num_rows()){
 					$dokter_id=$rs_krecord["karyawan_id"];
 					$data_dapp["dapp_petugas"]=$dapp_dokter_ganti;
+					
+					//UPDATE table.report_tindakan jika status='datang'
+					$rs_reportt=$this->db->query("SELECT reportt_jmltindakan FROM report_tindakan WHERE reportt_bln LIKE '$bln_now%' AND reportt_karyawan_id='$dapp_dokter_ganti'");
+					$rs_reportt_record=$rs_reportt->row_array();
+					if($rs_reportt->num_rows() && $dapp_status='datang'){
+						$data_reportt=array(
+						"reportt_jmltindakan"=>$rs_reportt_record["reportt_jmltindakan"]+1
+						);
+						$this->db->where('reportt_karyawan_id', $dapp_dokter_ganti);
+						$this->db->update('report_tindakan', $data_reportt);
+					}else if(!$rs_reportt->num_rows() && $dapp_status='datang'){
+						$data_reportt=array(
+						"reportt_karyawan_id"=>$dapp_dokter_ganti,
+						"reportt_bln"=>$date_now,
+						"reportt_jmltindakan"=>1
+						);
+						$this->db->insert('report_tindakan', $data_reportt);
+					}
 				}
 			}
 			//GANTI-TERAPIS
@@ -277,6 +295,24 @@ left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawa
 				if($rs_karyawan->num_rows()){
 					$terapis_id=$rs_krecord["karyawan_id"];
 					$data_dapp["dapp_petugas2"]=$dapp_terapis_ganti;
+					
+					//UPDATE table.report_tindakan jika status='datang'
+					$rs_reportt=$this->db->query("SELECT reportt_jmltindakan FROM report_tindakan WHERE reportt_bln LIKE '$bln_now%' AND reportt_karyawan_id='$dapp_terapis_ganti'");
+					$rs_reportt_record=$rs_reportt->row_array();
+					if($rs_reportt->num_rows() && $dapp_status='datang'){
+						$data_reportt=array(
+						"reportt_jmltindakan"=>$rs_reportt_record["reportt_jmltindakan"]+1
+						);
+						$this->db->where('reportt_karyawan_id', $dapp_terapis_ganti);
+						$this->db->update('report_tindakan', $data_reportt);
+					}else if(!$rs_reportt->num_rows() && $dapp_status='datang'){
+						$data_reportt=array(
+						"reportt_karyawan_id"=>$dapp_terapis_ganti,
+						"reportt_bln"=>$date_now,
+						"reportt_jmltindakan"=>1
+						);
+						$this->db->insert('report_tindakan', $data_reportt);
+					}
 				}
 			}
 			
@@ -483,21 +519,89 @@ left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawa
 			if(sizeof($pkid)<1){
 				return '0';
 			} else if (sizeof($pkid) == 1){
+				$sql="SELECT dapp_master,dapp_petugas,dapp_petugas2,dapp_tglreservasi FROM appointment_detail WHERE dapp_id='$pkid[0]'";
+				$rs=$this->db->query($sql);
+				$rs_record=$rs->row_array();
+				$temp_dapp_master[]=$rs_record["dapp_master"];
+				$temp_dapp_petugas[]=$rs_record["dapp_petugas"];
+				$temp_dapp_petugas2[]=$rs_record["dapp_petugas2"];
+				$temp_dapp_tglreservasi[]=$rs_record["dapp_tglreservasi"];
+				
 				$query = "DELETE FROM appointment_detail WHERE dapp_id = ".$pkid[0];
 				$this->db->query($query);
 			} else {
-				$query = "DELETE FROM appointment WHERE ";
+				$sql="SELECT dapp_master,dapp_petugas,dapp_petugas2,dapp_tglreservasi FROM appointment_detail WHERE ";
 				for($i = 0; $i < sizeof($pkid); $i++){
-					$query = $query . "app_id= ".$pkid[$i];
+					$sql = $sql . "dapp_id= ".$pkid[$i];
+					if($i<sizeof($pkid)-1){
+						$sql = $sql . " OR ";
+					}
+				}
+				$rs=$this->db->query($sql);
+				$rs_record=$rs->row_array();
+				if($rs->num_rows()>0){
+					foreach($rs->result_array() as $row){
+						$temp_dapp_master[]=$row["dapp_master"];
+						$temp_dapp_petugas[]=$row["dapp_petugas"];
+						$temp_dapp_petugas2[]=$row["dapp_petugas2"];
+						$temp_dapp_tglreservasi[]=$row["dapp_tglreservasi"];
+					}
+				}
+				
+				$query = "DELETE FROM appointment_detail WHERE ";
+				for($i = 0; $i < sizeof($pkid); $i++){
+					$query = $query . "dapp_id= ".$pkid[$i];
 					if($i<sizeof($pkid)-1){
 						$query = $query . " OR ";
 					}     
 				}
 				$this->db->query($query);
 			}
-			if($this->db->affected_rows()>0)
+			if($this->db->affected_rows()>0){
+				for($i=0; $i<sizeof($temp_dapp_master); $i++){
+					$sql="SELECT dapp_master FROM appointment_detail WHERE dapp_master='$temp_dapp_master[$i]'";
+					$rs=$this->db->query($sql);
+					if(!$rs->num_rows()){
+						//DELETE table.appointment where app_id=$temp_dapp_master[$i]
+						$this->db->where('app_id', $temp_dapp_master[$i]);
+						$this->db->delete('appointment');
+					}
+				}
+				//DeCOUNT table.report_tindakan where 
+				for($i=0; $i<sizeof($temp_dapp_petugas); $i++){
+					if($temp_dapp_petugas[$i]!=null){
+						$check_tglreservasi=date('Y-m', strtotime($temp_dapp_tglreservasi[$i]));
+						$sql="SELECT reportt_jmltindakan FROM report_tindakan WHERE reportt_karyawan_id='$temp_dapp_petugas[$i]' AND reportt_bln LIKE '$check_tglreservasi%'";
+						$rs=$this->db->query($sql);
+						$rs_record=$rs->row_array();
+						if($rs->num_rows() && $rs_record["reportt_jmltindakan"]!=0){
+							$data=array(
+							"reportt_jmltindakan"=>$rs_record["reportt_jmltindakan"]-1
+							);
+							$this->db->where('reportt_karyawan_id', $temp_dapp_petugas[$i]);
+							$this->db->like('reportt_bln', $check_tglreservasi);
+							$this->db->update('report_tindakan',$data);
+						}
+					}
+				}
+				for($i=0; $i<sizeof($temp_dapp_petugas2); $i++){
+					if($temp_dapp_petugas2[$i]!=null){
+						$check_tglreservasi=date('Y-m', strtotime($temp_dapp_tglreservasi[$i]));
+						$sql="SELECT reportt_jmltindakan FROM report_tindakan WHERE reportt_karyawan_id='$temp_dapp_petugas2[$i]' AND reportt_bln LIKE '$check_tglreservasi%'";
+						$rs=$this->db->query($sql);
+						$rs_record=$rs->row_array();
+						if($rs->num_rows() && $rs_record["reportt_jmltindakan"]!=0){
+							$data=array(
+							"reportt_jmltindakan"=>$rs_record["reportt_jmltindakan"]-1
+							);
+							$this->db->where('reportt_karyawan_id', $temp_dapp_petugas2[$i]);
+							$this->db->like('reportt_bln', $check_tglreservasi);
+							$this->db->update('report_tindakan',$data);
+						}
+					}
+				}
 				return '1';
-			else
+			}else
 				return '0';
 		}
 		
