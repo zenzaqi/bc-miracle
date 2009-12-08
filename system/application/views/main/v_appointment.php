@@ -156,6 +156,7 @@ var app_cust_hpBaruField;
 var app_cust_keteranganBaruField;
 
 var dt = new Date();
+<?php $mode="";?>
 
 Ext.util.Format.comboRenderer = function(combo){
 //	cbo_dapp_rawat_medisDataStore.load();
@@ -760,10 +761,7 @@ Ext.onReady(function(){
 			header: 'Perawatan',
 			dataIndex: 'rawat_nama',
 			width: 210,
-			sortable: true,
-			editor: new Ext.form.TextField({
-				maxLength: 250
-          	})
+			sortable: true
 		}, 
 		{
 			header: 'Customer',
@@ -934,6 +932,7 @@ Ext.onReady(function(){
 			text: 'Edit',
 			tooltip: 'Edit selected record',
 			iconCls:'icon-update',
+			disabled:true,
 			handler: appointment_confirm_update   // Confirm before updating
 		}, '-',{
 			text: 'Delete',
@@ -1395,6 +1394,20 @@ Ext.onReady(function(){
 	/*combo_dapp_tgl_medis.on('select', function(){
 		combo_dapp_tgl_medis.setValue(combo_dapp_tgl_medis.getValue().format('Y-m-d'));
 	});*/
+
+	var combo_dapp_medis_status=new Ext.form.ComboBox({
+		typeAhead: true,
+		triggerAction: 'all',
+		store:new Ext.data.SimpleStore({
+			fields:['dapp_status_value', 'dapp_status_display'],
+			data: [['reservasi','reservasi'],['konfirmasi','konfirmasi'],['datang','datang'],['batal','batal']]
+			}),
+		mode: 'local',
+       	displayField: 'dapp_status_display',
+       	valueField: 'dapp_status_value',
+       	lazyRender:true,
+       	listClass: 'x-combo-list-small'
+    });
 	
 	//declaration of detail coloumn model
 	appointment_detail_medis_ColumnModel = new Ext.grid.ColumnModel(
@@ -1435,19 +1448,7 @@ Ext.onReady(function(){
 			dataIndex: 'dapp_medis_status',
 			width: 100,
 			sortable: true,
-			editor: new Ext.form.ComboBox({
-				typeAhead: true,
-				triggerAction: 'all',
-				store:new Ext.data.SimpleStore({
-					fields:['dapp_status_value', 'dapp_status_display'],
-					data: [['reservasi','reservasi'],['konfirmasi','konfirmasi'],['datang','datang'],['batal','batal']]
-					}),
-				mode: 'local',
-               	displayField: 'dapp_status_display',
-               	valueField: 'dapp_status_value',
-               	lazyRender:true,
-               	listClass: 'x-combo-list-small'
-            })
+			editor: combo_dapp_medis_status
 		},
 		{
 			header:'Keterangan',
