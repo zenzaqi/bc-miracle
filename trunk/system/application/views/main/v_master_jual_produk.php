@@ -250,8 +250,15 @@ Ext.onReady(function(){
   
   	/* Function for add data, open window create form */
 	function master_jual_produk_create(){
+		var dproduk_produk_id="";
+		for(i=0; i<detail_jual_produk_DataStore.getCount(); i++){
+			detail_jual_produk_record=detail_jual_produk_DataStore.getAt(i);
+			if(/^\d+$/.test(detail_jual_produk_record.data.dproduk_produk)){
+				dproduk_produk_id="ada";
+			}
+		}
 	
-		if(is_master_jual_produk_form_valid()){	
+		if(is_master_jual_produk_form_valid() && dproduk_produk_id=="ada" && /^\d+$/.test(jproduk_custField.getValue())){	
 		var jproduk_id_create_pk=null; 
 		var jproduk_nobukti_create=null; 
 		var jproduk_cust_create=null; 
@@ -560,13 +567,24 @@ Ext.onReady(function(){
 			}                      
 		});
 		} else {
-			Ext.MessageBox.show({
-				title: 'Warning',
-				msg: 'Your Form is not valid!.',
-				buttons: Ext.MessageBox.OK,
-				animEl: 'save',
-				icon: Ext.MessageBox.WARNING
-			});
+			if(dproduk_produk_id!="ada"){
+				Ext.MessageBox.show({
+					title: 'Warning',
+					msg: 'Detail Penjualan Produk <br>harus Ada!.',
+					buttons: Ext.MessageBox.OK,
+					minWidth: 250,
+					animEl: 'save',
+					icon: Ext.MessageBox.WARNING
+				});
+			}else {
+				Ext.MessageBox.show({
+					title: 'Warning',
+					msg: 'Your Form is not valid!.',
+					buttons: Ext.MessageBox.OK,
+					animEl: 'save',
+					icon: Ext.MessageBox.WARNING
+				});
+			}
 		}
 	}
  	/* End of Function */

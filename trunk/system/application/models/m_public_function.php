@@ -808,14 +808,15 @@ class M_public_function extends Model{
 		$rs=$this->db->query($sql_dproduk);
 		$rs_rows=$rs->num_rows();
 		
-		$sql="select * from vu_produk";
-		if($query<>"")
-			$sql.=" WHERE (produk_kode like '%".$query."%' or produk_nama like '%".$query."%' or satuan_nama like '%".$query."%'
+		$sql="select * from vu_produk WHERE produk_aktif='Aktif'";
+		if($query<>""){
+			$sql.=eregi("WHERE",$sql)? " AND ":" WHERE ";
+			$sql.=" (produk_kode like '%".$query."%' or produk_nama like '%".$query."%' or satuan_nama like '%".$query."%'
 						 or kategori_nama like '%".$query."%' or group_nama like '%".$query."%') ";
-		else{
+		}else{
 			if($rs_rows){
 				$filter="";
-				$sql.=eregi("WHERE",$query)? " OR ":" WHERE ";
+				$sql.=eregi("WHERE",$sql)? " OR ":" WHERE ";
 				foreach($rs->result() as $row_dproduk){
 					
 					$filter.="OR dproduk_produk='".$row_dproduk->dproduk_produk."' ";
