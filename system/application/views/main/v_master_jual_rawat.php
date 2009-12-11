@@ -2931,7 +2931,7 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [jrawat_keteranganField, jrawat_tanggalField] 
+				items: [jrawat_tanggalField, jrawat_keteranganField] 
 			}
 			]
 	

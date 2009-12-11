@@ -2903,7 +2903,7 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [jpaket_keteranganField, jpaket_tanggalField] 
+				items: [jpaket_tanggalField, jpaket_keteranganField] 
 			}
 			]
 	
