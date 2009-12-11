@@ -751,7 +751,7 @@ Ext.onReady(function(){
 			header: 'Tgl App',
 			dataIndex: 'dapp_tglreservasi',
 			width: 70,
-			sortable: true,
+			sortable: false,
 			hidden: false,
 			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
 			editor: new Ext.form.DateField({
@@ -762,7 +762,7 @@ Ext.onReady(function(){
 			header: 'Jam App',
 			dataIndex: 'dapp_jamreservasi',
 			width: 60,
-			sortable: true,
+			defaultSortable: false,
 			editor: new Ext.form.TextField({
 				maxLength: 250
           	})
@@ -771,19 +771,19 @@ Ext.onReady(function(){
 			header: 'Perawatan',
 			dataIndex: 'rawat_nama',
 			width: 210,
-			sortable: true
+			sortable: false
 		}, 
 		{
 			header: 'Customer',
 			dataIndex: 'cust_nama',
 			width: 210,
-			sortable: true
+			sortable: false
 		}, 
 		{
 			header: 'Dokter',
 			dataIndex: 'dokter_username',
 			width: 140,
-			sortable: true,
+			sortable: false,
 			editor: new Ext.form.ComboBox({
 				store: dapp_dokterDataStore,
 				mode: 'remote',
@@ -800,7 +800,7 @@ Ext.onReady(function(){
 			header: 'Therapist',
 			dataIndex: 'terapis_username',
 			width: 140,
-			sortable: true,
+			sortable: false,
 			editor: new Ext.form.ComboBox({
 				store: dapp_terapisDataStore,
 				mode: 'remote',
@@ -817,7 +817,7 @@ Ext.onReady(function(){
 			header: 'Kategori',
 			dataIndex: 'kategori_nama',
 			width: 70,
-			sortable: true,
+			sortable: false,
 			editor: new Ext.form.TextField({
 				maxLength: 250
           	})
@@ -826,7 +826,7 @@ Ext.onReady(function(){
 			header: 'Status',
 			dataIndex: 'dapp_status',
 			width: 70,
-			sortable: true,
+			sortable: false,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
 				triggerAction: 'all',
@@ -845,7 +845,7 @@ Ext.onReady(function(){
 			header: 'Jam Datang',
 			dataIndex: 'dapp_jamdatang',
 			width: 70,
-			sortable: true,
+			sortable: false,
 			editor: new Ext.form.TextField({
 				maxLength: 10
           	})
@@ -986,11 +986,33 @@ Ext.onReady(function(){
 			tooltip: 'Print Document',
 			iconCls:'icon-print',
 			handler: appointment_print  
+		}, '-',{
+			xtype: 'combo',
+			id: 'cbo_page',
+			width: 50,
+			store: new Ext.data.SimpleStore({
+				fields:['set_page', 'set_page'],
+				data: [[5,5],[10,10],[15,15],[20,20],[25,25]]
+				}),
+            fieldLabel: 'ComboBox',
+            displayField: 'set_page',
+            valueField: 'set_page', 
+            typeAhead: true,
+            forceSelection: true,
+            mode: 'local',
+            triggerAction: 'all',
+            selectOnFocus: true,
+            editable: true
 		}
 		]
 	});
 	appointmentListEditorGrid.render();
 	/* End of DataStore */
+	Ext.getCmp('cbo_page').on('select', function(){
+		//this.pageS = 19;
+		//console.log("CBO_PAGE = "+Ext.getCmp('cbo_page').getValue());
+		//console.log("PAGE-S = "+pageS);
+	});
      
 	/* Create Context Menu */
 	appointment_ContextMenu = new Ext.menu.Menu({
