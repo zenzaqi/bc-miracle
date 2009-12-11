@@ -2922,7 +2922,7 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [jproduk_keteranganField, jproduk_tanggalField] 
+				items: [jproduk_tanggalField, jproduk_keteranganField] 
 			}
 			]
 	
@@ -3333,7 +3333,6 @@ Ext.onReady(function(){
 	function detail_jual_produk_insert(){
 		for(i=0;i<detail_jual_produk_DataStore.getCount();i++){
 			detail_jual_produk_record=detail_jual_produk_DataStore.getAt(i);
-			console.log("DETAIL SUBTOTAL NET = "+detail_jual_produk_record.data.dproduk_subtotal_net);
 			if(detail_jual_produk_record.data.dproduk_produk!==null&&detail_jual_produk_record.data.dproduk_produk.dproduk_produk!==""){
 				Ext.Ajax.request({
 					waitMsg: 'Please wait...',
