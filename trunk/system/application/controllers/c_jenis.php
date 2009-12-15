@@ -17,11 +17,11 @@ class C_jenis extends Controller {
 	function C_jenis(){
 		parent::Controller();
 		$this->load->model('m_jenis', '', TRUE);
+		$this->load->plugin('to_excel');
 	}
 	
 	//set index
 	function index(){
-		$this->load->plugin('to_excel');
 		$this->load->helper('asset');
 		$this->load->view('main/v_jenis');
 	}
