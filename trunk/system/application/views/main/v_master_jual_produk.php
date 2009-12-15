@@ -3819,6 +3819,7 @@ Ext.onReady(function(){
 	});
 	
 	function show_windowGrid(){
+		cbo_dproduk_satuanDataStore.load();
 		master_jual_produk_DataStore.load({
 			params: {start: 0, limit: pageS},
 			callback: function(opts, success, response){
