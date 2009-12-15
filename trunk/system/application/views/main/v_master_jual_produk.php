@@ -3028,7 +3028,9 @@ Ext.onReady(function(){
 			{name: 'djproduk_satuan_value', type: 'int', mapping: 'satuan_id'},
 			{name: 'djproduk_satuan_nama', type: 'string', mapping: 'satuan_nama'},
 			{name: 'djproduk_satuan_nilai', type: 'float', mapping: 'konversi_nilai'},
-			{name: 'djproduk_satuan_display', type: 'string', mapping: 'satuan_kode'}
+			{name: 'djproduk_satuan_display', type: 'string', mapping: 'satuan_kode'},
+			{name: 'djproduk_satuan_default', type: 'string', mapping: 'konversi_default'},
+			{name: 'djproduk_satuan_harga', type: 'float', mapping: 'produk_harga'}
 		]),
 		sortInfo:{field: 'djproduk_satuan_nilai', direction: "DESC"}
 	});
@@ -3124,8 +3126,29 @@ Ext.onReady(function(){
 
 	combo_satuan_produk.on('select', function(){
 		var j=cbo_dproduk_satuanDataStore.find('djproduk_satuan_value',combo_satuan_produk.getValue());
+		var jt=cbo_dproduk_satuanDataStore.find('djproduk_satuan_default','true');
+		var nilai_terpilih=0;
+		var nilai_default=0;
 		for(i=0;i<cbo_dproduk_satuanDataStore.getCount();i++){
-			djproduk_satuan_nilaiField.setValue(cbo_dproduk_satuanDataStore.getAt(j).data.djproduk_satuan_nilai);
+			if(cbo_dproduk_satuanDataStore.getAt(j).data.djproduk_satuan_default=="true"){
+				//Harga_Produk=harga yg tercantum di Master Produk tanpa proses bagi/kali
+				djproduk_satuan_nilaiField.setValue(1);
+			}else if(cbo_dproduk_satuanDataStore.getAt(j).data.djproduk_satuan_default=="false"){
+				//ambil satuan_nilai dr satuan_id yg terpilih, ambil satuan_nilai dr satuan_default=true
+				//jika [satuan_nilai dr satuan_default=true] === 1 => Harga_Produk=[satuan_nilai dr satuan_id yg terpilih]*data.djproduk_satuan_harga
+				//jika [satuan_nilai dr satuan_default=true] !== 1 AND [satuan_nilai dr satuan_default=true] < [satuan_nilai dr satuan_id yg terpilih] => Harga_Produk=([satuan_nilai dr satuan_id yg terpilih]/[satuan_nilai dr satuan_default=true])*data.djproduk_satuan_harga 
+				//jika [satuan_nilai dr satuan_default=true] !== 1 AND [satuan_nilai dr satuan_default=true] > [satuan_nilai dr satuan_id yg terpilih] => Harga_Produk=data.djproduk_satuan_harga/[satuan_nilai dr satuan_default=true]
+				nilai_terpilih=cbo_dproduk_satuanDataStore.getAt(j).data.djproduk_satuan_nilai;
+				nilai_default=cbo_dproduk_satuanDataStore.getAt(jt).data.djproduk_satuan_nilai;
+				if(nilai_default===1){
+					djproduk_satuan_nilaiField.setValue(cbo_dproduk_satuanDataStore.getAt(j).data.djproduk_satuan_nilai);
+				}else if(nilai_default!==1 && nilai_default<nilai_terpilih){
+					djproduk_satuan_nilaiField.setValue(nilai_terpilih/nilai_default);
+				}else if(nilai_default!==1 && nilai_default>nilai_terpilih){
+					djproduk_satuan_nilaiField.setValue(1/nilai_default);
+				}
+			}
+			//djproduk_satuan_nilaiField.setValue(cbo_dproduk_satuanDataStore.getAt(j).data.djproduk_satuan_nilai);
 		}
 	});
 		
@@ -3235,14 +3258,14 @@ Ext.onReady(function(){
 			width: 150,
 			sortable: true,
 			reaOnly: true
-		},{
+		}/*,{
 			header: 'Konversi Nilai',
 			dataIndex: 'konversi_nilai',
 			hidden: true,
 			width: 80,
 			sortable: true,
 			renderer: Ext.util.Format.numberRenderer('0,000')
-		}]
+		}*/]
 	);
 	detail_jual_produk_ColumnModel.defaultSortable= true;
 	//eof
