@@ -93,7 +93,7 @@ class M_tindakan_medis extends Model{
 			// For simple search
 			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (trawat_id LIKE '%".addslashes($filter)."%' OR trawat_cust LIKE '%".addslashes($filter)."%' OR trawat_keterangan LIKE '%".addslashes($filter)."%' )";
+				$query .= " (trawat_id='".addslashes($filter)."' OR trawat_cust='".addslashes($filter)."')";
 			}
 			
 			$result = $this->db->query($query);

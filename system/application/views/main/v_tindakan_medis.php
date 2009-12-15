@@ -377,7 +377,7 @@ Ext.onReady(function(){
 			url: 'index.php?c=c_tindakan_medis&m=get_action', 
 			method: 'POST'
 		}),
-		baseParams:{task: "LIST"}, // parameter yang di $_POST ke Controller
+		baseParams:{task: "LIST",start:0,limit:pageS}, // parameter yang di $_POST ke Controller
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
@@ -496,6 +496,7 @@ Ext.onReady(function(){
 			dataIndex: 'dtrawat_petugas1',
 			width: 150,
 			sortable: true,
+			editable:false,
 			editor: new Ext.form.ComboBox({
 				store: dtrawat_karyawanDataStore,
 				mode: 'remote',
@@ -1149,7 +1150,7 @@ Ext.onReady(function(){
 	/* Function for reset search result */
 	function tindakan_medisreset_search(){
 		// reset the store parameters
-		tindakan_medisDataStore.baseParams = { task: 'LIST' };
+		tindakan_medisDataStore.baseParams = { task: 'LIST',start:0,limit:pageS };
 		// Cause the datastore to do another query : 
 		tindakan_medisDataStore.reload({params: {start: 0, limit: pageS}});
 		tindakan_medissearchWindow.close();
