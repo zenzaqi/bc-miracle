@@ -28,13 +28,17 @@ class C_tindakan_medis extends Controller {
 	
 	function get_dokter_list(){
 		//ID dokter pada tabel departemen adalah 8
-		$result=$this->m_public_function->get_petugas_list("Dokter");
+		$query = isset($_POST['query']) ? $_POST['query'] : "";
+		$tgl_app = isset($_POST['tgl_app']) ? $_POST['tgl_app'] : "";
+		$result=$this->m_public_function->get_petugas_list($query,$tgl_app,"Dokter");
 		echo $result;
 	}
 	
 	function get_terapis_list(){
 		//ID dokter pada tabel departemen adalah 9
-		$result=$this->m_public_function->get_petugas_list("Therapist");
+		$query = isset($_POST['query']) ? $_POST['query'] : "";
+		$tgl_app = isset($_POST['tgl_app']) ? $_POST['tgl_app'] : "";
+		$result=$this->m_public_function->get_petugas_list($query,$tgl_app,"Therapist");
 		echo $result;
 	}
 	

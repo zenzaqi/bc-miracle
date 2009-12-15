@@ -128,7 +128,7 @@ var editor_appointment_detail_nonmedis;
 //declare konstant
 var post2db = '';
 var msg = '';
-var pageS=15;
+var pageS=50;
 var dmedis_record='';
 var dnonmedis_record='';
 
