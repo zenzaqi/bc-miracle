@@ -3863,6 +3863,7 @@ Ext.onReady(function(){
 					master_jual_produk_reset_form();
 					detail_jual_produk_DataStore.load({params: {master_id:0}});
 					master_cara_bayarTabPanel.setActiveTab(0);
+					post2db="CREATE";
 				}
 			}
 		]
