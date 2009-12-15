@@ -3626,7 +3626,7 @@ Ext.onReady(function(){
 				console.log("JML-1 = "+detail_jual_produk_record.data.dproduk_jumlah);
 			}*/
 			jumlah_item=jumlah_item+eval(detail_jual_produk_record.data.dproduk_jumlah);
-			subtotal_harga=subtotal_harga+eval(detail_jual_produk_record.data.konversi_nilai*detail_jual_produk_record.data.dproduk_jumlah*detail_jual_produk_record.data.dproduk_harga*(100-detail_jual_produk_record.data.dproduk_diskon)/100);
+			subtotal_harga=subtotal_harga+eval(djproduk_satuan_nilaiField.getValue()*detail_jual_produk_record.data.dproduk_jumlah*detail_jual_produk_record.data.dproduk_harga*(100-detail_jual_produk_record.data.dproduk_diskon)/100);
 		}
 		
 		jproduk_jumlahField.setValue(jumlah_item);
