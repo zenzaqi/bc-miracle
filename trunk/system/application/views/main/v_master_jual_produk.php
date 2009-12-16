@@ -1680,10 +1680,15 @@ Ext.onReady(function(){
 	
 	var produk_jual_produk_tpl = new Ext.XTemplate(
         '<tpl for="."><div class="search-item">',
+            '<span>{dproduk_produk_kode}| <b>{dproduk_produk_display}</b>',
+		'</div></tpl>'
+    );
+	/*var produk_jual_produk_tpl = new Ext.XTemplate(
+        '<tpl for="."><div class="search-item">',
             '<span><b>{dproduk_produk_kode}</b>| {dproduk_produk_display}<br/>Group: {dproduk_produk_group}<br/>',
 			'Kategori: {dproduk_produk_kategori}</span>',
 		'</div></tpl>'
-    );
+    );*/
 		
 	/* Identify  jproduk_id Field */
 	jproduk_idField= new Ext.form.NumberField({
