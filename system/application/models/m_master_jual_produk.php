@@ -124,6 +124,7 @@ left join jual_kwitansi on(master_jual_produk.jproduk_nobukti=jual_kwitansi.jkwi
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 				$query .= " (jproduk_id LIKE '%".addslashes($filter)."%' OR jproduk_nobukti LIKE '%".addslashes($filter)."%' OR jproduk_cust LIKE '%".addslashes($filter)."%' OR jproduk_tanggal LIKE '%".addslashes($filter)."%' OR jproduk_diskon LIKE '%".addslashes($filter)."%' OR jproduk_cara LIKE '%".addslashes($filter)."%' OR jproduk_cara2 LIKE '%".addslashes($filter)."%' OR jproduk_cara3 LIKE '%".addslashes($filter)."%' OR jproduk_keterangan LIKE '%".addslashes($filter)."%' )";
 			}
+			$query .= " ORDER BY jproduk_nobukti DESC";
 			
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();

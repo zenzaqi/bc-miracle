@@ -1250,10 +1250,15 @@ Ext.onReady(function(){
 	});
 	var rawat_jual_rawat_tpl = new Ext.XTemplate(
         '<tpl for="."><div class="search-item">',
+            '<span>{dapp_rawat_kode}| <b>{dapp_rawat_display}</b>',
+		'</div></tpl>'
+    );
+	/*var rawat_jual_rawat_tpl = new Ext.XTemplate(
+        '<tpl for="."><div class="search-item">',
             '<span><b>{dapp_rawat_kode}</b>| {dapp_rawat_display}<br/>Group: {dapp_rawat_group}<br/>',
 			'Kategori: {dapp_rawat_kategori}</span>',
 		'</div></tpl>'
-    );
+    );*/
 	
 	cbo_dapp_dokterDataStore = new Ext.data.Store({
 		id: 'cbo_dapp_dokterDataStore',

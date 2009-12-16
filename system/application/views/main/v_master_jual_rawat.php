@@ -1689,10 +1689,15 @@ Ext.onReady(function(){
 	
 	var rawat_jual_rawat_tpl = new Ext.XTemplate(
         '<tpl for="."><div class="search-item">',
+            '<span>{drawat_rawat_kode}| <b>{drawat_rawat_display}</b>',
+		'</div></tpl>'
+    );
+	/*var rawat_jual_rawat_tpl = new Ext.XTemplate(
+        '<tpl for="."><div class="search-item">',
             '<span><b>{drawat_rawat_kode}</b>| {drawat_rawat_display}<br/>Group: {drawat_rawat_group}<br/>',
 			'Kategori: {drawat_rawat_kategori}</span>',
 		'</div></tpl>'
-    );
+    );*/
 		
 	/* Identify  jrawat_id Field */
 	jrawat_idField= new Ext.form.NumberField({
