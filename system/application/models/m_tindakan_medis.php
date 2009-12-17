@@ -261,9 +261,13 @@ class M_tindakan_medis extends Model{
 		
 		//function for create new record
 		function tindakan_create($trawat_cust ,$trawat_keterangan ){
+			$time_now=date('H:i:s');
+			$date_now=date('Y-m-d');
 			$data = array(
-				"trawat_cust"=>$trawat_cust, 
-				"trawat_keterangan"=>$trawat_keterangan 
+			"trawat_cust"=>$trawat_cust,
+			"trawat_jamdatang"=>$time_now,
+			"trawat_date_create"=>$date_now,
+			"trawat_keterangan"=>$trawat_keterangan 
 			);
 			$this->db->insert('tindakan', $data); 
 			if($this->db->affected_rows())

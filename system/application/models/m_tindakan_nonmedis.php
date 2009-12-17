@@ -54,14 +54,14 @@ class M_tindakan_nonmedis extends Model{
 		//eof
 		
 		//purge all detail from master
-		function detail_tindakan_detail_purge($master_id){
+		function detail_tindakan_nonmedis_detail_purge($master_id){
 			$sql="DELETE from tindakan_detail where dtrawat_master='".$master_id."'";
 			$result=$this->db->query($sql);
 		}
 		//*eof
 		
 		//insert detail record
-		function detail_tindakan_detail_insert($dtrawat_id ,$dtrawat_master ,$dtrawat_perawatan ,$dtrawat_petugas1 ,$dtrawat_petugas2 ,$dtrawat_jam ,$dtrawat_kategori ,$dtrawat_status ){
+		function detail_tindakan_nonmedis_detail_insert($dtrawat_id ,$dtrawat_master ,$dtrawat_perawatan ,$dtrawat_petugas1 ,$dtrawat_petugas2 ,$dtrawat_jam ,$dtrawat_kategori ,$dtrawat_status ){
 			//if master id not capture from view then capture it from max pk from master table
 			if($dtrawat_master=="" || $dtrawat_master==NULL){
 				$dtrawat_master=$this->get_master_id();
@@ -261,10 +261,12 @@ class M_tindakan_nonmedis extends Model{
 		
 		//function for create new record
 		function tindakan_create($trawat_cust ,$trawat_jamdatang ,$trawat_appointment ,$trawat_keterangan ){
+			$time_now=date('H:i:s');
+			$date_now=date('Y-m-d');
 			$data = array(
 				"trawat_cust"=>$trawat_cust, 
-				"trawat_jamdatang"=>$trawat_jamdatang, 
-				"trawat_appointment"=>$trawat_appointment, 
+				"trawat_jamdatang"=>$time_now,
+				"trawat_date_create"=>$date_now,
 				"trawat_keterangan"=>$trawat_keterangan 
 			);
 			$this->db->insert('tindakan', $data); 
