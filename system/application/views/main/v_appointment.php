@@ -273,6 +273,7 @@ Ext.onReady(function(){
   
   	/* Function for add data, open window create form */
 	function appointment_create(){
+		app_id_create_pk=get_pk_id();
 		for(i=0;i<appointment_detail_medisDataStore.getCount();i++){
 			appointment_detail_medis_record=appointment_detail_medisDataStore.getAt(i);
 			if(appointment_detail_medis_record.data.dapp_medis_perawatan!="" && appointment_detail_medis_record.data.dapp_medis_petugas!="" && appointment_detail_medis_record.data.dapp_medis_jamreservasi!=""){
@@ -285,7 +286,7 @@ Ext.onReady(function(){
 				dnonmedis_record='ada';
 			}
 		}
-		if(is_appointment_form_valid() && (app_customerField.getValue()!==null && /^\d+$/.test(app_customerField.getValue()) || app_cust_namaBaruField.getValue()!==null) && (dmedis_record=='ada' || dnonmedis_record=='ada')){
+		if(is_appointment_form_valid() && ((app_customerField.getValue()!==null && /^\d+$/.test(app_customerField.getValue()) || app_id_create_pk!=="") || app_cust_namaBaruField.getValue()!==null) && (dmedis_record=='ada' || dnonmedis_record=='ada')){
 		var app_id_create_pk=null; 
 		var app_customer_create=""; 
 		var app_tanggal_create_date=""; 
@@ -306,7 +307,7 @@ Ext.onReady(function(){
 		if(app_cust_telpBaruField.getValue()!== null){app_cust_telpBaru_create = app_cust_telpBaruField.getValue();}
 		if(app_cust_hpBaruField.getValue()!== null){app_cust_hpBaru_create = app_cust_hpBaruField.getValue();}
 		if(app_cust_keteranganBaruField.getValue()!== null){app_cust_keteranganBaru_create = app_cust_keteranganBaruField.getValue();}
-		 
+			 
 
 		Ext.Ajax.request({  
 			waitMsg: 'Please wait...',
@@ -942,7 +943,7 @@ Ext.onReady(function(){
 			text: 'Edit',
 			tooltip: 'Edit selected record',
 			iconCls:'icon-update',
-			disabled:true,
+			disabled:false,
 			handler: appointment_confirm_update   // Confirm before updating
 		}, '-',{
 			text: 'Delete',
@@ -1485,6 +1486,7 @@ Ext.onReady(function(){
 			dataIndex: 'dapp_medis_status',
 			width: 100,
 			sortable: true,
+			editable:false,
 			editor: combo_dapp_medis_status
 		},
 		{
