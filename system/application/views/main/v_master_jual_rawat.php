@@ -1660,7 +1660,7 @@ Ext.onReady(function(){
 	/* End of Function */
   	
 	master_jual_rawatListEditorGrid.addListener('rowcontextmenu', onmaster_jual_rawat_ListEditGridContextMenu);
-	//master_jual_rawat_DataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
+	master_jual_rawat_DataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
 	master_jual_rawatListEditorGrid.on('afteredit', master_jual_rawat_update); // inLine Editing Record
 	
 	// Custom rendering Template
