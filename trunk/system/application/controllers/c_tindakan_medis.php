@@ -18,7 +18,6 @@ class C_tindakan_medis extends Controller {
 		parent::Controller();
 		$this->load->model('m_tindakan_medis', '', TRUE);
 		$this->load->plugin('to_excel');
-		$this->load->library('firephp');
 	}
 	
 	//set index
@@ -105,7 +104,6 @@ class C_tindakan_medis extends Controller {
 		$dtrawat_status=str_replace("/(<\/?)(p)([^>]*>)", "",$dtrawat_status);
 		$dtrawat_status=str_replace("\\", "",$dtrawat_status);
 		$dtrawat_status=str_replace("'", "\'",$dtrawat_status);
-		$this->firephp->log($dtrawat_jamreservasi,"JAM-APP");
 		$result=$this->m_tindakan_medis->detail_tindakan_medis_detail_insert($dtrawat_id ,$dtrawat_master ,$dtrawat_perawatan ,$dtrawat_petugas1 ,$dtrawat_petugas2 ,$dtrawat_jamreservasi ,$dtrawat_kategori ,$dtrawat_status );
 	}
 	

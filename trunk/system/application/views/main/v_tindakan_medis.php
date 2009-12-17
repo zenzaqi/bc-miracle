@@ -299,7 +299,7 @@ Ext.onReady(function(){
 		/* only one record is selected here */
 		if(tindakanListEditorGrid.selModel.getCount() == 1) {
 			tindakan_medis_set_form();
-			console.log("customer = "+trawat_medis_custField.getValue());
+			//console.log("customer = "+trawat_medis_custField.getValue());
 			post2db='UPDATE';
 			tindakan_medis_detail_DataStore.load({params : {master_id : eval(get_pk_id()), start:0, limit:pageS}});
 			msg='updated';
