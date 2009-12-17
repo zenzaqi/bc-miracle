@@ -151,6 +151,7 @@ class M_tindakan_nonmedis extends Model{
 						$data_djrawat=array(
 						"drawat_master"=>$jrawat_id,
 						"drawat_rawat"=>$dtrawat_perawatan_id,
+						"drawat_jumlah"=>1,
 						"drawat_harga"=>$rawat_harga,
 						"drawat_diskon"=>$rawat_dm,
 						"drawat_diskon_jenis"=>$diskon_jenis
@@ -162,6 +163,7 @@ class M_tindakan_nonmedis extends Model{
 						$data_djrawat=array(
 						"drawat_master"=>$jrawat_id,
 						"drawat_rawat"=>$dtrawat_perawatan_id,
+						"drawat_jumlah"=>1,
 						"drawat_harga"=>$rawat_harga,
 						"drawat_diskon"=>$rawat_du,
 						"drawat_diskon_jenis"=>$diskon_jenis
@@ -214,6 +216,7 @@ class M_tindakan_nonmedis extends Model{
 							$data_djrawat=array(
 							"drawat_master"=>$jrawat_id,
 							"drawat_rawat"=>$dtrawat_perawatan_id,
+							"drawat_jumlah"=>1,
 							"drawat_harga"=>$rawat_harga,
 							"drawat_diskon"=>$rawat_dm,
 							"drawat_diskon_jenis"=>$diskon_jenis
@@ -225,6 +228,7 @@ class M_tindakan_nonmedis extends Model{
 							$data_djrawat=array(
 							"drawat_master"=>$jrawat_id,
 							"drawat_rawat"=>$dtrawat_perawatan_id,
+							"drawat_jumlah"=>1,
 							"drawat_harga"=>$rawat_harga,
 							"drawat_diskon"=>$rawat_du,
 							"drawat_diskon_jenis"=>$diskon_jenis
