@@ -262,6 +262,9 @@ Ext.onReady(function(){
   	/* Function for Displaying  create Window Form */
 	function display_form_window(){
 		if(!tindakan_medis_screateWindow.isVisible()){
+			tindakan_medis_detail_DataStore.load({
+				params: {master_id:0, start:0, limit:pageS}
+			});
 			tindakan_medisreset_form();
 			post2db='CREATE';
 			msg='created';
@@ -409,6 +412,37 @@ Ext.onReady(function(){
 	});
 	/* End of Function */
 	
+	//ComboBox ambil data Customer
+	cbo_tmedis_cutomerDataStore = new Ext.data.Store({
+		id: 'cbo_tmedis_cutomerDataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_tindakan_medis&m=get_customer_list', 
+			method: 'POST'
+		}),
+		baseParams:{start: 0, limit: 10 }, // parameter yang di $_POST ke Controller
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'cust_id'
+		},[
+		/* dataIndex => insert intocustomer_note_ColumnModel, Mapping => for initiate table column */ 
+			{name: 'cust_id', type: 'int', mapping: 'cust_id'},
+			{name: 'cust_no', type: 'string', mapping: 'cust_no'},
+			{name: 'cust_nama', type: 'string', mapping: 'cust_nama'},
+			{name: 'cust_tgllahir', type: 'date', dateFormat: 'Y-m-d', mapping: 'cust_tgllahir'},
+			{name: 'cust_alamat', type: 'string', mapping: 'cust_alamat'},
+			{name: 'cust_telprumah', type: 'string', mapping: 'cust_telprumah'}
+		]),
+		sortInfo:{field: 'cust_no', direction: "ASC"}
+	});
+	//Template yang akan tampil di ComboBox
+	var customer_tmedis_tpl = new Ext.XTemplate(
+        '<tpl for="."><div class="search-item">',
+            '<span><b>{cust_no} : {cust_nama}</b> | Tgl-Lahir:{cust_tgllahir:date("M j, Y")}<br /></span>',
+            'Alamat: {cust_alamat}&nbsp;&nbsp;&nbsp;[Telp. {cust_telprumah}]',
+        '</div></tpl>'
+    );
+	
 	dtrawat_perawatanDataStore = new Ext.data.Store({
 		id: 'dtrawat_perawatanDataStore',
 		proxy: new Ext.data.HttpProxy({
@@ -444,10 +478,17 @@ Ext.onReady(function(){
 		},[
 		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
 			{name: 'karyawan_display', type: 'string', mapping: 'karyawan_nama'},
-			{name: 'karyawan_value', type: 'int', mapping: 'karyawan_id'}
+			{name: 'karyawan_username', type: 'string', mapping: 'karyawan_username'},
+			{name: 'karyawan_value', type: 'int', mapping: 'karyawan_id'},
+			{name: 'karyawan_jmltindakan', type: 'int', mapping: 'reportt_jmltindakan'}
 		]),
 		sortInfo:{field: 'karyawan_display', direction: "ASC"}
 	});
+	var karyawan_tpl = new Ext.XTemplate(
+        '<tpl for="."><div class="search-item">',
+            '<span><b>{karyawan_username}</b> | {karyawan_display} | <b>{karyawan_jmltindakan}</b></span>',
+        '</div></tpl>'
+    );
     
   	/* Function for Identify of Window Column Model */
 	tindakan_medisColumnModel = new Ext.grid.ColumnModel(
@@ -718,12 +759,25 @@ Ext.onReady(function(){
 		maskRe: /([0-9]+)$/
 	});
 	/* Identify  trawat_cust Field */
-	trawat_medis_custField= new Ext.form.TextField({
-		id: 'trawat_medis_custField',
-		fieldLabel: 'Customer',
-		anchor: '95%',
-		readOnly: true,
-		maxLength: 100
+	trawat_medis_custField= new Ext.form.ComboBox({
+		//id: 'trawat_medis_custField',
+		fieldLabel: 'Customer <span id="help_customer" style="font-size:11px;color:#F00">[?]</span>',
+		store: cbo_tmedis_cutomerDataStore,
+		mode: 'remote',
+		displayField:'cust_nama',
+		valueField: 'cust_id',
+        typeAhead: false,
+        loadingText: 'Searching...',
+        pageSize:10,
+        hideTrigger:false,
+        tpl: customer_tmedis_tpl,
+        //applyTo: 'search',
+        itemSelector: 'div.search-item',
+		triggerAction: 'all',
+		lazyRender:true,
+		listClass: 'x-combo-list-small',
+		allowBlank: true,
+		anchor: '95%'
 	});
 	/* Identify  trawat_keterangan Field */
 	trawat_medis_keteranganField= new Ext.form.TextArea({
@@ -853,10 +907,15 @@ Ext.onReady(function(){
 	});
 	var cbo_trawat_rawat_tpl = new Ext.XTemplate(
         '<tpl for="."><div class="search-item">',
+            '<span>{perawatan_kode}| <b>{perawatan_display}</b>',
+		'</div></tpl>'
+    );
+	/*var cbo_trawat_rawat_tpl = new Ext.XTemplate(
+        '<tpl for="."><div class="search-item">',
             '<span><b>{perawatan_kode}</b>| {perawatan_display}<br/>Group: {perawatan_group}<br/>',
 			'Kategori: {perawatan_kategori}</span>',
 		'</div></tpl>'
-    );
+    );*/
 	
 	var combo_trawat_rawat=new Ext.form.ComboBox({
 			store: dtrawat_perawatanDataStore,
@@ -864,7 +923,6 @@ Ext.onReady(function(){
 			typeAhead: true,
 			displayField: 'perawatan_display',
 			valueField: 'perawatan_value',
-			typeAhead: false,
 			loadingText: 'Searching...',
 			pageSize:10,
 			hideTrigger:false,
@@ -873,9 +931,6 @@ Ext.onReady(function(){
 			itemSelector: 'div.search-item',
 			triggerAction: 'all',
 			lazyRender:true,
-			listClass: 'x-combo-list-small',
-			anchor: '95%'
-
 	});
 	
 	var combo_dapp_dokter=new Ext.form.ComboBox({
@@ -883,7 +938,9 @@ Ext.onReady(function(){
 			mode: 'remote',
 			displayField: 'karyawan_display',
 			valueField: 'karyawan_value',
+			tpl: karyawan_tpl,
 			loadingText: 'Searching...',
+			itemSelector: 'div.search-item',
 			triggerAction: 'all',
 			anchor: '95%'
 	});
@@ -923,15 +980,20 @@ Ext.onReady(function(){
 			dataIndex: 'dtrawat_jam',
 			width: 100,
 			sortable: true,
-			editor: new Ext.form.TextField({
-				maxLength: 8
-          	})
+			editor: new Ext.form.TimeField({
+				format: 'H:i:s',
+				minValue: '7:00',
+				maxValue: '21:00',
+				increment: 30,
+				width: 94
+			})
 		},
 		{
 			header: 'Status',
 			dataIndex: 'dtrawat_status',
 			width: 100,
 			sortable: true,
+			editable:false,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
 				triggerAction: 'all',
@@ -1003,7 +1065,7 @@ Ext.onReady(function(){
 			dtrawat_petugas2	:'',		
 			dtrawat_jamreservasi	:'',		
 			dtrawat_kategori	:'',		
-			dtrawat_status	:''		
+			dtrawat_status	:'datang'		
 		});
 		editor_tindakan_medis_detail.stopEditing();
 		tindakan_medis_detail_DataStore.insert(0, edit_tindakan_medisdetail);
@@ -1014,8 +1076,8 @@ Ext.onReady(function(){
 	
 	//function for refresh detail
 	function refresh_tindakan_medisdetail(){
-		tindakan_medis_detail_DataStore.commitChanges();
-		tindakan_medisdetailListEditorGrid.getView().refresh();
+		//tindakan_medis_detail_DataStore.commitChanges();
+		//tindakan_medisdetailListEditorGrid.getView().refresh();
 	}
 	//eof
 	
@@ -1032,7 +1094,7 @@ Ext.onReady(function(){
 				dtrawat_perawatan	: tindakan_medisdetail_record.data.dtrawat_perawatan, 
 				dtrawat_petugas1	: tindakan_medisdetail_record.data.dtrawat_petugas1, 
 				dtrawat_petugas2	: tindakan_medisdetail_record.data.dtrawat_petugas2, 
-				dtrawat_jamreservasi	: tindakan_medisdetail_record.data.dtrawat_jamreservasi, 
+				dtrawat_jamreservasi	: tindakan_medisdetail_record.data.dtrawat_jam, 
 				dtrawat_kategori	: tindakan_medisdetail_record.data.dtrawat_kategori, 
 				dtrawat_status	: tindakan_medisdetail_record.data.dtrawat_status 
 				

@@ -26,6 +26,14 @@ class C_tindakan_nonmedis extends Controller {
 		$this->load->view('main/v_tindakan_nonmedis');
 	}
 	
+	function get_customer_list(){
+		$query = isset($_POST['query']) ? $_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		$result=$this->m_public_function->get_customer_list($query,$start,$end);
+		echo $result;
+	}
+	
 	function get_terapis_list(){
 		//ID dokter pada tabel departemen adalah 9
 		$query = isset($_POST['query']) ? $_POST['query'] : "";
@@ -65,9 +73,9 @@ class C_tindakan_nonmedis extends Controller {
 	//end of handler
 	
 	//purge all detail
-	function detail_tindakan_detail_purge(){
+	function detail_tindakan_nonmedis_detail_purge(){
 		$master_id = (integer) (isset($_POST['master_id']) ? $_POST['master_id'] : $_GET['master_id']);
-		$result=$this->m_tindakan_nonmedis->detail_tindakan_detail_purge($master_id);
+		$result=$this->m_tindakan_nonmedis->detail_tindakan_nonmedis_detail_purge($master_id);
 	}
 	//eof
 	
@@ -79,7 +87,7 @@ class C_tindakan_nonmedis extends Controller {
 	//
 	
 	//add detail
-	function detail_tindakan_detail_insert(){
+	function detail_tindakan_nonmedis_detail_insert(){
 	//POST variable here
 		$dtrawat_id=trim(@$_POST["dtrawat_id"]);
 		$dtrawat_master=trim(@$_POST["dtrawat_master"]);
@@ -98,7 +106,7 @@ class C_tindakan_nonmedis extends Controller {
 		$dtrawat_status=str_replace("/(<\/?)(p)([^>]*>)", "",$dtrawat_status);
 		$dtrawat_status=str_replace("\\", "",$dtrawat_status);
 		$dtrawat_status=str_replace("'", "\'",$dtrawat_status);
-		$result=$this->m_tindakan_nonmedis->detail_tindakan_detail_insert($dtrawat_id ,$dtrawat_master ,$dtrawat_perawatan ,$dtrawat_petugas1 ,$dtrawat_petugas2 ,$dtrawat_jam ,$dtrawat_kategori ,$dtrawat_status );
+		$result=$this->m_tindakan_nonmedis->detail_tindakan_nonmedis_detail_insert($dtrawat_id ,$dtrawat_master ,$dtrawat_perawatan ,$dtrawat_petugas1 ,$dtrawat_petugas2 ,$dtrawat_jam ,$dtrawat_kategori ,$dtrawat_status );
 	}
 	
 	

@@ -17,13 +17,22 @@ class C_tindakan_medis extends Controller {
 	function C_tindakan_medis(){
 		parent::Controller();
 		$this->load->model('m_tindakan_medis', '', TRUE);
+		$this->load->plugin('to_excel');
+		$this->load->library('firephp');
 	}
 	
 	//set index
 	function index(){
-		$this->load->plugin('to_excel');
 		$this->load->helper('asset');
 		$this->load->view('main/v_tindakan_medis');
+	}
+	
+	function get_customer_list(){
+		$query = isset($_POST['query']) ? $_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		$result=$this->m_public_function->get_customer_list($query,$start,$end);
+		echo $result;
 	}
 	
 	function get_dokter_list(){
@@ -96,6 +105,7 @@ class C_tindakan_medis extends Controller {
 		$dtrawat_status=str_replace("/(<\/?)(p)([^>]*>)", "",$dtrawat_status);
 		$dtrawat_status=str_replace("\\", "",$dtrawat_status);
 		$dtrawat_status=str_replace("'", "\'",$dtrawat_status);
+		$this->firephp->log($dtrawat_jamreservasi,"JAM-APP");
 		$result=$this->m_tindakan_medis->detail_tindakan_medis_detail_insert($dtrawat_id ,$dtrawat_master ,$dtrawat_perawatan ,$dtrawat_petugas1 ,$dtrawat_petugas2 ,$dtrawat_jamreservasi ,$dtrawat_kategori ,$dtrawat_status );
 	}
 	
