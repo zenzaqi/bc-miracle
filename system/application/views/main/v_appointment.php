@@ -330,12 +330,12 @@ Ext.onReady(function(){
 				switch(result){
 					case 1:
 						appointment_detail_purge();
-						appointment_detail_medis_insert();
-						appointment_detail_nonmedis_insert();
+						//appointment_detail_medis_insert();
+						//appointment_detail_nonmedis_insert();
 //						appointment_detail_medis_purge();
 //						appointment_detail_nonmedis_purge();
 						Ext.MessageBox.alert(post2db+' OK','The Appointment was '+msg+' successfully.');
-						appointment_DataStore.reload();
+						//appointment_DataStore.reload();
 						appointment_createWindow.hide();
 						break;
 					case 2:
@@ -356,7 +356,7 @@ Ext.onReady(function(){
 						   icon: Ext.MessageBox.WARNING
 						});
 						break;
-				}        
+				}
 			},
 			failure: function(response){
 				var result=response.responseText;
@@ -1588,7 +1588,10 @@ Ext.onReady(function(){
 					dapp_medis_status	: appointment_detail_medis_record.data.dapp_medis_status,
 					dapp_medis_keterangan	: appointment_detail_medis_record.data.dapp_medis_keterangan
 					},
-					timeout:20000
+					callback: function(opts, success, response){
+						if(success)
+							appointment_DataStore.reload();
+					}
 				});
 			}
 		}
@@ -1600,7 +1603,13 @@ Ext.onReady(function(){
 		Ext.Ajax.request({
 			waitMsg: 'Please wait...',
 			url: 'index.php?c=c_appointment&m=detail_appointment_detail_purge',
-			params:{ master_id: eval(app_idField.getValue()) }
+			params:{ master_id: eval(app_idField.getValue()) },
+			callback: function(opts, success, response){
+				if(success){
+					appointment_detail_medis_insert();
+					appointment_detail_nonmedis_insert();
+				}
+			}
 		});
 		
 	}
@@ -1933,6 +1942,10 @@ Ext.onReady(function(){
 					dapp_nonmedis_petugas2	: appointment_detail_nonmedis_record.data.dapp_nonmedis_petugas2, 
 					dapp_nonmedis_status	: appointment_detail_nonmedis_record.data.dapp_nonmedis_status,
 					dapp_nonmedis_keterangan	: appointment_detail_nonmedis_record.data.dapp_nonmedis_keterangan
+					},
+					callback: function(opts, success, response){
+						if(success)
+							appointment_DataStore.reload();
 					}
 				});
 			}

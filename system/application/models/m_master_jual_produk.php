@@ -18,9 +18,28 @@ class M_master_jual_produk extends Model{
 			parent::Model();
 		}
 		
+		function get_konversi_list($dproduk_produk_id){
+			$query = "SELECT * FROM satuan_konversi WHERE konversi_produk='$dproduk_produk_id'";
+			$result = $this->db->query($query);
+			$nbrows = $result->num_rows();
+		
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+		
 		//function for detail
 		//get record list
 		function detail_detail_jual_produk_list($master_id,$query,$start,$end) {
+			$this->firephp->log($master_id, "MASTER-ID");
+			$query="SELECT *,konversi_nilai FROM detail_jual_produk LEFT JOIN satuan_konversi ON(dproduk_produk=konversi_produk AND dproduk_satuan=konversi_satuan) WHERE dproduk_master='".$master_id."'";
+			
 			$query = "SELECT *,dproduk_harga*dproduk_jumlah as dproduk_subtotal, dproduk_harga*dproduk_jumlah*(100-dproduk_diskon)/100 as dproduk_subtotal_net,konversi_nilai FROM detail_jual_produk LEFT JOIN satuan_konversi ON(dproduk_produk=konversi_produk AND dproduk_satuan=konversi_satuan) WHERE dproduk_master='".$master_id."'";
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();

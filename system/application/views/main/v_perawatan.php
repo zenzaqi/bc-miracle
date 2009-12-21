@@ -2006,6 +2006,7 @@ Ext.onReady(function(){
 		mode: 'local',
 		displayField: 'rawat_aktif',
 		valueField: 'value',
+		emptyText: 'Aktif',
 		//anchor: '95%',
 		width: 80,
 		triggerAction: 'all'	 
