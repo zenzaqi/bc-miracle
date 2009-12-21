@@ -611,6 +611,7 @@ class M_public_function extends Model{
 		$sql="SELECT * FROM vu_perawatan WHERE kategori_nama='Medis'";//join dr tabel: perawatan,produk_group,kategori2,kategori,jenis,gudang
 		if($query<>"")
 			$sql.=" and (rawat_kode like '%".$query."%' or rawat_nama like '%".$query."%' or group_nama like '%".$query."%')";
+		$sql.=" ORDER BY rawat_nama ASC";
 	
 		$result = $this->db->query($sql);
 		$nbrows = $result->num_rows();

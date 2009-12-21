@@ -650,13 +650,14 @@ Ext.onReady(function(){
 		{
 			text: 'Add',
 			tooltip: 'Add new record',
+			disabled:true,
 			iconCls:'icon-adds',    				// this is defined in our styles.css
 			handler: display_form_window
 		}, '-',{
 			text: 'Edit',
 			tooltip: 'Edit selected record',
 			iconCls:'icon-update',
-			//handler: tindakan_medisconfirm_update   // Confirm before updating
+			handler: tindakan_medisconfirm_update   // Confirm before updating
 		}, '-',{
 			text: 'Delete',
 			tooltip: 'Delete selected record',
