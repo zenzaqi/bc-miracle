@@ -609,8 +609,10 @@ class M_public_function extends Model{
 		FROM perawatan,kategori,produk_group where rawat_kategori=kategori_id 
 		AND rawat_group=group_id AND rawat_aktif='Aktif' AND kategori_nama='Medis'";*/
 		$sql="SELECT * FROM vu_perawatan WHERE kategori_nama='Medis'";//join dr tabel: perawatan,produk_group,kategori2,kategori,jenis,gudang
-		if($query<>"")
-			$sql.=" and (rawat_kode like '%".$query."%' or rawat_nama like '%".$query."%' or group_nama like '%".$query."%')";
+		if($query<>""){
+			$sql.=" and (rawat_kode like '%".$query."%' or rawat_nama like '%".$query."%')";
+			//$sql.=" and (rawat_kode like '%".$query."%' or rawat_nama like '%".$query."%' or group_nama like '%".$query."%')";
+		}
 		$sql.=" ORDER BY rawat_nama ASC";
 	
 		$result = $this->db->query($sql);
