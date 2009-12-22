@@ -37,10 +37,10 @@ class M_master_jual_produk extends Model{
 		//function for detail
 		//get record list
 		function detail_detail_jual_produk_list($master_id,$query,$start,$end) {
-			$this->firephp->log($master_id, "MASTER-ID");
-			$query="SELECT *,konversi_nilai FROM detail_jual_produk LEFT JOIN satuan_konversi ON(dproduk_produk=konversi_produk AND dproduk_satuan=konversi_satuan) WHERE dproduk_master='".$master_id."'";
+			//$this->firephp->log($master_id, "MASTER-ID");
+			//$query="SELECT *,konversi_nilai FROM detail_jual_produk LEFT JOIN satuan_konversi ON(dproduk_produk=konversi_produk AND dproduk_satuan=konversi_satuan) WHERE dproduk_master='".$master_id."'";
 			
-			$query = "SELECT *,dproduk_harga*dproduk_jumlah as dproduk_subtotal, dproduk_harga*dproduk_jumlah*(100-dproduk_diskon)/100 as dproduk_subtotal_net,konversi_nilai FROM detail_jual_produk LEFT JOIN satuan_konversi ON(dproduk_produk=konversi_produk AND dproduk_satuan=konversi_satuan) WHERE dproduk_master='".$master_id."'";
+			$query = "SELECT detail_jual_produk.*,detail_jual_produk.konversi_nilai_temp*dproduk_harga*dproduk_jumlah as dproduk_subtotal,detail_jual_produk.konversi_nilai_temp*dproduk_harga*dproduk_jumlah*((100-dproduk_diskon)/100) as dproduk_subtotal_net FROM detail_jual_produk LEFT JOIN satuan_konversi ON(dproduk_produk=konversi_produk AND dproduk_satuan=konversi_satuan) WHERE dproduk_master='".$master_id."'";
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
 			$limit = $query." LIMIT ".$start.",".$end;			
@@ -100,7 +100,7 @@ class M_master_jual_produk extends Model{
 		//*eof
 		
 		//insert detail record
-		function detail_detail_jual_produk_insert($dproduk_id ,$dproduk_master ,$dproduk_produk ,$dproduk_satuan ,$dproduk_jumlah ,$dproduk_harga ,$dproduk_subtotal_net ,$dproduk_diskon,$dproduk_diskon_jenis,$dproduk_sales ){
+		function detail_detail_jual_produk_insert($dproduk_id ,$dproduk_master ,$dproduk_produk ,$dproduk_satuan ,$dproduk_jumlah ,$dproduk_harga ,$dproduk_subtotal_net ,$dproduk_diskon,$dproduk_diskon_jenis,$dproduk_sales,$konversi_nilai_temp ){
 			//if master id not capture from view then capture it from max pk from master table
 			if($dproduk_master=="" || $dproduk_master==NULL){
 				$dproduk_master=$this->get_master_id();
@@ -122,7 +122,8 @@ class M_master_jual_produk extends Model{
 				"dproduk_harga"=>$dproduk_harga, 
 				"dproduk_diskon"=>$dproduk_diskon,
 				"dproduk_diskon_jenis"=>$dproduk_diskon_jenis,
-				"dproduk_sales"=>$dproduk_sales 
+				"dproduk_sales"=>$dproduk_sales,
+				"konversi_nilai_temp"=>$konversi_nilai_temp
 			);
 			$this->db->insert('detail_jual_produk', $data); 
 			if($this->db->affected_rows())

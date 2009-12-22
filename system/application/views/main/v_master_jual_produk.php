@@ -768,7 +768,7 @@ Ext.onReady(function(){
 		update_group_carabayar_jual_produk();
 		update_group_carabayar2_jual_produk();
 		update_group_carabayar3_jual_produk();
-		load_total_produk_bayar();
+		//load_total_produk_bayar();
 
 		jproduk_bayarField.reset();
 		jproduk_bayarField.setValue(null);
@@ -1125,10 +1125,25 @@ Ext.onReady(function(){
 	function master_jual_produk_confirm_update(){
 		/* only one record is selected here */
 		if(master_jual_produkListEditorGrid.selModel.getCount() == 1) {
-			master_jual_produk_set_form();
+			//master_jual_produk_set_form();
 			master_cara_bayarTabPanel.setActiveTab(0);
 			post2db='UPDATE';
-			detail_jual_produk_DataStore.load({params : {master_id : eval(get_pk_id()), start:0, limit:pageS}});
+			detail_jual_produk_DataStore.load({
+				params : {master_id : eval(get_pk_id()), start:0, limit:pageS},
+				callback: function(opts, success, response){
+					if(success){
+						var subtotal_field=0;
+						master_jual_produk_set_form();
+						//console.log("Counnntnntnntnt = "+detail_jual_produk_DataStore.getCount());
+						console.log("dStore-1 = "+detail_jual_produk_DataStore.getAt(0).data.dproduk_subtotal_net);
+						console.log("dStore-2 = "+detail_jual_produk_DataStore.getAt(1).data.dproduk_subtotal_net);
+						for(i=0;i<detail_jual_produk_DataStore.getCount();i++){
+							subtotal_field+=detail_jual_produk_DataStore.getAt(i).data.dproduk_subtotal_net;
+							console.log("subtototoalll_field = "+subtotal_field);
+						}
+					}
+				}
+			});
 			console.log("D-Count = "+detail_jual_produk_DataStore.getTotalCount());
 			msg='updated';
 			master_jual_produk_createWindow.hide();
@@ -2955,7 +2970,7 @@ Ext.onReady(function(){
 			{name: 'dproduk_diskon_jenis', type: 'string', mapping: 'dproduk_diskon_jenis'},
 			{name: 'dproduk_subtotal', type: 'float', mapping: 'dproduk_subtotal'},
 			{name: 'dproduk_subtotal_net', type: 'int', mapping: 'dproduk_subtotal_net'},
-			{name: 'konversi_nilai', type: 'int', mapping: 'konversi_nilai'}
+			{name: 'konversi_nilai_temp', type: 'float', mapping: 'konversi_nilai_temp'}
 	]);
 	//eof
 	
@@ -3247,7 +3262,10 @@ Ext.onReady(function(){
 			dataIndex: 'dproduk_subtotal',
 			width: 150,
 			sortable: true,
-			readOnly: true//,
+			readOnly: true,
+			renderer: function(v, params, record){
+				return Ext.util.Format.number(record.data.konversi_nilai_temp*record.data.dproduk_harga* record.data.dproduk_jumlah,'0,000');
+			}//,
 			/*renderer: function(v, params, record){
 					console.log("D-PRODUK = "+record.data.dproduk_produk);
 					console.log("D-SATUAN = "+record.data.dproduk_satuan);
@@ -3452,7 +3470,8 @@ Ext.onReady(function(){
 						dproduk_subtotal_net	: detail_jual_produk_record.data.dproduk_subtotal_net,
 						dproduk_diskon	: detail_jual_produk_record.data.dproduk_diskon,
 						dproduk_diskon_jenis	: detail_jual_produk_record.data.dproduk_diskon_jenis,
-						dproduk_sales			: detail_jual_produk_record.data.dproduk_sales
+						dproduk_sales			: detail_jual_produk_record.data.dproduk_sales,
+						konversi_nilai_temp	: detail_jual_produk_record.data.konversi_nilai_temp
 					},
 					timeout: 60000,
 					success: function(response){							
@@ -3685,10 +3704,10 @@ Ext.onReady(function(){
 		var subtotal_net_harga=0;
 
 		var detail_jual_produk_record;
-		if(detail_jual_produk_DataStore.getCount()>=0){
+		if(detail_jual_produk_DataStore.getCount()>0){
 			detail_jual_produk_record=detail_jual_produk_DataStore.getAt(0);
 			console.log("konv_nilai = "+temp_konv_nilai.getValue());
-			detail_jual_produk_DataStore.getAt(0).data.konversi_nilai_temp=temp_konv_nilai.getValue();
+			detail_jual_produk_record.data.konversi_nilai_temp=temp_konv_nilai.getValue();
 			var j=cbo_dproduk_produkDataStore.find('dproduk_produk_value',detail_jual_produk_record.data.dproduk_produk);
 			//var ds=cbo_dproduk_satuanDataStore.find('djproduk_satuan_value',detail_jual_produk_record.data.dproduk_satuan);
 			if(j>=0){
@@ -3717,13 +3736,14 @@ Ext.onReady(function(){
 			}*/
 			
 			
-			jumlah_item=jumlah_item+eval(detail_jual_produk_record.data.dproduk_jumlah);
+			//jumlah_item=jumlah_item+eval(detail_jual_produk_record.data.dproduk_jumlah);
 			//subtotal_harga=subtotal_harga+eval(djproduk_satuan_nilaiField.getValue()*detail_jual_produk_record.data.dproduk_jumlah*detail_jual_produk_record.data.dproduk_harga*(100-detail_jual_produk_record.data.dproduk_diskon)/100);
 			
 			//subtotal_harga=eval(djproduk_satuan_nilaiField.getValue()*detail_jual_produk_record.data.dproduk_jumlah*detail_jual_produk_record.data.dproduk_harga);
 			//subtotal_harga=eval(detail_jual_produk_record.data.konversi_nilai*detail_jual_produk_record.data.dproduk_jumlah*detail_jual_produk_record.data.dproduk_harga);
 			//subtotal_harga_net=subtotal_harga*((100-detail_jual_produk_record.data.dproduk_diskon)/100);
 			detail_jual_produk_record.data.dproduk_subtotal=subtotal_harga;
+			detail_jual_produk_record.data.dproduk_subtotal_net=subtotal_harga*((100-detail_jual_produk_record.data.dproduk_diskon)/100);
 			//subtotal_net_harga=subtotal_harga*((100-detail_jual_produk_record.data.dproduk_diskon)/100);
 			//subtotal_harga_field+=subtotal_net_harga;
 		}
@@ -3777,11 +3797,17 @@ Ext.onReady(function(){
 		//(record.data.dproduk_subtotal* record.data.dproduk_jumlah*(100-record.data.dproduk_diskon)/100,'0,000')
 		console.log("getCount_drecord = "+detail_jual_produk_DataStore.getCount());
 		for(i=0;i<detail_jual_produk_DataStore.getCount();i++){
-			console.log("NET_Harga = "+detail_jual_produk_DataStore.getAt(i).data.dproduk_subtotal_net);
+			jumlah_item=jumlah_item+eval(detail_jual_produk_DataStore.getAt(i).data.dproduk_jumlah);
+			console.log("jumlah_item = "+detail_jual_produk_DataStore.getAt(i).data.dproduk_jumlah);
+			subtotal_harga_field+=detail_jual_produk_DataStore.getAt(i).data.dproduk_subtotal_net;
+			console.log("subtotal_harga_record = "+detail_jual_produk_DataStore.getAt(i).data.dproduk_subtotal);
 		}
+		console.log("Total-NETTT = "+subtotal_harga_field);
+		
 		jproduk_jumlahField.setValue(jumlah_item);
-		jproduk_subTotalField.setValue(subtotal_harga*(100-detail_jual_produk_record.data.dproduk_diskon)/100);
-		total_harga=subtotal_harga*(100-jproduk_diskonField.getValue())/100 - jproduk_cashbackField.getValue();
+		//jproduk_subTotalField.setValue(subtotal_harga*(100-detail_jual_produk_record.data.dproduk_diskon)/100);
+		jproduk_subTotalField.setValue(subtotal_harga_field);
+		total_harga=subtotal_harga_field*(100-jproduk_diskonField.getValue())/100 - jproduk_cashbackField.getValue();
 		total_harga=(total_harga>0?Math.round(total_harga):0);
 		//jproduk_subTotalField.setValue(total_harga);
 		jproduk_totalField.setValue(total_harga);
@@ -3916,7 +3942,7 @@ Ext.onReady(function(){
 	}
 	//event on update of detail data store
 	detail_jual_produk_DataStore.on("update",load_all_jual_produk);
-	detail_jual_produk_DataStore.on("load",load_total_produk_bayar);
+	//detail_jual_produk_DataStore.on("load",load_total_produk_bayar);
 	jproduk_bayarField.on("keyup",load_total_produk_bayar);
 	jproduk_diskonField.on("keyup",load_total_produk_bayar);
 	jproduk_cashbackField.on("keyup",load_total_produk_bayar);
