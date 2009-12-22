@@ -1,0 +1,1 @@
+ALTER TABLE `detail_jual_produk` ADD `konversi_nilai_temp` FLOAT NULL DEFAULT '0';
