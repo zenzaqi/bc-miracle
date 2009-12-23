@@ -442,6 +442,10 @@ left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawa
 		//function for create new record
 		function appointment_create($app_customer ,$app_tanggal ,$app_cara ,$app_keterangan ,$app_cust_nama_baru ,$app_cust_telp_baru ,$app_cust_hp_baru ,$app_cust_keterangan_baru ){
 			if($app_cust_nama_baru!=""){
+				if($app_cust_telp_baru=="")
+					$app_cust_telp_baru='0';
+				if($app_cust_hp_baru=="")
+					$app_cust_hp_baru='0';
 				$sql="SELECT * FROM customer WHERE cust_telprumah='$app_cust_telp_baru' OR cust_hp='$app_cust_hp_baru'";
 				$rs=$this->db->query($sql);
 				if($rs->num_rows()){
