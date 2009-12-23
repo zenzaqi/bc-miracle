@@ -535,7 +535,7 @@ Ext.onReady(function(){
 				switch(result){
 					case 1:
 						detail_jual_produk_purge();
-						detail_jual_produk_insert();
+						//detail_jual_produk_insert();
 						Ext.MessageBox.alert(post2db+' OK','The Master_jual_produk was '+msg+' successfully.');
 						//master_jual_produk_DataStore.reload();
 						detail_jual_produk_DataStore.load({params: {master_id:0}});
@@ -1148,6 +1148,8 @@ Ext.onReady(function(){
 						var dproduk_jumlah_field=0;
 						var total_field=0;
 						var hutang_field=0;
+						var diskon_field=0;
+						var cashback_field=0;
 						master_jual_produk_set_form();
 						//console.log("dStore-1 = "+detail_jual_produk_DataStore.getAt(0).data.dproduk_subtotal_net);
 						//console.log("dStore-2 = "+detail_jual_produk_DataStore.getAt(1).data.dproduk_subtotal_net);
@@ -1157,11 +1159,20 @@ Ext.onReady(function(){
 							//console.log("subtototoalll_field = "+subtotal_field);
 							jproduk_subTotalField.setValue(subtotal_field);
 							jproduk_jumlahField.setValue(dproduk_jumlah_field);
-							console.log("totalll_bayarayyr = "+detail_jual_produk_DataStore.getAt(i).data.jproduk_bayar);
-							console.log("jproduk_diskon = "+jproduk_diskonField.getValue());
-							console.log("jproduk_cash = "+jproduk_cashbackField.getValue());
-							total_field+=subtotal_field*(100-jproduk_diskonField.getValue())/100-jproduk_cashbackField.getValue();
-							console.log("total_ifelld = "+total_field);
+							//console.log("totalll_bayarayyr = "+detail_jual_produk_DataStore.getAt(i).data.jproduk_bayar);
+							//console.log("jproduk_diskon = "+jproduk_diskonField.getValue());
+							//console.log("jproduk_cash = "+jproduk_cashbackField.getValue());
+							//console.log("subtotal_field = "+subtotal_field);
+							if(jproduk_diskonField.getValue()!==""){
+								diskon_field=jproduk_diskonField.getValue();
+							}
+							if(jproduk_cashbackField.getValue()!==""){
+								cashback_field=jproduk_cashbackField.getValue();
+							}
+							//console.log("diskon = "+diskon_field);
+							//console.log("cashback = "+cashback_field);
+							total_field=subtotal_field*(100-diskon_field)/100-cashback_field;
+							//console.log("total_ifelld = "+total_field);
 							jproduk_totalField.setValue(total_field);
 							jproduk_bayarField.setValue(detail_jual_produk_DataStore.getAt(i).data.jproduk_bayar);
 							hutang_field=total_field-detail_jual_produk_DataStore.getAt(i).data.jproduk_bayar;
@@ -3528,7 +3539,12 @@ Ext.onReady(function(){
 		Ext.Ajax.request({
 			waitMsg: 'Please wait...',
 			url: 'index.php?c=c_master_jual_produk&m=detail_detail_jual_produk_purge',
-			params:{ master_id: eval(jproduk_idField.getValue()) }
+			params:{ master_id: eval(jproduk_idField.getValue()) },
+			callback: function(opts, success, response){
+				if(success){
+					detail_jual_produk_insert();
+				}
+			}
 		});
 	}
 	//eof
@@ -3707,7 +3723,7 @@ Ext.onReady(function(){
 		});
 	
 	function load_total_produk_bayar(){
-		console.log("POST2DB = "+post2db);
+		//console.log("POST2DB = "+post2db);
 		var jumlah_item=0;
 		var subtotal_harga=0;
 		var total_harga=0;
@@ -3964,11 +3980,11 @@ Ext.onReady(function(){
 	}
 
 	function load_total_bayar_updating(){
-		console.log("subtotal_field = "+jproduk_subTotalField.getValue());
-		console.log("total_field = "+jproduk_totalField.getValue());
-		console.log("diskon_field = "+jproduk_diskonField.getValue());
-		console.log("cashback_field = "+jproduk_cashbackField.getValue());
-		console.log("total_bayar_field = "+jproduk_bayarField.getValue());
+		//console.log("subtotal_field = "+jproduk_subTotalField.getValue());
+		//console.log("total_field = "+jproduk_totalField.getValue());
+		//console.log("diskon_field = "+jproduk_diskonField.getValue());
+		//console.log("cashback_field = "+jproduk_cashbackField.getValue());
+		//console.log("total_bayar_field = "+jproduk_bayarField.getValue());
 		var update_total_field=0;
 		var update_hutang_field=0;
 		var jproduk_bayar_temp=jproduk_bayarField.getValue();
