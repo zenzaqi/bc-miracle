@@ -663,7 +663,7 @@ Ext.onReady(function(){
 			{name: 'app_revised', type: 'int', mapping: 'app_revised'},
 			{name: 'dapp_keterangan', type: 'string', mapping: 'dapp_keterangan'}
 		]),
-		sortInfo:{field: 'dapp_jamreservasi', direction: "ASC"},
+		sortInfo:{field: 'dapp_tglreservasi', direction: "ASC"},
 		groupField:'kategori_nama'
 	});
 	/* End of Function */
