@@ -284,7 +284,7 @@ Ext.onReady(function(){
 		}
 		for(i=0;i<appointment_detail_nonmedisDataStore.getCount();i++){
 			appointment_detail_nonmedis_record=appointment_detail_nonmedisDataStore.getAt(i);
-			if(appointment_detail_nonmedis_record.data.dapp_nonmedis_perawatan!="" && appointment_detail_nonmedis_record.data.dapp_nonmedis_petugas!="" && appointment_detail_medis_record.data.dapp_nonmedis_jamreservasi!=""){
+			if(appointment_detail_nonmedis_record.data.dapp_nonmedis_perawatan!="" && appointment_detail_nonmedis_record.data.dapp_nonmedis_petugas!="" && appointment_detail_nonmedis_record.data.dapp_nonmedis_jamreservasi!=""){
 				dnonmedis_record='ada';
 			}
 		}
