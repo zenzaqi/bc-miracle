@@ -1168,14 +1168,16 @@ Ext.onReady(function(){
 		id: 'app_cust_telpBaruField',
 		fieldLabel: 'No.Telp. Rumah',
 		maxLength: 30,
-		anchor: '95%'
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
 	});
 
 	app_cust_hpBaruField=new Ext.form.TextField({
 		id: 'app_cust_hpBaruField',
 		fieldLabel: 'No. HandPhone',
 		maxLength: 30,
-		anchor: '95%'
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
 	});
 
 	app_cust_keteranganBaruField= new Ext.form.TextArea({

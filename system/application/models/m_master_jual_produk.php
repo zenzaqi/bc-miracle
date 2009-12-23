@@ -40,7 +40,7 @@ class M_master_jual_produk extends Model{
 			//$this->firephp->log($master_id, "MASTER-ID");
 			//$query="SELECT *,konversi_nilai FROM detail_jual_produk LEFT JOIN satuan_konversi ON(dproduk_produk=konversi_produk AND dproduk_satuan=konversi_satuan) WHERE dproduk_master='".$master_id."'";
 			
-			$query = "SELECT detail_jual_produk.*,detail_jual_produk.konversi_nilai_temp*dproduk_harga*dproduk_jumlah as dproduk_subtotal,detail_jual_produk.konversi_nilai_temp*dproduk_harga*dproduk_jumlah*((100-dproduk_diskon)/100) as dproduk_subtotal_net FROM detail_jual_produk LEFT JOIN satuan_konversi ON(dproduk_produk=konversi_produk AND dproduk_satuan=konversi_satuan) WHERE dproduk_master='".$master_id."'";
+			$query = "SELECT detail_jual_produk.*,master_jual_produk.jproduk_bayar,master_jual_produk.jproduk_diskon,detail_jual_produk.konversi_nilai_temp*dproduk_harga*dproduk_jumlah as dproduk_subtotal,detail_jual_produk.konversi_nilai_temp*dproduk_harga*dproduk_jumlah*((100-dproduk_diskon)/100) as dproduk_subtotal_net FROM detail_jual_produk LEFT JOIN satuan_konversi ON(dproduk_produk=konversi_produk AND dproduk_satuan=konversi_satuan) LEFT JOIN master_jual_produk ON(dproduk_master=jproduk_id) WHERE dproduk_master='".$master_id."'";
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
 			$limit = $query." LIMIT ".$start.",".$end;			
@@ -626,7 +626,7 @@ left join jual_kwitansi on(master_jual_produk.jproduk_nobukti=jual_kwitansi.jkwi
 				"jproduk_cust"=>$jproduk_cust, 
 				"jproduk_tanggal"=>$jproduk_tanggal, 
 				"jproduk_diskon"=>$jproduk_diskon, 
-				//"jproduk_cashback"=>$jproduk_cashback,
+				"jproduk_cashback"=>$jproduk_cashback,
 				"jproduk_bayar"=>$jproduk_bayar,
 				"jproduk_cara"=>$jproduk_cara, 
 				//"jproduk_cara2"=>$jproduk_cara2, 
