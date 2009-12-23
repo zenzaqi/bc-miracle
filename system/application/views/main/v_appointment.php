@@ -274,6 +274,8 @@ Ext.onReady(function(){
   	/* Function for add data, open window create form */
 	function appointment_create(){
 		app_id_create_pk=get_pk_id();
+		var appointment_detail_medis_record;
+		var appointment_detail_nonmedis_record;
 		for(i=0;i<appointment_detail_medisDataStore.getCount();i++){
 			appointment_detail_medis_record=appointment_detail_medisDataStore.getAt(i);
 			if(appointment_detail_medis_record.data.dapp_medis_perawatan!="" && appointment_detail_medis_record.data.dapp_medis_petugas!="" && appointment_detail_medis_record.data.dapp_medis_jamreservasi!=""){
