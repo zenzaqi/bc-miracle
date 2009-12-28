@@ -41,6 +41,9 @@
 			display:block;
 			clear:none;
 		}
+		.blue-row .x-grid3-cell-inner{
+	      color:blue;
+	    }
     </style>
 <script>
 
@@ -843,7 +846,8 @@ Ext.onReady(function(){
                	valueField: 'dapp_status_value',
                	lazyRender:true,
                	listClass: 'x-combo-list-small'
-            })
+            }),
+            renderer: ch_status
 		}, 
 		{
 			header: 'Jam Datang',
@@ -909,6 +913,17 @@ Ext.onReady(function(){
 	var width_listGrid=500;
 	function width_list(){
 		return 1100;
+	}
+
+	function ch_status(val){
+		if(val=="datang"){
+			return '<span style="color:green;"><b>' + val + '</b></span>';
+		}else if(val=="konfirmasi"){
+			return '<span style="color:blue;"><b>' + val + '</b></span>';
+		}else if(val=="batal"){
+			return '<span style="color:red;"><b>' + val + '</b></span>';
+		}
+		return val;
 	}
     
 	/* Declare DataStore and  show datagrid list */
