@@ -276,13 +276,13 @@ Ext.onReady(function(){
 		//tunai-3
 		var jproduk_tunai_nilai3_create=null;
 		//voucher
-		var jproduk_voucher_no_create=null;
+		var jproduk_voucher_no_create="";
 		var jproduk_voucher_cashback_create=null;
 		//voucher-2
-		var jproduk_voucher_no2_create=null;
+		var jproduk_voucher_no2_create="";
 		var jproduk_voucher_cashback2_create=null;
 		//voucher-3
-		var jproduk_voucher_no3_create=null;
+		var jproduk_voucher_no3_create="";
 		var jproduk_voucher_cashback3_create=null;
 		
 		var jproduk_cashback_create=null;
@@ -291,63 +291,63 @@ Ext.onReady(function(){
 		var jproduk_bayar_create=null;
 		var jproduk_hutang_create=null;
 		//kwitansi
-		var jproduk_kwitansi_nama_create=null;
-		var jproduk_kwitansi_nomor_create=null;
+		var jproduk_kwitansi_nama_create="";
+		var jproduk_kwitansi_nomor_create="";
 		var jproduk_kwitansi_nilai_create=null;
 		//kwitansi-2
-		var jproduk_kwitansi_nama2_create=null;
-		var jproduk_kwitansi_nomor2_create=null;
+		var jproduk_kwitansi_nama2_create="";
+		var jproduk_kwitansi_nomor2_create="";
 		var jproduk_kwitansi_nilai2_create=null;
 		//kwitansi-3
-		var jproduk_kwitansi_nama3_create=null;
-		var jproduk_kwitansi_nomor3_create=null;
+		var jproduk_kwitansi_nama3_create="";
+		var jproduk_kwitansi_nomor3_create="";
 		var jproduk_kwitansi_nilai3_create=null;
 		//card
-		var jproduk_card_nama_create=null;
-		var jproduk_card_edc_create=null;
-		var jproduk_card_no_create=null;
+		var jproduk_card_nama_create="";
+		var jproduk_card_edc_create="";
+		var jproduk_card_no_create="";
 		var jproduk_card_nilai_create=null;
 		//card-2
-		var jproduk_card_nama2_create=null;
-		var jproduk_card_edc2_create=null;
-		var jproduk_card_no2_create=null;
+		var jproduk_card_nama2_create="";
+		var jproduk_card_edc2_create="";
+		var jproduk_card_no2_create="";
 		var jproduk_card_nilai2_create=null;
 		//card-3
-		var jproduk_card_nama3_create=null;
-		var jproduk_card_edc3_create=null;
-		var jproduk_card_no3_create=null;
+		var jproduk_card_nama3_create="";
+		var jproduk_card_edc3_create="";
+		var jproduk_card_no3_create="";
 		var jproduk_card_nilai3_create=null;
 		//cek
 		var jproduk_cek_nama_create=null;
-		var jproduk_cek_nomor_create=null;
+		var jproduk_cek_nomor_create="";
 		var jproduk_cek_valid_create="";
-		var jproduk_cek_bank_create=null;
+		var jproduk_cek_bank_create="";
 		var jproduk_cek_nilai_create=null;
 		//cek-2
 		var jproduk_cek_nama2_create=null;
-		var jproduk_cek_nomor2_create=null;
+		var jproduk_cek_nomor2_create="";
 		var jproduk_cek_valid2_create="";
-		var jproduk_cek_bank2_create=null;
+		var jproduk_cek_bank2_create="";
 		var jproduk_cek_nilai2_create=null;
 		//cek-3
 		var jproduk_cek_nama3_create=null;
-		var jproduk_cek_nomor3_create=null;
+		var jproduk_cek_nomor3_create="";
 		var jproduk_cek_valid3_create="";
-		var jproduk_cek_bank3_create=null;
+		var jproduk_cek_bank3_create="";
 		var jproduk_cek_nilai3_create=null;
 		//transfer
-		var jproduk_transfer_bank_create=null;
+		var jproduk_transfer_bank_create="";
 		var jproduk_transfer_nama_create=null;
 		var jproduk_transfer_nilai_create=null;
 		//transfer-2
-		var jproduk_transfer_bank2_create=null;
+		var jproduk_transfer_bank2_create="";
 		var jproduk_transfer_nama2_create=null;
 		var jproduk_transfer_nilai2_create=null;
 		//transfer-3
-		var jproduk_transfer_bank3_create=null;
+		var jproduk_transfer_bank3_create="";
 		var jproduk_transfer_nama3_create=null;
 		var jproduk_transfer_nilai3_create=null;
-		
+
 		if(jproduk_idField.getValue()!== null){jproduk_id_create_pk = jproduk_idField.getValue();}else{jproduk_id_create_pk=get_pk_id();} 
 		if(jproduk_nobuktiField.getValue()!== null){jproduk_nobukti_create = jproduk_nobuktiField.getValue();} 
 		if(jproduk_custField.getValue()!== null){jproduk_cust_create = jproduk_custField.getValue();} 
@@ -364,13 +364,13 @@ Ext.onReady(function(){
 		//tunai-3
 		if(jproduk_tunai_nilai3Field.getValue()!== null){jproduk_tunai_nilai3_create = jproduk_tunai_nilai3Field.getValue();}
 		//voucher
-		if(jproduk_voucher_noField.getValue()!== null){jproduk_voucher_no_create = jproduk_voucher_noField.getValue();} 
+		if(jproduk_voucher_noField.getValue()!== ""){jproduk_voucher_no_create = jproduk_voucher_noField.getValue();}
 		if(jproduk_voucher_cashbackField.getValue()!== null){jproduk_voucher_cashback_create = jproduk_voucher_cashbackField.getValue();} 
 		//voucher-2
-		if(jproduk_voucher_no2Field.getValue()!== null){jproduk_voucher_no2_create = jproduk_voucher_no2Field.getValue();} 
+		if(jproduk_voucher_no2Field.getValue()!== ""){jproduk_voucher_no2_create = jproduk_voucher_no2Field.getValue();} 
 		if(jproduk_voucher_cashback2Field.getValue()!== null){jproduk_voucher_cashback2_create = jproduk_voucher_cashback2Field.getValue();} 
 		//voucher-3
-		if(jproduk_voucher_no3Field.getValue()!== null){jproduk_voucher_no3_create = jproduk_voucher_no3Field.getValue();} 
+		if(jproduk_voucher_no3Field.getValue()!== ""){jproduk_voucher_no3_create = jproduk_voucher_no3Field.getValue();} 
 		if(jproduk_voucher_cashback3Field.getValue()!== null){jproduk_voucher_cashback3_create = jproduk_voucher_cashback3Field.getValue();} 
 		
 		if(jproduk_cashbackField.getValue()!== null){jproduk_cashback_create = jproduk_cashbackField.getValue();} 
@@ -379,60 +379,60 @@ Ext.onReady(function(){
 		if(jproduk_subTotalField.getValue()!== null){jproduk_subtotal_create = jproduk_subTotalField.getValue();} 
 		if(jproduk_hutangField.getValue()!== null){jproduk_hutang_create = jproduk_hutangField.getValue();} 
 		//kwitansi value
-		if(jproduk_kwitansi_noField.getValue()!== null){jproduk_kwitansi_nomor_create = jproduk_kwitansi_noField.getValue();} 
-		if(jproduk_kwitansi_namaField.getValue()!== null){jproduk_kwitansi_nama_create = jproduk_kwitansi_namaField.getValue();} 
+		if(jproduk_kwitansi_noField.getValue()!== ""){jproduk_kwitansi_nomor_create = jproduk_kwitansi_noField.getValue();} 
+		if(jproduk_kwitansi_namaField.getValue()!== ""){jproduk_kwitansi_nama_create = jproduk_kwitansi_namaField.getValue();} 
 		if(jproduk_kwitansi_nilaiField.getValue()!== null){jproduk_kwitansi_nilai_create = jproduk_kwitansi_nilaiField.getValue();} 
 		//kwitansi-2 value
-		if(jproduk_kwitansi_no2Field.getValue()!== null){jproduk_kwitansi_nomor2_create = jproduk_kwitansi_no2Field.getValue();} 
-		if(jproduk_kwitansi_nama2Field.getValue()!== null){jproduk_kwitansi_nama2_create = jproduk_kwitansi_nama2Field.getValue();} 
+		if(jproduk_kwitansi_no2Field.getValue()!== ""){jproduk_kwitansi_nomor2_create = jproduk_kwitansi_no2Field.getValue();} 
+		if(jproduk_kwitansi_nama2Field.getValue()!== ""){jproduk_kwitansi_nama2_create = jproduk_kwitansi_nama2Field.getValue();} 
 		if(jproduk_kwitansi_nilai2Field.getValue()!== null){jproduk_kwitansi_nilai2_create = jproduk_kwitansi_nilai2Field.getValue();} 
 		//kwitansi-3 value
-		if(jproduk_kwitansi_no3Field.getValue()!== null){jproduk_kwitansi_nomor3_create = jproduk_kwitansi_no3Field.getValue();} 
-		if(jproduk_kwitansi_nama3Field.getValue()!== null){jproduk_kwitansi_nama3_create = jproduk_kwitansi_nama3Field.getValue();} 
+		if(jproduk_kwitansi_no3Field.getValue()!== ""){jproduk_kwitansi_nomor3_create = jproduk_kwitansi_no3Field.getValue();} 
+		if(jproduk_kwitansi_nama3Field.getValue()!== ""){jproduk_kwitansi_nama3_create = jproduk_kwitansi_nama3Field.getValue();} 
 		if(jproduk_kwitansi_nilai3Field.getValue()!== null){jproduk_kwitansi_nilai3_create = jproduk_kwitansi_nilai3Field.getValue();} 
 		//card value
-		if(jproduk_card_namaField.getValue()!== null){jproduk_card_nama_create = jproduk_card_namaField.getValue();} 
-		if(jproduk_card_edcField.getValue()!==null){jproduk_card_edc_create = jproduk_card_edcField.getValue();} 
-		if(jproduk_card_noField.getValue()!==null){jproduk_card_no_create = jproduk_card_noField.getValue();}
+		if(jproduk_card_namaField.getValue()!== ""){jproduk_card_nama_create = jproduk_card_namaField.getValue();} 
+		if(jproduk_card_edcField.getValue()!==""){jproduk_card_edc_create = jproduk_card_edcField.getValue();} 
+		if(jproduk_card_noField.getValue()!==""){jproduk_card_no_create = jproduk_card_noField.getValue();}
 		if(jproduk_card_nilaiField.getValue()!==null){jproduk_card_nilai_create = jproduk_card_nilaiField.getValue();} 
 		//card-2 value
-		if(jproduk_card_nama2Field.getValue()!== null){jproduk_card_nama2_create = jproduk_card_nama2Field.getValue();} 
-		if(jproduk_card_edc2Field.getValue()!==null){jproduk_card_edc2_create = jproduk_card_edc2Field.getValue();} 
-		if(jproduk_card_no2Field.getValue()!==null){jproduk_card_no2_create = jproduk_card_no2Field.getValue();}
+		if(jproduk_card_nama2Field.getValue()!== ""){jproduk_card_nama2_create = jproduk_card_nama2Field.getValue();} 
+		if(jproduk_card_edc2Field.getValue()!==""){jproduk_card_edc2_create = jproduk_card_edc2Field.getValue();} 
+		if(jproduk_card_no2Field.getValue()!==""){jproduk_card_no2_create = jproduk_card_no2Field.getValue();}
 		if(jproduk_card_nilai2Field.getValue()!==null){jproduk_card_nilai2_create = jproduk_card_nilai2Field.getValue();} 
 		//card-3 value
-		if(jproduk_card_nama3Field.getValue()!== null){jproduk_card_nama3_create = jproduk_card_nama3Field.getValue();} 
-		if(jproduk_card_edc3Field.getValue()!==null){jproduk_card_edc3_create = jproduk_card_edc3Field.getValue();} 
-		if(jproduk_card_no3Field.getValue()!==null){jproduk_card_no3_create = jproduk_card_no3Field.getValue();}
+		if(jproduk_card_nama3Field.getValue()!== ""){jproduk_card_nama3_create = jproduk_card_nama3Field.getValue();} 
+		if(jproduk_card_edc3Field.getValue()!==""){jproduk_card_edc3_create = jproduk_card_edc3Field.getValue();} 
+		if(jproduk_card_no3Field.getValue()!==""){jproduk_card_no3_create = jproduk_card_no3Field.getValue();}
 		if(jproduk_card_nilai3Field.getValue()!==null){jproduk_card_nilai3_create = jproduk_card_nilai3Field.getValue();} 
 		//cek value
 		if(jproduk_cek_namaField.getValue()!== null){jproduk_cek_nama_create = jproduk_cek_namaField.getValue();} 
-		if(jproduk_cek_noField.getValue()!== null){jproduk_cek_nomor_create = jproduk_cek_noField.getValue();} 
+		if(jproduk_cek_noField.getValue()!== ""){jproduk_cek_nomor_create = jproduk_cek_noField.getValue();} 
 		if(jproduk_cek_validField.getValue()!== ""){jproduk_cek_valid_create = jproduk_cek_validField.getValue().format('Y-m-d');} 
-		if(jproduk_cek_bankField.getValue()!== null){jproduk_cek_bank_create = jproduk_cek_bankField.getValue();} 
+		if(jproduk_cek_bankField.getValue()!== ""){jproduk_cek_bank_create = jproduk_cek_bankField.getValue();} 
 		if(jproduk_cek_nilaiField.getValue()!== null){jproduk_cek_nilai_create = jproduk_cek_nilaiField.getValue();} 
 		//cek-2 value
 		if(jproduk_cek_nama2Field.getValue()!== null){jproduk_cek_nama2_create = jproduk_cek_nama2Field.getValue();} 
-		if(jproduk_cek_no2Field.getValue()!== null){jproduk_cek_nomor2_create = jproduk_cek_no2Field.getValue();} 
+		if(jproduk_cek_no2Field.getValue()!== ""){jproduk_cek_nomor2_create = jproduk_cek_no2Field.getValue();} 
 		if(jproduk_cek_valid2Field.getValue()!== ""){jproduk_cek_valid2_create = jproduk_cek_valid2Field.getValue().format('Y-m-d');} 
-		if(jproduk_cek_bank2Field.getValue()!== null){jproduk_cek_bank2_create = jproduk_cek_bank2Field.getValue();} 
+		if(jproduk_cek_bank2Field.getValue()!== ""){jproduk_cek_bank2_create = jproduk_cek_bank2Field.getValue();} 
 		if(jproduk_cek_nilai2Field.getValue()!== null){jproduk_cek_nilai2_create = jproduk_cek_nilai2Field.getValue();} 
 		//cek-3 value
 		if(jproduk_cek_nama3Field.getValue()!== null){jproduk_cek_nama3_create = jproduk_cek_nama3Field.getValue();} 
-		if(jproduk_cek_no3Field.getValue()!== null){jproduk_cek_nomor3_create = jproduk_cek_no3Field.getValue();} 
+		if(jproduk_cek_no3Field.getValue()!== ""){jproduk_cek_nomor3_create = jproduk_cek_no3Field.getValue();} 
 		if(jproduk_cek_valid3Field.getValue()!== ""){jproduk_cek_valid3_create = jproduk_cek_valid3Field.getValue().format('Y-m-d');} 
-		if(jproduk_cek_bank3Field.getValue()!== null){jproduk_cek_bank3_create = jproduk_cek_bank3Field.getValue();} 
+		if(jproduk_cek_bank3Field.getValue()!== ""){jproduk_cek_bank3_create = jproduk_cek_bank3Field.getValue();} 
 		if(jproduk_cek_nilai3Field.getValue()!== null){jproduk_cek_nilai3_create = jproduk_cek_nilai3Field.getValue();} 
 		//transfer value
-		if(jproduk_transfer_bankField.getValue()!== null){jproduk_transfer_bank_create = jproduk_transfer_bankField.getValue();} 
+		if(jproduk_transfer_bankField.getValue()!== ""){jproduk_transfer_bank_create = jproduk_transfer_bankField.getValue();} 
 		if(jproduk_transfer_namaField.getValue()!== null){jproduk_transfer_nama_create = jproduk_transfer_namaField.getValue();}
 		if(jproduk_transfer_nilaiField.getValue()!== null){jproduk_transfer_nilai_create = jproduk_transfer_nilaiField.getValue();} 
 		//transfer-2 value
-		if(jproduk_transfer_bank2Field.getValue()!== null){jproduk_transfer_bank2_create = jproduk_transfer_bank2Field.getValue();} 
+		if(jproduk_transfer_bank2Field.getValue()!== ""){jproduk_transfer_bank2_create = jproduk_transfer_bank2Field.getValue();} 
 		if(jproduk_transfer_nama2Field.getValue()!== null){jproduk_transfer_nama2_create = jproduk_transfer_nama2Field.getValue();}
 		if(jproduk_transfer_nilai2Field.getValue()!== null){jproduk_transfer_nilai2_create = jproduk_transfer_nilai2Field.getValue();} 
 		//transfer-3 value
-		if(jproduk_transfer_bank3Field.getValue()!== null){jproduk_transfer_bank3_create = jproduk_transfer_bank3Field.getValue();} 
+		if(jproduk_transfer_bank3Field.getValue()!== ""){jproduk_transfer_bank3_create = jproduk_transfer_bank3Field.getValue();} 
 		if(jproduk_transfer_nama3Field.getValue()!== null){jproduk_transfer_nama3_create = jproduk_transfer_nama3Field.getValue();}
 		if(jproduk_transfer_nilai3Field.getValue()!== null){jproduk_transfer_nilai3_create = jproduk_transfer_nilai3Field.getValue();} 
 		
@@ -467,7 +467,6 @@ Ext.onReady(function(){
 				jproduk_voucher_no3	:	jproduk_voucher_no3_create,
 				jproduk_voucher_cashback3	:	jproduk_voucher_cashback3_create,
 				
-				jproduk_voucher_cashback	:	jproduk_voucher_cashback_create,
 				//bayar
 				jproduk_bayar			: 	jproduk_bayar_create,
 				jproduk_subtotal			: 	jproduk_subtotal_create,
@@ -609,18 +608,27 @@ Ext.onReady(function(){
 		jproduk_kwitansi_namaField.reset();
 		jproduk_kwitansi_nilaiField.reset();
 		jproduk_kwitansi_noField.reset();
+		jproduk_kwitansi_namaField.setValue("");
+		jproduk_kwitansi_nilai2Field.setValue(null);
+		jproduk_kwitansi_no2Field.setValue("");
 	}
 	// Reset kwitansi-2 option
 	function kwitansi2_jual_produk_reset_form(){
 		jproduk_kwitansi_nama2Field.reset();
 		jproduk_kwitansi_nilai2Field.reset();
 		jproduk_kwitansi_no2Field.reset();
+		jproduk_kwitansi_nama2Field.setValue("");
+		jproduk_kwitansi_nilai2Field.setValue(null);
+		jproduk_kwitansi_no2Field.setValue("");
 	}
 	// Reset kwitansi-3 option
 	function kwitansi3_jual_produk_reset_form(){
 		jproduk_kwitansi_nama3Field.reset();
 		jproduk_kwitansi_nilai3Field.reset();
 		jproduk_kwitansi_no3Field.reset();
+		jproduk_kwitansi_nama3Field.setValue("");
+		jproduk_kwitansi_nilai3Field.setValue(null);
+		jproduk_kwitansi_no3Field.setValue("");
 	}
 	
 	// Reset card option
@@ -629,6 +637,10 @@ Ext.onReady(function(){
 		jproduk_card_edcField.reset();
 		jproduk_card_noField.reset();
 		jproduk_card_nilaiField.reset();
+		jproduk_card_namaField.setValue("");
+		jproduk_card_edcField.setValue("");
+		jproduk_card_noField.setValue("");
+		jproduk_card_nilai2Field.setValue(null);
 	}
 	// Reset card-2 option
 	function card2_jual_produk_reset_form(){
@@ -636,6 +648,10 @@ Ext.onReady(function(){
 		jproduk_card_edc2Field.reset();
 		jproduk_card_no2Field.reset();
 		jproduk_card_nilai2Field.reset();
+		jproduk_card_nama2Field.setValue("");
+		jproduk_card_edc2Field.setValue("");
+		jproduk_card_no2Field.setValue("");
+		jproduk_card_nilai2Field.setValue(null);
 	}
 	// Reset card-3 option
 	function card3_jual_produk_reset_form(){
@@ -643,6 +659,10 @@ Ext.onReady(function(){
 		jproduk_card_edc3Field.reset();
 		jproduk_card_no3Field.reset();
 		jproduk_card_nilai3Field.reset();
+		jproduk_card_nama3Field.setValue("");
+		jproduk_card_edc3Field.setValue("");
+		jproduk_card_no3Field.setValue("");
+		jproduk_card_nilai3Field.setValue(null);
 	}
 	
 	// Reset cek option
@@ -652,6 +672,11 @@ Ext.onReady(function(){
 		jproduk_cek_validField.reset();
 		jproduk_cek_bankField.reset();
 		jproduk_cek_nilaiField.reset();
+		jproduk_cek_namaField.setValue(null);
+		jproduk_cek_noField.setValue("");
+		jproduk_cek_validField.setValue("");
+		jproduk_cek_bankField.setValue("");
+		jproduk_cek_nilaiField.setValue(null);
 	}
 	// Reset cek-2 option
 	function cek2_jual_produk_reset_form(){
@@ -660,6 +685,11 @@ Ext.onReady(function(){
 		jproduk_cek_valid2Field.reset();
 		jproduk_cek_bank2Field.reset();
 		jproduk_cek_nilai2Field.reset();
+		jproduk_cek_nama2Field.setValue(null);
+		jproduk_cek_no2Field.setValue("");
+		jproduk_cek_valid2Field.setValue("");
+		jproduk_cek_bank2Field.setValue("");
+		jproduk_cek_nilai2Field.setValue(null);
 	}
 	// Reset cek-3 option
 	function cek3_jual_produk_reset_form(){
@@ -668,6 +698,11 @@ Ext.onReady(function(){
 		jproduk_cek_valid3Field.reset();
 		jproduk_cek_bank3Field.reset();
 		jproduk_cek_nilai3Field.reset();
+		jproduk_cek_nama3Field.setValue(null);
+		jproduk_cek_no3Field.setValue("");
+		jproduk_cek_valid3Field.setValue("");
+		jproduk_cek_bank3Field.setValue("");
+		jproduk_cek_nilai3Field.setValue(null);
 	}
 	
 	// Reset transfer option
@@ -675,47 +710,65 @@ Ext.onReady(function(){
 		jproduk_transfer_bankField.reset();
 		jproduk_transfer_namaField.reset();
 		jproduk_transfer_nilaiField.reset();
+		jproduk_transfer_bankField.setValue("");
+		jproduk_transfer_namaField.setValue(null);
+		jproduk_transfer_nilaiField.setValue(null);
 	}
 	// Reset transfer-2 option
 	function transfer2_jual_produk_reset_form(){
 		jproduk_transfer_bank2Field.reset();
 		jproduk_transfer_nama2Field.reset();
 		jproduk_transfer_nilai2Field.reset();
+		jproduk_transfer_bank2Field.setValue("");
+		jproduk_transfer_nama2Field.setValue(null);
+		jproduk_transfer_nilai2Field.setValue(null);
 	}
 	// Reset transfer-3 option
 	function transfer3_jual_produk_reset_form(){
 		jproduk_transfer_bank3Field.reset();
 		jproduk_transfer_nama3Field.reset();
 		jproduk_transfer_nilai3Field.reset();
+		jproduk_transfer_bank3Field.setValue("");
+		jproduk_transfer_nama3Field.setValue(null);
+		jproduk_transfer_nilai3Field.setValue(null);
 	}
 
 	// Reset tunai option
 	function tunai_jual_produk_reset_form(){
 		jproduk_tunai_nilaiField.reset();
+		jproduk_tunai_nilaiField.setValue(null);
 	}
 	// Reset tunai-2 option
 	function tunai2_jual_produk_reset_form(){
 		jproduk_tunai_nilai2Field.reset();
+		jproduk_tunai_nilai2Field.setValue(null);
 	}
 	// Reset tunai-3 option
 	function tunai3_jual_produk_reset_form(){
 		jproduk_tunai_nilai3Field.reset();
+		jproduk_tunai_nilai3Field.setValue(null);
 	}
 
 	//Reset voucher option
 	function voucher_jual_produk_reset_form(){
 		jproduk_voucher_noField.reset();
 		jproduk_voucher_cashbackField.reset();
+		jproduk_voucher_noField.setValue("");
+		jproduk_voucher_cashbackField.setValue(null);
 	}
 	//Reset voucher-2 option
 	function voucher2_jual_produk_reset_form(){
 		jproduk_voucher_no2Field.reset();
 		jproduk_voucher_cashback2Field.reset();
+		jproduk_voucher_no2Field.setValue("");
+		jproduk_voucher_cashback2Field.setValue(null);
 	}
 	//Reset voucher-3 option
 	function voucher3_jual_produk_reset_form(){
 		jproduk_voucher_no3Field.reset();
 		jproduk_voucher_cashback3Field.reset();
+		jproduk_voucher_no3Field.setValue("");
+		jproduk_voucher_cashback3Field.setValue(null);
 	}
 	
 	/* Reset form before loading */
@@ -3180,9 +3233,8 @@ Ext.onReady(function(){
 			if(cbo_dproduk_produkDataStore.getCount()){
 				dproduk_idField.setValue(cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_value);
 				cbo_dproduk_satuanDataStore.load({params: {djproduk_id:dproduk_idField.getValue()}});
-				//detail_jual_produk_record.data.dproduk_jumlah='2';
-				//console.log("set_jumlah");
 			}
+			detail_jual_produk_DataStore.getAt(0).data.dproduk_jumlah=2;
 		}
 	});
 
@@ -3390,7 +3442,7 @@ Ext.onReady(function(){
 			sortable: true,
 			reaOnly: true,
 			renderer: function(v, params, record){
-					return Ext.util.Format.number(record.data.dproduk_subtotal* record.data.dproduk_jumlah*(100-record.data.dproduk_diskon)/100,'0,000');
+					return Ext.util.Format.number(record.data.dproduk_subtotal*(100-record.data.dproduk_diskon)/100,'0,000');
             }
 		},{
 			header: 'Sales',
@@ -3855,7 +3907,6 @@ Ext.onReady(function(){
 		total_harga=subtotal_harga_field*(100-jproduk_diskonField.getValue())/100 - jproduk_cashbackField.getValue();
 		total_harga=(total_harga>0?Math.round(total_harga):0);
 		//jproduk_subTotalField.setValue(total_harga);
-		console.log("jproduk_totalField = "+total_harga);
 		jproduk_totalField.setValue(total_harga);
 
 		
@@ -4005,23 +4056,20 @@ Ext.onReady(function(){
 		var voucher_nilai=0;
 		var voucher_nilai2=0;
 		var voucher_nilai3=0;
-
-		transfer_nilai=jproduk_transfer_nilaiField.getValue();
-		transfer_nilai2=jproduk_transfer_nilai2Field.getValue();
-		transfer_nilai3=jproduk_transfer_nilai3Field.getValue();
 		
+		transfer_nilai=jproduk_transfer_nilaiField.getValue();
 		if(/^\d+$/.test(transfer_nilai))
 			transfer_nilai=jproduk_transfer_nilaiField.getValue();
 		else
 			transfer_nilai=0;
-		
-		
+
+		transfer_nilai2=jproduk_transfer_nilai2Field.getValue();
 		if(/^\d+$/.test(transfer_nilai2))
 			transfer_nilai2=jproduk_transfer_nilai2Field.getValue();
 		else
 			transfer_nilai2=0;
 		
-		
+		transfer_nilai3=jproduk_transfer_nilai3Field.getValue();
 		if(/^\d+$/.test(transfer_nilai3))
 			transfer_nilai3=jproduk_transfer_nilai3Field.getValue();
 		else
