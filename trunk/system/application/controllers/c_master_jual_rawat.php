@@ -18,6 +18,7 @@ class C_master_jual_rawat extends Controller {
 		parent::Controller();
 		$this->load->model('m_master_jual_rawat', '', TRUE);
 		$this->load->plugin('to_excel');
+		$this->load->library('firephp');
 	}
 	
 	//set index
@@ -242,8 +243,6 @@ class C_master_jual_rawat extends Controller {
 		$jrawat_bayar=trim($_POST["jrawat_bayar"]);
 		$jrawat_subtotal=trim($_POST["jrawat_subtotal"]);
 		$jrawat_hutang=trim($_POST["jrawat_hutang"]);
-		if($jrawat_cara=='tunai')
-			$jrawat_bayar=$jrawat_subtotal;
 		//card
 		$jrawat_card_nama=trim($_POST["jrawat_card_nama"]);
 		$jrawat_card_edc=trim($_POST["jrawat_card_edc"]);

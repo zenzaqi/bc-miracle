@@ -178,7 +178,7 @@ Ext.onReady(function(){
 
   	Ext.util.Format.comboRenderer = function(combo){
   		jrawat_bankDataStore.load();
-  		cbo_drawat_rawatDataStore.load({params: {limit:0}});
+  		cbo_drawat_rawatDataStore.load();
   	    return function(value){
   	        var record = combo.findRecord(combo.valueField, value);
   	        return record ? record.get(combo.displayField) : combo.valueNotFoundText;
@@ -529,7 +529,7 @@ Ext.onReady(function(){
 						//detail_jual_rawat_purge();
 						detail_jual_rawat_insert();
 						Ext.MessageBox.alert(post2db+' OK','The Master_jual_rawat was '+msg+' successfully.');
-						//master_jual_rawat_DataStore.reload();
+						master_jual_rawat_DataStore.reload();
 						detail_jual_rawat_DataStore.load({params: {master_id:0}});
 						master_jual_rawat_createWindow.hide();
 						break;
@@ -1108,6 +1108,7 @@ Ext.onReady(function(){
 	/* Function for Update Confirm */
 	function master_jual_rawat_confirm_update(){
 		/* only one record is selected here */
+		cbo_drawat_rawatDataStore.load({params: {query:""}});
 		if(master_jual_rawatListEditorGrid.selModel.getCount() == 1) {
 			master_jual_rawat_set_form();
 			master_cara_bayarTabPanel.setActiveTab(0);
