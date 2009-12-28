@@ -820,6 +820,7 @@ Ext.onReady(function(){
 			header: 'Kategori',
 			dataIndex: 'kategori_nama',
 			width: 70,
+			hidden: true,
 			sortable: false,
 			editor: new Ext.form.TextField({
 				maxLength: 250
@@ -856,10 +857,10 @@ Ext.onReady(function(){
 		{
 			header: 'Keterangan',
 			dataIndex: 'dapp_keterangan',
-			width: 150,
+			width: 220,
 			sortable: true,
 			editor: new Ext.form.TextField({
-				maxLength: 10
+				maxLength: 100
           	})
 		}, 
 		{
