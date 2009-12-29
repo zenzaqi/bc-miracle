@@ -1167,7 +1167,6 @@ Ext.onReady(function(){
 				timeout: 60000,
 				success: function(response){							
 					var result=eval(response.responseText);
-					console.log(result);
 				},
 				failure: function(response){
 					var result=response.responseText;

@@ -178,7 +178,7 @@ left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawa
 		}
 		
 		//function for update record
-		function appointment_update($app_id ,$app_customer ,$app_tanggal ,$app_cara ,$app_keterangan,$dapp_id, $dapp_status, $dokter_nama, $terapis_nama, $kategori_nama, $rawat_id, $dokter_id, $terapis_id, $dapp_jamreservasi, $cust_id, $dapp_dokter_no, $dapp_terapis_no, $dapp_dokter_ganti, $dapp_terapis_ganti){
+		function appointment_update($app_id ,$app_customer ,$dapp_tglreservasi ,$app_cara ,$app_keterangan,$dapp_id, $dapp_status, $dokter_nama, $terapis_nama, $kategori_nama, $rawat_id, $dokter_id, $terapis_id, $dapp_jamreservasi, $cust_id, $dapp_dokter_no, $dapp_terapis_no, $dapp_dokter_ganti, $dapp_terapis_ganti){
 			//INSERT to Appointment-Detail
 			$bln_now=date('Y-m');
 			
@@ -316,6 +316,8 @@ left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawa
 				}
 			}
 			
+			$data_dapp["dapp_tglreservasi"]=$dapp_tglreservasi;
+			$data_dapp["dapp_jamreservasi"]=$dapp_jamreservasi;
 			$this->db->where('dapp_id',$dapp_id);
 			$this->db->where('dapp_master',$app_id);
 			$this->db->update('appointment_detail',$data_dapp);
@@ -324,7 +326,7 @@ left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawa
 			$data = array(
 				"app_id"=>$app_id, 
 				//"app_customer"=>$app_customer, 
-				"app_tanggal"=>$app_tanggal, 
+				//"app_tanggal"=>$app_tanggal, 
 				"app_cara"=>$app_cara, 
 				"app_keterangan"=>$app_keterangan,
 			);

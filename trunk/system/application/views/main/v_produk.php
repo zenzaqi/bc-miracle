@@ -1362,11 +1362,9 @@ Ext.onReady(function(){
 		$count_default=0;
 		for ($i = 0; $i < satuan_konversi_DataStore.getCount(); $i++) {
 			satuan_konversi_default=satuan_konversi_DataStore.getAt($i);
-			//console.log("value konversi_default = "+satuan_konversi_default.data.konversi_default);
 			if(satuan_konversi_default.data.konversi_default==true || satuan_konversi_default.data.konversi_default=='true')
 				$count_default+=1;
 		}
-		//console.log('count = '+$count_default);
 		if($count_default==1)
 			master_detail_insert();
 		else {

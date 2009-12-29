@@ -2644,8 +2644,6 @@ Ext.onReady(function(){
 					getSelisihBln=tempBln+(-(getSelisihBln));
 				}
 				var umur=getUmur+" Th, "+getSelisihBln+" Bln";
-				console.log("SELISIH = "+getSelisihBln);
-				console.log("Total UMUR = "+umur);
 				
 				cust_umurField.setValue(umur);
 			}
@@ -2669,8 +2667,6 @@ Ext.onReady(function(){
 			getSelisihBln=tempBln+(-(getSelisihBln));
 		}
 		var umur=getUmur+" Th, "+getSelisihBln+" Bln";
-		console.log("SELISIH = "+getSelisihBln);
-		console.log("Total UMUR = "+umur);
 		
 		cust_umurField.setValue(umur);
 	});

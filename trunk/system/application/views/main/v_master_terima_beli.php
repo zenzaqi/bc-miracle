@@ -1156,7 +1156,6 @@ Ext.onReady(function(){
 				timeout: 60000,
 				success: function(response){							
 					var result=eval(response.responseText);
-					console.log(result);
 				},
 				failure: function(response){
 					var result=response.responseText;
@@ -1182,7 +1181,6 @@ Ext.onReady(function(){
 			timeout: 60000,
 			success: function(response){							
 				var result=eval(response.responseText);
-				console.log(result);
 				detail_terima_beli_insert();
 			},
 			failure: function(response){
@@ -1481,7 +1479,6 @@ Ext.onReady(function(){
 				timeout: 5000,
 				success: function(response){							
 					var result=eval(response.responseText);
-					console.log(result);
 				},
 				failure: function(response){
 					var result=response.responseText;
@@ -1507,7 +1504,6 @@ Ext.onReady(function(){
 			timeout: 5000,
 			success: function(response){							
 				var result=eval(response.responseText);
-				console.log(result);
 				detail_terima_bonus_insert();
 			},
 			failure: function(response){

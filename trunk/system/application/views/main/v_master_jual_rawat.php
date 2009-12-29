@@ -831,16 +831,10 @@ Ext.onReady(function(){
 				  });
 				break;
 			case 'transfer' :
-				//console.log("jrawat_nobukti = "+jrawat_nobuktiField.getValue());
-				//console.log("jrawat_id = "+jrawat_idField.getValue());
 				transfer_jual_rawat_DataStore.load({
 						params : { no_faktur: jrawat_nobuktiField.getValue() },
 					  	callback: function(opts, success, response)  {
 							if (success) {
-								//console.log("sukses jtransfer");
-								//jrawat_transfer_record=transfer_jual_rawat_DataStore.getAt(0);
-								//console.log("Count JTransfer = "+jrawat_transfer_record.data.jtransfer_bank);
-								//console.log("getCount_jualProduk = "+transfer_jual_rawat_DataStore.getCount());
 									if(transfer_jual_rawat_DataStore.getCount()){
 										jrawat_transfer_record=transfer_jual_rawat_DataStore.getAt(0);
 										jrawat_transfer_bankField.setValue(jrawat_transfer_record.data.jtransfer_bank);
@@ -852,13 +846,10 @@ Ext.onReady(function(){
 				  });
 				break;
 			case 'tunai' :
-				//console.log("jrawat_nobukti = "+jrawat_nobuktiField.getValue());
-				//console.log("jrawat_id = "+jrawat_idField.getValue());
 				tunai_jual_rawat_DataStore.load({
 						params : { no_faktur: jrawat_nobuktiField.getValue() },
 					  	callback: function(opts, success, response)  {
 							if (success) {
-								//console.log("getCount_jualProduk = "+transfer_jual_rawat_DataStore.getCount());
 									if(tunai_jual_rawat_DataStore.getCount()){
 										jrawat_tunai_record=tunai_jual_rawat_DataStore.getAt(0);
 										jrawat_tunai_nilaiField.setValue(jrawat_tunai_record.data.jtunai_nilai);
@@ -890,9 +881,6 @@ Ext.onReady(function(){
 					params : { no_faktur: jrawat_nobuktiField.getValue() },
 					callback: function(opts, success, response)  {
 						 if (success) { 
-							 //console.log("sukses jcard");
-							 //jrawat_card_record=card_jual_rawat_DataStore.getAt(0);
-							 //console.log("jcard_nama = "+jrawat_card_record.data.jcard_nama);
 							 if(card_jual_rawat_DataStore.getCount()){
 								 jrawat_card_record=card_jual_rawat_DataStore.getAt(0).data;
 								 jrawat_card_nama2Field.setValue(jrawat_card_record.jcard_nama);
@@ -922,16 +910,12 @@ Ext.onReady(function(){
 				  });
 				break;								
 			case 'transfer' :
-				//console.log("jrawat_nobukti-2 = "+jrawat_nobuktiField.getValue());
 				transfer_jual_rawat_DataStore.load({
 						params : { no_faktur: jrawat_nobuktiField.getValue() },
 					  	callback: function(opts, success, response)  {
 							if (success) {
-								//console.log("sukses jtransfer-2");
 								jrawat_transfer_record=transfer_jual_rawat_DataStore.getAt(0);
-								//console.log("Count JTransfer-2 = "+jrawat_transfer_record.data.jtransfer_bank);
 									if(transfer_jual_rawat_DataStore.getCount()){
-										//console.log("SIAP SET FORM");
 										jrawat_transfer_record=transfer_jual_rawat_DataStore.getAt(0);
 										jrawat_transfer_bank2Field.setValue(jrawat_transfer_record.data.jtransfer_bank);
 										jrawat_transfer_nama2Field.setValue(jrawat_transfer_record.data.jtransfer_nama);
@@ -942,12 +926,10 @@ Ext.onReady(function(){
 				  });
 				break;
 			case 'tunai' :
-				//console.log("jrawat_nobukti = "+jrawat_nobuktiField.getValue());
 				tunai_jual_rawat_DataStore.load({
 						params : { no_faktur: jrawat_nobuktiField.getValue() },
 					  	callback: function(opts, success, response)  {
 							if (success) {
-								//console.log("getCount_jualProduk = "+transfer_jual_rawat_DataStore.getCount());
 									if(tunai_jual_rawat_DataStore.getCount()){
 										jrawat_tunai_record=tunai_jual_rawat_DataStore.getAt(0);
 										jrawat_tunai_nilaiField.setValue(jrawat_tunai_record.data.jtunai_nilai);
@@ -979,9 +961,6 @@ Ext.onReady(function(){
 					params : { no_faktur: jrawat_nobuktiField.getValue() },
 					callback: function(opts, success, response)  {
 						 if (success) { 
-							 //console.log("sukses jcard");
-							 //jrawat_card_record=card_jual_rawat_DataStore.getAt(0);
-							 //console.log("jcard_nama = "+jrawat_card_record.data.jcard_nama);
 							 if(card_jual_rawat_DataStore.getCount()){
 								 jrawat_card_record=card_jual_rawat_DataStore.getAt(0).data;
 								 jrawat_card_nama3Field.setValue(jrawat_card_record.jcard_nama);
@@ -1011,14 +990,11 @@ Ext.onReady(function(){
 				  });
 				break;								
 			case 'transfer' :
-				//console.log("jrawat_nobukti = "+jrawat_nobuktiField.getValue());
 				transfer_jual_rawat_DataStore.load({
 						params : { no_faktur: jrawat_nobuktiField.getValue() },
 					  	callback: function(opts, success, response)  {
 							if (success) {
-								//console.log("sukses jtransfer");
 								jrawat_transfer_record=transfer_jual_rawat_DataStore.getAt(0);
-								//console.log("Count JTransfer = "+jrawat_transfer_record.data.jtransfer_bank);
 									if(transfer_jual_rawat_DataStore.getCount()){
 										jrawat_transfer_record=transfer_jual_rawat_DataStore.getAt(0);
 										jrawat_transfer_bank3Field.setValue(jrawat_transfer_record.data.jtransfer_bank);
@@ -1030,12 +1006,10 @@ Ext.onReady(function(){
 				  });
 				break;
 			case 'tunai' :
-				//console.log("jrawat_nobukti = "+jrawat_nobuktiField.getValue());
 				tunai_jual_rawat_DataStore.load({
 						params : { no_faktur: jrawat_nobuktiField.getValue() },
 					  	callback: function(opts, success, response)  {
 							if (success) {
-								//console.log("getCount_jualProduk = "+transfer_jual_rawat_DataStore.getCount());
 									if(tunai_jual_rawat_DataStore.getCount()){
 										jrawat_tunai_record=tunai_jual_rawat_DataStore.getAt(0);
 										jrawat_tunai_nilaiField.setValue(jrawat_tunai_record.data.jtunai_nilai);
@@ -1113,7 +1087,6 @@ Ext.onReady(function(){
 			master_jual_rawat_set_form();
 			master_cara_bayarTabPanel.setActiveTab(0);
 			post2db='UPDATE';
-			//console.log("SIAP LOAD DETAIIL");
 			detail_jual_rawat_DataStore.load({params : {master_id : eval(get_pk_id()), start:0, limit:pageS}});
 			msg='updated';
 			//master_jual_rawat_createWindow.hide();
@@ -3056,12 +3029,9 @@ Ext.onReady(function(){
 			detail_jual_rawat_record=detail_jual_rawat_DataStore.getAt(i);
 			var c_dtStore=0;
 			var j=cbo_drawat_rawatDataStore.find('drawat_rawat_value',combo_jual_rawat.getValue());
-			//console.log("detail_harga = "+cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_harga);
-			//console.log("combo_djproduk = "+j);
 			if(cbo_drawat_rawatDataStore.getCount()){
 				drawat_idField.setValue(cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_value);
 				//detail_jual_rawat_record.data.drawat_jumlah='2';
-				//console.log("set_jumlah");
 			}
 		}
 	});
@@ -3265,7 +3235,6 @@ Ext.onReady(function(){
 					timeout: 60000,
 					success: function(response){							
 						var result=eval(response.responseText);
-						//console.log("hasil_insert="+result);
 					},
 					failure: function(response){
 						var result=response.responseText;
@@ -3426,11 +3395,8 @@ Ext.onReady(function(){
 		var detail_jual_rawat_record;
 		for(i=0;i<detail_jual_rawat_DataStore.getCount();i++){
 			detail_jual_rawat_record=detail_jual_rawat_DataStore.getAt(i);
-			//console.log("drawat_rawat = "+detail_jual_rawat_record.data.drawat_rawat);
 			var j=cbo_drawat_rawatDataStore.find('drawat_rawat_value',detail_jual_rawat_record.data.drawat_rawat);
-			//console.log("detail_j = "+j);
 			if(j>0){
-				//console.log("set_dharga = "+cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_harga);
 				detail_jual_rawat_record.data.drawat_harga=cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_harga;
 				//detail_jual_rawat_record.data.drawat_satuan=cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_satuan;
 				if(detail_jual_rawat_record.data.drawat_diskon==""){
@@ -3479,11 +3445,8 @@ Ext.onReady(function(){
 		var detail_jual_rawat_record;
 		for(i=0;i<detail_jual_rawat_DataStore.getCount();i++){
 			detail_jual_rawat_record=detail_jual_rawat_DataStore.getAt(i);
-			//console.log("drawat_rawat = "+detail_jual_rawat_record.data.drawat_rawat);
 			var j=cbo_drawat_rawatDataStore.find('drawat_rawat_value',detail_jual_rawat_record.data.drawat_rawat);
-			//console.log("detail_j = "+j);
 			if(j>0){
-				//console.log("set_dharga = "+cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_harga);
 				detail_jual_rawat_record.data.drawat_harga=cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_harga;
 				//detail_jual_rawat_record.data.drawat_satuan=cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_satuan;
 				if(detail_jual_rawat_record.data.drawat_diskon==""){
@@ -3629,13 +3592,11 @@ Ext.onReady(function(){
 
 		//total_hutang=total_harga-jrawat_bayarField.getValue()-jrawat_transfer_nilaiField.getValue()-jrawat_transfer_nilai2Field.getValue()-jrawat_transfer_nilai3Field.getValue()-jrawat_kwitansi_nilaiField.getValue()-jrawat_kwitansi_nilai2Field.getValue()-jrawat_kwitansi_nilai3Field.getValue()-jrawat_card_nilaiField.getValue()-jrawat_card_nilai2Field.getValue()-jrawat_card_nilai3Field.getValue()-jrawat_cek_nilaiField.getValue()-jrawat_cek_nilai2Field.getValue()-jrawat_cek_nilai3Field.getValue()-jrawat_voucher_cashbackField.getValue()-jrawat_voucher_cashback2Field.getValue()-jrawat_voucher_cashback3Field.getValue();
 		total_hutang=total_harga-total_bayar;
-		//console.log("TOTAL HUTANG... = "+total_hutang);
 		total_hutang=(total_hutang>0?Math.round(total_hutang):0);
 		jrawat_hutangField.setValue(total_hutang);
 	}
 	
 	function load_all_jual_rawat(){
-		//console.log("load all jual rawat");
 		//load_detail_jual_rawat();
 		load_total_rawat_bayar();
 	}

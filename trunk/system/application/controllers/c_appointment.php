@@ -213,7 +213,7 @@ class C_appointment extends Controller {
 		//POST variable here
 		$app_id=trim(@$_POST["app_id"]);
 		$app_customer=trim(@$_POST["app_customer"]);
-		$app_tanggal=trim(@$_POST["app_tanggal"]);
+		$dapp_tglreservasi=trim(@$_POST["dapp_tglreservasi"]);
 		$app_cara=trim(@$_POST["app_cara"]);
 		$app_cara=str_replace("/(<\/?)(p)([^>]*>)", "",$app_cara);
 		$app_cara=str_replace(",", "\,",$app_cara);
@@ -238,7 +238,7 @@ class C_appointment extends Controller {
 		$dapp_terapis_no=trim(@$_POST["dapp_terapis_no"]);
 		$dapp_dokter_ganti=trim(@$_POST["dapp_dokter_ganti"]);
 		$dapp_terapis_ganti=trim(@$_POST["dapp_terapis_ganti"]);
-		$result = $this->m_appointment->appointment_update($app_id ,$app_customer ,$app_tanggal ,$app_cara ,$app_keterangan, $dapp_id, $dapp_status, $dokter_nama, $terapis_nama, $kategori_nama, $rawat_id, $dokter_id, $terapis_id, $dapp_jamreservasi, $cust_id, $dapp_dokter_no, $dapp_terapis_no, $dapp_dokter_ganti, $dapp_terapis_ganti);
+		$result = $this->m_appointment->appointment_update($app_id ,$app_customer ,$dapp_tglreservasi ,$app_cara ,$app_keterangan, $dapp_id, $dapp_status, $dokter_nama, $terapis_nama, $kategori_nama, $rawat_id, $dokter_id, $terapis_id, $dapp_jamreservasi, $cust_id, $dapp_dokter_no, $dapp_terapis_no, $dapp_dokter_ganti, $dapp_terapis_ganti);
 		echo $result;
 	}
 	
