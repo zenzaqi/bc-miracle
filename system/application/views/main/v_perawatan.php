@@ -871,6 +871,17 @@ Ext.onReady(function(){
 			new Ext.app.SearchField({
 			store: perawatan_DataStore,
 			params: {start: 0, limit: pageS},
+			listeners:{
+				specialkey: function(f,e){
+					if(e.getKey() == e.ENTER){
+						perawatan_DataStore.baseParams={task:'LIST',start: 0, limit: pageS};
+		            }
+				},
+				render: function(c){
+				Ext.get(this.id).set({qtitle:'Search By'});
+				Ext.get(this.id).set({qtip:'- Kode Baru<br>- Kode Lama<br>- Nama Perawatan'});
+				}
+			},
 			width: 120
 		}),'-',{
 			text: 'Refresh',
@@ -1117,15 +1128,12 @@ Ext.onReady(function(){
 			rawat_dmField.setValue(cbo_rawat_groupDataStore.getAt(record).data.rawat_group_dmrawat);
 			rawat_kategoritxtField.setValue(cbo_rawat_groupDataStore.getAt(record).data.rawat_group_kelompok);
 			rawat_kategoriField.setValue(cbo_rawat_groupDataStore.getAt(record).data.rawat_group_kelompok_id);
-			console.log("Group Kelompok = "+cbo_rawat_groupDataStore.getAt(record).data.rawat_group_kelompok);
 			if(cbo_rawat_groupDataStore.getAt(record).data.rawat_group_kelompok=="Medis" || cbo_rawat_groupDataStore.getAt(record).data.rawat_group_kelompok=="Surgery"){
 				//rawat_gudangField.setValue("Gudang Besar");
 				cbo_rawat_gudangDataSore.load();
-				console.log("count gudang = "+cbo_rawat_gudangDataSore.getCount());
 			}else if(cbo_rawat_groupDataStore.getAt(record).data.rawat_group_kelompok=="Non Medis"){
 				//rawat_gudangField.setValue("Gudang BT");
 				cbo_rawat_gudangDataSore.load();
-				console.log("count gudang = "+cbo_rawat_gudangDataSore.getCount());
 			}else{
 				rawat_gudangField.setValue("");
 			}

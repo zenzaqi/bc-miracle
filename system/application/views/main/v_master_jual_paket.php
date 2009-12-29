@@ -837,15 +837,10 @@ Ext.onReady(function(){
 				  });
 				break;								
 			case 'transfer' :
-				//console.log("jpaket_nobukti = "+jpaket_nobuktiField.getValue());
 				transfer_jual_paket_DataStore.load({
 						params : { no_faktur: jpaket_nobuktiField.getValue() },
 					  	callback: function(opts, success, response)  {
 							if (success) {
-								//console.log("sukses jtransfer");
-								//jpaket_transfer_record=transfer_jual_paket_DataStore.getAt(0);
-								//console.log("Count JTransfer = "+jpaket_transfer_record.data.jtransfer_bank);
-								//console.log("getCount_jualProduk = "+transfer_jual_paket_DataStore.getCount());
 									if(transfer_jual_paket_DataStore.getCount()){
 										jpaket_transfer_record=transfer_jual_paket_DataStore.getAt(0);
 										jpaket_transfer_bankField.setValue(jpaket_transfer_record.data.jtransfer_bank);
@@ -857,12 +852,10 @@ Ext.onReady(function(){
 				  });
 				break;
 			case 'tunai' :
-				//console.log("jpaket_nobukti = "+jpaket_nobuktiField.getValue());
 				tunai_jual_paket_DataStore.load({
 						params : { no_faktur: jpaket_nobuktiField.getValue() },
 					  	callback: function(opts, success, response)  {
 							if (success) {
-								//console.log("getCount_jualProduk = "+transfer_jual_paket_DataStore.getCount());
 									if(tunai_jual_paket_DataStore.getCount()){
 										jpaket_tunai_record=tunai_jual_paket_DataStore.getAt(0);
 										jpaket_tunai_nilaiField.setValue(jpaket_tunai_record.data.jtunai_nilai);
@@ -894,9 +887,6 @@ Ext.onReady(function(){
 					params : { no_faktur: jpaket_nobuktiField.getValue() },
 					callback: function(opts, success, response)  {
 						 if (success) { 
-							 //console.log("sukses jcard");
-							 //jpaket_card_record=card_jual_paket_DataStore.getAt(0);
-							 //console.log("jcard_nama = "+jpaket_card_record.data.jcard_nama);
 							 if(card_jual_paket_DataStore.getCount()){
 								 jpaket_card_record=card_jual_paket_DataStore.getAt(0).data;
 								 jpaket_card_nama2Field.setValue(jpaket_card_record.jcard_nama);
@@ -926,14 +916,11 @@ Ext.onReady(function(){
 				  });
 				break;								
 			case 'transfer' :
-				//console.log("jpaket_nobukti = "+jpaket_nobuktiField.getValue());
 				transfer_jual_paket_DataStore.load({
 						params : { no_faktur: jpaket_nobuktiField.getValue() },
 					  	callback: function(opts, success, response)  {
 							if (success) {
-								//console.log("sukses jtransfer");
 								jpaket_transfer_record=transfer_jual_paket_DataStore.getAt(0);
-								//console.log("Count JTransfer = "+jpaket_transfer_record.data.jtransfer_bank);
 									if(transfer_jual_paket_DataStore.getCount()){
 										jpaket_transfer_record=transfer_jual_paket_DataStore.getAt(0);
 										jpaket_transfer_bank2Field.setValue(jpaket_transfer_record.data.jtransfer_bank);
@@ -945,12 +932,10 @@ Ext.onReady(function(){
 				  });
 				break;
 			case 'tunai' :
-				//console.log("jpaket_nobukti = "+jpaket_nobuktiField.getValue());
 				tunai_jual_paket_DataStore.load({
 						params : { no_faktur: jpaket_nobuktiField.getValue() },
 					  	callback: function(opts, success, response)  {
 							if (success) {
-								//console.log("getCount_jualProduk = "+transfer_jual_paket_DataStore.getCount());
 									if(tunai_jual_paket_DataStore.getCount()){
 										jpaket_tunai_record=tunai_jual_paket_DataStore.getAt(0);
 										jpaket_tunai_nilaiField.setValue(jpaket_tunai_record.data.jtunai_nilai);
@@ -982,9 +967,6 @@ Ext.onReady(function(){
 					params : { no_faktur: jpaket_nobuktiField.getValue() },
 					callback: function(opts, success, response)  {
 						 if (success) { 
-							 //console.log("sukses jcard");
-							 //jpaket_card_record=card_jual_paket_DataStore.getAt(0);
-							 //console.log("jcard_nama = "+jpaket_card_record.data.jcard_nama);
 							 if(card_jual_paket_DataStore.getCount()){
 								 jpaket_card_record=card_jual_paket_DataStore.getAt(0).data;
 								 jpaket_card_nama3Field.setValue(jpaket_card_record.jcard_nama);
@@ -1014,14 +996,11 @@ Ext.onReady(function(){
 				  });
 				break;								
 			case 'transfer' :
-				//console.log("jpaket_nobukti = "+jpaket_nobuktiField.getValue());
 				transfer_jual_paket_DataStore.load({
 						params : { no_faktur: jpaket_nobuktiField.getValue() },
 					  	callback: function(opts, success, response)  {
 							if (success) {
-								//console.log("sukses jtransfer");
 								jpaket_transfer_record=transfer_jual_paket_DataStore.getAt(0);
-								//console.log("Count JTransfer = "+jpaket_transfer_record.data.jtransfer_bank);
 									if(transfer_jual_paket_DataStore.getCount()){
 										jpaket_transfer_record=transfer_jual_paket_DataStore.getAt(0);
 										jpaket_transfer_bank3Field.setValue(jpaket_transfer_record.data.jtransfer_bank);
@@ -1033,12 +1012,10 @@ Ext.onReady(function(){
 				  });
 				break;
 			case 'tunai' :
-				//console.log("jpaket_nobukti = "+jpaket_nobuktiField.getValue());
 				tunai_jual_paket_DataStore.load({
 						params : { no_faktur: jpaket_nobuktiField.getValue() },
 					  	callback: function(opts, success, response)  {
 							if (success) {
-								//console.log("getCount_jualProduk = "+transfer_jual_paket_DataStore.getCount());
 									if(tunai_jual_paket_DataStore.getCount()){
 										jpaket_tunai_record=tunai_jual_paket_DataStore.getAt(0);
 										jpaket_tunai_nilaiField.setValue(jpaket_tunai_record.data.jtunai_nilai);
@@ -3052,13 +3029,8 @@ Ext.onReady(function(){
 			detail_jual_paket_record=detail_jual_paket_DataStore.getAt(i);
 			var c_dtStore=0;
 			var j=cbo_dpaket_paketDataStore.find('dpaket_paket_value',combo_jual_paket.getValue());
-			//console.log("detail_harga = "+cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_harga);
-			//console.log("combo_djpaket = "+cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_value);
 			if(cbo_dpaket_paketDataStore.getCount()){
 				dpaket_idField.setValue(cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_value);
-				
-				//detail_jual_paket_record.data.dpaket_jumlah='2';
-				//console.log("set_jumlah");
 			}
 		}
 	});
@@ -3274,7 +3246,6 @@ Ext.onReady(function(){
 					timeout: 60000,
 					success: function(response){							
 						var result=eval(response.responseText);
-						//console.log("hasil_insert_dpaket="+result);
 					},
 					failure: function(response){
 						var result=response.responseText;
@@ -3435,7 +3406,6 @@ Ext.onReady(function(){
 		var detail_jual_paket_record;
 		for(i=0;i<detail_jual_paket_DataStore.getCount();i++){
 			detail_jual_paket_record=detail_jual_paket_DataStore.getAt(i);
-			//console.log("dpaket_paket = "+detail_jual_paket_record.data.dpaket_paket);
 			var j=cbo_dpaket_paketDataStore.find('dpaket_paket_value',detail_jual_paket_record.data.dpaket_paket);
 			if(j>-1){
 				detail_jual_paket_record.data.dpaket_harga=cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_harga;
@@ -3602,12 +3572,9 @@ Ext.onReady(function(){
 		else
 			tunai_nilai3=0;
 
-		//console.log("TOTAL = "+(transfer_nilai+transfer_nilai2+transfer_nilai3+kwitansi_nilai+kwitansi_nilai2+kwitansi_nilai3+card_nilai+card_nilai2+card_nilai3+cek_nilai+cek_nilai2+cek_nilai3+voucher_nilai+voucher_nilai2+voucher_nilai3+tunai_nilai+tunai_nilai2+tunai_nilai3));
 
 		total_bayar=transfer_nilai+transfer_nilai2+transfer_nilai3+kwitansi_nilai+kwitansi_nilai2+kwitansi_nilai3+card_nilai+card_nilai2+card_nilai3+cek_nilai+cek_nilai2+cek_nilai3+voucher_nilai+voucher_nilai2+voucher_nilai3+tunai_nilai+tunai_nilai2+tunai_nilai3;
-		//console.log("total_bayar = "+total_bayar);
 		total_bayar=(total_bayar>0?Math.round(total_bayar):0);
-		//console.log("total_bayar = "+total_bayar);
 		jpaket_bayarField.setValue(total_bayar);
 
 		//total_hutang=total_harga-jpaket_bayarField.getValue()-jpaket_transfer_nilaiField.getValue()-jpaket_transfer_nilai2Field.getValue()-jpaket_transfer_nilai3Field.getValue()-jpaket_kwitansi_nilaiField.getValue()-jpaket_kwitansi_nilai2Field.getValue()-jpaket_kwitansi_nilai3Field.getValue()-jpaket_card_nilaiField.getValue()-jpaket_card_nilai2Field.getValue()-jpaket_card_nilai3Field.getValue()-jpaket_cek_nilaiField.getValue()-jpaket_cek_nilai2Field.getValue()-jpaket_cek_nilai3Field.getValue()-jpaket_voucher_cashbackField.getValue()-jpaket_voucher_cashback2Field.getValue()-jpaket_voucher_cashback3Field.getValue();

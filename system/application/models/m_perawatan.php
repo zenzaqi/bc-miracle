@@ -166,7 +166,7 @@ class M_perawatan extends Model{
 			// For simple search
 			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (rawat_id LIKE '%".addslashes($filter)."%' OR rawat_kode LIKE '%".addslashes($filter)."%' OR rawat_kodelama LIKE '%".addslashes($filter)."%' OR rawat_nama LIKE '%".addslashes($filter)."%' OR rawat_group LIKE '%".addslashes($filter)."%' OR rawat_kategori LIKE '%".addslashes($filter)."%' OR rawat_jenis LIKE '%".addslashes($filter)."%' OR rawat_keterangan LIKE '%".addslashes($filter)."%' OR rawat_du LIKE '%".addslashes($filter)."%' OR rawat_dm LIKE '%".addslashes($filter)."%' OR rawat_point LIKE '%".addslashes($filter)."%' OR rawat_harga LIKE '%".addslashes($filter)."%' OR rawat_gudang LIKE '%".addslashes($filter)."%' OR rawat_aktif LIKE '%".addslashes($filter)."%' )";
+				$query .= " (rawat_kode LIKE '%".addslashes($filter)."%' OR rawat_kodelama LIKE '%".addslashes($filter)."%' OR rawat_nama LIKE '%".addslashes($filter)."%')";
 			}
 			
 			$result = $this->db->query($query);

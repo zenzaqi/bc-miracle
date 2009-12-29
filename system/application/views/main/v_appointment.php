@@ -179,7 +179,7 @@ Ext.onReady(function(){
 	function appointment_update(oGrid_event){
 		var app_id_update_pk="";
 		var app_customer_update=null;
-		var app_tanggal_update_date="";
+		var dapp_tglreservasi_update_date="";
 		var app_cara_update=null;
 		var app_keterangan_update=null;
 		var dapp_id_update="";
@@ -199,7 +199,7 @@ Ext.onReady(function(){
 
 		app_id_update_pk = oGrid_event.record.data.app_id;
 		if(oGrid_event.record.data.app_customer!== null){app_customer_update = oGrid_event.record.data.app_customer;}
-	 	if(oGrid_event.record.data.app_tanggal!== ""){app_tanggal_update_date =oGrid_event.record.data.app_tanggal.format('Y-m-d');}
+	 	if(oGrid_event.record.data.dapp_tglreservasi!== ""){dapp_tglreservasi_update_date =oGrid_event.record.data.dapp_tglreservasi.format('Y-m-d');}
 		if(oGrid_event.record.data.app_cara!== null){app_cara_update = oGrid_event.record.data.app_cara;}
 		if(oGrid_event.record.data.app_keterangan!== null){app_keterangan_update = oGrid_event.record.data.app_keterangan;}
 		if(oGrid_event.record.data.dapp_id!== ""){dapp_id_update = oGrid_event.record.data.dapp_id;}
@@ -224,7 +224,7 @@ Ext.onReady(function(){
 				task: "UPDATE",
 				app_id	: app_id_update_pk, 
 				app_customer	:app_customer_update,  
-				app_tanggal	: app_tanggal_update_date, 
+				dapp_tglreservasi	: dapp_tglreservasi_update_date, 
 				app_cara	:app_cara_update,  
 				app_keterangan	:app_keterangan_update,
 				dapp_id	:dapp_id_update,  
@@ -248,6 +248,7 @@ Ext.onReady(function(){
 					case 1:
 						appointment_DataStore.commitChanges();
 						appointment_DataStore.reload();
+						dapp_dokterDataStore.load();
 						break;
 					default:
 						Ext.MessageBox.show({
@@ -769,15 +770,19 @@ Ext.onReady(function(){
 			dataIndex: 'dapp_jamreservasi',
 			width: 60,
 			defaultSortable: false,
-			editor: new Ext.form.TextField({
-				maxLength: 250
-          	})
+			editor: new Ext.form.TimeField({
+				format: 'H:i:s',
+				minValue: '7:00',
+				maxValue: '21:00',
+				increment: 30
+			})
 		}, 
 		{
 			header: 'Perawatan',
 			dataIndex: 'rawat_nama',
 			width: 210,
-			sortable: false
+			sortable: false,
+			renderer: chk_rawatid
 		}, 
 		{
 			header: 'Customer',
@@ -925,6 +930,13 @@ Ext.onReady(function(){
 		}
 		return val;
 	}
+
+	function chk_rawatid(val){
+		/*if(appointmentListEditorGrid.getStore().getAt(1).get('rawat_id')=='261'){
+			return '<span style="color:green;"><b>' + val + '</b></span>';
+		}*/
+		return val;
+	}
     
 	/* Declare DataStore and  show datagrid list */
 	appointmentListEditorGrid =  new Ext.grid.EditorGridPanel({
@@ -1028,9 +1040,6 @@ Ext.onReady(function(){
 	appointmentListEditorGrid.render();
 	/* End of DataStore */
 	Ext.getCmp('cbo_page').on('select', function(){
-		//this.pageS = 19;
-		//console.log("CBO_PAGE = "+Ext.getCmp('cbo_page').getValue());
-		//console.log("PAGE-S = "+pageS);
 	});
      
 	/* Create Context Menu */
@@ -1410,7 +1419,7 @@ Ext.onReady(function(){
 			store: cbo_dapp_dokterDataStore,
 			mode: 'remote',
 			tpl: dokter_tpl,
-			displayField: 'dokter_display',
+			displayField: 'dokter_username',
 			valueField: 'dokter_value',
 			loadingText: 'Searching...',
 			itemSelector: 'div.search-item',
@@ -1778,7 +1787,7 @@ Ext.onReady(function(){
 			store: cbo_dapp_terapisDataStore,
 			mode: 'remote',
 			tpl: cbo_terapis_tpl,
-			displayField: 'terapis_display',
+			displayField: 'terapis_username',
 			valueField: 'terapis_value',
 			loadingText: 'Searching...',
 			itemSelector: 'div.search-item',
@@ -1849,6 +1858,7 @@ Ext.onReady(function(){
 			header: 'Status',
 			dataIndex: 'dapp_nonmedis_status',
 			width: 100,
+			editable: false,
 			sortable: true,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
