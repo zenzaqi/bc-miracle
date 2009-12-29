@@ -468,7 +468,13 @@ left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawa
 					);
 					$this->db->insert('customer', $data_cust_baru);
 					if($this->db->affected_rows()){
-						$sql="SELECT cust_id FROM customer WHERE cust_telprumah='$app_cust_telp_baru' OR cust_hp='$app_cust_hp_baru'";
+						if($app_cust_telp_baru!='0')
+							$sql="SELECT cust_id FROM customer WHERE cust_telprumah='$app_cust_telp_baru'";
+						if($app_cust_hp_baru!='0')
+							$sql="SELECT cust_id FROM customer WHERE cust_hp='$app_cust_hp_baru'";
+						if($app_cust_telp_baru!='0' && $app_cust_hp_baru!='0')
+							$sql="SELECT cust_id FROM customer WHERE cust_telprumah='$app_cust_telp_baru' AND cust_hp='$app_cust_hp_baru'";
+						
 						$rs=$this->db->query($sql);
 						if($rs->num_rows()){
 							$rs_record=$rs->row_array();
