@@ -734,7 +734,13 @@ Ext.onReady(function(){
 		}, '-', 
 			new Ext.app.SearchField({
 			store: produk_group_DataStore,
-			params: {start: 0, limit: pageS},
+			baseParams: {task:'LIST',start: 0, limit: pageS},
+			listeners:{
+				render: function(c){
+				Ext.get(this.id).set({qtitle:'Search By'});
+				Ext.get(this.id).set({qtip:'- Nama Produk Group<br>- Nama Customer<br>- No.Telp dan HP<br>- No.Member'});
+				}
+			},
 			width: 120
 		}),'-',{
 			text: 'Refresh',
@@ -1097,7 +1103,7 @@ Ext.onReady(function(){
 	/* Function for reset search result */
 	function produk_group_reset_search(){
 		// reset the store parameters
-		produk_group_DataStore.baseParams = { task: 'LIST' };
+		produk_group_DataStore.baseParams = { task: 'LIST', start:0, limit:pageS };
 		// Cause the datastore to do another query : 
 		produk_group_DataStore.reload({params: {start: 0, limit: pageS}});
 		produk_group_searchWindow.close();

@@ -25,7 +25,7 @@ class M_produk_group extends Model{
 			// For simple search
 			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (group_id LIKE '%".addslashes($filter)."%' OR group_kode LIKE '%".addslashes($filter)."%' OR group_nama LIKE '%".addslashes($filter)."%' OR group_duproduk LIKE '%".addslashes($filter)."%' OR group_dmproduk LIKE '%".addslashes($filter)."%' OR group_durawat LIKE '%".addslashes($filter)."%' OR group_dmrawat LIKE '%".addslashes($filter)."%' OR group_dupaket LIKE '%".addslashes($filter)."%' OR group_dmpaket LIKE '%".addslashes($filter)."%' OR group_keterangan LIKE '%".addslashes($filter)."%' OR group_aktif LIKE '%".addslashes($filter)."%' OR group_creator LIKE '%".addslashes($filter)."%' OR group_date_create LIKE '%".addslashes($filter)."%' OR group_update LIKE '%".addslashes($filter)."%' OR group_date_update LIKE '%".addslashes($filter)."%' OR group_revised LIKE '%".addslashes($filter)."%' )";
+				$query .= " (group_kode LIKE '%".addslashes($filter)."%' OR group_nama LIKE '%".addslashes($filter)."%' OR group_duproduk LIKE '%".addslashes($filter)."%' OR group_dmproduk LIKE '%".addslashes($filter)."%' OR group_durawat LIKE '%".addslashes($filter)."%' OR group_dmrawat LIKE '%".addslashes($filter)."%' OR group_dupaket LIKE '%".addslashes($filter)."%' OR group_dmpaket LIKE '%".addslashes($filter)."%' OR group_keterangan LIKE '%".addslashes($filter)."%' OR group_aktif LIKE '%".addslashes($filter)."%' OR group_creator LIKE '%".addslashes($filter)."%' OR group_date_create LIKE '%".addslashes($filter)."%' OR group_update LIKE '%".addslashes($filter)."%' OR group_date_update LIKE '%".addslashes($filter)."%' OR group_revised LIKE '%".addslashes($filter)."%' )";
 			}
 			
 			$result = $this->db->query($query);
