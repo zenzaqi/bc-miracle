@@ -353,6 +353,15 @@ Ext.onReady(function(){
 						   icon: Ext.MessageBox.WARNING
 						});
 						break;
+					case 3:
+						Ext.MessageBox.show({
+						   title: 'Warning',
+						   msg: 'Maaf, No.HandPhone Baru tidak boleh Kosong.',
+						   buttons: Ext.MessageBox.OK,
+						   animEl: 'save',
+						   icon: Ext.MessageBox.WARNING
+						});
+						break;
 					default:
 						Ext.MessageBox.show({
 						   title: 'Warning',

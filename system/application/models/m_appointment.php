@@ -456,9 +456,9 @@ left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawa
 					$sql="SELECT * FROM customer WHERE cust_telprumah='$app_cust_telp_baru' AND cust_hp='$app_cust_hp_baru'";
 				
 				$rs=$this->db->query($sql);
-				if($rs->num_rows()){
+				if($rs->num_rows() && $app_cust_hp_baru=='0'){
 					return '2';
-				}else{
+				}elseif($app_cust_hp_baru!='0'){
 					$data_cust_baru=array(
 					"cust_nama"=>$app_cust_nama_baru,
 					"cust_telprumah"=>$app_cust_telp_baru,
@@ -489,6 +489,8 @@ left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawa
 						);
 						$this->db->insert('appointment', $data);
 					}
+				}elseif($app_cust_hp_baru=='0'){
+					return '3';
 				}
 			}else{
 				$data = array(
