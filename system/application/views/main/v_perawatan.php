@@ -679,7 +679,7 @@ Ext.onReady(function(){
 		}, 
 		{
 			header: 'Jenis',
-			dataIndex: 'rawat_kategori',
+			dataIndex: 'rawat_kategori_nama',
 			width: 150,
 			sortable: true,
 			editable: false
