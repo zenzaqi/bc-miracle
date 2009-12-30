@@ -1257,7 +1257,10 @@ var editor_cust_note;
 							   icon: Ext.MessageBox.WARNING
 							});
 						break;
-					}        
+					};
+					cbo_cust_profesi_DataStore.reload();
+					cbo_cust_hobi_DataStore.reload();
+					cbo_reflain_DataStore.reload();
 				},
 				failure: function(response){
 					var result=response.responseText;
