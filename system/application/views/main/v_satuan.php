@@ -336,7 +336,7 @@ Ext.onReady(function(){
 			url: 'index.php?c=c_satuan&m=get_action', 
 			method: 'POST'
 		}),
-		baseParams:{task: "LIST"}, // parameter yang di $_POST ke Controller
+		baseParams:{task: "LIST", start:0, limit:pageS}, // parameter yang di $_POST ke Controller
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
@@ -500,7 +500,13 @@ Ext.onReady(function(){
 		}, '-', 
 			new Ext.app.SearchField({
 			store: satuan_DataStore,
-			params: {start: 0, limit: pageS},
+			baseParams: {task:'LIST',start: 0, limit: pageS},
+			listeners:{
+				render: function(c){
+				Ext.get(this.id).set({qtitle:'Search By'});
+				Ext.get(this.id).set({qtip:'- Kode<br>- Nama'});
+				}
+			},
 			width: 120
 		}),'-',{
 			text: 'Refresh',
@@ -690,7 +696,7 @@ Ext.onReady(function(){
 	/* Function for reset search result */
 	function satuan_reset_search(){
 		// reset the store parameters
-		satuan_DataStore.baseParams = { task: 'LIST' };
+		satuan_DataStore.baseParams = { task: 'LIST', start:0, limit:pageS };
 		// Cause the datastore to do another query : 
 		satuan_DataStore.reload({params: {start: 0, limit: pageS}});
 		satuan_searchWindow.close();

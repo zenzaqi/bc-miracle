@@ -65,7 +65,7 @@ var editor_satuan_konversi;
 //declare konstant
 var post2db = '';
 var msg = '';
-//var pageS=15;
+var pageS=15;
 
 /* declare variable here for Field*/
 var produk_idField;
@@ -517,8 +517,8 @@ Ext.onReady(function(){
 	});
 	/* End of Function */
 	
-	cbo_produk_groupDataSore = new Ext.data.Store({
-		id: 'cbo_produk_groupDataSore',
+	cbo_produk_groupDataStore = new Ext.data.Store({
+		id: 'cbo_produk_groupDataStore',
 		proxy: new Ext.data.HttpProxy({
 			url: 'index.php?c=c_produk&m=get_group_produk_list', 
 			method: 'POST'
@@ -579,8 +579,8 @@ Ext.onReady(function(){
 	});
 	
 	
-	cbo_produk_jenis_DataSore = new Ext.data.Store({
-		id: 'cbo_produk_jenis_DataSore',
+	cbo_produk_jenis_DataStore = new Ext.data.Store({
+		id: 'cbo_produk_jenis_DataStore',
 		proxy: new Ext.data.HttpProxy({
 			url: 'index.php?c=c_produk&m=get_jenis_produk_list', 
 			method: 'POST'
@@ -668,7 +668,7 @@ Ext.onReady(function(){
 			width: 150,
 			sortable: true,
 			editor: new Ext.form.ComboBox({
-				store: cbo_produk_groupDataSore,
+				store: cbo_produk_groupDataStore,
 				mode: 'remote',
 				displayField: 'produk_group_display',
 				valueField: 'produk_group_value',
@@ -681,7 +681,7 @@ Ext.onReady(function(){
 			width: 150,
 			sortable: true,
 			editor: new Ext.form.ComboBox({
-				store: cbo_produk_jenis_DataSore,
+				store: cbo_produk_jenis_DataStore,
 				mode: 'remote',
 				displayField: 'produk_jenis_display',
 				valueField: 'produk_jenis_value',
@@ -885,7 +885,13 @@ Ext.onReady(function(){
 		}, '-', 
 			new Ext.app.SearchField({
 			store: produk_DataStore,
-			//params: {start: 0, limit: 15},
+			baseParams: {task:'LIST',start: 0, limit: pageS},
+			listeners:{
+				render: function(c){
+				Ext.get(this.id).set({qtitle:'Search By'});
+				Ext.get(this.id).set({qtip:'- Kode Baru<br>- Nama<br>- Group 1<br>- Group 2<br>- Jenis'});
+				}
+			},
 			width: 120
 		}),'-',{
 			text: 'Refresh',
@@ -997,7 +1003,7 @@ Ext.onReady(function(){
 	produk_groupField= new Ext.form.ComboBox({
 		id: 'produk_groupField',
 		fieldLabel: 'Group 1 <span style="color: #ec0000">*</span>',
-		store: cbo_produk_groupDataSore,
+		store: cbo_produk_groupDataStore,
 		mode: 'remote',
 		editable:false,
 		allowBlank: false,
@@ -1031,7 +1037,7 @@ Ext.onReady(function(){
 	produk_jenisField= new Ext.form.ComboBox({
 		id: 'produk_jenisField',
 		fieldLabel: 'Group 2 <span style="color: #ec0000">*</span>',
-		store: cbo_produk_jenis_DataSore,
+		store: cbo_produk_jenis_DataStore,
 		mode: 'remote',
 		editable:false,
 		allowBlank: false,
@@ -1139,12 +1145,12 @@ Ext.onReady(function(){
 	});
 	
 	produk_groupField.on('select', function(){
-		var record=cbo_produk_groupDataSore.find('produk_group_value', produk_groupField.getValue());
-		if(cbo_produk_groupDataSore.getCount()){
-			produk_duField.setValue(cbo_produk_groupDataSore.getAt(record).data.produk_group_duproduk);
-			produk_dmField.setValue(cbo_produk_groupDataSore.getAt(record).data.produk_group_dmproduk);
-			produk_kategoritxtField.setValue(cbo_produk_groupDataSore.getAt(record).data.produk_group_kelompok);
-			produk_kategoriField.setValue(cbo_produk_groupDataSore.getAt(record).data.produk_group_kelompok_id);
+		var record=cbo_produk_groupDataStore.find('produk_group_value', produk_groupField.getValue());
+		if(cbo_produk_groupDataStore.getCount()){
+			produk_duField.setValue(cbo_produk_groupDataStore.getAt(record).data.produk_group_duproduk);
+			produk_dmField.setValue(cbo_produk_groupDataStore.getAt(record).data.produk_group_dmproduk);
+			produk_kategoritxtField.setValue(cbo_produk_groupDataStore.getAt(record).data.produk_group_kelompok);
+			produk_kategoriField.setValue(cbo_produk_groupDataStore.getAt(record).data.produk_group_kelompok_id);
 		}
 	});
 	
@@ -1671,7 +1677,7 @@ Ext.onReady(function(){
 	produk_groupSearchField= new Ext.form.ComboBox({
 		id: 'produk_groupSearchField',
 		fieldLabel: 'Group 1 <span style="color: #ec0000">*</span>',
-		store: cbo_produk_groupDataSore,
+		store: cbo_produk_groupDataStore,
 		mode: 'remote',
 		displayField: 'produk_group_display',
 		valueField: 'produk_group_value',
@@ -1700,7 +1706,7 @@ Ext.onReady(function(){
 	produk_jenisSearchField= new Ext.form.ComboBox({
 		id: 'produk_jenisSearchField',
 		fieldLabel: 'Group 2 <span style="color: #ec0000">*</span>',
-		store: cbo_produk_jenis_DataSore,
+		store: cbo_produk_jenis_DataStore,
 		mode: 'remote',
 		displayField: 'produk_jenis_display',
 		valueField: 'produk_jenis_value',

@@ -738,7 +738,7 @@ Ext.onReady(function(){
 			listeners:{
 				render: function(c){
 				Ext.get(this.id).set({qtitle:'Search By'});
-				Ext.get(this.id).set({qtip:'- Nama Produk Group<br>- Nama Customer<br>- No.Telp dan HP<br>- No.Member'});
+				Ext.get(this.id).set({qtip:'- Nama Produk Group<br>- Kode Produk Group'});
 				}
 			},
 			width: 120
@@ -1128,8 +1128,8 @@ Ext.onReady(function(){
 	/* Identify  group_nama Field */
 	group_kodeSearchField= new Ext.form.TextField({
 		id: 'group_kodeSearchField',
-		fieldLabel: 'Kode <span style="color: #ec0000">*</span>',
-		allowBlank: false,
+		fieldLabel: 'Kode',
+		allowBlank: true,
 		maxLength: 5,
 		width: 100,
 		maskRe: /([a-zA-Z]+)$/
@@ -1137,8 +1137,8 @@ Ext.onReady(function(){
 	
 	group_namaSearchField= new Ext.form.TextField({
 		id: 'group_namaSearchField',
-		fieldLabel: 'Nama <span style="color: #ec0000">*</span>',
-		allowBlank: false,
+		fieldLabel: 'Nama',
+		allowBlank: true,
 		maxLength: 250,
 		anchor: '95%'
 	});

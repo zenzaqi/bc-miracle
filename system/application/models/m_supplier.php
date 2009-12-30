@@ -40,7 +40,7 @@ class M_supplier extends Model{
 			// For simple search
 			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (supplier_id LIKE '%".addslashes($filter)."%' OR supplier_kategori LIKE '%".addslashes($filter)."%' OR supplier_nama LIKE '%".addslashes($filter)."%' OR supplier_alamat LIKE '%".addslashes($filter)."%' OR supplier_kota LIKE '%".addslashes($filter)."%' OR supplier_kodepos LIKE '%".addslashes($filter)."%' OR supplier_propinsi LIKE '%".addslashes($filter)."%' OR supplier_negara LIKE '%".addslashes($filter)."%' OR supplier_notelp LIKE '%".addslashes($filter)."%' OR supplier_notelp2 LIKE '%".addslashes($filter)."%' OR supplier_nofax LIKE '%".addslashes($filter)."%' OR supplier_email LIKE '%".addslashes($filter)."%' OR supplier_website LIKE '%".addslashes($filter)."%' OR supplier_cp LIKE '%".addslashes($filter)."%' OR supplier_contact_cp LIKE '%".addslashes($filter)."%' OR supplier_aktif LIKE '%".addslashes($filter)."%' OR supplier_creator LIKE '%".addslashes($filter)."%' OR supplier_date_create LIKE '%".addslashes($filter)."%' OR supplier_update LIKE '%".addslashes($filter)."%' OR supplier_date_update LIKE '%".addslashes($filter)."%' OR supplier_revised LIKE '%".addslashes($filter)."%' )";
+				$query .= " (supplier_kategori LIKE '%".addslashes($filter)."%' OR supplier_nama LIKE '%".addslashes($filter)."%' OR supplier_notelp LIKE '%".addslashes($filter)."%' OR supplier_cp LIKE '%".addslashes($filter)."%' OR supplier_contact_cp LIKE '%".addslashes($filter)."%' )";
 			}
 			
 			$result = $this->db->query($query);

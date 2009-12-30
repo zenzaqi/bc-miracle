@@ -340,7 +340,7 @@ Ext.onReady(function(){
 			url: 'index.php?c=c_gudang&m=get_action', 
 			method: 'POST'
 		}),
-		baseParams:{task: "LIST"}, // parameter yang di $_POST ke Controller
+		baseParams:{task: "LIST", start:0, limit:pageS}, // parameter yang di $_POST ke Controller
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
@@ -507,7 +507,13 @@ Ext.onReady(function(){
 		}, '-', 
 			new Ext.app.SearchField({
 			store: gudang_DataStore,
-			params: {start: 0, limit: pageS},
+			baseParams: {task:'LIST',start: 0, limit: pageS},
+			listeners:{
+				render: function(c){
+				Ext.get(this.id).set({qtitle:'Search By'});
+				Ext.get(this.id).set({qtip:'- Nama<br>- Lokasi<br>- Keterangan'});
+				}
+			},
 			width: 120
 		}),'-',{
 			text: 'Refresh',
@@ -707,7 +713,7 @@ Ext.onReady(function(){
 	/* Function for reset search result */
 	function gudang_reset_search(){
 		// reset the store parameters
-		gudang_DataStore.baseParams = { task: 'LIST' };
+		gudang_DataStore.baseParams = { task: 'LIST', start:0, limit:pageS };
 		// Cause the datastore to do another query : 
 		gudang_DataStore.reload({params: {start: 0, limit: pageS}});
 		gudang_searchWindow.close();

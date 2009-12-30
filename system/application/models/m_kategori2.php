@@ -25,7 +25,7 @@ class M_kategori2 extends Model{
 			// For simple search
 			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (kategori2_id LIKE '%".addslashes($filter)."%' OR kategori2_nama LIKE '%".addslashes($filter)."%' OR kategori2_jenis LIKE '%".addslashes($filter)."%' OR kategori2_keterangan LIKE '%".addslashes($filter)."%' OR kategori2_aktif LIKE '%".addslashes($filter)."%' )";
+				$query .= " (kategori2_nama LIKE '%".addslashes($filter)."%' OR kategori2_jenis LIKE '%".addslashes($filter)."%' OR kategori2_keterangan LIKE '%".addslashes($filter)."%' )";
 			}
 			
 			$result = $this->db->query($query);

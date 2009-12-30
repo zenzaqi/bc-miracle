@@ -1114,7 +1114,13 @@ Ext.onReady(function(){
 		}, '-', 
 			new Ext.app.SearchField({
 			store: karyawan_DataStore,
-			params: {start: 0, limit: pageS},
+			baseParams: {task:'LIST',start: 0, limit: pageS},
+			listeners:{
+				render: function(c){
+				Ext.get(this.id).set({qtitle:'Search By'});
+				Ext.get(this.id).set({qtip:'- NIK<br>- Nama Lengkap<br>- Nickname<br>- Departemen<br>- Jabatan'});
+				}
+			},
 			width: 120
 		}),'-',{
 			text: 'Refresh',
