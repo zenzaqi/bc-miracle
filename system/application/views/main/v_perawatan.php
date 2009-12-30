@@ -569,24 +569,24 @@ Ext.onReady(function(){
 	});
 	
 	/* Datastore Rawat Jenis */
-//	cbo_rawat_kategoriDataSore = new Ext.data.Store({
-//		id: 'cbo_rawat_kategoriDataSore',
-//		proxy: new Ext.data.HttpProxy({
-//			url: 'index.php?c=c_perawatan&m=get_kategori_perawatan_list', 
-//			method: 'POST'
-//		}),
-//		baseParams:{task: "LIST"}, // parameter yang di $_POST ke Controller
-//		reader: new Ext.data.JsonReader({
-//			root: 'results',
-//			totalProperty: 'total',
-//			id: 'kategori_id'
-//		},[
-//		/* dataIndex => insert intocustomer_note_ColumnModel, Mapping => for initiate table column */ 
-//			{name: 'rawat_kategori_value', type: 'int', mapping: 'kategori_id'},
-//			{name: 'rawat_kategori_display', type: 'string', mapping: 'kategori_nama'}
-//		]),
-//		sortInfo:{field: 'rawat_kategori_display', direction: "ASC"}
-//	});
+	cbo_rawat_kategoriDataStore = new Ext.data.Store({
+		id: 'cbo_rawat_kategoriDataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_perawatan&m=get_kategori_perawatan_list', 
+			method: 'POST'
+		}),
+		baseParams:{task: "LIST"}, // parameter yang di $_POST ke Controller
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'kategori_id'
+		},[
+		/* dataIndex => insert intocustomer_note_ColumnModel, Mapping => for initiate table column */ 
+			{name: 'rawat_kategori_value', type: 'int', mapping: 'kategori_id'},
+			{name: 'rawat_kategori_display', type: 'string', mapping: 'kategori_nama'}
+		]),
+		sortInfo:{field: 'rawat_kategori_display', direction: "ASC"}
+	});
 	
 	/* Datastore Rawat Gudang */
 	cbo_rawat_gudangDataSore = new Ext.data.Store({
@@ -760,6 +760,19 @@ Ext.onReady(function(){
 				displayField: 'rawat_gudang_display',
 				valueField: 'rawat_gudang_value',
 				triggerAction: 'all'
+			})
+		}, 
+		{
+			header: 'Kontribusi',
+			dataIndex: 'rawat_kontribusi',
+			width: 150,
+			sortable: true,
+			editor: new Ext.form.ComboBox({
+				//store: cbo_rawat_gudangDataSore,
+				//mode: 'remote',
+				//displayField: 'rawat_gudang_display',
+				//valueField: 'rawat_gudang_value',
+				//triggerAction: 'all'
 			})
 		}, 
 		{
@@ -1914,7 +1927,7 @@ Ext.onReady(function(){
 	});
 	/* Identify  rawat_kategori Search Field */
 	rawat_jenisSearchField= new Ext.form.ComboBox({
-		id: 'rawat_kategoriSearchField',
+		id: 'rawat_jenisSearchField',
 		fieldLabel: 'Group 2',
 		store: cbo_rawat_jenisDataSore,
 		mode: 'remote',
@@ -1923,14 +1936,18 @@ Ext.onReady(function(){
 		width: 120,
 		triggerAction: 'all'
 	});
-
-	rawat_kategoriSearchField= new Ext.form.NumberField();
-	rawat_kategoritxtSearchField= new Ext.form.TextField({
-		id: 'rawat_kategoritxtSearchField',
+	
+	rawat_kategoriSearchField= new Ext.form.ComboBox({
+		id: 'rawat_kategoriSearchField',
 		fieldLabel: 'Jenis',
-		disabled: true,
-		width: 120
+		store: cbo_rawat_kategoriDataStore,
+		mode: 'remote',
+		displayField: 'rawat_kategori_display',
+		valueField: 'rawat_kategori_value',
+		width: 120,
+		triggerAction: 'all'
 	});
+	
 	/* Identify  rawat_keterangan Search Field */
 	rawat_keteranganSearchField= new Ext.form.TextArea({
 		id: 'rawat_keteranganSearchField',
@@ -2022,14 +2039,6 @@ Ext.onReady(function(){
 		triggerAction: 'all'	 
 	
 	});
-
-	rawat_groupSearchField.on('select', function(){
-		var record=cbo_rawat_groupDataStore.find('rawat_group_value', rawat_groupSearchField.getValue());
-		if(cbo_rawat_groupDataStore.getCount()){
-			rawat_kategoritxtSearchField.setValue(cbo_rawat_groupDataStore.getAt(record).data.rawat_group_kelompok);
-			rawat_kategoriSearchField.setValue(cbo_rawat_groupDataStore.getAt(record).data.rawat_group_kelompok_id);
-		}
-	});
     
 	/* Function for retrieve search Form Panel */
 	perawatan_searchForm = new Ext.FormPanel({
@@ -2046,7 +2055,7 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [rawat_kodelamaSearchField, rawat_kodeSearchField, rawat_namaSearchField, rawat_groupSearchField, rawat_jenisSearchField, rawat_kategoritxtSearchField, rawat_duSearchField, rawat_dmSearchField] 
+				items: [rawat_kodelamaSearchField, rawat_kodeSearchField, rawat_namaSearchField, rawat_groupSearchField, rawat_jenisSearchField, rawat_kategoriSearchField, rawat_duSearchField, rawat_dmSearchField] 
 			}
  
 			,{

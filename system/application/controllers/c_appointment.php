@@ -16,6 +16,7 @@ class C_appointment extends Controller {
 	//constructor
 	function C_appointment(){
 		parent::Controller();
+		session_start();
 		$this->load->model('m_appointment', '', TRUE);
 		$this->load->plugin('to_excel');
 	}
@@ -135,7 +136,8 @@ class C_appointment extends Controller {
 		$dapp_medis_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$dapp_medis_keterangan);
 		$dapp_medis_keterangan=str_replace("\\", "",$dapp_medis_keterangan);
 		$dapp_medis_keterangan=str_replace("'", "\'",$dapp_medis_keterangan);
-		$result=$this->m_appointment->detail_appointment_detail_medis_insert($dapp_medis_id ,$dapp_medis_master ,$dapp_medis_perawatan ,$dapp_medis_tglreservasi ,$dapp_medis_jamreservasi ,$dapp_medis_petugas ,$dapp_medis_status ,$dapp_medis_tgldatang ,$dapp_medis_jamdatang ,$dapp_medis_keterangan);
+		$dapp_user=$_SESSION["userid"];
+		$result=$this->m_appointment->detail_appointment_detail_medis_insert($dapp_medis_id ,$dapp_medis_master ,$dapp_medis_perawatan ,$dapp_medis_tglreservasi ,$dapp_medis_jamreservasi ,$dapp_medis_petugas ,$dapp_medis_status ,$dapp_medis_tgldatang ,$dapp_medis_jamdatang ,$dapp_medis_keterangan ,$dapp_user);
 	}
 	
 	function detail_appointment_detail_nonmedis_insert(){
@@ -241,7 +243,10 @@ class C_appointment extends Controller {
 		$dapp_keterangan=trim(@$_POST["dapp_keterangan"]);
 		$dapp_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$dapp_keterangan);
 		$dapp_keterangan=str_replace("'", "\'",$dapp_keterangan);
-		$result = $this->m_appointment->appointment_update($app_id ,$app_customer ,$dapp_tglreservasi ,$app_cara ,$app_keterangan, $dapp_id, $dapp_status, $dokter_nama, $terapis_nama, $kategori_nama, $rawat_id, $dokter_id, $terapis_id, $dapp_jamreservasi, $cust_id, $dapp_dokter_no, $dapp_terapis_no, $dapp_dokter_ganti, $dapp_terapis_ganti, $dapp_keterangan);
+		
+		$app_user=$_SESSION["userid"];
+		
+		$result = $this->m_appointment->appointment_update($app_id ,$app_customer ,$dapp_tglreservasi ,$app_cara ,$app_keterangan, $dapp_id, $dapp_status, $dokter_nama, $terapis_nama, $kategori_nama, $rawat_id, $dokter_id, $terapis_id, $dapp_jamreservasi, $cust_id, $dapp_dokter_no, $dapp_terapis_no, $dapp_dokter_ganti, $dapp_terapis_ganti, $dapp_keterangan, $app_user);
 		echo $result;
 	}
 	
