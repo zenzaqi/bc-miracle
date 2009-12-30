@@ -485,7 +485,7 @@ class M_perawatan extends Model{
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " rawat_aktif = '".$rawat_aktif."'";
 			};
-			//echo $query;
+			echo $query;
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
 			
