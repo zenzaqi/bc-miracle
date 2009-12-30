@@ -17,12 +17,13 @@ class C_perawatan extends Controller {
 	function C_perawatan(){
 		parent::Controller();
 		$this->load->model('m_perawatan', '', TRUE);
+		$this->load->plugin('to_excel');
+		$this->load->library('firephp');
 	}
 	
 	//set index
 	function index(){
 		$this->load->helper('asset');
-		$this->load->plugin('to_excel');
 		$this->load->view('main/v_perawatan');
 	}
 	

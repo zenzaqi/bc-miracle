@@ -187,8 +187,9 @@ class M_perawatan extends Model{
 		
 		//function for update record
 		function perawatan_update($rawat_id ,$rawat_kode ,$rawat_kodelama ,$rawat_nama ,$rawat_group ,$rawat_kategori,$rawat_kontribusi ,$rawat_jenis ,$rawat_keterangan ,$rawat_du ,$rawat_dm ,$rawat_point ,$rawat_harga ,$rawat_gudang ,$rawat_aktif ){
-		if ($rawat_aktif=="")
-			$rawat_aktif = "Aktif";
+			if ($rawat_aktif=="")
+				$rawat_aktif = "Aktif";
+				
 			$data = array(
 				"rawat_id"=>$rawat_id, 
 //				"rawat_kode"=>$rawat_kode, 
@@ -304,10 +305,13 @@ class M_perawatan extends Model{
 			}
 			
 			$pattern=$group_kode.$jenis_kode;
-			//echo $jenis_kode;
-			$rawat_kode=$this->get_kode($pattern);
+			/*$rawat_kode=$this->get_kode($pattern);
 			if($pattern!=="" && strlen($pattern)==4)
+				$data["rawat_kode"]=$rawat_kode;*/
+			//if rawat_kode!=""
+			if($rawat_kode!=""){
 				$data["rawat_kode"]=$rawat_kode;
+			}
 				
 			$sql="SELECT rawat_du FROM perawatan WHERE rawat_du!='".$rawat_du."' AND rawat_id='".$rawat_id."'";
 			$rs=$this->db->query($sql);
@@ -420,11 +424,14 @@ class M_perawatan extends Model{
 		//function for advanced search record
 		function perawatan_search($rawat_id ,$rawat_kode ,$rawat_kodelama ,$rawat_nama ,$rawat_group ,$rawat_kategori ,$rawat_jenis ,$rawat_keterangan ,$rawat_du ,$rawat_dm ,$rawat_point ,$rawat_harga ,$rawat_gudang ,$rawat_aktif ,$start,$end){
 			//full query
+			if($rawat_aktif==""){
+				$rawat_aktif="Aktif";
+			}
 			$query="SELECT * FROM vu_perawatan";
 			
 			if($rawat_id!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " rawat_id LIKE '%".$rawat_id."%'";
+				$query.= " rawat_id = '".$rawat_id."'";
 			};
 			if($rawat_kode!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -444,11 +451,11 @@ class M_perawatan extends Model{
 			};
 			if($rawat_kategori!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " rawat_kategori LIKE '%".$rawat_kategori."%'";
+				$query.= " rawat_jenis = '".$rawat_kategori."'";
 			};
 			if($rawat_jenis!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " rawat_jenis LIKE '%".$rawat_jenis."%'";
+				$query.= " rawat_kategori = '".$rawat_jenis."'";
 			};
 			if($rawat_keterangan!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -476,7 +483,7 @@ class M_perawatan extends Model{
 			};
 			if($rawat_aktif!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " rawat_aktif LIKE '%".$rawat_aktif."%'";
+				$query.= " rawat_aktif = '".$rawat_aktif."'";
 			};
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();

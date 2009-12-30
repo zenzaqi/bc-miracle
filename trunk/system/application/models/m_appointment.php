@@ -442,7 +442,7 @@ left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawa
 		}
 		
 		//function for create new record
-		function appointment_create($app_customer ,$app_tanggal ,$app_cara ,$app_keterangan ,$app_cust_nama_baru ,$app_cust_telp_baru ,$app_cust_hp_baru ,$app_cust_keterangan_baru ){
+		function appointment_create($app_customer ,$app_tanggal ,$app_cara ,$app_keterangan ,$app_cust_nama_baru ,$app_cust_telp_baru ,$app_cust_hp_baru ,$app_cust_keterangan_baru ,$app_user){
 			if($app_cust_nama_baru!=""){
 				if($app_cust_telp_baru=="")
 					$app_cust_telp_baru='0';
@@ -486,7 +486,8 @@ left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawa
 							"app_customer"=>$app_customer, 
 							"app_tanggal"=>$app_tanggal, 
 							"app_cara"=>$app_cara, 
-							"app_keterangan"=>$app_keterangan 
+							"app_keterangan"=>$app_keterangan,
+							"app_creator"=>$app_user
 						);
 						$this->db->insert('appointment', $data);
 					}
@@ -498,7 +499,8 @@ left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawa
 					"app_customer"=>$app_customer, 
 					"app_tanggal"=>$app_tanggal, 
 					"app_cara"=>$app_cara, 
-					"app_keterangan"=>$app_keterangan 
+					"app_keterangan"=>$app_keterangan,
+					"app_creator"=>$app_user
 				);
 				$this->db->insert('appointment', $data);
 			} 

@@ -51,10 +51,13 @@ class M_kategori2 extends Model{
 			$data = array(
 				"kategori2_id"=>$kategori2_id, 
 				"kategori2_nama"=>$kategori2_nama, 
-				"kategori2_jenis"=>$kategori2_jenis, 
 				"kategori2_keterangan"=>$kategori2_keterangan, 
 				"kategori2_aktif"=>$kategori2_aktif 
 			);
+			$sql="SELECT kategori_id FROM kategori WHERE kategori_id='$kategori2_jenis'";
+			$rs=$this->db->query($sql);
+			if($rs->num_rows())
+				$data["kategori2_jenis"]=$kategori2_jenis;
 			$this->db->where('kategori2_id', $kategori2_id);
 			$this->db->update('kategori2', $data);
 			
