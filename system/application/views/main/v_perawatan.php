@@ -627,7 +627,7 @@ Ext.onReady(function(){
 			width: 150,
 			sortable: true,
 			editor: new Ext.form.TextField({
-				allowBlank: false,
+				allowBlank: true,
 				maxLength: 20
           	})
 		},
@@ -1913,7 +1913,7 @@ Ext.onReady(function(){
 		triggerAction: 'all'
 	});
 	/* Identify  rawat_kategori Search Field */
-	rawat_kategoriSearchField= new Ext.form.ComboBox({
+	rawat_jenisSearchField= new Ext.form.ComboBox({
 		id: 'rawat_kategoriSearchField',
 		fieldLabel: 'Group 2',
 		store: cbo_rawat_jenisDataSore,
@@ -1923,10 +1923,12 @@ Ext.onReady(function(){
 		width: 120,
 		triggerAction: 'all'
 	});
-	/* Identify  rawat_jenis Search Field */
-	rawat_jenisSearchField= new Ext.form.TextField({
-		id: 'rawat_jenisSearchField',
+
+	rawat_kategoriSearchField= new Ext.form.NumberField();
+	rawat_kategoritxtSearchField= new Ext.form.TextField({
+		id: 'rawat_kategoritxtSearchField',
 		fieldLabel: 'Jenis',
+		disabled: true,
 		width: 120
 	});
 	/* Identify  rawat_keterangan Search Field */
@@ -2020,6 +2022,14 @@ Ext.onReady(function(){
 		triggerAction: 'all'	 
 	
 	});
+
+	rawat_groupSearchField.on('select', function(){
+		var record=cbo_rawat_groupDataStore.find('rawat_group_value', rawat_groupSearchField.getValue());
+		if(cbo_rawat_groupDataStore.getCount()){
+			rawat_kategoritxtSearchField.setValue(cbo_rawat_groupDataStore.getAt(record).data.rawat_group_kelompok);
+			rawat_kategoriSearchField.setValue(cbo_rawat_groupDataStore.getAt(record).data.rawat_group_kelompok_id);
+		}
+	});
     
 	/* Function for retrieve search Form Panel */
 	perawatan_searchForm = new Ext.FormPanel({
@@ -2036,7 +2046,7 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [rawat_kodelamaSearchField, rawat_kodeSearchField, rawat_namaSearchField, rawat_groupSearchField, rawat_kategoriSearchField, rawat_jenisSearchField, rawat_duSearchField, rawat_dmSearchField] 
+				items: [rawat_kodelamaSearchField, rawat_kodeSearchField, rawat_namaSearchField, rawat_groupSearchField, rawat_jenisSearchField, rawat_kategoritxtSearchField, rawat_duSearchField, rawat_dmSearchField] 
 			}
  
 			,{

@@ -271,7 +271,9 @@ class C_appointment extends Controller {
 		$app_cust_keterangan_baru=str_replace("/(<\/?)(p)([^>]*>)", "",$app_cust_keterangan_baru);
 		$app_cust_keterangan_baru=str_replace("'", "\'",$app_cust_keterangan_baru);
 		
-		$result=$this->m_appointment->appointment_create($app_customer ,$app_tanggal ,$app_cara ,$app_keterangan ,$app_cust_nama_baru ,$app_cust_telp_baru ,$app_cust_hp_baru ,$app_cust_keterangan_baru );
+		$app_user=$_SESSION["userid"];
+		
+		$result=$this->m_appointment->appointment_create($app_customer ,$app_tanggal ,$app_cara ,$app_keterangan ,$app_cust_nama_baru ,$app_cust_telp_baru ,$app_cust_hp_baru ,$app_cust_keterangan_baru ,$app_user );
 		echo $result;
 	}
 
