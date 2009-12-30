@@ -81,7 +81,7 @@ class M_appointment extends Model{
 		//*eof
 		
 		//insert detail record
-		function detail_appointment_detail_medis_insert($dapp_medis_id ,$dapp_medis_master ,$dapp_medis_perawatan ,$dapp_medis_tglreservasi ,$dapp_medis_jamreservasi ,$dapp_medis_petugas ,$dapp_medis_status ,$dapp_medis_tgldatang ,$dapp_medis_jamdatang ,$dapp_medis_keterangan){
+		function detail_appointment_detail_medis_insert($dapp_medis_id ,$dapp_medis_master ,$dapp_medis_perawatan ,$dapp_medis_tglreservasi ,$dapp_medis_jamreservasi ,$dapp_medis_petugas ,$dapp_medis_status ,$dapp_medis_tgldatang ,$dapp_medis_jamdatang ,$dapp_medis_keterangan ,$dapp_user){
 			//if master id not capture from view then capture it from max pk from master table
 			if($dapp_medis_master=="" || $dapp_medis_master==NULL){
 				$dapp_medis_master=$this->get_master_id();
@@ -101,7 +101,8 @@ class M_appointment extends Model{
 				"dapp_status"=>$dapp_medis_status, 
 				"dapp_tgldatang"=>$dapp_medis_tgldatang, 
 				"dapp_jamdatang"=>$dapp_medis_jamdatang,
-				"dapp_keterangan"=>$dapp_medis_keterangan
+				"dapp_keterangan"=>$dapp_medis_keterangan,
+				"dapp_creator"=>$dapp_user
 			);
 			$this->db->insert('appointment_detail', $data); 
 			if($this->db->affected_rows())
@@ -178,8 +179,9 @@ left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawa
 		}
 		
 		//function for update record
-		function appointment_update($app_id ,$app_customer ,$dapp_tglreservasi ,$app_cara ,$app_keterangan,$dapp_id, $dapp_status, $dokter_nama, $terapis_nama, $kategori_nama, $rawat_id, $dokter_id, $terapis_id, $dapp_jamreservasi, $cust_id, $dapp_dokter_no, $dapp_terapis_no, $dapp_dokter_ganti, $dapp_terapis_ganti, $dapp_keterangan){
+		function appointment_update($app_id ,$app_customer ,$dapp_tglreservasi ,$app_cara ,$app_keterangan,$dapp_id, $dapp_status, $dokter_nama, $terapis_nama, $kategori_nama, $rawat_id, $dokter_id, $terapis_id, $dapp_jamreservasi, $cust_id, $dapp_dokter_no, $dapp_terapis_no, $dapp_dokter_ganti, $dapp_terapis_ganti, $dapp_keterangan, $app_user){
 			//INSERT to Appointment-Detail
+			$dt=date('Y-m-d H:i:s');
 			$bln_now=date('Y-m');
 			
 			$sql_detail="SELECT dapp_status FROM appointment_detail WHERE dapp_id='$dapp_id' AND dapp_status!='$dapp_status'";
@@ -319,6 +321,14 @@ left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawa
 			$data_dapp["dapp_tglreservasi"]=$dapp_tglreservasi;
 			$data_dapp["dapp_jamreservasi"]=$dapp_jamreservasi;
 			$data_dapp["dapp_keterangan"]=$dapp_keterangan;
+			$data_dapp["dapp_update"]=$app_user;
+			$data_dapp["dapp_date_update"]=$dt;
+			$sql="SELECT dapp_revised FROM appointment_detail WHERE dapp_id='$dapp_id' AND dapp_master='$app_id'";
+			$rs=$this->db->query($sql);
+			if($rs->num_rows()){
+				$rs_record=$rs->row_array();
+				$data_dapp["dapp_revised"]=$rs_record["dapp_revised"]+1;
+			}
 			$this->db->where('dapp_id',$dapp_id);
 			$this->db->where('dapp_master',$app_id);
 			$this->db->update('appointment_detail',$data_dapp);
@@ -338,6 +348,14 @@ left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawa
 				$data["app_customer"]=$app_customer;
 			}else{
 				$customer_id=$cust_id;
+			}
+			$data["app_update"]=$app_user;
+			$data["app_date_update"]=$dt;
+			$sql="SELECT app_revised FROM appointment WHERE app_id='$app_id'";
+			$rs=$this->db->query($sql);
+			if($rs->num_rows()){
+				$rs_record=$rs->row_array();
+				$data_dapp["app_revised"]=$rs_record["app_revised"]+1;
 			}
 			$this->db->where('app_id', $app_id);
 			$this->db->update('appointment', $data);

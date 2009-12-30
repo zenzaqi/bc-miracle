@@ -449,10 +449,10 @@ class M_perawatan extends Model{
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " rawat_group LIKE '%".$rawat_group."%'";
 			};
-			/*if($rawat_kategori!=''){
+			if($rawat_kategori!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " rawat_jenis = '".$rawat_kategori."'";
-			};*/
+			};
 			if($rawat_jenis!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " rawat_jenis = '".$rawat_jenis."'";
@@ -485,6 +485,7 @@ class M_perawatan extends Model{
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " rawat_aktif = '".$rawat_aktif."'";
 			};
+			//echo $query;
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
 			
