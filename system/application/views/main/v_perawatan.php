@@ -987,7 +987,7 @@ Ext.onReady(function(){
 		id: 'rawat_kodeField',
 		fieldLabel: 'Kode Baru',
 		maxLength: 20,
-		readOnly: true,
+		readOnly: false,
 		emptyText: '(auto)',
 		width: 100
 	});
