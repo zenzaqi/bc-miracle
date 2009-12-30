@@ -485,7 +485,7 @@ Ext.onReady(function(){
 			{name: 'rawat_group', type: 'string', mapping: 'group_nama'}, 
 			{name: 'rawat_kategori_nama', type: 'string', mapping: 'kategori_nama'},
 			{name: 'rawat_kategori_id', type: 'string', mapping: 'rawat_kategori'},
-			{name: 'rawat_kontribusi', type: 'string', mapping: 'kontribusi_nama'}, 
+			{name: 'rawat_kontribusi', type: 'string', mapping: 'kategori2_nama'}, 
 			{name: 'rawat_jenis', type: 'string', mapping: 'jenis_nama'}, 
 			{name: 'rawat_keterangan', type: 'string', mapping: 'rawat_keterangan'}, 
 			{name: 'rawat_du', type: 'int', mapping: 'rawat_du'}, 
@@ -763,7 +763,7 @@ Ext.onReady(function(){
 			})
 		}, 
 		{
-			header: 'Kontribusi',
+			header: 'Contribution',
 			dataIndex: 'rawat_kontribusi',
 			width: 150,
 			sortable: true,
