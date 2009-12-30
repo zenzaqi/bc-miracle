@@ -424,6 +424,7 @@ class M_perawatan extends Model{
 		//function for advanced search record
 		function perawatan_search($rawat_id ,$rawat_kode ,$rawat_kodelama ,$rawat_nama ,$rawat_group ,$rawat_kategori ,$rawat_jenis ,$rawat_keterangan ,$rawat_du ,$rawat_dm ,$rawat_point ,$rawat_harga ,$rawat_gudang ,$rawat_aktif ,$start,$end){
 			//full query
+			//$this->firephp->log($rawat_kategori, "RATSST");
 			if($rawat_aktif==""){
 				$rawat_aktif="Aktif";
 			}
@@ -451,7 +452,7 @@ class M_perawatan extends Model{
 			};
 			if($rawat_kategori!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " rawat_jenis = '".$rawat_kategori."'";
+				$query.= " rawat_kategori = '".$rawat_kategori."'";
 			};
 			if($rawat_jenis!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -490,6 +491,7 @@ class M_perawatan extends Model{
 			$nbrows = $result->num_rows();
 			
 			$limit = $query." LIMIT ".$start.",".$end;		
+			//echo $limit;
 			$result = $this->db->query($limit);    
 			
 			if($nbrows>0){
@@ -534,7 +536,7 @@ class M_perawatan extends Model{
 				};
 				if($rawat_kategori!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " rawat_kategori LIKE '%".$rawat_kategori."%'";
+					$query.= " rawat_kategori = '".$rawat_kategori."'";
 				};
 				if($rawat_jenis!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
