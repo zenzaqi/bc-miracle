@@ -25,7 +25,7 @@ class M_jenis extends Model{
 			// For simple search
 			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (jenis_id LIKE '%".addslashes($filter)."%' OR jenis_kode LIKE '%".addslashes($filter)."%' OR jenis_nama LIKE '%".addslashes($filter)."%' OR jenis_kelompok LIKE '%".addslashes($filter)."%' OR jenis_keterangan LIKE '%".addslashes($filter)."%' OR jenis_aktif LIKE '%".addslashes($filter)."%' )";
+				$query .= " (jenis_kode LIKE '%".addslashes($filter)."%' OR jenis_nama LIKE '%".addslashes($filter)."%' OR jenis_kelompok LIKE '%".addslashes($filter)."%' )";
 			}
 			
 			$result = $this->db->query($query);

@@ -25,7 +25,7 @@ class M_satuan extends Model{
 			// For simple search
 			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (satuan_id LIKE '%".addslashes($filter)."%' OR satuan_kode LIKE '%".addslashes($filter)."%' OR satuan_nama LIKE '%".addslashes($filter)."%' OR satuan_aktif LIKE '%".addslashes($filter)."%' OR satuan_creator LIKE '%".addslashes($filter)."%' OR satuan_date_create LIKE '%".addslashes($filter)."%' OR satuan_update LIKE '%".addslashes($filter)."%' OR satuan_date_update LIKE '%".addslashes($filter)."%' OR satuan_revised LIKE '%".addslashes($filter)."%' )";
+				$query .= " (satuan_kode LIKE '%".addslashes($filter)."%' OR satuan_nama LIKE '%".addslashes($filter)."%' )";
 			}
 			
 			$result = $this->db->query($query);

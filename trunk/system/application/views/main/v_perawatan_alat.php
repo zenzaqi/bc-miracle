@@ -404,7 +404,13 @@ Ext.onReady(function(){
 		}, '-', 
 			new Ext.app.SearchField({
 			store: perawatan_alat_DataStore,
-			params: {start: 0, limit: pageS},
+			baseParams: {task:'LIST',start: 0, limit: pageS},
+			listeners:{
+				render: function(c){
+				Ext.get(this.id).set({qtitle:'Search By'});
+				Ext.get(this.id).set({qtip:'- Nama'});
+				}
+			},
 			width: 120
 		}),'-',{
 			text: 'Refresh',

@@ -166,7 +166,7 @@ FROM ((`paket` INNER JOIN `produk_group` ON `paket`.`paket_group`=`produk_group`
 			// For simple search
 			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (paket_id LIKE '%".addslashes($filter)."%' OR paket_kode LIKE '%".addslashes($filter)."%' OR paket_nama LIKE '%".addslashes($filter)."%' OR paket_group LIKE '%".addslashes($filter)."%' OR paket_keterangan LIKE '%".addslashes($filter)."%' OR paket_du LIKE '%".addslashes($filter)."%' OR paket_dm LIKE '%".addslashes($filter)."%' OR paket_point LIKE '%".addslashes($filter)."%' OR paket_harga LIKE '%".addslashes($filter)."%' OR paket_expired LIKE '%".addslashes($filter)."%' OR paket_aktif LIKE '%".addslashes($filter)."%' )";
+				$query .= " (paket_kode LIKE '%".addslashes($filter)."%' OR paket_kodelama LIKE '%".addslashes($filter)."%' OR paket_nama LIKE '%".addslashes($filter)."%' OR group_nama LIKE '%".addslashes($filter)."%' OR jenis_nama LIKE '%".addslashes($filter)."%' OR kategori_nama LIKE '%".addslashes($filter)."%')";
 			}
 			
 			$result = $this->db->query($query);

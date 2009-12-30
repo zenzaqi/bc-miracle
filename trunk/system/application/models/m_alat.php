@@ -25,7 +25,7 @@ class M_alat extends Model{
 			// For simple search
 			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (alat_id LIKE '%".addslashes($filter)."%' OR alat_nama LIKE '%".addslashes($filter)."%' OR alat_jumlah LIKE '%".addslashes($filter)."%' OR alat_aktif LIKE '%".addslashes($filter)."%' OR alat_creator LIKE '%".addslashes($filter)."%' OR alat_date_create LIKE '%".addslashes($filter)."%' OR alat_update LIKE '%".addslashes($filter)."%' OR alat_date_update LIKE '%".addslashes($filter)."%' OR alat_revised LIKE '%".addslashes($filter)."%' )";
+				$query .= " (alat_nama LIKE '%".addslashes($filter)."%' )";
 			}
 			
 			$result = $this->db->query($query);

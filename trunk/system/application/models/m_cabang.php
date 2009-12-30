@@ -25,7 +25,7 @@ class M_cabang extends Model{
 			// For simple search
 			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (cabang_id LIKE '%".addslashes($filter)."%' OR cabang_nama LIKE '%".addslashes($filter)."%' OR cabang_alamat LIKE '%".addslashes($filter)."%' OR cabang_kota LIKE '%".addslashes($filter)."%' OR cabang_kodepos LIKE '%".addslashes($filter)."%' OR cabang_propinsi LIKE '%".addslashes($filter)."%' OR cabang_keterangan LIKE '%".addslashes($filter)."%' OR cabang_aktif LIKE '%".addslashes($filter)."%' )";
+				$query .= " (cabang_nama LIKE '%".addslashes($filter)."%' OR cabang_kota LIKE '%".addslashes($filter)."%' )";
 			}
 			
 			$result = $this->db->query($query);

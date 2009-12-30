@@ -576,7 +576,7 @@ class M_public_function extends Model{
 		}
 	}
 	
-	/*function get_perawatan_list($query="",$start=0,$end=10){
+	function get_perawatan_list($query="",$start=0,$end=10){
 		//$sql="SELECT rawat_id,rawat_kode,rawat_nama,rawat_kategori,rawat_harga,rawat_group,rawat_du,rawat_dm
 		//		,kategori_nama, group_nama 
 		//		FROM perawatan,kategori,produk_group where kategori_id=rawat_kategori
@@ -601,7 +601,7 @@ class M_public_function extends Model{
 		} else {
 			return '({"total":"0", "results":""})';
 		}
-	}*/
+	}
 	
 	//Ambil Perawatan berdasarkan kategori MEDIS
 	function get_rawat_medis_list($query,$start,$end){
@@ -677,9 +677,23 @@ class M_public_function extends Model{
 		/*$sql="SELECT rawat_id,rawat_kode,rawat_nama,rawat_kategori,rawat_harga,rawat_group,rawat_du,rawat_dm,kategori_nama, group_nama 
 		FROM perawatan,kategori,produk_group where rawat_kategori=kategori_id 
 		AND rawat_group=group_id AND rawat_aktif='Aktif' AND kategori_nama='Non Medis'";*/
+		$sql_dapp="SELECT dapp_perawatan FROM appointment_detail";
+		$rs=$this->db->query($sql_dapp);
+		$rs_rows=$rs->num_rows();
+		
 		$sql="SELECT * FROM vu_perawatan WHERE kategori_nama='Non Medis'";//join dr tabel: perawatan,produk_group,kategori2,kategori,jenis,gudang
 		if($query<>""){
 			$sql.=" and (rawat_kode like '%".$query."%' or rawat_nama like '%".$query."%')";
+		}else{
+			if($rs_rows){
+				$filter="";
+				$sql.=eregi("AND",$query)? " OR ":" AND ";
+				foreach($rs->result() as $row_dapp){
+					
+					$filter.="OR rawat_id='".$row_dapp->dapp_perawatan."' ";
+				}
+				$sql=$sql."(".substr($filter,2,strlen($filter)).")";
+			}
 		}
 		$sql.=" ORDER BY rawat_nama ASC";
 	
@@ -937,8 +951,7 @@ class M_public_function extends Model{
 	}
 	
 	function get_group_paket_list(){
-		$sql="SELECT group_id,group_nama,group_duproduk,group_dmproduk,group_durawat,group_dmrawat,group_dupaket,group_dmpaket, kategori_nama,kategori_id 
-		FROM produk_group,kategori WHERE group_kelompok=kategori_id AND kategori_jenis='paket' AND group_aktif='Aktif' AND kategori_aktif='Aktif'";
+		$sql="SELECT group_id,group_nama,group_duproduk,group_dmproduk,group_durawat,group_dmrawat,group_dupaket,group_dmpaket, kategori_nama,kategori_id FROM produk_group,kategori WHERE group_kelompok=kategori_id AND kategori_jenis='produk' AND group_aktif='Aktif' AND kategori_aktif='Aktif'";
 		$query = $this->db->query($sql);
 		$nbrows = $query->num_rows();
 		if($nbrows>0){

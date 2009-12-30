@@ -196,6 +196,7 @@ Ext.onReady(function(){
 		var dapp_terapis_no_update="";
 		var dapp_dokter_ganti_update="";
 		var dapp_terapis_ganti_update="";
+		var dapp_keterangan_update="";
 
 		app_id_update_pk = oGrid_event.record.data.app_id;
 		if(oGrid_event.record.data.app_customer!== null){app_customer_update = oGrid_event.record.data.app_customer;}
@@ -216,6 +217,7 @@ Ext.onReady(function(){
 		if(oGrid_event.record.data.terapis_no!== ""){dapp_terapis_no_update = oGrid_event.record.data.terapis_no;}
 		dapp_dokter_ganti_update = oGrid_event.record.data.dokter_username;
 		dapp_terapis_ganti_update = oGrid_event.record.data.terapis_username;
+		if(oGrid_event.record.data.dapp_keterangan!== ""){dapp_keterangan_update = oGrid_event.record.data.dapp_keterangan;}
 
 		Ext.Ajax.request({  
 			waitMsg: 'Please wait...',
@@ -240,7 +242,8 @@ Ext.onReady(function(){
 				dapp_dokter_no	:dapp_dokter_no_update,
 				dapp_terapis_no	:dapp_terapis_no_update,
 				dapp_dokter_ganti	:dapp_dokter_ganti_update,
-				dapp_terapis_ganti	:dapp_terapis_ganti_update
+				dapp_terapis_ganti	:dapp_terapis_ganti_update,
+				dapp_keterangan	: dapp_keterangan_update
 			}, 
 			success: function(response){							
 				var result=eval(response.responseText);
@@ -791,13 +794,14 @@ Ext.onReady(function(){
 			dataIndex: 'rawat_nama',
 			width: 210,
 			sortable: false,
-			renderer: chk_rawatid
+			renderer: disable_color
 		}, 
 		{
 			header: 'Customer',
 			dataIndex: 'cust_nama',
 			width: 210,
-			sortable: false
+			sortable: false,
+			renderer: disable_color
 		}, 
 		{
 			header: 'Dokter',
@@ -940,11 +944,9 @@ Ext.onReady(function(){
 		return val;
 	}
 
-	function chk_rawatid(val){
-		/*if(appointmentListEditorGrid.getStore().getAt(1).get('rawat_id')=='261'){
-			return '<span style="color:green;"><b>' + val + '</b></span>';
-		}*/
-		return val;
+	function disable_color(value, cell){
+		cell.css = "readonlycell"; // Mengambil Value dari Class di dalam CSS 
+		return value;
 	}
     
 	/* Declare DataStore and  show datagrid list */
