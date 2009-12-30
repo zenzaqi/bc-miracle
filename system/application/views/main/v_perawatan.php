@@ -767,12 +767,14 @@ Ext.onReady(function(){
 			dataIndex: 'rawat_kontribusi',
 			width: 150,
 			sortable: true,
+			hidden: true,
 			editor: new Ext.form.ComboBox({
-				//store: cbo_rawat_gudangDataSore,
-				//mode: 'remote',
-				//displayField: 'rawat_gudang_display',
-				//valueField: 'rawat_gudang_value',
-				//triggerAction: 'all'
+				store: cbo_rawat_kontribusiDataSore,
+				mode: 'remote',
+				editable:false,
+				displayField: 'rawat_kontribusi_display',
+				valueField: 'rawat_kontribusi_value',
+				triggerAction: 'all'
 			})
 		}, 
 		{
