@@ -449,13 +449,13 @@ class M_perawatan extends Model{
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " rawat_group LIKE '%".$rawat_group."%'";
 			};
-			if($rawat_kategori!=''){
+			/*if($rawat_kategori!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " rawat_jenis = '".$rawat_kategori."'";
-			};
+			};*/
 			if($rawat_jenis!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " rawat_kategori = '".$rawat_jenis."'";
+				$query.= " rawat_jenis = '".$rawat_jenis."'";
 			};
 			if($rawat_keterangan!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
