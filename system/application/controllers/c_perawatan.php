@@ -18,6 +18,7 @@ class C_perawatan extends Controller {
 		parent::Controller();
 		$this->load->model('m_perawatan', '', TRUE);
 		$this->load->plugin('to_excel');
+		//$this->load->library('firephp');
 	}
 	
 	//set index
