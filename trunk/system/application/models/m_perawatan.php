@@ -205,13 +205,14 @@ class M_perawatan extends Model{
 //				"rawat_gudang"=>$rawat_gudang, 
 				"rawat_aktif"=>$rawat_aktif 
 			);
-			$sql="SELECT group_id,group_durawat,group_dmrawat FROM produk_group WHERE group_id='".$rawat_group."'";
+			$sql="SELECT group_id,group_durawat,group_dmrawat,group_kelompok FROM produk_group WHERE group_id='".$rawat_group."'";
 			$rs=$this->db->query($sql);
 			if($rs->num_rows()){
 				$data["rawat_group"]=$rawat_group;
 				$rs_sql=$rs->row();
 				$data["rawat_du"]=$rs_sql->group_durawat;
 				$data["rawat_dm"]=$rs_sql->group_dmrawat;
+				$data["rawat_kategori"]=$rs_sql->group_kelompok;
 			}
 			
 			$sql="SELECT kategori_id FROM kategori WHERE kategori_id='".$rawat_kategori."'";
