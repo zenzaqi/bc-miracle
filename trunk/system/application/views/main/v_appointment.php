@@ -518,8 +518,8 @@ Ext.onReady(function(){
 	/* Function for Update Confirm */
 	function appointment_confirm_update(){
 		/* only one record is selected here */
-		cbo_dapp_rawat_medisDataStore.load();
-		cbo_dapp_rawat_nonmedisDataStore.load();
+		cbo_dapp_rawat_medisDataStore.load({params:{query:""}});
+		cbo_dapp_rawat_nonmedisDataStore.load({params:{query:""}});
 		cbo_dapp_dokterDataStore.load();
 		cbo_dapp_terapisDataStore.load();
 		if(appointmentListEditorGrid.selModel.getCount() == 1) {
