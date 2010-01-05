@@ -991,7 +991,8 @@ Ext.onReady(function(){
 		maxLength: 20,
 		readOnly: false,
 		emptyText: '(auto)',
-		width: 100
+		width: 100,
+		maskRe: /([A-Z0-9]+)$/
 	});
 	/* Identify  rawat_kodelama Field */
 	rawat_kodelamaField= new Ext.form.TextField({

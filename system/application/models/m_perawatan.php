@@ -335,6 +335,7 @@ class M_perawatan extends Model{
 		if ($rawat_aktif=="")
 			$rawat_aktif = "Aktif";
 			$data = array(
+				"rawat_kode"=>$rawat_kode,
 				"rawat_nama"=>$rawat_nama, 
 				"rawat_group"=>$rawat_group, 
 				"rawat_kategori"=>$rawat_kategori, 
@@ -349,7 +350,7 @@ class M_perawatan extends Model{
 				"rawat_aktif"=>$rawat_aktif 
 			);
 			
-			$sql="SELECT group_id,group_kode FROM produk_group WHERE group_id='".$rawat_group."' ";
+			/*$sql="SELECT group_id,group_kode FROM produk_group WHERE group_id='".$rawat_group."' ";
 			$rs=$this->db->query($sql);
 			if($rs->num_rows()){
 				$row=$rs->row();
@@ -362,7 +363,7 @@ class M_perawatan extends Model{
 				}
 				
 				
-			}
+			}*/
 			
 			//generate rawat kode
 			//get group kode
@@ -385,11 +386,11 @@ class M_perawatan extends Model{
 				$data["rawat_jenis"]=$rawat_jenis;
 			}
 			
-			$pattern=$group_kode.$jenis_kode;
+			//$pattern=$group_kode.$jenis_kode;
 			//echo $jenis_kode;
-			$rawat_kode=$this->get_kode($pattern);
+			/*$rawat_kode=$this->get_kode($pattern);
 			if($pattern!=="" && strlen($pattern)==4)
-				$data["rawat_kode"]=$rawat_kode;
+				$data["rawat_kode"]=$rawat_kode;*/
 				
 			$this->db->insert('perawatan', $data); 
 			if($this->db->affected_rows())
