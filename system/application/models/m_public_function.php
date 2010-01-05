@@ -612,7 +612,6 @@ class M_public_function extends Model{
 		$sql_dapp="SELECT distinct(dapp_perawatan) FROM appointment_detail";
 		$rs=$this->db->query($sql_dapp);
 		$rs_rows=$rs->num_rows();
-		$this->firephp->log($query, "QUERYERT");
 		
 		$sql="SELECT * FROM vu_perawatan WHERE kategori_nama='Medis' AND rawat_aktif='Aktif'";//join dr tabel: perawatan,produk_group,kategori2,kategori,jenis,gudang
 		if($query<>""){
