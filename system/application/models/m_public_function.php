@@ -541,12 +541,12 @@ class M_public_function extends Model{
 		$rs_rows=$rs->num_rows();
 		
 		$sql="SELECT * FROM vu_perawatan WHERE rawat_aktif='Aktif'";//join dr tabel: perawatan,produk_group,kategori2,kategori,jenis,gudang
-		if($query<>"")
+		if($query<>""){
 			$sql.=" WHERE (rawat_kode like '%".$query."%' or rawat_nama like '%".$query."%' or kategori_nama like '%".$query."%') ";
-		else{
+		}else{
 			if($rs_rows){
 				$filter="";
-				$sql.=eregi("WHERE",$query)? " OR ":" WHERE ";
+				$sql.=eregi("AND",$query)? " OR ":" AND ";
 				foreach($rs->result() as $row_drawat){
 					
 					$filter.="OR drawat_rawat='".$row_drawat->drawat_rawat."' ";

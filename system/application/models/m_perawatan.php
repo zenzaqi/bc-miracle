@@ -344,7 +344,8 @@ class M_perawatan extends Model{
 				"rawat_dm"=>$rawat_dm, 
 				"rawat_point"=>$rawat_point, 
 				"rawat_harga"=>$rawat_harga, 
-				"rawat_gudang"=>$rawat_gudang, 
+				"rawat_gudang"=>$rawat_gudang,
+				"rawat_kontribusi"=>$rawat_kontribusi,
 				"rawat_aktif"=>$rawat_aktif 
 			);
 			
