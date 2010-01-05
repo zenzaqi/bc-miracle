@@ -578,14 +578,15 @@ Ext.onReady(function(){
 				triggerAction: 'all',
 				store:new Ext.data.SimpleStore({
 					fields:['dtrawat_status_value', 'dtrawat_status_display'],
-					data: [['batal','batal'],['selesai','selesai'],['datang','datang']]
+					data: [['batal','batal'],['selesai','selesai'],['datang','datang'],['siap','siap']]
 					}),
 				mode: 'local',
                	displayField: 'dtrawat_status_display',
                	valueField: 'dtrawat_status_value',
                	lazyRender:true,
                	listClass: 'x-combo-list-small'
-            })
+            }),
+            renderer: ch_status
 		}, 
 		{
 			header: 'Keterangan',
@@ -639,6 +640,16 @@ Ext.onReady(function(){
 	
 	tindakan_nonmedis_ColumnModel.defaultSortable= true;
 	/* End of Function */
+	function ch_status(val){
+		if(val=="selesai"){
+			return '<span style="color:green;"><b>' + val + '</b></span>';
+		}else if(val=="siap"){
+			return '<span style="color:blue;"><b>' + val + '</b></span>';
+		}else if(val=="batal"){
+			return '<span style="color:red;"><b>' + val + '</b></span>';
+		}
+		return val;
+	}
     
 	/* Declare DataStore and  show datagrid list */
 	tindakan_nonmedisListEditorGrid =  new Ext.grid.EditorGridPanel({
