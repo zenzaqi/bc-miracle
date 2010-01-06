@@ -200,10 +200,18 @@ class C_tindakan_medis extends Controller {
 		$trawat_keterangan=trim(@$_POST["trawat_keterangan"]);
 		$trawat_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$trawat_keterangan);
 		$trawat_keterangan=str_replace("'", "\'",$trawat_keterangan);
+		if(trim(@$_POST["trawat_tglapp_start"])!="")
+			$trawat_tglapp_start=date('Y-m-d', strtotime(trim(@$_POST["trawat_tglapp_start"])));
+		else
+			$trawat_tglapp_start="";
+		if(trim(@$_POST["trawat_tglapp_end"])!="")
+			$trawat_tglapp_end=date('Y-m-d', strtotime(trim(@$_POST["trawat_tglapp_end"])));
+		else
+			$trawat_tglapp_end="";
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_tindakan_medis->tindakan_search($trawat_id ,$trawat_cust ,$trawat_keterangan ,$start,$end);
+		$result = $this->m_tindakan_medis->tindakan_search($trawat_id ,$trawat_cust ,$trawat_keterangan ,$trawat_tglapp_start ,$trawat_tglapp_end ,$start,$end);
 		echo $result;
 	}
 
