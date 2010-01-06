@@ -1,0 +1,1 @@
+ALTER TABLE `tindakan_detail` ADD `dtrawat_tglapp` DATETIME NULL DEFAULT NULL AFTER `dtrawat_kategori`;

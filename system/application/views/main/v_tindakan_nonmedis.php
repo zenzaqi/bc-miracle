@@ -402,7 +402,7 @@ Ext.onReady(function(){
 			{name: 'trawat_cust', type: 'string', mapping: 'cust_nama'}, 
 			{name: 'trawat_keterangan', type: 'string', mapping: 'trawat_keterangan'}, 
 			{name: 'trawat_creator', type: 'string', mapping: 'trawat_creator'}, 
-			{name: 'trawat_date_create', type: 'date', dateFormat: 'Y-m-d', mapping: 'trawat_date_create'}, 
+			{name: 'trawat_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'trawat_date_create'}, 
 			{name: 'trawat_update', type: 'string', mapping: 'trawat_update'}, 
 			{name: 'trawat_date_update', type: 'date', dateFormat: 'Y-m-d', mapping: 'trawat_date_update'}, 
 			{name: 'trawat_revised', type: 'int', mapping: 'trawat_revised'},
@@ -412,11 +412,12 @@ Ext.onReady(function(){
 			{name: 'dtrawat_petugas2', type: 'string', mapping: 'karyawan_nama'},
 			{name: 'dtrawat_petugas2_no', type: 'string', mapping: 'karyawan_no'},
 			{name: 'dtrawat_jam', type: 'string', mapping: 'dtrawat_jam'},
-			{name: 'dtrawat_status', type: 'string', mapping: 'dtrawat_status'},
-			{name: 'perawatan_harga', type: 'float', mapping: 'rawat_harga'},
-			{name: 'perawatan_du', type: 'int', mapping: 'rawat_du'},
-			{name: 'perawatan_dm', type: 'int', mapping: 'rawat_dm'},
-			{name: 'cust_member', type: 'string', mapping: 'cust_member'}
+			{name: 'dtrawat_tglapp', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'dtrawat_tglapp'},
+			{name: 'dtrawat_status', type: 'string', mapping: 'dtrawat_status'}//,
+			//{name: 'perawatan_harga', type: 'float', mapping: 'rawat_harga'},
+			//{name: 'perawatan_du', type: 'int', mapping: 'rawat_du'},
+			//{name: 'perawatan_dm', type: 'int', mapping: 'rawat_dm'},
+			//{name: 'cust_member', type: 'string', mapping: 'cust_member'}
 		]),
 		sortInfo:{field: 'trawat_id', direction: "DESC"}
 	});
@@ -506,7 +507,7 @@ Ext.onReady(function(){
     
   	/* Function for Identify of Window Column Model */
 	tindakan_nonmedis_ColumnModel = new Ext.grid.ColumnModel(
-		[{
+		[/*{
 			header: '#',
 			readOnly: true,
 			dataIndex: 'trawat_id',
@@ -516,7 +517,7 @@ Ext.onReady(function(){
 				return value;
 				},
 			hidden: false
-		},
+		},*/
 		{
 			header: 'Customer',
 			dataIndex: 'trawat_cust',
@@ -596,6 +597,14 @@ Ext.onReady(function(){
 			editor: new Ext.form.TextField({
 				maxLength: 250
           	})
+		}, 
+		{
+			header: 'Tgl App',
+			dataIndex: 'dtrawat_tglapp',
+			width: 150,
+			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
+			sortable: true,
+			hidden: true
 		}, 
 		{
 			header: 'Creator',
