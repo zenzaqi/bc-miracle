@@ -297,7 +297,7 @@ Ext.onReady(function(){
 	/* Function for Update Confirm */
 	function tindakan_medisconfirm_update(){
 		/* only one record is selected here */
-		dtrawat_perawatanDataStore.load();
+		dtrawat_perawatanDataStore.load({params:{query:""}});
 		if(tindakanListEditorGrid.selModel.getCount() == 1) {
 			tindakan_medis_set_form();
 			post2db='UPDATE';

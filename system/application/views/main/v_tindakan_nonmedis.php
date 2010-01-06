@@ -457,7 +457,7 @@ Ext.onReady(function(){
 	dtrawat_perawatanDataStore = new Ext.data.Store({
 		id: 'dtrawat_perawatanDataStore',
 		proxy: new Ext.data.HttpProxy({
-			url: 'index.php?c=c_tindakan_nonmedis&m=get_rawat_nonmedis_list', 
+			url: 'index.php?c=c_tindakan_nonmedis&m=get_tindakan_nonmedis_list', 
 			method: 'POST'
 		}),baseParams: {start: 0, limit: 15 },
 			reader: new Ext.data.JsonReader({
