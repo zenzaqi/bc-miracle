@@ -293,9 +293,10 @@ Ext.onReady(function(){
 	/* Function for Update Confirm */
 	function tindakan_nonmedis_confirm_update(){
 		/* only one record is selected here */
+		dtrawat_perawatanDataStore.load({params:{query:""}});
 		if(tindakan_nonmedisListEditorGrid.selModel.getCount() == 1) {
-			cbo_dtrawat_perawatan_nonmedisDataSore.load();
-			cbo_dtrawat_petugas_nonmedisDataStore.load();
+			//cbo_dtrawat_perawatan_nonmedisDataStore.load();
+			//cbo_dtrawat_petugas_nonmedisDataStore.load();
 			tindakan_nonmedis_set_form();
 			post2db='UPDATE';
 			tindakan_nonmedis_detail_DataStore.load({params : {master_id : eval(get_pk_id()), start:0, limit:pageS}});
@@ -885,8 +886,8 @@ Ext.onReady(function(){
     });
 	//eof
 	
-	cbo_dtrawat_perawatan_nonmedisDataSore = new Ext.data.Store({
-		id: 'cbo_dtrawat_perawatan_nonmedisDataSore',
+	cbo_dtrawat_perawatan_nonmedisDataStore = new Ext.data.Store({
+		id: 'cbo_dtrawat_perawatan_nonmedisDataStore',
 		proxy: new Ext.data.HttpProxy({
 			url: 'index.php?c=c_tindakan_nonmedis&m=get_perawatan_nonmedis_list', 
 			method: 'POST'
