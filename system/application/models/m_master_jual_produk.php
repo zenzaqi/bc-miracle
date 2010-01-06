@@ -135,8 +135,7 @@ class M_master_jual_produk extends Model{
 		
 		//function for get list record
 		function master_jual_produk_list($filter,$start,$end){
-			$query = "SELECT * FROM (((((master_jual_produk left join customer on(master_jual_produk.jproduk_cust=customer.cust_id)) left join jual_transfer on(master_jual_produk.jproduk_nobukti=jual_transfer.jtransfer_ref)) 
-left join jual_kwitansi on(master_jual_produk.jproduk_nobukti=jual_kwitansi.jkwitansi_ref)) left join jual_card on(master_jual_produk.jproduk_nobukti=jual_card.jcard_ref)) left join jual_cek on(master_jual_produk.jproduk_nobukti=jual_cek.jcek_ref))";
+			$query = "SELECT jproduk_id,jproduk_nobukti,cust_nama,jproduk_cust,jproduk_tanggal,jproduk_diskon,jproduk_cashback,jproduk_cara,jproduk_cara2,jproduk_cara3,jproduk_bayar,jproduk_keterangan,jproduk_creator,jproduk_date_create,jproduk_update,jproduk_date_update,jproduk_revised FROM (((((master_jual_produk LEFT JOIN customer ON(master_jual_produk.jproduk_cust=customer.cust_id)) LEFT JOIN jual_transfer ON(master_jual_produk.jproduk_nobukti=jual_transfer.jtransfer_ref)) LEFT JOIN jual_kwitansi ON(master_jual_produk.jproduk_nobukti=jual_kwitansi.jkwitansi_ref)) LEFT JOIN jual_card ON(master_jual_produk.jproduk_nobukti=jual_card.jcard_ref)) LEFT JOIN jual_cek ON(master_jual_produk.jproduk_nobukti=jual_cek.jcek_ref))";
 			
 			// For simple search
 			if ($filter<>""){
