@@ -397,11 +397,11 @@ Ext.onReady(function(){
 			{name: 'dtrawat_petugas2_no', type: 'string', mapping: 'karyawan_no'},
 			{name: 'dtrawat_jam', type: 'string', mapping: 'dtrawat_jam'},
 			{name: 'dtrawat_tglapp', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'dtrawat_tglapp'},
-			{name: 'dtrawat_status', type: 'string', mapping: 'dtrawat_status'}//,
-			//{name: 'perawatan_harga', type: 'float', mapping: 'rawat_harga'},
-			//{name: 'perawatan_du', type: 'int', mapping: 'rawat_du'},
-			//{name: 'perawatan_dm', type: 'int', mapping: 'rawat_dm'},
-			//{name: 'cust_member', type: 'string', mapping: 'cust_member'}
+			{name: 'dtrawat_status', type: 'string', mapping: 'dtrawat_status'},
+			{name: 'perawatan_harga', type: 'float', mapping: 'rawat_harga'},
+			{name: 'perawatan_du', type: 'int', mapping: 'rawat_du'},
+			{name: 'perawatan_dm', type: 'int', mapping: 'rawat_dm'},
+			{name: 'cust_member', type: 'string', mapping: 'cust_member'}
 		]),
 		sortInfo:{field: 'dtrawat_id', direction: "DESC"}
 	});

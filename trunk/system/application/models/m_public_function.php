@@ -536,7 +536,7 @@ class M_public_function extends Model{
 				,kategori_nama, group_nama, satuan_kode, satuan_nama 
 				FROM produk,satuan,kategori,produk_group where satuan_id=produk_satuan and kategori_id=produk_kategori
 				and produk_group=group_id and produk_aktif='Aktif'";*/
-		$sql_drawat="SELECT drawat_rawat FROM detail_jual_rawat";
+		$sql_drawat="SELECT distinct(drawat_rawat) FROM detail_jual_rawat";
 		$rs=$this->db->query($sql_drawat);
 		$rs_rows=$rs->num_rows();
 		
