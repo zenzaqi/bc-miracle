@@ -743,7 +743,6 @@ class M_public_function extends Model{
 		$result = $this->db->query($sql);
 		$nbrows = $result->num_rows();
 		$limit = $sql." LIMIT ".$start.",".$end;			
-		echo $limit;
 		$result = $this->db->query($limit); 
 		if($nbrows>0){
 			foreach($result->result() as $row){

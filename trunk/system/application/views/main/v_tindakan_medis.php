@@ -392,7 +392,7 @@ Ext.onReady(function(){
 			{name: 'trawat_cust', type: 'string', mapping: 'cust_nama'}, 
 			{name: 'trawat_keterangan', type: 'string', mapping: 'trawat_keterangan'}, 
 			{name: 'trawat_creator', type: 'string', mapping: 'trawat_creator'}, 
-			{name: 'trawat_date_create', type: 'date', dateFormat: 'Y-m-d', mapping: 'trawat_date_create'}, 
+			{name: 'trawat_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'trawat_date_create'}, 
 			{name: 'trawat_update', type: 'string', mapping: 'trawat_update'}, 
 			{name: 'trawat_date_update', type: 'date', dateFormat: 'Y-m-d', mapping: 'trawat_date_update'}, 
 			{name: 'trawat_revised', type: 'int', mapping: 'trawat_revised'},
@@ -402,11 +402,12 @@ Ext.onReady(function(){
 			{name: 'dtrawat_petugas1', type: 'string', mapping: 'karyawan_nama'},
 			{name: 'dtrawat_petugas1_no', type: 'string', mapping: 'karyawan_no'},
 			{name: 'dtrawat_jam', type: 'string', mapping: 'dtrawat_jam'},
-			{name: 'dtrawat_status', type: 'string', mapping: 'dtrawat_status'},
-			{name: 'perawatan_harga', type: 'float', mapping: 'rawat_harga'},
-			{name: 'perawatan_du', type: 'int', mapping: 'rawat_du'},
-			{name: 'perawatan_dm', type: 'int', mapping: 'rawat_dm'},
-			{name: 'cust_member', type: 'string', mapping: 'cust_member'}
+			{name: 'dtrawat_tglapp', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'dtrawat_tglapp'},
+			{name: 'dtrawat_status', type: 'string', mapping: 'dtrawat_status'}//,
+			//{name: 'perawatan_harga', type: 'float', mapping: 'rawat_harga'},
+			//{name: 'perawatan_du', type: 'int', mapping: 'rawat_du'},
+			//{name: 'perawatan_dm', type: 'int', mapping: 'rawat_dm'},
+			//{name: 'cust_member', type: 'string', mapping: 'cust_member'}
 		]),
 		sortInfo:{field: 'dtrawat_id', direction: "DESC"}
 	});
@@ -492,7 +493,7 @@ Ext.onReady(function(){
     
   	/* Function for Identify of Window Column Model */
 	tindakan_medisColumnModel = new Ext.grid.ColumnModel(
-		[{
+		[/*{
 			header: '#',
 			readOnly: true,
 			dataIndex: 'trawat_id',
@@ -502,7 +503,7 @@ Ext.onReady(function(){
 				return value;
 				},
 			hidden: false
-		},
+		},*/
 		{
 			header: 'Customer',
 			dataIndex: 'trawat_cust',
@@ -584,6 +585,14 @@ Ext.onReady(function(){
           	})
 		}, 
 		{
+			header: 'Tgl App',
+			dataIndex: 'dtrawat_tglapp',
+			width: 150,
+			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
+			sortable: true,
+			hidden: true
+		}, 
+		{
 			header: 'Creator',
 			dataIndex: 'trawat_creator',
 			width: 150,
@@ -595,9 +604,9 @@ Ext.onReady(function(){
 			header: 'Date Create',
 			dataIndex: 'trawat_date_create',
 			width: 150,
+			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
 			sortable: true,
-			hidden: true,
-			readOnly: true,
+			hidden: true
 		}, 
 		{
 			header: 'Update',
@@ -1244,15 +1253,25 @@ Ext.onReady(function(){
 	
 	});
 	/* Identify  trawat_cust Search Field */
-	trawat_medis_custSearchField= new Ext.form.NumberField({
-		id: 'trawat_medis_custSearchField',
+	trawat_medis_custSearchField= new Ext.form.ComboBox({
+		//id: 'trawat_medis_custField',
 		fieldLabel: 'Customer',
-		allowNegatife : false,
-		blankText: '0',
-		allowDecimals: false,
-		anchor: '95%',
-		maskRe: /([0-9]+)$/
-	
+		store: cbo_tmedis_cutomerDataStore,
+		mode: 'remote',
+		displayField:'cust_nama',
+		valueField: 'cust_id',
+        typeAhead: false,
+        loadingText: 'Searching...',
+        pageSize:10,
+        hideTrigger:false,
+        tpl: customer_tmedis_tpl,
+        //applyTo: 'search',
+        itemSelector: 'div.search-item',
+		triggerAction: 'all',
+		lazyRender:true,
+		listClass: 'x-combo-list-small',
+		allowBlank: true,
+		anchor: '95%'
 	});
 	/* Identify  trawat_keterangan Search Field */
 	trawat_medis_keteranganSearchField= new Ext.form.TextArea({
@@ -1268,7 +1287,7 @@ Ext.onReady(function(){
 		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
-		width: 300,        
+		width: 400,        
 		items: [{
 			layout:'column',
 			border:false,
