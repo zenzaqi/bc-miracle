@@ -70,12 +70,9 @@ var pageS=15;
 /* declare variable here for Field*/
 var trawat_nonmedis_idField;
 var trawat_nonmedis_custField;
-var trawat_nonmedis_jamdatangField;
-//var trawat_nonmedis_appointmentField;
 var trawat_nonmedis_keteranganField;
 var trawat_nonmedis_idSearchField;
 var trawat_nonmedis_custSearchField;
-var trawat_nonmedis_jamdatangSearchField;
 //var trawat_nonmedis_appointmentSearchField;
 var trawat_nonmedis_keteranganSearchField;
 
@@ -170,14 +167,10 @@ Ext.onReady(function(){
 		if(is_tindakan_nonmedis_form_valid()){	
 		var trawat_id_create_pk=null; 
 		var trawat_cust_create=null; 
-		var trawat_jamdatang_create=null; 
-//		var trawat_appointment_create=null; 
 		var trawat_keterangan_create=null; 
 
 		if(trawat_nonmedis_idField.getValue()!== null){trawat_id_create = trawat_nonmedis_idField.getValue();}else{trawat_id_create_pk=get_pk_id();} 
 		if(trawat_nonmedis_custField.getValue()!== null){trawat_cust_create = trawat_nonmedis_custField.getValue();} 
-		if(trawat_nonmedis_jamdatangField.getValue()!== null){trawat_jamdatang_create = trawat_nonmedis_jamdatangField.getValue();} 
-//		if(trawat_nonmedis_appointmentField.getValue()!== null){trawat_appointment_create = trawat_nonmedis_appointmentField.getValue();} 
 		if(trawat_nonmedis_keteranganField.getValue()!== null){trawat_keterangan_create = trawat_nonmedis_keteranganField.getValue();} 
 
 		Ext.Ajax.request({  
@@ -187,18 +180,14 @@ Ext.onReady(function(){
 				task: post2db,
 				trawat_id	: trawat_id_create_pk, 
 				trawat_cust	: trawat_cust_create, 
-				trawat_jamdatang	: trawat_jamdatang_create, 
-//				trawat_appointment	: trawat_appointment_create, 
 				trawat_keterangan	: trawat_keterangan_create, 
 			}, 
 			success: function(response){             
 				var result=eval(response.responseText);
 				switch(result){
 					case 1:
-						tindakan_nonmedis_detail_purge()
-						tindakan_nonmedis_detail_insert();
+						tindakan_nonmedis_detail_purge();
 						Ext.MessageBox.alert(post2db+' OK','The Tindakan was '+msg+' successfully.');
-						tindakan_nonmedis_DataStore.reload();
 						tindakan_nonmedis_createWindow.hide();
 						break;
 					default:
@@ -250,10 +239,6 @@ Ext.onReady(function(){
 		trawat_nonmedis_idField.setValue(null);
 		trawat_nonmedis_custField.reset();
 		trawat_nonmedis_custField.setValue(null);
-		trawat_nonmedis_jamdatangField.reset();
-		trawat_nonmedis_jamdatangField.setValue(null);
-//		trawat_nonmedis_appointmentField.reset();
-//		trawat_nonmedis_appointmentField.setValue(null);
 		trawat_nonmedis_keteranganField.reset();
 		trawat_nonmedis_keteranganField.setValue(null);
 	}
@@ -263,8 +248,6 @@ Ext.onReady(function(){
 	function tindakan_nonmedis_set_form(){
 		trawat_nonmedis_idField.setValue(tindakan_nonmedisListEditorGrid.getSelectionModel().getSelected().get('trawat_id'));
 		trawat_nonmedis_custField.setValue(tindakan_nonmedisListEditorGrid.getSelectionModel().getSelected().get('trawat_cust'));
-		trawat_nonmedis_jamdatangField.setValue(tindakan_nonmedisListEditorGrid.getSelectionModel().getSelected().get('trawat_jamdatang'));
-//		trawat_nonmedis_appointmentField.setValue(tindakan_nonmedisListEditorGrid.getSelectionModel().getSelected().get('trawat_appointment'));
 		trawat_nonmedis_keteranganField.setValue(tindakan_nonmedisListEditorGrid.getSelectionModel().getSelected().get('trawat_keterangan'));
 	}
 	/* End setValue to EDIT*/
@@ -312,7 +295,7 @@ Ext.onReady(function(){
 		/* only one record is selected here */
 		if(tindakan_nonmedisListEditorGrid.selModel.getCount() == 1) {
 			cbo_dtrawat_perawatan_nonmedisDataSore.load();
-			cbo_dtrawat_petugas_nonmedisDataSore.load();
+			cbo_dtrawat_petugas_nonmedisDataStore.load();
 			tindakan_nonmedis_set_form();
 			post2db='UPDATE';
 			tindakan_nonmedis_detail_DataStore.load({params : {master_id : eval(get_pk_id()), start:0, limit:pageS}});
@@ -394,7 +377,7 @@ Ext.onReady(function(){
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
-			id: 'trawat_id'
+			id: 'dtrawat_id'
 		},[
 		/* dataIndex => insert intotindakan_nonmedis_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'trawat_id', type: 'int', mapping: 'trawat_id'}, 
@@ -409,7 +392,7 @@ Ext.onReady(function(){
 			{name: 'dtrawat_id', type: 'int', mapping: 'dtrawat_id'},
 			{name: 'dtrawat_perawatan_id', type: 'int', mapping: 'dtrawat_perawatan'},
 			{name: 'dtrawat_perawatan', type: 'string', mapping: 'rawat_nama'},
-			{name: 'dtrawat_petugas2', type: 'string', mapping: 'karyawan_nama'},
+			{name: 'dtrawat_petugas2', type: 'string', mapping: 'karyawan_username'},
 			{name: 'dtrawat_petugas2_no', type: 'string', mapping: 'karyawan_no'},
 			{name: 'dtrawat_jam', type: 'string', mapping: 'dtrawat_jam'},
 			{name: 'dtrawat_tglapp', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'dtrawat_tglapp'},
@@ -419,7 +402,7 @@ Ext.onReady(function(){
 			//{name: 'perawatan_dm', type: 'int', mapping: 'rawat_dm'},
 			//{name: 'cust_member', type: 'string', mapping: 'cust_member'}
 		]),
-		sortInfo:{field: 'trawat_id', direction: "DESC"}
+		sortInfo:{field: 'dtrawat_id', direction: "DESC"}
 	});
 	/* End of Function */
 	
@@ -500,7 +483,9 @@ Ext.onReady(function(){
 		},[
 		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
 			{name: 'karyawan_display', type: 'string', mapping: 'karyawan_nama'},
-			{name: 'karyawan_value', type: 'int', mapping: 'karyawan_id'}
+			{name: 'karyawan_username', type: 'string', mapping: 'karyawan_username'},
+			{name: 'karyawan_value', type: 'int', mapping: 'karyawan_id'},
+			{name: 'karyawan_jmltindakan', type: 'int', mapping: 'reportt_jmltindakan'}
 		]),
 		sortInfo:{field: 'karyawan_display', direction: "ASC"}
 	});
@@ -556,7 +541,7 @@ Ext.onReady(function(){
 			editor: new Ext.form.ComboBox({
 				store: dtrawat_karyawanDataStore,
 				mode: 'remote',
-				displayField: 'karyawan_display',
+				displayField: 'karyawan_username',
 				valueField: 'karyawan_value',
 				loadingText: 'Searching...',
 				triggerAction: 'all',
@@ -685,6 +670,7 @@ Ext.onReady(function(){
 			text: 'Add',
 			tooltip: 'Add new record',
 			iconCls:'icon-adds',    				// this is defined in our styles.css
+			disabled:true,
 			handler: display_form_window
 		}, '-',{
 			text: 'Edit',
@@ -695,6 +681,7 @@ Ext.onReady(function(){
 			text: 'Delete',
 			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
+			disabled:true,
 			handler: tindakan_nonmedis_confirm_delete   // Confirm before deleting
 		}, '-', {
 			text: 'Search',
@@ -916,8 +903,8 @@ Ext.onReady(function(){
 		sortInfo:{field: 'dtrawat_perawatan_display', direction: "ASC"}
 	});
 	
-	cbo_dtrawat_petugas_nonmedisDataSore = new Ext.data.Store({
-		id: 'cbo_dtrawat_petugas_nonmedisDataSore',
+	cbo_dtrawat_petugas_nonmedisDataStore = new Ext.data.Store({
+		id: 'cbo_dtrawat_petugas_nonmedisDataStore',
 		proxy: new Ext.data.HttpProxy({
 			url: 'index.php?c=c_tindakan_nonmedis&m=get_terapis_list', 
 			method: 'POST'
@@ -964,10 +951,10 @@ Ext.onReady(function(){
 	});
 	
 	var combo_dapp_terapis=new Ext.form.ComboBox({
-			store: cbo_dtrawat_petugas_nonmedisDataSore,
+			store: cbo_dtrawat_petugas_nonmedisDataStore,
 			mode: 'remote',
 			typeAhead: true,
-			displayField: 'dtrawat_karyawan_display',
+			displayField: 'dtrawat_karyawan_username',
 			valueField: 'dtrawat_karyawan_value',
 			tpl: karyawan_tpl,
 			loadingText: 'Searching...',
@@ -1128,7 +1115,13 @@ Ext.onReady(function(){
 		Ext.Ajax.request({
 			waitMsg: 'Please wait...',
 			url: 'index.php?c=c_tindakan_nonmedis&m=detail_tindakan_nonmedis_detail_purge',
-			params:{ master_id: eval(trawat_nonmedis_idField.getValue()) }
+			params:{ master_id: eval(trawat_nonmedis_idField.getValue()) },
+			callback: function(opts, success, response){
+				if(success){
+					tindakan_nonmedis_detail_insert();
+					tindakan_nonmedis_DataStore.reload();
+				}
+			}
 		});
 	}
 	//eof
@@ -1211,14 +1204,10 @@ Ext.onReady(function(){
 		// render according to a SQL date format.
 		var trawat_id_search=null;
 		var trawat_cust_search=null;
-		var trawat_jamdatang_search=null;
-//		var trawat_appointment_search=null;
 		var trawat_keterangan_search=null;
 
 		if(trawat_nonmedis_idSearchField.getValue()!==null){trawat_id_search=trawat_nonmedis_idSearchField.getValue();}
 		if(trawat_nonmedis_custSearchField.getValue()!==null){trawat_cust_search=trawat_nonmedis_custSearchField.getValue();}
-		if(trawat_nonmedis_jamdatangSearchField.getValue()!==null){trawat_jamdatang_search=trawat_nonmedis_jamdatangSearchField.getValue();}
-//		if(trawat_nonmedis_appointmentSearchField.getValue()!==null){trawat_appointment_search=trawat_nonmedis_appointmentSearchField.getValue();}
 		if(trawat_nonmedis_keteranganSearchField.getValue()!==null){trawat_keterangan_search=trawat_nonmedis_keteranganSearchField.getValue();}
 		// change the store parameters
 		tindakan_nonmedis_DataStore.baseParams = {
@@ -1226,8 +1215,6 @@ Ext.onReady(function(){
 			//variable here
 			trawat_id	:	trawat_id_search, 
 			trawat_cust	:	trawat_cust_search, 
-			trawat_jamdatang	:	trawat_jamdatang_search, 
-//			trawat_appointment	:	trawat_appointment_search, 
 			trawat_keterangan	:	trawat_keterangan_search, 
 		};
 		// Cause the datastore to do another query : 
@@ -1260,14 +1247,6 @@ Ext.onReady(function(){
 	trawat_nonmedis_custSearchField= new Ext.form.TextField({
 		id: 'trawat_nonmedis_custSearchField',
 		fieldLabel: 'Customer',
-		anchor: '95%'
-	
-	});
-	/* Identify  trawat_jamdatang Search Field */
-	trawat_nonmedis_jamdatangSearchField= new Ext.form.TextField({
-		id: 'trawat_nonmedis_jamdatangSearchField',
-		fieldLabel: 'Jam Datang',
-		maxLength: 10,
 		anchor: '95%'
 	
 	});
@@ -1309,7 +1288,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [trawat_nonmedis_custSearchField, trawat_nonmedis_jamdatangSearchField, trawat_nonmedis_keteranganSearchField] 
+				items: [trawat_nonmedis_custSearchField, trawat_nonmedis_keteranganSearchField] 
 			}
 			]
 		}]
@@ -1358,15 +1337,11 @@ Ext.onReady(function(){
 	function tindakan_nonmedis_print(){
 		var searchquery = "";
 		var trawat_cust_print=null;
-		var trawat_jamdatang_print=null;
-//		var trawat_appointment_print=null;
 		var trawat_keterangan_print=null;
 		var win;              
 		// check if we do have some search data...
 		if(tindakan_nonmedis_DataStore.baseParams.query!==null){searchquery = tindakan_nonmedis_DataStore.baseParams.query;}
 		if(tindakan_nonmedis_DataStore.baseParams.trawat_cust!==null){trawat_cust_print = tindakan_nonmedis_DataStore.baseParams.trawat_cust;}
-		if(tindakan_nonmedis_DataStore.baseParams.trawat_jamdatang!==null){trawat_jamdatang_print = tindakan_nonmedis_DataStore.baseParams.trawat_jamdatang;}
-//		if(tindakan_nonmedis_DataStore.baseParams.trawat_appointment!==null){trawat_appointment_print = tindakan_nonmedis_DataStore.baseParams.trawat_appointment;}
 		if(tindakan_nonmedis_DataStore.baseParams.trawat_keterangan!==null){trawat_keterangan_print = tindakan_nonmedis_DataStore.baseParams.trawat_keterangan;}
 
 		Ext.Ajax.request({   
@@ -1377,8 +1352,6 @@ Ext.onReady(function(){
 		  	query: searchquery,                    		// if we are doing a quicksearch, use this
 			//if we are doing advanced search, use this
 			trawat_cust : trawat_cust_print,
-			trawat_jamdatang : trawat_jamdatang_print,
-//			trawat_appointment : trawat_appointment_print,
 			trawat_keterangan : trawat_keterangan_print,
 		  	currentlisting: tindakan_nonmedis_DataStore.baseParams.task // this tells us if we are searching or not
 		}, 
@@ -1418,15 +1391,11 @@ Ext.onReady(function(){
 	function tindakan_nonmedis_export_excel(){
 		var searchquery = "";
 		var trawat_cust_2excel=null;
-		var trawat_jamdatang_2excel=null;
-//		var trawat_appointment_2excel=null;
 		var trawat_keterangan_2excel=null;
 		var win;              
 		// check if we do have some search data...
 		if(tindakan_nonmedis_DataStore.baseParams.query!==null){searchquery = tindakan_nonmedis_DataStore.baseParams.query;}
 		if(tindakan_nonmedis_DataStore.baseParams.trawat_cust!==null){trawat_cust_2excel = tindakan_nonmedis_DataStore.baseParams.trawat_cust;}
-		if(tindakan_nonmedis_DataStore.baseParams.trawat_jamdatang!==null){trawat_jamdatang_2excel = tindakan_nonmedis_DataStore.baseParams.trawat_jamdatang;}
-//		if(tindakan_nonmedis_DataStore.baseParams.trawat_appointment!==null){trawat_appointment_2excel = tindakan_nonmedis_DataStore.baseParams.trawat_appointment;}
 		if(tindakan_nonmedis_DataStore.baseParams.trawat_keterangan!==null){trawat_keterangan_2excel = tindakan_nonmedis_DataStore.baseParams.trawat_keterangan;}
 
 		Ext.Ajax.request({   
@@ -1437,8 +1406,6 @@ Ext.onReady(function(){
 		  	query: searchquery,                    		// if we are doing a quicksearch, use this
 			//if we are doing advanced search, use this
 			trawat_cust : trawat_cust_2excel,
-			trawat_jamdatang : trawat_jamdatang_2excel,
-//			trawat_appointment : trawat_appointment_2excel,
 			trawat_keterangan : trawat_keterangan_2excel,
 		  	currentlisting: tindakan_nonmedis_DataStore.baseParams.task // this tells us if we are searching or not
 		},

@@ -43,14 +43,66 @@
 		}
     </style>
 <script>
+Ext.namespace('Ext.ux.plugin');
+
+Ext.ux.plugin.triggerfieldTooltip = function(config){
+    Ext.apply(this, config);
+};
+
+Ext.extend(Ext.ux.plugin.triggerfieldTooltip, Ext.util.Observable,{
+    init: function(component){
+        this.component = component;
+        this.component.on('render', this.onRender, this);
+    },
+    
+    //private
+    onRender: function(){
+        if(this.component.tooltip){
+            if(typeof this.component.tooltip == 'object'){
+                Ext.QuickTips.register(Ext.apply({
+                      target: this.component.trigger
+                }, this.component.tooltip));
+            } else {
+                this.component.trigger.dom[this.component.tooltipType] = this.component.tooltip;
+            }
+        }
+    }
+}); 
+
+Ext.apply(Ext.form.VTypes, {
+    daterange : function(val, field) {
+        var date = field.parseDate(val);
+
+        if(!date){
+            return;
+        }
+        if (field.startDateField && (!this.dateRangeMax || (date.getTime() != this.dateRangeMax.getTime()))) {
+            var start = Ext.getCmp(field.startDateField);
+            start.setMaxValue(date);
+            start.validate();
+            this.dateRangeMax = date;
+        } 
+        else if (field.endDateField && (!this.dateRangeMin || (date.getTime() != this.dateRangeMin.getTime()))) {
+            var end = Ext.getCmp(field.endDateField);
+            end.setMinValue(date);
+            end.validate();
+            this.dateRangeMin = date;
+        }
+        /*
+         * Always return true since we're only using this vtype to set the
+         * min/max allowed values (these are tested for after the vtype test)
+         */
+        return true;
+    }
+});
 /* declare function */		
 var tindakan_medisDataStore;
 var tindakan_medisColumnModel;
 var tindakanListEditorGrid;
-var tindakan_medis_screateForm;
-var tindakan_medis_screateWindow;
-var tindakan_medissearchForm;
-var tindakan_medissearchWindow;
+var tindakan_medis_createForm;
+var tindakan_medis_createWindow;
+var tindakan_medis_searchForm;
+var tindakan_medis_searchWindow;
 var tindakan_medisSelectedRow;
 var tindakan_medisContextMenu;
 //for detail data
@@ -161,7 +213,7 @@ Ext.onReady(function(){
   	/* End of Function */
   
   	/* Function for add data, open window create form */
-	function tindakan_medis_screate(){
+	function tindakan_medis_create(){
 	
 		if(is_tindakan_medisform_valid()){	
 		var trawat_id_create_pk=null; 
@@ -185,11 +237,9 @@ Ext.onReady(function(){
 				var result=eval(response.responseText);
 				switch(result){
 					case 1:
-						tindakan_medisdetail_purge()
-						tindakan_medisdetail_insert();
+						tindakan_medisdetail_purge();
 						Ext.MessageBox.alert(post2db+' OK','The Tindakan was '+msg+' successfully.');
-						tindakan_medisDataStore.reload();
-						tindakan_medis_screateWindow.hide();
+						tindakan_medis_createWindow.hide();
 						break;
 					default:
 						Ext.MessageBox.show({
@@ -261,16 +311,16 @@ Ext.onReady(function(){
   
   	/* Function for Displaying  create Window Form */
 	function display_form_window(){
-		if(!tindakan_medis_screateWindow.isVisible()){
+		if(!tindakan_medis_createWindow.isVisible()){
 			tindakan_medis_detail_DataStore.load({
 				params: {master_id:0, start:0, limit:pageS}
 			});
 			tindakan_medisreset_form();
 			post2db='CREATE';
 			msg='created';
-			tindakan_medis_screateWindow.show();
+			tindakan_medis_createWindow.show();
 		} else {
-			tindakan_medis_screateWindow.toFront();
+			tindakan_medis_createWindow.toFront();
 		}
 	}
   	/* End of Function */
@@ -303,7 +353,7 @@ Ext.onReady(function(){
 			post2db='UPDATE';
 			tindakan_medis_detail_DataStore.load({params : {master_id : eval(get_pk_id()), start:0, limit:pageS}});
 			msg='updated';
-			tindakan_medis_screateWindow.show();
+			tindakan_medis_createWindow.show();
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
@@ -399,7 +449,7 @@ Ext.onReady(function(){
 			{name: 'dtrawat_id', type: 'int', mapping: 'dtrawat_id'},
 			{name: 'dtrawat_perawatan_id', type: 'int', mapping: 'dtrawat_perawatan'},
 			{name: 'dtrawat_perawatan', type: 'string', mapping: 'rawat_nama'},
-			{name: 'dtrawat_petugas1', type: 'string', mapping: 'karyawan_nama'},
+			{name: 'dtrawat_petugas1', type: 'string', mapping: 'karyawan_username'},
 			{name: 'dtrawat_petugas1_no', type: 'string', mapping: 'karyawan_no'},
 			{name: 'dtrawat_jam', type: 'string', mapping: 'dtrawat_jam'},
 			{name: 'dtrawat_tglapp', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'dtrawat_tglapp'},
@@ -542,7 +592,7 @@ Ext.onReady(function(){
 			editor: new Ext.form.ComboBox({
 				store: dtrawat_karyawanDataStore,
 				mode: 'remote',
-				displayField: 'karyawan_display',
+				displayField: 'karyawan_username',
 				valueField: 'karyawan_value',
 				loadingText: 'Searching...',
 				triggerAction: 'all',
@@ -682,6 +732,7 @@ Ext.onReady(function(){
 			text: 'Delete',
 			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
+			disabled:true,
 			handler: tindakan_medisconfirm_delete   // Confirm before deleting
 		}, '-', {
 			text: 'Search',
@@ -957,7 +1008,7 @@ Ext.onReady(function(){
 	var combo_dapp_dokter=new Ext.form.ComboBox({
 			store: dtrawat_karyawanDataStore,
 			mode: 'remote',
-			displayField: 'karyawan_display',
+			displayField: 'karyawan_username',
 			valueField: 'karyawan_value',
 			tpl: karyawan_tpl,
 			loadingText: 'Searching...',
@@ -1130,7 +1181,13 @@ Ext.onReady(function(){
 		Ext.Ajax.request({
 			waitMsg: 'Please wait...',
 			url: 'index.php?c=c_tindakan_medis&m=detail_tindakan_medis_detail_purge',
-			params:{ master_id: eval(trawat_medis_idField.getValue()) }
+			params:{ master_id: eval(trawat_medis_idField.getValue()) },
+			callback: function(opts, success, response){
+				if(success){
+					tindakan_medisdetail_insert();
+					tindakan_medisDataStore.reload();
+				}
+			}
 		});
 	}
 	//eof
@@ -1169,7 +1226,7 @@ Ext.onReady(function(){
 	tindakan_medis_detail_DataStore.on('update', refresh_tindakan_medisdetail);
 	
 	/* Function for retrieve create Window Panel*/ 
-	tindakan_medis_screateForm = new Ext.FormPanel({
+	tindakan_medis_createForm = new Ext.FormPanel({
 		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
@@ -1178,12 +1235,12 @@ Ext.onReady(function(){
 		,
 		buttons: [{
 				text: 'Save and Close',
-				handler: tindakan_medis_screate
+				handler: tindakan_medis_create
 			}
 			,{
 				text: 'Cancel',
 				handler: function(){
-					tindakan_medis_screateWindow.hide();
+					tindakan_medis_createWindow.hide();
 				}
 			}
 		]
@@ -1191,8 +1248,8 @@ Ext.onReady(function(){
 	/* End  of Function*/
 	
 	/* Function for retrieve create Window Form */
-	tindakan_medis_screateWindow= new Ext.Window({
-		id: 'tindakan_medis_screateWindow',
+	tindakan_medis_createWindow= new Ext.Window({
+		id: 'tindakan_medis_createWindow',
 		title: post2db+'Tindakan',
 		closable:true,
 		closeAction: 'hide',
@@ -1203,8 +1260,8 @@ Ext.onReady(function(){
 		plain:true,
 		layout: 'fit',
 		modal: true,
-		renderTo: 'elwindow_tindakan_medis_screate',
-		items: tindakan_medis_screateForm
+		renderTo: 'elwindow_tindakan_medis_create',
+		items: tindakan_medis_createForm
 	});
 	/* End Window */
 	
@@ -1214,10 +1271,14 @@ Ext.onReady(function(){
 		var trawat_id_search=null;
 		var trawat_cust_search=null;
 		var trawat_keterangan_search=null;
+		var trawat_tgl_start_app_search=null;
+		var trawat_tgl_end_app_search=null;
 
 		if(trawat_medis_idSearchField.getValue()!==null){trawat_id_search=trawat_medis_idSearchField.getValue();}
 		if(trawat_medis_custSearchField.getValue()!==null){trawat_cust_search=trawat_medis_custSearchField.getValue();}
 		if(trawat_medis_keteranganSearchField.getValue()!==null){trawat_keterangan_search=trawat_medis_keteranganSearchField.getValue();}
+		if(Ext.getCmp('trawat_medis_tglStartAppSearchField').getValue()!==null){trawat_tgl_start_app_search=Ext.getCmp('trawat_medis_tglStartAppSearchField').getValue();}
+		if(Ext.getCmp('trawat_medis_tglEndAppSearchField').getValue()!==null){trawat_tgl_end_app_search=Ext.getCmp('trawat_medis_tglEndAppSearchField').getValue();}
 		// change the store parameters
 		tindakan_medisDataStore.baseParams = {
 			task: 'SEARCH',
@@ -1225,6 +1286,8 @@ Ext.onReady(function(){
 			trawat_id	:	trawat_id_search, 
 			trawat_cust	:	trawat_cust_search, 
 			trawat_keterangan	:	trawat_keterangan_search, 
+			trawat_tglapp_start	: 	trawat_tgl_start_app_search,
+			trawat_tglapp_end	: 	trawat_tgl_end_app_search
 		};
 		// Cause the datastore to do another query : 
 		tindakan_medisDataStore.reload({params: {start: 0, limit: pageS}});
@@ -1236,7 +1299,7 @@ Ext.onReady(function(){
 		tindakan_medisDataStore.baseParams = { task: 'LIST',start:0,limit:pageS };
 		// Cause the datastore to do another query : 
 		tindakan_medisDataStore.reload({params: {start: 0, limit: pageS}});
-		tindakan_medissearchWindow.close();
+		tindakan_medis_searchWindow.close();
 	};
 	/* End of Fuction */
 	
@@ -1283,11 +1346,11 @@ Ext.onReady(function(){
 	});
     
 	/* Function for retrieve search Form Panel */
-	tindakan_medissearchForm = new Ext.FormPanel({
+	tindakan_medis_searchForm = new Ext.FormPanel({
 		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
-		width: 400,        
+		width: 540,        
 		items: [{
 			layout:'column',
 			border:false,
@@ -1296,7 +1359,41 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [trawat_medis_custSearchField, trawat_medis_keteranganSearchField] 
+				items: [trawat_medis_custSearchField,
+				        {
+						layout:'column',
+						border:false,
+						items:[
+				        {
+							columnWidth:0.38,
+							layout: 'form',
+							border:false,
+							defaultType: 'datefield',
+							items: [
+							    {
+									fieldLabel: 'Tanggal Appointment',
+							        name: 'trawat_medis_tglStartAppSearchField',
+							        id: 'trawat_medis_tglStartAppSearchField',
+							        vtype: 'daterange',
+							        endDateField: 'trawat_medis_tglEndAppSearchField' // id of the end date field
+							    }] 
+						},
+						{
+							columnWidth:0.55,
+							layout: 'form',
+							labelWidth:20,
+							border:false,
+							defaultType: 'datefield',
+							items: [
+						      	{
+									fieldLabel: 's/d',
+							        name: 'trawat_medis_tglEndAppSearchField',
+							        id: 'trawat_medis_tglEndAppSearchField',
+							        vtype: 'daterange',
+							        startDateField: 'trawat_medis_tglStartAppSearchField' // id of the end date field
+							    }] 
+						}]},
+						trawat_medis_keteranganSearchField] 
 			}
 			]
 		}]
@@ -1307,15 +1404,28 @@ Ext.onReady(function(){
 			},{
 				text: 'Close',
 				handler: function(){
-					tindakan_medissearchWindow.hide();
+					tindakan_medis_searchWindow.hide();
 				}
 			}
 		]
 	});
     /* End of Function */ 
+    
+	function tindakan_medis_reset_formSearch(){
+		trawat_medis_idSearchField.reset();
+		trawat_medis_idSearchField.setValue(null);
+		trawat_medis_custSearchField.reset();
+		trawat_medis_custSearchField.setValue(null);
+		trawat_medis_keteranganSearchField.reset();
+		trawat_medis_keteranganSearchField.setValue(null);
+		Ext.getCmp('trawat_medis_tglStartAppSearchField').reset();
+		Ext.getCmp('trawat_medis_tglStartAppSearchField').setValue(null);
+		Ext.getCmp('trawat_medis_tglEndAppSearchField').reset();
+		Ext.getCmp('trawat_medis_tglEndAppSearchField').setValue(null);
+	}
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
-	tindakan_medissearchWindow = new Ext.Window({
+	tindakan_medis_searchWindow = new Ext.Window({
 		title: 'tindakan Search',
 		closable:true,
 		closeAction: 'hide',
@@ -1326,17 +1436,18 @@ Ext.onReady(function(){
 		x: 0,
 		y: 0,
 		modal: true,
-		renderTo: 'elwindow_tindakan_medissearch',
-		items: tindakan_medissearchForm
+		renderTo: 'elwindow_tindakan_medis_search',
+		items: tindakan_medis_searchForm
 	});
     /* End of Function */ 
 	 
   	/* Function for Displaying  Search Window Form */
 	function display_form_search_window(){
-		if(!tindakan_medissearchWindow.isVisible()){
-			tindakan_medissearchWindow.show();
+		if(!tindakan_medis_searchWindow.isVisible()){
+			tindakan_medis_reset_formSearch();
+			tindakan_medis_searchWindow.show();
 		} else {
-			tindakan_medissearchWindow.toFront();
+			tindakan_medis_searchWindow.toFront();
 		}
 	}
   	/* End Function */
@@ -1455,8 +1566,8 @@ Ext.onReady(function(){
 	<div class="col">
         <div id="fp_tindakan"></div>
          <div id="fp_tindakan_medisdetail"></div>
-		<div id="elwindow_tindakan_medis_screate"></div>
-        <div id="elwindow_tindakan_medissearch"></div>
+		<div id="elwindow_tindakan_medis_create"></div>
+        <div id="elwindow_tindakan_medis_search"></div>
     </div>
 </div>
 </body>

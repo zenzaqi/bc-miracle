@@ -179,16 +179,10 @@ class C_tindakan_nonmedis extends Controller {
 		//POST varible here
 		//auto increment, don't accept anything from form values
 		$trawat_cust=trim(@$_POST["trawat_cust"]);
-		$trawat_jamdatang=trim(@$_POST["trawat_jamdatang"]);
-		$trawat_jamdatang=str_replace("/(<\/?)(p)([^>]*>)", "",$trawat_jamdatang);
-		$trawat_jamdatang=str_replace("'", "\'",$trawat_jamdatang);
-		$trawat_appointment=trim(@$_POST["trawat_appointment"]);
-		$trawat_appointment=str_replace("/(<\/?)(p)([^>]*>)", "",$trawat_appointment);
-		$trawat_appointment=str_replace("'", "\'",$trawat_appointment);
 		$trawat_keterangan=trim(@$_POST["trawat_keterangan"]);
 		$trawat_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$trawat_keterangan);
 		$trawat_keterangan=str_replace("'", "\'",$trawat_keterangan);
-		$result=$this->m_tindakan_nonmedis->tindakan_create($trawat_cust ,$trawat_jamdatang ,$trawat_appointment ,$trawat_keterangan );
+		$result=$this->m_tindakan_nonmedis->tindakan_create($trawat_cust ,$trawat_keterangan );
 		echo $result;
 	}
 
@@ -205,19 +199,13 @@ class C_tindakan_nonmedis extends Controller {
 		//POST varibale here
 		$trawat_id=trim(@$_POST["trawat_id"]);
 		$trawat_cust=trim(@$_POST["trawat_cust"]);
-		$trawat_jamdatang=trim(@$_POST["trawat_jamdatang"]);
-		$trawat_jamdatang=str_replace("/(<\/?)(p)([^>]*>)", "",$trawat_jamdatang);
-		$trawat_jamdatang=str_replace("'", "\'",$trawat_jamdatang);
-		$trawat_appointment=trim(@$_POST["trawat_appointment"]);
-		$trawat_appointment=str_replace("/(<\/?)(p)([^>]*>)", "",$trawat_appointment);
-		$trawat_appointment=str_replace("'", "\'",$trawat_appointment);
 		$trawat_keterangan=trim(@$_POST["trawat_keterangan"]);
 		$trawat_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$trawat_keterangan);
 		$trawat_keterangan=str_replace("'", "\'",$trawat_keterangan);
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_tindakan_nonmedis->tindakan_search($trawat_id ,$trawat_cust ,$trawat_jamdatang ,$trawat_appointment ,$trawat_keterangan ,$start,$end);
+		$result = $this->m_tindakan_nonmedis->tindakan_search($trawat_id ,$trawat_cust ,$trawat_keterangan ,$start,$end);
 		echo $result;
 	}
 
@@ -226,19 +214,13 @@ class C_tindakan_nonmedis extends Controller {
   		//POST varibale here
 		$trawat_id=trim(@$_POST["trawat_id"]);
 		$trawat_cust=trim(@$_POST["trawat_cust"]);
-		$trawat_jamdatang=trim(@$_POST["trawat_jamdatang"]);
-		$trawat_jamdatang=str_replace("/(<\/?)(p)([^>]*>)", "",$trawat_jamdatang);
-		$trawat_jamdatang=str_replace("'", "\'",$trawat_jamdatang);
-		$trawat_appointment=trim(@$_POST["trawat_appointment"]);
-		$trawat_appointment=str_replace("/(<\/?)(p)([^>]*>)", "",$trawat_appointment);
-		$trawat_appointment=str_replace("'", "\'",$trawat_appointment);
 		$trawat_keterangan=trim(@$_POST["trawat_keterangan"]);
 		$trawat_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$trawat_keterangan);
 		$trawat_keterangan=str_replace("'", "\'",$trawat_keterangan);
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$result = $this->m_tindakan_nonmedis->tindakan_print($trawat_id ,$trawat_cust ,$trawat_jamdatang ,$trawat_appointment ,$trawat_keterangan ,$option,$filter);
+		$result = $this->m_tindakan_nonmedis->tindakan_print($trawat_id ,$trawat_cust ,$trawat_keterangan ,$option,$filter);
 		$nbrows=$result->num_rows();
 		$totcolumn=10;
    		/* We now have our array, let's build our HTML file */
@@ -259,10 +241,6 @@ class C_tindakan_nonmedis extends Controller {
 				fwrite($file, $data['trawat_id']);
 				fwrite($file,"</th><td>");
 				fwrite($file, $data['trawat_cust']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['trawat_jamdatang']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['trawat_appointment']);
 				fwrite($file,"</td><td>");
 				fwrite($file, $data['trawat_keterangan']);
 				fwrite($file, "</td></tr>");
@@ -289,19 +267,13 @@ class C_tindakan_nonmedis extends Controller {
 		//POST varibale here
 		$trawat_id=trim(@$_POST["trawat_id"]);
 		$trawat_cust=trim(@$_POST["trawat_cust"]);
-		$trawat_jamdatang=trim(@$_POST["trawat_jamdatang"]);
-		$trawat_jamdatang=str_replace("/(<\/?)(p)([^>]*>)", "",$trawat_jamdatang);
-		$trawat_jamdatang=str_replace("'", "\'",$trawat_jamdatang);
-		$trawat_appointment=trim(@$_POST["trawat_appointment"]);
-		$trawat_appointment=str_replace("/(<\/?)(p)([^>]*>)", "",$trawat_appointment);
-		$trawat_appointment=str_replace("'", "\'",$trawat_appointment);
 		$trawat_keterangan=trim(@$_POST["trawat_keterangan"]);
 		$trawat_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$trawat_keterangan);
 		$trawat_keterangan=str_replace("'", "\'",$trawat_keterangan);
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$query = $this->m_tindakan_nonmedis->tindakan_export_excel($trawat_id ,$trawat_cust ,$trawat_jamdatang ,$trawat_appointment ,$trawat_keterangan ,$option,$filter);
+		$query = $this->m_tindakan_nonmedis->tindakan_export_excel($trawat_id ,$trawat_cust ,$trawat_keterangan ,$option,$filter);
 		
 		to_excel($query,"tindakan"); 
 		echo '1';
