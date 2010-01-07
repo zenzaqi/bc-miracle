@@ -687,11 +687,11 @@ Ext.onReady(function(){
 	/* End of Function */
 	function ch_status(val){
 		if(val=="selesai"){
-			return '<span style="color:blue;">' + val + '</span>';
+			return '<span style="color:blue;"><b>' + val + '</b></span>';
 		}else if(val=="siap"){
-			return '<span style="color:green;">' + val + '</span>';
+			return '<span style="color:green;"><b>' + val + '</b></span>';
 		}else if(val=="datang"){
-			return '<span style="color:red;">' + val + '</span>';
+			return '<span style="color:red;"><b>' + val + '</b></span>';
 		}else if(val=="batal"){
 			return '<span style="color:black;"><b>' + val + '</b></span>';
 		}

@@ -134,7 +134,7 @@ class M_tindakan_medis extends Model{
 			
 			//Jika dtrawat_status=="selesai" --> INSERT to table.master_jual_rawat
 			if($dtrawat_status=="selesai"){
-				$bln_now=date('Y-m');
+				//$bln_now=date('Y-m');
 				//Checking di table.master_jual_rawat WHERE jrawat_cust=$trawat_cust_id AND jrawat_tanggal=$date_now
 				//Jika SUDAH ADA maka INSERT hanya ke table.detail_jual_rawat
 				//Jika TIDAK ADA maka INSERT ke table.master_jual_rawat AND table.detail_jual_rawat
