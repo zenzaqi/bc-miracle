@@ -130,6 +130,11 @@ class M_tindakan_nonmedis extends Model{
 			$data_dtindakan=array(
 			"dtrawat_status"=>$dtrawat_status
 			);
+			$sql="SELECT rawat_id FROM perawatan WHERE rawat_id='$dtrawat_perawatan'";
+			$rs=$this->db->query($sql);
+			if($rs->num_rows())
+				$data_dtindakan["dtrawat_perawatan"]=$dtrawat_perawatan;
+				
 			$this->db->where("dtrawat_id", $dtrawat_id);
 			$this->db->update("tindakan_detail", $data_dtindakan);
 			

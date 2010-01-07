@@ -522,7 +522,7 @@ Ext.onReady(function(){
 			header: 'Perawatan',
 			dataIndex: 'dtrawat_perawatan',
 			width: 150,
-			sortable: true/*,
+			sortable: true,
 			editor: new Ext.form.ComboBox({
 				store: dtrawat_perawatanDataStore,
 				mode: 'remote',
@@ -531,7 +531,7 @@ Ext.onReady(function(){
 				loadingText: 'Searching...',
 				triggerAction: 'all',
 				anchor: '95%'
-			})*/
+			})
 		}, 
 		{
 			header: 'Therapist',

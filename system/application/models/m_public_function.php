@@ -677,6 +677,7 @@ class M_public_function extends Model{
 		/*$sql="SELECT rawat_id,rawat_kode,rawat_nama,rawat_kategori,rawat_harga,rawat_group,rawat_du,rawat_dm,kategori_nama, group_nama 
 		FROM perawatan,kategori,produk_group where rawat_kategori=kategori_id 
 		AND rawat_group=group_id AND rawat_aktif='Aktif' AND kategori_nama='Medis'";*/
+		$rs_rows=0;
 		if(is_numeric($query)==true){
 			$sql_dapp="SELECT distinct(dtrawat_perawatan) FROM tindakan_detail WHERE dtrawat_master='$query'";
 			$rs=$this->db->query($sql_dapp);
@@ -721,6 +722,7 @@ class M_public_function extends Model{
 		/*$sql="SELECT rawat_id,rawat_kode,rawat_nama,rawat_kategori,rawat_harga,rawat_group,rawat_du,rawat_dm,kategori_nama, group_nama 
 		FROM perawatan,kategori,produk_group where rawat_kategori=kategori_id 
 		AND rawat_group=group_id AND rawat_aktif='Aktif' AND kategori_nama='Medis'";*/
+		$rs_rows=0;
 		if(is_numeric($query)==true){
 			$sql_dapp="SELECT distinct(dtrawat_perawatan) FROM tindakan_detail WHERE dtrawat_master='$query'";
 			$rs=$this->db->query($sql_dapp);
