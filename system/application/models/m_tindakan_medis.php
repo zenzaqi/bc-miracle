@@ -125,6 +125,7 @@ class M_tindakan_medis extends Model{
 			 * Karena untuk perawatan-tindakan ini yg diUPDATE hanya dtrawat_status maka yg diUPDATE adalah
 			 * hanya table.tindakan_detail
 			 */ 
+			$date_now=date('Y-m-d');
 			$data_dtindakan=array(
 			"dtrawat_status"=>$dtrawat_status
 			);
@@ -133,7 +134,6 @@ class M_tindakan_medis extends Model{
 			
 			//Jika dtrawat_status=="selesai" --> INSERT to table.master_jual_rawat
 			if($dtrawat_status=="selesai"){
-				$date_now=date('Y-m-d');
 				$bln_now=date('Y-m');
 				//Checking di table.master_jual_rawat WHERE jrawat_cust=$trawat_cust_id AND jrawat_tanggal=$date_now
 				//Jika SUDAH ADA maka INSERT hanya ke table.detail_jual_rawat
@@ -256,6 +256,21 @@ class M_tindakan_medis extends Model{
 							);
 							$this->db->insert('report_tindakan', $data_report_tindakan);
 						}*/
+					}
+				}
+			}else{
+				//ambil trawat_cust,dtrawat_perawatan, dan tanggal_sekarang untuk ambil ID dr db.Master_Jual_Rawat
+				$sql="SELECT jrawat_id FROM master_jual_rawat WHERE jrawat_cust='$trawat_cust_id' AND jrawat_tanggal='$date_now'";
+				$rs=$this->db->query($sql);
+				if($rs->num_rows()){
+					$rs_record=$rs->row_array();
+					$rs_record_jrawat_id=$rs_record['jrawat_id'];
+					$sql="SELECT * FROM detail_jual_rawat WHERE drawat_master='$rs_record_jrawat_id' AND drawat_rawat='$dtrawat_perawatan_id'";
+					$rs=$this->db->query($sql);
+					if($rs->num_rows()){
+						$this->db->where('drawat_master',$rs_record_jrawat_id);
+						$this->db->where('drawat_rawat',$dtrawat_perawatan_id);
+						$this->db->delete('detail_jual_rawat');
 					}
 				}
 			}
