@@ -198,7 +198,7 @@ class M_tindakan_nonmedis extends Model{
 					}*/
 				}else{
 					//INSERT to table.master_jual_rawat AND table.detail_jual_rawat
-					$pattern="PR/".date("y/m")."/";
+					$pattern="PR/".date("ym")."-";
 					$jrawat_nobukti=$this->m_public_function->get_kode_1('master_jual_rawat','jrawat_nobukti',$pattern,13);
 					$data_jrawat=array(
 					"jrawat_nobukti"=>$jrawat_nobukti,
