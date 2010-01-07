@@ -125,8 +125,6 @@ class M_tindakan_medis extends Model{
 			 * Karena untuk perawatan-tindakan ini yg diUPDATE hanya dtrawat_status maka yg diUPDATE adalah
 			 * hanya table.tindakan_detail
 			 */ 
-			$this->firephp->log($rawat_du,"DU");
-			$this->firephp->log($rawat_dm,"DM");
 			$data_dtindakan=array(
 			"dtrawat_status"=>$dtrawat_status
 			);
