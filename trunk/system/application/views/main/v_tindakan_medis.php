@@ -347,7 +347,7 @@ Ext.onReady(function(){
 	/* Function for Update Confirm */
 	function tindakan_medisconfirm_update(){
 		/* only one record is selected here */
-		dtrawat_perawatanDataStore.load({params:{query:""}});
+		dtrawat_perawatanDataStore.load({params:{query:eval(get_pk_id())}});
 		if(tindakanListEditorGrid.selModel.getCount() == 1) {
 			tindakan_medis_set_form();
 			post2db='UPDATE';
@@ -744,7 +744,18 @@ Ext.onReady(function(){
 		}, '-', 
 			new Ext.app.SearchField({
 			store: tindakan_medisDataStore,
-			params: {start: 0, limit: pageS},
+			params: {task: 'LIST',start: 0, limit: pageS},
+			listeners:{
+				specialkey: function(f,e){
+					if(e.getKey() == e.ENTER){
+						tindakan_medisDataStore.baseParams={task:'LIST',start: 0, limit: pageS};
+		            }
+				},
+				render: function(c){
+				Ext.get(this.id).set({qtitle:'Search By'});
+				Ext.get(this.id).set({qtip:'- Nama Customer<br>- Nama Perawatan<br>- Nama Dokter<br>- Status'});
+				}
+			},
 			width: 120
 		}),'-',{
 			text: 'Refresh',
@@ -1325,6 +1336,44 @@ Ext.onReady(function(){
 		mode: 'remote',
 		displayField:'cust_nama',
 		valueField: 'cust_id',
+        typeAhead: false,
+        loadingText: 'Searching...',
+        pageSize:10,
+        hideTrigger:false,
+        tpl: customer_tmedis_tpl,
+        //applyTo: 'search',
+        itemSelector: 'div.search-item',
+		triggerAction: 'all',
+		lazyRender:true,
+		listClass: 'x-combo-list-small',
+		allowBlank: true,
+		anchor: '95%'
+	});
+	trawat_medis_rawatSearchField= new Ext.form.ComboBox({
+		fieldLabel: 'Perawatan',
+		store: dtrawat_perawatanDataStore,
+		mode: 'remote',
+		displayField:'perawatan_display',
+		valueField: 'perawatan_value',
+        typeAhead: false,
+        loadingText: 'Searching...',
+        pageSize:10,
+        hideTrigger:false,
+        tpl: customer_tmedis_tpl,
+        //applyTo: 'search',
+        itemSelector: 'div.search-item',
+		triggerAction: 'all',
+		lazyRender:true,
+		listClass: 'x-combo-list-small',
+		allowBlank: true,
+		anchor: '95%'
+	});
+	trawat_medis_dokterSearchField= new Ext.form.ComboBox({
+		fieldLabel: 'Dokter',
+		store: dtrawat_karyawanDataStore,
+		mode: 'remote',
+		displayField:'karyawan_username',
+		valueField: 'karyawan_value',
         typeAhead: false,
         loadingText: 'Searching...',
         pageSize:10,

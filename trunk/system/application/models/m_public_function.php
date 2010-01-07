@@ -677,13 +677,15 @@ class M_public_function extends Model{
 		/*$sql="SELECT rawat_id,rawat_kode,rawat_nama,rawat_kategori,rawat_harga,rawat_group,rawat_du,rawat_dm,kategori_nama, group_nama 
 		FROM perawatan,kategori,produk_group where rawat_kategori=kategori_id 
 		AND rawat_group=group_id AND rawat_aktif='Aktif' AND kategori_nama='Medis'";*/
+		$this->firephp->log($query, "QUERYY");
 		
 		$sql_dapp="SELECT distinct(dtrawat_perawatan) FROM tindakan_detail";
 		$rs=$this->db->query($sql_dapp);
 		$rs_rows=$rs->num_rows();
 		
 		$sql="SELECT * FROM vu_perawatan WHERE kategori_nama='Medis' AND rawat_aktif='Aktif'";//join dr tabel: perawatan,produk_group,kategori2,kategori,jenis,gudang
-		if($query<>""){
+		if($query<>"" && is_numeric($query)==false){
+			$this->firephp->log("YESSS");
 			$sql.=" and (rawat_kode like '%".$query."%' or rawat_nama like '%".$query."%')";
 			//$sql.=" and (rawat_kode like '%".$query."%' or rawat_nama like '%".$query."%' or group_nama like '%".$query."%')";
 		}else{
