@@ -18,7 +18,6 @@ class C_tindakan_medis extends Controller {
 		parent::Controller();
 		$this->load->model('m_tindakan_medis', '', TRUE);
 		$this->load->plugin('to_excel');
-		//$this->load->library('firephp');
 	}
 	
 	//set index
@@ -52,7 +51,7 @@ class C_tindakan_medis extends Controller {
 	}
 	
 	function get_tindakan_medis_list(){
-		$query = isset($_POST['query']) ? $_POST['query'] : "";
+		$query = isset($_POST['query']) ? $_POST['query'] : $_GET['start'];
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
 		$result = $this->m_public_function->get_tindakan_medis_list($query,$start,$end);
@@ -198,9 +197,9 @@ class C_tindakan_medis extends Controller {
 		//POST varibale here
 		$trawat_id=trim(@$_POST["trawat_id"]);
 		$trawat_cust=trim(@$_POST["trawat_cust"]);
-		$trawat_keterangan=trim(@$_POST["trawat_keterangan"]);
+		/*$trawat_keterangan=trim(@$_POST["trawat_keterangan"]);
 		$trawat_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$trawat_keterangan);
-		$trawat_keterangan=str_replace("'", "\'",$trawat_keterangan);
+		$trawat_keterangan=str_replace("'", "\'",$trawat_keterangan);*/
 		if(trim(@$_POST["trawat_tglapp_start"])!="")
 			$trawat_tglapp_start=date('Y-m-d', strtotime(trim(@$_POST["trawat_tglapp_start"])));
 		else
@@ -209,10 +208,13 @@ class C_tindakan_medis extends Controller {
 			$trawat_tglapp_end=date('Y-m-d', strtotime(trim(@$_POST["trawat_tglapp_end"])));
 		else
 			$trawat_tglapp_end="";
+		$trawat_rawat=trim(@$_POST["trawat_rawat"]);
+		$trawat_dokter=trim(@$_POST["trawat_dokter"]);
+		$trawat_status=trim(@$_POST["trawat_status"]);
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_tindakan_medis->tindakan_search($trawat_id ,$trawat_cust ,$trawat_keterangan ,$trawat_tglapp_start ,$trawat_tglapp_end ,$start,$end);
+		$result = $this->m_tindakan_medis->tindakan_search($trawat_id ,$trawat_cust ,$trawat_tglapp_start ,$trawat_tglapp_end ,$trawat_rawat ,$trawat_dokter ,$trawat_status ,$start,$end);
 		echo $result;
 	}
 

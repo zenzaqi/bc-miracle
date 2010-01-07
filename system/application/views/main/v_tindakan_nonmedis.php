@@ -293,7 +293,7 @@ Ext.onReady(function(){
 	/* Function for Update Confirm */
 	function tindakan_nonmedis_confirm_update(){
 		/* only one record is selected here */
-		dtrawat_perawatanDataStore.load({params:{query:""}});
+		dtrawat_perawatanDataStore.load({params:{query:tindakan_nonmedisListEditorGrid.getSelectionModel().getSelected().get('trawat_id')}});
 		if(tindakan_nonmedisListEditorGrid.selModel.getCount() == 1) {
 			//cbo_dtrawat_perawatan_nonmedisDataStore.load();
 			//cbo_dtrawat_petugas_nonmedisDataStore.load();
