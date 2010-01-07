@@ -18,6 +18,7 @@ class C_tindakan_medis extends Controller {
 		parent::Controller();
 		$this->load->model('m_tindakan_medis', '', TRUE);
 		$this->load->plugin('to_excel');
+		//$this->load->library('firephp');
 	}
 	
 	//set index
