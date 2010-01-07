@@ -277,6 +277,12 @@ class M_tindakan_nonmedis extends Model{
 						$this->db->where('drawat_rawat',$dtrawat_perawatan_id);
 						$this->db->delete('detail_jual_rawat');
 					}
+					$sql="SELECT drawat_id FROM detail_jual_rawat WHERE drawat_master='$rs_record_jrawat_id'";
+					$rs=$this->db->query($sql);
+					if(!$rs->num_rows()){
+						$this->db->where('jrawat_id',$rs_record_jrawat_id);
+						$this->db->delete('master_jual_rawat');
+					}
 				}
 			}
 			
