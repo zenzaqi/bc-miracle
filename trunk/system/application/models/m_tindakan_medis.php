@@ -87,7 +87,6 @@ class M_tindakan_medis extends Model{
 		
 		//function for get list record
 		function tindakan_list($filter,$start,$end){
-			//$this->firephp->log($filter, "FILETER");
 			$date_now=date('Y-m-d');
 			$query = "SELECT trawat_id,trawat_cust,cust_nama,trawat_keterangan,trawat_creator,trawat_date_create,trawat_update,trawat_date_update,trawat_revised,dtrawat_id,dtrawat_perawatan,rawat_nama,karyawan_nama,karyawan_no,dtrawat_jam,dtrawat_tglapp,dtrawat_status,karyawan_username,rawat_harga,rawat_du,rawat_dm FROM tindakan INNER JOIN customer ON trawat_cust=cust_id INNER JOIN tindakan_detail ON dtrawat_master=trawat_id LEFT JOIN perawatan ON dtrawat_perawatan=rawat_id LEFT JOIN karyawan ON dtrawat_petugas1=karyawan_id LEFT JOIN kategori ON rawat_kategori=kategori_id WHERE kategori_nama='Medis' AND dtrawat_tglapp='$date_now'";
 			
@@ -271,6 +270,7 @@ class M_tindakan_medis extends Model{
 					if($rs->num_rows()){
 						$this->db->where('drawat_master',$rs_record_jrawat_id);
 						$this->db->where('drawat_rawat',$dtrawat_perawatan_id);
+						$this->db->like('drawat_date_create',$date_now,'after');
 						$this->db->delete('detail_jual_rawat');
 					}
 				}
@@ -322,7 +322,7 @@ class M_tindakan_medis extends Model{
 		}
 		
 		//function for advanced search record
-		function tindakan_search($trawat_id ,$trawat_cust ,$trawat_keterangan ,$trawat_tglapp_start ,$trawat_tglapp_end ,$start,$end){
+		function tindakan_search($trawat_id ,$trawat_cust ,$trawat_tglapp_start ,$trawat_tglapp_end ,$trawat_rawat ,$trawat_dokter ,$trawat_status ,$start,$end){
 			//full query
 			$query="SELECT trawat_id,trawat_cust,cust_nama,trawat_keterangan,trawat_creator,trawat_date_create,trawat_update,trawat_date_update,trawat_revised,dtrawat_id,dtrawat_perawatan,rawat_nama,karyawan_nama,karyawan_no,dtrawat_jam,dtrawat_tglapp,dtrawat_status FROM tindakan INNER JOIN customer ON trawat_cust=cust_id INNER JOIN tindakan_detail ON dtrawat_master=trawat_id LEFT JOIN perawatan ON dtrawat_perawatan=rawat_id LEFT JOIN karyawan ON dtrawat_petugas1=karyawan_id LEFT JOIN kategori ON rawat_kategori=kategori_id WHERE kategori_nama='Medis'";
 			
@@ -334,9 +334,17 @@ class M_tindakan_medis extends Model{
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " trawat_cust LIKE '%".$trawat_cust."%'";
 			};
-			if($trawat_keterangan!=''){
+			if($trawat_rawat!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " trawat_keterangan LIKE '%".$trawat_keterangan."%'";
+				$query.= " dtrawat_perawatan LIKE '%".$trawat_rawat."%'";
+			};
+			if($trawat_dokter!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " dtrawat_petugas1 LIKE '%".$trawat_dokter."%'";
+			};
+			if($trawat_status!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " dtrawat_status LIKE '%".$trawat_status."%'";
 			};
 			if($trawat_tglapp_start!='' && $trawat_tglapp_end!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
