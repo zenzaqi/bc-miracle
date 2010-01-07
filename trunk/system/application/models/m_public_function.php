@@ -542,7 +542,8 @@ class M_public_function extends Model{
 		
 		$sql="SELECT * FROM vu_perawatan WHERE rawat_aktif='Aktif'";//join dr tabel: perawatan,produk_group,kategori2,kategori,jenis,gudang
 		if($query<>""){
-			$sql.=" WHERE (rawat_kode like '%".$query."%' or rawat_nama like '%".$query."%' or kategori_nama like '%".$query."%') ";
+			$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+			$sql.=" (rawat_kode like '%".$query."%' or rawat_nama like '%".$query."%' or kategori_nama like '%".$query."%') ";
 		}else{
 			if($rs_rows){
 				$filter="";
