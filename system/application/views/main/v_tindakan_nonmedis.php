@@ -43,6 +43,58 @@
 		}
     </style>
 <script>
+Ext.namespace('Ext.ux.plugin');
+
+Ext.ux.plugin.triggerfieldTooltip = function(config){
+    Ext.apply(this, config);
+};
+
+Ext.extend(Ext.ux.plugin.triggerfieldTooltip, Ext.util.Observable,{
+    init: function(component){
+        this.component = component;
+        this.component.on('render', this.onRender, this);
+    },
+    
+    //private
+    onRender: function(){
+        if(this.component.tooltip){
+            if(typeof this.component.tooltip == 'object'){
+                Ext.QuickTips.register(Ext.apply({
+                      target: this.component.trigger
+                }, this.component.tooltip));
+            } else {
+                this.component.trigger.dom[this.component.tooltipType] = this.component.tooltip;
+            }
+        }
+    }
+}); 
+
+Ext.apply(Ext.form.VTypes, {
+    daterange : function(val, field) {
+        var date = field.parseDate(val);
+
+        if(!date){
+            return;
+        }
+        if (field.startDateField && (!this.dateRangeMax || (date.getTime() != this.dateRangeMax.getTime()))) {
+            var start = Ext.getCmp(field.startDateField);
+            start.setMaxValue(date);
+            start.validate();
+            this.dateRangeMax = date;
+        } 
+        else if (field.endDateField && (!this.dateRangeMin || (date.getTime() != this.dateRangeMin.getTime()))) {
+            var end = Ext.getCmp(field.endDateField);
+            end.setMinValue(date);
+            end.validate();
+            this.dateRangeMin = date;
+        }
+        /*
+         * Always return true since we're only using this vtype to set the
+         * min/max allowed values (these are tested for after the vtype test)
+         */
+        return true;
+    }
+});
 /* declare function */		
 var tindakan_nonmedis_DataStore;
 var tindakan_nonmedis_ColumnModel;
@@ -492,6 +544,11 @@ Ext.onReady(function(){
 		]),
 		sortInfo:{field: 'karyawan_display', direction: "ASC"}
 	});
+    var karyawan_terapis_tpl = new Ext.XTemplate(
+            '<tpl for="."><div class="search-item">',
+                '<span><b>{karyawan_username}</b> | {karyawan_display} | <b>{karyawan_jmltindakan}</b></span>',
+            '</div></tpl>'
+        );
     
   	/* Function for Identify of Window Column Model */
 	tindakan_nonmedis_ColumnModel = new Ext.grid.ColumnModel(
@@ -1210,18 +1267,33 @@ Ext.onReady(function(){
 		// render according to a SQL date format.
 		var trawat_id_search=null;
 		var trawat_cust_search=null;
-		var trawat_keterangan_search=null;
+		//var trawat_keterangan_search=null;
+		var trawat_tgl_start_app_search=null;
+		var trawat_tgl_end_app_search=null;
+		var trawat_rawat_search=null;
+		var trawat_terapis_search=null;
+		var trawat_status_search=null;
 
 		if(trawat_nonmedis_idSearchField.getValue()!==null){trawat_id_search=trawat_nonmedis_idSearchField.getValue();}
 		if(trawat_nonmedis_custSearchField.getValue()!==null){trawat_cust_search=trawat_nonmedis_custSearchField.getValue();}
-		if(trawat_nonmedis_keteranganSearchField.getValue()!==null){trawat_keterangan_search=trawat_nonmedis_keteranganSearchField.getValue();}
+		//if(trawat_nonmedis_keteranganSearchField.getValue()!==null){trawat_keterangan_search=trawat_nonmedis_keteranganSearchField.getValue();}
+		if(Ext.getCmp('trawat_nonmedis_tglStartAppSearchField').getValue()!==null){trawat_tgl_start_app_search=Ext.getCmp('trawat_nonmedis_tglStartAppSearchField').getValue();}
+		if(Ext.getCmp('trawat_nonmedis_tglEndAppSearchField').getValue()!==null){trawat_tgl_end_app_search=Ext.getCmp('trawat_nonmedis_tglEndAppSearchField').getValue();}
+		if(trawat_nonmedis_rawatSearchField.getValue()!==null){trawat_rawat_search=trawat_nonmedis_rawatSearchField.getValue();}
+		if(trawat_nonmedis_terapisSearchField.getValue()!==null){trawat_terapis_search=trawat_nonmedis_terapisSearchField.getValue();}
+		if(trawat_nonmedis_statusSearchField.getValue()!==null){trawat_status_search=trawat_nonmedis_statusSearchField.getValue();}
 		// change the store parameters
 		tindakan_nonmedis_DataStore.baseParams = {
 			task: 'SEARCH',
 			//variable here
 			trawat_id	:	trawat_id_search, 
 			trawat_cust	:	trawat_cust_search, 
-			trawat_keterangan	:	trawat_keterangan_search, 
+			//trawat_keterangan	:	trawat_keterangan_search,
+			trawat_tglapp_start	: 	trawat_tgl_start_app_search,
+			trawat_tglapp_end	: 	trawat_tgl_end_app_search,
+			trawat_rawat	:	trawat_rawat_search,
+			trawat_terapis	:	trawat_terapis_search,
+			trawat_status	:	trawat_status_search 
 		};
 		// Cause the datastore to do another query : 
 		tindakan_nonmedis_DataStore.reload({params: {start: 0, limit: pageS}});
@@ -1250,27 +1322,82 @@ Ext.onReady(function(){
 	
 	});
 	/* Identify  trawat_cust Search Field */
-	trawat_nonmedis_custSearchField= new Ext.form.TextField({
-		id: 'trawat_nonmedis_custSearchField',
+	trawat_nonmedis_custSearchField= new Ext.form.ComboBox({
+		//id: 'trawat_medis_custField',
 		fieldLabel: 'Customer',
+		store: cbo_tnonmedis_cutomerDataStore,
+		mode: 'remote',
+		displayField:'cust_nama',
+		valueField: 'cust_id',
+        typeAhead: false,
+        loadingText: 'Searching...',
+        pageSize:10,
+        hideTrigger:false,
+        tpl: customer_tnonmedis_tpl,
+        //applyTo: 'search',
+        itemSelector: 'div.search-item',
+		triggerAction: 'all',
+		lazyRender:true,
+		listClass: 'x-combo-list-small',
+		allowBlank: true,
 		anchor: '95%'
-	
 	});
-	/* Identify  trawat_appointment Search Field */
-//	trawat_nonmedis_appointmentSearchField= new Ext.form.ComboBox({
-//		id: 'trawat_nonmedis_appointmentSearchField',
-//		fieldLabel: 'Appointment',
-//		store:new Ext.data.SimpleStore({
-//			fields:['value', 'trawat_appointment'],
-//			data:[['Medis','Medis'],['Non Medis','Non Medis']]
-//		}),
-//		mode: 'local',
-//		displayField: 'trawat_appointment',
-//		valueField: 'value',
-//		anchor: '95%',
-//		triggerAction: 'all'	 
-//	
-//	});
+	trawat_nonmedis_rawatSearchField= new Ext.form.ComboBox({
+		fieldLabel: 'Perawatan',
+		store: dtrawat_perawatanDataStore,
+		mode: 'remote',
+		displayField:'perawatan_display',
+		valueField: 'perawatan_value',
+        typeAhead: false,
+        loadingText: 'Searching...',
+        pageSize:10,
+        hideTrigger:false,
+        tpl: cbo_trawat_rawat_tpl,
+        //applyTo: 'search',
+        itemSelector: 'div.search-item',
+		triggerAction: 'all',
+		lazyRender:true,
+		listClass: 'x-combo-list-small',
+		allowBlank: true,
+		width: 214
+	});
+	trawat_nonmedis_terapisSearchField= new Ext.form.ComboBox({
+		fieldLabel: 'Terapis',
+		store: dtrawat_karyawanDataStore,
+		mode: 'remote',
+		displayField:'karyawan_username',
+		valueField: 'karyawan_value',
+        typeAhead: false,
+        loadingText: 'Searching...',
+        pageSize:10,
+        hideTrigger:false,
+        tpl: karyawan_terapis_tpl,
+        //applyTo: 'search',
+        itemSelector: 'div.search-item',
+		triggerAction: 'all',
+		lazyRender:true,
+		listClass: 'x-combo-list-small',
+		allowBlank: true,
+		width: 214
+	});
+	trawat_nonmedis_statusSearchField= new Ext.form.ComboBox({
+		fieldLabel: 'Status',
+		store: new Ext.data.SimpleStore({
+			fields:['dtrawat_status_value', 'dtrawat_status_display'],
+			data: [['batal','batal'],['selesai','selesai'],['datang','datang'],['siap','siap']]
+			}),
+		mode: 'local',
+		displayField:'dtrawat_status_display',
+		valueField: 'dtrawat_status_value',
+        typeAhead: false,
+        hideTrigger:false,
+        //applyTo: 'search',
+		triggerAction: 'all',
+		lazyRender:true,
+		listClass: 'x-combo-list-small',
+		allowBlank: true,
+		width: 94
+	});
 	/* Identify  trawat_keterangan Search Field */
 	trawat_nonmedis_keteranganSearchField= new Ext.form.TextArea({
 		id: 'trawat_nonmedis_keteranganSearchField',
@@ -1285,7 +1412,7 @@ Ext.onReady(function(){
 		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
-		width: 300,        
+		width: 540,        
 		items: [{
 			layout:'column',
 			border:false,
@@ -1294,7 +1421,41 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [trawat_nonmedis_custSearchField, trawat_nonmedis_keteranganSearchField] 
+				items: [trawat_nonmedis_custSearchField,
+				        {
+						layout:'column',
+						border:false,
+						items:[
+				        {
+							columnWidth:0.38,
+							layout: 'form',
+							border:false,
+							defaultType: 'datefield',
+							items: [
+							    {
+									fieldLabel: 'Tanggal Appointment',
+							        name: 'trawat_nonmedis_tglStartAppSearchField',
+							        id: 'trawat_nonmedis_tglStartAppSearchField',
+							        vtype: 'daterange',
+							        endDateField: 'trawat_nonmedis_tglEndAppSearchField' // id of the end date field
+							    }] 
+						},
+						{
+							columnWidth:0.55,
+							layout: 'form',
+							labelWidth:20,
+							border:false,
+							defaultType: 'datefield',
+							items: [
+						      	{
+									fieldLabel: 's/d',
+							        name: 'trawat_nonmedis_tglEndAppSearchField',
+							        id: 'trawat_nonmedis_tglEndAppSearchField',
+							        vtype: 'daterange',
+							        startDateField: 'trawat_nonmedis_tglStartAppSearchField' // id of the end date field
+							    }] 
+						}]},
+						trawat_nonmedis_rawatSearchField,trawat_nonmedis_terapisSearchField,trawat_nonmedis_statusSearchField] 
 			}
 			]
 		}]
@@ -1311,6 +1472,18 @@ Ext.onReady(function(){
 		]
 	});
     /* End of Function */ 
+	function tindakan_nonmedis_reset_formSearch(){
+		trawat_nonmedis_idSearchField.reset();
+		trawat_nonmedis_idSearchField.setValue(null);
+		trawat_nonmedis_custSearchField.reset();
+		trawat_nonmedis_custSearchField.setValue(null);
+		trawat_nonmedis_keteranganSearchField.reset();
+		trawat_nonmedis_keteranganSearchField.setValue(null);
+		Ext.getCmp('trawat_nonmedis_tglStartAppSearchField').reset();
+		Ext.getCmp('trawat_nonmedis_tglStartAppSearchField').setValue(null);
+		Ext.getCmp('trawat_nonmedis_tglEndAppSearchField').reset();
+		Ext.getCmp('trawat_nonmedis_tglEndAppSearchField').setValue(null);
+	}
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
 	tindakan_nonmedis_searchWindow = new Ext.Window({
@@ -1332,6 +1505,7 @@ Ext.onReady(function(){
   	/* Function for Displaying  Search Window Form */
 	function display_form_search_window(){
 		if(!tindakan_nonmedis_searchWindow.isVisible()){
+			tindakan_nonmedis_reset_formSearch();
 			tindakan_nonmedis_searchWindow.show();
 		} else {
 			tindakan_nonmedis_searchWindow.toFront();

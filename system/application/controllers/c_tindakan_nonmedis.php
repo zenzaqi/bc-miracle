@@ -199,13 +199,24 @@ class C_tindakan_nonmedis extends Controller {
 		//POST varibale here
 		$trawat_id=trim(@$_POST["trawat_id"]);
 		$trawat_cust=trim(@$_POST["trawat_cust"]);
-		$trawat_keterangan=trim(@$_POST["trawat_keterangan"]);
+		/*$trawat_keterangan=trim(@$_POST["trawat_keterangan"]);
 		$trawat_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$trawat_keterangan);
-		$trawat_keterangan=str_replace("'", "\'",$trawat_keterangan);
+		$trawat_keterangan=str_replace("'", "\'",$trawat_keterangan);*/
+		if(trim(@$_POST["trawat_tglapp_start"])!="")
+			$trawat_tglapp_start=date('Y-m-d', strtotime(trim(@$_POST["trawat_tglapp_start"])));
+		else
+			$trawat_tglapp_start="";
+		if(trim(@$_POST["trawat_tglapp_end"])!="")
+			$trawat_tglapp_end=date('Y-m-d', strtotime(trim(@$_POST["trawat_tglapp_end"])));
+		else
+			$trawat_tglapp_end="";
+		$trawat_rawat=trim(@$_POST["trawat_rawat"]);
+		$trawat_terapis=trim(@$_POST["trawat_terapis"]);
+		$trawat_status=trim(@$_POST["trawat_status"]);
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_tindakan_nonmedis->tindakan_search($trawat_id ,$trawat_cust ,$trawat_keterangan ,$start,$end);
+		$result = $this->m_tindakan_nonmedis->tindakan_search($trawat_id ,$trawat_cust ,$trawat_tglapp_start ,$trawat_tglapp_end ,$trawat_rawat ,$trawat_terapis ,$trawat_status ,$start,$end);
 		echo $result;
 	}
 

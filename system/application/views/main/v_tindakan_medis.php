@@ -1371,14 +1371,14 @@ Ext.onReady(function(){
         loadingText: 'Searching...',
         pageSize:10,
         hideTrigger:false,
-        tpl: customer_tmedis_tpl,
+        tpl: cbo_trawat_rawat_tpl,
         //applyTo: 'search',
         itemSelector: 'div.search-item',
 		triggerAction: 'all',
 		lazyRender:true,
 		listClass: 'x-combo-list-small',
 		allowBlank: true,
-		anchor: '95%'
+		width: 214
 	});
 	trawat_medis_dokterSearchField= new Ext.form.ComboBox({
 		fieldLabel: 'Dokter',
@@ -1390,33 +1390,32 @@ Ext.onReady(function(){
         loadingText: 'Searching...',
         pageSize:10,
         hideTrigger:false,
-        tpl: customer_tmedis_tpl,
+        tpl: karyawan_tpl,
         //applyTo: 'search',
         itemSelector: 'div.search-item',
 		triggerAction: 'all',
 		lazyRender:true,
 		listClass: 'x-combo-list-small',
 		allowBlank: true,
-		anchor: '95%'
+		width: 214
 	});
 	trawat_medis_statusSearchField= new Ext.form.ComboBox({
 		fieldLabel: 'Status',
 		store: new Ext.data.SimpleStore({
 			fields:['dtrawat_status_value', 'dtrawat_status_display'],
-			data: [['batal','batal'],['selesai','selesai'],['datang','datang']]
+			data: [['batal','batal'],['selesai','selesai'],['datang','datang'],['siap','siap']]
 			}),
 		mode: 'local',
 		displayField:'dtrawat_status_display',
 		valueField: 'dtrawat_status_value',
         typeAhead: false,
         hideTrigger:false,
-        tpl: customer_tmedis_tpl,
         //applyTo: 'search',
 		triggerAction: 'all',
 		lazyRender:true,
 		listClass: 'x-combo-list-small',
 		allowBlank: true,
-		anchor: '95%'
+		width: 94
 	});
 	
 	/* Identify  trawat_keterangan Search Field */
