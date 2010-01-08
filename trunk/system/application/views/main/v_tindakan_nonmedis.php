@@ -186,7 +186,9 @@ Ext.onReady(function(){
 				var result=eval(response.responseText);
 				switch(result){
 					case 1:
-						tindakan_nonmedis_detail_purge();
+						//tindakan_nonmedis_detail_purge();
+						tindakan_nonmedis_detail_insert();
+						tindakan_nonmedis_DataStore.reload();
 						Ext.MessageBox.alert(post2db+' OK','The Tindakan was '+msg+' successfully.');
 						tindakan_nonmedis_createWindow.hide();
 						break;
@@ -801,6 +803,7 @@ Ext.onReady(function(){
 		lazyRender:true,
 		listClass: 'x-combo-list-small',
 		allowBlank: true,
+		disabled:true,
 		anchor: '95%'
 	});
 	/* Identify  trawat_appointment Field */

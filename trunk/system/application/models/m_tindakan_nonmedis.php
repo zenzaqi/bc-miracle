@@ -67,20 +67,24 @@ class M_tindakan_nonmedis extends Model{
 				$dtrawat_master=$this->get_master_id();
 			}
 			
-			$data = array(
-				"dtrawat_master"=>$dtrawat_master, 
-				"dtrawat_perawatan"=>$dtrawat_perawatan, 
-				"dtrawat_petugas1"=>$dtrawat_petugas1, 
-				"dtrawat_petugas2"=>$dtrawat_petugas2, 
-				"dtrawat_jam"=>$dtrawat_jam, 
-				"dtrawat_kategori"=>$dtrawat_kategori, 
-				"dtrawat_status"=>$dtrawat_status 
-			);
-			$this->db->insert('tindakan_detail', $data); 
-			if($this->db->affected_rows())
-				return '1';
-			else
-				return '0';
+			if(is_numeric($dtrawat_id)==false && is_numeric($dtrawat_perawatan)==true){
+				$dt_now=date('Y-m-d');
+				$data = array(
+					"dtrawat_master"=>$dtrawat_master, 
+					"dtrawat_perawatan"=>$dtrawat_perawatan, 
+					"dtrawat_petugas1"=>$dtrawat_petugas1, 
+					"dtrawat_petugas2"=>$dtrawat_petugas2, 
+					"dtrawat_jam"=>$dtrawat_jam, 
+					"dtrawat_kategori"=>$dtrawat_kategori,
+					"dtrawat_tglapp"=>$dt_now,
+					"dtrawat_status"=>$dtrawat_status 
+				);
+				$this->db->insert('tindakan_detail', $data); 
+				if($this->db->affected_rows())
+					return '1';
+				else
+					return '0';
+			}
 
 		}
 		//end of function
