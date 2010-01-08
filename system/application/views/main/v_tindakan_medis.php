@@ -237,7 +237,9 @@ Ext.onReady(function(){
 				var result=eval(response.responseText);
 				switch(result){
 					case 1:
-						tindakan_medisdetail_purge();
+						//tindakan_medisdetail_purge();
+						tindakan_medisdetail_insert();
+						tindakan_medisDataStore.reload();
 						Ext.MessageBox.alert(post2db+' OK','The Tindakan was '+msg+' successfully.');
 						tindakan_medis_createWindow.hide();
 						break;
@@ -862,6 +864,7 @@ Ext.onReady(function(){
 		lazyRender:true,
 		listClass: 'x-combo-list-small',
 		allowBlank: true,
+		disabled:true,
 		anchor: '95%'
 	});
 	/* Identify  trawat_keterangan Field */
