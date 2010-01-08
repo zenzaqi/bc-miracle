@@ -103,8 +103,8 @@ class M_tindakan_nonmedis extends Model{
 			
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
-			$limit = $query." LIMIT ".$start.",".$end;		
-			$result = $this->db->query($limit);  
+			//$limit = $query." LIMIT ".$start.",".$end;		
+			//$result = $this->db->query($limit);  
 			
 			if($nbrows>0){
 				foreach($result->result() as $row){
