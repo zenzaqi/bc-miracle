@@ -336,9 +336,9 @@ class M_tindakan_nonmedis extends Model{
 		}
 		
 		//function for advanced search record
-		function tindakan_search($trawat_id ,$trawat_cust ,$trawat_keterangan ,$start,$end){
+		function tindakan_search($trawat_id ,$trawat_cust ,$trawat_tglapp_start ,$trawat_tglapp_end ,$trawat_rawat ,$trawat_terapis ,$trawat_status ,$start,$end){
 			//full query
-			$query="select * from tindakan";
+			$query="SELECT trawat_id,trawat_cust,cust_nama,trawat_keterangan,trawat_creator,trawat_date_create,trawat_update,trawat_date_update,trawat_revised,dtrawat_id,dtrawat_perawatan,rawat_nama,karyawan_nama,karyawan_no,dtrawat_jam,dtrawat_tglapp,dtrawat_status,karyawan_username,rawat_harga,rawat_du,rawat_dm FROM tindakan INNER JOIN customer ON trawat_cust=cust_id INNER JOIN tindakan_detail ON dtrawat_master=trawat_id LEFT JOIN perawatan ON dtrawat_perawatan=rawat_id LEFT JOIN karyawan ON dtrawat_petugas2=karyawan_id LEFT JOIN kategori ON rawat_kategori=kategori_id WHERE kategori_nama='Non Medis'";
 			
 			if($trawat_id!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -348,10 +348,25 @@ class M_tindakan_nonmedis extends Model{
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " trawat_cust LIKE '%".$trawat_cust."%'";
 			};
-			if($trawat_keterangan!=''){
+			if($trawat_rawat!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " trawat_keterangan LIKE '%".$trawat_keterangan."%'";
+				$query.= " dtrawat_perawatan LIKE '%".$trawat_rawat."%'";
 			};
+			if($trawat_terapis!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " dtrawat_petugas2 LIKE '%".$trawat_terapis."%'";
+			};
+			if($trawat_status!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " dtrawat_status LIKE '%".$trawat_status."%'";
+			};
+			if($trawat_tglapp_start!='' && $trawat_tglapp_end!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " dtrawat_tglapp BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."'";
+			}else if($trawat_tglapp_start!='' && $trawat_tglapp_end==''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " dtrawat_tglapp='".$trawat_tglapp_start."'";
+			}
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
 			

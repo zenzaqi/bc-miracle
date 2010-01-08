@@ -1,0 +1,1 @@
+ALTER TABLE `report_tindakan` CHANGE `reportt_jmltindakan` `reportt_jmltindakan` INT( 11 ) UNSIGNED NULL DEFAULT NULL;
