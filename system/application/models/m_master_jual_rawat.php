@@ -125,6 +125,7 @@ class M_master_jual_rawat extends Model{
 		
 		//function for get list record
 		function master_jual_rawat_list($filter,$start,$end){
+			$dt_now=date('Y-m-d');
 			$query = "SELECT * FROM master_jual_rawat,customer where jrawat_cust=cust_id";
 			
 			// For simple search
@@ -132,7 +133,7 @@ class M_master_jual_rawat extends Model{
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 				$query .= " (jrawat_id LIKE '%".addslashes($filter)."%' OR jrawat_nobukti LIKE '%".addslashes($filter)."%' OR jrawat_cust LIKE '%".addslashes($filter)."%' OR jrawat_tanggal LIKE '%".addslashes($filter)."%' OR jrawat_diskon LIKE '%".addslashes($filter)."%' OR jrawat_cara LIKE '%".addslashes($filter)."%' OR jrawat_keterangan LIKE '%".addslashes($filter)."%' )";
 			}
-			$query.=" ORDER BY jrawat_date_create DESC";
+			$query.=" AND jrawat_date_create LIKE '$dt_now%' ORDER BY jrawat_date_create DESC";
 			
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
