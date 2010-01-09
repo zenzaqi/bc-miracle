@@ -856,6 +856,7 @@ Ext.onReady(function(){
 	  	width: 1200,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
+			hideParent:true,
 			store: perawatan_DataStore,
 			displayInfo: true
 		}),

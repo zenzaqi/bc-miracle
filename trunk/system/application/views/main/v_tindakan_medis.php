@@ -545,7 +545,7 @@ Ext.onReady(function(){
     
   	/* Function for Identify of Window Column Model */
 	tindakan_medisColumnModel = new Ext.grid.ColumnModel(
-		[/*{
+		[{
 			header: '#',
 			readOnly: true,
 			dataIndex: 'trawat_id',
@@ -555,7 +555,7 @@ Ext.onReady(function(){
 				return value;
 				},
 			hidden: false
-		},*/
+		},
 		{
 			header: 'Customer',
 			dataIndex: 'trawat_cust',
@@ -715,7 +715,8 @@ Ext.onReady(function(){
 		viewConfig: { forceFit:true },
 	  	width: 940,
 		bbar: new Ext.PagingToolbar({
-			pageSize: pageS,
+			//pageSize: pageS,
+			disabled:true,
 			store: tindakan_medisDataStore,
 			displayInfo: true
 		}),

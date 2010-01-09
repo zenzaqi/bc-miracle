@@ -84,6 +84,18 @@ class M_tindakan_medis extends Model{
 					return '1';
 				else
 					return '0';
+			}elseif(is_numeric($dtrawat_id)==true){
+				$sql="SELECT dtrawat_id,dtrawat_perawatan,dtrawat_petugas1,dtrawat_jam FROM tindakan_detail WHERE dtrawat_perawatan='$dtrawat_perawatan' AND dtrawat_petugas1='$dtrawat_petugas1' AND dtrawat_jam='$dtrawat_jam' AND dtrawat_id='$dtrawat_id'";
+				$rs=$this->db->query($sql);
+				if(!$rs->num_rows()){
+					$data = array(
+					"dtrawat_perawatan"=>$dtrawat_perawatan, 
+					"dtrawat_petugas1"=>$dtrawat_petugas1, 
+					"dtrawat_jam"=>$dtrawat_jamreservasi
+					);
+					$this->db->where('dtrawat_id',$dtrawat_id);
+					$this->db->update('tindakan_detail',$data);
+				}
 			}
 
 		}
@@ -99,6 +111,7 @@ class M_tindakan_medis extends Model{
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 				$query .= " (cust_nama LIKE '%".addslashes($filter)."%' OR rawat_nama LIKE '%".addslashes($filter)."%' OR karyawan_username LIKE '%".addslashes($filter)."%' OR karyawan_nama LIKE '%".addslashes($filter)."%' OR dtrawat_status LIKE '%".addslashes($filter)."%')";
 			}
+			$query.=" AND dtrawat_status='datang'";
 			
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
