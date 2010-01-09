@@ -653,6 +653,7 @@ Ext.onReady(function(){
 			{name: 'app_id', type: 'int', mapping: 'app_id'}, 
 			{name: 'cust_id', type: 'int', mapping: 'cust_id'},
 			{name: 'cust_nama', type: 'string', mapping: 'cust_nama'},
+			{name: 'cust_no', type: 'string', mapping: 'cust_no'},
 			{name: 'rawat_id', type: 'int', mapping: 'rawat_id'}, 
 			{name: 'rawat_nama', type: 'string', mapping: 'rawat_nama'}, 
 			{name: 'dapp_jamreservasi', type: 'string', mapping: 'dapp_jamreservasi'}, 
@@ -798,6 +799,13 @@ Ext.onReady(function(){
 		}, 
 		{
 			header: 'Customer',
+			dataIndex: 'cust_nama',
+			width: 210,
+			sortable: false,
+			renderer: disable_color
+		}, 
+		{
+			header: 'C',
 			dataIndex: 'cust_nama',
 			width: 210,
 			sortable: false,
