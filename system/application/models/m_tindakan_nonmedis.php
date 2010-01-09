@@ -100,15 +100,68 @@ class M_tindakan_nonmedis extends Model{
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 				$query .= " (trawat_id='".addslashes($filter)."' OR trawat_cust='".addslashes($filter)."')";
 			}
+			$query.=" AND dtrawat_status='siap'";
+			
+			$query2 = "SELECT trawat_id,trawat_cust,cust_nama,trawat_keterangan,trawat_creator,trawat_date_create,trawat_update,trawat_date_update,trawat_revised,dtrawat_id,dtrawat_perawatan,rawat_nama,karyawan_nama,karyawan_no,dtrawat_jam,dtrawat_tglapp,dtrawat_status,karyawan_username,rawat_harga,rawat_du,rawat_dm FROM tindakan INNER JOIN customer ON trawat_cust=cust_id INNER JOIN tindakan_detail ON dtrawat_master=trawat_id LEFT JOIN perawatan ON dtrawat_perawatan=rawat_id LEFT JOIN karyawan ON dtrawat_petugas2=karyawan_id LEFT JOIN kategori ON rawat_kategori=kategori_id WHERE kategori_nama='Non Medis' AND trawat_date_create='$date_now'";
+			
+			// For simple search
+			if ($filter<>""){
+				$query2 .=eregi("WHERE",$query2)? " AND ":" WHERE ";
+				$query2 .= " (trawat_id='".addslashes($filter)."' OR trawat_cust='".addslashes($filter)."')";
+			}
+			$query2.=" AND dtrawat_status='siap'";
+			
+			$query3 = "SELECT trawat_id,trawat_cust,cust_nama,trawat_keterangan,trawat_creator,trawat_date_create,trawat_update,trawat_date_update,trawat_revised,dtrawat_id,dtrawat_perawatan,rawat_nama,karyawan_nama,karyawan_no,dtrawat_jam,dtrawat_tglapp,dtrawat_status,karyawan_username,rawat_harga,rawat_du,rawat_dm FROM tindakan INNER JOIN customer ON trawat_cust=cust_id INNER JOIN tindakan_detail ON dtrawat_master=trawat_id LEFT JOIN perawatan ON dtrawat_perawatan=rawat_id LEFT JOIN karyawan ON dtrawat_petugas2=karyawan_id LEFT JOIN kategori ON rawat_kategori=kategori_id WHERE kategori_nama='Non Medis' AND trawat_date_create='$date_now'";
+			
+			// For simple search
+			if ($filter<>""){
+				$query3 .=eregi("WHERE",$query3)? " AND ":" WHERE ";
+				$query3 .= " (trawat_id='".addslashes($filter)."' OR trawat_cust='".addslashes($filter)."')";
+			}
+			$query3.=" AND dtrawat_status='siap'";
+			
+			$query4 = "SELECT trawat_id,trawat_cust,cust_nama,trawat_keterangan,trawat_creator,trawat_date_create,trawat_update,trawat_date_update,trawat_revised,dtrawat_id,dtrawat_perawatan,rawat_nama,karyawan_nama,karyawan_no,dtrawat_jam,dtrawat_tglapp,dtrawat_status,karyawan_username,rawat_harga,rawat_du,rawat_dm FROM tindakan INNER JOIN customer ON trawat_cust=cust_id INNER JOIN tindakan_detail ON dtrawat_master=trawat_id LEFT JOIN perawatan ON dtrawat_perawatan=rawat_id LEFT JOIN karyawan ON dtrawat_petugas2=karyawan_id LEFT JOIN kategori ON rawat_kategori=kategori_id WHERE kategori_nama='Non Medis' AND trawat_date_create='$date_now'";
+			
+			// For simple search
+			if ($filter<>""){
+				$query4 .=eregi("WHERE",$query4)? " AND ":" WHERE ";
+				$query4 .= " (trawat_id='".addslashes($filter)."' OR trawat_cust='".addslashes($filter)."')";
+			}
+			$query4.=" AND dtrawat_status='siap'";
 			
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
 			//$limit = $query." LIMIT ".$start.",".$end;		
 			//$result = $this->db->query($limit);  
+			$result2 = $this->db->query($query2);
+			$nbrows2 = $result2->num_rows();
 			
+			$result3 = $this->db->query($query3);
+			$nbrows3 = $result3->num_rows();
+			
+			$result4 = $this->db->query($query4);
+			$nbrows4 = $result4->num_rows();
+			
+			if($nbrows>0 || $nbrows2>0 || $nbrows3>0 || $nbrows4>0){
 			if($nbrows>0){
-				foreach($result->result() as $row){
-					$arr[] = $row;
+					foreach($result->result() as $row){
+						$arr[] = $row;
+					}
+				}
+				if($nbrows2>0){
+					foreach($result2->result() as $row2){
+						$arr[] = $row2;
+					}
+				}
+				if($nbrows3>0){
+					foreach($result3->result() as $row3){
+						$arr[] = $row3;
+					}
+				}
+				if($nbrows4>0){
+					foreach($result4->result() as $row4){
+						$arr[] = $row4;
+					}
 				}
 				$jsonresult = json_encode($arr);
 				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
