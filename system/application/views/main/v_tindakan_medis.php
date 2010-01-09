@@ -442,6 +442,7 @@ Ext.onReady(function(){
 			{name: 'trawat_id', type: 'int', mapping: 'trawat_id'}, 
 			{name: 'trawat_cust_id', type: 'int', mapping: 'trawat_cust'}, 
 			{name: 'trawat_cust', type: 'string', mapping: 'cust_nama'}, 
+			{name: 'trawat_cust_no', type: 'string', mapping: 'cust_no'},
 			{name: 'trawat_keterangan', type: 'string', mapping: 'trawat_keterangan'}, 
 			{name: 'trawat_creator', type: 'string', mapping: 'trawat_creator'}, 
 			{name: 'trawat_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'trawat_date_create'}, 
@@ -546,10 +547,10 @@ Ext.onReady(function(){
   	/* Function for Identify of Window Column Model */
 	tindakan_medisColumnModel = new Ext.grid.ColumnModel(
 		[{
-			header: '#',
+			header: 'No.Customer',
 			readOnly: true,
-			dataIndex: 'trawat_id',
-			width: 40,
+			dataIndex: 'trawat_cust_no',
+			width: 75,
 			renderer: function(value, cell){
 				cell.css = "readonlycell"; // Mengambil Value dari Class di dalam CSS 
 				return value;
