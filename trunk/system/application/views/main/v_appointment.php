@@ -798,14 +798,14 @@ Ext.onReady(function(){
 			renderer: disable_color
 		}, 
 		{
-			header: 'Customer',
-			dataIndex: 'cust_nama',
-			width: 210,
+			header: 'No.Customer',
+			dataIndex: 'cust_no',
+			width: 75,
 			sortable: false,
 			renderer: disable_color
 		}, 
 		{
-			header: 'C',
+			header: 'Customer',
 			dataIndex: 'cust_nama',
 			width: 210,
 			sortable: false,
