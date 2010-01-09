@@ -460,8 +460,8 @@ Ext.onReady(function(){
 			{name: 'perawatan_du', type: 'int', mapping: 'rawat_du'},
 			{name: 'perawatan_dm', type: 'int', mapping: 'rawat_dm'},
 			{name: 'cust_member', type: 'string', mapping: 'cust_member'}
-		]),
-		sortInfo:{field: 'dtrawat_id', direction: "DESC"}
+		])/*,
+		sortInfo:{field: 'dtrawat_id', direction: "DESC"}*/
 	});
 	/* End of Function */
 	
