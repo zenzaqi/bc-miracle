@@ -930,22 +930,24 @@ class M_public_function extends Model{
 				,kategori_nama, group_nama, satuan_kode, satuan_nama 
 				FROM produk,satuan,kategori,produk_group where satuan_id=produk_satuan and kategori_id=produk_kategori
 				and produk_group=group_id and produk_aktif='Aktif'";*/
-		$sql_dproduk="SELECT dproduk_produk FROM detail_jual_produk";
-		$rs=$this->db->query($sql_dproduk);
-		$rs_rows=$rs->num_rows();
+		$rs_rows=0;
+		if(is_numeric($query)==true){
+			$sql_dproduk="SELECT krawat_produk FROM perawatan_konsumsi WHERE krawat_master='$query'";
+			$rs=$this->db->query($sql_dproduk);
+			$rs_rows=$rs->num_rows();
+		}
 		
 		$sql="select * from vu_produk WHERE produk_aktif='Aktif'";
-		if($query<>""){
+		if($query<>"" && is_numeric($query)==false){
 			$sql.=eregi("WHERE",$sql)? " AND ":" WHERE ";
-			$sql.=" (produk_kode like '%".$query."%' or produk_nama like '%".$query."%' or satuan_nama like '%".$query."%'
-						 or kategori_nama like '%".$query."%' or group_nama like '%".$query."%') ";
+			$sql.=" (produk_kode like '%".$query."%' or produk_nama like '%".$query."%' or satuan_nama like '%".$query."%' or kategori_nama like '%".$query."%' or group_nama like '%".$query."%') ";
 		}else{
 			if($rs_rows){
 				$filter="";
-				$sql.=eregi("WHERE",$sql)? " OR ":" WHERE ";
+				$sql.=eregi("AND",$sql)? " OR ":" AND ";
 				foreach($rs->result() as $row_dproduk){
 					
-					$filter.="OR dproduk_produk='".$row_dproduk->dproduk_produk."' ";
+					$filter.="OR produk_id='".$row_dproduk->krawat_produk."' ";
 				}
 				$sql=$sql."(".substr($filter,2,strlen($filter)).")";
 			}

@@ -530,7 +530,7 @@ Ext.onReady(function(){
     
   	/* Function for Identify of Window Column Model */
 	supplier_ColumnModel = new Ext.grid.ColumnModel(
-		[{
+		[/*{
 			header: '#',
 			readOnly: true,
 			dataIndex: 'supplier_id',
@@ -540,7 +540,7 @@ Ext.onReady(function(){
 				return value;
 				},
 			hidden: false
-		},
+		},*/
 		{
 			header: 'Kategori',
 			dataIndex: 'supplier_kategori',
