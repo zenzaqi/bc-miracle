@@ -18,7 +18,6 @@ class C_perawatan extends Controller {
 		parent::Controller();
 		$this->load->model('m_perawatan', '', TRUE);
 		$this->load->plugin('to_excel');
-		//$this->load->library('firephp');
 	}
 	
 	//set index
@@ -33,7 +32,7 @@ class C_perawatan extends Controller {
 	}
 	
 	function get_produk_list(){
-		$query = isset($_POST['query']) ? $_POST['query'] : "";
+		$query = isset($_POST['query']) ? $_POST['query'] : $_GET['query'];
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
 		$result=$this->m_public_function->get_produk_list($query, $start, $end);

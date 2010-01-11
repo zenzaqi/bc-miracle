@@ -611,7 +611,7 @@ Ext.onReady(function(){
 		{
 			header: 'Status',
 			dataIndex: 'dtrawat_status',
-			width: 150,
+			width: 80,
 			sortable: true,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
@@ -631,7 +631,7 @@ Ext.onReady(function(){
 		{
 			header: 'Keterangan',
 			dataIndex: 'trawat_keterangan',
-			width: 150,
+			width: 185,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 250
@@ -1097,6 +1097,19 @@ Ext.onReady(function(){
                	lazyRender:true,
                	listClass: 'x-combo-list-small'
             })
+		},
+		{
+			header: 'Detail Keterangan',
+			dataIndex: 'dtrawat_jam',
+			width: 100,
+			sortable: true,
+			editor: new Ext.form.TimeField({
+				format: 'H:i:s',
+				minValue: '7:00',
+				maxValue: '21:00',
+				increment: 30,
+				width: 94
+			})
 		}]
 	);
 	tindakan_medisdetail_ColumnModel.defaultSortable= true;

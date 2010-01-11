@@ -51,7 +51,7 @@ class C_tindakan_medis extends Controller {
 	}
 	
 	function get_tindakan_medis_list(){
-		$query = isset($_POST['query']) ? $_POST['query'] : $_GET['start'];
+		$query = isset($_POST['query']) ? $_POST['query'] : $_GET['query'];
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
 		$result = $this->m_public_function->get_tindakan_medis_list($query,$start,$end);

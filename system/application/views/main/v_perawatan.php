@@ -400,6 +400,9 @@ Ext.onReady(function(){
 	/* Function for Update Confirm */
 	function perawatan_confirm_update(){
 		/* only one record is selected here */
+		cbo_rawat_produkDataStore.load({params:{query:perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_id')}});
+		cbo_rawat_alatDataStore.load();
+		cbo_rawat_gudangDataSore.load();
 		if(perawatanListEditorGrid.selModel.getCount() == 1) {
 			perawatan_set_form();
 			post2db='UPDATE';
@@ -610,7 +613,7 @@ Ext.onReady(function(){
     
   	/* Function for Identify of Window Column Model */
 	perawatan_ColumnModel = new Ext.grid.ColumnModel(
-		[{
+		[/*{
 			header: '#',
 			readOnly: true,
 			dataIndex: 'rawat_id',
@@ -620,7 +623,7 @@ Ext.onReady(function(){
 				return value;
 				},
 			hidden: false
-		},
+		},*/
 		{
 			header: 'Kode Lama',
 			dataIndex: 'rawat_kodelama',
@@ -1268,9 +1271,9 @@ Ext.onReady(function(){
 	//eof
 	
 	Ext.util.Format.comboRenderer = function(combo){
-		cbo_rawat_produkDataStore.load();
-		cbo_rawat_alatDataStore.load();
-		cbo_rawat_gudangDataSore.load();
+		//cbo_rawat_produkDataStore.load();
+		//cbo_rawat_alatDataStore.load();
+		//cbo_rawat_gudangDataSore.load();
 		return function(value){
 			var record = combo.findRecord(combo.valueField, value);
 			return record ? record.get(combo.displayField) : combo.valueNotFoundText;

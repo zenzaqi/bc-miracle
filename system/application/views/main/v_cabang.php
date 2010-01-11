@@ -402,8 +402,8 @@ Ext.onReady(function(){
     
   	/* Function for Identify of Window Column Model */
 	cabang_ColumnModel = new Ext.grid.ColumnModel(
-		[{
-			/*index=0*/
+		[/*{
+			//index=0
 			header: '#',
 			readOnly: true,
 			dataIndex: 'cabang_id',
@@ -413,7 +413,7 @@ Ext.onReady(function(){
 				return value;
 				},
 			hidden: false
-		},
+		},*/
 		{
 			/*index=1*/
 			header: 'Nama',

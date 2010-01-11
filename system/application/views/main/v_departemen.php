@@ -354,8 +354,7 @@ Ext.onReady(function(){
     
   	/* Function for Identify of Window Column Model */
 	departemen_ColumnModel = new Ext.grid.ColumnModel(
-		[{
-			/*index=0*/
+		[/*{
 			header: '#',
 			readOnly: true,
 			dataIndex: 'departemen_id',
@@ -365,7 +364,7 @@ Ext.onReady(function(){
 				return value;
 				},
 			hidden: false
-		},
+		},*/
 		{
 			/*index=1*/
 			header: 'Nama',
@@ -526,11 +525,11 @@ Ext.onReady(function(){
 	departemenListEditorGrid.render();
 	/* End of DataStore */
 	
-	departemenListEditorGrid.getColumnModel().setHidden(4, true);
+	/*departemenListEditorGrid.getColumnModel().setHidden(4, true);
 	departemenListEditorGrid.getColumnModel().setHidden(5, true);
 	departemenListEditorGrid.getColumnModel().setHidden(6, true);
 	departemenListEditorGrid.getColumnModel().setHidden(7, true);
-	departemenListEditorGrid.getColumnModel().setHidden(8, true);
+	departemenListEditorGrid.getColumnModel().setHidden(8, true);*/
      
 	/* Create Context Menu */
 	departemen_ContextMenu = new Ext.menu.Menu({

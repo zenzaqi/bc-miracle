@@ -704,8 +704,8 @@ Ext.onReady(function(){
     
   	/* Function for Identify of Window Column Model */
 	karyawan_ColumnModel = new Ext.grid.ColumnModel(
-		[{
-			/*index=0*/
+		[/*{
+			//index=0
 			header: '#',
 			readOnly: true,
 			dataIndex: 'karyawan_id',
@@ -715,7 +715,7 @@ Ext.onReady(function(){
 				return value;
 				},
 			hidden: false
-		},
+		},*/
 		{
 			/*index=1*/
 			header: 'NIK',

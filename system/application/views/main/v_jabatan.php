@@ -354,8 +354,8 @@ Ext.onReady(function(){
     
   	/* Function for Identify of Window Column Model */
 	jabatan_ColumnModel = new Ext.grid.ColumnModel(
-		[{
-			/*index=0*/
+		[/*{
+			//index=0
 			header: '#',
 			readOnly: true,
 			dataIndex: 'jabatan_id',
@@ -365,7 +365,7 @@ Ext.onReady(function(){
 				return value;
 				},
 			hidden: false
-		},
+		},*/
 		{
 			/*index=1*/
 			header: 'Nama',
@@ -526,11 +526,11 @@ Ext.onReady(function(){
 	jabatanListEditorGrid.render();
 	/* End of DataStore */
 	
-	jabatanListEditorGrid.getColumnModel().setHidden(4, true);
+	/*jabatanListEditorGrid.getColumnModel().setHidden(4, true);
 	jabatanListEditorGrid.getColumnModel().setHidden(5, true);
 	jabatanListEditorGrid.getColumnModel().setHidden(6, true);
 	jabatanListEditorGrid.getColumnModel().setHidden(7, true);
-	jabatanListEditorGrid.getColumnModel().setHidden(8, true);
+	jabatanListEditorGrid.getColumnModel().setHidden(8, true);*/
      
 	/* Create Context Menu */
 	jabatan_ContextMenu = new Ext.menu.Menu({
