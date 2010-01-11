@@ -146,6 +146,7 @@ Ext.onReady(function(){
 		var perawatan_dm_update=null;
 		var cust_member_update=null;
 		var dtrawat_petugas1_no_update=null;
+		var dtrawat_keterangan_update=null;
 
 		trawat_id_update_pk = oGrid_event.record.data.trawat_id;
 		if(oGrid_event.record.data.trawat_cust!== null){trawat_cust_update = oGrid_event.record.data.trawat_cust;}
@@ -160,6 +161,7 @@ Ext.onReady(function(){
 		perawatan_dm_update = oGrid_event.record.data.perawatan_dm;
 		cust_member_update = oGrid_event.record.data.cust_member;
 		dtrawat_petugas1_no_update = oGrid_event.record.data.dtrawat_petugas1_no;
+		if(oGrid_event.record.data.dtrawat_keterangan!== null){dtrawat_keterangan_update = oGrid_event.record.data.dtrawat_keterangan;}
 
 		Ext.Ajax.request({  
 			waitMsg: 'Please wait...',
@@ -178,7 +180,8 @@ Ext.onReady(function(){
 				rawat_du	:perawatan_du_update,
 				rawat_dm	:perawatan_dm_update,
 				cust_member	:cust_member_update,
-				dtrawat_petugas1_no	: dtrawat_petugas1_no_update
+				dtrawat_petugas1_no	: dtrawat_petugas1_no_update,
+				dtrawat_keterangan	:dtrawat_keterangan_update
 			}, 
 			success: function(response){							
 				var result=eval(response.responseText);
@@ -239,7 +242,6 @@ Ext.onReady(function(){
 					case 1:
 						//tindakan_medisdetail_purge();
 						tindakan_medisdetail_insert();
-						tindakan_medisDataStore.reload();
 						Ext.MessageBox.alert(post2db+' OK','The Tindakan was '+msg+' successfully.');
 						tindakan_medis_createWindow.hide();
 						break;
@@ -460,7 +462,8 @@ Ext.onReady(function(){
 			{name: 'perawatan_harga', type: 'float', mapping: 'rawat_harga'},
 			{name: 'perawatan_du', type: 'int', mapping: 'rawat_du'},
 			{name: 'perawatan_dm', type: 'int', mapping: 'rawat_dm'},
-			{name: 'cust_member', type: 'string', mapping: 'cust_member'}
+			{name: 'cust_member', type: 'string', mapping: 'cust_member'},
+			{name: 'dtrawat_keterangan', type: 'string', mapping: 'dtrawat_keterangan'}
 		])/*,
 		sortInfo:{field: 'dtrawat_id', direction: "DESC"}*/
 	});
@@ -629,8 +632,8 @@ Ext.onReady(function(){
             renderer: ch_status
 		}, 
 		{
-			header: 'Keterangan',
-			dataIndex: 'trawat_keterangan',
+			header: 'Detail Keterangan',
+			dataIndex: 'dtrawat_keterangan',
 			width: 185,
 			sortable: true,
 			editor: new Ext.form.TextField({
@@ -909,7 +912,8 @@ Ext.onReady(function(){
 			{name: 'dtrawat_petugas1', type: 'int', mapping: 'dtrawat_petugas1'}, 
 			{name: 'dtrawat_jam', type: 'string', mapping: 'dtrawat_jam'}, 
 			{name: 'dtrawat_kategori', type: 'string', mapping: 'dtrawat_kategori'}, 
-			{name: 'dtrawat_status', type: 'string', mapping: 'dtrawat_status'} 
+			{name: 'dtrawat_status', type: 'string', mapping: 'dtrawat_status'},
+			{name: 'dtrawat_keterangan', type: 'string', mapping: 'dtrawat_keterangan'}
 	]);
 	//eof
 	
@@ -1052,7 +1056,7 @@ Ext.onReady(function(){
 		{
 			header: 'Perawatan',
 			dataIndex: 'dtrawat_perawatan',
-			width: 290,
+			width: 270,
 			sortable: true,
 			editor: combo_trawat_rawat,
 			renderer: Ext.util.Format.comboRenderer(combo_trawat_rawat)
@@ -1100,15 +1104,11 @@ Ext.onReady(function(){
 		},
 		{
 			header: 'Detail Keterangan',
-			dataIndex: 'dtrawat_jam',
-			width: 100,
+			dataIndex: 'dtrawat_keterangan',
+			width: 200,
 			sortable: true,
-			editor: new Ext.form.TimeField({
-				format: 'H:i:s',
-				minValue: '7:00',
-				maxValue: '21:00',
-				increment: 30,
-				width: 94
+			editor: new Ext.form.TextField({
+				maxLength: 250,
 			})
 		}]
 	);
@@ -1123,7 +1123,7 @@ Ext.onReady(function(){
 		el: 'fp_tindakan_medisdetail',
 		title: 'Detail tindakan_medisdetail',
 		height: 250,
-		width: 690,
+		width: 888,
 		autoScroll: true,
 		store: tindakan_medis_detail_DataStore, // DataStore
 		colModel: tindakan_medisdetail_ColumnModel, // Nama-nama Columns
@@ -1199,8 +1199,12 @@ Ext.onReady(function(){
 				dtrawat_petugas2	: tindakan_medisdetail_record.data.dtrawat_petugas2, 
 				dtrawat_jamreservasi	: tindakan_medisdetail_record.data.dtrawat_jam, 
 				dtrawat_kategori	: tindakan_medisdetail_record.data.dtrawat_kategori, 
-				dtrawat_status	: tindakan_medisdetail_record.data.dtrawat_status 
-				
+				dtrawat_status	: tindakan_medisdetail_record.data.dtrawat_status,
+				dtrawat_keterangan	: tindakan_medisdetail_record.data.dtrawat_keterangan
+				},
+				callback: function(opts, success, response){
+					if(success)
+						tindakan_medisDataStore.reload();
 				}
 			});
 		}
@@ -1261,7 +1265,7 @@ Ext.onReady(function(){
 		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
-		width: 700,        
+		width: 900,        
 		items: [tindakan_medismasterGroup,tindakan_medisdetailListEditorGrid]
 		,
 		buttons: [{
@@ -1447,7 +1451,7 @@ Ext.onReady(function(){
 		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
-		width: 540,        
+		width: 640,        
 		items: [{
 			layout:'column',
 			border:false,

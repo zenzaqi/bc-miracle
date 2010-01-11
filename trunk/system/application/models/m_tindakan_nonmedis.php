@@ -61,7 +61,7 @@ class M_tindakan_nonmedis extends Model{
 		//*eof
 		
 		//insert detail record
-		function detail_tindakan_nonmedis_detail_insert($dtrawat_id ,$dtrawat_master ,$dtrawat_perawatan ,$dtrawat_petugas1 ,$dtrawat_petugas2 ,$dtrawat_jam ,$dtrawat_kategori ,$dtrawat_status ){
+		function detail_tindakan_nonmedis_detail_insert($dtrawat_id ,$dtrawat_master ,$dtrawat_perawatan ,$dtrawat_petugas1 ,$dtrawat_petugas2 ,$dtrawat_jam ,$dtrawat_kategori ,$dtrawat_status ,$dtrawat_keterangan ){
 			//if master id not capture from view then capture it from max pk from master table
 			if($dtrawat_master=="" || $dtrawat_master==NULL){
 				$dtrawat_master=$this->get_master_id();
@@ -74,16 +74,30 @@ class M_tindakan_nonmedis extends Model{
 					"dtrawat_perawatan"=>$dtrawat_perawatan, 
 					"dtrawat_petugas1"=>$dtrawat_petugas1, 
 					"dtrawat_petugas2"=>$dtrawat_petugas2, 
-					"dtrawat_jam"=>$dtrawat_jam, 
+					"dtrawat_jam"=>$dtrawat_jamreservasi, 
 					"dtrawat_kategori"=>$dtrawat_kategori,
 					"dtrawat_tglapp"=>$dt_now,
-					"dtrawat_status"=>$dtrawat_status 
+					"dtrawat_status"=>$dtrawat_status,
+					"dtrawat_keterangan"=>$dtrawat_keterangan
 				);
 				$this->db->insert('tindakan_detail', $data); 
 				if($this->db->affected_rows())
 					return '1';
 				else
 					return '0';
+			}elseif(is_numeric($dtrawat_id)==true){
+				$sql="SELECT dtrawat_id,dtrawat_perawatan,dtrawat_petugas1,dtrawat_jam FROM tindakan_detail WHERE dtrawat_perawatan='$dtrawat_perawatan' AND dtrawat_petugas1='$dtrawat_petugas1' AND dtrawat_jam='$dtrawat_jam' AND dtrawat_id='$dtrawat_id'";
+				$rs=$this->db->query($sql);
+				if(!$rs->num_rows()){
+					$data = array(
+					"dtrawat_perawatan"=>$dtrawat_perawatan, 
+					"dtrawat_petugas1"=>$dtrawat_petugas1, 
+					"dtrawat_jam"=>$dtrawat_jamreservasi,
+					"dtrawat_keterangan"=>$dtrawat_keterangan
+					);
+					$this->db->where('dtrawat_id',$dtrawat_id);
+					$this->db->update('tindakan_detail',$data);
+				}
 			}
 
 		}
@@ -171,7 +185,7 @@ class M_tindakan_nonmedis extends Model{
 		}
 		
 		//function for update record
-		function tindakan_update($trawat_id ,$trawat_cust ,$trawat_keterangan ,$dtrawat_status ,$trawat_cust_id ,$dtrawat_perawatan_id ,$dtrawat_perawatan ,$dtrawat_id ,$rawat_harga ,$rawat_du ,$rawat_dm ,$cust_member ,$dtrawat_petugas2_no){
+		function tindakan_update($trawat_id ,$trawat_cust ,$trawat_keterangan ,$dtrawat_status ,$trawat_cust_id ,$dtrawat_perawatan_id ,$dtrawat_perawatan ,$dtrawat_id ,$rawat_harga ,$rawat_du ,$rawat_dm ,$cust_member ,$dtrawat_petugas2_no ,$dtrawat_keterangan){
 			/*$data = array(
 				"trawat_id"=>$trawat_id, 
 				//"trawat_cust"=>$trawat_cust, 
@@ -185,7 +199,8 @@ class M_tindakan_nonmedis extends Model{
 			 */ 
 			$date_now=date('Y-m-d');
 			$data_dtindakan=array(
-			"dtrawat_status"=>$dtrawat_status
+			"dtrawat_status"=>$dtrawat_status,
+			"dtrawat_keterangan"=>$dtrawat_keterangan
 			);
 			$sql="SELECT rawat_id FROM perawatan WHERE rawat_id='$dtrawat_perawatan'";
 			$rs=$this->db->query($sql);

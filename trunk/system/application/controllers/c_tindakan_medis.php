@@ -104,7 +104,10 @@ class C_tindakan_medis extends Controller {
 		$dtrawat_status=str_replace("/(<\/?)(p)([^>]*>)", "",$dtrawat_status);
 		$dtrawat_status=str_replace("\\", "",$dtrawat_status);
 		$dtrawat_status=str_replace("'", "\'",$dtrawat_status);
-		$result=$this->m_tindakan_medis->detail_tindakan_medis_detail_insert($dtrawat_id ,$dtrawat_master ,$dtrawat_perawatan ,$dtrawat_petugas1 ,$dtrawat_petugas2 ,$dtrawat_jamreservasi ,$dtrawat_kategori ,$dtrawat_status );
+		$dtrawat_keterangan=trim(@$_POST["dtrawat_keterangan"]);
+		$dtrawat_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$dtrawat_keterangan);
+		$dtrawat_keterangan=str_replace("\\", "",$dtrawat_keterangan);
+		$result=$this->m_tindakan_medis->detail_tindakan_medis_detail_insert($dtrawat_id ,$dtrawat_master ,$dtrawat_perawatan ,$dtrawat_petugas1 ,$dtrawat_petugas2 ,$dtrawat_jamreservasi ,$dtrawat_kategori ,$dtrawat_status ,$dtrawat_keterangan );
 	}
 	
 	
@@ -168,7 +171,10 @@ class C_tindakan_medis extends Controller {
 		$rawat_dm=trim(@$_POST["rawat_dm"]);
 		$cust_member=trim(@$_POST["cust_member"]);
 		$dtrawat_petugas1_no=trim(@$_POST["dtrawat_petugas1_no"]);
-		$result = $this->m_tindakan_medis->tindakan_update($trawat_id ,$trawat_cust ,$trawat_keterangan ,$dtrawat_status ,$trawat_cust_id ,$dtrawat_perawatan_id ,$dtrawat_perawatan ,$dtrawat_id ,$rawat_harga ,$rawat_du ,$rawat_dm ,$cust_member ,$dtrawat_petugas1_no);
+		$dtrawat_keterangan=trim(@$_POST["dtrawat_keterangan"]);
+		$dtrawat_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$dtrawat_keterangan);
+		$dtrawat_keterangan=str_replace(",", "\,",$dtrawat_keterangan);
+		$result = $this->m_tindakan_medis->tindakan_update($trawat_id ,$trawat_cust ,$trawat_keterangan ,$dtrawat_status ,$trawat_cust_id ,$dtrawat_perawatan_id ,$dtrawat_perawatan ,$dtrawat_id ,$rawat_harga ,$rawat_du ,$rawat_dm ,$cust_member ,$dtrawat_petugas1_no ,$dtrawat_keterangan);
 		echo $result;
 	}
 	
