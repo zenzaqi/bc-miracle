@@ -761,7 +761,7 @@ Ext.onReady(function(){
 			listeners:{
 				specialkey: function(f,e){
 					if(e.getKey() == e.ENTER){
-						tindakan_medisDataStore.baseParams={task:'LIST',start: 0, limit: pageS};
+						tindakan_nonmedis_DataStore.baseParams={task:'LIST',start: 0, limit: pageS};
 		            }
 				},
 				render: function(c){

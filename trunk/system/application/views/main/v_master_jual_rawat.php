@@ -1165,7 +1165,9 @@ Ext.onReady(function(){
 			{name: 'jrawat_id', type: 'int', mapping: 'jrawat_id'}, 
 			{name: 'jrawat_nobukti', type: 'string', mapping: 'jrawat_nobukti'}, 
 			{name: 'jrawat_cust', type: 'string', mapping: 'cust_nama'}, 
-			{name: 'jrawat_cust_id', type: 'int', mapping: 'jrawat_cust'}, 
+			{name: 'jrawat_cust_id', type: 'int', mapping: 'jrawat_cust'},
+			{name: 'cust_no', type: 'string', mapping: 'cust_no'},
+			{name: 'cust_member', type: 'string', mapping: 'cust_member'},
 			{name: 'jrawat_tanggal', type: 'date', dateFormat: 'Y-m-d', mapping: 'jrawat_tanggal'}, 
 			{name: 'jrawat_diskon', type: 'int', mapping: 'jrawat_diskon'}, 
 			{name: 'jrawat_cashback', type: 'float', mapping: 'jrawat_cashback'},
@@ -1415,7 +1417,7 @@ Ext.onReady(function(){
 	
   	/* Function for Identify of Window Column Model */
 	master_jual_rawat_ColumnModel = new Ext.grid.ColumnModel(
-		[{
+		[/*{
 			header: '#',
 			readOnly: true,
 			dataIndex: 'jrawat_id',
@@ -1425,15 +1427,32 @@ Ext.onReady(function(){
 				return value;
 				},
 			hidden: false
-		},
+		},*/
+		{
+			header: 'Tanggal',
+			dataIndex: 'jrawat_tanggal',
+			width: 70,
+			sortable: true,
+			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
+			editor: new Ext.form.DateField({
+				format: 'Y-m-d'
+			})
+		}, 
 		{
 			header: 'No.Faktur',
 			dataIndex: 'jrawat_nobukti',
-			width: 150,
+			width: 82,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 30
           	})
+		}, 
+		{
+			header: 'No.Customer',
+			dataIndex: 'cust_no',
+			width: 80,
+			sortable: false,
+			readOnly: true
 		}, 
 		{
 			header: 'Customer',
@@ -1443,14 +1462,11 @@ Ext.onReady(function(){
 			readOnly: true
 		}, 
 		{
-			header: 'Tanggal',
-			dataIndex: 'jrawat_tanggal',
-			width: 150,
-			sortable: true,
-			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
-			editor: new Ext.form.DateField({
-				format: 'Y-m-d'
-			})
+			header: 'Member Customer',
+			dataIndex: 'cust_member',
+			width: 100,
+			sortable: false,
+			readOnly: true
 		}, 
 		{
 			header: 'Jumlah Bayar',
@@ -1466,7 +1482,7 @@ Ext.onReady(function(){
 		{
 			header: 'Keterangan',
 			dataIndex: 'jrawat_keterangan',
-			width: 150,
+			width: 190,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 250
@@ -1530,7 +1546,7 @@ Ext.onReady(function(){
 		//clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 800,
+	  	width: 900,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: master_jual_rawat_DataStore,
