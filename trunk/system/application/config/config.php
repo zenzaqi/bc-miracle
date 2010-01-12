@@ -11,7 +11,7 @@
 |	http://example.com/
 |
 */
-$config['base_url']	= "http://localhost:81/new-miracle/";
+$config['base_url']	= "http://miraclepdc:81/new-miracle/";
 //$http = 'http' . ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 's' : '') . '://';
 //$fo = str_replace("index.php","", $_SERVER['SCRIPT_NAME']);
 //$config['base_url']    = "$http" . $_SERVER['SERVER_NAME'] . "" . $fo;
