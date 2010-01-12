@@ -1435,7 +1435,7 @@ Ext.onReady(function(){
 		{
 			header: 'Tanggal',
 			dataIndex: 'jrawat_tanggal',
-			width: 70,
+			width: 78,
 			sortable: true,
 			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
 			editor: new Ext.form.DateField({
@@ -1473,9 +1473,9 @@ Ext.onReady(function(){
 			readOnly: true
 		}, 
 		{
-			header: 'Total Biaya',
+			header: 'Total (Rp)',
 			dataIndex: 'jrawat_total',
-			width: 150,
+			width: 100,
 			sortable: true,
 			readOnly: true,
 			renderer: function(val){
@@ -1484,9 +1484,9 @@ Ext.onReady(function(){
 			
 		},
 		{
-			header: 'Jumlah Bayar',
+			header: 'Total Bayar (Rp)',
 			dataIndex: 'jrawat_bayar',
-			width: 150,
+			width: 100,
 			sortable: true,
 			readOnly: true,
 			renderer: function(val){
@@ -1561,7 +1561,7 @@ Ext.onReady(function(){
 		//clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 900,
+	  	width: 940,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: master_jual_rawat_DataStore,
