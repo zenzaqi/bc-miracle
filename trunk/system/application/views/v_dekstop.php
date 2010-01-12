@@ -20,8 +20,7 @@
 	<?=js_asset('SearchField.js');?>
 	<?=js_asset('RowExpander.js');?>
     <?=js_asset('RowEditor.js');?>
-  	<link rel="shortcut icon" href="<?="./uploads/favicon.ico";?>" />
-	<link rel="icon" href="<?="./uploads/favicon.ico";?>" />
+  	<link rel="shortcut icon" href="<?=base_url();?>favicon.ico" />
 
 	<style type="text/css">
 	html, body {
