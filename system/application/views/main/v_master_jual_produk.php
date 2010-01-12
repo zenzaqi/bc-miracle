@@ -178,7 +178,7 @@ Ext.onReady(function(){
   	Ext.QuickTips.init();	/* Initiate quick tips icon */
 
   	Ext.util.Format.comboRenderer = function(combo){
-  		jproduk_bankDataStore.load();
+  		//jproduk_bankDataStore.load();
   	    return function(value){
   	        var record = combo.findRecord(combo.valueField, value);
   	        return record ? record.get(combo.displayField) : combo.valueNotFoundText;
@@ -3141,8 +3141,8 @@ Ext.onReady(function(){
 	
 		
 	Ext.util.Format.comboRenderer = function(combo){
-		cbo_dproduk_produkDataStore.load({params: {limit:0}});
-		cbo_dproduk_satuanDataStore.load();
+		//cbo_dproduk_produkDataStore.load({params: {limit:0}});
+		//cbo_dproduk_satuanDataStore.load();
 		return function(value){
 			var record = combo.findRecord(combo.valueField, value);
 			return record ? record.get(combo.displayField) : combo.valueNotFoundText;
@@ -4178,7 +4178,7 @@ Ext.onReady(function(){
 	});
 	
 	function show_windowGrid(){
-		cbo_dproduk_satuanDataStore.load();
+		//cbo_dproduk_satuanDataStore.load();
 		master_jual_produk_DataStore.load({
 			params: {start: 0, limit: pageS},
 			callback: function(opts, success, response){
