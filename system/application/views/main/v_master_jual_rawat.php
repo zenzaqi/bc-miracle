@@ -177,8 +177,8 @@ Ext.onReady(function(){
   	Ext.QuickTips.init();	/* Initiate quick tips icon */
 
   	Ext.util.Format.comboRenderer = function(combo){
-  		jrawat_bankDataStore.load();
-  		cbo_drawat_rawatDataStore.load();
+  		//jrawat_bankDataStore.load();
+  		//cbo_drawat_rawatDataStore.load();
   	    return function(value){
   	        var record = combo.findRecord(combo.valueField, value);
   	        return record ? record.get(combo.displayField) : combo.valueNotFoundText;
@@ -1082,7 +1082,7 @@ Ext.onReady(function(){
 	/* Function for Update Confirm */
 	function master_jual_rawat_confirm_update(){
 		/* only one record is selected here */
-		cbo_drawat_rawatDataStore.load({params: {query:""}});
+		cbo_drawat_rawatDataStore.load({params: {query:master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_id')}});
 		if(master_jual_rawatListEditorGrid.selModel.getCount() == 1) {
 			master_jual_rawat_set_form();
 			master_cara_bayarTabPanel.setActiveTab(0);
