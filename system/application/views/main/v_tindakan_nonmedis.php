@@ -1190,7 +1190,7 @@ Ext.onReady(function(){
 				dtrawat_jam	: tindakan_nonmedis_detail_record.data.dtrawat_jam, 
 				dtrawat_kategori	: tindakan_nonmedis_detail_record.data.dtrawat_kategori, 
 				dtrawat_status	: tindakan_nonmedis_detail_record.data.dtrawat_status, 
-				dtrawat_keterangan	: tindakan_medisdetail_record.data.dtrawat_keterangan
+				dtrawat_keterangan	: tindakan_nonmedis_detail_record.data.dtrawat_keterangan
 				},
 				callback: function(opts, success, response){
 					if(success)
