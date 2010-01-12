@@ -560,7 +560,7 @@ Ext.onReady(function(){
 			header: 'No.Customer',
 			readOnly: true,
 			dataIndex: 'trawat_cust_no',
-			width: 40,
+			width: 75,
 			renderer: function(value, cell){
 				cell.css = "readonlycell"; // Mengambil Value dari Class di dalam CSS 
 				return value;
@@ -621,7 +621,7 @@ Ext.onReady(function(){
 		{
 			header: 'Status',
 			dataIndex: 'dtrawat_status',
-			width: 150,
+			width: 80,
 			sortable: true,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
@@ -641,7 +641,7 @@ Ext.onReady(function(){
 		{
 			header: 'Detail Keterangan',
 			dataIndex: 'dtrawat_keterangan',
-			width: 150,
+			width: 185,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 250
