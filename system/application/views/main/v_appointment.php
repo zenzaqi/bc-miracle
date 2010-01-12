@@ -678,7 +678,8 @@ Ext.onReady(function(){
 			{name: 'app_update', type: 'string', mapping: 'app_update'}, 
 			{name: 'app_date_update', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'app_date_update'}, 
 			{name: 'app_revised', type: 'int', mapping: 'app_revised'},
-			{name: 'dapp_keterangan', type: 'string', mapping: 'dapp_keterangan'}
+			{name: 'dapp_keterangan', type: 'string', mapping: 'dapp_keterangan'},
+			{name: 'rawat_warna', type: 'int', mapping: 'rawat_warna'}
 		]),
 		sortInfo:{field: 'dapp_tglreservasi', direction: "ASC"},
 		groupField:'kategori_nama'
@@ -795,7 +796,13 @@ Ext.onReady(function(){
 			dataIndex: 'rawat_nama',
 			width: 210,
 			sortable: false,
-			renderer: disable_color
+			renderer: function(value, cell, record){
+				cell.css = "readonlycell";
+				if(record.data.rawat_warna==1){
+					return '<span style="color:red;">' + value + '</span>';
+				}
+				return value;
+			}
 		}, 
 		{
 			header: 'No.Customer',
@@ -929,6 +936,14 @@ Ext.onReady(function(){
 			header: 'App Revised',
 			dataIndex: 'app_revised',
 			width: 150,
+			sortable: true,
+			hidden: true,
+			readOnly: true,
+		},
+		{
+			header: 'Kode Warna',
+			dataIndex: 'rawat_warna',
+			width: 50,
 			sortable: true,
 			hidden: true,
 			readOnly: true,
