@@ -280,6 +280,7 @@ Ext.onReady(function(){
 		var jrawat_cashback_create=null;
 		//bayar
 		var jrawat_subtotal_create=null;
+		var jrawat_total_create=null;
 		var jrawat_bayar_create=null;
 		var jrawat_hutang_create=null;
 		//kwitansi
@@ -367,6 +368,7 @@ Ext.onReady(function(){
 		
 		if(jrawat_cashbackField.getValue()!== null){jrawat_cashback_create = jrawat_cashbackField.getValue();} 
 		//bayar
+		if(jrawat_totalField.getValue()!== null){jrawat_total_create = jrawat_totalField.getValue();}
 		if(jrawat_bayarField.getValue()!== null){jrawat_bayar_create = jrawat_bayarField.getValue();}
 		if(jrawat_subTotalField.getValue()!== null){jrawat_subtotal_create = jrawat_subTotalField.getValue();} 
 		if(jrawat_hutangField.getValue()!== null){jrawat_hutang_create = jrawat_hutangField.getValue();} 
@@ -461,6 +463,7 @@ Ext.onReady(function(){
 				
 				jrawat_voucher_cashback	:	jrawat_voucher_cashback_create,
 				//bayar
+				jrawat_total			: 	jrawat_total_create,
 				jrawat_bayar			: 	jrawat_bayar_create,
 				jrawat_subtotal			: 	jrawat_subtotal_create,
 				jrawat_hutang		: 	jrawat_hutang_create,
@@ -1174,7 +1177,8 @@ Ext.onReady(function(){
 			{name: 'jrawat_cara', type: 'string', mapping: 'jrawat_cara'}, 
 			{name: 'jrawat_cara2', type: 'string', mapping: 'jrawat_cara2'}, 
 			{name: 'jrawat_cara3', type: 'string', mapping: 'jrawat_cara3'}, 
-			{name: 'jrawat_bayar', type: 'float', mapping: 'jrawat_bayar'}, 
+			{name: 'jrawat_total', type: 'float', mapping: 'jrawat_totalbiaya'}, 
+			{name: 'jrawat_bayar', type: 'float', mapping: 'jrawat_bayar'},
 			{name: 'jrawat_keterangan', type: 'string', mapping: 'jrawat_keterangan'}, 
 			{name: 'jrawat_creator', type: 'string', mapping: 'jrawat_creator'}, 
 			{name: 'jrawat_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'jrawat_date_create'}, 
@@ -1468,6 +1472,17 @@ Ext.onReady(function(){
 			sortable: false,
 			readOnly: true
 		}, 
+		{
+			header: 'Total Biaya',
+			dataIndex: 'jrawat_total',
+			width: 150,
+			sortable: true,
+			readOnly: true,
+			renderer: function(val){
+				return '<span> Rp. '+Ext.util.Format.number(val,'0,000')+'</span>';
+			}
+			
+		},
 		{
 			header: 'Jumlah Bayar',
 			dataIndex: 'jrawat_bayar',

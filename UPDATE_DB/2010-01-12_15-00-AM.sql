@@ -1,0 +1,1 @@
+ALTER TABLE `master_jual_rawat` ADD `jrawat_totalbiaya` DOUBLE NULL DEFAULT NULL AFTER `jrawat_bayar`;
