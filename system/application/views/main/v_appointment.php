@@ -682,7 +682,7 @@ Ext.onReady(function(){
 			{name: 'rawat_warna', type: 'int', mapping: 'rawat_warna'}
 		]),
 		sortInfo:{field: 'dapp_tglreservasi', direction: "ASC"},
-		groupField:'dokter_nama'
+		groupField:'kategori_nama'
 	});
 	/* End of Function */
 	
