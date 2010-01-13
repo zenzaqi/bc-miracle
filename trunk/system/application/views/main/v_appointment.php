@@ -1053,6 +1053,21 @@ Ext.onReady(function(){
 			handler: appointment_print  
 		}, '-',{
 			xtype: 'combo',
+			id: 'cbo_dokter',
+			text: 'Pilihan Dokter',
+			emptyText: 'Pilihan Dokter',
+			width: 200,
+			store: dapp_dokterDataStore,
+            fieldLabel: 'ComboBox Dokter',
+            mode: 'remote',
+			tpl: dapp_dokter_tpl,
+			displayField: 'dokter_username',
+			valueField: 'dokter_value',
+			loadingText: 'Searching...',
+			itemSelector: 'div.search-item',
+			triggerAction: 'all',
+		}, '-',{
+			xtype: 'combo',
 			id: 'cbo_page',
 			width: 50,
 			store: new Ext.data.SimpleStore({
@@ -1068,20 +1083,7 @@ Ext.onReady(function(){
             triggerAction: 'all',
             selectOnFocus: true,
             editable: true
-		}/*, '-',{
-			xtype: 'combo',
-			id: 'cbo_dokter',
-			width: 120,
-			store: dapp_dokterDataStore,
-            fieldLabel: 'ComboBox Dokter',
-            mode: 'remote',
-			tpl: dapp_dokter_tpl,
-			displayField: 'dokter_username',
-			valueField: 'dokter_value',
-			loadingText: 'Searching...',
-			itemSelector: 'div.search-item',
-			triggerAction: 'all',
-		}*/
+		}
 		]
 	});
 	appointmentListEditorGrid.render();
@@ -1089,14 +1091,14 @@ Ext.onReady(function(){
 	Ext.getCmp('cbo_page').on('select', function(){
 	});
 	
-	/*Ext.getCmp('cbo_dokter').on('select', function(){
+	Ext.getCmp('cbo_dokter').on('select', function(){
 		appointment_DataStore.load({params: {
 			task: 'LIST',
 			start: 0,
 			limit: pageS,
 			query: Ext.getCmp('cbo_dokter').getValue()
 		}});
-	});*/
+	});
      
 	/* Create Context Menu */
 	appointment_ContextMenu = new Ext.menu.Menu({
