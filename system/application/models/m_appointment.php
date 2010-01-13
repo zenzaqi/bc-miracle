@@ -160,7 +160,7 @@ left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawa
 				//search customer,perawatan,dokter,therapist
 				$query .= " (cust_nama LIKE '%".addslashes($filter)."%' OR rawat_nama LIKE '%".addslashes($filter)."%' OR karyawan_dokter.karyawan_username LIKE '%".addslashes($filter)."%' OR karyawan_terapis.karyawan_username LIKE '%".addslashes($filter)."%')";
 			}
-			$query.=" ORDER BY dapp_tglreservasi ASC, dapp_jamreservasi ASC, karyawan_dokter.karyawan_id ASC";
+			$query.=" ORDER BY karyawan_dokter.karyawan_username ASC, dapp_tglreservasi ASC, dapp_jamreservasi ASC";
 			//echo $query;
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
