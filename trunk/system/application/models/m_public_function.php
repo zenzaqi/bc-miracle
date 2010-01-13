@@ -685,7 +685,8 @@ class M_public_function extends Model{
 			$rs_rows=$rs->num_rows();
 		}
 		
-		$sql="SELECT * FROM vu_perawatan WHERE kategori_nama='Medis' AND rawat_aktif='Aktif'";//join dr tabel: perawatan,produk_group,kategori2,kategori,jenis,gudang
+		//$sql="SELECT * FROM vu_perawatan WHERE kategori_nama='Medis' AND rawat_aktif='Aktif'";//join dr tabel: perawatan,produk_group,kategori2,kategori,jenis,gudang
+		$sql="SELECT rawat_id,rawat_harga,rawat_kode,group_nama,kategori_nama,rawat_du,rawat_dm,rawat_nama FROM perawatan LEFT JOIN produk_group ON(rawat_group=group_id) LEFT JOIN kategori ON(rawat_kategori=kategori_id) WHERE kategori_nama='Medis' AND rawat_aktif='Aktif'";
 		if($query<>"" && is_numeric($query)==false){
 			//$this->firephp->log("YESSS");
 			$sql.=" and (rawat_kode like '%".$query."%' or rawat_nama like '%".$query."%')";
@@ -702,7 +703,7 @@ class M_public_function extends Model{
 			}
 		}
 		$sql.=" ORDER BY rawat_nama ASC";
-		echo $sql;
+		//echo $sql;
 	
 		$result = $this->db->query($sql);
 		$nbrows = $result->num_rows();
