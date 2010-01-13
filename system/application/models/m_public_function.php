@@ -542,7 +542,7 @@ class M_public_function extends Model{
 		
 		$sql="SELECT * FROM vu_perawatan WHERE rawat_aktif='Aktif'";//join dr tabel: perawatan,produk_group,kategori2,kategori,jenis,gudang
 		if($query<>"" && is_numeric($query)==false){
-			//$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+			$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
 			$sql.=" (rawat_kode like '%".$query."%' or rawat_nama like '%".$query."%' or kategori_nama like '%".$query."%') ";
 		}else{
 			if($rs_rows){
@@ -702,6 +702,7 @@ class M_public_function extends Model{
 			}
 		}
 		$sql.=" ORDER BY rawat_nama ASC";
+		echo $sql;
 	
 		$result = $this->db->query($sql);
 		$nbrows = $result->num_rows();
