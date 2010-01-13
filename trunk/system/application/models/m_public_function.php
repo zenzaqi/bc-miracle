@@ -309,9 +309,7 @@ class M_public_function extends Model{
 		$sql="SELECT cust_id,cust_no,cust_nama,cust_tgllahir,cust_alamat,cust_telprumah
 		FROM customer where cust_aktif='Aktif'";
 		if($query<>""){
-			$sql=$sql." and (cust_no like '%".$query."%' or cust_nama like '%".$query."%' 
-			or cust_telprumah like '%".$query."%' or cust_telprumah2 like '%".$query."%' or cust_telpkantor like '%".$query."%' 
-			or cust_hp like '%".$query."%' or cust_hp2 like '%".$query."%' or cust_hp3 like '%".$query."%') ";
+			$sql=$sql." and (cust_no like '%".$query."%' or cust_nama like '%".$query."%' or cust_telprumah like '%".$query."%' or cust_telprumah2 like '%".$query."%' or cust_telpkantor like '%".$query."%' or cust_hp like '%".$query."%' or cust_hp2 like '%".$query."%' or cust_hp3 like '%".$query."%') ";
 		}
 		
 		$result = $this->db->query($sql);
@@ -330,11 +328,9 @@ class M_public_function extends Model{
 	}
 	
 	function get_kwitansi_list($query,$start=0,$end=10,$kwitansi_cust){
-		$sql="SELECT kwitansi_id,kwitansi_no,kwitansi_nilai,cust_no,cust_nama,cust_tgllahir,cust_alamat,cust_telprumah  
-			FROM cetak_kwitansi,customer WHERE kwitansi_cust=cust_id AND cust_aktif='Aktif'";
+		$sql="SELECT kwitansi_id,kwitansi_no,kwitansi_nilai,cust_no,cust_nama,cust_tgllahir,cust_alamat,cust_telprumah FROM cetak_kwitansi,customer WHERE kwitansi_cust=cust_id AND cust_aktif='Aktif'";
 		if($query<>""){
-			$sql=$sql." and (cust_no like '%".$query."%' or cust_nama like '%".$query."%' or cust_alamat like '%".$query."%' or
-					cust_telprumah like '%".$query."%' or cust_tgllahir like '%".$query."%') ";
+			$sql=$sql." and (cust_no like '%".$query."%' or cust_nama like '%".$query."%' or cust_alamat like '%".$query."%' or kwitansi_no like '%".$query."%')";
 		}
 		if($kwitansi_cust<>""){
 			$sql=$sql." AND kwitansi_cust='$kwitansi_cust'";
