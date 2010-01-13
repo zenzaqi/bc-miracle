@@ -148,7 +148,7 @@ class M_appointment extends Model{
 FROM (((appointment inner join appointment_detail on appointment.app_id=appointment_detail.dapp_master inner join perawatan on appointment_detail.dapp_perawatan=perawatan.rawat_id 
 inner join customer on appointment.app_customer=customer.cust_id inner join kategori on perawatan.rawat_kategori=kategori.kategori_id) 
 left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawan_dokter.karyawan_id) left join karyawan as karyawan_terapis on appointment_detail.dapp_petugas2=karyawan_terapis.karyawan_id)
-WHERE dapp_tglreservasi BETWEEN '$dt' AND '$dt_six'";
+WHERE dapp_tglreservasi >= '$dt'";
 			
 			// For simple search
 			if ($filter<>""){
@@ -160,7 +160,7 @@ left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawa
 				//search customer,perawatan,dokter,therapist
 				$query .= " (cust_nama LIKE '%".addslashes($filter)."%' OR rawat_nama LIKE '%".addslashes($filter)."%' OR karyawan_dokter.karyawan_username LIKE '%".addslashes($filter)."%' OR karyawan_terapis.karyawan_username LIKE '%".addslashes($filter)."%')";
 			}
-			$query.=" ORDER BY karyawan_dokter.karyawan_username ASC, dapp_tglreservasi ASC, dapp_jamreservasi ASC";
+			$query.=" ORDER BY dapp_tglreservasi ASC, dapp_jamreservasi ASC";
 			//echo $query;
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
@@ -715,6 +715,7 @@ left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawa
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " app_keterangan LIKE '%".$app_keterangan."%'";
 			};*/
+			//echo $query;
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
 			
