@@ -1068,13 +1068,35 @@ Ext.onReady(function(){
             triggerAction: 'all',
             selectOnFocus: true,
             editable: true
-		}
+		}/*, '-',{
+			xtype: 'combo',
+			id: 'cbo_dokter',
+			width: 120,
+			store: dapp_dokterDataStore,
+            fieldLabel: 'ComboBox Dokter',
+            mode: 'remote',
+			tpl: dapp_dokter_tpl,
+			displayField: 'dokter_username',
+			valueField: 'dokter_value',
+			loadingText: 'Searching...',
+			itemSelector: 'div.search-item',
+			triggerAction: 'all',
+		}*/
 		]
 	});
 	appointmentListEditorGrid.render();
 	/* End of DataStore */
 	Ext.getCmp('cbo_page').on('select', function(){
 	});
+	
+	/*Ext.getCmp('cbo_dokter').on('select', function(){
+		appointment_DataStore.load({params: {
+			task: 'LIST',
+			start: 0,
+			limit: pageS,
+			query: Ext.getCmp('cbo_dokter').getValue()
+		}});
+	});*/
      
 	/* Create Context Menu */
 	appointment_ContextMenu = new Ext.menu.Menu({
@@ -1144,7 +1166,7 @@ Ext.onReady(function(){
 	/* Identify  app_customer Field */
 	app_customerField= new Ext.form.ComboBox({
 		//id: 'app_customerField',
-		fieldLabel: 'Customer <span id="help_customer" style="font-size:11px;color:#F00">[?]</span>',
+		fieldLabel: 'Customer',
 		store: cbo_app_cutomerDataStore,
 		mode: 'remote',
 		displayField:'cust_nama',
@@ -1156,11 +1178,26 @@ Ext.onReady(function(){
         tpl: customer_app_tpl,
         //applyTo: 'search',
         itemSelector: 'div.search-item',
-		triggerAction: 'all',
+		triggerAction: 'query',
 		lazyRender:true,
 		listClass: 'x-combo-list-small',
 		allowBlank: true,
-		anchor: '95%'
+		anchor: '95%',
+		queryDelay:1200,
+		listeners:{
+			/*beforequery: function(qe){
+	            delete qe.combo.lastQuery;
+	        },*/
+			specialkey: function(f,e){
+				if(e.getKey() == e.ENTER){
+					cbo_app_cutomerDataStore.load({params: {query:app_customerField.getValue()}});
+	            }
+			},
+			render: function(c){
+				Ext.get(this.id).set({qtitle:'Search By'});
+				Ext.get(this.id).set({qtip:'- No.Customer<br>- Nama Customer<br>- No.Telp Rumah<br>- No.Telp Kantor<br>- No.HP'});
+			}
+		}
 	});
 	/* Identify  app_tanggal Field */
 	app_tanggalField= new Ext.form.DateField({
