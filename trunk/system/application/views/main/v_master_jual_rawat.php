@@ -1089,8 +1089,9 @@ Ext.onReady(function(){
 	/* Function for Update Confirm */
 	function master_jual_rawat_confirm_update(){
 		/* only one record is selected here */
-		cbo_drawat_rawatDataStore.load({params: {query:master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_id')}});
+		
 		if(master_jual_rawatListEditorGrid.selModel.getCount() == 1) {
+			cbo_drawat_rawatDataStore.load({params: {query:master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_id')}});
 			master_jual_rawat_set_form();
 			master_cara_bayarTabPanel.setActiveTab(0);
 			post2db='UPDATE';
@@ -2627,6 +2628,7 @@ Ext.onReady(function(){
 		id: 'jrawat_kwitansi_namaField',
 		fieldLabel: 'Atas Nama',
 		allowBlank: true,
+		disabled:true,
 		anchor: '95%'
 	});
 	
@@ -2678,6 +2680,7 @@ Ext.onReady(function(){
 		id: 'jrawat_kwitansi_nama2Field',
 		fieldLabel: 'Atas Nama',
 		allowBlank: true,
+		disabled:true,
 		anchor: '95%'
 	});
 	
@@ -2723,6 +2726,7 @@ Ext.onReady(function(){
 		id: 'jrawat_kwitansi_nama3Field',
 		fieldLabel: 'Atas Nama',
 		allowBlank: true,
+		disabled:true,
 		anchor: '95%'
 	});
 	
@@ -3769,6 +3773,8 @@ Ext.onReady(function(){
 		var jrawat_diskon_search=null;
 		var jrawat_cara_search=null;
 		var jrawat_keterangan_search=null;
+		var jrawat_tgl_start_search=null;
+		var jrawat_tgl_end_search=null;
 
 		if(jrawat_idSearchField.getValue()!==null){jrawat_id_search=jrawat_idSearchField.getValue();}
 		if(jrawat_nobuktiSearchField.getValue()!==null){jrawat_nobukti_search=jrawat_nobuktiSearchField.getValue();}
@@ -3777,6 +3783,8 @@ Ext.onReady(function(){
 		if(jrawat_diskonSearchField.getValue()!==null){jrawat_diskon_search=jrawat_diskonSearchField.getValue();}
 		if(jrawat_caraSearchField.getValue()!==null){jrawat_cara_search=jrawat_caraSearchField.getValue();}
 		if(jrawat_keteranganSearchField.getValue()!==null){jrawat_keterangan_search=jrawat_keteranganSearchField.getValue();}
+		if(Ext.getCmp('jrawat_tanggalStartAppSearchField').getValue()!==null){jrawat_tgl_start_search=Ext.getCmp('jrawat_tanggalStartAppSearchField').getValue();}
+		if(Ext.getCmp('jrawat_tanggalEndAppSearchField').getValue()!==null){jrawat_tgl_end_search=Ext.getCmp('jrawat_tanggalEndAppSearchField').getValue();}
 		// change the store parameters
 		master_jual_rawat_DataStore.baseParams = {
 			task: 'SEARCH',
@@ -3789,7 +3797,9 @@ Ext.onReady(function(){
 			jrawat_tanggal	:	jrawat_tanggal_search_date, 
 			jrawat_diskon	:	jrawat_diskon_search, 
 			jrawat_cara	:	jrawat_cara_search, 
-			jrawat_keterangan	:	jrawat_keterangan_search, 
+			jrawat_keterangan	:	jrawat_keterangan_search,
+			jrawat_tgl_start	: 	jrawat_tgl_start_search,
+			jrawat_tgl_end	: 	jrawat_tgl_end_search
 		};
 		// Cause the datastore to do another query : 
 		master_jual_rawat_DataStore.reload({params: {start: 0, limit: pageS}});
@@ -3807,11 +3817,21 @@ Ext.onReady(function(){
 
 	function master_jual_rawat_reset_SearchForm(){
 		jrawat_nobuktiSearchField.reset();
+		jrawat_nobuktiSearchField.setValue(null);
 		jrawat_custSearchField.reset();
+		jrawat_custSearchField.setValue(null);
 		jrawat_tanggalSearchField.reset();
+		jrawat_tanggalSearchField.setValue(null);
 		jrawat_diskonSearchField.reset();
+		jrawat_diskonSearchField.setValue(null);
 		jrawat_caraSearchField.reset();
+		jrawat_caraSearchField.setValue(null);
 		jrawat_keteranganSearchField.reset();
+		jrawat_keteranganSearchField.setValue(null);
+		Ext.getCmp('jrawat_tanggalStartAppSearchField').reset();
+		Ext.getCmp('jrawat_tanggalStartAppSearchField').setValue(null);
+		Ext.getCmp('jrawat_tanggalEndAppSearchField').reset();
+		Ext.getCmp('jrawat_tanggalEndAppSearchField').setValue(null);
 	}
 	
 	/* Field for search */
@@ -3835,12 +3855,24 @@ Ext.onReady(function(){
 	
 	});
 	/* Identify  jrawat_cust Search Field */
-	jrawat_custSearchField= new Ext.form.TextField({
+	jrawat_custSearchField= new Ext.form.ComboBox({
 		id: 'jrawat_custSearchField',
 		fieldLabel: 'Customer',
-		maxLength: 30,
+		store: cbo_cust_jual_rawat_DataStore,
+		mode: 'remote',
+		displayField:'cust_nama',
+		valueField: 'cust_id',
+        typeAhead: false,
+        loadingText: 'Searching...',
+        pageSize:10,
+        hideTrigger:false,
+        tpl: customer_jual_rawat_tpl,
+        //applyTo: 'search',
+        itemSelector: 'div.search-item',
+		triggerAction: 'all',
+		lazyRender:true,
+		listClass: 'x-combo-list-small',
 		anchor: '95%'
-	
 	});
 	/* Identify  jrawat_tanggal Search Field */
 	jrawat_tanggalSearchField= new Ext.form.DateField({
@@ -3856,7 +3888,7 @@ Ext.onReady(function(){
 		allowNegatife : false,
 		blankText: '0',
 		allowDecimals: false,
-		anchor: '95%',
+		width:94,
 		maskRe: /([0-9]+)$/
 	
 	});
@@ -3871,7 +3903,7 @@ Ext.onReady(function(){
 		mode: 'local',
 		displayField: 'jrawat_cara',
 		valueField: 'value',
-		anchor: '95%',
+		width:94,
 		triggerAction: 'all'	 
 	
 	});
@@ -3889,7 +3921,7 @@ Ext.onReady(function(){
 		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
-		width: 300,        
+		width: 560,        
 		items: [{
 			layout:'column',
 			border:false,
@@ -3898,7 +3930,42 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [jrawat_nobuktiSearchField, jrawat_custSearchField, jrawat_tanggalSearchField, jrawat_diskonSearchField, jrawat_caraSearchField, jrawat_keteranganSearchField] 
+				items: [jrawat_nobuktiSearchField, jrawat_custSearchField, 
+				        {
+							layout:'column',
+							border:false,
+							items:[
+					        {
+								columnWidth:0.38,
+								layout: 'form',
+								border:false,
+								defaultType: 'datefield',
+								items: [
+								    {
+										fieldLabel: 'Tanggal',
+								        name: 'jrawat_tanggalStartAppSearchField',
+								        id: 'jrawat_tanggalStartAppSearchField',
+								        vtype: 'daterange',
+								        endDateField: 'jrawat_tanggalEndAppSearchField' // id of the end date field
+								    }] 
+							},
+							{
+								columnWidth:0.55,
+								layout: 'form',
+								labelWidth:20,
+								border:false,
+								defaultType: 'datefield',
+								items: [
+							      	{
+										fieldLabel: 's/d',
+								        name: 'jrawat_tanggalEndAppSearchField',
+								        id: 'jrawat_tanggalEndAppSearchField',
+								        vtype: 'daterange',
+								        startDateField: 'jrawat_tanggalStartAppSearchField' // id of the end date field
+								    }] 
+							}]
+						}
+						, jrawat_diskonSearchField, jrawat_caraSearchField, jrawat_keteranganSearchField] 
 			}
 			]
 		}]

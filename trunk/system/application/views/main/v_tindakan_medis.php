@@ -351,8 +351,9 @@ Ext.onReady(function(){
 	/* Function for Update Confirm */
 	function tindakan_medisconfirm_update(){
 		/* only one record is selected here */
-		dtrawat_perawatanDataStore.load({params:{query:tindakanListEditorGrid.getSelectionModel().getSelected().get('trawat_id')}});
+		
 		if(tindakanListEditorGrid.selModel.getCount() == 1) {
+			dtrawat_perawatanDataStore.load({params:{query:tindakanListEditorGrid.getSelectionModel().getSelected().get('trawat_id')}});
 			tindakan_medis_set_form();
 			post2db='UPDATE';
 			tindakan_medis_detail_DataStore.load({params : {master_id : eval(get_pk_id()), start:0, limit:pageS}});
@@ -1519,6 +1520,8 @@ Ext.onReady(function(){
 		trawat_medis_custSearchField.setValue(null);
 		trawat_medis_keteranganSearchField.reset();
 		trawat_medis_keteranganSearchField.setValue(null);
+		trawat_medis_rawatSearchField.reset();
+		trawat_medis_rawatSearchField.setValue(null);
 		Ext.getCmp('trawat_medis_tglStartAppSearchField').reset();
 		Ext.getCmp('trawat_medis_tglStartAppSearchField').setValue(null);
 		Ext.getCmp('trawat_medis_tglEndAppSearchField').reset();
