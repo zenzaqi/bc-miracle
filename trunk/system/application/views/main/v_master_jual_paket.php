@@ -4031,6 +4031,8 @@ Ext.onReady(function(){
 		post2db="CREATE";
 		jpaket_tanggalField.setValue(dt.format('Y-m-d'));
 		master_jual_paket_createForm.render();
+		jpaket_caraField.setValue('card');
+		master_jual_paket_cardGroup.setVisible(true);
 	}
 	pertamax();
 	

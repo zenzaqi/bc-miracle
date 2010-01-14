@@ -94,7 +94,7 @@ class M_master_jual_rawat extends Model{
 			if($rs->num_rows()){
 				$data = array(
 					//"drawat_master"=>$drawat_master, 
-					//"drawat_rawat"=>$drawat_rawat, 
+					"drawat_rawat"=>$drawat_rawat, 
 					"drawat_jumlah"=>$drawat_jumlah, 
 					"drawat_harga"=>$drawat_harga, 
 					"drawat_diskon"=>$drawat_diskon,

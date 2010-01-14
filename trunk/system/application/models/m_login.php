@@ -27,6 +27,7 @@ class M_login extends Model{
 			$row = $Q->row_array();
 			if($row["user_passwd"]==$pw){
 				$_SESSION["userid"]=$u;
+				$_SESSION["id_user"]=$row["user_id"];
 				$_SESSION["usergroup"]=$row["user_groups"];
 				$_SESSION["userkaryawan"]=$row["user_karyawan"];
 				//cari group
