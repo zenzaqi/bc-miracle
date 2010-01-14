@@ -3780,6 +3780,8 @@ Ext.onReady(function(){
 		// change the store parameters
 		master_jual_rawat_DataStore.baseParams = {
 			task: 'SEARCH',
+			start: 0,
+			limit: pageS,
 			//variable here
 			jrawat_id	:	jrawat_id_search, 
 			jrawat_nobukti	:	jrawat_nobukti_search, 
