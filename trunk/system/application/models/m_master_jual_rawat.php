@@ -897,9 +897,9 @@ class M_master_jual_rawat extends Model{
 		}
 		
 		//function for advanced search record
-		function master_jual_rawat_search($jrawat_id ,$jrawat_nobukti ,$jrawat_cust ,$jrawat_tanggal ,$jrawat_diskon ,$jrawat_cara ,$jrawat_keterangan ,$start,$end){
+		function master_jual_rawat_search($jrawat_id ,$jrawat_nobukti ,$jrawat_cust ,$jrawat_tanggal ,$jrawat_diskon ,$jrawat_cashback ,$jrawat_voucher ,$jrawat_cara ,$jrawat_bayar ,$jrawat_keterangan ,$start,$end){
 			//full query
-			$query="select * from master_jual_rawat";
+			$query="SELECT * FROM master_jual_rawat,customer WHERE jrawat_cust=cust_id";
 			
 			if($jrawat_id!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -915,7 +915,7 @@ class M_master_jual_rawat extends Model{
 			};
 			if($jrawat_tanggal!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " jrawat_tanggal LIKE '%".$jrawat_tanggal."%'";
+				$query.= " jrawat_tanggal = '".$jrawat_tanggal."'";
 			};
 			if($jrawat_diskon!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
