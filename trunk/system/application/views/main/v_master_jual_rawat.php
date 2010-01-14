@@ -1056,6 +1056,8 @@ Ext.onReady(function(){
 	function display_form_window(){
 		if(!master_jual_rawat_createWindow.isVisible()){
 			master_jual_rawat_reset_form();
+			jrawat_caraField.setValue("card");
+			master_jual_rawat_cardGroup.setVisible(true);
 			detail_jual_rawat_DataStore.load({params: {master_id:0}});
 			post2db='CREATE';
 			msg='created';

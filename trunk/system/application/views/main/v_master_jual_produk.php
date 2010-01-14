@@ -4568,6 +4568,8 @@ Ext.onReady(function(){
 		post2db="CREATE";
 		jproduk_tanggalField.setValue(dt.format('Y-m-d'));
 		master_jual_produk_createForm.render();
+		jproduk_caraField.setValue('card');
+		master_jual_produk_cardGroup.setVisible(true);
 	}
 	pertamax();
 	

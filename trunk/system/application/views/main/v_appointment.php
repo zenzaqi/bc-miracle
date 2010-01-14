@@ -895,7 +895,7 @@ Ext.onReady(function(){
 			header: 'Keterangan',
 			dataIndex: 'dapp_keterangan',
 			width: 260,
-			sortable: true,
+			sortable: false,
 			editor: new Ext.form.TextField({
 				maxLength: 100
           	})
@@ -1088,8 +1088,8 @@ Ext.onReady(function(){
 	});
 	appointmentListEditorGrid.render();
 	/* End of DataStore */
-	Ext.getCmp('cbo_page').on('select', function(){
-	});
+	/*Ext.getCmp('cbo_page').on('select', function(){
+	});*/
 	
 	Ext.getCmp('cbo_dokter').on('select', function(){
 		appointment_DataStore.load({params: {
