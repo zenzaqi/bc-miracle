@@ -156,7 +156,7 @@ class M_master_jual_rawat extends Model{
 			//UPDATE table.master_jual_rawat
 			$data = array(
 				"jrawat_id"=>$jrawat_id, 
-				"jrawat_nobukti"=>$jrawat_nobukti, 
+				//"jrawat_nobukti"=>$jrawat_nobukti, 
 				"jrawat_tanggal"=>$jrawat_tanggal, 
 				"jrawat_diskon"=>$jrawat_diskon,
 				"jrawat_cashback"=>$jrawat_cashback,
