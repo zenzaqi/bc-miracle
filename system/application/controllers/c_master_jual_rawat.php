@@ -457,10 +457,12 @@ class C_master_jual_rawat extends Controller {
 		$jrawat_keterangan=trim(@$_POST["jrawat_keterangan"]);
 		$jrawat_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$jrawat_keterangan);
 		$jrawat_keterangan=str_replace("'", '"',$jrawat_keterangan);
+		$jrawat_tgl_start=trim(@$_POST["jrawat_tgl_start"]);
+		$jrawat_tgl_end=trim(@$_POST["jrawat_tgl_end"]);
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_master_jual_rawat->master_jual_rawat_search($jrawat_id ,$jrawat_nobukti ,$jrawat_cust ,$jrawat_tanggal ,$jrawat_diskon ,$jrawat_cashback ,$jrawat_voucher ,$jrawat_cara ,$jrawat_bayar ,$jrawat_keterangan ,$start,$end);
+		$result = $this->m_master_jual_rawat->master_jual_rawat_search($jrawat_id ,$jrawat_nobukti ,$jrawat_cust ,$jrawat_tanggal ,$jrawat_diskon ,$jrawat_cashback ,$jrawat_voucher ,$jrawat_cara ,$jrawat_bayar ,$jrawat_keterangan ,$jrawat_tgl_start ,$jrawat_tgl_end ,$start,$end);
 		echo $result;
 	}
 

@@ -821,7 +821,7 @@ Ext.onReady(function(){
 		{
 			header: 'Dokter',
 			dataIndex: 'dokter_username',
-			width: 140,
+			width: 70,
 			sortable: false,
 			editor: new Ext.form.ComboBox({
 				store: dapp_dokterDataStore,
@@ -838,7 +838,7 @@ Ext.onReady(function(){
 		{
 			header: 'Therapist',
 			dataIndex: 'terapis_username',
-			width: 140,
+			width: 70,
 			sortable: false,
 			editor: new Ext.form.ComboBox({
 				store: dapp_terapisDataStore,
@@ -865,7 +865,7 @@ Ext.onReady(function(){
 		{
 			header: 'Status',
 			dataIndex: 'dapp_status',
-			width: 70,
+			width: 80,
 			sortable: false,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
@@ -894,7 +894,7 @@ Ext.onReady(function(){
 		{
 			header: 'Keterangan',
 			dataIndex: 'dapp_keterangan',
-			width: 220,
+			width: 260,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 100
@@ -1066,7 +1066,7 @@ Ext.onReady(function(){
 			loadingText: 'Searching...',
 			itemSelector: 'div.search-item',
 			triggerAction: 'all',
-		}, '-',{
+		}/*, '-',{
 			xtype: 'combo',
 			id: 'cbo_page',
 			width: 50,
@@ -1083,7 +1083,7 @@ Ext.onReady(function(){
             triggerAction: 'all',
             selectOnFocus: true,
             editable: true
-		}
+		}*/
 		]
 	});
 	appointmentListEditorGrid.render();
@@ -2189,10 +2189,10 @@ Ext.onReady(function(){
 		if(app_terapisSearchField.getValue()!==null){app_terapis_search=app_terapisSearchField.getValue();}
 		if(app_perawatan_medisSearchField.getValue()!==null){app_rawat_medis_search=app_perawatan_medisSearchField.getValue();}
 		if(app_perawatan_nonmedisSearchField.getValue()!==null){app_rawat_nonmedis_search=app_perawatan_nonmedisSearchField.getValue();}
-		if(Ext.getCmp('app_tgl_startReservasiSearchField').getValue()!==null){app_tgl_start_reservasi_search=Ext.getCmp('app_tgl_startReservasiSearchField').getValue();}
-		if(Ext.getCmp('app_tgl_endReservasiSearchField').getValue()!==null){app_tgl_end_reservasi_search=Ext.getCmp('app_tgl_endReservasiSearchField').getValue();}
-		if(Ext.getCmp('app_tgl_startAppSearchField').getValue()!==null){app_tgl_start_app_search=Ext.getCmp('app_tgl_startAppSearchField').getValue();}
-		if(Ext.getCmp('app_tgl_endAppSearchField').getValue()!==null){app_tgl_end_app_search=Ext.getCmp('app_tgl_endAppSearchField').getValue();}
+		if(Ext.getCmp('app_tgl_startReservasiSearchField').getValue()!==null){app_tgl_start_reservasi_search=Ext.getCmp('app_tgl_startReservasiSearchField').getValue().format('Y-m-d');}
+		if(Ext.getCmp('app_tgl_endReservasiSearchField').getValue()!==null){app_tgl_end_reservasi_search=Ext.getCmp('app_tgl_endReservasiSearchField').getValue().format('Y-m-d');}
+		if(Ext.getCmp('app_tgl_startAppSearchField').getValue()!==null){app_tgl_start_app_search=Ext.getCmp('app_tgl_startAppSearchField').getValue().format('Y-m-d');}
+		if(Ext.getCmp('app_tgl_endAppSearchField').getValue()!==null){app_tgl_end_app_search=Ext.getCmp('app_tgl_endAppSearchField').getValue().format('Y-m-d');}
 		// change the store parameters
 		appointment_DataStore.baseParams = {
 			task: 'SEARCH',
