@@ -540,7 +540,7 @@ class M_public_function extends Model{
 			$rs_rows=$rs->num_rows();
 		}
 		
-		$sql="SELECT * FROM vu_perawatan WHERE rawat_aktif='Aktif'";//join dr tabel: perawatan,produk_group,kategori2,kategori,jenis,gudang
+		$sql="SELECT rawat_id,rawat_harga,rawat_kode,group_nama,kategori_nama,rawat_du,rawat_dm,rawat_nama FROM perawatan LEFT JOIN produk_group ON(rawat_group=group_id) LEFT JOIN kategori ON(rawat_kategori=kategori_id) WHERE rawat_aktif='Aktif'";//join dr tabel: perawatan,produk_group,kategori2,kategori,jenis,gudang
 		if($query<>"" && is_numeric($query)==false){
 			$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
 			$sql.=" (rawat_kode like '%".$query."%' or rawat_nama like '%".$query."%' or kategori_nama like '%".$query."%') ";
@@ -550,7 +550,7 @@ class M_public_function extends Model{
 				$sql.=eregi("AND",$query)? " OR ":" AND ";
 				foreach($rs->result() as $row_drawat){
 					
-					$filter.="OR drawat_rawat='".$row_drawat->drawat_rawat."' ";
+					$filter.="OR rawat_id='".$row_drawat->drawat_rawat."' ";
 				}
 				$sql=$sql."(".substr($filter,2,strlen($filter)).")";
 			}
