@@ -219,11 +219,11 @@ Ext.onReady(function(){
 	function tindakan_medis_create(){
 	
 		if(is_tindakan_medisform_valid()){	
-		var trawat_id_create_pk=null; 
+		var trawat_id_create=null; 
 		var trawat_cust_create=null; 
 		var trawat_keterangan_create=null; 
 
-		if(trawat_medis_idField.getValue()!== null){trawat_id_create = trawat_medis_idField.getValue();}else{trawat_id_create_pk=get_pk_id();} 
+		if(trawat_medis_idField.getValue()!== null){trawat_id_create = trawat_medis_idField.getValue();}else{trawat_id_create=get_pk_id();} 
 		if(trawat_medis_custField.getValue()!== null){trawat_cust_create = trawat_medis_custField.getValue();} 
 		if(trawat_medis_keteranganField.getValue()!== null){trawat_keterangan_create = trawat_medis_keteranganField.getValue();} 
 
@@ -232,7 +232,7 @@ Ext.onReady(function(){
 			url: 'index.php?c=c_tindakan_medis&m=get_action',
 			params: {
 				task: post2db,
-				trawat_id	: trawat_id_create_pk, 
+				trawat_id	: trawat_id_create, 
 				trawat_cust	: trawat_cust_create, 
 				trawat_keterangan	: trawat_keterangan_create, 
 			}, 
