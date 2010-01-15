@@ -609,12 +609,15 @@ class M_public_function extends Model{
 		/*$sql="SELECT rawat_id,rawat_kode,rawat_nama,rawat_kategori,rawat_harga,rawat_group,rawat_du,rawat_dm,kategori_nama, group_nama 
 		FROM perawatan,kategori,produk_group where rawat_kategori=kategori_id 
 		AND rawat_group=group_id AND rawat_aktif='Aktif' AND kategori_nama='Medis'";*/
-		$sql_dapp="SELECT distinct(dapp_perawatan) FROM appointment_detail";
-		$rs=$this->db->query($sql_dapp);
-		$rs_rows=$rs->num_rows();
+		$rs_rows=0;
+		if(is_numeric($query)==true){
+			$sql_dapp="SELECT distinct(dapp_perawatan) FROM appointment_detail WHERE dapp_master='$query'";
+			$rs=$this->db->query($sql_dapp);
+			$rs_rows=$rs->num_rows();
+		}
 		
 		$sql="SELECT * FROM vu_perawatan WHERE kategori_nama='Medis' AND rawat_aktif='Aktif'";//join dr tabel: perawatan,produk_group,kategori2,kategori,jenis,gudang
-		if($query<>""){
+		if($query<>"" && is_numeric($query)==false){
 			$sql.=" and (rawat_kode like '%".$query."%' or rawat_nama like '%".$query."%')";
 			//$sql.=" and (rawat_kode like '%".$query."%' or rawat_nama like '%".$query."%' or group_nama like '%".$query."%')";
 		}else{
@@ -629,7 +632,6 @@ class M_public_function extends Model{
 			}
 		}
 		$sql.=" ORDER BY rawat_nama ASC";
-		//echo $sql;
 	
 		$result = $this->db->query($sql);
 		$nbrows = $result->num_rows();
@@ -770,9 +772,12 @@ class M_public_function extends Model{
 		/*$sql="SELECT rawat_id,rawat_kode,rawat_nama,rawat_kategori,rawat_harga,rawat_group,rawat_du,rawat_dm,kategori_nama, group_nama 
 		FROM perawatan,kategori,produk_group where rawat_kategori=kategori_id 
 		AND rawat_group=group_id AND rawat_aktif='Aktif' AND kategori_nama='Non Medis'";*/
-		$sql_dapp="SELECT distinct(dapp_perawatan) FROM appointment_detail";
-		$rs=$this->db->query($sql_dapp);
-		$rs_rows=$rs->num_rows();
+		$rs_rows=0;
+		if(is_numeric($query)==true){
+			$sql_dapp="SELECT distinct(dapp_perawatan) FROM appointment_detail WHERE dapp_master='$query'";
+			$rs=$this->db->query($sql_dapp);
+			$rs_rows=$rs->num_rows();
+		}
 		
 		$sql="SELECT * FROM vu_perawatan WHERE kategori_nama='Non Medis' AND rawat_aktif='Aktif'";//join dr tabel: perawatan,produk_group,kategori2,kategori,jenis,gudang
 		if($query<>""){
