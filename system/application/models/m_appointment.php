@@ -400,6 +400,7 @@ left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawa
 						$data_dtindakan["dtrawat_petugas2"]=$terapis_nama;
 					else
 						$data_dtindakan["dtrawat_petugas2"]=$terapis_id;
+					$this->db->where('dtrawat_dapp !=', $dapp_id);
 					$this->db->insert('tindakan_detail', $data_dtindakan);
 				}else{
 					$data_tindakan=array(
