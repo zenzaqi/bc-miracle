@@ -17,11 +17,11 @@ class C_tindakan_nonmedis extends Controller {
 	function C_tindakan_nonmedis(){
 		parent::Controller();
 		$this->load->model('m_tindakan_nonmedis', '', TRUE);
+		$this->load->plugin('to_excel');
 	}
 	
 	//set index
 	function index(){
-		$this->load->plugin('to_excel');
 		$this->load->helper('asset');
 		$this->load->view('main/v_tindakan_nonmedis');
 	}
