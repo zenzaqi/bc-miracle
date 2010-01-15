@@ -518,8 +518,8 @@ Ext.onReady(function(){
 	/* Function for Update Confirm */
 	function appointment_confirm_update(){
 		/* only one record is selected here */
-		cbo_dapp_rawat_medisDataStore.load({params:{query:""}});
-		cbo_dapp_rawat_nonmedisDataStore.load({params:{query:""}});
+		cbo_dapp_rawat_medisDataStore.load({params:{query:appointmentListEditorGrid.getSelectionModel().getSelected().get('app_id')}});
+		cbo_dapp_rawat_nonmedisDataStore.load({params:{query:appointmentListEditorGrid.getSelectionModel().getSelected().get('app_id')}});
 		cbo_dapp_dokterDataStore.load();
 		cbo_dapp_terapisDataStore.load();
 		if(appointmentListEditorGrid.selModel.getCount() == 1) {
@@ -1145,7 +1145,8 @@ Ext.onReady(function(){
 	
 	/* function for editing row via context menu */
 	function appointment_editContextMenu(){
-		appointmentListEditorGrid.startEditing(appointment_SelectedRow,1);
+		//appointmentListEditorGrid.startEditing(appointment_SelectedRow,1);
+		appointment_confirm_update();
   	}
 	/* End of Function */
   	
