@@ -163,7 +163,7 @@ Ext.onReady(function(){
 		id: 'pass_user_passwdlamaField',
 		fieldLabel: 'Password Lama',
 		name: 'pass_user_passwdlama',
-		minLength: 6,
+		minLength: 3,
 		maxLength: 15,
 		allowBlank: true,
 		anchor: '95%',
