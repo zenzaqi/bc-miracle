@@ -1829,7 +1829,6 @@ Ext.onReady(function(){
 	var combo_dapp_rawat_nonmedis=new Ext.form.ComboBox({
 			store: cbo_dapp_rawat_nonmedisDataStore,
 			mode: 'remote',
-			typeAhead: true,
 			displayField: 'dapp_rawat_display',
 			valueField: 'dapp_rawat_value',
 			typeAhead: false,
