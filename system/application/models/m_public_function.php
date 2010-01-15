@@ -609,7 +609,6 @@ class M_public_function extends Model{
 		/*$sql="SELECT rawat_id,rawat_kode,rawat_nama,rawat_kategori,rawat_harga,rawat_group,rawat_du,rawat_dm,kategori_nama, group_nama 
 		FROM perawatan,kategori,produk_group where rawat_kategori=kategori_id 
 		AND rawat_group=group_id AND rawat_aktif='Aktif' AND kategori_nama='Medis'";*/
-		
 		$sql_dapp="SELECT distinct(dapp_perawatan) FROM appointment_detail";
 		$rs=$this->db->query($sql_dapp);
 		$rs_rows=$rs->num_rows();
@@ -630,6 +629,7 @@ class M_public_function extends Model{
 			}
 		}
 		$sql.=" ORDER BY rawat_nama ASC";
+		//echo $sql;
 	
 		$result = $this->db->query($sql);
 		$nbrows = $result->num_rows();

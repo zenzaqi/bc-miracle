@@ -1475,7 +1475,7 @@ Ext.onReady(function(){
 			valueField: 'dapp_rawat_value',
 			typeAhead: false,
 			loadingText: 'Searching...',
-			pageSize:10,
+			pageSize:15,
 			hideTrigger:false,
 			tpl: rawat_jual_rawat_tpl,
 			//applyTo: 'search',
