@@ -196,7 +196,7 @@ class M_master_jual_rawat extends Model{
 				if($jrawat_cara!=null || $jrawat_cara!=''){
 					//kwitansi
 					if($jrawat_cara=='kwitansi'){
-						if($jrawat_kwitansi_nama=="" || $jrawat_kwitansi_nama==NULL){
+						/*if($jrawat_kwitansi_nama=="" || $jrawat_kwitansi_nama==NULL){
 							if(is_int($jrawat_kwitansi_nama)){
 								$sql="select cust_nama from customer where cust_id='".$jrawat_cust."'";
 								$query=$this->db->query($sql);
@@ -207,14 +207,14 @@ class M_master_jual_rawat extends Model{
 							}else{
 									$jrawat_kwitansi_nama=$jrawat_cust;
 							}
-						}
+						}*/
 						
 						$sql="SELECT jkwitansi_id FROM jual_kwitansi WHERE jkwitansi_ref='$jrawat_nobukti'";
 						$rs=$this->db->query($sql);
 						if($rs->num_rows()){
 							$data=array(
 								"jkwitansi_no"=>$jrawat_kwitansi_no,
-								"jkwitansi_nilai"=>$jrawat_hutang
+								"jkwitansi_nilai"=>$jrawat_kwitansi_nilai
 							);
 							$this->db->where('jkwitansi_ref', $jrawat_nobukti);
 							$this->db->update('jual_kwitansi', $data);
@@ -222,7 +222,7 @@ class M_master_jual_rawat extends Model{
 							$data=array(
 								"jkwitansi_ref"=>$jrawat_nobukti,
 								"jkwitansi_no"=>$jrawat_kwitansi_no,
-								"jkwitansi_nilai"=>$jrawat_hutang
+								"jkwitansi_nilai"=>$jrawat_kwitansi_nilai
 							);
 							$this->db->insert('jual_kwitansi', $data);
 						}
@@ -330,7 +330,7 @@ class M_master_jual_rawat extends Model{
 				if($jrawat_cara2!=null || $jrawat_cara2!=''){
 					//kwitansi
 					if($jrawat_cara2=='kwitansi'){
-						if($jrawat_kwitansi_nama2=="" || $jrawat_kwitansi_nama2==NULL){
+						/*if($jrawat_kwitansi_nama2=="" || $jrawat_kwitansi_nama2==NULL){
 							if(is_int($jrawat_kwitansi_nama2)){
 								$sql="select cust_nama from customer where cust_id='".$jrawat_cust."'";
 								$query=$this->db->query($sql);
@@ -341,14 +341,14 @@ class M_master_jual_rawat extends Model{
 							}else{
 									$jrawat_kwitansi_nama2=$jrawat_cust;
 							}
-						}
+						}*/
 						
 						$sql="SELECT jkwitansi_id FROM jual_kwitansi WHERE jkwitansi_ref='$jrawat_nobukti'";
 						$rs=$this->db->query($sql);
 						if($rs->num_rows()){
 							$data=array(
 								"jkwitansi_no"=>$jrawat_kwitansi_no2,
-								"jkwitansi_nilai"=>$jrawat_hutang
+								"jkwitansi_nilai"=>$jrawat_kwitansi_nilai2
 							);
 							$this->db->where('jkwitansi_ref', $jrawat_nobukti);
 							$this->db->update('jual_kwitansi', $data);
@@ -356,7 +356,7 @@ class M_master_jual_rawat extends Model{
 							$data=array(
 								"jkwitansi_ref"=>$jrawat_nobukti,
 								"jkwitansi_no"=>$jrawat_kwitansi_no2,
-								"jkwitansi_nilai"=>$jrawat_hutang
+								"jkwitansi_nilai"=>$jrawat_kwitansi_nilai2
 							);
 							$this->db->insert('jual_kwitansi', $data);
 						}
@@ -465,7 +465,7 @@ class M_master_jual_rawat extends Model{
 				if($jrawat_cara3!=null || $jrawat_cara3!=''){
 					//kwitansi
 					if($jrawat_cara3=='kwitansi'){
-						if($jrawat_kwitansi_nama3=="" || $jrawat_kwitansi_nama3==NULL){
+						/*if($jrawat_kwitansi_nama3=="" || $jrawat_kwitansi_nama3==NULL){
 							if(is_int($jrawat_kwitansi_nama3)){
 								$sql="select cust_nama from customer where cust_id='".$jrawat_cust."'";
 								$query=$this->db->query($sql);
@@ -476,14 +476,14 @@ class M_master_jual_rawat extends Model{
 							}else{
 									$jrawat_kwitansi_nama3=$jrawat_cust;
 							}
-						}
+						}*/
 						
 						$sql="SELECT jkwitansi_id FROM jual_kwitansi WHERE jkwitansi_ref='$jrawat_nobukti'";
 						$rs=$this->db->query($sql);
 						if($rs->num_rows()){
 							$data=array(
 								"jkwitansi_no"=>$jrawat_kwitansi_no3,
-								"jkwitansi_nilai"=>$jrawat_hutang
+								"jkwitansi_nilai"=>$jrawat_kwitansi_nilai3
 							);
 							$this->db->where('jkwitansi_ref', $jrawat_nobukti);
 							$this->db->update('jual_kwitansi', $data);
@@ -491,7 +491,7 @@ class M_master_jual_rawat extends Model{
 							$data=array(
 								"jkwitansi_ref"=>$jrawat_nobukti,
 								"jkwitansi_no"=>$jrawat_kwitansi_no3,
-								"jkwitansi_nilai"=>$jrawat_hutang
+								"jkwitansi_nilai"=>$jrawat_kwitansi_nilai3
 							);
 							$this->db->insert('jual_kwitansi', $data);
 						}

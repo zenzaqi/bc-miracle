@@ -797,7 +797,7 @@ Ext.onReady(function(){
 							if(kwitansi_jual_rawat_DataStore.getCount()){
 								jrawat_kwitansi_record=kwitansi_jual_rawat_DataStore.getAt(0).data;
 								jrawat_kwitansi_noField.setValue(jrawat_kwitansi_record.jkwitansi_no);
-								jrawat_kwitansi_namaField.setValue(jrawat_kwitansi_record.jkwitansi_nama);
+								jrawat_kwitansi_namaField.setValue(jrawat_kwitansi_record.cust_nama);
 								jrawat_kwitansi_nilaiField.setValue(jrawat_kwitansi_record.jkwitansi_nilai);
 							}
 						  }
@@ -809,6 +809,7 @@ Ext.onReady(function(){
 					params : { no_faktur: jrawat_nobuktiField.getValue() },
 					callback: function(opts, success, response)  {
 						 if (success) { 
+						 	console.log("card = "+card_jual_rawat_DataStore.getCount());
 							if(card_jual_rawat_DataStore.getCount()){
 								jrawat_card_record=card_jual_rawat_DataStore.getAt(0).data;
 								jrawat_card_namaField.setValue(jrawat_card_record.jcard_nama);
@@ -825,8 +826,10 @@ Ext.onReady(function(){
 					params : { no_faktur: jrawat_nobuktiField.getValue() },
 					callback: function(opts, success, response)  {
 							if (success) {
+								console.log("cek = "+cek_jual_rawat_DataStore.getCount());
 								if(cek_jual_rawat_DataStore.getCount()){
 									jrawat_cek_record=cek_jual_rawat_DataStore.getAt(0).data;
+									console.log("JCEK-NAma = "+jrawat_cek_record.jcek_nama);
 									jrawat_cek_namaField.setValue(jrawat_cek_record.jcek_nama);
 									jrawat_cek_noField.setValue(jrawat_cek_record.jcek_no);
 									jrawat_cek_validField.setValue(jrawat_cek_record.jcek_valid);
@@ -1059,7 +1062,7 @@ Ext.onReady(function(){
 			jrawat_caraField.setValue("card");
 			master_jual_rawat_cardGroup.setVisible(true);
 			detail_jual_rawat_DataStore.load({params: {master_id:0}});
-			post2db='CREATE';
+			this.post2db="CREATE";
 			msg='created';
 			master_cara_bayarTabPanel.setActiveTab(0);
 			master_jual_rawat_createWindow.show();
@@ -1094,6 +1097,7 @@ Ext.onReady(function(){
 		
 		if(master_jual_rawatListEditorGrid.selModel.getCount() == 1) {
 			cbo_drawat_rawatDataStore.load({params: {query:master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_id')}});
+			cbo_kwitansi_jual_rawat_DataStore.load();
 			master_jual_rawat_set_form();
 			master_cara_bayarTabPanel.setActiveTab(0);
 			post2db='UPDATE';
@@ -1288,7 +1292,8 @@ Ext.onReady(function(){
 		/* dataIndex => insert intomaster_jual_rawat_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'jkwitansi_id', type: 'int', mapping: 'jkwitansi_id'},
 			{name: 'jkwitansi_no', type: 'string', mapping: 'jkwitansi_no'},
-			{name: 'jkwitansi_nilai', type: 'float', mapping: 'jkwitansi_nilai'}
+			{name: 'jkwitansi_nilai', type: 'float', mapping: 'jkwitansi_nilai'},
+			{name: 'cust_nama', type: 'string', mapping: 'cust_nama'}
 		]),
 		sortInfo:{field: 'jkwitansi_id', direction: "DESC"}
 	});
@@ -1335,7 +1340,7 @@ Ext.onReady(function(){
 			{name: 'jcek_no', type: 'string', mapping: 'jcek_no'},
 			{name: 'jcek_valid', type: 'string', mapping: 'jcek_valid'}, 
 			{name: 'jcek_bank', type: 'string', mapping: 'jcek_bank'},
-			{name: 'jcek_nilai', type: 'double', mapping: 'jcek_nilai'}
+			{name: 'jcek_nilai', type: 'float', mapping: 'jcek_nilai'}
 		]),
 		sortInfo:{field: 'jcek_id', direction: "DESC"}
 	});
@@ -1667,7 +1672,8 @@ Ext.onReady(function(){
 	
 	/* function for editing row via context menu */
 	function master_jual_rawat_editContextMenu(){
-		master_jual_rawatListEditorGrid.startEditing(master_jual_rawat_SelectedRow,1);
+		//master_jual_rawatListEditorGrid.startEditing(master_jual_rawat_SelectedRow,1);
+		master_jual_rawat_confirm_update();
   	}
 	/* End of Function */
   	

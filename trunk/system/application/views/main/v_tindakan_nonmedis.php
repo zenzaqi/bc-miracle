@@ -349,10 +349,11 @@ Ext.onReady(function(){
 	/* Function for Update Confirm */
 	function tindakan_nonmedis_confirm_update(){
 		/* only one record is selected here */
-		dtrawat_perawatanDataStore.load({params:{query:tindakan_nonmedisListEditorGrid.getSelectionModel().getSelected().get('trawat_id')}});
+		
 		if(tindakan_nonmedisListEditorGrid.selModel.getCount() == 1) {
+			dtrawat_perawatanDataStore.load({params:{query:tindakan_nonmedisListEditorGrid.getSelectionModel().getSelected().get('trawat_id')}});
 			//cbo_dtrawat_perawatan_nonmedisDataStore.load();
-			//cbo_dtrawat_petugas_nonmedisDataStore.load();
+			cbo_dtrawat_petugas_nonmedisDataStore.load();
 			tindakan_nonmedis_set_form();
 			post2db='UPDATE';
 			tindakan_nonmedis_detail_DataStore.load({params : {master_id : eval(get_pk_id()), start:0, limit:pageS}});
@@ -1016,7 +1017,7 @@ Ext.onReady(function(){
 	var combo_dtrawat_perawatan=new Ext.form.ComboBox({
 			store: dtrawat_perawatanDataStore,
 			mode: 'remote',
-			typeAhead: true,
+			typeAhead: false,
 			displayField: 'perawatan_display',
 			valueField: 'perawatan_value',
 			tpl: cbo_trawat_rawat_tpl,
@@ -1025,7 +1026,7 @@ Ext.onReady(function(){
 			itemSelector: 'div.search-item',
 			triggerAction: 'all',
 			lazyRender:true,
-
+			listClass: 'x-combo-list-small'
 	});
 	
 	var combo_dapp_terapis=new Ext.form.ComboBox({

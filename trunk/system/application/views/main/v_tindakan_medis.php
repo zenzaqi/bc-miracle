@@ -831,7 +831,8 @@ Ext.onReady(function(){
 	
 	/* function for editing row via context menu */
 	function tindakan_mediseditContextMenu(){
-		tindakanListEditorGrid.startEditing(tindakan_medisSelectedRow,1);
+		//tindakanListEditorGrid.startEditing(tindakan_medisSelectedRow,1);
+		tindakan_medisconfirm_update();
   	}
 	/* End of Function */
   	
