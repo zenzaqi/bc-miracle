@@ -809,7 +809,6 @@ Ext.onReady(function(){
 					params : { no_faktur: jrawat_nobuktiField.getValue() },
 					callback: function(opts, success, response)  {
 						 if (success) { 
-						 	console.log("card = "+card_jual_rawat_DataStore.getCount());
 							if(card_jual_rawat_DataStore.getCount()){
 								jrawat_card_record=card_jual_rawat_DataStore.getAt(0).data;
 								jrawat_card_namaField.setValue(jrawat_card_record.jcard_nama);
@@ -826,10 +825,8 @@ Ext.onReady(function(){
 					params : { no_faktur: jrawat_nobuktiField.getValue() },
 					callback: function(opts, success, response)  {
 							if (success) {
-								console.log("cek = "+cek_jual_rawat_DataStore.getCount());
 								if(cek_jual_rawat_DataStore.getCount()){
 									jrawat_cek_record=cek_jual_rawat_DataStore.getAt(0).data;
-									console.log("JCEK-NAma = "+jrawat_cek_record.jcek_nama);
 									jrawat_cek_namaField.setValue(jrawat_cek_record.jcek_nama);
 									jrawat_cek_noField.setValue(jrawat_cek_record.jcek_no);
 									jrawat_cek_validField.setValue(jrawat_cek_record.jcek_valid);
@@ -942,7 +939,7 @@ Ext.onReady(function(){
 							if (success) {
 									if(tunai_jual_rawat_DataStore.getCount()){
 										jrawat_tunai_record=tunai_jual_rawat_DataStore.getAt(0);
-										jrawat_tunai_nilaiField.setValue(jrawat_tunai_record.data.jtunai_nilai);
+										jrawat_tunai_nilai2Field.setValue(jrawat_tunai_record.data.jtunai_nilai);
 									}
 							}
 					 	}
@@ -1022,7 +1019,7 @@ Ext.onReady(function(){
 							if (success) {
 									if(tunai_jual_rawat_DataStore.getCount()){
 										jrawat_tunai_record=tunai_jual_rawat_DataStore.getAt(0);
-										jrawat_tunai_nilaiField.setValue(jrawat_tunai_record.data.jtunai_nilai);
+										jrawat_tunai_nilai3Field.setValue(jrawat_tunai_record.data.jtunai_nilai);
 									}
 							}
 					 	}
@@ -1062,7 +1059,7 @@ Ext.onReady(function(){
 			jrawat_caraField.setValue("card");
 			master_jual_rawat_cardGroup.setVisible(true);
 			detail_jual_rawat_DataStore.load({params: {master_id:0}});
-			this.post2db="CREATE";
+			post2db="CREATE";
 			msg='created';
 			master_cara_bayarTabPanel.setActiveTab(0);
 			master_jual_rawat_createWindow.show();
@@ -1101,7 +1098,8 @@ Ext.onReady(function(){
 			master_jual_rawat_set_form();
 			master_cara_bayarTabPanel.setActiveTab(0);
 			post2db='UPDATE';
-			detail_jual_rawat_DataStore.load({params : {master_id : eval(get_pk_id()), start:0, limit:pageS}});
+			//detail_jual_rawat_DataStore.load({params : {master_id : eval(get_pk_id()), start:0, limit:pageS}});
+			detail_jual_rawat_DataStore.load({params : {master_id : master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_id'), start:0, limit:pageS}});
 			msg='updated';
 			//master_jual_rawat_createWindow.hide();
 			master_jual_rawat_createWindow.show();

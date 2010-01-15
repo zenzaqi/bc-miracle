@@ -934,7 +934,8 @@ Ext.onReady(function(){
 			{name: 'dtrawat_petugas2', type: 'int', mapping: 'dtrawat_petugas2'}, 
 			{name: 'dtrawat_jam', type: 'string', mapping: 'dtrawat_jam'}, 
 			{name: 'dtrawat_kategori', type: 'string', mapping: 'dtrawat_kategori'}, 
-			{name: 'dtrawat_status', type: 'string', mapping: 'dtrawat_status'} 
+			{name: 'dtrawat_status', type: 'string', mapping: 'dtrawat_status'},
+			{name: 'dtrawat_keterangan', type: 'string', mapping: 'dtrawat_keterangan'} 
 	]);
 	//eof
 	
