@@ -1167,7 +1167,7 @@ Ext.onReady(function(){
 			url: 'index.php?c=c_master_jual_rawat&m=get_action', 
 			method: 'POST'
 		}),
-		baseParams:{task: "LIST"}, // parameter yang di $_POST ke Controller
+		baseParams:{task: "LIST", start:0, limit:pageS}, // parameter yang di $_POST ke Controller
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
@@ -1602,7 +1602,18 @@ Ext.onReady(function(){
 		}, '-', 
 			new Ext.app.SearchField({
 			store: master_jual_rawat_DataStore,
-			params: {start: 0, limit: pageS},
+			params: {task: 'LIST',start: 0, limit: pageS},
+			listeners:{
+				specialkey: function(f,e){
+					if(e.getKey() == e.ENTER){
+						master_jual_rawat_DataStore.baseParams={task:'LIST',start: 0, limit: pageS};
+		            }
+				},
+				render: function(c){
+				Ext.get(this.id).set({qtitle:'Search By'});
+				Ext.get(this.id).set({qtip:'- No.Faktur<br>- No.Customer<br>- Nama Customer<br>- Member Customer'});
+				}
+			},
 			width: 120
 		}),'-',{
 			text: 'Refresh',
