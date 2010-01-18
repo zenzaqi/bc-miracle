@@ -358,13 +358,13 @@ Ext.onReady(function(){
 			{name: 'gudang_date_update', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'gudang_date_update'},
 			{name: 'gudang_revised', type: 'int', mapping: 'gudang_revised'}
 		]),
-		sortInfo:{field: 'gudang_id', direction: "ASC"}
+		sortInfo:{field: 'gudang_nama', direction: "ASC"}
 	});
 	/* End of Function */
     
   	/* Function for Identify of Window Column Model */
 	gudang_ColumnModel = new Ext.grid.ColumnModel(
-		[{/*
+		[/*{
 			header: '#',
 			readOnly: true,
 			dataIndex: 'gudang_id',
