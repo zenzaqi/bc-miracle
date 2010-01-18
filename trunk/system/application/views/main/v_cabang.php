@@ -396,7 +396,7 @@ Ext.onReady(function(){
 			{name: 'cabang_date_update', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'cabang_date_update'},
 			{name: 'cabang_revised', type: 'int', mapping: 'cabang_revised'}
 		]),
-		sortInfo:{field: 'cabang_id', direction: "ASC"}
+		sortInfo:{field: 'cabang_nama', direction: "ASC"}
 	});
 	/* End of Function */
     
@@ -616,11 +616,11 @@ Ext.onReady(function(){
 	cabangListEditorGrid.render();
 	/* End of DataStore */
 	
-	cabangListEditorGrid.getColumnModel().setHidden(8, true);
+	/*cabangListEditorGrid.getColumnModel().setHidden(8, true);
 	cabangListEditorGrid.getColumnModel().setHidden(9, true);
 	cabangListEditorGrid.getColumnModel().setHidden(10, true);
 	cabangListEditorGrid.getColumnModel().setHidden(11, true);
-	cabangListEditorGrid.getColumnModel().setHidden(12, true);
+	cabangListEditorGrid.getColumnModel().setHidden(12, true);*/
      
 	/* Create Context Menu */
 	cabang_ContextMenu = new Ext.menu.Menu({
