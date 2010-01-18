@@ -353,13 +353,13 @@ Ext.onReady(function(){
 			{name: 'satuan_date_update', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'satuan_date_update'},
 			{name: 'satuan_revised', type: 'int', mapping: 'satuan_revised'}
 		]),
-		sortInfo:{field: 'satuan_id', direction: "ASC"}
+		sortInfo:{field: 'satuan_kode', direction: "ASC"}
 	});
 	/* End of Function */
     
   	/* Function for Identify of Window Column Model */
 	satuan_ColumnModel = new Ext.grid.ColumnModel(
-		[{/*
+		[/*{
 			header: '#',
 			readOnly: true,
 			dataIndex: 'satuan_id',
