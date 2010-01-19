@@ -31,12 +31,12 @@ class CI_Session {
 	var $encryption		= TRUE;
 	var $use_database	= FALSE;
 	var $session_table	= FALSE;
-	var $sess_length	= 7200;
+	var $sess_length	= 36000;
 	var $sess_cookie	= 'ci_session';
 	var $userdata		= array();
 	var $gc_probability	= 5;
 	var $flashdata_key 	= 'flash';
-	var $time_to_update	= 300;
+	var $time_to_update	= 36000;
 
 	/**
 	 * Session Constructor
