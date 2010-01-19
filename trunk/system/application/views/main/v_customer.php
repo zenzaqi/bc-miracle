@@ -1260,7 +1260,7 @@ var editor_cust_note;
 					};
 					cbo_cust_profesi_DataStore.reload();
 					cbo_cust_hobi_DataStore.reload();
-					cbo_reflain_DataStore.reload();
+					//cbo_reflain_DataStore.reload();
 				},
 				failure: function(response){
 					var result=response.responseText;
@@ -2339,7 +2339,7 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'cust_referensilain'
 		},[
-		/* dataIndex => insert intocustomer_note_ColumnModel, Mapping => for initiate table column */ 
+		// dataIndex => insert intocustomer_note_ColumnModel, Mapping => for initiate table column 
 			{name: 'cust_referensilain', type: 'string', mapping: 'cust_referensilain'},
 		]),
 		sortInfo:{field: 'cust_referensilain', direction: "ASC"}
