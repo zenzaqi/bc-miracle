@@ -422,6 +422,7 @@ left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawa
 						"dtrawat_perawatan"=>$rawat_id,
 						"dtrawat_jam"=>$dapp_jamreservasi,
 						"dtrawat_tglapp"=>$dapp_tglreservasi,
+						"dtrawat_keterangan"=>$dapp_keterangan,
 						"dtrawat_status"=>$dapp_status
 						);
 						$sql_petugas1="SELECT karyawan_id FROM karyawan WHERE karyawan_id='$dokter_nama'";
@@ -465,6 +466,7 @@ left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawa
 							"dtrawat_perawatan"=>$rawat_id,
 							"dtrawat_jam"=>$dapp_jamreservasi,
 							"dtrawat_tglapp"=>$dapp_tglreservasi,
+							"dtrawat_keterangan"=>$dapp_keterangan,
 							"dtrawat_status"=>$dapp_status
 							);
 							$sql_petugas1="SELECT karyawan_id FROM karyawan WHERE karyawan_id='$dokter_nama'";
