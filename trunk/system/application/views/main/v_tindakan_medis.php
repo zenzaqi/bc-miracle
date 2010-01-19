@@ -147,6 +147,7 @@ Ext.onReady(function(){
 		var cust_member_update=null;
 		var dtrawat_petugas1_no_update=null;
 		var dtrawat_keterangan_update=null;
+		var dtrawat_dapp_update="";
 
 		trawat_id_update_pk = oGrid_event.record.data.trawat_id;
 		if(oGrid_event.record.data.trawat_cust!== null){trawat_cust_update = oGrid_event.record.data.trawat_cust;}
@@ -162,6 +163,7 @@ Ext.onReady(function(){
 		cust_member_update = oGrid_event.record.data.cust_member;
 		dtrawat_petugas1_no_update = oGrid_event.record.data.dtrawat_petugas1_no;
 		if(oGrid_event.record.data.dtrawat_keterangan!== null){dtrawat_keterangan_update = oGrid_event.record.data.dtrawat_keterangan;}
+		dtrawat_dapp_update = oGrid_event.record.data.dtrawat_dapp;
 
 		Ext.Ajax.request({  
 			waitMsg: 'Please wait...',
@@ -181,7 +183,8 @@ Ext.onReady(function(){
 				rawat_dm	:perawatan_dm_update,
 				cust_member	:cust_member_update,
 				dtrawat_petugas1_no	: dtrawat_petugas1_no_update,
-				dtrawat_keterangan	:dtrawat_keterangan_update
+				dtrawat_keterangan	:dtrawat_keterangan_update,
+				dtrawat_dapp	: dtrawat_dapp_update
 			}, 
 			success: function(response){							
 				var result=eval(response.responseText);
@@ -453,6 +456,7 @@ Ext.onReady(function(){
 			{name: 'trawat_date_update', type: 'date', dateFormat: 'Y-m-d', mapping: 'trawat_date_update'}, 
 			{name: 'trawat_revised', type: 'int', mapping: 'trawat_revised'},
 			{name: 'dtrawat_id', type: 'int', mapping: 'dtrawat_id'},
+			{name: 'dtrawat_dapp', type: 'int', mapping: 'dtrawat_dapp'},
 			{name: 'dtrawat_perawatan_id', type: 'int', mapping: 'dtrawat_perawatan'},
 			{name: 'dtrawat_perawatan', type: 'string', mapping: 'rawat_nama'},
 			{name: 'dtrawat_petugas1', type: 'string', mapping: 'karyawan_username'},

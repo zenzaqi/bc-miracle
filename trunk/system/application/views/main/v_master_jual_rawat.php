@@ -435,6 +435,7 @@ Ext.onReady(function(){
 			url: 'index.php?c=c_master_jual_rawat&m=get_action',
 			params: {
 				task: post2db,
+				printed:printed,
 				jrawat_id			: 	jrawat_id_create_pk, 
 				jrawat_nobukti		: 	jrawat_nobukti_create, 
 				jrawat_cust		: 	jrawat_cust_create, 

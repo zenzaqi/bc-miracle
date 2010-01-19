@@ -338,9 +338,9 @@ Ext.onReady(function(){
 				var result=eval(response.responseText);
 				switch(result){
 					case 1:
-						appointment_detail_purge();
-						//appointment_detail_medis_insert();
-						//appointment_detail_nonmedis_insert();
+						//appointment_detail_purge();
+						appointment_detail_medis_insert();
+						appointment_detail_nonmedis_insert();
 //						appointment_detail_medis_purge();
 //						appointment_detail_nonmedis_purge();
 						Ext.MessageBox.alert(post2db+' OK','The Appointment was '+msg+' successfully.');
@@ -1214,7 +1214,7 @@ Ext.onReady(function(){
 		fieldLabel: 'Cara',// <span id="tet">[?]</span>
 		store:new Ext.data.SimpleStore({
 			fields:['app_cara_value', 'app_cara_display'],
-			data:[['Datang','Datang'],['Telp','Telp'],['SMS','SMS']]
+			data:[['Datang','Work in'],['Telp','Telp'],['SMS','SMS']]
 		}),
 		mode: 'local',
 		name:'app_cara',
@@ -1676,12 +1676,13 @@ Ext.onReady(function(){
 	function appointment_detail_medis_insert(){
 		for(i=0;i<appointment_detail_medisDataStore.getCount();i++){
 			appointment_detail_medis_record=appointment_detail_medisDataStore.getAt(i);
+			if(app_caraField.getValue()=="Datang"){appointment_detail_medis_record.data.dapp_medis_status="Datang"}
 			if(appointment_detail_medis_record.data.dapp_medis_perawatan!=""){
 				Ext.Ajax.request({
 					waitMsg: 'Please wait...',
 					url: 'index.php?c=c_appointment&m=detail_appointment_detail_medis_insert',
 					params:{
-					//dapp_medis_id	: appointment_detail_medis_record.data.dapp_medis_id, 
+					dapp_medis_id	: appointment_detail_medis_record.data.dapp_medis_id, 
 					dapp_medis_master	: eval(app_idField.getValue()), 
 					dapp_medis_perawatan	: appointment_detail_medis_record.data.dapp_medis_perawatan, 
 					dapp_medis_tglreservasi	: appointment_detail_medis_record.data.dapp_medis_tglreservasi.format('Y-m-d'),

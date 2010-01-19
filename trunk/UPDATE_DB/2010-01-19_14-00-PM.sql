@@ -1,0 +1,1 @@
+ALTER TABLE `detail_jual_rawat` ADD `drawat_dtrawat` INT( 11 ) NULL AFTER `drawat_master`;

@@ -106,7 +106,7 @@ class M_tindakan_medis extends Model{
 		//function for get list record
 		function tindakan_list($filter,$start,$end){
 			$date_now=date('Y-m-d');
-			$query = "SELECT trawat_id,trawat_cust,cust_nama,cust_no,trawat_keterangan,trawat_creator,trawat_date_create,trawat_update,trawat_date_update,trawat_revised,dtrawat_id,dtrawat_perawatan,rawat_nama,karyawan_nama,karyawan_no,dtrawat_jam,dtrawat_tglapp,dtrawat_status,karyawan_username,rawat_harga,rawat_du,rawat_dm,dtrawat_keterangan FROM tindakan INNER JOIN customer ON trawat_cust=cust_id INNER JOIN tindakan_detail ON dtrawat_master=trawat_id LEFT JOIN perawatan ON dtrawat_perawatan=rawat_id LEFT JOIN karyawan ON dtrawat_petugas1=karyawan_id LEFT JOIN kategori ON rawat_kategori=kategori_id WHERE kategori_nama='Medis' AND dtrawat_tglapp='$date_now'";
+			$query = "SELECT trawat_id,trawat_cust,cust_nama,cust_no,trawat_keterangan,trawat_creator,trawat_date_create,trawat_update,trawat_date_update,trawat_revised,dtrawat_id,dtrawat_perawatan,rawat_nama,karyawan_nama,karyawan_no,dtrawat_jam,dtrawat_tglapp,dtrawat_status,karyawan_username,rawat_harga,rawat_du,rawat_dm,dtrawat_keterangan,dtrawat_dapp FROM tindakan INNER JOIN customer ON trawat_cust=cust_id INNER JOIN tindakan_detail ON dtrawat_master=trawat_id LEFT JOIN perawatan ON dtrawat_perawatan=rawat_id LEFT JOIN karyawan ON dtrawat_petugas1=karyawan_id LEFT JOIN kategori ON rawat_kategori=kategori_id WHERE kategori_nama='Medis' AND dtrawat_tglapp='$date_now'";
 			
 			// For simple search
 			if ($filter<>""){
@@ -115,7 +115,7 @@ class M_tindakan_medis extends Model{
 			}
 			$query.=" AND dtrawat_status='siap'";
 			
-			$query2 = "SELECT trawat_id,trawat_cust,cust_nama,cust_no,trawat_keterangan,trawat_creator,trawat_date_create,trawat_update,trawat_date_update,trawat_revised,dtrawat_id,dtrawat_perawatan,rawat_nama,karyawan_nama,karyawan_no,dtrawat_jam,dtrawat_tglapp,dtrawat_status,karyawan_username,rawat_harga,rawat_du,rawat_dm,dtrawat_keterangan FROM tindakan INNER JOIN customer ON trawat_cust=cust_id INNER JOIN tindakan_detail ON dtrawat_master=trawat_id LEFT JOIN perawatan ON dtrawat_perawatan=rawat_id LEFT JOIN karyawan ON dtrawat_petugas1=karyawan_id LEFT JOIN kategori ON rawat_kategori=kategori_id WHERE kategori_nama='Medis' AND dtrawat_tglapp='$date_now'";
+			$query2 = "SELECT trawat_id,trawat_cust,cust_nama,cust_no,trawat_keterangan,trawat_creator,trawat_date_create,trawat_update,trawat_date_update,trawat_revised,dtrawat_id,dtrawat_perawatan,rawat_nama,karyawan_nama,karyawan_no,dtrawat_jam,dtrawat_tglapp,dtrawat_status,karyawan_username,rawat_harga,rawat_du,rawat_dm,dtrawat_keterangan,dtrawat_dapp FROM tindakan INNER JOIN customer ON trawat_cust=cust_id INNER JOIN tindakan_detail ON dtrawat_master=trawat_id LEFT JOIN perawatan ON dtrawat_perawatan=rawat_id LEFT JOIN karyawan ON dtrawat_petugas1=karyawan_id LEFT JOIN kategori ON rawat_kategori=kategori_id WHERE kategori_nama='Medis' AND dtrawat_tglapp='$date_now'";
 			
 			// For simple search
 			if ($filter<>""){
@@ -124,7 +124,7 @@ class M_tindakan_medis extends Model{
 			}
 			$query2.=" AND dtrawat_status='datang'";
 			
-			$query3 = "SELECT trawat_id,trawat_cust,cust_nama,cust_no,trawat_keterangan,trawat_creator,trawat_date_create,trawat_update,trawat_date_update,trawat_revised,dtrawat_id,dtrawat_perawatan,rawat_nama,karyawan_nama,karyawan_no,dtrawat_jam,dtrawat_tglapp,dtrawat_status,karyawan_username,rawat_harga,rawat_du,rawat_dm,dtrawat_keterangan FROM tindakan INNER JOIN customer ON trawat_cust=cust_id INNER JOIN tindakan_detail ON dtrawat_master=trawat_id LEFT JOIN perawatan ON dtrawat_perawatan=rawat_id LEFT JOIN karyawan ON dtrawat_petugas1=karyawan_id LEFT JOIN kategori ON rawat_kategori=kategori_id WHERE kategori_nama='Medis' AND dtrawat_tglapp='$date_now'";
+			$query3 = "SELECT trawat_id,trawat_cust,cust_nama,cust_no,trawat_keterangan,trawat_creator,trawat_date_create,trawat_update,trawat_date_update,trawat_revised,dtrawat_id,dtrawat_perawatan,rawat_nama,karyawan_nama,karyawan_no,dtrawat_jam,dtrawat_tglapp,dtrawat_status,karyawan_username,rawat_harga,rawat_du,rawat_dm,dtrawat_keterangan,dtrawat_dapp FROM tindakan INNER JOIN customer ON trawat_cust=cust_id INNER JOIN tindakan_detail ON dtrawat_master=trawat_id LEFT JOIN perawatan ON dtrawat_perawatan=rawat_id LEFT JOIN karyawan ON dtrawat_petugas1=karyawan_id LEFT JOIN kategori ON rawat_kategori=kategori_id WHERE kategori_nama='Medis' AND dtrawat_tglapp='$date_now'";
 			
 			// For simple search
 			if ($filter<>""){
@@ -133,7 +133,7 @@ class M_tindakan_medis extends Model{
 			}
 			$query3.=" AND dtrawat_status='selesai'";
 			
-			$query4 = "SELECT trawat_id,trawat_cust,cust_nama,cust_no,trawat_keterangan,trawat_creator,trawat_date_create,trawat_update,trawat_date_update,trawat_revised,dtrawat_id,dtrawat_perawatan,rawat_nama,karyawan_nama,karyawan_no,dtrawat_jam,dtrawat_tglapp,dtrawat_status,karyawan_username,rawat_harga,rawat_du,rawat_dm,dtrawat_keterangan FROM tindakan INNER JOIN customer ON trawat_cust=cust_id INNER JOIN tindakan_detail ON dtrawat_master=trawat_id LEFT JOIN perawatan ON dtrawat_perawatan=rawat_id LEFT JOIN karyawan ON dtrawat_petugas1=karyawan_id LEFT JOIN kategori ON rawat_kategori=kategori_id WHERE kategori_nama='Medis' AND dtrawat_tglapp='$date_now'";
+			$query4 = "SELECT trawat_id,trawat_cust,cust_nama,cust_no,trawat_keterangan,trawat_creator,trawat_date_create,trawat_update,trawat_date_update,trawat_revised,dtrawat_id,dtrawat_perawatan,rawat_nama,karyawan_nama,karyawan_no,dtrawat_jam,dtrawat_tglapp,dtrawat_status,karyawan_username,rawat_harga,rawat_du,rawat_dm,dtrawat_keterangan,dtrawat_dapp FROM tindakan INNER JOIN customer ON trawat_cust=cust_id INNER JOIN tindakan_detail ON dtrawat_master=trawat_id LEFT JOIN perawatan ON dtrawat_perawatan=rawat_id LEFT JOIN karyawan ON dtrawat_petugas1=karyawan_id LEFT JOIN kategori ON rawat_kategori=kategori_id WHERE kategori_nama='Medis' AND dtrawat_tglapp='$date_now'";
 			
 			// For simple search
 			if ($filter<>""){
@@ -184,7 +184,7 @@ class M_tindakan_medis extends Model{
 		}
 		
 		//function for update record
-		function tindakan_update($trawat_id ,$trawat_cust ,$trawat_keterangan ,$dtrawat_status ,$trawat_cust_id ,$dtrawat_perawatan_id ,$dtrawat_perawatan ,$dtrawat_id ,$rawat_harga ,$rawat_du ,$rawat_dm ,$cust_member ,$dtrawat_petugas1_no ,$dtrawat_keterangan){
+		function tindakan_update($trawat_id ,$trawat_cust ,$trawat_keterangan ,$dtrawat_status ,$trawat_cust_id ,$dtrawat_perawatan_id ,$dtrawat_perawatan ,$dtrawat_id ,$rawat_harga ,$rawat_du ,$rawat_dm ,$cust_member ,$dtrawat_petugas1_no ,$dtrawat_keterangan ,$dtrawat_dapp){
 			/*$data = array(
 				"trawat_id"=>$trawat_id, 
 				//"trawat_cust"=>$trawat_cust, 
@@ -196,24 +196,28 @@ class M_tindakan_medis extends Model{
 			 * Karena untuk perawatan-tindakan ini yg diUPDATE hanya dtrawat_status maka yg diUPDATE adalah
 			 * hanya table.tindakan_detail
 			 */ 
-			$data_tindakan=array(
-			"trawat_keterangan"=>$trawat_keterangan
-			);
-			$this->db->where("trawat_id", $trawat_id);
-			$this->db->update("tindakan", $data_tindakan);
-			
 			$date_now=date('Y-m-d');
-			$data_dtindakan=array(
-			"dtrawat_status"=>$dtrawat_status,
-			"dtrawat_keterangan"=>$dtrawat_keterangan
-			);
-			$sql="SELECT rawat_id FROM perawatan WHERE rawat_id='$dtrawat_perawatan'";
+			$sql="SELECT dtrawat_locked FROM tindakan_detail WHERE dtrawat_id='$dtrawat_id' AND dtrawat_locked=0";
 			$rs=$this->db->query($sql);
-			if($rs->num_rows())
-				$data_dtindakan["dtrawat_perawatan"]=$dtrawat_perawatan;
-			
-			$this->db->where("dtrawat_id", $dtrawat_id);
-			$this->db->update("tindakan_detail", $data_dtindakan);
+			if($rs->num_rows()){
+				$data_tindakan=array(
+				"trawat_keterangan"=>$trawat_keterangan
+				);
+				$this->db->where("trawat_id", $trawat_id);
+				$this->db->update("tindakan", $data_tindakan);
+				
+				$data_dtindakan=array(
+				"dtrawat_status"=>$dtrawat_status,
+				"dtrawat_keterangan"=>$dtrawat_keterangan
+				);
+				$sql="SELECT rawat_id FROM perawatan WHERE rawat_id='$dtrawat_perawatan'";
+				$rs=$this->db->query($sql);
+				if($rs->num_rows())
+					$data_dtindakan["dtrawat_perawatan"]=$dtrawat_perawatan;
+				
+				$this->db->where("dtrawat_id", $dtrawat_id);
+				$this->db->update("tindakan_detail", $data_dtindakan);
+			}
 			
 			//Jika dtrawat_status=="selesai" --> INSERT to table.master_jual_rawat
 			if($dtrawat_status=="selesai"){
@@ -233,6 +237,7 @@ class M_tindakan_medis extends Model{
 						
 						$data_djrawat=array(
 						"drawat_master"=>$jrawat_id,
+						"drawat_dtrawat"=>$dtrawat_id,
 						"drawat_rawat"=>$dtrawat_perawatan_id,
 						"drawat_jumlah"=>1,
 						"drawat_harga"=>$rawat_harga,
@@ -240,11 +245,19 @@ class M_tindakan_medis extends Model{
 						"drawat_diskon_jenis"=>$diskon_jenis
 						);
 						$this->db->insert('detail_jual_rawat', $data_djrawat);
+						if($this->db->affected_rows()){
+							$data_dapp_locked=array(
+							"dapp_locked"=>1
+							);
+							$this->db->where('dapp_id', $dtrawat_dapp);
+							$this->db->update('appointment_detail', $data_dapp_locked);
+						}
 					}else if($cust_member==""){
 						$diskon_jenis="DU";
 						
 						$data_djrawat=array(
 						"drawat_master"=>$jrawat_id,
+						"drawat_dtrawat"=>$dtrawat_id,
 						"drawat_rawat"=>$dtrawat_perawatan_id,
 						"drawat_jumlah"=>1,
 						"drawat_harga"=>$rawat_harga,
@@ -252,6 +265,13 @@ class M_tindakan_medis extends Model{
 						"drawat_diskon_jenis"=>$diskon_jenis
 						);
 						$this->db->insert('detail_jual_rawat', $data_djrawat);
+						if($this->db->affected_rows()){
+							$data_dapp_locked=array(
+							"dapp_locked"=>1
+							);
+							$this->db->where('dapp_id', $dtrawat_dapp);
+							$this->db->update('appointment_detail', $data_dapp_locked);
+						}
 					}
 					//Check AND INSERT history jumlah tindakan oleh Dokter
 					/*$sql="SELECT reportt_jmltindakan FROM report_tindakan WHERE reportt_nik='$dtrawat_petugas1_no' AND reportt_bln LIKE '$bln_now%'";
@@ -298,6 +318,7 @@ class M_tindakan_medis extends Model{
 							
 							$data_djrawat=array(
 							"drawat_master"=>$jrawat_id,
+							"drawat_dtrawat"=>$dtrawat_id,
 							"drawat_rawat"=>$dtrawat_perawatan_id,
 							"drawat_jumlah"=>1,
 							"drawat_harga"=>$rawat_harga,
@@ -305,11 +326,19 @@ class M_tindakan_medis extends Model{
 							"drawat_diskon_jenis"=>$diskon_jenis
 							);
 							$this->db->insert('detail_jual_rawat', $data_djrawat);
+							if($this->db->affected_rows()){
+								$data_dapp_locked=array(
+								"dapp_locked"=>1
+								);
+								$this->db->where('dapp_id', $dtrawat_dapp);
+								$this->db->update('appointment_detail', $data_dapp_locked);
+							}
 						}else if($cust_member==""){
 							$diskon_jenis="DU";
 							
 							$data_djrawat=array(
 							"drawat_master"=>$jrawat_id,
+							"drawat_dtrawat"=>$dtrawat_id,
 							"drawat_rawat"=>$dtrawat_perawatan_id,
 							"drawat_jumlah"=>1,
 							"drawat_harga"=>$rawat_harga,
@@ -317,6 +346,13 @@ class M_tindakan_medis extends Model{
 							"drawat_diskon_jenis"=>$diskon_jenis
 							);
 							$this->db->insert('detail_jual_rawat', $data_djrawat);
+							if($this->db->affected_rows()){
+								$data_dapp_locked=array(
+								"dapp_locked"=>1
+								);
+								$this->db->where('dapp_id', $dtrawat_dapp);
+								$this->db->update('appointment_detail', $data_dapp_locked);
+							}
 						}
 						//Check AND INSERT history jumlah tindakan oleh Dokter
 						/*$sql="SELECT reportt_jmltindakan FROM report_tindakan WHERE reportt_nik='$dtrawat_petugas1_no' AND reportt_bln='$bln_now'";
@@ -342,25 +378,43 @@ class M_tindakan_medis extends Model{
 					}
 				}
 			}else{
-				//ambil trawat_cust,dtrawat_perawatan, dan tanggal_sekarang untuk ambil ID dr db.Master_Jual_Rawat
-				$sql="SELECT jrawat_id FROM master_jual_rawat WHERE jrawat_cust='$trawat_cust_id' AND jrawat_tanggal='$date_now'";
+				$sql="SELECT dtrawat_locked FROM tindakan_detail WHERE dtrawat_id='$dtrawat_id' AND dtrawat_locked=0";
 				$rs=$this->db->query($sql);
 				if($rs->num_rows()){
-					$rs_record=$rs->row_array();
-					$rs_record_jrawat_id=$rs_record['jrawat_id'];
-					$sql="SELECT * FROM detail_jual_rawat WHERE drawat_master='$rs_record_jrawat_id' AND drawat_rawat='$dtrawat_perawatan_id'";
+					//ambil trawat_cust,dtrawat_perawatan, dan tanggal_sekarang untuk ambil ID dr db.Master_Jual_Rawat
+					$sql="SELECT jrawat_id FROM master_jual_rawat WHERE jrawat_cust='$trawat_cust_id' AND jrawat_tanggal='$date_now'";
 					$rs=$this->db->query($sql);
 					if($rs->num_rows()){
-						$this->db->where('drawat_master',$rs_record_jrawat_id);
-						$this->db->where('drawat_rawat',$dtrawat_perawatan_id);
-						$this->db->like('drawat_date_create',$date_now,'after');
-						$this->db->delete('detail_jual_rawat');
-					}
-					$sql="SELECT drawat_id FROM detail_jual_rawat WHERE drawat_master='$rs_record_jrawat_id'";
-					$rs=$this->db->query($sql);
-					if(!$rs->num_rows()){
-						$this->db->where('jrawat_id',$rs_record_jrawat_id);
-						$this->db->delete('master_jual_rawat');
+						$rs_record=$rs->row_array();
+						$rs_record_jrawat_id=$rs_record['jrawat_id'];
+						$sql="SELECT * FROM detail_jual_rawat WHERE drawat_master='$rs_record_jrawat_id' AND drawat_rawat='$dtrawat_perawatan_id'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							$this->db->where('drawat_master',$rs_record_jrawat_id);
+							$this->db->where('drawat_rawat',$dtrawat_perawatan_id);
+							$this->db->like('drawat_date_create',$date_now,'after');
+							$this->db->delete('detail_jual_rawat');
+							if($this->db->affected_rows()){
+								$data_dapp_locked=array(
+								"dapp_locked"=>0
+								);
+								$this->db->where('dapp_id', $dtrawat_dapp);
+								$this->db->update('appointment_detail', $data_dapp_locked);
+							}
+						}
+						$sql="SELECT drawat_id FROM detail_jual_rawat WHERE drawat_master='$rs_record_jrawat_id'";
+						$rs=$this->db->query($sql);
+						if(!$rs->num_rows()){
+							$this->db->where('jrawat_id',$rs_record_jrawat_id);
+							$this->db->delete('master_jual_rawat');
+							if($this->db->affected_rows()){
+								$data_dapp_locked=array(
+								"dapp_locked"=>0
+								);
+								$this->db->where('dapp_id', $dtrawat_dapp);
+								$this->db->update('appointment_detail', $data_dapp_locked);
+							}
+						}
 					}
 				}
 			}
