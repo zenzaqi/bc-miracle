@@ -324,6 +324,25 @@ left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawa
 							);
 							$this->db->insert('report_tindakan', $data_reportt);
 						}
+					}elseif($dokter_id!=""){
+						//UPDATE/INSERT ke db.report_tindakan dari Dokter KETIKA $dapp_status BERUBAH 'datang'
+						$sql="SELECT reportt_jmltindakan FROM report_tindakan WHERE reportt_bln LIKE '$bln_now%' AND reportt_karyawan_id='$dokter_id'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							$rs_record=$rs->row_array();
+							$data_reportt=array(
+							"reportt_jmltindakan"=>$rs_record["reportt_jmltindakan"]+1
+							);
+							$this->db->where('reportt_karyawan_id', $dokter_id);
+							$this->db->update('report_tindakan', $data_reportt);
+						}else if(!$rs->num_rows()){
+							$data_reportt=array(
+							"reportt_karyawan_id"=>$dokter_id,
+							"reportt_bln"=>$date_now,
+							"reportt_jmltindakan"=>1
+							);
+							$this->db->insert('report_tindakan', $data_reportt);
+						}
 					}
 					
 					$sql="SELECT karyawan_id FROM karyawan WHERE karyawan_id='$dapp_terapis_ganti'";
@@ -350,16 +369,36 @@ left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawa
 						//UPDATE/INSERT ke db.report_tindakan dari Terapis-Pengganti && $dapp_status=='datang'
 						$sql="SELECT reportt_jmltindakan FROM report_tindakan WHERE reportt_bln LIKE '$bln_now%' AND reportt_karyawan_id='$dapp_terapis_ganti'";
 						$rs=$this->db->query($sql);
-						$rs_record=$rs->row_array();
 						if($rs->num_rows()){
+							$rs_record=$rs->row_array();
 							$data_reportt=array(
-							"reportt_jmltindakan"=>$rs_reportt_record["reportt_jmltindakan"]+1
+							"reportt_jmltindakan"=>$rs_record["reportt_jmltindakan"]+1
 							);
 							$this->db->where('reportt_karyawan_id', $dapp_terapis_ganti);
 							$this->db->update('report_tindakan', $data_reportt);
 						}else if(!$rs->num_rows()){
 							$data_reportt=array(
 							"reportt_karyawan_id"=>$dapp_terapis_ganti,
+							"reportt_bln"=>$date_now,
+							"reportt_jmltindakan"=>1
+							);
+							$this->db->insert('report_tindakan', $data_reportt);
+						}
+					}elseif($terapis_id!=""){
+						$this->firephp->log($terapis_id, "terapis_id");
+						//UPDATE/INSERT ke db.report_tindakan dari Terapis KETIKA $dapp_status BERUBAH 'datang'
+						$sql="SELECT reportt_jmltindakan FROM report_tindakan WHERE reportt_bln LIKE '$bln_now%' AND reportt_karyawan_id='$terapis_id'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							$rs_record=$rs->row_array();
+							$data_reportt=array(
+							"reportt_jmltindakan"=>$rs_record["reportt_jmltindakan"]+1
+							);
+							$this->db->where('reportt_karyawan_id', $terapis_id);
+							$this->db->update('report_tindakan', $data_reportt);
+						}else if(!$rs->num_rows()){
+							$data_reportt=array(
+							"reportt_karyawan_id"=>$terapis_id,
 							"reportt_bln"=>$date_now,
 							"reportt_jmltindakan"=>1
 							);
