@@ -197,6 +197,7 @@ Ext.onReady(function(){
 		var dapp_dokter_ganti_update="";
 		var dapp_terapis_ganti_update="";
 		var dapp_keterangan_update="";
+		var dapp_locked_update=0;
 
 		app_id_update_pk = oGrid_event.record.data.app_id;
 		if(oGrid_event.record.data.app_customer!== null){app_customer_update = oGrid_event.record.data.app_customer;}
@@ -218,6 +219,7 @@ Ext.onReady(function(){
 		dapp_dokter_ganti_update = oGrid_event.record.data.dokter_username;
 		dapp_terapis_ganti_update = oGrid_event.record.data.terapis_username;
 		if(oGrid_event.record.data.dapp_keterangan!== ""){dapp_keterangan_update = oGrid_event.record.data.dapp_keterangan;}
+		dapp_locked_update = oGrid_event.record.data.dapp_locked;
 
 		Ext.Ajax.request({  
 			waitMsg: 'Please wait...',
@@ -243,7 +245,8 @@ Ext.onReady(function(){
 				dapp_terapis_no	:dapp_terapis_no_update,
 				dapp_dokter_ganti	:dapp_dokter_ganti_update,
 				dapp_terapis_ganti	:dapp_terapis_ganti_update,
-				dapp_keterangan	: dapp_keterangan_update
+				dapp_keterangan	: dapp_keterangan_update,
+				dapp_locked	: dapp_locked_update
 			}, 
 			success: function(response){							
 				var result=eval(response.responseText);
@@ -679,7 +682,8 @@ Ext.onReady(function(){
 			{name: 'app_date_update', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'app_date_update'}, 
 			{name: 'app_revised', type: 'int', mapping: 'app_revised'},
 			{name: 'dapp_keterangan', type: 'string', mapping: 'dapp_keterangan'},
-			{name: 'rawat_warna', type: 'int', mapping: 'rawat_warna'}
+			{name: 'rawat_warna', type: 'int', mapping: 'rawat_warna'},
+			{name: 'dapp_locked', type: 'int', mapping: 'dapp_locked'}
 		]),
 		sortInfo:{field: 'dapp_tglreservasi', direction: "ASC"},
 		groupField:'dokter_username'

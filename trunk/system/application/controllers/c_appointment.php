@@ -243,10 +243,11 @@ class C_appointment extends Controller {
 		$dapp_keterangan=trim(@$_POST["dapp_keterangan"]);
 		$dapp_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$dapp_keterangan);
 		$dapp_keterangan=str_replace("'", "\'",$dapp_keterangan);
+		$dapp_locked=trim(@$_POST["dapp_locked"]);
 		
 		$app_user=$_SESSION["userid"];
 		
-		$result = $this->m_appointment->appointment_update($app_id ,$app_customer ,$dapp_tglreservasi ,$app_cara ,$app_keterangan, $dapp_id, $dapp_status, $dokter_nama, $terapis_nama, $kategori_nama, $rawat_id, $dokter_id, $terapis_id, $dapp_jamreservasi, $cust_id, $dapp_dokter_no, $dapp_terapis_no, $dapp_dokter_ganti, $dapp_terapis_ganti, $dapp_keterangan, $app_user);
+		$result = $this->m_appointment->appointment_update($app_id ,$app_customer ,$dapp_tglreservasi ,$app_cara ,$app_keterangan, $dapp_id, $dapp_status, $dokter_nama, $terapis_nama, $kategori_nama, $rawat_id, $dokter_id, $terapis_id, $dapp_jamreservasi, $cust_id, $dapp_dokter_no, $dapp_terapis_no, $dapp_dokter_ganti, $dapp_terapis_ganti, $dapp_keterangan, $dapp_locked, $app_user);
 		echo $result;
 	}
 	
