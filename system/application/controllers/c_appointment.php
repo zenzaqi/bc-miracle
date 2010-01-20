@@ -19,6 +19,7 @@ class C_appointment extends Controller {
 		session_start();
 		$this->load->model('m_appointment', '', TRUE);
 		$this->load->plugin('to_excel');
+		$this->load->library('firephp');
 	}
 	
 	//set index

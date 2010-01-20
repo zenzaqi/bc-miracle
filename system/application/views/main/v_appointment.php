@@ -805,6 +805,9 @@ Ext.onReady(function(){
 				if(record.data.rawat_warna==1){
 					return '<span style="color:red;">' + value + '</span>';
 				}
+				if(record.data.rawat_warna==2){
+					return '<span style="color:black;"><b>' + value + '</b></span>';
+				}
 				return value;
 			}
 		}, 

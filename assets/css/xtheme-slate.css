@@ -671,3 +671,7 @@ td.x-date-mp-sel a{
 .x-item-disabled * {
 	color:#333 !important;
 }
+
+.readonlycell { 
+  background-color:#F4F4F4 !important;
+}
