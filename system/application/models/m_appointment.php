@@ -219,7 +219,7 @@ left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawa
 		}
 		
 		//function for update record
-		function appointment_update($app_id ,$app_customer ,$dapp_tglreservasi ,$app_cara ,$app_keterangan,$dapp_id, $dapp_status, $dokter_nama, $terapis_nama, $kategori_nama, $rawat_id, $dokter_id, $terapis_id, $dapp_jamreservasi, $cust_id, $dapp_dokter_no, $dapp_terapis_no, $dapp_dokter_ganti, $dapp_terapis_ganti, $dapp_keterangan, $app_user){
+		function appointment_update($app_id ,$app_customer ,$dapp_tglreservasi ,$app_cara ,$app_keterangan,$dapp_id, $dapp_status, $dokter_nama, $terapis_nama, $kategori_nama, $rawat_id, $dokter_id, $terapis_id, $dapp_jamreservasi, $cust_id, $dapp_dokter_no, $dapp_terapis_no, $dapp_dokter_ganti, $dapp_terapis_ganti, $dapp_keterangan, $dapp_locked, $app_user){
 			$dapp_locked=0;
 			$sql="SELECT dapp_locked FROM appointment_detail WHERE dapp_id='$dapp_id'";
 			$rs=$this->db->query($sql);
@@ -227,35 +227,302 @@ left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawa
 				$rs_record=$rs->row_array();
 				$dapp_locked=$rs_record["dapp_locked"];
 			}
+			/* START JIKA db.appointment_detail.dapp_locked == 0 ALIAS Tidak di-Lock */
 			if($dapp_locked==0){
-				//INSERT to Appointment-Detail
 				$dt=date('Y-m-d H:i:s');
 				$bln_now=date('Y-m');
 				
+				/* UPDATE ke db.appointment baik $dapp_status=='datang' atau $dapp_status!='datang'
+				>> Checking di db.appointment, apakah ada Perubahan atau Tidak => jika Tidak maka Tidak Ada Updating */
+				$sql="SELECT app_cara,app_keterangan,app_revised FROM appointment WHERE app_id='$app_id'";
+				$rs=$this->db->query($sql);
+				if($rs->num_rows()){
+					$rs_record=$rs->row_array();
+					if($rs_record["app_cara"]!=$app_cara || $rs_record["app_keterangan"]!=$app_keterangan){ /* JIKA terjadi PERUBAHAN */
+						$data = array(
+							//"app_id"=>$app_id, 
+							//"app_customer"=>$app_customer, 
+							//"app_tanggal"=>$app_tanggal, 
+							"app_cara"=>$app_cara, 
+							"app_keterangan"=>$app_keterangan,
+							"app_update"=>$app_user,
+							"app_date_update"=>$dt,
+							"app_revised"=>$rs_record["app_revised"]+1
+						);
+						/* TIDAK ADA UPDATE Customer
+						$sql_cust="SELECT cust_id FROM customer WHERE cust_id='$app_customer'";
+						$rs_cust=$this->db->query($sql_cust);
+						if($rs_cust->num_rows()){
+							$customer_id=$app_customer;
+							$data["app_customer"]=$app_customer;
+						}else{
+							$customer_id=$cust_id;
+						}*/
+						$this->db->where('app_id', $app_id);
+						$this->db->update('appointment', $data);
+					}
+				}
+				
+				/* Ambil dan Tampung terlebih dahulu => nilai appointment_detail.dapp_status JIKA appointment_detail.dapp_status TIDAK SAMA DENGAN $dapp_status(Status dari VIEW.LIST apakah telah terjadi Perubahan atau Tidak) */
 				$sql_detail="SELECT dapp_status FROM appointment_detail WHERE dapp_id='$dapp_id' AND dapp_status!='$dapp_status'";
 				$rs_detail=$this->db->query($sql_detail);
 				if($rs_detail->num_rows()){
 					$rs_drecord=$rs_detail->row_array();
-					$check_dapp_status=$rs_drecord["dapp_status"];
+					$dapp_status_temp=$rs_drecord["dapp_status"];
 				}else{
-					$check_dapp_status=$dapp_status;
+					$dapp_status_temp=$dapp_status;
 				}
 				
+				/* JIKA $dapp_status(Status dari VIEW.LIST) BERUBAH menjadi=>'datang', maka berpengaruh ke:
+				>> db.appointment_detail.dapp_status, db.appointment_detail.dapp_jamdatang
+				>> db.tindakan, db.tindakan_detail
+				>> db.report_tindakan.reportt_jmltindakan (Meng-Counter tindakan yang dilakukan VIEW.LIST.$dokter_id) */
 				$data_dapp=array();
-				if($dapp_status=="datang"){
+				if($dapp_status=="datang"){ /* VIEW.LIST.$dapp_status DIGANTI 'datang' */
 					$date_now=date('Y-m-d');
 					$time_now=date('H:i:s');
 					$data_dapp["dapp_tgldatang"]=$date_now;
 					$data_dapp["dapp_jamdatang"]=$time_now;
 					$data_dapp["dapp_status"]=$dapp_status;
-				}else{
+					
+					$sql="SELECT karyawan_id FROM karyawan WHERE karyawan_id='$dapp_dokter_ganti'";
+					$rs=$this->db->query($sql);
+					if($rs->num_rows()){ /* artinya: Telah terjadi per-GANTI-an DOKTER */
+						$data_dapp["dapp_petugas"]=$dapp_dokter_ganti;
+						
+						/* KARENA ada per-GANTI-an Dokter && $dapp_status=="datang", 
+						maka $dokter_id(dokter sebelumnya) dilakukan DE-Counter pada db.report_tindakan.reportt_jmltindakan */
+						$sql="SELECT reportt_jmltindakan FROM report_tindakan WHERE reportt_bln LIKE '$bln_now%' AND reportt_karyawan_id='$dokter_id'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							$rs_record=$rs->row_array();
+							$reportt_jmltindakan=$rs_record["reportt_jmltindakan"];
+							//UPDATE jumlah_tindakan
+							$data_report_tindakan=array(
+							"reportt_jmltindakan"=>$reportt_jmltindakan-1
+							);
+							$this->db->where('reportt_karyawan_id', $dokter_id);
+							$this->db->like('reportt_bln', $bln_now, 'after');
+							$this->db->update('report_tindakan', $data_report_tindakan);
+						}
+						
+						//UPDATE/INSERT ke db.report_tindakan dari Dokter-Pengganti && $dapp_status=='datang'
+						$sql="SELECT reportt_jmltindakan FROM report_tindakan WHERE reportt_bln LIKE '$bln_now%' AND reportt_karyawan_id='$dapp_dokter_ganti'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							$rs_record=$rs->row_array();
+							$data_reportt=array(
+							"reportt_jmltindakan"=>$rs_record["reportt_jmltindakan"]+1
+							);
+							$this->db->where('reportt_karyawan_id', $dapp_dokter_ganti);
+							$this->db->update('report_tindakan', $data_reportt);
+						}else if(!$rs->num_rows()){
+							$data_reportt=array(
+							"reportt_karyawan_id"=>$dapp_dokter_ganti,
+							"reportt_bln"=>$date_now,
+							"reportt_jmltindakan"=>1
+							);
+							$this->db->insert('report_tindakan', $data_reportt);
+						}
+					}
+					
+					$sql="SELECT karyawan_id FROM karyawan WHERE karyawan_id='$dapp_terapis_ganti'";
+					$rs=$this->db->query($sql);
+					if($rs->num_rows()){ /* artinya: Telah terjadi per-GANTI-an TERAPIS */
+						$data_dapp["dapp_petugas2"]=$dapp_terapis_ganti;
+						
+						/* KARENA ada per-GANTI-an Terapis && $dapp_status=="datang", 
+						maka $terapis_id(terapis sebelumnya) dilakukan DE-Counter pada db.report_tindakan.reportt_jmltindakan */
+						$sql="SELECT reportt_jmltindakan FROM report_tindakan WHERE reportt_bln LIKE '$bln_now%' AND reportt_karyawan_id='$terapis_id'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							$rs_record=$rs->row_array();
+							$reportt_jmltindakan=$rs_record["reportt_jmltindakan"];
+							//UPDATE jumlah_tindakan
+							$data_report_tindakan=array(
+							"reportt_jmltindakan"=>$reportt_jmltindakan-1
+							);
+							$this->db->where('reportt_karyawan_id', $terapis_id);
+							$this->db->like('reportt_bln', $bln_now, 'after');
+							$this->db->update('report_tindakan', $data_report_tindakan);
+						}
+						
+						//UPDATE/INSERT ke db.report_tindakan dari Terapis-Pengganti && $dapp_status=='datang'
+						$sql="SELECT reportt_jmltindakan FROM report_tindakan WHERE reportt_bln LIKE '$bln_now%' AND reportt_karyawan_id='$dapp_terapis_ganti'";
+						$rs=$this->db->query($sql);
+						$rs_record=$rs->row_array();
+						if($rs->num_rows()){
+							$data_reportt=array(
+							"reportt_jmltindakan"=>$rs_reportt_record["reportt_jmltindakan"]+1
+							);
+							$this->db->where('reportt_karyawan_id', $dapp_terapis_ganti);
+							$this->db->update('report_tindakan', $data_reportt);
+						}else if(!$rs->num_rows()){
+							$data_reportt=array(
+							"reportt_karyawan_id"=>$dapp_terapis_ganti,
+							"reportt_bln"=>$date_now,
+							"reportt_jmltindakan"=>1
+							);
+							$this->db->insert('report_tindakan', $data_reportt);
+						}
+					}
+					
+					$data_dapp["dapp_tglreservasi"]=$dapp_tglreservasi;
+					$data_dapp["dapp_jamreservasi"]=$dapp_jamreservasi;
+					$data_dapp["dapp_keterangan"]=$dapp_keterangan;
+					$data_dapp["dapp_update"]=$app_user;
+					$data_dapp["dapp_date_update"]=$dt;
+					$sql="SELECT dapp_revised FROM appointment_detail WHERE dapp_id='$dapp_id' AND dapp_master='$app_id'";
+					$rs=$this->db->query($sql);
+					if($rs->num_rows()){
+						$rs_record=$rs->row_array();
+						$data_dapp["dapp_revised"]=$rs_record["dapp_revised"]+1;
+					}
+					$this->db->where('dapp_id',$dapp_id);
+					$this->db->where('dapp_master',$app_id);
+					$this->db->update('appointment_detail',$data_dapp);
+					
+					/* INSERT ke db.tindakan dan db.tindakan_detail JIKA $dapp_status=='datang' */
+					$sql="SELECT * FROM tindakan WHERE trawat_cust='$cust_id' AND trawat_date_create='$date_now'";
+					$rs=$this->db->query($sql);
+					if($rs->num_rows()){
+						$rs_record=$rs->row_array();
+						$dtrawat_master=$rs_record["trawat_id"]; //ambil ID dr tabel tindakan
+						//Hanya INSERT to Tindakan-Detail
+						$data_dtindakan=array(
+						"dtrawat_master"=>$dtrawat_master,
+						"dtrawat_dapp"=>$dapp_id,
+						"dtrawat_perawatan"=>$rawat_id,
+						"dtrawat_jam"=>$dapp_jamreservasi,
+						"dtrawat_tglapp"=>$dapp_tglreservasi,
+						"dtrawat_keterangan"=>$dapp_keterangan,
+						"dtrawat_status"=>$dapp_status
+						);
+						$sql_petugas1="SELECT karyawan_id FROM karyawan WHERE karyawan_id='$dapp_dokter_ganti'";
+						$rs_petugas1=$this->db->query($sql_petugas1);
+						if($rs_petugas1->num_rows())
+							$data_dtindakan["dtrawat_petugas1"]=$dapp_dokter_ganti;
+						else
+							$data_dtindakan["dtrawat_petugas1"]=$dokter_id;
+						
+						$sql_petugas2="SELECT karyawan_id FROM karyawan WHERE karyawan_id='$dapp_terapis_ganti'";
+						$rs_petugas2=$this->db->query($sql_petugas2);
+						if($rs_petugas2->num_rows())
+							$data_dtindakan["dtrawat_petugas2"]=$dapp_terapis_ganti;
+						else
+							$data_dtindakan["dtrawat_petugas2"]=$terapis_id;
+						
+						$sql_cek_dtindakan="SELECT dtrawat_dapp FROM tindakan_detail WHERE dtrawat_dapp='$dapp_id'";
+						$rs=$this->db->query($sql_cek_dtindakan);
+						if(!$rs->num_rows()){
+							$this->db->insert('tindakan_detail', $data_dtindakan);
+						}
+					}else{
+						$data_tindakan=array(
+						"trawat_cust"=>$cust_id,
+						"trawat_jamdatang"=>$time_now,
+						//"trawat_appointment"=>$kategori_nama,
+						"trawat_keterangan"=>$app_keterangan,
+						"trawat_date_create"=>$date_now
+						);
+						$this->db->insert('tindakan', $data_tindakan);
+						if($this->db->affected_rows()){
+							$sql="SELECT * FROM tindakan WHERE trawat_cust='$cust_id' AND trawat_date_create='$date_now'";
+							$rs=$this->db->query($sql);
+							if($rs->num_rows()){
+								$rs_record=$rs->row_array();
+								$dtrawat_master=$rs_record["trawat_id"];
+							}
+							$data_dtindakan=array(
+							"dtrawat_master"=>$dtrawat_master,
+							"dtrawat_dapp"=>$dapp_id,
+							"dtrawat_perawatan"=>$rawat_id,
+							"dtrawat_jam"=>$dapp_jamreservasi,
+							"dtrawat_tglapp"=>$dapp_tglreservasi,
+							"dtrawat_keterangan"=>$dapp_keterangan,
+							"dtrawat_status"=>$dapp_status
+							);
+							$sql_petugas1="SELECT karyawan_id FROM karyawan WHERE karyawan_id='$dapp_dokter_ganti'";
+							$rs_petugas1=$this->db->query($sql_petugas1);
+							if($rs_petugas1->num_rows())
+								$data_dtindakan["dtrawat_petugas1"]=$dapp_dokter_ganti;
+							else
+								$data_dtindakan["dtrawat_petugas1"]=$dokter_id;
+							
+							$sql_petugas2="SELECT karyawan_id FROM karyawan WHERE karyawan_id='$dapp_terapis_ganti'";
+							$rs_petugas2=$this->db->query($sql_petugas2);
+							if($rs_petugas2->num_rows())
+								$data_dtindakan["dtrawat_petugas2"]=$dapp_terapis_ganti;
+							else
+								$data_dtindakan["dtrawat_petugas2"]=$terapis_id;
+							$this->db->insert('tindakan_detail', $data_dtindakan);
+						}
+					}
+					
+					/* $dapp_status == 'datang' */
+					/* Checking DAN Counter db.report_tindakan.reportt_jmltindakan oleh DOKTER atau TERAPIS */
+					/*$sql="SELECT reportt_jmltindakan FROM report_tindakan WHERE reportt_bln LIKE '$bln_now%' AND (reportt_karyawan_id='$dokter_id' OR reportt_karyawan_id='$terapis_id')";
+					$rs=$this->db->query($sql);
+					//if($rs->num_rows()){
+					if($rs->num_rows() && $dapp_status_temp!=$dapp_status){
+						$rs_record=$rs->row_array();
+						$reportt_jmltindakan=$rs_record["reportt_jmltindakan"];
+						//UPDATE jumlah_tindakan
+						$data_report_tindakan=array(
+						"reportt_jmltindakan"=>$reportt_jmltindakan+1
+						);
+						$this->db->where('reportt_karyawan_id', $dokter_id);
+						$this->db->or_where('reportt_karyawan_id', $terapis_id);
+						$this->db->like('reportt_bln', $bln_now, 'after');
+						$this->db->update('report_tindakan', $data_report_tindakan);
+					}else if(!$rs->num_rows()){
+						if($dokter_id!="")
+							$petugas_id=$dokter_id;
+						if($terapis_id!="")
+							$petugas_id=$terapis_id;
+						$data_report_tindakan=array(
+						"reportt_karyawan_id"=>$petugas_id,
+						"reportt_bln"=>$date_now,
+						"reportt_jmltindakan"=>1
+						);
+						$this->db->insert('report_tindakan', $data_report_tindakan);
+					}*/
+					
+				}else{ /* VIEW.LIST.$dapp_status DIGANTI SELAIN 'datang' */
+					/* Menghapus Tindakan-DEtail WHERE db.tindakan_detail.dtrawat_dapp == $dapp_id(dari appointment_detail.dapp_id) */
+					$this->db->where('dtrawat_dapp', $dapp_id);
+					$this->db->delete('tindakan_detail');
+					
+					/* UPDATE db.appointment_detail */
 					$data_dapp["dapp_tgldatang"]="0000-00-00";
 					$data_dapp["dapp_jamdatang"]="";
 					$data_dapp["dapp_status"]=$dapp_status;
 					
-					//Menghapus Tindakan-DEtail WHERE 
-					$this->db->where('dtrawat_dapp', $dapp_id);
-					$this->db->delete('tindakan_detail');
+					$sql="SELECT karyawan_id FROM karyawan WHERE karyawan_id='$dapp_dokter_ganti'";
+					$rs=$this->db->query($sql);
+					if($rs->num_rows())
+						$data_dapp["dapp_petugas"]=$dapp_dokter_ganti;
+					
+					$sql="SELECT karyawan_id FROM karyawan WHERE karyawan_id='$dapp_terapis_ganti'";
+					$rs=$this->db->query($sql);
+					if($rs->num_rows())
+						$data_dapp["dapp_petugas2"]=$dapp_terapis_ganti;
+					
+					$data_dapp["dapp_tglreservasi"]=$dapp_tglreservasi;
+					$data_dapp["dapp_jamreservasi"]=$dapp_jamreservasi;
+					$data_dapp["dapp_keterangan"]=$dapp_keterangan;
+					$data_dapp["dapp_update"]=$app_user;
+					$data_dapp["dapp_date_update"]=$dt;
+					$sql="SELECT dapp_revised FROM appointment_detail WHERE dapp_id='$dapp_id' AND dapp_master='$app_id'";
+					$rs=$this->db->query($sql);
+					if($rs->num_rows()){
+						$rs_record=$rs->row_array();
+						$data_dapp["dapp_revised"]=$rs_record["dapp_revised"]+1;
+					}
+					$this->db->where('dapp_id',$dapp_id);
+					$this->db->where('dapp_master',$app_id);
+					$this->db->update('appointment_detail',$data_dapp);
+					
 					
 					//decounter table.report_tindakan
 					$sql="SELECT reportt_jmltindakan FROM report_tindakan WHERE reportt_bln LIKE '$bln_now%' AND (reportt_karyawan_id='$dokter_id' OR reportt_karyawan_id='$terapis_id')";
@@ -283,89 +550,6 @@ left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawa
 				if($rs->num_rows())
 					$data_dapp["dapp_petugas2"]=$terapis_nama;
 				
-				//GANTI-DOKTER
-				if($dokter_id<>$dapp_dokter_ganti && is_numeric($dapp_dokter_ganti)==true){//ada PerGANTIan Dokter
-					//decounter table.report_tindakan
-					$sql="SELECT reportt_jmltindakan FROM report_tindakan WHERE reportt_bln LIKE '$bln_now%' AND reportt_karyawan_id='$dokter_id'";
-					$rs=$this->db->query($sql);
-					if($rs->num_rows()){
-						$rs_record=$rs->row_array();
-						$reportt_jmltindakan=$rs_record["reportt_jmltindakan"];
-						//UPDATE jumlah_tindakan
-						$data_report_tindakan=array(
-						"reportt_jmltindakan"=>$reportt_jmltindakan-1
-						);
-						$this->db->where('reportt_karyawan_id', $dokter_id);
-						$this->db->like('reportt_bln', $bln_now, 'after');
-						$this->db->update('report_tindakan', $data_report_tindakan);
-					}
-					$rs_karyawan=$this->db->query("SELECT karyawan_id FROM karyawan WHERE karyawan_id='$dapp_dokter_ganti'");
-					$rs_krecord=$rs_karyawan->row_array();
-					if($rs_karyawan->num_rows()){
-						$dokter_id=$rs_krecord["karyawan_id"];
-						$data_dapp["dapp_petugas"]=$dapp_dokter_ganti;
-						
-						//UPDATE table.report_tindakan jika status='datang'
-						$rs_reportt=$this->db->query("SELECT reportt_jmltindakan FROM report_tindakan WHERE reportt_bln LIKE '$bln_now%' AND reportt_karyawan_id='$dapp_dokter_ganti'");
-						$rs_reportt_record=$rs_reportt->row_array();
-						if($rs_reportt->num_rows() && $dapp_status='datang'){
-							$data_reportt=array(
-							"reportt_jmltindakan"=>$rs_reportt_record["reportt_jmltindakan"]+1
-							);
-							$this->db->where('reportt_karyawan_id', $dapp_dokter_ganti);
-							$this->db->update('report_tindakan', $data_reportt);
-						}else if(!$rs_reportt->num_rows() && $dapp_status='datang'){
-							$data_reportt=array(
-							"reportt_karyawan_id"=>$dapp_dokter_ganti,
-							"reportt_bln"=>$date_now,
-							"reportt_jmltindakan"=>1
-							);
-							$this->db->insert('report_tindakan', $data_reportt);
-						}
-					}
-				}
-				//GANTI-TERAPIS
-				if($terapis_id<>$dapp_terapis_ganti && is_numeric($dapp_terapis_ganti)==true){//ada PerGANTIan Dokter
-					//decounter table.report_tindakan
-					$sql="SELECT reportt_jmltindakan FROM report_tindakan WHERE reportt_bln LIKE '$bln_now%' AND reportt_karyawan_id='$terapis_id'";
-					$rs=$this->db->query($sql);
-					if($rs->num_rows()){
-						$rs_record=$rs->row_array();
-						$reportt_jmltindakan=$rs_record["reportt_jmltindakan"];
-						//UPDATE jumlah_tindakan
-						$data_report_tindakan=array(
-						"reportt_jmltindakan"=>$reportt_jmltindakan-1
-						);
-						$this->db->where('reportt_karyawan_id', $terapis_id);
-						$this->db->like('reportt_bln', $bln_now, 'after');
-						$this->db->update('report_tindakan', $data_report_tindakan);
-					}
-					$rs_karyawan=$this->db->query("SELECT karyawan_id FROM karyawan WHERE karyawan_id='$dapp_terapis_ganti'");
-					$rs_krecord=$rs_karyawan->row_array();
-					if($rs_karyawan->num_rows()){
-						$terapis_id=$rs_krecord["karyawan_id"];
-						$data_dapp["dapp_petugas2"]=$dapp_terapis_ganti;
-						
-						//UPDATE table.report_tindakan jika status='datang'
-						$rs_reportt=$this->db->query("SELECT reportt_jmltindakan FROM report_tindakan WHERE reportt_bln LIKE '$bln_now%' AND reportt_karyawan_id='$dapp_terapis_ganti'");
-						$rs_reportt_record=$rs_reportt->row_array();
-						if($rs_reportt->num_rows() && $dapp_status='datang'){
-							$data_reportt=array(
-							"reportt_jmltindakan"=>$rs_reportt_record["reportt_jmltindakan"]+1
-							);
-							$this->db->where('reportt_karyawan_id', $dapp_terapis_ganti);
-							$this->db->update('report_tindakan', $data_reportt);
-						}else if(!$rs_reportt->num_rows() && $dapp_status='datang'){
-							$data_reportt=array(
-							"reportt_karyawan_id"=>$dapp_terapis_ganti,
-							"reportt_bln"=>$date_now,
-							"reportt_jmltindakan"=>1
-							);
-							$this->db->insert('report_tindakan', $data_reportt);
-						}
-					}
-				}
-				
 				$data_dapp["dapp_tglreservasi"]=$dapp_tglreservasi;
 				$data_dapp["dapp_jamreservasi"]=$dapp_jamreservasi;
 				$data_dapp["dapp_keterangan"]=$dapp_keterangan;
@@ -381,8 +565,8 @@ left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawa
 				$this->db->where('dapp_master',$app_id);
 				$this->db->update('appointment_detail',$data_dapp);
 				
-				//INSERT to Appointment
-				$data = array(
+				//UPDATE to Appointment
+				/*$data = array(
 					"app_id"=>$app_id, 
 					//"app_customer"=>$app_customer, 
 					//"app_tanggal"=>$app_tanggal, 
@@ -406,10 +590,10 @@ left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawa
 					$data_dapp["app_revised"]=$rs_record["app_revised"]+1;
 				}
 				$this->db->where('app_id', $app_id);
-				$this->db->update('appointment', $data);
+				$this->db->update('appointment', $data);*/
 				
 				//INSERT to Perawatan-Tindakan
-				if($dapp_status=="datang"){
+				/*if($dapp_status=="datang"){
 					$sql="SELECT * FROM tindakan WHERE trawat_cust='$customer_id' AND trawat_date_create='$date_now'";
 					$rs=$this->db->query($sql);
 					if($rs->num_rows()){
@@ -488,7 +672,8 @@ left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawa
 					//Check AND INSERT history jumlah tindakan oleh Dokter
 					$sql="SELECT reportt_jmltindakan FROM report_tindakan WHERE reportt_bln LIKE '$bln_now%' AND (reportt_karyawan_id='$dokter_id' OR reportt_karyawan_id='$terapis_id')";
 					$rs=$this->db->query($sql);
-					if($rs->num_rows() && $check_dapp_status!=$dapp_status){
+					//if($rs->num_rows()){
+					if($rs->num_rows() && $dapp_status_temp!=$dapp_status){
 						$rs_record=$rs->row_array();
 						$reportt_jmltindakan=$rs_record["reportt_jmltindakan"];
 						//UPDATE jumlah_tindakan
@@ -511,8 +696,9 @@ left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawa
 						);
 						$this->db->insert('report_tindakan', $data_report_tindakan);
 					}
-				}
+				}*/
 			}
+			/* END JIKA db.appointment_detail.dapp_locked == 0 ALIAS Tidak di-Lock */
 			return '1';
 		}
 		

@@ -40,10 +40,14 @@ class M_master_jual_rawat extends Model{
 		//end of function
 		
 		function get_voucher_list($query,$start,$end){
-			$query = "SELECT * FROM voucher,voucher_kupon where kvoucher_master=voucher_id";
-			$result = $this->db->query($query);
+			$sql = "SELECT * FROM voucher,voucher_kupon WHERE kvoucher_master=voucher_id";
+			if ($query<>""){
+				$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
+				$sql .= " (kvoucher_nomor LIKE '%".addslashes($query)."%')";
+			}
+			$result = $this->db->query($sql);
 			$nbrows = $result->num_rows();
-			$limit = $query." LIMIT ".$start.",".$end;			
+			$limit = $sql." LIMIT ".$start.",".$end;			
 			$result = $this->db->query($limit); 
 		
 			if($nbrows>0){
