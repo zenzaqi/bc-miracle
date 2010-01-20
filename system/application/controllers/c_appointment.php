@@ -19,7 +19,6 @@ class C_appointment extends Controller {
 		session_start();
 		$this->load->model('m_appointment', '', TRUE);
 		$this->load->plugin('to_excel');
-		$this->load->library('firephp');
 	}
 	
 	//set index
@@ -137,8 +136,10 @@ class C_appointment extends Controller {
 		$dapp_medis_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$dapp_medis_keterangan);
 		$dapp_medis_keterangan=str_replace("\\", "",$dapp_medis_keterangan);
 		$dapp_medis_keterangan=str_replace("'", "\'",$dapp_medis_keterangan);
+		$app_cara=trim(@$_POST["app_cara"]);
+		$app_customer=trim(@$_POST["app_customer"]);
 		$dapp_user=$_SESSION["userid"];
-		$result=$this->m_appointment->detail_appointment_detail_medis_insert($dapp_medis_id ,$dapp_medis_master ,$dapp_medis_perawatan ,$dapp_medis_tglreservasi ,$dapp_medis_jamreservasi ,$dapp_medis_petugas ,$dapp_medis_status ,$dapp_medis_tgldatang ,$dapp_medis_jamdatang ,$dapp_medis_keterangan ,$dapp_user);
+		$result=$this->m_appointment->detail_appointment_detail_medis_insert($dapp_medis_id ,$dapp_medis_master ,$dapp_medis_perawatan ,$dapp_medis_tglreservasi ,$dapp_medis_jamreservasi ,$dapp_medis_petugas ,$dapp_medis_status ,$dapp_medis_tgldatang ,$dapp_medis_jamdatang ,$dapp_medis_keterangan ,$app_cara ,$app_customer ,$dapp_user);
 	}
 	
 	function detail_appointment_detail_nonmedis_insert(){

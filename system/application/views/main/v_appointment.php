@@ -1221,7 +1221,7 @@ Ext.onReady(function(){
 		fieldLabel: 'Cara',// <span id="tet">[?]</span>
 		store:new Ext.data.SimpleStore({
 			fields:['app_cara_value', 'app_cara_display'],
-			data:[['Datang','Work in'],['Telp','Telp'],['SMS','SMS']]
+			data:[['Datang','Walk-in'],['Telp','Telp'],['SMS','SMS']]
 		}),
 		mode: 'local',
 		name:'app_cara',
@@ -1255,9 +1255,6 @@ Ext.onReady(function(){
 				layout: 'form',
 				border:false,
 				items: [app_keteranganField, app_idField] 
-			},
-			{
-				
 			}
 			]
 	
@@ -1697,7 +1694,9 @@ Ext.onReady(function(){
 					dapp_medis_petugas	: appointment_detail_medis_record.data.dapp_medis_petugas, 
 	//				dapp_medis_petugas2	: appointment_detail_medis_record.data.dapp_medis_petugas2, 
 					dapp_medis_status	: appointment_detail_medis_record.data.dapp_medis_status,
-					dapp_medis_keterangan	: appointment_detail_medis_record.data.dapp_medis_keterangan
+					dapp_medis_keterangan	: appointment_detail_medis_record.data.dapp_medis_keterangan,
+					app_cara	: app_caraField.getValue(),
+					app_customer	: app_customerField.getValue()
 					},
 					callback: function(opts, success, response){
 						if(success)
