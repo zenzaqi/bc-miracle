@@ -699,35 +699,6 @@ left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawa
 						}
 					}
 					
-					/* $dapp_status == 'datang' */
-					/* Checking DAN Counter db.report_tindakan.reportt_jmltindakan oleh DOKTER atau TERAPIS */
-					/*$sql="SELECT reportt_jmltindakan FROM report_tindakan WHERE reportt_bln LIKE '$bln_now%' AND (reportt_karyawan_id='$dokter_id' OR reportt_karyawan_id='$terapis_id')";
-					$rs=$this->db->query($sql);
-					//if($rs->num_rows()){
-					if($rs->num_rows() && $dapp_status_temp!=$dapp_status){
-						$rs_record=$rs->row_array();
-						$reportt_jmltindakan=$rs_record["reportt_jmltindakan"];
-						//UPDATE jumlah_tindakan
-						$data_report_tindakan=array(
-						"reportt_jmltindakan"=>$reportt_jmltindakan+1
-						);
-						$this->db->where('reportt_karyawan_id', $dokter_id);
-						$this->db->or_where('reportt_karyawan_id', $terapis_id);
-						$this->db->like('reportt_bln', $bln_now, 'after');
-						$this->db->update('report_tindakan', $data_report_tindakan);
-					}else if(!$rs->num_rows()){
-						if($dokter_id!="")
-							$petugas_id=$dokter_id;
-						if($terapis_id!="")
-							$petugas_id=$terapis_id;
-						$data_report_tindakan=array(
-						"reportt_karyawan_id"=>$petugas_id,
-						"reportt_bln"=>$date_now,
-						"reportt_jmltindakan"=>1
-						);
-						$this->db->insert('report_tindakan', $data_report_tindakan);
-					}*/
-					
 				}else{ /* VIEW.LIST.$dapp_status DIGANTI SELAIN 'datang' */
 					/* Menghapus Tindakan-DEtail WHERE db.tindakan_detail.dtrawat_dapp == $dapp_id(dari appointment_detail.dapp_id) */
 					$this->db->where('dtrawat_dapp', $dapp_id);
