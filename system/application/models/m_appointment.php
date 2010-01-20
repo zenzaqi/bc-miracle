@@ -176,6 +176,25 @@ class M_appointment extends Model{
 								$this->db->insert('tindakan_detail', $data_dtindakan);
 							}
 						}
+						//UPDATE/INSERT ke db.report_tindakan dari Dokter && $app_cara=='datang'
+						$bln_now=date('Y-m');
+						$sql="SELECT reportt_jmltindakan FROM report_tindakan WHERE reportt_bln LIKE '$bln_now%' AND reportt_karyawan_id='$dapp_medis_petugas'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							$rs_record=$rs->row_array();
+							$data_reportt=array(
+							"reportt_jmltindakan"=>$rs_record["reportt_jmltindakan"]+1
+							);
+							$this->db->where('reportt_karyawan_id', $dapp_medis_petugas);
+							$this->db->update('report_tindakan', $data_reportt);
+						}else if(!$rs->num_rows()){
+							$data_reportt=array(
+							"reportt_karyawan_id"=>$dapp_medis_petugas,
+							"reportt_bln"=>$date_now,
+							"reportt_jmltindakan"=>1
+							);
+							$this->db->insert('report_tindakan', $data_reportt);
+						}
 					}
 					return '1';
 				}else{
@@ -300,6 +319,25 @@ class M_appointment extends Model{
 								);
 								$this->db->insert('tindakan_detail', $data_dtindakan);
 							}
+						}
+						//UPDATE/INSERT ke db.report_tindakan dari Dokter && $app_cara=='datang'
+						$bln_now=date('Y-m');
+						$sql="SELECT reportt_jmltindakan FROM report_tindakan WHERE reportt_bln LIKE '$bln_now%' AND reportt_karyawan_id='$dapp_nonmedis_petugas2'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							$rs_record=$rs->row_array();
+							$data_reportt=array(
+							"reportt_jmltindakan"=>$rs_record["reportt_jmltindakan"]+1
+							);
+							$this->db->where('reportt_karyawan_id', $dapp_nonmedis_petugas2);
+							$this->db->update('report_tindakan', $data_reportt);
+						}else if(!$rs->num_rows()){
+							$data_reportt=array(
+							"reportt_karyawan_id"=>$dapp_nonmedis_petugas2,
+							"reportt_bln"=>$date_now,
+							"reportt_jmltindakan"=>1
+							);
+							$this->db->insert('report_tindakan', $data_reportt);
 						}
 					}
 					return '1';
