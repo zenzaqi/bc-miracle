@@ -256,6 +256,17 @@ Ext.onReady(function(){
 						appointment_DataStore.reload();
 						dapp_dokterDataStore.load();
 						break;
+					case 2:
+						Ext.MessageBox.show({
+						   title: 'Warning',
+						   width: 250,
+						   msg: 'Status Tidak Bisa diubah karena tindakan sudah \"selesai\"',
+						   buttons: Ext.MessageBox.OK,
+						   animEl: 'save',
+						   icon: Ext.MessageBox.WARNING
+						});
+						appointment_DataStore.reload();
+						break;
 					default:
 						Ext.MessageBox.show({
 						   title: 'Warning',
@@ -1696,7 +1707,8 @@ Ext.onReady(function(){
 					dapp_medis_status	: appointment_detail_medis_record.data.dapp_medis_status,
 					dapp_medis_keterangan	: appointment_detail_medis_record.data.dapp_medis_keterangan,
 					app_cara	: app_caraField.getValue(),
-					app_customer	: app_customerField.getValue()
+					app_customer	: app_customerField.getValue(),
+					app_keterangan	: app_keteranganField.getValue()
 					},
 					callback: function(opts, success, response){
 						if(success)
@@ -2038,6 +2050,7 @@ Ext.onReady(function(){
 	function appointment_detail_nonmedis_insert(){
 		for(i=0;i<appointment_detail_nonmedisDataStore.getCount();i++){
 			appointment_detail_nonmedis_record=appointment_detail_nonmedisDataStore.getAt(i);
+			if(app_caraField.getValue()=="Datang"){appointment_detail_nonmedis_record.data.dapp_nonmedis_status="Datang"}
 			if(appointment_detail_nonmedis_record.data.dapp_nonmedis_perawatan!=""){
 				Ext.Ajax.request({
 					waitMsg: 'Please wait...',
@@ -2051,7 +2064,10 @@ Ext.onReady(function(){
 	//				dapp_nonmedis_petugas	: appointment_detail_nonmedis_record.data.dapp_nonmedis_petugas, 
 					dapp_nonmedis_petugas2	: appointment_detail_nonmedis_record.data.dapp_nonmedis_petugas2, 
 					dapp_nonmedis_status	: appointment_detail_nonmedis_record.data.dapp_nonmedis_status,
-					dapp_nonmedis_keterangan	: appointment_detail_nonmedis_record.data.dapp_nonmedis_keterangan
+					dapp_nonmedis_keterangan	: appointment_detail_nonmedis_record.data.dapp_nonmedis_keterangan,
+					app_cara	: app_caraField.getValue(),
+					app_customer	: app_customerField.getValue(),
+					app_keterangan	: app_keteranganField.getValue()
 					},
 					callback: function(opts, success, response){
 						if(success)

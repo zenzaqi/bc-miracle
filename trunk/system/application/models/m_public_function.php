@@ -780,7 +780,7 @@ class M_public_function extends Model{
 		}
 		
 		$sql="SELECT * FROM vu_perawatan WHERE kategori_nama='Non Medis' AND rawat_aktif='Aktif'";//join dr tabel: perawatan,produk_group,kategori2,kategori,jenis,gudang
-		if($query<>""){
+		if($query<>"" && is_numeric($query)==false){
 			$sql.=" and (rawat_kode like '%".$query."%' or rawat_nama like '%".$query."%')";
 		}else{
 			if($rs_rows){

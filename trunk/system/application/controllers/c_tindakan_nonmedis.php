@@ -176,7 +176,8 @@ class C_tindakan_nonmedis extends Controller {
 		$dtrawat_keterangan=trim(@$_POST["dtrawat_keterangan"]);
 		$dtrawat_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$dtrawat_keterangan);
 		$dtrawat_keterangan=str_replace(",", "\,",$dtrawat_keterangan);
-		$result = $this->m_tindakan_nonmedis->tindakan_update($trawat_id ,$trawat_cust ,$trawat_keterangan ,$dtrawat_status ,$trawat_cust_id ,$dtrawat_perawatan_id ,$dtrawat_perawatan ,$dtrawat_id ,$rawat_harga ,$rawat_du ,$rawat_dm ,$cust_member ,$dtrawat_petugas2_no ,$dtrawat_keterangan);
+		$dtrawat_dapp=trim(@$_POST["dtrawat_dapp"]);
+		$result = $this->m_tindakan_nonmedis->tindakan_update($trawat_id ,$trawat_cust ,$trawat_keterangan ,$dtrawat_status ,$trawat_cust_id ,$dtrawat_perawatan_id ,$dtrawat_perawatan ,$dtrawat_id ,$rawat_harga ,$rawat_du ,$rawat_dm ,$cust_member ,$dtrawat_petugas2_no ,$dtrawat_keterangan ,$dtrawat_dapp);
 		echo $result;
 	}
 	
