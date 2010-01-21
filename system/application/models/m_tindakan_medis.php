@@ -21,7 +21,8 @@ class M_tindakan_medis extends Model{
 		//function for detail
 		//get record list
 		function detail_tindakan_detail_list($master_id,$query,$start,$end) {
-			$query = "SELECT * FROM tindakan_detail,perawatan,karyawan WHERE dtrawat_perawatan=rawat_id AND dtrawat_petugas1=karyawan_id AND dtrawat_master='".$master_id."'";
+			//$query = "SELECT * FROM tindakan_detail,perawatan,karyawan WHERE dtrawat_perawatan=rawat_id AND dtrawat_petugas1=karyawan_id AND dtrawat_master='".$master_id."'";
+			$query="SELECT * FROM tindakan_detail INNER JOIN perawatan ON(dtrawat_perawatan=rawat_id) INNER JOIN karyawan ON(dtrawat_petugas1=karyawan_id) LEFT JOIN kategori ON(rawat_kategori=kategori_id) WHERE dtrawat_master='".$master_id."' AND kategori_nama='Medis'";
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
 			$limit = $query." LIMIT ".$start.",".$end;			
@@ -102,6 +103,61 @@ class M_tindakan_medis extends Model{
 
 		}
 		//end of function
+		
+		/* START NON-MEDIS Function */
+		function dtindakan_jual_nonmedis_list($master_id,$query,$start,$end) {
+			//$query = "SELECT * FROM tindakan_detail,perawatan,karyawan WHERE dtrawat_perawatan=rawat_id AND dtrawat_petugas1=karyawan_id AND dtrawat_master='".$master_id."'";
+			$query="SELECT * FROM tindakan_detail INNER JOIN perawatan ON(dtrawat_perawatan=rawat_id) LEFT JOIN kategori ON(rawat_kategori=kategori_id) WHERE dtrawat_master='".$master_id."' AND kategori_nama='Non Medis'";
+			$result = $this->db->query($query);
+			$nbrows = $result->num_rows();
+			$limit = $query." LIMIT ".$start.",".$end;			
+			$result = $this->db->query($limit);  
+			
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+		
+		function detail_tindakan_nonmedis_detail_purge($master_id){
+			$sql="DELETE tindakan_detail FROM tindakan_detail INNER JOIN perawatan ON(dtrawat_perawatan=rawat_id) LEFT JOIN kategori ON(rawat_kategori=kategori_id) WHERE dtrawat_master='".$master_id."' AND kategori_nama='Non Medis'";
+			$result=$this->db->query($sql);
+		}
+		
+		function detail_dtindakan_jual_nonmedis_insert($dtrawat_id ,$dtrawat_master ,$dtrawat_perawatan ,$dtrawat_keterangan ){
+			//if master id not capture from view then capture it from max pk from master table
+			if($dtrawat_master=="" || $dtrawat_master==NULL){
+				$dtrawat_master=$this->get_master_id();
+			}
+			
+			if(is_numeric($dtrawat_id)==false && is_numeric($dtrawat_perawatan)==true){
+				$dt_now=date('Y-m-d');
+				$data = array(
+					"dtrawat_master"=>$dtrawat_master, 
+					"dtrawat_perawatan"=>$dtrawat_perawatan, 
+					"dtrawat_keterangan"=>$dtrawat_keterangan
+				);
+				$this->db->insert('tindakan_detail', $data); 
+			}elseif(is_numeric($dtrawat_id)==true){
+				$sql="SELECT dtrawat_id,dtrawat_perawatan,dtrawat_petugas1,dtrawat_jam FROM tindakan_detail WHERE dtrawat_perawatan='$dtrawat_perawatan' AND dtrawat_petugas1='$dtrawat_petugas1' AND dtrawat_jam='$dtrawat_jam' AND dtrawat_id='$dtrawat_id'";
+				$rs=$this->db->query($sql);
+				if(!$rs->num_rows()){
+					$data = array(
+					"dtrawat_perawatan"=>$dtrawat_perawatan, 
+					"dtrawat_keterangan"=>$dtrawat_keterangan
+					);
+					$this->db->where('dtrawat_id',$dtrawat_id);
+					$this->db->update('tindakan_detail',$data);
+				}
+			}
+
+		}
+		/* END NON-MEDIS Function */
 		
 		//function for get list record
 		function tindakan_list($filter,$start,$end){
@@ -212,7 +268,7 @@ class M_tindakan_medis extends Model{
 				$this->db->update("tindakan_detail", $data_dtindakan);
 			}
 			
-			//Jika dtrawat_status=="selesai" --> INSERT to table.master_jual_rawat
+			//Jika $dtrawat_status=="selesai" --> INSERT to table.master_jual_rawat
 			if($dtrawat_status=="selesai"){
 				//$bln_now=date('Y-m');
 				//Checking di table.master_jual_rawat WHERE jrawat_cust=$trawat_cust_id AND jrawat_tanggal=$date_now
@@ -222,7 +278,9 @@ class M_tindakan_medis extends Model{
 				$sql="SELECT jrawat_id FROM master_jual_rawat WHERE jrawat_cust='$trawat_cust_id' AND jrawat_tanggal='$date_now'";
 				$rs=$this->db->query($sql);
 				if($rs->num_rows()){
-					//Hanya INSERT to table.detail_jual_rawat
+					/* di db.master_jual_rawat 'sudah ada', 
+					 * maka Hanya INSERT to db.detail_jual_rawat
+					 */
 					$rs_record=$rs->row_array();
 					$jrawat_id=$rs_record["jrawat_id"];
 					if($cust_member!=""){
@@ -238,7 +296,32 @@ class M_tindakan_medis extends Model{
 						"drawat_diskon_jenis"=>$diskon_jenis
 						);
 						$this->db->insert('detail_jual_rawat', $data_djrawat);
+						
+						/* Checking di db.tindakan_detail WHERE tindakan_detail.dtrawat_master = $trawat_id AND 
+						 * kategori = 'Non Medis'
+						 */
+						$sql="SELECT dtrawat_id,dtrawat_perawatan,dtrawat_keterangan,rawat_harga,rawat_dm FROM tindakan_detail INNER JOIN perawatan ON(dtrawat_perawatan=rawat_id) LEFT JOIN kategori ON(rawat_kategori=kategori_id) WHERE dtrawat_master='$trawat_id' AND kategori_nama='Non Medis'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							/* hasilnya "ADA", maka akan ditambahkan ke db.detail_jual_rawat */
+							$rs_record=$rs->row_array();
+							$dtj_nonmedis_perawatan=$rs_record["dtrawat_perawatan"];
+							$dtj_nonmedis_rawat_harga=$rs_record["rawat_harga"];
+							$dtj_nonmedis_rawat_dm=$rs_record["rawat_dm"];
+							$data_dtj_nonmedis=array(
+							"drawat_master"=>$jrawat_id,
+							"drawat_dtrawat"=>$dtrawat_id,
+							"drawat_rawat"=>$dtj_nonmedis_perawatan,
+							"drawat_jumlah"=>1,
+							"drawat_harga"=>$dtj_nonmedis_rawat_harga,
+							"drawat_diskon"=>$dtj_nonmedis_rawat_dm,
+							"drawat_diskon_jenis"=>$diskon_jenis
+							);
+							$this->db->insert('detail_jual_rawat', $data_dtj_nonmedis);
+						}
+						
 						if($this->db->affected_rows()){
+							/* Karena STATUS di tindakan sudah berubah ke 'selesai', maka appointment_detail di-LOCK */
 							$data_dapp_locked=array(
 							"dapp_locked"=>1
 							);
@@ -258,6 +341,30 @@ class M_tindakan_medis extends Model{
 						"drawat_diskon_jenis"=>$diskon_jenis
 						);
 						$this->db->insert('detail_jual_rawat', $data_djrawat);
+						
+						/* Checking di db.tindakan_detail WHERE tindakan_detail.dtrawat_master = $trawat_id AND 
+						 * kategori = 'Non Medis'
+						 */
+						$sql="SELECT dtrawat_id,dtrawat_perawatan,dtrawat_keterangan,rawat_harga,rawat_du FROM tindakan_detail INNER JOIN perawatan ON(dtrawat_perawatan=rawat_id) LEFT JOIN kategori ON(rawat_kategori=kategori_id) WHERE dtrawat_master='$trawat_id' AND kategori_nama='Non Medis'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							/* hasilnya "ADA", maka akan ditambahkan ke db.detail_jual_rawat */
+							$rs_record=$rs->row_array();
+							$dtj_nonmedis_perawatan=$rs_record["dtrawat_perawatan"];
+							$dtj_nonmedis_rawat_harga=$rs_record["rawat_harga"];
+							$dtj_nonmedis_rawat_du=$rs_record["rawat_du"];
+							$data_dtj_nonmedis=array(
+							"drawat_master"=>$jrawat_id,
+							"drawat_dtrawat"=>$dtrawat_id,
+							"drawat_rawat"=>$dtj_nonmedis_perawatan,
+							"drawat_jumlah"=>1,
+							"drawat_harga"=>$dtj_nonmedis_rawat_harga,
+							"drawat_diskon"=>$dtj_nonmedis_rawat_du,
+							"drawat_diskon_jenis"=>$diskon_jenis
+							);
+							$this->db->insert('detail_jual_rawat', $data_dtj_nonmedis);
+						}
+						
 						if($this->db->affected_rows()){
 							$data_dapp_locked=array(
 							"dapp_locked"=>1
@@ -298,6 +405,30 @@ class M_tindakan_medis extends Model{
 							"drawat_diskon_jenis"=>$diskon_jenis
 							);
 							$this->db->insert('detail_jual_rawat', $data_djrawat);
+							
+							/* Checking di db.tindakan_detail WHERE tindakan_detail.dtrawat_master = $trawat_id AND 
+							 * kategori = 'Non Medis'
+							 */
+							$sql="SELECT dtrawat_id,dtrawat_perawatan,dtrawat_keterangan,rawat_harga,rawat_dm FROM tindakan_detail INNER JOIN perawatan ON(dtrawat_perawatan=rawat_id) LEFT JOIN kategori ON(rawat_kategori=kategori_id) WHERE dtrawat_master='$trawat_id' AND kategori_nama='Non Medis'";
+							$rs=$this->db->query($sql);
+							if($rs->num_rows()){
+								/* hasilnya "ADA", maka akan ditambahkan ke db.detail_jual_rawat */
+								$rs_record=$rs->row_array();
+								$dtj_nonmedis_perawatan=$rs_record["dtrawat_perawatan"];
+								$dtj_nonmedis_rawat_harga=$rs_record["rawat_harga"];
+								$dtj_nonmedis_rawat_dm=$rs_record["rawat_dm"];
+								$data_dtj_nonmedis=array(
+								"drawat_master"=>$jrawat_id,
+								"drawat_dtrawat"=>$dtrawat_id,
+								"drawat_rawat"=>$dtj_nonmedis_perawatan,
+								"drawat_jumlah"=>1,
+								"drawat_harga"=>$dtj_nonmedis_rawat_harga,
+								"drawat_diskon"=>$dtj_nonmedis_rawat_dm,
+								"drawat_diskon_jenis"=>$diskon_jenis
+								);
+								$this->db->insert('detail_jual_rawat', $data_dtj_nonmedis);
+							}
+							
 							if($this->db->affected_rows()){
 								$data_dapp_locked=array(
 								"dapp_locked"=>1
@@ -318,6 +449,30 @@ class M_tindakan_medis extends Model{
 							"drawat_diskon_jenis"=>$diskon_jenis
 							);
 							$this->db->insert('detail_jual_rawat', $data_djrawat);
+							
+							/* Checking di db.tindakan_detail WHERE tindakan_detail.dtrawat_master = $trawat_id AND 
+							 * kategori = 'Non Medis'
+							 */
+							$sql="SELECT dtrawat_id,dtrawat_perawatan,dtrawat_keterangan,rawat_harga,rawat_du FROM tindakan_detail INNER JOIN perawatan ON(dtrawat_perawatan=rawat_id) LEFT JOIN kategori ON(rawat_kategori=kategori_id) WHERE dtrawat_master='$trawat_id' AND kategori_nama='Non Medis'";
+							$rs=$this->db->query($sql);
+							if($rs->num_rows()){
+								/* hasilnya "ADA", maka akan ditambahkan ke db.detail_jual_rawat */
+								$rs_record=$rs->row_array();
+								$dtj_nonmedis_perawatan=$rs_record["dtrawat_perawatan"];
+								$dtj_nonmedis_rawat_harga=$rs_record["rawat_harga"];
+								$dtj_nonmedis_rawat_du=$rs_record["rawat_du"];
+								$data_dtj_nonmedis=array(
+								"drawat_master"=>$jrawat_id,
+								"drawat_dtrawat"=>$dtrawat_id,
+								"drawat_rawat"=>$dtj_nonmedis_perawatan,
+								"drawat_jumlah"=>1,
+								"drawat_harga"=>$dtj_nonmedis_rawat_harga,
+								"drawat_diskon"=>$dtj_nonmedis_rawat_du,
+								"drawat_diskon_jenis"=>$diskon_jenis
+								);
+								$this->db->insert('detail_jual_rawat', $data_dtj_nonmedis);
+							}
+							
 							if($this->db->affected_rows()){
 								$data_dapp_locked=array(
 								"dapp_locked"=>1
