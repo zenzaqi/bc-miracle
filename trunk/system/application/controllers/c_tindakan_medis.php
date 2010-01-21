@@ -110,6 +110,39 @@ class C_tindakan_medis extends Controller {
 		$result=$this->m_tindakan_medis->detail_tindakan_medis_detail_insert($dtrawat_id ,$dtrawat_master ,$dtrawat_perawatan ,$dtrawat_petugas1 ,$dtrawat_petugas2 ,$dtrawat_jamreservasi ,$dtrawat_kategori ,$dtrawat_status ,$dtrawat_keterangan );
 	}
 	
+	/* START NON-MEDIS Function */
+	function  dtindakan_jual_nonmedis_list(){
+		$query = isset($_POST['query']) ? $_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		$master_id = (integer) (isset($_POST['master_id']) ? $_POST['master_id'] : $_GET['master_id']);
+		$result=$this->m_tindakan_medis->dtindakan_jual_nonmedis_list($master_id,$query,$start,$end);
+		echo $result;
+	}
+	
+	function get_tindakan_nonmedis_list(){
+		$query = isset($_POST['query']) ? $_POST['query'] : $_GET['query'];
+		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		$result = $this->m_public_function->get_tindakan_nonmedis_list($query,$start,$end);
+		echo $result;
+	}
+	
+	function detail_tindakan_nonmedis_detail_purge(){
+		$master_id = (integer) (isset($_POST['master_id']) ? $_POST['master_id'] : $_GET['master_id']);
+		$result=$this->m_tindakan_medis->detail_tindakan_nonmedis_detail_purge($master_id);
+	}
+	
+	function detail_dtindakan_jual_nonmedis_insert(){
+		$dtrawat_id=trim(@$_POST["dtrawat_id"]);
+		$dtrawat_master=trim(@$_POST["dtrawat_master"]);
+		$dtrawat_perawatan=trim(@$_POST["dtrawat_perawatan"]);
+		$dtrawat_keterangan=trim(@$_POST["dtrawat_keterangan"]);
+		$dtrawat_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$dtrawat_keterangan);
+		$dtrawat_keterangan=str_replace("\\", "",$dtrawat_keterangan);
+		$result=$this->m_tindakan_medis->detail_dtindakan_jual_nonmedis_insert($dtrawat_id ,$dtrawat_master ,$dtrawat_perawatan ,$dtrawat_keterangan );
+	}
+	/* END NON-MEDIS Function */
 	
 	//event handler action
 	function get_action(){
