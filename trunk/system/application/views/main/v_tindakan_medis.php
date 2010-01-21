@@ -1410,7 +1410,7 @@ Ext.onReady(function(){
 	dtindakan_jual_nonmedisListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'dtindakan_jual_nonmedisListEditorGrid',
 		el: 'fp_dtindakan_jual_nonmedis',
-		title: 'Detail JUAL NON-MEDIS',
+		title: 'Detail TINDAKAN NON MEDIS',
 		height: 200,
 		width: 888,
 		autoScroll: true,
@@ -1533,7 +1533,14 @@ Ext.onReady(function(){
 	
 	//event on update of detail data store
 	dtindakan_jual_nonmedisDataStore.on('update', refresh_dtindakan_jual_nonmedis);
-	/* END JUAL DETAIL_NON-MEDIS *
+	/* END JUAL DETAIL_NON-MEDIS */
+	
+	var detail_tab_tindakan = new Ext.TabPanel({
+		plain:true,
+		activeTab: 0,
+		autoHeight: true,
+		items: [tindakan_medisdetailListEditorGrid,dtindakan_jual_nonmedisListEditorGrid]
+	});
 	
 	/* Function for retrieve create Window Panel*/ 
 	tindakan_medis_createForm = new Ext.FormPanel({
@@ -1541,7 +1548,7 @@ Ext.onReady(function(){
 		bodyStyle:'padding:5px',
 		autoHeight:true,
 		width: 900,        
-		items: [tindakan_medismasterGroup, tindakan_medisdetailListEditorGrid, dtindakan_jual_nonmedisListEditorGrid]
+		items: [tindakan_medismasterGroup, detail_tab_tindakan]
 		,
 		buttons: [{
 				text: 'Save and Close',
