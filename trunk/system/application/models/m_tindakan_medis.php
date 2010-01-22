@@ -152,20 +152,46 @@ class M_tindakan_medis extends Model{
 			$result=$this->db->query($sql);
 		}
 		
-		function detail_dtindakan_jual_nonmedis_insert($dtrawat_id ,$dtrawat_master ,$dtrawat_perawatan ,$dtrawat_keterangan ){
+		function detail_dtindakan_jual_nonmedis_insert($dtrawat_id ,$dtrawat_master ,$dtrawat_perawatan ,$dtrawat_keterangan ,$customer_id ){
 			//if master id not capture from view then capture it from max pk from master table
 			if($dtrawat_master=="" || $dtrawat_master==NULL){
 				$dtrawat_master=$this->get_master_id();
 			}
 			
 			if(is_numeric($dtrawat_id)==false && is_numeric($dtrawat_perawatan)==true){
-				$dt_now=date('Y-m-d');
+				$date_now=date('Y-m-d');
 				$data = array(
 					"dtrawat_master"=>$dtrawat_master, 
 					"dtrawat_perawatan"=>$dtrawat_perawatan, 
-					"dtrawat_keterangan"=>$dtrawat_keterangan
+					"dtrawat_keterangan"=>$dtrawat_keterangan,
+					"dtrawat_status"=>"selesai"
 				);
 				$this->db->insert('tindakan_detail', $data); 
+				if($this->db->affected_rows()){
+					//$sql="SELECT * FROM tindakan_detail WHERE dtrawat_master='$dtrawat_master' AND ";
+					$sql="SELECT rawat_harga FROM perawatan WHERE rawat_id='$dtrawat_perawatan'";
+					$rs=$this->db->query($sql);
+					if($rs->num_rows()){
+						$rs_record=$rs->row_array();
+						$rawat_harga=$rs_record["rawat_harga"];
+					}
+					/* karena otomatis status jual_nonmedis = 'selesai', maka harus di-INSERT ke db.detail_jual_rawat */
+					$sql="SELECT jrawat_id FROM master_jual_rawat WHERE jrawat_cust='$customer_id' AND jrawat_tanggal='$date_now'";
+					$rs=$this->db->query($sql);
+					if($rs->num_rows()){
+						$rs_record=$rs->row_array();
+						$jrawat_id=$rs_record["jrawat_id"];
+						
+						$data_to_drawat=array(
+						"drawat_master"=>$jrawat_id,
+						"drawat_rawat"=>$dtrawat_perawatan,
+						"drawat_jumlah"=>1,
+						"drawat_harga"=>$rawat_harga
+						);
+						$this->db->insert('detail_jual_rawat', $data_to_drawat);
+					}
+				}
+								
 			}elseif(is_numeric($dtrawat_id)==true){
 				$sql="SELECT dtrawat_id,dtrawat_perawatan,dtrawat_petugas1,dtrawat_jam FROM tindakan_detail WHERE dtrawat_perawatan='$dtrawat_perawatan' AND dtrawat_petugas1='$dtrawat_petugas1' AND dtrawat_jam='$dtrawat_jam' AND dtrawat_id='$dtrawat_id'";
 				$rs=$this->db->query($sql);
