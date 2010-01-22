@@ -322,6 +322,7 @@ Ext.onReady(function(){
 	function tindakan_medis_set_form(){
 		trawat_medis_idField.setValue(tindakanListEditorGrid.getSelectionModel().getSelected().get('trawat_id'));
 		trawat_medis_custField.setValue(tindakanListEditorGrid.getSelectionModel().getSelected().get('trawat_cust'));
+		trawat_medis_custidField.setValue(tindakanListEditorGrid.getSelectionModel().getSelected().get('trawat_cust_id'));
 		trawat_medis_keteranganField.setValue(tindakanListEditorGrid.getSelectionModel().getSelected().get('trawat_keterangan'));
 	}
 	/* End setValue to EDIT*/
@@ -898,6 +899,7 @@ Ext.onReady(function(){
 		disabled:true,
 		anchor: '95%'
 	});
+	trawat_medis_custidField= new Ext.form.NumberField();
 	/* Identify  trawat_keterangan Field */
 	trawat_medis_keteranganField= new Ext.form.TextArea({
 		id: 'trawat_medis_keteranganField',
@@ -1494,7 +1496,8 @@ Ext.onReady(function(){
 				dtrawat_id	: tindakan_nonmedis_detail_record.data.dtrawat_id, 
 				dtrawat_master	: eval(trawat_medis_idField.getValue()), 
 				dtrawat_perawatan	: tindakan_nonmedis_detail_record.data.dtrawat_perawatan, 
-				dtrawat_keterangan	: tindakan_nonmedis_detail_record.data.dtrawat_keterangan
+				dtrawat_keterangan	: tindakan_nonmedis_detail_record.data.dtrawat_keterangan,
+				customer_id	: trawat_medis_custidField.getValue()
 				}
 			});
 		}

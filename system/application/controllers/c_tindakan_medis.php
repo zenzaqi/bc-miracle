@@ -140,7 +140,8 @@ class C_tindakan_medis extends Controller {
 		$dtrawat_keterangan=trim(@$_POST["dtrawat_keterangan"]);
 		$dtrawat_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$dtrawat_keterangan);
 		$dtrawat_keterangan=str_replace("\\", "",$dtrawat_keterangan);
-		$result=$this->m_tindakan_medis->detail_dtindakan_jual_nonmedis_insert($dtrawat_id ,$dtrawat_master ,$dtrawat_perawatan ,$dtrawat_keterangan );
+		$customer_id=trim(@$_POST["customer_id"]);
+		$result=$this->m_tindakan_medis->detail_dtindakan_jual_nonmedis_insert($dtrawat_id ,$dtrawat_master ,$dtrawat_perawatan ,$dtrawat_keterangan ,$customer_id );
 	}
 	/* END NON-MEDIS Function */
 	
