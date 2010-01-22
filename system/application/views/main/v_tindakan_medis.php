@@ -145,9 +145,10 @@ Ext.onReady(function(){
 		var perawatan_du_update=null;
 		var perawatan_dm_update=null;
 		var cust_member_update=null;
-		var dtrawat_petugas1_no_update=null;
 		var dtrawat_keterangan_update=null;
 		var dtrawat_dapp_update="";
+		var dtrawat_dokter_update=null;
+		var dtrawat_dokter_id_update=null;
 
 		trawat_id_update_pk = oGrid_event.record.data.trawat_id;
 		if(oGrid_event.record.data.trawat_cust!== null){trawat_cust_update = oGrid_event.record.data.trawat_cust;}
@@ -161,15 +162,17 @@ Ext.onReady(function(){
 		perawatan_du_update = oGrid_event.record.data.perawatan_du;
 		perawatan_dm_update = oGrid_event.record.data.perawatan_dm;
 		cust_member_update = oGrid_event.record.data.cust_member;
-		dtrawat_petugas1_no_update = oGrid_event.record.data.dtrawat_petugas1_no;
 		if(oGrid_event.record.data.dtrawat_keterangan!== null){dtrawat_keterangan_update = oGrid_event.record.data.dtrawat_keterangan;}
 		dtrawat_dapp_update = oGrid_event.record.data.dtrawat_dapp;
+		dtrawat_dokter_update = oGrid_event.record.data.dtrawat_petugas1;
+		dtrawat_dokter_id_update = oGrid_event.record.data.dtrawat_petugas1_id;
 
 		Ext.Ajax.request({  
 			waitMsg: 'Please wait...',
 			url: 'index.php?c=c_tindakan_medis&m=get_action',
 			params: {
 				task: "UPDATE",
+				mode_edit: "update_list",
 				trawat_id	: trawat_id_update_pk, 
 				trawat_cust	:trawat_cust_update,  
 				trawat_keterangan	:trawat_keterangan_update,  
@@ -182,15 +185,27 @@ Ext.onReady(function(){
 				rawat_du	:perawatan_du_update,
 				rawat_dm	:perawatan_dm_update,
 				cust_member	:cust_member_update,
-				dtrawat_petugas1_no	: dtrawat_petugas1_no_update,
 				dtrawat_keterangan	:dtrawat_keterangan_update,
-				dtrawat_dapp	: dtrawat_dapp_update
+				dtrawat_dapp	: dtrawat_dapp_update,
+				dtrawat_dokter : dtrawat_dokter_update,
+				dtrawat_dokter_id : dtrawat_dokter_id_update
 			}, 
 			success: function(response){							
 				var result=eval(response.responseText);
 				switch(result){
 					case 1:
 						tindakan_medisDataStore.commitChanges();
+						tindakan_medisDataStore.reload();
+						dtrawat_perawatanDataStore.reload();
+						break;
+					case 2:
+						Ext.MessageBox.show({
+						   title: 'Warning',
+						   msg: 'Tidak bisa diubah, karena di Kasir sudah selesai diproses.',
+						   buttons: Ext.MessageBox.OK,
+						   animEl: 'save',
+						   icon: Ext.MessageBox.WARNING
+						});
 						tindakan_medisDataStore.reload();
 						break;
 					default:
@@ -465,7 +480,7 @@ Ext.onReady(function(){
 			{name: 'dtrawat_perawatan_id', type: 'int', mapping: 'dtrawat_perawatan'},
 			{name: 'dtrawat_perawatan', type: 'string', mapping: 'rawat_nama'},
 			{name: 'dtrawat_petugas1', type: 'string', mapping: 'karyawan_username'},
-			{name: 'dtrawat_petugas1_no', type: 'string', mapping: 'karyawan_no'},
+			{name: 'dtrawat_petugas1_id', type: 'int', mapping: 'karyawan_id'},
 			{name: 'dtrawat_jam', type: 'string', mapping: 'dtrawat_jam'},
 			{name: 'dtrawat_tglapp', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'dtrawat_tglapp'},
 			{name: 'dtrawat_status', type: 'string', mapping: 'dtrawat_status'},
@@ -604,7 +619,7 @@ Ext.onReady(function(){
 			dataIndex: 'dtrawat_petugas1',
 			width: 150,
 			sortable: true,
-			editable:false,
+			editable:true,
 			editor: new Ext.form.ComboBox({
 				store: cbo_dtindakan_dokterDataStore,
 				mode: 'remote',
@@ -845,7 +860,7 @@ Ext.onReady(function(){
   	}
 	/* End of Function */
   	
-	tindakanListEditorGrid.addListener('rowcontextmenu', ontindakan_medisListEditGridContextMenu);
+	//tindakanListEditorGrid.addListener('rowcontextmenu', ontindakan_medisListEditGridContextMenu);
 	tindakan_medisDataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
 	tindakanListEditorGrid.on('afteredit', tindakan_medis_update); // inLine Editing Record
 	
@@ -1154,6 +1169,7 @@ Ext.onReady(function(){
 			text: 'Delete',
 			tooltip: 'Delete detail selected record',
 			iconCls:'icon-delete',
+			disabled: true,
 			handler: tindakan_medisdetail_confirm_delete
 		}
 		]
