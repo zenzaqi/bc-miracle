@@ -1487,19 +1487,23 @@ Ext.onReady(function(){
 	
 	//function for insert detail
 	function dtindakan_jual_nonmedis_insert(){
-		for(i=0;i<dtindakan_jual_nonmedisDataStore.getCount();i++){
-			tindakan_nonmedis_detail_record=dtindakan_jual_nonmedisDataStore.getAt(i);
-			Ext.Ajax.request({
-				waitMsg: 'Please wait...',
-				url: 'index.php?c=c_tindakan_medis&m=detail_dtindakan_jual_nonmedis_insert',
-				params:{
-				dtrawat_id	: tindakan_nonmedis_detail_record.data.dtrawat_id, 
-				dtrawat_master	: eval(trawat_medis_idField.getValue()), 
-				dtrawat_perawatan	: tindakan_nonmedis_detail_record.data.dtrawat_perawatan, 
-				dtrawat_keterangan	: tindakan_nonmedis_detail_record.data.dtrawat_keterangan,
-				customer_id	: trawat_medis_custidField.getValue()
-				}
-			});
+		if(dtindakan_jual_nonmedisDataStore.getCount()!=0){
+			for(i=0;i<dtindakan_jual_nonmedisDataStore.getCount();i++){
+				tindakan_nonmedis_detail_record=dtindakan_jual_nonmedisDataStore.getAt(i);
+				Ext.Ajax.request({
+					waitMsg: 'Please wait...',
+					url: 'index.php?c=c_tindakan_medis&m=detail_dtindakan_jual_nonmedis_insert',
+					params:{
+					dtrawat_id	: tindakan_nonmedis_detail_record.data.dtrawat_id, 
+					dtrawat_master	: eval(trawat_medis_idField.getValue()), 
+					dtrawat_perawatan	: tindakan_nonmedis_detail_record.data.dtrawat_perawatan, 
+					dtrawat_keterangan	: tindakan_nonmedis_detail_record.data.dtrawat_keterangan,
+					customer_id	: trawat_medis_custidField.getValue()
+					}
+				});
+			}
+		}else if(dtindakan_jual_nonmedisDataStore.getCount()==0){
+			dtindakan_jual_nonmedis_purge();
 		}
 	}
 	//eof
@@ -1512,7 +1516,7 @@ Ext.onReady(function(){
 			params:{ master_id: eval(trawat_medis_idField.getValue()) },
 			callback: function(opts, success, response){
 				if(success){
-					dtindakan_jual_nonmedis_insert();
+					//dtindakan_jual_nonmedis_insert();
 					tindakan_nonmedis_DataStore.reload();
 				}
 			}

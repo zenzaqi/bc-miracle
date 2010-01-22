@@ -169,12 +169,31 @@ class M_tindakan_medis extends Model{
 				$this->db->insert('tindakan_detail', $data); 
 				if($this->db->affected_rows()){
 					//$sql="SELECT * FROM tindakan_detail WHERE dtrawat_master='$dtrawat_master' AND ";
-					$sql="SELECT rawat_harga FROM perawatan WHERE rawat_id='$dtrawat_perawatan'";
+					$sql="SELECT rawat_harga,rawat_dm,rawat_du FROM perawatan WHERE rawat_id='$dtrawat_perawatan'";
 					$rs=$this->db->query($sql);
 					if($rs->num_rows()){
 						$rs_record=$rs->row_array();
 						$rawat_harga=$rs_record["rawat_harga"];
+						$rawat_dm=$rs_record["rawat_dm"];
+						$rawat_du=$rs_record["rawat_du"];
 					}
+					
+					/* Chekc Customer_Member */
+					$cust_member="";
+					$sql="SELECT cust_member FROM customer WHERE cust_id='$customer_id'";
+					$rs=$this->db->query($sql);
+					if($rs->num_rows()){
+						$rs_record=$rs->row_array();
+						$cust_member=$rs_record["cust_member"];
+					}
+					if($cust_member!=""){
+						$drawat_diskon=$rawat_dm;
+						$drawat_diskon_jenis="DM";
+					}elseif($cust_member==""){
+						$drawat_diskon=$rawat_du;
+						$drawat_diskon_jenis="DU";
+					}
+					
 					/* karena otomatis status jual_nonmedis = 'selesai', maka harus di-INSERT ke db.detail_jual_rawat */
 					$sql="SELECT jrawat_id FROM master_jual_rawat WHERE jrawat_cust='$customer_id' AND jrawat_tanggal='$date_now'";
 					$rs=$this->db->query($sql);
@@ -186,9 +205,15 @@ class M_tindakan_medis extends Model{
 						"drawat_master"=>$jrawat_id,
 						"drawat_rawat"=>$dtrawat_perawatan,
 						"drawat_jumlah"=>1,
-						"drawat_harga"=>$rawat_harga
+						"drawat_harga"=>$rawat_harga,
+						"drawat_diskon"=>$drawat_diskon,
+						"drawat_diskon_jenis"=>$drawat_diskon_jenis
 						);
-						$this->db->insert('detail_jual_rawat', $data_to_drawat);
+						$sql="SELECT drawat_id FROM detail_jual_rawat WHERE drawat_master='$jrawat_id' AND drawat_rawat='$dtrawat_perawatan' AND drawat_date_create LIKE '$date_now%'";
+						$rs=$this->db->query($sql);
+						if(!$rs->num_rows()){
+							$this->db->insert('detail_jual_rawat', $data_to_drawat);
+						}
 					}
 				}
 								
@@ -212,7 +237,8 @@ class M_tindakan_medis extends Model{
 		function tindakan_list($filter,$start,$end){
 			$date_now=date('Y-m-d');
 			//$query = "SELECT trawat_id,trawat_cust,cust_nama,cust_no,trawat_keterangan,trawat_creator,trawat_date_create,trawat_update,trawat_date_update,trawat_revised,dtrawat_id,dtrawat_perawatan,rawat_nama,karyawan_nama,karyawan_id,dtrawat_jam,dtrawat_tglapp,dtrawat_status,karyawan_username,rawat_harga,rawat_du,rawat_dm,dtrawat_keterangan,dtrawat_dapp FROM tindakan INNER JOIN customer ON trawat_cust=cust_id INNER JOIN tindakan_detail ON dtrawat_master=trawat_id LEFT JOIN perawatan ON dtrawat_perawatan=rawat_id LEFT JOIN karyawan ON dtrawat_petugas1=karyawan_id LEFT JOIN kategori ON rawat_kategori=kategori_id WHERE kategori_nama='Medis' AND dtrawat_tglapp='$date_now'";
-			$query = "SELECT * FROM vu_tindakan WHERE kategori_nama='Medis' AND dtrawat_tglapp='$date_now'";
+			//$query = "SELECT * FROM vu_tindakan WHERE kategori_nama='Medis' AND dtrawat_tglapp='$date_now'"; //TAMPILAN MEDIS SAJA
+			$query = "SELECT medis.* FROM vu_tindakan medis WHERE medis.kategori_nama='Medis' OR medis.dtrawat_master IN(SELECT nonmedis.dtrawat_master FROM vu_tindakan nonmedis WHERE nonmedis.kategori_nama='Non Medis') AND medis.trawat_date_create LIKE '$date_now%'";
 			
 			// For simple search
 			if ($filter<>""){
@@ -222,7 +248,8 @@ class M_tindakan_medis extends Model{
 			$query.=" AND dtrawat_status='siap'";
 			
 			//$query2 = "SELECT trawat_id,trawat_cust,cust_nama,cust_no,trawat_keterangan,trawat_creator,trawat_date_create,trawat_update,trawat_date_update,trawat_revised,dtrawat_id,dtrawat_perawatan,rawat_nama,karyawan_nama,karyawan_id,dtrawat_jam,dtrawat_tglapp,dtrawat_status,karyawan_username,rawat_harga,rawat_du,rawat_dm,dtrawat_keterangan,dtrawat_dapp FROM tindakan INNER JOIN customer ON trawat_cust=cust_id INNER JOIN tindakan_detail ON dtrawat_master=trawat_id LEFT JOIN perawatan ON dtrawat_perawatan=rawat_id LEFT JOIN karyawan ON dtrawat_petugas1=karyawan_id LEFT JOIN kategori ON rawat_kategori=kategori_id WHERE kategori_nama='Medis' AND dtrawat_tglapp='$date_now'";
-			$query2 = "SELECT * FROM vu_tindakan WHERE kategori_nama='Medis' AND dtrawat_tglapp='$date_now'";
+			//$query2 = "SELECT * FROM vu_tindakan WHERE kategori_nama='Medis' AND dtrawat_tglapp='$date_now'"; //TAMPILAN MEDIS SAJA
+			$query2 = "SELECT medis.* FROM vu_tindakan medis WHERE medis.kategori_nama='Medis' OR medis.dtrawat_master IN(SELECT nonmedis.dtrawat_master FROM vu_tindakan nonmedis WHERE nonmedis.kategori_nama='Non Medis') AND medis.trawat_date_create LIKE '$date_now%'";
 			
 			// For simple search
 			if ($filter<>""){
@@ -232,7 +259,8 @@ class M_tindakan_medis extends Model{
 			$query2.=" AND dtrawat_status='datang'";
 			
 			//$query3 = "SELECT trawat_id,trawat_cust,cust_nama,cust_no,trawat_keterangan,trawat_creator,trawat_date_create,trawat_update,trawat_date_update,trawat_revised,dtrawat_id,dtrawat_perawatan,rawat_nama,karyawan_nama,karyawan_id,dtrawat_jam,dtrawat_tglapp,dtrawat_status,karyawan_username,rawat_harga,rawat_du,rawat_dm,dtrawat_keterangan,dtrawat_dapp FROM tindakan INNER JOIN customer ON trawat_cust=cust_id INNER JOIN tindakan_detail ON dtrawat_master=trawat_id LEFT JOIN perawatan ON dtrawat_perawatan=rawat_id LEFT JOIN karyawan ON dtrawat_petugas1=karyawan_id LEFT JOIN kategori ON rawat_kategori=kategori_id WHERE kategori_nama='Medis' AND dtrawat_tglapp='$date_now'";
-			$query3 = "SELECT * FROM vu_tindakan WHERE kategori_nama='Medis' AND dtrawat_tglapp='$date_now'";
+			//$query3 = "SELECT * FROM vu_tindakan WHERE kategori_nama='Medis' AND dtrawat_tglapp='$date_now'"; //TAMPILAN MEDIS SAJA
+			$query3 = "SELECT medis.* FROM vu_tindakan medis WHERE medis.kategori_nama='Medis' OR medis.dtrawat_master IN(SELECT nonmedis.dtrawat_master FROM vu_tindakan nonmedis WHERE nonmedis.kategori_nama='Non Medis') AND medis.trawat_date_create LIKE '$date_now%'";
 			
 			// For simple search
 			if ($filter<>""){
@@ -242,7 +270,8 @@ class M_tindakan_medis extends Model{
 			$query3.=" AND dtrawat_status='selesai'";
 			
 			//$query4 = "SELECT trawat_id,trawat_cust,cust_nama,cust_no,trawat_keterangan,trawat_creator,trawat_date_create,trawat_update,trawat_date_update,trawat_revised,dtrawat_id,dtrawat_perawatan,rawat_nama,karyawan_nama,karyawan_id,dtrawat_jam,dtrawat_tglapp,dtrawat_status,karyawan_username,rawat_harga,rawat_du,rawat_dm,dtrawat_keterangan,dtrawat_dapp FROM tindakan INNER JOIN customer ON trawat_cust=cust_id INNER JOIN tindakan_detail ON dtrawat_master=trawat_id LEFT JOIN perawatan ON dtrawat_perawatan=rawat_id LEFT JOIN karyawan ON dtrawat_petugas1=karyawan_id LEFT JOIN kategori ON rawat_kategori=kategori_id WHERE kategori_nama='Medis' AND dtrawat_tglapp='$date_now'";
-			$query4 = "SELECT * FROM vu_tindakan WHERE kategori_nama='Medis' AND dtrawat_tglapp='$date_now'";
+			//$query4 = "SELECT * FROM vu_tindakan WHERE kategori_nama='Medis' AND dtrawat_tglapp='$date_now'"; //TAMPILAN MEDIS SAJA
+			$query4 = "SELECT medis.* FROM vu_tindakan medis WHERE medis.kategori_nama='Medis' OR medis.dtrawat_master IN(SELECT nonmedis.dtrawat_master FROM vu_tindakan nonmedis WHERE nonmedis.kategori_nama='Non Medis') AND medis.trawat_date_create LIKE '$date_now%'";
 			
 			// For simple search
 			if ($filter<>""){
@@ -400,7 +429,11 @@ class M_tindakan_medis extends Model{
 										"drawat_diskon"=>$dtj_nonmedis_rawat_dm,
 										"drawat_diskon_jenis"=>$diskon_jenis
 										);
-										$this->db->insert('detail_jual_rawat', $data_dtj_nonmedis);
+										$sql="SELECT drawat_id FROM detail_jual_rawat WHERE drawat_master='$jrawat_id' AND drawat_rawat='$dtj_nonmedis_perawatan' AND drawat_date_create LIKE '$date_now%'";
+										$rs=$this->db->query($sql);
+										if(!$rs->num_rows()){
+											$this->db->insert('detail_jual_rawat', $data_dtj_nonmedis);
+										}
 									}
 									
 									if($this->db->affected_rows()){
@@ -446,7 +479,11 @@ class M_tindakan_medis extends Model{
 										"drawat_diskon"=>$dtj_nonmedis_rawat_du,
 										"drawat_diskon_jenis"=>$diskon_jenis
 										);
-										$this->db->insert('detail_jual_rawat', $data_dtj_nonmedis);
+										$sql="SELECT drawat_id FROM detail_jual_rawat WHERE drawat_master='$jrawat_id' AND drawat_rawat='$dtj_nonmedis_perawatan' AND drawat_date_create LIKE '$date_now%'";
+										$rs=$this->db->query($sql);
+										if(!$rs->num_rows()){
+											$this->db->insert('detail_jual_rawat', $data_dtj_nonmedis);
+										}
 									}
 									
 									/* Karena STATUS di menu tindakan sudah berubah ke 'selesai', 
@@ -514,7 +551,11 @@ class M_tindakan_medis extends Model{
 											"drawat_diskon"=>$dtj_nonmedis_rawat_dm,
 											"drawat_diskon_jenis"=>$diskon_jenis
 											);
-											$this->db->insert('detail_jual_rawat', $data_dtj_nonmedis);
+											$sql="SELECT drawat_id FROM detail_jual_rawat WHERE drawat_master='$jrawat_id' AND drawat_rawat='$dtj_nonmedis_perawatan' AND drawat_date_create LIKE '$date_now%'";
+											$rs=$this->db->query($sql);
+											if(!$rs->num_rows()){
+												$this->db->insert('detail_jual_rawat', $data_dtj_nonmedis);
+											}
 										}
 										
 										if($this->db->affected_rows()){
@@ -559,7 +600,11 @@ class M_tindakan_medis extends Model{
 											"drawat_diskon"=>$dtj_nonmedis_rawat_du,
 											"drawat_diskon_jenis"=>$diskon_jenis
 											);
-											$this->db->insert('detail_jual_rawat', $data_dtj_nonmedis);
+											$sql="SELECT drawat_id FROM detail_jual_rawat WHERE drawat_master='$jrawat_id' AND drawat_rawat='$dtj_nonmedis_perawatan' AND drawat_date_create LIKE '$date_now%'";
+											$rs=$this->db->query($sql);
+											if(!$rs->num_rows()){
+												$this->db->insert('detail_jual_rawat', $data_dtj_nonmedis);
+											}
 										}
 										
 										if($this->db->affected_rows()){
@@ -589,9 +634,10 @@ class M_tindakan_medis extends Model{
 								$sql="SELECT * FROM detail_jual_rawat WHERE drawat_master='$rs_record_jrawat_id' AND drawat_rawat='$dtrawat_perawatan_id'";
 								$rs=$this->db->query($sql);
 								if($rs->num_rows()){ /* artinya: "ada" di db.detail_jual_rawat */
-									$this->db->where('drawat_master',$rs_record_jrawat_id);
+									/*$this->db->where('drawat_master',$rs_record_jrawat_id);
 									$this->db->where('drawat_rawat',$dtrawat_perawatan_id);
-									$this->db->like('drawat_date_create',$date_now,'after');
+									$this->db->like('drawat_date_create',$date_now,'after');*/
+									$this->db->where('drawat_dtrawat', $dtrawat_id);
 									$this->db->delete('detail_jual_rawat');
 									if($this->db->affected_rows()){
 										/* meng-UNLOCK db.appointment_detail */
@@ -610,14 +656,14 @@ class M_tindakan_medis extends Model{
 								if(!$rs->num_rows()){
 									$this->db->where('jrawat_id',$rs_record_jrawat_id);
 									$this->db->delete('master_jual_rawat');
-									if($this->db->affected_rows()){
-										/* meng-UNLOCK db.appointment_detail */
+									/*if($this->db->affected_rows()){
+										// meng-UNLOCK db.appointment_detail 
 										$data_dapp_locked=array(
 										"dapp_locked"=>0
 										);
 										$this->db->where('dapp_id', $dtrawat_dapp);
 										$this->db->update('appointment_detail', $data_dapp_locked);
-									}
+									}*/
 								}
 							}
 						}
