@@ -371,11 +371,13 @@ Ext.onReady(function(){
 	/* Function for Update Confirm */
 	function tindakan_medisconfirm_update(){
 		/* only one record is selected here */
+		var get_trawat_id=tindakanListEditorGrid.getSelectionModel().getSelected().get('trawat_id');
+		
 		cbo_dtindakan_terapisDataStore.load();
-		dtrawat_perawatanDataStore.load();
+		//dtrawat_perawatanDataStore.load();
 		cbo_dtindakan_dokterDataStore.load();
 		if(tindakanListEditorGrid.selModel.getCount() == 1) {
-			dtrawat_perawatanDataStore.load({params:{query:tindakanListEditorGrid.getSelectionModel().getSelected().get('trawat_id')}});
+			cbo_trawat_rawatDataStore.load({params:{query:get_trawat_id}});
 			cbo_perawatan_dtjnonmedisDataStore.load({params:{query:tindakanListEditorGrid.getSelectionModel().getSelected().get('trawat_id')}});
 			tindakan_medis_set_form();
 			post2db='UPDATE';
@@ -1011,7 +1013,7 @@ Ext.onReady(function(){
 	cbo_trawat_rawatDataStore = new Ext.data.Store({
 		id: 'cbo_trawat_rawatDataStore',
 		proxy: new Ext.data.HttpProxy({
-			url: 'index.php?c=c_tindakan_medis&m=get_rawat_list', 
+			url: 'index.php?c=c_tindakan_medis&m=get_tindakan_medis_list', 
 			method: 'POST'
 		}),baseParams: {start: 0, limit: 15 },
 			reader: new Ext.data.JsonReader({
@@ -1032,7 +1034,7 @@ Ext.onReady(function(){
 	});
 	var cbo_trawat_rawat_tpl = new Ext.XTemplate(
         '<tpl for="."><div class="search-item">',
-            '<span>{perawatan_kode}| <b>{perawatan_display}</b>',
+            '<span>{trawat_rawat_kode}| <b>{trawat_rawat_display}</b>',
 		'</div></tpl>'
     );
 	/*var cbo_trawat_rawat_tpl = new Ext.XTemplate(
@@ -1043,11 +1045,11 @@ Ext.onReady(function(){
     );*/
 	
 	var combo_trawat_rawat=new Ext.form.ComboBox({
-			store: dtrawat_perawatanDataStore,
+			store: cbo_trawat_rawatDataStore,
 			mode: 'remote',
 			typeAhead: true,
-			displayField: 'perawatan_display',
-			valueField: 'perawatan_value',
+			displayField: 'trawat_rawat_display',
+			valueField: 'trawat_rawat_value',
 			loadingText: 'Searching...',
 			pageSize:10,
 			hideTrigger:false,
@@ -1517,7 +1519,7 @@ Ext.onReady(function(){
 			callback: function(opts, success, response){
 				if(success){
 					//dtindakan_jual_nonmedis_insert();
-					tindakan_nonmedis_DataStore.reload();
+					dtindakan_jual_nonmedisDataStore.reload();
 				}
 			}
 		});
