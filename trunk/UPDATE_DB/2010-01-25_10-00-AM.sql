@@ -1,0 +1,1 @@
+ALTER TABLE `tindakan_detail` CHANGE `dtrawat_dapp` `dtrawat_dapp` INT( 11 ) NOT NULL DEFAULT '0';

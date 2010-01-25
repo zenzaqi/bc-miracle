@@ -556,10 +556,6 @@ class M_public_function extends Model{
 			}
 		}
 		
-		/*if($query<>"")
-			$sql.=" WHERE (produk_kode like '%".$query."%' or produk_nama like '%".$query."%' or satuan_nama like '%".$query."%'
-						 or kategori_nama like '%".$query."%' or group_nama like '%".$query."%') ";*/
-		
 		$result = $this->db->query($sql);
 		$nbrows = $result->num_rows();
 		if($end!=0){
