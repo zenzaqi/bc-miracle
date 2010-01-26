@@ -573,6 +573,47 @@ class M_public_function extends Model{
 		}
 	}
 	
+	/*function get_cbo_rawat_list($query,$start,$end){
+		$rs_rows=0;
+		if(is_numeric($query)==true){
+			$sql_drawat="SELECT distinct(drawat_rawat) FROM detail_jual_rawat WHERE drawat_master='$query'";
+			$rs=$this->db->query($sql_drawat);
+			$rs_rows=$rs->num_rows();
+		}
+		
+		$sql="SELECT rawat_id,rawat_kode,rawat_nama FROM perawatan WHERE rawat_aktif='Aktif'";//join dr tabel: perawatan,produk_group,kategori2,kategori,jenis,gudang
+		if($query<>"" && is_numeric($query)==false){
+			$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+			$sql.=" (rawat_kode like '%".$query."%' or rawat_nama like '%".$query."%') ";
+		}else{
+			if($rs_rows){
+				$filter="";
+				$sql.=eregi("AND",$query)? " OR ":" AND ";
+				foreach($rs->result() as $row_drawat){
+					
+					$filter.="OR rawat_id='".$row_drawat->drawat_rawat."' ";
+				}
+				$sql=$sql."(".substr($filter,2,strlen($filter)).")";
+			}
+		}
+		
+		$result = $this->db->query($sql);
+		$nbrows = $result->num_rows();
+		if($end!=0){
+			$limit = $sql." LIMIT ".$start.",".$end;			
+			$result = $this->db->query($limit);
+		}
+		if($nbrows>0){
+			foreach($result->result() as $row){
+				$arr[] = $row;
+			}
+			$jsonresult = json_encode($arr);
+			return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+		} else {
+			return '({"total":"0", "results":""})';
+		}
+	}*/
+	
 	function get_perawatan_list($query="",$start=0,$end=10){
 		//$sql="SELECT rawat_id,rawat_kode,rawat_nama,rawat_kategori,rawat_harga,rawat_group,rawat_du,rawat_dm
 		//		,kategori_nama, group_nama 
@@ -582,7 +623,7 @@ class M_public_function extends Model{
 		$sql="SELECT * FROM vu_perawatan";//join dr tabel: perawatan,produk_group,kategori2,kategori,jenis,gudang
 		if($query<>""){
 			$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
-			$sql.=" rawat_kode like '%".$query."%' or rawat_nama like '%".$query."%' or kategori_nama like '%".$query."%' or group_nama like '%".$query."%'";
+			$sql.=" (rawat_kode like '%".$query."%' or rawat_nama like '%".$query."%' or kategori_nama like '%".$query."%' or group_nama like '%".$query."%')";
 		}
 	
 		$result = $this->db->query($sql);

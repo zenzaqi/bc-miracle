@@ -725,6 +725,9 @@ Ext.onReady(function(){
 		
 		jrawat_keteranganField.reset();
 		jrawat_keteranganField.setValue(null);
+		
+		jrawat_cust_nomemberField.reset();
+		jrawat_cust_nomemberField.setValue(null);
 
 		tunai_jual_rawat_reset_form();
 		tunai2_jual_rawat_reset_form();
@@ -1095,6 +1098,7 @@ Ext.onReady(function(){
 		
 		if(master_jual_rawatListEditorGrid.selModel.getCount() == 1) {
 			cbo_drawat_rawatDataStore.load({params: {query:master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_id')}});
+			//cbo_perawatanDataStore.load({params: {query:master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_id')}});
 			cbo_kwitansi_jual_rawat_DataStore.load();
 			master_jual_rawat_set_form();
 			master_cara_bayarTabPanel.setActiveTab(0);
@@ -1429,6 +1433,30 @@ Ext.onReady(function(){
 		]),
 		sortInfo:{field: 'drawat_rawat_display', direction: "ASC"}
 	});
+	
+	cbo_perawatanDataStore = new Ext.data.Store({
+		id: 'cbo_perawatanDataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_master_jual_rawat&m=get_cbo_rawat_list', 
+			method: 'POST'
+		}),baseParams: {start: 0, limit: 15 },
+			reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'rawat_id'
+		},[
+			{name: 'drawat_rawat_value', type: 'int', mapping: 'rawat_id'},
+			{name: 'drawat_rawat_kode', type: 'string', mapping: 'rawat_kode'},
+			{name: 'drawat_rawat_display', type: 'string', mapping: 'rawat_nama'}
+		]),
+		sortInfo:{field: 'drawat_rawat_display', direction: "ASC"}
+	});
+	
+	var cbo_rawat_tpl = new Ext.XTemplate(
+        '<tpl for="."><div class="search-item">',
+            '<span>{drawat_rawat_kode}| <b>{drawat_rawat_display}</b>',
+		'</div></tpl>'
+    );
 	
   	/* Function for Identify of Window Column Model */
 	master_jual_rawat_ColumnModel = new Ext.grid.ColumnModel(
@@ -3509,20 +3537,21 @@ Ext.onReady(function(){
 		for(i=0;i<detail_jual_rawat_DataStore.getCount();i++){
 			detail_jual_rawat_record=detail_jual_rawat_DataStore.getAt(i);
 			var j=cbo_drawat_rawatDataStore.find('drawat_rawat_value',detail_jual_rawat_record.data.drawat_rawat);
-			if(j>0){
+			if(j>=0){
 				detail_jual_rawat_record.data.drawat_harga=cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_harga;
 				//detail_jual_rawat_record.data.drawat_satuan=cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_satuan;
 				if(detail_jual_rawat_record.data.drawat_diskon==""){
+					console.log("drawat_diskon = kosng");
 					if(jrawat_cust_nomemberField.getValue()!=""){
 						if(cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_dm!==0){
 							detail_jual_rawat_record.data.drawat_diskon=cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_dm;
 							detail_jual_rawat_record.data.drawat_diskon_jenis='DM';
 						}
 					}else{
-						if(cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_du!==0){
+						//if(cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_du!==0){
 							detail_jual_rawat_record.data.drawat_diskon=cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_du;
 							detail_jual_rawat_record.data.drawat_diskon_jenis='DU';
-						}
+						//}
 					}
 				}
 			}

@@ -47,6 +47,22 @@ class C_master_jual_rawat extends Controller {
 		echo $result;
 	}
 	
+	/*function get_rawat_list(){
+		$query = isset($_POST['query']) ? $_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		$result = $this->m_master_jual_rawat->get_rawat_list($query,$start,$end);
+		echo $result;
+	}*/
+	
+	/*function get_cbo_rawat_list(){
+		$query = isset($_POST['query']) ? $_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		$result = $this->m_public_function->get_cbo_rawat_list($query,$start,$end);
+		echo $result;
+	}*/
+	
 		
 	function get_harga_rawat(){
 		$rawat_id = (integer) (isset($_POST['rawat_id']) ? $_POST['rawat_id'] : $_GET['rawat_id']);

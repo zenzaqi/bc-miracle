@@ -835,14 +835,14 @@ Ext.onReady(function(){
 	
 	
 	Ext.util.Format.comboRenderer = function(combo){
-		cbo_voucher_produkDataStore.load();
+		//cbo_voucher_produkDataStore.load();
 		return function(value){
 			var record = combo.findRecord(combo.valueField, value);
 			return record ? record.get(combo.displayField) : combo.valueNotFoundText;
 		}
 	}
 	
-	var combo_promo_produk_rawat=new Ext.form.ComboBox({
+	/*var combo_promo_produk_rawat=new Ext.form.ComboBox({
 			store: cbo_voucher_produkDataStore,
 			id: 'bpromo_produk',
 			mode: 'remote',
@@ -852,7 +852,7 @@ Ext.onReady(function(){
 			triggerAction: 'all',
 			lazyRender:true
 
-	});
+	});*/
 	
 	
 	//declaration of detail coloumn model
@@ -862,9 +862,9 @@ Ext.onReady(function(){
 			header: 'Produk/Perawatan',
 			dataIndex: 'bpromo_produk',
 			width: 150,
-			sortable: true,
-			editor: combo_promo_produk_rawat,
-			renderer: Ext.util.Format.comboRenderer(combo_promo_produk_rawat)
+			sortable: true//,
+			//editor: combo_promo_produk_rawat,
+			//renderer: Ext.util.Format.comboRenderer(combo_promo_produk_rawat)
 		}]
 	);
 	promo_berlaku_ColumnModel.defaultSortable= true;

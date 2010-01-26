@@ -274,7 +274,7 @@ Ext.onReady(function(){
 		order_bayarField.setValue(null);
 		order_keteranganField.reset();
 		order_keteranganField.setValue(null);
-		detail_order_beli_DataStore.load({params : {master_id : get_pk_id(), start:0, limit:pageS}});
+		detail_order_beli_DataStore.load({params : {master_id : 0, start:0, limit:pageS}});
 	}
  	/* End of Function */
   
