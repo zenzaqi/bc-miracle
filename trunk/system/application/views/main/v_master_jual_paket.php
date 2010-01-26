@@ -3583,40 +3583,372 @@ Ext.onReady(function(){
 		jpaket_hutangField.setValue(total_hutang);
 	}
 	
+	/* START LOAD TOTAL BAYAR */
+	function load_total_paket_bayar(){
+		var jumlah_item=0;
+		var subtotal_harga=0;
+		var total_harga=0;
+		var total_hutang=0;
+		var total_bayar=0;
+		var subtotal_harga_field=0;
+
+		var transfer_nilai=0;
+		var transfer_nilai2=0;
+		var transfer_nilai3=0;
+		var kwitansi_nilai=0;
+		var kwitansi_nilai2=0;
+		var kwitansi_nilai3=0;
+		var card_nilai=0;
+		var card_nilai2=0;
+		var card_nilai3=0;
+		var cek_nilai=0;
+		var cek_nilai2=0;
+		var cek_nilai3=0;
+		var voucher_nilai=0;
+		var voucher_nilai2=0;
+		var voucher_nilai3=0;
+
+		var subtotal_net_harga=0;
+
+		var detail_jual_paket_record;
+		if(detail_jual_paket_DataStore.getCount()>0){
+			detail_jual_paket_record=detail_jual_paket_DataStore.getAt(0);
+			detail_jual_paket_record.data.konversi_nilai_temp=temp_konv_nilai.getValue();
+			var j=cbo_dpaket_paketDataStore.find('dpaket_paket_value',detail_jual_paket_record.data.dpaket_paket);
+			if(j>=0){
+				detail_jual_paket_record.data.dpaket_harga=cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_harga;
+				subtotal_harga=eval(detail_jual_paket_record.data.konversi_nilai_temp*detail_jual_paket_record.data.dpaket_jumlah*detail_jual_paket_record.data.dpaket_harga);
+				//detail_jual_paket_record.data.dpaket_satuan=cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_satuan;
+				if(detail_jual_paket_record.data.dpaket_diskon==""){
+					if(jpaket_cust_nomemberField.getValue()!=""){
+						if(cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_dm!==0){
+							detail_jual_paket_record.data.dpaket_diskon=cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_dm;
+							detail_jual_paket_record.data.dpaket_diskon_jenis='DM';
+						}
+					}else{
+						if(cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_du!==0){
+							detail_jual_paket_record.data.dpaket_diskon=cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_du;
+							detail_jual_paket_record.data.dpaket_diskon_jenis='DU';
+						}
+					}
+				}
+			}
+			detail_jual_paket_record.data.dpaket_subtotal=subtotal_harga;
+			detail_jual_paket_record.data.dpaket_subtotal_net=subtotal_harga*((100-detail_jual_paket_record.data.dpaket_diskon)/100);
+		}
+		//(record.data.dpaket_subtotal* record.data.dpaket_jumlah*(100-record.data.dpaket_diskon)/100,'0,000')
+		for(i=0;i<detail_jual_paket_DataStore.getCount();i++){
+			jumlah_item=jumlah_item+eval(detail_jual_paket_DataStore.getAt(i).data.dpaket_jumlah);
+			subtotal_harga_field+=detail_jual_paket_DataStore.getAt(i).data.dpaket_subtotal_net;
+		}
+		
+		jpaket_jumlahField.setValue(jumlah_item);
+		//jpaket_subTotalField.setValue(subtotal_harga*(100-detail_jual_paket_record.data.dpaket_diskon)/100);
+		jpaket_subTotalField.setValue(subtotal_harga_field);
+		total_harga=subtotal_harga_field*(100-jpaket_diskonField.getValue())/100 - jpaket_cashbackField.getValue();
+		total_harga=(total_harga>0?Math.round(total_harga):0);
+		//jpaket_subTotalField.setValue(total_harga);
+		jpaket_totalField.setValue(total_harga);
+
+		
+
+		transfer_nilai=jpaket_transfer_nilaiField.getValue();
+		if(/^\d+$/.test(transfer_nilai))
+			transfer_nilai=jpaket_transfer_nilaiField.getValue();
+		else
+			transfer_nilai=0;
+		
+		transfer_nilai2=jpaket_transfer_nilai2Field.getValue();
+		if(/^\d+$/.test(transfer_nilai2))
+			transfer_nilai2=jpaket_transfer_nilai2Field.getValue();
+		else
+			transfer_nilai2=0;
+		
+		transfer_nilai3=jpaket_transfer_nilai3Field.getValue();
+		if(/^\d+$/.test(transfer_nilai3))
+			transfer_nilai3=jpaket_transfer_nilai3Field.getValue();
+		else
+			transfer_nilai3=0;
+		
+		kwitansi_nilai=jpaket_kwitansi_nilaiField.getValue();
+		if(/^\d+$/.test(kwitansi_nilai))
+			kwitansi_nilai=jpaket_kwitansi_nilaiField.getValue();
+		else
+			kwitansi_nilai=0;
+		
+		kwitansi_nilai2=jpaket_kwitansi_nilai2Field.getValue();
+		if(/^\d+$/.test(kwitansi_nilai2))
+			kwitansi_nilai2=jpaket_kwitansi_nilai2Field.getValue();
+		else
+			kwitansi_nilai2=0;
+		
+		kwitansi_nilai3=jpaket_kwitansi_nilai3Field.getValue();
+		if(/^\d+$/.test(kwitansi_nilai3))
+			kwitansi_nilai3=jpaket_kwitansi_nilai3Field.getValue();
+		else
+			kwitansi_nilai3=0;
+		
+		card_nilai=jpaket_card_nilaiField.getValue();
+		if(/^\d+$/.test(card_nilai))
+			card_nilai=jpaket_card_nilaiField.getValue();
+		else
+			card_nilai=0;
+		
+		card_nilai2=jpaket_card_nilai2Field.getValue();
+		if(/^\d+$/.test(card_nilai2))
+			card_nilai2=jpaket_card_nilai2Field.getValue();
+		else
+			card_nilai2=0;
+		
+		card_nilai3=jpaket_card_nilai3Field.getValue();
+		if(/^\d+$/.test(card_nilai3))
+			card_nilai3=jpaket_card_nilai3Field.getValue();
+		else
+			card_nilai3=0;
+		
+		cek_nilai=jpaket_cek_nilaiField.getValue();
+		if(/^\d+$/.test(cek_nilai))
+			cek_nilai=jpaket_cek_nilaiField.getValue();
+		else
+			cek_nilai=0;
+		
+		cek_nilai2=jpaket_cek_nilai2Field.getValue();
+		if(/^\d+$/.test(cek_nilai2))
+			cek_nilai2=jpaket_cek_nilai2Field.getValue();
+		else
+			cek_nilai2=0;
+		
+		cek_nilai3=jpaket_cek_nilai3Field.getValue();
+		if(/^\d+$/.test(cek_nilai3))
+			cek_nilai3=jpaket_cek_nilai3Field.getValue();
+		else
+			cek_nilai3=0;
+		
+		voucher_nilai=jpaket_voucher_cashbackField.getValue();
+		if(/^\d+$/.test(voucher_nilai))
+			voucher_nilai=jpaket_voucher_cashbackField.getValue();
+		else
+			voucher_nilai=0;
+		
+		voucher_nilai2=jpaket_voucher_cashback3Field.getValue();
+		if(/^\d+$/.test(voucher_nilai2))
+			voucher_nilai2=jpaket_voucher_cashback3Field.getValue();
+		else
+			voucher_nilai2=0;
+		
+		voucher_nilai3=jpaket_voucher_cashback3Field.getValue();
+		if(/^\d+$/.test(voucher_nilai3))
+			voucher_nilai3=jpaket_voucher_cashback3Field.getValue();
+		else
+			voucher_nilai3=0;
+
+		tunai_nilai=jpaket_tunai_nilaiField.getValue();
+		if(/^\d+$/.test(tunai_nilai))
+			tunai_nilai=jpaket_tunai_nilaiField.getValue();
+		else
+			tunai_nilai=0;
+
+		tunai_nilai2=jpaket_tunai_nilai2Field.getValue();
+		if(/^\d+$/.test(tunai_nilai2))
+			tunai_nilai2=jpaket_tunai_nilai2Field.getValue();
+		else
+			tunai_nilai2=0;
+
+		tunai_nilai3=jpaket_tunai_nilai3Field.getValue();
+		if(/^\d+$/.test(tunai_nilai3))
+			tunai_nilai3=jpaket_tunai_nilai3Field.getValue();
+		else
+			tunai_nilai3=0;
+
+
+		total_bayar=transfer_nilai+transfer_nilai2+transfer_nilai3+kwitansi_nilai+kwitansi_nilai2+kwitansi_nilai3+card_nilai+card_nilai2+card_nilai3+cek_nilai+cek_nilai2+cek_nilai3+voucher_nilai+voucher_nilai2+voucher_nilai3+tunai_nilai+tunai_nilai2+tunai_nilai3;
+		total_bayar=(total_bayar>0?Math.round(total_bayar):0);
+		jpaket_bayarField.setValue(total_bayar);
+
+		total_hutang=total_harga-total_bayar;
+		total_hutang=(total_hutang>0?Math.round(total_hutang):0);
+		jpaket_hutangField.setValue(total_hutang);
+	}
+
+	function load_total_bayar_updating(){
+		var update_total_field=0;
+		var update_hutang_field=0;
+		var jpaket_bayar_temp=jpaket_bayarField.getValue();
+		var total_bayar=0;
+
+		var transfer_nilai=0;
+		var transfer_nilai2=0;
+		var transfer_nilai3=0;
+		var kwitansi_nilai=0;
+		var kwitansi_nilai2=0;
+		var kwitansi_nilai3=0;
+		var card_nilai=0;
+		var card_nilai2=0;
+		var card_nilai3=0;
+		var cek_nilai=0;
+		var cek_nilai2=0;
+		var cek_nilai3=0;
+		var voucher_nilai=0;
+		var voucher_nilai2=0;
+		var voucher_nilai3=0;
+		
+		transfer_nilai=jpaket_transfer_nilaiField.getValue();
+		if(/^\d+$/.test(transfer_nilai))
+			transfer_nilai=jpaket_transfer_nilaiField.getValue();
+		else
+			transfer_nilai=0;
+
+		transfer_nilai2=jpaket_transfer_nilai2Field.getValue();
+		if(/^\d+$/.test(transfer_nilai2))
+			transfer_nilai2=jpaket_transfer_nilai2Field.getValue();
+		else
+			transfer_nilai2=0;
+		
+		transfer_nilai3=jpaket_transfer_nilai3Field.getValue();
+		if(/^\d+$/.test(transfer_nilai3))
+			transfer_nilai3=jpaket_transfer_nilai3Field.getValue();
+		else
+			transfer_nilai3=0;
+		
+		kwitansi_nilai=jpaket_kwitansi_nilaiField.getValue();
+		if(/^\d+$/.test(kwitansi_nilai))
+			kwitansi_nilai=jpaket_kwitansi_nilaiField.getValue();
+		else
+			kwitansi_nilai=0;
+		
+		kwitansi_nilai2=jpaket_kwitansi_nilai2Field.getValue();
+		if(/^\d+$/.test(kwitansi_nilai2))
+			kwitansi_nilai2=jpaket_kwitansi_nilai2Field.getValue();
+		else
+			kwitansi_nilai2=0;
+		
+		kwitansi_nilai3=jpaket_kwitansi_nilai3Field.getValue();
+		if(/^\d+$/.test(kwitansi_nilai3))
+			kwitansi_nilai3=jpaket_kwitansi_nilai3Field.getValue();
+		else
+			kwitansi_nilai3=0;
+		
+		card_nilai=jpaket_card_nilaiField.getValue();
+		if(/^\d+$/.test(card_nilai))
+			card_nilai=jpaket_card_nilaiField.getValue();
+		else
+			card_nilai=0;
+		
+		card_nilai2=jpaket_card_nilai2Field.getValue();
+		if(/^\d+$/.test(card_nilai2))
+			card_nilai2=jpaket_card_nilai2Field.getValue();
+		else
+			card_nilai2=0;
+		
+		card_nilai3=jpaket_card_nilai3Field.getValue();
+		if(/^\d+$/.test(card_nilai3))
+			card_nilai3=jpaket_card_nilai3Field.getValue();
+		else
+			card_nilai3=0;
+		
+		cek_nilai=jpaket_cek_nilaiField.getValue();
+		if(/^\d+$/.test(cek_nilai))
+			cek_nilai=jpaket_cek_nilaiField.getValue();
+		else
+			cek_nilai=0;
+		
+		cek_nilai2=jpaket_cek_nilai2Field.getValue();
+		if(/^\d+$/.test(cek_nilai2))
+			cek_nilai2=jpaket_cek_nilai2Field.getValue();
+		else
+			cek_nilai2=0;
+		
+		cek_nilai3=jpaket_cek_nilai3Field.getValue();
+		if(/^\d+$/.test(cek_nilai3))
+			cek_nilai3=jpaket_cek_nilai3Field.getValue();
+		else
+			cek_nilai3=0;
+		
+		voucher_nilai=jpaket_voucher_cashbackField.getValue();
+		if(/^\d+$/.test(voucher_nilai))
+			voucher_nilai=jpaket_voucher_cashbackField.getValue();
+		else
+			voucher_nilai=0;
+		
+		voucher_nilai2=jpaket_voucher_cashback3Field.getValue();
+		if(/^\d+$/.test(voucher_nilai2))
+			voucher_nilai2=jpaket_voucher_cashback3Field.getValue();
+		else
+			voucher_nilai2=0;
+		
+		voucher_nilai3=jpaket_voucher_cashback3Field.getValue();
+		if(/^\d+$/.test(voucher_nilai3))
+			voucher_nilai3=jpaket_voucher_cashback3Field.getValue();
+		else
+			voucher_nilai3=0;
+
+		tunai_nilai=jpaket_tunai_nilaiField.getValue();
+		if(/^\d+$/.test(tunai_nilai))
+			tunai_nilai=jpaket_tunai_nilaiField.getValue();
+		else
+			tunai_nilai=0;
+
+		tunai_nilai2=jpaket_tunai_nilai2Field.getValue();
+		if(/^\d+$/.test(tunai_nilai2))
+			tunai_nilai2=jpaket_tunai_nilai2Field.getValue();
+		else
+			tunai_nilai2=0;
+
+		tunai_nilai3=jpaket_tunai_nilai3Field.getValue();
+		if(/^\d+$/.test(tunai_nilai3))
+			tunai_nilai3=jpaket_tunai_nilai3Field.getValue();
+		else
+			tunai_nilai3=0;
+
+		total_bayar=transfer_nilai+transfer_nilai2+transfer_nilai3+kwitansi_nilai+kwitansi_nilai2+kwitansi_nilai3+card_nilai+card_nilai2+card_nilai3+cek_nilai+cek_nilai2+cek_nilai3+voucher_nilai+voucher_nilai2+voucher_nilai3+tunai_nilai+tunai_nilai2+tunai_nilai3;
+		
+		update_total_field=jpaket_subTotalField.getValue()*((100-jpaket_diskonField.getValue())/100)-jpaket_cashbackField.getValue();
+		jpaket_totalField.setValue(update_total_field);
+
+		jpaket_bayarField.setValue(total_bayar);
+		
+		update_hutang_field=update_total_field-total_bayar;
+		jpaket_hutangField.setValue(update_hutang_field);
+
+		jpaket_diskonField.setValue(jpaket_diskonField.getValue());
+		jpaket_cashbackField.setValue(jpaket_cashbackField.getValue());
+	}
+	/* END LOAD TOTAL BAYAR */
+	
 	function load_all_jual_paket(){
-		load_detail_jual_paket();
+		//load_detail_jual_paket();
 		load_total_paket_bayar();
 	}
 	//event on update of detail data store
 	detail_jual_paket_DataStore.on("update",load_all_jual_paket);
-	detail_jual_paket_DataStore.on("load",load_total_paket_bayar);
+	//detail_jual_paket_DataStore.on("load",load_total_paket_bayar);
 	jpaket_bayarField.on("keyup",load_total_paket_bayar);
 	jpaket_diskonField.on("keyup",load_total_paket_bayar);
-	jpaket_cashbackField.on("keyup",load_total_paket_bayar);
+	jpaket_cashbackField.on("keyup",function(){if(post2db=="CREATE"){load_total_paket_bayar();}else if(post2db=="UPDATE"){load_total_bayar_updating();}});
 	//kwitansi
-	jpaket_kwitansi_nilaiField.on("keyup",load_total_paket_bayar);
-	jpaket_kwitansi_nilai2Field.on("keyup",load_total_paket_bayar);
-	jpaket_kwitansi_nilai3Field.on("keyup",load_total_paket_bayar);
+	jpaket_kwitansi_nilaiField.on("keyup",function(){if(post2db=="CREATE"){load_total_paket_bayar();}else if(post2db=="UPDATE"){load_total_bayar_updating();}});
+	jpaket_kwitansi_nilai2Field.on("keyup",function(){if(post2db=="CREATE"){load_total_paket_bayar();}else if(post2db=="UPDATE"){load_total_bayar_updating();}});
+	jpaket_kwitansi_nilai3Field.on("keyup",function(){if(post2db=="CREATE"){load_total_paket_bayar();}else if(post2db=="UPDATE"){load_total_bayar_updating();}});
 	//card
-	jpaket_card_nilaiField.on("keyup",load_total_paket_bayar);
-	jpaket_card_nilai2Field.on("keyup",load_total_paket_bayar);
-	jpaket_card_nilai3Field.on("keyup",load_total_paket_bayar);
+	jpaket_card_nilaiField.on("keyup",function(){if(post2db=="CREATE"){load_total_paket_bayar();}else if(post2db=="UPDATE"){load_total_bayar_updating();}});
+	jpaket_card_nilai2Field.on("keyup",function(){if(post2db=="CREATE"){load_total_paket_bayar();}else if(post2db=="UPDATE"){load_total_bayar_updating();}});
+	jpaket_card_nilai3Field.on("keyup",function(){if(post2db=="CREATE"){load_total_paket_bayar();}else if(post2db=="UPDATE"){load_total_bayar_updating();}});
 	//cek/giro
-	jpaket_cek_nilaiField.on("keyup",load_total_paket_bayar);
-	jpaket_cek_nilai2Field.on("keyup",load_total_paket_bayar);
-	jpaket_cek_nilai3Field.on("keyup",load_total_paket_bayar);
+	jpaket_cek_nilaiField.on("keyup",function(){if(post2db=="CREATE"){load_total_paket_bayar();}else if(post2db=="UPDATE"){load_total_bayar_updating();}});
+	jpaket_cek_nilai2Field.on("keyup",function(){if(post2db=="CREATE"){load_total_paket_bayar();}else if(post2db=="UPDATE"){load_total_bayar_updating();}});
+	jpaket_cek_nilai3Field.on("keyup",function(){if(post2db=="CREATE"){load_total_paket_bayar();}else if(post2db=="UPDATE"){load_total_bayar_updating();}});
 	//transfer
-	jpaket_transfer_nilaiField.on("keyup",load_total_paket_bayar);
-	jpaket_transfer_nilai2Field.on("keyup",load_total_paket_bayar);
-	jpaket_transfer_nilai3Field.on("keyup",load_total_paket_bayar);
+	jpaket_transfer_nilaiField.on("keyup",function(){if(post2db=="CREATE"){load_total_paket_bayar();}else if(post2db=="UPDATE"){load_total_bayar_updating();}});
+	jpaket_transfer_nilai2Field.on("keyup",function(){if(post2db=="CREATE"){load_total_paket_bayar();}else if(post2db=="UPDATE"){load_total_bayar_updating();}});
+	jpaket_transfer_nilai3Field.on("keyup",function(){if(post2db=="CREATE"){load_total_paket_bayar();}else if(post2db=="UPDATE"){load_total_bayar_updating();}});
 	//voucher
-	jpaket_voucher_cashbackField.on("keyup",load_total_paket_bayar);
-	jpaket_voucher_cashback2Field.on("keyup",load_total_paket_bayar);
-	jpaket_voucher_cashback3Field.on("keyup",load_total_paket_bayar);
+	jpaket_voucher_cashbackField.on("keyup",function(){if(post2db=="CREATE"){load_total_paket_bayar();}else if(post2db=="UPDATE"){load_total_bayar_updating();}});
+	jpaket_voucher_cashback2Field.on("keyup",function(){if(post2db=="CREATE"){load_total_paket_bayar();}else if(post2db=="UPDATE"){load_total_bayar_updating();}});
+	jpaket_voucher_cashback3Field.on("keyup",function(){if(post2db=="CREATE"){load_total_paket_bayar();}else if(post2db=="UPDATE"){load_total_bayar_updating();}});
 	//tunai
-	jpaket_tunai_nilaiField.on("keyup",load_total_paket_bayar);
-	jpaket_tunai_nilai2Field.on("keyup",load_total_paket_bayar);
-	jpaket_tunai_nilai3Field.on("keyup",load_total_paket_bayar);
+	jpaket_tunai_nilaiField.on("keyup",function(){if(post2db=="CREATE"){load_total_paket_bayar();}else if(post2db=="UPDATE"){load_total_bayar_updating();}});
+	jpaket_tunai_nilai2Field.on("keyup",function(){if(post2db=="CREATE"){load_total_paket_bayar();}else if(post2db=="UPDATE"){load_total_bayar_updating();}});
+	jpaket_tunai_nilai3Field.on("keyup",function(){if(post2db=="CREATE"){load_total_paket_bayar();}else if(post2db=="UPDATE"){load_total_bayar_updating();}});
 	
 	jpaket_caraField.on("select",update_group_carabayar_jual_paket);
 	jpaket_cara2Field.on("select",update_group_carabayar2_jual_paket);
