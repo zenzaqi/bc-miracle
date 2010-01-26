@@ -636,7 +636,7 @@ Ext.onReady(function(){
 			})
 		}, 
 		{
-			header: 'Point',
+			header: 'Poin',
 			dataIndex: 'paket_point',
 			width: 100,
 			sortable: true,
@@ -970,7 +970,7 @@ Ext.onReady(function(){
 	paket_pointField= new Ext.form.NumberField({
 		id: 'paket_pointField',
 		name: 'paket_pointField',
-		fieldLabel: 'Point',
+		fieldLabel: 'Poin (X)',
 		allowNegatife : false,
 		emptyText: '0',
 		maxLength: 11,

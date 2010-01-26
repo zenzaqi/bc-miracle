@@ -19,6 +19,21 @@ class M_paket extends Model{
 		parent::Model();
 	}
 	
+	function get_group_paket_list(){
+		$sql="SELECT group_id,group_nama,group_duproduk,group_dmproduk,group_durawat,group_dmrawat,group_dupaket,group_dmpaket, kategori_nama,kategori_id FROM produk_group,kategori WHERE group_kelompok=kategori_id AND kategori_jenis='paket' AND group_aktif='Aktif' AND kategori_aktif='Aktif'";
+		$query = $this->db->query($sql);
+		$nbrows = $query->num_rows();
+		if($nbrows>0){
+			foreach($query->result() as $row){
+				$arr[] = $row;
+			}
+			$jsonresult = json_encode($arr);
+			return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+		} else {
+			return '({"total":"0", "results":""})';
+		}
+	}
+	
 	function get_rawat_list($query,$start,$end){
 	/*$sql="SELECT produk_id,produk_kode,produk_nama,produk_kategori,produk_harga,produk_group,produk_du,produk_dm
 				,kategori_nama, group_nama, satuan_kode, satuan_nama 

@@ -830,10 +830,11 @@ Ext.onReady(function(){
 		anchor: '95%',
 		maskRe: /([0-9]+)$/
 	});
-	/* Identify  order_bayar Field */
-	order_nilaiField= new Ext.form.NumberField({
-		id: 'order_nilaiField',
-		fieldLabel: 'Total Nilai (Rp)',
+	
+	/* START Field master_order_beli_bayarGroup */
+	order_subtotalField= new Ext.form.NumberField({
+		id: 'order_subtotalField',
+		fieldLabel: 'Sub Total (Rp)',
 		allowNegatife : false,
 		emptyText: '0',
 		allowDecimals: true,
@@ -841,7 +842,17 @@ Ext.onReady(function(){
 		anchor: '95%',
 		maskRe: /([0-9]+)$/
 	});
-	
+	/* Identify  order_bayar Field */
+	order_totalField= new Ext.form.NumberField({
+		id: 'order_totalField',
+		fieldLabel: '<span><b>Total (Rp)</b></span>',
+		allowNegatife : false,
+		emptyText: '0',
+		allowDecimals: true,
+		readOnly: true,
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
+	});
 	
 	/* Identify  order_bayar Field */
 	order_jumlahField= new Ext.form.NumberField({
@@ -877,6 +888,7 @@ Ext.onReady(function(){
 		anchor: '95%',
 		maskRe: /([0-9]+)$/
 	});
+	/* END Field master_order_beli_bayarGroup */
 	
 	/* Identify  order_keterangan Field */
 	order_keteranganField= new Ext.form.TextArea({
@@ -921,7 +933,7 @@ Ext.onReady(function(){
 				layout: 'form',
 				labelAlign: 'left',
 				border:false,
-				items: [order_jumlahField, order_nilaiField] 
+				items: [order_jumlahField, order_totalField] 
 			},{
 				columnWidth:0.5,
 				layout: 'form',
@@ -1292,7 +1304,7 @@ Ext.onReady(function(){
 			total_harga=total_harga+(detail_order_beli_record.data.dorder_jumlah*detail_order_beli_record.data.dorder_harga*(100-detail_order_beli_record.data.dorder_diskon)/100);
 		}
 		order_jumlahField.setValue(jumlah_item);
-		order_nilaiField.setValue(total_harga);
+		order_totalField.setValue(total_harga);
 		order_totalbayarField.setValue(total_harga-order_bayarField.getValue());
 	}
 	

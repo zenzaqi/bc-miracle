@@ -37,7 +37,7 @@ class C_paket extends Controller {
 	}
 	
 	function get_group_paket_list(){
-		$result=$this->m_public_function->get_group_paket_list();
+		$result=$this->m_paket->get_group_paket_list();
 		echo $result;
 	}
 	
