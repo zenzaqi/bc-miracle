@@ -135,9 +135,12 @@ class M_master_order_beli extends Model{
 		
 		//function for create new record
 		function master_order_beli_create($order_no ,$order_supplier ,$order_tanggal ,$order_carabayar ,$order_diskon ,$order_biaya ,$order_bayar ,$order_keterangan ){
-			
-			$pattern="PO/".date("y/m")."/";
-			$order_no=$this->m_public_function->get_kode_1('master_order_beli','order_no',$pattern,13);
+			$date_now=date('Y-m-d');
+			if($order_tanggal==""){
+				$order_tanggal=$date_now;
+			}
+			$pattern="OP/".date("ym")."-";
+			$order_no=$this->m_public_function->get_kode_1('master_order_beli','order_no',$pattern,12);
 			
 			$data = array(
 				"order_no"=>$order_no, 

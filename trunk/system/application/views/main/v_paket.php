@@ -306,6 +306,8 @@ Ext.onReady(function(){
 		paket_expiredField.setValue(null);
 		paket_aktifField.reset();
 		paket_aktifField.setValue(null);
+		paket_kategoritxtField.reset();
+		paket_kategoritxtField.setValue(null);
 	}
  	/* End of Function */
   
@@ -338,6 +340,7 @@ Ext.onReady(function(){
 	function display_form_window(){
 		if(!paket_createWindow.isVisible()){
 			paket_reset_form();
+			paket_isi_perawatan_DataStore.load({params: { master_id: 0, start:0, limit: pageS}});
 			post2db='CREATE';
 			msg='created';
 			paket_createWindow.show();
@@ -593,7 +596,7 @@ Ext.onReady(function(){
 		}, 
 		{
 			header: 'Jenis',
-			dataIndex: 'produk_kategori',
+			dataIndex: 'kategori_nama',
 			width: 150,
 			sortable: true,
 			editable: false
@@ -1125,38 +1128,34 @@ Ext.onReady(function(){
 	});
 	
 	cbo_rawat_listDataStore = new Ext.data.Store({
-	id: 'cbo_rawat_listDataStore',
-	proxy: new Ext.data.HttpProxy({
-			url: 'index.php?c=c_paket&m=get_rawat_list', 
-			method: 'POST'
-		}), baseParams: {start: 0, limit: pageS},
-			reader: new Ext.data.JsonReader({
-			root: 'results',
-			totalProperty: 'total',
-			id: 'rawat_id'
-		},[
-		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
-			{name: 'rawat_id', type: 'int', mapping: 'rawat_id'},
-			{name: 'rawat_kode', type: 'string', mapping: 'rawat_kode'},
-			{name: 'rawat_group', type: 'string', mapping: 'group_nama'},
-			{name: 'rawat_kategori', type: 'string', mapping: 'kategori_nama'},
-			{name: 'rawat_nama', type: 'string', mapping: 'rawat_nama'}
-		]),
-	sortInfo:{field: 'rawat_nama', direction: "ASC"}
+		id: 'cbo_rawat_listDataStore',
+		proxy: new Ext.data.HttpProxy({
+				url: 'index.php?c=c_paket&m=get_rawat_list', 
+				method: 'POST'
+			}), baseParams: {start: 0, limit: pageS},
+				reader: new Ext.data.JsonReader({
+				root: 'results',
+				totalProperty: 'total',
+				id: 'rawat_id'
+			},[
+			/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
+				{name: 'rawat_id', type: 'int', mapping: 'rawat_id'},
+				{name: 'rawat_kode', type: 'string', mapping: 'rawat_kode'},
+				{name: 'rawat_nama', type: 'string', mapping: 'rawat_nama'}
+			]),
+		sortInfo:{field: 'rawat_nama', direction: "ASC"}
 	});
 	
 	
 	var paket_produk_tpl = new Ext.XTemplate(
         '<tpl for="."><div class="search-item">',
-            '<span><b>{produk_kode}</b>| {produk_nama}<br/>Group 1: {produk_group}<br/>',
-			'Kategori: {produk_kategori}</span>',
+            '<span>{produk_kode}| <b>{produk_nama}</b></span>',
 		'</div></tpl>'
     );
 	
 	var paket_rawat_tpl = new Ext.XTemplate(
         '<tpl for="."><div class="search-item">',
-            '<span><b>{rawat_kode}</b>| {rawat_nama}<br/>Group 1: {rawat_group}<br/>',
-			'Kategori: {rawat_kategori}</span>',
+            '<span>{rawat_kode}| <b>{rawat_nama}</b></span>',
 		'</div></tpl>'
     );
 	

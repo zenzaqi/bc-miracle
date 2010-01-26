@@ -178,6 +178,7 @@ class C_perawatan extends Controller {
 	function perawatan_list(){
 		
 		$query = isset($_POST['query']) ? $_POST['query'] : "";
+		$query = str_replace(" ", "%",$query);
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
 		$result=$this->m_perawatan->perawatan_list($query,$start,$end);
