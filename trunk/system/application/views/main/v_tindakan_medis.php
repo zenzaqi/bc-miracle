@@ -550,6 +550,11 @@ Ext.onReady(function(){
 		]),
 		sortInfo:{field: 'perawatan_display', direction: "ASC"}
 	});
+	var trawat_rawat_tpl = new Ext.XTemplate(
+        '<tpl for="."><div class="search-item">',
+            '<span>{perawatan_kode}| <b>{perawatan_display}</b>',
+		'</div></tpl>'
+    );
 
 	cbo_dtindakan_dokterDataStore = new Ext.data.Store({
 		id: 'cbo_dtindakan_dokterDataStore',
@@ -591,7 +596,7 @@ Ext.onReady(function(){
 		{
 			header: 'Customer',
 			dataIndex: 'trawat_cust',
-			width: 150,
+			width: 210,
 			sortable: true/*,
 			editor: new Ext.form.NumberField({
 				allowBlank: false,
@@ -605,13 +610,15 @@ Ext.onReady(function(){
 		{
 			header: 'Perawatan',
 			dataIndex: 'dtrawat_perawatan',
-			width: 150,
+			width: 210,
 			sortable: true,
 			editor: new Ext.form.ComboBox({
 				store: dtrawat_perawatanDataStore,
 				mode: 'remote',
 				displayField: 'perawatan_display',
 				valueField: 'perawatan_value',
+				tpl: trawat_rawat_tpl,
+				itemSelector: 'div.search-item',
 				loadingText: 'Searching...',
 				triggerAction: 'all',
 				anchor: '95%'
@@ -620,7 +627,7 @@ Ext.onReady(function(){
 		{
 			header: 'Dokter',
 			dataIndex: 'dtrawat_petugas1',
-			width: 150,
+			width: 80,
 			sortable: true,
 			editable:true,
 			editor: new Ext.form.ComboBox({
@@ -634,9 +641,9 @@ Ext.onReady(function(){
 			})
 		}, 
 		{
-			header: 'Jam Appointment',
+			header: 'Jam App',
 			dataIndex: 'dtrawat_jam',
-			width: 150,
+			width: 60,
 			sortable: true
 		}, 
 		{

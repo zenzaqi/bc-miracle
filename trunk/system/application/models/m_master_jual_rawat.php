@@ -915,7 +915,7 @@ class M_master_jual_rawat extends Model{
 		}
 		
 		//function for advanced search record
-		function master_jual_rawat_search($jrawat_id ,$jrawat_nobukti ,$jrawat_cust ,$jrawat_tanggal ,$jrawat_diskon ,$jrawat_cashback ,$jrawat_voucher ,$jrawat_cara ,$jrawat_bayar ,$jrawat_keterangan ,$jrawat_tgl_start ,$jrawat_tgl_end ,$start,$end){
+		function master_jual_rawat_search($jrawat_id ,$jrawat_nobukti ,$jrawat_cust ,$jrawat_diskon ,$jrawat_cashback ,$jrawat_voucher ,$jrawat_cara ,$jrawat_bayar ,$jrawat_keterangan ,$jrawat_tgl_start ,$jrawat_tgl_end ,$start,$end){
 			//full query
 			$query="SELECT * FROM master_jual_rawat,customer WHERE jrawat_cust=cust_id";
 			
@@ -931,10 +931,6 @@ class M_master_jual_rawat extends Model{
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " jrawat_cust = '".$jrawat_cust."'";
 			};
-			/*if($jrawat_tanggal!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " jrawat_tanggal = '".$jrawat_tanggal."'";
-			};*/
 			if($jrawat_tgl_start!='' && $jrawat_tgl_end!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " jrawat_tanggal BETWEEN '".$jrawat_tgl_start."' AND '".$jrawat_tgl_end."'";
@@ -954,7 +950,7 @@ class M_master_jual_rawat extends Model{
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " jrawat_keterangan LIKE '%".$jrawat_keterangan."%'";
 			};
-			//echo $query;
+			
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
 			
