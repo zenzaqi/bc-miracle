@@ -165,7 +165,6 @@ var jrawat_transfer_nilai3Field;
 var jrawat_idSearchField;
 var jrawat_nobuktiSearchField;
 var jrawat_custSearchField;
-var jrawat_tanggalSearchField;
 var jrawat_diskonSearchField;
 var jrawat_caraSearchField;
 var jrawat_keteranganSearchField;
@@ -3816,22 +3815,20 @@ Ext.onReady(function(){
 		var jrawat_id_search=null;
 		var jrawat_nobukti_search=null;
 		var jrawat_cust_search=null;
-		var jrawat_tanggal_search_date="";
 		var jrawat_diskon_search=null;
 		var jrawat_cara_search=null;
 		var jrawat_keterangan_search=null;
-		var jrawat_tgl_start_search=null;
-		var jrawat_tgl_end_search=null;
+		var jrawat_tgl_start_search="";
+		var jrawat_tgl_end_search="";
 
 		if(jrawat_idSearchField.getValue()!==null){jrawat_id_search=jrawat_idSearchField.getValue();}
 		if(jrawat_nobuktiSearchField.getValue()!==null){jrawat_nobukti_search=jrawat_nobuktiSearchField.getValue();}
 		if(jrawat_custSearchField.getValue()!==null){jrawat_cust_search=jrawat_custSearchField.getValue();}
-		if(jrawat_tanggalSearchField.getValue()!==""){jrawat_tanggal_search_date=jrawat_tanggalSearchField.getValue().format('Y-m-d');}
 		if(jrawat_diskonSearchField.getValue()!==null){jrawat_diskon_search=jrawat_diskonSearchField.getValue();}
 		if(jrawat_caraSearchField.getValue()!==null){jrawat_cara_search=jrawat_caraSearchField.getValue();}
 		if(jrawat_keteranganSearchField.getValue()!==null){jrawat_keterangan_search=jrawat_keteranganSearchField.getValue();}
-		if(Ext.getCmp('jrawat_tanggalStartAppSearchField').getValue()!==null){jrawat_tgl_start_search=Ext.getCmp('jrawat_tanggalStartAppSearchField').getValue();}
-		if(Ext.getCmp('jrawat_tanggalEndAppSearchField').getValue()!==null){jrawat_tgl_end_search=Ext.getCmp('jrawat_tanggalEndAppSearchField').getValue();}
+		if(Ext.getCmp('jrawat_tanggalStartAppSearchField').getValue()!==""){jrawat_tgl_start_search=Ext.getCmp('jrawat_tanggalStartAppSearchField').getValue().format('Y-m-d');}
+		if(Ext.getCmp('jrawat_tanggalEndAppSearchField').getValue()!==""){jrawat_tgl_end_search=Ext.getCmp('jrawat_tanggalEndAppSearchField').getValue().format('Y-m-d');}
 		// change the store parameters
 		master_jual_rawat_DataStore.baseParams = {
 			task: 'SEARCH',
@@ -3841,7 +3838,6 @@ Ext.onReady(function(){
 			jrawat_id	:	jrawat_id_search, 
 			jrawat_nobukti	:	jrawat_nobukti_search, 
 			jrawat_cust	:	jrawat_cust_search, 
-			jrawat_tanggal	:	jrawat_tanggal_search_date, 
 			jrawat_diskon	:	jrawat_diskon_search, 
 			jrawat_cara	:	jrawat_cara_search, 
 			jrawat_keterangan	:	jrawat_keterangan_search,
@@ -3867,8 +3863,6 @@ Ext.onReady(function(){
 		jrawat_nobuktiSearchField.setValue(null);
 		jrawat_custSearchField.reset();
 		jrawat_custSearchField.setValue(null);
-		jrawat_tanggalSearchField.reset();
-		jrawat_tanggalSearchField.setValue(null);
 		jrawat_diskonSearchField.reset();
 		jrawat_diskonSearchField.setValue(null);
 		jrawat_caraSearchField.reset();
@@ -3920,13 +3914,6 @@ Ext.onReady(function(){
 		lazyRender:true,
 		listClass: 'x-combo-list-small',
 		anchor: '95%'
-	});
-	/* Identify  jrawat_tanggal Search Field */
-	jrawat_tanggalSearchField= new Ext.form.DateField({
-		id: 'jrawat_tanggalSearchField',
-		fieldLabel: 'Tanggal',
-		format : 'Y-m-d',
-	
 	});
 	/* Identify  jrawat_diskon Search Field */
 	jrawat_diskonSearchField= new Ext.form.NumberField({
