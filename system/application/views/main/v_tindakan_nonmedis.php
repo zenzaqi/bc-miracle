@@ -1185,25 +1185,27 @@ Ext.onReady(function(){
 	function tindakan_nonmedis_detail_insert(){
 		for(i=0;i<tindakan_nonmedis_detail_DataStore.getCount();i++){
 			tindakan_nonmedis_detail_record=tindakan_nonmedis_detail_DataStore.getAt(i);
-			Ext.Ajax.request({
-				waitMsg: 'Please wait...',
-				url: 'index.php?c=c_tindakan_nonmedis&m=detail_tindakan_nonmedis_detail_insert',
-				params:{
-				dtrawat_id	: tindakan_nonmedis_detail_record.data.dtrawat_id, 
-				dtrawat_master	: eval(trawat_nonmedis_idField.getValue()), 
-				dtrawat_perawatan	: tindakan_nonmedis_detail_record.data.dtrawat_perawatan, 
-				dtrawat_petugas1	: tindakan_nonmedis_detail_record.data.dtrawat_petugas1, 
-				dtrawat_petugas2	: tindakan_nonmedis_detail_record.data.dtrawat_petugas2, 
-				dtrawat_jam	: tindakan_nonmedis_detail_record.data.dtrawat_jam, 
-				dtrawat_kategori	: tindakan_nonmedis_detail_record.data.dtrawat_kategori, 
-				dtrawat_status	: tindakan_nonmedis_detail_record.data.dtrawat_status, 
-				dtrawat_keterangan	: tindakan_nonmedis_detail_record.data.dtrawat_keterangan
-				},
-				callback: function(opts, success, response){
-					if(success)
-						tindakan_nonmedis_DataStore.reload();
-				}
-			});
+			if(tindakan_nonmedis_detail_record.data.dtrawat_perawatan!=""){
+				Ext.Ajax.request({
+					waitMsg: 'Please wait...',
+					url: 'index.php?c=c_tindakan_nonmedis&m=detail_tindakan_nonmedis_detail_insert',
+					params:{
+					dtrawat_id	: tindakan_nonmedis_detail_record.data.dtrawat_id, 
+					dtrawat_master	: eval(trawat_nonmedis_idField.getValue()), 
+					dtrawat_perawatan	: tindakan_nonmedis_detail_record.data.dtrawat_perawatan, 
+					dtrawat_petugas1	: tindakan_nonmedis_detail_record.data.dtrawat_petugas1, 
+					dtrawat_petugas2	: tindakan_nonmedis_detail_record.data.dtrawat_petugas2, 
+					dtrawat_jam	: tindakan_nonmedis_detail_record.data.dtrawat_jam, 
+					dtrawat_kategori	: tindakan_nonmedis_detail_record.data.dtrawat_kategori, 
+					dtrawat_status	: tindakan_nonmedis_detail_record.data.dtrawat_status, 
+					dtrawat_keterangan	: tindakan_nonmedis_detail_record.data.dtrawat_keterangan
+					},
+					callback: function(opts, success, response){
+						if(success)
+							tindakan_nonmedis_DataStore.reload();
+					}
+				});
+			}
 		}
 	}
 	//eof

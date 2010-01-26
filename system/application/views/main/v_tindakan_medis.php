@@ -1218,25 +1218,27 @@ Ext.onReady(function(){
 	function tindakan_medisdetail_insert(){
 		for(i=0;i<tindakan_medis_detail_DataStore.getCount();i++){
 			tindakan_medisdetail_record=tindakan_medis_detail_DataStore.getAt(i);
-			Ext.Ajax.request({
-				waitMsg: 'Please wait...',
-				url: 'index.php?c=c_tindakan_medis&m=detail_tindakan_medis_detail_insert',
-				params:{
-				dtrawat_id	: tindakan_medisdetail_record.data.dtrawat_id, 
-				dtrawat_master	: eval(trawat_medis_idField.getValue()), 
-				dtrawat_perawatan	: tindakan_medisdetail_record.data.dtrawat_perawatan, 
-				dtrawat_petugas1	: tindakan_medisdetail_record.data.dtrawat_petugas1, 
-				dtrawat_petugas2	: tindakan_medisdetail_record.data.dtrawat_petugas2, 
-				dtrawat_jamreservasi	: tindakan_medisdetail_record.data.dtrawat_jam, 
-				dtrawat_kategori	: tindakan_medisdetail_record.data.dtrawat_kategori, 
-				dtrawat_status	: tindakan_medisdetail_record.data.dtrawat_status,
-				dtrawat_keterangan	: tindakan_medisdetail_record.data.dtrawat_keterangan
-				},
-				callback: function(opts, success, response){
-					if(success)
-						tindakan_medisDataStore.reload();
-				}
-			});
+			if(tindakan_medisdetail_record.data.dtrawat_perawatan!=""){
+				Ext.Ajax.request({
+					waitMsg: 'Please wait...',
+					url: 'index.php?c=c_tindakan_medis&m=detail_tindakan_medis_detail_insert',
+					params:{
+					dtrawat_id	: tindakan_medisdetail_record.data.dtrawat_id, 
+					dtrawat_master	: eval(trawat_medis_idField.getValue()), 
+					dtrawat_perawatan	: tindakan_medisdetail_record.data.dtrawat_perawatan, 
+					dtrawat_petugas1	: tindakan_medisdetail_record.data.dtrawat_petugas1, 
+					dtrawat_petugas2	: tindakan_medisdetail_record.data.dtrawat_petugas2, 
+					dtrawat_jamreservasi	: tindakan_medisdetail_record.data.dtrawat_jam, 
+					dtrawat_kategori	: tindakan_medisdetail_record.data.dtrawat_kategori, 
+					dtrawat_status	: tindakan_medisdetail_record.data.dtrawat_status,
+					dtrawat_keterangan	: tindakan_medisdetail_record.data.dtrawat_keterangan
+					},
+					callback: function(opts, success, response){
+						if(success)
+							tindakan_medisDataStore.reload();
+					}
+				});
+			}
 		}
 	}
 	//eof

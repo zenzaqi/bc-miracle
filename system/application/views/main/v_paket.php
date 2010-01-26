@@ -341,6 +341,7 @@ Ext.onReady(function(){
 		if(!paket_createWindow.isVisible()){
 			paket_reset_form();
 			paket_isi_perawatan_DataStore.load({params: { master_id: 0, start:0, limit: pageS}});
+			paket_isi_produk_DataStore.load({params: { master_id: 0, start:0, limit: pageS}});
 			post2db='CREATE';
 			msg='created';
 			paket_createWindow.show();
