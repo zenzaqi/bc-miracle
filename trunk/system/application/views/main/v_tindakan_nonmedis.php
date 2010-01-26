@@ -575,7 +575,7 @@ Ext.onReady(function(){
 		{
 			header: 'Customer',
 			dataIndex: 'trawat_cust',
-			width: 150,
+			width: 210,
 			sortable: true,
 			editor: new Ext.form.NumberField({
 				allowBlank: false,
@@ -589,7 +589,7 @@ Ext.onReady(function(){
 		{
 			header: 'Perawatan',
 			dataIndex: 'dtrawat_perawatan',
-			width: 150,
+			width: 210,
 			sortable: true,
 			editor: new Ext.form.ComboBox({
 				store: dtrawat_perawatanDataStore,
@@ -604,7 +604,7 @@ Ext.onReady(function(){
 		{
 			header: 'Therapist',
 			dataIndex: 'dtrawat_petugas2',
-			width: 150,
+			width: 80,
 			sortable: true,
 			editable:false,
 			editor: new Ext.form.ComboBox({
@@ -618,9 +618,9 @@ Ext.onReady(function(){
 			})
 		}, 
 		{
-			header: 'Jam Appointment',
+			header: 'Jam App',
 			dataIndex: 'dtrawat_jam',
-			width: 150,
+			width: 60,
 			sortable: true
 		}, 
 		{
@@ -633,7 +633,7 @@ Ext.onReady(function(){
 				triggerAction: 'all',
 				store:new Ext.data.SimpleStore({
 					fields:['dtrawat_status_value', 'dtrawat_status_display'],
-					data: [['batal','batal'],['selesai','selesai'],['datang','datang'],['siap','siap']]
+					data: [['batal','batal'],['selesai','selesai'],['datang','datang']]
 					}),
 				mode: 'local',
                	displayField: 'dtrawat_status_display',
@@ -1419,7 +1419,7 @@ Ext.onReady(function(){
 		fieldLabel: 'Status',
 		store: new Ext.data.SimpleStore({
 			fields:['dtrawat_status_value', 'dtrawat_status_display'],
-			data: [['batal','batal'],['selesai','selesai'],['datang','datang'],['siap','siap']]
+			data: [['batal','batal'],['selesai','selesai'],['datang','datang']]
 			}),
 		mode: 'local',
 		displayField:'dtrawat_status_display',
