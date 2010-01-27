@@ -46,8 +46,8 @@ class M_cabang extends Model{
 		
 		//function for update record
 		function cabang_update($cabang_id ,$cabang_nama ,$cabang_alamat ,$cabang_kota ,$cabang_kodepos ,$cabang_propinsi ,$cabang_keterangan ,$cabang_aktif ){
-		if ($cabang_aktif=="")
-			$cabang_aktif = "Aktif";
+			if ($cabang_aktif=="")
+				$cabang_aktif = "Aktif";
 			$data = array(
 				"cabang_id"=>$cabang_id,			
 				"cabang_nama"=>$cabang_nama,			
@@ -74,8 +74,8 @@ class M_cabang extends Model{
 		
 		//function for create new record
 		function cabang_create($cabang_nama ,$cabang_alamat ,$cabang_kota ,$cabang_kodepos ,$cabang_propinsi ,$cabang_keterangan ,$cabang_aktif ){
-		if ($cabang_aktif=="")
-			$cabang_aktif = "Aktif";
+			if ($cabang_aktif=="")
+				$cabang_aktif = "Aktif";
 			$data = array(
 	
 				"cabang_nama"=>$cabang_nama,	
@@ -125,6 +125,8 @@ class M_cabang extends Model{
 		
 		//function for advanced search record
 		function cabang_search($cabang_id ,$cabang_nama ,$cabang_alamat ,$cabang_kota ,$cabang_kodepos ,$cabang_propinsi ,$cabang_keterangan ,$cabang_aktif ,$start,$end){
+			if ($cabang_aktif=="")
+				$cabang_aktif = "Aktif";
 			//full query
 			$query="select * from cabang";
 			

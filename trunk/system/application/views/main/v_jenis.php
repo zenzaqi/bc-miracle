@@ -556,8 +556,13 @@ Ext.onReady(function(){
 		}, '-', 
 			new Ext.app.SearchField({
 			store: jenis_DataStore,
-			baseParams: {task:'LIST',start: 0, limit: pageS},
+			params: {task: 'LIST',start: 0, limit: pageS},
 			listeners:{
+				specialkey: function(f,e){
+					if(e.getKey() == e.ENTER){
+						jenis_DataStore.baseParams={task:'LIST',start: 0, limit: pageS};
+		            }
+				},
 				render: function(c){
 				Ext.get(this.id).set({qtitle:'Search By'});
 				Ext.get(this.id).set({qtip:'- Nama Group 2<br>- Kode Group 2<br>- Kelompok'});
@@ -772,6 +777,8 @@ Ext.onReady(function(){
 		// change the store parameters
 		jenis_DataStore.baseParams = {
 			task: 'SEARCH',
+			start: 0,
+			limit: pageS,
 			//variable here
 			jenis_id	:	jenis_id_search, 
 			jenis_kode	:	jenis_kode_search, 
@@ -856,6 +863,7 @@ Ext.onReady(function(){
 		mode: 'local',
 		displayField: 'jenis_aktif',
 		valueField: 'value',
+		emptyText: 'Aktif',
 		width: 80,
 		triggerAction: 'all'	 
 	
@@ -909,10 +917,24 @@ Ext.onReady(function(){
 		items: jenis_searchForm
 	});
     /* End of Function */ 
+	
+	function jenis_reset_SearchForm(){
+		jenis_kodeSearchField.reset();
+		jenis_kodeSearchField.setValue(null);
+		jenis_namaSearchField.reset();
+		jenis_namaSearchField.setValue(null);
+		jenis_kelompokSearchField.reset();
+		jenis_kelompokSearchField.setValue(null);
+		jenis_keteranganSearchField.reset();
+		jenis_keteranganSearchField.setValue(null);
+		jenis_aktifSearchField.reset();
+		jenis_aktifSearchField.setValue(null);
+	}
 	 
   	/* Function for Displaying  Search Window Form */
 	function display_form_search_window(){
 		if(!jenis_searchWindow.isVisible()){
+			jenis_reset_SearchForm();
 			jenis_searchWindow.show();
 		} else {
 			jenis_searchWindow.toFront();

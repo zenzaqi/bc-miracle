@@ -497,8 +497,13 @@ Ext.onReady(function(){
 		}, '-', 
 			new Ext.app.SearchField({
 			store: alat_DataStore,
-			baseParams: {task:'LIST',start: 0, limit: pageS},
+			params: {task: 'LIST',start: 0, limit: pageS},
 			listeners:{
+				specialkey: function(f,e){
+					if(e.getKey() == e.ENTER){
+						alat_DataStore.baseParams={task:'LIST',start: 0, limit: pageS};
+		            }
+				},
 				render: function(c){
 				Ext.get(this.id).set({qtitle:'Search By'});
 				Ext.get(this.id).set({qtip:'- Nama'});
@@ -610,6 +615,7 @@ Ext.onReady(function(){
 		editable:false,
 		displayField: 'alat_aktif_display',
 		valueField: 'alat_aktif_value',
+		emptyText: 'Aktif',
 		width: 80,
 		triggerAction: 'all'	
 	});
@@ -681,6 +687,8 @@ Ext.onReady(function(){
 		// change the store parameters
 		alat_DataStore.baseParams = {
 			task: 'SEARCH',
+			start: 0,
+			limit: pageS,
 			//variable here
 			alat_id	:	alat_id_search, 
 			alat_nama	:	alat_nama_search, 
@@ -752,6 +760,7 @@ Ext.onReady(function(){
 		mode: 'local',
 		displayField: 'alat_aktif',
 		valueField: 'value',
+		emptyText: 'Aktif',
 		width: 80,
 		triggerAction: 'all'	 
 	

@@ -950,7 +950,8 @@ Ext.onReady(function(){
 			{name: 'dtrawat_jam', type: 'string', mapping: 'dtrawat_jam'}, 
 			{name: 'dtrawat_kategori', type: 'string', mapping: 'dtrawat_kategori'}, 
 			{name: 'dtrawat_status', type: 'string', mapping: 'dtrawat_status'},
-			{name: 'dtrawat_keterangan', type: 'string', mapping: 'dtrawat_keterangan'}
+			{name: 'dtrawat_keterangan', type: 'string', mapping: 'dtrawat_keterangan'},
+			{name: 'dtrawat_ambil_paket', type: 'string', mapping: 'dtrawat_ambil_paket'}
 	]);
 	//eof
 	
@@ -1079,6 +1080,12 @@ Ext.onReady(function(){
 			anchor: '95%'
 	});
 	
+	var checkColumn = new Ext.grid.CheckColumn({
+		header: 'Ambil Paket',
+		dataIndex: 'dtrawat_ambil_paket',
+		width: 55
+	});
+	
 	//declaration of detail coloumn model
 	tindakan_medisdetail_ColumnModel = new Ext.grid.ColumnModel(
 		[
@@ -1139,7 +1146,7 @@ Ext.onReady(function(){
 			editor: new Ext.form.TextField({
 				maxLength: 250,
 			})
-		}]
+		},checkColumn]
 	);
 	tindakan_medisdetail_ColumnModel.defaultSortable= true;
 	//eof
@@ -1159,7 +1166,7 @@ Ext.onReady(function(){
 		enableColLock:false,
 		region: 'center',
         margins: '0 5 5 5',
-		plugins: [editor_tindakan_medis_detail],
+		plugins: [editor_tindakan_medis_detail,checkColumn],
 		frame: true,
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
@@ -1195,10 +1202,9 @@ Ext.onReady(function(){
 			dtrawat_master	:'',		
 			dtrawat_perawatan	:'',		
 			dtrawat_petugas1	:'',		
-			dtrawat_petugas2	:'',		
-			dtrawat_jamreservasi	:'',		
-			dtrawat_kategori	:'',		
-			dtrawat_status	:'datang'		
+			dtrawat_jam	:'',		
+			dtrawat_status	:'datang',
+			dtrawat_keterangan	: ''
 		});
 		editor_tindakan_medis_detail.stopEditing();
 		tindakan_medis_detail_DataStore.insert(0, edit_tindakan_medisdetail);

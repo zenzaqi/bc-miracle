@@ -43,11 +43,11 @@ Ext.app.SearchField = Ext.extend(Ext.form.TwinTriggerField, {
             this.onTrigger1Click();
             return;
         }
-        var o = {start: 0};
+        var o = {task: 'LIST', start: 0};
         this.store.baseParams = this.store.baseParams || {};
         this.store.baseParams[this.paramName] = v;
         this.store.reload({params:o});
-        this.hasSearch = true;
+        this.hasSearch = false;
         this.triggers[0].show();
     }
 });

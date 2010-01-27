@@ -46,8 +46,8 @@ class M_kategori extends Model{
 		
 		//function for update record
 		function kategori_update($kategori_id ,$kategori_nama ,$kategori_jenis ,$kategori_keterangan ,$kategori_aktif ,$kategori_creator ,$kategori_date_create ,$kategori_update ,$kategori_date_update ,$kategori_revised ){
-		if ($kategori_aktif=="")
-			$kategori_aktif = "Aktif";
+			if ($kategori_aktif=="")
+				$kategori_aktif = "Aktif";
 			$data = array(
 				"kategori_id"=>$kategori_id,			
 				"kategori_nama"=>$kategori_nama,			
@@ -71,8 +71,8 @@ class M_kategori extends Model{
 		
 		//function for create new record
 		function kategori_create($kategori_nama ,$kategori_jenis ,$kategori_keterangan ,$kategori_aktif ,$kategori_creator ,$kategori_date_create ,$kategori_update ,$kategori_date_update ,$kategori_revised ){
-		if ($kategori_aktif=="")
-			$kategori_aktif = "Aktif";
+			if ($kategori_aktif=="")
+				$kategori_aktif = "Aktif";
 			$data = array(
 	
 				"kategori_nama"=>$kategori_nama,	
@@ -119,6 +119,8 @@ class M_kategori extends Model{
 		
 		//function for advanced search record
 		function kategori_search($kategori_id ,$kategori_nama ,$kategori_jenis ,$kategori_keterangan ,$kategori_aktif ,$kategori_creator ,$kategori_date_create ,$kategori_update ,$kategori_date_update ,$kategori_revised ,$start,$end){
+			if ($kategori_aktif=="")
+				$kategori_aktif = "Aktif";
 			//full query
 			$query="select * from kategori";
 			

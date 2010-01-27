@@ -40,7 +40,7 @@ class M_akun extends Model{
 			// For simple search
 			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (akun_id LIKE '%".addslashes($filter)."%' OR akun_kode LIKE '%".addslashes($filter)."%' OR akun_nama LIKE '%".addslashes($filter)."%' OR akun_parent LIKE '%".addslashes($filter)."%' OR akun_neraca LIKE '%".addslashes($filter)."%' OR akun_rugilaba LIKE '%".addslashes($filter)."%' OR akun_debet LIKE '%".addslashes($filter)."%' OR akun_kredit LIKE '%".addslashes($filter)."%' OR akun_saldo LIKE '%".addslashes($filter)."%' OR akun_keterangan LIKE '%".addslashes($filter)."%' OR akun_aktif LIKE '%".addslashes($filter)."%' OR akun_creator LIKE '%".addslashes($filter)."%' OR akun_date_create LIKE '%".addslashes($filter)."%' OR akun_update LIKE '%".addslashes($filter)."%' OR akun_date_update LIKE '%".addslashes($filter)."%' OR akun_revised LIKE '%".addslashes($filter)."%' )";
+				$query .= " (akun_kode LIKE '%".addslashes($filter)."%' OR akun_nama LIKE '%".addslashes($filter)."%' )";
 			}
 			
 			$result = $this->db->query($query);
@@ -61,8 +61,8 @@ class M_akun extends Model{
 		
 		//function for update record
 		function akun_update($akun_id ,$akun_kode ,$akun_nama ,$akun_parent ,$akun_neraca ,$akun_rugilaba ,$akun_debet ,$akun_kredit ,$akun_saldo ,$akun_keterangan ,$akun_aktif ,$akun_creator ,$akun_date_create ,$akun_update ,$akun_date_update ,$akun_revised ){
-		if ($akun_aktif=="")
-			$akun_aktif = "Aktif";
+			if ($akun_aktif=="")
+				$akun_aktif = "Aktif";
 			$data = array(
 				"akun_id"=>$akun_id,			
 				"akun_kode"=>$akun_kode,			
@@ -95,8 +95,8 @@ class M_akun extends Model{
 		
 		//function for create new record
 		function akun_create($akun_kode ,$akun_nama ,$akun_parent ,$akun_neraca ,$akun_rugilaba ,$akun_debet ,$akun_kredit ,$akun_saldo ,$akun_keterangan ,$akun_aktif ,$akun_creator ,$akun_date_create ,$akun_update ,$akun_date_update ,$akun_revised ){
-		if ($akun_aktif=="")
-			$akun_aktif = "Aktif";
+			if ($akun_aktif=="")
+				$akun_aktif = "Aktif";
 			$data = array(
 	
 				"akun_kode"=>$akun_kode,	
@@ -149,6 +149,8 @@ class M_akun extends Model{
 		
 		//function for advanced search record
 		function akun_search($akun_id ,$akun_kode ,$akun_nama ,$akun_parent ,$akun_neraca ,$akun_rugilaba ,$akun_debet ,$akun_kredit ,$akun_saldo ,$akun_keterangan ,$akun_aktif ,$akun_creator ,$akun_date_create ,$akun_update ,$akun_date_update ,$akun_revised ,$start,$end){
+			if ($akun_aktif=="")
+				$akun_aktif = "Aktif";
 			//full query
 			$query="select * from akun";
 			

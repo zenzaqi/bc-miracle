@@ -46,8 +46,8 @@ class M_jabatan extends Model{
 		
 		//function for update record
 		function jabatan_update($jabatan_id ,$jabatan_nama ,$jabatan_keterangan ,$jabatan_aktif ){
-		if ($jabatan_aktif=="")
-			$jabatan_aktif = "Aktif";
+			if ($jabatan_aktif=="")
+				$jabatan_aktif = "Aktif";
 			$data = array(
 				"jabatan_id"=>$jabatan_id,			
 				"jabatan_nama"=>$jabatan_nama,			
@@ -70,8 +70,8 @@ class M_jabatan extends Model{
 		
 		//function for create new record
 		function jabatan_create($jabatan_nama ,$jabatan_keterangan ,$jabatan_aktif ){
-		if ($jabatan_aktif=="")
-			$jabatan_aktif = "Aktif";
+			if ($jabatan_aktif=="")
+				$jabatan_aktif = "Aktif";
 			$data = array(
 	
 				"jabatan_nama"=>$jabatan_nama,	
@@ -117,6 +117,8 @@ class M_jabatan extends Model{
 		
 		//function for advanced search record
 		function jabatan_search($jabatan_id ,$jabatan_nama ,$jabatan_keterangan ,$jabatan_aktif ,$start,$end){
+			if ($jabatan_aktif=="")
+				$jabatan_aktif = "Aktif";
 			//full query
 			$query="select * from jabatan";
 			

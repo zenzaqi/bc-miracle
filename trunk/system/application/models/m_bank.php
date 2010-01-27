@@ -40,7 +40,7 @@ class M_bank extends Model{
 			// For simple search
 			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (bank_id LIKE '%".addslashes($filter)."%' OR bank_kode LIKE '%".addslashes($filter)."%' OR bank_nama LIKE '%".addslashes($filter)."%' OR bank_norek LIKE '%".addslashes($filter)."%' OR bank_atasnama LIKE '%".addslashes($filter)."%' OR bank_saldo LIKE '%".addslashes($filter)."%' OR bank_keterangan LIKE '%".addslashes($filter)."%' OR bank_aktif LIKE '%".addslashes($filter)."%' OR bank_creator LIKE '%".addslashes($filter)."%' OR bank_date_create LIKE '%".addslashes($filter)."%' OR bank_update LIKE '%".addslashes($filter)."%' OR bank_date_update LIKE '%".addslashes($filter)."%' OR bank_revised LIKE '%".addslashes($filter)."%' )";
+				$query .= " (bank_kode LIKE '%".addslashes($filter)."%' OR bank_nama LIKE '%".addslashes($filter)."%' OR bank_norek LIKE '%".addslashes($filter)."%' OR bank_atasnama LIKE '%".addslashes($filter)."%' )";
 			}
 			
 			$result = $this->db->query($query);
@@ -62,8 +62,8 @@ class M_bank extends Model{
 		//function for update record
 		function bank_update($bank_id ,$bank_kode ,$bank_nama ,$bank_norek ,$bank_atasnama ,$bank_saldo ,$bank_keterangan ,$bank_aktif ){
 			
-		if ($bank_aktif=="")
-			$bank_aktif = "Aktif";
+			if ($bank_aktif=="")
+				$bank_aktif = "Aktif";
 			$data = array(
 				"bank_id"=>$bank_id,	
 				"bank_nama"=>$bank_nama,			
@@ -101,8 +101,8 @@ class M_bank extends Model{
 		
 		//function for create new record
 		function bank_create($bank_kode ,$bank_nama ,$bank_norek ,$bank_atasnama ,$bank_saldo ,$bank_keterangan ,$bank_aktif ,$bank_creator ,$bank_date_create ,$bank_update ,$bank_date_update ,$bank_revised ){
-		if ($bank_aktif=="")
-			$bank_aktif = "Aktif";
+			if ($bank_aktif=="")
+				$bank_aktif = "Aktif";
 			$data = array(
 	
 				"bank_kode"=>$bank_kode,	
@@ -152,6 +152,8 @@ class M_bank extends Model{
 		
 		//function for advanced search record
 		function bank_search($bank_id ,$bank_kode ,$bank_nama ,$bank_norek ,$bank_atasnama ,$bank_saldo ,$bank_keterangan ,$bank_aktif ,$bank_creator ,$bank_date_create ,$bank_update ,$bank_date_update ,$bank_revised ,$start,$end){
+			if ($bank_aktif=="")
+				$bank_aktif = "Aktif";
 			//full query
 			$query="select * from bank,akun,bank_master WHERE bank_kode=akun_id AND bank_nama=mbank_id";
 			

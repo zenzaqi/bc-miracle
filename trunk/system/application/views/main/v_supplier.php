@@ -778,8 +778,13 @@ Ext.onReady(function(){
 		}, '-', 
 			new Ext.app.SearchField({
 			store: supplier_DataStore,
-			baseParams: {task:'LIST',start: 0, limit: pageS},
+			params: {task: 'LIST',start: 0, limit: pageS},
 			listeners:{
+				specialkey: function(f,e){
+					if(e.getKey() == e.ENTER){
+						supplier_DataStore.baseParams={task:'LIST',start: 0, limit: pageS};
+		            }
+				},
 				render: function(c){
 				Ext.get(this.id).set({qtitle:'Search By'});
 				Ext.get(this.id).set({qtip:'- Kategori<br>- Nama<br>- No.Telp<br>- Contact Person<br>- Telp.CP'});
@@ -1107,6 +1112,8 @@ Ext.onReady(function(){
 		// change the store parameters
 		supplier_DataStore.baseParams = {
 			task: 'SEARCH',
+			start: 0,
+			limit: pageS,
 			//variable here
 			supplier_id	:	supplier_id_search, 
 			supplier_kategori	:	supplier_kategori_search, 
@@ -1297,6 +1304,7 @@ Ext.onReady(function(){
 		mode: 'local',
 		displayField: 'supplier_aktif',
 		valueField: 'value',
+		emptyText: 'Aktif',
 		width: 80,
 		triggerAction: 'all'	 
 	

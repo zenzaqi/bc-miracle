@@ -25,7 +25,7 @@ class M_bank_master extends Model{
 			// For simple search
 			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (mbank_id LIKE '%".addslashes($filter)."%' OR mbank_nama LIKE '%".addslashes($filter)."%' OR mbank_keterangan LIKE '%".addslashes($filter)."%' OR mbank_aktif LIKE '%".addslashes($filter)."%' )";
+				$query .= " (mbank_nama LIKE '%".addslashes($filter)."%' OR mbank_keterangan LIKE '%".addslashes($filter)."%' )";
 			}
 			
 			$result = $this->db->query($query);
@@ -46,8 +46,8 @@ class M_bank_master extends Model{
 		
 		//function for update record
 		function bank_master_update($mbank_id ,$mbank_nama ,$mbank_keterangan ,$mbank_aktif ){
-		if ($mbank_aktif=="")
-			$mbank_aktif = "Aktif";
+			if ($mbank_aktif=="")
+				$mbank_aktif = "Aktif";
 			$data = array(
 				"mbank_id"=>$mbank_id, 
 				"mbank_nama"=>$mbank_nama, 
@@ -62,8 +62,8 @@ class M_bank_master extends Model{
 		
 		//function for create new record
 		function bank_master_create($mbank_nama ,$mbank_keterangan ,$mbank_aktif ){
-		if ($mbank_aktif=="")
-			$mbank_aktif = "Aktif";
+			if ($mbank_aktif=="")
+				$mbank_aktif = "Aktif";
 			$data = array(
 				"mbank_nama"=>$mbank_nama, 
 				"mbank_keterangan"=>$mbank_keterangan, 
@@ -103,6 +103,8 @@ class M_bank_master extends Model{
 		
 		//function for advanced search record
 		function bank_master_search($mbank_id ,$mbank_nama ,$mbank_keterangan ,$mbank_aktif ,$start,$end){
+			if ($mbank_aktif=="")
+				$mbank_aktif = "Aktif";
 			//full query
 			$query="select * from bank_master";
 			

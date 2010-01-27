@@ -889,7 +889,7 @@ Ext.onReady(function(){
 		}, '-', 
 			new Ext.app.SearchField({
 			store: perawatan_DataStore,
-			params: {start: 0, limit: pageS},
+			params: {task: 'LIST',start: 0, limit: pageS},
 			listeners:{
 				specialkey: function(f,e){
 					if(e.getKey() == e.ENTER){
@@ -1824,6 +1824,8 @@ Ext.onReady(function(){
 		// change the store parameters
 		perawatan_DataStore.baseParams = {
 			task: 'SEARCH',
+			start: 0,
+			limit: pageS,
 			//variable here
 			rawat_id	:	rawat_id_search, 
 			rawat_kode	:	rawat_kode_search, 

@@ -46,8 +46,8 @@ class M_gudang extends Model{
 		
 		//function for update record
 		function gudang_update($gudang_id ,$gudang_nama ,$gudang_lokasi ,$gudang_keterangan ,$gudang_aktif ,$gudang_creator ,$gudang_date_create ,$gudang_update ,$gudang_date_update ,$gudang_revised ){
-		if ($gudang_aktif=="")
-			$gudang_aktif = "Aktif";
+			if ($gudang_aktif=="")
+				$gudang_aktif = "Aktif";
 			$data = array(
 				"gudang_id"=>$gudang_id,			
 				"gudang_nama"=>$gudang_nama,			
@@ -71,8 +71,8 @@ class M_gudang extends Model{
 		
 		//function for create new record
 		function gudang_create($gudang_nama ,$gudang_lokasi ,$gudang_keterangan ,$gudang_aktif ,$gudang_creator ,$gudang_date_create ,$gudang_update ,$gudang_date_update ,$gudang_revised ){
-		if ($gudang_aktif=="")
-			$gudang_aktif = "Aktif";
+			if ($gudang_aktif=="")
+				$gudang_aktif = "Aktif";
 			$data = array(
 	
 				"gudang_nama"=>$gudang_nama,	
@@ -119,6 +119,8 @@ class M_gudang extends Model{
 		
 		//function for advanced search record
 		function gudang_search($gudang_id ,$gudang_nama ,$gudang_lokasi ,$gudang_keterangan ,$gudang_aktif ,$gudang_creator ,$gudang_date_create ,$gudang_update ,$gudang_date_update ,$gudang_revised ,$start,$end){
+			if($gudang_aktif=="")
+				$gudang_aktif="Aktif";
 			//full query
 			$query="select * from gudang";
 			
