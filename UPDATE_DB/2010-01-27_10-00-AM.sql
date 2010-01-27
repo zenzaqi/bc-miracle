@@ -1,0 +1,1 @@
+ALTER TABLE `tindakan_detail` ADD `dtrawat_ambil_paket` ENUM( 'true', 'false' ) NULL DEFAULT 'false' AFTER `dtrawat_status`;

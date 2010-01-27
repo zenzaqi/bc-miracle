@@ -19,6 +19,7 @@ class C_appointment extends Controller {
 		session_start();
 		$this->load->model('m_appointment', '', TRUE);
 		$this->load->plugin('to_excel');
+		$this->load->library('firephp');
 	}
 	
 	//set index
@@ -411,17 +412,22 @@ class C_appointment extends Controller {
 		//POST varibale here
 		$app_id=trim(@$_POST["app_id"]);
 		$app_customer=trim(@$_POST["app_customer"]);
-		$app_tanggal=trim(@$_POST["app_tanggal"]);
 		$app_cara=trim(@$_POST["app_cara"]);
 		$app_cara=str_replace("/(<\/?)(p)([^>]*>)", "",$app_cara);
 		$app_cara=str_replace("'", "\'",$app_cara);
-		$app_keterangan=trim(@$_POST["app_keterangan"]);
-		$app_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$app_keterangan);
-		$app_keterangan=str_replace("'", "\'",$app_keterangan);
+		$app_kategori=trim(@$_POST["app_kategori"]);
+		$app_dokter=trim(@$_POST["app_dokter"]);
+		$app_terapis=trim(@$_POST["app_terapis"]);
+		$app_tgl_start_reservasi=trim(@$_POST["app_tgl_start_reservasi"]);
+		$app_tgl_end_reservasi=trim(@$_POST["app_tgl_end_reservasi"]);
+		$app_tgl_start_app=trim(@$_POST["app_tgl_start_app"]);
+		$app_tgl_end_app=trim(@$_POST["app_tgl_end_app"]);
+		$app_rawat_medis=trim(@$_POST["app_rawat_medis"]);
+		$app_rawat_nonmedis=trim(@$_POST["app_rawat_nonmedis"]);
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$query = $this->m_appointment->appointment_export_excel($app_id ,$app_customer ,$app_tanggal ,$app_cara ,$app_keterangan ,$option,$filter);
+		$query = $this->m_appointment->appointment_export_excel($app_id ,$app_customer ,$app_cara ,$app_kategori ,$app_dokter ,$app_terapis ,$app_tgl_start_reservasi ,$app_tgl_end_reservasi ,$app_tgl_start_app ,$app_tgl_end_app ,$app_rawat_medis ,$app_rawat_nonmedis ,$option,$filter);
 		
 		to_excel($query,"appointment"); 
 		echo '1';
