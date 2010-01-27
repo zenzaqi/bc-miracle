@@ -3540,7 +3540,6 @@ Ext.onReady(function(){
 				detail_jual_rawat_record.data.drawat_harga=cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_harga;
 				//detail_jual_rawat_record.data.drawat_satuan=cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_satuan;
 				if(detail_jual_rawat_record.data.drawat_diskon==""){
-					console.log("drawat_diskon = kosng");
 					if(jrawat_cust_nomemberField.getValue()!=""){
 						if(cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_dm!==0){
 							detail_jual_rawat_record.data.drawat_diskon=cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_dm;
