@@ -791,8 +791,13 @@ Ext.onReady(function(){
 		}, '-', 
 			new Ext.app.SearchField({
 			store: paket_DataStore,
-			baseParams: {task:'LIST',start: 0, limit: pageS},
+			params: {task: 'LIST',start: 0, limit: pageS},
 			listeners:{
+				specialkey: function(f,e){
+					if(e.getKey() == e.ENTER){
+						paket_DataStore.baseParams={task:'LIST',start: 0, limit: pageS};
+		            }
+				},
 				render: function(c){
 				Ext.get(this.id).set({qtitle:'Search By'});
 				Ext.get(this.id).set({qtip:'- Kode Baru<br>- Nama<br>- Group 1<br>- Group 2<br>- Jenis'});
@@ -1677,6 +1682,8 @@ Ext.onReady(function(){
 		// change the store parameters
 		paket_DataStore.baseParams = {
 			task: 'SEARCH',
+			start: 0,
+			limit: pageS,
 			//variable here
 			paket_id	:	paket_id_search, 
 			paket_kode	:	paket_kode_search, 

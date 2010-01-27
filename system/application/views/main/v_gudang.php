@@ -507,8 +507,13 @@ Ext.onReady(function(){
 		}, '-', 
 			new Ext.app.SearchField({
 			store: gudang_DataStore,
-			baseParams: {task:'LIST',start: 0, limit: pageS},
+			params: {task: 'LIST',start: 0, limit: pageS},
 			listeners:{
+				specialkey: function(f,e){
+					if(e.getKey() == e.ENTER){
+						gudang_DataStore.baseParams={task:'LIST',start: 0, limit: pageS};
+		            }
+				},
 				render: function(c){
 				Ext.get(this.id).set({qtitle:'Search By'});
 				Ext.get(this.id).set({qtip:'- Nama<br>- Lokasi<br>- Keterangan'});
@@ -623,6 +628,7 @@ Ext.onReady(function(){
 		editable:false,
 		displayField: 'gudang_aktif_display',
 		valueField: 'gudang_aktif_value',
+		emptyText: 'Aktif',
 		width: 80,
 		triggerAction: 'all'	
 	});
@@ -699,6 +705,8 @@ Ext.onReady(function(){
 		// change the store parameters
 		gudang_DataStore.baseParams = {
 			task: 'SEARCH',
+			start: 0,
+			limit: pageS,
 			//variable here
 			gudang_id	:	gudang_id_search, 
 			gudang_nama	:	gudang_nama_search, 
@@ -774,6 +782,7 @@ Ext.onReady(function(){
 		mode: 'local',
 		displayField: 'gudang_aktif',
 		valueField: 'value',
+		emptyText: 'Aktif',
 		width: 80,
 		triggerAction: 'all'	 
 	

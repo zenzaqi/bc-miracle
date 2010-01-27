@@ -46,8 +46,8 @@ class M_departemen extends Model{
 		
 		//function for update record
 		function departemen_update($departemen_id ,$departemen_nama ,$departemen_keterangan ,$departemen_aktif ){
-		if ($departemen_aktif=="")
-			$departemen_aktif = "Aktif";
+			if ($departemen_aktif=="")
+				$departemen_aktif = "Aktif";
 			$data = array(
 				"departemen_id"=>$departemen_id,			
 				"departemen_nama"=>$departemen_nama,			
@@ -70,8 +70,8 @@ class M_departemen extends Model{
 		
 		//function for create new record
 		function departemen_create($departemen_nama ,$departemen_keterangan ,$departemen_aktif ){
-		if ($departemen_aktif=="")
-			$departemen_aktif = "Aktif";
+			if ($departemen_aktif=="")
+				$departemen_aktif = "Aktif";
 			$data = array(
 	
 				"departemen_nama"=>$departemen_nama,	
@@ -117,6 +117,8 @@ class M_departemen extends Model{
 		
 		//function for advanced search record
 		function departemen_search($departemen_id ,$departemen_nama ,$departemen_keterangan ,$departemen_aktif ,$start,$end){
+			if ($departemen_aktif=="")
+				$departemen_aktif = "Aktif";
 			//full query
 			$query="select * from departemen";
 			

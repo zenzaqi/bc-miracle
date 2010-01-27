@@ -550,8 +550,13 @@ Ext.onReady(function(){
 		}, '-', 
 			new Ext.app.SearchField({
 			store: kategori2_DataStore,
-			baseParams: {task:'LIST',start: 0, limit: pageS},
+			params: {task: 'LIST',start: 0, limit: pageS},
 			listeners:{
+				specialkey: function(f,e){
+					if(e.getKey() == e.ENTER){
+						kategori2_DataStore.baseParams={task:'LIST',start: 0, limit: pageS};
+		            }
+				},
 				render: function(c){
 				Ext.get(this.id).set({qtitle:'Search By'});
 				Ext.get(this.id).set({qtip:'- Nama<br>- Jenis<br>- Keterangan'});
@@ -751,6 +756,8 @@ Ext.onReady(function(){
 		// change the store parameters
 		kategori2_DataStore.baseParams = {
 			task: 'SEARCH',
+			start: 0,
+			limit: pageS,
 			//variable here
 			kategori2_id	:	kategori2_id_search, 
 			kategori2_nama	:	kategori2_nama_search, 
@@ -796,14 +803,11 @@ Ext.onReady(function(){
 	kategori2_jenisSearchField= new Ext.form.ComboBox({
 		id: 'kategori2_jenisSearchField',
 		fieldLabel: 'Jenis',
-		store:new Ext.data.SimpleStore({
-			fields:['kategori2_jenis_value', 'kategori2_jenis_display'],
-			data:[['produk','produk'],['perawatan','perawatan']]
-		}),
-		mode: 'local',
+		store: kategori2_jenisDataStore,
+		mode: 'remote',
 		editable: false,
-		displayField: 'kategori2_jenis_display',
-		valueField: 'kategori2_jenis_value',
+		displayField: 'kategori_nama',
+		valueField: 'kategori_id',
 		anchor: '95%',
 		triggerAction: 'all'	
 	});
@@ -862,6 +866,17 @@ Ext.onReady(function(){
 		]
 	});
     /* End of Function */ 
+	
+	function kategori2_reset_SearchForm(){
+		kategori2_namaSearchField.reset();
+		kategori2_namaSearchField.setValue(null);
+		kategori2_jenisSearchField.reset();
+		kategori2_jenisSearchField.setValue(null);
+		kategori2_keteranganSearchField.reset();
+		kategori2_keteranganSearchField.setValue(null);
+		kategori2_aktifSearchField.reset();
+		kategori2_aktifSearchField.setValue(null);
+	}
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
 	kategori2_searchWindow = new Ext.Window({
@@ -883,6 +898,7 @@ Ext.onReady(function(){
   	/* Function for Displaying  Search Window Form */
 	function display_form_search_window(){
 		if(!kategori2_searchWindow.isVisible()){
+			kategori2_reset_SearchForm();
 			kategori2_searchWindow.show();
 		} else {
 			kategori2_searchWindow.toFront();

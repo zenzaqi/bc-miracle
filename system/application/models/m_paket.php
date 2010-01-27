@@ -247,8 +247,8 @@ FROM ((`paket` INNER JOIN `produk_group` ON `paket`.`paket_group`=`produk_group`
 	
 	//function for update record
 	function paket_update($paket_id ,$paket_kode, $paket_kodelama ,$paket_nama ,$paket_group ,$paket_keterangan ,$paket_du ,$paket_dm ,$paket_point ,$paket_harga ,$paket_expired ,$paket_aktif ){
-	if ($paket_aktif=="")
-		$paket_aktif = "Aktif";
+		if ($paket_aktif=="")
+			$paket_aktif = "Aktif";
 		$data = array(
 			"paket_id"=>$paket_id, 
 			"paket_nama"=>$paket_nama, 
@@ -324,8 +324,8 @@ FROM ((`paket` INNER JOIN `produk_group` ON `paket`.`paket_group`=`produk_group`
 	
 	//function for create new record
 	function paket_create($paket_kode ,$paket_kodelama ,$paket_nama ,$paket_group ,$paket_keterangan ,$paket_du ,$paket_dm ,$paket_point ,$paket_harga ,$paket_expired ,$paket_aktif ){
-	if ($paket_aktif=="")
-		$paket_aktif = "Aktif";
+		if ($paket_aktif=="")
+			$paket_aktif = "Aktif";
 		$data = array(
 			"paket_kodelama"=>$paket_kodelama, 
 			"paket_nama"=>$paket_nama, 
@@ -379,6 +379,8 @@ FROM ((`paket` INNER JOIN `produk_group` ON `paket`.`paket_group`=`produk_group`
 	
 	//function for advanced search record
 	function paket_search($paket_id ,$paket_kode ,$paket_kodelama ,$paket_nama ,$paket_group ,$paket_keterangan ,$paket_du ,$paket_dm ,$paket_point ,$paket_harga ,$paket_expired ,$paket_aktif ,$start,$end){
+		if ($paket_aktif=="")
+			$paket_aktif = "Aktif";
 		//full query
 		$query="select * from paket,produk_group where paket_group=group_id";
 		

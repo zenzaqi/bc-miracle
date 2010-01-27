@@ -111,7 +111,7 @@ class M_kategori2 extends Model{
 			//full query
 			if($kategori2_aktif=="")
 				$kategori2_aktif="Aktif";
-			$query="select * from kategori2";
+			$query="SELECT * FROM kategori2,kategori WHERE kategori2_jenis=kategori_id";
 			
 			if($kategori2_id!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";

@@ -1114,8 +1114,13 @@ Ext.onReady(function(){
 		}, '-', 
 			new Ext.app.SearchField({
 			store: karyawan_DataStore,
-			baseParams: {task:'LIST',start: 0, limit: pageS},
+			params: {task: 'LIST',start: 0, limit: pageS},
 			listeners:{
+				specialkey: function(f,e){
+					if(e.getKey() == e.ENTER){
+						karyawan_DataStore.baseParams={task:'LIST',start: 0, limit: pageS};
+		            }
+				},
 				render: function(c){
 				Ext.get(this.id).set({qtitle:'Search By'});
 				Ext.get(this.id).set({qtip:'- NIK<br>- Nama Lengkap<br>- Nickname<br>- Departemen<br>- Jabatan'});
@@ -1428,6 +1433,7 @@ Ext.onReady(function(){
 		editable:false,
 		displayField: 'karyawan_aktif_display',
 		valueField: 'karyawan_aktif_value',
+		emptyText: 'Aktif',
 		width: 80,
 		triggerAction: 'all'	
 	});
@@ -1570,6 +1576,8 @@ Ext.onReady(function(){
 		// change the store parameters
 		karyawan_DataStore.baseParams = {
 			task: 'SEARCH',
+			start: 0,
+			limit: pageS,
 			//variable here
 			karyawan_id	:	karyawan_id_search, 
 			karyawan_no	:	karyawan_no_search, 

@@ -2154,8 +2154,13 @@ Ext.onReady(function(){
 		}, '-', 
 			new Ext.app.SearchField({
 			store: customer_DataStore,
-			baseParams: {task:'LIST',start: 0, limit: pageS},
+			params: {task: 'LIST',start: 0, limit: pageS},
 			listeners:{
+				specialkey: function(f,e){
+					if(e.getKey() == e.ENTER){
+						customer_DataStore.baseParams={task:'LIST',start: 0, limit: pageS};
+		            }
+				},
 				render: function(c){
 				Ext.get(this.id).set({qtitle:'Search By'});
 				Ext.get(this.id).set({qtip:'- No.Customer<br>- Nama Customer<br>- No.Telp dan HP<br>- No.Member'});
@@ -3446,6 +3451,7 @@ Ext.onReady(function(){
 		mode: 'local',
 		displayField: 'cust_aktif_display',
 		valueField: 'cust_aktif_value',
+		emptyText: 'Aktif',
 		anchor: '50%',
 		triggerAction: 'all'	
 	});

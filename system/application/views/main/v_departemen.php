@@ -331,7 +331,7 @@ Ext.onReady(function(){
 			url: 'index.php?c=c_departemen&m=get_action', 
 			method: 'POST'
 		}),
-		baseParams:{task: "LIST"}, // parameter yang di $_POST ke Controller
+		baseParams:{task: "LIST", start: 0, limit: pageS}, // parameter yang di $_POST ke Controller
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
@@ -502,7 +502,18 @@ Ext.onReady(function(){
 		}, '-', 
 			new Ext.app.SearchField({
 			store: departemen_DataStore,
-			params: {start: 0, limit: pageS},
+			params: {task: 'LIST',start: 0, limit: 15},
+			listeners:{
+				specialkey: function(f,e){
+					if(e.getKey() == e.ENTER){
+						departemen_DataStore.baseParams={task:'LIST',start: 0, limit: pageS};
+		            }
+				},
+				render: function(c){
+				Ext.get(this.id).set({qtitle:'Search By'});
+				Ext.get(this.id).set({qtip:'- Nama <br>- Keterangan'});
+				}
+			},
 			width: 120
 		}),'-',{
 			text: 'Refresh',
@@ -683,6 +694,8 @@ Ext.onReady(function(){
 		// change the store parameters
 		departemen_DataStore.baseParams = {
 			task: 'SEARCH',
+			start: 0,
+			limit: pageS,
 			//variable here
 			departemen_id	:	departemen_id_search, 
 			departemen_nama	:	departemen_nama_search, 
@@ -696,7 +709,7 @@ Ext.onReady(function(){
 	/* Function for reset search result */
 	function departemen_reset_search(){
 		// reset the store parameters
-		departemen_DataStore.baseParams = { task: 'LIST' };
+		departemen_DataStore.baseParams = { task: 'LIST',start: 0, limit: pageS };
 		// Cause the datastore to do another query : 
 		departemen_DataStore.reload({params: {start: 0, limit: pageS}});
 		departemen_searchWindow.close();

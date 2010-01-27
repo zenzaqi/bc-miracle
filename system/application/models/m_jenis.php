@@ -46,8 +46,8 @@ class M_jenis extends Model{
 		
 		//function for update record
 		function jenis_update($jenis_id ,$jenis_kode ,$jenis_nama ,$jenis_kelompok ,$jenis_keterangan ,$jenis_aktif ){
-		if ($jenis_aktif=="")
-			$jenis_aktif = "Aktif";
+			if ($jenis_aktif=="")
+				$jenis_aktif = "Aktif";
 			$data = array(
 				"jenis_id"=>$jenis_id, 
 				"jenis_kode"=>$jenis_kode, 
@@ -64,8 +64,8 @@ class M_jenis extends Model{
 		
 		//function for create new record
 		function jenis_create($jenis_kode ,$jenis_nama ,$jenis_kelompok ,$jenis_keterangan ,$jenis_aktif ){
-		if ($jenis_aktif=="")
-			$jenis_aktif = "Aktif";
+			if ($jenis_aktif=="")
+				$jenis_aktif = "Aktif";
 			$data = array(
 				"jenis_kode"=>$jenis_kode, 
 				"jenis_nama"=>$jenis_nama, 
@@ -107,6 +107,8 @@ class M_jenis extends Model{
 		
 		//function for advanced search record
 		function jenis_search($jenis_id ,$jenis_kode ,$jenis_nama ,$jenis_kelompok ,$jenis_keterangan ,$jenis_aktif ,$start,$end){
+			if ($jenis_aktif=="")
+				$jenis_aktif = "Aktif";
 			//full query
 			$query="select * from jenis";
 			

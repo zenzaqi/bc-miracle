@@ -61,8 +61,8 @@ class M_supplier extends Model{
 		
 		//function for update record
 		function supplier_update($supplier_id ,$supplier_kategori ,$supplier_nama ,$supplier_alamat ,$supplier_kota ,$supplier_kodepos ,$supplier_propinsi ,$supplier_negara ,$supplier_notelp ,$supplier_notelp2 ,$supplier_nofax ,$supplier_email ,$supplier_website ,$supplier_cp ,$supplier_contact_cp ,$supplier_aktif ,$supplier_creator ,$supplier_date_create ,$supplier_update ,$supplier_date_update ,$supplier_revised ){
-		if ($supplier_aktif=="")
-			$supplier_aktif = "Aktif";
+			if ($supplier_aktif=="")
+				$supplier_aktif = "Aktif";
 			$data = array(
 				"supplier_id"=>$supplier_id,			
 				"supplier_kategori"=>$supplier_kategori,			
@@ -97,8 +97,8 @@ class M_supplier extends Model{
 		
 		//function for create new record
 		function supplier_create($supplier_kategori ,$supplier_nama ,$supplier_alamat ,$supplier_kota ,$supplier_kodepos ,$supplier_propinsi ,$supplier_negara ,$supplier_notelp ,$supplier_notelp2 ,$supplier_nofax ,$supplier_email ,$supplier_website ,$supplier_cp ,$supplier_contact_cp ,$supplier_keterangan ,$supplier_aktif ,$supplier_creator ,$supplier_date_create ,$supplier_update ,$supplier_date_update ,$supplier_revised ){
-		if ($supplier_aktif=="")
-			$supplier_aktif = "Aktif";
+			if ($supplier_aktif=="")
+				$supplier_aktif = "Aktif";
 			$data = array(
 	
 				"supplier_kategori"=>$supplier_kategori,	
@@ -157,6 +157,8 @@ class M_supplier extends Model{
 		
 		//function for advanced search record
 		function supplier_search($supplier_id ,$supplier_kategori ,$supplier_nama ,$supplier_alamat ,$supplier_kota ,$supplier_kodepos ,$supplier_propinsi ,$supplier_negara ,$supplier_notelp ,$supplier_notelp2 ,$supplier_nofax ,$supplier_email ,$supplier_website ,$supplier_cp ,$supplier_contact_cp ,$supplier_aktif ,$supplier_creator ,$supplier_date_create ,$supplier_update ,$supplier_date_update ,$supplier_revised ,$start,$end){
+			if ($supplier_aktif=="")
+				$supplier_aktif = "Aktif";
 			//full query
 			$query="select * from supplier";
 			

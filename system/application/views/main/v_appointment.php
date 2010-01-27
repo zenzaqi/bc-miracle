@@ -2356,7 +2356,6 @@ Ext.onReady(function(){
 		itemSelector: 'div.search-item',
 		triggerAction: 'all',
 		lazyRender:true,
-		allowBlank: false,
 		listClass: 'x-combo-list-small',
 		anchor: '95%'
 	
@@ -2408,14 +2407,14 @@ Ext.onReady(function(){
 		fieldLabel: 'Tanggal Appointment',
         name: 'app_tgl_startAppSearchField',
         id: 'app_tgl_startAppSearchField',
-        vtype: 'daterange',
+        //vtype: 'daterange',
         endDateField: 'app_tgl_endAppSearchField' // id of the end date field
 	});
 	app_tgl_endAppSearchField= new Ext.form.DateField({
 		fieldLabel:'s/d',
         name: 'app_tgl_endAppSearchField',
         id: 'app_tgl_endAppSearchField',
-        vtype: 'daterange',
+        //vtype: 'daterange',
         endDateField: 'app_tgl_startAppSearchField' // id of the end date field
 	});
     
@@ -2449,14 +2448,14 @@ Ext.onReady(function(){
 											fieldLabel: 'Tanggal Reservasi',
 									        name: 'app_tgl_startReservasiSearchField',
 									        id: 'app_tgl_startReservasiSearchField',
-									        vtype: 'daterange',
+									        //vtype: 'daterange',
 									        endDateField: 'app_tgl_endReservasiSearchField' // id of the end date field
 									    },
 									    {
 											fieldLabel: 'Tanggal Appointment',
 									        name: 'app_tgl_startAppSearchField',
 									        id: 'app_tgl_startAppSearchField',
-									        vtype: 'daterange',
+									        //vtype: 'daterange',
 									        endDateField: 'app_tgl_endAppSearchField' // id of the end date field
 									    }] 
 								},
@@ -2471,14 +2470,14 @@ Ext.onReady(function(){
 									        fieldLabel: 's/d',
 									        name: 'app_tgl_endReservasiSearchField',
 									        id: 'app_tgl_endReservasiSearchField',
-									        vtype: 'daterange',
+									        //vtype: 'daterange',
 									        startDateField: 'app_tgl_startReservasiSearchField' // id of the start date field
 								      	},
 								      	{
 											fieldLabel: 's/d',
 									        name: 'app_tgl_endAppSearchField',
 									        id: 'app_tgl_endAppSearchField',
-									        vtype: 'daterange',
+									        //vtype: 'daterange',
 									        endDateField: 'app_tgl_startAppSearchField' // id of the end date field
 									    }] 
 								}]

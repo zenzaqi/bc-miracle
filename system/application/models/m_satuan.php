@@ -117,6 +117,8 @@ class M_satuan extends Model{
 		
 		//function for advanced search record
 		function satuan_search($satuan_id ,$satuan_kode ,$satuan_nama ,$satuan_aktif ,$satuan_creator ,$satuan_date_create ,$satuan_update ,$satuan_date_update ,$satuan_revised ,$start,$end){
+			if($satuan_aktif=="")
+				$satuan_aktif="Aktif";
 			//full query
 			$query="select * from satuan";
 			
@@ -156,6 +158,7 @@ class M_satuan extends Model{
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " satuan_revised LIKE '%".$satuan_revised."%'";
 			};
+			echo $query;
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
 			

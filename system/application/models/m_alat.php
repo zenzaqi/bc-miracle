@@ -46,9 +46,9 @@ class M_alat extends Model{
 		
 		//function for update record
 		function alat_update($alat_id ,$alat_nama ,$alat_jumlah ,$alat_aktif ,$alat_creator ,$alat_date_create ,$alat_update ,$alat_date_update ,$alat_revised ){
-		if ($alat_aktif=="")
-			$alat_aktif = "Aktif";
-		$data = array(
+			if ($alat_aktif=="")
+				$alat_aktif = "Aktif";
+			$data = array(
 				"alat_id"=>$alat_id,			
 				"alat_nama"=>$alat_nama,			
 				"alat_jumlah"=>$alat_jumlah,			
@@ -70,8 +70,8 @@ class M_alat extends Model{
 		
 		//function for create new record
 		function alat_create($alat_nama ,$alat_jumlah ,$alat_aktif ,$alat_creator ,$alat_date_create ,$alat_update ,$alat_date_update ,$alat_revised ){
-		if ($alat_aktif=="")
-			$alat_aktif = "Aktif";
+			if ($alat_aktif=="")
+				$alat_aktif = "Aktif";
 			$data = array(
 	
 				"alat_nama"=>$alat_nama,	
@@ -117,6 +117,8 @@ class M_alat extends Model{
 		
 		//function for advanced search record
 		function alat_search($alat_id ,$alat_nama ,$alat_jumlah ,$alat_aktif ,$alat_creator ,$alat_date_create ,$alat_update ,$alat_date_update ,$alat_revised ,$start,$end){
+			if ($alat_aktif=="")
+				$alat_aktif = "Aktif";
 			//full query
 			$query="select * from alat";
 			
