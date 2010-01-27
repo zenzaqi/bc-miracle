@@ -951,7 +951,7 @@ Ext.onReady(function(){
 			{name: 'dtrawat_kategori', type: 'string', mapping: 'dtrawat_kategori'}, 
 			{name: 'dtrawat_status', type: 'string', mapping: 'dtrawat_status'},
 			{name: 'dtrawat_keterangan', type: 'string', mapping: 'dtrawat_keterangan'},
-			{name: 'dtrawat_ambil_paket', type: 'string', mapping: 'dtrawat_ambil_paket'}
+			{name: 'dtrawat_ambil_paket', type: 'bool', mapping: 'dtrawat_ambil_paket'}
 	]);
 	//eof
 	
@@ -1083,7 +1083,7 @@ Ext.onReady(function(){
 	var checkColumn = new Ext.grid.CheckColumn({
 		header: 'Ambil Paket',
 		dataIndex: 'dtrawat_ambil_paket',
-		width: 55
+		width: 75
 	});
 	
 	//declaration of detail coloumn model
@@ -1237,7 +1237,8 @@ Ext.onReady(function(){
 					dtrawat_jamreservasi	: tindakan_medisdetail_record.data.dtrawat_jam, 
 					dtrawat_kategori	: tindakan_medisdetail_record.data.dtrawat_kategori, 
 					dtrawat_status	: tindakan_medisdetail_record.data.dtrawat_status,
-					dtrawat_keterangan	: tindakan_medisdetail_record.data.dtrawat_keterangan
+					dtrawat_keterangan	: tindakan_medisdetail_record.data.dtrawat_keterangan,
+					dtrawat_ambil_paket	: tindakan_medisdetail_record.data.dtrawat_ambil_paket
 					},
 					callback: function(opts, success, response){
 						if(success)
@@ -1587,7 +1588,7 @@ Ext.onReady(function(){
 		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
-		width: 900,        
+		width: 930,        
 		items: [tindakan_medismasterGroup, detail_tab_tindakan]
 		,
 		buttons: [{

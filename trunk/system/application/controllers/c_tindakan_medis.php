@@ -107,7 +107,8 @@ class C_tindakan_medis extends Controller {
 		$dtrawat_keterangan=trim(@$_POST["dtrawat_keterangan"]);
 		$dtrawat_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$dtrawat_keterangan);
 		$dtrawat_keterangan=str_replace("\\", "",$dtrawat_keterangan);
-		$result=$this->m_tindakan_medis->detail_tindakan_medis_detail_insert($dtrawat_id ,$dtrawat_master ,$dtrawat_perawatan ,$dtrawat_petugas1 ,$dtrawat_petugas2 ,$dtrawat_jamreservasi ,$dtrawat_kategori ,$dtrawat_status ,$dtrawat_keterangan );
+		$dtrawat_ambil_paket=trim(@$_POST["dtrawat_ambil_paket"]);
+		$result=$this->m_tindakan_medis->detail_tindakan_medis_detail_insert($dtrawat_id ,$dtrawat_master ,$dtrawat_perawatan ,$dtrawat_petugas1 ,$dtrawat_petugas2 ,$dtrawat_jamreservasi ,$dtrawat_kategori ,$dtrawat_status ,$dtrawat_keterangan ,$dtrawat_ambil_paket );
 	}
 	
 	/* START NON-MEDIS Function */

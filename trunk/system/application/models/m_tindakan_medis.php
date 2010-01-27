@@ -62,7 +62,7 @@ class M_tindakan_medis extends Model{
 		//*eof
 		
 		//insert detail record
-		function detail_tindakan_medis_detail_insert($dtrawat_id ,$dtrawat_master ,$dtrawat_perawatan ,$dtrawat_petugas1 ,$dtrawat_petugas2 ,$dtrawat_jamreservasi ,$dtrawat_kategori ,$dtrawat_status ,$dtrawat_keterangan ){
+		function detail_tindakan_medis_detail_insert($dtrawat_id ,$dtrawat_master ,$dtrawat_perawatan ,$dtrawat_petugas1 ,$dtrawat_petugas2 ,$dtrawat_jamreservasi ,$dtrawat_kategori ,$dtrawat_status ,$dtrawat_keterangan ,$dtrawat_ambil_paket ){
 			$date_now=date('Y-m-d');
 			//if master id not capture from view then capture it from max pk from master table
 			if($dtrawat_master=="" || $dtrawat_master==NULL){
@@ -77,14 +77,15 @@ class M_tindakan_medis extends Model{
 				$rs_record=$rs->row_array();
 				$dtrawat_locked=$rs_record["dtrawat_locked"];
 				
-				$sql="SELECT dtrawat_id FROM tindakan_detail WHERE dtrawat_perawatan='$dtrawat_perawatan' AND dtrawat_petugas1='$dtrawat_petugas1' AND dtrawat_jam='$dtrawat_jamreservasi' AND dtrawat_keterangan='$dtrawat_keterangan'";
+				$sql="SELECT dtrawat_id FROM tindakan_detail WHERE dtrawat_perawatan='$dtrawat_perawatan' AND dtrawat_petugas1='$dtrawat_petugas1' AND dtrawat_jam='$dtrawat_jamreservasi' AND dtrawat_keterangan='$dtrawat_keterangan' AND dtrawat_ambil_paket='$dtrawat_ambil_paket'";
 				$rs=$this->db->query($sql);
 				if(!$rs->num_rows() && $dtrawat_locked==0){
 					$data=array(
 					"dtrawat_perawatan"=>$dtrawat_perawatan,
 					"dtrawat_petugas1"=>$dtrawat_petugas1,
 					"dtrawat_jam"=>$dtrawat_jamreservasi,
-					"dtrawat_keterangan"=>$dtrawat_keterangan
+					"dtrawat_keterangan"=>$dtrawat_keterangan,
+					"dtrawat_ambil_paket"=>$dtrawat_ambil_paket
 					);
 					$this->db->where('dtrawat_id', $dtrawat_id);
 					$this->db->update('tindakan_detail', $data);

@@ -2614,16 +2614,30 @@ Ext.onReady(function(){
 	function appointment_export_excel(){
 		var searchquery = "";
 		var app_customer_2excel=null;
-		var app_tanggal_2excel_date="";
 		var app_cara_2excel=null;
-		var app_keterangan_2excel=null;
+		var app_kategori_2excel=null;
+		var app_dokter_2excel=null;
+		var app_terapis_2excel=null;
+		var app_rawat_medis_2excel=null;
+		var app_rawat_nonmedis_2excel=null;
+		var app_tgl_start_reservasi_2excel=null;
+		var app_tgl_end_reservasi_2excel=null;
+		var app_tgl_start_app_2excel=null;
+		var app_tgl_end_app_2excel=null;
 		var win;              
 		// check if we do have some search data...
 		if(appointment_DataStore.baseParams.query!==null){searchquery = appointment_DataStore.baseParams.query;}
 		if(appointment_DataStore.baseParams.app_customer!==null){app_customer_2excel = appointment_DataStore.baseParams.app_customer;}
-		if(appointment_DataStore.baseParams.app_tanggal!==""){app_tanggal_2excel_date = appointment_DataStore.baseParams.app_tanggal;}
 		if(appointment_DataStore.baseParams.app_cara!==null){app_cara_2excel = appointment_DataStore.baseParams.app_cara;}
-		if(appointment_DataStore.baseParams.app_keterangan!==null){app_keterangan_2excel = appointment_DataStore.baseParams.app_keterangan;}
+		if(appointment_DataStore.baseParams.app_kategori!==null){app_kategori_2excel = appointment_DataStore.baseParams.app_kategori;}
+		if(appointment_DataStore.baseParams.app_dokter!==null){app_dokter_2excel = appointment_DataStore.baseParams.app_dokter;}
+		if(appointment_DataStore.baseParams.app_terapis!==null){app_terapis_2excel = appointment_DataStore.baseParams.app_terapis;}
+		if(appointment_DataStore.baseParams.app_tgl_start_reservasi!==null){app_tgl_start_reservasi_2excel = appointment_DataStore.baseParams.app_tgl_start_reservasi;}
+		if(appointment_DataStore.baseParams.app_tgl_end_reservasi!==null){app_tgl_end_reservasi_2excel = appointment_DataStore.baseParams.app_tgl_end_reservasi;}
+		if(appointment_DataStore.baseParams.app_tgl_start_app!==null){app_tgl_start_app_2excel = appointment_DataStore.baseParams.app_tgl_start_app;}
+		if(appointment_DataStore.baseParams.app_tgl_end_app!==null){app_tgl_end_app_2excel = appointment_DataStore.baseParams.app_tgl_end_app;}
+		if(appointment_DataStore.baseParams.app_rawat_medis!==null){app_rawat_medis_2excel = appointment_DataStore.baseParams.app_rawat_medis;}
+		if(appointment_DataStore.baseParams.app_rawat_nonmedis!==null){app_rawat_nonmedis_2excel = appointment_DataStore.baseParams.app_rawat_nonmedis;}
 
 		Ext.Ajax.request({   
 		waitMsg: 'Please Wait...',
@@ -2633,9 +2647,16 @@ Ext.onReady(function(){
 		  	query: searchquery,                    		// if we are doing a quicksearch, use this
 			//if we are doing advanced search, use this
 			app_customer : app_customer_2excel,
-		  	app_tanggal : app_tanggal_2excel_date, 
 			app_cara : app_cara_2excel,
-			app_keterangan : app_keterangan_2excel,
+			app_kategori	: app_cara_2excel,
+			app_dokter	: app_dokter_2excel,
+			app_terapis	: app_terapis_2excel,
+			app_tgl_start_reservasi	: app_tgl_start_reservasi_2excel,
+			app_tgl_end_reservasi	: app_tgl_end_reservasi_2excel,
+			app_tgl_start_app	: app_tgl_start_app_2excel,
+			app_tgl_end_app	: app_tgl_end_app_2excel,
+			app_rawat_medis	: app_rawat_medis_2excel,
+			app_rawat_nonmedis	: app_rawat_nonmedis_2excel,
 		  	currentlisting: appointment_DataStore.baseParams.task // this tells us if we are searching or not
 		},
 		success: function(response){              
