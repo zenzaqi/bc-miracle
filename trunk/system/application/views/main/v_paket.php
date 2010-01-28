@@ -602,7 +602,8 @@ Ext.onReady(function(){
 			dataIndex: 'kategori_nama',
 			width: 150,
 			sortable: true,
-			editable: false
+			editable: false,
+			hidden: true
 		}, 
 		{
 			header: 'DU',
@@ -1052,7 +1053,7 @@ Ext.onReady(function(){
 				columnWidth: 0.5,
 				layout: 'form',
 				border:false,
-				items: [paket_kodelamaField, paket_kodeField, paket_namaField, paket_groupField, paket_kategoritxtField, paket_hargaField, paket_duField, paket_dmField] 
+				items: [paket_kodelamaField, paket_kodeField, paket_namaField, paket_groupField, paket_hargaField, paket_duField, paket_dmField] 
 			}
 			,{
 				columnWidth:0.5,
