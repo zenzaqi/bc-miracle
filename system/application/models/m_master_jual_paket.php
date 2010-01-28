@@ -18,6 +18,29 @@ class M_master_jual_paket extends Model{
 			parent::Model();
 		}
 		
+		function get_paket_list($filter,$start,$end){
+			$query="SELECT * FROM paket INNER JOIN produk_group ON paket.paket_group=produk_group.group_id INNER JOIN kategori ON produk_group.group_kelompok=kategori.kategori_id WHERE kategori.kategori_jenis='paket' AND paket_aktif='Aktif'";
+			
+			if ($filter<>""){
+				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
+				$query .= " (paket_kode LIKE '%".addslashes($filter)."%' OR paket_nama LIKE '%".addslashes($filter)."%' )";
+			}
+			
+			$result = $this->db->query($query);
+			$nbrows = $result->num_rows();
+			$limit = $query." LIMIT ".$start.",".$end;		
+			$result = $this->db->query($limit);
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+		
 		//function for detail
 		//get record list
 		function detail_detail_jual_paket_list($master_id,$query,$start,$end) {
