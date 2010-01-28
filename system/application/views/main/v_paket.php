@@ -375,6 +375,8 @@ Ext.onReady(function(){
 		/* only one record is selected here */
 		if(paketListEditorGrid.selModel.getCount() == 1) {
 			paket_set_form();
+			cbo_rawat_listDataStore.load({params: {query: paketListEditorGrid.getSelectionModel().getSelected().get('paket_id')}});
+			cbo_produk_listDataStore.load({params: {query: paketListEditorGrid.getSelectionModel().getSelected().get('paket_id')}});
 			post2db='UPDATE';
 			msg='updated';
 			paket_isi_produk_DataStore.load({params: { master_id: get_pk_id(), start:0, limit: pageS}});
@@ -976,7 +978,7 @@ Ext.onReady(function(){
 	paket_pointField= new Ext.form.NumberField({
 		id: 'paket_pointField',
 		name: 'paket_pointField',
-		fieldLabel: 'Poin (X)',
+		fieldLabel: 'Poin (x)',
 		allowNegatife : false,
 		emptyText: '0',
 		maxLength: 11,
