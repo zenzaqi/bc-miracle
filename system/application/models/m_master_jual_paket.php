@@ -21,7 +21,9 @@ class M_master_jual_paket extends Model{
 		//function for detail
 		//get record list
 		function detail_detail_jual_paket_list($master_id,$query,$start,$end) {
-			$query = "SELECT *,dpaket_harga*dpaket_jumlah as dpaket_subtotal, dpaket_harga*dpaket_jumlah*(100-dpaket_diskon)/100 as dpaket_subtotal_net FROM detail_jual_paket where dpaket_master='".$master_id."'";
+			$query = "SELECT detail_jual_paket.*,master_jual_paket.jpaket_bayar,master_jual_paket.jpaket_diskon,dpaket_harga*dpaket_jumlah as dpaket_subtotal,dpaket_harga*dpaket_jumlah*((100-dpaket_diskon)/100) as dpaket_subtotal_net FROM detail_jual_paket LEFT JOIN master_jual_paket ON(dpaket_master=jpaket_id) WHERE dpaket_master='".$master_id."'";
+			
+			//$query = "SELECT *,dpaket_harga*dpaket_jumlah as dpaket_subtotal, dpaket_harga*dpaket_jumlah*(100-dpaket_diskon)/100 as dpaket_subtotal_net FROM detail_jual_paket where dpaket_master='".$master_id."'";
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
 			$limit = $query." LIMIT ".$start.",".$end;			
@@ -77,6 +79,29 @@ class M_master_jual_paket extends Model{
 		function detail_detail_jual_paket_purge($master_id){
 			$sql="DELETE from detail_jual_paket where dpaket_master='".$master_id."'";
 			$result=$this->db->query($sql);
+			
+			// You could do some checkups here and return '0' or other error consts.
+			// Make a single query to delete all of the master_jual_pakets at the same time :
+			/*if(sizeof($pkid)<1){
+				return '0';
+			} else if (sizeof($pkid) == 1){
+				$query = "DELETE FROM detail_jual_paket WHERE dpaket_id = ".$pkid[0];
+				$this->db->query($query);
+			} else {
+				$query = "DELETE FROM detail_jual_paket WHERE ";
+				for($i = 0; $i < sizeof($pkid); $i++){
+					$query = $query . "dpaket_id= ".$pkid[$i];
+					if($i<sizeof($pkid)-1){
+						$query = $query . " OR ";
+					}     
+				}
+				$this->db->query($query);
+			}
+			if($this->db->affected_rows()>0)
+				return '1';
+			else
+				return '0';*/
+			
 		}
 		//*eof
 		
@@ -89,21 +114,41 @@ class M_master_jual_paket extends Model{
 			if($dpaket_kadaluarsa=="")
 				$dpaket_kadaluarsa=NULL;
 			
-			$data = array(
-				"dpaket_master"=>$dpaket_master, 
-				"dpaket_paket"=>$dpaket_paket,
-				"dpaket_kadaluarsa"=>$dpaket_kadaluarsa, 
-				"dpaket_jumlah"=>$dpaket_jumlah, 
-				"dpaket_harga"=>$dpaket_harga, 
-				"dpaket_diskon"=>$dpaket_diskon,
-				"dpaket_diskon_jenis"=>$dpaket_diskon_jenis,
-				"dpaket_sales"=>$dpaket_sales 
-			);
-			$this->db->insert('detail_jual_paket', $data); 
-			if($this->db->affected_rows())
-				return '1';
-			else
-				return '0';
+			/*$sql="SELECT dpaket_id FROM detail_jual_paket WHERE dpaket_id='$dpaket_id'";
+			$rs=$this->db->query($sql);
+			if($rs->num_rows()){
+				$data = array(
+					"dpaket_paket"=>$dpaket_paket,
+					"dpaket_kadaluarsa"=>$dpaket_kadaluarsa, 
+					"dpaket_jumlah"=>$dpaket_jumlah, 
+					"dpaket_harga"=>$dpaket_harga, 
+					"dpaket_diskon"=>$dpaket_diskon,
+					"dpaket_diskon_jenis"=>$dpaket_diskon_jenis,
+					"dpaket_sales"=>$dpaket_sales 
+				);
+				$this->db->where('dpaket_id', $dpaket_id);
+				$this->db->update('detail_jual_paket', $data);
+				if($this->db->affected_rows())
+					return '1';
+				else
+					return '0';
+			}else{*/
+				$data = array(
+					"dpaket_master"=>$dpaket_master, 
+					"dpaket_paket"=>$dpaket_paket,
+					"dpaket_kadaluarsa"=>$dpaket_kadaluarsa, 
+					"dpaket_jumlah"=>$dpaket_jumlah, 
+					"dpaket_harga"=>$dpaket_harga, 
+					"dpaket_diskon"=>$dpaket_diskon,
+					"dpaket_diskon_jenis"=>$dpaket_diskon_jenis,
+					"dpaket_sales"=>$dpaket_sales 
+				);
+				$this->db->insert('detail_jual_paket', $data); 
+				if($this->db->affected_rows())
+					return '1';
+				else
+					return '0';
+			//}
 
 		}
 		//end of function
@@ -142,8 +187,8 @@ class M_master_jual_paket extends Model{
 				"jpaket_nobukti"=>$jpaket_nobukti, 
 				"jpaket_tanggal"=>$jpaket_tanggal, 
 				"jpaket_diskon"=>$jpaket_diskon,
-				//"jpaket_cashback"=>$jpaket_cashback,
-				//"jpaket_bayar"=>$jpaket_bayar,
+				"jpaket_cashback"=>$jpaket_cashback,
+				"jpaket_bayar"=>$jpaket_bayar,
 				"jpaket_cara"=>$jpaket_cara, 
 				//"jpaket_cara2"=>$jpaket_cara2, 
 				//"jpaket_cara3"=>$jpaket_cara3,
@@ -415,8 +460,8 @@ class M_master_jual_paket extends Model{
 				"jpaket_cust"=>$jpaket_cust, 
 				"jpaket_tanggal"=>$jpaket_tanggal, 
 				"jpaket_diskon"=>$jpaket_diskon, 
-				//"jpaket_cashback"=>$jpaket_cashback,
-				//"jpaket_bayar"=>$jpaket_bayar,
+				"jpaket_cashback"=>$jpaket_cashback,
+				"jpaket_bayar"=>$jpaket_bayar,
 				"jpaket_cara"=>$jpaket_cara, 
 				//"jpaket_cara2"=>$jpaket_cara2, 
 				//"jpaket_cara3"=>$jpaket_cara3, 
