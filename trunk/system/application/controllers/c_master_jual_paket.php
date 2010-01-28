@@ -118,6 +118,12 @@ class C_master_jual_paket extends Controller {
 	function detail_detail_jual_paket_purge(){
 		$master_id = (integer) (isset($_POST['master_id']) ? $_POST['master_id'] : $_GET['master_id']);
 		$result=$this->m_master_jual_paket->detail_detail_jual_paket_purge($master_id);
+		
+		/*$ids = $_POST['ids']; // Get our array back and translate it :
+		$pkid = json_decode(stripslashes($ids));
+		$result=$this->m_master_jual_paket->detail_detail_jual_paket_purge($pkid);
+		echo $result;*/
+		
 	}
 	//eof
 	
