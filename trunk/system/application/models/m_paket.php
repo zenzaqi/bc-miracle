@@ -35,14 +35,10 @@ class M_paket extends Model{
 	}
 	
 	function get_rawat_list($query,$start,$end){
-	/*$sql="SELECT produk_id,produk_kode,produk_nama,produk_kategori,produk_harga,produk_group,produk_du,produk_dm
-				,kategori_nama, group_nama, satuan_kode, satuan_nama 
-				FROM produk,satuan,kategori,produk_group where satuan_id=produk_satuan and kategori_id=produk_kategori
-				and produk_group=group_id and produk_aktif='Aktif'";*/
 		$rs_rows=0;
 		if(is_numeric($query)==true){
-			$sql_drawat="SELECT distinct(rpaket_perawatan) FROM paket_isi_perawatan WHERE rpaket_master='$query'";
-			$rs=$this->db->query($sql_drawat);
+			$sql_rpaket="SELECT distinct(rpaket_perawatan) FROM paket_isi_perawatan WHERE rpaket_master='$query'";
+			$rs=$this->db->query($sql_rpaket);
 			$rs_rows=$rs->num_rows();
 		}
 		
@@ -54,9 +50,50 @@ class M_paket extends Model{
 			if($rs_rows){
 				$filter="";
 				$sql.=eregi("AND",$query)? " OR ":" AND ";
-				foreach($rs->result() as $row_drawat){
+				foreach($rs->result() as $row_rpaket){
 					
-					$filter.="OR rawat_id='".$row_drawat->drawat_rawat."' ";
+					$filter.="OR rawat_id='".$row_rpaket->rpaket_perawatan."' ";
+				}
+				$sql=$sql."(".substr($filter,2,strlen($filter)).")";
+			}
+		}
+		
+		$result = $this->db->query($sql);
+		$nbrows = $result->num_rows();
+		if($end!=0){
+			$limit = $sql." LIMIT ".$start.",".$end;			
+			$result = $this->db->query($limit);
+		}
+		if($nbrows>0){
+			foreach($result->result() as $row){
+				$arr[] = $row;
+			}
+			$jsonresult = json_encode($arr);
+			return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+		} else {
+			return '({"total":"0", "results":""})';
+		}
+	}
+	
+	function get_produk_list($query,$start,$end){
+		$rs_rows=0;
+		if(is_numeric($query)==true){
+			$sql_ipaket="SELECT distinct(ipaket_produk) FROM paket_isi_produk WHERE ipaket_master='$query'";
+			$rs=$this->db->query($sql_ipaket);
+			$rs_rows=$rs->num_rows();
+		}
+		
+		$sql="SELECT produk_id,produk_kode,produk_nama FROM produk WHERE produk_aktif='Aktif'";//join dr tabel: perawatan,produk_group,kategori2,kategori,jenis,gudang
+		if($query<>"" && is_numeric($query)==false){
+			$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+			$sql.=" (produk_kode like '%".$query."%' or produk_nama like '%".$query."%') ";
+		}else{
+			if($rs_rows){
+				$filter="";
+				$sql.=eregi("AND",$query)? " OR ":" AND ";
+				foreach($rs->result() as $row_ipaket){
+					
+					$filter.="OR produk_id='".$row_ipaket->ipaket_produk."' ";
 				}
 				$sql=$sql."(".substr($filter,2,strlen($filter)).")";
 			}
