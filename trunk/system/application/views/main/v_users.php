@@ -204,7 +204,7 @@ Ext.onReady(function(){
 			Ext.MessageBox.show({
 				title: 'Warning',
 				//msg: 'Your Form is not valid!.',
-				msg: 'Form tidak valid',
+				msg: 'Form anda belum lengkap',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -266,14 +266,16 @@ Ext.onReady(function(){
 	function users_confirm_delete(){
 		// only one users is selected here
 		if(usersListEditorGrid.selModel.getCount() == 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', users_delete);
+//			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', users_delete);
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', users_delete);
 		} else if(usersListEditorGrid.selModel.getCount() > 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', users_delete);
+//			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', users_delete);
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', users_delete);
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
 				//msg: 'You can\'t really delete something you haven\'t selected?',
-				msg: 'Anda belum memilih data yang akan dihapus.',
+				msg: 'Anda belum memilih data yang akan dihapus',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
