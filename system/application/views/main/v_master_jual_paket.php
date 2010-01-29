@@ -3105,10 +3105,10 @@ Ext.onReady(function(){
 			dataIndex: 'dpaket_kadaluarsa',
 			width: 90,
 			sortable: true,
-			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
+			renderer: Ext.util.Format.dateRenderer('Y-m-d')/*,
 			editor: new Ext.form.DateField({
 				format: 'Y-m-d'
-			})
+			})*/
 		},
 		{
 			header: 'Harga (Rp)',
