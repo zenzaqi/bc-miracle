@@ -177,9 +177,19 @@ class M_paket extends Model{
 			"rpaket_jumlah"=>$rpaket_jumlah 
 		);
 		$this->db->insert('paket_isi_perawatan', $data); 
-		if($this->db->affected_rows())
+		if($this->db->affected_rows()){
+			$sql="SELECT SUM(rpaket_jumlah) as total_rpaket_jumlah FROM paket_isi_perawatan WHERE rpaket_master='$rpaket_master'";
+			$rs=$this->db->query($sql);
+			if($rs->num_rows()){
+				$rs_record=$rs->row_array();
+				$data=array(
+				"paket_jmlisi"=>$rs_record["total_rpaket_jumlah"]
+				);
+				$this->db->where('paket_id', $rpaket_master);
+				$this->db->update('paket', $data);
+			}
 			return '1';
-		else
+		}else
 			return '0';
 
 	}
