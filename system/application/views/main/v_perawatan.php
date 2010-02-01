@@ -366,6 +366,7 @@ Ext.onReady(function(){
   
   	/* Function for Displaying  create Window Form */
 	function display_form_window(){
+		perawatan_konsumsi_DataStore.removeAll();
 		if(!perawatan_createWindow.isVisible()){
 			perawatan_reset_form();
 			post2db='CREATE';
@@ -1329,7 +1330,7 @@ Ext.onReady(function(){
 	
 	var rawat_produk_tpl = new Ext.XTemplate(
         '<tpl for="."><div class="search-item">',
-            '<span><b>{rawat_produk_kode}</b>| {rawat_produk_display}<br/>Group 1: {rawat_produk_group}<br/>',
+            '<span>{rawat_produk_display}<br/>Lama:{rawat_produk_kodelama}| Baru:<b>{rawat_produk_kode}</b> <br/>Group 1: {rawat_produk_group}, ',
 			'Kategori: {rawat_produk_kategori}</span>',
 		'</div></tpl>'
     );

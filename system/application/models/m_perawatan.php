@@ -18,6 +18,51 @@ class M_perawatan extends Model{
 			parent::Model();
 		}
 		
+		function get_produk_list($query,$start,$end){
+			$rs_rows=0;
+			if(is_numeric($query)==true){
+				$sql_dproduk="SELECT krawat_produk FROM perawatan_konsumsi WHERE krawat_master='$query'";
+				$rs=$this->db->query($sql_dproduk);
+				$rs_rows=$rs->num_rows();
+			}
+			
+			$sql="select * from vu_produk WHERE produk_aktif='Aktif'";
+			if($query<>"" && is_numeric($query)==false){
+				$sql.=eregi("WHERE",$sql)? " AND ":" WHERE ";
+				$sql.=" (produk_kode like '%".$query."%' or produk_nama like '%".$query."%' or satuan_nama like '%".$query."%' or kategori_nama like '%".$query."%' or group_nama like '%".$query."%' or produk_kodelama like '%".$query."%') ";
+			}else{
+				if($rs_rows){
+					$filter="";
+					$sql.=eregi("AND",$sql)? " OR ":" AND ";
+					foreach($rs->result() as $row_dproduk){
+						
+						$filter.="OR produk_id='".$row_dproduk->krawat_produk."' ";
+					}
+					$sql=$sql."(".substr($filter,2,strlen($filter)).")";
+				}
+			}
+			
+			/*if($query<>"")
+				$sql.=" WHERE (produk_kode like '%".$query."%' or produk_nama like '%".$query."%' or satuan_nama like '%".$query."%'
+							 or kategori_nama like '%".$query."%' or group_nama like '%".$query."%') ";*/
+			
+			$result = $this->db->query($sql);
+			$nbrows = $result->num_rows();
+			if($end!=0){
+				$limit = $sql." LIMIT ".$start.",".$end;			
+				$result = $this->db->query($limit);
+			}
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+		
 		//function for detail
 		//get record list
 		function detail_perawatan_konsumsi_list($master_id,$query,$start,$end) {

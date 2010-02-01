@@ -31,11 +31,19 @@ class C_perawatan extends Controller {
 		echo $result;
 	}
 	
-	function get_produk_list(){
+	/*function get_produk_list(){
 		$query = isset($_POST['query']) ? $_POST['query'] : $_GET['query'];
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
 		$result=$this->m_public_function->get_produk_list($query, $start, $end);
+		echo $result;
+	}*/
+	
+	function get_produk_list(){
+		$query = isset($_POST['query']) ? $_POST['query'] : $_GET['query'];
+		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		$result=$this->m_perawatan->get_produk_list($query, $start, $end);
 		echo $result;
 	}
 	
