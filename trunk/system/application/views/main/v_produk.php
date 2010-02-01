@@ -992,7 +992,7 @@ Ext.onReady(function(){
 		fieldLabel: 'Kode Baru',
 		maxLength: 20,
 		allowBlank: true,
-		readOnly: true,
+		readOnly: false,
 		emptyText: '(auto)',
 		width: 100
 	});
