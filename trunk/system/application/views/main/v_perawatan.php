@@ -1251,12 +1251,12 @@ Ext.onReady(function(){
 	
 	//function for editor of detail
 	var editor_perawatan_konsumsi= new Ext.ux.grid.RowEditor({
-        saveText: 'Update',
+        saveText: 'Update'/*,
 		listeners: {
 			afteredit: function(){
 				perawatan_konsumsi_DataStore.commitChanges();
 			}
-		}
+		}*/
     });
 	//eof
 	
@@ -1339,7 +1339,7 @@ Ext.onReady(function(){
 	var combo_rawat_produk=new Ext.form.ComboBox({
 			store: cbo_rawat_produkDataStore,
 			mode: 'remote',
-			typeAhead: true,
+			typeAhead: false,
 			displayField: 'rawat_produk_display',
 			valueField: 'rawat_produk_value',
 			triggerAction: 'all',
@@ -1534,7 +1534,7 @@ Ext.onReady(function(){
 		});
 		editor_perawatan_konsumsi.stopEditing();
 		perawatan_konsumsi_DataStore.insert(0, edit_perawatan_konsumsi);
-		perawatan_konsumsiListEditorGrid.getView().refresh();
+		//perawatan_konsumsiListEditorGrid.getView().refresh();
 		perawatan_konsumsiListEditorGrid.getSelectionModel().selectRow(0);
 		editor_perawatan_konsumsi.startEditing(0);
 	}
