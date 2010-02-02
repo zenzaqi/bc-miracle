@@ -24,6 +24,7 @@ class M_outbox extends Model{
 			
 			// For simple search
 			// For simple search
+			
 			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 				$query .= " (outbox_id LIKE '%".addslashes($filter)."%' OR outbox_destination LIKE '%".addslashes($filter)."%' OR outbox_message LIKE '%".addslashes($filter)."%' OR outbox_date LIKE '%".addslashes($filter)."%' OR outbox_creator LIKE '%".addslashes($filter)."%' OR outbox_date_create LIKE '%".addslashes($filter)."%' OR outbox_update LIKE '%".addslashes($filter)."%' OR outbox_date_update LIKE '%".addslashes($filter)."%' OR outbox_revised LIKE '%".addslashes($filter)."%' )";

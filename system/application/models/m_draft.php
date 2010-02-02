@@ -20,7 +20,7 @@ class M_draft extends Model{
 		
 		//function for get list record
 		function draft_list($filter,$start,$end){
-			$query = "SELECT * FROM draft";
+			$query = "SELECT * FROM vu_draft";
 			
 			// For simple search
 			// For simple search

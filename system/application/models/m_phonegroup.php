@@ -41,6 +41,50 @@ class M_phonegroup extends Model{
 						'".date('Y/m/d H:i:s')."')";
 				$this->db->query($sql);
 				//echo $sql;
+			}else{
+				if($isms_opsi=="Number"){
+					$dest=split(",",$isms_dest);
+					foreach($dest as $listdest=>$value){
+						$sql="insert into outbox(
+								outbox_destination,
+								outbox_message,
+								outbox_date,
+								outbox_status,
+								outbox_creator,
+								outbox_date_create)
+							values(
+								'".$value."',
+								'".$isms_isi."',
+								'".date('Y/m/d H:i:s')."',
+								'unsent',
+								'".$_SESSION["userid"]."',
+								'".date('Y/m/d H:i:s')."')";
+						$this->db->query($sql);
+						$sql="";
+					}
+				}else{
+					$sql="select phonegrouped_number from phonegrouped where phonegrouped_group='".$isms_dest."'";
+					$query=$this->db->query($sql);
+					foreach($query->result() as $row){
+						$sql="insert into outbox(
+								outbox_destination,
+								outbox_message,
+								outbox_date,
+								outbox_status,
+								outbox_creator,
+								outbox_date_create)
+							values(
+								'".$row->phonegrouped_number."',
+								'".$isms_isi."',
+								'".date('Y/m/d H:i:s')."',
+								'unsent',
+								'".$_SESSION["userid"]."',
+								'".date('Y/m/d H:i:s')."')";
+							//echo $sql;
+						$this->db->query($sql);
+						$sql="";
+					}
+				}
 			}
 			
 			return '1';
