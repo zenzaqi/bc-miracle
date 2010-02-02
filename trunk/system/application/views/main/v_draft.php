@@ -339,8 +339,9 @@ Ext.onReady(function(){
 			id: 'draft_id'
 		},[
 		/* dataIndex => insert intodraft_ColumnModel, Mapping => for initiate table column */ 
-			{name: 'draft_id', type: 'int', mapping: 'draft_id'}, 
-			{name: 'draft_destination', type: 'string', mapping: 'draft_destination'}, 
+			{name: 'draft_id', type: 'int', mapping: 'draft_id'},
+			{name: 'draft_destination_id', type: 'int', mapping: 'phonegroup_id'}, 
+			{name: 'draft_destination', type: 'string', mapping: 'phonegroup_nama'}, 
 			{name: 'draft_message', type: 'string', mapping: 'draft_message'}, 
 			{name: 'draft_date', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'draft_date'}, 
 			{name: 'draft_creator', type: 'string', mapping: 'draft_creator'}, 

@@ -343,6 +343,7 @@ Ext.onReady(function(){
 			{name: 'outbox_destination', type: 'string', mapping: 'outbox_destination'}, 
 			{name: 'outbox_message', type: 'string', mapping: 'outbox_message'}, 
 			{name: 'outbox_date', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'outbox_date'}, 
+			{name: 'outbox_status', type: 'string', mapping: 'outbox_status'}, 
 			{name: 'outbox_creator', type: 'string', mapping: 'outbox_creator'}, 
 			{name: 'outbox_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'outbox_date_create'}, 
 			{name: 'outbox_update', type: 'string', mapping: 'outbox_update'}, 
@@ -386,6 +387,12 @@ Ext.onReady(function(){
 			width: 150,
 			sortable: true,
 			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
+			readOnly: true
+		},{
+			header: 'Status',
+			dataIndex: 'outbox_status',
+			width: 150,
+			sortable: true,
 			readOnly: true
 		}, 
 		{
