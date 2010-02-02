@@ -18,6 +18,77 @@ class M_phonegroup extends Model{
 			parent::Model();
 		}
 		
+		function sms_save($isms_nomer,$isms_group,$isms_isi,$isms_opsi,$isms_task){
+			
+			if($isms_opsi=="Group"){
+				$isms_dest=$isms_group;
+			}else
+				$isms_dest=$isms_nomer;
+			
+			$sql="";
+			if($isms_task=='draft'){
+				$sql="insert into draft(
+						draft_destination,
+						draft_message,
+						draft_date,
+						draft_creator,
+						draft_date_create)
+					 values(
+						'".$isms_opsi.":".$isms_dest."',
+						'".$isms_isi."',
+						'".date('Y/m/d H:i:s')."',
+						'".$_SESSION["userid"]."',
+						'".date('Y/m/d H:i:s')."')";
+				$this->db->query($sql);
+				//echo $sql;
+			}
+			
+			return '1';
+		}
+		
+		function get_available($query,$start,$end){
+			$sql="select cust_nama,cust_hp from customer where cust_hp not in(select phonegrouped_number from phonegrouped) and cust_hp<>''";
+			if($query!==""){
+				$sql.=" and cust_nama like '%".$query."%' or cust_hp like '%".$query."%'";
+			}
+			$result = $this->db->query($sql);
+			$nbrows = $result->num_rows();
+			$limit = $sql." LIMIT ".$start.",".$end;		
+			$result = $this->db->query($limit);  
+			
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+			
+		}
+		
+		function get_phonegrouped($id,$query,$start,$end){
+			$sql="select cust_nama,cust_hp from customer where cust_hp in(select phonegrouped_number from phonegrouped where phonegrouped_group='".$id."')";
+			if($query!==""){
+				$sql.=" and cust_nama like '%".$query."%' or cust_hp like '%".$query."%'";
+			}
+			$result = $this->db->query($sql);
+			$nbrows = $result->num_rows();
+			$limit = $sql." LIMIT ".$start.",".$end;		
+			$result = $this->db->query($limit);  
+			
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+		
 		//function for get list record
 		function phonegroup_list($filter,$start,$end){
 			$query = "SELECT * FROM phonegroup";
@@ -46,7 +117,7 @@ class M_phonegroup extends Model{
 		}
 		
 		//function for create new record
-		function phonegroup_create($phonegroup_nama ,$phonegroup_detail ,$phonegroup_creator ,$phonegroup_date_create ){
+		function phonegroup_create($phonegroup_nama ,$phonegroup_detail ,$phonegroup_creator ,$phonegroup_date_create, $phonegroup_data ){
 			$data = array(
 				"phonegroup_nama"=>$phonegroup_nama, 
 				"phonegroup_detail"=>$phonegroup_detail, 
@@ -54,26 +125,53 @@ class M_phonegroup extends Model{
 				"phonegroup_date_create"=>$phonegroup_date_create 
 			);
 			$this->db->insert('phonegroup', $data); 
-			if($this->db->affected_rows())
+			if($this->db->affected_rows()){
+				if($phonegroup_data!=""){
+					$phonegrouped_group=$this->db->insert_id();
+					$phonegrouped_number=split(",",$phonegroup_data);
+					if(count($phonegrouped_number)>0){
+						$sql="delete from phonegrouped where phonegrouped_group='".$phonegrouped_group."'";
+						$this->db->query($sql);
+						foreach($phonegrouped_number as $pnumber=>$value){
+							$sql="insert into phonegrouped(phonegrouped_group,phonegrouped_number)
+									values('".$phonegrouped_group."','".$value."')";
+							$this->db->query($sql);
+							$sql="";
+						}
+					}
+				}
 				return '1';
-			else
+			}else
 				return '0';
 		}
 		
 		//function for update record
-		function phonegroup_update($phonegroup_id,$phonegroup_nama,$phonegroup_detail,$phonegroup_creator,$phonegroup_update,$phonegroup_date_update){
+		function phonegroup_update($phonegroup_id,$phonegroup_nama,$phonegroup_detail,$phonegroup_update,$phonegroup_date_update,$phonegroup_data){
 			$data = array(
 				"phonegroup_nama"=>$phonegroup_nama, 
 				"phonegroup_detail"=>$phonegroup_detail, 
-				"phonegroup_creator"=>$phonegroup_creator, 
 				"phonegroup_update"=>$phonegroup_update, 
 				"phonegroup_date_update"=>$phonegroup_date_update 
 			);
-			
+			$phonegrouped_group=$phonegroup_id;
 			$this->db->where('phonegroup_id', $phonegroup_id);
 			$this->db->update('phonegroup', $data);
 			$sql="UPDATE phonegroup set phonegroup_revised=(phonegroup_revised+1) where phonegroup_id='".$phonegroup_id."'";
 			$this->db->query($sql);
+			$sql="delete from phonegrouped where phonegrouped_group='".$phonegrouped_group."'";
+			$this->db->query($sql);
+				
+			if($phonegroup_data!=""){
+				$phonegrouped_number=split(",",$phonegroup_data);
+				if(count($phonegrouped_number)>0){
+					foreach($phonegrouped_number as $pnumber=>$value){
+						$sql="insert into phonegrouped(phonegrouped_group,phonegrouped_number)
+								values('".$phonegrouped_group."','".$value."')";
+						$this->db->query($sql);
+						$sql="";
+					}
+				}
+			}
 			return '1';
 		}
 		

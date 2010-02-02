@@ -70,7 +70,8 @@ var phonegroup_detailSearchField;
 /* on ready fuction */
 Ext.onReady(function(){
   	Ext.QuickTips.init();	/* Initiate quick tips icon */
-  
+  	Ext.form.Field.prototype.msgTarget = 'side';
+	 
   	/* Function for Saving inLine Editing */
 	function phonegroup_inline_update(oGrid_event){
 		var phonegroup_id_update_pk="";
@@ -140,7 +141,8 @@ Ext.onReady(function(){
 				params: {
 					phonegroup_id	: phonegroup_id_field_pk, 
 					phonegroup_nama	: phonegroup_nama_field, 
-					phonegroup_detail	: phonegroup_detail_field, 
+					phonegroup_detail	: phonegroup_detail_field,
+					phonegroup_data : phonegroup_saveForm.getForm().findField('itemselector').getValue(),
 					task: post2db
 				}, 
 				success: function(response){             
@@ -537,6 +539,48 @@ Ext.onReady(function(){
 	phonegroup_DataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
 	phonegroupListEditorGrid.on('afteredit', phonegroup_inline_update); // inLine Editing Record
 	
+	/* Function for Retrieve DataStore */
+	phonegrouped_DataStore = new Ext.data.Store({
+		id: 'phonegrouped_DataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_phonegroup&m=get_phonegrouped', 
+			method: 'POST'
+		}),
+		baseParams:{start:0, limit: 15 }, // parameter yang di $_POST ke Controller
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'phonenumber_number'
+		},[
+		/* dataIndex => insert intophonegroup_ColumnModel, Mapping => for initiate table column */ 
+			{name: 'phonenumber_number', type: 'string', mapping: 'cust_hp'}, 
+			{name: 'phonenumber_nama', type: 'string', mapping: 'cust_nama'}
+		]),
+		sortInfo:{field: 'phonenumber_nama', direction: "ASC"}
+	});
+	
+	
+	
+	/* Function for Retrieve DataStore */
+	phonenumber_DataStore = new Ext.data.Store({
+		id: 'phonenumer_DataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_phonegroup&m=get_available', 
+			method: 'POST'
+		}),
+		baseParams:{id: get_pk_id(),start:0, limit: 15 }, // parameter yang di $_POST ke Controller
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'phonenumber_number'
+		},[
+		/* dataIndex => insert intophonegroup_ColumnModel, Mapping => for initiate table column */ 
+			{name: 'phonenumber_nama', type: 'string', mapping: 'cust_nama'}, 
+			{name: 'phonenumber_number', type: 'string', mapping: 'cust_hp'}
+		]),
+		sortInfo:{field: 'phonenumber_nama', direction: "ASC"}
+	});
+	
 	/* Identify  phonegroup_nama Field */
 	phonegroup_namaField= new Ext.form.TextField({
 		id: 'phonegroup_namaField',
@@ -553,18 +597,66 @@ Ext.onReady(function(){
 	});
 
 	
+	
 	/* Function for retrieve create Window Panel*/ 
 	phonegroup_saveForm = new Ext.FormPanel({
-		labelAlign: 'top',
+		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
-		width: 300,        
+		width: 650,        
 		items:[
 			{
 				columnWidth:1,
 				layout: 'form',
 				border:false,
 				items: [phonegroup_namaField, phonegroup_detailField] 
+			},{
+				labelAlign: 'top',
+				bodyStyle:'padding:5px',
+				layout: 'form',
+				items:[
+					{
+						xtype: 'itemselector',
+						name: 'itemselector',
+						fieldLabel: 'Member',
+						imagePath: './assets/images/',
+						multiselects: [{
+							width: 300,
+							height: 200,
+							store: phonenumber_DataStore,
+							displayField: 'phonenumber_nama',
+							valueField: 'phonenumber_number',
+							tbar: new Ext.PagingToolbar({
+								pageSize: 15,
+								store: phonenumber_DataStore,
+								displayInfo: false
+							})
+						},{
+							width: 300,
+							height: 200,
+							store: phonegrouped_DataStore,
+							displayField: 'phonenumber_nama',
+							valueField: 'phonenumber_number',
+							tbar:[new Ext.PagingToolbar({
+								pageSize: 15,
+								store: phonegrouped_DataStore,
+								displayInfo: false,
+								listeners:{
+									render:function(){
+										phonegrouped_DataStore.setBaseParam({id:get_pk_id()});
+										console.log('test');
+									}
+								}
+								}),{
+								text: 'Clear',
+								xtype: 'button',
+								handler:function(){
+									phonegroup_saveForm.getForm().findField('itemselector').reset();
+								}
+								}]
+						}]
+					}
+					]
 			}
 			],
 		buttons: [{
@@ -825,7 +917,14 @@ Ext.onReady(function(){
 		});
 	}
 	/*End of Function */
+	phonegroup_saveWindow.on("show",function(){
+			phonegrouped_DataStore.setBaseParam('id',get_pk_id());
+			phonenumber_DataStore.setBaseParam('id',get_pk_id());
+			phonenumber_DataStore.load();
+			phonegrouped_DataStore.load();
+	});
 	
+		
 });
 	</script>
 <body>

@@ -8,7 +8,7 @@
     <?=css_asset('mmcal.css');?>
    	<?=css_asset('xtheme-slate.css');?>
 	<?=css_asset('file-upload.css');?>
-	
+	<?=css_asset('MultiSelect.css');?>
 	
 	
     <?=js_asset('ext-base.js');?>
@@ -21,6 +21,8 @@
 	<?=js_asset('RowExpander.js');?>
     <?=js_asset('RowEditor.js');?>
 	<?=js_asset('CheckColumn.js');?>
+    <?=js_asset('MultiSelect.js');?>
+    <?=js_asset('ItemSelector.js');?>
   	<link rel="shortcut icon" href="<?=base_url();?>favicon.ico" />
 
 	<style type="text/css">

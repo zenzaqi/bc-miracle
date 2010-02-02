@@ -57,6 +57,23 @@ class C_phonegroup extends Controller {
 		}
 	}
 	
+	function get_available(){
+		$id=isset($_POST['id']) ? @$_POST['id'] : "";
+		$query = isset($_POST['query']) ? @$_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? @$_POST['start'] : @$_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? @$_POST['limit'] : @$_GET['limit']);
+		$result=$this->m_phonegroup->get_available($query,$start,$end);
+		echo $result;
+	}
+	function get_phonegrouped(){
+		$id=isset($_POST['id']) ? @$_POST['id'] : "";
+		$query = isset($_POST['query']) ? @$_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? @$_POST['start'] : @$_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? @$_POST['limit'] : @$_GET['limit']);
+		$result=$this->m_phonegroup->get_phonegrouped($id,$query,$start,$end);
+		echo $result;
+	}
+	
 	//function fot list record
 	function phonegroup_list(){
 		
@@ -82,7 +99,8 @@ class C_phonegroup extends Controller {
 		//$phonegroup_update=NULL;
 		//$phonegroup_date_update=NULL;
 		//$phonegroup_revised=0;
-		$result=$this->m_phonegroup->phonegroup_create($phonegroup_nama ,$phonegroup_detail ,$phonegroup_creator ,$phonegroup_date_create );
+		$phonegroup_data=@$_POST["phonegroup_data"];
+		$result=$this->m_phonegroup->phonegroup_create($phonegroup_nama ,$phonegroup_detail ,$phonegroup_creator ,$phonegroup_date_create,$phonegroup_data );
 		echo $result;
 	}
 	
@@ -100,9 +118,10 @@ class C_phonegroup extends Controller {
 		//$phonegroup_creator="phonegroup_creator";
 		//$phonegroup_date_create="phonegroup_date_create";
 		$phonegroup_update=@$_SESSION["userid"];
-		$phonegroup_date_update=date('m/d/Y');
+		$phonegroup_date_update=date('Y/m/d');
 		//$phonegroup_revised="(revised+1)";
-		$result = $this->m_phonegroup->phonegroup_update($phonegroup_id,$phonegroup_nama,$phonegroup_detail,$phonegroup_update,$phonegroup_date_update);
+		$phonegroup_data=@$_POST["phonegroup_data"];
+		$result = $this->m_phonegroup->phonegroup_update($phonegroup_id,$phonegroup_nama,$phonegroup_detail,$phonegroup_update,$phonegroup_date_update,$phonegroup_data);
 		echo $result;
 	}
 	
