@@ -39,7 +39,8 @@ Ext.onReady(function(){
 						if(action.failureType == 'server'){
 							Ext.Msg.alert('Server Failed!', 'Authentication server is unreachable : ' + obj.msg);
 						} else {
-							Ext.Msg.alert('Login Failed!', obj.msg );
+//							Ext.Msg.alert('Login Failed!', obj.msg );
+							Ext.Msg.alert('Login gagal', obj.msg );
 						}
 						loginForm.getForm().reset();
 					}
@@ -109,7 +110,8 @@ Ext.onReady(function(){
 		
 	var createwindow = new Ext.Window({
 		frame:true,
-		title:'<center>Login Authentication</center>',
+//		title:'<center>Login Authentication</center>',
+		title:'<center>Silahkan Login</center>',
 		width:330,
 		height:175,
 		closable: false,
