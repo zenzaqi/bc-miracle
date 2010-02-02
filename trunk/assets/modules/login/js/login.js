@@ -40,7 +40,7 @@ Ext.onReady(function(){
 							Ext.Msg.alert('Server Failed!', 'Authentication server is unreachable : ' + obj.msg);
 						} else {
 //							Ext.Msg.alert('Login Failed!', obj.msg );
-							Ext.Msg.alert('Login gagal', obj.msg );
+							Ext.Msg.alert('Login gagal', 'Username atau password tidak benar' );
 						}
 						loginForm.getForm().reset();
 					}
