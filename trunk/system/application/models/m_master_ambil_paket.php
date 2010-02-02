@@ -25,9 +25,12 @@ class M_master_ambil_paket extends Model{
 				$sql_rpaket="SELECT distinct(rpaket_perawatan) FROM paket_isi_perawatan WHERE rpaket_master='$paket_id'";
 				$rs=$this->db->query($sql_rpaket);
 				$rs_rows=$rs->num_rows();
-			
-			
-				$sql="SELECT rawat_id,rawat_kode,rawat_nama,rpaket_jumlah FROM perawatan INNER JOIN paket_isi_perawatan ON(perawatan.rawat_id=paket_isi_perawatan.rpaket_perawatan) WHERE rawat_aktif='Aktif'";//join dr tabel: perawatan,produk_group,kategori2,kategori,jenis,gudang
+				
+				/* CHeck di db.master_ambil_paket dan db.submaster_apaket_item => JIKA pada submaster masih kosong maka jumlah item mengambil dari db.paket_isi_perawatan */
+				//$sql="SELECT * FROM perawatan INNER JOIN ";
+				
+				//$sql="SELECT rawat_id,rawat_kode,rawat_nama,rpaket_jumlah FROM perawatan INNER JOIN paket_isi_perawatan ON(perawatan.rawat_id=paket_isi_perawatan.rpaket_perawatan) WHERE rawat_aktif='Aktif'";//join dr tabel: perawatan,produk_group,kategori2,kategori,jenis,gudang
+				$sql="SELECT rawat_id,rawat_kode,rawat_nama,sapaket_sisa_item FROM perawatan INNER JOIN submaster_apaket_item ON(perawatan.rawat_id=submaster_apaket_item.sapaket_item) WHERE rawat_aktif='Aktif'";
 				
 				if($rs_rows){
 					$filter="";
@@ -106,15 +109,46 @@ class M_master_ambil_paket extends Model{
 				$rambil_paket_master=$this->get_master_id();
 			}
 			
-			$data = array(
+			/*$data = array(
 				"rpaket_master"=>$rambil_paket_master, 
 				"rpaket_perawatan"=>$rambil_paket_perawatan, 
 				"rpaket_jumlah"=>$rambil_paket_jumlah 
 			);
-			$this->db->insert('paket_isi_perawatan', $data); 
-			if($this->db->affected_rows())
+			$this->db->insert('paket_isi_perawatan', $data); */
+			/* INSERT ke db.detail_ambil sebagai History Pengambilan Paket, kemudian UPDATE db.submaster_apaket_item.sapaket_sisa_item u/ mengetahui sisa setelah dilakukan pengambilan, dan UPDATE db.master_ambil_paket.apaket_sisa_paket u/ mengetahui sisa isi paket */
+			$data=array(
+			"dapaket_master"=>$rambil_paket_master,
+			"dapaket_dpaket"=>$rambil_paket_id,
+			"dapaket_item"=>$rambil_paket_perawatan,
+			"dapaket_jumlah"=>$rambil_paket_jumlah
+			);
+			$this->db->insert('detail_ambil_paket', $data);
+			if($this->db->affected_rows()){
+				/* UPDATE db.submaster_apaket_item.sapaket_sisa_item WHERE db.submaster_apaket_item.sapaket_master = $rambil_paket_master AND db.submaster_apaket_item.sapaket_item = $rambil_paket_perawatan */
+				$sql_sapaket="SELECT sapaket_sisa_item FROM submaster_apaket_item WHERE sapaket_master='$rambil_paket_master' AND sapaket_item='$rambil_paket_perawatan'";
+				$rs_sapaket=$this->db->query($sql_sapaket);
+				$rs_sapaket_record=$rs_sapaket->row_array();
+				
+				$dtu_sapaket=array(
+				"sapaket_sisa_item"=>$rs_sapaket_record["sapaket_sisa_item"]-$rambil_paket_jumlah
+				);
+				$this->db->where('sapaket_master', $rambil_paket_master);
+				$this->db->where('sapaket_item', $rambil_paket_perawatan);
+				$this->db->update('submaster_apaket_item', $dtu_sapaket);
+				
+				/* UPDATE db.master_ambil_paket.apaket_sisa_paket */
+				$sql_apaket="SELECT apaket_sisa_paket FROM master_ambil_paket WHERE apaket_id='$rambil_paket_master'";
+				$rs_apaket=$this->db->query($sql_apaket);
+				$rs_apaket_record=$rs_apaket->row_array();
+				
+				$dtu_apaket=array(
+				"apaket_sisa_paket"=>$rs_apaket_record["apaket_sisa_paket"]-$rambil_paket_jumlah
+				);
+				$this->db->where('apaket_id', $rambil_paket_master);
+				$this->db->update('master_ambil_paket', $dtu_apaket);
+				
 				return '1';
-			else
+			}else
 				return '0';
 
 		}
@@ -123,7 +157,7 @@ class M_master_ambil_paket extends Model{
 		//function for get list record
 		function ambil_paket_list($filter,$start,$end){
 			/* Untuk menampilkan ke View.LIST = {Customer, No.Faktur Penjualan Paket, Tanggal Pembelian, Tanggal Expired Paket, Nama Paket } */
-			$query = "SELECT customer.cust_id, customer.cust_nama, master_jual_paket.jpaket_id, master_jual_paket.jpaket_nobukti, master_jual_paket.jpaket_tanggal, detail_jual_paket.dpaket_id, detail_jual_paket.dpaket_kadaluarsa, paket.paket_id, paket.paket_nama, paket.paket_kode, paket.paket_jmlisi, produk_group.group_nama, master_ambil_paket.apaket_sisa_paket FROM master_jual_paket INNER JOIN detail_jual_paket ON(master_jual_paket.jpaket_id=detail_jual_paket.dpaket_master) INNER JOIN paket ON(detail_jual_paket.dpaket_paket=paket.paket_id) LEFT JOIN customer ON(master_jual_paket.jpaket_cust=customer.cust_id) LEFT JOIN produk_group ON(paket.paket_group=produk_group.group_id) LEFT JOIN master_ambil_paket ON(master_jual_paket.jpaket_nobukti=master_ambil_paket.apaket_faktur)";
+			$query = "SELECT customer.cust_id, customer.cust_nama, master_jual_paket.jpaket_id, master_jual_paket.jpaket_nobukti, master_jual_paket.jpaket_tanggal, detail_jual_paket.dpaket_id, detail_jual_paket.dpaket_kadaluarsa, paket.paket_id, paket.paket_nama, paket.paket_kode, paket.paket_jmlisi, produk_group.group_nama, master_ambil_paket.apaket_sisa_paket, master_ambil_paket.apaket_id FROM master_jual_paket INNER JOIN detail_jual_paket ON(master_jual_paket.jpaket_id=detail_jual_paket.dpaket_master) INNER JOIN paket ON(detail_jual_paket.dpaket_paket=paket.paket_id) LEFT JOIN customer ON(master_jual_paket.jpaket_cust=customer.cust_id) LEFT JOIN produk_group ON(paket.paket_group=produk_group.group_id) LEFT JOIN master_ambil_paket ON(master_jual_paket.jpaket_nobukti=master_ambil_paket.apaket_faktur)";
 			
 			// For simple search
 			if ($filter<>""){
