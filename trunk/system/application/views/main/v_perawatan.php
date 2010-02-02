@@ -1446,8 +1446,8 @@ Ext.onReady(function(){
 	perawatan_konsumsiListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'perawatan_konsumsiListEditorGrid',
 		el: 'fp_perawatan_konsumsi',
-		title: 'Detail perawatan_konsumsi',
-		height: 250,
+		title: 'Detail Standard Bahan',
+		height: 350,
 		width: 690,
 		autoScroll: true,
 		store: perawatan_konsumsi_DataStore, // DataStore
@@ -1487,7 +1487,7 @@ Ext.onReady(function(){
 		id: 'perawatan_alatListEditorGrid',
 		el: 'fp_perawatan_alat',
 		title: 'Detail perawatan_alat',
-		height: 250,
+		height: 350,
 		width: 690,
 		autoScroll: true,
 		store: perawatan_alat_DataStore, // DataStore
