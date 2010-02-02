@@ -1726,7 +1726,7 @@ Ext.onReady(function(){
 				perawatan_konsumsi_DataStore.remove(r);
 			}
 		}
-		perawatan_konsumsi_DataStore.commitChanges();
+		//perawatan_konsumsi_DataStore.commitChanges();
 	}
 	//eof
 	

@@ -533,10 +533,13 @@ Ext.onReady(function(){
 				switch(result){
 					case 1:
 						detail_jual_paket_purge();
+						detail_pengguna_paket_insert();
+						//detail_pengguna_paket_purge();
 						//detail_jual_paket_insert();
 						Ext.MessageBox.alert(post2db+' OK','The Master_jual_paket was '+msg+' successfully.');
 						//master_jual_paket_DataStore.reload();
 						detail_jual_paket_DataStore.load({params: {master_id:0}});
+						detail_pengguna_paket_DataStore.removeAll();
 						master_jual_paket_createWindow.hide();
 						break;
 					default:
@@ -1136,6 +1139,7 @@ Ext.onReady(function(){
 					}
 				}
 			});
+			cbo_cust_jual_paket_DataStore.load({params:{query : eval(get_pk_id())}});
 			msg='updated';
 			master_jual_paket_createWindow.hide();
 			//master_jual_paket_createWindow.show();
@@ -1437,6 +1441,29 @@ Ext.onReady(function(){
 		sortInfo:{field: 'jpaket_bank_display', direction: "DESC"}
 		});
 	/* END GET Bank-List.Store */
+	
+	cbo_cust_pengguna_paket_DataStore = new Ext.data.Store({
+		id: 'cbo_cust_pengguna_paket_DataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_master_jual_paket&m=get_customer_pengguna_list', 
+			method: 'POST'
+		}),
+		baseParams:{start: 0, limit: 10 }, // parameter yang di $_POST ke Controller
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'cust_id'
+		},[
+		/* dataIndex => insert intocustomer_note_ColumnModel, Mapping => for initiate table column */ 
+			{name: 'cust_id', type: 'int', mapping: 'cust_id'},
+			{name: 'cust_no', type: 'string', mapping: 'cust_no'},
+			{name: 'cust_nama', type: 'string', mapping: 'cust_nama'},
+			{name: 'cust_tgllahir', type: 'date', dateFormat: 'Y-m-d', mapping: 'cust_tgllahir'},
+			{name: 'cust_alamat', type: 'string', mapping: 'cust_alamat'},
+			{name: 'cust_telprumah', type: 'string', mapping: 'cust_telprumah'}
+		]),
+		sortInfo:{field: 'cust_no', direction: "ASC"}
+	});
 	
   	/* Function for Identify of Window Column Model */
 	master_jual_paket_ColumnModel = new Ext.grid.ColumnModel(
@@ -3282,7 +3309,12 @@ Ext.onReady(function(){
 						dpaket_diskon_jenis	: detail_jual_paket_record.data.dpaket_diskon_jenis,
 						dpaket_sales			: detail_jual_paket_record.data.dpaket_sales
 					},
-					timeout: 60000,
+					//timeout: 60000,
+					callback: function(opts, success, response){
+						if(success){
+							//detail_pengguna_paket_insert();
+						}
+					}/*,
 					success: function(response){							
 						var result=eval(response.responseText);
 					},
@@ -3295,7 +3327,7 @@ Ext.onReady(function(){
 						   animEl: 'database',
 						   icon: Ext.MessageBox.ERROR
 						});	
-					}		
+					}*/
 				});
 			}
 		}
@@ -3402,6 +3434,226 @@ Ext.onReady(function(){
 		
 	}
 	//eof
+	
+	/* START Detail Pengguna Paket */
+	/*Detail Declaration */
+	
+	// Function for json reader of detail
+	var detail_pengguna_paket_reader=new Ext.data.JsonReader({
+		root: 'results',
+		totalProperty: 'total',
+		id: ''
+	},[
+	/* dataIndex => insert intoPaket_ColumnModel, Mapping => for initiate table column */ 
+			{name: 'sjpaket_id', type: 'int', mapping: 'sjpaket_id'}, 
+			{name: 'sjpaket_master', type: 'int', mapping: 'sjpaket_master'}, 
+			{name: 'sjpaket_nobukti', type: 'string', mapping: 'sjpaket_nobukti'},
+			{name: 'sjpaket_cust', type: 'int', mapping: 'sjpaket_cust'}
+	]);
+	//eof
+	
+	//function for json writer of detail
+	var detail_pengguna_paket_writer = new Ext.data.JsonWriter({
+		encode: true,
+		writeAllFields: false
+	});
+	//eof
+	
+	
+	
+	/* Function for Retrieve DataStore of detail*/
+	detail_pengguna_paket_DataStore = new Ext.data.Store({
+		id: 'detail_pengguna_paket_DataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_master_jual_paket&m=detail_pengguna_paket_list', 
+			method: 'POST'
+		}),baseParams: {master_id: jpaket_idField.getValue(), start: 0, limit: pageS},
+		reader: detail_pengguna_paket_reader,
+		sortInfo:{field: 'dpaket_id', direction: "ASC"}
+	});
+	/* End of Function */
+	
+	//function for editor of detail
+	var editor_detail_pengguna_paket= new Ext.ux.grid.RowEditor({
+        saveText: 'Update'/*,
+		listeners: {
+			afteredit: function(){
+				detail_pengguna_paket_DataStore.commitChanges();
+			}
+		}*/
+    });
+	//eof
+	
+	
+	var combo_pengguna_paket=new Ext.form.ComboBox({
+		store: cbo_cust_jual_paket_DataStore,
+		mode: 'remote',
+		displayField:'cust_nama',
+		valueField: 'cust_id',
+        typeAhead: false,
+        loadingText: 'Searching...',
+        pageSize:10,
+        hideTrigger:false,
+        tpl: customer_jual_paket_tpl,
+        //applyTo: 'search',
+        itemSelector: 'div.search-item',
+		triggerAction: 'all',
+		lazyRender:true,
+		listClass: 'x-combo-list-small'
+	});
+
+	//declaration of detail coloumn model
+	detail_pengguna_paket_ColumnModel = new Ext.grid.ColumnModel(
+		[
+		{
+			header: 'Customer Lain',
+			dataIndex: 'sjpaket_cust',
+			width: 298,
+			sortable: true,
+			editor: combo_pengguna_paket,
+			renderer: Ext.util.Format.comboRenderer(combo_pengguna_paket)
+		}]
+	);
+	detail_pengguna_paket_ColumnModel.defaultSortable= true;
+	//eof
+	
+	//declaration of detail list editor grid
+	detail_pengguna_paketListEditorGrid =  new Ext.grid.EditorGridPanel({
+		id: 'detail_pengguna_paketListEditorGrid',
+		el: 'fp_detail_pengguna_paket',
+		title: 'Detail Pengguna Paket',
+		height: 250,
+		width: 938,
+		autoScroll: true,
+		store: detail_pengguna_paket_DataStore, // DataStore
+		colModel: detail_pengguna_paket_ColumnModel, // Nama-nama Columns
+		enableColLock:false,
+		region: 'center',
+        margins: '0 0 0 0',
+		plugins: [editor_detail_pengguna_paket],
+		frame: true,
+		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
+		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
+		viewConfig: { forceFit:true},
+		bbar: new Ext.PagingToolbar({
+			pageSize: pageS,
+			store: detail_pengguna_paket_DataStore,
+			displayInfo: true
+		}),
+		/* Add Control on ToolBar */
+		tbar: [
+		{
+			text: 'Add',
+			tooltip: 'Add new detail record',
+			iconCls:'icon-adds',    				// this is defined in our styles.css
+			handler: detail_pengguna_paket_add
+		}, '-',{
+			text: 'Delete',
+			tooltip: 'Delete detail selected record',
+			iconCls:'icon-delete',
+			handler: detail_pengguna_paket_confirm_delete
+		}
+		]
+	});
+	//eof
+	
+	//function of detail add
+	function detail_pengguna_paket_add(){
+		var edit_detail_pengguna_paket= new detail_pengguna_paketListEditorGrid.store.recordType({
+			dpaket_id	:'',		
+			dpaket_master	:'',		
+			dpaket_paket	:null
+		});
+		editor_detail_pengguna_paket.stopEditing();
+		detail_pengguna_paket_DataStore.insert(0, edit_detail_pengguna_paket);
+		detail_pengguna_paketListEditorGrid.getView().refresh();
+		detail_pengguna_paketListEditorGrid.getSelectionModel().selectRow(0);
+		editor_detail_pengguna_paket.startEditing(0);
+	}
+	
+	//function for refresh detail
+	function refresh_detail_pengguna_paket(){
+		detail_pengguna_paket_DataStore.commitChanges();
+		detail_pengguna_paketListEditorGrid.getView().refresh();
+	}
+	//eof
+	
+	//function for insert detail
+	function detail_pengguna_paket_insert(){
+		for(i=0;i<detail_pengguna_paket_DataStore.getCount();i++){
+			detail_pengguna_paket_record=detail_pengguna_paket_DataStore.getAt(i);
+			if(detail_pengguna_paket_record.data.sjpaket_cust!==null&&detail_pengguna_paket_record.data.sjpaket_cust!==""){
+				Ext.Ajax.request({
+					waitMsg: 'Please wait...',
+					url: 'index.php?c=c_master_jual_paket&m=detail_pengguna_paket_insert',
+					params:{
+						sjpaket_master	: eval(jpaket_idField.getValue()), 
+						sjpaket_cust	: detail_pengguna_paket_record.data.sjpaket_cust
+					},
+					timeout: 60000,
+					success: function(response){							
+						var result=eval(response.responseText);
+					},
+					failure: function(response){
+						var result=response.responseText;
+						Ext.MessageBox.show({
+						   title: 'Error',
+						   msg: 'Could not connect to the database. retry later.',
+						   buttons: Ext.MessageBox.OK,
+						   animEl: 'database',
+						   icon: Ext.MessageBox.ERROR
+						});	
+					}		
+				});
+			}
+		}
+	}
+	//eof
+	
+	//function for purge detail
+	function detail_pengguna_paket_purge(){
+		Ext.Ajax.request({
+			waitMsg: 'Please wait...',
+			url: 'index.php?c=c_master_jual_paket&m=detail_pengguna_paket_purge',
+			params:{ master_id: eval(jpaket_idField.getValue()) },
+			callback: function(opts, success, response){
+				detail_pengguna_paket_insert();
+			}
+		});
+	}
+	//eof
+	
+	/* Function for Delete Confirm of detail */
+	function detail_pengguna_paket_confirm_delete(){
+		// only one record is selected here
+		if(detail_pengguna_paketListEditorGrid.selModel.getCount() == 1){
+			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', detail_pengguna_paket_delete);
+		} else if(detail_pengguna_paketListEditorGrid.selModel.getCount() > 1){
+			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', detail_pengguna_paket_delete);
+		} else {
+			Ext.MessageBox.show({
+				title: 'Warning',
+				msg: 'You can\'t really delete something you haven\'t selected?',
+				buttons: Ext.MessageBox.OK,
+				animEl: 'save',
+				icon: Ext.MessageBox.WARNING
+			});
+		}
+	}
+	//eof
+	
+	//function for Delete of detail
+	function detail_pengguna_paket_delete(btn){
+		if(btn=='yes'){
+			var s = detail_pengguna_paketListEditorGrid.getSelectionModel().getSelections();
+			for(var i = 0, r; r = s[i]; i++){
+				detail_pengguna_paket_DataStore.remove(r);
+			}
+		} 
+		detail_pengguna_paket_DataStore.commitChanges();
+	}
+	//eof
+	/* END Detail Pengguna Paket*/
 	
 	
 	function update_group_carabayar_jual_paket(){
@@ -3934,6 +4186,13 @@ Ext.onReady(function(){
 		});	// load DataStore
 	}
 	
+	var detail_tab_jual_paket = new Ext.TabPanel({
+		plain:true,
+		activeTab: 0,
+		autoHeight: true,
+		items: [detail_jual_paketListEditorGrid,detail_pengguna_paketListEditorGrid]
+	});
+	
 	/* Function for retrieve create Window Panel*/ 
 	master_jual_paket_createForm = new Ext.FormPanel({
 		labelAlign: 'left',
@@ -3943,7 +4202,7 @@ Ext.onReady(function(){
 		width: 950,
 		plain: true,
 		layout: 'fit',
-		items: [master_jual_paket_masterGroup,detail_jual_paketListEditorGrid,master_jual_paket_bayarGroup]
+		items: [master_jual_paket_masterGroup,detail_tab_jual_paket,master_jual_paket_bayarGroup]
 		,
 		buttons: [
 			{
@@ -3967,6 +4226,7 @@ Ext.onReady(function(){
 				handler: function(){
 					master_jual_paket_reset_form();
 					detail_jual_paket_DataStore.load({params: {master_id:0}});
+					detail_pengguna_paket_DataStore.removeAll();
 					master_cara_bayarTabPanel.setActiveTab(0);
 					post2db="CREATE";
 				}
@@ -4325,6 +4585,7 @@ Ext.onReady(function(){
 	<div class="col">
         <div id="fp_master_jual_paket"></div>
          <div id="fp_detail_jual_paket"></div>
+		 <div id="fp_detail_pengguna_paket"></div>
 		<div id="elwindow_master_jual_paket_create"></div>
         <div id="elwindow_master_jual_paket_search"></div>
         <div id="form_paket_addEdit"></div>

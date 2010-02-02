@@ -18,6 +18,82 @@ class M_master_jual_paket extends Model{
 			parent::Model();
 		}
 		
+		function get_customer_list($query,$start,$end){
+			$rs_rows=0;
+			if(is_numeric($query)==true){
+				$sql_cust="SELECT distinct(sjpaket_cust) FROM submaster_jual_paket WHERE sjpaket_master='$query'";
+				$rs=$this->db->query($sql_cust);
+				$rs_rows=$rs->num_rows();
+			}
+			
+			$sql="SELECT cust_id,cust_no,cust_nama,cust_tgllahir,cust_alamat,cust_telprumah FROM customer where cust_aktif='Aktif'";
+			if($query<>"" && is_numeric($query)==false){
+				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+				$sql.=" (cust_nama like '%".$query."%' ) ";
+			}else{
+				if($rs_rows){
+					$filter="";
+					$sql.=eregi("AND",$query)? " OR ":" AND ";
+					foreach($rs->result() as $row_cust){
+						
+						$filter.="OR cust_id='".$row_cust->sjpaket_cust."' ";
+					}
+					$sql=$sql."(".substr($filter,2,strlen($filter)).")";
+				}
+			}
+			
+			$result = $this->db->query($sql);
+			$nbrows = $result->num_rows();
+			if($end!=0){
+				$limit = $sql." LIMIT ".$start.",".$end;			
+				$result = $this->db->query($limit);
+			}
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+		
+		function detail_pengguna_paket_list($master_id,$start,$end){
+			$query="SELECT * FROM submaster_jual_paket WHERE sjpaket_master='$master_id'";
+			
+			$result = $this->db->query($query);
+			$nbrows = $result->num_rows();
+			$limit = $query." LIMIT ".$start.",".$end;		
+			$result = $this->db->query($limit);
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+		
+		function detail_pengguna_paket_insert($sjpaket_master, $sjpaket_cust){
+			//if master id not capture from view then capture it from max pk from master table
+			if($sjpaket_master=="" || $sjpaket_master==NULL){
+				$sjpaket_master=$this->get_master_id();
+			}
+			$data = array(
+				"sjpaket_master"=>$sjpaket_master, 
+				"sjpaket_cust"=>$sjpaket_cust
+			);
+			$this->db->insert('submaster_jual_paket', $data); 
+			if($this->db->affected_rows()){
+				return '1';
+			}else
+				return '0';
+
+		}
+		
 		function get_paket_list($filter,$start,$end){
 			$query="SELECT * FROM paket INNER JOIN produk_group ON paket.paket_group=produk_group.group_id INNER JOIN kategori ON produk_group.group_kelompok=kategori.kategori_id WHERE kategori.kategori_jenis='paket' AND paket_aktif='Aktif'";
 			
@@ -127,6 +203,12 @@ class M_master_jual_paket extends Model{
 			
 		}
 		//*eof
+		
+		function detail_pengguna_paket_purge($master_id){
+			$sql="DELETE FROM submaster_jual_paket WHERE sjpaket_master='".$master_id."'";
+			$result=$this->db->query($sql);
+			return '1';
+		}
 		
 		//insert detail record
 		function detail_detail_jual_paket_insert($dpaket_id ,$dpaket_master ,$dpaket_paket, $dpaket_kadaluarsa ,$dpaket_jumlah ,$dpaket_harga ,$dpaket_diskon,$dpaket_diskon_jenis,$dpaket_sales ){
@@ -522,8 +604,8 @@ class M_master_jual_paket extends Model{
 		
 		//function for create new record
 		function master_jual_paket_create($jpaket_nobukti ,$jpaket_cust ,$jpaket_tanggal ,$jpaket_diskon ,$jpaket_cara ,$jpaket_cara2 ,$jpaket_cara3 ,$jpaket_keterangan , $jpaket_cashback, $jpaket_tunai_nilai, $jpaket_tunai_nilai2, $jpaket_tunai_nilai3, $jpaket_voucher_no, $jpaket_voucher_cashback, $jpaket_voucher_no2, $jpaket_voucher_cashback2, $jpaket_voucher_no3, $jpaket_voucher_cashback3, $jpaket_bayar, $jpaket_subtotal, $jpaket_hutang, $jpaket_kwitansi_no, $jpaket_kwitansi_nama, $jpaket_kwitansi_nilai, $jpaket_kwitansi_no2, $jpaket_kwitansi_nama2, $jpaket_kwitansi_nilai2, $jpaket_kwitansi_no3, $jpaket_kwitansi_nama3, $jpaket_kwitansi_nilai3, $jpaket_card_nama, $jpaket_card_edc, $jpaket_card_no, $jpaket_card_nilai, $jpaket_card_nama2, $jpaket_card_edc2, $jpaket_card_no2, $jpaket_card_nilai2, $jpaket_card_nama3, $jpaket_card_edc3, $jpaket_card_no3, $jpaket_card_nilai3, $jpaket_cek_nama, $jpaket_cek_no, $jpaket_cek_valid, $jpaket_cek_bank, $jpaket_cek_nilai, $jpaket_cek_nama2, $jpaket_cek_no2, $jpaket_cek_valid2, $jpaket_cek_bank2, $jpaket_cek_nilai2, $jpaket_cek_nama3, $jpaket_cek_no3, $jpaket_cek_valid3, $jpaket_cek_bank3, $jpaket_cek_nilai3, $jpaket_transfer_bank, $jpaket_transfer_nama, $jpaket_transfer_nilai, $jpaket_transfer_bank2, $jpaket_transfer_nama2, $jpaket_transfer_nilai2, $jpaket_transfer_bank3, $jpaket_transfer_nama3, $jpaket_transfer_nilai3){
-			$pattern="FK/".date("ym")."-";
-			$jpaket_nobukti=$this->m_public_function->get_kode_1('master_jual_paket','jpaket_nobukti',$pattern,13);
+			$pattern="PK/".date("ym")."-";
+			$jpaket_nobukti=$this->m_public_function->get_kode_1('master_jual_paket','jpaket_nobukti',$pattern,12);
 			
 			$data = array(
 				"jpaket_nobukti"=>$jpaket_nobukti, 

@@ -26,6 +26,21 @@ class C_master_jual_paket extends Controller {
 		$this->load->view('main/v_master_jual_paket');
 	}
 	
+	function detail_pengguna_paket_list(){
+		$master_id = isset($_POST['master_id']) ? $_POST['master_id'] : "";
+		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		$result = $this->m_master_jual_paket->detail_pengguna_paket_list($master_id,$start,$end);
+		echo $result;
+	}
+	
+	function detail_pengguna_paket_insert(){
+		$sjpaket_master=trim(@$_POST["sjpaket_master"]);
+		$sjpaket_cust=trim(@$_POST["sjpaket_cust"]);
+		$result=$this->m_master_jual_paket->detail_pengguna_paket_insert($sjpaket_master, $sjpaket_cust);
+		echo $result;
+	}
+	
 	function get_bank_list(){
 		$result=$this->m_public_function->get_bank_list();
 		echo $result;
@@ -35,7 +50,7 @@ class C_master_jual_paket extends Controller {
 		$query = isset($_POST['query']) ? $_POST['query'] : "";
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result=$this->m_public_function->get_customer_list($query,$start,$end);
+		$result=$this->m_master_jual_paket->get_customer_list($query,$start,$end);
 		echo $result;
 	}
 	
@@ -133,6 +148,17 @@ class C_master_jual_paket extends Controller {
 		
 	}
 	//eof
+	
+	function detail_pengguna_paket_purge(){
+		$master_id = (integer) (isset($_POST['master_id']) ? $_POST['master_id'] : $_GET['master_id']);
+		$result=$this->m_master_jual_paket->detail_pengguna_paket_purge($master_id);
+		
+		/*$ids = $_POST['ids']; // Get our array back and translate it :
+		$pkid = json_decode(stripslashes($ids));
+		$result=$this->m_master_jual_paket->detail_detail_jual_paket_purge($pkid);
+		echo $result;*/
+		
+	}
 	
 	//get master id, note: not done yet
 	function get_master_id(){
