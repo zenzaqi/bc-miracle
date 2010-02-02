@@ -12,7 +12,8 @@ Ext.apply(Ext.form.VTypes, {
 		}
 		return true;
 	},
-	passwordText : 'Passwords do not match' //alert if you enter a password that is not the same
+//	passwordText : 'Passwords do not match' //alert if you enter a password that is not the same
+	passwordText : 'Password tidak sama' //alert if you enter a password that is not the same
 });
 
 var usernameField="";
@@ -25,8 +26,10 @@ Ext.onReady(function(){
 	function authenticate(oGrid_event){
 				loginForm.getForm().submit({
 					method:'POST',
-					waitTitle:'Please wait.....',
-					waitMsg:'Authenticate...',
+//					waitTitle:'Please wait.....',
+					waitTitle:'Mohon tunggu...',
+//					waitMsg:'Authenticate...',
+					waitMsg:'Verifikasi...',
 					success:function(){
 								var redirect = 'index.php?c=main';
 								window.location = redirect;
