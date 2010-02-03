@@ -403,11 +403,11 @@ Ext.onReady(function(){
 		/* only one record is selected here */
 		cbo_rawat_produkDataStore.load({params:{query:perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_id')}});
 		cbo_rawat_alatDataStore.load();
-		cbo_rawat_gudangDataSore.load();
+		//cbo_rawat_gudangDataSore.load();
 		if(perawatanListEditorGrid.selModel.getCount() == 1) {
 			perawatan_set_form();
 			post2db='UPDATE';
-			perawatan_konsumsi_DataStore.load({params : {master_id : get_pk_id(), start:0, limit:pageS}});
+			perawatan_konsumsi_DataStore.load({params : {master_id : get_pk_id(), start:0, limit:30}});
 			perawatan_alat_DataStore.load({params : {master_id : get_pk_id(), start:0, limit:pageS}});
 			msg='updated';
 			perawatan_createWindow.show();
@@ -1231,7 +1231,7 @@ Ext.onReady(function(){
 			method: 'POST'
 		}),
 		reader: perawatan_konsumsi_reader,
-		baseParams:{master_id: get_pk_id(), start: 0, limit: pageS},
+		baseParams:{master_id: get_pk_id(), start: 0, limit: 30},
 		sortInfo:{field: 'krawat_id', direction: "ASC"}
 	});
 	/* End of Function */
@@ -1461,7 +1461,7 @@ Ext.onReady(function(){
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true},
 		bbar: new Ext.PagingToolbar({
-			pageSize: pageS,
+			pageSize: 30,
 			store: perawatan_konsumsi_DataStore,
 			displayInfo: true
 		}),

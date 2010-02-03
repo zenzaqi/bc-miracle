@@ -54,6 +54,14 @@ class C_master_jual_paket extends Controller {
 		echo $result;
 	}
 	
+	function get_customer_pengguna_list(){
+		$query = isset($_POST['query']) ? $_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		$result=$this->m_master_jual_paket->get_customer_pengguna_list($query,$start,$end);
+		echo $result;
+	}
+	
 	/*function get_paket_list(){
 		$result = $this->m_public_function->get_paket_list();
 		echo $result;

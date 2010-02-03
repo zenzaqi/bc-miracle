@@ -616,8 +616,11 @@ class M_master_jual_rawat extends Model{
 						}
 					}
 				}
-				
-				return '1';
+				if($printed==1){
+					return $jrawat_id;
+				}else{
+					return '1';
+				}
 			}
 			else
 				return '0';
@@ -1051,6 +1054,13 @@ class M_master_jual_rawat extends Model{
 				};
 				$result = $this->db->query($query);
 			}
+			return $result;
+		}
+		
+		function print_paper($jrawat_id){
+			
+			$sql="SELECT * FROM master_jual_rawat WHERE jrawat_id='".$jrawat_id."'";
+			$result = $this->db->query($sql);
 			return $result;
 		}
 		

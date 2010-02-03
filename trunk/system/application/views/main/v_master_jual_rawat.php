@@ -183,6 +183,42 @@ Ext.onReady(function(){
   	        return record ? record.get(combo.displayField) : combo.valueNotFoundText;
   	    }
   	}
+	
+	function cetak_faktur_jual_rawat(){
+		Ext.Ajax.request({   
+			waitMsg: 'Please Wait...',
+			url: 'index.php?c=c_master_jual_rawat&m=print_paper',
+			params: { jrawat_id : jrawat_idField.getValue()	}, 
+			success: function(response){              
+				var result=eval(response.responseText);
+				switch(result){
+				case 1:
+					win = window.open('./jrawat_paper.html','Cetak Penjualan Perawatan','height=400,width=1000,resizable=1,scrollbars=0, menubar=0');
+					win.print();
+					break;
+				default:
+					Ext.MessageBox.show({
+						title: 'Warning',
+						msg: 'Unable to print the grid!',
+						buttons: Ext.MessageBox.OK,
+						animEl: 'save',
+						icon: Ext.MessageBox.WARNING
+					});
+					break;
+				}  
+			},
+			failure: function(response){
+				var result=response.responseText;
+				Ext.MessageBox.show({
+				   title: 'Error',
+				   msg: 'Could not connect to the database. retry later.',
+				   buttons: Ext.MessageBox.OK,
+				   animEl: 'database',
+				   icon: Ext.MessageBox.ERROR
+				});		
+			} 	                     
+		});
+	}
   
   	/* Function for Saving inLine Editing */
 	function master_jual_rawat_update(oGrid_event){
@@ -536,7 +572,7 @@ Ext.onReady(function(){
 						detail_jual_rawat_DataStore.load({params: {master_id:0}});
 						master_jual_rawat_createWindow.hide();
 						break;
-					default:
+					case 0:
 						Ext.MessageBox.show({
 						   title: 'Warning',
 						   msg: 'We could\'t not '+msg+' the Master_jual_rawat.',
@@ -544,6 +580,11 @@ Ext.onReady(function(){
 						   animEl: 'save',
 						   icon: Ext.MessageBox.WARNING
 						});
+						break;
+					default:
+						jrawat_idField.setValue(result);
+						cetak_faktur_jual_rawat();
+						master_jual_rawat_createWindow.hide();
 						break;
 				}
 				if(printed==1)

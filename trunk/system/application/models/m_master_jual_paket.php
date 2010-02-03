@@ -59,6 +59,47 @@ class M_master_jual_paket extends Model{
 			}
 		}
 		
+		function get_customer_pengguna_list($query,$start,$end){
+			$rs_rows=0;
+			if(is_numeric($query)==true){
+				$sql_cust="SELECT distinct(sjpaket_cust) FROM submaster_jual_paket WHERE sjpaket_master='$query'";
+				$rs=$this->db->query($sql_cust);
+				$rs_rows=$rs->num_rows();
+			}
+			
+			$sql="SELECT cust_id,cust_no,cust_nama,cust_tgllahir,cust_alamat,cust_telprumah FROM customer where cust_aktif='Aktif'";
+			if($query<>"" && is_numeric($query)==false){
+				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+				$sql.=" (cust_nama like '%".$query."%' ) ";
+			}else{
+				if($rs_rows){
+					$filter="";
+					$sql.=eregi("AND",$query)? " OR ":" AND ";
+					foreach($rs->result() as $row_cust){
+						
+						$filter.="OR cust_id='".$row_cust->sjpaket_cust."' ";
+					}
+					$sql=$sql."(".substr($filter,2,strlen($filter)).")";
+				}
+			}
+			
+			$result = $this->db->query($sql);
+			$nbrows = $result->num_rows();
+			if($end!=0){
+				$limit = $sql." LIMIT ".$start.",".$end;			
+				$result = $this->db->query($limit);
+			}
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+		
 		function detail_pengguna_paket_list($master_id,$start,$end){
 			$query="SELECT * FROM submaster_jual_paket WHERE sjpaket_master='$master_id'";
 			
@@ -86,26 +127,48 @@ class M_master_jual_paket extends Model{
 				"sjpaket_master"=>$sjpaket_master, 
 				"sjpaket_cust"=>$sjpaket_cust
 			);
-			$this->db->insert('submaster_jual_paket', $data); 
-			if($this->db->affected_rows()){
-				return '1';
-			}else
-				return '0';
+			$sql="SELECT sjpaket_id FROM submaster_jual_paket WHERE sjpaket_master='$sjpaket_master' AND sjpaket_cust='$sjpaket_cust'";
+			$rs=$this->db->query($sql);
+			if(!$rs->num_rows()){
+				$this->db->insert('submaster_jual_paket', $data); 
+				if($this->db->affected_rows()){
+					return '1';
+				}else
+					return '0';
+			}
 
 		}
 		
-		function get_paket_list($filter,$start,$end){
-			$query="SELECT * FROM paket INNER JOIN produk_group ON paket.paket_group=produk_group.group_id INNER JOIN kategori ON produk_group.group_kelompok=kategori.kategori_id WHERE kategori.kategori_jenis='paket' AND paket_aktif='Aktif'";
-			
-			if ($filter<>""){
-				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (paket_kode LIKE '%".addslashes($filter)."%' OR paket_nama LIKE '%".addslashes($filter)."%' )";
+		function get_paket_list($query,$start,$end){
+			$rs_rows=0;
+			if(is_numeric($query)==true){
+				$sql_paket="SELECT distinct(dpaket_paket) FROM detail_jual_paket WHERE dpaket_master='$query'";
+				$rs=$this->db->query($sql_paket);
+				$rs_rows=$rs->num_rows();
 			}
 			
-			$result = $this->db->query($query);
+			$sql="SELECT paket_id, paket_harga, paket_kode, group_nama, kategori_nama, paket_du, paket_dm, paket_nama, paket_expired FROM paket INNER JOIN produk_group ON paket.paket_group=produk_group.group_id INNER JOIN kategori ON produk_group.group_kelompok=kategori.kategori_id WHERE kategori.kategori_jenis='paket' AND paket_aktif='Aktif'";
+			if($query<>"" && is_numeric($query)==false){
+				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+				$sql.=" (paket_kode LIKE '%".addslashes($filter)."%' OR paket_nama LIKE '%".addslashes($filter)."%' ) ";
+			}else{
+				if($rs_rows){
+					$filter="";
+					$sql.=eregi("AND",$query)? " OR ":" AND ";
+					foreach($rs->result() as $row_paket){
+						
+						$filter.="OR paket_id='".$row_paket->dpaket_paket."' ";
+					}
+					$sql=$sql."(".substr($filter,2,strlen($filter)).")";
+				}
+			}
+			
+			$result = $this->db->query($sql);
 			$nbrows = $result->num_rows();
-			$limit = $query." LIMIT ".$start.",".$end;		
-			$result = $this->db->query($limit);
+			if($end!=0){
+				$limit = $sql." LIMIT ".$start.",".$end;			
+				$result = $this->db->query($limit);
+			}
 			if($nbrows>0){
 				foreach($result->result() as $row){
 					$arr[] = $row;
@@ -115,6 +178,7 @@ class M_master_jual_paket extends Model{
 			} else {
 				return '({"total":"0", "results":""})';
 			}
+			
 		}
 		
 		//function for detail
