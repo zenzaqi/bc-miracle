@@ -61,9 +61,10 @@ var pageS=15;
 
 /* declare variable here for Field*/
 var draft_idField;
-var draft_destinationField;
+var draft_destgroupField;
+var draft_destnumField;
 var draft_messageField;
-var draft_dateField;
+
 var draft_idSearchField;
 var draft_destinationSearchField;
 var draft_messageSearchField;
@@ -76,23 +77,17 @@ Ext.onReady(function(){
   	/* Function for Saving inLine Editing */
 	function draft_inline_update(oGrid_event){
 		var draft_id_update_pk="";
-		var draft_destination_update=null;
 		var draft_message_update=null;
-		var draft_date_update_date="";
 
 		draft_id_update_pk = oGrid_event.record.data.draft_id;
-		if(oGrid_event.record.data.draft_destination!== null){draft_destination_update = oGrid_event.record.data.draft_destination;}
 		if(oGrid_event.record.data.draft_message!== null){draft_message_update = oGrid_event.record.data.draft_message;}
-	 	if(oGrid_event.record.data.draft_date!== ""){draft_date_update_date =oGrid_event.record.data.draft_date.format('Y-m-d');}
-
+	 	
 		Ext.Ajax.request({  
 			waitMsg: 'Please wait...',
 			url: 'index.php?c=c_draft&m=get_action',
 			params: {
 				draft_id	: draft_id_update_pk, 
-				draft_destination	:draft_destination_update,
 				draft_message	:draft_message_update,
-				draft_date	: draft_date_update_date, 
 				task: "UPDATE"
 			}, 
 			success: function(response){							
@@ -128,28 +123,30 @@ Ext.onReady(function(){
   	/* End of Function */
   
   	/* Function for add and edit data form, open window form */
-	function draft_save(){
+	function draft_save(poststat){
 	
-		if(is_draft_form_valid()){	
-			var draft_id_field_pk=null; 
-			var draft_destination_field=null; 
-			var draft_message_field=null; 
-			var draft_date_field_date=""; 
-
-			draft_id_field_pk=get_pk_id();
-			if(draft_destinationField.getValue()!== null){draft_destination_field = draft_destinationField.getValue();} 
-			if(draft_messageField.getValue()!== null){draft_message_field = draft_messageField.getValue();} 
-			if(draft_dateField.getValue()!== ""){draft_date_field_date = draft_dateField.getValue().format('Y-m-d');} 
+		if(is_draft_form_valid()){
+			var draft_pk_id="";
+			var draft_nomer="";
+			var draft_group="";
+			var draft_isi="";
+			var draft_opsi="";
+			draft_pk_id=get_pk_id();
+			if(draft_destnumField.getValue()!=="") draft_nomer=draft_destnumField.getValue();
+			if(draft_destgroupField.getValue()!=="") draft_group=draft_destgroupField.getValue();
+			if(draft_messageField.getValue()!=="") draft_isi=draft_messageField.getValue();
+			if(draft_filterField.getValue()!=="") draft_opsi=draft_filterField.getValue();
 
 			Ext.Ajax.request({  
 				waitMsg: 'Please wait...',
-				url: 'index.php?c=c_draft&m=get_action',
+				url: 'index.php?c=c_draft&m=sms_save',
 				params: {
-					draft_id	: draft_id_field_pk, 
-					draft_destination	: draft_destination_field, 
-					draft_message	: draft_message_field, 
-					draft_date	: draft_date_field_date, 
-					task: post2db
+					isms_pk_id	: draft_pk_id,
+					isms_nomer	: draft_nomer,
+					isms_group	: draft_group,
+					isms_isi	: draft_isi,
+					isms_opsi	: draft_opsi,
+					isms_task	: poststat
 				}, 
 				success: function(response){             
 					var result=eval(response.responseText);
@@ -202,36 +199,11 @@ Ext.onReady(function(){
 			return 0;
 	}
 	/* End of Function  */
-	
-	/* Reset form before loading */
-	function draft_reset_form(){
-		draft_destinationField.reset();
-		draft_destinationField.setValue(null);
-		draft_messageField.reset();
-		draft_messageField.setValue(null);
-		draft_dateField.reset();
-		draft_dateField.setValue(null);
-	}
- 	/* End of Function */
   
-	/* setValue to EDIT */
-	function draft_set_form(){
-		draft_destinationField.setValue(draftListEditorGrid.getSelectionModel().getSelected().get('draft_destination'));
-		draft_messageField.setValue(draftListEditorGrid.getSelectionModel().getSelected().get('draft_message'));
-		draft_dateField.setValue(draftListEditorGrid.getSelectionModel().getSelected().get('draft_date'));
-	}
-	/* End setValue to EDIT*/
-  
-	/* Function for Check if the form is valid */
-	function is_draft_form_valid(){
-		return (true);
-	}
-  	/* End of Function */
-  
+
   	/* Function for Displaying  create Window Form */
 	function display_form_window(){
 		if(!draft_saveWindow.isVisible()){
-			draft_reset_form();
 			post2db='CREATE';
 			msg='created';
 			draft_saveWindow.show();
@@ -264,10 +236,10 @@ Ext.onReady(function(){
 	function draft_confirm_update(){
 		/* only one record is selected here */
 		if(draftListEditorGrid.selModel.getCount() == 1) {
-			draft_set_form();
 			post2db='UPDATE';
 			msg='updated';
 			draft_saveWindow.show();
+			draft_set_form();
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
@@ -340,8 +312,9 @@ Ext.onReady(function(){
 		},[
 		/* dataIndex => insert intodraft_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'draft_id', type: 'int', mapping: 'draft_id'},
-			{name: 'draft_destination_id', type: 'int', mapping: 'phonegroup_id'}, 
-			{name: 'draft_destination', type: 'string', mapping: 'phonegroup_nama'}, 
+			{name: 'draft_destid', type: 'int', mapping: 'draft_destid'},
+			{name: 'draft_jenis', type: 'string', mapping: 'draft_jenis'}, 
+			{name: 'draft_destnama', type: 'string', mapping: 'draft_destnama'}, 
 			{name: 'draft_message', type: 'string', mapping: 'draft_message'}, 
 			{name: 'draft_date', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'draft_date'}, 
 			{name: 'draft_creator', type: 'string', mapping: 'draft_creator'}, 
@@ -368,16 +341,21 @@ Ext.onReady(function(){
 			hidden: false
 		},
 		{
-			header: 'Destination',
-			dataIndex: 'draft_destination',
+			header: 'Jenis',
+			dataIndex: 'draft_jenis',
 			width: 150,
 			sortable: true,
-			editor: new Ext.form.TextField({
-				maxLength: 500
-          	})
+			readOnly: true
 		}, 
 		{
-			header: 'Message',
+			header: 'Tujuan',
+			dataIndex: 'draft_destnama',
+			width: 150,
+			sortable: true,
+			readOnly: true
+		}, 
+		{
+			header: 'Isi Pesan',
 			dataIndex: 'draft_message',
 			width: 150,
 			sortable: true,
@@ -391,9 +369,7 @@ Ext.onReady(function(){
 			width: 150,
 			sortable: true,
 			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
-			editor: new Ext.form.DateField({
-				format: 'Y-m-d'
-			})
+			readOnly: true
 		}, 
 		{
 			header: 'Creator',
@@ -555,13 +531,109 @@ Ext.onReady(function(){
 	draft_DataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
 	draftListEditorGrid.on('afteredit', draft_inline_update); // inLine Editing Record
 	
-	/* Identify  draft_destination Field */
-	draft_destinationField= new Ext.form.TextField({
-		id: 'draft_destinationField',
-		fieldLabel: 'Destination',
-		maxLength: 500,
+		/* Function for Retrieve DataStore */
+	phonegroup_DataStore = new Ext.data.Store({
+		id: 'phonegroup_DataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_sms&m=get_phonegroup_list', 
+			method: 'POST'
+		}),
+		baseParams:{query:'',start:0, limit: 15 }, // parameter yang di $_POST ke Controller
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'phonegroup_id'
+		},[
+		/* dataIndex => insert intophonegroup_ColumnModel, Mapping => for initiate table column */ 
+			{name: 'phonegroup_id', type: 'int', mapping: 'phonegroup_id'}, 
+			{name: 'phonegroup_nama', type: 'string', mapping: 'phonegroup_nama'},
+			{name: 'phonegroup_detail', type: 'string', mapping: 'phonegroup_detail'},
+			{name: 'phonegroup_jumlah', type: 'float', mapping: 'phonegroup_jumlah'}
+		]),
+		sortInfo:{field: 'phonegroup_nama', direction: "ASC"}
+	});
+	
+	var phonegroup_tpl = new Ext.XTemplate(
+        '<tpl for="."><div class="search-item">',
+            '<span><b>{phonegroup_nama} ({phonegroup_jumlah} orang)</b> <br/>',
+			'{phonegroup_detail}</span>',
+        '</div></tpl>'
+    );
+	
+	var draft_filterField= new Ext.form.ComboBox({
+		id: 'draft_filterField',
+		fieldLabel: '',
+		store:new Ext.data.SimpleStore({
+			fields:['pilih'],
+			data:[['Number'],['Group']]
+		}),
+		mode: 'local',
+		displayField: 'pilih',
+		valueField: 'pilih',
+		width: 94,
+		triggerAction: 'all'		
+	});
+	
+	/* Identify  draft_nama Field */
+	draft_destgroupField= new Ext.form.ComboBox({
+		id: 'draft_destgroupField',
+		fieldLabel: 'Group',
+		store: phonegroup_DataStore,
+		mode: 'remote',
+		displayField: 'phonegroup_nama',
+		valueField: 'phonegroup_id',
+		loadingText: 'Searching...',
+		typeAhead: false,
+        pageSize: pageS,
+        tpl: phonegroup_tpl,
+        //applyTo: 'search',
+        itemSelector: 'div.search-item',
+		triggerAction: 'all',
+		lazyRender:true,
+		listClass: 'x-combo-list-small',
 		anchor: '95%'
 	});
+	/* Identify  draft_detail Field */
+	
+	draft_destnumField=new Ext.form.TextArea({
+		id: 'draft_destnumField',
+		fieldLabel: 'Nomer (pisahkan dengan koma [,])',
+		maxLength: 250,
+		anchor: '95%'
+	});
+	
+	function is_draft_form_valid(){
+		if(draft_filterField.getValue()=='Group'){
+			if(draft_destgroupField.getValue()=="")
+				return false;
+			else
+				return true;
+		}else{
+			if(draft_destnumField.getValue()=="")
+				return false;
+			else
+				return true;
+		}
+	}
+	
+	var draft_destinationField = new Ext.form.FieldSet({
+		title: 'Tujuan',
+		anchor: '95%',
+		layout:'column',
+		items:[{
+				   layout: 'form',
+				   labelWidth: 5,
+				   columnWidth: 0.3,
+				   border: false,
+				   items:[draft_filterField]
+			   },{
+				   layout: 'form',
+				   columnWidth: 0.7,
+				   border: false,
+				   items:[draft_destgroupField,draft_destnumField]
+			   }]
+	});
+	
 	/* Identify  draft_message Field */
 	draft_messageField= new Ext.form.TextArea({
 		id: 'draft_messageField',
@@ -570,36 +642,49 @@ Ext.onReady(function(){
 		grow: false,
 		anchor: '95%'
 	});
-	/* Identify  draft_date Field */
-	draft_dateField= new Ext.form.DateField({
-		id: 'draft_dateField',
-		fieldLabel: 'Date',
-		format : 'Y-m-d'
-	});
-
+	
+	/* setValue to EDIT */
+	function draft_set_form(){
+		draft_filterField.setValue(draftListEditorGrid.getSelectionModel().getSelected().get('draft_jenis'));
+		if(draftListEditorGrid.getSelectionModel().getSelected().get('draft_jenis')=='Group'){
+			draft_filterField.setValue('Group');
+			draft_destgroupField.setValue(draftListEditorGrid.getSelectionModel().getSelected().get('draft_destnama'));
+			draft_destnumField.getEl().up('.x-form-item').setDisplayed(false);
+			draft_destgroupField.getEl().up('.x-form-item').setDisplayed(true);
+		}else{
+			draft_filterField.setValue('Number');
+			draft_destnumField.setValue(draftListEditorGrid.getSelectionModel().getSelected().get('draft_destnama'));
+			draft_destgroupField.getEl().up('.x-form-item').setDisplayed(false);
+			draft_destnumField.getEl().up('.x-form-item').setDisplayed(true);
+		}
+		draft_messageField.setValue(draftListEditorGrid.getSelectionModel().getSelected().get('draft_message'));
+	}
 	
 	/* Function for retrieve create Window Panel*/ 
 	draft_saveForm = new Ext.FormPanel({
 		labelAlign: 'top',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
-		width: 300,        
+		width: 500,        
 		items:[
 			{
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [draft_destinationField, draft_messageField, draft_dateField] 
+				items: [draft_destinationField, draft_messageField] 
 			}
 			],
 		buttons: [{
-				text: 'Save and Close',
-				handler: draft_save
+				text: 'Send',
+				handler: function(){ draft_save('send'); }
+			},{
+				text: 'Draft',
+				handler: function(){ draft_save('draft'); }
 			}
 			,{
 				text: 'Cancel',
 				handler: function(){
-					draft_saveWindow.hide();
+					draft_saveForm.hide();
 				}
 			}
 		]
@@ -866,6 +951,18 @@ Ext.onReady(function(){
 		});
 	}
 	/*End of Function */
+	
+
+	draft_filterField.on('select',function(){
+		if(draft_filterField.getValue()=='Group'){
+			draft_destgroupField.getEl().up('.x-form-item').setDisplayed(true);
+			draft_destnumField.getEl().up('.x-form-item').setDisplayed(false);
+		}else{
+			draft_destgroupField.getEl().up('.x-form-item').setDisplayed(false);
+			draft_destnumField.getEl().up('.x-form-item').setDisplayed(true);
+		}
+	});
+	
 	
 });
 	</script>

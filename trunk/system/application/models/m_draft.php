@@ -26,7 +26,7 @@ class M_draft extends Model{
 			// For simple search
 			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (draft_id LIKE '%".addslashes($filter)."%' OR draft_destination LIKE '%".addslashes($filter)."%' OR draft_message LIKE '%".addslashes($filter)."%' OR draft_date LIKE '%".addslashes($filter)."%' OR draft_creator LIKE '%".addslashes($filter)."%' OR draft_date_create LIKE '%".addslashes($filter)."%' OR draft_update LIKE '%".addslashes($filter)."%' OR draft_date_update LIKE '%".addslashes($filter)."%' OR draft_revised LIKE '%".addslashes($filter)."%' )";
+				$query .= " (draft_id LIKE '%".addslashes($filter)."%' OR draft_destnama LIKE '%".addslashes($filter)."%' OR draft_jenis LIKE '%".addslashes($filter)."%' OR draft_message LIKE '%".addslashes($filter)."%' OR draft_date LIKE '%".addslashes($filter)."%' OR draft_creator LIKE '%".addslashes($filter)."%' OR draft_date_create LIKE '%".addslashes($filter)."%' OR draft_update LIKE '%".addslashes($filter)."%' OR draft_date_update LIKE '%".addslashes($filter)."%' OR draft_revised LIKE '%".addslashes($filter)."%' )";
 			}
 			
 			$result = $this->db->query($query);
@@ -62,12 +62,11 @@ class M_draft extends Model{
 		}
 		
 		//function for update record
-		function draft_update($draft_id,$draft_destination,$draft_message,$draft_date,$draft_creator,$draft_update,$draft_date_update){
+		function draft_update($draft_id,$draft_destination,$draft_message,$draft_date,$draft_update,$draft_date_update){
 			$data = array(
 				"draft_destination"=>$draft_destination, 
 				"draft_message"=>$draft_message, 
 				"draft_date"=>$draft_date, 
-				"draft_creator"=>$draft_creator, 
 				"draft_update"=>$draft_update, 
 				"draft_date_update"=>$draft_date_update 
 			);
@@ -163,21 +162,25 @@ class M_draft extends Model{
 		}
 		
 		//function for print record
-		function draft_print($draft_id ,$draft_destination ,$draft_message ,$draft_date ,$draft_creator ,$draft_date_create ,$draft_update ,$draft_date_update ,$draft_revised ,$option,$filter){
+		function draft_print($draft_id ,$draft_destnama, $draft_jenis ,$draft_message ,$draft_date ,$draft_creator ,$draft_date_create ,$draft_update ,$draft_date_update ,$draft_revised ,$option,$filter){
 			//full query
 			$sql="select * from draft";
 			if($option=='LIST'){
 				$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
-				$sql .= " (draft_id LIKE '%".addslashes($filter)."%' OR draft_destination LIKE '%".addslashes($filter)."%' OR draft_message LIKE '%".addslashes($filter)."%' OR draft_date LIKE '%".addslashes($filter)."%' OR draft_creator LIKE '%".addslashes($filter)."%' OR draft_date_create LIKE '%".addslashes($filter)."%' OR draft_update LIKE '%".addslashes($filter)."%' OR draft_date_update LIKE '%".addslashes($filter)."%' OR draft_revised LIKE '%".addslashes($filter)."%' )";
+				$sql .= " (draft_id LIKE '%".addslashes($filter)."%' OR draft_destnama LIKE '%".addslashes($filter)."%' OR draft_jenis LIKE '%".addslashes($filter)."%' OR draft_message LIKE '%".addslashes($filter)."%' OR draft_date LIKE '%".addslashes($filter)."%' OR draft_creator LIKE '%".addslashes($filter)."%' OR draft_date_create LIKE '%".addslashes($filter)."%' OR draft_update LIKE '%".addslashes($filter)."%' OR draft_date_update LIKE '%".addslashes($filter)."%' OR draft_revised LIKE '%".addslashes($filter)."%' )";
 				$query = $this->db->query($sql);
 			} else if($option=='SEARCH'){
 				if($draft_id!=''){
 					$sql.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$sql.= " draft_id LIKE '%".$draft_id."%'";
 				};
-				if($draft_destination!=''){
-					$sql.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$sql.= " draft_destination LIKE '%".$draft_destination."%'";
+				if($draft_destnama!=''){
+					$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+					$sql.= " draft_destnama LIKE '%".$draft_destnama."%'";
+				};
+				if($draft_jenis!=''){
+					$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+					$sql.= " draft_jenis LIKE '%".$draft_jenis."%'";
 				};
 				if($draft_message!=''){
 					$sql.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -213,21 +216,25 @@ class M_draft extends Model{
 		}
 		
 		//function  for export to excel
-		function draft_export_excel($draft_id ,$draft_destination ,$draft_message ,$draft_date ,$draft_creator ,$draft_date_create ,$draft_update ,$draft_date_update ,$draft_revised ,$option,$filter){
+		function draft_export_excel($draft_id ,$draft_destnama, $draft_jenis ,$draft_message ,$draft_date ,$draft_creator ,$draft_date_create ,$draft_update ,$draft_date_update ,$draft_revised ,$option,$filter){
 			//full query
 			$sql="select * from draft";
 			if($option=='LIST'){
 				$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
-				$sql .= " (draft_id LIKE '%".addslashes($filter)."%' OR draft_destination LIKE '%".addslashes($filter)."%' OR draft_message LIKE '%".addslashes($filter)."%' OR draft_date LIKE '%".addslashes($filter)."%' OR draft_creator LIKE '%".addslashes($filter)."%' OR draft_date_create LIKE '%".addslashes($filter)."%' OR draft_update LIKE '%".addslashes($filter)."%' OR draft_date_update LIKE '%".addslashes($filter)."%' OR draft_revised LIKE '%".addslashes($filter)."%' )";
+				$sql .= " (draft_id LIKE '%".addslashes($filter)."%' OR draft_destnama LIKE '%".addslashes($filter)."%' OR draft_jenis LIKE '%".addslashes($filter)."%' OR draft_message LIKE '%".addslashes($filter)."%' OR draft_date LIKE '%".addslashes($filter)."%' OR draft_creator LIKE '%".addslashes($filter)."%' OR draft_date_create LIKE '%".addslashes($filter)."%' OR draft_update LIKE '%".addslashes($filter)."%' OR draft_date_update LIKE '%".addslashes($filter)."%' OR draft_revised LIKE '%".addslashes($filter)."%' )";
 				$query = $this->db->query($sql);
 			} else if($option=='SEARCH'){
 				if($draft_id!=''){
 					$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
 					$sql.= " draft_id LIKE '%".$draft_id."%'";
 				};
-				if($draft_destination!=''){
+				if($draft_destnama!=''){
 					$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
-					$sql.= " draft_destination LIKE '%".$draft_destination."%'";
+					$sql.= " draft_destnama LIKE '%".$draft_destnama."%'";
+				};
+				if($draft_jenis!=''){
+					$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+					$sql.= " draft_jenis LIKE '%".$draft_jenis."%'";
 				};
 				if($draft_message!=''){
 					$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";

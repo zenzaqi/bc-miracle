@@ -75,7 +75,8 @@ Ext.onReady(function(){
   	/* Function for add and edit data form, open window form */
 	function sms_save(post2db){
 	
-		if(is_sms_form_valid()){	
+		if(is_sms_form_valid()){
+			var sms_pk="";
 			var sms_nomer="";
 			var sms_group="";
 			var sms_isi="";
@@ -145,7 +146,7 @@ Ext.onReady(function(){
 	phonegroup_DataStore = new Ext.data.Store({
 		id: 'phonegroup_DataStore',
 		proxy: new Ext.data.HttpProxy({
-			url: 'index.php?c=c_phonegroup&m=phonegroup_list', 
+			url: 'index.php?c=c_sms&m=get_phonegroup_list', 
 			method: 'POST'
 		}),
 		baseParams:{query:'',start:0, limit: 15 }, // parameter yang di $_POST ke Controller
@@ -279,7 +280,7 @@ Ext.onReady(function(){
 			,{
 				text: 'Cancel',
 				handler: function(){
-					sms_saveWindow.hide();
+					mainPanel.remove(mainPanel.getActiveTab().getId());
 				}
 			}
 		]

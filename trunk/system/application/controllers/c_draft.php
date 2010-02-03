@@ -16,7 +16,9 @@ class C_draft extends Controller {
 	//constructor
 	function C_draft(){
 		parent::Controller();
+		session_start();
 		$this->load->model('m_draft', '', TRUE);
+		$this->load->model('m_phonegroup', '', TRUE);
 	}
 	
 	//set index
@@ -55,6 +57,31 @@ class C_draft extends Controller {
 				echo "{failure:true}";
 				break;
 		}
+	}
+	
+	function sms_save(){
+		$isms_pk_id = (isset($_POST['isms_pk_id']) ? @$_POST['isms_pk_id'] : @$_GET['isms_pk_id']);
+		$isms_nomer = (isset($_POST['isms_nomer']) ? @$_POST['isms_nomer'] : @$_GET['isms_nomer']);
+		$isms_group = (isset($_POST['isms_group']) ? @$_POST['isms_group'] : @$_GET['isms_group']);
+		$isms_isi = (isset($_POST['isms_isi']) ? @$_POST['isms_isi'] : @$_GET['isms_isi']);
+		$isms_opsi = (isset($_POST['isms_opsi']) ? @$_POST['isms_opsi'] : @$_GET['isms_opsi']);
+		$isms_task = (isset($_POST['isms_task']) ? @$_POST['isms_task'] : @$_GET['isms_task']);
+		if($isms_task=="send"){
+			$result=$this->m_phonegroup->sms_save($isms_nomer,$isms_group,$isms_isi,$isms_opsi,$isms_task);
+			$result=$this->m_draft->draft_delete($isms_pk_id);
+		}else{
+			$draft_id=$isms_pk_id;
+			if($isms_opsi=='Group')
+				$draft_destination="Group:".$isms_group;
+			else
+				$draft_destination="Number:".$isms_nomer;
+			$draft_message=$isms_isi;
+			$draft_date=date('Y/m/d H:i:s');
+			$draft_update=$_SESSION["userid"];
+			$draft_date_update=date("Y/m/d H:i:s");
+			$result = $this->m_draft->draft_update($draft_id,$draft_destination,$draft_message,$draft_date,$draft_update,$draft_date_update);
+		}
+		echo $result;
 	}
 	
 	//function fot list record
@@ -120,9 +147,12 @@ class C_draft extends Controller {
 	function draft_search(){
 		//POST varibale here
 		$draft_id=trim(@$_POST["draft_id"]);
-		$draft_destination=trim(@$_POST["draft_destination"]);
-		$draft_destination=str_replace("/(<\/?)(p)([^>]*>)", "",$draft_destination);
-		$draft_destination=str_replace("'", "''",$draft_destination);
+		$draft_destnama=trim(@$_POST["draft_destnama"]);
+		$draft_destnama=str_replace("/(<\/?)(p)([^>]*>)", "",$draft_destnama);
+		$draft_destnama=str_replace("'", "''",$draft_destnama);
+		$draft_jenis=trim(@$_POST["draft_jenis"]);
+		$draft_jenis=str_replace("/(<\/?)(p)([^>]*>)", "",$draft_jenis);
+		$draft_jenis=str_replace("'", "''",$draft_jenis);
 		$draft_message=trim(@$_POST["draft_message"]);
 		$draft_message=str_replace("/(<\/?)(p)([^>]*>)", "",$draft_message);
 		$draft_message=str_replace("'", "''",$draft_message);
@@ -139,7 +169,7 @@ class C_draft extends Controller {
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_draft->draft_search($draft_id ,$draft_destination ,$draft_message ,$draft_date ,$draft_creator ,$draft_date_create ,$draft_update ,$draft_date_update ,$draft_revised ,$start,$end);
+		$result = $this->m_draft->draft_search($draft_id ,$draft_destnama, $draft_jenis,$draft_message ,$draft_date ,$draft_creator ,$draft_date_create ,$draft_update ,$draft_date_update ,$draft_revised ,$start,$end);
 		echo $result;
 	}
 
@@ -147,9 +177,12 @@ class C_draft extends Controller {
 	function draft_print(){
   		//POST varibale here
 		$draft_id=trim(@$_POST["draft_id"]);
-		$draft_destination=trim(@$_POST["draft_destination"]);
-		$draft_destination=str_replace("/(<\/?)(p)([^>]*>)", "",$draft_destination);
-		$draft_destination=str_replace("'", "'",$draft_destination);
+		$draft_destnama=trim(@$_POST["draft_destnama"]);
+		$draft_destnama=str_replace("/(<\/?)(p)([^>]*>)", "",$draft_destnama);
+		$draft_destnama=str_replace("'", "''",$draft_destnama);
+		$draft_jenis=trim(@$_POST["draft_jenis"]);
+		$draft_jenis=str_replace("/(<\/?)(p)([^>]*>)", "",$draft_jenis);
+		$draft_jenis=str_replace("'", "''",$draft_jenis);
 		$draft_message=trim(@$_POST["draft_message"]);
 		$draft_message=str_replace("/(<\/?)(p)([^>]*>)", "",$draft_message);
 		$draft_message=str_replace("'", "'",$draft_message);
@@ -166,7 +199,7 @@ class C_draft extends Controller {
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$data["data_print"] = $this->m_draft->draft_print($draft_id ,$draft_destination ,$draft_message ,$draft_date ,$draft_creator ,$draft_date_create ,$draft_update ,$draft_date_update ,$draft_revised ,$option,$filter);
+		$data["data_print"] = $this->m_draft->draft_print($draft_id ,$draft_destnama, $draft_jenis ,$draft_message ,$draft_date ,$draft_creator ,$draft_date_create ,$draft_update ,$draft_date_update ,$draft_revised ,$option,$filter);
 		$print_view=$this->load->view("main/p_draft.php",$data,TRUE);
 		if(!file_exists("print")){
 			mkdir("print");
@@ -181,26 +214,29 @@ class C_draft extends Controller {
 	function draft_export_excel(){
 		//POST varibale here
 		$draft_id=trim(@$_POST["draft_id"]);
-		$draft_destination=trim(@$_POST["draft_destination"]);
-		$draft_destination=str_replace("/(<\/?)(p)([^>]*>)", "",$draft_destination);
-		$draft_destination=str_replace("'", "\'",$draft_destination);
+		$draft_destnama=trim(@$_POST["draft_destnama"]);
+		$draft_destnama=str_replace("/(<\/?)(p)([^>]*>)", "",$draft_destnama);
+		$draft_destnama=str_replace("'", "''",$draft_destnama);
+		$draft_jenis=trim(@$_POST["draft_jenis"]);
+		$draft_jenis=str_replace("/(<\/?)(p)([^>]*>)", "",$draft_jenis);
+		$draft_jenis=str_replace("'", "''",$draft_jenis);
 		$draft_message=trim(@$_POST["draft_message"]);
 		$draft_message=str_replace("/(<\/?)(p)([^>]*>)", "",$draft_message);
-		$draft_message=str_replace("'", "\'",$draft_message);
+		$draft_message=str_replace("'", "''",$draft_message);
 		$draft_date=trim(@$_POST["draft_date"]);
 		$draft_creator=trim(@$_POST["draft_creator"]);
 		$draft_creator=str_replace("/(<\/?)(p)([^>]*>)", "",$draft_creator);
-		$draft_creator=str_replace("'", "\'",$draft_creator);
+		$draft_creator=str_replace("'", "''",$draft_creator);
 		$draft_date_create=trim(@$_POST["draft_date_create"]);
 		$draft_update=trim(@$_POST["draft_update"]);
 		$draft_update=str_replace("/(<\/?)(p)([^>]*>)", "",$draft_update);
-		$draft_update=str_replace("'", "\'",$draft_update);
+		$draft_update=str_replace("'", "''",$draft_update);
 		$draft_date_update=trim(@$_POST["draft_date_update"]);
 		$draft_revised=trim(@$_POST["draft_revised"]);
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$query = $this->m_draft->draft_export_excel($draft_id ,$draft_destination ,$draft_message ,$draft_date ,$draft_creator ,$draft_date_create ,$draft_update ,$draft_date_update ,$draft_revised ,$option,$filter);
+		$query = $this->m_draft->draft_export_excel($draft_id ,$draft_destnama, $draft_jenis ,$draft_message ,$draft_date ,$draft_creator ,$draft_date_create ,$draft_update ,$draft_date_update ,$draft_revised ,$option,$filter);
 		
 		to_excel($query,"draft"); 
 		echo '1';

@@ -134,6 +134,33 @@ class M_phonegroup extends Model{
 		}
 		
 		//function for get list record
+		function get_phonegroup_list($filter,$start,$end){
+			$query = "SELECT * FROM vu_phonegroup";
+			
+			// For simple search
+			// For simple search
+			if ($filter<>""){
+				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
+				$query .= " (phonegroup_nama LIKE '%".addslashes($filter)."%' OR phonegroup_jumlah)";
+			}
+			
+			$result = $this->db->query($query);
+			$nbrows = $result->num_rows();
+			$limit = $query." LIMIT ".$start.",".$end;		
+			$result = $this->db->query($limit);  
+			
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+		
+		//function for get list record
 		function phonegroup_list($filter,$start,$end){
 			$query = "SELECT * FROM phonegroup";
 			

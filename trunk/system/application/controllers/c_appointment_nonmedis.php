@@ -87,18 +87,18 @@ class C_appointment_nonmedis extends Controller {
 		$dapp_jamreservasi=trim(@$_POST["dapp_jamreservasi"]);
 		$dapp_jamreservasi=str_replace("/(<\/?)(p)([^>]*>)", "",$dapp_jamreservasi);
 		$dapp_jamreservasi=str_replace("\\", "",$dapp_jamreservasi);
-		$dapp_jamreservasi=str_replace("'", "\'",$dapp_jamreservasi);
+		$dapp_jamreservasi=str_replace("'", "''",$dapp_jamreservasi);
 		$dapp_petugas=trim(@$_POST["dapp_petugas"]);
 		$dapp_petugas2=trim(@$_POST["dapp_petugas2"]);
 		$dapp_status=trim(@$_POST["dapp_status"]);
 		$dapp_status=str_replace("/(<\/?)(p)([^>]*>)", "",$dapp_status);
 		$dapp_status=str_replace("\\", "",$dapp_status);
-		$dapp_status=str_replace("'", "\'",$dapp_status);
+		$dapp_status=str_replace("'", "''",$dapp_status);
 		$dapp_tgldatang=trim(@$_POST["dapp_tgldatang"]);
 		$dapp_jamdatang=trim(@$_POST["dapp_jamdatang"]);
 		$dapp_jamdatang=str_replace("/(<\/?)(p)([^>]*>)", "",$dapp_jamdatang);
 		$dapp_jamdatang=str_replace("\\", "",$dapp_jamdatang);
-		$dapp_jamdatang=str_replace("'", "\'",$dapp_jamdatang);
+		$dapp_jamdatang=str_replace("'", "''",$dapp_jamdatang);
 		$result=$this->m_appointment_nonmedis->detail_appointment_detail_insert($dapp_id ,$dapp_master ,$dapp_perawatan ,$dapp_tglreservasi ,$dapp_jamreservasi ,$dapp_petugas ,$dapp_petugas2 ,$dapp_status ,$dapp_tgldatang ,$dapp_jamdatang );
 	}
 	
@@ -153,11 +153,11 @@ class C_appointment_nonmedis extends Controller {
 		$app_cara=trim(@$_POST["app_cara"]);
 		$app_cara=str_replace("/(<\/?)(p)([^>]*>)", "",$app_cara);
 		$app_cara=str_replace(",", "\,",$app_cara);
-		$app_cara=str_replace("'", "\'",$app_cara);
+		$app_cara=str_replace("'", "''",$app_cara);
 		$app_keterangan=trim(@$_POST["app_keterangan"]);
 		$app_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$app_keterangan);
 		$app_keterangan=str_replace(",", "\,",$app_keterangan);
-		$app_keterangan=str_replace("'", "\'",$app_keterangan);
+		$app_keterangan=str_replace("'", "''",$app_keterangan);
 		$result = $this->m_appointment_nonmedis->appointment_update($app_id ,$app_customer ,$app_tanggal ,$app_cara ,$app_keterangan      );
 		echo $result;
 	}
@@ -170,10 +170,10 @@ class C_appointment_nonmedis extends Controller {
 		$app_tanggal=trim(@$_POST["app_tanggal"]);
 		$app_cara=trim(@$_POST["app_cara"]);
 		$app_cara=str_replace("/(<\/?)(p)([^>]*>)", "",$app_cara);
-		$app_cara=str_replace("'", "\'",$app_cara);
+		$app_cara=str_replace("'", "''",$app_cara);
 		$app_keterangan=trim(@$_POST["app_keterangan"]);
 		$app_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$app_keterangan);
-		$app_keterangan=str_replace("'", "\'",$app_keterangan);
+		$app_keterangan=str_replace("'", "''",$app_keterangan);
 		$result=$this->m_appointment_nonmedis->appointment_create($app_customer ,$app_tanggal ,$app_cara ,$app_keterangan );
 		echo $result;
 	}
@@ -194,10 +194,10 @@ class C_appointment_nonmedis extends Controller {
 		$app_tanggal=trim(@$_POST["app_tanggal"]);
 		$app_cara=trim(@$_POST["app_cara"]);
 		$app_cara=str_replace("/(<\/?)(p)([^>]*>)", "",$app_cara);
-		$app_cara=str_replace("'", "\'",$app_cara);
+		$app_cara=str_replace("'", "''",$app_cara);
 		$app_keterangan=trim(@$_POST["app_keterangan"]);
 		$app_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$app_keterangan);
-		$app_keterangan=str_replace("'", "\'",$app_keterangan);
+		$app_keterangan=str_replace("'", "''",$app_keterangan);
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
@@ -213,10 +213,10 @@ class C_appointment_nonmedis extends Controller {
 		$app_tanggal=trim(@$_POST["app_tanggal"]);
 		$app_cara=trim(@$_POST["app_cara"]);
 		$app_cara=str_replace("/(<\/?)(p)([^>]*>)", "",$app_cara);
-		$app_cara=str_replace("'", "\'",$app_cara);
+		$app_cara=str_replace("'", "''",$app_cara);
 		$app_keterangan=trim(@$_POST["app_keterangan"]);
 		$app_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$app_keterangan);
-		$app_keterangan=str_replace("'", "\'",$app_keterangan);
+		$app_keterangan=str_replace("'", "''",$app_keterangan);
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
@@ -274,10 +274,10 @@ class C_appointment_nonmedis extends Controller {
 		$app_tanggal=trim(@$_POST["app_tanggal"]);
 		$app_cara=trim(@$_POST["app_cara"]);
 		$app_cara=str_replace("/(<\/?)(p)([^>]*>)", "",$app_cara);
-		$app_cara=str_replace("'", "\'",$app_cara);
+		$app_cara=str_replace("'", "''",$app_cara);
 		$app_keterangan=trim(@$_POST["app_keterangan"]);
 		$app_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$app_keterangan);
-		$app_keterangan=str_replace("'", "\'",$app_keterangan);
+		$app_keterangan=str_replace("'", "''",$app_keterangan);
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
