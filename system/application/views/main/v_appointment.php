@@ -767,13 +767,14 @@ Ext.onReady(function(){
 			{name: 'terapis_display', type: 'string', mapping: 'karyawan_nama'},
 			{name: 'terapis_username', type: 'string', mapping: 'karyawan_username'},
 			{name: 'terapis_value', type: 'int', mapping: 'karyawan_id'},
-			{name: 'terapis_jmltindakan', type: 'int', mapping: 'reportt_jmltindakan'}
-		]),
-		sortInfo:{field: 'terapis_display', direction: "ASC"}
+			{name: 'terapis_jmltindakan', type: 'int', mapping: 'reportt_jmltindakan'},
+			{name: 'absensi_shift', type: 'string', mapping: 'absensi_shift'}
+		])/*,
+		sortInfo:{field: 'terapis_display', direction: "ASC"}*/
 	});
 	var dapp_terapis_tpl = new Ext.XTemplate(
         '<tpl for="."><div class="search-item">',
-            '<span><b>{terapis_username}</b> | {terapis_display} | <b>{terapis_jmltindakan}</b></span>',
+            '<span><b>{terapis_username}</b> | {terapis_display} | <b>{terapis_jmltindakan}</b> | Shift:<b>{absensi_shift}</b></span>',
         '</div></tpl>'
     );
     
@@ -1874,7 +1875,7 @@ Ext.onReady(function(){
 	
 	var combo_dapp_terapis_nonmedis=new Ext.form.ComboBox({
 			store: dapp_terapisDataStore,
-			mode: 'remote',
+			mode: 'local',
 			tpl: dapp_terapis_tpl,
 			displayField: 'terapis_username',
 			valueField: 'terapis_value',
@@ -1905,9 +1906,10 @@ Ext.onReady(function(){
 	var combo_dapp_tgl_nonmedis=new Ext.form.DateField({
 		format: 'Y-m-d'
 	});
-	/*combo_dapp_tgl_nonmedis.on('select', function(){
-		combo_dapp_tgl_nonmedis.setValue(combo_dapp_tgl_nonmedis.getValue().format('Y-m-d'));
-	});*/
+	combo_dapp_tgl_nonmedis.on('select', function(){
+		//combo_dapp_tgl_nonmedis.setValue(combo_dapp_tgl_nonmedis.getValue().format('Y-m-d'));
+		dapp_terapisDataStore.load({params:{tgl_app:combo_dapp_tgl_nonmedis.getValue().format('Y-m-d')}});
+	});
 	
 	//declaration of detail nonmedis coloumn model
 	appointment_detail_nonmedis_ColumnModel = new Ext.grid.ColumnModel(
