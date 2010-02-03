@@ -60,21 +60,21 @@ class C_cetak_kwitansi extends Controller {
 		$jkwitansi_no=trim(@$_POST["jkwitansi_no"]);
 		$jkwitansi_no=str_replace("/(<\/?)(p)([^>]*>)", "",$jkwitansi_no);
 		$jkwitansi_no=str_replace("\\", "",$jkwitansi_no);
-		$jkwitansi_no=str_replace("'", "\'",$jkwitansi_no);
+		$jkwitansi_no=str_replace("'", "''",$jkwitansi_no);
 		$jkwitansi_nilai=trim(@$_POST["jkwitansi_nilai"]);
 		$jkwitansi_ref=trim(@$_POST["jkwitansi_ref"]);
 		$jkwitansi_ref=str_replace("/(<\/?)(p)([^>]*>)", "",$jkwitansi_ref);
 		$jkwitansi_ref=str_replace("\\", "",$jkwitansi_ref);
-		$jkwitansi_ref=str_replace("'", "\'",$jkwitansi_ref);
+		$jkwitansi_ref=str_replace("'", "''",$jkwitansi_ref);
 		$jkwitansi_creator=trim(@$_POST["jkwitansi_creator"]);
 		$jkwitansi_creator=str_replace("/(<\/?)(p)([^>]*>)", "",$jkwitansi_creator);
 		$jkwitansi_creator=str_replace("\\", "",$jkwitansi_creator);
-		$jkwitansi_creator=str_replace("'", "\'",$jkwitansi_creator);
+		$jkwitansi_creator=str_replace("'", "''",$jkwitansi_creator);
 		$jkwitansi_date_create=trim(@$_POST["jkwitansi_date_create"]);
 		$jkwitansi_update=trim(@$_POST["jkwitansi_update"]);
 		$jkwitansi_update=str_replace("/(<\/?)(p)([^>]*>)", "",$jkwitansi_update);
 		$jkwitansi_update=str_replace("\\", "",$jkwitansi_update);
-		$jkwitansi_update=str_replace("'", "\'",$jkwitansi_update);
+		$jkwitansi_update=str_replace("'", "''",$jkwitansi_update);
 		$jkwitansi_date_update=trim(@$_POST["jkwitansi_date_update"]);
 		$jkwitansi_revised=trim(@$_POST["jkwitansi_revised"]);
 		$result=$this->m_cetak_kwitansi->detail_jual_kwitansi_insert($jkwitansi_id ,$jkwitansi_master ,$jkwitansi_no ,$jkwitansi_nilai ,$jkwitansi_ref ,$jkwitansi_creator ,$jkwitansi_date_create ,$jkwitansi_update ,$jkwitansi_date_update ,$jkwitansi_revised );
@@ -129,18 +129,18 @@ class C_cetak_kwitansi extends Controller {
 		$kwitansi_no=trim(@$_POST["kwitansi_no"]);
 		$kwitansi_no=str_replace("/(<\/?)(p)([^>]*>)", "",$kwitansi_no);
 		$kwitansi_no=str_replace(",", "\,",$kwitansi_no);
-		$kwitansi_no=str_replace("'", "\'",$kwitansi_no);
+		$kwitansi_no=str_replace("'", "''",$kwitansi_no);
 		$kwitansi_cust=trim(@$_POST["kwitansi_cust"]);
 		$kwitansi_ref=trim(@$_POST["kwitansi_ref"]);
 		$kwitansi_nilai=trim(@$_POST["kwitansi_nilai"]);
 		$kwitansi_keterangan=trim(@$_POST["kwitansi_keterangan"]);
 		$kwitansi_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$kwitansi_keterangan);
 		$kwitansi_keterangan=str_replace(",", "\,",$kwitansi_keterangan);
-		$kwitansi_keterangan=str_replace("'", "\'",$kwitansi_keterangan);
+		$kwitansi_keterangan=str_replace("'", "''",$kwitansi_keterangan);
 		$kwitansi_status=trim(@$_POST["kwitansi_status"]);
 		$kwitansi_status=str_replace("/(<\/?)(p)([^>]*>)", "",$kwitansi_status);
 		$kwitansi_status=str_replace(",", "\,",$kwitansi_status);
-		$kwitansi_status=str_replace("'", "\'",$kwitansi_status);
+		$kwitansi_status=str_replace("'", "''",$kwitansi_status);
 		$result = $this->m_cetak_kwitansi->cetak_kwitansi_update($kwitansi_id ,$kwitansi_no ,$kwitansi_cust ,$kwitansi_ref ,$kwitansi_nilai ,$kwitansi_keterangan ,$kwitansi_status      );
 		echo $result;
 	}
@@ -151,16 +151,16 @@ class C_cetak_kwitansi extends Controller {
 		//auto increment, don't accept anything from form values
 		$kwitansi_no=trim(@$_POST["kwitansi_no"]);
 		$kwitansi_no=str_replace("/(<\/?)(p)([^>]*>)", "",$kwitansi_no);
-		$kwitansi_no=str_replace("'", "\'",$kwitansi_no);
+		$kwitansi_no=str_replace("'", "''",$kwitansi_no);
 		$kwitansi_cust=trim(@$_POST["kwitansi_cust"]);
 		$kwitansi_ref=trim(@$_POST["kwitansi_ref"]);
 		$kwitansi_nilai=trim(@$_POST["kwitansi_nilai"]);
 		$kwitansi_keterangan=trim(@$_POST["kwitansi_keterangan"]);
 		$kwitansi_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$kwitansi_keterangan);
-		$kwitansi_keterangan=str_replace("'", "\'",$kwitansi_keterangan);
+		$kwitansi_keterangan=str_replace("'", "''",$kwitansi_keterangan);
 		$kwitansi_status=trim(@$_POST["kwitansi_status"]);
 		$kwitansi_status=str_replace("/(<\/?)(p)([^>]*>)", "",$kwitansi_status);
-		$kwitansi_status=str_replace("'", "\'",$kwitansi_status);
+		$kwitansi_status=str_replace("'", "''",$kwitansi_status);
 		$result=$this->m_cetak_kwitansi->cetak_kwitansi_create($kwitansi_no ,$kwitansi_cust ,$kwitansi_ref ,$kwitansi_nilai ,$kwitansi_keterangan ,$kwitansi_status );
 		echo $result;
 	}
@@ -179,16 +179,16 @@ class C_cetak_kwitansi extends Controller {
 		$kwitansi_id=trim(@$_POST["kwitansi_id"]);
 		$kwitansi_no=trim(@$_POST["kwitansi_no"]);
 		$kwitansi_no=str_replace("/(<\/?)(p)([^>]*>)", "",$kwitansi_no);
-		$kwitansi_no=str_replace("'", "\'",$kwitansi_no);
+		$kwitansi_no=str_replace("'", "''",$kwitansi_no);
 		$kwitansi_cust=trim(@$_POST["kwitansi_cust"]);
 		$kwitansi_ref=trim(@$_POST["kwitansi_ref"]);
 		$kwitansi_nilai=trim(@$_POST["kwitansi_nilai"]);
 		$kwitansi_keterangan=trim(@$_POST["kwitansi_keterangan"]);
 		$kwitansi_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$kwitansi_keterangan);
-		$kwitansi_keterangan=str_replace("'", "\'",$kwitansi_keterangan);
+		$kwitansi_keterangan=str_replace("'", "''",$kwitansi_keterangan);
 		$kwitansi_status=trim(@$_POST["kwitansi_status"]);
 		$kwitansi_status=str_replace("/(<\/?)(p)([^>]*>)", "",$kwitansi_status);
-		$kwitansi_status=str_replace("'", "\'",$kwitansi_status);
+		$kwitansi_status=str_replace("'", "''",$kwitansi_status);
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
@@ -202,16 +202,16 @@ class C_cetak_kwitansi extends Controller {
 		$kwitansi_id=trim(@$_POST["kwitansi_id"]);
 		$kwitansi_no=trim(@$_POST["kwitansi_no"]);
 		$kwitansi_no=str_replace("/(<\/?)(p)([^>]*>)", "",$kwitansi_no);
-		$kwitansi_no=str_replace("'", "\'",$kwitansi_no);
+		$kwitansi_no=str_replace("'", "''",$kwitansi_no);
 		$kwitansi_cust=trim(@$_POST["kwitansi_cust"]);
 		$kwitansi_ref=trim(@$_POST["kwitansi_ref"]);
 		$kwitansi_nilai=trim(@$_POST["kwitansi_nilai"]);
 		$kwitansi_keterangan=trim(@$_POST["kwitansi_keterangan"]);
 		$kwitansi_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$kwitansi_keterangan);
-		$kwitansi_keterangan=str_replace("'", "\'",$kwitansi_keterangan);
+		$kwitansi_keterangan=str_replace("'", "''",$kwitansi_keterangan);
 		$kwitansi_status=trim(@$_POST["kwitansi_status"]);
 		$kwitansi_status=str_replace("/(<\/?)(p)([^>]*>)", "",$kwitansi_status);
-		$kwitansi_status=str_replace("'", "\'",$kwitansi_status);
+		$kwitansi_status=str_replace("'", "''",$kwitansi_status);
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
@@ -271,16 +271,16 @@ class C_cetak_kwitansi extends Controller {
 		$kwitansi_id=trim(@$_POST["kwitansi_id"]);
 		$kwitansi_no=trim(@$_POST["kwitansi_no"]);
 		$kwitansi_no=str_replace("/(<\/?)(p)([^>]*>)", "",$kwitansi_no);
-		$kwitansi_no=str_replace("'", "\'",$kwitansi_no);
+		$kwitansi_no=str_replace("'", "''",$kwitansi_no);
 		$kwitansi_cust=trim(@$_POST["kwitansi_cust"]);
 		$kwitansi_ref=trim(@$_POST["kwitansi_ref"]);
 		$kwitansi_nilai=trim(@$_POST["kwitansi_nilai"]);
 		$kwitansi_keterangan=trim(@$_POST["kwitansi_keterangan"]);
 		$kwitansi_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$kwitansi_keterangan);
-		$kwitansi_keterangan=str_replace("'", "\'",$kwitansi_keterangan);
+		$kwitansi_keterangan=str_replace("'", "''",$kwitansi_keterangan);
 		$kwitansi_status=trim(@$_POST["kwitansi_status"]);
 		$kwitansi_status=str_replace("/(<\/?)(p)([^>]*>)", "",$kwitansi_status);
-		$kwitansi_status=str_replace("'", "\'",$kwitansi_status);
+		$kwitansi_status=str_replace("'", "''",$kwitansi_status);
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		

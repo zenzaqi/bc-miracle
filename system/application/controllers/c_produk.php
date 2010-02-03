@@ -148,7 +148,7 @@ class C_produk extends Controller {
 		$produk_kodelama=trim(@$_POST["produk_kodelama"]);
 		$produk_kodelama=str_replace("/(<\/?)(p)([^>]*>)", "",$produk_kodelama);
 		$produk_kodelama=str_replace(",", ",",$produk_kodelama);
-		$produk_kodelama=str_replace("'", "\'",$produk_kodelama);
+		$produk_kodelama=str_replace("'", "''",$produk_kodelama);
 		$produk_group=trim(@$_POST["produk_group"]);
 		$produk_kategori=trim(@$_POST["produk_kategori"]);
 		$produk_kontribusi=trim(@$_POST["produk_kontribusi"]);
@@ -183,7 +183,7 @@ class C_produk extends Controller {
 		$produk_kode=str_replace("'", '"',$produk_kode);
 		$produk_kodelama=trim(@$_POST["produk_kodelama"]);
 		$produk_kodelama=str_replace("/(<\/?)(p)([^>]*>)", "",$produk_kodelama);
-		$produk_kodelama=str_replace("'", "\'",$produk_kodelama);
+		$produk_kodelama=str_replace("'", "''",$produk_kodelama);
 		$produk_group=trim(@$_POST["produk_group"]);
 		$produk_kategori=trim(@$_POST["produk_kategori"]);
 		$produk_kontribusi=trim(@$_POST["produk_kontribusi"]);
@@ -224,7 +224,7 @@ class C_produk extends Controller {
 		$produk_kode=str_replace("'", '"',$produk_kode);
 		$produk_kodelama=trim(@$_POST["produk_kodelama"]);
 		$produk_kodelama=str_replace("/(<\/?)(p)([^>]*>)", "",$produk_kodelama);
-		$produk_kodelama=str_replace("'", "\'",$produk_kodelama);
+		$produk_kodelama=str_replace("'", "''",$produk_kodelama);
 		$produk_group=trim(@$_POST["produk_group"]);
 		$produk_kategori=trim(@$_POST["produk_kategori"]);
 		$produk_jenis=trim(@$_POST["produk_jenis"]);
@@ -260,7 +260,7 @@ class C_produk extends Controller {
 		$produk_kode=str_replace("'", '"',$produk_kode);
 		$produk_kodelama=trim(@$_POST["produk_kodelama"]);
 		$produk_kodelama=str_replace("/(<\/?)(p)([^>]*>)", "",$produk_kodelama);
-		$produk_kodelama=str_replace("'", "\'",$produk_kodelama);
+		$produk_kodelama=str_replace("'", "''",$produk_kodelama);
 		$produk_group=trim(@$_POST["produk_group"]);
 		$produk_kategori=trim(@$_POST["produk_kategori"]);
 		$produk_jenis=trim(@$_POST["produk_jenis"]);
@@ -357,7 +357,7 @@ class C_produk extends Controller {
 		$produk_kode=str_replace("'", '"',$produk_kode);
 		$produk_kodelama=trim(@$_POST["produk_kodelama"]);
 		$produk_kodelama=str_replace("/(<\/?)(p)([^>]*>)", "",$produk_kodelama);
-		$produk_kodelama=str_replace("'", "\'",$produk_kodelama);
+		$produk_kodelama=str_replace("'", "''",$produk_kodelama);
 		$produk_group=trim(@$_POST["produk_group"]);
 		$produk_kategori=trim(@$_POST["produk_kategori"]);
 		$produk_jenis=trim(@$_POST["produk_jenis"]);

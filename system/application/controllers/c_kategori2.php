@@ -79,19 +79,19 @@ class C_kategori2 extends Controller {
 		$kategori2_nama=trim(@$_POST["kategori2_nama"]);
 		$kategori2_nama=str_replace("/(<\/?)(p)([^>]*>)", "",$kategori2_nama);
 		$kategori2_nama=str_replace(",", ",",$kategori2_nama);
-		$kategori2_nama=str_replace("'", "\'",$kategori2_nama);
+		$kategori2_nama=str_replace("'", "''",$kategori2_nama);
 		$kategori2_jenis=trim(@$_POST["kategori2_jenis"]);
 		$kategori2_jenis=str_replace("/(<\/?)(p)([^>]*>)", "",$kategori2_jenis);
 		$kategori2_jenis=str_replace(",", ",",$kategori2_jenis);
-		$kategori2_jenis=str_replace("'", "\'",$kategori2_jenis);
+		$kategori2_jenis=str_replace("'", "''",$kategori2_jenis);
 		$kategori2_keterangan=trim(@$_POST["kategori2_keterangan"]);
 		$kategori2_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$kategori2_keterangan);
 		$kategori2_keterangan=str_replace(",", ",",$kategori2_keterangan);
-		$kategori2_keterangan=str_replace("'", "\'",$kategori2_keterangan);
+		$kategori2_keterangan=str_replace("'", "''",$kategori2_keterangan);
 		$kategori2_aktif=trim(@$_POST["kategori2_aktif"]);
 		$kategori2_aktif=str_replace("/(<\/?)(p)([^>]*>)", "",$kategori2_aktif);
 		$kategori2_aktif=str_replace(",", ",",$kategori2_aktif);
-		$kategori2_aktif=str_replace("'", "\'",$kategori2_aktif);
+		$kategori2_aktif=str_replace("'", "''",$kategori2_aktif);
 		$result = $this->m_kategori2->kategori2_update($kategori2_id ,$kategori2_nama ,$kategori2_jenis ,$kategori2_keterangan ,$kategori2_aktif      );
 		echo $result;
 	}
@@ -102,16 +102,16 @@ class C_kategori2 extends Controller {
 		//auto increment, don't accept anything from form values
 		$kategori2_nama=trim(@$_POST["kategori2_nama"]);
 		$kategori2_nama=str_replace("/(<\/?)(p)([^>]*>)", "",$kategori2_nama);
-		$kategori2_nama=str_replace("'", "\'",$kategori2_nama);
+		$kategori2_nama=str_replace("'", "''",$kategori2_nama);
 		$kategori2_jenis=trim(@$_POST["kategori2_jenis"]);
 		$kategori2_jenis=str_replace("/(<\/?)(p)([^>]*>)", "",$kategori2_jenis);
-		$kategori2_jenis=str_replace("'", "\'",$kategori2_jenis);
+		$kategori2_jenis=str_replace("'", "''",$kategori2_jenis);
 		$kategori2_keterangan=trim(@$_POST["kategori2_keterangan"]);
 		$kategori2_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$kategori2_keterangan);
-		$kategori2_keterangan=str_replace("'", "\'",$kategori2_keterangan);
+		$kategori2_keterangan=str_replace("'", "''",$kategori2_keterangan);
 		$kategori2_aktif=trim(@$_POST["kategori2_aktif"]);
 		$kategori2_aktif=str_replace("/(<\/?)(p)([^>]*>)", "",$kategori2_aktif);
-		$kategori2_aktif=str_replace("'", "\'",$kategori2_aktif);
+		$kategori2_aktif=str_replace("'", "''",$kategori2_aktif);
 		$result=$this->m_kategori2->kategori2_create($kategori2_nama ,$kategori2_jenis ,$kategori2_keterangan ,$kategori2_aktif );
 		echo $result;
 	}
@@ -130,16 +130,16 @@ class C_kategori2 extends Controller {
 		$kategori2_id=trim(@$_POST["kategori2_id"]);
 		$kategori2_nama=trim(@$_POST["kategori2_nama"]);
 		$kategori2_nama=str_replace("/(<\/?)(p)([^>]*>)", "",$kategori2_nama);
-		$kategori2_nama=str_replace("'", "\'",$kategori2_nama);
+		$kategori2_nama=str_replace("'", "''",$kategori2_nama);
 		$kategori2_jenis=trim(@$_POST["kategori2_jenis"]);
 		$kategori2_jenis=str_replace("/(<\/?)(p)([^>]*>)", "",$kategori2_jenis);
-		$kategori2_jenis=str_replace("'", "\'",$kategori2_jenis);
+		$kategori2_jenis=str_replace("'", "''",$kategori2_jenis);
 		$kategori2_keterangan=trim(@$_POST["kategori2_keterangan"]);
 		$kategori2_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$kategori2_keterangan);
-		$kategori2_keterangan=str_replace("'", "\'",$kategori2_keterangan);
+		$kategori2_keterangan=str_replace("'", "''",$kategori2_keterangan);
 		$kategori2_aktif=trim(@$_POST["kategori2_aktif"]);
 		$kategori2_aktif=str_replace("/(<\/?)(p)([^>]*>)", "",$kategori2_aktif);
-		$kategori2_aktif=str_replace("'", "\'",$kategori2_aktif);
+		$kategori2_aktif=str_replace("'", "''",$kategori2_aktif);
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
@@ -153,16 +153,16 @@ class C_kategori2 extends Controller {
 		$kategori2_id=trim(@$_POST["kategori2_id"]);
 		$kategori2_nama=trim(@$_POST["kategori2_nama"]);
 		$kategori2_nama=str_replace("/(<\/?)(p)([^>]*>)", "",$kategori2_nama);
-		$kategori2_nama=str_replace("'", "\'",$kategori2_nama);
+		$kategori2_nama=str_replace("'", "''",$kategori2_nama);
 		$kategori2_jenis=trim(@$_POST["kategori2_jenis"]);
 		$kategori2_jenis=str_replace("/(<\/?)(p)([^>]*>)", "",$kategori2_jenis);
-		$kategori2_jenis=str_replace("'", "\'",$kategori2_jenis);
+		$kategori2_jenis=str_replace("'", "''",$kategori2_jenis);
 		$kategori2_keterangan=trim(@$_POST["kategori2_keterangan"]);
 		$kategori2_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$kategori2_keterangan);
-		$kategori2_keterangan=str_replace("'", "\'",$kategori2_keterangan);
+		$kategori2_keterangan=str_replace("'", "''",$kategori2_keterangan);
 		$kategori2_aktif=trim(@$_POST["kategori2_aktif"]);
 		$kategori2_aktif=str_replace("/(<\/?)(p)([^>]*>)", "",$kategori2_aktif);
-		$kategori2_aktif=str_replace("'", "\'",$kategori2_aktif);
+		$kategori2_aktif=str_replace("'", "''",$kategori2_aktif);
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
@@ -218,16 +218,16 @@ class C_kategori2 extends Controller {
 		$kategori2_id=trim(@$_POST["kategori2_id"]);
 		$kategori2_nama=trim(@$_POST["kategori2_nama"]);
 		$kategori2_nama=str_replace("/(<\/?)(p)([^>]*>)", "",$kategori2_nama);
-		$kategori2_nama=str_replace("'", "\'",$kategori2_nama);
+		$kategori2_nama=str_replace("'", "''",$kategori2_nama);
 		$kategori2_jenis=trim(@$_POST["kategori2_jenis"]);
 		$kategori2_jenis=str_replace("/(<\/?)(p)([^>]*>)", "",$kategori2_jenis);
-		$kategori2_jenis=str_replace("'", "\'",$kategori2_jenis);
+		$kategori2_jenis=str_replace("'", "''",$kategori2_jenis);
 		$kategori2_keterangan=trim(@$_POST["kategori2_keterangan"]);
 		$kategori2_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$kategori2_keterangan);
-		$kategori2_keterangan=str_replace("'", "\'",$kategori2_keterangan);
+		$kategori2_keterangan=str_replace("'", "''",$kategori2_keterangan);
 		$kategori2_aktif=trim(@$_POST["kategori2_aktif"]);
 		$kategori2_aktif=str_replace("/(<\/?)(p)([^>]*>)", "",$kategori2_aktif);
-		$kategori2_aktif=str_replace("'", "\'",$kategori2_aktif);
+		$kategori2_aktif=str_replace("'", "''",$kategori2_aktif);
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		

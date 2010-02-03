@@ -95,15 +95,15 @@ class C_tindakan_medis extends Controller {
 		$dtrawat_jamreservasi=trim(@$_POST["dtrawat_jamreservasi"]);
 		$dtrawat_jamreservasi=str_replace("/(<\/?)(p)([^>]*>)", "",$dtrawat_jamreservasi);
 		$dtrawat_jamreservasi=str_replace("\\", "",$dtrawat_jamreservasi);
-		$dtrawat_jamreservasi=str_replace("'", "\'",$dtrawat_jamreservasi);
+		$dtrawat_jamreservasi=str_replace("'", "''",$dtrawat_jamreservasi);
 		$dtrawat_kategori=trim(@$_POST["dtrawat_kategori"]);
 		$dtrawat_kategori=str_replace("/(<\/?)(p)([^>]*>)", "",$dtrawat_kategori);
 		$dtrawat_kategori=str_replace("\\", "",$dtrawat_kategori);
-		$dtrawat_kategori=str_replace("'", "\'",$dtrawat_kategori);
+		$dtrawat_kategori=str_replace("'", "''",$dtrawat_kategori);
 		$dtrawat_status=trim(@$_POST["dtrawat_status"]);
 		$dtrawat_status=str_replace("/(<\/?)(p)([^>]*>)", "",$dtrawat_status);
 		$dtrawat_status=str_replace("\\", "",$dtrawat_status);
-		$dtrawat_status=str_replace("'", "\'",$dtrawat_status);
+		$dtrawat_status=str_replace("'", "''",$dtrawat_status);
 		$dtrawat_keterangan=trim(@$_POST["dtrawat_keterangan"]);
 		$dtrawat_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$dtrawat_keterangan);
 		$dtrawat_keterangan=str_replace("\\", "",$dtrawat_keterangan);
@@ -195,7 +195,7 @@ class C_tindakan_medis extends Controller {
 		$trawat_keterangan=trim(@$_POST["trawat_keterangan"]);
 		$trawat_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$trawat_keterangan);
 		$trawat_keterangan=str_replace(",", "\,",$trawat_keterangan);
-		$trawat_keterangan=str_replace("'", "\'",$trawat_keterangan);
+		$trawat_keterangan=str_replace("'", "''",$trawat_keterangan);
 		$dtrawat_status=trim(@$_POST["dtrawat_status"]);
 		$trawat_cust_id=trim(@$_POST["trawat_cust_id"]);
 		$dtrawat_perawatan_id=trim(@$_POST["dtrawat_perawatan_id"]);
@@ -223,7 +223,7 @@ class C_tindakan_medis extends Controller {
 		$trawat_cust=trim(@$_POST["trawat_cust"]);
 		$trawat_keterangan=trim(@$_POST["trawat_keterangan"]);
 		$trawat_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$trawat_keterangan);
-		$trawat_keterangan=str_replace("'", "\'",$trawat_keterangan);
+		$trawat_keterangan=str_replace("'", "''",$trawat_keterangan);
 		$result=$this->m_tindakan_medis->tindakan_create($trawat_cust ,$trawat_keterangan );
 		echo $result;
 	}
@@ -243,7 +243,7 @@ class C_tindakan_medis extends Controller {
 		$trawat_cust=trim(@$_POST["trawat_cust"]);
 		/*$trawat_keterangan=trim(@$_POST["trawat_keterangan"]);
 		$trawat_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$trawat_keterangan);
-		$trawat_keterangan=str_replace("'", "\'",$trawat_keterangan);*/
+		$trawat_keterangan=str_replace("'", "''",$trawat_keterangan);*/
 		if(trim(@$_POST["trawat_tglapp_start"])!="")
 			$trawat_tglapp_start=date('Y-m-d', strtotime(trim(@$_POST["trawat_tglapp_start"])));
 		else
@@ -269,7 +269,7 @@ class C_tindakan_medis extends Controller {
 		$trawat_cust=trim(@$_POST["trawat_cust"]);
 		$trawat_keterangan=trim(@$_POST["trawat_keterangan"]);
 		$trawat_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$trawat_keterangan);
-		$trawat_keterangan=str_replace("'", "\'",$trawat_keterangan);
+		$trawat_keterangan=str_replace("'", "''",$trawat_keterangan);
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
@@ -322,7 +322,7 @@ class C_tindakan_medis extends Controller {
 		$trawat_cust=trim(@$_POST["trawat_cust"]);
 		$trawat_keterangan=trim(@$_POST["trawat_keterangan"]);
 		$trawat_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$trawat_keterangan);
-		$trawat_keterangan=str_replace("'", "\'",$trawat_keterangan);
+		$trawat_keterangan=str_replace("'", "''",$trawat_keterangan);
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
