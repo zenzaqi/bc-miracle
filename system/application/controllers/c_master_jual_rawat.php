@@ -594,6 +594,23 @@ class C_master_jual_rawat extends Controller {
 			
 	}
 	
+	function print_paper(){
+  		//POST varibale here
+		$jrawat_id=trim(@$_POST["jrawat_id"]);
+		
+		
+		$result = $this->m_master_jual_rawat->print_paper($jrawat_id);
+		$rs=$result->row();
+		$data["jrawat_nobukti"]=$rs->jrawat_nobukti;
+		$data["jrawat_tanggal"]=$rs->jrawat_tanggal;
+		
+		$viewdata=$this->load->view("main/jrawat_formcetak",$data,TRUE);
+		$file = fopen("jrawat_paper.html",'w');
+		fwrite($file, $viewdata);	
+		fclose($file);
+		echo '1';        
+	}
+	
 	// Encodes a SQL array into a JSON formated string
 	function JEncode($arr){
 		if (version_compare(PHP_VERSION,"5.2","<"))

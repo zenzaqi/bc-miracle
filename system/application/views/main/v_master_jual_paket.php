@@ -1102,6 +1102,8 @@ Ext.onReady(function(){
   
 	/* Function for Update Confirm */
 	function master_jual_paket_confirm_update(){
+		cbo_dpaket_paketDataStore.load({params:{query:master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_id')}});
+		cbo_cust_pengguna_paket_DataStore.load({params:{query:master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_id')}});
 		/* only one record is selected here */
 		if(master_jual_paketListEditorGrid.selModel.getCount() == 1) {
 			//master_jual_paket_set_form();
@@ -1139,7 +1141,7 @@ Ext.onReady(function(){
 					}
 				}
 			});
-			cbo_cust_jual_paket_DataStore.load({params:{query : eval(get_pk_id())}});
+			detail_pengguna_paket_DataStore.load({params:{master_id : eval(get_pk_id())}});
 			msg='updated';
 			master_jual_paket_createWindow.hide();
 			//master_jual_paket_createWindow.show();
@@ -3469,7 +3471,7 @@ Ext.onReady(function(){
 			method: 'POST'
 		}),baseParams: {master_id: jpaket_idField.getValue(), start: 0, limit: pageS},
 		reader: detail_pengguna_paket_reader,
-		sortInfo:{field: 'dpaket_id', direction: "ASC"}
+		sortInfo:{field: 'sjpaket_id', direction: "ASC"}
 	});
 	/* End of Function */
 	
@@ -3486,7 +3488,7 @@ Ext.onReady(function(){
 	
 	
 	var combo_pengguna_paket=new Ext.form.ComboBox({
-		store: cbo_cust_jual_paket_DataStore,
+		store: cbo_cust_pengguna_paket_DataStore,
 		mode: 'remote',
 		displayField:'cust_nama',
 		valueField: 'cust_id',

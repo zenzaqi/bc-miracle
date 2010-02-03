@@ -70,6 +70,7 @@ class M_perawatan extends Model{
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
 			$limit = $query." LIMIT ".$start.",".$end;			
+			echo $limit;
 			$result = $this->db->query($limit);  
 			
 			if($nbrows>0){
