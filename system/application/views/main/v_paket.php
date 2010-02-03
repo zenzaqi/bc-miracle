@@ -873,7 +873,8 @@ Ext.onReady(function(){
 	
 	/* function for editing row via context menu */
 	function paket_editContextMenu(){
-		paketListEditorGrid.startEditing(paket_SelectedRow,1);
+		//paketListEditorGrid.startEditing(paket_SelectedRow,1);
+		paket_confirm_update();
   	}
 	/* End of Function */
   	
