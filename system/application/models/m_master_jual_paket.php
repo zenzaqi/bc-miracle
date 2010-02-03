@@ -150,7 +150,7 @@ class M_master_jual_paket extends Model{
 			$sql="SELECT paket_id, paket_harga, paket_kode, group_nama, kategori_nama, paket_du, paket_dm, paket_nama, paket_expired FROM paket INNER JOIN produk_group ON paket.paket_group=produk_group.group_id INNER JOIN kategori ON produk_group.group_kelompok=kategori.kategori_id WHERE kategori.kategori_jenis='paket' AND paket_aktif='Aktif'";
 			if($query<>"" && is_numeric($query)==false){
 				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
-				$sql.=" (paket_kode LIKE '%".addslashes($filter)."%' OR paket_nama LIKE '%".addslashes($filter)."%' ) ";
+				$sql.=" (paket_kode LIKE '%".addslashes($query)."%' OR paket_nama LIKE '%".addslashes($query)."%' ) ";
 			}else{
 				if($rs_rows){
 					$filter="";
