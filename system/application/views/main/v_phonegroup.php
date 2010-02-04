@@ -644,7 +644,6 @@ Ext.onReady(function(){
 								listeners:{
 									render:function(){
 										phonegrouped_DataStore.setBaseParam({id:get_pk_id()});
-										console.log('test');
 									}
 								}
 								}),{

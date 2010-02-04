@@ -24,48 +24,48 @@ class M_appointment extends Model{
 			$date_now=date('Y-m-d');
 			$bln_now=date('Y-m');
 			
-			$sql="SELECT karyawan_id,karyawan_no,karyawan_nama,karyawan_username,reportt_jmltindakan,absensi_shift FROM karyawan INNER JOIN jabatan ON(karyawan_jabatan=jabatan_id) LEFT JOIN absensi ON(karyawan.karyawan_id=absensi.absensi_karyawan_id) LEFT JOIN (SELECT * FROM report_tindakan WHERE reportt_bln LIKE '$bln_now%') as rt ON(karyawan_id=rt.reportt_karyawan_id) WHERE karyawan_jabatan=jabatan_id AND jabatan_nama='$karyawan_jabatan' AND karyawan_aktif='Aktif' AND absensi_shift='P'";
+			$sql="SELECT karyawan_id,karyawan_no,karyawan_nama,karyawan_username,reportt_jmltindakan,ab.absensi_shift FROM karyawan INNER JOIN jabatan ON(karyawan_jabatan=jabatan_id) INNER JOIN (SELECT absensi_karyawan_id,absensi_tgl,absensi_shift FROM absensi WHERE absensi_shift='P') as ab ON(karyawan.karyawan_id=ab.absensi_karyawan_id) LEFT JOIN (SELECT * FROM report_tindakan WHERE reportt_bln LIKE '$bln_now%') as rt ON(karyawan_id=rt.reportt_karyawan_id) WHERE karyawan_jabatan=jabatan_id AND jabatan_nama='$karyawan_jabatan' AND karyawan_aktif='Aktif'";
 			if($query<>"" && is_numeric($query)==false){
 				$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
 				$sql .= " (karyawan_nama LIKE '%".addslashes($query)."%')";
 			}
 			if($tgl_app<>""){
 				$tgl_app = date('Y-m-d', strtotime($tgl_app));
-				$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
-				$sql .= " (absensi_tgl='".addslashes($tgl_app)."')";
+				$sql .=eregi("WHERE",$sql)? " OR ":" WHERE ";
+				$sql .= " (ab.absensi_tgl='".addslashes($tgl_app)."')";
 			}
 			
-			$sql2="SELECT karyawan_id,karyawan_no,karyawan_nama,karyawan_username,reportt_jmltindakan,absensi_shift FROM karyawan INNER JOIN jabatan ON(karyawan_jabatan=jabatan_id) LEFT JOIN absensi ON(karyawan.karyawan_id=absensi.absensi_karyawan_id) LEFT JOIN (SELECT * FROM report_tindakan WHERE reportt_bln LIKE '$bln_now%') as rt ON(karyawan_id=rt.reportt_karyawan_id) WHERE karyawan_jabatan=jabatan_id AND jabatan_nama='$karyawan_jabatan' AND karyawan_aktif='Aktif' AND absensi_shift='S'";
+			$sql2="SELECT karyawan_id,karyawan_no,karyawan_nama,karyawan_username,reportt_jmltindakan,ab.absensi_shift FROM karyawan INNER JOIN jabatan ON(karyawan_jabatan=jabatan_id) INNER JOIN (SELECT absensi_karyawan_id,absensi_tgl,absensi_shift FROM absensi WHERE absensi_shift='S') as ab ON(karyawan.karyawan_id=ab.absensi_karyawan_id) LEFT JOIN (SELECT * FROM report_tindakan WHERE reportt_bln LIKE '$bln_now%') as rt ON(karyawan_id=rt.reportt_karyawan_id) WHERE karyawan_jabatan=jabatan_id AND jabatan_nama='$karyawan_jabatan' AND karyawan_aktif='Aktif'";
 			if($query<>"" && is_numeric($query)==false){
 				$sql2 .=eregi("WHERE",$sql2)? " AND ":" WHERE ";
 				$sql2 .= " (karyawan_nama LIKE '%".addslashes($query)."%')";
 			}
 			if($tgl_app<>""){
 				$tgl_app = date('Y-m-d', strtotime($tgl_app));
-				$sql2 .=eregi("WHERE",$sql2)? " AND ":" WHERE ";
-				$sql2 .= " (absensi_tgl='".addslashes($tgl_app)."')";
+				$sql2 .=eregi("WHERE",$sql2)? " OR ":" WHERE ";
+				$sql2 .= " (ab.absensi_tgl='".addslashes($tgl_app)."')";
 			}
 			
-			$sql3="SELECT karyawan_id,karyawan_no,karyawan_nama,karyawan_username,reportt_jmltindakan,absensi_shift FROM karyawan INNER JOIN jabatan ON(karyawan_jabatan=jabatan_id) LEFT JOIN absensi ON(karyawan.karyawan_id=absensi.absensi_karyawan_id) LEFT JOIN (SELECT * FROM report_tindakan WHERE reportt_bln LIKE '$bln_now%') as rt ON(karyawan_id=rt.reportt_karyawan_id) WHERE karyawan_jabatan=jabatan_id AND jabatan_nama='$karyawan_jabatan' AND karyawan_aktif='Aktif' AND absensi_shift='M'";
+			$sql3="SELECT karyawan_id,karyawan_no,karyawan_nama,karyawan_username,reportt_jmltindakan,ab.absensi_shift FROM karyawan INNER JOIN jabatan ON(karyawan_jabatan=jabatan_id) INNER JOIN (SELECT absensi_karyawan_id,absensi_tgl,absensi_shift FROM absensi WHERE absensi_shift='M') as ab ON(karyawan.karyawan_id=ab.absensi_karyawan_id) LEFT JOIN (SELECT * FROM report_tindakan WHERE reportt_bln LIKE '$bln_now%') as rt ON(karyawan_id=rt.reportt_karyawan_id) WHERE karyawan_jabatan=jabatan_id AND jabatan_nama='$karyawan_jabatan' AND karyawan_aktif='Aktif'";
 			if($query<>"" && is_numeric($query)==false){
 				$sql3 .=eregi("WHERE",$sql3)? " AND ":" WHERE ";
 				$sql3 .= " (karyawan_nama LIKE '%".addslashes($query)."%')";
 			}
 			if($tgl_app<>""){
 				$tgl_app = date('Y-m-d', strtotime($tgl_app));
-				$sql3 .=eregi("WHERE",$sql3)? " AND ":" WHERE ";
-				$sql3 .= " (absensi_tgl='".addslashes($tgl_app)."')";
+				$sql3 .=eregi("WHERE",$sql3)? " OR ":" WHERE ";
+				$sql3 .= " (ab.absensi_tgl='".addslashes($tgl_app)."')";
 			}
 			
-			$sql4="SELECT karyawan_id,karyawan_no,karyawan_nama,karyawan_username,reportt_jmltindakan,absensi_shift FROM karyawan INNER JOIN jabatan ON(karyawan_jabatan=jabatan_id) LEFT JOIN absensi ON(karyawan.karyawan_id=absensi.absensi_karyawan_id) LEFT JOIN (SELECT * FROM report_tindakan WHERE reportt_bln LIKE '$bln_now%') as rt ON(karyawan_id=rt.reportt_karyawan_id) WHERE karyawan_jabatan=jabatan_id AND jabatan_nama='$karyawan_jabatan' AND karyawan_aktif='Aktif' AND absensi_shift='OFF'";
+			$sql4="SELECT karyawan_id,karyawan_no,karyawan_nama,karyawan_username,reportt_jmltindakan,ab.absensi_shift FROM karyawan INNER JOIN jabatan ON(karyawan_jabatan=jabatan_id) INNER JOIN (SELECT absensi_karyawan_id,absensi_tgl,absensi_shift FROM absensi WHERE absensi_shift='OFF') as ab ON(karyawan.karyawan_id=ab.absensi_karyawan_id) LEFT JOIN (SELECT * FROM report_tindakan WHERE reportt_bln LIKE '$bln_now%') as rt ON(karyawan_id=rt.reportt_karyawan_id) WHERE karyawan_jabatan=jabatan_id AND jabatan_nama='$karyawan_jabatan' AND karyawan_aktif='Aktif'";
 			if($query<>"" && is_numeric($query)==false){
 				$sql4 .=eregi("WHERE",$sql4)? " AND ":" WHERE ";
 				$sql4 .= " (karyawan_nama LIKE '%".addslashes($query)."%')";
 			}
 			if($tgl_app<>""){
 				$tgl_app = date('Y-m-d', strtotime($tgl_app));
-				$sql4 .=eregi("WHERE",$sql4)? " AND ":" WHERE ";
-				$sql4 .= " (absensi_tgl='".addslashes($tgl_app)."')";
+				$sql4 .=eregi("WHERE",$sql4)? " OR ":" WHERE ";
+				$sql4 .= " (ab.absensi_tgl='".addslashes($tgl_app)."')";
 			}
 			
 			
@@ -81,7 +81,17 @@ class M_appointment extends Model{
 			$query4 = $this->db->query($sql4);
 			$nbrows4 = $query4->num_rows();
 			
-			if($nbrows>0 || $nbrows2>0 || $nbrows3>0 || $nbrows4>0){
+			if($nbrows==0 && $nbrows2==0 && $nbrows3==0 && $nbrows4==0){
+				$sql5="SELECT karyawan_id,karyawan_no,karyawan_nama,karyawan_username,reportt_jmltindakan,ab.absensi_shift FROM karyawan INNER JOIN jabatan ON(karyawan_jabatan=jabatan_id) LEFT JOIN (SELECT absensi_karyawan_id,absensi_tgl,absensi_shift FROM absensi) as ab ON(karyawan.karyawan_id=ab.absensi_karyawan_id) LEFT JOIN (SELECT * FROM report_tindakan WHERE reportt_bln LIKE '$bln_now%') as rt ON(karyawan_id=rt.reportt_karyawan_id) WHERE karyawan_jabatan=jabatan_id AND jabatan_nama='$karyawan_jabatan' AND karyawan_aktif='Aktif'";
+				/*if($query<>"" && is_numeric($query)==false){
+					$sql5 .=eregi("WHERE",$sql5)? " AND ":" WHERE ";
+					$sql5 .= " (karyawan_nama LIKE '%".addslashes($query)."%')";
+				}*/
+				$query5 = $this->db->query($sql5);
+				$nbrows5 = $query5->num_rows();
+			}
+			
+			if($nbrows>0 || $nbrows2>0 || $nbrows3>0 || $nbrows4>0 || $nbrows5>0){
 				if($nbrows>0){
 					foreach($query->result() as $row){
 						$arr[] = $row;
@@ -102,6 +112,12 @@ class M_appointment extends Model{
 						$arr[] = $row4;
 					}
 				}
+				if($nbrows5>0){
+					foreach($query5->result() as $row5){
+						$arr[] = $row5;
+					}
+				}
+				$nbrows=$nbrows+$nbrows2+$nbrows3+$nbrows4+$nbrows5;
 				$jsonresult = json_encode($arr);
 				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
 			} else {
