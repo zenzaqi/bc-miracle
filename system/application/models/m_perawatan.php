@@ -41,10 +41,11 @@ class M_perawatan extends Model{
 					$sql=$sql."(".substr($filter,2,strlen($filter)).")";
 				}
 			}
-			
+			$sql.=" ORDER BY produk_id ASC";
 			/*if($query<>"")
 				$sql.=" WHERE (produk_kode like '%".$query."%' or produk_nama like '%".$query."%' or satuan_nama like '%".$query."%'
 							 or kategori_nama like '%".$query."%' or group_nama like '%".$query."%') ";*/
+			//echo $sql;
 			
 			$result = $this->db->query($sql);
 			$nbrows = $result->num_rows();
@@ -67,6 +68,7 @@ class M_perawatan extends Model{
 		//get record list
 		function detail_perawatan_konsumsi_list($master_id,$query,$start,$end) {
 			$query = "SELECT * FROM perawatan_konsumsi where krawat_master='".$master_id."'";
+			$query.=" ORDER BY krawat_produk ASC";
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
 			$limit = $query." LIMIT ".$start.",".$end;			
