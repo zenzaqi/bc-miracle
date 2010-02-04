@@ -71,6 +71,7 @@ var pageS=15;
 var promo_idField;
 var promo_acaraField;
 var promo_tempatField;
+var promo_keteranganField;
 var promo_tglmulaiField;
 var promo_tglselesaiField;
 var promo_cashbackField;
@@ -81,6 +82,7 @@ var promo_allrawatField;
 var promo_idSearchField;
 var promo_acaraSearchField;
 var promo_tempatSearchField;
+var promo_keteranganSearchField;
 var promo_tglmulaiSearchField;
 var promo_tglselesaiSearchField;
 var promo_cashbackSearchField;
@@ -122,8 +124,8 @@ Ext.onReady(function(){
 			url: 'index.php?c=c_promo&m=get_action',
 			params: {
 				task: "UPDATE",
-				promo_id	: promo_id_update_pk, 
-				promo_acara	:promo_acara_update,  
+				promo_id		: promo_id_update_pk, 
+				promo_acara		:promo_acara_update,  
 				promo_tempat	:promo_tempat_update,  
 				promo_tglmulai	: promo_tglmulai_update_date, 
 				promo_tglselesai	: promo_tglselesai_update_date, 
@@ -172,6 +174,7 @@ Ext.onReady(function(){
 		var promo_id_create=null; 
 		var promo_acara_create=null; 
 		var promo_tempat_create=null; 
+		var promo_keterangan_create=null;
 		var promo_tglmulai_create_date=""; 
 		var promo_tglselesai_create_date=""; 
 		var promo_cashback_create=null; 
@@ -183,6 +186,7 @@ Ext.onReady(function(){
 		if(promo_idField.getValue()!== null){promo_id_create_pk = promo_idField.getValue();} 
 		if(promo_acaraField.getValue()!== null){promo_acara_create = promo_acaraField.getValue();} 
 		if(promo_tempatField.getValue()!== null){promo_tempat_create = promo_tempatField.getValue();} 
+		if(promo_keteranganField.getValue()!== null){promo_keterangan_create = promo_keteranganField.getValue();} 
 		if(promo_tglmulaiField.getValue()!== ""){promo_tglmulai_create_date = promo_tglmulaiField.getValue().format('Y-m-d');} 
 		if(promo_tglselesaiField.getValue()!== ""){promo_tglselesai_create_date = promo_tglselesaiField.getValue().format('Y-m-d');} 
 		if(promo_cashbackField.getValue()!== null){promo_cashback_create = promo_cashbackField.getValue();} 
@@ -196,9 +200,10 @@ Ext.onReady(function(){
 			url: 'index.php?c=c_promo&m=get_action',
 			params: {
 				task: post2db,
-				promo_id	: promo_id_create_pk, 
-				promo_acara	: promo_acara_create, 
+				promo_id		: promo_id_create_pk, 
+				promo_acara		: promo_acara_create, 
 				promo_tempat	: promo_tempat_create, 
+				promo_keterangan	: promo_keterangan_create, 
 				promo_tglmulai	: promo_tglmulai_create_date, 
 				promo_tglselesai	: promo_tglselesai_create_date, 
 				promo_cashback	: promo_cashback_create, 
@@ -211,11 +216,11 @@ Ext.onReady(function(){
 				var result=eval(response.responseText);
 				switch(result){
 					case 1:
-						promo_berlaku_purge()
-						promo_berlaku_insert();
 						Ext.MessageBox.alert(post2db+' OK','The Promo was '+msg+' successfully.');
 						promo_DataStore.reload();
 						promo_createWindow.hide();
+						promo_produk_purge();
+						promo_perawatan_purge();
 						break;
 					default:
 						Ext.MessageBox.show({
@@ -268,20 +273,22 @@ Ext.onReady(function(){
 		promo_acaraField.setValue(null);
 		promo_tempatField.reset();
 		promo_tempatField.setValue(null);
+		promo_keteranganField.reset();
+		promo_keteranganField.setValue(null);
 		promo_tglmulaiField.reset();
 		promo_tglmulaiField.setValue(null);
 		promo_tglselesaiField.reset();
 		promo_tglselesaiField.setValue(null);
-		promo_cashbackField.reset();
-		promo_cashbackField.setValue(null);
-		promo_mincashField.reset();
-		promo_mincashField.setValue(null);
-		promo_diskonField.reset();
-		promo_diskonField.setValue(null);
-		promo_allprodukField.reset();
-		promo_allprodukField.setValue(null);
-		promo_allrawatField.reset();
-		promo_allrawatField.setValue(null);
+		//promo_cashbackField.reset();
+		promo_cashbackField.setValue(0);
+		//promo_mincashField.reset();
+		promo_mincashField.setValue(0);
+		//promo_diskonField.reset();
+		promo_diskonField.setValue(0);
+		//promo_allprodukField.reset();
+		promo_allprodukField.setValue('Y');
+		//promo_allrawatField.reset();
+		promo_allrawatField.setValue('Y');
 	}
  	/* End of Function */
   
@@ -290,6 +297,7 @@ Ext.onReady(function(){
 		promo_idField.setValue(promoListEditorGrid.getSelectionModel().getSelected().get('promo_id'));
 		promo_acaraField.setValue(promoListEditorGrid.getSelectionModel().getSelected().get('promo_acara'));
 		promo_tempatField.setValue(promoListEditorGrid.getSelectionModel().getSelected().get('promo_tempat'));
+		promo_keteranganField.setValue(promoListEditorGrid.getSelectionModel().getSelected().get('promo_keterangan'));
 		promo_tglmulaiField.setValue(promoListEditorGrid.getSelectionModel().getSelected().get('promo_tglmulai'));
 		promo_tglselesaiField.setValue(promoListEditorGrid.getSelectionModel().getSelected().get('promo_tglselesai'));
 		promo_cashbackField.setValue(promoListEditorGrid.getSelectionModel().getSelected().get('promo_cashback'));
@@ -297,12 +305,21 @@ Ext.onReady(function(){
 		promo_diskonField.setValue(promoListEditorGrid.getSelectionModel().getSelected().get('promo_diskon'));
 		promo_allprodukField.setValue(promoListEditorGrid.getSelectionModel().getSelected().get('promo_allproduk'));
 		promo_allrawatField.setValue(promoListEditorGrid.getSelectionModel().getSelected().get('promo_allrawat'));
+		if(promo_allprodukField.getValue()=='Y')
+			promo_produkListEditorGrid.setDisabled(true);
+		else
+			promo_produkListEditorGrid.setDisabled(false);
+		
+		if(promo_allrawatField.getValue()=='Y')
+			promo_perawatanListEditorGrid.setDisabled(true);
+		else
+			promo_perawatanListEditorGrid.setDisabled(false);
 	}
 	/* End setValue to EDIT*/
   
 	/* Function for Check if the form is valid */
 	function is_promo_form_valid(){
-		return (true  );
+		return ( promo_acaraField.isValid());
 	}
   	/* End of Function */
   
@@ -344,8 +361,11 @@ Ext.onReady(function(){
 		if(promoListEditorGrid.selModel.getCount() == 1) {
 			promo_set_form();
 			post2db='UPDATE';
-			promo_berlaku_DataStore.load({params : {master_id : eval(get_pk_id()), start:0, limit:pageS}});
 			msg='updated';
+			promo_produk_DataStore.setBaseParam('master_id',get_pk_id());
+			promo_perawatan_DataStore.setBaseParam('master_id',get_pk_id());
+			promo_produk_DataStore.load();
+			promo_perawatan_DataStore.load();
 			promo_createWindow.show();
 		} else {
 			Ext.MessageBox.show({
@@ -421,6 +441,7 @@ Ext.onReady(function(){
 			{name: 'promo_id', type: 'int', mapping: 'promo_id'}, 
 			{name: 'promo_acara', type: 'string', mapping: 'promo_acara'}, 
 			{name: 'promo_tempat', type: 'string', mapping: 'promo_tempat'}, 
+			{name: 'promo_keterangan', type: 'string', mapping: 'promo_keterangan'}, 
 			{name: 'promo_tglmulai', type: 'date', dateFormat: 'Y-m-d', mapping: 'promo_tglmulai'}, 
 			{name: 'promo_tglselesai', type: 'date', dateFormat: 'Y-m-d', mapping: 'promo_tglselesai'}, 
 			{name: 'promo_cashback', type: 'float', mapping: 'promo_cashback'}, 
@@ -457,7 +478,8 @@ Ext.onReady(function(){
 			width: 150,
 			sortable: true,
 			editor: new Ext.form.TextField({
-				maxLength: 250
+				maxLength: 250,
+				allowBlank: false
           	})
 		}, 
 		{
@@ -660,7 +682,7 @@ Ext.onReady(function(){
 		blankText: '0',
 		allowBlank: false,
 		allowDecimals: false,
-				hidden: true,
+		hidden: true,
 		readOnly: true,
 		anchor: '95%',
 		maskRe: /([0-9]+)$/
@@ -668,8 +690,9 @@ Ext.onReady(function(){
 	/* Identify  promo_acara Field */
 	promo_acaraField= new Ext.form.TextField({
 		id: 'promo_acaraField',
-		fieldLabel: 'Acara',
+		fieldLabel: 'Acara <font color=RED>*</font>',
 		maxLength: 250,
+		allowBlank: false,
 		anchor: '95%'
 	});
 	/* Identify  promo_tempat Field */
@@ -679,6 +702,15 @@ Ext.onReady(function(){
 		maxLength: 250,
 		anchor: '95%'
 	});
+	
+	/* Identify  promo_tempat Field */
+	promo_keteranganField= new Ext.form.TextArea({
+		id: 'promo_keteranganField',
+		fieldLabel: 'Keterangan',
+		maxLength: 500,
+		anchor: '95%'
+	});
+	
 	/* Identify  promo_tglmulai Field */
 	promo_tglmulaiField= new Ext.form.DateField({
 		id: 'promo_tglmulaiField',
@@ -698,7 +730,7 @@ Ext.onReady(function(){
 		allowNegatife : false,
 		blankText: '0',
 		allowDecimals: true,
-		anchor: '50%',
+		anchor: '90%',
 		maskRe: /([0-9]+)$/
 	});
 	/* Identify  promo_mincash Field */
@@ -708,7 +740,7 @@ Ext.onReady(function(){
 		allowNegatife : false,
 		blankText: '0',
 		allowDecimals: true,
-		anchor: '50%',
+		anchor: '90%',
 		maskRe: /([0-9]+)$/
 	});
 	/* Identify  promo_diskon Field */
@@ -718,7 +750,7 @@ Ext.onReady(function(){
 		allowNegatife : false,
 		blankText: '0',
 		allowDecimals: true,
-		anchor: '50%',
+		anchor: '90%',
 		maxLength: 2,
 		maskRe: /([0-9]+)$/
 	});
@@ -733,7 +765,7 @@ Ext.onReady(function(){
 		mode: 'local',
 		displayField: 'promo_allproduk_display',
 		valueField: 'promo_allproduk_value',
-		anchor: '30%',
+		width: 40,
 		triggerAction: 'all'	
 	});
 	/* Identify  promo_allrawat Field */
@@ -747,7 +779,7 @@ Ext.onReady(function(){
 		mode: 'local',
 		displayField: 'promo_allrawat_display',
 		valueField: 'promo_allrawat_value',
-		anchor: '30%',
+		width: 40,
 		triggerAction: 'all'	
 	});
   	/*Fieldset Master*/
@@ -758,141 +790,236 @@ Ext.onReady(function(){
 		layout:'column',
 		items:[
 			{
-				columnWidth:0.5,
+				columnWidth:0.6,
 				layout: 'form',
 				border:false,
-				items: [promo_acaraField, promo_tempatField, promo_tglmulaiField, promo_tglselesaiField, promo_idField] 
+				items: [promo_acaraField, promo_tempatField, promo_keteranganField, promo_tglmulaiField, promo_tglselesaiField] 
 			},
 			{
-				columnWidth:0.5,
+				columnWidth:0.4,
 				layout: 'form',
 				border:false,
-				items: [promo_cashbackField, promo_mincashField, promo_diskonField, promo_allprodukField, promo_allrawatField] 
+				items: [promo_cashbackField, promo_mincashField, promo_diskonField, promo_allprodukField, promo_allrawatField,promo_idField] 
 			}
 			]
 	
 	});
 	
 		
+		
 	/*Detail Declaration */
 		
 	// Function for json reader of detail
-	var promo_berlaku_reader=new Ext.data.JsonReader({
+	var promo_perawatan_reader=new Ext.data.JsonReader({
 		root: 'results',
 		totalProperty: 'total',
-		id: ''
+		id: 'rpromo_id'
 	},[
 	/* dataIndex => insert intoperawatan_ColumnModel, Mapping => for initiate table column */ 
-			{name: 'bpromo_id', type: 'int', mapping: 'bpromo_id'}, 
-			{name: 'bpromo_master', type: 'int', mapping: 'bpromo_master'}, 
-			{name: 'bpromo_produk', type: 'string', mapping: 'bpromo_produk'} 
+			{name: 'rpromo_id', type: 'int', mapping: 'rpromo_id'}, 
+			{name: 'rpromo_master', type: 'int', mapping: 'rpromo_master'}, 
+			{name: 'rpromo_perawatan', type: 'int', mapping: 'rpromo_perawatan'}
 	]);
 	//eof
 	
 	//function for json writer of detail
-	var promo_berlaku_writer = new Ext.data.JsonWriter({
+	var promo_perawatan_writer = new Ext.data.JsonWriter({
 		encode: true,
 		writeAllFields: false
 	});
 	//eof
 	
 	/* Function for Retrieve DataStore of detail*/
-	promo_berlaku_DataStore = new Ext.data.Store({
-		id: 'promo_berlaku_DataStore',
+	promo_perawatan_DataStore = new Ext.data.Store({
+		id: 'promo_perawatan_DataStore',
 		proxy: new Ext.data.HttpProxy({
-			url: 'index.php?c=c_promo&m=detail_promo_berlaku_list', 
+			url: 'index.php?c=c_promo&m=detail_promo_perawatan_list', 
 			method: 'POST'
 		}),
-		reader: promo_berlaku_reader,
-		baseParams:{master_id: promo_idField.getValue()},
-		sortInfo:{field: 'bpromo_id', direction: "ASC"}
+		reader: promo_perawatan_reader,
+		baseParams:{master_id: get_pk_id(), start:0, limit: pageS },
+		sortInfo:{field: 'rpromo_id', direction: "ASC"}
 	});
 	/* End of Function */
-	
+
 	//function for editor of detail
-	var editor_promo_berlaku= new Ext.ux.grid.RowEditor({
-        saveText: 'Update'
+	var editor_promo_perawatan= new Ext.ux.grid.RowEditor({
+        saveText: 'Update',
+		listeners: {
+			afteredit: function(){
+				promo_perawatan_DataStore.commitChanges();
+			}
+		}
     });
 	//eof
 	
-	cbo_promo_produkDataStore = new Ext.data.Store({
-		id: 'cbo_promo_produkDataStore',
-		proxy: new Ext.data.HttpProxy({
-			url: 'index.php?c=c_promo&m=get_produk_rawat_list', 
+	cbo_produk_listDataStore = new Ext.data.Store({
+	id: 'cbo_produk_listDataStore',
+	proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_promo&m=get_produk_list', 
 			method: 'POST'
-		}),
+		}), baseParams: {start: 0, limit: pageS},
 			reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
 			id: 'produk_id'
 		},[
-			{name: 'produk_rawat_kode', type: 'string', mapping: 'produk_rawat_kode'},
-			{name: 'produk_rawat_nama', type: 'string', mapping: 'produk_rawat_nama'},
-			{name: 'produk_rawat_jenis', type: 'string', mapping: 'produk_rawat_jenis'}
+		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
+			{name: 'produk_id', type: 'int', mapping: 'produk_id'},
+			{name: 'produk_kode', type: 'string', mapping: 'produk_kode'},
+			{name: 'produk_group', type: 'string', mapping: 'group_nama'},
+			{name: 'produk_kategori', type: 'string', mapping: 'kategori_nama'},
+			{name: 'produk_nama', type: 'string', mapping: 'produk_nama'}
 		]),
-		sortInfo:{field: 'produk_rawat_nama', direction: "ASC"}
+	sortInfo:{field: 'produk_nama', direction: "ASC"}
+	});
+	
+	cbo_rawat_listDataStore = new Ext.data.Store({
+		id: 'cbo_rawat_listDataStore',
+		proxy: new Ext.data.HttpProxy({
+				url: 'index.php?c=c_promo&m=get_rawat_list', 
+				method: 'POST'
+			}), baseParams: {start: 0, limit: pageS},
+				reader: new Ext.data.JsonReader({
+				root: 'results',
+				totalProperty: 'total',
+				id: 'rawat_id'
+			},[
+			/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
+				{name: 'rawat_id', type: 'int', mapping: 'rawat_id'},
+				{name: 'rawat_kode', type: 'string', mapping: 'rawat_kode'},
+				{name: 'rawat_nama', type: 'string', mapping: 'rawat_nama'}
+			]),
+		sortInfo:{field: 'rawat_nama', direction: "ASC"}
 	});
 	
 	
+	var promo_produk_tpl = new Ext.XTemplate(
+        '<tpl for="."><div class="search-item">',
+            '<span>{produk_kode}| <b>{produk_nama}</b></span>',
+		'</div></tpl>'
+    );
+	
+	var promo_rawat_tpl = new Ext.XTemplate(
+        '<tpl for="."><div class="search-item">',
+            '<span>{rawat_kode}| <b>{rawat_nama}</b></span>',
+		'</div></tpl>'
+    );
+	
 	Ext.util.Format.comboRenderer = function(combo){
-		//cbo_voucher_produkDataStore.load();
+		
+		cbo_rawat_listDataStore.load({params:{query:get_pk_id()}});
+		cbo_produk_listDataStore.load({params:{query:get_pk_id()}});
 		return function(value){
 			var record = combo.findRecord(combo.valueField, value);
 			return record ? record.get(combo.displayField) : combo.valueNotFoundText;
 		}
 	}
 	
-	/*var combo_promo_produk_rawat=new Ext.form.ComboBox({
-			store: cbo_voucher_produkDataStore,
-			id: 'bpromo_produk',
+	var combo_promo_produk=new Ext.form.ComboBox({
+			store: cbo_produk_listDataStore,
 			mode: 'remote',
 			typeAhead: true,
-			displayField: 'produk_rawat_nama',
-			valueField: 'produk_rawat_kode',
+			displayField: 'produk_nama',
+			valueField: 'produk_id',
+			typeAhead: false,
+			loadingText: 'Searching...',
+			pageSize:pageS,
+			hideTrigger:false,
+			tpl: promo_produk_tpl,
+			//applyTo: 'search',
+			itemSelector: 'div.search-item',
 			triggerAction: 'all',
-			lazyRender:true
+			lazyRender:true,
+			listClass: 'x-combo-list-small',
+			anchor: '95%'
 
-	});*/
+	});
 	
+	var combo_promo_rawat=new Ext.form.ComboBox({
+			store: cbo_rawat_listDataStore,
+			mode: 'remote',
+			typeAhead: true,
+			displayField: 'rawat_nama',
+			valueField: 'rawat_id',
+			typeAhead: false,
+			loadingText: 'Searching...',
+			pageSize:pageS,
+			hideTrigger:false,
+			tpl: promo_rawat_tpl,
+			//applyTo: 'search',
+			itemSelector: 'div.search-item',
+			triggerAction: 'all',
+			lazyRender:true,
+			listClass: 'x-combo-list-small',
+			anchor: '95%'
+
+	});
+	
+	//function of detail add
+	function promo_perawatan_add(){
+		var edit_promo_perawatan= new promo_perawatanListEditorGrid.store.recordType({
+			rpromo_id		:'',		
+			rpromo_master	:'',		
+			rpromo_perawatan:null
+		});
+		editor_promo_perawatan.stopEditing();
+		promo_perawatan_DataStore.insert(0, edit_promo_perawatan);
+		promo_perawatanListEditorGrid.getView().refresh();
+		promo_perawatanListEditorGrid.getSelectionModel().selectRow(0);
+		editor_promo_perawatan.startEditing(0);
+	}
+	//eof
 	
 	//declaration of detail coloumn model
-	promo_berlaku_ColumnModel = new Ext.grid.ColumnModel(
-		[
+	promo_perawatan_ColumnModel = new Ext.grid.ColumnModel(
+		[{
+			header: '#',
+			dataIndex: 'rpromo_id',
+			readOnly: true,
+			width: 40,
+			renderer: function(value, cell){
+				cell.css = "readonlycell"; // Mengambil Value dari Class di dalam CSS 
+				return value;
+				},
+			hidden: false
+		},
 		{
-			header: 'Produk/Perawatan',
-			dataIndex: 'bpromo_produk',
+			header: 'Perawatan',
+			dataIndex: 'rpromo_perawatan',
 			width: 150,
-			sortable: true//,
-			//editor: combo_promo_produk_rawat,
-			//renderer: Ext.util.Format.comboRenderer(combo_promo_produk_rawat)
-		}]
+			sortable: true,
+			editor: combo_promo_rawat,
+			renderer: Ext.util.Format.comboRenderer(combo_promo_rawat)
+		}
+		]
 	);
-	promo_berlaku_ColumnModel.defaultSortable= true;
+	promo_perawatan_ColumnModel.defaultSortable= true;
 	//eof
 	
 	
 	
 	//declaration of detail list editor grid
-	promo_berlakuListEditorGrid =  new Ext.grid.EditorGridPanel({
-		id: 'promo_berlakuListEditorGrid',
-		el: 'fp_promo_berlaku',
-		title: 'Detail berlaku pada Produk/Perawatan',
+	promo_perawatanListEditorGrid =  new Ext.grid.EditorGridPanel({
+		id: 'promo_perawatanListEditorGrid',
+		el: 'fp_promo_perawatan',
+		title: 'Detail Paket Isi Perawatan',
 		height: 250,
 		width: 690,
 		autoScroll: true,
-		store: promo_berlaku_DataStore, // DataStore
-		colModel: promo_berlaku_ColumnModel, // Nama-nama Columns
+		store: promo_perawatan_DataStore, // DataStore
+		colModel: promo_perawatan_ColumnModel, // Nama-nama Columns
 		enableColLock:false,
 		region: 'center',
         margins: '0 5 5 5',
-		plugins: [editor_promo_berlaku],
+		plugins: [editor_promo_perawatan],
 		frame: true,
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true},
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
-			store: promo_berlaku_DataStore,
+			store: promo_perawatan_DataStore,
 			displayInfo: true
 		}),
 		/* Add Control on ToolBar */
@@ -901,74 +1028,71 @@ Ext.onReady(function(){
 			text: 'Add',
 			tooltip: 'Add new detail record',
 			iconCls:'icon-adds',    				// this is defined in our styles.css
-			handler: promo_berlaku_add
+			handler: promo_perawatan_add
 		}, '-',{
 			text: 'Delete',
 			tooltip: 'Delete detail selected record',
 			iconCls:'icon-delete',
-			handler: promo_berlaku_confirm_delete
+			handler: promo_perawatan_confirm_delete
 		}
 		]
 	});
 	//eof
 	
 	
-	//function of detail add
-	function promo_berlaku_add(){
-		var edit_promo_berlaku= new promo_berlakuListEditorGrid.store.recordType({
-			bpromo_id	:'',		
-			bpromo_master	:'',		
-			bpromo_produk	:''		
-		});
-		editor_promo_berlaku.stopEditing();
-		promo_berlaku_DataStore.insert(0, edit_promo_berlaku);
-		promo_berlakuListEditorGrid.getView().refresh();
-		promo_berlakuListEditorGrid.getSelectionModel().selectRow(0);
-		editor_promo_berlaku.startEditing(0);
-	}
 	
-	//function for refresh detail
-	function refresh_promo_berlaku(){
-		promo_berlaku_DataStore.commitChanges();
-		promo_berlakuListEditorGrid.getView().refresh();
-	}
-	//eof
 	
 	//function for insert detail
-	function promo_berlaku_insert(){
-		for(i=0;i<promo_berlaku_DataStore.getCount();i++){
-			promo_berlaku_record=promo_berlaku_DataStore.getAt(i);
-			Ext.Ajax.request({
-				waitMsg: 'Please wait...',
-				url: 'index.php?c=c_promo&m=detail_promo_berlaku_insert',
-				params:{
-				bpromo_id	: promo_berlaku_record.data.bpromo_id, 
-				bpromo_master	: eval(promo_idField.getValue()), 
-				bpromo_produk	: promo_berlaku_record.data.bpromo_produk 
-				
-				}
-			});
+	function promo_perawatan_insert(){
+		for(i=0;i<promo_perawatan_DataStore.getCount();i++){
+			promo_perawatan_record=promo_perawatan_DataStore.getAt(i);
+			if(promo_perawatan_record.rpromo_perawatan!=="" && promo_perawatan_record.rpromo_perawatan!==null){
+				Ext.Ajax.request({
+					waitMsg: 'Please wait...',
+					url: 'index.php?c=c_promo&m=detail_promo_perawatan_insert',
+					params:{
+					rpromo_id	: promo_perawatan_record.data.rpromo_id, 
+					rpromo_master	: get_pk_id(), 
+					rpromo_perawatan	: promo_perawatan_record.data.rpromo_perawatan
+					}	
+				});
+			}
 		}
 	}
 	//eof
 	
 	//function for purge detail
-	function promo_berlaku_purge(){
+	function promo_perawatan_purge(){
 		Ext.Ajax.request({
 			waitMsg: 'Please wait...',
-			url: 'index.php?c=c_promo&m=detail_promo_berlaku_purge',
-			params:{ master_id: eval(promo_idField.getValue()) }
+			url: 'index.php?c=c_promo&m=detail_promo_perawatan_purge',
+			params:{ master_id: get_pk_id() },
+			timeout: 5000,
+			success: function(response){							
+				var result=eval(response.responseText);
+				promo_perawatan_insert();
+			},
+			failure: function(response){
+				var result=response.responseText;
+				Ext.MessageBox.show({
+				   title: 'Error',
+				   msg: 'Could not connect to the database. retry later.',
+				   buttons: Ext.MessageBox.OK,
+				   animEl: 'database',
+				   icon: Ext.MessageBox.ERROR
+				});	
+			}	
 		});
 	}
 	//eof
 	
 	/* Function for Delete Confirm of detail */
-	function promo_berlaku_confirm_delete(){
+	function promo_perawatan_confirm_delete(){
 		// only one record is selected here
-		if(promo_berlakuListEditorGrid.selModel.getCount() == 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', promo_berlaku_delete);
-		} else if(promo_berlakuListEditorGrid.selModel.getCount() > 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', promo_berlaku_delete);
+		if(promo_perawatanListEditorGrid.selModel.getCount() == 1){
+			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', promo_perawatan_delete);
+		} else if(promo_perawatanListEditorGrid.selModel.getCount() > 1){
+			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', promo_perawatan_delete);
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
@@ -982,26 +1106,238 @@ Ext.onReady(function(){
 	//eof
 	
 	//function for Delete of detail
-	function promo_berlaku_delete(btn){
+	function promo_perawatan_delete(btn){
 		if(btn=='yes'){
-			var s = promo_berlakuListEditorGrid.getSelectionModel().getSelections();
+			var s = promo_perawatanListEditorGrid.getSelectionModel().getSelections();
 			for(var i = 0, r; r = s[i]; i++){
-				promo_berlaku_DataStore.remove(r);
+				promo_perawatan_DataStore.remove(r);
 			}
-		}  
+		} 
+		promo_perawatan_DataStore.commitChanges();
+	}
+	//eof
+	// EOF DETAIL
+	
+	/*Detail Declaration of detail produk*/
+		
+	// Function for json reader of detail
+	var promo_produk_reader=new Ext.data.JsonReader({
+		root: 'results',
+		totalProperty: 'total',
+		id: 'ipromo_id'
+	},[
+	/* dataIndex => insert intoproduk_ColumnModel, Mapping => for initiate table column */ 
+			{name: 'ipromo_id', type: 'int', mapping: 'ipromo_id'}, 
+			{name: 'ipromo_master', type: 'int', mapping: 'ipromo_master'}, 
+			{name: 'ipromo_produk', type: 'int', mapping: 'ipromo_produk'}
+	]);
+	//eof
+	
+	//function for json writer of detail
+	var promo_produk_writer = new Ext.data.JsonWriter({
+		encode: true,
+		writeAllFields: false
+	});
+	//eof
+	
+	/* Function for Retrieve DataStore of detail*/
+	promo_produk_DataStore = new Ext.data.Store({
+		id: 'promo_produk_DataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_promo&m=detail_promo_produk_list', 
+			method: 'POST'
+		}),
+		reader: promo_produk_reader,
+		baseParams:{master_id: get_pk_id(), start:0, limit: pageS},
+		sortInfo:{field: 'ipromo_id', direction: "ASC"}
+	});
+	/* End of Function */
+	
+	//function for editor of detail
+	var editor_promo_produk= new Ext.ux.grid.RowEditor({
+        saveText: 'Update',
+		listeners: {
+			afteredit: function(){
+				promo_produk_DataStore.commitChanges();
+			}
+		}
+    });
+	//eof
+	
+	
+	//function of detail add
+	function promo_produk_add(){
+		var edit_promo_produk= new promo_produkListEditorGrid.store.recordType({
+			ipromo_id	:'',		
+			ipromo_master	: null,		
+			ipromo_produk	: null	
+		});
+		editor_promo_produk.stopEditing();
+		promo_produk_DataStore.insert(0, edit_promo_produk);
+		promo_produkListEditorGrid.getView().refresh();
+		promo_produkListEditorGrid.getSelectionModel().selectRow(0);
+		editor_promo_produk.startEditing(0);
+	}
+	
+	//declaration of detail coloumn model
+	promo_produk_ColumnModel = new Ext.grid.ColumnModel(
+		[{
+			header: '#',
+			dataIndex: 'ipromo_id',
+			readOnly: true,
+			width: 40,
+			renderer: function(value, cell){
+				cell.css = "readonlycell"; // Mengambil Value dari Class di dalam CSS 
+				return value;
+				},
+			hidden: false
+		},
+		{
+			header: 'produk',
+			dataIndex: 'ipromo_produk',
+			width: 250,
+			sortable: true,
+			editor: combo_promo_produk,
+			renderer: Ext.util.Format.comboRenderer(combo_promo_produk)
+		}]
+	);
+	promo_produk_ColumnModel.defaultSortable= true;
+	//eof
+	
+	
+	//declaration of detail list editor grid
+	promo_produkListEditorGrid =  new Ext.grid.EditorGridPanel({
+		id: 'promo_produkListEditorGrid',
+		el: 'fp_promo_produk',
+		title: 'Detail Paket Isi produk',
+		height: 250,
+		width: 690,
+		autoScroll: true,
+		store: promo_produk_DataStore, // DataStore
+		colModel: promo_produk_ColumnModel, // Nama-nama Columns
+		enableColLock:false,
+		region: 'center',
+        margins: '0 5 5 5',
+		plugins: [editor_promo_produk],
+		frame: true,
+		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
+		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
+		viewConfig: { forceFit:true},
+		bbar: new Ext.PagingToolbar({
+			pageSize: pageS,
+			store: promo_produk_DataStore,
+			displayInfo: true
+		}),
+		/* Add Control on ToolBar */
+		tbar: [
+		{
+			text: 'Add',
+			tooltip: 'Add new detail record',
+			iconCls:'icon-adds',    				// this is defined in our styles.css
+			handler: promo_produk_add
+		}, '-',{
+			text: 'Delete',
+			tooltip: 'Delete detail selected record',
+			iconCls:'icon-delete',
+			handler: promo_produk_confirm_delete
+		}
+		]
+	});
+	//eof
+	
+		
+
+	//function for purge detail
+	function promo_produk_purge(){
+		Ext.Ajax.request({
+			waitMsg: 'Please wait...',
+			url: 'index.php?c=c_promo&m=detail_promo_produk_purge',
+			params:{ master_id: get_pk_id() },
+			timeout: 5000,
+			success: function(response){							
+				var result=eval(response.responseText);
+				promo_produk_insert();
+			},
+			failure: function(response){
+				var result=response.responseText;
+				Ext.MessageBox.show({
+				   title: 'Error',
+				   msg: 'Could not connect to the database. retry later.',
+				   buttons: Ext.MessageBox.OK,
+				   animEl: 'database',
+				   icon: Ext.MessageBox.ERROR
+				});	
+			}
+		});
 	}
 	//eof
 	
-	//event on update of detail data store
-	promo_berlaku_DataStore.on('update', refresh_promo_berlaku);
+	//function for insert detail
+	function promo_produk_insert(){
+		for(i=0;i<promo_produk_DataStore.getCount();i++){
+			promo_produk_record=promo_produk_DataStore.getAt(i);
+			if(promo_produk_record.data.ipromo_produk!=="" && promo_produk_record.data.ipromo_produk!==null){
+				Ext.Ajax.request({
+					waitMsg: 'Please wait...',
+					url: 'index.php?c=c_promo&m=detail_promo_produk_insert',
+					params:{
+					ipromo_master	: get_pk_id(), 
+					ipromo_produk	: promo_produk_record.data.ipromo_produk
+					}		
+				});
+			}
+		}
+	}
+	//eof
+	
+	
+	
+	/* Function for Delete Confirm of detail */
+	function promo_produk_confirm_delete(){
+		// only one record is selected here
+		if(promo_produkListEditorGrid.selModel.getCount() == 1){
+			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', promo_produk_delete);
+		} else if(promo_produkListEditorGrid.selModel.getCount() > 1){
+			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', promo_produk_delete);
+		} else {
+			Ext.MessageBox.show({
+				title: 'Warning',
+				msg: 'You can\'t really delete something you haven\'t selected?',
+				buttons: Ext.MessageBox.OK,
+				animEl: 'save',
+				icon: Ext.MessageBox.WARNING
+			});
+		}
+	}
+	//eof
+	
+	//function for Delete of detail
+	function promo_produk_delete(btn){
+		if(btn=='yes'){
+			var s = promo_produkListEditorGrid.getSelectionModel().getSelections();
+			for(var i = 0, r; r = s[i]; i++){
+				promo_produk_DataStore.remove(r);
+			}
+		}  
+		promo_produk_DataStore.commitChanges();
+	}
+	//eof
+	
+		
+	var detail_tab_promo = new Ext.TabPanel({
+		activeTab: 0,
+		items: [promo_perawatanListEditorGrid,promo_produkListEditorGrid]
+	});
+	
+	// EOF detail
 	
 	/* Function for retrieve create Window Panel*/ 
 	promo_createForm = new Ext.FormPanel({
-		labelAlign: 'top',
+		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
 		width: 700,        
-		items: [promo_masterGroup,promo_berlakuListEditorGrid]
+		items: [promo_masterGroup,detail_tab_promo]
 		,
 		buttons: [{
 				text: 'Save and Close',
@@ -1422,13 +1758,32 @@ Ext.onReady(function(){
 	}
 	/*End of Function */
 	
+	promo_produkListEditorGrid.setDisabled(true);
+	promo_perawatanListEditorGrid.setDisabled(true);
+	
+	promo_allprodukField.on("select",function(){
+		if(promo_allprodukField.getValue()=='Y')
+			promo_produkListEditorGrid.setDisabled(true);
+		else
+			promo_produkListEditorGrid.setDisabled(false);
+	});
+	
+	promo_allrawatField.on("select",function(){
+		if(promo_allrawatField.getValue()=='Y')
+			promo_perawatanListEditorGrid.setDisabled(true);
+		else
+			promo_perawatanListEditorGrid.setDisabled(false);
+	});
+	
+	
 });
 	</script>
 <body>
 <div>
 	<div class="col">
         <div id="fp_promo"></div>
-         <div id="fp_promo_berlaku"></div>
+         <div id="fp_promo_perawatan"></div>
+         <div id="fp_promo_produk"></div>
 		<div id="elwindow_promo_create"></div>
         <div id="elwindow_promo_search"></div>
     </div>

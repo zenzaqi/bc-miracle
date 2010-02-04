@@ -17,16 +17,53 @@ class C_promo extends Controller {
 	function C_promo(){
 		parent::Controller();
 		$this->load->model('m_promo', '', TRUE);
-		$this->load->plugin('to_excel');
+		
 	}
 	
 	//set index
 	function index(){
+		$this->load->plugin('to_excel');
 		$this->load->helper('asset');
 		$this->load->view('main/v_promo');
 	}
 	
+	function get_produk_list(){
+		$query = isset($_POST['query']) ? $_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		$result=$this->m_promo->get_produk_list($query, $start, $end);
+		echo $result;
+	}
+	
+	function get_rawat_list(){
+		$query = isset($_POST['query']) ? $_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		$result=$this->m_promo->get_rawat_list($query,$start,$end);
+		echo $result;
+	}
+	
+	function detail_promo_perawatan_list(){
+		$query = isset($_POST['query']) ? $_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		$master_id = (integer) (isset($_POST['master_id']) ? $_POST['master_id'] : $_GET['master_id']);
+		$result=$this->m_promo->detail_promo_perawatan_list($master_id,$query,$start,$end);
+		echo $result;
+	}
+	
+	function detail_promo_produk_list(){
+		$query = isset($_POST['query']) ? $_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		$master_id = (integer) (isset($_POST['master_id']) ? $_POST['master_id'] : $_GET['master_id']);
+		$result=$this->m_promo->detail_promo_produk_list($master_id,$query,$start,$end);
+		echo $result;
+	}
+	
 	//for detail action
+	
+	
 	//list detail handler action
 	function  detail_promo_berlaku_list(){
 		$query = isset($_POST['query']) ? $_POST['query'] : "";
@@ -39,9 +76,14 @@ class C_promo extends Controller {
 	//end of handler
 	
 	//purge all detail
-	function detail_promo_berlaku_purge(){
+	function detail_promo_produk_purge(){
 		$master_id = (integer) (isset($_POST['master_id']) ? $_POST['master_id'] : $_GET['master_id']);
-		$result=$this->m_promo->detail_promo_berlaku_purge($master_id);
+		$result=$this->m_promo->detail_promo_produk_purge($master_id);
+	}
+	
+	function detail_promo_perawatan_purge(){
+		$master_id = (integer) (isset($_POST['master_id']) ? $_POST['master_id'] : $_GET['master_id']);
+		$result=$this->m_promo->detail_promo_perawatan_purge($master_id);
 	}
 	//eof
 	
@@ -57,15 +99,20 @@ class C_promo extends Controller {
 	}
 	
 	//add detail
-	function detail_promo_berlaku_insert(){
+	function detail_promo_produk_insert(){
 	//POST variable here
-		$bpromo_id=trim(@$_POST["bpromo_id"]);
-		$bpromo_master=trim(@$_POST["bpromo_master"]);
-		$bpromo_produk=trim(@$_POST["bpromo_produk"]);
-		$bpromo_produk=str_replace("/(<\/?)(p)([^>]*>)", "",$bpromo_produk);
-		$bpromo_produk=str_replace("\\", "",$bpromo_produk);
-		$bpromo_produk=str_replace("'", '"',$bpromo_produk);
-		$result=$this->m_promo->detail_promo_berlaku_insert($bpromo_id ,$bpromo_master ,$bpromo_produk );
+		$ipromo_id=trim(@$_POST["ipromo_id"]);
+		$ipromo_master=trim(@$_POST["ipromo_master"]);
+		$ipromo_produk=trim(@$_POST["ipromo_produk"]);
+		$result=$this->m_promo->detail_promo_produk_insert($ipromo_id,$ipromo_master ,$ipromo_produk );
+	}
+	
+	function detail_promo_perawatan_insert(){
+	//POST variable here
+		$rpromo_id=trim(@$_POST["rpromo_id"]);
+		$rpromo_master=trim(@$_POST["rpromo_master"]);
+		$rpromo_perawatan=trim(@$_POST["rpromo_perawatan"]);
+		$result=$this->m_promo->detail_promo_perawatan_insert($rpromo_id,$rpromo_master ,$rpromo_perawatan );
 	}
 	
 	
@@ -122,6 +169,10 @@ class C_promo extends Controller {
 		$promo_tempat=str_replace("/(<\/?)(p)([^>]*>)", "",$promo_tempat);
 		$promo_tempat=str_replace(",", ",",$promo_tempat);
 		$promo_tempat=str_replace("'", '"',$promo_tempat);
+		$promo_keterangan=trim(@$_POST["promo_keterangan"]);
+		$promo_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$promo_keterangan);
+		$promo_keterangan=str_replace(",", ",",$promo_keterangan);
+		$promo_keterangan=str_replace("'", '"',$promo_keterangan);
 		$promo_tglmulai=trim(@$_POST["promo_tglmulai"]);
 		$promo_tglselesai=trim(@$_POST["promo_tglselesai"]);
 		$promo_cashback=trim(@$_POST["promo_cashback"]);
@@ -135,7 +186,7 @@ class C_promo extends Controller {
 		$promo_allrawat=str_replace("/(<\/?)(p)([^>]*>)", "",$promo_allrawat);
 		$promo_allrawat=str_replace(",", ",",$promo_allrawat);
 		$promo_allrawat=str_replace("'", '"',$promo_allrawat);
-		$result = $this->m_promo->promo_update($promo_id ,$promo_acara ,$promo_tempat ,$promo_tglmulai ,$promo_tglselesai ,$promo_cashback ,$promo_mincash ,$promo_diskon ,$promo_allproduk ,$promo_allrawat      );
+		$result = $this->m_promo->promo_update($promo_id ,$promo_acara ,$promo_tempat, $promo_keterangan ,$promo_tglmulai ,$promo_tglselesai ,$promo_cashback ,$promo_mincash ,$promo_diskon ,$promo_allproduk ,$promo_allrawat      );
 		echo $result;
 	}
 	
@@ -149,6 +200,10 @@ class C_promo extends Controller {
 		$promo_tempat=trim(@$_POST["promo_tempat"]);
 		$promo_tempat=str_replace("/(<\/?)(p)([^>]*>)", "",$promo_tempat);
 		$promo_tempat=str_replace("'", '"',$promo_tempat);
+		$promo_keterangan=trim(@$_POST["promo_keterangan"]);
+		$promo_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$promo_keterangan);
+		$promo_keterangan=str_replace(",", ",",$promo_keterangan);
+		$promo_keterangan=str_replace("'", '"',$promo_keterangan);
 		$promo_tglmulai=trim(@$_POST["promo_tglmulai"]);
 		$promo_tglselesai=trim(@$_POST["promo_tglselesai"]);
 		$promo_cashback=trim(@$_POST["promo_cashback"]);
@@ -160,7 +215,7 @@ class C_promo extends Controller {
 		$promo_allrawat=trim(@$_POST["promo_allrawat"]);
 		$promo_allrawat=str_replace("/(<\/?)(p)([^>]*>)", "",$promo_allrawat);
 		$promo_allrawat=str_replace("'", '"',$promo_allrawat);
-		$result=$this->m_promo->promo_create($promo_id ,$promo_acara ,$promo_tempat ,$promo_tglmulai ,$promo_tglselesai ,$promo_cashback ,$promo_mincash ,$promo_diskon ,$promo_allproduk ,$promo_allrawat );
+		$result=$this->m_promo->promo_create($promo_id ,$promo_acara ,$promo_tempat, $promo_keterangan ,$promo_tglmulai ,$promo_tglselesai ,$promo_cashback ,$promo_mincash ,$promo_diskon ,$promo_allproduk ,$promo_allrawat );
 		echo $result;
 	}
 
@@ -182,6 +237,10 @@ class C_promo extends Controller {
 		$promo_tempat=trim(@$_POST["promo_tempat"]);
 		$promo_tempat=str_replace("/(<\/?)(p)([^>]*>)", "",$promo_tempat);
 		$promo_tempat=str_replace("'", '"',$promo_tempat);
+		$promo_keterangan=trim(@$_POST["promo_keterangan"]);
+		$promo_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$promo_keterangan);
+		$promo_keterangan=str_replace(",", ",",$promo_keterangan);
+		$promo_keterangan=str_replace("'", '"',$promo_keterangan);
 		$promo_tglmulai=trim(@$_POST["promo_tglmulai"]);
 		$promo_tglselesai=trim(@$_POST["promo_tglselesai"]);
 		$promo_cashback=trim(@$_POST["promo_cashback"]);
@@ -196,7 +255,7 @@ class C_promo extends Controller {
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_promo->promo_search($promo_id ,$promo_acara ,$promo_tempat ,$promo_tglmulai ,$promo_tglselesai ,$promo_cashback ,$promo_mincash ,$promo_diskon ,$promo_allproduk ,$promo_allrawat ,$start,$end);
+		$result = $this->m_promo->promo_search($promo_id ,$promo_acara ,$promo_tempat, $promo_keterangan ,$promo_tglmulai ,$promo_tglselesai ,$promo_cashback ,$promo_mincash ,$promo_diskon ,$promo_allproduk ,$promo_allrawat ,$start,$end);
 		echo $result;
 	}
 
@@ -210,6 +269,10 @@ class C_promo extends Controller {
 		$promo_tempat=trim(@$_POST["promo_tempat"]);
 		$promo_tempat=str_replace("/(<\/?)(p)([^>]*>)", "",$promo_tempat);
 		$promo_tempat=str_replace("'", '"',$promo_tempat);
+		$promo_keterangan=trim(@$_POST["promo_keterangan"]);
+		$promo_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$promo_keterangan);
+		$promo_keterangan=str_replace(",", ",",$promo_keterangan);
+		$promo_keterangan=str_replace("'", '"',$promo_keterangan);
 		$promo_tglmulai=trim(@$_POST["promo_tglmulai"]);
 		$promo_tglselesai=trim(@$_POST["promo_tglselesai"]);
 		$promo_cashback=trim(@$_POST["promo_cashback"]);
@@ -224,7 +287,7 @@ class C_promo extends Controller {
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$result = $this->m_promo->promo_print($promo_id ,$promo_acara ,$promo_tempat ,$promo_tglmulai ,$promo_tglselesai ,$promo_cashback ,$promo_mincash ,$promo_diskon ,$promo_allproduk ,$promo_allrawat ,$option,$filter);
+		$result = $this->m_promo->promo_print($promo_id ,$promo_acara ,$promo_tempat, $promo_keterangan ,$promo_tglmulai ,$promo_tglselesai ,$promo_cashback ,$promo_mincash ,$promo_diskon ,$promo_allproduk ,$promo_allrawat ,$option,$filter);
 		$nbrows=$result->num_rows();
 		$totcolumn=15;
    		/* We now have our array, let's build our HTML file */
@@ -290,6 +353,10 @@ class C_promo extends Controller {
 		$promo_tempat=trim(@$_POST["promo_tempat"]);
 		$promo_tempat=str_replace("/(<\/?)(p)([^>]*>)", "",$promo_tempat);
 		$promo_tempat=str_replace("'", '"',$promo_tempat);
+		$promo_keterangan=trim(@$_POST["promo_keterangan"]);
+		$promo_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$promo_keterangan);
+		$promo_keterangan=str_replace(",", ",",$promo_keterangan);
+		$promo_keterangan=str_replace("'", '"',$promo_keterangan);
 		$promo_tglmulai=trim(@$_POST["promo_tglmulai"]);
 		$promo_tglselesai=trim(@$_POST["promo_tglselesai"]);
 		$promo_cashback=trim(@$_POST["promo_cashback"]);
@@ -304,7 +371,7 @@ class C_promo extends Controller {
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$query = $this->m_promo->promo_export_excel($promo_id ,$promo_acara ,$promo_tempat ,$promo_tglmulai ,$promo_tglselesai ,$promo_cashback ,$promo_mincash ,$promo_diskon ,$promo_allproduk ,$promo_allrawat ,$option,$filter);
+		$query = $this->m_promo->promo_export_excel($promo_id ,$promo_acara ,$promo_tempat, $promo_keterangan ,$promo_tglmulai ,$promo_tglselesai ,$promo_cashback ,$promo_mincash ,$promo_diskon ,$promo_allproduk ,$promo_allrawat ,$option,$filter);
 		
 		to_excel($query,"promo"); 
 		echo '1';

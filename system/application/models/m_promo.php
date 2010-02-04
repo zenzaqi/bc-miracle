@@ -19,9 +19,92 @@ class M_promo extends Model{
 		}
 		
 		//function for detail
-		//get record list
-		function detail_promo_berlaku_list($master_id,$query,$start,$end) {
-			$query = "SELECT * FROM promo_berlaku where bpromo_master='".$master_id."'";
+		function get_rawat_list($query,$start,$end){
+			$rs_rows=0;
+			if(is_numeric($query)==true){
+				$sql_drawat="SELECT rpromo_perawatan FROM promo_perawatan WHERE rpromo_master='".$query."'";
+				$rs=$this->db->query($sql_drawat);
+				$rs_rows=$rs->num_rows();
+			}
+			
+			$sql="select distinct * from vu_perawatan WHERE rawat_aktif='Aktif'";
+			if($query<>"" && is_numeric($query)==false){
+				$sql.=eregi("WHERE",$sql)? " AND ":" WHERE ";
+				$sql.=" (rawat_kode like '%".$query."%' or rawat_nama like '%".$query."%' or kategori_nama like '%".$query."%' or group_nama like '%".$query."%' or rawat_kodelama like '%".$query."%') ";
+			}else{
+				if($rs_rows){
+					$filter="";
+					$sql.=eregi("AND",$sql)? " OR ":" AND ";
+					foreach($rs->result() as $row_drawat){
+						
+						$filter.="OR rawat_id='".$row_drawat->ipromo_perawatan."' ";
+					}
+					$sql=$sql."(".substr($filter,2,strlen($filter)).")";
+				}
+			}
+			$sql.=" ORDER BY rawat_id ASC";
+			
+			$result = $this->db->query($sql);
+			$nbrows = $result->num_rows();
+			if($end!=0){
+				$limit = $sql." LIMIT ".$start.",".$end;			
+				$result = $this->db->query($limit);
+			}
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+		
+		function get_produk_list($query,$start,$end){
+			$rs_rows=0;
+			if(is_numeric($query)==true){
+				$sql_dproduk="SELECT rpromo_produk FROM promo_produk WHERE ipromo_master='".$query."'";
+				$rs=$this->db->query($sql_dproduk);
+				$rs_rows=$rs->num_rows();
+			}
+			
+			$sql="select * from vu_produk WHERE produk_aktif='Aktif'";
+			if($query<>"" && is_numeric($query)==false){
+				$sql.=eregi("WHERE",$sql)? " AND ":" WHERE ";
+				$sql.=" (produk_kode like '%".$query."%' or produk_nama like '%".$query."%' or satuan_nama like '%".$query."%' or kategori_nama like '%".$query."%' or group_nama like '%".$query."%' or produk_kodelama like '%".$query."%') ";
+			}else{
+				if($rs_rows){
+					$filter="";
+					$sql.=eregi("AND",$sql)? " OR ":" AND ";
+					foreach($rs->result() as $row_dproduk){
+						
+						$filter.="OR produk_id='".$row_dproduk->krawat_produk."' ";
+					}
+					$sql=$sql."(".substr($filter,2,strlen($filter)).")";
+				}
+			}
+			$sql.=" ORDER BY produk_id ASC";
+			
+			$result = $this->db->query($sql);
+			$nbrows = $result->num_rows();
+			if($end!=0){
+				$limit = $sql." LIMIT ".$start.",".$end;			
+				$result = $this->db->query($limit);
+			}
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+		
+		function detail_promo_perawatan_list($master_id,$query,$start,$end) {
+			$query = "SELECT * FROM promo_perawatan where rpromo_master='".$master_id."'";
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
 			$limit = $query." LIMIT ".$start.",".$end;			
@@ -37,7 +120,25 @@ class M_promo extends Model{
 				return '({"total":"0", "results":""})';
 			}
 		}
-		//end of function
+		
+		function detail_promo_produk_list($master_id,$query,$start,$end) {
+			$query = "SELECT * FROM promo_produk where ipromo_master='".$master_id."'";
+			$result = $this->db->query($query);
+			$nbrows = $result->num_rows();
+			$limit = $query." LIMIT ".$start.",".$end;			
+			$result = $this->db->query($limit);  
+			
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+		
 		
 		//get master id, note : not done yet
 		function get_master_id() {
@@ -54,31 +155,57 @@ class M_promo extends Model{
 		//eof
 		
 		//purge all detail from master
-		function detail_promo_berlaku_purge($master_id){
-			$sql="DELETE from promo_berlaku where bpromo_master='".$master_id."'";
+		function detail_promo_produk_purge($master_id){
+			$sql="DELETE from promo_produk where ipromo_master='".$master_id."'";
 			$result=$this->db->query($sql);
+			return '1';
 		}
+		
+		function detail_promo_perawatan_purge($master_id){
+			$sql="DELETE from promo_perawatan where rpromo_master='".$master_id."'";
+			$result=$this->db->query($sql);
+			return '1';
+		}
+		
 		//*eof
 		
 		//insert detail record
-		function detail_promo_berlaku_insert($bpromo_id ,$bpromo_master ,$bpromo_produk ){
+		function detail_promo_produk_insert($ipromo_id ,$ipromo_master ,$ipromo_produk ){
 			//if master id not capture from view then capture it from max pk from master table
-			if($bpromo_master=="" || $bpromo_master==NULL){
-				$bpromo_master=$this->get_master_id();
+			if($ipromo_master=="" || $ipromo_master==NULL){
+				$ipromo_master=$this->get_master_id();
 			}
 			
 			$data = array(
-				"bpromo_id"=>$bpromo_id, 
-				"bpromo_master"=>$bpromo_master, 
-				"bpromo_produk"=>$bpromo_produk 
+				"ipromo_master"=>$ipromo_master, 
+				"ipromo_produk"=>$ipromo_produk 
 			);
-			$this->db->insert('promo_berlaku', $data); 
+			$this->db->insert('promo_produk', $data); 
 			if($this->db->affected_rows())
 				return '1';
 			else
 				return '0';
 
 		}
+		
+		function detail_promo_perawatan_insert($rpromo_id ,$rpromo_master ,$rpromo_perawatan ){
+			//if master id not capture from view then capture it from max pk from master table
+			if($rpromo_master=="" || $rpromo_master==NULL){
+				$rpromo_master=$this->get_master_id();
+			}
+			
+			$data = array(
+				"rpromo_master"=>$rpromo_master, 
+				"rpromo_perawatan"=>$rpromo_perawatan 
+			);
+			$this->db->insert('promo_perawatan', $data); 
+			if($this->db->affected_rows())
+				return '1';
+			else
+				return '0';
+
+		}
+		
 		//end of function
 		
 		//function for get list record
@@ -88,7 +215,7 @@ class M_promo extends Model{
 			// For simple search
 			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (promo_id LIKE '%".addslashes($filter)."%' OR promo_acara LIKE '%".addslashes($filter)."%' OR promo_tempat LIKE '%".addslashes($filter)."%' OR promo_tglmulai LIKE '%".addslashes($filter)."%' OR promo_tglselesai LIKE '%".addslashes($filter)."%' OR promo_cashback LIKE '%".addslashes($filter)."%' OR promo_mincash LIKE '%".addslashes($filter)."%' OR promo_diskon LIKE '%".addslashes($filter)."%' OR promo_allproduk LIKE '%".addslashes($filter)."%' OR promo_allrawat LIKE '%".addslashes($filter)."%' )";
+				$query .= " (promo_id LIKE '%".addslashes($filter)."%' OR promo_acara LIKE '%".addslashes($filter)."%' OR promo_tempat LIKE '%".addslashes($filter)."%'  OR promo_keterangan LIKE '%".addslashes($filter)."%' OR promo_tglmulai LIKE '%".addslashes($filter)."%' OR promo_tglselesai LIKE '%".addslashes($filter)."%' OR promo_cashback LIKE '%".addslashes($filter)."%' OR promo_mincash LIKE '%".addslashes($filter)."%' OR promo_diskon LIKE '%".addslashes($filter)."%' OR promo_allproduk LIKE '%".addslashes($filter)."%' OR promo_allrawat LIKE '%".addslashes($filter)."%' )";
 			}
 			
 			$result = $this->db->query($query);
@@ -108,11 +235,12 @@ class M_promo extends Model{
 		}
 		
 		//function for update record
-		function promo_update($promo_id ,$promo_acara ,$promo_tempat ,$promo_tglmulai ,$promo_tglselesai ,$promo_cashback ,$promo_mincash ,$promo_diskon ,$promo_allproduk ,$promo_allrawat ){
+		function promo_update($promo_id ,$promo_acara ,$promo_tempat, $promo_keterangan ,$promo_tglmulai ,$promo_tglselesai ,$promo_cashback ,$promo_mincash ,$promo_diskon ,$promo_allproduk ,$promo_allrawat ){
 			$data = array(
 				"promo_id"=>$promo_id, 
 				"promo_acara"=>$promo_acara, 
-				"promo_tempat"=>$promo_tempat, 
+				"promo_tempat"=>$promo_tempat,
+				"promo_keterangan"=>$promo_keterangan, 
 				"promo_tglmulai"=>$promo_tglmulai, 
 				"promo_tglselesai"=>$promo_tglselesai, 
 				"promo_cashback"=>$promo_cashback, 
@@ -128,11 +256,12 @@ class M_promo extends Model{
 		}
 		
 		//function for create new record
-		function promo_create($promo_id ,$promo_acara ,$promo_tempat ,$promo_tglmulai ,$promo_tglselesai ,$promo_cashback ,$promo_mincash ,$promo_diskon ,$promo_allproduk ,$promo_allrawat ){
+		function promo_create($promo_id ,$promo_acara ,$promo_tempat, $promo_keterangan ,$promo_tglmulai ,$promo_tglselesai ,$promo_cashback ,$promo_mincash ,$promo_diskon ,$promo_allproduk ,$promo_allrawat ){
 			$data = array(
 				"promo_id"=>$promo_id, 
 				"promo_acara"=>$promo_acara, 
 				"promo_tempat"=>$promo_tempat, 
+				"promo_keterangan"=>$promo_keterangan, 
 				"promo_tglmulai"=>$promo_tglmulai, 
 				"promo_tglselesai"=>$promo_tglselesai, 
 				"promo_cashback"=>$promo_cashback, 
@@ -174,7 +303,7 @@ class M_promo extends Model{
 		}
 		
 		//function for advanced search record
-		function promo_search($promo_id ,$promo_acara ,$promo_tempat ,$promo_tglmulai ,$promo_tglselesai ,$promo_cashback ,$promo_mincash ,$promo_diskon ,$promo_allproduk ,$promo_allrawat ,$start,$end){
+		function promo_search($promo_id ,$promo_acara ,$promo_tempat,$promo_keterangan ,$promo_tglmulai ,$promo_tglselesai ,$promo_cashback ,$promo_mincash ,$promo_diskon ,$promo_allproduk ,$promo_allrawat ,$start,$end){
 			//full query
 			$query="select * from promo";
 			
@@ -189,6 +318,10 @@ class M_promo extends Model{
 			if($promo_tempat!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " promo_tempat LIKE '%".$promo_tempat."%'";
+			};
+			if($promo_keterangan!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " promo_keterangan LIKE '%".$promo_keterangan."%'";
 			};
 			if($promo_tglmulai!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -236,12 +369,12 @@ class M_promo extends Model{
 		}
 		
 		//function for print record
-		function promo_print($promo_id ,$promo_acara ,$promo_tempat ,$promo_tglmulai ,$promo_tglselesai ,$promo_cashback ,$promo_mincash ,$promo_diskon ,$promo_allproduk ,$promo_allrawat ,$option,$filter){
+		function promo_print($promo_id ,$promo_acara ,$promo_tempat, $promo_keterangan ,$promo_tglmulai ,$promo_tglselesai ,$promo_cashback ,$promo_mincash ,$promo_diskon ,$promo_allproduk ,$promo_allrawat ,$option,$filter){
 			//full query
 			$query="select * from promo";
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (promo_id LIKE '%".addslashes($filter)."%' OR promo_acara LIKE '%".addslashes($filter)."%' OR promo_tempat LIKE '%".addslashes($filter)."%' OR promo_tglmulai LIKE '%".addslashes($filter)."%' OR promo_tglselesai LIKE '%".addslashes($filter)."%' OR promo_cashback LIKE '%".addslashes($filter)."%' OR promo_mincash LIKE '%".addslashes($filter)."%' OR promo_diskon LIKE '%".addslashes($filter)."%' OR promo_allproduk LIKE '%".addslashes($filter)."%' OR promo_allrawat LIKE '%".addslashes($filter)."%' )";
+				$query .= " (promo_id LIKE '%".addslashes($filter)."%' OR promo_acara LIKE '%".addslashes($filter)."%' OR promo_tempat LIKE '%".addslashes($filter)."%' OR promo_keterangan LIKE '%".addslashes($filter)."%' OR promo_tglmulai LIKE '%".addslashes($filter)."%' OR promo_tglselesai LIKE '%".addslashes($filter)."%' OR promo_cashback LIKE '%".addslashes($filter)."%' OR promo_mincash LIKE '%".addslashes($filter)."%' OR promo_diskon LIKE '%".addslashes($filter)."%' OR promo_allproduk LIKE '%".addslashes($filter)."%' OR promo_allrawat LIKE '%".addslashes($filter)."%' )";
 				$result = $this->db->query($query);
 			} else if($option=='SEARCH'){
 				if($promo_id!=''){
@@ -255,6 +388,10 @@ class M_promo extends Model{
 				if($promo_tempat!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " promo_tempat LIKE '%".$promo_tempat."%'";
+				};
+				if($promo_keterangan!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " promo_keterangan LIKE '%".$promo_keterangan."%'";
 				};
 				if($promo_tglmulai!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -295,7 +432,7 @@ class M_promo extends Model{
 			$query="select * from promo";
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (promo_id LIKE '%".addslashes($filter)."%' OR promo_acara LIKE '%".addslashes($filter)."%' OR promo_tempat LIKE '%".addslashes($filter)."%' OR promo_tglmulai LIKE '%".addslashes($filter)."%' OR promo_tglselesai LIKE '%".addslashes($filter)."%' OR promo_cashback LIKE '%".addslashes($filter)."%' OR promo_mincash LIKE '%".addslashes($filter)."%' OR promo_diskon LIKE '%".addslashes($filter)."%' OR promo_allproduk LIKE '%".addslashes($filter)."%' OR promo_allrawat LIKE '%".addslashes($filter)."%' )";
+				$query .= " (promo_id LIKE '%".addslashes($filter)."%' OR promo_acara LIKE '%".addslashes($filter)."%' OR promo_tempat LIKE '%".addslashes($filter)."%' OR promo_keterangan LIKE '%".addslashes($filter)."%' OR promo_tglmulai LIKE '%".addslashes($filter)."%' OR promo_tglselesai LIKE '%".addslashes($filter)."%' OR promo_cashback LIKE '%".addslashes($filter)."%' OR promo_mincash LIKE '%".addslashes($filter)."%' OR promo_diskon LIKE '%".addslashes($filter)."%' OR promo_allproduk LIKE '%".addslashes($filter)."%' OR promo_allrawat LIKE '%".addslashes($filter)."%' )";
 				$result = $this->db->query($query);
 			} else if($option=='SEARCH'){
 				if($promo_id!=''){
@@ -309,6 +446,10 @@ class M_promo extends Model{
 				if($promo_tempat!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " promo_tempat LIKE '%".$promo_tempat."%'";
+				};
+				if($promo_keterangan!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " promo_keterangan LIKE '%".$promo_keterangan."%'";
 				};
 				if($promo_tglmulai!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
