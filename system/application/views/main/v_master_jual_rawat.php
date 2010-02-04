@@ -909,6 +909,20 @@ Ext.onReady(function(){
 					 	}
 				  });
 				break;
+			case 'voucher' :
+				voucher_jual_rawatDataStore.load({
+						params : { no_faktur: jrawat_nobuktiField.getValue() },
+					  	callback: function(opts, success, response)  {
+							if (success) {
+									if(voucher_jual_rawatDataStore.getCount()){
+										jrawat_voucher_record=voucher_jual_rawatDataStore.getAt(0);
+										jrawat_voucher_noField.setValue(jrawat_voucher_record.data.tvoucher_novoucher);
+										jrawat_voucher_cashbackField.setValue(jrawat_voucher_record.data.voucher_cashback);
+									}
+							}
+					 	}
+				  });
+				break;
 		}
 
 		switch(jrawat_cara2Field.getValue()){
@@ -989,6 +1003,20 @@ Ext.onReady(function(){
 					 	}
 				  });
 				break;
+			case 'voucher' :
+				voucher_jual_rawatDataStore.load({
+						params : { no_faktur: jrawat_nobuktiField.getValue() },
+					  	callback: function(opts, success, response)  {
+							if (success) {
+									if(tunai_jual_rawat_DataStore.getCount()){
+										jrawat_voucher_record=voucher_jual_rawatDataStore.getAt(0);
+										jrawat_voucher_no2Field.setValue(jrawat_tunai_record.data.tvoucher_novoucher);
+										jrawat_voucher_cashback2Field.setValue(jrawat_tunai_record.data.voucher_cashback);
+									}
+							}
+					 	}
+				  });
+				break;
 		}
 
 		switch(jrawat_cara3Field.getValue()){
@@ -1064,6 +1092,20 @@ Ext.onReady(function(){
 									if(tunai_jual_rawat_DataStore.getCount()){
 										jrawat_tunai_record=tunai_jual_rawat_DataStore.getAt(0);
 										jrawat_tunai_nilai3Field.setValue(jrawat_tunai_record.data.jtunai_nilai);
+									}
+							}
+					 	}
+				  });
+				break;
+			case 'voucher' :
+				voucher_jual_rawatDataStore.load({
+						params : { no_faktur: jrawat_nobuktiField.getValue() },
+					  	callback: function(opts, success, response)  {
+							if (success) {
+									if(tunai_jual_rawat_DataStore.getCount()){
+										jrawat_voucher_record=voucher_jual_rawatDataStore.getAt(0);
+										jrawat_voucher_no3Field.setValue(jrawat_tunai_record.data.tvoucher_novoucher);
+										jrawat_voucher_cashback3Field.setValue(jrawat_tunai_record.data.voucher_cashback);
 									}
 							}
 					 	}
@@ -1269,6 +1311,25 @@ Ext.onReady(function(){
 			{name: 'voucher_allrawat', type: 'string', mapping: 'voucher_allrawat'}
 		]),
 		sortInfo:{field: 'voucher_nomor', direction: "ASC"}
+	});
+	
+	voucher_jual_rawatDataStore = new Ext.data.Store({
+		id: 'voucher_jual_rawatDataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_master_jual_rawat&m=get_voucher_by_ref', 
+			method: 'POST'
+		}),baseParams: {start:0, limit: 10},
+			reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'tvoucher_id'
+		},[
+		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
+			{name: 'tvoucher_id', type: 'int', mapping: 'tvoucher_id'},
+			{name: 'tvoucher_novoucher', type: 'string', mapping: 'tvoucher_novoucher'},
+			{name: 'voucher_cashback', type: 'float', mapping: 'voucher_cashback'}
+		]),
+		sortInfo:{field: 'tvoucher_novoucher', direction: "ASC"}
 	});
 	
 	
@@ -1934,7 +1995,7 @@ Ext.onReady(function(){
 		store: cbo_voucher_jual_rawatDataStore,
 		mode: 'remote',
 		displayField:'voucher_nomor',
-		valueField: 'voucher_id',
+		valueField: 'voucher_nomor',
         typeAhead: false,
         loadingText: 'Searching...',
         pageSize:10,
@@ -1948,9 +2009,10 @@ Ext.onReady(function(){
 		anchor: '95%'
 	});
 	jrawat_voucher_noField.on('select', function(){
-		j=cbo_voucher_jual_rawatDataStore.find('voucher_nomor',jrawat_kwitansi_noField.getValue());
+		j=cbo_voucher_jual_rawatDataStore.find('voucher_nomor',jrawat_voucher_noField.getValue());
 		if(j>-1){
-			jrawat_kwitansi_namaField.setValue(cbo_kwitansi_jual_rawat_DataStore.getAt(j).data.ckwitansi_cust_nama);
+			jrawat_voucher_cashbackField.setValue(cbo_voucher_jual_rawatDataStore.getAt(j).data.voucher_cashback);
+			load_total_rawat_bayar();
 		}
 	});
 	
@@ -1988,7 +2050,7 @@ Ext.onReady(function(){
 		store: cbo_voucher_jual_rawatDataStore,
 		mode: 'remote',
 		displayField:'voucher_nomor',
-		valueField: 'voucher_id',
+		valueField: 'voucher_nomor',
         typeAhead: false,
         loadingText: 'Searching...',
         pageSize:10,
@@ -2000,6 +2062,13 @@ Ext.onReady(function(){
 		lazyRender:true,
 		listClass: 'x-combo-list-small',
 		anchor: '95%'
+	});
+	jrawat_voucher_no2Field.on('select', function(){
+		j=cbo_voucher_jual_rawatDataStore.find('voucher_nomor',jrawat_voucher_no2Field.getValue());
+		if(j>-1){
+			jrawat_voucher_cashback2Field.setValue(cbo_voucher_jual_rawatDataStore.getAt(j).data.voucher_cashback);
+			load_total_rawat_bayar();
+		}
 	});
 	
 	jrawat_voucher_cashback2Field= new Ext.form.NumberField({
@@ -2048,6 +2117,13 @@ Ext.onReady(function(){
 		lazyRender:true,
 		listClass: 'x-combo-list-small',
 		anchor: '95%'
+	});
+	jrawat_voucher_no3Field.on('select', function(){
+		j=cbo_voucher_jual_rawatDataStore.find('voucher_nomor',jrawat_voucher_no3Field.getValue());
+		if(j>-1){
+			jrawat_voucher_cashback3Field.setValue(cbo_voucher_jual_rawatDataStore.getAt(j).data.voucher_cashback);
+			load_total_rawat_bayar();
+		}
 	});
 	
 	jrawat_voucher_cashback3Field= new Ext.form.NumberField({
@@ -3686,9 +3762,9 @@ Ext.onReady(function(){
 		else
 			voucher_nilai=0;
 		
-		voucher_nilai2=jrawat_voucher_cashback3Field.getValue();
+		voucher_nilai2=jrawat_voucher_cashback2Field.getValue();
 		if(/^\d+$/.test(voucher_nilai2))
-			voucher_nilai2=jrawat_voucher_cashback3Field.getValue();
+			voucher_nilai2=jrawat_voucher_cashback2Field.getValue();
 		else
 			voucher_nilai2=0;
 		
