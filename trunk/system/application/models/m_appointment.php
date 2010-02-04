@@ -23,6 +23,8 @@ class M_appointment extends Model{
 			$this->db->delete('absensi');
 			$date_now=date('Y-m-d');
 			$bln_now=date('Y-m');
+			if($tgl_app=="")
+				$tgl_app=$date_now;
 			
 			$sql="SELECT karyawan_id,karyawan_no,karyawan_nama,karyawan_username,reportt_jmltindakan,ab.absensi_shift FROM karyawan INNER JOIN jabatan ON(karyawan_jabatan=jabatan_id) INNER JOIN (SELECT absensi_karyawan_id,absensi_tgl,absensi_shift FROM absensi WHERE absensi_shift='P') as ab ON(karyawan.karyawan_id=ab.absensi_karyawan_id) LEFT JOIN (SELECT * FROM report_tindakan WHERE reportt_bln LIKE '$bln_now%') as rt ON(karyawan_id=rt.reportt_karyawan_id) WHERE karyawan_jabatan=jabatan_id AND jabatan_nama='$karyawan_jabatan' AND karyawan_aktif='Aktif'";
 			if($query<>"" && is_numeric($query)==false){
@@ -31,7 +33,7 @@ class M_appointment extends Model{
 			}
 			if($tgl_app<>""){
 				$tgl_app = date('Y-m-d', strtotime($tgl_app));
-				$sql .=eregi("WHERE",$sql)? " OR ":" WHERE ";
+				$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
 				$sql .= " (ab.absensi_tgl='".addslashes($tgl_app)."')";
 			}
 			
@@ -42,7 +44,7 @@ class M_appointment extends Model{
 			}
 			if($tgl_app<>""){
 				$tgl_app = date('Y-m-d', strtotime($tgl_app));
-				$sql2 .=eregi("WHERE",$sql2)? " OR ":" WHERE ";
+				$sql2 .=eregi("WHERE",$sql2)? " AND ":" WHERE ";
 				$sql2 .= " (ab.absensi_tgl='".addslashes($tgl_app)."')";
 			}
 			
@@ -53,7 +55,7 @@ class M_appointment extends Model{
 			}
 			if($tgl_app<>""){
 				$tgl_app = date('Y-m-d', strtotime($tgl_app));
-				$sql3 .=eregi("WHERE",$sql3)? " OR ":" WHERE ";
+				$sql3 .=eregi("WHERE",$sql3)? " AND ":" WHERE ";
 				$sql3 .= " (ab.absensi_tgl='".addslashes($tgl_app)."')";
 			}
 			
@@ -64,7 +66,7 @@ class M_appointment extends Model{
 			}
 			if($tgl_app<>""){
 				$tgl_app = date('Y-m-d', strtotime($tgl_app));
-				$sql4 .=eregi("WHERE",$sql4)? " OR ":" WHERE ";
+				$sql4 .=eregi("WHERE",$sql4)? " AND ":" WHERE ";
 				$sql4 .= " (ab.absensi_tgl='".addslashes($tgl_app)."')";
 			}
 			
@@ -81,6 +83,7 @@ class M_appointment extends Model{
 			$query4 = $this->db->query($sql4);
 			$nbrows4 = $query4->num_rows();
 			
+			$nbrows5=0;
 			if($nbrows==0 && $nbrows2==0 && $nbrows3==0 && $nbrows4==0){
 				$sql5="SELECT karyawan_id,karyawan_no,karyawan_nama,karyawan_username,reportt_jmltindakan,ab.absensi_shift FROM karyawan INNER JOIN jabatan ON(karyawan_jabatan=jabatan_id) LEFT JOIN (SELECT absensi_karyawan_id,absensi_tgl,absensi_shift FROM absensi) as ab ON(karyawan.karyawan_id=ab.absensi_karyawan_id) LEFT JOIN (SELECT * FROM report_tindakan WHERE reportt_bln LIKE '$bln_now%') as rt ON(karyawan_id=rt.reportt_karyawan_id) WHERE karyawan_jabatan=jabatan_id AND jabatan_nama='$karyawan_jabatan' AND karyawan_aktif='Aktif'";
 				/*if($query<>"" && is_numeric($query)==false){
