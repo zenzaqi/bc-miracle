@@ -100,6 +100,12 @@ class C_master_jual_rawat extends Controller {
 		echo $result;
 	}
 	
+	function get_voucher_by_ref(){
+		$ref_id = (isset($_POST['no_faktur']) ? $_POST['no_faktur'] : $_GET['no_faktur']);
+		$result = $this->m_public_function->get_voucher_by_ref($ref_id);
+		echo $result;
+	}
+	
 	function  get_voucher_list(){
 		$query = isset($_POST['query']) ? $_POST['query'] : "";
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
@@ -601,6 +607,7 @@ class C_master_jual_rawat extends Controller {
 		
 		$result = $this->m_master_jual_rawat->print_paper($jrawat_id);
 		$rs=$result->row();
+		$result_detail = $this->m_master_jual_rawat->print_paper_detail($jrawat_id);
 		$data["jrawat_nobukti"]=$rs->jrawat_nobukti;
 		$data["jrawat_tanggal"]=$rs->jrawat_tanggal;
 		

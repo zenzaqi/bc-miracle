@@ -248,6 +248,21 @@ class M_public_function extends Model{
 		}
 	}
 	
+	function get_voucher_by_ref($ref_id){
+		$sql="SELECT tvoucher_id,tvoucher_novoucher,voucher_cashback FROM voucher_terima INNER JOIN voucher_kupon ON(tvoucher_novoucher=kvoucher_nomor) INNER JOIN voucher ON(kvoucher_master=voucher_id) WHERE tvoucher_ref='".$ref_id."'";
+		$query = $this->db->query($sql);
+		$nbrows = $query->num_rows();
+		if($nbrows>0){
+			foreach($query->result() as $row){
+				$arr[] = $row;
+			}
+			$jsonresult = json_encode($arr);
+			return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+		} else {
+			return '({"total":"0", "results":""})';
+		}
+	}
+	
 	function get_transfer_paket_by_ref($ref_id){
 		$sql="SELECT jtransfer_id,jtransfer_bank,jtransfer_nilai FROM jual_transfer where jtransfer_ref='".$ref_id."'";
 		$query = $this->db->query($sql);

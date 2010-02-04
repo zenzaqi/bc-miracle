@@ -343,6 +343,22 @@ class M_master_jual_rawat extends Model{
 								);
 							$this->db->insert('jual_tunai', $data);
 						}
+					}else if($jrawat_cara=='voucher'){
+						$sql="SELECT tvoucher_id FROM voucher_terima WHERE tvoucher_ref='$jrawat_nobukti'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							$data=array(
+								"tvoucher_novoucher"=>$jrawat_voucher_no
+								);
+							$this->db->where('tvoucher_ref', $jrawat_nobukti);
+							$this->db->update('voucher_terima', $data);
+						}else{
+							$data=array(
+								"tvoucher_novoucher"=>$jrawat_voucher_no,
+								"tvoucher_ref"=>$jrawat_nobukti
+								);
+							$this->db->insert('voucher_terima', $data);
+						}
 					}
 				}
 				if($jrawat_cara2!=null || $jrawat_cara2!=''){
@@ -477,6 +493,22 @@ class M_master_jual_rawat extends Model{
 								"jtunai_nilai"=>$jrawat_tunai_nilai2
 								);
 							$this->db->insert('jual_tunai', $data);
+						}
+					}else if($jrawat_cara2=='voucher'){
+						$sql="SELECT tvoucher_id FROM voucher_terima WHERE tvoucher_ref='$jrawat_nobukti'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							$data=array(
+								"tvoucher_novoucher"=>$jrawat_voucher_no2
+								);
+							$this->db->where('tvoucher_ref', $jrawat_nobukti);
+							$this->db->update('voucher_terima', $data);
+						}else{
+							$data=array(
+								"tvoucher_novoucher"=>$jrawat_voucher_no2,
+								"tvoucher_ref"=>$jrawat_nobukti
+								);
+							$this->db->insert('voucher_terima', $data);
 						}
 					}
 				}
@@ -613,6 +645,22 @@ class M_master_jual_rawat extends Model{
 								);
 							$this->db->where('jtunai_ref', $jrawat_nobukti);
 							$this->db->update('jual_tunai', $data);
+						}
+					}else if($jrawat_cara3=='voucher'){
+						$sql="SELECT tvoucher_id FROM voucher_terima WHERE tvoucher_ref='$jrawat_nobukti'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							$data=array(
+								"tvoucher_novoucher"=>$jrawat_voucher_no3
+								);
+							$this->db->where('tvoucher_ref', $jrawat_nobukti);
+							$this->db->update('voucher_terima', $data);
+						}else{
+							$data=array(
+								"tvoucher_novoucher"=>$jrawat_voucher_no3,
+								"tvoucher_ref"=>$jrawat_nobukti
+								);
+							$this->db->insert('voucher_terima', $data);
 						}
 					}
 				}
@@ -1058,6 +1106,13 @@ class M_master_jual_rawat extends Model{
 		}
 		
 		function print_paper($jrawat_id){
+			
+			$sql="SELECT * FROM master_jual_rawat WHERE jrawat_id='".$jrawat_id."'";
+			$result = $this->db->query($sql);
+			return $result;
+		}
+		
+		function print_paper_detail($jrawat_id){
 			
 			$sql="SELECT * FROM master_jual_rawat WHERE jrawat_id='".$jrawat_id."'";
 			$result = $this->db->query($sql);

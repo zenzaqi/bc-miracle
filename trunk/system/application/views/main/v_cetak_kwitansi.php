@@ -311,6 +311,7 @@ Ext.onReady(function(){
 		if(cetak_kwitansiListEditorGrid.selModel.getCount() == 1) {
 			cetak_kwitansi_set_form();
 			post2db='UPDATE';
+			jual_kwitansi_DataStore.setBaseParam('master_id',eval(get_pk_id()));
 			jual_kwitansi_DataStore.load({params : {master_id : eval(get_pk_id()), start:0, limit:pageS}});
 			msg='updated';
 			cetak_kwitansi_createWindow.show();
@@ -801,20 +802,16 @@ Ext.onReady(function(){
 	jual_kwitansi_ColumnModel = new Ext.grid.ColumnModel(
 		[
 		{
-			header: 'Jkwitansi Master',
-			dataIndex: 'jkwitansi_master',
+			header: 'Referensi',
+			dataIndex: 'jkwitansi_ref',
 			width: 150,
 			sortable: true,
-			editor: new Ext.form.NumberField({
-				allowDecimals: false,
-				allowNegative: false,
-				blankText: '0',
-				maxLength: 11,
-				maskRe: /([0-9]+)$/
-			})
+			editor: new Ext.form.TextField({
+				maxLength: 50
+          	})
 		},
 		{
-			header: 'Jkwitansi Nilai',
+			header: 'Nilai',
 			dataIndex: 'jkwitansi_nilai',
 			width: 150,
 			sortable: true,
@@ -827,19 +824,11 @@ Ext.onReady(function(){
 			})
 		},
 		{
-			header: 'Jkwitansi Ref',
-			dataIndex: 'jkwitansi_ref',
-			width: 150,
-			sortable: true,
-			editor: new Ext.form.TextField({
-				maxLength: 50
-          	})
-		},
-		{
 			header: 'Jkwitansi Creator',
 			dataIndex: 'jkwitansi_creator',
 			width: 150,
 			sortable: true,
+			hidden:true,
 			editor: new Ext.form.TextField({
 				maxLength: 50
           	})
@@ -849,6 +838,7 @@ Ext.onReady(function(){
 			dataIndex: 'jkwitansi_date_create',
 			width: 150,
 			sortable: true,
+			hidden:true,
 			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
 			editor: new Ext.form.DateField({
 				format: 'Y-m-d'
@@ -859,6 +849,7 @@ Ext.onReady(function(){
 			dataIndex: 'jkwitansi_update',
 			width: 150,
 			sortable: true,
+			hidden:true,
 			editor: new Ext.form.TextField({
 				maxLength: 50
           	})
@@ -868,6 +859,7 @@ Ext.onReady(function(){
 			dataIndex: 'jkwitansi_date_update',
 			width: 150,
 			sortable: true,
+			hidden:true,
 			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
 			editor: new Ext.form.DateField({
 				format: 'Y-m-d'
@@ -878,6 +870,7 @@ Ext.onReady(function(){
 			dataIndex: 'jkwitansi_revised',
 			width: 150,
 			sortable: true,
+			hidden:true,
 			editor: new Ext.form.NumberField({
 				allowDecimals: false,
 				allowNegative: false,
@@ -896,7 +889,7 @@ Ext.onReady(function(){
 	jual_kwitansiListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'jual_kwitansiListEditorGrid',
 		el: 'fp_jual_kwitansi',
-		title: 'Detail jual_kwitansi',
+		title: 'Detail Penggunaan Kuitansi',
 		height: 250,
 		width: 690,
 		autoScroll: true,
