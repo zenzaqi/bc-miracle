@@ -26,27 +26,11 @@ class C_voucher extends Controller {
 		$this->load->view('main/v_voucher');
 	}
 	
-	//for detail action
-	//list detail handler action
-	function  detail_voucher_berlaku_list(){
-		$query = isset($_POST['query']) ? $_POST['query'] : "";
-		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
-		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$master_id = (integer) (isset($_POST['master_id']) ? $_POST['master_id'] : $_GET['master_id']);
-		$result=$this->m_voucher->detail_voucher_berlaku_list($master_id,$query,$start,$end);
-		echo $result;
-	}
-	//end of handler
-	
-	function get_produk_rawat_list(){
-		$result=$this->m_public_function->get_produk_rawat_list();
+	function get_voucher_list(){
+		$result=$this->m_voucher->get_voucher_list();
 		echo $result;
 	}
 	
-	function get_promo_list(){
-		$result=$this->m_voucher->get_promo_list();
-		echo $result;
-	}
 	function get_voucher_kupon_list(){
 		$query = isset($_POST['query']) ? $_POST['query'] : "";
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
@@ -56,31 +40,92 @@ class C_voucher extends Controller {
 		echo $result;
 	}
 	
-	//purge all detail
-	function detail_voucher_berlaku_purge(){
+	function get_produk_list(){
+		$query = isset($_POST['query']) ? $_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		$result=$this->m_promo->get_produk_list($query, $start, $end);
+		echo $result;
+	}
+	
+	function get_rawat_list(){
+		$query = isset($_POST['query']) ? $_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		$result=$this->m_promo->get_rawat_list($query,$start,$end);
+		echo $result;
+	}
+	
+	function detail_voucher_perawatan_list(){
+		$query = isset($_POST['query']) ? $_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
 		$master_id = (integer) (isset($_POST['master_id']) ? $_POST['master_id'] : $_GET['master_id']);
-		$result=$this->m_voucher->detail_voucher_berlaku_purge($master_id);
+		$result=$this->m_promo->detail_voucher_perawatan_list($master_id,$query,$start,$end);
+		echo $result;
+	}
+	
+	function detail_voucher_produk_list(){
+		$query = isset($_POST['query']) ? $_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		$master_id = (integer) (isset($_POST['master_id']) ? $_POST['master_id'] : $_GET['master_id']);
+		$result=$this->m_promo->detail_voucher_produk_list($master_id,$query,$start,$end);
+		echo $result;
+	}
+	
+	//for detail action
+	
+	
+	//list detail handler action
+	function  detail_voucher_berlaku_list(){
+		$query = isset($_POST['query']) ? $_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		$master_id = (integer) (isset($_POST['master_id']) ? $_POST['master_id'] : $_GET['master_id']);
+		$result=$this->m_promo->detail_voucher_berlaku_list($master_id,$query,$start,$end);
+		echo $result;
+	}
+	//end of handler
+	
+	//purge all detail
+	function detail_voucher_produk_purge(){
+		$master_id = (integer) (isset($_POST['master_id']) ? $_POST['master_id'] : $_GET['master_id']);
+		$result=$this->m_promo->detail_voucher_produk_purge($master_id);
+	}
+	
+	function detail_voucher_perawatan_purge(){
+		$master_id = (integer) (isset($_POST['master_id']) ? $_POST['master_id'] : $_GET['master_id']);
+		$result=$this->m_promo->detail_voucher_perawatan_purge($master_id);
 	}
 	//eof
 	
 	//get master id, note: not done yet
 	function get_master_id(){
-		$result=$this->m_voucher->get_master_id();
+		$result=$this->m_promo->get_master_id();
 		echo $result;
 	}
 	//
+	function get_produk_rawat_list(){
+		$result=$this->m_public_function->get_produk_rawat_list();
+		echo $result;
+	}
 	
 	//add detail
-	function detail_voucher_berlaku_insert(){
+	function detail_voucher_produk_insert(){
 	//POST variable here
-		$bvoucher_id=trim(@$_POST["bvoucher_id"]);
-		$bvoucher_master=trim(@$_POST["bvoucher_master"]);
-		$bvoucher_produk=trim(@$_POST["bvoucher_produk"]);
-		$bvoucher_produk=str_replace("/(<\/?)(p)([^>]*>)", "",$bvoucher_produk);
-		$bvoucher_produk=str_replace("\\", "",$bvoucher_produk);
-		$bvoucher_produk=str_replace("'", '"',$bvoucher_produk);
-		$result=$this->m_voucher->detail_voucher_berlaku_insert($bvoucher_id ,$bvoucher_master ,$bvoucher_produk );
-		echo $result;
+		$ipromo_id=trim(@$_POST["ipromo_id"]);
+		$ipromo_master=trim(@$_POST["ipromo_master"]);
+		$ipromo_produk=trim(@$_POST["ipromo_produk"]);
+		$result=$this->m_promo->detail_voucher_produk_insert($ipromo_id,$ipromo_master ,$ipromo_produk );
+	}
+	
+	function detail_voucher_perawatan_insert(){
+	//POST variable here
+		$rpromo_id=trim(@$_POST["rpromo_id"]);
+		$rpromo_master=trim(@$_POST["rpromo_master"]);
+		$rpromo_perawatan=trim(@$_POST["rpromo_perawatan"]);
+		$result=$this->m_promo->detail_voucher_perawatan_insert($rpromo_id,$rpromo_master ,$rpromo_perawatan );
 	}
 	
 	
