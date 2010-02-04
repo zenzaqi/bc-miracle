@@ -18,6 +18,22 @@ class M_member extends Model{
 			parent::Model();
 		}
 		
+		function member_cetak(){
+			
+			$query = "UPDATE member set member_status='print' where member_status='register'";
+			$this->db->query($query);
+			$query = "SELECT member.*,cust_nama as member_nama FROM member,customer where member_cust=cust_id and member_status='print'";
+			$row=$this->db->query($query);
+			return $row->result();
+		}
+		
+		function member_aktivasi(){
+			
+			$query = "UPDATE member set member_status='aktif' where member_status='print'";
+			$this->db->query($query);
+			return '1';
+		}
+		
 		//function for get list record
 		function member_list($filter,$start,$end){
 			$query = "SELECT member.*,cust_nama FROM member,customer where member_cust=cust_id ";

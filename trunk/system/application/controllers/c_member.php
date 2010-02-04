@@ -157,7 +157,24 @@ class C_member extends Controller {
 		echo $result;
 	}
 
-
+	function member_cetak(){
+		
+		$data["data_print"] = $this->m_member->member_cetak();
+		$print_view=$this->load->view("main/p_member_cetak.php",$data,TRUE);
+		if(!file_exists("print")){
+			mkdir("print");
+		}
+		$print_file=fopen("print/member_cetak_printlist.html","w+");
+		fwrite($print_file, $print_view);
+		echo '1';    
+	}
+	
+	function member_aktivasi(){
+		
+		$result=$this->m_member->member_aktivasi();
+		echo '1';    
+	}
+	
 	function member_print(){
   		//POST varibale here
 		$member_id=trim(@$_POST["member_id"]);
