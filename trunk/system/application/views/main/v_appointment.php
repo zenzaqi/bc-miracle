@@ -2263,6 +2263,8 @@ Ext.onReady(function(){
 		
 	/* Function for reset search result */
 	function appointment_reset_search(){
+		Ext.getCmp('cbo_dokter').reset();
+		app_dokter_tglField.reset();
 		// reset the store parameters
 		appointment_DataStore.baseParams = { task: 'LIST',start:0,limit:pageS };
 		// Cause the datastore to do another query : 

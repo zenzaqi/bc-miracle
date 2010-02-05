@@ -1020,14 +1020,14 @@ class M_master_jual_rawat extends Model{
 		}
 		
 		//function for print record
-		function master_jual_rawat_print($jrawat_id ,$jrawat_nobukti ,$jrawat_cust ,$jrawat_tanggal ,$jrawat_diskon ,$jrawat_cara ,$jrawat_keterangan ,$option,$filter){
+		function master_jual_rawat_print($jrawat_id ,$jrawat_nobukti ,$jrawat_cust ,$jrawat_tanggal ,$jrawat_diskon ,$jrawat_cashback ,$jrawat_voucher ,$jrawat_cara ,$jrawat_bayar ,$jrawat_keterangan ,$option,$filter){
 			//full query
 			$query="select * from master_jual_rawat";
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 				$query .= " (jrawat_id LIKE '%".addslashes($filter)."%' OR jrawat_nobukti LIKE '%".addslashes($filter)."%' OR jrawat_cust LIKE '%".addslashes($filter)."%' OR jrawat_tanggal LIKE '%".addslashes($filter)."%' OR jrawat_diskon LIKE '%".addslashes($filter)."%' OR jrawat_cara LIKE '%".addslashes($filter)."%' OR jrawat_keterangan LIKE '%".addslashes($filter)."%' )";
 				$result = $this->db->query($query);
-				return $result;
+				//return $result;
 			} else if($option=='SEARCH'){
 				if($jrawat_id!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -1057,10 +1057,11 @@ class M_master_jual_rawat extends Model{
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " jrawat_keterangan LIKE '%".$jrawat_keterangan."%'";
 				};
+				echo $query;
 				$result = $this->db->query($query);
-				return $result;
+				//return $result;
 			}
-			//return $result;
+			return $result;
 		}
 		
 		//function  for export to excel
@@ -1114,7 +1115,7 @@ class M_master_jual_rawat extends Model{
 		
 		function print_paper_detail($jrawat_id){
 			
-			$sql="SELECT * FROM master_jual_rawat WHERE jrawat_id='".$jrawat_id."'";
+			$sql="SELECT * FROM detail_jual_rawat INNER JOIN perawatan ON(drawat_rawat=rawat_id) WHERE drawat_master='".$jrawat_id."'";
 			$result = $this->db->query($sql);
 			return $result;
 		}
