@@ -286,9 +286,9 @@ Ext.onReady(function(){
 		//promo_diskonField.reset();
 		promo_diskonField.setValue(0);
 		//promo_allprodukField.reset();
-		promo_allprodukField.setValue('Y');
+		promo_allprodukField.setValue(false);
 		//promo_allrawatField.reset();
-		promo_allrawatField.setValue('Y');
+		promo_allrawatField.setValue(false);
 	}
  	/* End of Function */
   
@@ -305,15 +305,21 @@ Ext.onReady(function(){
 		promo_diskonField.setValue(promoListEditorGrid.getSelectionModel().getSelected().get('promo_diskon'));
 		promo_allprodukField.setValue(promoListEditorGrid.getSelectionModel().getSelected().get('promo_allproduk'));
 		promo_allrawatField.setValue(promoListEditorGrid.getSelectionModel().getSelected().get('promo_allrawat'));
-		if(promo_allprodukField.getValue()=='Y')
+		if(promoListEditorGrid.getSelectionModel().getSelected().get('promo_allproduk')=='Y'){
+			promo_allprodukField.setValue(true);
 			promo_produkListEditorGrid.setDisabled(true);
-		else
+		}else{
+			promo_allprodukField.setValue(false);
 			promo_produkListEditorGrid.setDisabled(false);
+		}
 		
-		if(promo_allrawatField.getValue()=='Y')
-			promo_perawatanListEditorGrid.setDisabled(true);
-		else
+		if(promoListEditorGrid.getSelectionModel().getSelected().get('promo_allrawat')=='Y'){
+			promo_allrawatField.setValue(true);
+			promo_perawatanListEditorGrid.setDisabled(true)
+		}else{
+			promo_allrawatField.setValue(false);
 			promo_perawatanListEditorGrid.setDisabled(false);
+		}
 	}
 	/* End setValue to EDIT*/
   
@@ -755,31 +761,17 @@ Ext.onReady(function(){
 		maskRe: /([0-9]+)$/
 	});
 	/* Identify  promo_allproduk Field */
-	promo_allprodukField= new Ext.form.ComboBox({
+	promo_allprodukField= new Ext.form.Checkbox({
 		id: 'promo_allprodukField',
 		fieldLabel: 'Berlaku untuk semua produk ?',
-		store:new Ext.data.SimpleStore({
-			fields:['promo_allproduk_value', 'promo_allproduk_display'],
-			data:[['T','T'],['Y','Y']]
-		}),
-		mode: 'local',
-		displayField: 'promo_allproduk_display',
-		valueField: 'promo_allproduk_value',
-		width: 40,
+		anchor: '90%',
 		triggerAction: 'all'	
 	});
 	/* Identify  promo_allrawat Field */
-	promo_allrawatField= new Ext.form.ComboBox({
+	promo_allrawatField= new Ext.form.Checkbox({
 		id: 'promo_allrawatField',
-		fieldLabel: 'Berlaku untuk semua perawatan',
-		store:new Ext.data.SimpleStore({
-			fields:['promo_allrawat_value', 'promo_allrawat_display'],
-			data:[['T','T'],['Y','Y']]
-		}),
-		mode: 'local',
-		displayField: 'promo_allrawat_display',
-		valueField: 'promo_allrawat_value',
-		width: 40,
+		fieldLabel: 'Berlaku untuk semua perawatan ?',
+		anchor: '90%',
 		triggerAction: 'all'	
 	});
   	/*Fieldset Master*/
@@ -798,6 +790,7 @@ Ext.onReady(function(){
 			{
 				columnWidth:0.4,
 				layout: 'form',
+				labelWidth: 180,
 				border:false,
 				items: [promo_cashbackField, promo_mincashField, promo_diskonField, promo_allprodukField, promo_allrawatField,promo_idField] 
 			}
@@ -1761,15 +1754,15 @@ Ext.onReady(function(){
 	promo_produkListEditorGrid.setDisabled(true);
 	promo_perawatanListEditorGrid.setDisabled(true);
 	
-	promo_allprodukField.on("select",function(){
-		if(promo_allprodukField.getValue()=='Y')
+	promo_allprodukField.on("check",function(){
+		if(promo_allprodukField.getValue()==true)
 			promo_produkListEditorGrid.setDisabled(true);
 		else
 			promo_produkListEditorGrid.setDisabled(false);
 	});
 	
-	promo_allrawatField.on("select",function(){
-		if(promo_allrawatField.getValue()=='Y')
+	promo_allrawatField.on("check",function(){
+		if(promo_allrawatField.getValue()==true)
 			promo_perawatanListEditorGrid.setDisabled(true);
 		else
 			promo_perawatanListEditorGrid.setDisabled(false);

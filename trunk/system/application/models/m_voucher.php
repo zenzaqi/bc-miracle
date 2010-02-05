@@ -19,9 +19,92 @@ class M_voucher extends Model{
 		}
 		
 		//function for detail
-		//get record list
-		function detail_voucher_berlaku_list($master_id,$query,$start,$end) {
-			$query = "SELECT * FROM voucher_berlaku where bvoucher_master='".$master_id."'";
+		function get_rawat_list($query,$start,$end){
+			$rs_rows=0;
+			if(is_numeric($query)==true){
+				$sql_drawat="SELECT rvoucher_perawatan FROM voucher_perawatan WHERE rvoucher_master='".$query."'";
+				$rs=$this->db->query($sql_drawat);
+				$rs_rows=$rs->num_rows();
+			}
+			
+			$sql="select distinct * from vu_perawatan WHERE rawat_aktif='Aktif'";
+			if($query<>"" && is_numeric($query)==false){
+				$sql.=eregi("WHERE",$sql)? " AND ":" WHERE ";
+				$sql.=" (rawat_kode like '%".$query."%' or rawat_nama like '%".$query."%' or kategori_nama like '%".$query."%' or group_nama like '%".$query."%' or rawat_kodelama like '%".$query."%') ";
+			}else{
+				if($rs_rows){
+					$filter="";
+					$sql.=eregi("AND",$sql)? " OR ":" AND ";
+					foreach($rs->result() as $row_drawat){
+						
+						$filter.="OR rawat_id='".$row_drawat->rvoucher_perawatan."' ";
+					}
+					$sql=$sql."(".substr($filter,2,strlen($filter)).")";
+				}
+			}
+			$sql.=" ORDER BY rawat_id ASC";
+			
+			$result = $this->db->query($sql);
+			$nbrows = $result->num_rows();
+			if($end!=0){
+				$limit = $sql." LIMIT ".$start.",".$end;			
+				$result = $this->db->query($limit);
+			}
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+		
+		function get_produk_list($query,$start,$end){
+			$rs_rows=0;
+			if(is_numeric($query)==true){
+				$sql_dproduk="SELECT ivoucher_produk FROM voucher_produk WHERE ivoucher_master='".$query."'";
+				$rs=$this->db->query($sql_dproduk);
+				$rs_rows=$rs->num_rows();
+			}
+			
+			$sql="select * from vu_produk WHERE produk_aktif='Aktif'";
+			if($query<>"" && is_numeric($query)==false){
+				$sql.=eregi("WHERE",$sql)? " AND ":" WHERE ";
+				$sql.=" (produk_kode like '%".$query."%' or produk_nama like '%".$query."%' or satuan_nama like '%".$query."%' or kategori_nama like '%".$query."%' or group_nama like '%".$query."%' or produk_kodelama like '%".$query."%') ";
+			}else{
+				if($rs_rows){
+					$filter="";
+					$sql.=eregi("AND",$sql)? " OR ":" AND ";
+					foreach($rs->result() as $row_dproduk){
+						
+						$filter.="OR produk_id='".$row_dproduk->ivoucher_produk."' ";
+					}
+					$sql=$sql."(".substr($filter,2,strlen($filter)).")";
+				}
+			}
+			$sql.=" ORDER BY produk_id ASC";
+			
+			$result = $this->db->query($sql);
+			$nbrows = $result->num_rows();
+			if($end!=0){
+				$limit = $sql." LIMIT ".$start.",".$end;			
+				$result = $this->db->query($limit);
+			}
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+		
+		function detail_voucher_perawatan_list($master_id,$query,$start,$end) {
+			$query = "SELECT * FROM voucher_perawatan where rvoucher_master='".$master_id."'";
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
 			$limit = $query." LIMIT ".$start.",".$end;			
@@ -37,7 +120,91 @@ class M_voucher extends Model{
 				return '({"total":"0", "results":""})';
 			}
 		}
-		//end of function
+		
+		function detail_voucher_produk_list($master_id,$query,$start,$end) {
+			$query = "SELECT * FROM voucher_produk where ivoucher_master='".$master_id."'";
+			$result = $this->db->query($query);
+			$nbrows = $result->num_rows();
+			$limit = $query." LIMIT ".$start.",".$end;			
+			$result = $this->db->query($limit);  
+			
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+		
+		
+		//get master id, note : not done yet
+		function get_master_id() {
+			$query = "SELECT max(voucher_id) as master_id from voucher";
+			$result = $this->db->query($query);
+			if($result->num_rows()){
+				$data=$result->row();
+				$master_id=$data->master_id;
+				return $master_id;
+			}else{
+				return '0';
+			}
+		}
+		//eof
+		
+		//purge all detail from master
+		function detail_voucher_produk_purge($master_id){
+			$sql="DELETE from voucher_produk where ivoucher_master='".$master_id."'";
+			$result=$this->db->query($sql);
+			return '1';
+		}
+		
+		function detail_voucher_perawatan_purge($master_id){
+			$sql="DELETE from voucher_perawatan where rvoucher_master='".$master_id."'";
+			$result=$this->db->query($sql);
+			return '1';
+		}
+		
+		//*eof
+		
+		//insert detail record
+		function detail_voucher_produk_insert($ivoucher_id ,$ivoucher_master ,$ivoucher_produk ){
+			//if master id not capture from view then capture it from max pk from master table
+			if($ivoucher_master=="" || $ivoucher_master==NULL){
+				$ivoucher_master=$this->get_master_id();
+			}
+			
+			$data = array(
+				"ivoucher_master"=>$ivoucher_master, 
+				"ivoucher_produk"=>$ivoucher_produk 
+			);
+			$this->db->insert('voucher_produk', $data); 
+			if($this->db->affected_rows())
+				return '1';
+			else
+				return '0';
+
+		}
+		
+		function detail_voucher_perawatan_insert($rvoucher_id ,$rvoucher_master ,$rvoucher_perawatan ){
+			//if master id not capture from view then capture it from max pk from master table
+			if($rvoucher_master=="" || $rvoucher_master==NULL){
+				$rvoucher_master=$this->get_master_id();
+			}
+			
+			$data = array(
+				"rvoucher_master"=>$rvoucher_master, 
+				"rvoucher_perawatan"=>$rvoucher_perawatan 
+			);
+			$this->db->insert('voucher_perawatan', $data); 
+			if($this->db->affected_rows())
+				return '1';
+			else
+				return '0';
+
+		}
 		
 		function get_promo_list(){
 			$query = "SELECT * from promo";
@@ -73,51 +240,11 @@ class M_voucher extends Model{
 			}
 		}
 		
-		//get master id, note : not done yet
-		function get_master_id() {
-			$query = "SELECT max(voucher_id) as master_id from voucher";
-			$result = $this->db->query($query);
-			if($result->num_rows()){
-				$data=$result->row();
-				$master_id=$data->master_id;
-				return $master_id;
-			}else{
-				return '0';
-			}
-		}
-		//eof
 		
 		function get_voucher_nomor($pattern){
 			$result=$this->m_public_function->get_kode_1("voucher_kupon","kvoucher_nomor",$pattern,10);
 			return $result;
 		}
-		
-		//purge all detail from master
-		function detail_voucher_berlaku_purge($master_id){
-			$sql="DELETE from voucher_berlaku where bvoucher_master='".$master_id."'";
-			$result=$this->db->query($sql);
-		}
-		//*eof
-		
-		//insert detail record
-		function detail_voucher_berlaku_insert($bvoucher_id ,$bvoucher_master ,$bvoucher_produk ){
-			//if master id not capture from view then capture it from max pk from master table
-			if($bvoucher_master=="" || $bvoucher_master==NULL){
-				$bvoucher_master=$this->get_master_id();
-			}
-			
-			$data = array(
-				"bvoucher_master"=>$bvoucher_master, 
-				"bvoucher_produk"=>$bvoucher_produk 
-			);
-			$this->db->insert('voucher_berlaku', $data); 
-			if($this->db->affected_rows())
-				return '1';
-			else
-				return '0'.mysql_error();
-
-		}
-		//end of function
 		
 		//function for get list record
 		function voucher_list($filter,$start,$end){
@@ -164,6 +291,20 @@ class M_voucher extends Model{
 			$this->db->where('voucher_id', $voucher_id);
 			$this->db->update('voucher', $data);
 			
+			$sql="DELETE FROM voucher_kupon where kvoucher_master='".$voucher_id."'";
+			$this->db->query($sql);
+			$this->db->trans_start();
+			for($i=0;$i<$voucher_jumlah;$i++){
+				if($voucher_jenis=='reward')
+					$no_voucher=$this->get_voucher_nomor('MRV');
+				else
+					$no_voucher=$this->get_voucher_nomor('MPV');
+					
+				$sql="insert into voucher_kupon(kvoucher_master,kvoucher_nomor) values('".$this->get_master_id()."','".$no_voucher."')";
+				$this->db->query($sql);
+			}
+			$this->db->trans_complete(); 
+				
 			return '1';
 		}
 		
@@ -186,7 +327,12 @@ class M_voucher extends Model{
 			if($this->db->affected_rows()){
 				$this->db->trans_start();
 				for($i=0;$i<$voucher_jumlah;$i++){
-					$sql="insert into voucher_kupon(kvoucher_master,kvoucher_nomor) values('".$this->get_master_id()."','".$this->get_voucher_nomor('MVO')."')";
+					if($voucher_jenis=='reward')
+						$no_voucher=$this->get_voucher_nomor('MRV');
+					else
+						$no_voucher=$this->get_voucher_nomor('MPV');
+						
+					$sql="insert into voucher_kupon(kvoucher_master,kvoucher_nomor) values('".$this->get_master_id()."','".$no_voucher."')";
 					$this->db->query($sql);
 				}
 				$this->db->trans_complete(); 
