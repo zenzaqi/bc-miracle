@@ -518,6 +518,15 @@ left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawa
 				//search customer,perawatan,dokter,therapist
 				$query .= " (karyawan_dokter.karyawan_id = '".addslashes($filter)."')";
 			}
+			
+			// For Pilihan Tanggal Appointment di tbar dengan pilihan dokter kosong
+			if($filter=="" && $tgl_app!=""){
+				$dt=date('Y-m-d', strtotime($tgl_app));
+				$query="SELECT app_id,cust_nama,cust_id,cust_no,karyawan_dokter.karyawan_nama as dokter_nama,karyawan_dokter.karyawan_id as dokter_id,karyawan_dokter.karyawan_username as dokter_username,karyawan_dokter.karyawan_no as dokter_no,karyawan_terapis.karyawan_nama as terapis_nama,karyawan_terapis.karyawan_id as terapis_id,karyawan_terapis.karyawan_username as terapis_username,karyawan_terapis.karyawan_no as terapis_no,rawat_id,rawat_nama,kategori_nama,dapp_id,dapp_status,dapp_tglreservasi,dapp_jamdatang,app_tanggal,app_cara,app_keterangan,dapp_jamreservasi,app_creator,app_date_create,app_update,app_date_update,app_revised,dapp_keterangan,rawat_warna FROM (((appointment inner join appointment_detail on appointment.app_id=appointment_detail.dapp_master inner join perawatan on appointment_detail.dapp_perawatan=perawatan.rawat_id 
+inner join customer on appointment.app_customer=customer.cust_id inner join kategori on perawatan.rawat_kategori=kategori.kategori_id) 
+left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawan_dokter.karyawan_id) left join karyawan as karyawan_terapis on appointment_detail.dapp_petugas2=karyawan_terapis.karyawan_id) WHERE dapp_tglreservasi = '$dt'";
+			}
+			
 			$query.=" ORDER BY dapp_tglreservasi ASC, dapp_jamreservasi ASC";
 			//echo $query;
 			$result = $this->db->query($query);

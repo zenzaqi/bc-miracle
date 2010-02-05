@@ -1126,7 +1126,7 @@ Ext.onReady(function(){
 	});
 	
 	app_dokter_tglField.on('select',function(){
-		if(Ext.getCmp('cbo_dokter').getValue()!==""){
+		//if(Ext.getCmp('cbo_dokter').getValue()!==""){
 			appointment_DataStore.setBaseParam('query',Ext.getCmp('cbo_dokter').getValue());
 			appointment_DataStore.load({params: {
 				task: 'LIST',
@@ -1135,7 +1135,7 @@ Ext.onReady(function(){
 				query: Ext.getCmp('cbo_dokter').getValue(),
 				tgl_app: app_dokter_tglField.getValue()
 			}});
-		}
+		//}
 	});
      
 	/* Create Context Menu */
