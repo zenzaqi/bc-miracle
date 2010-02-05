@@ -369,7 +369,7 @@ Ext.onReady(function(){
 					case 3:
 						Ext.MessageBox.show({
 						   title: 'Warning',
-						   msg: 'Maaf, No.HandPhone Baru tidak boleh Kosong.',
+						   msg: 'Maaf, No.Telp atau No.HandPhone Customer Baru tidak boleh Kosong.',
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'save',
 						   icon: Ext.MessageBox.WARNING
@@ -987,6 +987,13 @@ Ext.onReady(function(){
 		cell.css = "readonlycell"; // Mengambil Value dari Class di dalam CSS 
 		return value;
 	}
+	
+	app_dokter_tglField= new Ext.form.DateField({
+		id: 'app_dokter_tglField',
+		fieldLabel: 'Tanggal Reservasi',
+		format : 'Y-m-d',
+		emptyText: 'Tgl App'
+	});
     
 	/* Declare DataStore and  show datagrid list */
 	appointmentListEditorGrid =  new Ext.grid.EditorGridPanel({
@@ -1067,7 +1074,7 @@ Ext.onReady(function(){
 			tooltip: 'Print Document',
 			iconCls:'icon-print',
 			handler: appointment_print  
-		}, '-',{
+		}, '-',app_dokter_tglField, '-',{
 			xtype: 'combo',
 			id: 'cbo_dokter',
 			text: 'Pilihan Dokter',
@@ -1113,8 +1120,22 @@ Ext.onReady(function(){
 			task: 'LIST',
 			start: 0,
 			limit: pageS,
-			query: Ext.getCmp('cbo_dokter').getValue()
+			query: Ext.getCmp('cbo_dokter').getValue(),
+			tgl_app: app_dokter_tglField.getValue()
 		}});
+	});
+	
+	app_dokter_tglField.on('select',function(){
+		if(Ext.getCmp('cbo_dokter').getValue()!==""){
+			appointment_DataStore.setBaseParam('query',Ext.getCmp('cbo_dokter').getValue());
+			appointment_DataStore.load({params: {
+				task: 'LIST',
+				start: 0,
+				limit: pageS,
+				query: Ext.getCmp('cbo_dokter').getValue(),
+				tgl_app: app_dokter_tglField.getValue()
+			}});
+		}
 	});
      
 	/* Create Context Menu */
