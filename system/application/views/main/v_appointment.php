@@ -1108,6 +1108,7 @@ Ext.onReady(function(){
 	});*/
 	
 	Ext.getCmp('cbo_dokter').on('select', function(){
+		appointment_DataStore.setBaseParam('query',Ext.getCmp('cbo_dokter').getValue());
 		appointment_DataStore.load({params: {
 			task: 'LIST',
 			start: 0,
