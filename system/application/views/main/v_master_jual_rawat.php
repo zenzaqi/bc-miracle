@@ -587,8 +587,8 @@ Ext.onReady(function(){
 						master_jual_rawat_createWindow.hide();
 						break;
 				}
-				if(printed==1)
-					master_jual_rawat_print();
+				//if(printed==1)
+					//master_jual_rawat_print();
 				master_jual_rawat_reset_allForm();
 				master_cara_bayarTabPanel.setActiveTab(0);
 			},

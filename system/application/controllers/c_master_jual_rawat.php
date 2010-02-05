@@ -16,6 +16,7 @@ class C_master_jual_rawat extends Controller {
 	//constructor
 	function C_master_jual_rawat(){
 		parent::Controller();
+		session_start();
 		$this->load->model('m_master_jual_rawat', '', TRUE);
 		$this->load->plugin('to_excel');
 	}
@@ -608,8 +609,10 @@ class C_master_jual_rawat extends Controller {
 		$result = $this->m_master_jual_rawat->print_paper($jrawat_id);
 		$rs=$result->row();
 		$result_detail = $this->m_master_jual_rawat->print_paper_detail($jrawat_id);
+		$rs_detail=$result_detail->result();
 		$data["jrawat_nobukti"]=$rs->jrawat_nobukti;
 		$data["jrawat_tanggal"]=$rs->jrawat_tanggal;
+		$data["detail_item"]=$rs_detail;
 		
 		$viewdata=$this->load->view("main/jrawat_formcetak",$data,TRUE);
 		$file = fopen("jrawat_paper.html",'w');
