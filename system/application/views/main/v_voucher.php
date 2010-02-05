@@ -235,10 +235,11 @@ Ext.onReady(function(){
 				var result=eval(response.responseText);
 				switch(result){
 					case 1:
-						voucher_produk_purge()
-						voucher_produk_insert();
+						
 						Ext.MessageBox.alert(post2db+' OK','The Voucher was '+msg+' successfully.');
 						voucher_DataStore.reload();
+						voucher_produk_purge();
+						voucher_perawatan_purge();
 						voucher_createWindow.hide();
 						break;
 					default:
@@ -326,20 +327,29 @@ Ext.onReady(function(){
 		voucher_mincashField.setValue(voucherListEditorGrid.getSelectionModel().getSelected().get('voucher_mincash'));
 		voucher_diskonField.setValue(voucherListEditorGrid.getSelectionModel().getSelected().get('voucher_diskon'));
 		voucher_promoField.setValue(voucherListEditorGrid.getSelectionModel().getSelected().get('voucher_promo'));
-		if(voucherListEditorGrid.getSelectionModel().getSelected().get('voucher_allproduk')=='Y')
+		
+		if(voucherListEditorGrid.getSelectionModel().getSelected().get('voucher_allproduk')=='Y'){
 			voucher_allprodukField.setValue(true);
-		else
+			voucher_produkListEditorGrid.setDisabled(true);
+		}else{
 			voucher_allprodukField.setValue(false);
-		if(voucherListEditorGrid.getSelectionModel().getSelected().get('voucher_allrawat')=='Y')
+			voucher_produkListEditorGrid.setDisabled(false);
+		}
+		
+		if(voucherListEditorGrid.getSelectionModel().getSelected().get('voucher_allrawat')=='Y'){
 			voucher_allrawatField.setValue(true);
-		else
+			voucher_perawatanListEditorGrid.setDisabled(true)
+		}else{
 			voucher_allrawatField.setValue(false);
+			voucher_perawatanListEditorGrid.setDisabled(false);
+		}
+		
 	}
 	/* End setValue to EDIT*/
   
 	/* Function for Check if the form is valid */
 	function is_voucher_form_valid(){
-		return (true );
+		return ( voucher_namaField.isValid() );
 	}
   	/* End of Function */
   
@@ -383,8 +393,10 @@ Ext.onReady(function(){
 			post2db='UPDATE';
 			voucher_produk_DataStore.setBaseParam('master_id',get_pk_id());
 			voucher_perawatan_DataStore.setBaseParam('master_id',get_pk_id());
+			voucher_kupon_DataStore.setBaseParam('master_id',get_pk_id());
 			voucher_produk_DataStore.load();
 			voucher_perawatan_DataStore.load();
+			voucher_kupon_DataStore.load();
 			msg='updated';
 			voucher_createWindow.show();
 		} else {
@@ -451,7 +463,7 @@ Ext.onReady(function(){
 			url: 'index.php?c=c_voucher&m=get_action', 
 			method: 'POST'
 		}),
-		baseParams:{task: "LIST"}, // parameter yang di $_POST ke Controller
+		baseParams:{task: "LIST", start:0, limit: pageS}, // parameter yang di $_POST ke Controller
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
@@ -809,9 +821,9 @@ Ext.onReady(function(){
 		id: 'voucher_idField',
 		allowNegatife : false,
 		blankText: '0',
-		allowBlank: false,
+		allowBlank: true,
 		allowDecimals: false,
-				hidden: true,
+		hidden: true,
 		readOnly: true,
 		anchor: '95%',
 		maskRe: /([0-9]+)$/
@@ -821,6 +833,7 @@ Ext.onReady(function(){
 		id: 'voucher_namaField',
 		fieldLabel: 'Nama Voucher',
 		maxLength: 50,
+		allowBlank: false,
 		anchor: '95%'
 	});
 	/* Identify  voucher_jenis Field */
@@ -853,7 +866,7 @@ Ext.onReady(function(){
 		id: 'voucher_jumlahField',
 		fieldLabel: 'Jumlah (lembar)',
 		allowNegatife : false,
-		blankText: '0',
+		blankText: '1',
 		maxLength: 4,
 		allowDecimals: false,
 		width: 40,
@@ -962,7 +975,7 @@ Ext.onReady(function(){
 		proxy: new Ext.data.HttpProxy({
 			url: 'index.php?c=c_voucher&m=get_voucher_kupon_list', 
 			method: 'POST'
-		}),
+		}),baseParams:{start:0,limit:pageS},
 			reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
@@ -1110,14 +1123,13 @@ Ext.onReady(function(){
     );
 	
 	Ext.util.Format.comboRenderer = function(combo){
-		
 		cbo_rawat_listDataStore.load({params:{query:get_pk_id()}});
 		cbo_produk_listDataStore.load({params:{query:get_pk_id()}});
 		return function(value){
 			var record = combo.findRecord(combo.valueField, value);
 			return record ? record.get(combo.displayField) : combo.valueNotFoundText;
 		}
-	}
+	};
 	
 	var combo_voucher_produk=new Ext.form.ComboBox({
 			store: cbo_produk_listDataStore,
@@ -2025,6 +2037,24 @@ Ext.onReady(function(){
 			voucher_pointField.getEl().up('.x-form-item').setDisplayed(false);
 		}
 	});
+	
+	voucher_produkListEditorGrid.setDisabled(true);
+	voucher_perawatanListEditorGrid.setDisabled(true);
+	
+	voucher_allprodukField.on("check",function(){
+		if(voucher_allprodukField.getValue()==true)
+			voucher_produkListEditorGrid.setDisabled(true);
+		else
+			voucher_produkListEditorGrid.setDisabled(false);
+	});
+	
+	voucher_allrawatField.on("check",function(){
+		if(voucher_allrawatField.getValue()==true)
+			voucher_perawatanListEditorGrid.setDisabled(true);
+		else
+			voucher_perawatanListEditorGrid.setDisabled(false);
+	});
+	
 });
 	</script>
 <body>
