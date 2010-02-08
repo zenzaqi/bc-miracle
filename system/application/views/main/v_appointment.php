@@ -277,7 +277,8 @@ Ext.onReady(function(){
 					default:
 						Ext.MessageBox.show({
 						   title: 'Warning',
-						   msg: 'We could\'t not save the appointment.',
+//						   msg: 'We could\'t not save the appointment.',
+						   msg: 'Data appointment tidak bisa disimpan',
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'save',
 						   icon: Ext.MessageBox.WARNING
@@ -412,7 +413,8 @@ Ext.onReady(function(){
 			if(!/^\d+$/.test(app_customerField.getValue())){
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Customer harus di-Pilih <br>bukan isian!.',
+//					msg: 'Customer harus di-Pilih <br>bukan isian!.',
+					msg: 'Customer harus dipilih, <br>bukan isian',
 					buttons: Ext.MessageBox.OK,
 					minWidth: 250,
 					animEl: 'save',
@@ -421,7 +423,8 @@ Ext.onReady(function(){
 			}else {
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Ada DATA yang BELUM di-ISI!.',
+//					msg: 'Ada DATA yang BELUM di-ISI!.',
+					msg: 'Ada data yang belum diinputkan',
 					buttons: Ext.MessageBox.OK,
 					minWidth: 250,
 					animEl: 'save',
@@ -522,13 +525,16 @@ Ext.onReady(function(){
 	function appointment_confirm_delete(){
 		// only one appointment is selected here
 		if(appointmentListEditorGrid.selModel.getCount() == 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', appointment_detail_delete);
+//			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', appointment_detail_delete);
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', appointment_detail_delete);
 		} else if(appointmentListEditorGrid.selModel.getCount() > 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', appointment_detail_delete);
+//			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', appointment_detail_delete);
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', appointment_detail_delete);
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really delete something you haven\'t selected?',
+//				msg: 'You can\'t really delete something you haven\'t selected?',
+				msg: 'Anda belum memilih data yang akan dihapus',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -559,7 +565,8 @@ Ext.onReady(function(){
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really update something you haven\'t selected?',
+//				msg: 'You can\'t really update something you haven\'t selected?',
+				msg: 'Anda belum memilih data yang akan diedit',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -578,7 +585,8 @@ Ext.onReady(function(){
 			}
 			var encoded_array = Ext.encode(prez);
 			Ext.Ajax.request({ 
-				waitMsg: 'Please Wait',
+//				waitMsg: 'Please Wait',
+				waitMsg: 'Mohon tunggu',
 				url: 'index.php?c=c_appointment&m=get_action', 
 				params: { task: "DELETE", ids:  encoded_array }, 
 				success: function(response){
@@ -1726,7 +1734,8 @@ Ext.onReady(function(){
 	appointment_detail_medisListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'appointment_detail_medisListEditorGrid',
 		el: 'fp_appointment_detail_medis',
-		title: 'Detail PERAWATAN MEDIS',
+//		title: 'Detail PERAWATAN MEDIS',
+		title: 'Detail Perawatan Medis',
 		height: 250,
 		width: 940,
 		autoScroll: true,
@@ -1825,7 +1834,8 @@ Ext.onReady(function(){
 	//function for purge detail medis
 	function appointment_detail_purge(){
 		Ext.Ajax.request({
-			waitMsg: 'Please wait...',
+//			waitMsg: 'Please wait...',
+			waitMsg: 'Mohon tunggu...',
 			url: 'index.php?c=c_appointment&m=detail_appointment_detail_purge',
 			params:{ master_id: eval(app_idField.getValue()) },
 			callback: function(opts, success, response){
@@ -1866,13 +1876,16 @@ Ext.onReady(function(){
 	function appointment_detail_medis_confirm_delete(){
 		// only one record is selected here
 		if(appointment_detail_medisListEditorGrid.selModel.getCount() == 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', appointment_detail_medis_delete);
+//			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', appointment_detail_medis_delete);
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', appointment_detail_medis_delete);
 		} else if(appointment_detail_medisListEditorGrid.selModel.getCount() > 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', appointment_detail_medis_delete);
+//			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', appointment_detail_medis_delete);
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', appointment_detail_medis_delete);
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really delete something you haven\'t selected?',
+//				msg: 'You can\'t really delete something you haven\'t selected?',
+				msg: 'Anda belum memilih data yang akan dihapus',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -2086,7 +2099,8 @@ Ext.onReady(function(){
 	appointment_detail_nonmedisListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'appointment_detail_nonmedisListEditorGrid',
 		el: 'fp_appointment_detail_nonmedis',
-		title: 'Detail PERAWATAN NON-MEDIS',
+//		title: 'Detail PERAWATAN NON-MEDIS',
+		title: 'Detail Perawatan Non Medis',
 		height: 250,
 		width: 700,
 		autoScroll: true,
@@ -2217,7 +2231,8 @@ Ext.onReady(function(){
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really delete something you haven\'t selected?',
+//				msg: 'You can\'t really delete something you haven\'t selected?',
+				msg: 'Anda belum memilih data yang akan dihapus',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
