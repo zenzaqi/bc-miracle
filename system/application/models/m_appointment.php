@@ -23,21 +23,27 @@ class M_appointment extends Model{
 			$this->db->delete('absensi');
 			$date_now=date('Y-m-d');
 			$bln_now=date('Y-m');
-			if($tgl_app=="")
+			if($tgl_app==""){
 				$tgl_app=$date_now;
+				$bln_filter=$bln_now;
+			}elseif($tgl_app!=""){
+				$bln_filter=date('Y-m', strtotime($tgl_app));
+			}
 			
-			$sql="SELECT karyawan_id,karyawan_no,karyawan_nama,karyawan_username,reportt_jmltindakan,ab.absensi_shift FROM karyawan INNER JOIN jabatan ON(karyawan_jabatan=jabatan_id) INNER JOIN (SELECT absensi_karyawan_id,absensi_tgl,absensi_shift FROM absensi WHERE absensi_shift='P') as ab ON(karyawan.karyawan_id=ab.absensi_karyawan_id) LEFT JOIN (SELECT * FROM report_tindakan WHERE reportt_bln LIKE '$bln_now%') as rt ON(karyawan_id=rt.reportt_karyawan_id) WHERE karyawan_jabatan=jabatan_id AND jabatan_nama='$karyawan_jabatan' AND karyawan_aktif='Aktif'";
+			/* Mencari Terapis yang sudah memiliki Jadwal di db.absensi WHERE db.absensi.absensi_shift = 'P' */
+			$sql="SELECT karyawan_id,karyawan_no,karyawan_nama,karyawan_username,reportt_jmltindakan,ab.absensi_shift FROM karyawan INNER JOIN jabatan ON(karyawan_jabatan=jabatan_id) INNER JOIN (SELECT absensi_karyawan_id,absensi_tgl,absensi_shift FROM absensi WHERE absensi_shift='P') as ab ON(karyawan.karyawan_id=ab.absensi_karyawan_id) LEFT JOIN (SELECT * FROM report_tindakan WHERE date_format(reportt_bln,'%Y-%m')='$bln_filter') as rt ON(karyawan_id=rt.reportt_karyawan_id) WHERE karyawan_jabatan=jabatan_id AND jabatan_nama='$karyawan_jabatan' AND karyawan_aktif='Aktif'";
 			if($query<>"" && is_numeric($query)==false){
 				$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
 				$sql .= " (karyawan_nama LIKE '%".addslashes($query)."%')";
 			}
-			if($tgl_app<>""){
+			if($tgl_app<>""){ /* Query pada $sql akan di AND ab.absensi_tgl=$tgl_app Jika $tgl_app<>'' */
 				$tgl_app = date('Y-m-d', strtotime($tgl_app));
 				$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
 				$sql .= " (ab.absensi_tgl='".addslashes($tgl_app)."')";
 			}
+			$sql.=" ORDER BY reportt_jmltindakan ASC";
 			
-			$sql2="SELECT karyawan_id,karyawan_no,karyawan_nama,karyawan_username,reportt_jmltindakan,ab.absensi_shift FROM karyawan INNER JOIN jabatan ON(karyawan_jabatan=jabatan_id) INNER JOIN (SELECT absensi_karyawan_id,absensi_tgl,absensi_shift FROM absensi WHERE absensi_shift='S') as ab ON(karyawan.karyawan_id=ab.absensi_karyawan_id) LEFT JOIN (SELECT * FROM report_tindakan WHERE reportt_bln LIKE '$bln_now%') as rt ON(karyawan_id=rt.reportt_karyawan_id) WHERE karyawan_jabatan=jabatan_id AND jabatan_nama='$karyawan_jabatan' AND karyawan_aktif='Aktif'";
+			$sql2="SELECT karyawan_id,karyawan_no,karyawan_nama,karyawan_username,reportt_jmltindakan,ab.absensi_shift FROM karyawan INNER JOIN jabatan ON(karyawan_jabatan=jabatan_id) INNER JOIN (SELECT absensi_karyawan_id,absensi_tgl,absensi_shift FROM absensi WHERE absensi_shift='S') as ab ON(karyawan.karyawan_id=ab.absensi_karyawan_id) LEFT JOIN (SELECT * FROM report_tindakan WHERE date_format(reportt_bln,'%Y-%m')='$bln_filter') as rt ON(karyawan_id=rt.reportt_karyawan_id) WHERE karyawan_jabatan=jabatan_id AND jabatan_nama='$karyawan_jabatan' AND karyawan_aktif='Aktif'";
 			if($query<>"" && is_numeric($query)==false){
 				$sql2 .=eregi("WHERE",$sql2)? " AND ":" WHERE ";
 				$sql2 .= " (karyawan_nama LIKE '%".addslashes($query)."%')";
@@ -47,8 +53,9 @@ class M_appointment extends Model{
 				$sql2 .=eregi("WHERE",$sql2)? " AND ":" WHERE ";
 				$sql2 .= " (ab.absensi_tgl='".addslashes($tgl_app)."')";
 			}
+			$sql2.=" ORDER BY reportt_jmltindakan ASC";
 			
-			$sql3="SELECT karyawan_id,karyawan_no,karyawan_nama,karyawan_username,reportt_jmltindakan,ab.absensi_shift FROM karyawan INNER JOIN jabatan ON(karyawan_jabatan=jabatan_id) INNER JOIN (SELECT absensi_karyawan_id,absensi_tgl,absensi_shift FROM absensi WHERE absensi_shift='M') as ab ON(karyawan.karyawan_id=ab.absensi_karyawan_id) LEFT JOIN (SELECT * FROM report_tindakan WHERE reportt_bln LIKE '$bln_now%') as rt ON(karyawan_id=rt.reportt_karyawan_id) WHERE karyawan_jabatan=jabatan_id AND jabatan_nama='$karyawan_jabatan' AND karyawan_aktif='Aktif'";
+			$sql3="SELECT karyawan_id,karyawan_no,karyawan_nama,karyawan_username,reportt_jmltindakan,ab.absensi_shift FROM karyawan INNER JOIN jabatan ON(karyawan_jabatan=jabatan_id) INNER JOIN (SELECT absensi_karyawan_id,absensi_tgl,absensi_shift FROM absensi WHERE absensi_shift='M') as ab ON(karyawan.karyawan_id=ab.absensi_karyawan_id) LEFT JOIN (SELECT * FROM report_tindakan WHERE date_format(reportt_bln,'%Y-%m')='$bln_filter') as rt ON(karyawan_id=rt.reportt_karyawan_id) WHERE karyawan_jabatan=jabatan_id AND jabatan_nama='$karyawan_jabatan' AND karyawan_aktif='Aktif'";
 			if($query<>"" && is_numeric($query)==false){
 				$sql3 .=eregi("WHERE",$sql3)? " AND ":" WHERE ";
 				$sql3 .= " (karyawan_nama LIKE '%".addslashes($query)."%')";
@@ -58,8 +65,9 @@ class M_appointment extends Model{
 				$sql3 .=eregi("WHERE",$sql3)? " AND ":" WHERE ";
 				$sql3 .= " (ab.absensi_tgl='".addslashes($tgl_app)."')";
 			}
+			$sql3.=" ORDER BY reportt_jmltindakan ASC";
 			
-			$sql4="SELECT karyawan_id,karyawan_no,karyawan_nama,karyawan_username,reportt_jmltindakan,ab.absensi_shift FROM karyawan INNER JOIN jabatan ON(karyawan_jabatan=jabatan_id) INNER JOIN (SELECT absensi_karyawan_id,absensi_tgl,absensi_shift FROM absensi WHERE absensi_shift='OFF') as ab ON(karyawan.karyawan_id=ab.absensi_karyawan_id) LEFT JOIN (SELECT * FROM report_tindakan WHERE reportt_bln LIKE '$bln_now%') as rt ON(karyawan_id=rt.reportt_karyawan_id) WHERE karyawan_jabatan=jabatan_id AND jabatan_nama='$karyawan_jabatan' AND karyawan_aktif='Aktif'";
+			$sql4="SELECT karyawan_id,karyawan_no,karyawan_nama,karyawan_username,reportt_jmltindakan,ab.absensi_shift FROM karyawan INNER JOIN jabatan ON(karyawan_jabatan=jabatan_id) INNER JOIN (SELECT absensi_karyawan_id,absensi_tgl,absensi_shift FROM absensi WHERE absensi_shift='OFF') as ab ON(karyawan.karyawan_id=ab.absensi_karyawan_id) LEFT JOIN (SELECT * FROM report_tindakan WHERE date_format(reportt_bln,'%Y-%m')='$bln_filter') as rt ON(karyawan_id=rt.reportt_karyawan_id) WHERE karyawan_jabatan=jabatan_id AND jabatan_nama='$karyawan_jabatan' AND karyawan_aktif='Aktif'";
 			if($query<>"" && is_numeric($query)==false){
 				$sql4 .=eregi("WHERE",$sql4)? " AND ":" WHERE ";
 				$sql4 .= " (karyawan_nama LIKE '%".addslashes($query)."%')";
@@ -69,6 +77,7 @@ class M_appointment extends Model{
 				$sql4 .=eregi("WHERE",$sql4)? " AND ":" WHERE ";
 				$sql4 .= " (ab.absensi_tgl='".addslashes($tgl_app)."')";
 			}
+			$sql4.=" ORDER BY reportt_jmltindakan ASC";
 			
 			
 			$query = $this->db->query($sql);
@@ -85,7 +94,7 @@ class M_appointment extends Model{
 			
 			$nbrows5=0;
 			if($nbrows==0 && $nbrows2==0 && $nbrows3==0 && $nbrows4==0){
-				$sql5="SELECT karyawan_id,karyawan_no,karyawan_nama,karyawan_username,reportt_jmltindakan,ab.absensi_shift FROM karyawan INNER JOIN jabatan ON(karyawan_jabatan=jabatan_id) LEFT JOIN (SELECT absensi_karyawan_id,absensi_tgl,absensi_shift FROM absensi) as ab ON(karyawan.karyawan_id=ab.absensi_karyawan_id) LEFT JOIN (SELECT * FROM report_tindakan WHERE reportt_bln LIKE '$bln_now%') as rt ON(karyawan_id=rt.reportt_karyawan_id) WHERE karyawan_jabatan=jabatan_id AND jabatan_nama='$karyawan_jabatan' AND karyawan_aktif='Aktif'";
+				$sql5="SELECT karyawan_id,karyawan_no,karyawan_nama,karyawan_username,reportt_jmltindakan,ab.absensi_shift FROM karyawan INNER JOIN jabatan ON(karyawan_jabatan=jabatan_id) LEFT JOIN (SELECT absensi_karyawan_id,absensi_tgl,absensi_shift FROM absensi WHERE date_format(absensi_tgl,'%Y-%m')='$bln_filter') as ab ON(karyawan.karyawan_id=ab.absensi_karyawan_id) LEFT JOIN (SELECT * FROM report_tindakan WHERE date_format(reportt_bln,'%Y-%m')='$bln_filter') as rt ON(karyawan_id=rt.reportt_karyawan_id) WHERE karyawan_jabatan=jabatan_id AND jabatan_nama='$karyawan_jabatan' AND karyawan_aktif='Aktif' ORDER BY reportt_jmltindakan ASC";
 				/*if($query<>"" && is_numeric($query)==false){
 					$sql5 .=eregi("WHERE",$sql5)? " AND ":" WHERE ";
 					$sql5 .= " (karyawan_nama LIKE '%".addslashes($query)."%')";
@@ -481,50 +490,63 @@ class M_appointment extends Model{
 		//end of function
 		
 		//function for get list record
-		function appointment_list($filter,$start,$end,$tgl_app){
+		function appointment_list($filter,$start,$end,$tgl_app,$jenis_rawat){
+			if($jenis_rawat=="")
+				$jenis_rawat="Medis";
 			//$query = "SELECT * FROM appointment";
 			$dt=date('Y-m-d');
 			$dt_six=date('Y-m-d',mktime(0,0,0,date("m"),date("d")+6,date("Y")));
-			$query="SELECT app_id,cust_nama,cust_id,cust_no,karyawan_dokter.karyawan_nama as dokter_nama,karyawan_dokter.karyawan_id as dokter_id,karyawan_dokter.karyawan_username as dokter_username,karyawan_dokter.karyawan_no as dokter_no,karyawan_terapis.karyawan_nama as terapis_nama,karyawan_terapis.karyawan_id as terapis_id,karyawan_terapis.karyawan_username as terapis_username,karyawan_terapis.karyawan_no as terapis_no,rawat_id,rawat_nama,kategori_nama,dapp_id,dapp_status,dapp_tglreservasi,dapp_jamdatang,app_tanggal,app_cara,app_keterangan,dapp_jamreservasi,app_creator,app_date_create,app_update,app_date_update,app_revised,dapp_keterangan,rawat_warna 
-FROM (((appointment inner join appointment_detail on appointment.app_id=appointment_detail.dapp_master inner join perawatan on appointment_detail.dapp_perawatan=perawatan.rawat_id 
-inner join customer on appointment.app_customer=customer.cust_id inner join kategori on perawatan.rawat_kategori=kategori.kategori_id) 
-left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawan_dokter.karyawan_id) left join karyawan as karyawan_terapis on appointment_detail.dapp_petugas2=karyawan_terapis.karyawan_id)
-WHERE dapp_tglreservasi >= '$dt'";
+			$query="SELECT * FROM vu_appointment";
 			
-			// For simple search
-			if ($filter<>"" && is_numeric($filter)==false){
-				$query="SELECT app_id,cust_nama,cust_id,cust_no,karyawan_dokter.karyawan_nama as dokter_nama,karyawan_dokter.karyawan_id as dokter_id,karyawan_dokter.karyawan_username as dokter_username,karyawan_dokter.karyawan_no as dokter_no,karyawan_terapis.karyawan_nama as terapis_nama,karyawan_terapis.karyawan_id as terapis_id,karyawan_terapis.karyawan_username as terapis_username,karyawan_terapis.karyawan_no as terapis_no,rawat_id,rawat_nama,kategori_nama,dapp_id,dapp_status,dapp_tglreservasi,dapp_jamdatang,app_tanggal,app_cara,app_keterangan,dapp_jamreservasi,app_creator,app_date_create,app_update,app_date_update,app_revised,dapp_keterangan,rawat_warna 
-FROM (((appointment inner join appointment_detail on appointment.app_id=appointment_detail.dapp_master inner join perawatan on appointment_detail.dapp_perawatan=perawatan.rawat_id 
-inner join customer on appointment.app_customer=customer.cust_id inner join kategori on perawatan.rawat_kategori=kategori.kategori_id) 
-left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawan_dokter.karyawan_id) left join karyawan as karyawan_terapis on appointment_detail.dapp_petugas2=karyawan_terapis.karyawan_id)";
+			if($jenis_rawat=="Medis"){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				//search customer,perawatan,dokter,therapist
-				$query .= " (cust_nama LIKE '%".addslashes($filter)."%' OR rawat_nama LIKE '%".addslashes($filter)."%' OR karyawan_dokter.karyawan_username LIKE '%".addslashes($filter)."%' OR karyawan_terapis.karyawan_username LIKE '%".addslashes($filter)."%')";
+				$query .=" kategori_nama='Medis'";
+				if($tgl_app!=""){
+					$query .=" AND dapp_tglreservasi='$tgl_app'";
+				}else{
+					$query .=" AND dapp_tglreservasi >= '$dt'";
+				}
+				// For simple search
+				if ($filter<>"" && is_numeric($filter)==false){
+					$query="SELECT * FROM vu_appointment ";
+					$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
+					//search customer,perawatan,dokter,therapist
+					$query .= " (cust_nama LIKE '%".addslashes($filter)."%' OR rawat_nama LIKE '%".addslashes($filter)."%' OR dokter_username LIKE '%".addslashes($filter)."%' OR terapis_username LIKE '%".addslashes($filter)."%')";
+				}
+			}elseif($jenis_rawat=="Non Medis"){
+				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
+				$query .=" kategori_nama='Non Medis'";
+				if($tgl_app!=""){
+					$query .=" AND dapp_tglreservasi='$tgl_app'";
+				}else{
+					$query .=" AND dapp_tglreservasi >= '$dt'";
+				}
+				// For simple search
+				if ($filter<>"" && is_numeric($filter)==false){
+					$query="SELECT * FROM vu_appointment ";
+					$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
+					//search customer,perawatan,dokter,therapist
+					$query .= " (cust_nama LIKE '%".addslashes($filter)."%' OR rawat_nama LIKE '%".addslashes($filter)."%' OR dokter_username LIKE '%".addslashes($filter)."%' OR terapis_username LIKE '%".addslashes($filter)."%')";
+				}
 			}
 			
 			// For Pilihan Dokter pada tbar
 			if ($filter<>"" && is_numeric($filter)==true){
 				if($tgl_app!=""){
 					$dt=date('Y-m-d', strtotime($tgl_app));
-					$query="SELECT app_id,cust_nama,cust_id,cust_no,karyawan_dokter.karyawan_nama as dokter_nama,karyawan_dokter.karyawan_id as dokter_id,karyawan_dokter.karyawan_username as dokter_username,karyawan_dokter.karyawan_no as dokter_no,karyawan_terapis.karyawan_nama as terapis_nama,karyawan_terapis.karyawan_id as terapis_id,karyawan_terapis.karyawan_username as terapis_username,karyawan_terapis.karyawan_no as terapis_no,rawat_id,rawat_nama,kategori_nama,dapp_id,dapp_status,dapp_tglreservasi,dapp_jamdatang,app_tanggal,app_cara,app_keterangan,dapp_jamreservasi,app_creator,app_date_create,app_update,app_date_update,app_revised,dapp_keterangan,rawat_warna FROM (((appointment inner join appointment_detail on appointment.app_id=appointment_detail.dapp_master inner join perawatan on appointment_detail.dapp_perawatan=perawatan.rawat_id 
-inner join customer on appointment.app_customer=customer.cust_id inner join kategori on perawatan.rawat_kategori=kategori.kategori_id) 
-left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawan_dokter.karyawan_id) left join karyawan as karyawan_terapis on appointment_detail.dapp_petugas2=karyawan_terapis.karyawan_id) WHERE dapp_tglreservasi = '$dt'";
+					$query="SELECT * FROM vu_appointment WHERE dapp_tglreservasi = '$dt'";
 				}else{
-					$query="SELECT app_id,cust_nama,cust_id,cust_no,karyawan_dokter.karyawan_nama as dokter_nama,karyawan_dokter.karyawan_id as dokter_id,karyawan_dokter.karyawan_username as dokter_username,karyawan_dokter.karyawan_no as dokter_no,karyawan_terapis.karyawan_nama as terapis_nama,karyawan_terapis.karyawan_id as terapis_id,karyawan_terapis.karyawan_username as terapis_username,karyawan_terapis.karyawan_no as terapis_no,rawat_id,rawat_nama,kategori_nama,dapp_id,dapp_status,dapp_tglreservasi,dapp_jamdatang,app_tanggal,app_cara,app_keterangan,dapp_jamreservasi,app_creator,app_date_create,app_update,app_date_update,app_revised,dapp_keterangan,rawat_warna FROM (((appointment inner join appointment_detail on appointment.app_id=appointment_detail.dapp_master inner join perawatan on appointment_detail.dapp_perawatan=perawatan.rawat_id 
-inner join customer on appointment.app_customer=customer.cust_id inner join kategori on perawatan.rawat_kategori=kategori.kategori_id) 
-left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawan_dokter.karyawan_id) left join karyawan as karyawan_terapis on appointment_detail.dapp_petugas2=karyawan_terapis.karyawan_id) WHERE dapp_tglreservasi >= '$dt'";
+					$query="SELECT * FROM vu_appointment WHERE dapp_tglreservasi >= '$dt'";
 				}
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 				//search customer,perawatan,dokter,therapist
-				$query .= " (karyawan_dokter.karyawan_id = '".addslashes($filter)."')";
+				$query .= " (dokter_id = '".addslashes($filter)."') AND kategori_nama='Medis'";
 			}
 			
 			// For Pilihan Tanggal Appointment di tbar dengan pilihan dokter kosong
-			if($filter=="" && $tgl_app!=""){
+			if($filter=="" && is_numeric($filter)==false && $tgl_app!="" && $jenis_rawat=="Medis"){
 				$dt=date('Y-m-d', strtotime($tgl_app));
-				$query="SELECT app_id,cust_nama,cust_id,cust_no,karyawan_dokter.karyawan_nama as dokter_nama,karyawan_dokter.karyawan_id as dokter_id,karyawan_dokter.karyawan_username as dokter_username,karyawan_dokter.karyawan_no as dokter_no,karyawan_terapis.karyawan_nama as terapis_nama,karyawan_terapis.karyawan_id as terapis_id,karyawan_terapis.karyawan_username as terapis_username,karyawan_terapis.karyawan_no as terapis_no,rawat_id,rawat_nama,kategori_nama,dapp_id,dapp_status,dapp_tglreservasi,dapp_jamdatang,app_tanggal,app_cara,app_keterangan,dapp_jamreservasi,app_creator,app_date_create,app_update,app_date_update,app_revised,dapp_keterangan,rawat_warna FROM (((appointment inner join appointment_detail on appointment.app_id=appointment_detail.dapp_master inner join perawatan on appointment_detail.dapp_perawatan=perawatan.rawat_id 
-inner join customer on appointment.app_customer=customer.cust_id inner join kategori on perawatan.rawat_kategori=kategori.kategori_id) 
-left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawan_dokter.karyawan_id) left join karyawan as karyawan_terapis on appointment_detail.dapp_petugas2=karyawan_terapis.karyawan_id) WHERE dapp_tglreservasi = '$dt'";
+				$query="SELECT * FROM vu_appointment WHERE dapp_tglreservasi = '$dt'";
 			}
 			
 			$query.=" ORDER BY dapp_tglreservasi ASC, dapp_jamreservasi ASC";
@@ -557,6 +579,7 @@ left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawa
 			/* START JIKA db.appointment_detail.dapp_locked == 0 ALIAS Tidak di-Lock */
 			if($dapp_locked==0){
 				$dt=date('Y-m-d H:i:s');
+				$date_now=date('Y-m-d');
 				$bln_now=date('Y-m');
 				
 				/* UPDATE ke db.appointment baik $dapp_status=='datang' atau $dapp_status!='datang'
@@ -591,21 +614,23 @@ left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawa
 				}
 				
 				/* Ambil dan Tampung terlebih dahulu => nilai appointment_detail.dapp_status JIKA appointment_detail.dapp_status TIDAK SAMA DENGAN $dapp_status(Status dari VIEW.LIST apakah telah terjadi Perubahan atau Tidak) */
-				$sql_detail="SELECT dapp_status FROM appointment_detail WHERE dapp_id='$dapp_id' AND dapp_status!='$dapp_status'";
+				//$sql_detail="SELECT dapp_status FROM appointment_detail WHERE dapp_id='$dapp_id' AND dapp_status!='$dapp_status'";
+				$sql_detail="SELECT dapp_tglreservasi FROM appointment_detail WHERE dapp_id='$dapp_id'";
 				$rs_detail=$this->db->query($sql_detail);
 				if($rs_detail->num_rows()){
 					$rs_drecord=$rs_detail->row_array();
-					$dapp_status_temp=$rs_drecord["dapp_status"];
-				}else{
-					$dapp_status_temp=$dapp_status;
-				}
+					$dapp_tglreservasi_temp=$rs_drecord["dapp_tglreservasi"];
+					//$dapp_status_temp=$rs_drecord["dapp_status"];
+				}/*else{
+					//$dapp_status_temp=$dapp_status;
+				}*/
 				
 				/* JIKA $dapp_status(Status dari VIEW.LIST) BERUBAH menjadi=>'datang', maka berpengaruh ke:
 				>> db.appointment_detail.dapp_status, db.appointment_detail.dapp_jamdatang
 				>> db.tindakan, db.tindakan_detail
 				>> db.report_tindakan.reportt_jmltindakan (Meng-Counter tindakan yang dilakukan VIEW.LIST.$dokter_id) */
 				$data_dapp=array();
-				if($dapp_status=="datang"){ /* VIEW.LIST.$dapp_status DIGANTI 'datang' */
+				if($dapp_status=="datang" && $dapp_tglreservasi_temp==$date_now){ /* VIEW.LIST.$dapp_status DIGANTI 'datang' */
 					$date_now=date('Y-m-d');
 					$time_now=date('H:i:s');
 					$data_dapp["dapp_tgldatang"]=$date_now;
@@ -824,7 +849,7 @@ left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawa
 						}
 					}
 					
-				}else{ /* VIEW.LIST.$dapp_status DIGANTI SELAIN 'datang' */
+				}elseif($dapp_status!="datang"){ /* VIEW.LIST.$dapp_status DIGANTI SELAIN 'datang' */
 					/* Menghapus Tindakan-DEtail WHERE db.tindakan_detail.dtrawat_dapp == $dapp_id(dari appointment_detail.dapp_id) */
 					$this->db->where('dtrawat_dapp', $dapp_id);
 					$this->db->delete('tindakan_detail');
@@ -875,6 +900,8 @@ left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawa
 						$this->db->like('reportt_bln', $bln_now, 'after');
 						$this->db->update('report_tindakan', $data_report_tindakan);
 					}
+				}elseif($dapp_status=="datang" && $dapp_tglreservasi_temp!=$date_now){
+					return '3';
 				}
 				$sql="SELECT karyawan_id FROM karyawan WHERE karyawan_id='$dokter_nama'";
 				$rs=$this->db->query($sql);
@@ -1107,10 +1134,7 @@ left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawa
 */
 			$dt=date('Y-m-d');
 			$dt_six=date('Y-m-d',mktime(0,0,0,date("m"),date("d")+6,date("Y")));
-			$query="SELECT app_id,cust_nama,cust_id,karyawan_dokter.karyawan_nama as dokter_nama,karyawan_dokter.karyawan_id as dokter_id,karyawan_dokter.karyawan_username as dokter_username,karyawan_dokter.karyawan_no as dokter_no,karyawan_terapis.karyawan_nama as terapis_nama,karyawan_terapis.karyawan_id as terapis_id,karyawan_terapis.karyawan_username as terapis_username,karyawan_terapis.karyawan_no as terapis_no,rawat_id,rawat_nama,kategori_nama,dapp_id,dapp_status,dapp_tglreservasi,dapp_jamdatang,app_tanggal,app_cara,app_keterangan,dapp_jamreservasi,app_creator,app_date_create,app_update,app_date_update,app_revised 
-FROM (((appointment inner join appointment_detail on appointment.app_id=appointment_detail.dapp_master inner join perawatan on appointment_detail.dapp_perawatan=perawatan.rawat_id 
-inner join customer on appointment.app_customer=customer.cust_id inner join kategori on perawatan.rawat_kategori=kategori.kategori_id) 
-left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawan_dokter.karyawan_id) left join karyawan as karyawan_terapis on appointment_detail.dapp_petugas2=karyawan_terapis.karyawan_id)";
+			$query="SELECT * FROM vu_appointment";
 			
 			if($app_id!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -1144,11 +1168,11 @@ left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawa
 			};
 			if($app_dokter!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " karyawan_dokter.karyawan_id='".$app_dokter."'";
+				$query.= " dokter_id='".$app_dokter."'";
 			};
 			if($app_terapis!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " karyawan_terapis.karyawan_id='".$app_terapis."'";
+				$query.= " terapis_id='".$app_terapis."'";
 			};
 			if($app_rawat_medis!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
