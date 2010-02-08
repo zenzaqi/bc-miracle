@@ -4191,12 +4191,13 @@ Ext.onReady(function(){
 	
 	/* Function for retrieve create Window Panel*/ 
 	master_jual_produk_createForm = new Ext.FormPanel({
+		title: 'FORM ADD/EDIT',
 		labelAlign: 'left',
 		el: 'form_produk_addEdit',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
 		width: 950,
-		plain: true,
+		frame: true,
 		layout: 'fit',
 		items: [master_jual_produk_masterGroup,detail_jual_produkListEditorGrid,master_jual_produk_bayarGroup]
 		,

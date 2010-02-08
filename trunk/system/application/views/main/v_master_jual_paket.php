@@ -3514,7 +3514,15 @@ Ext.onReady(function(){
 			sortable: true,
 			editor: combo_pengguna_paket,
 			renderer: Ext.util.Format.comboRenderer(combo_pengguna_paket)
-		}]
+		}/*,
+		{
+			header: 'Customer Lain',
+			dataIndex: 'sjpaket_cust',
+			width: 298,
+			sortable: true,
+			editor: combo_pengguna_paket,
+			renderer: Ext.util.Format.comboRenderer(combo_pengguna_paket)
+		}*/]
 	);
 	detail_pengguna_paket_ColumnModel.defaultSortable= true;
 	//eof
@@ -3568,7 +3576,7 @@ Ext.onReady(function(){
 		});
 		editor_detail_pengguna_paket.stopEditing();
 		detail_pengguna_paket_DataStore.insert(0, edit_detail_pengguna_paket);
-		detail_pengguna_paketListEditorGrid.getView().refresh();
+		//detail_pengguna_paketListEditorGrid.getView().refresh();
 		detail_pengguna_paketListEditorGrid.getSelectionModel().selectRow(0);
 		editor_detail_pengguna_paket.startEditing(0);
 	}
@@ -4197,12 +4205,14 @@ Ext.onReady(function(){
 	
 	/* Function for retrieve create Window Panel*/ 
 	master_jual_paket_createForm = new Ext.FormPanel({
+		title: 'FORM ADD/EDIT',
 		labelAlign: 'left',
 		el: 'form_paket_addEdit',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
 		width: 950,
-		plain: true,
+		//plain: true,
+		frame:true,
 		layout: 'fit',
 		items: [master_jual_paket_masterGroup,detail_tab_jual_paket,master_jual_paket_bayarGroup]
 		,
