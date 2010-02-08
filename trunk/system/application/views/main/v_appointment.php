@@ -2315,8 +2315,8 @@ Ext.onReady(function(){
 		if(app_terapisSearchField.getValue()!==null){app_terapis_search=app_terapisSearchField.getValue();}
 		if(app_perawatan_medisSearchField.getValue()!==null){app_rawat_medis_search=app_perawatan_medisSearchField.getValue();}
 		if(app_perawatan_nonmedisSearchField.getValue()!==null){app_rawat_nonmedis_search=app_perawatan_nonmedisSearchField.getValue();}
-		if(Ext.getCmp('app_tgl_startReservasiSearchField').getValue()!=""){app_tgl_start_reservasi_search=Ext.getCmp('app_tgl_startReservasiSearchField').getValue().format('Y-m-d');}
-		if(Ext.getCmp('app_tgl_endReservasiSearchField').getValue()!==""){app_tgl_end_reservasi_search=Ext.getCmp('app_tgl_endReservasiSearchField').getValue().format('Y-m-d');}
+		//if(Ext.getCmp('app_tgl_startReservasiSearchField').getValue()!=""){app_tgl_start_reservasi_search=Ext.getCmp('app_tgl_startReservasiSearchField').getValue().format('Y-m-d');}
+		//if(Ext.getCmp('app_tgl_endReservasiSearchField').getValue()!==""){app_tgl_end_reservasi_search=Ext.getCmp('app_tgl_endReservasiSearchField').getValue().format('Y-m-d');}
 		if(Ext.getCmp('app_tgl_startAppSearchField').getValue()!==""){app_tgl_start_app_search=Ext.getCmp('app_tgl_startAppSearchField').getValue().format('Y-m-d');}
 		if(Ext.getCmp('app_tgl_endAppSearchField').getValue()!==""){app_tgl_end_app_search=Ext.getCmp('app_tgl_endAppSearchField').getValue().format('Y-m-d');}
 		// change the store parameters
@@ -2643,10 +2643,10 @@ Ext.onReady(function(){
 		app_dokterSearchField.setValue(null);
 		app_terapisSearchField.reset();
 		app_terapisSearchField.setValue(null);
-		Ext.getCmp('app_tgl_startReservasiSearchField').reset();
+		/*Ext.getCmp('app_tgl_startReservasiSearchField').reset();
 		Ext.getCmp('app_tgl_startReservasiSearchField').setValue(null);
 		Ext.getCmp('app_tgl_endReservasiSearchField').reset();
-		Ext.getCmp('app_tgl_endReservasiSearchField').setValue(null);
+		Ext.getCmp('app_tgl_endReservasiSearchField').setValue(null);*/
 		Ext.getCmp('app_tgl_startAppSearchField').reset();
 		Ext.getCmp('app_tgl_startAppSearchField').setValue(null);
 		Ext.getCmp('app_tgl_endAppSearchField').reset();
