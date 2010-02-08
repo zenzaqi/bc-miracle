@@ -224,11 +224,12 @@ class C_appointment extends Controller {
 	
 	//function fot list record
 	function appointment_list(){
+		$jenis_rawat = isset($_POST['jenis_rawat']) ? $_POST['jenis_rawat'] : "";
 		$tgl_app = isset($_POST['tgl_app']) ? $_POST['tgl_app'] : "";
 		$query = isset($_POST['query']) ? $_POST['query'] : "";
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result=$this->m_appointment->appointment_list($query,$start,$end,$tgl_app);
+		$result=$this->m_appointment->appointment_list($query,$start,$end,$tgl_app,$jenis_rawat);
 		echo $result;
 	}
 

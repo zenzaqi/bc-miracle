@@ -263,6 +263,17 @@ Ext.onReady(function(){
 						});
 						appointment_DataStore.reload();
 						break;
+					case 3:
+						Ext.MessageBox.show({
+						   title: 'Warning',
+						   width: 250,
+						   msg: 'Maaf, Tanggal Appointment != hari ini',
+						   buttons: Ext.MessageBox.OK,
+						   animEl: 'save',
+						   icon: Ext.MessageBox.WARNING
+						});
+						appointment_DataStore.reload();
+						break;
 					default:
 						Ext.MessageBox.show({
 						   title: 'Warning',
@@ -694,7 +705,7 @@ Ext.onReady(function(){
 			{name: 'dapp_locked', type: 'int', mapping: 'dapp_locked'}
 		]),
 		sortInfo:{field: 'dapp_tglreservasi', direction: "ASC"},
-		groupField:'dokter_username'
+		groupField: 'dokter_username'
 	});
 	/* End of Function */
 	
@@ -774,7 +785,7 @@ Ext.onReady(function(){
 	});
 	var dapp_terapis_tpl = new Ext.XTemplate(
         '<tpl for="."><div class="search-item">',
-            '<span><b>{terapis_username}</b> | {terapis_display} | <b>{terapis_jmltindakan}</b> | Shift:<b>{absensi_shift}</b></span>',
+            '<span><b>{terapis_jmltindakan}</b> | <b>{terapis_username}</b> | {terapis_display} | <b>{absensi_shift}</b></span>',
         '</div></tpl>'
     );
     
@@ -988,11 +999,40 @@ Ext.onReady(function(){
 		return value;
 	}
 	
-	app_dokter_tglField= new Ext.form.DateField({
-		id: 'app_dokter_tglField',
+	tbar_jenis_rawatField= new Ext.form.ComboBox({
+		id: 'tbar_jenis_rawatField',
+		store:new Ext.data.SimpleStore({
+			fields:['tbar_medis_or_non_value', 'tbar_medis_or_non_display'],
+			data:[['Medis','Medis'],['Non Medis','Non Medis']]
+		}),
+		mode: 'local',
+		displayField: 'tbar_medis_or_non_display',
+		valueField: 'tbar_medis_or_non_value',
+		listeners:{
+			render: function(c){
+			Ext.get(this.id).set({qtip:'Pilihan Medis / Non Medis'});
+			}
+		},
+		editable:false,
+		width: 76,
+		triggerAction: 'all'	
+	});
+	
+	tbar_dokter_tglField= new Ext.form.DateField({
+		id: 'tbar_dokter_tglField',
 		fieldLabel: 'Tanggal Reservasi',
 		format : 'Y-m-d',
-		emptyText: 'Tgl App'
+		emptyText: 'Tgl App',
+		ref: '../appDokterTgl'
+	});
+	
+	tbar_nonmedis_tglField= new Ext.form.DateField({
+		id: 'tbar_nonmedis_tglField',
+		fieldLabel: 'Tanggal Reservasi',
+		format : 'Y-m-d',
+		emptyText: 'Tgl App',
+		hidden:true,
+		ref: '../appNonMedisTgl'
 	});
     
 	/* Declare DataStore and  show datagrid list */
@@ -1049,6 +1089,7 @@ Ext.onReady(function(){
 			params: {task: 'LIST',start: 0, limit: pageS},
 			listeners:{
 				specialkey: function(f,e){
+					tbar_jenis_rawatField.reset();
 					if(e.getKey() == e.ENTER){
 						appointment_DataStore.baseParams={task:'LIST',start: 0, limit: pageS};
 		            }
@@ -1069,12 +1110,7 @@ Ext.onReady(function(){
 			tooltip: 'Export to Excel(.xls) Document',
 			iconCls:'icon-xls',
 			handler: appointment_export_excel
-		}, '-',{
-			text: 'Print',
-			tooltip: 'Print Document',
-			iconCls:'icon-print',
-			handler: appointment_print  
-		}, '-',app_dokter_tglField, '-',{
+		}, '-',tbar_jenis_rawatField, '-',tbar_nonmedis_tglField, '-',tbar_dokter_tglField, '-',{
 			xtype: 'combo',
 			id: 'cbo_dokter',
 			text: 'Pilihan Dokter',
@@ -1089,6 +1125,11 @@ Ext.onReady(function(){
 			loadingText: 'Searching...',
 			itemSelector: 'div.search-item',
 			triggerAction: 'all',
+		}, '-',{
+			text: 'Print',
+			tooltip: 'Print Document',
+			iconCls:'icon-print',
+			handler: appointment_print  
 		}/*, '-',{
 			xtype: 'combo',
 			id: 'cbo_page',
@@ -1110,9 +1151,40 @@ Ext.onReady(function(){
 		]
 	});
 	appointmentListEditorGrid.render();
+	tbar_jenis_rawatField.setValue('Medis');
 	/* End of DataStore */
 	/*Ext.getCmp('cbo_page').on('select', function(){
 	});*/
+	
+	tbar_jenis_rawatField.on('select', function(){
+		appointment_DataStore.setBaseParam('query','');
+		if(tbar_jenis_rawatField.getValue()=="Medis"){
+			tbar_nonmedis_tglField.reset();
+			tbar_dokter_tglField.setVisible(true);
+			Ext.getCmp('cbo_dokter').setVisible(true);
+			tbar_nonmedis_tglField.setVisible(false);
+			appointment_DataStore.load({params: {
+				task: 'LIST',
+				start: 0,
+				limit: pageS,
+				jenis_rawat: tbar_jenis_rawatField.getValue()
+			}});
+			appointment_DataStore.groupBy('dokter_username');
+		}else if(tbar_jenis_rawatField.getValue()=="Non Medis"){
+			Ext.getCmp('cbo_dokter').reset();
+			tbar_dokter_tglField.reset();
+			tbar_dokter_tglField.setVisible(false);
+			Ext.getCmp('cbo_dokter').setVisible(false);
+			tbar_nonmedis_tglField.setVisible(true);
+			appointment_DataStore.load({params: {
+				task: 'LIST',
+				start: 0,
+				limit: pageS,
+				jenis_rawat: tbar_jenis_rawatField.getValue()
+			}});
+			appointment_DataStore.groupBy('dapp_tglreservasi');
+		}
+	});
 	
 	Ext.getCmp('cbo_dokter').on('select', function(){
 		appointment_DataStore.setBaseParam('query',Ext.getCmp('cbo_dokter').getValue());
@@ -1121,11 +1193,11 @@ Ext.onReady(function(){
 			start: 0,
 			limit: pageS,
 			query: Ext.getCmp('cbo_dokter').getValue(),
-			tgl_app: app_dokter_tglField.getValue()
+			tgl_app: tbar_dokter_tglField.getValue()
 		}});
 	});
 	
-	app_dokter_tglField.on('select',function(){
+	tbar_dokter_tglField.on('select',function(){
 		//if(Ext.getCmp('cbo_dokter').getValue()!==""){
 			appointment_DataStore.setBaseParam('query',Ext.getCmp('cbo_dokter').getValue());
 			appointment_DataStore.load({params: {
@@ -1133,9 +1205,19 @@ Ext.onReady(function(){
 				start: 0,
 				limit: pageS,
 				query: Ext.getCmp('cbo_dokter').getValue(),
-				tgl_app: app_dokter_tglField.getValue()
+				tgl_app: tbar_dokter_tglField.getValue()
 			}});
 		//}
+	});
+	
+	tbar_nonmedis_tglField.on('select',function(){
+		appointment_DataStore.load({params: {
+			task: 'LIST',
+			start: 0,
+			limit: pageS,
+			jenis_rawat: tbar_jenis_rawatField.getValue(),
+			tgl_app: tbar_nonmedis_tglField.getValue().format('Y-m-d')
+		}});
 	});
      
 	/* Create Context Menu */
@@ -2263,10 +2345,13 @@ Ext.onReady(function(){
 		
 	/* Function for reset search result */
 	function appointment_reset_search(){
+		tbar_jenis_rawatField.setValue('Medis');
+		//tbar_jenis_rawatField.reset();
 		Ext.getCmp('cbo_dokter').reset();
-		app_dokter_tglField.reset();
+		tbar_dokter_tglField.reset();
 		// reset the store parameters
 		appointment_DataStore.baseParams = { task: 'LIST',start:0,limit:pageS };
+		appointment_DataStore.groupBy('dokter_username');
 		// Cause the datastore to do another query : 
 		appointment_DataStore.reload({params: {start: 0, limit: pageS}});
 		appointment_searchWindow.close();
@@ -2470,13 +2555,13 @@ Ext.onReady(function(){
 									border:false,
 									defaultType: 'datefield',
 									items: [
-										{
+										/*{
 											fieldLabel: 'Tanggal Reservasi',
 									        name: 'app_tgl_startReservasiSearchField',
 									        id: 'app_tgl_startReservasiSearchField',
 									        //vtype: 'daterange',
 									        endDateField: 'app_tgl_endReservasiSearchField' // id of the end date field
-									    },
+									    },*/
 									    {
 											fieldLabel: 'Tanggal Appointment',
 									        name: 'app_tgl_startAppSearchField',
@@ -2492,13 +2577,13 @@ Ext.onReady(function(){
 									border:false,
 									defaultType: 'datefield',
 									items: [
-										{
+										/*{
 									        fieldLabel: 's/d',
 									        name: 'app_tgl_endReservasiSearchField',
 									        id: 'app_tgl_endReservasiSearchField',
 									        //vtype: 'daterange',
 									        startDateField: 'app_tgl_startReservasiSearchField' // id of the start date field
-								      	},
+								      	},*/
 								      	{
 											fieldLabel: 's/d',
 									        name: 'app_tgl_endAppSearchField',
@@ -2514,7 +2599,10 @@ Ext.onReady(function(){
 		,
 		buttons: [{
 				text: 'Search',
-				handler: appointment_list_search
+				handler: function(){
+					appointment_list_search();
+					appointment_searchWindow.hide();
+				}
 			},{
 				text: 'Close',
 				handler: function(){
