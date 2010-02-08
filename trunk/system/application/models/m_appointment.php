@@ -79,6 +79,30 @@ class M_appointment extends Model{
 			}
 			$sql4.=" ORDER BY reportt_jmltindakan ASC";
 			
+			$sql5="SELECT karyawan_id,karyawan_no,karyawan_nama,karyawan_username,reportt_jmltindakan,ab.absensi_shift FROM karyawan INNER JOIN jabatan ON(karyawan_jabatan=jabatan_id) INNER JOIN (SELECT absensi_karyawan_id,absensi_tgl,absensi_shift FROM absensi WHERE absensi_shift='CT') as ab ON(karyawan.karyawan_id=ab.absensi_karyawan_id) LEFT JOIN (SELECT * FROM report_tindakan WHERE date_format(reportt_bln,'%Y-%m')='$bln_filter') as rt ON(karyawan_id=rt.reportt_karyawan_id) WHERE karyawan_jabatan=jabatan_id AND jabatan_nama='$karyawan_jabatan' AND karyawan_aktif='Aktif'";
+			if($query<>"" && is_numeric($query)==false){
+				$sql5 .=eregi("WHERE",$sql5)? " AND ":" WHERE ";
+				$sql5 .= " (karyawan_nama LIKE '%".addslashes($query)."%')";
+			}
+			if($tgl_app<>""){
+				$tgl_app = date('Y-m-d', strtotime($tgl_app));
+				$sql5 .=eregi("WHERE",$sql5)? " AND ":" WHERE ";
+				$sql5 .= " (ab.absensi_tgl='".addslashes($tgl_app)."')";
+			}
+			$sql5.=" ORDER BY reportt_jmltindakan ASC";
+			
+			$sql6="SELECT karyawan_id,karyawan_no,karyawan_nama,karyawan_username,reportt_jmltindakan,ab.absensi_shift FROM karyawan INNER JOIN jabatan ON(karyawan_jabatan=jabatan_id) INNER JOIN (SELECT absensi_karyawan_id,absensi_tgl,absensi_shift FROM absensi WHERE absensi_shift='H') as ab ON(karyawan.karyawan_id=ab.absensi_karyawan_id) LEFT JOIN (SELECT * FROM report_tindakan WHERE date_format(reportt_bln,'%Y-%m')='$bln_filter') as rt ON(karyawan_id=rt.reportt_karyawan_id) WHERE karyawan_jabatan=jabatan_id AND jabatan_nama='$karyawan_jabatan' AND karyawan_aktif='Aktif'";
+			if($query<>"" && is_numeric($query)==false){
+				$sql6 .=eregi("WHERE",$sql6)? " AND ":" WHERE ";
+				$sql6 .= " (karyawan_nama LIKE '%".addslashes($query)."%')";
+			}
+			if($tgl_app<>""){
+				$tgl_app = date('Y-m-d', strtotime($tgl_app));
+				$sql6 .=eregi("WHERE",$sql6)? " AND ":" WHERE ";
+				$sql6 .= " (ab.absensi_tgl='".addslashes($tgl_app)."')";
+			}
+			$sql6.=" ORDER BY reportt_jmltindakan ASC";
+			
 			
 			$query = $this->db->query($sql);
 			$nbrows = $query->num_rows();
@@ -92,18 +116,24 @@ class M_appointment extends Model{
 			$query4 = $this->db->query($sql4);
 			$nbrows4 = $query4->num_rows();
 			
-			$nbrows5=0;
+			$query5 = $this->db->query($sql5);
+			$nbrows5 = $query5->num_rows();
+			
+			$query6 = $this->db->query($sql6);
+			$nbrows6 = $query6->num_rows();
+			
+			$nbrows7=0;
 			if($nbrows==0 && $nbrows2==0 && $nbrows3==0 && $nbrows4==0){
-				$sql5="SELECT karyawan_id,karyawan_no,karyawan_nama,karyawan_username,reportt_jmltindakan,ab.absensi_shift FROM karyawan INNER JOIN jabatan ON(karyawan_jabatan=jabatan_id) LEFT JOIN (SELECT absensi_karyawan_id,absensi_tgl,absensi_shift FROM absensi WHERE date_format(absensi_tgl,'%Y-%m')='$bln_filter') as ab ON(karyawan.karyawan_id=ab.absensi_karyawan_id) LEFT JOIN (SELECT * FROM report_tindakan WHERE date_format(reportt_bln,'%Y-%m')='$bln_filter') as rt ON(karyawan_id=rt.reportt_karyawan_id) WHERE karyawan_jabatan=jabatan_id AND jabatan_nama='$karyawan_jabatan' AND karyawan_aktif='Aktif' ORDER BY reportt_jmltindakan ASC";
+				$sql7="SELECT karyawan_id,karyawan_no,karyawan_nama,karyawan_username,reportt_jmltindakan,ab.absensi_shift FROM karyawan INNER JOIN jabatan ON(karyawan_jabatan=jabatan_id) LEFT JOIN (SELECT absensi_karyawan_id,absensi_tgl,absensi_shift FROM absensi WHERE date_format(absensi_tgl,'%Y-%m')='$bln_filter') as ab ON(karyawan.karyawan_id=ab.absensi_karyawan_id) LEFT JOIN (SELECT * FROM report_tindakan WHERE date_format(reportt_bln,'%Y-%m')='$bln_filter') as rt ON(karyawan_id=rt.reportt_karyawan_id) WHERE karyawan_jabatan=jabatan_id AND jabatan_nama='$karyawan_jabatan' AND karyawan_aktif='Aktif' ORDER BY reportt_jmltindakan ASC";
 				/*if($query<>"" && is_numeric($query)==false){
 					$sql5 .=eregi("WHERE",$sql5)? " AND ":" WHERE ";
 					$sql5 .= " (karyawan_nama LIKE '%".addslashes($query)."%')";
 				}*/
-				$query5 = $this->db->query($sql5);
-				$nbrows5 = $query5->num_rows();
+				$query7 = $this->db->query($sql7);
+				$nbrows7 = $query7->num_rows();
 			}
 			
-			if($nbrows>0 || $nbrows2>0 || $nbrows3>0 || $nbrows4>0 || $nbrows5>0){
+			if($nbrows>0 || $nbrows2>0 || $nbrows3>0 || $nbrows4>0 || $nbrows5>0 || $nbrows6>0 || $nbrows7>0){
 				if($nbrows>0){
 					foreach($query->result() as $row){
 						$arr[] = $row;
@@ -129,7 +159,17 @@ class M_appointment extends Model{
 						$arr[] = $row5;
 					}
 				}
-				$nbrows=$nbrows+$nbrows2+$nbrows3+$nbrows4+$nbrows5;
+				if($nbrows6>0){
+					foreach($query6->result() as $row6){
+						$arr[] = $row6;
+					}
+				}
+				if($nbrows7>0){
+					foreach($query7->result() as $row7){
+						$arr[] = $row7;
+					}
+				}
+				$nbrows=$nbrows+$nbrows2+$nbrows3+$nbrows4+$nbrows5+$nbrows6+$nbrows7;
 				$jsonresult = json_encode($arr);
 				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
 			} else {
