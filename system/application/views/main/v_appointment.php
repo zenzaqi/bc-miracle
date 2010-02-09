@@ -793,7 +793,7 @@ Ext.onReady(function(){
 	});
 	var dapp_terapis_tpl = new Ext.XTemplate(
         '<tpl for="."><div class="search-item">',
-            '<span><b>{terapis_jmltindakan}</b> | <b>{terapis_username}</b> | {terapis_display} | <b>{absensi_shift}</b></span>',
+            '<span><b>{terapis_jmltindakan}</b> | <b>{terapis_username}</b> | <b>{absensi_shift}</b></span>',
         '</div></tpl>'
     );
     
@@ -873,7 +873,7 @@ Ext.onReady(function(){
 		{
 			header: 'Therapist',
 			dataIndex: 'terapis_username',
-			width: 70,
+			width: 140,
 			sortable: false,
 			editor: new Ext.form.ComboBox({
 				store: dapp_terapisDataStore,
@@ -1084,6 +1084,7 @@ Ext.onReady(function(){
 			text: 'Delete',
 			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
+			disabled: true,
 			handler: appointment_confirm_delete   // Confirm before deleting
 		}, '-', {
 			text: 'Search',
@@ -1099,7 +1100,10 @@ Ext.onReady(function(){
 				specialkey: function(f,e){
 					tbar_jenis_rawatField.reset();
 					if(e.getKey() == e.ENTER){
+						appointment_ColumnModel.setHidden(5,false);
+						appointment_ColumnModel.setHidden(6,false);
 						appointment_DataStore.baseParams={task:'LIST',start: 0, limit: pageS};
+						appointment_DataStore.groupBy('dokter_username');
 		            }
 				},
 				render: function(c){
@@ -1171,6 +1175,8 @@ Ext.onReady(function(){
 			tbar_dokter_tglField.setVisible(true);
 			Ext.getCmp('cbo_dokter').setVisible(true);
 			tbar_nonmedis_tglField.setVisible(false);
+			appointment_ColumnModel.setHidden(5,false);
+			appointment_ColumnModel.setHidden(6,true);
 			appointment_DataStore.load({params: {
 				task: 'LIST',
 				start: 0,
@@ -1184,6 +1190,8 @@ Ext.onReady(function(){
 			tbar_dokter_tglField.setVisible(false);
 			Ext.getCmp('cbo_dokter').setVisible(false);
 			tbar_nonmedis_tglField.setVisible(true);
+			appointment_ColumnModel.setHidden(5,true);
+			appointment_ColumnModel.setHidden(6,false);
 			appointment_DataStore.load({params: {
 				task: 'LIST',
 				start: 0,
@@ -1241,6 +1249,7 @@ Ext.onReady(function(){
 			text: 'Delete', 
 			tooltip: 'Delete selected record', 
 			iconCls:'icon-delete',
+			disabled: true,
 			handler: appointment_confirm_delete 
 		},
 		'-',
