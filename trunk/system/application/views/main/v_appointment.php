@@ -2105,7 +2105,7 @@ Ext.onReady(function(){
 			editor: new Ext.form.TextField({maxLength:250})
 		},{
             xtype: 'booleancolumn',
-            header: 'Counter',
+            header: 'Hitung',
             dataIndex: 'dapp_nonmedis_counter',
             align: 'center',
             width: 60,
