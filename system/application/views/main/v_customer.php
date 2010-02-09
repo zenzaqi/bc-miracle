@@ -351,13 +351,16 @@ var editor_cust_note;
 	function customer_confirm_delete(){
 		// only one customer is selected here
 		if(customerListEditorGrid.selModel.getCount() == 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', customer_delete);
+//			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', customer_delete);
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', customer_delete);
 		} else if(customerListEditorGrid.selModel.getCount() > 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', customer_delete);
+//			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', customer_delete);
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', customer_delete);
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really delete something you haven\'t selected?',
+//				msg: 'You can\'t really delete something you haven\'t selected?',
+				msg: 'Anda belum memilih data yang akan dihapus',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -384,7 +387,8 @@ var editor_cust_note;
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really update something you haven\'t selected?',
+//				msg: 'You can\'t really update something you haven\'t selected?',
+				msg: 'Anda belum memilih data yang akan diedit',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -408,7 +412,8 @@ var editor_cust_note;
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really update something you haven\'t selected?',
+//				msg: 'You can\'t really update something you haven\'t selected?',
+				msg: 'Anda belum memilih data yang akan diedit',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -427,7 +432,8 @@ var editor_cust_note;
 			}
 			var encoded_array = Ext.encode(prez);
 			Ext.Ajax.request({ 
-				waitMsg: 'Please Wait',
+//				waitMsg: 'Please Wait',
+				waitMsg: 'Silahkan tunggu',
 				url: 'index.php?c=c_customer&m=get_action', 
 				params: { task: "DELETE", ids:  encoded_array }, 
 				success: function(response){
@@ -721,7 +727,8 @@ var editor_cust_note;
 		
 
 		Ext.Ajax.request({   
-		waitMsg: 'Please Wait...',
+//		waitMsg: 'Please Wait...',
+		waitMsg: 'Silahkan tunggu...',
 		url: 'index.php?c=c_customer&m=get_action',
 		params: {
 			task: "PRINT",
@@ -1063,7 +1070,8 @@ var editor_cust_note;
 					default:
 						Ext.MessageBox.show({
 							   title: 'Warning',
-							   msg: 'We could\'t not save the customer.',
+//							   msg: 'We could\'t not save the customer.',
+							   msg: 'Data customer tidak bisa disimpan',
 							   buttons: Ext.MessageBox.OK,
 							   animEl: 'save',
 							   icon: Ext.MessageBox.WARNING
@@ -1184,7 +1192,8 @@ var editor_cust_note;
 		if(cust_cptelpField.getValue()!== null){cust_cptelp_create = cust_cptelpField.getValue();}
 
 			Ext.Ajax.request({  
-				waitMsg: 'Please wait...',
+//				waitMsg: 'Please wait...',
+				waitMsg: 'Silahkan tunggu...',
 				url: 'index.php?c=c_customer&m=get_action',
 				params: {
 					task: post2db,
@@ -1245,13 +1254,15 @@ var editor_cust_note;
 							}
 							customer_DataStore.reload();
 							customer_createWindow.hide();
-							Ext.MessageBox.alert(post2db+' OK','The Customer was '+msg+' successfully.');
+//							Ext.MessageBox.alert(post2db+' OK','The Customer was '+msg+' successfully.');
+							Ext.MessageBox.alert(post2db+' OK','Data customer berhasil disimpan');
 							
 							break;
 						default:
 							Ext.MessageBox.show({
 							   title: 'Warning',
-							   msg: 'We could\'t not '+msg+' the Customer.',
+//							   msg: 'We could\'t not '+msg+' the Customer.',
+							   msg: 'Data customer tidak bisa disimpan',
 							   buttons: Ext.MessageBox.OK,
 							   animEl: 'save',
 							   icon: Ext.MessageBox.WARNING
@@ -1276,7 +1287,8 @@ var editor_cust_note;
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'Your Form is not valid!.',
+//				msg: 'Your Form is not valid!.',
+				msg: 'Form Anda belum lengkap',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -1288,13 +1300,16 @@ var editor_cust_note;
 	function cust_note_confirm_delete(){
 		// only one record is selected here
 		if(cust_noteListEditorGrid.selModel.getCount() == 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', cust_note_delete);
+//			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', cust_note_delete);
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', cust_note_delete);
 		} else if(cust_noteListEditorGrid.selModel.getCount() > 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', cust_note_delete);
+//			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', cust_note_delete);
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', cust_note_delete);
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really delete something you haven\'t selected?',
+//				msg: 'You can\'t really delete something you haven\'t selected?',
+				msg: 'Anda belum memilih data yang akan dihapus',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -1359,7 +1374,8 @@ var editor_cust_note;
 		for(i=0;i<cust_note_DataStore.getCount();i++){
 			cust_note_record=cust_note_DataStore.getAt(i);
 			Ext.Ajax.request({
-				waitMsg: 'Please wait...',
+//				waitMsg: 'Please wait...',
+				waitMsg: 'Silahkan tunggu...',
 				url: 'index.php?c=c_customer&m=cust_note_insert',
 				params:{
 					note_id	: cust_note_record.data.note_id, 

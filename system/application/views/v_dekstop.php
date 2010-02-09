@@ -68,7 +68,12 @@
 			<p class="style5"><font style="font-weight:bold"><? $info=$this->m_public_function->get_info();echo $info->info_nama; ?></font>, <? echo $info->info_alamat; ?>&nbsp;&nbsp;
             </p>
 		</div>
-		<div style="float:right; margin-right:10px; margin-top:5px; color:#AF4046;"> Welcome <font style="font-weight:bold"><?=$_SESSION['userid']." (".$_SESSION["groupname"].")";?></font>&nbsp;[ <a  onClick="return confirm('Are you sure to logout?');" href="index.php?c=c_login&m=logout" style="color:#AF4046">Logout</a> ]
+		<div style="float:right; margin-right:10px; margin-top:5px; color:#AF4046;"> 
+<!--        Welcome --> 
+        Selamat datang
+        <font style="font-weight:bold"><?=$_SESSION['userid']." (".$_SESSION["groupname"].")";?></font>&nbsp;
+<!--        [ <a  onClick="return confirm('Are you sure to logout?'); " href="index.php?c=c_login&m=logout" style="color:#AF4046">Logout</a> ]-->
+ 		[<a  onClick="return confirm('Anda yakin untuk keluar?'); " href="index.php?c=c_login&m=logout" style="color:#AF4046">Keluar</a>]
         </div>
   	</div>
   	<div id="props-panel" style="width:200px;height:200px;overflow:hidden;"></div>
