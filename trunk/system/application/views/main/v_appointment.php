@@ -849,7 +849,7 @@ Ext.onReady(function(){
 		{
 			header: 'Customer',
 			dataIndex: 'cust_nama',
-			width: 210,
+			width: 190,
 			sortable: false,
 			renderer: disable_color
 		}, 
@@ -900,7 +900,7 @@ Ext.onReady(function(){
 		{
 			header: 'Status',
 			dataIndex: 'dapp_status',
-			width: 80,
+			width: 75,
 			sortable: false,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
@@ -918,9 +918,9 @@ Ext.onReady(function(){
             renderer: ch_status
 		}, 
 		{
-			header: 'Jam Datang',
+			header: 'Jam Dtg',
 			dataIndex: 'dapp_jamdatang',
-			width: 70,
+			width: 55,
 			sortable: false,
 			editor: new Ext.form.TextField({
 				maxLength: 10
@@ -1175,8 +1175,7 @@ Ext.onReady(function(){
 			tbar_dokter_tglField.setVisible(true);
 			Ext.getCmp('cbo_dokter').setVisible(true);
 			tbar_nonmedis_tglField.setVisible(false);
-			appointment_ColumnModel.setHidden(5,false);
-			appointment_ColumnModel.setHidden(6,true);
+			
 			appointment_DataStore.load({params: {
 				task: 'LIST',
 				start: 0,
@@ -1184,14 +1183,15 @@ Ext.onReady(function(){
 				jenis_rawat: tbar_jenis_rawatField.getValue()
 			}});
 			appointment_DataStore.groupBy('dokter_username');
+			//appointment_ColumnModel.setHidden(5,false);
+			//appointment_ColumnModel.setHidden(6,true);
 		}else if(tbar_jenis_rawatField.getValue()=="Non Medis"){
 			Ext.getCmp('cbo_dokter').reset();
 			tbar_dokter_tglField.reset();
 			tbar_dokter_tglField.setVisible(false);
 			Ext.getCmp('cbo_dokter').setVisible(false);
 			tbar_nonmedis_tglField.setVisible(true);
-			appointment_ColumnModel.setHidden(5,true);
-			appointment_ColumnModel.setHidden(6,false);
+			
 			appointment_DataStore.load({params: {
 				task: 'LIST',
 				start: 0,
@@ -1199,6 +1199,8 @@ Ext.onReady(function(){
 				jenis_rawat: tbar_jenis_rawatField.getValue()
 			}});
 			appointment_DataStore.groupBy('dapp_tglreservasi');
+			//appointment_ColumnModel.setHidden(5,true);
+			//appointment_ColumnModel.setHidden(6,false);
 		}
 	});
 	
