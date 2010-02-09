@@ -384,7 +384,7 @@ class M_appointment extends Model{
 
 		}
 		
-		function detail_appointment_detail_nonmedis_insert($dapp_nonmedis_id ,$dapp_nonmedis_master ,$dapp_nonmedis_perawatan ,$dapp_nonmedis_tglreservasi ,$dapp_nonmedis_jamreservasi ,$dapp_nonmedis_petugas2 ,$dapp_nonmedis_status ,$dapp_nonmedis_tgldatang ,$dapp_nonmedis_jamdatang ,$dapp_nonmedis_keterangan ,$app_cara ,$app_customer ,$app_keterangan ,$dapp_user){
+		function detail_appointment_detail_nonmedis_insert($dapp_nonmedis_id ,$dapp_nonmedis_master ,$dapp_nonmedis_perawatan ,$dapp_nonmedis_tglreservasi ,$dapp_nonmedis_jamreservasi ,$dapp_nonmedis_petugas2 ,$dapp_nonmedis_status ,$dapp_nonmedis_tgldatang ,$dapp_nonmedis_jamdatang ,$dapp_nonmedis_keterangan ,$dapp_nonmedis_counter ,$app_cara ,$app_customer ,$app_keterangan ,$dapp_user){
 			$sql="SELECT dapp_id FROM appointment_detail WHERE dapp_id='$dapp_nonmedis_id'";
 			$rs=$this->db->query($sql);
 			if(!$rs->num_rows()){
@@ -410,6 +410,7 @@ class M_appointment extends Model{
 					"dapp_tgldatang"=>$dapp_nonmedis_tgldatang, 
 					"dapp_jamdatang"=>$dapp_nonmedis_jamdatang,
 					"dapp_keterangan"=>$dapp_nonmedis_keterangan,
+					"dapp_counter"=>$dapp_nonmedis_counter,
 					"dapp_creator"=>$dapp_user
 				);
 				$this->db->insert('appointment_detail', $data); 
@@ -483,14 +484,14 @@ class M_appointment extends Model{
 						$bln_now=date('Y-m');
 						$sql="SELECT reportt_jmltindakan FROM report_tindakan WHERE reportt_bln LIKE '$bln_now%' AND reportt_karyawan_id='$dapp_nonmedis_petugas2'";
 						$rs=$this->db->query($sql);
-						if($rs->num_rows()){
+						if($rs->num_rows() && $dapp_nonmedis_counter=='true'){
 							$rs_record=$rs->row_array();
 							$data_reportt=array(
 							"reportt_jmltindakan"=>$rs_record["reportt_jmltindakan"]+1
 							);
 							$this->db->where('reportt_karyawan_id', $dapp_nonmedis_petugas2);
 							$this->db->update('report_tindakan', $data_reportt);
-						}else if(!$rs->num_rows()){
+						}else if(!$rs->num_rows() && $dapp_nonmedis_counter=='true'){
 							$data_reportt=array(
 							"reportt_karyawan_id"=>$dapp_nonmedis_petugas2,
 							"reportt_bln"=>$date_now,
@@ -608,7 +609,7 @@ class M_appointment extends Model{
 		}
 		
 		//function for update record
-		function appointment_update($app_id ,$app_customer ,$dapp_tglreservasi ,$app_cara ,$app_keterangan,$dapp_id, $dapp_status, $dokter_nama, $terapis_nama, $kategori_nama, $rawat_id, $dokter_id, $terapis_id, $dapp_jamreservasi, $cust_id, $dapp_dokter_no, $dapp_terapis_no, $dapp_dokter_ganti, $dapp_terapis_ganti, $dapp_keterangan, $dapp_locked, $app_user){
+		function appointment_update($app_id ,$app_customer ,$dapp_tglreservasi ,$app_cara ,$app_keterangan,$dapp_id, $dapp_status, $dokter_nama, $terapis_nama, $kategori_nama, $rawat_id, $dokter_id, $terapis_id, $dapp_jamreservasi, $cust_id, $dapp_dokter_no, $dapp_terapis_no, $dapp_dokter_ganti, $dapp_terapis_ganti, $dapp_keterangan, $dapp_locked, $dapp_counter, $app_user){
 			$dapp_locked=0;
 			$sql="SELECT dapp_locked FROM appointment_detail WHERE dapp_id='$dapp_id'";
 			$rs=$this->db->query($sql);
@@ -686,7 +687,7 @@ class M_appointment extends Model{
 						maka $dokter_id(dokter sebelumnya) dilakukan DE-Counter pada db.report_tindakan.reportt_jmltindakan */
 						$sql="SELECT reportt_jmltindakan FROM report_tindakan WHERE reportt_bln LIKE '$bln_now%' AND reportt_karyawan_id='$dokter_id'";
 						$rs=$this->db->query($sql);
-						if($rs->num_rows()){
+						if($rs->num_rows() && $dapp_counter=='true'){
 							$rs_record=$rs->row_array();
 							$reportt_jmltindakan=$rs_record["reportt_jmltindakan"];
 							//UPDATE jumlah_tindakan
@@ -701,14 +702,14 @@ class M_appointment extends Model{
 						//UPDATE/INSERT ke db.report_tindakan dari Dokter-Pengganti && $dapp_status=='datang'
 						$sql="SELECT reportt_jmltindakan FROM report_tindakan WHERE reportt_bln LIKE '$bln_now%' AND reportt_karyawan_id='$dapp_dokter_ganti'";
 						$rs=$this->db->query($sql);
-						if($rs->num_rows()){
+						if($rs->num_rows() && $dapp_counter=='true'){
 							$rs_record=$rs->row_array();
 							$data_reportt=array(
 							"reportt_jmltindakan"=>$rs_record["reportt_jmltindakan"]+1
 							);
 							$this->db->where('reportt_karyawan_id', $dapp_dokter_ganti);
 							$this->db->update('report_tindakan', $data_reportt);
-						}else if(!$rs->num_rows()){
+						}else if(!$rs->num_rows() && $dapp_counter=='true'){
 							$data_reportt=array(
 							"reportt_karyawan_id"=>$dapp_dokter_ganti,
 							"reportt_bln"=>$date_now,
@@ -720,14 +721,14 @@ class M_appointment extends Model{
 						//UPDATE/INSERT ke db.report_tindakan dari Dokter KETIKA $dapp_status BERUBAH 'datang'
 						$sql="SELECT reportt_jmltindakan FROM report_tindakan WHERE reportt_bln LIKE '$bln_now%' AND reportt_karyawan_id='$dokter_id'";
 						$rs=$this->db->query($sql);
-						if($rs->num_rows()){
+						if($rs->num_rows() && $dapp_counter=='true'){
 							$rs_record=$rs->row_array();
 							$data_reportt=array(
 							"reportt_jmltindakan"=>$rs_record["reportt_jmltindakan"]+1
 							);
 							$this->db->where('reportt_karyawan_id', $dokter_id);
 							$this->db->update('report_tindakan', $data_reportt);
-						}else if(!$rs->num_rows()){
+						}else if(!$rs->num_rows() && $dapp_counter=='true'){
 							$data_reportt=array(
 							"reportt_karyawan_id"=>$dokter_id,
 							"reportt_bln"=>$date_now,
@@ -746,7 +747,7 @@ class M_appointment extends Model{
 						maka $terapis_id(terapis sebelumnya) dilakukan DE-Counter pada db.report_tindakan.reportt_jmltindakan */
 						$sql="SELECT reportt_jmltindakan FROM report_tindakan WHERE reportt_bln LIKE '$bln_now%' AND reportt_karyawan_id='$terapis_id'";
 						$rs=$this->db->query($sql);
-						if($rs->num_rows()){
+						if($rs->num_rows() && $dapp_counter=='true'){
 							$rs_record=$rs->row_array();
 							$reportt_jmltindakan=$rs_record["reportt_jmltindakan"];
 							//UPDATE jumlah_tindakan
@@ -761,14 +762,14 @@ class M_appointment extends Model{
 						//UPDATE/INSERT ke db.report_tindakan dari Terapis-Pengganti && $dapp_status=='datang'
 						$sql="SELECT reportt_jmltindakan FROM report_tindakan WHERE reportt_bln LIKE '$bln_now%' AND reportt_karyawan_id='$dapp_terapis_ganti'";
 						$rs=$this->db->query($sql);
-						if($rs->num_rows()){
+						if($rs->num_rows() && $dapp_counter=='true'){
 							$rs_record=$rs->row_array();
 							$data_reportt=array(
 							"reportt_jmltindakan"=>$rs_record["reportt_jmltindakan"]+1
 							);
 							$this->db->where('reportt_karyawan_id', $dapp_terapis_ganti);
 							$this->db->update('report_tindakan', $data_reportt);
-						}else if(!$rs->num_rows()){
+						}else if(!$rs->num_rows() && $dapp_counter=='true'){
 							$data_reportt=array(
 							"reportt_karyawan_id"=>$dapp_terapis_ganti,
 							"reportt_bln"=>$date_now,
@@ -780,14 +781,14 @@ class M_appointment extends Model{
 						//UPDATE/INSERT ke db.report_tindakan dari Terapis KETIKA $dapp_status BERUBAH 'datang'
 						$sql="SELECT reportt_jmltindakan FROM report_tindakan WHERE reportt_bln LIKE '$bln_now%' AND reportt_karyawan_id='$terapis_id'";
 						$rs=$this->db->query($sql);
-						if($rs->num_rows()){
+						if($rs->num_rows() && $dapp_counter=='true'){
 							$rs_record=$rs->row_array();
 							$data_reportt=array(
 							"reportt_jmltindakan"=>$rs_record["reportt_jmltindakan"]+1
 							);
 							$this->db->where('reportt_karyawan_id', $terapis_id);
 							$this->db->update('report_tindakan', $data_reportt);
-						}else if(!$rs->num_rows()){
+						}else if(!$rs->num_rows() && $dapp_counter=='true'){
 							$data_reportt=array(
 							"reportt_karyawan_id"=>$terapis_id,
 							"reportt_bln"=>$date_now,
@@ -928,7 +929,7 @@ class M_appointment extends Model{
 					//decounter table.report_tindakan
 					$sql="SELECT reportt_jmltindakan FROM report_tindakan WHERE reportt_bln LIKE '$bln_now%' AND (reportt_karyawan_id='$dokter_id' OR reportt_karyawan_id='$terapis_id')";
 					$rs=$this->db->query($sql);
-					if($rs->num_rows()){
+					if($rs->num_rows() && $dapp_counter=='true'){
 						$rs_record=$rs->row_array();
 						$reportt_jmltindakan=$rs_record["reportt_jmltindakan"];
 						//UPDATE jumlah_tindakan
