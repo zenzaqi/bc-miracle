@@ -1100,8 +1100,8 @@ Ext.onReady(function(){
 				specialkey: function(f,e){
 					tbar_jenis_rawatField.reset();
 					if(e.getKey() == e.ENTER){
-						appointment_ColumnModel.setHidden(5,false);
-						appointment_ColumnModel.setHidden(6,false);
+						//appointment_ColumnModel.setHidden(5,false);
+						//appointment_ColumnModel.setHidden(6,false);
 						appointment_DataStore.baseParams={task:'LIST',start: 0, limit: pageS};
 						appointment_DataStore.groupBy('dokter_username');
 		            }
