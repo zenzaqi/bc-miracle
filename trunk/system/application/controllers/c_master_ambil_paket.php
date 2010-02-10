@@ -26,11 +26,25 @@ class C_master_ambil_paket extends Controller {
 		$this->load->view('main/v_master_ambil_paket');
 	}
 	
+	function get_history_ambil_paket(){
+		$apaket_id = isset($_POST['master_id']) ? $_POST['master_id'] : 0;
+		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		$result = $this->m_master_ambil_paket->get_history_ambil_paket($apaket_id,$start,$end);
+		echo $result;
+	}
+	
 	function get_isi_rawat_list(){
 		$paket_id = isset($_POST['master_id']) ? $_POST['master_id'] : 0;
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
 		$result = $this->m_master_ambil_paket->get_isi_rawat_list($paket_id,$start,$end);
+		echo $result;
+	}
+	
+	function get_pengguna_paket_list(){
+		$jpaket_id = isset($_POST['master_id']) ? $_POST['master_id'] : 0;
+		$result = $this->m_master_ambil_paket->get_pengguna_paket_list($jpaket_id);
 		echo $result;
 	}
 	
@@ -67,7 +81,8 @@ class C_master_ambil_paket extends Controller {
 		$rambil_paket_master=trim(@$_POST["rambil_paket_master"]);
 		$rambil_paket_perawatan=trim(@$_POST["rambil_paket_perawatan"]);
 		$rambil_paket_jumlah=trim(@$_POST["rambil_paket_jumlah"]);
-		$result=$this->m_master_ambil_paket->detail_ambil_paket_isi_perawatan_insert($rambil_paket_id ,$rambil_paket_master ,$rambil_paket_perawatan ,$rambil_paket_jumlah );
+		$rambil_paket_cust=trim(@$_POST["rambil_paket_cust"]);
+		$result=$this->m_master_ambil_paket->detail_ambil_paket_isi_perawatan_insert($rambil_paket_id ,$rambil_paket_master ,$rambil_paket_perawatan ,$rambil_paket_jumlah ,$rambil_paket_cust );
 	}
 	
 	
