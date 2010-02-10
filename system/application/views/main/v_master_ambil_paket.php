@@ -367,7 +367,7 @@ Ext.onReady(function(){
   	/* End of Function */
   
 	/* Function for Retrieve DataStore */
-	ambil_paket_DataStore = new Ext.data.GroupingStore({
+	ambil_paket_DataStore = new Ext.data.Store({
 		id: 'ambil_paket_DataStore',
 		proxy: new Ext.data.HttpProxy({
 			url: 'index.php?c=c_master_ambil_paket&m=get_action', 
@@ -395,8 +395,7 @@ Ext.onReady(function(){
 			{name: 'apaket_id', type: 'int', mapping: 'apaket_id'},
 			{name: 'paket_jmlisi', type: 'int', mapping: 'paket_jmlisi'}
 		]),
-		sortInfo:{field: 'paket_nama', direction: "ASC"},
-		groupField:'cust_nama'
+		sortInfo:{field: 'paket_nama', direction: "ASC"}
 	});
 	/* End of Function */
 	
@@ -513,11 +512,11 @@ Ext.onReady(function(){
 		frame: true,
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
-		//viewConfig: { forceFit:true },
-		view: new Ext.grid.GroupingView({
+		viewConfig: { forceFit:true },
+		/*view: new Ext.grid.GroupingView({
             forceFit:true,
             groupTextTpl: '{text} ({[values.rs.length]} {[values.rs.length > 1 ? "Items" : "Item"]})'
-        }),
+        }),*/
 	  	width: 800,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
