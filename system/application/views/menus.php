@@ -59,7 +59,8 @@ MainPanel = function() {
 
 		items: {
 			id:'welcome-panel',
-			title: 'Welcome Home',
+//			title: 'Welcome Home',
+			title: 'Home',
 			<? if(file_exists("./uploads/".$ibackground)){?>
 			style: 'background: url(./uploads/<?=$ibackground;?>)',
 			<? }else{ ?>
