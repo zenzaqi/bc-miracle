@@ -182,6 +182,7 @@ Ext.onReady(function(){
 						ambil_paket_isi_perawatan_insert();
 						Ext.MessageBox.alert(post2db+' OK','The Paket was '+msg+' successfully.');
 						ambil_paket_DataStore.reload();
+						history_ambil_paketStore.reload();
 						ambil_paket_createWindow.hide();
 						break;
 					default:
@@ -302,6 +303,7 @@ Ext.onReady(function(){
 		if(ambil_paketListEditorGrid.selModel.getCount() == 1) {
 			ambil_paket_set_form();
 			cbo_paket_isi_rawatDataStore.load({params:{master_id:ambil_paketListEditorGrid.getSelectionModel().getSelected().get('paket_id')}});
+			cbo_ambil_paket_custDataStore.load({params:{master_id:ambil_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_id')}});
 			//cbo_paket_isi_rawatDataStore.load({params:{master_id:0}});
 			post2db='UPDATE';
 			//ambil_paket_isi_perawatan_DataStore.load({params : {master_id : eval(get_pk_id()), start:0, limit:pageS}});
@@ -422,40 +424,77 @@ Ext.onReady(function(){
             '<span>{isi_rawat_kode}| <b>{isi_rawat_display}</b>| Sisa: <b>{sapaket_sisa_item}</b>',
 		'</div></tpl>'
     );
+	
+	cbo_ambil_paket_custDataStore = new Ext.data.Store({
+		id: 'cbo_ambil_paket_custDataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_master_ambil_paket&m=get_pengguna_paket_list', 
+			method: 'POST'
+		}),
+		//baseParams: {start: 0, limit: 15 },
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'sjpaket_id'
+		},[
+			{name: 'pengguna_paket_id', type: 'int', mapping: 'sjpaket_id'},
+			{name: 'pengguna_paket_value', type: 'int', mapping: 'sjpaket_cust'},
+			{name: 'pengguna_paket_display', type: 'string', mapping: 'cust_nama'},
+			{name: 'cust_no', type: 'string', mapping: 'cust_no'},
+			{name: 'cust_tgllahir', type: 'date', dateFormat: 'Y-m-d', mapping: 'cust_tgllahir'},
+			{name: 'cust_alamat', type: 'string', mapping: 'cust_alamat'},
+			{name: 'cust_telprumah', type: 'string', mapping: 'cust_telprumah'}
+		]),
+		sortInfo:{field: 'pengguna_paket_display', direction: "ASC"}
+	});
+	var cust_tpl = new Ext.XTemplate(
+        '<tpl for="."><div class="search-item">',
+            '<span><b>{cust_no} : {pengguna_paket_display}</b> | Tgl-Lahir:{cust_tgllahir:date("M j, Y")}<br /></span>',
+            'Alamat: {cust_alamat}&nbsp;&nbsp;&nbsp;[Telp. {cust_telprumah}]',
+        '</div></tpl>'
+    );
     
   	/* Function for Identify of Window Column Model */
 	ambil_paket_ColumnModel = new Ext.grid.ColumnModel(
 		[{
 			header: 'Customer',
 			dataIndex: 'cust_nama',
-			width: 150,
+			width: 230,
 			sortable: true
 		}, 
 		{
 			header: 'No.Faktur',
 			dataIndex: 'jpaket_nobukti',
-			width: 150,
+			width: 80,
 			sortable: true
 		}, 
 		{
 			header: 'Nama Paket',
 			dataIndex: 'paket_nama',
-			width: 150,
+			width: 230,
 			sortable: true
 		}, 
 		{
 			header: 'Tgl Faktur',
 			dataIndex: 'jpaket_tanggal',
-			width: 150,
+			width: 70,
 			sortable: true,
 			renderer: Ext.util.Format.dateRenderer('Y-m-d')
 		}, 
 		{
-			header: 'Tgl Exp ',
+			header: 'Tgl Exp',
 			dataIndex: 'dpaket_kadaluarsa',
-			width: 150,
+			width: 70,
 			sortable: true,
 			renderer: Ext.util.Format.dateRenderer('Y-m-d')
+		}, 
+		{
+			header: 'Total Sisa Paket',
+			dataIndex: 'apaket_sisa_paket',
+			width: 90,
+			renderer: function(value, cell, record){
+				return '<div align="right">' + value + '</div>';
+			}
 		}]
 	);
 	
@@ -545,6 +584,11 @@ Ext.onReady(function(){
 	});
 	ambil_paketListEditorGrid.render();
 	/* End of DataStore */
+	
+	ambil_paketListEditorGrid.on('rowclick', function (ambil_paketListEditorGrid, rowIndex, eventObj) {
+        var recordMaster = ambil_paketListEditorGrid.getSelectionModel().getSelected();
+        history_ambil_paketStore.load({params : {master_id : recordMaster.get("apaket_id")}});
+    });
      
 	/* Create Context Menu */
 	ambil_paket_ContextMenu = new Ext.menu.Menu({
@@ -591,7 +635,8 @@ Ext.onReady(function(){
 	
 	/* function for editing row via context menu */
 	function ambil_paket_editContextMenu(){
-		ambil_paketListEditorGrid.startEditing(ambil_paket_SelectedRow,1);
+		//ambil_paketListEditorGrid.startEditing(ambil_paket_SelectedRow,1);
+		ambil_paket_confirm_update();
   	}
 	/* End of Function */
   	
@@ -683,6 +728,88 @@ Ext.onReady(function(){
 	
 	});
 	
+	/* START History Ambil Paket */
+	/* Start History DataStore */
+	history_ambil_paketStore = new Ext.data.GroupingStore({
+		id: 'history_ambil_paketStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_master_ambil_paket&m=get_history_ambil_paket', 
+			method: 'POST'
+		}),
+		baseParams:{task: "LIST",start:0,limit:pageS}, // parameter yang di $_POST ke Controller
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total'//,
+			//id: 'app_id'
+		},[
+			{name: 'dapaket_id', type: 'int', mapping: 'dapaket_id'},
+        	{name: 'dapaket_master', type: 'int', mapping: 'dapaket_master'},
+        	{name: 'dapaket_dpaket', type: 'int', mapping: 'dapaket_dpaket'},
+			{name: 'dapaket_item', type: 'int', mapping: 'dapaket_item'},
+			{name: 'dapaket_jumlah', type: 'int', mapping: 'dapaket_jumlah'},
+			{name: 'dapaket_cust', type: 'string', mapping: 'cust_nama'},
+			{name: 'rawat_nama', type: 'string', mapping: 'rawat_nama'},
+			{name: 'paket_nama', type: 'string', mapping: 'paket_nama'},
+			{name: 'apaket_faktur', type: 'string', mapping: 'apaket_faktur'}
+		]),
+		sortInfo:{field: 'dapaket_id', direction: "ASC"},
+		groupField: 'apaket_faktur'
+	});
+	/* End DataStore */
+	history_ambil_paketStore.load({params: {master_id: '0'}});
+	
+	history_ambil_paketColumnModel = new Ext.grid.ColumnModel(
+		[{
+			header: 'dapaket_id',
+			dataIndex: 'dapaket_id',
+			width: 60,
+			hidden: true
+		},{
+			header: 'No.Faktur',
+			dataIndex: 'apaket_faktur',
+			width: 90
+		},{
+			header: 'Nama Paket',
+			dataIndex: 'paket_nama',
+			width: 210
+		},{
+			header: 'Perawatan',
+			dataIndex: 'rawat_nama',
+			width: 210
+		},{
+			header: 'Jumlah',
+			dataIndex: 'dapaket_jumlah',
+			width: 60,
+			renderer: function(value, cell, record){
+				return '<div align="right">' + value + '</div>';
+			}
+		},{
+			header: 'Customer',
+			dataIndex: 'dapaket_cust',
+			width: 210
+		}]
+    );
+    history_ambil_paketColumnModel.defaultSortable= true;
+	
+	var history_ambil_paketPanel = new Ext.grid.GridPanel({
+		id: 'history_ambil_paketPanel',
+		title: 'History Pengambilan Paket',
+        store: history_ambil_paketStore,
+        cm: history_ambil_paketColumnModel,
+		view: new Ext.grid.GroupingView({
+            forceFit:true,
+            groupTextTpl: '{text} ({[values.rs.length]} {[values.rs.length > 1 ? "Items" : "Item"]})'
+        }),
+        stripeRows: true,
+        autoExpandColumn: 'company',
+        autoHeight: true,
+		style: 'margin-top: 10px',
+        width:800
+    });
+    history_ambil_paketPanel.render('history_ambil_paket');
+
+	/* END History Ambil Paket */
+	
 		
 	/*Detail Declaration */
 	/* START Detail Isi Perawatan */
@@ -695,7 +822,7 @@ Ext.onReady(function(){
 	/* dataIndex => insert intoperawatan_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'rpaket_id', type: 'int', mapping: 'rpaket_id'}, 
 			{name: 'rpaket_perawatan', type: 'int', mapping: 'rpaket_perawatan'}, 
-			{name: 'rpaket_jumlah', type: 'int', mapping: 'rpaket_jumlah'} 
+			{name: 'rpaket_jumlah', type: 'int', mapping: 'rpaket_jumlah'}
 	]);
 	//eof
 	
@@ -745,6 +872,26 @@ Ext.onReady(function(){
 
 	});
 	
+	var combo_cust_ambil_paket=new Ext.form.ComboBox({
+			store: cbo_ambil_paket_custDataStore,
+			mode: 'local',
+			displayField: 'pengguna_paket_display',
+			valueField: 'pengguna_paket_value',
+			typeAhead: false,
+			loadingText: 'Searching...',
+			pageSize:15,
+			hideTrigger:false,
+			tpl: cust_tpl,
+			//applyTo: 'search',
+			itemSelector: 'div.search-item',
+			triggerAction: 'all',
+			lazyRender:true,
+			allowBlank: true,
+			listClass: 'x-combo-list-small',
+			anchor: '95%'
+
+	});
+	
 	//declaration of detail coloumn model
 	ambil_paket_isi_perawatan_ColumnModel = new Ext.grid.ColumnModel(
 		[
@@ -768,6 +915,14 @@ Ext.onReady(function(){
 				maxLength: 11,
 				maskRe: /([0-9]+)$/
 			})
+		},
+		{
+			header: 'Customer',
+			dataIndex: 'rpaket_cust',
+			width: 150,
+			sortable: true,
+			editor: combo_cust_ambil_paket,
+			renderer: Ext.util.Format.comboRenderer(combo_cust_ambil_paket)
 		}]
 	);
 	ambil_paket_isi_perawatan_ColumnModel.defaultSortable= true;
@@ -849,7 +1004,8 @@ Ext.onReady(function(){
 				rambil_paket_master	: eval(ambil_apaket_idField.getValue()), 
 				rambil_paket_id	: eval(ambil_paket_idField.getValue()), 
 				rambil_paket_perawatan	: ambil_paket_isi_perawatan_record.data.rpaket_perawatan, 
-				rambil_paket_jumlah	: ambil_paket_isi_perawatan_record.data.rpaket_jumlah 
+				rambil_paket_jumlah	: ambil_paket_isi_perawatan_record.data.rpaket_jumlah,
+				rambil_paket_cust	: ambil_paket_isi_perawatan_record.data.rpaket_cust
 				
 				}
 			});
@@ -1432,6 +1588,7 @@ Ext.onReady(function(){
 		 <div id="fp_ambil_paket_isi_produk"></div>
 		<div id="elwindow_ambil_paket_create"></div>
         <div id="elwindow_ambil_paket_search"></div>
+		<div id="history_ambil_paket"></div>
     </div>
 </div>
 </body>

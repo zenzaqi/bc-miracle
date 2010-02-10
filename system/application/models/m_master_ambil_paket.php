@@ -18,6 +18,41 @@ class M_master_ambil_paket extends Model{
 			parent::Model();
 		}
 		
+		function get_pengguna_paket_list($jpaket_id){
+			$query = "SELECT sjpaket_id, sjpaket_cust, cust_nama, cust_no, cust_tgllahir, cust_alamat, cust_telprumah FROM submaster_jual_paket INNER JOIN customer ON(sjpaket_cust=cust_id) WHERE sjpaket_master='$jpaket_id'";
+			$result = $this->db->query($query);
+			$nbrows = $result->num_rows();
+			
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+		
+		function get_history_ambil_paket($apaket_id,$start,$end){
+			/* Ambil dari db.detail_ambil_paket */
+			$query = "SELECT dapaket_id, dapaket_master, dapaket_dpaket, dapaket_item, dapaket_jumlah, dapaket_cust, cust_nama, rawat_nama, paket_nama, apaket_faktur FROM detail_ambil_paket INNER JOIN paket ON(dapaket_dpaket=paket_id) LEFT JOIN perawatan ON(dapaket_item=rawat_id) LEFT JOIN master_ambil_paket ON(dapaket_master=apaket_id) LEFT JOIN customer ON(dapaket_cust=cust_id) WHERE dapaket_master='$apaket_id'";
+			$result = $this->db->query($query);
+			$nbrows = $result->num_rows();
+			$limit = $query." LIMIT ".$start.",".$end;			
+			$result = $this->db->query($limit);  
+			
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+		
 		//Ambil Perawatan berdasarkan db.paket_isi_perawatan.rpaket_perawatan yang dihasilkan dari (db.paket_isi_perawatan.rpaket_master = paket.paket_id)
 		function get_isi_rawat_list($paket_id,$start,$end){
 			$rs_rows=0;
@@ -103,7 +138,7 @@ class M_master_ambil_paket extends Model{
 		//*eof
 		
 		//insert detail record
-		function detail_ambil_paket_isi_perawatan_insert($rambil_paket_id ,$rambil_paket_master ,$rambil_paket_perawatan ,$rambil_paket_jumlah ){
+		function detail_ambil_paket_isi_perawatan_insert($rambil_paket_id ,$rambil_paket_master ,$rambil_paket_perawatan ,$rambil_paket_jumlah ,$rambil_paket_cust){
 			//if master id not capture from view then capture it from max pk from master table
 			if($rambil_paket_master=="" || $rambil_paket_master==NULL){
 				$rambil_paket_master=$this->get_master_id();
@@ -120,7 +155,8 @@ class M_master_ambil_paket extends Model{
 			"dapaket_master"=>$rambil_paket_master,
 			"dapaket_dpaket"=>$rambil_paket_id,
 			"dapaket_item"=>$rambil_paket_perawatan,
-			"dapaket_jumlah"=>$rambil_paket_jumlah
+			"dapaket_jumlah"=>$rambil_paket_jumlah,
+			"dapaket_cust"=>$rambil_paket_cust
 			);
 			$this->db->insert('detail_ambil_paket', $data);
 			if($this->db->affected_rows()){
@@ -129,8 +165,9 @@ class M_master_ambil_paket extends Model{
 				$rs_sapaket=$this->db->query($sql_sapaket);
 				$rs_sapaket_record=$rs_sapaket->row_array();
 				
+				$sapaket_sisa_item_temp=$rs_sapaket_record["sapaket_sisa_item"]-$rambil_paket_jumlah;
 				$dtu_sapaket=array(
-				"sapaket_sisa_item"=>$rs_sapaket_record["sapaket_sisa_item"]-$rambil_paket_jumlah
+				"sapaket_sisa_item"=>$sapaket_sisa_item_temp
 				);
 				$this->db->where('sapaket_master', $rambil_paket_master);
 				$this->db->where('sapaket_item', $rambil_paket_perawatan);
