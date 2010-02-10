@@ -146,7 +146,7 @@ Ext.onReady(function(){
 		var perawatan_du_update=null;
 		var perawatan_dm_update=null;
 		var cust_member_update=null;
-		var dtrawat_petugas2_no_update=null;
+		var dtrawat_terapis_id_update=null;
 		var dtrawat_keterangan_update=null;
 		var dtrawat_dapp_update="";
 
@@ -162,7 +162,8 @@ Ext.onReady(function(){
 		perawatan_du_update = oGrid_event.record.data.perawatan_du;
 		perawatan_dm_update = oGrid_event.record.data.perawatan_dm;
 		cust_member_update = oGrid_event.record.data.cust_member;
-		dtrawat_petugas2_no_update = oGrid_event.record.data.dtrawat_petugas2_no;
+		dtrawat_terapis_update = oGrid_event.record.data.dtrawat_petugas2;
+		dtrawat_terapis_id_update = oGrid_event.record.data.dtrawat_petugas2_id;
 		if(oGrid_event.record.data.dtrawat_keterangan!== null){dtrawat_keterangan_update = oGrid_event.record.data.dtrawat_keterangan;}
 		dtrawat_dapp_update = oGrid_event.record.data.dtrawat_dapp;
 
@@ -171,6 +172,7 @@ Ext.onReady(function(){
 			url: 'index.php?c=c_tindakan_nonmedis&m=get_action',
 			params: {
 				task: "UPDATE",
+				mode_edit: "update_list",
 				trawat_id	: trawat_id_update_pk, 
 				trawat_cust	:trawat_cust_update,  
 				trawat_keterangan	:trawat_keterangan_update,  
@@ -183,7 +185,8 @@ Ext.onReady(function(){
 				rawat_du	:perawatan_du_update,
 				rawat_dm	:perawatan_dm_update,
 				cust_member	:cust_member_update,
-				dtrawat_petugas2_no	: dtrawat_petugas2_no_update,
+				dtrawat_terapis	: dtrawat_terapis_update,
+				dtrawat_terapis_id	: dtrawat_terapis_id_update,
 				dtrawat_keterangan	:dtrawat_keterangan_update,
 				dtrawat_dapp	: dtrawat_dapp_update
 			}, 
@@ -223,7 +226,7 @@ Ext.onReady(function(){
 	function tindakan_nonmedis_create(){
 	
 		if(is_tindakan_nonmedis_form_valid()){	
-		var trawat_id_create_pk=null; 
+		var trawat_id_create=null; 
 		var trawat_cust_create=null; 
 		var trawat_keterangan_create=null; 
 
@@ -236,7 +239,7 @@ Ext.onReady(function(){
 			url: 'index.php?c=c_tindakan_nonmedis&m=get_action',
 			params: {
 				task: post2db,
-				trawat_id	: trawat_id_create_pk, 
+				trawat_id	: trawat_id_create, 
 				trawat_cust	: trawat_cust_create, 
 				trawat_keterangan	: trawat_keterangan_create, 
 			}, 
@@ -420,7 +423,7 @@ Ext.onReady(function(){
   	/* End of Function */
   	
 	Ext.util.Format.comboRenderer = function(combo){
-		dtrawat_perawatanDataStore.load();
+		//dtrawat_perawatanDataStore.load();
 		return function(value){
 			var record = combo.findRecord(combo.valueField, value);
 			return record ? record.get(combo.displayField) : combo.valueNotFoundText;
@@ -455,8 +458,8 @@ Ext.onReady(function(){
 			{name: 'dtrawat_dapp', type: 'int', mapping: 'dtrawat_dapp'},
 			{name: 'dtrawat_perawatan_id', type: 'int', mapping: 'dtrawat_perawatan'},
 			{name: 'dtrawat_perawatan', type: 'string', mapping: 'rawat_nama'},
-			{name: 'dtrawat_petugas2', type: 'string', mapping: 'karyawan_username'},
-			{name: 'dtrawat_petugas2_no', type: 'string', mapping: 'karyawan_no'},
+			{name: 'dtrawat_petugas2', type: 'string', mapping: 'terapis_username'},
+			{name: 'dtrawat_petugas2_id', type: 'string', mapping: 'terapis_id'},
 			{name: 'dtrawat_jam', type: 'string', mapping: 'dtrawat_jam'},
 			{name: 'dtrawat_tglapp', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'dtrawat_tglapp'},
 			{name: 'dtrawat_status', type: 'string', mapping: 'dtrawat_status'},
@@ -606,7 +609,6 @@ Ext.onReady(function(){
 			dataIndex: 'dtrawat_petugas2',
 			width: 80,
 			sortable: true,
-			editable:false,
 			editor: new Ext.form.ComboBox({
 				store: dtrawat_karyawanDataStore,
 				mode: 'remote',
@@ -1047,6 +1049,12 @@ Ext.onReady(function(){
 			triggerAction: 'all'
 	});
 	
+	var checkColumn = new Ext.grid.CheckColumn({
+		header: 'Ambil Paket',
+		dataIndex: 'dtrawat_ambil_paket',
+		width: 75
+	});
+	
 	//declaration of detail coloumn model
 	tindakan_nonmedis_detail_ColumnModel = new Ext.grid.ColumnModel(
 		[
@@ -1107,7 +1115,7 @@ Ext.onReady(function(){
 			editor: new Ext.form.TextField({
 				maxLength: 250,
 			})
-		}]
+		},checkColumn]
 	);
 	tindakan_nonmedis_detail_ColumnModel.defaultSortable= true;
 	//eof
@@ -1120,14 +1128,14 @@ Ext.onReady(function(){
 		el: 'fp_tindakan_nonmedis_detail',
 		title: 'Detail tindakan_nonmedis_detail',
 		height: 250,
-		width: 888,
+		width: 920,
 		autoScroll: true,
 		store: tindakan_nonmedis_detail_DataStore, // DataStore
 		colModel: tindakan_nonmedis_detail_ColumnModel, // Nama-nama Columns
 		enableColLock:false,
 		region: 'center',
         margins: '0 5 5 5',
-		plugins: [editor_tindakan_nonmedis_detail],
+		plugins: [editor_tindakan_nonmedis_detail,checkColumn],
 		frame: true,
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
@@ -1198,7 +1206,8 @@ Ext.onReady(function(){
 					dtrawat_jam	: tindakan_nonmedis_detail_record.data.dtrawat_jam, 
 					dtrawat_kategori	: tindakan_nonmedis_detail_record.data.dtrawat_kategori, 
 					dtrawat_status	: tindakan_nonmedis_detail_record.data.dtrawat_status, 
-					dtrawat_keterangan	: tindakan_nonmedis_detail_record.data.dtrawat_keterangan
+					dtrawat_keterangan	: tindakan_nonmedis_detail_record.data.dtrawat_keterangan,
+					dtrawat_ambil_paket	: tindakan_nonmedis_detail_record.data.dtrawat_ambil_paket
 					},
 					callback: function(opts, success, response){
 						if(success)
@@ -1264,7 +1273,7 @@ Ext.onReady(function(){
 		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
-		width: 900,        
+		width: 930,        
 		items: [tindakan_nonmedis_masterGroup,tindakan_nonmedis_detailListEditorGrid]
 		,
 		buttons: [{
