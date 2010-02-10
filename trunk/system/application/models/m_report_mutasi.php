@@ -38,10 +38,10 @@ class M_report_mutasi extends Model{
 			//full query
 			$query = "SELECT master_mutasi.*,asal.gudang_nama as gudang_nama_asal,tujuan.gudang_nama as gudang_nama_tujuan FROM `master_mutasi`,`gudang` as asal,`gudang` as tujuan WHERE mutasi_asal=asal.gudang_id AND mutasi_tujuan=tujuan.gudang_id";
 //			
-//			if($_SESSION["usergroup"]==3){
-//				$query .=" and agenda_sales='".$_SESSION["userid"]."'";
-//			}else if($_SESSION["usergroup"]==2){
-//				$query .=" and agenda_sales in (select user_id from tbl_users where user_manager='".$_SESSION["userid"]."')";
+//			if($_SESSION[SESSION_GROUPID]==3){
+//				$query .=" and agenda_sales='".$_SESSION[SESSION_USERID]."'";
+//			}else if($_SESSION[SESSION_GROUPID]==2){
+//				$query .=" and agenda_sales in (select user_id from tbl_users where user_manager='".$_SESSION[SESSION_USERID]."')";
 //			}
 			
 			if($mutasi_asal!=''){

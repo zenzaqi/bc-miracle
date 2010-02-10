@@ -37,7 +37,7 @@ class M_phonegroup extends Model{
 						'".$isms_opsi.":".$isms_dest."',
 						'".$isms_isi."',
 						'".date('Y/m/d H:i:s')."',
-						'".$_SESSION["userid"]."',
+						'".$_SESSION[SESSION_USERID]."',
 						'".date('Y/m/d H:i:s')."')";
 				$this->db->query($sql);
 				//echo $sql;
@@ -57,7 +57,7 @@ class M_phonegroup extends Model{
 								'".$isms_isi."',
 								'".date('Y/m/d H:i:s')."',
 								'unsent',
-								'".$_SESSION["userid"]."',
+								'".$_SESSION[SESSION_USERID]."',
 								'".date('Y/m/d H:i:s')."')";
 						$this->db->query($sql);
 						$sql="";
@@ -78,7 +78,7 @@ class M_phonegroup extends Model{
 								'".$isms_isi."',
 								'".date('Y/m/d H:i:s')."',
 								'unsent',
-								'".$_SESSION["userid"]."',
+								'".$_SESSION[SESSION_USERID]."',
 								'".date('Y/m/d H:i:s')."')";
 							//echo $sql;
 						$this->db->query($sql);

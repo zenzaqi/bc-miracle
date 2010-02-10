@@ -78,7 +78,7 @@ class C_inbox extends Controller {
 		$inbox_message=str_replace("/(<\/?)(p)([^>]*>)", "",$inbox_message);
 		$inbox_message=str_replace("'", "''",$inbox_message);
 		$inbox_date=trim(@$_POST["inbox_date"]);
-		$inbox_creator=@$_SESSION["userid"];
+		$inbox_creator=@$_SESSION[SESSION_USERID];
 		$inbox_date_create=date('m/d/Y');
 		//$inbox_update=NULL;
 		//$inbox_date_update=NULL;
@@ -101,7 +101,7 @@ class C_inbox extends Controller {
 		$inbox_date=trim(@$_POST["inbox_date"]);
 		//$inbox_creator="inbox_creator";
 		//$inbox_date_create="inbox_date_create";
-		$inbox_update=@$_SESSION["userid"];
+		$inbox_update=@$_SESSION[SESSION_USERID];
 		$inbox_date_update=date('m/d/Y');
 		//$inbox_revised="(revised+1)";
 		$result = $this->m_inbox->inbox_update($inbox_id,$inbox_sender,$inbox_message,$inbox_date,$inbox_update,$inbox_date_update);

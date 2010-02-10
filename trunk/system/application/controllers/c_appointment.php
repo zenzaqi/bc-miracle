@@ -151,7 +151,7 @@ class C_appointment extends Controller {
 		$app_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$app_keterangan);
 		$app_keterangan=str_replace("\\", "",$app_keterangan);
 		$app_keterangan=str_replace("'", "''",$app_keterangan);
-		$dapp_user=$_SESSION["userid"];
+		$dapp_user=$_SESSION[SESSION_USERID];
 		$result=$this->m_appointment->detail_appointment_detail_medis_insert($dapp_medis_id ,$dapp_medis_master ,$dapp_medis_perawatan ,$dapp_medis_tglreservasi ,$dapp_medis_jamreservasi ,$dapp_medis_petugas ,$dapp_medis_status ,$dapp_medis_tgldatang ,$dapp_medis_jamdatang ,$dapp_medis_keterangan ,$app_cara ,$app_customer ,$app_keterangan ,$dapp_user);
 	}
 	
@@ -187,7 +187,7 @@ class C_appointment extends Controller {
 		$app_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$app_keterangan);
 		$app_keterangan=str_replace("\\", "",$app_keterangan);
 		$app_keterangan=str_replace("'", "''",$app_keterangan);
-		$dapp_user=$_SESSION["userid"];
+		$dapp_user=$_SESSION[SESSION_USERID];
 		$result=$this->m_appointment->detail_appointment_detail_nonmedis_insert($dapp_nonmedis_id ,$dapp_nonmedis_master ,$dapp_nonmedis_perawatan ,$dapp_nonmedis_tglreservasi ,$dapp_nonmedis_jamreservasi ,$dapp_nonmedis_petugas2 ,$dapp_nonmedis_status ,$dapp_nonmedis_tgldatang ,$dapp_nonmedis_jamdatang ,$dapp_nonmedis_keterangan ,$dapp_nonmedis_counter ,$app_cara ,$app_customer ,$app_keterangan ,$dapp_user);
 	}
 	
@@ -270,7 +270,7 @@ class C_appointment extends Controller {
 		$dapp_locked=trim(@$_POST["dapp_locked"]);
 		$dapp_counter=trim(@$_POST["dapp_counter"]);
 		
-		$app_user=$_SESSION["userid"];
+		$app_user=$_SESSION[SESSION_USERID];
 		
 		$result = $this->m_appointment->appointment_update($app_id ,$app_customer ,$dapp_tglreservasi ,$app_cara ,$app_keterangan, $dapp_id, $dapp_status, $dokter_nama, $terapis_nama, $kategori_nama, $rawat_id, $dokter_id, $terapis_id, $dapp_jamreservasi, $cust_id, $dapp_dokter_no, $dapp_terapis_no, $dapp_dokter_ganti, $dapp_terapis_ganti, $dapp_keterangan, $dapp_locked, $dapp_counter, $app_user);
 		echo $result;
@@ -302,7 +302,7 @@ class C_appointment extends Controller {
 		$app_cust_keterangan_baru=str_replace("/(<\/?)(p)([^>]*>)", "",$app_cust_keterangan_baru);
 		$app_cust_keterangan_baru=str_replace("'", "''",$app_cust_keterangan_baru);
 		
-		$app_user=$_SESSION["userid"];
+		$app_user=$_SESSION[SESSION_USERID];
 		
 		$result=$this->m_appointment->appointment_create($app_customer ,$app_tanggal ,$app_cara ,$app_keterangan ,$app_cust_nama_baru ,$app_cust_telp_baru ,$app_cust_hp_baru ,$app_cust_keterangan_baru ,$app_user );
 		echo $result;

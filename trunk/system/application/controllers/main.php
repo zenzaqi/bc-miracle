@@ -7,7 +7,7 @@ class Main extends Controller {
 		$this->load->model('m_main', '', TRUE);
 		$this->load->helper('date');
 		session_start();
- 		if (!isset($_SESSION['userid'])){
+ 		if (!isset($_SESSION[SESSION_USERID])){
 			redirect('','location',301);
 		}	
 	}
@@ -20,9 +20,7 @@ class Main extends Controller {
 		$data["menus"]=$this->m_main->get_menus();
 		$data["submenus"]=$this->m_main->get_shortcuts();
 		$data["background"]=$this->m_main->get_background();
-		//$data["shortcuts"]=$this->m_main->get_shortcuts();
 		$this->load->vars($data);
-		//$this->load->view('v_main');
 		$this->load->view('v_dekstop');
 	}
 	

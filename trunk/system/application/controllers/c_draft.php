@@ -77,7 +77,7 @@ class C_draft extends Controller {
 				$draft_destination="Number:".$isms_nomer;
 			$draft_message=$isms_isi;
 			$draft_date=date('Y/m/d H:i:s');
-			$draft_update=$_SESSION["userid"];
+			$draft_update=$_SESSION[SESSION_USERID];
 			$draft_date_update=date("Y/m/d H:i:s");
 			$result = $this->m_draft->draft_update($draft_id,$draft_destination,$draft_message,$draft_date,$draft_update,$draft_date_update);
 		}
@@ -105,7 +105,7 @@ class C_draft extends Controller {
 		$draft_message=str_replace("/(<\/?)(p)([^>]*>)", "",$draft_message);
 		$draft_message=str_replace("'", "''",$draft_message);
 		$draft_date=trim(@$_POST["draft_date"]);
-		$draft_creator=@$_SESSION["userid"];
+		$draft_creator=@$_SESSION[SESSION_USERID];
 		$draft_date_create=date('m/d/Y');
 		//$draft_update=NULL;
 		//$draft_date_update=NULL;
@@ -128,7 +128,7 @@ class C_draft extends Controller {
 		$draft_date=trim(@$_POST["draft_date"]);
 		//$draft_creator="draft_creator";
 		//$draft_date_create="draft_date_create";
-		$draft_update=@$_SESSION["userid"];
+		$draft_update=@$_SESSION[SESSION_USERID];
 		$draft_date_update=date('m/d/Y');
 		//$draft_revised="(revised+1)";
 		$result = $this->m_draft->draft_update($draft_id,$draft_destination,$draft_message,$draft_date,$draft_update,$draft_date_update);

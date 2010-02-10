@@ -94,7 +94,7 @@ class C_phonegroup extends Controller {
 		$phonegroup_detail=trim(@$_POST["phonegroup_detail"]);
 		$phonegroup_detail=str_replace("/(<\/?)(p)([^>]*>)", "",$phonegroup_detail);
 		$phonegroup_detail=str_replace("'", "''",$phonegroup_detail);
-		$phonegroup_creator=@$_SESSION["userid"];
+		$phonegroup_creator=@$_SESSION[SESSION_USERID];
 		$phonegroup_date_create=date('m/d/Y');
 		//$phonegroup_update=NULL;
 		//$phonegroup_date_update=NULL;
@@ -117,7 +117,7 @@ class C_phonegroup extends Controller {
 		$phonegroup_detail=str_replace("'", "''",$phonegroup_detail);
 		//$phonegroup_creator="phonegroup_creator";
 		//$phonegroup_date_create="phonegroup_date_create";
-		$phonegroup_update=@$_SESSION["userid"];
+		$phonegroup_update=@$_SESSION[SESSION_USERID];
 		$phonegroup_date_update=date('Y/m/d');
 		//$phonegroup_revised="(revised+1)";
 		$phonegroup_data=@$_POST["phonegroup_data"];

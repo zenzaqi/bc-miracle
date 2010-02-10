@@ -71,7 +71,7 @@
 		<div style="float:right; margin-right:10px; margin-top:5px; color:#AF4046;"> 
 <!--        Welcome --> 
         Selamat datang,
-        <font style="font-weight:bold"><?=$_SESSION['userid']." (".$_SESSION["groupname"].")";?></font>&nbsp;
+        <font style="font-weight:bold"><?=$_SESSION[SESSION_USERID]." (".$_SESSION[SESSION_GROUPNAMA].")";?></font>&nbsp;
 <!--        [ <a  onClick="return confirm('Are you sure to logout?'); " href="index.php?c=c_login&m=logout" style="color:#AF4046">Logout</a> ]-->
  		[<a  onClick="return confirm('Anda yakin untuk keluar?'); " href="index.php?c=c_login&m=logout" style="color:#AF4046">Keluar</a>]
         </div>

@@ -7,12 +7,12 @@ class M_security extends Model{
 	}
 
 	function get_user_group(){
-		return $_SESSION["usergroup"];
+		return $_SESSION[SESSION_GROUPID];
 	}
 
 	function get_access_group($group_id,$form_id){
 		
-		if($_SESSION["userid"]=='Super Admin'){
+		if($_SESSION[SESSION_USERID]=='Super Admin'){
 			return 'RCUD';
 		}else{
 			

@@ -6,8 +6,10 @@ class C_login extends Controller {
 		parent::Controller();
 		$this->load->model('m_login', '', TRUE);
 		session_start();
-		if(isset($_SESSION["userid"]))
-			header("location: ?c=main");
+		if(isset($_SESSION[SESSION_USERID])){
+			if($_SESSION[SESSION_USERID]!=="")
+				header("location: ?c=main");
+		}
 	}
 	
 	function index()
@@ -37,7 +39,7 @@ class C_login extends Controller {
 	
 	
 	function logout(){
-		unset($_SESSION['userid']);
+		unset($_SESSION[SESSION_USERID]);
 		$this->session->set_flashdata('error',"You've been logged out!");
 		redirect('','location',302);
 	 }

@@ -78,7 +78,7 @@ class C_outbox extends Controller {
 		$outbox_message=str_replace("/(<\/?)(p)([^>]*>)", "",$outbox_message);
 		$outbox_message=str_replace("'", "''",$outbox_message);
 		$outbox_date=trim(@$_POST["outbox_date"]);
-		$outbox_creator=@$_SESSION["userid"];
+		$outbox_creator=@$_SESSION[SESSION_USERID];
 		$outbox_date_create=date('m/d/Y');
 		//$outbox_update=NULL;
 		//$outbox_date_update=NULL;
@@ -101,7 +101,7 @@ class C_outbox extends Controller {
 		$outbox_date=trim(@$_POST["outbox_date"]);
 		//$outbox_creator="outbox_creator";
 		//$outbox_date_create="outbox_date_create";
-		$outbox_update=@$_SESSION["userid"];
+		$outbox_update=@$_SESSION[SESSION_USERID];
 		$outbox_date_update=date('m/d/Y');
 		//$outbox_revised="(revised+1)";
 		$result = $this->m_outbox->outbox_update($outbox_id,$outbox_destination,$outbox_message,$outbox_date,$outbox_update,$outbox_date_update);
