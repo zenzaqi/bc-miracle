@@ -838,10 +838,11 @@ class M_appointment extends Model{
 						
 						$sql_petugas2="SELECT karyawan_id FROM karyawan WHERE karyawan_id='$dapp_terapis_ganti'";
 						$rs_petugas2=$this->db->query($sql_petugas2);
-						if($rs_petugas2->num_rows())
+						if($rs_petugas2->num_rows()){
 							$data_dtindakan["dtrawat_petugas2"]=$dapp_terapis_ganti;
-						else
+						}else{
 							$data_dtindakan["dtrawat_petugas2"]=$terapis_id;
+						}
 						
 						$sql_cek_dtindakan="SELECT dtrawat_dapp FROM tindakan_detail WHERE dtrawat_dapp='$dapp_id'";
 						$rs=$this->db->query($sql_cek_dtindakan);
@@ -882,10 +883,11 @@ class M_appointment extends Model{
 							
 							$sql_petugas2="SELECT karyawan_id FROM karyawan WHERE karyawan_id='$dapp_terapis_ganti'";
 							$rs_petugas2=$this->db->query($sql_petugas2);
-							if($rs_petugas2->num_rows())
+							if($rs_petugas2->num_rows()){
 								$data_dtindakan["dtrawat_petugas2"]=$dapp_terapis_ganti;
-							else
+							}else{
 								$data_dtindakan["dtrawat_petugas2"]=$terapis_id;
+							}
 							$this->db->insert('tindakan_detail', $data_dtindakan);
 						}
 					}
