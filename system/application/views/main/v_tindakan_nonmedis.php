@@ -104,7 +104,7 @@ var tindakan_nonmedis_createWindow;
 var tindakan_nonmedis_searchForm;
 var tindakan_nonmedis_searchWindow;
 var tindakan_nonmedis_SelectedRow;
-var tindakan_nonmedis_ContextMenu;
+var tindakan_nonmedisContextMenu;
 //for detail data
 var tindakan_nonmedis_detail_DataStor;
 var tindakan_nonmedis_detailListEditorGrid;
@@ -357,9 +357,9 @@ Ext.onReady(function(){
 		/* only one record is selected here */
 		
 		if(tindakan_nonmedisListEditorGrid.selModel.getCount() == 1) {
+			cbo_dtrawat_petugas_nonmedisDataStore.load();
 			dtrawat_perawatanDataStore.load({params:{query:tindakan_nonmedisListEditorGrid.getSelectionModel().getSelected().get('trawat_id')}});
 			//cbo_dtrawat_perawatan_nonmedisDataStore.load();
-			cbo_dtrawat_petugas_nonmedisDataStore.load();
 			tindakan_nonmedis_set_form();
 			post2db='UPDATE';
 			tindakan_nonmedis_detail_DataStore.load({params : {master_id : eval(get_pk_id()), start:0, limit:pageS}});
@@ -459,7 +459,7 @@ Ext.onReady(function(){
 			{name: 'dtrawat_perawatan_id', type: 'int', mapping: 'dtrawat_perawatan'},
 			{name: 'dtrawat_perawatan', type: 'string', mapping: 'rawat_nama'},
 			{name: 'dtrawat_petugas2', type: 'string', mapping: 'terapis_username'},
-			{name: 'dtrawat_petugas2_id', type: 'string', mapping: 'terapis_id'},
+			{name: 'dtrawat_petugas2_id', type: 'int', mapping: 'terapis_id'},
 			{name: 'dtrawat_jam', type: 'string', mapping: 'dtrawat_jam'},
 			{name: 'dtrawat_tglapp', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'dtrawat_tglapp'},
 			{name: 'dtrawat_status', type: 'string', mapping: 'dtrawat_status'},
@@ -799,7 +799,7 @@ Ext.onReady(function(){
 	/* End of DataStore */
      
 	/* Create Context Menu */
-	tindakan_nonmedis_ContextMenu = new Ext.menu.Menu({
+	tindakan_nonmedisContextMenu = new Ext.menu.Menu({
 		id: 'tindakan_nonmedis_ListEditorGridContextMenu',
 		items: [
 		{ 
@@ -834,10 +834,10 @@ Ext.onReady(function(){
 	function ontindakan_nonmedis_ListEditGridContextMenu(grid, rowIndex, e) {
 		e.stopEvent();
 		var coords = e.getXY();
-		tindakan_nonmedis_ContextMenu.rowRecord = grid.store.getAt(rowIndex);
+		tindakan_nonmedisContextMenu.rowRecord = grid.store.getAt(rowIndex);
 		grid.selModel.selectRow(rowIndex);
 		tindakan_nonmedis_SelectedRow=rowIndex;
-		tindakan_nonmedis_ContextMenu.showAt([coords[0], coords[1]]);
+		tindakan_nonmedisContextMenu.showAt([coords[0], coords[1]]);
   	}
   	/* End of Function */
 	
@@ -942,7 +942,8 @@ Ext.onReady(function(){
 			{name: 'dtrawat_jam', type: 'string', mapping: 'dtrawat_jam'}, 
 			{name: 'dtrawat_kategori', type: 'string', mapping: 'dtrawat_kategori'}, 
 			{name: 'dtrawat_status', type: 'string', mapping: 'dtrawat_status'},
-			{name: 'dtrawat_keterangan', type: 'string', mapping: 'dtrawat_keterangan'} 
+			{name: 'dtrawat_keterangan', type: 'string', mapping: 'dtrawat_keterangan'},
+			{name: 'dtrawat_ambil_paket', type: 'bool', mapping: 'dtrawat_ambil_paket'}
 	]);
 	//eof
 	
