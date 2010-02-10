@@ -1,11 +1,11 @@
 <?
 
 function get_user_group(){
-	return $_SESSION["usergroup"];
+	return $_SESSION[SESSION_GROUPID];
 }
 
 function get_sales_group(){
-	$sql="select user_id from tbl_users where user_manager='".$_SESSION["userid"]."'";
+	$sql="select user_id from tbl_users where user_manager='".$_SESSION[SESSION_USERID]."'";
 	$query=$this->db->query($sql);
 	$rs=$query->result_array();
 	return $rs;

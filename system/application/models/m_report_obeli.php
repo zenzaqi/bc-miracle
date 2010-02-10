@@ -22,10 +22,10 @@ class M_report_obeli extends Model{
 			//full query
 			$query = "SELECT * FROM `master_order_beli`,`supplier` WHERE order_supplier=supplier_id";
 //			
-//			if($_SESSION["usergroup"]==3){
-//				$query .=" and agenda_sales='".$_SESSION["userid"]."'";
-//			}else if($_SESSION["usergroup"]==2){
-//				$query .=" and agenda_sales in (select user_id from tbl_users where user_manager='".$_SESSION["userid"]."')";
+//			if($_SESSION[SESSION_GROUPID]==3){
+//				$query .=" and agenda_sales='".$_SESSION[SESSION_USERID]."'";
+//			}else if($_SESSION[SESSION_GROUPID]==2){
+//				$query .=" and agenda_sales in (select user_id from tbl_users where user_manager='".$_SESSION[SESSION_USERID]."')";
 //			}
 			
 			if($order_supplier!=''){

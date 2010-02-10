@@ -38,10 +38,10 @@ class M_report_rbeli extends Model{
 			//full query
 			$query = "SELECT * FROM `master_retur_beli`,`master_terima_beli`,`supplier` WHERE rbeli_supplier=supplier_id AND rbeli_terima=terima_id";
 //			
-//			if($_SESSION["usergroup"]==3){
-//				$query .=" and agenda_sales='".$_SESSION["userid"]."'";
-//			}else if($_SESSION["usergroup"]==2){
-//				$query .=" and agenda_sales in (select user_id from tbl_users where user_manager='".$_SESSION["userid"]."')";
+//			if($_SESSION[SESSION_GROUPID]==3){
+//				$query .=" and agenda_sales='".$_SESSION[SESSION_USERID]."'";
+//			}else if($_SESSION[SESSION_GROUPID]==2){
+//				$query .=" and agenda_sales in (select user_id from tbl_users where user_manager='".$_SESSION[SESSION_USERID]."')";
 //			}
 			
 			if($rbeli_supplier!=''){

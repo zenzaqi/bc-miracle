@@ -36,6 +36,13 @@ define('FOPEN_READ_WRITE_CREATE', 				'a+b');
 define('FOPEN_WRITE_CREATE_STRICT', 			'xb');
 define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 
+define('PROJECT_CODE','d122d8ccb48c21175376e9dd9627bfe4');
+define('PROJECT_NAME','sik-miracle');
+define('SESSION_USERID','4c8ed88bc8c439fac1f33a13618573f5');
+define('SESSION_GROUPID','c293890e945456ecba7c9b2100b746c0');
+define('SESSION_GROUPNAMA','28b33bdc69aacbde669f466ef0e44a40');
+define('SESSION_KARYAWAN','karyawanmiracle');
+
 
 /* End of file constants.php */
 /* Location: ./system/application/config/constants.php */

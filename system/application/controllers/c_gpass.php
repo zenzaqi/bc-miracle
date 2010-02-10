@@ -29,7 +29,7 @@ class C_gpass extends Controller {
 	}
 	
 	function get(){
-		$user_id=$_SESSION["userid"];
+		$user_id=$_SESSION[SESSION_USERID];
 		$result=$this->m_gpass->get($user_id);
 		echo $result;
 	}
