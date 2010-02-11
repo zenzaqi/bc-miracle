@@ -870,7 +870,7 @@ Ext.onReady(function(){
   	}
 	/* End of Function */
   	
-	//tindakanListEditorGrid.addListener('rowcontextmenu', ontindakan_medisListEditGridContextMenu);
+	tindakanListEditorGrid.addListener('rowcontextmenu', ontindakan_medisListEditGridContextMenu);
 	tindakan_medisDataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
 	tindakanListEditorGrid.on('afteredit', tindakan_medis_update); // inLine Editing Record
 	

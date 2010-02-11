@@ -310,13 +310,13 @@ Ext.onReady(function(){
 		var appointment_detail_nonmedis_record;
 		for(i=0;i<appointment_detail_medisDataStore.getCount();i++){
 			appointment_detail_medis_record=appointment_detail_medisDataStore.getAt(i);
-			if(appointment_detail_medis_record.data.dapp_medis_perawatan!="" && appointment_detail_medis_record.data.dapp_medis_petugas!="" && appointment_detail_medis_record.data.dapp_medis_jamreservasi!=""){
+			if(appointment_detail_medis_record.data.dapp_medis_perawatan!="" && appointment_detail_medis_record.data.dapp_medis_jamreservasi!=""){
 				dmedis_record='ada';
 			}
 		}
 		for(i=0;i<appointment_detail_nonmedisDataStore.getCount();i++){
 			appointment_detail_nonmedis_record=appointment_detail_nonmedisDataStore.getAt(i);
-			if(appointment_detail_nonmedis_record.data.dapp_nonmedis_perawatan!="" && appointment_detail_nonmedis_record.data.dapp_nonmedis_petugas!="" && appointment_detail_nonmedis_record.data.dapp_nonmedis_jamreservasi!=""){
+			if(appointment_detail_nonmedis_record.data.dapp_nonmedis_perawatan!="" && appointment_detail_nonmedis_record.data.dapp_nonmedis_jamreservasi!=""){
 				dnonmedis_record='ada';
 			}
 		}
@@ -486,7 +486,8 @@ Ext.onReady(function(){
   
 	/* Function for Check if the form is valid */
 	function is_appointment_form_valid(){
-		return (app_customerField.isValid() && app_cust_namaBaruField.isValid());
+		//return (app_customerField.isValid() && app_cust_namaBaruField.isValid());
+		return true;
 	}
   	/* End of Function */
   

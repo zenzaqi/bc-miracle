@@ -241,6 +241,16 @@ class M_appointment extends Model{
 		
 		//insert detail record
 		function detail_appointment_detail_medis_insert($dapp_medis_id ,$dapp_medis_master ,$dapp_medis_perawatan ,$dapp_medis_tglreservasi ,$dapp_medis_jamreservasi ,$dapp_medis_petugas ,$dapp_medis_status ,$dapp_medis_tgldatang ,$dapp_medis_jamdatang ,$dapp_medis_keterangan ,$app_cara ,$app_customer ,$app_keterangan ,$dapp_user){
+			/* JIKA $dapp_medis_petugas=="" ==> diisi db.karyawan.karyawan_id WHERE username="Available dr." */
+			if($dapp_medis_petugas==""){
+				$sql="SELECT karyawan_id FROM karyawan WHERE karyawan_no='99'";
+				$rs=$this->db->query($sql);
+				if($rs->num_rows()){
+					$rs_record=$rs->row_array();
+					$dapp_medis_petugas=$rs_record["karyawan_id"];
+				}
+			}
+			
 			$sql="SELECT dapp_id FROM appointment_detail WHERE dapp_id='$dapp_medis_id'";
 			$rs=$this->db->query($sql);
 			if(!$rs->num_rows()){
@@ -385,6 +395,16 @@ class M_appointment extends Model{
 		}
 		
 		function detail_appointment_detail_nonmedis_insert($dapp_nonmedis_id ,$dapp_nonmedis_master ,$dapp_nonmedis_perawatan ,$dapp_nonmedis_tglreservasi ,$dapp_nonmedis_jamreservasi ,$dapp_nonmedis_petugas2 ,$dapp_nonmedis_status ,$dapp_nonmedis_tgldatang ,$dapp_nonmedis_jamdatang ,$dapp_nonmedis_keterangan ,$dapp_nonmedis_counter ,$app_cara ,$app_customer ,$app_keterangan ,$dapp_user){
+			/* JIKA $dapp_medis_petugas=="" ==> diisi db.karyawan.karyawan_id WHERE username="Available dr." */
+			if($dapp_medis_petugas==""){
+				$sql="SELECT karyawan_id FROM karyawan WHERE karyawan_no='999'";
+				$rs=$this->db->query($sql);
+				if($rs->num_rows()){
+					$rs_record=$rs->row_array();
+					$dapp_medis_petugas=$rs_record["karyawan_id"];
+				}
+			}
+			
 			$sql="SELECT dapp_id FROM appointment_detail WHERE dapp_id='$dapp_nonmedis_id'";
 			$rs=$this->db->query($sql);
 			if(!$rs->num_rows()){
