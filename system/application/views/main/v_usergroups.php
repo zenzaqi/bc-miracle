@@ -155,8 +155,10 @@ Ext.onReady(function(){
 					switch(result){
 						case 1:
 							Ext.MessageBox.alert(post2db+' OK','The Usergroups was '+msg+' successfully.');
+							permission_purge();
 							usergroups_DataStore.reload();
 							usergroups_createWindow.hide();
+							
 							break;
 						default:
 							Ext.MessageBox.show({
@@ -231,6 +233,8 @@ Ext.onReady(function(){
 			post2db='CREATE';
 			msg='created';
 			usergroups_createWindow.show();
+			permission_DataStore.load({params:{group:0}});
+			//permissionListEditorGrid.reconfigure(permission_DataStore,permission_ColumnModel);
 		} else {
 			usergroups_createWindow.toFront();
 		}
@@ -263,6 +267,8 @@ Ext.onReady(function(){
 			usergroups_set_form();
 			post2db='UPDATE';
 			msg='updated';
+			permission_DataStore.setBaseParam('group',get_pk_id());
+			permission_DataStore.load();
 			usergroups_createWindow.show();
 		} else {
 			Ext.MessageBox.show({
@@ -550,12 +556,291 @@ Ext.onReady(function(){
 		triggerAction: 'all'	
 	});
   	
+	/* Identify  group_desc Field */
+	group_allprivField= new Ext.form.Checkbox({
+		id: 'group_allprivField',
+		fieldLabel: 'All Privileges ?',
+		maxLength: 250,
+		anchor: '95%'
+	});
+	
+	group_allreadprivField= new Ext.form.Checkbox({
+		id: 'group_allreadprivField',
+		fieldLabel: 'All Read?',
+		maxLength: 250,
+		anchor: '95%'
+	});
+	
+	group_allcreateprivField= new Ext.form.Checkbox({
+		id: 'group_allcreateprivField',
+		fieldLabel: 'All Create?',
+		maxLength: 250,
+		anchor: '95%'
+	});
+	
+	group_allupdateprivField= new Ext.form.Checkbox({
+		id: 'group_allupdateprivField',
+		fieldLabel: 'All Update?',
+		maxLength: 250,
+		anchor: '95%'
+	});
+	
+	group_alldeleteprivField= new Ext.form.Checkbox({
+		id: 'group_alldeleteprivField',
+		fieldLabel: 'All Delete ?',
+		maxLength: 250,
+		anchor: '95%'
+	});
+	
+	group_permissionField=new Ext.form.FieldSet({
+		fieldLabel:'Permission',
+		layout: 'column',
+		labelAlign: 'left',
+		anchor: '95%',
+		border: false,
+		items:[{
+			   		layout: 'form',
+					border: false,
+					columnWidth: 0.5,
+					labelAlign: 'left',
+					items:[group_allprivField]
+			   }
+			   ,{
+				   	layout: 'form',
+					border: false,
+					columnWidth: 0.5,
+					labelWidth: 80,
+					labelAlign: 'left',
+					items:[group_allreadprivField,group_allcreateprivField,group_allupdateprivField,group_alldeleteprivField]
+			   }]
+	});
+	//detail permission
+	
+	
+	/* Function for Retrieve DataStore */
+	permission_DataStore = new Ext.data.Store({
+		id: 'permission_DataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_usergroups&m=get_permission', 
+			method: 'POST'
+		}),
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'menu_id'
+		},[
+		/* dataIndex => insert intousergroups_ColumnModel, Mapping => for initiate table column */ 
+			{name: 'menu_id', type: 'int', mapping: 'menu_id'},
+			{name: 'menu_parent', type: 'int', mapping: 'menu_parent'},
+			{name: 'menu_position', type: 'int', mapping: 'menu_position'},
+			{name: 'menu_title', type: 'string', mapping: 'menu_title'},
+			{name: 'perm_create', type: 'int', mapping: 'perm_create'},
+			{name: 'perm_update', type: 'int', mapping: 'perm_create'},
+			{name: 'perm_read', type: 'int', mapping: 'perm_read'},
+			{name: 'perm_delete', type: 'int', mapping: 'perm_delete'},
+		])
+	});
+	
+	
+	
+	var readColumn = new Ext.grid.CheckColumn({
+		header: "Read", 
+		dataIndex: 'perm_read', 
+		width: 80, 
+		sortable: false,
+		renderer: function(v,params,record){
+				if(record.data.menu_parent==0)
+					return '';
+				else{
+				   params.css += ' x-grid3-check-col-td'; 
+            		return '<div class="x-grid3-check-col'+(v?'-on':'')+' x-grid3-cc-'+this.id+'">&#160;</div>';
+				}
+			}
+	});
+	
+	var createColumn = new Ext.grid.CheckColumn({
+		header: "Create", 
+		dataIndex: 'perm_create', 
+		width: 80, 
+		sortable: false,
+		renderer: function(v,params,record){
+				if(record.data.menu_parent==0)
+					return '';
+				else{
+				   params.css += ' x-grid3-check-col-td'; 
+            		return '<div class="x-grid3-check-col'+(v?'-on':'')+' x-grid3-cc-'+this.id+'">&#160;</div>';
+				}
+			}
+	});
+	
+	var updateColumn = new Ext.grid.CheckColumn({
+		header: "Update", 
+		dataIndex: 'perm_update', 
+		width: 80, 
+		sortable: false,
+		renderer: function(v,params,record){
+				if(record.data.menu_parent==0)
+					return '';
+				else{
+				   params.css += ' x-grid3-check-col-td'; 
+            		return '<div class="x-grid3-check-col'+(v?'-on':'')+' x-grid3-cc-'+this.id+'">&#160;</div>';
+				}
+			}
+	});
+	
+	var deleteColumn = new Ext.grid.CheckColumn({
+		header: "Delete", 
+		dataIndex: 'perm_delete', 
+		width: 80, 
+		sortable: false,
+		renderer: function(v,params,record){
+				if(record.data.menu_parent==0)
+					return '';
+				else{
+				   	params.css += ' x-grid3-check-col-td'; 
+            		return '<div class="x-grid3-check-col'+(v?'-on':'')+' x-grid3-cc-'+this.id+'">&#160;</div>';
+				}
+			}
+	});
+	
+	//readchk.unlock();
+	/* Function for Identify of Window Column Model */
+	permission_ColumnModel = new Ext.grid.ColumnModel(
+		[{
+			header: '#',
+			readOnly: true,
+			dataIndex: 'menu_id',
+			width: 40,
+			renderer: function(value, cell){
+				cell.css = "readonlycell"; // Mengambil Value dari Class di dalam CSS 
+				return value;
+				},
+			hidden: false
+		},
+		{
+			header: 'Nama Menu',
+			dataIndex: 'menu_title',
+			width: 200,
+			readOnly: true,
+			renderer: function(v,params,record){
+				if(record.data.menu_parent==0)
+					return '<b><font size=\'medium\'>'+record.data.menu_title+'</font></b>';
+				else
+					return record.data.menu_title;
+			}
+		},
+		readColumn,
+		createColumn,
+		updateColumn,
+		deleteColumn
+		]
+	);
+	
+	
+	function permission_save(){
+		for(i=0;i<permission_DataStore.getCount();i++){
+			var perm_priv="";
+			var permission_record=permission_DataStore.getAt(i);
+			if(permission_record.data.perm_read==1)
+				perm_priv="R";
+			if(permission_record.data.perm_create==1)
+				perm_priv=perm_priv+"C";
+			if(permission_record.data.perm_update==1)
+				perm_priv=perm_priv+"U";
+			if(permission_record.data.perm_delete==1)
+				perm_priv=perm_priv+"D";
+			
+			if(perm_priv!==""){
+				Ext.Ajax.request({
+					waitMsg: 'Please wait...',
+					url: 'index.php?c=c_usergroups&m=permission_save',
+					params:{
+						menu_id: permission_record.data.menu_id,
+						menu_group: get_pk_id(),
+						menu_priv: perm_priv
+					},
+					timeout: 60000,
+					success: function(response){							
+						var result=eval(response.responseText);
+					},
+					failure: function(response){
+						var result=response.responseText;
+						Ext.MessageBox.show({
+						   title: 'Error',
+						   msg: 'Could not connect to the database. retry later.',
+						   buttons: Ext.MessageBox.OK,
+						   animEl: 'database',
+						   icon: Ext.MessageBox.ERROR
+						});	
+					}		
+				});
+			}
+		}
+	}
+	//eof
+	
+	//function for purge detail
+	function permission_purge(){
+		Ext.Ajax.request({
+			waitMsg: 'Please wait...',
+			url: 'index.php?c=c_usergroups&m=permission_purge',
+			params:{ menu_group: get_pk_id()},
+			callback: function(opts, success, response){
+				if(success){
+					permission_save();
+				}
+			}
+		});
+	}
+
+
+	
+	/* Declare DataStore and  show datagrid list */
+	permissionListEditorGrid =  new Ext.grid.EditorGridPanel({
+		id: 'permissionListEditorGrid',
+		el: 'fp_permission',
+		title: 'List Of Permission',
+		autoHeight: true,
+		store: permission_DataStore, // DataStore
+		cm: permission_ColumnModel, // Nama-nama Columns
+		enableColLock:false,
+		frame: true,
+		plugins: [readColumn,createColumn,updateColumn,deleteColumn],
+		clicksToEdit:1, // 2xClick untuk bisa meng-Edit inLine Data
+		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
+		viewConfig: { forceFit:true, markDirty: false },
+		autoSave: true,
+	  	width: 590/*,
+		tbar: [
+		{
+			text: 'Add',
+			tooltip: 'Add new record',
+			iconCls:'icon-adds',    				// this is defined in our styles.css
+			handler: ''
+		}, '-',{
+			text: 'Edit',
+			tooltip: 'Edit selected record',
+			iconCls:'icon-update',
+			handler: ''   // Confirm before updating
+		}, '-',{
+			text: 'Delete',
+			tooltip: 'Delete selected record',
+			iconCls:'icon-delete',
+			handler: usergroups_confirm_delete   // Confirm before deleting
+		}
+		]*/
+	});
+	//permissionListEditorGrid.render();
+	/* End of DataStore */
+     
+	 
+	
 	/* Function for retrieve create Window Panel*/ 
 	usergroups_createForm = new Ext.FormPanel({
 		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
-		width: 300,        
+		width: 600,        
 		items: [{
 			layout:'column',
 			border:false,
@@ -564,7 +849,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [group_nameField, group_descField, group_activeField] 
+				items: [group_nameField, group_descField, group_activeField,group_permissionField,permissionListEditorGrid] 
 			}
 			]
 		}]
@@ -853,11 +1138,104 @@ Ext.onReady(function(){
 	}
 	/*End of Function */
 	
+	group_allprivField.on('check',function(){
+			if(group_allprivField.getValue()==1)
+			{
+				for(i=0;i<permission_DataStore.getCount();i++){
+					var datapriv=permission_DataStore.getAt(i);
+					datapriv.data.perm_read=1;
+					datapriv.data.perm_create=1;
+					datapriv.data.perm_update=1;
+					datapriv.data.perm_delete=1;
+				}
+			}else{
+				for(i=0;i<permission_DataStore.getCount();i++){
+					var datapriv=permission_DataStore.getAt(i);
+					datapriv.data.perm_read=0;
+					datapriv.data.perm_create=0;
+					datapriv.data.perm_update=0;
+					datapriv.data.perm_delete=0;
+				}
+			}
+			permission_DataStore.commitChanges();
+			permissionListEditorGrid.reconfigure(permission_DataStore,permission_ColumnModel);
+	});
+	
+	group_allreadprivField.on('check',function(){
+			if(group_allreadprivField.getValue()==1)
+			{
+				for(i=0;i<permission_DataStore.getCount();i++){
+					var datapriv=permission_DataStore.getAt(i);
+					datapriv.data.perm_read=1;
+				}
+			}else{
+				for(i=0;i<permission_DataStore.getCount();i++){
+					var datapriv=permission_DataStore.getAt(i);
+					datapriv.data.perm_read=0;
+				}
+			}
+			permission_DataStore.commitChanges();
+			permissionListEditorGrid.reconfigure(permission_DataStore,permission_ColumnModel);
+	});
+	
+	group_allcreateprivField.on('check',function(){
+			if(group_allcreateprivField.getValue()==1)
+			{
+				for(i=0;i<permission_DataStore.getCount();i++){
+					var datapriv=permission_DataStore.getAt(i);
+					datapriv.data.perm_create=1;
+				}
+			}else{
+				for(i=0;i<permission_DataStore.getCount();i++){
+					var datapriv=permission_DataStore.getAt(i);
+					datapriv.data.perm_create=0;
+				}
+			}
+			permission_DataStore.commitChanges();
+			permissionListEditorGrid.reconfigure(permission_DataStore,permission_ColumnModel);
+	});
+	
+	group_allupdateprivField.on('check',function(){
+			if(group_allupdateprivField.getValue()==1)
+			{
+				for(i=0;i<permission_DataStore.getCount();i++){
+					var datapriv=permission_DataStore.getAt(i);
+					datapriv.data.perm_update=1;
+				}
+			}else{
+				for(i=0;i<permission_DataStore.getCount();i++){
+					var datapriv=permission_DataStore.getAt(i);
+					datapriv.data.perm_update=0;
+				}
+			}
+			permission_DataStore.commitChanges();
+			permissionListEditorGrid.reconfigure(permission_DataStore,permission_ColumnModel);
+	});
+	
+	group_alldeleteprivField.on('check',function(){
+			if(group_alldeleteprivField.getValue()==1)
+			{
+				for(i=0;i<permission_DataStore.getCount();i++){
+					var datapriv=permission_DataStore.getAt(i);
+					datapriv.data.perm_delete=1;
+				}
+			}else{
+				for(i=0;i<permission_DataStore.getCount();i++){
+					var datapriv=permission_DataStore.getAt(i);
+					datapriv.data.perm_delete=0;
+				}
+			}
+			permission_DataStore.commitChanges();
+			permissionListEditorGrid.reconfigure(permission_DataStore,permission_ColumnModel);
+	});
+	
+	
 });
 	</script>
 <body>
 <div>
 	<div class="col">
+        <div id="fp_permission"></div>
         <div id="fp_usergroups"></div>
 		<div id="elwindow_usergroups_create"></div>
         <div id="elwindow_usergroups_search"></div>
