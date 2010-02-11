@@ -893,7 +893,30 @@ class M_public_function extends Model{
 	
 	function get_karyawan_list($query="",$start=0,$end=10){
 		$sql="select karyawan_id,karyawan_no,karyawan_nama,jabatan_nama from karyawan,jabatan where jabatan_id=karyawan_jabatan and karyawan_aktif='Aktif'";
-		if($query<>"")
+		if($query!=="")
+			$sql.=" and (karyawan_id like '%".$query."%' or karyawan_no like '%".$query."%' or karyawan_nama like '%".$query."%'
+						 or jabatan_nama like '%".$query."%')";
+	
+		$result = $this->db->query($sql);
+		$nbrows = $result->num_rows();
+		$limit = $sql." LIMIT ".$start.",".$end;			
+		$result = $this->db->query($limit); 
+		if($nbrows>0){
+			foreach($result->result() as $row){
+				$arr[] = $row;
+			}
+			$jsonresult = json_encode($arr);
+			return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+		} else {
+			return '({"total":"0", "results":""})';
+		}
+	}
+	
+	function get_user_karyawan_nolist($query,$start,$end){
+		$sql="SELECT karyawan_id,karyawan_no,karyawan_nama,jabatan_nama FROM karyawan,jabatan 
+				WHERE jabatan_id=karyawan_jabatan AND karyawan_aktif='Aktif'
+				AND karyawan_id NOT IN(select user_karyawan from users)";
+		if($query!=="")
 			$sql.=" and (karyawan_id like '%".$query."%' or karyawan_no like '%".$query."%' or karyawan_nama like '%".$query."%'
 						 or jabatan_nama like '%".$query."%')";
 	
@@ -913,8 +936,10 @@ class M_public_function extends Model{
 	}
 	
 	function get_user_karyawan_list($query,$start,$end){
-		$sql="SELECT karyawan_id,karyawan_no,karyawan_nama,jabatan_nama FROM karyawan,jabatan,users WHERE jabatan_id=karyawan_jabatan AND user_karyawan!=karyawan_id AND karyawan_aktif='Aktif'";
-		if($query<>"")
+		$sql="SELECT karyawan_id,karyawan_no,karyawan_nama,jabatan_nama FROM karyawan,jabatan 
+				WHERE jabatan_id=karyawan_jabatan AND karyawan_aktif='Aktif'
+				AND karyawan_id IN(select user_karyawan from users)";
+		if($query!=="")
 			$sql.=" and (karyawan_id like '%".$query."%' or karyawan_no like '%".$query."%' or karyawan_nama like '%".$query."%'
 						 or jabatan_nama like '%".$query."%')";
 	

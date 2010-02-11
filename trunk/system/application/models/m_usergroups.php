@@ -18,6 +18,67 @@ class M_usergroups extends Model{
 			parent::Model();
 		}
 		
+		function permission_purge($group){
+			$sql="DELETE FROM permissions where perm_group='".$group."'";
+			$query=$this->db->query($sql);
+			return '1';
+		}
+		
+		function permission_save($group,$menu,$priveleges){
+			$sql="INSERT INTO permissions(perm_group,perm_menu,perm_priv) 
+					VALUES('".$group."','".$menu."','".$priveleges."')";
+			$query=$this->db->query($sql);
+			
+			$sql="INSERT INTO permissions(perm_group,perm_menu,perm_priv) 
+					SELECT  '".$group."',menu_parent,'R' FROM menus WHERE menu_id='".$menu."'
+					ON DUPLICATE KEY 
+					UPDATE SET perm_group='".$group."'";
+			$query=$this->db->query($sql);
+			
+			return '1';
+		}
+		
+		//function for get list record
+		function get_permission($group){
+			
+			$query = "SELECT * FROM menus WHERE menu_parent<>0";
+			$result = $this->db->query($query);
+			$nbrows = $result->num_rows();
+			$query = "SELECT menu_id,menu_parent,menu_title,menu_position,1 as perm_read, 0 as perm_create,
+						0 as perm_update, 0 as perm_delete FROM menus 
+						WHERE menu_parent=0 ORDER By menu_position";
+			$result = $this->db->query($query);
+
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+					$sql = "SELECT menu_id,menu_parent,menu_title,menu_position,0 as perm_read, 0 as perm_create,
+							0 as perm_update, 0 as perm_delete FROM menus 
+							WHERE menu_parent='".$row->menu_id."' ORDER By menu_position";
+					$rs_child=$this->db->query($sql);
+					foreach($rs_child->result() as $rowchild){
+						$sql_perm="SELECT menu_id,menu_parent,menu_title,menu_position,perm_read,perm_create,perm_update,perm_delete
+								FROM vu_permissions 
+								WHERE perm_menu='".$rowchild->menu_id."' AND perm_group='".$group."'";
+						$rs_perm=$this->db->query($sql_perm);
+						if($rs_perm->num_rows()){
+							$rowperm=$rs_perm->row();
+							$arr[] = $rowperm;
+							$sql_perm="";
+						}else
+							$arr[] = $rowchild;
+					}
+					$sql="";
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+		
+		
+		
 		//function for get list record
 		function usergroups_list($filter,$start,$end){
 			$query = "SELECT * FROM usergroups";
@@ -54,11 +115,8 @@ class M_usergroups extends Model{
 			$this->db->where('group_id', $group_id);
 			$this->db->update('usergroups', $data);
 			
+			return '1';
 			
-			if($this->db->affected_rows())
-				return '1';
-			else
-				return '0';
 		}
 		
 		//function for create new record

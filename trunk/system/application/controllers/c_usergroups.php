@@ -29,6 +29,21 @@ class C_usergroups extends Controller {
 		$this->load->view('main/v_usergroups');
 	}
 	
+	function permission_purge(){
+		$menu_group = (integer) (isset($_POST['menu_group']) ? @$_POST['menu_group'] : $_GET['menu_group']);
+		$result=$this->m_usergroups->permission_purge($menu_group);
+		echo $result;
+	}
+	
+	function permission_save(){
+		$menu_group = (integer) (isset($_POST['menu_group']) ? @$_POST['menu_group'] : @$_GET['menu_group']);
+		$menu_id = (integer) (isset($_POST['menu_id']) ? @$_POST['menu_id'] : @$_GET['menu_id']);
+		$menu_priv = (isset($_POST['menu_priv']) ? @$_POST['menu_priv'] : @$_GET['menu_priv']);
+		
+		$result=$this->m_usergroups->permission_save($menu_group,$menu_id,$menu_priv);
+		echo $result;
+	}
+		
 	//event handler action
 	function get_action(){
 		$task = $_POST['task'];
@@ -72,6 +87,12 @@ class C_usergroups extends Controller {
 		echo $result;
 	}
 
+	function get_permission(){
+		$group = (integer) (isset($_POST['group']) ? @$_POST['group'] : @$_GET['group']);
+		$result=$this->m_usergroups->get_permission($group);
+		echo $result;
+	}
+	
 	//function for update record
 	function usergroups_update(){
 		//POST variable here

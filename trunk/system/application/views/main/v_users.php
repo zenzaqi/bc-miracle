@@ -101,10 +101,12 @@ Ext.onReady(function(){
 			url: 'index.php?c=c_users&m=get_action',
 			params: {
 				task: "UPDATE",
-				user_id	: get_pk_id(),				user_name	:user_name_update,		
+				user_id	: get_pk_id(),				
+				user_name	:user_name_update,		
 				user_passwd	:user_passwd_update,		
 				user_karyawan	:user_karyawan_update,		
-				user_log	: user_log_update_date,				user_groups	:user_groups_update,		
+				user_log	: user_log_update_date,				
+				user_groups	:user_groups_update,		
 				user_aktif	:user_aktif_update		
 			}, 
 			success: function(response){							
@@ -377,6 +379,26 @@ Ext.onReady(function(){
 	cbo_user_karyawanDataStore = new Ext.data.Store({
 		id: 'cbo_user_karyawanDataStore',
 		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_users&m=get_karyawan_list', 
+			method: 'POST'
+		}),
+		baseParams:{start: 0, limit: 10 }, // parameter yang di $_POST ke Controller
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'karyawan_id'
+		},[
+		/* dataIndex => insert intocustomer_note_ColumnModel, Mapping => for initiate table column */ 
+			{name: 'karyawan_id', type: 'int', mapping: 'karyawan_id'},
+			{name: 'karyawan_no', type: 'string', mapping: 'karyawan_no'},
+			{name: 'karyawan_nama', type: 'string', mapping: 'karyawan_nama'}
+		]),
+		sortInfo:{field: 'karyawan_no', direction: "ASC"}
+	});
+	
+	cbo_user_search_karyawanDataStore = new Ext.data.Store({
+		id: 'cbo_user_search_karyawanDataStore',
+		proxy: new Ext.data.HttpProxy({
 			url: 'index.php?c=c_users&m=get_user_karyawan_list', 
 			method: 'POST'
 		}),
@@ -393,12 +415,14 @@ Ext.onReady(function(){
 		]),
 		sortInfo:{field: 'karyawan_no', direction: "ASC"}
 	});
+	
 	var user_karyawan_tpl = new Ext.XTemplate(
         '<tpl for="."><div class="search-item">',
             '<span><b>{karyawan_nama}</b><br /></span>',
             'No.Karyawan: {karyawan_no}&nbsp;&nbsp;&nbsp;',
         '</div></tpl>'
     );
+	
 	
 	cbo_user_groupDataStore = new Ext.data.Store({
 	id: 'cbo_user_groupDataStore',
@@ -809,7 +833,7 @@ Ext.onReady(function(){
 	user_karyawanSearchField= new Ext.form.ComboBox({
 		id: 'user_karyawanSearchField',
 		fieldLabel: 'Nama Karyawan',
-		store: cbo_user_karyawanDataStore,
+		store: cbo_user_search_karyawanDataStore,
 		mode: 'remote',
 		displayField:'karyawan_nama',
 		valueField: 'karyawan_id',
