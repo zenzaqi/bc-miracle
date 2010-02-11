@@ -3340,10 +3340,8 @@ Ext.onReady(function(){
 			sortable: true,
 			reaOnly: true,
 			renderer: function(v, params, record){
-//					return Ext.util.Format.number(record.data.drawat_harga* record.data.drawat_jumlah*(100-record.data.drawat_diskon)/100,'0,000');
-					return '<div align="right">' + 
-							Ext.util.Format.number(record.data.drawat_harga* record.data.drawat_jumlah*(100-record.data.drawat_diskon)/100,'0,000')
-							+ '</div>';
+					return Ext.util.Format.number(record.data.drawat_harga* record.data.drawat_jumlah*(100-record.data.drawat_diskon)/100,'0,000');
+
             }
 /*		},{
 			header: 'Sales',
