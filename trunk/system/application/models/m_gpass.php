@@ -40,7 +40,7 @@ class M_gpass extends Model{
 		//function for update record
 		function update_users($user_id, /*$user_nama, $user_kelamin, $user_tgllahir, $user_alamat, $user_kota, $user_notelp,*/ $user_passwd, $user_passwdlama ){
 			$key=false;
-			$sql="select user_passwd from users WHERE user_id='".$user_id."'";
+			$sql="select user_passwd from users WHERE user_name='".$user_id."'";
 			$query=$this->db->query($sql);
 			if($query->num_rows()>0){
 				$rs=$query->row_array();
@@ -62,7 +62,7 @@ class M_gpass extends Model{
 				if(!is_null($user_passwd) & trim($user_passwd)<>"")
 					$data["user_passwd"]=md5($user_passwd);
 					
-				$this->db->where('user_id',$user_id);
+				$this->db->where('user_name',$user_id);
 				$this->db->update('users', $data);
 				
 				if($this->db->affected_rows())

@@ -37,7 +37,7 @@ class C_gpass extends Controller {
 	//function for update record
 	function update(){
 		//POST variable here
-		$user_id=$_SESSION["id_user"];
+		$user_id=$_SESSION[SESSION_USERID];
 		$user_passwdlama=trim(@$_POST["user_passwdlama"]);
 		$user_passwdlama=str_replace("/(<\/?)(p)([^>]*>)", "",$user_passwdlama);
 		$user_passwdlama=str_replace("'", '"',$user_passwdlama);
