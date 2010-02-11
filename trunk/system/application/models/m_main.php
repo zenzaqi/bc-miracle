@@ -12,12 +12,11 @@ class M_main extends Model{
 					WHERE P.menu_parent=0 
 					ORDER BY P.menu_position ASC";
 		else
-			$sql="SELECT * FROM vu_menus P 
+			$sql="SELECT * FROM menus P 
 					WHERE P.menu_parent=0 
 					AND P.menu_id IN(SELECT C.menu_parent FROM vu_menus C
 									 WHERE C.menu_parent=P.menu_id
 									 AND C.group_id='".$_SESSION[SESSION_GROUPID]."')
-					AND  P.group_id='".$_SESSION[SESSION_GROUPID]."'
 					ORDER BY P.menu_position ASC";
 	
 		$query=$this->db->query($sql);
