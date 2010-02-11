@@ -261,7 +261,8 @@ Ext.onReady(function(){
 					default:
 						Ext.MessageBox.show({
 						   title: 'Warning',
-						   msg: 'We could\'t not save the master_jual_rawat.',
+//						   msg: 'We could\'t not save the master_jual_rawat.',
+						   msg: 'Data Penjualan Perawatan tidak bisa disimpan',
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'save',
 						   icon: Ext.MessageBox.WARNING
@@ -467,6 +468,7 @@ Ext.onReady(function(){
 		
 		Ext.Ajax.request({  
 			waitMsg: 'Please wait...',
+			waitMsg: 'Mohon tunggu...',
 			url: 'index.php?c=c_master_jual_rawat&m=get_action',
 			params: {
 				task: post2db,
@@ -575,7 +577,8 @@ Ext.onReady(function(){
 					case 0:
 						Ext.MessageBox.show({
 						   title: 'Warning',
-						   msg: 'We could\'t not '+msg+' the Master_jual_rawat.',
+//						   msg: 'We could\'t not '+msg+' the Master_jual_rawat.',
+						   msg: 'Data Penjualan Perawatan tidak bisa disimpan',
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'save',
 						   icon: Ext.MessageBox.WARNING
@@ -606,7 +609,8 @@ Ext.onReady(function(){
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'Your Form is not valid!.',
+//				msg: 'Your Form is not valid!.',
+				msg: 'Form Anda belum lengkap',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -1159,13 +1163,16 @@ Ext.onReady(function(){
 	function master_jual_rawat_confirm_delete(){
 		// only one master_jual_rawat is selected here
 		if(master_jual_rawatListEditorGrid.selModel.getCount() == 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', master_jual_rawat_delete);
+//			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', master_jual_rawat_delete);
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', master_jual_rawat_delete);
 		} else if(master_jual_rawatListEditorGrid.selModel.getCount() > 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', master_jual_rawat_delete);
+//			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', master_jual_rawat_delete);
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', master_jual_rawat_delete);
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really delete something you haven\'t selected?',
+//				msg: 'You can\'t really delete something you haven\'t selected?',
+				msg: 'Anda belum memilih data yang akan dihapus',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -1193,7 +1200,8 @@ Ext.onReady(function(){
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really update something you haven\'t selected?',
+//				msg: 'You can\'t really update something you haven\'t selected?',
+				msg: 'Anda belum memilih data yang akan diedit',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -1212,7 +1220,8 @@ Ext.onReady(function(){
 			}
 			var encoded_array = Ext.encode(prez);
 			Ext.Ajax.request({ 
-				waitMsg: 'Please Wait',
+//				waitMsg: 'Please Wait',
+				waitMsg: 'Mohon tunggu..',
 				url: 'index.php?c=c_master_jual_rawat&m=get_action', 
 				params: { task: "DELETE", ids:  encoded_array }, 
 				success: function(response){
@@ -3248,18 +3257,19 @@ Ext.onReady(function(){
 	detail_jual_rawat_ColumnModel = new Ext.grid.ColumnModel(
 		[
 		{
-			header: 'Perawatan',
+			header: '<div align="center">' + 'Perawatan' + '</div>',
 			dataIndex: 'drawat_rawat',
-			width: 250,
+			width: 400,	//250,
 			sortable: true,
 			allowBlank: false,
 			editor: combo_jual_rawat,
 			renderer: Ext.util.Format.comboRenderer(combo_jual_rawat)
 		},
 		{
-			header: 'Jumlah',
+			align: 'Right',
+			header: '<div align="center">' + 'Jumlah' + '</div>',
 			dataIndex: 'drawat_jumlah',
-			width: 80,
+			width: 60,	//80,
 			sortable: true,
 			renderer: Ext.util.Format.numberRenderer('0,000'),
 			editor: new Ext.form.NumberField({
@@ -3271,16 +3281,18 @@ Ext.onReady(function(){
 			})
 		},
 		{
-			header: 'Harga (Rp)',
+			align: 'Right',
+			header: '<div align="center">' + 'Harga (Rp)' + '</div>',
 			dataIndex: 'drawat_harga',
-			width: 150,
+			width: 100,	//150,
 			sortable: true,
 			renderer: Ext.util.Format.numberRenderer('0,000')
 		}
 		,{
-			header: 'Sub Total (Rp)',
+			align: 'Right',
+			header: '<div align="center">' + 'Sub Total (Rp)' + '</div>',
 			dataIndex: 'drawat_subtotal',
-			width: 150,
+			width: 100, //150,
 			sortable: true,
 			reaOnly: true,
 			renderer: function(v, params, record){
@@ -3288,11 +3300,13 @@ Ext.onReady(function(){
             }
 		},
 		{
-			header: 'Diskon (%)',
+			align: 'Right',
+			header: '<div align="center">' + 'Diskon (%)' + '</div>',
 			dataIndex: 'drawat_diskon',
-			width: 90,
+			width: 80, //90,
 			sortable: true,
-			renderer: Ext.util.Format.numberRenderer('0,000%'),
+//			renderer: Ext.util.Format.numberRenderer('0,000%'),
+			renderer: Ext.util.Format.numberRenderer('0,000'),
 			editor: new Ext.form.NumberField({
 				allowDecimals: false,
 				allowNegative: false,
@@ -3301,9 +3315,9 @@ Ext.onReady(function(){
 				maskRe: /([0-9]+)$/
 			})
 		},{
-			header: 'Jenis Diskon',
+			header: '<div align="center">' + 'Jenis Diskon' + '</div>',
 			dataIndex: 'drawat_diskon_jenis',
-			width: 100,
+			width: 80,	//100,
 			sortable: true,
 			editor: new Ext.form.ComboBox({
 				store:new Ext.data.SimpleStore({
@@ -3319,21 +3333,25 @@ Ext.onReady(function(){
 				lazyRenderer: true
 			})
 		},{
-			header: 'Sub Total Net (Rp)',
+			align: 'Right',
+			header: '<div align="center">' + 'Sub Tot Net (Rp)' + '</div>',
 			dataIndex: 'drawat_subtotal_net',
-			width: 150,
+			width: 100, //150,
 			sortable: true,
 			reaOnly: true,
 			renderer: function(v, params, record){
-					return Ext.util.Format.number(record.data.drawat_harga* record.data.drawat_jumlah*(100-record.data.drawat_diskon)/100,'0,000');
+//					return Ext.util.Format.number(record.data.drawat_harga* record.data.drawat_jumlah*(100-record.data.drawat_diskon)/100,'0,000');
+					return '<div align="right">' + 
+							Ext.util.Format.number(record.data.drawat_harga* record.data.drawat_jumlah*(100-record.data.drawat_diskon)/100,'0,000')
+							+ '</div>';
             }
-		},{
+/*		},{
 			header: 'Sales',
 			dataIndex: 'drawat_sales',
 			width: 150,
 			sortable: true,
 			reaOnly: true
-		}]
+*/		}]
 	);
 	detail_jual_rawat_ColumnModel.defaultSortable= true;
 	//eof
@@ -3341,7 +3359,7 @@ Ext.onReady(function(){
 	function get_harga_rawat(id_produk){
 		var harga_produk=0;
 		Ext.Ajax.request({
-			waitMsg: 'Please wait...',
+			waitMsg: 'Mohon tunggu...',
 			url: 'index.php?c=c_master_jual_rawat&m=get_harga_rawat',
 			params:{ produk_id	: id_produk },
 			success: function(response){							
