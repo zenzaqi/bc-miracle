@@ -1057,7 +1057,6 @@ class M_master_jual_rawat extends Model{
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " jrawat_keterangan LIKE '%".$jrawat_keterangan."%'";
 				};
-				echo $query;
 				$result = $this->db->query($query);
 				//return $result;
 			}

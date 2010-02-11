@@ -158,7 +158,6 @@ class M_satuan extends Model{
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " satuan_revised LIKE '%".$satuan_revised."%'";
 			};
-			echo $query;
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
 			
