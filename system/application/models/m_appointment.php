@@ -401,7 +401,7 @@ class M_appointment extends Model{
 				$rs=$this->db->query($sql);
 				if($rs->num_rows()){
 					$rs_record=$rs->row_array();
-					$dapp_medis_petugas=$rs_record["karyawan_id"];
+					$dapp_nonmedis_petugas2=$rs_record["karyawan_id"];
 				}
 			}
 			
