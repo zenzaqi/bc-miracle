@@ -3408,7 +3408,7 @@ Ext.onReady(function(){
 		});
 		editor_detail_jual_rawat.stopEditing();
 		detail_jual_rawat_DataStore.insert(0, edit_detail_jual_rawat);
-		detail_jual_rawatListEditorGrid.getView().refresh();
+		//detail_jual_rawatListEditorGrid.getView().refresh();
 		detail_jual_rawatListEditorGrid.getSelectionModel().selectRow(0);
 		editor_detail_jual_rawat.startEditing(0);
 	}
