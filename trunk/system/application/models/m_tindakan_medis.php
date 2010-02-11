@@ -112,13 +112,20 @@ class M_tindakan_medis extends Model{
 				/* artinya: data ini adalah "data baru".
 				* Data Baru ini otomatis ber-status='datang', maka db.report_tindakan dari Dokter yang dipilih akan ditambahkan +1
 				*/
+				/* 
+				* JIKA $dtrawat_ambil_paket=true ==> Lakukan Checking di 
+				*/
+				if($dtrawat_ambil_pake==true){
+					$sql="SELECT * FROM submaster_jual_paket INNER JOIN master_jual_paket ON(sjpaket_master=jpaket_id)  master_ambil_paket ";
+				}
 				$data=array(
 				"dtrawat_master"=>$dtrawat_master,
 				"dtrawat_perawatan"=>$dtrawat_perawatan,
 				"dtrawat_petugas1"=>$dtrawat_petugas1,
 				"dtrawat_tglapp"=>$date_now,
 				"dtrawat_jam"=>$dtrawat_jamreservasi,
-				"dtrawat_keterangan"=>$dtrawat_keterangan
+				"dtrawat_keterangan"=>$dtrawat_keterangan,
+				"dtrawat_ambil_paket"=>$dtrawat_ambil_paket
 				);
 				$this->db->insert('tindakan_detail', $data);
 				if($this->db->affected_rows()){
