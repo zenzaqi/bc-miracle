@@ -42,7 +42,7 @@ Ext.onReady(function(){
 //							Ext.Msg.alert('Login Failed!', obj.msg );
 							Ext.Msg.alert('Login gagal', 'Username atau password tidak benar' );
 						}
-						loginForm.getForm().reset();
+//						loginForm.getForm().reset(); //supaya username & password tidak hilang ketika salah login | by Hendri
 					}
 				});
 	}
@@ -103,7 +103,7 @@ Ext.onReady(function(){
 		},{
 			text: 'Reset',
 			handler: function(){
-				loginForm.getForm().reset();
+//				loginForm.getForm().reset();	//supaya username & password tidak hilang ketika salah login | by Hendri
 			}
 		}]
 });
