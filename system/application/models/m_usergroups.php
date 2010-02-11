@@ -32,7 +32,7 @@ class M_usergroups extends Model{
 			$sql="INSERT INTO permissions(perm_group,perm_menu,perm_priv) 
 					SELECT  '".$group."',menu_parent,'R' FROM menus WHERE menu_id='".$menu."'
 					ON DUPLICATE KEY 
-					UPDATE SET perm_group='".$group."'";
+					UPDATE perm_group='".$group."'";
 			$query=$this->db->query($sql);
 			
 			return '1';
