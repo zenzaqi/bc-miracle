@@ -62,10 +62,10 @@ class M_master_ambil_paket extends Model{
 				$rs_rows=$rs->num_rows();
 				
 				/* CHeck di db.master_ambil_paket dan db.submaster_apaket_item => JIKA pada submaster masih kosong maka jumlah item mengambil dari db.paket_isi_perawatan */
-				//$sql="SELECT * FROM perawatan INNER JOIN ";
 				
 				//$sql="SELECT rawat_id,rawat_kode,rawat_nama,rpaket_jumlah FROM perawatan INNER JOIN paket_isi_perawatan ON(perawatan.rawat_id=paket_isi_perawatan.rpaket_perawatan) WHERE rawat_aktif='Aktif'";//join dr tabel: perawatan,produk_group,kategori2,kategori,jenis,gudang
-				$sql="SELECT rawat_id,rawat_kode,rawat_nama,sapaket_sisa_item FROM perawatan INNER JOIN submaster_apaket_item ON(perawatan.rawat_id=submaster_apaket_item.sapaket_item) WHERE rawat_aktif='Aktif'";
+				//$sql="SELECT rawat_id,rawat_kode,rawat_nama,sapaket_sisa_item FROM perawatan INNER JOIN submaster_apaket_item ON(perawatan.rawat_id=submaster_apaket_item.sapaket_item) WHERE rawat_aktif='Aktif'";
+				$sql="SELECT rawat_id,rawat_kode,rawat_nama,sapaket_sisa_item FROM perawatan INNER JOIN submaster_apaket_item ON(perawatan.rawat_id=submaster_apaket_item.sapaket_item) WHERE (rawat_aktif='Aktif' OR rawat_aktif='Tidak Aktif')";
 				
 				if($rs_rows){
 					$filter="";
