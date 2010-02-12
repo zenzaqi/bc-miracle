@@ -1015,7 +1015,8 @@ var editor_cust_note;
 		if(oGrid_event.record.data.cust_aktif!== null){cust_aktif_update = oGrid_event.record.data.cust_aktif;}
 
 		Ext.Ajax.request({  
-			waitMsg: 'Please wait...',
+//			waitMsg: 'Please wait...',
+			waitMsg: 'Mohon tunggu...',
 			url: 'index.php?c=c_customer&m=get_action',
 			params: {
 				task: "UPDATE",
@@ -1875,7 +1876,7 @@ Ext.onReady(function(){
 			hidden: true
 		},
 		{
-			header: '<div align="center">' + 'Status Nikah' + '</div>',
+			header: '<div align="center">' + 'Stat. Nikah' + '</div>',
 			dataIndex: 'cust_statusnikah',
 			width: 80,	//90,
 			sortable: true,
@@ -1894,6 +1895,27 @@ Ext.onReady(function(){
             })
 		},
 		{
+//			header: 'Aktif',
+			header: '<div align="center">' + 'Status' + '</div>',
+			dataIndex: 'cust_aktif',
+			width: 80,	//150,
+			sortable: true,
+			editor: new Ext.form.ComboBox({
+				typeAhead: true,
+				triggerAction: 'all',
+				store:new Ext.data.SimpleStore({
+					fields:['cust_aktif_value', 'cust_aktif_display'],
+					data: [['Y','Y'],['T','T']]
+					}),
+				mode: 'local',
+               	displayField: 'cust_aktif_display',
+               	valueField: 'cust_aktif_value',
+               	lazyRender:true,
+               	listClass: 'x-combo-list-small'
+            }),
+//			hidden: true
+		},
+		{
 			header: '<div align="center">' + 'Member' + '</div>',
 			dataIndex: 'cust_member',
 			width: 80,	//150,
@@ -1904,7 +1926,7 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Keterangan' + '</div>',
 			dataIndex: 'cust_keterangan',
-			width: 220,	//150,
+			width: 160,	//150,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 500
@@ -1953,26 +1975,7 @@ Ext.onReady(function(){
             }),
 			hidden: true
 		},
-		{
-			header: 'Aktif',
-			dataIndex: 'cust_aktif',
-			width: 150,
-			sortable: true,
-			editor: new Ext.form.ComboBox({
-				typeAhead: true,
-				triggerAction: 'all',
-				store:new Ext.data.SimpleStore({
-					fields:['cust_aktif_value', 'cust_aktif_display'],
-					data: [['Y','Y'],['T','T']]
-					}),
-				mode: 'local',
-               	displayField: 'cust_aktif_display',
-               	valueField: 'cust_aktif_value',
-               	lazyRender:true,
-               	listClass: 'x-combo-list-small'
-            }),
-			hidden: true
-		},
+
 		{
 			header: 'Creator',
 			dataIndex: 'cust_creator',
@@ -2888,7 +2891,8 @@ Ext.onReady(function(){
 	
 	cust_update_confirmField=new Ext.form.Checkbox({
 		id: 'check_update',
-		boxLabel: 'Update data...',
+//		boxLabel: 'Update data...',
+		boxLabel: 'Simpan data',
 		handler: function(node,checked){
 			if (checked) {
 				//Ext.Msg.alert('Status', 'Changes saved successfully.');
