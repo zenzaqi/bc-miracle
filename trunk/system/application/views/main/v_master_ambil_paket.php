@@ -386,6 +386,7 @@ Ext.onReady(function(){
 			{name: 'paket_kode', type: 'string', mapping: 'paket_kode'},
 			{name: 'group_nama', type: 'string', mapping: 'group_nama'},
 			{name: 'cust_id', type: 'int', mapping: 'cust_id'}, 
+			{name: 'cust_no', type: 'string', mapping: 'cust_no'}, 	// by hendri
 			{name: 'cust_nama', type: 'string', mapping: 'cust_nama'}, 
 			{name: 'jpaket_nobukti', type: 'string', mapping: 'jpaket_nobukti'}, 
 			{name: 'jpaket_tanggal', type: 'date', dateFormat:'Y-m-d', mapping: 'jpaket_tanggal'}, 
@@ -456,41 +457,49 @@ Ext.onReady(function(){
   	/* Function for Identify of Window Column Model */
 	ambil_paket_ColumnModel = new Ext.grid.ColumnModel(
 		[{
-			header: 'Customer',
-			dataIndex: 'cust_nama',
-			width: 230,
+			header: '<div align="center">' + 'No. Cust' + '</div>',
+			dataIndex: 'cust_no',
+			width: 80,	//230,
 			sortable: true
 		}, 
 		{
-			header: 'No.Faktur',
+			header: '<div align="center">' + 'Customer' + '</div>',
+			dataIndex: 'cust_nama',
+			width: 200,	//230,
+			sortable: true
+		}, 
+		{
+			header: '<div align="center">' + 'No.Faktur' + '</div>',
 			dataIndex: 'jpaket_nobukti',
 			width: 80,
 			sortable: true
 		}, 
 		{
-			header: 'Nama Paket',
+			header: '<div align="center">' + 'Nama Paket' + '</div>',
 			dataIndex: 'paket_nama',
-			width: 230,
+			width: 300,	//230,
 			sortable: true
 		}, 
 		{
-			header: 'Tgl Faktur',
+			header: '<div align="center">' + 'Tgl Faktur' + '</div>',
 			dataIndex: 'jpaket_tanggal',
 			width: 70,
 			sortable: true,
-			renderer: Ext.util.Format.dateRenderer('Y-m-d')
+//			renderer: Ext.util.Format.dateRenderer('Y-m-d')
+			renderer: Ext.util.Format.dateRenderer('d-m-Y')
 		}, 
 		{
-			header: 'Tgl Exp',
+			header: '<div align="center">' + 'Tgl Exp' + '</div>',
 			dataIndex: 'dpaket_kadaluarsa',
 			width: 70,
 			sortable: true,
-			renderer: Ext.util.Format.dateRenderer('Y-m-d')
+//			renderer: Ext.util.Format.dateRenderer('Y-m-d')
+			renderer: Ext.util.Format.dateRenderer('d-m-Y')
 		}, 
 		{
-			header: 'Total Sisa Paket',
+			header: '<div align="center">' + 'Sisa Paket' + '</div>',
 			dataIndex: 'apaket_sisa_paket',
-			width: 90,
+			width: 60,	//90,
 			renderer: function(value, cell, record){
 				return '<div align="right">' + value + '</div>';
 			}
@@ -504,7 +513,8 @@ Ext.onReady(function(){
 	ambil_paketListEditorGrid =  new Ext.grid.GridPanel({
 		id: 'ambil_paketListEditorGrid',
 		el: 'fp_ambil_paket',
-		title: 'List Of Paket',
+//		title: 'List Of Paket',
+		title: 'Daftar Kepemilikan Paket',
 		autoHeight: true,
 		store: ambil_paket_DataStore, // DataStore
 		cm: ambil_paket_ColumnModel, // Nama-nama Columns
@@ -517,7 +527,7 @@ Ext.onReady(function(){
             forceFit:true,
             groupTextTpl: '{text} ({[values.rs.length]} {[values.rs.length > 1 ? "Items" : "Item"]})'
         }),*/
-	  	width: 800,
+	  	width: 940,	//800,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: ambil_paket_DataStore,
@@ -803,7 +813,7 @@ Ext.onReady(function(){
         autoExpandColumn: 'company',
         autoHeight: true,
 		style: 'margin-top: 10px',
-        width:800
+        width: 940	//800
     });
     history_ambil_paketPanel.render('history_ambil_paket');
 
