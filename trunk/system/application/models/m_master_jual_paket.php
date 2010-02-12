@@ -283,88 +283,68 @@ class M_master_jual_paket extends Model{
 			if($dpaket_kadaluarsa=="")
 				$dpaket_kadaluarsa=NULL;
 			
-			/*$sql="SELECT dpaket_id FROM detail_jual_paket WHERE dpaket_id='$dpaket_id'";
-			$rs=$this->db->query($sql);
-			if($rs->num_rows()){
-				$data = array(
-					"dpaket_paket"=>$dpaket_paket,
-					"dpaket_kadaluarsa"=>$dpaket_kadaluarsa, 
-					"dpaket_jumlah"=>$dpaket_jumlah, 
-					"dpaket_harga"=>$dpaket_harga, 
-					"dpaket_diskon"=>$dpaket_diskon,
-					"dpaket_diskon_jenis"=>$dpaket_diskon_jenis,
-					"dpaket_sales"=>$dpaket_sales 
-				);
-				$this->db->where('dpaket_id', $dpaket_id);
-				$this->db->update('detail_jual_paket', $data);
-				if($this->db->affected_rows())
-					return '1';
-				else
-					return '0';
-			}else{*/
-				$data = array(
-					"dpaket_master"=>$dpaket_master, 
-					"dpaket_paket"=>$dpaket_paket,
-					"dpaket_kadaluarsa"=>$dpaket_kadaluarsa, 
-					"dpaket_jumlah"=>$dpaket_jumlah, 
-					"dpaket_harga"=>$dpaket_harga, 
-					"dpaket_diskon"=>$dpaket_diskon,
-					"dpaket_diskon_jenis"=>$dpaket_diskon_jenis,
-					"dpaket_sales"=>$dpaket_sales 
-				);
-				$this->db->insert('detail_jual_paket', $data); 
-				if($this->db->affected_rows()){
-					/* Untuk data pengambilan paket, diinsertkan ke master_ambil_paket(identitas Paket) dan ke submaster_apaket_item(identitas tiap item dari paket itu) */
-					$sql="SELECT * FROM master_jual_paket WHERE jpaket_id='$dpaket_master'";
-					$rs=$this->db->query($sql);
-					if($rs->num_rows()){
-						$rs_record=$rs->row_array();
-						// Ambil Jumlah Total Isi Paket
-						$sql_paket="SELECT paket_jmlisi FROM paket WHERE paket_id='$dpaket_paket'";
-						$rs_paket=$this->db->query($sql_paket);
-						$rs_paket_record=$rs_paket->row_array();
-						// INSERT ke master_ambil_paket => per paket yg dimiliki No.Faktur Penjualan Paket
-						$data_apaket=array(
-						"apaket_faktur"=>$rs_record["jpaket_nobukti"],
-						"apaket_cust"=>$rs_record["jpaket_cust"],
-						"apaket_paket"=>$dpaket_paket,
-						"apaket_tanggal"=>$rs_record["jpaket_tanggal"],
-						"apaket_sisa_paket"=>$rs_paket_record["paket_jmlisi"]
-						);
-						$this->db->insert('master_ambil_paket', $data_apaket);
-						if($this->db->affected_rows()>0){
-							$sql_get_apaket="SELECT apaket_id FROM master_ambil_paket WHERE apaket_faktur='".$rs_record["jpaket_nobukti"]."' AND apaket_paket='".$dpaket_paket."'";
-							$rs_get_apaket=$this->db->query($sql_get_apaket);
-							if($rs_get_apaket->num_rows()){
-								$rs_get_apaket_record=$rs_get_apaket->row_array();
-								$get_apaket_id=$rs_get_apaket_record["apaket_id"]; //Untuk => db.submaster_apaket_item.sapaket_master
-							}
-							
+			$data = array(
+				"dpaket_master"=>$dpaket_master, 
+				"dpaket_paket"=>$dpaket_paket,
+				"dpaket_kadaluarsa"=>$dpaket_kadaluarsa, 
+				"dpaket_jumlah"=>$dpaket_jumlah, 
+				"dpaket_harga"=>$dpaket_harga, 
+				"dpaket_diskon"=>$dpaket_diskon,
+				"dpaket_diskon_jenis"=>$dpaket_diskon_jenis,
+				"dpaket_sales"=>$dpaket_sales 
+			);
+			$this->db->insert('detail_jual_paket', $data); 
+			if($this->db->affected_rows()){
+				/* Untuk data pengambilan paket, diinsertkan ke master_ambil_paket(identitas Paket) dan ke submaster_apaket_item(identitas tiap item dari paket itu) */
+				$sql="SELECT * FROM master_jual_paket WHERE jpaket_id='$dpaket_master'";
+				$rs=$this->db->query($sql);
+				if($rs->num_rows()){
+					$rs_record=$rs->row_array();
+					// Ambil Jumlah Total Isi Paket
+					$sql_paket="SELECT paket_jmlisi FROM paket WHERE paket_id='$dpaket_paket'";
+					$rs_paket=$this->db->query($sql_paket);
+					$rs_paket_record=$rs_paket->row_array();
+					// INSERT ke master_ambil_paket => per paket yg dimiliki No.Faktur Penjualan Paket
+					$data_apaket=array(
+					"apaket_faktur"=>$rs_record["jpaket_nobukti"],
+					"apaket_cust"=>$rs_record["jpaket_cust"],
+					"apaket_paket"=>$dpaket_paket,
+					"apaket_tanggal"=>$rs_record["jpaket_tanggal"],
+					"apaket_sisa_paket"=>$rs_paket_record["paket_jmlisi"]
+					);
+					$this->db->insert('master_ambil_paket', $data_apaket);
+					if($this->db->affected_rows()>0){
+						$sql_get_apaket="SELECT apaket_id FROM master_ambil_paket WHERE apaket_faktur='".$rs_record["jpaket_nobukti"]."' AND apaket_paket='".$dpaket_paket."'";
+						$rs_get_apaket=$this->db->query($sql_get_apaket);
+						if($rs_get_apaket->num_rows()){
+							$rs_get_apaket_record=$rs_get_apaket->row_array();
+							$get_apaket_id=$rs_get_apaket_record["apaket_id"]; //Untuk => db.submaster_apaket_item.sapaket_master
+						}
 						
-							$sql="SELECT * FROM paket_isi_perawatan WHERE rpaket_master='$dpaket_paket'";
-							$rs=$this->db->query($sql);
-							$nbrows = $rs->num_rows();
-							if($nbrows>0){
-								
-								
-								/* INSERT ke submaster_apaket_item u/ mencatat sisa setelah dilakukan pengambilan paket */
-								foreach($rs->result() as $row){
-									//$arr[] = $row;
-									$data_sapaket=array(
-									"sapaket_master"=>$get_apaket_id,
-									"sapaket_item"=>$row->rpaket_perawatan,
-									"sapaket_jmlisi_item"=>$row->rpaket_jumlah,
-									"sapaket_sisa_item"=>$row->rpaket_jumlah
-									);
-									$this->db->insert('submaster_apaket_item', $data_sapaket);
-								}
+					
+						$sql="SELECT * FROM paket_isi_perawatan WHERE rpaket_master='$dpaket_paket'";
+						$rs=$this->db->query($sql);
+						$nbrows = $rs->num_rows();
+						if($nbrows>0){
+							
+							
+							/* INSERT ke submaster_apaket_item u/ mencatat sisa setelah dilakukan pengambilan paket */
+							foreach($rs->result() as $row){
+								//$arr[] = $row;
+								$data_sapaket=array(
+								"sapaket_master"=>$get_apaket_id,
+								"sapaket_item"=>$row->rpaket_perawatan,
+								"sapaket_jmlisi_item"=>$row->rpaket_jumlah,
+								"sapaket_sisa_item"=>$row->rpaket_jumlah
+								);
+								$this->db->insert('submaster_apaket_item', $data_sapaket);
 							}
 						}
 					}
-					return '1';
-				}else
-					return '0';
-			//}
+				}
+				return '1';
+			}else
+				return '0';
 
 		}
 		//end of function
@@ -924,6 +904,18 @@ class M_master_jual_paket extends Model{
 							);
 						$this->db->insert('jual_tunai', $data); 
 					}
+				}
+				
+				/* Ambil db.master_jual_paket.jpaket_id ==> untuk memasukkan Customer yang membeli Paket ke db.submaster_jual_paket sebagai daftar pengguna Faktur Penjualan Paket */
+				$sql="SELECT jpaket_id FROM master_jual_paket WHERE jpaket_nobukti='$jpaket_nobukti'";
+				$rs=$this->db->query($sql);
+				if($rs->num_rows()){
+					$rs_record=$rs->row_array();
+					$data_sjpaket=array(
+					"sjpaket_master"=>$rs_record["jpaket_id"],
+					"sjpaket_cust"=>$jpaket_cust
+					);
+					$this->db->insert('submaster_jual_paket', $data_sjpaket);
 				}
 				
 				return '1';
