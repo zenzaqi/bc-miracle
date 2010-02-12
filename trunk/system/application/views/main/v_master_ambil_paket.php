@@ -286,7 +286,8 @@ Ext.onReady(function(){
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really delete something you haven\'t selected?',
+//				msg: 'You can\'t really delete something you haven\'t selected?',
+				msg: 'Anda belum memilih data yang akan diedit',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -312,7 +313,8 @@ Ext.onReady(function(){
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really update something you haven\'t selected?',
+//				msg: 'You can\'t really update something you haven\'t selected?',
+				msg: 'Anda belum memilih data yang akan diedit',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -542,7 +544,7 @@ Ext.onReady(function(){
 			disabled:true,
 			handler: display_form_window
 		}, '-',{
-			text: 'Ambil',
+			text: 'Ambil Paket',
 			tooltip: 'Pengambilan Isi Paket',
 			iconCls:'icon-update',
 			handler: ambil_paket_confirm_update   // Confirm before updating
@@ -1007,7 +1009,7 @@ Ext.onReady(function(){
 		for(i=0;i<ambil_paket_isi_perawatan_DataStore.getCount();i++){
 			ambil_paket_isi_perawatan_record=ambil_paket_isi_perawatan_DataStore.getAt(i);
 			Ext.Ajax.request({
-				waitMsg: 'Please wait...',
+				waitMsg: 'Mohon tunggu...',
 				url: 'index.php?c=c_master_ambil_paket&m=detail_ambil_paket_isi_perawatan_insert',
 				params:{
 				rambil_paket_master	: eval(ambil_apaket_idField.getValue()), 
@@ -1042,7 +1044,8 @@ Ext.onReady(function(){
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really delete something you haven\'t selected?',
+//				msg: 'You can\'t really delete something you haven\'t selected?',
+				msg: 'Anda belum memilih data yang akan dihapus',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -1210,7 +1213,7 @@ Ext.onReady(function(){
 		for(i=0;i<ambil_paket_isi_produk_DataStore.getCount();i++){
 			ambil_paket_isi_produk_record=ambil_paket_isi_produk_DataStore.getAt(i);
 			Ext.Ajax.request({
-				waitMsg: 'Please wait...',
+				waitMsg: 'Mohon tunggu...',
 				url: 'index.php?c=c_master_ambil_paket&m=detail_ambil_paket_isi_produk_insert',
 				params:{
 				rambil_paket_id	: ambil_paket_isi_produk_record.data.rambil_paket_id, 
@@ -1227,7 +1230,7 @@ Ext.onReady(function(){
 	//function for purge detail
 	function ambil_paket_isi_produk_purge(){
 		Ext.Ajax.request({
-			waitMsg: 'Please wait...',
+			waitMsg: 'Mohon tunggu...',
 			url: 'index.php?c=c_master_ambil_paket&m=detail_ambil_paket_isi_produk_purge',
 			params:{ master_id: eval(ambil_paket_idField.getValue()) }
 		});
@@ -1238,13 +1241,16 @@ Ext.onReady(function(){
 	function ambil_paket_isi_produk_confirm_delete(){
 		// only one record is selected here
 		if(ambil_paket_isi_produkListEditorGrid.selModel.getCount() == 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', ambil_paket_isi_produk_delete);
+//			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', ambil_paket_isi_produk_delete);
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', ambil_paket_isi_produk_delete);
 		} else if(ambil_paket_isi_produkListEditorGrid.selModel.getCount() > 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', ambil_paket_isi_produk_delete);
+//			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', ambil_paket_isi_produk_delete);
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', ambil_paket_isi_produk_delete);
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really delete something you haven\'t selected?',
+//				msg: 'You can\'t really delete something you haven\'t selected?',
+				msg: 'Anda belum memilih data yang akan dihapus',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
