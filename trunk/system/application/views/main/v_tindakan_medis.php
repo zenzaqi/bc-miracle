@@ -261,7 +261,7 @@ Ext.onReady(function(){
 						//tindakan_medisdetail_purge();
 						tindakan_medisdetail_insert();
 						dtindakan_jual_nonmedis_insert();
-						Ext.MessageBox.alert(post2db+' OK','The Tindakan was '+msg+' successfully.');
+						//Ext.MessageBox.alert(post2db+' OK','The Tindakan was '+msg+' successfully.');
 						tindakan_medis_createWindow.hide();
 						break;
 					default:
@@ -373,11 +373,11 @@ Ext.onReady(function(){
 		/* only one record is selected here */
 		var get_trawat_id=tindakanListEditorGrid.getSelectionModel().getSelected().get('trawat_id');
 		
-		cbo_dtindakan_terapisDataStore.load();
+		//cbo_dtindakan_terapisDataStore.load();
 		//dtrawat_perawatanDataStore.load();
 		cbo_dtindakan_dokterDataStore.load();
 		if(tindakanListEditorGrid.selModel.getCount() == 1) {
-			cbo_trawat_rawatDataStore.load({params:{query:get_trawat_id}});
+			dtrawat_perawatanDataStore.load({params:{query:get_trawat_id}});
 			cbo_perawatan_dtjnonmedisDataStore.load({params:{query:tindakanListEditorGrid.getSelectionModel().getSelected().get('trawat_id')}});
 			tindakan_medis_set_form();
 			post2db='UPDATE';
@@ -1053,15 +1053,15 @@ Ext.onReady(function(){
     );*/
 	
 	var combo_trawat_rawat=new Ext.form.ComboBox({
-			store: cbo_trawat_rawatDataStore,
+			store: dtrawat_perawatanDataStore,
 			mode: 'remote',
 			typeAhead: true,
-			displayField: 'trawat_rawat_display',
-			valueField: 'trawat_rawat_value',
+			displayField: 'perawatan_display',
+			valueField: 'perawatan_value',
 			loadingText: 'Searching...',
 			pageSize:10,
 			hideTrigger:false,
-			tpl: cbo_trawat_rawat_tpl,
+			tpl: trawat_rawat_tpl,
 			//applyTo: 'search',
 			itemSelector: 'div.search-item',
 			triggerAction: 'all',
@@ -1238,7 +1238,8 @@ Ext.onReady(function(){
 					dtrawat_kategori	: tindakan_medisdetail_record.data.dtrawat_kategori, 
 					dtrawat_status	: tindakan_medisdetail_record.data.dtrawat_status,
 					dtrawat_keterangan	: tindakan_medisdetail_record.data.dtrawat_keterangan,
-					dtrawat_ambil_paket	: tindakan_medisdetail_record.data.dtrawat_ambil_paket
+					dtrawat_ambil_paket	: tindakan_medisdetail_record.data.dtrawat_ambil_paket,
+					dtrawat_cust	: trawat_medis_custidField.getValue()
 					},
 					callback: function(opts, success, response){
 						if(success)
@@ -1713,7 +1714,7 @@ Ext.onReady(function(){
         loadingText: 'Searching...',
         pageSize:10,
         hideTrigger:false,
-        tpl: cbo_trawat_rawat_tpl,
+        tpl: trawat_rawat_tpl,
         //applyTo: 'search',
         itemSelector: 'div.search-item',
 		triggerAction: 'all',
@@ -1789,7 +1790,7 @@ Ext.onReady(function(){
 						border:false,
 						items:[
 				        {
-							columnWidth:0.38,
+							columnWidth:0.33,
 							layout: 'form',
 							border:false,
 							defaultType: 'datefield',
@@ -1803,7 +1804,7 @@ Ext.onReady(function(){
 							    }] 
 						},
 						{
-							columnWidth:0.55,
+							columnWidth:0.30,
 							layout: 'form',
 							labelWidth:20,
 							border:false,

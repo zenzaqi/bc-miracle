@@ -224,6 +224,13 @@ Ext.onReady(function(){
   
   	/* Function for add data, open window create form */
 	function tindakan_nonmedis_create(){
+		/*for(i=0;i<tindakan_nonmedis_detail_DataStore.getCount();i++){
+			appointment_detail_nonmedis_record=tindakan_nonmedis_detail_DataStore.getAt(i);
+			if(!/^\d+$/.test(appointment_detail_nonmedis_record.data.dtrawat_perawatan)){
+				//console.log("perawtatannn is numeric");
+				//dtnonmedis_rawat='ada';
+			}
+		}*/
 	
 		if(is_tindakan_nonmedis_form_valid()){	
 		var trawat_id_create=null; 
@@ -580,6 +587,7 @@ Ext.onReady(function(){
 			dataIndex: 'trawat_cust',
 			width: 200,	//210,
 			sortable: true,
+			editable:false,
 			editor: new Ext.form.NumberField({
 				allowBlank: false,
 				allowDecimals: false,
@@ -1016,26 +1024,20 @@ Ext.onReady(function(){
         '</div></tpl>'
     );
 	
-	/*Ext.util.Format.comboRenderer = function(combo){
-		return function(value){
-			var record = combo.findRecord(combo.valueField, value);
-			return record ? record.get(combo.displayField) : combo.valueNotFoundText;
-		}
-	}*/
-	
 	var combo_dtrawat_perawatan=new Ext.form.ComboBox({
 			store: dtrawat_perawatanDataStore,
 			mode: 'remote',
-			typeAhead: false,
+			typeAhead: true,
 			displayField: 'perawatan_display',
 			valueField: 'perawatan_value',
-			tpl: cbo_trawat_rawat_tpl,
 			loadingText: 'Searching...',
+			pageSize:10,
 			hideTrigger:false,
+			tpl: cbo_trawat_rawat_tpl,
+			//applyTo: 'search',
 			itemSelector: 'div.search-item',
 			triggerAction: 'all',
-			lazyRender:true,
-			listClass: 'x-combo-list-small'
+			lazyRender:true
 	});
 	
 	var combo_dapp_terapis=new Ext.form.ComboBox({
