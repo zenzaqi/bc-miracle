@@ -565,10 +565,10 @@ Ext.onReady(function(){
   	/* Function for Identify of Window Column Model */
 	tindakan_nonmedis_ColumnModel = new Ext.grid.ColumnModel(
 		[{
-			header: 'No.Customer',
+			header: '<div align="center">' + 'No. Cust' + '</div>',	//'No.Customer',
 			readOnly: true,
 			dataIndex: 'trawat_cust_no',
-			width: 75,
+			width: 70,	//75,
 			renderer: function(value, cell){
 				cell.css = "readonlycell"; // Mengambil Value dari Class di dalam CSS 
 				return value;
@@ -576,9 +576,9 @@ Ext.onReady(function(){
 			hidden: false
 		},
 		{
-			header: 'Customer',
+			header: '<div align="center">' + 'Customer',
 			dataIndex: 'trawat_cust',
-			width: 210,
+			width: 200,	//210,
 			sortable: true,
 			editor: new Ext.form.NumberField({
 				allowBlank: false,
@@ -590,9 +590,9 @@ Ext.onReady(function(){
 			})
 		}, 
 		{
-			header: 'Perawatan',
+			header: '<div align="center">' + 'Perawatan' + '</div>',
 			dataIndex: 'dtrawat_perawatan',
-			width: 210,
+			width: 300,	//210,
 			sortable: true,
 			editor: new Ext.form.ComboBox({
 				store: dtrawat_perawatanDataStore,
@@ -605,7 +605,7 @@ Ext.onReady(function(){
 			})
 		}, 
 		{
-			header: 'Therapist',
+			header: '<div align="center">' + 'Therapist' + '</div>',
 			dataIndex: 'dtrawat_petugas2',
 			width: 80,
 			sortable: true,
@@ -620,13 +620,13 @@ Ext.onReady(function(){
 			})
 		}, 
 		{
-			header: 'Jam App',
+			header: '<div align="center">' + 'Jam App' + '</div>',
 			dataIndex: 'dtrawat_jam',
 			width: 60,
 			sortable: true
 		}, 
 		{
-			header: 'Status',
+			header: '<div align="center">' + 'Status' + '</div>',
 			dataIndex: 'dtrawat_status',
 			width: 80,
 			sortable: true,
@@ -646,7 +646,7 @@ Ext.onReady(function(){
             renderer: ch_status
 		}, 
 		{
-			header: 'Detail Keterangan',
+			header: '<div align="center">' + 'Detail Keterangan' + '</div>',
 			dataIndex: 'dtrawat_keterangan',
 			width: 185,
 			sortable: true,
