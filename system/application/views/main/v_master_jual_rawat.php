@@ -1700,7 +1700,8 @@ Ext.onReady(function(){
 	master_jual_rawatListEditorGrid =  new Ext.grid.GridPanel({
 		id: 'master_jual_rawatListEditorGrid',
 		el: 'fp_master_jual_rawat',
-		title: 'List Of Master_jual_rawat',
+//		title: 'List Of Master_jual_rawat',
+		title: 'Daftar Penjualan Perawatan',
 		autoHeight: true,
 		store: master_jual_rawat_DataStore, // DataStore
 		cm: master_jual_rawat_ColumnModel, // Nama-nama Columns
