@@ -62,7 +62,9 @@ class M_tindakan_medis extends Model{
 		//*eof
 		
 		//insert detail record
-		function detail_tindakan_medis_detail_insert($dtrawat_id ,$dtrawat_master ,$dtrawat_perawatan ,$dtrawat_petugas1 ,$dtrawat_petugas2 ,$dtrawat_jamreservasi ,$dtrawat_kategori ,$dtrawat_status ,$dtrawat_keterangan ,$dtrawat_ambil_paket ){
+		function detail_tindakan_medis_detail_insert($dtrawat_id ,$dtrawat_master ,$dtrawat_perawatan ,$dtrawat_petugas1 ,$dtrawat_petugas2 ,$dtrawat_jamreservasi ,$dtrawat_kategori ,$dtrawat_status ,$dtrawat_keterangan ,$dtrawat_ambil_paket ,$dtrawat_cust){
+			$apaket=0;
+			$punya_paket=0;
 			$date_now=date('Y-m-d');
 			//if master id not capture from view then capture it from max pk from master table
 			if($dtrawat_master=="" || $dtrawat_master==NULL){
@@ -74,19 +76,90 @@ class M_tindakan_medis extends Model{
 			if($rs->num_rows()){
 				/* artinya: data dtrawat_id ini sudah ada di db.tindakan_detail,
 				maka hanya boleh dilakukan Editing dgn catatan data ini dalam kondisi UNLOCK*/
+				
+				/* 
+				* JIKA $dtrawat_ambil_paket=true ==> Lakukan Checking di db.submaster_jual_paket,db.master_jual_paket,db.master_ambil_paket WHERE db.submaster_jual_paket.sjpaket_cust=[customer yg diupdate]
+				*/
+				if($dtrawat_ambil_paket=='true'){
+					$sql="SELECT jpaket_nobukti, apaket_id, apaket_paket, apaket_sisa_paket FROM ((((submaster_jual_paket INNER JOIN master_jual_paket ON(sjpaket_master=jpaket_id)) INNER JOIN master_ambil_paket ON(jpaket_nobukti=apaket_faktur)) INNER JOIN paket ON(apaket_paket=paket_id)) INNER JOIN paket_isi_perawatan ON(paket_id=rpaket_master)) LEFT JOIN perawatan ON(rpaket_perawatan=rawat_id) WHERE sjpaket_cust='$dtrawat_cust' AND rpaket_perawatan='$dtrawat_perawatan' AND apaket_sisa_paket>0";
+					$rs=$this->db->query($sql);
+					if($rs->num_rows()){
+						/* Customer ini dengan perawatan yang telah dilakukan terdapat pada daftar pemilik paket yang ([total sisa paketnya] > 0) */
+						/* Karena CheckBox Pengambilan Paket di-Centang, maka akan dimasukkan ke dalam Daftar Pengambilan Paket sehingga total_sisa_paket akan berkurang */
+						//$this->firephp->log("punya paket");
+						$rs_record=$rs->row_array();
+						$apaket_sisa_paket_temp=$rs_record["apaket_sisa_paket"];
+						$apaket_id_temp=$rs_record["apaket_id"];
+						$data_dapaket=array(
+						"dapaket_master"=>$rs_record["apaket_id"],
+						"dapaket_dpaket"=>$rs_record["apaket_paket"],
+						"dapaket_item"=>$dtrawat_perawatan,
+						"dapaket_jumlah"=>1,
+						"dapaket_cust"=>$dtrawat_cust
+						);
+						$apaket=1;
+						$this->db->insert('detail_ambil_paket', $data_dapaket);
+						if($this->db->affected_rows()){
+							/* UPDATE db.master_ambil_paket.apaket_sisa_paket = -1 */
+							$data_apaket=array(
+							"apaket_sisa_paket"=>$apaket_sisa_paket_temp-1
+							);
+							$this->db->where('apaket_id', $apaket_id_temp);
+							$this->db->update('master_ambil_paket', $data_apaket);
+						}
+					}else{
+						//$this->firephp->log("tidak punya paket");
+						$punya_paket=1;
+					}
+				}elseif($dtrawat_ambil_paket=='false'){
+					$apaket=1;
+					//$this->firephp->log('dtrawat_ambil_paket=false');
+					
+					/* artinya: membatalkan pengambilan paket */
+					$sql="SELECT jpaket_nobukti, apaket_id, apaket_paket, apaket_sisa_paket FROM ((((submaster_jual_paket INNER JOIN master_jual_paket ON(sjpaket_master=jpaket_id)) INNER JOIN master_ambil_paket ON(jpaket_nobukti=apaket_faktur)) INNER JOIN paket ON(apaket_paket=paket_id)) INNER JOIN paket_isi_perawatan ON(paket_id=rpaket_master)) LEFT JOIN perawatan ON(rpaket_perawatan=rawat_id) WHERE sjpaket_cust='$dtrawat_cust' AND rpaket_perawatan='$dtrawat_perawatan'";
+					$rs=$this->db->query($sql);
+					if($rs->num_rows()){
+						//$this->firephp->log("delete ambil paket");
+						$rs_record=$rs->row_array();
+						$apaket_sisa_paket_temp=$rs_record["apaket_sisa_paket"];
+						$apaket_id_temp=$rs_record["apaket_id"];
+						//$this->firephp->log($apaket_sisa_paket_temp, 'apaket_sisa_paket_temp');
+						//$this->firephp->log($rs_record["apaket_id"], 'apaket_id');
+						//$this->firephp->log($rs_record["apaket_paket"], 'apaket_paket');
+						//$this->firephp->log($dtrawat_perawatan, 'dtrawat_perawatan');
+						//$this->firephp->log($dtrawat_cust, 'dtrawat_cust');
+						$this->db->where('dapaket_master', $rs_record["apaket_id"]);
+						$this->db->where('dapaket_dpaket', $rs_record["apaket_paket"]);
+						$this->db->where('dapaket_item', $dtrawat_perawatan);
+						$this->db->where('dapaket_cust', $dtrawat_cust);
+						$this->db->delete('detail_ambil_paket');
+						if($this->db->affected_rows()){
+							/* UPDATE db.master_ambil_paket.apaket_sisa_paket = +1 */
+							$data_apaket=array(
+							"apaket_sisa_paket"=>$apaket_sisa_paket_temp+1
+							);
+							$this->db->where('apaket_id', $apaket_id_temp);
+							$this->db->update('master_ambil_paket', $data_apaket);
+						}
+					}
+				}
+				
 				$rs_record=$rs->row_array();
 				$dtrawat_locked=$rs_record["dtrawat_locked"];
 				
 				$sql="SELECT dtrawat_id FROM tindakan_detail WHERE dtrawat_perawatan='$dtrawat_perawatan' AND dtrawat_petugas1='$dtrawat_petugas1' AND dtrawat_jam='$dtrawat_jamreservasi' AND dtrawat_keterangan='$dtrawat_keterangan' AND dtrawat_ambil_paket='$dtrawat_ambil_paket'";
 				$rs=$this->db->query($sql);
 				if(!$rs->num_rows() && $dtrawat_locked==0){
+					/* Belum terjadi transaksi di Kasir Perawatan, sehingga di Tindakan Perawatan masih bisa melakukan perubahan */
 					$data=array(
 					"dtrawat_perawatan"=>$dtrawat_perawatan,
 					"dtrawat_petugas1"=>$dtrawat_petugas1,
 					"dtrawat_jam"=>$dtrawat_jamreservasi,
-					"dtrawat_keterangan"=>$dtrawat_keterangan,
-					"dtrawat_ambil_paket"=>$dtrawat_ambil_paket
+					"dtrawat_keterangan"=>$dtrawat_keterangan/*,
+					"dtrawat_ambil_paket"=>$dtrawat_ambil_paket*/
 					);
+					if($apaket==1)
+						$data["dtrawat_ambil_paket"]=$dtrawat_ambil_paket;
 					$this->db->where('dtrawat_id', $dtrawat_id);
 					$this->db->update('tindakan_detail', $data);
 					if($this->db->affected_rows()){
@@ -101,11 +174,16 @@ class M_tindakan_medis extends Model{
 							$this->db->where('drawat_dtrawat', $dtrawat_id);
 							$this->db->update('detail_jual_rawat', $data);
 						}
-						return '1';
+						if($punya_paket==1){
+							return '1';
+						}else{
+							return '2';
+						}
 					}else {
-						return '0';
+						return '3';
 					}
 				}elseif($dtrawat_locked==1){
+					/* Sudah terjadi transaksi di Kasir Perawatan, sehingga TIDAK BOLEH melakukan perubahan di Tindakan Perawatan */
 					return '2';
 				}
 			}else{
@@ -113,20 +191,38 @@ class M_tindakan_medis extends Model{
 				* Data Baru ini otomatis ber-status='datang', maka db.report_tindakan dari Dokter yang dipilih akan ditambahkan +1
 				*/
 				/* 
-				* JIKA $dtrawat_ambil_paket=true ==> Lakukan Checking di 
+				* JIKA $dtrawat_ambil_paket=true ==> Lakukan Checking di db.submaster_jual_paket,db.master_jual_paket,db.master_ambil_paket WHERE db.submaster_jual_paket.sjpaket_cust=[customer yg diupdate]
 				*/
-				if($dtrawat_ambil_pake==true){
-					$sql="SELECT * FROM submaster_jual_paket INNER JOIN master_jual_paket ON(sjpaket_master=jpaket_id)  master_ambil_paket ";
+				if($dtrawat_ambil_paket=='true'){
+					$sql="SELECT jpaket_nobukti, apaket_id, apaket_paket FROM ((((submaster_jual_paket INNER JOIN master_jual_paket ON(sjpaket_master=jpaket_id)) INNER JOIN master_ambil_paket ON(jpaket_nobukti=apaket_faktur)) INNER JOIN paket ON(apaket_paket=paket_id)) INNER JOIN paket_isi_perawatan ON(paket_id=rpaket_master)) LEFT JOIN perawatan ON(rpaket_perawatan=rawat_id) WHERE sjpaket_cust='$dtrawat_cust' AND rpaket_perawatan='$dtrawat_perawatan' AND apaket_sisa_paket>0";
+					$rs=$this->db->query($sql);
+					if($rs->num_rows()){
+						/* Customer ini dengan perawatan yang telah dilakukan terdapat pada daftar pemilik paket yang ([total sisa paketnya] > 0) */
+						/* Karena CheckBox Pengambilan Paket di-Centang, maka akan dimasukkan ke dalam Daftar Pengambilan Paket sehingga total_sisa_paket akan berkurang */
+						$rs_record=$rs->row_array();
+						$data_dapaket=array(
+						"dapaket_master"=>$rs_record["apaket_id"],
+						"dapaket_dpaket"=>$rs_record["apaket_paket"],
+						"dapaket_item"=>$dtrawat_perawatan,
+						"dapaket_jumlah"=>1,
+						"dapaket_cust"=>$dtrawat_cust
+						);
+						//$apaket=1;
+						$this->db->insert('detail_ambil_paket', $data_dapaket);
+					}
 				}
+				
 				$data=array(
 				"dtrawat_master"=>$dtrawat_master,
 				"dtrawat_perawatan"=>$dtrawat_perawatan,
 				"dtrawat_petugas1"=>$dtrawat_petugas1,
 				"dtrawat_tglapp"=>$date_now,
 				"dtrawat_jam"=>$dtrawat_jamreservasi,
-				"dtrawat_keterangan"=>$dtrawat_keterangan,
-				"dtrawat_ambil_paket"=>$dtrawat_ambil_paket
+				"dtrawat_keterangan"=>$dtrawat_keterangan/*,
+				"dtrawat_ambil_paket"=>$dtrawat_ambil_paket*/
 				);
+				if($apaket==1)
+						$data["dtrawat_ambil_paket"]=$dtrawat_ambil_paket;
 				$this->db->insert('tindakan_detail', $data);
 				if($this->db->affected_rows()){
 					$bln_now=date('Y-m');
@@ -160,7 +256,7 @@ class M_tindakan_medis extends Model{
 		/* START NON-MEDIS Function */
 		function dtindakan_jual_nonmedis_list($master_id,$query,$start,$end) {
 			//$query = "SELECT * FROM tindakan_detail,perawatan,karyawan WHERE dtrawat_perawatan=rawat_id AND dtrawat_petugas1=karyawan_id AND dtrawat_master='".$master_id."'";
-			$query="SELECT * FROM tindakan_detail INNER JOIN perawatan ON(dtrawat_perawatan=rawat_id) LEFT JOIN kategori ON(rawat_kategori=kategori_id) WHERE dtrawat_master='".$master_id."' AND kategori_nama='Non Medis' AND dtrawat_dapp='0'";
+			$query="SELECT * FROM vu_tindakan WHERE dtrawat_master='".$master_id."' AND kategori_nama='Non Medis' AND dtrawat_petugas2='0'";
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
 			$limit = $query." LIMIT ".$start.",".$end;			
@@ -269,7 +365,7 @@ class M_tindakan_medis extends Model{
 			$date_now=date('Y-m-d');
 			//$query = "SELECT * FROM vu_tindakan WHERE kategori_nama='Medis' AND dtrawat_tglapp='$date_now'"; //TAMPILAN MEDIS SAJA
 			//$query = "SELECT medis.* FROM vu_tindakan medis WHERE (medis.kategori_nama='Medis' OR medis.dtrawat_master IN(SELECT nonmedis.dtrawat_master FROM vu_tindakan nonmedis WHERE nonmedis.kategori_nama='Non Medis' AND date_format(dtrawat_tglapp,'%Y-%m-%d') = date_format('$date_now','%Y-%m-%d') AND nonmedis.dtrawat_dapp='0')) AND date_format(dtrawat_tglapp,'%Y-%m-%d') = date_format('$date_now','%Y-%m-%d')";
-			$query = "SELECT * FROM vu_tindakan WHERE date_format(dtrawat_tglapp,'%Y-%m-%d') = date_format('$date_now','%Y-%m-%d') AND (kategori_nama='Medis' OR dtrawat_dapp='0')";
+			$query = "SELECT * FROM vu_tindakan WHERE date_format(dtrawat_tglapp,'%Y-%m-%d') = date_format('$date_now','%Y-%m-%d') AND (kategori_nama='Medis' OR dtrawat_petugas2='0')";
 			
 			// For simple search
 			if ($filter<>""){
@@ -280,7 +376,7 @@ class M_tindakan_medis extends Model{
 			
 			//$query2 = "SELECT * FROM vu_tindakan WHERE kategori_nama='Medis' AND dtrawat_tglapp='$date_now'"; //TAMPILAN MEDIS SAJA
 			//$query2 = "SELECT medis.* FROM vu_tindakan medis WHERE (medis.kategori_nama='Medis' OR medis.dtrawat_master IN(SELECT nonmedis.dtrawat_master FROM vu_tindakan nonmedis WHERE nonmedis.kategori_nama='Non Medis' AND date_format(dtrawat_tglapp,'%Y-%m-%d') = date_format('$date_now','%Y-%m-%d') AND nonmedis.dtrawat_dapp='0')) AND date_format(dtrawat_tglapp,'%Y-%m-%d') = date_format('$date_now','%Y-%m-%d')";
-			$query2 = "SELECT * FROM vu_tindakan WHERE date_format(dtrawat_tglapp,'%Y-%m-%d') = date_format('$date_now','%Y-%m-%d') AND (kategori_nama='Medis' OR dtrawat_dapp='0')";
+			$query2 = "SELECT * FROM vu_tindakan WHERE date_format(dtrawat_tglapp,'%Y-%m-%d') = date_format('$date_now','%Y-%m-%d') AND (kategori_nama='Medis' OR dtrawat_petugas2='0')";
 			
 			// For simple search
 			if ($filter<>""){
@@ -291,7 +387,7 @@ class M_tindakan_medis extends Model{
 			
 			//$query3 = "SELECT * FROM vu_tindakan WHERE kategori_nama='Medis' AND dtrawat_tglapp='$date_now'"; //TAMPILAN MEDIS SAJA
 			//$query3 = "SELECT medis.* FROM vu_tindakan medis WHERE (medis.kategori_nama='Medis' OR medis.dtrawat_master IN(SELECT nonmedis.dtrawat_master FROM vu_tindakan nonmedis WHERE nonmedis.kategori_nama='Non Medis' AND date_format(dtrawat_tglapp,'%Y-%m-%d') = date_format('$date_now','%Y-%m-%d') AND nonmedis.dtrawat_dapp='0')) AND date_format(dtrawat_tglapp,'%Y-%m-%d') = date_format('$date_now','%Y-%m-%d')";
-			$query3 = "SELECT * FROM vu_tindakan WHERE date_format(dtrawat_tglapp,'%Y-%m-%d') = date_format('$date_now','%Y-%m-%d') AND (kategori_nama='Medis' OR dtrawat_dapp='0')";
+			$query3 = "SELECT * FROM vu_tindakan WHERE date_format(dtrawat_tglapp,'%Y-%m-%d') = date_format('$date_now','%Y-%m-%d') AND (kategori_nama='Medis' OR dtrawat_petugas2='0')";
 			
 			// For simple search
 			if ($filter<>""){
@@ -302,7 +398,7 @@ class M_tindakan_medis extends Model{
 			
 			//$query4 = "SELECT * FROM vu_tindakan WHERE kategori_nama='Medis' AND dtrawat_tglapp='$date_now'"; //TAMPILAN MEDIS SAJA
 			//$query4 = "SELECT medis.* FROM vu_tindakan medis WHERE (medis.kategori_nama='Medis' OR medis.dtrawat_master IN(SELECT nonmedis.dtrawat_master FROM vu_tindakan nonmedis WHERE nonmedis.kategori_nama='Non Medis' AND date_format(dtrawat_tglapp,'%Y-%m-%d') = date_format('$date_now','%Y-%m-%d') AND nonmedis.dtrawat_dapp='0')) AND date_format(dtrawat_tglapp,'%Y-%m-%d') = date_format('$date_now','%Y-%m-%d')";
-			$query4 = "SELECT * FROM vu_tindakan WHERE date_format(dtrawat_tglapp,'%Y-%m-%d') = date_format('$date_now','%Y-%m-%d') AND (kategori_nama='Medis' OR dtrawat_dapp='0')";
+			$query4 = "SELECT * FROM vu_tindakan WHERE date_format(dtrawat_tglapp,'%Y-%m-%d') = date_format('$date_now','%Y-%m-%d') AND (kategori_nama='Medis' OR dtrawat_petugas2='0')";
 			
 			// For simple search
 			if ($filter<>""){
@@ -798,7 +894,7 @@ class M_tindakan_medis extends Model{
 		//function for advanced search record
 		function tindakan_search($trawat_id ,$trawat_cust ,$trawat_tglapp_start ,$trawat_tglapp_end ,$trawat_rawat ,$trawat_dokter ,$trawat_status ,$start,$end){
 			//full query
-			$query="SELECT trawat_id,trawat_cust,cust_nama,cust_no,dtrawat_keterangan,trawat_creator,trawat_date_create,trawat_update,trawat_date_update,trawat_revised,dtrawat_id,dtrawat_perawatan,rawat_nama,karyawan_nama,karyawan_no,dtrawat_jam,dtrawat_tglapp,dtrawat_status,karyawan_username,rawat_harga,rawat_du,rawat_dm FROM tindakan INNER JOIN customer ON trawat_cust=cust_id INNER JOIN tindakan_detail ON dtrawat_master=trawat_id LEFT JOIN perawatan ON dtrawat_perawatan=rawat_id LEFT JOIN karyawan ON dtrawat_petugas1=karyawan_id LEFT JOIN kategori ON rawat_kategori=kategori_id WHERE kategori_nama='Medis'";
+			$query="SELECT * FROM vu_tindakan WHERE kategori_nama='Medis'";
 			
 			if($trawat_id!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
