@@ -1588,7 +1588,7 @@ Ext.onReady(function(){
 			header: '#',
 			readOnly: true,
 			dataIndex: 'cust_id',
-			width: 40,
+			width: 80,	//40,
 			renderer: function(value, cell){
 				cell.css = "readonlycell"; // Mengambil Value dari Class di dalam CSS 
 				return value;
@@ -1596,9 +1596,10 @@ Ext.onReady(function(){
 			hidden: true
 		},
 		{
-			header: 'No Customer (Lama)',
+//			header: 'No Customer (Lama)',
+			header: 'No. Cust (Lama)',
 			dataIndex: 'cust_nolama',
-			width: 110,
+			width: 80,	//110,
 			sortable: true,
 			hidden: true,
 			editor: new Ext.form.TextField({
@@ -1606,25 +1607,26 @@ Ext.onReady(function(){
           	})
 		},
 		{
-			header: 'No Customer',
+//			header: 'No Customer',
+			header: '<div align="center">' + 'No. Cust' + '</div>',
 			dataIndex: 'cust_no',
-			width: 90,
+			width: 80,	//90,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 50
           	})
 		},
 		{
-			header: 'Nama Lengkap',
+			header: '<div align="center">' + 'Nama Lengkap' + '</div>',
 			dataIndex: 'cust_nama',
-			width: 167,
+			width: 180,	//167,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 50
           	})
 		},
 		{
-			header: 'L/P',
+			header: '<div align="center">' + 'L/P' + '</div>',
 			dataIndex: 'cust_kelamin',
 			width: 27,
 			sortable: true,
@@ -1643,9 +1645,9 @@ Ext.onReady(function(){
             })
 		},
 		{
-			header: 'Alamat',
+			header: '<div align="center">' + 'Alamat' + '</div>',
 			dataIndex: 'cust_alamat',
-			width: 127,
+			width: 180,	//127,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 250
@@ -1662,9 +1664,9 @@ Ext.onReady(function(){
 			hidden: true
 		},
 		{
-			header: 'Kota',
+			header: '<div align="center">' + 'Kota' + '</div>',
 			dataIndex: 'cust_kota',
-			width: 97,
+			width: 80,	//97,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 100
@@ -1702,9 +1704,9 @@ Ext.onReady(function(){
 			hidden: true
 		},
 		{
-			header: 'No. Telp. Rumah',
+			header: '<div align="center">' + 'Telp. Rumah' + '</div>',
 			dataIndex: 'cust_telprumah',
-			width: 97,
+			width: 80,	//97,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 30,
@@ -1712,9 +1714,9 @@ Ext.onReady(function(){
           	})
 		},
 		{
-			header: 'No. Telp. Rumah 2',
+			header: 'Telp. Rumah 2',
 			dataIndex: 'cust_telprumah2',
-			width: 150,
+			width: 80,	//150,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 30,
@@ -1734,9 +1736,9 @@ Ext.onReady(function(){
 			hidden: true
 		},
 		{
-			header: 'No. Ponsel',
+			header: '<div align="center">' + 'No. Ponsel' + '</div>',
 			dataIndex: 'cust_hp',
-			width: 97,
+			width: 80,	//97,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 25,
@@ -1834,13 +1836,15 @@ Ext.onReady(function(){
             })
 		},
 		{
-			header: 'Tgl Lahir',
+			header: '<div align="center">' + 'Tgl Lahir' + '</div>',
 			dataIndex: 'cust_tgllahir',
-			width: 67,
+			width: 70,	//67,
 			sortable: true,
-			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
+//			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
+			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
 			editor: new Ext.form.DateField({
-				format: 'Y-m-d'
+//				format: 'Y-m-d'
+				format: 'd-m-Y'
 			})
 		},
 		{
@@ -1871,27 +1875,9 @@ Ext.onReady(function(){
 			hidden: true
 		},
 		{
-			header: 'Keterangan',
-			dataIndex: 'cust_keterangan',
-			width: 150,
-			sortable: true,
-			editor: new Ext.form.TextField({
-				maxLength: 500
-          	}),
-			hidden: true
-		},
-		{
-			header: 'Member',
-			dataIndex: 'cust_member',
-			width: 150,
-			sortable: true,
-			hidden: true,
-			readOnly: true
-		},
-		{
-			header: 'Status Nikah',
+			header: '<div align="center">' + 'Status Nikah' + '</div>',
 			dataIndex: 'cust_statusnikah',
-			width: 90,
+			width: 80,	//90,
 			sortable: true,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
@@ -1906,6 +1892,24 @@ Ext.onReady(function(){
                	lazyRender:true,
                	listClass: 'x-combo-list-small'
             })
+		},
+		{
+			header: '<div align="center">' + 'Member' + '</div>',
+			dataIndex: 'cust_member',
+			width: 80,	//150,
+			sortable: true,
+			//hidden: true,
+			readOnly: true
+		},
+		{
+			header: '<div align="center">' + 'Keterangan' + '</div>',
+			dataIndex: 'cust_keterangan',
+			width: 220,	//150,
+			sortable: true,
+			editor: new Ext.form.TextField({
+				maxLength: 500
+          	}),
+			//hidden: true
 		},
 		{
 			header: 'Jumlah Anak',
@@ -2128,7 +2132,8 @@ Ext.onReady(function(){
 	customerListEditorGrid =  new Ext.grid.GridPanel({
 		id: 'customerListEditorGrid',
 		el: 'fp_customer',
-		title: 'List Of Customer',
+//		title: 'List Of Customer',
+		title: 'Daftar Customer',
 		autoHeight: true,
 		store: customer_DataStore, // DataStore
 		cm: customer_ColumnModel, // Nama-nama Columns
@@ -2137,7 +2142,7 @@ Ext.onReady(function(){
 		//clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:false },
-	  	width: 940,
+	  	width: 1200, //940,
 	  	//autoWidth: true,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
