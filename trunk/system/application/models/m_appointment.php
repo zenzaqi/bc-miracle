@@ -396,7 +396,7 @@ class M_appointment extends Model{
 		
 		function detail_appointment_detail_nonmedis_insert($dapp_nonmedis_id ,$dapp_nonmedis_master ,$dapp_nonmedis_perawatan ,$dapp_nonmedis_tglreservasi ,$dapp_nonmedis_jamreservasi ,$dapp_nonmedis_petugas2 ,$dapp_nonmedis_status ,$dapp_nonmedis_tgldatang ,$dapp_nonmedis_jamdatang ,$dapp_nonmedis_keterangan ,$dapp_nonmedis_counter ,$app_cara ,$app_customer ,$app_keterangan ,$dapp_user){
 			/* JIKA $dapp_medis_petugas=="" ==> diisi db.karyawan.karyawan_id WHERE username="Available dr." */
-			if($dapp_medis_petugas==""){
+			if($dapp_nonmedis_petugas2==""){
 				$sql="SELECT karyawan_id FROM karyawan WHERE karyawan_no='999'";
 				$rs=$this->db->query($sql);
 				if($rs->num_rows()){
