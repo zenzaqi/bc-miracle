@@ -321,12 +321,10 @@ class M_master_jual_paket extends Model{
 							$get_apaket_id=$rs_get_apaket_record["apaket_id"]; //Untuk => db.submaster_apaket_item.sapaket_master
 						}
 						
-					
 						$sql="SELECT * FROM paket_isi_perawatan WHERE rpaket_master='$dpaket_paket'";
 						$rs=$this->db->query($sql);
 						$nbrows = $rs->num_rows();
 						if($nbrows>0){
-							
 							
 							/* INSERT ke submaster_apaket_item u/ mencatat sisa setelah dilakukan pengambilan paket */
 							foreach($rs->result() as $row){
