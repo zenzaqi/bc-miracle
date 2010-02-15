@@ -257,8 +257,8 @@ Ext.onReady(function(){
 			}
 		}
 		
-		console.log("dpaket_paket_id = "+dpaket_paket_id);
-		console.log("jpaket_custField.getValue = "+(/^\d+$/.test(jpaket_custField.getValue())));
+		//console.log("dpaket_paket_id = "+dpaket_paket_id);
+		//console.log("jpaket_custField.getValue = "+(/^\d+$/.test(jpaket_custField.getValue())));
 	
 		if(is_master_jual_paket_form_valid()&& dpaket_paket_id=="ada" && (((/^\d+$/.test(jpaket_custField.getValue())) && post2db=="CREATE") || post2db=="UPDATE")){	
 			var jpaket_id_create_pk=null; 
