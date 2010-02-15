@@ -502,7 +502,7 @@ Ext.onReady(function(){
 			renderer: Ext.util.Format.dateRenderer('d-m-Y')
 		}, 
 		{
-			header: '<div align="center">' + 'Sisa Paket' + '</div>',
+			header: '<div align="center">' + 'Sisa' + '</div>',
 			dataIndex: 'apaket_sisa_paket',
 			width: 60,	//90,
 			renderer: function(value, cell, record){
@@ -829,26 +829,26 @@ Ext.onReady(function(){
 			width: 60,
 			hidden: true
 		},{
-			header: 'No.Faktur',
+			header: '<div align="center">' + 'No. Faktur' + '</div>',
 			dataIndex: 'apaket_faktur',
-			width: 90
+			width: 80,	//90
 		},{
-			header: 'Nama Paket',
+			header: '<div align="center">' + 'Nama Paket' + '</div>',
 			dataIndex: 'paket_nama',
 			width: 210
 		},{
-			header: 'Perawatan',
+			header: '<div align="center">' + 'Perawatan' + '</div>',
 			dataIndex: 'rawat_nama',
 			width: 210
 		},{
-			header: 'Jumlah',
+			header: '<div align="center">' + 'Jumlah' + '</div>',
 			dataIndex: 'dapaket_jumlah',
 			width: 60,
 			renderer: function(value, cell, record){
 				return '<div align="right">' + value + '</div>';
 			}
 		},{
-			header: 'Customer',
+			header: '<div align="center">' + 'Customer' + '</div>',
 			dataIndex: 'dapaket_cust',
 			width: 210
 		}]
