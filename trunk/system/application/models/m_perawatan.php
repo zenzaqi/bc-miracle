@@ -214,6 +214,7 @@ class M_perawatan extends Model{
 			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 				$query .= " (rawat_kode LIKE '%".addslashes($filter)."%' OR rawat_kodelama LIKE '%".addslashes($filter)."%' OR rawat_nama LIKE '%".addslashes($filter)."%' OR group_nama LIKE '%".addslashes($filter)."%' OR jenis_nama LIKE '%".addslashes($filter)."%' OR kategori_nama LIKE '%".addslashes($filter)."%')";
+				$query .= " AND rawat_aktif = 'Aktif'"; // by hendri, simple search khusus aktif only
 			}
 			
 			$result = $this->db->query($query);
