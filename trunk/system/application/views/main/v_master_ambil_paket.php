@@ -247,6 +247,10 @@ Ext.onReady(function(){
   
 	/* setValue to EDIT */
 	function ambil_paket_set_form(){
+		ambil_paket_noCustField.setValue(ambil_paketListEditorGrid.getSelectionModel().getSelected().get('cust_no'));
+		ambil_paket_custField.setValue(ambil_paketListEditorGrid.getSelectionModel().getSelected().get('cust_nama'));
+		ambil_paket_noFakturField.setValue(ambil_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_nobukti'));
+		ambil_paket_tglFakturField.setValue(ambil_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_tanggal'));
 		ambil_apaket_idField.setValue(ambil_paketListEditorGrid.getSelectionModel().getSelected().get('apaket_id'));
 		ambil_paket_idField.setValue(ambil_paketListEditorGrid.getSelectionModel().getSelected().get('paket_id'));
 		ambil_paket_kodeField.setValue(ambil_paketListEditorGrid.getSelectionModel().getSelected().get('paket_kode'));
@@ -666,6 +670,34 @@ Ext.onReady(function(){
 		anchor: '95%',
 		maskRe: /([0-9]+)$/
 	});
+	/* Identify  ambil_paket_customer Field */
+	ambil_paket_noCustField= new Ext.form.TextField({
+		id: 'ambil_paket_noCustField',
+		fieldLabel: 'No.Customer',
+		readOnly: true,
+		anchor: '95%'
+	});
+	/* Identify  ambil_paket_customer Field */
+	ambil_paket_custField= new Ext.form.TextField({
+		id: 'ambil_paket_custField',
+		fieldLabel: 'Customer',
+		readOnly: true,
+		anchor: '95%'
+	});
+	/* Identify  ambil_paket_customer Field */
+	ambil_paket_noFakturField= new Ext.form.TextField({
+		id: 'ambil_paket_noFakturField',
+		fieldLabel: 'No.Faktur',
+		readOnly: true,
+		anchor: '95%'
+	});
+	/* Identify  ambil_paket_expired Field */
+	ambil_paket_tglFakturField= new Ext.form.DateField({
+		id: 'ambil_paket_tglFakturField',
+		fieldLabel: 'Tgl Faktur',
+		format : 'Y-m-d',
+		disabled: true
+	});
 	/* Identify  ambil_paket_id Field */
 	ambil_paket_idField= new Ext.form.NumberField({
 		id: 'ambil_paket_idField',
@@ -716,7 +748,29 @@ Ext.onReady(function(){
 		maskRe: /([0-9]+)$/
 	});
   	/*Fieldset Master*/
-	ambil_paket_masterGroup = new Ext.form.FieldSet({
+	ambil_paket_fakturGroup = new Ext.form.FieldSet({
+		title: 'Info Faktur',
+		autoHeight: true,
+		collapsible: true,
+		layout:'column',
+		items:[
+			{
+				columnWidth:0.5,
+				layout: 'form',
+				border:false,
+				items: [ambil_paket_noFakturField, ambil_paket_tglFakturField]
+			}
+			,{
+				columnWidth:0.5,
+				layout: 'form',
+				border:false,
+				items: [ambil_paket_noCustField, ambil_paket_custField]
+			}
+			]
+	
+	});
+	
+	ambil_paket_infoPaketGroup = new Ext.form.FieldSet({
 		title: 'Info Paket',
 		autoHeight: true,
 		collapsible: true,
@@ -732,7 +786,7 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [ambil_paket_groupField, ambil_paket_expiredField, ambil_paket_sisaField]
+				items: [ambil_paket_expiredField, ambil_paket_sisaField]
 			}
 			]
 	
@@ -1284,7 +1338,7 @@ Ext.onReady(function(){
 		bodyStyle:'padding:5px',
 		autoHeight:true,
 		width: 700,        
-		items: [ambil_paket_masterGroup,detail_tab_isi]
+		items: [ambil_paket_fakturGroup,ambil_paket_infoPaketGroup,detail_tab_isi]
 		,
 		buttons: [{
 				text: 'Save and Close',

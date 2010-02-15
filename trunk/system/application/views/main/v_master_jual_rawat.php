@@ -43,6 +43,211 @@
 		}
     </style>
 <script>
+Ext.namespace('Ext.ux');
+
+Ext.override(Ext.Component, {
+    /*    override by Animal (http://extjs.com/forum/showthread.php?t=26484)
+        that allows us to find the dollar fields parent form. Very nice.
+    */
+    findParentBy: function(fn) {
+        for (var p = this.ownerCt; (p != null) && !fn(p); p = p.ownerCt);
+        return p;
+    },
+
+    findParentByType: function(xtype) {
+        return typeof xtype == 'function' ?
+            this.findParentBy(function(p){
+                return p.constructor === xtype;
+            }) :
+            this.findParentBy(function(p){
+                return p.constructor.xtype === xtype;
+            });
+    }
+});
+
+Ext.util.Format.usMoneyNull = function(val) {
+    //-- allows clearing of field value (so that $0.00 only shows if you explicitly entered zero for a value).
+    if (val == null||val == '') {
+        return '';
+    } else if (val > 999999999999) {
+        return '';
+    } else {
+        return Ext.util.Format.rpMoney(val);
+    }
+}
+
+Ext.ux.RupiahField = function(config) {
+    //-- Add any numberfield default settings here:
+    var defaultConfig = {
+        allowDecimals: true,
+        allowNegative: false,
+        decimalPrecision: 2,
+        maxValue: 1000000000,
+        minValue: 0,
+        value: null,
+        selectOnFocus: true//,
+        //itemCls: 'rmoney' // to right-align dollar field, define style: .rmoney .x-form-field {text-align:right;}
+    };
+
+    Ext.ux.RupiahField.superclass.constructor.call(this, Ext.apply(defaultConfig, config));
+
+    this.on('change',this._onChange,this);
+    this.on('initself',this._onInitSelf);
+    this.on('focus',this._onFocus);
+    this.on('blur',this._onBlur);
+    this.on('render',this._onRender);
+    //this.on('valid',this._onValid);
+    this.dollarNumericValue=config.value || null;
+    }
+
+    Ext.extend(Ext.ux.RupiahField, Ext.form.NumberField, {
+    dollarNumericValue: null,
+
+    initSelf: function(){
+        // When form loads, bare number is loaded and displayed. Call this (via listener, typically)
+        // to format value to dollar.
+        if (this.value === null || this.value === '') {
+            this.dollarNumericValue = null;
+        } else {
+            this.dollarNumericValue = this.value;
+        }
+        this.setRawValue(this.formatter(this.dollarNumericValue));
+
+        // prevent field from reporting itself as "dirty" after form load (isDirty check):
+        this.originalValue = this.dollarNumericValue;
+    },
+
+    getValue:function(){
+        //return this.value+"".replace(/[^0-9.-]/g,"")-0; strip out any formatting characters from string.
+        if (this.value === '' || this.value === null) {
+            return null;
+        } else if (isNaN(this.value)) {
+            this.value = 0;
+        } else {
+            return Number(this.value);
+        }
+    },
+
+    _onChange:function(field, newVal, oldVal){
+        // n will always be unformatted numeric as STRING! So "-0" to force numeric type:
+        if (newVal === '') {
+            this.dollarNumericValue = null
+        } else {
+            this.dollarNumericValue = newVal-0;
+            }
+    },
+    _onRender:function(cmp){
+        this.setRawValue(this.formatter(this.dollarNumericValue));
+        if (this.isFormField) {    // Is this check necessary?
+            var parentForm = this.findParentByType('form');
+
+            /*
+                Note: If client-side validation is enabled, unformatted numbers get posted on save. Good!
+
+                (The field's "isValid" method just does this for some reason, which works to our advantage.)
+
+                BUT (there's always a "but"), we then need to apply back the dollar formatting so that the
+                numbers aren't left displayed as plain.
+            */
+
+            // Format dollar after successful form save:
+            parentForm.on('actioncomplete', function(){cmp.initSelf();});
+
+            // Format back to dollar after failed save attempt.
+            parentForm.on('actionfailed', function(){cmp.initSelf();});
+
+            // doLayout is called on initial page load.
+            parentForm.on('afterLayout', function(){cmp.initSelf();});
+
+            // Formats dollar after client-side validation fails...maybe...still investigating this.
+            // parentForm.on('beforeaction', function(){cmp.initSelf();});
+
+            /*
+                Depends on order of any success/actioncomplete/actionfailed listeners???
+                Or maybe you are checking if the form isValid yourself by listening to the
+                form's beforeaction, type action.type=='submit' and then returning false to
+                cancel the action.    Still looking into all this.
+
+                More on clientValidation:
+                Before the form submits (doAction 'submit' with clientValidation not set to false...
+                from docs: "If undefined, pre-submission field validation is performed.") the call
+                to form "isValid" will turn the rupiahfield back to a plain, unformatted number,
+                which will get posted.
+            */
+
+        }
+    },
+
+    formatter: function(value){
+        if (value === 0) {
+            return Ext.util.Format.usMoneyNull("0");  // returns '$0.00' instead of ''.
+        } else {
+            return Ext.util.Format.usMoneyNull(value);
+        }
+    },
+
+    _onBlur: function(field){
+        /*
+            always update dollarNumericValue with the actual RawValue (which right here (onBlur) will
+            *always* be numeric    (remember: when focused, it's unformatted numeric entry...just like
+            numberfield does. So onBlur, grab that numeric value and save it to this.dollarNumericValue,
+            then apply formatting back to RawValue for display.
+        */
+
+        if (field.getRawValue() == '') {
+            this.dollarNumericValue=null;
+        } else {
+            this.dollarNumericValue=field.getRawValue()-0;
+        }
+
+        field.setRawValue(this.formatter(this.dollarNumericValue));
+
+        if (this.dollarNumericValue !== this.value)    {
+            /* for some reason, when zero'ing out a value (or clearing), the onChange event is not firing 
+              and this.value is not getting set to the new zero or blank value. This fixes that:
+            */
+            this.value = this.dollarNumericValue;
+        }
+
+    },
+
+    _onFocus: function(field){
+        if (this.dollarNumericValue === null||this.dollarNumericValue === '') {
+            field.setRawValue('');
+        } else {
+            // remove formatting by restoring RawValue to dollarNumericValue.
+            field.setRawValue((this.dollarNumericValue-0).toFixed(this.decimalPrecision));
+        }
+    },
+
+    initAllSiblings: function() {
+        /*
+        Perhaps useful to call this manually when having trouble getting the event listeners straightened
+        out as described above
+        */
+        if (this.isFormField) {    // Is this check necessary?
+            var parentForm = this.findParentByType('form');
+
+            var RupiahFields = parentForm.findByType('rupiahfield');
+            Ext.each(RupiahFields, function(rupiahfield) {rupiahfield.initSelf();});
+        }
+    }
+
+    /*
+    _onValid:function(field){
+        if (!field.hasFocus) {
+
+            //could do this here instead of onBlur, but form would end up posting the formatted dollar
+            //value instead of the numeric value.
+
+            this.setRawValue(this.formatter(this.dollarNumericValue));
+        }
+    },
+    */
+});
+
+Ext.ComponentMgr.registerType('rupiahfield', Ext.ux.RupiahField);
+
 /* declare function */		
 var master_jual_rawat_DataStore;
 var kwitansi_jual_rawat_DataStore;
@@ -800,7 +1005,7 @@ Ext.onReady(function(){
 		update_group_carabayar_jual_rawat();
 		update_group_carabayar2_jual_rawat();
 		update_group_carabayar3_jual_rawat();
-		load_total_rawat_bayar();
+		//load_total_rawat_bayar();
 
 		jrawat_bayarField.reset();
 		jrawat_bayarField.setValue(null);
@@ -1118,6 +1323,8 @@ Ext.onReady(function(){
 		}
 		
 		//detail_jual_rawat_DataStore.load({params:{master_id: jrawat_idField.getValue()}});
+		//detail_jual_rawat_DataStore.load({params : {master_id : master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_id'), start:0, limit:pageS},callback:function(opts, success, response){if(success)load_total_rawat_bayar();}});
+		load_total_rawat_bayar();
 	}
 	/* End setValue to EDIT*/
   
@@ -1193,7 +1400,8 @@ Ext.onReady(function(){
 			master_cara_bayarTabPanel.setActiveTab(0);
 			post2db='UPDATE';
 			//detail_jual_rawat_DataStore.load({params : {master_id : eval(get_pk_id()), start:0, limit:pageS}});
-			detail_jual_rawat_DataStore.load({params : {master_id : master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_id'), start:0, limit:pageS}});
+			detail_jual_rawat_DataStore.load({params : {master_id : master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_id'), start:0, limit:pageS},callback:function(opts, success, response){if(success)master_jual_rawat_set_form();}});
+			//master_jual_rawat_set_form();
 			msg='updated';
 			//master_jual_rawat_createWindow.hide();
 			master_jual_rawat_createWindow.show();
@@ -3013,18 +3221,19 @@ Ext.onReady(function(){
 		maskRe: /([0-9]+)$/
 	});
 
-	jrawat_totalField= new Ext.form.NumberField({
+	jrawat_totalField= new Ext.ux.RupiahField({
 		id: 'jrawat_totalField',
 		fieldLabel: '<span style="font-weight:bold">Total (Rp)</span>',
 		readOnly: true,
 		allowDecimals: false,
 		allowBlank: true,
+		itemCls: 'rmoney',
 		width: 100,
 		maxLength: 50,
 		maskRe: /([0-9]+)$/
 	});
 	
-	jrawat_bayarField= new Ext.form.NumberField({
+	jrawat_bayarField= new Ext.ux.RupiahField({
 		id: 'jrawat_bayarField',
 		fieldLabel: 'Total Bayar (Rp)',
 		readOnly: true,
@@ -3032,8 +3241,7 @@ Ext.onReady(function(){
 		allowBlank: true,
 		allowDecimals: false,
 		width: 100,
-		maxLength: 50,
-		maskRe: /([0-9]+)$/
+		maxLength: 50
 	});
 	
 	jrawat_hutangField= new Ext.form.NumberField({
@@ -3826,7 +4034,7 @@ Ext.onReady(function(){
 	}
 	//event on update of detail data store
 	detail_jual_rawat_DataStore.on("update",load_all_jual_rawat);
-	detail_jual_rawat_DataStore.on("load",load_total_rawat_bayar);
+	//detail_jual_rawat_DataStore.on("load",load_total_rawat_bayar);
 	jrawat_bayarField.on("keyup",load_total_rawat_bayar);
 	jrawat_diskonField.on("keyup",load_total_rawat_bayar);
 	jrawat_cashbackField.on("keyup",load_total_rawat_bayar);

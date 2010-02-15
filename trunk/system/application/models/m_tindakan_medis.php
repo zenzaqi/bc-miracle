@@ -490,7 +490,7 @@ class M_tindakan_medis extends Model{
 		}
 		
 		//function for update record
-		function tindakan_update($trawat_id ,$trawat_cust ,$trawat_keterangan ,$dtrawat_status ,$trawat_cust_id ,$dtrawat_perawatan_id ,$dtrawat_perawatan ,$dtrawat_id ,$rawat_harga ,$rawat_du ,$rawat_dm ,$cust_member ,$dtrawat_dokter ,$dtrawat_dokter_id ,$dtrawat_keterangan ,$dtrawat_dapp ,$mode_edit){
+		function tindakan_update($trawat_id ,$trawat_cust ,$trawat_keterangan ,$dtrawat_status ,$trawat_cust_id ,$dtrawat_perawatan_id ,$dtrawat_perawatan ,$dtrawat_id ,$rawat_harga ,$rawat_du ,$rawat_dm ,$cust_member ,$dtrawat_dokter ,$dtrawat_dokter_id ,$dtrawat_keterangan ,$dtrawat_dapp ,$dtrawat_ambil_paket ,$mode_edit){
 			/* Checking db.tindakan_detail WHERE db.tindakan_detail.dtrawat_id = $dtrawat_id DAN semua Field,
 			 * JIKA ada salah satu Field yang berubah maka akan di-UPDATE
 			 */ 
@@ -935,7 +935,8 @@ class M_tindakan_medis extends Model{
 		//function for advanced search record
 		function tindakan_search($trawat_id ,$trawat_cust ,$trawat_tglapp_start ,$trawat_tglapp_end ,$trawat_rawat ,$trawat_dokter ,$trawat_status ,$start,$end){
 			//full query
-			$query="SELECT * FROM vu_tindakan WHERE kategori_nama='Medis'";
+			//$query="SELECT * FROM vu_tindakan WHERE kategori_nama='Medis'";
+			$query = "SELECT * FROM vu_tindakan WHERE (kategori_nama='Medis' OR dtrawat_petugas2='0')";
 			
 			if($trawat_id!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
