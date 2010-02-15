@@ -149,6 +149,7 @@ Ext.onReady(function(){
 		var dtrawat_dapp_update="";
 		var dtrawat_dokter_update=null;
 		var dtrawat_dokter_id_update=null;
+		var dtrawat_ambil_paket_update="";
 
 		trawat_id_update_pk = oGrid_event.record.data.trawat_id;
 		if(oGrid_event.record.data.trawat_cust!== null){trawat_cust_update = oGrid_event.record.data.trawat_cust;}
@@ -166,6 +167,7 @@ Ext.onReady(function(){
 		dtrawat_dapp_update = oGrid_event.record.data.dtrawat_dapp;
 		dtrawat_dokter_update = oGrid_event.record.data.dtrawat_petugas1;
 		dtrawat_dokter_id_update = oGrid_event.record.data.dtrawat_petugas1_id;
+		dtrawat_ambil_paket_update = oGrid_event.record.data.dtrawat_ambil_paket;
 
 		Ext.Ajax.request({  
 			waitMsg: 'Please wait...',
@@ -188,7 +190,8 @@ Ext.onReady(function(){
 				dtrawat_keterangan	:dtrawat_keterangan_update,
 				dtrawat_dapp	: dtrawat_dapp_update,
 				dtrawat_dokter : dtrawat_dokter_update,
-				dtrawat_dokter_id : dtrawat_dokter_id_update
+				dtrawat_dokter_id : dtrawat_dokter_id_update,
+				dtrawat_ambil_paket	: dtrawat_ambil_paket_update
 			}, 
 			success: function(response){							
 				var result=eval(response.responseText);
@@ -491,7 +494,8 @@ Ext.onReady(function(){
 			{name: 'perawatan_du', type: 'int', mapping: 'rawat_du'},
 			{name: 'perawatan_dm', type: 'int', mapping: 'rawat_dm'},
 			{name: 'cust_member', type: 'string', mapping: 'cust_member'},
-			{name: 'dtrawat_keterangan', type: 'string', mapping: 'dtrawat_keterangan'}
+			{name: 'dtrawat_keterangan', type: 'string', mapping: 'dtrawat_keterangan'},
+			{name: 'dtrawat_ambil_paket', type: 'string', mapping: 'dtrawat_ambil_paket'}
 		])/*,
 		sortInfo:{field: 'dtrawat_id', direction: "DESC"}*/
 	});
