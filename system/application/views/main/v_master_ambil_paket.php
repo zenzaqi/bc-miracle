@@ -386,7 +386,7 @@ Ext.onReady(function(){
 			{name: 'dpaket_id', type: 'int', mapping: 'dpaket_id'}, 
 			{name: 'paket_id', type: 'int', mapping: 'paket_id'},
 			{name: 'paket_kode', type: 'string', mapping: 'paket_kode'},
-			{name: 'group_nama', type: 'string', mapping: 'group_nama'},
+			//{name: 'group_nama', type: 'string', mapping: 'group_nama'},
 			{name: 'cust_id', type: 'int', mapping: 'cust_id'}, 
 			{name: 'cust_no', type: 'string', mapping: 'cust_no'}, 	// by hendri
 			{name: 'cust_nama', type: 'string', mapping: 'cust_nama'}, 
@@ -395,8 +395,7 @@ Ext.onReady(function(){
 			{name: 'dpaket_kadaluarsa', type: 'date', dateFormat:'Y-m-d', mapping: 'dpaket_kadaluarsa'}, 
 			{name: 'paket_nama', type: 'string', mapping: 'paket_nama'},
 			{name: 'apaket_sisa_paket', type: 'int', mapping: 'apaket_sisa_paket'},
-			{name: 'apaket_id', type: 'int', mapping: 'apaket_id'},
-			{name: 'paket_jmlisi', type: 'int', mapping: 'paket_jmlisi'}
+			{name: 'apaket_id', type: 'int', mapping: 'apaket_id'}
 		]),
 		sortInfo:{field: 'paket_nama', direction: "ASC"}
 	});

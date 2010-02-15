@@ -178,7 +178,7 @@ class M_paket extends Model{
 		);
 		$this->db->insert('paket_isi_perawatan', $data); 
 		if($this->db->affected_rows()){
-			$sql="SELECT SUM(rpaket_jumlah) as total_rpaket_jumlah FROM paket_isi_perawatan WHERE rpaket_master='$rpaket_master'";
+			/*$sql="SELECT SUM(rpaket_jumlah) as total_rpaket_jumlah FROM paket_isi_perawatan WHERE rpaket_master='$rpaket_master'";
 			$rs=$this->db->query($sql);
 			if($rs->num_rows()){
 				$rs_record=$rs->row_array();
@@ -187,7 +187,7 @@ class M_paket extends Model{
 				);
 				$this->db->where('paket_id', $rpaket_master);
 				$this->db->update('paket', $data);
-			}
+			}*/
 			return '1';
 		}else
 			return '0';

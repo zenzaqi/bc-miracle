@@ -18,6 +18,47 @@ class M_tindakan_medis extends Model{
 			parent::Model();
 		}
 		
+	function get_nonmedis_in_tmedis_list($query,$start,$end){
+		$rs_rows=0;
+		if(is_numeric($query)==true){
+			$sql_dapp="SELECT distinct(dtrawat_perawatan) FROM tindakan_detail INNER JOIN perawatan ON(dtrawat_perawatan=rawat_id) LEFT JOIN kategori ON(kategori_id=rawat_kategori) WHERE dtrawat_master='$query' AND dtrawat_petugas2='0' AND kategori_nama='Non Medis'";
+			$rs=$this->db->query($sql_dapp);
+			$rs_rows=$rs->num_rows();
+		}
+		
+		$sql="SELECT * FROM vu_perawatan WHERE kategori_nama='Non Medis' AND rawat_aktif='Aktif'";//join dr tabel: perawatan,produk_group,kategori2,kategori,jenis,gudang
+		if($query<>"" && is_numeric($query)==false){
+			$sql.=" and (rawat_kode like '%".$query."%' or rawat_nama like '%".$query."%')";
+			//$sql.=" and (rawat_kode like '%".$query."%' or rawat_nama like '%".$query."%' or group_nama like '%".$query."%')";
+		}else{
+			if($rs_rows){
+				$filter="";
+				$sql.=eregi("AND",$query)? " OR ":" AND ";
+				foreach($rs->result() as $row_dapp){
+					
+					$filter.="OR rawat_id='".$row_dapp->dtrawat_perawatan."' ";
+				}
+				$sql=$sql."(".substr($filter,2,strlen($filter)).")";
+			}
+		}
+		$sql.=" ORDER BY rawat_nama ASC";
+	
+		$result = $this->db->query($sql);
+		$nbrows = $result->num_rows();
+		$limit = $sql." LIMIT ".$start.",".$end;			
+		//echo $limit;
+		$result = $this->db->query($limit); 
+		if($nbrows>0){
+			foreach($result->result() as $row){
+				$arr[] = $row;
+			}
+			$jsonresult = json_encode($arr);
+			return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+		} else {
+			return '({"total":"0", "results":""})';
+		}
+	}
+		
 		//function for detail
 		//get record list
 		function detail_tindakan_detail_list($master_id,$query,$start,$end) {

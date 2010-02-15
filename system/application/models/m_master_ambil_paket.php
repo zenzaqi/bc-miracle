@@ -140,16 +140,18 @@ class M_master_ambil_paket extends Model{
 		//insert detail record
 		function detail_ambil_paket_isi_perawatan_insert($rambil_paket_id ,$rambil_paket_master ,$rambil_paket_perawatan ,$rambil_paket_jumlah ,$rambil_paket_cust){
 			//if master id not capture from view then capture it from max pk from master table
-			if($rambil_paket_master=="" || $rambil_paket_master==NULL){
+			/*if($rambil_paket_master=="" || $rambil_paket_master==NULL){
 				$rambil_paket_master=$this->get_master_id();
+			}*/
+			if($rambil_paket_cust==""){
+				$sql="SELECT jpaket_cust FROM master_ambil_paket INNER JOIN detail_jual_paket ON(dpaket_id=apaket_dpaket) INNER JOIN master_jual_paket ON(jpaket_id=dpaket_master) WHERE apaket_id='$rambil_paket_master'";
+				$rs=$this->db->query($sql);
+				if($rs->num_rows()){
+					$rs_record=$rs->row_array();
+					$rambil_paket_cust=$rs_record["jpaket_cust"];
+				}
 			}
 			
-			/*$data = array(
-				"rpaket_master"=>$rambil_paket_master, 
-				"rpaket_perawatan"=>$rambil_paket_perawatan, 
-				"rpaket_jumlah"=>$rambil_paket_jumlah 
-			);
-			$this->db->insert('paket_isi_perawatan', $data); */
 			/* INSERT ke db.detail_ambil sebagai History Pengambilan Paket, kemudian UPDATE db.submaster_apaket_item.sapaket_sisa_item u/ mengetahui sisa setelah dilakukan pengambilan, dan UPDATE db.master_ambil_paket.apaket_sisa_paket u/ mengetahui sisa isi paket */
 			$data=array(
 			"dapaket_master"=>$rambil_paket_master,
@@ -171,6 +173,7 @@ class M_master_ambil_paket extends Model{
 				);
 				$this->db->where('sapaket_master', $rambil_paket_master);
 				$this->db->where('sapaket_item', $rambil_paket_perawatan);
+				$this->db->where('sapaket_jenis_item', 'perawatan');
 				$this->db->update('submaster_apaket_item', $dtu_sapaket);
 				
 				/* UPDATE db.master_ambil_paket.apaket_sisa_paket */
@@ -194,9 +197,8 @@ class M_master_ambil_paket extends Model{
 		//function for get list record
 		function ambil_paket_list($filter,$start,$end){
 			/* Untuk menampilkan ke View.LIST = {Customer, No.Faktur Penjualan Paket, Tanggal Pembelian, Tanggal Expired Paket, Nama Paket } */
-/*			$query = "SELECT customer.cust_id, customer.cust_nama, master_jual_paket.jpaket_id, master_jual_paket.jpaket_nobukti, master_jual_paket.jpaket_tanggal, detail_jual_paket.dpaket_id, detail_jual_paket.dpaket_kadaluarsa, paket.paket_id, paket.paket_nama, paket.paket_kode, paket.paket_jmlisi, produk_group.group_nama, master_ambil_paket.apaket_sisa_paket, master_ambil_paket.apaket_id FROM master_jual_paket INNER JOIN detail_jual_paket ON(master_jual_paket.jpaket_id=detail_jual_paket.dpaket_master) INNER JOIN paket ON(detail_jual_paket.dpaket_paket=paket.paket_id) LEFT JOIN customer ON(master_jual_paket.jpaket_cust=customer.cust_id) LEFT JOIN produk_group ON(paket.paket_group=produk_group.group_id) LEFT JOIN master_ambil_paket ON(master_jual_paket.jpaket_nobukti=master_ambil_paket.apaket_faktur)";
-*/			
-			$query = "SELECT customer.cust_id, customer.cust_nama, customer.cust_no, master_jual_paket.jpaket_id, master_jual_paket.jpaket_nobukti, master_jual_paket.jpaket_tanggal, detail_jual_paket.dpaket_id, detail_jual_paket.dpaket_kadaluarsa, paket.paket_id, paket.paket_nama, paket.paket_kode, paket.paket_jmlisi, produk_group.group_nama, master_ambil_paket.apaket_sisa_paket, master_ambil_paket.apaket_id FROM master_jual_paket INNER JOIN detail_jual_paket ON(master_jual_paket.jpaket_id=detail_jual_paket.dpaket_master) INNER JOIN paket ON(detail_jual_paket.dpaket_paket=paket.paket_id) LEFT JOIN customer ON(master_jual_paket.jpaket_cust=customer.cust_id) LEFT JOIN produk_group ON(paket.paket_group=produk_group.group_id) LEFT JOIN master_ambil_paket ON(master_jual_paket.jpaket_nobukti=master_ambil_paket.apaket_faktur)";
+			//$query = "SELECT customer.cust_id, customer.cust_nama, customer.cust_no, master_jual_paket.jpaket_id, master_jual_paket.jpaket_nobukti, master_jual_paket.jpaket_tanggal, detail_jual_paket.dpaket_id, detail_jual_paket.dpaket_kadaluarsa, paket.paket_id, paket.paket_nama, paket.paket_kode, produk_group.group_nama, master_ambil_paket.apaket_sisa_paket, master_ambil_paket.apaket_id FROM master_ambil_paket INNER JOIN master_jual_paket ON(master_ambil_paket.apaket_faktur=master_jual_paket.jpaket_nobukti) LEFT JOIN detail_jual_paket ON(detail_jual_paket.dpaket_paket=master_ambil_paket.apaket_paket AND detail_jual_paket.dpaket_master=master_jual_paket.jpaket_id) LEFT JOIN paket ON(paket.paket_id=detail_jual_paket.dpaket_paket) LEFT JOIN customer ON(master_jual_paket.jpaket_cust=customer.cust_id) LEFT JOIN produk_group ON(paket.paket_group=produk_group.group_id)";
+			$query = "SELECT customer.cust_id, customer.cust_nama, customer.cust_no, master_jual_paket.jpaket_id, master_jual_paket.jpaket_nobukti, master_jual_paket.jpaket_tanggal, detail_jual_paket.dpaket_id, detail_jual_paket.dpaket_kadaluarsa, paket.paket_id, paket.paket_nama, paket.paket_kode, master_ambil_paket.apaket_sisa_paket, master_ambil_paket.apaket_id FROM master_ambil_paket INNER JOIN detail_jual_paket ON(dpaket_id=apaket_dpaket) LEFT JOIN master_jual_paket ON(jpaket_id=dpaket_master) LEFT JOIN customer ON(cust_id=jpaket_cust) LEFT JOIN paket ON(paket_id=dpaket_paket)";
 
 			// For simple search
 			if ($filter<>""){

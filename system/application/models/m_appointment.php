@@ -607,7 +607,7 @@ class M_appointment extends Model{
 			// For Pilihan Tanggal Appointment di tbar dengan pilihan dokter kosong
 			if($filter=="" && is_numeric($filter)==false && $tgl_app!="" && $jenis_rawat=="Medis"){
 				$dt=date('Y-m-d', strtotime($tgl_app));
-				$query="SELECT * FROM vu_appointment WHERE dapp_tglreservasi = '$dt'";
+				$query="SELECT * FROM vu_appointment WHERE kategori_nama='Medis' AND dapp_tglreservasi = '$dt'";
 			}
 			
 			$query.=" ORDER BY dapp_tglreservasi ASC, dapp_jamreservasi ASC";
