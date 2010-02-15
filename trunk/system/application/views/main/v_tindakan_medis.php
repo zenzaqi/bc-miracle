@@ -196,7 +196,7 @@ Ext.onReady(function(){
 					case 1:
 						tindakan_medisDataStore.commitChanges();
 						tindakan_medisDataStore.reload();
-						dtrawat_perawatanDataStore.reload();
+						trawat_medis_perawatanDataStore.reload();
 						break;
 					case 2:
 						Ext.MessageBox.show({
@@ -374,10 +374,10 @@ Ext.onReady(function(){
 		var get_trawat_id=tindakanListEditorGrid.getSelectionModel().getSelected().get('trawat_id');
 		
 		//cbo_dtindakan_terapisDataStore.load();
-		//dtrawat_perawatanDataStore.load();
+		//trawat_medis_perawatanDataStore.load();
 		cbo_dtindakan_dokterDataStore.load();
 		if(tindakanListEditorGrid.selModel.getCount() == 1) {
-			dtrawat_perawatanDataStore.load({params:{query:get_trawat_id}});
+			trawat_medis_perawatanDataStore.load({params:{query:tindakanListEditorGrid.getSelectionModel().getSelected().get('trawat_id')}});
 			cbo_perawatan_dtjnonmedisDataStore.load({params:{query:tindakanListEditorGrid.getSelectionModel().getSelected().get('trawat_id')}});
 			tindakan_medis_set_form();
 			post2db='UPDATE';
@@ -446,7 +446,7 @@ Ext.onReady(function(){
 		//cbo_trawat_rawatDataStore.load();
 		//cbo_dapp_dokterDataStore.load();
 		/*cbo_dtindakan_terapisDataStore.load();
-		dtrawat_perawatanDataStore.load();
+		trawat_medis_perawatanDataStore.load();
 		cbo_dtindakan_dokterDataStore.load();*/
 		return function(value){
 			var record = combo.findRecord(combo.valueField, value);
@@ -528,8 +528,8 @@ Ext.onReady(function(){
         '</div></tpl>'
     );
 	
-	dtrawat_perawatanDataStore = new Ext.data.Store({
-		id: 'dtrawat_perawatanDataStore',
+	trawat_medis_perawatanDataStore = new Ext.data.Store({
+		id: 'trawat_medis_perawatanDataStore',
 		proxy: new Ext.data.HttpProxy({
 			url: 'index.php?c=c_tindakan_medis&m=get_tindakan_medis_list', 
 			method: 'POST'
@@ -613,7 +613,7 @@ Ext.onReady(function(){
 			width: 300,	//210,
 			sortable: true,
 			editor: new Ext.form.ComboBox({
-				store: dtrawat_perawatanDataStore,
+				store: trawat_medis_perawatanDataStore,
 				mode: 'remote',
 				displayField: 'perawatan_display',
 				valueField: 'perawatan_value',
@@ -1053,7 +1053,7 @@ Ext.onReady(function(){
     );*/
 	
 	var combo_trawat_rawat=new Ext.form.ComboBox({
-			store: dtrawat_perawatanDataStore,
+			store: trawat_medis_perawatanDataStore,
 			mode: 'remote',
 			typeAhead: true,
 			displayField: 'perawatan_display',
@@ -1357,7 +1357,7 @@ Ext.onReady(function(){
 	cbo_perawatan_dtjnonmedisDataStore = new Ext.data.Store({
 		id: 'cbo_perawatan_dtjnonmedisDataStore',
 		proxy: new Ext.data.HttpProxy({
-			url: 'index.php?c=c_tindakan_medis&m=get_tindakan_nonmedis_list', 
+			url: 'index.php?c=c_tindakan_medis&m=get_nonmedis_in_tmedis_list', 
 			method: 'POST'
 		}),baseParams: {start: 0, limit: 15 },
 			reader: new Ext.data.JsonReader({
@@ -1706,7 +1706,7 @@ Ext.onReady(function(){
 	});
 	trawat_medis_rawatSearchField= new Ext.form.ComboBox({
 		fieldLabel: 'Perawatan',
-		store: dtrawat_perawatanDataStore,
+		store: trawat_medis_perawatanDataStore,
 		mode: 'remote',
 		displayField:'perawatan_display',
 		valueField: 'perawatan_value',

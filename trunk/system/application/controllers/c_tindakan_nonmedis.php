@@ -110,7 +110,8 @@ class C_tindakan_nonmedis extends Controller {
 		$dtrawat_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$dtrawat_keterangan);
 		$dtrawat_keterangan=str_replace("\\", "",$dtrawat_keterangan);
 		$dtrawat_ambil_paket=trim(@$_POST["dtrawat_ambil_paket"]);
-		$result=$this->m_tindakan_nonmedis->detail_tindakan_nonmedis_detail_insert($dtrawat_id ,$dtrawat_master ,$dtrawat_perawatan ,$dtrawat_petugas1 ,$dtrawat_petugas2 ,$dtrawat_jam ,$dtrawat_kategori ,$dtrawat_status ,$dtrawat_keterangan ,$dtrawat_ambil_paket );
+		$dtrawat_cust=trim(@$_POST["dtrawat_cust"]);
+		$result=$this->m_tindakan_nonmedis->detail_tindakan_nonmedis_detail_insert($dtrawat_id ,$dtrawat_master ,$dtrawat_perawatan ,$dtrawat_petugas1 ,$dtrawat_petugas2 ,$dtrawat_jam ,$dtrawat_kategori ,$dtrawat_status ,$dtrawat_keterangan ,$dtrawat_ambil_paket ,$dtrawat_cust);
 	}
 	
 	

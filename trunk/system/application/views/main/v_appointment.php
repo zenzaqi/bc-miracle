@@ -440,10 +440,11 @@ Ext.onReady(function(){
   
   	/* Function for get PK field */
 	function get_pk_id(){
-		if(post2db=='UPDATE')
+		if(post2db=='UPDATE'){
 			return appointmentListEditorGrid.getSelectionModel().getSelected().get('app_id');
-		else 
+		}else {
 			return 0;
+		}
 	}
 	/* End of Function  */
 	
@@ -1228,6 +1229,7 @@ Ext.onReady(function(){
 				start: 0,
 				limit: pageS,
 				query: Ext.getCmp('cbo_dokter').getValue(),
+				jenis_rawat: tbar_jenis_rawatField.getValue(),
 				tgl_app: tbar_dokter_tglField.getValue()
 			}});
 		//}

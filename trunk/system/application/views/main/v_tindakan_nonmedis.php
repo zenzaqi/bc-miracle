@@ -317,6 +317,7 @@ Ext.onReady(function(){
 	function tindakan_nonmedis_set_form(){
 		trawat_nonmedis_idField.setValue(tindakan_nonmedisListEditorGrid.getSelectionModel().getSelected().get('trawat_id'));
 		trawat_nonmedis_custField.setValue(tindakan_nonmedisListEditorGrid.getSelectionModel().getSelected().get('trawat_cust'));
+		trawat_nonmedis_custidField.setValue(tindakan_nonmedisListEditorGrid.getSelectionModel().getSelected().get('trawat_cust_id'));
 		trawat_nonmedis_keteranganField.setValue(tindakan_nonmedisListEditorGrid.getSelectionModel().getSelected().get('trawat_keterangan'));
 	}
 	/* End setValue to EDIT*/
@@ -365,7 +366,7 @@ Ext.onReady(function(){
 		
 		if(tindakan_nonmedisListEditorGrid.selModel.getCount() == 1) {
 			cbo_dtrawat_petugas_nonmedisDataStore.load();
-			dtrawat_perawatanDataStore.load({params:{query:tindakan_nonmedisListEditorGrid.getSelectionModel().getSelected().get('trawat_id')}});
+			trawat_nonmedis_perawatanDataStore.load({params:{query:tindakan_nonmedisListEditorGrid.getSelectionModel().getSelected().get('trawat_id')}});
 			//cbo_dtrawat_perawatan_nonmedisDataStore.load();
 			tindakan_nonmedis_set_form();
 			post2db='UPDATE';
@@ -430,7 +431,7 @@ Ext.onReady(function(){
   	/* End of Function */
   	
 	Ext.util.Format.comboRenderer = function(combo){
-		//dtrawat_perawatanDataStore.load();
+		//trawat_nonmedis_perawatanDataStore.load();
 		return function(value){
 			var record = combo.findRecord(combo.valueField, value);
 			return record ? record.get(combo.displayField) : combo.valueNotFoundText;
@@ -511,8 +512,8 @@ Ext.onReady(function(){
         '</div></tpl>'
     );
 	
-	dtrawat_perawatanDataStore = new Ext.data.Store({
-		id: 'dtrawat_perawatanDataStore',
+	trawat_nonmedis_perawatanDataStore = new Ext.data.Store({
+		id: 'trawat_nonmedis_perawatanDataStore',
 		proxy: new Ext.data.HttpProxy({
 			url: 'index.php?c=c_tindakan_nonmedis&m=get_tindakan_nonmedis_list', 
 			method: 'POST'
@@ -603,7 +604,7 @@ Ext.onReady(function(){
 			width: 300,	//210,
 			sortable: true,
 			editor: new Ext.form.ComboBox({
-				store: dtrawat_perawatanDataStore,
+				store: trawat_nonmedis_perawatanDataStore,
 				mode: 'remote',
 				displayField: 'perawatan_display',
 				valueField: 'perawatan_value',
@@ -894,6 +895,7 @@ Ext.onReady(function(){
 		disabled:true,
 		anchor: '95%'
 	});
+	trawat_nonmedis_custidField= new Ext.form.NumberField();
 	/* Identify  trawat_appointment Field */
 //	trawat_nonmedis_appointmentField= new Ext.form.ComboBox({
 //		id: 'trawat_nonmedis_appointmentField',
@@ -1025,7 +1027,7 @@ Ext.onReady(function(){
     );
 	
 	var combo_dtrawat_perawatan=new Ext.form.ComboBox({
-			store: dtrawat_perawatanDataStore,
+			store: trawat_nonmedis_perawatanDataStore,
 			mode: 'remote',
 			typeAhead: true,
 			displayField: 'perawatan_display',
@@ -1210,7 +1212,8 @@ Ext.onReady(function(){
 					dtrawat_kategori	: tindakan_nonmedis_detail_record.data.dtrawat_kategori, 
 					dtrawat_status	: tindakan_nonmedis_detail_record.data.dtrawat_status, 
 					dtrawat_keterangan	: tindakan_nonmedis_detail_record.data.dtrawat_keterangan,
-					dtrawat_ambil_paket	: tindakan_nonmedis_detail_record.data.dtrawat_ambil_paket
+					dtrawat_ambil_paket	: tindakan_nonmedis_detail_record.data.dtrawat_ambil_paket,
+					dtrawat_cust	: trawat_nonmedis_custidField.getValue()
 					},
 					callback: function(opts, success, response){
 						if(success)
@@ -1393,7 +1396,7 @@ Ext.onReady(function(){
 	});
 	trawat_nonmedis_rawatSearchField= new Ext.form.ComboBox({
 		fieldLabel: 'Perawatan',
-		store: dtrawat_perawatanDataStore,
+		store: trawat_nonmedis_perawatanDataStore,
 		mode: 'remote',
 		displayField:'perawatan_display',
 		valueField: 'perawatan_value',

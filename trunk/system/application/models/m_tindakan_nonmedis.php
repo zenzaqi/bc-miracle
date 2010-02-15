@@ -61,7 +61,7 @@ class M_tindakan_nonmedis extends Model{
 		//*eof
 		
 		//insert detail record
-		function detail_tindakan_nonmedis_detail_insert($dtrawat_id ,$dtrawat_master ,$dtrawat_perawatan ,$dtrawat_petugas1 ,$dtrawat_petugas2 ,$dtrawat_jam ,$dtrawat_kategori ,$dtrawat_status ,$dtrawat_keterangan ,$dtrawat_ambil_paket){
+		function detail_tindakan_nonmedis_detail_insert($dtrawat_id ,$dtrawat_master ,$dtrawat_perawatan ,$dtrawat_petugas1 ,$dtrawat_petugas2 ,$dtrawat_jam ,$dtrawat_kategori ,$dtrawat_status ,$dtrawat_keterangan ,$dtrawat_ambil_paket ,$dtrawat_cust){
 			$date_now=date('Y-m-d');
 			//if master id not capture from view then capture it from max pk from master table
 			if($dtrawat_master=="" || $dtrawat_master==NULL){
@@ -73,6 +73,74 @@ class M_tindakan_nonmedis extends Model{
 			if($rs->num_rows()){
 				/* artinya: data dtrawat_id ini sudah ada di db.tindakan_detail,
 				maka hanya boleh dilakukan Editing dgn catatan data ini dalam kondisi UNLOCK*/
+				
+				/* 
+				* JIKA $dtrawat_ambil_paket=true ==> Lakukan Checking di db.submaster_jual_paket,db.master_jual_paket,db.master_ambil_paket WHERE db.submaster_jual_paket.sjpaket_cust=[customer yg diupdate]
+				*/
+				if($dtrawat_ambil_paket=='true'){
+					$sql="SELECT jpaket_nobukti, apaket_id, apaket_paket, apaket_sisa_paket FROM ((((submaster_jual_paket INNER JOIN master_jual_paket ON(sjpaket_master=jpaket_id)) INNER JOIN master_ambil_paket ON(jpaket_nobukti=apaket_faktur)) INNER JOIN paket ON(apaket_paket=paket_id)) INNER JOIN paket_isi_perawatan ON(paket_id=rpaket_master)) LEFT JOIN perawatan ON(rpaket_perawatan=rawat_id) WHERE sjpaket_cust='$dtrawat_cust' AND rpaket_perawatan='$dtrawat_perawatan' AND apaket_sisa_paket>0";
+					$rs=$this->db->query($sql);
+					if($rs->num_rows()){
+						/* Customer ini dengan perawatan yang telah dilakukan terdapat pada daftar pemilik paket yang ([total sisa paketnya] > 0) */
+						/* Karena CheckBox Pengambilan Paket di-Centang, maka akan dimasukkan ke dalam Daftar Pengambilan Paket sehingga total_sisa_paket akan berkurang */
+						//$this->firephp->log("punya paket");
+						$rs_record=$rs->row_array();
+						$apaket_sisa_paket_temp=$rs_record["apaket_sisa_paket"];
+						$apaket_id_temp=$rs_record["apaket_id"];
+						$data_dapaket=array(
+						"dapaket_master"=>$rs_record["apaket_id"],
+						"dapaket_dpaket"=>$rs_record["apaket_paket"],
+						"dapaket_item"=>$dtrawat_perawatan,
+						"dapaket_jumlah"=>1,
+						"dapaket_cust"=>$dtrawat_cust
+						);
+						$apaket=1;
+						$this->db->insert('detail_ambil_paket', $data_dapaket);
+						if($this->db->affected_rows()){
+							/* UPDATE db.master_ambil_paket.apaket_sisa_paket = -1 */
+							$data_apaket=array(
+							"apaket_sisa_paket"=>$apaket_sisa_paket_temp-1
+							);
+							$this->db->where('apaket_id', $apaket_id_temp);
+							$this->db->update('master_ambil_paket', $data_apaket);
+						}
+					}else{
+						//$this->firephp->log("tidak punya paket");
+						$punya_paket=1;
+					}
+				}elseif($dtrawat_ambil_paket=='false'){
+					$apaket=1;
+					//$this->firephp->log('dtrawat_ambil_paket=false');
+					
+					/* artinya: membatalkan pengambilan paket */
+					$sql="SELECT jpaket_nobukti, apaket_id, apaket_paket, apaket_sisa_paket FROM ((((submaster_jual_paket INNER JOIN master_jual_paket ON(sjpaket_master=jpaket_id)) INNER JOIN master_ambil_paket ON(jpaket_nobukti=apaket_faktur)) INNER JOIN paket ON(apaket_paket=paket_id)) INNER JOIN paket_isi_perawatan ON(paket_id=rpaket_master)) LEFT JOIN perawatan ON(rpaket_perawatan=rawat_id) WHERE sjpaket_cust='$dtrawat_cust' AND rpaket_perawatan='$dtrawat_perawatan'";
+					$rs=$this->db->query($sql);
+					if($rs->num_rows()){
+						//$this->firephp->log("delete ambil paket");
+						$rs_record=$rs->row_array();
+						$apaket_sisa_paket_temp=$rs_record["apaket_sisa_paket"];
+						$apaket_id_temp=$rs_record["apaket_id"];
+						//$this->firephp->log($apaket_sisa_paket_temp, 'apaket_sisa_paket_temp');
+						//$this->firephp->log($rs_record["apaket_id"], 'apaket_id');
+						//$this->firephp->log($rs_record["apaket_paket"], 'apaket_paket');
+						//$this->firephp->log($dtrawat_perawatan, 'dtrawat_perawatan');
+						//$this->firephp->log($dtrawat_cust, 'dtrawat_cust');
+						$this->db->where('dapaket_master', $rs_record["apaket_id"]);
+						$this->db->where('dapaket_dpaket', $rs_record["apaket_paket"]);
+						$this->db->where('dapaket_item', $dtrawat_perawatan);
+						$this->db->where('dapaket_cust', $dtrawat_cust);
+						$this->db->delete('detail_ambil_paket');
+						if($this->db->affected_rows()){
+							/* UPDATE db.master_ambil_paket.apaket_sisa_paket = +1 */
+							$data_apaket=array(
+							"apaket_sisa_paket"=>$apaket_sisa_paket_temp+1
+							);
+							$this->db->where('apaket_id', $apaket_id_temp);
+							$this->db->update('master_ambil_paket', $data_apaket);
+						}
+					}
+				}
+				
 				$rs_record=$rs->row_array();
 				$dtrawat_locked=$rs_record["dtrawat_locked"];
 				

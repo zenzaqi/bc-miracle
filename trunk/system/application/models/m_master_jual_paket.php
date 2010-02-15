@@ -16,6 +16,7 @@ class M_master_jual_paket extends Model{
 		//constructor
 		function M_master_jual_paket() {
 			parent::Model();
+			session_start();
 		}
 		
 		function get_customer_list($query,$start,$end){
@@ -101,7 +102,7 @@ class M_master_jual_paket extends Model{
 		}
 		
 		function detail_pengguna_paket_list($master_id,$start,$end){
-			$query="SELECT * FROM submaster_jual_paket WHERE sjpaket_master='$master_id'";
+			$query="SELECT sjpaket_cust FROM submaster_jual_paket INNER JOIN master_jual_paket ON(sjpaket_master=jpaket_id) WHERE sjpaket_master='$master_id' AND sjpaket_cust!=jpaket_cust";
 			
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
@@ -224,7 +225,7 @@ class M_master_jual_paket extends Model{
 		
 		//get master id, note : not done yet
 		function get_master_id() {
-			$query = "SELECT max(jpaket_id) as master_id from master_jual_paket";
+			$query = "SELECT max(jpaket_id) as master_id FROM master_jual_paket WHERE jpaket_creator='".$_SESSION[SESSION_USERID]."'";
 			$result = $this->db->query($query);
 			if($result->num_rows()){
 				$data=$result->row();
@@ -296,48 +297,75 @@ class M_master_jual_paket extends Model{
 			$this->db->insert('detail_jual_paket', $data); 
 			if($this->db->affected_rows()){
 				/* Untuk data pengambilan paket, diinsertkan ke master_ambil_paket(identitas Paket) dan ke submaster_apaket_item(identitas tiap item dari paket itu) */
-				$sql="SELECT * FROM master_jual_paket WHERE jpaket_id='$dpaket_master'";
+				//$sql="SELECT * FROM master_jual_paket WHERE jpaket_id='$dpaket_master'";
+				$sql="SELECT jpaket_nobukti, jpaket_cust, jpaket_tanggal, dpaket_id FROM master_jual_paket INNER JOIN detail_jual_paket ON(dpaket_master=jpaket_id) WHERE dpaket_id=(SELECT max(dpaket_id) FROM detail_jual_paket WHERE dpaket_master='$dpaket_master')";
+				//echo $sql;
 				$rs=$this->db->query($sql);
 				if($rs->num_rows()){
 					$rs_record=$rs->row_array();
+					$apaket_dpaket=$rs_record["dpaket_id"];
 					// Ambil Jumlah Total Isi Paket
-					$sql_paket="SELECT paket_jmlisi FROM paket WHERE paket_id='$dpaket_paket'";
+					$sql_paket="SELECT total_isi_paket FROM vu_total_isi_paket WHERE rpaket_master='$dpaket_paket'";
 					$rs_paket=$this->db->query($sql_paket);
 					$rs_paket_record=$rs_paket->row_array();
 					// INSERT ke master_ambil_paket => per paket yg dimiliki No.Faktur Penjualan Paket
 					$data_apaket=array(
+					"apaket_dpaket"=>$apaket_dpaket,
 					"apaket_faktur"=>$rs_record["jpaket_nobukti"],
 					"apaket_cust"=>$rs_record["jpaket_cust"],
 					"apaket_paket"=>$dpaket_paket,
 					"apaket_tanggal"=>$rs_record["jpaket_tanggal"],
-					"apaket_sisa_paket"=>$rs_paket_record["paket_jmlisi"]
+					"apaket_sisa_paket"=>$rs_paket_record["total_isi_paket"]
 					);
 					$this->db->insert('master_ambil_paket', $data_apaket);
 					if($this->db->affected_rows()>0){
-						$sql_get_apaket="SELECT apaket_id FROM master_ambil_paket WHERE apaket_faktur='".$rs_record["jpaket_nobukti"]."' AND apaket_paket='".$dpaket_paket."'";
+						$sql_get_apaket="SELECT apaket_id FROM master_ambil_paket WHERE apaket_dpaket='$apaket_dpaket'";
 						$rs_get_apaket=$this->db->query($sql_get_apaket);
 						if($rs_get_apaket->num_rows()){
 							$rs_get_apaket_record=$rs_get_apaket->row_array();
 							$get_apaket_id=$rs_get_apaket_record["apaket_id"]; //Untuk => db.submaster_apaket_item.sapaket_master
 						}
 						
-						$sql="SELECT * FROM paket_isi_perawatan WHERE rpaket_master='$dpaket_paket'";
-						$rs=$this->db->query($sql);
-						$nbrows = $rs->num_rows();
-						if($nbrows>0){
+						/* INSERT ke submaster_apaket_item dengan db.submaster_apaket_item.sapaket_jenis_item = 'perawatan' */
+						$sql_isi_perawatan="SELECT * FROM paket_isi_perawatan WHERE rpaket_master='$dpaket_paket'";
+						$rs_isi_perawatan=$this->db->query($sql_isi_perawatan);
+						$nbrows_isi_perawatan = $rs_isi_perawatan->num_rows();
+						if($nbrows_isi_perawatan>0){
 							
 							/* INSERT ke submaster_apaket_item u/ mencatat sisa setelah dilakukan pengambilan paket */
-							foreach($rs->result() as $row){
+							foreach($rs_isi_perawatan->result() as $row_isi_perawatan){
 								//$arr[] = $row;
-								$data_sapaket=array(
+								$data_sapaket_perawatan=array(
 								"sapaket_master"=>$get_apaket_id,
-								"sapaket_item"=>$row->rpaket_perawatan,
-								"sapaket_jmlisi_item"=>$row->rpaket_jumlah,
-								"sapaket_sisa_item"=>$row->rpaket_jumlah
+								"sapaket_item"=>$row_isi_perawatan->rpaket_perawatan,
+								"sapaket_jenis_item"=>'perawatan',
+								"sapaket_jmlisi_item"=>$row_isi_perawatan->rpaket_jumlah,
+								"sapaket_sisa_item"=>$row_isi_perawatan->rpaket_jumlah
 								);
-								$this->db->insert('submaster_apaket_item', $data_sapaket);
+								$this->db->insert('submaster_apaket_item', $data_sapaket_perawatan);
 							}
 						}
+						
+						/* INSERT ke submaster_apaket_item dengan db.submaster_apaket_item.sapaket_jenis_item = 'perawatan' */
+						$sql_isi_produk="SELECT * FROM paket_isi_produk WHERE ipaket_master='$dpaket_paket'";
+						$rs_isi_produk=$this->db->query($sql_isi_produk);
+						$nbrows_isi_produk = $rs_isi_produk->num_rows();
+						if($nbrows_isi_produk>0){
+							
+							/* INSERT ke submaster_apaket_item u/ mencatat sisa setelah dilakukan pengambilan paket */
+							foreach($rs_isi_produk->result() as $row_isi_produk){
+								//$arr[] = $row;
+								$data_sapaket_produk=array(
+								"sapaket_master"=>$get_apaket_id,
+								"sapaket_item"=>$row_isi_produk->ipaket_produk,
+								"sapaket_jenis_item"=>'produk',
+								"sapaket_jmlisi_item"=>$row_isi_produk->ipaket_jumlah,
+								"sapaket_sisa_item"=>$row_isi_produk->ipaket_jumlah
+								);
+								$this->db->insert('submaster_apaket_item', $data_sapaket_produk);
+							}
+						}
+						
 					}
 				}
 				return '1';
@@ -659,7 +687,8 @@ class M_master_jual_paket extends Model{
 				"jpaket_cara"=>$jpaket_cara, 
 				//"jpaket_cara2"=>$jpaket_cara2, 
 				//"jpaket_cara3"=>$jpaket_cara3, 
-				"jpaket_keterangan"=>$jpaket_keterangan 
+				"jpaket_keterangan"=>$jpaket_keterangan,
+				"jpaket_creator"=>$_SESSION[SESSION_USERID]
 			);
 			if($jpaket_cara2!=null)
 				$data["jpaket_cara2"]=$jpaket_cara2;
