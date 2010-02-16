@@ -1790,71 +1790,78 @@ Ext.onReady(function(){
 			hidden: false
 		},*/
 		{
-			header: 'Tanggal',
+			header: '<div align="center">' + 'Tanggal' + '</div>',
 			dataIndex: 'jrawat_tanggal',
-			width: 78,
+			width: 70,	//78,
 			sortable: true,
-			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
+//			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
+			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
 			editor: new Ext.form.DateField({
-				format: 'Y-m-d'
+//				format: 'Y-m-d'
+				format: 'd-m-Y'
 			})
 		}, 
 		{
-			header: 'No.Faktur',
+			header: '<div align="center">' + 'No. Faktur' + '</div>',
 			dataIndex: 'jrawat_nobukti',
-			width: 82,
+			width: 80,	//82,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 30
           	})
 		}, 
 		{
-			header: 'No.Customer',
+			header: '<div align="center">' + 'No. Cust' + '</div>',
 			dataIndex: 'cust_no',
 			width: 80,
 			sortable: false,
 			readOnly: true
 		}, 
 		{
-			header: 'Customer',
+			header: '<div align="center">' + 'Customer' + '</div>',
 			dataIndex: 'jrawat_cust',
-			width: 185,
+			width: 200,	//185,
 			sortable: true,
 			readOnly: true
 		}, 
 		{
-			header: 'Member Customer',
+//			header: 'Member Customer',
+			header: 'No. Member',
 			dataIndex: 'cust_member',
-			width: 100,
+			width: 80,	//100,
 			sortable: false,
 			readOnly: true
 		}, 
 		{
-			header: 'Total (Rp)',
+			header: '<div align="center">' + 'Total (Rp)' + '</div>',
 			dataIndex: 'jrawat_total',
+			align: 'right',
 			width: 100,
 			sortable: true,
 			readOnly: true,
 			renderer: function(val){
-				return '<span> Rp. '+Ext.util.Format.number(val,'0,000')+'</span>';
+//				return '<span> Rp. '+Ext.util.Format.number(val,'0,000')+'</span>';
+				return '<span> '+Ext.util.Format.number(val,'0,000')+'</span>';
 			}
 			
 		},
 		{
-			header: 'Total Bayar (Rp)',
+			header: '<div align="center">' + 'Total Bayar (Rp)' + '</div>',
+			align: 'right',
 			dataIndex: 'jrawat_bayar',
 			width: 100,
 			sortable: true,
 			readOnly: true,
 			renderer: function(val){
-				return '<span> Rp. '+Ext.util.Format.number(val,'0,000')+'</span>';
+//				return '<span> Rp. '+Ext.util.Format.number(val,'0,000')+'</span>';
+				return '<span> '+Ext.util.Format.number(val,'0,000')+'</span>';
 			}
 			
 		},
 		{
-			header: 'Keterangan',
+			header: '<div align="center">' + 'Keterangan' + '</div>',
 			dataIndex: 'jrawat_keterangan',
-			width: 190,
+			width: 180,	//190,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 250
