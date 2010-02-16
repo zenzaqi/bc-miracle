@@ -1916,7 +1916,7 @@ Ext.onReady(function(){
 //			hidden: true
 		},
 		{
-			header: '<div align="center">' + 'Member' + '</div>',
+			header: '<div align="center">' + 'No Member' + '</div>',
 			dataIndex: 'cust_member',
 			width: 80,	//150,
 			sortable: true,
@@ -2032,7 +2032,7 @@ Ext.onReady(function(){
 			hidden: true
 		},
 		{
-			header: 'No. Member',
+			header: 'No Member',
 			dataIndex: 'member_no',
 			width: 150,
 			sortable: true,
@@ -2799,7 +2799,7 @@ Ext.onReady(function(){
 	/* Identify  cust_member Field */
 	cust_memberField= new Ext.form.TextField({
 		id: 'cust_memberField',
-		fieldLabel: 'Member',
+		fieldLabel: 'No Member',
 		anchor: '95%',
 		readOnly: true
 	});
@@ -3015,13 +3015,15 @@ Ext.onReady(function(){
 				border:false,
 				frame: true,
 				anchor: '95%',
-				title: 'History Membership',
+//				title: 'History Membership',
+				title: 'Membership',
 				items: cust_memberListEditorGrid
 			},{
 				border:false,
 				frame: true,
 				anchor: '95%',
-				title: 'History Catatan',
+//				title: 'History Catatan',
+				title: 'Catatan Customer',
 				items: cust_noteListEditorGrid
 			}
 		]
@@ -3416,7 +3418,7 @@ Ext.onReady(function(){
 	/* Identify  cust_member Field */
 	cust_memberSearchField= new Ext.form.TextField({
 		id: 'cust_memberSearchField',
-		fieldLabel: 'Member',
+		fieldLabel: 'No Member',
 		anchor: '95%',
 		readOnly: true
 	});
