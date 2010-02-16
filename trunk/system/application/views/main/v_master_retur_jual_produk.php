@@ -102,7 +102,7 @@ Ext.onReady(function(){
 		if(oGrid_event.record.data.rproduk_keterangan!== null){rproduk_keterangan_update = oGrid_event.record.data.rproduk_keterangan;}
 
 		Ext.Ajax.request({  
-			waitMsg: 'Please wait...',
+			waitMsg: 'Mohon  Tunggu...',
 			url: 'index.php?c=c_master_retur_jual_produk&m=get_action',
 			params: {
 				task: "UPDATE",
@@ -164,7 +164,7 @@ Ext.onReady(function(){
 		if(rproduk_keteranganField.getValue()!== null){rproduk_keterangan_create = rproduk_keteranganField.getValue();} 
 
 		Ext.Ajax.request({  
-			waitMsg: 'Please wait...',
+			waitMsg: 'Mohon  Tunggu...',
 			url: 'index.php?c=c_master_retur_jual_produk&m=get_action',
 			params: {
 				task: post2db,
@@ -210,7 +210,7 @@ Ext.onReady(function(){
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'Your Form is not valid!.',
+				msg: 'Form anda belum lengkap!',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -286,7 +286,7 @@ Ext.onReady(function(){
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really delete something you haven\'t selected?',
+				msg: 'Anda belum memilih data yang akan dihapus?',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -308,7 +308,7 @@ Ext.onReady(function(){
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really update something you haven\'t selected?',
+				msg: 'Anda belum memilih data yang akan diedit?',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -327,7 +327,7 @@ Ext.onReady(function(){
 			}
 			var encoded_array = Ext.encode(prez);
 			Ext.Ajax.request({ 
-				waitMsg: 'Please Wait',
+				waitMsg: 'Mohon  Tunggu',
 				url: 'index.php?c=c_master_retur_jual_produk&m=get_action', 
 				params: { task: "DELETE", ids:  encoded_array }, 
 				success: function(response){
@@ -421,7 +421,8 @@ Ext.onReady(function(){
   	/* Function for Identify of Window Column Model */
 	master_retur_jual_produk_ColumnModel = new Ext.grid.ColumnModel(
 		[{
-			header: '#',
+			align : 'Right',
+			header: '<div align="center">' + '#' + '</div>',
 			readOnly: true,
 			dataIndex: 'rproduk_id',
 			width: 40,
@@ -432,44 +433,46 @@ Ext.onReady(function(){
 			hidden: false
 		},
 		{
-			header: 'No.Faktur',
+			align : 'Right',
+			header: '<div align="center">' + 'No.Faktur' + '</div>',
 			dataIndex: 'rproduk_nobukti',
-			width: 150,
+			width: 100, //150,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 100
           	})
 		}, 
 		{
-			header: 'No.Faktur Jual',
+			align : 'Right',
+			header: '<div align="center">' + 'No.Faktur Jual' + '</div>' ,
 			dataIndex: 'rproduk_nobuktijual',
-			width: 150,
+			width: 100, //150,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 100
           	})
 		}, 
 		{
-			header: 'Customer',
+			header: '<div align="center">' + 'Customer' + '</div>',
 			dataIndex: 'rproduk_cust',
-			width: 150,
+			width: 200, //150,
 			sortable: true,
 			readOnly: true
 		}, 
 		{
-			header: 'Tanggal',
+			header: '<div align="center">' + 'Tanggal' + '</div>',
 			dataIndex: 'rproduk_tanggal',
 			width: 150,
 			sortable: true,
-			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
+			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
 			editor: new Ext.form.DateField({
-				format: 'Y-m-d'
+				format: 'd-m-Y'
 			})
 		}, 
 		{
-			header: 'Keterangan',
+			header: '<div align="center">' + 'Keterangan' + '</div>',
 			dataIndex: 'rproduk_keterangan',
-			width: 150,
+			width: 200, //150,
 			sortable: true,
 			editor: new Ext.form.TextArea({
 				maxLength: 250
@@ -906,7 +909,7 @@ Ext.onReady(function(){
 		for(i=0;i<detail_retur_jual_produk_DataStore.getCount();i++){
 			detail_retur_jual_produk_record=detail_retur_jual_produk_DataStore.getAt(i);
 			Ext.Ajax.request({
-				waitMsg: 'Please wait...',
+				waitMsg: 'Mohon  Tunggu...',
 				url: 'index.php?c=c_master_retur_jual_produk&m=detail_detail_retur_jual_produk_insert',
 				params:{
 				drproduk_id	: detail_retur_jual_produk_record.data.drproduk_id, 
@@ -925,7 +928,7 @@ Ext.onReady(function(){
 	//function for purge detail
 	function detail_retur_jual_produk_purge(){
 		Ext.Ajax.request({
-			waitMsg: 'Please wait...',
+			waitMsg: 'Mohon  Tunggu...',
 			url: 'index.php?c=c_master_retur_jual_produk&m=detail_detail_retur_jual_produk_purge',
 			params:{ master_id: eval(rproduk_idField.getValue()) }
 		});
@@ -942,7 +945,7 @@ Ext.onReady(function(){
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really delete something you haven\'t selected?',
+				msg: 'Anda belum memilih data yang akan dihapus?',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -1188,7 +1191,7 @@ Ext.onReady(function(){
 		if(master_retur_jual_produk_DataStore.baseParams.rproduk_keterangan!==null){rproduk_keterangan_print = master_retur_jual_produk_DataStore.baseParams.rproduk_keterangan;}
 
 		Ext.Ajax.request({   
-		waitMsg: 'Please Wait...',
+		waitMsg: 'Mohon  Tunggu...',
 		url: 'index.php?c=c_master_retur_jual_produk&m=get_action',
 		params: {
 			task: "PRINT",
@@ -1251,7 +1254,7 @@ Ext.onReady(function(){
 		if(master_retur_jual_produk_DataStore.baseParams.rproduk_keterangan!==null){rproduk_keterangan_2excel = master_retur_jual_produk_DataStore.baseParams.rproduk_keterangan;}
 
 		Ext.Ajax.request({   
-		waitMsg: 'Please Wait...',
+		waitMsg: 'Mohon  Tunggu...',
 		url: 'index.php?c=c_master_retur_jual_produk&m=get_action',
 		params: {
 			task: "EXCEL",
