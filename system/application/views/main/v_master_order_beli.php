@@ -61,7 +61,7 @@ var detail_order_beli_proxy;
 var detail_order_beli_writer;
 var detail_order_beli_reader;
 var editor_detail_order_beli;
-
+var today=new Date().format('Y-m-d');
 //declare konstant
 var post2db = '';
 var msg = '';
@@ -262,19 +262,17 @@ Ext.onReady(function(){
 		order_noField.setValue(null);
 		order_supplierField.reset();
 		order_supplierField.setValue(null);
-		order_tanggalField.reset();
-		order_tanggalField.setValue(null);
+		order_tanggalField.setValue(today);
 		order_carabayarField.reset();
 		order_carabayarField.setValue(null);
 		order_diskonField.reset();
-		order_diskonField.setValue(null);
+		order_diskonField.setValue('0');
 		order_biayaField.reset();
-		order_biayaField.setValue(null);
+		order_biayaField.setValue('0');
 		order_bayarField.reset();
-		order_bayarField.setValue(null);
+		order_bayarField.setValue('0');
 		order_keteranganField.reset();
 		order_keteranganField.setValue(null);
-		detail_order_beli_DataStore.load({params : {master_id : 0, start:0, limit:pageS}});
 	}
  	/* End of Function */
   
@@ -289,6 +287,8 @@ Ext.onReady(function(){
 		order_biayaField.setValue(master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_biaya'));
 		order_bayarField.setValue(master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_bayar'));
 		order_keteranganField.setValue(master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_keterangan'));
+		detail_order_beli_DataStore.setBaseParam('master_id',get_pk_id());
+		detail_order_beli_DataStore.load();
 	}
 	/* End setValue to EDIT*/
   
@@ -301,8 +301,8 @@ Ext.onReady(function(){
   	/* Function for Displaying  create Window Form */
 	function display_form_window(){
 		if(!master_order_beli_createWindow.isVisible()){
-			master_order_beli_reset_form();
 			post2db='CREATE';
+			master_order_beli_reset_form();
 			msg='created';
 			master_order_beli_createWindow.show();
 		} else {
@@ -334,9 +334,9 @@ Ext.onReady(function(){
 	function master_order_beli_confirm_update(){
 		/* only one record is selected here */
 		if(master_order_beliListEditorGrid.selModel.getCount() == 1) {
-			master_order_beli_set_form();
 			post2db='UPDATE';
-			detail_order_beli_DataStore.load({params : {master_id : eval(get_pk_id()), start:0, limit:pageS}});
+			master_order_beli_set_form();
+			//detail_order_beli_DataStore.load({params : {master_id : get_pk_id(), start:0, limit:pageS}});
 			msg='updated';
 			master_order_beli_createWindow.show();
 		} else {
@@ -537,7 +537,7 @@ Ext.onReady(function(){
 			sortable: true,
 			readOnly: true,
 			renderer: function(val){
-				return '<span>Rp. '+Ext.util.Format.number(val,'0,000')+'</span>';
+				return '<span>Rp. '+Ext.util.Format.number(val,'0,000.00')+'</span>';
 			}
 		},
 		{
@@ -627,7 +627,7 @@ Ext.onReady(function(){
 	master_order_beliListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'master_order_beliListEditorGrid',
 		el: 'fp_master_order_beli',
-		title: 'List Of Master_order_beli',
+		title: 'Daftar Order Pembelian',
 		autoHeight: true,
 		store: master_order_beli_DataStore, // DataStore
 		cm: master_order_beli_ColumnModel, // Nama-nama Columns
@@ -981,7 +981,7 @@ Ext.onReady(function(){
 			method: 'POST'
 		}),
 		reader: detail_order_beli_reader,
-		baseParams:{master_id: order_idField.getValue()},
+		baseParams:{start:0, limit:pageS},
 		sortInfo:{field: 'dorder_id', direction: "ASC"}
 	});
 	/* End of Function */
@@ -1114,7 +1114,8 @@ Ext.onReady(function(){
 			sortable: true,
 			readOnly: true,
 			renderer: function(v, params, record){
-                    return "<span>Rp. " + Ext.util.Format.number((record.data.dorder_harga * record.data.dorder_jumlah*(100-record.data.dorder_diskon)/100),'0,000')+ "</span>";
+					subtotal=Ext.util.Format.number((record.data.dorder_harga * record.data.dorder_jumlah*(100-record.data.dorder_diskon)/100),"0,000");
+                    return '<span>Rp. ' + subtotal+ '</span>';
             }
 		}
 		]
@@ -1126,7 +1127,7 @@ Ext.onReady(function(){
 	detail_order_beliListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'detail_order_beliListEditorGrid',
 		el: 'fp_detail_order_beli',
-		title: 'Detail detail_order_beli',
+		title: 'Detail Item',
 		height: 250,
 		width: 690,
 		autoScroll: true,
@@ -1281,7 +1282,7 @@ Ext.onReady(function(){
 	/* Function for retrieve create Window Form */
 	master_order_beli_createWindow= new Ext.Window({
 		id: 'master_order_beli_createWindow',
-		title: post2db+'Master_order_beli',
+		title: post2db+' Order Pembelian',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,
@@ -1380,7 +1381,7 @@ Ext.onReady(function(){
 	/* Identify  order_id Search Field */
 	order_idSearchField= new Ext.form.NumberField({
 		id: 'order_idSearchField',
-		fieldLabel: 'Order Id',
+		fieldLabel: 'Id Order',
 		allowNegatife : false,
 		blankText: '0',
 		allowDecimals: false,
@@ -1391,33 +1392,44 @@ Ext.onReady(function(){
 	/* Identify  order_no Search Field */
 	order_noSearchField= new Ext.form.TextField({
 		id: 'order_noSearchField',
-		fieldLabel: 'Order No',
+		fieldLabel: 'No Order',
 		maxLength: 50,
 		anchor: '95%'
 	
 	});
 	/* Identify  order_supplier Search Field */
-	order_supplierSearchField= new Ext.form.NumberField({
+	order_supplierSearchField= new Ext.form.ComboBox({
 		id: 'order_supplierSearchField',
-		fieldLabel: 'Order Supplier',
-		allowNegatife : false,
-		blankText: '0',
-		allowDecimals: false,
-		anchor: '95%',
-		maskRe: /([0-9]+)$/
+		fieldLabel: 'Supplier',
+		store: cbo_order_supplier_DataSore,
+		displayField:'order_supplier_nama',
+		mode : 'remote',
+		valueField: 'order_supplier_value',
+        typeAhead: false,
+        //loadingText: 'Searching...',
+        pageSize:10,
+        hideTrigger:false,
+		allowBlank: true,
+        tpl: order_supplier_tpl,
+        //applyTo: 'search',
+        itemSelector: 'div.search-item',
+		triggerAction: 'all',
+		lazyRender:true,
+		listClass: 'x-combo-list-small',
+		anchor: '95%'
 	
 	});
 	/* Identify  order_tanggal Search Field */
 	order_tanggalSearchField= new Ext.form.DateField({
 		id: 'order_tanggalSearchField',
-		fieldLabel: 'Order Tanggal',
-		format : 'Y-m-d',
+		fieldLabel: 'Tanggal',
+		format : 'Y-m-d'
 	
 	});
 	/* Identify  order_carabayar Search Field */
 	order_carabayarSearchField= new Ext.form.ComboBox({
 		id: 'order_carabayarSearchField',
-		fieldLabel: 'Order Carabayar',
+		fieldLabel: 'Cara Pembayaran',
 		store:new Ext.data.SimpleStore({
 			fields:['value', 'order_carabayar'],
 			data:[['tunai','tunai'],['kredit','kredit'],['konsinyasi','konsinyasi']]
@@ -1425,25 +1437,25 @@ Ext.onReady(function(){
 		mode: 'local',
 		displayField: 'order_carabayar',
 		valueField: 'value',
-		anchor: '95%',
+		anchor: '80%',
 		triggerAction: 'all'	 
 	
 	});
 	/* Identify  order_diskon Search Field */
 	order_diskonSearchField= new Ext.form.NumberField({
 		id: 'order_diskonSearchField',
-		fieldLabel: 'Order Diskon',
+		fieldLabel: 'Diskon',
 		allowNegatife : false,
 		blankText: '0',
 		allowDecimals: true,
-		anchor: '95%',
+		anchor: '50%',
 		maskRe: /([0-9]+)$/
 	
 	});
 	/* Identify  order_biaya Search Field */
 	order_biayaSearchField= new Ext.form.NumberField({
 		id: 'order_biayaSearchField',
-		fieldLabel: 'Order Biaya',
+		fieldLabel: 'Biaya',
 		allowNegatife : false,
 		blankText: '0',
 		allowDecimals: true,
@@ -1454,7 +1466,7 @@ Ext.onReady(function(){
 	/* Identify  order_bayar Search Field */
 	order_bayarSearchField= new Ext.form.NumberField({
 		id: 'order_bayarSearchField',
-		fieldLabel: 'Order Bayar',
+		fieldLabel: 'Bayar',
 		allowNegatife : false,
 		blankText: '0',
 		allowDecimals: true,
@@ -1465,7 +1477,7 @@ Ext.onReady(function(){
 	/* Identify  order_keterangan Search Field */
 	order_keteranganSearchField= new Ext.form.TextField({
 		id: 'order_keteranganSearchField',
-		fieldLabel: 'Order Keterangan',
+		fieldLabel: 'Keterangan',
 		maxLength: 500,
 		anchor: '95%'
 	
@@ -1473,7 +1485,7 @@ Ext.onReady(function(){
     
 	/* Function for retrieve search Form Panel */
 	master_order_beli_searchForm = new Ext.FormPanel({
-		labelAlign: 'top',
+		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
 		width: 300,        
@@ -1485,7 +1497,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [order_noSearchField, order_supplierSearchField, order_tanggalSearchField, order_carabayarSearchField, order_diskonSearchField, order_biayaSearchField, order_bayarSearchField, order_keteranganSearchField] 
+				items: [order_noSearchField, order_supplierSearchField, order_tanggalSearchField, order_carabayarSearchField, order_diskonSearchField, order_biayaSearchField, order_keteranganSearchField] 
 			}
 			]
 		}]
@@ -1505,7 +1517,7 @@ Ext.onReady(function(){
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
 	master_order_beli_searchWindow = new Ext.Window({
-		title: 'master_order_beli Search',
+		title: 'Percarian Order Pembelian',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,

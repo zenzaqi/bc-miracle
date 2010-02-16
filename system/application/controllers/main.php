@@ -5,7 +5,6 @@ class Main extends Controller {
 	{
 		parent::Controller();
 		$this->load->model('m_main', '', TRUE);
-		$this->load->helper('date');
 		session_start();
  		if (!isset($_SESSION[SESSION_USERID])){
 			redirect('','location',301);
@@ -14,8 +13,6 @@ class Main extends Controller {
 	
 	function index()
 	{
-		$this->load->helper('asset');
-				
 		$data["id"]="Test";
 		$data["menus"]=$this->m_main->get_menus();
 		$data["submenus"]=$this->m_main->get_shortcuts();

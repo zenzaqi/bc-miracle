@@ -176,7 +176,8 @@ var looping=0;
 /* on ready fuction */
 Ext.onReady(function(){
   	Ext.QuickTips.init();	/* Initiate quick tips icon */
-
+	Ext.ux.InputTextMask=Ext.ux.netbox.InputTextMask;
+	
   	Ext.util.Format.comboRenderer = function(combo){
   		//jproduk_bankDataStore.load();
   	    return function(value){
@@ -2086,13 +2087,14 @@ Ext.onReady(function(){
 		anchor: '95%'
 	});
 	
-	jproduk_card_nilaiField= new Ext.form.NumberField({
+	jproduk_card_nilaiField= new Ext.form.TextField({
 		id: 'jproduk_card_nilaiField',
 		fieldLabel: 'Jumlah (Rp)',
 		allowBlank: true,
 		anchor: '95%',
 		enableKeyEvents: true,
-		maskRe: /([0-9]+)$/
+		//maskRe: /([0-9]+)$/,
+		plugins: [new Ext.ux.InputTextMask('999.999.999.999',false)]
 	});
 	
 	master_jual_produk_cardGroup= new Ext.form.FieldSet({
