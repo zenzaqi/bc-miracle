@@ -10,8 +10,7 @@
    	<?=css_asset('xtheme-slate.css');?>
 	<?=css_asset('file-upload.css');?>
 	<?=css_asset('MultiSelect.css');?>
-	
-	
+    
     <?=js_asset('ext-base.js');?>
     <?=js_asset('ext-all.js');?>
 	<?=js_asset('ext-all-debug.js');?>
@@ -24,6 +23,15 @@
 	<?=js_asset('CheckColumn.js');?>
     <?=js_asset('MultiSelect.js');?>
     <?=js_asset('ItemSelector.js');?>
+    <?=js_asset('InputTextMask.js');?>
+<script type="text/javascript">
+	var s = document.createElement("script");
+	s.type = 'text/javascript';
+	s.src = "./assets/js/locale/ext-lang-id.js";
+	s.charset = "ascii";
+	document.getElementsByTagName("head")[0].appendChild(s);
+</script>
+    <?=js_asset('PagingMemoryProxy.js');?>
   	<link rel="shortcut icon" href="<?=base_url();?>favicon.ico" />
 
 	<style type="text/css">
@@ -51,6 +59,22 @@
 		font-size: small;
 		color: #AF4046;
 	}
+	<?php
+	if(count($menus)){
+		foreach($menus as $allmenu){
+			$icon_file=file_exists(image_asset_url("icons/".$allmenu["menu_iconmenu"])) && $allmenu["menu_iconmenu"]!=="" ? image_asset_url("icons/".$allmenu["menu_iconmenu"]):image_asset_url("icons/grid.png");
+	echo "\t .icon-".$allmenu["menu_id"]."{ background-image:url(".$icon_file.") !important; } \n";
+		}
+	}
+	
+	if(count($submenus)){
+		foreach($submenus as $allmenu){
+			$icon_file=file_exists(image_asset_url("icons/".$allmenu["menu_iconmenu"])) && $allmenu["menu_iconmenu"]!=="" ? image_asset_url("icons/".$allmenu["menu_iconmenu"]):image_asset_url("icons/grid.png");
+	echo "\t .icon-".$allmenu["menu_id"]."{ background-image:url(".$icon_file.") !important; } \n";
+		}
+	}
+	
+	?>
     </style>
    
 	<?php $this->load->view('menus')?>
@@ -65,7 +89,7 @@
 	</div> 
   	<div id="north">
     	<div class="api-title style1 style2" style="float:left; margin-left:10px;">
-			<p class="style5"><font style="font-weight:bold"><? $info=$this->m_public_function->get_info();echo $info->info_nama; ?></font>, <? echo $info->info_alamat; ?>&nbsp;&nbsp;
+			<p class="style5"><font style="font-weight:bold"><? $info=$this->m_public_function->get_info(); if($info!==""){ echo $info->info_nama; }?></font>, <?php if($info!==""){ echo $info->info_alamat;  }?>&nbsp;&nbsp;
             </p>
 		</div>
 		<div style="float:right; margin-right:10px; margin-top:5px; color:#AF4046;"> 

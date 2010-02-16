@@ -27,7 +27,11 @@ class C_master_terima_beli extends Controller {
 	}
 	
 	function get_produk_list(){
-		$result=$this->m_public_function->get_produk_list();
+		$query = isset($_POST['query']) ? @$_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? @$_POST['start'] : @$_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? @$_POST['limit'] : @$_GET['limit']);
+		$end=($end==0 | $end==""?$end=15:$end=$end);
+		$result=$this->m_public_function->get_produk_list($query,$start,$end);
 		echo $result;
 	}
 	
@@ -59,10 +63,10 @@ class C_master_terima_beli extends Controller {
 	//for detail action
 	//list detail handler action
 	function  detail_detail_terima_bonus_list(){
-		$query = isset($_POST['query']) ? $_POST['query'] : "";
-		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
-		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$master_id = (integer) (isset($_POST['master_id']) ? $_POST['master_id'] : $_GET['master_id']);
+		$query = isset($_POST['query']) ? @$_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? @$_POST['start'] : @$_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? @$_POST['limit'] : @$_GET['limit']);
+		$master_id = (integer) (isset($_POST['master_id']) ? @$_POST['master_id'] : @$_GET['master_id']);
 		$result=$this->m_master_terima_beli->detail_detail_terima_bonus_list($master_id,$query,$start,$end);
 		echo $result;
 	}
@@ -70,7 +74,7 @@ class C_master_terima_beli extends Controller {
 	
 	//purge all detail
 	function detail_detail_terima_bonus_purge(){
-		$master_id = (integer) (isset($_POST['master_id']) ? $_POST['master_id'] : $_GET['master_id']);
+		$master_id = (integer) (isset($_POST['master_id']) ? @$_POST['master_id'] : @$_GET['master_id']);
 		$result=$this->m_master_terima_beli->detail_detail_terima_bonus_purge($master_id);
 		echo $result;
 	}
@@ -91,10 +95,10 @@ class C_master_terima_beli extends Controller {
 	//for detail action
 	//list detail handler action
 	function  detail_detail_terima_beli_list(){
-		$query = isset($_POST['query']) ? $_POST['query'] : "";
-		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
-		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$master_id = (integer) (isset($_POST['master_id']) ? $_POST['master_id'] : $_GET['master_id']);
+		$query = isset($_POST['query']) ? @$_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? @$_POST['start'] : @$_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? @$_POST['limit'] : @$_GET['limit']);
+		$master_id = (integer) (isset($_POST['master_id']) ? @$_POST['master_id'] : @$_GET['master_id']);
 		$result=$this->m_master_terima_beli->detail_detail_terima_beli_list($master_id,$query,$start,$end);
 		echo $result;
 	}
@@ -102,7 +106,7 @@ class C_master_terima_beli extends Controller {
 	
 	//purge all detail
 	function detail_detail_terima_beli_purge(){
-		$master_id = (integer) (isset($_POST['master_id']) ? $_POST['master_id'] : $_GET['master_id']);
+		$master_id = (integer) (isset($_POST['master_id']) ? @$_POST['master_id'] : @$_GET['master_id']);
 		$result=$this->m_master_terima_beli->detail_detail_terima_beli_purge($master_id);
 		echo $result;
 	}
@@ -130,7 +134,7 @@ class C_master_terima_beli extends Controller {
 	
 	//event handler action
 	function get_action(){
-		$task = $_POST['task'];
+		$task = @$_POST['task'];
 		switch($task){
 			case "LIST":
 				$this->master_terima_beli_list();
@@ -162,9 +166,9 @@ class C_master_terima_beli extends Controller {
 	//function fot list record
 	function master_terima_beli_list(){
 		
-		$query = isset($_POST['query']) ? $_POST['query'] : "";
-		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
-		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		$query = isset($_POST['query']) ? @$_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? @$_POST['start'] :@$_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? @$_POST['limit'] : @$_GET['limit']);
 		$result=$this->m_master_terima_beli->master_terima_beli_list($query,$start,$end);
 		echo $result;
 	}
@@ -221,7 +225,7 @@ class C_master_terima_beli extends Controller {
 
 	//function for delete selected record
 	function master_terima_beli_delete(){
-		$ids = $_POST['ids']; // Get our array back and translate it :
+		$ids = @$_POST['ids']; // Get our array back and translate it :
 		$pkid = json_decode(stripslashes($ids));
 		$result=$this->m_master_terima_beli->master_terima_beli_delete($pkid);
 		echo $result;
@@ -247,8 +251,8 @@ class C_master_terima_beli extends Controller {
 		$terima_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$terima_keterangan);
 		$terima_keterangan=str_replace("'", '"',$terima_keterangan);
 		
-		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
-		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		$start = (integer) (isset($_POST['start']) ? @$_POST['start'] : @$_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? @$_POST['limit'] : @$_GET['limit']);
 		$result = $this->m_master_terima_beli->master_terima_beli_search($terima_id ,$terima_no ,$terima_order ,$terima_supplier ,$terima_surat_jalan ,$terima_pengirim ,$terima_tanggal ,$terima_keterangan ,$start,$end);
 		echo $result;
 	}
@@ -272,8 +276,8 @@ class C_master_terima_beli extends Controller {
 		$terima_keterangan=trim(@$_POST["terima_keterangan"]);
 		$terima_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$terima_keterangan);
 		$terima_keterangan=str_replace("'", '"',$terima_keterangan);
-		$option=$_POST['currentlisting'];
-		$filter=$_POST["query"];
+		$option=@$_POST['currentlisting'];
+		$filter=@$_POST["query"];
 		
 		$result = $this->m_master_terima_beli->master_terima_beli_print($terima_id ,$terima_no ,$terima_order ,$terima_supplier ,$terima_surat_jalan ,$terima_pengirim ,$terima_tanggal ,$terima_keterangan ,$option,$filter);
 		$nbrows=$result->num_rows();
@@ -346,8 +350,8 @@ class C_master_terima_beli extends Controller {
 		$terima_keterangan=trim(@$_POST["terima_keterangan"]);
 		$terima_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$terima_keterangan);
 		$terima_keterangan=str_replace("'", '"',$terima_keterangan);
-		$option=$_POST['currentlisting'];
-		$filter=$_POST["query"];
+		$option=@$_POST['currentlisting'];
+		$filter=@$_POST["query"];
 		
 		$query = $this->m_master_terima_beli->master_terima_beli_export_excel($terima_id ,$terima_no ,$terima_order ,$terima_supplier ,$terima_surat_jalan ,$terima_pengirim ,$terima_tanggal ,$terima_keterangan ,$option,$filter);
 		

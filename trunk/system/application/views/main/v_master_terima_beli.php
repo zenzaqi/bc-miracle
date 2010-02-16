@@ -64,6 +64,7 @@ var editor_detail_terima_beli;
 
 //declare konstant
 var post2db = '';
+var today=new Date().format('Y-m-d');
 var msg = '';
 var pageS=15;
 
@@ -261,10 +262,13 @@ Ext.onReady(function(){
 		terima_surat_jalanField.setValue(null);
 		terima_pengirimField.reset();
 		terima_pengirimField.setValue(null);
-		terima_tanggalField.reset();
-		terima_tanggalField.setValue(null);
+		terima_tanggalField.setValue(today);
 		terima_keteranganField.reset();
 		terima_keteranganField.setValue(null);
+		detail_terima_beli_DataStore.setBaseParam('master_id', get_pk_id());
+		detail_terima_bonus_DataStore.setBaseParam('master_id', get_pk_id());
+		detail_terima_beli_DataStore.load();
+		detail_terima_bonus_DataStore.load();
 	}
  	/* End of Function */
   
@@ -280,9 +284,15 @@ Ext.onReady(function(){
 		terima_pengirimField.setValue(master_terima_beliListEditorGrid.getSelectionModel().getSelected().get('terima_pengirim'));
 		terima_tanggalField.setValue(master_terima_beliListEditorGrid.getSelectionModel().getSelected().get('terima_tanggal'));
 		terima_keteranganField.setValue(master_terima_beliListEditorGrid.getSelectionModel().getSelected().get('terima_keterangan'));
-		//detail_terima_beli_DataStore.load({params: {master_id: terima_idField.getValue()}});
-		cbo_dproduk_byorderDataStore.load({params: {master_order_id: terima_order_idField.getValue(), start: 0, limit: pageS}});
-		cbo_dsatuan_byproduk_orderDataStore.load({params: {master_order_id: terima_order_idField.getValue(), dorder_produk_id: ""}});
+		
+		detail_terima_beli_DataStore.setBaseParam('master_id', get_pk_id());
+		detail_terima_bonus_DataStore.setBaseParam('master_id', get_pk_id());
+		detail_terima_beli_DataStore.load();
+		detail_terima_bonus_DataStore.load();
+		cbo_dproduk_byorderDataStore.setBaseParam('master_order_id', get_pk_id());
+		cbo_dsatuan_byproduk_orderDataStore.setBaseParam('master_order_id', get_pk_id());
+		cbo_dproduk_byorderDataStore.load();
+		cbo_dsatuan_byproduk_orderDataStore.load();
 		cbo_dproduk_bonusDataStore.load();
 		cbo_dsatuan_bonusDataStore.load();
 	}
@@ -297,11 +307,9 @@ Ext.onReady(function(){
   	/* Function for Displaying  create Window Form */
 	function display_form_window(){
 		if(!master_terima_beli_createWindow.isVisible()){
-			master_terima_beli_reset_form();
-			detail_terima_beli_DataStore.load({params: {master_id: get_pk_id()}});
-			detail_terima_bonus_DataStore.load({params: {master_id: get_pk_id()}});
 			post2db='CREATE';
 			msg='created';
+			master_terima_beli_reset_form();
 			master_terima_beli_createWindow.show();
 		} else {
 			master_terima_beli_createWindow.toFront();
@@ -332,11 +340,9 @@ Ext.onReady(function(){
 	function master_terima_beli_confirm_update(){
 		/* only one record is selected here */
 		if(master_terima_beliListEditorGrid.selModel.getCount() == 1) {
-			master_terima_beli_set_form();
 			post2db='UPDATE';
-			detail_terima_beli_DataStore.load({params : {master_id : eval(get_pk_id()), start:0, limit:pageS}});
-			detail_terima_bonus_DataStore.load({params : {master_id : eval(get_pk_id()), start:0, limit:pageS}});
 			msg='updated';
+			master_terima_beli_set_form();
 			master_terima_beli_createWindow.show();
 		} else {
 			Ext.MessageBox.show({
@@ -1007,6 +1013,7 @@ Ext.onReady(function(){
 			displayField: 'dtbeli_produk_display',
 			valueField: 'dtbeli_produk_value',
 			lazyRender:true,
+			pageSize: pageS,
 			tpl: detail_orderbeli_tpl,
 			itemSelector: 'div.search-item',
 			triggerAction: 'all',
@@ -1338,7 +1345,11 @@ Ext.onReady(function(){
 			displayField: 'dtbonus_produk_display',
 			valueField: 'dtbonus_produk_value',
 			triggerAction: 'all',
+			pageSize:pageS,
+			itemSelector: 'div.search-item',
+			triggerAction: 'all',
 			lazyRender:true,
+			listClass: 'x-combo-list-small',
 
 	});
 	

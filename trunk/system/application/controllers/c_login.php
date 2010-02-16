@@ -5,6 +5,7 @@ class C_login extends Controller {
 	{
 		parent::Controller();
 		$this->load->model('m_login', '', TRUE);
+		$this->load->model('m_main', '', TRUE);
 		session_start();
 		if(isset($_SESSION[SESSION_USERID])){
 			if($_SESSION[SESSION_USERID]!=="")
@@ -14,7 +15,8 @@ class C_login extends Controller {
 	
 	function index()
 	{
-		$this->load->helper('asset');
+		$data["background"]=$this->m_main->get_background();
+		$this->load->vars($data);
 		$this->load->view('v_login');
 	}
 	

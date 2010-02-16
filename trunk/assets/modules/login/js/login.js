@@ -52,7 +52,8 @@ Ext.onReady(function(){
 	usernameField=new Ext.form.TextField({
 		fieldLabel:'Username',
 		name:'username',
-		width:190,
+		//width:190,
+		anchor: '95%',
 		allowBlank:false
 	});
 	
@@ -60,7 +61,8 @@ Ext.onReady(function(){
 	passwordField=new Ext.form.TextField({
 			fieldLabel:'Password',
 			name:'password',
-			width:190,
+			//width:190,
+			anchor: '95%',
 			inputType:'password',
 			id: 'pass',
 			enableKeyEvents: true,
@@ -97,6 +99,7 @@ Ext.onReady(function(){
 			}
 		},usernameField
 		,passwordField],
+		buttonAlign: 'center',
 		buttons:[{
 			text:'Login',
 			handler: authenticate

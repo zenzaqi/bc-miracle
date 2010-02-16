@@ -24,11 +24,16 @@ class M_main extends Model{
 		return $rs;
 	}
 	
+	
 	function get_background(){
+		$background="";
 		$sql="select info_background from info";
 		$query=$this->db->query($sql);
-		$rs=$query->result_array();
-		return $rs;
+		if($query->num_rows()){
+			$rs=$query->row();
+			$background=$rs->info_background;
+		}
+		return $background;
 	}	
 	
 	

@@ -1,3 +1,4 @@
+
 <script type="text/javascript">
 Ext.BLANK_IMAGE_URL = 'assets/images/s.gif';
 
@@ -40,10 +41,6 @@ DocPanel = Ext.extend(Ext.Panel, {
 		}
 	}
 });
-<?
-foreach($background as $lbackground => $fbackground)
-	$ibackground=$fbackground["info_background"];
-?>
 	
 MainPanel = function() {
 	MainPanel.superclass.constructor.call(this, {
@@ -61,8 +58,8 @@ MainPanel = function() {
 			id:'welcome-panel',
 //			title: 'Welcome Home',
 			title: 'Home',
-			<? if(file_exists("./uploads/".$ibackground)){?>
-			style: 'background: url(./uploads/<?=$ibackground;?>)',
+			<? if(file_exists("./uploads/".$background) && $background!==""){?>
+			style: 'background: url(./uploads/<?=$background;?>)',
 			<? }else{ ?>
 			style: 'background: url(assets/wallpapers/desktop.jpg)',
 			<? } ?>
@@ -148,7 +145,7 @@ if($subtotal>0){
 			$j++;
 ?>		{
 				text: '<?=$sub["menu_title"];?>'
-				, iconCls: 'icon-frm'
+				, iconCls: 'icon-<?=$sub["menu_id"]?>'
 				, handler: function() {
 <? if($sub["menu_cat"]=="window") { ?>
 					mainPanel.loadClass('<?=$sub["menu_link"]; ?>', '<?=$sub["menu_title"];?>');	
@@ -203,7 +200,7 @@ foreach($menus as $keymenu => $menu){
 		?>
 		{
 		text:'<?=$menu["menu_title"]; ?>',
-		iconCls: 'icon-files', 
+		iconCls: 'icon-<?=$menu["menu_id"]?>', 
 		menu: menu<?=str_replace(" ","_",$menu["menu_title"]);?>
 		}
 		<?	if($i<>$total) echo ",'-',";
@@ -323,7 +320,7 @@ if($s_cat==="window"){
 ?>						'</dl></center>',
 					border:false,
 					autoScroll: true,
-					iconCls:'nav'
+					iconCls:'icon-<?=$s_id?>'
 				}
 <?
 if($m<$totalmenu) echo ",";
