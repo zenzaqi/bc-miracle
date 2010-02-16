@@ -176,8 +176,7 @@ var looping=0;
 /* on ready fuction */
 Ext.onReady(function(){
   	Ext.QuickTips.init();	/* Initiate quick tips icon */
-	Ext.ux.InputTextMask=Ext.ux.netbox.InputTextMask;
-	
+
   	Ext.util.Format.comboRenderer = function(combo){
   		//jproduk_bankDataStore.load();
   	    return function(value){
@@ -205,7 +204,7 @@ Ext.onReady(function(){
 		if(oGrid_event.record.data.jproduk_keterangan!== null){jproduk_keterangan_update = oGrid_event.record.data.jproduk_keterangan;}
 
 		Ext.Ajax.request({  
-			waitMsg: 'Please wait...',
+			waitMsg: 'Mohon tunggu...',
 			url: 'index.php?c=c_master_jual_produk&m=get_action',
 			params: {
 				task: "UPDATE",
@@ -227,7 +226,7 @@ Ext.onReady(function(){
 					default:
 						Ext.MessageBox.show({
 						   title: 'Warning',
-						   msg: 'We could\'t not save the master_jual_produk.',
+						   msg: 'Data master_jual_produk tidak bisa disimpan',
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'save',
 						   icon: Ext.MessageBox.WARNING
@@ -437,7 +436,7 @@ Ext.onReady(function(){
 		if(jproduk_transfer_nilai3Field.getValue()!== null){jproduk_transfer_nilai3_create = jproduk_transfer_nilai3Field.getValue();} 
 		
 		Ext.Ajax.request({  
-			waitMsg: 'Please wait...',
+			waitMsg: 'Mohon tunggu...',
 			url: 'index.php?c=c_master_jual_produk&m=get_action',
 			params: {
 				task: post2db,
@@ -579,7 +578,7 @@ Ext.onReady(function(){
 			}else {
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Your Form is not valid!.',
+					msg: 'Form anda belum lengkap!',
 					buttons: Ext.MessageBox.OK,
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING
@@ -1154,7 +1153,7 @@ Ext.onReady(function(){
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really delete something you haven\'t selected?',
+				msg: 'Anda belum memilih data yang akan dihapus',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -1207,7 +1206,7 @@ Ext.onReady(function(){
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really update something you haven\'t selected?',
+				msg: 'Anda belum memilih data yang akan diedit',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -1226,7 +1225,7 @@ Ext.onReady(function(){
 			}
 			var encoded_array = Ext.encode(prez);
 			Ext.Ajax.request({ 
-				waitMsg: 'Please Wait',
+				waitMsg: 'Mohon tunggu...',
 				url: 'index.php?c=c_master_jual_produk&m=get_action', 
 				params: { task: "DELETE", ids:  encoded_array }, 
 				success: function(response){
@@ -1537,9 +1536,9 @@ Ext.onReady(function(){
 			dataIndex: 'jproduk_tanggal',
 			width: 150,
 			sortable: true,
-			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
+			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
 			editor: new Ext.form.DateField({
-				format: 'Y-m-d'
+				format: 'd-m-Y'
 			})
 		}, 
 		{
@@ -1610,7 +1609,7 @@ Ext.onReady(function(){
 	master_jual_produkListEditorGrid =  new Ext.grid.GridPanel({
 		id: 'master_jual_produkListEditorGrid',
 		el: 'fp_master_jual_produk',
-		title: 'List Of Master_jual_produk',
+		title: 'Daftar Master_jual_produk',
 		autoHeight: true,
 		store: master_jual_produk_DataStore, // DataStore
 		cm: master_jual_produk_ColumnModel, // Nama-nama Columns
@@ -2087,14 +2086,13 @@ Ext.onReady(function(){
 		anchor: '95%'
 	});
 	
-	jproduk_card_nilaiField= new Ext.form.TextField({
+	jproduk_card_nilaiField= new Ext.form.NumberField({
 		id: 'jproduk_card_nilaiField',
 		fieldLabel: 'Jumlah (Rp)',
 		allowBlank: true,
 		anchor: '95%',
 		enableKeyEvents: true,
-		//maskRe: /([0-9]+)$/,
-		plugins: [new Ext.ux.InputTextMask('999.999.999.999',false)]
+		maskRe: /([0-9]+)$/
 	});
 	
 	master_jual_produk_cardGroup= new Ext.form.FieldSet({
@@ -3262,18 +3260,20 @@ Ext.onReady(function(){
 	detail_jual_produk_ColumnModel = new Ext.grid.ColumnModel(
 		[
 		{
-			header: 'Produk',
+			align : 'Left',
+			header: '<div align="center">' + 'Produk' + '</div>',
 			dataIndex: 'dproduk_produk',
-			width: 250,
+			width: 300, //250
 			sortable: true,
 			allowBlank: false,
 			editor: combo_jual_produk,
 			renderer: Ext.util.Format.comboRenderer(combo_jual_produk)
 		},
 		{
-			header: 'Satuan',
+			align :'Left',
+			header: '<div align="center">' + 'Satuan' + '</div>',
 			dataIndex: 'dproduk_satuan',
-			width: 80,
+			width: 60, //80,
 			sortable: true,
 			editor: combo_satuan_produk,
 			renderer: Ext.util.Format.comboRenderer(combo_satuan_produk)
@@ -3287,9 +3287,10 @@ Ext.onReady(function(){
 */
 		},
 		{
-			header: 'Jumlah',
+			align : 'Right',
+			header: '<div align="center">' + 'Jumlah' + '</div>',
 			dataIndex: 'dproduk_jumlah',
-			width: 80,
+			width: 60, //80,
 			sortable: true,
 			renderer: Ext.util.Format.numberRenderer('0,000'),
 			editor: new Ext.form.NumberField({
@@ -3301,16 +3302,18 @@ Ext.onReady(function(){
 			})
 		},
 		{
-			header: 'Harga (Rp)',
+			align : 'Right',
+			header: '<div align="center">' + 'Harga (Rp)' + '</div>',
 			dataIndex: 'dproduk_harga',
-			width: 150,
+			width: 100, //150,
 			sortable: true,
 			renderer: Ext.util.Format.numberRenderer('0,000')
 		}
 		,{
-			header: 'Sub Total (Rp)',
+			align : 'Right',
+			header: '<div align="center">' + 'Sub Total (Rp)' + '</div>',
 			dataIndex: 'dproduk_subtotal',
-			width: 150,
+			width: 100, //150,
 			sortable: true,
 			readOnly: true,
 			renderer: function(v, params, record){
@@ -3359,11 +3362,12 @@ Ext.onReady(function(){
             }*/
 		},
 		{
-			header: 'Diskon (%)',
+			align : 'Right',
+			header: '<div align="center">' + 'Diskon (%)' + '</div>',
 			dataIndex: 'dproduk_diskon',
-			width: 90,
+			width: 80, //90,
 			sortable: true,
-			renderer: Ext.util.Format.numberRenderer('0,000%'),
+			renderer: Ext.util.Format.numberRenderer('0,000'),
 			editor: new Ext.form.NumberField({
 				allowDecimals: false,
 				allowNegative: false,
@@ -3372,9 +3376,10 @@ Ext.onReady(function(){
 				maskRe: /([0-9]+)$/
 			})
 		},{
-			header: 'Jenis Diskon',
+			align : 'Left',
+			header: '<div align="center">' + 'Jenis Diskon' + '</div>',
 			dataIndex: 'dproduk_diskon_jenis',
-			width: 100,
+			width: 80, //100,
 			sortable: true,
 			editor: new Ext.form.ComboBox({
 				store:new Ext.data.SimpleStore({
@@ -3390,26 +3395,28 @@ Ext.onReady(function(){
 				lazyRenderer: true
 			})
 		},{
-			header: 'Sub Total Net (Rp)',
+			align :'Right',
+			header: '<div align="center">' + 'Sub Total Net (Rp)' + '</div>',
 			dataIndex: 'dproduk_subtotal_net',
-			width: 150,
+			width: 100, //150,
 			sortable: true,
 			reaOnly: true,
 			renderer: function(v, params, record){
 					return Ext.util.Format.number(record.data.dproduk_subtotal*(100-record.data.dproduk_diskon)/100,'0,000');
             }
-		},{
+		},/*{
 			header: 'Sales',
 			dataIndex: 'dproduk_sales',
-			width: 150,
+			width: 40, //150,
 			sortable: true,
 			reaOnly: true
-		},{
-			header: 'Konversi Nilai',
+		},*/{
+			align : 'Right',
+			header: '<div align="center">' + 'Konversi Nilai' + '</div>',
 			dataIndex: 'konversi_nilai_temp',
 			hidden: false,
 			allowDecimals: true,
-			width: 80,
+			width: 80, //100
 			sortable: true
 		}]
 	);
@@ -3419,7 +3426,7 @@ Ext.onReady(function(){
 	function get_harga_produk(id_produk){
 		var harga_produk=0;
 		Ext.Ajax.request({
-			waitMsg: 'Please wait...',
+			waitMsg: 'Mohon tunggu...',
 			url: 'index.php?c=c_master_jual_produk&m=get_harga_produk',
 			params:{ produk_id	: id_produk },
 			success: function(response){							
@@ -3504,7 +3511,7 @@ Ext.onReady(function(){
 			detail_jual_produk_record=detail_jual_produk_DataStore.getAt(i);
 			if(detail_jual_produk_record.data.dproduk_produk!==null&&detail_jual_produk_record.data.dproduk_produk.dproduk_produk!==""){
 				Ext.Ajax.request({
-					waitMsg: 'Please wait...',
+					waitMsg: 'Mohon tunggu...',
 					url: 'index.php?c=c_master_jual_produk&m=detail_detail_jual_produk_insert',
 					params:{
 						dproduk_id	: detail_jual_produk_record.data.dproduk_id, 
@@ -3542,7 +3549,7 @@ Ext.onReady(function(){
 	//function for purge detail
 	function detail_jual_produk_purge(){
 		Ext.Ajax.request({
-			waitMsg: 'Please wait...',
+			waitMsg: 'Mohon tunggu...',
 			url: 'index.php?c=c_master_jual_produk&m=detail_detail_jual_produk_purge',
 			params:{ master_id: eval(jproduk_idField.getValue()) },
 			callback: function(opts, success, response){
@@ -4456,7 +4463,7 @@ Ext.onReady(function(){
 		if(master_jual_produk_DataStore.baseParams.jproduk_keterangan!==null){jproduk_keterangan_print = master_jual_produk_DataStore.baseParams.jproduk_keterangan;}
 
 		Ext.Ajax.request({   
-		waitMsg: 'Please Wait...',
+		waitMsg: 'Mohon tunggu...',
 		url: 'index.php?c=c_master_jual_produk&m=get_action',
 		params: {
 			task: "PRINT",
@@ -4522,7 +4529,7 @@ Ext.onReady(function(){
 		if(master_jual_produk_DataStore.baseParams.jproduk_keterangan!==null){jproduk_keterangan_2excel = master_jual_produk_DataStore.baseParams.jproduk_keterangan;}
 
 		Ext.Ajax.request({   
-		waitMsg: 'Please Wait...',
+		waitMsg: 'Mohon tunggu...',
 		url: 'index.php?c=c_master_jual_produk&m=get_action',
 		params: {
 			task: "EXCEL",

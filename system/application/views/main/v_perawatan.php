@@ -628,9 +628,9 @@ Ext.onReady(function(){
 			hidden: false
 		},*/
 		{
-			header: 'Kode Lama',
+			header: '<div align="center">' + 'Kode Lama' + '</div>',
 			dataIndex: 'rawat_kodelama',
-			width: 150,
+			width: 120,	//150,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				allowBlank: true,
@@ -638,9 +638,9 @@ Ext.onReady(function(){
           	})
 		},
 		{
-			header: 'Kode Baru',
+			header: '<div align="center">' + 'Kode Baru' + '</div>',
 			dataIndex: 'rawat_kode',
-			width: 150,
+			width: 120,	//150,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				allowBlank: false,
@@ -648,9 +648,9 @@ Ext.onReady(function(){
           	})
 		},
 		{
-			header: 'Nama',
+			header: '<div align="center">' + 'Nama Perawatan' + '</div>',
 			dataIndex: 'rawat_nama',
-			width: 250,
+			width: 300,	//250,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				allowBlank: false,
@@ -658,7 +658,7 @@ Ext.onReady(function(){
           	})
 		}, 
 		{
-			header: 'Group 1',
+			header: '<div align="center">' + 'Group 1' + '</div>',
 			dataIndex: 'rawat_group',
 			width: 150,
 			sortable: true,
@@ -671,7 +671,7 @@ Ext.onReady(function(){
 			})
 		},
 		{
-			header: 'Group 2',
+			header: '<div align="center">' + 'Group 2' + '</div>',
 			dataIndex: 'rawat_jenis',
 			width: 150,
 			sortable: true,
@@ -684,18 +684,20 @@ Ext.onReady(function(){
 			})
 		}, 
 		{
-			header: 'Jenis',
+			header: '<div align="center">' + 'Jenis' + '</div>',
 			dataIndex: 'rawat_kategori_nama',
-			width: 150,
+			width: 120,	//150,
 			sortable: true,
 			editable: false
 		}, 
 		{
-			header: 'DU',
+			header: '<div align="center">' + 'DU (%)' + '</div>',
+			align: 'right',
 			dataIndex: 'rawat_du',
-			width: 100,
+			width: 80,	//100,
 			renderer: function(val){
-				return '<span>' + val + ' %</span>';
+//				return '<span>' + val + ' %</span>' + '</div>';
+				return '<span>' + val + ' </span>' + '</div>';
 			},
 			sortable: true,
 			editor: new Ext.form.NumberField({
@@ -708,11 +710,12 @@ Ext.onReady(function(){
 			})
 		}, 
 		{
-			header: 'DM',
+			header: '<div align="center">' + 'DM (%)' + '</div>',
+			align: 'right',
 			dataIndex: 'rawat_dm',
-			width: 100,
+			width: 80,	//100,
 			renderer: function(val){
-				return '<span>' + val + ' %</span>';
+				return '<span>' + val + '</span>';
 			},
 			sortable: true,
 			editor: new Ext.form.NumberField({
@@ -725,9 +728,10 @@ Ext.onReady(function(){
 			})
 		}, 
 		{
-			header: 'Point',
+			header: '<div align="center">' + 'Point' + '</div>',
 			dataIndex: 'rawat_point',
-			width: 100,
+			align: 'right',
+			width: 80,	//100,
 			sortable: true,
 			editor: new Ext.form.NumberField({
 				allowBlank: false,
@@ -739,12 +743,14 @@ Ext.onReady(function(){
 			})
 		}, 
 		{
-			header: 'Harga',
+			header: '<div align="center">' + 'Harga (Rp)' + '</div>',
 			dataIndex: 'rawat_harga',
-			width: 150,
+			align: 'right',
+			width: 100,	//150,
 			sortable: true,
 			renderer: function(val){
-				return '<span>Rp. '+Ext.util.Format.number(val,'0,000')+'</span>';
+//				return '<span>Rp. '+Ext.util.Format.number(val,'0,000')+'</span>';
+				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
 			},
 			editor: new Ext.form.NumberField({
 				allowBlank: false,
@@ -756,7 +762,7 @@ Ext.onReady(function(){
 			})
 		}, 
 		{
-			header: 'Gudang',
+			header: '<div align="center">' + 'Gudang' + '</div>',
 			dataIndex: 'rawat_gudang',
 			width: 150,
 			sortable: true,
@@ -784,9 +790,9 @@ Ext.onReady(function(){
 			})
 		}, 
 		{
-			header: 'Status',
+			header: '<div align="center">' + 'Status' + '</div>',
 			dataIndex: 'rawat_aktif',
-			width: 150,
+			width: 80,	//150,
 			sortable: true,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
@@ -850,7 +856,8 @@ Ext.onReady(function(){
 	perawatanListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'perawatanListEditorGrid',
 		el: 'fp_perawatan',
-		title: 'List Of Perawatan',
+//		title: 'List Of Perawatan',
+		title: 'Daftar Perawatan',
 		autoHeight: true,
 		store: perawatan_DataStore, // DataStore
 		cm: perawatan_ColumnModel, // Nama-nama Columns
@@ -900,7 +907,7 @@ Ext.onReady(function(){
 		            }
 				},
 				render: function(c){
-				Ext.get(this.id).set({qtitle:'Search By'});
+				Ext.get(this.id).set({qtitle:'Search By (Aktif only)'});
 				Ext.get(this.id).set({qtip:'- Kode Baru<br>- Kode Lama<br>- Nama Perawatan<br>- Group 1<br>- Group 2<br>- Jenis'});
 				}
 			},
