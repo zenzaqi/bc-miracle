@@ -2097,7 +2097,7 @@ Ext.onReady(function(){
 	jrawat_nobuktiField= new Ext.form.TextField({
 		id: 'jrawat_nobuktiField',
 		fieldLabel: 'No. Faktur',
-		readOnly:true,
+		readOnly:true
 	//	maxLength: 30,
 	//	anchor: '95%'
 	});
