@@ -20,6 +20,10 @@ class C_tindakan_medis extends Controller {
 		$this->load->plugin('to_excel');
 	}
 	
+	function punya_paket_checking(){
+		$this->m_tindakan_medis->punya_paket_checking();
+	}
+	
 	//set index
 	function index(){
 		$this->load->helper('asset');
