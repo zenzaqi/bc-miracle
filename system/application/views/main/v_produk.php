@@ -175,7 +175,8 @@ Ext.onReady(function(){
 					default:
 						Ext.MessageBox.show({
 						   title: 'Warning',
-						   msg: 'We could\'t not save the produk.',
+//						   msg: 'We could\'t not save the produk.',
+						   msg: 'Data produk tidak bisa disimpan',
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'save',
 						   icon: Ext.MessageBox.WARNING
@@ -236,7 +237,7 @@ Ext.onReady(function(){
 		if(produk_aktifField.getValue()!== null){produk_aktif_create = produk_aktifField.getValue();} 
 
 		Ext.Ajax.request({  
-			waitMsg: 'Please wait...',
+			waitMsg: 'Mohon tunggu...',
 			url: 'index.php?c=c_produk&m=get_action',
 			params: {
 				task: post2db,
@@ -264,12 +265,12 @@ Ext.onReady(function(){
 						satuan_konversi_purge();
 						produk_DataStore.reload();
 						produk_createWindow.hide();
-						Ext.MessageBox.alert('OK','The Produk was updated successfully');
+						Ext.MessageBox.alert('OK','Data produk berhasil disimpan');
 						break;
 					default:
 						Ext.MessageBox.show({
 						   title: 'Warning',
-						   msg: 'We could\'t not '+msg+' the Produk.',
+						   msg: 'Data produk tidak bisa disimpan',
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'save',
 						   icon: Ext.MessageBox.WARNING
@@ -291,7 +292,7 @@ Ext.onReady(function(){
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'Your Form is not valid!.',
+				msg: 'Form anda belum lengkap',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -395,13 +396,13 @@ Ext.onReady(function(){
 	function produk_confirm_delete(){
 		// only one produk is selected here
 		if(produkListEditorGrid.selModel.getCount() == 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', produk_delete);
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', produk_delete);
 		} else if(produkListEditorGrid.selModel.getCount() > 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', produk_delete);
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', produk_delete);
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really delete something you haven\'t selected?',
+				msg: 'Anda belum memilih data yang akan dihapus',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -422,7 +423,7 @@ Ext.onReady(function(){
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really update something you haven\'t selected?',
+				msg: 'Anda belum memilih data yang akan diubah',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -632,20 +633,20 @@ Ext.onReady(function(){
 			hidden: false
 		},*/
 		{
-			header: 'Kode Lama',
+			header: '<div align="center">' + 'Kode Lama' + '</div>',
 			dataIndex: 'produk_kodelama',
-			width: 150,
+			width: 120,	//150,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				allowBlank: false,
 				maxLength: 20
           	}),
-			hidden: true
+			hidden: false
 		},
 		{
-			header: 'Kode Baru',
+			header: '<div align="center">' + 'Kode Baru' + '</div>',
 			dataIndex: 'produk_kode',
-			width: 150,
+			width: 120,	//150,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				allowBlank: false,
@@ -653,9 +654,9 @@ Ext.onReady(function(){
           	})
 		}, 
 		{
-			header: 'Nama',
+			header: '<div align="center">' + 'Nama' + '</div>',
 			dataIndex: 'produk_nama',
-			width: 250,
+			width: 260,	//250,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				allowBlank: false,
@@ -663,9 +664,9 @@ Ext.onReady(function(){
           	})
 		}, 
 		{
-			header: 'Group 1',
+			header: '<div align="center">' + 'Group 1' + '</div>',
 			dataIndex: 'produk_group',
-			width: 150,
+			width: 120, //150,
 			sortable: true,
 			editor: new Ext.form.ComboBox({
 				store: cbo_produk_groupDataStore,
@@ -676,9 +677,9 @@ Ext.onReady(function(){
 			})
 		},
 		{
-			header: 'Group 2',
+			header: '<div align="center">' + 'Group 2' + '</div>',
 			dataIndex: 'produk_jenis',
-			width: 150,
+			width: 120,	//150,
 			sortable: true,
 			editor: new Ext.form.ComboBox({
 				store: cbo_produk_jenis_DataStore,
@@ -689,26 +690,27 @@ Ext.onReady(function(){
 			})
 		}, 
 		{
-			header: 'Jenis',
+			header: '<div align="center">' + 'Jenis' + '</div>',
 			dataIndex: 'produk_kategori_nama',
-			width: 150,
+			width: 120,	//150,
 			sortable: true,
 			readOnly: true
 		}, 
 		{
 			header: 'Satuan',
 			dataIndex: 'produk_satuan',
-			width: 150,
+			width: 60,	//150,
 			sortable: true,
 			readOnly: true
 		}, 
 		{
-			header: 'DU',
+			header: '<div align="center">' + 'DU (%)' + '</div>',
+			align: 'right',
 			dataIndex: 'produk_du',
-			width: 100,
+			width: 60,	//100,
 			sortable: true,
 			renderer: function(val){
-				return '<span>' + val + ' %</span>';
+				return '<span>' + val + '</span>';
 			},
 			editor: new Ext.form.NumberField({
 				allowBlank: false,
@@ -720,12 +722,13 @@ Ext.onReady(function(){
 			})
 		}, 
 		{
-			header: 'DM',
+			header: '<div align="center">' + 'DM (%)' + '</div>',
+			align: 'right',
 			dataIndex: 'produk_dm',
-			width: 100,
+			width: 60,	//100,
 			sortable: true,
 			renderer: function(val){
-				return '<span>' + val + ' %</span>';
+				return '<span>' + val + '</span>';
 			},
 			editor: new Ext.form.NumberField({
 				allowBlank: false,
@@ -737,9 +740,10 @@ Ext.onReady(function(){
 			})
 		}, 
 		{
-			header: 'Point',
+			header: '<div align="center">' + 'Point' + '</div>',
+			align: 'right',
 			dataIndex: 'produk_point',
-			width: 100,
+			width: 60,	//100,
 			sortable: true,
 			editor: new Ext.form.NumberField({
 				allowBlank: false,
@@ -751,9 +755,10 @@ Ext.onReady(function(){
 			})
 		},
 		{
-			header: 'Volume',
+			header: '<div align="center">' + 'Vol' + '</div>',
+			align: 'right',
 			dataIndex: 'produk_volume',
-			width: 150,
+			width: 60,	//150,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				allowBlank: false,
@@ -761,12 +766,13 @@ Ext.onReady(function(){
 			})
 		},
 		{
-			header: 'Harga',
+			header: '<div align="center">' + 'Harga (Rp)' + '</div>',
+			align: 'right',
 			dataIndex: 'produk_harga',
-			width: 150,
+			width: 100,	//150,
 			sortable: true,
 			renderer: function(val){
-				return '<span>Rp. '+Ext.util.Format.number(val,'0,000')+'</span>';
+				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
 			},
 			editor: new Ext.form.NumberField({
 				allowBlank: false,
@@ -778,9 +784,9 @@ Ext.onReady(function(){
 			})
 		}, 
 		{
-			header: 'Status',
+			header: '<div align="center">' + 'Status' + '</div>',
 			dataIndex: 'produk_aktif',
-			width: 150,
+			width: 80,	//150,
 			sortable: true,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
