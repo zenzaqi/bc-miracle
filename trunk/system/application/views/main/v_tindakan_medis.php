@@ -211,6 +211,17 @@ Ext.onReady(function(){
 						});
 						tindakan_medisDataStore.reload();
 						break;
+					case 3:
+						Ext.MessageBox.show({
+						   title: 'Warning',
+						   msg: 'Tidak dilakukan perubahan apapun, karena perawatan pengganti tidak terdapat dalam Kepemilikan Paket.',
+						   buttons: Ext.MessageBox.OK,
+						   animEl: 'save',
+						   width: 250,
+						   icon: Ext.MessageBox.WARNING
+						});
+						tindakan_medisDataStore.reload();
+						break;
 					default:
 						Ext.MessageBox.show({
 						   title: 'Warning',
@@ -687,6 +698,15 @@ Ext.onReady(function(){
 			sortable: true,
 			hidden: true
 		}, 
+		{
+			xtype: 'booleancolumn',
+			header: 'Ambil Paket',
+			dataIndex: 'dtrawat_ambil_paket',
+			width: 100,
+			align: 'center',
+			trueText: 'Yes',
+			falseText: 'No'
+		},
 		{
 			header: 'Creator',
 			dataIndex: 'trawat_creator',
@@ -1246,8 +1266,21 @@ Ext.onReady(function(){
 					dtrawat_cust	: trawat_medis_custidField.getValue()
 					},
 					callback: function(opts, success, response){
-						if(success)
+						if(success){
 							tindakan_medisDataStore.reload();
+							var result = response.responseText;
+							switch(result){
+								default:
+									Ext.MessageBox.show({
+									   title: 'Warning',
+									   msg: result,
+									   buttons: Ext.MessageBox.OK,
+									   animEl: 'save',
+									   icon: Ext.MessageBox.WARNING
+									});
+									break;
+							}
+						}
 					}
 				});
 			}
