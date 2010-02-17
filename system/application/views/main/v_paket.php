@@ -128,7 +128,7 @@ Ext.onReady(function(){
 		if(oGrid_event.record.data.paket_aktif!== null){paket_aktif_update = oGrid_event.record.data.paket_aktif;}
 
 		Ext.Ajax.request({  
-			waitMsg: 'Please wait...',
+			waitMsg: 'Mohon tunggu...',
 			url: 'index.php?c=c_paket&m=get_action',
 			params: {
 				task: "UPDATE",
@@ -155,7 +155,7 @@ Ext.onReady(function(){
 					default:
 						Ext.MessageBox.show({
 						   title: 'Warning',
-						   msg: 'We could\'t not save the paket.',
+						   msg: 'Data paket tidak bisa disimpan',
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'save',
 						   icon: Ext.MessageBox.WARNING
@@ -208,7 +208,7 @@ Ext.onReady(function(){
 		if(paket_aktifField.getValue()!== null){paket_aktif_create = paket_aktifField.getValue();} 
 
 		Ext.Ajax.request({  
-			waitMsg: 'Please wait...',
+			waitMsg: 'Mohon tunggu...',
 			url: 'index.php?c=c_paket&m=get_action',
 			params: {
 				task: post2db,
@@ -231,14 +231,14 @@ Ext.onReady(function(){
 					case 1:
 						paket_isi_produk_purge();
 						paket_isi_perawatan_purge();
-						Ext.MessageBox.alert(post2db+' OK','The Paket was '+msg+' successfully.');
+						Ext.MessageBox.alert(post2db+' OK','Data paket berhasil disimpan');
 						paket_DataStore.reload();
 						paket_createWindow.hide();
 						break;
 					default:
 						Ext.MessageBox.show({
 						   title: 'Warning',
-						   msg: 'We could\'t not '+msg+' the Paket.',
+						   msg: 'Data paket tidak bisa disimpan',
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'save',
 						   icon: Ext.MessageBox.WARNING
@@ -260,7 +260,7 @@ Ext.onReady(function(){
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'Your Form is not valid!.',
+				msg: 'Form anda belum lengkap',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -355,13 +355,13 @@ Ext.onReady(function(){
 	function paket_confirm_delete(){
 		// only one paket is selected here
 		if(paketListEditorGrid.selModel.getCount() == 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', paket_delete);
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', paket_delete);
 		} else if(paketListEditorGrid.selModel.getCount() > 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', paket_delete);
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', paket_delete);
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really delete something you haven\'t selected?',
+				msg: 'Anda belum memilih data yang akan dihapus',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -385,7 +385,7 @@ Ext.onReady(function(){
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really update something you haven\'t selected?',
+				msg: 'Anda belum memilih data yang akan diubah',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -404,7 +404,7 @@ Ext.onReady(function(){
 			}
 			var encoded_array = Ext.encode(prez);
 			Ext.Ajax.request({ 
-				waitMsg: 'Please Wait',
+				waitMsg: 'Mohon tunggu...',
 				url: 'index.php?c=c_paket&m=get_action', 
 				params: { task: "DELETE", ids:  encoded_array }, 
 				success: function(response){
@@ -416,7 +416,7 @@ Ext.onReady(function(){
 						default:
 							Ext.MessageBox.show({
 								title: 'Warning',
-								msg: 'Could not delete the entire selection',
+								msg: 'Data tidak bisa dihapus',
 								buttons: Ext.MessageBox.OK,
 								animEl: 'save',
 								icon: Ext.MessageBox.WARNING
@@ -552,9 +552,9 @@ Ext.onReady(function(){
 			hidden: false
 		},*/
 		{
-			header: 'Kode Lama',
+			header: '<div align="center">' + 'Kode Lama' + '</div>',
 			dataIndex: 'paket_kodelama',
-			width: 150,
+			width: 120,	//150,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				allowBlank: false,
@@ -562,9 +562,9 @@ Ext.onReady(function(){
           	})
 		}, 
 		{
-			header: 'Kode Baru',
+			header: '<div align="center">' + 'Kode Baru' + '</div>',
 			dataIndex: 'paket_kode',
-			width: 150,
+			width: 120,	//150,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				allowBlank: false,
@@ -572,9 +572,9 @@ Ext.onReady(function(){
           	})
 		}, 
 		{
-			header: 'Nama',
+			header: '<div align="center">' + 'Nama' + '</div>',
 			dataIndex: 'paket_nama',
-			width: 250,
+			width: 300,	//250,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				allowBlank: false,
@@ -582,9 +582,9 @@ Ext.onReady(function(){
           	})
 		}, 
 		{
-			header: 'Group 1',
+			header: '<div align="center">' + 'Group 1' + '</div>',
 			dataIndex: 'paket_group',
-			width: 150,
+			width: 120,	//150,
 			sortable: true,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
@@ -598,17 +598,18 @@ Ext.onReady(function(){
             })
 		}, 
 		{
-			header: 'Jenis',
+			header: '<div align="center">' + 'Jenis' + '</div>',
 			dataIndex: 'kategori_nama',
-			width: 150,
+			width: 120,	//150,
 			sortable: true,
 			editable: false,
 			hidden: true
 		}, 
 		{
-			header: 'DU',
+			header: '<div align="center">' + 'DU (%)' + '</div>',
+			align: 'right',
 			dataIndex: 'paket_du',
-			width: 100,
+			width: 60,	//100,
 			sortable: true,
 			renderer: function(val){
 				return '<span>' + val + ' %</span>';
@@ -623,11 +624,12 @@ Ext.onReady(function(){
 			})
 		}, 
 		{
-			header: 'DM',
+			header: '<div align="center">' + 'DM (%)' + '</div>',
+			align: 'right',
 			dataIndex: 'paket_dm',
-			width: 100,
+			width: 60,	//100,
 			renderer: function(val){
-				return '<span>' + val + ' %</span>';
+				return '<span>' + val + '</span>';
 			},
 			sortable: true,
 			editor: new Ext.form.NumberField({
@@ -640,9 +642,10 @@ Ext.onReady(function(){
 			})
 		}, 
 		{
-			header: 'Poin',
+			header: '<div align="center">' + 'Poin' + '</div>',
+			align: 'right',
 			dataIndex: 'paket_point',
-			width: 100,
+			width: 60,	//100,
 			sortable: true,
 			editor: new Ext.form.NumberField({
 				allowBlank: false,
@@ -654,12 +657,13 @@ Ext.onReady(function(){
 			})
 		}, 
 		{
-			header: 'Harga',
+			header: '<div align="center">' + 'Harga (Rp)' + '</div>',
+			align: 'right',
 			dataIndex: 'paket_harga',
-			width: 150,
+			width: 100,	//150,
 			sortable: true,
 			renderer: function(val){
-				return '<span>Rp. '+Ext.util.Format.number(val,'0,000')+'</span>';
+				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
 			},
 			editor: new Ext.form.NumberField({
 				allowBlank: false,
@@ -671,11 +675,12 @@ Ext.onReady(function(){
 			})
 		}, 
 		{
-			header: 'Expired',
+			header: '<div align="center">' + 'Exp. (hari)' + '</div>',
+			align: 'right',
 			dataIndex: 'paket_expired',
-			width: 150,
+			width: 70,	//150,
 			renderer: function(val){
-				return '<span>' + val + ' hari</span>';
+				return '<span>' + val + '</span>';
 			},
 			sortable: true,
 			editor: new Ext.form.NumberField({
@@ -687,9 +692,9 @@ Ext.onReady(function(){
 			})
 		}, 
 		{
-			header: 'Status',
+			header: '<div align="center">' + 'Status' + '</div>',
 			dataIndex: 'paket_aktif',
-			width: 150,
+			width: 80,	//150,
 			sortable: true,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
@@ -753,7 +758,7 @@ Ext.onReady(function(){
 	paketListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'paketListEditorGrid',
 		el: 'fp_paket',
-		title: 'List Of Paket',
+		title: 'Data Paket',
 		autoHeight: true,
 		store: paket_DataStore, // DataStore
 		cm: paket_ColumnModel, // Nama-nama Columns
@@ -762,7 +767,7 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 900,
+	  	width: 1200,	//900,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: paket_DataStore,
