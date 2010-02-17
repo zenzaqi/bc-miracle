@@ -536,7 +536,8 @@ Ext.onReady(function(){
 						detail_pengguna_paket_insert();
 						//detail_pengguna_paket_purge();
 						//detail_jual_paket_insert();
-						Ext.MessageBox.alert(post2db+' OK','The Master_jual_paket was '+msg+' successfully.');
+						//Ext.MessageBox.alert(post2db+' OK','The Master_jual_paket was '+msg+' successfully.');
+						Ext.MessageBox.alert('OK', 'Data penjualan paket berhasil disimpan');
 						//master_jual_paket_DataStore.reload();
 						detail_jual_paket_DataStore.load({params: {master_id:0}});
 						detail_pengguna_paket_DataStore.removeAll();
@@ -545,7 +546,8 @@ Ext.onReady(function(){
 					default:
 						Ext.MessageBox.show({
 						   title: 'Warning',
-						   msg: 'We could\'t not '+msg+' the Master_jual_paket.',
+						   //msg: 'We could\'t not '+msg+' the Master_jual_paket.',
+						   msg: 'Data penjualan paket tidak bisa disimpan',
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'save',
 						   icon: Ext.MessageBox.WARNING
@@ -1737,10 +1739,10 @@ Ext.onReady(function(){
 	/* Identify  jpaket_nobukti Field */
 	jpaket_nobuktiField= new Ext.form.TextField({
 		id: 'jpaket_nobuktiField',
-		fieldLabel: 'No.Faktur',
+		fieldLabel: 'No. Faktur',
 		readOnly:true,
 		maxLength: 30,
-		anchor: '95%'
+//		anchor: '95%'
 	});
 	/* Identify  jpaket_cust Field */
 	jpaket_custField= new Ext.form.ComboBox({
@@ -1773,7 +1775,7 @@ Ext.onReady(function(){
 	jpaket_tanggalField= new Ext.form.DateField({
 		id: 'jpaket_tanggalField',
 		fieldLabel: 'Tanggal',
-		format : 'Y-m-d'
+		format : 'd-m-Y'
 	});
 	/* Identify  jpaket_diskon Field */
 	jpaket_diskonField= new Ext.form.NumberField({
@@ -3236,7 +3238,7 @@ Ext.onReady(function(){
 	detail_jual_paketListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'detail_jual_paketListEditorGrid',
 		el: 'fp_detail_jual_paket',
-		title: 'Detail detail_jual_paket',
+		title: 'Detail Penjualan Paket',
 		height: 250,
 		width: 938,
 		autoScroll: true,
@@ -3538,7 +3540,7 @@ Ext.onReady(function(){
 	detail_pengguna_paketListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'detail_pengguna_paketListEditorGrid',
 		el: 'fp_detail_pengguna_paket',
-		title: 'Detail Pengguna Paket',
+		title: 'Daftar Pengguna Paket',
 		height: 250,
 		width: 938,
 		autoScroll: true,
@@ -4212,7 +4214,7 @@ Ext.onReady(function(){
 	
 	/* Function for retrieve create Window Panel*/ 
 	master_jual_paket_createForm = new Ext.FormPanel({
-		title: 'FORM ADD/EDIT',
+		title: 'Penjualan Paket',
 		labelAlign: 'left',
 		el: 'form_paket_addEdit',
 		bodyStyle:'padding:5px',
@@ -4344,7 +4346,7 @@ Ext.onReady(function(){
 		id: 'jpaket_nobuktiSearchField',
 		fieldLabel: 'No.Faktur',
 		maxLength: 30,
-		anchor: '95%'
+//		anchor: '95%'
 	
 	});
 	/* Identify  jpaket_cust Search Field */
@@ -4359,7 +4361,7 @@ Ext.onReady(function(){
 	jpaket_tanggalSearchField= new Ext.form.DateField({
 		id: 'jpaket_tanggalSearchField',
 		fieldLabel: 'Tanggal',
-		format : 'Y-m-d',
+		format : 'd-m-Y',
 	
 	});
 	/* Identify  jpaket_diskon Search Field */
