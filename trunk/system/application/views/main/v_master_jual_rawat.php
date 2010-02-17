@@ -444,7 +444,7 @@ Ext.onReady(function(){
 		if(oGrid_event.record.data.jrawat_keterangan!== null){jrawat_keterangan_update = oGrid_event.record.data.jrawat_keterangan;}
 
 		Ext.Ajax.request({  
-			waitMsg: 'Please wait...',
+			waitMsg: 'Mohon tunggu...',
 			url: 'index.php?c=c_master_jual_rawat&m=get_action',
 			params: {
 				task: "UPDATE",
@@ -1826,7 +1826,7 @@ Ext.onReady(function(){
 		}, 
 		{
 //			header: 'Member Customer',
-			header: 'No. Member',
+			header: '<div align="center">' + 'No. Member' + '</div>',
 			dataIndex: 'cust_member',
 			width: 80,	//100,
 			sortable: false,
@@ -2096,10 +2096,10 @@ Ext.onReady(function(){
 	/* Identify  jrawat_nobukti Field */
 	jrawat_nobuktiField= new Ext.form.TextField({
 		id: 'jrawat_nobuktiField',
-		fieldLabel: 'No.Faktur',
+		fieldLabel: 'No. Faktur',
 		readOnly:true,
-		maxLength: 30,
-		anchor: '95%'
+	//	maxLength: 30,
+	//	anchor: '95%'
 	});
 	/* Identify  jrawat_cust Field */
 	jrawat_custField= new Ext.form.ComboBox({
@@ -2132,7 +2132,7 @@ Ext.onReady(function(){
 	jrawat_tanggalField= new Ext.form.DateField({
 		id: 'jrawat_tanggalField',
 		fieldLabel: 'Tanggal',
-		format : 'Y-m-d'
+		format : 'd-m-Y'
 	});
 	/* Identify  jrawat_diskon Field */
 	jrawat_diskonField= new Ext.form.NumberField({
@@ -3589,9 +3589,9 @@ Ext.onReady(function(){
 	detail_jual_rawatListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'detail_jual_rawatListEditorGrid',
 		el: 'fp_detail_jual_rawat',
-		title: 'Detail detail_jual_rawat',
+		title: 'Detail Penjualan Perawatan',
 		height: 250,
-		width: 938,
+		width: 940,	//938,
 		autoScroll: true,
 		store: detail_jual_rawat_DataStore, // DataStore
 		colModel: detail_jual_rawat_ColumnModel, // Nama-nama Columns
@@ -3658,7 +3658,7 @@ Ext.onReady(function(){
 			detail_jual_rawat_record=detail_jual_rawat_DataStore.getAt(i);
 			if(detail_jual_rawat_record.data.drawat_rawat!==null&&detail_jual_rawat_record.data.drawat_rawat.drawat_rawat!==""){
 				Ext.Ajax.request({
-					waitMsg: 'Please wait...',
+					waitMsg: 'Mohon tunggu...',
 					url: 'index.php?c=c_master_jual_rawat&m=detail_detail_jual_rawat_insert',
 					params:{
 						drawat_id	: detail_jual_rawat_record.data.drawat_id, 
@@ -4141,7 +4141,8 @@ Ext.onReady(function(){
 	/* Function for retrieve create Window Form */
 	master_jual_rawat_createWindow= new Ext.Window({
 		id: 'master_jual_rawat_createWindow',
-		title: post2db+'Master_jual_rawat',
+//		title: post2db+'Master_jual_rawat',
+		title: post2db+'Penjualan Perawatan',
 		closable:true,
 		closeAction: 'hide',
 		//autoWidth: true,
@@ -4238,7 +4239,7 @@ Ext.onReady(function(){
 	/* Identify  jrawat_nobukti Search Field */
 	jrawat_nobuktiSearchField= new Ext.form.TextField({
 		id: 'jrawat_nobuktiSearchField',
-		fieldLabel: 'No.Faktur',
+		fieldLabel: 'No. Faktur',
 		maxLength: 30,
 		anchor: '95%'
 	
