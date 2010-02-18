@@ -1516,28 +1516,28 @@ Ext.onReady(function(){
 				cell.css = "readonlycell"; // Mengambil Value dari Class di dalam CSS 
 				return value;
 				},
-			hidden: false
+			hidden: true
 		},
 		{
-			header: 'No. Faktur',
+			header: '<div align="center">' + 'No. Faktur' + '</div>',
 			dataIndex: 'jproduk_nobukti',
-			width: 150,
+			width: 80,	//150,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 30
           	})
 		}, 
 		{
-			header: 'Customer',
+			header: '<div align="center">' + 'Customer' + '</div>',
 			dataIndex: 'jproduk_cust',
-			width: 185,
+			width: 200,	//185,
 			sortable: true,
 			readOnly: true
 		}, 
 		{
-			header: 'Tanggal',
+			header: '<div align="center">' + 'Tanggal' + '</div>',
 			dataIndex: 'jproduk_tanggal',
-			width: 150,
+			width: 70,	//150,
 			sortable: true,
 			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
 			editor: new Ext.form.DateField({
@@ -1545,20 +1545,35 @@ Ext.onReady(function(){
 			})
 		}, 
 		{
-			header: 'Jumlah Bayar',
-			dataIndex: 'jproduk_bayar',
-			width: 150,
+		//	header: 'Jumlah Bayar',
+			header: '<div align="center">' + 'Total (Rp)' + '</div>',
+			align: 'right',
+			dataIndex: 'jproduk_total',
+			width: 100,	//150,
 			sortable: true,
 			readOnly: true,
 			renderer: function(val){
-				return '<span> Rp. '+Ext.util.Format.number(val,'0,000')+'</span>';
+				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
 			}
 			
 		},
 		{
-			header: 'Keterangan',
+		//	header: 'Jumlah Bayar',
+			header: '<div align="center">' + 'Total Bayar (Rp)' + '</div>',
+			align: 'right',
+			dataIndex: 'jproduk_bayar',
+			width: 100,	//150,
+			sortable: true,
+			readOnly: true,
+			renderer: function(val){
+				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
+			}
+			
+		},
+		{
+			header: '<div align="center">' + 'Keterangan' + '</div>',
 			dataIndex: 'jproduk_keterangan',
-			width: 150,
+			width: 200,	//150,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 250
@@ -1612,7 +1627,7 @@ Ext.onReady(function(){
 	master_jual_produkListEditorGrid =  new Ext.grid.GridPanel({
 		id: 'master_jual_produkListEditorGrid',
 		el: 'fp_master_jual_produk',
-		title: 'Daftar Master_jual_produk',
+		title: 'Daftar Penjualan Produk',
 		autoHeight: true,
 		store: master_jual_produk_DataStore, // DataStore
 		cm: master_jual_produk_ColumnModel, // Nama-nama Columns
@@ -1622,7 +1637,7 @@ Ext.onReady(function(){
 		//clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 800,
+	  	width: 1200,	//800,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: master_jual_produk_DataStore,
@@ -4209,14 +4224,14 @@ Ext.onReady(function(){
 		el: 'form_produk_addEdit',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
-		width: 950,
+		width: 	940,
 		frame: true,
 		layout: 'fit',
 		items: [master_jual_produk_masterGroup,detail_jual_produkListEditorGrid,master_jual_produk_bayarGroup]
 		,
 		buttons: [
 			{
-				text: '<span style="font-weight:bold">Show List</span>',
+				text: '<span style="font-weight:bold">Lihat Daftar</span>',
 				handler: show_windowGrid
 			},
 			{
@@ -4253,7 +4268,7 @@ Ext.onReady(function(){
 		closable:true,
 		closeAction: 'hide',
 		//autoWidth: true,
-		width:810,
+		width: 1200,	//810,
 		autoHeight: true,
 		x:0,
 		y:0,
