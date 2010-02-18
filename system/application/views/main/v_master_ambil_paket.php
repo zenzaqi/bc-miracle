@@ -857,7 +857,7 @@ Ext.onReady(function(){
 	
 	var history_ambil_paketPanel = new Ext.grid.GridPanel({
 		id: 'history_ambil_paketPanel',
-		title: 'History Pengambilan Paket',
+		title: 'Catatan Pengambilan Paket',
         store: history_ambil_paketStore,
         cm: history_ambil_paketColumnModel,
 		view: new Ext.grid.GroupingView({
