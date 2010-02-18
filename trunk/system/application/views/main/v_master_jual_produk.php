@@ -534,7 +534,8 @@ Ext.onReady(function(){
 					case 1:
 						detail_jual_produk_purge();
 						//detail_jual_produk_insert();
-						Ext.MessageBox.alert(post2db+' OK','The Master_jual_produk was '+msg+' successfully.');
+						//Ext.MessageBox.alert(post2db+' OK','The Master_jual_produk was '+msg+' successfully.');
+						Ext.MessageBox.alert(post2db+' OK','Data penjualan produk berhasil disimpan');
 						//master_jual_produk_DataStore.reload();
 						detail_jual_produk_DataStore.load({params: {master_id:0}});
 						master_jual_produk_createWindow.hide();
@@ -542,7 +543,8 @@ Ext.onReady(function(){
 					default:
 						Ext.MessageBox.show({
 						   title: 'Warning',
-						   msg: 'We could\'t not '+msg+' the Master_jual_produk.',
+						   //msg: 'We could\'t not '+msg+' the Master_jual_produk.',
+						   msg: 'Data penjualan produk tidak bisa disimpan',
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'save',
 						   icon: Ext.MessageBox.WARNING
@@ -569,7 +571,8 @@ Ext.onReady(function(){
 			if(dproduk_produk_id!="ada"){
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Detail Penjualan Produk <br>harus Ada!.',
+					//msg: 'Detail Penjualan Produk <br>harus Ada!.',
+					msg: 'Detail penjualan produk tidak boleh kosong',
 					buttons: Ext.MessageBox.OK,
 					minWidth: 250,
 					animEl: 'save',
@@ -578,7 +581,7 @@ Ext.onReady(function(){
 			}else {
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Form anda belum lengkap!',
+					msg: 'Form anda belum lengkap',
 					buttons: Ext.MessageBox.OK,
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING
@@ -1516,7 +1519,7 @@ Ext.onReady(function(){
 			hidden: false
 		},
 		{
-			header: 'No.Faktur',
+			header: 'No. Faktur',
 			dataIndex: 'jproduk_nobukti',
 			width: 150,
 			sortable: true,
@@ -1777,10 +1780,10 @@ Ext.onReady(function(){
 	/* Identify  jproduk_nobukti Field */
 	jproduk_nobuktiField= new Ext.form.TextField({
 		id: 'jproduk_nobuktiField',
-		fieldLabel: 'No.Faktur',
+		fieldLabel: 'No. Faktur',
 		readOnly:true,
 		maxLength: 30,
-		anchor: '95%'
+		//anchor: '95%'
 	});
 	/* Identify  jproduk_cust Field */
 	jproduk_custField= new Ext.form.ComboBox({
@@ -1813,7 +1816,7 @@ Ext.onReady(function(){
 	jproduk_tanggalField= new Ext.form.DateField({
 		id: 'jproduk_tanggalField',
 		fieldLabel: 'Tanggal',
-		format : 'Y-m-d'
+		format : 'd-m-Y'
 	});
 	/* Identify  jproduk_diskon Field */
 	jproduk_diskonField= new Ext.form.NumberField({
@@ -3396,7 +3399,7 @@ Ext.onReady(function(){
 			})
 		},{
 			align :'Right',
-			header: '<div align="center">' + 'Sub Total Net (Rp)' + '</div>',
+			header: '<div align="center">' + 'Sub Tot Net (Rp)' + '</div>',
 			dataIndex: 'dproduk_subtotal_net',
 			width: 100, //150,
 			sortable: true,
@@ -3410,7 +3413,7 @@ Ext.onReady(function(){
 			width: 40, //150,
 			sortable: true,
 			reaOnly: true
-		},*/{
+		},{
 			align : 'Right',
 			header: '<div align="center">' + 'Konversi Nilai' + '</div>',
 			dataIndex: 'konversi_nilai_temp',
@@ -3418,7 +3421,8 @@ Ext.onReady(function(){
 			allowDecimals: true,
 			width: 80, //100
 			sortable: true
-		}]
+		}*/
+		]
 	);
 	detail_jual_produk_ColumnModel.defaultSortable= true;
 	//eof
@@ -3442,7 +3446,7 @@ Ext.onReady(function(){
 	detail_jual_produkListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'detail_jual_produkListEditorGrid',
 		el: 'fp_detail_jual_produk',
-		title: 'Detail detail_jual_produk',
+		title: 'Detail Penjualan Produk',
 		height: 250,
 		width: 938,
 		autoScroll: true,
@@ -4200,7 +4204,7 @@ Ext.onReady(function(){
 	
 	/* Function for retrieve create Window Panel*/ 
 	master_jual_produk_createForm = new Ext.FormPanel({
-		title: 'FORM ADD/EDIT',
+		title: 'Penjualan Produk',
 		labelAlign: 'left',
 		el: 'form_produk_addEdit',
 		bodyStyle:'padding:5px',
@@ -4244,7 +4248,8 @@ Ext.onReady(function(){
 	/* Function for retrieve create Window Form */
 	master_jual_produk_createWindow= new Ext.Window({
 		id: 'master_jual_produk_createWindow',
-		title: post2db+'Master_jual_produk',
+		//title: post2db+'Master_jual_produk',
+		title: 'Daftar Penjualan Produk',
 		closable:true,
 		closeAction: 'hide',
 		//autoWidth: true,
@@ -4328,9 +4333,9 @@ Ext.onReady(function(){
 	/* Identify  jproduk_nobukti Search Field */
 	jproduk_nobuktiSearchField= new Ext.form.TextField({
 		id: 'jproduk_nobuktiSearchField',
-		fieldLabel: 'No.Faktur',
+		fieldLabel: 'No. Faktur',
 		maxLength: 30,
-		anchor: '95%'
+	//	anchor: '95%'
 	
 	});
 	/* Identify  jproduk_cust Search Field */
@@ -4345,7 +4350,7 @@ Ext.onReady(function(){
 	jproduk_tanggalSearchField= new Ext.form.DateField({
 		id: 'jproduk_tanggalSearchField',
 		fieldLabel: 'Tanggal',
-		format : 'Y-m-d',
+		format : 'd-m-Y',
 	
 	});
 	/* Identify  jproduk_diskon Search Field */

@@ -3197,7 +3197,7 @@ Ext.onReady(function(){
 			})
 		},{
 			align : 'Right',
-			header: '<div align="center">' + 'Sub Total Net (Rp)' + '</div>',
+			header: '<div align="center">' + 'Sub Tot Net (Rp)' + '</div>',
 			dataIndex: 'dpaket_diskon',
 			width: 100, //80,
 			sortable: true,
