@@ -220,7 +220,7 @@ Ext.onReady(function(){
 		dapp_counter_update = oGrid_event.record.data.dapp_counter;
 
 		Ext.Ajax.request({  
-			waitMsg: 'Please wait...',
+			waitMsg: 'Mohon tunggu...',
 			url: 'index.php?c=c_appointment&m=get_action',
 			params: {
 				task: "UPDATE",
@@ -259,7 +259,7 @@ Ext.onReady(function(){
 						Ext.MessageBox.show({
 						   title: 'Warning',
 						   width: 250,
-						   msg: 'Status Tidak Bisa diubah karena tindakan sudah \"selesai\"',
+						   msg: 'Status tidak bisa diubah karena tindakan sudah selesai',
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'save',
 						   icon: Ext.MessageBox.WARNING
@@ -270,7 +270,7 @@ Ext.onReady(function(){
 						Ext.MessageBox.show({
 						   title: 'Warning',
 						   width: 250,
-						   msg: 'Maaf, Tanggal Appointment != hari ini',
+						   msg: 'Tanggal appointment tidak sama dengan hari ini',
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'save',
 						   icon: Ext.MessageBox.WARNING
@@ -344,7 +344,7 @@ Ext.onReady(function(){
 			 
 
 		Ext.Ajax.request({  
-			waitMsg: 'Please wait...',
+			waitMsg: 'Mohon tunggu...',
 			url: 'index.php?c=c_appointment&m=get_action',
 			params: {
 				task: post2db,
@@ -368,14 +368,15 @@ Ext.onReady(function(){
 						appointment_detail_nonmedis_insert();
 //						appointment_detail_medis_purge();
 //						appointment_detail_nonmedis_purge();
-						Ext.MessageBox.alert(post2db+' OK','The Appointment was '+msg+' successfully.');
+						//Ext.MessageBox.alert(post2db+' OK','The Appointment was '+msg+' successfully.');
+						Ext.MessageBox.alert(post2db+' OK','Data appointment berhasil disimpan');
 						//appointment_DataStore.reload();
 						appointment_createWindow.hide();
 						break;
 					case 2:
 						Ext.MessageBox.show({
 						   title: 'Warning',
-						   msg: 'Maaf, Customer sudah Terdaftar.',
+						   msg: 'Customer sudah terdaftar.',
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'save',
 						   icon: Ext.MessageBox.WARNING
@@ -384,7 +385,7 @@ Ext.onReady(function(){
 					case 3:
 						Ext.MessageBox.show({
 						   title: 'Warning',
-						   msg: 'Maaf, No.Telp atau No.HandPhone Customer Baru tidak boleh Kosong.',
+						   msg: 'No telp atau no ponsel customer baru tidak boleh kosong.',
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'save',
 						   icon: Ext.MessageBox.WARNING
@@ -393,7 +394,7 @@ Ext.onReady(function(){
 					default:
 						Ext.MessageBox.show({
 						   title: 'Warning',
-						   msg: 'We could\'t not '+msg+' the Appointment.',
+						   msg: 'Data appointment tidak bisa disimpan',
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'save',
 						   icon: Ext.MessageBox.WARNING
@@ -636,7 +637,7 @@ Ext.onReady(function(){
 			}
 			var encoded_array = Ext.encode(prez);
 			Ext.Ajax.request({ 
-				waitMsg: 'Please Wait',
+				waitMsg: 'Mohon tunggu...',
 				url: 'index.php?c=c_appointment&m=get_action', 
 				params: { task: "DELETE", ids:  encoded_array }, 
 				success: function(response){
@@ -807,20 +808,20 @@ Ext.onReady(function(){
 	appointment_ColumnModel = new Ext.grid.ColumnModel(
 		[
 		{
-			header: 'Tgl App',
+			header: '<div align="center">' + 'Tgl App' + '</div>',
 			dataIndex: 'dapp_tglreservasi',
 			width: 70,
 			sortable: false,
 			hidden: false,
-			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
+			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
 			editor: new Ext.form.DateField({
-				format: 'Y-m-d'
+				format: 'd-m-Y'
 			})
 		}, 
 		{
-			header: 'Jam App',
+			header: '<div align="center">' + 'Jam App' + '</div>',
 			dataIndex: 'dapp_jamreservasi',
-			width: 60,
+			width: 55,	//60,
 			defaultSortable: false,
 			editor: new Ext.form.TimeField({
 				format: 'H:i:s',
@@ -830,7 +831,7 @@ Ext.onReady(function(){
 			})
 		}, 
 		{
-			header: 'Perawatan',
+			header: '<div align="center">' + 'Perawatan' + '</div>',
 			dataIndex: 'rawat_nama',
 			width: 210,
 			sortable: false,
@@ -846,7 +847,7 @@ Ext.onReady(function(){
 			}
 		}, 
 		{
-			header: 'No.Customer',
+			header: '<div align="center">' + 'No. Cust' + '</div>',
 			dataIndex: 'cust_no',
 			width: 75,
 			sortable: false,
@@ -860,6 +861,7 @@ Ext.onReady(function(){
 			renderer: disable_color
 		}, 
 		{
+			//header: '<div align="center">' + 'Dokter' + '</div>',
 			header: 'Dokter',
 			dataIndex: 'dokter_username',
 			width: 70,
@@ -877,7 +879,7 @@ Ext.onReady(function(){
 			})
 		}, 
 		{
-			header: 'Therapist',
+			header: '<div align="center">' + 'Therapist' + '</div>',
 			dataIndex: 'terapis_username',
 			width: 140,
 			sortable: false,
@@ -904,7 +906,7 @@ Ext.onReady(function(){
           	})
 		}, 
 		{
-			header: 'Status',
+			header: '<div align="center">' + 'Status' + '</div>',
 			dataIndex: 'dapp_status',
 			width: 75,
 			sortable: false,
@@ -924,7 +926,7 @@ Ext.onReady(function(){
             renderer: ch_status
 		}, 
 		{
-			header: 'Jam Dtg',
+			header: '<div align="center">' + 'Jam Dtg' + '</div>',
 			dataIndex: 'dapp_jamdatang',
 			width: 55,
 			sortable: false,
@@ -933,7 +935,7 @@ Ext.onReady(function(){
           	})
 		}, 
 		{
-			header: 'Keterangan',
+			header: '<div align="center">' + 'Keterangan' + '</div>',
 			dataIndex: 'dapp_keterangan',
 			width: 260,
 			sortable: false,
@@ -1035,7 +1037,7 @@ Ext.onReady(function(){
 	tbar_dokter_tglField= new Ext.form.DateField({
 		id: 'tbar_dokter_tglField',
 		fieldLabel: 'Tanggal Reservasi',
-		format : 'Y-m-d',
+		format : 'd-m-Y',
 		emptyText: 'Tgl App',
 		ref: '../appDokterTgl'
 	});
@@ -1043,7 +1045,7 @@ Ext.onReady(function(){
 	tbar_nonmedis_tglField= new Ext.form.DateField({
 		id: 'tbar_nonmedis_tglField',
 		fieldLabel: 'Tanggal Reservasi',
-		format : 'Y-m-d',
+		format : 'd-m-Y',
 		emptyText: 'Tgl App',
 		hidden:true,
 		ref: '../appNonMedisTgl'
@@ -1053,7 +1055,7 @@ Ext.onReady(function(){
 	appointmentListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'appointmentListEditorGrid',
 		el: 'fp_appointment',
-		title: 'List Of Appointment',
+		title: 'Daftar Appointment',
 		autoHeight: true,
 		store: appointment_DataStore, // DataStore
 		cm: appointment_ColumnModel, // Nama-nama Columns
@@ -1241,7 +1243,7 @@ Ext.onReady(function(){
 			start: 0,
 			limit: pageS,
 			jenis_rawat: tbar_jenis_rawatField.getValue(),
-			tgl_app: tbar_nonmedis_tglField.getValue().format('Y-m-d')
+			tgl_app: tbar_nonmedis_tglField.getValue().format('d-m-Y')
 		}});
 	});
      
@@ -1352,7 +1354,7 @@ Ext.onReady(function(){
 	app_tanggalField= new Ext.form.DateField({
 		id: 'app_tanggalField',
 		fieldLabel: 'Tanggal Reservasi',
-		format : 'Y-m-d',
+		format : 'd-m-Y',
 	});
 	/* Identify  app_cara Field */
 	app_caraField= new Ext.form.ComboBox({
@@ -1673,7 +1675,7 @@ Ext.onReady(function(){
 	});*/
 
 	var combo_dapp_tgl_medis=new Ext.form.DateField({
-		format: 'Y-m-d'
+		format: 'd-m-Y'
 	});
 	/*combo_dapp_tgl_medis.on('select', function(){
 		combo_dapp_tgl_medis.setValue(combo_dapp_tgl_medis.getValue().format('Y-m-d'));
@@ -1709,7 +1711,7 @@ Ext.onReady(function(){
 			dataIndex: 'dapp_medis_tglreservasi',
 			width: 100,
 			sortable: true,
-			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
+			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
 			editor: combo_dapp_tgl_medis
 		},
 		{
@@ -2039,7 +2041,7 @@ Ext.onReady(function(){
 	});*/
 
 	var combo_dapp_tgl_nonmedis=new Ext.form.DateField({
-		format: 'Y-m-d'
+		format: 'd-m-Y'
 	});
 	combo_dapp_tgl_nonmedis.on('select', function(){
 		//combo_dapp_tgl_nonmedis.setValue(combo_dapp_tgl_nonmedis.getValue().format('Y-m-d'));
