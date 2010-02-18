@@ -854,7 +854,7 @@ Ext.onReady(function(){
 			renderer: disable_color
 		}, 
 		{
-			header: 'Customer',
+			header: '<div align="center">' + 'Customer' + '</div>',
 			dataIndex: 'cust_nama',
 			width: 190,
 			sortable: false,
