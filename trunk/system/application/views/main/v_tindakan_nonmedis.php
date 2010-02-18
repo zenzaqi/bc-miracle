@@ -1029,7 +1029,7 @@ Ext.onReady(function(){
 	var combo_dtrawat_perawatan=new Ext.form.ComboBox({
 			store: trawat_nonmedis_perawatanDataStore,
 			mode: 'remote',
-			typeAhead: true,
+			typeAhead: false,
 			displayField: 'perawatan_display',
 			valueField: 'perawatan_value',
 			loadingText: 'Searching...',
