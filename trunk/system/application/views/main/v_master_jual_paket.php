@@ -1576,7 +1576,7 @@ Ext.onReady(function(){
 	master_jual_paketListEditorGrid =  new Ext.grid.GridPanel({
 		id: 'master_jual_paketListEditorGrid',
 		el: 'fp_master_jual_paket',
-		title: 'List Of Master_jual_paket',
+		title: 'Daftar Penjualan Paket',
 		autoHeight: true,
 		store: master_jual_paket_DataStore, // DataStore
 		cm: master_jual_paket_ColumnModel, // Nama-nama Columns
@@ -4227,7 +4227,7 @@ Ext.onReady(function(){
 		,
 		buttons: [
 			{
-				text: '<span style="font-weight:bold">Show List</span>',
+				text: '<span style="font-weight:bold">Lihat Daftar</span>',
 				handler: show_windowGrid
 			},
 			{
@@ -4260,7 +4260,8 @@ Ext.onReady(function(){
 	/* Function for retrieve create Window Form */
 	master_jual_paket_createWindow= new Ext.Window({
 		id: 'master_jual_paket_createWindow',
-		title: post2db+'Master_jual_paket',
+		//title: post2db+'Master_jual_paket',
+		title: 'Daftar Penjualan Paket',
 		closable:true,
 		closeAction: 'hide',
 		//autoWidth: true,
