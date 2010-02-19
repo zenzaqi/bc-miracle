@@ -774,7 +774,8 @@ Ext.onReady(function(){
 					case 1:
 						//detail_jual_rawat_purge();
 						detail_jual_rawat_insert();
-						Ext.MessageBox.alert(post2db+' OK','The Master_jual_rawat was '+msg+' successfully.');
+						//Ext.MessageBox.alert(post2db+' OK','The Master_jual_rawat was '+msg+' successfully.');
+						Ext.MessageBox.alert(post2db+' OK','Data penjualan perawatan berhasil disimpan');
 						master_jual_rawat_DataStore.reload();
 						detail_jual_rawat_DataStore.load({params: {master_id:0}});
 						master_jual_rawat_createWindow.hide();
