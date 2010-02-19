@@ -138,7 +138,8 @@ class M_master_jual_rawat extends Model{
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 				$query .= " (jrawat_nobukti LIKE '%".addslashes($filter)."%' OR cust_no LIKE '%".addslashes($filter)."%' OR cust_nama LIKE '%".addslashes($filter)."%' OR cust_member LIKE '%".addslashes($filter)."%')";
 			}
-			$query.=" AND jrawat_date_create LIKE '$dt_now%' ORDER BY jrawat_date_create DESC";
+//			$query.=" AND jrawat_date_create LIKE '$dt_now%' ORDER BY jrawat_date_create DESC";
+			$query.=" AND jrawat_date_create LIKE '$dt_now%' AND (jrawat_bayar is null OR jrawat_bayar = 0) ORDER BY jrawat_date_create DESC";
 			
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
