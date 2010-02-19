@@ -414,12 +414,12 @@ Ext.onReady(function(){
 				cell.css = "readonlycell"; // Mengambil Value dari Class di dalam CSS 
 				return value;
 				},
-			hidden: false
+			hidden: true
 		},
 		{
-			header: 'Kwitansi No',
+			header: 'No. Kuitansi',
 			dataIndex: 'kwitansi_no',
-			width: 150,
+			width: 80,	//150,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 20
@@ -540,7 +540,7 @@ Ext.onReady(function(){
 	cetak_kwitansiListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'cetak_kwitansiListEditorGrid',
 		el: 'fp_cetak_kwitansi',
-		title: 'List Of Cetak_kwitansi',
+		title: 'Daftar Cetak Kuitansi',
 		autoHeight: true,
 		store: cetak_kwitansi_DataStore, // DataStore
 		cm: cetak_kwitansi_ColumnModel, // Nama-nama Columns
