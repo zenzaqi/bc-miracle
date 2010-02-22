@@ -671,14 +671,14 @@ Ext.onReady(function(){
 	/* Identify  kwitansi_no Field */
 	kwitansi_noField= new Ext.form.TextField({
 		id: 'kwitansi_noField',
-		fieldLabel: 'Kwitansi No',
+		fieldLabel: 'No Kuitansi',
 		maxLength: 20,
 		anchor: '95%'
 	});
 	/* Identify  kwitansi_cust Field */
 	kwitansi_custField= new Ext.form.NumberField({
 		id: 'kwitansi_custField',
-		fieldLabel: 'Kwitansi Cust',
+		fieldLabel: 'Customer',
 		allowNegatife : false,
 		blankText: '0',
 		allowDecimals: false,
@@ -688,7 +688,7 @@ Ext.onReady(function(){
 	/* Identify  kwitansi_ref Field */
 	kwitansi_refField= new Ext.form.NumberField({
 		id: 'kwitansi_refField',
-		fieldLabel: 'Kwitansi Ref',
+		fieldLabel: 'Ref.',
 		allowNegatife : false,
 		blankText: '0',
 		allowDecimals: false,
@@ -698,7 +698,7 @@ Ext.onReady(function(){
 	/* Identify  kwitansi_nilai Field */
 	kwitansi_nilaiField= new Ext.form.NumberField({
 		id: 'kwitansi_nilaiField',
-		fieldLabel: 'Kwitansi Nilai',
+		fieldLabel: 'Nilai (Rp)',
 		allowNegatife : false,
 		blankText: '0',
 		allowDecimals: true,
@@ -708,14 +708,14 @@ Ext.onReady(function(){
 	/* Identify  kwitansi_keterangan Field */
 	kwitansi_keteranganField= new Ext.form.TextArea({
 		id: 'kwitansi_keteranganField',
-		fieldLabel: 'Kwitansi Keterangan',
+		fieldLabel: 'Keterangan',
 		maxLength: 500,
 		anchor: '95%'
 	});
 	/* Identify  kwitansi_status Field */
 	kwitansi_statusField= new Ext.form.ComboBox({
 		id: 'kwitansi_statusField',
-		fieldLabel: 'Kwitansi Status',
+		fieldLabel: 'Status',
 		store:new Ext.data.SimpleStore({
 			fields:['kwitansi_status_value', 'kwitansi_status_display'],
 			data:[['aktif','aktif'],['hapus','hapus'],['habis','habis']]
@@ -728,7 +728,7 @@ Ext.onReady(function(){
 	});
   	/*Fieldset Master*/
 	cetak_kwitansi_masterGroup = new Ext.form.FieldSet({
-		title: 'Master',
+		title: 'Info Kuitansi',
 		autoHeight: true,
 		collapsible: true,
 		layout:'column',
@@ -1047,7 +1047,7 @@ Ext.onReady(function(){
 	/* Function for retrieve create Window Form */
 	cetak_kwitansi_createWindow= new Ext.Window({
 		id: 'cetak_kwitansi_createWindow',
-		title: post2db+'Cetak_kwitansi',
+		title: post2db+'Cetak Kuitansi',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,

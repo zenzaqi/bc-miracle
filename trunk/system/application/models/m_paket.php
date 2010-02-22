@@ -274,6 +274,7 @@ FROM ((`paket` INNER JOIN `produk_group` ON `paket`.`paket_group`=`produk_group`
 		if ($filter<>""){
 			$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 			$query .= " (paket_kode LIKE '%".addslashes($filter)."%' OR paket_kodelama LIKE '%".addslashes($filter)."%' OR paket_nama LIKE '%".addslashes($filter)."%' OR group_nama LIKE '%".addslashes($filter)."%' OR kategori_nama LIKE '%".addslashes($filter)."%')";
+			$query .= " AND paket_aktif = 'Aktif'"; // by hendri, simple search khusus aktif only
 		}
 		
 		$result = $this->db->query($query);
