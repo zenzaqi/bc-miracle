@@ -807,7 +807,7 @@ Ext.onReady(function(){
 	
 	history_ambil_paketColumnModel = new Ext.grid.ColumnModel(
 		[{
-			header: '<div align="center">' + 'No. Faktur' + '</div>',
+			header: 'No. Faktur',
 			dataIndex: 'jpaket_nobukti',
 			width: 80,	//90
 		},{
