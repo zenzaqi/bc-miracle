@@ -1,0 +1,15 @@
+@charset "utf-8";
+.Header {
+	text-align: left;
+	background-color: #BFEBFF;
+	padding-left: 20px;
+	font-size: 30px;
+	font-weight: bold;
+}
+body {
+	margin-left: 20px;
+	font-size: 18px;
+}
+a {
+	text-decoration: none;
+}
