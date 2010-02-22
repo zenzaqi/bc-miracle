@@ -3456,10 +3456,9 @@ Ext.onReady(function(){
 		id: ''
 	},[
 	/* dataIndex => insert intoPaket_ColumnModel, Mapping => for initiate table column */ 
-			{name: 'sjpaket_id', type: 'int', mapping: 'sjpaket_id'}, 
-			{name: 'sjpaket_master', type: 'int', mapping: 'sjpaket_master'}, 
-			{name: 'sjpaket_nobukti', type: 'string', mapping: 'sjpaket_nobukti'},
-			{name: 'sjpaket_cust', type: 'int', mapping: 'sjpaket_cust'}
+			{name: 'ppaket_id', type: 'int', mapping: 'ppaket_id'}, 
+			{name: 'ppaket_master', type: 'int', mapping: 'ppaket_master'}, 
+			{name: 'ppaket_cust', type: 'int', mapping: 'ppaket_cust'}
 	]);
 	//eof
 	
@@ -3480,7 +3479,7 @@ Ext.onReady(function(){
 			method: 'POST'
 		}),baseParams: {master_id: jpaket_idField.getValue(), start: 0, limit: pageS},
 		reader: detail_pengguna_paket_reader,
-		sortInfo:{field: 'sjpaket_id', direction: "ASC"}
+		sortInfo:{field: 'ppaket_id', direction: "ASC"}
 	});
 	/* End of Function */
 	
@@ -3518,7 +3517,7 @@ Ext.onReady(function(){
 		[
 		{
 			header: 'Customer Lain',
-			dataIndex: 'sjpaket_cust',
+			dataIndex: 'ppaket_cust',
 			width: 298,
 			sortable: true,
 			editor: combo_pengguna_paket,
@@ -3526,7 +3525,7 @@ Ext.onReady(function(){
 		}/*,
 		{
 			header: 'Customer Lain',
-			dataIndex: 'sjpaket_cust',
+			dataIndex: 'ppaket_cust',
 			width: 298,
 			sortable: true,
 			editor: combo_pengguna_paket,
@@ -3601,13 +3600,13 @@ Ext.onReady(function(){
 	function detail_pengguna_paket_insert(){
 		for(i=0;i<detail_pengguna_paket_DataStore.getCount();i++){
 			detail_pengguna_paket_record=detail_pengguna_paket_DataStore.getAt(i);
-			if(detail_pengguna_paket_record.data.sjpaket_cust!==null&&detail_pengguna_paket_record.data.sjpaket_cust!==""){
+			if(detail_pengguna_paket_record.data.ppaket_cust!==null&&detail_pengguna_paket_record.data.ppaket_cust!==""){
 				Ext.Ajax.request({
 					waitMsg: 'Mohon  Tunggu...',
 					url: 'index.php?c=c_master_jual_paket&m=detail_pengguna_paket_insert',
 					params:{
-						sjpaket_master	: eval(jpaket_idField.getValue()), 
-						sjpaket_cust	: detail_pengguna_paket_record.data.sjpaket_cust
+						ppaket_master	: eval(jpaket_idField.getValue()), 
+						ppaket_cust	: detail_pengguna_paket_record.data.ppaket_cust
 					},
 					timeout: 60000,
 					success: function(response){							

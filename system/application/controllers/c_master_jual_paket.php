@@ -35,9 +35,9 @@ class C_master_jual_paket extends Controller {
 	}
 	
 	function detail_pengguna_paket_insert(){
-		$sjpaket_master=trim(@$_POST["sjpaket_master"]);
-		$sjpaket_cust=trim(@$_POST["sjpaket_cust"]);
-		$result=$this->m_master_jual_paket->detail_pengguna_paket_insert($sjpaket_master, $sjpaket_cust);
+		$ppaket_master=trim(@$_POST["ppaket_master"]);
+		$ppaket_cust=trim(@$_POST["ppaket_cust"]);
+		$result=$this->m_master_jual_paket->detail_pengguna_paket_insert($ppaket_master, $ppaket_cust);
 		echo $result;
 	}
 	

@@ -168,6 +168,8 @@ Ext.onReady(function(){
 		dtrawat_dokter_update = oGrid_event.record.data.dtrawat_petugas1;
 		dtrawat_dokter_id_update = oGrid_event.record.data.dtrawat_petugas1_id;
 		dtrawat_ambil_paket_update = oGrid_event.record.data.dtrawat_ambil_paket;
+		dpaket_id_update = oGrid_event.record.data.dpaket_id;
+		rpaket_perawatan_update = oGrid_event.record.data.rpaket_perawatan;
 
 		Ext.Ajax.request({  
 			waitMsg: 'Please wait...',
@@ -191,12 +193,14 @@ Ext.onReady(function(){
 				dtrawat_dapp	: dtrawat_dapp_update,
 				dtrawat_dokter : dtrawat_dokter_update,
 				dtrawat_dokter_id : dtrawat_dokter_id_update,
-				dtrawat_ambil_paket	: dtrawat_ambil_paket_update
+				dtrawat_ambil_paket	: dtrawat_ambil_paket_update,
+				dpaket_id	: dpaket_id_update,
+				rpaket_perawatan	: rpaket_perawatan_update
 			}, 
 			success: function(response){							
 				var result=eval(response.responseText);
 				switch(result){
-					case 1:
+					/*case 1:
 						tindakan_medisDataStore.commitChanges();
 						tindakan_medisDataStore.reload();
 						trawat_medis_perawatanDataStore.reload();
@@ -221,15 +225,18 @@ Ext.onReady(function(){
 						   icon: Ext.MessageBox.WARNING
 						});
 						tindakan_medisDataStore.reload();
-						break;
+						break;*/
 					default:
-						Ext.MessageBox.show({
+						tindakan_medisDataStore.commitChanges();
+						tindakan_medisDataStore.reload();
+						trawat_medis_perawatanDataStore.reload();
+						/*Ext.MessageBox.show({
 						   title: 'Warning',
 						   msg: 'We could\'t not save the tindakan.',
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'save',
 						   icon: Ext.MessageBox.WARNING
-						});
+						});*/
 						break;
 				}
 			},
@@ -506,7 +513,10 @@ Ext.onReady(function(){
 			{name: 'perawatan_dm', type: 'int', mapping: 'rawat_dm'},
 			{name: 'cust_member', type: 'string', mapping: 'cust_member'},
 			{name: 'dtrawat_keterangan', type: 'string', mapping: 'dtrawat_keterangan'},
-			{name: 'dtrawat_ambil_paket', type: 'string', mapping: 'dtrawat_ambil_paket'}
+			{name: 'dtrawat_ambil_paket', type: 'string', mapping: 'dtrawat_ambil_paket'},
+			{name: 'cust_punya_paket', type: 'string', mapping: 'cust_punya_paket'},
+			{name: 'dpaket_id', type: 'int', mapping: 'dpaket_id'},
+			{name: 'rpaket_perawatan', type: 'int', mapping: 'rpaket_perawatan'}
 		])/*,
 		sortInfo:{field: 'dtrawat_id', direction: "DESC"}*/
 	});
@@ -601,7 +611,7 @@ Ext.onReady(function(){
 			header: '<div align="center">' + 'No. Cust' + '</div>', //'No. Customer',
 			readOnly: true,
 			dataIndex: 'trawat_cust_no',
-			width: 70,	//75,
+			width: 65,	//75,
 			renderer: function(value, cell){
 				cell.css = "readonlycell"; // Mengambil Value dari Class di dalam CSS 
 				return value;
@@ -611,7 +621,7 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Customer' + '</div>',
 			dataIndex: 'trawat_cust',
-			width: 200,	//210,
+			width: 185,	//210,
 			sortable: true/*,
 			editor: new Ext.form.NumberField({
 				allowBlank: false,
@@ -625,7 +635,7 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Perawatan' + '</div>',
 			dataIndex: 'dtrawat_perawatan',
-			width: 300,	//210,
+			width: 185,	//210,
 			sortable: true,
 			editor: new Ext.form.ComboBox({
 				store: trawat_medis_perawatanDataStore,
@@ -658,13 +668,13 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Jam App' + '</div>',
 			dataIndex: 'dtrawat_jam',
-			width: 60,
+			width: 55,
 			sortable: true
 		}, 
 		{
 			header: '<div align="center">' + 'Status' + '</div>',
 			dataIndex: 'dtrawat_status',
-			width: 80,
+			width: 60,
 			sortable: true,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
@@ -702,10 +712,19 @@ Ext.onReady(function(){
 			xtype: 'booleancolumn',
 			header: 'Ambil Paket',
 			dataIndex: 'dtrawat_ambil_paket',
-			width: 100,
+			width: 65,
 			align: 'center',
 			trueText: 'Yes',
-			falseText: 'No'
+			falseText: 'No',
+			editor: {
+                xtype: 'checkbox'
+            }
+		},
+		{
+			header: '<div align="center">' + 'Paket' + '</div>',
+			dataIndex: 'cust_punya_paket',
+			width: 55,
+			sortable: false
 		},
 		{
 			header: 'Creator',
@@ -776,7 +795,7 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 940,
+	  	width: 970,
 		bbar: new Ext.PagingToolbar({
 			//pageSize: pageS,
 			disabled:true,
@@ -1107,6 +1126,7 @@ Ext.onReady(function(){
 	var checkColumn = new Ext.grid.CheckColumn({
 		header: 'Ambil Paket',
 		dataIndex: 'dtrawat_ambil_paket',
+		hidden: true,
 		width: 75
 	});
 	
@@ -1268,7 +1288,7 @@ Ext.onReady(function(){
 					callback: function(opts, success, response){
 						if(success){
 							tindakan_medisDataStore.reload();
-							var result = response.responseText;
+							/*var result = response.responseText;
 							switch(result){
 								default:
 									Ext.MessageBox.show({
@@ -1276,10 +1296,10 @@ Ext.onReady(function(){
 									   msg: result,
 									   buttons: Ext.MessageBox.OK,
 									   animEl: 'save',
-									   icon: Ext.MessageBox.WARNING
+									   icon: Ext.MessageBox.INFO
 									});
 									break;
-							}
+							}*/
 						}
 					}
 				});

@@ -1401,6 +1401,7 @@ Ext.onReady(function(){
 			master_cara_bayarTabPanel.setActiveTab(0);
 			post2db='UPDATE';
 			//detail_jual_rawat_DataStore.load({params : {master_id : eval(get_pk_id()), start:0, limit:pageS}});
+			detail_ambil_paketDataStore.load({params: {master_id : master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_cust_id'), start:0, limit:pageS}});
 			detail_jual_rawat_DataStore.load({params : {master_id : master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_id'), start:0, limit:pageS},callback:function(opts, success, response){if(success)master_jual_rawat_set_form();}});
 			//master_jual_rawat_set_form();
 			msg='updated';
@@ -1498,7 +1499,8 @@ Ext.onReady(function(){
 			{name: 'jrawat_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'jrawat_date_create'}, 
 			{name: 'jrawat_update', type: 'string', mapping: 'jrawat_update'}, 
 			{name: 'jrawat_date_update', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'jrawat_date_update'}, 
-			{name: 'jrawat_revised', type: 'int', mapping: 'jrawat_revised'} 
+			{name: 'jrawat_revised', type: 'int', mapping: 'jrawat_revised'},
+			{name: 'keterangan_paket', type: 'string', mapping: 'keterangan_paket'}
 		]),
 		sortInfo:{field: 'jrawat_id', direction: "DESC"}
 	});
@@ -1867,6 +1869,11 @@ Ext.onReady(function(){
 			editor: new Ext.form.TextField({
 				maxLength: 250
           	})
+		}, 
+		{
+			header: '<div align="center">' + 'Paket' + '</div>',
+			dataIndex: 'keterangan_paket',
+			width: 80
 		}, 
 		{
 			header: 'Creator',
@@ -4106,6 +4113,105 @@ Ext.onReady(function(){
 		});	// load DataStore
 	}
 	
+	/* START Detail Pengambilan Paket */
+	// Function for json reader of detail
+	var detail_ambil_paket_reader=new Ext.data.JsonReader({
+		root: 'results',
+		totalProperty: 'total',
+		id: ''
+	},[
+	/* dataIndex => insert intopeprodukan_ColumnModel, Mapping => for initiate table column */ 
+			{name: 'jpaket_nobukti', type: 'string', mapping: 'jpaket_nobukti'}, 
+			{name: 'paket_nama', type: 'string', mapping: 'paket_nama'}, 
+			{name: 'rawat_nama', type: 'string', mapping: 'rawat_nama'}, 
+			{name: 'hapaket_jumlah', type: 'int', mapping: 'hapaket_jumlah'}, 
+			{name: 'cust_nama', type: 'string', mapping: 'cust_nama'}
+	]);
+	//eof
+	
+	
+	//function for json writer of detail
+	var detail_ambil_paket_writer = new Ext.data.JsonWriter({
+		encode: true,
+		writeAllFields: false
+	});
+	//eof
+	
+	/* Function for Retrieve DataStore of detail*/
+	detail_ambil_paketDataStore = new Ext.data.Store({
+		id: 'detail_ambil_paketDataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_master_jual_rawat&m=detail_ambil_paket_list', 
+			method: 'POST'
+		}),baseParams: {start: 0, limit: pageS},
+		reader: detail_ambil_paket_reader,
+		sortInfo:{field: 'jpaket_nobukti', direction: "ASC"}
+	});
+	/* End of Function */
+	
+	detail_ambil_paketColumnModel = new Ext.grid.ColumnModel(
+		[
+		{
+			header: '<div align="center">' + 'No.Faktur' + '</div>',
+			dataIndex: 'jpaket_nobukti',
+			width: 400,	//250,
+			sortable: true
+		},
+		{
+			header: '<div align="center">' + 'Nama Paket' + '</div>',
+			dataIndex: 'paket_nama',
+			width: 60,	//80,
+			sortable: true
+		},
+		{
+			header: '<div align="center">' + 'Perawatan' + '</div>',
+			dataIndex: 'rawat_nama',
+			width: 100,
+			sortable: true
+		},
+		{
+			header: '<div align="center">' + 'Jumlah' + '</div>',
+			dataIndex: 'hapaket_jumlah',
+			width: 100,
+			sortable: true
+		},
+		{
+			//align: 'Right',
+			header: '<div align="center">' + 'Customer' + '</div>',
+			dataIndex: 'cust_nama',
+			width: 100, //150,
+			sortable: true,
+			reaOnly: true
+		}]
+	);
+	detail_ambil_paketColumnModel.defaultSortable= true;
+	
+	//declaration of detail list editor grid
+	detail_ambil_paketListGrid =  new Ext.grid.GridPanel({
+		id: 'detail_ambil_paketListGrid',
+		el: 'fp_detail_ambil_paket',
+		title: 'Detail Pengambilan Paket',
+		height: 250,
+		width: 940,	//938,
+		autoScroll: true,
+		store: detail_ambil_paketDataStore, // DataStore
+		colModel: detail_ambil_paketColumnModel, // Nama-nama Columns
+		enableColLock:false,
+		region: 'center',
+        margins: '0 5 5 5',
+		//plugins: [editor_detail_jual_rawat],
+		frame: true,
+		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
+		viewConfig: { forceFit:true},
+		bbar: new Ext.PagingToolbar({
+			pageSize: pageS,
+			store: detail_ambil_paketDataStore,
+			displayInfo: true
+		})
+	});
+	//eof
+	/* END Detail Pengambilan Paket */
+	
 	/* Function for retrieve create Window Panel*/ 
 	master_jual_rawat_createForm = new Ext.FormPanel({
 		labelAlign: 'left',
@@ -4115,7 +4221,7 @@ Ext.onReady(function(){
 		width: 950,
 		//plain: true,
 		//layout: 'fit',
-		items: [master_jual_rawat_masterGroup,detail_jual_rawatListEditorGrid,master_jual_rawat_bayarGroup]
+		items: [master_jual_rawat_masterGroup,detail_jual_rawatListEditorGrid,detail_ambil_paketListGrid,master_jual_rawat_bayarGroup]
 		,
 		buttons: [
 			{
@@ -4540,6 +4646,7 @@ Ext.onReady(function(){
 	<div class="col">
         <div id="fp_master_jual_rawat"></div>
          <div id="fp_detail_jual_rawat"></div>
+		 <div id="fp_detail_ambil_paket"></div>
 		<div id="elwindow_master_jual_rawat_create"></div>
         <div id="elwindow_master_jual_rawat_search"></div>
 <!--        <div id="form_rawat_addEdit"></div>-->

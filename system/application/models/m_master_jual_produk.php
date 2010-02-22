@@ -18,6 +18,93 @@ class M_master_jual_produk extends Model{
 			parent::Model();
 		}
 		
+	function get_produk_list($query,$start,$end){
+		$rs_rows=0;
+		if(is_numeric($query)==true){
+			$sql_dproduk="SELECT dproduk_produk FROM detail_jual_produk WHERE dproduk_master='$query'";
+			$rs=$this->db->query($sql_dproduk);
+			$rs_rows=$rs->num_rows();
+		}
+		
+		$sql="select * from vu_produk WHERE produk_aktif='Aktif'";
+		if($query<>"" && is_numeric($query)==false){
+			$sql.=eregi("WHERE",$sql)? " AND ":" WHERE ";
+			$sql.=" (produk_kode like '%".$query."%' or produk_nama like '%".$query."%' or satuan_nama like '%".$query."%' or kategori_nama like '%".$query."%' or group_nama like '%".$query."%') ";
+		}else{
+			if($rs_rows){
+				$filter="";
+				$sql.=eregi("AND",$sql)? " OR ":" AND ";
+				foreach($rs->result() as $row_dproduk){
+					
+					$filter.="OR produk_id='".$row_dproduk->dproduk_produk."' ";
+				}
+				$sql=$sql."(".substr($filter,2,strlen($filter)).")";
+			}
+		}
+		
+		$result = $this->db->query($sql);
+		$nbrows = $result->num_rows();
+		if($end!=0){
+			$limit = $sql." LIMIT ".$start.",".$end;			
+			$result = $this->db->query($limit);
+		}
+		if($nbrows>0){
+			foreach($result->result() as $row){
+				$arr[] = $row;
+			}
+			$jsonresult = json_encode($arr);
+			return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+		} else {
+			return '({"total":"0", "results":""})';
+		}
+	}
+	
+	function get_satuan_byproduk_list($jproduk_id, $produk_id){
+		$rs_rows=0;
+		
+		if($produk_id!=0 && is_numeric($produk_id)==true){
+			$sql="SELECT satuan_id, satuan_nama, konversi_nilai, satuan_kode, konversi_default, produk_harga FROM satuan_konversi LEFT JOIN produk ON(konversi_produk=produk_id) LEFT JOIN satuan ON(konversi_satuan=satuan_id) WHERE konversi_produk='$produk_id'";
+			$rs=$this->db->query($sql);
+			$rs_rows=$rs->num_rows();
+			if($produk_id<>"" && is_numeric($produk_id)==false){
+				$sql.=eregi("WHERE",$sql)? " AND ":" WHERE ";
+				$sql.=" (satuan_nama like '%".$produk_id."%' or satuan_kode like '%".$produk_id."%') ";
+			}
+			
+			$result = $this->db->query($sql);
+			$nbrows = $result->num_rows();
+			/*if($end!=0){
+				$limit = $sql." LIMIT ".$start.",".$end;			
+				$result = $this->db->query($limit);
+			}*/
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}elseif($jproduk_id!=0 && is_numeric($jproduk_id)==true){
+			$sql="SELECT satuan_id,satuan_nama,konversi_nilai,satuan_kode,konversi_default,produk_harga FROM produk,satuan_konversi,satuan WHERE produk_id=konversi_produk AND konversi_satuan=satuan_id AND produk_id='$jproduk_id'";
+			if($jproduk_id==0)
+				$sql="SELECT satuan_id,satuan_nama,konversi_nilai,satuan_kode,konversi_default,produk_harga FROM produk,satuan_konversi,satuan WHERE produk_id=konversi_produk AND konversi_satuan=satuan_id";
+			$query = $this->db->query($sql);
+			$nbrows = $query->num_rows();
+			if($nbrows>0){
+				foreach($query->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+		
+	}
+		
 		function get_konversi_list($dproduk_produk_id){
 			$query = "SELECT * FROM satuan_konversi WHERE konversi_produk='$dproduk_produk_id'";
 			$result = $this->db->query($query);
