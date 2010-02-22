@@ -18,6 +18,79 @@ class M_master_jual_produk extends Model{
 			parent::Model();
 		}
 		
+	
+		function get_laporan_rekap($tgl_awal,$tgl_akhir){
+			$sql="SELECT * FROM vu_trans_produk WHERE tanggal BETWEEN '".$tgl_awal."' AND '".$tgl_akhir."'";
+			$query=$this->db->query($sql);
+			return $query->result();
+		}
+		
+		function get_rekap_total_item($tgl_awal,$tgl_akhir){
+			$sql="SELECT SUM(jumlah_barang) as total_item FROM vu_trans_produk WHERE tanggal BETWEEN '".$tgl_awal."' AND '".$tgl_akhir."'";
+			$query=$this->db->query($sql);
+			if($query->num_rows()){
+				$data=$query->row();
+				return $data->total_item;
+			}else
+				return "";
+		}
+		
+		function get_rekap_total_diskon($tgl_awal,$tgl_akhir){
+			$sql="SELECT SUM(cashback) as total_diskon FROM vu_trans_produk WHERE tanggal BETWEEN '".$tgl_awal."' AND '".$tgl_akhir."'";
+			$query=$this->db->query($sql);
+			if($query->num_rows()){
+				$data=$query->row();
+				return $data->total_diskon;
+			}else
+				return "";
+		}
+		
+		function get_rekap_total_nilai($tgl_awal,$tgl_akhir){
+			$sql="SELECT SUM(total_nilai) as total_nilai FROM vu_trans_produk WHERE tanggal BETWEEN '".$tgl_awal."' AND '".$tgl_akhir."'";
+			$query=$this->db->query($sql);
+			if($query->num_rows()){
+				$data=$query->row();
+				return $data->total_nilai;
+			}else
+				return "";
+		}
+		
+		function get_laporan_detail($tgl_awal,$tgl_akhir){
+			$sql="SELECT * FROM vu_detail_jual_produk WHERE tanggal BETWEEN '".$tgl_awal."' AND '".$tgl_akhir."'";
+			$query=$this->db->query($sql);
+			return $query->result();
+		}
+		
+		function get_detail_total_item($tgl_awal,$tgl_akhir){
+			$sql="SELECT SUM(jumlah_barang) as total_item FROM vu_detail_jual_produk WHERE tanggal BETWEEN '".$tgl_awal."' AND '".$tgl_akhir."'";
+			$query=$this->db->query($sql);
+			if($query->num_rows()){
+				$data=$query->row();
+				return $data->total_item;
+			}else
+				return "";
+		}
+		
+		function get_detail_total_diskon($tgl_awal,$tgl_akhir){
+			$sql="SELECT SUM(diskon_nilai) as total_diskon FROM vu_detail_jual_produk WHERE tanggal BETWEEN '".$tgl_awal."' AND '".$tgl_akhir."'";
+			$query=$this->db->query($sql);
+			if($query->num_rows()){
+				$data=$query->row();
+				return $data->total_diskon;
+			}else
+				return "";
+		}
+		
+		function get_detail_total_nilai($tgl_awal,$tgl_akhir){
+			$sql="SELECT SUM(subtotal) as total_nilai FROM vu_detail_jual_produk WHERE tanggal BETWEEN '".$tgl_awal."' AND '".$tgl_akhir."'";
+			$query=$this->db->query($sql);
+			if($query->num_rows()){
+				$data=$query->row();
+				return $data->total_nilai;
+			}else
+				return "";
+		}
+		
 	function get_produk_list($query,$start,$end){
 		$rs_rows=0;
 		if(is_numeric($query)==true){

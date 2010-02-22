@@ -11,14 +11,14 @@ caption {
 	padding: 0 0.6em 0.8em;
 	font-size: 1.3em;
 	font-weight: bold;
-	text-align: center;
+	text-align: left;
 	color: #000;
 	background: transparent;
 }
-td, th {
+/*td, th {
 	border: 1px solid #e0e0e0;
 	padding: 0.5em;
-}
+}*/
 thead th {
 	border: 1px solid #e0e0e0;
 	text-align: left;
@@ -64,12 +64,4 @@ tfoot td {
 }
 tbody tr:hover {
 	background: #ffffd9;
-}
-
-.numeric{
-	text-align: right;
-}
-
-.clear{
-	border: none;
 }
