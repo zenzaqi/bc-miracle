@@ -1807,7 +1807,7 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'No. Faktur' + '</div>',
 			dataIndex: 'jrawat_nobukti',
-			width: 100,	//82,
+			width: 90,	//82,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 30
