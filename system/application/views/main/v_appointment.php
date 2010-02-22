@@ -808,7 +808,7 @@ Ext.onReady(function(){
 	appointment_ColumnModel = new Ext.grid.ColumnModel(
 		[
 		{
-			header: '<div align="center">' + 'Tgl App' + '</div>',
+			header: 'Tgl App',
 			dataIndex: 'dapp_tglreservasi',
 			width: 70,
 			sortable: false,
@@ -1150,7 +1150,18 @@ Ext.onReady(function(){
 			tooltip: 'Print Document',
 			iconCls:'icon-print',
 			handler: appointment_print  
-		}/*, '-',{
+		}, '-',{
+			text: 'Waiting List',
+			tooltip: 'Waiting List',
+			//iconCls:'icon-print',
+			handler: function(){window.open("system/application/views/main/waitinglist/waitinglist.php")}  
+		}
+//		{
+//			text: 'Waiting List',
+//			tooltip: 'Waiting List',
+//			iconCls:'icon-print',
+//			handler: function(){window.open("waitinglist/waitinglist.php")  
+		/*,{
 			xtype: 'combo',
 			id: 'cbo_page',
 			width: 50,
