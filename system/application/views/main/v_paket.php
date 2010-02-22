@@ -612,7 +612,7 @@ Ext.onReady(function(){
 			width: 60,	//100,
 			sortable: true,
 			renderer: function(val){
-				return '<span>' + val + ' %</span>';
+				return '<span>' + val + '</span>';
 			},
 			editor: new Ext.form.NumberField({
 				allowBlank: false,
@@ -767,7 +767,7 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 1200,	//900,
+	  	width: 940,	//900,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: paket_DataStore,
@@ -807,7 +807,7 @@ Ext.onReady(function(){
 		            }
 				},
 				render: function(c){
-				Ext.get(this.id).set({qtitle:'Search By'});
+				Ext.get(this.id).set({qtitle:'Search by (Aktif only):'});
 				Ext.get(this.id).set({qtip:'- Kode Baru<br>- Nama<br>- Group 1<br>- Group 2<br>- Jenis'});
 				}
 			},

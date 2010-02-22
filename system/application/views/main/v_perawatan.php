@@ -907,7 +907,7 @@ Ext.onReady(function(){
 		            }
 				},
 				render: function(c){
-				Ext.get(this.id).set({qtitle:'Search By (Aktif only)'});
+				Ext.get(this.id).set({qtitle:'Search by (Aktif only):'});
 				Ext.get(this.id).set({qtip:'- Kode Baru<br>- Kode Lama<br>- Nama Perawatan<br>- Group 1<br>- Group 2<br>- Jenis'});
 				}
 			},
