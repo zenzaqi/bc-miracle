@@ -86,6 +86,14 @@ var kwitansi_statusSearchField;
 /* on ready fuction */
 Ext.onReady(function(){
   	Ext.QuickTips.init();	/* Initiate quick tips icon */
+	
+	Ext.util.Format.comboRenderer = function(combo){
+  		//jproduk_bankDataStore.load();
+  	    return function(value){
+  	        var record = combo.findRecord(combo.valueField, value);
+  	        return record ? record.get(combo.displayField) : combo.valueNotFoundText;
+  	    }
+  	}
   
   	/* Function for Saving inLine Editing */
 	function cetak_kwitansi_update(oGrid_event){
@@ -259,7 +267,7 @@ Ext.onReady(function(){
 	function cetak_kwitansi_set_form(){
 		kwitansi_idField.setValue(cetak_kwitansiListEditorGrid.getSelectionModel().getSelected().get('kwitansi_id'));
 		kwitansi_noField.setValue(cetak_kwitansiListEditorGrid.getSelectionModel().getSelected().get('kwitansi_no'));
-		kwitansi_custField.setValue(cetak_kwitansiListEditorGrid.getSelectionModel().getSelected().get('kwitansi_cust'));
+		kwitansi_custField.setValue(cetak_kwitansiListEditorGrid.getSelectionModel().getSelected().get('cust_nama'));
 		kwitansi_refField.setValue(cetak_kwitansiListEditorGrid.getSelectionModel().getSelected().get('kwitansi_ref'));
 		kwitansi_nilaiField.setValue(cetak_kwitansiListEditorGrid.getSelectionModel().getSelected().get('kwitansi_nilai'));
 		kwitansi_keteranganField.setValue(cetak_kwitansiListEditorGrid.getSelectionModel().getSelected().get('kwitansi_keterangan'));
@@ -275,6 +283,7 @@ Ext.onReady(function(){
   
   	/* Function for Displaying  create Window Form */
 	function display_form_window(){
+		cbo_custDataStore.load();
 		if(!cetak_kwitansi_createWindow.isVisible()){
 			cetak_kwitansi_reset_form();
 			post2db='CREATE';
@@ -388,7 +397,8 @@ Ext.onReady(function(){
 		/* dataIndex => insert intocetak_kwitansi_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'kwitansi_id', type: 'int', mapping: 'kwitansi_id'}, 
 			{name: 'kwitansi_no', type: 'string', mapping: 'kwitansi_no'}, 
-			{name: 'kwitansi_cust', type: 'int', mapping: 'kwitansi_cust'}, 
+			{name: 'kwitansi_cust', type: 'int', mapping: 'kwitansi_cust'},
+			{name: 'cust_nama', type: 'string', mapping: 'cust_nama'},
 			{name: 'kwitansi_ref', type: 'int', mapping: 'kwitansi_ref'}, 
 			{name: 'kwitansi_nilai', type: 'float', mapping: 'kwitansi_nilai'}, 
 			{name: 'kwitansi_keterangan', type: 'string', mapping: 'kwitansi_keterangan'}, 
@@ -402,6 +412,35 @@ Ext.onReady(function(){
 		sortInfo:{field: 'kwitansi_id', direction: "DESC"}
 	});
 	/* End of Function */
+	
+	cbo_custDataStore = new Ext.data.Store({
+		id: 'cbo_custDataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_cetak_kwitansi&m=get_customer_list', 
+			method: 'POST'
+		}),
+		baseParams:{start: 0, limit: 10 }, // parameter yang di $_POST ke Controller
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'cust_id'
+		},[
+		/* dataIndex => insert intocustomer_note_ColumnModel, Mapping => for initiate table column */ 
+			{name: 'cust_id', type: 'int', mapping: 'cust_id'},
+			{name: 'cust_no', type: 'string', mapping: 'cust_no'},
+			{name: 'cust_nama', type: 'string', mapping: 'cust_nama'},
+			{name: 'cust_tgllahir', type: 'date', dateFormat: 'Y-m-d', mapping: 'cust_tgllahir'},
+			{name: 'cust_alamat', type: 'string', mapping: 'cust_alamat'},
+			{name: 'cust_telprumah', type: 'string', mapping: 'cust_telprumah'}
+		]),
+		sortInfo:{field: 'cust_no', direction: "ASC"}
+	});
+	var customer_tpl = new Ext.XTemplate(
+        '<tpl for="."><div class="search-item">',
+            '<span><b>{cust_no} : {cust_nama}</b> | Tgl-Lahir:{cust_tgllahir:date("M j, Y")}<br /></span>',
+            'Alamat: {cust_alamat}&nbsp;&nbsp;&nbsp;[Telp. {cust_telprumah}]',
+        '</div></tpl>'
+    );
     
   	/* Function for Identify of Window Column Model */
 	cetak_kwitansi_ColumnModel = new Ext.grid.ColumnModel(
@@ -419,30 +458,24 @@ Ext.onReady(function(){
 		{
 			header: 'No. Kuitansi',
 			dataIndex: 'kwitansi_no',
-			width: 80,	//150,
+			width: 85,	//150,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 20
           	})
 		}, 
 		{
-			header: 'Kwitansi Cust',
-			dataIndex: 'kwitansi_cust',
-			width: 150,
-			sortable: true,
-			editor: new Ext.form.NumberField({
-				allowDecimals: false,
-				allowNegative: false,
-				blankText: '0',
-				maxLength: 11,
-				maskRe: /([0-9]+)$/
-			})
+			header: 'Customer',
+			dataIndex: 'cust_nama',
+			width: 210,
+			sortable: true
 		}, 
 		{
-			header: 'Kwitansi Ref',
+			header: 'Ref',
 			dataIndex: 'kwitansi_ref',
 			width: 150,
 			sortable: true,
+			hidden: true,
 			editor: new Ext.form.NumberField({
 				allowDecimals: false,
 				allowNegative: false,
@@ -452,7 +485,7 @@ Ext.onReady(function(){
 			})
 		}, 
 		{
-			header: 'Kwitansi Nilai',
+			header: 'Nilai',
 			dataIndex: 'kwitansi_nilai',
 			width: 150,
 			sortable: true,
@@ -465,18 +498,18 @@ Ext.onReady(function(){
 			})
 		}, 
 		{
-			header: 'Kwitansi Keterangan',
+			header: 'Keterangan',
 			dataIndex: 'kwitansi_keterangan',
-			width: 150,
+			width: 250,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 500
           	})
 		}, 
 		{
-			header: 'Kwitansi Status',
+			header: 'Status',
 			dataIndex: 'kwitansi_status',
-			width: 150,
+			width: 60,
 			sortable: true,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
@@ -493,7 +526,7 @@ Ext.onReady(function(){
             })
 		}, 
 		{
-			header: 'Kwitansi Creator',
+			header: 'Creator',
 			dataIndex: 'kwitansi_creator',
 			width: 150,
 			sortable: true,
@@ -501,7 +534,7 @@ Ext.onReady(function(){
 			readOnly: true,
 		}, 
 		{
-			header: 'Kwitansi Date Create',
+			header: 'Date Create',
 			dataIndex: 'kwitansi_date_create',
 			width: 150,
 			sortable: true,
@@ -509,7 +542,7 @@ Ext.onReady(function(){
 			readOnly: true,
 		}, 
 		{
-			header: 'Kwitansi Update',
+			header: 'Update',
 			dataIndex: 'kwitansi_update',
 			width: 150,
 			sortable: true,
@@ -517,7 +550,7 @@ Ext.onReady(function(){
 			readOnly: true,
 		}, 
 		{
-			header: 'Kwitansi Date Update',
+			header: 'Date Update',
 			dataIndex: 'kwitansi_date_update',
 			width: 150,
 			sortable: true,
@@ -525,7 +558,7 @@ Ext.onReady(function(){
 			readOnly: true,
 		}, 
 		{
-			header: 'Kwitansi Revised',
+			header: 'Revised',
 			dataIndex: 'kwitansi_revised',
 			width: 150,
 			sortable: true,
@@ -671,24 +704,35 @@ Ext.onReady(function(){
 	/* Identify  kwitansi_no Field */
 	kwitansi_noField= new Ext.form.TextField({
 		id: 'kwitansi_noField',
-		fieldLabel: 'No Kuitansi',
+		fieldLabel: 'No.Kuitansi',
 		maxLength: 20,
+		readOnly:true,
 		anchor: '95%'
 	});
 	/* Identify  kwitansi_cust Field */
-	kwitansi_custField= new Ext.form.NumberField({
+	kwitansi_custField= new Ext.form.ComboBox({
 		id: 'kwitansi_custField',
 		fieldLabel: 'Customer',
-		allowNegatife : false,
-		blankText: '0',
-		allowDecimals: false,
-				anchor: '95%',
-		maskRe: /([0-9]+)$/
+		store: cbo_custDataStore,
+		mode: 'remote',
+		displayField:'cust_nama',
+		valueField: 'cust_id',
+        typeAhead: false,
+        loadingText: 'Searching...',
+        pageSize:10,
+        hideTrigger:false,
+        tpl: customer_tpl,
+        //applyTo: 'search',
+        itemSelector: 'div.search-item',
+		triggerAction: 'all',
+		lazyRender:true,
+		listClass: 'x-combo-list-small',
+		anchor: '95%'
 	});
 	/* Identify  kwitansi_ref Field */
 	kwitansi_refField= new Ext.form.NumberField({
 		id: 'kwitansi_refField',
-		fieldLabel: 'Ref.',
+		fieldLabel: 'Ref',
 		allowNegatife : false,
 		blankText: '0',
 		allowDecimals: false,
@@ -728,7 +772,7 @@ Ext.onReady(function(){
 	});
   	/*Fieldset Master*/
 	cetak_kwitansi_masterGroup = new Ext.form.FieldSet({
-		title: 'Info Kuitansi',
+		title: 'Master',
 		autoHeight: true,
 		collapsible: true,
 		layout:'column',
@@ -737,13 +781,13 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [kwitansi_noField, kwitansi_custField, kwitansi_refField, kwitansi_nilaiField, kwitansi_idField] 
+				items: [kwitansi_noField, kwitansi_custField, kwitansi_nilaiField, kwitansi_idField] 
 			},
 			{
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [kwitansi_statusField, kwitansi_keteranganField] 
+				items: [kwitansi_keteranganField, kwitansi_statusField] 
 			}
 			]
 	
@@ -914,11 +958,13 @@ Ext.onReady(function(){
 			text: 'Add',
 			tooltip: 'Add new detail record',
 			iconCls:'icon-adds',    				// this is defined in our styles.css
+			disabled: true,
 			handler: jual_kwitansi_add
 		}, '-',{
 			text: 'Delete',
 			tooltip: 'Delete detail selected record',
 			iconCls:'icon-delete',
+			disabled: true,
 			handler: jual_kwitansi_confirm_delete
 		}
 		]
@@ -1047,7 +1093,7 @@ Ext.onReady(function(){
 	/* Function for retrieve create Window Form */
 	cetak_kwitansi_createWindow= new Ext.Window({
 		id: 'cetak_kwitansi_createWindow',
-		title: post2db+'Cetak Kuitansi',
+		title: post2db+'Cetak_kwitansi',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,

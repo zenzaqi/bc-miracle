@@ -26,6 +26,22 @@ class C_cetak_kwitansi extends Controller {
 		$this->load->view('main/v_cetak_kwitansi');
 	}
 	
+	function get_customer_list(){
+		$query = isset($_POST['query']) ? $_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		$result=$this->m_public_function->get_customer_list($query,$start,$end);
+		echo $result;
+	}
+	
+	function get_customer_kwitansi_list(){
+		$query = isset($_POST['query']) ? $_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		$result=$this->m_cetak_kwitansi->get_customer_kwitansi_list($query,$start,$end);
+		echo $result;
+	}
+	
 	//for detail action
 	//list detail handler action
 	function  detail_jual_kwitansi_list(){

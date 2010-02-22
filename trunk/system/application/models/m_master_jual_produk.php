@@ -132,6 +132,24 @@ class M_master_jual_produk extends Model{
 		}
 	}
 	
+	function get_satuan_bydjproduk_list($djproduk_id){
+		/*$sql="SELECT satuan_id,satuan_nama,konversi_nilai,satuan_kode,konversi_default,produk_harga FROM produk,satuan_konversi,satuan WHERE produk_id=konversi_produk AND konversi_satuan=satuan_id AND produk_id='$djproduk_id'";
+		if($djproduk_id==0)
+			$sql="SELECT satuan_id,satuan_nama,konversi_nilai,satuan_kode,konversi_default,produk_harga FROM produk,satuan_konversi,satuan WHERE produk_id=konversi_produk AND konversi_satuan=satuan_id";*/
+		$sql="SELECT satuan_id,satuan_nama,satuan_kode FROM satuan";
+		$query = $this->db->query($sql);
+		$nbrows = $query->num_rows();
+		if($nbrows>0){
+			foreach($query->result() as $row){
+				$arr[] = $row;
+			}
+			$jsonresult = json_encode($arr);
+			return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+		} else {
+			return '({"total":"0", "results":""})';
+		}
+	}
+	
 	function get_satuan_byproduk_list($jproduk_id, $produk_id){
 		$rs_rows=0;
 		
