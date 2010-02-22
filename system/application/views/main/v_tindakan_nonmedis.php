@@ -712,7 +712,7 @@ Ext.onReady(function(){
 			xtype: 'booleancolumn',
 			header: 'Ambil Paket',
 			dataIndex: 'dtrawat_ambil_paket',
-			width: 65,
+			width: 60,	//65,
 			align: 'center',
 			trueText: 'Yes',
 			falseText: 'No',
@@ -721,9 +721,9 @@ Ext.onReady(function(){
             }
 		},
 		{
-			header: '<div align="center">' + 'Paket' + '</div>',
+			header: '<div align="center">' + 'Info Paket' + '</div>',
 			dataIndex: 'cust_punya_paket',
-			width: 55,
+			width: 60,	//55,
 			sortable: false
 		},
 		{
@@ -795,7 +795,7 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 970,
+	  	width: 1200,	//970,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: tindakan_nonmedis_DataStore,
