@@ -20,18 +20,18 @@ class M_master_jual_paket extends Model{
 		}
 		
 		function get_customer_list($query,$start,$end){
-			$rs_rows=0;
+			/*$rs_rows=0;
 			if(is_numeric($query)==true){
 				$sql_cust="SELECT distinct(sjpaket_cust) FROM submaster_jual_paket WHERE sjpaket_master='$query'";
 				$rs=$this->db->query($sql_cust);
 				$rs_rows=$rs->num_rows();
-			}
+			}*/
 			
 			$sql="SELECT cust_id,cust_no,cust_nama,cust_tgllahir,cust_alamat,cust_telprumah FROM customer where cust_aktif='Aktif'";
 			if($query<>"" && is_numeric($query)==false){
 				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
 				$sql.=" (cust_nama like '%".$query."%' ) ";
-			}else{
+			}/*else{
 				if($rs_rows){
 					$filter="";
 					$sql.=eregi("AND",$query)? " OR ":" AND ";
@@ -41,7 +41,7 @@ class M_master_jual_paket extends Model{
 					}
 					$sql=$sql."(".substr($filter,2,strlen($filter)).")";
 				}
-			}
+			}*/
 			
 			$result = $this->db->query($sql);
 			$nbrows = $result->num_rows();
@@ -63,7 +63,7 @@ class M_master_jual_paket extends Model{
 		function get_customer_pengguna_list($query,$start,$end){
 			$rs_rows=0;
 			if(is_numeric($query)==true){
-				$sql_cust="SELECT distinct(sjpaket_cust) FROM submaster_jual_paket WHERE sjpaket_master='$query'";
+				$sql_cust="SELECT distinct(ppaket_cust) FROM pengguna_paket WHERE ppaket_master='$query'";
 				$rs=$this->db->query($sql_cust);
 				$rs_rows=$rs->num_rows();
 			}
@@ -78,7 +78,7 @@ class M_master_jual_paket extends Model{
 					$sql.=eregi("AND",$query)? " OR ":" AND ";
 					foreach($rs->result() as $row_cust){
 						
-						$filter.="OR cust_id='".$row_cust->sjpaket_cust."' ";
+						$filter.="OR cust_id='".$row_cust->ppaket_cust."' ";
 					}
 					$sql=$sql."(".substr($filter,2,strlen($filter)).")";
 				}
@@ -102,7 +102,7 @@ class M_master_jual_paket extends Model{
 		}
 		
 		function detail_pengguna_paket_list($master_id,$start,$end){
-			$query="SELECT sjpaket_cust FROM submaster_jual_paket INNER JOIN master_jual_paket ON(sjpaket_master=jpaket_id) WHERE sjpaket_master='$master_id' AND sjpaket_cust!=jpaket_cust";
+			$query="SELECT ppaket_cust FROM pengguna_paket INNER JOIN master_jual_paket ON(ppaket_master=jpaket_id) WHERE ppaket_master='$master_id' AND ppaket_cust!=jpaket_cust";
 			
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
@@ -119,19 +119,19 @@ class M_master_jual_paket extends Model{
 			}
 		}
 		
-		function detail_pengguna_paket_insert($sjpaket_master, $sjpaket_cust){
+		function detail_pengguna_paket_insert($ppaket_master, $ppaket_cust){
 			//if master id not capture from view then capture it from max pk from master table
-			if($sjpaket_master=="" || $sjpaket_master==NULL){
-				$sjpaket_master=$this->get_master_id();
+			if($ppaket_master=="" || $ppaket_master==NULL){
+				$ppaket_master=$this->get_master_id();
 			}
 			$data = array(
-				"sjpaket_master"=>$sjpaket_master, 
-				"sjpaket_cust"=>$sjpaket_cust
+				"ppaket_master"=>$ppaket_master, 
+				"ppaket_cust"=>$ppaket_cust
 			);
-			$sql="SELECT sjpaket_id FROM submaster_jual_paket WHERE sjpaket_master='$sjpaket_master' AND sjpaket_cust='$sjpaket_cust'";
+			$sql="SELECT ppaket_id FROM pengguna_paket WHERE ppaket_master='$ppaket_master' AND ppaket_cust='$ppaket_cust'";
 			$rs=$this->db->query($sql);
 			if(!$rs->num_rows()){
-				$this->db->insert('submaster_jual_paket', $data); 
+				$this->db->insert('pengguna_paket', $data); 
 				if($this->db->affected_rows()){
 					return '1';
 				}else
@@ -270,7 +270,7 @@ class M_master_jual_paket extends Model{
 		//*eof
 		
 		function detail_pengguna_paket_purge($master_id){
-			$sql="DELETE FROM submaster_jual_paket WHERE sjpaket_master='".$master_id."'";
+			$sql="DELETE FROM pengguna_paket WHERE ppaket_master='".$master_id."'";
 			$result=$this->db->query($sql);
 			return '1';
 		}
@@ -296,78 +296,6 @@ class M_master_jual_paket extends Model{
 			);
 			$this->db->insert('detail_jual_paket', $data); 
 			if($this->db->affected_rows()){
-				/* Untuk data pengambilan paket, diinsertkan ke master_ambil_paket(identitas Paket) dan ke submaster_apaket_item(identitas tiap item dari paket itu) */
-				//$sql="SELECT * FROM master_jual_paket WHERE jpaket_id='$dpaket_master'";
-				$sql="SELECT jpaket_nobukti, jpaket_cust, jpaket_tanggal, dpaket_id FROM master_jual_paket INNER JOIN detail_jual_paket ON(dpaket_master=jpaket_id) WHERE dpaket_id=(SELECT max(dpaket_id) FROM detail_jual_paket WHERE dpaket_master='$dpaket_master')";
-				//echo $sql;
-				$rs=$this->db->query($sql);
-				if($rs->num_rows()){
-					$rs_record=$rs->row_array();
-					$apaket_dpaket=$rs_record["dpaket_id"];
-					// Ambil Jumlah Total Isi Paket
-					$sql_paket="SELECT total_isi_paket FROM vu_total_isi_paket WHERE rpaket_master='$dpaket_paket'";
-					$rs_paket=$this->db->query($sql_paket);
-					$rs_paket_record=$rs_paket->row_array();
-					// INSERT ke master_ambil_paket => per paket yg dimiliki No.Faktur Penjualan Paket
-					$data_apaket=array(
-					"apaket_dpaket"=>$apaket_dpaket,
-					"apaket_faktur"=>$rs_record["jpaket_nobukti"],
-					"apaket_cust"=>$rs_record["jpaket_cust"],
-					"apaket_paket"=>$dpaket_paket,
-					"apaket_tanggal"=>$rs_record["jpaket_tanggal"],
-					"apaket_sisa_paket"=>$rs_paket_record["total_isi_paket"]
-					);
-					$this->db->insert('master_ambil_paket', $data_apaket);
-					if($this->db->affected_rows()>0){
-						$sql_get_apaket="SELECT apaket_id FROM master_ambil_paket WHERE apaket_dpaket='$apaket_dpaket'";
-						$rs_get_apaket=$this->db->query($sql_get_apaket);
-						if($rs_get_apaket->num_rows()){
-							$rs_get_apaket_record=$rs_get_apaket->row_array();
-							$get_apaket_id=$rs_get_apaket_record["apaket_id"]; //Untuk => db.submaster_apaket_item.sapaket_master
-						}
-						
-						/* INSERT ke submaster_apaket_item dengan db.submaster_apaket_item.sapaket_jenis_item = 'perawatan' */
-						$sql_isi_perawatan="SELECT * FROM paket_isi_perawatan WHERE rpaket_master='$dpaket_paket'";
-						$rs_isi_perawatan=$this->db->query($sql_isi_perawatan);
-						$nbrows_isi_perawatan = $rs_isi_perawatan->num_rows();
-						if($nbrows_isi_perawatan>0){
-							
-							/* INSERT ke submaster_apaket_item u/ mencatat sisa setelah dilakukan pengambilan paket */
-							foreach($rs_isi_perawatan->result() as $row_isi_perawatan){
-								//$arr[] = $row;
-								$data_sapaket_perawatan=array(
-								"sapaket_master"=>$get_apaket_id,
-								"sapaket_item"=>$row_isi_perawatan->rpaket_perawatan,
-								"sapaket_jenis_item"=>'perawatan',
-								"sapaket_jmlisi_item"=>$row_isi_perawatan->rpaket_jumlah,
-								"sapaket_sisa_item"=>$row_isi_perawatan->rpaket_jumlah
-								);
-								$this->db->insert('submaster_apaket_item', $data_sapaket_perawatan);
-							}
-						}
-						
-						/* INSERT ke submaster_apaket_item dengan db.submaster_apaket_item.sapaket_jenis_item = 'perawatan' */
-						$sql_isi_produk="SELECT * FROM paket_isi_produk WHERE ipaket_master='$dpaket_paket'";
-						$rs_isi_produk=$this->db->query($sql_isi_produk);
-						$nbrows_isi_produk = $rs_isi_produk->num_rows();
-						if($nbrows_isi_produk>0){
-							
-							/* INSERT ke submaster_apaket_item u/ mencatat sisa setelah dilakukan pengambilan paket */
-							foreach($rs_isi_produk->result() as $row_isi_produk){
-								//$arr[] = $row;
-								$data_sapaket_produk=array(
-								"sapaket_master"=>$get_apaket_id,
-								"sapaket_item"=>$row_isi_produk->ipaket_produk,
-								"sapaket_jenis_item"=>'produk',
-								"sapaket_jmlisi_item"=>$row_isi_produk->ipaket_jumlah,
-								"sapaket_sisa_item"=>$row_isi_produk->ipaket_jumlah
-								);
-								$this->db->insert('submaster_apaket_item', $data_sapaket_produk);
-							}
-						}
-						
-					}
-				}
 				return '1';
 			}else
 				return '0';
@@ -939,10 +867,10 @@ class M_master_jual_paket extends Model{
 				if($rs->num_rows()){
 					$rs_record=$rs->row_array();
 					$data_sjpaket=array(
-					"sjpaket_master"=>$rs_record["jpaket_id"],
-					"sjpaket_cust"=>$jpaket_cust
+					"ppaket_master"=>$rs_record["jpaket_id"],
+					"ppaket_cust"=>$jpaket_cust
 					);
-					$this->db->insert('submaster_jual_paket', $data_sjpaket);
+					$this->db->insert('pengguna_paket', $data_sjpaket);
 				}
 				
 				return '1';

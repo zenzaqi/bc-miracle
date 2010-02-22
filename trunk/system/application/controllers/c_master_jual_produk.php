@@ -49,7 +49,7 @@ class C_master_jual_produk extends Controller {
 		$query = isset($_POST['query']) ? $_POST['query'] : "";
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_public_function->get_produk_list($query,$start,$end);
+		$result = $this->m_master_jual_produk->get_produk_list($query,$start,$end);
 		echo $result;
 	}
 	
@@ -58,9 +58,16 @@ class C_master_jual_produk extends Controller {
 		echo $result;
 	}
 	
-	function get_satuan_bydjproduk_list(){
-		$djproduk_id = (integer) (isset($_POST['djproduk_id']) ? $_POST['djproduk_id'] : 0);
-		$result = $this->m_public_function->get_satuan_bydjproduk_list($djproduk_id);
+	/*function get_satuan_bydjproduk_list(){
+		$query = (integer) (isset($_POST['query']) ? $_POST['query'] : 0);
+		$result = $this->m_master_jual_produk->get_satuan_bydjproduk_list($query);
+		echo $result;
+	}*/
+	
+	function get_satuan_byproduk_list(){
+		$jproduk_id = (integer) (isset($_POST['jproduk_id']) ? $_POST['jproduk_id'] : 0);
+		$produk_id = (integer) (isset($_POST['produk_id']) ? $_POST['produk_id'] : 0);
+		$result = $this->m_master_jual_produk->get_satuan_byproduk_list($jproduk_id, $produk_id);
 		echo $result;
 	}
 	

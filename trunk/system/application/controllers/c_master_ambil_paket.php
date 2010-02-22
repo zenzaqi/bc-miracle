@@ -77,12 +77,11 @@ class C_master_ambil_paket extends Controller {
 	//add detail
 	function detail_ambil_paket_isi_perawatan_insert(){
 	//POST variable here
-		$rambil_paket_id=trim(@$_POST["rambil_paket_id"]);
-		$rambil_paket_master=trim(@$_POST["rambil_paket_master"]);
-		$rambil_paket_perawatan=trim(@$_POST["rambil_paket_perawatan"]);
-		$rambil_paket_jumlah=trim(@$_POST["rambil_paket_jumlah"]);
-		$rambil_paket_cust=trim(@$_POST["rambil_paket_cust"]);
-		$result=$this->m_master_ambil_paket->detail_ambil_paket_isi_perawatan_insert($rambil_paket_id ,$rambil_paket_master ,$rambil_paket_perawatan ,$rambil_paket_jumlah ,$rambil_paket_cust );
+		$hapaket_dpaket=trim(@$_POST["hapaket_dpaket"]);
+		$hapaket_rawat=trim(@$_POST["hapaket_rawat"]);
+		$hapaket_jumlah=trim(@$_POST["hapaket_jumlah"]);
+		$hapaket_cust=trim(@$_POST["hapaket_cust"]);
+		$result=$this->m_master_ambil_paket->detail_ambil_paket_isi_perawatan_insert($hapaket_dpaket ,$hapaket_rawat ,$hapaket_jumlah ,$hapaket_cust);
 	}
 	
 	

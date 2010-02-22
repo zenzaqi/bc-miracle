@@ -176,6 +176,18 @@ class C_master_jual_rawat extends Controller {
 		$result=$this->m_master_jual_rawat->detail_detail_jual_rawat_insert($drawat_id ,$drawat_master ,$drawat_rawat ,$drawat_jumlah ,$drawat_harga ,$drawat_diskon ,$drawat_diskon_jenis ,$drawat_sales ,$jrawat_id);
 	}
 	
+	//for detail pengambilan paket
+	//list detail handler action
+	function  detail_ambil_paket_list(){
+		$query = isset($_POST['query']) ? $_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		$master_id = (integer) (isset($_POST['master_id']) ? $_POST['master_id'] : $_GET['master_id']);
+		$result=$this->m_master_jual_rawat->detail_ambil_paket_list($master_id,$query,$start,$end);
+		echo $result;
+	}
+	//end of handler
+	
 	
 	//event handler action
 	function get_action(){

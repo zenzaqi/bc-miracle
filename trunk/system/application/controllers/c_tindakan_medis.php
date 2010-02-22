@@ -218,8 +218,10 @@ class C_tindakan_medis extends Controller {
 		$dtrawat_keterangan=str_replace(",", "\,",$dtrawat_keterangan);
 		$dtrawat_dapp=trim(@$_POST["dtrawat_dapp"]);
 		$dtrawat_ambil_paket=trim(@$_POST["dtrawat_ambil_paket"]);
+		$dpaket_id=trim(@$_POST["dpaket_id"]);
+		$rpaket_perawatan=trim(@$_POST["rpaket_perawatan"]);
 		$mode_edit=trim(@$_POST["mode_edit"]);
-		$result = $this->m_tindakan_medis->tindakan_update($trawat_id ,$trawat_cust ,$trawat_keterangan ,$dtrawat_status ,$trawat_cust_id ,$dtrawat_perawatan_id ,$dtrawat_perawatan ,$dtrawat_id ,$rawat_harga ,$rawat_du ,$rawat_dm ,$cust_member ,$dtrawat_dokter ,$dtrawat_dokter_id ,$dtrawat_keterangan ,$dtrawat_dapp ,$dtrawat_ambil_paket ,$mode_edit);
+		$result = $this->m_tindakan_medis->tindakan_update($trawat_id ,$trawat_cust ,$trawat_keterangan ,$dtrawat_status ,$trawat_cust_id ,$dtrawat_perawatan_id ,$dtrawat_perawatan ,$dtrawat_id ,$rawat_harga ,$rawat_du ,$rawat_dm ,$cust_member ,$dtrawat_dokter ,$dtrawat_dokter_id ,$dtrawat_keterangan ,$dtrawat_dapp ,$dtrawat_ambil_paket ,$dpaket_id ,$rpaket_perawatan ,$mode_edit);
 		echo $result;
 	}
 	
