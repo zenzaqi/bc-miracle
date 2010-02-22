@@ -66,6 +66,7 @@ var editor_detail_invoice;
 var post2db = '';
 var msg = '';
 var pageS=15;
+var today=new Date().format('Y-m-d');
 
 /* declare variable here for Field*/
 var invoice_idField;
@@ -254,8 +255,8 @@ Ext.onReady(function(){
 		invoice_supplierField.setValue(null);
 		invoice_noterimaField.reset();
 		invoice_noterimaField.setValue(null);
-		invoice_tanggalField.reset();
-		invoice_tanggalField.setValue(null);
+		//invoice_tanggalField.reset();
+		invoice_tanggalField.setValue(today);
 		invoice_nilaiField.reset();
 		invoice_nilaiField.setValue(null);
 		invoice_jatuhtempoField.reset();
@@ -280,16 +281,16 @@ Ext.onReady(function(){
   
 	/* Function for Check if the form is valid */
 	function is_master_invoice_form_valid(){
-		return (true &&  true &&  invoice_supplierField.isValid() && invoice_noterimaField.isValid() && true &&  true &&  true &&  true &&  true &&  true &&  true &&  true &&  true  );
+		return (invoice_supplierField.isValid() && invoice_noterimaField.isValid());
 	}
   	/* End of Function */
   
   	/* Function for Displaying  create Window Form */
 	function display_form_window(){
 		if(!master_invoice_createWindow.isVisible()){
-			master_invoice_reset_form();
 			post2db='CREATE';
 			msg='created';
+			master_invoice_reset_form();
 			cbo_dinvoice_produkDataStore.load();
 			cbo_dinvoice_satuanDataStore.load();
 			master_invoice_createWindow.show();
@@ -322,9 +323,10 @@ Ext.onReady(function(){
 	function master_invoice_confirm_update(){
 		/* only one record is selected here */
 		if(master_invoiceListEditorGrid.selModel.getCount() == 1) {
-			master_invoice_set_form();
 			post2db='UPDATE';
-			detail_invoice_DataStore.load({params : {master_id : eval(get_pk_id()), start:0, limit:pageS}});
+			master_invoice_set_form();
+			detail_invoice_DataStore.setBaseParam('master_id',get_pk_id());
+			detail_invoice_DataStore.load();
 			msg='updated';
 			master_invoice_createWindow.show();
 		} else {
@@ -424,7 +426,7 @@ Ext.onReady(function(){
 			url: 'index.php?c=c_master_invoice&m=get_tbeli_list', 
 			method: 'POST'
 		}),
-		baseParams:{start: 0, limit: 10 }, // parameter yang di $_POST ke Controller
+		baseParams:{start: 0, limit: pageS }, // parameter yang di $_POST ke Controller
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
@@ -445,6 +447,27 @@ Ext.onReady(function(){
         '</div></tpl>'
     );
     
+	detail_invoice_tbeliDataStore = new Ext.data.Store({
+		id: 'detail_invoice_tbeliDataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_master_invoice&m=get_dtbeli_list', 
+			method: 'POST'
+		}),
+		baseParams:{start: 0, limit: pageS }, // parameter yang di $_POST ke Controller
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'terima_id'
+		},[
+		/* dataIndex => insert intocustomer_note_ColumnModel, Mapping => for initiate table column */ 
+			{name: 'cbo_invoice_terima_id', type: 'int', mapping: 'terima_id'},
+			{name: 'cbo_invoice_terima_no', type: 'string', mapping: 'terima_no'},
+			{name: 'cbo_invoice_terima_supplier', type: 'string', mapping: 'supplier_nama'},
+			{name: 'cbo_invoice_terima_supplier_id', type: 'string', mapping: 'supplier_id'}
+		]),
+		sortInfo:{field: 'cbo_invoice_terima_no', direction: "ASC"}
+	});
+	
   	/* Function for Identify of Window Column Model */
 	master_invoice_ColumnModel = new Ext.grid.ColumnModel(
 		[{
@@ -913,6 +936,7 @@ Ext.onReady(function(){
 			url: 'index.php?c=c_master_invoice&m=detail_detail_invoice_list', 
 			method: 'POST'
 		}),
+		BaseParams:{start:0,limit:pageS},
 		reader: detail_invoice_reader,
 		baseParams:{master_id: invoice_idField.getValue()},
 		sortInfo:{field: 'dinvoice_id', direction: "ASC"}
@@ -1056,7 +1080,7 @@ Ext.onReady(function(){
 	detail_invoiceListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'detail_invoiceListEditorGrid',
 		el: 'fp_detail_invoice',
-		title: 'Detail detail_invoice',
+		title: 'Detail Item',
 		height: 250,
 		width: 690,
 		autoScroll: true,
