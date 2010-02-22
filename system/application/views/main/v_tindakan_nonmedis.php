@@ -1112,6 +1112,7 @@ Ext.onReady(function(){
 	var checkColumn = new Ext.grid.CheckColumn({
 		header: 'Ambil Paket',
 		dataIndex: 'dtrawat_ambil_paket',
+		hidden: true,
 		width: 75
 	});
 	
@@ -1216,6 +1217,7 @@ Ext.onReady(function(){
 			text: 'Delete',
 			tooltip: 'Delete detail selected record',
 			iconCls:'icon-delete',
+			disabled: true,
 			handler: tindakan_nonmedis_detail_confirm_delete
 		}
 		]

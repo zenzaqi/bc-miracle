@@ -18,6 +18,28 @@ class M_cetak_kwitansi extends Model{
 			parent::Model();
 		}
 		
+		function get_customer_kwitansi_list($query,$start,$end){
+			$sql="SELECT cust_id,cust_no,cust_nama,cust_tgllahir,cust_alamat,cust_telprumah
+			FROM customer where cust_aktif='Aktif'";
+			if($query<>""){
+				$sql=$sql." and (cust_no like '%".$query."%' or cust_nama like '%".$query."%' or cust_telprumah like '%".$query."%' or cust_telprumah2 like '%".$query."%' or cust_telpkantor like '%".$query."%' or cust_hp like '%".$query."%' or cust_hp2 like '%".$query."%' or cust_hp3 like '%".$query."%') ";
+			}
+			
+			$result = $this->db->query($sql);
+			$nbrows = $result->num_rows();
+			$limit = $sql." LIMIT ".$start.",".$end;			
+			$result = $this->db->query($limit);  
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+		
 		//function for detail
 		//get record list
 		function detail_jual_kwitansi_list($master_id,$query,$start,$end) {
@@ -89,7 +111,7 @@ class M_cetak_kwitansi extends Model{
 		
 		//function for get list record
 		function cetak_kwitansi_list($filter,$start,$end){
-			$query = "SELECT * FROM cetak_kwitansi";
+			$query = "SELECT * FROM cetak_kwitansi LEFT JOIN customer ON(kwitansi_cust=cust_id)";
 			
 			// For simple search
 			if ($filter<>""){
@@ -118,12 +140,16 @@ class M_cetak_kwitansi extends Model{
 			$data = array(
 				"kwitansi_id"=>$kwitansi_id, 
 				"kwitansi_no"=>$kwitansi_no, 
-				"kwitansi_cust"=>$kwitansi_cust, 
+				//"kwitansi_cust"=>$kwitansi_cust, 
 				"kwitansi_ref"=>$kwitansi_ref, 
 				"kwitansi_nilai"=>$kwitansi_nilai, 
 				"kwitansi_keterangan"=>$kwitansi_keterangan, 
 				"kwitansi_status"=>$kwitansi_status 
 			);
+			$sql="SELECT cust_id FROM customer WHERE cust_id='$kwitansi_cust'";
+			$rs=$this->db->query($sql);
+			if($rs->num_rows())
+				$data["kwitansi_cust"]=$kwitansi_cust;
 			$this->db->where('kwitansi_id', $kwitansi_id);
 			$this->db->update('cetak_kwitansi', $data);
 			
@@ -132,6 +158,8 @@ class M_cetak_kwitansi extends Model{
 		
 		//function for create new record
 		function cetak_kwitansi_create($kwitansi_no ,$kwitansi_cust ,$kwitansi_ref ,$kwitansi_nilai ,$kwitansi_keterangan ,$kwitansi_status ){
+			$pattern="KW/".date('ym')."-";
+			$kwitansi_no=$this->m_public_function->get_kode_1("cetak_kwitansi","kwitansi_no",$pattern,12);
 			$data = array(
 				"kwitansi_no"=>$kwitansi_no, 
 				"kwitansi_cust"=>$kwitansi_cust, 

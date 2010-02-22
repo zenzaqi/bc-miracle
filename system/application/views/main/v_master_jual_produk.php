@@ -1170,7 +1170,7 @@ Ext.onReady(function(){
 		/* only one record is selected here */
 		if(master_jual_produkListEditorGrid.selModel.getCount() == 1) {
 			cbo_dproduk_produkDataStore.load({params: {query: master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_id')}});
-			cbo_dproduk_satuanDataStore.load({params: {jproduk_id: master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_id')}});
+			cbo_dproduk_satuanDataStore.load({params: {query: master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_id')}});
 			//master_jual_produk_set_form();
 			master_cara_bayarTabPanel.setActiveTab(0);
 			post2db='UPDATE';
@@ -3114,7 +3114,7 @@ Ext.onReady(function(){
 		sortInfo:{field: 'dproduk_produk_display', direction: "ASC"}
 	});
 	
-	/*cbo_dproduk_satuanDataStore = new Ext.data.Store({
+	cbo_dproduk_satuanDataStore = new Ext.data.Store({
 		id: 'cbo_dproduk_satuanDataStore',
 		proxy: new Ext.data.HttpProxy({
 			url: 'index.php?c=c_master_jual_produk&m=get_satuan_bydjproduk_list', 
@@ -3133,9 +3133,9 @@ Ext.onReady(function(){
 			{name: 'djproduk_satuan_harga', type: 'float', mapping: 'produk_harga'}
 		]),
 		sortInfo:{field: 'djproduk_satuan_nilai', direction: "DESC"}
-	});*/
+	});
 	
-	cbo_dproduk_satuanDataStore = new Ext.data.Store({
+	/*cbo_dproduk_satuanDataStore = new Ext.data.Store({
 		id: 'cbo_dproduk_satuanDataStore',
 		proxy: new Ext.data.HttpProxy({
 			url: 'index.php?c=c_master_jual_produk&m=get_satuan_byproduk_list', 
@@ -3154,7 +3154,7 @@ Ext.onReady(function(){
 			{name: 'djproduk_satuan_harga', type: 'float', mapping: 'produk_harga'}
 		]),
 		sortInfo:{field: 'djproduk_satuan_nilai', direction: "DESC"}
-	});
+	});*/
 	
 	
 	memberDataStore = new Ext.data.Store({
