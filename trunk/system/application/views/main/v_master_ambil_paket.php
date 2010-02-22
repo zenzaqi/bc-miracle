@@ -455,7 +455,8 @@ Ext.onReady(function(){
     
   	/* Function for Identify of Window Column Model */
 	ambil_paket_ColumnModel = new Ext.grid.ColumnModel(
-		[{
+		[
+		{
 			header: '<div align="center">' + 'No. Cust' + '</div>',
 			dataIndex: 'cust_no',
 			width: 80,	//230,
@@ -466,6 +467,14 @@ Ext.onReady(function(){
 			dataIndex: 'cust_nama',
 			width: 200,	//230,
 			sortable: true
+		}, 
+		{
+			header: '<div align="center">' + 'Tgl Faktur' + '</div>',
+			dataIndex: 'jpaket_tanggal',
+			width: 70,
+			sortable: true,
+//			renderer: Ext.util.Format.dateRenderer('Y-m-d')
+			renderer: Ext.util.Format.dateRenderer('d-m-Y')
 		}, 
 		{
 			header: '<div align="center">' + 'No.Faktur' + '</div>',
@@ -480,13 +489,13 @@ Ext.onReady(function(){
 			sortable: true
 		}, 
 		{
-			header: '<div align="center">' + 'Tgl Faktur' + '</div>',
-			dataIndex: 'jpaket_tanggal',
-			width: 70,
-			sortable: true,
-//			renderer: Ext.util.Format.dateRenderer('Y-m-d')
-			renderer: Ext.util.Format.dateRenderer('d-m-Y')
-		}, 
+			header: '<div align="center">' + 'Sisa' + '</div>',
+			dataIndex: 'total_sisa_dpaket',
+			width: 60,	//90,
+			renderer: function(value, cell, record){
+				return '<div align="right">' + value + '</div>';
+			}
+		},
 		{
 			header: '<div align="center">' + 'Tgl Exp' + '</div>',
 			dataIndex: 'dpaket_kadaluarsa',
@@ -494,15 +503,8 @@ Ext.onReady(function(){
 			sortable: true,
 //			renderer: Ext.util.Format.dateRenderer('Y-m-d')
 			renderer: Ext.util.Format.dateRenderer('d-m-Y')
-		}, 
-		{
-			header: '<div align="center">' + 'Sisa' + '</div>',
-			dataIndex: 'total_sisa_dpaket',
-			width: 60,	//90,
-			renderer: function(value, cell, record){
-				return '<div align="right">' + value + '</div>';
-			}
-		}]
+		} 
+		]
 	);
 	
 	ambil_paket_ColumnModel.defaultSortable= true;
