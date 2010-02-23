@@ -606,18 +606,18 @@ Ext.onReady(function(){
 		id: 'ambil_paket_ListEditorGridContextMenu',
 		items: [
 		{ 
-			text: 'Edit', tooltip: 'Edit selected record', 
+			text: 'Ambil Paket', tooltip: 'Edit selected record', 
 			iconCls:'icon-update',
 			handler: ambil_paket_editContextMenu 
 		},
-		{ 
+/*		{ 
 			text: 'Delete', 
 			tooltip: 'Delete selected record', 
 			iconCls:'icon-delete',
 			handler: ambil_paket_confirm_delete 
 		},
 		'-',
-		{ 
+*/		{ 
 			text: 'Print',
 			tooltip: 'Print Document',
 			iconCls:'icon-print',
