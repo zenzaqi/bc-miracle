@@ -399,10 +399,11 @@ Ext.onReady(function(){
 			{name: 'kwitansi_no', type: 'string', mapping: 'kwitansi_no'}, 
 			{name: 'kwitansi_cust', type: 'int', mapping: 'kwitansi_cust'},
 			{name: 'cust_nama', type: 'string', mapping: 'cust_nama'},
-			{name: 'kwitansi_ref', type: 'int', mapping: 'kwitansi_ref'}, 
 			{name: 'kwitansi_nilai', type: 'float', mapping: 'kwitansi_nilai'}, 
 			{name: 'kwitansi_keterangan', type: 'string', mapping: 'kwitansi_keterangan'}, 
-			{name: 'kwitansi_status', type: 'string', mapping: 'kwitansi_status'}, 
+			{name: 'kwitansi_status', type: 'string', mapping: 'kwitansi_status'},
+			{name: 'total_terpakai', type: 'int', mapping: 'total_terpakai'},
+			{name: 'total_sisa', type: 'int', mapping: 'total_sisa'},
 			{name: 'kwitansi_creator', type: 'string', mapping: 'kwitansi_creator'}, 
 			{name: 'kwitansi_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'kwitansi_date_create'}, 
 			{name: 'kwitansi_update', type: 'string', mapping: 'kwitansi_update'}, 
@@ -487,7 +488,7 @@ Ext.onReady(function(){
 		{
 			header: 'Nilai',
 			dataIndex: 'kwitansi_nilai',
-			width: 150,
+			width: 100,
 			sortable: true,
 			editor: new Ext.form.NumberField({
 				allowDecimals: true,
@@ -498,9 +499,15 @@ Ext.onReady(function(){
 			})
 		}, 
 		{
+			header: 'Sisa',
+			dataIndex: 'total_sisa',
+			width: 100,
+			sortable: true
+		}, 
+		{
 			header: 'Keterangan',
 			dataIndex: 'kwitansi_keterangan',
-			width: 250,
+			width: 210,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 500
@@ -509,7 +516,7 @@ Ext.onReady(function(){
 		{
 			header: 'Status',
 			dataIndex: 'kwitansi_status',
-			width: 60,
+			width: 55,
 			sortable: true,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
