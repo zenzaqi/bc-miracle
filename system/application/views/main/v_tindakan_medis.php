@@ -516,7 +516,8 @@ Ext.onReady(function(){
 			{name: 'dtrawat_ambil_paket', type: 'string', mapping: 'dtrawat_ambil_paket'},
 			{name: 'cust_punya_paket', type: 'string', mapping: 'cust_punya_paket'},
 			{name: 'dpaket_id', type: 'int', mapping: 'dpaket_id'},
-			{name: 'rpaket_perawatan', type: 'int', mapping: 'rpaket_perawatan'}
+			{name: 'rpaket_perawatan', type: 'int', mapping: 'rpaket_perawatan'},
+			{name: 'dtrawat_edit', type: 'string', mapping: 'dtrawat_edit'}
 		])/*,
 		sortInfo:{field: 'dtrawat_id', direction: "DESC"}*/
 	});
@@ -724,6 +725,12 @@ Ext.onReady(function(){
 			header: '<div align="center">' + 'Info Paket' + '</div>',
 			dataIndex: 'cust_punya_paket',
 			width: 60,	//55,
+			sortable: false
+		},
+		{
+			header: '<div align="center">' + 'Editing' + '</div>',
+			dataIndex: 'dtrawat_edit',
+			width: 40,	//55,
 			sortable: false
 		},
 		{
