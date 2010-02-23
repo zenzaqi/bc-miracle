@@ -3539,9 +3539,9 @@ Ext.onReady(function(){
 	detail_pengguna_paketListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'detail_pengguna_paketListEditorGrid',
 		el: 'fp_detail_pengguna_paket',
-		title: 'Daftar Pengguna Paket',
+		title: 'Daftar Pemakai Paket',
 		height: 250,
-		width: 938,
+		width: 940,	//938,
 		autoScroll: true,
 		store: detail_pengguna_paket_DataStore, // DataStore
 		colModel: detail_pengguna_paket_ColumnModel, // Nama-nama Columns

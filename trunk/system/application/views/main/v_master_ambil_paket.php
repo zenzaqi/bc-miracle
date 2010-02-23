@@ -477,7 +477,7 @@ Ext.onReady(function(){
 			renderer: Ext.util.Format.dateRenderer('d-m-Y')
 		}, 
 		{
-			header: '<div align="center">' + 'No.Faktur' + '</div>',
+			header: '<div align="center">' + 'No. Faktur' + '</div>',
 			dataIndex: 'jpaket_nobukti',
 			width: 80,
 			sortable: true
@@ -658,7 +658,7 @@ Ext.onReady(function(){
 	/* Identify  ambil_paket_customer Field */
 	ambil_paket_noCustField= new Ext.form.TextField({
 		id: 'ambil_paket_noCustField',
-		fieldLabel: 'No.Customer',
+		fieldLabel: 'No. Customer',
 		readOnly: true,
 		anchor: '95%'
 	});
@@ -672,7 +672,7 @@ Ext.onReady(function(){
 	/* Identify  ambil_paket_customer Field */
 	ambil_paket_noFakturField= new Ext.form.TextField({
 		id: 'ambil_paket_noFakturField',
-		fieldLabel: 'No.Faktur',
+		fieldLabel: 'No. Faktur',
 		readOnly: true,
 		anchor: '95%'
 	});
@@ -680,7 +680,7 @@ Ext.onReady(function(){
 	ambil_paket_tglFakturField= new Ext.form.DateField({
 		id: 'ambil_paket_tglFakturField',
 		fieldLabel: 'Tgl Faktur',
-		format : 'Y-m-d',
+		format : 'd-m-Y',
 		disabled: true
 	});
 	/* Identify  ambil_paket_kode Field */
@@ -710,12 +710,12 @@ Ext.onReady(function(){
 	ambil_paket_expiredField= new Ext.form.DateField({
 		id: 'ambil_paket_expiredField',
 		fieldLabel: 'Tgl Expired',
-		format : 'Y-m-d',
+		format : 'd-m-Y',
 		disabled: true
 	});
 	ambil_paket_sisaField= new Ext.form.NumberField({
 		id: 'ambil_paket_sisaField',
-		fieldLabel: 'Sisa Paket',
+		fieldLabel: 'Sisa',
 		readOnly: true,
 		width: 94,
 		maskRe: /([0-9]+)$/
@@ -828,7 +828,7 @@ Ext.onReady(function(){
 				return '<div align="right">' + value + '</div>';
 			}
 		},{
-			header: '<div align="center">' + 'Customer' + '</div>',
+			header: '<div align="center">' + 'Pemakai' + '</div>',
 			dataIndex: 'cust_nama',
 			width: 210
 		}]
@@ -940,17 +940,18 @@ Ext.onReady(function(){
 	ambil_paket_isi_perawatan_ColumnModel = new Ext.grid.ColumnModel(
 		[
 		{
-			header: 'Perawatan',
+			header: '<div align="center">' + 'Perawatan' + '</div>',
 			dataIndex: 'rpaket_perawatan',
-			width: 150,
+			width: 200,	//150,
 			sortable: true,
 			editor: combo_paket_isi_rawat,
 			renderer: Ext.util.Format.comboRenderer(combo_paket_isi_rawat)
 		},
 		{
-			header: 'Jumlah Diambil',
+			header: '<div align="center">' + 'Jumlah' + '</div>',
 			dataIndex: 'rpaket_jumlah',
-			width: 80,
+			align: 'right',
+			width: 60,	//80,
 			sortable: true,
 			editor: new Ext.form.NumberField({
 				allowDecimals: false,
@@ -961,9 +962,9 @@ Ext.onReady(function(){
 			})
 		},
 		{
-			header: 'Customer',
+			header: '<div align="center">' + 'Pemakai' + '</div>',
 			dataIndex: 'rpaket_cust',
-			width: 150,
+			width: 200,	//150,
 			sortable: true,
 			editor: combo_cust_ambil_paket,
 			renderer: Ext.util.Format.comboRenderer(combo_cust_ambil_paket)
