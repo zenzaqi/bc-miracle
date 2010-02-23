@@ -728,9 +728,9 @@ Ext.onReady(function(){
 			sortable: false
 		},
 		{
-			header: '<div align="center">' + 'Editing' + '</div>',
+			header: '<div align="center">' + 'Stat. Kasir' + '</div>',
 			dataIndex: 'dtrawat_edit',
-			width: 40,	//55,
+			width: 60,	//55,
 			sortable: false
 		},
 		{
