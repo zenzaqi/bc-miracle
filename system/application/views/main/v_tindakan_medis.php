@@ -786,7 +786,7 @@ Ext.onReady(function(){
 	tindakanListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'tindakanListEditorGrid',
 		el: 'fp_tindakan',
-		title: 'List Of Tindakan',
+		title: 'Daftar Tindakan Medis',
 		autoHeight: true,
 		store: tindakan_medisDataStore, // DataStore
 		cm: tindakan_medisColumnModel, // Nama-nama Columns
@@ -1134,25 +1134,25 @@ Ext.onReady(function(){
 	tindakan_medisdetail_ColumnModel = new Ext.grid.ColumnModel(
 		[
 		{
-			header: 'Perawatan',
+			header: '<div align="center">' + 'Perawatan' + '</div>',
 			dataIndex: 'dtrawat_perawatan',
-			width: 270,
+			width: 300,	//270,
 			sortable: true,
 			editor: combo_trawat_rawat,
 			renderer: Ext.util.Format.comboRenderer(combo_trawat_rawat)
 		},
 		{
-			header: 'Dokter',
+			header: '<div align="center">' + 'Dokter' + '</div>',
 			dataIndex: 'dtrawat_petugas1',
-			width: 200,
+			width: 80,	//200,
 			sortable: true,
 			editor: combo_dapp_dokter,
 			renderer: Ext.util.Format.comboRenderer(combo_dapp_dokter)
 		},
 		{
-			header: 'Jam Appointment',
+			header: '<div align="center">' + 'Jam App' + '</div>',
 			dataIndex: 'dtrawat_jam',
-			width: 100,
+			width: 60,	//100,
 			sortable: true,
 			editor: new Ext.form.TimeField({
 				format: 'H:i:s',
@@ -1163,9 +1163,9 @@ Ext.onReady(function(){
 			})
 		},
 		{
-			header: 'Status',
+			header: '<div align="center">' + 'Status' + '</div>',
 			dataIndex: 'dtrawat_status',
-			width: 100,
+			width: 80,	//100,
 			sortable: true,
 			editable:false,
 			editor: new Ext.form.ComboBox({
@@ -1183,7 +1183,7 @@ Ext.onReady(function(){
             })
 		},
 		{
-			header: 'Detail Keterangan',
+			header: '<div align="center">' + 'Detail Keterangan' + '</div>',
 			dataIndex: 'dtrawat_keterangan',
 			width: 200,
 			sortable: true,
@@ -1201,7 +1201,7 @@ Ext.onReady(function(){
 	tindakan_medisdetailListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'tindakan_medisdetailListEditorGrid',
 		el: 'fp_tindakan_medisdetail',
-		title: 'Detail TINDAKAN MEDIS',
+		title: 'Detail Tindakan Medis',
 		height: 200,
 		width: 888,
 		autoScroll: true,
@@ -1470,7 +1470,7 @@ Ext.onReady(function(){
 	tindakan_nonmedis_detailColumnModel = new Ext.grid.ColumnModel(
 		[
 		{
-			header: 'Perawatan',
+			header: '<div align="center">' + 'Perawatan' + '</div>',
 			dataIndex: 'dtrawat_perawatan',
 			width: 290,
 			sortable: true,
@@ -1486,7 +1486,7 @@ Ext.onReady(function(){
 			renderer: Ext.util.Format.comboRenderer(combo_dtindakan_terapis)
 		},*/
 		{
-			header: 'Detail Keterangan',
+			header: '<div align="center">' + 'Detail Keterangan' + '</div>',
 			dataIndex: 'dtrawat_keterangan',
 			width: 200,
 			sortable: true,
@@ -1504,7 +1504,7 @@ Ext.onReady(function(){
 	dtindakan_jual_nonmedisListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'dtindakan_jual_nonmedisListEditorGrid',
 		el: 'fp_dtindakan_jual_nonmedis',
-		title: 'Detail TINDAKAN NON MEDIS',
+		title: 'Detail Tindakan Non Medis',
 		height: 200,
 		width: 888,
 		autoScroll: true,
@@ -1666,7 +1666,7 @@ Ext.onReady(function(){
 	/* Function for retrieve create Window Form */
 	tindakan_medis_createWindow= new Ext.Window({
 		id: 'tindakan_medis_createWindow',
-		title: post2db+'Tindakan',
+		title: post2db+'Tindakan Medis',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,

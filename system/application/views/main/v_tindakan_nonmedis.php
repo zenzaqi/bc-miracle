@@ -786,7 +786,7 @@ Ext.onReady(function(){
 	tindakan_nonmedisListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'tindakan_nonmedisListEditorGrid',
 		el: 'fp_tindakan_nonmedis',
-		title: 'List Of Tindakan',
+		title: 'Daftar Tindakan Non Medis',
 		autoHeight: true,
 		store: tindakan_nonmedis_DataStore, // DataStore
 		cm: tindakan_nonmedis_ColumnModel, // Nama-nama Columns
@@ -1120,25 +1120,25 @@ Ext.onReady(function(){
 	tindakan_nonmedis_detail_ColumnModel = new Ext.grid.ColumnModel(
 		[
 		{
-			header: 'Perawatan',
+			header: '<div align="center">' + 'Perawatan' + '</div>',
 			dataIndex: 'dtrawat_perawatan',
-			width: 290,
+			width: 300,	//290,
 			sortable: true,
 			editor: combo_dtrawat_perawatan,
 			renderer: Ext.util.Format.comboRenderer(combo_dtrawat_perawatan)
 		},
 		{
-			header: 'Therapist',
+			header: '<div align="center">' + 'Therapist' + '</div>',
 			dataIndex: 'dtrawat_petugas2',
-			width: 200,
+			width: 140,	//200,
 			sortable: true,
 			editor: combo_dapp_terapis,
 			renderer: Ext.util.Format.comboRenderer(combo_dapp_terapis)
 		},
 		{
-			header: 'Jam Appointment',
+			header: '<div align="center">' + 'Jam App' + '</div>',
 			dataIndex: 'dtrawat_jam',
-			width: 100,
+			width: 60,	//100,
 			sortable: true,
 			editor: new Ext.form.TimeField({
 				format: 'H:i:s',
@@ -1149,9 +1149,9 @@ Ext.onReady(function(){
 			})
 		},
 		{
-			header: 'Status',
+			header: '<div align="center">' + 'Status' + '</div>',
 			dataIndex: 'dtrawat_status',
-			width: 100,
+			width: 80,	//100,
 			sortable: true,
 			editable:false,
 			editor: new Ext.form.ComboBox({
@@ -1169,7 +1169,7 @@ Ext.onReady(function(){
             })
 		},
 		{
-			header: 'Detail Keterangan',
+			header: '<div align="center">' + 'Detail Keterangan' + '</div>',
 			dataIndex: 'dtrawat_keterangan',
 			width: 200,
 			sortable: true,
@@ -1187,7 +1187,7 @@ Ext.onReady(function(){
 	tindakan_nonmedis_detailListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'tindakan_nonmedis_detailListEditorGrid',
 		el: 'fp_tindakan_nonmedis_detail',
-		title: 'Detail tindakan_nonmedis_detail',
+		title: 'Detail Tindakan Non Medis',
 		height: 250,
 		width: 920,
 		autoScroll: true,
@@ -1369,7 +1369,7 @@ Ext.onReady(function(){
 	/* Function for retrieve create Window Form */
 	tindakan_nonmedis_createWindow= new Ext.Window({
 		id: 'tindakan_nonmedis_createWindow',
-		title: post2db+'Tindakan',
+		title: post2db+'Tindakan Non Medis',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,
