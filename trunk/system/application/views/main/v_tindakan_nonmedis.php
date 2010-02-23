@@ -230,7 +230,7 @@ Ext.onReady(function(){
 					default:
 						tindakan_nonmedis_DataStore.commitChanges();
 						tindakan_nonmedis_DataStore.reload();
-						trawat_medis_perawatanDataStore.reload();
+						trawat_nonmedis_perawatanDataStore.reload();
 						/*Ext.MessageBox.show({
 						   title: 'Warning',
 						   msg: 'Perubahan tidak dapat disimpan.',
