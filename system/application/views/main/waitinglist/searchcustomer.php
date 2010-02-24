@@ -6,7 +6,7 @@
 <style type="text/css">
 <!--
 body {
-	background-color: #666666;
+	background-color: #F3F3F3;
 }
 -->
 </style></head>
@@ -25,7 +25,7 @@ else
 $hal=0;
 $perpage=30;
 $jmlrow=0;
-$query=mysql_query("select count(*) from customer where cust_nama like '" .$_GET['cust_nama']."%' ");
+$query=mysql_query("select count(*) from customer where cust_nama like '".$_GET['cust_nama']."%'");
 $jmlrow=mysql_fetch_row($query);
 
 
@@ -33,7 +33,7 @@ $maxhal=floor($jmlrow[0]/$perpage);
 if($jmlrow[0]%$perpage>0)
 $maxhal++;
 
-$query=mysql_query("select * from customer where cust_nama like '" .$_GET['cust_nama']."%' limit ".($hal*$perpage).",30");
+$query=mysql_query("select * from customer where cust_nama like '%" .$_GET['cust_nama']."%' or cust_no like '%".$_GET['cust_nama']."%' or cust_telprumah like '%" .$_GET['cust_nama']."%' or cust_hp like '%" .$_GET['cust_nama']."%'limit ".($hal*$perpage).",30");
 //echo $maxhal." ".$hal;
 ?>
   <? if($hal>0) { ?>

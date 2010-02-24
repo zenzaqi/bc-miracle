@@ -58,6 +58,10 @@ session_start();
 }
 .style6 {font-family: Arial, Helvetica, sans-serif; font-weight: bold; }
 .style9 {font-family: Arial, Helvetica, sans-serif; font-style: italic; }
+body {
+	background-image: url(logo%20kecil.jpg);
+	background-repeat: no-repeat;
+}
 </style>
 <script src="datepickercontrol.js" ></script>
 <script src="searchcustomer.js"></script>
@@ -117,10 +121,13 @@ showsearchperawatan(document.getElementById('txtperawatan').value);
       <div align="center"></div>
       <table width="200" border="0" align="left">
         <tr>
-          <td height="83"><table width="200" border="0" align="left">
-            <tr>
-              <td><label> </label>
-                  <div align="center"><span class="style9">Search Dokter</span>
+          <td height="83" ><table width="200" border="0" align="left">
+            <tr >
+              <td bordercolor="#D8D8D8"><span class="style9">Tgl 
+                </span>
+                <input name="txtsearchtgl" type="text" id="DPC_date1" size="8"  value="<? echo date("d-m-Y"); ?>" /></td>
+              <td bordercolor="#D8D8D8"><label> </label>
+                  <div align="center"><span class="style9"> Dokter</span>
                       <select name="listdokter" id="listdokter">
                         <? $query=mysql_query("select * from karyawan where karyawan_jabatan=8");
 	  while($data=mysql_fetch_array($query))
@@ -135,22 +142,27 @@ showsearchperawatan(document.getElementById('txtperawatan').value);
                 </div></td>
             </tr>
             <tr>
-              <td height="26"><div align="center">
-                <input name="submitsearchdokter" type="submit" value="OK" />
+              <td height="26" colspan="2" bordercolor="#D8D8D8"><div align="center">
+                <input name="submitsearchdokter" type="submit" value="Search" />
               </div></td>
-            </tr>
+              </tr>
             <tr>
+              <td>&nbsp;</td>
               <td height="26">&nbsp;</td>
             </tr>
             <tr>
+              <td>&nbsp;</td>
               <td height="26">&nbsp;</td>
             </tr>
             <tr>
-              <td height="26"><label> </label>
-                  <div align="center">
-                    <input  type="button" value="Tampilkan Semua Data"  onclick="document.location.href='waitinglist.php'" />
-                  </div></td>
+              <td>&nbsp;</td>
+              <td height="26">&nbsp;</td>
             </tr>
+            <tr>
+              <td height="26" colspan="2"><input  type="button" value="Tampilkan Semua Data"  onclick="document.location.href='waitinglist.php'" />
+                <label> </label>
+                  <div align="center"></div></td>
+              </tr>
           </table></td>
           </tr>
         <tr></tr>
@@ -162,12 +174,11 @@ if(isset($_GET['appointment']))
 {
 	$query=mysql_query("select * from waiting_list where wl_id=".$_GET['appointment']."");
 	$arr=mysql_fetch_array($query);
-	//$temp=$arr['wl_priority'];
 	$temp2=$arr['karyawan_id'];
-	//$hitung=strval($temp)-1;
+	$temp3=date("Y-m-d",strtotime($arr['wl_date']));
 	
-	$query=mysql_query("update waiting_list set wl_priority=wl_priority-1 where karyawan_id = ".$temp2."");
-	$query=mysql_query("update waiting_list set wl_priority=null, wl_status='Appointment' where wl_priority=0");
+	$query=mysql_query("update waiting_list set wl_priority=wl_priority-1 where karyawan_id = ".$temp2." and wl_date = '".$temp3."'");
+	$query=mysql_query("update waiting_list set wl_priority=null, wl_status='Appointment' where wl_id = ".$_GET['appointment']."");
 	
 }
 
@@ -177,10 +188,9 @@ if(isset($_GET['batal']))
 	$arr=mysql_fetch_array($query);
 	$temp=$arr['wl_priority'];
 	$temp2=$arr['karyawan_id'];
-	$hitung=strval($temp)+1;
-
-	$query=mysql_query("update waiting_list set wl_priority=".$temp." where wl_priority = ".$hitung." and karyawan_id = ".$temp2."");
-	$query=mysql_query("update waiting_list set wl_priority=".$hitung." where wl_id=".$_GET['batal']."");
+	$temp3=date("Y-m-d",strtotime($arr['wl_date']));
+	
+	$query=mysql_query("update waiting_list set wl_priority=wl_priority-1 where wl_priority > ".$temp." and karyawan_id = ".$temp2." and  wl_date = '".$temp3."'");	
 	$query=mysql_query("update waiting_list set wl_status='Batal', wl_priority=null where wl_id=".$_GET['batal']."");
 }
 
@@ -188,12 +198,11 @@ if(isset($_GET['batal2']))
 {
 	$query=mysql_query("select * from waiting_list where wl_id=".$_GET['batal2']."");
 	$arr=mysql_fetch_array($query);
-	//$temp=$arr['wl_priority'];
 	$temp2=$arr['karyawan_id'];
-	//$hitung=strval($temp)-1;
+	$temp3=date("Y-m-d",strtotime($arr['wl_date']));
 	
-	$query=mysql_query("update waiting_list set wl_priority=null, wl_status='Batal' where wl_id=".$_GET['batal2']."");
-	$query=mysql_query("update waiting_list set wl_priority=wl_priority-1 where karyawan_id = ".$temp2."");
+		$query=mysql_query("update waiting_list set wl_priority=wl_priority-1 where karyawan_id = ".$temp2." and wl_date = '".$temp3."' and wl_priority>0");
+		$query=mysql_query("update waiting_list set wl_priority=null, wl_status='Batal' where wl_id=".$_GET['batal2']."");
 
 }
 
@@ -203,11 +212,12 @@ if(isset($_GET['up']))
 	$arr=mysql_fetch_array($query);
 	$temp=$arr['wl_priority'];
 	$temp2=$arr['karyawan_id'];
+	$temp3=date("Y-m-d",strtotime($arr['wl_date']));
 	$hitung=strval($temp)-1;
 	
 	if($hitung>0)
 	{
-	$query=mysql_query("update waiting_list set wl_priority=".$temp." where wl_priority = ".$hitung." and karyawan_id = ".$temp2."");
+	$query=mysql_query("update waiting_list set wl_priority=".$temp." where wl_priority = ".$hitung." and karyawan_id = ".$temp2." and wl_date = '".$temp3."'");
 	$query=mysql_query("update waiting_list set wl_priority=".$hitung." where wl_id=".$_GET['up']."");
 	}
 }
@@ -218,9 +228,10 @@ if(isset($_GET['down']))
 	$arr=mysql_fetch_array($query);
 	$temp=$arr['wl_priority'];
 	$temp2=$arr['karyawan_id'];
+	$temp3=date("Y-m-d",strtotime($arr['wl_date']));
 	$hitung=strval($temp)+1;
 	
-	$query=mysql_query("update waiting_list set wl_priority=".$temp." where wl_priority = ".$hitung." and karyawan_id = ".$temp2."");
+	$query=mysql_query("update waiting_list set wl_priority=".$temp." where wl_priority = ".$hitung." and karyawan_id = ".$temp2." and wl_date = '".$temp3."'");
 	$query=mysql_query("update waiting_list set wl_priority=".$hitung." where wl_id=".$_GET['down']."");
 }
 
@@ -228,7 +239,7 @@ if(isset($_GET['down']))
 if(isset($_POST['submitwaiting']))
 {
 
-$query=mysql_query("select max(wl_priority) from waiting_list where karyawan_id =".$_POST['lstdokter']."");
+$query=mysql_query("select max(wl_priority) from waiting_list where karyawan_id =".$_POST['lstdokter']." and wl_date = '".date("Y-m-d",strtotime($_POST['txttgl']))."'");
 if(mysql_num_rows($query)>0)
 {
 $no=mysql_fetch_row($query);
@@ -237,14 +248,19 @@ $no[0]=strval($no[0])+1;
 else
 $no[0]=1;
 
-if(strlen($_POST['txtcustomer'])>0 & strlen($_POST['txtperawatan'])>0)
+if(strlen($_POST['txtperawatan'])>0)
 {
+if(strlen($_POST['txtcustomer'])==0)
+{
+$_POST['txtcustomer']="-1";
+}
+$temp3=date("Y-m-d",strtotime($_POST['txttgl']));
 
-mysql_query(" insert into waiting_list (wl_date, wl_status, wl_priority, wl_keterangan, karyawan_id, cust_id, rawat_id) values('".$_POST['txttgl']."' , 'Waiting List' , ".$no[0]." , '".$_POST['txtketerangan']."', '".$_POST['lstdokter']."' , '".$_POST['txtcustomer']."' , '".$_POST['txtperawatan']."') ");
+mysql_query(" insert into waiting_list (wl_date, wl_status, wl_priority, wl_keterangan, karyawan_id, cust_id, rawat_id) values('".$temp3."' , 'Waiting List' , ".$no[0]." , '".$_POST['txtketerangan']."', '".$_POST['lstdokter']."' , ".$_POST['txtcustomer'].", '".$_POST['txtperawatan']."') ");
 
 }
 		else
-		echo "Pilih Customer / Perawatan terlebih dahulu";
+		echo "Pilih Perawatan terlebih dahulu";
 
 }
 
@@ -252,16 +268,16 @@ mysql_query(" insert into waiting_list (wl_date, wl_status, wl_priority, wl_kete
       </p>
     </div>
     <form action="waitinglist.php" method="post">
-      <table width="200" border="0" align="left">
+      <table width="200" border="0" align="left" style="margin-left:50px">
 
         <tr>
           <td><table width="200" border="0" align="left">
             <tr>
-              <th colspan="5" scope="col"><div align="center" class="style2">Add Waiting List</div></th>
+              <th colspan="5" scope="col"><div align="center" class="style2">Tambah Waiting List</div></th>
             </tr>
             <tr>
               <td><span class="style6">Tgl</span></td>
-              <td><input name="txttgl" type="text" id="DPC_date" size="14"  value="<? echo date("d-m-Y"); ?>" /></td>
+              <td><input name="txttgl" type="text" id="DPC_date2" size="14"  value="<? echo date("d-m-Y"); ?>" /></td>
               <td>&nbsp;</td>
               <td>&nbsp;</td>
               <td>&nbsp;</td>
@@ -308,10 +324,10 @@ mysql_query(" insert into waiting_list (wl_date, wl_status, wl_priority, wl_kete
             </tr>
             <tr>
               <td><div align="left"></div></td>
-              <td><div align="left">
-                  <input name="submitwaiting" type="submit" value="Add" />
-              </div></td>
-              <td>&nbsp;</td>
+              <td>
+                <div align="center">
+                  <input name="submitwaiting" type="submit" value="Tambah" />
+                    </div></td><td>&nbsp;</td>
               <td>&nbsp;</td>
               <td>&nbsp;</td>
             </tr>
@@ -325,7 +341,12 @@ mysql_query(" insert into waiting_list (wl_date, wl_status, wl_priority, wl_kete
   <p>&nbsp;    </p>
   <p>&nbsp;</p>
 </div>
-<div align="left"></div>
+<div align="left">
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+  </div>
 <table border="1" align="left" cellpadding="4" cellspacing="0" class="tableview">
   <thead style="background-color:#00CCFF">
     <tr>
@@ -343,17 +364,13 @@ mysql_query(" insert into waiting_list (wl_date, wl_status, wl_priority, wl_kete
   </thead>
   <?
   
-  
-  
-  
-  
 if(isset($_GET['appointment']) or (isset($_GET['batal']) or (isset($_GET['up']) or (isset($_GET['down']) or (isset($_GET['batal2']))))))
 {
 	$id_dokter = $_GET['iddokter'];
  $sql="select waiting_list.*,karyawan.karyawan_username,customer.cust_nama,customer.cust_no,perawatan.rawat_nama 
   from waiting_list,karyawan,customer,perawatan 
   where waiting_list.cust_id=customer.cust_id and waiting_list.rawat_id=perawatan.rawat_id and waiting_list.karyawan_id=karyawan.karyawan_id and waiting_list.karyawan_id = $id_dokter
-  order by waiting_list.karyawan_id,waiting_list.wl_priority";
+  order by waiting_list.wl_date desc,waiting_list.wl_status='Waiting List' desc,waiting_list.wl_status='Appointment' desc,waiting_list.karyawan_id,waiting_list.wl_priority";
   $query=mysql_query($sql); 
  
  }
@@ -362,19 +379,19 @@ if(isset($_GET['appointment']) or (isset($_GET['batal']) or (isset($_GET['up']) 
 
  	  $sql="select waiting_list.*,karyawan.karyawan_username,customer.cust_nama,customer.cust_no,perawatan.rawat_nama 
   from waiting_list,karyawan,customer,perawatan where waiting_list.cust_id=customer.cust_id and waiting_list.rawat_id=perawatan.rawat_id and waiting_list.karyawan_id=karyawan.karyawan_id 
-  order by waiting_list.karyawan_id,waiting_list.wl_priority,waiting_list.wl_status='Waiting List'";
+  order by waiting_list.wl_date desc,waiting_list.wl_status='Waiting List' desc,waiting_list.wl_status='Appointment' desc,waiting_list.karyawan_id,waiting_list.wl_priority";
   $query=mysql_query($sql);
  }
- 
  
 	if(isset($_GET['submitsearchdokter']))
 {
 	$id_dokter = $_GET['listdokter'];
+	$temp3=date("Y-m-d",strtotime($_GET['txtsearchtgl']));
  
  $sql="select waiting_list.*,karyawan.karyawan_username,customer.cust_nama,customer.cust_no,perawatan.rawat_nama 
   from waiting_list,karyawan,customer,perawatan 
-  where waiting_list.cust_id=customer.cust_id and waiting_list.rawat_id=perawatan.rawat_id and waiting_list.karyawan_id=karyawan.karyawan_id and waiting_list.karyawan_id = $id_dokter
-  order by waiting_list.karyawan_id,waiting_list.wl_priority";
+  where waiting_list.cust_id=customer.cust_id and waiting_list.rawat_id=perawatan.rawat_id and waiting_list.karyawan_id=karyawan.karyawan_id and waiting_list.karyawan_id = $id_dokter and waiting_list.wl_date = '".$temp3."'
+  order by waiting_list.wl_date desc,waiting_list.wl_status='Waiting List' desc,waiting_list.wl_status='Appointment' desc,waiting_list.karyawan_id,waiting_list.wl_priority";
   $query=mysql_query($sql); 
  
  }
@@ -388,12 +405,10 @@ if(isset($_GET['appointment']) or (isset($_GET['batal']) or (isset($_GET['up']) 
   {
   	while($row=mysql_fetch_array($query))
 	{
-		$query2=mysql_query("select wl_priority from waiting_list where karyawan_id=".$row['karyawan_id']." order by wl_priority desc");
+		$query2=mysql_query("select wl_priority from waiting_list where karyawan_id=".$row['karyawan_id']." and wl_date = '".date("Y-m-d",strtotime($row['wl_date']))."' order by wl_priority desc");
   		$row2=mysql_fetch_array($query2);
   		$max = $row2[0];
 
-	/*$query2=mysql_query("select * from karyawan where karyawan_id =$row[5]");
-	$row2=mysql_fetch_array($query2);*/
 	print("<tr><td>".date("d-M-Y",strtotime($row['wl_date']))." </td><td>".$row['karyawan_username']." </td><td> ".$row['cust_nama']." </td> <td> ".$row['cust_no']." </td>");
 	if($row['wl_status']=='Appointment')
 		$color='green';
@@ -428,16 +443,9 @@ if(isset($_GET['appointment']) or (isset($_GET['batal']) or (isset($_GET['up']) 
 	else if(strval($row['wl_priority']) == null)
 		print("");
 	
-
 	}
  
   }
-  
-  
-  
-  
-  
-  
   
   ?>
   
@@ -446,7 +454,7 @@ if(isset($_GET['appointment']) or (isset($_GET['batal']) or (isset($_GET['up']) 
 </table>
 <p align="left">&nbsp;</p>
 <p class="style2">&nbsp;</p>
-<p class="style2">&nbsp;</p></td>
+</td>
 </tr>
 </table>
 </body>
