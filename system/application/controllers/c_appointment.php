@@ -73,7 +73,7 @@ class C_appointment extends Controller {
 		//ID dokter pada tabel departemen adalah 8
 		$query = isset($_POST['query']) ? $_POST['query'] : "";
 		$tgl_app = isset($_POST['tgl_app']) ? $_POST['tgl_app'] : "";
-		$result=$this->m_public_function->get_dokter_list($query,$tgl_app,"Dokter");
+		$result=$this->m_appointment->get_dokter_list($query,$tgl_app,"Dokter");
 		echo $result;
 	}
 	
