@@ -6,12 +6,11 @@
 <style type="text/css">
 <!--
 body {
-	background-color: #666666;
+	background-color: #F3F3F3;
 }
 -->
 </style></head>
 <script src="searchperawatan.js">
-
 
 </script>
 <body onUnload="searchunload()">
@@ -32,7 +31,7 @@ $maxhal=floor($jmlrow[0]/$perpage);
 if($jmlrow[0]%$perpage>0)
 $maxhal++;
 
-$query=mysql_query("select * from perawatan where rawat_nama like '" .$_GET['rawat_nama']."%' limit ".($hal*$perpage).",30");
+$query=mysql_query("select * from perawatan where rawat_nama like '%" .$_GET['rawat_nama']."%' or rawat_kode like '%".$_GET['rawat_nama']."%' limit ".($hal*$perpage).",30");
 //echo $maxhal." ".$hal;
 ?>
 <? if($hal>0) { ?>
