@@ -1647,7 +1647,7 @@ Ext.onReady(function(){
 	
 	var combo_dapp_dokter_medis=new Ext.form.ComboBox({
 			store: dapp_dokterDataStore,
-			mode: 'remote',
+			mode: 'local',
 			tpl: dapp_dokter_tpl,
 			displayField: 'dokter_username',
 			valueField: 'dokter_value',
@@ -1688,9 +1688,10 @@ Ext.onReady(function(){
 	var combo_dapp_tgl_medis=new Ext.form.DateField({
 		format: 'd-m-Y'
 	});
-	/*combo_dapp_tgl_medis.on('select', function(){
-		combo_dapp_tgl_medis.setValue(combo_dapp_tgl_medis.getValue().format('Y-m-d'));
-	});*/
+	combo_dapp_tgl_medis.on('select', function(){
+		cbo_dapp_dokterDataStore.load({params:{tgl_app:combo_dapp_tgl_medis.getValue().format('Y-m-d')}});
+		//combo_dapp_tgl_medis.setValue(combo_dapp_tgl_medis.getValue().format('Y-m-d'));
+	});
 
 	var combo_dapp_medis_status=new Ext.form.ComboBox({
 		typeAhead: true,
