@@ -18,19 +18,26 @@ class M_appointment extends Model{
 			parent::Model();
 		}
 		
-		function get_dokter_list($query, $tgl_app="", $karyawan_jabatan){
+		function get_dokter_list($query, $tgl_app, $karyawan_jabatan){
+			$date_now=date('Y-m-d');
 			$bln_now=date('Y-m');
+			if($tgl_app==""){
+				$tgl_app=$date_now;
+				$bln_filter=$bln_now;
+			}elseif($tgl_app!=""){
+				$bln_filter=date('Y-m', strtotime($tgl_app));
+			}
 			//$sql="SELECT karyawan_id,karyawan_no,karyawan_nama,karyawan_username,reportt_jmltindakan FROM karyawan INNER JOIN jabatan ON(karyawan_jabatan=jabatan_id) LEFT JOIN (SELECT * FROM report_tindakan WHERE reportt_bln LIKE '$bln_now%') as rt ON(karyawan_id=rt.reportt_karyawan_id) WHERE karyawan_jabatan=jabatan_id AND jabatan_nama='$karyawan_jabatan' AND karyawan_aktif='Aktif'";
-			$sql="SELECT karyawan_id,karyawan_no,karyawan_nama,karyawan_username,reportt_jmltindakan FROM karyawan INNER JOIN jabatan ON(karyawan_jabatan=jabatan_id) LEFT JOIN vu_report_tindakan_dokter ON(vu_report_tindakan_dokter.dokter_id=karyawan.karyawan_id) WHERE karyawan_jabatan=jabatan_id AND jabatan_nama='$karyawan_jabatan' AND karyawan_aktif='Aktif' AND ";
+			$sql="SELECT karyawan_id,karyawan_no,karyawan_nama,karyawan_username,vu_report_tindakan_dokter.dokter_count FROM karyawan INNER JOIN jabatan ON(karyawan_jabatan=jabatan_id) LEFT JOIN vu_report_tindakan_dokter ON(vu_report_tindakan_dokter.dokter_id=karyawan.karyawan_id AND vu_report_tindakan_dokter.dokter_bulan='$bln_filter') WHERE karyawan_jabatan=jabatan_id AND jabatan_nama='$karyawan_jabatan' AND karyawan_aktif='Aktif'";
 			if($query<>""){
 				$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
 				$sql .= " (karyawan_nama LIKE '%".addslashes($query)."%')";
 			}
-			if($tgl_app<>""){
+			/*if($tgl_app<>""){
 				$tgl_app = date('Y-m-d', strtotime($tgl_app));
 				$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
 				$sql .= " (absensi_tgl='".addslashes($tgl_app)."')";
-			}
+			}*/
 			//echo $sql;
 			$query = $this->db->query($sql);
 			$nbrows = $query->num_rows();
