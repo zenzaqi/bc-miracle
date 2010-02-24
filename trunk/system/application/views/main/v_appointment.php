@@ -769,13 +769,13 @@ Ext.onReady(function(){
 			{name: 'dokter_display', type: 'string', mapping: 'karyawan_nama'},
 			{name: 'dokter_username', type: 'string', mapping: 'karyawan_username'},
 			{name: 'dokter_value', type: 'int', mapping: 'karyawan_id'},
-			{name: 'dokter_jmltindakan', type: 'int', mapping: 'reportt_jmltindakan'}
+			{name: 'dokter_count', type: 'int', mapping: 'dokter_count'}
 		]),
 		sortInfo:{field: 'dokter_display', direction: "ASC"}
 	});
 	var dapp_dokter_tpl = new Ext.XTemplate(
         '<tpl for="."><div class="search-item">',
-            '<span><b>{dokter_username}</b> | {dokter_display} | <b>{dokter_jmltindakan}</b>',
+            '<span><b>{dokter_username}</b> | {dokter_display} | <b>{dokter_count}</b>',
         '</div></tpl>'
     );
 
@@ -793,14 +793,14 @@ Ext.onReady(function(){
 			{name: 'terapis_display', type: 'string', mapping: 'karyawan_nama'},
 			{name: 'terapis_username', type: 'string', mapping: 'karyawan_username'},
 			{name: 'terapis_value', type: 'int', mapping: 'karyawan_id'},
-			{name: 'terapis_jmltindakan', type: 'int', mapping: 'reportt_jmltindakan'},
+			{name: 'terapis_count', type: 'int', mapping: 'terapis_count'},
 			{name: 'absensi_shift', type: 'string', mapping: 'absensi_shift'}
 		])/*,
 		sortInfo:{field: 'terapis_display', direction: "ASC"}*/
 	});
 	var dapp_terapis_tpl = new Ext.XTemplate(
         '<tpl for="."><div class="search-item">',
-            '<span><b>{terapis_jmltindakan}</b> | <b>{terapis_username}</b> | <b>{absensi_shift}</b></span>',
+            '<span><b>{terapis_count}</b> | <b>{terapis_username}</b> | <b>{absensi_shift}</b></span>',
         '</div></tpl>'
     );
     
@@ -1534,13 +1534,13 @@ Ext.onReady(function(){
 			{name: 'dokter_display', type: 'string', mapping: 'karyawan_nama'},
 			{name: 'dokter_username', type: 'string', mapping: 'karyawan_username'},
 			{name: 'dokter_value', type: 'int', mapping: 'karyawan_id'},
-			{name: 'dokter_jmltindakan', type: 'int', mapping: 'reportt_jmltindakan'}
+			{name: 'dokter_count', type: 'int', mapping: 'dokter_count'}
 		]),
 		sortInfo:{field: 'dokter_display', direction: "ASC"}
 	});
 	var dokter_tpl = new Ext.XTemplate(
         '<tpl for="."><div class="search-item">',
-            '<span><b>{dokter_username}</b> | {dokter_display} | <b>{dokter_jmltindakan}</b></span>',
+            '<span><b>{dokter_username}</b> | {dokter_display} | <b>{dokter_count}</b></span>',
         '</div></tpl>'
     );
 	
@@ -2595,7 +2595,7 @@ Ext.onReady(function(){
 		labelWidth: 130,
 		bodyStyle:'padding:5px',
 		autoHeight:true,
-		width: 650,        
+		width: 500,        
 		items: [{
 			layout:'column',
 			border:false,
@@ -2610,8 +2610,9 @@ Ext.onReady(function(){
 						border:false,
 						items:[
 								{
-									columnWidth:0.38,
+									columnWidth:0.5,
 									layout: 'form',
+									labelWidth:130,
 									border:false,
 									defaultType: 'datefield',
 									items: [
@@ -2631,9 +2632,9 @@ Ext.onReady(function(){
 									    }] 
 								},
 								{
-									columnWidth:0.62,
+									columnWidth:0.5,
 									layout: 'form',
-									labelWidth:20,
+									labelWidth:15,
 									border:false,
 									defaultType: 'datefield',
 									items: [

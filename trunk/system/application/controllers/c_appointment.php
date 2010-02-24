@@ -61,11 +61,19 @@ class C_appointment extends Controller {
 		echo $result;
 	}
 	
-	function get_dokter_list(){
+	/*function get_dokter_list(){
 		//ID dokter pada tabel departemen adalah 8
 		$query = isset($_POST['query']) ? $_POST['query'] : "";
 		$tgl_app = isset($_POST['tgl_app']) ? $_POST['tgl_app'] : "";
 		$result=$this->m_public_function->get_petugas_list($query,$tgl_app,"Dokter");
+		echo $result;
+	}*/
+	
+	function get_dokter_list(){
+		//ID dokter pada tabel departemen adalah 8
+		$query = isset($_POST['query']) ? $_POST['query'] : "";
+		$tgl_app = isset($_POST['tgl_app']) ? $_POST['tgl_app'] : "";
+		$result=$this->m_public_function->get_dokter_list($query,$tgl_app,"Dokter");
 		echo $result;
 	}
 	
