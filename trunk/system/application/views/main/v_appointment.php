@@ -1520,7 +1520,7 @@ Ext.onReady(function(){
 		'</div></tpl>'
     );*/
 	
-	cbo_dapp_dokterDataStore = new Ext.data.Store({
+	/*cbo_dapp_dokterDataStore = new Ext.data.Store({
 		id: 'cbo_dapp_dokterDataStore',
 		proxy: new Ext.data.HttpProxy({
 			url: 'index.php?c=c_appointment&m=get_dokter_list', 
@@ -1530,7 +1530,6 @@ Ext.onReady(function(){
 			root: 'results',
 			totalProperty: 'total'
 		},[
-		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
 			{name: 'dokter_display', type: 'string', mapping: 'karyawan_nama'},
 			{name: 'dokter_username', type: 'string', mapping: 'karyawan_username'},
 			{name: 'dokter_value', type: 'int', mapping: 'karyawan_id'},
@@ -1542,7 +1541,7 @@ Ext.onReady(function(){
         '<tpl for="."><div class="search-item">',
             '<span><b>{dokter_username}</b> | {dokter_display} | <b>{dokter_count}</b></span>',
         '</div></tpl>'
-    );
+    );*/
 	
 	/*cbo_dapp_terapisDataStore = new Ext.data.Store({
 		id: 'cbo_dapp_terapisDataStore',
@@ -1689,7 +1688,7 @@ Ext.onReady(function(){
 		format: 'd-m-Y'
 	});
 	combo_dapp_tgl_medis.on('select', function(){
-		cbo_dapp_dokterDataStore.load({params:{tgl_app:combo_dapp_tgl_medis.getValue().format('Y-m-d')}});
+		dapp_dokterDataStore.load({params:{tgl_app:combo_dapp_tgl_medis.getValue().format('Y-m-d')}});
 		//combo_dapp_tgl_medis.setValue(combo_dapp_tgl_medis.getValue().format('Y-m-d'));
 	});
 
@@ -1961,7 +1960,8 @@ Ext.onReady(function(){
 			{name: 'dapp_nonmedis_status', type: 'string', mapping: 'dapp_status'}, 
 			{name: 'dapp_nonmedis_tgldatang', type: 'date', dateFormat: 'Y-m-d', mapping: 'dapp_tgldatang'}, 
 			{name: 'dapp_nonmedis_jamdatang', type: 'string', mapping: 'dapp_jamdatang'},
-			{name: 'dapp_nonmedis_keterangan', type: 'string', mapping: 'dapp_keterangan'}
+			{name: 'dapp_nonmedis_keterangan', type: 'string', mapping: 'dapp_keterangan'},
+			{name: 'dapp_nonmedis_counter', type: 'bool', mapping: 'dapp_counter'}
 	]);
 	//eof
 	
