@@ -27,6 +27,43 @@ class C_master_jual_rawat extends Controller {
 		$this->load->view('main/v_master_jual_rawat');
 	}
 	
+	function laporan(){
+		$this->load->view('main/v_lap_jual_rawat');
+	}
+	
+	function print_laporan(){
+		$tgl_awal=(isset($_POST['tgl_awal']) ? @$_POST['tgl_awal'] : @$_GET['tgl_awal']);
+		$tgl_akhir=(isset($_POST['tgl_akhir']) ? @$_POST['tgl_akhir'] : @$_GET['tgl_akhir']);
+		$opsi=(isset($_POST['opsi']) ? @$_POST['opsi'] : @$_GET['opsi']);
+		$data["jenis"]='Produk';
+		$data["tgl_awal"]=$tgl_awal;
+		$data["tgl_akhir"]=$tgl_akhir;
+		
+		if($opsi=='rekap'){
+			$data["total_item"]=$this->m_master_jual_rawat->get_rekap_total_item($tgl_awal,$tgl_akhir);
+			$data["total_diskon"]=$this->m_master_jual_rawat->get_rekap_total_diskon($tgl_awal,$tgl_akhir);
+			$data["total_nilai"]=$this->m_master_jual_rawat->get_rekap_total_nilai($tgl_awal,$tgl_akhir);
+			$data["data_print"]=$this->m_master_jual_rawat->get_laporan_rekap($tgl_awal,$tgl_akhir);
+			$print_view=$this->load->view("main/p_rekap_jual.php",$data,TRUE);
+		}else{
+			$data["total_item"]=$this->m_master_jual_rawat->get_detail_total_item($tgl_awal,$tgl_akhir);
+			$data["total_diskon"]=$this->m_master_jual_rawat->get_detail_total_diskon($tgl_awal,$tgl_akhir);
+			$data["total_nilai"]=$this->m_master_jual_rawat->get_detail_total_nilai($tgl_awal,$tgl_akhir);
+			$data["data_print"]=$this->m_master_jual_rawat->get_laporan_detail($tgl_awal,$tgl_akhir);
+			$print_view=$this->load->view("main/p_detail_jual.php",$data,TRUE);
+		}
+		if(!file_exists("print")){
+			mkdir("print");
+		}
+		if($opsi=='rekap')
+			$print_file=fopen("print/report_jrawat.html","w+");
+		else
+			$print_file=fopen("print/report_jrawat.html","w+");
+			
+		fwrite($print_file, $print_view);
+		echo '1'; 
+	}
+	
 	function get_bank_list(){
 		$result=$this->m_public_function->get_bank_list();
 		echo $result;
