@@ -14,7 +14,7 @@
 //$config['base_url']	= "http://miraclepdc:81/new-miracle/";
 $http = 'http' . ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 's' : '') . '://';
 $fo = str_replace("index.php","", $_SERVER['SCRIPT_NAME']);
-$config['base_url']    = "$http" . $_SERVER['SERVER_NAME'] . ":81" . $fo;
+$config['base_url']    = "$http" . $_SERVER['SERVER_NAME'] . "" . $fo;
 
 /*
 |--------------------------------------------------------------------------
@@ -176,7 +176,7 @@ $config['function_trigger'] = 'm';
 | your log files will fill up very fast.
 |
 */
-$config['log_threshold'] = 0;
+$config['log_threshold'] = 1;
 
 /*
 |--------------------------------------------------------------------------
