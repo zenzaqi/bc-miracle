@@ -1901,7 +1901,7 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Stat. Nikah' + '</div>',
 			dataIndex: 'cust_statusnikah',
-			width: 80,	//90,
+			width: 90,
 			sortable: true,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
