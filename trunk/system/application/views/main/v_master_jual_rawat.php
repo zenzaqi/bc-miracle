@@ -1939,7 +1939,7 @@ Ext.onReady(function(){
 		//clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 940,
+	  	width: 1200,	//940,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: master_jual_rawat_DataStore,
