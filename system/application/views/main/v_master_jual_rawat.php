@@ -1876,6 +1876,11 @@ Ext.onReady(function(){
 			width: 80
 		}, 
 		{
+			header: '<div align="center">' + 'Cetak' + '</div>',
+			dataIndex: 'jrawat_status',
+			width: 80
+		}, 
+		{
 			header: 'Creator',
 			dataIndex: 'jrawat_creator',
 			width: 150,

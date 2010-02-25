@@ -1172,7 +1172,7 @@ Ext.onReady(function(){
 			cbo_dproduk_produkDataStore.load({params: {query: master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_id')}});
 			cbo_dproduk_satuanDataStore.load({params: {query: master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_id')}});
 			//master_jual_produk_set_form();
-			master_cara_bayarTabPanel.setActiveTab(0);
+			//master_cara_bayarTabPanel.setActiveTab(0);
 			post2db='UPDATE';
 			detail_jual_produk_DataStore.load({
 				params : {master_id : eval(get_pk_id()), start:0, limit:pageS},
@@ -1205,6 +1205,9 @@ Ext.onReady(function(){
 					}
 				}
 			});
+			master_cara_bayarTabPanel.setActiveTab(2);
+			master_cara_bayarTabPanel.setActiveTab(1);
+			master_cara_bayarTabPanel.setActiveTab(0);
 			msg='updated';
 			master_jual_produk_createWindow.hide();
 			//master_jual_produk_createWindow.show();

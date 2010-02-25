@@ -154,7 +154,7 @@ class M_master_jual_rawat extends Model{
 		
 		//function for get list record
 		function master_jual_rawat_list($filter,$start,$end){
-			$dt_now=date('Y-m-d');
+			$date_now=date('Y-m-d');
 			$query = "SELECT jrawat_id, jrawat_nobukti, cust_nama, jrawat_cust, cust_no, cust_member, jrawat_tanggal, jrawat_diskon, jrawat_cashback, jrawat_cara, jrawat_cara2, jrawat_cara3, jrawat_totalbiaya, jrawat_bayar, jrawat_keterangan, jrawat_creator, jrawat_date_create, jrawat_update, jrawat_date_update, jrawat_revised, IF(substring(jrawat_nobukti,1,2)='PK', 'paket', '') as keterangan_paket FROM master_jual_rawat,customer WHERE jrawat_cust=cust_id";
 			
 			// For simple search
@@ -162,19 +162,19 @@ class M_master_jual_rawat extends Model{
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 				$query .= " (jrawat_nobukti LIKE '%".addslashes($filter)."%' OR cust_no LIKE '%".addslashes($filter)."%' OR cust_nama LIKE '%".addslashes($filter)."%' OR cust_member LIKE '%".addslashes($filter)."%')";
 			}
-//			$query.=" AND jrawat_date_create LIKE '$dt_now%' ORDER BY jrawat_date_create DESC";
-//			$query.=" AND jrawat_date_create LIKE '$dt_now%' ORDER BY jrawat_date_create DESC";
-			$query.=" AND jrawat_date_create LIKE '$dt_now%' AND (jrawat_bayar is null OR jrawat_bayar = 0) ORDER BY jrawat_date_create DESC";
+//			$query.=" AND jrawat_date_create LIKE '$date_now%' ORDER BY jrawat_date_create DESC";
+//			$query.=" AND jrawat_date_create LIKE '$date_now%' ORDER BY jrawat_date_create DESC";
+			$query.=" AND date_format(jrawat_date_create,'%Y-%m-%d')='$date_now' AND (jrawat_bayar is null OR jrawat_bayar = 0) ORDER BY jrawat_date_create DESC";
 			
-			$query2 = "SELECT `master_jual_paket`.`jpaket_id` AS `jrawat_id`,`master_jual_paket`.`jpaket_nobukti` AS `jrawat_nobukti`,`customer`.`cust_nama` AS `cust_nama`, `customer`.`cust_id` AS `jrawat_cust`, `customer`.`cust_no` AS `cust_no`, `customer`.`cust_member` AS `cust_member`, `master_jual_paket`.`jpaket_tanggal` AS `jrawat_tanggal`, `master_jual_paket`.`jpaket_diskon` AS `jrawat_diskon`, `master_jual_paket`.`jpaket_cashback` AS `jrawat_cashback`, `master_jual_paket`.`jpaket_cara` AS `jrawat_cara`, `master_jual_paket`.`jpaket_cara2` AS `jrawat_cara2`, `master_jual_paket`.`jpaket_cara3` AS `jrawat_cara3`, IF(substring(jpaket_nobukti,1,2)='PK', 0, 0) AS jrawat_totalbiaya, `master_jual_paket`.`jpaket_bayar` AS `jrawat_bayar`, `master_jual_paket`.`jpaket_keterangan` AS `jrawat_keterangan`, `master_jual_paket`.`jpaket_creator` AS `jrawat_creator`, `master_jual_paket`.`jpaket_date_create` AS `jrawat_date_create`, `master_jual_paket`.`jpaket_update` AS `jrawat_update`, `master_jual_paket`.`jpaket_date_update` AS `jrawat_date_update`, `master_jual_paket`.`jpaket_revised` AS `jrawat_revised`, IF(substring(jpaket_nobukti,1,2)='PK', 'paket', '') as keterangan_paket FROM (((((`detail_jual_paket` left join `master_jual_paket` on((`detail_jual_paket`.`dpaket_master` = `master_jual_paket`.`jpaket_id`))) LEFT JOIN `customer` on((`master_jual_paket`.`jpaket_cust` = `customer`.`cust_id`))) LEFT JOIN `paket` on((`detail_jual_paket`.`dpaket_paket` = `paket`.`paket_id`))) LEFT JOIN `history_ambil_paket` on((`history_ambil_paket`.`hapaket_dpaket` = `detail_jual_paket`.`dpaket_id`))) LEFT JOIN `vu_total_isi_dpaket` on((`vu_total_isi_dpaket`.`dpaket_id` = `detail_jual_paket`.`dpaket_id`))) group by `detail_jual_paket`.`dpaket_id`";
+			$query2 = "SELECT `master_jual_paket`.`jpaket_id` AS `jrawat_id`,`master_jual_paket`.`jpaket_nobukti` AS `jrawat_nobukti`,`customer`.`cust_nama` AS `cust_nama`, `customer`.`cust_id` AS `jrawat_cust`, `customer`.`cust_no` AS `cust_no`, `customer`.`cust_member` AS `cust_member`, `master_jual_paket`.`jpaket_tanggal` AS `jrawat_tanggal`, `master_jual_paket`.`jpaket_diskon` AS `jrawat_diskon`, `master_jual_paket`.`jpaket_cashback` AS `jrawat_cashback`, `master_jual_paket`.`jpaket_cara` AS `jrawat_cara`, `master_jual_paket`.`jpaket_cara2` AS `jrawat_cara2`, `master_jual_paket`.`jpaket_cara3` AS `jrawat_cara3`, IF(substring(jpaket_nobukti,1,2)='PK', 0, 0) AS jrawat_totalbiaya, `master_jual_paket`.`jpaket_bayar` AS `jrawat_bayar`, `master_jual_paket`.`jpaket_keterangan` AS `jrawat_keterangan`, `master_jual_paket`.`jpaket_creator` AS `jrawat_creator`, `master_jual_paket`.`jpaket_date_create` AS `jrawat_date_create`, `master_jual_paket`.`jpaket_update` AS `jrawat_update`, `master_jual_paket`.`jpaket_date_update` AS `jrawat_date_update`, `master_jual_paket`.`jpaket_revised` AS `jrawat_revised`, IF(substring(jpaket_nobukti,1,2)='PK', 'paket', '') as keterangan_paket FROM (((((`detail_jual_paket` left join `master_jual_paket` on((`detail_jual_paket`.`dpaket_master` = `master_jual_paket`.`jpaket_id`))) LEFT JOIN `customer` on((`master_jual_paket`.`jpaket_cust` = `customer`.`cust_id`))) LEFT JOIN `paket` on((`detail_jual_paket`.`dpaket_paket` = `paket`.`paket_id`))) LEFT JOIN `history_ambil_paket` on((`history_ambil_paket`.`hapaket_dpaket` = `detail_jual_paket`.`dpaket_id`))) LEFT JOIN `vu_total_isi_dpaket` on((`vu_total_isi_dpaket`.`dpaket_id` = `detail_jual_paket`.`dpaket_id`))) WHERE date_format(`master_jual_paket`.`jpaket_date_create`,'%Y-%m-%d')='$date_now'";
 			
 			// For simple search
 			if ($filter<>""){
 				$query2 .=eregi("WHERE",$query2)? " AND ":" WHERE ";
 				$query2 .= " (jrawat_nobukti LIKE '%".addslashes($filter)."%' OR cust_no LIKE '%".addslashes($filter)."%' OR cust_nama LIKE '%".addslashes($filter)."%' OR cust_member LIKE '%".addslashes($filter)."%')";
 			}
-//			$query.=" AND jrawat_date_create LIKE '$dt_now%' ORDER BY jrawat_date_create DESC";
-			$query2.=" AND jrawat_date_create LIKE '$dt_now%' AND (jrawat_bayar is null OR jrawat_bayar = 0) ORDER BY jrawat_date_create DESC";
+//			$query.=" AND jrawat_date_create LIKE '$date_now%' ORDER BY jrawat_date_create DESC";
+			$query2.=" group by `detail_jual_paket`.`dpaket_id` ORDER BY `master_jual_paket`.`jpaket_date_create` DESC";
 			
 			$nbrows=0;
 			$nbrows2=0;
@@ -196,6 +196,7 @@ class M_master_jual_rawat extends Model{
 						$arr[] = $row2;
 					}
 				}
+				$nbrows=$nbrows+$nbrows2;
 				$jsonresult = json_encode($arr);
 				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
 			} else {
