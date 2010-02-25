@@ -34,22 +34,34 @@ class C_master_jual_produk extends Controller {
 	function print_laporan(){
 		$tgl_awal=(isset($_POST['tgl_awal']) ? @$_POST['tgl_awal'] : @$_GET['tgl_awal']);
 		$tgl_akhir=(isset($_POST['tgl_akhir']) ? @$_POST['tgl_akhir'] : @$_GET['tgl_akhir']);
+		$bulan=(isset($_POST['bulan']) ? @$_POST['bulan'] : @$_GET['bulan']);
+		$tahun=(isset($_POST['tahun']) ? @$_POST['tahun'] : @$_GET['tahun']);
 		$opsi=(isset($_POST['opsi']) ? @$_POST['opsi'] : @$_GET['opsi']);
+		$periode=(isset($_POST['periode']) ? @$_POST['periode'] : @$_GET['periode']);
 		$data["jenis"]='Produk';
-		$data["tgl_awal"]=$tgl_awal;
-		$data["tgl_akhir"]=$tgl_akhir;
+		if($periode=="all"){
+			$data["periode"]="Semua Periode";
+		}else if($periode=="bulan"){
+			$tgl_awal=$tahun."-".$bulan;
+			$data["periode"]=get_ina_month_name($bulan,'long')." ".$tahun;
+		}else if($periode=="tanggal"){
+			$data["periode"]="Periode ".$tgl_awal." s/d ".$tgl_akhir;
+		}
 		
+		$data["total_item"]=$this->m_master_jual_produk->get_total_item($tgl_awal,$tgl_akhir,$periode,$opsi);
+		$data["total_diskon"]=$this->m_master_jual_produk->get_total_diskon($tgl_awal,$tgl_akhir,$periode,$opsi);
+		$data["total_nilai"]=$this->m_master_jual_produk->get_total_nilai($tgl_awal,$tgl_akhir,$periode,$opsi);
+		$data["data_print"]=$this->m_master_jual_produk->get_laporan($tgl_awal,$tgl_akhir,$periode,$opsi);
+			
 		if($opsi=='rekap'){
-			$data["total_item"]=$this->m_master_jual_produk->get_rekap_total_item($tgl_awal,$tgl_akhir);
-			$data["total_diskon"]=$this->m_master_jual_produk->get_rekap_total_diskon($tgl_awal,$tgl_akhir);
-			$data["total_nilai"]=$this->m_master_jual_produk->get_rekap_total_nilai($tgl_awal,$tgl_akhir);
-			$data["data_print"]=$this->m_master_jual_produk->get_laporan_rekap($tgl_awal,$tgl_akhir);
+			$data["total_tunai"]=$this->m_master_jual_produk->get_total_tunai($tgl_awal,$tgl_akhir,$periode,$opsi);
+			$data["total_cek"]=$this->m_master_jual_produk->get_total_cek($tgl_awal,$tgl_akhir,$periode,$opsi);
+			$data["total_transfer"]=$this->m_master_jual_produk->get_total_transfer($tgl_awal,$tgl_akhir,$periode,$opsi);
+			$data["total_card"]=$this->m_master_jual_produk->get_total_card($tgl_awal,$tgl_akhir,$periode,$opsi);
+			$data["total_kuintansi"]=$this->m_master_jual_produk->get_total_kuintansi($tgl_awal,$tgl_akhir,$periode,$opsi);
+			$data["total_kredit"]=$this->m_master_jual_produk->get_total_kredit($tgl_awal,$tgl_akhir,$periode,$opsi);
 			$print_view=$this->load->view("main/p_rekap_jual.php",$data,TRUE);
 		}else{
-			$data["total_item"]=$this->m_master_jual_produk->get_detail_total_item($tgl_awal,$tgl_akhir);
-			$data["total_diskon"]=$this->m_master_jual_produk->get_detail_total_diskon($tgl_awal,$tgl_akhir);
-			$data["total_nilai"]=$this->m_master_jual_produk->get_detail_total_nilai($tgl_awal,$tgl_akhir);
-			$data["data_print"]=$this->m_master_jual_produk->get_laporan_detail($tgl_awal,$tgl_akhir);
 			$print_view=$this->load->view("main/p_detail_jual.php",$data,TRUE);
 		}
 		if(!file_exists("print")){

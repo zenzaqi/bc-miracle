@@ -283,6 +283,37 @@ class CI_Calendar {
 		return $this->CI->lang->line($month);
 	}
 	
+		/**
+	 * Get Indonesia Month Name
+	 *
+	 * Generates a textual month name based on the numeric
+	 * month provided.
+	 *
+	 * @access	public
+	 * @param	integer	the month
+	 * @return	string
+	 */
+	function get_ina_month_name($month)
+	{
+		if ($this->month_type == 'short')
+		{
+			$month_names = array('01' => 'cal_jan', '02' => 'cal_peb', '03' => 'cal_mar', '04' => 'cal_apr', '05' => 'cal_mei', '06' => 'cal_jun', '07' => 'cal_jul', '08' => 'cal_agt', '09' => 'cal_sep', '10' => 'cal_oct', '11' => 'cal_nop', '12' => 'cal_des');
+		}
+		else
+		{
+			$month_names = array('01' => 'cal_januari', '02' => 'cal_pebruari', '03' => 'cal_maret', '04' => 'cal_april', '05' => 'cal_mei', '06' => 'cal_juni', '07' => 'cal_juli', '08' => 'cal_agustus', '09' => 'cal_september', '10' => 'cal_oktober', '11' => 'cal_nopember', '12' => 'cal_desember');
+		}
+		
+		$month = $month_names[$month];
+		
+		if ($this->CI->lang->line($month) === FALSE)
+		{
+			return ucfirst(str_replace('cal_', '', $month));
+		}
+
+		return $this->CI->lang->line($month);
+	}
+	
 	// --------------------------------------------------------------------
 
 	/**
@@ -322,6 +353,7 @@ class CI_Calendar {
 		return $days;
 	}
  	
+	
 	// --------------------------------------------------------------------
 
 	/**

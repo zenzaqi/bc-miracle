@@ -48,6 +48,11 @@ var jprodukForm;
 
 var rpt_jproduktglstartField;
 var rpt_jproduktglendField;
+var rpt_jprodukbulanField;
+var rpt_jproduktahunField;
+var rpt_jproduktglopsiField;
+var rpt_jprodukallopsiField;
+var rpt_jprodukblnopsiField;
 var rpt_jprodukcustomerField;
 
 <?

@@ -631,6 +631,24 @@ if ( ! function_exists('timezones'))
 	}
 }
 
+if ( ! function_exists('get_ina_month_name'))
+{
+	function get_ina_month_name($month,$month_type='long')
+	{
+		if ($month_type == 'short')
+		{
+			$month_names = array('01' => 'cal_jan', '02' => 'cal_peb', '03' => 'cal_mar', '04' => 'cal_apr', '05' => 'cal_mei', '06' => 'cal_jun', '07' => 'cal_jul', '08' => 'cal_agt', '09' => 'cal_sep', '10' => 'cal_oct', '11' => 'cal_nop', '12' => 'cal_des');
+		}
+		else
+		{
+			$month_names = array('01' => 'cal_januari', '02' => 'cal_pebruari', '03' => 'cal_maret', '04' => 'cal_april', '05' => 'cal_mei', '06' => 'cal_juni', '07' => 'cal_juli', '08' => 'cal_agustus', '09' => 'cal_september', '10' => 'cal_oktober', '11' => 'cal_nopember', '12' => 'cal_desember');
+		}
+		
+		$month = $month_names[$month];
+		return ucfirst(str_replace('cal_', '', $month));
+
+	}
+}
 
 /* End of file date_helper.php */
 /* Location: ./system/helpers/date_helper.php */
