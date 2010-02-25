@@ -52,8 +52,16 @@ var rpt_jrawat_tglawalField;
 var rpt_jrawat_tglakhirField;
 var rpt_jrawat_rekapField;
 var rpt_jrawat_detailField;
-var today=new Date().format('Y-m-d');
+var rpt_jrawat_bulanField;
+var rpt_jrawat_tahunField;
+var rpt_jrawat_opsitglField;
+var rpt_jrawat_opsiblnField;
+var rpt_jrawat_opsiallField;
 
+var today=new Date().format('Y-m-d');
+var yesterday=new Date().add(Date.DAY, -1).format('Y-m-d');
+var thismonth=new Date().format('m');
+var thisyear=new Date().format('Y');
 <?
 $idForm=24;
 ?>
@@ -80,17 +88,78 @@ Ext.apply(Ext.form.VTypes, {
         return true;
     }
 });
+<?
+$tahun="[";
+for($i=(date('Y')-4);$i<=date('Y');$i++){
+	$tahun.="['$i'],";
+}
+$tahun=substr($tahun,0,strlen($tahun)-1);
+$tahun.="]";
+$bulan="";
 
+?>
 Ext.onReady(function(){
   Ext.QuickTips.init();
 
+	rpt_jrawat_bulanField=new Ext.form.ComboBox({
+		id:'rpt_jrawat_bulanField',
+		fieldLabel:' ',
+		store:new Ext.data.SimpleStore({
+			fields:['value', 'display'],
+			data:[['01','Januari'],['02','Pebruari'],['03','Maret'],['04','April'],['05','Mei'],['06','Juni'],['07','Juli'],['08','Agustus'],['09','September'],['10','Oktober'],['11','Nopember'],['12','Desember']]
+		}),
+		mode: 'local',
+		displayField: 'display',
+		valueField: 'value',
+		value: thismonth,
+		width: 100,
+		triggerAction: 'all'
+	});
+	
+	rpt_jrawat_tahunField=new Ext.form.ComboBox({
+		id:'rpt_jrawat_tahunField',
+		fieldLabel:' ',
+		store:new Ext.data.SimpleStore({
+			fields:['tahun'],
+			data: <?php echo $tahun; ?>
+		}),
+		mode: 'local',
+		displayField: 'tahun',
+		valueField: 'tahun',
+		value: thisyear,
+		width: 100,
+		triggerAction: 'all'
+	});
+	
+	rpt_jrawat_opsitglField=new Ext.form.Radio({
+		id:'rpt_jrawat_opsitglField',
+		boxLabel:'Tanggal',
+		width:100,
+		name: 'filter_opsi'
+	});
+	
+	rpt_jrawat_opsiblnField=new Ext.form.Radio({
+		id:'rpt_jrawat_opsiblnField',
+		boxLabel:'Bulan',
+		width:100,
+		name: 'filter_opsi'
+	});
+	
+	rpt_jrawat_opsiallField=new Ext.form.Radio({
+		id:'rpt_jrawat_opsiallField',
+		boxLabel:'Semua',
+		name: 'filter_opsi',
+		checked: true
+	});
+	
 	rpt_jrawat_tglawalField= new Ext.form.DateField({
 		id: 'rpt_jrawat_tglawalField',
-		fieldLabel: 'Tanggal ',
+		fieldLabel: ' ',
 		format : 'Y-m-d',
 		name: 'rpt_jrawat_tglawalField',
         vtype: 'daterange',
-		allowBlank: false,
+		allowBlank: true,
+		width: 100,
         endDateField: 'rpt_jrawat_tglakhirField'
 	});
 	
@@ -98,9 +167,10 @@ Ext.onReady(function(){
 		id: 'rpt_jrawat_tglakhirField',
 		fieldLabel: 's/d',
 		format : 'Y-m-d',
-		name: 'rpt_kegiatantglendField',
+		name: 'rpt_jrawat_tglakhirField',
         vtype: 'daterange',
-		allowBlank: false,
+		allowBlank: true,
+		width: 100,
         startDateField: 'rpt_jrawat_tglawalField',
 		value: today
 	});
@@ -118,29 +188,53 @@ Ext.onReady(function(){
 		name: 'jrawat_opsi'
 	});
 	
-	var rpt_jrawat_tanggalField=new Ext.form.FieldSet({
-		id:'rpt_jrawat_tanggalField',
-		title : 'Tanggal',
-		layout: 'column',
+	var rpt_jrawat_periodeField=new Ext.form.FieldSet({
+		id:'rpt_jrawat_periodeField',
+		title : 'Periode',
+		layout: 'form',
 		bodyStyle:'padding: 0px 0px 0',
 		frame: false,
 		bolder: false,
 		anchor: '98%',
-		items:[
-			   {
-				   columnWidth: 0.6,
-				   border: false,
-				   layout: 'form',
-				   items:[rpt_jrawat_tglawalField]
-				},
-				{
-				   columnWidth: 0.4,
-				   border: false,
-				   layout: 'form',
-				   labelWidth:30,
-				   items:[rpt_jrawat_tglakhirField]
-				},
-		]
+		items:[{
+				layout: 'column',
+				border: false,
+				items:[rpt_jrawat_opsiallField]
+			},{
+				layout: 'column',
+				border: false,
+				items:[rpt_jrawat_opsitglField, {
+					   		layout: 'form',
+							border: false,
+							labelWidth: 15,
+							bodyStyle:'padding:3px',
+							items:[rpt_jrawat_tglawalField]
+					   },{
+					   		layout: 'form',
+							border: false,
+							labelWidth: 15,
+							bodyStyle:'padding:3px',
+							labelSeparator: ' ', 
+							items:[rpt_jrawat_tglakhirField]
+					   }]
+			},{
+				layout: 'column',
+				border: false,
+				items:[rpt_jrawat_opsiblnField,{
+					   		layout: 'form',
+							border: false,
+							labelWidth: 15,
+							bodyStyle:'padding:3px',
+							items:[rpt_jrawat_bulanField]
+					   },{
+					   		layout: 'form',
+							border: false,
+							labelWidth: 15,
+							bodyStyle:'padding:3px',
+							labelSeparator: ' ', 
+							items:[rpt_jrawat_tahunField]
+					   }]
+			}]
 	});
 	
 	var	rpt_jrawat_opsiField=new Ext.form.FieldSet({
@@ -151,56 +245,98 @@ Ext.onReady(function(){
 		items: [rpt_jrawat_rekapField ,rpt_jrawat_detailField]
 	});
 	
+	function is_valid_form(){
+		if(rpt_jrawat_opsitglField.getValue()==true){
+			rpt_jrawat_tglawalField.allowBlank=false;
+			rpt_jrawat_tglakhirField.allowBlank=false;
+			if(rpt_jrawat_tglawalField.isValid() && rpt_jrawat_tglakhirField.isValid())
+				return true;
+			else
+				return false;
+		}else{
+			rpt_jrawat_tglawalField.allowBlank=true;
+			rpt_jrawat_tglakhirField.allowBlank=true;
+			return true;
+		}
+	}
+	
 	/* Function for print List Grid */
 	function print_rpt_jrawat(){
+		
 		var jrawat_tglawal="";
 		var jrawat_tglakhir="";
 		var jrpdouk_opsi="";
+		var jrawat_bulan="";
+		var jrawat_tahun="";
+		var jrawat_periode="";
 		
-		var win;               // our popup window
-		// check if we do have some search data...
+		var win;               
+		if(is_valid_form()){
+			
 		if(rpt_jrawat_tglawalField.getValue()!==""){jrawat_tglawal = rpt_jrawat_tglawalField.getValue().format('Y-m-d');}
 		if(rpt_jrawat_tglakhirField.getValue()!==""){jrawat_tglakhir = rpt_jrawat_tglakhirField.getValue().format('Y-m-d');}
-		if(rpt_jrawat_rekapField.getValue()==true){jrawat_opsi='rekap';}else{jrawat_opsi='detail'}
+		if(rpt_jrawat_bulanField.getValue()!==""){jrawat_bulan=rpt_jrawat_bulanField.getValue(); }
+		if(rpt_jrawat_tahunField.getValue()!==""){jrawat_tahun=rpt_jrawat_tahunField.getValue(); }
+		if(rpt_jrawat_opsitglField.getValue()==true){
+			jrawat_periode='tanggal';
+		}else if(rpt_jrawat_opsiblnField.getValue()==true){
+			jrawat_periode='bulan';
+		}else{
+			jrawat_periode='all';
+		}
 		
-		Ext.Ajax.request({   
-		waitMsg: 'Please Wait...',
-		url: 'index.php?c=c_master_jual_rawat&m=print_laporan',
-		params: {
-		  	tgl_awal	: jrawat_tglawal,
-			tgl_akhir	: jrawat_tglakhir,
-			opsi		: jrawat_opsi
-		  	
-		}, 
-		success: function(response){              
-		  	var result=eval(response.responseText);
-		  	switch(result){
-		  	case 1:
-				win = window.open('./print/report_jrawat.html','report_jrawat','height=400,width=800,resizable=1,scrollbars=1, menubar=1');
-				win.print();
-				break;
-		  	default:
-				Ext.MessageBox.show({
-					title: 'Warning',
-					msg: 'Unable to print the report!',
-					buttons: Ext.MessageBox.OK,
-					animEl: 'save',
-					icon: Ext.MessageBox.WARNING
-				});
-				break;
-		  	}  
-		},
-		failure: function(response){
-		  	var result=response.responseText;
+		if(rpt_jrawat_rekapField.getValue()==true){jrawat_opsi='rekap';}else{jrawat_opsi='detail';}
+		
+			Ext.Ajax.request({   
+				waitMsg: 'Please Wait...',
+				url: 'index.php?c=c_master_jual_rawat&m=print_laporan',
+				params: {
+					tgl_awal	: jrawat_tglawal,
+					tgl_akhir	: jrawat_tglakhir,
+					opsi		: jrawat_opsi,
+					bulan		: jrawat_bulan,
+					tahun		: jrawat_tahun,
+					periode		: jrawat_periode
+					
+				}, 
+				success: function(response){              
+					var result=eval(response.responseText);
+					switch(result){
+					case 1:
+						win = window.open('./print/report_jrawat.html','report_jrawat','height=400,width=800,resizable=1,scrollbars=1, menubar=1');
+						win.print();
+						break;
+					default:
+						Ext.MessageBox.show({
+							title: 'Warning',
+							msg: 'Unable to print the report!',
+							buttons: Ext.MessageBox.OK,
+							animEl: 'save',
+							icon: Ext.MessageBox.WARNING
+						});
+						break;
+					}  
+				},
+				failure: function(response){
+					var result=response.responseText;
+					Ext.MessageBox.show({
+					   title: 'Error',
+					   msg: 'Could not connect to the database. retry later.',
+					   buttons: Ext.MessageBox.OK,
+					   animEl: 'database',
+					   icon: Ext.MessageBox.ERROR
+					});		
+				} 	                     
+			});
+		}else{
 			Ext.MessageBox.show({
-			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
+			   title: 'Warning',
+			   msg: 'Not valid form.',
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
-			   icon: Ext.MessageBox.ERROR
-			});		
-		} 	                     
-		});
+			   icon: Ext.MessageBox.WARNING
+			});	
+		}
 	}
 	/* Enf Function */
 	
@@ -211,7 +347,7 @@ Ext.onReady(function(){
 		y:0,
 		width: 400, 
 		autoHeight: true,
-		items: [rpt_jrawat_tanggalField,rpt_jrawat_opsiField],
+		items: [rpt_jrawat_periodeField,rpt_jrawat_opsiField],
 		monitorValid:true,
 		buttons: [{
 				text: 'Print',
@@ -229,7 +365,7 @@ Ext.onReady(function(){
 	
 	/* Form Advanced Search */
 	rpt_jrawatWindow = new Ext.Window({
-		title: 'Laporan Penjualan Perawatan',
+		title: 'Laporan Penjualan rawat',
 		closable:false,
 		closeAction: 'hide',
 		resizable: false,
@@ -242,7 +378,18 @@ Ext.onReady(function(){
 		items: rpt_jrpdukForm
 	});
   	rpt_jrawatWindow.show();
-  	
+	
+	//EVENTS
+	rpt_jrawat_opsitglField.on("check",function(){
+		if(rpt_jrawat_opsitglField.getValue()==true){
+			rpt_jrawat_tglawalField.allowBlank=false;
+			rpt_jrawat_tglakhirField.allowBlank=false;
+		}else{
+			rpt_jrawat_tglawalField.allowBlank=true;
+			rpt_jrawat_tglakhirField.allowBlank=true;
+		}
+	});
+	
 });
 	</script>
 <body>
