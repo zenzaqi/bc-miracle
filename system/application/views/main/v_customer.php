@@ -101,6 +101,7 @@ var cust_referensilainField;
 var cust_keteranganField;
 var cust_terdaftarField;
 var cust_statusnikahField;
+var cust_priorityField;
 var cust_jmlanakField;
 var cust_unitField;
 var cust_aktifField;
@@ -140,6 +141,7 @@ var cust_keteranganSearchField;
 var cust_memberSearchField;
 var cust_terdaftarSearchField;
 var cust_statusnikahSearchField;
+var cust_prioritySearchField;
 var cust_jmlanakSearchField;
 var cust_unitSearchField;
 var cust_aktifSearchField;
@@ -198,6 +200,7 @@ var editor_cust_note;
 		cust_keteranganField.reset();
 		cust_terdaftarField.reset();
 		cust_statusnikahField.reset();
+		cust_priorityField.reset();
 		cust_jmlanakField.reset();
 		cust_unitField.reset();
 		cust_aktifField.reset();
@@ -246,6 +249,7 @@ var editor_cust_note;
 		cust_keteranganField.setValue(null);
 		cust_terdaftarField.setValue(null);
 		cust_statusnikahField.setValue(null);
+		cust_priorityField.setValue(null);
 		cust_jmlanakField.setValue(null);
 		cust_unitField.setValue(null);
 		cust_aktifField.setValue(null);
@@ -259,6 +263,7 @@ var editor_cust_note;
 		cust_kotaField.setValue('Surabaya');
 		cust_propinsiField.setValue('Jawa Timur');
 		cust_negaraField.setValue('Indonesia');
+		cust_priorityField.setValue('Reguler');
 	}
   
 	/* setValue to EDIT */
@@ -297,6 +302,7 @@ var editor_cust_note;
 		cust_keteranganField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_keterangan'));
 		cust_terdaftarField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_terdaftar'));
 		cust_statusnikahField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_statusnikah'));
+		cust_priorityField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_priority'));
 		cust_jmlanakField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_jmlanak'));
 		cust_unitField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_unit'));
 		cust_aktifField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_aktif'));
@@ -325,7 +331,7 @@ var editor_cust_note;
   
 	/* Function for Check if the form is valid */
 	function is_customer_form_valid(){
-		return (cust_namaField.isValid() && cust_alamatField.isValid() && cust_kotaField.isValid() && cust_propinsiField.isValid() && cust_kelaminField.isValid() && cust_agamaField.isValid() && cust_pendidikanField.isValid() && cust_statusnikahField.isValid() && cust_terdaftarField.isValid() && cust_unitField.isValid() && cust_aktifField.isValid());
+		return (cust_namaField.isValid() && cust_alamatField.isValid() && cust_kotaField.isValid() && cust_propinsiField.isValid() && cust_kelaminField.isValid() && cust_agamaField.isValid() && cust_pendidikanField.isValid() && cust_statusnikahField.isValid() && cust_priorityField.isValid() && cust_terdaftarField.isValid() && cust_unitField.isValid() && cust_aktifField.isValid() && cust_tgllahirField.isValid());
 	}
   	/* End of Function */
   
@@ -518,6 +524,7 @@ var editor_cust_note;
 		var cust_member_search=null;
 		var cust_terdaftar_search_date="";
 		var cust_statusnikah_search=null;
+		var cust_priority_search=null;
 		var cust_jmlanak_search=null;
 		var cust_unit_search=null;
 		var cust_aktif_search=null;
@@ -551,6 +558,7 @@ var editor_cust_note;
 		if(cust_memberSearchField.getValue()!==null){cust_member_search=cust_memberSearchField.getValue();}
 		if(cust_terdaftarSearchField.getValue()!==""){cust_terdaftar_search_date=cust_terdaftarSearchField.getValue().format('Y-m-d');}
 		if(cust_statusnikahSearchField.getValue()!==null){cust_statusnikah_search=cust_statusnikahSearchField.getValue();}
+		if(cust_prioritySearchField.getValue()!==null){cust_priority_search=cust_prioritySearchField.getValue();}
 		if(cust_jmlanakSearchField.getValue()!==null){cust_jmlanak_search=cust_jmlanakSearchField.getValue();}
 		if(cust_unitSearchField.getValue()!==null){cust_unit_search=cust_unitSearchField.getValue();}
 		if(cust_aktifSearchField.getValue()!==null){cust_aktif_search=cust_aktifSearchField.getValue();}
@@ -587,7 +595,8 @@ var editor_cust_note;
 			cust_keterangan	:	cust_keterangan_search, 
 			cust_member	:	cust_member_search, 
 			cust_terdaftar	:	cust_terdaftar_search_date, 
-			cust_statusnikah	:	cust_statusnikah_search, 
+			cust_statusnikah	:	cust_statusnikah_search,
+			cust_priority	:	cust_priority_search,
 			cust_jmlanak	:	cust_jmlanak_search, 
 			cust_unit	:	cust_unit_search, 
 			cust_aktif	:	cust_aktif_search
@@ -640,6 +649,7 @@ var editor_cust_note;
 		cust_memberSearchField.reset();
 		cust_terdaftarSearchField.reset();
 		cust_statusnikahSearchField.reset();
+		cust_prioritySearchField.reset();
 		cust_jmlanakSearchField.reset();
 		cust_unitSearchField.reset();
 		cust_aktifSearchField.reset();
@@ -688,6 +698,7 @@ var editor_cust_note;
 		var cust_member_print=null;
 		var cust_terdaftar_print_date="";
 		var cust_statusnikah_print=null;
+		var cust_priority_print=null;
 		var cust_jmlanak_print=null;
 		var cust_unit_print=null;
 		var cust_aktif_print=null;
@@ -721,6 +732,7 @@ var editor_cust_note;
 		if(customer_DataStore.baseParams.cust_member!==null){cust_member_print = customer_DataStore.baseParams.cust_member;}
 		if(customer_DataStore.baseParams.cust_terdaftar!==""){cust_terdaftar_print_date = customer_DataStore.baseParams.cust_terdaftar;}
 		if(customer_DataStore.baseParams.cust_statusnikah!==null){cust_statusnikah_print = customer_DataStore.baseParams.cust_statusnikah;}
+		if(customer_DataStore.baseParams.cust_priority!==null){cust_priority_print = customer_DataStore.baseParams.cust_priority;}
 		if(customer_DataStore.baseParams.cust_jmlanak!==null){cust_jmlanak_print = customer_DataStore.baseParams.cust_jmlanak;}
 		if(customer_DataStore.baseParams.cust_unit!==null){cust_unit_print = customer_DataStore.baseParams.cust_unit;}
 		if(customer_DataStore.baseParams.cust_aktif!==null){cust_aktif_print = customer_DataStore.baseParams.cust_aktif;}
@@ -761,6 +773,7 @@ var editor_cust_note;
 			cust_member : cust_member_print,
 		  	cust_terdaftar : cust_terdaftar_print_date, 
 			cust_statusnikah : cust_statusnikah_print,
+			cust_priority : cust_priority_print,
 			cust_jmlanak : cust_jmlanak_print,
 			cust_unit : cust_unit_print,
 			cust_aktif : cust_aktif_print,
@@ -828,6 +841,7 @@ var editor_cust_note;
 		var cust_member_2excel=null;
 		var cust_terdaftar_2excel_date="";
 		var cust_statusnikah_2excel=null;
+		var cust_priority_2excel=null;
 		var cust_jmlanak_2excel=null;
 		var cust_unit_2excel=null;
 		var cust_aktif_2excel=null;
@@ -861,6 +875,7 @@ var editor_cust_note;
 		if(customer_DataStore.baseParams.cust_member!==null){cust_member_2excel = customer_DataStore.baseParams.cust_member;}
 		if(customer_DataStore.baseParams.cust_terdaftar!==""){cust_terdaftar_2excel_date = customer_DataStore.baseParams.cust_terdaftar;}
 		if(customer_DataStore.baseParams.cust_statusnikah!==null){cust_statusnikah_2excel = customer_DataStore.baseParams.cust_statusnikah;}
+		if(customer_DataStore.baseParams.cust_priority!==null){cust_priority_2excel = customer_DataStore.baseParams.cust_priority;}
 		if(customer_DataStore.baseParams.cust_jmlanak!==null){cust_jmlanak_2excel = customer_DataStore.baseParams.cust_jmlanak;}
 		if(customer_DataStore.baseParams.cust_unit!==null){cust_unit_2excel = customer_DataStore.baseParams.cust_unit;}
 		if(customer_DataStore.baseParams.cust_aktif!==null){cust_aktif_2excel = customer_DataStore.baseParams.cust_aktif;}
@@ -900,6 +915,7 @@ var editor_cust_note;
 			cust_member : cust_member_2excel,
 		  	cust_terdaftar : cust_terdaftar_2excel_date, 
 			cust_statusnikah : cust_statusnikah_2excel,
+			cust_priority : cust_priority_2excel,
 			cust_jmlanak : cust_jmlanak_2excel,
 			cust_unit : cust_unit_2excel,
 			cust_aktif : cust_aktif_2excel,
@@ -972,6 +988,7 @@ var editor_cust_note;
 		var cust_keterangan_update=null;
 		var cust_terdaftar_update_date="";
 		var cust_statusnikah_update=null;
+		var cust_priority_update=null;
 		var cust_jmlanak_update=null;
 		var cust_unit_update=null;
 		var cust_aktif_update=null;
@@ -1010,6 +1027,7 @@ var editor_cust_note;
 		if(oGrid_event.record.data.cust_keterangan!== null){cust_keterangan_update = oGrid_event.record.data.cust_keterangan;}
 		if(oGrid_event.record.data.cust_terdaftar!== ""){cust_terdaftar_update_date = oGrid_event.record.data.cust_terdaftar.format('Y-m-d');}
 		if(oGrid_event.record.data.cust_statusnikah!== null){cust_statusnikah_update = oGrid_event.record.data.cust_statusnikah;}
+		if(oGrid_event.record.data.cust_priority!== null){cust_priority_update = oGrid_event.record.data.cust_priority;}
 		if(oGrid_event.record.data.cust_jmlanak!== null){cust_jmlanak_update = oGrid_event.record.data.cust_jmlanak;}
 		if(oGrid_event.record.data.cust_unit!== null){cust_unit_update = oGrid_event.record.data.cust_unit;}
 		if(oGrid_event.record.data.cust_aktif!== null){cust_aktif_update = oGrid_event.record.data.cust_aktif;}
@@ -1053,7 +1071,8 @@ var editor_cust_note;
 				cust_referensilain	:cust_referensilain_update,		
 				cust_keterangan	:cust_keterangan_update,		
 				cust_terdaftar	: cust_terdaftar_update_date,				
-				cust_statusnikah:cust_statusnikah_update,		
+				cust_statusnikah:cust_statusnikah_update,
+				cust_priority	:cust_priority_update,
 				cust_jmlanak	:cust_jmlanak_update,			
 				cust_unit		:cust_unit_update,		
 				cust_aktif		:cust_aktif_update	
@@ -1137,6 +1156,7 @@ var editor_cust_note;
 		var cust_keterangan_create=null;
 		var cust_terdaftar_create_date="";
 		var cust_statusnikah_create=null;
+		var cust_priority_create=null;
 		var cust_jmlanak_create=null;
 		var cust_unit_create=null;
 		var cust_aktif_create=null;
@@ -1186,6 +1206,7 @@ var editor_cust_note;
 		if(cust_keteranganField.getValue()!== null){cust_keterangan_create = cust_keteranganField.getValue();}
 		if(cust_terdaftarField.getValue()!== ""){cust_terdaftar_create_date = cust_terdaftarField.getValue().format('Y-m-d');}
 		if(cust_statusnikahField.getValue()!== null){cust_statusnikah_create = cust_statusnikahField.getValue();}
+		if(cust_priorityField.getValue()!== null){cust_priority_create = cust_priorityField.getValue();}
 		if(cust_jmlanakField.getValue()!== null){cust_jmlanak_create = cust_jmlanakField.getValue();}
 		if(cust_unitField.getValue()!== null){cust_unit_create = cust_unitField.getValue();}
 		if(cust_aktifField.getValue()!== null){cust_aktif_create = cust_aktifField.getValue();}
@@ -1239,7 +1260,8 @@ var editor_cust_note;
 					cust_referensilaintxt	: cust_referensilaintxt_create,
 					cust_keterangan	: cust_keterangan_create,	
 					cust_terdaftar	: cust_terdaftar_create_date,					
-					cust_statusnikah	: cust_statusnikah_create,	
+					cust_statusnikah	: cust_statusnikah_create,
+					cust_priority	: cust_priority_create,
 					cust_jmlanak	: cust_jmlanak_create,	
 					cust_unit	: cust_unit_create,	
 					cust_aktif	: cust_aktif_create,
@@ -1456,6 +1478,7 @@ Ext.onReady(function(){
 			{name: 'cust_member', type: 'string', mapping: 'cust_member'},
 			{name: 'cust_terdaftar', type: 'date', dateFormat: 'Y-m-d', mapping: 'cust_terdaftar'},
 			{name: 'cust_statusnikah', type: 'string', mapping: 'cust_statusnikah'},
+			{name: 'cust_priority', type: 'string', mapping: 'cust_priority'},
 			{name: 'cust_jmlanak', type: 'int', mapping: 'cust_jmlanak'},
 			{name: 'cust_unit', type: 'string', mapping: 'cabang_nama'},
 			{name: 'cust_aktif', type: 'string', mapping: 'cust_aktif'},
@@ -1894,7 +1917,31 @@ Ext.onReady(function(){
                	listClass: 'x-combo-list-small'
             })
 		},
+		
 		{
+
+			header: '<div align="center">' + 'Priority' + '</div>',
+			dataIndex: 'cust_priority',
+			width: 60,
+			sortable: true,
+			editor: new Ext.form.ComboBox({
+				typeAhead: true,
+				triggerAction: 'all',
+				store:new Ext.data.SimpleStore({
+					fields:['cust_priority_value', 'cust_priority_display'],
+					data: [['Core','Core'],['Reguler','Reguler'],['Low','Low']]
+					}),
+				mode: 'local',
+               	displayField: 'cust_priority_display',
+               	valueField: 'cust_priority_value',
+               	lazyRender:true,
+               	listClass: 'x-combo-list-small'
+            })
+		},
+		
+		
+		{
+
 //			header: 'Aktif',
 			header: '<div align="center">' + 'Status' + '</div>',
 			dataIndex: 'cust_aktif',
@@ -1934,6 +1981,7 @@ Ext.onReady(function(){
 			//hidden: true
 		},
 		{
+
 			header: 'Jumlah Anak',
 			dataIndex: 'cust_jmlanak',
 			width: 150,
@@ -2144,7 +2192,7 @@ Ext.onReady(function(){
 		frame: true,
 		//clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
-		viewConfig: { forceFit:false },
+		viewConfig: { forceFit:true },
 	  	width: 1200, //940,
 	  	//autoWidth: true,
 		bbar: new Ext.PagingToolbar({
@@ -2662,6 +2710,7 @@ Ext.onReady(function(){
 		fieldLabel: 'Tgl Lahir',
 		format : 'Y-m-d',
 		anchor: '50%',
+		allowBlank: false,
 		enableKeyEvents: 'true',
 		listeners:{
 			keyup: function(){
@@ -2828,6 +2877,23 @@ Ext.onReady(function(){
 		anchor: '50%',
 		triggerAction: 'all'	
 	});
+	
+	cust_priorityField= new Ext.form.ComboBox({
+		id: 'cust_priorityField',
+		fieldLabel: 'Priority <span style="color: #ec0000">*</span>',
+		store:new Ext.data.SimpleStore({
+			fields:['cust_priority_value', 'cust_priority_display'],
+			data:[['Core','Core'],['Reguler','Reguler'],['Low','Low']]
+		}),
+		mode: 'local',
+		editable: false,
+		allowBlank: false,
+		displayField: 'cust_priority_display',
+		valueField: 'cust_priority_value',
+		anchor: '50%',
+		triggerAction: 'all'	
+	});
+	
 	/* Identify  cust_jmlanak Field */
 	cust_jmlanakField= new Ext.form.NumberField({
 		id: 'cust_jmlanakField',
@@ -3008,7 +3074,7 @@ Ext.onReady(function(){
 							xtype: 'checkboxgroup',
 							fieldLabel:'',
 							items:[cust_fb2Field,cust_tweeter2Field]
-						},cust_kelaminField, cust_tmptlahirField, cust_tgllahirField, cust_umurField, cust_agamaField, cust_pendidikanField,  cust_profesiField, cust_profesitxtField, cust_hobiField, cust_hobitxtField, cust_referensiField, cust_referensilainField,cust_referensilaintxtField, cust_statusnikahField, cust_jmlanakField, cust_terdaftarField, cust_unitField, cust_keteranganField, cust_aktifField, cust_update_confirmField] 
+						},cust_kelaminField, cust_tmptlahirField, cust_tgllahirField, cust_umurField, cust_agamaField, cust_pendidikanField,  cust_profesiField, cust_profesitxtField, cust_hobiField, cust_hobitxtField, cust_referensiField, cust_referensilainField,cust_referensilaintxtField, cust_statusnikahField, cust_jmlanakField, cust_terdaftarField, cust_unitField, cust_priorityField, cust_keteranganField, cust_aktifField, cust_update_confirmField] 
 					}
 				]
 			},{
@@ -3443,6 +3509,21 @@ Ext.onReady(function(){
 		anchor: '50%',
 		triggerAction: 'all'	
 	});
+	
+	cust_prioritySearchField= new Ext.form.ComboBox({
+		id: 'cust_prioritySearchField',
+		fieldLabel: 'Priority',
+		store:new Ext.data.SimpleStore({
+			fields:['cust_priority_value', 'cust_priority_display'],
+			data:[['Core','Core'],['Reguler','Reguler'],['Low','Low']]
+		}),
+		mode: 'local',
+		displayField: 'cust_priority_display',
+		valueField: 'cust_priority_value',
+		anchor: '50%',
+		triggerAction: 'all'	
+	});
+	
 	/* Identify  cust_jmlanak Field */
 	cust_jmlanakSearchField= new Ext.form.NumberField({
 		id: 'cust_jmlanakSearchField',
@@ -3546,7 +3627,7 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [cust_emailSearchField,cust_email2SearchField,cust_kelaminSearchField, cust_tgllahirSearchField, cust_agamaSearchField, cust_pendidikanSearchField,  cust_profesiSearchField, cust_profesitxtSearchField, cust_hobiSearchField, cust_hobitxtSearchField, cust_referensiSearchField, cust_referensilainSearchField,cust_referensilaintxtSearchField, cust_keteranganSearchField, cust_statusnikahSearchField, cust_jmlanakSearchField, cust_terdaftarSearchField, cust_unitSearchField, cust_aktifSearchField] 
+				items: [cust_emailSearchField,cust_email2SearchField,cust_kelaminSearchField, cust_tgllahirSearchField, cust_agamaSearchField, cust_pendidikanSearchField,  cust_profesiSearchField, cust_profesitxtSearchField, cust_hobiSearchField, cust_hobitxtSearchField, cust_referensiSearchField, cust_referensilainSearchField,cust_referensilaintxtSearchField, cust_keteranganSearchField, cust_statusnikahSearchField, cust_prioritySearchField, cust_jmlanakSearchField, cust_terdaftarSearchField, cust_unitSearchField, cust_aktifSearchField] 
 			}
 			]
 		}]
