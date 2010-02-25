@@ -1876,7 +1876,7 @@ Ext.onReady(function(){
 			width: 80
 		}, 
 		{
-			header: '<div align="center">' + 'Cetak' + '</div>',
+			header: '<div align="center">' + 'Stat. Kasir' + '</div>',
 			dataIndex: 'jrawat_status',
 			width: 80
 		}, 
