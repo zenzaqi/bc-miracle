@@ -1154,7 +1154,8 @@ Ext.onReady(function(){
 			text: 'Waiting List',
 			tooltip: 'Waiting List',
 			//iconCls:'icon-print',
-			handler: function(){window.open("system/application/views/main/waitinglist/waitinglist.php")}  
+			//handler: function(){window.open("system/application/views/main/waitinglist/waitinglist.php")}  
+			handler: function(){window.open("../Add-on/waitinglist/waitinglist.php")}  
 		}
 //		{
 //			text: 'Waiting List',
