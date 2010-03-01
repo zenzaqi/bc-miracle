@@ -18,6 +18,202 @@ class M_master_retur_jual_produk extends Model{
 			parent::Model();
 		}
 		
+		function get_laporan($tgl_awal,$tgl_akhir,$periode,$opsi){
+			if($opsi=='rekap'){
+				if($periode=='all')
+					$sql="SELECT * FROM vu_trans_retur_produk";
+				else if($periode=='bulan')
+					$sql="SELECT * FROM vu_trans_retur_produk WHERE tanggal like '".$tgl_awal."%'";
+				else if($periode=='tanggal')
+					$sql="SELECT * FROM vu_trans_retur_produk WHERE tanggal>='".$tgl_awal."' AND tanggal<='".$tgl_akhir."'";
+			}else if($opsi=='detail'){
+				if($periode=='all')
+					$sql="SELECT * FROM vu_detail_retur_jual_produk";
+				else if($periode=='bulan')
+					$sql="SELECT * FROM vu_detail_retur_jual_produk WHERE tanggal like '".$tgl_awal."%'";
+				else if($periode=='tanggal')
+					$sql="SELECT * FROM vu_detail_retur_jual_produk WHERE tanggal>='".$tgl_awal."' AND tanggal<='".$tgl_akhir."'";
+			}
+			
+			$query=$this->db->query($sql);
+			return $query->result();
+		}
+		
+		function get_total_item($tgl_awal,$tgl_akhir,$periode,$opsi){
+			$sql="";
+			if($opsi=='rekap'){
+				if($periode=='all')
+					$sql="SELECT SUM(jumlah_barang) as total_item FROM vu_trans_retur_produk";
+				else if($periode=='bulan')
+					$sql="SELECT SUM(jumlah_barang) as total_item FROM vu_trans_retur_produk WHERE tanggal like '".$tgl_awal."%'";
+				else if($periode=='tanggal')
+					$sql="SELECT SUM(jumlah_barang) as total_item FROM vu_trans_retur_produk WHERE tanggal>='".$tgl_awal."' AND tanggal<='".$tgl_akhir."'";
+			}else if($opsi=='detail'){
+				if($periode=='all')
+					$sql="SELECT SUM(jumlah_barang) as total_item FROM vu_detail_retur_jual_produk";
+				else if($periode=='bulan')
+					$sql="SELECT SUM(jumlah_barang) as total_item FROM vu_detail_retur_jual_produk WHERE tanggal like '".$tgl_awal."%'";
+				else if($periode=='tanggal')
+					$sql="SELECT SUM(jumlah_barang) as total_item FROM vu_detail_retur_jual_produk WHERE tanggal>='".$tgl_awal."' AND tanggal<='".$tgl_akhir."'";
+			}
+			$query=$this->db->query($sql);
+			if($query->num_rows()){
+				$data=$query->row();
+				return $data->total_item;
+			}else
+				return "";
+		}
+		
+		function get_total_diskon($tgl_awal,$tgl_akhir,$periode,$opsi){
+			if($opsi=='rekap'){
+				if($periode=='all')
+					$sql="SELECT SUM(cashback) as total_diskon FROM vu_trans_retur_produk";
+				else if($periode=='bulan')
+					$sql="SELECT SUM(cashback) as total_diskon FROM vu_trans_retur_produk WHERE tanggal like '".$tgl_awal."%'";
+				else if($periode=='tanggal')
+					$sql="SELECT SUM(cashback) as total_diskon FROM vu_trans_retur_produk WHERE tanggal>='".$tgl_awal."' AND tanggal<='".$tgl_akhir."'";
+			}else if($opsi=='detail'){
+				if($periode=='all')
+					$sql="SELECT SUM(diskon_nilai) as total_diskon FROM vu_detail_retur_jual_produk";
+				else if($periode=='bulan')
+					$sql="SELECT SUM(diskon_nilai) as total_diskon FROM vu_detail_retur_jual_produk WHERE tanggal like '".$tgl_awal."%'";
+				else if($periode=='tanggal')
+					$sql="SELECT SUM(diskon_nilai) as total_diskon FROM vu_detail_retur_jual_produk WHERE tanggal>='".$tgl_awal."' AND tanggal<='".$tgl_akhir."'";
+			}
+			$query=$this->db->query($sql);
+			if($query->num_rows()){
+				$data=$query->row();
+				return $data->total_diskon;
+			}else
+				return "";
+		}
+		
+		function get_total_nilai($tgl_awal,$tgl_akhir,$periode,$opsi){
+			if($opsi=='rekap'){
+				if($periode=='all')
+					$sql="SELECT SUM(total_nilai) as total_nilai FROM vu_trans_retur_produk";
+				else if($periode=='bulan')
+					$sql="SELECT SUM(total_nilai) as total_nilai FROM vu_trans_retur_produk WHERE tanggal like '".$tgl_awal."%'";
+				else if($periode=='tanggal')
+					$sql="SELECT SUM(total_nilai) as total_nilai FROM vu_trans_retur_produk WHERE tanggal>='".$tgl_awal."' AND tanggal<='".$tgl_akhir."'";
+			}else if($opsi=='detail'){
+				if($periode=='all')
+					$sql="SELECT SUM(subtotal) as total_nilai FROM vu_detail_retur_jual_produk";
+				else if($periode=='bulan')
+					$sql="SELECT SUM(subtotal) as total_nilai FROM vu_detail_retur_jual_produk WHERE tanggal like '".$tgl_awal."%'";
+				else if($periode=='tanggal')
+					$sql="SELECT SUM(subtotal) as total_nilai FROM vu_detail_retur_jual_produk WHERE tanggal>='".$tgl_awal."' AND tanggal<='".$tgl_akhir."'";
+			}
+			$query=$this->db->query($sql);
+			if($query->num_rows()){
+				$data=$query->row();
+				return $data->total_nilai;
+			}else
+				return "";
+		}
+		
+		function get_total_cek($tgl_awal,$tgl_akhir,$periode,$opsi){
+			if($opsi=='rekap'){
+				if($periode=='all')
+					$sql="SELECT SUM(cek) as total_cek FROM vu_trans_retur_produk";
+				else if($periode=='bulan')
+					$sql="SELECT SUM(cek) as total_cek FROM vu_trans_retur_produk WHERE tanggal like '".$tgl_awal."%'";
+				else if($periode=='tanggal')
+					$sql="SELECT SUM(cek) as total_cek FROM vu_trans_retur_produk WHERE tanggal>='".$tgl_awal."' AND tanggal<='".$tgl_akhir."'";
+			}
+			$query=$this->db->query($sql);
+			if($query->num_rows()){
+				$data=$query->row();
+				return $data->total_cek;
+			}else
+				return "";
+		}
+		
+		function get_total_tunai($tgl_awal,$tgl_akhir,$periode,$opsi){
+			if($opsi=='rekap'){
+				if($periode=='all')
+					$sql="SELECT SUM(tunai) as total_tunai FROM vu_trans_retur_produk";
+				else if($periode=='bulan')
+					$sql="SELECT SUM(tunai) as total_tunai FROM vu_trans_retur_produk WHERE tanggal like '".$tgl_awal."%'";
+				else if($periode=='tanggal')
+					$sql="SELECT SUM(tunai) as total_tunai FROM vu_trans_retur_produk WHERE tanggal>='".$tgl_awal."' AND tanggal<='".$tgl_akhir."'";
+			}
+			$query=$this->db->query($sql);
+			if($query->num_rows()){
+				$data=$query->row();
+				return $data->total_tunai;
+			}else
+				return "";
+		}
+		
+		function get_total_transfer($tgl_awal,$tgl_akhir,$periode,$opsi){
+			if($opsi=='rekap'){
+				if($periode=='all')
+					$sql="SELECT SUM(transfer) as total_transfer FROM vu_trans_retur_produk";
+				else if($periode=='bulan')
+					$sql="SELECT SUM(transfer) as total_transfer FROM vu_trans_retur_produk WHERE tanggal like '".$tgl_awal."%'";
+				else if($periode=='tanggal')
+					$sql="SELECT SUM(transfer) as total_transfer FROM vu_trans_retur_produk WHERE tanggal>='".$tgl_awal."' AND tanggal<='".$tgl_akhir."'";
+			}
+			$query=$this->db->query($sql);
+			if($query->num_rows()){
+				$data=$query->row();
+				return $data->total_transfer;
+			}else
+				return "";
+		}
+		
+		function get_total_card($tgl_awal,$tgl_akhir,$periode,$opsi){
+			if($opsi=='rekap'){
+				if($periode=='all')
+					$sql="SELECT SUM(card) as total_card FROM vu_trans_retur_produk";
+				else if($periode=='bulan')
+					$sql="SELECT SUM(card) as total_card FROM vu_trans_retur_produk WHERE tanggal like '".$tgl_awal."%'";
+				else if($periode=='tanggal')
+					$sql="SELECT SUM(card) as total_card FROM vu_trans_retur_produk WHERE tanggal>='".$tgl_awal."' AND tanggal<='".$tgl_akhir."'";
+			}
+			$query=$this->db->query($sql);
+			if($query->num_rows()){
+				$data=$query->row();
+				return $data->total_card;
+			}else
+				return "";
+		}
+		
+		function get_total_kredit($tgl_awal,$tgl_akhir,$periode,$opsi){
+			if($opsi=='rekap'){
+				if($periode=='all')
+					$sql="SELECT SUM(kredit) as total_kredit FROM vu_trans_retur_produk";
+				else if($periode=='bulan')
+					$sql="SELECT SUM(kredit) as total_kredit FROM vu_trans_retur_produk WHERE tanggal like '".$tgl_awal."%'";
+				else if($periode=='tanggal')
+					$sql="SELECT SUM(kredit) as total_kredit FROM vu_trans_retur_produk WHERE tanggal>='".$tgl_awal."' AND tanggal<='".$tgl_akhir."'";
+			}
+			$query=$this->db->query($sql);
+			if($query->num_rows()){
+				$data=$query->row();
+				return $data->total_kredit;
+			}else
+				return "";
+		}
+		
+		function get_total_kuintansi($tgl_awal,$tgl_akhir,$periode,$opsi){
+			if($opsi=='rekap'){
+				if($periode=='all')
+					$sql="SELECT SUM(kuintansi) as total_kuintansi FROM vu_trans_retur_produk";
+				else if($periode=='bulan')
+					$sql="SELECT SUM(kuintansi) as total_kuintansi FROM vu_trans_retur_produk WHERE tanggal like '".$tgl_awal."%'";
+				else if($periode=='tanggal')
+					$sql="SELECT SUM(kuintansi) as total_kuintansi FROM vu_trans_retur_produk WHERE tanggal>='".$tgl_awal."' AND tanggal<='".$tgl_akhir."'";
+			}
+			$query=$this->db->query($sql);
+			if($query->num_rows()){
+				$data=$query->row();
+				return $data->total_kuintansi;
+			}else
+				return "";
+		}
+	
 		function get_jual_produk_list($query,$start,$end){
 			$sql="SELECT jproduk_id,jproduk_nobukti,jproduk_tanggal,cust_nama,cust_alamat,cust_id FROM master_jual_produk,customer WHERE jproduk_cust=cust_id";
 			if($query<>"")
