@@ -26,6 +26,49 @@ class C_master_retur_jual_produk extends Controller {
 		$this->load->view('main/v_master_retur_jual_produk');
 	}
 	
+	function laporan(){
+		$this->load->view('main/v_lap_retur_produk');
+	}
+	
+	function print_laporan(){
+		$tgl_awal=(isset($_POST['tgl_awal']) ? @$_POST['tgl_awal'] : @$_GET['tgl_awal']);
+		$tgl_akhir=(isset($_POST['tgl_akhir']) ? @$_POST['tgl_akhir'] : @$_GET['tgl_akhir']);
+		$bulan=(isset($_POST['bulan']) ? @$_POST['bulan'] : @$_GET['bulan']);
+		$tahun=(isset($_POST['tahun']) ? @$_POST['tahun'] : @$_GET['tahun']);
+		$opsi=(isset($_POST['opsi']) ? @$_POST['opsi'] : @$_GET['opsi']);
+		$periode=(isset($_POST['periode']) ? @$_POST['periode'] : @$_GET['periode']);
+		$data["jenis"]='Retur Produk';
+		if($periode=="all"){
+			$data["periode"]="Semua Periode";
+		}else if($periode=="bulan"){
+			$tgl_awal=$tahun."-".$bulan;
+			$data["periode"]=get_ina_month_name($bulan,'long')." ".$tahun;
+		}else if($periode=="tanggal"){
+			$data["periode"]="Periode ".$tgl_awal." s/d ".$tgl_akhir;
+		}
+		
+		$data["total_item"]=$this->m_master_retur_jual_produk->get_total_item($tgl_awal,$tgl_akhir,$periode,$opsi);
+		$data["total_diskon"]=$this->m_master_retur_jual_produk->get_total_diskon($tgl_awal,$tgl_akhir,$periode,$opsi);
+		$data["total_nilai"]=$this->m_master_retur_jual_produk->get_total_nilai($tgl_awal,$tgl_akhir,$periode,$opsi);
+		$data["data_print"]=$this->m_master_retur_jual_produk->get_laporan($tgl_awal,$tgl_akhir,$periode,$opsi);
+			
+		if($opsi=='rekap'){
+			$print_view=$this->load->view("main/p_rekap_retur_jual.php",$data,TRUE);
+		}else{
+			$print_view=$this->load->view("main/p_detail_retur_jual.php",$data,TRUE);
+		}
+		if(!file_exists("print")){
+			mkdir("print");
+		}
+		if($opsi=='rekap')
+			$print_file=fopen("print/report_rproduk.html","w+");
+		else
+			$print_file=fopen("print/report_rproduk.html","w+");
+			
+		fwrite($print_file, $print_view);
+		echo '1'; 
+	}
+		
 	function get_jual_produk_list(){
 		$query = isset($_POST['query']) ? $_POST['query'] : "";
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
