@@ -866,6 +866,12 @@ Ext.onReady(function(){
 			tooltip: 'Print Document',
 			iconCls:'icon-print',
 			handler: tindakan_nonmedis_print  
+		}, '-',{
+			text: 'Absensi',
+			tooltip: 'Absensi Therapist',
+			iconCls:'',
+			//handler: tindakan_nonmedis_print  
+			handler: function(){window.open("../Add-on/absensi/index.php")} 
 		}
 		]
 	});
