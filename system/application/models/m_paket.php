@@ -139,7 +139,7 @@ class M_paket extends Model{
 	
 	function get_produk_group_list(){
 		$result=$this->m_public_function->get_produk_group_list();
-		echo $result;
+		//echo $result;
 	}
 	
 	//get master id, note : not done yet

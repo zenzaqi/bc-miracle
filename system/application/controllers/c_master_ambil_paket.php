@@ -26,6 +26,22 @@ class C_master_ambil_paket extends Controller {
 		$this->load->view('main/v_master_ambil_paket');
 	}
 	
+	function get_customer_list(){
+		$query = isset($_POST['query']) ? $_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		$result=$this->m_master_ambil_paket->get_customer_list($query,$start,$end);
+		echo $result;
+	}
+	
+	function get_paket_list(){
+		$query = isset($_POST['query']) ? $_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		$result = $this->m_master_ambil_paket->get_paket_list($query,$start,$end);
+		echo $result;
+	}
+	
 	function get_history_ambil_paket(){
 		$apaket_id = isset($_POST['master_id']) ? $_POST['master_id'] : 0;
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
@@ -35,10 +51,10 @@ class C_master_ambil_paket extends Controller {
 	}
 	
 	function get_isi_rawat_list(){
-		$paket_id = isset($_POST['master_id']) ? $_POST['master_id'] : 0;
+		$apaket_id = isset($_POST['master_id']) ? $_POST['master_id'] : 0;
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_master_ambil_paket->get_isi_rawat_list($paket_id,$start,$end);
+		$result = $this->m_master_ambil_paket->get_isi_rawat_list($apaket_id,$start,$end);
 		echo $result;
 	}
 	
@@ -77,11 +93,11 @@ class C_master_ambil_paket extends Controller {
 	//add detail
 	function detail_ambil_paket_isi_perawatan_insert(){
 	//POST variable here
-		$hapaket_dpaket=trim(@$_POST["hapaket_dpaket"]);
-		$hapaket_rawat=trim(@$_POST["hapaket_rawat"]);
-		$hapaket_jumlah=trim(@$_POST["hapaket_jumlah"]);
-		$hapaket_cust=trim(@$_POST["hapaket_cust"]);
-		$result=$this->m_master_ambil_paket->detail_ambil_paket_isi_perawatan_insert($hapaket_dpaket ,$hapaket_rawat ,$hapaket_jumlah ,$hapaket_cust);
+		$dapaket_master=trim(@$_POST["dapaket_master"]);
+		$dapaket_sapaket=trim(@$_POST["dapaket_sapaket"]);
+		$dapaket_jumlah=trim(@$_POST["dapaket_jumlah"]);
+		$dapaket_cust=trim(@$_POST["dapaket_cust"]);
+		$result=$this->m_master_ambil_paket->detail_ambil_paket_isi_perawatan_insert($dapaket_master ,$dapaket_sapaket ,$dapaket_jumlah ,$dapaket_cust);
 	}
 	
 	
@@ -129,18 +145,17 @@ class C_master_ambil_paket extends Controller {
 	//function for update record
 	function ambil_paket_update(){
 		//POST variable here
-		$paket_id=trim(@$_POST["paket_id"]);
-		$paket_kode=trim(@$_POST["paket_kode"]);
+		$paket_id=trim(@$_POST["ambil_paket_id"]);
+		$paket_kode=trim(@$_POST["ambil_paket_kode"]);
 		$paket_kode=str_replace("/(<\/?)(p)([^>]*>)", "",$paket_kode);
 		$paket_kode=str_replace(",", "\,",$paket_kode);
 		$paket_kode=str_replace("'", "\'",$paket_kode);
-		$paket_nama=trim(@$_POST["paket_nama"]);
+		$paket_nama=trim(@$_POST["ambil_paket_nama"]);
 		$paket_nama=str_replace("/(<\/?)(p)([^>]*>)", "",$paket_nama);
 		$paket_nama=str_replace(",", "\,",$paket_nama);
 		$paket_nama=str_replace("'", "\'",$paket_nama);
-		$paket_group=trim(@$_POST["paket_group"]);
-		$paket_expired=trim(@$_POST["paket_expired"]);
-		$result = $this->m_master_ambil_paket->ambil_paket_update($paket_id ,$paket_kode ,$paket_nama ,$paket_group ,$paket_expired );
+		$paket_expired=trim(@$_POST["ambil_paket_expired"]);
+		$result = $this->m_master_ambil_paket->ambil_paket_update($paket_id ,$paket_kode ,$paket_nama ,$paket_expired );
 		echo $result;
 	}
 	
@@ -154,9 +169,8 @@ class C_master_ambil_paket extends Controller {
 		$paket_nama=trim(@$_POST["paket_nama"]);
 		$paket_nama=str_replace("/(<\/?)(p)([^>]*>)", "",$paket_nama);
 		$paket_nama=str_replace("'", "\'",$paket_nama);
-		$paket_group=trim(@$_POST["paket_group"]);
 		$paket_expired=trim(@$_POST["paket_expired"]);
-		$result=$this->m_master_ambil_paket->ambil_paket_create($paket_kode ,$paket_nama ,$paket_group ,$paket_expired );
+		$result=$this->m_master_ambil_paket->ambil_paket_create($paket_kode ,$paket_nama ,$paket_expired );
 		echo $result;
 	}
 
@@ -171,19 +185,16 @@ class C_master_ambil_paket extends Controller {
 	//function for advanced search
 	function ambil_paket_search(){
 		//POST varibale here
-		$paket_id=trim(@$_POST["paket_id"]);
-		$paket_kode=trim(@$_POST["paket_kode"]);
-		$paket_kode=str_replace("/(<\/?)(p)([^>]*>)", "",$paket_kode);
-		$paket_kode=str_replace("'", "\'",$paket_kode);
-		$paket_nama=trim(@$_POST["paket_nama"]);
-		$paket_nama=str_replace("/(<\/?)(p)([^>]*>)", "",$paket_nama);
-		$paket_nama=str_replace("'", "\'",$paket_nama);
-		$paket_group=trim(@$_POST["paket_group"]);
-		$paket_expired=trim(@$_POST["paket_expired"]);
+		$apaket_faktur=trim(@$_POST["apaket_faktur"]);
+		$apaket_faktur=str_replace("/(<\/?)(p)([^>]*>)", "",$apaket_faktur);
+		$apaket_faktur=str_replace("'", "\'",$apaket_faktur);
+		$apaket_cust=trim(@$_POST["apaket_cust"]);
+		$apaket_paket=trim(@$_POST["apaket_paket"]);
+		$apaket_kadaluarsa=trim(@$_POST["apaket_kadaluarsa"]);
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_master_ambil_paket->ambil_paket_search($paket_id ,$paket_kode ,$paket_nama ,$paket_group ,$paket_expired ,$start,$end);
+		$result = $this->m_master_ambil_paket->ambil_paket_search($apaket_faktur ,$apaket_cust ,$apaket_paket ,$apaket_kadaluarsa ,$start,$end);
 		echo $result;
 	}
 
@@ -197,7 +208,6 @@ class C_master_ambil_paket extends Controller {
 		$paket_nama=trim(@$_POST["paket_nama"]);
 		$paket_nama=str_replace("/(<\/?)(p)([^>]*>)", "",$paket_nama);
 		$paket_nama=str_replace("'", "\'",$paket_nama);
-		$paket_group=trim(@$_POST["paket_group"]);
 		$paket_kodelama=trim(@$_POST["paket_kodelama"]);
 		$paket_kodelama=str_replace("/(<\/?)(p)([^>]*>)", "",$paket_kodelama);
 		$paket_kodelama=str_replace("'", "\'",$paket_kodelama);
@@ -205,13 +215,13 @@ class C_master_ambil_paket extends Controller {
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$result = $this->m_master_ambil_paket->ambil_paket_print($paket_id ,$paket_kode ,$paket_nama ,$paket_group ,$paket_expired ,$option,$filter);
+		$result = $this->m_master_ambil_paket->ambil_paket_print($paket_id ,$paket_kode ,$paket_nama ,$paket_expired ,$option,$filter);
 		$nbrows=$result->num_rows();
 		$totcolumn=19;
    		/* We now have our array, let's build our HTML file */
-		$file = fopen("paketlist.html",'w');
+		$file = fopen("ambil_paketlist.html",'w');
 		fwrite($file, "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' /><title>Printing the Paket Grid</title><link rel='stylesheet' type='text/css' href='assets/modules/main/css/printstyle.css'/></head>");
-		fwrite($file, "<body><table summary='Paket List'><caption>PAKET</caption><thead><tr><th scope='col'>Paket Id</th><th scope='col'>Paket Kode</th><th scope='col'>Paket Nama</th><th scope='col'>Paket Group</th><th scope='col'>Paket Kontribusi</th><th scope='col'>Paket Kodelama</th><th scope='col'>Paket Keterangan</th><th scope='col'>Paket Du</th><th scope='col'>Paket Dm</th><th scope='col'>Paket Point</th><th scope='col'>Paket Harga</th><th scope='col'>Paket Expired</th><th scope='col'>Paket Aktif</th><th scope='col'>Paket Creator</th><th scope='col'>Paket Date Create</th><th scope='col'>Paket Update</th><th scope='col'>Paket Date Update</th><th scope='col'>Paket Revised</th><th scope='col'>Paket Jenis</th></tr></thead><tfoot><tr><th scope='row'>Total</th><td colspan='$totcolumn'>");
+		fwrite($file, "<body><table summary='Paket List'><caption>PAKET</caption><thead><tr><th scope='col'>Paket Id</th><th scope='col'>Paket Kode</th><th scope='col'>Paket Nama</th><th scope='col'>Paket Kontribusi</th><th scope='col'>Paket Kodelama</th><th scope='col'>Paket Keterangan</th><th scope='col'>Paket Du</th><th scope='col'>Paket Dm</th><th scope='col'>Paket Point</th><th scope='col'>Paket Harga</th><th scope='col'>Paket Expired</th><th scope='col'>Paket Aktif</th><th scope='col'>Paket Creator</th><th scope='col'>Paket Date Create</th><th scope='col'>Paket Update</th><th scope='col'>Paket Date Update</th><th scope='col'>Paket Revised</th><th scope='col'>Paket Jenis</th></tr></thead><tfoot><tr><th scope='row'>Total</th><td colspan='$totcolumn'>");
 		fwrite($file, $nbrows);
 		fwrite($file, " Paket</td></tr></tfoot><tbody>");
 		$i=0;
@@ -228,8 +238,6 @@ class C_master_ambil_paket extends Controller {
 				fwrite($file, $data['paket_kode']);
 				fwrite($file,"</td><td>");
 				fwrite($file, $data['paket_nama']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['paket_group']);
 				fwrite($file,"</td><td>");
 				fwrite($file, $data['paket_expired']);
 				fwrite($file,"</td><td>");
@@ -261,12 +269,11 @@ class C_master_ambil_paket extends Controller {
 		$paket_nama=trim(@$_POST["paket_nama"]);
 		$paket_nama=str_replace("/(<\/?)(p)([^>]*>)", "",$paket_nama);
 		$paket_nama=str_replace("'", "\'",$paket_nama);
-		$paket_group=trim(@$_POST["paket_group"]);
 		$paket_expired=trim(@$_POST["paket_expired"]);
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$query = $this->m_master_ambil_paket->ambil_paket_export_excel($paket_id ,$paket_kode ,$paket_nama ,$paket_group ,$paket_expired ,$option,$filter);
+		$query = $this->m_master_ambil_paket->ambil_paket_export_excel($paket_id ,$paket_kode ,$paket_nama ,$paket_expired ,$option,$filter);
 		
 		to_excel($query,"paket"); 
 		echo '1';
