@@ -18,6 +18,72 @@ class M_master_ambil_paket extends Model{
 			parent::Model();
 		}
 		
+		function get_paket_list($query,$start,$end){
+			/*$rs_rows=0;
+			if(is_numeric($query)==true){
+				$sql_paket="SELECT distinct(dpaket_paket) FROM detail_jual_paket WHERE dpaket_master='$query'";
+				$rs=$this->db->query($sql_paket);
+				$rs_rows=$rs->num_rows();
+			}*/
+			
+			$sql="SELECT paket_id, paket_kode, group_nama, paket_nama FROM paket INNER JOIN produk_group ON paket.paket_group=produk_group.group_id INNER JOIN kategori ON produk_group.group_kelompok=kategori.kategori_id WHERE kategori.kategori_jenis='paket' AND paket_aktif='Aktif'";
+			if($query<>"" && is_numeric($query)==false){
+				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+				$sql.=" (paket_kode LIKE '%".addslashes($query)."%' OR paket_nama LIKE '%".addslashes($query)."%' ) ";
+			}/*else{
+				if($rs_rows){
+					$filter="";
+					$sql.=eregi("AND",$query)? " OR ":" AND ";
+					foreach($rs->result() as $row_paket){
+						
+						$filter.="OR paket_id='".$row_paket->dpaket_paket."' ";
+					}
+					$sql=$sql."(".substr($filter,2,strlen($filter)).")";
+				}
+			}*/
+			
+			$result = $this->db->query($sql);
+			$nbrows = $result->num_rows();
+			if($end!=0){
+				$limit = $sql." LIMIT ".$start.",".$end;			
+				$result = $this->db->query($limit);
+			}
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+			
+		}
+		
+		function get_customer_list($query,$start,$end){
+			$sql="SELECT cust_id,cust_no,cust_nama,cust_tgllahir,cust_alamat,cust_telprumah FROM customer WHERE cust_aktif='Aktif'";
+			if($query<>"" && is_numeric($query)==false){
+				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+				$sql.=" (cust_nama like '%".$query."%' ) ";
+			}
+			
+			$result = $this->db->query($sql);
+			$nbrows = $result->num_rows();
+			if($end!=0){
+				$limit = $sql." LIMIT ".$start.",".$end;			
+				$result = $this->db->query($limit);
+			}
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+		
 		function get_pengguna_paket_list($jpaket_id){
 			//$query = "SELECT sjpaket_id, sjpaket_cust, cust_nama, cust_no, cust_tgllahir, cust_alamat, cust_telprumah FROM submaster_jual_paket INNER JOIN customer ON(sjpaket_cust=cust_id) WHERE sjpaket_master='$jpaket_id'";
 			$query = "SELECT cust_id, cust_nama, cust_no, cust_tgllahir, cust_alamat, cust_telprumah FROM pengguna_paket LEFT JOIN customer ON(ppaket_cust=cust_id) WHERE ppaket_master='$jpaket_id'";
@@ -35,10 +101,9 @@ class M_master_ambil_paket extends Model{
 			}
 		}
 		
-		function get_history_ambil_paket($dpaket_id,$start,$end){
+		function get_history_ambil_paket($apaket_id,$start,$end){
 			/* Ambil dari db.detail_ambil_paket */
-			//$query = "SELECT dapaket_id, dapaket_master, dapaket_dpaket, dapaket_item, dapaket_jumlah, dapaket_cust, cust_nama, rawat_nama, paket_nama, apaket_faktur FROM detail_ambil_paket INNER JOIN paket ON(dapaket_dpaket=paket_id) LEFT JOIN perawatan ON(dapaket_item=rawat_id) LEFT JOIN master_ambil_paket ON(dapaket_master=apaket_id) LEFT JOIN customer ON(dapaket_cust=cust_id) WHERE dapaket_master='$apaket_id'";
-			$query = "SELECT jpaket_nobukti, paket_nama, rawat_nama, hapaket_jumlah, cust_nama FROM history_ambil_paket LEFT JOIN detail_jual_paket ON(hapaket_dpaket=dpaket_id) LEFT JOIN master_jual_paket ON(dpaket_master=jpaket_id) LEFT JOIN perawatan ON(hapaket_rawat=rawat_id) LEFT JOIN paket ON(dpaket_paket=paket_id) LEFT JOIN customer ON(hapaket_cust=cust_id) WHERE hapaket_dpaket='$dpaket_id'";
+			$query = "SELECT apaket_faktur, paket_nama, rawat_nama, dapaket_jumlah, cust_nama FROM detail_ambil_paket LEFT JOIN master_ambil_paket ON(dapaket_master=apaket_id) LEFT JOIN submaster_apaket_item ON(dapaket_sapaket=sapaket_id) LEFT JOIN perawatan ON(sapaket_item=rawat_id) LEFT JOIN paket ON(apaket_paket=paket_id) LEFT JOIN customer ON(dapaket_cust=cust_id) WHERE dapaket_master='$apaket_id'";
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
 			$limit = $query." LIMIT ".$start.",".$end;			
@@ -56,14 +121,14 @@ class M_master_ambil_paket extends Model{
 		}
 		
 		//Ambil Perawatan berdasarkan db.paket_isi_perawatan.rpaket_perawatan yang dihasilkan dari (db.paket_isi_perawatan.rpaket_master = paket.paket_id)
-		function get_isi_rawat_list($paket_id,$start,$end){
+		function get_isi_rawat_list($apaket_id,$start,$end){
 			$rs_rows=0;
-			if(is_numeric($paket_id)==true){
-				$sql_rpaket="SELECT distinct(rpaket_perawatan) FROM paket_isi_perawatan WHERE rpaket_master='$paket_id'";
+			if(is_numeric($apaket_id)==true){
+				/*$sql_rpaket="SELECT distinct(rpaket_perawatan) FROM paket_isi_perawatan WHERE rpaket_master='$paket_id'";
 				$rs=$this->db->query($sql_rpaket);
-				$rs_rows=$rs->num_rows();
+				$rs_rows=$rs->num_rows();*/
 				
-				$sql = "SELECT rpaket_perawatan,rawat_kode,rawat_nama,total_sisa_item FROM vu_dpaket_item_total_sisa WHERE dpaket_id='$paket_id' AND (rawat_aktif='Aktif' OR rawat_aktif='Tidak Aktif')";
+				$sql = "SELECT sapaket_id, rawat_id,rawat_kode,rawat_nama,sapaket_sisa_item FROM submaster_apaket_item LEFT JOIN perawatan ON(sapaket_item=rawat_id) WHERE sapaket_jenis_item='perawatan' AND sapaket_master='$apaket_id' AND (rawat_aktif='Aktif' OR rawat_aktif='Tidak Aktif')";
 				
 				/*if($rs_rows){
 					$filter="";
@@ -136,29 +201,43 @@ class M_master_ambil_paket extends Model{
 		//*eof
 		
 		//insert detail record
-		function detail_ambil_paket_isi_perawatan_insert($hapaket_dpaket ,$hapaket_rawat ,$hapaket_jumlah ,$hapaket_cust){
-			//if master id not capture from view then capture it from max pk from master table
-			/*if($rambil_paket_master=="" || $rambil_paket_master==NULL){
-				$rambil_paket_master=$this->get_master_id();
-			}*/
-			/*if($rambil_paket_cust==""){
-				$sql="SELECT jpaket_cust FROM master_ambil_paket INNER JOIN detail_jual_paket ON(dpaket_id=apaket_dpaket) INNER JOIN master_jual_paket ON(jpaket_id=dpaket_master) WHERE apaket_id='$rambil_paket_master'";
-				$rs=$this->db->query($sql);
-				if($rs->num_rows()){
-					$rs_record=$rs->row_array();
-					$rambil_paket_cust=$rs_record["jpaket_cust"];
-				}
-			}*/
-			
-			/* INSERT ke db.history_ambil_paket sebagai History Pengambilan Paket */
-			$data=array(
-			"hapaket_dpaket"=>$hapaket_dpaket,
-			"hapaket_rawat"=>$hapaket_rawat,
-			"hapaket_jumlah"=>$hapaket_jumlah,
-			"hapaket_cust"=>$hapaket_cust
+		function detail_ambil_paket_isi_perawatan_insert($dapaket_master ,$dapaket_sapaket ,$dapaket_jumlah ,$dapaket_cust){
+			/* INSERT ke db.detail_ambil_paket sebagai History Pengambilan Paket */
+			$dti_dapaket=array(
+			"dapaket_master"=>$dapaket_master,
+			"dapaket_sapaket"=>$dapaket_sapaket,
+			"dapaket_jumlah"=>$dapaket_jumlah,
+			"dapaket_cust"=>$dapaket_cust
 			);
-			$this->db->insert('history_ambil_paket', $data);
+			$this->db->insert('detail_ambil_paket', $dti_dapaket);
+			
 			if($this->db->affected_rows()){
+				$sql_sisa_item="SELECT sapaket_id, IF((sapaket_sisa_item-(sum(dapaket_jumlah)))!='null', (sapaket_sisa_item-(sum(dapaket_jumlah))), 0) as total_sisa_item FROM submaster_apaket_item LEFT JOIN detail_ambil_paket ON(dapaket_sapaket=sapaket_id) WHERE sapaket_id='$dapaket_sapaket' GROUP BY sapaket_id";
+				$rs_sisa_item=$this->db->query($sql_sisa_item);
+				if($rs_sisa_item->num_rows()){
+					/* UPDATE db.submaster_apaket_item.sapaket_sisa_item */
+					$rs_sisa_item_record=$rs_sisa_item->row_array();
+					$total_sisa_item=$rs_sisa_item_record["total_sisa_item"];
+					$dtu_sapaket=array(
+					"sapaket_sisa_item"=>$total_sisa_item
+					);
+					$this->db->where('sapaket_id', $dapaket_sapaket);
+					$this->db->update('submaster_apaket_item', $dtu_sapaket);
+				}
+				
+				$sql_sisa_paket="SELECT apaket_id, IF((apaket_sisa_paket-(sum(dapaket_jumlah)))!='null', (apaket_sisa_paket-(sum(dapaket_jumlah))), 0) as total_sisa_paket FROM master_ambil_paket LEFT JOIN detail_ambil_paket ON(dapaket_master=apaket_id) WHERE apaket_id='$dapaket_master' GROUP BY apaket_id";
+				$rs_sisa_paket=$this->db->query($sql_sisa_paket);
+				if($rs_sisa_paket->num_rows()){
+					/* UPDATE db.master_ambil_paket.apaket_sisa_paket */
+					$rs_sisa_paket_record=$rs_sisa_paket->row_array();
+					$total_sisa_paket=$rs_sisa_paket_record["total_sisa_paket"];
+					$dtu_apaket=array(
+					"apaket_sisa_paket"=>$total_sisa_paket
+					);
+					$this->db->where('apaket_id', $dapaket_master);
+					$this->db->update('master_ambil_paket', $dtu_apaket);
+				}
+				
 				return '1';
 			}else
 				return '0';
@@ -170,12 +249,13 @@ class M_master_ambil_paket extends Model{
 		function ambil_paket_list($filter,$start,$end){
 			/* Untuk menampilkan ke View.LIST = {Customer, No.Faktur Penjualan Paket, Tanggal Pembelian, Tanggal Expired Paket, Nama Paket } */
 			//$query = "SELECT customer.cust_id, customer.cust_nama, customer.cust_no, master_jual_paket.jpaket_id, master_jual_paket.jpaket_nobukti, master_jual_paket.jpaket_tanggal, detail_jual_paket.dpaket_id, detail_jual_paket.dpaket_kadaluarsa, paket.paket_id, paket.paket_nama, paket.paket_kode, master_ambil_paket.apaket_sisa_paket, master_ambil_paket.apaket_id FROM master_ambil_paket INNER JOIN detail_jual_paket ON(dpaket_id=apaket_dpaket) LEFT JOIN master_jual_paket ON(jpaket_id=dpaket_master) LEFT JOIN customer ON(cust_id=jpaket_cust) LEFT JOIN paket ON(paket_id=dpaket_paket)";
-			$query = "SELECT * FROM vu_kasir_ambil_paket_list";
+			//$query = "SELECT * FROM vu_kasir_ambil_paket_list";
+			$query = "SELECT apaket_id, apaket_jpaket, apaket_faktur, apaket_faktur_tanggal, apaket_kadaluarsa, apaket_cust, apaket_cust_no, apaket_cust_nama, apaket_paket, apaket_paket_kode, apaket_paket_nama, apaket_paket_jumlah, apaket_sisa_paket FROM master_ambil_paket";
 
 			// For simple search
 			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (cust_nama LIKE '%".addslashes($filter)."%')";
+				$query .= " (apaket_cust_nama LIKE '%".addslashes($filter)."%')";
 			}
 			
 			$result = $this->db->query($query);
@@ -195,27 +275,25 @@ class M_master_ambil_paket extends Model{
 		}
 		
 		//function for update record
-		function ambil_paket_update($paket_id ,$paket_kode ,$paket_nama ,$paket_group ,$paket_expired ){
+		function ambil_paket_update($paket_id ,$paket_kode ,$paket_nama ,$paket_expired ){
 			/* Check di db.master_ambil_paket apakah No.Faktur Penjualan Paket && Paket_ID telah ada di db.master_ambil_paket ? */
-			$data = array(
+			/*$data = array(
 				"paket_id"=>$paket_id, 
 				"paket_kode"=>$paket_kode, 
 				"paket_nama"=>$paket_nama, 
-				"paket_group"=>$paket_group, 
 				"paket_expired"=>$paket_expired
 			);
 			$this->db->where('paket_id', $paket_id);
-			$this->db->update('paket', $data);
+			$this->db->update('paket', $data);*/
 			
 			return '1';
 		}
 		
 		//function for create new record
-		function ambil_paket_create($paket_kode ,$paket_nama ,$paket_group ,$paket_expired ){
+		function ambil_paket_create($paket_kode ,$paket_nama ,$paket_expired ){
 			$data = array(
 				"paket_kode"=>$paket_kode, 
 				"paket_nama"=>$paket_nama, 
-				"paket_group"=>$paket_group, 
 				"paket_expired"=>$paket_expired
 			);
 			$this->db->insert('paket', $data); 
@@ -251,30 +329,28 @@ class M_master_ambil_paket extends Model{
 		}
 		
 		//function for advanced search record
-		function ambil_paket_search($paket_id ,$paket_kode ,$paket_nama ,$paket_group ,$paket_expired ,$start,$end){
+		function ambil_paket_search($apaket_faktur ,$apaket_cust ,$apaket_paket ,$apaket_kadaluarsa ,$start,$end){
 			//full query
-			$query="select * from paket";
+			//$query="select * from paket";
+			$query = "SELECT apaket_id, apaket_jpaket, apaket_faktur, apaket_faktur_tanggal, apaket_kadaluarsa, apaket_cust, apaket_cust_no, apaket_cust_nama, apaket_paket, apaket_paket_kode, apaket_paket_nama, apaket_paket_jumlah, apaket_sisa_paket FROM master_ambil_paket";
 			
-			if($paket_id!=''){
+			if($apaket_faktur!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " paket_id LIKE '%".$paket_id."%'";
+				$query.= " apaket_faktur LIKE '%".$apaket_faktur."%'";
 			};
-			if($paket_kode!=''){
+			if($apaket_cust!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " paket_kode LIKE '%".$paket_kode."%'";
+				$query.= " apaket_cust LIKE '%".$apaket_cust."%'";
 			};
-			if($paket_nama!=''){
+			if($apaket_paket!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " paket_nama LIKE '%".$paket_nama."%'";
+				$query.= " apaket_paket LIKE '%".$apaket_paket."%'";
 			};
-			if($paket_group!=''){
+			if($apaket_kadaluarsa!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " paket_group LIKE '%".$paket_group."%'";
+				$query.= " date_format(apaket_kadaluarsa,'%Y-%m-%d')='$apaket_kadaluarsa'";
 			};
-			if($paket_expired!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " paket_expired LIKE '%".$paket_expired."%'";
-			};
+			
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
 			
@@ -293,12 +369,12 @@ class M_master_ambil_paket extends Model{
 		}
 		
 		//function for print record
-		function ambil_paket_print($paket_id ,$paket_kode ,$paket_nama ,$paket_group ,$paket_expired ,$option,$filter){
+		function ambil_paket_print($paket_id ,$paket_kode ,$paket_nama ,$paket_expired ,$option,$filter){
 			//full query
 			$query="select * from paket";
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (paket_id LIKE '%".addslashes($filter)."%' OR paket_kode LIKE '%".addslashes($filter)."%' OR paket_nama LIKE '%".addslashes($filter)."%' OR paket_group LIKE '%".addslashes($filter)."%' OR paket_expired LIKE '%".addslashes($filter)."%' )";
+				$query .= " (paket_id LIKE '%".addslashes($filter)."%' OR paket_kode LIKE '%".addslashes($filter)."%' OR paket_nama LIKE '%".addslashes($filter)."%' OR paket_expired LIKE '%".addslashes($filter)."%' )";
 				$result = $this->db->query($query);
 			} else if($option=='SEARCH'){
 				if($paket_id!=''){
@@ -312,10 +388,6 @@ class M_master_ambil_paket extends Model{
 				if($paket_nama!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " paket_nama LIKE '%".$paket_nama."%'";
-				};
-				if($paket_group!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " paket_group LIKE '%".$paket_group."%'";
 				};
 				if($paket_expired!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -327,12 +399,12 @@ class M_master_ambil_paket extends Model{
 		}
 		
 		//function  for export to excel
-		function ambil_paket_export_excel($paket_id ,$paket_kode ,$paket_nama ,$paket_group ,$paket_expired ,$option,$filter){
+		function ambil_paket_export_excel($paket_id ,$paket_kode ,$paket_nama ,$paket_expired ,$option,$filter){
 			//full query
 			$query="select * from paket";
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (paket_id LIKE '%".addslashes($filter)."%' OR paket_kode LIKE '%".addslashes($filter)."%' OR paket_nama LIKE '%".addslashes($filter)."%' OR paket_group LIKE '%".addslashes($filter)."%' OR paket_expired LIKE '%".addslashes($filter)."%' )";
+				$query .= " (paket_id LIKE '%".addslashes($filter)."%' OR paket_kode LIKE '%".addslashes($filter)."%' OR paket_nama LIKE '%".addslashes($filter)."%' OR paket_expired LIKE '%".addslashes($filter)."%' )";
 				$result = $this->db->query($query);
 			} else if($option=='SEARCH'){
 				if($paket_id!=''){
@@ -346,10 +418,6 @@ class M_master_ambil_paket extends Model{
 				if($paket_nama!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " paket_nama LIKE '%".$paket_nama."%'";
-				};
-				if($paket_group!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " paket_group LIKE '%".$paket_group."%'";
 				};
 				if($paket_expired!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";

@@ -4126,11 +4126,11 @@ Ext.onReady(function(){
 		id: ''
 	},[
 	/* dataIndex => insert intopeprodukan_ColumnModel, Mapping => for initiate table column */ 
-			{name: 'jpaket_nobukti', type: 'string', mapping: 'jpaket_nobukti'}, 
-			{name: 'paket_nama', type: 'string', mapping: 'paket_nama'}, 
-			{name: 'rawat_nama', type: 'string', mapping: 'rawat_nama'}, 
-			{name: 'hapaket_jumlah', type: 'int', mapping: 'hapaket_jumlah'}, 
-			{name: 'cust_nama', type: 'string', mapping: 'cust_nama'}
+			{name: 'apaket_faktur', type: 'string', mapping: 'apaket_faktur'}, 
+			{name: 'apaket_paket_nama', type: 'string', mapping: 'apaket_paket_nama'}, 
+			{name: 'sapaket_item_nama', type: 'string', mapping: 'sapaket_item_nama'}, 
+			{name: 'dapaket_jumlah', type: 'int', mapping: 'dapaket_jumlah'}, 
+			{name: 'apaket_cust_nama', type: 'string', mapping: 'apaket_cust_nama'}
 	]);
 	//eof
 	
@@ -4150,7 +4150,7 @@ Ext.onReady(function(){
 			method: 'POST'
 		}),baseParams: {start: 0, limit: pageS},
 		reader: detail_ambil_paket_reader,
-		sortInfo:{field: 'jpaket_nobukti', direction: "ASC"}
+		sortInfo:{field: 'apaket_faktur', direction: "ASC"}
 	});
 	/* End of Function */
 	
@@ -4158,32 +4158,32 @@ Ext.onReady(function(){
 		[
 		{
 			header: '<div align="center">' + 'No.Faktur' + '</div>',
-			dataIndex: 'jpaket_nobukti',
+			dataIndex: 'apaket_faktur',
 			width: 400,	//250,
 			sortable: true
 		},
 		{
 			header: '<div align="center">' + 'Nama Paket' + '</div>',
-			dataIndex: 'paket_nama',
+			dataIndex: 'apaket_paket_nama',
 			width: 60,	//80,
 			sortable: true
 		},
 		{
 			header: '<div align="center">' + 'Perawatan' + '</div>',
-			dataIndex: 'rawat_nama',
+			dataIndex: 'sapaket_item_nama',
 			width: 100,
 			sortable: true
 		},
 		{
 			header: '<div align="center">' + 'Jumlah' + '</div>',
-			dataIndex: 'hapaket_jumlah',
+			dataIndex: 'dapaket_jumlah',
 			width: 100,
 			sortable: true
 		},
 		{
 			//align: 'Right',
 			header: '<div align="center">' + 'Customer' + '</div>',
-			dataIndex: 'cust_nama',
+			dataIndex: 'apaket_cust_nama',
 			width: 100, //150,
 			sortable: true,
 			reaOnly: true

@@ -789,6 +789,7 @@ Ext.onReady(function(){
 		master_jual_paket_reset_form();
 		jpaket_idField.setValue(master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_id'));
 		jpaket_nobuktiField.setValue(master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_nobukti'));
+		jpaket_cust_idField.setValue(master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_cust_id'));
 		jpaket_custField.setValue(master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_cust'));
 		jpaket_tanggalField.setValue(master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_tanggal'));
 		jpaket_diskonField.setValue(master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_diskon'));
@@ -1299,6 +1300,7 @@ Ext.onReady(function(){
 			url: 'index.php?c=c_master_jual_paket&m=get_kwitansi_list', 
 			method: 'POST'
 		}),
+		baseParams: {start:0, limit:pageS},
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
@@ -1764,6 +1766,7 @@ Ext.onReady(function(){
 		listClass: 'x-combo-list-small',
 		anchor: '95%'
 	});
+	jpaket_cust_idField= new Ext.form.NumberField();
 	
 	jpaket_cust_nomemberField= new Ext.form.TextField({
 		id: 'jpaket_cust_nomemberField',

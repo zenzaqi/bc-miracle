@@ -169,8 +169,9 @@ Ext.onReady(function(){
 		if(oGrid_event.record.data.dtrawat_keterangan!== null){dtrawat_keterangan_update = oGrid_event.record.data.dtrawat_keterangan;}
 		dtrawat_dapp_update = oGrid_event.record.data.dtrawat_dapp;
 		dtrawat_ambil_paket_update = oGrid_event.record.data.dtrawat_ambil_paket;
-		dpaket_id_update = oGrid_event.record.data.dpaket_id;
-		rpaket_perawatan_update = oGrid_event.record.data.rpaket_perawatan;
+		apaket_id_update = oGrid_event.record.data.apaket_id;
+		sapaket_id_update = oGrid_event.record.data.sapaket_id;
+		sapaket_item_update = oGrid_event.record.data.sapaket_item;
 
 		Ext.Ajax.request({  
 			waitMsg: 'Please wait...',
@@ -195,8 +196,9 @@ Ext.onReady(function(){
 				dtrawat_keterangan	:dtrawat_keterangan_update,
 				dtrawat_dapp	: dtrawat_dapp_update,
 				dtrawat_ambil_paket	: dtrawat_ambil_paket_update,
-				dpaket_id	: dpaket_id_update,
-				rpaket_perawatan	: rpaket_perawatan_update
+				apaket_id	: apaket_id_update,
+				sapaket_id	: sapaket_id_update,
+				sapaket_item	: sapaket_item_update
 			}, 
 			success: function(response){							
 				var result=eval(response.responseText);
@@ -511,8 +513,9 @@ Ext.onReady(function(){
 			{name: 'dtrawat_keterangan', type: 'string', mapping: 'dtrawat_keterangan'},
 			{name: 'dtrawat_ambil_paket', type: 'string', mapping: 'dtrawat_ambil_paket'},
 			{name: 'cust_punya_paket', type: 'string', mapping: 'cust_punya_paket'},
-			{name: 'dpaket_id', type: 'int', mapping: 'dpaket_id'},
-			{name: 'rpaket_perawatan', type: 'int', mapping: 'rpaket_perawatan'},
+			{name: 'apaket_id', type: 'int', mapping: 'apaket_id'},
+			{name: 'sapaket_id', type: 'int', mapping: 'sapaket_id'},
+			{name: 'sapaket_item', type: 'int', mapping: 'sapaket_item'},
 			{name: 'dtrawat_edit', type: 'string', mapping: 'dtrawat_edit'}
 		])/*,
 		sortInfo:{field: 'dtrawat_id', direction: "DESC"}*/
