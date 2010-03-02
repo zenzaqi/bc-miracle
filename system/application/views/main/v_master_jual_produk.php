@@ -1288,6 +1288,8 @@ Ext.onReady(function(){
 			{name: 'jproduk_id', type: 'int', mapping: 'jproduk_id'}, 
 			{name: 'jproduk_nobukti', type: 'string', mapping: 'jproduk_nobukti'}, 
 			{name: 'jproduk_cust', type: 'string', mapping: 'cust_nama'}, 
+			{name: 'jproduk_cust_no', type: 'string', mapping: 'cust_no'}, 
+			{name: 'jproduk_cust_member', type: 'string', mapping: 'cust_member'}, 
 			{name: 'jproduk_cust_id', type: 'int', mapping: 'jproduk_cust'}, 
 			{name: 'jproduk_tanggal', type: 'date', dateFormat: 'Y-m-d', mapping: 'jproduk_tanggal'}, 
 			{name: 'jproduk_diskon', type: 'int', mapping: 'jproduk_diskon'}, 
@@ -1527,13 +1529,30 @@ Ext.onReady(function(){
 			hidden: true
 		},
 		{
-			header: '<div align="center">' + 'No. Faktur' + '</div>',
+			header: '<div align="center">' + 'Tanggal' + '</div>',
+			dataIndex: 'jproduk_tanggal',
+			width: 70,	//150,
+			sortable: true,
+			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
+			editor: new Ext.form.DateField({
+				format: 'd-m-Y'
+			})
+		}, 
+		{
+			header: '<div align="center">' + 'No Faktur' + '</div>',
 			dataIndex: 'jproduk_nobukti',
 			width: 80,	//150,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 30
           	})
+		}, 
+		{
+			header: '<div align="center">' + 'No Cust' + '</div>',
+			dataIndex: 'jproduk_cust_no',
+			width: 80,	//185,
+			sortable: true,
+			readOnly: true
 		}, 
 		{
 			header: '<div align="center">' + 'Customer' + '</div>',
@@ -1543,14 +1562,11 @@ Ext.onReady(function(){
 			readOnly: true
 		}, 
 		{
-			header: '<div align="center">' + 'Tanggal' + '</div>',
-			dataIndex: 'jproduk_tanggal',
-			width: 70,	//150,
+			header: '<div align="center">' + 'No Member' + '</div>',
+			dataIndex: 'jproduk_cust_member',
+			width: 80,	//185,
 			sortable: true,
-			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
-			editor: new Ext.form.DateField({
-				format: 'd-m-Y'
-			})
+			readOnly: true
 		}, 
 		{
 		//	header: 'Jumlah Bayar',

@@ -1821,7 +1821,7 @@ Ext.onReady(function(){
 			})
 		}, 
 		{
-			header: '<div align="center">' + 'No. Faktur' + '</div>',
+			header: '<div align="center">' + 'No Faktur' + '</div>',
 			dataIndex: 'jrawat_nobukti',
 			width: 90,	//82,
 			sortable: true,
@@ -1830,7 +1830,7 @@ Ext.onReady(function(){
           	})
 		}, 
 		{
-			header: '<div align="center">' + 'No. Cust' + '</div>',
+			header: '<div align="center">' + 'No Cust' + '</div>',
 			dataIndex: 'cust_no',
 			width: 80,
 			sortable: false,
@@ -1845,7 +1845,7 @@ Ext.onReady(function(){
 		}, 
 		{
 //			header: 'Member Customer',
-			header: '<div align="center">' + 'No. Member' + '</div>',
+			header: '<div align="center">' + 'No Member' + '</div>',
 			dataIndex: 'cust_member',
 			width: 80,	//100,
 			sortable: false,
