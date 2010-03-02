@@ -3619,7 +3619,7 @@ Ext.onReady(function(){
 		id: 'detail_jual_rawatListEditorGrid',
 		el: 'fp_detail_jual_rawat',
 		title: 'Detail Penjualan Perawatan',
-		height: 250,
+		height: 225,	//250,
 		width: 940,	//938,
 		autoScroll: true,
 		store: detail_jual_rawat_DataStore, // DataStore
@@ -4212,7 +4212,7 @@ Ext.onReady(function(){
 		id: 'detail_ambil_paketListGrid',
 		el: 'fp_detail_ambil_paket',
 		title: 'Detail Pengambilan Paket',
-		height: 250,
+		height: 150,	//250,
 		width: 940,	//938,
 		autoScroll: true,
 		store: detail_ambil_paketDataStore, // DataStore
