@@ -43,6 +43,7 @@
 		}
     </style>
 <script>
+
 /* declare function */		
 var cetak_kwitansi_DataStore;
 var cetak_kwitansi_ColumnModel;
@@ -457,18 +458,18 @@ Ext.onReady(function(){
 			hidden: true
 		},
 		{
-			header: 'No. Kuitansi',
+			header: '<div align="center">' + 'No Kuitansi' + '</div>',
 			dataIndex: 'kwitansi_no',
-			width: 85,	//150,
+			width: 80,	//150,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 20
           	})
 		}, 
 		{
-			header: 'Customer',
+			header: '<div align="center">' + 'Customer' + '</div>',
 			dataIndex: 'cust_nama',
-			width: 210,
+			width: 200,	//210,
 			sortable: true
 		}, 
 		{
@@ -486,28 +487,32 @@ Ext.onReady(function(){
 			})
 		}, 
 		{
-			header: 'Nilai',
+			header: '<div align="center">' + 'Nilai (Rp)' + '</div>',
+			align: 'right',
 			dataIndex: 'kwitansi_nilai',
 			width: 100,
 			sortable: true,
-			editor: new Ext.form.NumberField({
+			renderer: Ext.util.Format.numberRenderer('0,000')			
+/*			editor: new Ext.form.NumberField({
 				allowDecimals: true,
 				allowNegative: false,
 				blankText: '0',
 				maxLength: 22,
 				maskRe: /([0-9]+)$/
 			})
-		}, 
+*/		}, 
 		{
-			header: 'Sisa',
+			header: '<div align="center">' + 'Sisa (Rp)' + '</div>',
+			align: 'right',
 			dataIndex: 'total_sisa',
 			width: 100,
-			sortable: true
+			sortable: true,
+			renderer: Ext.util.Format.numberRenderer('0,000')			
 		}, 
 		{
-			header: 'Keterangan',
+			header: '<div align="center">' + 'Keterangan' + '</div>',
 			dataIndex: 'kwitansi_keterangan',
-			width: 210,
+			width: 200,	//210,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 500
@@ -516,7 +521,7 @@ Ext.onReady(function(){
 		{
 			header: 'Status',
 			dataIndex: 'kwitansi_status',
-			width: 55,
+			width: 80,	//55,
 			sortable: true,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
@@ -589,7 +594,7 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 800,
+	  	width: 940,	//800,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: cetak_kwitansi_DataStore,
