@@ -84,6 +84,13 @@ var rproduk_keteranganSearchField;
 /* on ready fuction */
 Ext.onReady(function(){
   	Ext.QuickTips.init();	/* Initiate quick tips icon */
+	
+	Ext.util.Format.comboRenderer = function(combo){
+  	    return function(value){
+  	        var record = combo.findRecord(combo.valueField, value);
+  	        return record ? record.get(combo.displayField) : combo.valueNotFoundText;
+  	    }
+  	}
   
   	/* Function for Saving inLine Editing */
 	function master_retur_jual_produk_update(oGrid_event){
@@ -719,6 +726,7 @@ Ext.onReady(function(){
 		if(cbo_retur_produk_DataSore.getCount()){
 			rproduk_custField.setValue(cbo_retur_produk_DataSore.getAt(j).data.retur_produk_nama_customer);
 			rproduk_custidField.setValue(cbo_retur_produk_DataSore.getAt(j).data.retur_produk_customer_id);
+			cbo_drproduk_produkDataStore.load({params: {query: rproduk_nobuktijualField.getValue()}});
 		}
 	});
 	
@@ -789,6 +797,50 @@ Ext.onReady(function(){
         saveText: 'Update'
     });
 	//eof
+	
+	cbo_drproduk_produkDataStore = new Ext.data.Store({
+		id: 'cbo_drproduk_produkDataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_master_retur_jual_produk&m=get_produk_list', 
+			method: 'POST'
+		}),baseParams: {start: 0, limit: 15 },
+			reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'produk_id'
+		},[
+			{name: 'drproduk_produk_value', type: 'int', mapping: 'produk_id'},
+			{name: 'drproduk_produk_harga', type: 'float', mapping: 'retur_produk_harga'},
+			{name: 'drproduk_produk_satuan', type: 'string', mapping: 'satuan_kode'},
+			{name: 'drproduk_produk_display', type: 'string', mapping: 'produk_nama'}
+		]),
+		sortInfo:{field: 'drproduk_produk_display', direction: "ASC"}
+	});
+	var produk_tpl = new Ext.XTemplate(
+        '<tpl for="."><div class="search-item">',
+            '<span>{drproduk_produk_kode}| <b>{drproduk_produk_display}</b>',
+		'</div></tpl>'
+    );
+	var combo_retur_produk=new Ext.form.ComboBox({
+			store: cbo_drproduk_produkDataStore,
+			mode: 'local',
+			typeAhead: true,
+			displayField: 'drproduk_produk_display',
+			valueField: 'drproduk_produk_value',
+			typeAhead: false,
+			loadingText: 'Searching...',
+			pageSize:pageS,
+			hideTrigger:false,
+			tpl: produk_tpl,
+			//applyTo: 'search',
+			itemSelector: 'div.search-item',
+			triggerAction: 'all',
+			lazyRender:true,
+			listClass: 'x-combo-list-small',
+			anchor: '95%'
+
+	});
+	
 	//declaration of detail coloumn model
 	detail_retur_jual_produk_ColumnModel = new Ext.grid.ColumnModel(
 		[
@@ -797,14 +849,8 @@ Ext.onReady(function(){
 			dataIndex: 'drproduk_produk',
 			width: 150,
 			sortable: true,
-			editor: new Ext.form.NumberField({
-				allowBlank: false,
-				allowDecimals: false,
-				allowNegative: false,
-				blankText: '0',
-				maxLength: 11,
-				maskRe: /([0-9]+)$/
-			})
+			editor: combo_retur_produk,
+			renderer: Ext.util.Format.comboRenderer(combo_retur_produk)
 		},
 		{
 			header: 'Satuan',
@@ -901,6 +947,15 @@ Ext.onReady(function(){
 	function refresh_detail_retur_jual_produk(){
 		detail_retur_jual_produk_DataStore.commitChanges();
 		detail_retur_jual_produkListEditorGrid.getView().refresh();
+		detail_retur_produk_record=detail_retur_jual_produk_DataStore.getAt(0);
+		//console.log("detail_retur_jual_produk_DataStore COUNT = "+detail_retur_jual_produk_DataStore.getCount());
+		if(detail_retur_jual_produk_DataStore.getCount()>=0){
+			var dproduk = cbo_drproduk_produkDataStore.find('drproduk_produk_value',detail_retur_produk_record.data.drproduk_produk);
+			if(dproduk>=0){
+				detail_retur_produk_record.data.drproduk_satuan=cbo_drproduk_produkDataStore.getAt(dproduk).data.drproduk_produk_satuan;
+				detail_retur_produk_record.data.drproduk_harga=cbo_drproduk_produkDataStore.getAt(dproduk).data.drproduk_produk_harga;
+			}
+		}
 	}
 	//eof
 	
@@ -970,7 +1025,7 @@ Ext.onReady(function(){
 	
 	/* Function for retrieve create Window Panel*/ 
 	master_retur_jual_produk_createForm = new Ext.FormPanel({
-		labelAlign: 'top',
+		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
 		width: 700,        
@@ -1115,7 +1170,7 @@ Ext.onReady(function(){
     
 	/* Function for retrieve search Form Panel */
 	master_retur_jual_produk_searchForm = new Ext.FormPanel({
-		labelAlign: 'top',
+		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
 		width: 300,        

@@ -18,6 +18,48 @@ class M_master_retur_jual_produk extends Model{
 			parent::Model();
 		}
 		
+	function get_produk_list($query,$start,$end){
+		$rs_rows=0;
+		if(is_numeric($query)==true){
+			$sql_dproduk="SELECT dproduk_produk FROM detail_jual_produk WHERE dproduk_master='$query'";
+			$rs=$this->db->query($sql_dproduk);
+			$rs_rows=$rs->num_rows();
+		}
+		
+		//$sql="select * from vu_produk WHERE produk_aktif='Aktif'";
+		$sql="SELECT produk_id, produk_nama, satuan_kode, (produk_harga*((100-dproduk_diskon)/100)*((100-jproduk_diskon)/100)-jproduk_cashback) AS retur_produk_harga FROM detail_jual_produk LEFT JOIN master_jual_produk ON(dproduk_master=jproduk_id) LEFT JOIN produk ON(dproduk_produk=produk_id) LEFT JOIN satuan ON(dproduk_satuan=satuan_id) WHERE dproduk_master='$query'";
+		if($query<>"" && is_numeric($query)==false){
+			$sql.=eregi("WHERE",$sql)? " AND ":" WHERE ";
+			$sql.=" (produk_kode like '%".$query."%' or produk_nama like '%".$query."%' or satuan_nama like '%".$query."%' or kategori_nama like '%".$query."%' or group_nama like '%".$query."%') ";
+		}else{
+			if($rs_rows){
+				$filter="";
+				$sql.=eregi("AND",$sql)? " OR ":" AND ";
+				foreach($rs->result() as $row_dproduk){
+					
+					$filter.="OR produk_id='".$row_dproduk->dproduk_produk."' ";
+				}
+				$sql=$sql."(".substr($filter,2,strlen($filter)).")";
+			}
+		}
+		
+		$result = $this->db->query($sql);
+		$nbrows = $result->num_rows();
+		if($end!=0){
+			$limit = $sql." LIMIT ".$start.",".$end;			
+			$result = $this->db->query($limit);
+		}
+		if($nbrows>0){
+			foreach($result->result() as $row){
+				$arr[] = $row;
+			}
+			$jsonresult = json_encode($arr);
+			return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+		} else {
+			return '({"total":"0", "results":""})';
+		}
+	}
+		
 		function get_laporan($tgl_awal,$tgl_akhir,$periode,$opsi){
 			if($opsi=='rekap'){
 				if($periode=='all')
@@ -342,6 +384,9 @@ class M_master_retur_jual_produk extends Model{
 		
 		//function for create new record
 		function master_retur_jual_produk_create($rproduk_nobukti ,$rproduk_nobuktijual ,$rproduk_cust ,$rproduk_tanggal ,$rproduk_keterangan ){
+			$pattern="RFT/".date("ym")."-";
+			$rproduk_nobukti=$this->m_public_function->get_kode_1('master_retur_jual_produk','rproduk_nobukti',$pattern,12);
+			
 			$data = array(
 				"rproduk_nobukti"=>$rproduk_nobukti, 
 				"rproduk_nobuktijual"=>$rproduk_nobuktijual, 
