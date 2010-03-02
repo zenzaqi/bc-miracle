@@ -1202,9 +1202,12 @@ Ext.onReady(function(){
 							hutang_field=total_field-detail_jual_produk_DataStore.getAt(i).data.jproduk_bayar;
 							jproduk_hutangField.setValue(hutang_field);
 						}
+						jproduk_caraField.setValue("card");
+						master_jual_produk_cardGroup.setVisible(true);
 					}
 				}
 			});
+			
 			master_cara_bayarTabPanel.setActiveTab(2);
 			master_cara_bayarTabPanel.setActiveTab(1);
 			master_cara_bayarTabPanel.setActiveTab(0);
@@ -3234,8 +3237,8 @@ Ext.onReady(function(){
 			var j=cbo_dproduk_produkDataStore.find('dproduk_produk_value',combo_jual_produk.getValue());
 			if(cbo_dproduk_produkDataStore.getCount()){
 				dproduk_idField.setValue(cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_value);
-				//cbo_dproduk_satuanDataStore.load({params: {query:dproduk_idField.getValue()}});
-				cbo_dproduk_satuanDataStore.load({params: {produk_id:combo_jual_produk.getValue()}});
+				cbo_dproduk_satuanDataStore.load({params: {query:dproduk_idField.getValue()}});
+				//cbo_dproduk_satuanDataStore.load({params: {produk_id:combo_jual_produk.getValue()}});
 			}
 			detail_jual_produk_DataStore.getAt(0).data.dproduk_jumlah=2;
 		}
@@ -4261,6 +4264,8 @@ Ext.onReady(function(){
 				handler: function(){
 					master_jual_produk_reset_form();
 					detail_jual_produk_DataStore.load({params: {master_id:0}});
+					jproduk_caraField.setValue("card");
+					master_jual_produk_cardGroup.setVisible(true);
 					master_cara_bayarTabPanel.setActiveTab(0);
 					post2db="CREATE";
 				}
