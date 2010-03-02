@@ -803,8 +803,8 @@ Ext.onReady(function(){
 		id: 'order_tanggalField',
 		name: 'order_tanggalField',
 		fieldLabel: 'Tanggal',
-		emptyText : dt.format('Y-m-d'),
-		format : 'Y-m-d',
+		emptyText : dt.format('d-m-Y'),
+		format : 'd-m-Y',
 	});
 	/* Identify  order_carabayar Field */
 	order_carabayarField= new Ext.form.ComboBox({
@@ -1442,7 +1442,7 @@ Ext.onReady(function(){
 	order_tanggalSearchField= new Ext.form.DateField({
 		id: 'order_tanggalSearchField',
 		fieldLabel: 'Tanggal',
-		format : 'Y-m-d'
+		format : 'd-m-Y'
 	
 	});
 	/* Identify  order_carabayar Search Field */
