@@ -494,7 +494,7 @@ Ext.onReady(function(){
 				cell.css = "readonlycell"; // Mengambil Value dari Class di dalam CSS 
 				return value;
 				},
-			hidden: false
+			hidden: true
 		},
 		{
 			header: 'No Order',
@@ -627,7 +627,7 @@ Ext.onReady(function(){
 	master_order_beliListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'master_order_beliListEditorGrid',
 		el: 'fp_master_order_beli',
-		title: 'Daftar Order Pembelian',
+		title: 'Daftar Pesanan Pembelian',
 		autoHeight: true,
 		store: master_order_beli_DataStore, // DataStore
 		cm: master_order_beli_ColumnModel, // Nama-nama Columns
@@ -1282,7 +1282,7 @@ Ext.onReady(function(){
 	/* Function for retrieve create Window Form */
 	master_order_beli_createWindow= new Ext.Window({
 		id: 'master_order_beli_createWindow',
-		title: post2db+' Order Pembelian',
+		title: post2db+' Pesanan Pembelian',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,
@@ -1517,7 +1517,7 @@ Ext.onReady(function(){
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
 	master_order_beli_searchWindow = new Ext.Window({
-		title: 'Percarian Order Pembelian',
+		title: 'Percarian Pesanan Pembelian',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,
