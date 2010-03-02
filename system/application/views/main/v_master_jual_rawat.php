@@ -978,6 +978,21 @@ Ext.onReady(function(){
 		
 		jrawat_cust_nomemberField.reset();
 		jrawat_cust_nomemberField.setValue(null);
+		
+		jrawat_jumlahField.reset();
+		jrawat_jumlahField.setValue(null);
+		jrawat_diskonField.reset();
+		jrawat_diskonField.setValue(null);
+		jrawat_cashbackField.reset();
+		jrawat_cashbackField.setValue(null);
+		jrawat_subTotalField.reset();
+		jrawat_subTotalField.setValue(null);
+		jrawat_totalField.reset();
+		jrawat_totalField.setValue(null);
+		jrawat_bayarField.reset();
+		jrawat_bayarField.setValue(null);
+		jrawat_hutangField.reset();
+		jrawat_hutangField.setValue(null);
 
 		tunai_jual_rawat_reset_form();
 		tunai2_jual_rawat_reset_form();
@@ -1357,6 +1372,7 @@ Ext.onReady(function(){
 			jrawat_caraField.setValue("card");
 			master_jual_rawat_cardGroup.setVisible(true);
 			detail_jual_rawat_DataStore.load({params: {master_id:0}});
+			detail_ambil_paketDataStore.load({params: {master_id : 0, start:0, limit:pageS}});
 			post2db="CREATE";
 			msg='created';
 			master_cara_bayarTabPanel.setActiveTab(0);

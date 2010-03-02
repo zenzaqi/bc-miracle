@@ -177,7 +177,7 @@ class M_tindakan_medis extends Model{
 				 * AND kategori = 'Non Medis',
 				 * JIKA "ada" ini artinya di menu Tindakan Medis juga menjual Tindakan Non-Medis
 				 */
-				$sql="SELECT dtrawat_id,dtrawat_perawatan,dtrawat_keterangan,rawat_harga,rawat_dm,rawat_du FROM tindakan_detail INNER JOIN perawatan ON(dtrawat_perawatan=rawat_id) LEFT JOIN kategori ON(rawat_kategori=kategori_id) WHERE dtrawat_master='$trawat_id' AND kategori_nama='Non Medis'";
+				$sql="SELECT dtrawat_id,dtrawat_perawatan,dtrawat_keterangan,rawat_harga,rawat_dm,rawat_du FROM tindakan_detail INNER JOIN perawatan ON(dtrawat_perawatan=rawat_id) LEFT JOIN kategori ON(rawat_kategori=kategori_id) WHERE dtrawat_master='$trawat_id' AND kategori_nama='Non Medis' AND dtrawat_petugas2='0'";
 				$rs=$this->db->query($sql);
 				if($rs->num_rows()){
 					/* hasilnya "ADA", maka akan ditambahkan ke db.detail_jual_rawat */
@@ -260,7 +260,7 @@ class M_tindakan_medis extends Model{
 							$dtj_nonmedis_diskon_jenis="DM";
 							$dtj_nonmedis_diskon=$rs_record["rawat_dm"];
 						}elseif($cust_member==""){
-							$diskon_jenis="DU";
+							$dtj_nonmedis_diskon_jenis="DU";
 							$dtj_nonmedis_diskon=$rs_record["rawat_du"];
 						}
 						$data_dtj_nonmedis=array(
