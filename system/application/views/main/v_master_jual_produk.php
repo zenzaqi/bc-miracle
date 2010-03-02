@@ -3237,7 +3237,24 @@ Ext.onReady(function(){
 			var j=cbo_dproduk_produkDataStore.find('dproduk_produk_value',combo_jual_produk.getValue());
 			if(cbo_dproduk_produkDataStore.getCount()){
 				dproduk_idField.setValue(cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_value);
-				cbo_dproduk_satuanDataStore.load({params: {query:dproduk_idField.getValue()}});
+				cbo_dproduk_satuanDataStore.load({
+					params: {query:dproduk_idField.getValue()},
+					callback: function(opts, success, response){
+						if(success){
+							//console.log("cbo_dproduk_satuanDataStore COUNT = "+cbo_dproduk_satuanDataStore.getCount());
+							var nilai_default=0;
+							var st=cbo_dproduk_satuanDataStore.find('djproduk_satuan_default','true');
+							if(cbo_dproduk_satuanDataStore.getCount()>=0){
+								nilai_default=cbo_dproduk_satuanDataStore.getAt(st).data.djproduk_satuan_nilai;
+								if(nilai_default===1){
+									temp_konv_nilai.setValue(nilai_default);
+								}else if(nilai_default!==1){
+									temp_konv_nilai.setValue(nilai_default*(1/nilai_default));
+								}
+							}
+						}
+					}
+				});
 				//cbo_dproduk_satuanDataStore.load({params: {produk_id:combo_jual_produk.getValue()}});
 			}
 			detail_jual_produk_DataStore.getAt(0).data.dproduk_jumlah=2;
