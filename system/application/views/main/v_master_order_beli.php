@@ -138,7 +138,8 @@ Ext.onReady(function(){
 					default:
 						Ext.MessageBox.show({
 						   title: 'Warning',
-						   msg: 'We could\'t not save the master_order_beli.',
+						   //msg: 'We could\'t not save the master_order_beli.',
+						   msg: 'Data Pesanan Pembelian tidak bisa disimpan',
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'save',
 						   icon: Ext.MessageBox.WARNING
@@ -185,7 +186,7 @@ Ext.onReady(function(){
 		if(order_keteranganField.getValue()!== null){order_keterangan_create = order_keteranganField.getValue();} 
 
 		Ext.Ajax.request({  
-			waitMsg: 'Please wait...',
+			waitMsg: 'Mohon tunggu...',
 			url: 'index.php?c=c_master_order_beli&m=get_action',
 			params: {
 				task: post2db,
@@ -217,6 +218,7 @@ Ext.onReady(function(){
 						   animEl: 'save',
 						   icon: Ext.MessageBox.WARNING
 						});
+						master_order_beli_DataStore.reload();
 						break;
 				}        
 			},
@@ -497,53 +499,55 @@ Ext.onReady(function(){
 			hidden: true
 		},
 		{
-			header: 'No Order',
+			header: '<div align="center">' + 'No Order' + '</div>',
 			dataIndex: 'order_no',
-			width: 150,
+			width: 80,	//150,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 50
           	})
 		}, 
 		{
-			header: 'Supplier',
+			header: '<div align="center">' + 'Supplier' + '</div>',
 			dataIndex: 'order_supplier',
-			width: 150,
+			width: 200,	//150,
 			sortable: true,
 			readOnly: true
 		}, 
 		{
-			header: 'Tanggal',
+			header: '<div align="center">' + 'Tanggal' + '</div>',
 			dataIndex: 'order_tanggal',
-			width: 150,
+			width: 70,	//150,
 			sortable: true,
-			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
+			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
 			editor: new Ext.form.DateField({
-				format: 'Y-m-d'
+				format: 'd-m-Y'
 			})
 		},
 		{
-			header: 'Jumlah Item',
+			header: '<div align="center">' + 'Jumlah' + '</div>',
+			align: 'right',
 			dataIndex: 'order_jumlah',
-			width: 150,
+			width: 60,	//150,
 			sortable: true,
 			readOnly: true,
 			renderer: Ext.util.Format.numberRenderer('0,000')
 		},
 		{
-			header: 'Total Harga',
+			header: '<div align="center">' + 'Total Harga (Rp)' + '</div>',
+			align: 'right',
 			dataIndex: 'order_total',
-			width: 150,
+			width: 100,	//150,
 			sortable: true,
 			readOnly: true,
 			renderer: function(val){
-				return '<span>Rp. '+Ext.util.Format.number(val,'0,000.00')+'</span>';
+				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
 			}
 		},
 		{
-			header: 'Cara Bayar',
+			header: '<div align="center">' + 'Cara Bayar' + '</div>',
 			dataIndex: 'order_carabayar',
-			width: 150,
+			width: 80,	//150,
 			sortable: true,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
@@ -560,22 +564,24 @@ Ext.onReady(function(){
             })
 		}, 
 		{
-			header: 'Diskon (%)',
+			header: '<div align="center">' + 'Diskon (%)' + '</div>',
+			align: 'right',
 			dataIndex: 'order_diskon',
-			width: 150,
+			width: 60,	//150,
 			sortable: true,
 			renderer: function(val){
-				return '<span>'+val+' %</span>';
+				return '<span>'+val+'</span>';
 			},
 			readOnly: true
 		}, 
 		{
-			header: 'Biaya',
+			header: '<div align="center">' + 'Biaya (Rp)' + '</div>',
+			align: 'right',
 			dataIndex: 'order_biaya',
-			width: 150,
+			width: 100,	//150,
 			sortable: true,
 			renderer: function(val){
-				return '<span>Rp. '+Ext.util.Format.number(val,'0,000')+'</span>';
+				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
 			},
 			readOnly: true
 		},
@@ -636,7 +642,7 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 900,
+	  	width: 940,	//900,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: master_order_beli_DataStore,
