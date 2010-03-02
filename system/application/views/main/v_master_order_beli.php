@@ -484,7 +484,8 @@ Ext.onReady(function(){
     var order_supplier_tpl = new Ext.XTemplate(
         '<tpl for="."><div class="search-item">',
             '<span><b>{order_supplier_nama}</b><br /></span>',
-            'Alamat: {order_supplier_alamat}, {order_supplier_kota}<br>Telp. {order_supplier_notelp}',
+//            'Alamat: {order_supplier_alamat}, {order_supplier_kota}<br>Telp. {order_supplier_notelp}',
+            '{order_supplier_alamat}, {order_supplier_kota}',
         '</div></tpl>'
     );
 	

@@ -480,74 +480,78 @@ Ext.onReady(function(){
 				cell.css = "readonlycell"; // Mengambil Value dari Class di dalam CSS 
 				return value;
 				},
-			hidden: false
+			hidden: true
 		},
 		{
-			header: 'No.Penerimaan',
+			header: '<div align="center">' + 'Tanggal' + '</div>',
+			dataIndex: 'terima_tanggal',
+			width: 70,	//150,
+			sortable: true,
+			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
+			editor: new Ext.form.DateField({
+				format: 'd-m-Y'
+			})
+		}, 
+		{
+			header: '<div align="center">' + 'No Penerimaan' + '</div>',
 			dataIndex: 'terima_no',
-			width: 150,
+			width: 100,	//150,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 50
           	})
 		}, 
 		{
-			header: 'No.Order',
+			header: '<div align="center">' + 'No Pesanan' + '</div>',
 			dataIndex: 'terima_order',
-			width: 150,
+			width: 100,	//150,
 			sortable: true,
 			readOnly: true
 		}, 
 		{
-			header: 'Supplier',
+			header: '<div align="center">' + 'Supplier' + '</div>',
 			dataIndex: 'terima_supplier',
-			width: 150,
+			width: 200,	//150,
 			sortable: true,
 			readOnly: true
 		},
 		{
-			header: 'Jumlah Item',
+			header: '<div align="center">' + 'Jumlah' + '</div>',
+			align: 'right',
 			dataIndex: 'jumlah_barang',
-			width: 150,
+			width: 60,	//150,
 			sortable: true,
 			readOnly: true,
 			renderer: Ext.util.Format.numberRenderer('0,000')
 		},
 		{
-			header: 'Jumlah Item Bonus',
+			//header: 'Jumlah Item Bonus',
+			header: '<div align="center">' + 'Bonus',
+			align: 'right',
 			dataIndex: 'jumlah_barang_bonus',
-			width: 150,
+			width: 60,	//150,
 			sortable: true,
 			readOnly: true,
 			renderer: Ext.util.Format.numberRenderer('0,000')
 		},
 		{
-			header: 'No.Surat Jalan',
+//			header: 'No.Surat Jalan',
+			header: '<div align="center">' + 'No Surat Jalan' + '</div>',
 			dataIndex: 'terima_surat_jalan',
-			width: 150,
+			width: 100,	//150,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 30
           	})
 		}, 
 		{
-			header: 'Nama Pengirim',
+			header: '<div align="center">' + 'Nama Pengirim' + '</div>',
 			dataIndex: 'terima_pengirim',
-			width: 150,
+			width: 200,	//150,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 30
           	})
-		}, 
-		{
-			header: 'Tanggal',
-			dataIndex: 'terima_tanggal',
-			width: 150,
-			sortable: true,
-			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
-			editor: new Ext.form.DateField({
-				format: 'Y-m-d'
-			})
 		}, 
 		{
 			header: 'Creator',
@@ -597,7 +601,7 @@ Ext.onReady(function(){
 	master_terima_beliListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'master_terima_beliListEditorGrid',
 		el: 'fp_master_terima_beli',
-		title: 'List Of Penerimaan Pembelian',
+		title: 'Daftar Penerimaan Barang',
 		autoHeight: true,
 		store: master_terima_beli_DataStore, // DataStore
 		cm: master_terima_beli_ColumnModel, // Nama-nama Columns
@@ -606,7 +610,7 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 900,
+	  	width: 1200,	//900,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: master_terima_beli_DataStore,
@@ -728,7 +732,7 @@ Ext.onReady(function(){
 	/* Identify  terima_no Field */
 	terima_noField= new Ext.form.TextField({
 		id: 'terima_noField',
-		fieldLabel: 'No.Penerimaan',
+		fieldLabel: 'No Penerimaan',
 		emptyText: '(Auto)',
 		readOnly: true,
 		maxLength: 50,
@@ -1733,7 +1737,7 @@ Ext.onReady(function(){
 	/* Identify  terima_no Search Field */
 	terima_noSearchField= new Ext.form.TextField({
 		id: 'terima_noSearchField',
-		fieldLabel: 'No.Penerimaan',
+		fieldLabel: 'No Penerimaan',
 		maxLength: 50,
 		anchor: '95%'
 	
