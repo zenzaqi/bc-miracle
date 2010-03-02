@@ -206,14 +206,16 @@ Ext.onReady(function(){
 					case 1:
 						detail_order_beli_purge()
 						detail_order_beli_insert();
-						Ext.MessageBox.alert(post2db+' OK','The Master_order_beli was '+msg+' successfully.');
+						//Ext.MessageBox.alert(post2db+' OK','The Master_order_beli was '+msg+' successfully.');
+						Ext.MessageBox.alert(post2db+' OK','Data Pesanan Pembelian berhasil disimpan');
 						master_order_beli_DataStore.reload();
 						master_order_beli_createWindow.hide();
 						break;
 					default:
 						Ext.MessageBox.show({
 						   title: 'Warning',
-						   msg: 'We could\'t not '+msg+' the Master_order_beli.',
+						   //msg: 'We could\'t not '+msg+' the Master_order_beli.',
+						   msg: 'Data Pesanan Pembelian tidak bissa disimpan',
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'save',
 						   icon: Ext.MessageBox.WARNING
@@ -317,13 +319,14 @@ Ext.onReady(function(){
 	function master_order_beli_confirm_delete(){
 		// only one master_order_beli is selected here
 		if(master_order_beliListEditorGrid.selModel.getCount() == 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', master_order_beli_delete);
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', master_order_beli_delete);
 		} else if(master_order_beliListEditorGrid.selModel.getCount() > 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', master_order_beli_delete);
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', master_order_beli_delete);
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really delete something you haven\'t selected?',
+				//msg: 'You can\'t really delete something you haven\'t selected?',
+				msg: 'Anda belum memilih data yang akan dihapus',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -344,7 +347,8 @@ Ext.onReady(function(){
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really update something you haven\'t selected?',
+				//msg: 'You can\'t really update something you haven\'t selected?',
+				msg: 'Anda belum memilih data yang akan diubah',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -363,7 +367,7 @@ Ext.onReady(function(){
 			}
 			var encoded_array = Ext.encode(prez);
 			Ext.Ajax.request({ 
-				waitMsg: 'Please Wait',
+				waitMsg: 'Mohon tunggu',
 				url: 'index.php?c=c_master_order_beli&m=get_action', 
 				params: { task: "DELETE", ids:  encoded_array }, 
 				success: function(response){
@@ -499,7 +503,8 @@ Ext.onReady(function(){
 			hidden: true
 		},
 		{
-			header: '<div align="center">' + 'No Order' + '</div>',
+			//header: '<div align="center">' + 'No Order' + '</div>',
+			header: '<div align="center">' + 'No Pesanan' + '</div>',
 			dataIndex: 'order_no',
 			width: 80,	//150,
 			sortable: true,
@@ -764,7 +769,8 @@ Ext.onReady(function(){
 	/* Identify  order_no Field */
 	order_noField= new Ext.form.TextField({
 		id: 'order_noField',
-		fieldLabel: 'No Order',
+		//fieldLabel: 'No Order',
+		fieldLabel: 'No Pesanan',
 		emptyText: '(Auto)',
 		readOnly: true,
 		maxLength: 50,
@@ -1051,24 +1057,26 @@ Ext.onReady(function(){
 	detail_order_beli_ColumnModel = new Ext.grid.ColumnModel(
 		[
 		 {
-			header: 'Produk',
+			header: '<div align="center">' + 'Produk' + '</div>',
 			dataIndex: 'dorder_produk',
-			width: 250,
+			width: 260,	//250,
 			sortable: true,
 			editor: combo_order_produk,
 			renderer: Ext.util.Format.comboRenderer(combo_order_produk)
 		},
 		{
-			header: 'Satuan',
+			header: '<div align="center">' + 'Satuan' + '</div>',
+			align: 'right',
 			dataIndex: 'dorder_satuan',
-			width: 150,
+			width: 80,	//150,
 			editor: combo_order_satuan,
 			renderer: Ext.util.Format.comboRenderer(combo_order_satuan)
 		},
 		{
-			header: 'Jumlah',
+			header: '<div align="center">' + 'Jumlah' + '</div>',
+			align: 'right',
 			dataIndex: 'dorder_jumlah',
-			width: 100,
+			width: 60,	//100,
 			sortable: true,
 			renderer: Ext.util.Format.numberRenderer('0,000'),
 			editor: new Ext.form.NumberField({
@@ -1080,9 +1088,10 @@ Ext.onReady(function(){
 			})
 		},
 		{
-			header: 'Harga',
+			header: '<div align="center">' + 'Harga (Rp)' + '</div>',
+			align: 'right',
 			dataIndex: 'dorder_harga',
-			width: 150,
+			width: 100,	//150,
 			sortable: true,
 			editor: new Ext.form.NumberField({
 				allowDecimals: true,
@@ -1092,16 +1101,17 @@ Ext.onReady(function(){
 				maskRe: /([0-9]+)$/
 			}),
 			renderer: function(val){
-				return '<span>Rp. '+Ext.util.Format.number(val,'0,000')+'</span>';
+				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
 			}
 			
 		},
 		{
-			header: 'Diskon',
+			header: '<div align="center">' + 'Diskon (%)' + '</div>',
+			align: 'right',
 			dataIndex: 'dorder_diskon',
-			width: 100,
+			width: 60,	//100,
 			renderer: function(val){
-				return '<span>'+val+' %</span>';
+				return '<span>'+val+'</span>';
 			},
 			sortable: true,
 			editor: new Ext.form.NumberField({
@@ -1114,14 +1124,15 @@ Ext.onReady(function(){
 			}),
 		},
 		{
-			header: 'Sub Total',
+			header: '<div align="center">' + 'Sub Total (Rp)' + '</div>',
+			align: 'right',
 			dataIndex: 'dorder_subtotal',
-			width: 150,
+			width: 100,	//150,
 			sortable: true,
 			readOnly: true,
 			renderer: function(v, params, record){
 					subtotal=Ext.util.Format.number((record.data.dorder_harga * record.data.dorder_jumlah*(100-record.data.dorder_diskon)/100),"0,000");
-                    return '<span>Rp. ' + subtotal+ '</span>';
+                    return '<span>' + subtotal+ '</span>';
             }
 		}
 		]
@@ -1135,7 +1146,7 @@ Ext.onReady(function(){
 		el: 'fp_detail_order_beli',
 		title: 'Detail Item',
 		height: 250,
-		width: 690,
+		width: 920,	//690,
 		autoScroll: true,
 		store: detail_order_beli_DataStore, // DataStore
 		colModel: detail_order_beli_ColumnModel, // Nama-nama Columns
@@ -1291,7 +1302,8 @@ Ext.onReady(function(){
 		title: post2db+' Pesanan Pembelian',
 		closable:true,
 		closeAction: 'hide',
-		autoWidth: true,
+		width: 940,
+		//autoWidth: true,
 		autoHeight: true,
 		x:0,
 		y:0,
@@ -1398,7 +1410,8 @@ Ext.onReady(function(){
 	/* Identify  order_no Search Field */
 	order_noSearchField= new Ext.form.TextField({
 		id: 'order_noSearchField',
-		fieldLabel: 'No Order',
+		//fieldLabel: 'No Order',
+		fieldLabel: 'No Pesanan',
 		maxLength: 50,
 		anchor: '95%'
 	
