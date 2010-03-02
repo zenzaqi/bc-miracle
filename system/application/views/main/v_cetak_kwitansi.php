@@ -1105,7 +1105,7 @@ Ext.onReady(function(){
 	/* Function for retrieve create Window Form */
 	cetak_kwitansi_createWindow= new Ext.Window({
 		id: 'cetak_kwitansi_createWindow',
-		title: post2db+'Cetak_kwitansi',
+		title: post2db+'Cetak Kuitansi',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,
