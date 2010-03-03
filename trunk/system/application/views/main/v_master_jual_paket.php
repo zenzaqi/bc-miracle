@@ -1222,13 +1222,16 @@ Ext.onReady(function(){
 			{name: 'jpaket_id', type: 'int', mapping: 'jpaket_id'}, 
 			{name: 'jpaket_nobukti', type: 'string', mapping: 'jpaket_nobukti'}, 
 			{name: 'jpaket_cust', type: 'string', mapping: 'cust_nama'}, 
-			{name: 'jpaket_cust_id', type: 'int', mapping: 'jpaket_cust'}, 
+			{name: 'jpaket_cust_id', type: 'int', mapping: 'jpaket_cust'},
+			{name: 'jpaket_cust_no', type: 'string', mapping: 'cust_no'},		//additional by hendri
+			{name: 'jpaket_cust_member', type: 'string', mapping: 'cust_member'},		//additional by hendri
 			{name: 'jpaket_tanggal', type: 'date', dateFormat: 'Y-m-d', mapping: 'jpaket_tanggal'}, 
 			{name: 'jpaket_diskon', type: 'int', mapping: 'jpaket_diskon'}, 
 			{name: 'jpaket_cashback', type: 'float', mapping: 'jpaket_cashback'},
 			{name: 'jpaket_cara', type: 'string', mapping: 'jpaket_cara'}, 
 			{name: 'jpaket_cara2', type: 'string', mapping: 'jpaket_cara2'}, 
 			{name: 'jpaket_cara3', type: 'string', mapping: 'jpaket_cara3'}, 
+			{name: 'jpaket_total', type: 'float', mapping: 'jpaket_totalbiaya'}, 	//additional by hendri
 			{name: 'jpaket_bayar', type: 'float', mapping: 'jpaket_bayar'}, 
 			{name: 'jpaket_keterangan', type: 'string', mapping: 'jpaket_keterangan'}, 
 			{name: 'jpaket_creator', type: 'string', mapping: 'jpaket_creator'}, 
@@ -1482,28 +1485,12 @@ Ext.onReady(function(){
 				cell.css = "readonlycell"; // Mengambil Value dari Class di dalam CSS 
 				return value;
 				},
-			hidden: false
+			hidden: true
 		},
 		{
-			header: 'No.Faktur',
-			dataIndex: 'jpaket_nobukti',
-			width: 150,
-			sortable: true,
-			editor: new Ext.form.TextField({
-				maxLength: 30
-          	})
-		}, 
-		{
-			header: 'Customer',
-			dataIndex: 'jpaket_cust',
-			width: 185,
-			sortable: true,
-			readOnly: true
-		}, 
-		{
-			header: 'Tanggal',
+			header: '<div align="center">' + 'Tanggal' + '</div>',
 			dataIndex: 'jpaket_tanggal',
-			width: 150,
+			width: 70,	//150,
 			sortable: true,
 			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
 			editor: new Ext.form.DateField({
@@ -1511,18 +1498,61 @@ Ext.onReady(function(){
 			})
 		}, 
 		{
-			header: 'Jumlah Bayar',
-			dataIndex: 'jpaket_bayar',
-			width: 150,
+			header: '<div align="center">' + 'No Faktur' + '</div>',
+			dataIndex: 'jpaket_nobukti',
+			width: 80,	//150,
+			sortable: true,
+			editor: new Ext.form.TextField({
+				maxLength: 30
+          	})
+		}, 
+		{
+			header: '<div align="center">' + 'No Cust' + '</div>',
+			dataIndex: 'jpaket_cust_no',
+			width: 80,	//185,
+			sortable: true,
+			readOnly: true
+		}, 
+		{
+			header: '<div align="center">' + 'Customer' + '</div>',
+			dataIndex: 'jpaket_cust',
+			width: 200,	//185,
+			sortable: true,
+			readOnly: true
+		}, 
+		{
+			header: '<div align="center">' + 'Member' + '</div>',
+			dataIndex: 'jpaket_cust_member',
+			width: 80,	//185,
+			sortable: true,
+			readOnly: true
+		}, 
+		{
+			header: '<div align="center">' + 'Total (Rp)' + '</div>',
+			align: 'right',
+			dataIndex: 'jpaket_total',
+			width: 100,	//150,
 			sortable: true,
 			readOnly: true,
 			renderer: function(val){
-				return '<span> Rp. '+Ext.util.Format.number(val,'0,000')+'</span>';
+				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
 			}
 			
 		},
 		{
-			header: 'Keterangan',
+			header: '<div align="center">' + 'Total Bayar (Rp)' + '</div>',
+			align: 'right',
+			dataIndex: 'jpaket_bayar',
+			width: 100,	//150,
+			sortable: true,
+			readOnly: true,
+			renderer: function(val){
+				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
+			}
+			
+		},
+		{
+			header: '<div align="center">' + 'Keterangan' + '</div>',
 			dataIndex: 'jpaket_keterangan',
 			width: 150,
 			sortable: true,
@@ -1588,7 +1618,7 @@ Ext.onReady(function(){
 		//clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 800,
+	  	width: 1200,	//800,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: master_jual_paket_DataStore,
@@ -4221,7 +4251,7 @@ Ext.onReady(function(){
 		el: 'form_paket_addEdit',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
-		width: 950,
+		width: 940,	//950,
 		//plain: true,
 		frame:true,
 		layout: 'fit',
@@ -4267,7 +4297,7 @@ Ext.onReady(function(){
 		closable:true,
 		closeAction: 'hide',
 		//autoWidth: true,
-		width:810,
+		width: 1200,	//810,
 		autoHeight: true,
 		x:0,
 		y:0,
