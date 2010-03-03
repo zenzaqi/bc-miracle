@@ -15,39 +15,38 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-	<style type="text/css">
-        p { width:650px; }
-		.search-item {
-			font:normal 11px tahoma, arial, helvetica, sans-serif;
-			padding:3px 10px 3px 10px;
-			border:1px solid #fff;
-			border-bottom:1px solid #eeeeee;
-			white-space:normal;
-			color:#555;
-		}
-		.search-item h3 {
-			display:block;
-			font:inherit;
-			font-weight:bold;
-			color:#222;
-		}
-		
-		.search-item h3 span {
-			float: right;
-			font-weight:normal;
-			margin:0 0 5px 5px;
-			width:100px;
-			display:block;
-			clear:none;
-		}
-    </style>
 </head>
+<style type="text/css">
+	p { width:650px; }
+	.search-item {
+		font:normal 11px tahoma, arial, helvetica, sans-serif;
+		padding:3px 10px 3px 10px;
+		border:1px solid #fff;
+		border-bottom:1px solid #eeeeee;
+		white-space:normal;
+		color:#555;
+	}
+	.search-item h3 {
+		display:block;
+		font:inherit;
+		font-weight:bold;
+		color:#222;
+	}
+	
+	.search-item h3 span {
+		float: right;
+		font-weight:normal;
+		margin:0 0 5px 5px;
+		width:100px;
+		display:block;
+		clear:none;
+	}
+</style>
 <script>
 
 var rpt_jrpdukWindow;
 var rpt_jrpdukForm;
 
-/* declare variable here */
 var rpt_jproduk_tglawalField;
 var rpt_jproduk_tglakhirField;
 var rpt_jproduk_rekapField;
@@ -57,6 +56,7 @@ var rpt_jproduk_tahunField;
 var rpt_jproduk_opsitglField;
 var rpt_jproduk_opsiblnField;
 var rpt_jproduk_opsiallField;
+var rpt_jproduk_groupField;
 
 var today=new Date().format('Y-m-d');
 var yesterday=new Date().add(Date.DAY, -1).format('Y-m-d');
@@ -96,11 +96,36 @@ for($i=(date('Y')-4);$i<=date('Y');$i++){
 $tahun=substr($tahun,0,strlen($tahun)-1);
 $tahun.="]";
 $bulan="";
-
 ?>
 Ext.onReady(function(){
   Ext.QuickTips.init();
 
+	var group_master_Store= new Ext.data.SimpleStore({
+			id: 'group_master_Store',
+			fields:['group'],
+			data:[['No Faktur'],['Tanggal'],['Customer']]
+	});
+	
+	var group_detail_Store= new Ext.data.SimpleStore({
+			id: 'group_detail_Store',
+			fields:['group'],
+			data:[['No Faktur'],['Tanggal'],['Customer'],['Produk'],['Sales'],['Jenis Diskon']]
+	});
+	
+	var rpt_jproduk_groupField=new Ext.form.ComboBox({
+		id:'rpt_jproduk_groupField',
+		fieldLabel:'Kelompokkan',
+		store: group_master_Store,
+		mode: 'local',
+		displayField: 'group',
+		valueField: 'group',
+		value: 'No Faktur',
+		width: 100,
+		triggerAction: 'all',
+		typeAhead: true,
+		lazyRender: true
+	});
+	
 	rpt_jproduk_bulanField=new Ext.form.ComboBox({
 		id:'rpt_jproduk_bulanField',
 		fieldLabel:' ',
@@ -245,6 +270,14 @@ Ext.onReady(function(){
 		items: [rpt_jproduk_rekapField ,rpt_jproduk_detailField]
 	});
 	
+	var	rpt_jproduk_groupbyField=new Ext.form.FieldSet({
+		id: 'rpt_jproduk_groupbyField',
+		title: 'Group By',
+		border: true,
+		anchor: '98%',
+		items: [rpt_jproduk_groupField]
+	});
+	
 	function is_valid_form(){
 		if(rpt_jproduk_opsitglField.getValue()==true){
 			rpt_jproduk_tglawalField.allowBlank=false;
@@ -269,6 +302,7 @@ Ext.onReady(function(){
 		var jproduk_bulan="";
 		var jproduk_tahun="";
 		var jproduk_periode="";
+		var jproduk_group="";
 		
 		var win;               
 		if(is_valid_form()){
@@ -284,6 +318,7 @@ Ext.onReady(function(){
 		}else{
 			jproduk_periode='all';
 		}
+		if(rpt_jproduk_groupField.getValue()!==""){jproduk_group=rpt_jproduk_groupField.getValue(); }
 		
 		if(rpt_jproduk_rekapField.getValue()==true){jproduk_opsi='rekap';}else{jproduk_opsi='detail';}
 		
@@ -296,7 +331,8 @@ Ext.onReady(function(){
 					opsi		: jproduk_opsi,
 					bulan		: jproduk_bulan,
 					tahun		: jproduk_tahun,
-					periode		: jproduk_periode
+					periode		: jproduk_periode,
+					group		: jproduk_group
 					
 				}, 
 				success: function(response){              
@@ -304,7 +340,7 @@ Ext.onReady(function(){
 					switch(result){
 					case 1:
 						win = window.open('./print/report_jproduk.html','report_jproduk','height=400,width=800,resizable=1,scrollbars=1, menubar=1');
-						win.print();
+						//win.print();
 						break;
 					default:
 						Ext.MessageBox.show({
@@ -347,7 +383,7 @@ Ext.onReady(function(){
 		y:0,
 		width: 400, 
 		autoHeight: true,
-		items: [rpt_jproduk_periodeField,rpt_jproduk_opsiField],
+		items: [rpt_jproduk_periodeField,rpt_jproduk_opsiField, rpt_jproduk_groupbyField],
 		monitorValid:true,
 		buttons: [{
 				text: 'Print',
@@ -380,6 +416,27 @@ Ext.onReady(function(){
   	rpt_jprodukWindow.show();
 	
 	//EVENTS
+	
+	rpt_jproduk_rekapField.on("check", function(){
+		rpt_jproduk_groupField.setValue('No faktur');
+		if(rpt_jproduk_rekapField.getValue()==true){
+			rpt_jproduk_groupField.bindStore(group_master_Store);
+		}else
+		{
+			rpt_jproduk_groupField.bindStore(group_detail_Store);
+		}
+	});
+	
+	rpt_jproduk_detailField.on("check", function(){
+		rpt_jproduk_groupField.setValue('No Faktur');
+		if(rpt_jproduk_detailField.getValue()==true){
+			rpt_jproduk_groupField.bindStore(group_detail_Store);
+		}else
+		{
+			rpt_jproduk_groupField.bindStore(group_master_Store);
+		}
+	});
+	
 	rpt_jproduk_opsitglField.on("check",function(){
 		if(rpt_jproduk_opsitglField.getValue()==true){
 			rpt_jproduk_tglawalField.allowBlank=false;
@@ -388,6 +445,7 @@ Ext.onReady(function(){
 			rpt_jproduk_tglawalField.allowBlank=true;
 			rpt_jproduk_tglakhirField.allowBlank=true;
 		}
+		
 	});
 	
 });
