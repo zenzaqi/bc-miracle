@@ -9,7 +9,7 @@
 <script type="text/javascript">
 	var s = document.createElement("script");
 	s.type = 'text/javascript';
-	s.src = "./assets/js/locale/ext-lang-id.js";
+	s.src = "<?=base_url();?>/assets/js/locale/ext-lang-id.js";
 	s.charset = "ascii";
 	document.getElementsByTagName("head")[0].appendChild(s);
 </script>

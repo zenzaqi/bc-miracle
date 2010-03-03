@@ -18,21 +18,32 @@ class M_master_jual_rawat extends Model{
 			parent::Model();
 		}
 		
-		function get_laporan($tgl_awal,$tgl_akhir,$periode,$opsi){
+		function get_laporan($tgl_awal,$tgl_akhir,$periode,$opsi,$group){
+			
+			switch($group){
+				case "Tanggal": $order_by=" ORDER BY tanggal";break;
+				case "Customer": $order_by=" ORDER BY cust_id";break;
+				case "No Faktur": $order_by=" ORDER BY no_bukti";break;
+				case "Perawatan": $order_by=" ORDER BY produk_kode";break;
+				case "Sales": $order_by=" ORDER BY sales";break;
+				case "Jenis Diskon": $order_by=" ORDER BY diskon_jenis";break;
+				default: $order_by=" ORDER BY no_bukti";break;
+			}
+			
 			if($opsi=='rekap'){
 				if($periode=='all')
-					$sql="SELECT * FROM vu_trans_rawat";
+					$sql="SELECT * FROM vu_trans_rawat ".$order_by;
 				else if($periode=='bulan')
-					$sql="SELECT * FROM vu_trans_rawat WHERE tanggal like '".$tgl_awal."%'";
+					$sql="SELECT * FROM vu_trans_rawat WHERE tanggal like '".$tgl_awal."%' ".$order_by;
 				else if($periode=='tanggal')
-					$sql="SELECT * FROM vu_trans_rawat WHERE tanggal>='".$tgl_awal."' AND tanggal<='".$tgl_akhir."'";
+					$sql="SELECT * FROM vu_trans_rawat WHERE tanggal>='".$tgl_awal."' AND tanggal<='".$tgl_akhir."' ".$order_by;
 			}else if($opsi=='detail'){
 				if($periode=='all')
-					$sql="SELECT * FROM vu_detail_jual_rawat";
+					$sql="SELECT * FROM vu_detail_jual_rawat ".$order_by;
 				else if($periode=='bulan')
-					$sql="SELECT * FROM vu_detail_jual_rawat WHERE tanggal like '".$tgl_awal."%'";
+					$sql="SELECT * FROM vu_detail_jual_rawat WHERE tanggal like '".$tgl_awal."%' ".$order_by;
 				else if($periode=='tanggal')
-					$sql="SELECT * FROM vu_detail_jual_rawat WHERE tanggal>='".$tgl_awal."' AND tanggal<='".$tgl_akhir."'";
+					$sql="SELECT * FROM vu_detail_jual_rawat WHERE tanggal>='".$tgl_awal."' AND tanggal<='".$tgl_akhir."' ".$order_by;
 			}
 			
 			$query=$this->db->query($sql);

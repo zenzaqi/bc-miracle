@@ -6,6 +6,22 @@ class M_public_function extends Model{
 		parent::Model();
 	}
 	
+	
+	function get_order_beli_detail_by_order_id($orderid){
+		$sql="SELECT * FROM vu_detail_order_beli WHERE dorder_master='".$orderid."'";
+		$query = $this->db->query($sql);
+		$nbrows = $query->num_rows();
+		if($nbrows>0){
+			foreach($query->result() as $row){
+				$arr[] = $row;
+			}
+			$jsonresult = json_encode($arr);
+			return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+		} else {
+			return '({"total":"0", "results":""})';
+		}
+	}
+	
 	function get_bank_list(){
 		$sql="SELECT * FROM bank_master WHERE mbank_aktif='Aktif'";
 		$query = $this->db->query($sql);

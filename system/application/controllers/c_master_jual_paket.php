@@ -37,6 +37,8 @@ class C_master_jual_paket extends Controller {
 		$tahun=(isset($_POST['tahun']) ? @$_POST['tahun'] : @$_GET['tahun']);
 		$opsi=(isset($_POST['opsi']) ? @$_POST['opsi'] : @$_GET['opsi']);
 		$periode=(isset($_POST['periode']) ? @$_POST['periode'] : @$_GET['periode']);
+		$group=(isset($_POST['group']) ? @$_POST['group'] : @$_GET['group']);
+		
 		$data["jenis"]='Paket';
 		if($periode=="all"){
 			$data["periode"]="Semua Periode";
@@ -50,7 +52,7 @@ class C_master_jual_paket extends Controller {
 		$data["total_item"]=$this->m_master_jual_paket->get_total_item($tgl_awal,$tgl_akhir,$periode,$opsi);
 		$data["total_diskon"]=$this->m_master_jual_paket->get_total_diskon($tgl_awal,$tgl_akhir,$periode,$opsi);
 		$data["total_nilai"]=$this->m_master_jual_paket->get_total_nilai($tgl_awal,$tgl_akhir,$periode,$opsi);
-		$data["data_print"]=$this->m_master_jual_paket->get_laporan($tgl_awal,$tgl_akhir,$periode,$opsi);
+		$data["data_print"]=$this->m_master_jual_paket->get_laporan($tgl_awal,$tgl_akhir,$periode,$opsi,$group);
 			
 		if($opsi=='rekap'){
 			$data["total_tunai"]=$this->m_master_jual_paket->get_total_tunai($tgl_awal,$tgl_akhir,$periode,$opsi);
@@ -59,9 +61,20 @@ class C_master_jual_paket extends Controller {
 			$data["total_card"]=$this->m_master_jual_paket->get_total_card($tgl_awal,$tgl_akhir,$periode,$opsi);
 			$data["total_kuintansi"]=$this->m_master_jual_paket->get_total_kuintansi($tgl_awal,$tgl_akhir,$periode,$opsi);
 			$data["total_kredit"]=$this->m_master_jual_paket->get_total_kredit($tgl_awal,$tgl_akhir,$periode,$opsi);
-			$print_view=$this->load->view("main/p_rekap_jual.php",$data,TRUE);
+			switch($group){
+				case "Tanggal": $print_view=$this->load->view("main/p_rekap_jual_tanggal.php",$data,TRUE);break;
+				case "Customer": $print_view=$this->load->view("main/p_rekap_jual_customer.php",$data,TRUE);break;
+				default: $print_view=$this->load->view("main/p_rekap_jual.php",$data,TRUE);break;
+			}
 		}else{
-			$print_view=$this->load->view("main/p_detail_jual.php",$data,TRUE);
+			switch($group){
+				case "Tanggal": $print_view=$this->load->view("main/p_detail_jual_tanggal.php",$data,TRUE);break;
+				case "Customer": $print_view=$this->load->view("main/p_detail_jual_customer.php",$data,TRUE);break;
+				case "Paket": $print_view=$this->load->view("main/p_detail_jual_produk.php",$data,TRUE);break;
+				case "Sales": $print_view=$this->load->view("main/p_detail_jual_sales.php",$data,TRUE);break;
+				case "Jenis Diskon": $print_view=$this->load->view("main/p_detail_jual_diskon.php",$data,TRUE);break;
+				default: $print_view=$this->load->view("main/p_detail_jual.php",$data,TRUE);break;
+			}
 		}
 		if(!file_exists("print")){
 			mkdir("print");

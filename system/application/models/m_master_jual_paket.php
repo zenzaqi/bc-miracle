@@ -19,21 +19,32 @@ class M_master_jual_paket extends Model{
 			session_start();
 		}
 		
-		function get_laporan($tgl_awal,$tgl_akhir,$periode,$opsi){
+		function get_laporan($tgl_awal,$tgl_akhir,$periode,$opsi,$group){
+			$order_by="";
+			switch($group){
+				case "Tanggal": $order_by=" ORDER BY tanggal";break;
+				case "Customer": $order_by=" ORDER BY cust_id";break;
+				case "No Faktur": $order_by=" ORDER BY no_bukti";break;
+				case "Paket": $order_by=" ORDER BY produk_kode";break;
+				case "Sales": $order_by=" ORDER BY sales";break;
+				case "Jenis Diskon": $order_by=" ORDER BY diskon_jenis";break;
+				default: $order_by=" ORDER BY no_bukti";break;
+			}
+			
 			if($opsi=='rekap'){
 				if($periode=='all')
-					$sql="SELECT * FROM vu_trans_paket";
+					$sql="SELECT * FROM vu_trans_paket ".$order_by;
 				else if($periode=='bulan')
-					$sql="SELECT * FROM vu_trans_paket WHERE tanggal like '".$tgl_awal."%'";
+					$sql="SELECT * FROM vu_trans_paket WHERE tanggal like '".$tgl_awal."%' ".$order_by;
 				else if($periode=='tanggal')
-					$sql="SELECT * FROM vu_trans_paket WHERE tanggal>='".$tgl_awal."' AND tanggal<='".$tgl_akhir."'";
+					$sql="SELECT * FROM vu_trans_paket WHERE tanggal>='".$tgl_awal."' AND tanggal<='".$tgl_akhir."' ".$order_by;
 			}else if($opsi=='detail'){
 				if($periode=='all')
-					$sql="SELECT * FROM vu_detail_jual_paket";
+					$sql="SELECT * FROM vu_detail_jual_paket ".$order_by;
 				else if($periode=='bulan')
-					$sql="SELECT * FROM vu_detail_jual_paket WHERE tanggal like '".$tgl_awal."%'";
+					$sql="SELECT * FROM vu_detail_jual_paket WHERE tanggal like '".$tgl_awal."%' ".$order_by;
 				else if($periode=='tanggal')
-					$sql="SELECT * FROM vu_detail_jual_paket WHERE tanggal>='".$tgl_awal."' AND tanggal<='".$tgl_akhir."'";
+					$sql="SELECT * FROM vu_detail_jual_paket WHERE tanggal>='".$tgl_awal."' AND tanggal<='".$tgl_akhir."' ".$order_by;
 			}
 			
 			$query=$this->db->query($sql);

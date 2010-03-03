@@ -1,0 +1,120 @@
+<?php
+/* 	These code was generated using phpCIGen v 0.1.b (24/06/2009)
+	#zaqi 		zaqi.smart@gmail.com,http://zenzaqi.blogspot.com, 
+	#CV. Trust Solution, jl. Saronojiwo 19 Surabaya, http://www.ts.co.id
+	
+	+ Module  		: Penjualan Print
+	+ Description	: For Print View
+	+ Filename 		: p_detail_jual.php
+ 	+ Author  		: 
+ 	+ Created on 01/Feb/2010 14:30:05
+	
+*/
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Laporan Detail Penjualan <?php echo $jenis; ?> <?php echo $periode; ?></title>
+<link rel='stylesheet' type='text/css' href='../assets/modules/main/css/printstyle.css'/>
+</head>
+<body>
+<table summary='Detail Jual'>
+	<caption>Laporan Detail Penjualan <?php echo $jenis; ?><br/><?php echo $periode; ?></caption>
+	<thead>
+    	<tr>
+        	<th scope='col'>No</th>
+            <th scope='col'>Tanggal</th>
+            <th scope='col'>No Faktur</th>
+            <th scope='col'>Customer</th>
+            <th scope='col'>Produk</th>
+            <th scope='col'>Satuan</th>
+            <th scope='col'>Jumlah</th>
+            <th scope='col'>Harga</th>
+            <th scope='col'>Diskon(%)</th>
+            <th scope='col'>Diskon(Rp)</th>
+            <th scope='col'>Jenis Diskon</th>
+            <th scope='col'>Total Nilai (Rp)</th>
+        </tr>
+    </thead>
+	<tfoot>
+    	<tr>
+        	<td class="clear">&nbsp;</td>
+        	<th scope='row' nowrap="nowrap">Total</th>
+            <td colspan='10'><?php echo count($data_print); ?> data</td>
+        </tr>
+        <tr>
+        	<td class="clear">&nbsp;</td>
+        	<th scope='row' colspan="11">Summary</th>
+        </tr>
+        <tr>
+        	<td class="clear">&nbsp;</td>
+        	<th scope='row' nowrap="nowrap">Total Item</th>
+            <td class="numeric clear" nowrap="nowrap"><?php echo number_format($total_item,0,",","."); ?></td>
+            <td colspan="9" class="clear">&nbsp;</td>
+        </tr>
+        <tr>
+        	<td class="clear">&nbsp;</td>
+        	<th scope='row' nowrap="nowrap">Total Diskon (Rp)</th>
+            <td class="numeric clear" nowrap="nowrap" ><?php echo number_format($total_diskon,2,",","."); ?></td>
+            <td colspan="9" class="clear">&nbsp;</td>
+        </tr>
+        <tr>
+        	<td class="clear">&nbsp;</td>
+        	<th scope='row' nowrap="nowrap">Total Nilai (Rp)</th>
+            <td class="numeric clear" nowrap="nowrap"><?php echo number_format($total_nilai,2,",","."); ?></td>
+            <td colspan="9" class="clear">&nbsp;</td>
+        </tr>
+	</tfoot>
+	<tbody>
+		        
+        <?php $i=0; $j=0; $sales=""; foreach($data_print as $print) { ?>
+			<?php if($sales!==$print->sales) { ?>
+           <tr>
+                <td><b><? $j++; echo $j; ?></b></td>
+                <td colspan="12"><b><?php echo $print->sales;?></b></td>
+           </tr>
+           <?php $sub_cashback=0;
+					$sub_total=0;
+					$sub_diskon=0;
+					$sub_jumlah_barang=0;
+					$i=0; 
+			?>
+           <?php foreach($data_print as $print_list) {  ?>
+           <?php if($print_list->sales==$print->sales){ $i++;
+		   			$sub_jumlah_barang+=$print_list->jumlah_barang;
+					$sub_diskon+=$print_list->diskon_nilai;
+					$sub_total+=$print_list->subtotal;
+		   ?>
+            <tr>
+                <td><? echo $i; ?></td>
+                <td><?php echo $print_list->tanggal; ?></td>
+                <td><?php echo $print_list->no_bukti; ?></td>
+                <td><?php echo $print_list->cust_nama."(".$print_list->cust_no.")";?></td>
+                <td><?php echo $print_list->produk_nama."(".$print_list->produk_kode.")"; ?></td>
+                <td><?php echo $print_list->satuan_nama; ?></td>
+                <td class="numeric"><?php echo number_format($print_list->jumlah_barang,0,",","."); ?></td>
+                <td class="numeric"><?php echo number_format($print_list->harga_satuan,2,",","."); ?></td>
+                <td class="numeric"><?php echo number_format($print_list->diskon,0,",","."); ?></td>
+                <td class="numeric"><?php echo number_format($print_list->diskon_nilai,2,",","."); ?></td>
+                <td class="numeric"><?php echo $print_list->diskon_jenis; ?></td>
+                <td class="numeric"><?php echo number_format($print_list->subtotal,2,",","."); ?></td>
+           </tr>
+           <?php } ?>
+           <?php } ?>
+           <tr>
+                <td colspan="6">&nbsp;</td>
+                <td align="right" class="numeric"><b><?php echo number_format($sub_jumlah_barang,0,",","."); ?></b></td>
+                <td align="right" class="numeric">&nbsp;</td>
+                <td align="right" class="numeric">&nbsp;</td>
+                <td align="right" class="numeric"><b><?php echo number_format($sub_diskon,2,",","."); ?></b></td>
+                <td align="right" class="numeric">&nbsp;</td>
+                <td align="right" class="numeric"><b><?php echo number_format($sub_total,2,",","."); ?></b></td>
+           </tr>
+           <?php } $sales=$print->sales; ?>
+		<?php } ?>
+        
+	</tbody>
+</table>
+</body>
+</html>

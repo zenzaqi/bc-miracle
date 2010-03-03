@@ -100,7 +100,33 @@ $bulan="";
 ?>
 Ext.onReady(function(){
   Ext.QuickTips.init();
-
+	
+	var group_master_Store= new Ext.data.SimpleStore({
+			id: 'group_master_Store',
+			fields:['group'],
+			data:[['No Faktur'],['Tanggal'],['Customer']]
+	});
+	
+	var group_detail_Store= new Ext.data.SimpleStore({
+			id: 'group_detail_Store',
+			fields:['group'],
+			data:[['No Faktur'],['Tanggal'],['Customer'],['Perawatan'],['Sales'],['Jenis Diskon']]
+	});
+	
+	var rpt_jrawat_groupField=new Ext.form.ComboBox({
+		id:'rpt_jrawat_groupField',
+		fieldLabel:'Kelompokkan',
+		store: group_master_Store,
+		mode: 'local',
+		displayField: 'group',
+		valueField: 'group',
+		value: 'No Faktur',
+		width: 100,
+		triggerAction: 'all',
+		typeAhead: true,
+		lazyRender: true
+	});
+	
 	rpt_jrawat_bulanField=new Ext.form.ComboBox({
 		id:'rpt_jrawat_bulanField',
 		fieldLabel:' ',
@@ -245,6 +271,14 @@ Ext.onReady(function(){
 		items: [rpt_jrawat_rekapField ,rpt_jrawat_detailField]
 	});
 	
+	var	rpt_jrawat_groupbyField=new Ext.form.FieldSet({
+		id: 'rpt_jrawat_groupbyField',
+		title: 'Group By',
+		border: true,
+		anchor: '98%',
+		items: [rpt_jrawat_groupField]
+	});
+	
 	function is_valid_form(){
 		if(rpt_jrawat_opsitglField.getValue()==true){
 			rpt_jrawat_tglawalField.allowBlank=false;
@@ -284,7 +318,7 @@ Ext.onReady(function(){
 		}else{
 			jrawat_periode='all';
 		}
-		
+		if(rpt_jrawat_groupField.getValue()!==""){jrawat_group=rpt_jrawat_groupField.getValue(); }
 		if(rpt_jrawat_rekapField.getValue()==true){jrawat_opsi='rekap';}else{jrawat_opsi='detail';}
 		
 			Ext.Ajax.request({   
@@ -296,7 +330,8 @@ Ext.onReady(function(){
 					opsi		: jrawat_opsi,
 					bulan		: jrawat_bulan,
 					tahun		: jrawat_tahun,
-					periode		: jrawat_periode
+					periode		: jrawat_periode,
+					group		: jrawat_group
 					
 				}, 
 				success: function(response){              
@@ -347,7 +382,7 @@ Ext.onReady(function(){
 		y:0,
 		width: 400, 
 		autoHeight: true,
-		items: [rpt_jrawat_periodeField,rpt_jrawat_opsiField],
+		items: [rpt_jrawat_periodeField,rpt_jrawat_opsiField,rpt_jrawat_groupbyField],
 		monitorValid:true,
 		buttons: [{
 				text: 'Print',
@@ -365,7 +400,7 @@ Ext.onReady(function(){
 	
 	/* Form Advanced Search */
 	rpt_jrawatWindow = new Ext.Window({
-		title: 'Laporan Penjualan rawat',
+		title: 'Laporan Penjualan Perawatan',
 		closable:false,
 		closeAction: 'hide',
 		resizable: false,
@@ -380,6 +415,28 @@ Ext.onReady(function(){
   	rpt_jrawatWindow.show();
 	
 	//EVENTS
+	
+	rpt_jrawat_rekapField.on("check", function(){
+		rpt_jrawat_groupField.setValue('No faktur');
+		if(rpt_jrawat_rekapField.getValue()==true){
+			rpt_jrawat_groupField.bindStore(group_master_Store);
+		}else
+		{
+			rpt_jrawat_groupField.bindStore(group_detail_Store);
+		}
+	});
+	
+	rpt_jrawat_detailField.on("check", function(){
+		rpt_jrawat_groupField.setValue('No Faktur');
+		if(rpt_jrawat_detailField.getValue()==true){
+			rpt_jrawat_groupField.bindStore(group_detail_Store);
+		}else
+		{
+			rpt_jrawat_groupField.bindStore(group_master_Store);
+		}
+	});
+	
+	
 	rpt_jrawat_opsitglField.on("check",function(){
 		if(rpt_jrawat_opsitglField.getValue()==true){
 			rpt_jrawat_tglawalField.allowBlank=false;

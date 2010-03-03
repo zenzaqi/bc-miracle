@@ -100,7 +100,33 @@ $bulan="";
 ?>
 Ext.onReady(function(){
   Ext.QuickTips.init();
-
+	
+	var group_master_Store= new Ext.data.SimpleStore({
+			id: 'group_master_Store',
+			fields:['group'],
+			data:[['No Faktur'],['Tanggal'],['Customer']]
+	});
+	
+	var group_detail_Store= new Ext.data.SimpleStore({
+			id: 'group_detail_Store',
+			fields:['group'],
+			data:[['No Faktur'],['Tanggal'],['Customer'],['Paket'],['Sales'],['Jenis Diskon']]
+	});
+	
+	var rpt_jpaket_groupField=new Ext.form.ComboBox({
+		id:'rpt_jpaket_groupField',
+		fieldLabel:'Kelompokkan',
+		store: group_master_Store,
+		mode: 'local',
+		displayField: 'group',
+		valueField: 'group',
+		value: 'No Faktur',
+		width: 100,
+		triggerAction: 'all',
+		typeAhead: true,
+		lazyRender: true
+	});
+	
 	rpt_jpaket_bulanField=new Ext.form.ComboBox({
 		id:'rpt_jpaket_bulanField',
 		fieldLabel:' ',
@@ -245,6 +271,14 @@ Ext.onReady(function(){
 		items: [rpt_jpaket_rekapField ,rpt_jpaket_detailField]
 	});
 	
+	var	rpt_jpaket_groupbyField=new Ext.form.FieldSet({
+		id: 'rpt_jpaket_groupbyField',
+		title: 'Group By',
+		border: true,
+		anchor: '98%',
+		items: [rpt_jpaket_groupField]
+	});
+	
 	function is_valid_form(){
 		if(rpt_jpaket_opsitglField.getValue()==true){
 			rpt_jpaket_tglawalField.allowBlank=false;
@@ -284,7 +318,7 @@ Ext.onReady(function(){
 		}else{
 			jpaket_periode='all';
 		}
-		
+		if(rpt_jpaket_groupField.getValue()!==""){jpaket_group=rpt_jpaket_groupField.getValue(); }
 		if(rpt_jpaket_rekapField.getValue()==true){jpaket_opsi='rekap';}else{jpaket_opsi='detail';}
 		
 			Ext.Ajax.request({   
@@ -296,7 +330,8 @@ Ext.onReady(function(){
 					opsi		: jpaket_opsi,
 					bulan		: jpaket_bulan,
 					tahun		: jpaket_tahun,
-					periode		: jpaket_periode
+					periode		: jpaket_periode,
+					group		: jpaket_group
 					
 				}, 
 				success: function(response){              
@@ -347,7 +382,7 @@ Ext.onReady(function(){
 		y:0,
 		width: 400, 
 		autoHeight: true,
-		items: [rpt_jpaket_periodeField,rpt_jpaket_opsiField],
+		items: [rpt_jpaket_periodeField,rpt_jpaket_opsiField,rpt_jpaket_groupbyField],
 		monitorValid:true,
 		buttons: [{
 				text: 'Print',
@@ -380,6 +415,26 @@ Ext.onReady(function(){
   	rpt_jpaketWindow.show();
 	
 	//EVENTS
+	rpt_jpaket_rekapField.on("check", function(){
+		rpt_jpaket_groupField.setValue('No faktur');
+		if(rpt_jpaket_rekapField.getValue()==true){
+			rpt_jpaket_groupField.bindStore(group_master_Store);
+		}else
+		{
+			rpt_jpaket_groupField.bindStore(group_detail_Store);
+		}
+	});
+	
+	rpt_jpaket_detailField.on("check", function(){
+		rpt_jpaket_groupField.setValue('No Faktur');
+		if(rpt_jpaket_detailField.getValue()==true){
+			rpt_jpaket_groupField.bindStore(group_detail_Store);
+		}else
+		{
+			rpt_jpaket_groupField.bindStore(group_master_Store);
+		}
+	});
+	
 	rpt_jpaket_opsitglField.on("check",function(){
 		if(rpt_jpaket_opsitglField.getValue()==true){
 			rpt_jpaket_tglawalField.allowBlank=false;

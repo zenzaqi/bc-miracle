@@ -26,6 +26,13 @@ class C_master_terima_beli extends Controller {
 		$this->load->view('main/v_master_terima_beli');
 	}
 	
+	
+	function get_order_beli_detail_by_order_id(){
+		$orderid = isset($_POST['orderid']) ? @$_POST['orderid'] : "";
+		$result=$this->m_public_function->get_order_beli_detail_by_order_id($orderid);
+		echo $result;
+	}
+	
 	function get_produk_list(){
 		$query = isset($_POST['query']) ? @$_POST['query'] : "";
 		$start = (integer) (isset($_POST['start']) ? @$_POST['start'] : @$_GET['start']);
