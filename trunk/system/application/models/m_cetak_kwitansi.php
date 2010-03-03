@@ -43,7 +43,7 @@ class M_cetak_kwitansi extends Model{
 		//function for detail
 		//get record list
 		function detail_jual_kwitansi_list($master_id,$query,$start,$end) {
-			$query = "SELECT * FROM jual_kwitansi where jkwitansi_no='".$master_id."'";
+			$query = "SELECT * FROM jual_kwitansi WHERE jkwitansi_master='".$master_id."'";
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
 			$limit = $query." LIMIT ".$start.",".$end;			

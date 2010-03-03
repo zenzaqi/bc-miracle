@@ -867,6 +867,7 @@ Ext.onReady(function(){
 		update_group_carabayar2_jual_produk();
 		update_group_carabayar3_jual_produk();
 		
+		if(jproduk_cara2Field.getValue()!=""){
 		switch(jproduk_caraField.getValue()){
 			case 'kwitansi':
 				kwitansi_jual_produk_DataStore.load({
@@ -944,6 +945,10 @@ Ext.onReady(function(){
 					 	}
 				  });
 				break;
+		}
+		}else if(jproduk_cara2Field.getValue()==""){
+			//jproduk_caraField.setValue("card");
+			//master_jual_produk_cardGroup.setVisible(true);
 		}
 
 		switch(jproduk_cara2Field.getValue()){
@@ -1202,8 +1207,8 @@ Ext.onReady(function(){
 							hutang_field=total_field-detail_jual_produk_DataStore.getAt(i).data.jproduk_bayar;
 							jproduk_hutangField.setValue(hutang_field);
 						}
-						jproduk_caraField.setValue("card");
-						master_jual_produk_cardGroup.setVisible(true);
+						//jproduk_caraField.setValue("card");
+						//master_jual_produk_cardGroup.setVisible(true);
 					}
 				}
 			});
@@ -2723,6 +2728,7 @@ Ext.onReady(function(){
 		id: 'jproduk_kwitansi_namaField',
 		fieldLabel: 'Atas Nama',
 		allowBlank: true,
+		readOnly: true,
 		anchor: '95%'
 	});
 	
@@ -2739,7 +2745,7 @@ Ext.onReady(function(){
 		id: 'jproduk_kwitansi_noField',
 		fieldLabel: 'Nomor Kwitansi',
 		store: cbo_kwitansi_jual_produk_DataStore,
-		mode: 'local',
+		mode: 'remote',
 		displayField:'ckwitansi_no',
 		valueField: 'ckwitansi_id',
         typeAhead: false,
@@ -2768,6 +2774,7 @@ Ext.onReady(function(){
 		id: 'jproduk_kwitansi_nama2Field',
 		fieldLabel: 'Atas Nama',
 		allowBlank: true,
+		readOnly: true,
 		anchor: '95%'
 	});
 	
@@ -2784,7 +2791,7 @@ Ext.onReady(function(){
 		id: 'jproduk_kwitansi_no2Field',
 		fieldLabel: 'Nomor Kwitansi',
 		store: cbo_kwitansi_jual_produk_DataStore,
-		mode: 'local',
+		mode: 'remote',
 		displayField:'ckwitansi_no',
 		valueField: 'ckwitansi_id',
         typeAhead: false,
@@ -2813,6 +2820,7 @@ Ext.onReady(function(){
 		id: 'jproduk_kwitansi_nama3Field',
 		fieldLabel: 'Atas Nama',
 		allowBlank: true,
+		readOnly: true,
 		anchor: '95%'
 	});
 	
@@ -2829,7 +2837,7 @@ Ext.onReady(function(){
 		id: 'jproduk_kwitansi_no3Field',
 		fieldLabel: 'Nomor Kwitansi',
 		store: cbo_kwitansi_jual_produk_DataStore,
-		mode: 'local',
+		mode: 'remote',
 		displayField:'ckwitansi_no',
 		valueField: 'ckwitansi_id',
         typeAhead: false,

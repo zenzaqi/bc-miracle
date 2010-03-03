@@ -534,16 +534,16 @@ class M_master_jual_produk extends Model{
 						$rs=$this->db->query($sql);
 						if($rs->num_rows()){
 							$data=array(
-								"jkwitansi_no"=>$jproduk_kwitansi_no,
-								"jkwitansi_nilai"=>$jproduk_hutang
+								"jkwitansi_master"=>$jproduk_kwitansi_no,
+								"jkwitansi_nilai"=>$jproduk_kwitansi_nilai
 							);
 							$this->db->where('jkwitansi_ref', $jproduk_nobukti);
 							$this->db->update('jual_kwitansi', $data);
 						}else{
 							$data=array(
 								"jkwitansi_ref"=>$jproduk_nobukti,
-								"jkwitansi_no"=>$jproduk_kwitansi_no,
-								"jkwitansi_nilai"=>$jproduk_hutang
+								"jkwitansi_master"=>$jproduk_kwitansi_no,
+								"jkwitansi_nilai"=>$jproduk_kwitansi_nilai
 							);
 							$this->db->insert('jual_kwitansi', $data);
 						}
@@ -668,16 +668,16 @@ class M_master_jual_produk extends Model{
 						$rs=$this->db->query($sql);
 						if($rs->num_rows()){
 							$data=array(
-								"jkwitansi_no"=>$jproduk_kwitansi_no2,
-								"jkwitansi_nilai"=>$jproduk_hutang
+								"jkwitansi_master"=>$jproduk_kwitansi_no2,
+								"jkwitansi_nilai"=>$jproduk_kwitansi_nilai2
 							);
 							$this->db->where('jkwitansi_ref', $jproduk_nobukti);
 							$this->db->update('jual_kwitansi', $data);
 						}else{
 							$data=array(
 								"jkwitansi_ref"=>$jproduk_nobukti,
-								"jkwitansi_no"=>$jproduk_kwitansi_no2,
-								"jkwitansi_nilai"=>$jproduk_hutang
+								"jkwitansi_master"=>$jproduk_kwitansi_no2,
+								"jkwitansi_nilai"=>$jproduk_kwitansi_nilai2
 							);
 							$this->db->insert('jual_kwitansi', $data);
 						}
@@ -803,16 +803,16 @@ class M_master_jual_produk extends Model{
 						$rs=$this->db->query($sql);
 						if($rs->num_rows()){
 							$data=array(
-								"jkwitansi_no"=>$jproduk_kwitansi_no3,
-								"jkwitansi_nilai"=>$jproduk_hutang
+								"jkwitansi_master"=>$jproduk_kwitansi_no3,
+								"jkwitansi_nilai"=>$jproduk_kwitansi_nilai3
 							);
 							$this->db->where('jkwitansi_ref', $jproduk_nobukti);
 							$this->db->update('jual_kwitansi', $data);
 						}else{
 							$data=array(
 								"jkwitansi_ref"=>$jproduk_nobukti,
-								"jkwitansi_no"=>$jproduk_kwitansi_no3,
-								"jkwitansi_nilai"=>$jproduk_hutang
+								"jkwitansi_master"=>$jproduk_kwitansi_no3,
+								"jkwitansi_nilai"=>$jproduk_kwitansi_nilai3
 							);
 							$this->db->insert('jual_kwitansi', $data);
 						}
@@ -981,8 +981,8 @@ class M_master_jual_produk extends Model{
 							}
 						}
 						$data=array(
-							"jkwitansi_no"=>$jproduk_kwitansi_no,
-							"jkwitansi_nilai"=>$jproduk_hutang,
+							"jkwitansi_master"=>$jproduk_kwitansi_no,
+							"jkwitansi_nilai"=>$jproduk_kwitansi_nilai,
 							"jkwitansi_ref"=>$jproduk_nobukti
 						);
 						$this->db->insert('jual_kwitansi', $data); 
@@ -1055,8 +1055,8 @@ class M_master_jual_produk extends Model{
 							}
 						}
 						$data=array(
-							"jkwitansi_no"=>$jproduk_kwitansi_no2,
-							"jkwitansi_nilai"=>$jproduk_hutang,
+							"jkwitansi_master"=>$jproduk_kwitansi_no2,
+							"jkwitansi_nilai"=>$jproduk_kwitansi_nilai2,
 							"jkwitansi_ref"=>$jproduk_nobukti
 						);
 						$this->db->insert('jual_kwitansi', $data); 
@@ -1128,8 +1128,8 @@ class M_master_jual_produk extends Model{
 							}
 						}
 						$data=array(
-							"jkwitansi_no"=>$jproduk_kwitansi_no3,
-							"jkwitansi_nilai"=>$jproduk_hutang,
+							"jkwitansi_master"=>$jproduk_kwitansi_no3,
+							"jkwitansi_nilai"=>$jproduk_kwitansi_nilai3,
 							"jkwitansi_ref"=>$jproduk_nobukti
 						);
 						$this->db->insert('jual_kwitansi', $data); 
