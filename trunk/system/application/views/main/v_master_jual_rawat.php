@@ -1065,7 +1065,7 @@ Ext.onReady(function(){
 						  if (success) {
 							if(kwitansi_jual_rawat_DataStore.getCount()){
 								jrawat_kwitansi_record=kwitansi_jual_rawat_DataStore.getAt(0).data;
-								jrawat_kwitansi_noField.setValue(jrawat_kwitansi_record.jkwitansi_no);
+								jrawat_kwitansi_noField.setValue(jrawat_kwitansi_record.kwitansi_no);
 								jrawat_kwitansi_namaField.setValue(jrawat_kwitansi_record.cust_nama);
 								jrawat_kwitansi_nilaiField.setValue(jrawat_kwitansi_record.jkwitansi_nilai);
 							}
@@ -1158,8 +1158,8 @@ Ext.onReady(function(){
 						  if (success) {
 							if(kwitansi_jual_rawat_DataStore.getCount()){
 								jrawat_kwitansi_record=kwitansi_jual_rawat_DataStore.getAt(0).data;
-								jrawat_kwitansi_no2Field.setValue(jrawat_kwitansi_record.jkwitansi_no);
-								jrawat_kwitansi_nama2Field.setValue(jrawat_kwitansi_record.jkwitansi_nama);
+								jrawat_kwitansi_no2Field.setValue(jrawat_kwitansi_record.kwitansi_no);
+								jrawat_kwitansi_nama2Field.setValue(jrawat_kwitansi_record.cust_nama);
 								jrawat_kwitansi_nilai2Field.setValue(jrawat_kwitansi_record.jkwitansi_nilai);
 							}
 						  }
@@ -1252,8 +1252,8 @@ Ext.onReady(function(){
 						  if (success) {
 							if(kwitansi_jual_rawat_DataStore.getCount()){
 								jrawat_kwitansi_record=kwitansi_jual_rawat_DataStore.getAt(0).data;
-								jrawat_kwitansi_no3Field.setValue(jrawat_kwitansi_record.jkwitansi_no);
-								jrawat_kwitansi_nama3Field.setValue(jrawat_kwitansi_record.jkwitansi_nama);
+								jrawat_kwitansi_no3Field.setValue(jrawat_kwitansi_record.kwitansi_no);
+								jrawat_kwitansi_nama3Field.setValue(jrawat_kwitansi_record.cust_nama);
 								jrawat_kwitansi_nilai3Field.setValue(jrawat_kwitansi_record.jkwitansi_nilai);
 							}
 						  }
@@ -1631,7 +1631,7 @@ Ext.onReady(function(){
 		},[
 		/* dataIndex => insert intomaster_jual_rawat_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'jkwitansi_id', type: 'int', mapping: 'jkwitansi_id'},
-			{name: 'jkwitansi_no', type: 'string', mapping: 'jkwitansi_no'},
+			{name: 'kwitansi_no', type: 'string', mapping: 'kwitansi_no'},
 			{name: 'jkwitansi_nilai', type: 'float', mapping: 'jkwitansi_nilai'},
 			{name: 'cust_nama', type: 'string', mapping: 'cust_nama'}
 		]),

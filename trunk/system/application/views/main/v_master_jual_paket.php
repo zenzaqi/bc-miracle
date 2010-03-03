@@ -813,8 +813,8 @@ Ext.onReady(function(){
 						  if (success) {
 							if(kwitansi_jual_paket_DataStore.getCount()){
 								jpaket_kwitansi_record=kwitansi_jual_paket_DataStore.getAt(0).data;
-								jpaket_kwitansi_noField.setValue(jpaket_kwitansi_record.jkwitansi_no);
-								jpaket_kwitansi_namaField.setValue(jpaket_kwitansi_record.jkwitansi_nama);
+								jpaket_kwitansi_noField.setValue(jpaket_kwitansi_record.kwitansi_no);
+								jpaket_kwitansi_namaField.setValue(jpaket_kwitansi_record.cust_nama);
 								jpaket_kwitansi_nilaiField.setValue(jpaket_kwitansi_record.jkwitansi_nilai);
 							}
 						  }
@@ -892,8 +892,8 @@ Ext.onReady(function(){
 						  if (success) {
 							if(kwitansi_jual_paket_DataStore.getCount()){
 								jpaket_kwitansi_record=kwitansi_jual_paket_DataStore.getAt(0).data;
-								jpaket_kwitansi_no2Field.setValue(jpaket_kwitansi_record.jkwitansi_no);
-								jpaket_kwitansi_nama2Field.setValue(jpaket_kwitansi_record.jkwitansi_nama);
+								jpaket_kwitansi_no2Field.setValue(jpaket_kwitansi_record.kwitansi_no);
+								jpaket_kwitansi_nama2Field.setValue(jpaket_kwitansi_record.cust_nama);
 								jpaket_kwitansi_nilai2Field.setValue(jpaket_kwitansi_record.jkwitansi_nilai);
 							}
 						  }
@@ -972,8 +972,8 @@ Ext.onReady(function(){
 						  if (success) {
 							if(kwitansi_jual_paket_DataStore.getCount()){
 								jpaket_kwitansi_record=kwitansi_jual_paket_DataStore.getAt(0).data;
-								jpaket_kwitansi_no3Field.setValue(jpaket_kwitansi_record.jkwitansi_no);
-								jpaket_kwitansi_nama3Field.setValue(jpaket_kwitansi_record.jkwitansi_nama);
+								jpaket_kwitansi_no3Field.setValue(jpaket_kwitansi_record.kwitansi_no);
+								jpaket_kwitansi_nama3Field.setValue(jpaket_kwitansi_record.cust_nama);
 								jpaket_kwitansi_nilai3Field.setValue(jpaket_kwitansi_record.jkwitansi_nilai);
 							}
 						  }
@@ -1335,8 +1335,9 @@ Ext.onReady(function(){
 		},[
 		/* dataIndex => insert intomaster_jual_paket_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'jkwitansi_id', type: 'int', mapping: 'jkwitansi_id'},
-			{name: 'jkwitansi_no', type: 'string', mapping: 'jkwitansi_no'},
-			{name: 'jkwitansi_nilai', type: 'float', mapping: 'jkwitansi_nilai'}
+			{name: 'kwitansi_no', type: 'string', mapping: 'kwitansi_no'},
+			{name: 'jkwitansi_nilai', type: 'float', mapping: 'jkwitansi_nilai'},
+			{name: 'cust_nama', type: 'string', mapping: 'cust_nama'}
 		]),
 		sortInfo:{field: 'jkwitansi_id', direction: "DESC"}
 	});

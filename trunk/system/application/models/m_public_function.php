@@ -190,7 +190,7 @@ class M_public_function extends Model{
 	}
 		
 	function get_kwitansi_by_ref($ref_id){
-		$sql="SELECT jkwitansi_id,jkwitansi_no,jkwitansi_nilai,cust_nama FROM jual_kwitansi LEFT JOIN cetak_kwitansi ON(jkwitansi_no=kwitansi_id) LEFT JOIN customer ON(kwitansi_cust=cust_id) WHERE jkwitansi_ref='".$ref_id."'";
+		$sql="SELECT jkwitansi_id,kwitansi_no,jkwitansi_nilai,cust_nama FROM jual_kwitansi LEFT JOIN cetak_kwitansi ON(jkwitansi_master=kwitansi_id) LEFT JOIN customer ON(kwitansi_cust=cust_id) WHERE jkwitansi_ref='".$ref_id."'";
 		$query = $this->db->query($sql);
 		$nbrows = $query->num_rows();
 		if($nbrows>0){

@@ -867,7 +867,6 @@ Ext.onReady(function(){
 		update_group_carabayar2_jual_produk();
 		update_group_carabayar3_jual_produk();
 		
-		if(jproduk_cara2Field.getValue()!=""){
 		switch(jproduk_caraField.getValue()){
 			case 'kwitansi':
 				kwitansi_jual_produk_DataStore.load({
@@ -876,8 +875,8 @@ Ext.onReady(function(){
 						  if (success) {
 							if(kwitansi_jual_produk_DataStore.getCount()){
 								jproduk_kwitansi_record=kwitansi_jual_produk_DataStore.getAt(0).data;
-								jproduk_kwitansi_noField.setValue(jproduk_kwitansi_record.jkwitansi_no);
-								jproduk_kwitansi_namaField.setValue(jproduk_kwitansi_record.jkwitansi_nama);
+								jproduk_kwitansi_noField.setValue(jproduk_kwitansi_record.kwitansi_no);
+								jproduk_kwitansi_namaField.setValue(jproduk_kwitansi_record.cust_nama);
 								jproduk_kwitansi_nilaiField.setValue(jproduk_kwitansi_record.jkwitansi_nilai);
 							}
 						  }
@@ -946,10 +945,6 @@ Ext.onReady(function(){
 				  });
 				break;
 		}
-		}else if(jproduk_cara2Field.getValue()==""){
-			//jproduk_caraField.setValue("card");
-			//master_jual_produk_cardGroup.setVisible(true);
-		}
 
 		switch(jproduk_cara2Field.getValue()){
 			case 'kwitansi':
@@ -959,8 +954,8 @@ Ext.onReady(function(){
 						  if (success) {
 							if(kwitansi_jual_produk_DataStore.getCount()){
 								jproduk_kwitansi_record=kwitansi_jual_produk_DataStore.getAt(0).data;
-								jproduk_kwitansi_no2Field.setValue(jproduk_kwitansi_record.jkwitansi_no);
-								jproduk_kwitansi_nama2Field.setValue(jproduk_kwitansi_record.jkwitansi_nama);
+								jproduk_kwitansi_no2Field.setValue(jproduk_kwitansi_record.kwitansi_no);
+								jproduk_kwitansi_nama2Field.setValue(jproduk_kwitansi_record.cust_nama);
 								jproduk_kwitansi_nilai2Field.setValue(jproduk_kwitansi_record.jkwitansi_nilai);
 							}
 						  }
@@ -1039,8 +1034,8 @@ Ext.onReady(function(){
 						  if (success) {
 							if(kwitansi_jual_produk_DataStore.getCount()){
 								jproduk_kwitansi_record=kwitansi_jual_produk_DataStore.getAt(0).data;
-								jproduk_kwitansi_no3Field.setValue(jproduk_kwitansi_record.jkwitansi_no);
-								jproduk_kwitansi_nama3Field.setValue(jproduk_kwitansi_record.jkwitansi_nama);
+								jproduk_kwitansi_no3Field.setValue(jproduk_kwitansi_record.kwitansi_no);
+								jproduk_kwitansi_nama3Field.setValue(jproduk_kwitansi_record.cust_nama);
 								jproduk_kwitansi_nilai3Field.setValue(jproduk_kwitansi_record.jkwitansi_nilai);
 							}
 						  }
@@ -1189,7 +1184,6 @@ Ext.onReady(function(){
 						var hutang_field=0;
 						var diskon_field=0;
 						var cashback_field=0;
-						master_jual_produk_set_form();
 						for(i=0;i<detail_jual_produk_DataStore.getCount();i++){
 							subtotal_field+=detail_jual_produk_DataStore.getAt(i).data.dproduk_subtotal_net;
 							dproduk_jumlah_field+=detail_jual_produk_DataStore.getAt(i).data.dproduk_jumlah;
@@ -1209,6 +1203,7 @@ Ext.onReady(function(){
 						}
 						//jproduk_caraField.setValue("card");
 						//master_jual_produk_cardGroup.setVisible(true);
+						master_jual_produk_set_form();
 					}
 				}
 			});
@@ -1404,8 +1399,9 @@ Ext.onReady(function(){
 		},[
 		/* dataIndex => insert intomaster_jual_produk_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'jkwitansi_id', type: 'int', mapping: 'jkwitansi_id'},
-			{name: 'jkwitansi_no', type: 'string', mapping: 'jkwitansi_no'},
-			{name: 'jkwitansi_nilai', type: 'float', mapping: 'jkwitansi_nilai'}
+			{name: 'kwitansi_no', type: 'string', mapping: 'kwitansi_no'},
+			{name: 'jkwitansi_nilai', type: 'float', mapping: 'jkwitansi_nilai'},
+			{name: 'cust_nama', type: 'string', mapping: 'cust_nama'}
 		]),
 		sortInfo:{field: 'jkwitansi_id', direction: "DESC"}
 	});
