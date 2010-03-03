@@ -817,9 +817,10 @@ Ext.onReady(function(){
 	/* dataIndex => insert intoperawatan_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'jkwitansi_id', type: 'int', mapping: 'jkwitansi_id'}, 
 			{name: 'jkwitansi_master', type: 'int', mapping: 'jkwitansi_master'}, 
-			{name: 'jkwitansi_no', type: 'string', mapping: 'jkwitansi_no'}, 
-			{name: 'jkwitansi_nilai', type: 'float', mapping: 'jkwitansi_nilai'}, 
 			{name: 'jkwitansi_ref', type: 'string', mapping: 'jkwitansi_ref'}, 
+			{name: 'jkwitansi_nilai', type: 'float', mapping: 'jkwitansi_nilai'}, 
+			{name: 'customer_id', type: 'int', mapping: 'customer_id'}, 
+			{name: 'customer_nama', type: 'string', mapping: 'customer_nama'}, 
 			{name: 'jkwitansi_creator', type: 'string', mapping: 'jkwitansi_creator'}, 
 			{name: 'jkwitansi_date_create', type: 'date', dateFormat: 'Y-m-d', mapping: 'jkwitansi_date_create'}, 
 			{name: 'jkwitansi_update', type: 'string', mapping: 'jkwitansi_update'}, 
@@ -880,6 +881,12 @@ Ext.onReady(function(){
 			})
 		},
 		{
+			header: 'Customer',
+			dataIndex: 'customer_nama',
+			width: 150,
+			sortable: true
+		}/*,
+		{
 			header: 'Jkwitansi Creator',
 			dataIndex: 'jkwitansi_creator',
 			width: 150,
@@ -934,7 +941,7 @@ Ext.onReady(function(){
 				maxLength: 11,
 				maskRe: /([0-9]+)$/
 			})
-		}]
+		}*/]
 	);
 	jual_kwitansi_ColumnModel.defaultSortable= true;
 	//eof
