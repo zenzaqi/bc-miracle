@@ -469,7 +469,7 @@ class M_master_jual_rawat extends Model{
 				if($jrawat_cara!=null || $jrawat_cara!=''){
 					//kwitansi
 					if($jrawat_cara=='kwitansi'){
-						/*if($jrawat_kwitansi_nama=="" || $jrawat_kwitansi_nama==NULL){
+						if($jrawat_kwitansi_nama=="" || $jrawat_kwitansi_nama==NULL){
 							if(is_int($jrawat_kwitansi_nama)){
 								$sql="select cust_nama from customer where cust_id='".$jrawat_cust."'";
 								$query=$this->db->query($sql);
@@ -478,9 +478,9 @@ class M_master_jual_rawat extends Model{
 									$jrawat_kwitansi_nama=$data->cust_nama;
 								}
 							}else{
-									$jrawat_kwitansi_nama=$jrawat_cust;
+									$jrawat_kwitansi_nama=$jpaket_cust;
 							}
-						}*/
+						}
 						
 						$sql="SELECT jkwitansi_id FROM jual_kwitansi WHERE jkwitansi_ref='$jrawat_nobukti'";
 						$rs=$this->db->query($sql);
@@ -561,7 +561,7 @@ class M_master_jual_rawat extends Model{
 								);
 							$this->db->insert('jual_cek', $data);
 						}
-						 
+						
 					}else if($jrawat_cara=='transfer'){
 						$sql="SELECT jtransfer_id FROM jual_transfer WHERE jtransfer_ref='$jrawat_nobukti'";
 						$rs=$this->db->query($sql);
@@ -582,6 +582,7 @@ class M_master_jual_rawat extends Model{
 								);
 							$this->db->insert('jual_transfer', $data);
 						}
+						
 					}else if($jrawat_cara=='tunai'){
 						$sql="SELECT jtunai_id FROM jual_tunai WHERE jtunai_ref='$jrawat_nobukti'";
 						$rs=$this->db->query($sql);
@@ -598,28 +599,13 @@ class M_master_jual_rawat extends Model{
 								);
 							$this->db->insert('jual_tunai', $data);
 						}
-					}else if($jrawat_cara=='voucher'){
-						$sql="SELECT tvoucher_id FROM voucher_terima WHERE tvoucher_ref='$jrawat_nobukti'";
-						$rs=$this->db->query($sql);
-						if($rs->num_rows()){
-							$data=array(
-								"tvoucher_novoucher"=>$jrawat_voucher_no
-								);
-							$this->db->where('tvoucher_ref', $jrawat_nobukti);
-							$this->db->update('voucher_terima', $data);
-						}else{
-							$data=array(
-								"tvoucher_novoucher"=>$jrawat_voucher_no,
-								"tvoucher_ref"=>$jrawat_nobukti
-								);
-							$this->db->insert('voucher_terima', $data);
-						}
+						
 					}
 				}
 				if($jrawat_cara2!=null || $jrawat_cara2!=''){
 					//kwitansi
 					if($jrawat_cara2=='kwitansi'){
-						/*if($jrawat_kwitansi_nama2=="" || $jrawat_kwitansi_nama2==NULL){
+						if($jrawat_kwitansi_nama2=="" || $jrawat_kwitansi_nama2==NULL){
 							if(is_int($jrawat_kwitansi_nama2)){
 								$sql="select cust_nama from customer where cust_id='".$jrawat_cust."'";
 								$query=$this->db->query($sql);
@@ -628,9 +614,9 @@ class M_master_jual_rawat extends Model{
 									$jrawat_kwitansi_nama2=$data->cust_nama;
 								}
 							}else{
-									$jrawat_kwitansi_nama2=$jrawat_cust;
+									$jrawat_kwitansi_nama2=$jpaket_cust;
 							}
-						}*/
+						}
 						
 						$sql="SELECT jkwitansi_id FROM jual_kwitansi WHERE jkwitansi_ref='$jrawat_nobukti'";
 						$rs=$this->db->query($sql);
@@ -696,7 +682,7 @@ class M_master_jual_rawat extends Model{
 								"jcek_no"=>$jrawat_cek_no2,
 								"jcek_valid"=>$jrawat_cek_valid2,
 								"jcek_bank"=>$jrawat_cek_bank2,
-								"jcek_nilai"=>$jrawat_cek_nilai
+								"jcek_nilai"=>$jrawat_cek_nilai2
 								);
 							$this->db->where('jcek_ref', $jrawat_nobukti);
 							$this->db->update('jual_cek', $data);
@@ -707,11 +693,11 @@ class M_master_jual_rawat extends Model{
 								"jcek_no"=>$jrawat_cek_no2,
 								"jcek_valid"=>$jrawat_cek_valid2,
 								"jcek_bank"=>$jrawat_cek_bank2,
-								"jcek_nilai"=>$jrawat_cek_nilai
+								"jcek_nilai"=>$jrawat_cek_nilai2
 								);
 							$this->db->insert('jual_cek', $data);
 						}
-						 
+						
 					}else if($jrawat_cara2=='transfer'){
 						$sql="SELECT jtransfer_id FROM jual_transfer WHERE jtransfer_ref='$jrawat_nobukti'";
 						$rs=$this->db->query($sql);
@@ -732,7 +718,7 @@ class M_master_jual_rawat extends Model{
 								);
 							$this->db->insert('jual_transfer', $data);
 						}
-						 
+						
 					}else if($jrawat_cara2=='tunai'){
 						$sql="SELECT jtunai_id FROM jual_tunai WHERE jtunai_ref='$jrawat_nobukti'";
 						$rs=$this->db->query($sql);
@@ -741,36 +727,21 @@ class M_master_jual_rawat extends Model{
 								"jtunai_nilai"=>$jrawat_tunai_nilai2
 								);
 							$this->db->where('jtunai_ref', $jrawat_nobukti);
-							$this->db->update('jual_tunai', $data); 
+							$this->db->update('jual_tunai', $data);
 						}else{
 							$data=array(
-								"jtunai_ref"=>$jrawat_nobukti,
-								"jtunai_nilai"=>$jrawat_tunai_nilai2
+								"jtunai_nilai"=>$jrawat_tunai_nilai2,
+								"jtunai_ref"=>$jrawat_nobukti
 								);
 							$this->db->insert('jual_tunai', $data);
 						}
-					}else if($jrawat_cara2=='voucher'){
-						$sql="SELECT tvoucher_id FROM voucher_terima WHERE tvoucher_ref='$jrawat_nobukti'";
-						$rs=$this->db->query($sql);
-						if($rs->num_rows()){
-							$data=array(
-								"tvoucher_novoucher"=>$jrawat_voucher_no2
-								);
-							$this->db->where('tvoucher_ref', $jrawat_nobukti);
-							$this->db->update('voucher_terima', $data);
-						}else{
-							$data=array(
-								"tvoucher_novoucher"=>$jrawat_voucher_no2,
-								"tvoucher_ref"=>$jrawat_nobukti
-								);
-							$this->db->insert('voucher_terima', $data);
-						}
+						
 					}
 				}
 				if($jrawat_cara3!=null || $jrawat_cara3!=''){
 					//kwitansi
 					if($jrawat_cara3=='kwitansi'){
-						/*if($jrawat_kwitansi_nama3=="" || $jrawat_kwitansi_nama3==NULL){
+						if($jrawat_kwitansi_nama3=="" || $jrawat_kwitansi_nama3==NULL){
 							if(is_int($jrawat_kwitansi_nama3)){
 								$sql="select cust_nama from customer where cust_id='".$jrawat_cust."'";
 								$query=$this->db->query($sql);
@@ -779,9 +750,9 @@ class M_master_jual_rawat extends Model{
 									$jrawat_kwitansi_nama3=$data->cust_nama;
 								}
 							}else{
-									$jrawat_kwitansi_nama3=$jrawat_cust;
+									$jrawat_kwitansi_nama3=$jpaket_cust;
 							}
-						}*/
+						}
 						
 						$sql="SELECT jkwitansi_id FROM jual_kwitansi WHERE jkwitansi_ref='$jrawat_nobukti'";
 						$rs=$this->db->query($sql);
@@ -809,19 +780,19 @@ class M_master_jual_rawat extends Model{
 								"jcard_nama"=>$jrawat_card_nama3,
 								"jcard_edc"=>$jrawat_card_edc3,
 								"jcard_no"=>$jrawat_card_no3,
-								"jcard_nilai"=>$jrawat_hutang
+								"jcard_nilai"=>$jrawat_card_nilai3
 								);
 							$this->db->where('jcard_ref', $jrawat_nobukti);
-							$this->db->update('jual_card', $data); 
+							$this->db->update('jual_card', $data);
 						}else{
 							$data=array(
 								"jcard_ref"=>$jrawat_nobukti,
 								"jcard_nama"=>$jrawat_card_nama3,
 								"jcard_edc"=>$jrawat_card_edc3,
 								"jcard_no"=>$jrawat_card_no3,
-								"jcard_nilai"=>$jrawat_hutang
+								"jcard_nilai"=>$jrawat_card_nilai3
 								);
-							$this->db->insert('jual_card', $data); 
+							$this->db->insert('jual_card', $data);
 						}
 					
 					}else if($jrawat_cara3=='cek/giro'){
@@ -847,10 +818,10 @@ class M_master_jual_rawat extends Model{
 								"jcek_no"=>$jrawat_cek_no3,
 								"jcek_valid"=>$jrawat_cek_valid3,
 								"jcek_bank"=>$jrawat_cek_bank3,
-								"jcek_nilai"=>$jrawat_cek_nilai
+								"jcek_nilai"=>$jrawat_cek_nilai3
 								);
 							$this->db->where('jcek_ref', $jrawat_nobukti);
-							$this->db->update('jual_cek', $data); 
+							$this->db->update('jual_cek', $data);
 						}else{
 							$data=array(
 								"jcek_ref"=>$jrawat_nobukti,
@@ -858,9 +829,9 @@ class M_master_jual_rawat extends Model{
 								"jcek_no"=>$jrawat_cek_no3,
 								"jcek_valid"=>$jrawat_cek_valid3,
 								"jcek_bank"=>$jrawat_cek_bank3,
-								"jcek_nilai"=>$jrawat_cek_nilai
+								"jcek_nilai"=>$jrawat_cek_nilai3
 								);
-							$this->db->insert('jual_cek', $data); 
+							$this->db->insert('jual_cek', $data);
 						}
 						
 					}else if($jrawat_cara3=='transfer'){
@@ -873,7 +844,7 @@ class M_master_jual_rawat extends Model{
 								"jtransfer_nilai"=>$jrawat_transfer_nilai3
 								);
 							$this->db->where('jtransfer_ref', $jrawat_nobukti);
-							$this->db->update('jual_transfer', $data); 
+							$this->db->update('jual_transfer', $data);
 						}else{
 							$data=array(
 								"jtransfer_ref"=>$jrawat_nobukti,
@@ -892,31 +863,15 @@ class M_master_jual_rawat extends Model{
 								"jtunai_nilai"=>$jrawat_tunai_nilai3
 								);
 							$this->db->where('jtunai_ref', $jrawat_nobukti);
-							$this->db->update('jual_tunai', $data); 
-						}else{
-							$data=array(
-								"jtunai_ref"=>$jrawat_nobukti,
-								"jtunai_nilai"=>$jrawat_tunai_nilai3
-								);
-							$this->db->where('jtunai_ref', $jrawat_nobukti);
 							$this->db->update('jual_tunai', $data);
-						}
-					}else if($jrawat_cara3=='voucher'){
-						$sql="SELECT tvoucher_id FROM voucher_terima WHERE tvoucher_ref='$jrawat_nobukti'";
-						$rs=$this->db->query($sql);
-						if($rs->num_rows()){
-							$data=array(
-								"tvoucher_novoucher"=>$jrawat_voucher_no3
-								);
-							$this->db->where('tvoucher_ref', $jrawat_nobukti);
-							$this->db->update('voucher_terima', $data);
 						}else{
 							$data=array(
-								"tvoucher_novoucher"=>$jrawat_voucher_no3,
-								"tvoucher_ref"=>$jrawat_nobukti
+								"jtunai_nilai"=>$jrawat_tunai_nilai3,
+								"jtunai_ref"=>$jrawat_nobukti
 								);
-							$this->db->insert('voucher_terima', $data);
+							$this->db->insert('jual_tunai', $data);
 						}
+						
 					}
 				}
 				if($printed==1){
