@@ -359,7 +359,7 @@ class M_public_function extends Model{
 	}
 	
 	function get_kwitansi_list($query,$start=0,$end=10,$kwitansi_cust){
-		$sql="SELECT kwitansi_id,kwitansi_no,kwitansi_nilai,cust_no,cust_nama,cust_tgllahir,cust_alamat,cust_telprumah FROM cetak_kwitansi,customer WHERE kwitansi_cust=cust_id AND cust_aktif='Aktif'";
+		$sql="SELECT kwitansi_id,kwitansi_no,kwitansi_nilai,cust_no,cust_nama,cust_tgllahir,cust_alamat, IF((kwitansi_nilai-(IF(sum(jkwitansi_nilai),sum(jkwitansi_nilai),0)))=0,kwitansi_nilai,(kwitansi_nilai-(IF(sum(jkwitansi_nilai),sum(jkwitansi_nilai),0)))) AS total_sisa FROM cetak_kwitansi LEFT JOIN jual_kwitansi ON(jkwitansi_master=kwitansi_id) LEFT JOIN customer ON(kwitansi_cust=cust_id) WHERE kwitansi_status='Aktif' GROUP BY jkwitansi_master";
 		if($query<>""){
 			$sql=$sql." and (cust_no like '%".$query."%' or cust_nama like '%".$query."%' or cust_alamat like '%".$query."%' or kwitansi_no like '%".$query."%')";
 		}

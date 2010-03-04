@@ -1387,7 +1387,7 @@ Ext.onReady(function(){
 			{name: 'ckwitansi_cust_no', type: 'string', mapping: 'cust_no'},
 			{name: 'ckwitansi_cust_nama', type: 'string', mapping: 'cust_nama'},
 			{name: 'ckwitansi_cust_alamat', type: 'string', mapping: 'cust_alamat'},
-			{name: 'ckwitansi_cust_notelp', type: 'string', mapping: 'cust_telprumah'}
+			{name: 'total_sisa', type: 'int', mapping: 'total_sisa'}
 		]),
 		sortInfo:{field: 'ckwitansi_no', direction: "ASC"}
 	});
@@ -1797,7 +1797,7 @@ Ext.onReady(function(){
         '<tpl for="."><div class="search-item">',
             '<span><b>{ckwitansi_no}</b> <br/>',
 			'a/n {ckwitansi_cust_nama} [ {ckwitansi_cust_no} ]<br/>',
-			'Alamat: {ckwitansi_cust_alamat}, notelp: {ckwitansi_cust_notelp} </span>',
+			'Alamat: {ckwitansi_cust_alamat}, <br>Sisa: <b>Rp. {total_sisa}</b> </span>',
 		'</div></tpl>'
     );
 	
@@ -2739,7 +2739,7 @@ Ext.onReady(function(){
 	jproduk_kwitansi_nilaiField= new Ext.form.NumberField({
 		id: 'jproduk_kwitansi_nilaiField',
 		enableKeyEvents: true,
-		fieldLabel: 'Jumlah (Rp)',
+		fieldLabel: 'Diambil (Rp)',
 		allowBlank: true,
 		anchor: '95%',
 		maskRe: /([0-9]+)$/
@@ -2765,10 +2765,18 @@ Ext.onReady(function(){
 		anchor: '95%'
 	});
 	
+	jproduk_kwitansi_sisaField= new Ext.form.NumberField({
+		id: 'jproduk_kwitansi_sisaField',
+		fieldLabel: 'Sisa (Rp)',
+		readOnly: true,
+		anchor: '95%'
+	});
+	
 	jproduk_kwitansi_noField.on("select",function(){
 			j=cbo_kwitansi_jual_produk_DataStore.find('ckwitansi_id',jproduk_kwitansi_noField.getValue());
 			if(j>-1){
 				jproduk_kwitansi_namaField.setValue(cbo_kwitansi_jual_produk_DataStore.getAt(j).data.ckwitansi_cust_nama);
+				jproduk_kwitansi_sisaField.setValue(cbo_kwitansi_jual_produk_DataStore.getAt(j).data.total_sisa);
 			}
 		});
 	// END Kwitansi-1
@@ -2785,7 +2793,7 @@ Ext.onReady(function(){
 	jproduk_kwitansi_nilai2Field= new Ext.form.NumberField({
 		id: 'jproduk_kwitansi_nilai2Field',
 		enableKeyEvents: true,
-		fieldLabel: 'Jumlah (Rp)',
+		fieldLabel: 'Diambil (Rp)',
 		allowBlank: true,
 		anchor: '95%',
 		maskRe: /([0-9]+)$/
@@ -2811,10 +2819,18 @@ Ext.onReady(function(){
 		anchor: '95%'
 	});
 	
+	jproduk_kwitansi_sisa2Field= new Ext.form.NumberField({
+		id: 'jproduk_kwitansi_sisa2Field',
+		fieldLabel: 'Sisa (Rp)',
+		readOnly: true,
+		anchor: '95%'
+	});
+	
 	jproduk_kwitansi_no2Field.on("select",function(){
 			j=cbo_kwitansi_jual_produk_DataStore.find('ckwitansi_id',jproduk_kwitansi_no2Field.getValue());
 			if(j>-1){
 				jproduk_kwitansi_nama2Field.setValue(cbo_kwitansi_jual_produk_DataStore.getAt(j).data.ckwitansi_cust_nama);
+				jproduk_kwitansi_sisa2Field.setValue(cbo_kwitansi_jual_produk_DataStore.getAt(j).data.total_sisa);
 			}
 		});
 	// END Kwitansi-2
@@ -2831,7 +2847,7 @@ Ext.onReady(function(){
 	jproduk_kwitansi_nilai3Field= new Ext.form.NumberField({
 		id: 'jproduk_kwitansi_nilai3Field',
 		enableKeyEvents: true,
-		fieldLabel: 'Jumlah (Rp)',
+		fieldLabel: 'Diambil (Rp)',
 		allowBlank: true,
 		anchor: '95%',
 		maskRe: /([0-9]+)$/
@@ -2857,10 +2873,18 @@ Ext.onReady(function(){
 		anchor: '95%'
 	});
 	
+	jproduk_kwitansi_sisa3Field= new Ext.form.NumberField({
+		id: 'jproduk_kwitansi_sisa3Field',
+		fieldLabel: 'Sisa (Rp)',
+		readOnly: true,
+		anchor: '95%'
+	});
+	
 	jproduk_kwitansi_no3Field.on("select",function(){
 			j=cbo_kwitansi_jual_produk_DataStore.find('ckwitansi_id',jproduk_kwitansi_no3Field.getValue());
 			if(j>-1){
 				jproduk_kwitansi_nama3Field.setValue(cbo_kwitansi_jual_produk_DataStore.getAt(j).data.ckwitansi_cust_nama);
+				jproduk_kwitansi_sisa3Field.setValue(cbo_kwitansi_jual_produk_DataStore.getAt(j).data.total_sisa);
 			}
 		});
 	// END Kwitansi-3
@@ -2876,7 +2900,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [jproduk_kwitansi_noField,jproduk_kwitansi_namaField,jproduk_kwitansi_nilaiField] 
+				items: [jproduk_kwitansi_noField,jproduk_kwitansi_namaField,jproduk_kwitansi_sisaField,jproduk_kwitansi_nilaiField] 
 			}
 		]
 	
@@ -2893,7 +2917,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [jproduk_kwitansi_no2Field,jproduk_kwitansi_nama2Field,jproduk_kwitansi_nilai2Field] 
+				items: [jproduk_kwitansi_no2Field,jproduk_kwitansi_nama2Field,jproduk_kwitansi_sisa2Field,jproduk_kwitansi_nilai2Field] 
 			}
 		]
 	
@@ -2910,7 +2934,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [jproduk_kwitansi_no3Field,jproduk_kwitansi_nama3Field,jproduk_kwitansi_nilai3Field] 
+				items: [jproduk_kwitansi_no3Field,jproduk_kwitansi_nama3Field,jproduk_kwitansi_sisa3Field,jproduk_kwitansi_nilai3Field] 
 			}
 		]
 	

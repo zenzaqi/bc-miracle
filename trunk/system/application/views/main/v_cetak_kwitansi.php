@@ -95,6 +95,88 @@ Ext.onReady(function(){
   	        return record ? record.get(combo.displayField) : combo.valueNotFoundText;
   	    }
   	}
+	
+	function terbilang(bilangan) {
+		bilangan    = String(bilangan);
+		var angka   = new Array('0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+		var kata    = new Array('','Satu','Dua','Tiga','Empat','Lima','Enam','Tujuh','Delapan','Sembilan');
+		var tingkat = new Array('','Ribu','Juta','Milyar','Triliun');
+		
+		var panjang_bilangan = bilangan.length;
+		
+		/* pengujian panjang bilangan */
+		if (panjang_bilangan > 15) {
+			kaLimat = "Diluar Batas";
+			return kaLimat;
+		}
+		
+		/* mengambil angka-angka yang ada dalam bilangan, dimasukkan ke dalam array */
+		for (i = 1; i <= panjang_bilangan; i++) {
+			angka[i] = bilangan.substr(-(i),1);
+		}
+		
+		i = 1;
+		j = 0;
+		kaLimat = "";
+		
+		
+		/* mulai proses iterasi terhadap array angka */
+		while (i <= panjang_bilangan) {
+			subkaLimat = "";
+			kata1 = "";
+			kata2 = "";
+			kata3 = "";
+			
+			/* untuk Ratusan */
+			if (angka[i+2] != "0") {
+				if (angka[i+2] == "1") {
+					kata1 = "Seratus";
+				} else {
+					kata1 = kata[angka[i+2]] + " Ratus";
+				}
+			}
+			
+			/* untuk Puluhan atau Belasan */
+			if (angka[i+1] != "0") {
+				if (angka[i+1] == "1") {
+					if (angka[i] == "0") {
+						kata2 = "Sepuluh";
+					} else if (angka[i] == "1") {
+						kata2 = "Sebelas";
+					} else {
+						kata2 = kata[angka[i]] + " Belas";
+					}
+				} else {
+					kata2 = kata[angka[i+1]] + " Puluh";
+				}
+			}
+			
+			/* untuk Satuan */
+			if (angka[i] != "0") {
+				if (angka[i+1] != "1") {
+					kata3 = kata[angka[i]];
+				}
+			}
+			
+			/* pengujian angka apakah tidak nol semua, lalu ditambahkan tingkat */
+			if ((angka[i] != "0") || (angka[i+1] != "0") || (angka[i+2] != "0")) {
+				subkaLimat = kata1+" "+kata2+" "+kata3+" "+tingkat[j]+" ";
+			}
+			
+			/* gabungkan variabe sub kaLimat (untuk Satu blok 3 angka) ke variabel kaLimat */
+			kaLimat = subkaLimat + kaLimat;
+			i = i + 3;
+			j = j + 1;
+		
+		}
+		
+		/* mengganti Satu Ribu jadi Seribu jika diperlukan */
+		if ((angka[5] == "0") && (angka[6] == "0")) {
+			kaLimat = kaLimat.replace("Satu Ribu","Seribu");
+		}
+		
+		return kaLimat + "Rupiah";
+	}
   
   	/* Function for Saving inLine Editing */
 	function cetak_kwitansi_update(oGrid_event){
@@ -538,7 +620,7 @@ Ext.onReady(function(){
 				triggerAction: 'all',
 				store:new Ext.data.SimpleStore({
 					fields:['kwitansi_status_value', 'kwitansi_status_display'],
-					data: [['aktif','aktif'],['hapus','hapus'],['habis','habis']]
+					data: [['Aktif','Aktif'],['Tidak Aktif','Tidak Aktif']
 					}),
 				mode: 'local',
                	displayField: 'kwitansi_status_display',
@@ -765,11 +847,19 @@ Ext.onReady(function(){
 	kwitansi_nilaiField= new Ext.form.NumberField({
 		id: 'kwitansi_nilaiField',
 		fieldLabel: 'Nilai (Rp)',
+		enableKeyEvents: true,
 		allowNegatife : false,
 		blankText: '0',
 		allowDecimals: true,
 		anchor: '95%',
 		maskRe: /([0-9]+)$/
+	});
+	kwitansi_terbilangField= new Ext.form.Label({
+		id: 'kwitansi_terbilangField',
+		fieldLabel: 'Terbilang',
+		margins: '0 0 0 0',
+		maxLength: 500,
+		anchor: '95%'
 	});
 	/* Identify  kwitansi_keterangan Field */
 	kwitansi_keteranganField= new Ext.form.TextArea({
@@ -784,7 +874,7 @@ Ext.onReady(function(){
 		fieldLabel: 'Status',
 		store:new Ext.data.SimpleStore({
 			fields:['kwitansi_status_value', 'kwitansi_status_display'],
-			data:[['aktif','aktif'],['hapus','hapus'],['habis','habis']]
+			data:[['Aktif','Aktif'],['Tidak Aktif','Tidak Aktif']
 		}),
 		mode: 'local',
 		displayField: 'kwitansi_status_display',
@@ -792,6 +882,13 @@ Ext.onReady(function(){
 		anchor: '95%',
 		triggerAction: 'all'	
 	});
+	
+	kwitansi_nilaiField.on("keyup", function(){
+		var test_terbilang="";
+		test_terbilang = terbilang(kwitansi_nilaiField.getValue());
+		kwitansi_terbilangField.setText(test_terbilang);
+	});
+	
   	/*Fieldset Master*/
 	cetak_kwitansi_masterGroup = new Ext.form.FieldSet({
 		title: 'Master',
@@ -803,7 +900,7 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [kwitansi_noField, kwitansi_custField, kwitansi_nilaiField, kwitansi_idField] 
+				items: [kwitansi_noField, kwitansi_custField, kwitansi_nilaiField, kwitansi_terbilangField, kwitansi_idField] 
 			},
 			{
 				columnWidth:0.5,
@@ -1251,7 +1348,7 @@ Ext.onReady(function(){
 		fieldLabel: 'Kwitansi Status',
 		store:new Ext.data.SimpleStore({
 			fields:['value', 'kwitansi_status'],
-			data:[['aktif','aktif'],['hapus','hapus'],['habis','habis']]
+			data:[['Aktif','Aktif'],['Tidak Aktif','Tidak Aktif']
 		}),
 		mode: 'local',
 		displayField: 'kwitansi_status',
