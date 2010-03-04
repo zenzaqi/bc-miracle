@@ -2109,8 +2109,10 @@ Ext.onReady(function(){
 	// Custom rendering Template
     var customer_jual_rawat_tpl = new Ext.XTemplate(
         '<tpl for="."><div class="search-item">',
-            '<span><b>{cust_no} : {cust_nama}</b> | Tgl-Lahir:{cust_tgllahir:date("M j, Y")}<br /></span>',
-            'Alamat: {cust_alamat}&nbsp;&nbsp;&nbsp;[Telp. {cust_telprumah}]',
+//            '<span><b>{cust_no} : {cust_nama}</b> | Tgl-Lahir:{cust_tgllahir:date("M j, Y")}<br /></span>',
+//           'Alamat: {cust_alamat}&nbsp;&nbsp;&nbsp;[Telp. {cust_telprumah}]',
+            '<span><b>{cust_no} : {cust_nama}</b><br /></span>',
+            '{cust_alamat} | {cust_telprumah}',
         '</div></tpl>'
     );
 	
@@ -2126,7 +2128,7 @@ Ext.onReady(function(){
         '<tpl for="."><div class="search-item">',
             '<span><b>{ckwitansi_no}</b> <br/>',
 			'a/n {ckwitansi_cust_nama} [ {ckwitansi_cust_no} ]<br/></span>',
-			'Alamat: {ckwitansi_cust_alamat}, <br>Sisa: <b>Rp. {total_sisa}</b> </span>',
+			'{ckwitansi_cust_alamat}, <br>Sisa: <b>Rp. {total_sisa}</b> </span>',
 		'</div></tpl>'
     );
 	
@@ -4229,34 +4231,34 @@ Ext.onReady(function(){
 	detail_ambil_paketColumnModel = new Ext.grid.ColumnModel(
 		[
 		{
-			header: '<div align="center">' + 'No.Faktur' + '</div>',
+			header: '<div align="center">' + 'No Faktur' + '</div>',
 			dataIndex: 'apaket_faktur',
-			width: 400,	//250,
+			width: 80,	//250,
 			sortable: true
 		},
 		{
 			header: '<div align="center">' + 'Nama Paket' + '</div>',
 			dataIndex: 'apaket_paket_nama',
-			width: 60,	//80,
+			width: 300,
 			sortable: true
 		},
 		{
 			header: '<div align="center">' + 'Perawatan' + '</div>',
 			dataIndex: 'sapaket_item_nama',
-			width: 100,
+			width: 300,	//100,
 			sortable: true
 		},
 		{
 			header: '<div align="center">' + 'Jumlah' + '</div>',
 			dataIndex: 'dapaket_jumlah',
-			width: 100,
+			width: 60,	//100,
 			sortable: true
 		},
 		{
 			//align: 'Right',
 			header: '<div align="center">' + 'Customer' + '</div>',
 			dataIndex: 'dapaket_cust_nama',
-			width: 100, //150,
+			width: 200, //150,
 			sortable: true,
 			reaOnly: true
 		}]

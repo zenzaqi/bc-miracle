@@ -1729,8 +1729,10 @@ Ext.onReady(function(){
 	// Custom rendering Template
     var customer_jual_paket_tpl = new Ext.XTemplate(
         '<tpl for="."><div class="search-item">',
-            '<span><b>{cust_no} : {cust_nama}</b> | Tgl-Lahir:{cust_tgllahir:date("M j, Y")}<br /></span>',
-            'Alamat: {cust_alamat}&nbsp;&nbsp;&nbsp;[Telp. {cust_telprumah}]',
+//            '<span><b>{cust_no} : {cust_nama}</b> | Tgl-Lahir:{cust_tgllahir:date("M j, Y")}<br /></span>',
+//            'Alamat: {cust_alamat}&nbsp;&nbsp;&nbsp;[Telp. {cust_telprumah}]',
+            '<span><b>{cust_no} : {cust_nama}</b><br /></span>',
+            '{cust_alamat} | {cust_telprumah}',
         '</div></tpl>'
     );
 	
@@ -1746,7 +1748,7 @@ Ext.onReady(function(){
         '<tpl for="."><div class="search-item">',
             '<span><b>{ckwitansi_no}</b> <br/>',
 			'a/n {ckwitansi_cust_nama} [ {ckwitansi_cust_no} ]<br/>',
-			'Alamat: {ckwitansi_cust_alamat}, <br>Sisa: <b>Rp. {total_sisa}</b> </span>',
+			'{ckwitansi_cust_alamat}, <br>Sisa: <b>Rp. {total_sisa}</b> </span>',
 		'</div></tpl>'
     );
 	
