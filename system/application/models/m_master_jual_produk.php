@@ -501,7 +501,7 @@ class M_master_jual_produk extends Model{
 			if($this->db->affected_rows() || $this->db->affected_rows()==0){
 				
 				//delete all transaksi
-				/*$sql="delete from jual_kwitansi where jkwitansi_ref='".$jproduk_nobukti."'";
+				$sql="delete from jual_kwitansi where jkwitansi_ref='".$jproduk_nobukti."'";
 				$this->db->query($sql);
 				$sql="delete from jual_card where jcard_ref='".$jproduk_nobukti."'";
 				$this->db->query($sql);
@@ -509,10 +509,8 @@ class M_master_jual_produk extends Model{
 				$this->db->query($sql);
 				$sql="delete from jual_transfer where jtransfer_ref='".$jproduk_nobukti."'";
 				$this->db->query($sql);
-				$sql="delete from jual_kredit where jkredit_ref='".$jproduk_nobukti."'";
-				$this->db->query($sql);
 				$sql="delete from jual_tunai where jtunai_ref='".$jproduk_nobukti."'";
-				$this->db->query($sql);*/
+				$this->db->query($sql);
 				
 				if($jproduk_cara!=null || $jproduk_cara!=''){
 					//kwitansi
@@ -980,6 +978,7 @@ class M_master_jual_produk extends Model{
 									$jproduk_kwitansi_nama=$jproduk_cust;
 							}
 						}
+						
 						$data=array(
 							"jkwitansi_master"=>$jproduk_kwitansi_no,
 							"jkwitansi_nilai"=>$jproduk_kwitansi_nilai,
