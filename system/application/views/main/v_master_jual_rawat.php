@@ -2125,7 +2125,7 @@ Ext.onReady(function(){
 	var kwitansi_jual_rawat_tpl = new Ext.XTemplate(
         '<tpl for="."><div class="search-item">',
             '<span><b>{ckwitansi_no}</b> <br/>',
-			'a/n {ckwitansi_cust_nama} [ {ckwitansi_cust_no} ]<br/>',
+			'a/n {ckwitansi_cust_nama} [ {ckwitansi_cust_no} ]<br/></span>',
 			'Alamat: {ckwitansi_cust_alamat}, notelp: {ckwitansi_cust_notelp} </span>',
 		'</div></tpl>'
     );
@@ -2227,7 +2227,7 @@ Ext.onReady(function(){
 		fieldLabel: 'Cara Bayar',
 		store:new Ext.data.SimpleStore({
 			fields:['jrawat_cara_value', 'jrawat_cara_display'],
-			data:[['tunai','Tunai'],['kwitansi','Kwitansi'],['card','Kartu Kredit'],['cek/giro','Cek/Giro'],['transfer','Transfer'],['voucher','Voucher']]
+			data:[['tunai','Tunai'],['kwitansi','Kuitansi'],['card','Kartu Kredit'],['cek/giro','Cek/Giro'],['transfer','Transfer'],['voucher','Voucher']]
 		}),
 		mode: 'local',
 		displayField: 'jrawat_cara_display',
@@ -2242,7 +2242,7 @@ Ext.onReady(function(){
 		fieldLabel: 'Cara Bayar 2',
 		store:new Ext.data.SimpleStore({
 			fields:['jrawat_cara_value', 'jrawat_cara_display'],
-			data:[['tunai','Tunai'],['kwitansi','Kwitansi'],['card','Kartu Kredit'],['cek/giro','Cek/Giro'],['transfer','Transfer'],['voucher','Voucher']]
+			data:[['tunai','Tunai'],['kwitansi','Kuitansi'],['card','Kartu Kredit'],['cek/giro','Cek/Giro'],['transfer','Transfer'],['voucher','Voucher']]
 		}),
 		mode: 'local',
 		displayField: 'jrawat_cara_display',
@@ -2257,7 +2257,7 @@ Ext.onReady(function(){
 		fieldLabel: 'Cara Bayar 3',
 		store:new Ext.data.SimpleStore({
 			fields:['jrawat_cara_value', 'jrawat_cara_display'],
-			data:[['tunai','Tunai'],['kwitansi','Kwitansi'],['card','Kartu Kredit'],['cek/giro','Cek/Giro'],['transfer','Transfer'],['voucher','Voucher']]
+			data:[['tunai','Tunai'],['kwitansi','Kuitansi'],['card','Kartu Kredit'],['cek/giro','Cek/Giro'],['transfer','Transfer'],['voucher','Voucher']]
 		}),
 		mode: 'local',
 		displayField: 'jrawat_cara_display',
@@ -2277,7 +2277,7 @@ Ext.onReady(function(){
 	// START Field Voucher
 	jrawat_voucher_noField= new Ext.form.ComboBox({
 		id: 'jrawat_voucher_noField',
-		fieldLabel: 'Nomor Voucher',
+		fieldLabel: 'No Voucher',
 		store: cbo_voucher_jual_rawatDataStore,
 		mode: 'remote',
 		displayField:'voucher_nomor',
@@ -2332,7 +2332,7 @@ Ext.onReady(function(){
 	// START Field Voucher-2
 	jrawat_voucher_no2Field= new Ext.form.ComboBox({
 		id: 'jrawat_voucher_no2Field',
-		fieldLabel: 'Nomor Voucher',
+		fieldLabel: 'No Voucher',
 		store: cbo_voucher_jual_rawatDataStore,
 		mode: 'remote',
 		displayField:'voucher_nomor',
@@ -2387,7 +2387,7 @@ Ext.onReady(function(){
 	// START Field Voucher-3
 	jrawat_voucher_no3Field= new Ext.form.ComboBox({
 		id: 'jrawat_voucher_no3Field',
-		fieldLabel: 'Nomor Voucher',
+		fieldLabel: 'No Voucher',
 		store: cbo_voucher_jual_rawatDataStore,
 		mode: 'remote',
 		displayField:'voucher_nomor',
@@ -3091,7 +3091,7 @@ Ext.onReady(function(){
 	
 	jrawat_kwitansi_noField= new Ext.form.ComboBox({
 		id: 'jrawat_kwitansi_noField',
-		fieldLabel: 'Nomor Kwitansi',
+		fieldLabel: 'No Kuitansi',
 		store: cbo_kwitansi_jual_rawat_DataStore,
 		mode: 'remote',
 		displayField:'ckwitansi_no',
@@ -3110,7 +3110,7 @@ Ext.onReady(function(){
 		listeners:{
 			render: function(c){
 				Ext.get(this.id).set({qtitle:'Search By'});
-				Ext.get(this.id).set({qtip:'- No.Customer<br>- Nama Customer<br>- Alamat Customer<br>- No.Kwitansi'});
+				Ext.get(this.id).set({qtip:'- No Cust<br>- Nama Customer<br>- Alamat Customer<br>- No Kuitansi'});
 			}
 		}
 	});
@@ -3143,7 +3143,7 @@ Ext.onReady(function(){
 	
 	jrawat_kwitansi_no2Field= new Ext.form.ComboBox({
 		id: 'jrawat_kwitansi_no2Field',
-		fieldLabel: 'Nomor Kwitansi',
+		fieldLabel: 'No Kuitansi',
 		store: cbo_kwitansi_jual_rawat_DataStore,
 		mode: 'local',
 		displayField:'ckwitansi_no',
@@ -3189,7 +3189,7 @@ Ext.onReady(function(){
 	
 	jrawat_kwitansi_no3Field= new Ext.form.ComboBox({
 		id: 'jrawat_kwitansi_no3Field',
-		fieldLabel: 'Nomor Kwitansi',
+		fieldLabel: 'No Kuitansi',
 		store: cbo_kwitansi_jual_rawat_DataStore,
 		mode: 'local',
 		displayField:'ckwitansi_no',
@@ -3216,7 +3216,7 @@ Ext.onReady(function(){
 	// END Kwitansi-3
 	
 	master_jual_rawat_kwitansiGroup = new Ext.form.FieldSet({
-		title: 'Kwitansi',
+		title: 'Kuitansi',
 		collapsible: true,
 		layout:'column',
 		anchor: '95%',
@@ -3233,7 +3233,7 @@ Ext.onReady(function(){
 	});
 	
 	master_jual_rawat_kwitansi2Group = new Ext.form.FieldSet({
-		title: 'Kwitansi',
+		title: 'Kuitansi',
 		collapsible: true,
 		layout:'column',
 		anchor: '95%',
@@ -3250,7 +3250,7 @@ Ext.onReady(function(){
 	});
 	
 	master_jual_rawat_kwitansi3Group = new Ext.form.FieldSet({
-		title: 'Kwitansi',
+		title: 'Kuitansi',
 		collapsible: true,
 		layout:'column',
 		anchor: '95%',
