@@ -44,7 +44,7 @@ class M_cetak_kwitansi extends Model{
 		//get record list
 		function detail_jual_kwitansi_list($master_id,$query,$start,$end) {
 			//$query = "SELECT * FROM jual_kwitansi WHERE jkwitansi_master='".$master_id."'";
-			$query = "SELECT vu_catatan_kwitansi.jkwitansi_id, vu_catatan_kwitansi.jkwitansi_master, vu_catatan_kwitansi.jkwitansi_ref, vu_catatan_kwitansi.jkwitansi_nilai, vu_catatan_kwitansi.customer_id, customer.cust_nama AS customer_nama FROM (select jkwitansi_id, jkwitansi_master, jkwitansi_ref, jkwitansi_nilai, if(jproduk_cust!='null',jproduk_cust,if(jrawat_cust!='null',jrawat_cust,jpaket_cust)) AS customer_id FROM jual_kwitansi LEFT JOIN master_jual_produk on(jkwitansi_ref=jproduk_nobukti) LEFT JOIN master_jual_rawat on(jkwitansi_ref=jrawat_nobukti) LEFT JOIN master_jual_paket ON(jkwitansi_ref=jpaket_nobukti)) as vu_catatan_kwitansi LEFT JOIN customer ON(vu_catatan_kwitansi.customer_id=customer.cust_id) WHERE jkwitansi_master='$master_id'";
+			$query = "SELECT vu_catatan_kwitansi.jkwitansi_id, vu_catatan_kwitansi.jkwitansi_master, vu_catatan_kwitansi.jkwitansi_ref, vu_catatan_kwitansi.jkwitansi_nilai, vu_catatan_kwitansi.customer_id, customer.cust_nama AS customer_nama, customer.cust_no AS customer_no FROM (select jkwitansi_id, jkwitansi_master, jkwitansi_ref, jkwitansi_nilai, if(jproduk_cust!='null',jproduk_cust,if(jrawat_cust!='null',jrawat_cust,jpaket_cust)) AS customer_id FROM jual_kwitansi LEFT JOIN master_jual_produk on(jkwitansi_ref=jproduk_nobukti) LEFT JOIN master_jual_rawat on(jkwitansi_ref=jrawat_nobukti) LEFT JOIN master_jual_paket ON(jkwitansi_ref=jpaket_nobukti)) as vu_catatan_kwitansi LEFT JOIN customer ON(vu_catatan_kwitansi.customer_id=customer.cust_id) WHERE jkwitansi_master='$master_id'";
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
 			$limit = $query." LIMIT ".$start.",".$end;			
@@ -112,7 +112,7 @@ class M_cetak_kwitansi extends Model{
 		
 		//function for get list record
 		function cetak_kwitansi_list($filter,$start,$end){
-			$query = "SELECT kwitansi_id, kwitansi_no, kwitansi_cust, cust_nama, kwitansi_nilai, kwitansi_keterangan, kwitansi_status, kwitansi_creator, kwitansi_date_create, kwitansi_update, kwitansi_date_update, kwitansi_revised, sum(jkwitansi_nilai) AS total_terpakai, IF((kwitansi_nilai-(IF(sum(jkwitansi_nilai),sum(jkwitansi_nilai),0)))=0,kwitansi_nilai,(kwitansi_nilai-(IF(sum(jkwitansi_nilai),sum(jkwitansi_nilai),0)))) AS total_sisa FROM cetak_kwitansi LEFT JOIN jual_kwitansi ON(jkwitansi_master=kwitansi_id) LEFT JOIN customer ON(kwitansi_cust=cust_id) GROUP BY kwitansi_id";
+			$query = "SELECT kwitansi_id, kwitansi_no, kwitansi_cust, cust_nama, cust_no, kwitansi_nilai, kwitansi_keterangan, kwitansi_status, kwitansi_creator, kwitansi_date_create, kwitansi_update, kwitansi_date_update, kwitansi_revised, sum(jkwitansi_nilai) AS total_terpakai, IF((kwitansi_nilai-(IF(sum(jkwitansi_nilai),sum(jkwitansi_nilai),0)))=0,kwitansi_nilai,(kwitansi_nilai-(IF(sum(jkwitansi_nilai),sum(jkwitansi_nilai),0)))) AS total_sisa FROM cetak_kwitansi LEFT JOIN jual_kwitansi ON(jkwitansi_master=kwitansi_id) LEFT JOIN customer ON(kwitansi_cust=cust_id) GROUP BY kwitansi_id";
 			
 			// For simple search
 			if ($filter<>""){
