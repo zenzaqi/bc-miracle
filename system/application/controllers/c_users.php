@@ -101,16 +101,17 @@ class C_users extends Controller {
 		$user_name=trim(@$_POST["user_name"]);
 		$user_name=str_replace("/(<\/?)(p)([^>]*>)", "",$user_name);
 		$user_name=str_replace("'", '"',$user_name);
-		$user_passwd=trim(@$_POST["user_passwd"]);
+/*		$user_passwd=trim(@$_POST["user_passwd"]);
 		$user_passwd=str_replace("/(<\/?)(p)([^>]*>)", "",$user_passwd);
 		$user_passwd=str_replace("'", '"',$user_passwd);
-		$user_karyawan=trim(@$_POST["user_karyawan"]);
+*/		$user_karyawan=trim(@$_POST["user_karyawan"]);
 		$user_log=trim(@$_POST["user_log"]);
 		$user_groups=trim(@$_POST["user_groups"]);
 		$user_aktif=trim(@$_POST["user_aktif"]);
 		$user_aktif=str_replace("/(<\/?)(p)([^>]*>)", "",$user_aktif);
 		$user_aktif=str_replace("'", '"',$user_aktif);
-		$result = $this->m_users->users_update($user_id ,$user_name ,$user_passwd ,$user_karyawan ,$user_log ,$user_groups ,$user_aktif );
+		//$result = $this->m_users->users_update($user_id ,$user_name ,$user_passwd ,$user_karyawan ,$user_log ,$user_groups ,$user_aktif );
+		$result = $this->m_users->users_update($user_id, $user_name, $user_karyawan, $user_log, $user_groups, $user_aktif );
 		echo $result;
 	}
 	

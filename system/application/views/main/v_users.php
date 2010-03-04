@@ -82,7 +82,7 @@ Ext.onReady(function(){
 	function users_update(oGrid_event){
 	var user_id_update_pk="";
 	var user_name_update=null;
-	var user_passwd_update=null;
+	//var user_passwd_update=null;
 	var user_karyawan_update=null;
 	var user_log_update_date="";
 	var user_groups_update=null;
@@ -90,20 +90,20 @@ Ext.onReady(function(){
 
 	user_id_update_pk = get_pk_id();
 	if(oGrid_event.record.data.user_name!== null){user_name_update = oGrid_event.record.data.user_name;}
-	if(oGrid_event.record.data.user_passwd!== null){user_passwd_update = oGrid_event.record.data.user_passwd;}
+	//if(oGrid_event.record.data.user_passwd!== null){user_passwd_update = oGrid_event.record.data.user_passwd;}
 	if(oGrid_event.record.data.user_karyawan!== null){user_karyawan_update = oGrid_event.record.data.user_karyawan;}
 	 if(oGrid_event.record.data.user_log!== ""){user_log_update_date = oGrid_event.record.data.user_log.format('Y-m-d');}
 	if(oGrid_event.record.data.user_groups!== null){user_groups_update = oGrid_event.record.data.user_groups;}
 	if(oGrid_event.record.data.user_aktif!== null){user_aktif_update = oGrid_event.record.data.user_aktif;}
 
 		Ext.Ajax.request({  
-			waitMsg: 'Please wait...',
+			waitMsg: 'Mohon tunggu...',
 			url: 'index.php?c=c_users&m=get_action',
 			params: {
 				task: "UPDATE",
 				user_id	: get_pk_id(),				
 				user_name	:user_name_update,		
-				user_passwd	:user_passwd_update,		
+				//user_passwd	:user_passwd_update,		
 				user_karyawan	:user_karyawan_update,		
 				user_log	: user_log_update_date,				
 				user_groups	:user_groups_update,		
@@ -161,7 +161,7 @@ Ext.onReady(function(){
 		if(user_aktifField.getValue()!== null){user_aktif_create = user_aktifField.getValue();}
 
 			Ext.Ajax.request({  
-				waitMsg: 'Please wait...',
+				waitMsg: 'Mohon tunggu...',
 				url: 'index.php?c=c_users&m=get_action',
 				params: {
 					task: post2db,
@@ -176,14 +176,16 @@ Ext.onReady(function(){
 					var result=eval(response.responseText);
 					switch(result){
 						case 1:
-							Ext.MessageBox.alert(post2db+' OK','The Users was '+msg+' successfully.');
+							//Ext.MessageBox.alert(post2db+' OK','The Users was '+msg+' successfully.');
+							Ext.MessageBox.alert(post2db+' OK', 'Data user berhasil disimpan');
 							users_DataStore.reload();
 							users_createWindow.hide();
 							break;
 						default:
 							Ext.MessageBox.show({
 							   title: 'Warning',
-							   msg: 'We could\'t not '+msg+' the Users.',
+							   //msg: 'We could\'t not '+msg+' the Users.',
+							   msg: 'Data user tidak bisa disimpan',
 							   buttons: Ext.MessageBox.OK,
 							   animEl: 'save',
 							   icon: Ext.MessageBox.WARNING
@@ -227,17 +229,22 @@ Ext.onReady(function(){
 	/* Reset form before loading */
 	function users_reset_form(){
 		user_nameField.reset();
+		user_nameField.setValue(null);
 		user_passwdField.reset();
+		user_passwdField.setValue(null);
 		user_karyawanField.reset();
+		user_karyawanField.setValue(null);
 		user_groupsField.reset();
+		user_groupsField.setValue(null);
 		user_aktifField.reset();
+		user_aktifField.setValue(null);
 	}
  	/* End of Function */
   
 	/* setValue to EDIT */
 	function users_set_form(){
 		user_nameField.setValue(usersListEditorGrid.getSelectionModel().getSelected().get('user_name'));
-		user_passwdField.setValue(usersListEditorGrid.getSelectionModel().getSelected().get('user_passwd'));
+		user_passwdField.setValue('******');
 		user_karyawanField.setValue(usersListEditorGrid.getSelectionModel().getSelected().get('user_karyawan'));
 		user_logField.setValue(usersListEditorGrid.getSelectionModel().getSelected().get('user_log'));
 		user_groupsField.setValue(usersListEditorGrid.getSelectionModel().getSelected().get('user_groups'));
@@ -297,7 +304,8 @@ Ext.onReady(function(){
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really update something you haven\'t selected?',
+				//msg: 'You can\'t really update something you haven\'t selected?',
+				msg: 'Anda belum memilih data yang akan diubah',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -316,7 +324,7 @@ Ext.onReady(function(){
 			}
 			var encoded_array = Ext.encode(prez);
 			Ext.Ajax.request({ 
-				waitMsg: 'Please Wait',
+				waitMsg: 'Mohon tunggu',
 				url: 'index.php?c=c_users&m=get_action', 
 				params: { task: "DELETE", ids:  encoded_array }, 
 				success: function(response){
@@ -453,12 +461,12 @@ Ext.onReady(function(){
 				cell.css = "readonlycell"; // Mengambil Value dari Class di dalam CSS 
 				return value;
 				},
-			hidden: false
+			hidden: true
 		},
 		{
-			header: 'User Name',
+			header: '<div align="center">' + 'User Name' + '</div>',
 			dataIndex: 'user_name',
-			width: 150,
+			width: 100,	//150,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				allowBlank: false,
@@ -466,9 +474,9 @@ Ext.onReady(function(){
           	})
 		},
 		{
-			header: 'Nama Karyawan',
+			header: '<div align="center">' + 'Nama Karyawan' + '</div>',
 			dataIndex: 'user_karyawan',
-			width: 150,
+			width: 200,	//150,
 			sortable: true,
 			editor: new Ext.form.NumberField({
 				allowBlank: false,
@@ -480,9 +488,9 @@ Ext.onReady(function(){
 			})
 		},
 		{
-			header: 'Group',
+			header: '<div align="center">' + 'Group' + '</div>',
 			dataIndex: 'user_groups',
-			width: 150,
+			width: 200,	//150,
 			sortable: true,
 			editor: new Ext.form.NumberField({
 				allowDecimals: false,
@@ -493,9 +501,9 @@ Ext.onReady(function(){
 			})
 		},
 		{
-			header: 'Status',
+			header: '<div align="center">' + 'Status' + '</div>',
 			dataIndex: 'user_aktif',
-			width: 150,
+			width: 80,	//150,
 			sortable: true,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
@@ -520,7 +528,7 @@ Ext.onReady(function(){
 	usersListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'usersListEditorGrid',
 		el: 'fp_users',
-		title: 'List Of Users',
+		title: 'Daftar User',
 		autoHeight: true,
 		store: users_DataStore, // DataStore
 		cm: users_ColumnModel, // Nama-nama Columns
@@ -644,15 +652,17 @@ Ext.onReady(function(){
 		allowBlank: false,
 		anchor: '95%'
 	});
+
 	/* Identify  user_passwd Field */
 	user_passwdField= new Ext.form.TextField({
 		id: 'user_passwdField',
 		fieldLabel: 'Password',
 		maxLength: 50,
 		anchor: '95%',
-		inputType: 'Password'
+		inputType: 'password'
 	});
-	/* Identify  user_karyawan Field */
+
+		/* Identify  user_karyawan Field */
 	user_karyawanField= new Ext.form.ComboBox({
 		id: 'user_karyawanField',
 		fieldLabel: 'Nama Karyawan',
