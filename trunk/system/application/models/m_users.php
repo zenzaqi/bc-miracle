@@ -45,13 +45,14 @@ class M_users extends Model{
 		}
 		
 		//function for update record
-		function users_update($user_id ,$user_name ,$user_passwd ,$user_karyawan ,$user_log ,$user_groups ,$user_aktif ){
+		//function users_update($user_id ,$user_name ,$user_passwd ,$user_karyawan ,$user_log ,$user_groups ,$user_aktif ){
+		function users_update($user_id, $user_name, $user_karyawan, $user_log, $user_groups, $user_aktif ){
 		if ($user_aktif=="")
 			$user_aktif = "Aktif";
 			$data = array(
 				"user_id"=>$user_id,			
 				"user_name"=>$user_name,			
-				"user_passwd"=>md5($user_passwd),			
+				//"user_passwd"=>md5($user_passwd),			
 				"user_aktif"=>$user_aktif			
 			);
 			$sql="SELECT karyawan_id FROM karyawan WHERE karyawan_id='".$user_karyawan."'";
