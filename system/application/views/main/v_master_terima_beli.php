@@ -86,6 +86,13 @@ var terima_pengirimSearchField;
 var terima_tanggalSearchField;
 var terima_keteranganSearchField;
 
+Ext.util.Format.comboRenderer = function(combo){
+		return function(value){
+			var record = combo.findRecord(combo.valueField, value);
+			return record ? record.get(combo.displayField) : combo.valueNotFoundText;
+		}
+}
+	
 /* on ready fuction */
 Ext.onReady(function(){
   	Ext.QuickTips.init();	/* Initiate quick tips icon */
@@ -265,10 +272,8 @@ Ext.onReady(function(){
 		terima_tanggalField.setValue(today);
 		terima_keteranganField.reset();
 		terima_keteranganField.setValue(null);
-		detail_terima_beli_DataStore.setBaseParam('master_id', get_pk_id());
-		detail_terima_bonus_DataStore.setBaseParam('master_id', get_pk_id());
-		detail_terima_beli_DataStore.load();
-		detail_terima_bonus_DataStore.load();
+		cbo_satuanDataStore.load();
+		cbo_produk_detailDataStore.load();
 	}
  	/* End of Function */
   
@@ -284,17 +289,30 @@ Ext.onReady(function(){
 		terima_pengirimField.setValue(master_terima_beliListEditorGrid.getSelectionModel().getSelected().get('terima_pengirim'));
 		terima_tanggalField.setValue(master_terima_beliListEditorGrid.getSelectionModel().getSelected().get('terima_tanggal'));
 		terima_keteranganField.setValue(master_terima_beliListEditorGrid.getSelectionModel().getSelected().get('terima_keterangan'));
+		cbo_satuanDataStore.load();
 		
-		detail_terima_beli_DataStore.setBaseParam('master_id', get_pk_id());
-		detail_terima_bonus_DataStore.setBaseParam('master_id', get_pk_id());
-		detail_terima_beli_DataStore.load();
-		detail_terima_bonus_DataStore.load();
-		cbo_dproduk_byorderDataStore.setBaseParam('master_order_id', get_pk_id());
-		cbo_dsatuan_byproduk_orderDataStore.setBaseParam('master_order_id', get_pk_id());
-		cbo_dproduk_byorderDataStore.load();
-		cbo_dsatuan_byproduk_orderDataStore.load();
-		cbo_dproduk_bonusDataStore.load();
-		cbo_dsatuan_bonusDataStore.load();
+		cbo_produk_detailDataStore.setBaseParam('master_id',get_pk_id());
+		cbo_produk_detailDataStore.setBaseParam('task','detail');
+		cbo_produk_detailDataStore.load({
+			callback: function(r,opt,success){
+				if(success==true){
+					detail_terima_beli_DataStore.setBaseParam('master_id', get_pk_id());
+					detail_terima_beli_DataStore.load();
+				}
+			}
+		});
+		
+		cbo_produk_bonusDataStore.setBaseParam('master_id',get_pk_id());
+		cbo_produk_bonusDataStore.setBaseParam('task','detail');
+		cbo_produk_bonusDataStore.load({
+			callback: function(r,opt,success){
+				if(success==true){
+					detail_terima_bonus_DataStore.setBaseParam('master_id', get_pk_id());
+					detail_terima_bonus_DataStore.load();
+				}
+			}
+		});
+		
 	}
 	/* End setValue to EDIT*/
   
@@ -847,7 +865,6 @@ Ext.onReady(function(){
 	});
 	
 
-	
   	/*Fieldset Master*/
 	master_terima_beli_masterGroup = new Ext.form.FieldSet({
 		title: 'Master',
@@ -947,7 +964,6 @@ Ext.onReady(function(){
 		}),
 		reader: detail_terima_beli_reader,
 		baseParams: {start: 0, limit: pageS},
-		//baseParams:{master_id: terima_idField.getValue()},
 		sortInfo:{field: 'dterima_id', direction: "ASC"}
 	});
 	/* End of Function */
@@ -957,107 +973,88 @@ Ext.onReady(function(){
         saveText: 'Update',
 		listeners: {
 			afteredit: function(){
-				cbo_dsatuan_byproduk_orderDataStore.load({params: {master_order_id: "", dorder_produk_id: ""}});
 				detail_terima_beli_DataStore.commitChanges();
 			}
 		}
     });
 	//eof
 	
-	Ext.util.Format.comboRenderer = function(combo){
-		//cbo_dproduk_byorderDataStore.load({params:{master_order_id: terima_order_idField.getValue()}});
-		return function(value){
-			var record = combo.findRecord(combo.valueField, value);
-			return record ? record.get(combo.displayField) : combo.valueNotFoundText;
-		}
-	}
-	
-	/*=== cbo_dproduk_byorderDataStore ==> mengambil "Detail Produk" dari detailList Modul Order Pembelian ===*/
-	cbo_dproduk_byorderDataStore = new Ext.data.Store({
-		id: 'cbo_dproduk_byorderDataStore',
+	/*=== cbo_produk_detailDataStore ==> mengambil "Detail Produk" dari detailList Modul Order Pembelian ===*/
+	cbo_produk_detailDataStore = new Ext.data.Store({
+		id: 'cbo_produk_detailDataStore',
 		proxy: new Ext.data.HttpProxy({
-			url: 'index.php?c=c_master_terima_beli&m=get_dorder_by_orderbeli', 
+			url: 'index.php?c=c_master_terima_beli&m=get_produk_list', 
 			method: 'POST'
 		}),
-		baseParams: {master_order_id: terima_orderField.getValue()},
+		baseParams: {task: 'list', start:0,limit:pageS},
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
 			id: 'produk_id'
 		},[
 		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
-			{name: 'dtbeli_produk_value', type: 'int', mapping: 'produk_id'},
-			{name: 'dtbeli_produk_satuan', type: 'string', mapping: 'satuan_nama'},
-			{name: 'dtbeli_produk_jumlah', type: 'int', mapping: 'dorder_jumlah'},
-			{name: 'dtbeli_produk_display', type: 'string', mapping: 'produk_nama'}
+			{name: 'produk_id', type: 'int', mapping: 'produk_id'},
+			{name: 'produk_nama', type: 'string', mapping: 'produk_nama'},
+			{name: 'produk_kode', type: 'string', mapping: 'produk_kode'},
+			{name: 'produk_kategori_nama', type: 'string', mapping: 'kategori_nama'}
 		]),
-		sortInfo:{field: 'dtbeli_produk_display', direction: "ASC"}
+		sortInfo:{field: 'produk_nama', direction: "ASC"}
 	});
-	/*======= END cbo_dproduk_byorderDataStore =======*/
+	/*======= END cbo_produk_detailDataStore =======*/
 	
-	var detail_orderbeli_tpl = new Ext.XTemplate(
+	var produk_detail_tpl = new Ext.XTemplate(
         '<tpl for="."><div class="search-item">',
-            '<span><b>{dtbeli_produk_display}</b><br /></span>',
-            'Jumlah: {dtbeli_produk_jumlah} {dtbeli_produk_satuan}',
+            '<span><b>{produk_nama} ({produk_kode})</b><br /></span>',
+            'Kategori: {produk_kategori_nama}',
         '</div></tpl>'
     );
 	
-	/*=== cbo_dsatuan_byproduk_orderDataStore ==> mengambil "Detail Produk" dari detailList Modul Order Pembelian ===*/
-	cbo_dsatuan_byproduk_orderDataStore = new Ext.data.Store({
-		id: 'cbo_dsatuan_byproduk_orderDataStore',
+	
+	var combo_produk_terima=new Ext.form.ComboBox({
+			store: cbo_produk_detailDataStore,
+			typeAhead: true,
+			mode : 'remote',
+			displayField: 'produk_nama',
+			valueField: 'produk_id',
+			lazyRender:true,
+			pageSize: pageS,
+			tpl: produk_detail_tpl,
+			itemSelector: 'div.search-item',
+			triggerAction: 'all',
+			listClass: 'x-combo-list-small',
+			anchor: '95%'
+	});
+	
+	
+	cbo_satuanDataStore = new Ext.data.Store({
+		id: 'cbo_satuanDataStore',
 		proxy: new Ext.data.HttpProxy({
-			url: 'index.php?c=c_master_terima_beli&m=get_dorder_satuan_by_produkorder', 
+			url: 'index.php?c=c_master_terima_beli&m=get_satuan_list', 
 			method: 'POST'
 		}),
 		//baseParams: {master_order_id: terima_order_idField.getValue()},
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
-			id: 'satuan_id'
+			id: 'satuan_value'
 		},[
 		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
-			{name: 'dtbeli_satuan_value', type: 'int', mapping: 'satuan_id'},
-			{name: 'dtbeli_satuan_display', type: 'string', mapping: 'satuan_nama'}
+			{name: 'satuan_value', type: 'int', mapping: 'satuan_id'},
+			{name: 'satuan_nama', type: 'string', mapping: 'satuan_nama'}
 		]),
-		sortInfo:{field: 'dtbeli_satuan_display', direction: "ASC"}
-	});
-	/*======= END cbo_dsatuan_byproduk_orderDataStore =======*/
-	
-	var combo_dtbeli_produk=new Ext.form.ComboBox({
-			store: cbo_dproduk_byorderDataStore,
-			typeAhead: true,
-			mode : 'remote',
-			displayField: 'dtbeli_produk_display',
-			valueField: 'dtbeli_produk_value',
-			lazyRender:true,
-			pageSize: pageS,
-			tpl: detail_orderbeli_tpl,
-			itemSelector: 'div.search-item',
-			triggerAction: 'all',
-			listClass: 'x-combo-list-small',
-			anchor: '95%'
-
+		sortInfo:{field: 'satuan_nama', direction: "ASC"}
 	});
 	
 	var combo_dtbeli_satuan=new Ext.form.ComboBox({
-			store: cbo_dsatuan_byproduk_orderDataStore,
+			store: cbo_satuanDataStore,
 			mode: 'local',
 			typeAhead: true,
-			displayField: 'dtbeli_satuan_display',
-			valueField: 'dtbeli_satuan_value',
+			displayField: 'satuan_nama',
+			valueField: 'satuan_value',
 			triggerAction: 'all',
-			lazyRender:true,
-
+			lazyRender:true
 	});
 	
-	/*combo_dtbeli_produk.on('select', function(){
-		var j=cbo_dproduk_byorderDataStore.find('dtbeli_produk_value',combo_dtbeli_produk.getValue());
-		cbo_dsatuan_byproduk_orderDataStore.load({params: {master_order_id: terima_orderField.getValue(), dorder_produk_id: combo_dtbeli_produk.getValue()}});
-	});*/
-	
-	combo_dtbeli_satuan.on('select', function(){
-		cbo_dsatuan_byproduk_orderDataStore.load({params: {master_order_id: "", dorder_produk_id: ""}});
-	});
 	
 	//declaration of detail coloumn model
 	detail_terima_beli_ColumnModel = new Ext.grid.ColumnModel(
@@ -1067,8 +1064,8 @@ Ext.onReady(function(){
 			dataIndex: 'dterima_produk',
 			width: 150,
 			sortable: true,
-			editor: combo_dtbeli_produk,
-			renderer: Ext.util.Format.comboRenderer(combo_dtbeli_produk)
+			editor: combo_produk_terima,
+			renderer: Ext.util.Format.comboRenderer(combo_produk_terima)
 		},
 		{
 			header: 'Satuan',
@@ -1093,16 +1090,12 @@ Ext.onReady(function(){
 			})
 		}]
 	);
-	detail_terima_beli_ColumnModel.defaultSortable= true;
 	//eof
-	
-	
-	
+
 	//declaration of detail list editor grid
 	detail_terima_beliListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'detail_terima_beliListEditorGrid',
 		el: 'fp_detail_terima_beli',
-		//title: 'Detail detail_terima_beli',
 		height: 250,
 		width: 690,
 		autoScroll: true,
@@ -1251,12 +1244,7 @@ Ext.onReady(function(){
 	}
 	//eof
 	
-	//event on update of detail data store
-	detail_terima_beli_DataStore.on('update', refresh_detail_terima_beli);
-	
-	/* Detail BONUS declaration */
-	/*Detail Declaration */
-		
+
 	// Function for json reader of detail
 	var detail_terima_bonus_reader=new Ext.data.JsonReader({
 		root: 'results',
@@ -1305,86 +1293,67 @@ Ext.onReady(function(){
 	//eof
 	
 	Ext.util.Format.comboRenderer = function(combo){
-		cbo_dproduk_byorderDataStore.load({params:{master_order_id: terima_order_idField.getValue()}});
-		//cbo_dtbeli_satuanDataStore.load();
 		return function(value){
 			var record = combo.findRecord(combo.valueField, value);
 			return record ? record.get(combo.displayField) : combo.valueNotFoundText;
 		}
 	}
 	
-	/*=== cbo_dproduk_byorderDataStore ==> mengambil "Detail Produk" dari detailList Modul Order Pembelian ===*/
-	cbo_dproduk_bonusDataStore = new Ext.data.Store({
-		id: 'cbo_dproduk_bonusDataStore',
+	/*=== cbo_produk_detailDataStore ==> mengambil "Detail Produk" dari detailList Modul Order Pembelian ===*/
+	cbo_produk_bonusDataStore = new Ext.data.Store({
+		id: 'cbo_produk_bonusDataStore',
 		proxy: new Ext.data.HttpProxy({
 			url: 'index.php?c=c_master_terima_beli&m=get_produk_list', 
 			method: 'POST'
 		}),
-		//baseParams: {master_order_id: terima_order_idField.getValue()},
+		baseParams: {task: 'list', start:0, limit: pageS},
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
 			id: 'produk_id'
 		},[
-		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
-			{name: 'dtbonus_produk_value', type: 'int', mapping: 'produk_id'},
-			{name: 'dtbonus_produk_display', type: 'string', mapping: 'produk_nama'}
+			{name: 'produk_id', type: 'int', mapping: 'produk_id'},
+			{name: 'produk_nama', type: 'string', mapping: 'produk_nama'},
+			{name: 'produk_kode', type: 'string', mapping: 'produk_kode'},
+			{name: 'produk_kategori_nama', type: 'string', mapping: 'kategori_nama'}
 		]),
-		sortInfo:{field: 'dtbonus_produk_display', direction: "ASC"}
+		sortInfo:{field: 'produk_nama', direction: "ASC"}
 	});
-	/*======= END cbo_dproduk_byorderDataStore =======*/
+	/*======= END cbo_produk_detailDataStore =======*/
 	
-	/*=== cbo_dsatuan_byproduk_orderDataStore ==> mengambil "Detail Produk" dari detailList Modul Order Pembelian ===*/
-	cbo_dsatuan_bonusDataStore = new Ext.data.Store({
-		id: 'cbo_dsatuan_bonusDataStore',
-		proxy: new Ext.data.HttpProxy({
-			url: 'index.php?c=c_master_terima_beli&m=get_satuan_list', 
-			method: 'POST'
-		}),
-		//baseParams: {master_order_id: terima_order_idField.getValue()},
-		reader: new Ext.data.JsonReader({
-			root: 'results',
-			totalProperty: 'total',
-			id: 'satuan_id'
-		},[
-		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
-			{name: 'dtbonus_satuan_value', type: 'int', mapping: 'satuan_id'},
-			{name: 'dtbonus_satuan_display', type: 'string', mapping: 'satuan_nama'}
-		]),
-		sortInfo:{field: 'dtbonus_satuan_display', direction: "ASC"}
-	});
-	/*======= END cbo_dsatuan_byproduk_orderDataStore =======*/
-	
-	var combo_dtbonus_produk=new Ext.form.ComboBox({
-			store: cbo_dproduk_bonusDataStore,
+	var produk_detail_tpl = new Ext.XTemplate(
+        '<tpl for="."><div class="search-item">',
+            '<span><b>{produk_nama} ({produk_kode})</b><br /></span>',
+            'Kategori: {produk_kategori_nama}',
+        '</div></tpl>'
+    );
+
+	var combo_bonus_terima=new Ext.form.ComboBox({
+			store: cbo_produk_bonusDataStore,
 			mode: 'remote',
 			typeAhead: true,
-			displayField: 'dtbonus_produk_display',
-			valueField: 'dtbonus_produk_value',
+			displayField: 'produk_nama',
+			valueField: 'produk_id',
 			triggerAction: 'all',
 			pageSize:pageS,
 			itemSelector: 'div.search-item',
 			triggerAction: 'all',
-			lazyRender:true,
+			tpl: produk_detail_tpl,
+			lazyRender: true,
 			listClass: 'x-combo-list-small',
 
 	});
 	
-	var combo_dtbonus_satuan=new Ext.form.ComboBox({
-			store: cbo_dsatuan_bonusDataStore,
-			mode: 'remote',
+	var combo_bonus_satuan=new Ext.form.ComboBox({
+			store: cbo_satuanDataStore,
+			mode: 'local',
 			typeAhead: true,
-			displayField: 'dtbonus_satuan_display',
-			valueField: 'dtbonus_satuan_value',
+			displayField: 'satuan_nama',
+			valueField: 'satuan_value',
 			triggerAction: 'all',
-			lazyRender:true,
+			lazyRender:true
 
 	});
-//	
-//	combo_dtbonus_produk.on('select', function(){
-//		var j=cbo_dproduk_bonusDataStore.find('dtbeli_produk_value',combo_dtbonus_produk.getValue());
-//		cbo_dsatuan_bonusDataStore.load({params: {master_order_id: terima_order_idField.getValue(), dorder_produk_id: combo_dtbeli_produk.getValue()}});
-//	});
 	
 	//declaration of detail coloumn model
 	detail_terima_bonus_ColumnModel = new Ext.grid.ColumnModel(
@@ -1394,16 +1363,16 @@ Ext.onReady(function(){
 			dataIndex: 'dtbonus_produk',
 			width: 150,
 			sortable: true,
-			editor: combo_dtbonus_produk,
-			renderer: Ext.util.Format.comboRenderer(combo_dtbonus_produk)
+			editor: combo_bonus_terima,
+			renderer: Ext.util.Format.comboRenderer(combo_bonus_terima)
 		},
 		{
 			header: 'Satuan',
 			dataIndex: 'dtbonus_satuan',
 			width: 150,
 			sortable: true,
-			editor: combo_dtbonus_satuan,
-			renderer: Ext.util.Format.comboRenderer(combo_dtbonus_satuan)
+			editor: combo_bonus_satuan,
+			renderer: Ext.util.Format.comboRenderer(combo_bonus_satuan)
 		},
 		{
 			header: 'Jumlah',
@@ -1420,11 +1389,9 @@ Ext.onReady(function(){
 			})
 		}]
 	);
-	detail_terima_bonus_ColumnModel.defaultSortable= true;
 	//eof
 	
-	
-	
+		
 	//declaration of detail list editor grid
 	detail_terima_bonusListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'detail_terima_bonusListEditorGrid',
@@ -2002,39 +1969,103 @@ Ext.onReady(function(){
 	}
 	/*End of Function */
 	
-		//EVENTS
-	
-	terima_orderField.on('select', function(){
-		var j=cbo_tbeli_orderbeli_DataSore.find('tbeli_orderbeli_value',terima_orderField.getValue());
-		cbo_dproduk_byorderDataStore.load({params: {master_order_id: terima_order_idField.getValue()}});
-		if(cbo_tbeli_orderbeli_DataSore.getCount()){
-			terima_supplierField.setValue(cbo_tbeli_orderbeli_DataSore.getAt(j).data.tbeli_orderbeli_supplier);
-			terima_supplier_idField.setValue(cbo_tbeli_orderbeli_DataSore.getAt(j).data.tbeli_orderbeli_supplier_id);
-			terima_order_idField.setValue(cbo_tbeli_orderbeli_DataSore.getAt(j).data.tbeli_orderbeli_value);
-		}
-	});
-		
+	//EVENTS
+
 	master_terima_beliListEditorGrid.addListener('rowcontextmenu', onmaster_terima_beli_ListEditGridContextMenu);
 	master_terima_beli_DataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
 	master_terima_beliListEditorGrid.on('afteredit', master_terima_beli_update); // inLine Editing Record
 	
-	detail_terima_beli_DataStore.on("update",detail_terima_beli_total);
+
 	detail_terima_beli_DataStore.on("load",detail_terima_beli_total);
-	
-	detail_terima_bonus_DataStore.on("update",detail_terima_bonus_total);
 	detail_terima_bonus_DataStore.on("load",detail_terima_bonus_total);
 	
+	
+	
+	detail_terima_beli_DataStore.on("update",function(){
+		detail_terima_beli_DataStore.commitChanges();
+		refresh_detail_terima_beli;
+		detail_terima_beli_total;
+		var	query_selected="";
+		for(i=0;i<detail_terima_beli_DataStore.getCount();i++){
+			detail_terima_beli_record=detail_terima_beli_DataStore.getAt(i);
+			query_selected=query_selected+detail_terima_beli_record.data.dterima_produk+",";
+		}
+		cbo_produk_detailDataStore.setBaseParam('task','selected');
+		cbo_produk_detailDataStore.setBaseParam('selected_id',query_selected);
+		cbo_produk_detailDataStore.load();
+	});
+	
+	detail_terima_bonus_DataStore.on("update",function(){
+		detail_terima_bonus_DataStore.commitChanges();
+		refresh_detail_terima_beli;
+		detail_terima_beli_total;
+		var	query_selected="";
+		for(i=0;i<detail_terima_bonus_DataStore.getCount();i++){
+			detail_terima_bonus_record=detail_terima_bonus_DataStore.getAt(i);
+			query_selected=query_selected+detail_terima_bonus_record.data.dbonus_produk+",";
+		}
+		cbo_produk_bonusDataStore.setBaseParam('task','selected');
+		cbo_produk_bonusDataStore.setBaseParam('selected_id',query_selected);
+		cbo_produk_bonusDataStore.load();
+	});
+	
+	combo_produk_terima.on("blur",function(){
+		var	query_selected="";
+		for(i=0;i<detail_terima_beli_DataStore.getCount();i++){
+			detail_terima_beli_record=detail_terima_beli_DataStore.getAt(i);
+			query_selected=query_selected+detail_terima_beli_record.data.dterima_produk+",";
+		}
+		cbo_produk_detailDataStore.setBaseParam('task','selected');
+		cbo_produk_detailDataStore.setBaseParam('selected_id',query_selected);
+		cbo_produk_detailDataStore.load();
+	});
+	
+	combo_bonus_terima.on("blur",function(){
+		var	  query_selected="";
+		for(i=0;i<detail_terima_bonus_DataStore.getCount();i++){
+			detail_terima_bonus_record=detail_terima_bonus_DataStore.getAt(i);
+			query_selected=query_selected+detail_terima_bonus_record.data.dbonus_produk+",";
+		}
+		cbo_produk_bonusDataStore.setBaseParam('task','selected');
+		cbo_produk_bonusDataStore.setBaseParam('selected_id',query_selected);
+		cbo_produk_bonusDataStore.load();
+	});
+	
+	combo_produk_terima.on("focus",function(){
+		var	query_selected="";
+		cbo_produk_detailDataStore.setBaseParam('task','list');
+		cbo_produk_detailDataStore.load();
+	});
+	
+	combo_bonus_terima.on("focus",function(){
+		cbo_produk_bonusDataStore.setBaseParam('task','list');
+		cbo_produk_bonusDataStore.load();
+	});
+	
 	terima_orderField.on("select",function(){
+		var j=cbo_tbeli_orderbeli_DataSore.find('tbeli_orderbeli_value',terima_orderField.getValue());
+		
+		if(cbo_tbeli_orderbeli_DataSore.getCount()){
+			terima_supplierField.setValue(cbo_tbeli_orderbeli_DataSore.getAt(j).data.tbeli_orderbeli_supplier);
+			terima_supplier_idField.setValue(cbo_tbeli_orderbeli_DataSore.getAt(j).data.tbeli_orderbeli_supplier_id);
+			terima_order_idField.setValue(cbo_tbeli_orderbeli_DataSore.getAt(j).data.tbeli_orderbeli_value);
+		}							   
 		tbeli_orderbeli_detail_DataStore.load({
 			params:{orderid: terima_orderField.getValue()},
 			callback: function(r,opt,success){
 				if(success==true){
-					detail_terima_beli_DataStore.removeAll();
-					for(i=0;i<tbeli_orderbeli_detail_DataStore.getCount();i++){
-							var detail_order_record=tbeli_orderbeli_detail_DataStore.getAt(i);
-							detail_terima_beli_DataStore.insert(i,detail_order_record);
-					}
-					console.log(detail_terima_beli_DataStore.getCount());
+					cbo_produk_detailDataStore.setBaseParam('task','order');
+					cbo_produk_detailDataStore.load({
+						callback: function(r,opt,success){
+							if(success==true){
+								detail_terima_beli_DataStore.removeAll();
+								for(i=0;i<tbeli_orderbeli_detail_DataStore.getCount();i++){
+										var detail_order_record=tbeli_orderbeli_detail_DataStore.getAt(i);
+										detail_terima_beli_DataStore.insert(i,detail_order_record);
+								}
+							}
+						}
+					});
 				}
 			}
 	});

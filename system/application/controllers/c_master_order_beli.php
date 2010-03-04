@@ -63,10 +63,18 @@ class C_master_order_beli extends Controller {
 	
 	//get master id, note: not done yet
 	function get_produk_list(){
-		$query = isset($_POST['query']) ? $_POST['query'] : "";
-		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
-		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result=$this->m_public_function->get_produk_list($query,$start,$end);
+		$query = isset($_POST['query']) ? @$_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? @$_POST['start'] : @$_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? @$_POST['limit'] : @$_GET['limit']);
+		$master_id = (integer) (isset($_POST['master_id']) ? @$_POST['master_id'] : @$_GET['master_id']);
+		$task = isset($_POST['task']) ? @$_POST['task'] : @$_GET['task'];
+		$selected_id = isset($_POST['selected_id']) ? @$_POST['selected_id'] : @$_GET['selected_id'];
+		if($task=='detail')
+			$result=$this->m_master_order_beli->get_produk_detail_list($master_id,$query,$start,$end);
+		elseif($task=='list')
+			$result=$this->m_master_order_beli->get_produk_all_list($query,$start,$end);
+		elseif($task=='selected')
+			$result=$this->m_master_order_beli->get_produk_selected_list($selected_id,$query,$start,$end);
 		echo $result;
 	}
 	//
@@ -127,6 +135,7 @@ class C_master_order_beli extends Controller {
 		$query = isset($_POST['query']) ? $_POST['query'] : "";
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		$task = isset($_POST['task']) ? $_POST['task'] : $_GET['task'];
 		$result=$this->m_master_order_beli->master_order_beli_list($query,$start,$end);
 		echo $result;
 	}

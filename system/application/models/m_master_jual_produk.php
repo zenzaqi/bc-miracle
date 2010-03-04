@@ -232,8 +232,8 @@ class M_master_jual_produk extends Model{
 			$sql_dproduk="SELECT dproduk_produk FROM detail_jual_produk WHERE dproduk_master='$query'";
 			$rs=$this->db->query($sql_dproduk);
 			$rs_rows=$rs->num_rows();
-		}
-		
+		}		
+
 		$sql="select * from vu_produk WHERE produk_aktif='Aktif'";
 		if($query<>"" && is_numeric($query)==false){
 			$sql.=eregi("WHERE",$sql)? " AND ":" WHERE ";

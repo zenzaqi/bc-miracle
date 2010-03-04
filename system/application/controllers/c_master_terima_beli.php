@@ -33,12 +33,39 @@ class C_master_terima_beli extends Controller {
 		echo $result;
 	}
 	
+
 	function get_produk_list(){
 		$query = isset($_POST['query']) ? @$_POST['query'] : "";
 		$start = (integer) (isset($_POST['start']) ? @$_POST['start'] : @$_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? @$_POST['limit'] : @$_GET['limit']);
-		$end=($end==0 | $end==""?$end=15:$end=$end);
-		$result=$this->m_public_function->get_produk_list($query,$start,$end);
+		$master_id = (integer) (isset($_POST['master_id']) ? @$_POST['master_id'] : @$_GET['master_id']);
+		$task = isset($_POST['task']) ? @$_POST['task'] : @$_GET['task'];
+		$selected_id = isset($_POST['selected_id']) ? @$_POST['selected_id'] : @$_GET['selected_id'];
+		$order_id = isset($_POST['order_id']) ? @$_POST['order_id'] : @$_GET['order_id'];
+		if($task=='detail')
+			$result=$this->m_master_terima_beli->get_produk_detail_list($master_id,$query,$start,$end);
+		elseif($task=='list')
+			$result=$this->m_master_terima_beli->get_produk_all_list($query,$start,$end);
+		elseif($task=='selected')
+			$result=$this->m_master_terima_beli->get_produk_selected_list($selected_id,$query,$start,$end);
+		elseif($task=='order')
+			$result=$this->m_master_terima_beli->get_produk_order_list($order_id,$query,$start,$end);
+		echo $result;
+	}
+	
+	function get_bonus_list(){
+		$query = isset($_POST['query']) ? @$_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? @$_POST['start'] : @$_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? @$_POST['limit'] : @$_GET['limit']);
+		$master_id = (integer) (isset($_POST['master_id']) ? @$_POST['master_id'] : @$_GET['master_id']);
+		$task = isset($_POST['task']) ? @$_POST['task'] : @$_GET['task'];
+		$selected_id = isset($_POST['selected_id']) ? @$_POST['selected_id'] : @$_GET['selected_id'];
+		if($task=='detail')
+			$result=$this->m_master_terima_beli->get_bonus_detail_list($master_id,$query,$start,$end);
+		elseif($task=='list')
+			$result=$this->m_master_terima_beli->get_produk_all_list($query,$start,$end);
+		elseif($task=='selected')
+			$result=$this->m_master_terima_beli->get_produk_selected_list($selected_id,$query,$start,$end);
 		echo $result;
 	}
 	
@@ -52,11 +79,12 @@ class C_master_terima_beli extends Controller {
 		echo $result;
 	}
 	
-	function get_dorder_by_orderbeli(){
-		//$result=$this->m_public_function->get_produk_list();
-		//echo $result;
-		$order_id = trim(@$_POST["master_order_id"]);
-		$result=$this->m_master_terima_beli->get_dorder_by_orderbeli($order_id);
+	function get_produk_detail_list(){
+		$query = isset($_POST['query']) ? @$_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? @$_POST['start'] : @$_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? @$_POST['limit'] : @$_GET['limit']);
+		$master_id = (integer) (isset($_POST['master_id']) ? @$_POST['master_id'] : @$_GET['master_id']);
+		$result=$this->m_master_terima_beli->get_produk_detail_list($master_id,$query,$start,$end);
 		echo $result;
 	}
 	
