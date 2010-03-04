@@ -781,7 +781,7 @@ Ext.onReady(function(){
 	/* Identify  terima_order Field */
 	terima_orderField= new Ext.form.ComboBox({
 		id: 'terima_orderField',
-		fieldLabel: 'No.Order',
+		fieldLabel: 'No Pesanan',
 		store: cbo_tbeli_orderbeli_DataSore,
 		displayField:'tbeli_orderbeli_nama',
 		mode : 'remote',
@@ -805,6 +805,7 @@ Ext.onReady(function(){
 		readOnly: true,
 		anchor: '95%'
 	});
+	
 	terima_supplier_idField= new Ext.form.NumberField({
 		id: 'terima_supplier_idField',
 		allowNegatife : false,
@@ -1655,7 +1656,7 @@ Ext.onReady(function(){
 		if(terima_idSearchField.getValue()!==null){terima_id_search=terima_idSearchField.getValue();}
 		if(terima_noSearchField.getValue()!==null){terima_no_search=terima_noSearchField.getValue();}
 		if(terima_orderSearchField.getValue()!==null){terima_order_search=terima_orderSearchField.getValue();}
-		if(terima_supplierSearchField.getValue()!==null){terima_supplier_search=terima_supplierSearchField.getValue();}
+		//if(terima_supplierSearchField.getValue()!==null){terima_supplier_search=terima_supplierSearchField.getValue();}
 		if(terima_surat_jalanSearchField.getValue()!==null){terima_surat_jalan_search=terima_surat_jalanSearchField.getValue();}
 		if(terima_pengirimSearchField.getValue()!==null){terima_pengirim_search=terima_pengirimSearchField.getValue();}
 		if(terima_tanggalSearchField.getValue()!==""){terima_tanggal_search_date=terima_tanggalSearchField.getValue().format('Y-m-d');}
@@ -1667,7 +1668,7 @@ Ext.onReady(function(){
 			terima_id	:	terima_id_search, 
 			terima_no	:	terima_no_search, 
 			terima_order	:	terima_order_search, 
-			terima_supplier	:	terima_supplier_search, 
+			//terima_supplier	:	terima_supplier_search, 
 			terima_surat_jalan	:	terima_surat_jalan_search, 
 			terima_pengirim	:	terima_pengirim_search, 
 			terima_tanggal	:	terima_tanggal_search_date, 
@@ -1713,32 +1714,46 @@ Ext.onReady(function(){
 	/* Identify  terima_no Search Field */
 	terima_noSearchField= new Ext.form.TextField({
 		id: 'terima_noSearchField',
-		fieldLabel: 'No Penerimaan',
+		fieldLabel: 'No. Penerimaan',
 		maxLength: 50,
 		anchor: '95%'
 	
 	});
 	/* Identify  terima_order Search Field */
-	terima_orderSearchField= new Ext.form.NumberField({
+	terima_orderSearchField= new Ext.form.ComboBox({
 		id: 'terima_orderSearchField',
-		fieldLabel: 'No.Order',
-		allowNegatife : false,
-		blankText: '0',
-		allowDecimals: false,
-		anchor: '95%',
-		maskRe: /([0-9]+)$/
-	
+		fieldLabel: 'No. Pesanan',
+		store: cbo_tbeli_orderbeli_DataSore,
+		displayField:'tbeli_orderbeli_nama',
+		mode : 'remote',
+		valueField: 'tbeli_orderbeli_value',
+        typeAhead: false,
+        hideTrigger:false,
+		allowBlank: false,
+		tpl: tbeli_orderbeli_tpl,
+		itemSelector: 'div.search-item',
+		triggerAction: 'all',
+		lazyRender:true,
+		listClass: 'x-combo-list-small',
+		anchor: '95%'
 	});
 	/* Identify  terima_supplier Search Field */
-	terima_supplierSearchField= new Ext.form.NumberField({
+	terima_supplierSearchField= new Ext.form.ComboBox({
 		id: 'terima_supplierSearchField',
 		fieldLabel: 'Supplier',
-		allowNegatife : false,
-		blankText: '0',
-		allowDecimals: false,
-		anchor: '95%',
-		maskRe: /([0-9]+)$/
-	
+		store: cbo_tbeli_orderbeli_DataSore,
+		displayField:'tbeli_orderbeli_nama',
+		mode : 'remote',
+		valueField: 'tbeli_orderbeli_value',
+        typeAhead: false,
+        hideTrigger:false,
+		allowBlank: false,
+		tpl: tbeli_orderbeli_tpl,
+		itemSelector: 'div.search-item',
+		triggerAction: 'all',
+		lazyRender:true,
+		listClass: 'x-combo-list-small',
+		anchor: '95%'
 	});
 	/* Identify  terima_surat_jalan Search Field */
 	terima_surat_jalanSearchField= new Ext.form.TextField({
@@ -1764,17 +1779,16 @@ Ext.onReady(function(){
 	
 	});
 	/* Identify  terima_keterangan Search Field */
-	terima_keteranganSearchField= new Ext.form.TextArea({
+	terima_keteranganSearchField= new Ext.form.TextField({
 		id: 'terima_keteranganSearchField',
 		fieldLabel: 'Keterangan',
 		maxLength: 500,
 		anchor: '95%'
-	
 	});
     
 	/* Function for retrieve search Form Panel */
 	master_terima_beli_searchForm = new Ext.FormPanel({
-		labelAlign: 'top',
+		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
 		width: 300,        
@@ -1786,7 +1800,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [terima_noSearchField, terima_orderSearchField, terima_supplierSearchField, terima_surat_jalanSearchField, terima_pengirimSearchField, terima_tanggalSearchField, terima_keteranganSearchField] 
+				items: [terima_noSearchField, terima_orderSearchField, terima_surat_jalanSearchField, terima_pengirimSearchField, terima_tanggalSearchField, terima_keteranganSearchField] 
 			}
 			]
 		}]
@@ -1806,7 +1820,7 @@ Ext.onReady(function(){
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
 	master_terima_beli_searchWindow = new Ext.Window({
-		title: 'master_terima_beli Search',
+		title: 'Pencarian Penerimaan Pembelian',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,
