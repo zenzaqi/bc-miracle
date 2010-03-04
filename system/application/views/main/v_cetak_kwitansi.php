@@ -180,7 +180,7 @@ Ext.onReady(function(){
 		if(kwitansi_statusField.getValue()!== null){kwitansi_status_create = kwitansi_statusField.getValue();} 
 
 		Ext.Ajax.request({  
-			waitMsg: 'Please wait...',
+			waitMsg: 'Mohon tunggu...',
 			url: 'index.php?c=c_cetak_kwitansi&m=get_action',
 			params: {
 				task: post2db,
@@ -401,6 +401,7 @@ Ext.onReady(function(){
 			{name: 'kwitansi_no', type: 'string', mapping: 'kwitansi_no'}, 
 			{name: 'kwitansi_cust', type: 'int', mapping: 'kwitansi_cust'},
 			{name: 'cust_nama', type: 'string', mapping: 'cust_nama'},
+			{name: 'cust_no', type: 'string', mapping: 'cust_no'},
 			{name: 'kwitansi_nilai', type: 'float', mapping: 'kwitansi_nilai'}, 
 			{name: 'kwitansi_keterangan', type: 'string', mapping: 'kwitansi_keterangan'}, 
 			{name: 'kwitansi_status', type: 'string', mapping: 'kwitansi_status'},
@@ -440,8 +441,10 @@ Ext.onReady(function(){
 	});
 	var customer_tpl = new Ext.XTemplate(
         '<tpl for="."><div class="search-item">',
-            '<span><b>{cust_no} : {cust_nama}</b> | Tgl-Lahir:{cust_tgllahir:date("M j, Y")}<br /></span>',
-            'Alamat: {cust_alamat}&nbsp;&nbsp;&nbsp;[Telp. {cust_telprumah}]',
+ //           '<span><b>{cust_no} : {cust_nama}</b> | Tgl-Lahir:{cust_tgllahir:date("M j, Y")}<br /></span>',
+ //           'Alamat: {cust_alamat}&nbsp;&nbsp;&nbsp;[Telp. {cust_telprumah}]',
+            '<span><b>{cust_no} : {cust_nama}</b><br /></span>',
+            '{cust_alamat}',
         '</div></tpl>'
     );
     
@@ -466,6 +469,12 @@ Ext.onReady(function(){
 			editor: new Ext.form.TextField({
 				maxLength: 20
           	})
+		}, 
+		{
+			header: '<div align="center">' + 'No Cust' + '</div>',
+			dataIndex: 'cust_no',
+			width: 80,	//210,
+			sortable: true
 		}, 
 		{
 			header: '<div align="center">' + 'Customer' + '</div>',
@@ -822,6 +831,7 @@ Ext.onReady(function(){
 			{name: 'jkwitansi_nilai', type: 'float', mapping: 'jkwitansi_nilai'}, 
 			{name: 'customer_id', type: 'int', mapping: 'customer_id'}, 
 			{name: 'customer_nama', type: 'string', mapping: 'customer_nama'}, 
+			{name: 'customer_no', type: 'string', mapping: 'customer_no'}, 
 			{name: 'jkwitansi_creator', type: 'string', mapping: 'jkwitansi_creator'}, 
 			{name: 'jkwitansi_date_create', type: 'date', dateFormat: 'Y-m-d', mapping: 'jkwitansi_date_create'}, 
 			{name: 'jkwitansi_update', type: 'string', mapping: 'jkwitansi_update'}, 
@@ -860,34 +870,35 @@ Ext.onReady(function(){
 	jual_kwitansi_ColumnModel = new Ext.grid.ColumnModel(
 		[
 		{
-			header: 'Referensi',
+			header: '<div align="center">' + 'No Faktur' + '</div>',	//'Referensi',
 			dataIndex: 'jkwitansi_ref',
-			width: 150,
+			width: 80,	//150,
 			sortable: true,
-			editor: new Ext.form.TextField({
+/*			editor: new Ext.form.TextField({
 				maxLength: 50
           	})
-		},
+*/		},
 		{
-			header: 'Nilai',
-			dataIndex: 'jkwitansi_nilai',
-			width: 150,
-			sortable: true,
-			editor: new Ext.form.NumberField({
-				allowDecimals: true,
-				allowNegative: false,
-				blankText: '0',
-				maxLength: 22,
-				maskRe: /([0-9]+)$/
-			})
-		},
-		{
-			header: 'Customer',
-			dataIndex: 'customer_nama',
-			width: 150,
+			header: '<div align="center">' + 'No Cust' + '</div>',
+			dataIndex: 'customer_no',
+			width: 80,
 			sortable: true
-		}/*,
+		},
 		{
+			header: '<div align="center">' + 'Customer' + '</div>',
+			dataIndex: 'customer_nama',
+			width: 200,
+			sortable: true
+		},
+		{
+			header: '<div align="center">' + 'Nilai (Rp)' + '</div>',
+			align: 'right',
+			dataIndex: 'jkwitansi_nilai',
+			width: 100,	//150,
+			sortable: true,
+			renderer: Ext.util.Format.numberRenderer('0,000')			
+		}
+/*		{
 			header: 'Jkwitansi Creator',
 			dataIndex: 'jkwitansi_creator',
 			width: 150,
@@ -950,10 +961,11 @@ Ext.onReady(function(){
 	
 	
 	//declaration of detail list editor grid
-	jual_kwitansiListEditorGrid =  new Ext.grid.EditorGridPanel({
+//	jual_kwitansiListEditorGrid =  new Ext.grid.EditorGridPanel({
+	jual_kwitansiListEditorGrid =  new Ext.grid.GridPanel({
 		id: 'jual_kwitansiListEditorGrid',
 		el: 'fp_jual_kwitansi',
-		title: 'Detail Penggunaan Kuitansi',
+		title: 'Detail Pemakaian Kuitansi',
 		height: 250,
 		width: 690,
 		autoScroll: true,
@@ -962,9 +974,9 @@ Ext.onReady(function(){
 		enableColLock:false,
 		region: 'center',
         margins: '0 5 5 5',
-		plugins: [editor_jual_kwitansi],
+		//plugins: [editor_jual_kwitansi],
 		frame: true,
-		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
+		//clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true},
 		bbar: new Ext.PagingToolbar({
