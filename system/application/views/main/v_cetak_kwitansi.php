@@ -285,6 +285,7 @@ Ext.onReady(function(){
   	/* Function for Displaying  create Window Form */
 	function display_form_window(){
 		cbo_custDataStore.load();
+		jual_kwitansi_DataStore.load({params : {master_id : 0, start:0, limit:pageS}});
 		if(!cetak_kwitansi_createWindow.isVisible()){
 			cetak_kwitansi_reset_form();
 			post2db='CREATE';
