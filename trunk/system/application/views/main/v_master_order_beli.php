@@ -91,6 +91,7 @@ var order_keteranganSearchField;
 Ext.onReady(function(){
   	Ext.QuickTips.init();	/* Initiate quick tips icon */
   
+  	
   	/* Function for Saving inLine Editing */
 	function master_order_beli_update(oGrid_event){
 		var order_id_update_pk="";
@@ -202,16 +203,12 @@ Ext.onReady(function(){
 			}, 
 			success: function(response){             
 				var result=eval(response.responseText);
-				switch(result){
-					case 1:
-						detail_order_beli_purge()
-						detail_order_beli_insert();
-						//Ext.MessageBox.alert(post2db+' OK','The Master_order_beli was '+msg+' successfully.');
+				if(result!==0){
+						detail_order_beli_purge(result)
 						Ext.MessageBox.alert(post2db+' OK','Data Pesanan Pembelian berhasil disimpan');
 						master_order_beli_DataStore.reload();
 						master_order_beli_createWindow.hide();
-						break;
-					default:
+				}else{
 						Ext.MessageBox.show({
 						   title: 'Warning',
 						   //msg: 'We could\'t not '+msg+' the Master_order_beli.',
@@ -221,7 +218,6 @@ Ext.onReady(function(){
 						   icon: Ext.MessageBox.WARNING
 						});
 						master_order_beli_DataStore.reload();
-						break;
 				}        
 			},
 			failure: function(response){
@@ -291,8 +287,16 @@ Ext.onReady(function(){
 		order_biayaField.setValue(master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_biaya'));
 		order_bayarField.setValue(master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_bayar'));
 		order_keteranganField.setValue(master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_keterangan'));
-		detail_order_beli_DataStore.setBaseParam('master_id',get_pk_id());
-		detail_order_beli_DataStore.load();
+		
+		cbo_order_produk_DataStore.setBaseParam('master_id',get_pk_id());
+		cbo_order_produk_DataStore.load({
+			callback: function(r,opt,success){
+				if(success==true){
+					detail_order_beli_DataStore.setBaseParam('master_id',get_pk_id());
+					detail_order_beli_DataStore.load();
+				}
+			}
+		});
 	}
 	/* End setValue to EDIT*/
   
@@ -444,7 +448,7 @@ Ext.onReady(function(){
 			url: 'index.php?c=c_master_order_beli&m=get_produk_list', 
 			method: 'POST'
 		}),
-		baseParams:{task: "LIST",start:0,limit:pageS}, // parameter yang di $_POST ke Controller
+		baseParams:{task: "detail",start:0,limit:pageS}, // parameter yang di $_POST ke Controller
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
@@ -452,7 +456,9 @@ Ext.onReady(function(){
 		},[
 		/* dataIndex => insert intocustomer_note_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'order_produk_value', type: 'int', mapping: 'produk_id'},
-			{name: 'order_produk_nama', type: 'string', mapping: 'produk_nama'}
+			{name: 'order_produk_nama', type: 'string', mapping: 'produk_nama'},
+			{name: 'order_produk_kode', type: 'string', mapping: 'produk_kode'},
+			{name: 'order_produk_kategori', type: 'string', mapping: 'kategori_nama'}
 		]),
 		sortInfo:{field: 'order_produk_nama', direction: "ASC"}
 	});
@@ -490,6 +496,13 @@ Ext.onReady(function(){
     );
 	
     
+	var order_produk_detail_tpl = new Ext.XTemplate(
+        '<tpl for="."><div class="search-item">',
+            '<span><b>{order_produk_nama} ({order_produk_kode})</b><br /></span>',
+            'Kategori: {order_produk_kategori}',
+        '</div></tpl>'
+    );
+	
   	/* Function for Identify of Window Column Model */
 	master_order_beli_ColumnModel = new Ext.grid.ColumnModel(
 		[{
@@ -1039,8 +1052,13 @@ Ext.onReady(function(){
 			displayField: 'order_produk_nama',
 			valueField: 'order_produk_value',
 			triggerAction: 'all',
-			lazyRender:true,
-
+			lazyRender: false,
+			pageSize: pageS,
+			tpl: order_produk_detail_tpl,
+			itemSelector: 'div.search-item',
+			triggerAction: 'all',
+			listClass: 'x-combo-list-small',
+			anchor: '95%'
 	});
 	
 	var combo_order_satuan=new Ext.form.ComboBox({
@@ -1181,7 +1199,6 @@ Ext.onReady(function(){
 	});
 	//eof
 	
-	
 	//function of detail add
 	function detail_order_beli_add(){
 		var edit_detail_order_beli= new detail_order_beliListEditorGrid.store.recordType({
@@ -1208,7 +1225,7 @@ Ext.onReady(function(){
 	//eof
 	
 	//function for insert detail
-	function detail_order_beli_insert(){
+	function detail_order_beli_insert(pkid){
 		for(i=0;i<detail_order_beli_DataStore.getCount();i++){
 			detail_order_beli_record=detail_order_beli_DataStore.getAt(i);
 			Ext.Ajax.request({
@@ -1216,7 +1233,7 @@ Ext.onReady(function(){
 				url: 'index.php?c=c_master_order_beli&m=detail_detail_order_beli_insert',
 				params:{
 				dorder_id	: detail_order_beli_record.data.dorder_id, 
-				dorder_master	: eval(order_idField.getValue()), 
+				dorder_master	: pkid, 
 				dorder_produk	: detail_order_beli_record.data.dorder_produk, 
 				dorder_satuan	: detail_order_beli_record.data.dorder_satuan, 
 				dorder_jumlah	: detail_order_beli_record.data.dorder_jumlah, 
@@ -1231,11 +1248,16 @@ Ext.onReady(function(){
 	
 	
 	//function for purge detail
-	function detail_order_beli_purge(){
+	function detail_order_beli_purge(pkid){
 		Ext.Ajax.request({
 			waitMsg: 'Please wait...',
 			url: 'index.php?c=c_master_order_beli&m=detail_detail_order_beli_purge',
-			params:{ master_id: eval(order_idField.getValue()) }
+			params:{ master_id: pkid },
+			callback:function(r,opt,success){
+				if(success==true){
+					detail_order_beli_insert(pkid);
+				}
+			}
 		});
 	}
 	//eof
@@ -1270,9 +1292,6 @@ Ext.onReady(function(){
 		detail_order_beli_DataStore.commitChanges();
 	}
 	//eof
-	
-	//event on update of detail data store
-	//detail_order_beli_DataStore.on('update', refresh_detail_order_beli);
 	
 	/* Function for retrieve create Window Panel*/ 
 	master_order_beli_createForm = new Ext.FormPanel({
@@ -1327,12 +1346,6 @@ Ext.onReady(function(){
 		order_totalField.setValue(total_harga);
 		order_totalbayarField.setValue(total_harga-order_bayarField.getValue());
 	}
-	
-	detail_order_beli_DataStore.on("update",detail_order_beli_total);
-	detail_order_beli_DataStore.on("load",detail_order_beli_total);
-	order_bayarField.on("keypress",detail_order_beli_total);
-	order_bayarField.on("keydown",detail_order_beli_total);
-	order_bayarField.on("keyup",detail_order_beli_total);
 	
 	/* Function for action list search */
 	function master_order_beli_list_search(){
@@ -1705,6 +1718,41 @@ Ext.onReady(function(){
 		});
 	}
 	/*End of Function */
+	
+	//EVENTS
+	combo_order_produk.on("focus",function(){
+		cbo_order_produk_DataStore.setBaseParam('task','list');
+		cbo_order_produk_DataStore.load();
+	});
+	
+	detail_order_beli_DataStore.on("update",function(){
+		detail_order_beli_DataStore.commitChanges();
+		var	  query_selected="";
+		for(i=0;i<detail_order_beli_DataStore.getCount();i++){
+			detail_order_beli_record=detail_order_beli_DataStore.getAt(i);
+			query_selected=query_selected+detail_order_beli_record.data.dorder_produk+",";
+		}
+		cbo_order_produk_DataStore.setBaseParam('task','selected');
+		cbo_order_produk_DataStore.setBaseParam('selected_id',query_selected);
+		cbo_order_produk_DataStore.load();
+		detail_order_beli_total;
+	});
+	detail_order_beli_DataStore.on("load",detail_order_beli_total);
+	order_bayarField.on("keypress",detail_order_beli_total);
+	order_bayarField.on("keydown",detail_order_beli_total);
+	order_bayarField.on("keyup",detail_order_beli_total);
+
+	combo_order_produk.on("blur",function(){
+		var	  query_selected="";
+		for(i=0;i<detail_order_beli_DataStore.getCount();i++){
+			detail_order_beli_record=detail_order_beli_DataStore.getAt(i);
+			query_selected=query_selected+detail_order_beli_record.data.dorder_produk+",";
+		}
+		cbo_order_produk_DataStore.setBaseParam('task','selected');
+		cbo_order_produk_DataStore.setBaseParam('selected_id',query_selected);
+		cbo_order_produk_DataStore.load();
+	});
+	
 	
 });
 	</script>

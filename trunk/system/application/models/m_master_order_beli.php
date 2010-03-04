@@ -18,6 +18,71 @@ class M_master_order_beli extends Model{
 			parent::Model();
 		}
 		
+		
+		function get_produk_selected_list($selected_id,$query,$start,$end){
+			$sql="SELECT produk_id,produk_nama,produk_kode,kategori_nama FROM vu_produk";
+			if($selected_id!=="")
+			{
+				$selected_id=substr($selected_id,0,strlen($selected_id)-1);
+				$sql.=" WHERE produk_id IN(".$selected_id.")";
+			}
+			$result = $this->db->query($sql);
+			$nbrows = $result->num_rows();
+			$limit = $sql." LIMIT ".$start.",".$end;			
+			$result = $this->db->query($limit);  
+			
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+				
+		function get_produk_all_list($query,$start,$end){
+			
+			$sql="SELECT produk_id,produk_nama,produk_kode,kategori_nama FROM vu_produk";
+						
+			$result = $this->db->query($sql);
+			$nbrows = $result->num_rows();
+			$limit = $sql." LIMIT ".$start.",".$end;			
+			$result = $this->db->query($limit);  
+			
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+				
+		function get_produk_detail_list($master_id,$query,$start,$end){
+			$sql="SELECT produk_id,produk_nama,produk_kode,kategori_nama FROM vu_produk";
+			if($master_id<>"")
+				$sql.=" WHERE produk_id IN(SELECT dorder_produk FROM detail_order_beli WHERE dorder_master='".$master_id."')";
+			
+			$result = $this->db->query($sql);
+			$nbrows = $result->num_rows();
+			$limit = $sql." LIMIT ".$start.",".$end;			
+			$result = $this->db->query($limit);  
+			
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+		
 		//function for detail
 		//get record list
 		function detail_detail_order_beli_list($master_id,$query,$start,$end) {
@@ -156,7 +221,7 @@ class M_master_order_beli extends Model{
 			
 			$this->db->insert('master_order_beli', $data); 
 			if($this->db->affected_rows())
-				return '1';
+				return $this->db->insert_id();
 			else
 				return '0';
 		}
