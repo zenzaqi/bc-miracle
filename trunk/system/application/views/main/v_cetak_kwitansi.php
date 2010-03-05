@@ -620,7 +620,7 @@ Ext.onReady(function(){
 				triggerAction: 'all',
 				store:new Ext.data.SimpleStore({
 					fields:['kwitansi_status_value', 'kwitansi_status_display'],
-					data: [['Aktif','Aktif'],['Tidak Aktif','Tidak Aktif']
+					data: [['aktif','aktif'],['hapus','hapus'],['habis','habis']]
 					}),
 				mode: 'local',
                	displayField: 'kwitansi_status_display',
@@ -847,19 +847,11 @@ Ext.onReady(function(){
 	kwitansi_nilaiField= new Ext.form.NumberField({
 		id: 'kwitansi_nilaiField',
 		fieldLabel: 'Nilai (Rp)',
-		enableKeyEvents: true,
 		allowNegatife : false,
 		blankText: '0',
 		allowDecimals: true,
 		anchor: '95%',
 		maskRe: /([0-9]+)$/
-	});
-	kwitansi_terbilangField= new Ext.form.Label({
-		id: 'kwitansi_terbilangField',
-		fieldLabel: 'Terbilang',
-		margins: '0 0 0 0',
-		maxLength: 500,
-		anchor: '95%'
 	});
 	/* Identify  kwitansi_keterangan Field */
 	kwitansi_keteranganField= new Ext.form.TextArea({
@@ -874,7 +866,7 @@ Ext.onReady(function(){
 		fieldLabel: 'Status',
 		store:new Ext.data.SimpleStore({
 			fields:['kwitansi_status_value', 'kwitansi_status_display'],
-			data:[['Aktif','Aktif'],['Tidak Aktif','Tidak Aktif']
+			data:[['aktif','aktif'],['hapus','hapus'],['habis','habis']]
 		}),
 		mode: 'local',
 		displayField: 'kwitansi_status_display',
@@ -882,13 +874,6 @@ Ext.onReady(function(){
 		anchor: '95%',
 		triggerAction: 'all'	
 	});
-	
-	kwitansi_nilaiField.on("keyup", function(){
-		var test_terbilang="";
-		test_terbilang = terbilang(kwitansi_nilaiField.getValue());
-		kwitansi_terbilangField.setText(test_terbilang);
-	});
-	
   	/*Fieldset Master*/
 	cetak_kwitansi_masterGroup = new Ext.form.FieldSet({
 		title: 'Master',
@@ -900,7 +885,7 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [kwitansi_noField, kwitansi_custField, kwitansi_nilaiField, kwitansi_terbilangField, kwitansi_idField] 
+				items: [kwitansi_noField, kwitansi_custField, kwitansi_nilaiField, kwitansi_idField] 
 			},
 			{
 				columnWidth:0.5,
@@ -1348,7 +1333,7 @@ Ext.onReady(function(){
 		fieldLabel: 'Kwitansi Status',
 		store:new Ext.data.SimpleStore({
 			fields:['value', 'kwitansi_status'],
-			data:[['Aktif','Aktif'],['Tidak Aktif','Tidak Aktif']
+			data:[['aktif','aktif'],['hapus','hapus'],['habis','habis']]
 		}),
 		mode: 'local',
 		displayField: 'kwitansi_status',
