@@ -18,6 +18,44 @@ class M_master_invoice extends Model{
 			parent::Model();
 		}
 		
+		function get_produk_terima_list($terima_id,$query,$start,$end){
+			$sql="SELECT produk_id,produk_nama from produk 
+					WHERE produk_id IN (SELECT dterima_produk FROM detail_terima_beli WHERE dterima_master='".$terima_id."')";
+			$result = $this->db->query($sql);
+			$nbrows = $result->num_rows();
+			$limit = $sql." LIMIT ".$start.",".$end;			
+			$result = $this->db->query($limit);  
+			
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+		
+		function get_produk_invoice_list($master_id,$query,$start,$end){
+			$sql="SELECT produk_id,produk_nama from produk 
+					WHERE produk_id IN (SELECT dinvoice_produk FROM detail_invoice WHERE dinvoice_master='".$master_id."')";
+			$result = $this->db->query($sql);
+			$nbrows = $result->num_rows();
+			$limit = $sql." LIMIT ".$start.",".$end;			
+			$result = $this->db->query($limit);  
+			
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+		
 		function get_dtbeli_list($dterima_master){
 			//$sql="SELECT * FROM detail_terima_beli WHERE dterima_master=$dterima_master";
 			$sql="SELECT * FROM detail_terima_beli,master_terima_beli,detail_order_beli WHERE dterima_master=terima_id AND dorder_master=terima_order AND dterima_master=$dterima_master AND dterima_produk=dorder_produk";
@@ -117,10 +155,7 @@ class M_master_invoice extends Model{
 		
 		//function for get list record
 		function master_invoice_list($filter,$start,$end){
-			$query = "SELECT master_invoice.*,supplier.supplier_nama,master_terima_beli.terima_no,vu_total_invoice_group.*  
-						FROM master_invoice,supplier,master_terima_beli,vu_total_invoice_group
-						WHERE master_invoice.invoice_supplier=supplier_id and master_invoice.invoice_noterima=master_terima_beli.terima_id
-						AND dinvoice_master=invoice_id";
+			$query = "SELECT * FROM vu_trans_invoice";
 			
 			// For simple search
 			if ($filter<>""){
@@ -159,7 +194,7 @@ class M_master_invoice extends Model{
 			$this->db->where('invoice_id', $invoice_id);
 			$this->db->update('master_invoice', $data);
 			
-			return '1';
+			return $invoice_id;
 		}
 		
 		//function for create new record
@@ -178,7 +213,7 @@ class M_master_invoice extends Model{
 			);
 			$this->db->insert('master_invoice', $data); 
 			if($this->db->affected_rows())
-				return '1';
+				return $this->db->insert_id();
 			else
 				return '0';
 		}
@@ -211,7 +246,7 @@ class M_master_invoice extends Model{
 		//function for advanced search record
 		function master_invoice_search($invoice_id ,$invoice_no ,$invoice_supplier ,$invoice_noterima ,$invoice_tanggal ,$invoice_nilai ,$invoice_jatuhtempo ,$invoice_penagih ,$start,$end){
 			//full query
-			$query="select * from master_invoice";
+			$query="SELECT * FROM vu_trans_invoice";
 			
 			if($invoice_id!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -265,7 +300,7 @@ class M_master_invoice extends Model{
 		//function for print record
 		function master_invoice_print($invoice_id ,$invoice_no ,$invoice_supplier ,$invoice_noterima ,$invoice_tanggal ,$invoice_nilai ,$invoice_jatuhtempo ,$invoice_penagih ,$option,$filter){
 			//full query
-			$query="select * from master_invoice";
+			$query="SELECT * FROM vu_trans_invoice";
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 				$query .= " (invoice_id LIKE '%".addslashes($filter)."%' OR invoice_no LIKE '%".addslashes($filter)."%' OR invoice_supplier LIKE '%".addslashes($filter)."%' OR invoice_noterima LIKE '%".addslashes($filter)."%' OR invoice_tanggal LIKE '%".addslashes($filter)."%' OR invoice_nilai LIKE '%".addslashes($filter)."%' OR invoice_jatuhtempo LIKE '%".addslashes($filter)."%' OR invoice_penagih LIKE '%".addslashes($filter)."%' )";
@@ -311,7 +346,7 @@ class M_master_invoice extends Model{
 		//function  for export to excel
 		function master_invoice_export_excel($invoice_id ,$invoice_no ,$invoice_supplier ,$invoice_noterima ,$invoice_tanggal ,$invoice_nilai ,$invoice_jatuhtempo ,$invoice_penagih ,$option,$filter){
 			//full query
-			$query="select * from master_invoice";
+			$query="SELECT * FROM vu_trans_invoice";
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 				$query .= " (invoice_id LIKE '%".addslashes($filter)."%' OR invoice_no LIKE '%".addslashes($filter)."%' OR invoice_supplier LIKE '%".addslashes($filter)."%' OR invoice_noterima LIKE '%".addslashes($filter)."%' OR invoice_tanggal LIKE '%".addslashes($filter)."%' OR invoice_nilai LIKE '%".addslashes($filter)."%' OR invoice_jatuhtempo LIKE '%".addslashes($filter)."%' OR invoice_penagih LIKE '%".addslashes($filter)."%' )";

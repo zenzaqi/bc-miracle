@@ -313,7 +313,7 @@ class M_master_terima_beli extends Model{
 			$this->db->where('terima_id', $terima_id);
 			$this->db->update('master_terima_beli', $data);
 			
-			return '1';
+			return $terima_id;
 		}
 		
 		//function for create new record
@@ -332,7 +332,7 @@ class M_master_terima_beli extends Model{
 			);
 			$this->db->insert('master_terima_beli', $data); 
 			if($this->db->affected_rows())
-				return '1';
+				return $this->db->insert_id();
 			else
 				return '0';
 		}
