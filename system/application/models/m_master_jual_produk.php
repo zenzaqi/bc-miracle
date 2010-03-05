@@ -475,12 +475,88 @@ class M_master_jual_produk extends Model{
 		
 		//function for update record
 		function master_jual_produk_update($jproduk_id ,$jproduk_nobukti ,$jproduk_cust ,$jproduk_tanggal ,$jproduk_diskon ,$jproduk_cara ,$jproduk_cara2 ,$jproduk_cara3 ,$jproduk_keterangan , $jproduk_cashback, $jproduk_tunai_nilai, $jproduk_tunai_nilai2, $jproduk_tunai_nilai3, $jproduk_voucher_no, $jproduk_voucher_cashback, $jproduk_voucher_no2, $jproduk_voucher_cashback2, $jproduk_voucher_no3, $jproduk_voucher_cashback3, $jproduk_bayar, $jproduk_subtotal, $jproduk_hutang, $jproduk_kwitansi_no, $jproduk_kwitansi_nama, $jproduk_kwitansi_nilai, $jproduk_kwitansi_no2, $jproduk_kwitansi_nama2, $jproduk_kwitansi_nilai2, $jproduk_kwitansi_no3, $jproduk_kwitansi_nama3, $jproduk_kwitansi_nilai3, $jproduk_card_nama, $jproduk_card_edc, $jproduk_card_no, $jproduk_card_nilai, $jproduk_card_nama2, $jproduk_card_edc2, $jproduk_card_no2, $jproduk_card_nilai2, $jproduk_card_nama3, $jproduk_card_edc3, $jproduk_card_no3, $jproduk_card_nilai3, $jproduk_cek_nama, $jproduk_cek_no, $jproduk_cek_valid, $jproduk_cek_bank, $jproduk_cek_nilai, $jproduk_cek_nama2, $jproduk_cek_no2, $jproduk_cek_valid2, $jproduk_cek_bank2, $jproduk_cek_nilai2, $jproduk_cek_nama3, $jproduk_cek_no3, $jproduk_cek_valid3, $jproduk_cek_bank3, $jproduk_cek_nilai3, $jproduk_transfer_bank, $jproduk_transfer_nama, $jproduk_transfer_nilai, $jproduk_transfer_bank2, $jproduk_transfer_nama2, $jproduk_transfer_nilai2, $jproduk_transfer_bank3, $jproduk_transfer_nama3, $jproduk_transfer_nilai3){
+			$sql="SELECT jproduk_cara, jproduk_cara2, jproduk_cara3 FROM master_jual_produk WHERE jproduk_id='$jproduk_id'";
+			$rs=$this->db->query($sql);
+			if($rs->num_rows()){
+				$rs_record=$rs->row_array();
+				$jproduk_cara_awal=$rs_record["jproduk_cara"];
+				$jproduk_cara2_awal=$rs_record["jproduk_cara2"];
+				$jproduk_cara3_awal=$rs_record["jproduk_cara3"];
+				if($jproduk_cara_awal<>$jproduk_cara){
+					if($jproduk_cara_awal=="tunai"){
+						$sql="delete from jual_tunai where jtunai_ref='".$jproduk_nobukti."'";
+						$this->db->query($sql);
+					}
+					if($jproduk_cara_awal=="kwitansi"){
+						$sql="delete from jual_kwitansi where jkwitansi_ref='".$jproduk_nobukti."'";
+						$this->db->query($sql);
+					}
+					if($jproduk_cara_awal=="card"){
+						$sql="delete from jual_card where jcard_ref='".$jproduk_nobukti."'";
+						$this->db->query($sql);
+					}
+					if($jproduk_cara_awal=="cek/giro"){
+						$sql="delete from jual_cek where jcek_ref='".$jproduk_nobukti."'";
+						$this->db->query($sql);
+					}
+					if($jproduk_cara_awal=="transfer"){
+						$sql="delete from jual_transfer where jtransfer_ref='".$jproduk_nobukti."'";
+						$this->db->query($sql);
+					}
+				}
+				
+				if($jproduk_cara2_awal<>$jproduk_cara2){
+					if($jproduk_cara2_awal=="tunai"){
+						$sql="delete from jual_tunai where jtunai_ref='".$jproduk_nobukti."'";
+						$this->db->query($sql);
+					}
+					if($jproduk_cara2_awal=="kwitansi"){
+						$sql="delete from jual_kwitansi where jkwitansi_ref='".$jproduk_nobukti."'";
+						$this->db->query($sql);
+					}
+					if($jproduk_cara2_awal=="card"){
+						$sql="delete from jual_card where jcard_ref='".$jproduk_nobukti."'";
+						$this->db->query($sql);
+					}
+					if($jproduk_cara2_awal=="cek/giro"){
+						$sql="delete from jual_cek where jcek_ref='".$jproduk_nobukti."'";
+						$this->db->query($sql);
+					}
+					if($jproduk_cara2_awal=="transfer"){
+						$sql="delete from jual_transfer where jtransfer_ref='".$jproduk_nobukti."'";
+						$this->db->query($sql);
+					}
+				}
+				
+				if($jproduk_cara3_awal<>$jproduk_cara3){
+					if($jproduk_cara3_awal=="tunai"){
+						$sql="delete from jual_tunai where jtunai_ref='".$jproduk_nobukti."'";
+						$this->db->query($sql);
+					}
+					if($jproduk_cara3_awal=="kwitansi"){
+						$sql="delete from jual_kwitansi where jkwitansi_ref='".$jproduk_nobukti."'";
+						$this->db->query($sql);
+					}
+					if($jproduk_cara3_awal=="card"){
+						$sql="delete from jual_card where jcard_ref='".$jproduk_nobukti."'";
+						$this->db->query($sql);
+					}
+					if($jproduk_cara3_awal=="cek/giro"){
+						$sql="delete from jual_cek where jcek_ref='".$jproduk_nobukti."'";
+						$this->db->query($sql);
+					}
+					if($jproduk_cara3_awal=="transfer"){
+						$sql="delete from jual_transfer where jtransfer_ref='".$jproduk_nobukti."'";
+						$this->db->query($sql);
+					}
+				}
+			}
 			$data = array(
 				"jproduk_id"=>$jproduk_id, 
 				"jproduk_nobukti"=>$jproduk_nobukti, 
 				"jproduk_tanggal"=>$jproduk_tanggal, 
 				"jproduk_diskon"=>$jproduk_diskon,
-				//"jproduk_cashback"=>$jproduk_cashback,
+				"jproduk_cashback"=>$jproduk_cashback,
 				"jproduk_bayar"=>$jproduk_bayar,
 				"jproduk_cara"=>$jproduk_cara, 
 				//"jproduk_cara2"=>$jproduk_cara2, 
@@ -491,6 +567,7 @@ class M_master_jual_produk extends Model{
 				$data["jproduk_cara2"]=$jproduk_cara2;
 			if($jproduk_cara3!=null)
 				$data["jproduk_cara3"]=$jproduk_cara3;
+			
 			$sql="select cust_id from customer where cust_id='".$jproduk_cust."'";
 			$query=$this->db->query($sql);
 			if($query->num_rows())
@@ -501,7 +578,7 @@ class M_master_jual_produk extends Model{
 			if($this->db->affected_rows() || $this->db->affected_rows()==0){
 				
 				//delete all transaksi
-				$sql="delete from jual_kwitansi where jkwitansi_ref='".$jproduk_nobukti."'";
+				/*$sql="delete from jual_kwitansi where jkwitansi_ref='".$jproduk_nobukti."'";
 				$this->db->query($sql);
 				$sql="delete from jual_card where jcard_ref='".$jproduk_nobukti."'";
 				$this->db->query($sql);
@@ -510,7 +587,7 @@ class M_master_jual_produk extends Model{
 				$sql="delete from jual_transfer where jtransfer_ref='".$jproduk_nobukti."'";
 				$this->db->query($sql);
 				$sql="delete from jual_tunai where jtunai_ref='".$jproduk_nobukti."'";
-				$this->db->query($sql);
+				$this->db->query($sql);*/
 				
 				if($jproduk_cara!=null || $jproduk_cara!=''){
 					//kwitansi
