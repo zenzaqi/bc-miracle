@@ -25,7 +25,16 @@ class C_master_invoice extends Controller {
 	}
 	
 	function get_produk_list(){
-		$result=$this->m_public_function->get_produk_list();
+		$query = isset($_POST['query']) ? @$_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? @$_POST['start'] : @$_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? @$_POST['limit'] : @$_GET['limit']);
+		$master_id = (integer) (isset($_POST['master_id']) ? @$_POST['master_id'] : @$_GET['master_id']);
+		$terima_id = (integer) (isset($_POST['terima_id']) ? @$_POST['terima_id'] : @$_GET['terima_id']);
+		$task = isset($_POST['task']) ? @$_POST['task'] : @$_GET['task'];
+		if($task=="detail")
+			$result=$this->m_master_invoice->get_produk_invoice_list($master_id,$query,$start,$end);
+		elseif($task=="terima")
+			$result=$this->m_master_invoice->get_produk_terima_list($terima_id,$query,$start,$end);
 		echo $result;
 	}
 	
@@ -60,9 +69,10 @@ class C_master_invoice extends Controller {
 	//end of handler
 	
 	//purge all detail
-	function detail_detail_invoice_purge(){
+	function detail_invoice_purge(){
 		$master_id = (integer) (isset($_POST['master_id']) ? $_POST['master_id'] : $_GET['master_id']);
 		$result=$this->m_master_invoice->detail_detail_invoice_purge($master_id);
+		echo $result;
 	}
 	//eof
 	
@@ -74,7 +84,7 @@ class C_master_invoice extends Controller {
 	//
 	
 	//add detail
-	function detail_detail_invoice_insert(){
+	function detail_invoice_insert(){
 	//POST variable here
 		$dinvoice_id=trim(@$_POST["dinvoice_id"]);
 		$dinvoice_master=trim(@$_POST["dinvoice_master"]);

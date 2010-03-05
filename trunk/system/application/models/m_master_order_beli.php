@@ -195,7 +195,7 @@ class M_master_order_beli extends Model{
 			$this->db->where('order_id', $order_id);
 			$this->db->update('master_order_beli', $data);
 			
-			return '1';
+			return $order_id;
 		}
 		
 		//function for create new record

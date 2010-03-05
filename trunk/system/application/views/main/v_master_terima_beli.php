@@ -434,7 +434,7 @@ Ext.onReady(function(){
 		},[
 		/* dataIndex => insert intomaster_terima_beli_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'terima_id', type: 'int', mapping: 'terima_id'}, 
-			{name: 'terima_no', type: 'string', mapping: 'terima_no'}, 
+			{name: 'terima_no', type: 'string', mapping: 'no_bukti'}, 
 			{name: 'terima_order_id', type: 'int', mapping: 'terima_order'}, 
 			{name: 'terima_order', type: 'string', mapping: 'order_no'}, 
 			{name: 'terima_supplier', type: 'string', mapping: 'supplier_nama'},
@@ -443,7 +443,7 @@ Ext.onReady(function(){
 			{name: 'terima_supplier_id', type: 'int', mapping: 'supplier_id'}, 
 			{name: 'terima_surat_jalan', type: 'string', mapping: 'terima_surat_jalan'}, 
 			{name: 'terima_pengirim', type: 'string', mapping: 'terima_pengirim'}, 
-			{name: 'terima_tanggal', type: 'date', dateFormat: 'Y-m-d', mapping: 'terima_tanggal'}, 
+			{name: 'terima_tanggal', type: 'date', dateFormat: 'Y-m-d', mapping: 'tanggal'}, 
 			{name: 'terima_keterangan', type: 'string', mapping: 'terima_keterangan'}, 
 			{name: 'terima_creator', type: 'string', mapping: 'terima_creator'}, 
 			{name: 'terima_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'terima_date_create'}, 
