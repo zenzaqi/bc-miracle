@@ -206,7 +206,6 @@ Ext.onReady(function(){
 				if(result!==0){
 						detail_order_beli_purge(result)
 						Ext.MessageBox.alert(post2db+' OK','Data Pesanan Pembelian berhasil disimpan');
-						master_order_beli_DataStore.reload();
 						master_order_beli_createWindow.hide();
 				}else{
 						Ext.MessageBox.show({
@@ -217,8 +216,8 @@ Ext.onReady(function(){
 						   animEl: 'save',
 						   icon: Ext.MessageBox.WARNING
 						});
-						master_order_beli_DataStore.reload();
-				}        
+				} 
+				master_order_beli_DataStore.reload();
 			},
 			failure: function(response){
 				var result=response.responseText;
@@ -273,6 +272,9 @@ Ext.onReady(function(){
 		order_bayarField.setValue('0');
 		order_keteranganField.reset();
 		order_keteranganField.setValue(null);
+		cbo_order_satuanDataStore.load();
+		cbo_order_produk_DataStore.load();
+		detail_order_beli_DataStore.load();
 	}
  	/* End of Function */
   
@@ -287,6 +289,7 @@ Ext.onReady(function(){
 		order_biayaField.setValue(master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_biaya'));
 		order_bayarField.setValue(master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_bayar'));
 		order_keteranganField.setValue(master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_keterangan'));
+		cbo_order_satuanDataStore.load();
 		
 		cbo_order_produk_DataStore.setBaseParam('master_id',get_pk_id());
 		cbo_order_produk_DataStore.load({
@@ -763,9 +766,7 @@ Ext.onReady(function(){
 		master_order_beliListEditorGrid.startEditing(master_order_beli_SelectedRow,1);
   	}
 	/* End of Function */
-  	master_order_beliListEditorGrid.addListener('rowcontextmenu', onmaster_order_beli_ListEditGridContextMenu);
-	master_order_beli_DataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
-	master_order_beliListEditorGrid.on('afteredit', master_order_beli_update); // inLine Editing Record
+
 	
 	/* Identify  order_id Field */
 	order_idField= new Ext.form.NumberField({
@@ -982,7 +983,8 @@ Ext.onReady(function(){
 	/* dataIndex => insert intoperawatan_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'dorder_id', type: 'int', mapping: 'dorder_id'}, 
 			{name: 'dorder_master', type: 'int', mapping: 'dorder_master'}, 
-			{name: 'dorder_produk', type: 'int', mapping: 'dorder_produk'}, 
+			{name: 'dorder_produk', type: 'int', mapping: 'dorder_produk'},
+			{name: 'produk_nama', type: 'string', mapping: 'produk_nama'},
 			{name: 'dorder_satuan', type: 'int', mapping: 'dorder_satuan'}, 
 			{name: 'dorder_jumlah', type: 'int', mapping: 'dorder_jumlah'}, 
 			{name: 'dorder_harga', type: 'float', mapping: 'dorder_harga'}, 
@@ -1037,8 +1039,6 @@ Ext.onReady(function(){
 	});
 	
 	Ext.util.Format.comboRenderer = function(combo){
-		cbo_order_produk_DataStore.load();
-		cbo_order_satuanDataStore.load();
 		return function(value){
 			var record = combo.findRecord(combo.valueField, value);
 			return record ? record.get(combo.displayField) : combo.valueNotFoundText;
@@ -1052,8 +1052,9 @@ Ext.onReady(function(){
 			displayField: 'order_produk_nama',
 			valueField: 'order_produk_value',
 			triggerAction: 'all',
-			lazyRender: false,
+			lazyRender: true,
 			pageSize: pageS,
+			enableKeyEvents: true,
 			tpl: order_produk_detail_tpl,
 			itemSelector: 'div.search-item',
 			triggerAction: 'all',
@@ -1253,10 +1254,8 @@ Ext.onReady(function(){
 			waitMsg: 'Please wait...',
 			url: 'index.php?c=c_master_order_beli&m=detail_detail_order_beli_purge',
 			params:{ master_id: pkid },
-			callback:function(r,opt,success){
-				if(success==true){
-					detail_order_beli_insert(pkid);
-				}
+			success:function(response){
+				detail_order_beli_insert(pkid);
 			}
 		});
 	}
@@ -1345,6 +1344,7 @@ Ext.onReady(function(){
 		order_jumlahField.setValue(jumlah_item);
 		order_totalField.setValue(total_harga);
 		order_totalbayarField.setValue(total_harga-order_bayarField.getValue());
+		console.log('total');
 	}
 	
 	/* Function for action list search */
@@ -1720,13 +1720,38 @@ Ext.onReady(function(){
 	/*End of Function */
 	
 	//EVENTS
+	detail_order_beli_DataStore.on("load",detail_order_beli_total);
+	order_bayarField.on("keypress",detail_order_beli_total);
+	order_bayarField.on("keydown",detail_order_beli_total);
+	order_bayarField.on("keyup",detail_order_beli_total);	
+	master_order_beliListEditorGrid.addListener('rowcontextmenu', onmaster_order_beli_ListEditGridContextMenu);
+	//master_order_beli_DataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
+	master_order_beliListEditorGrid.on('afteredit', master_order_beli_update); // inLine Editing Record
+	
 	combo_order_produk.on("focus",function(){
 		cbo_order_produk_DataStore.setBaseParam('task','list');
+		var selectedquery=detail_order_beliListEditorGrid.getSelectionModel().getSelected().get('produk_nama');
+		cbo_order_produk_DataStore.setBaseParam('query',selectedquery);
 		cbo_order_produk_DataStore.load();
 	});
 	
 	detail_order_beli_DataStore.on("update",function(){
+		var	  query_selected="";
 		detail_order_beli_DataStore.commitChanges();
+		detail_order_beli_total();
+		console.log('update');
+		for(i=0;i<detail_order_beli_DataStore.getCount();i++){
+			detail_order_beli_record=detail_order_beli_DataStore.getAt(i);
+			query_selected=query_selected+detail_order_beli_record.data.dorder_produk+",";
+		}
+		cbo_order_produk_DataStore.setBaseParam('task','selected');
+		cbo_order_produk_DataStore.setBaseParam('selected_id',query_selected);
+		cbo_order_produk_DataStore.load();
+		
+		//detail_order_beliListEditorGrid.getView().refresh();
+	});
+	
+	/*combo_order_produk.on("blur",function(){
 		var	  query_selected="";
 		for(i=0;i<detail_order_beli_DataStore.getCount();i++){
 			detail_order_beli_record=detail_order_beli_DataStore.getAt(i);
@@ -1735,14 +1760,11 @@ Ext.onReady(function(){
 		cbo_order_produk_DataStore.setBaseParam('task','selected');
 		cbo_order_produk_DataStore.setBaseParam('selected_id',query_selected);
 		cbo_order_produk_DataStore.load();
-		detail_order_beli_total;
-	});
-	detail_order_beli_DataStore.on("load",detail_order_beli_total);
-	order_bayarField.on("keypress",detail_order_beli_total);
-	order_bayarField.on("keydown",detail_order_beli_total);
-	order_bayarField.on("keyup",detail_order_beli_total);
-
-	combo_order_produk.on("blur",function(){
+		detail_order_beliListEditorGrid.getView().refresh();
+	});*/
+	
+/*	combo_order_produk.on("selected",function(){
+		etail_order_beli_DataStore.commitChanges();
 		var	  query_selected="";
 		for(i=0;i<detail_order_beli_DataStore.getCount();i++){
 			detail_order_beli_record=detail_order_beli_DataStore.getAt(i);
@@ -1751,7 +1773,8 @@ Ext.onReady(function(){
 		cbo_order_produk_DataStore.setBaseParam('task','selected');
 		cbo_order_produk_DataStore.setBaseParam('selected_id',query_selected);
 		cbo_order_produk_DataStore.load();
-	});
+	});*/
+	
 	
 	
 });

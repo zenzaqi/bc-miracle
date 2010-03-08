@@ -20,7 +20,7 @@
 </head>
 <body>
 <table summary='Rekap Jual'>
-	<caption>Laporan Rekap Penjualan <?php echo $jenis; ?><br/><?php echo $periode; ?></caption>
+	<caption>Laporan Rekap Penjualan <?php echo $jenis; ?><br/><?php echo $periode; ?>Group By No. Faktur</caption>
 	<thead>
     	<tr>
         	<th scope='col'>No</th>
