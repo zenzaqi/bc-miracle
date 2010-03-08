@@ -26,6 +26,10 @@ class M_master_order_beli extends Model{
 				$selected_id=substr($selected_id,0,strlen($selected_id)-1);
 				$sql.=" WHERE produk_id IN(".$selected_id.")";
 			}
+			if($query!==""){
+				$sql.=(eregi("WHERE",$sql)?" AND ":" WHERE ")." produk_nama like '%".$query."%' OR produk_kode like '%".$query."%'";
+			}
+			
 			$result = $this->db->query($sql);
 			$nbrows = $result->num_rows();
 			$limit = $sql." LIMIT ".$start.",".$end;			
@@ -45,7 +49,10 @@ class M_master_order_beli extends Model{
 		function get_produk_all_list($query,$start,$end){
 			
 			$sql="SELECT produk_id,produk_nama,produk_kode,kategori_nama FROM vu_produk";
-						
+			if($query!==""){
+				$sql.=(eregi("WHERE",$sql)?" AND ":" WHERE ")." produk_nama like '%".$query."%' OR produk_kode like '%".$query."%'";
+			}
+			
 			$result = $this->db->query($sql);
 			$nbrows = $result->num_rows();
 			$limit = $sql." LIMIT ".$start.",".$end;			
@@ -66,6 +73,9 @@ class M_master_order_beli extends Model{
 			$sql="SELECT produk_id,produk_nama,produk_kode,kategori_nama FROM vu_produk";
 			if($master_id<>"")
 				$sql.=" WHERE produk_id IN(SELECT dorder_produk FROM detail_order_beli WHERE dorder_master='".$master_id."')";
+			if($query!==""){
+				$sql.=(eregi("WHERE",$sql)?" AND ":" WHERE ")." produk_nama like '%".$query."%' OR produk_kode like '%".$query."%'";
+			}
 			
 			$result = $this->db->query($sql);
 			$nbrows = $result->num_rows();
@@ -86,7 +96,7 @@ class M_master_order_beli extends Model{
 		//function for detail
 		//get record list
 		function detail_detail_order_beli_list($master_id,$query,$start,$end) {
-			$query = "SELECT *,(dorder_harga*dorder_jumlah)*(100-dorder_diskon)/100 as dorder_subtotal FROM detail_order_beli where dorder_master='".$master_id."'";
+			$query = "SELECT * FROM vu_detail_order_beli where dorder_master='".$master_id."'";
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
 			$limit = $query." LIMIT ".$start.",".$end;			
