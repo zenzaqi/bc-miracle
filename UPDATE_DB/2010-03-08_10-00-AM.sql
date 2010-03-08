@@ -1,0 +1,1 @@
+ALTER TABLE `cetak_kwitansi` CHANGE `kwitansi_ref` `kwitansi_ref` VARCHAR( 20 ) NULL DEFAULT NULL ;

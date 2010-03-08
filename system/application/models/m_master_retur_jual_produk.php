@@ -24,11 +24,18 @@ class M_master_retur_jual_produk extends Model{
 			$sql_dproduk="SELECT dproduk_produk FROM detail_jual_produk WHERE dproduk_master='$query'";
 			$rs=$this->db->query($sql_dproduk);
 			$rs_rows=$rs->num_rows();
+		}elseif(is_string($query)==true){
+			$sql_dproduk="SELECT dproduk_master FROM detail_jual_produk LEFT JOIN master_jual_produk ON(dproduk_master=jproduk_id) WHERE jproduk_nobukti='$query'";
+			$rs=$this->db->query($sql_dproduk);
+			if($rs->num_rows()){
+				$rs_record=$rs->row_array();
+				$query=$rs_record["dproduk_master"];
+			}
 		}
 		
 		//$sql="select * from vu_produk WHERE produk_aktif='Aktif'";
-		$sql="SELECT produk_id, produk_nama, satuan_kode, (produk_harga*((100-dproduk_diskon)/100)*((100-jproduk_diskon)/100)-jproduk_cashback) AS retur_produk_harga FROM detail_jual_produk LEFT JOIN master_jual_produk ON(dproduk_master=jproduk_id) LEFT JOIN produk ON(dproduk_produk=produk_id) LEFT JOIN satuan ON(dproduk_satuan=satuan_id) WHERE dproduk_master='$query'";
-		if($query<>"" && is_numeric($query)==false){
+		$sql="SELECT produk_id, produk_nama, satuan_id, satuan_kode, (produk_harga*((100-dproduk_diskon)/100)*((100-jproduk_diskon)/100)-jproduk_cashback) AS retur_produk_harga FROM detail_jual_produk LEFT JOIN master_jual_produk ON(dproduk_master=jproduk_id) LEFT JOIN produk ON(dproduk_produk=produk_id) LEFT JOIN satuan ON(dproduk_satuan=satuan_id) WHERE dproduk_master='$query'";
+		/*if($query<>"" && is_numeric($query)==false){
 			$sql.=eregi("WHERE",$sql)? " AND ":" WHERE ";
 			$sql.=" (produk_kode like '%".$query."%' or produk_nama like '%".$query."%' or satuan_nama like '%".$query."%' or kategori_nama like '%".$query."%' or group_nama like '%".$query."%') ";
 		}else{
@@ -41,7 +48,7 @@ class M_master_retur_jual_produk extends Model{
 				}
 				$sql=$sql."(".substr($filter,2,strlen($filter)).")";
 			}
-		}
+		}*/
 		
 		$result = $this->db->query($sql);
 		$nbrows = $result->num_rows();
@@ -278,7 +285,8 @@ class M_master_retur_jual_produk extends Model{
 		//function for detail
 		//get record list
 		function detail_detail_retur_jual_produk_list($master_id,$query,$start,$end) {
-			$query = "SELECT * FROM detail_retur_jual_produk where drproduk_master='".$master_id."'";
+			$query = "SELECT drproduk_id, drproduk_master, drproduk_produk, drproduk_satuan, satuan_nama, drproduk_jumlah, drproduk_harga FROM detail_retur_jual_produk LEFT JOIN satuan ON(drproduk_satuan=satuan_id) WHERE drproduk_master='".$master_id."'";
+			
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
 			$limit = $query." LIMIT ".$start.",".$end;			
@@ -342,12 +350,12 @@ class M_master_retur_jual_produk extends Model{
 		
 		//function for get list record
 		function master_retur_jual_produk_list($filter,$start,$end){
-			$query = "SELECT * FROM master_retur_jual_produk,customer,master_jual_produk WHERE rproduk_cust=cust_id AND rproduk_nobuktijual=jproduk_id";
+			$query = "SELECT * FROM master_retur_jual_produk LEFT JOIN customer ON(rproduk_cust=cust_id) LEFT JOIN master_jual_produk ON(rproduk_nobuktijual=jproduk_id) LEFT JOIN cetak_kwitansi ON(kwitansi_ref=rproduk_nobukti)";
 			
 			// For simple search
 			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (rproduk_id LIKE '%".addslashes($filter)."%' OR rproduk_nobukti LIKE '%".addslashes($filter)."%' OR rproduk_nobuktijual LIKE '%".addslashes($filter)."%' OR rproduk_cust LIKE '%".addslashes($filter)."%' OR rproduk_tanggal LIKE '%".addslashes($filter)."%' OR rproduk_keterangan LIKE '%".addslashes($filter)."%' )";
+				$query .= " (rproduk_nobukti LIKE '%".addslashes($filter)."%' OR rproduk_nobuktijual LIKE '%".addslashes($filter)."%' OR rproduk_cust LIKE '%".addslashes($filter)."%' )";
 			}
 			
 			$result = $this->db->query($query);
@@ -383,7 +391,7 @@ class M_master_retur_jual_produk extends Model{
 		}
 		
 		//function for create new record
-		function master_retur_jual_produk_create($rproduk_nobukti ,$rproduk_nobuktijual ,$rproduk_cust ,$rproduk_tanggal ,$rproduk_keterangan ){
+		function master_retur_jual_produk_create($rproduk_nobukti ,$rproduk_nobuktijual ,$rproduk_cust ,$rproduk_tanggal ,$rproduk_keterangan ,$rproduk_kwitansi_nilai ,$rproduk_kwitansi_keterangan){
 			$pattern="RFT/".date("ym")."-";
 			$rproduk_nobukti=$this->m_public_function->get_kode_1('master_retur_jual_produk','rproduk_nobukti',$pattern,12);
 			
@@ -395,9 +403,20 @@ class M_master_retur_jual_produk extends Model{
 				"rproduk_keterangan"=>$rproduk_keterangan 
 			);
 			$this->db->insert('master_retur_jual_produk', $data); 
-			if($this->db->affected_rows())
+			if($this->db->affected_rows()){
+				$pattern="KW/".date('ym')."-";
+				$kwitansi_no=$this->m_public_function->get_kode_1("cetak_kwitansi","kwitansi_no",$pattern,12);
+				$dti_kwitansi=array(
+				"kwitansi_no"=>$kwitansi_no, 
+				"kwitansi_cust"=>$rproduk_cust, 
+				"kwitansi_ref"=>$rproduk_nobukti, 
+				"kwitansi_nilai"=>$rproduk_kwitansi_nilai, 
+				"kwitansi_keterangan"=>$rproduk_kwitansi_keterangan, 
+				"kwitansi_status"=>'Aktif'
+				);
+				$this->db->insert('cetak_kwitansi', $dti_kwitansi);
 				return '1';
-			else
+			}else
 				return '0';
 		}
 		

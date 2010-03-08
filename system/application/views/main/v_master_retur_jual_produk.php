@@ -162,6 +162,8 @@ Ext.onReady(function(){
 		var rproduk_cust_create=null; 
 		var rproduk_tanggal_create_date=""; 
 		var rproduk_keterangan_create=null; 
+		var rproduk_kwitansi_nilai_create=null; 
+		var rproduk_kwitansi_keterangan_create=null; 
 
 		if(rproduk_idField.getValue()!== null){rproduk_id_create_pk = rproduk_idField.getValue();}else{rproduk_id_create_pk=get_pk_id();} 
 		if(rproduk_nobuktiField.getValue()!== null){rproduk_nobukti_create = rproduk_nobuktiField.getValue();} 
@@ -169,6 +171,8 @@ Ext.onReady(function(){
 		if(rproduk_custField.getValue()!== null){rproduk_cust_create = rproduk_custidField.getValue();} 
 		if(rproduk_tanggalField.getValue()!== ""){rproduk_tanggal_create_date = rproduk_tanggalField.getValue().format('Y-m-d');} 
 		if(rproduk_keteranganField.getValue()!== null){rproduk_keterangan_create = rproduk_keteranganField.getValue();} 
+		if(rproduk_kwitansi_nilaiField.getValue()!== null){rproduk_kwitansi_nilai_create = rproduk_kwitansi_nilaiField.getValue();} 
+		if(rproduk_kwitansi_keteranganField.getValue()!== null){rproduk_kwitansi_keterangan_create = rproduk_kwitansi_keteranganField.getValue();} 
 
 		Ext.Ajax.request({  
 			waitMsg: 'Mohon  Tunggu...',
@@ -181,6 +185,8 @@ Ext.onReady(function(){
 				rproduk_cust	: rproduk_cust_create, 
 				rproduk_tanggal	: rproduk_tanggal_create_date, 
 				rproduk_keterangan	: rproduk_keterangan_create, 
+				rproduk_kwitansi_nilai	: rproduk_kwitansi_nilai_create, 
+				rproduk_kwitansi_keterangan	: rproduk_kwitansi_keterangan_create
 			}, 
 			success: function(response){             
 				var result=eval(response.responseText);
@@ -261,6 +267,8 @@ Ext.onReady(function(){
 		rproduk_custidField.setValue(master_retur_jual_produkListEditorGrid.getSelectionModel().getSelected().get('rproduk_cust_id'));
 		rproduk_tanggalField.setValue(master_retur_jual_produkListEditorGrid.getSelectionModel().getSelected().get('rproduk_tanggal'));
 		rproduk_keteranganField.setValue(master_retur_jual_produkListEditorGrid.getSelectionModel().getSelected().get('rproduk_keterangan'));
+		rproduk_kwitansi_nilaiField.setValue(master_retur_jual_produkListEditorGrid.getSelectionModel().getSelected().get('kwitansi_nilai'));
+		rproduk_kwitansi_keteranganField.setValue(master_retur_jual_produkListEditorGrid.getSelectionModel().getSelected().get('kwitansi_keterangan'));
 	}
 	/* End setValue to EDIT*/
   
@@ -272,6 +280,8 @@ Ext.onReady(function(){
   
   	/* Function for Displaying  create Window Form */
 	function display_form_window(){
+		detail_retur_jual_produk_DataStore.load({params : {master_id : 0, start:0, limit:pageS}});
+		cbo_drproduk_satuanDataStore.load();
 		if(!master_retur_jual_produk_createWindow.isVisible()){
 			master_retur_jual_produk_reset_form();
 			post2db='CREATE';
@@ -304,12 +314,16 @@ Ext.onReady(function(){
   
 	/* Function for Update Confirm */
 	function master_retur_jual_produk_confirm_update(){
+		cbo_drproduk_produkDataStore.load({params : {query : master_retur_jual_produkListEditorGrid.getSelectionModel().getSelected().get('rproduk_nobuktijual')}});
+		cbo_drproduk_satuanDataStore.load();
 		/* only one record is selected here */
 		if(master_retur_jual_produkListEditorGrid.selModel.getCount() == 1) {
 			master_retur_jual_produk_reset_form();
 			master_retur_jual_produk_set_form();
 			post2db='UPDATE';
-			detail_retur_jual_produk_DataStore.load({params : {master_id : eval(get_pk_id()), start:0, limit:pageS}});
+			detail_retur_jual_produk_DataStore.load({
+				params : {master_id : eval(get_pk_id()), start:0, limit:pageS}
+			});
 			msg='updated';
 			master_retur_jual_produk_createWindow.show();
 		} else {
@@ -394,15 +408,18 @@ Ext.onReady(function(){
 			{name: 'rproduk_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'rproduk_date_create'}, 
 			{name: 'rproduk_update', type: 'string', mapping: 'rproduk_update'}, 
 			{name: 'rproduk_date_update', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'rproduk_date_update'}, 
-			{name: 'rproduk_revised', type: 'int', mapping: 'rproduk_revised'} 
+			{name: 'rproduk_revised', type: 'int', mapping: 'rproduk_revised'},
+			{name: 'kwitansi_id', type: 'int', mapping: 'kwitansi_id'},
+			{name: 'kwitansi_nilai', type: 'float', mapping: 'kwitansi_nilai'},
+			{name: 'kwitansi_keterangan', type: 'string', mapping: 'kwitansi_keterangan'} 
 		]),
 		sortInfo:{field: 'rproduk_id', direction: "DESC"}
 	});
 	/* End of Function */
 	
 	/* Function for Retrieve DataStore */
-	cbo_retur_produk_DataSore = new Ext.data.Store({
-		id: 'cbo_retur_produk_DataSore',
+	cbo_retur_produk_DataStore = new Ext.data.Store({
+		id: 'cbo_retur_produk_DataStore',
 		proxy: new Ext.data.HttpProxy({
 			url: 'index.php?c=c_master_retur_jual_produk&m=get_jual_produk_list', 
 			method: 'POST'
@@ -682,7 +699,7 @@ Ext.onReady(function(){
 	rproduk_nobuktijualField= new Ext.form.ComboBox({
 		id: 'rproduk_nobuktijualField',
 		fieldLabel: 'No.Faktur Jual',
-		store: cbo_retur_produk_DataSore,
+		store: cbo_retur_produk_DataStore,
 		mode: 'remote',
 		displayField:'retur_produk_display',
 		valueField: 'retur_produk_value',
@@ -721,11 +738,28 @@ Ext.onReady(function(){
 		anchor: '95%'
 	});
 	
+	rproduk_kwitansi_nilaiField= new Ext.form.NumberField({
+		id: 'rproduk_kwitansi_nilaiField',
+		fieldLabel: 'Nilai (Rp)',
+		allowNegatife : false,
+		blankText: '0',
+		allowDecimals: true,
+		readOnly: true,
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
+	});
+	rproduk_kwitansi_keteranganField= new Ext.form.TextArea({
+		id: 'rproduk_kwitansi_keteranganField',
+		fieldLabel: 'Keterangan Kuitansi',
+		maxLength: 250,
+		anchor: '95%'
+	});
+	
 	rproduk_nobuktijualField.on('select', function(){
-		var j=cbo_retur_produk_DataSore.find('retur_produk_value',rproduk_nobuktijualField.getValue());
-		if(cbo_retur_produk_DataSore.getCount()){
-			rproduk_custField.setValue(cbo_retur_produk_DataSore.getAt(j).data.retur_produk_nama_customer);
-			rproduk_custidField.setValue(cbo_retur_produk_DataSore.getAt(j).data.retur_produk_customer_id);
+		var j=cbo_retur_produk_DataStore.find('retur_produk_value',rproduk_nobuktijualField.getValue());
+		if(cbo_retur_produk_DataStore.getCount()){
+			rproduk_custField.setValue(cbo_retur_produk_DataStore.getAt(j).data.retur_produk_nama_customer);
+			rproduk_custidField.setValue(cbo_retur_produk_DataStore.getAt(j).data.retur_produk_customer_id);
 			cbo_drproduk_produkDataStore.load({params: {query: rproduk_nobuktijualField.getValue()}});
 		}
 	});
@@ -767,6 +801,7 @@ Ext.onReady(function(){
 			{name: 'drproduk_master', type: 'int', mapping: 'drproduk_master'}, 
 			{name: 'drproduk_produk', type: 'int', mapping: 'drproduk_produk'}, 
 			{name: 'drproduk_satuan', type: 'int', mapping: 'drproduk_satuan'}, 
+			//{name: 'drproduk_satuan', type: 'string', mapping: 'satuan_nama'}, 
 			{name: 'drproduk_jumlah', type: 'int', mapping: 'drproduk_jumlah'}, 
 			{name: 'drproduk_harga', type: 'float', mapping: 'drproduk_harga'} 
 	]);
@@ -811,7 +846,8 @@ Ext.onReady(function(){
 		},[
 			{name: 'drproduk_produk_value', type: 'int', mapping: 'produk_id'},
 			{name: 'drproduk_produk_harga', type: 'float', mapping: 'retur_produk_harga'},
-			{name: 'drproduk_produk_satuan', type: 'string', mapping: 'satuan_kode'},
+			//{name: 'drproduk_produk_satuan', type: 'string', mapping: 'satuan_kode'},
+			{name: 'drproduk_produk_satuan', type: 'int', mapping: 'satuan_id'},
 			{name: 'drproduk_produk_display', type: 'string', mapping: 'produk_nama'}
 		]),
 		sortInfo:{field: 'drproduk_produk_display', direction: "ASC"}
@@ -821,10 +857,27 @@ Ext.onReady(function(){
             '<span>{drproduk_produk_kode}| <b>{drproduk_produk_display}</b>',
 		'</div></tpl>'
     );
+	
+	
+	cbo_drproduk_satuanDataStore = new Ext.data.Store({
+		id: 'cbo_drproduk_satuanDataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_master_retur_jual_produk&m=get_satuan_list', 
+			method: 'POST'
+		}),baseParams: {start: 0, limit: 15 },
+			reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'satuan_id'
+		},[
+			{name: 'drproduk_satuan_value', type: 'int', mapping: 'satuan_id'},
+			{name: 'drproduk_satuan_display', type: 'string', mapping: 'satuan_kode'}
+		]),
+		sortInfo:{field: 'drproduk_satuan_display', direction: "ASC"}
+	});
 	var combo_retur_produk=new Ext.form.ComboBox({
 			store: cbo_drproduk_produkDataStore,
 			mode: 'local',
-			typeAhead: true,
 			displayField: 'drproduk_produk_display',
 			valueField: 'drproduk_produk_value',
 			typeAhead: false,
@@ -834,6 +887,20 @@ Ext.onReady(function(){
 			tpl: produk_tpl,
 			//applyTo: 'search',
 			itemSelector: 'div.search-item',
+			triggerAction: 'all',
+			lazyRender:true,
+			listClass: 'x-combo-list-small',
+			anchor: '95%'
+
+	});
+	
+	var combo_retur_satuan=new Ext.form.ComboBox({
+			store: cbo_drproduk_satuanDataStore,
+			mode: 'local',
+			displayField: 'drproduk_satuan_display',
+			valueField: 'drproduk_satuan_value',
+			typeAhead: false,
+			hideTrigger:false,
 			triggerAction: 'all',
 			lazyRender:true,
 			listClass: 'x-combo-list-small',
@@ -857,7 +924,9 @@ Ext.onReady(function(){
 			dataIndex: 'drproduk_satuan',
 			width: 150,
 			sortable: true,
-			readOnly: true
+			readOnly: true,
+			//editor: combo_retur_satuan,
+			renderer: Ext.util.Format.comboRenderer(combo_retur_satuan)
 		},
 		{
 			header: 'Jumlah',
@@ -877,7 +946,18 @@ Ext.onReady(function(){
 			dataIndex: 'drproduk_harga',
 			width: 150,
 			sortable: true,
-			readOnly: true
+			readOnly: true,
+			renderer: Ext.util.Format.numberRenderer('0,000')
+		},
+		{
+			header: 'Sub Total',
+			dataIndex: 'drproduk_subtotal',
+			width: 150,
+			sortable: true,
+			readOnly: true,
+			renderer: function(v, params, record){
+				return Ext.util.Format.number(record.data.drproduk_jumlah*record.data.drproduk_harga,'0,000');
+			}
 		}]
 	);
 	detail_retur_jual_produk_ColumnModel.defaultSortable= true;
@@ -932,7 +1012,6 @@ Ext.onReady(function(){
 			drproduk_id	:'',		
 			drproduk_master	:'',		
 			drproduk_produk	:'',		
-			drproduk_satuan	:'',		
 			drproduk_jumlah	:'',		
 			drproduk_harga	:''		
 		});
@@ -945,7 +1024,8 @@ Ext.onReady(function(){
 	
 	//function for refresh detail
 	function refresh_detail_retur_jual_produk(){
-		detail_retur_jual_produk_DataStore.commitChanges();
+		var sum_subtotal_detail=0;
+		//detail_retur_jual_produk_DataStore.commitChanges();
 		detail_retur_jual_produkListEditorGrid.getView().refresh();
 		detail_retur_produk_record=detail_retur_jual_produk_DataStore.getAt(0);
 		//console.log("detail_retur_jual_produk_DataStore COUNT = "+detail_retur_jual_produk_DataStore.getCount());
@@ -954,6 +1034,11 @@ Ext.onReady(function(){
 			if(dproduk>=0){
 				detail_retur_produk_record.data.drproduk_satuan=cbo_drproduk_produkDataStore.getAt(dproduk).data.drproduk_produk_satuan;
 				detail_retur_produk_record.data.drproduk_harga=cbo_drproduk_produkDataStore.getAt(dproduk).data.drproduk_produk_harga;
+				
+				for(i=0;i<detail_retur_jual_produk_DataStore.getCount();i++){
+					sum_subtotal_detail+=(detail_retur_jual_produk_DataStore.getAt(i).data.drproduk_jumlah*cbo_drproduk_produkDataStore.getAt(dproduk).data.drproduk_produk_harga);
+					rproduk_kwitansi_nilaiField.setValue(sum_subtotal_detail);
+				}
 			}
 		}
 	}
@@ -1023,16 +1108,38 @@ Ext.onReady(function(){
 	//event on update of detail data store
 	detail_retur_jual_produk_DataStore.on('update', refresh_detail_retur_jual_produk);
 	
+	kwitansi_tercetakGroup = new Ext.form.FieldSet({
+		title: 'Kuitansi Tercetak',
+		autoHeight: true,
+		collapsible: true,
+		layout:'column',
+		items:[
+			{
+				columnWidth:0.5,
+				layout: 'form',
+				border:false,
+				items: [rproduk_kwitansi_nilaiField] 
+			}
+			,{
+				columnWidth:0.5,
+				layout: 'form',
+				border:false,
+				items: [rproduk_kwitansi_keteranganField] 
+			}
+			]
+	
+	});
+	
 	/* Function for retrieve create Window Panel*/ 
 	master_retur_jual_produk_createForm = new Ext.FormPanel({
 		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
 		width: 700,        
-		items: [master_retur_jual_produk_masterGroup,detail_retur_jual_produkListEditorGrid]
+		items: [master_retur_jual_produk_masterGroup,detail_retur_jual_produkListEditorGrid, kwitansi_tercetakGroup]
 		,
 		buttons: [{
-				text: 'Save and Close',
+				text: 'Cetak Kuitansi',
 				handler: master_retur_jual_produk_create
 			}
 			,{
