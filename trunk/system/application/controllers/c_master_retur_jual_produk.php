@@ -34,6 +34,14 @@ class C_master_retur_jual_produk extends Controller {
 		echo $result;
 	}
 	
+	function get_satuan_list(){
+		//$query = isset($_POST['query']) ? $_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		$result = $this->m_public_function->get_satuan_list();
+		echo $result;
+	}
+	
 	function laporan(){
 		$this->load->view('main/v_lap_retur_produk');
 	}
@@ -202,7 +210,11 @@ class C_master_retur_jual_produk extends Controller {
 		$rproduk_keterangan=trim(@$_POST["rproduk_keterangan"]);
 		$rproduk_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$rproduk_keterangan);
 		$rproduk_keterangan=str_replace("'", '"',$rproduk_keterangan);
-		$result=$this->m_master_retur_jual_produk->master_retur_jual_produk_create($rproduk_nobukti ,$rproduk_nobuktijual ,$rproduk_cust ,$rproduk_tanggal ,$rproduk_keterangan );
+		$rproduk_kwitansi_nilai=trim(@$_POST["rproduk_kwitansi_nilai"]);
+		$rproduk_kwitansi_keterangan=trim(@$_POST["rproduk_kwitansi_keterangan"]);
+		$rproduk_kwitansi_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$rproduk_kwitansi_keterangan);
+		$rproduk_kwitansi_keterangan=str_replace("'", '"',$rproduk_kwitansi_keterangan);
+		$result=$this->m_master_retur_jual_produk->master_retur_jual_produk_create($rproduk_nobukti ,$rproduk_nobuktijual ,$rproduk_cust ,$rproduk_tanggal ,$rproduk_keterangan ,$rproduk_kwitansi_nilai ,$rproduk_kwitansi_keterangan);
 		echo $result;
 	}
 
