@@ -1,0 +1,1 @@
+ALTER TABLE `cetak_kwitansi` ADD `kwitansi_cara` ENUM( 'tunai', 'card', 'cek/giro', 'transfer' ) NULL DEFAULT NULL AFTER `kwitansi_ref` ;
