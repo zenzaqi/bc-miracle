@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Cetak Kwitansi</title>
-<body>
+<body onload="window.print()">
 <table width="1000" border="0">
   <tr>
     <td colspan="2" align="center"><h1>KWITANSI</h1></td>

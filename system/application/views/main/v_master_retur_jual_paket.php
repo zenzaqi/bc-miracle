@@ -265,6 +265,7 @@ Ext.onReady(function(){
   
   	/* Function for Displaying  create Window Form */
 	function display_form_window(){
+		detail_retur_paket_rawat_DataStore.load({params : {master_id : 0, start:0, limit:pageS}});
 		if(!master_retur_jual_paket_createWindow.isVisible()){
 			master_retur_jual_paket_reset_form();
 			post2db='CREATE';
@@ -414,6 +415,54 @@ Ext.onReady(function(){
 		]),
 		sortInfo:{field: 'retur_paket_display', direction: "ASC"}
 	});
+	
+	cbo_drpaket_rawatDataStore = new Ext.data.Store({
+		id: 'cbo_drpaket_rawatDataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_master_retur_jual_paket&m=get_rawat_list', 
+			method: 'POST'
+		}),baseParams: {start: 0, limit: 15 },
+			reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'rawat_id'
+		},[
+			{name: 'drpaket_rawat_value', type: 'int', mapping: 'rawat_id'},
+			{name: 'drpaket_rawat_kode', type: 'string', mapping: 'rawat_kode'},
+			{name: 'drpaket_rawat_harga', type: 'float', mapping: 'rawat_harga'},
+			{name: 'drpaket_rawat_display', type: 'string', mapping: 'rawat_nama'}
+		]),
+		sortInfo:{field: 'drpaket_rawat_display', direction: "ASC"}
+	});
+	var rawat_tpl = new Ext.XTemplate(
+        '<tpl for="."><div class="search-item">',
+            '<span>{drpaket_rawat_kode}| <b>{drpaket_rawat_display}</b>',
+		'</div></tpl>'
+    );
+	
+	cbo_dretur_rawatDataStore = new Ext.data.Store({
+		id: 'cbo_dretur_rawatDataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_master_retur_jual_paket&m=get_retur_rawat_list', 
+			method: 'POST'
+		}),baseParams: {start: 0, limit: 15 },
+			reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'rawat_id'
+		},[
+			{name: 'dretur_rawat_value', type: 'int', mapping: 'rawat_id'},
+			{name: 'dretur_rawat_kode', type: 'string', mapping: 'rawat_kode'},
+			{name: 'dretur_rawat_harga', type: 'string', mapping: 'rawat_harga'},
+			{name: 'dretur_rawat_display', type: 'string', mapping: 'rawat_nama'}
+		]),
+		sortInfo:{field: 'dretur_rawat_display', direction: "ASC"}
+	});
+	var retur_rawat_tpl = new Ext.XTemplate(
+        '<tpl for="."><div class="search-item">',
+            '<span>{dretur_rawat_kode}| <b>{dretur_rawat_display}</b> | Rp.{dretur_rawat_harga}',
+		'</div></tpl>'
+    );
     
   	/* Function for Identify of Window Column Model */
 	master_retur_jual_paket_ColumnModel = new Ext.grid.ColumnModel(
@@ -717,6 +766,7 @@ Ext.onReady(function(){
 		if(cbo_retur_paket_DataSore.getCount()){
 			rpaket_custField.setValue(cbo_retur_paket_DataSore.getAt(j).data.retur_paket_nama_customer);
 			rpaket_custidField.setValue(cbo_retur_paket_DataSore.getAt(j).data.retur_paket_customer_id);
+			cbo_drpaket_rawatDataStore.load({params: {query: rpaket_nobuktijualField.getValue()}});
 		}
 	});
 	
@@ -787,25 +837,63 @@ Ext.onReady(function(){
     });
 	//eof
 	
+	var combo_retur_paket=new Ext.form.ComboBox({
+			store: cbo_drpaket_rawatDataStore,
+			mode: 'local',
+			displayField: 'drpaket_rawat_display',
+			valueField: 'drpaket_rawat_value',
+			typeAhead: false,
+			loadingText: 'Searching...',
+			pageSize:pageS,
+			hideTrigger:false,
+			tpl: rawat_tpl,
+			//applyTo: 'search',
+			itemSelector: 'div.search-item',
+			triggerAction: 'all',
+			lazyRender:true,
+			listClass: 'x-combo-list-small',
+			anchor: '95%'
+
+	});
+	combo_retur_paket.on('select', function(){
+		var j=cbo_drpaket_rawatDataStore.find('drpaket_rawat_value',combo_retur_paket.getValue());
+		if(cbo_drpaket_rawatDataStore.getCount()){
+			cbo_dretur_rawatDataStore.load({params: {query: cbo_drpaket_rawatDataStore.getAt(j).data.drpaket_rawat_harga}});
+		}
+	});
+	
+	var combo_retur_perawatan=new Ext.form.ComboBox({
+			store: cbo_dretur_rawatDataStore,
+			mode: 'local',
+			displayField: 'dretur_rawat_display',
+			valueField: 'dretur_rawat_value',
+			typeAhead: false,
+			loadingText: 'Searching...',
+			pageSize:pageS,
+			hideTrigger:false,
+			tpl: retur_rawat_tpl,
+			//applyTo: 'search',
+			itemSelector: 'div.search-item',
+			triggerAction: 'all',
+			lazyRender:true,
+			listClass: 'x-combo-list-small',
+			anchor: '95%'
+
+	});
+	
 	//declaration of detail coloumn model
 	detail_retur_paket_rawat_ColumnModel = new Ext.grid.ColumnModel(
 		[
 		{
-			header: 'Drpaket Rawat',
+			header: 'Perawatan',
 			dataIndex: 'drpaket_rawat',
 			width: 150,
 			sortable: true,
-			editor: new Ext.form.NumberField({
-				allowBlank: false,
-				allowDecimals: false,
-				allowNegative: false,
-				blankText: '0',
-				maxLength: 11,
-				maskRe: /([0-9]+)$/
-			})
+			editor: combo_retur_paket,
+			renderer: Ext.util.Format.comboRenderer(combo_retur_paket)
 		},
 		{
-			header: 'Drpaket Jumlah',
+			header: 'Jumlah',
 			dataIndex: 'drpaket_jumlah',
 			width: 150,
 			sortable: true,
@@ -818,7 +906,7 @@ Ext.onReady(function(){
 			})
 		},
 		{
-			header: 'Drpaket Harga',
+			header: 'Harga',
 			dataIndex: 'drpaket_harga',
 			width: 150,
 			sortable: true,
@@ -829,6 +917,14 @@ Ext.onReady(function(){
 				maxLength: 22,
 				maskRe: /([0-9]+)$/
 			})
+		},
+		{
+			header: 'Tukar Perawatan',
+			dataIndex: 'drpaket_rawat_tukar',
+			width: 150,
+			sortable: true,
+			editor: combo_retur_perawatan,
+			renderer: Ext.util.Format.comboRenderer(combo_retur_perawatan)
 		}]
 	);
 	detail_retur_paket_rawat_ColumnModel.defaultSortable= true;
@@ -965,7 +1061,7 @@ Ext.onReady(function(){
 	
 	/* Function for retrieve create Window Panel*/ 
 	master_retur_jual_paket_createForm = new Ext.FormPanel({
-		labelAlign: 'top',
+		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
 		width: 700,        
@@ -1110,7 +1206,7 @@ Ext.onReady(function(){
     
 	/* Function for retrieve search Form Panel */
 	master_retur_jual_paket_searchForm = new Ext.FormPanel({
-		labelAlign: 'top',
+		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
 		width: 300,        

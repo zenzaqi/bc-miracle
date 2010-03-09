@@ -17,13 +17,18 @@ class C_cetak_kwitansi extends Controller {
 	function C_cetak_kwitansi(){
 		parent::Controller();
 		$this->load->model('m_cetak_kwitansi', '', TRUE);
+		$this->load->plugin('to_excel');
 	}
 	
 	//set index
 	function index(){
-		$this->load->plugin('to_excel');
 		$this->load->helper('asset');
 		$this->load->view('main/v_cetak_kwitansi');
+	}
+	
+	function get_bank_list(){
+		$result=$this->m_public_function->get_bank_list();
+		echo $result;
 	}
 	
 	function get_customer_list(){
@@ -39,6 +44,30 @@ class C_cetak_kwitansi extends Controller {
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
 		$result=$this->m_cetak_kwitansi->get_customer_kwitansi_list($query,$start,$end);
+		echo $result;
+	}
+	
+	function get_cek_by_ref(){
+		$ref_id = (isset($_POST['no_faktur']) ? $_POST['no_faktur'] : $_GET['no_faktur']);
+		$result = $this->m_public_function->get_cek_by_ref($ref_id);
+		echo $result;
+	}
+	
+	function get_card_by_ref(){
+		$ref_id = (isset($_POST['no_faktur']) ? $_POST['no_faktur'] : $_GET['no_faktur']);
+		$result = $this->m_public_function->get_card_by_ref($ref_id);
+		echo $result;
+	}
+	
+	function get_transfer_by_ref(){
+		$ref_id = (isset($_POST['no_faktur']) ? $_POST['no_faktur'] : $_GET['no_faktur']);
+		$result = $this->m_public_function->get_transfer_by_ref($ref_id);
+		echo $result;
+	}
+	
+	function get_tunai_by_ref(){
+		$ref_id = (isset($_POST['no_faktur']) ? $_POST['no_faktur'] : $_GET['no_faktur']);
+		$result = $this->m_public_function->get_tunai_by_ref($ref_id);
 		echo $result;
 	}
 	
@@ -177,7 +206,29 @@ class C_cetak_kwitansi extends Controller {
 		$kwitansi_status=trim(@$_POST["kwitansi_status"]);
 		$kwitansi_status=str_replace("/(<\/?)(p)([^>]*>)", "",$kwitansi_status);
 		$kwitansi_status=str_replace("'", "''",$kwitansi_status);
-		$result=$this->m_cetak_kwitansi->cetak_kwitansi_create($kwitansi_no ,$kwitansi_cust ,$kwitansi_ref ,$kwitansi_nilai ,$kwitansi_keterangan ,$kwitansi_status );
+		
+		$kwitansi_cara=trim(@$_POST["kwitansi_cara"]);
+		$kwitansi_cara=str_replace("/(<\/?)(p)([^>]*>)", "",$kwitansi_cara);
+		$kwitansi_cara=str_replace("'", '"',$kwitansi_cara);
+		
+		$kwitansi_tunai_nilai=trim($_POST["kwitansi_tunai_nilai"]);
+		
+		$kwitansi_card_nama=trim($_POST["kwitansi_card_nama"]);
+		$kwitansi_card_edc=trim($_POST["kwitansi_card_edc"]);
+		$kwitansi_card_no=trim($_POST["kwitansi_card_no"]);
+		$kwitansi_card_nilai=trim($_POST["kwitansi_card_nilai"]);
+		
+		$kwitansi_cek_nama=trim($_POST["kwitansi_cek_nama"]);
+		$kwitansi_cek_no=trim($_POST["kwitansi_cek_no"]);
+		$kwitansi_cek_valid=trim($_POST["kwitansi_cek_valid"]);
+		$kwitansi_cek_bank=trim($_POST["kwitansi_cek_bank"]);
+		$kwitansi_cek_nilai=trim($_POST["kwitansi_cek_nilai"]);
+		
+		$kwitansi_transfer_bank=trim($_POST["kwitansi_transfer_bank"]);
+		$kwitansi_transfer_nama=trim($_POST["kwitansi_transfer_nama"]);
+		$kwitansi_transfer_nilai=trim($_POST["kwitansi_transfer_nilai"]);
+		
+		$result=$this->m_cetak_kwitansi->cetak_kwitansi_create($kwitansi_no ,$kwitansi_cust ,$kwitansi_ref ,$kwitansi_nilai ,$kwitansi_keterangan ,$kwitansi_status ,$kwitansi_cara ,$kwitansi_tunai_nilai ,$kwitansi_card_nama ,$kwitansi_card_edc ,$kwitansi_card_no ,$kwitansi_card_nilai ,$kwitansi_cek_nama ,$kwitansi_cek_no ,$kwitansi_cek_valid ,$kwitansi_cek_bank ,$kwitansi_cek_nilai ,$kwitansi_transfer_bank ,$kwitansi_transfer_nama ,$kwitansi_transfer_nilai );
 		echo $result;
 	}
 
@@ -280,6 +331,27 @@ class C_cetak_kwitansi extends Controller {
 		echo '1';        
 	}
 	/* End Of Function */
+	
+	function print_paper(){
+  		//POST varibale here
+		$kwitansi_id=trim(@$_POST["kwitansi_id"]);
+		
+		
+		$result = $this->m_cetak_kwitansi->print_paper($kwitansi_id);
+		$rs=$result->row();
+		$data["kwitansi_no"]=$rs->kwitansi_no;
+		$data["kwitansi_tanggal"]=$rs->kwitansi_date_create;
+		$data["kwitansi_customer"]=$rs->cust_no."-".$rs->cust_nama;
+		$data["kwitansi_nilai"]="Rp. ".ubah_rupiah($rs->kwitansi_nilai);
+		$data["kwitansi_terbilang"]=strtoupper(terbilang($rs->kwitansi_nilai))." RUPIAH";
+		$data["kwitansi_keterangan"]=$rs->kwitansi_keterangan;
+		
+		$viewdata=$this->load->view("main/kwitansi_formcetak",$data,TRUE);
+		$file = fopen("kwitansi_paper.html",'w');
+		fwrite($file, $viewdata);	
+		fclose($file);
+		echo '1';        
+	}
 
 	/* Function to Export Excel document */
 	function cetak_kwitansi_export_excel(){

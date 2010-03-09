@@ -112,7 +112,7 @@ class M_cetak_kwitansi extends Model{
 		
 		//function for get list record
 		function cetak_kwitansi_list($filter,$start,$end){
-			$query = "SELECT kwitansi_id, kwitansi_no, kwitansi_cust, cust_nama, cust_no, kwitansi_nilai, kwitansi_keterangan, kwitansi_status, kwitansi_creator, kwitansi_date_create, kwitansi_update, kwitansi_date_update, kwitansi_revised, sum(jkwitansi_nilai) AS total_terpakai, IF((kwitansi_nilai-(IF(sum(jkwitansi_nilai),sum(jkwitansi_nilai),0)))=0,kwitansi_nilai,(kwitansi_nilai-(IF(sum(jkwitansi_nilai),sum(jkwitansi_nilai),0)))) AS total_sisa FROM cetak_kwitansi LEFT JOIN jual_kwitansi ON(jkwitansi_master=kwitansi_id) LEFT JOIN customer ON(kwitansi_cust=cust_id) GROUP BY kwitansi_id";
+			$query = "SELECT kwitansi_id, kwitansi_no, kwitansi_cust, cust_nama, cust_no, kwitansi_cara, kwitansi_nilai, kwitansi_keterangan, kwitansi_status, kwitansi_creator, kwitansi_date_create, kwitansi_update, kwitansi_date_update, kwitansi_revised, sum(jkwitansi_nilai) AS total_terpakai, IF((kwitansi_nilai-(IF(sum(jkwitansi_nilai),sum(jkwitansi_nilai),0)))=0,kwitansi_nilai,(kwitansi_nilai-(IF(sum(jkwitansi_nilai),sum(jkwitansi_nilai),0)))) AS total_sisa FROM cetak_kwitansi LEFT JOIN jual_kwitansi ON(jkwitansi_master=kwitansi_id) LEFT JOIN customer ON(kwitansi_cust=cust_id) GROUP BY kwitansi_id";
 			
 			// For simple search
 			if ($filter<>""){
@@ -158,7 +158,10 @@ class M_cetak_kwitansi extends Model{
 		}
 		
 		//function for create new record
-		function cetak_kwitansi_create($kwitansi_no ,$kwitansi_cust ,$kwitansi_ref ,$kwitansi_nilai ,$kwitansi_keterangan ,$kwitansi_status ){
+		function cetak_kwitansi_create($kwitansi_no ,$kwitansi_cust ,$kwitansi_ref ,$kwitansi_nilai ,$kwitansi_keterangan ,$kwitansi_status ,$kwitansi_cara ,$kwitansi_tunai_nilai ,$kwitansi_card_nama ,$kwitansi_card_edc ,$kwitansi_card_no ,$kwitansi_card_nilai ,$kwitansi_cek_nama ,$kwitansi_cek_no ,$kwitansi_cek_valid ,$kwitansi_cek_bank ,$kwitansi_cek_nilai ,$kwitansi_transfer_bank ,$kwitansi_transfer_nama ,$kwitansi_transfer_nilai ){
+			if($kwitansi_status=="")
+				$kwitansi_status="Aktif";
+			
 			$pattern="KW/".date('ym')."-";
 			$kwitansi_no=$this->m_public_function->get_kode_1("cetak_kwitansi","kwitansi_no",$pattern,12);
 			$data = array(
@@ -167,12 +170,68 @@ class M_cetak_kwitansi extends Model{
 				"kwitansi_ref"=>$kwitansi_ref, 
 				"kwitansi_nilai"=>$kwitansi_nilai, 
 				"kwitansi_keterangan"=>$kwitansi_keterangan, 
-				"kwitansi_status"=>$kwitansi_status 
+				"kwitansi_status"=>$kwitansi_status,
+				"kwitansi_cara"=>$kwitansi_cara
 			);
 			$this->db->insert('cetak_kwitansi', $data); 
-			if($this->db->affected_rows())
-				return '1';
-			else
+			if($this->db->affected_rows()){
+				$id_cetak = $this->db->insert_id();
+				
+				if($kwitansi_cara!=null || $kwitansi_cara!=''){
+					if($kwitansi_cara=='card'){
+						
+						$data=array(
+							"jcard_nama"=>$kwitansi_card_nama,
+							"jcard_edc"=>$kwitansi_card_edc,
+							"jcard_no"=>$kwitansi_card_no,
+							"jcard_nilai"=>$kwitansi_card_nilai,
+							"jcard_ref"=>$kwitansi_no
+							);
+						$this->db->insert('jual_card', $data); 
+					
+					}else if($kwitansi_cara=='cek/giro'){
+						
+						if($kwitansi_cek_nama=="" || $kwitansi_cek_nama==NULL){
+							if(is_int($kwitansi_cek_nama)){
+								$sql="select cust_nama from customer where cust_id='".$kwitansi_cust."'";
+								$query=$this->db->query($sql);
+								if($query->num_rows()){
+									$data=$query->row();
+									$kwitansi_cek_nama=$data->cust_nama;
+								}
+							}else{
+									$kwitansi_cek_nama=$kwitansi_cust;
+							}
+						}
+						$data=array(
+							"jcek_nama"=>$kwitansi_cek_nama,
+							"jcek_no"=>$kwitansi_cek_no,
+							"jcek_valid"=>$kwitansi_cek_valid,
+							"jcek_bank"=>$kwitansi_cek_bank,
+							"jcek_nilai"=>$kwitansi_cek_nilai,
+							"jcek_ref"=>$kwitansi_no
+							);
+						$this->db->insert('jual_cek', $data); 
+					}else if($kwitansi_cara=='transfer'){
+						
+						$data=array(
+							"jtransfer_bank"=>$kwitansi_transfer_bank,
+							"jtransfer_nama"=>$kwitansi_transfer_nama,
+							"jtransfer_nilai"=>$kwitansi_transfer_nilai,
+							"jtransfer_ref"=>$kwitansi_no
+							);
+						$this->db->insert('jual_transfer', $data); 
+					}else if($kwitansi_cara=='tunai'){
+						
+						$data=array(
+							"jtunai_nilai"=>$kwitansi_tunai_nilai,
+							"jtunai_ref"=>$kwitansi_no
+							);
+						$this->db->insert('jual_tunai', $data); 
+					}
+				}
+				return $id_cetak;
+			}else
 				return '0';
 		}
 		
@@ -332,6 +391,15 @@ class M_cetak_kwitansi extends Model{
 				};
 				$result = $this->db->query($query);
 			}
+			return $result;
+		}
+		
+		function print_paper($kwitansi_id){
+			
+			$sql="select kwitansi_id,kwitansi_no,kwitansi_date_create,
+					cust_no,cust_nama,kwitansi_nilai,kwitansi_keterangan from cetak_kwitansi,customer
+					where kwitansi_cust=cust_id AND kwitansi_id='".$kwitansi_id."'";
+			$result = $this->db->query($sql);
 			return $result;
 		}
 		

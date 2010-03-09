@@ -26,6 +26,22 @@ class C_master_retur_jual_paket extends Controller {
 		$this->load->view('main/v_master_retur_jual_paket');
 	}
 	
+	function get_rawat_list(){
+		$query = isset($_POST['query']) ? $_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		$result = $this->m_master_retur_jual_paket->get_rawat_list($query,$start,$end);
+		echo $result;
+	}
+	
+	function get_retur_rawat_list(){
+		$query = isset($_POST['query']) ? $_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		$result = $this->m_master_retur_jual_paket->get_retur_rawat_list($query,$start,$end);
+		echo $result;
+	}
+	
 	function get_jual_paket_list(){
 		$query = isset($_POST['query']) ? $_POST['query'] : "";
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
