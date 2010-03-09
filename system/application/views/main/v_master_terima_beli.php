@@ -1012,11 +1012,11 @@ Ext.onReady(function(){
 	
 	var combo_produk_terima=new Ext.form.ComboBox({
 			store: cbo_produk_detailDataStore,
-			typeAhead: true,
+			typeAhead: false,
 			mode : 'remote',
 			displayField: 'produk_nama',
 			valueField: 'produk_id',
-			lazyRender:true,
+			lazyRender: false,
 			pageSize: pageS,
 			tpl: produk_detail_tpl,
 			itemSelector: 'div.search-item',
@@ -1333,7 +1333,7 @@ Ext.onReady(function(){
 	var combo_bonus_terima=new Ext.form.ComboBox({
 			store: cbo_produk_bonusDataStore,
 			mode: 'remote',
-			typeAhead: true,
+			typeAhead: false,
 			displayField: 'produk_nama',
 			valueField: 'produk_id',
 			triggerAction: 'all',
@@ -1341,7 +1341,7 @@ Ext.onReady(function(){
 			itemSelector: 'div.search-item',
 			triggerAction: 'all',
 			tpl: produk_detail_tpl,
-			lazyRender: true,
+			lazyRender: false,
 			listClass: 'x-combo-list-small',
 
 	});
@@ -2058,7 +2058,7 @@ Ext.onReady(function(){
 		cbo_produk_bonusDataStore.setBaseParam('task','list');
 		var selectedquery=detail_terima_bonusListEditorGrid.getSelectionModel().getSelected().get('produk_nama');
 		cbo_produk_detailDataStore.setBaseParam('query',selectedquery);
-		cbo_produk_bonusDataStore.load();
+		//cbo_produk_bonusDataStore.load();
 	});
 	
 	terima_orderField.on("select",function(){
