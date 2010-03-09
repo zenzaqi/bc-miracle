@@ -234,7 +234,7 @@ class M_perawatan extends Model{
 		}
 		
 		//function for update record
-		function perawatan_update($rawat_id ,$rawat_kode ,$rawat_kodelama ,$rawat_nama ,$rawat_group ,$rawat_kategori,$rawat_kontribusi ,$rawat_jenis ,$rawat_keterangan ,$rawat_du ,$rawat_dm ,$rawat_point ,$rawat_harga ,$rawat_gudang ,$rawat_aktif ){
+		function perawatan_update($rawat_id ,$rawat_kode ,$rawat_kodelama ,$rawat_nama ,$rawat_group ,$rawat_kategori,$rawat_kontribusi ,$rawat_jenis ,$rawat_keterangan ,$rawat_du ,$rawat_dm ,$rawat_point , $rawat_kredit, $rawat_jumlah_tindakan, $rawat_harga ,$rawat_gudang ,$rawat_aktif ){
 			if ($rawat_aktif=="")
 				$rawat_aktif = "Aktif";
 				
@@ -248,7 +248,9 @@ class M_perawatan extends Model{
 				"rawat_keterangan"=>$rawat_keterangan, 
 //				"rawat_du"=>$rawat_du, 
 //				"rawat_dm"=>$rawat_dm, 
-				"rawat_point"=>$rawat_point, 
+				"rawat_point"=>$rawat_point,
+				"rawat_kredit"=>$rawat_kredit,
+				"rawat_jumlah_tindakan"=>$rawat_jumlah_tindakan,
 				"rawat_harga"=>$rawat_harga, 
 //				"rawat_gudang"=>$rawat_gudang, 
 				"rawat_aktif"=>$rawat_aktif 
@@ -379,7 +381,7 @@ class M_perawatan extends Model{
 		}
 		
 		//function for create new record
-		function perawatan_create($rawat_kode ,$rawat_kodelama ,$rawat_nama ,$rawat_group ,$rawat_kategori, $rawat_kontribusi ,$rawat_jenis ,$rawat_keterangan ,$rawat_du ,$rawat_dm ,$rawat_point ,$rawat_harga ,$rawat_gudang ,$rawat_aktif ){
+		function perawatan_create($rawat_kode ,$rawat_kodelama ,$rawat_nama ,$rawat_group ,$rawat_kategori, $rawat_kontribusi ,$rawat_jenis ,$rawat_keterangan ,$rawat_du ,$rawat_dm ,$rawat_point , $rawat_kredit, $rawat_jumlah_tindakan, $rawat_harga ,$rawat_gudang ,$rawat_aktif ){
 		if ($rawat_aktif=="")
 			$rawat_aktif = "Aktif";
 			$data = array(
@@ -391,7 +393,9 @@ class M_perawatan extends Model{
 				"rawat_keterangan"=>$rawat_keterangan, 
 				"rawat_du"=>$rawat_du, 
 				"rawat_dm"=>$rawat_dm, 
-				"rawat_point"=>$rawat_point, 
+				"rawat_point"=>$rawat_point,
+				"rawat_kredit"=>$rawat_kredit,
+				"rawat_jumlah_tindakan"=>$rawat_jumlah_tindakan,
 				"rawat_harga"=>$rawat_harga, 
 				"rawat_gudang"=>$rawat_gudang,
 				"rawat_kontribusi"=>$rawat_kontribusi,

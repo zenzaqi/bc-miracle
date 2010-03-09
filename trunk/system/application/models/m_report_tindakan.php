@@ -1335,7 +1335,7 @@ class M_report_tindakan extends Model{
 			//full query
 			//$query="SELECT * FROM vu_tindakan WHERE kategori_nama='Medis'";
 			//$query = "SELECT * FROM vu_tindakan WHERE (kategori_nama='Medis' OR dtrawat_petugas2='0')";
-			$query ="select k.karyawan_username, p.rawat_nama, count(p.rawat_nama) as Jumlah_rawat from tindakan_detail d left outer join karyawan k on k.karyawan_id=d.dtrawat_petugas1 left outer join perawatan p on p.rawat_id = d.dtrawat_perawatan";
+			$query ="select k.karyawan_username, p.rawat_nama, count(p.rawat_nama) as Jumlah_rawat, p.rawat_kredit, p.rawat_kredit*count(p.rawat_nama) as Total_kredit from tindakan_detail d left outer join karyawan k on k.karyawan_id=d.dtrawat_petugas1 left outer join perawatan p on p.rawat_id = d.dtrawat_perawatan";
 			
 			
 			if($trawat_id!=''){
@@ -1356,7 +1356,7 @@ class M_report_tindakan extends Model{
 				$query.= " dtrawat_tglapp='".$trawat_tglapp_start."'";
 			}
 			$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-			$query.=" k.karyawan_id != 60";
+			$query.=" k.karyawan_id != 60 and p.rawat_id is not null"; //60 = Available . Dr
 			$query.=" group by k.karyawan_username, p.rawat_nama";
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
@@ -1404,7 +1404,7 @@ class M_report_tindakan extends Model{
 		//function  for export to excel
 		function tindakan_export_excel($trawat_id ,$trawat_dokter ,$option,$filter){
 			//full query
-			$query="select k.karyawan_username, p.rawat_nama, count(p.rawat_nama) as Jumlah_rawat from tindakan_detail d left outer join karyawan k on k.karyawan_id=d.dtrawat_petugas1 left outer join perawatan p on p.rawat_id = d.dtrawat_perawatan";
+			$query="select k.karyawan_username, p.rawat_nama, count(p.rawat_nama) as Jumlah_rawat, p.rawat_kredit, p.rawat_kredit*count(p.rawat_nama) as Total_kredit from tindakan_detail d left outer join karyawan k on k.karyawan_id=d.dtrawat_petugas1 left outer join perawatan p on p.rawat_id = d.dtrawat_perawatan";
 			
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
@@ -1423,6 +1423,7 @@ class M_report_tindakan extends Model{
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " rawat_nama LIKE '%".$rawat_nama."%'";
 				};*/
+				$query.=" p.rawat_id is not null";
 				$query.=" group by k.karyawan_username, p.rawat_nama";
 				$result = $this->db->query($query);
 				
