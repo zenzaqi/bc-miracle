@@ -521,7 +521,9 @@ Ext.onReady(function(){
 			{name: 'cust_punya_paket', type: 'string', mapping: 'cust_punya_paket'},
 			{name: 'dpaket_id', type: 'int', mapping: 'dpaket_id'},
 			{name: 'rpaket_perawatan', type: 'int', mapping: 'rpaket_perawatan'},
-			{name: 'dtrawat_edit', type: 'string', mapping: 'Jumlah_rawat'}
+			{name: 'dtrawat_edit', type: 'string', mapping: 'Jumlah_rawat'},
+			{name: 'dtrawat_skredit', type: 'string', mapping: 'rawat_kredit'},
+			{name: 'dtrawat_jkredit', type: 'string', mapping: 'Total_kredit'},
 		]),
 		sortInfo:{field: 'dtrawat_petugas1', direction: "DESC"}
 	});
@@ -734,7 +736,21 @@ Ext.onReady(function(){
 			align : 'Right',
 			header: '<div align="center">' + 'Jumlah' + '</div>',
 			dataIndex: 'dtrawat_edit',
-			width: 60,	//55,
+			width: 80,	//55,
+			sortable: false
+		},
+		{	
+			align : 'Right',
+			header: '<div align="center">' + 'Kredit (Satuan)' + '</div>',
+			dataIndex: 'dtrawat_skredit',
+			width: 80,	//55,
+			sortable: false
+		},
+		{	
+			align : 'Right',
+			header: '<div align="center">' + 'Total Kredit' + '</div>',
+			dataIndex: 'dtrawat_jkredit',
+			width: 80,	//55,
 			sortable: false
 		},
 		/*{

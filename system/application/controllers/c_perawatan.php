@@ -221,13 +221,15 @@ class C_perawatan extends Controller {
 		$rawat_du=trim(@$_POST["rawat_du"]);
 		$rawat_dm=trim(@$_POST["rawat_dm"]);
 		$rawat_point=trim(@$_POST["rawat_point"]);
+		$rawat_kredit=trim(@$_POST["rawat_kredit"]);
+		$rawat_jumlah_tindakan=trim(@$_POST["rawat_jumlah_tindakan"]);
 		$rawat_harga=trim(@$_POST["rawat_harga"]);
 		$rawat_gudang=trim(@$_POST["rawat_gudang"]);
 		$rawat_aktif=trim(@$_POST["rawat_aktif"]);
 		$rawat_aktif=str_replace("/(<\/?)(p)([^>]*>)", "",$rawat_aktif);
 		$rawat_aktif=str_replace(",", ",",$rawat_aktif);
 		$rawat_aktif=str_replace("'", '"',$rawat_aktif);
-		$result = $this->m_perawatan->perawatan_update($rawat_id ,$rawat_kode ,$rawat_kodelama ,$rawat_nama ,$rawat_group ,$rawat_kategori, $rawat_kontribusi ,$rawat_jenis ,$rawat_keterangan ,$rawat_du ,$rawat_dm ,$rawat_point ,$rawat_harga ,$rawat_gudang ,$rawat_aktif      );
+		$result = $this->m_perawatan->perawatan_update($rawat_id ,$rawat_kode ,$rawat_kodelama ,$rawat_nama ,$rawat_group ,$rawat_kategori, $rawat_kontribusi ,$rawat_jenis ,$rawat_keterangan ,$rawat_du ,$rawat_dm ,$rawat_point , $rawat_kredit, $rawat_jumlah_tindakan, $rawat_harga ,$rawat_gudang ,$rawat_aktif      );
 		echo $result;
 	}
 	
@@ -254,12 +256,14 @@ class C_perawatan extends Controller {
 		$rawat_du=trim(@$_POST["rawat_du"]);
 		$rawat_dm=trim(@$_POST["rawat_dm"]);
 		$rawat_point=trim(@$_POST["rawat_point"]);
+		$rawat_kredit=trim(@$_POST["rawat_kredit"]);
+		$rawat_jumlah_tindakan=trim(@$_POST["rawat_jumlah_tindakan"]);
 		$rawat_harga=trim(@$_POST["rawat_harga"]);
 		$rawat_gudang=trim(@$_POST["rawat_gudang"]);
 		$rawat_aktif=trim(@$_POST["rawat_aktif"]);
 		$rawat_aktif=str_replace("/(<\/?)(p)([^>]*>)", "",$rawat_aktif);
 		$rawat_aktif=str_replace("'", '"',$rawat_aktif);
-		$result=$this->m_perawatan->perawatan_create($rawat_kode ,$rawat_kodelama ,$rawat_nama ,$rawat_group ,$rawat_kategori, $rawat_kontribusi ,$rawat_jenis ,$rawat_keterangan ,$rawat_du ,$rawat_dm ,$rawat_point ,$rawat_harga ,$rawat_gudang ,$rawat_aktif );
+		$result=$this->m_perawatan->perawatan_create($rawat_kode ,$rawat_kodelama ,$rawat_nama ,$rawat_group ,$rawat_kategori, $rawat_kontribusi ,$rawat_jenis ,$rawat_keterangan ,$rawat_du ,$rawat_dm ,$rawat_point, $rawat_kredit, $rawat_jumlah_tindakan, $rawat_harga ,$rawat_gudang ,$rawat_aktif );
 		echo $result;
 	}
 
@@ -293,6 +297,8 @@ class C_perawatan extends Controller {
 		$rawat_du=trim(@$_POST["rawat_du"]);
 		$rawat_dm=trim(@$_POST["rawat_dm"]);
 		$rawat_point=trim(@$_POST["rawat_point"]);
+		$rawat_kredit=trim(@$_POST["rawat_kredit"]);
+		$rawat_jumlah_tindakan=trim(@$_POST["rawat_jumlah_tindakan"]);
 		$rawat_harga=trim(@$_POST["rawat_harga"]);
 		$rawat_gudang=trim(@$_POST["rawat_gudang"]);
 		$rawat_aktif=trim(@$_POST["rawat_aktif"]);
@@ -301,7 +307,7 @@ class C_perawatan extends Controller {
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_perawatan->perawatan_search($rawat_id ,$rawat_kode ,$rawat_kodelama ,$rawat_nama ,$rawat_group ,$rawat_kategori ,$rawat_jenis ,$rawat_keterangan ,$rawat_du ,$rawat_dm ,$rawat_point ,$rawat_harga ,$rawat_gudang ,$rawat_aktif ,$start,$end);
+		$result = $this->m_perawatan->perawatan_search($rawat_id ,$rawat_kode ,$rawat_kodelama ,$rawat_nama ,$rawat_group ,$rawat_kategori ,$rawat_jenis ,$rawat_keterangan ,$rawat_du ,$rawat_dm ,$rawat_point , $rawat_kredit, $rawat_jumlah_tindakan, $rawat_harga ,$rawat_gudang ,$rawat_aktif ,$start,$end);
 		echo $result;
 	}
 
@@ -327,6 +333,8 @@ class C_perawatan extends Controller {
 		$rawat_du=trim(@$_POST["rawat_du"]);
 		$rawat_dm=trim(@$_POST["rawat_dm"]);
 		$rawat_point=trim(@$_POST["rawat_point"]);
+		$rawat_kredit=trim(@$_POST["rawat_kredit"]);
+		$rawat_jumlah_tindakan=trim(@$_POST["rawat_jumlah_tindakan"]);
 		$rawat_harga=trim(@$_POST["rawat_harga"]);
 		$rawat_gudang=trim(@$_POST["rawat_gudang"]);
 		$rawat_aktif=trim(@$_POST["rawat_aktif"]);
@@ -335,7 +343,7 @@ class C_perawatan extends Controller {
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$result = $this->m_perawatan->perawatan_print($rawat_id ,$rawat_kode ,$rawat_kodelama ,$rawat_nama ,$rawat_group ,$rawat_kategori ,$rawat_jenis ,$rawat_keterangan ,$rawat_du ,$rawat_dm ,$rawat_point ,$rawat_harga ,$rawat_gudang ,$rawat_aktif ,$option,$filter);
+		$result = $this->m_perawatan->perawatan_print($rawat_id ,$rawat_kode ,$rawat_kodelama ,$rawat_nama ,$rawat_group ,$rawat_kategori ,$rawat_jenis ,$rawat_keterangan ,$rawat_du ,$rawat_dm ,$rawat_point ,$rawat_kredit, $rawat_jumlah_tindakan, $rawat_harga ,$rawat_gudang ,$rawat_aktif ,$option,$filter);
 		$nbrows=$result->num_rows();
 		$totcolumn=17;
    		/* We now have our array, let's build our HTML file */
@@ -374,6 +382,10 @@ class C_perawatan extends Controller {
 				fwrite($file, $data['rawat_dm']);
 				fwrite($file,"</td><td>");
 				fwrite($file, $data['rawat_point']);
+				fwrite($file,"</td><td>");
+				fwrite($file, $data['rawat_kredit']);
+				fwrite($file,"</td><td>");
+				fwrite($file, $data['rawat_jumlah_tindakan']);
 				fwrite($file,"</td><td>");
 				fwrite($file, $data['rawat_harga']);
 				fwrite($file,"</td><td>");
@@ -421,6 +433,8 @@ class C_perawatan extends Controller {
 		$rawat_du=trim(@$_POST["rawat_du"]);
 		$rawat_dm=trim(@$_POST["rawat_dm"]);
 		$rawat_point=trim(@$_POST["rawat_point"]);
+		$rawat_kredit=trim(@$_POST["rawat_kredit"]);
+		$rawat_jumlah_tindakan=trim(@$_POST["rawat_jumlah_tindakan"]);
 		$rawat_harga=trim(@$_POST["rawat_harga"]);
 		$rawat_gudang=trim(@$_POST["rawat_gudang"]);
 		$rawat_aktif=trim(@$_POST["rawat_aktif"]);
@@ -429,7 +443,7 @@ class C_perawatan extends Controller {
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$query = $this->m_perawatan->perawatan_export_excel($rawat_id ,$rawat_kode ,$rawat_kodelama ,$rawat_nama ,$rawat_group ,$rawat_kategori ,$rawat_jenis ,$rawat_keterangan ,$rawat_du ,$rawat_dm ,$rawat_point ,$rawat_harga ,$rawat_gudang ,$rawat_aktif ,$option,$filter);
+		$query = $this->m_perawatan->perawatan_export_excel($rawat_id ,$rawat_kode ,$rawat_kodelama ,$rawat_nama ,$rawat_group ,$rawat_kategori ,$rawat_jenis ,$rawat_keterangan ,$rawat_du ,$rawat_dm ,$rawat_point ,$rawat_kredit, $rawat_jumlah_tindakan, $rawat_harga ,$rawat_gudang ,$rawat_aktif ,$option,$filter);
 		
 		to_excel($query,"perawatan"); 
 		echo '1';
