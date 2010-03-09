@@ -850,7 +850,7 @@ Ext.onReady(function(){
 	produkListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'produkListEditorGrid',
 		el: 'fp_produk',
-		title: 'List Of Produk',
+		title: 'Daftar Produk',
 		autoHeight: true,
 		store: produk_DataStore, // DataStore
 		cm: produk_ColumnModel, // Nama-nama Columns
