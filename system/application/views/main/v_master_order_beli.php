@@ -211,7 +211,7 @@ Ext.onReady(function(){
 						Ext.MessageBox.show({
 						   title: 'Warning',
 						   //msg: 'We could\'t not '+msg+' the Master_order_beli.',
-						   msg: 'Data Pesanan Pembelian tidak bissa disimpan',
+						   msg: 'Data Pesanan Pembelian tidak bisa disimpan',
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'save',
 						   icon: Ext.MessageBox.WARNING
@@ -1244,6 +1244,7 @@ Ext.onReady(function(){
 				}
 			});
 		}
+		master_order_beli_DataStore.reload();		
 	}
 	//eof
 	
