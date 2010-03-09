@@ -201,24 +201,19 @@ Ext.onReady(function(){
 			}, 
 			success: function(response){             
 				var result=eval(response.responseText);
-				switch(result){
-					case 1:
-						detail_terima_beli_purge();
-						detail_terima_bonus_purge();
-						//detail_terima_beli_insert();
-						Ext.MessageBox.alert(post2db+' OK','The Master_terima_beli was '+msg+' successfully.');
-						master_terima_beli_DataStore.reload();
+				if(result!==0){
+						detail_terima_beli_purge(result);
+						detail_terima_bonus_purge(result);
+						Ext.MessageBox.alert(post2db+' OK','Data Penerimaan Pembelian berhasil disimpan');
 						master_terima_beli_createWindow.hide();
-						break;
-					default:
+				}else{
 						Ext.MessageBox.show({
 						   title: 'Warning',
-						   msg: 'We could\'t not '+msg+' the Master_terima_beli.',
+						   msg: 'Data Penerimaan Pembelian tidak bisa disimpan.',
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'save',
 						   icon: Ext.MessageBox.WARNING
 						});
-						break;
 				}        
 			},
 			failure: function(response){
@@ -274,6 +269,7 @@ Ext.onReady(function(){
 		terima_keteranganField.setValue(null);
 		cbo_satuanDataStore.load();
 		cbo_produk_detailDataStore.load();
+		detail_terima_beli_DataStore.load();
 	}
  	/* End of Function */
   
@@ -904,6 +900,7 @@ Ext.onReady(function(){
 				layout: 'form',
 				labelAlign: 'left',
 				border:false,
+				labelWidth: 200,
 				items: [terima_jumlahField] 
 			}
 			]
@@ -925,6 +922,7 @@ Ext.onReady(function(){
 				layout: 'form',
 				labelAlign: 'left',
 				border:false,
+				labelWidth: 200,
 				items: [bonus_jumlahField] 
 			}
 			]
@@ -944,6 +942,7 @@ Ext.onReady(function(){
 			{name: 'dterima_id', type: 'int', mapping: 'dterima_id'}, 
 			{name: 'dterima_master', type: 'int', mapping: 'dterima_master'}, 
 			{name: 'dterima_produk', type: 'int', mapping: 'dterima_produk'}, 
+			{name: 'produk_nama', type: 'string', mapping: 'produk_nama'},
 			{name: 'dterima_satuan', type: 'int', mapping: 'dterima_satuan'}, 
 			{name: 'dterima_jumlah', type: 'int', mapping: 'dterima_jumlah'} 
 	]);
@@ -1157,7 +1156,7 @@ Ext.onReady(function(){
 	//eof
 	
 	//function for insert detail
-	function detail_terima_beli_insert(){
+	function detail_terima_beli_insert(pkid){
 		for(i=0;i<detail_terima_beli_DataStore.getCount();i++){
 			detail_terima_beli_record=detail_terima_beli_DataStore.getAt(i);
 			Ext.Ajax.request({
@@ -1165,7 +1164,7 @@ Ext.onReady(function(){
 				url: 'index.php?c=c_master_terima_beli&m=detail_detail_terima_beli_insert',
 				params:{
 				dterima_id	: detail_terima_beli_record.data.dterima_id, 
-				dterima_master	: eval(terima_idField.getValue()), 
+				dterima_master	: pkid, 
 				dterima_produk	: detail_terima_beli_record.data.dterima_produk, 
 				dterima_satuan	: detail_terima_beli_record.data.dterima_satuan, 
 				dterima_jumlah	: detail_terima_beli_record.data.dterima_jumlah 
@@ -1187,19 +1186,20 @@ Ext.onReady(function(){
 				}		
 			});
 		}
+		master_terima_beli_DataStore.reload();
 	}
 	//eof
 	
 	//function for purge detail
-	function detail_terima_beli_purge(){
+	function detail_terima_beli_purge(pkid){
 		Ext.Ajax.request({
 			waitMsg: 'Please wait...',
 			url: 'index.php?c=c_master_terima_beli&m=detail_detail_terima_beli_purge',
-			params:{ master_id: eval(terima_idField.getValue()) },
+			params:{ master_id: pkid },
 			timeout: 60000,
 			success: function(response){							
 				var result=eval(response.responseText);
-				detail_terima_beli_insert();
+				detail_terima_beli_insert(pkid);
 			},
 			failure: function(response){
 				var result=response.responseText;
@@ -1255,7 +1255,8 @@ Ext.onReady(function(){
 	/* dataIndex => insert intoperawatan_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'dtbonus_id', type: 'int', mapping: 'dtbonus_id'}, 
 			{name: 'dtbonus_master', type: 'int', mapping: 'dtbonus_master'}, 
-			{name: 'dtbonus_produk', type: 'int', mapping: 'dtbonus_produk'}, 
+			{name: 'dtbonus_produk', type: 'int', mapping: 'dtbonus_produk'},
+			{name: 'produk_nama', type: 'string', mapping: 'produk_nama'},
 			{name: 'dtbonus_satuan', type: 'int', mapping: 'dtbonus_satuan'}, 
 			{name: 'dtbonus_jumlah', type: 'int', mapping: 'dtbonus_jumlah'} 
 	]);
@@ -1304,7 +1305,7 @@ Ext.onReady(function(){
 	cbo_produk_bonusDataStore = new Ext.data.Store({
 		id: 'cbo_produk_bonusDataStore',
 		proxy: new Ext.data.HttpProxy({
-			url: 'index.php?c=c_master_terima_beli&m=get_produk_list', 
+			url: 'index.php?c=c_master_terima_beli&m=get_bonus_list', 
 			method: 'POST'
 		}),
 		baseParams: {task: 'list', start:0, limit: pageS},
@@ -1458,7 +1459,7 @@ Ext.onReady(function(){
 	//eof
 	
 	//function for insert detail
-	function detail_terima_bonus_insert(){
+	function detail_terima_bonus_insert(pkid){
 		for(i=0;i<detail_terima_bonus_DataStore.getCount();i++){
 			detail_terima_bonus_record=detail_terima_bonus_DataStore.getAt(i);
 			Ext.Ajax.request({
@@ -1466,7 +1467,7 @@ Ext.onReady(function(){
 				url: 'index.php?c=c_master_terima_beli&m=detail_detail_terima_bonus_insert',
 				params:{
 				dtbonus_id	: detail_terima_bonus_record.data.dtbonus_id, 
-				dtbonus_master	: eval(terima_idField.getValue()), 
+				dtbonus_master	: pkid, 
 				dtbonus_produk	: detail_terima_bonus_record.data.dtbonus_produk, 
 				dtbonus_satuan	: detail_terima_bonus_record.data.dtbonus_satuan, 
 				dtbonus_jumlah	: detail_terima_bonus_record.data.dtbonus_jumlah 
@@ -1488,19 +1489,20 @@ Ext.onReady(function(){
 				}		
 			});
 		}
+		master_terima_beli_DataStore.reload();
 	}
 	//eof
 	
 	//function for purge detail
-	function detail_terima_bonus_purge(){
+	function detail_terima_bonus_purge(pkid){
 		Ext.Ajax.request({
 			waitMsg: 'Please wait...',
 			url: 'index.php?c=c_master_terima_beli&m=detail_detail_terima_bonus_purge',
-			params:{ master_id: eval(terima_idField.getValue()) },
+			params:{ master_id: pkid },
 			timeout: 5000,
 			success: function(response){							
 				var result=eval(response.responseText);
-				detail_terima_bonus_insert();
+				detail_terima_bonus_insert(pkid);
 			},
 			failure: function(response){
 				var result=response.responseText;
@@ -1605,7 +1607,7 @@ Ext.onReady(function(){
 	/* Function for retrieve create Window Form */
 	master_terima_beli_createWindow= new Ext.Window({
 		id: 'master_terima_beli_createWindow',
-		title: post2db+'Master_terima_beli',
+		title: post2db+' Penerimaan Pembelian',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,
@@ -1626,6 +1628,7 @@ Ext.onReady(function(){
 			detail_terima_beli_record=detail_terima_beli_DataStore.getAt(i);
 			jumlah_item=jumlah_item+detail_terima_beli_record.data.dterima_jumlah;
 		}
+		//console.log('total terima');
 		terima_jumlahField.setValue(jumlah_item);
 	}
 	
@@ -1997,8 +2000,7 @@ Ext.onReady(function(){
 	
 	detail_terima_beli_DataStore.on("update",function(){
 		detail_terima_beli_DataStore.commitChanges();
-		refresh_detail_terima_beli;
-		detail_terima_beli_total;
+		detail_terima_beli_total();
 		var	query_selected="";
 		for(i=0;i<detail_terima_beli_DataStore.getCount();i++){
 			detail_terima_beli_record=detail_terima_beli_DataStore.getAt(i);
@@ -2011,8 +2013,7 @@ Ext.onReady(function(){
 	
 	detail_terima_bonus_DataStore.on("update",function(){
 		detail_terima_bonus_DataStore.commitChanges();
-		refresh_detail_terima_beli;
-		detail_terima_beli_total;
+		detail_terima_beli_total();
 		var	query_selected="";
 		for(i=0;i<detail_terima_bonus_DataStore.getCount();i++){
 			detail_terima_bonus_record=detail_terima_bonus_DataStore.getAt(i);
@@ -2023,7 +2024,7 @@ Ext.onReady(function(){
 		cbo_produk_bonusDataStore.load();
 	});
 	
-	combo_produk_terima.on("blur",function(){
+	/*combo_produk_terima.on("blur",function(){
 		var	query_selected="";
 		for(i=0;i<detail_terima_beli_DataStore.getCount();i++){
 			detail_terima_beli_record=detail_terima_beli_DataStore.getAt(i);
@@ -2032,9 +2033,9 @@ Ext.onReady(function(){
 		cbo_produk_detailDataStore.setBaseParam('task','selected');
 		cbo_produk_detailDataStore.setBaseParam('selected_id',query_selected);
 		cbo_produk_detailDataStore.load();
-	});
+	});*/
 	
-	combo_bonus_terima.on("blur",function(){
+	/*combo_bonus_terima.on("blur",function(){
 		var	  query_selected="";
 		for(i=0;i<detail_terima_bonus_DataStore.getCount();i++){
 			detail_terima_bonus_record=detail_terima_bonus_DataStore.getAt(i);
@@ -2043,16 +2044,20 @@ Ext.onReady(function(){
 		cbo_produk_bonusDataStore.setBaseParam('task','selected');
 		cbo_produk_bonusDataStore.setBaseParam('selected_id',query_selected);
 		cbo_produk_bonusDataStore.load();
-	});
+	});*/
 	
 	combo_produk_terima.on("focus",function(){
 		var	query_selected="";
 		cbo_produk_detailDataStore.setBaseParam('task','list');
+		var selectedquery=detail_terima_beliListEditorGrid.getSelectionModel().getSelected().get('produk_nama');
+		cbo_produk_detailDataStore.setBaseParam('query',selectedquery);
 		cbo_produk_detailDataStore.load();
 	});
 	
 	combo_bonus_terima.on("focus",function(){
 		cbo_produk_bonusDataStore.setBaseParam('task','list');
+		var selectedquery=detail_terima_bonusListEditorGrid.getSelectionModel().getSelected().get('produk_nama');
+		cbo_produk_detailDataStore.setBaseParam('query',selectedquery);
 		cbo_produk_bonusDataStore.load();
 	});
 	
@@ -2082,8 +2087,9 @@ Ext.onReady(function(){
 					});
 				}
 			}
-	});
-		
+		});
+		detail_terima_beli_DataStore.commitChanges();
+		detail_terima_beli_total();
 	});
 	
 });
