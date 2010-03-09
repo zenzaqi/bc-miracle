@@ -1048,11 +1048,11 @@ Ext.onReady(function(){
 	var combo_order_produk=new Ext.form.ComboBox({
 			store: cbo_order_produk_DataStore,
 			mode: 'remote',
-			typeAhead: true,
+			typeAhead: false,
 			displayField: 'order_produk_nama',
 			valueField: 'order_produk_value',
 			triggerAction: 'all',
-			lazyRender: true,
+			lazyRender: false,
 			pageSize: pageS,
 			enableKeyEvents: true,
 			tpl: order_produk_detail_tpl,
@@ -1733,7 +1733,7 @@ Ext.onReady(function(){
 		cbo_order_produk_DataStore.setBaseParam('task','list');
 		var selectedquery=detail_order_beliListEditorGrid.getSelectionModel().getSelected().get('produk_nama');
 		cbo_order_produk_DataStore.setBaseParam('query',selectedquery);
-		cbo_order_produk_DataStore.load();
+		//cbo_order_produk_DataStore.load();
 	});
 	
 	detail_order_beli_DataStore.on("update",function(){
