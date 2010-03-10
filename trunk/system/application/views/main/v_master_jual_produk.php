@@ -3253,7 +3253,6 @@ Ext.onReady(function(){
 	var combo_jual_produk=new Ext.form.ComboBox({
 			store: cbo_dproduk_produkDataStore,
 			mode: 'remote',
-			typeAhead: true,
 			displayField: 'dproduk_produk_display',
 			valueField: 'dproduk_produk_value',
 			typeAhead: false,
