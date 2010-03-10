@@ -630,22 +630,7 @@ Ext.onReady(function(){
     
 	sum_kreditColumnModel = new Ext.grid.ColumnModel(
 		[
-		{
-			header: '<div align="left">' + 'Dokter' + '</div>',
-			dataIndex: 'tindakan_dokter',
-			width: 80,
-			sortable: true,
-			editable:true,
-			editor: new Ext.form.ComboBox({
-				store: cbo_dtindakan_dokterDataStore,
-				mode: 'remote',
-				displayField: 'karyawan_username',
-				valueField: 'karyawan_value',
-				loadingText: 'Searching...',
-				triggerAction: 'all',
-				anchor: '95%'
-			})
-		}, 
+	
 		{	
 			align : 'Right',
 			header: '<div align="right">' + 'Grand Total Kredit' + '</div>',
@@ -727,16 +712,9 @@ Ext.onReady(function(){
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
 	  	width: 800, //940,//1200,	//970,
-		bbar: new Ext.PagingToolbar({
-			//pageSize: pageS,
-			disabled:true,
-			store: sum_kreditDataStore,
-			displayInfo: true
-		}),
-		/* Add Control on ToolBar */
-		tbar: [
 	
-		]
+		/* Add Control on ToolBar */
+	
 	});
 	tindakanListEditorGrid2.render();
 	
