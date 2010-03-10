@@ -159,6 +159,9 @@ class C_report_tindakan extends Controller {
 			case "LIST":
 				$this->tindakan_list();
 				break;
+			case "LIST2":
+				$this->tindakan_list2();
+				break;
 			case "UPDATE":
 				$this->tindakan_update();
 				break;
@@ -170,6 +173,9 @@ class C_report_tindakan extends Controller {
 				break;
 			case "SEARCH":
 				$this->tindakan_search();
+				break;
+			case "SEARCH2":
+				$this->tindakan_search2();
 				break;
 			case "PRINT":
 				$this->tindakan_print();
@@ -192,6 +198,19 @@ class C_report_tindakan extends Controller {
 		$result=$this->m_report_tindakan->tindakan_list($query,$start,$end);
 		echo $result;
 	}
+	
+	//function fot list record
+	function tindakan_list2(){
+		
+		$query = isset($_POST['query']) ? $_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		$result=$this->m_report_tindakan->tindakan_list2($query,$start,$end);
+		echo $result;
+	}
+	
+	
+
 
 	//function for update record
 	function tindakan_update(){
@@ -249,10 +268,6 @@ class C_report_tindakan extends Controller {
 	function tindakan_search(){
 		//POST varibale here
 		$trawat_id=trim(@$_POST["trawat_id"]);
-		//$trawat_cust=trim(@$_POST["trawat_cust"]);
-		/*$trawat_keterangan=trim(@$_POST["trawat_keterangan"]);
-		$trawat_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$trawat_keterangan);
-		$trawat_keterangan=str_replace("'", "''",$trawat_keterangan);*/
 		if(trim(@$_POST["trawat_tglapp_start"])!="")
 			$trawat_tglapp_start=date('Y-m-d', strtotime(trim(@$_POST["trawat_tglapp_start"])));
 		else
@@ -261,9 +276,8 @@ class C_report_tindakan extends Controller {
 			$trawat_tglapp_end=date('Y-m-d', strtotime(trim(@$_POST["trawat_tglapp_end"])));
 		else
 			$trawat_tglapp_end="";
-		//$trawat_rawat=trim(@$_POST["trawat_rawat"]);
+
 		$trawat_dokter=trim(@$_POST["trawat_dokter"]);
-		//$trawat_status=trim(@$_POST["trawat_status"]);
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
@@ -271,6 +285,26 @@ class C_report_tindakan extends Controller {
 		echo $result;
 	}
 
+		function tindakan_search2(){
+		//POST varibale here
+		$trawat_id=trim(@$_POST["trawat_id"]);
+		if(trim(@$_POST["trawat_tglapp_start"])!="")
+			$trawat_tglapp_start=date('Y-m-d', strtotime(trim(@$_POST["trawat_tglapp_start"])));
+		else
+			$trawat_tglapp_start="";
+		if(trim(@$_POST["trawat_tglapp_end"])!="")
+			$trawat_tglapp_end=date('Y-m-d', strtotime(trim(@$_POST["trawat_tglapp_end"])));
+		else
+			$trawat_tglapp_end="";
+
+		$trawat_dokter=trim(@$_POST["trawat_dokter"]);
+		
+		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		$result = $this->m_report_tindakan->tindakan_search2($trawat_id ,$trawat_tglapp_start ,$trawat_tglapp_end ,$trawat_dokter ,$start,$end);
+		echo $result;
+	}
+	
 
 	function tindakan_print(){
   		//POST varibale here
@@ -329,9 +363,6 @@ class C_report_tindakan extends Controller {
 		//POST varibale here
 		$trawat_id=trim(@$_POST["trawat_id"]);
 		$trawat_dokter=trim(@$_POST["trawat_dokter"]);
-		//$rawat_nama=trim(@$_POST["rawat_nama"]);
-		//$trawat_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$trawat_keterangan);
-		//$trawat_keterangan=str_replace("'", "''",$trawat_keterangan);
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
