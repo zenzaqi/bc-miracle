@@ -125,7 +125,8 @@ class C_master_jual_produk extends Controller {
 	
 	function get_satuan_bydjproduk_list(){
 		$query = (integer) (isset($_POST['query']) ? $_POST['query'] : 0);
-		$result = $this->m_master_jual_produk->get_satuan_bydjproduk_list($query);
+		$produk_id = (integer) (isset($_POST['produk_id']) ? $_POST['produk_id'] : 0);
+		$result = $this->m_master_jual_produk->get_satuan_bydjproduk_list($query,$produk_id);
 		echo $result;
 	}
 	
