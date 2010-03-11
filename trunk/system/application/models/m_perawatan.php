@@ -477,7 +477,7 @@ class M_perawatan extends Model{
 		}
 		
 		//function for advanced search record
-		function perawatan_search($rawat_id ,$rawat_kode ,$rawat_kodelama ,$rawat_nama ,$rawat_group ,$rawat_kategori ,$rawat_jenis ,$rawat_keterangan ,$rawat_du ,$rawat_dm ,$rawat_point ,$rawat_harga ,$rawat_gudang ,$rawat_aktif ,$start,$end){
+		function perawatan_search($rawat_id ,$rawat_kode ,$rawat_kodelama ,$rawat_nama ,$rawat_group ,$rawat_kategori ,$rawat_jenis ,$rawat_keterangan ,$rawat_du ,$rawat_dm ,$rawat_point , $rawat_kredit, $rawat_jumlah_tindakan, $rawat_harga ,$rawat_gudang ,$rawat_aktif ,$start,$end){
 			//full query
 			//$this->firephp->log($rawat_kategori, "RATSST");
 			if($rawat_aktif==""){
@@ -546,7 +546,6 @@ class M_perawatan extends Model{
 			$nbrows = $result->num_rows();
 			
 			$limit = $query." LIMIT ".$start.",".$end;		
-			//echo $limit;
 			$result = $this->db->query($limit);    
 			
 			if($nbrows>0){
