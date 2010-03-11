@@ -3291,7 +3291,7 @@ Ext.onReady(function(){
 			if(cbo_dproduk_produkDataStore.getCount()){
 				dproduk_idField.setValue(cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_value);
 				cbo_dproduk_satuanDataStore.load({
-					params: {query:dproduk_idField.getValue()},
+					params: {produk_id:dproduk_idField.getValue()},
 					callback: function(opts, success, response){
 						if(success){
 							//console.log("cbo_dproduk_satuanDataStore COUNT = "+cbo_dproduk_satuanDataStore.getCount());
