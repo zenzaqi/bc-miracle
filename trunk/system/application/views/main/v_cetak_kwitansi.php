@@ -985,7 +985,7 @@ Ext.onReady(function(){
 	cetak_kwitansiListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'cetak_kwitansiListEditorGrid',
 		el: 'fp_cetak_kwitansi',
-		title: 'Daftar Cetak Kuitansi',
+		title: 'Daftar Kuitansi',
 		autoHeight: true,
 		store: cetak_kwitansi_DataStore, // DataStore
 		cm: cetak_kwitansi_ColumnModel, // Nama-nama Columns
@@ -1654,7 +1654,7 @@ Ext.onReady(function(){
 	
 	var history_pakai_kwitansiPanel = new Ext.grid.GridPanel({
 		id: 'history_pakai_kwitansiPanel',
-		title: 'Detail Pemakaian Kwitansi',
+		title: 'Detail Pemakaian Kuitansi',
         store: detail_pakai_kwitansiStore,
         cm: detail_pakai_kwitansiColumnModel,
 		view: new Ext.grid.GroupingView({
