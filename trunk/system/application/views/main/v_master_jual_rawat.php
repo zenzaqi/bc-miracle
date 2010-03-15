@@ -3603,21 +3603,6 @@ Ext.onReady(function(){
             }
 		},
 		{
-			align: 'Right',
-			header: '<div align="center">' + 'Diskon (%)' + '</div>',
-			dataIndex: 'drawat_diskon',
-			width: 80, //90,
-			sortable: true,
-//			renderer: Ext.util.Format.numberRenderer('0,000%'),
-			renderer: Ext.util.Format.numberRenderer('0,000'),
-			editor: new Ext.form.NumberField({
-				allowDecimals: false,
-				allowNegative: false,
-				blankText: '0',
-				maxLength: 2,
-				maskRe: /([0-9]+)$/
-			})
-		},{
 			header: '<div align="center">' + 'Jenis Diskon' + '</div>',
 			dataIndex: 'drawat_diskon_jenis',
 			width: 80,	//100,
@@ -3635,7 +3620,24 @@ Ext.onReady(function(){
 				triggerAction: 'all',
 				lazyRenderer: true
 			})
-		},{
+		},
+		{
+			align: 'Right',
+			header: '<div align="center">' + 'Diskon (%)' + '</div>',
+			dataIndex: 'drawat_diskon',
+			width: 80, //90,
+			sortable: true,
+//			renderer: Ext.util.Format.numberRenderer('0,000%'),
+			renderer: Ext.util.Format.numberRenderer('0,000'),
+			editor: new Ext.form.NumberField({
+				allowDecimals: false,
+				allowNegative: false,
+				blankText: '0',
+				maxLength: 2,
+				maskRe: /([0-9]+)$/
+			})
+		},
+		{
 			align: 'Right',
 			header: '<div align="center">' + 'Sub Tot Net (Rp)' + '</div>',
 			dataIndex: 'drawat_subtotal_net',
