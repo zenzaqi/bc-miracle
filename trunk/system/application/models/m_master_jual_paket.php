@@ -504,7 +504,8 @@ class M_master_jual_paket extends Model{
 				$rs_paket_record=$rs_paket->row_array();
 				$apaket_paket_kode=$rs_paket_record["paket_kode"];
 				$apaket_paket_nama=$rs_paket_record["paket_nama"];
-				$apaket_sisa_paket=$rs_paket_record["total_isi_rpaket"]+$rs_paket_record["total_isi_ipaket"];
+				//$apaket_sisa_paket=$rs_paket_record["total_isi_rpaket"]+$rs_paket_record["total_isi_ipaket"];
+				$apaket_sisa_paket=$rs_paket_record["total_isi_rpaket"];
 			}
 			
 			/* INSERT ke db.master_ambil_paket */
