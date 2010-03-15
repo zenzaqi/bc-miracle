@@ -3459,20 +3459,6 @@ Ext.onReady(function(){
             }*/
 		},
 		{
-			align : 'Right',
-			header: '<div align="center">' + 'Diskon (%)' + '</div>',
-			dataIndex: 'dproduk_diskon',
-			width: 80, //90,
-			sortable: true,
-			renderer: Ext.util.Format.numberRenderer('0,000'),
-			editor: new Ext.form.NumberField({
-				allowDecimals: false,
-				allowNegative: false,
-				blankText: '0',
-				maxLength: 2,
-				maskRe: /([0-9]+)$/
-			})
-		},{
 			align : 'Left',
 			header: '<div align="center">' + 'Jenis Diskon' + '</div>',
 			dataIndex: 'dproduk_diskon_jenis',
@@ -3491,7 +3477,23 @@ Ext.onReady(function(){
 				triggerAction: 'all',
 				lazyRenderer: true
 			})
-		},{
+		},
+		{
+			align : 'Right',
+			header: '<div align="center">' + 'Diskon (%)' + '</div>',
+			dataIndex: 'dproduk_diskon',
+			width: 80, //90,
+			sortable: true,
+			renderer: Ext.util.Format.numberRenderer('0,000'),
+			editor: new Ext.form.NumberField({
+				allowDecimals: false,
+				allowNegative: false,
+				blankText: '0',
+				maxLength: 2,
+				maskRe: /([0-9]+)$/
+			})
+		},
+		{
 			align :'Right',
 			header: '<div align="center">' + 'Sub Tot Net (Rp)' + '</div>',
 			dataIndex: 'dproduk_subtotal_net',

@@ -85,7 +85,7 @@ var kwitansi_statusSearchField;
 
 function cetak_kwitansi_print_paper(){
 	Ext.Ajax.request({   
-		waitMsg: 'Please Wait...',
+		waitMsg: 'Mohon tunggu...',
 		url: 'index.php?c=c_cetak_kwitansi&m=print_paper',
 		params: { kwitansi_id : kwitansi_idField.getValue()	}, 
 		success: function(response){              
@@ -396,7 +396,7 @@ Ext.onReady(function(){
 			} else{
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Pembayaran "Belum Lunas".',
+					msg: 'Pembayaran belum lunas',
 					buttons: Ext.MessageBox.OK,
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING
@@ -405,7 +405,7 @@ Ext.onReady(function(){
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'Your Form is not valid!.',
+				msg: 'Form anda belum lengkap',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -568,6 +568,7 @@ Ext.onReady(function(){
 			cetak_kwitansi_reset_form();
 			post2db='CREATE';
 			msg='created';
+			kwitansi_noField.setValue('(Auto)');
 			kwitansi_statusField.setValue("Terbuka");
 			cetak_kwitansi_createWindow.show();
 		} else {
@@ -1133,9 +1134,10 @@ Ext.onReady(function(){
 	/* Identify  kwitansi_no Field */
 	kwitansi_noField= new Ext.form.TextField({
 		id: 'kwitansi_noField',
-		fieldLabel: 'No.Kuitansi',
+		fieldLabel: 'No Kuitansi',
 		maxLength: 20,
 		readOnly:true,
+		emptyText: '(Auto)',
 		anchor: '95%'
 	});
 	/* Identify  kwitansi_cust Field */
