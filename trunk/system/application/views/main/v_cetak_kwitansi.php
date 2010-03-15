@@ -569,7 +569,7 @@ Ext.onReady(function(){
 			cetak_kwitansi_reset_form();
 			post2db='CREATE';
 			msg='created';
-			kwitansi_statusField.setValue("Aktif");
+			kwitansi_statusField.setValue("Terbuka");
 			cetak_kwitansi_createWindow.show();
 		} else {
 			cetak_kwitansi_createWindow.toFront();
@@ -928,7 +928,7 @@ Ext.onReady(function(){
 				triggerAction: 'all',
 				store:new Ext.data.SimpleStore({
 					fields:['kwitansi_status_value', 'kwitansi_status_display'],
-					data: [['aktif','aktif'],['hapus','hapus'],['habis','habis']]
+					data: [['Terbuka','Terbuka'],['Tertutup','Tertutup'],['Batal','Batal']]
 					}),
 				mode: 'local',
                	displayField: 'kwitansi_status_display',
@@ -1182,12 +1182,12 @@ Ext.onReady(function(){
 		fieldLabel: 'Status',
 		store:new Ext.data.SimpleStore({
 			fields:['kwitansi_status_value', 'kwitansi_status_display'],
-			data:[['aktif','aktif'],['hapus','hapus'],['habis','habis']]
+			data:[['Terbuka','Terbuka'],['Tertutup','Tertutup'],['Batal','Batal']]
 		}),
 		mode: 'local',
 		displayField: 'kwitansi_status_display',
 		valueField: 'kwitansi_status_value',
-		emptyText: 'Aktif',
+		emptyText: 'Terbuka',
 		anchor: '95%',
 		triggerAction: 'all'	
 	});
@@ -2107,7 +2107,7 @@ Ext.onReady(function(){
 		fieldLabel: 'Kwitansi Status',
 		store:new Ext.data.SimpleStore({
 			fields:['value', 'kwitansi_status'],
-			data:[['aktif','aktif'],['hapus','hapus'],['habis','habis']]
+			data:[['Terbuka','Terbuka'],['Tertutup','Tertutup'],['Batal','Batal']]
 		}),
 		mode: 'local',
 		displayField: 'kwitansi_status',

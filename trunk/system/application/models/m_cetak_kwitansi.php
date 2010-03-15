@@ -162,7 +162,8 @@ class M_cetak_kwitansi extends Model{
 			if($kwitansi_status=="")
 				$kwitansi_status="Aktif";
 			
-			$pattern="KW/".date('ym')."-";
+			//$pattern="KW/".date('ym')."-";
+			$pattern="KU/".date('ym')."-";
 			$kwitansi_no=$this->m_public_function->get_kode_1("cetak_kwitansi","kwitansi_no",$pattern,12);
 			$data = array(
 				"kwitansi_no"=>$kwitansi_no, 
