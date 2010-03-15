@@ -3605,6 +3605,7 @@ Ext.onReady(function(){
 	
 	//function for insert detail
 	function detail_jual_produk_insert(){
+		var count_detail=detail_jual_produk_DataStore.getCount();
 		for(i=0;i<detail_jual_produk_DataStore.getCount();i++){
 			detail_jual_produk_record=detail_jual_produk_DataStore.getAt(i);
 			if(detail_jual_produk_record.data.dproduk_produk!==null&&detail_jual_produk_record.data.dproduk_produk.dproduk_produk!==""){
@@ -3627,6 +3628,13 @@ Ext.onReady(function(){
 					timeout: 60000,
 					success: function(response){							
 						var result=eval(response.responseText);
+						if(i==count_detail){
+							Ext.Ajax.request({
+								waitMsg: 'Mohon tunggu...',
+								url: 'index.php?c=c_master_jual_produk&m=catatan_piutang_update',
+								params:{dproduk_master	: eval(jproduk_idField.getValue())}
+							});
+						}
 					},
 					failure: function(response){
 						var result=response.responseText;

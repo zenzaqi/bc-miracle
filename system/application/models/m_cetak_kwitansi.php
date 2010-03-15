@@ -112,13 +112,14 @@ class M_cetak_kwitansi extends Model{
 		
 		//function for get list record
 		function cetak_kwitansi_list($filter,$start,$end){
-			$query = "SELECT kwitansi_id, kwitansi_no, kwitansi_cust, cust_nama, cust_no, kwitansi_cara, kwitansi_nilai, kwitansi_keterangan, kwitansi_status, kwitansi_creator, kwitansi_date_create, kwitansi_update, kwitansi_date_update, kwitansi_revised, sum(jkwitansi_nilai) AS total_terpakai, IF((kwitansi_nilai-(IF(sum(jkwitansi_nilai),sum(jkwitansi_nilai),0)))=0,kwitansi_nilai,(kwitansi_nilai-(IF(sum(jkwitansi_nilai),sum(jkwitansi_nilai),0)))) AS total_sisa FROM cetak_kwitansi LEFT JOIN jual_kwitansi ON(jkwitansi_master=kwitansi_id) LEFT JOIN customer ON(kwitansi_cust=cust_id) GROUP BY kwitansi_id";
+			$query = "SELECT kwitansi_id, kwitansi_no, kwitansi_cust, cust_nama, cust_no, kwitansi_cara, kwitansi_nilai, kwitansi_keterangan, kwitansi_status, kwitansi_creator, kwitansi_date_create, kwitansi_update, kwitansi_date_update, kwitansi_revised, sum(jkwitansi_nilai) AS total_terpakai, IF((kwitansi_nilai-(IF(sum(jkwitansi_nilai),sum(jkwitansi_nilai),0)))=0,kwitansi_nilai,(kwitansi_nilai-(IF(sum(jkwitansi_nilai),sum(jkwitansi_nilai),0)))) AS total_sisa FROM cetak_kwitansi LEFT JOIN jual_kwitansi ON(jkwitansi_master=kwitansi_id) LEFT JOIN customer ON(kwitansi_cust=cust_id)";
 			
 			// For simple search
 			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (kwitansi_id LIKE '%".addslashes($filter)."%' OR kwitansi_no LIKE '%".addslashes($filter)."%' OR kwitansi_cust LIKE '%".addslashes($filter)."%' OR kwitansi_ref LIKE '%".addslashes($filter)."%' OR kwitansi_nilai LIKE '%".addslashes($filter)."%' OR kwitansi_keterangan LIKE '%".addslashes($filter)."%' OR kwitansi_status LIKE '%".addslashes($filter)."%' )";
+				$query .= " (kwitansi_no LIKE '%".addslashes($filter)."%' OR cust_nama LIKE '%".addslashes($filter)."%' OR kwitansi_ref LIKE '%".addslashes($filter)."%' )";
 			}
+			$query .= "GROUP BY kwitansi_id";
 			
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
@@ -262,9 +263,10 @@ class M_cetak_kwitansi extends Model{
 		}
 		
 		//function for advanced search record
-		function cetak_kwitansi_search($kwitansi_id ,$kwitansi_no ,$kwitansi_cust ,$kwitansi_ref ,$kwitansi_nilai ,$kwitansi_keterangan ,$kwitansi_status ,$start,$end){
+		function cetak_kwitansi_search($kwitansi_id ,$kwitansi_no ,$kwitansi_cust ,$kwitansi_keterangan ,$kwitansi_status ,$start,$end){
 			//full query
-			$query="select * from cetak_kwitansi";
+			//$query="select * from cetak_kwitansi";
+			$query = "SELECT kwitansi_id, kwitansi_no, kwitansi_cust, cust_nama, cust_no, kwitansi_cara, kwitansi_nilai, kwitansi_keterangan, kwitansi_status, kwitansi_creator, kwitansi_date_create, kwitansi_update, kwitansi_date_update, kwitansi_revised, sum(jkwitansi_nilai) AS total_terpakai, IF((kwitansi_nilai-(IF(sum(jkwitansi_nilai),sum(jkwitansi_nilai),0)))=0,kwitansi_nilai,(kwitansi_nilai-(IF(sum(jkwitansi_nilai),sum(jkwitansi_nilai),0)))) AS total_sisa FROM cetak_kwitansi LEFT JOIN jual_kwitansi ON(jkwitansi_master=kwitansi_id) LEFT JOIN customer ON(kwitansi_cust=cust_id)";
 			
 			if($kwitansi_id!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -277,14 +279,6 @@ class M_cetak_kwitansi extends Model{
 			if($kwitansi_cust!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " kwitansi_cust LIKE '%".$kwitansi_cust."%'";
-			};
-			if($kwitansi_ref!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " kwitansi_ref LIKE '%".$kwitansi_ref."%'";
-			};
-			if($kwitansi_nilai!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " kwitansi_nilai LIKE '%".$kwitansi_nilai."%'";
 			};
 			if($kwitansi_keterangan!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";

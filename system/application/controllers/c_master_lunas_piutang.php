@@ -17,6 +17,7 @@ class C_master_lunas_piutang extends Controller {
 	function C_master_lunas_piutang(){
 		parent::Controller();
 		$this->load->model('m_master_lunas_piutang', '', TRUE);
+		session_start();
 		$this->load->plugin('to_excel');
 	}
 	
@@ -24,6 +25,32 @@ class C_master_lunas_piutang extends Controller {
 	function index(){
 		$this->load->helper('asset');
 		$this->load->view('main/v_master_lunas_piutang');
+	}
+	
+	function detail_lunas_piutang_list(){
+		$lpiutang_id = isset($_POST['lpiutang_id']) ? $_POST['lpiutang_id'] : "";
+		$result=$this->m_master_lunas_piutang->detail_lunas_piutang_list($lpiutang_id);
+		echo $result;
+	}
+	
+	function get_faktur_jual_list_bycust(){
+		$cust_id = isset($_POST['cust_id']) ? $_POST['cust_id'] : "";
+		$result=$this->m_master_lunas_piutang->get_faktur_jual_list_bycust($cust_id);
+		echo $result;
+	}
+	
+	function get_customer_list(){
+		$query = isset($_POST['query']) ? $_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		$result=$this->m_master_lunas_piutang->get_customer_list($query,$start,$end);
+		echo $result;
+	}
+	
+	function  form_bayar_piutang_list(){
+		$cust_id = (integer) (isset($_POST['cust_id']) ? $_POST['cust_id'] : $_GET['cust_id']);
+		$result=$this->m_master_lunas_piutang->form_bayar_piutang_list($cust_id);
+		echo $result;
 	}
 	
 	//for detail action
@@ -51,6 +78,34 @@ class C_master_lunas_piutang extends Controller {
 		echo $result;
 	}
 	//
+	
+	//add bayar
+	function form_bayar_piutang_insert(){
+	//POST variable here
+		$dpiutang_master=trim(@$_POST["dpiutang_master"]);
+		$dpiutang_nilai=trim(@$_POST["dpiutang_nilai"]);
+		
+		$dpiutang_cara=trim(@$_POST["dpiutang_cara"]);
+		
+		$dpiutang_tunai_nilai=trim($_POST["dpiutang_tunai_nilai"]);
+		
+		$dpiutang_card_nama=trim($_POST["dpiutang_card_nama"]);
+		$dpiutang_card_edc=trim($_POST["dpiutang_card_edc"]);
+		$dpiutang_card_no=trim($_POST["dpiutang_card_no"]);
+		$dpiutang_card_nilai=trim($_POST["dpiutang_card_nilai"]);
+		
+		$dpiutang_cek_nama=trim($_POST["dpiutang_cek_nama"]);
+		$dpiutang_cek_no=trim($_POST["dpiutang_cek_no"]);
+		$dpiutang_cek_valid=trim($_POST["dpiutang_cek_valid"]);
+		$dpiutang_cek_bank=trim($_POST["dpiutang_cek_bank"]);
+		$dpiutang_cek_nilai=trim($_POST["dpiutang_cek_nilai"]);
+		
+		$dpiutang_transfer_bank=trim($_POST["dpiutang_transfer_bank"]);
+		$dpiutang_transfer_nama=trim($_POST["dpiutang_transfer_nama"]);
+		$dpiutang_transfer_nilai=trim($_POST["dpiutang_transfer_nilai"]);
+		
+		$result=$this->m_master_lunas_piutang->form_bayar_piutang_insert($dpiutang_master ,$dpiutang_nilai ,$dpiutang_cara ,$dpiutang_tunai_nilai ,$dpiutang_card_nama ,$dpiutang_card_edc ,$dpiutang_card_no ,$dpiutang_card_nilai ,$dpiutang_cek_nama ,$dpiutang_cek_no ,$dpiutang_cek_valid ,$dpiutang_cek_bank ,$dpiutang_cek_nilai ,$dpiutang_transfer_bank ,$dpiutang_transfer_nama ,$dpiutang_transfer_nilai );
+	}
 	
 	//add detail
 	function detail_detail_lunas_piutang_insert(){
@@ -118,7 +173,8 @@ class C_master_lunas_piutang extends Controller {
 		$lpiutang_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$lpiutang_keterangan);
 		$lpiutang_keterangan=str_replace(",", ",",$lpiutang_keterangan);
 		$lpiutang_keterangan=str_replace("'", '"',$lpiutang_keterangan);
-		$result = $this->m_master_lunas_piutang->master_lunas_piutang_update($lpiutang_id ,$lpiutang_no ,$lpiutang_cust ,$lpiutang_tanggal ,$lpiutang_keterangan      );
+		$piutang_cara=trim(@$_POST["piutang_cara"]);
+		$result = $this->m_master_lunas_piutang->master_lunas_piutang_update($lpiutang_id ,$lpiutang_no ,$lpiutang_cust ,$lpiutang_tanggal ,$lpiutang_keterangan ,$piutang_cara);
 		echo $result;
 	}
 	

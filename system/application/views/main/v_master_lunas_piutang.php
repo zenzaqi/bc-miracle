@@ -47,20 +47,20 @@
 var master_lunas_piutang_DataStore;
 var master_lunas_piutang_ColumnModel;
 var master_lunas_piutangListEditorGrid;
-var master_lunas_piutang_createForm;
-var master_lunas_piutang_createWindow;
+var multi_lunas_piutang_createForm;
+var multi_lunas_piutang_createWindow;
 var master_lunas_piutang_searchForm;
 var master_lunas_piutang_searchWindow;
 var master_lunas_piutang_SelectedRow;
 var master_lunas_piutang_ContextMenu;
 //for detail data
 var detail_lunas_piutang_DataStor;
-var detail_lunas_piutangListEditorGrid;
-var detail_lunas_piutang_ColumnModel;
+var form_bayar_piutangListEditorGrid;
+var form_bayar_piutang_ColumnModel;
 var detail_lunas_piutang_proxy;
-var detail_lunas_piutang_writer;
-var detail_lunas_piutang_reader;
-var editor_detail_lunas_piutang;
+var form_bayar_piutang_writer;
+var form_bayar_piutang_reader;
+var editor_form_bayar_piutang;
 
 //declare konstant
 var post2db = '';
@@ -69,7 +69,7 @@ var pageS=15;
 
 /* declare variable here for Field*/
 var lpiutang_idField;
-var lpiutang_noField;
+var lpiutang_fakturField;
 var lpiutang_custField;
 var lpiutang_tanggalField;
 var lpiutang_keteranganField;
@@ -78,6 +78,14 @@ var lpiutang_noSearchField;
 var lpiutang_custSearchField;
 var lpiutang_tanggalSearchField;
 var lpiutang_keteranganSearchField;
+
+
+Ext.util.Format.comboRenderer = function(combo){
+	return function(value){
+		var record = combo.findRecord(combo.valueField, value);
+		return record ? record.get(combo.displayField) : combo.valueNotFoundText;
+	}
+}
 
 /* on ready fuction */
 Ext.onReady(function(){
@@ -145,16 +153,18 @@ Ext.onReady(function(){
 	
 		if(is_master_lunas_piutang_form_valid()){	
 		var lpiutang_id_create_pk=null; 
-		var lpiutang_no_create=null; 
+		var lpiutang_nobukti_create=null; 
 		var lpiutang_cust_create=null; 
 		var lpiutang_tanggal_create_date=""; 
 		var lpiutang_keterangan_create=null; 
+		var piutang_cara_create=null;
 
 		if(lpiutang_idField.getValue()!== null){lpiutang_id_create = lpiutang_idField.getValue();}else{lpiutang_id_create_pk=get_pk_id();} 
-		if(lpiutang_noField.getValue()!== null){lpiutang_no_create = lpiutang_noField.getValue();} 
+		if(lpiutang_fakturField.getValue()!== null){lpiutang_nobukti_create = lpiutang_fakturField.getValue();} 
 		if(lpiutang_custField.getValue()!== null){lpiutang_cust_create = lpiutang_custField.getValue();} 
 		if(lpiutang_tanggalField.getValue()!== ""){lpiutang_tanggal_create_date = lpiutang_tanggalField.getValue().format('Y-m-d');} 
 		if(lpiutang_keteranganField.getValue()!== null){lpiutang_keterangan_create = lpiutang_keteranganField.getValue();} 
+		if(piutang_caraField.getValue()!== null){piutang_cara_create = piutang_caraField.getValue();} 
 
 		Ext.Ajax.request({  
 			waitMsg: 'Please wait...',
@@ -162,20 +172,21 @@ Ext.onReady(function(){
 			params: {
 				task: post2db,
 				lpiutang_id	: lpiutang_id_create_pk, 
-				lpiutang_no	: lpiutang_no_create, 
+				lpiutang_nobukti	: lpiutang_nobukti_create, 
 				lpiutang_cust	: lpiutang_cust_create, 
 				lpiutang_tanggal	: lpiutang_tanggal_create_date, 
 				lpiutang_keterangan	: lpiutang_keterangan_create, 
+				piutang_cara	: piutang_cara_create
 			}, 
 			success: function(response){             
 				var result=eval(response.responseText);
 				switch(result){
 					case 1:
-						detail_lunas_piutang_purge()
-						detail_lunas_piutang_insert();
+						//form_bayar_piutang_purge();
+						form_bayar_piutang_insert();
 						Ext.MessageBox.alert(post2db+' OK','The Master_lunas_piutang was '+msg+' successfully.');
 						master_lunas_piutang_DataStore.reload();
-						master_lunas_piutang_createWindow.hide();
+						single_lunas_piutang_createWindow.hide();
 						break;
 					default:
 						Ext.MessageBox.show({
@@ -224,8 +235,8 @@ Ext.onReady(function(){
 	function master_lunas_piutang_reset_form(){
 		lpiutang_idField.reset();
 		lpiutang_idField.setValue(null);
-		lpiutang_noField.reset();
-		lpiutang_noField.setValue(null);
+		lpiutang_fakturField.reset();
+		lpiutang_fakturField.setValue(null);
 		lpiutang_custField.reset();
 		lpiutang_custField.setValue(null);
 		lpiutang_tanggalField.reset();
@@ -238,8 +249,8 @@ Ext.onReady(function(){
 	/* setValue to EDIT */
 	function master_lunas_piutang_set_form(){
 		lpiutang_idField.setValue(master_lunas_piutangListEditorGrid.getSelectionModel().getSelected().get('lpiutang_id'));
-		lpiutang_noField.setValue(master_lunas_piutangListEditorGrid.getSelectionModel().getSelected().get('lpiutang_no'));
-		lpiutang_custField.setValue(master_lunas_piutangListEditorGrid.getSelectionModel().getSelected().get('lpiutang_cust'));
+		lpiutang_fakturField.setValue(master_lunas_piutangListEditorGrid.getSelectionModel().getSelected().get('lpiutang_nobukti'));
+		lpiutang_custField.setValue(master_lunas_piutangListEditorGrid.getSelectionModel().getSelected().get('cust_nama'));
 		lpiutang_tanggalField.setValue(master_lunas_piutangListEditorGrid.getSelectionModel().getSelected().get('lpiutang_tanggal'));
 		lpiutang_keteranganField.setValue(master_lunas_piutangListEditorGrid.getSelectionModel().getSelected().get('lpiutang_keterangan'));
 	}
@@ -253,13 +264,13 @@ Ext.onReady(function(){
   
   	/* Function for Displaying  create Window Form */
 	function display_form_window(){
-		if(!master_lunas_piutang_createWindow.isVisible()){
+		if(!multi_lunas_piutang_createWindow.isVisible()){
 			master_lunas_piutang_reset_form();
 			post2db='CREATE';
 			msg='created';
-			master_lunas_piutang_createWindow.show();
+			multi_lunas_piutang_createWindow.show();
 		} else {
-			master_lunas_piutang_createWindow.toFront();
+			multi_lunas_piutang_createWindow.toFront();
 		}
 	}
   	/* End of Function */
@@ -289,9 +300,20 @@ Ext.onReady(function(){
 		if(master_lunas_piutangListEditorGrid.selModel.getCount() == 1) {
 			master_lunas_piutang_set_form();
 			post2db='UPDATE';
-			detail_lunas_piutang_DataStore.load({params : {master_id : eval(get_pk_id()), start:0, limit:pageS}});
+			form_bayar_piutang_DataStore.load({
+				params : {cust_id : master_lunas_piutangListEditorGrid.getSelectionModel().getSelected().get('lpiutang_cust')},
+				callback: function(opts, success, response){
+					var total_piutang=0;
+					if(success){
+						for(i=0;i<form_bayar_piutang_DataStore.getCount();i++){
+							total_piutang += form_bayar_piutang_DataStore.getAt(i).data.lpiutang_sisa;
+						}
+						piutang_total_nilaiField.setValue(total_piutang);
+					}
+				}
+			});
 			msg='updated';
-			master_lunas_piutang_createWindow.show();
+			single_lunas_piutang_createWindow.show();
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
@@ -350,7 +372,7 @@ Ext.onReady(function(){
   	/* End of Function */
   
 	/* Function for Retrieve DataStore */
-	master_lunas_piutang_DataStore = new Ext.data.Store({
+	master_lunas_piutang_DataStore = new Ext.data.GroupingStore({
 		id: 'master_lunas_piutang_DataStore',
 		proxy: new Ext.data.HttpProxy({
 			url: 'index.php?c=c_master_lunas_piutang&m=get_action', 
@@ -364,19 +386,100 @@ Ext.onReady(function(){
 		},[
 		/* dataIndex => insert intomaster_lunas_piutang_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'lpiutang_id', type: 'int', mapping: 'lpiutang_id'}, 
-			{name: 'lpiutang_no', type: 'string', mapping: 'lpiutang_no'}, 
+			{name: 'lpiutang_faktur', type: 'string', mapping: 'lpiutang_faktur'}, 
 			{name: 'lpiutang_cust', type: 'int', mapping: 'lpiutang_cust'}, 
-			{name: 'lpiutang_tanggal', type: 'date', dateFormat: 'Y-m-d', mapping: 'lpiutang_tanggal'}, 
+			{name: 'cust_nama', type: 'string', mapping: 'cust_nama'}, 
+			{name: 'lpiutang_faktur_tanggal', type: 'date', dateFormat: 'Y-m-d', mapping: 'lpiutang_faktur_tanggal'}, 
+			{name: 'lpiutang_total', type: 'float', mapping: 'lpiutang_total'}, 
+			{name: 'lpiutang_sisa', type: 'float', mapping: 'lpiutang_sisa'}, 
 			{name: 'lpiutang_keterangan', type: 'string', mapping: 'lpiutang_keterangan'}, 
+			{name: 'lpiutang_status', type: 'string', mapping: 'lpiutang_status'}, 
 			{name: 'lpiutang_creator', type: 'string', mapping: 'lpiutang_creator'}, 
 			{name: 'lpiutang_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'lpiutang_date_create'}, 
 			{name: 'lpiutang_update', type: 'string', mapping: 'lpiutang_update'}, 
 			{name: 'lpiutang_date_update', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'lpiutang_date_update'}, 
 			{name: 'lpiutang_revised', type: 'int', mapping: 'lpiutang_revised'} 
 		]),
-		sortInfo:{field: 'lpiutang_id', direction: "DESC"}
+		sortInfo:{field: 'lpiutang_id', direction: "DESC"},
+		groupField: 'cust_nama'
 	});
 	/* End of Function */
+	
+	//ComboBox ambil data Customer
+	cbo_cutomerDataStore = new Ext.data.Store({
+		id: 'cbo_cutomerDataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_master_lunas_piutang&m=get_customer_list', 
+			method: 'POST'
+		}),
+		baseParams:{start: 0, limit: 10 }, // parameter yang di $_POST ke Controller
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'cust_id'
+		},[
+		/* dataIndex => insert intocustomer_note_ColumnModel, Mapping => for initiate table column */ 
+			{name: 'cust_id', type: 'int', mapping: 'cust_id'},
+			{name: 'cust_no', type: 'string', mapping: 'cust_no'},
+			{name: 'cust_nama', type: 'string', mapping: 'cust_nama'},
+			{name: 'cust_tgllahir', type: 'date', dateFormat: 'Y-m-d', mapping: 'cust_tgllahir'},
+			{name: 'cust_alamat', type: 'string', mapping: 'cust_alamat'},
+			{name: 'cust_telprumah', type: 'string', mapping: 'cust_telprumah'}
+		]),
+		sortInfo:{field: 'cust_no', direction: "ASC"}
+	});
+	//Template yang akan tampil di ComboBox
+	var customer_tpl = new Ext.XTemplate(
+        '<tpl for="."><div class="search-item">',
+            '<span><b>{cust_no} : {cust_nama}</b> | Tgl-Lahir:{cust_tgllahir:date("M j, Y")}<br /></span>',
+            'Alamat: {cust_alamat}&nbsp;&nbsp;&nbsp;[Telp. {cust_telprumah}]',
+        '</div></tpl>'
+    );
+	
+	cbo_nofaktur_jualDataStore = new Ext.data.Store({
+		id: 'cbo_nofaktur_jualDataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_master_lunas_piutang&m=get_faktur_jual_list_bycust', 
+			method: 'POST'
+		}),baseParams: {start: 0, limit: 15 },
+			reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'lpiutang_id'
+		},[
+			{name: 'cbo_nofaktur_value', type: 'int', mapping: 'lpiutang_id'},
+			{name: 'cbo_nofaktur_display', type: 'string', mapping: 'lpiutang_faktur'},
+			{name: 'cbo_nofaktur_tgl', type: 'date', dateFormat:'Y-m-d', mapping: 'lpiutang_faktur_tanggal'},
+			{name: 'cbo_nofaktur_total', type: 'float', mapping: 'lpiutang_total'},
+			{name: 'cbo_nofaktur_sisa', type: 'float', mapping: 'lpiutang_sisa'}
+		]),
+		sortInfo:{field: 'cbo_nofaktur_display', direction: "ASC"}
+	});
+	var nofaktur_jual_tpl = new Ext.XTemplate(
+        '<tpl for="."><div class="search-item">',
+            '<span><b>{cbo_nofaktur_display}</b>| Jumlah Piutang: <b>{cbo_nofaktur_sisa}</b>',
+		'</div></tpl>'
+    );
+	
+	/* GET Bank-List.Store */
+	piutang_bankDataStore = new Ext.data.Store({
+		id:'piutang_bankDataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_master_lunas_piutang&m=get_bank_list', 
+			method: 'POST'
+		}),
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'mbank_id'
+		},[
+		/* dataIndex => insert intomaster_jual_produk_ColumnModel, Mapping => for initiate table column */ 
+			{name: 'piutang_bank_value', type: 'int', mapping: 'mbank_id'}, 
+			{name: 'piutang_bank_display', type: 'string', mapping: 'mbank_nama'}
+		]),
+		sortInfo:{field: 'piutang_bank_display', direction: "DESC"}
+		});
+	/* END GET Bank-List.Store */
     
   	/* Function for Identify of Window Column Model */
 	master_lunas_piutang_ColumnModel = new Ext.grid.ColumnModel(
@@ -392,8 +495,8 @@ Ext.onReady(function(){
 			hidden: false
 		},
 		{
-			header: 'Lpiutang No',
-			dataIndex: 'lpiutang_no',
+			header: 'No.Faktur Jual',
+			dataIndex: 'lpiutang_faktur',
 			width: 150,
 			sortable: true,
 			editor: new Ext.form.TextField({
@@ -401,30 +504,35 @@ Ext.onReady(function(){
           	})
 		}, 
 		{
-			header: 'Lpiutang Cust',
-			dataIndex: 'lpiutang_cust',
-			width: 150,
-			sortable: true,
-			editor: new Ext.form.NumberField({
-				allowDecimals: false,
-				allowNegative: false,
-				blankText: '0',
-				maxLength: 11,
-				maskRe: /([0-9]+)$/
-			})
-		}, 
-		{
-			header: 'Lpiutang Tanggal',
-			dataIndex: 'lpiutang_tanggal',
+			header: 'Tanggal',
+			dataIndex: 'lpiutang_faktur_tanggal',
 			width: 150,
 			sortable: true,
 			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
-			editor: new Ext.form.DateField({
-				format: 'Y-m-d'
-			})
 		}, 
 		{
-			header: 'Lpiutang Keterangan',
+			header: 'Customer',
+			dataIndex: 'cust_nama',
+			width: 210,
+			sortable: true,
+			hidden: true
+		}, 
+		{
+			header: 'Total Piutang',
+			dataIndex: 'lpiutang_total',
+			width: 150,
+			sortable: true,
+			renderer: Ext.util.Format.numberRenderer('0,000')
+		}, 
+		{
+			header: 'Sisa Piutang',
+			dataIndex: 'lpiutang_sisa',
+			width: 150,
+			sortable: true,
+			renderer: Ext.util.Format.numberRenderer('0,000')
+		}, 
+		{
+			header: 'Keterangan',
 			dataIndex: 'lpiutang_keterangan',
 			width: 150,
 			sortable: true,
@@ -433,7 +541,13 @@ Ext.onReady(function(){
           	})
 		}, 
 		{
-			header: 'Lpiutang Creator',
+			header: 'Status',
+			dataIndex: 'lpiutang_status',
+			width: 150,
+			sortable: true
+		}, 
+		{
+			header: 'Creator',
 			dataIndex: 'lpiutang_creator',
 			width: 150,
 			sortable: true,
@@ -441,7 +555,7 @@ Ext.onReady(function(){
 			readOnly: true,
 		}, 
 		{
-			header: 'Lpiutang Date Create',
+			header: 'Date Create',
 			dataIndex: 'lpiutang_date_create',
 			width: 150,
 			sortable: true,
@@ -449,7 +563,7 @@ Ext.onReady(function(){
 			readOnly: true,
 		}, 
 		{
-			header: 'Lpiutang Update',
+			header: 'Update',
 			dataIndex: 'lpiutang_update',
 			width: 150,
 			sortable: true,
@@ -457,7 +571,7 @@ Ext.onReady(function(){
 			readOnly: true,
 		}, 
 		{
-			header: 'Lpiutang Date Update',
+			header: 'Date Update',
 			dataIndex: 'lpiutang_date_update',
 			width: 150,
 			sortable: true,
@@ -465,7 +579,7 @@ Ext.onReady(function(){
 			readOnly: true,
 		}, 
 		{
-			header: 'Lpiutang Revised',
+			header: 'Revised',
 			dataIndex: 'lpiutang_revised',
 			width: 150,
 			sortable: true,
@@ -489,8 +603,11 @@ Ext.onReady(function(){
 		trackMouseOver: false,
 		//clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
-		viewConfig: { forceFit:true },
-	  	width: 700,
+		view: new Ext.grid.GroupingView({
+            forceFit:true,
+            groupTextTpl: '{text} ({[values.rs.length]} {[values.rs.length > 1 ? "Items" : "Item"]})'
+        }),
+	  	width: 800,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: master_lunas_piutang_DataStore,
@@ -502,9 +619,10 @@ Ext.onReady(function(){
 			text: 'Add',
 			tooltip: 'Add new record',
 			iconCls:'icon-adds',    				// this is defined in our styles.css
+			disabled: true,
 			handler: display_form_window
 		}, '-',{
-			text: 'Edit',
+			text: 'Bayar',
 			tooltip: 'Edit selected record',
 			iconCls:'icon-update',
 			handler: master_lunas_piutang_confirm_update   // Confirm before updating
@@ -512,6 +630,7 @@ Ext.onReady(function(){
 			text: 'Delete',
 			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
+			disabled: true,
 			handler: master_lunas_piutang_confirm_delete   // Confirm before deleting
 		}, '-', {
 			text: 'Search',
@@ -576,6 +695,13 @@ Ext.onReady(function(){
 	}); 
 	/* End of Declaration */
 	
+	master_lunas_piutangListEditorGrid.on('rowclick', function (master_lunas_piutangListEditorGrid, rowIndex, eventObj) {
+        var recordMaster = master_lunas_piutangListEditorGrid.getSelectionModel().getSelected();
+        detail_bayar_piutangStore.setBaseParam('lpiutang_id',recordMaster.get("lpiutang_id"));
+		detail_bayar_piutangStore.load({params : {lpiutang_id : recordMaster.get("lpiutang_id"), start:0, limit:pageS}});
+		master_lunas_piutang_DataStore.reload();
+    });
+	
 	/* Event while selected row via context menu */
 	function onmaster_lunas_piutang_ListEditGridContextMenu(grid, rowIndex, e) {
 		e.stopEvent();
@@ -610,47 +736,422 @@ Ext.onReady(function(){
 		maskRe: /([0-9]+)$/
 	});
 	/* Identify  lpiutang_no Field */
-	lpiutang_noField= new Ext.form.TextField({
-		id: 'lpiutang_noField',
-		fieldLabel: 'Lpiutang No',
+	lpiutang_fakturField= new Ext.form.TextField({
+		id: 'lpiutang_fakturField',
+		fieldLabel: 'No.Faktur',
+		readOnly: true,
+		maxLength: 50,
+		emptyText: '(auto)',
+		anchor: '95%'
+	});
+	lpiutang_custField= new Ext.form.TextField({
+		id: 'lpiutang_custField',
+		fieldLabel: 'Customer',
+		readOnly: true,
 		maxLength: 50,
 		anchor: '95%'
 	});
 	/* Identify  lpiutang_cust Field */
-	lpiutang_custField= new Ext.form.NumberField({
+	/*lpiutang_custField= new Ext.form.ComboBox({
 		id: 'lpiutang_custField',
-		fieldLabel: 'Lpiutang Cust',
-		allowNegatife : false,
-		blankText: '0',
-		allowDecimals: false,
-				anchor: '95%',
-		maskRe: /([0-9]+)$/
-	});
+		fieldLabel: 'Customer',
+		store: cbo_cutomerDataStore,
+		mode: 'remote',
+		displayField:'cust_nama',
+		valueField: 'cust_id',
+        typeAhead: false,
+        loadingText: 'Searching...',
+        pageSize:10,
+        hideTrigger:false,
+        tpl: customer_tpl,
+        itemSelector: 'div.search-item',
+		triggerAction: 'query',
+		lazyRender:true,
+		listClass: 'x-combo-list-small',
+		allowBlank: true,
+		anchor: '95%',
+		queryDelay:1200,
+		listeners:{
+			render: function(c){
+				Ext.get(this.id).set({qtitle:'Search By'});
+				Ext.get(this.id).set({qtip:'- No.Customer<br>- Nama Customer<br>- No.Telp Rumah<br>- No.Telp Kantor<br>- No.HP'});
+			}
+		}
+	});*/
 	/* Identify  lpiutang_tanggal Field */
 	lpiutang_tanggalField= new Ext.form.DateField({
 		id: 'lpiutang_tanggalField',
-		fieldLabel: 'Lpiutang Tanggal',
+		fieldLabel: 'Tanggal',
 		format : 'Y-m-d',
 	});
 	/* Identify  lpiutang_keterangan Field */
-	lpiutang_keteranganField= new Ext.form.TextField({
+	lpiutang_keteranganField= new Ext.form.TextArea({
 		id: 'lpiutang_keteranganField',
-		fieldLabel: 'Lpiutang Keterangan',
+		fieldLabel: 'Keterangan',
 		maxLength: 150,
+		height: 65,
 		anchor: '95%'
 	});
+	
+	/* Identify  piutang_total_nilai Field */
+	piutang_total_nilaiField= new Ext.form.NumberField({
+		id: 'piutang_total_nilaiField',
+		fieldLabel: '<b>Total (Rp)</b>',
+		allowNegatife : false,
+		blankText: '0',
+		allowDecimals: true,
+		readOnly: true,
+		anchor: '100%',
+		maskRe: /([0-9]+)$/
+	});
+	/* Identify  piutang_total_bayar Field */
+	piutang_total_bayarField= new Ext.form.NumberField({
+		id: 'piutang_total_bayarField',
+		fieldLabel: 'Total Bayar (Rp)',
+		allowNegatife : false,
+		blankText: '0',
+		allowDecimals: true,
+		readOnly: true,
+		anchor: '100%',
+		maskRe: /([0-9]+)$/
+	});
+	
+	
   	/*Fieldset Master*/
-	master_lunas_piutang_masterGroup = new Ext.form.FieldSet({
+	multi_lunas_piutang_masterGroup = new Ext.form.FieldSet({
 		title: 'Master',
 		autoHeight: true,
 		collapsible: true,
 		layout:'column',
 		items:[
 			{
+				columnWidth:0.5,
+				layout: 'form',
+				border:false,
+				items: [lpiutang_custField, lpiutang_tanggalField] 
+			},
+			{
+				columnWidth:0.5,
+				layout: 'form',
+				border:false,
+				items: [lpiutang_keteranganField, lpiutang_idField] 
+			}
+			]
+	
+	});
+	
+	single_lunas_piutang_masterGroup = new Ext.form.FieldSet({
+		title: 'Master',
+		autoHeight: true,
+		collapsible: true,
+		layout:'column',
+		items:[
+			{
+				columnWidth:0.5,
+				layout: 'form',
+				border:false,
+				items: [lpiutang_custField] 
+			},
+			{
+				columnWidth:0.5,
+				layout: 'form',
+				border:false,
+				items: [lpiutang_keteranganField] 
+			}
+			]
+	
+	});
+	
+	//START Bayar Tunai
+	piutang_tunai_nilaiField= new Ext.form.NumberField({
+		id: 'piutang_tunai_nilaiField',
+		enableKeyEvents: true,
+		fieldLabel: 'Jumlah (Rp)',
+		allowBlank: true,
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
+	});
+
+	piutang_bayar_tunaiGroup = new Ext.form.FieldSet({
+		title: 'Tunai',
+		autoHeight: true,
+		collapsible: true,
+		layout:'column',
+		anchor: '99%',
+		hidden: true,
+		items:[
+			{
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [lpiutang_idField, lpiutang_noField, lpiutang_custField, lpiutang_tanggalField, lpiutang_keteranganField] 
+				items: [/*piutang_tunai_nilaiField*/] 
+			}
+		]
+	
+	});
+	// END Bayar Tunai
+	
+	// START Bayar Card
+	piutang_card_namaField= new Ext.form.ComboBox({
+		id: 'piutang_card_namaField',
+		fieldLabel: 'Jenis Kartu',
+		store:new Ext.data.SimpleStore({
+			fields:['piutang_card_value', 'piutang_card_display'],
+			data:[['VISA','VISA'],['MASTERCARD','MASTERCARD'],['Debit','Debit']]
+		}),
+		mode: 'local',
+		displayField: 'piutang_card_display',
+		valueField: 'piutang_card_value',
+		allowBlank: true,
+		anchor: '50%',
+		triggerAction: 'all',
+		lazyRenderer: true
+	});
+	
+		
+	piutang_card_edcField= new Ext.form.ComboBox({
+		id: 'piutang_card_edcField',
+		fieldLabel: 'EDC',
+		store:new Ext.data.SimpleStore({
+			fields:['piutang_card_edc_value', 'piutang_card_edc_display'],
+			data:[['1','1'],['2','2'],['3','3']]
+		}),
+		mode: 'local',
+		displayField: 'piutang_card_edc_display',
+		valueField: 'piutang_card_edc_value',
+		allowBlank: true,
+		anchor: '50%',
+		triggerAction: 'all',
+		lazyRenderer: true
+	});
+
+	piutang_card_noField= new Ext.form.TextField({
+		id: 'piutang_card_noField',
+		fieldLabel: 'No. Kartu',
+		maxLength: 30,
+		anchor: '95%'
+	});
+	
+	piutang_card_nilaiField= new Ext.form.NumberField({
+		id: 'piutang_card_nilaiField',
+		fieldLabel: 'Jumlah (Rp)',
+		allowBlank: true,
+		anchor: '95%',
+		enableKeyEvents: true,
+		maskRe: /([0-9]+)$/
+	});
+	
+	piutang_bayar_cardGroup= new Ext.form.FieldSet({
+		title: 'Credit Card',
+		autoHeight: true,
+		collapsible: true,
+		layout:'column',
+		anchor: '99%',
+		hidden: true,
+		items:[
+			{
+				columnWidth:1,
+				layout: 'form',
+				border:false,
+				items: [piutang_card_namaField,piutang_card_edcField,piutang_card_noField/*,piutang_card_nilaiField*/] 
+			}
+		]
+	
+	});
+	// END Bayar Card
+	// START Bayar Cek
+	piutang_cek_namaField= new Ext.form.TextField({
+		id: 'piutang_cek_namaField',
+		fieldLabel: 'Atas Nama',
+		allowBlank: true,
+		anchor: '95%'
+	});
+	
+	piutang_cek_noField= new Ext.form.TextField({
+		id: 'piutang_cek_noField',
+		fieldLabel: 'No. Cek/Giro',
+		allowBlank: true,
+		anchor: '95%',
+		maxLength: 50
+	});
+	
+	piutang_cek_validField= new Ext.form.DateField({
+		id: 'piutang_cek_validField',
+		allowBlank: true,
+		fieldLabel: 'Valid',
+		format: 'Y-m-d'
+	});
+	
+	piutang_cek_bankField= new Ext.form.ComboBox({
+		id: 'piutang_cek_bankField',
+		fieldLabel: 'Bank',
+		store: piutang_bankDataStore,
+		mode: 'remote',
+		displayField: 'piutang_bank_display',
+		valueField: 'piutang_bank_value',
+		allowBlank: true,
+		anchor: '50%',
+		triggerAction: 'all',
+		lazyRenderer: true
+	});
+	
+	piutang_cek_nilaiField= new Ext.form.NumberField({
+		id: 'piutang_cek_nilaiField',
+		fieldLabel: 'Jumlah (Rp)',
+		allowBlank: true,
+		anchor: '95%',
+		enableKeyEvents: true,
+		maskRe: /([0-9]+)$/
+	});
+	
+	
+	piutang_bayar_cekGroup = new Ext.form.FieldSet({
+		title: 'Check/Giro',
+		collapsible: true,
+		layout:'column',
+		anchor: '99%',
+		hidden: true,
+		items:[
+			{
+				columnWidth:1,
+				layout: 'form',
+				border:false,
+				items: [piutang_cek_namaField,piutang_cek_noField,piutang_cek_validField,piutang_cek_bankField/*,piutang_cek_nilaiField*/] 
+			}
+		]
+	
+	});
+	// END Bayar Cek
+	
+	// START Bayar Transfer
+	piutang_transfer_bankField= new Ext.form.ComboBox({
+		id: 'piutang_transfer_bankField',
+		fieldLabel: 'Bank',
+		store: piutang_bankDataStore,
+		mode: 'remote',
+		displayField: 'piutang_bank_display',
+		valueField: 'piutang_bank_value',
+		allowBlank: true,
+		anchor: '50%',
+		triggerAction: 'all',
+		lazyRenderer: true
+	});
+
+	piutang_transfer_namaField= new Ext.form.TextField({
+		id: 'piutang_transfer_namaField',
+		fieldLabel: 'Atas Nama',
+		allowBlank: true,
+		anchor: '95%',
+		maxLength: 50
+	});
+	
+	piutang_transfer_nilaiField= new Ext.form.NumberField({
+		id: 'piutang_transfer_nilaiField',
+		enableKeyEvents: true,
+		fieldLabel: 'Jumlah (Rp)',
+		allowBlank: true,
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
+	});
+	
+	piutang_bayar_transferGroup= new Ext.form.FieldSet({
+		title: 'Transfer',
+		collapsible: true,
+		layout:'column',
+		anchor: '99%',
+		hidden: true,
+		items:[
+			{
+				columnWidth:1,
+				layout: 'form',
+				border:false,
+				items: [piutang_transfer_bankField,piutang_transfer_namaField/*,piutang_transfer_nilaiField*/] 
+			}
+		]
+	
+	});
+	// END Bayar Transfer
+	
+	/* Identify  piutang_cara Field */
+	piutang_caraField= new Ext.form.ComboBox({
+		id: 'piutang_caraField',
+		fieldLabel: 'Cara Bayar',
+		store:new Ext.data.SimpleStore({
+			fields:['piutang_cara_value', 'piutang_cara_display'],
+			data:[['tunai','Tunai'],['card','Kartu Kredit'],['cek/giro','Cek/Giro'],['transfer','Transfer']]
+		}),
+		mode: 'local',
+		displayField: 'piutang_cara_display',
+		valueField: 'piutang_cara_value',
+		anchor: '60%',
+		//width: 60,
+		triggerAction: 'all'	
+	});
+	piutang_caraField.on('select', function(){
+		var value=piutang_caraField.getValue();
+		piutang_bayar_tunaiGroup.setVisible(false);
+		piutang_bayar_cardGroup.setVisible(false);
+		piutang_bayar_cekGroup.setVisible(false);
+		piutang_bayar_transferGroup.setVisible(false);
+		//RESET Nilai di Cara Bayar-1
+		piutang_tunai_nilaiField.reset();
+		piutang_card_nilaiField.reset();
+		piutang_cek_nilaiField.reset();
+		piutang_transfer_nilaiField.reset();
+		
+		if(value=='card'){
+			piutang_bayar_cardGroup.setVisible(true);
+		}else if(value=='cek/giro'){
+			piutang_bayar_cekGroup.setVisible(true);
+		}else if(value=='transfer'){
+			piutang_bayar_transferGroup.setVisible(true);
+		}else if(value=='tunai'){
+			piutang_bayar_tunaiGroup.setVisible(true);
+		}
+	});
+	
+	piutang_cara_bayarTabPanel = new Ext.TabPanel({
+		plain:true,
+		activeTab: 0,
+		//autoHeigth: true,
+		frame: true,
+		height: 242,
+		width: 400,
+		defaults:{bodyStyle:'padding:10px'},
+		items:[{
+                title:'Cara Bayar',
+                layout:'form',
+				frame: true,
+                defaults: {width: 230},
+                defaultType: 'textfield',
+
+                items: [piutang_caraField,/*piutang_bayar_tunaiGroup,*/piutang_bayar_cardGroup,piutang_bayar_cekGroup,piutang_bayar_transferGroup]
+            }]
+	});
+	
+	total_bayarGroup = new Ext.form.FieldSet({
+		//title: '-',
+		autoHeight: true,
+		collapsible: true,
+		layout:'column',
+		frame: true,
+		items:[
+			   {
+				columnWidth:0.65,
+				layout: 'form',
+				border:false,
+				items: [piutang_cara_bayarTabPanel] 
+			}
+			,{
+				columnWidth:0.35,
+				labelWidth: 100,
+				layout: 'form',
+    			labelPad: 8,
+				baseCls: 'x-plain',
+				border:false,
+				anchor: '100%',
+				labelAlign: 'left',
+				items: [piutang_total_nilaiField, piutang_total_bayarField] 
 			}
 			]
 	
@@ -660,103 +1161,97 @@ Ext.onReady(function(){
 	/*Detail Declaration */
 		
 	// Function for json reader of detail
-	var detail_lunas_piutang_reader=new Ext.data.JsonReader({
+	var form_bayar_piutang_reader=new Ext.data.JsonReader({
 		root: 'results',
 		totalProperty: 'total',
 		id: ''
 	},[
 	/* dataIndex => insert intoperawatan_ColumnModel, Mapping => for initiate table column */ 
-			{name: 'dpiutang_id', type: 'int', mapping: 'dpiutang_id'}, 
-			{name: 'dpiutang_master', type: 'int', mapping: 'dpiutang_master'}, 
-			{name: 'dpiutang_nohutang', type: 'int', mapping: 'dpiutang_nohutang'}, 
-			{name: 'dpiutang_nilai', type: 'float', mapping: 'dpiutang_nilai'} 
+			{name: 'lpiutang_id', type: 'int', mapping: 'lpiutang_id'}, 
+			{name: 'lpiutang_faktur', type: 'string', mapping: 'lpiutang_faktur'}, 
+			{name: 'lpiutang_sisa', type: 'float', mapping: 'lpiutang_sisa'} 
 	]);
 	//eof
 	
 	//function for json writer of detail
-	var detail_lunas_piutang_writer = new Ext.data.JsonWriter({
+	var form_bayar_piutang_writer = new Ext.data.JsonWriter({
 		encode: true,
 		writeAllFields: false
 	});
 	//eof
 	
 	/* Function for Retrieve DataStore of detail*/
-	detail_lunas_piutang_DataStore = new Ext.data.Store({
-		id: 'detail_lunas_piutang_DataStore',
+	form_bayar_piutang_DataStore = new Ext.data.GroupingStore({
+		id: 'form_bayar_piutang_DataStore',
 		proxy: new Ext.data.HttpProxy({
-			url: 'index.php?c=c_master_lunas_piutang&m=detail_detail_lunas_piutang_list', 
+			url: 'index.php?c=c_master_lunas_piutang&m=form_bayar_piutang_list', 
 			method: 'POST'
 		}),
-		reader: detail_lunas_piutang_reader,
-		baseParams:{master_id: lpiutang_idField.getValue()},
-		sortInfo:{field: 'dpiutang_id', direction: "ASC"}
+		reader: form_bayar_piutang_reader,
+		//baseParams:{master_id: lpiutang_idField.getValue()},
+		sortInfo:{field: 'lpiutang_id', direction: "ASC"}
 	});
 	/* End of Function */
 	
 	//function for editor of detail
-	var editor_detail_lunas_piutang= new Ext.ux.grid.RowEditor({
+	var editor_form_bayar_piutang= new Ext.ux.grid.RowEditor({
         saveText: 'Update'
     });
 	//eof
 	
 	//declaration of detail coloumn model
-	detail_lunas_piutang_ColumnModel = new Ext.grid.ColumnModel(
+	form_bayar_piutang_ColumnModel = new Ext.grid.ColumnModel(
 		[
 		{
-			header: 'Dpiutang Nohutang',
-			dataIndex: 'dpiutang_nohutang',
+			header: 'No.Faktur Jual',
+			dataIndex: 'lpiutang_faktur',
 			width: 150,
-			sortable: true,
-			editor: new Ext.form.NumberField({
-				allowBlank: false,
-				allowDecimals: false,
-				allowNegative: false,
-				blankText: '0',
-				maxLength: 11,
-				maskRe: /([0-9]+)$/
-			})
+			sortable: true
 		},
 		{
-			header: 'Dpiutang Nilai',
-			dataIndex: 'dpiutang_nilai',
-			width: 150,
-			sortable: true,
+			header: 'Total Piutang',
+			dataIndex: 'lpiutang_sisa',
+			renderer: Ext.util.Format.numberRenderer('0,000')
+		},
+		{
+			header: 'Jumlah Pelunasan (Rp)',
+			dataIndex: 'lpiutang_bayar',
 			editor: new Ext.form.NumberField({
-				allowBlank: false,
 				allowDecimals: true,
 				allowNegative: false,
 				blankText: '0',
 				maxLength: 22,
 				maskRe: /([0-9]+)$/
-			})
+			}),
+			renderer: Ext.util.Format.numberRenderer('0,000')
 		}]
 	);
-	detail_lunas_piutang_ColumnModel.defaultSortable= true;
+	form_bayar_piutang_ColumnModel.defaultSortable= true;
 	//eof
 	
 	
 	
 	//declaration of detail list editor grid
-	detail_lunas_piutangListEditorGrid =  new Ext.grid.EditorGridPanel({
-		id: 'detail_lunas_piutangListEditorGrid',
-		el: 'fp_detail_lunas_piutang',
-		title: 'Detail detail_lunas_piutang',
+	form_bayar_piutangListEditorGrid =  new Ext.grid.EditorGridPanel({
+		id: 'form_bayar_piutangListEditorGrid',
+		el: 'fp_form_bayar_piutang',
+		title: 'Detail Pelunasan',
 		height: 250,
 		width: 690,
 		autoScroll: true,
-		store: detail_lunas_piutang_DataStore, // DataStore
-		colModel: detail_lunas_piutang_ColumnModel, // Nama-nama Columns
+		store: form_bayar_piutang_DataStore, // DataStore
+		colModel: form_bayar_piutang_ColumnModel, // Nama-nama Columns
 		enableColLock:false,
 		region: 'center',
         margins: '0 5 5 5',
-		plugins: [editor_detail_lunas_piutang],
+		plugins: [editor_form_bayar_piutang],
 		frame: true,
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true},
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
-			store: detail_lunas_piutang_DataStore,
+			store: form_bayar_piutang_DataStore,
 			displayInfo: true
 		}),
 		/* Add Control on ToolBar */
@@ -765,12 +1260,14 @@ Ext.onReady(function(){
 			text: 'Add',
 			tooltip: 'Add new detail record',
 			iconCls:'icon-adds',    				// this is defined in our styles.css
-			handler: detail_lunas_piutang_add
+			disabled: true,
+			handler: form_bayar_piutang_add
 		}, '-',{
 			text: 'Delete',
 			tooltip: 'Delete detail selected record',
 			iconCls:'icon-delete',
-			handler: detail_lunas_piutang_confirm_delete
+			disabled: true,
+			handler: form_bayar_piutang_confirm_delete
 		}
 		]
 	});
@@ -778,40 +1275,102 @@ Ext.onReady(function(){
 	
 	
 	//function of detail add
-	function detail_lunas_piutang_add(){
-		var edit_detail_lunas_piutang= new detail_lunas_piutangListEditorGrid.store.recordType({
+	function form_bayar_piutang_add(){
+		var edit_form_bayar_piutang= new form_bayar_piutangListEditorGrid.store.recordType({
 			dpiutang_id	:'',		
 			dpiutang_master	:'',		
 			dpiutang_nohutang	:'',		
 			dpiutang_nilai	:''		
 		});
-		editor_detail_lunas_piutang.stopEditing();
-		detail_lunas_piutang_DataStore.insert(0, edit_detail_lunas_piutang);
-		detail_lunas_piutangListEditorGrid.getView().refresh();
-		detail_lunas_piutangListEditorGrid.getSelectionModel().selectRow(0);
-		editor_detail_lunas_piutang.startEditing(0);
+		editor_form_bayar_piutang.stopEditing();
+		form_bayar_piutang_DataStore.insert(0, edit_form_bayar_piutang);
+		form_bayar_piutangListEditorGrid.getView().refresh();
+		form_bayar_piutangListEditorGrid.getSelectionModel().selectRow(0);
+		editor_form_bayar_piutang.startEditing(0);
 	}
 	
 	//function for refresh detail
-	function refresh_detail_lunas_piutang(){
-		detail_lunas_piutang_DataStore.commitChanges();
-		detail_lunas_piutangListEditorGrid.getView().refresh();
+	function refresh_form_bayar_piutang(){
+		//form_bayar_piutang_DataStore.commitChanges();
+		//form_bayar_piutangListEditorGrid.getView().refresh();
+		if(form_bayar_piutang_DataStore.getCount()>0){
+			var total_bayar=0;
+			for(i=0;i<form_bayar_piutang_DataStore.getCount();i++){
+				total_bayar += form_bayar_piutang_DataStore.getAt(i).data.lpiutang_bayar;
+			}
+			piutang_total_bayarField.setValue(total_bayar);
+		}
 	}
 	//eof
 	
 	//function for insert detail
-	function detail_lunas_piutang_insert(){
-		for(i=0;i<detail_lunas_piutang_DataStore.getCount();i++){
-			detail_lunas_piutang_record=detail_lunas_piutang_DataStore.getAt(i);
+	function form_bayar_piutang_insert(){
+		for(i=0;i<form_bayar_piutang_DataStore.getCount();i++){
+			form_bayar_piutang_record=form_bayar_piutang_DataStore.getAt(i);
+			
+			var dpiutang_cara_insert=null;
+			// Bayar Tunai
+			var dpiutang_tunai_nilai_insert=null;
+			// Bayar Card/Kartu Kredit
+			var dpiutang_card_nama_insert="";
+			var dpiutang_card_edc_insert="";
+			var dpiutang_card_no_insert="";
+			var dpiutang_card_nilai_insert=null;
+			// Bayar Cek
+			var dpiutang_cek_nama_insert=null;
+			var dpiutang_cek_nomor_insert="";
+			var dpiutang_cek_valid_insert="";
+			var dpiutang_cek_bank_insert="";
+			var dpiutang_cek_nilai_insert=null;
+			// Bayar Transfer
+			var dpiutang_transfer_bank_insert="";
+			var dpiutang_transfer_nama_insert=null;
+			var dpiutang_transfer_nilai_insert=null;
+			
+			if(piutang_caraField.getValue()!== null){dpiutang_cara_insert = piutang_caraField.getValue();} 
+			
+			if(piutang_tunai_nilaiField.getValue()!== null){dpiutang_tunai_nilai_insert = piutang_tunai_nilaiField.getValue();}
+			
+			if(piutang_card_namaField.getValue()!== ""){dpiutang_card_nama_insert = piutang_card_namaField.getValue();} 
+			if(piutang_card_edcField.getValue()!==""){dpiutang_card_edc_insert = piutang_card_edcField.getValue();} 
+			if(piutang_card_noField.getValue()!==""){dpiutang_card_no_insert = piutang_card_noField.getValue();}
+			if(piutang_card_nilaiField.getValue()!==null){dpiutang_card_nilai_insert = piutang_card_nilaiField.getValue();} 
+			
+			if(piutang_cek_namaField.getValue()!== null){dpiutang_cek_nama_insert = piutang_cek_namaField.getValue();} 
+			if(piutang_cek_noField.getValue()!== ""){dpiutang_cek_nomor_insert = piutang_cek_noField.getValue();} 
+			if(piutang_cek_validField.getValue()!== ""){dpiutang_cek_valid_insert = piutang_cek_validField.getValue().format('Y-m-d');} 
+			if(piutang_cek_bankField.getValue()!== ""){dpiutang_cek_bank_insert = piutang_cek_bankField.getValue();} 
+			if(piutang_cek_nilaiField.getValue()!== null){dpiutang_cek_nilai_insert = piutang_cek_nilaiField.getValue();} 
+			
+			if(piutang_transfer_bankField.getValue()!== ""){dpiutang_transfer_bank_insert = piutang_transfer_bankField.getValue();} 
+			if(piutang_transfer_namaField.getValue()!== null){dpiutang_transfer_nama_insert = piutang_transfer_namaField.getValue();}
+			if(piutang_transfer_nilaiField.getValue()!== null){dpiutang_transfer_nilai_insert = piutang_transfer_nilaiField.getValue();} 
+			
 			Ext.Ajax.request({
 				waitMsg: 'Please wait...',
-				url: 'index.php?c=c_master_lunas_piutang&m=detail_detail_lunas_piutang_insert',
+				url: 'index.php?c=c_master_lunas_piutang&m=form_bayar_piutang_insert',
 				params:{
-				dpiutang_id	: detail_lunas_piutang_record.data.dpiutang_id, 
-				dpiutang_master	: eval(lpiutang_idField.getValue()), 
-				dpiutang_nohutang	: detail_lunas_piutang_record.data.dpiutang_nohutang, 
-				dpiutang_nilai	: detail_lunas_piutang_record.data.dpiutang_nilai 
+				dpiutang_master	: form_bayar_piutang_record.data.lpiutang_id, 
+				dpiutang_nilai	: form_bayar_piutang_record.data.lpiutang_bayar,
 				
+				dpiutang_cara	: dpiutang_cara_insert,
+				// Bayar Tunai
+				dpiutang_tunai_nilai	:	dpiutang_tunai_nilai_insert,
+				// Bayar Card/Kartu Kredit
+				dpiutang_card_nama	: 	dpiutang_card_nama_insert,
+				dpiutang_card_edc	:	dpiutang_card_edc_insert,
+				dpiutang_card_no		:	dpiutang_card_no_insert,
+				dpiutang_card_nilai	:	dpiutang_card_nilai_insert,
+				// Bayar Cek/Giro
+				dpiutang_cek_nama	: 	dpiutang_cek_nama_insert,
+				dpiutang_cek_no		:	dpiutang_cek_nomor_insert,
+				dpiutang_cek_valid	: 	dpiutang_cek_valid_insert,
+				dpiutang_cek_bank	:	dpiutang_cek_bank_insert,
+				dpiutang_cek_nilai	:	dpiutang_cek_nilai_insert,
+				// Bayar Transfer
+				dpiutang_transfer_bank	:	dpiutang_transfer_bank_insert,
+				dpiutang_transfer_nama	:	dpiutang_transfer_nama_insert,
+				dpiutang_transfer_nilai	:	dpiutang_transfer_nilai_insert
 				}
 			});
 		}
@@ -819,22 +1378,22 @@ Ext.onReady(function(){
 	//eof
 	
 	//function for purge detail
-	function detail_lunas_piutang_purge(){
+	function form_bayar_piutang_purge(){
 		Ext.Ajax.request({
 			waitMsg: 'Please wait...',
-			url: 'index.php?c=c_master_lunas_piutang&m=detail_detail_lunas_piutang_purge',
+			url: 'index.php?c=c_master_lunas_piutang&m=form_bayar_piutang_purge',
 			params:{ master_id: eval(lpiutang_idField.getValue()) }
 		});
 	}
 	//eof
 	
 	/* Function for Delete Confirm of detail */
-	function detail_lunas_piutang_confirm_delete(){
+	function form_bayar_piutang_confirm_delete(){
 		// only one record is selected here
-		if(detail_lunas_piutangListEditorGrid.selModel.getCount() == 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', detail_lunas_piutang_delete);
-		} else if(detail_lunas_piutangListEditorGrid.selModel.getCount() > 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', detail_lunas_piutang_delete);
+		if(form_bayar_piutangListEditorGrid.selModel.getCount() == 1){
+			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', form_bayar_piutang_delete);
+		} else if(form_bayar_piutangListEditorGrid.selModel.getCount() > 1){
+			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', form_bayar_piutang_delete);
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
@@ -848,26 +1407,26 @@ Ext.onReady(function(){
 	//eof
 	
 	//function for Delete of detail
-	function detail_lunas_piutang_delete(btn){
+	function form_bayar_piutang_delete(btn){
 		if(btn=='yes'){
-			var s = detail_lunas_piutangListEditorGrid.getSelectionModel().getSelections();
+			var s = form_bayar_piutangListEditorGrid.getSelectionModel().getSelections();
 			for(var i = 0, r; r = s[i]; i++){
-				detail_lunas_piutang_DataStore.remove(r);
+				form_bayar_piutang_DataStore.remove(r);
 			}
 		}  
 	}
 	//eof
 	
 	//event on update of detail data store
-	detail_lunas_piutang_DataStore.on('update', refresh_detail_lunas_piutang);
+	form_bayar_piutang_DataStore.on('update', refresh_form_bayar_piutang);
 	
 	/* Function for retrieve create Window Panel*/ 
-	master_lunas_piutang_createForm = new Ext.FormPanel({
-		labelAlign: 'top',
+	multi_lunas_piutang_createForm = new Ext.FormPanel({
+		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
 		width: 700,        
-		items: [master_lunas_piutang_masterGroup,detail_lunas_piutangListEditorGrid]
+		items: [multi_lunas_piutang_masterGroup,form_bayar_piutangListEditorGrid]
 		,
 		buttons: [{
 				text: 'Save and Close',
@@ -876,7 +1435,7 @@ Ext.onReady(function(){
 			,{
 				text: 'Cancel',
 				handler: function(){
-					master_lunas_piutang_createWindow.hide();
+					multi_lunas_piutang_createWindow.hide();
 				}
 			}
 		]
@@ -884,8 +1443,8 @@ Ext.onReady(function(){
 	/* End  of Function*/
 	
 	/* Function for retrieve create Window Form */
-	master_lunas_piutang_createWindow= new Ext.Window({
-		id: 'master_lunas_piutang_createWindow',
+	multi_lunas_piutang_createWindow= new Ext.Window({
+		id: 'multi_lunas_piutang_createWindow',
 		title: post2db+'Master_lunas_piutang',
 		closable:true,
 		closeAction: 'hide',
@@ -897,9 +1456,117 @@ Ext.onReady(function(){
 		layout: 'fit',
 		modal: true,
 		renderTo: 'elwindow_master_lunas_piutang_create',
-		items: master_lunas_piutang_createForm
+		items: multi_lunas_piutang_createForm
 	});
 	/* End Window */
+	
+	/* Function for retrieve create Window Panel*/ 
+	single_lunas_piutang_createForm = new Ext.FormPanel({
+		labelAlign: 'left',
+		bodyStyle:'padding:5px',
+		autoHeight:true,
+		width: 700,        
+		items: [single_lunas_piutang_masterGroup,form_bayar_piutangListEditorGrid,total_bayarGroup]
+		,
+		buttons: [{
+				text: 'Save and Close',
+				handler: master_lunas_piutang_create
+			}
+			,{
+				text: 'Cancel',
+				handler: function(){
+					single_lunas_piutang_createWindow.hide();
+				}
+			}
+		]
+	});
+	/* End  of Function*/
+	
+	/* Function for retrieve create Window Form */
+	single_lunas_piutang_createWindow= new Ext.Window({
+		id: 'single_lunas_piutang_createWindow',
+		title: post2db+'Master_lunas_piutang',
+		closable:true,
+		closeAction: 'hide',
+		autoWidth: true,
+		autoHeight: true,
+		x:0,
+		y:0,
+		plain:true,
+		layout: 'fit',
+		modal: true,
+		renderTo: 'elwindow_master_lunas_piutang_create',
+		items: single_lunas_piutang_createForm
+	});
+	/* End Window */
+	
+	/* START History Bayar Piutang*/
+	/* Start History DataStore */
+	detail_bayar_piutangStore = new Ext.data.Store({
+		id: 'detail_bayar_piutangStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_master_lunas_piutang&m=detail_lunas_piutang_list', 
+			method: 'POST'
+		}),
+		baseParams:{task: "LIST",start:0,limit:pageS}, // parameter yang di $_POST ke Controller
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total'//,
+			//id: 'app_id'
+		},[
+        	{name: 'dpiutang_id', type: 'int', mapping: 'dpiutang_id'}, 
+			{name: 'dpiutang_nobukti', type: 'string', mapping: 'dpiutang_nobukti'}, 
+			{name: 'dpiutang_tanggal', type: 'date', dateFormat: 'Y-m-d', mapping: 'dpiutang_tanggal'},
+			{name: 'dpiutang_nilai', type: 'float', mapping: 'dpiutang_nilai'}
+		])
+	});
+	/* End DataStore */
+	//detail_bayar_piutangStore.load({params: {master_id: '0'}});
+	
+	detail_bayar_piutangColumnModel = new Ext.grid.ColumnModel(
+		[{
+			header: '<div align="center">' + 'No. Faktur Pelunasan' + '</div>',	//'Referensi',
+			dataIndex: 'dpiutang_nobukti',
+			width: 80,	//150,
+			sortable: true
+		},
+		{
+			header: '<div align="center">' + 'Tanggal' + '</div>',
+			dataIndex: 'dpiutang_tanggal',
+			width: 80,
+			sortable: true,
+			renderer: Ext.util.Format.dateRenderer('Y-m-d')
+		},
+		{
+			header: '<div align="center">' + 'Nilai (Rp)' + '</div>',
+			align: 'right',
+			dataIndex: 'dpiutang_nilai',
+			width: 100,	//150,
+			sortable: true,
+			renderer: Ext.util.Format.numberRenderer('0,000')			
+		}]
+    );
+    detail_bayar_piutangColumnModel.defaultSortable= true;
+	
+	var history_bayar_piutangPanel = new Ext.grid.GridPanel({
+		id: 'history_bayar_piutangPanel',
+		title: 'Detail Pelunasan Piutang',
+        store: detail_bayar_piutangStore,
+        cm: detail_bayar_piutangColumnModel,
+		/*view: new Ext.grid.GroupingView({
+            forceFit:true,
+            groupTextTpl: '{text} ({[values.rs.length]} {[values.rs.length > 1 ? "Items" : "Item"]})'
+        }),*/
+		viewConfig: { forceFit:true },
+        stripeRows: true,
+        autoExpandColumn: 'dpiutang_nobukti',
+        autoHeight: true,
+		style: 'margin-top: 10px',
+        width: 800	//800
+    });
+    history_bayar_piutangPanel.render('history_bayar_piutang');
+
+	/* END History Pemakaian Kwitansi */
 	
 	/* Function for action list search */
 	function master_lunas_piutang_list_search(){
@@ -1170,7 +1837,8 @@ Ext.onReady(function(){
 <div>
 	<div class="col">
         <div id="fp_master_lunas_piutang"></div>
-         <div id="fp_detail_lunas_piutang"></div>
+         <div id="fp_form_bayar_piutang"></div>
+		 <div id="history_bayar_piutang"></div>
 		<div id="elwindow_master_lunas_piutang_create"></div>
         <div id="elwindow_master_lunas_piutang_search"></div>
     </div>

@@ -395,7 +395,7 @@ class M_master_jual_produk extends Model{
 		
 		//get master id, note : not done yet
 		function get_master_id() {
-			$query = "SELECT max(jproduk_id) as master_id from master_jual_produk";
+			$query = "SELECT max(jproduk_id) AS master_id FROM master_jual_produk";
 			$result = $this->db->query($query);
 			if($result->num_rows()){
 				$data=$result->row();
@@ -407,7 +407,50 @@ class M_master_jual_produk extends Model{
 		}
 		//eof
 		
-		
+		function catatan_piutang_update($jproduk_id){
+			if($jproduk_id=="" || $jproduk_id==NULL){
+				$jproduk_id=$this->get_master_id();
+			}
+			
+			$sql="SELECT * FROM vu_piutang_jproduk WHERE jproduk_id='$jproduk_id'";
+			$rs=$this->db->query($sql);
+			if($rs->num_rows()){
+				$rs_record=$rs->row_array();
+				$lpiutang_faktur=$rs_record["jproduk_nobukti"];
+				$lpiutang_cust=$rs_record["jproduk_cust"];
+				$lpiutang_faktur_tanggal=$rs_record["jproduk_tanggal"];
+				$lpiutang_total=$rs_record["piutang_total"];
+				/* ini artinya: No.Faktur Penjualan Produk ini masih BELUM LUNAS */
+				/* untuk itu, No.Faktur ini akan dimasukkan ke db.master_lunas_piutang sebagai daftar yang harus ditagihkan ke Customer */
+				
+				/* Checking terlebih dahulu ke db.master_lunas_piutang WHERE =$lpiutang_faktur:
+				* JIKA 'ada' ==> Lakukan UPDATE db.master_lunas_piutang
+				* JIKA 'tidak ada' ==> Lakukan INSERT db.master_lunas_piutang
+				*/
+				$sql="SELECT * FROM master_lunas_piutang WHERE lpiutang_faktur='$lpiutang_faktur'";
+				$rs=$this->db->query($sql);
+				if($rs->num_rows()){
+					/* UPDATE db.master_lunas_piutang */
+					$dtu_lpiutang=array(
+					"lpiutang_cust"=>$lpiutang_cust,
+					"lpiutang_total"=>lpiutang_total,
+					"lpiutang_sisa"=>lpiutang_total
+					);
+					$this->db->where('lpiutang_faktur', $lpiutang_faktur);
+					$this->db->update('master_lunas_piutang', $dtu_lpiutang);
+				}else{
+					/* INSERT db.master_lunas_piutang */
+					$dti_lpiutang=array(
+					"lpiutang_faktur"=>$lpiutang_faktur,
+					"lpiutang_cust"=>$lpiutang_cust,
+					"lpiutang_faktur_tanggal"=>$lpiutang_faktur_tanggal,
+					"lpiutang_total"=>$lpiutang_total,
+					"lpiutang_sisa"=>$lpiutang_total
+					);
+					$this->db->insert('master_lunas_piutang', $dti_lpiutang);
+				}
+			}
+		}
 		
 		//purge all detail from master
 		function detail_detail_jual_produk_purge($master_id){
@@ -443,9 +486,10 @@ class M_master_jual_produk extends Model{
 				"konversi_nilai_temp"=>$konversi_nilai_temp
 			);
 			$this->db->insert('detail_jual_produk', $data); 
-			if($this->db->affected_rows())
+			if($this->db->affected_rows()){
+				//$this->catatan_piutang_update($dproduk_master);
 				return '1';
-			else
+			}else
 				return '0';
 
 		}
