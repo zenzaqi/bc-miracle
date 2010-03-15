@@ -79,7 +79,6 @@ var kwitansi_statusField;
 var kwitansi_idSearchField;
 var kwitansi_noSearchField;
 var kwitansi_custSearchField;
-var kwitansi_refSearchField;
 var kwitansi_nilaiSearchField;
 var kwitansi_keteranganSearchField;
 var kwitansi_statusSearchField;
@@ -1025,7 +1024,18 @@ Ext.onReady(function(){
 		}, '-', 
 			new Ext.app.SearchField({
 			store: cetak_kwitansi_DataStore,
-			params: {start: 0, limit: pageS},
+			params: {task: 'LIST',start: 0, limit: pageS},
+			listeners:{
+				specialkey: function(f,e){
+					if(e.getKey() == e.ENTER){
+						cetak_kwitansi_DataStore.baseParams={task:'LIST',start: 0, limit: pageS};
+		            }
+				},
+				render: function(c){
+				Ext.get(this.id).set({qtitle:'Search By'});
+				Ext.get(this.id).set({qtip:'- Default Tgl Sekarang<br>- Nama Customer<br>- Cara Appointment<br>- Keterangan'});
+				}
+			},
 			width: 120
 		}),'-',{
 			text: 'Refresh',
@@ -1260,8 +1270,8 @@ Ext.onReady(function(){
 			data:[['VISA','VISA'],['MASTERCARD','MASTERCARD'],['Debit','Debit']]
 		}),
 		mode: 'local',
-		displayField: 'jproduk_card_display',
-		valueField: 'jproduk_card_value',
+		displayField: 'kwitansi_card_display',
+		valueField: 'kwitansi_card_value',
 		allowBlank: true,
 		anchor: '50%',
 		triggerAction: 'all',
@@ -1437,12 +1447,12 @@ Ext.onReady(function(){
 		id: 'kwitansi_caraField',
 		fieldLabel: 'Cara Bayar',
 		store:new Ext.data.SimpleStore({
-			fields:['jproduk_cara_value', 'jproduk_cara_display'],
+			fields:['kwitansi_cara_value', 'kwitansi_cara_display'],
 			data:[['tunai','Tunai'],['card','Kartu Kredit'],['cek/giro','Cek/Giro'],['transfer','Transfer']]
 		}),
 		mode: 'local',
-		displayField: 'jproduk_cara_display',
-		valueField: 'jproduk_cara_value',
+		displayField: 'kwitansi_cara_display',
+		valueField: 'kwitansi_cara_value',
 		anchor: '60%',
 		//width: 60,
 		triggerAction: 'all'	
@@ -2002,16 +2012,12 @@ Ext.onReady(function(){
 		var kwitansi_id_search=null;
 		var kwitansi_no_search=null;
 		var kwitansi_cust_search=null;
-		var kwitansi_ref_search=null;
-		var kwitansi_nilai_search=null;
 		var kwitansi_keterangan_search=null;
 		var kwitansi_status_search=null;
 
 		if(kwitansi_idSearchField.getValue()!==null){kwitansi_id_search=kwitansi_idSearchField.getValue();}
 		if(kwitansi_noSearchField.getValue()!==null){kwitansi_no_search=kwitansi_noSearchField.getValue();}
 		if(kwitansi_custSearchField.getValue()!==null){kwitansi_cust_search=kwitansi_custSearchField.getValue();}
-		if(kwitansi_refSearchField.getValue()!==null){kwitansi_ref_search=kwitansi_refSearchField.getValue();}
-		if(kwitansi_nilaiSearchField.getValue()!==null){kwitansi_nilai_search=kwitansi_nilaiSearchField.getValue();}
 		if(kwitansi_keteranganSearchField.getValue()!==null){kwitansi_keterangan_search=kwitansi_keteranganSearchField.getValue();}
 		if(kwitansi_statusSearchField.getValue()!==null){kwitansi_status_search=kwitansi_statusSearchField.getValue();}
 		// change the store parameters
@@ -2021,8 +2027,6 @@ Ext.onReady(function(){
 			kwitansi_id	:	kwitansi_id_search, 
 			kwitansi_no	:	kwitansi_no_search, 
 			kwitansi_cust	:	kwitansi_cust_search, 
-			kwitansi_ref	:	kwitansi_ref_search, 
-			kwitansi_nilai	:	kwitansi_nilai_search, 
 			kwitansi_keterangan	:	kwitansi_keterangan_search, 
 			kwitansi_status	:	kwitansi_status_search, 
 		};
@@ -2061,40 +2065,27 @@ Ext.onReady(function(){
 	
 	});
 	/* Identify  kwitansi_cust Search Field */
-	kwitansi_custSearchField= new Ext.form.NumberField({
+	kwitansi_custSearchField= new Ext.form.ComboBox({
 		id: 'kwitansi_custSearchField',
-		fieldLabel: 'Kwitansi Cust',
-		allowNegatife : false,
-		blankText: '0',
-		allowDecimals: false,
-		anchor: '95%',
-		maskRe: /([0-9]+)$/
-	
-	});
-	/* Identify  kwitansi_ref Search Field */
-	kwitansi_refSearchField= new Ext.form.NumberField({
-		id: 'kwitansi_refSearchField',
-		fieldLabel: 'Kwitansi Ref',
-		allowNegatife : false,
-		blankText: '0',
-		allowDecimals: false,
-		anchor: '95%',
-		maskRe: /([0-9]+)$/
-	
-	});
-	/* Identify  kwitansi_nilai Search Field */
-	kwitansi_nilaiSearchField= new Ext.form.NumberField({
-		id: 'kwitansi_nilaiSearchField',
-		fieldLabel: 'Kwitansi Nilai',
-		allowNegatife : false,
-		blankText: '0',
-		allowDecimals: true,
-		anchor: '95%',
-		maskRe: /([0-9]+)$/
-	
+		fieldLabel: 'Customer',
+		store: cbo_custDataStore,
+		mode: 'remote',
+		displayField:'cust_nama',
+		valueField: 'cust_id',
+        typeAhead: false,
+        loadingText: 'Searching...',
+        pageSize:10,
+        hideTrigger:false,
+        tpl: customer_tpl,
+        //applyTo: 'search',
+        itemSelector: 'div.search-item',
+		triggerAction: 'all',
+		lazyRender:true,
+		listClass: 'x-combo-list-small',
+		anchor: '95%'
 	});
 	/* Identify  kwitansi_keterangan Search Field */
-	kwitansi_keteranganSearchField= new Ext.form.TextField({
+	kwitansi_keteranganSearchField= new Ext.form.TextArea({
 		id: 'kwitansi_keteranganSearchField',
 		fieldLabel: 'Kwitansi Keterangan',
 		maxLength: 500,
@@ -2119,7 +2110,7 @@ Ext.onReady(function(){
     
 	/* Function for retrieve search Form Panel */
 	cetak_kwitansi_searchForm = new Ext.FormPanel({
-		labelAlign: 'top',
+		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
 		width: 300,        
@@ -2131,7 +2122,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [kwitansi_noSearchField, kwitansi_custSearchField, kwitansi_refSearchField, kwitansi_nilaiSearchField, kwitansi_keteranganSearchField, kwitansi_statusSearchField] 
+				items: [kwitansi_noSearchField, kwitansi_custSearchField, kwitansi_keteranganSearchField, kwitansi_statusSearchField] 
 			}
 			]
 		}]
