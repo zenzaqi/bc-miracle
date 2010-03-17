@@ -1,0 +1,1 @@
+ALTER TABLE `master_retur_jual_paket` CHANGE `rpaket_nobuktijual` `rpaket_nobuktijual` INT NOT NULL ;

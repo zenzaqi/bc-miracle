@@ -50,41 +50,40 @@ class C_master_retur_jual_paket extends Controller {
 		echo $result;
 	}
 	
-	//for detail action
+	/* START Detail Retur tokwitansi */
 	//list detail handler action
-	function  detail_detail_retur_paket_rawat_list(){
+	function  detail_retur_paket_tokwitansi_list(){
 		$query = isset($_POST['query']) ? $_POST['query'] : "";
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
 		$master_id = (integer) (isset($_POST['master_id']) ? $_POST['master_id'] : $_GET['master_id']);
-		$result=$this->m_master_retur_jual_paket->detail_detail_retur_paket_rawat_list($master_id,$query,$start,$end);
+		$result=$this->m_master_retur_jual_paket->detail_retur_paket_tokwitansi_list($master_id,$query,$start,$end);
 		echo $result;
 	}
 	//end of handler
 	
 	//purge all detail
-	function detail_detail_retur_paket_rawat_purge(){
+	function detail_retur_paket_tokwitansi_purge(){
 		$master_id = (integer) (isset($_POST['master_id']) ? $_POST['master_id'] : $_GET['master_id']);
-		$result=$this->m_master_retur_jual_paket->detail_detail_retur_paket_rawat_purge($master_id);
+		$result=$this->m_master_retur_jual_paket->detail_retur_paket_tokwitansi_purge($master_id);
 	}
 	//eof
-	
-	//get master id, note: not done yet
-	function get_master_id(){
-		$result=$this->m_master_retur_jual_paket->get_master_id();
-		echo $result;
-	}
-	//
-	
 	//add detail
-	function detail_detail_retur_paket_rawat_insert(){
+	function detail_retur_paket_tokwitansi_insert(){
 	//POST variable here
 		$drpaket_id=trim(@$_POST["drpaket_id"]);
 		$drpaket_master=trim(@$_POST["drpaket_master"]);
 		$drpaket_rawat=trim(@$_POST["drpaket_rawat"]);
 		$drpaket_jumlah=trim(@$_POST["drpaket_jumlah"]);
 		$drpaket_harga=trim(@$_POST["drpaket_harga"]);
-		$result=$this->m_master_retur_jual_paket->detail_detail_retur_paket_rawat_insert($drpaket_id ,$drpaket_master ,$drpaket_rawat ,$drpaket_jumlah ,$drpaket_harga );
+		$result=$this->m_master_retur_jual_paket->detail_retur_paket_tokwitansi_insert($drpaket_id ,$drpaket_master ,$drpaket_rawat ,$drpaket_jumlah ,$drpaket_harga );
+	}
+	/* END Detail Retur tokwitansi*/
+	
+	//get master id, note: not done yet
+	function get_master_id(){
+		$result=$this->m_master_retur_jual_paket->get_master_id();
+		echo $result;
 	}
 	
 	
@@ -166,7 +165,11 @@ class C_master_retur_jual_paket extends Controller {
 		$rpaket_keterangan=trim(@$_POST["rpaket_keterangan"]);
 		$rpaket_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$rpaket_keterangan);
 		$rpaket_keterangan=str_replace("'", '"',$rpaket_keterangan);
-		$result=$this->m_master_retur_jual_paket->master_retur_jual_paket_create($rpaket_nobukti ,$rpaket_nobuktijual ,$rpaket_cust ,$rpaket_tanggal ,$rpaket_keterangan );
+		$rpaket_kwitansi_nilai=trim(@$_POST["rpaket_kwitansi_nilai"]);
+		$rpaket_kwitansi_keterangan=trim(@$_POST["rpaket_kwitansi_keterangan"]);
+		$rpaket_kwitansi_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$rpaket_kwitansi_keterangan);
+		$rpaket_kwitansi_keterangan=str_replace("'", '"',$rpaket_kwitansi_keterangan);
+		$result=$this->m_master_retur_jual_paket->master_retur_jual_paket_create($rpaket_nobukti ,$rpaket_nobuktijual ,$rpaket_cust ,$rpaket_tanggal ,$rpaket_keterangan ,$rpaket_kwitansi_nilai ,$rpaket_kwitansi_keterangan );
 		echo $result;
 	}
 
