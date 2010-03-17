@@ -18,6 +18,108 @@ class M_master_retur_beli extends Model{
 			parent::Model();
 		}
 		
+		
+		function get_invoice_list($query,$start,$end){
+			$sql="SELECT * from vu_trans_invoice";
+			$result = $this->db->query($sql);
+			$nbrows = $result->num_rows();
+			$limit = $sql." LIMIT ".$start.",".$end;			
+			$result = $this->db->query($limit);  
+			
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+		function get_produk_selected_list($selected_id,$query,$start,$end){
+			$sql="SELECT produk_id,produk_nama,produk_kode,kategori_nama,satuan_id,satuan_nama,dinvoice_harga, dinvoice_diskon FROM vu_detail_invoice";
+			if($selected_id!=="")
+			{
+				$selected_id=substr($selected_id,0,strlen($selected_id)-1);
+				$sql.=" WHERE produk_id IN(".$selected_id.")";
+			}
+			if($query!==""){
+				$sql.=(eregi("WHERE",$sql)?" AND ":" WHERE ")." produk_nama like '%".$query."%' OR produk_kode like '%".$query."%'";
+			}
+			
+			$result = $this->db->query($sql);
+			$nbrows = $result->num_rows();
+			$limit = $sql." LIMIT ".$start.",".$end;			
+			$result = $this->db->query($limit);  
+			
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+				
+		function get_produk_all_list($master_id, $selected_id, $query,$start,$end){
+			
+			$sql="SELECT produk_id,produk_nama,produk_kode,kategori_nama,satuan_id,satuan_nama,dinvoice_harga, dinvoice_diskon FROM vu_detail_invoice";
+			if($master_id<>"")
+				$sql.=" WHERE drbeli_master='".$master_id."'";
+			
+		/*	if($selected_id!=="")
+			{
+				$selected_id=substr($selected_id,0,strlen($selected_id)-1);
+				if(trim($selected_id)!=="")
+					$sql.=" WHERE produk_id NOT IN(".$selected_id.")";
+			}*/
+			
+			if($query!==""){
+				$sql.=(eregi("WHERE",$sql)?" AND ":" WHERE ")." produk_nama like '%".$query."%' OR produk_kode like '%".$query."%'";
+			}
+			
+			$result = $this->db->query($sql);
+			$nbrows = $result->num_rows();
+			$limit = $sql." LIMIT ".$start.",".$end;			
+			$result = $this->db->query($limit);  
+			
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+				
+		function get_produk_detail_list($master_id,$query,$start,$end){
+			$sql="SELECT produk_id,produk_nama,produk_kode,kategori_nama,satuan_id,satuan_nama,dinvoice_harga, dinvoice_diskon FROM vu_detail_invoice";
+			if($master_id<>"")
+				$sql.=" WHERE drbeli_master='".$master_id."'";
+			if($query!==""){
+				$sql.=(eregi("WHERE",$sql)?" AND ":" WHERE ")." produk_nama like '%".$query."%' OR produk_kode like '%".$query."%'";
+			}
+			
+			$result = $this->db->query($sql);
+			$nbrows = $result->num_rows();
+			$limit = $sql." LIMIT ".$start.",".$end;			
+			$result = $this->db->query($limit);  
+			
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+		
 		function get_harga_on_order($dorder_master, $dorder_produk, $dorder_satuan){
 			$sql="SELECT * FROM detail_order_beli WHERE dorder_master='".$dorder_master."' AND dorder_produk='".$dorder_produk."' AND dorder_satuan='".$dorder_satuan."'";
 			$query = $this->db->query($sql);
@@ -126,7 +228,7 @@ class M_master_retur_beli extends Model{
 		//*eof
 		
 		//insert detail record
-		function detail_detail_retur_beli_insert($drbeli_id ,$drbeli_master ,$drbeli_produk ,$drbeli_satuan ,$drbeli_jumlah ,$drbeli_harga ){
+		function detail_detail_retur_beli_insert($drbeli_id ,$drbeli_master ,$drbeli_produk ,$drbeli_satuan ,$drbeli_jumlah ,$drbeli_harga, $drbeli_diskon ){
 			//if master id not capture from view then capture it from max pk from master table
 			if($drbeli_master=="" || $drbeli_master==NULL){
 				$drbeli_master=$this->get_master_id();
@@ -137,7 +239,8 @@ class M_master_retur_beli extends Model{
 				"drbeli_produk"=>$drbeli_produk, 
 				"drbeli_satuan"=>$drbeli_satuan, 
 				"drbeli_jumlah"=>$drbeli_jumlah, 
-				"drbeli_harga"=>$drbeli_harga 
+				"drbeli_harga"=>$drbeli_harga,
+				"drbeli_diskon"=>$drbeli_diskon
 			);
 			$this->db->insert('detail_retur_beli', $data); 
 			if($this->db->affected_rows())
@@ -150,9 +253,7 @@ class M_master_retur_beli extends Model{
 		
 		//function for get list record
 		function master_retur_beli_list($filter,$start,$end){
-			$query = "SELECT master_retur_beli.*,supplier.supplier_id,supplier.supplier_nama,master_terima_beli.*,vu_total_retur_group.* 
-						FROM master_retur_beli,supplier,master_terima_beli,vu_total_retur_group
-						WHERE rbeli_supplier=supplier_id AND rbeli_terima=terima_id AND vu_total_retur_group.drbeli_master=rbeli_id";
+			$query = "SELECT * from vu_trans_retur_beli";
 			
 			// For simple search
 			if ($filter<>""){
@@ -199,7 +300,7 @@ class M_master_retur_beli extends Model{
 			$this->db->where('rbeli_id', $rbeli_id);
 			$this->db->update('master_retur_beli', $data);
 			
-			return '1';
+			return $rbeli_id;;
 		}
 		
 		//function for create new record
@@ -217,7 +318,7 @@ class M_master_retur_beli extends Model{
 			);
 			$this->db->insert('master_retur_beli', $data); 
 			if($this->db->affected_rows())
-				return '1';
+				return $this->db->insert_id();
 			else
 				return '0';
 		}

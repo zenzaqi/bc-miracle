@@ -7,7 +7,6 @@
 	+ Filename 		: C_master_order_beli.php
  	+ Author  		: 
  	+ Created on 20/Aug/2009 15:43:12
-	
 */
 
 //class of master_order_beli
@@ -30,9 +29,9 @@ class C_master_order_beli extends Controller {
 	//list detail handler action
 	function  detail_detail_order_beli_list(){
 		$query = isset($_POST['query']) ? $_POST['query'] : "";
-		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
-		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$master_id = (integer) (isset($_POST['master_id']) ? $_POST['master_id'] : $_GET['master_id']);
+		$start = (integer) (isset($_POST['start']) ? @$_POST['start'] : @$_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? @$_POST['limit'] : @$_GET['limit']);
+		$master_id = (integer) (isset($_POST['master_id']) ? @$_POST['master_id'] : @$_GET['master_id']);
 		$result=$this->m_master_order_beli->detail_detail_order_beli_list($master_id,$query,$start,$end);
 		echo $result;
 	}
@@ -40,7 +39,7 @@ class C_master_order_beli extends Controller {
 	
 	//purge all detail
 	function detail_detail_order_beli_purge(){
-		$master_id = (integer) (isset($_POST['master_id']) ? $_POST['master_id'] : $_GET['master_id']);
+		$master_id = (integer) (isset($_POST['master_id']) ? @$_POST['master_id'] : @$_GET['master_id']);
 		$result=$this->m_master_order_beli->detail_detail_order_beli_purge($master_id);
 	}
 	//eof
@@ -54,8 +53,8 @@ class C_master_order_beli extends Controller {
 	
 	//get master id, note: not done yet
 	function get_supplier_list(){
-		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
-		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		$start = (integer) (isset($_POST['start']) ? @$_POST['start'] : @$_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? @$_POST['limit'] : @$_GET['limit']);
 		$result=$this->m_public_function->get_supplier_list($start,$end);
 		echo $result;
 	}
@@ -80,7 +79,17 @@ class C_master_order_beli extends Controller {
 	//
 	
 	function get_satuan_list(){
-		$result=$this->m_public_function->get_satuan_list();
+		$task = isset($_POST['task']) ? @$_POST['task'] : @$_GET['task'];
+		$selected_id = isset($_POST['selected_id']) ? @$_POST['selected_id'] : @$_GET['selected_id'];
+		$master_id = (integer) (isset($_POST['master_id']) ? @$_POST['master_id'] : @$_GET['master_id']);
+		
+		if($task=='detail')
+			$result=$this->m_master_order_beli->get_satuan_detail_list($master_id);
+		elseif($task=='produk')
+			$result=$this->m_master_order_beli->get_satuan_produk_list($selected_id);
+		elseif($task=='selected')
+			$result=$this->m_master_order_beli->get_satuan_selected_list($selected_id);
+			
 		echo $result;
 	}
 	
@@ -154,6 +163,7 @@ class C_master_order_beli extends Controller {
 		$order_carabayar=str_replace("/(<\/?)(p)([^>]*>)", "",$order_carabayar);
 		$order_carabayar=str_replace(",", ",",$order_carabayar);
 		$order_carabayar=str_replace("'", '"',$order_carabayar);
+		$order_cashback=trim(@$_POST["order_cashback"]);
 		$order_diskon=trim(@$_POST["order_diskon"]);
 		$order_biaya=trim(@$_POST["order_biaya"]);
 		$order_bayar=trim(@$_POST["order_bayar"]);
@@ -161,7 +171,7 @@ class C_master_order_beli extends Controller {
 		$order_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$order_keterangan);
 		$order_keterangan=str_replace(",", ",",$order_keterangan);
 		$order_keterangan=str_replace("'", '"',$order_keterangan);
-		$result = $this->m_master_order_beli->master_order_beli_update($order_id ,$order_no ,$order_supplier ,$order_tanggal ,$order_carabayar ,$order_diskon ,$order_biaya ,$order_bayar ,$order_keterangan      );
+		$result = $this->m_master_order_beli->master_order_beli_update($order_id ,$order_no ,$order_supplier ,$order_tanggal ,$order_carabayar ,$order_diskon, $order_cashback ,$order_biaya ,$order_bayar ,$order_keterangan      );
 		echo $result;
 	}
 	
@@ -177,13 +187,14 @@ class C_master_order_beli extends Controller {
 		$order_carabayar=trim(@$_POST["order_carabayar"]);
 		$order_carabayar=str_replace("/(<\/?)(p)([^>]*>)", "",$order_carabayar);
 		$order_carabayar=str_replace("'", '"',$order_carabayar);
+		$order_cashback=trim(@$_POST["order_cashback"]);
 		$order_diskon=trim(@$_POST["order_diskon"]);
 		$order_biaya=trim(@$_POST["order_biaya"]);
 		$order_bayar=trim(@$_POST["order_bayar"]);
 		$order_keterangan=trim(@$_POST["order_keterangan"]);
 		$order_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$order_keterangan);
 		$order_keterangan=str_replace("'", '"',$order_keterangan);
-		$result=$this->m_master_order_beli->master_order_beli_create($order_no ,$order_supplier ,$order_tanggal ,$order_carabayar ,$order_diskon ,$order_biaya ,$order_bayar ,$order_keterangan );
+		$result=$this->m_master_order_beli->master_order_beli_create($order_no ,$order_supplier ,$order_tanggal ,$order_carabayar ,$order_diskon, $order_cashback ,$order_biaya ,$order_bayar ,$order_keterangan );
 		echo $result;
 	}
 
@@ -208,6 +219,7 @@ class C_master_order_beli extends Controller {
 		$order_carabayar=str_replace("/(<\/?)(p)([^>]*>)", "",$order_carabayar);
 		$order_carabayar=str_replace("'", '"',$order_carabayar);
 		$order_diskon=trim(@$_POST["order_diskon"]);
+		$order_cashback=trim(@$_POST["order_cashback"]);
 		$order_biaya=trim(@$_POST["order_biaya"]);
 		$order_bayar=trim(@$_POST["order_bayar"]);
 		$order_keterangan=trim(@$_POST["order_keterangan"]);
@@ -216,7 +228,7 @@ class C_master_order_beli extends Controller {
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_master_order_beli->master_order_beli_search($order_id ,$order_no ,$order_supplier ,$order_tanggal ,$order_carabayar ,$order_diskon ,$order_biaya ,$order_bayar ,$order_keterangan ,$start,$end);
+		$result = $this->m_master_order_beli->master_order_beli_search($order_id ,$order_no ,$order_supplier ,$order_tanggal ,$order_carabayar ,$order_diskon, $order_cashback ,$order_biaya ,$order_bayar ,$order_keterangan ,$start,$end);
 		echo $result;
 	}
 
@@ -233,6 +245,7 @@ class C_master_order_beli extends Controller {
 		$order_carabayar=str_replace("/(<\/?)(p)([^>]*>)", "",$order_carabayar);
 		$order_carabayar=str_replace("'", '"',$order_carabayar);
 		$order_diskon=trim(@$_POST["order_diskon"]);
+		$order_cashback=trim(@$_POST["order_cashback"]);
 		$order_biaya=trim(@$_POST["order_biaya"]);
 		$order_bayar=trim(@$_POST["order_bayar"]);
 		$order_keterangan=trim(@$_POST["order_keterangan"]);
@@ -241,15 +254,31 @@ class C_master_order_beli extends Controller {
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$result = $this->m_master_order_beli->master_order_beli_print($order_id ,$order_no ,$order_supplier ,$order_tanggal ,$order_carabayar ,$order_diskon ,$order_biaya ,$order_bayar ,$order_keterangan ,$option,$filter);
+		$result = $this->m_master_order_beli->master_order_beli_print($order_id ,$order_no ,$order_supplier ,$order_tanggal ,$order_carabayar ,$order_diskon,$order_cashback ,$order_biaya ,$order_bayar ,$order_keterangan ,$option,$filter);
 		$nbrows=$result->num_rows();
-		$totcolumn=14;
+		$totcolumn=11;
    		/* We now have our array, let's build our HTML file */
 		$file = fopen("master_order_belilist.html",'w');
-		fwrite($file, "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' /><title>Printing the Master_order_beli Grid</title><link rel='stylesheet' type='text/css' href='assets/modules/main/css/printstyle.css'/></head>");
-		fwrite($file, "<body><table summary='Master_order_beli List'><caption>MASTER_ORDER_BELI</caption><thead><tr><th scope='col'>Order Id</th><th scope='col'>Order No</th><th scope='col'>Order Supplier</th><th scope='col'>Order Tanggal</th><th scope='col'>Order Carabayar</th><th scope='col'>Order Diskon</th><th scope='col'>Order Biaya</th><th scope='col'>Order Bayar</th><th scope='col'>Order Keterangan</th><th scope='col'>Order Creator</th><th scope='col'>Order Date Create</th><th scope='col'>Order Update</th><th scope='col'>Order Date Update</th><th scope='col'>Order Revised</th></tr></thead><tfoot><tr><th scope='row'>Total</th><td colspan='$totcolumn'>");
+		fwrite($file, "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' /><title>Cetak Pesanan Pembelian</title><link rel='stylesheet' type='text/css' href='assets/modules/main/css/printstyle.css'/></head>");
+		fwrite($file, "<body><table summary='Daftar Pesanan Pembelian'><caption>Daftar Pesanan Pembelian</caption>
+			   <thead>
+			   <tr>
+			   		<th scope='col'>Tanggal</th>
+					<th scope='col'>No Pesanan</th>
+					<th scope='col'>Supplier</th>
+					<th scope='col'>Jumlah Item</th>
+					<th scope='col'>Sub Total</th>
+					<th scope='col'>Diskon (%)</th>
+					<th scope='col'>Diskon (Rp)</th>
+					<th scope='col'>Biaya</th>
+					<th scope='col'>Total Nilai</th>
+					<th scope='col'>Uang Muka</th>
+					<th scope='col'>Cara Bayar</th>
+				</tr>
+				</thead>
+				<tfoot><tr><th scope='row'>Total</th><td colspan='$totcolumn'>");
 		fwrite($file, $nbrows);
-		fwrite($file, " Master_order_beli</td></tr></tfoot><tbody>");
+		fwrite($file, " Pesanan Pembelian </td></tr></tfoot><tbody>");
 		$i=0;
 		if($nbrows>0){
 			foreach($result->result_array() as $data){
@@ -259,33 +288,27 @@ class C_master_order_beli extends Controller {
 				}
 			
 				fwrite($file, "><th scope='row' id='r97'>");
-				fwrite($file, $data['order_id']);
+				fwrite($file, $data['order_tanggal']);
 				fwrite($file,"</th><td>");
 				fwrite($file, $data['order_no']);
 				fwrite($file,"</td><td>");
-				fwrite($file, $data['order_supplier']);
+				fwrite($file, $data['supplier_nama']);
 				fwrite($file,"</td><td>");
-				fwrite($file, $data['order_tanggal']);
+				fwrite($file, $data['jumlah_barang']);
+				fwrite($file,"</td><td align='right'  class='numeric'>");
+				fwrite($file, number_format($data['total_nilai']));
+				fwrite($file,"</td><td align='right' class='numeric'>");
+				fwrite($file, $data['order_diskon']);
+				fwrite($file,"</td><td align='right' class='numeric'>");
+				fwrite($file, number_format($data['order_cashback']));
+				fwrite($file,"</td><td align='right' class='numeric'>");
+				fwrite($file, number_format($data['order_biaya']));
+				fwrite($file,"</td><td align='right' class='numeric'>");
+				fwrite($file, number_format($data['total_nilai']+$data['order_biaya']-$data['order_cashback']-($data['order_diskon']*$data['total_nilai']/100)));
+				fwrite($file,"</td><td align='right' class='numeric'>");
+				fwrite($file, number_format($data['order_bayar']));
 				fwrite($file,"</td><td>");
 				fwrite($file, $data['order_carabayar']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['order_diskon']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['order_biaya']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['order_bayar']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['order_keterangan']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['order_creator']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['order_date_create']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['order_update']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['order_date_update']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['order_revised']);
 				fwrite($file, "</td></tr>");
 			}
 		}
@@ -308,6 +331,7 @@ class C_master_order_beli extends Controller {
 		$order_carabayar=str_replace("/(<\/?)(p)([^>]*>)", "",$order_carabayar);
 		$order_carabayar=str_replace("'", '"',$order_carabayar);
 		$order_diskon=trim(@$_POST["order_diskon"]);
+		$order_cashback=trim(@$_POST["order_cashback"]);
 		$order_biaya=trim(@$_POST["order_biaya"]);
 		$order_bayar=trim(@$_POST["order_bayar"]);
 		$order_keterangan=trim(@$_POST["order_keterangan"]);
@@ -316,7 +340,7 @@ class C_master_order_beli extends Controller {
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$query = $this->m_master_order_beli->master_order_beli_export_excel($order_id ,$order_no ,$order_supplier ,$order_tanggal ,$order_carabayar ,$order_diskon ,$order_biaya ,$order_bayar ,$order_keterangan ,$option,$filter);
+		$query = $this->m_master_order_beli->master_order_beli_export_excel($order_id ,$order_no ,$order_supplier ,$order_tanggal ,$order_carabayar ,$order_diskon, $order_cashback ,$order_biaya ,$order_bayar ,$order_keterangan ,$option,$filter);
 		
 		to_excel($query,"master_order_beli"); 
 		echo '1';

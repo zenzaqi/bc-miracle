@@ -17,10 +17,18 @@ class C_master_invoice extends Controller {
 	function C_master_invoice(){
 		parent::Controller();
 		$this->load->model('m_master_invoice', '', TRUE);
+		$this->load->plugin('to_excel');
 	}
 	
 	function get_satuan_list(){
 		$result=$this->m_public_function->get_satuan_list();
+		echo $result;
+	}
+	
+	
+	function get_invoice_order(){
+		$terima_id = (integer) (isset($_POST['terima_id']) ? @$_POST['terima_id'] : @$_GET['terima_id']);
+		$result=$this->m_master_invoice->get_invoice_order($terima_id);
 		echo $result;
 	}
 	
@@ -149,13 +157,16 @@ class C_master_invoice extends Controller {
 		$invoice_supplier=trim(@$_POST["invoice_supplier"]);
 		$invoice_noterima=trim(@$_POST["invoice_noterima"]);
 		$invoice_tanggal=trim(@$_POST["invoice_tanggal"]);
-		$invoice_nilai=trim(@$_POST["invoice_nilai"]);
+		$invoice_diskon=trim(@$_POST["invoice_diskon"]);
+		$invoice_cashback=trim(@$_POST["invoice_cashback"]);
+		$invoice_uangmuka=trim(@$_POST["invoice_uangmuka"]);
+		$invoice_biaya=trim(@$_POST["invoice_biaya"]);
 		$invoice_jatuhtempo=trim(@$_POST["invoice_jatuhtempo"]);
 		$invoice_penagih=trim(@$_POST["invoice_penagih"]);
 		$invoice_penagih=str_replace("/(<\/?)(p)([^>]*>)", "",$invoice_penagih);
 		$invoice_penagih=str_replace(",", ",",$invoice_penagih);
 		$invoice_penagih=str_replace("'", '"',$invoice_penagih);
-		$result = $this->m_master_invoice->master_invoice_update($invoice_id ,$invoice_no ,$invoice_supplier ,$invoice_noterima ,$invoice_tanggal ,$invoice_nilai ,$invoice_jatuhtempo ,$invoice_penagih      );
+		$result = $this->m_master_invoice->master_invoice_update($invoice_id ,$invoice_no ,$invoice_supplier ,$invoice_noterima ,$invoice_tanggal ,$invoice_diskon, $invoice_cashback, $invoice_uangmuka, $invoice_biaya ,$invoice_jatuhtempo ,$invoice_penagih      );
 		echo $result;
 	}
 	
@@ -169,12 +180,15 @@ class C_master_invoice extends Controller {
 		$invoice_supplier=trim(@$_POST["invoice_supplier"]);
 		$invoice_noterima=trim(@$_POST["invoice_noterima"]);
 		$invoice_tanggal=trim(@$_POST["invoice_tanggal"]);
-		$invoice_nilai=trim(@$_POST["invoice_nilai"]);
+		$invoice_diskon=trim(@$_POST["invoice_diskon"]);
+		$invoice_cashback=trim(@$_POST["invoice_cashback"]);
+		$invoice_uangmuka=trim(@$_POST["invoice_uangmuka"]);
+		$invoice_biaya=trim(@$_POST["invoice_biaya"]);
 		$invoice_jatuhtempo=trim(@$_POST["invoice_jatuhtempo"]);
 		$invoice_penagih=trim(@$_POST["invoice_penagih"]);
 		$invoice_penagih=str_replace("/(<\/?)(p)([^>]*>)", "",$invoice_penagih);
 		$invoice_penagih=str_replace("'", '"',$invoice_penagih);
-		$result=$this->m_master_invoice->master_invoice_create($invoice_no ,$invoice_supplier ,$invoice_noterima ,$invoice_tanggal ,$invoice_nilai ,$invoice_jatuhtempo ,$invoice_penagih );
+		$result=$this->m_master_invoice->master_invoice_create($invoice_no ,$invoice_supplier ,$invoice_noterima ,$invoice_tanggal ,$invoice_diskon, $invoice_cashback, $invoice_uangmuka, $invoice_biaya, $invoice_jatuhtempo ,$invoice_penagih );
 		echo $result;
 	}
 
@@ -196,7 +210,10 @@ class C_master_invoice extends Controller {
 		$invoice_supplier=trim(@$_POST["invoice_supplier"]);
 		$invoice_noterima=trim(@$_POST["invoice_noterima"]);
 		$invoice_tanggal=trim(@$_POST["invoice_tanggal"]);
-		$invoice_nilai=trim(@$_POST["invoice_nilai"]);
+		$invoice_diskon=trim(@$_POST["invoice_diskon"]);
+		$invoice_cashback=trim(@$_POST["invoice_cashback"]);
+		$invoice_uangmuka=trim(@$_POST["invoice_uangmuka"]);
+		$invoice_biaya=trim(@$_POST["invoice_biaya"]);
 		$invoice_jatuhtempo=trim(@$_POST["invoice_jatuhtempo"]);
 		$invoice_penagih=trim(@$_POST["invoice_penagih"]);
 		$invoice_penagih=str_replace("/(<\/?)(p)([^>]*>)", "",$invoice_penagih);
@@ -204,7 +221,7 @@ class C_master_invoice extends Controller {
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_master_invoice->master_invoice_search($invoice_id ,$invoice_no ,$invoice_supplier ,$invoice_noterima ,$invoice_tanggal ,$invoice_nilai ,$invoice_jatuhtempo ,$invoice_penagih ,$start,$end);
+		$result = $this->m_master_invoice->master_invoice_search($invoice_id ,$invoice_no ,$invoice_supplier ,$invoice_noterima ,$invoice_tanggal ,$invoice_diskon, $invoice_cashback, $invoice_uangmuka, $invoice_biaya,$invoice_jatuhtempo ,$invoice_penagih ,$start,$end);
 		echo $result;
 	}
 
@@ -218,7 +235,10 @@ class C_master_invoice extends Controller {
 		$invoice_supplier=trim(@$_POST["invoice_supplier"]);
 		$invoice_noterima=trim(@$_POST["invoice_noterima"]);
 		$invoice_tanggal=trim(@$_POST["invoice_tanggal"]);
-		$invoice_nilai=trim(@$_POST["invoice_nilai"]);
+		$invoice_diskon=trim(@$_POST["invoice_diskon"]);
+		$invoice_cashback=trim(@$_POST["invoice_cashback"]);
+		$invoice_uangmuka=trim(@$_POST["invoice_uangmuka"]);
+		$invoice_biaya=trim(@$_POST["invoice_biaya"]);
 		$invoice_jatuhtempo=trim(@$_POST["invoice_jatuhtempo"]);
 		$invoice_penagih=trim(@$_POST["invoice_penagih"]);
 		$invoice_penagih=str_replace("/(<\/?)(p)([^>]*>)", "",$invoice_penagih);
@@ -226,49 +246,67 @@ class C_master_invoice extends Controller {
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$result = $this->m_master_invoice->master_invoice_print($invoice_id ,$invoice_no ,$invoice_supplier ,$invoice_noterima ,$invoice_tanggal ,$invoice_nilai ,$invoice_jatuhtempo ,$invoice_penagih ,$option,$filter);
+		$result = $this->m_master_invoice->master_invoice_print($invoice_id ,$invoice_no ,$invoice_supplier ,$invoice_noterima ,$invoice_tanggal ,$invoice_diskon, $invoice_cashback, $invoice_uangmuka, $invoice_biaya,$invoice_jatuhtempo ,$invoice_penagih ,$option,$filter);
 		$nbrows=$result->num_rows();
 		$totcolumn=13;
    		/* We now have our array, let's build our HTML file */
 		$file = fopen("master_invoicelist.html",'w');
-		fwrite($file, "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' /><title>Printing the Master_invoice Grid</title><link rel='stylesheet' type='text/css' href='assets/modules/main/css/printstyle.css'/></head>");
-		fwrite($file, "<body><table summary='Master_invoice List'><caption>MASTER_INVOICE</caption><thead><tr><th scope='col'>Invoice Id</th><th scope='col'>Invoice No</th><th scope='col'>Invoice Supplier</th><th scope='col'>Invoice Noterima</th><th scope='col'>Invoice Tanggal</th><th scope='col'>Invoice Nilai</th><th scope='col'>Invoice Jatuhtempo</th><th scope='col'>Invoice Penagih</th><th scope='col'>Invoice Creator</th><th scope='col'>Invoice Date Create</th><th scope='col'>Invoice Update</th><th scope='col'>Invoice Date Update</th><th scope='col'>Invoice Revised</th></tr></thead><tfoot><tr><th scope='row'>Total</th><td colspan='$totcolumn'>");
+		fwrite($file, "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' /><title>Cetak Daftar Penerimaan Tagihan</title><link rel='stylesheet' type='text/css' href='assets/modules/main/css/printstyle.css'/></head>");
+		fwrite($file, "<body><table summary='Daftar Penerimaan Tagihan'><caption>Daftar Penerimaan Tagihan</caption>
+			   <thead><tr>
+			   		<th scope='col'>Tanggal</th>
+					<th scope='col'>No Tagihan</th>
+					<th scope='col'>No Penerimaan</th>
+					<th scope='col'>Supplier</th>
+					<th scope='col'>Jumlah Item</th>
+					<th scope='col'>Sub Total</th>
+					<th scope='col'>Diskon (%)</th>
+					<th scope='col'>Diskon (Rp)</th>
+					<th scope='col'>Biaya</th>
+					<th scope='col'>Total</th>
+					<th scope='col'>Uang Muka</th>
+					<th scope='col'>Sisa tagihan</th>
+					<th scope='col'>Jatuh Tempo</th>
+				</tr></thead>
+				<tfoot><tr><th scope='row'>Total</th><td colspan='$totcolumn'>");
 		fwrite($file, $nbrows);
-		fwrite($file, " Master_invoice</td></tr></tfoot><tbody>");
+		fwrite($file, " Daftar Tagihan</td></tr></tfoot><tbody>");
 		$i=0;
 		if($nbrows>0){
 			foreach($result->result_array() as $data){
+				$total_nilai=$data['total_nilai']-$data['invoice_cashback']+$data['invoice_biaya']-($data['invoice_diskon']*$data['total_nilai']/100);
+				
 				fwrite($file,'<tr');
 				if($i%1==0){
 					fwrite($file," class='odd'");
 				}
 			
 				fwrite($file, "><th scope='row' id='r97'>");
-				fwrite($file, $data['invoice_id']);
+				fwrite($file, $data['tanggal']);
 				fwrite($file,"</th><td>");
-				fwrite($file, $data['invoice_no']);
+				fwrite($file, $data['no_bukti']);
 				fwrite($file,"</td><td>");
-				fwrite($file, $data['invoice_supplier']);
+				fwrite($file, $data['terima_no']);
 				fwrite($file,"</td><td>");
-				fwrite($file, $data['invoice_noterima']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['invoice_tanggal']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['invoice_nilai']);
+				fwrite($file, $data['supplier_nama']);
+				fwrite($file,"</td><td class='numeric'>");
+				fwrite($file, number_format($data['jumlah_barang']));
+				fwrite($file,"</td><td class='numeric'>");
+				fwrite($file, number_format($data['total_nilai']));
+				fwrite($file,"</td><td class='numeric'>");
+				fwrite($file, number_format($data['invoice_cashback']));
+				fwrite($file,"</td><td class='numeric'>");
+				fwrite($file, number_format($data['invoice_diskon']));
+				fwrite($file,"</td><td class='numeric'>");
+				fwrite($file, number_format($data['invoice_biaya']));
+				fwrite($file,"</td><td class='numeric'>");
+				fwrite($file, number_format($total_nilai));
+				fwrite($file,"</td><td class='numeric'>");
+				fwrite($file, number_format($data['invoice_uangmuka']));
+				fwrite($file,"</td><td class='numeric'>");
+				fwrite($file, number_format($total_nilai-$data['invoice_uangmuka']));
 				fwrite($file,"</td><td>");
 				fwrite($file, $data['invoice_jatuhtempo']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['invoice_penagih']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['invoice_creator']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['invoice_date_create']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['invoice_update']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['invoice_date_update']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['invoice_revised']);
 				fwrite($file, "</td></tr>");
 			}
 		}
@@ -288,7 +326,10 @@ class C_master_invoice extends Controller {
 		$invoice_supplier=trim(@$_POST["invoice_supplier"]);
 		$invoice_noterima=trim(@$_POST["invoice_noterima"]);
 		$invoice_tanggal=trim(@$_POST["invoice_tanggal"]);
-		$invoice_nilai=trim(@$_POST["invoice_nilai"]);
+		$invoice_diskon=trim(@$_POST["invoice_diskon"]);
+		$invoice_cashback=trim(@$_POST["invoice_cashback"]);
+		$invoice_uangmuka=trim(@$_POST["invoice_uangmuka"]);
+		$invoice_biaya=trim(@$_POST["invoice_biaya"]);
 		$invoice_jatuhtempo=trim(@$_POST["invoice_jatuhtempo"]);
 		$invoice_penagih=trim(@$_POST["invoice_penagih"]);
 		$invoice_penagih=str_replace("/(<\/?)(p)([^>]*>)", "",$invoice_penagih);
@@ -296,7 +337,7 @@ class C_master_invoice extends Controller {
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$query = $this->m_master_invoice->master_invoice_export_excel($invoice_id ,$invoice_no ,$invoice_supplier ,$invoice_noterima ,$invoice_tanggal ,$invoice_nilai ,$invoice_jatuhtempo ,$invoice_penagih ,$option,$filter);
+		$query = $this->m_master_invoice->master_invoice_export_excel($invoice_id ,$invoice_no ,$invoice_supplier ,$invoice_noterima ,$invoice_tanggal ,$invoice_diskon, $invoice_cashback, $invoice_uangmuka, $invoice_biaya,$invoice_jatuhtempo ,$invoice_penagih ,$option,$filter);
 		
 		to_excel($query,"master_invoice"); 
 		echo '1';

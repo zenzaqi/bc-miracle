@@ -67,7 +67,7 @@ class M_customer_note extends Model{
 			$data = array(
 	
 				"note_customer"=>$note_customer,	
-				"note_tanggal"=>date('Y-m-d'),	
+				"note_tanggal"=>date('Y-m-d H:i:s'),	
 				"note_detail"=>$note_detail,	
 				"note_creator"=>$note_creator,	
 				"note_date_create"=>'NOW()'

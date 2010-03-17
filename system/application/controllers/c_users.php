@@ -86,9 +86,9 @@ class C_users extends Controller {
 	//function fot list record
 	function users_list(){
 		
-		$query = isset($_POST['query']) ? $_POST['query'] : "";
-		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
-		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		$query = isset($_POST['query']) ? @$_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? @$_POST['start'] : @$_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? @$_POST['limit'] : @$_GET['limit']);
 
 		$result=$this->m_users->users_list($query,$start,$end);
 		echo $result;
@@ -101,17 +101,17 @@ class C_users extends Controller {
 		$user_name=trim(@$_POST["user_name"]);
 		$user_name=str_replace("/(<\/?)(p)([^>]*>)", "",$user_name);
 		$user_name=str_replace("'", '"',$user_name);
-/*		$user_passwd=trim(@$_POST["user_passwd"]);
+		$user_passwd=trim(@$_POST["user_passwd"]);
 		$user_passwd=str_replace("/(<\/?)(p)([^>]*>)", "",$user_passwd);
 		$user_passwd=str_replace("'", '"',$user_passwd);
-*/		$user_karyawan=trim(@$_POST["user_karyawan"]);
-		$user_log=trim(@$_POST["user_log"]);
+		$user_karyawan=trim(@$_POST["user_karyawan"]);
+		//$user_log=trim(@$_POST["user_log"]);
 		$user_groups=trim(@$_POST["user_groups"]);
 		$user_aktif=trim(@$_POST["user_aktif"]);
 		$user_aktif=str_replace("/(<\/?)(p)([^>]*>)", "",$user_aktif);
 		$user_aktif=str_replace("'", '"',$user_aktif);
 		//$result = $this->m_users->users_update($user_id ,$user_name ,$user_passwd ,$user_karyawan ,$user_log ,$user_groups ,$user_aktif );
-		$result = $this->m_users->users_update($user_id, $user_name, $user_karyawan, $user_log, $user_groups, $user_aktif );
+		$result = $this->m_users->users_update($user_id, $user_name, $user_passwd, $user_karyawan, $user_groups, $user_aktif );
 		echo $result;
 	}
 	
@@ -150,9 +150,6 @@ class C_users extends Controller {
 		$user_name=trim(@$_POST["user_name"]);
 		$user_name=str_replace("/(<\/?)(p)([^>]*>)", "",$user_name);
 		$user_name=str_replace("'", '"',$user_name);
-		$user_passwd=trim(@$_POST["user_passwd"]);
-		$user_passwd=str_replace("/(<\/?)(p)([^>]*>)", "",$user_passwd);
-		$user_passwd=str_replace("'", '"',$user_passwd);
 		$user_karyawan=trim(@$_POST["user_karyawan"]);
 		$user_log=trim(@$_POST["user_log"]);
 		$user_groups=trim(@$_POST["user_groups"]);
@@ -162,7 +159,7 @@ class C_users extends Controller {
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_users->users_search($user_id ,$user_name ,$user_passwd ,$user_karyawan ,$user_log ,$user_groups ,$user_aktif ,$start,$end);
+		$result = $this->m_users->users_search($user_id ,$user_name ,$user_karyawan ,$user_log ,$user_groups ,$user_aktif ,$start,$end);
 		echo $result;
 	}
 
@@ -173,9 +170,6 @@ class C_users extends Controller {
 		$user_name=trim(@$_POST["user_name"]);
 		$user_name=str_replace("/(<\/?)(p)([^>]*>)", "",$user_name);
 		$user_name=str_replace("'", '"',$user_name);
-		$user_passwd=trim(@$_POST["user_passwd"]);
-		$user_passwd=str_replace("/(<\/?)(p)([^>]*>)", "",$user_passwd);
-		$user_passwd=str_replace("'", '"',$user_passwd);
 		$user_karyawan=trim(@$_POST["user_karyawan"]);
 		$user_log=trim(@$_POST["user_log"]);
 		$user_groups=trim(@$_POST["user_groups"]);
@@ -185,7 +179,7 @@ class C_users extends Controller {
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$result = $this->m_users->users_print($user_id ,$user_name ,$user_passwd ,$user_karyawan ,$user_log ,$user_groups ,$user_aktif ,$option,$filter);
+		$result = $this->m_users->users_print($user_id ,$user_name ,$user_karyawan ,$user_log ,$user_groups ,$user_aktif ,$option,$filter);
 		$nbrows=$result->num_rows();
 		$totcolumn=7;
    		/* We now have our array, let's build our HTML file */
@@ -232,9 +226,6 @@ class C_users extends Controller {
 		$user_name=trim(@$_POST["user_name"]);
 		$user_name=str_replace("/(<\/?)(p)([^>]*>)", "",$user_name);
 		$user_name=str_replace("'", '"',$user_name);
-		$user_passwd=trim(@$_POST["user_passwd"]);
-		$user_passwd=str_replace("/(<\/?)(p)([^>]*>)", "",$user_passwd);
-		$user_passwd=str_replace("'", '"',$user_passwd);
 		$user_karyawan=trim(@$_POST["user_karyawan"]);
 		$user_log=trim(@$_POST["user_log"]);
 		$user_groups=trim(@$_POST["user_groups"]);
@@ -244,7 +235,7 @@ class C_users extends Controller {
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$query = $this->m_users->users_export_excel($user_id ,$user_name ,$user_passwd ,$user_karyawan ,$user_log ,$user_groups ,$user_aktif ,$option,$filter);
+		$query = $this->m_users->users_export_excel($user_id ,$user_name ,$user_karyawan ,$user_log ,$user_groups ,$user_aktif ,$option,$filter);
 		
 		to_excel($query,"users"); 
 		echo '1';

@@ -88,11 +88,11 @@ Ext.onReady(function(){
 	var user_groups_update=null;
 	var user_aktif_update=null;
 
-	user_id_update_pk = get_pk_id();
+	if(oGrid_event.record.data.user_id!== null){user_id_update = oGrid_event.record.data.user_id;}
 	if(oGrid_event.record.data.user_name!== null){user_name_update = oGrid_event.record.data.user_name;}
 	//if(oGrid_event.record.data.user_passwd!== null){user_passwd_update = oGrid_event.record.data.user_passwd;}
 	if(oGrid_event.record.data.user_karyawan!== null){user_karyawan_update = oGrid_event.record.data.user_karyawan;}
-	 if(oGrid_event.record.data.user_log!== ""){user_log_update_date = oGrid_event.record.data.user_log.format('Y-m-d');}
+	//if(oGrid_event.record.data.user_log!== ""){user_log_update_date = oGrid_event.record.data.user_log.format('Y-m-d');}
 	if(oGrid_event.record.data.user_groups!== null){user_groups_update = oGrid_event.record.data.user_groups;}
 	if(oGrid_event.record.data.user_aktif!== null){user_aktif_update = oGrid_event.record.data.user_aktif;}
 
@@ -101,13 +101,13 @@ Ext.onReady(function(){
 			url: 'index.php?c=c_users&m=get_action',
 			params: {
 				task: "UPDATE",
-				user_id	: get_pk_id(),				
-				user_name	:user_name_update,		
+				user_id			: user_id_update,				
+				user_name		: user_name_update,		
 				//user_passwd	:user_passwd_update,		
-				user_karyawan	:user_karyawan_update,		
-				user_log	: user_log_update_date,				
-				user_groups	:user_groups_update,		
-				user_aktif	:user_aktif_update		
+				user_karyawan	: user_karyawan_update,		
+				//user_log		: user_log_update_date,				
+				user_groups		: user_groups_update,		
+				user_aktif		: user_aktif_update		
 			}, 
 			success: function(response){							
 				var result=eval(response.responseText);
@@ -164,13 +164,13 @@ Ext.onReady(function(){
 				waitMsg: 'Mohon tunggu...',
 				url: 'index.php?c=c_users&m=get_action',
 				params: {
-					task: post2db,
-					user_id	: user_id_create_pk,	
-					user_name	: user_name_create,	
-					user_passwd	: user_passwd_create,	
+					task			: post2db,
+					user_id			: user_id_create_pk,	
+					user_name		: user_name_create,	
+					user_passwd		: user_passwd_create,	
 					user_karyawan	: user_karyawan_create,			
-					user_groups	: user_groups_create,	
-					user_aktif	: user_aktif_create	
+					user_groups		: user_groups_create,	
+					user_aktif		: user_aktif_create	
 				}, 
 				success: function(response){             
 					var result=eval(response.responseText);
@@ -244,7 +244,7 @@ Ext.onReady(function(){
 	/* setValue to EDIT */
 	function users_set_form(){
 		user_nameField.setValue(usersListEditorGrid.getSelectionModel().getSelected().get('user_name'));
-		user_passwdField.setValue('******');
+		//user_passwdField.setValue('******');
 		user_karyawanField.setValue(usersListEditorGrid.getSelectionModel().getSelected().get('user_karyawan'));
 		user_logField.setValue(usersListEditorGrid.getSelectionModel().getSelected().get('user_log'));
 		user_groupsField.setValue(usersListEditorGrid.getSelectionModel().getSelected().get('user_groups'));
@@ -254,7 +254,7 @@ Ext.onReady(function(){
   
 	/* Function for Check if the form is valid */
 	function is_users_form_valid(){
-		return (user_nameField.isValid() &&  user_karyawanField.isValid() && user_aktifField.isValid() );
+		return (user_nameField.isValid() && user_groupsField.isValid() && user_karyawanField.isValid() && user_aktifField.isValid() );
 	}
   	/* End of Function */
   
@@ -366,7 +366,7 @@ Ext.onReady(function(){
 			url: 'index.php?c=c_users&m=get_action', 
 			method: 'POST'
 		}),
-		baseParams:{task: "LIST"}, // parameter yang di $_POST ke Controller
+		baseParams:{task: "LIST", start:0, limit: pageS}, // parameter yang di $_POST ke Controller
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
@@ -410,7 +410,7 @@ Ext.onReady(function(){
 			url: 'index.php?c=c_users&m=get_user_karyawan_list', 
 			method: 'POST'
 		}),
-		baseParams:{start: 0, limit: 10 }, // parameter yang di $_POST ke Controller
+		baseParams:{start: 0, limit: pageS}, // parameter yang di $_POST ke Controller
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
@@ -468,36 +468,32 @@ Ext.onReady(function(){
 			dataIndex: 'user_name',
 			width: 100,	//150,
 			sortable: true,
-			editor: new Ext.form.TextField({
-				allowBlank: false,
-				maxLength: 50
-          	})
+			readOnly: true
 		},
 		{
 			header: '<div align="center">' + 'Nama Karyawan' + '</div>',
 			dataIndex: 'user_karyawan',
 			width: 200,	//150,
 			sortable: true,
-			editor: new Ext.form.NumberField({
-				allowBlank: false,
-				allowDecimals: false,
-				allowNegative: false,
-				blankText: '0',
-				maxLength: 11,
-				maskRe: /([0-9]+)$/
-			})
+			readOnly: true
 		},
 		{
 			header: '<div align="center">' + 'Group' + '</div>',
 			dataIndex: 'user_groups',
 			width: 200,	//150,
 			sortable: true,
-			editor: new Ext.form.NumberField({
-				allowDecimals: false,
-				allowNegative: false,
-				blankText: '0',
-				maxLength: 11,
-				maskRe: /([0-9]+)$/
+			editor: new Ext.form.ComboBox({
+				fieldLabel: 'Group',
+				typeAhead: true,
+				triggerAction: 'all',
+				store: cbo_user_groupDataStore,
+				mode: 'remote',
+				editable:false,
+				displayField: 'user_group_display',
+				valueField: 'user_group_value',
+				lazyRender:true,
+				width: 120,
+				listClass: 'x-combo-list-small'
 			})
 		},
 		{
@@ -703,6 +699,7 @@ Ext.onReady(function(){
 		valueField: 'user_group_value',
 		lazyRender:true,
 		width: 120,
+		allowBlank: false,
 		listClass: 'x-combo-list-small'
 	});
 	/* Identify  user_aktif Field */
@@ -787,7 +784,6 @@ Ext.onReady(function(){
 
 		if(user_idSearchField.getValue()!==null){user_id_search=user_idSearchField.getValue();}
 		if(user_nameSearchField.getValue()!==null){user_name_search=user_nameSearchField.getValue();}
-		if(user_passwdSearchField.getValue()!==null){user_passwd_search=user_passwdSearchField.getValue();}
 		if(user_karyawanSearchField.getValue()!==null){user_karyawan_search=user_karyawanSearchField.getValue();}
 		if(user_logSearchField.getValue()!==""){user_log_search_date=user_logSearchField.getValue().format('Y-m-d');}
 		if(user_groupsSearchField.getValue()!==null){user_groups_search=user_groupsSearchField.getValue();}
@@ -796,14 +792,13 @@ Ext.onReady(function(){
 		users_DataStore.baseParams = {
 			task: 'SEARCH',
 			//variable here
-			user_id	:	user_id_search, 
-			user_name	:	user_name_search, 
-			user_passwd	:	user_passwd_search, 
+			user_id			:	user_id_search, 
+			user_name		:	user_name_search, 
 			user_karyawan	:	user_karyawan_search, 
-			user_log	:	user_log_search_date, 
-			user_groups	:	user_groups_search, 
-			user_aktif	:	user_aktif_search 
-};
+			user_log		:	user_log_search_date, 
+			user_groups		:	user_groups_search, 
+			user_aktif		:	user_aktif_search 
+		};
 		// Cause the datastore to do another query : 
 		users_DataStore.reload({params: {start: 0, limit: pageS}});
 	}
@@ -867,14 +862,20 @@ Ext.onReady(function(){
 	
 	});
 	/* Identify  user_groups Search Field */
-	user_groupsSearchField= new Ext.form.NumberField({
+	user_groupsSearchField= new Ext.form.ComboBox({
 		id: 'user_groupsSearchField',
 		fieldLabel: 'Group',
-		allowNegatife : false,
-		blankText: '0',
-		allowDecimals: false,
-		anchor: '95%',
-		maskRe: /([0-9]+)$/
+		typeAhead: true,
+		triggerAction: 'all',
+		store: cbo_user_groupDataStore,
+		mode: 'remote',
+		editable:false,
+		displayField: 'user_group_display',
+		valueField: 'user_group_value',
+		lazyRender:true,
+		width: 120,
+		allowBlank: false,
+		listClass: 'x-combo-list-small'
 	
 	});
 	/* Identify  user_aktif Search Field */

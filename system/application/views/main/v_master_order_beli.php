@@ -103,13 +103,15 @@ Ext.onReady(function(){
 		var order_biaya_update=null;
 		var order_bayar_update=null;
 		var order_keterangan_update=null;
-
+		var order_cashback_update=null
+		
 		order_id_update_pk = oGrid_event.record.data.order_id;
 		if(oGrid_event.record.data.order_no!== null){order_no_update = oGrid_event.record.data.order_no;}
 		if(oGrid_event.record.data.order_supplier!== null){order_supplier_update = oGrid_event.record.data.order_supplier;}
 	 	if(oGrid_event.record.data.order_tanggal!== ""){order_tanggal_update_date =oGrid_event.record.data.order_tanggal.format('Y-m-d');}
 		if(oGrid_event.record.data.order_carabayar!== null){order_carabayar_update = oGrid_event.record.data.order_carabayar;}
 		if(oGrid_event.record.data.order_diskon!== null){order_diskon_update = oGrid_event.record.data.order_diskon;}
+		if(oGrid_event.record.data.order_cashback!== null){order_cashback_update = oGrid_event.record.data.order_cashback;}
 		if(oGrid_event.record.data.order_biaya!== null){order_biaya_update = oGrid_event.record.data.order_biaya;}
 		if(oGrid_event.record.data.order_bayar!== null){order_bayar_update = oGrid_event.record.data.order_bayar;}
 		if(oGrid_event.record.data.order_keterangan!== null){order_keterangan_update = oGrid_event.record.data.order_keterangan;}
@@ -119,34 +121,33 @@ Ext.onReady(function(){
 			url: 'index.php?c=c_master_order_beli&m=get_action',
 			params: {
 				task: "UPDATE",
-				order_id	: order_id_update_pk, 
-				order_no	:order_no_update,  
-				order_supplier	:order_supplier_update,  
+				order_id		: order_id_update_pk, 
+				order_no		: order_no_update,  
+				order_supplier	: order_supplier_update,  
 				order_tanggal	: order_tanggal_update_date, 
-				order_carabayar	:order_carabayar_update,  
-				order_diskon	:order_diskon_update,  
-				order_biaya	:order_biaya_update,  
-				order_bayar	:order_bayar_update,  
-				order_keterangan	:order_keterangan_update,  
+				order_carabayar	: order_carabayar_update,  
+				order_diskon	: order_diskon_update,  
+				order_biaya	  	: order_biaya_update,  
+				order_bayar		: order_bayar_update,  
+				order_keterangan: order_keterangan_update,
+				order_cashback	: order_cashback_update
 			}, 
 			success: function(response){							
 				var result=eval(response.responseText);
-				switch(result){
-					case 1:
-						master_order_beli_DataStore.commitChanges();
-						master_order_beli_DataStore.reload();
-						break;
-					default:
+				if(result!==0){
+						Ext.MessageBox.alert(post2db+' OK','Data Pesanan Pembelian berhasil disimpan');
+						master_order_beli_createWindow.hide();
+				}else{
 						Ext.MessageBox.show({
 						   title: 'Warning',
-						   //msg: 'We could\'t not save the master_order_beli.',
+						   //msg: 'We could\'t not '+msg+' the Master_order_beli.',
 						   msg: 'Data Pesanan Pembelian tidak bisa disimpan',
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'save',
 						   icon: Ext.MessageBox.WARNING
 						});
-						break;
-				}
+				} 
+				master_order_beli_DataStore.reload();
 			},
 			failure: function(response){
 				var result=response.responseText;
@@ -171,7 +172,8 @@ Ext.onReady(function(){
 		var order_supplier_create=null; 
 		var order_tanggal_create_date=""; 
 		var order_carabayar_create=null; 
-		var order_diskon_create=null; 
+		var order_diskon_create=null;
+		var order_cashback_create=null;
 		var order_biaya_create=null; 
 		var order_bayar_create=null; 
 		var order_keterangan_create=null; 
@@ -182,6 +184,7 @@ Ext.onReady(function(){
 		if(order_tanggalField.getValue()!== ""){order_tanggal_create_date = order_tanggalField.getValue().format('Y-m-d');} 
 		if(order_carabayarField.getValue()!== null){order_carabayar_create = order_carabayarField.getValue();} 
 		if(order_diskonField.getValue()!== null){order_diskon_create = order_diskonField.getValue();} 
+		if(order_cashbackField.getValue()!== null){order_cashback_create = order_cashbackField.getValue();} 
 		if(order_biayaField.getValue()!== null){order_biaya_create = order_biayaField.getValue();} 
 		if(order_bayarField.getValue()!== null){order_bayar_create = order_bayarField.getValue();} 
 		if(order_keteranganField.getValue()!== null){order_keterangan_create = order_keteranganField.getValue();} 
@@ -190,16 +193,17 @@ Ext.onReady(function(){
 			waitMsg: 'Mohon tunggu...',
 			url: 'index.php?c=c_master_order_beli&m=get_action',
 			params: {
-				task: post2db,
-				order_id	: order_id_create_pk, 
-				order_no	: order_no_create, 
-				order_supplier	: order_supplier_create, 
-				order_tanggal	: order_tanggal_create_date, 
-				order_carabayar	: order_carabayar_create, 
-				order_diskon	: order_diskon_create, 
-				order_biaya	: order_biaya_create, 
-				order_bayar	: order_bayar_create, 
-				order_keterangan	: order_keterangan_create, 
+				task				: post2db,
+				order_id			: order_id_create_pk, 
+				order_no			: order_no_create, 
+				order_supplier		: order_supplier_create, 
+				order_tanggal		: order_tanggal_create_date, 
+				order_carabayar		: order_carabayar_create, 
+				order_diskon		: order_diskon_create, 
+				order_cashback		: order_cashback_create, 
+				order_biaya			: order_biaya_create, 
+				order_bayar			: order_bayar_create, 
+				order_keterangan	: order_keterangan_create
 			}, 
 			success: function(response){             
 				var result=eval(response.responseText);
@@ -266,6 +270,8 @@ Ext.onReady(function(){
 		order_carabayarField.setValue(null);
 		order_diskonField.reset();
 		order_diskonField.setValue('0');
+		order_cashbackField.reset();
+		order_cashbackField.setValue('0');
 		order_biayaField.reset();
 		order_biayaField.setValue('0');
 		order_bayarField.reset();
@@ -286,9 +292,14 @@ Ext.onReady(function(){
 		order_tanggalField.setValue(master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_tanggal'));
 		order_carabayarField.setValue(master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_carabayar'));
 		order_diskonField.setValue(master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_diskon'));
+		order_cashbackField.setValue(master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_cashback'));
+		
 		order_biayaField.setValue(master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_biaya'));
 		order_bayarField.setValue(master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_bayar'));
 		order_keteranganField.setValue(master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_keterangan'));
+		
+		cbo_order_satuanDataStore.setBaseParam('task','detail');
+		cbo_order_satuanDataStore.setBaseParam('master_id',get_pk_id());
 		cbo_order_satuanDataStore.load();
 		
 		cbo_order_produk_DataStore.setBaseParam('master_id',get_pk_id());
@@ -313,8 +324,8 @@ Ext.onReady(function(){
 	function display_form_window(){
 		if(!master_order_beli_createWindow.isVisible()){
 			post2db='CREATE';
-			master_order_beli_reset_form();
 			msg='created';
+			master_order_beli_reset_form();
 			master_order_beli_createWindow.show();
 		} else {
 			master_order_beli_createWindow.toFront();
@@ -347,9 +358,8 @@ Ext.onReady(function(){
 		/* only one record is selected here */
 		if(master_order_beliListEditorGrid.selModel.getCount() == 1) {
 			post2db='UPDATE';
-			master_order_beli_set_form();
-			//detail_order_beli_DataStore.load({params : {master_id : get_pk_id(), start:0, limit:pageS}});
 			msg='updated';
+			master_order_beli_set_form();
 			master_order_beli_createWindow.show();
 		} else {
 			Ext.MessageBox.show({
@@ -428,7 +438,8 @@ Ext.onReady(function(){
 			{name: 'order_supplier', type: 'string', mapping: 'supplier_nama'}, 
 			{name: 'order_tanggal', type: 'date', dateFormat: 'Y-m-d', mapping: 'order_tanggal'}, 
 			{name: 'order_carabayar', type: 'string', mapping: 'order_carabayar'}, 
-			{name: 'order_diskon', type: 'float', mapping: 'order_diskon'}, 
+			{name: 'order_diskon', type: 'float', mapping: 'order_diskon'},
+			{name: 'order_cashback', type: 'float', mapping: 'order_cashback'},
 			{name: 'order_biaya', type: 'float', mapping: 'order_biaya'}, 
 			{name: 'order_jumlah', type: 'float', mapping: 'jumlah_barang'}, 
 			{name: 'order_total', type: 'float', mapping: 'total_nilai'}, 
@@ -455,7 +466,7 @@ Ext.onReady(function(){
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
-			id: 'produk_id'
+			id: 'order_produk_value'
 		},[
 		/* dataIndex => insert intocustomer_note_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'order_produk_value', type: 'int', mapping: 'produk_id'},
@@ -477,7 +488,7 @@ Ext.onReady(function(){
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
-			id: 'supplier_id'
+			id: 'order_supplier_value'
 		},[
 		/* dataIndex => insert intocustomer_note_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'order_supplier_value', type: 'int', mapping: 'supplier_id'},
@@ -520,6 +531,16 @@ Ext.onReady(function(){
 			hidden: true
 		},
 		{
+			header: '<div align="center">' + 'Tanggal' + '</div>',
+			dataIndex: 'order_tanggal',
+			width: 70,	//150,
+			sortable: true,
+			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
+			editor: new Ext.form.DateField({
+				format: 'd-m-Y'
+			})
+		},
+		{
 			//header: '<div align="center">' + 'No Order' + '</div>',
 			header: '<div align="center">' + 'No Pesanan' + '</div>',
 			dataIndex: 'order_no',
@@ -537,26 +558,16 @@ Ext.onReady(function(){
 			readOnly: true
 		}, 
 		{
-			header: '<div align="center">' + 'Tanggal' + '</div>',
-			dataIndex: 'order_tanggal',
-			width: 70,	//150,
-			sortable: true,
-			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
-			editor: new Ext.form.DateField({
-				format: 'd-m-Y'
-			})
-		},
-		{
-			header: '<div align="center">' + 'Jumlah' + '</div>',
+			header: '<div align="center">' + 'Jumlah Item' + '</div>',
 			align: 'right',
 			dataIndex: 'order_jumlah',
-			width: 60,	//150,
+			width: 70,	//150,
 			sortable: true,
 			readOnly: true,
 			renderer: Ext.util.Format.numberRenderer('0,000')
 		},
 		{
-			header: '<div align="center">' + 'Total Harga (Rp)' + '</div>',
+			header: '<div align="center">' + 'Sub Total (Rp)' + '</div>',
 			align: 'right',
 			dataIndex: 'order_total',
 			width: 100,	//150,
@@ -565,6 +576,48 @@ Ext.onReady(function(){
 			renderer: function(val){
 				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
 			}
+		},
+		{
+			header: '<div align="center">' + 'Diskon (%)' + '</div>',
+			align: 'right',
+			dataIndex: 'order_diskon',
+			width: 100,	//150,
+			sortable: true,
+			renderer: function(val){
+				return '<span>'+val+'</span>';
+			},
+			readOnly: true
+		}, 
+		{
+			header: '<div align="center">' + 'Diskon (Rp)' + '</div>',
+			align: 'right',
+			width: 100,	//150,
+			dataIndex: 'order_cashback',
+			sortable: true,
+			renderer: Ext.util.Format.numberRenderer('0,000'),
+			readOnly: true
+		}, 
+		{
+			header: '<div align="center">' + 'Biaya (Rp)' + '</div>',
+			align: 'right',
+			dataIndex: 'order_biaya',
+			width: 100,	//150,
+			sortable: true,
+			renderer: function(val){
+				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
+			},
+			readOnly: true
+		},
+		{
+			header: '<div align="center">' + 'Total Nilai (Rp)' + '</div>',
+			align: 'right',
+			width: 100,	//150,
+			//sortable: true,
+			readOnly: true,
+			renderer: function(v, params, record){
+					order_total_nilai=Ext.util.Format.number((record.data.order_total-(record.data.order_diskon*record.data.order_total/100)+record.data.order_biaya-record.data.order_cashback),"0,000");
+                    return '<span>' + order_total_nilai+ '</span>';
+            }
 		},
 		{
 			header: '<div align="center">' + 'Cara Bayar' + '</div>',
@@ -586,34 +639,12 @@ Ext.onReady(function(){
             })
 		}, 
 		{
-			header: '<div align="center">' + 'Diskon (%)' + '</div>',
-			align: 'right',
-			dataIndex: 'order_diskon',
-			width: 60,	//150,
-			sortable: true,
-			renderer: function(val){
-				return '<span>'+val+'</span>';
-			},
-			readOnly: true
-		}, 
-		{
-			header: '<div align="center">' + 'Biaya (Rp)' + '</div>',
-			align: 'right',
-			dataIndex: 'order_biaya',
-			width: 100,	//150,
-			sortable: true,
-			renderer: function(val){
-				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
-			},
-			readOnly: true
-		},
-		{
 			header: 'Creator',
 			dataIndex: 'order_creator',
 			width: 150,
 			sortable: true,
 			hidden: true,
-			readOnly: true,
+			readOnly: true
 		}, 
 		{
 			header: 'Create on',
@@ -621,7 +652,7 @@ Ext.onReady(function(){
 			width: 150,
 			sortable: true,
 			hidden: true,
-			readOnly: true,
+			readOnly: true
 		}, 
 		{
 			header: 'Last Update by',
@@ -629,7 +660,7 @@ Ext.onReady(function(){
 			width: 150,
 			sortable: true,
 			hidden: true,
-			readOnly: true,
+			readOnly: true
 		}, 
 		{
 			header: 'Last Update on',
@@ -637,7 +668,7 @@ Ext.onReady(function(){
 			width: 150,
 			sortable: true,
 			hidden: true,
-			readOnly: true,
+			readOnly: true
 		}, 
 		{
 			header: 'Revised',
@@ -645,10 +676,10 @@ Ext.onReady(function(){
 			width: 150,
 			sortable: true,
 			hidden: true,
-			readOnly: true,
+			readOnly: true
 		}	]);
 	
-	master_order_beli_ColumnModel.defaultSortable= true;
+	//master_order_beli_ColumnModel.defaultSortable= true;
 	/* End of Function */
     
 	/* Declare DataStore and  show datagrid list */
@@ -664,7 +695,7 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 940,	//900,
+	  	width: 1024,	//900,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: master_order_beli_DataStore,
@@ -819,7 +850,7 @@ Ext.onReady(function(){
 		name: 'order_tanggalField',
 		fieldLabel: 'Tanggal',
 		emptyText : dt.format('d-m-Y'),
-		format : 'd-m-Y',
+		format : 'd-m-Y'
 	});
 	/* Identify  order_carabayar Field */
 	order_carabayarField= new Ext.form.ComboBox({
@@ -847,13 +878,25 @@ Ext.onReady(function(){
 		maxLength: 2,
 		maskRe: /([0-9]+)$/
 	});
+	
+	order_cashbackField= new Ext.form.NumberField({
+		id: 'order_cashbackField',
+		fieldLabel: 'Diskon (Rp)',
+		allowNegatife : false,
+		emptyText: '0',
+		allowDecimals: false,
+		anchor: '50%',
+		maxLength: 10,
+		maskRe: /([0-9]+)$/
+	});
+	
 	/* Identify  order_biaya Field */
 	order_biayaField= new Ext.form.NumberField({
 		id: 'order_biayaField',
 		fieldLabel: 'Biaya (Rp)',
 		allowNegatife : false,
 		emptyText: '0',
-		allowDecimals: true,
+		allowDecimals: false,
 		anchor: '95%',
 		maskRe: /([0-9]+)$/
 	});
@@ -864,11 +907,12 @@ Ext.onReady(function(){
 		fieldLabel: 'Sub Total (Rp)',
 		allowNegatife : false,
 		emptyText: '0',
-		allowDecimals: true,
+		allowDecimals: false,
 		readOnly: true,
 		anchor: '95%',
 		maskRe: /([0-9]+)$/
 	});
+	
 	/* Identify  order_bayar Field */
 	order_totalField= new Ext.form.NumberField({
 		id: 'order_totalField',
@@ -887,7 +931,7 @@ Ext.onReady(function(){
 		fieldLabel: 'Jumlah Item',
 		allowNegatife : false,
 		emptyText: '0',
-		allowDecimals: true,
+		allowDecimals: false,
 		readOnly: true,
 		anchor: '95%',
 		maskRe: /([0-9]+)$/
@@ -936,13 +980,13 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [order_noField, order_supplierField, order_tanggalField, order_carabayarField] 
+				items: [order_noField, order_supplierField, order_tanggalField] 
 			},
 			{
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [order_diskonField, order_biayaField, order_keteranganField,order_idField] 
+				items: [order_keteranganField,order_carabayarField,order_idField] 
 			}
 			]
 	
@@ -966,7 +1010,7 @@ Ext.onReady(function(){
 				layout: 'form',
 				labelAlign: 'left',
 				border:false,
-				items: [order_bayarField, order_totalbayarField] 
+				items: [order_diskonField, order_cashbackField, order_biayaField,order_bayarField, order_totalbayarField] 
 			}
 			]
 	
@@ -978,7 +1022,7 @@ Ext.onReady(function(){
 	var detail_order_beli_reader=new Ext.data.JsonReader({
 		root: 'results',
 		totalProperty: 'total',
-		id: ''
+		id: 'dorder_id'
 	},[
 	/* dataIndex => insert intoperawatan_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'dorder_id', type: 'int', mapping: 'dorder_id'}, 
@@ -1009,8 +1053,8 @@ Ext.onReady(function(){
 			method: 'POST'
 		}),
 		reader: detail_order_beli_reader,
-		baseParams:{start:0, limit:pageS},
-		sortInfo:{field: 'dorder_id', direction: "ASC"}
+		baseParams:{start:0, limit:pageS, task: 'detail'},
+		sortInfo:{field: 'dorder_id', direction: 'DESC'}
 	});
 	/* End of Function */
 	
@@ -1026,13 +1070,15 @@ Ext.onReady(function(){
 			url: 'index.php?c=c_master_order_beli&m=get_satuan_list', 
 			method: 'POST'
 		}),
+		baseParams:{start:0,limit:pageS,task:'detail'},
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
-			id: 'satuan_id'
+			id: 'order_satuan_value'
 		},[
 		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
 			{name: 'order_satuan_value', type: 'int', mapping: 'satuan_id'},
+			{name: 'order_satuan_kode', type: 'string', mapping: 'satuan_kode'},
 			{name: 'order_satuan_display', type: 'string', mapping: 'satuan_nama'}
 		]),
 		sortInfo:{field: 'order_satuan_display', direction: "ASC"}
@@ -1086,7 +1132,6 @@ Ext.onReady(function(){
 		},
 		{
 			header: '<div align="center">' + 'Satuan' + '</div>',
-			align: 'right',
 			dataIndex: 'dorder_satuan',
 			width: 80,	//150,
 			editor: combo_order_satuan,
@@ -1130,9 +1175,7 @@ Ext.onReady(function(){
 			align: 'right',
 			dataIndex: 'dorder_diskon',
 			width: 60,	//100,
-			renderer: function(val){
-				return '<span>'+val+'</span>';
-			},
+			renderer: Ext.util.Format.numberRenderer('0,000'),
 			sortable: true,
 			editor: new Ext.form.NumberField({
 				allowDecimals: true,
@@ -1233,7 +1276,7 @@ Ext.onReady(function(){
 				waitMsg: 'Please wait...',
 				url: 'index.php?c=c_master_order_beli&m=detail_detail_order_beli_insert',
 				params:{
-				dorder_id	: detail_order_beli_record.data.dorder_id, 
+				dorder_id		: detail_order_beli_record.data.dorder_id, 
 				dorder_master	: pkid, 
 				dorder_produk	: detail_order_beli_record.data.dorder_produk, 
 				dorder_satuan	: detail_order_beli_record.data.dorder_satuan, 
@@ -1345,7 +1388,7 @@ Ext.onReady(function(){
 		order_jumlahField.setValue(jumlah_item);
 		order_totalField.setValue(total_harga);
 		order_totalbayarField.setValue(total_harga-order_bayarField.getValue());
-		console.log('total');
+		//console.log('total');
 	}
 	
 	/* Function for action list search */
@@ -1404,6 +1447,7 @@ Ext.onReady(function(){
 		order_tanggalSearchField.reset();
 		order_carabayarSearchField.reset();
 		order_diskonSearchField.reset();
+		order_cashbackSearchField.reset();
 		order_biayaSearchField.reset();
 		order_bayarSearchField.reset();
 		order_keteranganSearchField.reset();
@@ -1478,14 +1522,27 @@ Ext.onReady(function(){
 	/* Identify  order_diskon Search Field */
 	order_diskonSearchField= new Ext.form.NumberField({
 		id: 'order_diskonSearchField',
-		fieldLabel: 'Diskon',
+		fieldLabel: 'Diskon (%)',
 		allowNegatife : false,
 		blankText: '0',
 		allowDecimals: true,
 		anchor: '50%',
+		maxLength: 2,
 		maskRe: /([0-9]+)$/
 	
 	});
+	
+	order_cashbackSearchField= new Ext.form.NumberField({
+		id: 'order_cashbackSearchField',
+		fieldLabel: 'Diskon (Rp)',
+		allowNegatife : false,
+		blankText: '0',
+		allowDecimals: true,
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
+	
+	});
+	
 	/* Identify  order_biaya Search Field */
 	order_biayaSearchField= new Ext.form.NumberField({
 		id: 'order_biayaSearchField',
@@ -1531,7 +1588,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [order_noSearchField, order_supplierSearchField, order_tanggalSearchField, order_carabayarSearchField, order_diskonSearchField, order_biayaSearchField, order_keteranganSearchField] 
+				items: [order_noSearchField, order_supplierSearchField, order_tanggalSearchField, order_carabayarSearchField, order_diskonSearchField,order_cashbackSearchField,  order_biayaSearchField, order_keteranganSearchField] 
 			}
 			]
 		}]
@@ -1585,6 +1642,7 @@ Ext.onReady(function(){
 		var order_tanggal_print_date="";
 		var order_carabayar_print=null;
 		var order_diskon_print=null;
+		var order_cashback_print=null;
 		var order_biaya_print=null;
 		var order_bayar_print=null;
 		var order_keterangan_print=null;
@@ -1596,6 +1654,7 @@ Ext.onReady(function(){
 		if(master_order_beli_DataStore.baseParams.order_tanggal!==""){order_tanggal_print_date = master_order_beli_DataStore.baseParams.order_tanggal;}
 		if(master_order_beli_DataStore.baseParams.order_carabayar!==null){order_carabayar_print = master_order_beli_DataStore.baseParams.order_carabayar;}
 		if(master_order_beli_DataStore.baseParams.order_diskon!==null){order_diskon_print = master_order_beli_DataStore.baseParams.order_diskon;}
+		if(master_order_beli_DataStore.baseParams.order_cashback!==null){order_cashback_print = master_order_beli_DataStore.baseParams.order_cashback;}
 		if(master_order_beli_DataStore.baseParams.order_biaya!==null){order_biaya_print = master_order_beli_DataStore.baseParams.order_biaya;}
 		if(master_order_beli_DataStore.baseParams.order_bayar!==null){order_bayar_print = master_order_beli_DataStore.baseParams.order_bayar;}
 		if(master_order_beli_DataStore.baseParams.order_keterangan!==null){order_keterangan_print = master_order_beli_DataStore.baseParams.order_keterangan;}
@@ -1607,15 +1666,16 @@ Ext.onReady(function(){
 			task: "PRINT",
 		  	query: searchquery,                    		// if we are doing a quicksearch, use this
 			//if we are doing advanced search, use this
-			order_no : order_no_print,
-			order_supplier : order_supplier_print,
-		  	order_tanggal : order_tanggal_print_date, 
-			order_carabayar : order_carabayar_print,
-			order_diskon : order_diskon_print,
-			order_biaya : order_biaya_print,
-			order_bayar : order_bayar_print,
-			order_keterangan : order_keterangan_print,
-		  	currentlisting: master_order_beli_DataStore.baseParams.task // this tells us if we are searching or not
+			order_no 			: order_no_print,
+			order_supplier 		: order_supplier_print,
+		  	order_tanggal 		: order_tanggal_print_date, 
+			order_carabayar 	: order_carabayar_print,
+			order_diskon 		: order_diskon_print,
+			order_cashback 		: order_cashback_print,
+			order_biaya 		: order_biaya_print,
+			order_bayar 		: order_bayar_print,
+			order_keterangan 	: order_keterangan_print,
+		  	currentlisting		: master_order_beli_DataStore.baseParams.task // this tells us if we are searching or not
 		}, 
 		success: function(response){              
 		  	var result=eval(response.responseText);
@@ -1657,6 +1717,7 @@ Ext.onReady(function(){
 		var order_tanggal_2excel_date="";
 		var order_carabayar_2excel=null;
 		var order_diskon_2excel=null;
+		var order_cashback_2excel=null;
 		var order_biaya_2excel=null;
 		var order_bayar_2excel=null;
 		var order_keterangan_2excel=null;
@@ -1668,6 +1729,7 @@ Ext.onReady(function(){
 		if(master_order_beli_DataStore.baseParams.order_tanggal!==""){order_tanggal_2excel_date = master_order_beli_DataStore.baseParams.order_tanggal;}
 		if(master_order_beli_DataStore.baseParams.order_carabayar!==null){order_carabayar_2excel = master_order_beli_DataStore.baseParams.order_carabayar;}
 		if(master_order_beli_DataStore.baseParams.order_diskon!==null){order_diskon_2excel = master_order_beli_DataStore.baseParams.order_diskon;}
+		if(master_order_beli_DataStore.baseParams.order_cashback!==null){order_cashback_2excel = master_order_beli_DataStore.baseParams.order_cashback;}
 		if(master_order_beli_DataStore.baseParams.order_biaya!==null){order_biaya_2excel = master_order_beli_DataStore.baseParams.order_biaya;}
 		if(master_order_beli_DataStore.baseParams.order_bayar!==null){order_bayar_2excel = master_order_beli_DataStore.baseParams.order_bayar;}
 		if(master_order_beli_DataStore.baseParams.order_keterangan!==null){order_keterangan_2excel = master_order_beli_DataStore.baseParams.order_keterangan;}
@@ -1676,18 +1738,18 @@ Ext.onReady(function(){
 		waitMsg: 'Please Wait...',
 		url: 'index.php?c=c_master_order_beli&m=get_action',
 		params: {
-			task: "EXCEL",
-		  	query: searchquery,                    		// if we are doing a quicksearch, use this
-			//if we are doing advanced search, use this
-			order_no : order_no_2excel,
-			order_supplier : order_supplier_2excel,
-		  	order_tanggal : order_tanggal_2excel_date, 
-			order_carabayar : order_carabayar_2excel,
-			order_diskon : order_diskon_2excel,
-			order_biaya : order_biaya_2excel,
-			order_bayar : order_bayar_2excel,
-			order_keterangan : order_keterangan_2excel,
-		  	currentlisting: master_order_beli_DataStore.baseParams.task // this tells us if we are searching or not
+			task				: "EXCEL",
+		  	query				: searchquery,                    		
+			order_no 			: order_no_2excel,
+			order_supplier 		: order_supplier_2excel,
+		  	order_tanggal 		: order_tanggal_2excel_date, 
+			order_carabayar 	: order_carabayar_2excel,
+			order_diskon 		: order_diskon_2excel,
+			order_cashback		: order_cashback_2excel,
+			order_biaya 		: order_biaya_2excel,
+			order_bayar 		: order_bayar_2excel,
+			order_keterangan 	: order_keterangan_2excel,
+		  	currentlisting		: master_order_beli_DataStore.baseParams.task // this tells us if we are searching or not
 		},
 		success: function(response){              
 		  	var result=eval(response.responseText);
@@ -1733,14 +1795,29 @@ Ext.onReady(function(){
 		cbo_order_produk_DataStore.setBaseParam('task','list');
 		var selectedquery=detail_order_beliListEditorGrid.getSelectionModel().getSelected().get('produk_nama');
 		cbo_order_produk_DataStore.setBaseParam('query',selectedquery);
+		
 		//cbo_order_produk_DataStore.load();
 	});
 	
+	combo_order_satuan.on("focus",function(){
+		cbo_order_satuanDataStore.setBaseParam('task','produk');
+		cbo_order_satuanDataStore.setBaseParam('selected_id',combo_order_produk.getValue());
+		cbo_order_satuanDataStore.load();
+	});
+	
+	combo_order_produk.on("select",function(){
+		cbo_order_satuanDataStore.setBaseParam('task','produk');
+		cbo_order_satuanDataStore.setBaseParam('selected_id',combo_order_produk.getValue());
+		cbo_order_satuanDataStore.load();
+	});
+	
+	
 	detail_order_beli_DataStore.on("update",function(){
-		var	  query_selected="";
+		var	query_selected="";
+		var satuan_selected="";
 		detail_order_beli_DataStore.commitChanges();
 		detail_order_beli_total();
-		console.log('update');
+		//console.log('update');
 		for(i=0;i<detail_order_beli_DataStore.getCount();i++){
 			detail_order_beli_record=detail_order_beli_DataStore.getAt(i);
 			query_selected=query_selected+detail_order_beli_record.data.dorder_produk+",";
@@ -1749,34 +1826,16 @@ Ext.onReady(function(){
 		cbo_order_produk_DataStore.setBaseParam('selected_id',query_selected);
 		cbo_order_produk_DataStore.load();
 		
+		for(i=0;i<detail_order_beli_DataStore.getCount();i++){
+			detail_order_beli_record=detail_order_beli_DataStore.getAt(i);
+			satuan_selected=satuan_selected+detail_order_beli_record.data.dorder_satuan+",";
+		}
+		cbo_order_satuanDataStore.setBaseParam('task','selected');
+		cbo_order_satuanDataStore.setBaseParam('selected_id',satuan_selected);
+		cbo_order_satuanDataStore.load();
 		//detail_order_beliListEditorGrid.getView().refresh();
 	});
-	
-	/*combo_order_produk.on("blur",function(){
-		var	  query_selected="";
-		for(i=0;i<detail_order_beli_DataStore.getCount();i++){
-			detail_order_beli_record=detail_order_beli_DataStore.getAt(i);
-			query_selected=query_selected+detail_order_beli_record.data.dorder_produk+",";
-		}
-		cbo_order_produk_DataStore.setBaseParam('task','selected');
-		cbo_order_produk_DataStore.setBaseParam('selected_id',query_selected);
-		cbo_order_produk_DataStore.load();
-		detail_order_beliListEditorGrid.getView().refresh();
-	});*/
-	
-/*	combo_order_produk.on("selected",function(){
-		etail_order_beli_DataStore.commitChanges();
-		var	  query_selected="";
-		for(i=0;i<detail_order_beli_DataStore.getCount();i++){
-			detail_order_beli_record=detail_order_beli_DataStore.getAt(i);
-			query_selected=query_selected+detail_order_beli_record.data.dorder_produk+",";
-		}
-		cbo_order_produk_DataStore.setBaseParam('task','selected');
-		cbo_order_produk_DataStore.setBaseParam('selected_id',query_selected);
-		cbo_order_produk_DataStore.load();
-	});*/
-	
-	
+		
 	
 });
 	</script>

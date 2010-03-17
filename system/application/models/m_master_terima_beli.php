@@ -19,7 +19,7 @@ class M_master_terima_beli extends Model{
 		}
 		
 		function get_produk_selected_list($selected_id,$query,$start,$end){
-			$sql="SELECT produk_id,produk_nama,produk_kode,kategori_nama FROM vu_produk";
+			$sql="SELECT produk_id,produk_nama,produk_kode,kategori_nama FROM vu_produk ";
 			if($selected_id!==""&strlen($selected_id)>1)
 			{
 				$selected_id=substr($selected_id,0,strlen($selected_id)-1);
@@ -46,7 +46,7 @@ class M_master_terima_beli extends Model{
 				
 		function get_produk_all_list($query,$start,$end){
 			
-			$sql="SELECT produk_id,produk_nama,produk_kode,kategori_nama FROM vu_produk";
+			$sql="SELECT produk_id,produk_nama,produk_kode,kategori_nama FROM vu_satuan_konversi WHERE produk_aktif='Aktif'";
 			if($query!==""){
 				$sql.=(eregi("WHERE",$sql)?" AND ":" WHERE ")." produk_nama like '%".$query."%' OR produk_kode like '%".$query."%'";
 			}
@@ -93,9 +93,9 @@ class M_master_terima_beli extends Model{
 		}
 		
 		function get_bonus_detail_list($master_id,$query,$start,$end){
-			$sql="SELECT produk_id,produk_nama,produk_kode,kategori_nama FROM vu_produk";
+			$sql="SELECT produk_id,produk_nama,produk_kode,kategori_nama FROM vu_satuan_konversi WHERE produk_aktif='Aktif'";
 			if($master_id<>"")
-				$sql.=" WHERE produk_id IN(SELECT dtbonus_produk FROM detail_terima_bonus WHERE dtbonus_master='".$master_id."')";
+				$sql.=(eregi("WHERE",$sql)?" AND ":" WHERE ")." produk_id IN(SELECT dtbonus_produk FROM detail_terima_bonus WHERE dtbonus_master='".$master_id."')";
 			if($query!==""){
 				$sql.=(eregi("WHERE",$sql)?" AND ":" WHERE ")." produk_nama like '%".$query."%' OR produk_kode like '%".$query."%'";
 			}
@@ -115,6 +115,72 @@ class M_master_terima_beli extends Model{
 				return '({"total":"0", "results":""})';
 			}
 		}
+		
+		function get_satuan_produk_list($selected_id){
+			
+			$sql="SELECT satuan_id,satuan_kode,satuan_nama FROM vu_satuan_konversi WHERE produk_aktif='Aktif'";
+			
+			if($selected_id!==""){
+				$sql.=(eregi("WHERE",$sql)?" AND ":" WHERE ")." produk_id='".$selected_id."'";
+			}
+			
+			$result = $this->db->query($sql);
+			$nbrows = $result->num_rows();
+			
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+		
+		function get_satuan_selected_list($selected_id){
+			$sql="SELECT satuan_id,satuan_kode,satuan_nama FROM satuan";
+			if($selected_id!=="")
+			{
+				$selected_id=substr($selected_id,0,strlen($selected_id)-1);
+				$sql.=" WHERE satuan_id IN(".$selected_id.")";
+			}
+
+			$result = $this->db->query($sql);
+			$nbrows = $result->num_rows();
+			
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+		
+		function get_satuan_detail_list($master_id){
+			$sql="SELECT satuan_id,satuan_kode,satuan_nama FROM satuan";
+			if($master_id<>""){
+				$sql.=" WHERE satuan_id IN(SELECT dterima_satuan FROM detail_terima_beli WHERE dterima_master='".$master_id."')";
+				$sql.=" OR satuan_id IN(SELECT dtbonus_satuan FROM detail_terima_bonus WHERE dtbonus_master='".$master_id."')";
+			}
+			
+			$result = $this->db->query($sql);
+			$nbrows = $result->num_rows();
+			
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+		
 		
 		function get_produk_order_list($order_id,$query,$start,$end){
 			$sql="SELECT produk_id,produk_nama,produk_kode,kategori_nama FROM vu_produk";
@@ -433,7 +499,7 @@ class M_master_terima_beli extends Model{
 			$query="SELECT *  FROM vu_trans_terima";
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (terima_id LIKE '%".addslashes($filter)."%' OR terima_no LIKE '%".addslashes($filter)."%' OR terima_order LIKE '%".addslashes($filter)."%' OR terima_supplier LIKE '%".addslashes($filter)."%' OR terima_surat_jalan LIKE '%".addslashes($filter)."%' OR terima_pengirim LIKE '%".addslashes($filter)."%' OR terima_tanggal LIKE '%".addslashes($filter)."%' OR terima_keterangan LIKE '%".addslashes($filter)."%' )";
+				$query .= " (terima_id LIKE '%".addslashes($filter)."%' OR no_bukti LIKE '%".addslashes($filter)."%' OR terima_order LIKE '%".addslashes($filter)."%' OR terima_supplier LIKE '%".addslashes($filter)."%' OR terima_surat_jalan LIKE '%".addslashes($filter)."%' OR terima_pengirim LIKE '%".addslashes($filter)."%' OR tanggal LIKE '%".addslashes($filter)."%' OR terima_keterangan LIKE '%".addslashes($filter)."%' )";
 				$result = $this->db->query($query);
 			} else if($option=='SEARCH'){
 				if($terima_id!=''){
@@ -442,7 +508,7 @@ class M_master_terima_beli extends Model{
 				};
 				if($terima_no!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " terima_no LIKE '%".$terima_no."%'";
+					$query.= " no_bukti LIKE '%".$terima_no."%'";
 				};
 				if($terima_order!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -462,7 +528,7 @@ class M_master_terima_beli extends Model{
 				};
 				if($terima_tanggal!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " terima_tanggal LIKE '%".$terima_tanggal."%'";
+					$query.= " tanggal LIKE '%".$terima_tanggal."%'";
 				};
 				if($terima_keterangan!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -476,10 +542,12 @@ class M_master_terima_beli extends Model{
 		//function  for export to excel
 		function master_terima_beli_export_excel($terima_id ,$terima_no ,$terima_order ,$terima_supplier ,$terima_surat_jalan ,$terima_pengirim ,$terima_tanggal ,$terima_keterangan ,$option,$filter){
 			//full query
-			$query="SELECT *  FROM vu_trans_terima";
+			$query="SELECT tanggal as 'Tanggal', no_bukti as 'No Penerimaan', order_no as 'No Pesanan', supplier_nama as Supplier
+					,jumlah_barang as 'Jumlah Item', jumlah_barang_bonus as 'Jumlah Item Bonus', terima_surat_jalan as 'No Surat Jalan',
+					terima_pengirim as 'Pengirim' FROM vu_trans_terima";
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (terima_id LIKE '%".addslashes($filter)."%' OR terima_no LIKE '%".addslashes($filter)."%' OR terima_order LIKE '%".addslashes($filter)."%' OR terima_supplier LIKE '%".addslashes($filter)."%' OR terima_surat_jalan LIKE '%".addslashes($filter)."%' OR terima_pengirim LIKE '%".addslashes($filter)."%' OR terima_tanggal LIKE '%".addslashes($filter)."%' OR terima_keterangan LIKE '%".addslashes($filter)."%' )";
+				$query .= " (terima_id LIKE '%".addslashes($filter)."%' OR no_bukti LIKE '%".addslashes($filter)."%' OR terima_order LIKE '%".addslashes($filter)."%' OR terima_supplier LIKE '%".addslashes($filter)."%' OR terima_surat_jalan LIKE '%".addslashes($filter)."%' OR terima_pengirim LIKE '%".addslashes($filter)."%' OR tanggal LIKE '%".addslashes($filter)."%' OR terima_keterangan LIKE '%".addslashes($filter)."%' )";
 				$result = $this->db->query($query);
 			} else if($option=='SEARCH'){
 				if($terima_id!=''){
@@ -488,7 +556,7 @@ class M_master_terima_beli extends Model{
 				};
 				if($terima_no!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " terima_no LIKE '%".$terima_no."%'";
+					$query.= " no_bukti LIKE '%".$terima_no."%'";
 				};
 				if($terima_order!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -508,7 +576,7 @@ class M_master_terima_beli extends Model{
 				};
 				if($terima_tanggal!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " terima_tanggal LIKE '%".$terima_tanggal."%'";
+					$query.= " tanggal LIKE '%".$terima_tanggal."%'";
 				};
 				if($terima_keterangan!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";

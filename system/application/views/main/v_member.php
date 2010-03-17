@@ -449,14 +449,14 @@ Ext.onReady(function(){
 			hidden: false
 		},
 		{
-			header: 'Customer',
+			header: '<div align="center">Customer</div>',
 			dataIndex: 'member_cust',
-			width: 150,
+			width: 250,
 			sortable: true,
 			readOnly: true
 		}, 
 		{
-			header: 'Member No',
+			header: '<div align="center">No. Member</div>',
 			dataIndex: 'member_no',
 			width: 150,
 			sortable: true,
@@ -466,23 +466,23 @@ Ext.onReady(function(){
           	})
 		}, 
 		{
-			header: 'Register',
+			header: '<div align="center">Register</div>',
 			dataIndex: 'member_register',
-			width: 100,
+			width: 120,
 			sortable: true,
 			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
 			readOnly: true
 		}, 
 		{
-			header: 'Valid',
+			header: '<div align="center">Valid</div>',
 			dataIndex: 'member_valid',
-			width: 100,
+			width: 120,
 			sortable: true,
 			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
 			readOnly: true
 		}, 
 		{
-			header: 'Nota Ref',
+			header: '<div align="center">Referensi Nota</div>',
 			dataIndex: 'member_nota_ref',
 			width: 150,
 			sortable: true,
@@ -491,8 +491,9 @@ Ext.onReady(function(){
           	})
 		}, 
 		{
-			header: 'Point',
+			header: '<div align="center">Point</div>',
 			dataIndex: 'member_point',
+			align: 'right',
 			width: 80,
 			sortable: true,
 			editor: new Ext.form.NumberField({
@@ -505,16 +506,16 @@ Ext.onReady(function(){
 			})
 		}, 
 		{
-			header: 'Jenis',
+			header: '<div align="center">Jenis</div>',
 			dataIndex: 'member_jenis',
-			width: 150,
+			width: 80,
 			sortable: true,
 			readOnly: true
 		}, 
 		{
-			header: 'Status Kartu',
+			header: '<div align="center">Status</div>',
 			dataIndex: 'member_status',
-			width: 150,
+			width: 80,
 			sortable: true,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
@@ -531,7 +532,7 @@ Ext.onReady(function(){
             })
 		}, 
 		{
-			header: 'Tgl penyerahan',
+			header: '<div align="center">Tgl penyerahan</div>',
 			dataIndex: 'member_tglserahterima',
 			width: 150,
 			sortable: true,
@@ -588,7 +589,7 @@ Ext.onReady(function(){
 	memberListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'memberListEditorGrid',
 		el: 'fp_member',
-		title: 'List Of Member',
+		title: 'Daftar Member',
 		autoHeight: true,
 		store: member_DataStore, // DataStore
 		cm: member_ColumnModel, // Nama-nama Columns
@@ -597,7 +598,7 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 800,
+	  	width: 1024,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: member_DataStore,
@@ -623,7 +624,7 @@ Ext.onReady(function(){
 			handler: member_cetak_kartu
 		},'-',{
 			text: 'Aktivasi',
-			tooltip: 'Aktifkan Kartu Member',
+			tooltip: 'Aktifkan Kartu Member yang statusnya print menjadi aktif',
 			iconCls:'icon-valid',
 			handler: member_aktivasi
 		}, '-',{
@@ -1103,6 +1104,13 @@ Ext.onReady(function(){
 		  	var result=eval(response.responseText);
 		  	switch(result){
 		  	case 1:
+				Ext.MessageBox.show({
+					title: 'Warning',
+					msg: 'Aktivasi Member Sukses!',
+					buttons: Ext.MessageBox.OK,
+					animEl: 'save',
+					icon: Ext.MessageBox.OK
+				});
 				member_DataStore.reload();
 				break;
 		  	default:

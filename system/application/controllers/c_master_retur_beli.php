@@ -17,12 +17,12 @@ class C_master_retur_beli extends Controller {
 	function C_master_retur_beli(){
 		parent::Controller();
 		$this->load->model('m_master_retur_beli', '', TRUE);
-		$this->load->plugin('to_excel');
+		
 	}
 	
 	//set index
 	function index(){
-		$this->load->helper('asset');
+		$this->load->plugin('to_excel');
 		$this->load->view('main/v_master_retur_beli');
 	}
 	
@@ -31,14 +31,40 @@ class C_master_retur_beli extends Controller {
 		echo $result;
 	}
 	
+	
+	function get_invoice_list(){
+		$query = isset($_POST['query']) ? @$_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? @$_POST['start'] : @$_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? @$_POST['limit'] : @$_GET['limit']);
+		$result=$this->m_master_retur_beli->get_invoice_list($query,$start,$end);
+		echo $result;
+	}
+	
+	
 	function get_supplier_list(){
 		$result=$this->m_public_function->get_supplier_list();
 		echo $result;
 	}
 	
-	function get_drbeli_by_terimabeli(){
-		$terima_id = trim(@$_POST["master_terima_id"]);
-		$result=$this->m_master_retur_beli->get_drbeli_by_terimabeli($terima_id);
+	//get master id, note: not done yet
+	function get_produk_list(){
+		$query = isset($_POST['query']) ? @$_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? @$_POST['start'] : @$_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? @$_POST['limit'] : @$_GET['limit']);
+		$master_id = (integer) (isset($_POST['master_id']) ? @$_POST['master_id'] : @$_GET['master_id']);
+		$task = isset($_POST['task']) ? @$_POST['task'] : @$_GET['task'];
+		$selected_id = isset($_POST['selected_id']) ? @$_POST['selected_id'] : @$_GET['selected_id'];
+		if($task=='detail')
+			$result=$this->m_master_retur_beli->get_produk_detail_list($master_id,$query,$start,$end);
+		elseif($task=='list')
+			$result=$this->m_master_retur_beli->get_produk_all_list($master_id, $selected_id, $query,$start,$end);
+		elseif($task=='selected')
+			$result=$this->m_master_retur_beli->get_produk_selected_list($selected_id,$query,$start,$end);
+		echo $result;
+	}
+	
+	function get_satuan_list(){
+		$result=$this->m_public_function->get_satuan_list();
 		echo $result;
 	}
 	
@@ -49,13 +75,6 @@ class C_master_retur_beli extends Controller {
 		echo $result;
 	}
 	
-	function get_harga_on_order(){
-		$dorder_master= trim(@$_POST["dorder_master"]);
-		$dorder_produk= trim(@$_POST["dorder_produk"]);
-		$dorder_satuan= trim(@$_POST["dorder_satuan"]);
-		$result=$this->m_master_retur_beli->get_harga_on_order($dorder_master, $dorder_produk, $dorder_satuan);
-		echo $result;
-	}
 	
 	//for detail action
 	//list detail handler action
@@ -92,7 +111,8 @@ class C_master_retur_beli extends Controller {
 		$drbeli_satuan=trim(@$_POST["drbeli_satuan"]);
 		$drbeli_jumlah=trim(@$_POST["drbeli_jumlah"]);
 		$drbeli_harga=trim(@$_POST["drbeli_harga"]);
-		$result=$this->m_master_retur_beli->detail_detail_retur_beli_insert($drbeli_id ,$drbeli_master ,$drbeli_produk ,$drbeli_satuan ,$drbeli_jumlah ,$drbeli_harga );
+		$drbeli_diskon=trim(@$_POST["drbeli_diskon"]);
+		$result=$this->m_master_retur_beli->detail_detail_retur_beli_insert($drbeli_id ,$drbeli_master ,$drbeli_produk ,$drbeli_satuan ,$drbeli_jumlah ,$drbeli_harga, $drbeli_diskon );
 	}
 	
 	
