@@ -689,7 +689,7 @@ Ext.onReady(function(){
 			{name: 'total_terpakai', type: 'int', mapping: 'total_terpakai'},
 			{name: 'total_sisa', type: 'int', mapping: 'total_sisa'},
 			{name: 'kwitansi_creator', type: 'string', mapping: 'kwitansi_creator'}, 
-			{name: 'kwitansi_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'kwitansi_date_create'}, 
+			{name: 'kwitansi_date_create', type: 'date', dateFormat: 'Y-m-d', mapping: 'kwitansi_date_create'}, 
 			{name: 'kwitansi_update', type: 'string', mapping: 'kwitansi_update'}, 
 			{name: 'kwitansi_date_update', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'kwitansi_date_update'}, 
 			{name: 'kwitansi_revised', type: 'int', mapping: 'kwitansi_revised'} 
@@ -851,6 +851,13 @@ Ext.onReady(function(){
 				},
 			hidden: true
 		},
+		{
+			header: '<div align="center">' + 'Tanggal' + '</div>',
+			dataIndex: 'kwitansi_date_create',
+			width: 80,	//150,
+			sortable: true,
+			renderer: Ext.util.Format.dateRenderer('Y-m-d')
+		}, 
 		{
 			header: '<div align="center">' + 'No Kuitansi' + '</div>',
 			dataIndex: 'kwitansi_no',
