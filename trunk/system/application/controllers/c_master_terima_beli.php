@@ -53,6 +53,21 @@ class C_master_terima_beli extends Controller {
 		echo $result;
 	}
 	
+	function get_satuan_list(){
+		$task = isset($_POST['task']) ? @$_POST['task'] : @$_GET['task'];
+		$selected_id = isset($_POST['selected_id']) ? @$_POST['selected_id'] : @$_GET['selected_id'];
+		$master_id = (integer) (isset($_POST['master_id']) ? @$_POST['master_id'] : @$_GET['master_id']);
+		
+		if($task=='detail')
+			$result=$this->m_master_terima_beli->get_satuan_detail_list($master_id);
+		elseif($task=='produk')
+			$result=$this->m_master_terima_beli->get_satuan_produk_list($selected_id);
+		elseif($task=='selected')
+			$result=$this->m_master_terima_beli->get_satuan_selected_list($selected_id);
+			
+		echo $result;
+	}
+	
 	function get_bonus_list(){
 		$query = isset($_POST['query']) ? @$_POST['query'] : "";
 		$start = (integer) (isset($_POST['start']) ? @$_POST['start'] : @$_GET['start']);
@@ -69,10 +84,6 @@ class C_master_terima_beli extends Controller {
 		echo $result;
 	}
 	
-	function get_satuan_list(){
-		$result=$this->m_public_function->get_satuan_list();
-		echo $result;
-	}
 	
 	function get_order_beli_list(){
 		$result=$this->m_master_terima_beli->get_order_beli_list();
@@ -316,13 +327,24 @@ class C_master_terima_beli extends Controller {
 		
 		$result = $this->m_master_terima_beli->master_terima_beli_print($terima_id ,$terima_no ,$terima_order ,$terima_supplier ,$terima_surat_jalan ,$terima_pengirim ,$terima_tanggal ,$terima_keterangan ,$option,$filter);
 		$nbrows=$result->num_rows();
-		$totcolumn=13;
+		$totcolumn=7;
    		/* We now have our array, let's build our HTML file */
 		$file = fopen("master_terima_belilist.html",'w');
-		fwrite($file, "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' /><title>Printing the Master_terima_beli Grid</title><link rel='stylesheet' type='text/css' href='assets/modules/main/css/printstyle.css'/></head>");
-		fwrite($file, "<body><table summary='Master_terima_beli List'><caption>MASTER_TERIMA_BELI</caption><thead><tr><th scope='col'>Terima Id</th><th scope='col'>Terima No</th><th scope='col'>Terima Order</th><th scope='col'>Terima Supplier</th><th scope='col'>Terima Surat Jalan</th><th scope='col'>Terima Pengirim</th><th scope='col'>Terima Tanggal</th><th scope='col'>Terima Keterangan</th><th scope='col'>Terima Creator</th><th scope='col'>Terima Date Create</th><th scope='col'>Terima Update</th><th scope='col'>Terima Date Update</th><th scope='col'>Terima Revised</th></tr></thead><tfoot><tr><th scope='row'>Total</th><td colspan='$totcolumn'>");
+		fwrite($file, "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' /><title>Cetak Daftar Penerimaan Barang</title><link rel='stylesheet' type='text/css' href='assets/modules/main/css/printstyle.css'/></head>");
+		fwrite($file, "<body><table summary='Daftar Penerimaan Barang'><caption>Daftar Penerimaan Barang</caption>
+			   <thead><tr>
+			   		<th scope='col'>Tanggal</th>
+					<th scope='col'>No Penerimaan</th>
+					<th scope='col'>No Pesanan</th>
+					<th scope='col'>Supplier</th>
+					<th scope='col'>Jumlah Item</th>
+					<th scope='col'>Jumlah Item Bonus</th>
+					<th scope='col'>No Surat Jalan</th>
+					<th scope='col'>Pengirim</th>
+				</tr></thead>
+				<tfoot><tr><th scope='row'>Total</th><td colspan='$totcolumn'>");
 		fwrite($file, $nbrows);
-		fwrite($file, " Master_terima_beli</td></tr></tfoot><tbody>");
+		fwrite($file, " Penerimaan Barang</td></tr></tfoot><tbody>");
 		$i=0;
 		if($nbrows>0){
 			foreach($result->result_array() as $data){
@@ -332,31 +354,21 @@ class C_master_terima_beli extends Controller {
 				}
 			
 				fwrite($file, "><th scope='row' id='r97'>");
-				fwrite($file, $data['terima_id']);
+				fwrite($file, $data['tanggal']);
 				fwrite($file,"</th><td>");
-				fwrite($file, $data['terima_no']);
+				fwrite($file, $data['no_bukti']);
 				fwrite($file,"</td><td>");
-				fwrite($file, $data['terima_order']);
+				fwrite($file, $data['order_no']);
 				fwrite($file,"</td><td>");
-				fwrite($file, $data['terima_supplier']);
+				fwrite($file, $data['supplier_nama']);
+				fwrite($file,"</td><td class='numeric'>");
+				fwrite($file, $data['jumlah_barang']);
+				fwrite($file,"</td><td class='numeric'>");
+				fwrite($file, $data['jumlah_barang_bonus']);
 				fwrite($file,"</td><td>");
 				fwrite($file, $data['terima_surat_jalan']);
 				fwrite($file,"</td><td>");
 				fwrite($file, $data['terima_pengirim']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['terima_tanggal']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['terima_keterangan']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['terima_creator']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['terima_date_create']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['terima_update']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['terima_date_update']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['terima_revised']);
 				fwrite($file, "</td></tr>");
 			}
 		}

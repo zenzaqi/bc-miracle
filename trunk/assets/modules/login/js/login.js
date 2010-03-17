@@ -78,18 +78,20 @@ Ext.onReady(function(){
 
 	});
 	
+	infoField=new Ext.form.Label({html:'<center><br/>Tekan tombol <b>F11</b> untuk tampilan full screen<br/></center>'});
 	
 	warningField=new Ext.form.Label({
 			html: '<font color=red>Aplikasi ini dapat berjalan dengan baik di atas browser minimal <a href=\'http://www.mozilla.com\' target=\'_blank\'>Mozilla Firefox 2</a> atau Internet Explorer 7, dengan resolusi terbaik 1024x768 pixel</font>'
 	});
 	
 	var loginForm = new Ext.FormPanel({
-		labelWidth:90,
+		labelWidth:75,
 		url:'index.php?c=c_login&m=verify',
 		frame:true,
-		width:320,
+		border: true,
+		width:330,
 		autoHeight:true,
-/*		padding:200,*/
+		margin:50,
 		defaultType:'textfield',
 		items:[{
 			xtype:'box', //create image
@@ -116,9 +118,9 @@ Ext.onReady(function(){
 //		title:'<center>Login Authentication</center>',
 		title:'<center>Silahkan Login</center>',
 		width:330,
-		height:175,
+		height:210,
 		closable: false,
-		items: loginForm
+		items: [loginForm,infoField]
 	});
 	
 	createwindow.show();

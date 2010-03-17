@@ -25,9 +25,8 @@ class C_login extends Controller {
 	{
 		if( isset($_POST['username']) && isset($_POST['password'])) 
 		{
-			$u	= $_POST['username'];
+			$u	= strtolower($_POST['username']);
 			$pw	= md5($_POST['password']);
-			
 			$auth = $this->m_login->verifyUser($u, $pw);
 			if($auth){
             	echo "{success:true}";

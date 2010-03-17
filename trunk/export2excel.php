@@ -1,5 +1,5 @@
 <?php header("Content-type: application/x-msdownload"); 
-header("Content-Disposition: attachment; filename=appointment.xls"); 
-echo "Tanggal Appointment	Jam Appointment	Perawatan	No Customer	Customer	Dokter Nikcname	Terapis Nickname	Status	Jam Datang	Keterangan Detail	
-01/26/2010	11:00:00	CRYSTAL DIAMOND	MR003758	Mr. HENDRIK TJANDRA	dr. Fanny		datang	15:05:11
+header("Content-Disposition: attachment; filename=master_invoice.xls"); 
+echo "Tanggal	No Tagihan	No Penerimaan	Supplier	Jumlah Item	Sub Total	Diskon (%)	Diskon (Rp)	Biaya	Total Nilai	Uang Muka	Sisa Tagihan	Jatuh Tempo	
+03/16/2010	INV/10/03/0001	LPB/10/03/0001	CV. Jawa Jamu	19	751600	5	1000	5000	718020	500000	218020	03/16/2010
 ";?>

@@ -121,33 +121,30 @@ Ext.onReady(function(){
 			waitMsg: 'Please wait...',
 			url: 'index.php?c=c_master_terima_beli&m=get_action',
 			params: {
-				task: "UPDATE",
-				terima_id	: terima_id_update_pk, 
-				terima_no	:terima_no_update,  
-				terima_order	:terima_order_update,  
-				terima_supplier	:terima_supplier_update,  
-				terima_surat_jalan	:terima_surat_jalan_update,  
-				terima_pengirim	:terima_pengirim_update,  
-				terima_tanggal	: terima_tanggal_update_date, 
-				terima_keterangan	:terima_keterangan_update,  
+				task				: "UPDATE",
+				terima_id			: terima_id_update_pk, 
+				terima_no			: terima_no_update,  
+				terima_order		: terima_order_update,  
+				terima_supplier		: terima_supplier_update,  
+				terima_surat_jalan	: terima_surat_jalan_update,  
+				terima_pengirim		: terima_pengirim_update,  
+				terima_tanggal		: terima_tanggal_update_date, 
+				terima_keterangan	: terima_keterangan_update  
 			}, 
 			success: function(response){							
 				var result=eval(response.responseText);
-				switch(result){
-					case 1:
-						master_terima_beli_DataStore.commitChanges();
-						master_terima_beli_DataStore.reload();
-						break;
-					default:
+				if(result!==0){
+						Ext.MessageBox.alert(post2db+' OK','Data Penerimaan Barang berhasil disimpan');
+						master_terima_beli_createWindow.hide();
+				}else{
 						Ext.MessageBox.show({
 						   title: 'Warning',
-						   msg: 'We could\'t not save the master_terima_beli.',
+						   msg: 'Data Penerimaan Barang tidak bisa disimpan.',
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'save',
 						   icon: Ext.MessageBox.WARNING
 						});
-						break;
-				}
+				}      
 			},
 			failure: function(response){
 				var result=response.responseText;
@@ -189,27 +186,27 @@ Ext.onReady(function(){
 			waitMsg: 'Please wait...',
 			url: 'index.php?c=c_master_terima_beli&m=get_action',
 			params: {
-				task: post2db,
-				terima_id	: terima_id_create_pk, 
-				terima_no	: terima_no_create, 
-				terima_order	: terima_order_create, 
-				terima_supplier	: terima_supplier_create, 
+				task				: post2db,
+				terima_id			: terima_id_create_pk, 
+				terima_no			: terima_no_create, 
+				terima_order		: terima_order_create, 
+				terima_supplier		: terima_supplier_create, 
 				terima_surat_jalan	: terima_surat_jalan_create, 
-				terima_pengirim	: terima_pengirim_create, 
-				terima_tanggal	: terima_tanggal_create_date, 
-				terima_keterangan	: terima_keterangan_create, 
+				terima_pengirim		: terima_pengirim_create, 
+				terima_tanggal		: terima_tanggal_create_date, 
+				terima_keterangan	: terima_keterangan_create 
 			}, 
 			success: function(response){             
 				var result=eval(response.responseText);
 				if(result!==0){
 						detail_terima_beli_purge(result);
 						detail_terima_bonus_purge(result);
-						Ext.MessageBox.alert(post2db+' OK','Data Penerimaan Pembelian berhasil disimpan');
+						Ext.MessageBox.alert(post2db+' OK','Data Penerimaan Barang berhasil disimpan');
 						master_terima_beli_createWindow.hide();
 				}else{
 						Ext.MessageBox.show({
 						   title: 'Warning',
-						   msg: 'Data Penerimaan Pembelian tidak bisa disimpan.',
+						   msg: 'Data Penerimaan Barang tidak bisa disimpan.',
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'save',
 						   icon: Ext.MessageBox.WARNING
@@ -267,7 +264,7 @@ Ext.onReady(function(){
 		terima_tanggalField.setValue(today);
 		terima_keteranganField.reset();
 		terima_keteranganField.setValue(null);
-		cbo_satuanDataStore.load();
+		cbo_satuan_produkDataStore.load();
 		cbo_produk_detailDataStore.load();
 		detail_terima_beli_DataStore.load();
 	}
@@ -285,7 +282,10 @@ Ext.onReady(function(){
 		terima_pengirimField.setValue(master_terima_beliListEditorGrid.getSelectionModel().getSelected().get('terima_pengirim'));
 		terima_tanggalField.setValue(master_terima_beliListEditorGrid.getSelectionModel().getSelected().get('terima_tanggal'));
 		terima_keteranganField.setValue(master_terima_beliListEditorGrid.getSelectionModel().getSelected().get('terima_keterangan'));
-		cbo_satuanDataStore.load();
+		
+		cbo_satuan_produkDataStore.setBaseParam('task','detail');
+		cbo_satuan_produkDataStore.setBaseParam('master_id',get_pk_id());
+		cbo_satuan_produkDataStore.load();
 		
 		cbo_produk_detailDataStore.setBaseParam('master_id',get_pk_id());
 		cbo_produk_detailDataStore.setBaseParam('task','detail');
@@ -649,7 +649,7 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 1200,	//900,
+	  	width: 1024,	//900,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: master_terima_beli_DataStore,
@@ -1026,13 +1026,13 @@ Ext.onReady(function(){
 	});
 	
 	
-	cbo_satuanDataStore = new Ext.data.Store({
-		id: 'cbo_satuanDataStore',
+	cbo_satuan_produkDataStore = new Ext.data.Store({
+		id: 'cbo_satuan_produkDataStore',
 		proxy: new Ext.data.HttpProxy({
 			url: 'index.php?c=c_master_terima_beli&m=get_satuan_list', 
 			method: 'POST'
 		}),
-		//baseParams: {master_order_id: terima_order_idField.getValue()},
+		baseParams: {start:0,limit:pageS, task:'detail'},
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
@@ -1045,8 +1045,8 @@ Ext.onReady(function(){
 		sortInfo:{field: 'satuan_nama', direction: "ASC"}
 	});
 	
-	var combo_dtbeli_satuan=new Ext.form.ComboBox({
-			store: cbo_satuanDataStore,
+	var combo_produk_satuan=new Ext.form.ComboBox({
+			store: cbo_satuan_produkDataStore,
 			mode: 'local',
 			typeAhead: true,
 			displayField: 'satuan_nama',
@@ -1060,25 +1060,26 @@ Ext.onReady(function(){
 	detail_terima_beli_ColumnModel = new Ext.grid.ColumnModel(
 		[
 		{
-			header: 'Nama Produk',
+			header: '<div align="center">Nama Produk</div>',
 			dataIndex: 'dterima_produk',
-			width: 150,
+			width: 300,
 			sortable: true,
 			editor: combo_produk_terima,
 			renderer: Ext.util.Format.comboRenderer(combo_produk_terima)
 		},
 		{
-			header: 'Satuan',
+			header: '<div align="center">Satuan</div>',
 			dataIndex: 'dterima_satuan',
 			width: 150,
 			sortable: true,
-			editor: combo_dtbeli_satuan,
-			renderer: Ext.util.Format.comboRenderer(combo_dtbeli_satuan)
+			editor: combo_produk_satuan,
+			renderer: Ext.util.Format.comboRenderer(combo_produk_satuan)
 		},
 		{
-			header: 'Jumlah',
+			header: '<div align="center">Jumlah</div>',
+			align: 'right',
 			dataIndex: 'dterima_jumlah',
-			width: 150,
+			width: 100,
 			sortable: true,
 			renderer: Ext.util.Format.numberRenderer('0,000'),
 			editor: new Ext.form.NumberField({
@@ -1347,7 +1348,7 @@ Ext.onReady(function(){
 	});
 	
 	var combo_bonus_satuan=new Ext.form.ComboBox({
-			store: cbo_satuanDataStore,
+			store: cbo_satuan_produkDataStore,
 			mode: 'local',
 			typeAhead: true,
 			displayField: 'satuan_nama',
@@ -1361,15 +1362,15 @@ Ext.onReady(function(){
 	detail_terima_bonus_ColumnModel = new Ext.grid.ColumnModel(
 		[
 		{
-			header: 'Nama Produk',
+			header: '<div align="center">Nama Produk</div>',
 			dataIndex: 'dtbonus_produk',
-			width: 150,
+			width: 300,
 			sortable: true,
 			editor: combo_bonus_terima,
 			renderer: Ext.util.Format.comboRenderer(combo_bonus_terima)
 		},
 		{
-			header: 'Satuan',
+			header: '<div align="center">Satuan</div>',
 			dataIndex: 'dtbonus_satuan',
 			width: 150,
 			sortable: true,
@@ -1377,10 +1378,11 @@ Ext.onReady(function(){
 			renderer: Ext.util.Format.comboRenderer(combo_bonus_satuan)
 		},
 		{
-			header: 'Jumlah',
+			header: '<div align="center">Jumlah</div>',
 			dataIndex: 'dtbonus_jumlah',
+			align:'right',
 			renderer: Ext.util.Format.numberRenderer('0,000'),
-			width: 150,
+			width: 100,
 			sortable: true,
 			editor: new Ext.form.NumberField({
 				allowDecimals: false,
@@ -1607,7 +1609,7 @@ Ext.onReady(function(){
 	/* Function for retrieve create Window Form */
 	master_terima_beli_createWindow= new Ext.Window({
 		id: 'master_terima_beli_createWindow',
-		title: post2db+' Penerimaan Pembelian',
+		title: post2db+' Penerimaan Barang',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,
@@ -1668,14 +1670,14 @@ Ext.onReady(function(){
 		master_terima_beli_DataStore.baseParams = {
 			task: 'SEARCH',
 			//variable here
-			terima_id	:	terima_id_search, 
-			terima_no	:	terima_no_search, 
-			terima_order	:	terima_order_search, 
+			terima_id			: terima_id_search, 
+			terima_no			: terima_no_search, 
+			terima_order		: terima_order_search, 
 			//terima_supplier	:	terima_supplier_search, 
-			terima_surat_jalan	:	terima_surat_jalan_search, 
-			terima_pengirim	:	terima_pengirim_search, 
-			terima_tanggal	:	terima_tanggal_search_date, 
-			terima_keterangan	:	terima_keterangan_search, 
+			terima_surat_jalan	: terima_surat_jalan_search, 
+			terima_pengirim		: terima_pengirim_search, 
+			terima_tanggal		: terima_tanggal_search_date, 
+			terima_keterangan	: terima_keterangan_search 
 		};
 		// Cause the datastore to do another query : 
 		master_terima_beli_DataStore.reload({params: {start: 0, limit: pageS}});
@@ -1823,7 +1825,7 @@ Ext.onReady(function(){
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
 	master_terima_beli_searchWindow = new Ext.Window({
-		title: 'Pencarian Penerimaan Pembelian',
+		title: 'Pencarian Penerimaan Barang',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,
@@ -1874,17 +1876,17 @@ Ext.onReady(function(){
 		waitMsg: 'Please Wait...',
 		url: 'index.php?c=c_master_terima_beli&m=get_action',
 		params: {
-			task: "PRINT",
-		  	query: searchquery,                    		// if we are doing a quicksearch, use this
+			task				: "PRINT",
+		  	query				: searchquery,                    		// if we are doing a quicksearch, use this
 			//if we are doing advanced search, use this
-			terima_no : terima_no_print,
-			terima_order : terima_order_print,
-			terima_supplier : terima_supplier_print,
-			terima_surat_jalan : terima_surat_jalan_print,
-			terima_pengirim : terima_pengirim_print,
-		  	terima_tanggal : terima_tanggal_print_date, 
-			terima_keterangan : terima_keterangan_print,
-		  	currentlisting: master_terima_beli_DataStore.baseParams.task // this tells us if we are searching or not
+			terima_no 			: terima_no_print,
+			terima_order 		: terima_order_print,
+			terima_supplier 	: terima_supplier_print,
+			terima_surat_jalan 	: terima_surat_jalan_print,
+			terima_pengirim 	: terima_pengirim_print,
+		  	terima_tanggal 		: terima_tanggal_print_date, 
+			terima_keterangan 	: terima_keterangan_print,
+		  	currentlisting		: master_terima_beli_DataStore.baseParams.task // this tells us if we are searching or not
 		}, 
 		success: function(response){              
 		  	var result=eval(response.responseText);
@@ -1943,17 +1945,17 @@ Ext.onReady(function(){
 		waitMsg: 'Please Wait...',
 		url: 'index.php?c=c_master_terima_beli&m=get_action',
 		params: {
-			task: "EXCEL",
-		  	query: searchquery,                    		// if we are doing a quicksearch, use this
+			task				: "EXCEL",
+		  	query				: searchquery,                    		// if we are doing a quicksearch, use this
 			//if we are doing advanced search, use this
-			terima_no : terima_no_2excel,
-			terima_order : terima_order_2excel,
-			terima_supplier : terima_supplier_2excel,
-			terima_surat_jalan : terima_surat_jalan_2excel,
-			terima_pengirim : terima_pengirim_2excel,
-		  	terima_tanggal : terima_tanggal_2excel_date, 
-			terima_keterangan : terima_keterangan_2excel,
-		  	currentlisting: master_terima_beli_DataStore.baseParams.task // this tells us if we are searching or not
+			terima_no 			: terima_no_2excel,
+			terima_order 		: terima_order_2excel,
+			terima_supplier 	: terima_supplier_2excel,
+			terima_surat_jalan 	: terima_surat_jalan_2excel,
+			terima_pengirim 	: terima_pengirim_2excel,
+		  	terima_tanggal 		: terima_tanggal_2excel_date, 
+			terima_keterangan 	: terima_keterangan_2excel,
+		  	currentlisting		: master_terima_beli_DataStore.baseParams.task // this tells us if we are searching or not
 		},
 		success: function(response){              
 		  	var result=eval(response.responseText);
@@ -1996,12 +1998,23 @@ Ext.onReady(function(){
 	detail_terima_beli_DataStore.on("load",detail_terima_beli_total);
 	detail_terima_bonus_DataStore.on("load",detail_terima_bonus_total);
 	
+	combo_bonus_satuan.on("focus",function(){
+		cbo_satuan_produkDataStore.setBaseParam('task','produk');
+		cbo_satuan_produkDataStore.setBaseParam('selected_id',combo_bonus_terima.getValue());
+		cbo_satuan_produkDataStore.load();
+	});
 	
+	combo_produk_satuan.on("focus",function(){
+		cbo_satuan_produkDataStore.setBaseParam('task','produk');
+		cbo_satuan_produkDataStore.setBaseParam('selected_id',combo_produk_terima.getValue());
+		cbo_satuan_produkDataStore.load();
+	});
 	
 	detail_terima_beli_DataStore.on("update",function(){
 		detail_terima_beli_DataStore.commitChanges();
 		detail_terima_beli_total();
 		var	query_selected="";
+		var satuan_selected="";
 		for(i=0;i<detail_terima_beli_DataStore.getCount();i++){
 			detail_terima_beli_record=detail_terima_beli_DataStore.getAt(i);
 			query_selected=query_selected+detail_terima_beli_record.data.dterima_produk+",";
@@ -2009,12 +2022,28 @@ Ext.onReady(function(){
 		cbo_produk_detailDataStore.setBaseParam('task','selected');
 		cbo_produk_detailDataStore.setBaseParam('selected_id',query_selected);
 		cbo_produk_detailDataStore.load();
+		
+		for(i=0;i<detail_terima_beli_DataStore.getCount();i++){
+			detail_terima_beli_record=detail_terima_beli_DataStore.getAt(i);
+			satuan_selected=satuan_selected+detail_terima_beli_record.data.dorder_satuan+",";
+		}
+		
+		for(i=0;i<detail_terima_bonus_DataStore.getCount();i++){
+			detail_terima_beli_record=detail_terima_bonus_DataStore.getAt(i);
+			satuan_selected=satuan_selected+detail_terima_beli_record.data.dorder_satuan+",";
+		}
+		
+		cbo_satuan_produkDataStore.setBaseParam('task','selected');
+		cbo_satuan_produkDataStore.setBaseParam('selected_id',satuan_selected);
+		cbo_satuan_produkDataStore.load();
+		
 	});
 	
 	detail_terima_bonus_DataStore.on("update",function(){
 		detail_terima_bonus_DataStore.commitChanges();
 		detail_terima_beli_total();
 		var	query_selected="";
+		var satuan_selected="";
 		for(i=0;i<detail_terima_bonus_DataStore.getCount();i++){
 			detail_terima_bonus_record=detail_terima_bonus_DataStore.getAt(i);
 			query_selected=query_selected+detail_terima_bonus_record.data.dbonus_produk+",";
@@ -2022,43 +2051,35 @@ Ext.onReady(function(){
 		cbo_produk_bonusDataStore.setBaseParam('task','selected');
 		cbo_produk_bonusDataStore.setBaseParam('selected_id',query_selected);
 		cbo_produk_bonusDataStore.load();
-	});
-	
-	/*combo_produk_terima.on("blur",function(){
-		var	query_selected="";
+		
+		
+		for(i=0;i<detail_terima_bonus_DataStore.getCount();i++){
+			detail_terima_beli_record=detail_terima_bonus_DataStore.getAt(i);
+			satuan_selected=satuan_selected+detail_terima_beli_record.data.dorder_satuan+",";
+		}
+		
 		for(i=0;i<detail_terima_beli_DataStore.getCount();i++){
 			detail_terima_beli_record=detail_terima_beli_DataStore.getAt(i);
-			query_selected=query_selected+detail_terima_beli_record.data.dterima_produk+",";
+			satuan_selected=satuan_selected+detail_terima_beli_record.data.dorder_satuan+",";
 		}
-		cbo_produk_detailDataStore.setBaseParam('task','selected');
-		cbo_produk_detailDataStore.setBaseParam('selected_id',query_selected);
-		cbo_produk_detailDataStore.load();
-	});*/
-	
-	/*combo_bonus_terima.on("blur",function(){
-		var	  query_selected="";
-		for(i=0;i<detail_terima_bonus_DataStore.getCount();i++){
-			detail_terima_bonus_record=detail_terima_bonus_DataStore.getAt(i);
-			query_selected=query_selected+detail_terima_bonus_record.data.dbonus_produk+",";
-		}
-		cbo_produk_bonusDataStore.setBaseParam('task','selected');
-		cbo_produk_bonusDataStore.setBaseParam('selected_id',query_selected);
-		cbo_produk_bonusDataStore.load();
-	});*/
+		
+		cbo_satuan_produkDataStore.setBaseParam('task','selected');
+		cbo_satuan_produkDataStore.setBaseParam('selected_id',satuan_selected);
+		cbo_satuan_produkDataStore.load();
+		
+	});
 	
 	combo_produk_terima.on("focus",function(){
 		var	query_selected="";
 		cbo_produk_detailDataStore.setBaseParam('task','list');
 		var selectedquery=detail_terima_beliListEditorGrid.getSelectionModel().getSelected().get('produk_nama');
 		cbo_produk_detailDataStore.setBaseParam('query',selectedquery);
-		cbo_produk_detailDataStore.load();
 	});
 	
 	combo_bonus_terima.on("focus",function(){
 		cbo_produk_bonusDataStore.setBaseParam('task','list');
 		var selectedquery=detail_terima_bonusListEditorGrid.getSelectionModel().getSelected().get('produk_nama');
 		cbo_produk_detailDataStore.setBaseParam('query',selectedquery);
-		//cbo_produk_bonusDataStore.load();
 	});
 	
 	terima_orderField.on("select",function(){

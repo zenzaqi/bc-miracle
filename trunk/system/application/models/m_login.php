@@ -16,7 +16,7 @@ class M_login extends Model{
 		}else{
 			
 			$this->db->select('*');
-			$this->db->where('user_name',$u);
+			$this->db->where('lower(user_name)',strtolower($u));
 			$this->db->where('user_aktif','Aktif');
 			$this->db->limit(1);
 			$Q = $this->db->get('users');

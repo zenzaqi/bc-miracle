@@ -92,10 +92,10 @@ Ext.onReady(function(){
 			url: 'index.php?c=c_customer_note&m=get_action',
 			params: {
 				task: "UPDATE",
-				note_id	: note_id_update_pk,				
-				note_customer	:note_customer_update,		
+				note_id			: note_id_update_pk,				
+				note_customer	: note_customer_update,		
 				note_tanggal	: note_tanggal_update_date,				
-				note_detail	:note_detail_update		
+				note_detail		: note_detail_update		
 			}, 
 			success: function(response){							
 				var result=eval(response.responseText);
@@ -148,17 +148,17 @@ Ext.onReady(function(){
 				waitMsg: 'Please wait...',
 				url: 'index.php?c=c_customer_note&m=get_action',
 				params: {
-					task: post2db,
-					note_id	: note_id_create_pk,	
+					task			: post2db,
+					note_id			: note_id_create_pk,	
 					note_customer	: note_customer_create,	
 					note_tanggal	: note_tanggal_create_date,					
-					note_detail	: note_detail_create
+					note_detail		: note_detail_create
 				}, 
-				success: function(response){             
+				success: function(response){   
 					var result=eval(response.responseText);
 					switch(result){
 						case 1:
-							Ext.MessageBox.alert(post2db+' OK','The Customer_note was '+msg+' successfully.');
+							Ext.MessageBox.alert(post2db+' OK','Penyimpanan Data Catatan Customer sukses');
 							customer_note_DataStore.reload();
 							cbo_note_customer_DataSore.reload();
 							customer_note_createWindow.hide();
@@ -208,14 +208,13 @@ Ext.onReady(function(){
 	
 	/* Reset form before loading */
 	function customer_note_reset_form(){
-		note_customerField.reset();
+		//note_customerField.reset();
 		note_tanggalField.reset();
 		note_detailField.reset();
-		note_customerField.setValue(null);
 		//note_tanggalField.setValue("");
 		note_detailField.setValue(null);
-		note_customerField.readOnly=false;
-		note_customerField.hideTrigger=false;
+		note_customerField.reset();
+		note_customerField.setValue(null);
 	}
  	/* End of Function */
   
@@ -224,8 +223,6 @@ Ext.onReady(function(){
 		note_customerField.setValue(customer_noteListEditorGrid.getSelectionModel().getSelected().get('note_customer'));
 		note_tanggalField.setValue(customer_noteListEditorGrid.getSelectionModel().getSelected().get('note_tanggal'));
 		note_detailField.setValue(customer_noteListEditorGrid.getSelectionModel().getSelected().get('note_detail'));
-		note_customerField.readOnly=true;
-		note_customerField.hideTrigger=true;
 	}
 	/* End setValue to EDIT*/
   
@@ -237,11 +234,11 @@ Ext.onReady(function(){
   
   	/* Function for Displaying  create Window Form */
 	function display_form_window(){
-		cbo_note_customer_DataSore.reload();
+		
 		if(!customer_note_createWindow.isVisible()){
-			customer_note_reset_form();
 			post2db='CREATE';
 			msg='created';
+			customer_note_reset_form();
 			customer_note_createWindow.show();
 		} else {
 			customer_note_createWindow.toFront();
@@ -272,9 +269,9 @@ Ext.onReady(function(){
 	function customer_note_confirm_update(){
 		/* only one record is selected here */
 		if(customer_noteListEditorGrid.selModel.getCount() == 1) {
-			customer_note_set_form();
 			post2db='UPDATE';
 			msg='updated';
+			customer_note_set_form();
 			customer_note_createWindow.show();
 		} else {
 			Ext.MessageBox.show({
@@ -350,7 +347,7 @@ Ext.onReady(function(){
 		/* dataIndex => insert intocustomer_note_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'note_id', type: 'int', mapping: 'note_id'},
 			{name: 'note_customer', type: 'string', mapping: 'cust_nama'},
-			{name: 'note_tanggal', type: 'date', dateFormat: 'Y-m-d', mapping: 'note_tanggal'},
+			{name: 'note_tanggal', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'note_tanggal'},
 			{name: 'note_detail', type: 'string', mapping: 'note_detail'},
 			{name: 'note_creator', type: 'string', mapping: 'note_creator'},
 			{name: 'note_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'note_date_create'},
@@ -370,20 +367,21 @@ Ext.onReady(function(){
 			url: 'index.php?c=c_customer_note&m=get_customer_list', 
 			method: 'POST'
 		}),
-		baseParams:{task: "LIST"}, // parameter yang di $_POST ke Controller
+		baseParams:{task: "LIST",start:0, limit:pageS}, // parameter yang di $_POST ke Controller
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
 			id: 'cust_id'
 		},[
 		/* dataIndex => insert intocustomer_note_ColumnModel, Mapping => for initiate table column */ 
-			{name: 'note_customer_value', type: 'int', mapping: 'cust_id'},
-			{name: 'note_customer_display', type: 'string', mapping: 'cust_nama'},
-			{name: 'note_customer_tgllahir', type: 'date', dateFormat: 'Y-m-d', mapping: 'cust_tgllahir'},
-			{name: 'note_customer_alamat', type: 'string', mapping: 'cust_alamat'},
-			{name: 'note_customer_telprumah', type: 'string', mapping: 'cust_telprumah'}
+			{name: 'cust_id', type: 'int', mapping: 'cust_id'},
+			{name: 'cust_nama', type: 'string', mapping: 'cust_nama'},
+			{name: 'cust_no', type: 'string', mapping: 'cust_no'},
+			{name: 'cust_tgllahir', type: 'date', dateFormat: 'Y-m-d', mapping: 'cust_tgllahir'},
+			{name: 'cust_alamat', type: 'string', mapping: 'cust_alamat'},
+			{name: 'cust_notelprumah', type: 'string', mapping: 'cust_telprumah'}
 		]),
-		sortInfo:{field: 'note_customer_display', direction: "ASC"}
+		sortInfo:{field: 'cust_no', direction: "ASC"}
 	});
 	/* End of Function */
 	
@@ -412,7 +410,7 @@ Ext.onReady(function(){
 			dataIndex: 'note_tanggal',
 			width: 100,
 			sortable: true,
-			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
+			renderer: Ext.util.Format.dateRenderer('Y-m-d H:i:s'),
 			readOnly: true
 		},
 		{
@@ -588,15 +586,15 @@ Ext.onReady(function(){
   	
 	customer_noteListEditorGrid.addListener('rowcontextmenu', oncustomer_note_ListEditGridContextMenu);
 	customer_note_DataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
-	cbo_note_customer_DataSore.load();
 	customer_noteListEditorGrid.on('afteredit', customer_note_update); // inLine Editing Record
 	
 	
 	// Custom rendering Template
     var note_customerTpl = new Ext.XTemplate(
         '<tpl for="."><div class="search-item">',
-            '<span><b>{note_customer_display}</b> | Tgl-Lahir:{note_customer_tgllahir:date("M j, Y")}<br /></span>',
-            'Alamat: {note_customer_alamat}&nbsp;&nbsp;&nbsp;[Telp. {note_customer_telprumah}]',
+            '<span><b>{cust_no}</b> | {cust_nama}<br/>',
+			'Tgl-Lahir:{cust_tgllahir:date("M j, Y")}<br />',
+            'Alamat: {cust_alamat}&nbsp;&nbsp;&nbsp;[Telp. {cust_notelprumah}]</span>',
         '</div></tpl>'
     );
 	
@@ -606,8 +604,8 @@ Ext.onReady(function(){
 		fieldLabel: 'Customer',
 		store: cbo_note_customer_DataSore,
 		mode: 'remote',
-		displayField:'note_customer_display',
-		valueField: 'note_customer_value',
+		displayField:'cust_nama',
+		valueField: 'cust_id',
         typeAhead: false,
         loadingText: 'Searching...',
         pageSize:10,
@@ -623,28 +621,29 @@ Ext.onReady(function(){
 	/* Identify  note_tanggal Field */
 	note_tanggalField= new Ext.form.DateField({
 		id: 'note_tanggalField',
-		fieldLabel: 'Tanggal',
-		format : 'Y-m-d',
-		emptyText: dt.format('Y-m-d'),
-		blankText: dt.format('Y-m-d'),
+		fieldLabel: 'Tanggal dan Jam',
+		format : 'Y-m-d H:i:s',
+		emptyText: dt.format('Y-m-d H:i:s'),
+		blankText: dt.format('Y-m-d H:i:s'),
 		allowBlank: true,
 		readOnly: true,
-		hideTrigger: true
+		hideTrigger: true,
+		width: 150
 	});
 	/* Identify  note_detail Field */
 	note_detailField= new Ext.form.TextArea({
 		id: 'note_detailField',
-		fieldLabel: 'Note Detail',
+		fieldLabel: 'Detail Catatan',
 		maxLength: 250,
 		anchor: '95%'
 	});
 	
 	/* Function for retrieve create Window Panel*/ 
 	customer_note_createForm = new Ext.FormPanel({
-		labelAlign: 'top',
+		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
-		width: 300,        
+		width: 400,        
 		items: [{
 			layout:'column',
 			border:false,
@@ -675,7 +674,7 @@ Ext.onReady(function(){
 	/* Function for retrieve create Window Form */
 	customer_note_createWindow= new Ext.Window({
 		id: 'customer_note_createWindow',
-		title: post2db+'Customer_note',
+		title: post2db+' Catatan Customer',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,
@@ -751,21 +750,28 @@ Ext.onReady(function(){
 	note_customerSearchField= new Ext.form.ComboBox({
 		id: 'note_customerSearchField',
 		fieldLabel: 'Customer',
-		typeAhead: true,
-		triggerAction: 'all',
 		store: cbo_note_customer_DataSore,
-		mode: 'local',
-		displayField: 'note_customer_display',
-		valueField: 'note_customer_value',
+		mode: 'remote',
+		displayField:'cust_nama',
+		valueField: 'cust_id',
+        typeAhead: false,
+        loadingText: 'Searching...',
+        pageSize:10,
+        hideTrigger:true,
+        tpl: note_customerTpl,
+        //applyTo: 'search',
+        itemSelector: 'div.search-item',
+		triggerAction: 'all',
 		lazyRender:true,
-		listClass: 'x-combo-list-small'
+		listClass: 'x-combo-list-small',
+		anchor: '95%'
 	
 	});
 	/* Identify  note_tanggal Search Field */
 	note_tanggalSearchField= new Ext.form.DateField({
 		id: 'note_tanggalSearchField',
 		fieldLabel: 'Tanggal',
-		format : 'Y-m-d',
+		format : 'Y-m-d'
 	
 	});
 	/* Identify  note_detail Search Field */
@@ -780,10 +786,10 @@ Ext.onReady(function(){
     
 	/* Function for retrieve search Form Panel */
 	customer_note_searchForm = new Ext.FormPanel({
-		labelAlign: 'top',
+		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
-		width: 300,        
+		width: 400,        
 		items: [{
 			layout:'column',
 			border:false,
@@ -812,7 +818,7 @@ Ext.onReady(function(){
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
 	customer_note_searchWindow = new Ext.Window({
-		title: 'customer_note Search',
+		title: 'Pencarian Catatan Customer',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,

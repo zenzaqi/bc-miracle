@@ -25,7 +25,7 @@ class M_users extends Model{
 			// For simple search
 			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (user_id LIKE '%".addslashes($filter)."%' OR user_name LIKE '%".addslashes($filter)."%' OR user_passwd LIKE '%".addslashes($filter)."%' OR user_karyawan LIKE '%".addslashes($filter)."%' OR user_log LIKE '%".addslashes($filter)."%' OR user_groups LIKE '%".addslashes($filter)."%' OR user_aktif LIKE '%".addslashes($filter)."%' )";
+				$query .= " (user_id LIKE '%".addslashes($filter)."%' OR user_name LIKE '%".addslashes($filter)."%' OR user_karyawan LIKE '%".addslashes($filter)."%' OR user_log LIKE '%".addslashes($filter)."%' OR user_groups LIKE '%".addslashes($filter)."%' OR user_aktif LIKE '%".addslashes($filter)."%' )";
 			}
 			
 			$result = $this->db->query($query);
@@ -45,21 +45,25 @@ class M_users extends Model{
 		}
 		
 		//function for update record
-		//function users_update($user_id ,$user_name ,$user_passwd ,$user_karyawan ,$user_log ,$user_groups ,$user_aktif ){
-		function users_update($user_id, $user_name, $user_karyawan, $user_log, $user_groups, $user_aktif ){
-		if ($user_aktif=="")
-			$user_aktif = "Aktif";
+		function users_update($user_id ,$user_name ,$user_passwd ,$user_karyawan,$user_groups ,$user_aktif ){
+		//function users_update($user_id, $user_name, $user_karyawan, $user_log, $user_groups, $user_aktif ){
+			if ($user_aktif=="")
+				$user_aktif = "Aktif";
+			
 			$data = array(
 				"user_id"=>$user_id,			
 				"user_name"=>$user_name,			
 				//"user_passwd"=>md5($user_passwd),			
 				"user_aktif"=>$user_aktif			
 			);
+			
 			$sql="SELECT karyawan_id FROM karyawan WHERE karyawan_id='".$user_karyawan."'";
 			$rs=$this->db->query($sql);
 			if($rs->num_rows())
 				$data["user_karyawan"]=$user_karyawan;
-			
+			if($user_passwd!=="")
+				$data["user_passwd"]=md5($user_passwd);
+				
 			$sql="SELECT group_id FROM usergroups WHERE group_id='".$user_groups."'";
 			$rs=$this->db->query($sql);
 			if($rs->num_rows())
@@ -67,11 +71,8 @@ class M_users extends Model{
 			
 			$this->db->where('user_id', $user_id);
 			$this->db->update('users', $data);
-			
-			if($this->db->affected_rows())
-				return '1';
-			else
-				return '0';
+			return '1';
+			//return $this->db->last_query();
 		}
 		
 		//function for create new record
@@ -120,9 +121,9 @@ class M_users extends Model{
 		}
 		
 		//function for advanced search record
-		function users_search($user_id ,$user_name ,$user_passwd ,$user_karyawan ,$user_log ,$user_groups ,$user_aktif ,$start,$end){
+		function users_search($user_id ,$user_name,$user_karyawan ,$user_log ,$user_groups ,$user_aktif ,$start,$end){
 			//full query
-			$query="select * from users";
+			$query="SELECT * FROM users,karyawan,usergroups WHERE user_karyawan=karyawan_id AND user_groups=group_id";
 			
 			if($user_id!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -132,13 +133,9 @@ class M_users extends Model{
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " user_name LIKE '%".$user_name."%'";
 			};
-			if($user_passwd!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " user_passwd LIKE '%".$user_passwd."%'";
-			};
 			if($user_karyawan!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " user_karyawan LIKE '%".$user_karyawan."%'";
+				$query.= " user_karyawan = '".$user_karyawan."'";
 			};
 			if($user_log!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -146,7 +143,7 @@ class M_users extends Model{
 			};
 			if($user_groups!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " user_groups LIKE '%".$user_groups."%'";
+				$query.= " user_groups ='".$user_groups."'";
 			};
 			if($user_aktif!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -170,9 +167,9 @@ class M_users extends Model{
 		}
 		
 		//function for print record
-		function users_print($user_id ,$user_name ,$user_passwd ,$user_karyawan ,$user_log ,$user_groups ,$user_aktif ,$option,$filter){
+		function users_print($user_id ,$user_name  ,$user_karyawan ,$user_log ,$user_groups ,$user_aktif ,$option,$filter){
 			//full query
-			$query="select * from users";
+			$query="SELECT * FROM users,karyawan,usergroups WHERE user_karyawan=karyawan_id AND user_groups=group_id";
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 				$query .= " (user_id LIKE '%".addslashes($filter)."%' OR user_name LIKE '%".addslashes($filter)."%' OR user_passwd LIKE '%".addslashes($filter)."%' OR user_karyawan LIKE '%".addslashes($filter)."%' OR user_log LIKE '%".addslashes($filter)."%' OR user_groups LIKE '%".addslashes($filter)."%' OR user_aktif LIKE '%".addslashes($filter)."%' )";
@@ -186,13 +183,9 @@ class M_users extends Model{
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " user_name LIKE '%".$user_name."%'";
 				};
-				if($user_passwd!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " user_passwd LIKE '%".$user_passwd."%'";
-				};
 				if($user_karyawan!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " user_karyawan LIKE '%".$user_karyawan."%'";
+					$query.= " user_karyawan = '".$user_karyawan."'";
 				};
 				if($user_log!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -200,7 +193,7 @@ class M_users extends Model{
 				};
 				if($user_groups!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " user_groups LIKE '%".$user_groups."%'";
+					$query.= " user_groups = '".$user_groups."'";
 				};
 				if($user_aktif!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -212,9 +205,9 @@ class M_users extends Model{
 		}
 		
 		//function  for export to excel
-		function users_export_excel($user_id ,$user_name ,$user_passwd ,$user_karyawan ,$user_log ,$user_groups ,$user_aktif ,$option,$filter){
+		function users_export_excel($user_id ,$user_name ,$user_karyawan ,$user_log ,$user_groups ,$user_aktif ,$option,$filter){
 			//full query
-			$query="select * from users";
+			$query="SELECT * FROM users,karyawan,usergroups WHERE user_karyawan=karyawan_id AND user_groups=group_id";
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 				$query .= " (user_id LIKE '%".addslashes($filter)."%' OR user_name LIKE '%".addslashes($filter)."%' OR user_passwd LIKE '%".addslashes($filter)."%' OR user_karyawan LIKE '%".addslashes($filter)."%' OR user_log LIKE '%".addslashes($filter)."%' OR user_groups LIKE '%".addslashes($filter)."%' OR user_aktif LIKE '%".addslashes($filter)."%' )";
@@ -228,13 +221,9 @@ class M_users extends Model{
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " user_name LIKE '%".$user_name."%'";
 				};
-				if($user_passwd!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " user_passwd LIKE '%".$user_passwd."%'";
-				};
 				if($user_karyawan!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " user_karyawan LIKE '%".$user_karyawan."%'";
+					$query.= " user_karyawan = '".$user_karyawan."'";
 				};
 				if($user_log!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -242,7 +231,7 @@ class M_users extends Model{
 				};
 				if($user_groups!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " user_groups LIKE '%".$user_groups."%'";
+					$query.= " user_groups = '".$user_groups."'";
 				};
 				if($user_aktif!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";

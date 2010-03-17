@@ -66,6 +66,7 @@ var editor_detail_retur_beli;
 var post2db = '';
 var msg = '';
 var pageS=15;
+var today=new Date().format('Y-m-d');
 
 /* declare variable here for Field*/
 var rbeli_idField;
@@ -122,7 +123,8 @@ Ext.onReady(function(){
 					default:
 						Ext.MessageBox.show({
 						   title: 'Warning',
-						   msg: 'We could\'t not save the master_retur_beli.',
+						   //msg: 'We could\'t not save the master_retur_beli.',
+						   msg: 'Data Retur Pembelian tidak bisa disimpan !',
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'save',
 						   icon: Ext.MessageBox.WARNING
@@ -134,7 +136,8 @@ Ext.onReady(function(){
 				var result=response.responseText;
 				Ext.MessageBox.show({
 				   title: 'Error',
-				   msg: 'Could not connect to the database. retry later.',
+				   //msg: 'Could not connect to the database. retry later.',
+				   msg: 'Koneksi ke database gagal, cobalah di lain waktu',
 				   buttons: Ext.MessageBox.OK,
 				   animEl: 'database',
 				   icon: Ext.MessageBox.ERROR
@@ -176,30 +179,28 @@ Ext.onReady(function(){
 			}, 
 			success: function(response){             
 				var result=eval(response.responseText);
-				switch(result){
-					case 1:
+				if(result!==0){
 						detail_retur_beli_purge()
-						detail_retur_beli_insert();
-						Ext.MessageBox.alert(post2db+' OK','The Master_retur_beli was '+msg+' successfully.');
+						Ext.MessageBox.alert(post2db+' OK','Data Retur Pembelian berhasil disimpan.');
 						master_retur_beli_DataStore.reload();
 						master_retur_beli_createWindow.hide();
-						break;
-					default:
+				}else{
 						Ext.MessageBox.show({
 						   title: 'Warning',
-						   msg: 'We could\'t not '+msg+' the Master_retur_beli.',
+						   //msg: 'We could\'t not '+msg+' the Master_retur_beli.',
+						   msg: 'Data Retur Pembelian tidak bisa disimpan !',
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'save',
 						   icon: Ext.MessageBox.WARNING
 						});
-						break;
 				}        
 			},
 			failure: function(response){
 				var result=response.responseText;
 				Ext.MessageBox.show({
 					   title: 'Error',
-					   msg: 'Could not connect to the database. retry later.',
+					   //msg: 'Could not connect to the database. retry later.',
+					   msg: 'Koneksi ke database gagal, cobalah di lain waktu',
 					   buttons: Ext.MessageBox.OK,
 					   animEl: 'database',
 					   icon: Ext.MessageBox.ERROR
@@ -209,7 +210,8 @@ Ext.onReady(function(){
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'Your Form is not valid!.',
+				//msg: 'Your Form is not valid!.',
+				msg: 'Isian tidak valid!.',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -237,11 +239,13 @@ Ext.onReady(function(){
 		rbeli_terimaField.setValue(null);
 		rbeli_supplierField.reset();
 		rbeli_supplierField.setValue(null);
-		rbeli_tanggalField.reset();
-		rbeli_tanggalField.setValue(null);
+		//rbeli_tanggalField.reset();
+		rbeli_tanggalField.setValue(today);
 		rbeli_keteranganField.reset();
 		rbeli_keteranganField.setValue(null);
-		detail_retur_beli_DataStore.load({params : {master_id : eval(get_pk_id()), start:0, limit:pageS}});
+		cbo_satuan_DataStore.load();
+		cbo_produk_DataStore.load();
+		detail_retur_beli_DataStore.load();
 	}
  	/* End of Function */
   
@@ -255,23 +259,33 @@ Ext.onReady(function(){
 		rbeli_supplier_idField.setValue(master_retur_beliListEditorGrid.getSelectionModel().getSelected().get('rbeli_supplier_id'));
 		rbeli_tanggalField.setValue(master_retur_beliListEditorGrid.getSelectionModel().getSelected().get('rbeli_tanggal'));
 		rbeli_keteranganField.setValue(master_retur_beliListEditorGrid.getSelectionModel().getSelected().get('rbeli_keterangan'));
-		cbo_drbeli_bytbeliDataStore.load({params: {master_terima_id: rbeli_terima_idField.getValue()}});
-		detail_retur_beli_DataStore.load({params : {master_id : eval(get_pk_id()), start:0, limit:pageS}});
+		
+		cbo_produk_DataStore.setBaseParam('master_id',get_pk_id());
+		cbo_produk_DataStore.setBaseParam('task','detail');
+		cbo_produk_DataStore.load({
+			callback: function(r,opt,success){
+				if(success==true){
+					detail_retur_beli_DataStore.setBaseParam('master_id',get_pk_id());
+					detail_retur_beli_DataStore.load();
+				}
+			}
+		});
+		
 	}
 	/* End setValue to EDIT*/
   
 	/* Function for Check if the form is valid */
 	function is_master_retur_beli_form_valid(){
-		return (true &&  true &&  true &&  true &&  true &&  true &&  true &&  true &&  true &&  true  );
+		return (rbeli_terimaField.isValid());
 	}
   	/* End of Function */
   
   	/* Function for Displaying  create Window Form */
 	function display_form_window(){
 		if(!master_retur_beli_createWindow.isVisible()){
-			master_retur_beli_reset_form();
 			post2db='CREATE';
 			msg='created';
+			master_retur_beli_reset_form();
 			master_retur_beli_createWindow.show();
 		} else {
 			master_retur_beli_createWindow.toFront();
@@ -283,13 +297,14 @@ Ext.onReady(function(){
 	function master_retur_beli_confirm_delete(){
 		// only one master_retur_beli is selected here
 		if(master_retur_beliListEditorGrid.selModel.getCount() == 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', master_retur_beli_delete);
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', master_retur_beli_delete);
 		} else if(master_retur_beliListEditorGrid.selModel.getCount() > 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', master_retur_beli_delete);
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data-data ini?', master_retur_beli_delete);
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really delete something you haven\'t selected?',
+				//msg: 'You can\'t really delete something you haven\'t selected?',
+				msg: 'Anda belum memilih data yang akan dihapus',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -302,15 +317,15 @@ Ext.onReady(function(){
 	function master_retur_beli_confirm_update(){
 		/* only one record is selected here */
 		if(master_retur_beliListEditorGrid.selModel.getCount() == 1) {
-			master_retur_beli_set_form();
 			post2db='UPDATE';
-			detail_retur_beli_DataStore.load({params : {master_id : eval(get_pk_id()), start:0, limit:pageS}});
 			msg='updated';
+			master_retur_beli_set_form();
 			master_retur_beli_createWindow.show();
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really update something you haven\'t selected?',
+				//msg: 'You can\'t really update something you haven\'t selected?',
+				msg: 'Anda belum memilih data yang akan diubah',	
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -341,7 +356,8 @@ Ext.onReady(function(){
 						default:
 							Ext.MessageBox.show({
 								title: 'Warning',
-								msg: 'Could not delete the entire selection',
+								//msg: 'Could not delete the entire selection',
+								msg: 'Anda belum memilih data yang akan dihapus',
 								buttons: Ext.MessageBox.OK,
 								animEl: 'save',
 								icon: Ext.MessageBox.WARNING
@@ -401,31 +417,33 @@ Ext.onReady(function(){
 	cbo_rbeli_terimabeli_DataSore = new Ext.data.Store({
 		id: 'cbo_rbeli_terimabeli_DataSore',
 		proxy: new Ext.data.HttpProxy({
-			url: 'index.php?c=c_master_retur_beli&m=get_terima_beli_list', 
+			url: 'index.php?c=c_master_retur_beli&m=get_invoice_list', 
 			method: 'POST'
 		}),
-		baseParams:{task: "LIST"}, // parameter yang di $_POST ke Controller
+		baseParams:{task: "LIST", start:0, limit:pageS}, // parameter yang di $_POST ke Controller
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
 			id: 'terima_id'
 		},[
 		/* dataIndex => insert intocustomer_note_ColumnModel, Mapping => for initiate table column */ 
-			{name: 'rbeli_terimabeli_value', type: 'int', mapping: 'terima_id'},
-			{name: 'rbeli_terimabeli_nama', type: 'string', mapping: 'terima_no'},
-			{name: 'rbeli_terimabeli_tgl', type: 'date', dateFormat: 'Y-m-d', mapping: 'terima_tanggal'},
-			{name: 'rbeli_terimabeli_supplier', type: 'string', mapping: 'supplier_nama'},
-			{name: 'rbeli_terimabeli_supplier_id', type: 'int', mapping: 'supplier_id'},
-			{name: 'rbeli_terimabeli_order_id', type: 'int', mapping: 'terima_order'}
+			{name: 'invoice_id', type: 'int', mapping: 'invoice_id'},
+			{name: 'invoice_nobukti', type: 'string', mapping: 'no_bukti'},
+			{name: 'invoice_tanggal', type: 'date', dateFormat: 'Y-m-d', mapping: 'tanggal'},
+			{name: 'invoice_supplier_nama', type: 'string', mapping: 'supplier_nama'},
+			{name: 'invoice_supplier_id', type: 'int', mapping: 'supplier_id'},
+			{name: 'invoice_noterima', type: 'string', mapping: 'terima_no'},
+			{name: 'invoice_norder', type: 'string', mapping: 'order_no'}
 		]),
-		sortInfo:{field: 'rbeli_terimabeli_nama', direction: "ASC"}
+		sortInfo:{field: 'invoice_nobukti', direction: "ASC"}
 	});
 	
 	var rbeli_terimabeli_tpl = new Ext.XTemplate(
         '<tpl for="."><div class="search-item">',
-            '<span><b>{rbeli_terimabeli_nama}</b><br /></span>',
-            'Tgl-Order: {rbeli_terimabeli_tgl:date("M j, Y")}<br>',
-			'Supplier: {rbeli_terimabeli_supplier}',
+            '<span><b>{invoice_nobukti}</b><br /></span>',
+            'Tgl-Invoice: {invoice_tanggal:date("M j, Y")}<br>',
+			'Supplier: {invoice_supplier_nama}<br/>',
+			'No. Terima: {invoice_noterima}, No. Order: {invoice_norder}',
         '</div></tpl>'
     );
 	
@@ -443,7 +461,7 @@ Ext.onReady(function(){
 			hidden: false
 		},
 		{
-			header: 'No.Retur ',
+			header: 'No. Retur ',
 			dataIndex: 'rbeli_nobukti',
 			width: 150,
 			sortable: true,
@@ -452,23 +470,11 @@ Ext.onReady(function(){
           	})
 		},
 		{
-			header: 'No.Faktur',
+			header: 'No. Invoice',
 			dataIndex: 'rbeli_terima',
 			width: 150,
 			sortable: true,
-			editor: new Ext.form.ComboBox({
-				store: cbo_rbeli_terimabeli_DataSore,
-				displayField:'rbeli_terimabeli_nama',
-				mode : 'remote',
-				valueField: 'rbeli_terimabeli_value',
-				typeAhead: false,
-				hideTrigger:false,
-				tpl: rbeli_terimabeli_tpl,
-				itemSelector: 'div.search-item',
-				triggerAction: 'all',
-				lazyRender:true,
-				listClass: 'x-combo-list-small'
-			})
+			readOnly: true
 		}, 
 		{
 			header: 'Supplier',
@@ -560,7 +566,7 @@ Ext.onReady(function(){
 	master_retur_beliListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'master_retur_beliListEditorGrid',
 		el: 'fp_master_retur_beli',
-		title: 'List Of Retur Beli',
+		title: 'Daftar Retur Pembelian',
 		autoHeight: true,
 		store: master_retur_beli_DataStore, // DataStore
 		cm: master_retur_beli_ColumnModel, // Nama-nama Columns
@@ -672,10 +678,7 @@ Ext.onReady(function(){
   	}
 	/* End of Function */
   	
-	master_retur_beliListEditorGrid.addListener('rowcontextmenu', onmaster_retur_beli_ListEditGridContextMenu);
-	master_retur_beli_DataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
-	master_retur_beliListEditorGrid.on('afteredit', master_retur_beli_update); // inLine Editing Record
-	
+		
 	/* Identify  rbeli_id Field */
 	rbeli_idField= new Ext.form.NumberField({
 		id: 'rbeli_idField',
@@ -683,7 +686,7 @@ Ext.onReady(function(){
 		blankText: '0',
 		allowBlank: false,
 		allowDecimals: false,
-				hidden: true,
+		hidden: true,
 		readOnly: true,
 		anchor: '95%',
 		maskRe: /([0-9]+)$/
@@ -700,11 +703,11 @@ Ext.onReady(function(){
 	/* Identify  rbeli_terima Field */
 	rbeli_terimaField= new Ext.form.ComboBox({
 		id: 'rbeli_terimaField',
-		fieldLabel: 'No.Faktur',
+		fieldLabel: 'No. Invoice',
 		store: cbo_rbeli_terimabeli_DataSore,
-		displayField:'rbeli_terimabeli_nama',
+		displayField:'invoice_nobukti',
 		mode : 'remote',
-		valueField: 'rbeli_terimabeli_value',
+		valueField: 'invoice_id',
         typeAhead: false,
         hideTrigger:false,
 		tpl: rbeli_terimabeli_tpl,
@@ -722,6 +725,7 @@ Ext.onReady(function(){
 		maxLength: 30,
 		anchor: '95%'
 	});
+	
 	rbeli_supplier_idField= new Ext.form.NumberField({
 		id: 'rbeli_supplier_idField',
 		allowNegatife : false,
@@ -736,7 +740,7 @@ Ext.onReady(function(){
 	rbeli_tanggalField= new Ext.form.DateField({
 		id: 'rbeli_tanggalField',
 		fieldLabel: 'Tanggal',
-		format : 'Y-m-d',
+		format : 'Y-m-d'
 	});
 	/* Identify  rbeli_keterangan Field */
 	rbeli_keteranganField= new Ext.form.TextArea({
@@ -766,19 +770,11 @@ Ext.onReady(function(){
 		anchor: '95%',
 		maskRe: /([0-9]+)$/
 	});
+	
 	rbeli_terima_orderField= new Ext.form.NumberField();
 	rbeli_dproduk_idField= new Ext.form.NumberField();
 	
-	rbeli_terimaField.on('select', function(){
-		var j=cbo_rbeli_terimabeli_DataSore.find('rbeli_terimabeli_value',rbeli_terimaField.getValue());
-		cbo_drbeli_bytbeliDataStore.load({params: {master_terima_id: rbeli_terimaField.getValue()}});
-		if(cbo_rbeli_terimabeli_DataSore.getCount()){
-			rbeli_supplierField.setValue(cbo_rbeli_terimabeli_DataSore.getAt(j).data.rbeli_terimabeli_supplier);
-			rbeli_supplier_idField.setValue(cbo_rbeli_terimabeli_DataSore.getAt(j).data.rbeli_terimabeli_supplier_id);
-			rbeli_terima_orderField.setValue(cbo_rbeli_terimabeli_DataSore.getAt(j).data.rbeli_terimabeli_order_id);
-			rbeli_terima_idField.setValue(cbo_rbeli_terimabeli_DataSore.getAt(j).data.rbeli_terimabeli_value);
-		}
-	});
+	
 	
   	/*Fieldset Master*/
 	master_retur_beli_masterGroup = new Ext.form.FieldSet({
@@ -844,7 +840,8 @@ Ext.onReady(function(){
 			{name: 'drbeli_produk', type: 'int', mapping: 'drbeli_produk'}, 
 			{name: 'drbeli_satuan', type: 'int', mapping: 'drbeli_satuan'}, 
 			{name: 'drbeli_jumlah', type: 'int', mapping: 'drbeli_jumlah'}, 
-			{name: 'drbeli_harga', type: 'float', mapping: 'drbeli_harga'} 
+			{name: 'drbeli_harga', type: 'float', mapping: 'drbeli_harga'},
+			{name: 'drbeli_diskon', type: 'int', mapping: 'drbeli_diskon'} 
 	]);
 	//eof
 	
@@ -863,7 +860,7 @@ Ext.onReady(function(){
 			method: 'POST'
 		}),
 		reader: detail_retur_beli_reader,
-		baseParams:{master_id: rbeli_idField.getValue()},
+		baseParams:{start:0, limit: pageS, master_id: 0},
 		sortInfo:{field: 'drbeli_id', direction: "ASC"}
 	});
 	/* End of Function */
@@ -874,49 +871,51 @@ Ext.onReady(function(){
 		listeners: {
 			afteredit: function(){
 				detail_retur_beli_DataStore.commitChanges();
-				cbo_satuan_byprodukDataStore.load({params: {dterima_master: "", dterima_produk: ""}});
+				cbo_satuan_DataStore.load({params: {dterima_master: "", dterima_produk: ""}});
 			}
 		}
     });
 	//eof
 	
 	Ext.util.Format.comboRenderer = function(combo){
-//		cbo_drbeli_produkDataStore.load();
-//		cbo_drbeli_satuanDataStore.load();
 		return function(value){
 			var record = combo.findRecord(combo.valueField, value);
 			return record ? record.get(combo.displayField) : combo.valueNotFoundText;
 		}
 	}
 	
-	/*=== cbo_drbeli_bytbeliDataStore ==> untuk mengambil data produk yang diterima pada Modul Penerimaan Pembelian dgn params: rbeli_terima_idField. Parameter rbeli_terima_idField didapatkan dari ComboBox No.Faktur ===*/
-	cbo_drbeli_bytbeliDataStore = new Ext.data.Store({
-		id: 'cbo_drbeli_bytbeliDataStore',
+	/*=== cbo_produk_DataStore ==> untuk mengambil data produk yang diterima pada Modul Penerimaan Pembelian dgn params: rbeli_terima_idField. Parameter rbeli_terima_idField didapatkan dari ComboBox No.Faktur ===*/
+	cbo_produk_DataStore = new Ext.data.Store({
+		id: 'cbo_produk_DataStore',
 		proxy: new Ext.data.HttpProxy({
-			url: 'index.php?c=c_master_retur_beli&m=get_drbeli_by_terimabeli', 
+			url: 'index.php?c=c_master_retur_beli&m=get_produk_list', 
 			method: 'POST'
 		}),
-		baseParams: {master_terima_id: rbeli_terima_idField.getValue()},
+		baseParams: {start: 0, limit: pageS, task:'detail', master_id: 0},
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
 			id: 'produk_id'
 		},[
 		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
-			{name: 'drbeli_produk_value', type: 'int', mapping: 'produk_id'},
-			{name: 'drbeli_produk_display', type: 'string', mapping: 'produk_nama'},
-			{name: 'drbeli_satuan_value', type: 'int', mapping: 'satuan_id'},
-			{name: 'drbeli_satuan_display', type: 'string', mapping: 'satuan_nama'}
+			{name: 'produk_id', type: 'int', mapping: 'produk_id'},
+			{name: 'produk_nama', type: 'string', mapping: 'produk_nama'},
+			{name: 'produk_kode', type: 'string', mapping: 'produk_kode'},
+			{name: 'produk_satuan', type: 'int', mapping: 'satuan_id'},
+			{name: 'produk_satuan_nama', type: 'string', mapping: 'satuan_nama'},
+			{name: 'produk_harga', type: 'float', mapping: 'dinvoice_harga'},
+			{name: 'produk_kategori', type: 'string', mapping: 'kategori_nama'},
+			{name: 'produk_diskon', type: 'int', mapping: 'diinvoice_diskon'}
 		]),
-		sortInfo:{field: 'drbeli_produk_display', direction: "ASC"}
+		sortInfo:{field: 'produk_nama', direction: "ASC"}
 	});
-	/*======= END cbo_drbeli_bytbeliDataStore =======*/
+	/*======= END cbo_produk_DataStore =======*/
 	
-	/*=== cbo_satuan_byprodukDataStore ==> untuk mengambil data satuan dari "nama produk yang sama" yang ada pada Detail Modul Penerimaan Pembelian dgn params: rbeli_terima_idField, dan rbeli_produk_idField. ===*/
-	cbo_satuan_byprodukDataStore = new Ext.data.Store({
-		id: 'cbo_satuan_byprodukDataStore',
+	/*=== cbo_satuan_DataStore ==> untuk mengambil data satuan dari "nama produk yang sama" yang ada pada Detail Modul Penerimaan Pembelian dgn params: rbeli_terima_idField, dan rbeli_produk_idField. ===*/
+	cbo_satuan_DataStore = new Ext.data.Store({
+		id: 'cbo_satuan_DataStore',
 		proxy: new Ext.data.HttpProxy({
-			url: 'index.php?c=c_master_retur_beli&m=get_satuan_by_produkid', 
+			url: 'index.php?c=c_master_retur_beli&m=get_satuan_list', 
 			method: 'POST'
 		}),
 		//baseParams: {dterima_master: rbeli_terima_idField.getValue(), dterima_produk: rbeli_dproduk_idField.getValue()},
@@ -926,12 +925,12 @@ Ext.onReady(function(){
 			id: 'produk_id'
 		},[
 		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
-			{name: 'drbeli_satuan_value', type: 'int', mapping: 'satuan_id'},
-			{name: 'drbeli_satuan_display', type: 'string', mapping: 'satuan_nama'}
+			{name: 'satuan_id', type: 'int', mapping: 'satuan_id'},
+			{name: 'satuan_nama', type: 'string', mapping: 'satuan_nama'}
 		]),
-		sortInfo:{field: 'drbeli_satuan_display', direction: "ASC"}
+		sortInfo:{field: 'satuan_nama', direction: "ASC"}
 	});
-	/*======= END cbo_satuan_byprodukDataStore =======*/
+	/*======= END cbo_satuan_DataStore =======*/
 	
 	get_harga_onorderDataStore = new Ext.data.Store({
 		id: 'get_harga_onorderDataStore',
@@ -948,45 +947,43 @@ Ext.onReady(function(){
 		])
 	});
 	
-	var combo_drbeli_produk=new Ext.form.ComboBox({
-			store: cbo_drbeli_bytbeliDataStore,
-			mode: 'local',
-			typeAhead: true,
-			displayField: 'drbeli_produk_display',
-			valueField: 'drbeli_produk_value',
+	var retur_produk_detail_tpl = new Ext.XTemplate(
+        '<tpl for="."><div class="search-item">',
+            '<span><b>{produk_nama} ({produk_kode})</b><br /></span>',
+            'Kategori: {produk_kategori}',
+        '</div></tpl>'
+    );
+	
+	
+	var combo_detail_produk=new Ext.form.ComboBox({
+			store: cbo_produk_DataStore,
+			mode: 'remote',
+			typeAhead: false,
+			displayField: 'produk_nama',
+			valueField: 'produk_id',
 			triggerAction: 'all',
-			lazyRender:true,
+			lazyRender: false,
+			pageSize: pageS,
+			enableKeyEvents: true,
+			tpl: retur_produk_detail_tpl,
+			itemSelector: 'div.search-item',
+			triggerAction: 'all',
+			listClass: 'x-combo-list-small',
+			anchor: '95%'
 
 	});
 	
 	var combo_drbeli_satuan=new Ext.form.ComboBox({
-			store: cbo_satuan_byprodukDataStore,
+			store: cbo_satuan_DataStore,
 			mode: 'local',
 			typeAhead: true,
-			displayField: 'drbeli_satuan_display',
-			valueField: 'drbeli_satuan_value',
+			displayField: 'satuan_nama',
+			valueField: 'satuan_id',
 			triggerAction: 'all',
 			lazyRender:true,
 
 	});
 	
-	combo_drbeli_produk.on('select', function(){
-		var j=cbo_drbeli_bytbeliDataStore.find('drbeli_produk_value',combo_drbeli_produk.getValue());
-		if(cbo_drbeli_bytbeliDataStore.getCount()){
-			rbeli_dproduk_idField.setValue(cbo_drbeli_bytbeliDataStore.getAt(j).data.drbeli_produk_value);
-			cbo_satuan_byprodukDataStore.load({params: {dterima_master: rbeli_terima_idField.getValue(), dterima_produk: rbeli_dproduk_idField.getValue()}});
-		}
-	});
-	
-	combo_drbeli_satuan.on('select', function(){
-		var j=cbo_satuan_byprodukDataStore.find('drbeli_satuan_value',combo_drbeli_satuan.getValue());
-		if(cbo_satuan_byprodukDataStore.getCount()){
-			get_harga_onorderDataStore.load({params: {dorder_master: rbeli_terima_orderField.getValue(), dorder_produk: rbeli_dproduk_idField.getValue(), dorder_satuan: combo_drbeli_satuan.getValue()}});
-		}
-	});
-	
-	
-	//harga_byproduk_onorderDataStore.load({params: {order_id: rbeli_terima_orderField.getValue() ,produk_id: record.data.drbeli_produk}});
 	//declaration of detail coloumn model
 	detail_retur_beli_ColumnModel = new Ext.grid.ColumnModel(
 		[
@@ -995,21 +992,21 @@ Ext.onReady(function(){
 			dataIndex: 'drbeli_produk',
 			width: 150,
 			sortable: true,
-			editor: combo_drbeli_produk,
-			renderer: Ext.util.Format.comboRenderer(combo_drbeli_produk)
+			editor: combo_detail_produk,
+			renderer: Ext.util.Format.comboRenderer(combo_detail_produk)
 		},
 		{
 			header: 'Satuan',
 			dataIndex: 'drbeli_satuan',
-			width: 150,
+			width: 80,
 			sortable: true,
-			editor: combo_drbeli_satuan,
 			renderer: Ext.util.Format.comboRenderer(combo_drbeli_satuan)
 		},
 		{
 			header: 'Jumlah',
+			align: 'right',
 			dataIndex: 'drbeli_jumlah',
-			width: 150,
+			width: 80,
 			sortable: true,
 			editor: new Ext.form.NumberField({
 				allowDecimals: false,
@@ -1020,17 +1017,36 @@ Ext.onReady(function(){
 			})
 		},
 		{
-			header: 'Harga',
+			header: 'Harga (Rp)',
+			align: 'right',
+			dataIndex: 'drbeli_harga',
+			width: 150,
+			sortable: true,
+			readOnly: true,
+			renderer: Ext.util.Format.numberRenderer('0,000')
+		},
+		{
+			header: 'Diskon (%)',
+			align: 'right',
+			dataIndex: 'drbeli_diskon',
+			width: 80,
+			sortable: true,
+			readOnly: true,
+			renderer: Ext.util.Format.numberRenderer('0,000')
+		},
+		{
+			header: 'Sub Total (Rp)',
+			align: 'right',
 			dataIndex: 'drbeli_harga',
 			width: 150,
 			sortable: true,
 			readOnly: true,
 			renderer: function(v, params, record){
-				if(get_harga_onorderDataStore.getCount()){
-					return Ext.util.Format.number(get_harga_onorderDataStore.getAt(0).data.dorder_harga_value, '0,000');
-				}
-			}
-		}]
+					subtotal=Ext.util.Format.number((record.data.drbeli_harga * record.data.drbeli_jumlah*(100-record.data.drbeli_diskon)/100),"0,000");
+                    return '<span>' + subtotal+ '</span>';
+            }
+		}
+		]
 	);
 	detail_retur_beli_ColumnModel.defaultSortable= true;
 	//eof
@@ -1041,9 +1057,9 @@ Ext.onReady(function(){
 	detail_retur_beliListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'detail_retur_beliListEditorGrid',
 		el: 'fp_detail_retur_beli',
-		title: 'Detail detail_retur_beli',
+		title: 'Detail Item Retur Pembelian',
 		height: 250,
-		width: 690,
+		width: 800,
 		autoScroll: true,
 		store: detail_retur_beli_DataStore, // DataStore
 		colModel: detail_retur_beli_ColumnModel, // Nama-nama Columns
@@ -1085,8 +1101,9 @@ Ext.onReady(function(){
 			drbeli_master	:'',		
 			drbeli_produk	:'',		
 			drbeli_satuan	:'',		
-			drbeli_jumlah	:'',		
-			drbeli_harga	:''		
+			drbeli_jumlah	:0,		
+			drbeli_harga	:0,
+			drbeli_diskon	:0	
 		});
 		editor_detail_retur_beli.stopEditing();
 		detail_retur_beli_DataStore.insert(0, edit_detail_retur_beli);
@@ -1103,32 +1120,36 @@ Ext.onReady(function(){
 	//eof
 	
 	//function for insert detail
-	function detail_retur_beli_insert(){
+	function detail_retur_beli_insert(pkid){
 		for(i=0;i<detail_retur_beli_DataStore.getCount();i++){
 			detail_retur_beli_record=detail_retur_beli_DataStore.getAt(i);
 			Ext.Ajax.request({
 				waitMsg: 'Please wait...',
 				url: 'index.php?c=c_master_retur_beli&m=detail_detail_retur_beli_insert',
 				params:{
-				drbeli_id	: detail_retur_beli_record.data.drbeli_id, 
-				drbeli_master	: eval(rbeli_idField.getValue()), 
+				drbeli_id		: detail_retur_beli_record.data.drbeli_id, 
+				drbeli_master	: pkid, 
 				drbeli_produk	: detail_retur_beli_record.data.drbeli_produk, 
 				drbeli_satuan	: detail_retur_beli_record.data.drbeli_satuan, 
 				drbeli_jumlah	: detail_retur_beli_record.data.drbeli_jumlah, 
-				drbeli_harga	: detail_retur_beli_record.data.drbeli_harga 
-				
+				drbeli_harga	: detail_retur_beli_record.data.drbeli_harga,
+				drbeli_diskon	: detail_retur_beli_record.data.drbeli_diskon 
 				}
 			});
 		}
+		master_retur_beli_DataStore.reload();
 	}
 	//eof
 	
 	//function for purge detail
-	function detail_retur_beli_purge(){
+	function detail_retur_beli_purge(pkid){
 		Ext.Ajax.request({
 			waitMsg: 'Please wait...',
 			url: 'index.php?c=c_master_retur_beli&m=detail_detail_retur_beli_purge',
-			params:{ master_id: eval(rbeli_idField.getValue()) }
+			params:{ master_id: pkid},
+			success:function(response){
+				detail_retur_beli_insert(pkid);
+			}
 		});
 	}
 	//eof
@@ -1162,16 +1183,13 @@ Ext.onReady(function(){
 		}  
 	}
 	//eof
-	
-	//event on update of detail data store
-	detail_retur_beli_DataStore.on('update', refresh_detail_retur_beli);
-	
+
 	/* Function for retrieve create Window Panel*/ 
 	master_retur_beli_createForm = new Ext.FormPanel({
 		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
-		width: 700,        
+		width: 815,        
 		items: [master_retur_beli_masterGroup,detail_retur_beliListEditorGrid,master_retur_beli_footGroup]
 		,
 		buttons: [{
@@ -1191,7 +1209,7 @@ Ext.onReady(function(){
 	/* Function for retrieve create Window Form */
 	master_retur_beli_createWindow= new Ext.Window({
 		id: 'master_retur_beli_createWindow',
-		title: post2db+'Master_retur_beli',
+		title: post2db+' Retur Pembelian',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,
@@ -1216,10 +1234,6 @@ Ext.onReady(function(){
 		rbeli_totaljumlahField.setValue(jumlah_item);
 		rbeli_totalhargaField.setValue(total_harga);
 	}
-	
-	detail_retur_beli_DataStore.on("update",detail_retur_beli_total);
-	detail_retur_beli_DataStore.on("load",detail_retur_beli_total);
-	//order_bayarField.on("keypress",detail_order_beli_total);
 	
 	/* Function for action list search */
 	function master_retur_beli_list_search(){
@@ -1275,7 +1289,7 @@ Ext.onReady(function(){
 	/* Identify  rbeli_id Search Field */
 	rbeli_idSearchField= new Ext.form.NumberField({
 		id: 'rbeli_idSearchField',
-		fieldLabel: 'Rbeli Id',
+		fieldLabel: 'Id',
 		allowNegatife : false,
 		blankText: '0',
 		allowDecimals: false,
@@ -1290,14 +1304,21 @@ Ext.onReady(function(){
 		anchor: '95%'
 	});
 	/* Identify  rbeli_terima Search Field */
-	rbeli_terimaSearchField= new Ext.form.NumberField({
+	rbeli_terimaSearchField= new Ext.form.ComboBox({
 		id: 'rbeli_terimaSearchField',
-		fieldLabel: 'No.Faktur',
-		allowNegatife : false,
-		blankText: '0',
-		allowDecimals: false,
-		anchor: '95%',
-		maskRe: /([0-9]+)$/
+		fieldLabel: 'No. Invoice',
+		store: cbo_rbeli_terimabeli_DataSore,
+		displayField:'invoice_nobukti',
+		mode : 'remote',
+		valueField: 'invoice_id',
+        typeAhead: false,
+        hideTrigger:false,
+		tpl: rbeli_terimabeli_tpl,
+		itemSelector: 'div.search-item',
+		triggerAction: 'all',
+		lazyRender:true,
+		listClass: 'x-combo-list-small',
+		anchor: '95%'
 	
 	});
 	/* Identify  rbeli_supplier Search Field */
@@ -1315,21 +1336,20 @@ Ext.onReady(function(){
 	rbeli_tanggalSearchField= new Ext.form.DateField({
 		id: 'rbeli_tanggalSearchField',
 		fieldLabel: 'Tanggal',
-		format : 'Y-m-d',
+		format : 'Y-m-d'
 	
 	});
 	/* Identify  rbeli_keterangan Search Field */
-	rbeli_keteranganSearchField= new Ext.form.TextArea({
+	rbeli_keteranganSearchField= new Ext.form.TextField({
 		id: 'rbeli_keteranganSearchField',
 		fieldLabel: 'Keterangan',
 		maxLength: 500,
 		anchor: '95%'
-	
 	});
     
 	/* Function for retrieve search Form Panel */
 	master_retur_beli_searchForm = new Ext.FormPanel({
-		labelAlign: 'top',
+		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
 		width: 300,        
@@ -1341,7 +1361,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [rbeli_nobuktiSearchField, rbeli_terimaSearchField, rbeli_supplierSearchField, rbeli_tanggalSearchField, rbeli_keteranganSearchField] 
+				items: [rbeli_nobuktiSearchField, rbeli_terimaSearchField, rbeli_tanggalSearchField, rbeli_keteranganSearchField] 
 			}
 			]
 		}]
@@ -1361,7 +1381,7 @@ Ext.onReady(function(){
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
 	master_retur_beli_searchWindow = new Ext.Window({
-		title: 'master_retur_beli Search',
+		title: 'Pencarian Retur Pembelian',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,
@@ -1511,6 +1531,62 @@ Ext.onReady(function(){
 		});
 	}
 	/*End of Function */
+	//EVENTS
+	
+
+	master_retur_beliListEditorGrid.addListener('rowcontextmenu', onmaster_retur_beli_ListEditGridContextMenu);
+	master_retur_beli_DataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
+	master_retur_beliListEditorGrid.on('afteredit', master_retur_beli_update); // inLine Editing Record
+	detail_retur_beli_DataStore.on('update', function(){
+		detail_retur_beli_DataStore.commitChanges();
+		detail_retur_beli_total();
+		for(i=0;i<detail_retur_beli_DataStore.getCount();i++){
+			//console.log('masuk combo');
+			var detail_data=detail_retur_beli_DataStore.getAt(i);
+			var j=cbo_produk_DataStore.find('produk_id',detail_data.data.drbeli_produk);
+			if(j>-1)
+			{
+				var data_combo=cbo_produk_DataStore.getAt(j);
+				detail_data.data.drbeli_satuan=data_combo.data.produk_satuan;
+				detail_data.data.drbeli_harga=data_combo.data.produk_harga;
+				detail_data.data.drbeli_diskon=data_combo.data.produk_diskon;
+			}
+		}
+		var query_selected="";
+		for(i=0;i<detail_retur_beli_DataStore.getCount();i++){
+			var data_record=detail_retur_beli_DataStore.getAt(i);
+			query_selected=query_selected+data_record.data.drbeli_produk+",";
+		}
+		cbo_produk_DataStore.setBaseParam('task','selected');
+		cbo_produk_DataStore.setBaseParam('selected_id',query_selected);
+		
+		
+	});
+	detail_retur_beli_DataStore.on("load",detail_retur_beli_total);
+	
+	rbeli_terimaField.on('select', function(){
+		var j=cbo_rbeli_terimabeli_DataSore.find('invoice_id',rbeli_terimaField.getValue());
+		cbo_produk_DataStore.load({params: {master_terima_id: rbeli_terimaField.getValue()}});
+		if(cbo_rbeli_terimabeli_DataSore.getCount()){
+			rbeli_supplierField.setValue(cbo_rbeli_terimabeli_DataSore.getAt(j).data.invoice_supplier_nama);
+			rbeli_supplier_idField.setValue(cbo_rbeli_terimabeli_DataSore.getAt(j).data.invoice_supplier_id);
+			rbeli_terima_orderField.setValue(cbo_rbeli_terimabeli_DataSore.getAt(j).data.invoice_norder);
+			rbeli_terima_idField.setValue(cbo_rbeli_terimabeli_DataSore.getAt(j).data.invoice_id);
+		}
+	});
+	
+	combo_detail_produk.on('focus', function(){
+		var query_selected="";
+		for(i=0;i<detail_retur_beli_DataStore.getCount();i++){
+			var data_record=detail_retur_beli_DataStore.getAt(i);
+			query_selected=query_selected+data_record.data.drbeli_produk+",";
+		}
+		cbo_produk_DataStore.setBaseParam('task','list');
+		cbo_produk_DataStore.setBaseParam('master_id',get_pk_id());
+		cbo_produk_DataStore.setBaseParam('selected_id',query_selected);
+		//cbo_produk_DataStore.load();
+	});
+	
 	
 });
 	</script>
