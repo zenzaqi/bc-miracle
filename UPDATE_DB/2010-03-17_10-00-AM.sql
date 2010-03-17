@@ -1,0 +1,1 @@
+ALTER TABLE `cetak_kwitansi` CHANGE `kwitansi_date_create` `kwitansi_date_create` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ;

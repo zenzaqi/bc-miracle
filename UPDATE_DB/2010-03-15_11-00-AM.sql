@@ -4,6 +4,7 @@ ALTER TABLE `detail_lunas_piutang` ADD `dpiutang_cara` ENUM( 'tunai', 'card', 'c
 
 ALTER TABLE `master_lunas_piutang` CHANGE `lpiutang_no` `lpiutang_faktur` VARCHAR( 15 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ;
 ALTER TABLE `master_lunas_piutang` CHANGE `lpiutang_tanggal` `lpiutang_faktur_tanggal` DATE NULL DEFAULT NULL ;
+ALTER TABLE `master_lunas_piutang` ADD `lpiutang_total` DOUBLE NULL DEFAULT NULL AFTER `lpiutang_faktur_tanggal` ;
 ALTER TABLE `master_lunas_piutang` ADD `lpiutang_sisa` DOUBLE NULL DEFAULT NULL AFTER `lpiutang_total` ;
 ALTER TABLE `master_lunas_piutang` ADD `lpiutang_status` ENUM( 'lunas', 'piutang' ) NOT NULL DEFAULT 'piutang' AFTER `lpiutang_keterangan` ;
 
