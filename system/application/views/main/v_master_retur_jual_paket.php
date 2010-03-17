@@ -55,12 +55,12 @@ var master_retur_jual_paket_SelectedRow;
 var master_retur_jual_paket_ContextMenu;
 //for detail data
 var detail_retur_paket_rawat_DataStor;
-var detail_retur_paket_rawatListEditorGrid;
-var detail_retur_paket_rawat_ColumnModel;
+var detail_retur_paket_tokwitansiListEditorGrid;
+var detail_retur_paket_tokwitansiColumnModel;
 var detail_retur_paket_rawat_proxy;
-var detail_retur_paket_rawat_writer;
-var detail_retur_paket_rawat_reader;
-var editor_detail_retur_paket_rawat;
+var detail_retur_paket_tokwitansi_writer;
+var detail_retur_paket_tokwitansi_reader;
+var editor_detail_retur_paket_tokwitansi;
 
 //declare konstant
 var post2db = '';
@@ -84,6 +84,13 @@ var rpaket_keteranganSearchField;
 /* on ready fuction */
 Ext.onReady(function(){
   	Ext.QuickTips.init();	/* Initiate quick tips icon */
+	
+	Ext.util.Format.comboRenderer = function(combo){
+  	    return function(value){
+  	        var record = combo.findRecord(combo.valueField, value);
+  	        return record ? record.get(combo.displayField) : combo.valueNotFoundText;
+  	    }
+  	}
   
   	/* Function for Saving inLine Editing */
 	function master_retur_jual_paket_update(oGrid_event){
@@ -155,6 +162,8 @@ Ext.onReady(function(){
 		var rpaket_cust_create=null; 
 		var rpaket_tanggal_create_date=""; 
 		var rpaket_keterangan_create=null; 
+		var rpaket_kwitansi_nilai_create=null; 
+		var rpaket_kwitansi_keterangan_create=null; 
 
 		if(rpaket_idField.getValue()!== null){rpaket_id_create_pk = rpaket_idField.getValue();}else{rpaket_id_create_pk=get_pk_id();} 
 		if(rpaket_nobuktiField.getValue()!= null){rpaket_nobukti_create = rpaket_nobuktiField.getValue();} 
@@ -162,6 +171,8 @@ Ext.onReady(function(){
 		if(rpaket_custField.getValue()!= null){rpaket_cust_create = rpaket_custidField.getValue();} 
 		if(rpaket_tanggalField.getValue()!= ""){rpaket_tanggal_create_date = rpaket_tanggalField.getValue().format('Y-m-d');} 
 		if(rpaket_keteranganField.getValue()!= null){rpaket_keterangan_create = rpaket_keteranganField.getValue();} 
+		if(rpaket_kwitansi_nilaiField.getValue()!== null){rpaket_kwitansi_nilai_create = rpaket_kwitansi_nilaiField.getValue();} 
+		if(rpaket_kwitansi_keteranganField.getValue()!== null){rpaket_kwitansi_keterangan_create = rpaket_kwitansi_keteranganField.getValue();} 
 
 		Ext.Ajax.request({  
 			waitMsg: 'Please wait...',
@@ -174,13 +185,15 @@ Ext.onReady(function(){
 				rpaket_cust	: rpaket_cust_create, 
 				rpaket_tanggal	: rpaket_tanggal_create_date, 
 				rpaket_keterangan	: rpaket_keterangan_create, 
+				rpaket_kwitansi_nilai	: rpaket_kwitansi_nilai_create, 
+				rpaket_kwitansi_keterangan	: rpaket_kwitansi_keterangan_create
 			}, 
 			success: function(response){             
 				var result=eval(response.responseText);
 				switch(result){
 					case 1:
-						detail_retur_paket_rawat_purge()
-						detail_retur_paket_rawat_insert();
+						detail_retur_paket_tokwitansi_purge()
+						detail_retur_paket_tokwitansi_insert();
 						Ext.MessageBox.alert(post2db+' OK','The Master_retur_jual_paket was '+msg+' successfully.');
 						master_retur_jual_paket_DataStore.reload();
 						master_retur_jual_paket_createWindow.hide();
@@ -265,7 +278,7 @@ Ext.onReady(function(){
   
   	/* Function for Displaying  create Window Form */
 	function display_form_window(){
-		detail_retur_paket_rawat_DataStore.load({params : {master_id : 0, start:0, limit:pageS}});
+		detail_retur_paket_tokwitansiDataStore.load({params : {master_id : 0, start:0, limit:pageS}});
 		if(!master_retur_jual_paket_createWindow.isVisible()){
 			master_retur_jual_paket_reset_form();
 			post2db='CREATE';
@@ -302,7 +315,7 @@ Ext.onReady(function(){
 		if(master_retur_jual_paketListEditorGrid.selModel.getCount() == 1) {
 			master_retur_jual_paket_set_form();
 			post2db='UPDATE';
-			detail_retur_paket_rawat_DataStore.load({params : {master_id : eval(get_pk_id()), start:0, limit:pageS}});
+			detail_retur_paket_tokwitansiDataStore.load({params: {master_id:master_retur_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_id'), start:0, limit:pageS}});
 			msg='updated';
 			master_retur_jual_paket_createWindow.show();
 		} else {
@@ -378,6 +391,7 @@ Ext.onReady(function(){
 		/* dataIndex => insert intomaster_retur_jual_paket_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'rpaket_id', type: 'int', mapping: 'rpaket_id'}, 
 			{name: 'rpaket_nobukti', type: 'string', mapping: 'rpaket_nobukti'}, 
+			{name: 'jpaket_id', type: 'int', mapping: 'jpaket_id'}, 
 			{name: 'rpaket_nobuktijual', type: 'string', mapping: 'jpaket_nobukti'}, 
 			{name: 'rpaket_cust', type: 'string', mapping: 'cust_nama'}, 
 			{name: 'rpaket_cust_id', type: 'int', mapping: 'cust_id'}, 
@@ -411,7 +425,9 @@ Ext.onReady(function(){
 			{name: 'retur_paket_tanggal', type: 'date', dateFormat: 'Y-m-d', mapping: 'jpaket_tanggal'},
 			{name: 'retur_paket_nama_customer', type: 'string', mapping: 'cust_nama'},
 			{name: 'retur_paket_customer_id', type: 'string', mapping: 'cust_id'},
-			{name: 'retur_paket_alamat', type: 'string', mapping: 'cust_alamat'}
+			{name: 'retur_paket_alamat', type: 'string', mapping: 'cust_alamat'},
+			{name: 'jpaket_total_bayar', type: 'float', mapping: 'jpaket_total_bayar'},
+			{name: 'jpaket_total_retur', type: 'float', mapping: 'jpaket_total_retur'}
 		]),
 		sortInfo:{field: 'retur_paket_display', direction: "ASC"}
 	});
@@ -717,6 +733,7 @@ Ext.onReady(function(){
 		id: 'rpaket_nobuktiField',
 		fieldLabel: 'No.Faktur',
 		maxLength: 100,
+		readOnly: true,
 		anchor: '95%'
 	});
 	/* Identify  rpaket_nobuktijual Field */
@@ -761,12 +778,39 @@ Ext.onReady(function(){
 		anchor: '95%'
 	});
 	
+	rpaket_kwitansi_nilaiField= new Ext.form.NumberField({
+		id: 'rpaket_kwitansi_nilaiField',
+		fieldLabel: 'Nilai (Rp)',
+		allowNegatife : false,
+		blankText: '0',
+		allowDecimals: true,
+		readOnly: true,
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
+	});
+	rpaket_kwitansi_keteranganField= new Ext.form.TextArea({
+		id: 'rpaket_kwitansi_keteranganField',
+		fieldLabel: 'Keterangan Kuitansi',
+		maxLength: 250,
+		anchor: '95%'
+	});
+	
+	rpaket_jpaket_total_bayarField= new Ext.form.NumberField({
+		id: 'rpaket_jpaket_total_bayarField',
+		fieldLabel: 'No.Faktur Jual - Total Bayar',
+		readOnly: true,
+		anchor: '95%'
+	});
+	
 	rpaket_nobuktijualField.on('select', function(){
 		var j=cbo_retur_paket_DataSore.find('retur_paket_value',rpaket_nobuktijualField.getValue());
 		if(cbo_retur_paket_DataSore.getCount()){
 			rpaket_custField.setValue(cbo_retur_paket_DataSore.getAt(j).data.retur_paket_nama_customer);
 			rpaket_custidField.setValue(cbo_retur_paket_DataSore.getAt(j).data.retur_paket_customer_id);
-			cbo_drpaket_rawatDataStore.load({params: {query: rpaket_nobuktijualField.getValue()}});
+			rpaket_jpaket_total_bayarField.setValue(cbo_retur_paket_DataSore.getAt(j).data.jpaket_total_bayar);
+			rpaket_kwitansi_nilaiField.setValue(cbo_retur_paket_DataSore.getAt(j).data.jpaket_total_retur);
+			//cbo_drpaket_rawatDataStore.load({params: {query: rpaket_nobuktijualField.getValue()}});
+			detail_retur_paket_tokwitansiDataStore.load({params: {master_id:rpaket_nobuktijualField.getValue(), start:0, limit:pageS}});
 		}
 	});
 	
@@ -781,7 +825,7 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [rpaket_nobuktiField, rpaket_nobuktijualField, rpaket_custField] 
+				items: [rpaket_nobuktiField, rpaket_nobuktijualField, rpaket_custField, rpaket_jpaket_total_bayarField] 
 			}
 			,{
 				columnWidth:0.5,
@@ -795,49 +839,49 @@ Ext.onReady(function(){
 	
 		
 	/*Detail Declaration */
-		
+	/* START Detail Retur to Kwitansi */
 	// Function for json reader of detail
-	var detail_retur_paket_rawat_reader=new Ext.data.JsonReader({
+	var detail_retur_paket_tokwitansi_reader=new Ext.data.JsonReader({
 		root: 'results',
 		totalProperty: 'total',
 		id: ''
 	},[
 	/* dataIndex => insert intoperawatan_ColumnModel, Mapping => for initiate table column */ 
-			{name: 'drpaket_id', type: 'int', mapping: 'drpaket_id'}, 
-			{name: 'drpaket_master', type: 'int', mapping: 'drpaket_master'}, 
-			{name: 'drpaket_rawat', type: 'int', mapping: 'drpaket_rawat'}, 
-			{name: 'drpaket_jumlah', type: 'int', mapping: 'drpaket_jumlah'}, 
-			{name: 'drpaket_harga', type: 'float', mapping: 'drpaket_harga'} 
+			{name: 'sapaket_master', type: 'int', mapping: 'sapaket_master'}, 
+			{name: 'sapaket_item', type: 'int', mapping: 'sapaket_item'}, 
+			{name: 'sapaket_item_nama', type: 'string', mapping: 'sapaket_item_nama'}, 
+			{name: 'jumlah_terpakai', type: 'int', mapping: 'jumlah_terpakai'}, 
+			{name: 'rawat_harga', type: 'float', mapping: 'rawat_harga'} 
 	]);
 	//eof
 	
 	//function for json writer of detail
-	var detail_retur_paket_rawat_writer = new Ext.data.JsonWriter({
+	var detail_retur_paket_tokwitansi_writer = new Ext.data.JsonWriter({
 		encode: true,
 		writeAllFields: false
 	});
 	//eof
 	
 	/* Function for Retrieve DataStore of detail*/
-	detail_retur_paket_rawat_DataStore = new Ext.data.Store({
-		id: 'detail_retur_paket_rawat_DataStore',
+	detail_retur_paket_tokwitansiDataStore = new Ext.data.Store({
+		id: 'detail_retur_paket_tokwitansiDataStore',
 		proxy: new Ext.data.HttpProxy({
-			url: 'index.php?c=c_master_retur_jual_paket&m=detail_detail_retur_paket_rawat_list', 
+			url: 'index.php?c=c_master_retur_jual_paket&m=detail_retur_paket_tokwitansi_list', 
 			method: 'POST'
 		}),
-		reader: detail_retur_paket_rawat_reader,
+		reader: detail_retur_paket_tokwitansi_reader,
 		baseParams:{master_id: rpaket_idField.getValue()},
-		sortInfo:{field: 'drpaket_id', direction: "ASC"}
+		sortInfo:{field: 'sapaket_item_nama', direction: "ASC"}
 	});
 	/* End of Function */
 	
 	//function for editor of detail
-	var editor_detail_retur_paket_rawat= new Ext.ux.grid.RowEditor({
+	var editor_detail_retur_paket_tokwitansi= new Ext.ux.grid.RowEditor({
         saveText: 'Update'
     });
 	//eof
 	
-	var combo_retur_paket=new Ext.form.ComboBox({
+	var combo_retur_paket_tokwitansi=new Ext.form.ComboBox({
 			store: cbo_drpaket_rawatDataStore,
 			mode: 'local',
 			displayField: 'drpaket_rawat_display',
@@ -855,104 +899,76 @@ Ext.onReady(function(){
 			anchor: '95%'
 
 	});
-	combo_retur_paket.on('select', function(){
-		var j=cbo_drpaket_rawatDataStore.find('drpaket_rawat_value',combo_retur_paket.getValue());
-		if(cbo_drpaket_rawatDataStore.getCount()){
-			cbo_dretur_rawatDataStore.load({params: {query: cbo_drpaket_rawatDataStore.getAt(j).data.drpaket_rawat_harga}});
-		}
-	});
-	
-	var combo_retur_perawatan=new Ext.form.ComboBox({
-			store: cbo_dretur_rawatDataStore,
-			mode: 'local',
-			displayField: 'dretur_rawat_display',
-			valueField: 'dretur_rawat_value',
-			typeAhead: false,
-			loadingText: 'Searching...',
-			pageSize:pageS,
-			hideTrigger:false,
-			tpl: retur_rawat_tpl,
-			//applyTo: 'search',
-			itemSelector: 'div.search-item',
-			triggerAction: 'all',
-			lazyRender:true,
-			listClass: 'x-combo-list-small',
-			anchor: '95%'
-
-	});
 	
 	//declaration of detail coloumn model
-	detail_retur_paket_rawat_ColumnModel = new Ext.grid.ColumnModel(
+	detail_retur_paket_tokwitansiColumnModel = new Ext.grid.ColumnModel(
 		[
 		{
 			header: 'Perawatan',
-			dataIndex: 'drpaket_rawat',
+			dataIndex: 'sapaket_item_nama',
 			width: 150,
-			sortable: true,
-			editor: combo_retur_paket,
-			renderer: Ext.util.Format.comboRenderer(combo_retur_paket)
+			sortable: true/*,
+			editor: combo_retur_paket_tokwitansi,
+			renderer: Ext.util.Format.comboRenderer(combo_retur_paket_tokwitansi)*/
 		},
 		{
 			header: 'Jumlah',
-			dataIndex: 'drpaket_jumlah',
+			dataIndex: 'jumlah_terpakai',
 			width: 150,
-			sortable: true,
+			sortable: true/*,
 			editor: new Ext.form.NumberField({
 				allowDecimals: false,
 				allowNegative: false,
 				blankText: '0',
 				maxLength: 11,
 				maskRe: /([0-9]+)$/
-			})
+			})*/
 		},
 		{
 			header: 'Harga',
-			dataIndex: 'drpaket_harga',
+			dataIndex: 'rawat_harga',
 			width: 150,
 			sortable: true,
-			editor: new Ext.form.NumberField({
-				allowDecimals: true,
-				allowNegative: false,
-				blankText: '0',
-				maxLength: 22,
-				maskRe: /([0-9]+)$/
-			})
+			readOnly: true,
+			renderer: Ext.util.Format.numberRenderer('0,000')
 		},
 		{
-			header: 'Tukar Perawatan',
-			dataIndex: 'drpaket_rawat_tukar',
+			header: 'Sub Total',
+			dataIndex: 'drpaket_subtotal',
 			width: 150,
 			sortable: true,
-			editor: combo_retur_perawatan,
-			renderer: Ext.util.Format.comboRenderer(combo_retur_perawatan)
+			readOnly: true,
+			renderer: function(v, params, record){
+				return Ext.util.Format.number(record.data.jumlah_terpakai*record.data.rawat_harga,'0,000');
+			}
 		}]
 	);
-	detail_retur_paket_rawat_ColumnModel.defaultSortable= true;
+	detail_retur_paket_tokwitansiColumnModel.defaultSortable= true;
 	//eof
 	
 	
 	
 	//declaration of detail list editor grid
-	detail_retur_paket_rawatListEditorGrid =  new Ext.grid.EditorGridPanel({
-		id: 'detail_retur_paket_rawatListEditorGrid',
-		el: 'fp_detail_retur_paket_rawat',
+	detail_retur_paket_tokwitansiListEditorGrid =  new Ext.grid.GridPanel({
+		id: 'detail_retur_paket_tokwitansiListEditorGrid',
+		el: 'fp_detail_retur_paket_tokwitansi',
 		title: 'Detail detail_retur_paket_rawat',
 		height: 250,
 		width: 690,
 		autoScroll: true,
-		store: detail_retur_paket_rawat_DataStore, // DataStore
-		colModel: detail_retur_paket_rawat_ColumnModel, // Nama-nama Columns
+		store: detail_retur_paket_tokwitansiDataStore, // DataStore
+		colModel: detail_retur_paket_tokwitansiColumnModel, // Nama-nama Columns
 		enableColLock:false,
 		region: 'center',
         margins: '0 5 5 5',
-		plugins: [editor_detail_retur_paket_rawat],
+		//plugins: [editor_detail_retur_paket_tokwitansi],
 		frame: true,
-		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
+		//clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true},
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
-			store: detail_retur_paket_rawat_DataStore,
+			store: detail_retur_paket_tokwitansiDataStore,
 			displayInfo: true
 		}),
 		/* Add Control on ToolBar */
@@ -961,12 +977,12 @@ Ext.onReady(function(){
 			text: 'Add',
 			tooltip: 'Add new detail record',
 			iconCls:'icon-adds',    				// this is defined in our styles.css
-			handler: detail_retur_paket_rawat_add
+			handler: detail_retur_paket_tokwitansi_add
 		}, '-',{
 			text: 'Delete',
 			tooltip: 'Delete detail selected record',
 			iconCls:'icon-delete',
-			handler: detail_retur_paket_rawat_confirm_delete
+			handler: detail_retur_paket_tokwitansi_confirm_delete
 		}
 		]
 	});
@@ -974,35 +990,49 @@ Ext.onReady(function(){
 	
 	
 	//function of detail add
-	function detail_retur_paket_rawat_add(){
-		var edit_detail_retur_paket_rawat= new detail_retur_paket_rawatListEditorGrid.store.recordType({
+	function detail_retur_paket_tokwitansi_add(){
+		var edit_detail_retur_paket_tokwitansi= new detail_retur_paket_tokwitansiListEditorGrid.store.recordType({
 			drpaket_id	:'',		
 			drpaket_master	:'',		
 			drpaket_rawat	:'',		
 			drpaket_jumlah	:'',		
 			drpaket_harga	:''		
 		});
-		editor_detail_retur_paket_rawat.stopEditing();
-		detail_retur_paket_rawat_DataStore.insert(0, edit_detail_retur_paket_rawat);
-		detail_retur_paket_rawatListEditorGrid.getView().refresh();
-		detail_retur_paket_rawatListEditorGrid.getSelectionModel().selectRow(0);
-		editor_detail_retur_paket_rawat.startEditing(0);
+		editor_detail_retur_paket_tokwitansi.stopEditing();
+		detail_retur_paket_tokwitansiDataStore.insert(0, edit_detail_retur_paket_tokwitansi);
+		detail_retur_paket_tokwitansiListEditorGrid.getView().refresh();
+		detail_retur_paket_tokwitansiListEditorGrid.getSelectionModel().selectRow(0);
+		editor_detail_retur_paket_tokwitansi.startEditing(0);
 	}
 	
 	//function for refresh detail
-	function refresh_detail_retur_paket_rawat(){
-		detail_retur_paket_rawat_DataStore.commitChanges();
-		detail_retur_paket_rawatListEditorGrid.getView().refresh();
+	function refresh_detail_retur_paket_tokwitansi(){
+		var sum_subtotal_detail=0;
+		//detail_retur_paket_tokwitansiDataStore.commitChanges();
+		detail_retur_paket_tokwitansiListEditorGrid.getView().refresh();
+		detail_retur_tokwitansi_record=detail_retur_paket_tokwitansiDataStore.getAt(0);
+		//console.log("detail_retur_paket_tokwitansiDataStore COUNT = "+detail_retur_paket_tokwitansiDataStore.getCount());
+		if(detail_retur_paket_tokwitansiDataStore.getCount()>=0){
+			var drtokwitansi = cbo_drpaket_rawatDataStore.find('drpaket_rawat_value',detail_retur_tokwitansi_record.data.drpaket_rawat);
+			if(drtokwitansi>=0){
+				detail_retur_tokwitansi_record.data.drpaket_harga=cbo_drpaket_rawatDataStore.getAt(drtokwitansi).data.drpaket_rawat_harga;
+				
+				for(i=0;i<detail_retur_paket_tokwitansiDataStore.getCount();i++){
+					sum_subtotal_detail+=(detail_retur_paket_tokwitansiDataStore.getAt(i).data.drpaket_jumlah*cbo_drpaket_rawatDataStore.getAt(drtokwitansi).data.drpaket_rawat_harga);
+					rpaket_kwitansi_nilaiField.setValue(sum_subtotal_detail);
+				}
+			}
+		}
 	}
 	//eof
 	
 	//function for insert detail
-	function detail_retur_paket_rawat_insert(){
-		for(i=0;i<detail_retur_paket_rawat_DataStore.getCount();i++){
-			detail_retur_paket_rawat_record=detail_retur_paket_rawat_DataStore.getAt(i);
+	function detail_retur_paket_tokwitansi_insert(){
+		for(i=0;i<detail_retur_paket_tokwitansiDataStore.getCount();i++){
+			detail_retur_paket_rawat_record=detail_retur_paket_tokwitansiDataStore.getAt(i);
 			Ext.Ajax.request({
 				waitMsg: 'Please wait...',
-				url: 'index.php?c=c_master_retur_jual_paket&m=detail_detail_retur_paket_rawat_insert',
+				url: 'index.php?c=c_master_retur_jual_paket&m=detail_retur_paket_tokwitansi_insert',
 				params:{
 				drpaket_id	: detail_retur_paket_rawat_record.data.drpaket_id, 
 				drpaket_master	: eval(rpaket_idField.getValue()), 
@@ -1017,22 +1047,22 @@ Ext.onReady(function(){
 	//eof
 	
 	//function for purge detail
-	function detail_retur_paket_rawat_purge(){
+	function detail_retur_paket_tokwitansi_purge(){
 		Ext.Ajax.request({
 			waitMsg: 'Please wait...',
-			url: 'index.php?c=c_master_retur_jual_paket&m=detail_detail_retur_paket_rawat_purge',
+			url: 'index.php?c=c_master_retur_jual_paket&m=detail_retur_paket_tokwitansi_purge',
 			params:{ master_id: eval(rpaket_idField.getValue()) }
 		});
 	}
 	//eof
 	
 	/* Function for Delete Confirm of detail */
-	function detail_retur_paket_rawat_confirm_delete(){
+	function detail_retur_paket_tokwitansi_confirm_delete(){
 		// only one record is selected here
-		if(detail_retur_paket_rawatListEditorGrid.selModel.getCount() == 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', detail_retur_paket_rawat_delete);
-		} else if(detail_retur_paket_rawatListEditorGrid.selModel.getCount() > 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', detail_retur_paket_rawat_delete);
+		if(detail_retur_paket_tokwitansiListEditorGrid.selModel.getCount() == 1){
+			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', detail_retur_paket_tokwitansi_delete);
+		} else if(detail_retur_paket_tokwitansiListEditorGrid.selModel.getCount() > 1){
+			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', detail_retur_paket_tokwitansi_delete);
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
@@ -1046,18 +1076,41 @@ Ext.onReady(function(){
 	//eof
 	
 	//function for Delete of detail
-	function detail_retur_paket_rawat_delete(btn){
+	function detail_retur_paket_tokwitansi_delete(btn){
 		if(btn=='yes'){
-			var s = detail_retur_paket_rawatListEditorGrid.getSelectionModel().getSelections();
+			var s = detail_retur_paket_tokwitansiListEditorGrid.getSelectionModel().getSelections();
 			for(var i = 0, r; r = s[i]; i++){
-				detail_retur_paket_rawat_DataStore.remove(r);
+				detail_retur_paket_tokwitansiDataStore.remove(r);
 			}
 		}  
 	}
 	//eof
 	
 	//event on update of detail data store
-	detail_retur_paket_rawat_DataStore.on('update', refresh_detail_retur_paket_rawat);
+	detail_retur_paket_tokwitansiDataStore.on('update', refresh_detail_retur_paket_tokwitansi);
+	
+	kwitansi_tercetakGroup = new Ext.form.FieldSet({
+		title: 'Kuitansi Tercetak',
+		autoHeight: true,
+		collapsible: true,
+		layout:'column',
+		items:[
+			{
+				columnWidth:0.5,
+				layout: 'form',
+				border:false,
+				items: [rpaket_kwitansi_nilaiField] 
+			}
+			,{
+				columnWidth:0.5,
+				layout: 'form',
+				border:false,
+				items: [rpaket_kwitansi_keteranganField] 
+			}
+			]
+	
+	});
+	/* END Detail Retur to Kwitansi */
 	
 	/* Function for retrieve create Window Panel*/ 
 	master_retur_jual_paket_createForm = new Ext.FormPanel({
@@ -1065,10 +1118,10 @@ Ext.onReady(function(){
 		bodyStyle:'padding:5px',
 		autoHeight:true,
 		width: 700,        
-		items: [master_retur_jual_paket_masterGroup,detail_retur_paket_rawatListEditorGrid]
+		items: [master_retur_jual_paket_masterGroup,detail_retur_paket_tokwitansiListEditorGrid,kwitansi_tercetakGroup]
 		,
 		buttons: [{
-				text: 'Save and Close',
+				text: 'Cetak Kuitansi',
 				handler: master_retur_jual_paket_create
 			}
 			,{
@@ -1395,7 +1448,7 @@ Ext.onReady(function(){
 <div>
 	<div class="col">
         <div id="fp_master_retur_jual_paket"></div>
-         <div id="fp_detail_retur_paket_rawat"></div>
+         <div id="fp_detail_retur_paket_tokwitansi"></div>
 		<div id="elwindow_master_retur_jual_paket_create"></div>
         <div id="elwindow_master_retur_jual_paket_search"></div>
     </div>

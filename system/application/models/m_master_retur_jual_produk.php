@@ -404,7 +404,7 @@ class M_master_retur_jual_produk extends Model{
 			);
 			$this->db->insert('master_retur_jual_produk', $data); 
 			if($this->db->affected_rows()){
-				$pattern="KW/".date('ym')."-";
+				$pattern="KU/".date('ym')."-";
 				$kwitansi_no=$this->m_public_function->get_kode_1("cetak_kwitansi","kwitansi_no",$pattern,12);
 				$dti_kwitansi=array(
 				"kwitansi_no"=>$kwitansi_no, 
