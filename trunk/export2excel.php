@@ -1,5 +1,5 @@
 <?php header("Content-type: application/x-msdownload"); 
-header("Content-Disposition: attachment; filename=master_invoice.xls"); 
-echo "Tanggal	No Tagihan	No Penerimaan	Supplier	Jumlah Item	Sub Total	Diskon (%)	Diskon (Rp)	Biaya	Total Nilai	Uang Muka	Sisa Tagihan	Jatuh Tempo	
-03/16/2010	INV/10/03/0001	LPB/10/03/0001	CV. Jawa Jamu	19	751600	5	1000	5000	718020	500000	218020	03/16/2010
+header("Content-Disposition: attachment; filename=master_retur_beli.xls"); 
+echo "Tanggal	No Order	No Penerimaan	No Pesanan	Supplier	Jumlah Item	Total Nilai	Keterangan	
+03/17/2010	RB/10/03/0002	LPB/10/03/0001	PP/1003-0001	CV. Jawa Jamu	10	100000
 ";?>
