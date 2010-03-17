@@ -694,7 +694,7 @@ Ext.onReady(function(){
 			{name: 'kwitansi_date_update', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'kwitansi_date_update'}, 
 			{name: 'kwitansi_revised', type: 'int', mapping: 'kwitansi_revised'} 
 		]),
-		sortInfo:{field: 'kwitansi_id', direction: "DESC"}
+		sortInfo:{field: 'kwitansi_date_create', direction: "DESC"}
 	});
 	/* End of Function */
 	
