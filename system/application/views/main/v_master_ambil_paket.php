@@ -396,9 +396,9 @@ Ext.onReady(function(){
 			{name: 'paket_nama', type: 'string', mapping: 'paket_nama'},
 			{name: 'apaket_paket_jumlah', type: 'int', mapping: 'apaket_paket_jumlah'},
 			{name: 'apaket_sisa_paket', type: 'int', mapping: 'apaket_sisa_paket'}
-		]),
+		])//,
 //		sortInfo:{field: 'apaket_paket_nama', direction: "ASC"}
-		sortInfo:{field: 'paket_nama', direction: "ASC"}
+//		sortInfo:{field: 'paket_nama', direction: "ASC"}
 	});
 	/* End of Function */
 	
