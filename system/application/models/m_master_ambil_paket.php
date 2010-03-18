@@ -250,13 +250,25 @@ class M_master_ambil_paket extends Model{
 			/* Untuk menampilkan ke View.LIST = {Customer, No.Faktur Penjualan Paket, Tanggal Pembelian, Tanggal Expired Paket, Nama Paket } */
 			//$query = "SELECT customer.cust_id, customer.cust_nama, customer.cust_no, master_jual_paket.jpaket_id, master_jual_paket.jpaket_nobukti, master_jual_paket.jpaket_tanggal, detail_jual_paket.dpaket_id, detail_jual_paket.dpaket_kadaluarsa, paket.paket_id, paket.paket_nama, paket.paket_kode, master_ambil_paket.apaket_sisa_paket, master_ambil_paket.apaket_id FROM master_ambil_paket INNER JOIN detail_jual_paket ON(dpaket_id=apaket_dpaket) LEFT JOIN master_jual_paket ON(jpaket_id=dpaket_master) LEFT JOIN customer ON(cust_id=jpaket_cust) LEFT JOIN paket ON(paket_id=dpaket_paket)";
 			//$query = "SELECT * FROM vu_kasir_ambil_paket_list";
-			$query = "SELECT apaket_id, apaket_jpaket, apaket_faktur, apaket_faktur_tanggal, apaket_kadaluarsa, apaket_cust, apaket_cust_no, apaket_cust_nama, apaket_paket, apaket_paket_kode, apaket_paket_nama, apaket_paket_jumlah, apaket_sisa_paket FROM master_ambil_paket";
+			$query =   "SELECT
+							apaket_jpaket, apaket_faktur, apaket_faktur_tanggal, apaket_kadaluarsa, apaket_cust, 
+							/*apaket_cust_no, apaket_cust_nama, */
+							apaket_paket, 
+							/*apaket_paket_kode, apaket_paket_nama, */
+							apaket_paket_jumlah, apaket_sisa_paket ,
+							c.cust_no, c.cust_nama, p.paket_kode, p.paket_nama
+						FROM master_ambil_paket m
+						LEFT OUTER JOIN customer c on c.cust_id = m.apaket_cust
+						LEFT OUTER JOIN paket p on p.paket_id = m.apaket_paket
+						WHERE apaket_sisa_paket > 0";
 
 			// For simple search
 			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (apaket_cust_nama LIKE '%".addslashes($filter)."%')";
+				$query .= " (cust_nama LIKE '%".addslashes($filter)."%')";
 			}
+
+			$query .= " ORDER BY apaket_faktur DESC";
 			
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();

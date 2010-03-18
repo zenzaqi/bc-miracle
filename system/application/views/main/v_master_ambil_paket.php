@@ -239,12 +239,16 @@ Ext.onReady(function(){
 	function ambil_paket_set_form(){
 		apaket_idField.setValue(ambil_paketListEditorGrid.getSelectionModel().getSelected().get('apaket_id'));
 		apaket_paketField.setValue(ambil_paketListEditorGrid.getSelectionModel().getSelected().get('apaket_paket'));
-		apaket_cust_noField.setValue(ambil_paketListEditorGrid.getSelectionModel().getSelected().get('apaket_cust_no'));
-		apaket_cust_namaField.setValue(ambil_paketListEditorGrid.getSelectionModel().getSelected().get('apaket_cust_nama'));
+//		apaket_cust_noField.setValue(ambil_paketListEditorGrid.getSelectionModel().getSelected().get('apaket_cust_no'));
+//		apaket_cust_namaField.setValue(ambil_paketListEditorGrid.getSelectionModel().getSelected().get('apaket_cust_nama'));
+		apaket_cust_noField.setValue(ambil_paketListEditorGrid.getSelectionModel().getSelected().get('cust_no'));
+		apaket_cust_namaField.setValue(ambil_paketListEditorGrid.getSelectionModel().getSelected().get('cust_nama'));
 		apaket_fakturField.setValue(ambil_paketListEditorGrid.getSelectionModel().getSelected().get('apaket_faktur'));
 		apaket_faktur_tanggalField.setValue(ambil_paketListEditorGrid.getSelectionModel().getSelected().get('apaket_faktur_tanggal'));
-		apaket_paket_kodeField.setValue(ambil_paketListEditorGrid.getSelectionModel().getSelected().get('apaket_paket_kode'));
-		apaket_paket_namaField.setValue(ambil_paketListEditorGrid.getSelectionModel().getSelected().get('apaket_paket_nama'));
+//		apaket_paket_kodeField.setValue(ambil_paketListEditorGrid.getSelectionModel().getSelected().get('apaket_paket_kode'));
+//		apaket_paket_namaField.setValue(ambil_paketListEditorGrid.getSelectionModel().getSelected().get('apaket_paket_nama'));
+		apaket_paket_kodeField.setValue(ambil_paketListEditorGrid.getSelectionModel().getSelected().get('paket_kode'));
+		apaket_paket_namaField.setValue(ambil_paketListEditorGrid.getSelectionModel().getSelected().get('paket_nama'));
 		apaket_kadaluarsaField.setValue(ambil_paketListEditorGrid.getSelectionModel().getSelected().get('apaket_kadaluarsa'));
 		apaket_paket_sisaField.setValue(ambil_paketListEditorGrid.getSelectionModel().getSelected().get('apaket_sisa_paket'));
 	}
@@ -375,21 +379,26 @@ Ext.onReady(function(){
 			id: 'apaket_id'
 		},[
 		/* dataIndex => insert intoambil_paket_ColumnModel, Mapping => for initiate table column */ 
-			{name: 'apaket_id', type: 'int', mapping: 'apaket_id'},
+//			{name: 'apaket_id', type: 'int', mapping: 'apaket_id'},
 			{name: 'apaket_jpaket', type: 'int', mapping: 'apaket_jpaket'},
 			{name: 'apaket_faktur', type: 'string', mapping: 'apaket_faktur'}, 
 			{name: 'apaket_faktur_tanggal', type: 'date', dateFormat:'Y-m-d', mapping: 'apaket_faktur_tanggal'}, 	// by hendri
 			{name: 'apaket_kadaluarsa', type: 'date', dateFormat:'Y-m-d', mapping: 'apaket_kadaluarsa'}, 
 			{name: 'apaket_cust', type: 'int', mapping: 'apaket_cust'}, 
-			{name: 'apaket_cust_no', type: 'string', mapping: 'apaket_cust_no'}, 
-			{name: 'apaket_cust_nama', type: 'string', mapping: 'apaket_cust_nama'}, 
+//			{name: 'apaket_cust_no', type: 'string', mapping: 'apaket_cust_no'}, 
+//			{name: 'apaket_cust_nama', type: 'string', mapping: 'apaket_cust_nama'}, 
+			{name: 'cust_no', type: 'string', mapping: 'cust_no'}, 
+			{name: 'cust_nama', type: 'string', mapping: 'cust_nama'}, 
 			{name: 'apaket_paket', type: 'int', mapping: 'apaket_paket'},
-			{name: 'apaket_paket_kode', type: 'string', mapping: 'apaket_paket_kode'},
-			{name: 'apaket_paket_nama', type: 'string', mapping: 'apaket_paket_nama'},
+//			{name: 'apaket_paket_kode', type: 'string', mapping: 'apaket_paket_kode'},
+//			{name: 'apaket_paket_nama', type: 'string', mapping: 'apaket_paket_nama'},
+			{name: 'paket_kode', type: 'string', mapping: 'paket_kode'},
+			{name: 'paket_nama', type: 'string', mapping: 'paket_nama'},
 			{name: 'apaket_paket_jumlah', type: 'int', mapping: 'apaket_paket_jumlah'},
 			{name: 'apaket_sisa_paket', type: 'int', mapping: 'apaket_sisa_paket'}
 		]),
-		sortInfo:{field: 'apaket_paket_nama', direction: "ASC"}
+//		sortInfo:{field: 'apaket_paket_nama', direction: "ASC"}
+		sortInfo:{field: 'paket_nama', direction: "ASC"}
 	});
 	/* End of Function */
 	
@@ -503,14 +512,16 @@ Ext.onReady(function(){
 	ambil_paket_ColumnModel = new Ext.grid.ColumnModel(
 		[
 		{
-			header: '<div align="center">' + 'No. Cust' + '</div>',
-			dataIndex: 'apaket_cust_no',
+			header: '<div align="center">' + 'No Cust' + '</div>',
+//			dataIndex: 'apaket_cust_no',
+			dataIndex: 'cust_no',
 			width: 80,	//230,
 			sortable: true
 		}, 
 		{
 			header: '<div align="center">' + 'Customer' + '</div>',
-			dataIndex: 'apaket_cust_nama',
+//			dataIndex: 'apaket_cust_nama',
+			dataIndex: 'cust_nama',
 			width: 200,	//230,
 			sortable: true
 		}, 
@@ -523,15 +534,23 @@ Ext.onReady(function(){
 			renderer: Ext.util.Format.dateRenderer('d-m-Y')
 		}, 
 		{
-			header: '<div align="center">' + 'No. Faktur' + '</div>',
+			header: '<div align="center">' + 'No Faktur' + '</div>',
 			dataIndex: 'apaket_faktur',
 			width: 80,
 			sortable: true
 		}, 
 		{
+			header: '<div align="center">' + 'Kode Paket' + '</div>',
+//			dataIndex: 'apaket_paket_kode',
+			dataIndex: 'paket_kode',
+			width: 80,	//230,
+			sortable: true
+		}, 
+		{
 			header: '<div align="center">' + 'Nama Paket' + '</div>',
-			dataIndex: 'apaket_paket_nama',
-			width: 300,	//230,
+//			dataIndex: 'apaket_paket_nama',
+			dataIndex: 'paket_nama',
+			width: 200,	//230,
 			sortable: true
 		}, 
 		{
@@ -574,7 +593,7 @@ Ext.onReady(function(){
             forceFit:true,
             groupTextTpl: '{text} ({[values.rs.length]} {[values.rs.length > 1 ? "Items" : "Item"]})'
         }),*/
-	  	width: 940,	//800,
+	  	width: 1220,	//940,	//800,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: ambil_paket_DataStore,
@@ -871,7 +890,7 @@ Ext.onReady(function(){
 		[{
 			header: 'No. Faktur',
 			dataIndex: 'apaket_faktur',
-			width: 80,	//90
+			width: 80	//90
 		},{
 			header: '<div align="center">' + 'Nama Paket' + '</div>',
 			dataIndex: 'paket_nama',
@@ -897,7 +916,7 @@ Ext.onReady(function(){
 	
 	var history_ambil_paketPanel = new Ext.grid.GridPanel({
 		id: 'history_ambil_paketPanel',
-		title: 'Catatan Pengambilan Paket',
+		title: 'Daftar Pengambilan Paket',
         store: detail_ambil_paketStore,
         cm: detail_ambil_paketColumnModel,
 		view: new Ext.grid.GroupingView({
@@ -908,7 +927,7 @@ Ext.onReady(function(){
         autoExpandColumn: 'company',
         autoHeight: true,
 		style: 'margin-top: 10px',
-        width: 940	//800
+        width: 1220	//940	//800
     });
     history_ambil_paketPanel.render('history_ambil_paket');
 
