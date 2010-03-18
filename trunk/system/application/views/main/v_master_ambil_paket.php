@@ -379,7 +379,7 @@ Ext.onReady(function(){
 			id: 'apaket_id'
 		},[
 		/* dataIndex => insert intoambil_paket_ColumnModel, Mapping => for initiate table column */ 
-//			{name: 'apaket_id', type: 'int', mapping: 'apaket_id'},
+			{name: 'apaket_id', type: 'int', mapping: 'apaket_id'},
 			{name: 'apaket_jpaket', type: 'int', mapping: 'apaket_jpaket'},
 			{name: 'apaket_faktur', type: 'string', mapping: 'apaket_faktur'}, 
 			{name: 'apaket_faktur_tanggal', type: 'date', dateFormat:'Y-m-d', mapping: 'apaket_faktur_tanggal'}, 	// by hendri
