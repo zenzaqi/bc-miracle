@@ -956,7 +956,7 @@ Ext.onReady(function(){
 							if (success) {
 									if(tunai_jual_paket_DataStore.getCount()){
 										jpaket_tunai_record=tunai_jual_paket_DataStore.getAt(0);
-										jpaket_tunai_nilaiField.setValue(jpaket_tunai_record.data.jtunai_nilai);
+										jpaket_tunai_nilai2Field.setValue(jpaket_tunai_record.data.jtunai_nilai);
 									}
 							}
 					 	}
@@ -1036,7 +1036,7 @@ Ext.onReady(function(){
 							if (success) {
 									if(tunai_jual_paket_DataStore.getCount()){
 										jpaket_tunai_record=tunai_jual_paket_DataStore.getAt(0);
-										jpaket_tunai_nilaiField.setValue(jpaket_tunai_record.data.jtunai_nilai);
+										jpaket_tunai_nilai3Field.setValue(jpaket_tunai_record.data.jtunai_nilai);
 									}
 							}
 					 	}
@@ -1650,7 +1650,19 @@ Ext.onReady(function(){
 		}, '-', 
 			new Ext.app.SearchField({
 			store: master_jual_paket_DataStore,
-			params: {start: 0, limit: pageS},
+			params: {task: 'LIST',start: 0, limit: pageS},
+			listeners:{
+				specialkey: function(f,e){
+					tbar_jenis_rawatField.reset();
+					if(e.getKey() == e.ENTER){
+						master_jual_paket_DataStore.baseParams={task:'LIST',start: 0, limit: pageS};
+		            }
+				},
+				render: function(c){
+				Ext.get(this.id).set({qtitle:'Search By'});
+				Ext.get(this.id).set({qtip:'- No Faktur<br>- Nama Customer<br>- No Customer'});
+				}
+			},
 			width: 120
 		}),'-',{
 			text: 'Refresh',
@@ -3349,7 +3361,7 @@ Ext.onReady(function(){
 		});
 		editor_detail_jual_paket.stopEditing();
 		detail_jual_paket_DataStore.insert(0, edit_detail_jual_paket);
-		detail_jual_paketListEditorGrid.getView().refresh();
+		//detail_jual_paketListEditorGrid.getView().refresh();
 		detail_jual_paketListEditorGrid.getSelectionModel().selectRow(0);
 		editor_detail_jual_paket.startEditing(0);
 	}
