@@ -103,7 +103,23 @@ class M_master_ambil_paket extends Model{
 		
 		function get_history_ambil_paket($apaket_id,$start,$end){
 			/* Ambil dari db.detail_ambil_paket */
-			$query = "SELECT apaket_faktur, paket_nama, rawat_nama, dapaket_jumlah, cust_nama FROM detail_ambil_paket LEFT JOIN master_ambil_paket ON(dapaket_master=apaket_id) LEFT JOIN submaster_apaket_item ON(dapaket_sapaket=sapaket_id) LEFT JOIN perawatan ON(sapaket_item=rawat_id) LEFT JOIN paket ON(apaket_paket=paket_id) LEFT JOIN customer ON(dapaket_cust=cust_id) WHERE dapaket_master='$apaket_id'";
+			$query =   "SELECT 
+							/*m.apaket_faktur, 
+							pk.paket_nama, */
+							pr.rawat_nama, 
+							d.dapaket_jumlah, 
+							c.cust_nama,
+							date_format(d.dapaket_date_create, '%Y-%m-%d') as tgl_ambil
+						FROM detail_ambil_paket d
+						/*LEFT JOIN master_ambil_paket m ON ( d.dapaket_master = m.apaket_id ) */
+						LEFT JOIN submaster_apaket_item s ON ( d.dapaket_sapaket= s.sapaket_id ) 
+						LEFT JOIN perawatan pr ON ( s.sapaket_item = pr.rawat_id ) 
+						/*LEFT JOIN paket pk ON ( m.apaket_paket = pk.paket_id ) */
+						LEFT JOIN customer c ON ( d.dapaket_cust = c.cust_id )
+						WHERE dapaket_master='$apaket_id'"; //by hendri
+			
+
+
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
 			$limit = $query." LIMIT ".$start.",".$end;			
@@ -260,12 +276,12 @@ class M_master_ambil_paket extends Model{
 						FROM master_ambil_paket m
 						LEFT OUTER JOIN customer c on c.cust_id = m.apaket_cust
 						LEFT OUTER JOIN paket p on p.paket_id = m.apaket_paket
-						WHERE apaket_sisa_paket > 0";
+						WHERE apaket_sisa_paket > 0"; //by hendri
 
 			// For simple search
 			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (cust_nama LIKE '%".addslashes($filter)."%')";
+				$query .= " (c.cust_nama LIKE '%".addslashes($filter)."%' OR c.cust_no LIKE '%".addslashes($filter)."%' OR p.paket_kode LIKE '%".addslashes($filter)."%' OR p.paket_nama LIKE '%".addslashes($filter)."%')";
 			}
 
 			$query .= " ORDER BY apaket_faktur DESC";
