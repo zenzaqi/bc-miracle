@@ -558,9 +558,9 @@ class M_master_jual_paket extends Model{
 				$ipaket_num_rows=$rs_ipaket->num_rows();
 				if($ipaket_num_rows>0){
 					foreach($rs_ipaket->result_array() as $row){
-						$sapaket_item=$row['rpaket_perawatan'];
-						$sapaket_item_nama=$row['rawat_nama'];
-						$rpaket_jumlah=$row['rpaket_jumlah'];
+						$sapaket_item=$row['ipaket_produk'];
+						$sapaket_item_nama=$row['produk_nama'];
+						$rpaket_jumlah=$row['ipaket_jumlah'];
 						$dti_sapaket=array(
 						"sapaket_master"=>$apaket_id,
 						"sapaket_item"=>$sapaket_item,
@@ -612,7 +612,7 @@ class M_master_jual_paket extends Model{
 			// For simple search
 			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (jpaket_id LIKE '%".addslashes($filter)."%' OR jpaket_nobukti LIKE '%".addslashes($filter)."%' OR cust_nama LIKE '%".addslashes($filter)."%' OR jpaket_tanggal LIKE '%".addslashes($filter)."%' OR jpaket_diskon LIKE '%".addslashes($filter)."%' OR jpaket_cara LIKE '%".addslashes($filter)."%' OR jpaket_keterangan LIKE '%".addslashes($filter)."%' )";
+				$query .= " (jpaket_nobukti LIKE '%".addslashes($filter)."%' OR cust_nama LIKE '%".addslashes($filter)."%' OR cust_no LIKE '%".addslashes($filter)."%'  )";
 			}
 			
 			$result = $this->db->query($query);
