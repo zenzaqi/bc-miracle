@@ -634,8 +634,8 @@ Ext.onReady(function(){
 		            }
 				},
 				render: function(c){
-				Ext.get(this.id).set({qtitle:'Search By'});
-				Ext.get(this.id).set({qtip:'- Nama Customer'});
+				Ext.get(this.id).set({qtitle:'Search by:'});
+				Ext.get(this.id).set({qtip:' - No Customer<br> - Nama Customer<br> - Kode Paket<br> - Nama Paket'});
 				}
 			},
 			width: 120
@@ -852,14 +852,15 @@ Ext.onReady(function(){
 			totalProperty: 'total'//,
 			//id: 'app_id'
 		},[
-        	{name: 'apaket_faktur', type: 'string', mapping: 'apaket_faktur'},
-			{name: 'paket_nama', type: 'string', mapping: 'paket_nama'},
+//			{name: 'apaket_faktur', type: 'string', mapping: 'apaket_faktur'},	//simplified, by hendri
+//			{name: 'paket_nama', type: 'string', mapping: 'paket_nama'},		//simplified, by hendri
 			{name: 'rawat_nama', type: 'string', mapping: 'rawat_nama'},
 			{name: 'dapaket_jumlah', type: 'int', mapping: 'dapaket_jumlah'},
-			{name: 'cust_nama', type: 'string', mapping: 'cust_nama'}
+			{name: 'cust_nama', type: 'string', mapping: 'cust_nama'},
+			{name: 'tgl_ambil', type: 'date', dateFormat: 'Y-m-d', mapping: 'tgl_ambil'}
 		]),
-		sortInfo:{field: 'cust_nama', direction: "ASC"},
-		groupField: 'apaket_faktur'
+		sortInfo:{field: 'cust_nama', direction: "ASC"}//,
+//		groupField: 'apaket_faktur'	//simplified, by hendri
 	});
 	/* End DataStore */
 	//detail_ambil_paketStore.load({params: {master_id: '0'}});
@@ -887,19 +888,30 @@ Ext.onReady(function(){
 	});*/
 	
 	detail_ambil_paketColumnModel = new Ext.grid.ColumnModel(
-		[{
+		[
+/*		{										//simplified, by hendri
 			header: 'No. Faktur',
 			dataIndex: 'apaket_faktur',
 			width: 80	//90
-		},{
+		},
+		{
 			header: '<div align="center">' + 'Nama Paket' + '</div>',
 			dataIndex: 'paket_nama',
 			width: 210
-		},{
+		},
+*/		{
+			header: '<div align="center">' + 'Tgl Ambil' + '</div>',
+			dataIndex: 'tgl_ambil',
+			width: 70,
+			sortable: true,
+			renderer: Ext.util.Format.dateRenderer('d-m-Y')
+		}, 
+		{
 			header: '<div align="center">' + 'Perawatan' + '</div>',
 			dataIndex: 'rawat_nama',
 			width: 210
-		},{
+		},
+		{
 			header: '<div align="center">' + 'Jumlah' + '</div>',
 			dataIndex: 'dapaket_jumlah',
 			width: 60,
