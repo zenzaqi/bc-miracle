@@ -100,12 +100,12 @@ class M_karyawan extends Model{
 		
 		//function for get list record
 		function karyawan_list($filter,$start,$end){
-			$query = "SELECT * FROM karyawan,departemen,cabang,jabatan where karyawan_departemen=departemen_id and karyawan_cabang=cabang_id and karyawan_jabatan=jabatan_id";
+			$query = "SELECT * FROM karyawan,departemen,cabang,jabatan where karyawan_departemen=departemen_id and karyawan_cabang=cabang_id and karyawan_jabatan=jabatan_id and karyawan_aktif = 'Aktif' ";
 			
 			// For simple search
 			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (karyawan_no = '".addslashes($filter)."' OR karyawan_username LIKE '%".addslashes($filter)."%' OR karyawan_nama LIKE '%".addslashes($filter)."%' OR jabatan_nama LIKE '%".addslashes($filter)."%' OR departemen_nama LIKE '%".addslashes($filter)."%' )";
+				$query .= " (karyawan_no = '".addslashes($filter)."' OR karyawan_username LIKE '%".addslashes($filter)."%' OR karyawan_nama LIKE '%".addslashes($filter). /*"%' OR jabatan_nama LIKE '%".addslashes($filter).*/ "%' OR departemen_nama LIKE '%".addslashes($filter)."%' )";
 			}
 			
 			$result = $this->db->query($query);
