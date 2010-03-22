@@ -718,9 +718,9 @@ Ext.onReady(function(){
 		},*/
 		{
 			/*index=1*/
-			header: 'NIK',
+			header: '<div align="center">' + 'NIK' + '</div>',
 			dataIndex: 'karyawan_no',
-			width: 100,
+			width: 80,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 30
@@ -728,9 +728,9 @@ Ext.onReady(function(){
 		},
 		{
 			/*index=2*/
-			header: 'NPWP',
+			header: '<div align="center">' + 'NPWP' + '</div>',
 			dataIndex: 'karyawan_npwp',
-			width: 150,
+			width: 80,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 30
@@ -738,8 +738,18 @@ Ext.onReady(function(){
 			hidden: true
 		},
 		{
+			/*index=4*/
+			header: '<div align="center">' + 'Nama Lengkap' + '</div>',
+			dataIndex: 'karyawan_nama',
+			width: 180,
+			sortable: true,
+			editor: new Ext.form.TextField({
+				maxLength: 50
+          	})
+		},
+		{
 			/*index=3*/
-			header: 'Nickname',
+			header: '<div align="center">' + 'Panggilan' + '</div>',
 			dataIndex: 'karyawan_username',
 			width: 80,
 			sortable: true,
@@ -748,21 +758,12 @@ Ext.onReady(function(){
           	})
 		},
 		{
-			/*index=4*/
-			header: 'Nama Lengkap',
-			dataIndex: 'karyawan_nama',
-			width: 170,
-			sortable: true,
-			editor: new Ext.form.TextField({
-				maxLength: 50
-          	})
-		},
-		{
 			/*index=5*/
-			header: 'L/P',
+			header: '<div align="center">' + 'L/P' + '</div>',
 			dataIndex: 'karyawan_kelamin',
 			width: 30,
 			sortable: true,
+			hidden: true,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
 				triggerAction: 'all',
@@ -779,20 +780,20 @@ Ext.onReady(function(){
 		},
 		{
 			/*index=6*/
-			header: 'Tgl Lahir',
+			header: '<div align="center">' + 'Tgl Lahir' + '</div>',
 			dataIndex: 'karyawan_tgllahir',
 			width: 80,
 			sortable: true,
-			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
+			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
 			editor: new Ext.form.DateField({
-				format: 'Y-m-d'
+				format: 'd-m-Y'
 			})
 		},
 		{
 			/*index=7*/
-			header: 'Alamat',
+			header: '<div align="center">' + 'Alamat' + '</div>',
 			dataIndex: 'karyawan_alamat',
-			width: 280,
+			width: 200,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 250
@@ -800,7 +801,7 @@ Ext.onReady(function(){
 		},
 		{
 			/*index=8*/
-			header: 'Kota',
+			header: '<div align="center">' + 'Kota' + '</div>',
 			dataIndex: 'karyawan_kota',
 			width: 80,
 			sortable: true,
@@ -810,9 +811,9 @@ Ext.onReady(function(){
 		},
 		{
 			/*index=9*/
-			header: 'Kode Pos',
+			header: '<div align="center">' + 'Kode Pos' + '</div>',
 			dataIndex: 'karyawan_kodepos',
-			width: 150,
+			width: 80,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 10
@@ -821,7 +822,7 @@ Ext.onReady(function(){
 		},
 		{
 			/*index=10*/
-			header: 'Email',
+			header: '<div align="center">' + 'Email' + '</div>',
 			dataIndex: 'karyawan_email',
 			width: 150,
 			sortable: true,
@@ -832,7 +833,7 @@ Ext.onReady(function(){
 		},
 		{
 			/*index=11*/
-			header: 'Email Miracle',
+			header: '<div align="center">' + 'Email Miracle' + '</div>',
 			dataIndex: 'karyawan_emiracle',
 			width: 150,
 			sortable: true,
@@ -843,7 +844,7 @@ Ext.onReady(function(){
 		},
 		{
 			/*index=12*/
-			header: 'Keterangan',
+			header: '<div align="center">' + 'Keterangan' + '</div>',
 			dataIndex: 'karyawan_keterangan',
 			width: 150,
 			sortable: true,
@@ -854,9 +855,9 @@ Ext.onReady(function(){
 		},
 		{
 			/*index=13*/
-			header: 'No.Telp Rumah',
+			header: '<div align="center">' + 'Telp Rumah' + '</div>',
 			dataIndex: 'karyawan_notelp',
-			width: 90,
+			width: 80,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 25
@@ -864,9 +865,9 @@ Ext.onReady(function(){
 		},
 		{
 			/*index=14*/
-			header: 'Ponsel 1',
+			header: '<div align="center">' + 'Ponsel 1' + '</div>',
 			dataIndex: 'karyawan_notelp2',
-			width: 90,
+			width: 80,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 25
@@ -875,9 +876,9 @@ Ext.onReady(function(){
 		},
 		{
 			/*index=15*/
-			header: 'Ponsel 2',
+			header: '<div align="center">' + 'Ponsel 2' + '</div>',
 			dataIndex: 'karyawan_notelp3',
-			width: 90,
+			width: 80,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 25
@@ -886,9 +887,9 @@ Ext.onReady(function(){
 		},
 		{
 			/*index=16*/
-			header: 'Ponsel 3',
+			header: '<div align="center">' + 'Ponsel 3' + '</div>',
 			dataIndex: 'karyawan_notelp4',
-			width: 90,
+			width: 80,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 25
@@ -897,7 +898,7 @@ Ext.onReady(function(){
 		},
 		{
 			/*index=17*/
-			header: 'Cabang',
+			header: '<div align="center">' + 'Cabang' + '</div>',
 			dataIndex: 'karyawan_cabang',
 			width: 100,
 			sortable: true,
@@ -915,9 +916,9 @@ Ext.onReady(function(){
 		},
 		{
 			/*index=18*/
-			header: 'Jabatan',
+			header: '<div align="center">' + 'Jabatan' + '</div>',
 			dataIndex: 'karyawan_jabatan',
-			width: 150,
+			width: 100,
 			sortable: true,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
@@ -933,7 +934,7 @@ Ext.onReady(function(){
 		},
 		{
 			/*index=19*/
-			header: 'Departemen',
+			header: '<div align="center">' + 'Departemen' + '</div>',
 			dataIndex: 'karyawan_departemen',
 			width: 80,
 			sortable: true,
@@ -951,9 +952,9 @@ Ext.onReady(function(){
 		},
 		{
 			/*index=20*/
-			header: 'Golongan',
+			header: '<div align="center">' + 'Gol' + '</div>',
 			dataIndex: 'karyawan_golongan',
-			width: 150,
+			width: 60,
 			sortable: true,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
@@ -969,19 +970,19 @@ Ext.onReady(function(){
 		},
 		{
 			/*index=21*/
-			header: 'Tgl Masuk',
+			header: '<div align="center">' + 'Tgl Masuk' + '</div>',
 			dataIndex: 'karyawan_tglmasuk',
-			width: 150,
+			width: 70,
 			sortable: true,
-			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
+			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
 			editor: new Ext.form.DateField({
-				format: 'Y-m-d'
+				format: 'd-m-Y'
 			}),
 			hidden: true
 		},
 		{
 			/*index=22*/
-			header: 'Atasan',
+			header: '<div align="center">' + 'Atasan' + '</div>',
 			dataIndex: 'karyawan_atasan',
 			width: 150,
 			sortable: true,
@@ -999,9 +1000,9 @@ Ext.onReady(function(){
 		},
 		{
 			/*index=23*/
-			header: 'Status',
+			header: '<div align="center">' + 'Status' + '</div>',
 			dataIndex: 'karyawan_aktif',
-			width: 70,
+			width: 80,
 			sortable: true,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
@@ -1073,7 +1074,7 @@ Ext.onReady(function(){
 	karyawanListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'karyawanListEditorGrid',
 		el: 'fp_karyawan',
-		title: 'List Of Karyawan',
+		title: 'Daftar Karyawan',
 		autoHeight: true,
 		store: karyawan_DataStore, // DataStore
 		cm: karyawan_ColumnModel, // Nama-nama Columns
@@ -1082,7 +1083,7 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 1200,
+	  	width: 1220,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: karyawan_DataStore,
@@ -1122,8 +1123,8 @@ Ext.onReady(function(){
 		            }
 				},
 				render: function(c){
-				Ext.get(this.id).set({qtitle:'Search By'});
-				Ext.get(this.id).set({qtip:'- NIK<br>- Nama Lengkap<br>- Nickname<br>- Departemen<br>- Jabatan'});
+				Ext.get(this.id).set({qtitle:'Search by (aktif only):'});
+				Ext.get(this.id).set({qtip:'- NIK<br>- Nama Lengkap<br>- Panggilan<br>- Departemen'});
 				}
 			},
 			width: 120
@@ -1171,6 +1172,7 @@ Ext.onReady(function(){
 			text: 'Delete', 
 			tooltip: 'Delete selected record', 
 			iconCls:'icon-delete',
+			disabled: true,
 			handler: karyawan_confirm_delete 
 		},
 		'-',
@@ -1235,7 +1237,7 @@ Ext.onReady(function(){
 	/* Identify  karyawan_username Field */
 	karyawan_usernameField= new Ext.form.TextField({
 		id: 'karyawan_usernameField',
-		fieldLabel: '&nbsp;&nbsp;&nbsp;Nickname <span style="color: #ec0000">*</span>',
+		fieldLabel: '&nbsp;&nbsp;&nbsp;Panggilan <span style="color: #ec0000">*</span>',
 		maxLength: 15,
 		allowBlank: false,
 		width: 100
@@ -1703,7 +1705,7 @@ Ext.onReady(function(){
 	/* Identify  karyawan_username Search Field */
 	karyawan_usernameSearchField= new Ext.form.TextField({
 		id: 'karyawan_usernameSearchField',
-		fieldLabel: '&nbsp;&nbsp;&nbsp;Nickname',
+		fieldLabel: '&nbsp;&nbsp;&nbsp;Panggilan',
 		maxLength: 15,
 		width: 100
 	
