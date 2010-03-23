@@ -770,6 +770,22 @@ class M_master_jual_produk extends Model{
 								);
 							$this->db->insert('jual_tunai', $data);
 						}
+					}else if($jproduk_cara=='voucher'){
+						$sql="SELECT tvoucher_id FROM voucher_terima WHERE tvoucher_ref='$jproduk_nobukti'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							$data=array(
+								"tvoucher_novoucher"=>$jproduk_voucher_no
+								);
+							$this->db->where('tvoucher_ref', $jproduk_nobukti);
+							$this->db->update('voucher_terima', $data);
+						}else{
+							$data=array(
+								"tvoucher_novoucher"=>$jproduk_voucher_no,
+								"tvoucher_ref"=>$jproduk_nobukti
+								);
+							$this->db->insert('voucher_terima', $data);
+						}
 					}
 				}
 				if($jproduk_cara2!=null || $jproduk_cara2!=''){
@@ -904,6 +920,22 @@ class M_master_jual_produk extends Model{
 								"jtunai_nilai"=>$jproduk_tunai_nilai2
 								);
 							$this->db->insert('jual_tunai', $data);
+						}
+					}else if($jproduk_cara2=='voucher'){
+						$sql="SELECT tvoucher_id FROM voucher_terima WHERE tvoucher_ref='$jproduk_nobukti'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							$data=array(
+								"tvoucher_novoucher"=>$jproduk_voucher_no2
+								);
+							$this->db->where('tvoucher_ref', $jproduk_nobukti);
+							$this->db->update('voucher_terima', $data);
+						}else{
+							$data=array(
+								"tvoucher_novoucher"=>$jproduk_voucher_no2,
+								"tvoucher_ref"=>$jproduk_nobukti
+								);
+							$this->db->insert('voucher_terima', $data);
 						}
 					}
 				}
@@ -1041,6 +1073,22 @@ class M_master_jual_produk extends Model{
 							$this->db->where('jtunai_ref', $jproduk_nobukti);
 							$this->db->update('jual_tunai', $data);
 						}
+					}else if($jproduk_cara=='voucher'){
+						$sql="SELECT tvoucher_id FROM voucher_terima WHERE tvoucher_ref='$jproduk_nobukti'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							$data=array(
+								"tvoucher_novoucher"=>$jproduk_voucher_no3
+								);
+							$this->db->where('tvoucher_ref', $jproduk_nobukti);
+							$this->db->update('voucher_terima', $data);
+						}else{
+							$data=array(
+								"tvoucher_novoucher"=>$jproduk_voucher_no3,
+								"tvoucher_ref"=>$jproduk_nobukti
+								);
+							$this->db->insert('voucher_terima', $data);
+						}
 					}
 				}
 				
@@ -1162,6 +1210,13 @@ class M_master_jual_produk extends Model{
 							"jtunai_ref"=>$jproduk_nobukti
 							);
 						$this->db->insert('jual_tunai', $data); 
+					}else if($jproduk_cara=='voucher'){
+						
+						$data=array(
+							"tvoucher_novoucher"=>$jproduk_voucher_no,
+							"tvoucher_ref"=>$jproduk_nobukti
+							);
+						$this->db->insert('voucher_terima', $data); 
 					}
 				}
 				if($jproduk_cara2!=null || $jproduk_cara2!=''){
@@ -1235,6 +1290,13 @@ class M_master_jual_produk extends Model{
 							"jtunai_ref"=>$jproduk_nobukti
 							);
 						$this->db->insert('jual_tunai', $data); 
+					}else if($jproduk_cara2=='voucher'){
+						
+						$data=array(
+							"tvoucher_novoucher"=>$jproduk_voucher_no2,
+							"tvoucher_ref"=>$jproduk_nobukti
+							);
+						$this->db->insert('voucher_terima', $data); 
 					}
 				}
 				if($jproduk_cara3!=null || $jproduk_cara3!=''){
@@ -1309,6 +1371,13 @@ class M_master_jual_produk extends Model{
 							"jtunai_ref"=>$jproduk_nobukti
 							);
 						$this->db->insert('jual_tunai', $data); 
+					}else if($jproduk_cara3=='voucher'){
+						
+						$data=array(
+							"tvoucher_novoucher"=>$jproduk_voucher_no3,
+							"tvoucher_ref"=>$jproduk_nobukti
+							);
+						$this->db->insert('voucher_terima', $data); 
 					}
 				}
 				

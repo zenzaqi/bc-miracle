@@ -173,6 +173,12 @@ class C_master_jual_produk extends Controller {
 		echo $result;
 	}
 	
+	function get_voucher_by_ref(){
+		$ref_id = (isset($_POST['no_faktur']) ? $_POST['no_faktur'] : $_GET['no_faktur']);
+		$result = $this->m_public_function->get_voucher_by_ref($ref_id);
+		echo $result;
+	}
+	
 	function  get_voucher_list(){
 		$query = isset($_POST['query']) ? $_POST['query'] : "";
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
