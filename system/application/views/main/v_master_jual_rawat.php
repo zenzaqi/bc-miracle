@@ -43,210 +43,151 @@
 		}
     </style>
 <script>
-Ext.namespace('Ext.ux');
+Ext.ns('Ext.ux.form');
 
-Ext.override(Ext.Component, {
-    /*    override by Animal (http://extjs.com/forum/showthread.php?t=26484)
-        that allows us to find the dollar fields parent form. Very nice.
-    */
-    findParentBy: function(fn) {
-        for (var p = this.ownerCt; (p != null) && !fn(p); p = p.ownerCt);
-        return p;
+/*Ext.ux.form.CFTextField = Ext.extend(Ext.form.TextField,{
+    valueRenderer: null,
+    initComponent: function(config) {
+        Ext.ux.form.CFTextField.superclass.initComponent.apply(this, arguments);
+        this.on('blur', this);
     },
-
-    findParentByType: function(xtype) {
-        return typeof xtype == 'function' ?
-            this.findParentBy(function(p){
-                return p.constructor === xtype;
-            }) :
-            this.findParentBy(function(p){
-                return p.constructor.xtype === xtype;
-            });
-    }
-});
-
-Ext.util.Format.usMoneyNull = function(val) {
-    //-- allows clearing of field value (so that $0.00 only shows if you explicitly entered zero for a value).
-    if (val == null||val == '') {
-        return '';
-    } else if (val > 999999999999) {
-        return '';
-    } else {
-        return Ext.util.Format.rpMoney(val);
-    }
-}
-
-Ext.ux.RupiahField = function(config) {
-    //-- Add any numberfield default settings here:
-    var defaultConfig = {
-        allowDecimals: true,
-        allowNegative: false,
-        decimalPrecision: 2,
-        maxValue: 1000000000,
-        minValue: 0,
-        value: null,
-        selectOnFocus: true//,
-        //itemCls: 'rmoney' // to right-align dollar field, define style: .rmoney .x-form-field {text-align:right;}
-    };
-
-    Ext.ux.RupiahField.superclass.constructor.call(this, Ext.apply(defaultConfig, config));
-
-    this.on('change',this._onChange,this);
-    this.on('initself',this._onInitSelf);
-    this.on('focus',this._onFocus);
-    this.on('blur',this._onBlur);
-    this.on('render',this._onRender);
-    //this.on('valid',this._onValid);
-    this.dollarNumericValue=config.value || null;
-    }
-
-    Ext.extend(Ext.ux.RupiahField, Ext.form.NumberField, {
-    dollarNumericValue: null,
-
-    initSelf: function(){
-        // When form loads, bare number is loaded and displayed. Call this (via listener, typically)
-        // to format value to dollar.
-        if (this.value === null || this.value === '') {
-            this.dollarNumericValue = null;
-        } else {
-            this.dollarNumericValue = this.value;
-        }
-        this.setRawValue(this.formatter(this.dollarNumericValue));
-
-        // prevent field from reporting itself as "dirty" after form load (isDirty check):
-        this.originalValue = this.dollarNumericValue;
-    },
-
-    getValue:function(){
-        //return this.value+"".replace(/[^0-9.-]/g,"")-0; strip out any formatting characters from string.
-        if (this.value === '' || this.value === null) {
-            return null;
-        } else if (isNaN(this.value)) {
-            this.value = 0;
-        } else {
-            return Number(this.value);
-        }
-    },
-
-    _onChange:function(field, newVal, oldVal){
-        // n will always be unformatted numeric as STRING! So "-0" to force numeric type:
-        if (newVal === '') {
-            this.dollarNumericValue = null
-        } else {
-            this.dollarNumericValue = newVal-0;
+    onRender: function(){
+        Ext.ux.form.CFTextField.superclass.onRender.apply(this, arguments);
+        this.hiddenEl = this.el.insertSibling({
+            tag: 'input', type: 'hidden', name: this.hiddenName
+        });
+    },*/
+    
+    /*setHidden: function(v){
+        var regEx = new RegExp(/\s?[a-z]?/gi); 
+        var myValue = Ext.ux.form.CFTextField.superclass.getValue.call(this);
+            
+            if(myValue.match(/\s?h/gi)){
+                myValue = myValue.replace(regEx, '');
+                myValue = myValue*60;
             }
+            else if(myValue.match(/\s?k/gi)){
+                myValue = myValue.replace(regEx, '');
+                myValue = myValue*1000;
+            }
+            else if(myValue.match(regEx)){
+                myValue = myValue.replace(regEx, '');
+            }
+            
+        this.hiddenEl.dom.value = myValue;
+    },*/
+/*    setValue: function(v){
+        switch(this.valueRenderer){
+            case 'numberToCurrency': v = this.currencyFormat(v); break;
+            default: break;
+        }
+        Ext.ux.form.CFTextField.superclass.setValue.apply(this, [v]); 
     },
-    _onRender:function(cmp){
-        this.setRawValue(this.formatter(this.dollarNumericValue));
-        if (this.isFormField) {    // Is this check necessary?
-            var parentForm = this.findParentByType('form');
-
-            /*
-                Note: If client-side validation is enabled, unformatted numbers get posted on save. Good!
-
-                (The field's "isValid" method just does this for some reason, which works to our advantage.)
-
-                BUT (there's always a "but"), we then need to apply back the dollar formatting so that the
-                numbers aren't left displayed as plain.
-            */
-
-            // Format dollar after successful form save:
-            parentForm.on('actioncomplete', function(){cmp.initSelf();});
-
-            // Format back to dollar after failed save attempt.
-            parentForm.on('actionfailed', function(){cmp.initSelf();});
-
-            // doLayout is called on initial page load.
-            parentForm.on('afterLayout', function(){cmp.initSelf();});
-
-            // Formats dollar after client-side validation fails...maybe...still investigating this.
-            // parentForm.on('beforeaction', function(){cmp.initSelf();});
-
-            /*
-                Depends on order of any success/actioncomplete/actionfailed listeners???
-                Or maybe you are checking if the form isValid yourself by listening to the
-                form's beforeaction, type action.type=='submit' and then returning false to
-                cancel the action.    Still looking into all this.
-
-                More on clientValidation:
-                Before the form submits (doAction 'submit' with clientValidation not set to false...
-                from docs: "If undefined, pre-submission field validation is performed.") the call
-                to form "isValid" will turn the rupiahfield back to a plain, unformatted number,
-                which will get posted.
-            */
-
-        }
+    getValue: function(){
+        return this.hiddenEl.dom.value;
     },
-
-    formatter: function(value){
-        if (value === 0) {
-            return Ext.util.Format.usMoneyNull("0");  // returns '$0.00' instead of ''.
-        } else {
-            return Ext.util.Format.usMoneyNull(value);
-        }
+    getName: function() {
+        return this.hiddenName;
     },
+    
+    currencyFormat: function(v) {
+		//-- allows clearing of field value (so that $0.00 only shows if you explicitly entered zero for a value).
+		if (v == null||v == '') {
+			return '';
+		} else if (v > 999999999999) {
+			return '';
+		} else {
+			return Ext.util.Format.rpMoney(v);
+		}
+	}
+     
+});*/
 
-    _onBlur: function(field){
-        /*
-            always update dollarNumericValue with the actual RawValue (which right here (onBlur) will
-            *always* be numeric    (remember: when focused, it's unformatted numeric entry...just like
-            numberfield does. So onBlur, grab that numeric value and save it to this.dollarNumericValue,
-            then apply formatting back to RawValue for display.
-        */
+/*Ext.reg('CFTextField', Ext.ux.form.CFTextField);
+*/
 
-        if (field.getRawValue() == '') {
-            this.dollarNumericValue=null;
-        } else {
-            this.dollarNumericValue=field.getRawValue()-0;
-        }
 
-        field.setRawValue(this.formatter(this.dollarNumericValue));
 
-        if (this.dollarNumericValue !== this.value)    {
-            /* for some reason, when zero'ing out a value (or clearing), the onChange event is not firing 
-              and this.value is not getting set to the new zero or blank value. This fixes that:
-            */
-            this.value = this.dollarNumericValue;
-        }
-
-    },
-
-    _onFocus: function(field){
-        if (this.dollarNumericValue === null||this.dollarNumericValue === '') {
-            field.setRawValue('');
-        } else {
-            // remove formatting by restoring RawValue to dollarNumericValue.
-            field.setRawValue((this.dollarNumericValue-0).toFixed(this.decimalPrecision));
-        }
-    },
-
-    initAllSiblings: function() {
-        /*
-        Perhaps useful to call this manually when having trouble getting the event listeners straightened
-        out as described above
-        */
-        if (this.isFormField) {    // Is this check necessary?
-            var parentForm = this.findParentByType('form');
-
-            var RupiahFields = parentForm.findByType('rupiahfield');
-            Ext.each(RupiahFields, function(rupiahfield) {rupiahfield.initSelf();});
-        }
-    }
-
-    /*
-    _onValid:function(field){
-        if (!field.hasFocus) {
-
-            //could do this here instead of onBlur, but form would end up posting the formatted dollar
-            //value instead of the numeric value.
-
-            this.setRawValue(this.formatter(this.dollarNumericValue));
-        }
-    },
-    */
+Ext.ux.form.NumberField=Ext.extend(Ext.form.TextField,{
+	fieldClass:"x-form-field x-form-num-field",
+	allowDecimals:true,
+	decimalSeparator:".",
+	decimalPrecision:2,
+	allowNegative:true,
+	minValue:Number.NEGATIVE_INFINITY,
+	maxValue:Number.MAX_VALUE,minText:"The minimum value for this field is {0}",
+	maxText:"The maximum value for this field is {0}",
+	nanText:"{0} is not a valid number",
+	baseChars:"0123456789",
+	initEvents:function(){
+		var a=this.baseChars+"";
+		if(this.allowDecimals){
+			a+=this.decimalSeparator
+		}
+		if(this.allowNegative){
+			a+="-"
+		}
+		this.maskRe=new RegExp("["+Ext.escapeRe(a)+"]");
+		Ext.form.NumberField.superclass.initEvents.call(this)},
+		validateValue:function(b){
+			if(!Ext.form.NumberField.superclass.validateValue.call(this,b)){
+				return false
+			}
+			if(b.length<1){
+				return true
+			}
+			b=String(b).replace(this.decimalSeparator,".");
+			if(isNaN(b)){
+				this.markInvalid(String.format(this.nanText,b));
+				return false
+			}
+			var a=this.parseValue(b);
+			if(a<this.minValue){
+				this.markInvalid(String.format(this.minText,this.minValue));
+				return false
+			}
+			if(a>this.maxValue){
+				this.markInvalid(String.format(this.maxText,this.maxValue));
+				return false
+			}
+			return true
+		},
+		
+		getValue:function(){
+			return this.fixPrecision(this.parseValue(Ext.form.NumberField.superclass.getValue.call(this)))
+		},
+		
+		setValue:function(a){
+			a=typeof a=="number"?a:parseFloat(String(a).replace(this.decimalSeparator,"."));
+			a=isNaN(a)?"":String(a).replace(".",this.decimalSeparator);
+			return Ext.form.NumberField.superclass.setValue.call(this,a)
+		},
+		
+		parseValue:function(a){
+			a=parseFloat(String(a).replace(this.decimalSeparator,"."));
+			return isNaN(a)?"":a
+		},
+		
+		fixPrecision:function(b){
+			var a=isNaN(b);
+			if(!this.allowDecimals||this.decimalPrecision==-1||a||!b){
+				return a?"":b
+			}
+			return parseFloat(parseFloat(b).toFixed(this.decimalPrecision))
+		},
+		
+		beforeBlur:function(){
+			var a=this.parseValue(this.getRawValue());
+			if(!Ext.isEmpty(a)){this.setValue(this.fixPrecision(a))}
+		}
 });
+Ext.reg("cfnumberfield",Ext.ux.form.NumberField);
 
-Ext.ComponentMgr.registerType('rupiahfield', Ext.ux.RupiahField);
+
+
+
+
+
 
 /* declare function */		
 var master_jual_rawat_DataStore;
@@ -388,6 +329,78 @@ Ext.onReady(function(){
   	        return record ? record.get(combo.displayField) : combo.valueNotFoundText;
   	    }
   	}
+	
+	/*function CurrencyFormatted(number)
+	{
+		var str = new String(number);
+		str = str.replace(",","");
+        if (isNaN(str)) {
+			return "";
+		}else{
+			//var str = new String(number);
+			//str = str.replace(",","");
+			var result = "";
+			var len = str.length;           
+			for(var i=len-1;i>=0;i--)
+			{           
+				if ((i+1)%3 == 0 && i+1!= len) 
+					result += ",";
+				result += str.charAt(len-1-i);
+			}       
+			return result;
+		}
+    }
+	
+	function convertToNumber(str)
+	{
+		str = str.replace(",","");
+        if (isNaN(str)) 
+			return "";
+		else{
+			//str = str.replace(",","");
+			var tonumber = new parseFloat(str);
+			
+			return tonumber;
+		}
+    }*/
+
+	
+	function FormatCurrency(objNum){
+		console.log("objNum = "+objNum);
+       	var num = objNum.value;
+		var ent, dec;
+		num = MoneyToNumber(objNum);
+		if (num != '' && num != objNum.oldvalue){
+			num = MoneyToNumber(num);
+			if (isNaN(num)){
+				console.log("1");
+				objNum.value = objNum.oldvalue;
+			}else{
+				console.log("2");
+				var ev = (navigator.appName.indexOf('Netscape') != -1)?Event:event;
+				if (ev.keyCode == 190 || !isNaN(num.split('.')[1])){
+					console.log("3");
+					objNum.value = AddCommas(num.split('.')[0])+'.'+num.split('.')[1];
+				}else{
+					objNum.value = AddCommas(num.split('.')[0]);
+				}
+				objNum.oldvalue = objNum.value;
+			}
+		}
+		return num;
+	}
+	
+	function MoneyToNumber(num){
+		return (num.replace(/,/g, ''));
+	}
+	
+	function AddCommas(num){
+		numArr=new String(num).split('').reverse();
+		for (i=3;i<numArr.length;i+=3){
+			 numArr[i]+=',';
+		}
+		return numArr.reverse().join('');
+	}
 	
 	function cetak_faktur_jual_rawat(){
 		Ext.Ajax.request({   
@@ -2211,6 +2224,28 @@ Ext.onReady(function(){
 		maskRe: /([0-9]+)$/
 	});
 	
+	jrawat_cashback_cfField= new Ext.form.TextField({
+		id: 'jrawat_cashback_cfField',
+		fieldLabel: 'Diskon (Rp)',
+		allowNegatife : false,
+		blankText: '0',
+		emptyText: '0',
+		enableKeyEvents: true,
+		//allowDecimals: false,
+		width: 120,
+		listeners: {
+			'keyup': function(){
+				var cf_tonumber = convertToNumber(this.getValue());
+				jrawat_cashbackField.setValue(cf_tonumber);
+				load_total_rawat_bayar();
+				
+				var cashback_cf = CurrencyFormatted(this.getValue());
+				this.setRawValue(cashback_cf);
+			}
+		}/*,
+		maskRe: /([0-9]+)$/*/
+	});
+	
 	jrawat_cashbackField= new Ext.form.NumberField({
 		id: 'jrawat_cashbackField',
 		fieldLabel: 'Diskon (Rp)',
@@ -3310,7 +3345,7 @@ Ext.onReady(function(){
 		readOnly: true,
 		allowDecimals: false,
 		allowBlank: true,
-		width: 100,
+		width: 120,
 		maxLength: 50,
 		maskRe: /([0-9]+)$/
 	});
@@ -3318,27 +3353,39 @@ Ext.onReady(function(){
 	jrawat_totalField= new Ext.form.NumberField({
 		id: 'jrawat_totalField',
 		fieldLabel: '<span style="font-weight:bold">Total (Rp)</span>',
+		//valueRenderer: 'frFormat',
 		readOnly: true,
 		allowDecimals: false,
 		allowBlank: true,
-		itemCls: 'rmoney',
-		width: 100,
+		itemCls: 'rmoney_b',
+		width: 120,
 		maxLength: 50,
 		maskRe: /([0-9]+)$/
 	});
 	
-	jrawat_bayarField= new Ext.form.NumberField({
+	/*jrawat_bayarField= new Ext.form.NumberField({
 		id: 'jrawat_bayarField',
 		fieldLabel: 'Total Bayar (Rp)',
 		readOnly: true,
 		enableKeyEvents: true,
 		allowBlank: true,
 		allowDecimals: false,
-		width: 100,
+		width: 120,
+		maxLength: 50
+	});*/
+	jrawat_bayarField= new Ext.ux.form.CFTextField({
+		id: 'jrawat_bayarField',
+		fieldLabel: 'Total Bayar (Rp)',
+		valueRenderer: 'numberToCurrency',
+		readOnly: true,
+		enableKeyEvents: true,
+		allowBlank: true,
+		allowDecimals: false,
+		width: 120,
 		maxLength: 50
 	});
 	
-	jrawat_hutangField= new Ext.form.NumberField({
+	/*jrawat_hutangField= new Ext.form.NumberField({
 		id: 'jrawat_hutangField',
 		fieldLabel: 'Hutang (Rp)',
 		readOnly: true,
@@ -3347,6 +3394,16 @@ Ext.onReady(function(){
 		width: 100,
 		maxLength: 50,
 		maskRe: /([0-9]+)$/
+	});*/
+	jrawat_hutangField= new Ext.ux.form.CFTextField({
+		id: 'jrawat_hutangField',
+		fieldLabel: 'Hutang (Rp)',
+		valueRenderer: 'numberToCurrency',
+		readOnly: true,
+		itemCls: 'rmoney',
+		width: 120
+		//maskRe: new RegExp('[0123456789.km ]'),
+		//hiddenName: 'length'
 	});
 	
 	
@@ -3400,13 +3457,13 @@ Ext.onReady(function(){
 			}
 			,{
 				columnWidth:0.3,
-				labelWidth: 140,
+				labelWidth: 120,
 				layout: 'form',
     			labelPad: 0,
 				baseCls: 'x-plain',
 				border:false,
 				labelAlign: 'left',
-				items: [jrawat_jumlahField, jrawat_subTotalField, jrawat_diskonField, jrawat_cashbackField, {xtype: 'spacer',height:10},jrawat_totalField, jrawat_bayarField,jrawat_hutangField] 
+				items: [jrawat_jumlahField, jrawat_subTotalField, jrawat_diskonField, jrawat_cashback_cfField, {xtype: 'spacer',height:10},jrawat_totalField, jrawat_bayarField,jrawat_hutangField] 
 			}
 			]
 	

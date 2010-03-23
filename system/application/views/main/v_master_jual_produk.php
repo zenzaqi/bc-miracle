@@ -611,27 +611,33 @@ Ext.onReady(function(){
 	function kwitansi_jual_produk_reset_form(){
 		jproduk_kwitansi_namaField.reset();
 		jproduk_kwitansi_nilaiField.reset();
+		jproduk_kwitansi_nilai_cfField.reset();
 		jproduk_kwitansi_noField.reset();
 		jproduk_kwitansi_namaField.setValue("");
-		jproduk_kwitansi_nilai2Field.setValue(null);
-		jproduk_kwitansi_no2Field.setValue("");
+		jproduk_kwitansi_nilaiField.setValue(null);
+		jproduk_kwitansi_nilai_cfField.setValue(null);
+		jproduk_kwitansi_noField.setValue("");
 	}
 	// Reset kwitansi-2 option
 	function kwitansi2_jual_produk_reset_form(){
 		jproduk_kwitansi_nama2Field.reset();
 		jproduk_kwitansi_nilai2Field.reset();
+		jproduk_kwitansi_nilai2_cfField.reset();
 		jproduk_kwitansi_no2Field.reset();
 		jproduk_kwitansi_nama2Field.setValue("");
 		jproduk_kwitansi_nilai2Field.setValue(null);
+		jproduk_kwitansi_nilai2_cfField.setValue(null);
 		jproduk_kwitansi_no2Field.setValue("");
 	}
 	// Reset kwitansi-3 option
 	function kwitansi3_jual_produk_reset_form(){
 		jproduk_kwitansi_nama3Field.reset();
 		jproduk_kwitansi_nilai3Field.reset();
+		jproduk_kwitansi_nilai3_cfField.reset();
 		jproduk_kwitansi_no3Field.reset();
 		jproduk_kwitansi_nama3Field.setValue("");
 		jproduk_kwitansi_nilai3Field.setValue(null);
+		jproduk_kwitansi_nilai3_cfField.setValue(null);
 		jproduk_kwitansi_no3Field.setValue("");
 	}
 	
@@ -641,10 +647,12 @@ Ext.onReady(function(){
 		jproduk_card_edcField.reset();
 		jproduk_card_noField.reset();
 		jproduk_card_nilaiField.reset();
+		jproduk_card_nilai_cfField.reset();
 		jproduk_card_namaField.setValue("");
 		jproduk_card_edcField.setValue("");
 		jproduk_card_noField.setValue("");
-		jproduk_card_nilai2Field.setValue(null);
+		jproduk_card_nilaiField.setValue(null);
+		jproduk_card_nilai_cfField.setValue(null);
 	}
 	// Reset card-2 option
 	function card2_jual_produk_reset_form(){
@@ -652,10 +660,12 @@ Ext.onReady(function(){
 		jproduk_card_edc2Field.reset();
 		jproduk_card_no2Field.reset();
 		jproduk_card_nilai2Field.reset();
+		jproduk_card_nilai2_cfField.reset();
 		jproduk_card_nama2Field.setValue("");
 		jproduk_card_edc2Field.setValue("");
 		jproduk_card_no2Field.setValue("");
 		jproduk_card_nilai2Field.setValue(null);
+		jproduk_card_nilai2_cfField.setValue(null);
 	}
 	// Reset card-3 option
 	function card3_jual_produk_reset_form(){
@@ -663,10 +673,12 @@ Ext.onReady(function(){
 		jproduk_card_edc3Field.reset();
 		jproduk_card_no3Field.reset();
 		jproduk_card_nilai3Field.reset();
+		jproduk_card_nilai3_cfField.reset();
 		jproduk_card_nama3Field.setValue("");
 		jproduk_card_edc3Field.setValue("");
 		jproduk_card_no3Field.setValue("");
 		jproduk_card_nilai3Field.setValue(null);
+		jproduk_card_nilai3_cfField.setValue(null);
 	}
 	
 	// Reset cek option
@@ -676,11 +688,13 @@ Ext.onReady(function(){
 		jproduk_cek_validField.reset();
 		jproduk_cek_bankField.reset();
 		jproduk_cek_nilaiField.reset();
+		jproduk_cek_nilai_cfField.reset();
 		jproduk_cek_namaField.setValue(null);
 		jproduk_cek_noField.setValue("");
 		jproduk_cek_validField.setValue("");
 		jproduk_cek_bankField.setValue("");
 		jproduk_cek_nilaiField.setValue(null);
+		jproduk_cek_nilai_cfField.setValue(null);
 	}
 	// Reset cek-2 option
 	function cek2_jual_produk_reset_form(){
@@ -689,11 +703,13 @@ Ext.onReady(function(){
 		jproduk_cek_valid2Field.reset();
 		jproduk_cek_bank2Field.reset();
 		jproduk_cek_nilai2Field.reset();
+		jproduk_cek_nilai2_cfField.reset();
 		jproduk_cek_nama2Field.setValue(null);
 		jproduk_cek_no2Field.setValue("");
 		jproduk_cek_valid2Field.setValue("");
 		jproduk_cek_bank2Field.setValue("");
 		jproduk_cek_nilai2Field.setValue(null);
+		jproduk_cek_nilai2_cfField.setValue(null);
 	}
 	// Reset cek-3 option
 	function cek3_jual_produk_reset_form(){
@@ -702,11 +718,13 @@ Ext.onReady(function(){
 		jproduk_cek_valid3Field.reset();
 		jproduk_cek_bank3Field.reset();
 		jproduk_cek_nilai3Field.reset();
+		jproduk_cek_nilai3_cfField.reset();
 		jproduk_cek_nama3Field.setValue(null);
 		jproduk_cek_no3Field.setValue("");
 		jproduk_cek_valid3Field.setValue("");
 		jproduk_cek_bank3Field.setValue("");
 		jproduk_cek_nilai3Field.setValue(null);
+		jproduk_cek_nilai3_cfField.setValue(null);
 	}
 	
 	// Reset transfer option
@@ -714,43 +732,55 @@ Ext.onReady(function(){
 		jproduk_transfer_bankField.reset();
 		jproduk_transfer_namaField.reset();
 		jproduk_transfer_nilaiField.reset();
+		jproduk_transfer_nilai_cfField.reset();
 		jproduk_transfer_bankField.setValue("");
 		jproduk_transfer_namaField.setValue(null);
 		jproduk_transfer_nilaiField.setValue(null);
+		jproduk_transfer_nilai_cfField.setValue(null);
 	}
 	// Reset transfer-2 option
 	function transfer2_jual_produk_reset_form(){
 		jproduk_transfer_bank2Field.reset();
 		jproduk_transfer_nama2Field.reset();
 		jproduk_transfer_nilai2Field.reset();
+		jproduk_transfer_nilai2_cfField.reset();
 		jproduk_transfer_bank2Field.setValue("");
 		jproduk_transfer_nama2Field.setValue(null);
 		jproduk_transfer_nilai2Field.setValue(null);
+		jproduk_transfer_nilai2_cfField.setValue(null);
 	}
 	// Reset transfer-3 option
 	function transfer3_jual_produk_reset_form(){
 		jproduk_transfer_bank3Field.reset();
 		jproduk_transfer_nama3Field.reset();
 		jproduk_transfer_nilai3Field.reset();
+		jproduk_transfer_nilai3_cfField.reset();
 		jproduk_transfer_bank3Field.setValue("");
 		jproduk_transfer_nama3Field.setValue(null);
 		jproduk_transfer_nilai3Field.setValue(null);
+		jproduk_transfer_nilai3_cfField.setValue(null);
 	}
 
 	// Reset tunai option
 	function tunai_jual_produk_reset_form(){
 		jproduk_tunai_nilaiField.reset();
 		jproduk_tunai_nilaiField.setValue(null);
+		jproduk_tunai_nilai_cfField.reset();
+		jproduk_tunai_nilai_cfField.setValue(null);
 	}
 	// Reset tunai-2 option
 	function tunai2_jual_produk_reset_form(){
 		jproduk_tunai_nilai2Field.reset();
 		jproduk_tunai_nilai2Field.setValue(null);
+		jproduk_tunai_nilai2_cfField.reset();
+		jproduk_tunai_nilai2_cfField.setValue(null);
 	}
 	// Reset tunai-3 option
 	function tunai3_jual_produk_reset_form(){
 		jproduk_tunai_nilai3Field.reset();
 		jproduk_tunai_nilai3Field.setValue(null);
+		jproduk_tunai_nilai3_cfField.reset();
+		jproduk_tunai_nilai3_cfField.setValue(null);
 	}
 
 	//Reset voucher option
@@ -792,20 +822,29 @@ Ext.onReady(function(){
 		jproduk_cara2Field.setValue(null);
 		jproduk_cara3Field.reset();
 		jproduk_cara3Field.setValue(null);
+		
 		jproduk_cashbackField.reset();
 		jproduk_cashbackField.setValue(null);
+		jproduk_cashback_cfField.reset();
+		jproduk_cashback_cfField.setValue(null);
 		
 		jproduk_keteranganField.reset();
 		jproduk_keteranganField.setValue(null);
 
 		jproduk_subTotalField.reset();
 		jproduk_subTotalField.setValue(null);
+		jproduk_subTotal_cfField.reset();
+		jproduk_subTotal_cfField.setValue(null);
 
 		jproduk_totalField.reset();
 		jproduk_totalField.setValue(null);
+		jproduk_total_cfField.reset();
+		jproduk_total_cfField.setValue(null);
 
 		jproduk_hutangField.reset();
 		jproduk_hutangField.setValue(null);
+		jproduk_hutang_cfField.reset();
+		jproduk_hutang_cfField.setValue(null);
 
 		jproduk_jumlahField.reset();
 		jproduk_jumlahField.setValue(null);
@@ -841,6 +880,8 @@ Ext.onReady(function(){
 
 		jproduk_bayarField.reset();
 		jproduk_bayarField.setValue(null);
+		jproduk_bayar_cfField.reset();
+		jproduk_bayar_cfField.setValue(null);
 	}
  	/* End of Function */
 	
@@ -852,6 +893,15 @@ Ext.onReady(function(){
 	/* setValue to EDIT */
 	function master_jual_produk_set_form(){
 		var hutang_temp=0;
+		var cf_hutang="";
+		
+		var subtotal_field=0;
+		var dproduk_jumlah_field=0;
+		var total_field=0;
+		var hutang_field=0;
+		var diskon_field=0;
+		var cashback_field=0;
+		
 		//master_jual_produk_reset_form();
 		jproduk_idField.setValue(master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_id'));
 		jproduk_nobuktiField.setValue(master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_nobukti'));
@@ -862,11 +912,40 @@ Ext.onReady(function(){
 		jproduk_cara3Field.setValue(master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_cara3'));
 		jproduk_diskonField.setValue(master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_diskon'));
 		jproduk_cashbackField.setValue(master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_cashback'));
+		jproduk_cashback_cfField.setValue(CurrencyFormatted(master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_cashback')));
 		jproduk_bayarField.setValue(master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_bayar'));
-		hutang_temp=jproduk_totalField.getValue()-jproduk_bayarField.getValue();
-		jproduk_hutangField.setValue(hutang_temp);
-
+		jproduk_bayar_cfField.setValue(master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_bayar'));
+		
 		jproduk_keteranganField.setValue(master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_keterangan'));
+		
+		for(i=0;i<detail_jual_produk_DataStore.getCount();i++){
+			subtotal_field+=detail_jual_produk_DataStore.getAt(i).data.dproduk_subtotal_net;
+			dproduk_jumlah_field+=detail_jual_produk_DataStore.getAt(i).data.dproduk_jumlah;
+		}
+		if(jproduk_diskonField.getValue()!==""){
+			diskon_field=jproduk_diskonField.getValue();
+		}
+		
+		if(jproduk_cashbackField.getValue()!==""){
+			cashback_field=jproduk_cashbackField.getValue();
+		}
+		total_field=subtotal_field*(100-diskon_field)/100-cashback_field;
+		
+		jproduk_jumlahField.setValue(dproduk_jumlah_field);
+		jproduk_subTotalField.setValue(subtotal_field);
+		jproduk_subTotal_cfField.setValue(subtotal_field);
+		
+		jproduk_totalField.setValue(total_field);
+		jproduk_total_cfField.setValue(total_field);
+		
+		hutang_temp=total_field-jproduk_bayarField.getValue();
+		jproduk_hutangField.setValue(hutang_temp);
+		jproduk_hutang_cfField.setValue(hutang_temp);
+		
+		
+		
+		
+		
 		load_membership();
 		update_group_carabayar_jual_produk();
 		update_group_carabayar2_jual_produk();
@@ -883,6 +962,7 @@ Ext.onReady(function(){
 								jproduk_kwitansi_noField.setValue(jproduk_kwitansi_record.kwitansi_no);
 								jproduk_kwitansi_namaField.setValue(jproduk_kwitansi_record.cust_nama);
 								jproduk_kwitansi_nilaiField.setValue(jproduk_kwitansi_record.jkwitansi_nilai);
+								jproduk_kwitansi_nilai_cfField.setValue(CurrencyFormatted(jproduk_kwitansi_record.jkwitansi_nilai));
 							}
 						  }
 					  }
@@ -899,6 +979,7 @@ Ext.onReady(function(){
 								jproduk_card_edcField.setValue(jproduk_card_record.jcard_edc);
 								jproduk_card_noField.setValue(jproduk_card_record.jcard_no);
 								jproduk_card_nilaiField.setValue(jproduk_card_record.jcard_nilai);
+								jproduk_card_nilai_cfField.setValue(CurrencyFormatted(jproduk_card_record.jcard_nilai));
 							}
 						 }
 					}
@@ -916,6 +997,7 @@ Ext.onReady(function(){
 									jproduk_cek_validField.setValue(jproduk_cek_record.jcek_valid);
 									jproduk_cek_bankField.setValue(jproduk_cek_record.jcek_bank);
 									jproduk_cek_nilaiField.setValue(jproduk_cek_record.jcek_nilai);
+									jproduk_cek_nilai_cfField.setValue(CurrencyFormatted(jproduk_cek_record.jcek_nilai));
 								}
 							}
 					 	}
@@ -931,6 +1013,7 @@ Ext.onReady(function(){
 										jproduk_transfer_bankField.setValue(jproduk_transfer_record.data.jtransfer_bank);
 										jproduk_transfer_namaField.setValue(jproduk_transfer_record.data.jtransfer_nama);
 										jproduk_transfer_nilaiField.setValue(jproduk_transfer_record.data.jtransfer_nilai);
+										jproduk_transfer_nilai_cfField.setValue(CurrencyFormatted(jproduk_transfer_record.data.jtransfer_nilai));
 									}
 							}
 					 	}
@@ -944,6 +1027,21 @@ Ext.onReady(function(){
 									if(tunai_jual_produk_DataStore.getCount()){
 										jproduk_tunai_record=tunai_jual_produk_DataStore.getAt(0);
 										jproduk_tunai_nilaiField.setValue(jproduk_tunai_record.data.jtunai_nilai);
+										jproduk_tunai_nilai_cfField.setValue(CurrencyFormatted(jproduk_tunai_record.data.jtunai_nilai));
+									}
+							}
+					 	}
+				  });
+				break;
+			case 'voucher' :
+				voucher_jual_produk_DataStore.load({
+						params : { no_faktur: jproduk_nobuktiField.getValue() },
+					  	callback: function(opts, success, response)  {
+							if (success) {
+									if(voucher_jual_produk_DataStore.getCount()){
+										jproduk_voucher_record=voucher_jual_produk_DataStore.getAt(0);
+										jproduk_voucher_noField.setValue(jproduk_voucher_record.data.tvoucher_novoucher);
+										jproduk_voucher_cashbackField.setValue(jproduk_voucher_record.data.voucher_cashback);
 									}
 							}
 					 	}
@@ -962,6 +1060,7 @@ Ext.onReady(function(){
 								jproduk_kwitansi_no2Field.setValue(jproduk_kwitansi_record.kwitansi_no);
 								jproduk_kwitansi_nama2Field.setValue(jproduk_kwitansi_record.cust_nama);
 								jproduk_kwitansi_nilai2Field.setValue(jproduk_kwitansi_record.jkwitansi_nilai);
+								jproduk_kwitansi_nilai2_cfField.setValue(CurrencyFormatted(jproduk_kwitansi_record.jkwitansi_nilai));
 							}
 						  }
 					  }
@@ -978,6 +1077,7 @@ Ext.onReady(function(){
 								 jproduk_card_edc2Field.setValue(jproduk_card_record.jcard_edc);
 								 jproduk_card_no2Field.setValue(jproduk_card_record.jcard_no);
 								 jproduk_card_nilai2Field.setValue(jproduk_card_record.jcard_nilai);
+								 jproduk_card_nilai2_cfField.setValue(CurrencyFormatted(jproduk_card_record.jcard_nilai));
 							 }
 						 }
 					}
@@ -995,6 +1095,7 @@ Ext.onReady(function(){
 									jproduk_cek_valid2Field.setValue(jproduk_cek_record.jcek_valid);
 									jproduk_cek_bank2Field.setValue(jproduk_cek_record.jcek_bank);
 									jproduk_cek_nilai2Field.setValue(jproduk_cek_record.jcek_nilai);
+									jproduk_cek_nilai2_cfField.setValue(CurrencyFormatted(jproduk_cek_record.jcek_nilai));
 								}
 							}
 					 	}
@@ -1011,6 +1112,7 @@ Ext.onReady(function(){
 										jproduk_transfer_bank2Field.setValue(jproduk_transfer_record.data.jtransfer_bank);
 										jproduk_transfer_nama2Field.setValue(jproduk_transfer_record.data.jtransfer_nama);
 										jproduk_transfer_nilai2Field.setValue(jproduk_transfer_record.data.jtransfer_nilai);
+										jproduk_transfer_nilai2_cfField.setValue(CurrencyFormatted(jproduk_transfer_record.data.jtransfer_nilai));
 									}
 							}
 					 	}
@@ -1023,7 +1125,22 @@ Ext.onReady(function(){
 							if (success) {
 									if(tunai_jual_produk_DataStore.getCount()){
 										jproduk_tunai_record=tunai_jual_produk_DataStore.getAt(0);
-										jproduk_tunai_nilaiField.setValue(jproduk_tunai_record.data.jtunai_nilai);
+										jproduk_tunai_nilai2Field.setValue(jproduk_tunai_record.data.jtunai_nilai);
+										jproduk_tunai_nilai2_cfField.setValue(CurrencyFormatted(jproduk_tunai_record.data.jtunai_nilai));
+									}
+							}
+					 	}
+				  });
+				break;
+			case 'voucher' :
+				voucher_jual_produk_DataStore.load({
+						params : { no_faktur: jproduk_nobuktiField.getValue() },
+					  	callback: function(opts, success, response)  {
+							if (success) {
+									if(voucher_jual_produk_DataStore.getCount()){
+										jproduk_voucher_record=voucher_jual_produk_DataStore.getAt(0);
+										jproduk_voucher_no2Field.setValue(jproduk_voucher_record.data.tvoucher_novoucher);
+										jproduk_voucher_cashback2Field.setValue(jproduk_voucher_record.data.voucher_cashback);
 									}
 							}
 					 	}
@@ -1042,6 +1159,7 @@ Ext.onReady(function(){
 								jproduk_kwitansi_no3Field.setValue(jproduk_kwitansi_record.kwitansi_no);
 								jproduk_kwitansi_nama3Field.setValue(jproduk_kwitansi_record.cust_nama);
 								jproduk_kwitansi_nilai3Field.setValue(jproduk_kwitansi_record.jkwitansi_nilai);
+								jproduk_kwitansi_nilai3_cfField.setValue(CurrencyFormatted(jproduk_kwitansi_record.jkwitansi_nilai));
 							}
 						  }
 					  }
@@ -1058,6 +1176,7 @@ Ext.onReady(function(){
 								 jproduk_card_edc3Field.setValue(jproduk_card_record.jcard_edc);
 								 jproduk_card_no3Field.setValue(jproduk_card_record.jcard_no);
 								 jproduk_card_nilai3Field.setValue(jproduk_card_record.jcard_nilai);
+								 jproduk_card_nilai3_cfField.setValue(CurrencyFormatted(jproduk_card_record.jcard_nilai));
 							 }
 						 }
 					}
@@ -1075,6 +1194,7 @@ Ext.onReady(function(){
 									jproduk_cek_valid3Field.setValue(jproduk_cek_record.jcek_valid);
 									jproduk_cek_bank3Field.setValue(jproduk_cek_record.jcek_bank);
 									jproduk_cek_nilai3Field.setValue(jproduk_cek_record.jcek_nilai);
+									jproduk_cek_nilai3_cfField.setValue(CurrencyFormatted(jproduk_cek_record.jcek_nilai));
 								}
 							}
 					 	}
@@ -1091,6 +1211,7 @@ Ext.onReady(function(){
 										jproduk_transfer_bank3Field.setValue(jproduk_transfer_record.data.jtransfer_bank);
 										jproduk_transfer_nama3Field.setValue(jproduk_transfer_record.data.jtransfer_nama);
 										jproduk_transfer_nilai3Field.setValue(jproduk_transfer_record.data.jtransfer_nilai);
+										jproduk_transfer_nilai3_cfField.setValue(CurrencyFormatted(jproduk_transfer_record.data.jtransfer_nilai));
 									}
 							}
 					 	}
@@ -1103,7 +1224,22 @@ Ext.onReady(function(){
 							if (success) {
 									if(tunai_jual_produk_DataStore.getCount()){
 										jproduk_tunai_record=tunai_jual_produk_DataStore.getAt(0);
-										jproduk_tunai_nilaiField.setValue(jproduk_tunai_record.data.jtunai_nilai);
+										jproduk_tunai_nilai3Field.setValue(jproduk_tunai_record.data.jtunai_nilai);
+										jproduk_tunai_nilai3_cfField.setValue(CurrencyFormatted(jproduk_tunai_record.data.jtunai_nilai));
+									}
+							}
+					 	}
+				  });
+				break;
+			case 'voucher' :
+				voucher_jual_produk_DataStore.load({
+						params : { no_faktur: jproduk_nobuktiField.getValue() },
+					  	callback: function(opts, success, response)  {
+							if (success) {
+									if(voucher_jual_produk_DataStore.getCount()){
+										jproduk_voucher_record=voucher_jual_produk_DataStore.getAt(0);
+										jproduk_voucher_no3Field.setValue(jproduk_voucher_record.data.tvoucher_novoucher);
+										jproduk_voucher_cashback3Field.setValue(jproduk_voucher_record.data.voucher_cashback);
 									}
 							}
 					 	}
@@ -1184,7 +1320,7 @@ Ext.onReady(function(){
 				params : {master_id : eval(get_pk_id()), start:0, limit:pageS},
 				callback: function(opts, success, response){
 					if(success){
-						var subtotal_field=0;
+						/*var subtotal_field=0;
 						var dproduk_jumlah_field=0;
 						var total_field=0;
 						var hutang_field=0;
@@ -1197,20 +1333,15 @@ Ext.onReady(function(){
 							if(jproduk_diskonField.getValue()!==""){
 								diskon_field=jproduk_diskonField.getValue();
 							}
+							
 							if(jproduk_cashbackField.getValue()!==""){
 								cashback_field=jproduk_cashbackField.getValue();
 							}
 							total_field=subtotal_field*(100-diskon_field)/100-cashback_field;
-							//jproduk_totalField.setValue(total_field);
-							//jproduk_bayarField.setValue(detail_jual_produk_DataStore.getAt(i).data.jproduk_bayar);
-							//hutang_field=total_field-detail_jual_produk_DataStore.getAt(i).data.jproduk_bayar;
-							//jproduk_hutangField.setValue(hutang_field);
 						}
-						//jproduk_caraField.setValue("card");
-						//master_jual_produk_cardGroup.setVisible(true);
 						jproduk_jumlahField.setValue(dproduk_jumlah_field);
 						jproduk_subTotalField.setValue(subtotal_field);
-						jproduk_totalField.setValue(total_field);
+						jproduk_totalField.setValue(total_field);*/
 						master_jual_produk_set_form();
 					}
 				}
@@ -1523,6 +1654,27 @@ Ext.onReady(function(){
 		sortInfo:{field: 'jproduk_bank_display', direction: "DESC"}
 		});
 	/* END GET Bank-List.Store */
+	
+	/* GET Voucher-Terima-List.Store */
+	voucher_jual_produk_DataStore = new Ext.data.Store({
+		id: 'voucher_jual_produk_DataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_master_jual_produk&m=get_voucher_by_ref', 
+			method: 'POST'
+		}),
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'tvoucher_id'
+		},[
+		/* dataIndex => insert intomaster_jual_produk_ColumnModel, Mapping => for initiate table column */ 
+			{name: 'tvoucher_id', type: 'int', mapping: 'tvoucher_id'}, 
+			{name: 'tvoucher_novoucher', type: 'string', mapping: 'tvoucher_novoucher'}, 
+			{name: 'voucher_cashback', type: 'float', mapping: 'voucher_cashback'}
+		]),
+		sortInfo:{field: 'tvoucher_id', direction: "DESC"}
+	});
+	/* End of GET Voucher-Terima-List.Store */
 	
   	/* Function for Identify of Window Column Model */
 	master_jual_produk_ColumnModel = new Ext.grid.ColumnModel(
@@ -1877,11 +2029,30 @@ Ext.onReady(function(){
 		emptyText: '0',
 		allowDecimals: false,
 		enableKeyEvents: true,
-		width: 100,
+		width: 120,
 		maxLength: 2,
 		maskRe: /([0-9]+)$/
 	});
 	
+	jproduk_cashback_cfField= new Ext.form.TextField({
+		id: 'jproduk_cashback_cfField',
+		fieldLabel: 'Diskon (Rp)',
+		allowNegatife : false,
+		enableKeyEvents: true,
+		itemCls: 'rmoney',
+		width: 120,
+		maskRe: /([0-9]+)$/ 
+		/*,listeners: {
+			'keyup': function(){
+				var cf_tonumber = convertToNumber(this.getValue());
+				jproduk_cashbackField.setValue(cf_tonumber);
+				load_total_produk_bayar();
+				
+				var cashback_cf = CurrencyFormatted(this.getValue());
+				this.setRawValue(cashback_cf);
+			}
+		}*/
+	});
 	jproduk_cashbackField= new Ext.form.NumberField({
 		id: 'jproduk_cashbackField',
 		fieldLabel: 'Diskon (Rp)',
@@ -1890,7 +2061,7 @@ Ext.onReady(function(){
 		emptyText: '0',
 		enableKeyEvents: true,
 		allowDecimals: false,
-		width: 100,
+		width: 120,
 		maskRe: /([0-9]+)$/
 	});
 	
@@ -1954,7 +2125,7 @@ Ext.onReady(function(){
 		store: cbo_voucher_jual_produkDataStore,
 		mode: 'remote',
 		displayField:'voucher_nomor',
-		valueField: 'voucher_id',
+		valueField: 'voucher_nomor',
         typeAhead: false,
         loadingText: 'Searching...',
         pageSize:10,
@@ -1968,19 +2139,32 @@ Ext.onReady(function(){
 		anchor: '95%'
 	});
 	jproduk_voucher_noField.on('select', function(){
-		j=cbo_voucher_jual_produkDataStore.find('voucher_nomor',jproduk_kwitansi_noField.getValue());
+		j=cbo_voucher_jual_produkDataStore.find('voucher_nomor',jproduk_voucher_noField.getValue());
 		if(j>-1){
-			jproduk_kwitansi_namaField.setValue(cbo_kwitansi_jual_produk_DataStore.getAt(j).data.ckwitansi_cust_nama);
+			jproduk_voucher_cashbackField.setValue(cbo_voucher_jual_produkDataStore.getAt(j).data.voucher_cashback);
+			if(post2db=="CREATE")
+				load_total_produk_bayar();
+			else if(post2db=="UPDATE")
+				load_total_bayar_updating();
 		}
 	});
 	
-	jproduk_voucher_cashbackField= new Ext.form.NumberField({
+	jproduk_voucher_cashbackField= new Ext.ux.form.CFTextField({
 		id: 'jproduk_voucher_cashbackField',
 		fieldLabel: 'Nilai Cashback',
+		valueRenderer: 'numberToCurrency',
+		readOnly: true,
+		anchor: '95%',
+		enableKeyEvents: true
+	});
+	/*jproduk_voucher_cashbackField= new Ext.form.NumberField({
+		id: 'jproduk_voucher_cashbackField',
+		fieldLabel: 'Nilai Cashback',
+		readOnly: true,
 		anchor: '95%',
 		enableKeyEvents: true,
 		maskRe: /([0-9]+)$/
-	});
+	});*/
 	
 	
 	master_jual_produk_voucherGroup= new Ext.form.FieldSet({
@@ -2008,7 +2192,7 @@ Ext.onReady(function(){
 		store: cbo_voucher_jual_produkDataStore,
 		mode: 'remote',
 		displayField:'voucher_nomor',
-		valueField: 'voucher_id',
+		valueField: 'voucher_nomor',
         typeAhead: false,
         loadingText: 'Searching...',
         pageSize:10,
@@ -2021,14 +2205,33 @@ Ext.onReady(function(){
 		listClass: 'x-combo-list-small',
 		anchor: '95%'
 	});
+	jproduk_voucher_no2Field.on('select', function(){
+		j=cbo_voucher_jual_produkDataStore.find('voucher_nomor',jproduk_voucher_no2Field.getValue());
+		if(j>-1){
+			jproduk_voucher_cashback2Field.setValue(cbo_voucher_jual_produkDataStore.getAt(j).data.voucher_cashback);
+			if(post2db=="CREATE")
+				load_total_produk_bayar();
+			else if(post2db=="UPDATE")
+				load_total_bayar_updating();
+		}
+	});
 	
-	jproduk_voucher_cashback2Field= new Ext.form.NumberField({
+	jproduk_voucher_cashback2Field= new Ext.ux.form.CFTextField({
 		id: 'jproduk_voucher_cashback2Field',
 		fieldLabel: 'Nilai Cashback',
+		valueRenderer: 'numberToCurrency',
+		readOnly: true,
+		anchor: '95%',
+		enableKeyEvents: true
+	});
+	/*jproduk_voucher_cashback2Field= new Ext.form.NumberField({
+		id: 'jproduk_voucher_cashback2Field',
+		fieldLabel: 'Nilai Cashback',
+		readOnly: true,
 		anchor: '95%',
 		enableKeyEvents: true,
 		maskRe: /([0-9]+)$/
-	});
+	});*/
 	
 	
 	master_jual_produk_voucher2Group= new Ext.form.FieldSet({
@@ -2056,7 +2259,7 @@ Ext.onReady(function(){
 		store: cbo_voucher_jual_produkDataStore,
 		mode: 'remote',
 		displayField:'voucher_nomor',
-		valueField: 'voucher_id',
+		valueField: 'voucher_nomor',
         typeAhead: false,
         loadingText: 'Searching...',
         pageSize:10,
@@ -2069,14 +2272,33 @@ Ext.onReady(function(){
 		listClass: 'x-combo-list-small',
 		anchor: '95%'
 	});
+	jproduk_voucher_no3Field.on('select', function(){
+		j=cbo_voucher_jual_produkDataStore.find('voucher_nomor',jproduk_voucher_no3Field.getValue());
+		if(j>-1){
+			jproduk_voucher_cashback3Field.setValue(cbo_voucher_jual_produkDataStore.getAt(j).data.voucher_cashback);
+			if(post2db=="CREATE")
+				load_total_produk_bayar();
+			else if(post2db=="UPDATE")
+				load_total_bayar_updating();
+		}
+	});
 	
-	jproduk_voucher_cashback3Field= new Ext.form.NumberField({
+	jproduk_voucher_cashback3Field= new Ext.ux.form.CFTextField({
 		id: 'jproduk_voucher_cashback3Field',
 		fieldLabel: 'Nilai Cashback',
+		valueRenderer: 'numberToCurrency',
+		readOnly: true,
+		anchor: '95%',
+		enableKeyEvents: true
+	});
+	/*jproduk_voucher_cashback3Field= new Ext.form.NumberField({
+		id: 'jproduk_voucher_cashback3Field',
+		fieldLabel: 'Nilai Cashback',
+		readOnly: true,
 		anchor: '95%',
 		enableKeyEvents: true,
 		maskRe: /([0-9]+)$/
-	});
+	});*/
 	
 	
 	master_jual_produk_voucher3Group= new Ext.form.FieldSet({
@@ -2139,6 +2361,15 @@ Ext.onReady(function(){
 		anchor: '95%'
 	});
 	
+	jproduk_card_nilai_cfField= new Ext.form.TextField({
+		id: 'jproduk_card_nilai_cfField',
+		fieldLabel: 'Jumlah (Rp)',
+		allowNegatife : false,
+		enableKeyEvents: true,
+		itemCls: 'rmoney',
+		anchor: '95%',
+		maskRe: /([0-9]+)$/ 
+	});
 	jproduk_card_nilaiField= new Ext.form.NumberField({
 		id: 'jproduk_card_nilaiField',
 		fieldLabel: 'Jumlah (Rp)',
@@ -2160,7 +2391,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [jproduk_card_namaField,jproduk_card_edcField,jproduk_card_noField,jproduk_card_nilaiField] 
+				items: [jproduk_card_namaField,jproduk_card_edcField,jproduk_card_noField,jproduk_card_nilai_cfField] 
 			}
 		]
 	
@@ -2207,6 +2438,15 @@ Ext.onReady(function(){
 		anchor: '95%'
 	});
 	
+	jproduk_card_nilai2_cfField= new Ext.form.TextField({
+		id: 'jproduk_card_nilai2_cfField',
+		fieldLabel: 'Jumlah (Rp)',
+		allowNegatife : false,
+		enableKeyEvents: true,
+		itemCls: 'rmoney',
+		anchor: '95%',
+		maskRe: /([0-9]+)$/ 
+	});
 	jproduk_card_nilai2Field= new Ext.form.NumberField({
 		id: 'jproduk_card_nilai2Field',
 		fieldLabel: 'Jumlah (Rp)',
@@ -2228,7 +2468,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [jproduk_card_nama2Field,jproduk_card_edc2Field,jproduk_card_no2Field,jproduk_card_nilai2Field] 
+				items: [jproduk_card_nama2Field,jproduk_card_edc2Field,jproduk_card_no2Field,jproduk_card_nilai2_cfField] 
 			}
 		]
 	
@@ -2275,6 +2515,15 @@ Ext.onReady(function(){
 		anchor: '95%'
 	});
 	
+	jproduk_card_nilai3_cfField= new Ext.form.TextField({
+		id: 'jproduk_card_nilai3_cfField',
+		fieldLabel: 'Jumlah (Rp)',
+		allowNegatife : false,
+		enableKeyEvents: true,
+		itemCls: 'rmoney',
+		anchor: '95%',
+		maskRe: /([0-9]+)$/ 
+	});
 	jproduk_card_nilai3Field= new Ext.form.NumberField({
 		id: 'jproduk_card_nilai3Field',
 		fieldLabel: 'Jumlah (Rp)',
@@ -2296,7 +2545,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [jproduk_card_nama3Field,jproduk_card_edc3Field,jproduk_card_no3Field,jproduk_card_nilai3Field] 
+				items: [jproduk_card_nama3Field,jproduk_card_edc3Field,jproduk_card_no3Field,jproduk_card_nilai3_cfField] 
 			}
 		]
 	
@@ -2340,6 +2589,15 @@ Ext.onReady(function(){
 		renderer: Ext.util.Format.comboRenderer(jproduk_cek_bankField)
 	});
 	
+	jproduk_cek_nilai_cfField= new Ext.form.TextField({
+		id: 'jproduk_cek_nilai_cfField',
+		fieldLabel: 'Jumlah (Rp)',
+		allowNegatife : false,
+		enableKeyEvents: true,
+		itemCls: 'rmoney',
+		anchor: '95%',
+		maskRe: /([0-9]+)$/ 
+	});
 	jproduk_cek_nilaiField= new Ext.form.NumberField({
 		id: 'jproduk_cek_nilaiField',
 		fieldLabel: 'Jumlah (Rp)',
@@ -2361,7 +2619,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [jproduk_cek_namaField,jproduk_cek_noField,jproduk_cek_validField,jproduk_cek_bankField,jproduk_cek_nilaiField] 
+				items: [jproduk_cek_namaField,jproduk_cek_noField,jproduk_cek_validField,jproduk_cek_bankField,jproduk_cek_nilai_cfField] 
 			}
 		]
 	
@@ -2404,6 +2662,15 @@ Ext.onReady(function(){
 		renderer: Ext.util.Format.comboRenderer(jproduk_cek_bankField)
 	});
 	
+	jproduk_cek_nilai2_cfField= new Ext.form.TextField({
+		id: 'jproduk_cek_nilai2_cfField',
+		fieldLabel: 'Jumlah (Rp)',
+		allowNegatife : false,
+		enableKeyEvents: true,
+		itemCls: 'rmoney',
+		anchor: '95%',
+		maskRe: /([0-9]+)$/ 
+	});
 	jproduk_cek_nilai2Field= new Ext.form.NumberField({
 		id: 'jproduk_cek_nilai2Field',
 		fieldLabel: 'Jumlah (Rp)',
@@ -2425,7 +2692,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [jproduk_cek_nama2Field,jproduk_cek_no2Field,jproduk_cek_valid2Field,jproduk_cek_bank2Field,jproduk_cek_nilai2Field] 
+				items: [jproduk_cek_nama2Field,jproduk_cek_no2Field,jproduk_cek_valid2Field,jproduk_cek_bank2Field,jproduk_cek_nilai2_cfField] 
 			}
 		]
 	
@@ -2468,6 +2735,15 @@ Ext.onReady(function(){
 		renderer: Ext.util.Format.comboRenderer(jproduk_cek_bankField)
 	});
 	
+	jproduk_cek_nilai3_cfField= new Ext.form.TextField({
+		id: 'jproduk_cek_nilai3_cfField',
+		fieldLabel: 'Jumlah (Rp)',
+		allowNegatife : false,
+		enableKeyEvents: true,
+		itemCls: 'rmoney',
+		anchor: '95%',
+		maskRe: /([0-9]+)$/ 
+	});
 	jproduk_cek_nilai3Field= new Ext.form.NumberField({
 		id: 'jproduk_cek_nilai3Field',
 		fieldLabel: 'Jumlah (Rp)',
@@ -2489,7 +2765,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [jproduk_cek_nama3Field,jproduk_cek_no3Field,jproduk_cek_valid3Field,jproduk_cek_bank3Field,jproduk_cek_nilai3Field] 
+				items: [jproduk_cek_nama3Field,jproduk_cek_no3Field,jproduk_cek_valid3Field,jproduk_cek_bank3Field,jproduk_cek_nilai3_cfField] 
 			}
 		]
 	
@@ -2519,6 +2795,15 @@ Ext.onReady(function(){
 		maxLength: 50
 	});
 	
+	jproduk_transfer_nilai_cfField= new Ext.form.TextField({
+		id: 'jproduk_transfer_nilai_cfField',
+		fieldLabel: 'Jumlah (Rp)',
+		allowNegatife : false,
+		enableKeyEvents: true,
+		itemCls: 'rmoney',
+		anchor: '95%',
+		maskRe: /([0-9]+)$/ 
+	});
 	jproduk_transfer_nilaiField= new Ext.form.NumberField({
 		id: 'jproduk_transfer_nilaiField',
 		enableKeyEvents: true,
@@ -2539,7 +2824,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [jproduk_transfer_bankField,jproduk_transfer_namaField,jproduk_transfer_nilaiField] 
+				items: [jproduk_transfer_bankField,jproduk_transfer_namaField,jproduk_transfer_nilai_cfField] 
 			}
 		]
 	
@@ -2567,6 +2852,15 @@ Ext.onReady(function(){
 		maxLength: 50
 	});
 	
+	jproduk_transfer_nilai2_cfField= new Ext.form.TextField({
+		id: 'jproduk_transfer_nilai2_cfField',
+		fieldLabel: 'Jumlah (Rp)',
+		allowNegatife : false,
+		enableKeyEvents: true,
+		itemCls: 'rmoney',
+		anchor: '95%',
+		maskRe: /([0-9]+)$/ 
+	});
 	jproduk_transfer_nilai2Field= new Ext.form.NumberField({
 		id: 'jproduk_transfer_nilai2Field',
 		fieldLabel: 'Jumlah (Rp)',
@@ -2587,7 +2881,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [jproduk_transfer_bank2Field,jproduk_transfer_nama2Field,jproduk_transfer_nilai2Field] 
+				items: [jproduk_transfer_bank2Field,jproduk_transfer_nama2Field,jproduk_transfer_nilai2_cfField] 
 			}
 		]
 	
@@ -2615,6 +2909,15 @@ Ext.onReady(function(){
 		maxLength: 50
 	});
 	
+	jproduk_transfer_nilai3_cfField= new Ext.form.TextField({
+		id: 'jproduk_transfer_nilai3_cfField',
+		fieldLabel: 'Jumlah (Rp)',
+		allowNegatife : false,
+		enableKeyEvents: true,
+		itemCls: 'rmoney',
+		anchor: '95%',
+		maskRe: /([0-9]+)$/ 
+	});
 	jproduk_transfer_nilai3Field= new Ext.form.NumberField({
 		id: 'jproduk_transfer_nilai3Field',
 		fieldLabel: 'Jumlah (Rp)',
@@ -2635,7 +2938,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [jproduk_transfer_bank3Field,jproduk_transfer_nama3Field,jproduk_transfer_nilai3Field] 
+				items: [jproduk_transfer_bank3Field,jproduk_transfer_nama3Field,jproduk_transfer_nilai3_cfField] 
 			}
 		]
 	
@@ -2643,6 +2946,15 @@ Ext.onReady(function(){
 	// END Field Transfer-3
 	
 	//START Field Tunai-1
+	jproduk_tunai_nilai_cfField= new Ext.form.TextField({
+		id: 'jproduk_tunai_nilai_cfField',
+		fieldLabel: 'Jumlah (Rp)',
+		allowNegatife : false,
+		enableKeyEvents: true,
+		itemCls: 'rmoney',
+		anchor: '95%',
+		maskRe: /([0-9]+)$/ 
+	});
 	jproduk_tunai_nilaiField= new Ext.form.NumberField({
 		id: 'jproduk_tunai_nilaiField',
 		enableKeyEvents: true,
@@ -2664,7 +2976,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [jproduk_tunai_nilaiField] 
+				items: [jproduk_tunai_nilai_cfField] 
 			}
 		]
 	
@@ -2672,6 +2984,15 @@ Ext.onReady(function(){
 	// END Tunai-1
 	
 	//START Field Tunai-2
+	jproduk_tunai_nilai2_cfField= new Ext.form.TextField({
+		id: 'jproduk_tunai_nilai2_cfField',
+		fieldLabel: 'Jumlah (Rp)',
+		allowNegatife : false,
+		enableKeyEvents: true,
+		itemCls: 'rmoney',
+		anchor: '95%',
+		maskRe: /([0-9]+)$/ 
+	});
 	jproduk_tunai_nilai2Field= new Ext.form.NumberField({
 		id: 'jproduk_tunai_nilai2Field',
 		enableKeyEvents: true,
@@ -2693,7 +3014,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [jproduk_tunai_nilai2Field] 
+				items: [jproduk_tunai_nilai2_cfField] 
 			}
 		]
 	
@@ -2701,6 +3022,15 @@ Ext.onReady(function(){
 	// END Tunai-2
 	
 	//START Field Tunai-3
+	jproduk_tunai_nilai3_cfField= new Ext.form.TextField({
+		id: 'jproduk_tunai_nilai3_cfField',
+		fieldLabel: 'Jumlah (Rp)',
+		allowNegatife : false,
+		enableKeyEvents: true,
+		itemCls: 'rmoney',
+		anchor: '95%',
+		maskRe: /([0-9]+)$/ 
+	});
 	jproduk_tunai_nilai3Field= new Ext.form.NumberField({
 		id: 'jproduk_tunai_nilai3Field',
 		enableKeyEvents: true,
@@ -2722,7 +3052,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [jproduk_tunai_nilai3Field] 
+				items: [jproduk_tunai_nilai3_cfField] 
 			}
 		]
 	
@@ -2738,6 +3068,15 @@ Ext.onReady(function(){
 		anchor: '95%'
 	});
 	
+	jproduk_kwitansi_nilai_cfField= new Ext.form.TextField({
+		id: 'jproduk_kwitansi_nilai_cfField',
+		fieldLabel: 'Diambil (Rp)',
+		allowNegatife : false,
+		enableKeyEvents: true,
+		itemCls: 'rmoney',
+		anchor: '95%',
+		maskRe: /([0-9]+)$/ 
+	});
 	jproduk_kwitansi_nilaiField= new Ext.form.NumberField({
 		id: 'jproduk_kwitansi_nilaiField',
 		enableKeyEvents: true,
@@ -2792,6 +3131,15 @@ Ext.onReady(function(){
 		anchor: '95%'
 	});
 	
+	jproduk_kwitansi_nilai2_cfField= new Ext.form.TextField({
+		id: 'jproduk_kwitansi_nilai2_cfField',
+		fieldLabel: 'Diambil (Rp)',
+		allowNegatife : false,
+		enableKeyEvents: true,
+		itemCls: 'rmoney',
+		anchor: '95%',
+		maskRe: /([0-9]+)$/ 
+	});
 	jproduk_kwitansi_nilai2Field= new Ext.form.NumberField({
 		id: 'jproduk_kwitansi_nilai2Field',
 		enableKeyEvents: true,
@@ -2846,6 +3194,15 @@ Ext.onReady(function(){
 		anchor: '95%'
 	});
 	
+	jproduk_kwitansi_nilai3_cfField= new Ext.form.TextField({
+		id: 'jproduk_kwitansi_nilai3_cfField',
+		fieldLabel: 'Diambil (Rp)',
+		allowNegatife : false,
+		enableKeyEvents: true,
+		itemCls: 'rmoney',
+		anchor: '95%',
+		maskRe: /([0-9]+)$/ 
+	});
 	jproduk_kwitansi_nilai3Field= new Ext.form.NumberField({
 		id: 'jproduk_kwitansi_nilai3Field',
 		enableKeyEvents: true,
@@ -2902,7 +3259,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [jproduk_kwitansi_noField,jproduk_kwitansi_namaField,jproduk_kwitansi_sisaField,jproduk_kwitansi_nilaiField] 
+				items: [jproduk_kwitansi_noField,jproduk_kwitansi_namaField,jproduk_kwitansi_sisaField,jproduk_kwitansi_nilai_cfField] 
 			}
 		]
 	
@@ -2919,7 +3276,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [jproduk_kwitansi_no2Field,jproduk_kwitansi_nama2Field,jproduk_kwitansi_sisa2Field,jproduk_kwitansi_nilai2Field] 
+				items: [jproduk_kwitansi_no2Field,jproduk_kwitansi_nama2Field,jproduk_kwitansi_sisa2Field,jproduk_kwitansi_nilai2_cfField] 
 			}
 		]
 	
@@ -2936,7 +3293,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [jproduk_kwitansi_no3Field,jproduk_kwitansi_nama3Field,jproduk_kwitansi_sisa3Field,jproduk_kwitansi_nilai3Field] 
+				items: [jproduk_kwitansi_no3Field,jproduk_kwitansi_nama3Field,jproduk_kwitansi_sisa3Field,jproduk_kwitansi_nilai3_cfField] 
 			}
 		]
 	
@@ -2954,28 +3311,52 @@ Ext.onReady(function(){
 		maskRe: /([0-9]+)$/
 	});
 	
+	jproduk_subTotal_cfField= new Ext.ux.form.CFTextField({
+		id: 'jproduk_subTotal_cfField',
+		fieldLabel: 'Sub Total (Rp)',
+		valueRenderer: 'numberToCurrency',
+		readOnly: true,
+		itemCls: 'rmoney',
+		width: 120
+	});
 	jproduk_subTotalField= new Ext.form.NumberField({
 		id: 'jproduk_subTotalField',
 		fieldLabel: 'Sub Total (Rp)',
 		readOnly: true,
 		allowDecimals: false,
 		allowBlank: true,
-		width: 100,
+		width: 120,
 		maxLength: 50,
 		maskRe: /([0-9]+)$/
 	});
 
+	jproduk_total_cfField= new Ext.ux.form.CFTextField({
+		id: 'jproduk_total_cfField',
+		fieldLabel: '<span style="font-weight:bold">Total (Rp)</span>',
+		valueRenderer: 'numberToCurrency',
+		readOnly: true,
+		itemCls: 'rmoney_b',
+		width: 120
+	});
 	jproduk_totalField= new Ext.form.NumberField({
 		id: 'jproduk_totalField',
 		fieldLabel: '<span style="font-weight:bold">Total (Rp)</span>',
 		readOnly: true,
 		allowDecimals: false,
 		allowBlank: true,
-		width: 100,
+		width: 120,
 		maxLength: 50,
 		maskRe: /([0-9]+)$/
 	});
 	
+	jproduk_bayar_cfField= new Ext.ux.form.CFTextField({
+		id: 'jproduk_bayar_cfField',
+		fieldLabel: 'Total Bayar (Rp)',
+		valueRenderer: 'numberToCurrency',
+		readOnly: true,
+		itemCls: 'rmoney',
+		width: 120
+	});
 	jproduk_bayarField= new Ext.form.NumberField({
 		id: 'jproduk_bayarField',
 		fieldLabel: 'Total Bayar (Rp)',
@@ -2983,18 +3364,26 @@ Ext.onReady(function(){
 		enableKeyEvents: true,
 		allowBlank: true,
 		allowDecimals: false,
-		width: 100,
+		width: 120,
 		maxLength: 50,
 		maskRe: /([0-9]+)$/
 	});
 	
+	jproduk_hutang_cfField= new Ext.ux.form.CFTextField({
+		id: 'jproduk_hutang_cfField',
+		fieldLabel: 'Hutang (Rp)',
+		valueRenderer: 'numberToCurrency',
+		readOnly: true,
+		itemCls: 'rmoney',
+		width: 120
+	});
 	jproduk_hutangField= new Ext.form.NumberField({
 		id: 'jproduk_hutangField',
 		fieldLabel: 'Hutang (Rp)',
 		readOnly: true,
 		allowBlank: true,
 		allowDecimals: false,
-		width: 100,
+		width: 120,
 		maxLength: 50,
 		maskRe: /([0-9]+)$/
 	});
@@ -3050,13 +3439,13 @@ Ext.onReady(function(){
 			}
 			,{
 				columnWidth:0.3,
-				labelWidth: 140,
+				labelWidth: 120,
 				layout: 'form',
     			labelPad: 0,
 				baseCls: 'x-plain',
 				border:false,
 				labelAlign: 'left',
-				items: [jproduk_jumlahField, jproduk_subTotalField, jproduk_diskonField, jproduk_cashbackField, {xtype: 'spacer',height:10},jproduk_totalField, jproduk_bayarField,jproduk_hutangField] 
+				items: [jproduk_jumlahField, jproduk_subTotal_cfField, jproduk_diskonField, jproduk_cashback_cfField, {xtype: 'spacer',height:10},jproduk_total_cfField, jproduk_bayar_cfField,jproduk_hutang_cfField] 
 			}
 			]
 	
@@ -3411,48 +3800,7 @@ Ext.onReady(function(){
 			readOnly: true,
 			renderer: function(v, params, record){
 				return Ext.util.Format.number(record.data.konversi_nilai_temp*record.data.dproduk_harga* record.data.dproduk_jumlah,'0,000');
-			}//,
-			/*renderer: function(v, params, record){
-					var konversi_store = new Ext.data.Store({
-						proxy: new Ext.data.HttpProxy({
-							url: 'index.php?c=c_master_jual_produk&m=get_konversi_list',
-							method: 'POST'
-							}),
-						reader: new Ext.data.JsonReader({
-							root: 'results',
-							totalProperty: 'total',
-							id: 'voucher_nomor'
-							},[
-								{name: 'konversi_produk', type: 'int', mapping: 'konversi_produk'},
-								{name: 'konversi_satuan', type: 'int', mapping: 'konversi_satuan'},
-							   	{name: 'konversi_nilai', type: 'float', mapping: 'konversi_nilai'},
-							   	{name: 'konversi_default', type: 'string', mapping: 'konversi_default'}
-							])
-						});
-					konversi_store.load({
-						params: {dproduk_produk_id:record.data.dproduk_produk},
-						callback: function(opts, success, response){
-							if(success){
-								var df=konversi_store.find('konversi_default','true');
-								var konversi_df=konversi_store.getAt(df).data.konversi_nilai;
-								var j=konversi_store.find('konversi_satuan',record.data.dproduk_satuan);
-								if(konversi_store.getAt(j).data.konversi_default==='true'){
-									record.data.konversi_nilai=1;
-								}else if(konversi_store.getAt(j).data.konversi_default!=='true' && konversi_df<konversi_store.getAt(j).data.konversi_nilai){
-									record.data.konversi_nilai=konversi_store.getAt(j).data.konversi_nilai/konversi_df;
-								}else if(konversi_store.getAt(j).data.konversi_default!=='true' && konversi_df>konversi_store.getAt(j).data.konversi_nilai){
-									record.data.konversi_nilai=1/konversi_df;
-								}
-								var nilai_subtotal=record.data.konversi_nilai*record.data.dproduk_harga* record.data.dproduk_jumlah;
-								//return Ext.util.Format.number(record.data.konversi_nilai*record.data.dproduk_harga* record.data.dproduk_jumlah,'0,000');
-							}
-							djproduk_satuan_nilaiField.setValue(record.data.konversi_nilai);
-							return Ext.util.Format.number(djproduk_satuan_nilaiField.getValue(),'0,000');
-						}
-					});
-					
-					//return Ext.util.Format.number(record.data.konversi_nilai*record.data.dproduk_harga* record.data.dproduk_jumlah,'0,000');
-            }*/
+			}
 		},
 		{
 			align : 'Left',
@@ -3589,7 +3937,7 @@ Ext.onReady(function(){
 		});
 		editor_detail_jual_produk.stopEditing();
 		detail_jual_produk_DataStore.insert(0, edit_detail_jual_produk);
-		detail_jual_produkListEditorGrid.getView().refresh();
+		//detail_jual_produkListEditorGrid.getView().refresh();
 		detail_jual_produkListEditorGrid.getSelectionModel().selectRow(0);
 		editor_detail_jual_produk.startEditing(0);
 	}
@@ -3904,10 +4252,12 @@ Ext.onReady(function(){
 		jproduk_jumlahField.setValue(jumlah_item);
 		
 		jproduk_subTotalField.setValue(subtotal_harga_field);
+		jproduk_subTotal_cfField.setValue(subtotal_harga_field);
 		
 		total_harga=subtotal_harga_field*(100-jproduk_diskonField.getValue())/100 - jproduk_cashbackField.getValue();
 		total_harga=(total_harga>0?Math.round(total_harga):0);
 		jproduk_totalField.setValue(total_harga);
+		jproduk_total_cfField.setValue(total_harga);
 
 		
 
@@ -3989,9 +4339,9 @@ Ext.onReady(function(){
 		else
 			voucher_nilai=0;
 		
-		voucher_nilai2=jproduk_voucher_cashback3Field.getValue();
+		voucher_nilai2=jproduk_voucher_cashback2Field.getValue();
 		if(/^\d+$/.test(voucher_nilai2))
-			voucher_nilai2=jproduk_voucher_cashback3Field.getValue();
+			voucher_nilai2=jproduk_voucher_cashback2Field.getValue();
 		else
 			voucher_nilai2=0;
 		
@@ -4022,11 +4372,14 @@ Ext.onReady(function(){
 
 		total_bayar=transfer_nilai+transfer_nilai2+transfer_nilai3+kwitansi_nilai+kwitansi_nilai2+kwitansi_nilai3+card_nilai+card_nilai2+card_nilai3+cek_nilai+cek_nilai2+cek_nilai3+voucher_nilai+voucher_nilai2+voucher_nilai3+tunai_nilai+tunai_nilai2+tunai_nilai3;
 		total_bayar=(total_bayar>0?Math.round(total_bayar):0);
+		
 		jproduk_bayarField.setValue(total_bayar);
+		jproduk_bayar_cfField.setValue(total_bayar);
 
 		total_hutang=total_harga-total_bayar;
 		total_hutang=(total_hutang>0?Math.round(total_hutang):0);
 		jproduk_hutangField.setValue(total_hutang);
+		jproduk_hutang_cfField.setValue(total_hutang);
 	}
 
 	function load_total_bayar_updating(){
@@ -4129,9 +4482,9 @@ Ext.onReady(function(){
 		else
 			voucher_nilai=0;
 		
-		voucher_nilai2=jproduk_voucher_cashback3Field.getValue();
+		voucher_nilai2=jproduk_voucher_cashback2Field.getValue();
 		if(/^\d+$/.test(voucher_nilai2))
-			voucher_nilai2=jproduk_voucher_cashback3Field.getValue();
+			voucher_nilai2=jproduk_voucher_cashback2Field.getValue();
 		else
 			voucher_nilai2=0;
 		
@@ -4163,27 +4516,19 @@ Ext.onReady(function(){
 		
 		update_total_field=jproduk_subTotalField.getValue()*((100-jproduk_diskonField.getValue())/100)-jproduk_cashbackField.getValue();
 		jproduk_totalField.setValue(update_total_field);
+		jproduk_total_cfField.setValue(update_total_field);
 
 		jproduk_bayarField.setValue(total_bayar);
+		jproduk_bayar_cfField.setValue(total_bayar);
 		
 		update_hutang_field=update_total_field-total_bayar;
 		jproduk_hutangField.setValue(update_hutang_field);
+		jproduk_hutang_cfField.setValue(update_hutang_field);
 
 		jproduk_diskonField.setValue(jproduk_diskonField.getValue());
 		jproduk_cashbackField.setValue(jproduk_cashbackField.getValue());
+		jproduk_cashback_cfField.setValue(CurrencyFormatted(jproduk_cashbackField.getValue()));
 
-
-/*
-		total_bayar=transfer_nilai+transfer_nilai2+transfer_nilai3+kwitansi_nilai+kwitansi_nilai2+kwitansi_nilai3+card_nilai+card_nilai2+card_nilai3+cek_nilai+cek_nilai2+cek_nilai3+voucher_nilai+voucher_nilai2+voucher_nilai3+tunai_nilai+tunai_nilai2+tunai_nilai3;
-		total_bayar=(total_bayar>0?Math.round(total_bayar):0);
-		jproduk_bayarField.setValue(total_bayar);
-
-		//total_hutang=total_harga-jproduk_bayarField.getValue()-jproduk_transfer_nilaiField.getValue()-jproduk_transfer_nilai2Field.getValue()-jproduk_transfer_nilai3Field.getValue()-jproduk_kwitansi_nilaiField.getValue()-jproduk_kwitansi_nilai2Field.getValue()-jproduk_kwitansi_nilai3Field.getValue()-jproduk_card_nilaiField.getValue()-jproduk_card_nilai2Field.getValue()-jproduk_card_nilai3Field.getValue()-jproduk_cek_nilaiField.getValue()-jproduk_cek_nilai2Field.getValue()-jproduk_cek_nilai3Field.getValue()-jproduk_voucher_cashbackField.getValue()-jproduk_voucher_cashback2Field.getValue()-jproduk_voucher_cashback3Field.getValue();
-		total_hutang=total_harga-total_bayar;
-		total_hutang=(total_hutang>0?Math.round(total_hutang):0);
-		jproduk_hutangField.setValue(total_hutang);
-*/
-		
 	}
 	
 	function load_all_jual_produk(){
@@ -4193,32 +4538,352 @@ Ext.onReady(function(){
 	detail_jual_produk_DataStore.on("update",load_all_jual_produk);
 	//detail_jual_produk_DataStore.on("load",load_total_produk_bayar);
 	jproduk_bayarField.on("keyup",load_total_produk_bayar);
-	jproduk_diskonField.on("keyup",load_total_produk_bayar);
+	jproduk_diskonField.on("keyup",function(){if(post2db=="CREATE"){load_total_produk_bayar();}else if(post2db=="UPDATE"){load_total_bayar_updating();}});
 	jproduk_cashbackField.on("keyup",function(){if(post2db=="CREATE"){load_total_produk_bayar();}else if(post2db=="UPDATE"){load_total_bayar_updating();}});
+	jproduk_cashback_cfField.on("keyup",function(){
+		var cf_value = jproduk_cashback_cfField.getValue();
+		if(post2db=="CREATE"){
+			var cf_tonumber = convertToNumber(cf_value);
+			jproduk_cashbackField.setValue(cf_tonumber);
+			load_total_produk_bayar();
+			
+			var number_tocf = CurrencyFormatted(cf_value);
+			this.setRawValue(number_tocf);
+			//load_total_produk_bayar();
+		}else if(post2db=="UPDATE"){
+			var cf_tonumber = convertToNumber(cf_value);
+			jproduk_cashbackField.setValue(cf_tonumber);
+			load_total_bayar_updating();
+			
+			var number_tocf = CurrencyFormatted(cf_value);
+			this.setRawValue(number_tocf);
+			//load_total_bayar_updating();
+		}
+	});
 	//kwitansi
 	jproduk_kwitansi_nilaiField.on("keyup",function(){if(post2db=="CREATE"){load_total_produk_bayar();}else if(post2db=="UPDATE"){load_total_bayar_updating();}});
+	jproduk_kwitansi_nilai_cfField.on("keyup",function(){
+		var cf_value = jproduk_kwitansi_nilai_cfField.getValue();
+		if(post2db=="CREATE"){
+			var cf_tonumber = convertToNumber(cf_value);
+			jproduk_kwitansi_nilaiField.setValue(cf_tonumber);
+			load_total_produk_bayar();
+			
+			var number_tocf = CurrencyFormatted(cf_value);
+			this.setRawValue(number_tocf);
+			//load_total_produk_bayar();
+		}else if(post2db=="UPDATE"){
+			var cf_tonumber = convertToNumber(cf_value);
+			jproduk_kwitansi_nilaiField.setValue(cf_tonumber);
+			load_total_bayar_updating();
+			
+			var number_tocf = CurrencyFormatted(cf_value);
+			this.setRawValue(number_tocf);
+			//load_total_bayar_updating();
+		}
+	});
 	jproduk_kwitansi_nilai2Field.on("keyup",function(){if(post2db=="CREATE"){load_total_produk_bayar();}else if(post2db=="UPDATE"){load_total_bayar_updating();}});
+	jproduk_kwitansi_nilai2_cfField.on("keyup",function(){
+		var cf_value = jproduk_kwitansi_nilai2_cfField.getValue();
+		if(post2db=="CREATE"){
+			var cf_tonumber = convertToNumber(cf_value);
+			jproduk_kwitansi_nilai2Field.setValue(cf_tonumber);
+			load_total_produk_bayar();
+			
+			var number_tocf = CurrencyFormatted(cf_value);
+			this.setRawValue(number_tocf);
+			//load_total_produk_bayar();
+		}else if(post2db=="UPDATE"){
+			var cf_tonumber = convertToNumber(cf_value);
+			jproduk_kwitansi_nilai2Field.setValue(cf_tonumber);
+			load_total_bayar_updating();
+			
+			var number_tocf = CurrencyFormatted(cf_value);
+			this.setRawValue(number_tocf);
+			//load_total_bayar_updating();
+		}
+	});
 	jproduk_kwitansi_nilai3Field.on("keyup",function(){if(post2db=="CREATE"){load_total_produk_bayar();}else if(post2db=="UPDATE"){load_total_bayar_updating();}});
+	jproduk_kwitansi_nilai3_cfField.on("keyup",function(){
+		var cf_value = jproduk_kwitansi_nilai3_cfField.getValue();
+		if(post2db=="CREATE"){
+			var cf_tonumber = convertToNumber(cf_value);
+			jproduk_kwitansi_nilai3Field.setValue(cf_tonumber);
+			load_total_produk_bayar();
+			
+			var number_tocf = CurrencyFormatted(cf_value);
+			this.setRawValue(number_tocf);
+			//load_total_produk_bayar();
+		}else if(post2db=="UPDATE"){
+			var cf_tonumber = convertToNumber(cf_value);
+			jproduk_kwitansi_nilai3Field.setValue(cf_tonumber);
+			load_total_bayar_updating();
+			
+			var number_tocf = CurrencyFormatted(cf_value);
+			this.setRawValue(number_tocf);
+			//load_total_bayar_updating();
+		}
+	});
 	//card
 	jproduk_card_nilaiField.on("keyup",function(){if(post2db=="CREATE"){load_total_produk_bayar();}else if(post2db=="UPDATE"){load_total_bayar_updating();}});
+	jproduk_card_nilai_cfField.on("keyup",function(){
+		var cf_value = jproduk_card_nilai_cfField.getValue();
+		if(post2db=="CREATE"){
+			var cf_tonumber = convertToNumber(cf_value);
+			jproduk_card_nilaiField.setValue(cf_tonumber);
+			load_total_produk_bayar();
+			
+			var number_tocf = CurrencyFormatted(cf_value);
+			this.setRawValue(number_tocf);
+			//load_total_produk_bayar();
+		}else if(post2db=="UPDATE"){
+			var cf_tonumber = convertToNumber(cf_value);
+			jproduk_card_nilaiField.setValue(cf_tonumber);
+			load_total_bayar_updating();
+			
+			var number_tocf = CurrencyFormatted(cf_value);
+			this.setRawValue(number_tocf);
+			//load_total_bayar_updating();
+		}
+	});
 	jproduk_card_nilai2Field.on("keyup",function(){if(post2db=="CREATE"){load_total_produk_bayar();}else if(post2db=="UPDATE"){load_total_bayar_updating();}});
+	jproduk_card_nilai2_cfField.on("keyup",function(){
+		var cf_value = jproduk_card_nilai2_cfField.getValue();
+		if(post2db=="CREATE"){
+			var cf_tonumber = convertToNumber(cf_value);
+			jproduk_card_nilai2Field.setValue(cf_tonumber);
+			load_total_produk_bayar();
+			
+			var number_tocf = CurrencyFormatted(cf_value);
+			this.setRawValue(number_tocf);
+			//load_total_produk_bayar();
+		}else if(post2db=="UPDATE"){
+			var cf_tonumber = convertToNumber(cf_value);
+			jproduk_card_nilai2Field.setValue(cf_tonumber);
+			load_total_bayar_updating();
+			
+			var number_tocf = CurrencyFormatted(cf_value);
+			this.setRawValue(number_tocf);
+			//load_total_bayar_updating();
+		}
+	});
 	jproduk_card_nilai3Field.on("keyup",function(){if(post2db=="CREATE"){load_total_produk_bayar();}else if(post2db=="UPDATE"){load_total_bayar_updating();}});
+	jproduk_card_nilai3_cfField.on("keyup",function(){
+		var cf_value = jproduk_card_nilai3_cfField.getValue();
+		if(post2db=="CREATE"){
+			var cf_tonumber = convertToNumber(cf_value);
+			jproduk_card_nilai3Field.setValue(cf_tonumber);
+			load_total_produk_bayar();
+			
+			var number_tocf = CurrencyFormatted(cf_value);
+			this.setRawValue(number_tocf);
+			//load_total_produk_bayar();
+		}else if(post2db=="UPDATE"){
+			var cf_tonumber = convertToNumber(cf_value);
+			jproduk_card_nilai3Field.setValue(cf_tonumber);
+			load_total_bayar_updating();
+			
+			var number_tocf = CurrencyFormatted(cf_value);
+			this.setRawValue(number_tocf);
+			//load_total_bayar_updating();
+		}
+	});
 	//cek/giro
 	jproduk_cek_nilaiField.on("keyup",function(){if(post2db=="CREATE"){load_total_produk_bayar();}else if(post2db=="UPDATE"){load_total_bayar_updating();}});
+	jproduk_cek_nilai_cfField.on("keyup",function(){
+		var cf_value = jproduk_cek_nilai_cfField.getValue();
+		if(post2db=="CREATE"){
+			var cf_tonumber = convertToNumber(cf_value);
+			jproduk_cek_nilaiField.setValue(cf_tonumber);
+			load_total_produk_bayar();
+			
+			var number_tocf = CurrencyFormatted(cf_value);
+			this.setRawValue(number_tocf);
+			//load_total_produk_bayar();
+		}else if(post2db=="UPDATE"){
+			var cf_tonumber = convertToNumber(cf_value);
+			jproduk_cek_nilaiField.setValue(cf_tonumber);
+			load_total_bayar_updating();
+			
+			var number_tocf = CurrencyFormatted(cf_value);
+			this.setRawValue(number_tocf);
+			//load_total_bayar_updating();
+		}
+	});
 	jproduk_cek_nilai2Field.on("keyup",function(){if(post2db=="CREATE"){load_total_produk_bayar();}else if(post2db=="UPDATE"){load_total_bayar_updating();}});
+	jproduk_cek_nilai2_cfField.on("keyup",function(){
+		var cf_value = jproduk_cek_nilai2_cfField.getValue();
+		if(post2db=="CREATE"){
+			var cf_tonumber = convertToNumber(cf_value);
+			jproduk_cek_nilai2Field.setValue(cf_tonumber);
+			load_total_produk_bayar();
+			
+			var number_tocf = CurrencyFormatted(cf_value);
+			this.setRawValue(number_tocf);
+			//load_total_produk_bayar();
+		}else if(post2db=="UPDATE"){
+			var cf_tonumber = convertToNumber(cf_value);
+			jproduk_cek_nilai2Field.setValue(cf_tonumber);
+			load_total_bayar_updating();
+			
+			var number_tocf = CurrencyFormatted(cf_value);
+			this.setRawValue(number_tocf);
+			//load_total_bayar_updating();
+		}
+	});
 	jproduk_cek_nilai3Field.on("keyup",function(){if(post2db=="CREATE"){load_total_produk_bayar();}else if(post2db=="UPDATE"){load_total_bayar_updating();}});
+	jproduk_cek_nilai3_cfField.on("keyup",function(){
+		var cf_value = jproduk_cek_nilai3_cfField.getValue();
+		if(post2db=="CREATE"){
+			var cf_tonumber = convertToNumber(cf_value);
+			jproduk_cek_nilai3Field.setValue(cf_tonumber);
+			load_total_produk_bayar();
+			
+			var number_tocf = CurrencyFormatted(cf_value);
+			this.setRawValue(number_tocf);
+			//load_total_produk_bayar();
+		}else if(post2db=="UPDATE"){
+			var cf_tonumber = convertToNumber(cf_value);
+			jproduk_cek_nilai3Field.setValue(cf_tonumber);
+			load_total_bayar_updating();
+			
+			var number_tocf = CurrencyFormatted(cf_value);
+			this.setRawValue(number_tocf);
+			//load_total_bayar_updating();
+		}
+	});
 	//transfer
 	jproduk_transfer_nilaiField.on("keyup",function(){if(post2db=="CREATE"){load_total_produk_bayar();}else if(post2db=="UPDATE"){load_total_bayar_updating();}});
+	jproduk_transfer_nilai_cfField.on("keyup",function(){
+		var cf_value = jproduk_transfer_nilai_cfField.getValue();
+		if(post2db=="CREATE"){
+			var cf_tonumber = convertToNumber(cf_value);
+			jproduk_transfer_nilaiField.setValue(cf_tonumber);
+			load_total_produk_bayar();
+			
+			var number_tocf = CurrencyFormatted(cf_value);
+			this.setRawValue(number_tocf);
+			//load_total_produk_bayar();
+		}else if(post2db=="UPDATE"){
+			var cf_tonumber = convertToNumber(cf_value);
+			jproduk_transfer_nilaiField.setValue(cf_tonumber);
+			load_total_bayar_updating();
+			
+			var number_tocf = CurrencyFormatted(cf_value);
+			this.setRawValue(number_tocf);
+			//load_total_bayar_updating();
+		}
+	});
 	jproduk_transfer_nilai2Field.on("keyup",function(){if(post2db=="CREATE"){load_total_produk_bayar();}else if(post2db=="UPDATE"){load_total_bayar_updating();}});
+	jproduk_transfer_nilai2_cfField.on("keyup",function(){
+		var cf_value = jproduk_transfer_nilai2_cfField.getValue();
+		if(post2db=="CREATE"){
+			var cf_tonumber = convertToNumber(cf_value);
+			jproduk_transfer_nilai2Field.setValue(cf_tonumber);
+			load_total_produk_bayar();
+			
+			var number_tocf = CurrencyFormatted(cf_value);
+			this.setRawValue(number_tocf);
+			//load_total_produk_bayar();
+		}else if(post2db=="UPDATE"){
+			var cf_tonumber = convertToNumber(cf_value);
+			jproduk_transfer_nilai2Field.setValue(cf_tonumber);
+			load_total_bayar_updating();
+			
+			var number_tocf = CurrencyFormatted(cf_value);
+			this.setRawValue(number_tocf);
+			//load_total_bayar_updating();
+		}
+	});
 	jproduk_transfer_nilai3Field.on("keyup",function(){if(post2db=="CREATE"){load_total_produk_bayar();}else if(post2db=="UPDATE"){load_total_bayar_updating();}});
+	jproduk_transfer_nilai3_cfField.on("keyup",function(){
+		var cf_value = jproduk_transfer_nilai3_cfField.getValue();
+		if(post2db=="CREATE"){
+			var cf_tonumber = convertToNumber(cf_value);
+			jproduk_transfer_nilai3Field.setValue(cf_tonumber);
+			load_total_produk_bayar();
+			
+			var number_tocf = CurrencyFormatted(cf_value);
+			this.setRawValue(number_tocf);
+			//load_total_produk_bayar();
+		}else if(post2db=="UPDATE"){
+			var cf_tonumber = convertToNumber(cf_value);
+			jproduk_transfer_nilai3Field.setValue(cf_tonumber);
+			load_total_bayar_updating();
+			
+			var number_tocf = CurrencyFormatted(cf_value);
+			this.setRawValue(number_tocf);
+			//load_total_bayar_updating();
+		}
+	});
 	//voucher
 	jproduk_voucher_cashbackField.on("keyup",function(){if(post2db=="CREATE"){load_total_produk_bayar();}else if(post2db=="UPDATE"){load_total_bayar_updating();}});
 	jproduk_voucher_cashback2Field.on("keyup",function(){if(post2db=="CREATE"){load_total_produk_bayar();}else if(post2db=="UPDATE"){load_total_bayar_updating();}});
 	jproduk_voucher_cashback3Field.on("keyup",function(){if(post2db=="CREATE"){load_total_produk_bayar();}else if(post2db=="UPDATE"){load_total_bayar_updating();}});
 	//tunai
 	jproduk_tunai_nilaiField.on("keyup",function(){if(post2db=="CREATE"){load_total_produk_bayar();}else if(post2db=="UPDATE"){load_total_bayar_updating();}});
+	jproduk_tunai_nilai_cfField.on("keyup",function(){
+		var cf_value = jproduk_tunai_nilai_cfField.getValue();
+		if(post2db=="CREATE"){
+			var cf_tonumber = convertToNumber(cf_value);
+			jproduk_tunai_nilaiField.setValue(cf_tonumber);
+			load_total_produk_bayar();
+			
+			var number_tocf = CurrencyFormatted(cf_value);
+			this.setRawValue(number_tocf);
+			//load_total_produk_bayar();
+		}else if(post2db=="UPDATE"){
+			var cf_tonumber = convertToNumber(cf_value);
+			jproduk_tunai_nilaiField.setValue(cf_tonumber);
+			load_total_bayar_updating();
+			
+			var number_tocf = CurrencyFormatted(cf_value);
+			this.setRawValue(number_tocf);
+			//load_total_bayar_updating();
+		}
+	});
 	jproduk_tunai_nilai2Field.on("keyup",function(){if(post2db=="CREATE"){load_total_produk_bayar();}else if(post2db=="UPDATE"){load_total_bayar_updating();}});
+	jproduk_tunai_nilai2_cfField.on("keyup",function(){
+		var cf_value = jproduk_tunai_nilai2_cfField.getValue();
+		if(post2db=="CREATE"){
+			var cf_tonumber = convertToNumber(cf_value);
+			jproduk_tunai_nilai2Field.setValue(cf_tonumber);
+			load_total_produk_bayar();
+			
+			var number_tocf = CurrencyFormatted(cf_value);
+			this.setRawValue(number_tocf);
+			//load_total_produk_bayar();
+		}else if(post2db=="UPDATE"){
+			var cf_tonumber = convertToNumber(cf_value);
+			jproduk_tunai_nilai2Field.setValue(cf_tonumber);
+			load_total_bayar_updating();
+			
+			var number_tocf = CurrencyFormatted(cf_value);
+			this.setRawValue(number_tocf);
+			//load_total_bayar_updating();
+		}
+	});
 	jproduk_tunai_nilai3Field.on("keyup",function(){if(post2db=="CREATE"){load_total_produk_bayar();}else if(post2db=="UPDATE"){load_total_bayar_updating();}});
+	jproduk_tunai_nilai3_cfField.on("keyup",function(){
+		var cf_value = jproduk_tunai_nilai3_cfField.getValue();
+		if(post2db=="CREATE"){
+			var cf_tonumber = convertToNumber(cf_value);
+			jproduk_tunai_nilai3Field.setValue(cf_tonumber);
+			load_total_produk_bayar();
+			
+			var number_tocf = CurrencyFormatted(cf_value);
+			this.setRawValue(number_tocf);
+			//load_total_produk_bayar();
+		}else if(post2db=="UPDATE"){
+			var cf_tonumber = convertToNumber(cf_value);
+			jproduk_tunai_nilai3Field.setValue(cf_tonumber);
+			load_total_bayar_updating();
+			
+			var number_tocf = CurrencyFormatted(cf_value);
+			this.setRawValue(number_tocf);
+			//load_total_bayar_updating();
+		}
+	});
 	
 	jproduk_caraField.on("select",update_group_carabayar_jual_produk);
 	jproduk_cara2Field.on("select",update_group_carabayar2_jual_produk);
@@ -4390,7 +5055,7 @@ Ext.onReady(function(){
 	jproduk_nobuktiSearchField= new Ext.form.TextField({
 		id: 'jproduk_nobuktiSearchField',
 		fieldLabel: 'No. Faktur',
-		maxLength: 30,
+		maxLength: 30
 	//	anchor: '95%'
 	
 	});

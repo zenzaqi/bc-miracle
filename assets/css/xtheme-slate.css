@@ -676,6 +676,8 @@ td.x-date-mp-sel a{
   background-color:#F4F4F4 !important;
 }
 
-.rmoney .x-form-field {text-align:right; font-size:16px; font-weight:bold}
+.rmoney_b .x-form-field {text-align:right; font-size:16px; font-weight:bold}
+
+.rmoney .x-form-field {text-align:right; font-size:16px;}
 
 .status_lunas{font-size:18px; font-weight:bold}

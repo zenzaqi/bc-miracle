@@ -24,6 +24,7 @@
     <?=js_asset('MultiSelect.js');?>
     <?=js_asset('ItemSelector.js');?>
     <?=js_asset('InputTextMask.js');?>
+	<?=js_asset('currency.js');?>
 <script type="text/javascript">
 	var s = document.createElement("script");
 	s.type = 'text/javascript';
