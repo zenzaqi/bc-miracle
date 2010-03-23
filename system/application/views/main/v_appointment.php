@@ -793,7 +793,8 @@ Ext.onReady(function(){
 			{name: 'terapis_display', type: 'string', mapping: 'karyawan_nama'},
 			{name: 'terapis_username', type: 'string', mapping: 'karyawan_username'},
 			{name: 'terapis_value', type: 'int', mapping: 'karyawan_id'},
-			{name: 'terapis_count', type: 'int', mapping: 'terapis_count'},
+//			{name: 'terapis_count', type: 'int', mapping: 'terapis_count'},
+			{name: 'terapis_count', type: 'int', mapping: 'new_count'},
 			{name: 'absensi_shift', type: 'string', mapping: 'absensi_shift'}
 		])/*,
 		sortInfo:{field: 'terapis_display', direction: "ASC"}*/
