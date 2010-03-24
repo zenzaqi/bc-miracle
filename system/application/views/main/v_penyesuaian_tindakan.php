@@ -342,8 +342,8 @@ Ext.onReady(function(){
 			{name: 'adj_count', type: 'int', mapping: 'adj_count'},
 			{name: 'terapis_count', type: 'int', mapping: 'terapis_count'},
 			{name: 'new_count', type: 'int', mapping: 'new_count'},
-		]),
-		sortInfo:{field: 'karyawan_username', direction: "ASC"}
+		])//,
+//		sortInfo:{field: 'karyawan_username', direction: "ASC"}
 	});
 	/* End of Function */
 	
@@ -416,8 +416,8 @@ Ext.onReady(function(){
 		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
 			{name: 'user_group_value', type: 'int', mapping: 'group_id'},
 			{name: 'user_group_display', type: 'string', mapping: 'group_name'}
-		])//,
-//	sortInfo:{field: 'user_group_display', direction: "ASC"}
+		]),
+	sortInfo:{field: 'user_group_display', direction: "ASC"}
 	});
     
 	
@@ -448,15 +448,15 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Therapist' + '</div>',
 			dataIndex: 'karyawan_username',
-			width: 100,	//150,
+			width: 60,	//150,
 			sortable: true,
 		
 		},		
 		{
 			align : 'Right',
-			header: '<div align="center">' + 'Tindakan Sebelumnya' + '</div>',
+			header: '<div align="center">' + 'Tind. Seblmnya' + '</div>',
 			dataIndex: 'terapis_count',
-			width: 80,	//150,
+			width: 50,	//150,
 			sortable: true,
 			
 		},	
@@ -464,7 +464,7 @@ Ext.onReady(function(){
 			align : 'Right',
 			header: '<div align="center">' + 'Penyesuaian' + '</div>',
 			dataIndex: 'adj_count',
-			width: 60,	//150,
+			width: 40,	//150,
 			sortable: true,
 			editor: new Ext.form.NumberField({
 				allowDecimals: false,
@@ -477,15 +477,15 @@ Ext.onReady(function(){
 		
 		{
 			align : 'Right',
-			header: '<div align="center">' + 'Tindakan Saat Ini' + '</div>',
+			header: '<div align="center">' + 'Tind. Saat Ini' + '</div>',
 			dataIndex: 'new_count',
-			width: 80,	//150,
+			width: 50,	//150,
 			sortable: true,
 			
 		}
 		]
 	);
-	penyesuaian_ColumnModel.defaultSortable= true;
+//	penyesuaian_ColumnModel.defaultSortable= true;
 	/* End of Function */
     
 	/* Declare DataStore and  show datagrid list */
