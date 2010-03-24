@@ -1834,7 +1834,13 @@ Ext.onReady(function(){
 	//eof
 	
 	//function for insert detail medis
+	var cbo_customer_master = 0;
 	function appointment_detail_medis_insert(){
+		if(post2db=="CREATE"){
+			cbo_customer_master = app_customerField.getValue();
+		}else if(post2db=="UPDATE"){
+			cbo_customer_master = app_customer_idField.getValue();
+		}
 		for(i=0;i<appointment_detail_medisDataStore.getCount();i++){
 			appointment_detail_medis_record=appointment_detail_medisDataStore.getAt(i);
 			if(app_caraField.getValue()=="Datang"){appointment_detail_medis_record.data.dapp_medis_status="Datang"}
@@ -1853,7 +1859,7 @@ Ext.onReady(function(){
 					dapp_medis_status	: appointment_detail_medis_record.data.dapp_medis_status,
 					dapp_medis_keterangan	: appointment_detail_medis_record.data.dapp_medis_keterangan,
 					app_cara	: app_caraField.getValue(),
-					app_customer	: app_customer_idField.getValue(),
+					app_customer	: cbo_customer_master,
 					app_keterangan	: app_keteranganField.getValue()
 					},
 					callback: function(opts, success, response){

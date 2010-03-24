@@ -328,6 +328,14 @@ class M_appointment extends Model{
 						$date_now=date('Y-m-d');
 						$time_now=date('H:i:s');
 						/* INSERT ke db.tindakan dan db.tindakan_detail JIKA $dapp_status=='datang' */
+						/*if(!is_numeric($app_customer)){
+							$ambil_cust = "SELECT app_customer FROM appointment WHERE app_id='$dapp_medis_master'";
+							$rs_ambil_cust = $this->db->query($ambil_cust);
+							if($rs_ambil_cust->num_rows()){
+								$rs_ambil_cust_record = $rs_ambil_cust->row_array();
+								$app_customer = $rs_ambil_cust_record["app_customer"];
+							}
+						}*/
 						$sql="SELECT trawat_id FROM tindakan WHERE trawat_cust='$app_customer' AND date_format(trawat_date_create,'%Y-%m-%d')='$date_now'";
 						$rs=$this->db->query($sql);
 						if($rs->num_rows()){ /* artinya: di db.tindakan telah masuk appointment = $app_customer pada trawat_date_create(tanggal-input) = $date_now */
