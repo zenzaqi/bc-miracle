@@ -328,7 +328,7 @@ class M_appointment extends Model{
 						$date_now=date('Y-m-d');
 						$time_now=date('H:i:s');
 						/* INSERT ke db.tindakan dan db.tindakan_detail JIKA $dapp_status=='datang' */
-						$sql="SELECT trawat_id FROM tindakan WHERE trawat_cust='$app_customer' AND trawat_date_create='$date_now'";
+						$sql="SELECT trawat_id FROM tindakan WHERE trawat_cust='$app_customer' AND date_format(trawat_date_create,'%Y-%m-%d')='$date_now'";
 						$rs=$this->db->query($sql);
 						if($rs->num_rows()){ /* artinya: di db.tindakan telah masuk appointment = $app_customer pada trawat_date_create(tanggal-input) = $date_now */
 							$rs_record=$rs->row_array();
@@ -362,7 +362,7 @@ class M_appointment extends Model{
 							
 							if($this->db->affected_rows()){
 								/* Telah ter-insert ke db.tindakan, maka mulai INSERT db.tindakan_detail */
-								$sql="SELECT trawat_id FROM tindakan WHERE trawat_cust='$app_customer' AND trawat_date_create='$date_now'";
+								$sql="SELECT trawat_id FROM tindakan WHERE trawat_cust='$app_customer' AND date_format(trawat_date_create,'%Y-%m-%d')='$date_now'";
 								$rs=$this->db->query($sql);
 								if($rs->num_rows()){
 									$rs_record=$rs->row_array();
@@ -483,7 +483,7 @@ class M_appointment extends Model{
 						$date_now=date('Y-m-d');
 						$time_now=date('H:i:s');
 						/* INSERT ke db.tindakan dan db.tindakan_detail JIKA $dapp_status=='datang' */
-						$sql="SELECT trawat_id FROM tindakan WHERE trawat_cust='$app_customer' AND trawat_date_create='$date_now'";
+						$sql="SELECT trawat_id FROM tindakan WHERE trawat_cust='$app_customer' AND date_format(trawat_date_create,'%Y-%m-%d')='$date_now'";
 						$rs=$this->db->query($sql);
 						if($rs->num_rows()){ /* artinya: di db.tindakan telah masuk appointment = $app_customer pada trawat_date_create(tanggal-input) = $date_now */
 							$rs_record=$rs->row_array();
@@ -517,7 +517,7 @@ class M_appointment extends Model{
 							
 							if($this->db->affected_rows()){
 								/* Telah ter-insert ke db.tindakan, maka mulai INSERT db.tindakan_detail */
-								$sql="SELECT trawat_id FROM tindakan WHERE trawat_cust='$app_customer' AND trawat_date_create='$date_now'";
+								$sql="SELECT trawat_id FROM tindakan WHERE trawat_cust='$app_customer' AND date_format(trawat_date_create,'%Y-%m-%d')='$date_now'";
 								$rs=$this->db->query($sql);
 								if($rs->num_rows()){
 									$rs_record=$rs->row_array();
@@ -870,7 +870,7 @@ class M_appointment extends Model{
 					$this->db->update('appointment_detail',$data_dapp);
 					
 					/* INSERT ke db.tindakan dan db.tindakan_detail JIKA $dapp_status=='datang' */
-					$sql="SELECT * FROM tindakan WHERE trawat_cust='$cust_id' AND trawat_date_create='$date_now'";
+					$sql="SELECT * FROM tindakan WHERE trawat_cust='$cust_id' AND date_format(trawat_date_create,'%Y-%m-%d')='$date_now'";
 					$rs=$this->db->query($sql);
 					if($rs->num_rows()){
 						$rs_record=$rs->row_array();
@@ -915,7 +915,7 @@ class M_appointment extends Model{
 						);
 						$this->db->insert('tindakan', $data_tindakan);
 						if($this->db->affected_rows()){
-							$sql="SELECT * FROM tindakan WHERE trawat_cust='$cust_id' AND trawat_date_create='$date_now'";
+							$sql="SELECT * FROM tindakan WHERE trawat_cust='$cust_id' AND date_format(trawat_date_create,'%Y-%m-%d')='$date_now'";
 							$rs=$this->db->query($sql);
 							if($rs->num_rows()){
 								$rs_record=$rs->row_array();

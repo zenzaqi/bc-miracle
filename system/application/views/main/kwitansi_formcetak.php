@@ -3,6 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Cetak Kwitansi</title>
+</head>
 <body onload="window.print()">
 <table width="1000" border="0">
   <tr>

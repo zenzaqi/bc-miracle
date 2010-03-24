@@ -361,7 +361,7 @@ class M_master_jual_rawat extends Model{
 		//function for get list record
 		function master_jual_rawat_list($filter,$start,$end){
 			$date_now=date('Y-m-d');
-			$query = "SELECT jrawat_id, jrawat_nobukti, cust_nama, jrawat_cust, cust_no, cust_member, jrawat_tanggal, jrawat_diskon, jrawat_cashback, jrawat_cara, jrawat_cara2, jrawat_cara3, jrawat_totalbiaya, jrawat_bayar, jrawat_keterangan, jrawat_creator, jrawat_date_create, jrawat_update, jrawat_date_update, jrawat_revised, IF(substring(jrawat_nobukti,1,2)='PK', 'paket', '') as keterangan_paket FROM master_jual_rawat,customer WHERE jrawat_cust=cust_id";
+			$query = "SELECT jrawat_id, jrawat_nobukti, vu_jrawat_pr.cust_nama, jrawat_cust, vu_jrawat_pr.cust_no, vu_jrawat_pr.cust_member, jrawat_tanggal, jrawat_diskon, jrawat_cashback, jrawat_cara, jrawat_cara2, jrawat_cara3, jrawat_totalbiaya, jrawat_bayar, jrawat_keterangan, jrawat_creator, jrawat_date_create, jrawat_update, jrawat_date_update, jrawat_revised, keterangan_paket FROM vu_jrawat_pr";
 			
 			// For simple search
 			if ($filter<>""){
@@ -370,9 +370,11 @@ class M_master_jual_rawat extends Model{
 			}
 //			$query.=" AND jrawat_date_create LIKE '$date_now%' ORDER BY jrawat_date_create DESC";
 //			$query.=" AND jrawat_date_create LIKE '$date_now%' ORDER BY jrawat_date_create DESC";
-			$query.=" AND date_format(jrawat_date_create,'%Y-%m-%d')='$date_now' AND (jrawat_bayar is null OR jrawat_bayar = 0) ORDER BY jrawat_date_create DESC";
+			$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
+			$query.=" date_format(jrawat_date_create,'%Y-%m-%d')='$date_now' AND (jrawat_bayar is null OR jrawat_bayar = 0) ORDER BY jrawat_date_create DESC";
 			
-			$query2 = "SELECT `master_ambil_paket`.`apaket_jpaket` AS `jrawat_id`,`master_ambil_paket`.`apaket_faktur` AS `jrawat_nobukti`,`customer`.`cust_nama` AS `cust_nama`, `customer`.`cust_id` AS `jrawat_cust`, `customer`.`cust_no` AS `cust_no`, `customer`.`cust_member` AS `cust_member`, date_format(`detail_ambil_paket`.`dapaket_date_create`,'%Y-%m-%d') AS `jrawat_tanggal`, 0 AS `jrawat_diskon`, 0 AS `jrawat_cashback`, null AS `jrawat_cara`, null AS `jrawat_cara2`, null AS `jrawat_cara3`, IF(substring(`master_ambil_paket`.`apaket_faktur`,1,2)='PK', 0, 0) AS jrawat_totalbiaya, 0 AS `jrawat_bayar`, '' AS `jrawat_keterangan`, `master_ambil_paket`.`apaket_creator` AS `jrawat_creator`, `master_ambil_paket`.`apaket_date_create` AS `jrawat_date_create`, `master_ambil_paket`.`apaket_update` AS `jrawat_update`, `master_ambil_paket`.`apaket_date_update` AS `jrawat_date_update`, `master_ambil_paket`.`apaket_revised` AS `jrawat_revised`, IF(substring(`master_ambil_paket`.`apaket_faktur`,1,2)='PK', 'paket', '') as keterangan_paket FROM ((`detail_ambil_paket` LEFT JOIN `master_ambil_paket` ON(`detail_ambil_paket`.`dapaket_master` = `master_ambil_paket`.`apaket_id`)) LEFT JOIN `customer` ON(`master_ambil_paket`.`apaket_cust` = `customer`.`cust_id`)) WHERE date_format(`detail_ambil_paket`.`dapaket_date_create`,'%Y-%m-%d')='$date_now'";
+			//$query2 = "SELECT `master_ambil_paket`.`apaket_jpaket` AS `jrawat_id`,`master_ambil_paket`.`apaket_faktur` AS `jrawat_nobukti`,`customer`.`cust_nama` AS `cust_nama`, `customer`.`cust_id` AS `jrawat_cust`, `customer`.`cust_no` AS `cust_no`, `customer`.`cust_member` AS `cust_member`, date_format(`detail_ambil_paket`.`dapaket_date_create`,'%Y-%m-%d') AS `jrawat_tanggal`, 0 AS `jrawat_diskon`, 0 AS `jrawat_cashback`, null AS `jrawat_cara`, null AS `jrawat_cara2`, null AS `jrawat_cara3`, IF(substring(`master_ambil_paket`.`apaket_faktur`,1,2)='PK', 0, 0) AS jrawat_totalbiaya, 0 AS `jrawat_bayar`, '' AS `jrawat_keterangan`, `master_ambil_paket`.`apaket_creator` AS `jrawat_creator`, `master_ambil_paket`.`apaket_date_create` AS `jrawat_date_create`, `master_ambil_paket`.`apaket_update` AS `jrawat_update`, `master_ambil_paket`.`apaket_date_update` AS `jrawat_date_update`, `master_ambil_paket`.`apaket_revised` AS `jrawat_revised`, IF(substring(`master_ambil_paket`.`apaket_faktur`,1,2)='PK', 'paket', '') as keterangan_paket FROM ((`detail_ambil_paket` LEFT JOIN `master_ambil_paket` ON(`detail_ambil_paket`.`dapaket_master` = `master_ambil_paket`.`apaket_id`)) LEFT JOIN `customer` ON(`master_ambil_paket`.`apaket_cust` = `customer`.`cust_id`)) WHERE date_format(`detail_ambil_paket`.`dapaket_date_create`,'%Y-%m-%d')='$date_now'";
+			$query2 = "SELECT jrawat_id, jrawat_nobukti, vu_jrawat_pk.cust_nama, jrawat_cust, vu_jrawat_pk.cust_no, vu_jrawat_pk.cust_member, jrawat_tanggal, jrawat_diskon, jrawat_cashback, jrawat_cara, jrawat_cara2, jrawat_cara3, jrawat_totalbiaya, jrawat_bayar, jrawat_keterangan, jrawat_creator, jrawat_date_create, jrawat_update, jrawat_date_update, jrawat_revised, keterangan_paket FROM vu_jrawat_pk WHERE date_format(vu_jrawat_pk.jrawat_date_create,'%Y-%m-%d')='$date_now' AND vu_jrawat_pk.jrawat_cust NOT IN(SELECT vu_jrawat_pr.jrawat_cust FROM vu_jrawat_pr)";
 			
 			// For simple search
 			if ($filter<>""){
@@ -380,7 +382,7 @@ class M_master_jual_rawat extends Model{
 				$query2 .= " (jrawat_nobukti LIKE '%".addslashes($filter)."%' OR cust_no LIKE '%".addslashes($filter)."%' OR cust_nama LIKE '%".addslashes($filter)."%' OR cust_member LIKE '%".addslashes($filter)."%')";
 			}
 //			$query.=" AND jrawat_date_create LIKE '$date_now%' ORDER BY jrawat_date_create DESC";
-			$query2.=" group by `detail_ambil_paket`.`dapaket_id`";
+			//$query2.=" group by `detail_ambil_paket`.`dapaket_id`";
 			
 			$nbrows=0;
 			$nbrows2=0;
