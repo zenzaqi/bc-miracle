@@ -480,6 +480,7 @@ Ext.onReady(function(){
 	function appointment_set_form(){
 		app_idField.setValue(appointmentListEditorGrid.getSelectionModel().getSelected().get('app_id'));
 		app_customerField.setValue(appointmentListEditorGrid.getSelectionModel().getSelected().get('cust_nama'));
+		app_customer_idField.setValue(appointmentListEditorGrid.getSelectionModel().getSelected().get('cust_id'));
 		app_tanggalField.setValue(appointmentListEditorGrid.getSelectionModel().getSelected().get('app_tanggal'));
 		app_caraField.setValue(appointmentListEditorGrid.getSelectionModel().getSelected().get('app_cara'));
 		app_keteranganField.setValue(appointmentListEditorGrid.getSelectionModel().getSelected().get('app_keterangan'));
@@ -1363,6 +1364,7 @@ Ext.onReady(function(){
 			}
 		}
 	});
+	app_customer_idField=new Ext.form.NumberField();
 	/* Identify  app_tanggal Field */
 	app_tanggalField= new Ext.form.DateField({
 		id: 'app_tanggalField',
@@ -1851,7 +1853,7 @@ Ext.onReady(function(){
 					dapp_medis_status	: appointment_detail_medis_record.data.dapp_medis_status,
 					dapp_medis_keterangan	: appointment_detail_medis_record.data.dapp_medis_keterangan,
 					app_cara	: app_caraField.getValue(),
-					app_customer	: app_customerField.getValue(),
+					app_customer	: app_customer_idField.getValue(),
 					app_keterangan	: app_keteranganField.getValue()
 					},
 					callback: function(opts, success, response){

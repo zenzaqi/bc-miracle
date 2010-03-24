@@ -42,7 +42,7 @@ Ext.ux.form.CFTextField = Ext.extend(Ext.form.TextField,{
     },
     getValue: function(){
 		//return this.value;
-		if(this.value==undefined && !isNaN(this.value)){
+		if(this.value==undefined || !isNaN(this.value) || this.value!==""){
 			return 0;
 		}else if(this.value!==undefined){
 			var to_number = this.convertToNumber(this.value);

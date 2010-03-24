@@ -2076,6 +2076,7 @@ Ext.onReady(function(){
 		mode: 'local',
 		displayField: 'jproduk_cara_display',
 		valueField: 'jproduk_cara_value',
+		editable: false,
 		//anchor: '95%',
 		width: 100,
 		triggerAction: 'all'	
@@ -2091,6 +2092,7 @@ Ext.onReady(function(){
 		mode: 'local',
 		displayField: 'jproduk_cara_display',
 		valueField: 'jproduk_cara_value',
+		editable: false,
 		//anchor: '95%',
 		width: 100,
 		triggerAction: 'all'	
@@ -2106,6 +2108,7 @@ Ext.onReady(function(){
 		mode: 'local',
 		displayField: 'jproduk_cara_display',
 		valueField: 'jproduk_cara_value',
+		editable: false,
 		//anchor: '95%',
 		width: 100,
 		triggerAction: 'all'	

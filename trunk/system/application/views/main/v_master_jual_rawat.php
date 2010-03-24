@@ -43,152 +43,6 @@
 		}
     </style>
 <script>
-Ext.ns('Ext.ux.form');
-
-/*Ext.ux.form.CFTextField = Ext.extend(Ext.form.TextField,{
-    valueRenderer: null,
-    initComponent: function(config) {
-        Ext.ux.form.CFTextField.superclass.initComponent.apply(this, arguments);
-        this.on('blur', this);
-    },
-    onRender: function(){
-        Ext.ux.form.CFTextField.superclass.onRender.apply(this, arguments);
-        this.hiddenEl = this.el.insertSibling({
-            tag: 'input', type: 'hidden', name: this.hiddenName
-        });
-    },*/
-    
-    /*setHidden: function(v){
-        var regEx = new RegExp(/\s?[a-z]?/gi); 
-        var myValue = Ext.ux.form.CFTextField.superclass.getValue.call(this);
-            
-            if(myValue.match(/\s?h/gi)){
-                myValue = myValue.replace(regEx, '');
-                myValue = myValue*60;
-            }
-            else if(myValue.match(/\s?k/gi)){
-                myValue = myValue.replace(regEx, '');
-                myValue = myValue*1000;
-            }
-            else if(myValue.match(regEx)){
-                myValue = myValue.replace(regEx, '');
-            }
-            
-        this.hiddenEl.dom.value = myValue;
-    },*/
-/*    setValue: function(v){
-        switch(this.valueRenderer){
-            case 'numberToCurrency': v = this.currencyFormat(v); break;
-            default: break;
-        }
-        Ext.ux.form.CFTextField.superclass.setValue.apply(this, [v]); 
-    },
-    getValue: function(){
-        return this.hiddenEl.dom.value;
-    },
-    getName: function() {
-        return this.hiddenName;
-    },
-    
-    currencyFormat: function(v) {
-		//-- allows clearing of field value (so that $0.00 only shows if you explicitly entered zero for a value).
-		if (v == null||v == '') {
-			return '';
-		} else if (v > 999999999999) {
-			return '';
-		} else {
-			return Ext.util.Format.rpMoney(v);
-		}
-	}
-     
-});*/
-
-/*Ext.reg('CFTextField', Ext.ux.form.CFTextField);
-*/
-
-
-
-Ext.ux.form.NumberField=Ext.extend(Ext.form.TextField,{
-	fieldClass:"x-form-field x-form-num-field",
-	allowDecimals:true,
-	decimalSeparator:".",
-	decimalPrecision:2,
-	allowNegative:true,
-	minValue:Number.NEGATIVE_INFINITY,
-	maxValue:Number.MAX_VALUE,minText:"The minimum value for this field is {0}",
-	maxText:"The maximum value for this field is {0}",
-	nanText:"{0} is not a valid number",
-	baseChars:"0123456789",
-	initEvents:function(){
-		var a=this.baseChars+"";
-		if(this.allowDecimals){
-			a+=this.decimalSeparator
-		}
-		if(this.allowNegative){
-			a+="-"
-		}
-		this.maskRe=new RegExp("["+Ext.escapeRe(a)+"]");
-		Ext.form.NumberField.superclass.initEvents.call(this)},
-		validateValue:function(b){
-			if(!Ext.form.NumberField.superclass.validateValue.call(this,b)){
-				return false
-			}
-			if(b.length<1){
-				return true
-			}
-			b=String(b).replace(this.decimalSeparator,".");
-			if(isNaN(b)){
-				this.markInvalid(String.format(this.nanText,b));
-				return false
-			}
-			var a=this.parseValue(b);
-			if(a<this.minValue){
-				this.markInvalid(String.format(this.minText,this.minValue));
-				return false
-			}
-			if(a>this.maxValue){
-				this.markInvalid(String.format(this.maxText,this.maxValue));
-				return false
-			}
-			return true
-		},
-		
-		getValue:function(){
-			return this.fixPrecision(this.parseValue(Ext.form.NumberField.superclass.getValue.call(this)))
-		},
-		
-		setValue:function(a){
-			a=typeof a=="number"?a:parseFloat(String(a).replace(this.decimalSeparator,"."));
-			a=isNaN(a)?"":String(a).replace(".",this.decimalSeparator);
-			return Ext.form.NumberField.superclass.setValue.call(this,a)
-		},
-		
-		parseValue:function(a){
-			a=parseFloat(String(a).replace(this.decimalSeparator,"."));
-			return isNaN(a)?"":a
-		},
-		
-		fixPrecision:function(b){
-			var a=isNaN(b);
-			if(!this.allowDecimals||this.decimalPrecision==-1||a||!b){
-				return a?"":b
-			}
-			return parseFloat(parseFloat(b).toFixed(this.decimalPrecision))
-		},
-		
-		beforeBlur:function(){
-			var a=this.parseValue(this.getRawValue());
-			if(!Ext.isEmpty(a)){this.setValue(this.fixPrecision(a))}
-		}
-});
-Ext.reg("cfnumberfield",Ext.ux.form.NumberField);
-
-
-
-
-
-
-
 /* declare function */		
 var master_jual_rawat_DataStore;
 var kwitansi_jual_rawat_DataStore;
@@ -330,77 +184,6 @@ Ext.onReady(function(){
   	    }
   	}
 	
-	/*function CurrencyFormatted(number)
-	{
-		var str = new String(number);
-		str = str.replace(",","");
-        if (isNaN(str)) {
-			return "";
-		}else{
-			//var str = new String(number);
-			//str = str.replace(",","");
-			var result = "";
-			var len = str.length;           
-			for(var i=len-1;i>=0;i--)
-			{           
-				if ((i+1)%3 == 0 && i+1!= len) 
-					result += ",";
-				result += str.charAt(len-1-i);
-			}       
-			return result;
-		}
-    }
-	
-	function convertToNumber(str)
-	{
-		str = str.replace(",","");
-        if (isNaN(str)) 
-			return "";
-		else{
-			//str = str.replace(",","");
-			var tonumber = new parseFloat(str);
-			
-			return tonumber;
-		}
-    }*/
-
-	
-	function FormatCurrency(objNum){
-		console.log("objNum = "+objNum);
-       	var num = objNum.value;
-		var ent, dec;
-		num = MoneyToNumber(objNum);
-		if (num != '' && num != objNum.oldvalue){
-			num = MoneyToNumber(num);
-			if (isNaN(num)){
-				console.log("1");
-				objNum.value = objNum.oldvalue;
-			}else{
-				console.log("2");
-				var ev = (navigator.appName.indexOf('Netscape') != -1)?Event:event;
-				if (ev.keyCode == 190 || !isNaN(num.split('.')[1])){
-					console.log("3");
-					objNum.value = AddCommas(num.split('.')[0])+'.'+num.split('.')[1];
-				}else{
-					objNum.value = AddCommas(num.split('.')[0]);
-				}
-				objNum.oldvalue = objNum.value;
-			}
-		}
-		return num;
-	}
-	
-	function MoneyToNumber(num){
-		return (num.replace(/,/g, ''));
-	}
-	
-	function AddCommas(num){
-		numArr=new String(num).split('').reverse();
-		for (i=3;i<numArr.length;i+=3){
-			 numArr[i]+=',';
-		}
-		return numArr.reverse().join('');
-	}
 	
 	function cetak_faktur_jual_rawat(){
 		Ext.Ajax.request({   
@@ -1046,6 +829,14 @@ Ext.onReady(function(){
 	function master_jual_rawat_set_form(){
 		//master_jual_rawat_reset_form();
 		var hutang_temp=0;
+		
+		var subtotal_field=0;
+		var drawat_jumlah_field=0;
+		var total_field=0;
+		var hutang_field=0;
+		var diskon_field=0;
+		var cashback_field=0;
+		
 		jrawat_idField.setValue(master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_id'));
 		jrawat_nobuktiField.setValue(master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_nobukti'));
 		jrawat_custField.setValue(master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_cust'));
@@ -1060,10 +851,30 @@ Ext.onReady(function(){
 		jrawat_cara2Field.setValue(master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_cara2'));
 		jrawat_cara3Field.setValue(master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_cara3'));
 		jrawat_bayarField.setValue(master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_bayar'));
-		hutang_temp=jrawat_totalField.getValue()-jrawat_bayarField.getValue();
-		jrawat_hutangField.setValue(hutang_temp);
+		
 
 		jrawat_keteranganField.setValue(master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_keterangan'));
+		
+		for(i=0;i<detail_jual_rawat_DataStore.getCount();i++){
+			subtotal_field+=detail_jual_rawat_DataStore.getAt(i).data.drawat_subtotal_net;
+			drawat_jumlah_field+=detail_jual_rawat_DataStore.getAt(i).data.drawat_jumlah;
+		}
+		if(jrawat_diskonField.getValue()!==""){
+			diskon_field=jrawat_diskonField.getValue();
+		}
+		if(jrawat_cashbackField.getValue()!==""){
+			cashback_field=jrawat_cashbackField.getValue();
+		}
+		total_field=subtotal_field*(100-diskon_field)/100-cashback_field;
+		
+		jrawat_jumlahField.setValue(drawat_jumlah_field);
+		jrawat_subTotalField.setValue(subtotal_field);
+		jrawat_totalField.setValue(total_field);
+		
+		hutang_temp=total_field-jrawat_bayarField.getValue();
+		jrawat_hutangField.setValue(hutang_temp);
+		
+		
 		load_membership();
 		update_group_carabayar_jual_rawat();
 		update_group_carabayar2_jual_rawat();
@@ -1433,7 +1244,7 @@ Ext.onReady(function(){
 				params : {master_id : master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_id'), start:0, limit:pageS},
 				callback:function(opts, success, response){
 					if(success){
-						var subtotal_field=0;
+						/*var subtotal_field=0;
 						var drawat_jumlah_field=0;
 						var total_field=0;
 						var hutang_field=0;
@@ -1459,7 +1270,7 @@ Ext.onReady(function(){
 						//master_jual_rawat_cardGroup.setVisible(true);
 						jrawat_jumlahField.setValue(drawat_jumlah_field);
 						jrawat_subTotalField.setValue(subtotal_field);
-						jrawat_totalField.setValue(total_field);
+						jrawat_totalField.setValue(total_field);*/
 						master_jual_rawat_set_form();
 					}
 				}
@@ -2219,7 +2030,7 @@ Ext.onReady(function(){
 		emptyText: '0',
 		allowDecimals: false,
 		enableKeyEvents: true,
-		width: 100,
+		width: 120,
 		maxLength: 2,
 		maskRe: /([0-9]+)$/
 	});
@@ -2228,10 +2039,8 @@ Ext.onReady(function(){
 		id: 'jrawat_cashback_cfField',
 		fieldLabel: 'Diskon (Rp)',
 		allowNegatife : false,
-		blankText: '0',
-		emptyText: '0',
 		enableKeyEvents: true,
-		//allowDecimals: false,
+		itemCls: 'rmoney',
 		width: 120,
 		listeners: {
 			'keyup': function(){
@@ -2239,11 +2048,11 @@ Ext.onReady(function(){
 				jrawat_cashbackField.setValue(cf_tonumber);
 				load_total_rawat_bayar();
 				
-				var cashback_cf = CurrencyFormatted(this.getValue());
-				this.setRawValue(cashback_cf);
+				var number_tocf = CurrencyFormatted(this.getValue());
+				this.setRawValue(number_tocf);
 			}
-		}/*,
-		maskRe: /([0-9]+)$/*/
+		},
+		maskRe: /([0-9]+)$/
 	});
 	
 	jrawat_cashbackField= new Ext.form.NumberField({
@@ -2269,6 +2078,7 @@ Ext.onReady(function(){
 		mode: 'local',
 		displayField: 'jrawat_cara_display',
 		valueField: 'jrawat_cara_value',
+		editable: false,
 		//anchor: '95%',
 		width: 100,
 		triggerAction: 'all'	
@@ -2284,6 +2094,7 @@ Ext.onReady(function(){
 		mode: 'local',
 		displayField: 'jrawat_cara_display',
 		valueField: 'jrawat_cara_value',
+		editable: false,
 		//anchor: '95%',
 		width: 100,
 		triggerAction: 'all'	
@@ -2299,6 +2110,7 @@ Ext.onReady(function(){
 		mode: 'local',
 		displayField: 'jrawat_cara_display',
 		valueField: 'jrawat_cara_value',
+		editable: false,
 		//anchor: '95%',
 		width: 100,
 		triggerAction: 'all'	
@@ -2518,6 +2330,25 @@ Ext.onReady(function(){
 		anchor: '95%'
 	});
 	
+	jrawat_card_nilai_cfField= new Ext.form.TextField({
+		id: 'jrawat_card_nilai_cfField',
+		fieldLabel: 'Jumlah (Rp)',
+		allowNegatife : false,
+		enableKeyEvents: true,
+		itemCls: 'rmoney',
+		anchor: '95%',
+		listeners: {
+			'keyup': function(){
+				var cf_tonumber = convertToNumber(this.getValue());
+				jrawat_card_nilaiField.setValue(cf_tonumber);
+				load_total_rawat_bayar();
+				
+				var number_tocf = CurrencyFormatted(this.getValue());
+				this.setRawValue(number_tocf);
+			}
+		},
+		maskRe: /([0-9]+)$/ 
+	});
 	jrawat_card_nilaiField= new Ext.form.NumberField({
 		id: 'jrawat_card_nilaiField',
 		fieldLabel: 'Jumlah (Rp)',
@@ -2539,7 +2370,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [jrawat_card_namaField,jrawat_card_edcField,jrawat_card_noField,jrawat_card_nilaiField] 
+				items: [jrawat_card_namaField,jrawat_card_edcField,jrawat_card_noField,jrawat_card_nilai_cfField] 
 			}
 		]
 	
@@ -2586,6 +2417,25 @@ Ext.onReady(function(){
 		anchor: '95%'
 	});
 	
+	jrawat_card_nilai2_cfField= new Ext.form.TextField({
+		id: 'jrawat_card_nilai2_cfField',
+		fieldLabel: 'Jumlah (Rp)',
+		allowNegatife : false,
+		enableKeyEvents: true,
+		itemCls: 'rmoney',
+		anchor: '95%',
+		listeners: {
+			'keyup': function(){
+				var cf_tonumber = convertToNumber(this.getValue());
+				jrawat_card_nilai2Field.setValue(cf_tonumber);
+				load_total_rawat_bayar();
+				
+				var number_tocf = CurrencyFormatted(this.getValue());
+				this.setRawValue(number_tocf);
+			}
+		},
+		maskRe: /([0-9]+)$/ 
+	});
 	jrawat_card_nilai2Field= new Ext.form.NumberField({
 		id: 'jrawat_card_nilai2Field',
 		fieldLabel: 'Jumlah (Rp)',
@@ -2607,7 +2457,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [jrawat_card_nama2Field,jrawat_card_edc2Field,jrawat_card_no2Field,jrawat_card_nilai2Field] 
+				items: [jrawat_card_nama2Field,jrawat_card_edc2Field,jrawat_card_no2Field,jrawat_card_nilai2_cfField] 
 			}
 		]
 	
@@ -2654,6 +2504,25 @@ Ext.onReady(function(){
 		anchor: '95%'
 	});
 	
+	jrawat_card_nilai3_cfField= new Ext.form.TextField({
+		id: 'jrawat_card_nilai3_cfField',
+		fieldLabel: 'Jumlah (Rp)',
+		allowNegatife : false,
+		enableKeyEvents: true,
+		itemCls: 'rmoney',
+		anchor: '95%',
+		listeners: {
+			'keyup': function(){
+				var cf_tonumber = convertToNumber(this.getValue());
+				jrawat_card_nilai3Field.setValue(cf_tonumber);
+				load_total_rawat_bayar();
+				
+				var number_tocf = CurrencyFormatted(this.getValue());
+				this.setRawValue(number_tocf);
+			}
+		},
+		maskRe: /([0-9]+)$/ 
+	});
 	jrawat_card_nilai3Field= new Ext.form.NumberField({
 		id: 'jrawat_card_nilai3Field',
 		fieldLabel: 'Jumlah (Rp)',
@@ -2675,7 +2544,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [jrawat_card_nama3Field,jrawat_card_edc3Field,jrawat_card_no3Field,jrawat_card_nilai3Field] 
+				items: [jrawat_card_nama3Field,jrawat_card_edc3Field,jrawat_card_no3Field,jrawat_card_nilai3_cfField] 
 			}
 		]
 	
@@ -2719,6 +2588,25 @@ Ext.onReady(function(){
 		renderer: Ext.util.Format.comboRenderer(jrawat_cek_bankField)
 	});
 	
+	jrawat_cek_nilai_cfField= new Ext.form.TextField({
+		id: 'jrawat_cek_nilai_cfField',
+		fieldLabel: 'Jumlah (Rp)',
+		allowNegatife : false,
+		enableKeyEvents: true,
+		itemCls: 'rmoney',
+		anchor: '95%',
+		listeners: {
+			'keyup': function(){
+				var cf_tonumber = convertToNumber(this.getValue());
+				jrawat_cek_nilaiField.setValue(cf_tonumber);
+				load_total_rawat_bayar();
+				
+				var number_tocf = CurrencyFormatted(this.getValue());
+				this.setRawValue(number_tocf);
+			}
+		},
+		maskRe: /([0-9]+)$/ 
+	});
 	jrawat_cek_nilaiField= new Ext.form.NumberField({
 		id: 'jrawat_cek_nilaiField',
 		fieldLabel: 'Jumlah (Rp)',
@@ -2740,7 +2628,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [jrawat_cek_namaField,jrawat_cek_noField,jrawat_cek_validField,jrawat_cek_bankField,jrawat_cek_nilaiField] 
+				items: [jrawat_cek_namaField,jrawat_cek_noField,jrawat_cek_validField,jrawat_cek_bankField,jrawat_cek_nilai_cfField] 
 			}
 		]
 	
@@ -2783,6 +2671,25 @@ Ext.onReady(function(){
 		renderer: Ext.util.Format.comboRenderer(jrawat_cek_bankField)
 	});
 	
+	jrawat_cek_nilai2_cfField= new Ext.form.TextField({
+		id: 'jrawat_cek_nilai2_cfField',
+		fieldLabel: 'Jumlah (Rp)',
+		allowNegatife : false,
+		enableKeyEvents: true,
+		itemCls: 'rmoney',
+		anchor: '95%',
+		listeners: {
+			'keyup': function(){
+				var cf_tonumber = convertToNumber(this.getValue());
+				jrawat_cek_nilai2Field.setValue(cf_tonumber);
+				load_total_rawat_bayar();
+				
+				var number_tocf = CurrencyFormatted(this.getValue());
+				this.setRawValue(number_tocf);
+			}
+		},
+		maskRe: /([0-9]+)$/ 
+	});
 	jrawat_cek_nilai2Field= new Ext.form.NumberField({
 		id: 'jrawat_cek_nilai2Field',
 		fieldLabel: 'Jumlah (Rp)',
@@ -2804,7 +2711,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [jrawat_cek_nama2Field,jrawat_cek_no2Field,jrawat_cek_valid2Field,jrawat_cek_bank2Field,jrawat_cek_nilai2Field] 
+				items: [jrawat_cek_nama2Field,jrawat_cek_no2Field,jrawat_cek_valid2Field,jrawat_cek_bank2Field,jrawat_cek_nilai2_cfField] 
 			}
 		]
 	
@@ -2847,6 +2754,25 @@ Ext.onReady(function(){
 		renderer: Ext.util.Format.comboRenderer(jrawat_cek_bankField)
 	});
 	
+	jrawat_cek_nilai3_cfField= new Ext.form.TextField({
+		id: 'jrawat_cek_nilai3_cfField',
+		fieldLabel: 'Jumlah (Rp)',
+		allowNegatife : false,
+		enableKeyEvents: true,
+		itemCls: 'rmoney',
+		anchor: '95%',
+		listeners: {
+			'keyup': function(){
+				var cf_tonumber = convertToNumber(this.getValue());
+				jrawat_cek_nilai3Field.setValue(cf_tonumber);
+				load_total_rawat_bayar();
+				
+				var number_tocf = CurrencyFormatted(this.getValue());
+				this.setRawValue(number_tocf);
+			}
+		},
+		maskRe: /([0-9]+)$/ 
+	});
 	jrawat_cek_nilai3Field= new Ext.form.NumberField({
 		id: 'jrawat_cek_nilai3Field',
 		fieldLabel: 'Jumlah (Rp)',
@@ -2868,7 +2794,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [jrawat_cek_nama3Field,jrawat_cek_no3Field,jrawat_cek_valid3Field,jrawat_cek_bank3Field,jrawat_cek_nilai3Field] 
+				items: [jrawat_cek_nama3Field,jrawat_cek_no3Field,jrawat_cek_valid3Field,jrawat_cek_bank3Field,jrawat_cek_nilai3_cfField] 
 			}
 		]
 	
@@ -2898,6 +2824,25 @@ Ext.onReady(function(){
 		maxLength: 50
 	});
 	
+	jrawat_transfer_nilai_cfField= new Ext.form.TextField({
+		id: 'jrawat_transfer_nilai_cfField',
+		fieldLabel: 'Jumlah (Rp)',
+		allowNegatife : false,
+		enableKeyEvents: true,
+		itemCls: 'rmoney',
+		anchor: '95%',
+		listeners: {
+			'keyup': function(){
+				var cf_tonumber = convertToNumber(this.getValue());
+				jrawat_transfer_nilaiField.setValue(cf_tonumber);
+				load_total_rawat_bayar();
+				
+				var number_tocf = CurrencyFormatted(this.getValue());
+				this.setRawValue(number_tocf);
+			}
+		},
+		maskRe: /([0-9]+)$/ 
+	});
 	jrawat_transfer_nilaiField= new Ext.form.NumberField({
 		id: 'jrawat_transfer_nilaiField',
 		enableKeyEvents: true,
@@ -2918,7 +2863,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [jrawat_transfer_bankField,jrawat_transfer_namaField,jrawat_transfer_nilaiField] 
+				items: [jrawat_transfer_bankField,jrawat_transfer_namaField,jrawat_transfer_nilai_cfField] 
 			}
 		]
 	
@@ -2946,6 +2891,25 @@ Ext.onReady(function(){
 		maxLength: 50
 	});
 	
+	jrawat_transfer_nilai2_cfField= new Ext.form.TextField({
+		id: 'jrawat_transfer_nilai2_cfField',
+		fieldLabel: 'Jumlah (Rp)',
+		allowNegatife : false,
+		enableKeyEvents: true,
+		itemCls: 'rmoney',
+		anchor: '95%',
+		listeners: {
+			'keyup': function(){
+				var cf_tonumber = convertToNumber(this.getValue());
+				jrawat_transfer_nilai2Field.setValue(cf_tonumber);
+				load_total_rawat_bayar();
+				
+				var number_tocf = CurrencyFormatted(this.getValue());
+				this.setRawValue(number_tocf);
+			}
+		},
+		maskRe: /([0-9]+)$/ 
+	});
 	jrawat_transfer_nilai2Field= new Ext.form.NumberField({
 		id: 'jrawat_transfer_nilai2Field',
 		fieldLabel: 'Jumlah (Rp)',
@@ -2966,7 +2930,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [jrawat_transfer_bank2Field,jrawat_transfer_nama2Field,jrawat_transfer_nilai2Field] 
+				items: [jrawat_transfer_bank2Field,jrawat_transfer_nama2Field,jrawat_transfer_nilai2_cfField] 
 			}
 		]
 	
@@ -2994,6 +2958,25 @@ Ext.onReady(function(){
 		maxLength: 50
 	});
 	
+	jrawat_transfer_nilai3_cfField= new Ext.form.TextField({
+		id: 'jrawat_transfer_nilai3_cfField',
+		fieldLabel: 'Jumlah (Rp)',
+		allowNegatife : false,
+		enableKeyEvents: true,
+		itemCls: 'rmoney',
+		anchor: '95%',
+		listeners: {
+			'keyup': function(){
+				var cf_tonumber = convertToNumber(this.getValue());
+				jrawat_transfer_nilai3Field.setValue(cf_tonumber);
+				load_total_rawat_bayar();
+				
+				var number_tocf = CurrencyFormatted(this.getValue());
+				this.setRawValue(number_tocf);
+			}
+		},
+		maskRe: /([0-9]+)$/ 
+	});
 	jrawat_transfer_nilai3Field= new Ext.form.NumberField({
 		id: 'jrawat_transfer_nilai3Field',
 		fieldLabel: 'Jumlah (Rp)',
@@ -3014,7 +2997,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [jrawat_transfer_bank3Field,jrawat_transfer_nama3Field,jrawat_transfer_nilai3Field] 
+				items: [jrawat_transfer_bank3Field,jrawat_transfer_nama3Field,jrawat_transfer_nilai3_cfField] 
 			}
 		]
 	
@@ -3022,6 +3005,25 @@ Ext.onReady(function(){
 	// END Field Transfer-3
 	
 	//START Field Tunai-1
+	jrawat_tunai_nilai_cfField= new Ext.form.TextField({
+		id: 'jrawat_tunai_nilai_cfField',
+		fieldLabel: 'Jumlah (Rp)',
+		allowNegatife : false,
+		enableKeyEvents: true,
+		itemCls: 'rmoney',
+		anchor: '95%',
+		listeners: {
+			'keyup': function(){
+				var cf_tonumber = convertToNumber(this.getValue());
+				jrawat_tunai_nilaiField.setValue(cf_tonumber);
+				load_total_rawat_bayar();
+				
+				var number_tocf = CurrencyFormatted(this.getValue());
+				this.setRawValue(number_tocf);
+			}
+		},
+		maskRe: /([0-9]+)$/ 
+	});
 	jrawat_tunai_nilaiField= new Ext.form.NumberField({
 		id: 'jrawat_tunai_nilaiField',
 		enableKeyEvents: true,
@@ -3043,7 +3045,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [jrawat_tunai_nilaiField] 
+				items: [jrawat_tunai_nilai_cfField] 
 			}
 		]
 	
@@ -3051,6 +3053,25 @@ Ext.onReady(function(){
 	// END Tunai-1
 	
 	//START Field Tunai-2
+	jrawat_tunai_nilai2_cfField= new Ext.form.TextField({
+		id: 'jrawat_tunai_nilai2_cfField',
+		fieldLabel: 'Jumlah (Rp)',
+		allowNegatife : false,
+		enableKeyEvents: true,
+		itemCls: 'rmoney',
+		anchor: '95%',
+		listeners: {
+			'keyup': function(){
+				var cf_tonumber = convertToNumber(this.getValue());
+				jrawat_tunai_nilai2Field.setValue(cf_tonumber);
+				load_total_rawat_bayar();
+				
+				var number_tocf = CurrencyFormatted(this.getValue());
+				this.setRawValue(number_tocf);
+			}
+		},
+		maskRe: /([0-9]+)$/ 
+	});
 	jrawat_tunai_nilai2Field= new Ext.form.NumberField({
 		id: 'jrawat_tunai_nilai2Field',
 		enableKeyEvents: true,
@@ -3072,7 +3093,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [jrawat_tunai_nilai2Field] 
+				items: [jrawat_tunai_nilai2_cfField] 
 			}
 		]
 	
@@ -3080,6 +3101,25 @@ Ext.onReady(function(){
 	// END Tunai-2
 	
 	//START Field Tunai-3
+	jrawat_tunai_nilai3_cfField= new Ext.form.TextField({
+		id: 'jrawat_tunai_nilai3_cfField',
+		fieldLabel: 'Jumlah (Rp)',
+		allowNegatife : false,
+		enableKeyEvents: true,
+		itemCls: 'rmoney',
+		anchor: '95%',
+		listeners: {
+			'keyup': function(){
+				var cf_tonumber = convertToNumber(this.getValue());
+				jrawat_tunai_nilai3Field.setValue(cf_tonumber);
+				load_total_rawat_bayar();
+				
+				var number_tocf = CurrencyFormatted(this.getValue());
+				this.setRawValue(number_tocf);
+			}
+		},
+		maskRe: /([0-9]+)$/ 
+	});
 	jrawat_tunai_nilai3Field= new Ext.form.NumberField({
 		id: 'jrawat_tunai_nilai3Field',
 		enableKeyEvents: true,
@@ -3101,7 +3141,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [jrawat_tunai_nilai3Field] 
+				items: [jrawat_tunai_nilai3_cfField] 
 			}
 		]
 	
@@ -3117,6 +3157,25 @@ Ext.onReady(function(){
 		anchor: '95%'
 	});
 	
+	jrawat_kwitansi_nilai_cfField= new Ext.form.TextField({
+		id: 'jrawat_kwitansi_nilai_cfField',
+		fieldLabel: 'Diambil (Rp)',
+		allowNegatife : false,
+		enableKeyEvents: true,
+		itemCls: 'rmoney',
+		anchor: '95%',
+		listeners: {
+			'keyup': function(){
+				var cf_tonumber = convertToNumber(this.getValue());
+				jrawat_kwitansi_nilaiField.setValue(cf_tonumber);
+				load_total_rawat_bayar();
+				
+				var number_tocf = CurrencyFormatted(this.getValue());
+				this.setRawValue(number_tocf);
+			}
+		},
+		maskRe: /([0-9]+)$/ 
+	});
 	jrawat_kwitansi_nilaiField= new Ext.form.NumberField({
 		id: 'jrawat_kwitansi_nilaiField',
 		enableKeyEvents: true,
@@ -3177,6 +3236,25 @@ Ext.onReady(function(){
 		anchor: '95%'
 	});
 	
+	jrawat_kwitansi_nilai2_cfField= new Ext.form.TextField({
+		id: 'jrawat_kwitansi_nilai2_cfField',
+		fieldLabel: 'Diambil (Rp)',
+		allowNegatife : false,
+		enableKeyEvents: true,
+		itemCls: 'rmoney',
+		anchor: '95%',
+		listeners: {
+			'keyup': function(){
+				var cf_tonumber = convertToNumber(this.getValue());
+				jrawat_kwitansi_nilai2Field.setValue(cf_tonumber);
+				load_total_rawat_bayar();
+				
+				var number_tocf = CurrencyFormatted(this.getValue());
+				this.setRawValue(number_tocf);
+			}
+		},
+		maskRe: /([0-9]+)$/ 
+	});
 	jrawat_kwitansi_nilai2Field= new Ext.form.NumberField({
 		id: 'jrawat_kwitansi_nilai2Field',
 		enableKeyEvents: true,
@@ -3231,6 +3309,25 @@ Ext.onReady(function(){
 		anchor: '95%'
 	});
 	
+	jrawat_kwitansi_nilai3_cfField= new Ext.form.TextField({
+		id: 'jrawat_kwitansi_nilai3_cfField',
+		fieldLabel: 'Diambil (Rp)',
+		allowNegatife : false,
+		enableKeyEvents: true,
+		itemCls: 'rmoney',
+		anchor: '95%',
+		listeners: {
+			'keyup': function(){
+				var cf_tonumber = convertToNumber(this.getValue());
+				jrawat_kwitansi_nilai3Field.setValue(cf_tonumber);
+				load_total_rawat_bayar();
+				
+				var number_tocf = CurrencyFormatted(this.getValue());
+				this.setRawValue(number_tocf);
+			}
+		},
+		maskRe: /([0-9]+)$/ 
+	});
 	jrawat_kwitansi_nilai3Field= new Ext.form.NumberField({
 		id: 'jrawat_kwitansi_nilai3Field',
 		enableKeyEvents: true,
@@ -3287,7 +3384,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [jrawat_kwitansi_noField,jrawat_kwitansi_namaField,jrawat_kwitansi_sisaField,jrawat_kwitansi_nilaiField] 
+				items: [jrawat_kwitansi_noField,jrawat_kwitansi_namaField,jrawat_kwitansi_sisaField,jrawat_kwitansi_nilai_cfField] 
 			}
 		]
 	
@@ -3304,7 +3401,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [jrawat_kwitansi_no2Field,jrawat_kwitansi_nama2Field,jrawat_kwitansi_sisa2Field,jrawat_kwitansi_nilai2Field] 
+				items: [jrawat_kwitansi_no2Field,jrawat_kwitansi_nama2Field,jrawat_kwitansi_sisa2Field,jrawat_kwitansi_nilai2_cfField] 
 			}
 		]
 	
@@ -3321,7 +3418,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [jrawat_kwitansi_no3Field,jrawat_kwitansi_nama3Field,jrawat_kwitansi_sisa2Field,jrawat_kwitansi_nilai3Field] 
+				items: [jrawat_kwitansi_no3Field,jrawat_kwitansi_nama3Field,jrawat_kwitansi_sisa2Field,jrawat_kwitansi_nilai3_cfField] 
 			}
 		]
 	
@@ -3339,28 +3436,24 @@ Ext.onReady(function(){
 		maskRe: /([0-9]+)$/
 	});
 	
-	jrawat_subTotalField= new Ext.form.NumberField({
+	jrawat_subTotalField= new Ext.ux.form.CFTextField({
 		id: 'jrawat_subTotalField',
 		fieldLabel: 'Sub Total (Rp)',
+		valueRenderer: 'numberToCurrency',
 		readOnly: true,
-		allowDecimals: false,
-		allowBlank: true,
-		width: 120,
-		maxLength: 50,
-		maskRe: /([0-9]+)$/
+		enableKeyEvents: true,
+		itemCls: 'rmoney',
+		width: 120
 	});
 
-	jrawat_totalField= new Ext.form.NumberField({
+	jrawat_totalField= new Ext.ux.form.CFTextField({
 		id: 'jrawat_totalField',
 		fieldLabel: '<span style="font-weight:bold">Total (Rp)</span>',
-		//valueRenderer: 'frFormat',
+		valueRenderer: 'numberToCurrency',
 		readOnly: true,
-		allowDecimals: false,
-		allowBlank: true,
+		enableKeyEvents: true,
 		itemCls: 'rmoney_b',
-		width: 120,
-		maxLength: 50,
-		maskRe: /([0-9]+)$/
+		width: 120
 	});
 	
 	/*jrawat_bayarField= new Ext.form.NumberField({
@@ -3379,10 +3472,8 @@ Ext.onReady(function(){
 		valueRenderer: 'numberToCurrency',
 		readOnly: true,
 		enableKeyEvents: true,
-		allowBlank: true,
-		allowDecimals: false,
-		width: 120,
-		maxLength: 50
+		itemCls: 'rmoney',
+		width: 120
 	});
 	
 	/*jrawat_hutangField= new Ext.form.NumberField({
