@@ -416,8 +416,8 @@ Ext.onReady(function(){
 		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
 			{name: 'user_group_value', type: 'int', mapping: 'group_id'},
 			{name: 'user_group_display', type: 'string', mapping: 'group_name'}
-		]),
-	sortInfo:{field: 'user_group_display', direction: "ASC"}
+		])//,
+//	sortInfo:{field: 'user_group_display', direction: "ASC"}
 	});
     
 	
@@ -454,9 +454,9 @@ Ext.onReady(function(){
 		},		
 		{
 			align : 'Right',
-			header: '<div align="center">' + 'Jml Tindakan' + '</div>',
+			header: '<div align="center">' + 'Tindakan Sebelumnya' + '</div>',
 			dataIndex: 'terapis_count',
-			width: 60,	//150,
+			width: 80,	//150,
 			sortable: true,
 			
 		},	
@@ -477,9 +477,9 @@ Ext.onReady(function(){
 		
 		{
 			align : 'Right',
-			header: '<div align="center">' + 'Hasil' + '</div>',
+			header: '<div align="center">' + 'Tindakan Saat Ini' + '</div>',
 			dataIndex: 'new_count',
-			width: 60,	//150,
+			width: 80,	//150,
 			sortable: true,
 			
 		}
