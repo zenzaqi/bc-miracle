@@ -7,6 +7,19 @@ class M_public_function extends Model{
 	}
 	
 	
+	function get_laporan_terima_kas($tgl_awal,$tgl_akhir,$periode,$opsi){
+			$sql="";
+			if($periode=='all')
+				$sql="SELECT tanggal,sum(card) as nilai_card,sum(cek) as nilai_cek, sum(kredit) as nilai_kredit, sum(kwitansi) as nilai_kwitansi, sum(transfer) as nilai_transfer,sum(tunai) as nilai_tunai,sum(voucher) as nilai_voucher FROM vu_trans_terima_kas GROUP BY tanggal";
+			else if($periode=='bulan')
+				$sql="SELECT tanggal,sum(card) as nilai_card,sum(cek) as nilai_cek, sum(kredit) as nilai_kredit, sum(kwitansi) as nilai_kwitansi, sum(transfer) as nilai_transfer,sum(tunai) as nilai_tunai,sum(voucher) as nilai_voucher FROM vu_trans_terima_kas WHERE tanggal like '".$tgl_awal."%' GROUP BY tanggal";
+			else if($periode=='tanggal')
+				$sql="SELECT tanggal,sum(card) as nilai_card,sum(cek) as nilai_cek, sum(kredit) as nilai_kredit, sum(kwitansi) as nilai_kwitansi, sum(transfer) as nilai_transfer,sum(tunai) as nilai_tunai,sum(voucher) as nilai_voucher FROM vu_trans_terima_kas WHERE tanggal>='".$tgl_awal."' AND tanggal<='".$tgl_akhir."' GROUP BY tanggal";
+
+			$query = $this->db->query($sql);
+			return $query->result();
+	}
+		
 	function get_order_beli_detail_by_order_id($orderid){
 		$sql="SELECT * FROM vu_detail_order_beli WHERE dorder_master='".$orderid."'";
 		$query = $this->db->query($sql);
