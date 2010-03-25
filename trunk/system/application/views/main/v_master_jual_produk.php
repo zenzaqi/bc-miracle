@@ -289,6 +289,7 @@ Ext.onReady(function(){
 		var jproduk_cashback_create=null;
 		//bayar
 		var jproduk_subtotal_create=null;
+		var jproduk_total_create=null;
 		var jproduk_bayar_create=null;
 		var jproduk_hutang_create=null;
 		//kwitansi
@@ -378,6 +379,7 @@ Ext.onReady(function(){
 		//bayar
 		if(jproduk_bayarField.getValue()!== null){jproduk_bayar_create = jproduk_bayarField.getValue();}
 		if(jproduk_subTotalField.getValue()!== null){jproduk_subtotal_create = jproduk_subTotalField.getValue();} 
+		if(jproduk_totalField.getValue()!== null){jproduk_total_create = jproduk_totalField.getValue();} 
 		if(jproduk_hutangField.getValue()!== null){jproduk_hutang_create = jproduk_hutangField.getValue();} 
 		//kwitansi value
 		if(jproduk_kwitansi_noField.getValue()!== ""){jproduk_kwitansi_nomor_create = jproduk_kwitansi_noField.getValue();} 
@@ -471,6 +473,7 @@ Ext.onReady(function(){
 				//bayar
 				jproduk_bayar			: 	jproduk_bayar_create,
 				jproduk_subtotal			: 	jproduk_subtotal_create,
+				jproduk_total			: 	jproduk_total_create,
 				jproduk_hutang		: 	jproduk_hutang_create,
 				//kwitansi posting
 				jproduk_kwitansi_no		:	jproduk_kwitansi_nomor_create,
@@ -1425,6 +1428,7 @@ Ext.onReady(function(){
 			{name: 'jproduk_cara2', type: 'string', mapping: 'jproduk_cara2'}, 
 			{name: 'jproduk_cara3', type: 'string', mapping: 'jproduk_cara3'}, 
 			{name: 'jproduk_bayar', type: 'float', mapping: 'jproduk_bayar'}, 
+			{name: 'jproduk_total', type: 'float', mapping: 'jproduk_totalbiaya'}, 
 			{name: 'jproduk_keterangan', type: 'string', mapping: 'jproduk_keterangan'}, 
 			{name: 'jproduk_creator', type: 'string', mapping: 'jproduk_creator'}, 
 			{name: 'jproduk_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'jproduk_date_create'}, 
