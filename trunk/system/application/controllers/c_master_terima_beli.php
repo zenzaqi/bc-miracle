@@ -26,6 +26,10 @@ class C_master_terima_beli extends Controller {
 		$this->load->view('main/v_master_terima_beli');
 	}
 	
+	function laporan(){
+		$this->load->view('main/v_lap_terima_beli');
+	}
+	
 	
 	function get_order_beli_detail_by_order_id(){
 		$orderid = isset($_POST['orderid']) ? @$_POST['orderid'] : "";

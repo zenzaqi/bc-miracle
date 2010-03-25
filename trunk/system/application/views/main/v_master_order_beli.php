@@ -434,9 +434,9 @@ Ext.onReady(function(){
 		},[
 		/* dataIndex => insert intomaster_order_beli_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'order_id', type: 'int', mapping: 'order_id'}, 
-			{name: 'order_no', type: 'string', mapping: 'order_no'}, 
+			{name: 'order_no', type: 'string', mapping: 'no_bukti'}, 
 			{name: 'order_supplier', type: 'string', mapping: 'supplier_nama'}, 
-			{name: 'order_tanggal', type: 'date', dateFormat: 'Y-m-d', mapping: 'order_tanggal'}, 
+			{name: 'order_tanggal', type: 'date', dateFormat: 'Y-m-d', mapping: 'tanggal'}, 
 			{name: 'order_carabayar', type: 'string', mapping: 'order_carabayar'}, 
 			{name: 'order_diskon', type: 'float', mapping: 'order_diskon'},
 			{name: 'order_cashback', type: 'float', mapping: 'order_cashback'},
@@ -1030,9 +1030,9 @@ Ext.onReady(function(){
 			{name: 'dorder_produk', type: 'int', mapping: 'dorder_produk'},
 			{name: 'produk_nama', type: 'string', mapping: 'produk_nama'},
 			{name: 'dorder_satuan', type: 'int', mapping: 'dorder_satuan'}, 
-			{name: 'dorder_jumlah', type: 'int', mapping: 'dorder_jumlah'}, 
-			{name: 'dorder_harga', type: 'float', mapping: 'dorder_harga'}, 
-			{name: 'dorder_diskon', type: 'float', mapping: 'dorder_diskon'} ,
+			{name: 'dorder_jumlah', type: 'int', mapping: 'jumlah_barang'}, 
+			{name: 'dorder_harga', type: 'float', mapping: 'harga_satuan'}, 
+			{name: 'dorder_diskon', type: 'float', mapping: 'diskon'} ,
 			{name: 'dorder_subtotal', type: 'float', mapping: 'dorder_subtotal'} 
 			
 	]);
