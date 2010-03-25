@@ -1641,6 +1641,7 @@ Ext.onReady(function(){
 			text: 'Delete',
 			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
+			disabled: true,
 			handler: master_jual_paket_confirm_delete   // Confirm before deleting
 		}, '-', {
 			text: 'Search',
@@ -1698,6 +1699,7 @@ Ext.onReady(function(){
 			text: 'Delete', 
 			tooltip: 'Delete selected record', 
 			iconCls:'icon-delete',
+			disabled: true,
 			handler: master_jual_paket_confirm_delete 
 		},
 		'-',
@@ -3340,6 +3342,7 @@ Ext.onReady(function(){
 			text: 'Delete',
 			tooltip: 'Delete detail selected record',
 			iconCls:'icon-delete',
+			disabled: true,
 			handler: detail_jual_paket_confirm_delete
 		}
 		]
