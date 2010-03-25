@@ -20,6 +20,10 @@ class C_master_invoice extends Controller {
 		$this->load->plugin('to_excel');
 	}
 	
+	function laporan(){
+		$this->load->view('main/v_lap_invoice');
+	}
+	
 	function get_satuan_list(){
 		$result=$this->m_public_function->get_satuan_list();
 		echo $result;

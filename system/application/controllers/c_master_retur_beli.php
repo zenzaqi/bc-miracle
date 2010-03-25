@@ -26,6 +26,10 @@ class C_master_retur_beli extends Controller {
 		$this->load->view('main/v_master_retur_beli');
 	}
 	
+	function laporan(){
+		$this->load->view('main/v_lap_retur_beli');
+	}
+	
 	function get_terima_beli_list(){
 		$result=$this->m_master_retur_beli->get_terima_beli_list();
 		echo $result;
