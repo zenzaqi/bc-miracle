@@ -42,9 +42,11 @@ Ext.ux.form.CFTextField = Ext.extend(Ext.form.TextField,{
     },
     getValue: function(){
 		//return this.value;
-		if(this.value==undefined || !isNaN(this.value) || this.value!==""){
+		if(this.value==""){
 			return 0;
-		}else if(this.value!==undefined){
+		}else if(this.value==undefined){
+			return 0;
+		}else if(this.value!==undefined && isNaN(this.value)){
 			var to_number = this.convertToNumber(this.value);
 			//return this.value;
 			return to_number;
@@ -60,7 +62,7 @@ Ext.ux.form.CFTextField = Ext.extend(Ext.form.TextField,{
     
     currencyFormat: function(v) {
 		//-- allows clearing of field value (so that $0.00 only shows if you explicitly entered zero for a value).
-		if (v == null||v == '') {
+		if (v == null||v == ''||isNaN(v)) {
 			return '';
 		} else if (v > 999999999999) {
 			return '';
@@ -70,7 +72,7 @@ Ext.ux.form.CFTextField = Ext.extend(Ext.form.TextField,{
 	},
 	
 	convertToNumber: function(v){
-		v = v.replace(",","");
+		v = v.replace(/,/g,"");
 		if (isNaN(v)) 
 			return "";
 		else{
@@ -84,7 +86,7 @@ Ext.reg('CFTextField', Ext.ux.form.CFTextField);
 
 function CurrencyFormatted(number){
 	var str = new String(number);
-	str = str.replace(",","");
+	str = str.replace(/,/g,"");
 	if (isNaN(str)) {
 		return "";
 	}else{
@@ -103,10 +105,10 @@ function CurrencyFormatted(number){
 }
 
 function convertToNumber(str){
-	str = str.replace(",","");
-	if (isNaN(str)) 
+	str = str.replace(/,/g,"");
+	if(isNaN(str)) {
 		return "";
-	else{
+	}else{
 		var tonumber = new parseFloat(str);
 		return tonumber;
 	}

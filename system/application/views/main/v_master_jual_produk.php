@@ -833,18 +833,12 @@ Ext.onReady(function(){
 
 		jproduk_subTotalField.reset();
 		jproduk_subTotalField.setValue(null);
-		jproduk_subTotal_cfField.reset();
-		jproduk_subTotal_cfField.setValue(null);
 
 		jproduk_totalField.reset();
 		jproduk_totalField.setValue(null);
-		jproduk_total_cfField.reset();
-		jproduk_total_cfField.setValue(null);
 
 		jproduk_hutangField.reset();
 		jproduk_hutangField.setValue(null);
-		jproduk_hutang_cfField.reset();
-		jproduk_hutang_cfField.setValue(null);
 
 		jproduk_jumlahField.reset();
 		jproduk_jumlahField.setValue(null);
@@ -880,8 +874,6 @@ Ext.onReady(function(){
 
 		jproduk_bayarField.reset();
 		jproduk_bayarField.setValue(null);
-		jproduk_bayar_cfField.reset();
-		jproduk_bayar_cfField.setValue(null);
 	}
  	/* End of Function */
 	
@@ -914,7 +906,6 @@ Ext.onReady(function(){
 		jproduk_cashbackField.setValue(master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_cashback'));
 		jproduk_cashback_cfField.setValue(CurrencyFormatted(master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_cashback')));
 		jproduk_bayarField.setValue(master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_bayar'));
-		jproduk_bayar_cfField.setValue(master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_bayar'));
 		
 		jproduk_keteranganField.setValue(master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_keterangan'));
 		
@@ -933,14 +924,11 @@ Ext.onReady(function(){
 		
 		jproduk_jumlahField.setValue(dproduk_jumlah_field);
 		jproduk_subTotalField.setValue(subtotal_field);
-		jproduk_subTotal_cfField.setValue(subtotal_field);
 		
 		jproduk_totalField.setValue(total_field);
-		jproduk_total_cfField.setValue(total_field);
 		
 		hutang_temp=total_field-jproduk_bayarField.getValue();
 		jproduk_hutangField.setValue(hutang_temp);
-		jproduk_hutang_cfField.setValue(hutang_temp);
 		
 		
 		
@@ -3314,15 +3302,15 @@ Ext.onReady(function(){
 		maskRe: /([0-9]+)$/
 	});
 	
-	jproduk_subTotal_cfField= new Ext.ux.form.CFTextField({
-		id: 'jproduk_subTotal_cfField',
+	jproduk_subTotalField= new Ext.ux.form.CFTextField({
+		id: 'jproduk_subTotalField',
 		fieldLabel: 'Sub Total (Rp)',
 		valueRenderer: 'numberToCurrency',
 		readOnly: true,
 		itemCls: 'rmoney',
 		width: 120
 	});
-	jproduk_subTotalField= new Ext.form.NumberField({
+	/*jproduk_subTotalField= new Ext.form.NumberField({
 		id: 'jproduk_subTotalField',
 		fieldLabel: 'Sub Total (Rp)',
 		readOnly: true,
@@ -3331,17 +3319,17 @@ Ext.onReady(function(){
 		width: 120,
 		maxLength: 50,
 		maskRe: /([0-9]+)$/
-	});
+	});*/
 
-	jproduk_total_cfField= new Ext.ux.form.CFTextField({
-		id: 'jproduk_total_cfField',
+	jproduk_totalField= new Ext.ux.form.CFTextField({
+		id: 'jproduk_totalField',
 		fieldLabel: '<span style="font-weight:bold">Total (Rp)</span>',
 		valueRenderer: 'numberToCurrency',
 		readOnly: true,
 		itemCls: 'rmoney_b',
 		width: 120
 	});
-	jproduk_totalField= new Ext.form.NumberField({
+	/*jproduk_totalField= new Ext.form.NumberField({
 		id: 'jproduk_totalField',
 		fieldLabel: '<span style="font-weight:bold">Total (Rp)</span>',
 		readOnly: true,
@@ -3350,17 +3338,17 @@ Ext.onReady(function(){
 		width: 120,
 		maxLength: 50,
 		maskRe: /([0-9]+)$/
-	});
+	});*/
 	
-	jproduk_bayar_cfField= new Ext.ux.form.CFTextField({
-		id: 'jproduk_bayar_cfField',
+	jproduk_bayarField= new Ext.ux.form.CFTextField({
+		id: 'jproduk_bayarField',
 		fieldLabel: 'Total Bayar (Rp)',
 		valueRenderer: 'numberToCurrency',
 		readOnly: true,
 		itemCls: 'rmoney',
 		width: 120
 	});
-	jproduk_bayarField= new Ext.form.NumberField({
+	/*jproduk_bayarField= new Ext.form.NumberField({
 		id: 'jproduk_bayarField',
 		fieldLabel: 'Total Bayar (Rp)',
 		readOnly: true,
@@ -3370,17 +3358,17 @@ Ext.onReady(function(){
 		width: 120,
 		maxLength: 50,
 		maskRe: /([0-9]+)$/
-	});
+	});*/
 	
-	jproduk_hutang_cfField= new Ext.ux.form.CFTextField({
-		id: 'jproduk_hutang_cfField',
+	jproduk_hutangField= new Ext.ux.form.CFTextField({
+		id: 'jproduk_hutangField',
 		fieldLabel: 'Hutang (Rp)',
 		valueRenderer: 'numberToCurrency',
 		readOnly: true,
 		itemCls: 'rmoney',
 		width: 120
 	});
-	jproduk_hutangField= new Ext.form.NumberField({
+	/*jproduk_hutangField= new Ext.form.NumberField({
 		id: 'jproduk_hutangField',
 		fieldLabel: 'Hutang (Rp)',
 		readOnly: true,
@@ -3389,6 +3377,20 @@ Ext.onReady(function(){
 		width: 120,
 		maxLength: 50,
 		maskRe: /([0-9]+)$/
+	});*/
+	jproduk_pesanLabel= new Ext.form.Label({
+		style: {
+			marginLeft: '100px',
+			fontSize: '14px',
+			color: '#CC0000'
+		}
+	});
+	jproduk_lunasLabel= new Ext.form.Label({
+		style: {
+			marginLeft: '100px',
+			fontSize: '14px',
+			color: '#006600'
+		}
 	});
 	
 	
@@ -3448,7 +3450,7 @@ Ext.onReady(function(){
 				baseCls: 'x-plain',
 				border:false,
 				labelAlign: 'left',
-				items: [jproduk_jumlahField, jproduk_subTotal_cfField, jproduk_diskonField, jproduk_cashback_cfField, {xtype: 'spacer',height:10},jproduk_total_cfField, jproduk_bayar_cfField,jproduk_hutang_cfField] 
+				items: [jproduk_jumlahField, jproduk_subTotalField, jproduk_diskonField, jproduk_cashback_cfField, {xtype: 'spacer',height:10},jproduk_totalField, jproduk_bayarField,jproduk_hutangField, jproduk_pesanLabel, jproduk_lunasLabel] 
 			}
 			]
 	
@@ -4255,12 +4257,10 @@ Ext.onReady(function(){
 		jproduk_jumlahField.setValue(jumlah_item);
 		
 		jproduk_subTotalField.setValue(subtotal_harga_field);
-		jproduk_subTotal_cfField.setValue(subtotal_harga_field);
 		
 		total_harga=subtotal_harga_field*(100-jproduk_diskonField.getValue())/100 - jproduk_cashbackField.getValue();
 		total_harga=(total_harga>0?Math.round(total_harga):0);
 		jproduk_totalField.setValue(total_harga);
-		jproduk_total_cfField.setValue(total_harga);
 
 		
 
@@ -4375,14 +4375,22 @@ Ext.onReady(function(){
 
 		total_bayar=transfer_nilai+transfer_nilai2+transfer_nilai3+kwitansi_nilai+kwitansi_nilai2+kwitansi_nilai3+card_nilai+card_nilai2+card_nilai3+cek_nilai+cek_nilai2+cek_nilai3+voucher_nilai+voucher_nilai2+voucher_nilai3+tunai_nilai+tunai_nilai2+tunai_nilai3;
 		total_bayar=(total_bayar>0?Math.round(total_bayar):0);
-		
 		jproduk_bayarField.setValue(total_bayar);
-		jproduk_bayar_cfField.setValue(total_bayar);
 
 		total_hutang=total_harga-total_bayar;
 		total_hutang=(total_hutang>0?Math.round(total_hutang):0);
 		jproduk_hutangField.setValue(total_hutang);
-		jproduk_hutang_cfField.setValue(total_hutang);
+		
+		if(total_bayar>total_harga){
+			jproduk_pesanLabel.setText("Kelebihan Jumlah Bayar");
+		}else if(total_bayar<total_harga || total_bayar==total_harga){
+			jproduk_pesanLabel.setText("");
+		}
+		if(total_bayar==total_harga){
+			jproduk_lunasLabel.setText("LUNAS");
+		}else if(total_bayar!==total_harga){
+			jproduk_lunasLabel.setText("");
+		}
 	}
 
 	function load_total_bayar_updating(){
@@ -4519,18 +4527,26 @@ Ext.onReady(function(){
 		
 		update_total_field=jproduk_subTotalField.getValue()*((100-jproduk_diskonField.getValue())/100)-jproduk_cashbackField.getValue();
 		jproduk_totalField.setValue(update_total_field);
-		jproduk_total_cfField.setValue(update_total_field);
 
 		jproduk_bayarField.setValue(total_bayar);
-		jproduk_bayar_cfField.setValue(total_bayar);
 		
 		update_hutang_field=update_total_field-total_bayar;
 		jproduk_hutangField.setValue(update_hutang_field);
-		jproduk_hutang_cfField.setValue(update_hutang_field);
 
 		jproduk_diskonField.setValue(jproduk_diskonField.getValue());
 		jproduk_cashbackField.setValue(jproduk_cashbackField.getValue());
 		jproduk_cashback_cfField.setValue(CurrencyFormatted(jproduk_cashbackField.getValue()));
+		
+		if(total_bayar>update_total_field){
+			jproduk_pesanLabel.setText("Kelebihan Jumlah Bayar");
+		}else if(total_bayar<update_total_field || total_bayar==update_total_field){
+			jproduk_pesanLabel.setText("");
+		}
+		if(total_bayar==update_total_field){
+			jproduk_lunasLabel.setText("LUNAS");
+		}else if(total_bayar!==update_total_field){
+			jproduk_lunasLabel.setText("");
+		}
 
 	}
 	
