@@ -639,18 +639,21 @@ Ext.onReady(function(){
 	function kwitansi_jual_rawat_reset_form(){
 		jrawat_kwitansi_namaField.reset();
 		jrawat_kwitansi_nilaiField.reset();
+		jrawat_kwitansi_nilai_cfField.reset();
 		jrawat_kwitansi_noField.reset();
 	}
 	// Reset kwitansi-2 option
 	function kwitansi2_jual_rawat_reset_form(){
 		jrawat_kwitansi_nama2Field.reset();
 		jrawat_kwitansi_nilai2Field.reset();
+		jrawat_kwitansi_nilai2_cfField.reset();
 		jrawat_kwitansi_no2Field.reset();
 	}
 	// Reset kwitansi-3 option
 	function kwitansi3_jual_rawat_reset_form(){
 		jrawat_kwitansi_nama3Field.reset();
 		jrawat_kwitansi_nilai3Field.reset();
+		jrawat_kwitansi_nilai3_cfField.reset();
 		jrawat_kwitansi_no3Field.reset();
 	}
 	
@@ -660,6 +663,7 @@ Ext.onReady(function(){
 		jrawat_card_edcField.reset();
 		jrawat_card_noField.reset();
 		jrawat_card_nilaiField.reset();
+		jrawat_card_nilai_cfField.reset();
 	}
 	// Reset card-2 option
 	function card2_jual_rawat_reset_form(){
@@ -667,6 +671,7 @@ Ext.onReady(function(){
 		jrawat_card_edc2Field.reset();
 		jrawat_card_no2Field.reset();
 		jrawat_card_nilai2Field.reset();
+		jrawat_card_nilai2_cfField.reset();
 	}
 	// Reset card-3 option
 	function card3_jual_rawat_reset_form(){
@@ -674,6 +679,7 @@ Ext.onReady(function(){
 		jrawat_card_edc3Field.reset();
 		jrawat_card_no3Field.reset();
 		jrawat_card_nilai3Field.reset();
+		jrawat_card_nilai3_cfField.reset();
 	}
 	
 	// Reset cek option
@@ -683,6 +689,7 @@ Ext.onReady(function(){
 		jrawat_cek_validField.reset();
 		jrawat_cek_bankField.reset();
 		jrawat_cek_nilaiField.reset();
+		jrawat_cek_nilai_cfField.reset();
 	}
 	// Reset cek-2 option
 	function cek2_jual_rawat_reset_form(){
@@ -691,6 +698,7 @@ Ext.onReady(function(){
 		jrawat_cek_valid2Field.reset();
 		jrawat_cek_bank2Field.reset();
 		jrawat_cek_nilai2Field.reset();
+		jrawat_cek_nilai2_cfField.reset();
 	}
 	// Reset cek-3 option
 	function cek3_jual_rawat_reset_form(){
@@ -699,6 +707,7 @@ Ext.onReady(function(){
 		jrawat_cek_valid3Field.reset();
 		jrawat_cek_bank3Field.reset();
 		jrawat_cek_nilai3Field.reset();
+		jrawat_cek_nilai3_cfField.reset();
 	}
 	
 	// Reset transfer option
@@ -706,31 +715,37 @@ Ext.onReady(function(){
 		jrawat_transfer_bankField.reset();
 		jrawat_transfer_namaField.reset();
 		jrawat_transfer_nilaiField.reset();
+		jrawat_transfer_nilai_cfField.reset();
 	}
 	// Reset transfer-2 option
 	function transfer2_jual_rawat_reset_form(){
 		jrawat_transfer_bank2Field.reset();
 		jrawat_transfer_nama2Field.reset();
 		jrawat_transfer_nilai2Field.reset();
+		jrawat_transfer_nilai2_cfField.reset();
 	}
 	// Reset transfer-3 option
 	function transfer3_jual_rawat_reset_form(){
 		jrawat_transfer_bank3Field.reset();
 		jrawat_transfer_nama3Field.reset();
 		jrawat_transfer_nilai3Field.reset();
+		jrawat_transfer_nilai3_cfField.reset();
 	}
 
 	// Reset tunai option
 	function tunai_jual_rawat_reset_form(){
 		jrawat_tunai_nilaiField.reset();
+		jrawat_tunai_nilai_cfField.reset();
 	}
 	// Reset tunai-2 option
 	function tunai2_jual_rawat_reset_form(){
 		jrawat_tunai_nilai2Field.reset();
+		jrawat_tunai_nilai2_cfField.reset();
 	}
 	// Reset tunai-3 option
 	function tunai3_jual_rawat_reset_form(){
 		jrawat_tunai_nilai3Field.reset();
+		jrawat_tunai_nilai3_cfField.reset();
 	}
 
 	//Reset voucher option
@@ -789,6 +804,8 @@ Ext.onReady(function(){
 		jrawat_bayarField.setValue(null);
 		jrawat_hutangField.reset();
 		jrawat_hutangField.setValue(null);
+		jrawat_pesanLabel.setText("");
+		jrawat_lunasLabel.setText("");
 
 		tunai_jual_rawat_reset_form();
 		tunai2_jual_rawat_reset_form();
@@ -871,7 +888,8 @@ Ext.onReady(function(){
 		jrawat_subTotalField.setValue(subtotal_field);
 		jrawat_totalField.setValue(total_field);
 		
-		hutang_temp=total_field-jrawat_bayarField.getValue();
+		//hutang_temp=total_field-jrawat_bayarField.getValue();
+		hutang_temp=total_field-master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_bayar');
 		jrawat_hutangField.setValue(hutang_temp);
 		
 		
@@ -891,6 +909,7 @@ Ext.onReady(function(){
 								jrawat_kwitansi_noField.setValue(jrawat_kwitansi_record.kwitansi_no);
 								jrawat_kwitansi_namaField.setValue(jrawat_kwitansi_record.cust_nama);
 								jrawat_kwitansi_nilaiField.setValue(jrawat_kwitansi_record.jkwitansi_nilai);
+								jrawat_kwitansi_nilai_cfField.setValue(CurrencyFormatted(jrawat_kwitansi_record.jkwitansi_nilai));
 							}
 						  }
 					  }
@@ -907,6 +926,7 @@ Ext.onReady(function(){
 								jrawat_card_edcField.setValue(jrawat_card_record.jcard_edc);
 								jrawat_card_noField.setValue(jrawat_card_record.jcard_no);
 								jrawat_card_nilaiField.setValue(jrawat_card_record.jcard_nilai);
+								jrawat_card_nilai_cfField.setValue(CurrencyFormatted(jrawat_card_record.jcard_nilai));
 							}
 						 }
 					}
@@ -924,6 +944,7 @@ Ext.onReady(function(){
 									jrawat_cek_validField.setValue(jrawat_cek_record.jcek_valid);
 									jrawat_cek_bankField.setValue(jrawat_cek_record.jcek_bank);
 									jrawat_cek_nilaiField.setValue(jrawat_cek_record.jcek_nilai);
+									jrawat_cek_nilai_cfField.setValue(CurrencyFormatted(jrawat_cek_record.jcek_nilai));
 								}
 							}
 					 	}
@@ -939,6 +960,7 @@ Ext.onReady(function(){
 										jrawat_transfer_bankField.setValue(jrawat_transfer_record.data.jtransfer_bank);
 										jrawat_transfer_namaField.setValue(jrawat_transfer_record.data.jtransfer_nama);
 										jrawat_transfer_nilaiField.setValue(jrawat_transfer_record.data.jtransfer_nilai);
+										jrawat_transfer_nilai_cfField.setValue(CurrencyFormatted(jrawat_transfer_record.data.jtransfer_nilai));
 									}
 							}
 					 	}
@@ -952,6 +974,7 @@ Ext.onReady(function(){
 									if(tunai_jual_rawat_DataStore.getCount()){
 										jrawat_tunai_record=tunai_jual_rawat_DataStore.getAt(0);
 										jrawat_tunai_nilaiField.setValue(jrawat_tunai_record.data.jtunai_nilai);
+										jrawat_tunai_nilai_cfField.setValue(CurrencyFormatted(jrawat_tunai_record.data.jtunai_nilai));
 									}
 							}
 					 	}
@@ -984,6 +1007,7 @@ Ext.onReady(function(){
 								jrawat_kwitansi_no2Field.setValue(jrawat_kwitansi_record.kwitansi_no);
 								jrawat_kwitansi_nama2Field.setValue(jrawat_kwitansi_record.cust_nama);
 								jrawat_kwitansi_nilai2Field.setValue(jrawat_kwitansi_record.jkwitansi_nilai);
+								jrawat_kwitansi_nilai2_cfField.setValue(CurrencyFormatted(jrawat_kwitansi_record.jkwitansi_nilai));
 							}
 						  }
 					  }
@@ -1000,6 +1024,7 @@ Ext.onReady(function(){
 								 jrawat_card_edc2Field.setValue(jrawat_card_record.jcard_edc);
 								 jrawat_card_no2Field.setValue(jrawat_card_record.jcard_no);
 								 jrawat_card_nilai2Field.setValue(jrawat_card_record.jcard_nilai);
+								 jrawat_card_nilai2_cfField.setValue(CurrencyFormatted(jrawat_card_record.jcard_nilai));
 							 }
 						 }
 					}
@@ -1017,6 +1042,7 @@ Ext.onReady(function(){
 									jrawat_cek_valid2Field.setValue(jrawat_cek_record.jcek_valid);
 									jrawat_cek_bank2Field.setValue(jrawat_cek_record.jcek_bank);
 									jrawat_cek_nilai2Field.setValue(jrawat_cek_record.jcek_nilai);
+									jrawat_cek_nilai2_cfField.setValue(CurrencyFormatted(jrawat_cek_record.jcek_nilai));
 								}
 							}
 					 	}
@@ -1033,6 +1059,7 @@ Ext.onReady(function(){
 										jrawat_transfer_bank2Field.setValue(jrawat_transfer_record.data.jtransfer_bank);
 										jrawat_transfer_nama2Field.setValue(jrawat_transfer_record.data.jtransfer_nama);
 										jrawat_transfer_nilai2Field.setValue(jrawat_transfer_record.data.jtransfer_nilai);
+										jrawat_transfer_nilai2_cfField.setValue(CurrencyFormatted(jrawat_transfer_record.data.jtransfer_nilai));
 									}
 							}
 					 	}
@@ -1046,6 +1073,7 @@ Ext.onReady(function(){
 									if(tunai_jual_rawat_DataStore.getCount()){
 										jrawat_tunai_record=tunai_jual_rawat_DataStore.getAt(0);
 										jrawat_tunai_nilai2Field.setValue(jrawat_tunai_record.data.jtunai_nilai);
+										jrawat_tunai_nilai2_cfField.setValue(CurrencyFormatted(jrawat_tunai_record.data.jtunai_nilai));
 									}
 							}
 					 	}
@@ -1078,6 +1106,7 @@ Ext.onReady(function(){
 								jrawat_kwitansi_no3Field.setValue(jrawat_kwitansi_record.kwitansi_no);
 								jrawat_kwitansi_nama3Field.setValue(jrawat_kwitansi_record.cust_nama);
 								jrawat_kwitansi_nilai3Field.setValue(jrawat_kwitansi_record.jkwitansi_nilai);
+								jrawat_kwitansi_nilai3_cfField.setValue(CurrencyFormatted(jrawat_kwitansi_record.jkwitansi_nilai));
 							}
 						  }
 					  }
@@ -1094,6 +1123,7 @@ Ext.onReady(function(){
 								 jrawat_card_edc3Field.setValue(jrawat_card_record.jcard_edc);
 								 jrawat_card_no3Field.setValue(jrawat_card_record.jcard_no);
 								 jrawat_card_nilai3Field.setValue(jrawat_card_record.jcard_nilai);
+								 jrawat_card_nilai3_cfField.setValue(CurrencyFormatted(jrawat_card_record.jcard_nilai));
 							 }
 						 }
 					}
@@ -1111,6 +1141,7 @@ Ext.onReady(function(){
 									jrawat_cek_valid3Field.setValue(jrawat_cek_record.jcek_valid);
 									jrawat_cek_bank3Field.setValue(jrawat_cek_record.jcek_bank);
 									jrawat_cek_nilai3Field.setValue(jrawat_cek_record.jcek_nilai);
+									jrawat_cek_nilai3_cfField.setValue(CurrencyFormatted(jrawat_cek_record.jcek_nilai));
 								}
 							}
 					 	}
@@ -1127,6 +1158,7 @@ Ext.onReady(function(){
 										jrawat_transfer_bank3Field.setValue(jrawat_transfer_record.data.jtransfer_bank);
 										jrawat_transfer_nama3Field.setValue(jrawat_transfer_record.data.jtransfer_nama);
 										jrawat_transfer_nilai3Field.setValue(jrawat_transfer_record.data.jtransfer_nilai);
+										jrawat_transfer_nilai3_cfField.setValue(CurrencyFormatted(jrawat_transfer_record.data.jtransfer_nilai));
 									}
 							}
 					 	}
@@ -1140,6 +1172,7 @@ Ext.onReady(function(){
 									if(tunai_jual_rawat_DataStore.getCount()){
 										jrawat_tunai_record=tunai_jual_rawat_DataStore.getAt(0);
 										jrawat_tunai_nilai3Field.setValue(jrawat_tunai_record.data.jtunai_nilai);
+										jrawat_tunai_nilai3_cfField.setValue(CurrencyFormatted(jrawat_tunai_record.data.jtunai_nilai));
 									}
 							}
 					 	}
@@ -2151,9 +2184,11 @@ Ext.onReady(function(){
 		}
 	});
 	
-	jrawat_voucher_cashbackField= new Ext.form.NumberField({
+	jrawat_voucher_cashbackField= new Ext.ux.form.CFTextField({
 		id: 'jrawat_voucher_cashbackField',
 		fieldLabel: 'Nilai Cashback',
+		valueRenderer: 'numberToCurrency',
+		readOnly: true,
 		anchor: '95%',
 		enableKeyEvents: true,
 		maskRe: /([0-9]+)$/
@@ -2206,9 +2241,11 @@ Ext.onReady(function(){
 		}
 	});
 	
-	jrawat_voucher_cashback2Field= new Ext.form.NumberField({
+	jrawat_voucher_cashback2Field= new Ext.ux.form.CFTextField({
 		id: 'jrawat_voucher_cashback2Field',
 		fieldLabel: 'Nilai Cashback',
+		valueRenderer: 'numberToCurrency',
+		readOnly: true,
 		anchor: '95%',
 		enableKeyEvents: true,
 		maskRe: /([0-9]+)$/
@@ -2261,9 +2298,11 @@ Ext.onReady(function(){
 		}
 	});
 	
-	jrawat_voucher_cashback3Field= new Ext.form.NumberField({
+	jrawat_voucher_cashback3Field= new Ext.ux.form.CFTextField({
 		id: 'jrawat_voucher_cashback3Field',
 		fieldLabel: 'Nilai Cashback',
+		valueRenderer: 'numberToCurrency',
+		readOnly: true,
 		anchor: '95%',
 		enableKeyEvents: true,
 		maskRe: /([0-9]+)$/
@@ -3490,11 +3529,26 @@ Ext.onReady(function(){
 		id: 'jrawat_hutangField',
 		fieldLabel: 'Hutang (Rp)',
 		valueRenderer: 'numberToCurrency',
+		allowNegatife: true,
 		readOnly: true,
 		itemCls: 'rmoney',
 		width: 120
 		//maskRe: new RegExp('[0123456789.km ]'),
 		//hiddenName: 'length'
+	});
+	jrawat_pesanLabel= new Ext.form.Label({
+		style: {
+			marginLeft: '100px',
+			fontSize: '14px',
+			color: '#CC0000'
+		}
+	});
+	jrawat_lunasLabel= new Ext.form.Label({
+		style: {
+			marginLeft: '100px',
+			fontSize: '14px',
+			color: '#006600'
+		}
 	});
 	
 	
@@ -3554,7 +3608,7 @@ Ext.onReady(function(){
 				baseCls: 'x-plain',
 				border:false,
 				labelAlign: 'left',
-				items: [jrawat_jumlahField, jrawat_subTotalField, jrawat_diskonField, jrawat_cashback_cfField, {xtype: 'spacer',height:10},jrawat_totalField, jrawat_bayarField,jrawat_hutangField] 
+				items: [jrawat_jumlahField, jrawat_subTotalField, jrawat_diskonField, jrawat_cashback_cfField, {xtype: 'spacer',height:10},jrawat_totalField, jrawat_bayarField,jrawat_hutangField,jrawat_pesanLabel,jrawat_lunasLabel] 
 			}
 			]
 	
@@ -3672,7 +3726,6 @@ Ext.onReady(function(){
 	var combo_jual_rawat=new Ext.form.ComboBox({
 			store: cbo_drawat_rawatDataStore,
 			mode: 'remote',
-			typeAhead: true,
 			displayField: 'drawat_rawat_display',
 			valueField: 'drawat_rawat_value',
 			typeAhead: false,
@@ -4268,8 +4321,20 @@ Ext.onReady(function(){
 
 		//total_hutang=total_harga-jrawat_bayarField.getValue()-jrawat_transfer_nilaiField.getValue()-jrawat_transfer_nilai2Field.getValue()-jrawat_transfer_nilai3Field.getValue()-jrawat_kwitansi_nilaiField.getValue()-jrawat_kwitansi_nilai2Field.getValue()-jrawat_kwitansi_nilai3Field.getValue()-jrawat_card_nilaiField.getValue()-jrawat_card_nilai2Field.getValue()-jrawat_card_nilai3Field.getValue()-jrawat_cek_nilaiField.getValue()-jrawat_cek_nilai2Field.getValue()-jrawat_cek_nilai3Field.getValue()-jrawat_voucher_cashbackField.getValue()-jrawat_voucher_cashback2Field.getValue()-jrawat_voucher_cashback3Field.getValue();
 		total_hutang=total_harga-total_bayar;
+		
 		total_hutang=(total_hutang>0?Math.round(total_hutang):0);
 		jrawat_hutangField.setValue(total_hutang);
+		
+		if(total_bayar>total_harga){
+			jrawat_pesanLabel.setText("Kelebihan Jumlah Bayar");
+		}else if(total_bayar<total_harga || total_bayar==total_harga){
+			jrawat_pesanLabel.setText("");
+		}
+		if(total_bayar==total_harga){
+			jrawat_lunasLabel.setText("LUNAS");
+		}else if(total_bayar!==total_harga){
+			jrawat_lunasLabel.setText("");
+		}
 	}
 	
 	function load_all_jual_rawat(){

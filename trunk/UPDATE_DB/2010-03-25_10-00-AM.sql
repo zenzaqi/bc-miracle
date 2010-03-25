@@ -1,0 +1,1 @@
+ALTER TABLE `voucher_terima` ADD `tvoucher_nilai` DOUBLE NULL DEFAULT NULL AFTER `tvoucher_novoucher` ;
