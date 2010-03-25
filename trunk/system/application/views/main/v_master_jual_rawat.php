@@ -781,8 +781,6 @@ Ext.onReady(function(){
 		jrawat_cara2Field.setValue(null);
 		jrawat_cara3Field.reset();
 		jrawat_cara3Field.setValue(null);
-		jrawat_cashbackField.reset();
-		jrawat_cashbackField.setValue(null);
 		
 		jrawat_keteranganField.reset();
 		jrawat_keteranganField.setValue(null);
@@ -796,6 +794,8 @@ Ext.onReady(function(){
 		jrawat_diskonField.setValue(null);
 		jrawat_cashbackField.reset();
 		jrawat_cashbackField.setValue(null);
+		jrawat_cashback_cfField.reset();
+		jrawat_cashback_cfField.setValue(null);
 		jrawat_subTotalField.reset();
 		jrawat_subTotalField.setValue(null);
 		jrawat_totalField.reset();
@@ -860,6 +860,7 @@ Ext.onReady(function(){
 		jrawat_tanggalField.setValue(master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_tanggal'));
 		jrawat_diskonField.setValue(master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_diskon'));
 		jrawat_cashbackField.setValue(master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_cashback'));
+		jrawat_cashback_cfField.setValue(CurrencyFormatted(master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_cashback')));
 		if(master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_cara')==""){
 			jrawat_caraField.setValue("card");
 		}else{
