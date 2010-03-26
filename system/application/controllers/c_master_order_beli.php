@@ -81,7 +81,7 @@ class C_master_order_beli extends Controller {
 	//for detail action
 	//list detail handler action
 	function  detail_detail_order_beli_list(){
-		$query = isset($_POST['query']) ? $_POST['query'] : "";
+		$query = isset($_POST['query']) ? @$_POST['query'] : "";
 		$start = (integer) (isset($_POST['start']) ? @$_POST['start'] : @$_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? @$_POST['limit'] : @$_GET['limit']);
 		$master_id = (integer) (isset($_POST['master_id']) ? @$_POST['master_id'] : @$_GET['master_id']);
@@ -194,10 +194,10 @@ class C_master_order_beli extends Controller {
 	//function fot list record
 	function master_order_beli_list(){
 		
-		$query = isset($_POST['query']) ? $_POST['query'] : "";
-		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
-		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$task = isset($_POST['task']) ? $_POST['task'] : $_GET['task'];
+		$query = isset($_POST['query']) ? @$_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? @$_POST['start'] : @$_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? @$_POST['limit'] : @$_GET['limit']);
+		$task = isset($_POST['task']) ? @$_POST['task'] : @$_GET['task'];
 		$result=$this->m_master_order_beli->master_order_beli_list($query,$start,$end);
 		echo $result;
 	}
