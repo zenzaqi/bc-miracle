@@ -44,8 +44,8 @@
 </style>
 <script>
 
-var rpt_jrpdukWindow;
-var rpt_jrpdukForm;
+var rpt_terimakasWindow;
+var rpt_terimakasForm;
 
 var rpt_terimakas_tglawalField;
 var rpt_terimakas_tglakhirField;
@@ -295,7 +295,7 @@ Ext.onReady(function(){
 		
 		var terimakas_tglawal="";
 		var terimakas_tglakhir="";
-		var jrpdouk_opsi="";
+		var terimakas_opsi="";
 		var terimakas_bulan="";
 		var terimakas_tahun="";
 		var terimakas_periode="";
@@ -372,7 +372,7 @@ Ext.onReady(function(){
 	}
 	/* Enf Function */
 	
-	rpt_jrpdukForm = new Ext.FormPanel({
+	rpt_terimakasForm = new Ext.FormPanel({
 		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		x:0,
@@ -407,7 +407,7 @@ Ext.onReady(function(){
 		y: 0,
 		modal: true,
 		renderTo: 'elwindow_rpt_terimakas',
-		items: rpt_jrpdukForm
+		items: rpt_terimakasForm
 	});
   	rpt_terimakasWindow.show();
 	
