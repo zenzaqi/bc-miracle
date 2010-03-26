@@ -167,7 +167,8 @@ Ext.onReady(function(){
 		id:'rpt_terimakas_opsiblnField',
 		boxLabel:'Bulan',
 		width:100,
-		name: 'filter_opsi'
+		name: 'filter_opsi',
+		checked: true
 	});
 	
 	rpt_terimakas_opsiallField=new Ext.form.Radio({
@@ -222,10 +223,6 @@ Ext.onReady(function(){
 		bolder: false,
 		anchor: '98%',
 		items:[{
-				layout: 'column',
-				border: false,
-				items:[rpt_terimakas_opsiallField]
-			},{
 				layout: 'column',
 				border: false,
 				items:[rpt_terimakas_opsitglField, {
@@ -320,7 +317,7 @@ Ext.onReady(function(){
 		}
 		if(rpt_terimakas_groupField.getValue()!==""){terimakas_group=rpt_terimakas_groupField.getValue(); }
 		
-		if(rpt_terimakas_rekapField.getValue()==true){terimakas_opsi='rekap';}else{terimakas_opsi='detail';}
+		//if(rpt_terimakas_rekapField.getValue()==true){terimakas_opsi='rekap';}else{terimakas_opsi='detail';}
 		
 			Ext.Ajax.request({   
 				waitMsg: 'Please Wait...',
@@ -328,7 +325,7 @@ Ext.onReady(function(){
 				params: {
 					tgl_awal	: terimakas_tglawal,
 					tgl_akhir	: terimakas_tglakhir,
-					opsi		: terimakas_opsi,
+					/*opsi		: terimakas_opsi,*/
 					bulan		: terimakas_bulan,
 					tahun		: terimakas_tahun,
 					periode		: terimakas_periode
@@ -382,7 +379,7 @@ Ext.onReady(function(){
 		y:0,
 		width: 400, 
 		autoHeight: true,
-		items: [rpt_terimakas_periodeField,rpt_terimakas_opsiField],
+		items: [rpt_terimakas_periodeField],
 		monitorValid:true,
 		buttons: [{
 				text: 'Print',
@@ -436,7 +433,7 @@ Ext.onReady(function(){
 		}
 	});*/
 	
-	rpt_terimakas_opsitglField.on("check",function(){
+	/*rpt_terimakas_opsitglField.on("check",function(){
 		if(rpt_terimakas_opsitglField.getValue()==true){
 			rpt_terimakas_tglawalField.allowBlank=false;
 			rpt_terimakas_tglakhirField.allowBlank=false;
@@ -445,7 +442,7 @@ Ext.onReady(function(){
 			rpt_terimakas_tglakhirField.allowBlank=true;
 		}
 		
-	});
+	});*/
 	
 });
 	</script>
