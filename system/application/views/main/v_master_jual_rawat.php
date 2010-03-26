@@ -4037,11 +4037,17 @@ Ext.onReady(function(){
 		master_jual_rawat_voucherGroup.setVisible(false);
 		//RESET Nilai di Cara Bayar-1
 		jrawat_tunai_nilaiField.reset();
+		jrawat_tunai_nilai_cfField.reset();
 		jrawat_card_nilaiField.reset();
+		jrawat_card_nilai_cfField.reset();
 		jrawat_cek_nilaiField.reset();
+		jrawat_cek_nilai_cfField.reset();
 		jrawat_transfer_nilaiField.reset();
+		jrawat_transfer_nilai_cfField.reset();
 		jrawat_kwitansi_nilaiField.reset();
+		jrawat_kwitansi_nilai_cfField.reset();
 		jrawat_voucher_cashbackField.reset();
+		//jrawat_voucher_cashback_cfField.reset();
 		//load_total_rawat_bayar();
 		
 		if(value=='card'){
