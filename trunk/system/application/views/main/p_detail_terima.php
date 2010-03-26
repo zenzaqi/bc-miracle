@@ -35,6 +35,7 @@
         	<?php $i=0; $j=0; $faktur=""; 
 					$total_item=0;
 					foreach($data_print as $print) { 
+					$sub_jumlah=0;
 						
 			?>
 			<?php if($faktur!==$print->no_bukti) { ?>
@@ -43,11 +44,10 @@
                 <td colspan="5"><b><?php echo "No Faktur: ".$print->no_bukti.", Tanggal : ".$print->tanggal.", Supplier: ".$print->supplier_nama."(".$print->supplier_akun.")";?></b></td>
            </tr>
            <?php 	
-					$sub_jumlah=0;
+					
 					$i=0; 
 			?>
            <?php foreach($data_print as $print_list) {  
-		   			//$sub_jumlah=0;
 		   ?>
            <?php if($print_list->no_bukti==$print->no_bukti){ $i++;
 		   			$sub_jumlah+=$print_list->jumlah;
