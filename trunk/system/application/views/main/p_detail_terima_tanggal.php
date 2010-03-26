@@ -20,10 +20,12 @@
 </head>
 <body>
 <table summary='Detail Jual'>
-	<caption>Laporan Detail Penerimaan Barang<br/><?php echo $periode; ?><br/>Group By No. Faktur</caption>
+	<caption>Laporan Detail Penerimaan Barang<br/><?php echo $periode; ?><br/>Group By Tanggal</caption>
 	<thead>
     	<tr>
         	<th scope='col'>No</th>
+            <th scope='col'>No Faktur</th>
+            <th scope='col'>Supplier</th>
             <th scope='col'>Nama Barang</th>
             <th scope='col'>Satuan</th>
             <th scope='col'>Jumlah</th>
@@ -32,15 +34,15 @@
     </thead>
 	<tbody>
 		        
-        	<?php $i=0; $j=0; $faktur=""; 
+        	<?php $i=0; $j=0; $tanggal=""; 
 					$total_item=0;
 					foreach($data_print as $print) { 
 						
 			?>
-			<?php if($faktur!==$print->no_bukti) { ?>
+			<?php if($tanggal!==$print->tanggal) { ?>
            <tr>
                 <td><b><? $j++; echo $j; ?></b></td>
-                <td colspan="5"><b><?php echo "No Faktur: ".$print->no_bukti.", Tanggal : ".$print->tanggal.", Supplier: ".$print->supplier_nama."(".$print->supplier_akun.")";?></b></td>
+                <td colspan="7"><b><?php echo $print->tanggal;?></b></td>
            </tr>
            <?php 	
 					$sub_jumlah=0;
@@ -49,11 +51,13 @@
            <?php foreach($data_print as $print_list) {  
 		   			//$sub_jumlah=0;
 		   ?>
-           <?php if($print_list->no_bukti==$print->no_bukti){ $i++;
+           <?php if($print_list->tanggal==$print->tanggal){ $i++;
 		   			$sub_jumlah+=$print_list->jumlah;
 		   ?>
             <tr>
                 <td><? echo $i; ?></td>
+                <td><?php echo $print_list->no_bukti;?></td>
+                <td><?php echo $print_list->supplier_nama."(".$print_list->supplier_akun.")";?></td>
                 <td><?php echo $print_list->produk_nama;?></td>
                 <td><?php echo $print_list->satuan_nama; ?></td>
                 <td class="numeric"><?php echo number_format($print_list->jumlah,0,",","."); ?></td>
@@ -62,11 +66,11 @@
            <?php } ?>
            <?php } ?>
            <tr>
-                <td colspan="3">&nbsp;</td>
+                <td colspan="5">&nbsp;</td>
                 <td align="right" class="numeric"><b><?php echo number_format($sub_jumlah,0,",","."); ?></b></td>
                 <td align="right" class="numeric">&nbsp;</td>
            </tr>
-           <?php } $faktur=$print->no_bukti; ?>
+           <?php } $tanggal=$print->tanggal; ?>
 		<?php 
 			$total_item+=$sub_jumlah;
 		
@@ -77,17 +81,17 @@
     	<tr>
         	<td class="clear">&nbsp;</td>
         	<th scope='row' nowrap="nowrap">Total</th>
-            <td colspan='3'><?php echo count($data_print); ?> data</td>
+            <td colspan='5'><?php echo count($data_print); ?> data</td>
         </tr>
         <tr>
         	<td class="clear">&nbsp;</td>
-        	<th scope='row' colspan="4">Summary</th>
+        	<th scope='row' colspan="6">Summary</th>
         </tr>
         <tr>
         	<td class="clear">&nbsp;</td>
         	<th scope='row' nowrap="nowrap">Total Item</th>
             <td class="numeric clear" nowrap="nowrap"><?php echo number_format($total_item,0,",","."); ?></td>
-            <td colspan="2" class="clear">&nbsp;</td>
+            <td colspan="4" class="clear">&nbsp;</td>
         </tr>
 	</tfoot>
 </table>
