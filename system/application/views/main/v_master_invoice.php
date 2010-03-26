@@ -1782,7 +1782,6 @@ Ext.onReady(function(){
 		invoice_orderDataStore.load({
 			callback:function(opts, response, success){
 				if(success==true){
-					console.log('counting');
 					var data_invoice_order=invoice_orderDataStore.getAt(0);
 					invoice_diskonField.setValue(data_invoice_order.data.order_diskon);
 					invoice_cashbackField.setValue(data_invoice_order.data.order_cashback);

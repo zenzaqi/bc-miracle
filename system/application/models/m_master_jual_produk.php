@@ -497,7 +497,7 @@ class M_master_jual_produk extends Model{
 		
 		//function for get list record
 		function master_jual_produk_list($filter,$start,$end){
-			$query = "SELECT jproduk_id, jproduk_nobukti, cust_nama, cust_no, cust_member, jproduk_cust, jproduk_tanggal, jproduk_diskon, jproduk_cashback, jproduk_cara, jproduk_cara2, jproduk_cara3, jproduk_bayar, jproduk_totalbiaya, jproduk_keterangan, jproduk_creator, jproduk_date_create, jproduk_update, jproduk_date_update, jproduk_revised FROM vu_jproduk";
+			$query = "SELECT jproduk_id, jproduk_nobukti, cust_nama, cust_no, cust_member, jproduk_cust, jproduk_tanggal, jproduk_diskon, jproduk_cashback, jproduk_cara, jproduk_cara2, jproduk_cara3, jproduk_bayar, jproduk_totalbiaya, jproduk_keterangan, jproduk_creator, jproduk_date_create, jproduk_update, jproduk_date_update, jproduk_revised FROM vu_jproduk LEFT JOIN vu_jproduk_totalbiaya ON(vu_jproduk_totalbiaya.dproduk_master=vu_jproduk.jproduk_id)";
 			
 			// For simple search
 			if ($filter<>""){
@@ -505,9 +505,12 @@ class M_master_jual_produk extends Model{
 				$query .= " (jproduk_id LIKE '%".addslashes($filter)."%' OR jproduk_nobukti LIKE '%".addslashes($filter)."%' OR jproduk_cust LIKE '%".addslashes($filter)."%' OR jproduk_tanggal LIKE '%".addslashes($filter)."%' OR jproduk_diskon LIKE '%".addslashes($filter)."%' OR jproduk_cara LIKE '%".addslashes($filter)."%' OR jproduk_cara2 LIKE '%".addslashes($filter)."%' OR jproduk_cara3 LIKE '%".addslashes($filter)."%' OR jproduk_keterangan LIKE '%".addslashes($filter)."%' )";
 			}
 			$query .= " ORDER BY jproduk_nobukti DESC";
+			$query_nbrows="SELECT jproduk_id FROM master_jual_produk";
 			
-			$result = $this->db->query($query);
+			$result = $this->db->query($query_nbrows);
 			$nbrows = $result->num_rows();
+			//$result = $this->db->query($query);
+			//$nbrows = $result->num_rows();
 			$limit = $query." LIMIT ".$start.",".$end;		
 			$result = $this->db->query($limit);  
 			

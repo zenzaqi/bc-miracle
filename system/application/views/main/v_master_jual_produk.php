@@ -888,7 +888,6 @@ Ext.onReady(function(){
 	/* setValue to EDIT */
 	function master_jual_produk_set_form(){
 		var hutang_temp=0;
-		var cf_hutang="";
 		
 		var subtotal_field=0;
 		var dproduk_jumlah_field=0;
