@@ -1302,7 +1302,10 @@ Ext.onReady(function(){
 		/* only one record is selected here */
 		if(master_jual_produkListEditorGrid.selModel.getCount() == 1) {
 			cbo_dproduk_produkDataStore.load({params: {query: master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_id')}});
-			cbo_dproduk_satuanDataStore.load({params: {query: master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_id')}});
+			cbo_dproduk_satuanDataStore.setBaseParam('produk_id', 0);
+			cbo_dproduk_satuanDataStore.setBaseParam('query', master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_id'));
+			//cbo_dproduk_satuanDataStore.load({params: {query: master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_id')}});
+			cbo_dproduk_satuanDataStore.load();
 			//master_jual_produk_set_form();
 			//master_cara_bayarTabPanel.setActiveTab(0);
 			post2db='UPDATE';
@@ -3591,7 +3594,7 @@ Ext.onReady(function(){
 			{name: 'djproduk_satuan_default', type: 'string', mapping: 'konversi_default'},
 			{name: 'djproduk_satuan_harga', type: 'float', mapping: 'produk_harga'}
 		]),
-		sortInfo:{field: 'djproduk_satuan_nilai', direction: "DESC"}
+		sortInfo:{field: 'djproduk_satuan_default', direction: "DESC"}
 	});
 	
 	/*cbo_dproduk_satuanDataStore = new Ext.data.Store({
@@ -3681,7 +3684,7 @@ Ext.onReady(function(){
 	dproduk_idField=new Ext.form.NumberField();
 	djproduk_satuan_nilaiField=new Ext.form.NumberField();
 	
-	combo_jual_produk.on('select',function(){
+	/*combo_jual_produk.on('select',function(){
 		for(i=0;i<detail_jual_produk_DataStore.getCount();i++){	
 			detail_jual_produk_record=detail_jual_produk_DataStore.getAt(i);
 			var c_dtStore=0;
@@ -3707,10 +3710,14 @@ Ext.onReady(function(){
 				});
 			}
 		}
-	});
+	});*/
 
 	temp_konv_nilai=new Ext.form.NumberField();
 
+	combo_satuan_produk.on('focus', function(){
+		cbo_dproduk_satuanDataStore.setBaseParam('produk_id',combo_jual_produk.getValue());
+		cbo_dproduk_satuanDataStore.load();
+	});
 	combo_satuan_produk.on('select', function(){
 		var j=cbo_dproduk_satuanDataStore.find('djproduk_satuan_value',combo_satuan_produk.getValue());
 		var jt=cbo_dproduk_satuanDataStore.find('djproduk_satuan_default','true');
