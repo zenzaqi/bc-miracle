@@ -324,7 +324,7 @@ Ext.onReady(function(){
 		
 			Ext.Ajax.request({   
 				waitMsg: 'Please Wait...',
-				url: 'index.php?c=c_master_jual_produk&m=print_laporan',
+				url: 'index.php?c=c_master_terima_beli&m=print_laporan',
 				params: {
 					tgl_awal	: terimabeli_tglawal,
 					tgl_akhir	: terimabeli_tglakhir,

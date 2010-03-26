@@ -18,6 +18,36 @@ class M_master_terima_beli extends Model{
 			parent::Model();
 		}
 		
+		function get_laporan($tgl_awal,$tgl_akhir,$periode,$opsi,$group){
+			
+			switch($group){
+				case "Tanggal": $order_by=" ORDER BY tanggal";break;
+				case "Supplier": $order_by=" ORDER BY supplier_id";break;
+				case "No Faktur": $order_by=" ORDER BY no_bukti";break;
+				case "Produk": $order_by=" ORDER BY produk_kode";break;
+				default: $order_by=" ORDER BY no_bukti";break;
+			}
+			
+			if($opsi=='rekap'){
+				if($periode=='all')
+					$sql="SELECT * FROM vu_trans_terima ".$order_by;
+				else if($periode=='bulan')
+					$sql="SELECT * FROM vu_trans_terima WHERE tanggal like '".$tgl_awal."%' ".$order_by;
+				else if($periode=='tanggal')
+					$sql="SELECT * FROM vu_trans_terima WHERE tanggal>='".$tgl_awal."' AND tanggal<='".$tgl_akhir."' ".$order_by;
+			}else if($opsi=='detail'){
+				if($periode=='all')
+					$sql="SELECT * FROM vu_detail_terima ".$order_by;
+				else if($periode=='bulan')
+					$sql="SELECT * FROM vu_detail_terima WHERE tanggal like '".$tgl_awal."%' ".$order_by;
+				else if($periode=='tanggal')
+					$sql="SELECT * FROM vu_detail_terima WHERE tanggal>='".$tgl_awal."' AND tanggal<='".$tgl_akhir."' ".$order_by;
+			}
+			//echo $sql;
+			$query=$this->db->query($sql);
+			return $query->result();
+		}
+		
 		function get_produk_selected_list($selected_id,$query,$start,$end){
 			$sql="SELECT produk_id,produk_nama,produk_kode,kategori_nama FROM vu_produk ";
 			if($selected_id!==""&strlen($selected_id)>1)
