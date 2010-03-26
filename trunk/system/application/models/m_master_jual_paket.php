@@ -607,18 +607,21 @@ class M_master_jual_paket extends Model{
 		
 		//function for get list record
 		function master_jual_paket_list($filter,$start,$end){
-			$query = "SELECT * FROM master_jual_paket,customer where jpaket_cust=cust_id";
+			$query = "SELECT jpaket_id, jpaket_nobukti, cust_nama, cust_no, cust_member, jpaket_cust, jpaket_tanggal, jpaket_diskon, jpaket_cashback, jpaket_cara, jpaket_cara2, jpaket_cara3, jpaket_bayar, IF(vu_jpaket.jpaket_totalbiaya!=0,vu_jpaket.jpaket_totalbiaya,vu_jpaket_totalbiaya.jpaket_totalbiaya) AS jpaket_totalbiaya, jpaket_keterangan, jpaket_creator, jpaket_date_create, jpaket_update, jpaket_date_update, jpaket_revised FROM vu_jpaket LEFT JOIN vu_jpaket_totalbiaya ON(vu_jpaket_totalbiaya.dpaket_master=vu_jpaket.jpaket_id)";
 			
 			// For simple search
 			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 				$query .= " (jpaket_nobukti LIKE '%".addslashes($filter)."%' OR cust_nama LIKE '%".addslashes($filter)."%' OR cust_no LIKE '%".addslashes($filter)."%'  )";
 			}
+			$query_nbrows="SELECT jpaket_id FROM master_jual_paket";
 			
-			$result = $this->db->query($query);
+			$result = $this->db->query($query_nbrows);
 			$nbrows = $result->num_rows();
-			$limit = $query." LIMIT ".$start.",".$end;		
-			$result = $this->db->query($limit);  
+			//$result = $this->db->query($query);
+			//$nbrows = $result->num_rows();
+			$limit = $query." LIMIT ".$start.",".$end;
+			$result = $this->db->query($limit);
 			
 			if($nbrows>0){
 				foreach($result->result() as $row){
