@@ -4066,11 +4066,17 @@ Ext.onReady(function(){
 		master_jual_produk_voucherGroup.setVisible(false);
 		//RESET Nilai di Cara Bayar-1
 		jproduk_tunai_nilaiField.reset();
+		jproduk_tunai_nilai_cfField.reset();
 		jproduk_card_nilaiField.reset();
+		jproduk_card_nilai_cfField.reset();
 		jproduk_cek_nilaiField.reset();
+		jproduk_cek_nilai_cfField.reset();
 		jproduk_transfer_nilaiField.reset();
+		jproduk_transfer_nilai_cfField.reset();
 		jproduk_kwitansi_nilaiField.reset();
+		jproduk_kwitansi_nilai_cfField.reset();
 		jproduk_voucher_cashbackField.reset();
+		//jproduk_voucher_cashback_cfField.reset();
 		//load_total_produk_bayar();
 		
 		if(value=='card'){
@@ -4098,11 +4104,17 @@ Ext.onReady(function(){
 		master_jual_produk_voucher2Group.setVisible(false);
 		//RESET Nilai di Cara Bayar-1
 		jproduk_tunai_nilai2Field.reset();
+		jproduk_tunai_nilai2_cfField.reset();
 		jproduk_card_nilai2Field.reset();
+		jproduk_card_nilai2_cfField.reset();
 		jproduk_cek_nilai2Field.reset();
+		jproduk_cek_nilai2_cfField.reset();
 		jproduk_transfer_nilai2Field.reset();
+		jproduk_transfer_nilai2_cfField.reset();
 		jproduk_kwitansi_nilai2Field.reset();
+		jproduk_kwitansi_nilai2_cfField.reset();
 		jproduk_voucher_cashback2Field.reset();
+		//jproduk_voucher_cashback2_cfField.reset();
 		//load_total_produk_bayar();
 		
 		if(value=='card'){
@@ -4130,11 +4142,17 @@ Ext.onReady(function(){
 		master_jual_produk_voucher3Group.setVisible(false);
 		//RESET Nilai di Cara Bayar-1
 		jproduk_tunai_nilai3Field.reset();
+		jproduk_tunai_nilai3_cfField.reset();
 		jproduk_card_nilai3Field.reset();
+		jproduk_card_nilai3_cfField.reset();
 		jproduk_cek_nilai3Field.reset();
+		jproduk_cek_nilai3_cfField.reset();
 		jproduk_transfer_nilai3Field.reset();
+		jproduk_transfer_nilai3_cfField.reset();
 		jproduk_kwitansi_nilai3Field.reset();
+		jproduk_kwitansi_nilai3_cfField.reset();
 		jproduk_voucher_cashback3Field.reset();
+		//jproduk_voucher_cashback3_cfField.reset();
 		//load_total_produk_bayar();
 		
 		if(value=='card'){
