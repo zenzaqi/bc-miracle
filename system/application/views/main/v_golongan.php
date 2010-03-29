@@ -371,7 +371,7 @@ Ext.onReady(function(){
 		},
 		{
 			align : 'Right',
-			header: '<div align="center">' + 'Grooming (Rp.)' + '</div>',
+			header: '<div align="center">' + 'Grooming (Rp)' + '</div>',
 			dataIndex: 'grooming_golongan',
 			width: 100,
 			sortable: true,
@@ -442,7 +442,7 @@ Ext.onReady(function(){
 	golonganListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'golonganListEditorGrid',
 		el: 'fp_bank',
-		title: 'List of Golongan',
+		title: 'Daftar Golongan',
 		autoHeight: true,
 		store: golongan_DataStore, // DataStore
 		cm: golongan_ColumnModel, // Nama-nama Columns
