@@ -1824,7 +1824,7 @@ Ext.onReady(function(){
 	jpaket_nobuktiField= new Ext.form.TextField({
 		id: 'jpaket_nobuktiField',
 		fieldLabel: 'No. Faktur',
-		readOnly:true,
+//		readOnly:true,	//sementara, utk input manual
 		maxLength: 30,
 //		anchor: '95%'
 	});
