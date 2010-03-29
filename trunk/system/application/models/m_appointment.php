@@ -326,7 +326,7 @@ class M_appointment extends Model{
 					/* JIKA Cara Appointment = 'Walk-in' alias 'Datang', maka INSERT ke db.tindakan atau dan db.tindakan_detail */
 					if($app_cara=="Datang"){
 						$date_now=date('Y-m-d');
-						$time_now=date('H:i:s');
+						$time_now=date('H:i:s',mktime(date('H')-1,date('i'),date('s'),0,0,0));
 						/* INSERT ke db.tindakan dan db.tindakan_detail JIKA $dapp_status=='datang' */
 						/*if(!is_numeric($app_customer)){
 							$ambil_cust = "SELECT app_customer FROM appointment WHERE app_id='$dapp_medis_master'";
@@ -489,7 +489,7 @@ class M_appointment extends Model{
 					/* JIKA Cara Appointment = 'Walk-in' alias 'Datang', maka INSERT ke db.tindakan atau dan db.tindakan_detail */
 					if($app_cara=="Datang"){
 						$date_now=date('Y-m-d');
-						$time_now=date('H:i:s');
+						$time_now=date('H:i:s',mktime(date('H')-1,date('i'),date('s'),0,0,0));
 						/* INSERT ke db.tindakan dan db.tindakan_detail JIKA $dapp_status=='datang' */
 						$sql="SELECT trawat_id FROM tindakan WHERE trawat_cust='$app_customer' AND date_format(trawat_date_create,'%Y-%m-%d')='$date_now'";
 						$rs=$this->db->query($sql);
@@ -737,7 +737,7 @@ class M_appointment extends Model{
 				$data_dapp=array();
 				if($dapp_status=="datang" && $dapp_tglreservasi_temp==$date_now){ /* VIEW.LIST.$dapp_status DIGANTI 'datang' */
 					$date_now=date('Y-m-d');
-					$time_now=date('H:i:s');
+					$time_now=date('H:i:s',mktime(date('H')-1,date('i'),date('s'),0,0,0));
 					$data_dapp["dapp_tgldatang"]=$date_now;
 					$data_dapp["dapp_jamdatang"]=$time_now;
 					$data_dapp["dapp_status"]=$dapp_status;

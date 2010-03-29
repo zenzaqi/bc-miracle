@@ -981,7 +981,7 @@ class M_tindakan_medis extends Model{
 		
 		//function for create new record
 		function tindakan_create($trawat_cust ,$trawat_keterangan ){
-			$time_now=date('H:i:s');
+			$time_now=date('H:i:s',mktime(date('H')-1,date('i'),date('s'),0,0,0));
 			$date_now=date('Y-m-d');
 			$data = array(
 			"trawat_cust"=>$trawat_cust,
