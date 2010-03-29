@@ -46,7 +46,7 @@ Ext.ux.form.CFTextField = Ext.extend(Ext.form.TextField,{
 			return 0;
 		}else if(this.value==undefined){
 			return 0;
-		}else if(this.value!==undefined && isNaN(this.value)){
+		}else if(this.value!==undefined || isNaN(this.value)){
 			var to_number = this.convertToNumber(this.value);
 			//return this.value;
 			return to_number;
