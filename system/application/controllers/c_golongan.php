@@ -41,13 +41,13 @@ class C_golongan extends Controller {
 		$task = $_POST['task'];
 		switch($task){
 			case "LIST":
-				$this->bank_list();
+				$this->golongan_list();
 				break;
 			case "UPDATE":
-				$this->bank_update();
+				$this->golongan_update();
 				break;
 			case "CREATE":
-				$this->bank_create();
+				$this->golongan_create();
 				break;
 			case "DELETE":
 				$this->bank_delete();
@@ -68,18 +68,18 @@ class C_golongan extends Controller {
 	}
 	
 	//function fot list record
-	function bank_list(){
+	function golongan_list(){
 		
 		$query = isset($_POST['query']) ? $_POST['query'] : "";
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
 
-		$result=$this->m_golongan->bank_list($query,$start,$end);
+		$result=$this->m_golongan->golongan_list($query,$start,$end);
 		echo $result;
 	}
 
 	//function for update record
-	function bank_update(){
+	function golongan_update(){
 		//POST variable here
 		$id_golongan=trim(@$_POST["id_golongan"]);
 		$id_golongan=str_replace("/(<\/?)(p)([^>]*>)", "",$id_golongan);
@@ -91,23 +91,26 @@ class C_golongan extends Controller {
 		$keterangan_golongan=trim(@$_POST["keterangan_golongan"]);
 		$keterangan_golongan=str_replace("/(<\/?)(p)([^>]*>)", "",$keterangan_golongan);
 		$keterangan_golongan=str_replace("'", '"',$keterangan_golongan);
-		$result = $this->m_golongan->bank_update($id_golongan, $nama_golongan, $grooming_golongan, $keterangan_golongan);
+		$golongan_creator=trim(@$_POST["golongan_creator"]);
+		$golongan_creator=str_replace("/(<\/?)(p)([^>]*>)", "",$golongan_creator);
+		$golongan_creator=str_replace("'", '"',$golongan_creator);
+		$golongan_date_create=trim(@$_POST["golongan_date_create"]);
+		$golongan_update=trim(@$_POST["golongan_update"]);
+		$golongan_update=str_replace("/(<\/?)(p)([^>]*>)", "",$golongan_update);
+		$golongan_update=str_replace("'", '"',$golongan_update);
+		$golongan_date_update=trim(@$_POST["golongan_date_update"]);
+		$golongan_revised=trim(@$_POST["golongan_revised"]);
+		$result = $this->m_golongan->golongan_update($id_golongan, $nama_golongan, $grooming_golongan, $keterangan_golongan, $golongan_creator ,$golongan_date_create ,$golongan_update ,$golongan_date_update ,$golongan_revised);
 		echo $result;
 	}
 	
 	//function for create new record
-	function bank_create(){
+	function golongan_create(){
 		//POST varible here
 		//auto increment, don't accept anything from form values
 		$id_golongan=trim(@$_POST["id_golongan"]);
 		$id_golongan=str_replace("/(<\/?)(p)([^>]*>)", "",$id_golongan);
 		$id_golongan=str_replace("'", '"',$id_golongan);
-		//$bank_nama=trim(@$_POST["bank_nama"]);
-		//$bank_nama=str_replace("/(<\/?)(p)([^>]*>)", "",$bank_nama);
-		//$bank_nama=str_replace("'", '"',$bank_nama);
-		//$bank_norek=trim(@$_POST["bank_norek"]);
-		//$bank_norek=str_replace("/(<\/?)(p)([^>]*>)", "",$bank_norek);
-		//$bank_norek=str_replace("'", '"',$bank_norek);
 		$nama_golongan=trim(@$_POST["nama_golongan"]);
 		$nama_golongan=str_replace("/(<\/?)(p)([^>]*>)", "",$nama_golongan);
 		$nama_golongan=str_replace("'", '"',$nama_golongan);
@@ -115,19 +118,16 @@ class C_golongan extends Controller {
 		$keterangan_golongan=trim(@$_POST["keterangan_golongan"]);
 		$keterangan_golongan=str_replace("/(<\/?)(p)([^>]*>)", "",$keterangan_golongan);
 		$keterangan_golongan=str_replace("'", '"',$keterangan_golongan);
-		//$bank_aktif=trim(@$_POST["bank_aktif"]);
-		//$bank_aktif=str_replace("/(<\/?)(p)([^>]*>)", "",$bank_aktif);
-		//$bank_aktif=str_replace("'", '"',$bank_aktif);
-		//$bank_creator=trim(@$_POST["bank_creator"]);
-		//$bank_creator=str_replace("/(<\/?)(p)([^>]*>)", "",$bank_creator);
-		//$bank_creator=str_replace("'", '"',$bank_creator);
-		//$bank_date_create=trim(@$_POST["bank_date_create"]);
-		//$bank_update=trim(@$_POST["bank_update"]);
-		//$bank_update=str_replace("/(<\/?)(p)([^>]*>)", "",$bank_update);
-		//$bank_update=str_replace("'", '"',$bank_update);
-		//$bank_date_update=trim(@$_POST["bank_date_update"]);
-		//$bank_revised=trim(@$_POST["bank_revised"]);
-		$result=$this->m_golongan->bank_create($id_golongan, $nama_golongan, $grooming_golongan, $keterangan_golongan);
+		$golongan_creator=trim(@$_POST["golongan_creator"]);
+		$golongan_creator=str_replace("/(<\/?)(p)([^>]*>)", "",$golongan_creator);
+		$golongan_creator=str_replace("'", '"',$golongan_creator);
+		$golongan_date_create=trim(@$_POST["golongan_date_create"]);
+		$golongan_update=trim(@$_POST["golongan_update"]);
+		$golongan_update=str_replace("/(<\/?)(p)([^>]*>)", "",$golongan_update);
+		$golongan_update=str_replace("'", '"',$golongan_update);
+		$golongan_date_update=trim(@$_POST["golongan_date_update"]);
+		$golongan_revised=trim(@$_POST["golongan_revised"]);
+		$result=$this->m_golongan->golongan_create($id_golongan, $nama_golongan, $grooming_golongan, $keterangan_golongan, $golongan_creator ,$golongan_date_create ,$golongan_update ,$golongan_date_update ,$golongan_revised);
 		echo $result;
 	}
 

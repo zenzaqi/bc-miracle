@@ -34,7 +34,7 @@ class M_golongan extends Model{
 		}
 		
 		//function for get list record
-		function bank_list($filter,$start,$end){
+		function golongan_list($filter,$start,$end){
 			$query = "SELECT * FROM golongan";
 			
 			// For simple search
@@ -60,19 +60,20 @@ class M_golongan extends Model{
 		}
 		
 		//function for update record
-		function bank_update($id_golongan, $nama_golongan, $grooming_golongan, $keterangan_golongan){
+		function golongan_update($id_golongan, $nama_golongan, $grooming_golongan, $keterangan_golongan, $golongan_creator ,$golongan_date_create ,$golongan_update ,$golongan_date_update ,$golongan_revised){
 			
 		
 			$data = array(
 				"id_golongan"=>$id_golongan,	
 				"nama_golongan"=>$nama_golongan,	
 				"grooming_golongan"=>$grooming_golongan,
-				"keterangan_golongan"=>$keterangan_golongan,	
-//				"bank_creator"=>$bank_creator,			
-//				"bank_date_create"=>$bank_date_create,			
-//				"bank_update"=>$bank_update,			
-//				"bank_date_update"=>$bank_date_update,			
-//				"bank_revised"=>$bank_revised			
+				"keterangan_golongan"=>$keterangan_golongan,
+				"golongan_creator"=>$golongan_creator,	
+				"golongan_date_create"=>$golongan_date_create,	
+				"golongan_update"=>$golongan_update,	
+				"golongan_date_update"=>$golongan_date_update,	
+				"golongan_revised"=>$golongan_revised
+		
 			);
 			
 			/*$sql="SELECT akun_id FROM akun WHERE akun_id='".$id_golongan."'";
@@ -96,14 +97,19 @@ class M_golongan extends Model{
 		}
 		
 		//function for create new record
-		function bank_create($id_golongan, $nama_golongan, $grooming_golongan, $keterangan_golongan){
+		function golongan_create($id_golongan, $nama_golongan, $grooming_golongan, $keterangan_golongan, $golongan_creator ,$golongan_date_create ,$golongan_update ,$golongan_date_update ,$golongan_revised){
 		
 			$data = array(
 	
 				"id_golongan"=>$id_golongan,	
 				"nama_golongan"=>$nama_golongan,	
 				"grooming_golongan"=>$grooming_golongan,
-				"keterangan_golongan"=>$keterangan_golongan	
+				"keterangan_golongan"=>$keterangan_golongan,
+				"golongan_creator"=>$golongan_creator,	
+				"golongan_date_create"=>$golongan_date_create,	
+				"golongan_update"=>$golongan_update,	
+				"golongan_date_update"=>$golongan_date_update,	
+				"golongan_revised"=>$golongan_revised	
 			);
 			$this->db->insert('golongan', $data); 
 			if($this->db->affected_rows())
