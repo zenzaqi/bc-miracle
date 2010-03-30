@@ -221,7 +221,6 @@ Ext.onReady(function(){
 						   icon: Ext.MessageBox.WARNING
 						});
 				} 
-				master_order_beli_DataStore.reload();
 			},
 			failure: function(response){
 				var result=response.responseText;
@@ -1302,6 +1301,7 @@ Ext.onReady(function(){
 				detail_order_beli_insert(pkid);
 			}
 		});
+		master_order_beli_DataStore.reload();
 	}
 	//eof
 	
@@ -1783,6 +1783,7 @@ Ext.onReady(function(){
 	/*End of Function */
 	
 	//EVENTS
+	master_order_beli_DataStore.load({params:{start:0, limit: pageS}});
 	detail_order_beli_DataStore.on("load",detail_order_beli_total);
 	order_bayarField.on("keypress",detail_order_beli_total);
 	order_bayarField.on("keydown",detail_order_beli_total);
