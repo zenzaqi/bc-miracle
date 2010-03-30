@@ -553,11 +553,12 @@ Ext.onReady(function(){
 	/* Function for Update Confirm */
 	function appointment_confirm_update(){
 		/* only one record is selected here */
-		cbo_dapp_rawat_medisDataStore.load({params:{query:appointmentListEditorGrid.getSelectionModel().getSelected().get('app_id')}});
-		cbo_dapp_rawat_nonmedisDataStore.load({params:{query:appointmentListEditorGrid.getSelectionModel().getSelected().get('app_id')}});
 		dapp_dokterDataStore.load();
 		dapp_terapisDataStore.load();
 		if(appointmentListEditorGrid.selModel.getCount() == 1) {
+			cbo_dapp_rawat_medisDataStore.load({params:{query:appointmentListEditorGrid.getSelectionModel().getSelected().get('app_id')}});
+			cbo_dapp_rawat_nonmedisDataStore.load({params:{query:appointmentListEditorGrid.getSelectionModel().getSelected().get('app_id')}});
+			
 			medis_orNonMedis=appointmentListEditorGrid.getSelectionModel().getSelected().get('kategori_nama');
 			if(medis_orNonMedis=="Medis")
 				detail_tab_perawatan.setActiveTab(0);

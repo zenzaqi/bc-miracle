@@ -306,7 +306,10 @@ Ext.onReady(function(){
 			var kwitansi_transfer_bank_create="";
 			var kwitansi_transfer_nama_create=null;
 			var kwitansi_transfer_nilai_create=null;
+			
+			var kwitansi_total_bayar_create=null;
 	
+			kwitansi_id_create_pk=get_pk_id();
 			if(kwitansi_idField.getValue()!== null){kwitansi_id_create = kwitansi_idField.getValue();}else{kwitansi_id_create_pk=get_pk_id();} 
 			if(kwitansi_noField.getValue()!== null){kwitansi_no_create = kwitansi_noField.getValue();} 
 			if(kwitansi_custField.getValue()!== null){kwitansi_cust_create = kwitansi_custField.getValue();} 
@@ -332,6 +335,8 @@ Ext.onReady(function(){
 			if(kwitansi_transfer_bankField.getValue()!== ""){kwitansi_transfer_bank_create = kwitansi_transfer_bankField.getValue();} 
 			if(kwitansi_transfer_namaField.getValue()!== null){kwitansi_transfer_nama_create = kwitansi_transfer_namaField.getValue();}
 			if(kwitansi_transfer_nilaiField.getValue()!== null){kwitansi_transfer_nilai_create = kwitansi_transfer_nilaiField.getValue();} 
+			
+			if(kwitansi_total_bayarField.getValue()!== null){kwitansi_total_bayar_create = kwitansi_total_bayarField.getValue();} 
 	
 			Ext.Ajax.request({  
 				waitMsg: 'Mohon tunggu...',
@@ -346,6 +351,7 @@ Ext.onReady(function(){
 					kwitansi_keterangan	: kwitansi_keterangan_create, 
 					kwitansi_status	: kwitansi_status_create, 
 					kwitansi_cara		: 	kwitansi_cara_create,
+					kwitansi_bayar	: kwitansi_total_bayar_create,
 					// Bayar Tunai
 					kwitansi_tunai_nilai	:	kwitansi_tunai_nilai_create,
 					// Bayar Card/Kartu Kredit
@@ -368,7 +374,7 @@ Ext.onReady(function(){
 					var result=eval(response.responseText);
 					switch(result){
 						case 1:
-							jual_kwitansi_purge()
+							//jual_kwitansi_purge()
 							jual_kwitansi_insert();
 							Ext.MessageBox.alert(post2db+' OK','The Cetak_kwitansi was '+msg+' successfully.');
 							cetak_kwitansi_DataStore.reload();
@@ -434,13 +440,64 @@ Ext.onReady(function(){
 		kwitansi_refField.reset();
 		kwitansi_refField.setValue(null);
 		kwitansi_nilaiField.reset();
-		kwitansi_nilaiField.setValue(null);
+		kwitansi_nilaiField.setValue(0);
+		kwitansi_nilai_cfField.reset();
+		kwitansi_nilai_cfField.setValue(0);
 		kwitansi_keteranganField.reset();
 		kwitansi_keteranganField.setValue(null);
 		kwitansi_statusField.reset();
 		kwitansi_statusField.setValue(null);
+		
+		kwitansi_total_nilaiField.reset();
+		kwitansi_total_nilaiField.setValue(0);
+		kwitansi_total_bayarField.reset();
+		kwitansi_total_bayarField.setValue(0);
+		
+		kwitansi_status_lunasLabel.setText("");
+		kwitansi_status_lunasField.reset();
+		kwitansi_status_lunasField.setValue("");
+		
+		tunai_jual_kwitansi_reset_form();
+		
+		card_jual_kwitansi_reset_form();
+		
+		cek_jual_kwitansi_reset_form();
+		
+		transfer_jual_kwitansi_reset_form();
+		
+		kwitansi_caraField.setValue("");
+		update_group_carabayar_kwitansi();
 	}
  	/* End of Function */
+	
+	function tunai_jual_kwitansi_reset_form(){
+		kwitansi_tunai_nilaiField.reset();
+		kwitansi_tunai_nilai_cfField.reset();
+	}
+	
+	function card_jual_kwitansi_reset_form(){
+		kwitansi_card_namaField.reset();
+		kwitansi_card_edcField.reset();
+		kwitansi_card_noField.reset();
+		kwitansi_card_nilaiField.reset();
+		kwitansi_card_nilai_cfField.reset();
+	}
+	
+	function cek_jual_kwitansi_reset_form(){
+		kwitansi_cek_namaField.reset();
+		kwitansi_cek_noField.reset();
+		kwitansi_cek_validField.reset();
+		kwitansi_cek_bankField.reset();
+		kwitansi_cek_nilaiField.reset();
+		kwitansi_cek_nilai_cfField.reset();
+	}
+	
+	function transfer_jual_kwitansi_reset_form(){
+		kwitansi_transfer_bankField.reset();
+		kwitansi_transfer_namaField.reset();
+		kwitansi_transfer_nilaiField.reset();
+		kwitansi_transfer_nilai_cfField.reset();
+	}
 	
 	function update_group_carabayar_kwitansi(){
 		var value=kwitansi_caraField.getValue();
@@ -450,9 +507,13 @@ Ext.onReady(function(){
 		kwitansi_bayar_transferGroup.setVisible(false);
 		//RESET Nilai di Cara Bayar-1
 		kwitansi_tunai_nilaiField.reset();
+		kwitansi_tunai_nilai_cfField.reset();
 		kwitansi_card_nilaiField.reset();
+		kwitansi_card_nilai_cfField.reset();
 		kwitansi_cek_nilaiField.reset();
+		kwitansi_cek_nilai_cfField.reset();
 		kwitansi_transfer_nilaiField.reset();
+		kwitansi_transfer_nilai_cfField.reset();
 		
 		if(value=='card'){
 			kwitansi_bayar_cardGroup.setVisible(true);
@@ -472,6 +533,7 @@ Ext.onReady(function(){
 		kwitansi_custField.setValue(cetak_kwitansiListEditorGrid.getSelectionModel().getSelected().get('cust_nama'));
 		kwitansi_refField.setValue(cetak_kwitansiListEditorGrid.getSelectionModel().getSelected().get('kwitansi_ref'));
 		kwitansi_nilaiField.setValue(cetak_kwitansiListEditorGrid.getSelectionModel().getSelected().get('kwitansi_nilai'));
+		kwitansi_nilai_cfField.setValue(CurrencyFormatted(cetak_kwitansiListEditorGrid.getSelectionModel().getSelected().get('kwitansi_nilai')));
 		kwitansi_keteranganField.setValue(cetak_kwitansiListEditorGrid.getSelectionModel().getSelected().get('kwitansi_keterangan'));
 		kwitansi_statusField.setValue(cetak_kwitansiListEditorGrid.getSelectionModel().getSelected().get('kwitansi_status'));
 		kwitansi_caraField.setValue(cetak_kwitansiListEditorGrid.getSelectionModel().getSelected().get('kwitansi_cara'));
@@ -490,8 +552,18 @@ Ext.onReady(function(){
 								kwitansi_card_edcField.setValue(kwitansi_card_record.jcard_edc);
 								kwitansi_card_noField.setValue(kwitansi_card_record.jcard_no);
 								kwitansi_card_nilaiField.setValue(kwitansi_card_record.jcard_nilai);
+								kwitansi_card_nilai_cfField.setValue(CurrencyFormatted(kwitansi_card_record.jcard_nilai));
 								
-								load_pembayaran();
+								//load_pembayaran();
+								kwitansi_total_nilaiField.setValue(cetak_kwitansiListEditorGrid.getSelectionModel().getSelected().get('kwitansi_nilai'));
+								kwitansi_total_bayarField.setValue(cetak_kwitansiListEditorGrid.getSelectionModel().getSelected().get('kwitansi_bayar'));
+								if(kwitansi_total_nilaiField.getValue()==kwitansi_total_bayarField.getValue() && kwitansi_total_bayarField.getValue()!=0){
+									kwitansi_status_lunasLabel.setText("LUNAS");
+									kwitansi_status_lunasField.setValue("LUNAS");
+								}else{
+									kwitansi_status_lunasLabel.setText("");
+									kwitansi_status_lunasField.setValue("");
+								}
 							}
 						 }
 					}
@@ -509,8 +581,18 @@ Ext.onReady(function(){
 									kwitansi_cek_validField.setValue(kwitansi_cek_record.jcek_valid);
 									kwitansi_cek_bankField.setValue(kwitansi_cek_record.jcek_bank);
 									kwitansi_cek_nilaiField.setValue(kwitansi_cek_record.jcek_nilai);
+									kwitansi_cek_nilai_cfField.setValue(CurrencyFormatted(kwitansi_cek_record.jcek_nilai));
 									
-									load_pembayaran();
+									//load_pembayaran();
+									kwitansi_total_nilaiField.setValue(cetak_kwitansiListEditorGrid.getSelectionModel().getSelected().get('kwitansi_nilai'));
+									kwitansi_total_bayarField.setValue(cetak_kwitansiListEditorGrid.getSelectionModel().getSelected().get('kwitansi_bayar'));
+									if(kwitansi_total_nilaiField.getValue()==kwitansi_total_bayarField.getValue() && kwitansi_total_bayarField.getValue()!=0){
+										kwitansi_status_lunasLabel.setText("LUNAS");
+										kwitansi_status_lunasField.setValue("LUNAS");
+									}else{
+										kwitansi_status_lunasLabel.setText("");
+										kwitansi_status_lunasField.setValue("");
+									}
 								}
 							}
 					 	}
@@ -526,8 +608,18 @@ Ext.onReady(function(){
 										kwitansi_transfer_bankField.setValue(kwitansi_transfer_record.data.jtransfer_bank);
 										kwitansi_transfer_namaField.setValue(kwitansi_transfer_record.data.jtransfer_nama);
 										kwitansi_transfer_nilaiField.setValue(kwitansi_transfer_record.data.jtransfer_nilai);
+										kwitansi_transfer_nilai_cfField.setValue(CurrencyFormatted(kwitansi_transfer_record.data.jtransfer_nilai));
 										
-										load_pembayaran();
+										//load_pembayaran();
+										kwitansi_total_nilaiField.setValue(cetak_kwitansiListEditorGrid.getSelectionModel().getSelected().get('kwitansi_nilai'));
+										kwitansi_total_bayarField.setValue(cetak_kwitansiListEditorGrid.getSelectionModel().getSelected().get('kwitansi_bayar'));
+										if(kwitansi_total_nilaiField.getValue()==kwitansi_total_bayarField.getValue() && kwitansi_total_bayarField.getValue()!=0){
+											kwitansi_status_lunasLabel.setText("LUNAS");
+											kwitansi_status_lunasField.setValue("LUNAS");
+										}else{
+											kwitansi_status_lunasLabel.setText("");
+											kwitansi_status_lunasField.setValue("");
+										}
 									}
 							}
 					 	}
@@ -541,8 +633,18 @@ Ext.onReady(function(){
 									if(tunai_jual_produk_DataStore.getCount()){
 										kwitansi_tunai_record=tunai_jual_produk_DataStore.getAt(0);
 										kwitansi_tunai_nilaiField.setValue(kwitansi_tunai_record.data.jtunai_nilai);
+										kwitansi_tunai_nilai_cfField.setValue(CurrencyFormatted(kwitansi_tunai_record.data.jtunai_nilai));
 										
-										load_pembayaran();
+										//load_pembayaran();
+										kwitansi_total_nilaiField.setValue(cetak_kwitansiListEditorGrid.getSelectionModel().getSelected().get('kwitansi_nilai'));
+										kwitansi_total_bayarField.setValue(cetak_kwitansiListEditorGrid.getSelectionModel().getSelected().get('kwitansi_bayar'));
+										if(kwitansi_total_nilaiField.getValue()==kwitansi_total_bayarField.getValue() && kwitansi_total_bayarField.getValue()!=0){
+											kwitansi_status_lunasLabel.setText("LUNAS");
+											kwitansi_status_lunasField.setValue("LUNAS");
+										}else{
+											kwitansi_status_lunasLabel.setText("");
+											kwitansi_status_lunasField.setValue("");
+										}
 									}
 							}
 					 	}
@@ -550,13 +652,12 @@ Ext.onReady(function(){
 				break;
 		}
 		
-		kwitansi_total_nilaiField.setValue(cetak_kwitansiListEditorGrid.getSelectionModel().getSelected().get('kwitansi_nilai'));
 	}
 	/* End setValue to EDIT*/
   
 	/* Function for Check if the form is valid */
 	function is_cetak_kwitansi_form_valid(){
-		return (true &&  true &&  true &&  true &&  true &&  true &&  true &&  true &&  true &&  true &&  true &&  true  );
+		return (kwitansi_custField.isValid() && true );
 	}
   	/* End of Function */
   
@@ -566,6 +667,8 @@ Ext.onReady(function(){
 		jual_kwitansi_DataStore.load({params : {master_id : 0, start:0, limit:pageS}});
 		if(!cetak_kwitansi_createWindow.isVisible()){
 			cetak_kwitansi_reset_form();
+			kwitansi_caraField.setValue("card");
+			kwitansi_bayar_cardGroup.setVisible(true);
 			post2db='CREATE';
 			msg='created';
 			kwitansi_noField.setValue('(Auto)');
@@ -684,6 +787,7 @@ Ext.onReady(function(){
 			{name: 'cust_no', type: 'string', mapping: 'cust_no'},
 			{name: 'kwitansi_cara', type: 'string', mapping: 'kwitansi_cara'}, 
 			{name: 'kwitansi_nilai', type: 'float', mapping: 'kwitansi_nilai'}, 
+			{name: 'kwitansi_bayar', type: 'float', mapping: 'kwitansi_bayar'}, 
 			{name: 'kwitansi_keterangan', type: 'string', mapping: 'kwitansi_keterangan'}, 
 			{name: 'kwitansi_status', type: 'string', mapping: 'kwitansi_status'},
 			{name: 'total_terpakai', type: 'int', mapping: 'total_terpakai'},
@@ -1177,12 +1281,34 @@ Ext.onReady(function(){
 				anchor: '95%',
 		maskRe: /([0-9]+)$/
 	});
+	
+	kwitansi_nilai_cfField= new Ext.form.TextField({
+		id: 'kwitansi_nilai_cfField',
+		fieldLabel: 'Nilai (Rp)',
+		allowNegatife : false,
+		enableKeyEvents: true,
+		emptyText: '0',
+		itemCls: 'rmoney',
+		anchor: '95%',
+		listeners: {
+			'keyup': function(){
+				var cf_tonumber = convertToNumber(this.getValue());
+				kwitansi_nilaiField.setValue(cf_tonumber);
+				kwitansi_total_nilaiField.setValue(cf_tonumber);
+				load_pembayaran();
+				
+				var number_tocf = CurrencyFormatted(this.getValue());
+				this.setRawValue(number_tocf);
+			}
+		},
+		maskRe: /([0-9]+)$/ 
+	});
 	/* Identify  kwitansi_nilai Field */
 	kwitansi_nilaiField= new Ext.form.NumberField({
 		id: 'kwitansi_nilaiField',
 		fieldLabel: 'Nilai (Rp)',
 		allowNegatife : false,
-		blankText: '0',
+		emptyText: '0',
 		allowDecimals: true,
 		enableKeyEvents: true,
 		anchor: '95%',
@@ -1211,37 +1337,52 @@ Ext.onReady(function(){
 		triggerAction: 'all'	
 	});
 	/* Identify  kwitansi_total_nilai Field */
-	kwitansi_total_nilaiField= new Ext.form.NumberField({
+	kwitansi_total_nilaiField= new Ext.ux.form.CFTextField({
 		id: 'kwitansi_total_nilaiField',
 		fieldLabel: '<b>Total (Rp)</b>',
-		allowNegatife : false,
-		blankText: '0',
-		allowDecimals: true,
+		valueRenderer: 'numberToCurrency',
 		readOnly: true,
-		anchor: '100%',
-		maskRe: /([0-9]+)$/
+		itemCls: 'rmoney',
+		width: 120
 	});
 	/* Identify  kwitansi_total_bayar Field */
-	kwitansi_total_bayarField= new Ext.form.NumberField({
+	kwitansi_total_bayarField= new Ext.ux.form.CFTextField({
 		id: 'kwitansi_total_bayarField',
 		fieldLabel: 'Total Bayar (Rp)',
-		allowNegatife : false,
-		blankText: '0',
-		allowDecimals: true,
+		valueRenderer: 'numberToCurrency',
 		readOnly: true,
-		anchor: '100%',
-		maskRe: /([0-9]+)$/
+		itemCls: 'rmoney',
+		width: 120
 	});
 	kwitansi_status_lunasLabel= new Ext.form.Label({
 		ctCls: 'status_lunas'
 	});
 	kwitansi_status_lunasField= new Ext.form.TextField();
 	
-	kwitansi_nilaiField.on('keyup', function(){
+	/*kwitansi_nilaiField.on('keyup', function(){
 		kwitansi_total_nilaiField.setValue(kwitansi_nilaiField.getValue());
-	});
+	});*/
 	
 	//START Bayar Tunai
+	kwitansi_tunai_nilai_cfField= new Ext.form.TextField({
+		id: 'kwitansi_tunai_nilai_cfField',
+		fieldLabel: 'Jumlah (Rp)',
+		allowNegatife : false,
+		enableKeyEvents: true,
+		itemCls: 'rmoney',
+		anchor: '95%',
+		listeners: {
+			'keyup': function(){
+				var cf_tonumber = convertToNumber(this.getValue());
+				kwitansi_tunai_nilaiField.setValue(cf_tonumber);
+				load_pembayaran();
+				
+				var number_tocf = CurrencyFormatted(this.getValue());
+				this.setRawValue(number_tocf);
+			}
+		},
+		maskRe: /([0-9]+)$/ 
+	});
 	kwitansi_tunai_nilaiField= new Ext.form.NumberField({
 		id: 'kwitansi_tunai_nilaiField',
 		enableKeyEvents: true,
@@ -1263,7 +1404,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [kwitansi_tunai_nilaiField] 
+				items: [kwitansi_tunai_nilai_cfField] 
 			}
 		]
 	
@@ -1282,7 +1423,7 @@ Ext.onReady(function(){
 		displayField: 'kwitansi_card_display',
 		valueField: 'kwitansi_card_value',
 		allowBlank: true,
-		anchor: '50%',
+		width: 110,
 		triggerAction: 'all',
 		lazyRenderer: true
 	});
@@ -1299,7 +1440,7 @@ Ext.onReady(function(){
 		displayField: 'kwitansi_card_edc_display',
 		valueField: 'kwitansi_card_edc_value',
 		allowBlank: true,
-		anchor: '50%',
+		width: 110,
 		triggerAction: 'all',
 		lazyRenderer: true
 	});
@@ -1311,6 +1452,25 @@ Ext.onReady(function(){
 		anchor: '95%'
 	});
 	
+	kwitansi_card_nilai_cfField= new Ext.form.TextField({
+		id: 'kwitansi_card_nilai_cfField',
+		fieldLabel: 'Jumlah (Rp)',
+		allowNegatife : false,
+		enableKeyEvents: true,
+		itemCls: 'rmoney',
+		anchor: '95%',
+		listeners: {
+			'keyup': function(){
+				var cf_tonumber = convertToNumber(this.getValue());
+				kwitansi_card_nilaiField.setValue(cf_tonumber);
+				load_pembayaran();
+				
+				var number_tocf = CurrencyFormatted(this.getValue());
+				this.setRawValue(number_tocf);
+			}
+		},
+		maskRe: /([0-9]+)$/ 
+	});
 	kwitansi_card_nilaiField= new Ext.form.NumberField({
 		id: 'kwitansi_card_nilaiField',
 		fieldLabel: 'Jumlah (Rp)',
@@ -1332,7 +1492,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [kwitansi_card_namaField,kwitansi_card_edcField,kwitansi_card_noField,kwitansi_card_nilaiField] 
+				items: [kwitansi_card_namaField,kwitansi_card_edcField,kwitansi_card_noField,kwitansi_card_nilai_cfField] 
 			}
 		]
 	
@@ -1369,11 +1529,29 @@ Ext.onReady(function(){
 		displayField: 'kwitansi_bank_display',
 		valueField: 'kwitansi_bank_value',
 		allowBlank: true,
-		anchor: '50%',
-		triggerAction: 'all',
-		lazyRenderer: true
+		anchor: '69%',
+		triggerAction: 'all'
 	});
 	
+	kwitansi_cek_nilai_cfField= new Ext.form.TextField({
+		id: 'kwitansi_cek_nilai_cfField',
+		fieldLabel: 'Jumlah (Rp)',
+		allowNegatife : false,
+		enableKeyEvents: true,
+		itemCls: 'rmoney',
+		anchor: '95%',
+		listeners: {
+			'keyup': function(){
+				var cf_tonumber = convertToNumber(this.getValue());
+				kwitansi_cek_nilaiField.setValue(cf_tonumber);
+				load_pembayaran();
+				
+				var number_tocf = CurrencyFormatted(this.getValue());
+				this.setRawValue(number_tocf);
+			}
+		},
+		maskRe: /([0-9]+)$/ 
+	});
 	kwitansi_cek_nilaiField= new Ext.form.NumberField({
 		id: 'kwitansi_cek_nilaiField',
 		fieldLabel: 'Jumlah (Rp)',
@@ -1395,7 +1573,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [kwitansi_cek_namaField,kwitansi_cek_noField,kwitansi_cek_validField,kwitansi_cek_bankField,kwitansi_cek_nilaiField] 
+				items: [kwitansi_cek_namaField,kwitansi_cek_noField,kwitansi_cek_validField,kwitansi_cek_bankField,kwitansi_cek_nilai_cfField] 
 			}
 		]
 	
@@ -1411,7 +1589,7 @@ Ext.onReady(function(){
 		displayField: 'kwitansi_bank_display',
 		valueField: 'kwitansi_bank_value',
 		allowBlank: true,
-		anchor: '50%',
+		anchor: '69%',
 		triggerAction: 'all',
 		lazyRenderer: true
 	});
@@ -1424,6 +1602,25 @@ Ext.onReady(function(){
 		maxLength: 50
 	});
 	
+	kwitansi_transfer_nilai_cfField= new Ext.form.TextField({
+		id: 'kwitansi_transfer_nilai_cfField',
+		fieldLabel: 'Jumlah (Rp)',
+		allowNegatife : false,
+		enableKeyEvents: true,
+		itemCls: 'rmoney',
+		anchor: '95%',
+		listeners: {
+			'keyup': function(){
+				var cf_tonumber = convertToNumber(this.getValue());
+				kwitansi_transfer_nilaiField.setValue(cf_tonumber);
+				load_pembayaran();
+				
+				var number_tocf = CurrencyFormatted(this.getValue());
+				this.setRawValue(number_tocf);
+			}
+		},
+		maskRe: /([0-9]+)$/ 
+	});
 	kwitansi_transfer_nilaiField= new Ext.form.NumberField({
 		id: 'kwitansi_transfer_nilaiField',
 		enableKeyEvents: true,
@@ -1444,7 +1641,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [kwitansi_transfer_bankField,kwitansi_transfer_namaField,kwitansi_transfer_nilaiField] 
+				items: [kwitansi_transfer_bankField,kwitansi_transfer_namaField,kwitansi_transfer_nilai_cfField] 
 			}
 		]
 	
@@ -1462,7 +1659,8 @@ Ext.onReady(function(){
 		mode: 'local',
 		displayField: 'kwitansi_cara_display',
 		valueField: 'kwitansi_cara_value',
-		anchor: '60%',
+		editable: false,
+		anchor: '65%',
 		//width: 60,
 		triggerAction: 'all'	
 	});
@@ -1473,10 +1671,22 @@ Ext.onReady(function(){
 		kwitansi_bayar_cekGroup.setVisible(false);
 		kwitansi_bayar_transferGroup.setVisible(false);
 		//RESET Nilai di Cara Bayar-1
-		kwitansi_tunai_nilaiField.reset();
+		/*kwitansi_tunai_nilaiField.reset();
+		kwitansi_tunai_nilai_cfField.reset();
 		kwitansi_card_nilaiField.reset();
+		kwitansi_card_nilai_cfField.reset();
 		kwitansi_cek_nilaiField.reset();
+		kwitansi_cek_nilai_cfField.reset();
 		kwitansi_transfer_nilaiField.reset();
+		kwitansi_transfer_nilai_cfField.reset();*/
+		
+		tunai_jual_kwitansi_reset_form();
+		
+		card_jual_kwitansi_reset_form();
+		
+		cek_jual_kwitansi_reset_form();
+		
+		transfer_jual_kwitansi_reset_form();
 		
 		if(value=='card'){
 			kwitansi_bayar_cardGroup.setVisible(true);
@@ -1487,6 +1697,7 @@ Ext.onReady(function(){
 		}else if(value=='tunai'){
 			kwitansi_bayar_tunaiGroup.setVisible(true);
 		}
+		load_pembayaran();
 	});
 	
 	kwitansi_cara_bayarTabPanel = new Ext.TabPanel({
@@ -1495,13 +1706,13 @@ Ext.onReady(function(){
 		//autoHeigth: true,
 		frame: true,
 		height: 242,
-		width: 400,
+		width: 350,
 		defaults:{bodyStyle:'padding:10px'},
 		items:[{
                 title:'Cara Bayar',
                 layout:'form',
 				frame: true,
-                defaults: {width: 230},
+                defaults: {width: 200},
                 defaultType: 'textfield',
 
                 items: [kwitansi_caraField,kwitansi_bayar_tunaiGroup,kwitansi_bayar_cardGroup,kwitansi_bayar_cekGroup,kwitansi_bayar_transferGroup]
@@ -1516,13 +1727,13 @@ Ext.onReady(function(){
 		frame: true,
 		items:[
 			   {
-				columnWidth:0.65,
+				columnWidth:0.6,
 				layout: 'form',
 				border:false,
 				items: [kwitansi_cara_bayarTabPanel] 
 			}
 			,{
-				columnWidth:0.35,
+				columnWidth:0.4,
 				labelWidth: 100,
 				layout: 'form',
     			labelPad: 8,
@@ -1547,7 +1758,7 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [kwitansi_noField, kwitansi_custField, kwitansi_nilaiField, kwitansi_idField] 
+				items: [kwitansi_noField, kwitansi_custField, kwitansi_nilai_cfField, kwitansi_idField] 
 			},
 			{
 				columnWidth:0.5,
@@ -1598,7 +1809,7 @@ Ext.onReady(function(){
 		total_bayar=kwitansi_tunai_nilai+kwitansi_card_nilai+kwitansi_cek_nilai+kwitansi_transfer_nilai;
 		total_bayar=(total_bayar>0?Math.round(total_bayar):0);
 		kwitansi_total_bayarField.setValue(total_bayar);
-		if(kwitansi_total_nilaiField.getValue()==total_bayar){
+		if(kwitansi_total_nilaiField.getValue()==total_bayar && total_bayar!=0){
 			kwitansi_status_lunasLabel.setText("LUNAS");
 			kwitansi_status_lunasField.setValue("LUNAS");
 		}else{
@@ -2090,6 +2301,7 @@ Ext.onReady(function(){
         itemSelector: 'div.search-item',
 		triggerAction: 'all',
 		lazyRender:true,
+		allowBlank: false,
 		listClass: 'x-combo-list-small',
 		anchor: '95%'
 	});
