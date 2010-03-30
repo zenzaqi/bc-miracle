@@ -587,13 +587,23 @@ Ext.onReady(function(){
 						});
 						break;
 					default:
+						Ext.MessageBox.show({
+						   title: 'Warning',
+						   //msg: 'We could\'t not '+msg+' the Master_jual_produk.',
+						   msg: 'Data penjualan perawatan tidak bisa disimpan',
+						   buttons: Ext.MessageBox.OK,
+						   animEl: 'save',
+						   icon: Ext.MessageBox.WARNING
+						});
+						break;
+					/*default:
 						jrawat_idField.setValue(result);
 						cetak_faktur_jual_rawat();
 						master_jual_rawat_createWindow.hide();
-						break;
+						break;*/
 				}
-				//if(printed==1)
-					//master_jual_rawat_print();
+				if(printed==1)
+					cetak_faktur_jual_rawat();
 				master_jual_rawat_reset_allForm();
 				master_cara_bayarTabPanel.setActiveTab(0);
 			},

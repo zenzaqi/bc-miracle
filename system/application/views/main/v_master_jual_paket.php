@@ -4157,7 +4157,8 @@ Ext.onReady(function(){
 				detail_jual_paket_record.data.dpaket_harga=cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_harga;
 				var DayLength=1*24*60*60*1000;
 				var Days=cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_expired;
-				var dt_kadaluarsa=new Date(dt*1+DayLength*Days);
+				//var dt_kadaluarsa=new Date(dt*1+DayLength*Days);
+				var dt_kadaluarsa=new Date(jpaket_tanggalField.getValue()*1+DayLength*Days);
 				detail_jual_paket_record.data.dpaket_kadaluarsa=dt_kadaluarsa;
 				
 				subtotal_harga=eval(detail_jual_paket_record.data.dpaket_jumlah*detail_jual_paket_record.data.dpaket_harga);
