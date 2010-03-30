@@ -161,7 +161,7 @@ Ext.onReady(function(){
 		if(oGrid_event.record.data.karyawan_cabang!== null){karyawan_cabang_update = oGrid_event.record.data.karyawan_cabang;}
 		if(oGrid_event.record.data.karyawan_jabatan!== null){karyawan_jabatan_update = oGrid_event.record.data.karyawan_jabatan;}
 		if(oGrid_event.record.data.karyawan_departemen!== null){karyawan_departemen_update = oGrid_event.record.data.karyawan_departemen;}
-		if(oGrid_event.record.data.karyawan_golongan!== null){karyawan_golongan_update = oGrid_event.record.data.karyawan_golongan;}
+		if(oGrid_event.record.data.karyawan_idgolongan!== null){karyawan_golongan_update = oGrid_event.record.data.karyawan_idgolongan;}
 		if(oGrid_event.record.data.karyawan_tglmasuk!== ""){karyawan_tglmasuk_update_date =oGrid_event.record.data.karyawan_tglmasuk.format('Y-m-d');}
 		if(oGrid_event.record.data.karyawan_atasan!== null){karyawan_atasan_update = oGrid_event.record.data.karyawan_atasan;}
 		if(oGrid_event.record.data.karyawan_aktif!== null){karyawan_aktif_update = oGrid_event.record.data.karyawan_aktif;}
@@ -191,7 +191,7 @@ Ext.onReady(function(){
 				karyawan_cabang	:karyawan_cabang_update,		
 				karyawan_jabatan	:karyawan_jabatan_update,		
 				karyawan_departemen	:karyawan_departemen_update,		
-				karyawan_golongan	:karyawan_golongan_update,		
+				karyawan_idgolongan	:karyawan_golongan_update,		
 				karyawan_tglmasuk	: karyawan_tglmasuk_update_date,				
 				karyawan_atasan	:karyawan_atasan_update,		
 				karyawan_aktif	:karyawan_aktif_update,		
@@ -204,13 +204,14 @@ Ext.onReady(function(){
 						karyawan_DataStore.reload();
 						cbo_karyawan_cabang_DataStore.reload();
 						cbo_karyawan_departemen_DataStore.reload();
+						cbo_karyawan_golongan_DataStore.reload();
 						cbo_karyawan_jabatan_DataStore.reload();
 						cbo_karyawan_atasan_DataStore.reload();
 						break;
 					default:
 						Ext.MessageBox.show({
 							   title: 'Warning',
-							   msg: 'We could\'t not save the karyawan.',
+							   msg: 'Data karyawan tidak bisa disimpan',
 							   buttons: Ext.MessageBox.OK,
 							   animEl: 'save',
 							   icon: Ext.MessageBox.WARNING
@@ -289,7 +290,7 @@ Ext.onReady(function(){
 		if(karyawan_aktifField.getValue()!== null){karyawan_aktif_create = karyawan_aktifField.getValue();}
 
 			Ext.Ajax.request({  
-				waitMsg: 'Please wait...',
+				waitMsg: 'Mohon tunggu...',
 				url: 'index.php?c=c_karyawan&m=get_action',
 				params: {
 					task: post2db,
@@ -313,7 +314,7 @@ Ext.onReady(function(){
 					karyawan_cabang	: karyawan_cabang_create,	
 					karyawan_jabatan	: karyawan_jabatan_create,	
 					karyawan_departemen	: karyawan_departemen_create,	
-					karyawan_golongan	: karyawan_golongan_create,	
+					karyawan_idgolongan	: karyawan_golongan_create,	
 					karyawan_golongantxt	: karyawan_golongantxt_create,	
 					karyawan_tglmasuk	: karyawan_tglmasuk_create_date,					
 					karyawan_atasan	: karyawan_atasan_create,	
@@ -323,10 +324,11 @@ Ext.onReady(function(){
 					var result=eval(response.responseText);
 					switch(result){
 						case 1:
-							Ext.MessageBox.alert(post2db+' OK','The Karyawan was '+msg+' successfully.');
+							Ext.MessageBox.alert(post2db+' OK', 'Data karyawan berhasil disimpan');
 							karyawan_DataStore.reload();
 							cbo_karyawan_cabang_DataStore.reload();
 							cbo_karyawan_departemen_DataStore.reload();
+							cbo_karyawan_golongan_DataStore.reload();
 							cbo_karyawan_jabatan_DataStore.reload();
 							cbo_karyawan_atasan_DataStore.reload();
 
@@ -335,7 +337,7 @@ Ext.onReady(function(){
 						default:
 							Ext.MessageBox.show({
 							   title: 'Warning',
-							   msg: 'We could\'t not '+msg+' the Karyawan.',
+							   msg: 'Data karyawan tidak bisa disimpan',
 							   buttons: Ext.MessageBox.OK,
 							   animEl: 'save',
 							   icon: Ext.MessageBox.WARNING
@@ -358,7 +360,7 @@ Ext.onReady(function(){
 			Ext.MessageBox.show({
 				title: 'Warning',
 				width: 230,
-				msg: 'Data Belum Lengkap!.',
+				msg: 'Form anda belum lengkap',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -448,7 +450,7 @@ Ext.onReady(function(){
 		karyawan_cabangField.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_cabang'));
 		karyawan_jabatanField.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_jabatan'));
 		karyawan_departemenField.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_departemen'));
-		karyawan_golonganField.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_golongan'));
+		karyawan_golonganField.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_idgolongan'));
 		karyawan_tglmasukField.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_tglmasuk'));
 		karyawan_atasanField.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_atasan'));
 		karyawan_aktifField.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_aktif'));
@@ -465,6 +467,7 @@ Ext.onReady(function(){
 	function display_form_window(){
 		cbo_karyawan_cabang_DataStore.reload();
 		cbo_karyawan_departemen_DataStore.reload();
+		cbo_karyawan_golongan_DataStore.reload();
 		cbo_karyawan_jabatan_DataStore.reload();
 		cbo_karyawan_atasan_DataStore.reload();
 		
@@ -511,7 +514,7 @@ Ext.onReady(function(){
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really update something you haven\'t selected?',
+				msg: 'Anda belum memilih data yang akan diubah',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -530,7 +533,7 @@ Ext.onReady(function(){
 			}
 			var encoded_array = Ext.encode(prez);
 			Ext.Ajax.request({ 
-				waitMsg: 'Please Wait',
+				waitMsg: 'Mohon tunggu...',
 				url: 'index.php?c=c_karyawan&m=get_action', 
 				params: { task: "DELETE", ids:  encoded_array }, 
 				success: function(response){
@@ -540,6 +543,7 @@ Ext.onReady(function(){
 							karyawan_DataStore.reload();
 							cbo_karyawan_cabang_DataStore.reload();
 							cbo_karyawan_departemen_DataStore.reload();
+							cbo_karyawan_golongan_DataStore.reload();
 							cbo_karyawan_jabatan_DataStore.reload();
 							cbo_karyawan_atasan_DataStore.reload();
 
@@ -604,7 +608,7 @@ Ext.onReady(function(){
 			{name: 'karyawan_cabang', type: 'string', mapping: 'cabang_nama'},
 			{name: 'karyawan_jabatan', type: 'string', mapping: 'jabatan_nama'},
 			{name: 'karyawan_departemen', type: 'string', mapping: 'departemen_nama'},
-			{name: 'karyawan_golongan', type: 'string', mapping: 'karyawan_golongan'},
+			{name: 'karyawan_idgolongan', type: 'string', mapping: 'nama_golongan'},
 			{name: 'karyawan_tglmasuk', type: 'date', dateFormat: 'Y-m-d', mapping: 'karyawan_tglmasuk'},
 			{name: 'karyawan_atasan', type: 'int', mapping: 'karyawan_atasan'},
 			{name: 'karyawan_aktif', type: 'string', mapping: 'karyawan_aktif'},
@@ -635,21 +639,6 @@ Ext.onReady(function(){
 		sortInfo:{field: 'karyawan_atasan_display', direction: "ASC"}
 	});
 	
-	cbo_karyawan_golongan_DataStore = new Ext.data.Store({
-		id: 'cbo_karyawan_golongan_DataStore',
-		proxy: new Ext.data.HttpProxy({
-			url: 'index.php?c=c_karyawan&m=get_karyawan_golongan_list', 
-			method: 'POST'
-		}),
-			reader: new Ext.data.JsonReader({
-			root: 'results',
-			totalProperty: 'total'
-		},[
-		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
-			{name: 'karyawan_golongan_display', type: 'string', mapping: 'nama_golongan'}
-		]),
-		sortInfo:{field: 'karyawan_golongan_display', direction: "ASC"}
-	});
 	
 	cbo_karyawan_jabatan_DataStore = new Ext.data.Store({
 		id: 'cbo_karyawan_jabatan_DataStore',
@@ -701,6 +690,25 @@ Ext.onReady(function(){
 		]),
 		sortInfo:{field: 'karyawan_departemen_value', direction: "ASC"}
 	});
+	
+	cbo_karyawan_golongan_DataStore = new Ext.data.Store({
+		id: 'cbo_karyawan_golongan_DataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_karyawan&m=get_karyawan_golongan_list', 
+			method: 'POST'
+		}),
+			reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total'
+		},[
+		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
+			{name: 'karyawan_golongan_display', type: 'string', mapping: 'nama_golongan'},
+			{name: 'karyawan_golongan_value', type: 'int', mapping: 'id_golongan'}
+		]),
+		sortInfo:{field: 'karyawan_golongan_value', direction: "ASC"}
+	});
+	
+	
     
   	/* Function for Identify of Window Column Model */
 	karyawan_ColumnModel = new Ext.grid.ColumnModel(
@@ -718,7 +726,7 @@ Ext.onReady(function(){
 		},*/
 		{
 			/*index=1*/
-			header: 'NIK',
+			header: '<div align="center">' + 'NIK' + '</div>',
 			dataIndex: 'karyawan_no',
 			width: 100,
 			sortable: true,
@@ -739,7 +747,7 @@ Ext.onReady(function(){
 		},
 		{
 			/*index=3*/
-			header: 'Nickname',
+			header: '<div align="center">' + 'Nickname' + '</div>',
 			dataIndex: 'karyawan_username',
 			width: 80,
 			sortable: true,
@@ -749,7 +757,7 @@ Ext.onReady(function(){
 		},
 		{
 			/*index=4*/
-			header: 'Nama Lengkap',
+			header: '<div align="center">' + 'Nama Lengkap' + '</div>',
 			dataIndex: 'karyawan_nama',
 			width: 170,
 			sortable: true,
@@ -759,7 +767,7 @@ Ext.onReady(function(){
 		},
 		{
 			/*index=5*/
-			header: 'L/P',
+			header: '<div align="center">' + 'L/P' + '</div>',
 			dataIndex: 'karyawan_kelamin',
 			width: 30,
 			sortable: true,
@@ -779,7 +787,7 @@ Ext.onReady(function(){
 		},
 		{
 			/*index=6*/
-			header: 'Tgl Lahir',
+			header: '<div align="center">' + 'Tgl Lahir' + '</div>',
 			dataIndex: 'karyawan_tgllahir',
 			width: 80,
 			sortable: true,
@@ -790,7 +798,7 @@ Ext.onReady(function(){
 		},
 		{
 			/*index=7*/
-			header: 'Alamat',
+			header: '<div align="center">' + 'Alamat' + '</div>',
 			dataIndex: 'karyawan_alamat',
 			width: 280,
 			sortable: true,
@@ -800,7 +808,7 @@ Ext.onReady(function(){
 		},
 		{
 			/*index=8*/
-			header: 'Kota',
+			header: '<div align="center">' + 'Kota' + '</div>',
 			dataIndex: 'karyawan_kota',
 			width: 80,
 			sortable: true,
@@ -854,7 +862,7 @@ Ext.onReady(function(){
 		},
 		{
 			/*index=13*/
-			header: 'No.Telp Rumah',
+			header: '<div align="center">' + 'No.Telp Rmh' + '</div>',
 			dataIndex: 'karyawan_notelp',
 			width: 90,
 			sortable: true,
@@ -864,7 +872,7 @@ Ext.onReady(function(){
 		},
 		{
 			/*index=14*/
-			header: 'Ponsel 1',
+			header: '<div align="center">' + 'Ponsel 1' + '</div>',
 			dataIndex: 'karyawan_notelp2',
 			width: 90,
 			sortable: true,
@@ -933,7 +941,7 @@ Ext.onReady(function(){
 		},
 		{
 			/*index=19*/
-			header: 'Departemen',
+			header: '<div align="center">' + 'Departemen' + '</div>',
 			dataIndex: 'karyawan_departemen',
 			width: 80,
 			sortable: true,
@@ -952,7 +960,7 @@ Ext.onReady(function(){
 		{
 			/*index=20*/
 			header: 'Golongan',
-			dataIndex: 'nama_golongan',
+			dataIndex: 'karyawan_idgolongan',
 			width: 150,
 			sortable: true,
 			editor: new Ext.form.ComboBox({
@@ -961,7 +969,7 @@ Ext.onReady(function(){
 				store: cbo_karyawan_golongan_DataStore,
 				mode: 'remote',
                	displayField: 'karyawan_golongan_display',
-               	valueField: 'karyawan_golongan_display',
+               	valueField: 'karyawan_golongan_value',
                	lazyRender:true,
                	listClass: 'x-combo-list-small'
             }),
@@ -999,7 +1007,7 @@ Ext.onReady(function(){
 		},
 		{
 			/*index=23*/
-			header: 'Status',
+			header: '<div align="center">' + 'Status' + '</div>',
 			dataIndex: 'karyawan_aktif',
 			width: 70,
 			sortable: true,
@@ -1073,7 +1081,7 @@ Ext.onReady(function(){
 	karyawanListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'karyawanListEditorGrid',
 		el: 'fp_karyawan',
-		title: 'List Of Karyawan',
+		title: 'Daftar Karyawan',
 		autoHeight: true,
 		store: karyawan_DataStore, // DataStore
 		cm: karyawan_ColumnModel, // Nama-nama Columns
@@ -1380,19 +1388,20 @@ Ext.onReady(function(){
 		anchor: '95%',
 		triggerAction: 'all'
 	});
-	/* Identify  karyawan_golongan Field */
+	
 	karyawan_golonganField= new Ext.form.ComboBox({
 		id: 'karyawan_golonganField',
-		fieldLabel: 'Golongan',
+		fieldLabel: 'Golongan <span style="color: #ec0000">*</span>',
 		store:cbo_karyawan_golongan_DataStore,
 		mode: 'remote',
 		editable:false,
 		allowBlank: true,
 		displayField: 'karyawan_golongan_display',
-		valueField: 'karyawan_golongan_display',
+		valueField: 'karyawan_golongan_value',
 		anchor: '95%',
 		triggerAction: 'all'
 	});
+	
 	/* Identify  karyawan_golongantxt Field */
 	karyawan_golongantxtField= new Ext.form.TextField({
 		id: 'karyawan_golongantxtField',
@@ -1599,7 +1608,7 @@ Ext.onReady(function(){
 			karyawan_cabang	:	karyawan_cabang_search, 
 			karyawan_jabatan	:	karyawan_jabatan_search, 
 			karyawan_departemen	:	karyawan_departemen_search, 
-			karyawan_golongan	:	karyawan_golongan_search, 
+			karyawan_idgolongan	:	karyawan_golongan_search, 
 			karyawan_tglmasuk	:	karyawan_tglmasuk_search_date, 
 			karyawan_atasan	:	karyawan_atasan_search, 
 			karyawan_aktif	:	karyawan_aktif_search, 
@@ -1616,6 +1625,7 @@ Ext.onReady(function(){
 		karyawan_DataStore.reload({params: {start: 0, limit: pageS}});
 		cbo_karyawan_cabang_DataStore.reload();
 		cbo_karyawan_departemen_DataStore.reload();
+		cbo_karyawan_golongan_DataStore.reload();
 		cbo_karyawan_jabatan_DataStore.reload();
 		cbo_karyawan_atasan_DataStore.reload();
 
@@ -1789,7 +1799,7 @@ Ext.onReady(function(){
 	/* Identify  karyawan_notelp Search Field */
 	karyawan_notelpSearchField= new Ext.form.TextField({
 		id: 'karyawan_notelpSearchField',
-		fieldLabel: 'No. Telp Rumah',
+		fieldLabel: 'Telp Rumah',
 		maxLength: 25,
 		anchor: '95%'
 	
@@ -1797,7 +1807,7 @@ Ext.onReady(function(){
 	/* Identify  karyawan_notelp2 Search Field */
 	karyawan_notelp2SearchField= new Ext.form.TextField({
 		id: 'karyawan_notelp2SearchField',
-		fieldLabel: 'No. Ponsel 1',
+		fieldLabel: 'No Ponsel 1',
 		maxLength: 25,
 		anchor: '95%'
 	
@@ -1805,7 +1815,7 @@ Ext.onReady(function(){
 	/* Identify  karyawan_notelp3 Search Field */
 	karyawan_notelp3SearchField= new Ext.form.TextField({
 		id: 'karyawan_notelp3SearchField',
-		fieldLabel: 'No. Ponsel 2',
+		fieldLabel: 'No Ponsel 2',
 		maxLength: 25,
 		anchor: '95%'
 	
@@ -1813,7 +1823,7 @@ Ext.onReady(function(){
 	
 	karyawan_notelp4SearchField= new Ext.form.TextField({
 		id: 'karyawan_notelp4SearchField',
-		fieldLabel: 'No. Ponsel 3',
+		fieldLabel: 'No Ponsel 3',
 		maxLength: 25,
 		anchor: '95%'
 	
@@ -1865,7 +1875,7 @@ Ext.onReady(function(){
 		store:cbo_karyawan_golongan_DataStore,
 		mode: 'remote',
 		displayField: 'karyawan_golongan_display',
-		valueField: 'karyawan_golongan_display',
+		valueField: 'karyawan_golongan_value',
 		allowBlank: true,
 		anchor: '95%',
 		triggerAction: 'all'
@@ -2074,7 +2084,7 @@ Ext.onReady(function(){
 			karyawan_cabang : karyawan_cabang_print,
 			karyawan_jabatan : karyawan_jabatan_print,
 			karyawan_departemen : karyawan_departemen_print,
-			karyawan_golongan : karyawan_golongan_print,
+			karyawan_idgolongan : karyawan_golongan_print,
 		  	karyawan_tglmasuk : karyawan_tglmasuk_print_date, 
 			karyawan_atasan : karyawan_atasan_print,
 			karyawan_aktif : karyawan_aktif_print,
@@ -2158,13 +2168,13 @@ Ext.onReady(function(){
 		if(karyawan_DataStore.baseParams.karyawan_cabang!==null){karyawan_cabang_2excel = karyawan_DataStore.baseParams.karyawan_cabang;}
 		if(karyawan_DataStore.baseParams.karyawan_jabatan!==null){karyawan_jabatan_2excel = karyawan_DataStore.baseParams.karyawan_jabatan;}
 		if(karyawan_DataStore.baseParams.karyawan_departemen!==null){karyawan_departemen_2excel = karyawan_DataStore.baseParams.karyawan_departemen;}
-		if(karyawan_DataStore.baseParams.karyawan_golongan!==null){karyawan_golongan_2excel = karyawan_DataStore.baseParams.karyawan_golongan;}
+		if(karyawan_DataStore.baseParams.karyawan_idgolongan!==null){karyawan_golongan_2excel = karyawan_DataStore.baseParams.karyawan_idgolongan;}
 		if(karyawan_DataStore.baseParams.karyawan_tglmasuk!==""){karyawan_tglmasuk_2excel_date = karyawan_DataStore.baseParams.karyawan_tglmasuk;}
 		if(karyawan_DataStore.baseParams.karyawan_atasan!==null){karyawan_atasan_2excel = karyawan_DataStore.baseParams.karyawan_atasan;}
 		if(karyawan_DataStore.baseParams.karyawan_aktif!==null){karyawan_aktif_2excel = karyawan_DataStore.baseParams.karyawan_aktif;}
 
 		Ext.Ajax.request({   
-		waitMsg: 'Please Wait...',
+		waitMsg: 'Mohon tunggu...',
 		url: 'index.php?c=c_karyawan&m=get_action',
 		params: {
 			task: "EXCEL",
@@ -2188,7 +2198,7 @@ Ext.onReady(function(){
 			karyawan_cabang : karyawan_cabang_2excel,
 			karyawan_jabatan : karyawan_jabatan_2excel,
 			karyawan_departemen : karyawan_departemen_2excel,
-			karyawan_golongan : karyawan_golongan_2excel,
+			karyawan_idgolongan : karyawan_golongan_2excel,
 		  	karyawan_tglmasuk : karyawan_tglmasuk_2excel_date, 
 			karyawan_atasan : karyawan_atasan_2excel,
 			karyawan_aktif : karyawan_aktif_2excel,
