@@ -44,42 +44,42 @@
     </style>
 <script>
 /* declare function */		
-var tindakan_DataStore;
-var penyesuaian_ColumnModel;
-var usersListEditorGrid;
-var users_createForm;
-var users_createWindow;
-var users_searchForm;
-var users_searchWindow;
-var users_SelectedRow;
-var users_ContextMenu;
+var ptindakan_terapis_DataStore;
+var ptindakan_terapis_ColumnModel;
+var ptindakan_terapisListEditorGrid;
+var ptindakan_terapis_createForm;
+var ptindakan_terapis_createWindow;
+var ptindakan_terapis_searchForm;
+var ptindakan_terapis_searchWindow;
+var ptindakan_terapis_SelectedRow;
+var ptindakan_terapis_ContextMenu;
 //declare konstant
 var post2db = '';
 var msg = '';
 var pageS=30;
 
 /* declare variable here */
-var user_idField;
-var user_nameField;
-var user_passwdField;
-var user_karyawanField;
-var user_logField;
-var user_groupsField;
-var user_aktifField;
-var user_idSearchField;
-var user_nameSearchField;
-var user_passwdSearchField;
-var user_karyawanSearchField;
-var user_logSearchField;
-var user_groupsSearchField;
-var user_aktifSearchField;
+//var user_idField;
+//var user_nameField;
+//var user_passwdField;
+//var user_karyawanField;
+//var user_logField;
+//var user_groupsField;
+//var user_aktifField;
+//var user_idSearchField;
+//var user_nameSearchField;
+//var user_passwdSearchField;
+//var user_karyawanSearchField;
+//var user_logSearchField;
+//var user_groupsSearchField;
+//var user_aktifSearchField;
 
 /* on ready fuction */
 Ext.onReady(function(){
   	Ext.QuickTips.init();	/* Initiate quick tips icon */
   
   	/* Function for Saving inLine Editing */
-	function penyesuaian_update(oGrid_event){
+	function ptindakan_terapis_update(oGrid_event){
 
 	var tindakan_adjusment_update=null;
 	var adj_id_update_pk="";
@@ -102,14 +102,14 @@ Ext.onReady(function(){
 				var result=eval(response.responseText);
 				switch(result){
 					case 1:
-						tindakan_DataStore.commitChanges();
-						tindakan_DataStore.reload();
+						ptindakan_terapis_DataStore.commitChanges();
+						ptindakan_terapis_DataStore.reload();
 						break;
 					default:
 						Ext.MessageBox.show({
 							   title: 'Warning',
 							   //msg: 'We could\'t not save the users.',
-							   msg: 'Data user tidak dapat disimpan',
+							   msg: 'Data penyesuaian tindakan tidak dapat disimpan',
 							   buttons: Ext.MessageBox.OK,
 							   animEl: 'save',
 							   icon: Ext.MessageBox.WARNING
@@ -132,22 +132,22 @@ Ext.onReady(function(){
   	/* End of Function */
   
   	/* Function for add data, open window create form */
-	function users_create(){
+	/*function users_create(){
 		if(is_users_form_valid()){
 		
-		var user_id_create_pk=null;
-		var user_name_create=null;
-		var user_passwd_create=null;
-		var user_karyawan_create=null;
-		var user_groups_create=null;
-		var user_aktif_create=null;
+		//var user_id_create_pk=null;
+		//var user_name_create=null;
+		//var user_passwd_create=null;
+		//var user_karyawan_create=null;
+		//var user_groups_create=null;
+		//var user_aktif_create=null;
 
 		user_id_create_pk=get_pk_id();
-		if(user_nameField.getValue()!== null){user_name_create = user_nameField.getValue();}
-		if(user_passwdField.getValue()!== null){user_passwd_create = user_passwdField.getValue();}
-		if(user_karyawanField.getValue()!== null){user_karyawan_create = user_karyawanField.getValue();}
-		if(user_groupsField.getValue()!== null){user_groups_create = user_groupsField.getValue();}
-		if(user_aktifField.getValue()!== null){user_aktif_create = user_aktifField.getValue();}
+		//if(user_nameField.getValue()!== null){user_name_create = user_nameField.getValue();}
+		//if(user_passwdField.getValue()!== null){user_passwd_create = user_passwdField.getValue();}
+		//if(user_karyawanField.getValue()!== null){user_karyawan_create = user_karyawanField.getValue();}
+		//if(user_groupsField.getValue()!== null){user_groups_create = user_groupsField.getValue();}
+		//if(user_aktifField.getValue()!== null){user_aktif_create = user_aktifField.getValue();}
 
 			Ext.Ajax.request({  
 				waitMsg: 'Mohon tunggu...',
@@ -167,8 +167,8 @@ Ext.onReady(function(){
 						case 1:
 							//Ext.MessageBox.alert(post2db+' OK','The Users was '+msg+' successfully.');
 							Ext.MessageBox.alert(post2db+' OK', 'Data user berhasil disimpan');
-							tindakan_DataStore.reload();
-							users_createWindow.hide();
+							ptindakan_terapis_DataStore.reload();
+							ptindakan_terapis_createWindow.hide();
 							break;
 						default:
 							Ext.MessageBox.show({
@@ -203,13 +203,13 @@ Ext.onReady(function(){
 				icon: Ext.MessageBox.WARNING
 			});
 		}
-	}
+	}*/
  	/* End of Function */
   
   	/* Function for get PK field */
 	function get_pk_id(){
 		if(post2db=='UPDATE')
-			return usersListEditorGrid.getSelectionModel().getSelected().get('adj_id');
+			return ptindakan_terapisListEditorGrid.getSelectionModel().getSelected().get('adj_id');
 		else 
 			return 0;
 	}
@@ -217,30 +217,29 @@ Ext.onReady(function(){
   
 	/* Function for Check if the form is valid */
 	function is_users_form_valid(){
-		return (user_nameField.isValid() &&  user_karyawanField.isValid() && user_aktifField.isValid() );
 	}
   	/* End of Function */
   
   	/* Function for Displaying  create Window Form */
-	function display_form_window(){
-		if(!users_createWindow.isVisible()){
+	/*function display_form_window(){
+		if(!ptindakan_terapis_createWindow.isVisible()){
 			users_reset_form();
 			post2db='CREATE';
 			msg='created';
-			users_createWindow.show();
+			ptindakan_terapis_createWindow.show();
 		} else {
-			users_createWindow.toFront();
+			ptindakan_terapis_createWindow.toFront();
 		}
-	}
+	}*/
   	/* End of Function */
  
   	/* Function for Delete Confirm */
 	function users_confirm_delete(){
 		// only one users is selected here
-		if(usersListEditorGrid.selModel.getCount() == 1){
+		if(ptindakan_terapisListEditorGrid.selModel.getCount() == 1){
 //			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', users_delete);
 			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', users_delete);
-		} else if(usersListEditorGrid.selModel.getCount() > 1){
+		} else if(ptindakan_terapisListEditorGrid.selModel.getCount() > 1){
 //			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', users_delete);
 			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', users_delete);
 		} else {
@@ -259,11 +258,11 @@ Ext.onReady(function(){
 	/* Function for Update Confirm */
 	function users_confirm_update(){
 		/* only one record is selected here */
-		if(usersListEditorGrid.selModel.getCount() == 1) {
+		if(ptindakan_terapisListEditorGrid.selModel.getCount() == 1) {
 			users_set_form();
 			post2db='UPDATE';
 			msg='updated';
-			users_createWindow.show();
+			ptindakan_terapis_createWindow.show();
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
@@ -280,9 +279,9 @@ Ext.onReady(function(){
   	/* Function for Delete Record */
 	function users_delete(btn){
 		if(btn=='yes'){
-			var selections = usersListEditorGrid.selModel.getSelections();
+			var selections = ptindakan_terapisListEditorGrid.selModel.getSelections();
 			var prez = [];
-			for(i = 0; i< usersListEditorGrid.selModel.getCount(); i++){
+			for(i = 0; i< ptindakan_terapisListEditorGrid.selModel.getCount(); i++){
 				prez.push(selections[i].json.user_id);
 			}
 			var encoded_array = Ext.encode(prez);
@@ -294,7 +293,7 @@ Ext.onReady(function(){
 					var result=eval(response.responseText);
 					switch(result){
 						case 1:  // Success : simply reload
-							tindakan_DataStore.reload();
+							ptindakan_terapis_DataStore.reload();
 							break;
 						default:
 							Ext.MessageBox.show({
@@ -323,8 +322,8 @@ Ext.onReady(function(){
   	/* End of Function */
   
 	/* Function for Retrieve DataStore */
-	tindakan_DataStore = new Ext.data.Store({
-		id: 'tindakan_DataStore',
+	ptindakan_terapis_DataStore = new Ext.data.Store({
+		id: 'ptindakan_terapis_DataStore',
 		proxy: new Ext.data.HttpProxy({
 			url: 'index.php?c=c_penyesuaian_tindakan&m=get_action', 
 			method: 'POST'
@@ -342,8 +341,8 @@ Ext.onReady(function(){
 			{name: 'adj_count', type: 'int', mapping: 'adj_count'},
 			{name: 'terapis_count', type: 'int', mapping: 'terapis_count'},
 			{name: 'new_count', type: 'int', mapping: 'new_count'},
-		])//,
-//		sortInfo:{field: 'karyawan_username', direction: "ASC"}
+		]),
+		sortInfo:{field: 'karyawan_username', direction: "ASC"}
 	});
 	/* End of Function */
 	
@@ -398,7 +397,7 @@ Ext.onReady(function(){
 		format: 'Y-m'
 	});
 	combo_dapp_tgl_medis.on('select', function(){
-		tindakan_DataStore.load({params:{tgl_app:combo_dapp_tgl_medis.getValue().format('Y-m')}});
+		ptindakan_terapis_DataStore.load({params:{tgl_app:combo_dapp_tgl_medis.getValue().format('Y-m')}});
 		//combo_dapp_tgl_medis.setValue(combo_dapp_tgl_medis.getValue().format('Y-m-d'));
 	});
 	
@@ -422,7 +421,7 @@ Ext.onReady(function(){
     
 	
   	/* Function for Identify of Window Column Model */
-	penyesuaian_ColumnModel = new Ext.grid.ColumnModel(
+	ptindakan_terapis_ColumnModel = new Ext.grid.ColumnModel(
 		[{
 			header: '#',
 			readOnly: true,
@@ -445,30 +444,32 @@ Ext.onReady(function(){
 				format: 'Y-m'
 			})
 		},
+		
+		{
+			align : 'Right',
+			header: '<div align="center">' + 'Terapis Count(saat ini)' + '</div>',
+			dataIndex: 'terapis_count',
+			width: 60,	//150,
+			sortable: true,
+			
+		},
+		
 		{
 			header: '<div align="center">' + 'Therapist' + '</div>',
 			dataIndex: 'karyawan_username',
-			width: 60,	//150,
+			width: 100,	//150,
 			sortable: true,
 		
-		},		
+		},
 		{
 			align : 'Right',
-			header: '<div align="center">' + 'Tind. Seblmnya' + '</div>',
-			dataIndex: 'terapis_count',
-			width: 50,	//150,
-			sortable: true,
-			
-		},	
-		{
-			align : 'Right',
-			header: '<div align="center">' + 'Penyesuaian' + '</div>',
+			header: '<div align="center">' + 'Selisih' + '</div>',
 			dataIndex: 'adj_count',
-			width: 40,	//150,
+			width: 60,	//150,
 			sortable: true,
 			editor: new Ext.form.NumberField({
 				allowDecimals: false,
-				allowNegative: false,
+				allowNegative: true,
 				blankText: '0',
 				maxLength: 11,
 				maskRe: /([0-9]+)$/
@@ -477,25 +478,25 @@ Ext.onReady(function(){
 		
 		{
 			align : 'Right',
-			header: '<div align="center">' + 'Tind. Saat Ini' + '</div>',
+			header: '<div align="center">' + 'New Count' + '</div>',
 			dataIndex: 'new_count',
-			width: 50,	//150,
+			width: 60,	//150,
 			sortable: true,
 			
 		}
 		]
 	);
-//	penyesuaian_ColumnModel.defaultSortable= true;
+	ptindakan_terapis_ColumnModel.defaultSortable= true;
 	/* End of Function */
     
 	/* Declare DataStore and  show datagrid list */
-	usersListEditorGrid =  new Ext.grid.EditorGridPanel({
-		id: 'usersListEditorGrid',
+	ptindakan_terapisListEditorGrid =  new Ext.grid.EditorGridPanel({
+		id: 'ptindakan_terapisListEditorGrid',
 		el: 'fp_users',
 		title: 'Daftar Penyesuaian Tindakan Non Medis',
 		autoHeight: true,
-		store: tindakan_DataStore, // DataStore
-		cm: penyesuaian_ColumnModel, // Nama-nama Columns
+		store: ptindakan_terapis_DataStore, // DataStore
+		cm: ptindakan_terapis_ColumnModel, // Nama-nama Columns
 		enableColLock:false,
 		frame: true,
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
@@ -504,7 +505,7 @@ Ext.onReady(function(){
 	  	width: 450,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
-			store: tindakan_DataStore,
+			store: ptindakan_terapis_DataStore,
 			displayInfo: true
 		}),
 		/* Add Control on ToolBar */
@@ -517,11 +518,11 @@ Ext.onReady(function(){
 		}
 		]
 	});
-	usersListEditorGrid.render();
+	ptindakan_terapisListEditorGrid.render();
 	/* End of DataStore */
      
 	/* Create Context Menu */
-	users_ContextMenu = new Ext.menu.Menu({
+	ptindakan_terapis_ContextMenu = new Ext.menu.Menu({
 		id: 'users_ListEditorGridContextMenu',
 		items: [
 		{ 
@@ -544,43 +545,43 @@ Ext.onReady(function(){
 	function onusers_ListEditGridContextMenu(grid, rowIndex, e) {
 		e.stopEvent();
 		var coords = e.getXY();
-		users_ContextMenu.rowRecord = grid.store.getAt(rowIndex);
+		ptindakan_terapis_ContextMenu.rowRecord = grid.store.getAt(rowIndex);
 		grid.selModel.selectRow(rowIndex);
-		users_SelectedRow=rowIndex;
-		users_ContextMenu.showAt([coords[0], coords[1]]);
+		ptindakan_terapis_SelectedRow=rowIndex;
+		ptindakan_terapis_ContextMenu.showAt([coords[0], coords[1]]);
   	}
   	/* End of Function */
 	
 	/* function for editing row via context menu */
 	function users_editContextMenu(){
-      usersListEditorGrid.startEditing(users_SelectedRow,1);
+      ptindakan_terapisListEditorGrid.startEditing(ptindakan_terapis_SelectedRow,1);
   	}
 	/* End of Function */
   	
-	usersListEditorGrid.addListener('rowcontextmenu', onusers_ListEditGridContextMenu);
-	tindakan_DataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
-	usersListEditorGrid.on('afteredit', penyesuaian_update); // inLine Editing Record
+	ptindakan_terapisListEditorGrid.addListener('rowcontextmenu', onusers_ListEditGridContextMenu);
+	ptindakan_terapis_DataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
+	ptindakan_terapisListEditorGrid.on('afteredit', ptindakan_terapis_update); // inLine Editing Record
 	
 	/* Identify  user_name Field */
-	user_nameField= new Ext.form.TextField({
+	/*user_nameField= new Ext.form.TextField({
 		id: 'user_nameField',
 		fieldLabel: 'User Name',
 		maxLength: 50,
 		allowBlank: false,
 		anchor: '95%'
-	});
+	});*/
 
 	/* Identify  user_passwd Field */
-	user_passwdField= new Ext.form.TextField({
+	/*user_passwdField= new Ext.form.TextField({
 		id: 'user_passwdField',
 		fieldLabel: 'Password',
 		maxLength: 50,
 		anchor: '95%',
 		inputType: 'password'
-	});
+	});*/
 
 		/* Identify  user_karyawan Field */
-	user_karyawanField= new Ext.form.ComboBox({
+	/*user_karyawanField= new Ext.form.ComboBox({
 		id: 'user_karyawanField',
 		fieldLabel: 'Nama Karyawan',
 		store: cbo_user_karyawanDataStore,
@@ -598,17 +599,17 @@ Ext.onReady(function(){
 		lazyRender:true,
 		listClass: 'x-combo-list-small',
 		anchor: '95%'
-	});
+	});*/
 	/* Identify  user_log Field */
-	user_logField= new Ext.form.DateField({
+	/*user_logField= new Ext.form.DateField({
 		id: 'user_logField',
 		fieldLabel: 'Last Log',
 		format : 'Y-m-d',
 		readOnly: true,
 		hideTrigger: true
-	});
+	});*/
 	/* Identify  user_groups Field */
-	user_groupsField= new Ext.form.ComboBox({
+	/*user_groupsField= new Ext.form.ComboBox({
 		id: 'user_groupsField',
 		fieldLabel: 'Group',
 		typeAhead: true,
@@ -621,9 +622,9 @@ Ext.onReady(function(){
 		lazyRender:true,
 		width: 120,
 		listClass: 'x-combo-list-small'
-	});
+	});*/
 	/* Identify  user_aktif Field */
-	user_aktifField= new Ext.form.ComboBox({
+	/*user_aktifField= new Ext.form.ComboBox({
 		id: 'user_aktifField',
 		fieldLabel: 'Status',
 		store:new Ext.data.SimpleStore({
@@ -637,10 +638,10 @@ Ext.onReady(function(){
 		allowBlank: false,
 		width: 80,
 		triggerAction: 'all'	
-	});
+	});*/
   	
 	/* Function for retrieve create Window Panel*/ 
-	users_createForm = new Ext.FormPanel({
+	ptindakan_terapis_createForm = new Ext.FormPanel({
 		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
@@ -652,20 +653,19 @@ Ext.onReady(function(){
 			{
 				columnWidth:1,
 				layout: 'form',
-				border:false,
-				items: [user_nameField, user_passwdField, user_karyawanField, user_groupsField, user_aktifField] 
+				border:false
 			}
 			]
 		}]
 		,
 		buttons: [{
-				text: 'Save and Close',
-				handler: users_create
+				text: 'Save and Close'
+				//handler: users_create
 			}
 			,{
 				text: 'Cancel',
 				handler: function(){
-					users_createWindow.hide();
+					ptindakan_terapis_createWindow.hide();
 				}
 			}
 		]
@@ -673,8 +673,8 @@ Ext.onReady(function(){
 	/* End  of Function*/
 	
 	/* Function for retrieve create Window Form */
-	users_createWindow= new Ext.Window({
-		id: 'users_createWindow',
+	ptindakan_terapis_createWindow= new Ext.Window({
+		id: 'ptindakan_terapis_createWindow',
 		title: post2db+'Users',
 		closable:true,
 		closeAction: 'hide',
@@ -686,7 +686,7 @@ Ext.onReady(function(){
 		layout: 'fit',
 		modal: true,
 		renderTo: 'elwindow_users_create',
-		items: users_createForm
+		items: ptindakan_terapis_createForm
 	});
 	/* End Window */
 	
@@ -702,15 +702,15 @@ Ext.onReady(function(){
 		var user_groups_search=null;
 		var user_aktif_search=null;
 
-		if(user_idSearchField.getValue()!==null){user_id_search=user_idSearchField.getValue();}
-		if(user_nameSearchField.getValue()!==null){user_name_search=user_nameSearchField.getValue();}
-		if(user_passwdSearchField.getValue()!==null){user_passwd_search=user_passwdSearchField.getValue();}
-		if(user_karyawanSearchField.getValue()!==null){user_karyawan_search=user_karyawanSearchField.getValue();}
-		if(user_logSearchField.getValue()!==""){user_log_search_date=user_logSearchField.getValue().format('Y-m-d');}
-		if(user_groupsSearchField.getValue()!==null){user_groups_search=user_groupsSearchField.getValue();}
-		if(user_aktifSearchField.getValue()!==null){user_aktif_search=user_aktifSearchField.getValue();}
+		//if(user_idSearchField.getValue()!==null){user_id_search=user_idSearchField.getValue();}
+		//if(user_nameSearchField.getValue()!==null){user_name_search=user_nameSearchField.getValue();}
+		//if(user_passwdSearchField.getValue()!==null){user_passwd_search=user_passwdSearchField.getValue();}
+		//if(user_karyawanSearchField.getValue()!==null){user_karyawan_search=user_karyawanSearchField.getValue();}
+		//if(user_logSearchField.getValue()!==""){user_log_search_date=user_logSearchField.getValue().format('Y-m-d');}
+		//if(user_groupsSearchField.getValue()!==null){user_groups_search=user_groupsSearchField.getValue();}
+		//if(user_aktifSearchField.getValue()!==null){user_aktif_search=user_aktifSearchField.getValue();}
 		// change the store parameters
-		tindakan_DataStore.baseParams = {
+		ptindakan_terapis_DataStore.baseParams = {
 			task: 'SEARCH',
 			//variable here
 			user_id	:	user_id_search, 
@@ -722,22 +722,22 @@ Ext.onReady(function(){
 			user_aktif	:	user_aktif_search 
 };
 		// Cause the datastore to do another query : 
-		tindakan_DataStore.reload({params: {start: 0, limit: pageS}});
+		ptindakan_terapis_DataStore.reload({params: {start: 0, limit: pageS}});
 	}
 		
 	/* Function for reset search result */
 	function users_reset_search(){
 		// reset the store parameters
-		tindakan_DataStore.baseParams = { task: 'LIST' };
+		ptindakan_terapis_DataStore.baseParams = { task: 'LIST' };
 		// Cause the datastore to do another query : 
-		tindakan_DataStore.reload({params: {start: 0, limit: pageS}});
-		users_searchWindow.close();
+		ptindakan_terapis_DataStore.reload({params: {start: 0, limit: pageS}});
+		ptindakan_terapis_searchWindow.close();
 	};
 	/* End of Fuction */
 	
 	/* Field for search */
 	/* Identify  user_id Search Field */
-	user_idSearchField= new Ext.form.NumberField({
+	/*user_idSearchField= new Ext.form.NumberField({
 		id: 'user_idSearchField',
 		fieldLabel: 'Id',
 		allowNegatife : false,
@@ -746,18 +746,18 @@ Ext.onReady(function(){
 		anchor: '95%',
 		maskRe: /([0-9]+)$/
 	
-	});
+	});*/
 	/* Identify  user_name Search Field */
-	user_nameSearchField= new Ext.form.TextField({
+	/*user_nameSearchField= new Ext.form.TextField({
 		id: 'user_nameSearchField',
 		fieldLabel: 'User Name',
 		maxLength: 50,
 		anchor: '95%'
 	
-	});
+	});*/
 	
 	/* Identify  user_karyawan Search Field */
-	user_karyawanSearchField= new Ext.form.ComboBox({
+	/*user_karyawanSearchField= new Ext.form.ComboBox({
 		id: 'user_karyawanSearchField',
 		fieldLabel: 'Nama Karyawan',
 		store: cbo_user_search_karyawanDataStore,
@@ -775,16 +775,16 @@ Ext.onReady(function(){
 		lazyRender:true,
 		listClass: 'x-combo-list-small',
 		anchor: '95%'
-	});
+	});*/
 	/* Identify  user_log Search Field */
-	user_logSearchField= new Ext.form.DateField({
+	/*user_logSearchField= new Ext.form.DateField({
 		id: 'user_logSearchField',
 		fieldLabel: 'Last Log',
 		format : 'Y-m-d'
 	
-	});
+	});*/
 	/* Identify  user_groups Search Field */
-	user_groupsSearchField= new Ext.form.NumberField({
+	/*user_groupsSearchField= new Ext.form.NumberField({
 		id: 'user_groupsSearchField',
 		fieldLabel: 'Group',
 		allowNegatife : false,
@@ -793,9 +793,9 @@ Ext.onReady(function(){
 		anchor: '95%',
 		maskRe: /([0-9]+)$/
 	
-	});
+	});*/
 	/* Identify  user_aktif Search Field */
-	user_aktifSearchField= new Ext.form.ComboBox({
+	/*user_aktifSearchField= new Ext.form.ComboBox({
 		id: 'user_aktifSearchField',
 		fieldLabel: 'Status',
 		store:new Ext.data.SimpleStore({
@@ -809,10 +809,10 @@ Ext.onReady(function(){
 		width: 80,
 		triggerAction: 'all'	 
 	
-	});
+	});*/
     
 	/* Function for retrieve search Form Panel */
-	users_searchForm = new Ext.FormPanel({
+	ptindakan_terapis_searchForm = new Ext.FormPanel({
 		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
@@ -824,8 +824,7 @@ Ext.onReady(function(){
 			{
 				columnWidth:1,
 				layout: 'form',
-				border:false,
-				items: [user_nameSearchField, user_karyawanSearchField, user_groupsSearchField, user_aktifSearchField] 
+				border:false
 			}
 			]
 		}]
@@ -836,7 +835,7 @@ Ext.onReady(function(){
 			},{
 				text: 'Close',
 				handler: function(){
-					users_searchWindow.hide();
+					ptindakan_terapis_searchWindow.hide();
 				}
 			}
 		]
@@ -844,7 +843,7 @@ Ext.onReady(function(){
     /* End of Function */ 
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
-	users_searchWindow = new Ext.Window({
+	ptindakan_terapis_searchWindow = new Ext.Window({
 		title: 'users Search',
 		closable:true,
 		closeAction: 'hide',
@@ -856,16 +855,16 @@ Ext.onReady(function(){
 		y: 0,
 		modal: true,
 		renderTo: 'elwindow_users_search',
-		items: users_searchForm
+		items: ptindakan_terapis_searchForm
 	});
     /* End of Function */ 
 	 
   	/* Function for Displaying  Search Window Form */
 	function display_form_search_window(){
-		if(!users_searchWindow.isVisible()){
-			users_searchWindow.show();
+		if(!ptindakan_terapis_searchWindow.isVisible()){
+			ptindakan_terapis_searchWindow.show();
 		} else {
-			users_searchWindow.toFront();
+			ptindakan_terapis_searchWindow.toFront();
 		}
 	}
   	/* End Function */
@@ -880,12 +879,12 @@ Ext.onReady(function(){
 		var user_aktif_print=null;
 		var win;              
 		// check if we do have some search data...
-		if(tindakan_DataStore.baseParams.query!==null){searchquery = tindakan_DataStore.baseParams.query;}
-		if(tindakan_DataStore.baseParams.user_name!==null){user_name_print = tindakan_DataStore.baseParams.user_name;}
-		if(tindakan_DataStore.baseParams.user_karyawan!==null){user_karyawan_print = tindakan_DataStore.baseParams.user_karyawan;}
-		if(tindakan_DataStore.baseParams.user_log!==""){user_log_print_date = tindakan_DataStore.baseParams.user_log;}
-		if(tindakan_DataStore.baseParams.user_groups!==null){user_groups_print = tindakan_DataStore.baseParams.user_groups;}
-		if(tindakan_DataStore.baseParams.user_aktif!==null){user_aktif_print = tindakan_DataStore.baseParams.user_aktif;}
+		if(ptindakan_terapis_DataStore.baseParams.query!==null){searchquery = ptindakan_terapis_DataStore.baseParams.query;}
+		if(ptindakan_terapis_DataStore.baseParams.user_name!==null){user_name_print = ptindakan_terapis_DataStore.baseParams.user_name;}
+		if(ptindakan_terapis_DataStore.baseParams.user_karyawan!==null){user_karyawan_print = ptindakan_terapis_DataStore.baseParams.user_karyawan;}
+		if(ptindakan_terapis_DataStore.baseParams.user_log!==""){user_log_print_date = ptindakan_terapis_DataStore.baseParams.user_log;}
+		if(ptindakan_terapis_DataStore.baseParams.user_groups!==null){user_groups_print = ptindakan_terapis_DataStore.baseParams.user_groups;}
+		if(ptindakan_terapis_DataStore.baseParams.user_aktif!==null){user_aktif_print = ptindakan_terapis_DataStore.baseParams.user_aktif;}
 
 		Ext.Ajax.request({   
 		waitMsg: 'Please Wait...',
@@ -899,7 +898,7 @@ Ext.onReady(function(){
 		  	user_log : user_log_print_date, 
 			user_groups : user_groups_print,
 			user_aktif : user_aktif_print,
-		  	currentlisting: tindakan_DataStore.baseParams.task // this tells us if we are searching or not
+		  	currentlisting: ptindakan_terapis_DataStore.baseParams.task // this tells us if we are searching or not
 		}, 
 		success: function(response){              
 		  	var result=eval(response.responseText);
@@ -943,12 +942,12 @@ Ext.onReady(function(){
 		var user_aktif_2excel=null;
 		var win;              
 		// check if we do have some search data...
-		if(tindakan_DataStore.baseParams.query!==null){searchquery = tindakan_DataStore.baseParams.query;}
-		if(tindakan_DataStore.baseParams.user_name!==null){user_name_2excel = tindakan_DataStore.baseParams.user_name;}
-		if(tindakan_DataStore.baseParams.user_karyawan!==null){user_karyawan_2excel = tindakan_DataStore.baseParams.user_karyawan;}
-		if(tindakan_DataStore.baseParams.user_log!==""){user_log_2excel_date = tindakan_DataStore.baseParams.user_log;}
-		if(tindakan_DataStore.baseParams.user_groups!==null){user_groups_2excel = tindakan_DataStore.baseParams.user_groups;}
-		if(tindakan_DataStore.baseParams.user_aktif!==null){user_aktif_2excel = tindakan_DataStore.baseParams.user_aktif;}
+		if(ptindakan_terapis_DataStore.baseParams.query!==null){searchquery = ptindakan_terapis_DataStore.baseParams.query;}
+		if(ptindakan_terapis_DataStore.baseParams.user_name!==null){user_name_2excel = ptindakan_terapis_DataStore.baseParams.user_name;}
+		if(ptindakan_terapis_DataStore.baseParams.user_karyawan!==null){user_karyawan_2excel = ptindakan_terapis_DataStore.baseParams.user_karyawan;}
+		if(ptindakan_terapis_DataStore.baseParams.user_log!==""){user_log_2excel_date = ptindakan_terapis_DataStore.baseParams.user_log;}
+		if(ptindakan_terapis_DataStore.baseParams.user_groups!==null){user_groups_2excel = ptindakan_terapis_DataStore.baseParams.user_groups;}
+		if(ptindakan_terapis_DataStore.baseParams.user_aktif!==null){user_aktif_2excel = ptindakan_terapis_DataStore.baseParams.user_aktif;}
 
 		Ext.Ajax.request({   
 		waitMsg: 'Please Wait...',
@@ -962,7 +961,7 @@ Ext.onReady(function(){
 		  	user_log : user_log_2excel_date, 
 			user_groups : user_groups_2excel,
 			user_aktif : user_aktif_2excel,
-		  	currentlisting: tindakan_DataStore.baseParams.task // this tells us if we are searching or not
+		  	currentlisting: ptindakan_terapis_DataStore.baseParams.task // this tells us if we are searching or not
 		},
 		success: function(response){              
 		  	var result=eval(response.responseText);
