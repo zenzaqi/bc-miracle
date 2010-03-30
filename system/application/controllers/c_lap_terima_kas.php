@@ -42,8 +42,10 @@ class C_lap_terima_kas extends Controller {
 		}else if($periode=="tanggal"){
 			$data["periode"]="Periode ".$tgl_awal." s/d ".$tgl_akhir;
 		}
-			
+		
+		
 		$data["data_print"]=$this->m_public_function->get_laporan_terima_kas($tgl_awal,$tgl_akhir,$periode,$opsi);
+		$data["sql"]=$this->db->last_query();
 		$print_view=$this->load->view("main/p_lap_terima_kas.php",$data,TRUE);
 		if(!file_exists("print")){
 			mkdir("print");
