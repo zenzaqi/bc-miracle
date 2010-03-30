@@ -150,7 +150,7 @@ Ext.onReady(function(){
 		var dtrawat_dokter_update=null;
 		var dtrawat_dokter_id_update=null;
 		var dtrawat_ambil_paket_update="";
-
+		
 		trawat_id_update_pk = oGrid_event.record.data.trawat_id;
 		if(oGrid_event.record.data.trawat_cust!== null){trawat_cust_update = oGrid_event.record.data.trawat_cust;}
 		if(oGrid_event.record.data.trawat_keterangan!== null){trawat_keterangan_update = oGrid_event.record.data.trawat_keterangan;}

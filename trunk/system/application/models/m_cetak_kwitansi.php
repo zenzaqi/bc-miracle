@@ -112,7 +112,7 @@ class M_cetak_kwitansi extends Model{
 		
 		//function for get list record
 		function cetak_kwitansi_list($filter,$start,$end){
-			$query = "SELECT kwitansi_id, kwitansi_no, kwitansi_cust, cust_nama, cust_no, kwitansi_cara, kwitansi_nilai, kwitansi_keterangan, kwitansi_status, kwitansi_creator, date_format(kwitansi_date_create,'%Y-%m-%d') AS kwitansi_date_create, kwitansi_update, kwitansi_date_update, kwitansi_revised, sum(jkwitansi_nilai) AS total_terpakai, IF((kwitansi_nilai-(IF(sum(jkwitansi_nilai),sum(jkwitansi_nilai),0)))=0, kwitansi_nilai, (kwitansi_nilai-(IF(sum(jkwitansi_nilai),sum(jkwitansi_nilai),0)))) AS total_sisa FROM cetak_kwitansi LEFT JOIN jual_kwitansi ON(jkwitansi_master=kwitansi_id) LEFT JOIN customer ON(kwitansi_cust=cust_id)";
+			$query = "SELECT kwitansi_id, kwitansi_no, kwitansi_cust, cust_nama, cust_no, kwitansi_cara, kwitansi_nilai, kwitansi_bayar, kwitansi_keterangan, kwitansi_status, kwitansi_creator, date_format(kwitansi_date_create,'%Y-%m-%d') AS kwitansi_date_create, kwitansi_update, kwitansi_date_update, kwitansi_revised, sum(jkwitansi_nilai) AS total_terpakai, IF((kwitansi_nilai-(IF(sum(jkwitansi_nilai),sum(jkwitansi_nilai),0)))=0, kwitansi_nilai, (kwitansi_nilai-(IF(sum(jkwitansi_nilai),sum(jkwitansi_nilai),0)))) AS total_sisa FROM cetak_kwitansi LEFT JOIN jual_kwitansi ON(jkwitansi_master=kwitansi_id) LEFT JOIN customer ON(kwitansi_cust=cust_id)";
 			
 			// For simple search
 			if ($filter<>""){
@@ -138,7 +138,8 @@ class M_cetak_kwitansi extends Model{
 		}
 		
 		//function for update record
-		function cetak_kwitansi_update($kwitansi_id ,$kwitansi_no ,$kwitansi_cust ,$kwitansi_ref ,$kwitansi_nilai ,$kwitansi_keterangan ,$kwitansi_status ){
+		function cetak_kwitansi_update($kwitansi_id ,$kwitansi_no ,$kwitansi_cust ,$kwitansi_ref ,$kwitansi_nilai ,$kwitansi_keterangan ,$kwitansi_status ,$kwitansi_update ){
+			$dt_now = date('Y-m-d H:i:s');
 			$data = array(
 				"kwitansi_id"=>$kwitansi_id, 
 				"kwitansi_no"=>$kwitansi_no, 
@@ -146,7 +147,9 @@ class M_cetak_kwitansi extends Model{
 				"kwitansi_ref"=>$kwitansi_ref, 
 				"kwitansi_nilai"=>$kwitansi_nilai, 
 				"kwitansi_keterangan"=>$kwitansi_keterangan, 
-				"kwitansi_status"=>$kwitansi_status 
+				"kwitansi_status"=>$kwitansi_status,
+				"kwitansi_update"=>$kwitansi_update,
+				"kwitansi_date_update"=>$dt_now
 			);
 			$sql="SELECT cust_id FROM customer WHERE cust_id='$kwitansi_cust'";
 			$rs=$this->db->query($sql);
@@ -154,12 +157,16 @@ class M_cetak_kwitansi extends Model{
 				$data["kwitansi_cust"]=$kwitansi_cust;
 			$this->db->where('kwitansi_id', $kwitansi_id);
 			$this->db->update('cetak_kwitansi', $data);
+			if($this->db->affected_rows()){
+				$sql="UPDATE cetak_kwitansi SET kwitansi_revised=(kwitansi_revised+1) WHERE kwitansi_id='$kwitansi_id'";
+				$this->db->query($sql);
+			}
 			
 			return '1';
 		}
 		
 		//function for create new record
-		function cetak_kwitansi_create($kwitansi_no ,$kwitansi_cust ,$kwitansi_ref ,$kwitansi_nilai ,$kwitansi_keterangan ,$kwitansi_status ,$kwitansi_cara ,$kwitansi_tunai_nilai ,$kwitansi_card_nama ,$kwitansi_card_edc ,$kwitansi_card_no ,$kwitansi_card_nilai ,$kwitansi_cek_nama ,$kwitansi_cek_no ,$kwitansi_cek_valid ,$kwitansi_cek_bank ,$kwitansi_cek_nilai ,$kwitansi_transfer_bank ,$kwitansi_transfer_nama ,$kwitansi_transfer_nilai ){
+		function cetak_kwitansi_create($kwitansi_no ,$kwitansi_cust ,$kwitansi_ref ,$kwitansi_nilai ,$kwitansi_keterangan ,$kwitansi_status ,$kwitansi_cara ,$kwitansi_bayar ,$kwitansi_tunai_nilai ,$kwitansi_card_nama ,$kwitansi_card_edc ,$kwitansi_card_no ,$kwitansi_card_nilai ,$kwitansi_cek_nama ,$kwitansi_cek_no ,$kwitansi_cek_valid ,$kwitansi_cek_bank ,$kwitansi_cek_nilai ,$kwitansi_transfer_bank ,$kwitansi_transfer_nama ,$kwitansi_transfer_nilai ,$kwitansi_creator ){
 			if($kwitansi_status=="")
 				$kwitansi_status="Aktif";
 			
@@ -170,10 +177,12 @@ class M_cetak_kwitansi extends Model{
 				"kwitansi_no"=>$kwitansi_no, 
 				"kwitansi_cust"=>$kwitansi_cust, 
 				"kwitansi_ref"=>$kwitansi_ref, 
-				"kwitansi_nilai"=>$kwitansi_nilai, 
+				"kwitansi_nilai"=>$kwitansi_nilai,
+				"kwitansi_bayar"=>$kwitansi_bayar,
 				"kwitansi_keterangan"=>$kwitansi_keterangan, 
 				"kwitansi_status"=>$kwitansi_status,
-				"kwitansi_cara"=>$kwitansi_cara
+				"kwitansi_cara"=>$kwitansi_cara,
+				"kwitansi_creator"=>$kwitansi_creator
 			);
 			$this->db->insert('cetak_kwitansi', $data); 
 			if($this->db->affected_rows()){
