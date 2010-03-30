@@ -35,127 +35,142 @@
     </thead>
 	<tbody>
 		<?php 
+			//produk
+			$produk_tunai=0;
+			$produk_kwitansi=0;
+			$produk_kredit=0;
+			$produk_cek=0;
+			$produk_transfer=0;
+			$produk_voucher=0;
+			$produk_total=0;
+			//rawat
+			$rawat_tunai=0;
+			$rawat_kwitansi=0;
+			$rawat_kredit=0;
+			$rawat_cek=0;
+			$rawat_transfer=0;
+			$rawat_voucher=0;
+			$rawat_total=0;
+			//paket
+			$paket_tunai=0;
+			$paket_kwitansi=0;
+			$paket_kredit=0;
+			$paket_cek=0;
+			$paket_transfer=0;
+			$paket_voucher=0;
+			$paket_total=0;
+			//kwintansi
+			$kwitansi_tunai=0;
+			$kwitansi_kwitansi=0;
+			$kwitansi_kredit=0;
+			$kwitansi_cek=0;
+			$kwitansi_transfer=0;
+			$kwitansi_voucher=0;
+			$kwitansi_total=0;
+			//total
 			$total_tunai=0;
 			$total_kwitansi=0;
-			$total_card=0;
+			$total_kredit=0;
 			$total_cek=0;
 			$total_transfer=0;
 			$total_voucher=0;
-			$total_nilai=0;
+			$total_total=0;
 			
-			$i=0; foreach($data_print as $print) { $i++; 
-			$total_tunai+=$print->nilai_tunai;
-			$total_kwitansi+=$print->nilai_kwitansi;
-			$total_card+=$print->nilai_card;
-			$total_cek+=$print->nilai_cek;
-			$total_transfer+=$print->nilai_transfer;
-			$total_voucher+=$print->nilai_voucher;
-			$total_nilai+=($total_tunai+$total_kwitansi+$total_card+$total_cek+$total_transfer+$total_voucher)
+			$i=0; 
+			foreach($data_print as $print) { 
+				$i++;
+				if($print->jenis_transaksi=="jual_produk")
+				{
+					$produk_tunai=$print->nilai_tunai;
+					$produk_kwintansi=$print->nilai_kwitansi;
+					$produk_kredit=$print->nilai_card;
+					$produk_cek=$print->nilai_cek;
+					$produk_transfer=$print->nilai_transfer;
+					$produk_voucher=$print->nilai_voucher;
+					$produk_total=$produk_tunai+$produk_kwitansi+$produk_kredit+$produk_cek+$produk_transfer+$produk_voucher;
+				}elseif($print->jenis_transaksi=="jual_rawat")
+				{
+					$rawat_tunai=$print->nilai_tunai;
+					$rawat_kwintansi=$print->nilai_kwitansi;
+					$rawat_kredit=$print->nilai_card;
+					$rawat_cek=$print->nilai_cek;
+					$rawat_transfer=$print->nilai_transfer;
+					$rawat_voucher=$print->nilai_voucher;
+					$rawat_total=$rawat_tunai+$rawat_kwitansi+$rawat_kredit+$rawat_cek+$rawat_transfer+$rawat_voucher;
+				}elseif($print->jenis_transaksi=="jual_paket")
+				{
+					$paket_tunai=$print->nilai_tunai;
+					$paket_kwintansi=$print->nilai_kwitansi;
+					$paket_kredit=$print->nilai_card;
+					$paket_cek=$print->nilai_cek;
+					$paket_transfer=$print->nilai_transfer;
+					$paket_voucher=$print->nilai_voucher;
+					$paket_total=$paket_tunai+$paket_kwitansi+$paket_kredit+$paket_cek+$paket_transfer+$paket_voucher;
+				}elseif($print->jenis_transaksi=="jual_kwitansi")
+				{
+					$kwitansi_tunai=$print->nilai_tunai;
+					$kwitansi_kwintansi=$print->nilai_kwitansi;
+					$kwitansi_kredit=$print->nilai_card;
+					$kwitansi_cek=$print->nilai_cek;
+					$kwitansi_transfer=$print->nilai_transfer;
+					$kwitansi_voucher=$print->nilai_voucher;
+					$kwitansi_total=$kwitansi_tunai+$kwitansi_kwitansi+$kwitansi_kredit+$kwitansi_cek+$kwitansi_transfer+$kwitansi_voucher;	
+				}
+			}
+			
+			$total_tunai=$produk_tunai+$rawat_tunai+$paket_tunai+$kwitansi_tunai;
+			$total_kredit=$produk_kredit+$rawat_kredit+$paket_kredit+$kwitansi_kredit;
+			$total_kwitansi=$produk_kwitansi+$rawat_kwitansi+$paket_kwitansi+$kwitansi_kwitansi;
+			$total_cek=$produk_cek+$rawat_cek+$paket_cek+$kwitansi_cek;
+			$total_transfer=$produk_transfer+$rawat_transfer+$paket_transfer+$kwitansi_transfer;
+			$total_voucher=$produk_voucher+$rawat_voucher+$paket_voucher+$kwitansi_voucher;
+			$total_nilai=$produk_total+$rawat_total+$paket_total+$kwitansi_total;
+			
 		?>
-		<tr>
-            <td colspan="9"><? echo  $print->tanggal;?><td>
-        </tr>
-        <? if($print->jenis_transaksi=='jual_produk') { ?>
         <tr>
         	<td>1.</td>
             <td>Penjualan Produk</td>
-            <td  class="numeric"><?php echo number_format($print->nilai_tunai); ?></td>
-            <td  class="numeric"><?php echo number_format($print->nilai_kwitansi); ?></td>
-            <td  class="numeric"><?php echo number_format($print->nilai_card); ?></td>
-            <td  class="numeric"><?php echo number_format($print->nilai_cek); ?></td>
-            <td  class="numeric"><?php echo number_format($print->nilai_transfer); ?></td>
-            <td  class="numeric"><?php echo number_format($print->nilai_voucher); ?></td>
-            <td  class="numeric"><?php echo number_format($print->nilai_tunai+$print->nilai_card+$print->nilai_cek+$print->nilai_transfer+$print->nilai_voucher); ?></td>
+            <td  class="numeric"><?php echo number_format($produk_tunai); ?></td>
+            <td  class="numeric"><?php echo number_format($produk_kwitansi); ?></td>
+            <td  class="numeric"><?php echo number_format($produk_kredit); ?></td>
+            <td  class="numeric"><?php echo number_format($produk_cek); ?></td>
+            <td  class="numeric"><?php echo number_format($produk_transfer); ?></td>
+            <td  class="numeric"><?php echo number_format($produk_voucher); ?></td>
+            <td  class="numeric"><?php echo number_format($produk_total); ?></td>
        </tr>
-       <? }else{ ?>
-		<tr>
-        	<td>1.</td>
-            <td>Penjualan Produk</td>
-            <td  class="numeric"><?php echo number_format(0); ?></td>
-            <td  class="numeric"><?php echo number_format(0); ?></td>
-            <td  class="numeric"><?php echo number_format(0); ?></td>
-            <td  class="numeric"><?php echo number_format(0); ?></td>
-            <td  class="numeric"><?php echo number_format(0); ?></td>
-            <td  class="numeric"><?php echo number_format(0); ?></td>
-            <td  class="numeric"><?php echo number_format(0); ?></td>
-       </tr>
-	   <? } ?>    
-         <? if($print->jenis_transaksi=='jual_rawat') { ?>
         <tr>
         	<td>2.</td>
             <td>Penjualan Perawatan</td>
-            <td  class="numeric"><?php echo number_format($print->nilai_tunai); ?></td>
-            <td  class="numeric"><?php echo number_format($print->nilai_kwitansi); ?></td>
-            <td  class="numeric"><?php echo number_format($print->nilai_card); ?></td>
-            <td  class="numeric"><?php echo number_format($print->nilai_cek); ?></td>
-            <td  class="numeric"><?php echo number_format($print->nilai_transfer); ?></td>
-            <td  class="numeric"><?php echo number_format($print->nilai_voucher); ?></td>
-            <td  class="numeric"><?php echo number_format($print->nilai_tunai+$print->nilai_card+$print->nilai_cek+$print->nilai_transfer+$print->nilai_voucher); ?></td>
+            <td  class="numeric"><?php echo number_format($rawat_tunai); ?></td>
+            <td  class="numeric"><?php echo number_format($rawat_kwitansi); ?></td>
+            <td  class="numeric"><?php echo number_format($rawat_kredit); ?></td>
+            <td  class="numeric"><?php echo number_format($rawat_cek); ?></td>
+            <td  class="numeric"><?php echo number_format($rawat_transfer); ?></td>
+            <td  class="numeric"><?php echo number_format($rawat_voucher); ?></td>
+            <td  class="numeric"><?php echo number_format($rawat_total); ?></td>
        </tr>
-       <? }else{ ?>
-		<tr>
-        	<td>2.</td>
-            <td>Penjualan Perawatan</td>
-            <td  class="numeric"><?php echo number_format(0); ?></td>
-            <td  class="numeric"><?php echo number_format(0); ?></td>
-            <td  class="numeric"><?php echo number_format(0); ?></td>
-            <td  class="numeric"><?php echo number_format(0); ?></td>
-            <td  class="numeric"><?php echo number_format(0); ?></td>
-            <td  class="numeric"><?php echo number_format(0); ?></td>
-            <td  class="numeric"><?php echo number_format(0); ?></td>
-       </tr>
-	   <? } ?>  
-         <? if($print->jenis_transaksi=='jual_paket') { ?>
         <tr>
         	<td>3.</td>
             <td>Penjualan Paket</td>
-            <td  class="numeric"><?php echo number_format($print->nilai_tunai); ?></td>
-            <td  class="numeric"><?php echo number_format($print->nilai_kwitansi); ?></td>
-            <td  class="numeric"><?php echo number_format($print->nilai_card); ?></td>
-            <td  class="numeric"><?php echo number_format($print->nilai_cek); ?></td>
-            <td  class="numeric"><?php echo number_format($print->nilai_transfer); ?></td>
-            <td  class="numeric"><?php echo number_format($print->nilai_voucher); ?></td>
-            <td  class="numeric"><?php echo number_format($print->nilai_tunai+$print->nilai_card+$print->nilai_cek+$print->nilai_transfer+$print->nilai_voucher); ?></td>
+            <td  class="numeric"><?php echo number_format($paket_tunai); ?></td>
+            <td  class="numeric"><?php echo number_format($paket_kwitansi); ?></td>
+            <td  class="numeric"><?php echo number_format($paket_kredit); ?></td>
+            <td  class="numeric"><?php echo number_format($paket_cek); ?></td>
+            <td  class="numeric"><?php echo number_format($paket_transfer); ?></td>
+            <td  class="numeric"><?php echo number_format($paket_voucher); ?></td>
+            <td  class="numeric"><?php echo number_format($paket_total); ?></td>
        </tr>
-       <? }else{ ?>
-		<tr>
-        	<td>3.</td>
-            <td>Penjualan Paket</td>
-            <td  class="numeric"><?php echo number_format(0); ?></td>
-            <td  class="numeric"><?php echo number_format(0); ?></td>
-            <td  class="numeric"><?php echo number_format(0); ?></td>
-            <td  class="numeric"><?php echo number_format(0); ?></td>
-            <td  class="numeric"><?php echo number_format(0); ?></td>
-            <td  class="numeric"><?php echo number_format(0); ?></td>
-            <td  class="numeric"><?php echo number_format(0); ?></td>
-       </tr>
-	   <? } ?> 
-         <? if($print->jenis_transaksi=='kwitansi') { ?>
         <tr>
         	<td>4.</td>
             <td>Penjualan Kwitansi</td>
-            <td  class="numeric"><?php echo number_format($print->nilai_tunai); ?></td>
-            <td  class="numeric"><?php echo number_format($print->nilai_kwitansi); ?></td>
-            <td  class="numeric"><?php echo number_format($print->nilai_card); ?></td>
-            <td  class="numeric"><?php echo number_format($print->nilai_cek); ?></td>
-            <td  class="numeric"><?php echo number_format($print->nilai_transfer); ?></td>
-            <td  class="numeric"><?php echo number_format($print->nilai_voucher); ?></td>
-            <td  class="numeric"><?php echo number_format($print->nilai_tunai+$print->nilai_card+$print->nilai_cek+$print->nilai_transfer+$print->nilai_voucher); ?></td>
+            <td  class="numeric"><?php echo number_format($kwitansi_tunai); ?></td>
+            <td  class="numeric"><?php echo number_format($kwitansi_kwitansi); ?></td>
+            <td  class="numeric"><?php echo number_format($kwitansi_kredit); ?></td>
+            <td  class="numeric"><?php echo number_format($kwitansi_cek); ?></td>
+            <td  class="numeric"><?php echo number_format($kwitansi_transfer); ?></td>
+            <td  class="numeric"><?php echo number_format($kwitansi_voucher); ?></td>
+            <td  class="numeric"><?php echo number_format($kwitansi_total); ?></td>
        </tr>
-       <? }else{ ?>
-		<tr>
-        	<td>4.</td>
-            <td>Penjualan Kwitansi</td>
-            <td  class="numeric"><?php echo number_format(0); ?></td>
-            <td  class="numeric"><?php echo number_format(0); ?></td>
-            <td  class="numeric"><?php echo number_format(0); ?></td>
-            <td  class="numeric"><?php echo number_format(0); ?></td>
-            <td  class="numeric"><?php echo number_format(0); ?></td>
-            <td  class="numeric"><?php echo number_format(0); ?></td>
-            <td  class="numeric"><?php echo number_format(0); ?></td>
-       </tr>
-	   <? } ?>  
-		<?php } ?>
 	</tbody>
     	<tfoot>
     	<tr>
@@ -177,7 +192,7 @@
         </tr>
         <tr><td class="clear">&nbsp;</td>
         	<th scope='row'>Total Kartu Kredit (Rp)</th>
-            <td class="numeric"><?php echo number_format($total_card); ?></td>
+            <td class="numeric"><?php echo number_format($total_kredit); ?></td>
             <td colspan='6' class="clear">&nbsp;</td>
         </tr>
         <tr><td class="clear">&nbsp;</td>

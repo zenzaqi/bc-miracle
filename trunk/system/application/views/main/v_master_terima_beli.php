@@ -1473,7 +1473,6 @@ Ext.onReady(function(){
 				dtbonus_produk	: detail_terima_bonus_record.data.dtbonus_produk, 
 				dtbonus_satuan	: detail_terima_bonus_record.data.dtbonus_satuan, 
 				dtbonus_jumlah	: detail_terima_bonus_record.data.dtbonus_jumlah 
-				
 				},
 				timeout: 5000,
 				success: function(response){							
