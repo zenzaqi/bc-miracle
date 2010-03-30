@@ -101,14 +101,18 @@ class M_karyawan extends Model{
 		
 		//function for get list record
 		function karyawan_list($filter,$start,$end){
-			$query = "SELECT * FROM karyawan,departemen,cabang,jabatan,golongan where karyawan_departemen=departemen_id and karyawan_cabang=cabang_id and karyawan_jabatan=jabatan_id";
-			
+			//$query = "SELECT * FROM karyawan,departemen,cabang,jabatan,golongan where karyawan_departemen=departemen_id and karyawan_cabang=cabang_id and karyawan_jabatan=jabatan_id and karyawan_idgolongan=id_karyawan_golongan";
+			$query = "SELECT karyawan.*, departemen.*, cabang.*, golongan.* FROM karyawan
+left join departemen on (departemen.departemen_id=karyawan.karyawan_departemen)
+left join cabang on (cabang.cabang_id=karyawan.karyawan_cabang)
+left join jabatan on (jabatan.jabatan_id=karyawan.karyawan_jabatan)
+left join golongan on (golongan.id_golongan=karyawan.karyawan_idgolongan)";
 			// For simple search
 			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 				$query .= " (karyawan_no = '".addslashes($filter)."' OR karyawan_username LIKE '%".addslashes($filter)."%' OR karyawan_nama LIKE '%".addslashes($filter)."%' OR jabatan_nama LIKE '%".addslashes($filter)."%' OR departemen_nama LIKE '%".addslashes($filter)."%' )";
 			}
-			
+	
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
 			$limit = $query." LIMIT ".$start.",".$end;		
