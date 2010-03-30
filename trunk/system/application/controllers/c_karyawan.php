@@ -168,9 +168,9 @@ class C_karyawan extends Controller {
 		$karyawan_golongantxt=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_golongantxt);
 		$karyawan_golongantxt=str_replace("'", '"',$karyawan_golongantxt);
 		if($karyawan_golongantxt<>"")
-			$karyawan_golongan=$karyawan_golongantxt;
+			$karyawan_idgolongan=$karyawan_golongantxt;
 		else 
-			$karyawan_golongan=trim(@$_POST["karyawan_golongan"]);
+			$karyawan_idgolongan=trim(@$_POST["karyawan_idgolongan"]);
 		$karyawan_tglmasuk=trim(@$_POST["karyawan_tglmasuk"]);
 		$karyawan_atasan=trim(@$_POST["karyawan_atasan"]);
 		$karyawan_aktif=trim(@$_POST["karyawan_aktif"]);
@@ -188,7 +188,7 @@ class C_karyawan extends Controller {
 		$karyawan_update=str_replace("'", '"',$karyawan_update);
 		$karyawan_date_update=trim(@$_POST["karyawan_date_update"]);
 		$karyawan_revised=trim(@$_POST["karyawan_revised"]);
-		$result = $this->m_karyawan->karyawan_update($karyawan_id ,$karyawan_no ,$karyawan_npwp ,$karyawan_username ,$karyawan_nama ,$karyawan_kelamin ,$karyawan_tgllahir ,$karyawan_alamat ,$karyawan_kota ,$karyawan_kodepos ,$karyawan_email ,$karyawan_emiracle ,$karyawan_keterangan ,$karyawan_notelp ,$karyawan_notelp2 ,$karyawan_notelp3, $karyawan_notelp4 ,$karyawan_cabang ,$karyawan_jabatan ,$karyawan_departemen ,$karyawan_golongan ,$karyawan_tglmasuk ,$karyawan_atasan ,$karyawan_aktif ,$karyawan_creator ,$karyawan_date_create ,$karyawan_update ,$karyawan_date_update ,$karyawan_revised );
+		$result = $this->m_karyawan->karyawan_update($karyawan_id ,$karyawan_no ,$karyawan_npwp ,$karyawan_username ,$karyawan_nama ,$karyawan_kelamin ,$karyawan_tgllahir ,$karyawan_alamat ,$karyawan_kota ,$karyawan_kodepos ,$karyawan_email ,$karyawan_emiracle ,$karyawan_keterangan ,$karyawan_notelp ,$karyawan_notelp2 ,$karyawan_notelp3, $karyawan_notelp4 ,$karyawan_cabang ,$karyawan_jabatan ,$karyawan_departemen ,$karyawan_idgolongan ,$karyawan_tglmasuk ,$karyawan_atasan ,$karyawan_aktif ,$karyawan_creator ,$karyawan_date_create ,$karyawan_update ,$karyawan_date_update ,$karyawan_revised );
 		echo $result;
 	}
 	
@@ -250,9 +250,9 @@ class C_karyawan extends Controller {
 		$karyawan_golongantxt=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_golongantxt);
 		$karyawan_golongantxt=str_replace("'", '"',$karyawan_golongantxt);
 		if($karyawan_golongantxt<>"")
-			$karyawan_golongan=$karyawan_golongantxt;
+			$karyawan_idgolongan=$karyawan_golongantxt;
 		else 
-			$karyawan_golongan=trim(@$_POST["karyawan_golongan"]);
+			$karyawan_idgolongan=trim(@$_POST["karyawan_idgolongan"]);
 		$karyawan_tglmasuk=trim(@$_POST["karyawan_tglmasuk"]);
 		$karyawan_atasan=trim(@$_POST["karyawan_atasan"]);
 		$karyawan_aktif=trim(@$_POST["karyawan_aktif"]);
@@ -267,7 +267,7 @@ class C_karyawan extends Controller {
 		$karyawan_update=str_replace("'", '"',$karyawan_update);
 		$karyawan_date_update=trim(@$_POST["karyawan_date_update"]);
 		$karyawan_revised=trim(@$_POST["karyawan_revised"]);
-		$result=$this->m_karyawan->karyawan_create($karyawan_no ,$karyawan_npwp ,$karyawan_username ,$karyawan_nama ,$karyawan_kelamin ,$karyawan_tgllahir ,$karyawan_alamat ,$karyawan_kota ,$karyawan_kodepos ,$karyawan_email ,$karyawan_emiracle ,$karyawan_keterangan ,$karyawan_notelp ,$karyawan_notelp2 ,$karyawan_notelp3, $karyawan_notelp4 ,$karyawan_cabang ,$karyawan_jabatan ,$karyawan_departemen ,$karyawan_golongan ,$karyawan_tglmasuk ,$karyawan_atasan ,$karyawan_aktif ,$karyawan_creator ,$karyawan_date_create ,$karyawan_update ,$karyawan_date_update ,$karyawan_revised );
+		$result=$this->m_karyawan->karyawan_create($karyawan_no ,$karyawan_npwp ,$karyawan_username ,$karyawan_nama ,$karyawan_kelamin ,$karyawan_tgllahir ,$karyawan_alamat ,$karyawan_kota ,$karyawan_kodepos ,$karyawan_email ,$karyawan_emiracle ,$karyawan_keterangan ,$karyawan_notelp ,$karyawan_notelp2 ,$karyawan_notelp3, $karyawan_notelp4 ,$karyawan_cabang ,$karyawan_jabatan ,$karyawan_departemen ,$karyawan_idgolongan ,$karyawan_tglmasuk ,$karyawan_atasan ,$karyawan_aktif ,$karyawan_creator ,$karyawan_date_create ,$karyawan_update ,$karyawan_date_update ,$karyawan_revised );
 		echo $result;
 	}
 
@@ -333,9 +333,9 @@ class C_karyawan extends Controller {
 		$karyawan_cabang=trim(@$_POST["karyawan_cabang"]);
 		$karyawan_jabatan=trim(@$_POST["karyawan_jabatan"]);
 		$karyawan_departemen=trim(@$_POST["karyawan_departemen"]);
-		$karyawan_golongan=trim(@$_POST["karyawan_golongan"]);
-		$karyawan_golongan=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_golongan);
-		$karyawan_golongan=str_replace("'", '"',$karyawan_golongan);
+		$karyawan_idgolongan=trim(@$_POST["karyawan_idgolongan"]);
+		$karyawan_idgolongan=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_idgolongan);
+		$karyawan_idgolongan=str_replace("'", '"',$karyawan_idgolongan);
 		$karyawan_tglmasuk=trim(@$_POST["karyawan_tglmasuk"]);
 		$karyawan_atasan=trim(@$_POST["karyawan_atasan"]);
 		$karyawan_aktif=trim(@$_POST["karyawan_aktif"]);
@@ -353,7 +353,7 @@ class C_karyawan extends Controller {
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_karyawan->karyawan_search($karyawan_id ,$karyawan_no ,$karyawan_npwp ,$karyawan_username ,$karyawan_nama ,$karyawan_kelamin ,$karyawan_tgllahir ,$karyawan_alamat ,$karyawan_kota ,$karyawan_kodepos ,$karyawan_email ,$karyawan_emiracle ,$karyawan_keterangan ,$karyawan_notelp ,$karyawan_notelp2 ,$karyawan_notelp3, $karyawan_notelp4 ,$karyawan_cabang ,$karyawan_jabatan ,$karyawan_departemen ,$karyawan_golongan ,$karyawan_tglmasuk ,$karyawan_atasan ,$karyawan_aktif ,$karyawan_creator ,$karyawan_date_create ,$karyawan_update ,$karyawan_date_update ,$karyawan_revised ,$start,$end);
+		$result = $this->m_karyawan->karyawan_search($karyawan_id ,$karyawan_no ,$karyawan_npwp ,$karyawan_username ,$karyawan_nama ,$karyawan_kelamin ,$karyawan_tgllahir ,$karyawan_alamat ,$karyawan_kota ,$karyawan_kodepos ,$karyawan_email ,$karyawan_emiracle ,$karyawan_keterangan ,$karyawan_notelp ,$karyawan_notelp2 ,$karyawan_notelp3, $karyawan_notelp4 ,$karyawan_cabang ,$karyawan_jabatan ,$karyawan_departemen ,$karyawan_idgolongan ,$karyawan_tglmasuk ,$karyawan_atasan ,$karyawan_aktif ,$karyawan_creator ,$karyawan_date_create ,$karyawan_update ,$karyawan_date_update ,$karyawan_revised ,$start,$end);
 		echo $result;
 	}
 
@@ -411,9 +411,9 @@ class C_karyawan extends Controller {
 		$karyawan_cabang=trim(@$_POST["karyawan_cabang"]);
 		$karyawan_jabatan=trim(@$_POST["karyawan_jabatan"]);
 		$karyawan_departemen=trim(@$_POST["karyawan_departemen"]);
-		$karyawan_golongan=trim(@$_POST["karyawan_golongan"]);
-		$karyawan_golongan=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_golongan);
-		$karyawan_golongan=str_replace("'", '"',$karyawan_golongan);
+		$karyawan_idgolongan=trim(@$_POST["karyawan_idgolongan"]);
+		$karyawan_idgolongan=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_idgolongan);
+		$karyawan_idgolongan=str_replace("'", '"',$karyawan_idgolongan);
 		$karyawan_tglmasuk=trim(@$_POST["karyawan_tglmasuk"]);
 		$karyawan_atasan=trim(@$_POST["karyawan_atasan"]);
 		$karyawan_aktif=trim(@$_POST["karyawan_aktif"]);
@@ -431,7 +431,7 @@ class C_karyawan extends Controller {
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$result = $this->m_karyawan->karyawan_print($karyawan_id ,$karyawan_no ,$karyawan_npwp ,$karyawan_username ,$karyawan_nama ,$karyawan_kelamin ,$karyawan_tgllahir ,$karyawan_alamat ,$karyawan_kota ,$karyawan_kodepos ,$karyawan_email ,$karyawan_emiracle ,$karyawan_keterangan ,$karyawan_notelp ,$karyawan_notelp2 ,$karyawan_notelp3, $karyawan_notelp4 ,$karyawan_cabang ,$karyawan_jabatan ,$karyawan_departemen ,$karyawan_golongan ,$karyawan_tglmasuk ,$karyawan_atasan ,$karyawan_aktif ,$karyawan_creator ,$karyawan_date_create ,$karyawan_update ,$karyawan_date_update ,$karyawan_revised ,$option,$filter);
+		$result = $this->m_karyawan->karyawan_print($karyawan_id ,$karyawan_no ,$karyawan_npwp ,$karyawan_username ,$karyawan_nama ,$karyawan_kelamin ,$karyawan_tgllahir ,$karyawan_alamat ,$karyawan_kota ,$karyawan_kodepos ,$karyawan_email ,$karyawan_emiracle ,$karyawan_keterangan ,$karyawan_notelp ,$karyawan_notelp2 ,$karyawan_notelp3, $karyawan_notelp4 ,$karyawan_cabang ,$karyawan_jabatan ,$karyawan_departemen ,$karyawan_idgolongan ,$karyawan_tglmasuk ,$karyawan_atasan ,$karyawan_aktif ,$karyawan_creator ,$karyawan_date_create ,$karyawan_update ,$karyawan_date_update ,$karyawan_revised ,$option,$filter);
 		$nbrows=$result->num_rows();
 		$totcolumn=26;
    		/* We now have our array, let's build our HTML file */
@@ -487,7 +487,7 @@ class C_karyawan extends Controller {
 				fwrite($file,"</td><td>");
 				fwrite($file, $data['karyawan_departemen']);
 				fwrite($file,"</td><td>");
-				fwrite($file, $data['karyawan_golongan']);
+				fwrite($file, $data['karyawan_idgolongan']);
 				fwrite($file,"</td><td>");
 				fwrite($file, $data['karyawan_tglmasuk']);
 				fwrite($file,"</td><td>");
@@ -567,9 +567,9 @@ class C_karyawan extends Controller {
 		$karyawan_cabang=trim(@$_POST["karyawan_cabang"]);
 		$karyawan_jabatan=trim(@$_POST["karyawan_jabatan"]);
 		$karyawan_departemen=trim(@$_POST["karyawan_departemen"]);
-		$karyawan_golongan=trim(@$_POST["karyawan_golongan"]);
-		$karyawan_golongan=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_golongan);
-		$karyawan_golongan=str_replace("'", '"',$karyawan_golongan);
+		$karyawan_idgolongan=trim(@$_POST["karyawan_idgolongan"]);
+		$karyawan_idgolongan=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_idgolongan);
+		$karyawan_idgolongan=str_replace("'", '"',$karyawan_idgolongan);
 		$karyawan_tglmasuk=trim(@$_POST["karyawan_tglmasuk"]);
 		$karyawan_atasan=trim(@$_POST["karyawan_atasan"]);
 		$karyawan_aktif=trim(@$_POST["karyawan_aktif"]);
@@ -587,7 +587,7 @@ class C_karyawan extends Controller {
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$query = $this->m_karyawan->karyawan_export_excel($karyawan_id ,$karyawan_no ,$karyawan_npwp ,$karyawan_username ,$karyawan_nama ,$karyawan_kelamin ,$karyawan_tgllahir ,$karyawan_alamat ,$karyawan_kota ,$karyawan_kodepos ,$karyawan_email ,$karyawan_emiracle ,$karyawan_keterangan ,$karyawan_notelp ,$karyawan_notelp2 ,$karyawan_notelp3, $karyawan_notelp4 ,$karyawan_cabang ,$karyawan_jabatan ,$karyawan_departemen ,$karyawan_golongan ,$karyawan_tglmasuk ,$karyawan_atasan ,$karyawan_aktif ,$karyawan_creator ,$karyawan_date_create ,$karyawan_update ,$karyawan_date_update ,$karyawan_revised ,$option,$filter);
+		$query = $this->m_karyawan->karyawan_export_excel($karyawan_id ,$karyawan_no ,$karyawan_npwp ,$karyawan_username ,$karyawan_nama ,$karyawan_kelamin ,$karyawan_tgllahir ,$karyawan_alamat ,$karyawan_kota ,$karyawan_kodepos ,$karyawan_email ,$karyawan_emiracle ,$karyawan_keterangan ,$karyawan_notelp ,$karyawan_notelp2 ,$karyawan_notelp3, $karyawan_notelp4 ,$karyawan_cabang ,$karyawan_jabatan ,$karyawan_departemen ,$karyawan_idgolongan ,$karyawan_tglmasuk ,$karyawan_atasan ,$karyawan_aktif ,$karyawan_creator ,$karyawan_date_create ,$karyawan_update ,$karyawan_date_update ,$karyawan_revised ,$option,$filter);
 		
 		to_excel($query,"karyawan"); 
 		echo '1';
