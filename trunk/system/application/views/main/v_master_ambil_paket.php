@@ -445,9 +445,10 @@ Ext.onReady(function(){
 			{name: 'cust_no', type: 'string', mapping: 'cust_no'},
 			{name: 'cust_tgllahir', type: 'date', dateFormat: 'Y-m-d', mapping: 'cust_tgllahir'},
 			{name: 'cust_alamat', type: 'string', mapping: 'cust_alamat'},
-			{name: 'cust_telprumah', type: 'string', mapping: 'cust_telprumah'}
+			{name: 'cust_telprumah', type: 'string', mapping: 'cust_telprumah'},
+			{name: 'jpaket_cust', type: 'int', mapping: 'jpaket_cust'}
 		]),
-		sortInfo:{field: 'pengguna_paket_display', direction: "ASC"}
+		sortInfo:{field: 'jpaket_cust', direction: "DESC"}
 	});
 	var cust_tpl = new Ext.XTemplate(
         '<tpl for="."><div class="search-item">',
@@ -1026,6 +1027,9 @@ Ext.onReady(function(){
 			anchor: '95%'
 
 	});
+	combo_cust_ambil_paket.on('focus', function(){
+		cbo_ambil_paket_custDataStore.reload();
+	});
 	
 	//declaration of detail coloumn model
 	ambil_paket_isi_perawatan_ColumnModel = new Ext.grid.ColumnModel(
@@ -1125,6 +1129,8 @@ Ext.onReady(function(){
 	function refresh_ambil_paket_isi_perawatan(){
 		//ambil_paket_isi_perawatan_DataStore.commitChanges();
 		//ambil_paket_isi_perawatanListEditorGrid.getView().refresh();
+		/* SET pemakai Paket */
+		
 	}
 	//eof
 	
@@ -1472,7 +1478,7 @@ Ext.onReady(function(){
 		if(apaket_fakturSearchField.getValue()!==null){apaket_faktur_search=apaket_fakturSearchField.getValue();}
 		if(apaket_custSearchField.getValue()!==null){apaket_cust_search=apaket_custSearchField.getValue();}
 		if(apaket_paketSearchField.getValue()!==null){apaket_paket_search=apaket_paketSearchField.getValue();}
-		if(apaket_kadaluarsaSearchField.getValue()!==null){apaket_kadaluarsa_search=apaket_kadaluarsaSearchField.getValue().format('Y-m-d');}
+		if(apaket_kadaluarsaSearchField.getValue()!==""){apaket_kadaluarsa_search=apaket_kadaluarsaSearchField.getValue().format('Y-m-d');}
 		// change the store parameters
 		ambil_paket_DataStore.baseParams = {
 			task: 'SEARCH',
@@ -1496,6 +1502,13 @@ Ext.onReady(function(){
 		detail_ambil_paketStore.reload();
 	};
 	/* End of Fuction */
+	
+	function ambil_paket_reset_SearchForm(){
+		apaket_fakturSearchField.reset();
+		apaket_custSearchField.reset();
+		apaket_paketSearchField.reset();
+		apaket_kadaluarsaSearchField.reset();
+	}
 	
 	/* Field for search */
 	/* Identify  ambil_paket_id Search Field */
@@ -1613,6 +1626,7 @@ Ext.onReady(function(){
   	/* Function for Displaying  Search Window Form */
 	function display_form_search_window(){
 		if(!ambil_paket_searchWindow.isVisible()){
+			ambil_paket_reset_SearchForm();
 			ambil_paket_searchWindow.show();
 		} else {
 			ambil_paket_searchWindow.toFront();

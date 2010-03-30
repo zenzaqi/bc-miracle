@@ -85,15 +85,38 @@ class M_master_ambil_paket extends Model{
 		}
 		
 		function get_pengguna_paket_list($jpaket_id){
-			//$query = "SELECT sjpaket_id, sjpaket_cust, cust_nama, cust_no, cust_tgllahir, cust_alamat, cust_telprumah FROM submaster_jual_paket INNER JOIN customer ON(sjpaket_cust=cust_id) WHERE sjpaket_master='$jpaket_id'";
-			$query = "SELECT cust_id, cust_nama, cust_no, cust_tgllahir, cust_alamat, cust_telprumah FROM pengguna_paket LEFT JOIN customer ON(ppaket_cust=cust_id) WHERE ppaket_master='$jpaket_id'";
+			//$query = "SELECT cust_id, cust_nama, cust_no, cust_tgllahir, cust_alamat, cust_telprumah FROM pengguna_paket LEFT JOIN customer ON(ppaket_cust=cust_id) WHERE ppaket_master='$jpaket_id'";
+			$query = "SELECT cust_id, cust_nama, cust_no, cust_tgllahir, cust_alamat, cust_telprumah FROM pengguna_paket LEFT JOIN customer ON(ppaket_cust=cust_id) LEFT JOIN master_jual_paket ON(ppaket_master=jpaket_id AND ppaket_cust=jpaket_cust) WHERE ppaket_master='$jpaket_id'";
+			
+			//$query2 = "SELECT cust_id, cust_nama, cust_no, cust_tgllahir, cust_alamat, cust_telprumah FROM pengguna_paket LEFT JOIN customer ON(ppaket_cust=cust_id) LEFT JOIN master_jual_paket ON(ppaket_master=jpaket_id AND ppaket_cust<>jpaket_cust) WHERE ppaket_master='$jpaket_id'";
+			//echo $query."<br />";
+			//echo $query2;
+			
+			
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
 			
-			if($nbrows>0){
+			//$result2 = $this->db->query($query2);
+			//$nbrows2 = $result2->num_rows();
+			
+			//$nbrows=0;
+			//$nbrows2=0;
+			
+			if($nbrows>0 || $nbrows2>0){
 				foreach($result->result() as $row){
 					$arr[] = $row;
 				}
+				/*if($nbrows>0){
+					foreach($result->result() as $row){
+						$arr[] = $row;
+					}
+				}
+				if($nbrows2>0){
+					foreach($result2->result() as $row2){
+						$arr[] = $row2;
+					}
+				}
+				$nbrows=$nbrows+$nbrows2;*/
 				$jsonresult = json_encode($arr);
 				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
 			} else {
@@ -360,7 +383,8 @@ class M_master_ambil_paket extends Model{
 		function ambil_paket_search($apaket_faktur ,$apaket_cust ,$apaket_paket ,$apaket_kadaluarsa ,$start,$end){
 			//full query
 			//$query="select * from paket";
-			$query = "SELECT apaket_id, apaket_jpaket, apaket_faktur, apaket_faktur_tanggal, apaket_kadaluarsa, apaket_cust, apaket_cust_no, apaket_cust_nama, apaket_paket, apaket_paket_kode, apaket_paket_nama, apaket_paket_jumlah, apaket_sisa_paket FROM master_ambil_paket";
+			//$query = "SELECT apaket_id, apaket_jpaket, apaket_faktur, apaket_faktur_tanggal, apaket_kadaluarsa, apaket_cust, apaket_cust_no, apaket_cust_nama, apaket_paket, apaket_paket_kode, apaket_paket_nama, apaket_paket_jumlah, apaket_sisa_paket FROM master_ambil_paket";
+			$query =   "SELECT apaket_id, apaket_jpaket, apaket_faktur, apaket_faktur_tanggal, apaket_kadaluarsa, apaket_cust, /*apaket_cust_no, apaket_cust_nama, */ apaket_paket, /*apaket_paket_kode, apaket_paket_nama, */ apaket_paket_jumlah, apaket_sisa_paket , c.cust_no, c.cust_nama, p.paket_kode, p.paket_nama FROM master_ambil_paket m LEFT OUTER JOIN customer c on c.cust_id = m.apaket_cust LEFT OUTER JOIN paket p on p.paket_id = m.apaket_paket WHERE apaket_sisa_paket > 0";
 			
 			if($apaket_faktur!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
