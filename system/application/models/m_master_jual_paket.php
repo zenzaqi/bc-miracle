@@ -614,6 +614,9 @@ class M_master_jual_paket extends Model{
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 				$query .= " (jpaket_nobukti LIKE '%".addslashes($filter)."%' OR cust_nama LIKE '%".addslashes($filter)."%' OR cust_no LIKE '%".addslashes($filter)."%'  )";
 			}
+			
+			$query .= " ORDER BY jpaket_nobukti DESC ";
+			
 			$query_nbrows="SELECT jpaket_id FROM master_jual_paket";
 			
 			$result = $this->db->query($query_nbrows);
