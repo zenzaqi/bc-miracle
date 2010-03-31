@@ -20,13 +20,13 @@ class C_penyesuaian_tindakan extends Controller {
 		$this->load->plugin('to_excel');
 	}
 	
-	function get_karyawan_list(){
+	/*function get_karyawan_list(){
 		$query = isset($_POST['query']) ? $_POST['query'] : "";
 		$start = (integer) (isset($_POST['start']) ? @$_POST['start'] : @$_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? @$_POST['limit'] : @$_GET['limit']);
 		$result = $this->m_public_function->get_user_karyawan_nolist($query,$start,$end);
 		echo $result;
-	}
+	}*/
 	
 	//set index
 	function index(){
@@ -44,7 +44,7 @@ class C_penyesuaian_tindakan extends Controller {
 			case "UPDATE":
 				$this->penyesuaian_update();
 				break;
-			case "CREATE":
+			/*case "CREATE":
 				$this->users_create();
 				break;
 			case "DELETE":
@@ -58,7 +58,7 @@ class C_penyesuaian_tindakan extends Controller {
 				break;
 			case "EXCEL":
 				$this->users_export_excel();
-				break;
+				break;*/
 			default:
 				echo "{failure:true}";
 				break;
@@ -86,7 +86,7 @@ class C_penyesuaian_tindakan extends Controller {
 	}
 
 
-	function users_print(){
+	/*function users_print(){
   		//POST varibale here
 		$user_id=trim(@$_POST["user_id"]);
 		$user_name=trim(@$_POST["user_name"]);
@@ -107,7 +107,7 @@ class C_penyesuaian_tindakan extends Controller {
 		$result = $this->m_users->users_print($user_id ,$user_name ,$user_passwd ,$user_karyawan ,$user_log ,$user_groups ,$user_aktif ,$option,$filter);
 		$nbrows=$result->num_rows();
 		$totcolumn=7;
-   		/* We now have our array, let's build our HTML file */
+   		/* We now have our array, let's build our HTML file 
 		$file = fopen("userslist.html",'w');
 		fwrite($file, "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' /><title>Printing the Users Grid</title><link rel='stylesheet' type='text/css' href='assets/modules/main/css/printstyle.css'/></head>");
 		fwrite($file, "<body><table summary='Users List'><caption>USERS</caption><thead><tr><th scope='col'>User Id</th><th scope='col'>User Name</th><th scope='col'>User Passwd</th><th scope='col'>User Karyawan</th><th scope='col'>User Log</th><th scope='col'>User Groups</th><th scope='col'>User Aktif</th></tr></thead><tfoot><tr><th scope='row'>Total</th><td colspan='$totcolumn'>");
@@ -141,11 +141,11 @@ class C_penyesuaian_tindakan extends Controller {
 		fwrite($file, "</tbody></table></body></html>");	
 		fclose($file);
 		echo '1';        
-	}
+	}*/
 	/* End Of Function */
 
 	/* Function to Export Excel document */
-	function users_export_excel(){
+	/*function users_export_excel(){
 		//POST varibale here
 		$user_id=trim(@$_POST["user_id"]);
 		$user_name=trim(@$_POST["user_name"]);
@@ -166,9 +166,8 @@ class C_penyesuaian_tindakan extends Controller {
 		$query = $this->m_users->users_export_excel($user_id ,$user_name ,$user_passwd ,$user_karyawan ,$user_log ,$user_groups ,$user_aktif ,$option,$filter);
 		
 		to_excel($query,"users"); 
-		echo '1';
-			
-	}
+		echo '1';	
+	}*/
 	
 	// Encodes a SQL array into a JSON formated string
 	function JEncode($arr){
