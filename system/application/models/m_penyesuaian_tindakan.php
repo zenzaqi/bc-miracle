@@ -24,7 +24,7 @@ class M_penyesuaian_tindakan extends Model{
 			$query="select tindakan_adjust.adj_id, date_format(tindakan_adjust.adj_bln,'%Y-%m'), karyawan.karyawan_username, adj_count, vu_report_tindakan_terapis.terapis_count, (vu_report_tindakan_terapis.terapis_count+tindakan_adjust.adj_count) as new_count
 from tindakan_adjust 
 left join vu_report_tindakan_terapis on (vu_report_tindakan_terapis.terapis_id=tindakan_adjust.karyawan_id) and vu_report_tindakan_terapis.terapis_bulan=date_format(tindakan_adjust.adj_bln,'%Y-%m')
-left join karyawan on karyawan.karyawan_id=tindakan_adjust.karyawan_id";
+left join karyawan on karyawan.karyawan_id=tindakan_adjust.karyawan_id where tindakan_adjust.adj_bln = '2010-03-12'";
 			// For simple search
 			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
@@ -70,7 +70,7 @@ left join karyawan on karyawan.karyawan_id=tindakan_adjust.karyawan_id";
 		
 		
 		//function for print record
-		function users_print($user_id ,$user_name ,$user_passwd ,$user_karyawan ,$user_log ,$user_groups ,$user_aktif ,$option,$filter){
+		/*function users_print($user_id ,$user_name ,$user_passwd ,$user_karyawan ,$user_log ,$user_groups ,$user_aktif ,$option,$filter){
 			//full query
 			$query="select * from users";
 			if($option=='LIST'){
@@ -109,10 +109,10 @@ left join karyawan on karyawan.karyawan_id=tindakan_adjust.karyawan_id";
 				$result = $this->db->query($query);
 			}
 			return $result;
-		}
+		}*/
 		
 		//function  for export to excel
-		function users_export_excel($user_id ,$user_name ,$user_passwd ,$user_karyawan ,$user_log ,$user_groups ,$user_aktif ,$option,$filter){
+		/*function users_export_excel($user_id ,$user_name ,$user_passwd ,$user_karyawan ,$user_log ,$user_groups ,$user_aktif ,$option,$filter){
 			//full query
 			$query="select * from users";
 			if($option=='LIST'){
@@ -151,7 +151,7 @@ left join karyawan on karyawan.karyawan_id=tindakan_adjust.karyawan_id";
 				$result = $this->db->query($query);
 			}
 			return $result;
-		}
+		}*/
 		
 
 }
