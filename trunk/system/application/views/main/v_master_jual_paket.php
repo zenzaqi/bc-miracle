@@ -850,6 +850,7 @@ Ext.onReady(function(){
 								jpaket_kwitansi_noField.setValue(jpaket_kwitansi_record.kwitansi_no);
 								jpaket_kwitansi_namaField.setValue(jpaket_kwitansi_record.cust_nama);
 								jpaket_kwitansi_nilaiField.setValue(jpaket_kwitansi_record.jkwitansi_nilai);
+								jpaket_kwitansi_nilai_cfField.setValue(CurrencyFormatted(jpaket_kwitansi_record.jkwitansi_nilai));
 							}
 						  }
 					  }
@@ -866,6 +867,7 @@ Ext.onReady(function(){
 								jpaket_card_edcField.setValue(jpaket_card_record.jcard_edc);
 								jpaket_card_noField.setValue(jpaket_card_record.jcard_no);
 								jpaket_card_nilaiField.setValue(jpaket_card_record.jcard_nilai);
+								jpaket_card_nilai_cfField.setValue(CurrencyFormatted(jpaket_card_record.jcard_nilai));
 							}
 						 }
 					}
@@ -883,6 +885,7 @@ Ext.onReady(function(){
 									jpaket_cek_validField.setValue(jpaket_cek_record.jcek_valid);
 									jpaket_cek_bankField.setValue(jpaket_cek_record.jcek_bank);
 									jpaket_cek_nilaiField.setValue(jpaket_cek_record.jcek_nilai);
+									jpaket_cek_nilai_cfField.setValue(CurrencyFormatted(jpaket_cek_record.jcek_nilai));
 								}
 							}
 					 	}
@@ -898,6 +901,7 @@ Ext.onReady(function(){
 										jpaket_transfer_bankField.setValue(jpaket_transfer_record.data.jtransfer_bank);
 										jpaket_transfer_namaField.setValue(jpaket_transfer_record.data.jtransfer_nama);
 										jpaket_transfer_nilaiField.setValue(jpaket_transfer_record.data.jtransfer_nilai);
+										jpaket_transfer_nilai_cfField.setValue(CurrencyFormatted(jpaket_transfer_record.data.jtransfer_nilai));
 									}
 							}
 					 	}
@@ -911,6 +915,7 @@ Ext.onReady(function(){
 									if(tunai_jual_paket_DataStore.getCount()){
 										jpaket_tunai_record=tunai_jual_paket_DataStore.getAt(0);
 										jpaket_tunai_nilaiField.setValue(jpaket_tunai_record.data.jtunai_nilai);
+										jpaket_tunai_nilai_cfField.setValue(CurrencyFormatted(jpaket_tunai_record.data.jtunai_nilai));
 									}
 							}
 					 	}
@@ -929,6 +934,7 @@ Ext.onReady(function(){
 								jpaket_kwitansi_no2Field.setValue(jpaket_kwitansi_record.kwitansi_no);
 								jpaket_kwitansi_nama2Field.setValue(jpaket_kwitansi_record.cust_nama);
 								jpaket_kwitansi_nilai2Field.setValue(jpaket_kwitansi_record.jkwitansi_nilai);
+								jpaket_kwitansi_nilai2_cfField.setValue(CurrencyFormatted(jpaket_kwitansi_record.jkwitansi_nilai));
 							}
 						  }
 					  }
@@ -945,6 +951,7 @@ Ext.onReady(function(){
 								 jpaket_card_edc2Field.setValue(jpaket_card_record.jcard_edc);
 								 jpaket_card_no2Field.setValue(jpaket_card_record.jcard_no);
 								 jpaket_card_nilai2Field.setValue(jpaket_card_record.jcard_nilai);
+								 jpaket_card_nilai2_cfField.setValue(CurrencyFormatted(jpaket_card_record.jcard_nilai));
 							 }
 						 }
 					}
@@ -962,6 +969,7 @@ Ext.onReady(function(){
 									jpaket_cek_valid2Field.setValue(jpaket_cek_record.jcek_valid);
 									jpaket_cek_bank2Field.setValue(jpaket_cek_record.jcek_bank);
 									jpaket_cek_nilai2Field.setValue(jpaket_cek_record.jcek_nilai);
+									jpaket_cek_nilai2_cfField.setValue(CurrencyFormatted(jpaket_cek_record.jcek_nilai));
 								}
 							}
 					 	}
@@ -978,6 +986,7 @@ Ext.onReady(function(){
 										jpaket_transfer_bank2Field.setValue(jpaket_transfer_record.data.jtransfer_bank);
 										jpaket_transfer_nama2Field.setValue(jpaket_transfer_record.data.jtransfer_nama);
 										jpaket_transfer_nilai2Field.setValue(jpaket_transfer_record.data.jtransfer_nilai);
+										jpaket_transfer_nilai2_cfField.setValue(CurrencyFormatted(jpaket_transfer_record.data.jtransfer_nilai));
 									}
 							}
 					 	}
@@ -991,6 +1000,7 @@ Ext.onReady(function(){
 									if(tunai_jual_paket_DataStore.getCount()){
 										jpaket_tunai_record=tunai_jual_paket_DataStore.getAt(0);
 										jpaket_tunai_nilai2Field.setValue(jpaket_tunai_record.data.jtunai_nilai);
+										jpaket_tunai_nilai2_cfField.setValue(CurrencyFormatted(jpaket_tunai_record.data.jtunai_nilai));
 									}
 							}
 					 	}
@@ -1009,6 +1019,7 @@ Ext.onReady(function(){
 								jpaket_kwitansi_no3Field.setValue(jpaket_kwitansi_record.kwitansi_no);
 								jpaket_kwitansi_nama3Field.setValue(jpaket_kwitansi_record.cust_nama);
 								jpaket_kwitansi_nilai3Field.setValue(jpaket_kwitansi_record.jkwitansi_nilai);
+								jpaket_kwitansi_nilai3_cfField.setValue(CurrencyFormatted(jpaket_kwitansi_record.jkwitansi_nilai));
 							}
 						  }
 					  }
@@ -1025,6 +1036,7 @@ Ext.onReady(function(){
 								 jpaket_card_edc3Field.setValue(jpaket_card_record.jcard_edc);
 								 jpaket_card_no3Field.setValue(jpaket_card_record.jcard_no);
 								 jpaket_card_nilai3Field.setValue(jpaket_card_record.jcard_nilai);
+								 jpaket_card_nilai3_cfField.setValue(CurrencyFormatted(jpaket_card_record.jcard_nilai));
 							 }
 						 }
 					}
@@ -1042,6 +1054,7 @@ Ext.onReady(function(){
 									jpaket_cek_valid3Field.setValue(jpaket_cek_record.jcek_valid);
 									jpaket_cek_bank3Field.setValue(jpaket_cek_record.jcek_bank);
 									jpaket_cek_nilai3Field.setValue(jpaket_cek_record.jcek_nilai);
+									jpaket_cek_nilai3_cfField.setValue(CurrencyFormatted(jpaket_cek_record.jcek_nilai));
 								}
 							}
 					 	}
@@ -1058,6 +1071,7 @@ Ext.onReady(function(){
 										jpaket_transfer_bank3Field.setValue(jpaket_transfer_record.data.jtransfer_bank);
 										jpaket_transfer_nama3Field.setValue(jpaket_transfer_record.data.jtransfer_nama);
 										jpaket_transfer_nilai3Field.setValue(jpaket_transfer_record.data.jtransfer_nilai);
+										jpaket_transfer_nilai3_cfField.setValue(CurrencyFormatted(jpaket_transfer_record.data.jtransfer_nilai));
 									}
 							}
 					 	}
@@ -1071,6 +1085,7 @@ Ext.onReady(function(){
 									if(tunai_jual_paket_DataStore.getCount()){
 										jpaket_tunai_record=tunai_jual_paket_DataStore.getAt(0);
 										jpaket_tunai_nilai3Field.setValue(jpaket_tunai_record.data.jtunai_nilai);
+										jpaket_tunai_nilai3_cfField.setValue(CurrencyFormatted(jpaket_tunai_record.data.jtunai_nilai));
 									}
 							}
 					 	}
@@ -1689,7 +1704,6 @@ Ext.onReady(function(){
 			params: {task: 'LIST',start: 0, limit: pageS},
 			listeners:{
 				specialkey: function(f,e){
-					tbar_jenis_rawatField.reset();
 					if(e.getKey() == e.ENTER){
 						master_jual_paket_DataStore.baseParams={task:'LIST',start: 0, limit: pageS};
 		            }
@@ -2890,7 +2904,7 @@ Ext.onReady(function(){
 	});
 	
 	jpaket_kwitansi_sisaField= new Ext.form.NumberField({
-		id: 'jrawat_kwitansi_sisaField',
+		id: 'jpaket_kwitansi_sisaField',
 		fieldLabel: 'Sisa (Rp)',
 		readOnly: true,
 		anchor: '95%'
@@ -2961,7 +2975,7 @@ Ext.onReady(function(){
 	});
 	
 	jpaket_kwitansi_sisa2Field= new Ext.form.NumberField({
-		id: 'jrawat_kwitansi_sisa2Field',
+		id: 'jpaket_kwitansi_sisa2Field',
 		fieldLabel: 'Sisa (Rp)',
 		readOnly: true,
 		anchor: '95%'
@@ -3032,7 +3046,7 @@ Ext.onReady(function(){
 	});
 	
 	jpaket_kwitansi_sisa3Field= new Ext.form.NumberField({
-		id: 'jrawat_kwitansi_sisa3Field',
+		id: 'jpaket_kwitansi_sisa3Field',
 		fieldLabel: 'Sisa (Rp)',
 		readOnly: true,
 		anchor: '95%'
