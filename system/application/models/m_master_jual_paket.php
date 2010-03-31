@@ -413,10 +413,14 @@ class M_master_jual_paket extends Model{
 		//end of function
 		
 		function get_voucher_list($query,$start,$end){
-			$query = "SELECT * FROM voucher,voucher_kupon where kvoucher_master=voucher_id";
-			$result = $this->db->query($query);
+			$sql = "SELECT * FROM voucher,voucher_kupon where kvoucher_master=voucher_id";
+			if ($query<>""){
+				$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
+				$sql .= " (kvoucher_nomor LIKE '%".addslashes($query)."%')";
+			}
+			$result = $this->db->query($sql);
 			$nbrows = $result->num_rows();
-			$limit = $query." LIMIT ".$start.",".$end;			
+			$limit = $sql." LIMIT ".$start.",".$end;
 			$result = $this->db->query($limit); 
 		
 			if($nbrows>0){
@@ -617,7 +621,11 @@ class M_master_jual_paket extends Model{
 			
 			$query .= " ORDER BY jpaket_nobukti DESC ";
 			
-			$query_nbrows="SELECT jpaket_id FROM master_jual_paket";
+			$query_nbrows="SELECT jpaket_id FROM master_jual_paket LEFT JOIN customer ON(jpaket_cust=cust_id)";
+			if ($filter<>""){
+				$query_nbrows .=eregi("WHERE",$query_nbrows)? " AND ":" WHERE ";
+				$query_nbrows .= " (jpaket_nobukti LIKE '%".addslashes($filter)."%' OR cust_nama LIKE '%".addslashes($filter)."%' OR cust_no LIKE '%".addslashes($filter)."%'  )";
+			}
 			
 			$result = $this->db->query($query_nbrows);
 			$nbrows = $result->num_rows();

@@ -184,6 +184,7 @@ class M_tindakan_medis extends Model{
 					$rs_record=$rs->row_array();
 					$dtj_nonmedis_perawatan=$rs_record["dtrawat_perawatan"];
 					$dtj_nonmedis_rawat_harga=$rs_record["rawat_harga"];
+					$dtj_nonmedis_dtrawat_id=$rs_record["dtrawat_id"];
 					if($cust_member!=""){
 						$dtj_nonmedis_diskon_jenis="DM";
 						$dtj_nonmedis_diskon=$rs_record["rawat_dm"];
@@ -193,7 +194,7 @@ class M_tindakan_medis extends Model{
 					}
 					$data_dtj_nonmedis=array(
 					"drawat_master"=>$jrawat_id,
-					"drawat_dtrawat"=>$dtrawat_id,
+					"drawat_dtrawat"=>$dtj_nonmedis_dtrawat_id,
 					"drawat_rawat"=>$dtj_nonmedis_perawatan,
 					"drawat_jumlah"=>1,
 					"drawat_harga"=>$dtj_nonmedis_rawat_harga,
@@ -256,6 +257,7 @@ class M_tindakan_medis extends Model{
 						$rs_record=$rs->row_array();
 						$dtj_nonmedis_perawatan=$rs_record["dtrawat_perawatan"];
 						$dtj_nonmedis_rawat_harga=$rs_record["rawat_harga"];
+						$dtj_nonmedis_dtrawat_id=$rs_record["dtrawat_id"];
 						if($cust_member!=""){
 							$dtj_nonmedis_diskon_jenis="DM";
 							$dtj_nonmedis_diskon=$rs_record["rawat_dm"];
@@ -265,7 +267,7 @@ class M_tindakan_medis extends Model{
 						}
 						$data_dtj_nonmedis=array(
 						"drawat_master"=>$jrawat_id,
-						"drawat_dtrawat"=>$dtrawat_id,
+						"drawat_dtrawat"=>$dtj_nonmedis_dtrawat_id,
 						"drawat_rawat"=>$dtj_nonmedis_perawatan,
 						"drawat_jumlah"=>1,
 						"drawat_harga"=>$dtj_nonmedis_rawat_harga,
@@ -1023,11 +1025,14 @@ class M_tindakan_medis extends Model{
 		
 		//function for advanced search record
 		function tindakan_search($trawat_id ,$trawat_cust ,$trawat_tglapp_start ,$trawat_tglapp_end ,$trawat_rawat ,$trawat_dokter ,$trawat_status ,$start,$end){
+			$this->firephp->log($start, "start");
+			$this->firephp->log($end, "end");
 			//full query
 			//$query="SELECT * FROM vu_tindakan WHERE kategori_nama='Medis'";
-			$query = "SELECT * FROM vu_tindakan WHERE (kategori_nama='Medis' OR dtrawat_petugas2='0')";
+			//$query = "SELECT * FROM vu_tindakan WHERE (kategori_nama='Medis' OR dtrawat_petugas2='0')";
+			$query = "SELECT vu_tindakan_test.*, IF((vu_cust_punya_paket_test.sapaket_id AND vu_cust_punya_paket_test.sapaket_sisa_item<>0),'ada','tidak_ada') AS cust_punya_paket, vu_cust_punya_paket_test.* FROM vu_tindakan_test LEFT JOIN vu_cust_punya_paket_test ON(vu_cust_punya_paket_test.ppaket_cust=vu_tindakan_test.trawat_cust AND vu_cust_punya_paket_test.sapaket_item=vu_tindakan_test.dtrawat_perawatan AND vu_cust_punya_paket_test.sapaket_jenis_item='perawatan' AND vu_cust_punya_paket_test.sapaket_sisa_item>0) WHERE (vu_tindakan_test.kategori_nama='Medis' OR vu_tindakan_test.dtrawat_petugas2='0')";
 			
-			if($trawat_id!=''){
+			/*if($trawat_id!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " trawat_id LIKE '%".$trawat_id."%'";
 			};
@@ -1046,13 +1051,13 @@ class M_tindakan_medis extends Model{
 			if($trawat_status!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " dtrawat_status LIKE '%".$trawat_status."%'";
-			};
+			};*/
 			if($trawat_tglapp_start!='' && $trawat_tglapp_end!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " dtrawat_tglapp BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."'";
+				$query.= " vu_tindakan_test.dtrawat_tglapp BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."'";
 			}else if($trawat_tglapp_start!='' && $trawat_tglapp_end==''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " dtrawat_tglapp='".$trawat_tglapp_start."'";
+				$query.= " vu_tindakan_test.dtrawat_tglapp='".$trawat_tglapp_start."'";
 			}
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();

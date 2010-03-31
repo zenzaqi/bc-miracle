@@ -127,6 +127,12 @@ var trawat_medis_idSearchField;
 var trawat_medis_custSearchField;
 var trawat_medis_keteranganSearchField;
 
+/*var conn = new Ext.data.Connection({
+    timeout: 10000000
+});
+
+var proxy = new Ext.data.HttpProxy(conn);*/
+
 /* on ready fuction */
 Ext.onReady(function(){
   	Ext.QuickTips.init();	/* Initiate quick tips icon */
@@ -480,6 +486,7 @@ Ext.onReady(function(){
 	/* Function for Retrieve DataStore */
 	tindakan_medisDataStore = new Ext.data.Store({
 		id: 'tindakan_medisDataStore',
+		timeout: 3600,
 		proxy: new Ext.data.HttpProxy({
 			url: 'index.php?c=c_tindakan_medis&m=get_action', 
 			method: 'POST'
