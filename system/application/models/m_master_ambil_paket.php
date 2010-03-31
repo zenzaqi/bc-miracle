@@ -132,14 +132,16 @@ class M_master_ambil_paket extends Model{
 							pr.rawat_nama, 
 							d.dapaket_jumlah, 
 							c.cust_nama,
-							date_format(d.dapaket_date_create, '%Y-%m-%d') as tgl_ambil
+							/*date_format(d.dapaket_date_create, '%Y-%m-%d') as tgl_ambil*/
+							date_format(d.tgl_ambil, '%Y-%m-%d') as tgl_ambil
 						FROM detail_ambil_paket d
 						/*LEFT JOIN master_ambil_paket m ON ( d.dapaket_master = m.apaket_id ) */
 						LEFT JOIN submaster_apaket_item s ON ( d.dapaket_sapaket= s.sapaket_id ) 
 						LEFT JOIN perawatan pr ON ( s.sapaket_item = pr.rawat_id ) 
 						/*LEFT JOIN paket pk ON ( m.apaket_paket = pk.paket_id ) */
 						LEFT JOIN customer c ON ( d.dapaket_cust = c.cust_id )
-						WHERE dapaket_master='$apaket_id'"; //by hendri
+						WHERE dapaket_master='$apaket_id'
+						ORDER BY tgl_ambil"; //by hendri
 			
 
 
@@ -299,7 +301,7 @@ class M_master_ambil_paket extends Model{
 						FROM master_ambil_paket m
 						LEFT OUTER JOIN customer c on c.cust_id = m.apaket_cust
 						LEFT OUTER JOIN paket p on p.paket_id = m.apaket_paket
-						WHERE apaket_sisa_paket > 0"; //by hendri
+						WHERE apaket_sisa_paket >= 0 AND apaket_faktur_tanggal >= '2007-01-01'"; //by hendri
 
 			// For simple search
 			if ($filter<>""){
