@@ -64,7 +64,7 @@ class M_kartu_rekomendasi extends Model{
 	function detail_rekomendasi_detail_list($master_id,$query,$start,$end) {
 		//$query = "SELECT * FROM tindakan_detail,perawatan,karyawan WHERE dtrawat_perawatan=rawat_id AND dtrawat_petugas1=karyawan_id AND dtrawat_master='".$master_id."'";
 		//$query="SELECT * FROM tindakan_detail INNER JOIN perawatan ON(dtrawat_perawatan=rawat_id) INNER JOIN karyawan ON(dtrawat_petugas1=karyawan_id) LEFT JOIN kategori ON(rawat_kategori=kategori_id) WHERE dtrawat_master='".$master_id."' AND kategori_nama='Medis'";
-		$query="SELECT drawatm_id, drawatm_master, drawatm_perawatan, date_format(drawatm_tanggal,'%Y-%m-%d') as drawatm_tanggal, drawatm_keterangan FROM detail_perawatan_medis INNER JOIN perawatan ON(drawatm_perawatan=rawat_id) WHERE drawatm_master='".$master_id."'";
+		$query="SELECT drawatm_id, drawatm_master, drawatm_perawatan, date_format(drawatm_tanggal,'%Y-%m-%d') as drawatm_tanggal, drawatm_keterangan FROM detail_rekomendasi_medis INNER JOIN perawatan ON(drawatm_perawatan=rawat_id) WHERE drawatm_master='".$master_id."'";
 		
 		$result = $this->db->query($query);
 		$nbrows = $result->num_rows();
@@ -575,7 +575,7 @@ class M_kartu_rekomendasi extends Model{
 			//"dtrawat_jam"=>$dtrawat_jamreservasi,
 			"drawatm_keterangan"=>$drawatm_keterangan
 			);
-			$this->db->insert('detail_perawatan_medis', $dti_dtrawat);
+			$this->db->insert('detail_rekomendasi_medis', $dti_dtrawat);
 		
 		}
 
@@ -737,7 +737,7 @@ class M_kartu_rekomendasi extends Model{
 		function rekomendasi_nonmedis_list($master_id,$query,$start,$end) {
 			//$query = "SELECT * FROM tindakan_detail,perawatan,karyawan WHERE dtrawat_perawatan=rawat_id AND dtrawat_petugas1=karyawan_id AND dtrawat_master='".$master_id."'";
 			$query="SELECT drawatn_id, drawatn_master, drawatn_perawatan, date_format(drawatn_tanggal,'%Y-%m-%d') as drawatn_tanggal, drawatn_keterangan
-			FROM detail_perawatan_nonmedis
+			FROM detail_rekomendasi_nonmedis
 			INNER JOIN perawatan ON(drawatn_perawatan=rawat_id)
 			WHERE drawatn_master='".$master_id."'";
 		
@@ -777,7 +777,7 @@ class M_kartu_rekomendasi extends Model{
 					"drawatn_tanggal"=>$drawatn_tanggal,
 					//"dtrawat_status"=>"selesai"
 				);
-				$this->db->insert('detail_perawatan_nonmedis', $data); 
+				$this->db->insert('detail_rekomendasi_nonmedis', $data); 
 				
 				
 				if($this->db->affected_rows()){
@@ -793,7 +793,7 @@ class M_kartu_rekomendasi extends Model{
 				}
 								
 			}elseif(is_numeric($drawatn_id)==true){
-				$sql="SELECT drawatn_id,drawatn_perawatan FROM detail_perawatan_nonmedis WHERE drawatn_perawatan='$drawatn_perawatan' AND drawatn_id='$drawatn_id'";
+				$sql="SELECT drawatn_id,drawatn_perawatan FROM detail_rekomendasi_nonmedis WHERE drawatn_perawatan='$drawatn_perawatan' AND drawatn_id='$drawatn_id'";
 				$rs=$this->db->query($sql);
 				if(!$rs->num_rows()){
 					$data = array(
@@ -801,7 +801,7 @@ class M_kartu_rekomendasi extends Model{
 					"drawatn_keterangan"=>$drawatn_keterangan
 					);
 					$this->db->where('drawatn_id',$drawatn_id);
-					$this->db->update('detail_perawatan_nonmedis',$data);
+					$this->db->update('detail_rekomendasi_nonmedis',$data);
 				}
 			}
 		}
@@ -851,7 +851,7 @@ class M_kartu_rekomendasi extends Model{
 		function detail_produk_list($master_id,$query,$start,$end) {
 			//$query="SELECT *,konversi_nilai FROM detail_jual_produk LEFT JOIN satuan_konversi ON(dproduk_produk=konversi_produk AND dproduk_satuan=konversi_satuan) WHERE dproduk_master='".$master_id."'";
 			$query = "SELECT dproduk_id, dproduk_master, dproduk_produk, date_format(dproduk_tanggal,'%Y-%m-%d') as dproduk_tanggal, dproduk_keterangan
-			FROM detail_produk
+			FROM detail_rekomendasi_produk
 			INNER JOIN produk ON(dproduk_produk=produk_id)
 			WHERE dproduk_master='".$master_id."'";
 			
@@ -886,12 +886,12 @@ class M_kartu_rekomendasi extends Model{
 					"dproduk_tanggal"=>$dproduk_tanggal,
 					
 				);
-				$this->db->insert('detail_produk', $data); 
+				$this->db->insert('detail_rekomendasi_produk', $data); 
 			}
 		}
 		
 		function detail_produk_purge($master_id){
-			$sql="DELETE detail_produk FROM detail_produk INNER JOIN produk ON(dproduk_produk=produk_id) WHERE dproduk_master='".$master_id."'";
+			$sql="DELETE detail_rekomendasi_produk FROM detail_rekomendasi_produk INNER JOIN produk ON(dproduk_produk=produk_id) WHERE dproduk_master='".$master_id."'";
 			$result=$this->db->query($sql);
 		}
 		
@@ -930,12 +930,101 @@ left join karyawan on (karyawan.karyawan_id = rekomendasi_card.card_dokter)";
 		/* Checking db.tindakan_detail WHERE db.tindakan_detail.dtrawat_id = $dtrawat_id DAN semua Field,
 		 * JIKA ada salah satu Field yang berubah maka akan di-UPDATE
 		 */ 
-		$data_tindakan=array(
-		"card_keterangan"=>$card_keterangan,
+		$data=array(
+		"card_keterangan"=>$card_keterangan);
+
+			if($card_wl1=='true')
+				$data["card_wl1"]=1;
+			if($card_wl1=='false')
+				$data["card_wl1"]=0;
+			if($card_wl2=='true')
+				$data["card_wl2"]=1;
+			if($card_wl2=='false')
+				$data["card_wl2"]=0;
+			if($card_wl3=='true')
+				$data["card_wl3"]=1;
+			if($card_wl3=='false')
+				$data["card_wl3"]=0;
+			if($card_wl4=='true')
+				$data["card_wl4"]=1;
+			if($card_wl4=='false')
+				$data["card_wl4"]=0;
+			if($card_wl5=='true')
+				$data["card_wl5"]=1;
+			if($card_wl5=='false')
+				$data["card_wl5"]=0;
+			if($card_wl6=='true')
+				$data["card_wl6"]=1;
+			if($card_wl6=='false')
+				$data["card_wl6"]=0;
+			if($card_wl7=='true')
+				$data["card_wl7"]=1;
+			if($card_wl7=='false')
+				$data["card_wl7"]=0;
+			if($card_wl8=='true')
+				$data["card_wl8"]=1;
+			if($card_wl8=='false')
+				$data["card_wl8"]=0;
+			if($card_wl9=='true')
+				$data["card_wl9"]=1;
+			if($card_wl9=='false')
+				$data["card_wl9"]=0;
+			if($card_wl10=='true')
+				$data["card_wl10"]=1;
+			if($card_wl10=='false')
+				$data["card_wl10"]=0;
+			if($card_wl11=='true')
+				$data["card_wl11"]=1;
+			if($card_wl11=='false')
+				$data["card_wl11"]=0;
+			if($card_wl12=='true')
+				$data["card_wl12"]=1;
+			if($card_wl12=='false')
+				$data["card_wl12"]=0;
+			if($card_wl13=='true')
+				$data["card_wl13"]=1;
+			if($card_wl13=='false')
+				$data["card_wl13"]=0;
+			if($card_wl14=='true')
+				$data["card_wl14"]=1;
+			if($card_wl14=='false')
+				$data["card_wl14"]=0;
+			if($card_wl15=='true')
+				$data["card_wl15"]=1;
+			if($card_wl15=='false')
+				$data["card_wl15"]=0;
+			if($card_wl16=='true')
+				$data["card_wl16"]=1;
+			if($card_wl16=='false')
+				$data["card_wl16"]=0;
+			if($card_wl17=='true')
+				$data["card_wl17"]=1;
+			if($card_wl17=='false')
+				$data["card_wl17"]=0;
+			if($card_wl18=='true')
+				$data["card_wl18"]=1;
+			if($card_wl18=='false')
+				$data["card_wl18"]=0;
+			if($card_wl19=='true')
+				$data["card_wl19"]=1;
+			if($card_wl19=='false')
+				$data["card_wl19"]=0;
+			if($card_wl20=='true')
+				$data["card_wl20"]=1;
+			if($card_wl20=='false')
+				$data["card_wl20"]=0;
+			if($card_wl21=='true')
+				$data["card_wl21"]=1;
+			if($card_wl21=='false')
+				$data["card_wl21"]=0;
+			if($card_wl22=='true')
+				$data["card_wl22"]=1;
+			if($card_wl22=='false')
+				$data["card_wl22"]=0;
+		
 		//"card_dokter"=>$card_dokter
-		);
 		$this->db->where("card_id", $card_id);
-		$this->db->update("rekomendasi_card", $data_tindakan);
+		$this->db->update("rekomendasi_card", $data);
 		
 		if($mode_edit=="update_list"){
 			$sql_check="SELECT card_id,card_keterangan, card_cust, card_dokter, card_locked FROM rekomendasi_card WHERE card_id='$card_id'";

@@ -1264,7 +1264,7 @@ Ext.onReady(function(){
 			renderer: Ext.util.Format.comboRenderer(combo_rawat_medis)
 		},
 		{
-			header: 'Tgl Rekomendasi',
+			header: '<div align="center">' + 'Tgl Rekomendasi' + '</div>',
 			dataIndex: 'drawatm_tanggal',
 			width: 100,
 			sortable: true,
@@ -1288,7 +1288,7 @@ Ext.onReady(function(){
 	rekomendasi_medisdetailListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'rekomendasi_medisdetailListEditorGrid',
 		el: 'fp_kartu_rekomendasi_detail',
-		title: 'Detail Tindakan Medis',
+		title: 'Detail Rekomendasi Medis',
 		height: 200,
 		width: 888,
 		autoScroll: true,
@@ -1522,7 +1522,7 @@ Ext.onReady(function(){
 			renderer: Ext.util.Format.comboRenderer(combo_rekomendasi_detail_nonmedis)
 		},
 		{
-			header: 'Tgl Rekomendasi',
+			header: '<div align="center">' + 'Tgl Rekomendasi' + '</div>',
 			dataIndex: 'drawatn_tanggal',
 			width: 100,
 			sortable: true,
@@ -1546,7 +1546,7 @@ Ext.onReady(function(){
 	rekomendasi_nonmedisListEditorGrid = new Ext.grid.EditorGridPanel({
 		id: 'rekomendasi_nonmedisListEditorGrid',
 		el: 'fp_dkartu_rekomendasi',
-		title: 'Detail Tindakan Non Medis',
+		title: 'Detail Rekomendasi Non Medis',
 		height: 200,
 		width: 888,
 		autoScroll: true,
@@ -1781,7 +1781,7 @@ Ext.onReady(function(){
 			renderer: Ext.util.Format.comboRenderer(combo_rekomendasi_detailproduk)
 		},
 		{
-			header: 'Tanggal Rekomendasi',
+			header: '<div align="center">' + 'Tgl Rekomendasi' + '</div>',
 			dataIndex: 'dproduk_tanggal',
 			width: 100,
 			sortable: true,
@@ -1804,9 +1804,9 @@ Ext.onReady(function(){
 	rekomendasi_detail_produkListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'rekomendasi_detail_produkListEditorGrid',
 		el: 'fp_detail_produk',
-		title: 'Detail Penjualan Produk',
-		height: 250,
-		width: 918,
+		title: 'Detail Rekomendasi Produk',
+		height: 200,
+		width: 888,
 		autoScroll: true,
 		store: rekomendasi_produkdetail_DataStore, // DataStore
 		colModel: rekomendasi_detail_produk_ColumnModel, // Nama-nama Columns
