@@ -2094,6 +2094,7 @@ Ext.onReady(function(){
 			callback: function(r,opt,success){
 				if(success==true){
 					cbo_produk_detailDataStore.setBaseParam('task','order');
+					cbo_produk_detailDataStore.setBaseParam('order_id',terima_orderField.getValue());
 					cbo_produk_detailDataStore.load({
 						callback: function(r,opt,success){
 							if(success==true){
