@@ -112,7 +112,8 @@ class C_master_jual_paket extends Controller {
 		$query = isset($_POST['query']) ? $_POST['query'] : "";
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result=$this->m_master_jual_paket->get_customer_list($query,$start,$end);
+//		$result=$this->m_master_jual_paket->get_customer_list($query,$start,$end);
+		$result=$this->m_public_function->get_customer_list($query,$start,$end);
 		echo $result;
 	}
 	
