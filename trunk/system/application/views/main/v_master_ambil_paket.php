@@ -635,7 +635,7 @@ Ext.onReady(function(){
 		            }
 				},
 				render: function(c){
-				Ext.get(this.id).set({qtitle:'Search by:'});
+				Ext.get(this.id).set({qtitle:'Search by (Tgl Faktur >= 2007):'});
 				Ext.get(this.id).set({qtip:' - No Customer<br> - Nama Customer<br> - Kode Paket<br> - Nama Paket'});
 				}
 			},
