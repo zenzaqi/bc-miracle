@@ -778,15 +778,31 @@ class M_master_jual_produk extends Model{
 						$sql="SELECT tvoucher_id FROM voucher_terima WHERE tvoucher_ref='$jproduk_nobukti'";
 						$rs=$this->db->query($sql);
 						if($rs->num_rows()){
+							/*$get_voucher_cashback=0;
+							$sql="SELECT voucher_cashback FROM voucher_kupon LEFT JOIN voucher ON(kvoucher_master=voucher_id) WHERE kvoucher_nomor='$jproduk_voucher_no'";
+							$rs=$this->db->query($sql);
+							if($rs->num_rows()){
+								$rs_record=$rs->row_array();
+								$get_voucher_cashback=$rs_record["voucher_cashback"];
+							}*/
 							$data=array(
-								"tvoucher_novoucher"=>$jproduk_voucher_no
+								"tvoucher_novoucher"=>$jproduk_voucher_no,
+								"tvoucher_nilai"=>$jproduk_voucher_cashback
 								);
 							$this->db->where('tvoucher_ref', $jproduk_nobukti);
 							$this->db->update('voucher_terima', $data);
 						}else{
+							/*$get_voucher_cashback=0;
+							$sql="SELECT voucher_cashback FROM voucher_kupon LEFT JOIN voucher ON(kvoucher_master=voucher_id) WHERE kvoucher_nomor='$jproduk_voucher_no'";
+							$rs=$this->db->query($sql);
+							if($rs->num_rows()){
+								$rs_record=$rs->row_array();
+								$get_voucher_cashback=$rs_record["voucher_cashback"];
+							}*/
 							$data=array(
 								"tvoucher_novoucher"=>$jproduk_voucher_no,
-								"tvoucher_ref"=>$jproduk_nobukti
+								"tvoucher_ref"=>$jproduk_nobukti,
+								"tvoucher_nilai"=>$jproduk_voucher_cashback
 								);
 							$this->db->insert('voucher_terima', $data);
 						}
@@ -929,15 +945,31 @@ class M_master_jual_produk extends Model{
 						$sql="SELECT tvoucher_id FROM voucher_terima WHERE tvoucher_ref='$jproduk_nobukti'";
 						$rs=$this->db->query($sql);
 						if($rs->num_rows()){
+							/*$get_voucher_cashback=0;
+							$sql="SELECT voucher_cashback FROM voucher_kupon LEFT JOIN voucher ON(kvoucher_master=voucher_id) WHERE kvoucher_nomor='$jproduk_voucher_no'";
+							$rs=$this->db->query($sql);
+							if($rs->num_rows()){
+								$rs_record=$rs->row_array();
+								$get_voucher_cashback=$rs_record["voucher_cashback"];
+							}*/
 							$data=array(
-								"tvoucher_novoucher"=>$jproduk_voucher_no2
+								"tvoucher_novoucher"=>$jproduk_voucher_no2,
+								"tvoucher_nilai"=>$jproduk_voucher_cashback
 								);
 							$this->db->where('tvoucher_ref', $jproduk_nobukti);
 							$this->db->update('voucher_terima', $data);
 						}else{
+							/*$get_voucher_cashback=0;
+							$sql="SELECT voucher_cashback FROM voucher_kupon LEFT JOIN voucher ON(kvoucher_master=voucher_id) WHERE kvoucher_nomor='$jproduk_voucher_no2'";
+							$rs=$this->db->query($sql);
+							if($rs->num_rows()){
+								$rs_record=$rs->row_array();
+								$get_voucher_cashback=$rs_record["voucher_cashback"];
+							}*/
 							$data=array(
 								"tvoucher_novoucher"=>$jproduk_voucher_no2,
-								"tvoucher_ref"=>$jproduk_nobukti
+								"tvoucher_ref"=>$jproduk_nobukti,
+								"tvoucher_nilai"=>$jproduk_voucher_cashback2
 								);
 							$this->db->insert('voucher_terima', $data);
 						}
@@ -1081,15 +1113,31 @@ class M_master_jual_produk extends Model{
 						$sql="SELECT tvoucher_id FROM voucher_terima WHERE tvoucher_ref='$jproduk_nobukti'";
 						$rs=$this->db->query($sql);
 						if($rs->num_rows()){
+							/*$get_voucher_cashback=0;
+							$sql="SELECT voucher_cashback FROM voucher_kupon LEFT JOIN voucher ON(kvoucher_master=voucher_id) WHERE kvoucher_nomor='$jproduk_voucher_no'";
+							$rs=$this->db->query($sql);
+							if($rs->num_rows()){
+								$rs_record=$rs->row_array();
+								$get_voucher_cashback=$rs_record["voucher_cashback"];
+							}*/
 							$data=array(
-								"tvoucher_novoucher"=>$jproduk_voucher_no3
+								"tvoucher_novoucher"=>$jproduk_voucher_no3,
+								"tvoucher_nilai"=>$jproduk_voucher_cashback3
 								);
 							$this->db->where('tvoucher_ref', $jproduk_nobukti);
 							$this->db->update('voucher_terima', $data);
 						}else{
+							/*$get_voucher_cashback=0;
+							$sql="SELECT voucher_cashback FROM voucher_kupon LEFT JOIN voucher ON(kvoucher_master=voucher_id) WHERE kvoucher_nomor='$jproduk_voucher_no3'";
+							$rs=$this->db->query($sql);
+							if($rs->num_rows()){
+								$rs_record=$rs->row_array();
+								$get_voucher_cashback=$rs_record["voucher_cashback"];
+							}*/
 							$data=array(
 								"tvoucher_novoucher"=>$jproduk_voucher_no3,
-								"tvoucher_ref"=>$jproduk_nobukti
+								"tvoucher_ref"=>$jproduk_nobukti,
+								"tvoucher_nilai"=>$jproduk_voucher_cashback
 								);
 							$this->db->insert('voucher_terima', $data);
 						}
@@ -1216,10 +1264,17 @@ class M_master_jual_produk extends Model{
 							);
 						$this->db->insert('jual_tunai', $data); 
 					}else if($jproduk_cara=='voucher'){
-						
+						/*$get_voucher_cashback=0;
+						$sql="SELECT voucher_cashback FROM voucher_kupon LEFT JOIN voucher ON(kvoucher_master=voucher_id) WHERE kvoucher_nomor='$jproduk_voucher_no'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							$rs_record=$rs->row_array();
+							$get_voucher_cashback=$rs_record["voucher_cashback"];
+						}*/
 						$data=array(
 							"tvoucher_novoucher"=>$jproduk_voucher_no,
-							"tvoucher_ref"=>$jproduk_nobukti
+							"tvoucher_ref"=>$jproduk_nobukti,
+							"tvoucher_nilai"=>$jproduk_voucher_cashback
 							);
 						$this->db->insert('voucher_terima', $data); 
 					}
@@ -1296,10 +1351,17 @@ class M_master_jual_produk extends Model{
 							);
 						$this->db->insert('jual_tunai', $data); 
 					}else if($jproduk_cara2=='voucher'){
-						
+						/*$get_voucher_cashback=0;
+						$sql="SELECT voucher_cashback FROM voucher_kupon LEFT JOIN voucher ON(kvoucher_master=voucher_id) WHERE kvoucher_nomor='$jproduk_voucher_no2'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							$rs_record=$rs->row_array();
+							$get_voucher_cashback=$rs_record["voucher_cashback"];
+						}*/
 						$data=array(
 							"tvoucher_novoucher"=>$jproduk_voucher_no2,
-							"tvoucher_ref"=>$jproduk_nobukti
+							"tvoucher_ref"=>$jproduk_nobukti,
+							"tvoucher_nilai"=>$jproduk_voucher_cashback2
 							);
 						$this->db->insert('voucher_terima', $data); 
 					}
@@ -1377,10 +1439,17 @@ class M_master_jual_produk extends Model{
 							);
 						$this->db->insert('jual_tunai', $data); 
 					}else if($jproduk_cara3=='voucher'){
-						
+						/*$get_voucher_cashback=0;
+						$sql="SELECT voucher_cashback FROM voucher_kupon LEFT JOIN voucher ON(kvoucher_master=voucher_id) WHERE kvoucher_nomor='$jproduk_voucher_no3'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							$rs_record=$rs->row_array();
+							$get_voucher_cashback=$rs_record["voucher_cashback"];
+						}*/
 						$data=array(
 							"tvoucher_novoucher"=>$jproduk_voucher_no3,
-							"tvoucher_ref"=>$jproduk_nobukti
+							"tvoucher_ref"=>$jproduk_nobukti,
+							"tvoucher_nilai"=>$jproduk_voucher_cashback3
 							);
 						$this->db->insert('voucher_terima', $data); 
 					}
