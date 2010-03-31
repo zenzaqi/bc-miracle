@@ -279,7 +279,8 @@ class M_public_function extends Model{
 	}
 	
 	function get_voucher_by_ref($ref_id){
-		$sql="SELECT tvoucher_id,tvoucher_novoucher,voucher_cashback FROM voucher_terima INNER JOIN voucher_kupon ON(tvoucher_novoucher=kvoucher_nomor) INNER JOIN voucher ON(kvoucher_master=voucher_id) WHERE tvoucher_ref='".$ref_id."'";
+		//$sql="SELECT tvoucher_id,tvoucher_novoucher,voucher_cashback FROM voucher_terima INNER JOIN voucher_kupon ON(tvoucher_novoucher=kvoucher_nomor) INNER JOIN voucher ON(kvoucher_master=voucher_id) WHERE tvoucher_ref='".$ref_id."'";
+		$sql="SELECT tvoucher_id,tvoucher_novoucher,tvoucher_nilai FROM voucher_terima WHERE tvoucher_ref='".$ref_id."'";
 		$query = $this->db->query($sql);
 		$nbrows = $query->num_rows();
 		if($nbrows>0){
