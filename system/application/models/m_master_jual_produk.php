@@ -671,7 +671,8 @@ class M_master_jual_produk extends Model{
 							$data=array(
 								"jkwitansi_ref"=>$jproduk_nobukti,
 								"jkwitansi_master"=>$jproduk_kwitansi_no,
-								"jkwitansi_nilai"=>$jproduk_kwitansi_nilai
+								"jkwitansi_nilai"=>$jproduk_kwitansi_nilai,
+								"jkwitansi_transaksi"=>"jual_produk"
 							);
 							$this->db->insert('jual_kwitansi', $data);
 						}
@@ -694,7 +695,8 @@ class M_master_jual_produk extends Model{
 								"jcard_nama"=>$jproduk_card_nama,
 								"jcard_edc"=>$jproduk_card_edc,
 								"jcard_no"=>$jproduk_card_no,
-								"jcard_nilai"=>$jproduk_card_nilai
+								"jcard_nilai"=>$jproduk_card_nilai,
+								"jcard_transaksi"=>"jual_produk"
 								);
 							$this->db->insert('jual_card', $data);
 						}
@@ -722,7 +724,7 @@ class M_master_jual_produk extends Model{
 								"jcek_no"=>$jproduk_cek_no,
 								"jcek_valid"=>$jproduk_cek_valid,
 								"jcek_bank"=>$jproduk_cek_bank,
-								"jcek_nilai"=>$jproduk_cek_nilai
+								"jcek_nilai"=>$jproduk_cek_nilai,
 								);
 							$this->db->where('jcek_ref', $jproduk_nobukti);
 							$this->db->update('jual_cek', $data);
@@ -733,7 +735,8 @@ class M_master_jual_produk extends Model{
 								"jcek_no"=>$jproduk_cek_no,
 								"jcek_valid"=>$jproduk_cek_valid,
 								"jcek_bank"=>$jproduk_cek_bank,
-								"jcek_nilai"=>$jproduk_cek_nilai
+								"jcek_nilai"=>$jproduk_cek_nilai,
+								"jcek_transaksi"=>"jual_produk"
 								);
 							$this->db->insert('jual_cek', $data);
 						}
@@ -754,7 +757,8 @@ class M_master_jual_produk extends Model{
 								"jtransfer_ref"=>$jproduk_nobukti,
 								"jtransfer_bank"=>$jproduk_transfer_bank,
 								"jtransfer_nama"=>$jproduk_transfer_nama,
-								"jtransfer_nilai"=>$jproduk_transfer_nilai
+								"jtransfer_nilai"=>$jproduk_transfer_nilai,
+								"jtransfer_transaksi"=>"jual_produk"
 								);
 							$this->db->insert('jual_transfer', $data);
 						}
@@ -770,7 +774,8 @@ class M_master_jual_produk extends Model{
 						}else{
 							$data=array(
 								"jtunai_nilai"=>$jproduk_tunai_nilai,
-								"jtunai_ref"=>$jproduk_nobukti
+								"jtunai_ref"=>$jproduk_nobukti,
+								"jtunai_transaksi"=>"jual_produk"
 								);
 							$this->db->insert('jual_tunai', $data);
 						}
@@ -802,7 +807,8 @@ class M_master_jual_produk extends Model{
 							$data=array(
 								"tvoucher_novoucher"=>$jproduk_voucher_no,
 								"tvoucher_ref"=>$jproduk_nobukti,
-								"tvoucher_nilai"=>$jproduk_voucher_cashback
+								"tvoucher_nilai"=>$jproduk_voucher_cashback,
+								"tvoucher_transaksi"=>"jual_produk"
 								);
 							$this->db->insert('voucher_terima', $data);
 						}
@@ -837,7 +843,8 @@ class M_master_jual_produk extends Model{
 							$data=array(
 								"jkwitansi_ref"=>$jproduk_nobukti,
 								"jkwitansi_master"=>$jproduk_kwitansi_no2,
-								"jkwitansi_nilai"=>$jproduk_kwitansi_nilai2
+								"jkwitansi_nilai"=>$jproduk_kwitansi_nilai2,
+								"jkwitansi_transaksi"=>"jual_produk"
 							);
 							$this->db->insert('jual_kwitansi', $data);
 						}
@@ -860,7 +867,8 @@ class M_master_jual_produk extends Model{
 								"jcard_nama"=>$jproduk_card_nama2,
 								"jcard_edc"=>$jproduk_card_edc2,
 								"jcard_no"=>$jproduk_card_no2,
-								"jcard_nilai"=>$jproduk_card_nilai2
+								"jcard_nilai"=>$jproduk_card_nilai2,
+								"jcard_transaksi"=>"jual_produk"
 								);
 							$this->db->insert('jual_card', $data);
 						}
@@ -888,7 +896,7 @@ class M_master_jual_produk extends Model{
 								"jcek_no"=>$jproduk_cek_no2,
 								"jcek_valid"=>$jproduk_cek_valid2,
 								"jcek_bank"=>$jproduk_cek_bank2,
-								"jcek_nilai"=>$jproduk_cek_nilai
+								"jcek_nilai"=>$jproduk_cek_nilai2
 								);
 							$this->db->where('jcek_ref', $jproduk_nobukti);
 							$this->db->update('jual_cek', $data);
@@ -899,7 +907,8 @@ class M_master_jual_produk extends Model{
 								"jcek_no"=>$jproduk_cek_no2,
 								"jcek_valid"=>$jproduk_cek_valid2,
 								"jcek_bank"=>$jproduk_cek_bank2,
-								"jcek_nilai"=>$jproduk_cek_nilai
+								"jcek_nilai"=>$jproduk_cek_nilai2,
+								"jcek_transaksi"=>"jual_produk"
 								);
 							$this->db->insert('jual_cek', $data);
 						}
@@ -920,7 +929,8 @@ class M_master_jual_produk extends Model{
 								"jtransfer_ref"=>$jproduk_nobukti,
 								"jtransfer_bank"=>$jproduk_transfer_bank2,
 								"jtransfer_nama"=>$jproduk_transfer_nama2,
-								"jtransfer_nilai"=>$jproduk_transfer_nilai2
+								"jtransfer_nilai"=>$jproduk_transfer_nilai2,
+								"jtransfer_transaksi"=>"jual_produk"
 								);
 							$this->db->insert('jual_transfer', $data);
 						}
@@ -937,7 +947,8 @@ class M_master_jual_produk extends Model{
 						}else{
 							$data=array(
 								"jtunai_ref"=>$jproduk_nobukti,
-								"jtunai_nilai"=>$jproduk_tunai_nilai2
+								"jtunai_nilai"=>$jproduk_tunai_nilai2,
+								"jtunai_transaksi"=>"jual_produk"
 								);
 							$this->db->insert('jual_tunai', $data);
 						}
@@ -954,7 +965,7 @@ class M_master_jual_produk extends Model{
 							}*/
 							$data=array(
 								"tvoucher_novoucher"=>$jproduk_voucher_no2,
-								"tvoucher_nilai"=>$jproduk_voucher_cashback
+								"tvoucher_nilai"=>$jproduk_voucher_cashback2
 								);
 							$this->db->where('tvoucher_ref', $jproduk_nobukti);
 							$this->db->update('voucher_terima', $data);
@@ -969,7 +980,8 @@ class M_master_jual_produk extends Model{
 							$data=array(
 								"tvoucher_novoucher"=>$jproduk_voucher_no2,
 								"tvoucher_ref"=>$jproduk_nobukti,
-								"tvoucher_nilai"=>$jproduk_voucher_cashback2
+								"tvoucher_nilai"=>$jproduk_voucher_cashback2,
+								"tvoucher_transaksi"=>"jual_produk"
 								);
 							$this->db->insert('voucher_terima', $data);
 						}
@@ -1004,7 +1016,8 @@ class M_master_jual_produk extends Model{
 							$data=array(
 								"jkwitansi_ref"=>$jproduk_nobukti,
 								"jkwitansi_master"=>$jproduk_kwitansi_no3,
-								"jkwitansi_nilai"=>$jproduk_kwitansi_nilai3
+								"jkwitansi_nilai"=>$jproduk_kwitansi_nilai3,
+								"jkwitansi_transaksi"=>"jual_produk"
 							);
 							$this->db->insert('jual_kwitansi', $data);
 						}
@@ -1017,7 +1030,7 @@ class M_master_jual_produk extends Model{
 								"jcard_nama"=>$jproduk_card_nama3,
 								"jcard_edc"=>$jproduk_card_edc3,
 								"jcard_no"=>$jproduk_card_no3,
-								"jcard_nilai"=>$jproduk_hutang
+								"jcard_nilai"=>$jproduk_card_nilai3
 								);
 							$this->db->where('jcard_ref', $jproduk_nobukti);
 							$this->db->update('jual_card', $data); 
@@ -1027,7 +1040,8 @@ class M_master_jual_produk extends Model{
 								"jcard_nama"=>$jproduk_card_nama3,
 								"jcard_edc"=>$jproduk_card_edc3,
 								"jcard_no"=>$jproduk_card_no3,
-								"jcard_nilai"=>$jproduk_hutang
+								"jcard_nilai"=>$jproduk_card_nilai3,
+								"jcard_transaksi"=>"jual_produk"
 								);
 							$this->db->insert('jual_card', $data); 
 						}
@@ -1055,7 +1069,7 @@ class M_master_jual_produk extends Model{
 								"jcek_no"=>$jproduk_cek_no3,
 								"jcek_valid"=>$jproduk_cek_valid3,
 								"jcek_bank"=>$jproduk_cek_bank3,
-								"jcek_nilai"=>$jproduk_cek_nilai
+								"jcek_nilai"=>$jproduk_cek_nilai3
 								);
 							$this->db->where('jcek_ref', $jproduk_nobukti);
 							$this->db->update('jual_cek', $data); 
@@ -1066,7 +1080,8 @@ class M_master_jual_produk extends Model{
 								"jcek_no"=>$jproduk_cek_no3,
 								"jcek_valid"=>$jproduk_cek_valid3,
 								"jcek_bank"=>$jproduk_cek_bank3,
-								"jcek_nilai"=>$jproduk_cek_nilai
+								"jcek_nilai"=>$jproduk_cek_nilai3,
+								"jcek_transaksi"=>"jual_produk"
 								);
 							$this->db->insert('jual_cek', $data); 
 						}
@@ -1087,7 +1102,8 @@ class M_master_jual_produk extends Model{
 								"jtransfer_ref"=>$jproduk_nobukti,
 								"jtransfer_bank"=>$jproduk_transfer_bank3,
 								"jtransfer_nama"=>$jproduk_transfer_nama3,
-								"jtransfer_nilai"=>$jproduk_transfer_nilai3
+								"jtransfer_nilai"=>$jproduk_transfer_nilai3,
+								"jtransfer_transaksi"=>"jual_produk"
 								);
 							$this->db->insert('jual_transfer', $data);
 						}
@@ -1104,7 +1120,8 @@ class M_master_jual_produk extends Model{
 						}else{
 							$data=array(
 								"jtunai_ref"=>$jproduk_nobukti,
-								"jtunai_nilai"=>$jproduk_tunai_nilai3
+								"jtunai_nilai"=>$jproduk_tunai_nilai3,
+								"jtunai_transaksi"=>"jual_produk"
 								);
 							$this->db->where('jtunai_ref', $jproduk_nobukti);
 							$this->db->update('jual_tunai', $data);
@@ -1137,7 +1154,8 @@ class M_master_jual_produk extends Model{
 							$data=array(
 								"tvoucher_novoucher"=>$jproduk_voucher_no3,
 								"tvoucher_ref"=>$jproduk_nobukti,
-								"tvoucher_nilai"=>$jproduk_voucher_cashback
+								"tvoucher_nilai"=>$jproduk_voucher_cashback3,
+								"tvoucher_transaksi"=>"jual_produk"
 								);
 							$this->db->insert('voucher_terima', $data);
 						}
@@ -1209,7 +1227,8 @@ class M_master_jual_produk extends Model{
 						$data=array(
 							"jkwitansi_master"=>$jproduk_kwitansi_no,
 							"jkwitansi_nilai"=>$jproduk_kwitansi_nilai,
-							"jkwitansi_ref"=>$jproduk_nobukti
+							"jkwitansi_ref"=>$jproduk_nobukti,
+							"jkwitansi_transaksi"=>"jual_produk"
 						);
 						$this->db->insert('jual_kwitansi', $data); 
 					
@@ -1220,7 +1239,8 @@ class M_master_jual_produk extends Model{
 							"jcard_edc"=>$jproduk_card_edc,
 							"jcard_no"=>$jproduk_card_no,
 							"jcard_nilai"=>$jproduk_card_nilai,
-							"jcard_ref"=>$jproduk_nobukti
+							"jcard_ref"=>$jproduk_nobukti,
+							"jcard_transaksi"=>"jual_produk"
 							);
 						$this->db->insert('jual_card', $data); 
 					
@@ -1244,7 +1264,8 @@ class M_master_jual_produk extends Model{
 							"jcek_valid"=>$jproduk_cek_valid,
 							"jcek_bank"=>$jproduk_cek_bank,
 							"jcek_nilai"=>$jproduk_cek_nilai,
-							"jcek_ref"=>$jproduk_nobukti
+							"jcek_ref"=>$jproduk_nobukti,
+							"jcek_transaksi"=>"jual_produk"
 							);
 						$this->db->insert('jual_cek', $data); 
 					}else if($jproduk_cara=='transfer'){
@@ -1253,14 +1274,16 @@ class M_master_jual_produk extends Model{
 							"jtransfer_bank"=>$jproduk_transfer_bank,
 							"jtransfer_nama"=>$jproduk_transfer_nama,
 							"jtransfer_nilai"=>$jproduk_transfer_nilai,
-							"jtransfer_ref"=>$jproduk_nobukti
+							"jtransfer_ref"=>$jproduk_nobukti,
+							"jtransfer_transaksi"=>"jual_produk"
 							);
 						$this->db->insert('jual_transfer', $data); 
 					}else if($jproduk_cara=='tunai'){
 						
 						$data=array(
 							"jtunai_nilai"=>$jproduk_tunai_nilai,
-							"jtunai_ref"=>$jproduk_nobukti
+							"jtunai_ref"=>$jproduk_nobukti,
+							"jtunai_transaksi"=>"jual_produk"
 							);
 						$this->db->insert('jual_tunai', $data); 
 					}else if($jproduk_cara=='voucher'){
@@ -1274,7 +1297,8 @@ class M_master_jual_produk extends Model{
 						$data=array(
 							"tvoucher_novoucher"=>$jproduk_voucher_no,
 							"tvoucher_ref"=>$jproduk_nobukti,
-							"tvoucher_nilai"=>$jproduk_voucher_cashback
+							"tvoucher_nilai"=>$jproduk_voucher_cashback,
+							"tvoucher_transaksi"=>"jual_produk"
 							);
 						$this->db->insert('voucher_terima', $data); 
 					}
@@ -1297,7 +1321,8 @@ class M_master_jual_produk extends Model{
 						$data=array(
 							"jkwitansi_master"=>$jproduk_kwitansi_no2,
 							"jkwitansi_nilai"=>$jproduk_kwitansi_nilai2,
-							"jkwitansi_ref"=>$jproduk_nobukti
+							"jkwitansi_ref"=>$jproduk_nobukti,
+							"jkwitansi_transaksi"=>"jual_produk"
 						);
 						$this->db->insert('jual_kwitansi', $data); 
 					
@@ -1307,7 +1332,8 @@ class M_master_jual_produk extends Model{
 							"jcard_edc"=>$jproduk_card_edc2,
 							"jcard_no"=>$jproduk_card_no2,
 							"jcard_nilai"=>$jproduk_card_nilai2,
-							"jcard_ref"=>$jproduk_nobukti
+							"jcard_ref"=>$jproduk_nobukti,
+							"jcard_transaksi"=>"jual_produk"
 							);
 						$this->db->insert('jual_card', $data); 
 					
@@ -1330,8 +1356,9 @@ class M_master_jual_produk extends Model{
 							"jcek_no"=>$jproduk_cek_no2,
 							"jcek_valid"=>$jproduk_cek_valid2,
 							"jcek_bank"=>$jproduk_cek_bank2,
-							"jcek_nilai"=>$jproduk_cek_nilai,
-							"jcek_ref"=>$jproduk_nobukti
+							"jcek_nilai"=>$jproduk_cek_nilai2,
+							"jcek_ref"=>$jproduk_nobukti,
+							"jcek_transaksi"=>"jual_produk"
 							);
 						$this->db->insert('jual_cek', $data); 
 					}else if($jproduk_cara2=='transfer'){
@@ -1340,14 +1367,16 @@ class M_master_jual_produk extends Model{
 							"jtransfer_bank"=>$jproduk_transfer_bank2,
 							"jtransfer_nama"=>$jproduk_transfer_nama2,
 							"jtransfer_nilai"=>$jproduk_transfer_nilai2,
-							"jtransfer_ref"=>$jproduk_nobukti
+							"jtransfer_ref"=>$jproduk_nobukti,
+							"jtransfer_transaksi"=>"jual_produk"
 							);
 						$this->db->insert('jual_transfer', $data); 
 					}else if($jproduk_cara2=='tunai'){
 						
 						$data=array(
 							"jtunai_nilai"=>$jproduk_tunai_nilai2,
-							"jtunai_ref"=>$jproduk_nobukti
+							"jtunai_ref"=>$jproduk_nobukti,
+							"jtunai_transaksi"=>"jual_produk"
 							);
 						$this->db->insert('jual_tunai', $data); 
 					}else if($jproduk_cara2=='voucher'){
@@ -1361,7 +1390,8 @@ class M_master_jual_produk extends Model{
 						$data=array(
 							"tvoucher_novoucher"=>$jproduk_voucher_no2,
 							"tvoucher_ref"=>$jproduk_nobukti,
-							"tvoucher_nilai"=>$jproduk_voucher_cashback2
+							"tvoucher_nilai"=>$jproduk_voucher_cashback2,
+							"tvoucher_transaksi"=>"jual_produk"
 							);
 						$this->db->insert('voucher_terima', $data); 
 					}
@@ -1384,7 +1414,8 @@ class M_master_jual_produk extends Model{
 						$data=array(
 							"jkwitansi_master"=>$jproduk_kwitansi_no3,
 							"jkwitansi_nilai"=>$jproduk_kwitansi_nilai3,
-							"jkwitansi_ref"=>$jproduk_nobukti
+							"jkwitansi_ref"=>$jproduk_nobukti,
+							"jkwitansi_transaksi"=>"jual_produk"
 						);
 						$this->db->insert('jual_kwitansi', $data); 
 					
@@ -1394,8 +1425,9 @@ class M_master_jual_produk extends Model{
 							"jcard_nama"=>$jproduk_card_nama3,
 							"jcard_edc"=>$jproduk_card_edc3,
 							"jcard_no"=>$jproduk_card_no3,
-							"jcard_nilai"=>$jproduk_hutang,
-							"jcard_ref"=>$jproduk_nobukti
+							"jcard_nilai"=>$jproduk_card_nilai3,
+							"jcard_ref"=>$jproduk_nobukti,
+							"jcard_transaksi"=>"jual_produk"
 							);
 						$this->db->insert('jual_card', $data); 
 					
@@ -1418,8 +1450,9 @@ class M_master_jual_produk extends Model{
 							"jcek_no"=>$jproduk_cek_no3,
 							"jcek_valid"=>$jproduk_cek_valid3,
 							"jcek_bank"=>$jproduk_cek_bank3,
-							"jcek_nilai"=>$jproduk_cek_nilai,
-							"jcek_ref"=>$jproduk_nobukti
+							"jcek_nilai"=>$jproduk_cek_nilai3,
+							"jcek_ref"=>$jproduk_nobukti,
+							"jcek_transaksi"=>"jual_produk"
 							);
 						$this->db->insert('jual_cek', $data); 
 					}else if($jproduk_cara3=='transfer'){
@@ -1428,14 +1461,16 @@ class M_master_jual_produk extends Model{
 							"jtransfer_bank"=>$jproduk_transfer_bank3,
 							"jtransfer_nama"=>$jproduk_transfer_nama3,
 							"jtransfer_nilai"=>$jproduk_transfer_nilai3,
-							"jtransfer_ref"=>$jproduk_nobukti
+							"jtransfer_ref"=>$jproduk_nobukti,
+							"jtransfer_transaksi"=>"jual_produk"
 							);
 						$this->db->insert('jual_transfer', $data); 
 					}else if($jproduk_cara3=='tunai'){
 						
 						$data=array(
 							"jtunai_nilai"=>$jproduk_tunai_nilai3,
-							"jtunai_ref"=>$jproduk_nobukti
+							"jtunai_ref"=>$jproduk_nobukti,
+							"jtunai_transaksi"=>"jual_produk"
 							);
 						$this->db->insert('jual_tunai', $data); 
 					}else if($jproduk_cara3=='voucher'){
@@ -1449,7 +1484,8 @@ class M_master_jual_produk extends Model{
 						$data=array(
 							"tvoucher_novoucher"=>$jproduk_voucher_no3,
 							"tvoucher_ref"=>$jproduk_nobukti,
-							"tvoucher_nilai"=>$jproduk_voucher_cashback3
+							"tvoucher_nilai"=>$jproduk_voucher_cashback3,
+							"tvoucher_transaksi"=>"jual_produk"
 							);
 						$this->db->insert('voucher_terima', $data); 
 					}
