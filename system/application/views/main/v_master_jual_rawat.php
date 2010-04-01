@@ -4504,7 +4504,8 @@ Ext.onReady(function(){
 	detail_ambil_paketListGrid =  new Ext.grid.GridPanel({
 		id: 'detail_ambil_paketListGrid',
 		el: 'fp_detail_ambil_paket',
-		title: 'Detail Pengambilan Paket',
+		//title: 'Detail Pengambilan Paket',
+		title: 'Info Paket (dari Kasir - Pengambilan Paket)',
 		height: 150,	//250,
 		width: 940,	//938,
 		autoScroll: true,
