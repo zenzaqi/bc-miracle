@@ -297,7 +297,8 @@ Ext.onReady(function(){
   
 	/* Function for Update Confirm */
 	function ambil_paket_confirm_update(){
-		ambil_paket_isi_perawatan_DataStore.removeAll();
+		//ambil_paket_isi_perawatan_DataStore.removeAll();
+		ambil_paket_isi_perawatan_DataStore.load({params: {master_id:0, start:0, limit:pageS}});
 		//cbo_paket_isi_rawatDataStore.load({params:{master_id:0}});
 		/* only one record is selected here */
 		if(ambil_paketListEditorGrid.selModel.getCount() == 1) {
@@ -514,6 +515,13 @@ Ext.onReady(function(){
   	/* Function for Identify of Window Column Model */
 	ambil_paket_ColumnModel = new Ext.grid.ColumnModel(
 		[
+		{
+			header: '<div align="center">' + 'apaket_id' + '</div>',
+//			dataIndex: 'apaket_cust_no',
+			dataIndex: 'apaket_id',
+			width: 80,	//230,
+			sortable: true
+		}, 
 		{
 			header: '<div align="center">' + 'No Cust' + '</div>',
 //			dataIndex: 'apaket_cust_no',

@@ -254,7 +254,7 @@ class M_master_ambil_paket extends Model{
 			$this->db->insert('detail_ambil_paket', $dti_dapaket);
 			
 			if($this->db->affected_rows()){
-				$sql_sisa_item="SELECT sapaket_id, IF((sapaket_sisa_item-(sum(dapaket_jumlah)))!='null', (sapaket_sisa_item-(sum(dapaket_jumlah))), 0) as total_sisa_item FROM submaster_apaket_item LEFT JOIN detail_ambil_paket ON(dapaket_sapaket=sapaket_id) WHERE sapaket_id='$dapaket_sapaket' GROUP BY sapaket_id";
+				$sql_sisa_item="SELECT sapaket_id, IF((sapaket_jmlisi_item-(sum(dapaket_jumlah)))!='null', (sapaket_jmlisi_item-(sum(dapaket_jumlah))), 0) as total_sisa_item FROM submaster_apaket_item LEFT JOIN detail_ambil_paket ON(dapaket_sapaket=sapaket_id) WHERE sapaket_id='$dapaket_sapaket' GROUP BY sapaket_id";
 				$rs_sisa_item=$this->db->query($sql_sisa_item);
 				if($rs_sisa_item->num_rows()){
 					/* UPDATE db.submaster_apaket_item.sapaket_sisa_item */
@@ -267,7 +267,8 @@ class M_master_ambil_paket extends Model{
 					$this->db->update('submaster_apaket_item', $dtu_sapaket);
 				}
 				
-				$sql_sisa_paket="SELECT apaket_id, IF((apaket_sisa_paket-(sum(dapaket_jumlah)))!='null', (apaket_sisa_paket-(sum(dapaket_jumlah))), 0) as total_sisa_paket FROM master_ambil_paket LEFT JOIN detail_ambil_paket ON(dapaket_master=apaket_id) WHERE apaket_id='$dapaket_master' GROUP BY apaket_id";
+				$sql_sisa_paket="SELECT apaket_id, IF((apaket_paket_jumlah-(sum(dapaket_jumlah)))!='null', (apaket_paket_jumlah-(sum(dapaket_jumlah))), 0) as total_sisa_paket FROM master_ambil_paket LEFT JOIN detail_ambil_paket ON(dapaket_master=apaket_id) WHERE apaket_id='$dapaket_master' GROUP BY apaket_id";
+				echo $sql_sisa_paket;
 				$rs_sisa_paket=$this->db->query($sql_sisa_paket);
 				if($rs_sisa_paket->num_rows()){
 					/* UPDATE db.master_ambil_paket.apaket_sisa_paket */
