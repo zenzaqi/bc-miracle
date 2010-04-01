@@ -280,6 +280,21 @@ Ext.onReady(function(){
 		cbo_order_satuanDataStore.load();
 		cbo_order_produk_DataStore.load();
 		detail_order_beli_DataStore.load();
+		
+		cbo_order_satuanDataStore.setBaseParam('task','detail');
+		cbo_order_satuanDataStore.setBaseParam('master_id',get_pk_id());
+		cbo_order_satuanDataStore.load();
+		
+		cbo_order_produk_DataStore.setBaseParam('master_id',get_pk_id());
+		cbo_order_produk_DataStore.load({
+			callback: function(r,opt,success){
+				if(success==true){
+					detail_order_beli_DataStore.setBaseParam('master_id',get_pk_id());
+					detail_order_beli_DataStore.load();
+				}
+			}
+		});
+		
 	}
  	/* End of Function */
   
@@ -302,6 +317,7 @@ Ext.onReady(function(){
 		cbo_order_satuanDataStore.load();
 		
 		cbo_order_produk_DataStore.setBaseParam('master_id',get_pk_id());
+		cbo_order_produk_DataStore.setBaseParam('task','detail');
 		cbo_order_produk_DataStore.load({
 			callback: function(r,opt,success){
 				if(success==true){
