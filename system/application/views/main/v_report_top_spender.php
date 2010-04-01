@@ -284,9 +284,9 @@ Ext.onReady(function(){
 	}
   	/* End of Function */
 	
-	
+	// cek valid
 	function is_tindakan_medis_searchform_valid(){
-		return (Ext.getCmp('trawat_medis_tglStartAppSearchField').isValid());
+		return (Ext.getCmp('trawat_medis_tglStartAppSearchField').isValid() && jumlahField.getValue()!=null && jenisField.getValue()!=null);
 		// && trawat_medis_dokterSearchField.isValid()
 	}
 	
@@ -608,9 +608,9 @@ Ext.onReady(function(){
 			})
 		}, 
 		{
-			header: '<div align="center">' + 'Nomor member' + '</div>',
+			header: '<div align="center">' + 'No Member' + '</div>',
 			dataIndex: 'customer_member',
-			width: 185,//185,	//210,
+			width: 80,//185,	//210,
 			sortable: true,
 			editor: new Ext.form.ComboBox({
 				//store: trawat_medis_perawatanDataStore,
@@ -626,8 +626,10 @@ Ext.onReady(function(){
 		}, 
 		{	
 			align : 'Right',
-			header: '<div align="center">' + 'Total Spending' + '</div>',
+			header: '<div align="center">' + 'Total (Rp)' + '</div>',
 			dataIndex: 'total',
+			renderer: Ext.util.Format.numberRenderer('0,000'),
+			readOnly: true,
 			width: 80,	//55,
 			sortable: true
 		}/*,
@@ -1546,7 +1548,7 @@ Ext.onReady(function(){
 		else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'Tanggal atau dokter belum diisi',
+				msg: 'Tanggal Awal, Jenis, atau Jumlah belum diisi',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
