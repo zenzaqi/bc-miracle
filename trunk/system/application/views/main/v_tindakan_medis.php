@@ -237,7 +237,7 @@ Ext.onReady(function(){
 					default:
 						tindakan_medisDataStore.commitChanges();
 						tindakan_medisDataStore.reload();
-						trawat_medis_perawatanDataStore.reload();
+						trawat_medis_perawatanDataStore.reload({params:{query:tindakanListEditorGrid.getSelectionModel().getSelected().get('trawat_id')}});
 						/*Ext.MessageBox.show({
 						   title: 'Warning',
 						   msg: 'We could\'t not save the tindakan.',
