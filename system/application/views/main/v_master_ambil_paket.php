@@ -77,6 +77,8 @@ var apaket_custSearchField;
 var apaket_paketSearchField;
 var apaket_kadaluarsaSearchField;
 
+var dt = new Date();
+
 /* on ready fuction */
 Ext.onReady(function(){
   	Ext.QuickTips.init();	/* Initiate quick tips icon */
@@ -1035,6 +1037,15 @@ Ext.onReady(function(){
 	ambil_paket_isi_perawatan_ColumnModel = new Ext.grid.ColumnModel(
 		[
 		{
+			header: '<div align="center">' + 'Tgl Ambil' + '</div>',
+			dataIndex: 'tgl_ambil',
+			width: 70,
+			sortable: true,
+			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
+			editor: new Ext.form.DateField({
+				format: 'd-m-Y'})
+		}, 
+		{
 			header: '<div align="center">' + 'Perawatan' + '</div>',
 			dataIndex: 'rpaket_perawatan',
 			width: 200,	//150,
@@ -1114,9 +1125,10 @@ Ext.onReady(function(){
 	//function of detail add
 	function ambil_paket_isi_perawatan_add(){
 		var edit_ambil_paket_isi_perawatan= new ambil_paket_isi_perawatanListEditorGrid.store.recordType({
-			rpaket_perawatan	:'',		
-			rpaket_jumlah	:'',		
-			rpaket_cust	:''
+			tgl_ambil		: dt.dateFormat('Y-m-d'),
+			rpaket_perawatan: '',		
+			rpaket_jumlah	: '',		
+			rpaket_cust		: ''
 		});
 		editor_ambil_paket_isi_perawatan.stopEditing();
 		ambil_paket_isi_perawatan_DataStore.insert(0, edit_ambil_paket_isi_perawatan);
@@ -1145,7 +1157,8 @@ Ext.onReady(function(){
 				dapaket_master	: eval(apaket_idField.getValue()), 
 				dapaket_sapaket	: ambil_paket_isi_perawatan_record.data.rpaket_perawatan, 
 				dapaket_jumlah	: ambil_paket_isi_perawatan_record.data.rpaket_jumlah,
-				dapaket_cust	: ambil_paket_isi_perawatan_record.data.rpaket_cust
+				dapaket_cust	: ambil_paket_isi_perawatan_record.data.rpaket_cust,
+				tgl_ambil		: ambil_paket_isi_perawatan_record.data.tgl_ambil.format('Y-m-d')
 				
 				}
 			});
