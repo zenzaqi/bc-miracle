@@ -490,7 +490,7 @@ Ext.onReady(function(){
 			{name: 'dorder_master', type: 'int', mapping: 'order_id'},
 			{name: 'dterima_produk', type: 'int', mapping: 'dorder_produk'},
 			{name: 'dorder_produk_nama', type: 'string', mapping: 'produk_nama'},
-			{name: 'dterima_jumlah', type: 'int', mapping: 'dorder_jumlah'},
+			{name: 'dterima_jumlah', type: 'int', mapping: 'jumlah_barang'},
 			{name: 'dterima_satuan', type: 'int', mapping: 'dorder_satuan'},
 			{name: 'dorder_produk_satuan', type: 'string', mapping: 'satuan_nama'},
 			{name: 'dorder_produk_harga', type: 'int', mapping: 'dorder_harga'},
