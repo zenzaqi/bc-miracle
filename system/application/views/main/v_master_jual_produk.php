@@ -3690,7 +3690,7 @@ Ext.onReady(function(){
 	dproduk_idField=new Ext.form.NumberField();
 	djproduk_satuan_nilaiField=new Ext.form.NumberField();
 	
-	/*combo_jual_produk.on('select',function(){
+	combo_jual_produk.on('select',function(){
 		for(i=0;i<detail_jual_produk_DataStore.getCount();i++){	
 			detail_jual_produk_record=detail_jual_produk_DataStore.getAt(i);
 			var c_dtStore=0;
@@ -3716,7 +3716,7 @@ Ext.onReady(function(){
 				});
 			}
 		}
-	});*/
+	});
 
 	temp_konv_nilai=new Ext.form.NumberField();
 
