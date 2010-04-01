@@ -516,13 +516,6 @@ Ext.onReady(function(){
 	ambil_paket_ColumnModel = new Ext.grid.ColumnModel(
 		[
 		{
-			header: '<div align="center">' + 'apaket_id' + '</div>',
-//			dataIndex: 'apaket_cust_no',
-			dataIndex: 'apaket_id',
-			width: 80,	//230,
-			sortable: true
-		}, 
-		{
 			header: '<div align="center">' + 'No Cust' + '</div>',
 //			dataIndex: 'apaket_cust_no',
 			dataIndex: 'cust_no',
