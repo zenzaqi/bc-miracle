@@ -1548,7 +1548,7 @@ Ext.onReady(function(){
 		else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'Tanggal Awal, Jenis, atau Jumlah belum diisi',
+				msg: 'Tanggal, Jenis, atau Jumlah belum diisi',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -1632,7 +1632,7 @@ Ext.onReady(function(){
 							items: [
 							    {
 									//fieldLabel: 'Tanggal Tindakan',
-									fieldLabel: 'Tanggal Awal',
+									fieldLabel: 'Tanggal',
 							        name: 'trawat_medis_tglStartAppSearchField',
 							        id: 'trawat_medis_tglStartAppSearchField',
 									vtype: 'daterange',
