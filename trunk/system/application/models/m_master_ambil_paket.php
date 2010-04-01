@@ -242,13 +242,14 @@ class M_master_ambil_paket extends Model{
 		//*eof
 		
 		//insert detail record
-		function detail_ambil_paket_isi_perawatan_insert($dapaket_master ,$dapaket_sapaket ,$dapaket_jumlah ,$dapaket_cust){
+		function detail_ambil_paket_isi_perawatan_insert($dapaket_master ,$dapaket_sapaket ,$dapaket_jumlah ,$dapaket_cust, $tgl_ambil){
 			/* INSERT ke db.detail_ambil_paket sebagai History Pengambilan Paket */
 			$dti_dapaket=array(
 			"dapaket_master"=>$dapaket_master,
 			"dapaket_sapaket"=>$dapaket_sapaket,
 			"dapaket_jumlah"=>$dapaket_jumlah,
-			"dapaket_cust"=>$dapaket_cust
+			"dapaket_cust"=>$dapaket_cust,
+			"tgl_ambil"		=>$tgl_ambil
 			);
 			$this->db->insert('detail_ambil_paket', $dti_dapaket);
 			
