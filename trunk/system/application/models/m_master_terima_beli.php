@@ -425,8 +425,10 @@ class M_master_terima_beli extends Model{
 		
 		//function for create new record
 		function master_terima_beli_create($terima_no ,$terima_order ,$terima_supplier ,$terima_surat_jalan ,$terima_pengirim ,$terima_tanggal ,$terima_keterangan ){
-			$pattern="LPB/".date("y/m")."/";
-			$terima_no=$this->m_public_function->get_kode_1('master_terima_beli','terima_no',$pattern,14);
+//			$pattern="LPB/".date("y/m")."/";
+//			$terima_no=$this->m_public_function->get_kode_1('master_terima_beli','terima_no',$pattern,14);
+			$pattern="PB/".date("ym")."-";
+			$terima_no=$this->m_public_function->get_kode_1('master_terima_beli','terima_no',$pattern,13);
 			
 			$data = array(
 				"terima_no"=>$terima_no, 
