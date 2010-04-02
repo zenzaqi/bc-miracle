@@ -280,7 +280,7 @@ class M_master_order_beli extends Model{
 		}
 		
 		//function for update record
-		function master_order_beli_update($order_id ,$order_no ,$order_supplier ,$order_tanggal ,$order_carabayar ,$order_diskon, $order_cashback ,$order_biaya ,$order_bayar ,$order_keterangan ){
+		function master_order_beli_update($order_id ,$order_no ,$order_supplier ,$order_tanggal ,$order_carabayar ,$order_diskon, $order_cashback ,$order_biaya ,$order_bayar ,$order_keterangan, $order_status){
 			$data = array(
 				"order_id"=>$order_id, 
 				"order_no"=>$order_no, 
@@ -290,7 +290,8 @@ class M_master_order_beli extends Model{
 				"order_cashback"=>$order_cashback,
 				"order_biaya"=>$order_biaya, 
 				"order_bayar"=>$order_bayar, 
-				"order_keterangan"=>$order_keterangan 
+				"order_keterangan"=>$order_keterangan,
+				"order_status"=>$order_status 
 			);
 			$sql="select supplier_id from supplier where supplier_id='".$order_supplier."'";
 			$query=$this->db->query($sql);
@@ -304,7 +305,7 @@ class M_master_order_beli extends Model{
 		}
 		
 		//function for create new record
-		function master_order_beli_create($order_no ,$order_supplier ,$order_tanggal ,$order_carabayar ,$order_diskon, $order_cashback ,$order_biaya ,$order_bayar ,$order_keterangan ){
+		function master_order_beli_create($order_no ,$order_supplier ,$order_tanggal ,$order_carabayar ,$order_diskon, $order_cashback ,$order_biaya ,$order_bayar ,$order_keterangan, $order_status){
 			$date_now=date('Y-m-d');
 			if($order_tanggal==""){
 				$order_tanggal=$date_now;
@@ -322,7 +323,8 @@ class M_master_order_beli extends Model{
 				"order_cashback"=>$order_cashback,
 				"order_biaya"=>$order_biaya, 
 				"order_bayar"=>$order_bayar, 
-				"order_keterangan"=>$order_keterangan 
+				"order_keterangan"=>$order_keterangan,
+				"order_status"=>$order_status 
 			);
 			
 			$this->db->insert('master_order_beli', $data); 
@@ -358,7 +360,7 @@ class M_master_order_beli extends Model{
 		}
 		
 		//function for advanced search record
-		function master_order_beli_search($order_id ,$order_no ,$order_supplier ,$order_tanggal ,$order_carabayar ,$order_diskon,$order_cashback ,$order_biaya ,$order_bayar ,$order_keterangan ,$start,$end){
+		function master_order_beli_search($order_id ,$order_no ,$order_supplier ,$order_tanggal ,$order_carabayar ,$order_diskon,$order_cashback ,$order_biaya ,$order_bayar ,$order_keterangan, $order_status, $start,$end){
 			//full query
 			$query = "SELECT * FROM vu_trans_order";
 			
@@ -401,6 +403,10 @@ class M_master_order_beli extends Model{
 			if($order_keterangan!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " order_keterangan LIKE '%".$order_keterangan."%'";
+			};
+			if($order_status!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " order_status LIKE '%".$order_status."%'";
 			};
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
