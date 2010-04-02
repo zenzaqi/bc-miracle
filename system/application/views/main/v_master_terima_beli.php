@@ -532,7 +532,7 @@ Ext.onReady(function(){
 			})
 		}, 
 		{
-			header: '<div align="center">' + 'No Penerimaan' + '</div>',
+			header: '<div align="center">' + 'No PB' + '</div>',
 			dataIndex: 'terima_no',
 			width: 100,	//150,
 			sortable: true,
@@ -541,7 +541,7 @@ Ext.onReady(function(){
           	})
 		}, 
 		{
-			header: '<div align="center">' + 'No Pesanan' + '</div>',
+			header: '<div align="center">' + 'No SP' + '</div>',
 			dataIndex: 'terima_order',
 			width: 100,	//150,
 			sortable: true,
@@ -555,7 +555,7 @@ Ext.onReady(function(){
 			readOnly: true
 		},
 		{
-			header: '<div align="center">' + 'Jumlah' + '</div>',
+			header: '<div align="center">' + 'Jumlah Item' + '</div>',
 			align: 'right',
 			dataIndex: 'jumlah_barang',
 			width: 60,	//150,
@@ -649,7 +649,7 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 1024,	//900,
+	  	width: 1220,	//900,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: master_terima_beli_DataStore,
@@ -768,7 +768,7 @@ Ext.onReady(function(){
 	/* Identify  terima_no Field */
 	terima_noField= new Ext.form.TextField({
 		id: 'terima_noField',
-		fieldLabel: 'No Penerimaan',
+		fieldLabel: 'No PB',
 		emptyText: '(Auto)',
 		readOnly: true,
 		maxLength: 50,
@@ -777,7 +777,7 @@ Ext.onReady(function(){
 	/* Identify  terima_order Field */
 	terima_orderField= new Ext.form.ComboBox({
 		id: 'terima_orderField',
-		fieldLabel: 'No Pesanan',
+		fieldLabel: 'No SP',
 		store: cbo_tbeli_orderbeli_DataSore,
 		displayField:'tbeli_orderbeli_nama',
 		mode : 'remote',
@@ -814,7 +814,7 @@ Ext.onReady(function(){
 	/* Identify  terima_surat_jalan Field */
 	terima_surat_jalanField= new Ext.form.TextField({
 		id: 'terima_surat_jalanField',
-		fieldLabel: 'No.Surat Jalan',
+		fieldLabel: 'No Surat Jalan',
 		maxLength: 30,
 		anchor: '95%'
 	});
@@ -829,7 +829,7 @@ Ext.onReady(function(){
 	terima_tanggalField= new Ext.form.DateField({
 		id: 'terima_tanggalField',
 		fieldLabel: 'Tanggal',
-		format : 'Y-m-d'
+		format : 'd-m-Y'
 	});
 	/* Identify  terima_keterangan Field */
 	terima_keteranganField= new Ext.form.TextArea({
@@ -842,7 +842,7 @@ Ext.onReady(function(){
 	/* Identify  order_bayar Field */
 	terima_jumlahField= new Ext.form.NumberField({
 		id: 'terima_jumlahField',
-		fieldLabel: 'Jumlah Total Penerimaan',
+		fieldLabel: 'Jumlah Item',
 		allowNegatife : false,
 		emptyText: '0',
 		allowDecimals: true,
@@ -1718,7 +1718,7 @@ Ext.onReady(function(){
 	/* Identify  terima_no Search Field */
 	terima_noSearchField= new Ext.form.TextField({
 		id: 'terima_noSearchField',
-		fieldLabel: 'No. Penerimaan',
+		fieldLabel: 'No PB',
 		maxLength: 50,
 		anchor: '95%'
 	
@@ -1726,7 +1726,7 @@ Ext.onReady(function(){
 	/* Identify  terima_order Search Field */
 	terima_orderSearchField= new Ext.form.ComboBox({
 		id: 'terima_orderSearchField',
-		fieldLabel: 'No. Pesanan',
+		fieldLabel: 'No SP',
 		store: cbo_tbeli_orderbeli_DataSore,
 		displayField:'tbeli_orderbeli_nama',
 		mode : 'remote',
@@ -1762,7 +1762,7 @@ Ext.onReady(function(){
 	/* Identify  terima_surat_jalan Search Field */
 	terima_surat_jalanSearchField= new Ext.form.TextField({
 		id: 'terima_surat_jalanSearchField',
-		fieldLabel: 'No.Surat Jalan',
+		fieldLabel: 'No Surat Jalan',
 		maxLength: 30,
 		anchor: '95%'
 	
@@ -1779,7 +1779,7 @@ Ext.onReady(function(){
 	terima_tanggalSearchField= new Ext.form.DateField({
 		id: 'terima_tanggalSearchField',
 		fieldLabel: 'Tanggal',
-		format : 'Y-m-d',
+		format : 'd-m-Y',
 	
 	});
 	/* Identify  terima_keterangan Search Field */

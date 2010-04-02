@@ -86,6 +86,7 @@ var order_diskonSearchField;
 var order_biayaSearchField;
 var order_bayarSearchField;
 var order_keteranganSearchField;
+var order_statusSearchField;
 
 /* on ready fuction */
 Ext.onReady(function(){
@@ -103,6 +104,7 @@ Ext.onReady(function(){
 		var order_biaya_update=null;
 		var order_bayar_update=null;
 		var order_keterangan_update=null;
+		var order_status_update=null;
 		var order_cashback_update=null
 		
 		order_id_update_pk = oGrid_event.record.data.order_id;
@@ -115,6 +117,7 @@ Ext.onReady(function(){
 		if(oGrid_event.record.data.order_biaya!== null){order_biaya_update = oGrid_event.record.data.order_biaya;}
 		if(oGrid_event.record.data.order_bayar!== null){order_bayar_update = oGrid_event.record.data.order_bayar;}
 		if(oGrid_event.record.data.order_keterangan!== null){order_keterangan_update = oGrid_event.record.data.order_keterangan;}
+		if(oGrid_event.record.data.order_status!== null){order_status_update = oGrid_event.record.data.order_status;}
 
 		Ext.Ajax.request({  
 			waitMsg: 'Please wait...',
@@ -130,18 +133,19 @@ Ext.onReady(function(){
 				order_biaya	  	: order_biaya_update,  
 				order_bayar		: order_bayar_update,  
 				order_keterangan: order_keterangan_update,
+				order_status	: order_status_update,
 				order_cashback	: order_cashback_update
 			}, 
 			success: function(response){							
 				var result=eval(response.responseText);
 				if(result!==0){
-						Ext.MessageBox.alert(post2db+' OK','Data Pesanan Pembelian berhasil disimpan');
+						Ext.MessageBox.alert(post2db+' OK','Data Surat Pesanan Pembelian berhasil disimpan');
 						master_order_beli_createWindow.hide();
 				}else{
 						Ext.MessageBox.show({
 						   title: 'Warning',
 						   //msg: 'We could\'t not '+msg+' the Master_order_beli.',
-						   msg: 'Data Pesanan Pembelian tidak bisa disimpan',
+						   msg: 'Data Surat Pesanan Pembelian tidak bisa disimpan',
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'save',
 						   icon: Ext.MessageBox.WARNING
@@ -177,6 +181,7 @@ Ext.onReady(function(){
 		var order_biaya_create=null; 
 		var order_bayar_create=null; 
 		var order_keterangan_create=null; 
+		var order_status_create=null; 
 
 		if(order_idField.getValue()!== null){order_id_create_pk = order_idField.getValue();}else{order_id_create_pk=get_pk_id();} 
 		if(order_noField.getValue()!== null){order_no_create = order_noField.getValue();} 
@@ -188,6 +193,7 @@ Ext.onReady(function(){
 		if(order_biayaField.getValue()!== null){order_biaya_create = order_biayaField.getValue();} 
 		if(order_bayarField.getValue()!== null){order_bayar_create = order_bayarField.getValue();} 
 		if(order_keteranganField.getValue()!== null){order_keterangan_create = order_keteranganField.getValue();} 
+		if(order_statusField.getValue()!== null){order_status_create = order_statusField.getValue();} 
 
 		Ext.Ajax.request({  
 			waitMsg: 'Mohon tunggu...',
@@ -203,19 +209,20 @@ Ext.onReady(function(){
 				order_cashback		: order_cashback_create, 
 				order_biaya			: order_biaya_create, 
 				order_bayar			: order_bayar_create, 
-				order_keterangan	: order_keterangan_create
+				order_keterangan	: order_keterangan_create,
+				order_status		: order_status_create
 			}, 
 			success: function(response){             
 				var result=eval(response.responseText);
 				if(result!==0){
 						detail_order_beli_purge(result)
-						Ext.MessageBox.alert(post2db+' OK','Data Pesanan Pembelian berhasil disimpan');
+						Ext.MessageBox.alert(post2db+' OK','Data Surat Pesanan Pembelian berhasil disimpan');
 						master_order_beli_createWindow.hide();
 				}else{
 						Ext.MessageBox.show({
 						   title: 'Warning',
 						   //msg: 'We could\'t not '+msg+' the Master_order_beli.',
-						   msg: 'Data Pesanan Pembelian tidak bisa disimpan',
+						   msg: 'Data Surat Pesanan Pembelian tidak bisa disimpan',
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'save',
 						   icon: Ext.MessageBox.WARNING
@@ -266,7 +273,7 @@ Ext.onReady(function(){
 		order_supplierField.setValue(null);
 		order_tanggalField.setValue(today);
 		order_carabayarField.reset();
-		order_carabayarField.setValue(null);
+		order_carabayarField.setValue('Kredit');
 		order_diskonField.reset();
 		order_diskonField.setValue('0');
 		order_cashbackField.reset();
@@ -277,6 +284,8 @@ Ext.onReady(function(){
 		order_bayarField.setValue('0');
 		order_keteranganField.reset();
 		order_keteranganField.setValue(null);
+		order_statusField.reset();
+		order_statusField.setValue('Terbuka');
 		cbo_order_satuanDataStore.load();
 		cbo_order_produk_DataStore.load();
 		detail_order_beli_DataStore.load();
@@ -311,6 +320,7 @@ Ext.onReady(function(){
 		order_biayaField.setValue(master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_biaya'));
 		order_bayarField.setValue(master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_bayar'));
 		order_keteranganField.setValue(master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_keterangan'));
+		order_statusField.setValue(master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_status'));
 		
 		cbo_order_satuanDataStore.setBaseParam('task','detail');
 		cbo_order_satuanDataStore.setBaseParam('master_id',get_pk_id());
@@ -460,6 +470,7 @@ Ext.onReady(function(){
 			{name: 'order_total', type: 'float', mapping: 'total_nilai'}, 
 			{name: 'order_bayar', type: 'float', mapping: 'order_bayar'}, 
 			{name: 'order_keterangan', type: 'string', mapping: 'order_keterangan'}, 
+			{name: 'order_status', type: 'string', mapping: 'order_status'}, 
 			{name: 'order_creator', type: 'string', mapping: 'order_creator'}, 
 			{name: 'order_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'order_date_create'}, 
 			{name: 'order_update', type: 'string', mapping: 'order_update'}, 
@@ -557,7 +568,7 @@ Ext.onReady(function(){
 		},
 		{
 			//header: '<div align="center">' + 'No Order' + '</div>',
-			header: '<div align="center">' + 'No Pesanan' + '</div>',
+			header: '<div align="center">' + 'No SP' + '</div>',
 			dataIndex: 'order_no',
 			width: 80,	//150,
 			sortable: true,
@@ -596,7 +607,7 @@ Ext.onReady(function(){
 			header: '<div align="center">' + 'Diskon (%)' + '</div>',
 			align: 'right',
 			dataIndex: 'order_diskon',
-			width: 100,	//150,
+			width: 60,	//150,
 			sortable: true,
 			renderer: function(val){
 				return '<span>'+val+'</span>';
@@ -644,7 +655,7 @@ Ext.onReady(function(){
 				triggerAction: 'all',
 				store:new Ext.data.SimpleStore({
 					fields:['order_carabayar_value', 'order_carabayar_display'],
-					data: [['tunai','tunai'],['kredit','kredit'],['konsinyasi','konsinyasi']]
+					data: [['Tunai','Tunai'],['Kredit','Kredit'],['Konsinyasi','Konsinyasi']]
 					}),
 				mode: 'local',
                	displayField: 'order_carabayar_display',
@@ -652,6 +663,11 @@ Ext.onReady(function(){
                	lazyRender:true,
                	listClass: 'x-combo-list-small'
             })
+		}, 
+		{
+			header: '<div align="center">' + 'Status' + '</div>',
+			dataIndex: 'order_status',
+			width: 80
 		}, 
 		{
 			header: 'Creator',
@@ -701,7 +717,7 @@ Ext.onReady(function(){
 	master_order_beliListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'master_order_beliListEditorGrid',
 		el: 'fp_master_order_beli',
-		title: 'Daftar Pesanan Pembelian',
+		title: 'Daftar Surat Pesanan Pembelian',
 		autoHeight: true,
 		store: master_order_beli_DataStore, // DataStore
 		cm: master_order_beli_ColumnModel, // Nama-nama Columns
@@ -710,7 +726,7 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 1024,	//900,
+	  	width: 1220,	//900,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: master_order_beli_DataStore,
@@ -831,7 +847,7 @@ Ext.onReady(function(){
 	order_noField= new Ext.form.TextField({
 		id: 'order_noField',
 		//fieldLabel: 'No Order',
-		fieldLabel: 'No Pesanan',
+		fieldLabel: 'No SP',
 		emptyText: '(Auto)',
 		readOnly: true,
 		maxLength: 50,
@@ -870,14 +886,28 @@ Ext.onReady(function(){
 	/* Identify  order_carabayar Field */
 	order_carabayarField= new Ext.form.ComboBox({
 		id: 'order_carabayarField',
-		fieldLabel: 'Cara Bayar <span style="color: #ec0000">*</span>',
+		fieldLabel: 'Cara Bayar',
 		store:new Ext.data.SimpleStore({
 			fields:['order_carabayar_value', 'order_carabayar_display'],
-			data:[['tunai','tunai'],['kredit','kredit'],['konsinyasi','konsinyasi']]
+			data:[['Tunai','Tunai'],['Kredit','Kredit'],['Konsinyasi','Konsinyasi']]
 		}),
 		mode: 'local',
 		displayField: 'order_carabayar_display',
 		valueField: 'order_carabayar_value',
+		anchor: '80%',
+		allowBlank: false,
+		triggerAction: 'all'	
+	});
+	order_statusField= new Ext.form.ComboBox({
+		id: 'order_statusField',
+		fieldLabel: 'Status',
+		store:new Ext.data.SimpleStore({
+			fields:['order_status_value', 'order_status_display'],
+			data:[['Terbuka','Terbuka'],['Tertutup','Tertutup']]
+		}),
+		mode: 'local',
+		displayField: 'order_status_display',
+		valueField: 'order_status_value',
 		anchor: '80%',
 		allowBlank: false,
 		triggerAction: 'all'	
@@ -995,13 +1025,13 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [order_noField, order_supplierField, order_tanggalField] 
+				items: [order_noField, order_supplierField, order_tanggalField, order_carabayarField] 
 			},
 			{
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [order_keteranganField,order_carabayarField,order_idField] 
+				items: [order_keteranganField, order_statusField, order_idField] 
 			}
 			]
 	
@@ -1378,7 +1408,7 @@ Ext.onReady(function(){
 	/* Function for retrieve create Window Form */
 	master_order_beli_createWindow= new Ext.Window({
 		id: 'master_order_beli_createWindow',
-		title: post2db+' Pesanan Pembelian',
+		title: post2db+'Surat Pesanan Pembelian',
 		closable:true,
 		closeAction: 'hide',
 		width: 940,
@@ -1486,7 +1516,7 @@ Ext.onReady(function(){
 	order_noSearchField= new Ext.form.TextField({
 		id: 'order_noSearchField',
 		//fieldLabel: 'No Order',
-		fieldLabel: 'No Pesanan',
+		fieldLabel: 'No SP',
 		maxLength: 50,
 		anchor: '95%'
 	
@@ -1526,7 +1556,7 @@ Ext.onReady(function(){
 		fieldLabel: 'Cara Pembayaran',
 		store:new Ext.data.SimpleStore({
 			fields:['value', 'order_carabayar'],
-			data:[['tunai','tunai'],['kredit','kredit'],['konsinyasi','konsinyasi']]
+			data:[['Tunai','Tunai'],['Kredit','Kredit'],['Konsinyasi','Konsinyasi']]
 		}),
 		mode: 'local',
 		displayField: 'order_carabayar',
@@ -1624,7 +1654,7 @@ Ext.onReady(function(){
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
 	master_order_beli_searchWindow = new Ext.Window({
-		title: 'Percarian Pesanan Pembelian',
+		title: 'Percarian Surat Pesanan Pembelian',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,
