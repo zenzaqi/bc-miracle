@@ -1764,8 +1764,8 @@ Ext.onReady(function(){
 		id: 'paket_kodeSearchField',
 		fieldLabel: 'Kode Baru',
 		maxLength: 20,
-		readOnly: true,
-		emptyText: '(auto)',
+		readOnly: false,
+//		emptyText: '(auto)',
 		width: 100
 	});
 	/* Identify  paket_kodelama Field */
