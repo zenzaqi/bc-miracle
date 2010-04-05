@@ -428,7 +428,7 @@ class M_master_terima_beli extends Model{
 //			$pattern="LPB/".date("y/m")."/";
 //			$terima_no=$this->m_public_function->get_kode_1('master_terima_beli','terima_no',$pattern,14);
 			$pattern="PB/".date("ym")."-";
-			$terima_no=$this->m_public_function->get_kode_1('master_terima_beli','terima_no',$pattern,13);
+			$terima_no=$this->m_public_function->get_kode_1('master_terima_beli','terima_no',$pattern,12);
 			
 			$data = array(
 				"terima_no"=>$terima_no, 
