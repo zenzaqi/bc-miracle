@@ -122,15 +122,15 @@ Ext.onReady(function(){
 			url: 'index.php?c=c_member&m=get_action',
 			params: {
 				task: "UPDATE",
-				member_id	: member_id_update_pk, 
-				member_cust	:member_cust_update,  
-				member_no	:member_no_update,  
+				member_id		: member_id_update_pk, 
+				member_cust		: member_cust_update,  
+				member_no		: member_no_update,  
 				member_register	: member_register_update_date, 
 				member_valid	: member_valid_update_date, 
-				member_nota_ref	:member_nota_ref_update,  
-				member_point	:member_point_update,  
-				member_jenis	:member_jenis_update,  
-				member_status	:member_status_update,  
+				member_nota_ref	: member_nota_ref_update,  
+				member_point	: member_point_update,  
+				member_jenis	: member_jenis_update,  
+				member_status	: member_status_update,  
 				member_tglserahterima	: member_tglserahterima_update_date, 
 			}, 
 			success: function(response){							
@@ -180,7 +180,7 @@ Ext.onReady(function(){
 		var member_status_create=null; 
 		var member_tglserahterima_create_date=""; 
 
-		if(member_idField.getValue()!== null){member_id_create = member_idField.getValue();}else{member_id_create_pk=get_pk_id();} 
+		member_id_create_pk=get_pk_id(); 
 		if(member_custField.getValue()!== null){member_cust_create = member_custField.getValue();} 
 		if(member_noField.getValue()!== null){member_no_create = member_noField.getValue();} 
 		if(member_registerField.getValue()!== ""){member_register_create_date = member_registerField.getValue().format('Y-m-d');} 
@@ -195,10 +195,10 @@ Ext.onReady(function(){
 			waitMsg: 'Please wait...',
 			url: 'index.php?c=c_member&m=get_action',
 			params: {
-				task: post2db,
-				member_id	: member_id_create_pk, 
-				member_cust	: member_cust_create, 
-				member_no	: member_no_create, 
+				task			: post2db,
+				member_id		: member_id_create_pk, 
+				member_cust		: member_cust_create, 
+				member_no		: member_no_create, 
 				member_register	: member_register_create_date, 
 				member_valid	: member_valid_create_date, 
 				member_nota_ref	: member_nota_ref_create, 
@@ -307,9 +307,9 @@ Ext.onReady(function(){
   	/* Function for Displaying  create Window Form */
 	function display_form_window(){
 		if(!member_createWindow.isVisible()){
-			member_reset_form();
 			post2db='CREATE';
 			msg='created';
+			member_reset_form();
 			member_createWindow.show();
 		} else {
 			member_createWindow.toFront();
@@ -340,9 +340,9 @@ Ext.onReady(function(){
 	function member_confirm_update(){
 		/* only one record is selected here */
 		if(memberListEditorGrid.selModel.getCount() == 1) {
-			member_set_form();
 			post2db='UPDATE';
 			msg='updated';
+			member_set_form();
 			member_createWindow.show();
 		} else {
 			Ext.MessageBox.show({
@@ -815,20 +815,20 @@ Ext.onReady(function(){
 	
 	/* Function for retrieve create Window Panel*/ 
 	member_createForm = new Ext.FormPanel({
-		labelAlign: 'top',
+		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
 		layout: 'column',
-		width: 400,        
+		width: 600,        
 		items:[
 			{
-				columnWidth:0.7,
+				columnWidth:0.5,
 				layout: 'form',
 				border:false,
 				items: [member_custField, member_noField, member_registerField, member_validField,member_nota_refField] 
 			},
 			{
-				columnWidth:0.3,
+				columnWidth:0.5,
 				layout: 'form',
 				border:false,
 				items: [ member_pointField, member_jenisField, member_statusField, member_tglserahterimaField,member_idField] 
@@ -936,7 +936,7 @@ Ext.onReady(function(){
 	/* Identify  member_id Search Field */
 	member_idSearchField= new Ext.form.NumberField({
 		id: 'member_idSearchField',
-		fieldLabel: 'Member Id',
+		fieldLabel: 'Id',
 		allowNegatife : false,
 		blankText: '0',
 		allowDecimals: false,
@@ -945,20 +945,18 @@ Ext.onReady(function(){
 	
 	});
 	/* Identify  member_cust Search Field */
-	member_custSearchField= new Ext.form.NumberField({
+	member_custSearchField= new Ext.form.TextField({
 		id: 'member_custSearchField',
-		fieldLabel: 'Member Cust',
+		fieldLabel: 'Customer',
 		allowNegatife : false,
-		blankText: '0',
 		allowDecimals: false,
-		anchor: '95%',
-		maskRe: /([0-9]+)$/
+		anchor: '95%'
 	
 	});
 	/* Identify  member_no Search Field */
 	member_noSearchField= new Ext.form.TextField({
 		id: 'member_noSearchField',
-		fieldLabel: 'Member No',
+		fieldLabel: 'No Member',
 		maxLength: 50,
 		anchor: '95%'
 	
@@ -966,21 +964,21 @@ Ext.onReady(function(){
 	/* Identify  member_register Search Field */
 	member_registerSearchField= new Ext.form.DateField({
 		id: 'member_registerSearchField',
-		fieldLabel: 'Member Register',
-		format : 'Y-m-d',
+		fieldLabel: 'Tanggal Register',
+		format : 'Y-m-d'
 	
 	});
 	/* Identify  member_valid Search Field */
 	member_validSearchField= new Ext.form.DateField({
 		id: 'member_validSearchField',
-		fieldLabel: 'Member Valid',
-		format : 'Y-m-d',
+		fieldLabel: 'Tanggal Valid',
+		format : 'Y-m-d'
 	
 	});
 	/* Identify  member_nota_ref Search Field */
 	member_nota_refSearchField= new Ext.form.TextField({
 		id: 'member_nota_refSearchField',
-		fieldLabel: 'Member Nota Ref',
+		fieldLabel: 'Referensi Nota Transaksi',
 		maxLength: 50,
 		anchor: '95%'
 	
@@ -988,7 +986,7 @@ Ext.onReady(function(){
 	/* Identify  member_point Search Field */
 	member_pointSearchField= new Ext.form.NumberField({
 		id: 'member_pointSearchField',
-		fieldLabel: 'Member Point',
+		fieldLabel: 'Point',
 		allowNegatife : false,
 		blankText: '0',
 		allowDecimals: false,
@@ -999,56 +997,62 @@ Ext.onReady(function(){
 	/* Identify  member_jenis Search Field */
 	member_jenisSearchField= new Ext.form.ComboBox({
 		id: 'member_jenisSearchField',
-		fieldLabel: 'Member Jenis',
+		fieldLabel: 'Jenis',
 		store:new Ext.data.SimpleStore({
 			fields:['value', 'member_jenis'],
-			data:[['perpanjangan','perpanjangan'],['baru','baru']]
+			data:[['perpanjangan','Perpanjangan'],['baru','Baru']]
 		}),
 		mode: 'local',
 		displayField: 'member_jenis',
 		valueField: 'value',
-		anchor: '50%',
+		anchor: '95%',
 		triggerAction: 'all'	 
 	
 	});
 	/* Identify  member_status Search Field */
 	member_statusSearchField= new Ext.form.ComboBox({
 		id: 'member_statusSearchField',
-		fieldLabel: 'Member Status',
+		fieldLabel: 'Status',
 		store:new Ext.data.SimpleStore({
 			fields:['value', 'member_status'],
-			data:[['tidak aktif','tidak aktif'],['print','print'],['aktif','aktif'],['register','register']]
+			data:[['tidak aktif','Tidak aktif'],['print','Print'],['aktif','Aktif'],['register','Register']]
 		}),
 		mode: 'local',
 		displayField: 'member_status',
 		valueField: 'value',
-		anchor: '50%',
+		anchor: '95%',
 		triggerAction: 'all'	 
 	
 	});
 	/* Identify  member_tglserahterima Search Field */
 	member_tglserahterimaSearchField= new Ext.form.DateField({
 		id: 'member_tglserahterimaSearchField',
-		fieldLabel: 'Member Tglserahterima',
-		format : 'Y-m-d',
+		fieldLabel: 'Tgl Penyerahan',
+		format : 'Y-m-d'
 	
 	});
     
 	/* Function for retrieve search Form Panel */
 	member_searchForm = new Ext.FormPanel({
-		labelAlign: 'top',
+		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
-		width: 300,        
+		width: 600,        
 		items: [{
 			layout:'column',
 			border:false,
 			items:[
 			{
-				columnWidth:1,
+				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [member_custSearchField, member_noSearchField, member_registerSearchField, member_validSearchField, member_nota_refSearchField, member_pointSearchField, member_jenisSearchField, member_statusSearchField, member_tglserahterimaSearchField] 
+				items: [member_custSearchField, member_noSearchField, member_registerSearchField, member_validSearchField, member_nota_refSearchField] 
+			},
+			{
+				columnWidth:0.5,
+				layout: 'form',
+				border:false,
+				items: [member_pointSearchField, member_jenisSearchField, member_statusSearchField, member_tglserahterimaSearchField] 
 			}
 			]
 		}]
@@ -1068,7 +1072,7 @@ Ext.onReady(function(){
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
 	member_searchWindow = new Ext.Window({
-		title: 'member Search',
+		title: 'Pencarian Member',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,
