@@ -43,6 +43,8 @@ define('SESSION_GROUPID','c293890e945456ecba7c9b2100b746c0');
 define('SESSION_GROUPNAMA','28b33bdc69aacbde669f466ef0e44a40');
 define('SESSION_KARYAWAN','karyawanmiracle');
 
+define('LONG_FORMATDATE', 'Y-m-d H:i:s');
+define('SHORT_FORMATDATE', 'Y-m-d');
 
 /* End of file constants.php */
 /* Location: ./system/application/config/constants.php */
