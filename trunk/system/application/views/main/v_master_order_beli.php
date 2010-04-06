@@ -665,7 +665,7 @@ Ext.onReady(function(){
             })
 		}, 
 		{
-			header: '<div align="center">' + 'Status' + '</div>',
+			header: '<div align="center">' + 'Stat. Dok' + '</div>',
 			dataIndex: 'order_status',
 			width: 80
 		}, 
@@ -900,7 +900,7 @@ Ext.onReady(function(){
 	});
 	order_statusField= new Ext.form.ComboBox({
 		id: 'order_statusField',
-		fieldLabel: 'Status',
+		fieldLabel: 'Status Dok',
 		store:new Ext.data.SimpleStore({
 			fields:['order_status_value', 'order_status_display'],
 			data:[['Terbuka','Terbuka'],['Tertutup','Tertutup']]
