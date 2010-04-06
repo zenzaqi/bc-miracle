@@ -555,6 +555,10 @@ class M_master_jual_produk extends Model{
 						$sql="delete from jual_transfer where jtransfer_ref='".$jproduk_nobukti."'";
 						$this->db->query($sql);
 					}
+					if($jproduk_cara_awal=="voucher"){
+						$sql="delete from voucher_terima where tvoucher_ref='".$jproduk_nobukti."'";
+						$this->db->query($sql);
+					}
 				}
 				
 				if($jproduk_cara2_awal<>$jproduk_cara2){
@@ -578,6 +582,10 @@ class M_master_jual_produk extends Model{
 						$sql="delete from jual_transfer where jtransfer_ref='".$jproduk_nobukti."'";
 						$this->db->query($sql);
 					}
+					if($jproduk_cara2_awal=="voucher"){
+						$sql="delete from voucher_terima where tvoucher_ref='".$jproduk_nobukti."'";
+						$this->db->query($sql);
+					}
 				}
 				
 				if($jproduk_cara3_awal<>$jproduk_cara3){
@@ -599,6 +607,10 @@ class M_master_jual_produk extends Model{
 					}
 					if($jproduk_cara3_awal=="transfer"){
 						$sql="delete from jual_transfer where jtransfer_ref='".$jproduk_nobukti."'";
+						$this->db->query($sql);
+					}
+					if($jproduk_cara3_awal=="voucher"){
+						$sql="delete from voucher_terima where tvoucher_ref='".$jproduk_nobukti."'";
 						$this->db->query($sql);
 					}
 				}

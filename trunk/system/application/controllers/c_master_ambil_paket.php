@@ -43,24 +43,30 @@ class C_master_ambil_paket extends Controller {
 	}
 	
 	function get_history_ambil_paket(){
-		$apaket_id = isset($_POST['master_id']) ? $_POST['master_id'] : 0;
+		/*$dpaket_master = isset($_POST['dpaket_master']) ? $_POST['dpaket_master'] : 0;
+		$dpaket_paket = isset($_POST['dpaket_paket']) ? $_POST['dpaket_paket'] : 0;*/
+		$dapaket_dpaket = isset($_POST['dapaket_dpaket']) ? $_POST['dapaket_dpaket'] : 0;
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_master_ambil_paket->get_history_ambil_paket($apaket_id,$start,$end);
+		//$result = $this->m_master_ambil_paket->get_history_ambil_paket($dpaket_master,$dpaket_paket,$start,$end);
+		$result = $this->m_master_ambil_paket->get_history_ambil_paket($dapaket_dpaket,$start,$end);
 		echo $result;
 	}
 	
 	function get_isi_rawat_list(){
-		$apaket_id = isset($_POST['master_id']) ? $_POST['master_id'] : 0;
+		//$apaket_id = isset($_POST['master_id']) ? $_POST['master_id'] : 0;
+		$dapaket_dpaket = isset($_POST['dapaket_dpaket']) ? $_POST['dapaket_dpaket'] : 0;
+		$dapaket_jpaket = isset($_POST['dapaket_jpaket']) ? $_POST['dapaket_jpaket'] : 0;
+		$dapaket_paket = isset($_POST['dapaket_paket']) ? $_POST['dapaket_paket'] : 0;
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_master_ambil_paket->get_isi_rawat_list($apaket_id,$start,$end);
+		$result = $this->m_master_ambil_paket->get_isi_rawat_list($dapaket_dpaket,$dapaket_jpaket,$dapaket_paket,$start,$end);
 		echo $result;
 	}
 	
 	function get_pengguna_paket_list(){
-		$jpaket_id = isset($_POST['master_id']) ? $_POST['master_id'] : 0;
-		$result = $this->m_master_ambil_paket->get_pengguna_paket_list($jpaket_id);
+		$dpaket_master = isset($_POST['dpaket_master']) ? $_POST['dpaket_master'] : 0;
+		$result = $this->m_master_ambil_paket->get_pengguna_paket_list($dpaket_master);
 		echo $result;
 	}
 	
@@ -93,12 +99,16 @@ class C_master_ambil_paket extends Controller {
 	//add detail
 	function detail_ambil_paket_isi_perawatan_insert(){
 	//POST variable here
-		$dapaket_master=trim(@$_POST["dapaket_master"]);
-		$dapaket_sapaket=trim(@$_POST["dapaket_sapaket"]);
+		/*$dapaket_master=trim(@$_POST["dapaket_master"]);
+		$dapaket_sapaket=trim(@$_POST["dapaket_sapaket"]);*/
+		$dapaket_dpaket=trim(@$_POST["dapaket_dpaket"]);
+		$dapaket_jpaket=trim(@$_POST["dapaket_jpaket"]);
+		$dapaket_paket=trim(@$_POST["dapaket_paket"]);
+		$dapaket_item=trim(@$_POST["dapaket_item"]);
 		$dapaket_jumlah=trim(@$_POST["dapaket_jumlah"]);
 		$dapaket_cust=trim(@$_POST["dapaket_cust"]);
 		$tgl_ambil=trim(@$_POST["tgl_ambil"]);
-		$result=$this->m_master_ambil_paket->detail_ambil_paket_isi_perawatan_insert($dapaket_master, $dapaket_sapaket, $dapaket_jumlah, $dapaket_cust, $tgl_ambil);
+		$result=$this->m_master_ambil_paket->detail_ambil_paket_isi_perawatan_insert($dapaket_dpaket, $dapaket_jpaket, $dapaket_paket, $dapaket_item, $dapaket_jumlah, $dapaket_cust, $tgl_ambil);
 	}
 	
 	

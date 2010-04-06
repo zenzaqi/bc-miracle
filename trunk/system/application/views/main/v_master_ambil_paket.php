@@ -175,7 +175,11 @@ Ext.onReady(function(){
 						//ambil_paket_isi_perawatan_purge()
 						ambil_paket_isi_perawatan_insert();
 						Ext.MessageBox.alert(post2db+' OK','The Paket was '+msg+' successfully.');
-						ambil_paket_DataStore.reload();
+						
+						ambil_paket_DataStore.baseParams = { task: 'LIST' };
+						ambil_paket_DataStore.reload({params: {start: 0, limit: pageS}});
+						
+						//ambil_paket_DataStore.reload();
 						detail_ambil_paketStore.reload();
 						ambil_paket_createWindow.hide();
 						break;
@@ -216,7 +220,7 @@ Ext.onReady(function(){
   	/* Function for get PK field */
 	function get_pk_id(){
 		if(post2db=='UPDATE')
-			return ambil_paketListEditorGrid.getSelectionModel().getSelected().get('apaket_paket');
+			return ambil_paketListEditorGrid.getSelectionModel().getSelected().get('dpaket_id');
 		else if(post2db=='CREATE')
 			return apaket_paketField.getValue();
 		else 
@@ -239,20 +243,26 @@ Ext.onReady(function(){
   
 	/* setValue to EDIT */
 	function ambil_paket_set_form(){
-		apaket_idField.setValue(ambil_paketListEditorGrid.getSelectionModel().getSelected().get('apaket_id'));
-		apaket_paketField.setValue(ambil_paketListEditorGrid.getSelectionModel().getSelected().get('apaket_paket'));
+		//apaket_idField.setValue(ambil_paketListEditorGrid.getSelectionModel().getSelected().get('apaket_id'));
+		//apaket_paketField.setValue(ambil_paketListEditorGrid.getSelectionModel().getSelected().get('apaket_paket'));
+		apaket_paketField.setValue(ambil_paketListEditorGrid.getSelectionModel().getSelected().get('dpaket_paket'));
 //		apaket_cust_noField.setValue(ambil_paketListEditorGrid.getSelectionModel().getSelected().get('apaket_cust_no'));
 //		apaket_cust_namaField.setValue(ambil_paketListEditorGrid.getSelectionModel().getSelected().get('apaket_cust_nama'));
 		apaket_cust_noField.setValue(ambil_paketListEditorGrid.getSelectionModel().getSelected().get('cust_no'));
 		apaket_cust_namaField.setValue(ambil_paketListEditorGrid.getSelectionModel().getSelected().get('cust_nama'));
-		apaket_fakturField.setValue(ambil_paketListEditorGrid.getSelectionModel().getSelected().get('apaket_faktur'));
-		apaket_faktur_tanggalField.setValue(ambil_paketListEditorGrid.getSelectionModel().getSelected().get('apaket_faktur_tanggal'));
+		//apaket_fakturField.setValue(ambil_paketListEditorGrid.getSelectionModel().getSelected().get('apaket_faktur'));
+		apaket_fakturField.setValue(ambil_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_nobukti'));
+		//apaket_faktur_tanggalField.setValue(ambil_paketListEditorGrid.getSelectionModel().getSelected().get('apaket_faktur_tanggal'));
+		apaket_faktur_tanggalField.setValue(ambil_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_tanggal'));
 //		apaket_paket_kodeField.setValue(ambil_paketListEditorGrid.getSelectionModel().getSelected().get('apaket_paket_kode'));
 //		apaket_paket_namaField.setValue(ambil_paketListEditorGrid.getSelectionModel().getSelected().get('apaket_paket_nama'));
 		apaket_paket_kodeField.setValue(ambil_paketListEditorGrid.getSelectionModel().getSelected().get('paket_kode'));
 		apaket_paket_namaField.setValue(ambil_paketListEditorGrid.getSelectionModel().getSelected().get('paket_nama'));
-		apaket_kadaluarsaField.setValue(ambil_paketListEditorGrid.getSelectionModel().getSelected().get('apaket_kadaluarsa'));
-		apaket_paket_sisaField.setValue(ambil_paketListEditorGrid.getSelectionModel().getSelected().get('apaket_sisa_paket'));
+		//apaket_kadaluarsaField.setValue(ambil_paketListEditorGrid.getSelectionModel().getSelected().get('apaket_kadaluarsa'));
+		apaket_kadaluarsaField.setValue(ambil_paketListEditorGrid.getSelectionModel().getSelected().get('dpaket_kadaluarsa'));
+		//apaket_paket_sisaField.setValue(ambil_paketListEditorGrid.getSelectionModel().getSelected().get('apaket_sisa_paket'));
+		apaket_paket_sisaField.setValue(ambil_paketListEditorGrid.getSelectionModel().getSelected().get('dpaket_sisa_paket'));
+		apaket_jpaketField.setValue(ambil_paketListEditorGrid.getSelectionModel().getSelected().get('dpaket_master'));
 	}
 	/* End setValue to EDIT*/
   
@@ -303,8 +313,9 @@ Ext.onReady(function(){
 		/* only one record is selected here */
 		if(ambil_paketListEditorGrid.selModel.getCount() == 1) {
 			ambil_paket_set_form();
-			cbo_paket_isi_rawatDataStore.load({params:{master_id:ambil_paketListEditorGrid.getSelectionModel().getSelected().get('apaket_id')}});
-			cbo_ambil_paket_custDataStore.load({params:{master_id:ambil_paketListEditorGrid.getSelectionModel().getSelected().get('apaket_jpaket')}});
+			//cbo_paket_isi_rawatDataStore.load({params:{master_id:ambil_paketListEditorGrid.getSelectionModel().getSelected().get('apaket_id')}});
+			cbo_paket_isi_rawatDataStore.load({params:{dapaket_dpaket:ambil_paketListEditorGrid.getSelectionModel().getSelected().get('dpaket_id'),dapaket_jpaket:ambil_paketListEditorGrid.getSelectionModel().getSelected().get('dpaket_master'),dapaket_paket:ambil_paketListEditorGrid.getSelectionModel().getSelected().get('dpaket_paket')}});
+			cbo_ambil_paket_custDataStore.load({params:{dpaket_master:ambil_paketListEditorGrid.getSelectionModel().getSelected().get('dpaket_master')}});
 			//cbo_paket_isi_rawatDataStore.load({params:{master_id:0}});
 			post2db='UPDATE';
 			//ambil_paket_isi_perawatan_DataStore.load({params : {master_id : eval(get_pk_id()), start:0, limit:pageS}});
@@ -382,23 +393,30 @@ Ext.onReady(function(){
 			id: 'apaket_id'
 		},[
 		/* dataIndex => insert intoambil_paket_ColumnModel, Mapping => for initiate table column */ 
-			{name: 'apaket_id', type: 'int', mapping: 'apaket_id'},
-			{name: 'apaket_jpaket', type: 'int', mapping: 'apaket_jpaket'},
-			{name: 'apaket_faktur', type: 'string', mapping: 'apaket_faktur'}, 
-			{name: 'apaket_faktur_tanggal', type: 'date', dateFormat:'Y-m-d', mapping: 'apaket_faktur_tanggal'}, 	// by hendri
-			{name: 'apaket_kadaluarsa', type: 'date', dateFormat:'Y-m-d', mapping: 'apaket_kadaluarsa'}, 
-			{name: 'apaket_cust', type: 'int', mapping: 'apaket_cust'}, 
+			//{name: 'apaket_id', type: 'int', mapping: 'apaket_id'},
+			//{name: 'apaket_jpaket', type: 'int', mapping: 'apaket_jpaket'},
+			//{name: 'apaket_faktur', type: 'string', mapping: 'apaket_faktur'}, 
+			{name: 'jpaket_nobukti', type: 'string', mapping: 'jpaket_nobukti'}, 
+			//{name: 'apaket_faktur_tanggal', type: 'date', dateFormat:'Y-m-d', mapping: 'apaket_faktur_tanggal'}, 	// by hendri
+			{name: 'jpaket_tanggal', type: 'date', dateFormat:'Y-m-d', mapping: 'jpaket_tanggal'},
+			//{name: 'apaket_kadaluarsa', type: 'date', dateFormat:'Y-m-d', mapping: 'apaket_kadaluarsa'}, 
+			{name: 'dpaket_kadaluarsa', type: 'date', dateFormat:'Y-m-d', mapping: 'dpaket_kadaluarsa'}, 
+			//{name: 'apaket_cust', type: 'int', mapping: 'apaket_cust'}, 
 //			{name: 'apaket_cust_no', type: 'string', mapping: 'apaket_cust_no'}, 
 //			{name: 'apaket_cust_nama', type: 'string', mapping: 'apaket_cust_nama'}, 
 			{name: 'cust_no', type: 'string', mapping: 'cust_no'}, 
 			{name: 'cust_nama', type: 'string', mapping: 'cust_nama'}, 
-			{name: 'apaket_paket', type: 'int', mapping: 'apaket_paket'},
+			//{name: 'apaket_paket', type: 'int', mapping: 'apaket_paket'},
 //			{name: 'apaket_paket_kode', type: 'string', mapping: 'apaket_paket_kode'},
 //			{name: 'apaket_paket_nama', type: 'string', mapping: 'apaket_paket_nama'},
 			{name: 'paket_kode', type: 'string', mapping: 'paket_kode'},
 			{name: 'paket_nama', type: 'string', mapping: 'paket_nama'},
-			{name: 'apaket_paket_jumlah', type: 'int', mapping: 'apaket_paket_jumlah'},
-			{name: 'apaket_sisa_paket', type: 'int', mapping: 'apaket_sisa_paket'}
+			//{name: 'apaket_paket_jumlah', type: 'int', mapping: 'apaket_paket_jumlah'},
+			//{name: 'apaket_sisa_paket', type: 'int', mapping: 'apaket_sisa_paket'}
+			{name: 'dpaket_id', type: 'int', mapping: 'dpaket_id'},
+			{name: 'dpaket_sisa_paket', type: 'int', mapping: 'dpaket_sisa_paket'},
+			{name: 'dpaket_master', type: 'int', mapping: 'dpaket_master'},
+			{name: 'dpaket_paket', type: 'int', mapping: 'dpaket_paket'}
 		])//,
 //		sortInfo:{field: 'apaket_paket_nama', direction: "ASC"}
 //		sortInfo:{field: 'paket_nama', direction: "ASC"}
@@ -417,11 +435,11 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'rawat_id'
 		},[
-			{name: 'isi_rawat_value', type: 'int', mapping: 'sapaket_id'},
-			{name: 'isi_rawat_is', type: 'int', mapping: 'rawat_id'},
+			//{name: 'isi_rawat_value', type: 'int', mapping: 'apaket_id'},
+			{name: 'isi_rawat_value', type: 'int', mapping: 'rawat_id'},
 			{name: 'isi_rawat_kode', type: 'string', mapping: 'rawat_kode'},
 			{name: 'isi_rawat_display', type: 'string', mapping: 'rawat_nama'},
-			{name: 'total_sisa_item', type: 'int', mapping: 'sapaket_sisa_item'}
+			{name: 'total_sisa_item', type: 'int', mapping: 'apaket_sisa_item'}
 		]),
 		sortInfo:{field: 'isi_rawat_display', direction: "ASC"}
 	});
@@ -529,17 +547,31 @@ Ext.onReady(function(){
 			width: 200,	//230,
 			sortable: true
 		}, 
-		{
+		/*{
 			header: '<div align="center">' + 'Tgl Faktur' + '</div>',
 			dataIndex: 'apaket_faktur_tanggal',
 			width: 70,
 			sortable: true,
 //			renderer: Ext.util.Format.dateRenderer('Y-m-d')
 			renderer: Ext.util.Format.dateRenderer('d-m-Y')
-		}, 
+		}, */
 		{
+			header: '<div align="center">' + 'Tgl Faktur' + '</div>',
+			dataIndex: 'jpaket_tanggal',
+			width: 70,
+			sortable: true,
+//			renderer: Ext.util.Format.dateRenderer('Y-m-d')
+			renderer: Ext.util.Format.dateRenderer('d-m-Y')
+		}, 
+		/*{
 			header: '<div align="center">' + 'No Faktur' + '</div>',
 			dataIndex: 'apaket_faktur',
+			width: 80,
+			sortable: true
+		}, */
+		{
+			header: '<div align="center">' + 'No Faktur' + '</div>',
+			dataIndex: 'jpaket_nobukti',
 			width: 80,
 			sortable: true
 		}, 
@@ -557,17 +589,33 @@ Ext.onReady(function(){
 			width: 200,	//230,
 			sortable: true
 		}, 
-		{
+		/*{
 			header: '<div align="center">' + 'Sisa' + '</div>',
 			dataIndex: 'apaket_sisa_paket',
 			width: 60,	//90,
 			renderer: function(value, cell, record){
 				return '<div align="right">' + value + '</div>';
 			}
-		},
+		},*/
 		{
+			header: '<div align="center">' + 'Sisa' + '</div>',
+			dataIndex: 'dpaket_sisa_paket',
+			width: 60,	//90,
+			renderer: function(value, cell, record){
+				return '<div align="right">' + value + '</div>';
+			}
+		},
+		/*{
 			header: '<div align="center">' + 'Tgl Exp' + '</div>',
 			dataIndex: 'apaket_kadaluarsa',
+			width: 70,
+			sortable: true,
+//			renderer: Ext.util.Format.dateRenderer('Y-m-d')
+			renderer: Ext.util.Format.dateRenderer('d-m-Y')
+		} */
+		{
+			header: '<div align="center">' + 'Tgl Exp' + '</div>',
+			dataIndex: 'dpaket_kadaluarsa',
 			width: 70,
 			sortable: true,
 //			renderer: Ext.util.Format.dateRenderer('Y-m-d')
@@ -666,8 +714,9 @@ Ext.onReady(function(){
 	
 	ambil_paketListEditorGrid.on('rowclick', function (ambil_paketListEditorGrid, rowIndex, eventObj) {
         var recordMaster = ambil_paketListEditorGrid.getSelectionModel().getSelected();
-        detail_ambil_paketStore.load({params : {master_id : recordMaster.get("apaket_id")}});
-		ambil_paket_DataStore.reload();
+        //detail_ambil_paketStore.load({params : {dpaket_master : recordMaster.get("dpaket_master"), dpaket_paket : recordMaster.get("dpaket_paket")}});
+		detail_ambil_paketStore.load({params : {dapaket_dpaket : recordMaster.get("dpaket_id")}});
+		//ambil_paket_DataStore.reload();
     });
      
 	/* Create Context Menu */
@@ -789,14 +838,8 @@ Ext.onReady(function(){
 		width: 94,
 		maskRe: /([0-9]+)$/
 	});
-	apaket_paketField= new Ext.form.NumberField({
-		id: 'apaket_paketField',
-		fieldLabel: 'dpaket_id',
-		hidden: true,
-		readOnly: true,
-		width: 94,
-		maskRe: /([0-9]+)$/
-	});
+	apaket_paketField= new Ext.form.NumberField();
+	apaket_jpaketField=new Ext.form.NumberField();
   	/*Fieldset Master*/
 	ambil_paket_fakturGroup = new Ext.form.FieldSet({
 		title: 'Info Faktur',
@@ -999,12 +1042,12 @@ Ext.onReady(function(){
 			typeAhead: false,
 			loadingText: 'Searching...',
 			pageSize:15,
-			hideTrigger:false,
+			//hideTrigger:false,
 			tpl: isi_rawat_tpl,
 			//applyTo: 'search',
 			itemSelector: 'div.search-item',
 			triggerAction: 'all',
-			lazyRender:true,
+			//lazyRender:true,
 			allowBlank: true,
 			listClass: 'x-combo-list-small',
 			anchor: '95%'
@@ -1143,7 +1186,10 @@ Ext.onReady(function(){
 		//ambil_paket_isi_perawatan_DataStore.commitChanges();
 		//ambil_paket_isi_perawatanListEditorGrid.getView().refresh();
 		/* SET pemakai Paket */
-		
+		/*if(ambil_paket_isi_perawatan_DataStore.getCount()>0){
+			ambil_paket_isi_perawatan_record=ambil_paket_isi_perawatan_DataStore.getAt(0);
+			console.log("rpaket_perawatn = "+ambil_paket_isi_perawatan_record.data.rpaket_perawatan);
+		}*/
 	}
 	//eof
 	
@@ -1155,8 +1201,12 @@ Ext.onReady(function(){
 				waitMsg: 'Mohon tunggu...',
 				url: 'index.php?c=c_master_ambil_paket&m=detail_ambil_paket_isi_perawatan_insert',
 				params:{
-				dapaket_master	: eval(apaket_idField.getValue()), 
-				dapaket_sapaket	: ambil_paket_isi_perawatan_record.data.rpaket_perawatan, 
+				//dapaket_master	: eval(apaket_idField.getValue()), 
+				dapaket_dpaket	: eval(get_pk_id()), 
+				dapaket_jpaket	: eval(apaket_jpaketField.getValue()),
+				dapaket_paket	: eval(apaket_paketField.getValue()),
+				dapaket_item	: ambil_paket_isi_perawatan_record.data.rpaket_perawatan,
+				//dapaket_sapaket	: ambil_paket_isi_perawatan_record.data.rpaket_perawatan, 
 				dapaket_jumlah	: ambil_paket_isi_perawatan_record.data.rpaket_jumlah,
 				dapaket_cust	: ambil_paket_isi_perawatan_record.data.rpaket_cust,
 				tgl_ambil		: ambil_paket_isi_perawatan_record.data.tgl_ambil.format('Y-m-d')

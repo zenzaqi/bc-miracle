@@ -486,7 +486,7 @@ class M_master_jual_paket extends Model{
 			return '1';
 		}
 		
-		function master_ambil_paket_insert($jpaket_id, $paket_id, $paket_jumlah, $jpaket_kadaluarsa){
+		/*function master_ambil_paket_insert($jpaket_id, $paket_id, $paket_jumlah, $jpaket_kadaluarsa){
 			$apaket_faktur="";
 			$apaket_faktur_tanggal="";
 			$cust_no="";
@@ -512,7 +512,7 @@ class M_master_jual_paket extends Model{
 				$apaket_sisa_paket=$rs_paket_record["total_isi_rpaket"];
 			}
 			
-			/* INSERT ke db.master_ambil_paket */
+			//* INSERT ke db.master_ambil_paket 
 			$dti_apaket=array(
 			"apaket_jpaket"=>$jpaket_id,
 			"apaket_faktur"=>$apaket_faktur,
@@ -535,7 +535,7 @@ class M_master_jual_paket extends Model{
 					$rs_apaket_record=$rs_apaket->row_array();
 					$apaket_id=$rs_apaket_record["apaket_id"];
 				}
-				/* INSERT ke submaster_apaket_item (per isi paket) <== db.paket_isi_perawatan */
+				//* INSERT ke submaster_apaket_item (per isi paket) <== db.paket_isi_perawatan 
 				$sql_rpaket="SELECT rpaket_perawatan, rpaket_jumlah, rawat_nama FROM paket_isi_perawatan LEFT JOIN perawatan ON(rpaket_perawatan=rawat_id) WHERE rpaket_master='$paket_id'";
 				$rs_rpaket=$this->db->query($sql_rpaket);
 				$rpaket_num_rows=$rs_rpaket->num_rows();
@@ -556,7 +556,7 @@ class M_master_jual_paket extends Model{
 					}
 				}
 				
-				/* INSERT ke submaster_apaket_item (per isi paket) <== db.paket_isi_perawatan */
+				//* INSERT ke submaster_apaket_item (per isi paket) <== db.paket_isi_perawatan 
 				$sql_ipaket="SELECT ipaket_produk, ipaket_jumlah, produk_nama FROM paket_isi_produk LEFT JOIN produk ON(ipaket_produk=produk_id) WHERE ipaket_master='$paket_id'";
 				$rs_ipaket=$this->db->query($sql_ipaket);
 				$ipaket_num_rows=$rs_ipaket->num_rows();
@@ -578,7 +578,45 @@ class M_master_jual_paket extends Model{
 				}
 				
 			}
-		}
+		}*/
+		
+		/*function master_ambil_paket_insert($jpaket_id, $dpaket_paket, $dpaket_jumlah, $dpaket_kadaluarsa){
+			//* INSERT ke db.master_ambil_paket (per isi paket) <== db.paket_isi_perawatan /
+			$sql_rpaket="SELECT rpaket_perawatan, rpaket_jumlah FROM paket_isi_perawatan WHERE rpaket_master='$dpaket_paket'";
+			$rs_rpaket=$this->db->query($sql_rpaket);
+			if($rs_rpaket->num_rows()){
+				foreach($rs_rpaket->result_array() as $row){
+					$apaket_item=$row["rpaket_perawatan"];
+					$apaket_sisa_item=$row["rpaket_jumlah"]*$dpaket_jumlah;
+					$dti_rpaket_toapaket=array(
+					"apaket_jpaket"=>$jpaket_id,
+					"apaket_paket"=>$dpaket_paket,
+					"apaket_item"=>$apaket_item,
+					"apaket_jenis_item"=>'perawatan',
+					"apaket_sisa_item"=>$apaket_sisa_item
+					);
+					$this->db->insert('master_ambil_paket', $dti_rpaket_toapaket);
+				}
+			}
+			
+			//* INSERT ke db.master_ambil_paket (per isi paket) <== db.paket_isi_produk /
+			$sql_rpaket="SELECT ipaket_produk, ipaket_jumlah FROM paket_isi_produk WHERE ipaket_master='$dpaket_paket'";
+			$rs_rpaket=$this->db->query($sql_rpaket);
+			if($rs_rpaket->num_rows()){
+				foreach($rs_rpaket->result_array() as $row){
+					$apaket_item=$row["ipaket_produk"];
+					$apaket_sisa_item=$row["ipaket_jumlah"]*$dpaket_jumlah;
+					$dti_ipaket_toapaket=array(
+					"apaket_jpaket"=>$jpaket_id,
+					"apaket_paket"=>$dpaket_paket,
+					"apaket_item"=>$apaket_item,
+					"apaket_jenis_item"=>'produk',
+					"apaket_sisa_item"=>$apaket_sisa_item
+					);
+					$this->db->insert('master_ambil_paket', $dti_ipaket_toapaket);
+				}
+			}
+		}*/
 		
 		//insert detail record
 		function detail_detail_jual_paket_insert($dpaket_id ,$dpaket_master ,$dpaket_paket, $dpaket_kadaluarsa ,$dpaket_jumlah ,$dpaket_harga ,$dpaket_diskon,$dpaket_diskon_jenis,$dpaket_sales ){
@@ -589,6 +627,24 @@ class M_master_jual_paket extends Model{
 			if($dpaket_kadaluarsa=="")
 				$dpaket_kadaluarsa=NULL;
 			
+			$dpaket_sisa_paket=0;
+			$rpaket_jumlah_total=0;
+			$ipaket_jumlah_total=0;
+			
+			$sql_rpaket="SELECT sum(rpaket_jumlah) AS rpaket_jumlah_total FROM paket_isi_perawatan WHERE rpaket_master='$dpaket_paket' ORDER BY rpaket_master";
+			$rs_rpaket=$this->db->query($sql_rpaket);
+			if($rs_rpaket->num_rows()){
+				$rs_rpaket_record=$rs_rpaket->row_array();
+				$rpaket_jumlah_total=$rs_rpaket_record["rpaket_jumlah_total"];
+			}
+			$sql_ipaket="SELECT sum(ipaket_jumlah) AS ipaket_jumlah_total FROM paket_isi_produk WHERE ipaket_master='$dpaket_paket' ORDER BY ipaket_master";
+			$rs_ipaket=$this->db->query($sql_ipaket);
+			if($rs_ipaket->num_rows()){
+				$rs_ipaket_record=$rs_ipaket->row_array();
+				$ipaket_jumlah_total=$rs_ipaket_record["ipaket_jumlah_total"];
+			}
+			$dpaket_sisa_paket=$rpaket_jumlah_total+$ipaket_jumlah_total;
+			
 			$data = array(
 				"dpaket_master"=>$dpaket_master, 
 				"dpaket_paket"=>$dpaket_paket,
@@ -597,11 +653,12 @@ class M_master_jual_paket extends Model{
 				"dpaket_harga"=>$dpaket_harga, 
 				"dpaket_diskon"=>$dpaket_diskon,
 				"dpaket_diskon_jenis"=>$dpaket_diskon_jenis,
-				"dpaket_sales"=>$dpaket_sales 
+				"dpaket_sales"=>$dpaket_sales,
+				"dpaket_sisa_paket"=>$dpaket_sisa_paket
 			);
 			$this->db->insert('detail_jual_paket', $data); 
 			if($this->db->affected_rows()){
-				$this->master_ambil_paket_insert($dpaket_master, $dpaket_paket, $dpaket_jumlah, $dpaket_kadaluarsa);
+				//$this->master_ambil_paket_insert($dpaket_master, $dpaket_paket, $dpaket_jumlah, $dpaket_kadaluarsa);
 				return '1';
 			}else
 				return '0';
