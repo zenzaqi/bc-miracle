@@ -156,6 +156,10 @@ Ext.onReady(function(){
 		var dtrawat_dokter_update=null;
 		var dtrawat_dokter_id_update=null;
 		var dtrawat_ambil_paket_update="";
+		var dapaket_dpaket_update=null;
+		var dapaket_jpaket_update=null;
+		var dapaket_paket_update=null;
+		var dapaket_item_update=null;
 		
 		trawat_id_update_pk = oGrid_event.record.data.trawat_id;
 		if(oGrid_event.record.data.trawat_cust!== null){trawat_cust_update = oGrid_event.record.data.trawat_cust;}
@@ -174,9 +178,10 @@ Ext.onReady(function(){
 		dtrawat_dokter_update = oGrid_event.record.data.dtrawat_petugas1;
 		dtrawat_dokter_id_update = oGrid_event.record.data.dtrawat_petugas1_id;
 		dtrawat_ambil_paket_update = oGrid_event.record.data.dtrawat_ambil_paket;
-		apaket_id_update = oGrid_event.record.data.apaket_id;
-		sapaket_id_update = oGrid_event.record.data.sapaket_id;
-		sapaket_item_update = oGrid_event.record.data.sapaket_item;
+		dapaket_dpaket_update = oGrid_event.record.data.dapaket_dpaket;
+		dapaket_jpaket_update = oGrid_event.record.data.dapaket_jpaket;
+		dapaket_paket_update = oGrid_event.record.data.dapaket_paket;
+		dapaket_item_update = oGrid_event.record.data.dapaket_item;
 
 		Ext.Ajax.request({  
 			waitMsg: 'Please wait...',
@@ -201,9 +206,10 @@ Ext.onReady(function(){
 				dtrawat_dokter : dtrawat_dokter_update,
 				dtrawat_dokter_id : dtrawat_dokter_id_update,
 				dtrawat_ambil_paket	: dtrawat_ambil_paket_update,
-				apaket_id	: apaket_id_update,
-				sapaket_id	: sapaket_id_update,
-				sapaket_item	: sapaket_item_update
+				dapaket_dpaket	: dapaket_dpaket_update,
+				dapaket_jpaket	: dapaket_jpaket_update,
+				dapaket_paket	: dapaket_paket_update,
+				dapaket_item	: dapaket_item_update
 			}, 
 			success: function(response){							
 				var result=eval(response.responseText);
@@ -524,9 +530,9 @@ Ext.onReady(function(){
 			{name: 'dtrawat_keterangan', type: 'string', mapping: 'dtrawat_keterangan'},
 			{name: 'dtrawat_ambil_paket', type: 'string', mapping: 'dtrawat_ambil_paket'},
 			{name: 'cust_punya_paket', type: 'string', mapping: 'cust_punya_paket'},
-			{name: 'apaket_id', type: 'int', mapping: 'apaket_id'},
-			{name: 'sapaket_id', type: 'int', mapping: 'sapaket_id'},
-			{name: 'sapaket_item', type: 'int', mapping: 'sapaket_item'},
+			{name: 'dapaket_dpaket', type: 'int', mapping: 'dpaket_id'},
+			{name: 'dapaket_jpaket', type: 'int', mapping: 'dpaket_master'},
+			{name: 'dapaket_paket', type: 'int', mapping: 'dpaket_paket'},
 			{name: 'dtrawat_edit', type: 'string', mapping: 'dtrawat_edit'}
 		])/*,
 		sortInfo:{field: 'dtrawat_id', direction: "DESC"}*/

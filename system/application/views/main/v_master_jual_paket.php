@@ -534,11 +534,7 @@ Ext.onReady(function(){
 					case 1:
 						detail_jual_paket_purge();
 						detail_pengguna_paket_insert();
-						//detail_pengguna_paket_purge();
-						//detail_jual_paket_insert();
-						//Ext.MessageBox.alert(post2db+' OK','The Master_jual_paket was '+msg+' successfully.');
 						Ext.MessageBox.alert('OK', 'Data penjualan paket berhasil disimpan');
-						//master_jual_paket_DataStore.reload();
 						detail_jual_paket_DataStore.load({params: {master_id:0}});
 						detail_pengguna_paket_DataStore.removeAll();
 						master_jual_paket_createWindow.hide();
@@ -557,7 +553,16 @@ Ext.onReady(function(){
 				if(printed==1)
 					master_jual_paket_print();
 				master_jual_paket_reset_allForm();
+				//master_cara_bayarTabPanel.setActiveTab(0);
+				
+				
+				//master_jual_paket_reset_form();
+				//detail_jual_paket_DataStore.load({params: {master_id:0}});
+				jpaket_caraField.setValue("card");
+				master_jual_paket_cardGroup.setVisible(true);
+				//detail_pengguna_paket_DataStore.removeAll();
 				master_cara_bayarTabPanel.setActiveTab(0);
+				post2db="CREATE";
 			},
 			failure: function(response){
 				var result=response.responseText;
