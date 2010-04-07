@@ -43,7 +43,6 @@ class C_perawatan extends Controller {
 		$query = isset($_POST['query']) ? $_POST['query'] : $_GET['query'];
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$end=0;
 		$result=$this->m_perawatan->get_produk_list($query, $start, $end);
 		echo $result;
 	}
@@ -53,8 +52,22 @@ class C_perawatan extends Controller {
 		echo $result;
 	}
 	
-	function get_satuan_list(){
+	/*function get_satuan_list(){
 		$result=$this->m_public_function->get_satuan_list();
+		echo $result;
+	}*/
+	function get_satuan_list(){
+		$task = isset($_POST['task']) ? @$_POST['task'] : @$_GET['task'];
+		$selected_id = isset($_POST['selected_id']) ? @$_POST['selected_id'] : @$_GET['selected_id'];
+		$master_id = (integer) (isset($_POST['master_id']) ? @$_POST['master_id'] : @$_GET['master_id']);
+		
+		if($task=='detail')
+			$result=$this->m_perawatan->get_satuan_detail_list($master_id);
+		elseif($task=='produk')
+			$result=$this->m_perawatan->get_satuan_produk_list($selected_id);
+		elseif($task=='selected')
+			$result=$this->m_perawatan->get_satuan_selected_list($selected_id);
+			
 		echo $result;
 	}
 	

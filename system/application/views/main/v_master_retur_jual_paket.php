@@ -1011,7 +1011,6 @@ Ext.onReady(function(){
 		//detail_retur_paket_tokwitansiDataStore.commitChanges();
 		detail_retur_paket_tokwitansiListEditorGrid.getView().refresh();
 		detail_retur_tokwitansi_record=detail_retur_paket_tokwitansiDataStore.getAt(0);
-		//console.log("detail_retur_paket_tokwitansiDataStore COUNT = "+detail_retur_paket_tokwitansiDataStore.getCount());
 		if(detail_retur_paket_tokwitansiDataStore.getCount()>=0){
 			var drtokwitansi = cbo_drpaket_rawatDataStore.find('drpaket_rawat_value',detail_retur_tokwitansi_record.data.drpaket_rawat);
 			if(drtokwitansi>=0){

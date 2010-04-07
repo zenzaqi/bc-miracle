@@ -1896,7 +1896,6 @@ Ext.onReady(function(){
 			params:{ master_id: eval(app_idField.getValue()) },
 			success: function(response){							
 				var result=eval(response.responseText);
-				console.log(result);
 				appointment_detail_medis_insert();
 			},
 			failure: function(response){
@@ -2260,7 +2259,6 @@ Ext.onReady(function(){
 			params:{ master_id: eval(app_idField.getValue()) },
 			success: function(response){							
 				var result=eval(response.responseText);
-				console.log(result);
 				appointment_detail_nonmedis_insert();
 			},
 			failure: function(response){

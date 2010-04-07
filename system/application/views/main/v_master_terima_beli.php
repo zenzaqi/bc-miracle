@@ -1629,7 +1629,6 @@ Ext.onReady(function(){
 			detail_terima_beli_record=detail_terima_beli_DataStore.getAt(i);
 			jumlah_item=jumlah_item+detail_terima_beli_record.data.dterima_jumlah;
 		}
-		//console.log('total terima');
 		terima_jumlahField.setValue(jumlah_item);
 	}
 	
