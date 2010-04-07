@@ -182,11 +182,12 @@ class C_tindakan_nonmedis extends Controller {
 		$dtrawat_keterangan=str_replace(",", "\,",$dtrawat_keterangan);
 		$dtrawat_dapp=trim(@$_POST["dtrawat_dapp"]);
 		$dtrawat_ambil_paket=trim(@$_POST["dtrawat_ambil_paket"]);
-		$apaket_id=trim(@$_POST["apaket_id"]);
-		$sapaket_id=trim(@$_POST["sapaket_id"]);
-		$sapaket_item=trim(@$_POST["sapaket_item"]);
+		$dapaket_dpaket=trim(@$_POST["dapaket_dpaket"]);
+		$dapaket_jpaket=trim(@$_POST["dapaket_jpaket"]);
+		$dapaket_paket=trim(@$_POST["dapaket_paket"]);
+		$dapaket_item=trim(@$_POST["dapaket_item"]);
 		$mode_edit=trim(@$_POST["mode_edit"]);
-		$result = $this->m_tindakan_nonmedis->tindakan_update($trawat_id ,$trawat_cust ,$trawat_keterangan ,$dtrawat_status ,$trawat_cust_id ,$dtrawat_perawatan_id ,$dtrawat_perawatan ,$dtrawat_id ,$rawat_harga ,$rawat_du ,$rawat_dm ,$cust_member ,$dtrawat_terapis ,$dtrawat_terapis_id ,$dtrawat_keterangan ,$dtrawat_dapp ,$dtrawat_ambil_paket ,$apaket_id ,$sapaket_id ,$sapaket_item ,$mode_edit);
+		$result = $this->m_tindakan_nonmedis->tindakan_update($trawat_id ,$trawat_cust ,$trawat_keterangan ,$dtrawat_status ,$trawat_cust_id ,$dtrawat_perawatan_id ,$dtrawat_perawatan ,$dtrawat_id ,$rawat_harga ,$rawat_du ,$rawat_dm ,$cust_member ,$dtrawat_terapis ,$dtrawat_terapis_id ,$dtrawat_keterangan ,$dtrawat_dapp ,$dtrawat_ambil_paket ,$dapaket_dpaket ,$dapaket_jpaket ,$dapaket_paket ,$dapaket_item ,$mode_edit);
 		echo $result;
 	}
 	

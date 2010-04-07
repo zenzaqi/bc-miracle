@@ -1188,7 +1188,6 @@ Ext.onReady(function(){
 		/* SET pemakai Paket */
 		/*if(ambil_paket_isi_perawatan_DataStore.getCount()>0){
 			ambil_paket_isi_perawatan_record=ambil_paket_isi_perawatan_DataStore.getAt(0);
-			console.log("rpaket_perawatn = "+ambil_paket_isi_perawatan_record.data.rpaket_perawatan);
 		}*/
 	}
 	//eof

@@ -377,6 +377,10 @@ Ext.onReady(function(){
 		rawat_jumlah_tindakanField.setValue(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_jumlah_tindakan'));
 		rawat_gudangField.setValue(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_gudang'));
 		rawat_aktifField.setValue(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_aktif'));
+		
+		cbo_satuan_produkDataStore.setBaseParam('task','detail');
+		cbo_satuan_produkDataStore.setBaseParam('master_id',get_pk_id());
+		cbo_satuan_produkDataStore.load();
 	}
 	/* End setValue to EDIT*/
   
@@ -388,11 +392,11 @@ Ext.onReady(function(){
   
   	/* Function for Displaying  create Window Form */
 	function display_form_window(){
-		perawatan_konsumsi_DataStore.removeAll();
+		perawatan_konsumsi_DataStore.load({params:{master_id:0}});
 		if(!perawatan_createWindow.isVisible()){
-			perawatan_reset_form();
 			post2db='CREATE';
 			msg='created';
+			perawatan_reset_form();
 			rawat_aktifField.setValue('Aktif');
 			perawatan_createWindow.show();
 		} else {
@@ -1427,6 +1431,25 @@ Ext.onReady(function(){
 		'</div></tpl>'
     );
 	
+	cbo_satuan_produkDataStore = new Ext.data.Store({
+		id: 'cbo_satuan_produkDataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_perawatan&m=get_satuan_list', 
+			method: 'POST'
+		}),
+		baseParams: {start:0,limit:pageS, task:'detail'},
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'satuan_value'
+		},[
+		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
+			{name: 'satuan_value', type: 'int', mapping: 'satuan_id'},
+			{name: 'satuan_nama', type: 'string', mapping: 'satuan_nama'}
+		]),
+		sortInfo:{field: 'satuan_nama', direction: "ASC"}
+	});
+	
 	
 	var combo_rawat_produk=new Ext.form.ComboBox({
 			store: cbo_rawat_produkDataStore,
@@ -1463,6 +1486,21 @@ Ext.onReady(function(){
 
 	});
 	
+	var combo_dproduk_satuan=new Ext.form.ComboBox({
+		store: cbo_satuan_produkDataStore,
+		mode: 'local',
+		typeAhead: true,
+		displayField: 'satuan_nama',
+		valueField: 'satuan_value',
+		triggerAction: 'all',
+		lazyRender:true
+	});
+	/*combo_dproduk_satuan.on("focus",function(){
+		cbo_satuan_produkDataStore.setBaseParam('task','produk');
+		cbo_satuan_produkDataStore.setBaseParam('selected_id',combo_rawat_produk.getValue());
+		cbo_satuan_produkDataStore.load();
+	});*/
+	
 	//declaration of detail coloumn model
 	perawatan_konsumsi_ColumnModel = new Ext.grid.ColumnModel(
 		[
@@ -1479,6 +1517,8 @@ Ext.onReady(function(){
 			dataIndex: 'krawat_satuan',
 			width: 100,
 			sortable: true,
+			/*editor: combo_dproduk_satuan,
+			renderer: Ext.util.Format.comboRenderer(combo_dproduk_satuan)*/
 			readOnly: true,
 			renderer: function(v, params, record){
 				j=cbo_rawat_produkDataStore.find('rawat_produk_value',record.data.krawat_produk);

@@ -1548,7 +1548,6 @@ Ext.onReady(function(){
 		detail_retur_beli_DataStore.commitChanges();
 		detail_retur_beli_total();
 		for(i=0;i<detail_retur_beli_DataStore.getCount();i++){
-			//console.log('masuk combo');
 			var detail_data=detail_retur_beli_DataStore.getAt(i);
 			var j=cbo_produk_DataStore.find('produk_id',detail_data.data.drbeli_produk);
 			if(j>-1)
@@ -1586,7 +1585,6 @@ Ext.onReady(function(){
 	combo_detail_produk.on('select', function(){
 			
 		for(i=0;i<detail_retur_beli_DataStore.getCount();i++){
-		//console.log('masuk combo');
 			var detail_data=detail_retur_beli_DataStore.getAt(i);
 			var j=cbo_produk_DataStore.find('produk_id',combo_detail_produk.getValue());
 			if(j>-1)

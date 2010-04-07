@@ -3717,7 +3717,6 @@ Ext.onReady(function(){
 			
 			var prez = [];
 			for(i = 0; i< detail_jual_paketListEditorGrid.selModel.getCount(); i++){
-				console.log("selections = "+selections[i].json.dpaket_id);
 				prez.push(selections[i].json.dpaket_id);
 				
 			}

@@ -1028,7 +1028,6 @@ Ext.onReady(function(){
 		//detail_retur_jual_produk_DataStore.commitChanges();
 		detail_retur_jual_produkListEditorGrid.getView().refresh();
 		detail_retur_produk_record=detail_retur_jual_produk_DataStore.getAt(0);
-		//console.log("detail_retur_jual_produk_DataStore COUNT = "+detail_retur_jual_produk_DataStore.getCount());
 		if(detail_retur_jual_produk_DataStore.getCount()>=0){
 			var dproduk = cbo_drproduk_produkDataStore.find('drproduk_produk_value',detail_retur_produk_record.data.drproduk_produk);
 			if(dproduk>=0){

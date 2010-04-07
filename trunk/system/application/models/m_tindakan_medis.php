@@ -124,6 +124,8 @@ class M_tindakan_medis extends Model{
 				);
 				$this->db->where('dapp_id', $dtrawat_dapp);
 				$this->db->update('appointment_detail', $dtu_dapp);
+				
+				$this->detail_pakai_cabin_delete($dtrawat_id);
 			}
 		}
 	}
@@ -173,6 +175,8 @@ class M_tindakan_medis extends Model{
 				$this->db->where('dapp_id', $dtrawat_dapp);
 				$this->db->update('appointment_detail', $dtu_dapp);
 				
+				$this->detail_pakai_cabin_insert($dtrawat_id, $dtrawat_perawatan_id);
+				
 				/* Checking di db.tindakan_detail WHERE tindakan_detail.dtrawat_master = $trawat_id 
 				 * AND kategori = 'Non Medis',
 				 * JIKA "ada" ini artinya di menu Tindakan Medis juga menjual Tindakan Non-Medis
@@ -205,6 +209,9 @@ class M_tindakan_medis extends Model{
 					$rs=$this->db->query($sql);
 					if(!$rs->num_rows()){
 						$this->db->insert('detail_jual_rawat', $data_dtj_nonmedis);
+						if($this->db->affected_rows()){
+							$this->detail_pakai_cabin_insert($dtj_nonmedis_dtrawat_id, $dtj_nonmedis_perawatan);
+						}
 					}
 				}
 			}
@@ -246,6 +253,8 @@ class M_tindakan_medis extends Model{
 					$this->db->where('dapp_id', $dtrawat_dapp);
 					$this->db->update('appointment_detail', $dtu_dapp);
 					
+					$this->detail_pakai_cabin_insert($dtrawat_id, $dtrawat_perawatan_id);
+					
 					/* Checking di db.tindakan_detail WHERE tindakan_detail.dtrawat_master = $trawat_id 
 					 * AND kategori = 'Non Medis',
 					 * JIKA "ada" ini artinya di menu Tindakan Medis juga menjual Tindakan Non-Medis
@@ -278,6 +287,9 @@ class M_tindakan_medis extends Model{
 						$rs=$this->db->query($sql);
 						if(!$rs->num_rows()){
 							$this->db->insert('detail_jual_rawat', $data_dtj_nonmedis);
+							if($this->db->affected_rows()){
+								$this->detail_pakai_cabin_insert($dtj_nonmedis_dtrawat_id, $dtj_nonmedis_perawatan);
+							}
 						}
 					}
 				}
@@ -311,6 +323,9 @@ class M_tindakan_medis extends Model{
 		);
 		$this->db->where('drawat_dtrawat', $dtrawat_id);
 		$this->db->update('detail_jual_rawat', $dtu_drawat);
+		if($this->db->affected_rows()){
+			$this->detail_pakai_cabin_update($dtrawat_id, $dtrawat_perawatan);
+		}
 	}
 	/* eof detail_jual_rawat_update */
 	
@@ -358,6 +373,8 @@ class M_tindakan_medis extends Model{
 			$this->db->update('tindakan_detail', $dtu_dtrawat);
 			
 			$this->total_sisa_paket_update($dapaket_dpaket, $dapaket_jpaket, $dapaket_paket);
+			
+			$this->detail_pakai_cabin_insert($dtrawat_id, $dapaket_item);
 		}
 	}
 	/* eof detail_ambil_paket_insert */
@@ -400,6 +417,61 @@ class M_tindakan_medis extends Model{
 		}*/
 	}
 	
+	/* INSERT db.detail_pakai_cabin */
+	function detail_pakai_cabin_insert($cabin_dtrawat, $cabin_rawat){
+		//* Mencatat pemakaian Standard Bahan dari perawatan($cabin_rawat) yang terpakai /
+		$sql="SELECT krawat_produk, krawat_satuan, krawat_jumlah, produk_satuan FROM perawatan_konsumsi LEFT JOIN produk ON(krawat_produk=produk_id) WHERE krawat_master='$cabin_rawat'";
+		$rs=$this->db->query($sql);
+		if($rs->num_rows()){
+			foreach($rs->result_array() as $row){
+				$dti_cabin=array(
+				"cabin_dtrawat"=>$cabin_dtrawat,
+				"cabin_rawat"=>$cabin_rawat,
+				"cabin_produk"=>$row['krawat_produk'],
+				"cabin_satuan"=>$row['produk_satuan'],
+				"cabin_jumlah"=>$row['krawat_jumlah']
+				);
+				$this->db->insert('detail_pakai_cabin', $dti_cabin);
+			}
+			return '1';
+		}
+	}
+	
+	/* DELETE db.detail_pakai_cabin */
+	function detail_pakai_cabin_delete($cabin_dtrawat){
+		$this->db->where('cabin_dtrawat', $cabin_dtrawat);
+		$this->db->delete('detail_pakai_cabin');
+		if($this->db->affected_rows()){
+			return '1';
+		}else{
+			return '0';
+		}
+	}
+	
+	/* UPDATE db.detail_pakai_cabin */
+	function detail_pakai_cabin_update($cabin_dtrawat, $cabin_rawat){
+		$this->db->where('cabin_dtrawat', $cabin_dtrawat);
+		$this->db->delete('detail_pakai_cabin');
+		if($this->db->affected_rows()){
+			//* Mencatat pemakaian Standard Bahan dari perawatan($cabin_rawat) yang terpakai /
+			$sql="SELECT krawat_produk, krawat_satuan, krawat_jumlah, produk_satuan FROM perawatan_konsumsi LEFT JOIN produk ON(krawat_produk=produk_id) WHERE krawat_master='$cabin_rawat'";
+			$rs=$this->db->query($sql);
+			if($rs->num_rows()){
+				foreach($rs->result_array() as $row){
+					$dti_cabin=array(
+					"cabin_dtrawat"=>$cabin_dtrawat,
+					"cabin_rawat"=>$cabin_rawat,
+					"cabin_produk"=>$row['krawat_produk'],
+					"cabin_satuan"=>$row['produk_satuan'],
+					"cabin_jumlah"=>$row['krawat_jumlah']
+					);
+					$this->db->insert('detail_pakai_cabin', $dti_cabin);
+				}
+				return '1';
+			}
+		}
+	}
+	
 	/* INSERT ke db.detail_ambil_paket */
 	function detail_ambil_paket_delete($dtrawat_id, $dtrawat_dapp, $dapaket_dpaket, $dapaket_jpaket, $dapaket_paket){
 		/*$sql="SELECT dapaket_master, dapaket_sapaket FROM detail_ambil_paket WHERE dapaket_dtrawat='$dtrawat_id'";
@@ -421,6 +493,8 @@ class M_tindakan_medis extends Model{
 			$this->db->update('appointment_detail', $dtu_dapp);
 			
 			$this->total_sisa_paket_update($dapaket_dpaket, $dapaket_jpaket, $dapaket_paket);
+			
+			$this->detail_pakai_cabin_delete($dtrawat_id);
 		}
 	}
 	/* eof detail_ambil_paket_delete */
@@ -920,8 +994,12 @@ class M_tindakan_medis extends Model{
 							"dapaket_paket"=>$dapaket_paket_ganti,
 							"dapaket_item"=>$dtrawat_perawatan
 							);
+							$this->db->where('dapaket_dtrawat', $dtrawat_id);
+							$this->db->update('detail_ambil_paket', $dtu_dapaket);
 							if($this->db->affected_rows()){
+								//* UPDATE sisa_paket dari pengambilan paket yang dibatalkan */
 								$this->total_sisa_paket_update($dapaket_dpaket, $dapaket_jpaket, $dapaket_paket);
+								//* UPDATE sisa_paket dari pengambilan paket penggantinya */
 								$this->total_sisa_paket_update($dapaket_dpaket_ganti, $dapaket_jpaket_ganti, $dapaket_paket_ganti);
 							}
 							return '1';

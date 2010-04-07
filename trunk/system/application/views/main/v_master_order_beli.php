@@ -1434,7 +1434,6 @@ Ext.onReady(function(){
 		order_jumlahField.setValue(jumlah_item);
 		order_totalField.setValue(total_harga);
 		order_totalbayarField.setValue(total_harga-order_bayarField.getValue());
-		//console.log('total');
 	}
 	
 	/* Function for action list search */
@@ -1864,7 +1863,6 @@ Ext.onReady(function(){
 		var satuan_selected="";
 		detail_order_beli_DataStore.commitChanges();
 		detail_order_beli_total();
-		//console.log('update');
 		for(i=0;i<detail_order_beli_DataStore.getCount();i++){
 			detail_order_beli_record=detail_order_beli_DataStore.getAt(i);
 			query_selected=query_selected+detail_order_beli_record.data.dorder_produk+",";
