@@ -1160,7 +1160,8 @@ Ext.onReady(function(){
 		items: [master_retur_jual_produk_masterGroup,detail_retur_jual_produkListEditorGrid, kwitansi_tercetakGroup]
 		,
 		buttons: [{
-				text: 'Cetak Kuitansi',
+				//text: 'Cetak Kuitansi',
+				text: 'Save and Close',
 				handler: master_retur_jual_produk_create
 			}
 			,{
