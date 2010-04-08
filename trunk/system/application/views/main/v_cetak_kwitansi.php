@@ -684,13 +684,13 @@ Ext.onReady(function(){
 	function cetak_kwitansi_confirm_delete(){
 		// only one cetak_kwitansi is selected here
 		if(cetak_kwitansiListEditorGrid.selModel.getCount() == 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', cetak_kwitansi_delete);
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', cetak_kwitansi_delete);
 		} else if(cetak_kwitansiListEditorGrid.selModel.getCount() > 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', cetak_kwitansi_delete);
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', cetak_kwitansi_delete);
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really delete something you haven\'t selected?',
+				msg: 'Anda belum memilih data yang akan dihapus',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -712,7 +712,7 @@ Ext.onReady(function(){
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really update something you haven\'t selected?',
+				msg: 'Anda belum memilih data yang akan diubah',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -731,7 +731,7 @@ Ext.onReady(function(){
 			}
 			var encoded_array = Ext.encode(prez);
 			Ext.Ajax.request({ 
-				waitMsg: 'Please Wait',
+				waitMsg: 'Mohon tunggu...',
 				url: 'index.php?c=c_cetak_kwitansi&m=get_action', 
 				params: { task: "DELETE", ids:  encoded_array }, 
 				success: function(response){
@@ -960,7 +960,7 @@ Ext.onReady(function(){
 			dataIndex: 'kwitansi_date_create',
 			width: 80,	//150,
 			sortable: true,
-			renderer: Ext.util.Format.dateRenderer('Y-m-d')
+			renderer: Ext.util.Format.dateRenderer('d-m-Y')
 		}, 
 		{
 			header: '<div align="center">' + 'No Kuitansi' + '</div>',
@@ -1105,7 +1105,7 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 940,	//800,
+	  	width: 1220,	//800,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: cetak_kwitansi_DataStore,
@@ -1895,7 +1895,7 @@ Ext.onReady(function(){
         autoExpandColumn: 'customer_nama',
         autoHeight: true,
 		style: 'margin-top: 10px',
-        width: 940	//800
+        width: 1220	//800
     });
     history_pakai_kwitansiPanel.render('history_pakai_kwitansi');
 
