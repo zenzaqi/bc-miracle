@@ -130,7 +130,7 @@ Ext.onReady(function(){
 					default:
 						Ext.MessageBox.show({
 						   title: 'Warning',
-						   msg: 'We could\'t not save the master_retur_jual_produk.',
+						   msg: 'Data retur penjualan produk tidak bisa disimpan',
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'save',
 						   icon: Ext.MessageBox.WARNING
@@ -194,14 +194,14 @@ Ext.onReady(function(){
 					case 1:
 						detail_retur_jual_produk_purge()
 						detail_retur_jual_produk_insert();
-						Ext.MessageBox.alert(post2db+' OK','The Master_retur_jual_produk was '+msg+' successfully.');
+						Ext.MessageBox.alert(post2db+' OK','Data retur penjualan produk berhasil disimpan');
 						master_retur_jual_produk_DataStore.reload();
 						master_retur_jual_produk_createWindow.hide();
 						break;
 					default:
 						Ext.MessageBox.show({
 						   title: 'Warning',
-						   msg: 'We could\'t not '+msg+' the Master_retur_jual_produk.',
+						   msg: 'Data retur penjualan produk tidak bisa disimpan',
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'save',
 						   icon: Ext.MessageBox.WARNING
@@ -348,7 +348,7 @@ Ext.onReady(function(){
 			}
 			var encoded_array = Ext.encode(prez);
 			Ext.Ajax.request({ 
-				waitMsg: 'Mohon  Tunggu',
+				waitMsg: 'Mohon tunggu...',
 				url: 'index.php?c=c_master_retur_jual_produk&m=get_action', 
 				params: { task: "DELETE", ids:  encoded_array }, 
 				success: function(response){
@@ -454,11 +454,10 @@ Ext.onReady(function(){
 				cell.css = "readonlycell"; // Mengambil Value dari Class di dalam CSS 
 				return value;
 				},
-			hidden: false
+			hidden: true
 		},
 		{
-			align : 'Right',
-			header: '<div align="center">' + 'No.Faktur' + '</div>',
+			header: '<div align="center">' + 'No Faktur' + '</div>',
 			dataIndex: 'rproduk_nobukti',
 			width: 100, //150,
 			sortable: true,
@@ -467,8 +466,7 @@ Ext.onReady(function(){
           	})
 		}, 
 		{
-			align : 'Right',
-			header: '<div align="center">' + 'No.Faktur Jual' + '</div>' ,
+			header: '<div align="center">' + 'No Faktur Jual' + '</div>' ,
 			dataIndex: 'rproduk_nobuktijual',
 			width: 100, //150,
 			sortable: true,
@@ -486,7 +484,7 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Tanggal' + '</div>',
 			dataIndex: 'rproduk_tanggal',
-			width: 150,
+			width: 70,	//150,
 			sortable: true,
 			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
 			editor: new Ext.form.DateField({
@@ -550,7 +548,7 @@ Ext.onReady(function(){
 	master_retur_jual_produkListEditorGrid =  new Ext.grid.GridPanel({
 		id: 'master_retur_jual_produkListEditorGrid',
 		el: 'fp_master_retur_jual_produk',
-		title: 'List Of Master_retur_jual_produk',
+		title: 'Daftar Retur Penjualan Produk',
 		autoHeight: true,
 		store: master_retur_jual_produk_DataStore, // DataStore
 		cm: master_retur_jual_produk_ColumnModel, // Nama-nama Columns
@@ -560,7 +558,7 @@ Ext.onReady(function(){
 		//clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 800,
+	  	width: 1220,	//800,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: master_retur_jual_produk_DataStore,
@@ -1154,7 +1152,7 @@ Ext.onReady(function(){
 	/* Function for retrieve create Window Form */
 	master_retur_jual_produk_createWindow= new Ext.Window({
 		id: 'master_retur_jual_produk_createWindow',
-		title: post2db+'Master_retur_jual_produk',
+		title: post2db+'Retur Penjualan Produk',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,
@@ -1308,7 +1306,7 @@ Ext.onReady(function(){
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
 	master_retur_jual_produk_searchWindow = new Ext.Window({
-		title: 'master_retur_jual_produk Search',
+		title: 'Pencarian Retur Penjualan Produk',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,

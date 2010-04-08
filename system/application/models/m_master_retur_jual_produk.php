@@ -392,7 +392,8 @@ class M_master_retur_jual_produk extends Model{
 		
 		//function for create new record
 		function master_retur_jual_produk_create($rproduk_nobukti ,$rproduk_nobuktijual ,$rproduk_cust ,$rproduk_tanggal ,$rproduk_keterangan ,$rproduk_kwitansi_nilai ,$rproduk_kwitansi_keterangan){
-			$pattern="RFT/".date("ym")."-";
+//			$pattern="RFT/".date("ym")."-";
+			$pattern="RJ/".date("ym")."-";
 			$rproduk_nobukti=$this->m_public_function->get_kode_1('master_retur_jual_produk','rproduk_nobukti',$pattern,12);
 			
 			$data = array(
