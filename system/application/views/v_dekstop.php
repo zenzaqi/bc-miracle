@@ -10,6 +10,7 @@
    	<?=css_asset('xtheme-slate.css');?>
 	<?=css_asset('file-upload.css');?>
 	<?=css_asset('MultiSelect.css');?>
+	<?=css_asset('GroupSummary.css');?>
     
     <?=js_asset('ext-base.js');?>
     <?=js_asset('ext-all.js');?>
@@ -25,6 +26,7 @@
     <?=js_asset('ItemSelector.js');?>
     <?=js_asset('InputTextMask.js');?>
 	<?=js_asset('currency.js');?>
+	<?=js_asset('GroupSummary.js');?>
 <script type="text/javascript">
 	var s = document.createElement("script");
 	s.type = 'text/javascript';

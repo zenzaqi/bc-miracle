@@ -123,6 +123,15 @@ function cetak_kwitansi_print_paper(){
 Ext.onReady(function(){
   	Ext.QuickTips.init();	/* Initiate quick tips icon */
 	
+	// define a custom summary function
+    Ext.ux.grid.GroupSummary.Calculations['totalCost'] = function(v, record, field){
+        return v + (record.data.estimate * record.data.rate);
+    };
+
+	// utilize custom extension for Group Summary
+    var summary = new Ext.ux.grid.GroupSummary();
+
+	
 	Ext.util.Format.comboRenderer = function(combo){
   		//jproduk_bankDataStore.load();
   	    return function(value){
@@ -1249,7 +1258,7 @@ Ext.onReady(function(){
 		maxLength: 20,
 		readOnly:true,
 		emptyText: '(Auto)',
-		anchor: '95%'
+		anchor: '100%'
 	});
 	/* Identify  kwitansi_cust Field */
 	kwitansi_custField= new Ext.form.ComboBox({
@@ -1269,7 +1278,7 @@ Ext.onReady(function(){
 		triggerAction: 'all',
 		lazyRender:true,
 		listClass: 'x-combo-list-small',
-		anchor: '95%'
+		anchor: '100%'
 	});
 	/* Identify  kwitansi_ref Field */
 	kwitansi_refField= new Ext.form.NumberField({
@@ -1289,13 +1298,16 @@ Ext.onReady(function(){
 		enableKeyEvents: true,
 		emptyText: '0',
 		itemCls: 'rmoney',
-		anchor: '95%',
+		anchor: '100%',
 		listeners: {
 			'keyup': function(){
 				var cf_tonumber = convertToNumber(this.getValue());
 				kwitansi_nilaiField.setValue(cf_tonumber);
 				kwitansi_total_nilaiField.setValue(cf_tonumber);
 				load_pembayaran();
+				
+				var label_terbilang = terbilang(cf_tonumber);
+				kwitansi_terbilangLabel.setText(label_terbilang);
 				
 				var number_tocf = CurrencyFormatted(this.getValue());
 				this.setRawValue(number_tocf);
@@ -1362,6 +1374,7 @@ Ext.onReady(function(){
 	/*kwitansi_nilaiField.on('keyup', function(){
 		kwitansi_total_nilaiField.setValue(kwitansi_nilaiField.getValue());
 	});*/
+	kwitansi_terbilangLabel= new Ext.form.Label();
 	
 	//START Bayar Tunai
 	kwitansi_tunai_nilai_cfField= new Ext.form.TextField({
@@ -1654,7 +1667,7 @@ Ext.onReady(function(){
 		fieldLabel: 'Cara Bayar',
 		store:new Ext.data.SimpleStore({
 			fields:['kwitansi_cara_value', 'kwitansi_cara_display'],
-			data:[['tunai','Tunai'],['card','Kartu Kredit'],['cek/giro','Cek/Giro'],['transfer','Transfer']]
+			data:[['tunai','Tunai'],['card','Kartu Kredit'],['cek/giro','Cek/Giro'],['transfer','Transfer'],['retur','Retur']]
 		}),
 		mode: 'local',
 		displayField: 'kwitansi_cara_display',
@@ -1741,7 +1754,7 @@ Ext.onReady(function(){
 				border:false,
 				anchor: '100%',
 				labelAlign: 'left',
-				items: [kwitansi_total_nilaiField, kwitansi_total_bayarField, {xtype: 'spacer',height:10}, kwitansi_status_lunasLabel] 
+				items: [{xtype: 'spacer',height:10}, kwitansi_status_lunasLabel] 
 			}
 			]
 	
@@ -1755,10 +1768,16 @@ Ext.onReady(function(){
 		layout:'column',
 		items:[
 			{
-				columnWidth:0.5,
+				columnWidth:0.48,
 				layout: 'form',
 				border:false,
-				items: [kwitansi_noField, kwitansi_custField, kwitansi_nilai_cfField, kwitansi_idField] 
+				items: [kwitansi_noField, kwitansi_custField, kwitansi_nilai_cfField, kwitansi_terbilangLabel, kwitansi_idField] 
+			},
+			{
+				columnWidth:0.02,
+				layout: 'form',
+				border:false,
+				items: [{xtype: 'spacer',height:10}] 
 			},
 			{
 				columnWidth:0.5,
@@ -1857,7 +1876,11 @@ Ext.onReady(function(){
 			header: '<div align="center">' + 'No Faktur' + '</div>',	//'Referensi',
 			dataIndex: 'jkwitansi_ref',
 			width: 80,	//150,
-			sortable: true
+			sortable: true,
+			summaryType: 'count',
+			summaryRenderer: function(v, params, data){
+				return ((v === 0 || v > 1) ? '(' + v +'x Pemakaian)' : '(1x Pemakaian)');
+			}
 		},
 		{
 			header: '<div align="center">' + 'No Cust' + '</div>',
@@ -1877,7 +1900,11 @@ Ext.onReady(function(){
 			dataIndex: 'jkwitansi_nilai',
 			width: 100,	//150,
 			sortable: true,
-			renderer: Ext.util.Format.numberRenderer('0,000')			
+			summaryType: 'sum',
+			renderer: Ext.util.Format.numberRenderer('0,000'),
+			summaryRenderer: function(v, params, data){
+				return 'Total: &nbsp;&nbsp;&nbsp;'+Ext.util.Format.number(v, '0,000');
+			}
 		}]
     );
     detail_pakai_kwitansiColumnModel.defaultSortable= true;
@@ -1891,6 +1918,7 @@ Ext.onReady(function(){
             forceFit:true,
             groupTextTpl: '{text} ({[values.rs.length]} {[values.rs.length > 1 ? "Items" : "Item"]})'
         }),
+		plugins: summary,
         stripeRows: true,
         autoExpandColumn: 'customer_nama',
         autoHeight: true,

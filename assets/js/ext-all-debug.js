@@ -64518,6 +64518,11 @@ Ext.grid.EditorGridPanel = Ext.extend(Ext.grid.GridPanel, {
     // private
     initComponent : function(){
         Ext.grid.EditorGridPanel.superclass.initComponent.call(this);
+		
+		this.selModel = new Ext.grid.RowSelectionModel( {
+			singleSelect :true
+		});
+
 
         if(!this.selModel){
             /**
