@@ -350,8 +350,16 @@ class M_master_retur_jual_produk extends Model{
 		
 		//function for get list record
 		function master_retur_jual_produk_list($filter,$start,$end){
-			$query = "SELECT * FROM master_retur_jual_produk LEFT JOIN customer ON(rproduk_cust=cust_id) LEFT JOIN master_jual_produk ON(rproduk_nobuktijual=jproduk_id) LEFT JOIN cetak_kwitansi ON(kwitansi_ref=rproduk_nobukti)";
-			
+//			$query = "SELECT * FROM master_retur_jual_produk LEFT JOIN customer ON(rproduk_cust=cust_id) LEFT JOIN master_jual_produk ON(rproduk_nobuktijual=jproduk_id) LEFT JOIN cetak_kwitansi ON(kwitansi_ref=rproduk_nobukti)";
+			$query =   "SELECT
+							rproduk_id, rproduk_nobukti, jproduk_nobukti, cust_no, cust_nama, cust_id, 
+							rproduk_tanggal, rproduk_keterangan, rproduk_creator, 		
+							rproduk_date_create, rproduk_update, rproduk_date_update, rproduk_revised, kwitansi_id, kwitansi_nilai, kwitansi_keterangan
+						FROM master_retur_jual_produk m
+						LEFT JOIN customer c ON(m.rproduk_cust=c.cust_id) 
+						LEFT JOIN master_jual_produk mp ON(m.rproduk_nobuktijual=mp.jproduk_id) 
+						LEFT JOIN cetak_kwitansi ck ON(ck.kwitansi_ref=m.rproduk_nobukti)";
+				
 			// For simple search
 			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";

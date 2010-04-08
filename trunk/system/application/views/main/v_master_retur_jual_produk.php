@@ -81,6 +81,8 @@ var rproduk_custSearchField;
 var rproduk_tanggalSearchField;
 var rproduk_keteranganSearchField;
 
+var dt= new Date();
+
 /* on ready fuction */
 Ext.onReady(function(){
   	Ext.QuickTips.init();	/* Initiate quick tips icon */
@@ -252,7 +254,7 @@ Ext.onReady(function(){
 		rproduk_custField.reset();
 		rproduk_custField.setValue(null);
 		rproduk_tanggalField.reset();
-		rproduk_tanggalField.setValue(null);
+		rproduk_tanggalField.setValue(dt.format('Y-m-d'));
 		rproduk_keteranganField.reset();
 		rproduk_keteranganField.setValue(null);
 	}
@@ -400,6 +402,7 @@ Ext.onReady(function(){
 			{name: 'rproduk_id', type: 'int', mapping: 'rproduk_id'}, 
 			{name: 'rproduk_nobukti', type: 'string', mapping: 'rproduk_nobukti'}, 
 			{name: 'rproduk_nobuktijual', type: 'string', mapping: 'jproduk_nobukti'}, 
+			{name: 'rproduk_cust_no', type: 'string', mapping: 'cust_no'}, 
 			{name: 'rproduk_cust', type: 'string', mapping: 'cust_nama'}, 
 			{name: 'rproduk_cust_id', type: 'int', mapping: 'cust_id'}, 
 			{name: 'rproduk_tanggal', type: 'date', dateFormat: 'Y-m-d', mapping: 'rproduk_tanggal'}, 
@@ -475,6 +478,13 @@ Ext.onReady(function(){
           	})
 		}, 
 		{
+			header: '<div align="center">' + 'No Cust' + '</div>',
+			dataIndex: 'rproduk_cust_no',
+			width: 80,
+			sortable: true,
+			readOnly: true
+		}, 
+		{
 			header: '<div align="center">' + 'Customer' + '</div>',
 			dataIndex: 'rproduk_cust',
 			width: 200, //150,
@@ -491,6 +501,17 @@ Ext.onReady(function(){
 				format: 'd-m-Y'
 			})
 		}, 
+		{
+			header: '<div align="center">' + 'Nilai Kuitansi (Rp)' + '</div>',
+			dataIndex: 'kwitansi_nilai',
+			align: 'right',
+			width: 100,
+			sortable: true,
+			readOnly: true,
+			renderer: function(val){
+				return '<span> '+Ext.util.Format.number(val,'0,000')+'</span>';
+			}
+		},
 		{
 			header: '<div align="center">' + 'Keterangan' + '</div>',
 			dataIndex: 'rproduk_keterangan',
@@ -726,7 +747,7 @@ Ext.onReady(function(){
 	rproduk_tanggalField= new Ext.form.DateField({
 		id: 'rproduk_tanggalField',
 		fieldLabel: 'Tanggal',
-		format : 'Y-m-d',
+		format : 'd-m-Y',
 	});
 	/* Identify  rproduk_keterangan Field */
 	rproduk_keteranganField= new Ext.form.TextArea({
@@ -738,7 +759,7 @@ Ext.onReady(function(){
 	
 	rproduk_kwitansi_nilaiField= new Ext.form.NumberField({
 		id: 'rproduk_kwitansi_nilaiField',
-		fieldLabel: 'Nilai (Rp)',
+		fieldLabel: 'Nilai Kuitansi (Rp)',
 		allowNegatife : false,
 		blankText: '0',
 		allowDecimals: true,
@@ -910,26 +931,27 @@ Ext.onReady(function(){
 	detail_retur_jual_produk_ColumnModel = new Ext.grid.ColumnModel(
 		[
 		{
-			header: 'Nama Produk',
+			header: '<div align="center">' + 'Produk' + '</div>',
 			dataIndex: 'drproduk_produk',
-			width: 150,
+			width: 200,
 			sortable: true,
 			editor: combo_retur_produk,
 			renderer: Ext.util.Format.comboRenderer(combo_retur_produk)
 		},
 		{
-			header: 'Satuan',
+			header: '<div align="center">' + 'Satuan' + '</div>',
 			dataIndex: 'drproduk_satuan',
-			width: 150,
+			width: 80,
 			sortable: true,
 			readOnly: true,
 			//editor: combo_retur_satuan,
 			renderer: Ext.util.Format.comboRenderer(combo_retur_satuan)
 		},
 		{
-			header: 'Jumlah',
+			header: '<div align="center">' + 'Jumlah' + '</div>',
+			align: 'right',
 			dataIndex: 'drproduk_jumlah',
-			width: 150,
+			width: 60,
 			sortable: true,
 			editor: new Ext.form.NumberField({
 				allowDecimals: false,
@@ -940,17 +962,19 @@ Ext.onReady(function(){
 			})
 		},
 		{
-			header: 'Harga',
+			header: '<div align="center">' + 'Harga (Rp)' + '</div>',
+			align: 'right',
 			dataIndex: 'drproduk_harga',
-			width: 150,
+			width: 100,
 			sortable: true,
 			readOnly: true,
 			renderer: Ext.util.Format.numberRenderer('0,000')
 		},
 		{
-			header: 'Sub Total',
+			header: '<div align="center">' + 'Sub Total (Rp)' + '</div>',
+			align: 'right',
 			dataIndex: 'drproduk_subtotal',
-			width: 150,
+			width: 100,
 			sortable: true,
 			readOnly: true,
 			renderer: function(v, params, record){
@@ -1260,7 +1284,7 @@ Ext.onReady(function(){
 	rproduk_tanggalSearchField= new Ext.form.DateField({
 		id: 'rproduk_tanggalSearchField',
 		fieldLabel: 'Tanggal',
-		format : 'Y-m-d',
+		format : 'd-m-Y',
 	
 	});
 	/* Identify  rproduk_keterangan Search Field */
