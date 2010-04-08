@@ -435,7 +435,7 @@ Ext.onReady(function(){
 			perawatan_set_form();
 			post2db='UPDATE';
 			perawatan_konsumsi_DataStore.setBaseParam('master_id',get_pk_id());
-			perawatan_konsumsi_DataStore.load({params : {master_id : get_pk_id(), start:0, limit:pageS}});
+			perawatan_konsumsi_DataStore.load();
 			perawatan_alat_DataStore.load({params : {master_id : get_pk_id(), start:0, limit:pageS}});
 			msg='updated';
 			perawatan_createWindow.show();
@@ -1383,7 +1383,7 @@ Ext.onReady(function(){
 		proxy: new Ext.data.HttpProxy({
 			url: 'index.php?c=c_perawatan&m=get_produk_list', 
 			method: 'POST'
-		}),baseParams: {start: 0, limit: pageS },
+		}),baseParams: {start: 0, limit: 50 },
 			reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',

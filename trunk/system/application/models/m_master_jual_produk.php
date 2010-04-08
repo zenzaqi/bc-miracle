@@ -487,7 +487,7 @@ class M_master_jual_produk extends Model{
 			);
 			$this->db->insert('detail_jual_produk', $data); 
 			if($this->db->affected_rows()){
-				//$this->catatan_piutang_update($dproduk_master);
+				$this->catatan_piutang_update($dproduk_master);
 				return '1';
 			}else
 				return '0';

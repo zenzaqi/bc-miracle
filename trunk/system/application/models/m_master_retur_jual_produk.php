@@ -419,6 +419,7 @@ class M_master_retur_jual_produk extends Model{
 				"kwitansi_no"=>$kwitansi_no, 
 				"kwitansi_cust"=>$rproduk_cust, 
 				"kwitansi_ref"=>$rproduk_nobukti, 
+				"kwitansi_cara"=>'retur', 
 				"kwitansi_nilai"=>$rproduk_kwitansi_nilai, 
 				"kwitansi_keterangan"=>$rproduk_kwitansi_keterangan, 
 				"kwitansi_status"=>'Aktif'

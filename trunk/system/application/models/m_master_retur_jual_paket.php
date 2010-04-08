@@ -318,6 +318,7 @@ class M_master_retur_jual_paket extends Model{
 			"kwitansi_no"=>$kwitansi_no, 
 			"kwitansi_cust"=>$rpaket_cust, 
 			"kwitansi_ref"=>$rpaket_nobukti, 
+			"kwitansi_cara"=>'retur', 
 			"kwitansi_nilai"=>$rpaket_kwitansi_nilai, 
 			"kwitansi_keterangan"=>$rpaket_kwitansi_keterangan, 
 			"kwitansi_status"=>'Aktif'

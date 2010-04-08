@@ -448,7 +448,50 @@ class M_master_jual_paket extends Model{
 		}
 		//eof
 		
-		
+		function catatan_piutang_update($jpaket_id){
+			if($jpaket_id=="" || $jpaket_id==NULL){
+				$jpaket_id=$this->get_master_id();
+			}
+			
+			$sql="SELECT * FROM vu_piutang_jpaket WHERE jpaket_id='$jpaket_id'";
+			$rs=$this->db->query($sql);
+			if($rs->num_rows()){
+				$rs_record=$rs->row_array();
+				$lpiutang_faktur=$rs_record["jpaket_nobukti"];
+				$lpiutang_cust=$rs_record["jpaket_cust"];
+				$lpiutang_faktur_tanggal=$rs_record["jpaket_tanggal"];
+				$lpiutang_total=$rs_record["piutang_total"];
+				/* ini artinya: No.Faktur Penjualan Produk ini masih BELUM LUNAS */
+				/* untuk itu, No.Faktur ini akan dimasukkan ke db.master_lunas_piutang sebagai daftar yang harus ditagihkan ke Customer */
+				
+				/* Checking terlebih dahulu ke db.master_lunas_piutang WHERE =$lpiutang_faktur:
+				* JIKA 'ada' ==> Lakukan UPDATE db.master_lunas_piutang
+				* JIKA 'tidak ada' ==> Lakukan INSERT db.master_lunas_piutang
+				*/
+				$sql="SELECT * FROM master_lunas_piutang WHERE lpiutang_faktur='$lpiutang_faktur'";
+				$rs=$this->db->query($sql);
+				if($rs->num_rows()){
+					/* UPDATE db.master_lunas_piutang */
+					$dtu_lpiutang=array(
+					"lpiutang_cust"=>$lpiutang_cust,
+					"lpiutang_total"=>lpiutang_total,
+					"lpiutang_sisa"=>lpiutang_total
+					);
+					$this->db->where('lpiutang_faktur', $lpiutang_faktur);
+					$this->db->update('master_lunas_piutang', $dtu_lpiutang);
+				}else{
+					/* INSERT db.master_lunas_piutang */
+					$dti_lpiutang=array(
+					"lpiutang_faktur"=>$lpiutang_faktur,
+					"lpiutang_cust"=>$lpiutang_cust,
+					"lpiutang_faktur_tanggal"=>$lpiutang_faktur_tanggal,
+					"lpiutang_total"=>$lpiutang_total,
+					"lpiutang_sisa"=>$lpiutang_total
+					);
+					$this->db->insert('master_lunas_piutang', $dti_lpiutang);
+				}
+			}
+		}
 		
 		//purge all detail from master
 		function detail_detail_jual_paket_purge($master_id){
@@ -659,6 +702,7 @@ class M_master_jual_paket extends Model{
 			$this->db->insert('detail_jual_paket', $data); 
 			if($this->db->affected_rows()){
 				//$this->master_ambil_paket_insert($dpaket_master, $dpaket_paket, $dpaket_jumlah, $dpaket_kadaluarsa);
+				$this->catatan_piutang_update($dpaket_master);
 				return '1';
 			}else
 				return '0';
