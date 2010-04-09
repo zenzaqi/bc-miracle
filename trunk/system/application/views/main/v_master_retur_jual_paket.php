@@ -761,7 +761,7 @@ Ext.onReady(function(){
         itemSelector: 'div.search-item',
 		triggerAction: 'all',
 		lazyRender:true,
-		listClass: 'x-combo-list-small',
+		//listClass: 'x-combo-list-small',
 		anchor: '95%'
 	});
 	/* Identify  rpaket_cust Field */
@@ -855,11 +855,15 @@ Ext.onReady(function(){
 		id: ''
 	},[
 	/* dataIndex => insert intoperawatan_ColumnModel, Mapping => for initiate table column */ 
-			{name: 'sapaket_master', type: 'int', mapping: 'sapaket_master'}, 
+			/*{name: 'sapaket_master', type: 'int', mapping: 'sapaket_master'}, 
 			{name: 'sapaket_item', type: 'int', mapping: 'sapaket_item'}, 
 			{name: 'sapaket_item_nama', type: 'string', mapping: 'sapaket_item_nama'}, 
 			{name: 'jumlah_terpakai', type: 'int', mapping: 'jumlah_terpakai'}, 
-			{name: 'rawat_harga', type: 'float', mapping: 'rawat_harga'} 
+			{name: 'rawat_harga', type: 'float', mapping: 'rawat_harga'} */
+			{name: 'rpaket_perawatan', type: 'int', mapping: 'rpaket_perawatan'}, 
+			{name: 'rawat_nama', type: 'string', mapping: 'rawat_nama'}, 
+			{name: 'total_sisa_item', type: 'int', mapping: 'total_sisa_item'}, 
+			{name: 'rawat_harga', type: 'float', mapping: 'rawat_harga'}
 	]);
 	//eof
 	
@@ -913,7 +917,7 @@ Ext.onReady(function(){
 		[
 		{
 			header: 'Perawatan',
-			dataIndex: 'sapaket_item_nama',
+			dataIndex: 'rawat_nama',
 			width: 150,
 			sortable: true/*,
 			editor: combo_retur_paket_tokwitansi,
@@ -921,7 +925,7 @@ Ext.onReady(function(){
 		},
 		{
 			header: 'Jumlah',
-			dataIndex: 'jumlah_terpakai',
+			dataIndex: 'total_sisa_item',
 			width: 150,
 			sortable: true/*,
 			editor: new Ext.form.NumberField({
