@@ -741,7 +741,8 @@ Ext.onReady(function(){
 			header: '<div align="center">' + 'Info Paket' + '</div>',
 			dataIndex: 'cust_punya_paket',
 			width: 60,	//55,
-			sortable: false
+			sortable: false,
+			hidden: true
 		},
 		{
 			header: '<div align="center">' + 'Stat. Kasir' + '</div>',

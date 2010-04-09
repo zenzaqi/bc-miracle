@@ -422,7 +422,7 @@ class M_master_retur_jual_produk extends Model{
 				"kwitansi_cara"=>'retur', 
 				"kwitansi_nilai"=>$rproduk_kwitansi_nilai, 
 				"kwitansi_keterangan"=>$rproduk_kwitansi_keterangan, 
-				"kwitansi_status"=>'Aktif'
+				"kwitansi_status"=>'Terbuka'
 				);
 				$this->db->insert('cetak_kwitansi', $dti_kwitansi);
 				return '1';

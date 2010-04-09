@@ -878,6 +878,7 @@ class M_tindakan_medis extends Model{
 					}
 					return '1';
 				}elseif($dtrawat_ambil_paket_awal=='false' && $dtrawat_ambil_paket=='true' && $dtrawat_status_awal=='selesai'){
+					//$this->firephp->log('ambil_paket=false-->true -- status==selesai');
 					/*
 					# status='selesai': ini artinya bahwa customer dengan perawatan yang terpilih sudah masuk ke Kasir Perawatan.
 					# kemudian checkbox "ambil paket" diganti dari [false ke true], maka ini berarti perawatan saat tindakan-perawatan ini akan diambilkan dari Paket yang dimiliki Customer sehingga secara otomatis akan memindahkan dari yg sebelumnya di Kasir Perawatan ke Kasir Pengambilan Paket:
@@ -898,13 +899,15 @@ class M_tindakan_medis extends Model{
 						return '0';
 					}
 				}elseif($dtrawat_ambil_paket_awal=='false' && $dtrawat_ambil_paket=='true' && $dtrawat_status_awal!='selesai'){
+					//$this->firephp->log('ambil_paket=false-->true -- status!=selesai');
 					/*
 					# status='!selesai': ini artinya bahwa customer dengan perawatan yang terpilih belum masuk ke Kasir manapun.
 					# kemudian checkbox "ambil paket" diganti dari [false ke true], maka ini berarti perawatan saat tindakan-perawatan ini akan diambilkan dari Paket yang dimiliki Customer ketika statusnya nanti berubah ke 'selesai':
 					1. Checking kepemilikan paket => db.vu_tindakan.cust_punya_paket='ada'
 					2. UPDATE db.tindakan_detail.dtrawat_ambil_paket = 'true'
 					*/
-					$sql="SELECT cust_punya_paket FROM vu_tindakan WHERE dtrawat_id='$dtrawat_id' AND cust_punya_paket='ada'";
+					//$sql_backup20100406="SELECT cust_punya_paket FROM vu_tindakan WHERE dtrawat_id='$dtrawat_id' AND cust_punya_paket='ada'";
+					$sql="SELECT * FROM vu_total_sisa_item_perawatan WHERE ppaket_cust='$trawat_cust_id' AND vu_total_sisa_item_perawatan.rpaket_perawatan='$dtrawat_perawatan' AND vu_total_sisa_item_perawatan.total_sisa_item>0";
 					$rs=$this->db->query($sql);
 					if($rs->num_rows()){
 						$dtu_dtrawat=array(
@@ -1131,9 +1134,10 @@ class M_tindakan_medis extends Model{
 			//full query
 			//$query="SELECT * FROM vu_tindakan WHERE kategori_nama='Medis'";
 			//$query = "SELECT * FROM vu_tindakan WHERE (kategori_nama='Medis' OR dtrawat_petugas2='0')";
-			$query = "SELECT vu_tindakan_test.*, IF((vu_cust_punya_paket_test.sapaket_id AND vu_cust_punya_paket_test.sapaket_sisa_item<>0),'ada','tidak_ada') AS cust_punya_paket, vu_cust_punya_paket_test.* FROM vu_tindakan_test LEFT JOIN vu_cust_punya_paket_test ON(vu_cust_punya_paket_test.ppaket_cust=vu_tindakan_test.trawat_cust AND vu_cust_punya_paket_test.sapaket_item=vu_tindakan_test.dtrawat_perawatan AND vu_cust_punya_paket_test.sapaket_jenis_item='perawatan' AND vu_cust_punya_paket_test.sapaket_sisa_item>0) WHERE (vu_tindakan_test.kategori_nama='Medis' OR vu_tindakan_test.dtrawat_petugas2='0')";
+			//$query = "SELECT vu_tindakan_test.*, IF((vu_cust_punya_paket_test.sapaket_id AND vu_cust_punya_paket_test.sapaket_sisa_item<>0),'ada','tidak_ada') AS cust_punya_paket, vu_cust_punya_paket_test.* FROM vu_tindakan_test LEFT JOIN vu_cust_punya_paket_test ON(vu_cust_punya_paket_test.ppaket_cust=vu_tindakan_test.trawat_cust AND vu_cust_punya_paket_test.sapaket_item=vu_tindakan_test.dtrawat_perawatan AND vu_cust_punya_paket_test.sapaket_jenis_item='perawatan' AND vu_cust_punya_paket_test.sapaket_sisa_item>0) WHERE (vu_tindakan_test.kategori_nama='Medis' OR vu_tindakan_test.dtrawat_petugas2='0')";
+			$query = "SELECT * FROM vu_tindakan WHERE (kategori_nama='Medis')";
 			
-			/*if($trawat_id!=''){
+			if($trawat_id!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " trawat_id LIKE '%".$trawat_id."%'";
 			};
@@ -1152,14 +1156,21 @@ class M_tindakan_medis extends Model{
 			if($trawat_status!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " dtrawat_status LIKE '%".$trawat_status."%'";
-			};*/
+			};
 			if($trawat_tglapp_start!='' && $trawat_tglapp_end!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " vu_tindakan.dtrawat_tglapp BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."'";
+			}else if($trawat_tglapp_start!='' && $trawat_tglapp_end==''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " vu_tindakan.dtrawat_tglapp='".$trawat_tglapp_start."'";
+			}
+			/*if($trawat_tglapp_start!='' && $trawat_tglapp_end!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " vu_tindakan_test.dtrawat_tglapp BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."'";
 			}else if($trawat_tglapp_start!='' && $trawat_tglapp_end==''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " vu_tindakan_test.dtrawat_tglapp='".$trawat_tglapp_start."'";
-			}
+			}*/
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
 			

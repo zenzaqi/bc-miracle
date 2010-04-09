@@ -27,6 +27,11 @@ class C_master_lunas_piutang extends Controller {
 		$this->load->view('main/v_master_lunas_piutang');
 	}
 	
+	function get_bank_list(){
+		$result=$this->m_public_function->get_bank_list();
+		echo $result;
+	}
+	
 	function detail_lunas_piutang_list(){
 		$lpiutang_id = isset($_POST['lpiutang_id']) ? $_POST['lpiutang_id'] : "";
 		$result=$this->m_master_lunas_piutang->detail_lunas_piutang_list($lpiutang_id);

@@ -231,6 +231,44 @@ Ext.onReady(function(){
 	}
 	/* End of Function  */
 	
+	function piutang_bayar_tunai_reset_form(){
+		piutang_tunai_nilaiField.reset();
+		piutang_tunai_nilaiField.setValue(null);
+	}
+	
+	function piutang_bayar_card_reset_form(){
+		piutang_card_namaField.reset();
+		piutang_card_namaField.setValue(null);
+		piutang_card_edcField.reset();
+		piutang_card_edcField.setValue(null);
+		piutang_card_noField.reset();
+		piutang_card_noField.setValue(null);
+		piutang_card_nilaiField.reset();
+		piutang_card_nilaiField.setValue(null);
+	}
+	
+	function piutang_bayar_cek_reset_form(){
+		piutang_cek_namaField.reset();
+		piutang_cek_namaField.setValue(null);
+		piutang_cek_noField.reset();
+		piutang_cek_noField.setValue(null);
+		piutang_cek_validField.reset();
+		piutang_cek_validField.setValue(null);
+		piutang_cek_bankField.reset();
+		piutang_cek_bankField.setValue(null);
+		piutang_cek_nilaiField.reset();
+		piutang_cek_nilaiField.setValue(null);
+	}
+	
+	function piutang_bayar_transfer_reset_form(){
+		piutang_transfer_bankField.reset();
+		piutang_transfer_bankField.setValue(null);
+		piutang_transfer_namaField.reset();
+		piutang_transfer_namaField.setValue(null);
+		piutang_transfer_nilaiField.reset();
+		piutang_transfer_nilaiField.setValue(null);
+	}
+	
 	/* Reset form before loading */
 	function master_lunas_piutang_reset_form(){
 		lpiutang_idField.reset();
@@ -243,6 +281,18 @@ Ext.onReady(function(){
 		lpiutang_tanggalField.setValue(null);
 		lpiutang_keteranganField.reset();
 		lpiutang_keteranganField.setValue(null);
+		piutang_caraField.reset();
+		piutang_caraField.setValue(null);
+		
+		piutang_bayar_tunai_reset_form();
+		piutang_bayar_card_reset_form();
+		piutang_bayar_cek_reset_form();
+		piutang_bayar_transfer_reset_form();
+		
+		piutang_bayar_tunaiGroup.setVisible(false);
+		piutang_bayar_cardGroup.setVisible(false);
+		piutang_bayar_cekGroup.setVisible(false);
+		piutang_bayar_transferGroup.setVisible(false);
 	}
  	/* End of Function */
   
@@ -298,7 +348,10 @@ Ext.onReady(function(){
 	function master_lunas_piutang_confirm_update(){
 		/* only one record is selected here */
 		if(master_lunas_piutangListEditorGrid.selModel.getCount() == 1) {
+			master_lunas_piutang_reset_form();
 			master_lunas_piutang_set_form();
+			piutang_caraField.setValue("card");
+			piutang_bayar_cardGroup.setVisible(true);
 			post2db='UPDATE';
 			form_bayar_piutang_DataStore.load({
 				params : {cust_id : master_lunas_piutangListEditorGrid.getSelectionModel().getSelected().get('lpiutang_cust')},
@@ -884,7 +937,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [/*piutang_tunai_nilaiField*/] 
+				items: [piutang_tunai_nilaiField] 
 			}
 		]
 	
@@ -1125,7 +1178,7 @@ Ext.onReady(function(){
                 defaults: {width: 230},
                 defaultType: 'textfield',
 
-                items: [piutang_caraField,/*piutang_bayar_tunaiGroup,*/piutang_bayar_cardGroup,piutang_bayar_cekGroup,piutang_bayar_transferGroup]
+                items: [piutang_caraField,piutang_bayar_tunaiGroup,piutang_bayar_cardGroup,piutang_bayar_cekGroup,piutang_bayar_transferGroup]
             }]
 	});
 	

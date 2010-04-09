@@ -651,7 +651,8 @@ class M_tindakan_nonmedis extends Model{
 					3. INSERT ke db.detail_ambil_paket
 					4. UPDATE db.tindakan_detail.dtrawat_ambil_paket = 'true'
 					*/
-					$sql="SELECT cust_punya_paket FROM vu_tindakan WHERE dtrawat_id='$dtrawat_id' AND cust_punya_paket='ada'";
+					//$sql_backup20100406="SELECT cust_punya_paket FROM vu_tindakan WHERE dtrawat_id='$dtrawat_id' AND cust_punya_paket='ada'";
+					$sql="SELECT * FROM vu_total_sisa_item_perawatan WHERE ppaket_cust='$trawat_cust_id' AND vu_total_sisa_item_perawatan.rpaket_perawatan='$dtrawat_perawatan' AND vu_total_sisa_item_perawatan.total_sisa_item>0";
 					$rs=$this->db->query($sql);
 					if($rs->num_rows()){
 						$this->detail_jual_rawat_delete($dtrawat_id, $dtrawat_dapp);
@@ -668,7 +669,8 @@ class M_tindakan_nonmedis extends Model{
 					1. Checking kepemilikan paket => db.vu_tindakan.cust_punya_paket='ada'
 					2. UPDATE db.tindakan_detail.dtrawat_ambil_paket = 'true'
 					*/
-					$sql="SELECT cust_punya_paket FROM vu_tindakan WHERE dtrawat_id='$dtrawat_id' AND cust_punya_paket='ada'";
+					//$sql_backup20100406="SELECT cust_punya_paket FROM vu_tindakan WHERE dtrawat_id='$dtrawat_id' AND cust_punya_paket='ada'";
+					$sql="SELECT * FROM vu_total_sisa_item_perawatan WHERE ppaket_cust='$trawat_cust_id' AND vu_total_sisa_item_perawatan.rpaket_perawatan='$dtrawat_perawatan' AND vu_total_sisa_item_perawatan.total_sisa_item>0";
 					$rs=$this->db->query($sql);
 					if($rs->num_rows()){
 						$dtu_dtrawat=array(

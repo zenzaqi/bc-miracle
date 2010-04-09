@@ -18,6 +18,7 @@ class C_master_jual_paket extends Controller {
 		parent::Controller();
 		$this->load->model('m_master_jual_paket', '', TRUE);
 		$this->load->plugin('to_excel');
+		$this->load->library('firephp');
 	}
 	
 	//set index

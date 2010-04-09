@@ -138,11 +138,11 @@ class M_master_retur_jual_paket extends Model{
 	//get record list
 	function detail_retur_paket_tokwitansi_list($master_id,$query,$start,$end) {
 		/* Menampilkan detail paket yang terpakai dari No.Faktur Jual yang terpilih + harga asli dari isi paket*/
-		//$query = "SELECT * FROM detail_retur_paket_rawat where drpaket_master='".$master_id."'";
-		$query = "SELECT * FROM (SELECT apaket_jpaket, sapaket_master, sapaket_item, sapaket_item_nama, (sapaket_jmlisi_item-sapaket_sisa_item) As jumlah_terpakai, rawat_harga FROM submaster_apaket_item LEFT JOIN perawatan ON(sapaket_item=rawat_id) LEFT JOIN master_ambil_paket ON(sapaket_master=apaket_id)) AS vu_retur_paket WHERE vu_retur_paket.apaket_jpaket='".$master_id."' AND vu_retur_paket.jumlah_terpakai!='0'";
-		$result = $this->db->query($query);
+		//$query = "SELECT * FROM (SELECT apaket_jpaket, sapaket_master, sapaket_item, sapaket_item_nama, (sapaket_jmlisi_item-sapaket_sisa_item) As jumlah_terpakai, rawat_harga FROM submaster_apaket_item LEFT JOIN perawatan ON(sapaket_item=rawat_id) LEFT JOIN master_ambil_paket ON(sapaket_master=apaket_id)) AS vu_retur_paket WHERE vu_retur_paket.apaket_jpaket='".$master_id."' AND vu_retur_paket.jumlah_terpakai!='0'";
+		$sql="SELECT vu_total_sisa_item_perawatan.rpaket_perawatan, rawat_nama, vu_total_sisa_item_perawatan.total_sisa_item, perawatan.rawat_harga FROM vu_total_sisa_item_perawatan LEFT JOIN perawatan ON(vu_total_sisa_item_perawatan.rpaket_perawatan=perawatan.rawat_id ) WHERE vu_total_sisa_item_perawatan.dpaket_master='$master_id'";
+		$result = $this->db->query($sql);
 		$nbrows = $result->num_rows();
-		$limit = $query." LIMIT ".$start.",".$end;			
+		$limit = $sql." LIMIT ".$start.",".$end;			
 		$result = $this->db->query($limit);  
 		
 		if($nbrows>0){
@@ -329,7 +329,7 @@ class M_master_retur_jual_paket extends Model{
 			"kwitansi_cara"=>'retur', 
 			"kwitansi_nilai"=>$rpaket_kwitansi_nilai, 
 			"kwitansi_keterangan"=>$rpaket_kwitansi_keterangan, 
-			"kwitansi_status"=>'Aktif'
+			"kwitansi_status"=>'Terbuka'
 			);
 			$this->db->insert('cetak_kwitansi', $dti_kwitansi);
 			return '1';
