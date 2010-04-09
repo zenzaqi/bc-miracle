@@ -263,7 +263,7 @@ Ext.onReady(function(){
 					default:
 						Ext.MessageBox.show({
 						   title: 'Warning',
-						   msg: 'We could\'t not save the cetak_kwitansi.',
+						   msg: 'Data kuitansi tidak bisa disimpan',
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'save',
 						   icon: Ext.MessageBox.WARNING
@@ -385,7 +385,7 @@ Ext.onReady(function(){
 							case 1:
 								//jual_kwitansi_purge()
 								jual_kwitansi_insert();
-								Ext.MessageBox.alert(post2db+' OK','The Cetak_kwitansi was '+msg+' successfully.');
+								Ext.MessageBox.alert(post2db+' OK','Data kuitansi berhasil disimpan');
 								cetak_kwitansi_DataStore.reload();
 								cetak_kwitansi_createWindow.hide();
 								break;
@@ -1138,6 +1138,7 @@ Ext.onReady(function(){
 			text: 'Delete',
 			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
+			disabled: true,
 			handler: cetak_kwitansi_confirm_delete   // Confirm before deleting
 		}, '-', {
 			text: 'Search',
@@ -1201,6 +1202,7 @@ Ext.onReady(function(){
 			text: 'Delete', 
 			tooltip: 'Delete selected record', 
 			iconCls:'icon-delete',
+			disabled: true,
 			handler: cetak_kwitansi_confirm_delete 
 		},
 		'-',
