@@ -27,7 +27,7 @@ class M_member_setup extends Model{
 			// For simple search
 			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (setmember_id LIKE '%".addslashes($filter)."%' OR setmember_transhari LIKE '%".addslashes($filter)."%' OR setmember_transbulan LIKE '%".addslashes($filter)."%' OR setmember_periodeaktif LIKE '%".addslashes($filter)."%' OR setmember_periodetanggang LIKE '%".addslashes($filter)."%' OR setmember_transharitenggang LIKE '%".addslashes($filter)."%' OR setmember_author LIKE '%".addslashes($filter)."%' OR setmember_date_create LIKE '%".addslashes($filter)."%' OR setmember_update LIKE '%".addslashes($filter)."%' OR setmember_date_update LIKE '%".addslashes($filter)."%' OR setmember_revised LIKE '%".addslashes($filter)."%' )";
+				$query .= " (setmember_id LIKE '%".addslashes($filter)."%' OR setmember_transhari LIKE '%".addslashes($filter)."%' OR setmember_transbulan LIKE '%".addslashes($filter)."%' OR setmember_periodeaktif LIKE '%".addslashes($filter)."%' OR setmember_periodetenggang LIKE '%".addslashes($filter)."%' OR setmember_transtenggang LIKE '%".addslashes($filter)."%' OR setmember_author LIKE '%".addslashes($filter)."%' OR setmember_date_create LIKE '%".addslashes($filter)."%' OR setmember_update LIKE '%".addslashes($filter)."%' OR setmember_date_update LIKE '%".addslashes($filter)."%' OR setmember_revised LIKE '%".addslashes($filter)."%' )";
 			}
 			
 			
@@ -46,13 +46,13 @@ class M_member_setup extends Model{
 		}
 		
 		//function for create new record
-		function member_setup_create($setmember_transhari ,$setmember_transbulan ,$setmember_periodeaktif ,$setmember_periodetanggang ,$setmember_transharitenggang ,$setmember_author ,$setmember_date_create ){
+		function member_setup_create($setmember_transhari, $setmember_pointhari ,$setmember_transbulan, $setmember_pointbulan ,$setmember_periodeaktif ,$setmember_periodetenggang ,$setmember_transtenggang, $setmember_pointtenggang ,$setmember_author ,$setmember_date_create ){
 			$data = array(
 				"setmember_transhari"=>$setmember_transhari, 
 				"setmember_transbulan"=>$setmember_transbulan, 
 				"setmember_periodeaktif"=>$setmember_periodeaktif, 
-				"setmember_periodetanggang"=>$setmember_periodetanggang, 
-				"setmember_transharitenggang"=>$setmember_transharitenggang, 
+				"setmember_periodetenggang"=>$setmember_periodetenggang, 
+				"setmember_transtenggang"=>$setmember_transtenggang, 
 				"setmember_author"=>$setmember_author, 
 				"setmember_date_create"=>$setmember_date_create 
 			);
@@ -64,13 +64,16 @@ class M_member_setup extends Model{
 		}
 		
 		//function for update record
-		function member_setup_update($setmember_id,$setmember_transhari,$setmember_transbulan,$setmember_periodeaktif,$setmember_periodetanggang,$setmember_transharitenggang,$setmember_update,$setmember_date_update){
+		function member_setup_update($setmember_id,$setmember_transhari, $setmember_pointhari ,$setmember_transbulan, $setmember_pointbulan ,$setmember_periodeaktif ,$setmember_periodetenggang ,$setmember_transtenggang, $setmember_pointtenggang,$setmember_update,$setmember_date_update){
 			$data = array(
-				"setmember_transhari"=>$setmember_transhari, 
-				"setmember_transbulan"=>$setmember_transbulan, 
+				"setmember_transhari"=>$setmember_transhari,
+				"setmember_pointhari"=>$setmember_pointhari,
+				"setmember_transbulan"=>$setmember_transbulan,
+				"setmember_pointbulan"=>$setmember_pointbulan,
 				"setmember_periodeaktif"=>$setmember_periodeaktif, 
-				"setmember_periodetanggang"=>$setmember_periodetanggang, 
-				"setmember_transharitenggang"=>$setmember_transharitenggang, 
+				"setmember_periodetenggang"=>$setmember_periodetenggang,
+				"setmember_pointtenggang"=>$setmember_pointtenggang,
+				"setmember_transtenggang"=>$setmember_transtenggang, 
 				"setmember_update"=>$setmember_update, 
 				"setmember_date_update"=>$setmember_date_update 
 			);
@@ -108,7 +111,7 @@ class M_member_setup extends Model{
 		}
 		
 		//function for advanced search record
-		function member_setup_search($setmember_id ,$setmember_transhari ,$setmember_transbulan ,$setmember_periodeaktif ,$setmember_periodetanggang ,$setmember_transharitenggang ,$setmember_author ,$setmember_date_create ,$setmember_update ,$setmember_date_update ,$setmember_revised ,$start,$end){
+		function member_setup_search($setmember_id ,$setmember_transhari, $setmember_pointhari ,$setmember_transbulan, $setmember_pointbulan ,$setmember_periodeaktif ,$setmember_periodetenggang ,$setmember_transtenggang, $setmember_pointtenggang ,$setmember_author ,$setmember_date_create ,$setmember_update ,$setmember_date_update ,$setmember_revised ,$start,$end){
 			//full query
 			$query="select * from member_setup";
 			
@@ -128,13 +131,13 @@ class M_member_setup extends Model{
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " setmember_periodeaktif LIKE '%".$setmember_periodeaktif."%'";
 			};
-			if($setmember_periodetanggang!=''){
+			if($setmember_periodetenggang!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " setmember_periodetanggang LIKE '%".$setmember_periodetanggang."%'";
+				$query.= " setmember_periodetenggang LIKE '%".$setmember_periodetenggang."%'";
 			};
-			if($setmember_transharitenggang!=''){
+			if($setmember_transtenggang!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " setmember_transharitenggang LIKE '%".$setmember_transharitenggang."%'";
+				$query.= " setmember_transtenggang LIKE '%".$setmember_transtenggang."%'";
 			};
 			if($setmember_author!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -174,12 +177,12 @@ class M_member_setup extends Model{
 		}
 		
 		//function for print record
-		function member_setup_print($setmember_id ,$setmember_transhari ,$setmember_transbulan ,$setmember_periodeaktif ,$setmember_periodetanggang ,$setmember_transharitenggang ,$setmember_author ,$setmember_date_create ,$setmember_update ,$setmember_date_update ,$setmember_revised ,$option,$filter){
+		function member_setup_print($setmember_id ,$setmember_transhari, $setmember_pointhari ,$setmember_transbulan, $setmember_pointbulan ,$setmember_periodeaktif ,$setmember_periodetenggang ,$setmember_transtenggang, $setmember_pointtenggang ,$setmember_author ,$setmember_date_create ,$setmember_update ,$setmember_date_update ,$setmember_revised ,$option,$filter){
 			//full query
 			$sql="select * from member_setup";
 			if($option=='LIST'){
 				$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
-				$sql .= " (setmember_id LIKE '%".addslashes($filter)."%' OR setmember_transhari LIKE '%".addslashes($filter)."%' OR setmember_transbulan LIKE '%".addslashes($filter)."%' OR setmember_periodeaktif LIKE '%".addslashes($filter)."%' OR setmember_periodetanggang LIKE '%".addslashes($filter)."%' OR setmember_transharitenggang LIKE '%".addslashes($filter)."%' OR setmember_author LIKE '%".addslashes($filter)."%' OR setmember_date_create LIKE '%".addslashes($filter)."%' OR setmember_update LIKE '%".addslashes($filter)."%' OR setmember_date_update LIKE '%".addslashes($filter)."%' OR setmember_revised LIKE '%".addslashes($filter)."%' )";
+				$sql .= " (setmember_id LIKE '%".addslashes($filter)."%' OR setmember_transhari LIKE '%".addslashes($filter)."%' OR setmember_transbulan LIKE '%".addslashes($filter)."%' OR setmember_periodeaktif LIKE '%".addslashes($filter)."%' OR setmember_periodetenggang LIKE '%".addslashes($filter)."%' OR setmember_transtenggang LIKE '%".addslashes($filter)."%' OR setmember_author LIKE '%".addslashes($filter)."%' OR setmember_date_create LIKE '%".addslashes($filter)."%' OR setmember_update LIKE '%".addslashes($filter)."%' OR setmember_date_update LIKE '%".addslashes($filter)."%' OR setmember_revised LIKE '%".addslashes($filter)."%' )";
 				$query = $this->db->query($sql);
 			} else if($option=='SEARCH'){
 				if($setmember_id!=''){
@@ -198,13 +201,13 @@ class M_member_setup extends Model{
 					$sql.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$sql.= " setmember_periodeaktif LIKE '%".$setmember_periodeaktif."%'";
 				};
-				if($setmember_periodetanggang!=''){
+				if($setmember_periodetenggang!=''){
 					$sql.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$sql.= " setmember_periodetanggang LIKE '%".$setmember_periodetanggang."%'";
+					$sql.= " setmember_periodetenggang LIKE '%".$setmember_periodetenggang."%'";
 				};
-				if($setmember_transharitenggang!=''){
+				if($setmember_transtenggang!=''){
 					$sql.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$sql.= " setmember_transharitenggang LIKE '%".$setmember_transharitenggang."%'";
+					$sql.= " setmember_transtenggang LIKE '%".$setmember_transtenggang."%'";
 				};
 				if($setmember_author!=''){
 					$sql.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -232,12 +235,12 @@ class M_member_setup extends Model{
 		}
 		
 		//function  for export to excel
-		function member_setup_export_excel($setmember_id ,$setmember_transhari ,$setmember_transbulan ,$setmember_periodeaktif ,$setmember_periodetanggang ,$setmember_transharitenggang ,$setmember_author ,$setmember_date_create ,$setmember_update ,$setmember_date_update ,$setmember_revised ,$option,$filter){
+		function member_setup_export_excel($setmember_id ,$setmember_transhari, $setmember_pointhari ,$setmember_transbulan, $setmember_pointbulan ,$setmember_periodeaktif ,$setmember_periodetenggang ,$setmember_transtenggang, $setmember_pointtenggang,$setmember_transtenggang ,$setmember_author ,$setmember_date_create ,$setmember_update ,$setmember_date_update ,$setmember_revised ,$option,$filter){
 			//full query
 			$sql="select * from member_setup";
 			if($option=='LIST'){
 				$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
-				$sql .= " (setmember_id LIKE '%".addslashes($filter)."%' OR setmember_transhari LIKE '%".addslashes($filter)."%' OR setmember_transbulan LIKE '%".addslashes($filter)."%' OR setmember_periodeaktif LIKE '%".addslashes($filter)."%' OR setmember_periodetanggang LIKE '%".addslashes($filter)."%' OR setmember_transharitenggang LIKE '%".addslashes($filter)."%' OR setmember_author LIKE '%".addslashes($filter)."%' OR setmember_date_create LIKE '%".addslashes($filter)."%' OR setmember_update LIKE '%".addslashes($filter)."%' OR setmember_date_update LIKE '%".addslashes($filter)."%' OR setmember_revised LIKE '%".addslashes($filter)."%' )";
+				$sql .= " (setmember_id LIKE '%".addslashes($filter)."%' OR setmember_transhari LIKE '%".addslashes($filter)."%' OR setmember_transbulan LIKE '%".addslashes($filter)."%' OR setmember_periodeaktif LIKE '%".addslashes($filter)."%' OR setmember_periodetenggang LIKE '%".addslashes($filter)."%' OR setmember_transtenggang LIKE '%".addslashes($filter)."%' OR setmember_author LIKE '%".addslashes($filter)."%' OR setmember_date_create LIKE '%".addslashes($filter)."%' OR setmember_update LIKE '%".addslashes($filter)."%' OR setmember_date_update LIKE '%".addslashes($filter)."%' OR setmember_revised LIKE '%".addslashes($filter)."%' )";
 				$query = $this->db->query($sql);
 			} else if($option=='SEARCH'){
 				if($setmember_id!=''){
@@ -256,13 +259,13 @@ class M_member_setup extends Model{
 					$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
 					$sql.= " setmember_periodeaktif LIKE '%".$setmember_periodeaktif."%'";
 				};
-				if($setmember_periodetanggang!=''){
+				if($setmember_periodetenggang!=''){
 					$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
-					$sql.= " setmember_periodetanggang LIKE '%".$setmember_periodetanggang."%'";
+					$sql.= " setmember_periodetenggang LIKE '%".$setmember_periodetenggang."%'";
 				};
-				if($setmember_transharitenggang!=''){
+				if($setmember_transtenggang!=''){
 					$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
-					$sql.= " setmember_transharitenggang LIKE '%".$setmember_transharitenggang."%'";
+					$sql.= " setmember_transtenggang LIKE '%".$setmember_transtenggang."%'";
 				};
 				if($setmember_author!=''){
 					$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";

@@ -408,7 +408,7 @@ Ext.onReady(function(){
 			url: 'index.php?c=c_member&m=get_action', 
 			method: 'POST'
 		}),
-		baseParams:{task: "LIST"}, // parameter yang di $_POST ke Controller
+		baseParams:{task: "LIST", start: 0, limit: pageS}, // parameter yang di $_POST ke Controller
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
@@ -486,8 +486,9 @@ Ext.onReady(function(){
 			dataIndex: 'member_nota_ref',
 			width: 150,
 			sortable: true,
-			editor: new Ext.form.TextField({
-				maxLength: 50
+			hidden: true,
+			editor: new Ext.form.TextArea({
+				maxLength: 250
           	})
 		}, 
 		{
@@ -732,6 +733,7 @@ Ext.onReady(function(){
 	member_custField= new Ext.form.TextField({
 		id: 'member_custField',
 		fieldLabel: 'Customer',
+		readOnly: true,
 		anchor: '95%'
 	});
 	/* Identify  member_no Field */
@@ -741,6 +743,7 @@ Ext.onReady(function(){
 		emptyText: '(auto)',
 		maxLength: 50,
 		allowBlank: false,
+		readOnly: true,
 		anchor: '95%'
 	});
 	/* Identify  member_register Field */
@@ -760,7 +763,7 @@ Ext.onReady(function(){
 		readOnly: true
 	});
 	/* Identify  member_nota_ref Field */
-	member_nota_refField= new Ext.form.TextField({
+	member_nota_refField= new Ext.form.TextArea({
 		id: 'member_nota_refField',
 		fieldLabel: 'Referensi Nota Pembelian',
 		maxLength: 50,
@@ -816,10 +819,11 @@ Ext.onReady(function(){
 	/* Function for retrieve create Window Panel*/ 
 	member_createForm = new Ext.FormPanel({
 		labelAlign: 'left',
+		labelWidth: 120,
 		bodyStyle:'padding:5px',
 		autoHeight:true,
 		layout: 'column',
-		width: 600,        
+		width: 800,        
 		items:[
 			{
 				columnWidth:0.5,
