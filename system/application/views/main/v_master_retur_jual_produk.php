@@ -460,6 +460,16 @@ Ext.onReady(function(){
 			hidden: true
 		},
 		{
+			header: '<div align="center">' + 'Tanggal' + '</div>',
+			dataIndex: 'rproduk_tanggal',
+			width: 70,	//150,
+			sortable: true,
+			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
+			editor: new Ext.form.DateField({
+				format: 'd-m-Y'
+			})
+		}, 
+		{
 			header: '<div align="center">' + 'No Faktur' + '</div>',
 			dataIndex: 'rproduk_nobukti',
 			width: 100, //150,
@@ -490,16 +500,6 @@ Ext.onReady(function(){
 			width: 200, //150,
 			sortable: true,
 			readOnly: true
-		}, 
-		{
-			header: '<div align="center">' + 'Tanggal' + '</div>',
-			dataIndex: 'rproduk_tanggal',
-			width: 70,	//150,
-			sortable: true,
-			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
-			editor: new Ext.form.DateField({
-				format: 'd-m-Y'
-			})
 		}, 
 		{
 			header: '<div align="center">' + 'Nilai Kuitansi (Rp)' + '</div>',
@@ -710,14 +710,14 @@ Ext.onReady(function(){
 	/* Identify  rproduk_nobukti Field */
 	rproduk_nobuktiField= new Ext.form.TextField({
 		id: 'rproduk_nobuktiField',
-		fieldLabel: 'No.Faktur',
+		fieldLabel: 'No Faktur',
 		maxLength: 100,
 		anchor: '95%'
 	});
 	/* Identify  rproduk_nobuktijual Field */
 	rproduk_nobuktijualField= new Ext.form.ComboBox({
 		id: 'rproduk_nobuktijualField',
-		fieldLabel: 'No.Faktur Jual',
+		fieldLabel: 'No Faktur Jual',
 		store: cbo_retur_produk_DataStore,
 		mode: 'remote',
 		displayField:'retur_produk_display',
@@ -1257,7 +1257,7 @@ Ext.onReady(function(){
 	/* Identify  rproduk_nobukti Search Field */
 	rproduk_nobuktiSearchField= new Ext.form.TextField({
 		id: 'rproduk_nobuktiSearchField',
-		fieldLabel: 'No.Faktur',
+		fieldLabel: 'No Faktur',
 		maxLength: 100,
 		anchor: '95%'
 	
@@ -1265,7 +1265,7 @@ Ext.onReady(function(){
 	/* Identify  rproduk_nobuktijual Search Field */
 	rproduk_nobuktijualSearchField= new Ext.form.TextField({
 		id: 'rproduk_nobuktijualSearchField',
-		fieldLabel: 'No.Faktur Jual',
+		fieldLabel: 'No Faktur Jual',
 		maxLength: 100,
 		anchor: '95%'
 	
