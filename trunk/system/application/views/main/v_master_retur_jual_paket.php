@@ -393,6 +393,7 @@ Ext.onReady(function(){
 			{name: 'rpaket_nobukti', type: 'string', mapping: 'rpaket_nobukti'}, 
 			{name: 'jpaket_id', type: 'int', mapping: 'jpaket_id'}, 
 			{name: 'rpaket_nobuktijual', type: 'string', mapping: 'jpaket_nobukti'}, 
+			{name: 'rpaket_cust_no', type: 'string', mapping: 'cust_no'}, 
 			{name: 'rpaket_cust', type: 'string', mapping: 'cust_nama'}, 
 			{name: 'rpaket_cust_id', type: 'int', mapping: 'cust_id'}, 
 			{name: 'rpaket_tanggal', type: 'date', dateFormat: 'Y-m-d', mapping: 'rpaket_tanggal'}, 
@@ -491,30 +492,37 @@ Ext.onReady(function(){
 				cell.css = "readonlycell"; // Mengambil Value dari Class di dalam CSS 
 				return value;
 				},
-			hidden: false
+			hidden: true
 		},
 		{
-			header: 'No.Faktur',
+			header: '<div align="center">' + 'No Faktur' + '</div>',
 			dataIndex: 'rpaket_nobukti',
-			width: 150,
+			width: 100,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 100
           	})
 		}, 
 		{
-			header: 'No.Faktur Jual',
+			header: '<div align="center">' + 'No Faktur Jual' + '</div>',
 			dataIndex: 'rpaket_nobuktijual',
-			width: 150,
+			width: 100,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 100
           	})
 		}, 
 		{
-			header: 'Customer',
+			header: '<div align="center">' + 'No Cust' + '</div>',
+			dataIndex: 'rpaket_cust_no',
+			width: 80,
+			sortable: true,
+			readOnly: true
+		}, 
+		{
+			header: '<div align="center">' + 'Customer' + '</div>',
 			dataIndex: 'rpaket_cust',
-			width: 150,
+			width: 200,
 			sortable: true,
 			editor: new Ext.form.NumberField({
 				allowDecimals: false,
@@ -525,19 +533,19 @@ Ext.onReady(function(){
 			})
 		}, 
 		{
-			header: 'Tanggal',
+			header: '<div align="center">' + 'Tanggal' + '</div>',
 			dataIndex: 'rpaket_tanggal',
-			width: 150,
+			width: 70,
 			sortable: true,
-			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
+			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
 			editor: new Ext.form.DateField({
-				format: 'Y-m-d'
+				format: 'd-m-Y'
 			})
 		}, 
 		{
-			header: 'Keterangan',
+			header: '<div align="center">' + 'Keterangan' + '</div>',
 			dataIndex: 'rpaket_keterangan',
-			width: 150,
+			width: 200,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 250
@@ -591,7 +599,7 @@ Ext.onReady(function(){
 	master_retur_jual_paketListEditorGrid =  new Ext.grid.GridPanel({
 		id: 'master_retur_jual_paketListEditorGrid',
 		el: 'fp_master_retur_jual_paket',
-		title: 'List Of Master_retur_jual_paket',
+		title: 'Daftar Retur Penjualan Paket',
 		autoHeight: true,
 		store: master_retur_jual_paket_DataStore, // DataStore
 		cm: master_retur_jual_paket_ColumnModel, // Nama-nama Columns
@@ -601,7 +609,7 @@ Ext.onReady(function(){
 		//clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 800,
+	  	width: 1220,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: master_retur_jual_paket_DataStore,
@@ -731,7 +739,7 @@ Ext.onReady(function(){
 	/* Identify  rpaket_nobukti Field */
 	rpaket_nobuktiField= new Ext.form.TextField({
 		id: 'rpaket_nobuktiField',
-		fieldLabel: 'No.Faktur',
+		fieldLabel: 'No Faktur',
 		maxLength: 100,
 		readOnly: true,
 		anchor: '95%'
@@ -739,7 +747,7 @@ Ext.onReady(function(){
 	/* Identify  rpaket_nobuktijual Field */
 	rpaket_nobuktijualField= new Ext.form.ComboBox({
 		id: 'rpaket_nobuktijualField',
-		fieldLabel: 'No.Faktur Jual',
+		fieldLabel: 'No Faktur Jual',
 		store: cbo_retur_paket_DataSore,
 		mode: 'remote',
 		displayField:'retur_paket_display',

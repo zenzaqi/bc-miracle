@@ -253,12 +253,19 @@ class M_master_retur_jual_paket extends Model{
 	
 	//function for get list record
 	function master_retur_jual_paket_list($filter,$start,$end){
-		$query = "SELECT * FROM master_retur_jual_paket,customer,master_jual_paket WHERE rpaket_cust=cust_id AND rpaket_nobuktijual=jpaket_id";
-		
+//		$query = "SELECT * FROM master_retur_jual_paket,customer,master_jual_paket WHERE rpaket_cust=cust_id AND rpaket_nobuktijual=jpaket_id";
+	
+		$query =   "SELECT
+						rpaket_id, rpaket_nobukti, jpaket_id, jpaket_nobukti, 
+						cust_no, cust_nama, cust_id, 
+						rpaket_tanggal, rpaket_keterangan, rpaket_creator, rpaket_date_create, rpaket_update, rpaket_date_update, rpaket_revised
+					FROM master_retur_jual_paket m1, customer c, master_jual_paket m2
+					WHERE m1.rpaket_cust = c.cust_id AND m1.rpaket_nobuktijual = m2.jpaket_id";
+	
 		// For simple search
 		if ($filter<>""){
 			$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-			$query .= " (rpaket_id LIKE '%".addslashes($filter)."%' OR rpaket_nobukti LIKE '%".addslashes($filter)."%' OR rpaket_nobuktijual LIKE '%".addslashes($filter)."%' OR rpaket_cust LIKE '%".addslashes($filter)."%' OR rpaket_tanggal LIKE '%".addslashes($filter)."%' OR rpaket_keterangan LIKE '%".addslashes($filter)."%' )";
+			$query .= " (cust_no LIKE '%".addslashes($filter)."%' OR cust_nama LIKE '%".addslashes($filter)."%' OR rpaket_nobukti LIKE '%".addslashes($filter)."%' OR rpaket_nobuktijual LIKE '%".addslashes($filter)."%' OR rpaket_tanggal LIKE '%".addslashes($filter)."%' OR rpaket_keterangan LIKE '%".addslashes($filter)."%' )";
 		}
 		
 		$result = $this->db->query($query);
