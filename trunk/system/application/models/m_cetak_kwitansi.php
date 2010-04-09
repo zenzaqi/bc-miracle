@@ -119,7 +119,7 @@ class M_cetak_kwitansi extends Model{
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 				$query .= " (kwitansi_no LIKE '%".addslashes($filter)."%' OR cust_nama LIKE '%".addslashes($filter)."%' OR kwitansi_ref LIKE '%".addslashes($filter)."%' )";
 			}
-			$query .= "GROUP BY kwitansi_id ORDER BY kwitansi_no DESC";
+			$query .= "GROUP BY kwitansi_id ORDER BY kwitansi_date_create DESC";
 			
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
