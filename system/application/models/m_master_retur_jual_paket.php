@@ -307,7 +307,8 @@ class M_master_retur_jual_paket extends Model{
 	
 	//function for create new record
 	function master_retur_jual_paket_create($rpaket_nobukti ,$rpaket_nobuktijual ,$rpaket_cust ,$rpaket_tanggal ,$rpaket_keterangan ,$rpaket_kwitansi_nilai ,$rpaket_kwitansi_keterangan ){
-		$pattern="RPK/".date("ym")."-";
+		//$pattern="RPK/".date("ym")."-";
+		$pattern="RP/".date("ym")."-";
 		$rpaket_nobukti=$this->m_public_function->get_kode_1('master_retur_jual_paket','rpaket_nobukti',$pattern,12);
 		
 		$data = array(
