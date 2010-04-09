@@ -795,7 +795,6 @@ Ext.onReady(function(){
 			{name: 'terapis_display', type: 'string', mapping: 'karyawan_nama'},
 			{name: 'terapis_username', type: 'string', mapping: 'karyawan_username'},
 			{name: 'terapis_value', type: 'int', mapping: 'karyawan_id'},
-//			{name: 'terapis_count', type: 'int', mapping: 'terapis_count'},
 			{name: 'terapis_count', type: 'int', mapping: 'new_count'},
 			{name: 'absensi_shift', type: 'string', mapping: 'absensi_shift'}
 		])/*,
@@ -864,7 +863,7 @@ Ext.onReady(function(){
 			renderer: disable_color
 		}, 
 		{
-			//header: '<div align="center">' + 'Dokter' + '</div>',
+	
 			header: 'Dokter',
 			dataIndex: 'dokter_username',
 			width: 70,
@@ -918,7 +917,7 @@ Ext.onReady(function(){
 				triggerAction: 'all',
 				store:new Ext.data.SimpleStore({
 					fields:['dapp_status_value', 'dapp_status_display'],
-					data: [['reservasi','reservasi'],['konfirmasi','konfirmasi'],['datang','datang'],['batal','batal']]
+					data: [['reservasi','reservasi'],['konfirmasi','konfirmasi'],['datang','datang'],['batal','batal'],['jadual ulang','jadual ulang']]
 					}),
 				mode: 'local',
                	displayField: 'dapp_status_display',
@@ -1009,6 +1008,8 @@ Ext.onReady(function(){
 			return '<span style="color:blue;"><b>' + val + '</b></span>';
 		}else if(val=="batal"){
 			return '<span style="color:red;"><b>' + val + '</b></span>';
+		}else if(val=="jadual ulang"){
+			return '<span style="color:brown;"><b>' + val + '</b></span>';
 		}
 		return val;
 	}
@@ -1375,7 +1376,7 @@ Ext.onReady(function(){
 	/* Identify  app_cara Field */
 	app_caraField= new Ext.form.ComboBox({
 		id: 'app_caraField',
-		fieldLabel: 'Cara',// <span id="tet">[?]</span>
+		fieldLabel: 'Cara',
 		store:new Ext.data.SimpleStore({
 			fields:['app_cara_value', 'app_cara_display'],
 			data:[['Datang','Walk-in'],['Telp','Telp'],['SMS','SMS']]
@@ -1702,7 +1703,7 @@ Ext.onReady(function(){
 		triggerAction: 'all',
 		store:new Ext.data.SimpleStore({
 			fields:['dapp_status_value', 'dapp_status_display'],
-			data: [['reservasi','reservasi'],['konfirmasi','konfirmasi'],['datang','datang'],['batal','batal']]
+			data: [['reservasi','reservasi'],['konfirmasi','konfirmasi'],['datang','datang'],['batal','batal'],['jadwal ulang','jadwal ulang']]
 			}),
 		mode: 'local',
        	displayField: 'dapp_status_display',
@@ -1896,6 +1897,7 @@ Ext.onReady(function(){
 			params:{ master_id: eval(app_idField.getValue()) },
 			success: function(response){							
 				var result=eval(response.responseText);
+				console.log(result);
 				appointment_detail_medis_insert();
 			},
 			failure: function(response){
@@ -2115,7 +2117,7 @@ Ext.onReady(function(){
 				triggerAction: 'all',
 				store:new Ext.data.SimpleStore({
 					fields:['dapp_status_value', 'dapp_status_display'],
-					data: [['reservasi','reservasi'],['konfirmasi','konfirmasi'],['datang','datang'],['batal','batal']]
+					data: [['reservasi','reservasi'],['konfirmasi','konfirmasi'],['datang','datang'],['batal','batal'],['jadwal ulang','jadwal ulang']]
 					}),
 				mode: 'local',
                	displayField: 'dapp_status_display',
@@ -2259,6 +2261,7 @@ Ext.onReady(function(){
 			params:{ master_id: eval(app_idField.getValue()) },
 			success: function(response){							
 				var result=eval(response.responseText);
+				console.log(result);
 				appointment_detail_nonmedis_insert();
 			},
 			failure: function(response){
