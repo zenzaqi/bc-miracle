@@ -937,7 +937,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [piutang_tunai_nilaiField] 
+				items: [/*piutang_tunai_nilaiField*/] 
 			}
 		]
 	
@@ -1262,7 +1262,7 @@ Ext.onReady(function(){
 			sortable: true
 		},
 		{
-			header: 'Total Piutang',
+			header: 'Total Piutang (Rp)',
 			dataIndex: 'lpiutang_sisa',
 			renderer: Ext.util.Format.numberRenderer('0,000')
 		},
@@ -1365,18 +1365,18 @@ Ext.onReady(function(){
 			// Bayar Tunai
 			var dpiutang_tunai_nilai_insert=null;
 			// Bayar Card/Kartu Kredit
-			var dpiutang_card_nama_insert="";
-			var dpiutang_card_edc_insert="";
+			var dpiutang_card_nama_insert=null;
+			var dpiutang_card_edc_insert=null;
 			var dpiutang_card_no_insert="";
 			var dpiutang_card_nilai_insert=null;
 			// Bayar Cek
 			var dpiutang_cek_nama_insert=null;
 			var dpiutang_cek_nomor_insert="";
 			var dpiutang_cek_valid_insert="";
-			var dpiutang_cek_bank_insert="";
+			var dpiutang_cek_bank_insert=null;
 			var dpiutang_cek_nilai_insert=null;
 			// Bayar Transfer
-			var dpiutang_transfer_bank_insert="";
+			var dpiutang_transfer_bank_insert=null;
 			var dpiutang_transfer_nama_insert=null;
 			var dpiutang_transfer_nilai_insert=null;
 			
@@ -1384,18 +1384,18 @@ Ext.onReady(function(){
 			
 			if(piutang_tunai_nilaiField.getValue()!== null){dpiutang_tunai_nilai_insert = piutang_tunai_nilaiField.getValue();}
 			
-			if(piutang_card_namaField.getValue()!== ""){dpiutang_card_nama_insert = piutang_card_namaField.getValue();} 
-			if(piutang_card_edcField.getValue()!==""){dpiutang_card_edc_insert = piutang_card_edcField.getValue();} 
+			if(piutang_card_namaField.getValue()!== null){dpiutang_card_nama_insert = piutang_card_namaField.getValue();} 
+			if(piutang_card_edcField.getValue()!== null){dpiutang_card_edc_insert = piutang_card_edcField.getValue();} 
 			if(piutang_card_noField.getValue()!==""){dpiutang_card_no_insert = piutang_card_noField.getValue();}
-			if(piutang_card_nilaiField.getValue()!==null){dpiutang_card_nilai_insert = piutang_card_nilaiField.getValue();} 
+			if(piutang_card_nilaiField.getValue()!== null){dpiutang_card_nilai_insert = piutang_card_nilaiField.getValue();} 
 			
 			if(piutang_cek_namaField.getValue()!== null){dpiutang_cek_nama_insert = piutang_cek_namaField.getValue();} 
 			if(piutang_cek_noField.getValue()!== ""){dpiutang_cek_nomor_insert = piutang_cek_noField.getValue();} 
 			if(piutang_cek_validField.getValue()!== ""){dpiutang_cek_valid_insert = piutang_cek_validField.getValue().format('Y-m-d');} 
-			if(piutang_cek_bankField.getValue()!== ""){dpiutang_cek_bank_insert = piutang_cek_bankField.getValue();} 
+			if(piutang_cek_bankField.getValue()!== null){dpiutang_cek_bank_insert = piutang_cek_bankField.getValue();} 
 			if(piutang_cek_nilaiField.getValue()!== null){dpiutang_cek_nilai_insert = piutang_cek_nilaiField.getValue();} 
 			
-			if(piutang_transfer_bankField.getValue()!== ""){dpiutang_transfer_bank_insert = piutang_transfer_bankField.getValue();} 
+			if(piutang_transfer_bankField.getValue()!== null){dpiutang_transfer_bank_insert = piutang_transfer_bankField.getValue();} 
 			if(piutang_transfer_namaField.getValue()!== null){dpiutang_transfer_nama_insert = piutang_transfer_namaField.getValue();}
 			if(piutang_transfer_nilaiField.getValue()!== null){dpiutang_transfer_nilai_insert = piutang_transfer_nilaiField.getValue();} 
 			
@@ -1424,6 +1424,11 @@ Ext.onReady(function(){
 				dpiutang_transfer_bank	:	dpiutang_transfer_bank_insert,
 				dpiutang_transfer_nama	:	dpiutang_transfer_nama_insert,
 				dpiutang_transfer_nilai	:	dpiutang_transfer_nilai_insert
+				},
+				callback: function(opts, success, response){
+					master_lunas_piutang_DataStore.baseParams = { task: 'LIST' };
+					// Cause the datastore to do another query : 
+					master_lunas_piutang_DataStore.reload({params: {start: 0, limit: pageS}});
 				}
 			});
 		}

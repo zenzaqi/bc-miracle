@@ -92,22 +92,22 @@ class C_master_lunas_piutang extends Controller {
 		
 		$dpiutang_cara=trim(@$_POST["dpiutang_cara"]);
 		
-		$dpiutang_tunai_nilai=trim($_POST["dpiutang_tunai_nilai"]);
+		$dpiutang_tunai_nilai=trim(@$_POST["dpiutang_tunai_nilai"]);
 		
-		$dpiutang_card_nama=trim($_POST["dpiutang_card_nama"]);
-		$dpiutang_card_edc=trim($_POST["dpiutang_card_edc"]);
-		$dpiutang_card_no=trim($_POST["dpiutang_card_no"]);
-		$dpiutang_card_nilai=trim($_POST["dpiutang_card_nilai"]);
+		$dpiutang_card_nama=trim(@$_POST["dpiutang_card_nama"]);
+		$dpiutang_card_edc=trim(@$_POST["dpiutang_card_edc"]);
+		$dpiutang_card_no=trim(@$_POST["dpiutang_card_no"]);
+		$dpiutang_card_nilai=trim(@$_POST["dpiutang_card_nilai"]);
 		
-		$dpiutang_cek_nama=trim($_POST["dpiutang_cek_nama"]);
-		$dpiutang_cek_no=trim($_POST["dpiutang_cek_no"]);
-		$dpiutang_cek_valid=trim($_POST["dpiutang_cek_valid"]);
-		$dpiutang_cek_bank=trim($_POST["dpiutang_cek_bank"]);
-		$dpiutang_cek_nilai=trim($_POST["dpiutang_cek_nilai"]);
+		$dpiutang_cek_nama=trim(@$_POST["dpiutang_cek_nama"]);
+		$dpiutang_cek_no=trim(@$_POST["dpiutang_cek_no"]);
+		$dpiutang_cek_valid=trim(@$_POST["dpiutang_cek_valid"]);
+		$dpiutang_cek_bank=trim(@$_POST["dpiutang_cek_bank"]);
+		$dpiutang_cek_nilai=trim(@$_POST["dpiutang_cek_nilai"]);
 		
-		$dpiutang_transfer_bank=trim($_POST["dpiutang_transfer_bank"]);
-		$dpiutang_transfer_nama=trim($_POST["dpiutang_transfer_nama"]);
-		$dpiutang_transfer_nilai=trim($_POST["dpiutang_transfer_nilai"]);
+		$dpiutang_transfer_bank=trim(@$_POST["dpiutang_transfer_bank"]);
+		$dpiutang_transfer_nama=trim(@$_POST["dpiutang_transfer_nama"]);
+		$dpiutang_transfer_nilai=trim(@$_POST["dpiutang_transfer_nilai"]);
 		
 		$result=$this->m_master_lunas_piutang->form_bayar_piutang_insert($dpiutang_master ,$dpiutang_nilai ,$dpiutang_cara ,$dpiutang_tunai_nilai ,$dpiutang_card_nama ,$dpiutang_card_edc ,$dpiutang_card_no ,$dpiutang_card_nilai ,$dpiutang_cek_nama ,$dpiutang_cek_no ,$dpiutang_cek_valid ,$dpiutang_cek_bank ,$dpiutang_cek_nilai ,$dpiutang_transfer_bank ,$dpiutang_transfer_nama ,$dpiutang_transfer_nilai );
 	}

@@ -220,6 +220,12 @@ class C_master_jual_rawat extends Controller {
 	}
 	//
 	
+	function catatan_piutang_update(){
+		$drawat_master = isset($_POST['drawat_master']) ? $_POST['drawat_master'] : "";
+		$result=$this->m_master_jual_rawat->catatan_piutang_update($drawat_master);
+		echo $result;
+	}
+	
 	//add detail
 	function detail_detail_jual_rawat_insert(){
 	//POST variable here

@@ -18,7 +18,6 @@ class C_master_jual_paket extends Controller {
 		parent::Controller();
 		$this->load->model('m_master_jual_paket', '', TRUE);
 		$this->load->plugin('to_excel');
-		$this->load->library('firephp');
 	}
 	
 	//set index
@@ -239,6 +238,12 @@ class C_master_jual_paket extends Controller {
 		echo $result;
 	}
 	//
+	
+	function catatan_piutang_update(){
+		$dpaket_master = isset($_POST['dpaket_master']) ? $_POST['dpaket_master'] : "";
+		$result=$this->m_master_jual_paket->catatan_piutang_update($dpaket_master);
+		echo $result;
+	}
 	
 	//add detail
 	function detail_detail_jual_paket_insert(){

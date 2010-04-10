@@ -394,7 +394,6 @@ class M_master_jual_rawat extends Model{
 				$this->db->insert('detail_jual_rawat', $data);
 			} 
 			if($this->db->affected_rows()){
-				$this->catatan_piutang_update($drawat_master);
 				return '1';
 			}else
 				return '0';

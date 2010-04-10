@@ -157,9 +157,9 @@ class M_master_lunas_piutang extends Model{
 		
 		//insert record bayar
 		function form_bayar_piutang_insert($dpiutang_master ,$dpiutang_nilai ,$dpiutang_cara ,$dpiutang_tunai_nilai ,$dpiutang_card_nama ,$dpiutang_card_edc ,$dpiutang_card_no ,$dpiutang_card_nilai ,$dpiutang_cek_nama ,$dpiutang_cek_no ,$dpiutang_cek_valid ,$dpiutang_cek_bank ,$dpiutang_cek_nilai ,$dpiutang_transfer_bank ,$dpiutang_transfer_nama ,$dpiutang_transfer_nilai ){
-			//$pattern="LP/".date("ym")."-";
-			//$dpiutang_nobukti=$this->m_public_function->get_kode_1('detail_lunas_piutang','dpiutang_nobukti',$pattern,12);
-			$dpiutang_nobukti=$this->get_nofaktur_lunas_piutang();
+			$pattern="LP/".date("ym")."-";
+			$dpiutang_nobukti=$this->m_public_function->get_kode_1('detail_lunas_piutang','dpiutang_nobukti',$pattern,12);
+			//$dpiutang_nobukti=$this->get_nofaktur_lunas_piutang();
 			
 			$data = array(
 			"dpiutang_master"=>$dpiutang_master, 
@@ -290,7 +290,7 @@ class M_master_lunas_piutang extends Model{
 			);
 			$this->db->where('lpiutang_id', $lpiutang_id);
 			$this->db->update('master_lunas_piutang', $data);*/
-			$pattern="LP/".date("ym")."-";
+			/*$pattern="LP/".date("ym")."-";
 			$fpiutang_nobukti=$this->m_public_function->get_kode_1('master_faktur_lunas_piutang','fpiutang_nobukti',$pattern,12);
 			
 			$fpiutang_creator=$_SESSION[SESSION_USERID];
@@ -299,7 +299,7 @@ class M_master_lunas_piutang extends Model{
 			"fpiutang_cara"=>$piutang_cara,
 			"fpiutang_creator"=>$fpiutang_creator
 			);
-			$this->db->insert('master_faktur_lunas_piutang', $dti_fpiutang);
+			$this->db->insert('master_faktur_lunas_piutang', $dti_fpiutang);*/
 			
 			return '1';
 		}

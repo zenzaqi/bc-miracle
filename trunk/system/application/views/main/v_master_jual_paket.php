@@ -3628,6 +3628,7 @@ Ext.onReady(function(){
 	
 	//function for insert detail
 	function detail_jual_paket_insert(){
+		var count_detail=detail_jual_paket_DataStore.getCount();
 		for(i=0;i<detail_jual_paket_DataStore.getCount();i++){
 			detail_jual_paket_record=detail_jual_paket_DataStore.getAt(i);
 			if(detail_jual_paket_record.data.dpaket_paket!==null&&detail_jual_paket_record.data.dpaket_paket.dpaket_paket!==""){
@@ -3645,14 +3646,16 @@ Ext.onReady(function(){
 						dpaket_diskon_jenis	: detail_jual_paket_record.data.dpaket_diskon_jenis,
 						dpaket_sales			: detail_jual_paket_record.data.dpaket_sales
 					},
-					//timeout: 60000,
-					callback: function(opts, success, response){
-						if(success){
-							//detail_pengguna_paket_insert();
-						}
-					}/*,
+					timeout: 60000,
 					success: function(response){							
 						var result=eval(response.responseText);
+						if(i==count_detail){
+							Ext.Ajax.request({
+								waitMsg: 'Mohon tunggu...',
+								url: 'index.php?c=c_master_jual_paket&m=catatan_piutang_update',
+								params:{dpaket_master	: eval(jpaket_idField.getValue())}
+							});
+						}
 					},
 					failure: function(response){
 						var result=response.responseText;
@@ -3663,7 +3666,7 @@ Ext.onReady(function(){
 						   animEl: 'database',
 						   icon: Ext.MessageBox.ERROR
 						});	
-					}*/
+					}
 				});
 			}
 		}
