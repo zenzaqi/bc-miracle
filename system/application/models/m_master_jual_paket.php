@@ -452,7 +452,6 @@ class M_master_jual_paket extends Model{
 			if($jpaket_id=="" || $jpaket_id==NULL){
 				$jpaket_id=$this->get_master_id();
 			}
-			$this->firephp->log($jpaket_id, 'jpaket_id');
 			$sql="SELECT * FROM vu_piutang_jpaket WHERE jpaket_id='$jpaket_id'";
 			$rs=$this->db->query($sql);
 			if($rs->num_rows()){
@@ -481,7 +480,6 @@ class M_master_jual_paket extends Model{
 					$this->db->update('master_lunas_piutang', $dtu_lpiutang);
 				}else{
 					/* INSERT db.master_lunas_piutang */
-					$this->firephp->log($lpiutang_faktur, 'lpiutang_faktur');
 					$dti_lpiutang=array(
 					"lpiutang_faktur"=>$lpiutang_faktur,
 					"lpiutang_cust"=>$lpiutang_cust,
@@ -702,8 +700,6 @@ class M_master_jual_paket extends Model{
 			);
 			$this->db->insert('detail_jual_paket', $data); 
 			if($this->db->affected_rows()){
-				//$this->master_ambil_paket_insert($dpaket_master, $dpaket_paket, $dpaket_jumlah, $dpaket_kadaluarsa);
-				$this->catatan_piutang_update($dpaket_master);
 				return '1';
 			}else
 				return '0';

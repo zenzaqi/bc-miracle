@@ -3958,6 +3958,7 @@ Ext.onReady(function(){
 	
 	//function for insert detail
 	function detail_jual_rawat_insert(){
+		var count_detail=detail_jual_rawat_DataStore.getCount();
 		for(i=0;i<detail_jual_rawat_DataStore.getCount();i++){
 			detail_jual_rawat_record=detail_jual_rawat_DataStore.getAt(i);
 			if(detail_jual_rawat_record.data.drawat_rawat!==null&&detail_jual_rawat_record.data.drawat_rawat.drawat_rawat!==""){
@@ -3978,6 +3979,13 @@ Ext.onReady(function(){
 					timeout: 60000,
 					success: function(response){							
 						var result=eval(response.responseText);
+						if(i==count_detail){
+							Ext.Ajax.request({
+								waitMsg: 'Mohon tunggu...',
+								url: 'index.php?c=c_master_jual_rawat&m=catatan_piutang_update',
+								params:{drawat_master	: eval(jrawat_idField.getValue())}
+							});
+						}
 					},
 					failure: function(response){
 						var result=response.responseText;
