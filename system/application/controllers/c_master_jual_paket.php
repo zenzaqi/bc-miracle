@@ -17,6 +17,7 @@ class C_master_jual_paket extends Controller {
 	function C_master_jual_paket(){
 		parent::Controller();
 		$this->load->model('m_master_jual_paket', '', TRUE);
+		session_start();
 		$this->load->plugin('to_excel');
 	}
 	

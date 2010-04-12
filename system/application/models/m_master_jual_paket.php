@@ -16,7 +16,6 @@ class M_master_jual_paket extends Model{
 		//constructor
 		function M_master_jual_paket() {
 			parent::Model();
-			session_start();
 		}
 		
 		function get_laporan($tgl_awal,$tgl_akhir,$periode,$opsi,$group){

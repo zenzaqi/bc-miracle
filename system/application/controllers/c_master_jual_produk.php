@@ -17,6 +17,7 @@ class C_master_jual_produk extends Controller {
 	function C_master_jual_produk(){
 		parent::Controller();
 		$this->load->model('m_master_jual_produk', '', TRUE);
+		session_start();
 		$this->load->plugin('to_excel');
 	}
 	
@@ -250,7 +251,13 @@ class C_master_jual_produk extends Controller {
 		$dproduk_diskon_jenis=trim(@$_POST["dproduk_diskon_jenis"]);
 		$dproduk_sales=trim(@$_POST["dproduk_sales"]);
 		$konversi_nilai_temp=trim(@$_POST["konversi_nilai_temp"]);
-		$result=$this->m_master_jual_produk->detail_detail_jual_produk_insert($dproduk_id ,$dproduk_master ,$dproduk_produk ,$dproduk_satuan ,$dproduk_jumlah ,$dproduk_harga ,$dproduk_subtotal_net ,$dproduk_diskon,$dproduk_diskon_jenis,$dproduk_sales,$konversi_nilai_temp );
+		
+		$cetak=trim(@$_POST['cetak']);
+		
+		$count=trim(@$_POST['count']);
+		$dcount=trim(@$_POST['dcount']);
+		
+		$result=$this->m_master_jual_produk->detail_detail_jual_produk_insert($dproduk_id ,$dproduk_master ,$dproduk_produk ,$dproduk_satuan ,$dproduk_jumlah ,$dproduk_harga ,$dproduk_subtotal_net ,$dproduk_diskon,$dproduk_diskon_jenis,$dproduk_sales,$konversi_nilai_temp, $cetak, $count, $dcount);
 		echo $result;
 	}
 	
@@ -656,6 +663,30 @@ class C_master_jual_produk extends Controller {
 		to_excel($query,"master_jual_produk"); 
 		echo '1';
 			
+	}
+	
+	function print_paper(){
+  		//POST varibale here
+		$jproduk_id=trim(@$_POST["jproduk_id"]);
+		
+		
+		$result = $this->m_master_jual_produk->print_paper($jproduk_id);
+		$rs=$result->row();
+		$detail_jproduk=$result->result();
+		$data['jproduk_nobukti']=$rs->jproduk_nobukti;
+		$data['jproduk_tanggal']=$rs->jproduk_tanggal;
+		$data['cust_nama']=$rs->cust_nama;
+		$data['cust_alamat']=$rs->cust_alamat;
+		$data['jumlah_subtotal']=ubah_rupiah($rs->jumlah_subtotal);
+		//$data['jproduk_creator']=$rs->jproduk_creator;
+		//$data['jproduk_totalbiaya']=$rs->jproduk_totalbiaya;
+		$data['detail_jproduk']=$detail_jproduk;
+		
+		$viewdata=$this->load->view("main/jproduk_formcetak",$data,TRUE);
+		$file = fopen("jproduk_paper.html",'w');
+		fwrite($file, $viewdata);	
+		fclose($file);
+		echo '1';        
 	}
 	
 	// Encodes a SQL array into a JSON formated string
