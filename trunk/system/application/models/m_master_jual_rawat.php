@@ -294,7 +294,7 @@ class M_master_jual_rawat extends Model{
 		
 		//get master id, note : not done yet
 		function get_master_id() {
-			$query = "SELECT max(jrawat_id) as master_id from master_jual_rawat";
+			$query = "SELECT max(jrawat_id) AS master_id FROM master_jual_rawat WHERE jrawat_update='".$_SESSION[SESSION_USERID]."'";
 			$result = $this->db->query($query);
 			if($result->num_rows()){
 				$data=$result->row();
@@ -558,7 +558,8 @@ class M_master_jual_rawat extends Model{
 				"jrawat_cara"=>$jrawat_cara, 
 				//"jrawat_cara2"=>$jrawat_cara2, 
 				//"jrawat_cara3"=>$jrawat_cara3,
-				"jrawat_keterangan"=>$jrawat_keterangan 
+				"jrawat_keterangan"=>$jrawat_keterangan,
+				"jrawat_update"=>$_SESSION[SESSION_USERID]
 			);
 			if($jrawat_cara2!=null)
 				$data["jrawat_cara2"]=$jrawat_cara2;
@@ -1147,7 +1148,9 @@ class M_master_jual_rawat extends Model{
 				"jrawat_cara"=>$jrawat_cara, 
 				//"jrawat_cara2"=>$jrawat_cara2, 
 				//"jrawat_cara3"=>$jrawat_cara3, 
-				"jrawat_keterangan"=>$jrawat_keterangan 
+				"jrawat_keterangan"=>$jrawat_keterangan,
+				"jrawat_creator"=>$_SESSION[SESSION_USERID],
+				"jrawat_update"=>$_SESSION[SESSION_USERID]
 			);
 			if($jrawat_cara2!=null)
 				$data["jrawat_cara2"]=$jrawat_cara2;

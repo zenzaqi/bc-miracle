@@ -395,7 +395,7 @@ class M_master_jual_produk extends Model{
 		
 		//get master id, note : not done yet
 		function get_master_id() {
-			$query = "SELECT max(jproduk_id) AS master_id FROM master_jual_produk";
+			$query = "SELECT max(jproduk_id) AS master_id FROM master_jual_produk WHERE jproduk_creator='".$_SESSION[SESSION_USERID]."'";
 			$result = $this->db->query($query);
 			if($result->num_rows()){
 				$data=$result->row();
@@ -460,7 +460,7 @@ class M_master_jual_produk extends Model{
 		//*eof
 		
 		//insert detail record
-		function detail_detail_jual_produk_insert($dproduk_id ,$dproduk_master ,$dproduk_produk ,$dproduk_satuan ,$dproduk_jumlah ,$dproduk_harga ,$dproduk_subtotal_net ,$dproduk_diskon,$dproduk_diskon_jenis,$dproduk_sales,$konversi_nilai_temp ){
+		function detail_detail_jual_produk_insert($dproduk_id ,$dproduk_master ,$dproduk_produk ,$dproduk_satuan ,$dproduk_jumlah ,$dproduk_harga ,$dproduk_subtotal_net ,$dproduk_diskon,$dproduk_diskon_jenis,$dproduk_sales,$konversi_nilai_temp, $cetak, $count, $dcount){
 			//if master id not capture from view then capture it from max pk from master table
 			if($dproduk_master=="" || $dproduk_master==NULL){
 				$dproduk_master=$this->get_master_id();
@@ -487,9 +487,15 @@ class M_master_jual_produk extends Model{
 			);
 			$this->db->insert('detail_jual_produk', $data); 
 			if($this->db->affected_rows()){
-				return '1';
+				if($cetak==1 && ($count==($dcount-1))){
+					return $dproduk_master;
+				}else if($cetak!==1 && ($count==($dcount-1))){
+					return '0';
+				}else {
+					return '-1';
+				}
 			}else
-				return '0';
+				return '-2';
 
 		}
 		//end of function
@@ -1196,7 +1202,8 @@ class M_master_jual_produk extends Model{
 				"jproduk_cara"=>$jproduk_cara, 
 				//"jproduk_cara2"=>$jproduk_cara2, 
 				//"jproduk_cara3"=>$jproduk_cara3, 
-				"jproduk_keterangan"=>$jproduk_keterangan 
+				"jproduk_keterangan"=>$jproduk_keterangan,
+				"jproduk_creator"=>$_SESSION[SESSION_USERID]
 			);
 			if($jproduk_cara2!=null)
 				$data["jproduk_cara2"]=$jproduk_cara2;
@@ -1502,10 +1509,10 @@ class M_master_jual_produk extends Model{
 					}
 				}
 				
-				return '1';
+				return '0';
 			}
 			else
-				return '0';
+				return '-1';
 		}
 		
 		//fcuntion for delete record
@@ -1664,6 +1671,13 @@ class M_master_jual_produk extends Model{
 				};
 				$result = $this->db->query($query);
 			}
+			return $result;
+		}
+		
+		function print_paper($jproduk_id){
+			//$this->firephp->log($jproduk_id, "jproduk_id");
+			$sql="SELECT jproduk_tanggal, cust_nama, cust_alamat, jproduk_nobukti, produk_nama, dproduk_jumlah, satuan_nama, dproduk_harga, dproduk_diskon, (dproduk_harga*((100-dproduk_diskon)/100)) AS jumlah_subtotal, jproduk_creator FROM detail_jual_produk LEFT JOIN master_jual_produk ON(dproduk_master=jproduk_id) LEFT JOIN customer ON(jproduk_cust=cust_id) LEFT JOIN produk ON(dproduk_produk=produk_id) LEFT JOIN satuan ON(dproduk_satuan=satuan_id) WHERE jproduk_id='$jproduk_id'";
+			$result = $this->db->query($sql);
 			return $result;
 		}
 		
