@@ -138,6 +138,7 @@ class M_master_ambil_paket extends Model{
 						ORDER BY tgl_ambil"; //by hendri*/
 			
 			//$query = "SELECT date_format(dapaket_date_create, '%Y-%m-%d') AS tgl_ambil, rawat_nama, dapaket_jumlah, cust_nama FROM detail_ambil_paket LEFT JOIN master_ambil_paket ON(dapaket_master=apaket_id) LEFT JOIN perawatan ON(apaket_item=rawat_id) LEFT JOIN customer ON(dapaket_cust=cust_id) WHERE apaket_jpaket='$dpaket_master' AND apaket_paket='$dpaket_paket' ORDER BY dapaket_date_create";
+			
 			$query = "SELECT date_format(dapaket_date_create, '%Y-%m-%d') AS tgl_ambil, rawat_nama, dapaket_jumlah, cust_nama FROM detail_ambil_paket LEFT JOIN perawatan ON(dapaket_item=rawat_id) LEFT JOIN customer ON(dapaket_cust=cust_id) WHERE dapaket_dpaket='$dapaket_dpaket' ORDER BY dapaket_date_create";
 
 
