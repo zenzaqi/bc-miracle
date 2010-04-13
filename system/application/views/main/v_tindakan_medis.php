@@ -184,7 +184,7 @@ Ext.onReady(function(){
 		dapaket_item_update = oGrid_event.record.data.dapaket_item;
 
 		Ext.Ajax.request({  
-			waitMsg: 'Please wait...',
+			waitMsg: 'Mohon tunggu...',
 			url: 'index.php?c=c_tindakan_medis&m=get_action',
 			params: {
 				task: "UPDATE",
@@ -625,7 +625,7 @@ Ext.onReady(function(){
   	/* Function for Identify of Window Column Model */
 	tindakan_medisColumnModel = new Ext.grid.ColumnModel(
 		[{
-			header: '<div align="center">' + 'No. Cust' + '</div>', //'No. Customer',
+			header: '<div align="center">' + 'No Cust' + '</div>', //'No. Customer',
 			readOnly: true,
 			dataIndex: 'trawat_cust_no',
 			width: 65,	//75,
@@ -745,7 +745,7 @@ Ext.onReady(function(){
 			hidden: true
 		},
 		{
-			header: '<div align="center">' + 'Stat. Kasir' + '</div>',
+			header: '<div align="center">' + 'Stat Kasir' + '</div>',
 			dataIndex: 'dtrawat_edit',
 			width: 60,	//55,
 			sortable: false
