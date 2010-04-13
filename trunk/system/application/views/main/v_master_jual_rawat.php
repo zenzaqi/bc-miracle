@@ -4443,11 +4443,11 @@ Ext.onReady(function(){
 		id: ''
 	},[
 	/* dataIndex => insert intopeprodukan_ColumnModel, Mapping => for initiate table column */ 
-			{name: 'apaket_faktur', type: 'string', mapping: 'apaket_faktur'}, 
-			{name: 'apaket_paket_nama', type: 'string', mapping: 'apaket_paket_nama'}, 
-			{name: 'sapaket_item_nama', type: 'string', mapping: 'sapaket_item_nama'}, 
+			{name: 'jpaket_nobukti', type: 'string', mapping: 'jpaket_nobukti'}, 
+			{name: 'paket_nama', type: 'string', mapping: 'paket_nama'}, 
+			{name: 'rawat_nama', type: 'string', mapping: 'rawat_nama'}, 
 			{name: 'dapaket_jumlah', type: 'int', mapping: 'dapaket_jumlah'}, 
-			{name: 'dapaket_cust_nama', type: 'string', mapping: 'dapaket_cust_nama'}
+			{name: 'cust_nama', type: 'string', mapping: 'cust_nama'}
 	]);
 	//eof
 	
@@ -4467,7 +4467,7 @@ Ext.onReady(function(){
 			method: 'POST'
 		}),baseParams: {start: 0, limit: pageS},
 		reader: detail_ambil_paket_reader,
-		sortInfo:{field: 'apaket_faktur', direction: "ASC"}
+		sortInfo:{field: 'jpaket_nobukti', direction: "ASC"}
 	});
 	/* End of Function */
 	
@@ -4475,19 +4475,19 @@ Ext.onReady(function(){
 		[
 		{
 			header: '<div align="center">' + 'No Faktur' + '</div>',
-			dataIndex: 'apaket_faktur',
-			width: 80,	//250,
+			dataIndex: 'jpaket_nobukti',
+			width: 100,	//250,
 			sortable: true
 		},
 		{
 			header: '<div align="center">' + 'Nama Paket' + '</div>',
-			dataIndex: 'apaket_paket_nama',
-			width: 300,
+			dataIndex: 'paket_nama',
+			width: 280,
 			sortable: true
 		},
 		{
 			header: '<div align="center">' + 'Perawatan' + '</div>',
-			dataIndex: 'sapaket_item_nama',
+			dataIndex: 'rawat_nama',
 			width: 300,	//100,
 			sortable: true
 		},
@@ -4500,7 +4500,7 @@ Ext.onReady(function(){
 		{
 			//align: 'Right',
 			header: '<div align="center">' + 'Customer' + '</div>',
-			dataIndex: 'dapaket_cust_nama',
+			dataIndex: 'cust_nama',
 			width: 200, //150,
 			sortable: true,
 			reaOnly: true

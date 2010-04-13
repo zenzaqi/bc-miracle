@@ -91,6 +91,14 @@ Ext.onReady(function(){
   	        return record ? record.get(combo.displayField) : combo.valueNotFoundText;
   	    }
   	}
+	
+	// define a custom summary function
+    Ext.ux.grid.GroupSummary.Calculations['totalCost'] = function(v, record, field){
+        return v + (record.data.estimate * record.data.rate);
+    };
+
+	// utilize custom extension for Group Summary
+    var summary = new Ext.ux.grid.GroupSummary();
   
   	/* Function for Saving inLine Editing */
 	function master_retur_jual_paket_update(oGrid_event){
@@ -192,7 +200,7 @@ Ext.onReady(function(){
 				var result=eval(response.responseText);
 				switch(result){
 					case 1:
-						detail_retur_paket_tokwitansi_purge()
+						detail_retur_paket_tokwitansi_purge();
 						detail_retur_paket_tokwitansi_insert();
 						Ext.MessageBox.alert(post2db+' OK','Data retur penjualan paket berhasil disimpan');
 						master_retur_jual_paket_DataStore.reload();
@@ -278,8 +286,9 @@ Ext.onReady(function(){
   
   	/* Function for Displaying  create Window Form */
 	function display_form_window(){
-		detail_retur_paket_tokwitansiDataStore.load({params : {master_id : 0, start:0, limit:pageS}});
 		if(!master_retur_jual_paket_createWindow.isVisible()){
+			detail_retur_paket_tokwitansiDataStore.setBaseParam('master_id',0);
+			detail_retur_paket_tokwitansiDataStore.load();
 			master_retur_jual_paket_reset_form();
 			post2db='CREATE';
 			msg='created';
@@ -786,15 +795,16 @@ Ext.onReady(function(){
 		anchor: '95%'
 	});
 	
-	rpaket_kwitansi_nilaiField= new Ext.form.NumberField({
+	rpaket_kwitansi_nilaiField= new Ext.ux.form.CFTextField({
 		id: 'rpaket_kwitansi_nilaiField',
 		fieldLabel: 'Nilai (Rp)',
-		allowNegatife : false,
-		blankText: '0',
-		allowDecimals: true,
+		valueRenderer: 'numberToCurrency',
+		//allowNegatife : false,
+		//blankText: '0',
+		//allowDecimals: true,
 		readOnly: true,
-		anchor: '95%',
-		maskRe: /([0-9]+)$/
+		anchor: '95%'//,
+		//maskRe: /([0-9]+)$/
 	});
 	rpaket_kwitansi_keteranganField= new Ext.form.TextArea({
 		id: 'rpaket_kwitansi_keteranganField',
@@ -803,9 +813,10 @@ Ext.onReady(function(){
 		anchor: '95%'
 	});
 	
-	rpaket_jpaket_total_bayarField= new Ext.form.NumberField({
+	rpaket_jpaket_total_bayarField= new Ext.ux.form.CFTextField({
 		id: 'rpaket_jpaket_total_bayarField',
 		fieldLabel: 'No.Faktur Jual - Total Bayar',
+		valueRenderer: 'numberToCurrency',
 		readOnly: true,
 		anchor: '95%'
 	});
@@ -863,6 +874,7 @@ Ext.onReady(function(){
 			{name: 'rpaket_perawatan', type: 'int', mapping: 'rpaket_perawatan'}, 
 			{name: 'rawat_nama', type: 'string', mapping: 'rawat_nama'}, 
 			{name: 'total_sisa_item', type: 'int', mapping: 'total_sisa_item'}, 
+			{name: 'total_ambil_item', type: 'int', mapping: 'total_ambil_item'}, 
 			{name: 'rawat_harga', type: 'float', mapping: 'rawat_harga'}
 	]);
 	//eof
@@ -882,8 +894,8 @@ Ext.onReady(function(){
 			method: 'POST'
 		}),
 		reader: detail_retur_paket_tokwitansi_reader,
-		baseParams:{master_id: rpaket_idField.getValue()},
-		sortInfo:{field: 'sapaket_item_nama', direction: "ASC"}
+		baseParams:{master_id: rpaket_idField.getValue(), start:0, limit:pageS},
+		sortInfo:{field: 'rawat_nama', direction: "ASC"}
 	});
 	/* End of Function */
 	
@@ -924,8 +936,8 @@ Ext.onReady(function(){
 			renderer: Ext.util.Format.comboRenderer(combo_retur_paket_tokwitansi)*/
 		},
 		{
-			header: 'Jumlah',
-			dataIndex: 'total_sisa_item',
+			header: 'Jumlah Diambil',
+			dataIndex: 'total_ambil_item',
 			width: 150,
 			sortable: true/*,
 			editor: new Ext.form.NumberField({
@@ -951,7 +963,7 @@ Ext.onReady(function(){
 			sortable: true,
 			readOnly: true,
 			renderer: function(v, params, record){
-				return Ext.util.Format.number(record.data.jumlah_terpakai*record.data.rawat_harga,'0,000');
+				return Ext.util.Format.number(record.data.total_ambil_item*record.data.rawat_harga,'0,000');
 			}
 		}]
 	);
@@ -1019,7 +1031,7 @@ Ext.onReady(function(){
 	
 	//function for refresh detail
 	function refresh_detail_retur_paket_tokwitansi(){
-		var sum_subtotal_detail=0;
+		/*var sum_subtotal_detail=0;
 		//detail_retur_paket_tokwitansiDataStore.commitChanges();
 		detail_retur_paket_tokwitansiListEditorGrid.getView().refresh();
 		detail_retur_tokwitansi_record=detail_retur_paket_tokwitansiDataStore.getAt(0);
@@ -1033,6 +1045,15 @@ Ext.onReady(function(){
 					rpaket_kwitansi_nilaiField.setValue(sum_subtotal_detail);
 				}
 			}
+		}*/
+		var sum_subtotal_detail=0;
+		var total_nilai_kuitansi=0;
+		if(detail_retur_paket_tokwitansiDataStore.getCount()>0){
+			for(i=0;i<detail_retur_paket_tokwitansiDataStore.getCount();i++){
+				sum_subtotal_detail += ((detail_retur_paket_tokwitansiDataStore.getAt(i).data.total_ambil_item)*(detail_retur_paket_tokwitansiDataStore.getAt(i).data.rawat_harga));
+			}
+			total_nilai_kuitansi = rpaket_jpaket_total_bayarField.getValue()-sum_subtotal_detail;
+			rpaket_kwitansi_nilaiField.setValue(total_nilai_kuitansi);
 		}
 	}
 	//eof
@@ -1098,7 +1119,8 @@ Ext.onReady(function(){
 	//eof
 	
 	//event on update of detail data store
-	detail_retur_paket_tokwitansiDataStore.on('update', refresh_detail_retur_paket_tokwitansi);
+	//detail_retur_paket_tokwitansiDataStore.on('update', refresh_detail_retur_paket_tokwitansi);
+	detail_retur_paket_tokwitansiDataStore.on('load', refresh_detail_retur_paket_tokwitansi);
 	
 	kwitansi_tercetakGroup = new Ext.form.FieldSet({
 		title: 'Kuitansi Tercetak',

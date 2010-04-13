@@ -491,11 +491,11 @@ class M_master_jual_produk extends Model{
 					return $dproduk_master;
 				}else if($cetak!==1 && ($count==($dcount-1))){
 					return '0';
-				}else {
-					return '-1';
+				}else if($count!==($dcount-1)){
+					return '-3';
 				}
 			}else
-				return '-2';
+				return '-1';
 
 		}
 		//end of function
@@ -507,16 +507,22 @@ class M_master_jual_produk extends Model{
 			// For simple search
 			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (jproduk_id LIKE '%".addslashes($filter)."%' OR jproduk_nobukti LIKE '%".addslashes($filter)."%' OR jproduk_cust LIKE '%".addslashes($filter)."%' OR jproduk_tanggal LIKE '%".addslashes($filter)."%' OR jproduk_diskon LIKE '%".addslashes($filter)."%' OR jproduk_cara LIKE '%".addslashes($filter)."%' OR jproduk_cara2 LIKE '%".addslashes($filter)."%' OR jproduk_cara3 LIKE '%".addslashes($filter)."%' OR jproduk_keterangan LIKE '%".addslashes($filter)."%' )";
+				$query .= " (jproduk_nobukti LIKE '%".addslashes($filter)."%' OR cust_nama LIKE '%".addslashes($filter)."%' OR cust_no LIKE '%".addslashes($filter)."%' )";
 			}
 			$query .= " ORDER BY jproduk_nobukti DESC";
-			$query_nbrows="SELECT jproduk_id FROM master_jual_produk";
 			
-			$result = $this->db->query($query_nbrows);
-			$nbrows = $result->num_rows();
+			$query_nbrows="SELECT jproduk_id FROM master_jual_produk LEFT JOIN customer ON(jproduk_cust=cust_id)";
+			// For simple search
+			if ($filter<>""){
+				$query_nbrows .=eregi("WHERE",$query_nbrows)? " AND ":" WHERE ";
+				$query_nbrows .= " (jproduk_nobukti LIKE '%".addslashes($filter)."%' OR cust_nama LIKE '%".addslashes($filter)."%' OR cust_no LIKE '%".addslashes($filter)."%' )";
+			}
+			
+			$result2 = $this->db->query($query_nbrows);
+			$nbrows = $result2->num_rows();
 			//$result = $this->db->query($query);
 			//$nbrows = $result->num_rows();
-			$limit = $query." LIMIT ".$start.",".$end;		
+			$limit = $query." LIMIT ".$start.",".$end;
 			$result = $this->db->query($limit);  
 			
 			if($nbrows>0){
@@ -621,7 +627,7 @@ class M_master_jual_produk extends Model{
 				}
 			}
 			$data = array(
-				"jproduk_id"=>$jproduk_id, 
+				//"jproduk_id"=>$jproduk_id, 
 				"jproduk_nobukti"=>$jproduk_nobukti, 
 				"jproduk_tanggal"=>$jproduk_tanggal, 
 				"jproduk_diskon"=>$jproduk_diskon,
@@ -1179,10 +1185,10 @@ class M_master_jual_produk extends Model{
 					}
 				}
 				
-				return '1';
+				return '0';
 			}
 			else
-				return '0';
+				return '-1';
 		}
 		
 		//function for create new record
