@@ -4351,14 +4351,16 @@ Ext.onReady(function(){
 				//detail_jual_produk_record.data.dproduk_satuan=cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_satuan;
 				if(detail_jual_produk_record.data.dproduk_diskon==""){
 					if(jproduk_cust_nomemberField.getValue()!=""){
+						detail_jual_produk_record.data.dproduk_diskon_jenis='DM';
 						if(cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_dm!==0){
 							detail_jual_produk_record.data.dproduk_diskon=cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_dm;
-							detail_jual_produk_record.data.dproduk_diskon_jenis='DM';
+							//detail_jual_produk_record.data.dproduk_diskon_jenis='DM'; //asli
 						}
 					}else{
+						detail_jual_produk_record.data.dproduk_diskon_jenis='DU';
 						if(cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_du!==0){
 							detail_jual_produk_record.data.dproduk_diskon=cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_du;
-							detail_jual_produk_record.data.dproduk_diskon_jenis='DU';
+							//detail_jual_produk_record.data.dproduk_diskon_jenis='DU'; //asli
 						}
 					}
 				}

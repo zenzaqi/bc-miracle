@@ -53,6 +53,8 @@ html,body,table,tr,td{
 	  	<?php 
 		$i=0;
 		$total=0;
+		$subtotal=0;
+		$total_diskon=0;
 		foreach($detail_jproduk as $list => $row) { $i+=1;?>
         <tr>
           <td width="560px">&nbsp;<?=$i;?>.&nbsp;<?=$row->produk_nama;?></td>
@@ -62,8 +64,11 @@ html,body,table,tr,td{
           <td width="200px">&nbsp;<?=ubah_rupiah($row->jumlah_subtotal);?></td>
         </tr>
 		<?php 
-		$total+=$row->jumlah_subtotal;
-		}?>
+			$subtotal+=$row->jumlah_subtotal;
+		}
+		$total=($subtotal*((100-$jproduk_diskon)/100)-$jproduk_cashback);
+		$total_diskon=($subtotal*($jproduk_diskon/100));
+		?>
       </table>
 	  </td>
   </tr>
@@ -71,10 +76,10 @@ html,body,table,tr,td{
 	  <td width="1280px"><table width="1280" border="0" cellspacing="0" cellpadding="0">
         <tr>
           <td width="180px">&nbsp;</td>
-          <td width="300px">&nbsp;</td>
+          <td width="300px"><?=$_SESSION[SESSION_USERID];?></td>
           <td width="420px">&nbsp;</td>
           <td width="180px">&nbsp;</td>
-          <td width="200px"><?=ubah_rupiah($total);?></td>
+          <td width="200px"><?=ubah_rupiah($subtotal);?></td>
         </tr>
         <tr>
           <td>&nbsp;</td>
@@ -88,14 +93,14 @@ html,body,table,tr,td{
           <td>&nbsp;</td>
           <td>&nbsp;</td>
           <td>&nbsp;</td>
-          <td>&nbsp;</td>
+          <td><?=$total_diskon;?></td>
         </tr>
         <tr>
           <td>&nbsp;</td>
           <td>&nbsp;</td>
           <td>&nbsp;</td>
           <td>&nbsp;</td>
-          <td>&nbsp;</td>
+          <td><?=$jumlah_tunai;?></td>
         </tr>
         <tr>
           <td>&nbsp;</td>
