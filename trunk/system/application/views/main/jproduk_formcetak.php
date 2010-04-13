@@ -61,10 +61,10 @@ html,body,table,tr,td{
           <td width="170px">&nbsp;<?=$row->dproduk_jumlah;?> <?=$row->satuan_nama;?></td>
           <td width="200px">&nbsp;<?=ubah_rupiah($row->dproduk_harga);?></td>
           <td width="150px">&nbsp;<?=$row->dproduk_diskon;?></td>
-          <td width="200px">&nbsp;<?=ubah_rupiah($row->jumlah_subtotal);?></td>
+          <td width="200px">&nbsp;<?=ubah_rupiah(($row->dproduk_jumlah)*($row->jumlah_subtotal));?></td>
         </tr>
 		<?php 
-			$subtotal+=$row->jumlah_subtotal;
+			$subtotal+=(($row->dproduk_jumlah)*($row->jumlah_subtotal));
 		}
 		$total=($subtotal*((100-$jproduk_diskon)/100)-$jproduk_cashback);
 		$total_diskon=($subtotal*($jproduk_diskon/100));
@@ -93,7 +93,7 @@ html,body,table,tr,td{
           <td>&nbsp;</td>
           <td>&nbsp;</td>
           <td>&nbsp;</td>
-          <td><?=$total_diskon;?></td>
+          <td><?=ubah_rupiah($total_diskon);?></td>
         </tr>
         <tr>
           <td>&nbsp;</td>
