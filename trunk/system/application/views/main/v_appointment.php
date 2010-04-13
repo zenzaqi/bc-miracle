@@ -910,7 +910,7 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Status' + '</div>',
 			dataIndex: 'dapp_status',
-			width: 75,
+			width: 80,
 			sortable: false,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
