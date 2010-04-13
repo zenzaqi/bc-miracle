@@ -917,7 +917,7 @@ Ext.onReady(function(){
 				triggerAction: 'all',
 				store:new Ext.data.SimpleStore({
 					fields:['dapp_status_value', 'dapp_status_display'],
-					data: [['reservasi','reservasi'],['konfirmasi','konfirmasi'],['datang','datang'],['batal','batal'],['jadual ulang','jadual ulang']]
+					data: [['reservasi','reservasi'],['konfirmasi','konfirmasi'],['datang','datang'],['batal','batal'],['jadwal ulang','jadwal ulang']]
 					}),
 				mode: 'local',
                	displayField: 'dapp_status_display',
@@ -1008,7 +1008,7 @@ Ext.onReady(function(){
 			return '<span style="color:blue;"><b>' + val + '</b></span>';
 		}else if(val=="batal"){
 			return '<span style="color:red;"><b>' + val + '</b></span>';
-		}else if(val=="jadual ulang"){
+		}else if(val=="jadwal ulang"){
 			return '<span style="color:brown;"><b>' + val + '</b></span>';
 		}
 		return val;
