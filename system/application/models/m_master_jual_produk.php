@@ -462,7 +462,7 @@ class M_master_jual_produk extends Model{
 		//insert detail record
 		function detail_detail_jual_produk_insert($dproduk_id ,$dproduk_master ,$dproduk_produk ,$dproduk_satuan ,$dproduk_jumlah ,$dproduk_harga ,$dproduk_subtotal_net ,$dproduk_diskon,$dproduk_diskon_jenis,$dproduk_sales,$konversi_nilai_temp, $cetak, $count, $dcount){
 			//if master id not capture from view then capture it from max pk from master table
-			if($dproduk_master=="" || $dproduk_master==NULL){
+			if($dproduk_master=="" || $dproduk_master==NULL || $dproduk_master==0){
 				$dproduk_master=$this->get_master_id();
 			}
 			

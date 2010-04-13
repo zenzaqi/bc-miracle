@@ -4036,7 +4036,7 @@ Ext.onReady(function(){
 					params:{
 						cetak	: cetak_faktur,
 						dproduk_id	: detail_jual_produk_record.data.dproduk_id, 
-						dproduk_master	: eval(jproduk_idField.getValue()), 
+						dproduk_master	: eval(get_pk_id()), 
 						dproduk_produk	: detail_jual_produk_record.data.dproduk_produk,
 						dproduk_satuan	: detail_jual_produk_record.data.dproduk_satuan,
 						dproduk_jumlah	: detail_jual_produk_record.data.dproduk_jumlah, 
