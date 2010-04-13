@@ -1682,7 +1682,7 @@ class M_master_jual_produk extends Model{
 		
 		function print_paper($jproduk_id){
 			//$this->firephp->log($jproduk_id, "jproduk_id");
-			$sql="SELECT jproduk_tanggal, cust_nama, cust_alamat, jproduk_nobukti, produk_nama, dproduk_jumlah, satuan_nama, dproduk_harga, dproduk_diskon, (dproduk_harga*((100-dproduk_diskon)/100)) AS jumlah_subtotal, jproduk_creator, jtunai_nilai, jproduk_diskon, jproduk_cashback FROM detail_jual_produk LEFT JOIN master_jual_produk ON(dproduk_master=jproduk_id) LEFT JOIN customer ON(jproduk_cust=cust_id) LEFT JOIN produk ON(dproduk_produk=produk_id) LEFT JOIN satuan ON(dproduk_satuan=satuan_id) LEFT JOIN jual_tunai ON(jtunai_ref=jproduk_nobukti) WHERE jproduk_id='$jproduk_id'";
+			$sql="SELECT jproduk_tanggal, cust_no, cust_nama, cust_alamat, jproduk_nobukti, produk_nama, dproduk_jumlah, satuan_nama, dproduk_harga, dproduk_diskon, (dproduk_harga*((100-dproduk_diskon)/100)) AS jumlah_subtotal, jproduk_creator, jtunai_nilai, jproduk_diskon, jproduk_cashback FROM detail_jual_produk LEFT JOIN master_jual_produk ON(dproduk_master=jproduk_id) LEFT JOIN customer ON(jproduk_cust=cust_id) LEFT JOIN produk ON(dproduk_produk=produk_id) LEFT JOIN satuan ON(dproduk_satuan=satuan_id) LEFT JOIN jual_tunai ON(jtunai_ref=jproduk_nobukti) WHERE jproduk_id='$jproduk_id'";
 			$result = $this->db->query($sql);
 			return $result;
 		}

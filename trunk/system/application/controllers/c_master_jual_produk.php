@@ -675,6 +675,7 @@ class C_master_jual_produk extends Controller {
 		$detail_jproduk=$result->result();
 		$data['jproduk_nobukti']=$rs->jproduk_nobukti;
 		$data['jproduk_tanggal']=$rs->jproduk_tanggal;
+		$data['cust_no']=$rs->cust_no;
 		$data['cust_nama']=$rs->cust_nama;
 		$data['cust_alamat']=$rs->cust_alamat;
 		$data['jumlah_subtotal']=ubah_rupiah($rs->jumlah_subtotal);
