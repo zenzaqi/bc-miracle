@@ -275,6 +275,8 @@ Ext.onReady(function(){
 		rpaket_custidField.setValue(master_retur_jual_paketListEditorGrid.getSelectionModel().getSelected().get('rpaket_cust_id'));
 		rpaket_tanggalField.setValue(master_retur_jual_paketListEditorGrid.getSelectionModel().getSelected().get('rpaket_tanggal'));
 		rpaket_keteranganField.setValue(master_retur_jual_paketListEditorGrid.getSelectionModel().getSelected().get('rpaket_keterangan'));
+		rpaket_kwitansi_nilaiField.setValue(master_retur_jual_paketListEditorGrid.getSelectionModel().getSelected().get('kwitansi_nilai'));
+		rpaket_kwitansi_keteranganField.setValue(master_retur_jual_paketListEditorGrid.getSelectionModel().getSelected().get('kwitansi_keterangan'));
 	}
 	/* End setValue to EDIT*/
   
@@ -411,7 +413,10 @@ Ext.onReady(function(){
 			{name: 'rpaket_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'rpaket_date_create'}, 
 			{name: 'rpaket_update', type: 'string', mapping: 'rpaket_update'}, 
 			{name: 'rpaket_date_update', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'rpaket_date_update'}, 
-			{name: 'rpaket_revised', type: 'int', mapping: 'rpaket_revised'} 
+			{name: 'rpaket_revised', type: 'int', mapping: 'rpaket_revised'},
+			{name: 'kwitansi_id', type: 'int', mapping: 'kwitansi_id'},
+			{name: 'kwitansi_nilai', type: 'float', mapping: 'kwitansi_nilai'},
+			{name: 'kwitansi_keterangan', type: 'string', mapping: 'kwitansi_keterangan'} 
 		]),
 		sortInfo:{field: 'rpaket_id', direction: "DESC"}
 	});
@@ -504,6 +509,16 @@ Ext.onReady(function(){
 			hidden: true
 		},
 		{
+			header: '<div align="center">' + 'Tanggal' + '</div>',
+			dataIndex: 'rpaket_tanggal',
+			width: 70,
+			sortable: true,
+			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
+			editor: new Ext.form.DateField({
+				format: 'd-m-Y'
+			})
+		}, 
+		{
 			header: '<div align="center">' + 'No Faktur' + '</div>',
 			dataIndex: 'rpaket_nobukti',
 			width: 100,
@@ -542,15 +557,16 @@ Ext.onReady(function(){
 			})
 		}, 
 		{
-			header: '<div align="center">' + 'Tanggal' + '</div>',
-			dataIndex: 'rpaket_tanggal',
-			width: 70,
+			header: '<div align="center">' + 'Nilai Kuitansi (Rp)' + '</div>',
+			dataIndex: 'kwitansi_nilai',
+			align: 'right',
+			width: 100,
 			sortable: true,
-			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
-			editor: new Ext.form.DateField({
-				format: 'd-m-Y'
-			})
-		}, 
+			readOnly: true,
+			renderer: function(val){
+				return '<span> '+Ext.util.Format.number(val,'0,000')+'</span>';
+			}
+		},
 		{
 			header: '<div align="center">' + 'Keterangan' + '</div>',
 			dataIndex: 'rpaket_keterangan',
@@ -797,7 +813,7 @@ Ext.onReady(function(){
 	
 	rpaket_kwitansi_nilaiField= new Ext.ux.form.CFTextField({
 		id: 'rpaket_kwitansi_nilaiField',
-		fieldLabel: 'Nilai (Rp)',
+		fieldLabel: 'Nilai Kuitansi(Rp)',
 		valueRenderer: 'numberToCurrency',
 		//allowNegatife : false,
 		//blankText: '0',
