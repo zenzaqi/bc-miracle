@@ -619,7 +619,7 @@ Ext.onReady(function(){
   	/* Function for Identify of Window Column Model */
 	tindakan_nonmedis_ColumnModel = new Ext.grid.ColumnModel(
 		[{
-			header: '<div align="center">' + 'No. Cust' + '</div>',	//'No.Customer',
+			header: '<div align="center">' + 'No Cust' + '</div>',	//'No.Customer',
 			readOnly: true,
 			dataIndex: 'trawat_cust_no',
 			width: 65,	//75,
@@ -733,10 +733,11 @@ Ext.onReady(function(){
 			header: '<div align="center">' + 'Info Paket' + '</div>',
 			dataIndex: 'cust_punya_paket',
 			width: 60,	//55,
-			sortable: false
+			sortable: false,
+			hidden: true
 		},
 		{
-			header: '<div align="center">' + 'Stat. Kasir' + '</div>',
+			header: '<div align="center">' + 'Stat Kasir' + '</div>',
 			dataIndex: 'dtrawat_edit',
 			width: 60,	//55,
 			sortable: false
