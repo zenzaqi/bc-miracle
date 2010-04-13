@@ -18,10 +18,173 @@ class M_master_mutasi extends Model{
 			parent::Model();
 		}
 		
+		function get_produk_selected_list($gudang,$selected_id,$query,$start,$end){
+			if($gudang==1){
+				$sql="SELECT produk_id,produk_kode,produk_nama,jumlah_stok FROM vu_stok_gudang_besar_saldo";
+			}elseif($gudang==2){
+				$sql="SELECT produk_id,produk_kode,produk_nama,jumlah_stok FROM vu_stok_gudang_produk_saldo";
+			}else{
+				$sql="SELECT produk_id,produk_kode,produk_nama,jumlah_stok FROM vu_stok_gudang_all";
+				$sql.=(eregi("WHERE",$sql)?" AND ":" WHERE ")." gudang_id =".$gudang."";
+			}
+			if($selected_id!=="")
+			{
+				$selected_id=substr($selected_id,0,strlen($selected_id)-1);
+				$sql.=(eregi("WHERE",$sql)?" AND ":" WHERE ")." produk_id IN(".$selected_id.")";
+			}
+			if($query!==""){
+				$sql.=(eregi("WHERE",$sql)?" AND ":" WHERE ")." produk_nama like '%".$query."%' OR produk_kode like '%".$query."%'";
+			}
+			
+			$result = $this->db->query($sql);
+			$nbrows = $result->num_rows();
+			$limit = $sql." LIMIT ".$start.",".$end;			
+			$result = $this->db->query($limit);  
+			
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+				
+		function get_produk_all_list($gudang,$selected_id,$query,$start,$end){
+			
+			if($gudang==1){
+				$sql="SELECT produk_id,produk_kode,produk_nama,satuan_nama,jumlah_stok FROM vu_stok_gudang_besar_saldo";
+			}elseif($gudang==2){
+				$sql="SELECT produk_id,produk_kode,produk_nama,satuan_nama,jumlah_stok FROM vu_stok_gudang_produk_saldo";
+			}else{
+				$sql="SELECT produk_id,produk_kode,produk_nama,satuan_nama,jumlah_stok FROM vu_stok_gudang_all";
+				$sql.=(eregi("WHERE",$sql)?" AND ":" WHERE ")." gudang_id =".$gudang."";
+			}
+			if($query!==""){
+				$sql.=(eregi("WHERE",$sql)?" AND ":" WHERE ")." produk_nama like '%".$query."%' OR produk_kode like '%".$query."%'";
+			}
+			
+			$result = $this->db->query($sql);
+			$nbrows = $result->num_rows();
+			$limit = $sql." LIMIT ".$start.",".$end;			
+			$result = $this->db->query($limit);  
+			
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+		
+			
+		function get_produk_detail_list($gudang,$master_id,$query,$start,$end){
+			if($gudang==1){
+				$sql="SELECT produk_id,produk_kode,produk_nama,jumlah_stok FROM vu_stok_gudang_besar_saldo";
+			}elseif($gudang==2){
+				$sql="SELECT produk_id,produk_kode,produk_nama,jumlah_stok FROM vu_stok_gudang_produk_saldo";
+			}else{
+				$sql="SELECT produk_id,produk_kode,produk_nama,jumlah_stok FROM vu_stok_gudang_all";
+				$sql.=(eregi("WHERE",$sql)?" AND ":" WHERE ")." gudang_id =".$gudang."";
+			}
+			
+			if($master_id<>""){
+				$sql.=(eregi("WHERE",$sql)?" AND ":" WHERE ");
+				$sql.=" produk_id IN(SELECT dmutasi_produk FROM detail_mutasi WHERE dmutasi_master='".$master_id."')";
+			}
+			
+			if($query!==""){
+				$sql.=(eregi("WHERE",$sql)?" AND ":" WHERE ")." produk_nama like '%".$query."%' OR produk_kode like '%".$query."%'";
+			}
+			
+			$result = $this->db->query($sql);
+			$nbrows = $result->num_rows();
+			$limit = $sql." LIMIT ".$start.",".$end;			
+			$result = $this->db->query($limit);  
+			
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+		
+		function get_satuan_produk_list($selected_id){
+			
+			$sql="SELECT satuan_id,satuan_kode,satuan_nama FROM vu_satuan_konversi WHERE produk_aktif='Aktif'";
+			
+			if($selected_id!==""){
+				$sql.=(eregi("WHERE",$sql)?" AND ":" WHERE ")." produk_id='".$selected_id."'";
+			}
+			
+			$result = $this->db->query($sql);
+			$nbrows = $result->num_rows();
+			
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+		
+		function get_satuan_selected_list($selected_id){
+			$sql="SELECT satuan_id,satuan_kode,satuan_nama FROM satuan";
+			if($selected_id!=="")
+			{
+				$selected_id=substr($selected_id,0,strlen($selected_id)-1);
+				$sql.=" WHERE satuan_id IN(".$selected_id.")";
+			}
+
+			$result = $this->db->query($sql);
+			$nbrows = $result->num_rows();
+			
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+		
+		function get_satuan_detail_list($master_id){
+			$sql="SELECT satuan_id,satuan_kode,satuan_nama FROM satuan";
+			if($master_id<>"")
+				$sql.=" WHERE satuan_id IN(SELECT dmutasi_satuan FROM detail_mutasi WHERE dmutasi_master='".$master_id."')";
+			
+			$result = $this->db->query($sql);
+			$nbrows = $result->num_rows();
+			
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+		
 		//function for detail
 		//get record list
 		function detail_detail_mutasi_list($master_id,$query,$start,$end) {
-			$query = "SELECT * FROM detail_mutasi where dmutasi_master='".$master_id."'";
+			$query = "SELECT * FROM detail_mutasi where dmutasi_master='".$master_id."' ORDER by dmutasi_id DESC";
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
 			$limit = $query." LIMIT ".$start.",".$end;			
@@ -84,7 +247,7 @@ class M_master_mutasi extends Model{
 		
 		//function for get list record
 		function master_mutasi_list($filter,$start,$end){
-			$query = "SELECT master_mutasi.*,asal.gudang_nama as gudang_nama_asal,tujuan.gudang_nama as gudang_nama_tujuan FROM master_mutasi,gudang as asal,gudang as tujuan WHERE mutasi_asal=asal.gudang_id AND mutasi_tujuan=tujuan.gudang_id";
+			$query = "SELECT * FROM vu_trans_mutasi";
 			
 			// For simple search
 			if ($filter<>""){
@@ -130,7 +293,7 @@ class M_master_mutasi extends Model{
 			$this->db->where('mutasi_id', $mutasi_id);
 			$this->db->update('master_mutasi', $data);
 			
-			return '1';
+			return $mutasi_id;
 		}
 		
 		//function for create new record
@@ -143,7 +306,7 @@ class M_master_mutasi extends Model{
 			);
 			$this->db->insert('master_mutasi', $data); 
 			if($this->db->affected_rows())
-				return '1';
+				return $this->db->insert_id();
 			else
 				return '0';
 		}

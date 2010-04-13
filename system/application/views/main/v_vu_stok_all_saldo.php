@@ -159,73 +159,87 @@ Ext.onReady(function(){
 			hidden: false
 		},
 		{
-			header: 'Kode',
+			header: '<div align="center">Kode</div>',
 			dataIndex: 'produk_kode',
 			width: 150,
 			sortable: true,
 			readOnly: true
 		}, 
 		{
-			header: 'Nama',
+			header: '<div align="center">Nama</div>',
 			dataIndex: 'produk_nama',
 			width: 350,
 			sortable: true,
 			readOnly: true
 		}, 
 		{
-			header: 'Satuan Nama',
+			header: '<div align="center">Satuan</div>',
 			dataIndex: 'satuan_nama',
 			width: 150,
 			sortable: true,
 			readOnly: true
 		},
 		{
-			header: 'Beli',
+			header: '<div align="center">Beli</div>',
 			dataIndex: 'jumlah_terima',
 			width: 150,
+			align: 'right',
+			renderer: Ext.util.Format.numberRenderer('0,000.00'),
 			sortable: true,
 			readOnly: true
 		},
 		{
-			header: 'Retur Beli',
+			header: '<div align="center">Retur Beli</div>',
 			dataIndex: 'jumlah_retur_beli',
 			width: 150,
 			sortable: true,
+			align: 'right',
+			renderer: Ext.util.Format.numberRenderer('0,000.00'),
 			readOnly: true
 		},
 		{
-			header: 'Jual',
+			header: '<div align="center">Jual</div>',
 			dataIndex: 'jumlah_jual',
 			width: 150,
 			sortable: true,
+			align: 'right',
+			renderer: Ext.util.Format.numberRenderer('0,000.00'),
 			readOnly: true
 		},
 		{
-			header: 'Retur Jual',
+			header: '<div align="center">Retur Jual</div>',
 			dataIndex: 'jumlah_retur_produk',
 			width: 150,
 			sortable: true,
+			align: 'right',
+			renderer: Ext.util.Format.numberRenderer('0,000.00'),
 			readOnly: true
 		},
 		{
-			header: 'Pemakaian Cabin',
+			header: '<div align="center">Pakai Cabin</div>',
 			dataIndex: 'jumlah_cabin',
 			width: 150,
 			sortable: true,
+			align: 'right',
+			renderer: Ext.util.Format.numberRenderer('0,000.00'),
 			readOnly: true
 		},
 		{
-			header: 'Koreksi',
+			header: '<div align="center">Koreksi</div>',
 			dataIndex: 'jumlah_koreksi',
 			width: 150,
 			sortable: true,
+			align: 'right',
+			renderer: Ext.util.Format.numberRenderer('0,000.00'),
 			readOnly: true
 		},
 		{
-			header: 'Saldo',
+			header: '<div align="center">Saldo</div>',
 			dataIndex: 'stok_saldo',
 			width: 150,
 			sortable: true,
+			align: 'right',
+			renderer: Ext.util.Format.numberRenderer('0,000.00'),
 			readOnly: true
 		}	]);
 	
@@ -245,7 +259,7 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 1024,
+	  	width: 1200,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: vu_stok_all_saldo_DataStore,

@@ -32,12 +32,35 @@ class C_master_mutasi extends Controller {
 	}
 	
 	function get_produk_list(){
-		$result=$this->m_public_function->get_produk_list();
+		$query = isset($_POST['query']) ? $_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? @$_POST['start'] : @$_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? @$_POST['limit'] : @$_GET['limit']);
+		$gudang = (integer) (isset($_POST['gudang']) ? @$_POST['gudang'] : @$_GET['gudang']);
+		$master_id = (integer) (isset($_POST['master_id']) ? @$_POST['master_id'] : @$_GET['master_id']);
+		$task = isset($_POST['task']) ? @$_POST['task'] : @$_GET['task'];
+		$selected_id = isset($_POST['selected_id']) ? @$_POST['selected_id'] : @$_GET['selected_id'];
+		if($task=='detail')
+			$result=$this->m_master_mutasi->get_produk_detail_list($gudang, $master_id,$query,$start,$end);
+		elseif($task=='list')
+			$result=$this->m_master_mutasi->get_produk_all_list($gudang, $selected_id, $query, $start, $end);
+		elseif($task=='selected')
+			$result=$this->m_master_mutasi->get_produk_selected_list($gudang, $selected_id,$query,$start,$end);
+
 		echo $result;
 	}
 	
 	function get_satuan_list(){
-		$result=$this->m_public_function->get_satuan_list();
+		$task = isset($_POST['task']) ? @$_POST['task'] : @$_GET['task'];
+		$selected_id = isset($_POST['selected_id']) ? @$_POST['selected_id'] : @$_GET['selected_id'];
+		$master_id = (integer) (isset($_POST['master_id']) ? @$_POST['master_id'] : @$_GET['master_id']);
+		
+		if($task=='detail')
+			$result=$this->m_master_mutasi->get_satuan_detail_list($master_id);
+		elseif($task=='produk')
+			$result=$this->m_master_mutasi->get_satuan_produk_list($selected_id);
+		elseif($task=='selected')
+			$result=$this->m_master_mutasi->get_satuan_selected_list($selected_id);
+			
 		echo $result;
 	}
 	
@@ -57,6 +80,7 @@ class C_master_mutasi extends Controller {
 	function detail_detail_mutasi_purge(){
 		$master_id = (integer) (isset($_POST['master_id']) ? $_POST['master_id'] : $_GET['master_id']);
 		$result=$this->m_master_mutasi->detail_detail_mutasi_purge($master_id);
+		echo $result;
 	}
 	//eof
 	

@@ -54,7 +54,7 @@ var master_koreksi_stok_searchWindow;
 var master_koreksi_stok_SelectedRow;
 var master_koreksi_stok_ContextMenu;
 //for detail data
-var detail_koreksi_stok_DataStor;
+var detail_koreksi_stok_DataStore;
 var detail_koreksi_stokListEditorGrid;
 var detail_koreksi_stok_ColumnModel;
 var detail_koreksi_stok_proxy;
@@ -88,7 +88,7 @@ Ext.onReady(function(){
 		var koreksi_tanggal_update_date="";
 		var koreksi_keterangan_update=null;
 
-		koreksi_id_update_pk = oGrid_event.record.data.koreksi_id;
+		koreksi_id_update_pk = get_pk_id();
 		if(oGrid_event.record.data.koreksi_gudang!== null){koreksi_gudang_update = oGrid_event.record.data.koreksi_gudang;}
 	 	if(oGrid_event.record.data.koreksi_tanggal!== ""){koreksi_tanggal_update_date =oGrid_event.record.data.koreksi_tanggal.format('Y-m-d');}
 		if(oGrid_event.record.data.koreksi_keterangan!== null){koreksi_keterangan_update = oGrid_event.record.data.koreksi_keterangan;}
@@ -97,29 +97,26 @@ Ext.onReady(function(){
 			waitMsg: 'Please wait...',
 			url: 'index.php?c=c_master_koreksi_stok&m=get_action',
 			params: {
-				task: "UPDATE",
-				koreksi_id	: koreksi_id_update_pk, 
-				koreksi_gudang	:koreksi_gudang_update,  
-				koreksi_tanggal	: koreksi_tanggal_update_date, 
-				koreksi_keterangan	:koreksi_keterangan_update,  
+				task				: "UPDATE",
+				koreksi_id			: koreksi_id_update_pk, 
+				koreksi_gudang		: koreksi_gudang_update,  
+				koreksi_tanggal		: koreksi_tanggal_update_date, 
+				koreksi_keterangan	: koreksi_keterangan_update 
 			}, 
 			success: function(response){							
 				var result=eval(response.responseText);
-				switch(result){
-					case 1:
-						master_koreksi_stok_DataStore.commitChanges();
-						master_koreksi_stok_DataStore.reload();
-						break;
-					default:
+				if(result!==0){
+						Ext.MessageBox.alert(post2db+' OK','Data koreksi stok berhasil disimpan');
+				}else{
 						Ext.MessageBox.show({
 						   title: 'Warning',
-						   msg: 'We could\'t not save the master_koreksi_stok.',
+						   //msg: 'We could\'t not '+msg+' the Master_order_beli.',
+						   msg: 'Data koreksi stok  tidak bisa disimpan',
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'save',
 						   icon: Ext.MessageBox.WARNING
 						});
-						break;
-				}
+				}     
 			},
 			failure: function(response){
 				var result=response.responseText;
@@ -144,7 +141,7 @@ Ext.onReady(function(){
 		var koreksi_tanggal_create_date=""; 
 		var koreksi_keterangan_create=null; 
 
-		if(koreksi_idField.getValue()!== null){koreksi_id_create = koreksi_idField.getValue();}else{koreksi_id_create_pk=get_pk_id();} 
+		koreksi_id_create_pk=get_pk_id();
 		if(koreksi_gudangField.getValue()!== null){koreksi_gudang_create = koreksi_gudangField.getValue();} 
 		if(koreksi_tanggalField.getValue()!== ""){koreksi_tanggal_create_date = koreksi_tanggalField.getValue().format('Y-m-d');} 
 		if(koreksi_keteranganField.getValue()!== null){koreksi_keterangan_create = koreksi_keteranganField.getValue();} 
@@ -153,32 +150,28 @@ Ext.onReady(function(){
 			waitMsg: 'Please wait...',
 			url: 'index.php?c=c_master_koreksi_stok&m=get_action',
 			params: {
-				task: post2db,
-				koreksi_id	: koreksi_id_create_pk, 
-				koreksi_gudang	: koreksi_gudang_create, 
-				koreksi_tanggal	: koreksi_tanggal_create_date, 
-				koreksi_keterangan	: koreksi_keterangan_create, 
+				task				: post2db,
+				koreksi_id			: koreksi_id_create_pk, 
+				koreksi_gudang		: koreksi_gudang_create, 
+				koreksi_tanggal		: koreksi_tanggal_create_date, 
+				koreksi_keterangan	: koreksi_keterangan_create
 			}, 
 			success: function(response){             
 				var result=eval(response.responseText);
-				switch(result){
-					case 1:
-						detail_koreksi_stok_purge()
-						detail_koreksi_stok_insert();
-						Ext.MessageBox.alert(post2db+' OK','The Master_koreksi_stok was '+msg+' successfully.');
-						master_koreksi_stok_DataStore.reload();
+				if(result!==0){
+						detail_koreksi_stok_purge(result);
+						Ext.MessageBox.alert(post2db+' OK','Data koreksi stok berhasil disimpan');
 						master_koreksi_stok_createWindow.hide();
-						break;
-					default:
+				}else{
 						Ext.MessageBox.show({
 						   title: 'Warning',
-						   msg: 'We could\'t not '+msg+' the Master_koreksi_stok.',
+						   //msg: 'We could\'t not '+msg+' the Master_order_beli.',
+						   msg: 'Data koreksi stok  tidak bisa disimpan',
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'save',
 						   icon: Ext.MessageBox.WARNING
 						});
-						break;
-				}        
+				}    
 			},
 			failure: function(response){
 				var result=response.responseText;
@@ -222,6 +215,23 @@ Ext.onReady(function(){
 		koreksi_tanggalField.setValue(null);
 		koreksi_keteranganField.reset();
 		koreksi_keteranganField.setValue(null);
+		
+		cbo_stok_satuanDataStore.setBaseParam('task','detail');
+		cbo_stok_satuanDataStore.setBaseParam('master_id',get_pk_id());
+		cbo_stok_satuanDataStore.load();
+		
+		cbo_stok_produkDataStore.setBaseParam('master_id',get_pk_id());
+		cbo_stok_produkDataStore.setBaseParam('task','detail');
+		cbo_stok_produkDataStore.setBaseParam('gudang',0);
+		cbo_stok_produkDataStore.load({
+			callback: function(r,opt,success){
+				if(success==true){
+					detail_koreksi_stok_DataStore.setBaseParam('master_id',get_pk_id());
+					detail_koreksi_stok_DataStore.load();
+				}
+			}
+		});
+		
 	}
  	/* End of Function */
   
@@ -231,21 +241,37 @@ Ext.onReady(function(){
 		koreksi_gudangField.setValue(master_koreksi_stokListEditorGrid.getSelectionModel().getSelected().get('koreksi_gudang'));
 		koreksi_tanggalField.setValue(master_koreksi_stokListEditorGrid.getSelectionModel().getSelected().get('koreksi_tanggal'));
 		koreksi_keteranganField.setValue(master_koreksi_stokListEditorGrid.getSelectionModel().getSelected().get('koreksi_keterangan'));
+		
+		cbo_stok_satuanDataStore.setBaseParam('task','detail');
+		cbo_stok_satuanDataStore.setBaseParam('master_id',get_pk_id());
+		cbo_stok_satuanDataStore.load();
+		
+		cbo_stok_produkDataStore.setBaseParam('master_id',get_pk_id());
+		cbo_stok_produkDataStore.setBaseParam('task','detail');
+		cbo_stok_produkDataStore.setBaseParam('gudang',master_koreksi_stokListEditorGrid.getSelectionModel().getSelected().get('koreksi_gudang_id'));
+		cbo_stok_produkDataStore.load({
+			callback: function(r,opt,success){
+				if(success==true){
+					detail_koreksi_stok_DataStore.setBaseParam('master_id',get_pk_id());
+					detail_koreksi_stok_DataStore.load();
+				}
+			}
+		});
 	}
 	/* End setValue to EDIT*/
   
 	/* Function for Check if the form is valid */
 	function is_master_koreksi_stok_form_valid(){
-		return (true &&  true &&  true &&  true &&  true &&  true &&  true &&  true &&  true  );
+		return (koreksi_gudangField.isValid());
 	}
   	/* End of Function */
   
   	/* Function for Displaying  create Window Form */
 	function display_form_window(){
 		if(!master_koreksi_stok_createWindow.isVisible()){
-			master_koreksi_stok_reset_form();
 			post2db='CREATE';
 			msg='created';
+			master_koreksi_stok_reset_form();
 			master_koreksi_stok_createWindow.show();
 		} else {
 			master_koreksi_stok_createWindow.toFront();
@@ -276,10 +302,10 @@ Ext.onReady(function(){
 	function master_koreksi_stok_confirm_update(){
 		/* only one record is selected here */
 		if(master_koreksi_stokListEditorGrid.selModel.getCount() == 1) {
-			master_koreksi_stok_set_form();
+			
 			post2db='UPDATE';
-			detail_koreksi_stok_DataStore.load({params : {master_id : eval(get_pk_id()), start:0, limit:pageS}});
 			msg='updated';
+			master_koreksi_stok_set_form();
 			master_koreksi_stok_createWindow.show();
 		} else {
 			Ext.MessageBox.show({
@@ -353,7 +379,8 @@ Ext.onReady(function(){
 		},[
 		/* dataIndex => insert intomaster_koreksi_stok_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'koreksi_id', type: 'int', mapping: 'koreksi_id'}, 
-			{name: 'koreksi_gudang', type: 'string', mapping: 'gudang_nama'}, 
+			{name: 'koreksi_gudang', type: 'string', mapping: 'gudang_nama'},
+			{name: 'koreksi_gudang_id', type: 'int', mapping: 'gudang_id'},
 			{name: 'koreksi_tanggal', type: 'date', dateFormat: 'Y-m-d', mapping: 'koreksi_tanggal'}, 
 			{name: 'koreksi_keterangan', type: 'string', mapping: 'koreksi_keterangan'}, 
 			{name: 'koreksi_creator', type: 'string', mapping: 'koreksi_creator'}, 
@@ -366,8 +393,8 @@ Ext.onReady(function(){
 	});
 	/* End of Function */
 	
-	cbo_koreksi_stokgudangDataSore = new Ext.data.Store({
-		id: 'cbo_koreksi_stokgudangDataSore',
+	cbo_koreksi_gudangDataSore = new Ext.data.Store({
+		id: 'cbo_koreksi_gudangDataSore',
 		proxy: new Ext.data.HttpProxy({
 			url: 'index.php?c=c_master_koreksi_stok&m=get_gudang_list', 
 			method: 'POST'
@@ -379,10 +406,10 @@ Ext.onReady(function(){
 			id: 'gudang_id'
 		},[
 		/* dataIndex => insert intocustomer_note_ColumnModel, Mapping => for initiate table column */ 
-			{name: 'koreksi_stokgudang_value', type: 'int', mapping: 'gudang_id'},
-			{name: 'koreksi_stokgudang_nama', type: 'string', mapping: 'gudang_nama'}
+			{name: 'gudang_id', type: 'int', mapping: 'gudang_id'},
+			{name: 'gudang_nama', type: 'string', mapping: 'gudang_nama'}
 		]),
-		sortInfo:{field: 'koreksi_stokgudang_nama', direction: "ASC"}
+		sortInfo:{field: 'gudang_nama', direction: "ASC"}
 	});
     
   	/* Function for Identify of Window Column Model */
@@ -397,36 +424,29 @@ Ext.onReady(function(){
 				return value;
 				},
 			hidden: false
-		},
-		{
-			header: 'Gudang',
-			dataIndex: 'koreksi_gudang',
-			width: 150,
-			sortable: true,
-			editor: new Ext.form.NumberField({
-				allowDecimals: false,
-				allowNegative: false,
-				blankText: '0',
-				maxLength: 11,
-				maskRe: /([0-9]+)$/
-			})
-		}, 
-		{
-			header: 'Tanggal',
+		},{
+			header: '<div align="center">Tanggal</div>',
 			dataIndex: 'koreksi_tanggal',
-			width: 150,
+			width: 100,
 			sortable: true,
 			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
 			editor: new Ext.form.DateField({
 				format: 'Y-m-d'
 			})
+		},
+		{
+			header: '<div align="center">Gudang</div>',
+			dataIndex: 'koreksi_gudang',
+			width: 150,
+			sortable: true,
+			readOnly: true
 		}, 
 		{
-			header: 'Keterangan',
+			header: '<div align="center">Keterangan</div>',
 			dataIndex: 'koreksi_keterangan',
 			width: 150,
 			sortable: true,
-			editor: new Ext.form.TextField({
+			editor: new Ext.form.TextArea({
 				maxLength: 500
           	})
 		}, 
@@ -436,31 +456,31 @@ Ext.onReady(function(){
 			width: 150,
 			sortable: true,
 			hidden: true,
-			readOnly: true,
+			readOnly: true
 		}, 
 		{
-			header: 'Date Create',
+			header: 'Create on',
 			dataIndex: 'koreksi_date_create',
 			width: 150,
 			sortable: true,
 			hidden: true,
-			readOnly: true,
+			readOnly: true
 		}, 
 		{
-			header: 'Update',
+			header: 'Last Update by',
 			dataIndex: 'koreksi_update',
 			width: 150,
 			sortable: true,
 			hidden: true,
-			readOnly: true,
+			readOnly: true
 		}, 
 		{
-			header: 'Date Update',
+			header: 'Last Update on',
 			dataIndex: 'koreksi_date_update',
 			width: 150,
 			sortable: true,
 			hidden: true,
-			readOnly: true,
+			readOnly: true
 		}, 
 		{
 			header: 'Revised',
@@ -468,8 +488,9 @@ Ext.onReady(function(){
 			width: 150,
 			sortable: true,
 			hidden: true,
-			readOnly: true,
-		}	]);
+			readOnly: true
+		}	
+		]);
 	
 	master_koreksi_stok_ColumnModel.defaultSortable= true;
 	/* End of Function */
@@ -478,7 +499,7 @@ Ext.onReady(function(){
 	master_koreksi_stokListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'master_koreksi_stokListEditorGrid',
 		el: 'fp_master_koreksi_stok',
-		title: 'List Of Master_koreksi_stok',
+		title: 'Daftar Koreksi Stok',
 		autoHeight: true,
 		store: master_koreksi_stok_DataStore, // DataStore
 		cm: master_koreksi_stok_ColumnModel, // Nama-nama Columns
@@ -601,7 +622,7 @@ Ext.onReady(function(){
 		blankText: '0',
 		allowBlank: false,
 		allowDecimals: false,
-				hidden: true,
+		hidden: true,
 		readOnly: true,
 		anchor: '95%',
 		maskRe: /([0-9]+)$/
@@ -609,11 +630,11 @@ Ext.onReady(function(){
 	/* Identify  koreksi_gudang Field */
 	koreksi_gudangField= new Ext.form.ComboBox({
 		id: 'koreksi_gudangField',
-		fieldLabel: 'Gudang',
-		store: cbo_koreksi_stokgudangDataSore,
-		displayField:'koreksi_stokgudang_nama',
+		fieldLabel: 'Gudang *',
+		store: cbo_koreksi_gudangDataSore,
+		displayField:'gudang_nama',
+		valueField: 'gudang_id',
 		mode : 'remote',
-		valueField: 'koreksi_stokgudang_value',
         typeAhead: false,
         hideTrigger:false,
 		triggerAction: 'all',
@@ -625,7 +646,7 @@ Ext.onReady(function(){
 	koreksi_tanggalField= new Ext.form.DateField({
 		id: 'koreksi_tanggalField',
 		fieldLabel: 'Tanggal',
-		format : 'Y-m-d',
+		format : 'Y-m-d'
 	});
 	/* Identify  koreksi_keterangan Field */
 	koreksi_keteranganField= new Ext.form.TextArea({
@@ -645,13 +666,13 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [koreksi_gudangField, koreksi_tanggalField] 
+				items: [koreksi_gudangField, koreksi_tanggalField,koreksi_idField] 
 			}
 			,{
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [koreksi_keteranganField, koreksi_idField] 
+				items: [koreksi_keteranganField] 
 			}
 			]
 	
@@ -664,7 +685,7 @@ Ext.onReady(function(){
 	var detail_koreksi_stok_reader=new Ext.data.JsonReader({
 		root: 'results',
 		totalProperty: 'total',
-		id: ''
+		id: 'dkoreksi_id'
 	},[
 	/* dataIndex => insert intoperawatan_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'dkoreksi_id', type: 'int', mapping: 'dkoreksi_id'}, 
@@ -693,7 +714,7 @@ Ext.onReady(function(){
 			method: 'POST'
 		}),
 		reader: detail_koreksi_stok_reader,
-		baseParams:{master_id: koreksi_idField.getValue()},
+		baseParams:{master_id: 0, start:0, limit: pageS, gudang: 0},
 		sortInfo:{field: 'dkoreksi_id', direction: "ASC"}
 	});
 	/* End of Function */
@@ -705,139 +726,167 @@ Ext.onReady(function(){
 	//eof
 	
 	Ext.util.Format.comboRenderer = function(combo){
-		cbo_dkstok_produkDataStore.load();
-		cbo_dkstok_satuanDataStore.load();
 		return function(value){
 			var record = combo.findRecord(combo.valueField, value);
 			return record ? record.get(combo.displayField) : combo.valueNotFoundText;
 		}
 	}
 	
-	cbo_dkstok_produkDataStore = new Ext.data.Store({
-		id: 'cbo_dkstok_produkDataStore',
+	cbo_stok_produkDataStore = new Ext.data.Store({
+		id: 'cbo_stok_produkDataStore',
 		proxy: new Ext.data.HttpProxy({
-			url: 'index.php?c=c_master_mutasi&m=get_produk_list', 
+			url: 'index.php?c=c_master_koreksi_stok&m=get_produk_list', 
 			method: 'POST'
-		}),
+		}),baseParams:{start:0, limit:pageS, master_id:0, gudang:0},
 			reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
 			id: 'produk_id'
 		},[
 		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
-			{name: 'dkstok_produk_value', type: 'int', mapping: 'produk_id'},
-			{name: 'dkstok_produk_display', type: 'string', mapping: 'produk_nama'}
+			{name: 'produk_id', type: 'int', mapping: 'produk_id'},
+			{name: 'produk_nama', type: 'string', mapping: 'produk_nama'},
+			{name: 'produk_kode', type: 'string', mapping: 'produk_kode'},
+			{name: 'produk_satuan', type: 'string', mapping: 'satuan_nama'},
+			{name: 'produk_satuan_id', type: 'int', mapping: 'satuan_id'},
+			{name: 'produk_stok', type: 'float', mapping: 'jumlah_stok'}
 		]),
-		sortInfo:{field: 'dkstok_produk_value', direction: "ASC"}
+		sortInfo:{field: 'produk_id', direction: "ASC"}
 	});
 	
-	cbo_dkstok_satuanDataStore = new Ext.data.Store({
-		id: 'cbo_dkstok_satuanDataStore',
+	cbo_stok_satuanDataStore = new Ext.data.Store({
+		id: 'cbo_stok_satuanDataStore',
 		proxy: new Ext.data.HttpProxy({
-			url: 'index.php?c=c_master_mutasi&m=get_satuan_list', 
+			url: 'index.php?c=c_master_koreksi_stok&m=get_satuan_list', 
 			method: 'POST'
 		}),
-			reader: new Ext.data.JsonReader({
+		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
 			id: 'satuan_id'
 		},[
 		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
-			{name: 'dkstok_satuan_value', type: 'int', mapping: 'satuan_id'},
-			{name: 'dkstok_satuan_display', type: 'string', mapping: 'satuan_nama'}
+			{name: 'satuan_id', type: 'int', mapping: 'satuan_id'},
+			{name: 'satuan_nama', type: 'string', mapping: 'satuan_nama'}
 		]),
-		sortInfo:{field: 'dkstok_satuan_value', direction: "ASC"}
+		sortInfo:{field: 'satuan_id', direction: "ASC"}
 	});
 	
-	var combo_dkstok_produk=new Ext.form.ComboBox({
-			store: cbo_dkstok_produkDataStore,
-			mode: 'remote',
-			typeAhead: true,
-			displayField: 'dkstok_produk_display',
-			valueField: 'dkstok_produk_value',
-			triggerAction: 'all',
-			lazyRender:true,
+	var produk_tpl = new Ext.XTemplate(
+        '<tpl for="."><div class="search-item">',
+            '<span><b>{produk_nama} ({produk_kode})</b><br /></span>',
+            'stok: {produk_stok} {produk_satuan}',
+        '</div></tpl>'
+    );
+	
+	var combo_stok_produk=new Ext.form.ComboBox({
+		store: cbo_stok_produkDataStore,
+		mode: 'remote',
+		typeAhead: true,
+		displayField: 'produk_nama',
+		valueField: 'produk_id',
+		triggerAction: 'all',
+		lazyRender:true,
+		loadingText: 'Searching...',
+		pageSize: pageS,
+		hideTrigger:false,
+		tpl : produk_tpl,
+		itemSelector: 'div.search-item',
+		triggerAction: 'all',
+		lazyRender:true,
+		listClass: 'x-combo-list-small',
+		anchor: '95%'
 
 	});
 	
-	var combo_dkstok_satuan=new Ext.form.ComboBox({
-			store: cbo_dkstok_satuanDataStore,
-			mode: 'remote',
-			typeAhead: true,
-			displayField: 'dkstok_satuan_display',
-			valueField: 'dkstok_satuan_value',
-			triggerAction: 'all',
-			lazyRender:true,
+	var combo_stok_satuan=new Ext.form.ComboBox({
+		store: cbo_stok_satuanDataStore,
+		mode: 'local',
+		typeAhead: true,
+		displayField: 'satuan_nama',
+		valueField: 'satuan_id',
+		triggerAction: 'all',
+		lazyRender:true
 
 	});
+	
+	var stok_awalField=new Ext.form.NumberField({
+		allowDecimals: true,
+		allowNegative: true,
+		blankText: '0',
+		maxLength: 11,
+		readOnly: true,
+		maskRe: /([0-9]+)$/
+	});
+	
+	var stok_terkoreksiField=new Ext.form.NumberField({
+		allowDecimals: true,
+		allowNegative: true,
+		blankText: '0',
+		maxLength: 11,
+		enableKeyEvents: true,
+		maskRe: /([0-9]+)$/
+	});
+	
+	var stok_saldoField=new Ext.form.NumberField({
+		allowDecimals: true,
+		allowNegative: true,
+		enableKeyEvents: true,
+		blankText: '0',
+		maxLength: 11,
+		maskRe: /([0-9]+)$/
+	});
+	
 	
 	//declaration of detail coloumn model
 	detail_koreksi_stok_ColumnModel = new Ext.grid.ColumnModel(
 		[
 		{
-			header: 'Nama Produk',
+			header: '<div align="center">Nama Produk</div>',
 			dataIndex: 'dkoreksi_produk',
-			width: 150,
+			width: 350,
 			sortable: true,
-			editor: combo_dkstok_produk,
-			renderer: Ext.util.Format.comboRenderer(combo_dkstok_produk)
+			editor: combo_stok_produk,
+			renderer: Ext.util.Format.comboRenderer(combo_stok_produk)
 		},
 		{
-			header: 'Satuan',
+			header: '<div align="center">Satuan</div>',
 			dataIndex: 'dkoreksi_satuan',
-			width: 150,
+			width: 100,
 			sortable: true,
-			editor: combo_dkstok_satuan,
-			renderer: Ext.util.Format.comboRenderer(combo_dkstok_satuan)
+			readOnly: true,
+			editor: combo_stok_satuan,
+			renderer: Ext.util.Format.comboRenderer(combo_stok_satuan)
 		},
 		{
-			header: 'Jumlah Awal',
+			header: '<div align="center">Jumlah Awal</div>',
 			dataIndex: 'dkoreksi_jmlawal',
-			width: 150,
+			width: 100,
+			align: 'right',
+			editor: stok_awalField,
+			renderer: Ext.util.Format.numberRenderer('0,000.00'),
 			sortable: true,
-			editor: new Ext.form.NumberField({
-				allowDecimals: false,
-				allowNegative: false,
-				blankText: '0',
-				maxLength: 11,
-				maskRe: /([0-9]+)$/
-			})
+			readOnly: true
 		},
 		{
-			header: 'Jumlah Terkoreksi',
+			header: '<div align="center">Jumlah Terkoreksi</div>',
 			dataIndex: 'dkoreksi_jmlkoreksi',
-			width: 150,
+			width: 100,
+			align: 'right',
 			sortable: true,
-			editor: new Ext.form.NumberField({
-				allowDecimals: false,
-				allowNegative: false,
-				blankText: '0',
-				maxLength: 11,
-				maskRe: /([0-9]+)$/
-			})
+			renderer: Ext.util.Format.numberRenderer('0,000.00'),
+			editor: stok_terkoreksiField
 		},
 		{
-			header: 'Jumlah Saldo',
+			header: '<div align="center">Jumlah Saldo</div>',
 			dataIndex: 'dkoreksi_jmlsaldo',
-			width: 150,
+			width: 100,
+			align: 'right',
 			sortable: true,
-			editor: new Ext.form.NumberField({
-				allowDecimals: false,
-				allowNegative: false,
-				blankText: '0',
-				maxLength: 11,
-				maskRe: /([0-9]+)$/
-			})
-		},
-		{
-			header: 'Keterangan',
-			dataIndex: 'dkoreksi_ket',
-			width: 150,
-			sortable: true,
-			editor: new Ext.form.TextField({
-				maxLength: 250
-          	})
-		}]
+			renderer: Ext.util.Format.numberRenderer('0,000.00'),
+			editor: stok_saldoField
+		}
+		]
 	);
 	detail_koreksi_stok_ColumnModel.defaultSortable= true;
 	//eof
@@ -848,9 +897,9 @@ Ext.onReady(function(){
 	detail_koreksi_stokListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'detail_koreksi_stokListEditorGrid',
 		el: 'fp_detail_koreksi_stok',
-		title: 'Detail detail_koreksi_stok',
+		title: 'Detail Item',
 		height: 250,
-		width: 690,
+		width: 790,
 		autoScroll: true,
 		store: detail_koreksi_stok_DataStore, // DataStore
 		colModel: detail_koreksi_stok_ColumnModel, // Nama-nama Columns
@@ -888,14 +937,14 @@ Ext.onReady(function(){
 	//function of detail add
 	function detail_koreksi_stok_add(){
 		var edit_detail_koreksi_stok= new detail_koreksi_stokListEditorGrid.store.recordType({
-			dkoreksi_id	:'',		
-			dkoreksi_master	:'',		
-			dkoreksi_produk	:'',		
-			dkoreksi_satuan	:'',		
-			dkoreksi_jmlawal	:'',		
-			dkoreksi_jmlkoreksi	:'',		
-			dkoreksi_jmlsaldo	:'',		
-			dkoreksi_ket	:''		
+			dkoreksi_id			: null,		
+			dkoreksi_master		: null,		
+			dkoreksi_produk		: null,		
+			dkoreksi_satuan		: 0,		
+			dkoreksi_jmlawal	: 0,		
+			dkoreksi_jmlkoreksi	: 0,		
+			dkoreksi_jmlsaldo	: 0,		
+			dkoreksi_ket		: null		
 		});
 		editor_detail_koreksi_stok.stopEditing();
 		detail_koreksi_stok_DataStore.insert(0, edit_detail_koreksi_stok);
@@ -912,35 +961,40 @@ Ext.onReady(function(){
 	//eof
 	
 	//function for insert detail
-	function detail_koreksi_stok_insert(){
+	function detail_koreksi_stok_insert(pkid){
 		for(i=0;i<detail_koreksi_stok_DataStore.getCount();i++){
 			detail_koreksi_stok_record=detail_koreksi_stok_DataStore.getAt(i);
 			Ext.Ajax.request({
 				waitMsg: 'Please wait...',
 				url: 'index.php?c=c_master_koreksi_stok&m=detail_detail_koreksi_stok_insert',
 				params:{
-				dkoreksi_id	: detail_koreksi_stok_record.data.dkoreksi_id, 
-				dkoreksi_master	: eval(koreksi_idField.getValue()), 
-				dkoreksi_produk	: detail_koreksi_stok_record.data.dkoreksi_produk, 
-				dkoreksi_satuan	: detail_koreksi_stok_record.data.dkoreksi_satuan, 
+				dkoreksi_id			: detail_koreksi_stok_record.data.dkoreksi_id, 
+				dkoreksi_master		: pkid, 
+				dkoreksi_produk		: detail_koreksi_stok_record.data.dkoreksi_produk, 
+				dkoreksi_satuan		: detail_koreksi_stok_record.data.dkoreksi_satuan, 
 				dkoreksi_jmlawal	: detail_koreksi_stok_record.data.dkoreksi_jmlawal, 
 				dkoreksi_jmlkoreksi	: detail_koreksi_stok_record.data.dkoreksi_jmlkoreksi, 
 				dkoreksi_jmlsaldo	: detail_koreksi_stok_record.data.dkoreksi_jmlsaldo, 
-				dkoreksi_ket	: detail_koreksi_stok_record.data.dkoreksi_ket 
+				dkoreksi_ket		: detail_koreksi_stok_record.data.dkoreksi_ket 
 				
 				}
 			});
 		}
+		master_koreksi_stok_DataStore.reload();	
 	}
 	//eof
 	
 	//function for purge detail
-	function detail_koreksi_stok_purge(){
+	function detail_koreksi_stok_purge(pkid){
 		Ext.Ajax.request({
 			waitMsg: 'Please wait...',
 			url: 'index.php?c=c_master_koreksi_stok&m=detail_detail_koreksi_stok_purge',
-			params:{ master_id: eval(koreksi_idField.getValue()) }
+			params:{ master_id:  pkid },
+			success:function(response){
+				detail_koreksi_stok_insert(pkid);
+			}
 		});
+		master_koreksi_stok_DataStore.reload();	
 	}
 	//eof
 	
@@ -974,17 +1028,14 @@ Ext.onReady(function(){
 	}
 	//eof
 	
-	//event on update of detail data store
-	detail_koreksi_stok_DataStore.on('update', refresh_detail_koreksi_stok);
-	
+
 	/* Function for retrieve create Window Panel*/ 
 	master_koreksi_stok_createForm = new Ext.FormPanel({
-		labelAlign: 'top',
+		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
-		width: 700,        
-		items: [master_koreksi_stok_masterGroup,detail_koreksi_stokListEditorGrid]
-		,
+		width: 800,        
+		items: [master_koreksi_stok_masterGroup,detail_koreksi_stokListEditorGrid],
 		buttons: [{
 				text: 'Save and Close',
 				handler: master_koreksi_stok_create
@@ -1002,7 +1053,7 @@ Ext.onReady(function(){
 	/* Function for retrieve create Window Form */
 	master_koreksi_stok_createWindow= new Ext.Window({
 		id: 'master_koreksi_stok_createWindow',
-		title: post2db+'Master_koreksi_stok',
+		title: post2db+' Koreksi Stok',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,
@@ -1031,12 +1082,12 @@ Ext.onReady(function(){
 		if(koreksi_keteranganSearchField.getValue()!==null){koreksi_keterangan_search=koreksi_keteranganSearchField.getValue();}
 		// change the store parameters
 		master_koreksi_stok_DataStore.baseParams = {
-			task: 'SEARCH',
+			task				: 'SEARCH',
 			//variable here
-			koreksi_id	:	koreksi_id_search, 
-			koreksi_gudang	:	koreksi_gudang_search, 
-			koreksi_tanggal	:	koreksi_tanggal_search_date, 
-			koreksi_keterangan	:	koreksi_keterangan_search, 
+			koreksi_id			: koreksi_id_search, 
+			koreksi_gudang		: koreksi_gudang_search, 
+			koreksi_tanggal		: koreksi_tanggal_search_date, 
+			koreksi_keterangan	: koreksi_keterangan_search
 		};
 		// Cause the datastore to do another query : 
 		master_koreksi_stok_DataStore.reload({params: {start: 0, limit: pageS}});
@@ -1072,21 +1123,26 @@ Ext.onReady(function(){
 	
 	});
 	/* Identify  koreksi_gudang Search Field */
-	koreksi_gudangSearchField= new Ext.form.NumberField({
+	koreksi_gudangSearchField= new Ext.form.ComboBox({
 		id: 'koreksi_gudangSearchField',
 		fieldLabel: 'Gudang',
-		allowNegatife : false,
-		blankText: '0',
-		allowDecimals: false,
-		anchor: '95%',
-		maskRe: /([0-9]+)$/
-	
+		store: cbo_koreksi_gudangDataSore,
+		displayField:'gudang_nama',
+		valueField: 'gudang_id',
+		mode : 'remote',
+        typeAhead: false,
+        hideTrigger:false,
+		triggerAction: 'all',
+		lazyRender:true,
+		listClass: 'x-combo-list-small',
+		anchor: '95%'
 	});
+	
 	/* Identify  koreksi_tanggal Search Field */
 	koreksi_tanggalSearchField= new Ext.form.DateField({
 		id: 'koreksi_tanggalSearchField',
 		fieldLabel: 'Tanggal',
-		format : 'Y-m-d',
+		format : 'Y-m-d'
 	
 	});
 	/* Identify  koreksi_keterangan Search Field */
@@ -1100,7 +1156,7 @@ Ext.onReady(function(){
     
 	/* Function for retrieve search Form Panel */
 	master_koreksi_stok_searchForm = new Ext.FormPanel({
-		labelAlign: 'top',
+		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
 		width: 300,        
@@ -1132,7 +1188,7 @@ Ext.onReady(function(){
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
 	master_koreksi_stok_searchWindow = new Ext.Window({
-		title: 'master_koreksi_stok Search',
+		title: 'Pencarian Koreksi Stok',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,
@@ -1175,10 +1231,9 @@ Ext.onReady(function(){
 		waitMsg: 'Please Wait...',
 		url: 'index.php?c=c_master_koreksi_stok&m=get_action',
 		params: {
-			task: "PRINT",
-		  	query: searchquery,                    		// if we are doing a quicksearch, use this
-			//if we are doing advanced search, use this
-			koreksi_gudang : koreksi_gudang_print,
+			task			: "PRINT",
+		  	query			: searchquery,                    		
+			koreksi_gudang 	: koreksi_gudang_print,
 		  	koreksi_tanggal : koreksi_tanggal_print_date, 
 			koreksi_keterangan : koreksi_keterangan_print,
 		  	currentlisting: master_koreksi_stok_DataStore.baseParams.task // this tells us if we are searching or not
@@ -1232,13 +1287,12 @@ Ext.onReady(function(){
 		waitMsg: 'Please Wait...',
 		url: 'index.php?c=c_master_koreksi_stok&m=get_action',
 		params: {
-			task: "EXCEL",
-		  	query: searchquery,                    		// if we are doing a quicksearch, use this
-			//if we are doing advanced search, use this
-			koreksi_gudang : koreksi_gudang_2excel,
-		  	koreksi_tanggal : koreksi_tanggal_2excel_date, 
-			koreksi_keterangan : koreksi_keterangan_2excel,
-		  	currentlisting: master_koreksi_stok_DataStore.baseParams.task // this tells us if we are searching or not
+			task				: "EXCEL",
+		  	query				: searchquery,                    		
+			koreksi_gudang 		: koreksi_gudang_2excel,
+		  	koreksi_tanggal 	: koreksi_tanggal_2excel_date, 
+			koreksi_keterangan 	: koreksi_keterangan_2excel,
+		  	currentlisting		: master_koreksi_stok_DataStore.baseParams.task // this tells us if we are searching or not
 		},
 		success: function(response){              
 		  	var result=eval(response.responseText);
@@ -1270,6 +1324,79 @@ Ext.onReady(function(){
 		});
 	}
 	/*End of Function */
+	
+	//EVENTS
+		//event on update of detail data store
+	detail_koreksi_stok_DataStore.on('update', refresh_detail_koreksi_stok);
+	
+	
+	koreksi_gudangField.on("select",function(){
+		cbo_stok_produkDataStore.setBaseParam('gudang',koreksi_gudangField.getValue());
+		cbo_stok_produkDataStore.setBaseParam('task','list');
+		cbo_stok_produkDataStore.reload();
+	});
+	
+	combo_stok_produk.on("focus",function(){
+		cbo_stok_produkDataStore.setBaseParam('task','list');
+		var selectedquery=detail_koreksi_stokListEditorGrid.getSelectionModel().getSelected().get('produk_nama');
+		cbo_stok_produkDataStore.setBaseParam('query',selectedquery);
+	});
+	
+/*	combo_stok_satuan.on("focus",function(){
+		cbo_stok_satuanDataStore.setBaseParam('task','produk');
+		cbo_stok_satuanDataStore.setBaseParam('selected_id',combo_koreksi_produk.getValue());
+		cbo_stok_satuanDataStore.load();
+	});*/
+	
+	
+	combo_stok_produk.on("select",function(){
+		cbo_stok_satuanDataStore.setBaseParam('task','produk');
+		cbo_stok_satuanDataStore.setBaseParam('selected_id',combo_stok_produk.getValue());
+		var jumlah_awal=0;
+		var satuan_id=0;
+		var j=cbo_stok_produkDataStore.find('produk_id',combo_stok_produk.getValue());
+		if(j>=0){
+			var record_produk=cbo_stok_produkDataStore.getAt(j);
+			satuan_id=record_produk.data.produk_satuan_id;
+			jumlah_awal=record_produk.data.produk_stok;
+		}
+		cbo_stok_satuanDataStore.reload();
+		combo_stok_satuan.setValue(satuan_id);
+		combo_stok_satuan.render();
+		stok_awalField.setValue(jumlah_awal);
+		stok_saldoField.setValue(stok_awalField.getValue()+stok_terkoreksiField.getValue());
+	});
+	
+	stok_terkoreksiField.on("keyup", function(){
+		stok_saldoField.setValue(stok_awalField.getValue()+stok_terkoreksiField.getValue());
+	});
+	
+	stok_saldoField.on("keyup", function(){
+		stok_terkoreksiField.setValue(stok_saldoField.getValue()-stok_awalField.getValue());
+	});
+	
+	detail_koreksi_stok_DataStore.on("update",function(){
+		var	query_selected="";
+		var satuan_selected="";
+		detail_koreksi_stok_DataStore.commitChanges();
+		for(i=0;i<detail_koreksi_stok_DataStore.getCount();i++){
+			var detail_koreksi_record=detail_koreksi_stok_DataStore.getAt(i);
+			query_selected=query_selected+detail_koreksi_record.data.dkoreksi_produk+",";
+		}
+		cbo_stok_produkDataStore.setBaseParam('task','selected');
+		cbo_stok_produkDataStore.setBaseParam('selected_id',query_selected);
+		cbo_stok_produkDataStore.load();
+		
+		for(i=0;i<detail_koreksi_stok_DataStore.getCount();i++){
+			var detail_koreksi_record=detail_koreksi_stok_DataStore.getAt(i);
+			satuan_selected=satuan_selected+detail_koreksi_record.data.dkoreksi_satuan+",";
+		}
+		cbo_stok_satuanDataStore.setBaseParam('task','selected');
+		cbo_stok_satuanDataStore.setBaseParam('selected_id',satuan_selected);
+		cbo_stok_satuanDataStore.load();
+		//detail_order_beliListEditorGrid.getView().refresh();
+	});
+	
 	
 });
 	</script>

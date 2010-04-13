@@ -18,6 +18,169 @@ class M_master_koreksi_stok extends Model{
 			parent::Model();
 		}
 		
+		function get_produk_selected_list($gudang,$selected_id,$query,$start,$end){
+			if($gudang==1){
+				$sql="SELECT produk_id,produk_kode,produk_nama,jumlah_stok FROM vu_stok_gudang_besar_saldo";
+			}elseif($gudang==2){
+				$sql="SELECT produk_id,produk_kode,produk_nama,jumlah_stok FROM vu_stok_gudang_produk_saldo";
+			}else{
+				$sql="SELECT produk_id,produk_kode,produk_nama,jumlah_stok FROM vu_stok_gudang_all";
+				$sql.=(eregi("WHERE",$sql)?" AND ":" WHERE ")." gudang_id =".$gudang."";
+			}
+			if($selected_id!=="")
+			{
+				$selected_id=substr($selected_id,0,strlen($selected_id)-1);
+				$sql.=(eregi("WHERE",$sql)?" AND ":" WHERE ")." produk_id IN(".$selected_id.")";
+			}
+			if($query!==""){
+				$sql.=(eregi("WHERE",$sql)?" AND ":" WHERE ")." produk_nama like '%".$query."%' OR produk_kode like '%".$query."%'";
+			}
+			
+			$result = $this->db->query($sql);
+			$nbrows = $result->num_rows();
+			$limit = $sql." LIMIT ".$start.",".$end;			
+			$result = $this->db->query($limit);  
+			
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+				
+		function get_produk_all_list($gudang,$selected_id,$query,$start,$end){
+			
+			if($gudang==1){
+				$sql="SELECT produk_id,produk_kode,produk_nama,satuan_nama,satuan_id,jumlah_stok FROM vu_stok_gudang_besar_saldo";
+			}elseif($gudang==2){
+				$sql="SELECT produk_id,produk_kode,produk_nama,satuan_nama,satuan_id,jumlah_stok FROM vu_stok_gudang_produk_saldo";
+			}else{
+				$sql="SELECT produk_id,produk_kode,produk_nama,satuan_nama,satuan_id,jumlah_stok FROM vu_stok_gudang_all";
+				$sql.=(eregi("WHERE",$sql)?" AND ":" WHERE ")." gudang_id =".$gudang."";
+			}
+			if($query!==""){
+				$sql.=(eregi("WHERE",$sql)?" AND ":" WHERE ")." produk_nama like '%".$query."%' OR produk_kode like '%".$query."%'";
+			}
+			
+			$result = $this->db->query($sql);
+			$nbrows = $result->num_rows();
+			$limit = $sql." LIMIT ".$start.",".$end;			
+			$result = $this->db->query($limit);  
+			
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+		
+			
+		function get_produk_detail_list($gudang,$master_id,$query,$start,$end){
+			if($gudang==1){
+				$sql="SELECT produk_id,produk_kode,produk_nama,jumlah_stok FROM vu_stok_gudang_besar_saldo";
+			}elseif($gudang==2){
+				$sql="SELECT produk_id,produk_kode,produk_nama,jumlah_stok FROM vu_stok_gudang_produk_saldo";
+			}else{
+				$sql="SELECT produk_id,produk_kode,produk_nama,jumlah_stok FROM vu_stok_gudang_all";
+				$sql.=(eregi("WHERE",$sql)?" AND ":" WHERE ")." gudang_id =".$gudang."";
+			}
+			
+			if($master_id<>""){
+				$sql.=(eregi("WHERE",$sql)?" AND ":" WHERE ");
+				$sql.=" produk_id IN(SELECT dkoreksi_produk FROM detail_koreksi_stok WHERE dkoreksi_master='".$master_id."')";
+			}
+			
+			if($query!==""){
+				$sql.=(eregi("WHERE",$sql)?" AND ":" WHERE ")." produk_nama like '%".$query."%' OR produk_kode like '%".$query."%'";
+			}
+			
+			$result = $this->db->query($sql);
+			$nbrows = $result->num_rows();
+			$limit = $sql." LIMIT ".$start.",".$end;			
+			$result = $this->db->query($limit);  
+			
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+		
+		function get_satuan_produk_list($selected_id){
+			
+			$sql="SELECT satuan_id,satuan_kode,satuan_nama FROM vu_satuan_konversi WHERE produk_aktif='Aktif'";
+			
+			if($selected_id!==""){
+				$sql.=(eregi("WHERE",$sql)?" AND ":" WHERE ")." produk_id='".$selected_id."'";
+			}
+			
+			$result = $this->db->query($sql);
+			$nbrows = $result->num_rows();
+			
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+		
+		function get_satuan_selected_list($selected_id){
+			$sql="SELECT satuan_id,satuan_kode,satuan_nama FROM satuan";
+			if($selected_id!=="")
+			{
+				$selected_id=substr($selected_id,0,strlen($selected_id)-1);
+				$sql.=" WHERE satuan_id IN(".$selected_id.")";
+			}
+
+			$result = $this->db->query($sql);
+			$nbrows = $result->num_rows();
+			
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+		
+		function get_satuan_detail_list($master_id){
+			$sql="SELECT satuan_id,satuan_kode,satuan_nama FROM satuan";
+			if($master_id<>"")
+				$sql.=" WHERE satuan_id IN(SELECT dkoreksi_satuan FROM detail_koreksi_stok WHERE dkoreksi_master='".$master_id."')";
+			
+			$result = $this->db->query($sql);
+			$nbrows = $result->num_rows();
+			
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+		
 		//function for detail
 		//get record list
 		function detail_detail_koreksi_stok_list($master_id,$query,$start,$end) {
@@ -127,7 +290,7 @@ class M_master_koreksi_stok extends Model{
 			$this->db->where('koreksi_id', $koreksi_id);
 			$this->db->update('master_koreksi_stok', $data);
 			
-			return '1';
+			return $koreksi_id;
 		}
 		
 		//function for create new record
@@ -139,7 +302,7 @@ class M_master_koreksi_stok extends Model{
 			);
 			$this->db->insert('master_koreksi_stok', $data); 
 			if($this->db->affected_rows())
-				return '1';
+				return $this->db->insert_id();
 			else
 				return '0';
 		}

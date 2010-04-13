@@ -94,6 +94,7 @@ class C_master_order_beli extends Controller {
 	function detail_detail_order_beli_purge(){
 		$master_id = (integer) (isset($_POST['master_id']) ? @$_POST['master_id'] : @$_GET['master_id']);
 		$result=$this->m_master_order_beli->detail_detail_order_beli_purge($master_id);
+		echo $result;
 	}
 	//eof
 	
