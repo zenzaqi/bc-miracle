@@ -130,7 +130,7 @@ Ext.onReady(function(){
 					default:
 						Ext.MessageBox.show({
 						   title: 'Warning',
-						   msg: 'We could\'t not save the master_retur_jual_paket.',
+						   msg: 'Data retur penjualan paket tidak bisa disimpan',
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'save',
 						   icon: Ext.MessageBox.WARNING
@@ -194,14 +194,14 @@ Ext.onReady(function(){
 					case 1:
 						detail_retur_paket_tokwitansi_purge()
 						detail_retur_paket_tokwitansi_insert();
-						Ext.MessageBox.alert(post2db+' OK','The Master_retur_jual_paket was '+msg+' successfully.');
+						Ext.MessageBox.alert(post2db+' OK','Data retur penjualan paket berhasil disimpan');
 						master_retur_jual_paket_DataStore.reload();
 						master_retur_jual_paket_createWindow.hide();
 						break;
 					default:
 						Ext.MessageBox.show({
 						   title: 'Warning',
-						   msg: 'We could\'t not '+msg+' the Master_retur_jual_paket.',
+						   msg: 'Data retur penjualan paket tidak bisa disimpan',
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'save',
 						   icon: Ext.MessageBox.WARNING
@@ -294,13 +294,13 @@ Ext.onReady(function(){
 	function master_retur_jual_paket_confirm_delete(){
 		// only one master_retur_jual_paket is selected here
 		if(master_retur_jual_paketListEditorGrid.selModel.getCount() == 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', master_retur_jual_paket_delete);
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', master_retur_jual_paket_delete);
 		} else if(master_retur_jual_paketListEditorGrid.selModel.getCount() > 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', master_retur_jual_paket_delete);
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', master_retur_jual_paket_delete);
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really delete something you haven\'t selected?',
+				msg: 'Anda belum memilih data yang akan dihapus',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -1148,7 +1148,7 @@ Ext.onReady(function(){
 	/* Function for retrieve create Window Form */
 	master_retur_jual_paket_createWindow= new Ext.Window({
 		id: 'master_retur_jual_paket_createWindow',
-		title: post2db+'Master_retur_jual_paket',
+		title: post2db+'Retur Penjualan Paket',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,
@@ -1302,7 +1302,7 @@ Ext.onReady(function(){
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
 	master_retur_jual_paket_searchWindow = new Ext.Window({
-		title: 'master_retur_jual_paket Search',
+		title: 'Pencarian Retur Penjualan Paket',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,
