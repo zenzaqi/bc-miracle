@@ -344,7 +344,7 @@ Ext.onReady(function(){
 			}
 			var encoded_array = Ext.encode(prez);
 			Ext.Ajax.request({ 
-				waitMsg: 'Please Wait',
+				waitMsg: 'Mohon tunggu...',
 				url: 'index.php?c=c_master_ambil_paket&m=get_action', 
 				params: { task: "DELETE", ids:  encoded_array }, 
 				success: function(response){

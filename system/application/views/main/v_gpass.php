@@ -63,7 +63,7 @@ Ext.apply(Ext.form.VTypes, {
 		}
 		return true;
 	},
-	passwordText : 'Passwords do not match' //alert if you enter a password that is not the same
+	passwordText : 'Passwords tidak sama' //alert if you enter a password that is not the same
 });
 
 Ext.onReady(function(){
@@ -72,7 +72,7 @@ Ext.onReady(function(){
 	function updatepass_users(){
 		if(is_pass_usersFormValid()){
 			Ext.Ajax.request({  
-				waitMsg: 'Please wait...',
+				waitMsg: 'Mohon tunggu...',
 				url: 'index.php?c=c_gpass&m=update',
 				params: {
 					user_passwd		: pass_user_passwdField.getValue(),
@@ -82,14 +82,14 @@ Ext.onReady(function(){
 					var result=eval(response.responseText);
 					switch(result){
 						case 1:
-							Ext.MessageBox.alert('Update OK ','password was updated successfully.');
+							Ext.MessageBox.alert('Update OK ','Password berhasil disimpan');
 							pass_usersWindow.hide();
 							mainPanel.remove(mainPanel.getActiveTab().getId());
 							break;
 						default:
 							Ext.MessageBox.show({
 							   title: 'Warning',
-							   msg: 'We could\'t not update pass_users',
+							   msg: 'Password tidak bisa disimpan',
 							   buttons: Ext.MessageBox.OK,
 							   animEl: 'save',
 							   icon: Ext.MessageBox.WARNING
@@ -111,7 +111,7 @@ Ext.onReady(function(){
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'Your Form is not valid!.',
+				msg: 'Form anda belum valid',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -214,7 +214,7 @@ Ext.onReady(function(){
 	
 	/* Form Advanced Search */
 	pass_usersWindow = new Ext.Window({
-		title: 'Form Update Password',
+		title: 'Ganti Password',
 		closable:false,
 		closeAction: 'hide',
 		autoWidth: true,
