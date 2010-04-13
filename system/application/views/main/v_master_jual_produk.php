@@ -581,7 +581,7 @@ Ext.onReady(function(){
 						//Ext.MessageBox.alert(post2db+' OK','The Master_jual_produk was '+msg+' successfully.');
 						//Ext.MessageBox.alert(post2db+' OK','Data penjualan produk berhasil disimpan');
 						//master_jual_produk_DataStore.reload();
-						detail_jual_produk_DataStore.load({params: {master_id:0}});
+						//detail_jual_produk_DataStore.load({params: {master_id:0}});
 						master_jual_produk_createWindow.hide();
 						break;
 					default:
@@ -1893,7 +1893,18 @@ Ext.onReady(function(){
 		}, '-', 
 			new Ext.app.SearchField({
 			store: master_jual_produk_DataStore,
-			params: {start: 0, limit: pageS},
+			params: {task: 'LIST',start: 0, limit: pageS},
+			listeners:{
+				specialkey: function(f,e){
+					if(e.getKey() == e.ENTER){
+						master_jual_produk_DataStore.baseParams={task:'LIST',start: 0, limit: pageS};
+		            }
+				},
+				render: function(c){
+				Ext.get(this.id).set({qtitle:'Search By'});
+				Ext.get(this.id).set({qtip:'- No.Customer<br>- Nama Customer<br>- No.Faktur'});
+				}
+			},
 			width: 120
 		}),'-',{
 			text: 'Refresh',
@@ -4014,13 +4025,11 @@ Ext.onReady(function(){
 	
 	//function for insert detail
 	function detail_jual_produk_insert(){
-		//console.log("proses insert detail");
 		var count_detail=detail_jual_produk_DataStore.getCount();
 		for(i=0;i<detail_jual_produk_DataStore.getCount();i++){
 			var count_i = i;
 			detail_jual_produk_record=detail_jual_produk_DataStore.getAt(i);
 			if(detail_jual_produk_record.data.dproduk_produk!==null&&detail_jual_produk_record.data.dproduk_produk.dproduk_produk!==""){
-				//console.log("start inserting detail");
 				Ext.Ajax.request({
 					waitMsg: 'Mohon tunggu...',
 					url: 'index.php?c=c_master_jual_produk&m=detail_detail_jual_produk_insert',
@@ -4044,10 +4053,10 @@ Ext.onReady(function(){
 					success: function(response){
 						var result=eval(response.responseText);
 						if(result==0){
-							//console.log("result = 0");
+							detail_jual_produk_DataStore.load({params: {master_id:0}});
 							Ext.MessageBox.alert(post2db+' OK','Data penjualan produk berhasil disimpan');
 						}else if(result==-1){
-							//console.log("result = -1");
+							detail_jual_produk_DataStore.load({params: {master_id:0}});
 							Ext.MessageBox.show({
 							   title: 'Warning',
 							   //msg: 'We could\'t not '+msg+' the Master_jual_produk.',
@@ -4057,7 +4066,7 @@ Ext.onReady(function(){
 							   icon: Ext.MessageBox.WARNING
 							});
 						}else if(result>0){
-							//console.log("result > 0");
+							detail_jual_produk_DataStore.load({params: {master_id:0}});
 							jproduk_cetak(result);
 						}
 						/*switch(result){
@@ -4102,7 +4111,6 @@ Ext.onReady(function(){
 			params:{ master_id: eval(jproduk_idField.getValue()) },
 			callback: function(opts, success, response){
 				if(success){
-					//console.log("insert detail produk");
 					detail_jual_produk_insert();
 				}
 			}
