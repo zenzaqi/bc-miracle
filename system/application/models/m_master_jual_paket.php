@@ -660,7 +660,7 @@ class M_master_jual_paket extends Model{
 		}*/
 		
 		//insert detail record
-		function detail_detail_jual_paket_insert($dpaket_id ,$dpaket_master ,$dpaket_paket, $dpaket_kadaluarsa ,$dpaket_jumlah ,$dpaket_harga ,$dpaket_diskon,$dpaket_diskon_jenis,$dpaket_sales ){
+		function detail_detail_jual_paket_insert($dpaket_id ,$dpaket_master ,$dpaket_paket, $dpaket_kadaluarsa ,$dpaket_jumlah ,$dpaket_harga ,$dpaket_diskon,$dpaket_diskon_jenis,$dpaket_sales, $cetak, $count, $dcount){
 			//if master id not capture from view then capture it from max pk from master table
 			if($dpaket_master=="" || $dpaket_master==NULL){
 				$dpaket_master=$this->get_master_id();
@@ -699,9 +699,15 @@ class M_master_jual_paket extends Model{
 			);
 			$this->db->insert('detail_jual_paket', $data); 
 			if($this->db->affected_rows()){
-				return '1';
+				if($cetak==1 && ($count==($dcount-1))){
+					return $dpaket_master;
+				}else if($cetak!==1 && ($count==($dcount-1))){
+					return '0';
+				}else if($count!==($dcount-1)){
+					return '-3';
+				}
 			}else
-				return '0';
+				return '-1';
 
 		}
 		//end of function
@@ -1867,6 +1873,13 @@ class M_master_jual_paket extends Model{
 				};
 				$result = $this->db->query($query);
 			}
+			return $result;
+		}
+		
+		function print_paper($jpaket_id){
+			//$this->firephp->log($jpaket_id, "jpaket_id");
+			$sql="SELECT jpaket_tanggal, cust_no, cust_nama, cust_alamat, jpaket_nobukti, paket_nama, dpaket_jumlah, dpaket_harga, dpaket_diskon, (dpaket_harga*((100-dpaket_diskon)/100)) AS jumlah_subtotal, jpaket_creator, jtunai_nilai, jpaket_diskon, jpaket_cashback FROM detail_jual_paket LEFT JOIN master_jual_paket ON(dpaket_master=jpaket_id) LEFT JOIN customer ON(jpaket_cust=cust_id) LEFT JOIN paket ON(dpaket_paket=paket_id) LEFT JOIN jual_tunai ON(jtunai_ref=jpaket_nobukti) WHERE jpaket_id='$jpaket_id'";
+			$result = $this->db->query($sql);
 			return $result;
 		}
 		

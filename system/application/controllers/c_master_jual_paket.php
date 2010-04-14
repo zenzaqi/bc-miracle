@@ -261,7 +261,13 @@ class C_master_jual_paket extends Controller {
 		$dpaket_sales=str_replace("/(<\/?)(p)([^>]*>)", "",$dpaket_sales);
 		$dpaket_sales=str_replace("\\", "",$dpaket_sales);
 		$dpaket_sales=str_replace("'", '"',$dpaket_sales);
-		$result=$this->m_master_jual_paket->detail_detail_jual_paket_insert($dpaket_id ,$dpaket_master ,$dpaket_paket, $dpaket_kadaluarsa ,$dpaket_jumlah ,$dpaket_harga ,$dpaket_diskon ,$dpaket_diskon_jenis ,$dpaket_sales );
+		
+		$cetak=trim(@$_POST['cetak']);
+		
+		$count=trim(@$_POST['count']);
+		$dcount=trim(@$_POST['dcount']);
+		
+		$result=$this->m_master_jual_paket->detail_detail_jual_paket_insert($dpaket_id ,$dpaket_master ,$dpaket_paket, $dpaket_kadaluarsa ,$dpaket_jumlah ,$dpaket_harga ,$dpaket_diskon ,$dpaket_diskon_jenis ,$dpaket_sales, $cetak, $count, $dcount);
 		echo $result;
 	}
 	
@@ -686,6 +692,34 @@ class C_master_jual_paket extends Controller {
 		to_excel($query,"master_jual_paket"); 
 		echo '1';
 			
+	}
+	
+	function print_paper(){
+  		//POST varibale here
+		$jpaket_id=trim(@$_POST["jpaket_id"]);
+		
+		
+		$result = $this->m_master_jual_paket->print_paper($jpaket_id);
+		$rs=$result->row();
+		$detail_jpaket=$result->result();
+		$data['jpaket_nobukti']=$rs->jpaket_nobukti;
+		$data['jpaket_tanggal']=$rs->jpaket_tanggal;
+		$data['cust_no']=$rs->cust_no;
+		$data['cust_nama']=$rs->cust_nama;
+		$data['cust_alamat']=$rs->cust_alamat;
+		$data['jumlah_subtotal']=ubah_rupiah($rs->jumlah_subtotal);
+		$data['jumlah_tunai']=ubah_rupiah($rs->jtunai_nilai);
+		$data['jpaket_diskon']=$rs->jpaket_diskon;
+		$data['jpaket_cashback']=$rs->jpaket_cashback;
+		//$data['jpaket_creator']=$rs->jpaket_creator;
+		//$data['jpaket_totalbiaya']=$rs->jpaket_totalbiaya;
+		$data['detail_jpaket']=$detail_jpaket;
+		
+		$viewdata=$this->load->view("main/jpaket_formcetak",$data,TRUE);
+		$file = fopen("jpaket_paper.html",'w');
+		fwrite($file, $viewdata);	
+		fclose($file);
+		echo '1';        
 	}
 	
 	// Encodes a SQL array into a JSON formated string

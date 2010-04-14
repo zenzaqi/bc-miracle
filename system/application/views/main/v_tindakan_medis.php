@@ -529,10 +529,10 @@ Ext.onReady(function(){
 			{name: 'cust_member', type: 'string', mapping: 'cust_member'},
 			{name: 'dtrawat_keterangan', type: 'string', mapping: 'dtrawat_keterangan'},
 			{name: 'dtrawat_ambil_paket', type: 'string', mapping: 'dtrawat_ambil_paket'},
-			{name: 'cust_punya_paket', type: 'string', mapping: 'cust_punya_paket'},
+			/*{name: 'cust_punya_paket', type: 'string', mapping: 'cust_punya_paket'},
 			{name: 'dapaket_dpaket', type: 'int', mapping: 'dpaket_id'},
 			{name: 'dapaket_jpaket', type: 'int', mapping: 'dpaket_master'},
-			{name: 'dapaket_paket', type: 'int', mapping: 'dpaket_paket'},
+			{name: 'dapaket_paket', type: 'int', mapping: 'dpaket_paket'},*/
 			{name: 'dtrawat_edit', type: 'string', mapping: 'dtrawat_edit'}
 		])/*,
 		sortInfo:{field: 'dtrawat_id', direction: "DESC"}*/
@@ -736,14 +736,14 @@ Ext.onReady(function(){
 			editor: {
                 xtype: 'checkbox'
             }
-		},
+		},/*
 		{
 			header: '<div align="center">' + 'Info Paket' + '</div>',
 			dataIndex: 'cust_punya_paket',
 			width: 60,	//55,
 			sortable: false,
 			hidden: true
-		},
+		},*/
 		{
 			header: '<div align="center">' + 'Stat Kasir' + '</div>',
 			dataIndex: 'dtrawat_edit',

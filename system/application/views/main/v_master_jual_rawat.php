@@ -170,7 +170,44 @@ var jrawat_caraSearchField;
 var jrawat_keteranganSearchField;
 var dt= new Date();
 
-var printed=0;
+var cetak_jrawat=0;
+
+function jrawat_cetak(){
+	Ext.Ajax.request({   
+		waitMsg: 'Please Wait...',
+		url: 'index.php?c=c_master_jual_rawat&m=print_paper',
+		params: { jrawat_id : jrawat_idField.getValue()	}, 
+		success: function(response){              
+			var result=eval(response.responseText);
+			switch(result){
+			case 1:
+				win = window.open('./jrawat_paper.html','Cetak Penjualan Perawatan','height=480,width=1240,resizable=1,scrollbars=0, menubar=0');
+				//win.print();
+				break;
+			default:
+				Ext.MessageBox.show({
+					title: 'Warning',
+					msg: 'Unable to print the grid!',
+					buttons: Ext.MessageBox.OK,
+					animEl: 'save',
+					icon: Ext.MessageBox.WARNING
+				});
+				break;
+			}  
+		},
+		failure: function(response){
+			var result=response.responseText;
+			Ext.MessageBox.show({
+			   title: 'Error',
+			   msg: 'Could not connect to the database. retry later.',
+			   buttons: Ext.MessageBox.OK,
+			   animEl: 'database',
+			   icon: Ext.MessageBox.ERROR
+			});		
+		} 	                     
+	});
+}
+
 /* on ready fuction */
 Ext.onReady(function(){
   	Ext.QuickTips.init();	/* Initiate quick tips icon */
@@ -183,43 +220,6 @@ Ext.onReady(function(){
   	        return record ? record.get(combo.displayField) : combo.valueNotFoundText;
   	    }
   	}
-	
-	
-	function cetak_faktur_jual_rawat(){
-		Ext.Ajax.request({   
-			waitMsg: 'Please Wait...',
-			url: 'index.php?c=c_master_jual_rawat&m=print_paper',
-			params: { jrawat_id : jrawat_idField.getValue()	}, 
-			success: function(response){              
-				var result=eval(response.responseText);
-				switch(result){
-				case 1:
-					win = window.open('./jrawat_paper.html','Cetak Penjualan Perawatan','height=400,width=1000,resizable=1,scrollbars=0, menubar=0');
-					win.print();
-					break;
-				default:
-					Ext.MessageBox.show({
-						title: 'Warning',
-						msg: 'Unable to print the grid!',
-						buttons: Ext.MessageBox.OK,
-						animEl: 'save',
-						icon: Ext.MessageBox.WARNING
-					});
-					break;
-				}  
-			},
-			failure: function(response){
-				var result=response.responseText;
-				Ext.MessageBox.show({
-				   title: 'Error',
-				   msg: 'Could not connect to the database. retry later.',
-				   buttons: Ext.MessageBox.OK,
-				   animEl: 'database',
-				   icon: Ext.MessageBox.ERROR
-				});		
-			} 	                     
-		});
-	}
   
   	/* Function for Saving inLine Editing */
 	function master_jual_rawat_update(oGrid_event){
@@ -473,7 +473,7 @@ Ext.onReady(function(){
 			url: 'index.php?c=c_master_jual_rawat&m=get_action',
 			params: {
 				task: post2db,
-				printed:printed,
+				cetak_jrawat:cetak_jrawat,
 				jrawat_id			: 	jrawat_id_create_pk, 
 				jrawat_nobukti		: 	jrawat_nobukti_create, 
 				jrawat_cust		: 	jrawat_cust_create, 
@@ -569,9 +569,12 @@ Ext.onReady(function(){
 				switch(result){
 					case 1:
 						//detail_jual_rawat_purge();
-						detail_jual_rawat_insert();
+						//detail_jual_rawat_insert();
 						//Ext.MessageBox.alert(post2db+' OK','The Master_jual_rawat was '+msg+' successfully.');
-						Ext.MessageBox.alert(post2db+' OK','Data penjualan perawatan berhasil disimpan');
+						//Ext.MessageBox.alert(post2db+' OK','Data penjualan perawatan berhasil disimpan');
+						if(cetak_jrawat==1){
+							jrawat_cetak();
+						}
 						master_jual_rawat_DataStore.reload();
 						detail_jual_rawat_DataStore.load({params: {master_id:0}});
 						master_jual_rawat_createWindow.hide();
@@ -598,12 +601,10 @@ Ext.onReady(function(){
 						break;
 					/*default:
 						jrawat_idField.setValue(result);
-						cetak_faktur_jual_rawat();
+						jrawat_cetak();
 						master_jual_rawat_createWindow.hide();
 						break;*/
 				}
-				if(printed==1)
-					cetak_faktur_jual_rawat();
 				master_jual_rawat_reset_allForm();
 				master_cara_bayarTabPanel.setActiveTab(0);
 			},
@@ -632,7 +633,7 @@ Ext.onReady(function(){
  	/* End of Function */
 	
 	function save_andPrint(){
-		printed=1;
+		cetak_jrawat=1;
 		master_jual_rawat_create();
 	}
   
