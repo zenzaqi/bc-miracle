@@ -159,12 +159,12 @@ Ext.onReady(function(){
 					var result=eval(response.responseText);
 					switch(result){
 						case 1:
-							Ext.MessageBox.alert(post2db+' OK','Iklan Hari Ini berhasil disimpan.');
+							Ext.MessageBox.alert(post2db+' OK','Promo Hari Ini berhasil disimpan.');
 							break;
 						default:
 							Ext.MessageBox.show({
 							   title: 'Warning',
-							   msg: 'We could\'t not '+msg+' Iklan Hari Ini.',
+							   msg: 'We could\'t not '+msg+' Promo Hari Ini.',
 							   buttons: Ext.MessageBox.OK,
 							   animEl: 'save',
 							   icon: Ext.MessageBox.WARNING
@@ -261,8 +261,7 @@ Ext.onReady(function(){
 		id: 'iklantoday_tanggalField',
 		name : 'iklantoday_tanggal',
 		fieldLabel: 'Tanggal',
-		format : 'Y-m-d',
-		name: 'iklantoday_tanggalField',
+		format : 'd-m-Y',
         vtype: 'daterange',
 		allowBlank: false,
 		width: 100
@@ -272,7 +271,7 @@ Ext.onReady(function(){
 	iklantoday_keteranganField= new Ext.form.TextArea({
 		id: 'iklantoday_keteranganField',
 		name : 'iklantoday_keterangan',
-		fieldLabel: 'Iklan',
+		fieldLabel: 'Promo',
 		allowBlank : false,
 		maxLength: 250,
 		anchor: '95%'
@@ -432,7 +431,7 @@ Ext.onReady(function(){
 	/* Function for retrieve create Window Form */
 	iklan_today_saveWindow= new Ext.Window({
 		id: 'iklan_today_saveWindow',
-		title: post2db+' Iklan Hari Ini',
+		title: post2db+' Promo Hari Ini',
 		closable:true,
 		closeAction: 'hide',
 		closable: false,
