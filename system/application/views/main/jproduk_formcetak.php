@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Cetak Kwitansi</title>
+<title>Cetak Penjualan Produk</title>
 <style type="text/css">
 html,body,table,tr,td{
 	font-family:Geneva, Arial, Helvetica, sans-serif;
@@ -41,7 +41,7 @@ html,body,table,tr,td{
         </table></td>
 	</tr>
 	<tr>
-	  <td height="34px"><table width="1240px" height="34px" border="0" cellspacing="0" cellpadding="0">
+	  <td height="40px"><table width="1240px" height="40px" border="0" cellspacing="0" cellpadding="0">
         <tr>
           <td width="200px">&nbsp;</td>
           <td width="1040px" valign="bottom"><?=$jproduk_nobukti;?></td>

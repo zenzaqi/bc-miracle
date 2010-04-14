@@ -279,7 +279,7 @@ function to_money($string)
     } 
   } 
 function rupiah($angka){
-	$rupiah="";
+	/*$rupiah="";
 	$rp=strlen($angka);
 	while ($rp>3){
 		$rupiah = ".". substr($angka,-3). $rupiah;
@@ -289,6 +289,9 @@ function rupiah($angka){
 	}
 	//$rupiah = "Rp." . $angka . $rupiah . ",00-";
 	$rupiah = $angka . $rupiah;
+	return $rupiah;*/
+	$rupiah="";
+	$rupiah=number_format($angka,0,"",".");
 	return $rupiah;
 }
 ?>
