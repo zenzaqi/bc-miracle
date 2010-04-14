@@ -3633,6 +3633,32 @@ Ext.onReady(function(){
 		sortInfo:{field: 'dproduk_produk_display', direction: "ASC"}
 	});
 	
+	cbo_dproduk_reveralDataStore = new Ext.data.Store({
+		id: 'cbo_dproduk_reveralDataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_master_jual_produk&m=get_reveral_list', 
+			method: 'POST'
+		}),baseParams: {start: 0, limit: 15 },
+			reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total'
+			//id: 'produk_id'
+		},[
+			{name: 'karyawan_display', type: 'string', mapping: 'karyawan_nama'},
+			//{name: 'karyawan_id', type: 'int', mapping: 'karyawan_id'},
+			{name: 'karyawan_no', type: 'string', mapping: 'karyawan_no'},
+			{name: 'karyawan_username', type: 'string', mapping: 'karyawan_username'},
+			{name: 'karyawan_value', type: 'int', mapping: 'karyawan_id'}
+		]),
+		sortInfo:{field: 'karyawan_no', direction: "ASC"}
+	});
+	var reveral_tpl = new Ext.XTemplate(
+        '<tpl for="."><div class="search-item">',
+            '<span><b>{karyawan_username}</b> | {karyawan_display}</span>',
+        '</div></tpl>'
+    );
+	
+	
 	cbo_dproduk_satuanDataStore = new Ext.data.Store({
 		id: 'cbo_dproduk_satuanDataStore',
 		proxy: new Ext.data.HttpProxy({
@@ -3728,6 +3754,26 @@ Ext.onReady(function(){
 
 	});
 	
+	var combo_reveral=new Ext.form.ComboBox({
+			store: cbo_dproduk_reveralDataStore,
+			mode: 'remote',
+			displayField: 'karyawan_username',
+			valueField: 'karyawan_value',
+			typeAhead: false,
+			loadingText: 'Searching...',
+			pageSize:pageS,
+			hideTrigger:false,
+			tpl: reveral_tpl,
+			//applyTo: 'search',
+			itemSelector: 'div.search-item',
+			triggerAction: 'all',
+			lazyRender:true,
+			listClass: 'x-combo-list-small',
+			anchor: '95%'
+
+	});
+	
+
 	var combo_satuan_produk=new Ext.form.ComboBox({
 		store: cbo_dproduk_satuanDataStore,
 		mode:'local',
@@ -3921,7 +3967,19 @@ Ext.onReady(function(){
 			renderer: function(v, params, record){
 					return Ext.util.Format.number(record.data.dproduk_subtotal*(100-record.data.dproduk_diskon)/100,'0,000');
             }
-		},/*{
+		},
+		{
+			align : 'Left',
+			header: '<div align="center">' + 'Referal' + '</div>',
+			dataIndex: 'dproduk_karyawan',
+			width: 100, //250
+			sortable: true,
+			allowBlank: false,
+			editor: combo_reveral,
+			renderer: Ext.util.Format.comboRenderer(combo_reveral)
+		},
+		
+		/*{
 			header: 'Sales',
 			dataIndex: 'dproduk_sales',
 			width: 40, //150,
@@ -3962,7 +4020,7 @@ Ext.onReady(function(){
 		el: 'fp_detail_jual_produk',
 		title: 'Detail Penjualan Produk',
 		height: 250,
-		width: 918,
+		width: 940,	//918,
 		autoScroll: true,
 		store: detail_jual_produk_DataStore, // DataStore
 		colModel: detail_jual_produk_ColumnModel, // Nama-nama Columns
@@ -4002,7 +4060,8 @@ Ext.onReady(function(){
 		var edit_detail_jual_produk= new detail_jual_produkListEditorGrid.store.recordType({
 			dproduk_id	:'',		
 			dproduk_master	:'',		
-			dproduk_produk	:null,		
+			dproduk_produk	:null,
+			dproduk_karyawan:null,
 			dproduk_satuan	:null,		
 			dproduk_jumlah	:null,		
 			dproduk_harga	:null,
@@ -4039,6 +4098,7 @@ Ext.onReady(function(){
 						dproduk_id	: detail_jual_produk_record.data.dproduk_id, 
 						dproduk_master	: eval(get_pk_id()),
 						dproduk_produk	: detail_jual_produk_record.data.dproduk_produk,
+						dproduk_karyawan: detail_jual_produk_record.data.dproduk_karyawan,
 						dproduk_satuan	: detail_jual_produk_record.data.dproduk_satuan,
 						dproduk_jumlah	: detail_jual_produk_record.data.dproduk_jumlah, 
 						dproduk_harga	: detail_jual_produk_record.data.dproduk_harga, 

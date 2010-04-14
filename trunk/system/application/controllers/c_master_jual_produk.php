@@ -98,6 +98,17 @@ class C_master_jual_produk extends Controller {
 		echo $result;
 	}
 	
+	
+	function get_reveral_list(){
+		$query = isset($_POST['query']) ? $_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		$result=$this->m_master_jual_produk->get_reveral_list($query,$start,$end);
+		echo $result;
+	}
+	
+	
+	
 	function get_bank_list(){
 		$result=$this->m_public_function->get_bank_list();
 		echo $result;
@@ -242,6 +253,7 @@ class C_master_jual_produk extends Controller {
 	//POST variable here
 		$dproduk_id=trim(@$_POST["dproduk_id"]);
 		$dproduk_master=trim(@$_POST["dproduk_master"]);
+		$dproduk_karyawan=trim(@$_POST["dproduk_karyawan"]);
 		$dproduk_produk=trim(@$_POST["dproduk_produk"]);
 		$dproduk_satuan=trim(@$_POST["dproduk_satuan"]);
 		$dproduk_jumlah=trim(@$_POST["dproduk_jumlah"]);
@@ -257,7 +269,7 @@ class C_master_jual_produk extends Controller {
 		$count=trim(@$_POST['count']);
 		$dcount=trim(@$_POST['dcount']);
 		
-		$result=$this->m_master_jual_produk->detail_detail_jual_produk_insert($dproduk_id ,$dproduk_master ,$dproduk_produk ,$dproduk_satuan ,$dproduk_jumlah ,$dproduk_harga ,$dproduk_subtotal_net ,$dproduk_diskon,$dproduk_diskon_jenis,$dproduk_sales,$konversi_nilai_temp, $cetak, $count, $dcount);
+		$result=$this->m_master_jual_produk->detail_detail_jual_produk_insert($dproduk_id ,$dproduk_master ,$dproduk_karyawan, $dproduk_produk ,$dproduk_satuan ,$dproduk_jumlah ,$dproduk_harga ,$dproduk_subtotal_net ,$dproduk_diskon,$dproduk_diskon_jenis,$dproduk_sales,$konversi_nilai_temp, $cetak, $count, $dcount);
 		echo $result;
 	}
 	
@@ -671,12 +683,15 @@ class C_master_jual_produk extends Controller {
 		
 		
 		$result = $this->m_master_jual_produk->print_paper($jproduk_id);
+		$iklan = $this->m_master_jual_produk->iklan();
 		$rs=$result->row();
+		$rsiklan=$iklan->row();
 		$detail_jproduk=$result->result();
 		$data['jproduk_nobukti']=$rs->jproduk_nobukti;
 		$data['jproduk_tanggal']=$rs->jproduk_tanggal;
 		$data['cust_no']=$rs->cust_no;
 		$data['cust_nama']=$rs->cust_nama;
+		$data['iklantoday_keterangan']=$rsiklan->iklantoday_keterangan;
 		$data['cust_alamat']=$rs->cust_alamat;
 		$data['jumlah_subtotal']=ubah_rupiah($rs->jumlah_subtotal);
 		$data['jumlah_tunai']=ubah_rupiah($rs->jtunai_nilai);
