@@ -68,7 +68,7 @@ var detail_jual_produk_reader;
 var editor_detail_jual_produk;
 
 //declare konstant
-var post2db = '';
+var jproduk_post2db = '';
 var msg = '';
 var pageS=15;
 
@@ -171,7 +171,7 @@ var jproduk_caraSearchField;
 var jproduk_keteranganSearchField;
 var dt= new Date();
 
-var cetak_faktur=0;
+var cetak_jproduk=0;
 var looping=0;
 
 
@@ -184,7 +184,7 @@ function jproduk_cetak(master_id){
 			var result=eval(response.responseText);
 			switch(result){
 			case 1:
-				win = window.open('./jproduk_paper.html','Cetak Penjualan Produk','height=480,width=1280,resizable=1,scrollbars=0, menubar=0');
+				win = window.open('./jproduk_paper.html','Cetak Penjualan Produk','height=480,width=1240,resizable=1,scrollbars=0, menubar=0');
 				//win.print();
 				break;
 			default:
@@ -482,7 +482,7 @@ Ext.onReady(function(){
 			waitMsg: 'Mohon tunggu...',
 			url: 'index.php?c=c_master_jual_produk&m=get_action',
 			params: {
-				task: post2db,
+				task: jproduk_post2db,
 				jproduk_id			: 	jproduk_id_create_pk, 
 				jproduk_nobukti		: 	jproduk_nobukti_create, 
 				jproduk_cust		: 	jproduk_cust_create, 
@@ -578,8 +578,8 @@ Ext.onReady(function(){
 					case 0:
 						detail_jual_produk_purge();
 						//detail_jual_produk_insert();
-						//Ext.MessageBox.alert(post2db+' OK','The Master_jual_produk was '+msg+' successfully.');
-						//Ext.MessageBox.alert(post2db+' OK','Data penjualan produk berhasil disimpan');
+						//Ext.MessageBox.alert(jproduk_post2db+' OK','The Master_jual_produk was '+msg+' successfully.');
+						//Ext.MessageBox.alert(jproduk_post2db+' OK','Data penjualan produk berhasil disimpan');
 						//master_jual_produk_DataStore.reload();
 						//detail_jual_produk_DataStore.load({params: {master_id:0}});
 						master_jual_produk_createWindow.hide();
@@ -599,6 +599,7 @@ Ext.onReady(function(){
 				jproduk_caraField.setValue("card");
 				master_jual_produk_cardGroup.setVisible(true);
 				master_cara_bayarTabPanel.setActiveTab(0);
+				//jproduk_post2db="CREATE";
 			},
 			failure: function(response){
 				var result=response.responseText;
@@ -636,13 +637,13 @@ Ext.onReady(function(){
  	/* End of Function */
 	
 	function save_andPrint(){
-		cetak_faktur=1;
+		cetak_jproduk=1;
 		master_jual_produk_create();
 	}
   
   	/* Function for get PK field */
 	function get_pk_id(){
-		if(post2db=='UPDATE')
+		if(jproduk_post2db=='UPDATE')
 			return master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_id');
 		else 
 			return 0;
@@ -1312,7 +1313,7 @@ Ext.onReady(function(){
 		if(!master_jual_produk_createWindow.isVisible()){
 			master_jual_produk_reset_form();
 			detail_jual_produk_DataStore.load({params: {master_id:0}});
-			post2db='CREATE';
+			jproduk_post2db='CREATE';
 			msg='created';
 			master_cara_bayarTabPanel.setActiveTab(0);
 			master_jual_produk_createWindow.show();
@@ -1353,7 +1354,7 @@ Ext.onReady(function(){
 			cbo_dproduk_satuanDataStore.load();
 			//master_jual_produk_set_form();
 			//master_cara_bayarTabPanel.setActiveTab(0);
-			post2db='UPDATE';
+			jproduk_post2db='UPDATE';
 			detail_jual_produk_DataStore.load({
 				params : {master_id : eval(get_pk_id()), start:0, limit:pageS},
 				callback: function(opts, success, response){
@@ -2197,9 +2198,9 @@ Ext.onReady(function(){
 		j=cbo_voucher_jual_produkDataStore.find('voucher_nomor',jproduk_voucher_noField.getValue());
 		if(j>-1){
 			jproduk_voucher_cashbackField.setValue(cbo_voucher_jual_produkDataStore.getAt(j).data.voucher_cashback);
-			if(post2db=="CREATE")
+			if(jproduk_post2db=="CREATE")
 				load_total_produk_bayar();
-			else if(post2db=="UPDATE")
+			else if(jproduk_post2db=="UPDATE")
 				load_total_bayar_updating();
 		}
 	});
@@ -2264,9 +2265,9 @@ Ext.onReady(function(){
 		j=cbo_voucher_jual_produkDataStore.find('voucher_nomor',jproduk_voucher_no2Field.getValue());
 		if(j>-1){
 			jproduk_voucher_cashback2Field.setValue(cbo_voucher_jual_produkDataStore.getAt(j).data.voucher_cashback);
-			if(post2db=="CREATE")
+			if(jproduk_post2db=="CREATE")
 				load_total_produk_bayar();
-			else if(post2db=="UPDATE")
+			else if(jproduk_post2db=="UPDATE")
 				load_total_bayar_updating();
 		}
 	});
@@ -2331,9 +2332,9 @@ Ext.onReady(function(){
 		j=cbo_voucher_jual_produkDataStore.find('voucher_nomor',jproduk_voucher_no3Field.getValue());
 		if(j>-1){
 			jproduk_voucher_cashback3Field.setValue(cbo_voucher_jual_produkDataStore.getAt(j).data.voucher_cashback);
-			if(post2db=="CREATE")
+			if(jproduk_post2db=="CREATE")
 				load_total_produk_bayar();
-			else if(post2db=="UPDATE")
+			else if(jproduk_post2db=="UPDATE")
 				load_total_bayar_updating();
 		}
 	});
@@ -4034,9 +4035,9 @@ Ext.onReady(function(){
 					waitMsg: 'Mohon tunggu...',
 					url: 'index.php?c=c_master_jual_produk&m=detail_detail_jual_produk_insert',
 					params:{
-						cetak	: cetak_faktur,
+						cetak	: cetak_jproduk,
 						dproduk_id	: detail_jual_produk_record.data.dproduk_id, 
-						dproduk_master	: eval(get_pk_id()), 
+						dproduk_master	: eval(get_pk_id()),
 						dproduk_produk	: detail_jual_produk_record.data.dproduk_produk,
 						dproduk_satuan	: detail_jual_produk_record.data.dproduk_satuan,
 						dproduk_jumlah	: detail_jual_produk_record.data.dproduk_jumlah, 
@@ -4054,7 +4055,12 @@ Ext.onReady(function(){
 						var result=eval(response.responseText);
 						if(result==0){
 							detail_jual_produk_DataStore.load({params: {master_id:0}});
-							Ext.MessageBox.alert(post2db+' OK','Data penjualan produk berhasil disimpan');
+							Ext.Ajax.request({
+								waitMsg: 'Mohon tunggu...',
+								url: 'index.php?c=c_master_jual_produk&m=catatan_piutang_update',
+								params:{dproduk_master	: eval(get_pk_id())}
+							});
+							Ext.MessageBox.alert(jproduk_post2db+' OK','Data penjualan produk berhasil disimpan');
 						}else if(result==-1){
 							detail_jual_produk_DataStore.load({params: {master_id:0}});
 							Ext.MessageBox.show({
@@ -4076,7 +4082,7 @@ Ext.onReady(function(){
 									url: 'index.php?c=c_master_jual_produk&m=catatan_piutang_update',
 									params:{dproduk_master	: eval(jproduk_idField.getValue())}
 								});
-								Ext.MessageBox.alert(post2db+' OK','Data penjualan produk berhasil disimpan');
+								Ext.MessageBox.alert(jproduk_post2db+' OK','Data penjualan produk berhasil disimpan');
 								master_jual_produk_createWindow.hide();
 								break;
 							case -1:
@@ -4677,11 +4683,11 @@ Ext.onReady(function(){
 	detail_jual_produk_DataStore.on("update",load_all_jual_produk);
 	//detail_jual_produk_DataStore.on("load",load_total_produk_bayar);
 	jproduk_bayarField.on("keyup",load_total_produk_bayar);
-	jproduk_diskonField.on("keyup",function(){if(post2db=="CREATE"){load_total_produk_bayar();}else if(post2db=="UPDATE"){load_total_bayar_updating();}});
-	jproduk_cashbackField.on("keyup",function(){if(post2db=="CREATE"){load_total_produk_bayar();}else if(post2db=="UPDATE"){load_total_bayar_updating();}});
+	jproduk_diskonField.on("keyup",function(){if(jproduk_post2db=="CREATE"){load_total_produk_bayar();}else if(jproduk_post2db=="UPDATE"){load_total_bayar_updating();}});
+	jproduk_cashbackField.on("keyup",function(){if(jproduk_post2db=="CREATE"){load_total_produk_bayar();}else if(jproduk_post2db=="UPDATE"){load_total_bayar_updating();}});
 	jproduk_cashback_cfField.on("keyup",function(){
 		var cf_value = jproduk_cashback_cfField.getValue();
-		if(post2db=="CREATE"){
+		if(jproduk_post2db=="CREATE"){
 			var cf_tonumber = convertToNumber(cf_value);
 			jproduk_cashbackField.setValue(cf_tonumber);
 			load_total_produk_bayar();
@@ -4689,7 +4695,7 @@ Ext.onReady(function(){
 			var number_tocf = CurrencyFormatted(cf_value);
 			this.setRawValue(number_tocf);
 			//load_total_produk_bayar();
-		}else if(post2db=="UPDATE"){
+		}else if(jproduk_post2db=="UPDATE"){
 			var cf_tonumber = convertToNumber(cf_value);
 			jproduk_cashbackField.setValue(cf_tonumber);
 			load_total_bayar_updating();
@@ -4700,10 +4706,10 @@ Ext.onReady(function(){
 		}
 	});
 	//kwitansi
-	jproduk_kwitansi_nilaiField.on("keyup",function(){if(post2db=="CREATE"){load_total_produk_bayar();}else if(post2db=="UPDATE"){load_total_bayar_updating();}});
+	jproduk_kwitansi_nilaiField.on("keyup",function(){if(jproduk_post2db=="CREATE"){load_total_produk_bayar();}else if(jproduk_post2db=="UPDATE"){load_total_bayar_updating();}});
 	jproduk_kwitansi_nilai_cfField.on("keyup",function(){
 		var cf_value = jproduk_kwitansi_nilai_cfField.getValue();
-		if(post2db=="CREATE"){
+		if(jproduk_post2db=="CREATE"){
 			var cf_tonumber = convertToNumber(cf_value);
 			jproduk_kwitansi_nilaiField.setValue(cf_tonumber);
 			load_total_produk_bayar();
@@ -4711,7 +4717,7 @@ Ext.onReady(function(){
 			var number_tocf = CurrencyFormatted(cf_value);
 			this.setRawValue(number_tocf);
 			//load_total_produk_bayar();
-		}else if(post2db=="UPDATE"){
+		}else if(jproduk_post2db=="UPDATE"){
 			var cf_tonumber = convertToNumber(cf_value);
 			jproduk_kwitansi_nilaiField.setValue(cf_tonumber);
 			load_total_bayar_updating();
@@ -4721,10 +4727,10 @@ Ext.onReady(function(){
 			//load_total_bayar_updating();
 		}
 	});
-	jproduk_kwitansi_nilai2Field.on("keyup",function(){if(post2db=="CREATE"){load_total_produk_bayar();}else if(post2db=="UPDATE"){load_total_bayar_updating();}});
+	jproduk_kwitansi_nilai2Field.on("keyup",function(){if(jproduk_post2db=="CREATE"){load_total_produk_bayar();}else if(jproduk_post2db=="UPDATE"){load_total_bayar_updating();}});
 	jproduk_kwitansi_nilai2_cfField.on("keyup",function(){
 		var cf_value = jproduk_kwitansi_nilai2_cfField.getValue();
-		if(post2db=="CREATE"){
+		if(jproduk_post2db=="CREATE"){
 			var cf_tonumber = convertToNumber(cf_value);
 			jproduk_kwitansi_nilai2Field.setValue(cf_tonumber);
 			load_total_produk_bayar();
@@ -4732,7 +4738,7 @@ Ext.onReady(function(){
 			var number_tocf = CurrencyFormatted(cf_value);
 			this.setRawValue(number_tocf);
 			//load_total_produk_bayar();
-		}else if(post2db=="UPDATE"){
+		}else if(jproduk_post2db=="UPDATE"){
 			var cf_tonumber = convertToNumber(cf_value);
 			jproduk_kwitansi_nilai2Field.setValue(cf_tonumber);
 			load_total_bayar_updating();
@@ -4742,10 +4748,10 @@ Ext.onReady(function(){
 			//load_total_bayar_updating();
 		}
 	});
-	jproduk_kwitansi_nilai3Field.on("keyup",function(){if(post2db=="CREATE"){load_total_produk_bayar();}else if(post2db=="UPDATE"){load_total_bayar_updating();}});
+	jproduk_kwitansi_nilai3Field.on("keyup",function(){if(jproduk_post2db=="CREATE"){load_total_produk_bayar();}else if(jproduk_post2db=="UPDATE"){load_total_bayar_updating();}});
 	jproduk_kwitansi_nilai3_cfField.on("keyup",function(){
 		var cf_value = jproduk_kwitansi_nilai3_cfField.getValue();
-		if(post2db=="CREATE"){
+		if(jproduk_post2db=="CREATE"){
 			var cf_tonumber = convertToNumber(cf_value);
 			jproduk_kwitansi_nilai3Field.setValue(cf_tonumber);
 			load_total_produk_bayar();
@@ -4753,7 +4759,7 @@ Ext.onReady(function(){
 			var number_tocf = CurrencyFormatted(cf_value);
 			this.setRawValue(number_tocf);
 			//load_total_produk_bayar();
-		}else if(post2db=="UPDATE"){
+		}else if(jproduk_post2db=="UPDATE"){
 			var cf_tonumber = convertToNumber(cf_value);
 			jproduk_kwitansi_nilai3Field.setValue(cf_tonumber);
 			load_total_bayar_updating();
@@ -4764,10 +4770,10 @@ Ext.onReady(function(){
 		}
 	});
 	//card
-	jproduk_card_nilaiField.on("keyup",function(){if(post2db=="CREATE"){load_total_produk_bayar();}else if(post2db=="UPDATE"){load_total_bayar_updating();}});
+	jproduk_card_nilaiField.on("keyup",function(){if(jproduk_post2db=="CREATE"){load_total_produk_bayar();}else if(jproduk_post2db=="UPDATE"){load_total_bayar_updating();}});
 	jproduk_card_nilai_cfField.on("keyup",function(){
 		var cf_value = jproduk_card_nilai_cfField.getValue();
-		if(post2db=="CREATE"){
+		if(jproduk_post2db=="CREATE"){
 			var cf_tonumber = convertToNumber(cf_value);
 			jproduk_card_nilaiField.setValue(cf_tonumber);
 			load_total_produk_bayar();
@@ -4775,7 +4781,7 @@ Ext.onReady(function(){
 			var number_tocf = CurrencyFormatted(cf_value);
 			this.setRawValue(number_tocf);
 			//load_total_produk_bayar();
-		}else if(post2db=="UPDATE"){
+		}else if(jproduk_post2db=="UPDATE"){
 			var cf_tonumber = convertToNumber(cf_value);
 			jproduk_card_nilaiField.setValue(cf_tonumber);
 			load_total_bayar_updating();
@@ -4785,10 +4791,10 @@ Ext.onReady(function(){
 			//load_total_bayar_updating();
 		}
 	});
-	jproduk_card_nilai2Field.on("keyup",function(){if(post2db=="CREATE"){load_total_produk_bayar();}else if(post2db=="UPDATE"){load_total_bayar_updating();}});
+	jproduk_card_nilai2Field.on("keyup",function(){if(jproduk_post2db=="CREATE"){load_total_produk_bayar();}else if(jproduk_post2db=="UPDATE"){load_total_bayar_updating();}});
 	jproduk_card_nilai2_cfField.on("keyup",function(){
 		var cf_value = jproduk_card_nilai2_cfField.getValue();
-		if(post2db=="CREATE"){
+		if(jproduk_post2db=="CREATE"){
 			var cf_tonumber = convertToNumber(cf_value);
 			jproduk_card_nilai2Field.setValue(cf_tonumber);
 			load_total_produk_bayar();
@@ -4796,7 +4802,7 @@ Ext.onReady(function(){
 			var number_tocf = CurrencyFormatted(cf_value);
 			this.setRawValue(number_tocf);
 			//load_total_produk_bayar();
-		}else if(post2db=="UPDATE"){
+		}else if(jproduk_post2db=="UPDATE"){
 			var cf_tonumber = convertToNumber(cf_value);
 			jproduk_card_nilai2Field.setValue(cf_tonumber);
 			load_total_bayar_updating();
@@ -4806,10 +4812,10 @@ Ext.onReady(function(){
 			//load_total_bayar_updating();
 		}
 	});
-	jproduk_card_nilai3Field.on("keyup",function(){if(post2db=="CREATE"){load_total_produk_bayar();}else if(post2db=="UPDATE"){load_total_bayar_updating();}});
+	jproduk_card_nilai3Field.on("keyup",function(){if(jproduk_post2db=="CREATE"){load_total_produk_bayar();}else if(jproduk_post2db=="UPDATE"){load_total_bayar_updating();}});
 	jproduk_card_nilai3_cfField.on("keyup",function(){
 		var cf_value = jproduk_card_nilai3_cfField.getValue();
-		if(post2db=="CREATE"){
+		if(jproduk_post2db=="CREATE"){
 			var cf_tonumber = convertToNumber(cf_value);
 			jproduk_card_nilai3Field.setValue(cf_tonumber);
 			load_total_produk_bayar();
@@ -4817,7 +4823,7 @@ Ext.onReady(function(){
 			var number_tocf = CurrencyFormatted(cf_value);
 			this.setRawValue(number_tocf);
 			//load_total_produk_bayar();
-		}else if(post2db=="UPDATE"){
+		}else if(jproduk_post2db=="UPDATE"){
 			var cf_tonumber = convertToNumber(cf_value);
 			jproduk_card_nilai3Field.setValue(cf_tonumber);
 			load_total_bayar_updating();
@@ -4828,10 +4834,10 @@ Ext.onReady(function(){
 		}
 	});
 	//cek/giro
-	jproduk_cek_nilaiField.on("keyup",function(){if(post2db=="CREATE"){load_total_produk_bayar();}else if(post2db=="UPDATE"){load_total_bayar_updating();}});
+	jproduk_cek_nilaiField.on("keyup",function(){if(jproduk_post2db=="CREATE"){load_total_produk_bayar();}else if(jproduk_post2db=="UPDATE"){load_total_bayar_updating();}});
 	jproduk_cek_nilai_cfField.on("keyup",function(){
 		var cf_value = jproduk_cek_nilai_cfField.getValue();
-		if(post2db=="CREATE"){
+		if(jproduk_post2db=="CREATE"){
 			var cf_tonumber = convertToNumber(cf_value);
 			jproduk_cek_nilaiField.setValue(cf_tonumber);
 			load_total_produk_bayar();
@@ -4839,7 +4845,7 @@ Ext.onReady(function(){
 			var number_tocf = CurrencyFormatted(cf_value);
 			this.setRawValue(number_tocf);
 			//load_total_produk_bayar();
-		}else if(post2db=="UPDATE"){
+		}else if(jproduk_post2db=="UPDATE"){
 			var cf_tonumber = convertToNumber(cf_value);
 			jproduk_cek_nilaiField.setValue(cf_tonumber);
 			load_total_bayar_updating();
@@ -4849,10 +4855,10 @@ Ext.onReady(function(){
 			//load_total_bayar_updating();
 		}
 	});
-	jproduk_cek_nilai2Field.on("keyup",function(){if(post2db=="CREATE"){load_total_produk_bayar();}else if(post2db=="UPDATE"){load_total_bayar_updating();}});
+	jproduk_cek_nilai2Field.on("keyup",function(){if(jproduk_post2db=="CREATE"){load_total_produk_bayar();}else if(jproduk_post2db=="UPDATE"){load_total_bayar_updating();}});
 	jproduk_cek_nilai2_cfField.on("keyup",function(){
 		var cf_value = jproduk_cek_nilai2_cfField.getValue();
-		if(post2db=="CREATE"){
+		if(jproduk_post2db=="CREATE"){
 			var cf_tonumber = convertToNumber(cf_value);
 			jproduk_cek_nilai2Field.setValue(cf_tonumber);
 			load_total_produk_bayar();
@@ -4860,7 +4866,7 @@ Ext.onReady(function(){
 			var number_tocf = CurrencyFormatted(cf_value);
 			this.setRawValue(number_tocf);
 			//load_total_produk_bayar();
-		}else if(post2db=="UPDATE"){
+		}else if(jproduk_post2db=="UPDATE"){
 			var cf_tonumber = convertToNumber(cf_value);
 			jproduk_cek_nilai2Field.setValue(cf_tonumber);
 			load_total_bayar_updating();
@@ -4870,10 +4876,10 @@ Ext.onReady(function(){
 			//load_total_bayar_updating();
 		}
 	});
-	jproduk_cek_nilai3Field.on("keyup",function(){if(post2db=="CREATE"){load_total_produk_bayar();}else if(post2db=="UPDATE"){load_total_bayar_updating();}});
+	jproduk_cek_nilai3Field.on("keyup",function(){if(jproduk_post2db=="CREATE"){load_total_produk_bayar();}else if(jproduk_post2db=="UPDATE"){load_total_bayar_updating();}});
 	jproduk_cek_nilai3_cfField.on("keyup",function(){
 		var cf_value = jproduk_cek_nilai3_cfField.getValue();
-		if(post2db=="CREATE"){
+		if(jproduk_post2db=="CREATE"){
 			var cf_tonumber = convertToNumber(cf_value);
 			jproduk_cek_nilai3Field.setValue(cf_tonumber);
 			load_total_produk_bayar();
@@ -4881,7 +4887,7 @@ Ext.onReady(function(){
 			var number_tocf = CurrencyFormatted(cf_value);
 			this.setRawValue(number_tocf);
 			//load_total_produk_bayar();
-		}else if(post2db=="UPDATE"){
+		}else if(jproduk_post2db=="UPDATE"){
 			var cf_tonumber = convertToNumber(cf_value);
 			jproduk_cek_nilai3Field.setValue(cf_tonumber);
 			load_total_bayar_updating();
@@ -4892,10 +4898,10 @@ Ext.onReady(function(){
 		}
 	});
 	//transfer
-	jproduk_transfer_nilaiField.on("keyup",function(){if(post2db=="CREATE"){load_total_produk_bayar();}else if(post2db=="UPDATE"){load_total_bayar_updating();}});
+	jproduk_transfer_nilaiField.on("keyup",function(){if(jproduk_post2db=="CREATE"){load_total_produk_bayar();}else if(jproduk_post2db=="UPDATE"){load_total_bayar_updating();}});
 	jproduk_transfer_nilai_cfField.on("keyup",function(){
 		var cf_value = jproduk_transfer_nilai_cfField.getValue();
-		if(post2db=="CREATE"){
+		if(jproduk_post2db=="CREATE"){
 			var cf_tonumber = convertToNumber(cf_value);
 			jproduk_transfer_nilaiField.setValue(cf_tonumber);
 			load_total_produk_bayar();
@@ -4903,7 +4909,7 @@ Ext.onReady(function(){
 			var number_tocf = CurrencyFormatted(cf_value);
 			this.setRawValue(number_tocf);
 			//load_total_produk_bayar();
-		}else if(post2db=="UPDATE"){
+		}else if(jproduk_post2db=="UPDATE"){
 			var cf_tonumber = convertToNumber(cf_value);
 			jproduk_transfer_nilaiField.setValue(cf_tonumber);
 			load_total_bayar_updating();
@@ -4913,10 +4919,10 @@ Ext.onReady(function(){
 			//load_total_bayar_updating();
 		}
 	});
-	jproduk_transfer_nilai2Field.on("keyup",function(){if(post2db=="CREATE"){load_total_produk_bayar();}else if(post2db=="UPDATE"){load_total_bayar_updating();}});
+	jproduk_transfer_nilai2Field.on("keyup",function(){if(jproduk_post2db=="CREATE"){load_total_produk_bayar();}else if(jproduk_post2db=="UPDATE"){load_total_bayar_updating();}});
 	jproduk_transfer_nilai2_cfField.on("keyup",function(){
 		var cf_value = jproduk_transfer_nilai2_cfField.getValue();
-		if(post2db=="CREATE"){
+		if(jproduk_post2db=="CREATE"){
 			var cf_tonumber = convertToNumber(cf_value);
 			jproduk_transfer_nilai2Field.setValue(cf_tonumber);
 			load_total_produk_bayar();
@@ -4924,7 +4930,7 @@ Ext.onReady(function(){
 			var number_tocf = CurrencyFormatted(cf_value);
 			this.setRawValue(number_tocf);
 			//load_total_produk_bayar();
-		}else if(post2db=="UPDATE"){
+		}else if(jproduk_post2db=="UPDATE"){
 			var cf_tonumber = convertToNumber(cf_value);
 			jproduk_transfer_nilai2Field.setValue(cf_tonumber);
 			load_total_bayar_updating();
@@ -4934,10 +4940,10 @@ Ext.onReady(function(){
 			//load_total_bayar_updating();
 		}
 	});
-	jproduk_transfer_nilai3Field.on("keyup",function(){if(post2db=="CREATE"){load_total_produk_bayar();}else if(post2db=="UPDATE"){load_total_bayar_updating();}});
+	jproduk_transfer_nilai3Field.on("keyup",function(){if(jproduk_post2db=="CREATE"){load_total_produk_bayar();}else if(jproduk_post2db=="UPDATE"){load_total_bayar_updating();}});
 	jproduk_transfer_nilai3_cfField.on("keyup",function(){
 		var cf_value = jproduk_transfer_nilai3_cfField.getValue();
-		if(post2db=="CREATE"){
+		if(jproduk_post2db=="CREATE"){
 			var cf_tonumber = convertToNumber(cf_value);
 			jproduk_transfer_nilai3Field.setValue(cf_tonumber);
 			load_total_produk_bayar();
@@ -4945,7 +4951,7 @@ Ext.onReady(function(){
 			var number_tocf = CurrencyFormatted(cf_value);
 			this.setRawValue(number_tocf);
 			//load_total_produk_bayar();
-		}else if(post2db=="UPDATE"){
+		}else if(jproduk_post2db=="UPDATE"){
 			var cf_tonumber = convertToNumber(cf_value);
 			jproduk_transfer_nilai3Field.setValue(cf_tonumber);
 			load_total_bayar_updating();
@@ -4956,14 +4962,14 @@ Ext.onReady(function(){
 		}
 	});
 	//voucher
-	jproduk_voucher_cashbackField.on("keyup",function(){if(post2db=="CREATE"){load_total_produk_bayar();}else if(post2db=="UPDATE"){load_total_bayar_updating();}});
-	jproduk_voucher_cashback2Field.on("keyup",function(){if(post2db=="CREATE"){load_total_produk_bayar();}else if(post2db=="UPDATE"){load_total_bayar_updating();}});
-	jproduk_voucher_cashback3Field.on("keyup",function(){if(post2db=="CREATE"){load_total_produk_bayar();}else if(post2db=="UPDATE"){load_total_bayar_updating();}});
+	jproduk_voucher_cashbackField.on("keyup",function(){if(jproduk_post2db=="CREATE"){load_total_produk_bayar();}else if(jproduk_post2db=="UPDATE"){load_total_bayar_updating();}});
+	jproduk_voucher_cashback2Field.on("keyup",function(){if(jproduk_post2db=="CREATE"){load_total_produk_bayar();}else if(jproduk_post2db=="UPDATE"){load_total_bayar_updating();}});
+	jproduk_voucher_cashback3Field.on("keyup",function(){if(jproduk_post2db=="CREATE"){load_total_produk_bayar();}else if(jproduk_post2db=="UPDATE"){load_total_bayar_updating();}});
 	//tunai
-	jproduk_tunai_nilaiField.on("keyup",function(){if(post2db=="CREATE"){load_total_produk_bayar();}else if(post2db=="UPDATE"){load_total_bayar_updating();}});
+	jproduk_tunai_nilaiField.on("keyup",function(){if(jproduk_post2db=="CREATE"){load_total_produk_bayar();}else if(jproduk_post2db=="UPDATE"){load_total_bayar_updating();}});
 	jproduk_tunai_nilai_cfField.on("keyup",function(){
 		var cf_value = jproduk_tunai_nilai_cfField.getValue();
-		if(post2db=="CREATE"){
+		if(jproduk_post2db=="CREATE"){
 			var cf_tonumber = convertToNumber(cf_value);
 			jproduk_tunai_nilaiField.setValue(cf_tonumber);
 			load_total_produk_bayar();
@@ -4971,7 +4977,7 @@ Ext.onReady(function(){
 			var number_tocf = CurrencyFormatted(cf_value);
 			this.setRawValue(number_tocf);
 			//load_total_produk_bayar();
-		}else if(post2db=="UPDATE"){
+		}else if(jproduk_post2db=="UPDATE"){
 			var cf_tonumber = convertToNumber(cf_value);
 			jproduk_tunai_nilaiField.setValue(cf_tonumber);
 			load_total_bayar_updating();
@@ -4981,10 +4987,10 @@ Ext.onReady(function(){
 			//load_total_bayar_updating();
 		}
 	});
-	jproduk_tunai_nilai2Field.on("keyup",function(){if(post2db=="CREATE"){load_total_produk_bayar();}else if(post2db=="UPDATE"){load_total_bayar_updating();}});
+	jproduk_tunai_nilai2Field.on("keyup",function(){if(jproduk_post2db=="CREATE"){load_total_produk_bayar();}else if(jproduk_post2db=="UPDATE"){load_total_bayar_updating();}});
 	jproduk_tunai_nilai2_cfField.on("keyup",function(){
 		var cf_value = jproduk_tunai_nilai2_cfField.getValue();
-		if(post2db=="CREATE"){
+		if(jproduk_post2db=="CREATE"){
 			var cf_tonumber = convertToNumber(cf_value);
 			jproduk_tunai_nilai2Field.setValue(cf_tonumber);
 			load_total_produk_bayar();
@@ -4992,7 +4998,7 @@ Ext.onReady(function(){
 			var number_tocf = CurrencyFormatted(cf_value);
 			this.setRawValue(number_tocf);
 			//load_total_produk_bayar();
-		}else if(post2db=="UPDATE"){
+		}else if(jproduk_post2db=="UPDATE"){
 			var cf_tonumber = convertToNumber(cf_value);
 			jproduk_tunai_nilai2Field.setValue(cf_tonumber);
 			load_total_bayar_updating();
@@ -5002,10 +5008,10 @@ Ext.onReady(function(){
 			//load_total_bayar_updating();
 		}
 	});
-	jproduk_tunai_nilai3Field.on("keyup",function(){if(post2db=="CREATE"){load_total_produk_bayar();}else if(post2db=="UPDATE"){load_total_bayar_updating();}});
+	jproduk_tunai_nilai3Field.on("keyup",function(){if(jproduk_post2db=="CREATE"){load_total_produk_bayar();}else if(jproduk_post2db=="UPDATE"){load_total_bayar_updating();}});
 	jproduk_tunai_nilai3_cfField.on("keyup",function(){
 		var cf_value = jproduk_tunai_nilai3_cfField.getValue();
-		if(post2db=="CREATE"){
+		if(jproduk_post2db=="CREATE"){
 			var cf_tonumber = convertToNumber(cf_value);
 			jproduk_tunai_nilai3Field.setValue(cf_tonumber);
 			load_total_produk_bayar();
@@ -5013,7 +5019,7 @@ Ext.onReady(function(){
 			var number_tocf = CurrencyFormatted(cf_value);
 			this.setRawValue(number_tocf);
 			//load_total_produk_bayar();
-		}else if(post2db=="UPDATE"){
+		}else if(jproduk_post2db=="UPDATE"){
 			var cf_tonumber = convertToNumber(cf_value);
 			jproduk_tunai_nilai3Field.setValue(cf_tonumber);
 			load_total_bayar_updating();
@@ -5097,7 +5103,7 @@ Ext.onReady(function(){
 					jproduk_caraField.setValue("card");
 					master_jual_produk_cardGroup.setVisible(true);
 					master_cara_bayarTabPanel.setActiveTab(0);
-					post2db="CREATE";
+					jproduk_post2db="CREATE";
 				}
 			}
 		]
@@ -5108,7 +5114,7 @@ Ext.onReady(function(){
 	/* Function for retrieve create Window Form */
 	master_jual_produk_createWindow= new Ext.Window({
 		id: 'master_jual_produk_createWindow',
-		//title: post2db+'Master_jual_produk',
+		//title: jproduk_post2db+'Master_jual_produk',
 		title: 'Daftar Penjualan Produk',
 		closable:true,
 		closeAction: 'hide',
@@ -5440,7 +5446,7 @@ Ext.onReady(function(){
 	/*End of Function */
 	
 	function pertamax(){
-		post2db="CREATE";
+		jproduk_post2db="CREATE";
 		jproduk_tanggalField.setValue(dt.format('Y-m-d'));
 		master_jual_produk_createForm.render();
 		jproduk_caraField.setValue('card');

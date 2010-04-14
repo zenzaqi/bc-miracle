@@ -458,7 +458,7 @@ class M_master_jual_rawat extends Model{
 		}
 		
 		//function for update record
-		function master_jual_rawat_update($jrawat_id ,$jrawat_nobukti ,$jrawat_cust ,$jrawat_tanggal ,$jrawat_diskon ,$jrawat_cara ,$jrawat_cara2 ,$jrawat_cara3 ,$jrawat_keterangan , $jrawat_cashback, $jrawat_tunai_nilai, $jrawat_tunai_nilai2, $jrawat_tunai_nilai3, $jrawat_voucher_no, $jrawat_voucher_cashback, $jrawat_voucher_no2, $jrawat_voucher_cashback2, $jrawat_voucher_no3, $jrawat_voucher_cashback3, $jrawat_total, $jrawat_bayar, $jrawat_subtotal, $jrawat_hutang, $jrawat_kwitansi_no, $jrawat_kwitansi_nama, $jrawat_kwitansi_nilai, $jrawat_kwitansi_no2, $jrawat_kwitansi_nama2, $jrawat_kwitansi_nilai2, $jrawat_kwitansi_no3, $jrawat_kwitansi_nama3, $jrawat_kwitansi_nilai3, $jrawat_card_nama, $jrawat_card_edc, $jrawat_card_no, $jrawat_card_nilai, $jrawat_card_nama2, $jrawat_card_edc2, $jrawat_card_no2, $jrawat_card_nilai2, $jrawat_card_nama3, $jrawat_card_edc3, $jrawat_card_no3, $jrawat_card_nilai3, $jrawat_cek_nama, $jrawat_cek_no, $jrawat_cek_valid, $jrawat_cek_bank, $jrawat_cek_nilai, $jrawat_cek_nama2, $jrawat_cek_no2, $jrawat_cek_valid2, $jrawat_cek_bank2, $jrawat_cek_nilai2, $jrawat_cek_nama3, $jrawat_cek_no3, $jrawat_cek_valid3, $jrawat_cek_bank3, $jrawat_cek_nilai3, $jrawat_transfer_bank, $jrawat_transfer_nama, $jrawat_transfer_nilai, $jrawat_transfer_bank2, $jrawat_transfer_nama2, $jrawat_transfer_nilai2, $jrawat_transfer_bank3, $jrawat_transfer_nama3, $jrawat_transfer_nilai3 ,$printed){
+		function master_jual_rawat_update($jrawat_id ,$jrawat_nobukti ,$jrawat_cust ,$jrawat_tanggal ,$jrawat_diskon ,$jrawat_cara ,$jrawat_cara2 ,$jrawat_cara3 ,$jrawat_keterangan , $jrawat_cashback, $jrawat_tunai_nilai, $jrawat_tunai_nilai2, $jrawat_tunai_nilai3, $jrawat_voucher_no, $jrawat_voucher_cashback, $jrawat_voucher_no2, $jrawat_voucher_cashback2, $jrawat_voucher_no3, $jrawat_voucher_cashback3, $jrawat_total, $jrawat_bayar, $jrawat_subtotal, $jrawat_hutang, $jrawat_kwitansi_no, $jrawat_kwitansi_nama, $jrawat_kwitansi_nilai, $jrawat_kwitansi_no2, $jrawat_kwitansi_nama2, $jrawat_kwitansi_nilai2, $jrawat_kwitansi_no3, $jrawat_kwitansi_nama3, $jrawat_kwitansi_nilai3, $jrawat_card_nama, $jrawat_card_edc, $jrawat_card_no, $jrawat_card_nilai, $jrawat_card_nama2, $jrawat_card_edc2, $jrawat_card_no2, $jrawat_card_nilai2, $jrawat_card_nama3, $jrawat_card_edc3, $jrawat_card_no3, $jrawat_card_nilai3, $jrawat_cek_nama, $jrawat_cek_no, $jrawat_cek_valid, $jrawat_cek_bank, $jrawat_cek_nilai, $jrawat_cek_nama2, $jrawat_cek_no2, $jrawat_cek_valid2, $jrawat_cek_bank2, $jrawat_cek_nilai2, $jrawat_cek_nama3, $jrawat_cek_no3, $jrawat_cek_valid3, $jrawat_cek_bank3, $jrawat_cek_nilai3, $jrawat_transfer_bank, $jrawat_transfer_nama, $jrawat_transfer_nilai, $jrawat_transfer_bank2, $jrawat_transfer_nama2, $jrawat_transfer_nilai2, $jrawat_transfer_bank3, $jrawat_transfer_nama3, $jrawat_transfer_nilai3 ,$cetak_jrawat){
 			$sql="SELECT jrawat_cara, jrawat_cara2, jrawat_cara3 FROM master_jual_rawat WHERE jrawat_id='$jrawat_id'";
 			$rs=$this->db->query($sql);
 			if($rs->num_rows()){
@@ -574,7 +574,7 @@ class M_master_jual_rawat extends Model{
 			$this->db->where('jrawat_id', $jrawat_id);
 			$this->db->update('master_jual_rawat', $data);
 			
-			//if($printed==1){
+			//if($cetak_jrawat==1){
 				$sql="SELECT drawat_dtrawat FROM detail_jual_rawat WHERE drawat_master='$jrawat_id'";
 				$rs=$this->db->query($sql);
 				if($rs->num_rows()){
@@ -1124,11 +1124,12 @@ class M_master_jual_rawat extends Model{
 						}
 					}
 				}
-				if($printed==1){
+				/*if($cetak_jrawat==1){
 					return $jrawat_id;
 				}else{
 					return '1';
-				}
+				}*/
+				return '1';
 			}
 			else
 				return '0';
@@ -1629,15 +1630,8 @@ class M_master_jual_rawat extends Model{
 		}
 		
 		function print_paper($jrawat_id){
-			
-			$sql="SELECT * FROM master_jual_rawat WHERE jrawat_id='".$jrawat_id."'";
-			$result = $this->db->query($sql);
-			return $result;
-		}
-		
-		function print_paper_detail($jrawat_id){
-			
-			$sql="SELECT * FROM detail_jual_rawat INNER JOIN perawatan ON(drawat_rawat=rawat_id) WHERE drawat_master='".$jrawat_id."'";
+			//$this->firephp->log($jproduk_id, "jproduk_id");
+			$sql="SELECT jrawat_tanggal, cust_no, cust_nama, cust_alamat, jrawat_nobukti, rawat_nama, drawat_jumlah, drawat_harga, drawat_diskon, (drawat_harga*((100-drawat_diskon)/100)) AS jumlah_subtotal, jrawat_creator, jtunai_nilai, jrawat_diskon, jrawat_cashback FROM detail_jual_rawat LEFT JOIN master_jual_rawat ON(drawat_master=jrawat_id) LEFT JOIN customer ON(jrawat_cust=cust_id) LEFT JOIN perawatan ON(drawat_rawat=rawat_id) LEFT JOIN jual_tunai ON(jtunai_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id'";
 			$result = $this->db->query($sql);
 			return $result;
 		}
