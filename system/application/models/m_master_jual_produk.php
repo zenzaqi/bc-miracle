@@ -226,6 +226,35 @@ class M_master_jual_produk extends Model{
 				return "";
 		}
 		
+		function get_reveral_list($query,$start,$end){
+		$sql="SELECT karyawan_id,karyawan_no,karyawan_username,karyawan_nama,karyawan_tgllahir,karyawan_alamat
+		FROM karyawan where karyawan_aktif='Aktif'";
+		if($query<>""){
+			$sql=$sql." and (karyawan_no like '%".$query."%' or karyawan_nama like '%".$query."%') ";
+		}
+		
+		$result = $this->db->query($sql);
+		$nbrows = $result->num_rows();
+		$limit = $sql." LIMIT ".$start.",".$end;			
+		$result = $this->db->query($limit);  
+		if($nbrows>0){
+			foreach($result->result() as $row){
+				$arr[] = $row;
+			}
+			$jsonresult = json_encode($arr);
+			return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+		} else {
+			return '({"total":"0", "results":""})';
+		}
+	}
+		
+		
+		
+		
+		
+		
+		
+		
 		function get_produk_list($query,$start,$end){
 		$rs_rows=0;
 		if(is_numeric($query)==true){
@@ -460,7 +489,7 @@ class M_master_jual_produk extends Model{
 		//*eof
 		
 		//insert detail record
-		function detail_detail_jual_produk_insert($dproduk_id ,$dproduk_master ,$dproduk_produk ,$dproduk_satuan ,$dproduk_jumlah ,$dproduk_harga ,$dproduk_subtotal_net ,$dproduk_diskon,$dproduk_diskon_jenis,$dproduk_sales,$konversi_nilai_temp, $cetak, $count, $dcount){
+		function detail_detail_jual_produk_insert($dproduk_id ,$dproduk_master ,$dproduk_karyawan, $dproduk_produk ,$dproduk_satuan ,$dproduk_jumlah ,$dproduk_harga ,$dproduk_subtotal_net ,$dproduk_diskon,$dproduk_diskon_jenis,$dproduk_sales,$konversi_nilai_temp, $cetak, $count, $dcount){
 			//if master id not capture from view then capture it from max pk from master table
 			if($dproduk_master=="" || $dproduk_master==NULL || $dproduk_master==0){
 				$dproduk_master=$this->get_master_id();
@@ -477,6 +506,7 @@ class M_master_jual_produk extends Model{
 			$data = array(
 				"dproduk_master"=>$dproduk_master, 
 				"dproduk_produk"=>$dproduk_produk, 
+				"dproduk_karyawan"=>$dproduk_karyawan,
 				"dproduk_satuan"=>$dproduk_satuan, 
 				"dproduk_jumlah"=>$dproduk_jumlah, 
 				"dproduk_harga"=>$dproduk_harga, 
@@ -1686,6 +1716,15 @@ class M_master_jual_produk extends Model{
 			$result = $this->db->query($sql);
 			return $result;
 		}
+		
+		function iklan(){
+			//$this->firephp->log($jproduk_id, "jproduk_id");
+			$sql="SELECT * from iklan_today";
+			$result = $this->db->query($sql);
+			return $result;
+		}
+		
+		
 		
 }
 ?>
