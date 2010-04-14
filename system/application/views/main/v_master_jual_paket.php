@@ -1192,46 +1192,36 @@ Ext.onReady(function(){
   
 	/* Function for Update Confirm */
 	function master_jual_paket_confirm_update(){
-		cbo_dpaket_paketDataStore.load({params:{query:master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_id')}});
+		/////cbo_dpaket_paketDataStore.load({params:{query:master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_id')}});
 		cbo_cust_pengguna_paket_DataStore.load({params:{query:master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_id')}});
 		/* only one record is selected here */
 		if(master_jual_paketListEditorGrid.selModel.getCount() == 1) {
 			//master_jual_paket_set_form();
 			master_cara_bayarTabPanel.setActiveTab(0);
 			jpaket_post2db='UPDATE';
-			detail_jual_paket_DataStore.load({
-				params : {master_id : eval(get_pk_id()), start:0, limit:pageS},
+			cbo_dpaket_paketDataStore.load({
+				params:{query:master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_id')},
 				callback: function(opts, success, response){
 					if(success){
-						/*var subtotal_field=0;
-						var dpaket_jumlah_field=0;
-						var total_field=0;
-						var hutang_field=0;
-						var diskon_field=0;
-						var cashback_field=0;
-						
-						for(i=0;i<detail_jual_paket_DataStore.getCount();i++){
-							subtotal_field+=detail_jual_paket_DataStore.getAt(i).data.dpaket_subtotal_net;
-							dpaket_jumlah_field+=detail_jual_paket_DataStore.getAt(i).data.dpaket_jumlah;
-							
-							jpaket_subTotalField.setValue(subtotal_field);
-							jpaket_jumlahField.setValue(dpaket_jumlah_field);
-							if(jpaket_diskonField.getValue()!==""){
-								diskon_field=jpaket_diskonField.getValue();
+						detail_jual_paket_DataStore.load({
+							params : {master_id : eval(get_pk_id()), start:0, limit:pageS},
+							callback: function(opts, success, response){
+								if(success){
+									master_jual_paket_set_form();
+								}
 							}
-							if(jpaket_cashbackField.getValue()!==""){
-								cashback_field=jpaket_cashbackField.getValue();
-							}
-							total_field=subtotal_field*(100-diskon_field)/100-cashback_field;
-							jpaket_totalField.setValue(total_field);
-							jpaket_bayarField.setValue(detail_jual_paket_DataStore.getAt(i).data.jpaket_bayar);
-							hutang_field=total_field-detail_jual_paket_DataStore.getAt(i).data.jpaket_bayar;
-							jpaket_hutangField.setValue(hutang_field);
-						}*/
-						master_jual_paket_set_form();
+						});
 					}
 				}
 			});
+			/*detail_jual_paket_DataStore.load({
+				params : {master_id : eval(get_pk_id()), start:0, limit:pageS},
+				callback: function(opts, success, response){
+					if(success){
+						master_jual_paket_set_form();
+					}
+				}
+			});*/
 			detail_pengguna_paket_DataStore.load({params:{master_id : eval(get_pk_id())}});
 			msg='updated';
 			master_jual_paket_createWindow.hide();
@@ -3715,6 +3705,7 @@ Ext.onReady(function(){
 						}else if(result>0){
 							detail_jual_paket_DataStore.load({params: {master_id:0}});
 							jpaket_cetak(result);
+							cetak_jpaket=0;
 						}
 					},
 					failure: function(response){

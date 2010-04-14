@@ -19,6 +19,7 @@ class C_master_jual_produk extends Controller {
 		$this->load->model('m_master_jual_produk', '', TRUE);
 		session_start();
 		$this->load->plugin('to_excel');
+		$this->load->library('firephp');
 	}
 	
 	

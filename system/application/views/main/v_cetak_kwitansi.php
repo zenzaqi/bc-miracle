@@ -92,7 +92,7 @@ function cetak_kwitansi_print_paper(){
 			var result=eval(response.responseText);
 			switch(result){
 			case 1:
-				win = window.open('./kwitansi_paper.html','Cetak Kwitansi','height=400,width=1000,resizable=1,scrollbars=0, menubar=0');
+				win = window.open('./kwitansi_paper.html','Cetak Kwitansi','height=480,width=1240,resizable=1,scrollbars=0, menubar=0');
 				//win.print();
 				break;
 			default:
