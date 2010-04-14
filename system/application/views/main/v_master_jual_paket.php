@@ -323,6 +323,7 @@ Ext.onReady(function(){
 		var jpaket_cashback_create=null;
 		//bayar
 		var jpaket_subtotal_create=null;
+		var jpaket_total_create=null;
 		var jpaket_bayar_create=null;
 		var jpaket_hutang_create=null;
 		//kwitansi
@@ -412,6 +413,7 @@ Ext.onReady(function(){
 		//bayar
 		if(jpaket_bayarField.getValue()!== null){jpaket_bayar_create = jpaket_bayarField.getValue();}
 		if(jpaket_subTotalField.getValue()!== null){jpaket_subtotal_create = jpaket_subTotalField.getValue();} 
+		if(jpaket_totalField.getValue()!== null){jpaket_total_create = jpaket_totalField.getValue();} 
 		if(jpaket_hutangField.getValue()!== null){jpaket_hutang_create = jpaket_hutangField.getValue();} 
 		//kwitansi value
 		if(jpaket_kwitansi_noField.getValue()!== null){jpaket_kwitansi_nomor_create = jpaket_kwitansi_noField.getValue();} 
@@ -506,6 +508,7 @@ Ext.onReady(function(){
 				//bayar
 				jpaket_bayar			: 	jpaket_bayar_create,
 				jpaket_subtotal			: 	jpaket_subtotal_create,
+				jpaket_total			: 	jpaket_total_create,
 				jpaket_hutang		: 	jpaket_hutang_create,
 				//kwitansi posting
 				jpaket_kwitansi_no		:	jpaket_kwitansi_nomor_create,
@@ -1128,7 +1131,7 @@ Ext.onReady(function(){
 				break;
 		}
 		
-		detail_jual_paket_DataStore.load({params:{master_id: jpaket_idField.getValue()}});
+		//detail_jual_paket_DataStore.load({params:{master_id: jpaket_idField.getValue()}});
 	}
 	/* End setValue to EDIT*/
   
