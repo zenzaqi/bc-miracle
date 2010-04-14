@@ -400,9 +400,13 @@ class M_cetak_kwitansi extends Model{
 		
 		function print_paper($kwitansi_id){
 			
-			$sql="select kwitansi_id,kwitansi_no,kwitansi_date_create,
-					cust_no,cust_nama,kwitansi_nilai,kwitansi_keterangan from cetak_kwitansi,customer
-					where kwitansi_cust=cust_id AND kwitansi_id='".$kwitansi_id."'";
+			$sql="SELECT kwitansi_id,kwitansi_no,kwitansi_date_create,cust_no,cust_nama,kwitansi_nilai,kwitansi_keterangan,kwitansi_cara FROM cetak_kwitansi,customer WHERE kwitansi_cust=cust_id AND kwitansi_id='".$kwitansi_id."'";
+			$result = $this->db->query($sql);
+			return $result;
+		}
+		
+		function cara_bayar($kwitansi_id){
+			$sql="SELECT kwitansi_id,kwitansi_no,kwitansi_date_create,cust_no,cust_nama,kwitansi_nilai,kwitansi_keterangan FROM cetak_kwitansi,customer WHERE kwitansi_cust=cust_id AND kwitansi_id='".$kwitansi_id."'";
 			$result = $this->db->query($sql);
 			return $result;
 		}

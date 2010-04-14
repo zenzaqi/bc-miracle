@@ -4127,6 +4127,7 @@ Ext.onReady(function(){
 						}else if(result>0){
 							detail_jual_produk_DataStore.load({params: {master_id:0}});
 							jproduk_cetak(result);
+							cetak_jproduk=0;
 						}
 						/*switch(result){
 							case 0:

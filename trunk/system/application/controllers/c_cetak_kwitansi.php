@@ -343,12 +343,15 @@ class C_cetak_kwitansi extends Controller {
 		
 		$result = $this->m_cetak_kwitansi->print_paper($kwitansi_id);
 		$rs=$result->row();
+		$result_cara_bayar = $this->m_cetak_kwitansi->cara_bayar($kwitansi_id);
+		
 		$data["kwitansi_no"]=$rs->kwitansi_no;
 		$data["kwitansi_tanggal"]=$rs->kwitansi_date_create;
 		$data["kwitansi_customer"]=$rs->cust_no."-".$rs->cust_nama;
 		$data["kwitansi_nilai"]="Rp. ".ubah_rupiah($rs->kwitansi_nilai);
 		$data["kwitansi_terbilang"]=strtoupper(terbilang($rs->kwitansi_nilai))." RUPIAH";
 		$data["kwitansi_keterangan"]=$rs->kwitansi_keterangan;
+		$data["kwitansi_cara"]=$rs->kwitansi_cara;
 		
 		$viewdata=$this->load->view("main/kwitansi_formcetak",$data,TRUE);
 		$file = fopen("kwitansi_paper.html",'w');
