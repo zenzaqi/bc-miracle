@@ -1,0 +1,1 @@
+ALTER TABLE `detail_jual_produk` ADD `dproduk_karyawan` INT NULL DEFAULT NULL AFTER `konversi_nilai_temp` ;
