@@ -1347,7 +1347,7 @@ Ext.onReady(function(){
 		master_jual_produk_reset_form();
 		/* only one record is selected here */
 		if(master_jual_produkListEditorGrid.selModel.getCount() == 1) {
-			cbo_dproduk_produkDataStore.load({params: {query: master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_id')}});
+			////cbo_dproduk_produkDataStore.load({params: {query: master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_id')}});
 			cbo_dproduk_satuanDataStore.setBaseParam('produk_id', 0);
 			cbo_dproduk_satuanDataStore.setBaseParam('query', master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_id'));
 			//cbo_dproduk_satuanDataStore.load({params: {query: master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_id')}});
@@ -1355,36 +1355,29 @@ Ext.onReady(function(){
 			//master_jual_produk_set_form();
 			//master_cara_bayarTabPanel.setActiveTab(0);
 			jproduk_post2db='UPDATE';
-			detail_jual_produk_DataStore.load({
-				params : {master_id : eval(get_pk_id()), start:0, limit:pageS},
+			cbo_dproduk_produkDataStore.load({
+				params: {query: master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_id')},
 				callback: function(opts, success, response){
 					if(success){
-						/*var subtotal_field=0;
-						var dproduk_jumlah_field=0;
-						var total_field=0;
-						var hutang_field=0;
-						var diskon_field=0;
-						var cashback_field=0;
-						for(i=0;i<detail_jual_produk_DataStore.getCount();i++){
-							subtotal_field+=detail_jual_produk_DataStore.getAt(i).data.dproduk_subtotal_net;
-							dproduk_jumlah_field+=detail_jual_produk_DataStore.getAt(i).data.dproduk_jumlah;
-							//jproduk_subTotalField.setValue(subtotal_field);
-							if(jproduk_diskonField.getValue()!==""){
-								diskon_field=jproduk_diskonField.getValue();
+						detail_jual_produk_DataStore.load({
+							params : {master_id : eval(get_pk_id()), start:0, limit:pageS},
+							callback: function(opts, success, response){
+								if(success){
+									master_jual_produk_set_form();
+								}
 							}
-							
-							if(jproduk_cashbackField.getValue()!==""){
-								cashback_field=jproduk_cashbackField.getValue();
-							}
-							total_field=subtotal_field*(100-diskon_field)/100-cashback_field;
-						}
-						jproduk_jumlahField.setValue(dproduk_jumlah_field);
-						jproduk_subTotalField.setValue(subtotal_field);
-						jproduk_totalField.setValue(total_field);*/
-						master_jual_produk_set_form();
+						});
 					}
 				}
 			});
+			/*detail_jual_produk_DataStore.load({
+				params : {master_id : eval(get_pk_id()), start:0, limit:pageS},
+				callback: function(opts, success, response){
+					if(success){
+						master_jual_produk_set_form();
+					}
+				}
+			});*/
 			
 			master_cara_bayarTabPanel.setActiveTab(2);
 			master_cara_bayarTabPanel.setActiveTab(1);
