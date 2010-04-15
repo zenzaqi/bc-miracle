@@ -115,14 +115,14 @@ Ext.onReady(function(){
 			success: function(response){							
 				var result=eval(response.responseText);
 				if(result!==0){
-						Ext.MessageBox.alert(post2db+' OK','Data Retur Pembelian berhasil disimpan.');
+						Ext.MessageBox.alert(post2db+' OK','Data retur pembelian berhasil disimpan.');
 						master_retur_beli_DataStore.reload();
 						master_retur_beli_createWindow.hide();
 				}else{
 						Ext.MessageBox.show({
 						   title: 'Warning',
 						   //msg: 'We could\'t not '+msg+' the Master_retur_beli.',
-						   msg: 'Data Retur Pembelian tidak bisa disimpan !',
+						   msg: 'Data retur pembelian tidak bisa disimpan !',
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'save',
 						   icon: Ext.MessageBox.WARNING
@@ -439,7 +439,7 @@ Ext.onReady(function(){
             '<span><b>{terima_no}</b><br /></span>',
             'Tgl-Penerimaan : {terima_tanggal:date("M j, Y")}<br>',
 			'Supplier: {terima_supplier}<br/>',
-			'No. Order: {terima_order}',
+			'No Order: {terima_order}',
         '</div></tpl>'
     );
 	
@@ -454,61 +454,61 @@ Ext.onReady(function(){
 				cell.css = "readonlycell"; // Mengambil Value dari Class di dalam CSS 
 				return value;
 				},
-			hidden: false
+			hidden: true
 		},
 		{
 			header: '<div align="center">Tanggal</div>',
 			dataIndex: 'rbeli_tanggal',
-			width: 100,
+			width: 70,	//100,
 			sortable: true,
-			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
+			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
 			editor: new Ext.form.DateField({
-				format: 'Y-m-d'
+				format: 'd-m-Y'
 			})
 		},
 		{
-			header: '<div align="center">No. Retur</div>',
+			header: '<div align="center">No Retur</div>',
 			dataIndex: 'rbeli_nobukti',
-			width: 100,
+			width: 80,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 500
           	})
 		},
 		{
-			header: '<div align="center">No. Penerimaan</div>',
+			header: '<div align="center">No PB</div>',
 			dataIndex: 'rbeli_terima',
-			width: 120,
+			width: 80,
 			sortable: true,
 			readOnly: true
 		}, 
 		{
-			header: '<div align="center">No. Pesanan</div>',
+			header: '<div align="center">No SP</div>',
 			dataIndex: 'rbeli_order',
-			width: 120,
+			width: 80,
 			sortable: true,
 			readOnly: true
 		}, 
 		{
 			header: '<div align="center">Supplier</div>',
 			dataIndex: 'rbeli_supplier',
-			width: 250,
+			width: 200,
 			sortable: true,
 			readOnly: true
 		},
 		{
-			header: '<div align="center">Jumlah Item</div>',
+			header: '<div align="center">Jml Item</div>',
 			align: 'right',
 			dataIndex: 'rbeli_jumlah',
-			width: 100,
+			width: 60,
 			sortable: true,
 			readOnly: true,
 			renderer: Ext.util.Format.numberRenderer('0,000')
 		},
 		{
-			header: '<div align="center">Total Nilai</div>',
+			header: '<div align="center">Tot Nilai (Rp)</div>',
 			dataIndex: 'rbeli_total',
-			width: 150,
+			width: 100,
 			align: 'right',
 			sortable: true,
 			readOnly: true,
@@ -580,7 +580,7 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 1024,
+	  	width: 1220,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: master_retur_beli_DataStore,
@@ -699,7 +699,7 @@ Ext.onReady(function(){
 	
 	rbeli_nobuktiField= new Ext.form.TextField({
 		id: 'rbeli_nobuktiField',
-		fieldLabel: 'No. Retur',
+		fieldLabel: 'No Retur',
 		emptyText: '(Auto)',
 		readOnly: true,
 		maxLength: 100,
@@ -708,7 +708,7 @@ Ext.onReady(function(){
 	/* Identify  rbeli_terima Field */
 	rbeli_terimaField= new Ext.form.ComboBox({
 		id: 'rbeli_terimaField',
-		fieldLabel: 'No. Penerimaan',
+		fieldLabel: 'No PB',
 		store: cbo_rbeli_terimabeli_DataSore,
 		displayField:'terima_no',
 		mode : 'remote',
@@ -745,7 +745,7 @@ Ext.onReady(function(){
 	rbeli_tanggalField= new Ext.form.DateField({
 		id: 'rbeli_tanggalField',
 		fieldLabel: 'Tanggal',
-		format : 'Y-m-d'
+		format : 'd-m-Y'
 	});
 	/* Identify  rbeli_keterangan Field */
 	rbeli_keteranganField= new Ext.form.TextArea({
@@ -993,22 +993,22 @@ Ext.onReady(function(){
 	detail_retur_beli_ColumnModel = new Ext.grid.ColumnModel(
 		[
 		{
-			header: 'Nama Produk',
+			header: '<div align="center">Produk</div>',
 			dataIndex: 'drbeli_produk',
-			width: 250,
+			width: 200,
 			sortable: true,
 			editor: combo_detail_produk,
 			renderer: Ext.util.Format.comboRenderer(combo_detail_produk)
 		},
 		{
-			header: 'Satuan',
+			header: '<div align="center">Satuan</div>',
 			dataIndex: 'drbeli_satuan',
 			width: 80,
 			sortable: true,
 			renderer: Ext.util.Format.comboRenderer(combo_drbeli_satuan)
 		},
 		{
-			header: 'Jumlah',
+			header: '<div align="center">Jumlah</div>',
 			align: 'right',
 			dataIndex: 'drbeli_jumlah',
 			width: 80,
@@ -1022,7 +1022,7 @@ Ext.onReady(function(){
 			})
 		},
 		{
-			header: 'Harga (Rp)',
+			header: '<div align="center">Harga (Rp)</div>',
 			align: 'right',
 			dataIndex: 'drbeli_harga',
 			width: 100,
@@ -1031,7 +1031,7 @@ Ext.onReady(function(){
 			renderer: Ext.util.Format.numberRenderer('0,000')
 		},
 		{
-			header: 'Diskon (%)',
+			header: '<div align="center">Diskon (%)</div>',
 			align: 'right',
 			dataIndex: 'drbeli_diskon',
 			width: 80,
@@ -1040,9 +1040,9 @@ Ext.onReady(function(){
 			renderer: Ext.util.Format.numberRenderer('0,000')
 		},
 		{
-			header: 'Sub Total (Rp)',
+			header: '<div align="center">Sub Total (Rp)</div>',
 			align: 'right',
-			width: 150,
+			width: 100,
 			sortable: true,
 			readOnly: true,
 			renderer: function(v, params, record){
@@ -1063,7 +1063,7 @@ Ext.onReady(function(){
 		el: 'fp_detail_retur_beli',
 		title: 'Detail Item Retur Pembelian',
 		height: 250,
-		width: 800,
+		width: 940,	//800,
 		autoScroll: true,
 		store: detail_retur_beli_DataStore, // DataStore
 		colModel: detail_retur_beli_ColumnModel, // Nama-nama Columns
@@ -1193,7 +1193,7 @@ Ext.onReady(function(){
 		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
-		width: 815,        
+		width: 932,	//815,        
 		items: [master_retur_beli_masterGroup,detail_retur_beliListEditorGrid,master_retur_beli_footGroup]
 		,
 		buttons: [{
@@ -1293,14 +1293,14 @@ Ext.onReady(function(){
 	});
 	rbeli_nobuktiSearchField= new Ext.form.TextField({
 		id: 'rbeli_terimaSearchField',
-		fieldLabel: 'No. Retur',
+		fieldLabel: 'No Retur',
 		maxLength: 100,
 		anchor: '95%'
 	});
 	/* Identify  rbeli_terima Search Field */
 	rbeli_terimaSearchField= new Ext.form.ComboBox({
 		id: 'rbeli_terimaSearchField',
-		fieldLabel: 'No. Penerimaan',
+		fieldLabel: 'No PB',
 		store: cbo_rbeli_terimabeli_DataSore,
 		displayField:'terima_no',
 		mode : 'remote',
@@ -1330,7 +1330,7 @@ Ext.onReady(function(){
 	rbeli_tanggalSearchField= new Ext.form.DateField({
 		id: 'rbeli_tanggalSearchField',
 		fieldLabel: 'Tanggal',
-		format : 'Y-m-d'
+		format : 'd-m-Y'
 	
 	});
 	/* Identify  rbeli_keterangan Search Field */
