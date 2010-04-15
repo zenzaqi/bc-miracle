@@ -423,15 +423,15 @@ Ext.onReady(function(){
 				cell.css = "readonlycell"; // Mengambil Value dari Class di dalam CSS 
 				return value;
 				},
-			hidden: false
+			hidden: true
 		},{
 			header: '<div align="center">Tanggal</div>',
 			dataIndex: 'koreksi_tanggal',
-			width: 100,
+			width: 70,	//100,
 			sortable: true,
-			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
+			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
 			editor: new Ext.form.DateField({
-				format: 'Y-m-d'
+				format: 'd-m-Y'
 			})
 		},
 		{
@@ -444,7 +444,7 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">Keterangan</div>',
 			dataIndex: 'koreksi_keterangan',
-			width: 150,
+			width: 200,
 			sortable: true,
 			editor: new Ext.form.TextArea({
 				maxLength: 500
@@ -499,7 +499,7 @@ Ext.onReady(function(){
 	master_koreksi_stokListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'master_koreksi_stokListEditorGrid',
 		el: 'fp_master_koreksi_stok',
-		title: 'Daftar Koreksi Stok',
+		title: 'Daftar Penyesuaian Stok',
 		autoHeight: true,
 		store: master_koreksi_stok_DataStore, // DataStore
 		cm: master_koreksi_stok_ColumnModel, // Nama-nama Columns
@@ -508,7 +508,7 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 700,
+	  	width: 800,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: master_koreksi_stok_DataStore,
@@ -842,9 +842,9 @@ Ext.onReady(function(){
 	detail_koreksi_stok_ColumnModel = new Ext.grid.ColumnModel(
 		[
 		{
-			header: '<div align="center">Nama Produk</div>',
+			header: '<div align="center">Produk</div>',
 			dataIndex: 'dkoreksi_produk',
-			width: 350,
+			width: 200,	//350,
 			sortable: true,
 			editor: combo_stok_produk,
 			renderer: Ext.util.Format.comboRenderer(combo_stok_produk)
@@ -852,16 +852,16 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">Satuan</div>',
 			dataIndex: 'dkoreksi_satuan',
-			width: 100,
+			width: 80,
 			sortable: true,
 			readOnly: true,
 			editor: combo_stok_satuan,
 			renderer: Ext.util.Format.comboRenderer(combo_stok_satuan)
 		},
 		{
-			header: '<div align="center">Jumlah Awal</div>',
+			header: '<div align="center">Jml Awal</div>',
 			dataIndex: 'dkoreksi_jmlawal',
-			width: 100,
+			width: 60,
 			align: 'right',
 			editor: stok_awalField,
 			renderer: Ext.util.Format.numberRenderer('0,000.00'),
@@ -869,18 +869,18 @@ Ext.onReady(function(){
 			readOnly: true
 		},
 		{
-			header: '<div align="center">Jumlah Terkoreksi</div>',
+			header: '<div align="center">Koreksi</div>',
 			dataIndex: 'dkoreksi_jmlkoreksi',
-			width: 100,
+			width: 60,
 			align: 'right',
 			sortable: true,
 			renderer: Ext.util.Format.numberRenderer('0,000.00'),
 			editor: stok_terkoreksiField
 		},
 		{
-			header: '<div align="center">Jumlah Saldo</div>',
+			header: '<div align="center">Jml Akhir</div>',
 			dataIndex: 'dkoreksi_jmlsaldo',
-			width: 100,
+			width: 60,
 			align: 'right',
 			sortable: true,
 			renderer: Ext.util.Format.numberRenderer('0,000.00'),
@@ -899,7 +899,7 @@ Ext.onReady(function(){
 		el: 'fp_detail_koreksi_stok',
 		title: 'Detail Item',
 		height: 250,
-		width: 790,
+		width: 800,
 		autoScroll: true,
 		store: detail_koreksi_stok_DataStore, // DataStore
 		colModel: detail_koreksi_stok_ColumnModel, // Nama-nama Columns
@@ -1053,7 +1053,7 @@ Ext.onReady(function(){
 	/* Function for retrieve create Window Form */
 	master_koreksi_stok_createWindow= new Ext.Window({
 		id: 'master_koreksi_stok_createWindow',
-		title: post2db+' Koreksi Stok',
+		title: post2db+' Penyesuaian Stok',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,
@@ -1188,7 +1188,7 @@ Ext.onReady(function(){
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
 	master_koreksi_stok_searchWindow = new Ext.Window({
-		title: 'Pencarian Koreksi Stok',
+		title: 'Pencarian Penyesuaian Stok',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,
