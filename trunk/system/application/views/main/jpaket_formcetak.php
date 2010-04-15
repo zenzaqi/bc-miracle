@@ -52,7 +52,7 @@ html,body,table,tr,td{
 	  <td width="1240px" height="25px">&nbsp;</td>
   </tr>
 	<tr>
-	  <td width="1240px" height="230px" valign="top">
+	  <td width="1240px" height="200px" valign="top">
 	  <table width="1240px" border="0" cellspacing="0" cellpadding="0">
 	  	<?php 
 		$i=0;
@@ -76,6 +76,13 @@ html,body,table,tr,td{
       </table>
 	  </td>
   </tr>
+  
+  <tr>
+  <td height="30px">
+  <?=$iklantoday_keterangan;?>
+  </td>
+  </tr>
+  
 	<tr>
 	  <td width="1240px"><table width="1240px" border="0" cellspacing="0" cellpadding="0">
         <tr>
