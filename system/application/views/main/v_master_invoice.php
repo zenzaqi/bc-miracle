@@ -117,7 +117,7 @@ Ext.onReady(function(){
 		if(oGrid_event.record.data.invoice_biaya!== null){invoice_biaya_update = oGrid_event.record.data.invoice_biaya;}
 	
 		Ext.Ajax.request({  
-			waitMsg: 'Please wait...',
+			waitMsg: 'Mohon tunggu...',
 			url: 'index.php?c=c_master_invoice&m=get_action',
 			params: {
 				task				: "UPDATE",
@@ -136,7 +136,7 @@ Ext.onReady(function(){
 			success: function(response){							
 				var result=eval(response.responseText);
 				if(result!==0){
-						Ext.MessageBox.alert(post2db+' OK','Invoice was '+msg+' successfully.');
+						Ext.MessageBox.alert(post2db+' OK','Data penerimaan tagihan berhasil disimpan');
 						master_invoice_DataStore.reload();
 						master_invoice_createWindow.hide();
 					}else{
@@ -216,7 +216,7 @@ Ext.onReady(function(){
 				var result=eval(response.responseText);
 				if(result!==0){
 						detail_invoice_purge(result)
-						Ext.MessageBox.alert(post2db+' OK','Invoice was '+msg+' successfully.');
+						Ext.MessageBox.alert(post2db+' OK','Data penerimaan tagihan berhasil disimpan');
 						master_invoice_DataStore.reload();
 						master_invoice_createWindow.hide();
 					}else{
@@ -348,13 +348,13 @@ Ext.onReady(function(){
 	function master_invoice_confirm_delete(){
 		// only one master_invoice is selected here
 		if(master_invoiceListEditorGrid.selModel.getCount() == 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', master_invoice_delete);
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', master_invoice_delete);
 		} else if(master_invoiceListEditorGrid.selModel.getCount() > 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', master_invoice_delete);
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', master_invoice_delete);
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really delete something you haven\'t selected?',
+				msg: 'Anda belum memilih data yang akan dihapus',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -374,7 +374,7 @@ Ext.onReady(function(){
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really update something you haven\'t selected?',
+				msg: 'Anda belum memilih data yang akan diubah',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -393,7 +393,7 @@ Ext.onReady(function(){
 			}
 			var encoded_array = Ext.encode(prez);
 			Ext.Ajax.request({ 
-				waitMsg: 'Please Wait',
+				waitMsg: 'Mohon tunggu...',
 				url: 'index.php?c=c_master_invoice&m=get_action', 
 				params: { task: "DELETE", ids:  encoded_array }, 
 				success: function(response){
@@ -525,49 +525,51 @@ Ext.onReady(function(){
 				cell.css = "readonlycell"; // Mengambil Value dari Class di dalam CSS 
 				return value;
 				},
-			hidden: false
+			hidden: true
 		},
 		{
 			header: '<div align="center">Tanggal</div>',
 			dataIndex: 'invoice_tanggal',
-			width: 100,
+			width: 70,	//100,
 			sortable: true,
-			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
+			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
 			editor: new Ext.form.DateField({
-				format: 'Y-m-d'
+				format: 'd-m-Y'
 			})
 		},
 		{
-			header: '<div align="center">No Invoice</div>',
+			header: '<div align="center">No Tagihan</div>',
 			dataIndex: 'invoice_no',
-			width: 100,
+			width: 80,	//100,
 			sortable: true,
 			readOnly: true
 		},
 		{
-			header: '<div align="center">No Penerimaan</div>',
+			header: '<div align="center">No PB</div>',
 			dataIndex: 'invoice_noterima',
-			width: 120,
+			width: 80,	//120,
 			sortable: true,
 			readOnly: true
 		},
 		{
 			header: '<div align="center">Supplier</div>',
 			dataIndex: 'invoice_supplier',
-			width: 250,
+			width: 200,	//250,
 			sortable: true,
 			readOnly: true
 		}, 
 		{
-			header: '<div align="center">Jumlah Item</div>',
+			header: '<div align="center">Jml Item</div>',
+			align: 'right',
 			dataIndex: 'invoice_jumlah',
-			width: 100,
+			width: 60,	//100,
 			sortable: true,
 			readOnly: true,
 			renderer: Ext.util.Format.numberRenderer('0,000')
 		},
 		{
-			header: '<div align="center">Sub Total</div>',
+			header: '<div align="center">Sub Total (Rp)</div>',
+			align: 'right',
 			dataIndex: 'invoice_total',
 			width: 100,
 			sortable: true,
@@ -578,7 +580,7 @@ Ext.onReady(function(){
 			header: '<div align="center">Diskon (%)</div>',
 			dataIndex: 'invoice_diskon',
 			align: 'right',
-			width: 100,
+			width: 60,	//100,
 			sortable: true,
 			readOnly: true,
 			renderer: Ext.util.Format.numberRenderer('0,000')
@@ -593,7 +595,7 @@ Ext.onReady(function(){
 			renderer: Ext.util.Format.numberRenderer('0,000')
 		},
 		{
-			header: '<div align="center">Biaya</div>',
+			header: '<div align="center">Biaya (Rp)</div>',
 			dataIndex: 'invoice_biaya',
 			align: 'right',
 			width: 100,
@@ -621,7 +623,7 @@ Ext.onReady(function(){
 		{
 			header: 'Jatuh Tempo',
 			dataIndex: 'invoice_jatuhtempo',
-			width: 100,
+			width: 70,	//100,
 			sortable: true,
 			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
 			editor: new Ext.form.DateField({
@@ -686,7 +688,7 @@ Ext.onReady(function(){
 	master_invoiceListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'master_invoiceListEditorGrid',
 		el: 'fp_master_invoice',
-		title: 'List Penerimaan Tagihan',
+		title: 'Daftar Penerimaan Tagihan',
 		autoHeight: true,
 		store: master_invoice_DataStore, // DataStore
 		cm: master_invoice_ColumnModel, // Nama-nama Columns
@@ -695,7 +697,7 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 1200,
+	  	width: 1220,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: master_invoice_DataStore,
@@ -814,7 +816,7 @@ Ext.onReady(function(){
 	/* Identify  invoice_no Field */
 	invoice_noField= new Ext.form.TextField({
 		id: 'invoice_noField',
-		fieldLabel: 'No. Invoice',
+		fieldLabel: 'No Tagihan',
 		maxLength: 50,
 		anchor: '95%'
 	});
@@ -830,7 +832,7 @@ Ext.onReady(function(){
 	/* Identify  invoice_noterima Field */
 	invoice_noterimaField= new Ext.form.ComboBox({
 		id: 'invoice_noterimaField',
-		fieldLabel: 'No. Penerimaan',
+		fieldLabel: 'No PB',
 		store: cbo_invoice_tbeliDataStore,
 		mode: 'remote',
 		displayField:'cbo_invoice_terima_no',
@@ -852,7 +854,7 @@ Ext.onReady(function(){
 	invoice_tanggalField= new Ext.form.DateField({
 		id: 'invoice_tanggalField',
 		fieldLabel: 'Tanggal',
-		format : 'Y-m-d'
+		format : 'd-m-Y'
 	});
 	/* Identify  invoice_nilai Field */
 	invoice_biayaField= new Ext.form.NumberField({
@@ -936,8 +938,8 @@ Ext.onReady(function(){
 	/* Identify  invoice_jatuhtempo Field */
 	invoice_jatuhtempoField= new Ext.form.DateField({
 		id: 'invoice_jatuhtempoField',
-		fieldLabel: 'Tgl Jatuh Tempo',
-		format : 'Y-m-d'
+		fieldLabel: 'Jatuh Tempo',
+		format : 'd-m-Y'
 	});
 	/* Identify  invoice_penagih Field */
 	invoice_penagihField= new Ext.form.TextField({
@@ -1160,7 +1162,7 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">Produk</div>',
 			dataIndex: 'dinvoice_produk',
-			width: 250,
+			width: 200,	//250,
 			sortable: true,
 			renderer: Ext.util.Format.comboRenderer(combo_invoice_produk)
 		},
@@ -1175,7 +1177,7 @@ Ext.onReady(function(){
 			header: '<div align="center">Jumlah</div>',
 			align: 'right',
 			dataIndex: 'dinvoice_jumlah',
-			width: 80,
+			width: 60,
 			renderer: Ext.util.Format.numberRenderer('0,000'),
 			sortable: true,
 			editable: false
@@ -1184,7 +1186,7 @@ Ext.onReady(function(){
 			header: '<div align="center">Harga (Rp)</div>',
 			align: 'right',
 			dataIndex: 'dinvoice_harga',
-			width: 150,
+			width: 100,	//150,
 			sortable: true,
 			renderer: Ext.util.Format.numberRenderer('0,000'),
 			editor: new Ext.form.NumberField({
@@ -1198,7 +1200,7 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">Diskon (%)</div>',
 			dataIndex: 'dinvoice_diskon',
-			width: 100,
+			width: 60,
 			align: 'right',
 			sortable: true,
 			editor: new Ext.form.NumberField({
@@ -1211,7 +1213,7 @@ Ext.onReady(function(){
 		},
 		{
 			header: '<div align="center">Sub Total (Rp)</div>',
-			width: 150,
+			width: 100,	//150,
 			align: 'right',
 			sortable: true,
 			readOnly: true,
@@ -1231,7 +1233,7 @@ Ext.onReady(function(){
 		el: 'fp_detail_invoice',
 		title: 'Detail Item Barang',
 		height: 250,
-		width: 692,
+		width: 940,	//692,
 		autoScroll: true,
 		store: detail_invoice_DataStore, // DataStore
 		colModel: detail_invoice_ColumnModel, // Nama-nama Columns
@@ -1299,7 +1301,7 @@ Ext.onReady(function(){
 		for(i=0;i<detail_invoice_DataStore.getCount();i++){
 			detail_invoice_record=detail_invoice_DataStore.getAt(i);
 			Ext.Ajax.request({
-				waitMsg: 'Please wait...',
+				waitMsg: 'Mohon tunggu...',
 				url: 'index.php?c=c_master_invoice&m=detail_invoice_insert',
 				params:{
 				dinvoice_id	: detail_invoice_record.data.dinvoice_id, 
@@ -1319,7 +1321,7 @@ Ext.onReady(function(){
 	//function for purge detail
 	function detail_invoice_purge(pkid){
 		Ext.Ajax.request({
-			waitMsg: 'Please wait...',
+			waitMsg: 'Mohon tunggu...',
 			url: 'index.php?c=c_master_invoice&m=detail_invoice_purge',
 			params:{ master_id: pkid},
 			success: function(response){
@@ -1367,7 +1369,7 @@ Ext.onReady(function(){
 		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
-		width: 700,        
+		width: 940,	//700,        
 		items: [master_invoice_masterGroup,detail_invoiceListEditorGrid, master_invoice_footerGroup],
 		buttons: [{
 				text: 'Save and Close',
@@ -1473,7 +1475,7 @@ Ext.onReady(function(){
 	/* Identify  invoice_no Search Field */
 	invoice_noSearchField= new Ext.form.TextField({
 		id: 'invoice_noSearchField',
-		fieldLabel: 'No. Invoice',
+		fieldLabel: 'No Tagihan',
 		maxLength: 50,
 		anchor: '95%'
 	
@@ -1492,13 +1494,13 @@ Ext.onReady(function(){
 	/* Identify  invoice_noterima Search Field */
 	invoice_noterimaSearchField= new Ext.form.ComboBox({
 		id: 'invoice_noterimaSearchField',
-		fieldLabel: 'No. Penerimaan',
+		fieldLabel: 'No PB',
 		store: cbo_invoice_tbeliDataStore,
 		mode: 'remote',
 		displayField:'cbo_invoice_terima_no',
 		valueField: 'cbo_invoice_terima_id',
         typeAhead: false,
-        loadingText: 'Searching...',
+        loadingText: 'Mencari...',
         pageSize:10,
         hideTrigger:false,
         tpl: invoice_tbeli_tpl,
@@ -1514,7 +1516,7 @@ Ext.onReady(function(){
 	invoice_tanggalSearchField= new Ext.form.DateField({
 		id: 'invoice_tanggalSearchField',
 		fieldLabel: 'Tanggal',
-		format : 'Y-m-d'
+		format : 'd-m-Y'
 	
 	});
 	/* Identify  invoice_nilai Search Field */
@@ -1578,7 +1580,7 @@ Ext.onReady(function(){
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
 	master_invoice_searchWindow = new Ext.Window({
-		title: 'Pencarian Invoice',
+		title: 'Pencarian Penerimaan Tagihan',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,
