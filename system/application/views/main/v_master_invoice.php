@@ -1534,7 +1534,7 @@ Ext.onReady(function(){
 	invoice_jatuhtempoSearchField= new Ext.form.DateField({
 		id: 'invoice_jatuhtempoSearchField',
 		fieldLabel: 'Jatuh Tempo',
-		format : 'Y-m-d'
+		format : 'd-m-Y'
 	
 	});
 	/* Identify  invoice_penagih Search Field */
