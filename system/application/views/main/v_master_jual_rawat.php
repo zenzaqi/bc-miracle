@@ -1895,7 +1895,7 @@ Ext.onReady(function(){
 				},
 				render: function(c){
 				Ext.get(this.id).set({qtitle:'Search By'});
-				Ext.get(this.id).set({qtip:'- No.Faktur<br>- No.Customer<br>- Nama Customer<br>- Member Customer'});
+				Ext.get(this.id).set({qtip:'- No Faktur<br>- No Cust<br>- Nama Customer<br>- No Member'});
 				}
 			},
 			width: 120
