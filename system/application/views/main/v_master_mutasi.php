@@ -537,7 +537,7 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 1220,	//700,
+	  	width: 800,	//700,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: master_mutasi_DataStore,
@@ -919,7 +919,7 @@ Ext.onReady(function(){
 		el: 'fp_detail_mutasi',
 		title: 'Item Mutasi',
 		height: 250,
-		width: 940,	//690,
+		width: 800,	//690,
 		autoScroll: true,
 		store: detail_mutasi_DataStore, // DataStore
 		colModel: detail_mutasi_ColumnModel, // Nama-nama Columns
@@ -1050,7 +1050,7 @@ Ext.onReady(function(){
 		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
-		width: 940,	//700,        
+		width: 800,	//700,        
 		items: [master_mutasi_masterGroup,detail_mutasiListEditorGrid,master_mutasi_footGroup]
 		,
 		buttons: [{
