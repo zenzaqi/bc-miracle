@@ -230,6 +230,7 @@ Ext.onReady(function(){
 		var jpaket_diskon_update=null;
 		var jpaket_cara_update=null;
 		var jpaket_keterangan_update=null;
+		var jpaket_statdok_update=null;
 
 		jpaket_id_update_pk = oGrid_event.record.data.jpaket_id;
 		if(oGrid_event.record.data.jpaket_nobukti!== null){jpaket_nobukti_update = oGrid_event.record.data.jpaket_nobukti;}
@@ -238,6 +239,7 @@ Ext.onReady(function(){
 		if(oGrid_event.record.data.jpaket_diskon!== null){jpaket_diskon_update = oGrid_event.record.data.jpaket_diskon;}
 		if(oGrid_event.record.data.jpaket_cara!== null){jpaket_cara_update = oGrid_event.record.data.jpaket_cara;}
 		if(oGrid_event.record.data.jpaket_keterangan!== null){jpaket_keterangan_update = oGrid_event.record.data.jpaket_keterangan;}
+		if(oGrid_event.record.data.jpaket_stat_dok!== null){jpaket_statdok_update = oGrid_event.record.data.jpaket_stat_dok;}
 
 		Ext.Ajax.request({  
 			waitMsg: 'Mohon  Tunggu...',
@@ -250,7 +252,8 @@ Ext.onReady(function(){
 				jpaket_tanggal	: jpaket_tanggal_update_date, 
 				jpaket_diskon	:jpaket_diskon_update,  
 				jpaket_cara	:jpaket_cara_update,  
-				jpaket_keterangan	:jpaket_keterangan_update,  
+				jpaket_keterangan	:jpaket_keterangan_update,
+				jpaket_stat_dok		:jpaket_statdok_update,
 			}, 
 			success: function(response){							
 				var result=eval(response.responseText);
@@ -303,7 +306,8 @@ Ext.onReady(function(){
 		var jpaket_cara_create=null; 
 		var jpaket_cara2_create=null; 
 		var jpaket_cara3_create=null; 
-		var jpaket_keterangan_create=null; 
+		var jpaket_keterangan_create=null;
+		var jpaket_statdok_create=null;
 		//tunai
 		var jpaket_tunai_nilai_create=null;
 		//tunai-2
@@ -392,7 +396,8 @@ Ext.onReady(function(){
 		if(jpaket_caraField.getValue()!== null){jpaket_cara_create = jpaket_caraField.getValue();} 
 		if(jpaket_cara2Field.getValue()!== null){jpaket_cara2_create = jpaket_cara2Field.getValue();} 
 		if(jpaket_cara3Field.getValue()!== null){jpaket_cara3_create = jpaket_cara3Field.getValue();} 
-		if(jpaket_keteranganField.getValue()!== null){jpaket_keterangan_create = jpaket_keteranganField.getValue();} 
+		if(jpaket_keteranganField.getValue()!== null){jpaket_keterangan_create = jpaket_keteranganField.getValue();}
+		if(jpaket_stat_dokField.getValue()!== null){jpaket_statdok_create = jpaket_stat_dokField.getValue();} 
 		//tunai
 		if(jpaket_tunai_nilaiField.getValue()!== null){jpaket_tunai_nilai_create = jpaket_tunai_nilaiField.getValue();}
 		//tunai-2
@@ -486,7 +491,8 @@ Ext.onReady(function(){
 				jpaket_cara		: 	jpaket_cara_create, 
 				jpaket_cara2		: 	jpaket_cara2_create, 
 				jpaket_cara3		: 	jpaket_cara3_create, 
-				jpaket_keterangan	: 	jpaket_keterangan_create, 
+				jpaket_keterangan	: 	jpaket_keterangan_create,
+				jpaket_stat_dok		:	jpaket_statdok_create,
 				jpaket_cashback	: 	jpaket_cashback_create,
 				//tunai
 				jpaket_tunai_nilai	:	jpaket_tunai_nilai_create,
@@ -773,6 +779,9 @@ Ext.onReady(function(){
 		jpaket_keteranganField.reset();
 		jpaket_keteranganField.setValue(null);
 		
+		jpaket_stat_dokField.reset();
+		jpaket_stat_dokField.setValue('Terbuka');
+		
 		jpaket_subTotalField.reset();
 		jpaket_subTotalField.setValue(null);
 
@@ -850,6 +859,7 @@ Ext.onReady(function(){
 		jpaket_bayarField.setValue(master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_bayar'));
 
 		jpaket_keteranganField.setValue(master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_keterangan'));
+		jpaket_stat_dokField.setValue(master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_stat_dok'));
 		
 		for(i=0;i<detail_jual_paket_DataStore.getCount();i++){
 			subtotal_field+=detail_jual_paket_DataStore.getAt(i).data.dpaket_subtotal_net;
@@ -1311,7 +1321,8 @@ Ext.onReady(function(){
 			{name: 'jpaket_cara3', type: 'string', mapping: 'jpaket_cara3'}, 
 			{name: 'jpaket_total', type: 'float', mapping: 'jpaket_totalbiaya'}, 	//additional by hendri
 			{name: 'jpaket_bayar', type: 'float', mapping: 'jpaket_bayar'}, 
-			{name: 'jpaket_keterangan', type: 'string', mapping: 'jpaket_keterangan'}, 
+			{name: 'jpaket_keterangan', type: 'string', mapping: 'jpaket_keterangan'},
+			{name: 'jpaket_stat_dok', type: 'string', mapping: 'jpaket_stat_dok'}, 			
 			{name: 'jpaket_creator', type: 'string', mapping: 'jpaket_creator'}, 
 			{name: 'jpaket_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'jpaket_date_create'}, 
 			{name: 'jpaket_update', type: 'string', mapping: 'jpaket_update'}, 
@@ -1639,6 +1650,15 @@ Ext.onReady(function(){
 				maxLength: 250
           	})
 		}, 
+		
+		{
+			header: '<div align="center">' + 'Stat Dok' + '</div>',
+			dataIndex: 'jpaket_stat_dok',
+			width: 80,	//150,
+			sortable: true
+		}, 
+		
+		
 		{
 			header: 'Creator',
 			dataIndex: 'jpaket_creator',
@@ -1987,6 +2007,27 @@ Ext.onReady(function(){
 		width: 100,
 		triggerAction: 'all'	
 	});
+	
+	
+	jpaket_stat_dokField= new Ext.form.ComboBox({
+		id: 'jpaket_stat_dokField',
+		fieldLabel: 'Status Dokumen',
+		store:new Ext.data.SimpleStore({
+			fields:['jpaket_stat_dok_value', 'jpaket_stat_dok_display'],
+			data:[['Terbuka','Terbuka'],['Tertutup','Tertutup'],['Batal','Batal']]
+		}),
+		mode: 'local',
+		emptyText: 'Terbuka',
+		displayField: 'jpaket_stat_dok_display',
+		valueField: 'jpaket_stat_dok_value',
+		editable: false,
+		//anchor: '95%',
+		width: 100,
+		triggerAction: 'all'	
+	});
+	
+	
+	
 	/* Identify  jpaket_keterangan Field */
 	jpaket_keteranganField= new Ext.form.TextArea({
 		id: 'jpaket_keteranganField',
@@ -3308,7 +3349,7 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [jpaket_tanggalField, jpaket_keteranganField] 
+				items: [jpaket_tanggalField, jpaket_keteranganField, jpaket_stat_dokField] 
 			}
 			]
 	
@@ -3692,10 +3733,8 @@ Ext.onReady(function(){
 								params:{dpaket_master	: eval(get_pk_id())}
 							});
 							Ext.MessageBox.alert(jpaket_post2db+' OK','Data penjualan produk berhasil disimpan');
-							jpaket_post2db="CREATE";
 						}else if(result==-1){
 							detail_jual_paket_DataStore.load({params: {master_id:0}});
-							jpaket_post2db="CREATE";
 							Ext.MessageBox.show({
 							   title: 'Warning',
 							   //msg: 'We could\'t not '+msg+' the Master_jual_produk.',
@@ -3708,7 +3747,6 @@ Ext.onReady(function(){
 							detail_jual_paket_DataStore.load({params: {master_id:0}});
 							jpaket_cetak(result);
 							cetak_jpaket=0;
-							jpaket_post2db="CREATE";
 						}
 					},
 					failure: function(response){
