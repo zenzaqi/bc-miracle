@@ -425,7 +425,12 @@ class M_master_retur_jual_produk extends Model{
 				"kwitansi_status"=>'Terbuka'
 				);
 				$this->db->insert('cetak_kwitansi', $dti_kwitansi);
-				return '1';
+				if($this->db->affected_rows()){
+					return $rproduk_nobukti;
+				}else{
+					return '1';
+				}
+				
 			}else
 				return '0';
 		}
@@ -574,6 +579,19 @@ class M_master_retur_jual_produk extends Model{
 				};
 				$result = $this->db->query($query);
 			}
+			return $result;
+		}
+		
+		function print_paper($kwitansi_ref){
+			
+			$sql="SELECT kwitansi_id,kwitansi_no,kwitansi_date_create,cust_no,cust_nama,kwitansi_nilai,kwitansi_keterangan,kwitansi_cara FROM cetak_kwitansi,customer WHERE kwitansi_cust=cust_id AND kwitansi_ref='".$kwitansi_ref."'";
+			$result = $this->db->query($sql);
+			return $result;
+		}
+		
+		function cara_bayar($kwitansi_ref){
+			$sql="SELECT kwitansi_id,kwitansi_no,kwitansi_date_create,cust_no,cust_nama,kwitansi_nilai,kwitansi_keterangan FROM cetak_kwitansi,customer WHERE kwitansi_cust=cust_id AND kwitansi_ref='".$kwitansi_ref."'";
+			$result = $this->db->query($sql);
 			return $result;
 		}
 		

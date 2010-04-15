@@ -83,6 +83,42 @@ var rproduk_keteranganSearchField;
 
 var dt= new Date();
 
+function retur_jproduk_cetak(kwitansi_ref){
+	Ext.Ajax.request({   
+		waitMsg: 'Mohon tunggu...',
+		url: 'index.php?c=c_master_retur_jual_produk&m=print_paper',
+		params: { kwitansi_ref : kwitansi_ref}, 
+		success: function(response){              
+			var result=eval(response.responseText);
+			switch(result){
+			case 1:
+				win = window.open('./kwitansi_paper.html','Cetak Kwitansi Retur Produk','height=480,width=1240,resizable=1,scrollbars=0, menubar=0');
+				//win.print();
+				break;
+			default:
+				Ext.MessageBox.show({
+					title: 'Warning',
+					msg: 'Unable to print the grid!',
+					buttons: Ext.MessageBox.OK,
+					animEl: 'save',
+					icon: Ext.MessageBox.WARNING
+				});
+				break;
+			}  
+		},
+		failure: function(response){
+			var result=response.responseText;
+			Ext.MessageBox.show({
+			   title: 'Error',
+			   msg: 'Could not connect to the database. retry later.',
+			   buttons: Ext.MessageBox.OK,
+			   animEl: 'database',
+			   icon: Ext.MessageBox.ERROR
+			});		
+		} 	                     
+	});
+}
+
 /* on ready fuction */
 Ext.onReady(function(){
   	Ext.QuickTips.init();	/* Initiate quick tips icon */
@@ -191,10 +227,26 @@ Ext.onReady(function(){
 				rproduk_kwitansi_keterangan	: rproduk_kwitansi_keterangan_create
 			}, 
 			success: function(response){             
-				var result=eval(response.responseText);
-				switch(result){
+				//var result=eval(response.responseText);
+				var result=response.responseText;
+				if(result=='0' || result=='1'){
+					Ext.MessageBox.show({
+					   title: 'Warning',
+					   msg: 'Data retur penjualan produk tidak bisa disimpan',
+					   buttons: Ext.MessageBox.OK,
+					   animEl: 'save',
+					   icon: Ext.MessageBox.WARNING
+					});
+				}else{
+					retur_jproduk_cetak(result);
+					detail_retur_jual_produk_purge();
+					detail_retur_jual_produk_insert();
+					master_retur_jual_produk_DataStore.reload();
+					master_retur_jual_produk_createWindow.hide();
+				}
+				/*switch(result){
 					case 1:
-						detail_retur_jual_produk_purge()
+						detail_retur_jual_produk_purge();
 						detail_retur_jual_produk_insert();
 						Ext.MessageBox.alert(post2db+' OK','Data retur penjualan produk berhasil disimpan');
 						master_retur_jual_produk_DataStore.reload();
@@ -209,7 +261,7 @@ Ext.onReady(function(){
 						   icon: Ext.MessageBox.WARNING
 						});
 						break;
-				}        
+				}*/
 			},
 			failure: function(response){
 				var result=response.responseText;
