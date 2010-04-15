@@ -176,12 +176,48 @@ function jrawat_cetak(){
 	Ext.Ajax.request({   
 		waitMsg: 'Please Wait...',
 		url: 'index.php?c=c_master_jual_rawat&m=print_paper',
-		params: { jrawat_id : jrawat_idField.getValue()	}, 
+		params: { jrawat_id : jrawat_idField.getValue(), jrawat_cust : jrawat_cust_idField.getValue() }, 
 		success: function(response){              
 			var result=eval(response.responseText);
 			switch(result){
 			case 1:
 				win = window.open('./jrawat_paper.html','Cetak Penjualan Perawatan','height=480,width=1240,resizable=1,scrollbars=0, menubar=0');
+				//win.print();
+				break;
+			default:
+				Ext.MessageBox.show({
+					title: 'Warning',
+					msg: 'Unable to print the grid!',
+					buttons: Ext.MessageBox.OK,
+					animEl: 'save',
+					icon: Ext.MessageBox.WARNING
+				});
+				break;
+			}  
+		},
+		failure: function(response){
+			var result=response.responseText;
+			Ext.MessageBox.show({
+			   title: 'Error',
+			   msg: 'Could not connect to the database. retry later.',
+			   buttons: Ext.MessageBox.OK,
+			   animEl: 'database',
+			   icon: Ext.MessageBox.ERROR
+			});		
+		} 	                     
+	});
+}
+
+function apaket_cetak(jpaket_id,dapaket_cust){
+	Ext.Ajax.request({   
+		waitMsg: 'Please Wait...',
+		url: 'index.php?c=c_master_jual_rawat&m=print_paper_paket',
+		params: { dapaket_jpaket : jpaket_id, dapaket_cust : dapaket_cust }, 
+		success: function(response){              
+			var result=eval(response.responseText);
+			switch(result){
+			case 1:
+				win = window.open('./apaket_paper.html','Cetak Pengambilan Paket','height=480,width=1240,resizable=1,scrollbars=0, menubar=0');
 				//win.print();
 				break;
 			default:
@@ -868,6 +904,7 @@ Ext.onReady(function(){
 		jrawat_idField.setValue(master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_id'));
 		jrawat_nobuktiField.setValue(master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_nobukti'));
 		jrawat_custField.setValue(master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_cust'));
+		jrawat_cust_idField.setValue(master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_cust_id'));
 		jrawat_tanggalField.setValue(master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_tanggal'));
 		jrawat_diskonField.setValue(master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_diskon'));
 		jrawat_cashbackField.setValue(master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_cashback'));
@@ -1368,6 +1405,84 @@ Ext.onReady(function(){
 				}
 			});
 		}  
+	}
+  	/* End of Function */
+	
+	/* Function for pra-cetak Pengambilan Paket Record */
+	function pra_cetak_ambil_paket(){
+		if(master_jual_rawatListEditorGrid.selModel.getCount() == 1){
+			var selections = master_jual_rawatListEditorGrid.selModel.getSelections();
+			var prez = [];
+			var preznobukti = [];
+			prez.push(selections[0].json.jrawat_id);
+			var encoded_array = Ext.encode(prez);
+			preznobukti.push(selections[0].json.jrawat_nobukti);
+			var encoded_preznobukti = Ext.encode(preznobukti);
+			prezcust.push(selections[0].json.jrawat_cust_id);
+			var encoded_prezcust = Ext.encode(prezcust);
+			if(encoded_preznobukti.substring(2,4)=="PK"){
+				apaket_cetak(encoded_array,encoded_prezcust);
+			}else{
+				Ext.MessageBox.show({
+					title: 'Warning',
+					msg: 'Pilih yang field Paket = paket.',
+					buttons: Ext.MessageBox.OK,
+					animEl: 'save',
+					icon: Ext.MessageBox.WARNING
+				});
+			}
+			/*if(encoded_preznobukti.substring(2,4)=="PK"){
+				Ext.Ajax.request({ 
+		//				waitMsg: 'Please Wait',
+					waitMsg: 'Mohon tunggu..',
+					url: 'index.php?c=c_master_jual_rawat&m=get_action', 
+					params: { task: "CETAK_PAKET", ids:  encoded_array }, 
+					success: function(response){
+						var result=eval(response.responseText);
+						switch(result){
+							case 1:  // Success : simply reload
+								master_jual_rawat_DataStore.reload();
+								break;
+							default:
+								Ext.MessageBox.show({
+									title: 'Warning',
+									msg: 'Could not delete the entire selection',
+									buttons: Ext.MessageBox.OK,
+									animEl: 'save',
+									icon: Ext.MessageBox.WARNING
+								});
+								break;
+						}
+					},
+					failure: function(response){
+						var result=response.responseText;
+						Ext.MessageBox.show({
+						   title: 'Error',
+						   msg: 'Could not connect to the database. retry later.',
+						   buttons: Ext.MessageBox.OK,
+						   animEl: 'database',
+						   icon: Ext.MessageBox.ERROR
+						});	
+					}
+				});
+			}else{
+				Ext.MessageBox.show({
+					title: 'Warning',
+					msg: 'Pilih yang field Paket = paket.',
+					buttons: Ext.MessageBox.OK,
+					animEl: 'save',
+					icon: Ext.MessageBox.WARNING
+				});
+			}*/
+		}else{
+			Ext.MessageBox.show({
+				title: 'Warning',
+				msg: 'Anda harus memilih satu data untuk dicetak.',
+				buttons: Ext.MessageBox.OK,
+				animEl: 'save',
+				icon: Ext.MessageBox.WARNING
+			});
+		}
 	}
   	/* End of Function */
   
@@ -1931,7 +2046,7 @@ Ext.onReady(function(){
 			text: 'Print',
 			tooltip: 'Print Document',
 			iconCls:'icon-print',
-			handler: master_jual_rawat_print 
+			handler: pra_cetak_ambil_paket 
 		},
 		{ 
 			text: 'Export Excel', 
@@ -2043,6 +2158,7 @@ Ext.onReady(function(){
 		listClass: 'x-combo-list-small',
 		anchor: '95%'
 	});
+	jrawat_cust_idField= new Ext.form.NumberField();
 	
 	jrawat_cust_nomemberField= new Ext.form.TextField({
 		id: 'jrawat_cust_nomemberField',

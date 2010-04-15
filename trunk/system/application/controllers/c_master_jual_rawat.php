@@ -282,6 +282,9 @@ class C_master_jual_rawat extends Controller {
 			case "EXCEL":
 				$this->master_jual_rawat_export_excel();
 				break;
+			case "CETAK_PAKET":
+				$this->print_paper_paket();
+				break;
 			default:
 				echo "{failure:true}";
 				break;
@@ -684,10 +687,16 @@ class C_master_jual_rawat extends Controller {
 	function print_paper(){
   		//POST varibale here
 		$jrawat_id=trim(@$_POST["jrawat_id"]);
+		$jrawat_cust=trim(@$_POST["jrawat_cust"]);
 		
 		$result = $this->m_master_jual_rawat->print_paper($jrawat_id);
 		$rs=$result->row();
 		$detail_jrawat=$result->result();
+		
+		$result_apaket = $this->m_master_jual_rawat->print_paper_apaket_bycust($jrawat_cust);
+		$rs_apaket=$result_apaket->row();
+		$detail_apaket=$result_apaket->result();
+		
 		$data['jrawat_nobukti']=$rs->jrawat_nobukti;
 		$data['jrawat_tanggal']=$rs->jrawat_tanggal;
 		$data['cust_no']=$rs->cust_no;
@@ -700,9 +709,34 @@ class C_master_jual_rawat extends Controller {
 		//$data['jrawat_creator']=$rs->jrawat_creator;
 		//$data['jrawat_totalbiaya']=$rs->jrawat_totalbiaya;
 		$data['detail_jrawat']=$detail_jrawat;
+		$data['detail_apaket']=$detail_apaket;
 		
 		$viewdata=$this->load->view("main/jrawat_formcetak",$data,TRUE);
 		$file = fopen("jrawat_paper.html",'w');
+		fwrite($file, $viewdata);	
+		fclose($file);
+		echo '1';        
+	}
+	
+	function print_paper_paket(){
+  		//POST varibale here
+		$dapaket_jpaket=trim(@$_POST["dapaket_jpaket"]);
+		$dapaket_jpaket = json_decode(stripslashes($dapaket_jpaket));
+		$dapaket_cust=trim(@$_POST["dapaket_cust"]);
+		$dapaket_cust = json_decode(stripslashes($dapaket_cust));
+		
+		$result = $this->m_master_jual_rawat->print_paper_paket($dapaket_jpaket, $dapaket_cust);
+		$rs=$result->row();
+		$detail_ambil_paket=$result->result();
+		$data['jpaket_nobukti']=$rs->jpaket_nobukti;
+		$data['dapaket_tanggal']=$rs->dapaket_tanggal;
+		$data['cust_no']=$rs->cust_no;
+		$data['cust_nama']=$rs->cust_nama;
+		$data['cust_alamat']=$rs->cust_alamat;
+		$data['detail_ambil_paket']=$detail_ambil_paket;
+		
+		$viewdata=$this->load->view("main/apaket_formcetak",$data,TRUE);
+		$file = fopen("apaket_paper.html",'w');
 		fwrite($file, $viewdata);	
 		fclose($file);
 		echo '1';        

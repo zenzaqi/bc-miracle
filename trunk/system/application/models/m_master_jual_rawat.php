@@ -1636,5 +1636,20 @@ class M_master_jual_rawat extends Model{
 			return $result;
 		}
 		
+		function print_paper_paket($dapaket_jpaket, $dapaket_cust){
+			$date_now = date('Y-m-d');
+			//$this->firephp->log($jproduk_id, "jproduk_id");
+			$sql="SELECT date_format(dapaket_date_create,'%Y-%m-%d') AS dapaket_tanggal, cust_no, cust_nama, cust_alamat, jpaket_nobukti, rawat_nama, paket_nama FROM detail_ambil_paket LEFT JOIN detail_jual_paket ON(dapaket_dpaket=dpaket_id AND dapaket_jpaket=dpaket_master AND dapaket_paket=dpaket_paket) LEFT JOIN master_jual_paket ON(dapaket_jpaket=jpaket_id) LEFT JOIN paket ON(dapaket_paket=paket_id) LEFT JOIN customer ON(dapaket_cust=cust_id) LEFT JOIN perawatan ON(dapaket_item=rawat_id) WHERE dapaket_jpaket='$dapaket_jpaket[0]' AND dapaket_cust='$dapaket_cust[0]' AND date_format(dapaket_date_create,'%Y-%m-%d')='$date_now'";
+			$result = $this->db->query($sql);
+			return $result;
+		}
+		
+		function print_paper_apaket_bycust($dapaket_cust){
+			$date_now = date('Y-m-d');
+			$sql="SELECT cust_no, cust_nama, cust_alamat, jpaket_nobukti, rawat_nama, paket_nama FROM detail_ambil_paket LEFT JOIN detail_jual_paket ON(dapaket_dpaket=dpaket_id AND dapaket_jpaket=dpaket_master AND dapaket_paket=dpaket_paket) LEFT JOIN master_jual_paket ON(dapaket_jpaket=jpaket_id) LEFT JOIN paket ON(dapaket_paket=paket_id) LEFT JOIN customer ON(dapaket_cust=cust_id) LEFT JOIN perawatan ON(dapaket_item=rawat_id) WHERE dapaket_cust='$dapaket_cust' AND date_format(dapaket_date_create,'%Y-%m-%d')='$date_now'";
+			$result = $this->db->query($sql);
+			return $result;
+		}
+		
 }
 ?>

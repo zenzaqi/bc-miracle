@@ -53,7 +53,9 @@ html,body,table,tr,td{
   </tr>
 	<tr>
 	  <td width="1240px" height="230px" valign="top">
+	  <?php if($detail_jrawat){?>
 	  <table width="1240px" border="0" cellspacing="0" cellpadding="0">
+	  <?php }?>
 	  	<?php 
 		$i=0;
 		$total=0;
@@ -73,7 +75,22 @@ html,body,table,tr,td{
 		$total=($subtotal*((100-$jrawat_diskon)/100)-$jrawat_cashback);
 		$total_diskon=($subtotal*($jrawat_diskon/100));
 		?>
-      </table>
+      <?php if($detail_jrawat){?>
+	  </table>
+	  <?php }?><br />
+	  <table width="1240px" border="0" cellspacing="0" cellpadding="0">
+		<tr>
+			<td><font style="font-weight:bold; border:#000000 1px solid">PENGAMBILAN PAKET</font></td>
+		</tr>
+		<?php 
+		$j=0;
+		foreach($detail_apaket as $list => $row_apaket){ $j+=1;?>
+		<tr>
+			<td width="970px">&nbsp;<?=$j;?>.&nbsp;<?=$row_apaket->paket_nama;?>&nbsp;(<?=$row_apaket->rawat_nama;?>&nbsp;-&nbsp;<?=$row_apaket->jpaket_nobukti;?>)</td>
+			<td width="270px" align="right">0</td>
+		</tr>
+		<?php }?>
+	  </table>
 	  </td>
   </tr>
 	<tr>
