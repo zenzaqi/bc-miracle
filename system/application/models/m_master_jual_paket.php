@@ -714,6 +714,8 @@ class M_master_jual_paket extends Model{
 		
 		//function for get list record
 		function master_jual_paket_list($filter,$start,$end){
+			$date_now=date('Y-m-d');
+		
 			$query = "SELECT jpaket_id, jpaket_nobukti, cust_nama, cust_no, cust_member, jpaket_cust, jpaket_tanggal, jpaket_diskon, jpaket_cashback, jpaket_cara, jpaket_cara2, jpaket_cara3, jpaket_bayar, IF(vu_jpaket.jpaket_totalbiaya!=0,vu_jpaket.jpaket_totalbiaya,vu_jpaket_totalbiaya.jpaket_totalbiaya) AS jpaket_totalbiaya, jpaket_keterangan, jpaket_stat_dok, jpaket_creator, jpaket_date_create, jpaket_update, jpaket_date_update, jpaket_revised FROM vu_jpaket LEFT JOIN vu_jpaket_totalbiaya ON(vu_jpaket_totalbiaya.dpaket_master=vu_jpaket.jpaket_id)";
 			
 			// For simple search
@@ -721,6 +723,11 @@ class M_master_jual_paket extends Model{
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 				$query .= " (jpaket_nobukti LIKE '%".addslashes($filter)."%' OR cust_nama LIKE '%".addslashes($filter)."%' OR cust_no LIKE '%".addslashes($filter)."%'  )";
 			}
+			//normal LIST by Hendri
+			else {
+				$query .= eregi("WHERE",$query)? " AND ":" WHERE ";
+				$query .= " date_format(jpaket_date_create,'%Y-%m-%d')='$date_now'";
+			}	
 			
 			$query .= " ORDER BY jpaket_nobukti DESC ";
 			
@@ -729,6 +736,10 @@ class M_master_jual_paket extends Model{
 				$query_nbrows .=eregi("WHERE",$query_nbrows)? " AND ":" WHERE ";
 				$query_nbrows .= " (jpaket_nobukti LIKE '%".addslashes($filter)."%' OR cust_nama LIKE '%".addslashes($filter)."%' OR cust_no LIKE '%".addslashes($filter)."%'  )";
 			}
+			else {
+				$query_nbrows .= eregi("WHERE",$query_nbrows)? " AND ":" WHERE ";
+				$query_nbrows .= " date_format(jpaket_date_create,'%Y-%m-%d')='$date_now'";
+			}	
 			
 			$result = $this->db->query($query_nbrows);
 			$nbrows = $result->num_rows();

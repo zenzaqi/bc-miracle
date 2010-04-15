@@ -3732,7 +3732,7 @@ Ext.onReady(function(){
 								url: 'index.php?c=c_master_jual_paket&m=catatan_piutang_update',
 								params:{dpaket_master	: eval(get_pk_id())}
 							});
-							Ext.MessageBox.alert(jpaket_post2db+' OK','Data penjualan produk berhasil disimpan');
+							Ext.MessageBox.alert(jpaket_post2db+' OK','Data penjualan paket berhasil disimpan');
 							jpaket_post2db="CREATE";
 						}else if(result==-1){
 							detail_jual_paket_DataStore.load({params: {master_id:0}});
@@ -3740,7 +3740,7 @@ Ext.onReady(function(){
 							Ext.MessageBox.show({
 							   title: 'Warning',
 							   //msg: 'We could\'t not '+msg+' the Master_jual_produk.',
-							   msg: 'Data penjualan produk tidak bisa disimpan',
+							   msg: 'Data penjualan paket tidak bisa disimpan',
 							   buttons: Ext.MessageBox.OK,
 							   animEl: 'save',
 							   icon: Ext.MessageBox.WARNING

@@ -541,6 +541,7 @@ class M_master_jual_produk extends Model{
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 				$query .= " (jproduk_nobukti LIKE '%".addslashes($filter)."%' OR cust_nama LIKE '%".addslashes($filter)."%' OR cust_no LIKE '%".addslashes($filter)."%' )";
 			}
+			//normal LIST by Hendri
 			else {
 				$query .= eregi("WHERE",$query)? " AND ":" WHERE ";
 				$query .= " date_format(jproduk_date_create,'%Y-%m-%d')='$date_now'";
