@@ -49,7 +49,7 @@ html,body,table,tr,td{
       </table></td>
   </tr>
   	<tr>
-	  <td width="1240px" height="35px">&nbsp;</td>
+	  <td width="1240px" height="30px">&nbsp;</td>
   </tr>
 	<tr>
 	  <td width="1240px" height="200px" valign="top">
