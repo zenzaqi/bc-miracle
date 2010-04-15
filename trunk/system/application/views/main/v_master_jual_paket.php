@@ -3733,8 +3733,10 @@ Ext.onReady(function(){
 								params:{dpaket_master	: eval(get_pk_id())}
 							});
 							Ext.MessageBox.alert(jpaket_post2db+' OK','Data penjualan produk berhasil disimpan');
+							jpaket_post2db="CREATE";
 						}else if(result==-1){
 							detail_jual_paket_DataStore.load({params: {master_id:0}});
+							jpaket_post2db="CREATE";
 							Ext.MessageBox.show({
 							   title: 'Warning',
 							   //msg: 'We could\'t not '+msg+' the Master_jual_produk.',
@@ -3747,6 +3749,7 @@ Ext.onReady(function(){
 							detail_jual_paket_DataStore.load({params: {master_id:0}});
 							jpaket_cetak(result);
 							cetak_jpaket=0;
+							jpaket_post2db="CREATE";
 						}
 					},
 					failure: function(response){
