@@ -231,6 +231,7 @@ Ext.onReady(function(){
 		var jproduk_id_update_pk="";
 		var jproduk_nobukti_update=null;
 		var jproduk_cust_update=null;
+		var jproduk_stat_dok_update=null;
 		var jproduk_tanggal_update_date="";
 		var jproduk_diskon_update=null;
 		var jproduk_cara_update=null;
@@ -243,6 +244,7 @@ Ext.onReady(function(){
 		if(oGrid_event.record.data.jproduk_diskon!== null){jproduk_diskon_update = oGrid_event.record.data.jproduk_diskon;}
 		if(oGrid_event.record.data.jproduk_cara!== null){jproduk_cara_update = oGrid_event.record.data.jproduk_cara;}
 		if(oGrid_event.record.data.jproduk_keterangan!== null){jproduk_keterangan_update = oGrid_event.record.data.jproduk_keterangan;}
+		if(oGrid_event.record.data.jproduk_stat_dok!== null){jproduk_stat_dok_update = oGrid_event.record.data.jproduk_stat_dok;}
 
 		Ext.Ajax.request({  
 			waitMsg: 'Mohon tunggu...',
@@ -255,7 +257,8 @@ Ext.onReady(function(){
 				jproduk_tanggal	: jproduk_tanggal_update_date, 
 				jproduk_diskon	:jproduk_diskon_update,  
 				jproduk_cara	:jproduk_cara_update,  
-				jproduk_keterangan	:jproduk_keterangan_update,  
+				jproduk_keterangan	:jproduk_keterangan_update,
+				jproduk_stat_dok	:jproduk_stat_dok_update
 			}, 
 			success: function(response){							
 				var result=eval(response.responseText);
@@ -308,6 +311,7 @@ Ext.onReady(function(){
 		var jproduk_cara_create=null; 
 		var jproduk_cara2_create=null; 
 		var jproduk_cara3_create=null; 
+		var jproduk_statdok_create=null;
 		var jproduk_keterangan_create=null; 
 		//tunai
 		var jproduk_tunai_nilai_create=null;
@@ -397,6 +401,7 @@ Ext.onReady(function(){
 		if(jproduk_caraField.getValue()!== null){jproduk_cara_create = jproduk_caraField.getValue();} 
 		if(jproduk_cara2Field.getValue()!== null){jproduk_cara2_create = jproduk_cara2Field.getValue();} 
 		if(jproduk_cara3Field.getValue()!== null){jproduk_cara3_create = jproduk_cara3Field.getValue();} 
+		if(jproduk_stat_dokField.getValue()!== null){jproduk_statdok_create = jproduk_stat_dokField.getValue();} 
 		if(jproduk_keteranganField.getValue()!== null){jproduk_keterangan_create = jproduk_keteranganField.getValue();} 
 		//tunai
 		if(jproduk_tunai_nilaiField.getValue()!== null){jproduk_tunai_nilai_create = jproduk_tunai_nilaiField.getValue();}
@@ -491,6 +496,7 @@ Ext.onReady(function(){
 				jproduk_cara		: 	jproduk_cara_create, 
 				jproduk_cara2		: 	jproduk_cara2_create, 
 				jproduk_cara3		: 	jproduk_cara3_create, 
+				jproduk_stat_dok	:	jproduk_statdok_create,
 				jproduk_keterangan	: 	jproduk_keterangan_create, 
 				jproduk_cashback	: 	jproduk_cashback_create,
 				//tunai
@@ -865,6 +871,8 @@ Ext.onReady(function(){
 		jproduk_tanggalField.setValue(dt.format('Y-m-d'));
 		jproduk_diskonField.reset();
 		jproduk_diskonField.setValue(null);
+		jproduk_stat_dokField.reset();
+		jproduk_stat_dokField.setValue('Terbuka');
 		jproduk_caraField.reset();
 		jproduk_caraField.setValue(null);
 		jproduk_cara2Field.reset();
@@ -941,6 +949,7 @@ Ext.onReady(function(){
 		var hutang_field=0;
 		var diskon_field=0;
 		var cashback_field=0;
+	
 		
 		//master_jual_produk_reset_form();
 		jproduk_idField.setValue(master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_id'));
@@ -948,6 +957,7 @@ Ext.onReady(function(){
 		jproduk_custField.setValue(master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_cust'));
 		jproduk_tanggalField.setValue(master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_tanggal'));
 		jproduk_caraField.setValue(master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_cara'));
+		jproduk_stat_dokField.setValue(master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_stat_dok'));
 		jproduk_cara2Field.setValue(master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_cara2'));
 		jproduk_cara3Field.setValue(master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_cara3'));
 		jproduk_diskonField.setValue(master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_diskon'));
@@ -1347,7 +1357,7 @@ Ext.onReady(function(){
 		master_jual_produk_reset_form();
 		/* only one record is selected here */
 		if(master_jual_produkListEditorGrid.selModel.getCount() == 1) {
-			////cbo_dproduk_produkDataStore.load({params: {query: master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_id')}});
+			cbo_dproduk_produkDataStore.load({params: {query: master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_id')}});
 			cbo_dproduk_satuanDataStore.setBaseParam('produk_id', 0);
 			cbo_dproduk_satuanDataStore.setBaseParam('query', master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_id'));
 			//cbo_dproduk_satuanDataStore.load({params: {query: master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_id')}});
@@ -1355,29 +1365,36 @@ Ext.onReady(function(){
 			//master_jual_produk_set_form();
 			//master_cara_bayarTabPanel.setActiveTab(0);
 			jproduk_post2db='UPDATE';
-			cbo_dproduk_produkDataStore.load({
-				params: {query: master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_id')},
-				callback: function(opts, success, response){
-					if(success){
-						detail_jual_produk_DataStore.load({
-							params : {master_id : eval(get_pk_id()), start:0, limit:pageS},
-							callback: function(opts, success, response){
-								if(success){
-									master_jual_produk_set_form();
-								}
-							}
-						});
-					}
-				}
-			});
-			/*detail_jual_produk_DataStore.load({
+			detail_jual_produk_DataStore.load({
 				params : {master_id : eval(get_pk_id()), start:0, limit:pageS},
 				callback: function(opts, success, response){
 					if(success){
+						/*var subtotal_field=0;
+						var dproduk_jumlah_field=0;
+						var total_field=0;
+						var hutang_field=0;
+						var diskon_field=0;
+						var cashback_field=0;
+						for(i=0;i<detail_jual_produk_DataStore.getCount();i++){
+							subtotal_field+=detail_jual_produk_DataStore.getAt(i).data.dproduk_subtotal_net;
+							dproduk_jumlah_field+=detail_jual_produk_DataStore.getAt(i).data.dproduk_jumlah;
+							//jproduk_subTotalField.setValue(subtotal_field);
+							if(jproduk_diskonField.getValue()!==""){
+								diskon_field=jproduk_diskonField.getValue();
+							}
+							
+							if(jproduk_cashbackField.getValue()!==""){
+								cashback_field=jproduk_cashbackField.getValue();
+							}
+							total_field=subtotal_field*(100-diskon_field)/100-cashback_field;
+						}
+						jproduk_jumlahField.setValue(dproduk_jumlah_field);
+						jproduk_subTotalField.setValue(subtotal_field);
+						jproduk_totalField.setValue(total_field);*/
 						master_jual_produk_set_form();
 					}
 				}
-			});*/
+			});
 			
 			master_cara_bayarTabPanel.setActiveTab(2);
 			master_cara_bayarTabPanel.setActiveTab(1);
@@ -1470,7 +1487,8 @@ Ext.onReady(function(){
 			{name: 'jproduk_cara3', type: 'string', mapping: 'jproduk_cara3'}, 
 			{name: 'jproduk_bayar', type: 'float', mapping: 'jproduk_bayar'}, 
 			{name: 'jproduk_total', type: 'float', mapping: 'jproduk_totalbiaya'}, 
-			{name: 'jproduk_keterangan', type: 'string', mapping: 'jproduk_keterangan'}, 
+			{name: 'jproduk_keterangan', type: 'string', mapping: 'jproduk_keterangan'},
+			{name: 'jproduk_stat_dok', type: 'string', mapping: 'jproduk_stat_dok'}, 			
 			{name: 'jproduk_creator', type: 'string', mapping: 'jproduk_creator'}, 
 			{name: 'jproduk_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'jproduk_date_create'}, 
 			{name: 'jproduk_update', type: 'string', mapping: 'jproduk_update'}, 
@@ -1797,6 +1815,15 @@ Ext.onReady(function(){
 				maxLength: 250
           	})
 		}, 
+		{
+			header: '<div align="center">' + 'Stat Dok' + '</div>',
+			dataIndex: 'jproduk_stat_dok',
+			width: 80,	//150,
+			sortable: true
+		}, 
+		
+		
+		
 		{
 			header: 'Creator',
 			dataIndex: 'jproduk_creator',
@@ -2159,6 +2186,26 @@ Ext.onReady(function(){
 		width: 100,
 		triggerAction: 'all'	
 	});
+	
+	jproduk_stat_dokField= new Ext.form.ComboBox({
+		id: 'jproduk_stat_dokField',
+		fieldLabel: 'Status Dokumen',
+		store:new Ext.data.SimpleStore({
+			fields:['jproduk_stat_dok_value', 'jproduk_stat_dok_display'],
+			data:[['Terbuka','Terbuka'],['Tertutup','Tertutup'],['Batal','Batal']]
+		}),
+		mode: 'local',
+		emptyText: 'Terbuka',
+		displayField: 'jproduk_stat_dok_display',
+		valueField: 'jproduk_stat_dok_value',
+		editable: false,
+		//anchor: '95%',
+		width: 100,
+		triggerAction: 'all'	
+	});
+	
+	
+	
 	/* Identify  jproduk_keterangan Field */
 	jproduk_keteranganField= new Ext.form.TextArea({
 		id: 'jproduk_keteranganField',
@@ -3531,7 +3578,7 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [jproduk_tanggalField, jproduk_keteranganField] 
+				items: [jproduk_tanggalField, jproduk_keteranganField, jproduk_stat_dokField] 
 			}
 			]
 	
@@ -3965,7 +4012,7 @@ Ext.onReady(function(){
 			align : 'Left',
 			header: '<div align="center">' + 'Referal' + '</div>',
 			dataIndex: 'dproduk_karyawan',
-			width: 100, //250
+			width: 150, //250
 			sortable: true,
 			allowBlank: false,
 			editor: combo_reveral,
@@ -4013,7 +4060,7 @@ Ext.onReady(function(){
 		el: 'fp_detail_jual_produk',
 		title: 'Detail Penjualan Produk',
 		height: 250,
-		width: 940,	//918,
+		width: 918,
 		autoScroll: true,
 		store: detail_jual_produk_DataStore, // DataStore
 		colModel: detail_jual_produk_ColumnModel, // Nama-nama Columns
