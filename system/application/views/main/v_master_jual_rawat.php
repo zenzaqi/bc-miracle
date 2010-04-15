@@ -176,48 +176,12 @@ function jrawat_cetak(){
 	Ext.Ajax.request({   
 		waitMsg: 'Please Wait...',
 		url: 'index.php?c=c_master_jual_rawat&m=print_paper',
-		params: { jrawat_id : jrawat_idField.getValue(), jrawat_cust : jrawat_cust_idField.getValue() }, 
+		params: { jrawat_id : jrawat_idField.getValue()	}, 
 		success: function(response){              
 			var result=eval(response.responseText);
 			switch(result){
 			case 1:
 				win = window.open('./jrawat_paper.html','Cetak Penjualan Perawatan','height=480,width=1240,resizable=1,scrollbars=0, menubar=0');
-				//win.print();
-				break;
-			default:
-				Ext.MessageBox.show({
-					title: 'Warning',
-					msg: 'Unable to print the grid!',
-					buttons: Ext.MessageBox.OK,
-					animEl: 'save',
-					icon: Ext.MessageBox.WARNING
-				});
-				break;
-			}  
-		},
-		failure: function(response){
-			var result=response.responseText;
-			Ext.MessageBox.show({
-			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
-			   buttons: Ext.MessageBox.OK,
-			   animEl: 'database',
-			   icon: Ext.MessageBox.ERROR
-			});		
-		} 	                     
-	});
-}
-
-function apaket_cetak(jpaket_id,dapaket_cust){
-	Ext.Ajax.request({   
-		waitMsg: 'Please Wait...',
-		url: 'index.php?c=c_master_jual_rawat&m=print_paper_paket',
-		params: { dapaket_jpaket : jpaket_id, dapaket_cust : dapaket_cust }, 
-		success: function(response){              
-			var result=eval(response.responseText);
-			switch(result){
-			case 1:
-				win = window.open('./apaket_paper.html','Cetak Pengambilan Paket','height=480,width=1240,resizable=1,scrollbars=0, menubar=0');
 				//win.print();
 				break;
 			default:
@@ -266,6 +230,7 @@ Ext.onReady(function(){
 		var jrawat_diskon_update=null;
 		var jrawat_cara_update=null;
 		var jrawat_keterangan_update=null;
+		var jrawat_statdok_update=null;
 
 		jrawat_id_update_pk = oGrid_event.record.data.jrawat_id;
 		if(oGrid_event.record.data.jrawat_nobukti!== null){jrawat_nobukti_update = oGrid_event.record.data.jrawat_nobukti;}
@@ -274,6 +239,7 @@ Ext.onReady(function(){
 		if(oGrid_event.record.data.jrawat_diskon!== null){jrawat_diskon_update = oGrid_event.record.data.jrawat_diskon;}
 		if(oGrid_event.record.data.jrawat_cara!== null){jrawat_cara_update = oGrid_event.record.data.jrawat_cara;}
 		if(oGrid_event.record.data.jrawat_keterangan!== null){jrawat_keterangan_update = oGrid_event.record.data.jrawat_keterangan;}
+		if(oGrid_event.record.data.jrawat_stat_dok!== null){jrawat_statdok_update = oGrid_event.record.data.jrawat_stat_dok;}
 
 		Ext.Ajax.request({  
 			waitMsg: 'Mohon tunggu...',
@@ -286,7 +252,8 @@ Ext.onReady(function(){
 				jrawat_tanggal	: jrawat_tanggal_update_date, 
 				jrawat_diskon	:jrawat_diskon_update,  
 				jrawat_cara	:jrawat_cara_update,  
-				jrawat_keterangan	:jrawat_keterangan_update,  
+				jrawat_keterangan	:jrawat_keterangan_update, 
+				jrawat_stat_dok		:jrawat_statdok_update,
 			}, 
 			success: function(response){							
 				var result=eval(response.responseText);
@@ -334,6 +301,7 @@ Ext.onReady(function(){
 		var jrawat_cara2_create=null; 
 		var jrawat_cara3_create=null; 
 		var jrawat_keterangan_create=null; 
+		var jrawat_statdok_create=null;
 		//tunai
 		var jrawat_tunai_nilai_create=null;
 		//tunai-2
@@ -423,6 +391,7 @@ Ext.onReady(function(){
 		if(jrawat_cara2Field.getValue()!== null){jrawat_cara2_create = jrawat_cara2Field.getValue();} 
 		if(jrawat_cara3Field.getValue()!== null){jrawat_cara3_create = jrawat_cara3Field.getValue();} 
 		if(jrawat_keteranganField.getValue()!== null){jrawat_keterangan_create = jrawat_keteranganField.getValue();} 
+		if(jrawat_stat_dokField.getValue()!== null){jrawat_statdok_create = jrawat_stat_dokField.getValue();} 
 		//tunai
 		if(jrawat_tunai_nilaiField.getValue()!== null){jrawat_tunai_nilai_create = jrawat_tunai_nilaiField.getValue();}
 		//tunai-2
@@ -518,7 +487,8 @@ Ext.onReady(function(){
 				jrawat_cara		: 	jrawat_cara_create, 
 				jrawat_cara2		: 	jrawat_cara2_create, 
 				jrawat_cara3		: 	jrawat_cara3_create, 
-				jrawat_keterangan	: 	jrawat_keterangan_create, 
+				jrawat_keterangan	: 	jrawat_keterangan_create,
+				jrawat_stat_dok		:	jrawat_statdok_create,
 				jrawat_cashback	: 	jrawat_cashback_create,
 				//tunai
 				jrawat_tunai_nilai	:	jrawat_tunai_nilai_create,
@@ -831,6 +801,8 @@ Ext.onReady(function(){
 		
 		jrawat_keteranganField.reset();
 		jrawat_keteranganField.setValue(null);
+		jrawat_stat_dokField.reset();
+		jrawat_stat_dokField.setValue('Terbuka');
 		
 		jrawat_cust_nomemberField.reset();
 		jrawat_cust_nomemberField.setValue(null);
@@ -904,7 +876,6 @@ Ext.onReady(function(){
 		jrawat_idField.setValue(master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_id'));
 		jrawat_nobuktiField.setValue(master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_nobukti'));
 		jrawat_custField.setValue(master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_cust'));
-		jrawat_cust_idField.setValue(master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_cust_id'));
 		jrawat_tanggalField.setValue(master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_tanggal'));
 		jrawat_diskonField.setValue(master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_diskon'));
 		jrawat_cashbackField.setValue(master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_cashback'));
@@ -920,6 +891,7 @@ Ext.onReady(function(){
 		
 
 		jrawat_keteranganField.setValue(master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_keterangan'));
+		jrawat_stat_dokField.setValue(master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_stat_dok'));
 		
 		for(i=0;i<detail_jual_rawat_DataStore.getCount();i++){
 			subtotal_field+=detail_jual_rawat_DataStore.getAt(i).data.drawat_subtotal_net;
@@ -1407,84 +1379,6 @@ Ext.onReady(function(){
 		}  
 	}
   	/* End of Function */
-	
-	/* Function for pra-cetak Pengambilan Paket Record */
-	function pra_cetak_ambil_paket(){
-		if(master_jual_rawatListEditorGrid.selModel.getCount() == 1){
-			var selections = master_jual_rawatListEditorGrid.selModel.getSelections();
-			var prez = [];
-			var preznobukti = [];
-			prez.push(selections[0].json.jrawat_id);
-			var encoded_array = Ext.encode(prez);
-			preznobukti.push(selections[0].json.jrawat_nobukti);
-			var encoded_preznobukti = Ext.encode(preznobukti);
-			prezcust.push(selections[0].json.jrawat_cust_id);
-			var encoded_prezcust = Ext.encode(prezcust);
-			if(encoded_preznobukti.substring(2,4)=="PK"){
-				apaket_cetak(encoded_array,encoded_prezcust);
-			}else{
-				Ext.MessageBox.show({
-					title: 'Warning',
-					msg: 'Pilih yang field Paket = paket.',
-					buttons: Ext.MessageBox.OK,
-					animEl: 'save',
-					icon: Ext.MessageBox.WARNING
-				});
-			}
-			/*if(encoded_preznobukti.substring(2,4)=="PK"){
-				Ext.Ajax.request({ 
-		//				waitMsg: 'Please Wait',
-					waitMsg: 'Mohon tunggu..',
-					url: 'index.php?c=c_master_jual_rawat&m=get_action', 
-					params: { task: "CETAK_PAKET", ids:  encoded_array }, 
-					success: function(response){
-						var result=eval(response.responseText);
-						switch(result){
-							case 1:  // Success : simply reload
-								master_jual_rawat_DataStore.reload();
-								break;
-							default:
-								Ext.MessageBox.show({
-									title: 'Warning',
-									msg: 'Could not delete the entire selection',
-									buttons: Ext.MessageBox.OK,
-									animEl: 'save',
-									icon: Ext.MessageBox.WARNING
-								});
-								break;
-						}
-					},
-					failure: function(response){
-						var result=response.responseText;
-						Ext.MessageBox.show({
-						   title: 'Error',
-						   msg: 'Could not connect to the database. retry later.',
-						   buttons: Ext.MessageBox.OK,
-						   animEl: 'database',
-						   icon: Ext.MessageBox.ERROR
-						});	
-					}
-				});
-			}else{
-				Ext.MessageBox.show({
-					title: 'Warning',
-					msg: 'Pilih yang field Paket = paket.',
-					buttons: Ext.MessageBox.OK,
-					animEl: 'save',
-					icon: Ext.MessageBox.WARNING
-				});
-			}*/
-		}else{
-			Ext.MessageBox.show({
-				title: 'Warning',
-				msg: 'Anda harus memilih satu data untuk dicetak.',
-				buttons: Ext.MessageBox.OK,
-				animEl: 'save',
-				icon: Ext.MessageBox.WARNING
-			});
-		}
-	}
-  	/* End of Function */
   
 	/* Function for Retrieve DataStore */
 	master_jual_rawat_DataStore = new Ext.data.Store({
@@ -1514,7 +1408,8 @@ Ext.onReady(function(){
 			{name: 'jrawat_cara3', type: 'string', mapping: 'jrawat_cara3'}, 
 			{name: 'jrawat_total', type: 'float', mapping: 'jrawat_totalbiaya'}, 
 			{name: 'jrawat_bayar', type: 'float', mapping: 'jrawat_bayar'},
-			{name: 'jrawat_keterangan', type: 'string', mapping: 'jrawat_keterangan'}, 
+			{name: 'jrawat_keterangan', type: 'string', mapping: 'jrawat_keterangan'},
+			{name: 'jrawat_stat_dok', type: 'string', mapping: 'jrawat_stat_dok'}, 				
 			{name: 'jrawat_creator', type: 'string', mapping: 'jrawat_creator'}, 
 			{name: 'jrawat_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'jrawat_date_create'}, 
 			{name: 'jrawat_update', type: 'string', mapping: 'jrawat_update'}, 
@@ -1896,8 +1791,8 @@ Ext.onReady(function(){
 			width: 80
 		}, 
 		{
-			header: '<div align="center">' + 'Stat. Kasir' + '</div>',
-			dataIndex: 'jrawat_status',
+			header: '<div align="center">' + 'Stat Dok' + '</div>',
+			dataIndex: 'jrawat_stat_dok',
 			width: 80
 		}, 
 		{
@@ -2046,7 +1941,7 @@ Ext.onReady(function(){
 			text: 'Print',
 			tooltip: 'Print Document',
 			iconCls:'icon-print',
-			handler: pra_cetak_ambil_paket 
+			handler: master_jual_rawat_print 
 		},
 		{ 
 			text: 'Export Excel', 
@@ -2158,7 +2053,6 @@ Ext.onReady(function(){
 		listClass: 'x-combo-list-small',
 		anchor: '95%'
 	});
-	jrawat_cust_idField= new Ext.form.NumberField();
 	
 	jrawat_cust_nomemberField= new Ext.form.TextField({
 		id: 'jrawat_cust_nomemberField',
@@ -2266,6 +2160,27 @@ Ext.onReady(function(){
 		width: 100,
 		triggerAction: 'all'	
 	});
+	
+	jrawat_stat_dokField= new Ext.form.ComboBox({
+		id: 'jrawat_stat_dokField',
+		fieldLabel: 'Status Dokumen',
+		store:new Ext.data.SimpleStore({
+			fields:['jrawat_stat_dok_value', 'jrawat_stat_dok_display'],
+			data:[['Terbuka','Terbuka'],['Tertutup','Tertutup'],['Batal','Batal']]
+		}),
+		mode: 'local',
+		emptyText: 'Terbuka',
+		displayField: 'jrawat_stat_dok_display',
+		valueField: 'jrawat_stat_dok_value',
+		editable: false,
+		//anchor: '95%',
+		width: 100,
+		triggerAction: 'all'	
+	});
+	
+	
+	
+	
 	/* Identify  jrawat_keterangan Field */
 	jrawat_keteranganField= new Ext.form.TextArea({
 		id: 'jrawat_keteranganField',
@@ -3749,7 +3664,7 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [jrawat_tanggalField, jrawat_keteranganField] 
+				items: [jrawat_tanggalField, jrawat_keteranganField, jrawat_stat_dokField] 
 			}
 			]
 	
@@ -4702,6 +4617,7 @@ Ext.onReady(function(){
 		var jrawat_diskon_search=null;
 		var jrawat_cara_search=null;
 		var jrawat_keterangan_search=null;
+		var jrawat_statdok_search=null;
 		var jrawat_tgl_start_search="";
 		var jrawat_tgl_end_search="";
 
@@ -4711,6 +4627,7 @@ Ext.onReady(function(){
 		if(jrawat_diskonSearchField.getValue()!==null){jrawat_diskon_search=jrawat_diskonSearchField.getValue();}
 		if(jrawat_caraSearchField.getValue()!==null){jrawat_cara_search=jrawat_caraSearchField.getValue();}
 		if(jrawat_keteranganSearchField.getValue()!==null){jrawat_keterangan_search=jrawat_keteranganSearchField.getValue();}
+		if(jrawat_statdokSearchField.getValue()!==null){jrawat_statdok_search=jrawat_statdokSearchField.getValue();}
 		if(Ext.getCmp('jrawat_tanggalStartAppSearchField').getValue()!==""){jrawat_tgl_start_search=Ext.getCmp('jrawat_tanggalStartAppSearchField').getValue().format('Y-m-d');}
 		if(Ext.getCmp('jrawat_tanggalEndAppSearchField').getValue()!==""){jrawat_tgl_end_search=Ext.getCmp('jrawat_tanggalEndAppSearchField').getValue().format('Y-m-d');}
 		// change the store parameters
@@ -4725,6 +4642,7 @@ Ext.onReady(function(){
 			jrawat_diskon	:	jrawat_diskon_search, 
 			jrawat_cara	:	jrawat_cara_search, 
 			jrawat_keterangan	:	jrawat_keterangan_search,
+			jrawat_stat_dok		:	jrawat_statdok_search,
 			jrawat_tgl_start	: 	jrawat_tgl_start_search,
 			jrawat_tgl_end	: 	jrawat_tgl_end_search
 		};
@@ -4753,6 +4671,8 @@ Ext.onReady(function(){
 		jrawat_caraSearchField.setValue(null);
 		jrawat_keteranganSearchField.reset();
 		jrawat_keteranganSearchField.setValue(null);
+		jrawat_statdokSearchField.reset();
+		jrawat_statdokSearchField.setValue(null);
 		Ext.getCmp('jrawat_tanggalStartAppSearchField').reset();
 		Ext.getCmp('jrawat_tanggalStartAppSearchField').setValue(null);
 		Ext.getCmp('jrawat_tanggalEndAppSearchField').reset();
@@ -4833,6 +4753,15 @@ Ext.onReady(function(){
 		anchor: '95%'
 	
 	});
+	
+	jrawat_statdokSearchField= new Ext.form.TextArea({
+		id: 'jrawat_statdokSearchField',
+		fieldLabel: 'Status Dokumen',
+		maxLength: 250,
+		anchor: '95%'
+	
+	});
+	
     
 	/* Function for retrieve search Form Panel */
 	master_jual_rawat_searchForm = new Ext.FormPanel({

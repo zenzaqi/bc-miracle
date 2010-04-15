@@ -282,9 +282,6 @@ class C_master_jual_rawat extends Controller {
 			case "EXCEL":
 				$this->master_jual_rawat_export_excel();
 				break;
-			case "CETAK_PAKET":
-				$this->print_paper_paket();
-				break;
 			default:
 				echo "{failure:true}";
 				break;
@@ -326,6 +323,11 @@ class C_master_jual_rawat extends Controller {
 		$jrawat_keterangan=trim(@$_POST["jrawat_keterangan"]);
 		$jrawat_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$jrawat_keterangan);
 		$jrawat_keterangan=str_replace("'", '"',$jrawat_keterangan);
+		
+		$jrawat_stat_dok=trim(@$_POST["jrawat_stat_dok"]);
+		$jrawat_stat_dok=str_replace("/(<\/?)(p)([^>]*>)", "",$jrawat_stat_dok);
+		$jrawat_stat_dok=str_replace("'", '"',$jrawat_stat_dok);
+		
 		$jrawat_cashback=trim($_POST["jrawat_cashback"]);
 		
 		//tunai
@@ -416,7 +418,7 @@ class C_master_jual_rawat extends Controller {
 		$cetak_jrawat=trim($_POST["cetak_jrawat"]);
 		
 		
-		$result = $this->m_master_jual_rawat->master_jual_rawat_update($jrawat_id ,$jrawat_nobukti ,$jrawat_cust ,$jrawat_tanggal ,$jrawat_diskon ,$jrawat_cara ,$jrawat_cara2 ,$jrawat_cara3 ,$jrawat_keterangan , $jrawat_cashback, $jrawat_tunai_nilai, $jrawat_tunai_nilai2, $jrawat_tunai_nilai3, $jrawat_voucher_no, $jrawat_voucher_cashback, $jrawat_voucher_no2, $jrawat_voucher_cashback2, $jrawat_voucher_no3, $jrawat_voucher_cashback3, $jrawat_total, $jrawat_bayar, $jrawat_subtotal, $jrawat_hutang, $jrawat_kwitansi_no, $jrawat_kwitansi_nama, $jrawat_kwitansi_nilai, $jrawat_kwitansi_no2, $jrawat_kwitansi_nama2, $jrawat_kwitansi_nilai2, $jrawat_kwitansi_no3, $jrawat_kwitansi_nama3, $jrawat_kwitansi_nilai3, $jrawat_card_nama, $jrawat_card_edc, $jrawat_card_no, $jrawat_card_nilai, $jrawat_card_nama2, $jrawat_card_edc2, $jrawat_card_no2, $jrawat_card_nilai2, $jrawat_card_nama3, $jrawat_card_edc3, $jrawat_card_no3, $jrawat_card_nilai3, $jrawat_cek_nama, $jrawat_cek_no, $jrawat_cek_valid, $jrawat_cek_bank, $jrawat_cek_nilai, $jrawat_cek_nama2, $jrawat_cek_no2, $jrawat_cek_valid2, $jrawat_cek_bank2, $jrawat_cek_nilai2, $jrawat_cek_nama3, $jrawat_cek_no3, $jrawat_cek_valid3, $jrawat_cek_bank3, $jrawat_cek_nilai3, $jrawat_transfer_bank, $jrawat_transfer_nama, $jrawat_transfer_nilai, $jrawat_transfer_bank2, $jrawat_transfer_nama2, $jrawat_transfer_nilai2, $jrawat_transfer_bank3, $jrawat_transfer_nama3, $jrawat_transfer_nilai3 ,$cetak_jrawat);
+		$result = $this->m_master_jual_rawat->master_jual_rawat_update($jrawat_id ,$jrawat_nobukti ,$jrawat_cust ,$jrawat_tanggal ,$jrawat_stat_dok, $jrawat_diskon ,$jrawat_cara ,$jrawat_cara2 ,$jrawat_cara3 ,$jrawat_keterangan , $jrawat_cashback, $jrawat_tunai_nilai, $jrawat_tunai_nilai2, $jrawat_tunai_nilai3, $jrawat_voucher_no, $jrawat_voucher_cashback, $jrawat_voucher_no2, $jrawat_voucher_cashback2, $jrawat_voucher_no3, $jrawat_voucher_cashback3, $jrawat_total, $jrawat_bayar, $jrawat_subtotal, $jrawat_hutang, $jrawat_kwitansi_no, $jrawat_kwitansi_nama, $jrawat_kwitansi_nilai, $jrawat_kwitansi_no2, $jrawat_kwitansi_nama2, $jrawat_kwitansi_nilai2, $jrawat_kwitansi_no3, $jrawat_kwitansi_nama3, $jrawat_kwitansi_nilai3, $jrawat_card_nama, $jrawat_card_edc, $jrawat_card_no, $jrawat_card_nilai, $jrawat_card_nama2, $jrawat_card_edc2, $jrawat_card_no2, $jrawat_card_nilai2, $jrawat_card_nama3, $jrawat_card_edc3, $jrawat_card_no3, $jrawat_card_nilai3, $jrawat_cek_nama, $jrawat_cek_no, $jrawat_cek_valid, $jrawat_cek_bank, $jrawat_cek_nilai, $jrawat_cek_nama2, $jrawat_cek_no2, $jrawat_cek_valid2, $jrawat_cek_bank2, $jrawat_cek_nilai2, $jrawat_cek_nama3, $jrawat_cek_no3, $jrawat_cek_valid3, $jrawat_cek_bank3, $jrawat_cek_nilai3, $jrawat_transfer_bank, $jrawat_transfer_nama, $jrawat_transfer_nilai, $jrawat_transfer_bank2, $jrawat_transfer_nama2, $jrawat_transfer_nilai2, $jrawat_transfer_bank3, $jrawat_transfer_nama3, $jrawat_transfer_nilai3 ,$cetak_jrawat);
 		echo $result;
 	}
 	
@@ -445,6 +447,11 @@ class C_master_jual_rawat extends Controller {
 		$jrawat_keterangan=trim(@$_POST["jrawat_keterangan"]);
 		$jrawat_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$jrawat_keterangan);
 		$jrawat_keterangan=str_replace("'", '"',$jrawat_keterangan);
+		
+		$jrawat_stat_dok=trim(@$_POST["jrawat_stat_dok"]);
+		$jrawat_stat_dok=str_replace("/(<\/?)(p)([^>]*>)", "",$jrawat_stat_dok);
+		$jrawat_stat_dok=str_replace("'", '"',$jrawat_stat_dok);
+		
 		$jrawat_cashback=trim($_POST["jrawat_cashback"]);
 		//$jrawat_voucher=trim($_POST["jrawat_voucher"]);
 		//tunai
@@ -532,7 +539,7 @@ class C_master_jual_rawat extends Controller {
 		$jrawat_transfer_nama3=trim($_POST["jrawat_transfer_nama3"]);
 		$jrawat_transfer_nilai3=trim($_POST["jrawat_transfer_nilai3"]);
 				
-		$result=$this->m_master_jual_rawat->master_jual_rawat_create($jrawat_cust ,$jrawat_tanggal ,$jrawat_diskon ,$jrawat_cara ,$jrawat_cara2 ,$jrawat_cara3 ,$jrawat_keterangan , $jrawat_cashback, $jrawat_tunai_nilai, $jrawat_tunai_nilai2, $jrawat_tunai_nilai3, $jrawat_voucher_no, $jrawat_voucher_cashback, $jrawat_voucher_no2, $jrawat_voucher_cashback2, $jrawat_voucher_no3, $jrawat_voucher_cashback3, $jrawat_bayar, $jrawat_subtotal, $jrawat_hutang, $jrawat_kwitansi_no, $jrawat_kwitansi_nama, $jrawat_kwitansi_nilai, $jrawat_kwitansi_no2, $jrawat_kwitansi_nama2, $jrawat_kwitansi_nilai2, $jrawat_kwitansi_no3, $jrawat_kwitansi_nama3, $jrawat_kwitansi_nilai3, $jrawat_card_nama, $jrawat_card_edc, $jrawat_card_no, $jrawat_card_nilai, $jrawat_card_nama2, $jrawat_card_edc2, $jrawat_card_no2, $jrawat_card_nilai2, $jrawat_card_nama3, $jrawat_card_edc3, $jrawat_card_no3, $jrawat_card_nilai3, $jrawat_cek_nama, $jrawat_cek_no, $jrawat_cek_valid, $jrawat_cek_bank, $jrawat_cek_nilai, $jrawat_cek_nama2, $jrawat_cek_no2, $jrawat_cek_valid2, $jrawat_cek_bank2, $jrawat_cek_nilai2, $jrawat_cek_nama3, $jrawat_cek_no3, $jrawat_cek_valid3, $jrawat_cek_bank3, $jrawat_cek_nilai3, $jrawat_transfer_bank, $jrawat_transfer_nama, $jrawat_transfer_nilai, $jrawat_transfer_bank2, $jrawat_transfer_nama2, $jrawat_transfer_nilai2, $jrawat_transfer_bank3, $jrawat_transfer_nama3, $jrawat_transfer_nilai3);
+		$result=$this->m_master_jual_rawat->master_jual_rawat_create($jrawat_cust ,$jrawat_tanggal ,$jrawat_diskon ,$jrawat_cara ,$jrawat_stat_dok, $jrawat_cara2 ,$jrawat_cara3 ,$jrawat_keterangan , $jrawat_cashback, $jrawat_tunai_nilai, $jrawat_tunai_nilai2, $jrawat_tunai_nilai3, $jrawat_voucher_no, $jrawat_voucher_cashback, $jrawat_voucher_no2, $jrawat_voucher_cashback2, $jrawat_voucher_no3, $jrawat_voucher_cashback3, $jrawat_bayar, $jrawat_subtotal, $jrawat_hutang, $jrawat_kwitansi_no, $jrawat_kwitansi_nama, $jrawat_kwitansi_nilai, $jrawat_kwitansi_no2, $jrawat_kwitansi_nama2, $jrawat_kwitansi_nilai2, $jrawat_kwitansi_no3, $jrawat_kwitansi_nama3, $jrawat_kwitansi_nilai3, $jrawat_card_nama, $jrawat_card_edc, $jrawat_card_no, $jrawat_card_nilai, $jrawat_card_nama2, $jrawat_card_edc2, $jrawat_card_no2, $jrawat_card_nilai2, $jrawat_card_nama3, $jrawat_card_edc3, $jrawat_card_no3, $jrawat_card_nilai3, $jrawat_cek_nama, $jrawat_cek_no, $jrawat_cek_valid, $jrawat_cek_bank, $jrawat_cek_nilai, $jrawat_cek_nama2, $jrawat_cek_no2, $jrawat_cek_valid2, $jrawat_cek_bank2, $jrawat_cek_nilai2, $jrawat_cek_nama3, $jrawat_cek_no3, $jrawat_cek_valid3, $jrawat_cek_bank3, $jrawat_cek_nilai3, $jrawat_transfer_bank, $jrawat_transfer_nama, $jrawat_transfer_nilai, $jrawat_transfer_bank2, $jrawat_transfer_nama2, $jrawat_transfer_nilai2, $jrawat_transfer_bank3, $jrawat_transfer_nama3, $jrawat_transfer_nilai3);
 		echo $result;
 	}
 
@@ -564,12 +571,16 @@ class C_master_jual_rawat extends Controller {
 		$jrawat_keterangan=trim(@$_POST["jrawat_keterangan"]);
 		$jrawat_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$jrawat_keterangan);
 		$jrawat_keterangan=str_replace("'", '"',$jrawat_keterangan);
+		$jrawat_stat_dok=trim(@$_POST["jrawat_stat_dok"]);
+		$jrawat_stat_dok=str_replace("/(<\/?)(p)([^>]*>)", "",$jrawat_stat_dok);
+		$jrawat_stat_dok=str_replace("'", '"',$jrawat_stat_dok);
+		
 		$jrawat_tgl_start=trim(@$_POST["jrawat_tgl_start"]);
 		$jrawat_tgl_end=trim(@$_POST["jrawat_tgl_end"]);
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_master_jual_rawat->master_jual_rawat_search($jrawat_id ,$jrawat_nobukti ,$jrawat_cust ,$jrawat_diskon ,$jrawat_cashback ,$jrawat_voucher ,$jrawat_cara ,$jrawat_bayar ,$jrawat_keterangan ,$jrawat_tgl_start ,$jrawat_tgl_end ,$start,$end);
+		$result = $this->m_master_jual_rawat->master_jual_rawat_search($jrawat_id ,$jrawat_nobukti ,$jrawat_cust ,$jrawat_diskon , $jrawat_stat_dok, $jrawat_cashback ,$jrawat_voucher ,$jrawat_cara ,$jrawat_bayar ,$jrawat_keterangan ,$jrawat_tgl_start ,$jrawat_tgl_end ,$start,$end);
 		echo $result;
 	}
 
@@ -687,16 +698,10 @@ class C_master_jual_rawat extends Controller {
 	function print_paper(){
   		//POST varibale here
 		$jrawat_id=trim(@$_POST["jrawat_id"]);
-		$jrawat_cust=trim(@$_POST["jrawat_cust"]);
 		
 		$result = $this->m_master_jual_rawat->print_paper($jrawat_id);
 		$rs=$result->row();
 		$detail_jrawat=$result->result();
-		
-		$result_apaket = $this->m_master_jual_rawat->print_paper_apaket_bycust($jrawat_cust);
-		$rs_apaket=$result_apaket->row();
-		$detail_apaket=$result_apaket->result();
-		
 		$data['jrawat_nobukti']=$rs->jrawat_nobukti;
 		$data['jrawat_tanggal']=$rs->jrawat_tanggal;
 		$data['cust_no']=$rs->cust_no;
@@ -709,34 +714,9 @@ class C_master_jual_rawat extends Controller {
 		//$data['jrawat_creator']=$rs->jrawat_creator;
 		//$data['jrawat_totalbiaya']=$rs->jrawat_totalbiaya;
 		$data['detail_jrawat']=$detail_jrawat;
-		$data['detail_apaket']=$detail_apaket;
 		
 		$viewdata=$this->load->view("main/jrawat_formcetak",$data,TRUE);
 		$file = fopen("jrawat_paper.html",'w');
-		fwrite($file, $viewdata);	
-		fclose($file);
-		echo '1';        
-	}
-	
-	function print_paper_paket(){
-  		//POST varibale here
-		$dapaket_jpaket=trim(@$_POST["dapaket_jpaket"]);
-		$dapaket_jpaket = json_decode(stripslashes($dapaket_jpaket));
-		$dapaket_cust=trim(@$_POST["dapaket_cust"]);
-		$dapaket_cust = json_decode(stripslashes($dapaket_cust));
-		
-		$result = $this->m_master_jual_rawat->print_paper_paket($dapaket_jpaket, $dapaket_cust);
-		$rs=$result->row();
-		$detail_ambil_paket=$result->result();
-		$data['jpaket_nobukti']=$rs->jpaket_nobukti;
-		$data['dapaket_tanggal']=$rs->dapaket_tanggal;
-		$data['cust_no']=$rs->cust_no;
-		$data['cust_nama']=$rs->cust_nama;
-		$data['cust_alamat']=$rs->cust_alamat;
-		$data['detail_ambil_paket']=$detail_ambil_paket;
-		
-		$viewdata=$this->load->view("main/apaket_formcetak",$data,TRUE);
-		$file = fopen("apaket_paper.html",'w');
 		fwrite($file, $viewdata);	
 		fclose($file);
 		echo '1';        
