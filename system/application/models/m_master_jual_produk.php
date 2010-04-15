@@ -532,6 +532,8 @@ class M_master_jual_produk extends Model{
 		
 		//function for get list record
 		function master_jual_produk_list($filter,$start,$end){
+			$date_now=date('Y-m-d');
+
 			$query = "SELECT jproduk_id, jproduk_nobukti, cust_nama, cust_no, cust_member, jproduk_cust, jproduk_tanggal, jproduk_diskon, jproduk_cashback, jproduk_cara, jproduk_cara2, jproduk_cara3, jproduk_bayar, IF(vu_jproduk.jproduk_totalbiaya!=0, vu_jproduk.jproduk_totalbiaya, vu_jproduk_totalbiaya.jproduk_totalbiaya) AS jproduk_totalbiaya, jproduk_keterangan, jproduk_stat_dok, jproduk_creator, jproduk_date_create, jproduk_update, jproduk_date_update, jproduk_revised FROM vu_jproduk LEFT JOIN vu_jproduk_totalbiaya ON(vu_jproduk_totalbiaya.dproduk_master=vu_jproduk.jproduk_id)";
 			
 			// For simple search
@@ -539,6 +541,11 @@ class M_master_jual_produk extends Model{
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 				$query .= " (jproduk_nobukti LIKE '%".addslashes($filter)."%' OR cust_nama LIKE '%".addslashes($filter)."%' OR cust_no LIKE '%".addslashes($filter)."%' )";
 			}
+			else {
+				$query .= eregi("WHERE",$query)? " AND ":" WHERE ";
+				$query .= " date_format(jproduk_date_create,'%Y-%m-%d')='$date_now'";
+			}
+			
 			$query .= " ORDER BY jproduk_nobukti DESC";
 			
 			$query_nbrows="SELECT jproduk_id FROM master_jual_produk LEFT JOIN customer ON(jproduk_cust=cust_id)";
@@ -546,6 +553,10 @@ class M_master_jual_produk extends Model{
 			if ($filter<>""){
 				$query_nbrows .=eregi("WHERE",$query_nbrows)? " AND ":" WHERE ";
 				$query_nbrows .= " (jproduk_nobukti LIKE '%".addslashes($filter)."%' OR cust_nama LIKE '%".addslashes($filter)."%' OR cust_no LIKE '%".addslashes($filter)."%' )";
+			}
+			else {
+				$query_nbrows .= eregi("WHERE",$query_nbrows)? " AND ":" WHERE ";
+				$query_nbrows .= " date_format(jproduk_date_create,'%Y-%m-%d')='$date_now'";
 			}
 			
 			$result2 = $this->db->query($query_nbrows);
