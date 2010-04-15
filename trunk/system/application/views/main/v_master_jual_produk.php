@@ -4012,7 +4012,7 @@ Ext.onReady(function(){
 			align : 'Left',
 			header: '<div align="center">' + 'Referal' + '</div>',
 			dataIndex: 'dproduk_karyawan',
-			width: 150, //250
+			width: 100, //250
 			sortable: true,
 			allowBlank: false,
 			editor: combo_reveral,
