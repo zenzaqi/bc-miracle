@@ -66,6 +66,7 @@ var editor_detail_mutasi;
 var post2db = '';
 var msg = '';
 var pageS=15;
+var today=new Date().format('Y-m-d');
 
 /* declare variable here for Field*/
 var mutasi_idField;
@@ -98,7 +99,7 @@ Ext.onReady(function(){
 		if(oGrid_event.record.data.mutasi_keterangan!== null){mutasi_keterangan_update = oGrid_event.record.data.mutasi_keterangan;}
 
 		Ext.Ajax.request({  
-			waitMsg: 'Please wait...',
+			waitMsg: 'Mohon tunggu...',
 			url: 'index.php?c=c_master_mutasi&m=get_action',
 			params: {
 				task					: "UPDATE",
@@ -111,13 +112,13 @@ Ext.onReady(function(){
 			success: function(response){							
 				var result=eval(response.responseText);
 				if(result!==0){
-						Ext.MessageBox.alert(post2db+' OK','Data mutasi berhasil disimpan');
+						Ext.MessageBox.alert(post2db+' OK','Data mutasi barang berhasil disimpan');
 						master_mutasi_createWindow.hide();
 				}else{
 						Ext.MessageBox.show({
 						   title: 'Warning',
 						   //msg: 'We could\'t not '+msg+' the Master_order_beli.',
-						   msg: 'Data Surat Pesanan Pembelian tidak bisa disimpan',
+						   msg: 'Data mutasi barang tidak bisa disimpan',
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'save',
 						   icon: Ext.MessageBox.WARNING
@@ -155,7 +156,7 @@ Ext.onReady(function(){
 		if(mutasi_keteranganField.getValue()!== null){mutasi_keterangan_create = mutasi_keteranganField.getValue();} 
 
 		Ext.Ajax.request({  
-			waitMsg: 'Please wait...',
+			waitMsg: 'Mohon tunggu...',
 			url: 'index.php?c=c_master_mutasi&m=get_action',
 			params: {
 				task				: post2db,
@@ -169,13 +170,13 @@ Ext.onReady(function(){
 				var result=eval(response.responseText);
 				if(result!==0){
 						detail_mutasi_purge(result)
-						Ext.MessageBox.alert(post2db+' OK','Data mutasi berhasil disimpan');
+						Ext.MessageBox.alert(post2db+' OK','Data mutasi barang berhasil disimpan');
 						master_mutasi_createWindow.hide();
 				}else{
 						Ext.MessageBox.show({
 						   title: 'Warning',
 						   //msg: 'We could\'t not '+msg+' the Master_order_beli.',
-						   msg: 'Data  mutasi tidak bisa disimpan',
+						   msg: 'Data mutasi barang tidak bisa disimpan',
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'save',
 						   icon: Ext.MessageBox.WARNING
@@ -196,7 +197,7 @@ Ext.onReady(function(){
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'Your Form is not valid!.',
+				msg: 'Form anda belum valid',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -223,7 +224,7 @@ Ext.onReady(function(){
 		mutasi_tujuanField.reset();
 		mutasi_tujuanField.setValue(null);
 		mutasi_tanggalField.reset();
-		mutasi_tanggalField.setValue(null);
+		mutasi_tanggalField.setValue(today);
 		mutasi_keteranganField.reset();
 		mutasi_keteranganField.setValue(null);
 		
@@ -294,13 +295,13 @@ Ext.onReady(function(){
 	function master_mutasi_confirm_delete(){
 		// only one master_mutasi is selected here
 		if(master_mutasiListEditorGrid.selModel.getCount() == 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', master_mutasi_delete);
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', master_mutasi_delete);
 		} else if(master_mutasiListEditorGrid.selModel.getCount() > 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', master_mutasi_delete);
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', master_mutasi_delete);
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really delete something you haven\'t selected?',
+				msg: 'Anda belum memilih data yang akan dihapus',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -320,7 +321,7 @@ Ext.onReady(function(){
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really update something you haven\'t selected?',
+				msg: 'Anda belum memilih datang yang akan diubah',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -339,7 +340,7 @@ Ext.onReady(function(){
 			}
 			var encoded_array = Ext.encode(prez);
 			Ext.Ajax.request({ 
-				waitMsg: 'Please Wait',
+				waitMsg: 'Mohon tunggu...',
 				url: 'index.php?c=c_master_mutasi&m=get_action', 
 				params: { task: "DELETE", ids:  encoded_array }, 
 				success: function(response){
@@ -436,15 +437,15 @@ Ext.onReady(function(){
 				cell.css = "readonlycell"; // Mengambil Value dari Class di dalam CSS 
 				return value;
 				},
-			hidden: false
+			hidden: true
 		},{
 			header: '<div align="center">Tanggal</div>',
 			dataIndex: 'mutasi_tanggal',
-			width: 150,
+			width: 70,	//150,
 			sortable: true,
-			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
+			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
 			editor: new Ext.form.DateField({
-				format: 'Y-m-d'
+				format: 'd-m-Y'
 			})
 		},
 		{
@@ -462,9 +463,9 @@ Ext.onReady(function(){
 			readOnly: true
 		}, 
 		{
-			header: '<div align="center">Jumlah Barang</div>',
+			header: '<div align="center">Jml Barang</div>',
 			dataIndex: 'mutasi_jumlah',
-			width: 100,
+			width: 60,
 			align: 'right',
 			renderer: Ext.util.Format.numberRenderer('0,000'),
 			sortable: true,
@@ -536,7 +537,7 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 700,
+	  	width: 1220,	//700,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: master_mutasi_DataStore,
@@ -688,7 +689,7 @@ Ext.onReady(function(){
 	mutasi_tanggalField= new Ext.form.DateField({
 		id: 'mutasi_tanggalField',
 		fieldLabel: 'Tanggal',
-		format : 'Y-m-d'
+		format : 'd-m-Y'
 	});
 	/* Identify  mutasi_keterangan Field */
 	mutasi_keteranganField= new Ext.form.TextArea({
@@ -720,13 +721,13 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [mutasi_asalField, mutasi_tujuanField, mutasi_tanggalField, mutasi_idField] 
+				items: [mutasi_asalField, mutasi_tujuanField, mutasi_idField] 
 			}
 			,{
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [ mutasi_keteranganField] 
+				items: [mutasi_tanggalField, mutasi_keteranganField] 
 			}
 			]
 	
@@ -876,9 +877,9 @@ Ext.onReady(function(){
 	detail_mutasi_ColumnModel = new Ext.grid.ColumnModel(
 		[
 		{
-			header: '<div align="center">Nama Produk</div>',
+			header: '<div align="center">Produk</div>',
 			dataIndex: 'dmutasi_produk',
-			width: 350,
+			width: 200,
 			sortable: true,
 			editor: combo_mutasi_produk,
 			renderer: Ext.util.Format.comboRenderer(combo_mutasi_produk)
@@ -886,7 +887,7 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">Satuan</div>',
 			dataIndex: 'dmutasi_satuan',
-			width: 100,
+			width: 80,
 			sortable: true,
 			editor: combo_mutasi_satuan,
 			renderer: Ext.util.Format.comboRenderer(combo_mutasi_satuan)
@@ -894,7 +895,7 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">Jumlah</div>',
 			dataIndex: 'dmutasi_jumlah',
-			width: 100,
+			width: 60,
 			sortable: true,
 			align: 'right',
 			renderer: Ext.util.Format.numberRenderer('0,000'),
@@ -918,7 +919,7 @@ Ext.onReady(function(){
 		el: 'fp_detail_mutasi',
 		title: 'Item Mutasi',
 		height: 250,
-		width: 690,
+		width: 940,	//690,
 		autoScroll: true,
 		store: detail_mutasi_DataStore, // DataStore
 		colModel: detail_mutasi_ColumnModel, // Nama-nama Columns
@@ -1049,7 +1050,7 @@ Ext.onReady(function(){
 		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
-		width: 700,        
+		width: 940,	//700,        
 		items: [master_mutasi_masterGroup,detail_mutasiListEditorGrid,master_mutasi_footGroup]
 		,
 		buttons: [{
@@ -1188,7 +1189,7 @@ Ext.onReady(function(){
 	mutasi_tanggalSearchField= new Ext.form.DateField({
 		id: 'mutasi_tanggalSearchField',
 		fieldLabel: 'Tanggal',
-		format : 'Y-m-d'
+		format : 'd-m-Y'
 	
 	});
 	/* Identify  mutasi_keterangan Search Field */
