@@ -474,7 +474,7 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">Keterangan</div>',
 			dataIndex: 'mutasi_keterangan',
-			width: 150,
+			width: 200,	//150,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 500
