@@ -416,6 +416,7 @@ Ext.onReady(function(){
 		},[
 		/* dataIndex => insert intomember_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'member_id', type: 'int', mapping: 'member_id'}, 
+			{name: 'member_cust_no', type: 'string', mapping: 'cust_no'}, 
 			{name: 'member_cust', type: 'string', mapping: 'cust_nama'}, 
 			{name: 'member_no', type: 'string', mapping: 'member_no'}, 
 			{name: 'member_register', type: 'date', dateFormat: 'Y-m-d', mapping: 'member_register'}, 
@@ -446,19 +447,26 @@ Ext.onReady(function(){
 				cell.css = "readonlycell"; // Mengambil Value dari Class di dalam CSS 
 				return value;
 				},
-			hidden: false
+			hidden: true
 		},
 		{
-			header: '<div align="center">Customer</div>',
-			dataIndex: 'member_cust',
-			width: 250,
+			header: '<div align="center">No Cust</div>',
+			dataIndex: 'member_cust_no',
+			width: 80,
 			sortable: true,
 			readOnly: true
 		}, 
 		{
-			header: '<div align="center">No. Member</div>',
+			header: '<div align="center">Customer</div>',
+			dataIndex: 'member_cust',
+			width: 200,
+			sortable: true,
+			readOnly: true
+		}, 
+		{
+			header: '<div align="center">No Member</div>',
 			dataIndex: 'member_no',
-			width: 150,
+			width: 100,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				allowBlank: false,
@@ -466,25 +474,25 @@ Ext.onReady(function(){
           	})
 		}, 
 		{
-			header: '<div align="center">Register</div>',
+			header: '<div align="center">Tgl Daftar</div>',	//'<div align="center">Register</div>',
 			dataIndex: 'member_register',
-			width: 120,
+			width: 70,
 			sortable: true,
-			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
+			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
 			readOnly: true
 		}, 
 		{
-			header: '<div align="center">Valid</div>',
+			header: '<div align="center">Tgl Valid</div>',
 			dataIndex: 'member_valid',
-			width: 120,
+			width: 70,
 			sortable: true,
-			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
+			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
 			readOnly: true
 		}, 
 		{
-			header: '<div align="center">Referensi Nota</div>',
+			header: '<div align="center">Ref Nota</div>',
 			dataIndex: 'member_nota_ref',
-			width: 150,
+			width: 80,	//150,
 			sortable: true,
 			hidden: true,
 			editor: new Ext.form.TextArea({
@@ -492,10 +500,10 @@ Ext.onReady(function(){
           	})
 		}, 
 		{
-			header: '<div align="center">Point</div>',
+			header: '<div align="center">Poin</div>',
 			dataIndex: 'member_point',
 			align: 'right',
-			width: 80,
+			width: 60,
 			sortable: true,
 			editor: new Ext.form.NumberField({
 				allowBlank: false,
@@ -523,7 +531,8 @@ Ext.onReady(function(){
 				triggerAction: 'all',
 				store:new Ext.data.SimpleStore({
 					fields:['member_status_value', 'member_status_display'],
-					data: [['tidak aktif','tidak aktif'],['print','print'],['aktif','aktif'],['register','register']]
+					//data: [['tidak aktif','tidak aktif'],['print','print'],['aktif','aktif'],['register','register']]
+					data: [['Daftar', 'Daftar'], ['Cetak', 'Cetak'], ['Aktif', 'Aktif']]
 					}),
 				mode: 'local',
                	displayField: 'member_status_display',
@@ -533,13 +542,13 @@ Ext.onReady(function(){
             })
 		}, 
 		{
-			header: '<div align="center">Tgl penyerahan</div>',
+			header: '<div align="center">Tgl Penyerahan</div>',
 			dataIndex: 'member_tglserahterima',
-			width: 150,
+			width: 70,
 			sortable: true,
-			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
+			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
 			editor: new Ext.form.DateField({
-				format: 'Y-m-d'
+				format: 'd-m-Y'
 			})
 		}, 
 		{
@@ -590,7 +599,7 @@ Ext.onReady(function(){
 	memberListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'memberListEditorGrid',
 		el: 'fp_member',
-		title: 'Daftar Member',
+		title: 'Daftar Aktivasi Member',
 		autoHeight: true,
 		store: member_DataStore, // DataStore
 		cm: member_ColumnModel, // Nama-nama Columns
@@ -599,7 +608,7 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 1024,
+	  	width: 1220,	//1024,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: member_DataStore,
@@ -625,7 +634,7 @@ Ext.onReady(function(){
 			handler: member_cetak_kartu
 		},'-',{
 			text: 'Aktivasi',
-			tooltip: 'Aktifkan Kartu Member yang statusnya print menjadi aktif',
+			tooltip: 'Aktifkan Kartu Member yang statusnya cetak menjadi aktif',
 			iconCls:'icon-valid',
 			handler: member_aktivasi
 		}, '-',{
@@ -739,7 +748,7 @@ Ext.onReady(function(){
 	/* Identify  member_no Field */
 	member_noField= new Ext.form.TextField({
 		id: 'member_noField',
-		fieldLabel: 'Nomor Member',
+		fieldLabel: 'No Member',
 		emptyText: '(auto)',
 		maxLength: 50,
 		allowBlank: false,
@@ -749,8 +758,8 @@ Ext.onReady(function(){
 	/* Identify  member_register Field */
 	member_registerField= new Ext.form.DateField({
 		id: 'member_registerField',
-		fieldLabel: 'Tanggal Register',
-		format : 'Y-m-d',
+		fieldLabel: 'Tanggal Daftar',
+		format : 'd-m-Y',
 		hideTrigger: true,
 		readOnly: true
 	});
@@ -758,7 +767,7 @@ Ext.onReady(function(){
 	member_validField= new Ext.form.DateField({
 		id: 'member_validField',
 		fieldLabel: 'Tanggal Valid',
-		format : 'Y-m-d',
+		format : 'd-m-Y',
 		hideTrigger: true,
 		readOnly: true
 	});
@@ -772,7 +781,7 @@ Ext.onReady(function(){
 	/* Identify  member_point Field */
 	member_pointField= new Ext.form.NumberField({
 		id: 'member_pointField',
-		fieldLabel: 'Point',
+		fieldLabel: 'Poin',
 		allowNegatife : false,
 		blankText: '0',
 		allowBlank: false,
@@ -800,7 +809,8 @@ Ext.onReady(function(){
 		fieldLabel: 'Status Kartu',
 		store:new Ext.data.SimpleStore({
 			fields:['member_status_value', 'member_status_display'],
-			data:[['tidak aktif','tidak aktif'],['print','print'],['aktif','aktif'],['register','register']]
+			//data:[['tidak aktif','tidak aktif'],['print','print'],['aktif','aktif'],['register','register']]
+			data: [['Daftar', 'Daftar'], ['Cetak', 'Cetak'], ['Aktif', 'Aktif']]
 		}),
 		mode: 'local',
 		displayField: 'member_status_display',
@@ -968,15 +978,15 @@ Ext.onReady(function(){
 	/* Identify  member_register Search Field */
 	member_registerSearchField= new Ext.form.DateField({
 		id: 'member_registerSearchField',
-		fieldLabel: 'Tanggal Register',
-		format : 'Y-m-d'
+		fieldLabel: 'Tanggal Daftar',
+		format : 'd-m-Y'
 	
 	});
 	/* Identify  member_valid Search Field */
 	member_validSearchField= new Ext.form.DateField({
 		id: 'member_validSearchField',
 		fieldLabel: 'Tanggal Valid',
-		format : 'Y-m-d'
+		format : 'd-m-Y'
 	
 	});
 	/* Identify  member_nota_ref Search Field */
@@ -990,7 +1000,7 @@ Ext.onReady(function(){
 	/* Identify  member_point Search Field */
 	member_pointSearchField= new Ext.form.NumberField({
 		id: 'member_pointSearchField',
-		fieldLabel: 'Point',
+		fieldLabel: 'Poin',
 		allowNegatife : false,
 		blankText: '0',
 		allowDecimals: false,
@@ -1019,7 +1029,8 @@ Ext.onReady(function(){
 		fieldLabel: 'Status',
 		store:new Ext.data.SimpleStore({
 			fields:['value', 'member_status'],
-			data:[['tidak aktif','Tidak aktif'],['print','Print'],['aktif','Aktif'],['register','Register']]
+		//	data:[['tidak aktif','Tidak aktif'],['print','Print'],['aktif','Aktif'],['register','Register']]
+			data: [['Daftar', 'Daftar'], ['Cetak', 'Cetak'], ['Aktif', 'Aktif']]
 		}),
 		mode: 'local',
 		displayField: 'member_status',
@@ -1149,7 +1160,7 @@ Ext.onReady(function(){
 	/* Function for print List Grid */
 	function member_cetak_kartu(){
 		Ext.Ajax.request({   
-		waitMsg: 'Please Wait...',
+		waitMsg: 'Mohon tunggu...',
 		url: 'index.php?c=c_member&m=member_cetak',
 		success: function(response){              
 		  	var result=eval(response.responseText);
@@ -1210,7 +1221,7 @@ Ext.onReady(function(){
 		if(member_DataStore.baseParams.member_tglserahterima!==""){member_tglserahterima_print_date = member_DataStore.baseParams.member_tglserahterima;}
 
 		Ext.Ajax.request({   
-		waitMsg: 'Please Wait...',
+		waitMsg: 'Mohon tunggu...',
 		url: 'index.php?c=c_member&m=get_action',
 		params: {
 			task: "PRINT",
