@@ -720,9 +720,25 @@ class M_tindakan_nonmedis extends Model{
 					2. UPDATE db.tindakan_detail.dtrawat_ambil_paket = 'true'
 					*/
 					//$sql_backup20100406="SELECT cust_punya_paket FROM vu_tindakan WHERE dtrawat_id='$dtrawat_id' AND cust_punya_paket='ada'";
+					/* BACKUP 2010-04-16
 					$sql="SELECT * FROM vu_total_sisa_item_perawatan WHERE ppaket_cust='$trawat_cust_id' AND vu_total_sisa_item_perawatan.rpaket_perawatan='$dtrawat_perawatan' AND vu_total_sisa_item_perawatan.total_sisa_item>0";
 					$rs=$this->db->query($sql);
 					if($rs->num_rows()){
+						$dtu_dtrawat=array(
+						"dtrawat_ambil_paket"=>'true'
+						);
+						$this->db->where('dtrawat_id', $dtrawat_id);
+						$this->db->update('tindakan_detail', $dtu_dtrawat);
+						if($this->db->affected_rows()){
+							return '1';
+						}else{
+							return '0';
+						}
+					}else{
+						return '-1';
+					}*/
+					$sql_check_paket=$this->customer_check_paket($trawat_cust_id, $dtrawat_perawatan_id);
+					if($sql_check_paket){
 						$dtu_dtrawat=array(
 						"dtrawat_ambil_paket"=>'true'
 						);
