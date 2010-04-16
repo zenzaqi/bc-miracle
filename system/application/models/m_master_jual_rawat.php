@@ -227,11 +227,11 @@ class M_master_jual_rawat extends Model{
 		
 		//fungsi untuk pengambilan paket
 		//get record list
-		function detail_ambil_paket_list($master_id,$query,$start,$end) {
+		function detail_ambil_paket_list($master_id,$tanggal,$query,$start,$end) {
 			$date_now=date('Y-m-d');
 			/* ambil history pengambilan paket dari $master_id===customer_id untuk transaksi hari ini */
 			//$query = "SELECT apaket_faktur, apaket_paket_nama, sapaket_item_nama, dapaket_jumlah, cust_nama AS dapaket_cust_nama FROM detail_ambil_paket LEFT JOIN master_ambil_paket ON(dapaket_master=apaket_id) LEFT JOIN submaster_apaket_item ON(dapaket_sapaket=sapaket_id) LEFT JOIN customer ON(dapaket_cust=cust_id) WHERE dapaket_cust='$master_id' AND date_format(dapaket_date_create,'%Y-%m-%d')='$date_now'";
-			$query = "SELECT jpaket_nobukti, paket_nama, rawat_nama, dapaket_jumlah, cust_nama FROM detail_ambil_paket LEFT JOIN master_jual_paket ON(dapaket_jpaket=jpaket_id) LEFT JOIN paket ON(dapaket_paket=paket_id) LEFT JOIN customer ON(dapaket_cust=cust_id) LEFT JOIN perawatan ON(dapaket_item=rawat_id) WHERE dapaket_cust='$master_id' AND date_format(dapaket_date_create,'%Y-%m-%d')='$date_now'";
+			$query = "SELECT jpaket_nobukti, paket_nama, rawat_nama, dapaket_jumlah, cust_nama FROM detail_ambil_paket LEFT JOIN master_jual_paket ON(dapaket_jpaket=jpaket_id) LEFT JOIN paket ON(dapaket_paket=paket_id) LEFT JOIN customer ON(dapaket_cust=cust_id) LEFT JOIN perawatan ON(dapaket_item=rawat_id) WHERE dapaket_cust='$master_id' AND date_format(dapaket_date_create,'%Y-%m-%d')='$tanggal'";
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
 			$limit = $query." LIMIT ".$start.",".$end;			
@@ -1641,7 +1641,6 @@ class M_master_jual_rawat extends Model{
 		}
 		
 		function print_paper($jrawat_id){
-			//$this->firephp->log($jproduk_id, "jproduk_id");
 			$sql="SELECT jrawat_tanggal, cust_no, cust_nama, cust_alamat, jrawat_nobukti, rawat_nama, drawat_jumlah, drawat_harga, drawat_diskon, (drawat_harga*((100-drawat_diskon)/100)) AS jumlah_subtotal, jrawat_creator, jtunai_nilai, jrawat_diskon, jrawat_cashback FROM detail_jual_rawat LEFT JOIN master_jual_rawat ON(drawat_master=jrawat_id) LEFT JOIN customer ON(jrawat_cust=cust_id) LEFT JOIN perawatan ON(drawat_rawat=rawat_id) LEFT JOIN jual_tunai ON(jtunai_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id'";
 			$result = $this->db->query($sql);
 			return $result;
