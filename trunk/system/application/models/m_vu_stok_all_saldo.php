@@ -18,22 +18,83 @@ class M_vu_stok_all_saldo extends Model{
 			parent::Model();
 		}
 		
+		function get_detail_stok($produk_id,$query,$start,$end){
+			$sql="select * from gudang";
+			$result = $this->db->query($sql);
+			$nbrows = $result->num_rows();
+			
+			$limit = $sql." LIMIT ".$start.",".$end;		
+			$result = $this->db->query($limit);  
+			$i=0;
+			foreach($result->result() as $row){
+				if($row->gudang_id==1)
+				{
+					$data[$i]["gudang_id"]=$row->gudang_id;
+					$data[$i]["gudang_nama"]=$row->gudang_nama;
+						
+					$sql="SELECT * FROM vu_stok_gudang_besar_saldo WHERE produk_id='".$produk_id."'";
+					$rs_gb=$this->db->query($sql);
+					if($rs_gb->num_rows())
+					{
+						$ds=$rs_gb->row();
+						$data[$i]["jumlah_stok"]=$ds->jumlah_stok;
+					}else
+						$data[$i]["jumlah_stok"]=0;
+				}elseif($row->gudang_id==2)
+				{
+					$data[$i]["gudang_id"]=$row->gudang_id;
+					$data[$i]["gudang_nama"]=$row->gudang_nama;
+						
+					$sql="SELECT * FROM vu_stok_gudang_produk_saldo WHERE produk_id='".$produk_id."'";
+					$rs_gb=$this->db->query($sql);
+					if($rs_gb->num_rows())
+					{
+						$ds=$rs_gb->row();
+						$data[$i]["jumlah_stok"]=$ds->jumlah_stok;
+					}else
+						$data[$i]["jumlah_stok"]=0;
+				}else{
+					$data[$i]["gudang_id"]=$row->gudang_id;
+					$data[$i]["gudang_nama"]=$row->gudang_nama;
+						
+					$sql="SELECT * FROM vu_stok_gudang_all WHERE produk_id='".$produk_id."' AND gudang_id='".$row->gudang_id."'";
+					$rs_gb=$this->db->query($sql);
+					if($rs_gb->num_rows())
+					{
+						$ds=$rs_gb->row();
+						$data[$i]["jumlah_stok"]=$ds->jumlah_stok;
+					}else
+						$data[$i]["jumlah_stok"]=0;
+				}
+				$i++;
+			}
+			
+			if($nbrows>0){
+				
+				$jsonresult = json_encode($data);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+			
+		}
+		
 		//function for get list record
 		function vu_stok_all_saldo_list($filter,$start,$end){
 			$query = "SELECT * FROM vu_stok_all_saldo";
-			$result = $this->db->query($query);
-			$nbrows = $result->num_rows();
-			
+		
 			// For simple search
 			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (produk_id LIKE '%".addslashes($filter)."%' OR produk_nama LIKE '%".addslashes($filter)."%' OR satuan_id LIKE '%".addslashes($filter)."%' OR satuan_nama LIKE '%".addslashes($filter)."%' OR stok_saldo LIKE '%".addslashes($filter)."%' )";
+				$query .= " (produk_id LIKE '%".addslashes($filter)."%' OR produk_nama LIKE '%".addslashes($filter)."%' OR satuan_id LIKE '%".addslashes($filter)."%' OR satuan_nama LIKE '%".addslashes($filter)."%' OR stok_saldo LIKE '%".addslashes($filter)."%'  OR produk_kode LIKE '%".addslashes($filter)."%')";
 			}
-			
-			
+			//echo $query;
+			$result = $this->db->query($query);
+			$nbrows = $result->num_rows();
+			if($end<=0) $end=15;
 			$limit = $query." LIMIT ".$start.",".$end;		
 			$result = $this->db->query($limit);  
-			
+			//echo $limit;
 			if($nbrows>0){
 				foreach($result->result() as $row){
 					$arr[] = $row;
@@ -45,80 +106,20 @@ class M_vu_stok_all_saldo extends Model{
 			}
 		}
 		
-		//function for create new record
-		function vu_stok_all_saldo_create($produk_id ,$produk_nama, $satuan_id, $satuan_nama, $stok_saldo ){
-			$data = array(
-				"produk_id"=>$produk_id, 
-				"produk_nama"=>$produk_nama, 
-				"satuan_id"=>$satuan_id, 
-				"satuan_nama"=>$satuan_nama, 
-				"stok_saldo"=>$stok_saldo 
-			);
-			$this->db->insert('vu_stok_all_saldo', $data); 
-			if($this->db->affected_rows())
-				return '1';
-			else
-				return '0';
-		}
 		
-		//function for update record
-		function vu_stok_all_saldo_update($produk_id,$produk_nama,$satuan_id,$satuan_nama,$stok_saldo){
-			$data = array(
-				"produk_id"=>$produk_id, 
-				"produk_nama"=>$produk_nama, 
-				"satuan_id"=>$satuan_id, 
-				"satuan_nama"=>$satuan_nama, 
-				"stok_saldo"=>$stok_saldo 
-			);
-			
-			$this->db->where('produk_id', $produk_id);
-			$this->db->update('vu_stok_all_saldo', $data);
-			$sql="UPDATE vu_stok_all_saldo set  where ='".$produk_id."'";
-			$this->db->query($sql);
-			return '1';
-		}
-		
-		//fcuntion for delete record
-		function vu_stok_all_saldo_delete($pkid){
-			// You could do some checkups here and return '0' or other error consts.
-			// Make a single query to delete all of the vu_stok_all_saldos at the same time :
-			if(sizeof($pkid)<1){
-				return '0';
-			} else if (sizeof($pkid) == 1){
-				$query = "DELETE FROM vu_stok_all_saldo WHERE  = ".$pkid[0];
-				$this->db->query($query);
-			} else {
-				$query = "DELETE FROM vu_stok_all_saldo WHERE ";
-				for($i = 0; $i < sizeof($pkid); $i++){
-					$query = $query . "= ".$pkid[$i];
-					if($i<sizeof($pkid)-1){
-						$query = $query . " OR ";
-					}     
-				}
-				$this->db->query($query);
-			}
-			if($this->db->affected_rows()>0)
-				return '1';
-			else
-				return '0';
-		}
-		
+	
 		//function for advanced search record
-		function vu_stok_all_saldo_search($produk_id ,$produk_nama ,$satuan_id ,$satuan_nama ,$stok_saldo ,$start,$end){
+		function vu_stok_all_saldo_search($produk_kode ,$produk_nama,$satuan_nama ,$stok_saldo ,$start,$end){
 			//full query
 			$query="select * from vu_stok_all_saldo";
 			
-			if($produk_id!=''){
+			if($produk_kode!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " produk_id LIKE '%".$produk_id."%'";
+				$query.= " produk_id LIKE '%".$produk_kode."%'";
 			};
 			if($produk_nama!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " produk_nama LIKE '%".$produk_nama."%'";
-			};
-			if($satuan_id!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " satuan_id LIKE '%".$satuan_id."%'";
 			};
 			if($satuan_nama!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";

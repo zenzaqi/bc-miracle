@@ -114,6 +114,70 @@ class M_master_retur_beli extends Model{
 			}
 		}
 		
+		function get_satuan_produk_list($selected_id){
+			
+			$sql="SELECT satuan_id,satuan_kode,satuan_nama FROM vu_satuan_konversi WHERE produk_aktif='Aktif'
+					AND satuan_id in(SELECT distinct dterima_satuan FROM detail_terima_beli)";
+			
+			if($selected_id!==""){
+				$sql.=(eregi("WHERE",$sql)?" AND ":" WHERE ")." produk_id='".$selected_id."'";
+			}
+			
+			$result = $this->db->query($sql);
+			$nbrows = $result->num_rows();
+			
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+		
+		function get_satuan_selected_list($selected_id){
+			$sql="SELECT satuan_id,satuan_kode,satuan_nama FROM satuan";
+			if($selected_id!=="")
+			{
+				$selected_id=substr($selected_id,0,strlen($selected_id)-1);
+				$sql.=" WHERE satuan_id IN(".$selected_id.")";
+			}
+
+			$result = $this->db->query($sql);
+			$nbrows = $result->num_rows();
+			
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+		
+		function get_satuan_detail_list($master_id){
+			$sql="SELECT satuan_id,satuan_kode,satuan_nama FROM satuan";
+			if($master_id<>"")
+				$sql.=" WHERE satuan_id IN(SELECT drbeli_satuan FROM detail_retur_beli WHERE drbeli_master='".$master_id."')";
+			
+			$result = $this->db->query($sql);
+			$nbrows = $result->num_rows();
+			
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+		
 		function get_harga_on_order($dorder_master, $dorder_produk, $dorder_satuan){
 			$sql="SELECT * FROM detail_order_beli WHERE dorder_master='".$dorder_master."' AND dorder_produk='".$dorder_produk."' AND dorder_satuan='".$dorder_satuan."'";
 			$query = $this->db->query($sql);
@@ -185,6 +249,7 @@ class M_master_retur_beli extends Model{
 			$query = "SELECT * FROM detail_retur_beli where drbeli_master='".$master_id."'";
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
+			if($end<=0) $end=15;
 			$limit = $query." LIMIT ".$start.",".$end;			
 			$result = $this->db->query($limit);  
 			
@@ -252,7 +317,13 @@ class M_master_retur_beli extends Model{
 			// For simple search
 			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (rbeli_id LIKE '%".addslashes($filter)."%' OR rbeli_terima LIKE '%".addslashes($filter)."%' OR rbeli_supplier LIKE '%".addslashes($filter)."%' OR rbeli_tanggal LIKE '%".addslashes($filter)."%' OR rbeli_keterangan LIKE '%".addslashes($filter)."%' )";
+				$query .= " (no_bukti LIKE '%".addslashes($filter)."%' OR
+							 no_order LIKE '%".addslashes($filter)."%' OR 
+							 supplier_nama LIKE '%".addslashes($filter)."%' OR 
+							 tanggal LIKE '%".addslashes($filter)."%' OR
+							 no_terima LIKE '%".addslashes($filter)."%' OR
+							 jumlah_barang LIKE '%".addslashes($filter)."%' OR
+							 total_nilai LIKE '%".addslashes($filter)."%')";
 			}
 			
 			$result = $this->db->query($query);
@@ -404,7 +475,13 @@ class M_master_retur_beli extends Model{
 			$query="SELECT * FROM vu_trans_retur_beli";
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (rbeli_id LIKE '%".addslashes($filter)."%' OR no_bukti LIKE '%".addslashes($filter)."%' OR rbeli_terima LIKE '%".addslashes($filter)."%' OR rbeli_supplier LIKE '%".addslashes($filter)."%' OR tanggal LIKE '%".addslashes($filter)."%' OR rbeli_keterangan LIKE '%".addslashes($filter)."%' )";
+				$query .= " (no_bukti LIKE '%".addslashes($filter)."%' OR
+							 no_order LIKE '%".addslashes($filter)."%' OR 
+							 supplier_nama LIKE '%".addslashes($filter)."%' OR 
+							 tanggal LIKE '%".addslashes($filter)."%' OR
+							 no_terima LIKE '%".addslashes($filter)."%' OR
+							 jumlah_barang LIKE '%".addslashes($filter)."%' OR
+							 total_nilai LIKE '%".addslashes($filter)."%')";
 				$result = $this->db->query($query);
 			} else if($option=='SEARCH'){
 				if($rbeli_id!=''){

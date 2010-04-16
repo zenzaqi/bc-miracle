@@ -179,7 +179,6 @@ Ext.onReady(function(){
 				if(result!==0){
 						detail_retur_beli_purge()
 						Ext.MessageBox.alert(post2db+' OK','Data Retur Pembelian berhasil disimpan.');
-						master_retur_beli_DataStore.reload();
 						master_retur_beli_createWindow.hide();
 				}else{
 						Ext.MessageBox.show({
@@ -240,9 +239,19 @@ Ext.onReady(function(){
 		rbeli_tanggalField.setValue(today);
 		rbeli_keteranganField.reset();
 		rbeli_keteranganField.setValue(null);
+		cbo_satuan_DataStore.setBaseParam('task','detail');
+		cbo_satuan_DataStore.setBaseParam('master_id',get_pk_id());
 		cbo_satuan_DataStore.load();
-		cbo_produk_DataStore.load();
-		detail_retur_beli_DataStore.load();
+		cbo_produk_DataStore.setBaseParam('master_id',get_pk_id());
+		cbo_produk_DataStore.setBaseParam('task','detail');
+		cbo_produk_DataStore.load({
+			callback: function(r,opt,success){
+				if(success==true){
+					detail_retur_beli_DataStore.setBaseParam('master_id',get_pk_id());
+					detail_retur_beli_DataStore.load();
+				}
+			}
+		});
 	}
  	/* End of Function */
   
@@ -256,6 +265,8 @@ Ext.onReady(function(){
 		rbeli_supplier_idField.setValue(master_retur_beliListEditorGrid.getSelectionModel().getSelected().get('rbeli_supplier_id'));
 		rbeli_tanggalField.setValue(master_retur_beliListEditorGrid.getSelectionModel().getSelected().get('rbeli_tanggal'));
 		rbeli_keteranganField.setValue(master_retur_beliListEditorGrid.getSelectionModel().getSelected().get('rbeli_keterangan'));
+		cbo_satuan_DataStore.setBaseParam('task','detail');
+		cbo_satuan_DataStore.setBaseParam('master_id',get_pk_id());
 		cbo_satuan_DataStore.load();
 		cbo_produk_DataStore.setBaseParam('master_id',get_pk_id());
 		cbo_produk_DataStore.setBaseParam('task','detail');
@@ -384,7 +395,7 @@ Ext.onReady(function(){
 			url: 'index.php?c=c_master_retur_beli&m=get_action', 
 			method: 'POST'
 		}),
-		baseParams:{task: "LIST"}, // parameter yang di $_POST ke Controller
+		baseParams:{task: "LIST",start: 0, limit: pageS}, // parameter yang di $_POST ke Controller
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
@@ -837,7 +848,7 @@ Ext.onReady(function(){
 	var detail_retur_beli_reader=new Ext.data.JsonReader({
 		root: 'results',
 		totalProperty: 'total',
-		id: ''
+		id: 'drbeli_id'
 	},[
 	/* dataIndex => insert intoperawatan_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'drbeli_id', type: 'int', mapping: 'drbeli_id'}, 
@@ -910,24 +921,22 @@ Ext.onReady(function(){
 			{name: 'produk_satuan_nama', type: 'string', mapping: 'satuan_nama'},
 			{name: 'produk_harga', type: 'float', mapping: 'dinvoice_harga'},
 			{name: 'produk_kategori', type: 'string', mapping: 'kategori_nama'},
-			{name: 'produk_diskon', type: 'int', mapping: 'diinvoice_diskon'}
+			{name: 'produk_diskon', type: 'int', mapping: 'dinvoice_diskon'}
 		]),
 		sortInfo:{field: 'produk_nama', direction: "ASC"}
 	});
 	/*======= END cbo_produk_DataStore =======*/
 	
-	/*=== cbo_satuan_DataStore ==> untuk mengambil data satuan dari "nama produk yang sama" yang ada pada Detail Modul Penerimaan Pembelian dgn params: rbeli_terima_idField, dan rbeli_produk_idField. ===*/
 	cbo_satuan_DataStore = new Ext.data.Store({
 		id: 'cbo_satuan_DataStore',
 		proxy: new Ext.data.HttpProxy({
 			url: 'index.php?c=c_master_retur_beli&m=get_satuan_list', 
 			method: 'POST'
 		}),
-		//baseParams: {dterima_master: rbeli_terima_idField.getValue(), dterima_produk: rbeli_dproduk_idField.getValue()},
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
-			id: 'produk_id'
+			id: 'satuan_id'
 		},[
 		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
 			{name: 'satuan_id', type: 'int', mapping: 'satuan_id'},
@@ -978,15 +987,73 @@ Ext.onReady(function(){
 
 	});
 	
-	var combo_drbeli_satuan=new Ext.form.ComboBox({
-			store: cbo_satuan_DataStore,
-			mode: 'local',
-			typeAhead: true,
-			displayField: 'satuan_nama',
-			valueField: 'satuan_id',
-			triggerAction: 'all',
-			lazyRender:true,
-
+	var combo_detail_satuan=new Ext.form.ComboBox({
+		store: cbo_satuan_DataStore,
+		mode: 'remote',
+		typeAhead: false,
+		displayField: 'satuan_nama',
+		valueField: 'satuan_id',
+		triggerAction: 'all',
+		lazyRender:true
+		//hideTrigger: true,
+		//readOnly:true
+	});
+	
+	dretur_beli_satuanField= new Ext.form.TextField({
+		id: 'dretur_beli_satuanField',
+		fieldLabel: 'Satuan',
+		allowNegatife : false,
+		blankText: '0',
+		allowDecimals: true,
+		readOnly: true,
+		anchor: '95%',
+		readOnly: true,
+		maskRe: /([0-9]+)$/
+	});
+	
+	dretur_beli_jumlahField= new Ext.form.NumberField({
+		id: 'dretur_beli_jumlahField',
+		fieldLabel: 'Jumlah',
+		allowNegatife : false,
+		blankText: '0',
+		allowDecimals: true,
+		enableKeyEvents: true,
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
+	});
+	
+	dretur_beli_hargaField= new Ext.form.NumberField({
+		id: 'dinvoice_hargaField',
+		fieldLabel: 'Harga',
+		allowNegatife : false,
+		blankText: '0',
+		allowDecimals: true,
+		anchor: '95%',
+		readOnly: true,
+		maskRe: /([0-9]+)$/
+	});
+	
+	dretur_beli_diskonField= new Ext.form.NumberField({
+		id: 'dinvoice_diskonField',
+		fieldLabel: 'Diskon',
+		allowNegatife : false,
+		blankText: '0',
+		allowDecimals: true,
+		anchor: '95%',
+		readOnly: true,
+		maskRe: /([0-9]+)$/
+	});
+	
+	dretur_beli_subtotalField= new Ext.form.NumberField({
+		id: 'dinvoice_subtotalField',
+		fieldLabel: 'Sub Total',
+		allowNegatife : false,
+		blankText: '0',
+		allowDecimals: true,
+		enableKeyEvents: true,
+		anchor: '95%',
+		readOnly: true,
+		maskRe: /([0-9]+)$/
 	});
 	
 	//declaration of detail coloumn model
@@ -1005,7 +1072,8 @@ Ext.onReady(function(){
 			dataIndex: 'drbeli_satuan',
 			width: 80,
 			sortable: true,
-			renderer: Ext.util.Format.comboRenderer(combo_drbeli_satuan)
+			editor: combo_detail_satuan,
+			renderer: Ext.util.Format.comboRenderer(combo_detail_satuan)
 		},
 		{
 			header: '<div align="center">Jumlah</div>',
@@ -1013,13 +1081,7 @@ Ext.onReady(function(){
 			dataIndex: 'drbeli_jumlah',
 			width: 80,
 			sortable: true,
-			editor: new Ext.form.NumberField({
-				allowDecimals: false,
-				allowNegative: false,
-				blankText: '0',
-				maxLength: 11,
-				maskRe: /([0-9]+)$/
-			})
+			editor: dretur_beli_jumlahField
 		},
 		{
 			header: '<div align="center">Harga (Rp)</div>',
@@ -1028,6 +1090,7 @@ Ext.onReady(function(){
 			width: 100,
 			sortable: true,
 			readOnly: true,
+			editor: dretur_beli_hargaField,
 			renderer: Ext.util.Format.numberRenderer('0,000')
 		},
 		{
@@ -1037,6 +1100,7 @@ Ext.onReady(function(){
 			width: 80,
 			sortable: true,
 			readOnly: true,
+			editor: dretur_beli_diskonField,
 			renderer: Ext.util.Format.numberRenderer('0,000')
 		},
 		{
@@ -1045,6 +1109,7 @@ Ext.onReady(function(){
 			width: 100,
 			sortable: true,
 			readOnly: true,
+			editor: dretur_beli_subtotalField,
 			renderer: function(v, params, record){
 					subtotal=Ext.util.Format.number((record.data.drbeli_harga * record.data.drbeli_jumlah*(100-record.data.drbeli_diskon)/100),"0,000");
                     return '<span>' + subtotal+ '</span>';
@@ -1155,6 +1220,7 @@ Ext.onReady(function(){
 				detail_retur_beli_insert(pkid);
 			}
 		});
+		master_retur_beli_DataStore.reload();
 	}
 	//eof
 	
@@ -1579,6 +1645,7 @@ Ext.onReady(function(){
 			rbeli_supplierField.setValue(cbo_rbeli_terimabeli_DataSore.getAt(j).data.terima_supplier);
 			rbeli_terima_orderField.setValue(cbo_rbeli_terimabeli_DataSore.getAt(j).data.terima_order);
 			rbeli_terima_idField.setValue(cbo_rbeli_terimabeli_DataSore.getAt(j).data.terima_id);
+			
 		}
 	});
 	
@@ -1586,6 +1653,9 @@ Ext.onReady(function(){
 			
 		for(i=0;i<detail_retur_beli_DataStore.getCount();i++){
 			var detail_data=detail_retur_beli_DataStore.getAt(i);
+			cbo_satuan_DataStore.setBaseParam('task','produk');
+			cbo_satuan_DataStore.setBaseParam('selected_id',combo_detail_produk.getValue());
+			cbo_satuan_DataStore.load();
 			var j=cbo_produk_DataStore.find('produk_id',combo_detail_produk.getValue());
 			if(j>-1)
 			{
@@ -1593,8 +1663,16 @@ Ext.onReady(function(){
 				detail_data.data.drbeli_satuan=data_combo.data.produk_satuan;
 				detail_data.data.drbeli_harga=data_combo.data.produk_harga;
 				detail_data.data.drbeli_diskon=data_combo.data.produk_diskon;
+				combo_detail_satuan.setValue(data_combo.data.produk_satuan);
+				dretur_beli_diskonField.setValue(data_combo.data.produk_diskon);
+				dretur_beli_hargaField.setValue(data_combo.data.produk_harga);
+				dretur_beli_subtotalField.setValue((100-data_combo.data.produk_diskon)*data_combo.data.produk_harga*dretur_beli_jumlahField.getValue()/100);
 			}
 		}
+	});
+	
+	dretur_beli_jumlahField.on('keyup',function(){
+		dretur_beli_subtotalField.setValue((100-dretur_beli_diskonField.getValue())*dretur_beli_hargaField.getValue()*dretur_beli_jumlahField.getValue()/100);
 	});
 	
 	combo_detail_produk.on('focus', function(){

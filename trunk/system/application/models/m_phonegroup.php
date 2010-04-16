@@ -91,7 +91,7 @@ class M_phonegroup extends Model{
 		}
 		
 		function get_available($query,$start,$end){
-			$sql="select cust_nama,cust_hp from customer where cust_hp not in(select phonegrouped_number from phonegrouped) and cust_hp<>''";
+			$sql="select concat(cust_nama,' (',cust_no,')') as cust_nama, cust_no,cust_hp from customer where cust_hp not in(select phonegrouped_number from phonegrouped) and cust_hp<>''";
 			if($query!==""){
 				$sql.=" and cust_nama like '%".$query."%' or cust_hp like '%".$query."%'";
 			}
@@ -113,7 +113,7 @@ class M_phonegroup extends Model{
 		}
 		
 		function get_phonegrouped($id,$query,$start,$end){
-			$sql="select cust_nama,cust_hp from customer where cust_hp in(select phonegrouped_number from phonegrouped where phonegrouped_group='".$id."')";
+			$sql="select concat(cust_nama,' (',cust_no,')') as cust_nama, cust_no,cust_hp from customer where cust_hp in(select phonegrouped_number from phonegrouped where phonegrouped_group='".$id."')";
 			if($query!==""){
 				$sql.=" and cust_nama like '%".$query."%' or cust_hp like '%".$query."%'";
 			}

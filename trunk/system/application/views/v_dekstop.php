@@ -11,7 +11,8 @@
 	<?=css_asset('file-upload.css');?>
 	<?=css_asset('MultiSelect.css');?>
 	<?=css_asset('GroupSummary.css');?>
-    
+    <?=css_asset('ColumnNodeUI.css');?>
+      
     <?=js_asset('ext-base.js');?>
     <?=js_asset('ext-all.js');?>
 	<?=js_asset('ext-all-debug.js');?>
@@ -22,6 +23,7 @@
 	<?=js_asset('RowExpander.js');?>
     <?=js_asset('RowEditor.js');?>
 	<?=js_asset('CheckColumn.js');?>
+    <?=js_asset('ColumnNodeUI.js');?>
     <?=js_asset('MultiSelect.js');?>
     <?=js_asset('ItemSelector.js');?>
     <?=js_asset('InputTextMask.js');?>
