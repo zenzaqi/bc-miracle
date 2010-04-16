@@ -1865,10 +1865,15 @@ Ext.onReady(function(){
 		'</div></tpl>'
     );
 	
-	var paket_jual_paket_tpl = new Ext.XTemplate(
+/*	var paket_jual_paket_tpl = new Ext.XTemplate(
         '<tpl for="."><div class="search-item">',
             '<span><b>{dpaket_paket_kode}</b>| {dpaket_paket_display}<br/>Group: {dpaket_paket_group}<br/>',
 			'Kategori: {dpaket_paket_kategori}</span>',
+		'</div></tpl>'
+    );
+*/	var paket_jual_paket_tpl = new Ext.XTemplate(
+        '<tpl for="."><div class="search-item">',
+            '<span>{dpaket_paket_kode} | <b>{dpaket_paket_display}</b></span>',
 		'</div></tpl>'
     );
 		
@@ -3429,8 +3434,8 @@ Ext.onReady(function(){
 			{name: 'dpaket_paket_value', type: 'int', mapping: 'paket_id'},
 			{name: 'dpaket_paket_harga', type: 'float', mapping: 'paket_harga'},
 			{name: 'dpaket_paket_kode', type: 'string', mapping: 'paket_kode'},
-			{name: 'dpaket_paket_group', type: 'string', mapping: 'group_nama'},
-			{name: 'dpaket_paket_kategori', type: 'string', mapping: 'kategori_nama'},
+//			{name: 'dpaket_paket_group', type: 'string', mapping: 'group_nama'},
+//			{name: 'dpaket_paket_kategori', type: 'string', mapping: 'kategori_nama'},
 			{name: 'dpaket_paket_du', type: 'float', mapping: 'paket_du'},
 			{name: 'dpaket_paket_dm', type: 'float', mapping: 'paket_dm'},
 			{name: 'dpaket_paket_display', type: 'string', mapping: 'paket_nama'},
