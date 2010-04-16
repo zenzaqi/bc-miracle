@@ -251,7 +251,8 @@ class C_master_jual_rawat extends Controller {
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
 		$master_id = (integer) (isset($_POST['master_id']) ? $_POST['master_id'] : $_GET['master_id']);
-		$result=$this->m_master_jual_rawat->detail_ambil_paket_list($master_id,$query,$start,$end);
+		$tanggal = isset($_POST['tanggal']) ? $_POST['tanggal'] : $_GET['tanggal'];
+		$result=$this->m_master_jual_rawat->detail_ambil_paket_list($master_id,$tanggal,$query,$start,$end);
 		echo $result;
 	}
 	//end of handler

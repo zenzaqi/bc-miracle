@@ -1298,7 +1298,7 @@ Ext.onReady(function(){
 			master_cara_bayarTabPanel.setActiveTab(0);
 			post2db='UPDATE';
 			//detail_jual_rawat_DataStore.load({params : {master_id : eval(get_pk_id()), start:0, limit:pageS}});
-			detail_ambil_paketDataStore.load({params: {master_id : master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_cust_id'), start:0, limit:pageS}});
+			detail_ambil_paketDataStore.load({params: {master_id : master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_cust_id'), tanggal: master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_tanggal').format('Y-m-d'), start:0, limit:pageS}});
 			cbo_drawat_rawatDataStore.load({
 				params: {query:master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_id')},
 				callback:function(opts, success, response){

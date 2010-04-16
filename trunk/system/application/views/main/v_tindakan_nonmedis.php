@@ -249,7 +249,7 @@ Ext.onReady(function(){
 					default:
 						tindakan_nonmedis_DataStore.commitChanges();
 						tindakan_nonmedis_DataStore.reload();
-						trawat_nonmedis_perawatanDataStore.reload({params:{query:tindakanListEditorGrid.getSelectionModel().getSelected().get('trawat_id')}});
+						trawat_nonmedis_perawatanDataStore.reload({params:{query:tindakan_nonmedisListEditorGrid.getSelectionModel().getSelected().get('trawat_id')}});
 						/*Ext.MessageBox.show({
 						   title: 'Warning',
 						   msg: 'Perubahan tidak dapat disimpan.',
