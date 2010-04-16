@@ -3664,8 +3664,8 @@ Ext.onReady(function(){
 			{name: 'dproduk_produk_harga', type: 'float', mapping: 'produk_harga'},
 			{name: 'dproduk_produk_kode', type: 'string', mapping: 'produk_kode'},
 			{name: 'dproduk_produk_satuan', type: 'string', mapping: 'satuan_kode'},
-			{name: 'dproduk_produk_group', type: 'string', mapping: 'group_nama'},
-			{name: 'dproduk_produk_kategori', type: 'string', mapping: 'kategori_nama'},
+//			{name: 'dproduk_produk_group', type: 'string', mapping: 'group_nama'},
+//			{name: 'dproduk_produk_kategori', type: 'string', mapping: 'kategori_nama'},
 			{name: 'dproduk_produk_du', type: 'float', mapping: 'produk_du'},
 			{name: 'dproduk_produk_dm', type: 'float', mapping: 'produk_dm'},
 			{name: 'dproduk_produk_display', type: 'string', mapping: 'produk_nama'}
@@ -3905,7 +3905,7 @@ Ext.onReady(function(){
 			align : 'Left',
 			header: '<div align="center">' + 'Produk' + '</div>',
 			dataIndex: 'dproduk_produk',
-			width: 300, //250
+			width: 260, //250
 			sortable: true,
 			allowBlank: false,
 			editor: combo_jual_produk,

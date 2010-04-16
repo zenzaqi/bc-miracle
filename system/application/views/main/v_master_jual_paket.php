@@ -1760,7 +1760,7 @@ Ext.onReady(function(){
 				},
 				render: function(c){
 				Ext.get(this.id).set({qtitle:'Search By'});
-				Ext.get(this.id).set({qtip:'- No Faktur<br>- Nama Customer<br>- No Customer'});
+				Ext.get(this.id).set({qtip:'- No Faktur<br>- Nama Customer<br>- No Cust'});
 				}
 			},
 			width: 120
