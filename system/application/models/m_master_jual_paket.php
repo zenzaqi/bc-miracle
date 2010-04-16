@@ -327,7 +327,7 @@ class M_master_jual_paket extends Model{
 		
 		function detail_pengguna_paket_insert($ppaket_master, $ppaket_cust){
 			//if master id not capture from view then capture it from max pk from master table
-			if($ppaket_master=="" || $ppaket_master==NULL){
+			if($ppaket_master=="" || $ppaket_master==NULL || $ppaket_master==0){
 				$ppaket_master=$this->get_master_id();
 			}
 			$data = array(
