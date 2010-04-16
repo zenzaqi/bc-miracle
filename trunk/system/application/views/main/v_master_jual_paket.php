@@ -1187,9 +1187,9 @@ Ext.onReady(function(){
 	function master_jual_paket_confirm_delete(){
 		// only one master_jual_paket is selected here
 		if(master_jual_paketListEditorGrid.selModel.getCount() == 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', master_jual_paket_delete);
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', master_jual_paket_delete);
 		} else if(master_jual_paketListEditorGrid.selModel.getCount() > 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', master_jual_paket_delete);
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', master_jual_paket_delete);
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
@@ -1260,7 +1260,7 @@ Ext.onReady(function(){
 			}
 			var encoded_array = Ext.encode(prez);
 			Ext.Ajax.request({ 
-				waitMsg: 'Mohon  Tunggu',
+				waitMsg: 'Mohon tunggu...',
 				url: 'index.php?c=c_master_jual_paket&m=get_action', 
 				params: { task: "DELETE", ids:  encoded_array }, 
 				success: function(response){
@@ -3658,7 +3658,7 @@ Ext.onReady(function(){
 			text: 'Delete',
 			tooltip: 'Delete detail selected record',
 			iconCls:'icon-delete',
-			disabled: true,
+			disabled: false,
 			handler: detail_jual_paket_confirm_delete
 		}
 		]
@@ -3793,13 +3793,13 @@ Ext.onReady(function(){
 	function detail_jual_paket_confirm_delete(){
 		// only one record is selected here
 		if(detail_jual_paketListEditorGrid.selModel.getCount() == 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', detail_jual_paket_delete);
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', detail_jual_paket_delete);
 		} else if(detail_jual_paketListEditorGrid.selModel.getCount() > 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', detail_jual_paket_delete);
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', detail_jual_paket_delete);
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'Anda belum memilih data yang akan dihapus?',
+				msg: 'Anda belum memilih data yang akan dihapus',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -4077,13 +4077,13 @@ Ext.onReady(function(){
 	function detail_pengguna_paket_confirm_delete(){
 		// only one record is selected here
 		if(detail_pengguna_paketListEditorGrid.selModel.getCount() == 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', detail_pengguna_paket_delete);
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', detail_pengguna_paket_delete);
 		} else if(detail_pengguna_paketListEditorGrid.selModel.getCount() > 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', detail_pengguna_paket_delete);
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', detail_pengguna_paket_delete);
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'Anda belum memilih data yang akan dihapus?',
+				msg: 'Anda belum memilih data yang akan dihapus',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING

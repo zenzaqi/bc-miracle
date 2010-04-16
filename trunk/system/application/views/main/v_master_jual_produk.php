@@ -1337,9 +1337,9 @@ Ext.onReady(function(){
 	function master_jual_produk_confirm_delete(){
 		// only one master_jual_produk is selected here
 		if(master_jual_produkListEditorGrid.selModel.getCount() == 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', master_jual_produk_delete);
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', master_jual_produk_delete);
 		} else if(master_jual_produkListEditorGrid.selModel.getCount() > 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', master_jual_produk_delete);
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', master_jual_produk_delete);
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
@@ -4088,7 +4088,7 @@ Ext.onReady(function(){
 			text: 'Delete',
 			tooltip: 'Delete detail selected record',
 			iconCls:'icon-delete',
-			disabled: true,
+			disabled: false,
 			handler: detail_jual_produk_confirm_delete
 		}
 		]
@@ -4237,13 +4237,13 @@ Ext.onReady(function(){
 	function detail_jual_produk_confirm_delete(){
 		// only one record is selected here
 		if(detail_jual_produkListEditorGrid.selModel.getCount() == 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', detail_jual_produk_delete);
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', detail_jual_produk_delete);
 		} else if(detail_jual_produkListEditorGrid.selModel.getCount() > 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', detail_jual_produk_delete);
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', detail_jual_produk_delete);
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really delete something you haven\'t selected?',
+				msg: 'Anda belum memilih data yang akan dihapus',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
