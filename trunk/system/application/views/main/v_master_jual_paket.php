@@ -4035,7 +4035,7 @@ Ext.onReady(function(){
 					waitMsg: 'Mohon  Tunggu...',
 					url: 'index.php?c=c_master_jual_paket&m=detail_pengguna_paket_insert',
 					params:{
-						ppaket_master	: eval(jpaket_idField.getValue()), 
+						ppaket_master	: eval(get_pk_id()), 
 						ppaket_cust	: detail_pengguna_paket_record.data.ppaket_cust
 					},
 					timeout: 60000,
