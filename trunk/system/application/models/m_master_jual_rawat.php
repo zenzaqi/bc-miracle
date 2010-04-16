@@ -308,7 +308,7 @@ class M_master_jual_rawat extends Model{
 		//eof
 		
 		function catatan_piutang_update($jpaket_id){
-			if($jrawat_id=="" || $jrawat_id==NULL){
+			if($jrawat_id=="" || $jrawat_id==NULL || $jrawat_id==0){
 				$jrawat_id=$this->get_master_id();
 			}
 			
