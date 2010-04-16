@@ -235,10 +235,21 @@ Ext.onReady(function(){
 						   icon: Ext.MessageBox.WARNING
 						});
 						break;*/
+					case -1:
+						Ext.MessageBox.show({
+						   title: 'Warning',
+						   width: 330,
+						   msg: 'Customer dengan perawatan yang dipilih, <br/>\"tidak ada\" dalam paket.',
+						   buttons: Ext.MessageBox.OK,
+						   animEl: 'save',
+						   icon: Ext.MessageBox.WARNING
+						});
+						tindakan_nonmedis_DataStore.reload();
+						break;
 					default:
 						tindakan_nonmedis_DataStore.commitChanges();
 						tindakan_nonmedis_DataStore.reload();
-						trawat_nonmedis_perawatanDataStore.reload();
+						trawat_nonmedis_perawatanDataStore.reload({params:{query:tindakanListEditorGrid.getSelectionModel().getSelected().get('trawat_id')}});
 						/*Ext.MessageBox.show({
 						   title: 'Warning',
 						   msg: 'Perubahan tidak dapat disimpan.',
