@@ -762,6 +762,8 @@ Ext.onReady(function(){
 		jpaket_nobuktiField.setValue(null);
 		jpaket_custField.reset();
 		jpaket_custField.setValue(null);
+		jpaket_cust_nomemberField.reset();
+		jpaket_cust_nomemberField.setValue(null);
 		jpaket_tanggalField.setValue(dt.format('Y-m-d'));
 		jpaket_diskonField.reset();
 		jpaket_diskonField.setValue(null);
@@ -3750,6 +3752,11 @@ Ext.onReady(function(){
 							jpaket_cetak(result);
 							cetak_jpaket=0;
 							jpaket_post2db="CREATE";
+							Ext.Ajax.request({
+								waitMsg: 'Mohon tunggu...',
+								url: 'index.php?c=c_master_jual_paket&m=catatan_piutang_update',
+								params:{dpaket_master	: eval(get_pk_id())}
+							});
 						}
 					},
 					failure: function(response){

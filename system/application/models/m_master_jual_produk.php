@@ -437,7 +437,7 @@ class M_master_jual_produk extends Model{
 		//eof
 		
 		function catatan_piutang_update($jproduk_id){
-			if($jproduk_id=="" || $jproduk_id==NULL){
+			if($jproduk_id=="" || $jproduk_id==NULL || $jproduk_id==0){
 				$jproduk_id=$this->get_master_id();
 			}
 			

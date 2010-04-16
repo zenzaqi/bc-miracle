@@ -581,6 +581,11 @@ Ext.onReady(function(){
 						if(cetak_jrawat==1){
 							jrawat_cetak();
 						}
+						Ext.Ajax.request({
+							waitMsg: 'Mohon tunggu...',
+							url: 'index.php?c=c_master_jual_rawat&m=catatan_piutang_update',
+							params:{drawat_master	: eval(jrawat_idField.getValue())}
+						});
 						master_jual_rawat_DataStore.reload();
 						detail_jual_rawat_DataStore.load({params: {master_id:0}});
 						master_jual_rawat_createWindow.hide();

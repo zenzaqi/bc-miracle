@@ -4178,6 +4178,11 @@ Ext.onReady(function(){
 							jproduk_cetak(result);
 							cetak_jproduk=0;
 							jproduk_post2db="CREATE";
+							Ext.Ajax.request({
+								waitMsg: 'Mohon tunggu...',
+								url: 'index.php?c=c_master_jual_produk&m=catatan_piutang_update',
+								params:{dproduk_master	: eval(get_pk_id())}
+							});
 						}
 						/*switch(result){
 							case 0:

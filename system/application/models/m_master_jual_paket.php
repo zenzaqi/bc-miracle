@@ -448,7 +448,7 @@ class M_master_jual_paket extends Model{
 		//eof
 		
 		function catatan_piutang_update($jpaket_id){
-			if($jpaket_id=="" || $jpaket_id==NULL){
+			if($jpaket_id=="" || $jpaket_id==NULL || $jpaket_id==0){
 				$jpaket_id=$this->get_master_id();
 			}
 			$sql="SELECT * FROM vu_piutang_jpaket WHERE jpaket_id='$jpaket_id'";
