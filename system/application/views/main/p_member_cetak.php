@@ -20,7 +20,7 @@
 </head>
 <table summary='Inbox List'>
 	<caption>Kartu Member Cetak</caption>
-	<thead><tr><th scope='col'>No</th><th scope='col'>Nama Member</th><th scope='col'>Nomor Member</th><th scope='col'>Register</th><th scope='col'>Valid</th><th scope='col'>Jenis</th></tr></thead>
+	<thead><tr><th scope='col'>No</th><th scope='col'>Customer</th><th scope='col'>No Member</th><th scope='col'>Tgl Daftar</th><th scope='col'>Tgl Valid</th><th scope='col'>Jenis</th></tr></thead>
 	<tfoot><tr><th scope='row'>Total</th><td colspan='5'><?php echo count($data_print); ?></td></tr></tfoot>
 	<tbody>
 		<?php $i=0; foreach($data_print as $print) { $i++; ?>
