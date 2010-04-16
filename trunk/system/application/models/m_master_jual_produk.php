@@ -263,7 +263,8 @@ class M_master_jual_produk extends Model{
 			$rs_rows=$rs->num_rows();
 		}		
 
-		$sql="select * from vu_produk WHERE produk_aktif='Aktif'";
+//		$sql="select * from vu_produk WHERE produk_aktif='Aktif'";
+		$sql="select produk_id, produk_harga, produk_kode, satuan_kode, produk_du, produk_dm, produk_nama from vu_produk WHERE produk_aktif='Aktif'";
 		if($query<>"" && is_numeric($query)==false){
 			$sql.=eregi("WHERE",$sql)? " AND ":" WHERE ";
 			$sql.=" (produk_kode like '%".$query."%' or produk_nama like '%".$query."%' or satuan_nama like '%".$query."%' or kategori_nama like '%".$query."%' or group_nama like '%".$query."%') ";
