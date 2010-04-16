@@ -18,6 +18,38 @@ class M_tindakan_nonmedis extends Model{
 		parent::Model();
 	}
 	
+	function customer_check_paket($cust_id, $rawat_id){
+		//* Mencari kepemilikan paket berdasarkan customer_id /
+		$sql="SELECT rpaket_jumlah, dpaket_id, dpaket_master, dpaket_paket FROM paket_isi_perawatan LEFT JOIN detail_jual_paket ON(rpaket_master=dpaket_paket) LEFT JOIN master_jual_paket ON(dpaket_master=jpaket_id) LEFT JOIN pengguna_paket ON(ppaket_master=jpaket_id) WHERE ppaket_cust='$cust_id' AND rpaket_perawatan='$rawat_id'";
+		$rs=$this->db->query($sql);
+		if($rs->num_rows()){
+			$check_paket_record=$rs->row();
+			
+			$rs_record=$rs->row_array();
+			$dpaket_id=$rs_record['dpaket_id'];
+			$dpaket_master=$rs_record['dpaket_master'];
+			$dpaket_paket=$rs_record['dpaket_paket'];
+			$rpaket_jumlah=$rs_record['rpaket_jumlah'];
+			$sql="SELECT sum(dapaket_jumlah) AS total_item_terpakai FROM detail_ambil_paket WHERE dapaket_dpaket='$dpaket_id' AND dapaket_jpaket='$dpaket_master' AND dapaket_paket='$dpaket_paket' AND dapaket_item='$rawat_id' GROUP BY dapaket_item";
+			$rs=$this->db->query($sql);
+			if($rs->num_rows()){
+				$rs_record=$rs->row_array();
+				$total_item_terpakai=$rs_record['total_item_terpakai'];
+				if($rpaket_jumlah > $total_item_terpakai){
+					//return 1;
+					return $check_paket_record;
+				}else{
+					return 0;
+				}
+			}else{
+				//return 1;
+				return $check_paket_record;
+			}
+		}else{
+			return 0;
+		}
+	}
+	
 	//function for detail
 	//get record list
 	function detail_tindakan_detail_list($master_id,$query,$start,$end) {
@@ -605,10 +637,16 @@ class M_tindakan_nonmedis extends Model{
 						3. UPDATE db.tindakan_detail.status = 'selesai' ==> sudah dilakukan sebelum masuk fungsi IF ini
 						*/
 						//$sql_backup20100406="SELECT cust_punya_paket FROM vu_tindakan WHERE dtrawat_id='$dtrawat_id' AND cust_punya_paket='ada'";
+						/* BACKUP 2010-04-16
 						$sql="SELECT * FROM vu_total_sisa_item_perawatan WHERE ppaket_cust='$trawat_cust_id' AND vu_total_sisa_item_perawatan.rpaket_perawatan='$dtrawat_perawatan' AND vu_total_sisa_item_perawatan.total_sisa_item>0";
 						$rs=$this->db->query($sql);
 						if($rs->num_rows()){
 							$this->detail_ambil_paket_insert($dapaket_dpaket, $dapaket_jpaket, $dapaket_paket, $dtrawat_perawatan_id, $trawat_cust_id, $dtrawat_id, $dtrawat_dapp);
+							return '1';
+						}*/
+						$sql_check_paket=$this->customer_check_paket($trawat_cust_id, $dtrawat_perawatan_id);
+						if($sql_check_paket){
+							$this->detail_ambil_paket_insert($sql_check_paket->dpaket_id, $sql_check_paket->dpaket_master, $sql_check_paket->dpaket_paket, $dtrawat_perawatan_id, $trawat_cust_id, $dtrawat_id, $dtrawat_dapp);
 							return '1';
 						}
 					}elseif($dtrawat_status_awal!='selesai' && $dtrawat_status=='selesai' && $dtrawat_ambil_paket=='false'){
@@ -653,12 +691,23 @@ class M_tindakan_nonmedis extends Model{
 					4. UPDATE db.tindakan_detail.dtrawat_ambil_paket = 'true'
 					*/
 					//$sql_backup20100406="SELECT cust_punya_paket FROM vu_tindakan WHERE dtrawat_id='$dtrawat_id' AND cust_punya_paket='ada'";
+					/* BACKUP 2010-04-16
 					$sql="SELECT * FROM vu_total_sisa_item_perawatan WHERE ppaket_cust='$trawat_cust_id' AND vu_total_sisa_item_perawatan.rpaket_perawatan='$dtrawat_perawatan' AND vu_total_sisa_item_perawatan.total_sisa_item>0";
 					$rs=$this->db->query($sql);
 					if($rs->num_rows()){
 						$this->detail_jual_rawat_delete($dtrawat_id, $dtrawat_dapp);
-						/* 3. INSERT ke db.detail_ambil_paket */
+						//* 3. INSERT ke db.detail_ambil_paket /
 						$this->detail_ambil_paket_insert($dapaket_dpaket, $dapaket_jpaket, $dapaket_paket, $dtrawat_perawatan_id, $trawat_cust_id, $dtrawat_id, $dtrawat_dapp);
+						return '1';
+					}else{
+						return '0';
+					}*/
+					$sql_check_paket=$this->customer_check_paket($trawat_cust_id, $dtrawat_perawatan_id);
+					if($sql_check_paket){
+						$this->detail_jual_rawat_delete($dtrawat_id, $dtrawat_dapp);
+						//* 3. INSERT ke db.detail_ambil_paket /
+						//$this->detail_ambil_paket_insert($dapaket_dpaket, $dapaket_jpaket, $dapaket_paket, $dtrawat_perawatan_id, $trawat_cust_id, $dtrawat_id, $dtrawat_dapp);
+						$this->detail_ambil_paket_insert($sql_check_paket->dpaket_id, $sql_check_paket->dpaket_master, $sql_check_paket->dpaket_paket, $dtrawat_perawatan_id, $trawat_cust_id, $dtrawat_id, $dtrawat_dapp);
 						return '1';
 					}else{
 						return '0';
