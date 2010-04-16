@@ -576,11 +576,19 @@ Ext.onReady(function(){
 		},[
 		/* dataIndex => insert intophonegroup_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'phonenumber_nama', type: 'string', mapping: 'cust_nama'}, 
-			{name: 'phonenumber_number', type: 'string', mapping: 'cust_hp'}
+			{name: 'phonenumber_number', type: 'string', mapping: 'cust_hp'},
+			{name: 'phonenumber_no', type: 'string', mapping: 'cust_no'}
 		]),
 		sortInfo:{field: 'phonenumber_nama', direction: "ASC"}
 	});
 	
+	var cust_tpl = new Ext.XTemplate(
+        '<tpl for="."><div class="search-item">',
+            '<span><b>{phonenumber_nama} ({phonenumber_no})</b><br /></span>',
+            'No HP: {phonenumber_member}',
+        '</div></tpl>'
+    );
+		
 	/* Identify  phonegroup_nama Field */
 	phonegroup_namaField= new Ext.form.TextField({
 		id: 'phonegroup_namaField',
@@ -626,6 +634,7 @@ Ext.onReady(function(){
 							store: phonenumber_DataStore,
 							displayField: 'phonenumber_nama',
 							valueField: 'phonenumber_number',
+							tpl: cust_tpl,
 							tbar: new Ext.PagingToolbar({
 								pageSize: 15,
 								store: phonenumber_DataStore,

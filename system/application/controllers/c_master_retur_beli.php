@@ -69,9 +69,20 @@ class C_master_retur_beli extends Controller {
 	}
 	
 	function get_satuan_list(){
-		$result=$this->m_public_function->get_satuan_list();
+		$task = isset($_POST['task']) ? @$_POST['task'] : @$_GET['task'];
+		$selected_id = isset($_POST['selected_id']) ? @$_POST['selected_id'] : @$_GET['selected_id'];
+		$master_id = (integer) (isset($_POST['master_id']) ? @$_POST['master_id'] : @$_GET['master_id']);
+		
+		if($task=='detail')
+			$result=$this->m_master_retur_beli->get_satuan_detail_list($master_id);
+		elseif($task=='produk')
+			$result=$this->m_master_retur_beli->get_satuan_produk_list($selected_id);
+		elseif($task=='selected')
+			$result=$this->m_master_retur_beli->get_satuan_selected_list($selected_id);
+			
 		echo $result;
 	}
+	
 	
 	function get_satuan_by_produkid(){
 		$dterima_master = trim(@$_POST["dterima_master"]);

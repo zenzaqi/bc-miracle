@@ -339,7 +339,7 @@ class M_master_mutasi extends Model{
 		//function for advanced search record
 		function master_mutasi_search($mutasi_id ,$mutasi_asal ,$mutasi_tujuan ,$mutasi_tanggal ,$mutasi_keterangan ,$start,$end){
 			//full query
-			$query="select * from master_mutasi";
+			$query = "SELECT * FROM vu_trans_mutasi";
 			
 			if($mutasi_id!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -381,8 +381,10 @@ class M_master_mutasi extends Model{
 		//function for print record
 		function master_mutasi_print($mutasi_id ,$mutasi_asal ,$mutasi_tujuan ,$mutasi_tanggal ,$mutasi_keterangan ,$option,$filter){
 			//full query
-			$query="select * from master_mutasi";
-			if($option=='LIST'){
+			$query = "SELECT * FROM vu_trans_mutasi";
+			
+			// For simple search
+			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 				$query .= " (mutasi_id LIKE '%".addslashes($filter)."%' OR mutasi_asal LIKE '%".addslashes($filter)."%' OR mutasi_tujuan LIKE '%".addslashes($filter)."%' OR mutasi_tanggal LIKE '%".addslashes($filter)."%' OR mutasi_keterangan LIKE '%".addslashes($filter)."%' )";
 				$result = $this->db->query($query);

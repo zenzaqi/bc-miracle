@@ -2,28 +2,36 @@
 /* 	These code was generated using phpCIGen v 0.1.b (21/04/2009)
 	#zaqi 		zaqi.smart@gmail.com,http://zenzaqi.blogspot.com, 
 	
-	+ Module  		: vu_stok_all_saldo Controller
+	+ Module  		: hpp Controller
 	+ Description	: For record controller process back-end
-	+ Filename 		: C_vu_stok_all_saldo.php
+	+ Filename 		: C_hpp.php
  	+ creator 		: 
  	+ Created on 09/Apr/2010 10:47:15
 	
 */
 
-//class of vu_stok_all_saldo
-class C_vu_stok_all_saldo extends Controller {
+//class of hpp
+class C_hpp extends Controller {
 
 	//constructor
-	function C_vu_stok_all_saldo(){
+	function C_hpp(){
 		parent::Controller();
 		session_start();
-		$this->load->model('m_vu_stok_all_saldo', '', TRUE);
+		$this->load->model('m_hpp', '', TRUE);
 	}
 	
 	//set index
 	function index(){
 		$this->load->plugin('to_excel');
-		$this->load->view('main/v_vu_stok_all_saldo');
+		$this->load->view('main/v_hpp');
+	}
+	
+	function get_produk_list(){
+		$query = isset($_POST['query']) ? @$_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? @$_POST['start'] : @$_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? @$_POST['limit'] : @$_GET['limit']);
+		$result=$this->m_hpp->get_produk_list($query,$start,$end);
+		echo $result;
 	}
 	
 	//event handler action
@@ -31,16 +39,16 @@ class C_vu_stok_all_saldo extends Controller {
 		$task = $_POST['task'];
 		switch($task){
 			case "LIST":
-				$this->vu_stok_all_saldo_list();
+				$this->hpp_list();
 				break;
 			case "SEARCH":
-				$this->vu_stok_all_saldo_search();
+				$this->hpp_search();
 				break;
 			case "PRINT":
-				$this->vu_stok_all_saldo_print();
+				$this->hpp_print();
 				break;
 			case "EXCEL":
-				$this->vu_stok_all_saldo_export_excel();
+				$this->hpp_export_excel();
 				break;
 			default:
 				echo "{failure:true}";
@@ -48,35 +56,26 @@ class C_vu_stok_all_saldo extends Controller {
 		}
 	}
 	
-	
-	function get_detail_stok()
-	{
-		$query = isset($_POST['query']) ? @$_POST['query'] : "";
-		$start = (integer) (isset($_POST['start']) ? @$_POST['start'] : @$_GET['start']);
-		$end = (integer) (isset($_POST['limit']) ? @$_POST['limit'] : @$_GET['limit']);
-		$produk_id = (integer) (isset($_POST['produk_id']) ? @$_POST['produk_id'] : @$_GET['produk_id']);
-		$result=$this->m_vu_stok_all_saldo->get_detail_stok($produk_id,$query,$start,$end);
-		echo $result;
-	}
 	//function fot list record
-	function vu_stok_all_saldo_list(){
+	function hpp_list(){
 		
 		$query = isset($_POST['query']) ? @$_POST['query'] : "";
 		$start = (integer) (isset($_POST['start']) ? @$_POST['start'] : @$_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? @$_POST['limit'] : @$_GET['limit']);
-		$result=$this->m_vu_stok_all_saldo->vu_stok_all_saldo_list($query,$start,$end);
+		$produk_id = (integer) (isset($_POST['produk_id']) ? @$_POST['produk_id'] : @$_GET['produk_id']);
+		$result=$this->m_hpp->hpp_list($produk_id, $query,$start,$end);
 		echo $result;
 	}
 	
-	//function for create new record
 	
 	//function for advanced search
-	function vu_stok_all_saldo_search(){
+	function hpp_search(){
 		//POST varibale here
-		$produk_kode=trim(@$_POST["produk_kode"]);
+		$produk_id=trim(@$_POST["produk_id"]);
 		$produk_nama=trim(@$_POST["produk_nama"]);
 		$produk_nama=str_replace("/(<\/?)(p)([^>]*>)", "",$produk_nama);
 		$produk_nama=str_replace("'", "''",$produk_nama);
+		$satuan_id=trim(@$_POST["satuan_id"]);
 		$satuan_nama=trim(@$_POST["satuan_nama"]);
 		$satuan_nama=str_replace("/(<\/?)(p)([^>]*>)", "",$satuan_nama);
 		$satuan_nama=str_replace("'", "''",$satuan_nama);
@@ -84,12 +83,12 @@ class C_vu_stok_all_saldo extends Controller {
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_vu_stok_all_saldo->vu_stok_all_saldo_search($produk_kode ,$produk_nama ,$satuan_nama ,$stok_saldo ,$start,$end);
+		$result = $this->m_hpp->hpp_search($produk_id ,$produk_nama ,$satuan_id ,$satuan_nama ,$stok_saldo ,$start,$end);
 		echo $result;
 	}
 
 
-	function vu_stok_all_saldo_print(){
+	function hpp_print(){
   		//POST varibale here
 		$produk_id=trim(@$_POST["produk_id"]);
 		$produk_nama=trim(@$_POST["produk_nama"]);
@@ -103,19 +102,19 @@ class C_vu_stok_all_saldo extends Controller {
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$data["data_print"] = $this->m_vu_stok_all_saldo->vu_stok_all_saldo_print($produk_id ,$produk_nama ,$satuan_id ,$satuan_nama ,$stok_saldo ,$option,$filter);
-		$print_view=$this->load->view("main/p_vu_stok_all_saldo.php",$data,TRUE);
+		$data["data_print"] = $this->m_hpp->hpp_print($produk_id ,$produk_nama ,$satuan_id ,$satuan_nama ,$stok_saldo ,$option,$filter);
+		$print_view=$this->load->view("main/p_hpp.php",$data,TRUE);
 		if(!file_exists("print")){
 			mkdir("print");
 		}
-		$print_file=fopen("print/vu_stok_all_saldo_printlist.html","w+");
+		$print_file=fopen("print/hpp_printlist.html","w+");
 		fwrite($print_file, $print_view);
 		echo '1';        
 	}
 	/* End Of Function */
 
 	/* Function to Export Excel document */
-	function vu_stok_all_saldo_export_excel(){
+	function hpp_export_excel(){
 		//POST varibale here
 		$produk_id=trim(@$_POST["produk_id"]);
 		$produk_nama=trim(@$_POST["produk_nama"]);
@@ -129,9 +128,9 @@ class C_vu_stok_all_saldo extends Controller {
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$query = $this->m_vu_stok_all_saldo->vu_stok_all_saldo_export_excel($produk_id ,$produk_nama ,$satuan_id ,$satuan_nama ,$stok_saldo ,$option,$filter);
+		$query = $this->m_hpp->hpp_export_excel($produk_id ,$produk_nama ,$satuan_id ,$satuan_nama ,$stok_saldo ,$option,$filter);
 		
-		to_excel($query,"vu_stok_all_saldo"); 
+		to_excel($query,"hpp"); 
 		echo '1';
 			
 	}

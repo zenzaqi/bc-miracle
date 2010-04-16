@@ -435,7 +435,7 @@ Ext.onReady(function(){
 			url: 'index.php?c=c_master_invoice&m=get_action', 
 			method: 'POST'
 		}),
-		baseParams:{task: "LIST"}, // parameter yang di $_POST ke Controller
+		baseParams:{task: "LIST", start:0, limit: pageS}, // parameter yang di $_POST ke Controller
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
@@ -955,7 +955,7 @@ Ext.onReady(function(){
 			url: 'index.php?c=c_master_invoice&m=get_invoice_order', 
 			method: 'POST'
 		}),
-		baseParams:{terima_id: 0},
+		baseParams:{terima_id: 0, start:0, limit: pageS},
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
@@ -976,6 +976,7 @@ Ext.onReady(function(){
 			url: 'index.php?c=c_master_invoice&m=get_dtbeli_list', 
 			method: 'POST'
 		}),
+		baseParams:{start:0, limit: pageS},
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
@@ -1156,6 +1157,8 @@ Ext.onReady(function(){
 		lazyRender: false
 	});
 	
+
+	
 	//declaration of detail coloumn model
 	detail_invoice_ColumnModel = new Ext.grid.ColumnModel(
 		[
@@ -1315,6 +1318,7 @@ Ext.onReady(function(){
 				}
 			});
 		}
+		master_invoice_DataStore.reload();
 	}
 	//eof
 	
@@ -1328,6 +1332,7 @@ Ext.onReady(function(){
 				detail_invoice_insert(pkid);
 			}
 		});
+		master_invoice_DataStore.reload();
 	}
 	//eof
 	
