@@ -710,7 +710,7 @@ class M_tindakan_nonmedis extends Model{
 						$this->detail_ambil_paket_insert($sql_check_paket->dpaket_id, $sql_check_paket->dpaket_master, $sql_check_paket->dpaket_paket, $dtrawat_perawatan_id, $trawat_cust_id, $dtrawat_id, $dtrawat_dapp);
 						return '1';
 					}else{
-						return '0';
+						return '-1';
 					}
 				}elseif($dtrawat_ambil_paket_awal=='false' && $dtrawat_ambil_paket=='true' && $dtrawat_status_awal!='selesai'){
 					/*
@@ -734,7 +734,7 @@ class M_tindakan_nonmedis extends Model{
 							return '0';
 						}
 					}else{
-						return '0';
+						return '-1';
 					}
 				}elseif($dtrawat_ambil_paket_awal=='true' && $dtrawat_ambil_paket=='false' && $dtrawat_status_awal=='selesai'){
 					/*

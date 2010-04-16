@@ -240,6 +240,17 @@ Ext.onReady(function(){
 						});
 						tindakan_medisDataStore.reload();
 						break;*/
+					case -1:
+						Ext.MessageBox.show({
+						   title: 'Warning',
+						   width: 330,
+						   msg: 'Customer dengan perawatan yang dipilih, <br/>\"tidak ada\" dalam paket.',
+						   buttons: Ext.MessageBox.OK,
+						   animEl: 'save',
+						   icon: Ext.MessageBox.WARNING
+						});
+						tindakan_medisDataStore.reload();
+						break;
 					default:
 						tindakan_medisDataStore.commitChanges();
 						tindakan_medisDataStore.reload();
