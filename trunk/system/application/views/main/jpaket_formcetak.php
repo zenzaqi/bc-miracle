@@ -41,7 +41,8 @@ html,body,table,tr,td{
         </table></td>
 	</tr>
 	<tr>
-	  <td height="34px"><table width="1240px" height="34px" border="0" cellspacing="0" cellpadding="0">
+	  <td height="40px">
+	  <table width="1240px" height="34px" border="0" cellspacing="0" cellpadding="0">
         <tr>
           <td width="200px">&nbsp;</td>
           <td width="1040px" valign="bottom"><?=$jpaket_nobukti;?></td>
