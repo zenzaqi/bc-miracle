@@ -1337,9 +1337,9 @@ Ext.onReady(function(){
 	function master_jual_produk_confirm_delete(){
 		// only one master_jual_produk is selected here
 		if(master_jual_produkListEditorGrid.selModel.getCount() == 1){
-			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', master_jual_produk_delete);
+			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', master_jual_produk_delete);
 		} else if(master_jual_produkListEditorGrid.selModel.getCount() > 1){
-			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', master_jual_produk_delete);
+			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', master_jual_produk_delete);
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
@@ -1362,6 +1362,7 @@ Ext.onReady(function(){
 			cbo_dproduk_satuanDataStore.setBaseParam('query', master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_id'));
 			//cbo_dproduk_satuanDataStore.load({params: {query: master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_id')}});
 			cbo_dproduk_satuanDataStore.load();
+			cbo_dproduk_reveralDataStore.load();
 			//master_jual_produk_set_form();
 			//master_cara_bayarTabPanel.setActiveTab(0);
 			jproduk_post2db='UPDATE';
@@ -3602,6 +3603,8 @@ Ext.onReady(function(){
 			{name: 'dproduk_diskon', type: 'int', mapping: 'dproduk_diskon'},
 			{name: 'dproduk_sales', type: 'string', mapping: 'dproduk_sales'},
 			{name: 'dproduk_diskon_jenis', type: 'string', mapping: 'dproduk_diskon_jenis'},
+			{name: 'nama_karyawan', type: 'string', mapping: 'karyawan_username'},
+			{name: 'dproduk_karyawan', type: 'int', mapping: 'dproduk_karyawan'},
 			{name: 'dproduk_subtotal', type: 'float', mapping: 'dproduk_subtotal'},
 			{name: 'dproduk_subtotal_net', type: 'int', mapping: 'dproduk_subtotal_net'},
 			{name: 'konversi_nilai_temp', type: 'float', mapping: 'konversi_nilai_temp'},
@@ -3664,8 +3667,8 @@ Ext.onReady(function(){
 			{name: 'dproduk_produk_harga', type: 'float', mapping: 'produk_harga'},
 			{name: 'dproduk_produk_kode', type: 'string', mapping: 'produk_kode'},
 			{name: 'dproduk_produk_satuan', type: 'string', mapping: 'satuan_kode'},
-//			{name: 'dproduk_produk_group', type: 'string', mapping: 'group_nama'},
-//			{name: 'dproduk_produk_kategori', type: 'string', mapping: 'kategori_nama'},
+			{name: 'dproduk_produk_group', type: 'string', mapping: 'group_nama'},
+			{name: 'dproduk_produk_kategori', type: 'string', mapping: 'kategori_nama'},
 			{name: 'dproduk_produk_du', type: 'float', mapping: 'produk_du'},
 			{name: 'dproduk_produk_dm', type: 'float', mapping: 'produk_dm'},
 			{name: 'dproduk_produk_display', type: 'string', mapping: 'produk_nama'}
@@ -3684,17 +3687,17 @@ Ext.onReady(function(){
 			totalProperty: 'total'
 			//id: 'produk_id'
 		},[
-			{name: 'karyawan_display', type: 'string', mapping: 'karyawan_nama'},
+			{name: 'karyawan_display', type: 'string', mapping: 'karyawan_username'},
 			//{name: 'karyawan_id', type: 'int', mapping: 'karyawan_id'},
 			{name: 'karyawan_no', type: 'string', mapping: 'karyawan_no'},
-			{name: 'karyawan_username', type: 'string', mapping: 'karyawan_username'},
+			{name: 'nama_karyawan', type: 'string', mapping: 'karyawan_nama'},
 			{name: 'karyawan_value', type: 'int', mapping: 'karyawan_id'}
 		]),
 		sortInfo:{field: 'karyawan_no', direction: "ASC"}
 	});
 	var reveral_tpl = new Ext.XTemplate(
         '<tpl for="."><div class="search-item">',
-            '<span><b>{karyawan_username}</b> | {karyawan_display}</span>',
+            '<span><b>{nama_karyawan}</b> | {karyawan_display}</span>',
         '</div></tpl>'
     );
 	
@@ -3797,7 +3800,7 @@ Ext.onReady(function(){
 	var combo_reveral=new Ext.form.ComboBox({
 			store: cbo_dproduk_reveralDataStore,
 			mode: 'remote',
-			displayField: 'karyawan_username',
+			displayField: 'karyawan_display',
 			valueField: 'karyawan_value',
 			typeAhead: false,
 			loadingText: 'Searching...',
@@ -3905,7 +3908,7 @@ Ext.onReady(function(){
 			align : 'Left',
 			header: '<div align="center">' + 'Produk' + '</div>',
 			dataIndex: 'dproduk_produk',
-			width: 260, //250
+			width: 300, //250
 			sortable: true,
 			allowBlank: false,
 			editor: combo_jual_produk,
@@ -4007,6 +4010,20 @@ Ext.onReady(function(){
 			renderer: function(v, params, record){
 					return Ext.util.Format.number(record.data.dproduk_subtotal*(100-record.data.dproduk_diskon)/100,'0,000');
             }
+
+		},
+		{
+			align : 'Left',
+			header: '<div align="center">' + 'Referal' + '</div>',
+			dataIndex: 'dproduk_karyawan',
+			width: 150, //250
+			sortable: true,
+			allowBlank: false,
+			editor: combo_reveral,
+			renderer: Ext.util.Format.comboRenderer(combo_reveral)
+		},
+		
+		/*{
 		},
 		{
 			align : 'Left',
@@ -4020,6 +4037,7 @@ Ext.onReady(function(){
 		},
 		
 		/*{
+
 			header: 'Sales',
 			dataIndex: 'dproduk_sales',
 			width: 40, //150,
@@ -4088,7 +4106,7 @@ Ext.onReady(function(){
 			text: 'Delete',
 			tooltip: 'Delete detail selected record',
 			iconCls:'icon-delete',
-			disabled: false,
+			disabled: true,
 			handler: detail_jual_produk_confirm_delete
 		}
 		]
@@ -4178,11 +4196,6 @@ Ext.onReady(function(){
 							jproduk_cetak(result);
 							cetak_jproduk=0;
 							jproduk_post2db="CREATE";
-							Ext.Ajax.request({
-								waitMsg: 'Mohon tunggu...',
-								url: 'index.php?c=c_master_jual_produk&m=catatan_piutang_update',
-								params:{dproduk_master	: eval(get_pk_id())}
-							});
 						}
 						/*switch(result){
 							case 0:
@@ -4237,13 +4250,13 @@ Ext.onReady(function(){
 	function detail_jual_produk_confirm_delete(){
 		// only one record is selected here
 		if(detail_jual_produkListEditorGrid.selModel.getCount() == 1){
-			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', detail_jual_produk_delete);
+			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', detail_jual_produk_delete);
 		} else if(detail_jual_produkListEditorGrid.selModel.getCount() > 1){
-			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', detail_jual_produk_delete);
+			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', detail_jual_produk_delete);
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'Anda belum memilih data yang akan dihapus',
+				msg: 'You can\'t really delete something you haven\'t selected?',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
