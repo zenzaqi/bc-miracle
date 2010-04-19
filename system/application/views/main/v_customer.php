@@ -264,6 +264,9 @@ var editor_cust_note;
 		cust_propinsiField.setValue('Jawa Timur');
 		cust_negaraField.setValue('Indonesia');
 		cust_priorityField.setValue('Reguler');
+		cust_unitField.setValue('Miracle Thamrin');
+		cust_aktifField.setValue('Aktif');
+		
 	}
   
 	/* setValue to EDIT */
@@ -331,7 +334,7 @@ var editor_cust_note;
   
 	/* Function for Check if the form is valid */
 	function is_customer_form_valid(){
-		return (cust_namaField.isValid() && cust_alamatField.isValid() && cust_kotaField.isValid() && cust_propinsiField.isValid() && cust_kelaminField.isValid() && cust_agamaField.isValid() && cust_pendidikanField.isValid() && cust_statusnikahField.isValid() && cust_priorityField.isValid() && cust_terdaftarField.isValid() && cust_unitField.isValid() && cust_aktifField.isValid() && cust_tgllahirField.isValid());
+		return (cust_namaField.isValid() && cust_noField.isValid());
 	}
   	/* End of Function */
   
@@ -1476,6 +1479,7 @@ Ext.onReady(function(){
 			{name: 'cust_referensilain', type: 'string', mapping: 'cust_referensilain'},
 			{name: 'cust_keterangan', type: 'string', mapping: 'cust_keterangan'},
 			{name: 'cust_member', type: 'string', mapping: 'cust_member'},
+			{name: 'cust_statusmember', type: 'string', mapping: 'cust_statusmember'},
 			{name: 'cust_terdaftar', type: 'date', dateFormat: 'Y-m-d', mapping: 'cust_terdaftar'},
 			{name: 'cust_statusnikah', type: 'string', mapping: 'cust_statusnikah'},
 			{name: 'cust_priority', type: 'string', mapping: 'cust_priority'},
@@ -1619,7 +1623,7 @@ Ext.onReady(function(){
 				},
 			hidden: true
 		},
-		{
+		/*{
 //			header: 'No Customer (Lama)',
 			header: 'No. Cust (Lama)',
 			dataIndex: 'cust_nolama',
@@ -1629,12 +1633,12 @@ Ext.onReady(function(){
 			editor: new Ext.form.TextField({
 				maxLength: 50
           	})
-		},
+		},*/
 		{
 //			header: 'No Customer',
-			header: '<div align="center">' + 'No. Cust' + '</div>',
+			header: '<div align="center">' + 'No Cust' + '</div>',
 			dataIndex: 'cust_no',
-			width: 80,	//90,
+			width: 70,	//90,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 50
@@ -1677,7 +1681,7 @@ Ext.onReady(function(){
 				maxLength: 250
           	})
 		},
-		{
+		/*{
 			header: 'Alamat2',
 			dataIndex: 'cust_alamat2',
 			width: 150,
@@ -1686,7 +1690,7 @@ Ext.onReady(function(){
 				maxLength: 150
           	}),
 			hidden: true
-		},
+		},*/
 		{
 			header: '<div align="center">' + 'Kota' + '</div>',
 			dataIndex: 'cust_kota',
@@ -1696,7 +1700,7 @@ Ext.onReady(function(){
 				maxLength: 100
           	})
 		},
-		{
+		/*{
 			header: 'Kode Pos',
 			dataIndex: 'cust_kodepos',
 			width: 150,
@@ -1706,8 +1710,8 @@ Ext.onReady(function(){
 				maskRe: /([0-9]+)$/
           	}),
 			hidden: true
-		},
-		{
+		},*/
+		/*{
 			header: 'Propinsi',
 			dataIndex: 'cust_propinsi',
 			width: 150,
@@ -1716,8 +1720,8 @@ Ext.onReady(function(){
 				maxLength: 100
           	}),
 			hidden: true
-		},
-		{
+		},*/
+		/*{
 			header: 'Negara',
 			dataIndex: 'cust_negara',
 			width: 150,
@@ -1726,9 +1730,9 @@ Ext.onReady(function(){
 				maxLength: 100
           	}),
 			hidden: true
-		},
+		},*/
 		{
-			header: '<div align="center">' + 'Telp. Rumah' + '</div>',
+			header: '<div align="center">' + 'Telp Rumah' + '</div>',
 			dataIndex: 'cust_telprumah',
 			width: 80,	//97,
 			sortable: true,
@@ -1737,7 +1741,7 @@ Ext.onReady(function(){
 				maskRe: /([0-9]+)$/
           	})
 		},
-		{
+		/*{
 			header: 'Telp. Rumah 2',
 			dataIndex: 'cust_telprumah2',
 			width: 80,	//150,
@@ -1747,8 +1751,8 @@ Ext.onReady(function(){
 				maskRe: /([0-9]+)$/
           	}),
 			hidden: true
-		},
-		{
+		},*/
+		/*{
 			header: 'No. Telp. Kantor',
 			dataIndex: 'cust_telpkantor',
 			width: 150,
@@ -1758,9 +1762,9 @@ Ext.onReady(function(){
 				maskRe: /([0-9]+)$/
           	}),
 			hidden: true
-		},
+		},*/
 		{
-			header: '<div align="center">' + 'No. Ponsel' + '</div>',
+			header: '<div align="center">' + 'No Ponsel' + '</div>',
 			dataIndex: 'cust_hp',
 			width: 80,	//97,
 			sortable: true,
@@ -1769,7 +1773,7 @@ Ext.onReady(function(){
 				maskRe: /([0-9]+)$/
           	})
 		},
-		{
+		/*{
 			header: 'No. Ponsel 2',
 			dataIndex: 'cust_hp2',
 			width: 150,
@@ -1780,8 +1784,8 @@ Ext.onReady(function(){
           	})
 			,
 			hidden: true
-		},
-		{
+		},*/
+		/*{
 			header: 'No. Ponsel 3',
 			dataIndex: 'cust_hp3',
 			width: 150,
@@ -1791,8 +1795,8 @@ Ext.onReady(function(){
 				maskRe: /([0-9]+)$/
           	}),
 			hidden: true
-		},
-		{
+		},*/
+		/*{
 			header: 'Email',
 			dataIndex: 'cust_email',
 			width: 150,
@@ -1801,8 +1805,8 @@ Ext.onReady(function(){
 				maxLength: 100
           	}),
 			hidden: true
-		},
-		{
+		},*/
+		/*{
 			header: 'Agama',
 			dataIndex: 'cust_agama',
 			width: 150,
@@ -1821,8 +1825,8 @@ Ext.onReady(function(){
                	lazyRender:true,
                	listClass: 'x-combo-list-small'
             })
-		},
-		{
+		},*/
+		/*{
 			header: 'Pendidikan',
 			dataIndex: 'cust_pendidikan',
 			width: 150,
@@ -1841,8 +1845,8 @@ Ext.onReady(function(){
                	listClass: 'x-combo-list-small'
             }),
 			hidden: true
-		},
-		{
+		},*/
+		/*{
 			header: 'Profesi',
 			dataIndex: 'cust_profesi',
 			width: 150,
@@ -1858,7 +1862,7 @@ Ext.onReady(function(){
                	lazyRender:true,
                	listClass: 'x-combo-list-small'
             })
-		},
+		},*/
 		{
 			header: '<div align="center">' + 'Tgl Lahir' + '</div>',
 			dataIndex: 'cust_tgllahir',
@@ -1871,7 +1875,7 @@ Ext.onReady(function(){
 				format: 'd-m-Y'
 			})
 		},
-		{
+		/*{
 			header: 'Hobi',
 			dataIndex: 'cust_hobi',
 			width: 150,
@@ -1887,8 +1891,8 @@ Ext.onReady(function(){
                	listClass: 'x-combo-list-small'
             }),
 			hidden: true
-		},
-		{
+		},*/
+		/*{
 			header: 'Referensi',
 			dataIndex: 'cust_referensi',
 			width: 150,
@@ -1897,11 +1901,11 @@ Ext.onReady(function(){
 				maxLength: 250
           	}),
 			hidden: true
-		},
+		},*/
 		{
-			header: '<div align="center">' + 'Stat. Nikah' + '</div>',
+			header: '<div align="center">' + 'Stat Nikah' + '</div>',
 			dataIndex: 'cust_statusnikah',
-			width: 90,
+			width: 80,
 			sortable: true,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
@@ -1970,6 +1974,29 @@ Ext.onReady(function(){
 			//hidden: true,
 			readOnly: true
 		},
+		
+		{
+			header: '<div align="center">' + 'Stat Member' + '</div>',
+			dataIndex: 'cust_statusmember',
+			width: 80,
+			sortable: true,
+			editor: new Ext.form.ComboBox({
+				typeAhead: true,
+				triggerAction: 'all',
+				store:new Ext.data.SimpleStore({
+					fields:['cust_statusmember_value', 'cust_statusmember_display'],
+					data: [['Member','Member'],['Non-Member','Non-Member']]
+					}),
+				mode: 'local',
+               	displayField: 'cust_statusmember_display',
+               	valueField: 'cust_statusmember_value',
+               	lazyRender:true,
+               	listClass: 'x-combo-list-small'
+            })
+		},
+		
+		
+		
 		{
 			header: '<div align="center">' + 'Keterangan' + '</div>',
 			dataIndex: 'cust_keterangan',
@@ -1978,9 +2005,9 @@ Ext.onReady(function(){
 			editor: new Ext.form.TextField({
 				maxLength: 500
           	}),
-			//hidden: true
+			hidden: true
 		},
-		{
+		/*{
 
 			header: 'Jumlah Anak',
 			dataIndex: 'cust_jmlanak',
@@ -1994,8 +2021,8 @@ Ext.onReady(function(){
 				maskRe: /([0-9]+)$/
 			}),
 			hidden: true
-		},
-		{
+		},*/
+		/*{
 			header: 'Terdaftar',
 			dataIndex: 'cust_terdaftar',
 			width: 150,
@@ -2005,8 +2032,8 @@ Ext.onReady(function(){
 			editor: new Ext.form.DateField({
 				format: 'Y-m-d'
 			})
-		},
-		{
+		},*/
+		/*{
 			header: 'Cabang',
 			dataIndex: 'cust_unit',
 			width: 150,
@@ -2022,7 +2049,7 @@ Ext.onReady(function(){
                	listClass: 'x-combo-list-small'
             }),
 			hidden: true
-		},
+		},*/
 
 		{
 			header: 'Creator',
@@ -2152,7 +2179,7 @@ Ext.onReady(function(){
 			header: '#',
 			readOnly: true,
 			dataIndex: 'note_id',
-			width: 40,
+			width: 20,
 			renderer: function(value, cell){
 				cell.css = "readonlycell"; // Mengambil Value dari Class di dalam CSS 
 				return value;
@@ -2160,16 +2187,16 @@ Ext.onReady(function(){
 			hidden: false
 		},
 		{
-			header: 'Tanggal',
+			header: '<div align="center">' + 'Tanggal dan Jam' + '</div>',
 			dataIndex: 'note_tanggal',
 			width: 70,
 			sortable: true,
 			readOnly: true
 		},
 		{
-			header: 'Catatan',
+			header: '<div align="center">' + 'Catatan' + '</div>',
 			dataIndex: 'note_detail',
-			width: 350,
+			width: 250,
 			sortable: true,
 			editor: new Ext.form.TextArea({
 				maxLength: 500
@@ -2293,7 +2320,7 @@ Ext.onReady(function(){
 	cust_noteListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'cust_noteListEditorGrid',
 		el: 'fp_cust_note',
-		title: 'History Of Note',
+		title: 'Catatan Customer',
 		height: 400,
 		store: cust_note_DataStore, // DataStore
 		cm: cust_note_ColumnModel, // Nama-nama Columns
@@ -2317,6 +2344,7 @@ Ext.onReady(function(){
 		}, '-',{
 			text: 'Delete',
 			tooltip: 'Delete selected record',
+			disabled : true,
 			iconCls:'icon-delete',
 			handler: cust_note_confirm_delete
 		}]
@@ -2432,8 +2460,9 @@ Ext.onReady(function(){
 	/* Identify  cust_no Field */
 	cust_noField= new Ext.form.TextField({
 		id: 'cust_noField',
-		fieldLabel: 'No Customer',
+		fieldLabel: 'No Customer <span style="color: #ec0000">*</span>',
 		maxLength: 50,
+		allowBlank: false,
 		anchor: '50%'
 	});
 	cust_nolamaField= new Ext.form.TextField({
@@ -2461,7 +2490,7 @@ Ext.onReady(function(){
 	/* Identify  cust_kelamin Field */
 	cust_kelaminField= new Ext.form.ComboBox({
 		id: 'cust_kelaminField',
-		fieldLabel: 'Jenis Kelamin <span style="color: #ec0000">*</span>',
+		fieldLabel: 'Jenis Kelamin',
 		store:new Ext.data.SimpleStore({
 			fields:['cust_kelamin_value', 'cust_kelamin_display'],
 			data:[['L','Laki-laki'],['P','Perempuan']]
@@ -2470,26 +2499,26 @@ Ext.onReady(function(){
 		editable: false,
 		displayField: 'cust_kelamin_display',
 		valueField: 'cust_kelamin_value',
-		allowBlank: false,
+		//allowBlank: false,
 		anchor: '50%',
 		triggerAction: 'all'	
 	});
 	/* Identify  cust_alamat Field */
 	cust_alamatField= new Ext.form.TextField({
 		id: 'cust_alamatField',
-		fieldLabel: 'Alamat <span style="color: #ec0000">*</span>',
+		fieldLabel: 'Alamat',
 		maxLength: 250,
-		allowBlank: false,
+		//allowBlank: false,
 		anchor: '95%'
 	});
 	
 	/* Identify  cust_kota Field */
 	cust_kotaField= new Ext.form.TextField({
 		id: 'cust_kotaField',
-		fieldLabel: 'Kota <span style="color: #ec0000">*</span>',
+		fieldLabel: 'Kota',
 		maxLength: 100,
 		//emptyText: 'Surabaya',
-		allowBlank: true,
+		//allowBlank: true,
 		anchor: '95%'
 	});
 	/* Identify  cust_kodepos Field */
@@ -2503,7 +2532,7 @@ Ext.onReady(function(){
 	/* Identify  cust_propinsi Field */
 	cust_propinsiField= new Ext.form.ComboBox({
 		id: 'cust_propinsiField',
-		fieldLabel: 'Propinsi <span style="color: #ec0000">*</span>',
+		fieldLabel: 'Propinsi',
 		//blankText: 'Jawa Timur',
 		//emptyText: 'Jawa Timur',
 		maxLength: 100,
@@ -2646,7 +2675,7 @@ Ext.onReady(function(){
 	/* Identify  cust_agama Field */
 	cust_agamaField= new Ext.form.ComboBox({
 		id: 'cust_agamaField',
-		fieldLabel: 'Agama <span style="color: #ec0000">*</span>',
+		fieldLabel: 'Agama',
 		maxLength: 50,
 		store:new Ext.data.SimpleStore({
 			fields:['cust_agama_value_display'],
@@ -2657,13 +2686,13 @@ Ext.onReady(function(){
 		displayField: 'cust_agama_value_display',
 		valueField: 'cust_agama_value_display',
 		anchor: '50%',
-		allowBlank: false,
+		//allowBlank: false,
 		triggerAction: 'all'	
 	});
 	/* Identify  cust_pendidikan Field */
 	cust_pendidikanField= new Ext.form.ComboBox({
 		id: 'cust_pendidikanField',
-		fieldLabel: 'Pendidikan <span style="color: #ec0000">*</span>',
+		fieldLabel: 'Pendidikan',
 		maxLength: 50,
 		store:new Ext.data.SimpleStore({
 			fields:['cust_pendidikan_value_display'],
@@ -2671,7 +2700,7 @@ Ext.onReady(function(){
 		}),
 		mode: 'local',
 		editable: false,
-		allowBlank: false,
+		//allowBlank: false,
 		displayField: 'cust_pendidikan_value_display',
 		valueField: 'cust_pendidikan_value_display',
 		anchor: '50%',
@@ -2710,7 +2739,7 @@ Ext.onReady(function(){
 		fieldLabel: 'Tgl Lahir',
 		format : 'Y-m-d',
 		anchor: '50%',
-		allowBlank: false,
+		//allowBlank: false,
 		enableKeyEvents: 'true',
 		listeners:{
 			keyup: function(){
@@ -2855,23 +2884,23 @@ Ext.onReady(function(){
 	/* Identify  cust_terdaftar Field */
 	cust_terdaftarField= new Ext.form.DateField({
 		id: 'cust_terdaftarField',
-		fieldLabel: 'Tanggal Terdaftar <span style="color: #ec0000">*</span>',
+		fieldLabel: 'Tanggal Terdaftar',
 		format : 'Y-m-d',
 		emptyText: '<?=date('Y/m/d'); ?>',
-		allowBlank: false,
+		//allowBlank: false,
 		anchor: '50%'
 	});
 	/* Identify  cust_statusnikah Field */
 	cust_statusnikahField= new Ext.form.ComboBox({
 		id: 'cust_statusnikahField',
-		fieldLabel: 'Status Pernikahan <span style="color: #ec0000">*</span>',
+		fieldLabel: 'Status Pernikahan',
 		store:new Ext.data.SimpleStore({
 			fields:['cust_statusnikah_value', 'cust_statusnikah_display'],
 			data:[['menikah','menikah'],['belum menikah','belum menikah']]
 		}),
 		mode: 'local',
 		editable: false,
-		allowBlank: false,
+		//allowBlank: false,
 		displayField: 'cust_statusnikah_display',
 		valueField: 'cust_statusnikah_value',
 		anchor: '50%',
@@ -2880,14 +2909,14 @@ Ext.onReady(function(){
 	
 	cust_priorityField= new Ext.form.ComboBox({
 		id: 'cust_priorityField',
-		fieldLabel: 'Priority <span style="color: #ec0000">*</span>',
+		fieldLabel: 'Priority',
 		store:new Ext.data.SimpleStore({
 			fields:['cust_priority_value', 'cust_priority_display'],
 			data:[['Core','Core'],['Reguler','Reguler'],['Low','Low']]
 		}),
 		mode: 'local',
 		editable: false,
-		allowBlank: false,
+		//allowBlank: false,
 		displayField: 'cust_priority_display',
 		valueField: 'cust_priority_value',
 		anchor: '50%',
@@ -2910,11 +2939,12 @@ Ext.onReady(function(){
 	/* Identify  cust_unit Field */
 	cust_unitField= new Ext.form.ComboBox({
 		id: 'cust_unitField',
-		fieldLabel: 'Cabang <span style="color: #ec0000">*</span>',
+		fieldLabel: 'Cabang',
 		store: cbo_cust_cabang_DataStore,
 		mode: 'remote',
+		emptyText: 'Miracle Thamrin',
 		editable: false,
-		allowBlank: false,
+		//allowBlank: false,
 		displayField: 'cust_cabang_display',
 		valueField: 'cust_cabang_value',
 		anchor: '95%',
@@ -2923,14 +2953,14 @@ Ext.onReady(function(){
 	/* Identify  cust_aktif Field */
 	cust_aktifField= new Ext.form.ComboBox({
 		id: 'cust_aktifField',
-		fieldLabel: 'Status <span style="color: #ec0000">*</span>',
+		fieldLabel: 'Status',
 		store:new Ext.data.SimpleStore({
 			fields:['cust_aktif_value', 'cust_aktif_display'],
 			data:[['Aktif','Aktif'],['Tidak Aktif','Tidak Aktif']]
 		}),
 		mode: 'local',
 		emptyText: 'Aktif',
-		allowBlank: true,
+		//allowBlank: true,
 		displayField: 'cust_aktif_display',
 		valueField: 'cust_aktif_value',
 		anchor: '50%',
