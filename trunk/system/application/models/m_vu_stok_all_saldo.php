@@ -18,7 +18,7 @@ class M_vu_stok_all_saldo extends Model{
 			parent::Model();
 		}
 		
-		function get_detail_stok($produk_id,$query,$start,$end){
+		function get_detail_stok($tanggal_start,$tanggal_end,$produk_id,$query,$start,$end){
 			$sql="select * from gudang";
 			$result = $this->db->query($sql);
 			$nbrows = $result->num_rows();
@@ -27,44 +27,176 @@ class M_vu_stok_all_saldo extends Model{
 			$result = $this->db->query($limit);  
 			$i=0;
 			foreach($result->result() as $row){
+				
+				$data[$i]["gudang_id"]=$row->gudang_id;
+				$data[$i]["gudang_nama"]=$row->gudang_nama;
+					
+				//untuk gudang besar
 				if($row->gudang_id==1)
 				{
-					$data[$i]["gudang_id"]=$row->gudang_id;
-					$data[$i]["gudang_nama"]=$row->gudang_nama;
-						
-					$sql="SELECT * FROM vu_stok_gudang_besar_saldo WHERE produk_id='".$produk_id."'";
-					$rs_gb=$this->db->query($sql);
-					if($rs_gb->num_rows())
+					
+					//saldo awal
+					$sql_stokawal="SELECT sum(jumlah_terima)-sum(jumlah_retur_beli)+sum(jumlah_masuk)-sum(jumlah_keluar)+sum(jumlah_koreksi) jumlah_awal 									FROM vu_stok_gudang_besar_tanggal
+							WHERE produk_id='".$produk_id."' 
+							AND date_format(tanggal,'%Y-%m-%d')<'".$tanggal_start."'
+							GROUP BY produk_id";
+					$q_stokawal=$this->db->query($sql_stokawal);
+					if($q_stokawal->num_rows())
 					{
-						$ds=$rs_gb->row();
-						$data[$i]["jumlah_stok"]=$ds->jumlah_stok;
-					}else
-						$data[$i]["jumlah_stok"]=0;
+						$ds_stokawal=$q_stokawal->row();
+						$data[$i]["jumlah_awal"]=$ds_stokawal->jumlah_awal;
+					}else{
+						$data[$i]["jumlah_awal"]=0;
+					}
+					
+					//echo  $sql_stokawal;
+					//mutasi
+					$sql_mutasi="SELECT sum(jumlah_terima) as jumlah_terima, 
+										sum(jumlah_retur_beli) as jumlah_retur_beli, 
+										sum(jumlah_masuk) as jumlah_masuk,
+										sum(jumlah_keluar) as jumlah_keluar,
+										sum(jumlah_koreksi) as jumlah_koreksi
+								FROM vu_stok_gudang_besar_tanggal
+							WHERE produk_id='".$produk_id."' 
+							AND date_format(tanggal,'%Y-%m-%d')>='".$tanggal_start."'
+							AND date_format(tanggal,'%Y-%m-%d')<='".$tanggal_end."'
+							GROUP BY produk_id";
+					$rs_mutasi=$this->db->query($sql_mutasi);
+					if($rs_mutasi->num_rows())
+					{
+						$ds_mutasi=$rs_mutasi->row();
+						$data[$i]["jumlah_masuk"]=$ds_mutasi->jumlah_terima+$ds_mutasi->jumlah_masuk;
+						$data[$i]["jumlah_keluar"]=$ds_mutasi->jumlah_keluar+$ds_mutasi->jumlah_retur_beli;
+						$data[$i]["jumlah_koreksi"]=$ds_mutasi->jumlah_koreksi;
+						$data[$i]["jumlah_stok"]=$data[$i]["jumlah_awal"]+$data[$i]["jumlah_masuk"]-$data[$i]["jumlah_keluar"]+$data[$i]["jumlah_koreksi"];
+						
+					}else{
+						$data[$i]["jumlah_masuk"]=0;
+						$data[$i]["jumlah_keluar"]=0;
+						$data[$i]["jumlah_koreksi"]=0;
+						$data[$i]["jumlah_stok"]=$data[$i]["jumlah_awal"];
+					}
+				
 				}elseif($row->gudang_id==2)
 				{
-					$data[$i]["gudang_id"]=$row->gudang_id;
-					$data[$i]["gudang_nama"]=$row->gudang_nama;
-						
-					$sql="SELECT * FROM vu_stok_gudang_produk_saldo WHERE produk_id='".$produk_id."'";
-					$rs_gb=$this->db->query($sql);
-					if($rs_gb->num_rows())
+					//gudang kasir/produk
+					
+					//stok awal
+					$sql_stokawal="SELECT sum(jumlah_masuk)+sum(jumlah_retur_produk)+sum(jumlah_retur_paket)-sum(jumlah_jual)-sum(jumlah_keluar)+sum(jumlah_koreksi) as jumlah_awal
+									FROM vu_stok_gudang_produk_tanggal
+									WHERE produk_id='".$produk_id."' 
+									AND date_format(tanggal,'%Y-%m-%d')<'".$tanggal_start."'
+									GROUP BY produk_id";
+					$q_stokawal=$this->db->query($sql_stokawal);
+					if($q_stokawal->num_rows())
 					{
-						$ds=$rs_gb->row();
-						$data[$i]["jumlah_stok"]=$ds->jumlah_stok;
-					}else
-						$data[$i]["jumlah_stok"]=0;
+						$ds_stokawal=$q_stokawal->row();
+						$data[$i]["jumlah_awal"]=$ds_stokawal->jumlah_awal;
+					}else{
+						$data[$i]["jumlah_awal"]=0;
+					}
+					
+					//mutasi
+					$sql_mutasi="SELECT sum(jumlah_jual) as jumlah_jual, 
+										sum(jumlah_retur_produk) as jumlah_retur_produk, 
+										sum(jumlah_retur_paket) as jumlah_retur_paket, 
+										sum(jumlah_masuk) as jumlah_masuk,
+										sum(jumlah_keluar) as jumlah_keluar,
+										sum(jumlah_koreksi) as jumlah_koreksi
+								FROM vu_stok_gudang_produk_tanggal
+								WHERE produk_id='".$produk_id."' 
+								AND date_format(tanggal,'%Y-%m-%d')>='".$tanggal_start."'
+								AND date_format(tanggal,'%Y-%m-%d')<='".$tanggal_end."'
+								GROUP BY produk_id";
+					$rs_mutasi=$this->db->query($sql_mutasi);
+					if($rs_mutasi->num_rows())
+					{
+						$ds_mutasi=$rs_mutasi->row();
+						$data[$i]["jumlah_masuk"]=$ds_mutasi->jumlah_retur_produk+$ds_mutasi->jumlah_retur_paket+$ds_mutasi->jumlah_masuk;
+						$data[$i]["jumlah_keluar"]=$ds_mutasi->jumlah_keluar;
+						$data[$i]["jumlah_koreksi"]=$ds_mutasi->jumlah_koreksi;
+						$data[$i]["jumlah_stok"]=$data[$i]["jumlah_awal"]+$data[$i]["jumlah_masuk"]-$data[$i]["jumlah_keluar"]+$data[$i]["jumlah_koreksi"];
+						
+					}else{
+						$data[$i]["jumlah_masuk"]=0;
+						$data[$i]["jumlah_keluar"]=0;
+						$data[$i]["jumlah_koreksi"]=0;
+						$data[$i]["jumlah_stok"]=$data[$i]["jumlah_awal"];
+					}
+					
 				}else{
-					$data[$i]["gudang_id"]=$row->gudang_id;
-					$data[$i]["gudang_nama"]=$row->gudang_nama;
-						
-					$sql="SELECT * FROM vu_stok_gudang_all WHERE produk_id='".$produk_id."' AND gudang_id='".$row->gudang_id."'";
-					$rs_gb=$this->db->query($sql);
-					if($rs_gb->num_rows())
+					//gudang lainnya
+
+					//stok awal
+					$sql_stokawal="SELECT sum(jumlah_masuk)-sum(jumlah_keluar)+sum(jumlah_koreksi) as jumlah_awal
+									FROM vu_stok_mutasi_all
+									WHERE produk_id='".$produk_id."' 
+									AND date_format(mutasi_tanggal,'%Y-%m-%d')<'".$tanggal_start."'
+									GROUP BY produk_id";
+					$q_stokawal=$this->db->query($sql_stokawal);
+					if($q_stokawal->num_rows())
 					{
-						$ds=$rs_gb->row();
-						$data[$i]["jumlah_stok"]=$ds->jumlah_stok;
-					}else
-						$data[$i]["jumlah_stok"]=0;
+						$ds_stokawal=$q_stokawal->row();
+						$data[$i]["jumlah_awal"]=$ds_stokawal->jumlah_awal;
+					}else{
+						$data[$i]["jumlah_awal"]=0;
+					}
+					
+					//pake cabin
+					$sql_cabin="SELECT sum(jumlah_konversi) as jumlah_cabin
+								FROM vu_stok_pakai_cabin
+								WHERE produk_id='".$produk_id."' 
+								AND date_format(cabin_date_create,'%Y-%m-%d')<'".$tanggal_start."'
+								GROUP BY produk_id";
+					$q_cabin=$this->db->query($sql_cabin);
+					if($q_cabin->num_rows())
+					{
+						$ds_cabin=$q_cabin->row();
+						$data[$i]["jumlah_awal"]=$data[$i]["jumlah_awal"]-$ds_cabin->jumlah_cabin;
+					}
+					
+					
+					//mutasi
+					$sql_mutasi="SELECT 	sum(jumlah_masuk) as jumlah_masuk,
+											sum(jumlah_keluar) as jumlah_keluar,
+											sum(jumlah_koreksi) as jumlah_koreksi
+									FROM vu_stok_mutasi_all
+									WHERE produk_id='".$produk_id."' 
+									AND date_format(mutasi_tanggal,'%Y-%m-%d')>='".$tanggal_start."'
+									AND date_format(mutasi_tanggal,'%Y-%m-%d')<='".$tanggal_end."'
+									GROUP BY produk_id";
+									
+					$rs_mutasi=$this->db->query($sql_mutasi);
+					if($rs_mutasi->num_rows())
+					{
+						$ds_mutasi=$rs_mutasi->row();
+						$data[$i]["jumlah_masuk"]=$ds_mutasi->jumlah_masuk;
+						$data[$i]["jumlah_keluar"]=$ds_mutasi->jumlah_keluar;
+						$data[$i]["jumlah_koreksi"]=$ds_mutasi->jumlah_koreksi;
+						$data[$i]["jumlah_stok"]=$data[$i]["jumlah_awal"]+$data[$i]["jumlah_masuk"]-$data[$i]["jumlah_keluar"]+$data[$i]["jumlah_koreksi"];
+						
+					}else{
+						$data[$i]["jumlah_masuk"]=0;
+						$data[$i]["jumlah_keluar"]=0;
+						$data[$i]["jumlah_koreksi"]=0;
+						$data[$i]["jumlah_stok"]=$data[$i]["jumlah_awal"];
+					}
+					
+					//pake cabin
+					$sql_cabin="SELECT sum(jumlah_konversi) as jumlah_cabin
+								FROM vu_stok_pakai_cabin
+								WHERE produk_id='".$produk_id."' 
+								AND date_format(cabin_date_create,'%Y-%m-%d')>='".$tanggal_start."'
+								AND date_format(cabin_date_create,'%Y-%m-%d')<='".$tanggal_end."'
+								GROUP BY produk_id";
+					$q_cabin=$this->db->query($sql_cabin);
+					if($q_cabin->num_rows())
+					{
+						$ds_cabin=$q_cabin->row();
+						$data[$i]["jumlah_stok"]=$data[$i]["jumlah_stok"]-$ds_cabin->jumlah_cabin;
+						$data[$i]["jumlah_keluar"]=$data[$i]["jumlah_keluar"]+$ds_cabin->jumlah_cabin;
+					}
+					
 				}
 				$i++;
 			}
@@ -80,26 +212,127 @@ class M_vu_stok_all_saldo extends Model{
 		}
 		
 		//function for get list record
-		function vu_stok_all_saldo_list($filter,$start,$end){
-			$query = "SELECT * FROM vu_stok_all_saldo";
-		
+		function vu_stok_all_saldo_list($tanggal_start,$tanggal_end,$filter,$start,$end){
+			
+			$sql="SELECT * FROM vu_produk_satuan_terkecil";
+			if($filter!==""){
+				$sql.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$sql.="	produk_kode LIKE '%".addslashes($filter)."%' OR
+						produk_nama LIKE '%".addslashes($filter)."%' OR
+						satuan_kode LIKE '%".addslashes($filter)."%' OR
+						satuan_nama LIKE '%".addslashes($filter)."%'";
+			}
+			
+			$query_first=$this->db->query($sql);
+			$result = $this->db->query($sql);
+			$nbrows = $result->num_rows();
+			
+			
+			if($end<=0) $end=15;
+			$limit = $sql." LIMIT ".$start.",".$end;		
+			$result = $this->db->query($limit); 
+			$i=0;
+			
+			foreach($result->result() as $rowproduk){
+				
+				
+				$data[$i]["produk_id"]=$rowproduk->produk_id;
+				$data[$i]["produk_kode"]=$rowproduk->produk_kode;
+				$data[$i]["produk_nama"]=$rowproduk->produk_nama;
+				$data[$i]["satuan_id"]=$rowproduk->satuan_id;
+				$data[$i]["satuan_kode"]=$rowproduk->satuan_kode;
+				$data[$i]["satuan_nama"]=$rowproduk->satuan_nama;				
+				//stok awal
+				$sql_stokawal = "SELECT
+					sum(`A`.`jumlah_terima`) as jumlah_terima,
+					sum(`A`.`jumlah_retur_beli`) as jumlah_retur_beli,
+					sum(`A`.`jumlah_jual`) as jumlah_jual,
+					sum(`A`.`jumlah_retur_produk`) as jumlah_retur_produk,
+					sum(`A`.`jumlah_retur_paket`) as jumlah_retur_paket,
+					sum(`A`.`jumlah_cabin`) as jumlah_cabin,
+					sum(`A`.`jumlah_koreksi`) as jumlah_koreksi,
+					sum(`A`.`jumlah_saldo`) as jumlah_saldo
+					FROM
+					`vu_stok_all_saldo_tanggal` AS `A`
+					WHERE
+					date_format(A.tanggal,'%Y-%m-%d')<'".$tanggal_start."' 
+					AND A.produk_id='".$rowproduk->produk_id."'
+					GROUP BY 
+					`A`.`produk_kode`,
+					`A`.`produk_id`,
+					`A`.`produk_nama`,
+					`A`.`satuan_kode`,
+					`A`.`satuan_id`,
+					`A`.`satuan_nama`
+					";
+				$q_stokawal=$this->db->query($sql_stokawal);
+				if($q_stokawal->num_rows()){
+					$rs_stokawal=$q_stokawal->row();
+					$data[$i]["stok_awal"]=$rs_stokawal->jumlah_saldo;
+				}else{
+					$data[$i]["stok_awal"]=0;
+				}
+				
+				//stok mutasi dan saldo
+				$sql_stokmutasi = "SELECT
+					sum(`A`.`jumlah_terima`) as jumlah_terima,
+					sum(`A`.`jumlah_retur_beli`) as jumlah_retur_beli,
+					sum(`A`.`jumlah_jual`) as jumlah_jual,
+					sum(`A`.`jumlah_retur_produk`) as jumlah_retur_produk,
+					sum(`A`.`jumlah_retur_paket`) as jumlah_retur_paket,
+					sum(`A`.`jumlah_cabin`) as jumlah_cabin,
+					sum(`A`.`jumlah_koreksi`) as jumlah_koreksi,
+					sum(`A`.`jumlah_saldo`) as jumlah_saldo
+					FROM
+					`vu_stok_all_saldo_tanggal` AS `A`
+					WHERE
+					date_format(A.tanggal,'%Y-%m-%d')>='".$tanggal_start."' 
+					AND date_format(A.tanggal,'%Y-%m-%d')<='".$tanggal_end."' 
+					AND A.produk_id='".$rowproduk->produk_id."' 
+					GROUP BY 
+					`A`.`produk_kode`,
+					`A`.`produk_id`,
+					`A`.`produk_nama`,
+					`A`.`satuan_kode`,
+					`A`.`satuan_id`,
+					`A`.`satuan_nama`
+					";
+				$q_stokmutasi=$this->db->query($sql_stokmutasi);
+				if($q_stokmutasi->num_rows()){
+					$rs_stokmutasi=$q_stokmutasi->row();
+					$data[$i]["jumlah_terima"]=$rs_stokmutasi->jumlah_terima;
+					$data[$i]["jumlah_retur_beli"]=$rs_stokmutasi->jumlah_retur_beli;
+					$data[$i]["jumlah_jual"]=$rs_stokmutasi->jumlah_jual;
+					$data[$i]["jumlah_retur_produk"]=$rs_stokmutasi->jumlah_retur_produk;
+					$data[$i]["jumlah_retur_paket"]=$rs_stokmutasi->jumlah_retur_paket;
+					$data[$i]["jumlah_cabin"]=$rs_stokmutasi->jumlah_cabin;
+					$data[$i]["jumlah_koreksi"]=$rs_stokmutasi->jumlah_koreksi;
+					$data[$i]["stok_saldo"]=$data[$i]["stok_awal"]+$rs_stokmutasi->jumlah_saldo;
+					
+				}else{
+					$data[$i]["jumlah_terima"]=0;
+					$data[$i]["jumlah_retur_beli"]=0;
+					$data[$i]["jumlah_jual"]=0;
+					$data[$i]["jumlah_retur_produk"]=0;
+					$data[$i]["jumlah_retur_paket"]=0;
+					$data[$i]["jumlah_cabin"]=0;
+					$data[$i]["jumlah_koreksi"]=0;
+					$data[$i]["stok_saldo"]=$data[$i]["stok_awal"];
+				}
+				$i++;
+			}
 			// For simple search
-			if ($filter<>""){
+			/*if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 				$query .= " (produk_id LIKE '%".addslashes($filter)."%' OR produk_nama LIKE '%".addslashes($filter)."%' OR satuan_id LIKE '%".addslashes($filter)."%' OR satuan_nama LIKE '%".addslashes($filter)."%' OR stok_saldo LIKE '%".addslashes($filter)."%'  OR produk_kode LIKE '%".addslashes($filter)."%')";
-			}
+			}*/
 			//echo $query;
-			$result = $this->db->query($query);
-			$nbrows = $result->num_rows();
-			if($end<=0) $end=15;
-			$limit = $query." LIMIT ".$start.",".$end;		
-			$result = $this->db->query($limit);  
+			
+			 
 			//echo $limit;
 			if($nbrows>0){
-				foreach($result->result() as $row){
-					$arr[] = $row;
-				}
-				$jsonresult = json_encode($arr);
+				
+				$jsonresult = json_encode($data);
 				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
 			} else {
 				return '({"total":"0", "results":""})';

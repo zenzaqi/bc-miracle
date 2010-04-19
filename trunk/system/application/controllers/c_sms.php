@@ -35,14 +35,14 @@ class C_sms extends Controller {
 	}
 	
 	function sms_save(){
-		
-		$isms_nomer = (isset($_POST['isms_nomer']) ? @$_POST['isms_nomer'] : @$_GET['isms_nomer']);
-		$isms_group = (isset($_POST['isms_group']) ? @$_POST['isms_group'] : @$_GET['isms_group']);
+		$result=0;
+		$isms_dest = (isset($_POST['isms_dest']) ? @$_POST['isms_dest'] : @$_GET['isms_dest']);
 		$isms_isi = (isset($_POST['isms_isi']) ? @$_POST['isms_isi'] : @$_GET['isms_isi']);
 		$isms_opsi = (isset($_POST['isms_opsi']) ? @$_POST['isms_opsi'] : @$_GET['isms_opsi']);
 		$isms_task = (isset($_POST['isms_task']) ? @$_POST['isms_task'] : @$_GET['isms_task']);
 		
-		$result=$this->m_phonegroup->sms_save($isms_nomer,$isms_group,$isms_isi,$isms_opsi,$isms_task);
+		$result=$this->m_phonegroup->sms_save($isms_dest,$isms_isi,$isms_opsi,$isms_task);
+		
 		echo $result;
 	}
 	// Encodes a SQL array into a JSON formated string

@@ -347,24 +347,8 @@ Ext.onReady(function(){
             hideGroupedColumn: true
         }),
 		plugins: summary,*/
-		tbar: [
-		/*{
-			text: 'Search',
-			tooltip: 'Advanced Search',
-			iconCls:'icon-search',
-			handler: display_form_search_window 
-		}, '-', 
-			new Ext.app.SearchField({
-			store: hpp_DataStore,
-			params: {start: 0, limit: pageS},
-			width: 120
-		}),*/hpp_produk_kode_filterField,'-'/*,
-		{
-			text: 'View',
-			tooltip: 'View selected record',
-			iconCls:'icon-update',
-			handler: hpp_confirm_update   // Confirm before updating
-		}*/,{
+		tbar: [' <font color="WHITE"><b>Pilih Produk &nbsp; :</b></font>  ',
+		hpp_produk_kode_filterField,'-',{
 			text: 'Refresh',
 			tooltip: 'Refresh datagrid',
 			handler: hpp_reset_search,

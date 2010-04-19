@@ -121,75 +121,7 @@ Ext.onReady(function(){
 		});   
 	}
   	/* End of Function */
-  
-  	/* Function for add and edit data form, open window form */
-	function draft_save(poststat){
-	
-		if(is_draft_form_valid()){
-			var draft_pk_id="";
-			var draft_nomer="";
-			var draft_group="";
-			var draft_isi="";
-			var draft_opsi="";
-			draft_pk_id=get_pk_id();
-			if(draft_destnumField.getValue()!=="") draft_nomer=draft_destnumField.getValue();
-			if(draft_destgroupField.getValue()!=="") draft_group=draft_destgroupField.getValue();
-			if(draft_messageField.getValue()!=="") draft_isi=draft_messageField.getValue();
-			if(draft_filterField.getValue()!=="") draft_opsi=draft_filterField.getValue();
-
-			Ext.Ajax.request({  
-				waitMsg: 'Please wait...',
-				url: 'index.php?c=c_draft&m=sms_save',
-				params: {
-					isms_pk_id	: draft_pk_id,
-					isms_nomer	: draft_nomer,
-					isms_group	: draft_group,
-					isms_isi	: draft_isi,
-					isms_opsi	: draft_opsi,
-					isms_task	: poststat
-				}, 
-				success: function(response){             
-					var result=eval(response.responseText);
-					switch(result){
-						case 1:
-							Ext.MessageBox.alert(post2db+' OK','The Draft was '+post2db+' successfully.');
-							draft_DataStore.reload();
-							draft_saveWindow.hide();
-							break;
-						default:
-							Ext.MessageBox.show({
-							   title: 'Warning',
-							   msg: 'We could\'t not '+msg+' the Draft.',
-							   buttons: Ext.MessageBox.OK,
-							   animEl: 'save',
-							   icon: Ext.MessageBox.WARNING
-							});
-							break;
-					}        
-				},
-				failure: function(response){
-					var result=response.responseText;
-					Ext.MessageBox.show({
-						   title: 'Error',
-						   msg: 'Could not connect to the database. retry later.',
-						   buttons: Ext.MessageBox.OK,
-						   animEl: 'database',
-						   icon: Ext.MessageBox.ERROR
-					});	
-				}                      
-			});
-			
-		} else {
-			Ext.MessageBox.show({
-				title: 'Warning',
-				msg: 'Your Form is not valid!.',
-				buttons: Ext.MessageBox.OK,
-				animEl: 'save',
-				icon: Ext.MessageBox.WARNING
-			});
-		}
-	}
- 	/* End of Function */
+ 
   
   	/* Function for get PK field */
 	function get_pk_id(){
@@ -206,6 +138,7 @@ Ext.onReady(function(){
 		if(!draft_saveWindow.isVisible()){
 			post2db='CREATE';
 			msg='created';
+			draft_reset_form();
 			draft_saveWindow.show();
 		} else {
 			draft_saveWindow.toFront();
@@ -314,7 +247,12 @@ Ext.onReady(function(){
 			{name: 'draft_id', type: 'int', mapping: 'draft_id'},
 			{name: 'draft_destid', type: 'int', mapping: 'draft_destid'},
 			{name: 'draft_jenis', type: 'string', mapping: 'draft_jenis'}, 
-			{name: 'draft_destnama', type: 'string', mapping: 'draft_destnama'}, 
+			{name: 'draft_destnama', type: 'string', mapping: 'draft_destination'}, 
+			{name: 'draft_destnama_view', type: 'string', mapping: 'draft_destination_view'},
+			{name: 'draft_dest_tglawal', type: 'int', mapping: 'draft_destination_tglawal'}, 
+			{name: 'draft_dest_blnawal', type: 'int', mapping: 'draft_destination_blnawal'}, 
+			{name: 'draft_dest_tglakhir', type: 'int', mapping: 'draft_destination_tglakhir'},
+			{name: 'draft_dest_blnakhir', type: 'int', mapping: 'draft_destination_blnakhir'}, 
 			{name: 'draft_message', type: 'string', mapping: 'draft_message'}, 
 			{name: 'draft_date', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'draft_date'}, 
 			{name: 'draft_creator', type: 'string', mapping: 'draft_creator'}, 
@@ -343,21 +281,21 @@ Ext.onReady(function(){
 		{
 			header: 'Jenis',
 			dataIndex: 'draft_jenis',
-			width: 150,
+			width: 80,
 			sortable: true,
 			readOnly: true
 		}, 
 		{
 			header: 'Tujuan',
-			dataIndex: 'draft_destnama',
-			width: 150,
+			dataIndex: 'draft_destnama_view',
+			width: 200,
 			sortable: true,
 			readOnly: true
 		}, 
 		{
 			header: 'Isi Pesan',
 			dataIndex: 'draft_message',
-			width: 150,
+			width: 250,
 			sortable: true,
 			editor: new Ext.form.TextArea({
 				height: 5
@@ -428,7 +366,7 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 700,
+	  	width: 800,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: draft_DataStore,
@@ -531,7 +469,157 @@ Ext.onReady(function(){
 	draft_DataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
 	draftListEditorGrid.on('afteredit', draft_inline_update); // inLine Editing Record
 	
-		/* Function for Retrieve DataStore */
+	
+	/* setValue to EDIT */
+	function draft_set_form(){
+		var f_jenis=draftListEditorGrid.getSelectionModel().getSelected().get('draft_jenis');
+		var f_dest=draftListEditorGrid.getSelectionModel().getSelected().get('draft_destnama');
+		var f_dest_tgl_awal=draftListEditorGrid.getSelectionModel().getSelected().get('draft_dest_tglawal');
+		var f_dest_bln_awal=draftListEditorGrid.getSelectionModel().getSelected().get('draft_dest_blnawal');
+		var f_dest_tgl_akhir=draftListEditorGrid.getSelectionModel().getSelected().get('draft_dest_tglakhir');
+		var f_dest_bln_akhir=draftListEditorGrid.getSelectionModel().getSelected().get('draft_dest_blnakhir');
+		var f_isi=draftListEditorGrid.getSelectionModel().getSelected().get('draft_message');
+		if(f_jenis=='Semua'){
+			draft_semua_radioField.setValue(true);
+		}else if(f_jenis=='Group'){
+			draft_group_radioField.setValue(true);
+			draft_destgroupField.setValue(f_dest);
+			draft_destgroupField.setDisabled(false);
+			draft_destgroupField.allowBlank=false;
+		}else if(f_jenis=='Number'){
+			draft_destnumField.setValue(f_dest);
+			draft_number_radioField.setValue(true);
+			draft_destnumField.setDisabled(false);
+			draft_destnumField.allowBlank=false;
+		}else if(f_jenis=='Ultah'){
+			draft_ultah_radioField.setValue(true);
+			draft_bulanlahir_startField.setValue(f_dest_bln_awal);
+			draft_tgllahir_startField.setValue(f_dest_tgl_awal);
+			draft_tgllahir_endField.setValue(f_dest_tgl_akhir);
+			draft_bulanlahir_endField.setValue(f_dest_bln_akhir);
+			
+			draft_ultah_groupField.setDisabled(false);
+			
+		}else if(f_jenis=='Kelamin'){
+			draft_kelamin_radioField.setValue(true);
+			draft_kelaminField.setValue(f_dest);
+			
+			draft_kelaminField.setDisabled(false);
+			draft_kelaminField.allowBlank=false;
+
+
+		}else if(f_jenis=='Member'){
+			draft_member_radioField.setValue(true);
+			draft_membershipField.setValue(f_dest);
+			
+			draft_membershipField.setDisabled(false);
+			draft_membershipField.allowBlank=false;
+			
+			if(f_dest=='Expired'){
+				draft_tglexp_startField.setValue(f_dest_tgl_awal);
+				draft_tglexp_endField.setValue(f_dest_tgl_akhir);
+				draft_member_expField.setDisabled(false);
+			}
+		}
+		draft_detailField.setValue(f_isi);
+		//setDisableAll();
+	}
+	
+	/* setValue to EDIT */
+	function draft_reset_form(){
+		
+	}
+	
+	
+	function draft_save(post2db){
+	
+		if(is_draft_form_valid()){
+			var draft_pk="";
+			var draft_opsi="";
+			var draft_dest="";
+			var draft_isi="";
+			
+			if(draft_detailField.getValue()!=="") draft_isi=draft_detailField.getValue();
+			if(draft_semua_radioField.getValue()==true){
+				draft_opsi='semua';
+			}else if(draft_group_radioField.getValue()==true){
+				draft_opsi='group';
+				draft_dest=draft_destgroupField.getValue();
+			}else if(draft_number_radioField.getValue()==true){
+				draft_opsi='number';
+				draft_dest=draft_destnumField.getValue();
+			}else if(draft_kelamin_radioField.getValue()==true){
+				draft_opsi='kelamin';
+				draft_dest=draft_kelaminField.getValue();
+			}else if(draft_ultah_radioField.getValue()==true){
+				draft_opsi='ultah';
+				draft_dest=draft_bulanlahir_startField.getValue() + '-' +draft_tgllahir_startField.getValue()+ 's/d'+draft_bulanlahir_endField.getValue() + '-' +draft_tgllahir_endField.getValue();
+			}else if(draft_member_radioField.getValue()==true){
+				draft_opsi='member';
+				if(draft_membershipField.getValue()=='Expired'){
+					draft_dest=draft_membershipField.getValue()+':'+draft_tglexp_startField.getValue().format('Y-m-d')+ 's/d'+draft_tglexp_endField.getValue().format('Y-m-d');
+				}else{
+					draft_dest=draft_membershipField.getValue();
+				}	
+			}
+			
+			//console.log('group'+draft_number_radioField.getValue());
+			Ext.Ajax.request({  
+				waitMsg: 'Please wait...',
+				url: 'index.php?c=c_draft&m=draft_save',
+				timeout: 3600000,
+				params: {
+					idraft_id	: get_pk_id(),
+					idraft_opsi	: draft_opsi,
+					idraft_dest	: draft_dest,
+					idraft_isi	: draft_isi,
+					idraft_task	: post2db
+				}, 
+				success: function(response){             
+					var result=eval(response.responseText);
+					switch(result){
+						case 1:
+							Ext.MessageBox.alert(post2db+' OK','SMS sukses !');
+							draft_saveWindow.hide();
+							draft_DataStore.reload();
+							break;
+						default:
+							Ext.MessageBox.show({
+							   title: 'Warning',
+							   msg: 'We could\'t not '+msg+' the sms.',
+							   buttons: Ext.MessageBox.OK,
+							   animEl: 'save',
+							   icon: Ext.MessageBox.WARNING
+							});
+							break;
+					}        
+				},
+				failure: function(response){
+					var result=response.responseText;
+					Ext.MessageBox.show({
+						   title: 'Error',
+						   msg: 'Could not connect to the database. retry later.',
+						   buttons: Ext.MessageBox.OK,
+						   animEl: 'database',
+						   icon: Ext.MessageBox.ERROR
+					});	
+				}                      
+			});
+			
+		} else {
+			Ext.MessageBox.show({
+				title: 'Warning',
+				msg: 'Your Form is not valid!.',
+				buttons: Ext.MessageBox.OK,
+				animEl: 'save',
+				icon: Ext.MessageBox.WARNING
+			});
+		}
+	
+	}
+ 	/* End of Function */
+	
+  	/* Function for Retrieve DataStore */
 	phonegroup_DataStore = new Ext.data.Store({
 		id: 'phonegroup_DataStore',
 		proxy: new Ext.data.HttpProxy({
@@ -560,22 +648,9 @@ Ext.onReady(function(){
         '</div></tpl>'
     );
 	
-	var draft_filterField= new Ext.form.ComboBox({
-		id: 'draft_filterField',
-		fieldLabel: '',
-		store:new Ext.data.SimpleStore({
-			fields:['pilih'],
-			data:[['Number'],['Group']]
-		}),
-		mode: 'local',
-		displayField: 'pilih',
-		valueField: 'pilih',
-		width: 94,
-		triggerAction: 'all'		
-	});
 	
 	/* Identify  draft_nama Field */
-	draft_destgroupField= new Ext.form.ComboBox({
+	var draft_destgroupField= new Ext.form.ComboBox({
 		id: 'draft_destgroupField',
 		fieldLabel: 'Group',
 		store: phonegroup_DataStore,
@@ -591,78 +666,323 @@ Ext.onReady(function(){
 		triggerAction: 'all',
 		lazyRender:true,
 		listClass: 'x-combo-list-small',
-		anchor: '95%'
+		width: 300
 	});
 	/* Identify  draft_detail Field */
 	
-	draft_destnumField=new Ext.form.TextArea({
+	var draft_destnumField=new Ext.form.TextArea({
 		id: 'draft_destnumField',
 		fieldLabel: 'Nomer (pisahkan dengan koma [,])',
 		maxLength: 250,
-		anchor: '95%'
+		maskRe: /^\+|,|([0-9]+)$/,
+		width: 300
 	});
 	
-	function is_draft_form_valid(){
-		if(draft_filterField.getValue()=='Group'){
-			if(draft_destgroupField.getValue()=="")
-				return false;
-			else
-				return true;
-		}else{
-			if(draft_destnumField.getValue()=="")
-				return false;
-			else
-				return true;
-		}
-	}
+	var bulanStore=new Ext.data.SimpleStore({
+		fields:['bulan_id','bulan_nama'],
+		data:[['01','Januari'],['02','Pebruari'],['03','Maret'],['04','April'],['05','Mei'],['06','Juni'],['07','Juli'],['08','Agustus'],['09','September'],['10','Oktober'],['11','Nopember'],['12','Desember']]
+	});
 	
-	var draft_destinationField = new Ext.form.FieldSet({
-		title: 'Tujuan',
-		anchor: '95%',
-		layout:'column',
+	var tanggalStore=new Ext.data.SimpleStore({
+		fields:['tanggal'],
+		data:[['01'],['02'],['03'],['04'],['05'],['06'],['07'],['08'],['09'],['10'],
+			  ['11'],['12'],['13'],['14'],['15'],['16'],['17'],['18'],['19'],['20'],
+			  ['21'],['22'],['23'],['24'],['25'],['26'],['27'],['28'],['29'],['30'],['31']]
+	});
+	
+	var draft_tgllahir_startField=new Ext.form.ComboBox({
+		id:	'draft_tgllahir_startField',
+		name: 'draft_tgllahir_startField',
+		typeAhead: true,
+		triggerAction: 'all',
+		store:tanggalStore,
+		mode: 'local',
+		width: 50,
+		displayField: 'tanggal',
+		valueField: 'tanggal',
+		value: '01',
+		lazyRender:true,
+		listClass: 'x-combo-list-small',
+		bodyStyle:'padding:5px'
+	});
+	
+	var draft_bulanlahir_startField=new Ext.form.ComboBox({
+		id:	'draft_bulanlahir_startField',
+		name: 'draft_bulanlahir_startField',
+		typeAhead: true,
+		triggerAction: 'all',
+		store: bulanStore,
+		mode: 'local',
+		value: '01',
+		width: 80,
+		displayField: 'bulan_nama',
+		valueField: 'bulan_id',
+		lazyRender:true,
+		listClass: 'x-combo-list-small',
+		bodyStyle:'padding:5px'
+	});
+	
+	var draft_tgllahir_endField=new Ext.form.ComboBox({
+		id:	'draft_tgllahir_endField',
+		name: 'draft_tgllahir_endField',
+		typeAhead: true,
+		triggerAction: 'all',
+		store: tanggalStore,
+		mode: 'local',
+		width: 50,
+		value: '01',
+		displayField: 'tanggal',
+		valueField: 'tanggal',
+		lazyRender:true,
+		listClass: 'x-combo-list-small',
+		bodyStyle:'padding:5px'
+	});
+	
+
+	
+	var draft_bulanlahir_endField=new Ext.form.ComboBox({
+		id:	'draft_bulanlahir_endField',
+		name: 'draft_bulanlahir_endField',
+		typeAhead: true,
+		triggerAction: 'all',
+		store: bulanStore,
+		mode: 'local',
+		width: 80,
+		value: '01',
+		displayField: 'bulan_nama',
+		valueField: 'bulan_id',
+		lazyRender:true,
+		listClass: 'x-combo-list-small'
+	});
+	
+	var draft_tgllahir_labelField=new Ext.form.Label({
+		bodyStyle:'padding:5px',
+		html: '&nbsp; s/d ',
+		width: 30,
+		frame: false,
+		border: false
+	});
+		
+	var draft_tglexp_labelField=new Ext.form.Label({
+		bodyStyle:'padding:5px',
+		html: '&nbsp; s/d ',
+		width: 30,
+		frame: false,
+		border: false
+	});
+	
+	
+	
+	
+	var draft_ultah_groupField=new Ext.form.FieldSet({
+		id:	'draft_ultah_groupField',
+		name: 'draft_ultah_groupField',
+		layout: 'column',
+		frame: false,
+		border: false,
+		items:[draft_tgllahir_startField,draft_bulanlahir_startField,draft_tgllahir_labelField,draft_tgllahir_endField,draft_bulanlahir_endField]
+	
+	});
+	
+	var draft_membershipField=new Ext.form.ComboBox({
+		id:	'draft_membershipField',
+		name: 'draft_membershipField',
+		typeAhead: true,
+		triggerAction: 'all',
+		store: new Ext.data.SimpleStore({
+			fields:['membership'],
+			data:[['Semua'],['Aktif'],['Non Aktif'],['Expired']]
+		}),
+		mode: 'local',
+		width: 80,
+		value : 'Semua',
+		displayField: 'membership',
+		valueField: 'membership',
+		lazyRender:true,
+		listClass: 'x-combo-list-small'
+	});
+	
+	
+	var draft_tglexp_startField=new Ext.form.DateField({
+		id:	'draft_tglexp_startField',
+		name: 'draft_tglexp_startField',
+		format: 'Y-m-d',
+		value: today
+	});
+	
+	
+	var draft_tglexp_endField=new Ext.form.DateField({
+		id:	'draft_tglexp_endField',
+		name: 'draft_tglexp_endField',
+		format: 'Y-m-d',
+		value: today
+	});
+	
+	
+	
+	var draft_member_expField=new Ext.form.FieldSet({
+		layout: 'column',
+		frame: false,
+		border: false,
+		disabled : true,
+		bodyStyle:'padding-top:5px;padding-bottom:5px;padding-left:0px',
+		items: [draft_tglexp_startField,draft_tglexp_labelField,draft_tglexp_endField]
+	});
+	
+	var draft_member_groupField=new Ext.form.FieldSet({
+		id:	'draft_member_groupField',
+		name: 'draft_member_groupField',
+		layout: 'form',
+		frame: false,
+		border: false,
 		items:[{
-				   layout: 'form',
-				   labelWidth: 5,
-				   columnWidth: 0.3,
-				   border: false,
-				   items:[draft_filterField]
-			   },{
-				   layout: 'form',
-				   columnWidth: 0.7,
-				   border: false,
-				   items:[draft_destgroupField,draft_destnumField]
+			   		layout:'column',
+					frame: false,
+					border: false,
+					bodyStyle:'padding-top:5px;padding-bottom:5px',
+					items: [draft_membershipField]
+			   },
+			   {
+			   		layout:'column',
+					frame: false,
+					border: false,
+					bodyStyle:'padding-top:5px;padding-bottom:5px',
+					items: [draft_member_expField]
 			   }]
 	});
 	
-	/* Identify  draft_message Field */
-	draft_messageField= new Ext.form.TextArea({
-		id: 'draft_messageField',
-		fieldLabel: 'Message',
-		height: 60,
-		grow: false,
-		anchor: '95%'
+	
+	var draft_kelaminField=new Ext.form.ComboBox({
+		id:	'draft_kelaminField',
+		name: 'draft_kelaminField',
+		typeAhead: true,
+		triggerAction: 'all',
+		store: new Ext.data.SimpleStore({
+			fields:['kelamin_id','kelamin_nama'],
+			data:[['L','Laki-laki'],['P','Perempuan']]
+		}),
+		mode: 'local',
+		width: 100,
+		value: 'P',
+		displayField: 'kelamin_nama',
+		valueField: 'kelamin_id',
+		lazyRender:true,
+		listClass: 'x-combo-list-small'
 	});
 	
-	/* setValue to EDIT */
-	function draft_set_form(){
-		draft_filterField.setValue(draftListEditorGrid.getSelectionModel().getSelected().get('draft_jenis'));
-		if(draftListEditorGrid.getSelectionModel().getSelected().get('draft_jenis')=='Group'){
-			draft_filterField.setValue('Group');
-			draft_destgroupField.setValue(draftListEditorGrid.getSelectionModel().getSelected().get('draft_destnama'));
-			draft_destnumField.getEl().up('.x-form-item').setDisplayed(false);
-			draft_destgroupField.getEl().up('.x-form-item').setDisplayed(true);
-		}else{
-			draft_filterField.setValue('Number');
-			draft_destnumField.setValue(draftListEditorGrid.getSelectionModel().getSelected().get('draft_destnama'));
-			draft_destgroupField.getEl().up('.x-form-item').setDisplayed(false);
-			draft_destnumField.getEl().up('.x-form-item').setDisplayed(true);
-		}
-		draft_messageField.setValue(draftListEditorGrid.getSelectionModel().getSelected().get('draft_message'));
+	function is_draft_form_valid(){
+		return (draft_destgroupField.isValid() && draft_destnumField.isValid() && draft_kelaminField.isValid() && draft_membershipField.isValid() && draft_detailField.isValid());
 	}
+	
+	
+	var draft_group_radioField=new Ext.form.Radio({
+		id:'draft_group_radioField',
+		name:'draft_opsiField',
+		width: 100,
+		boxLabel: 'Phonegroup',
+		value: 'selected'
+	});
+	
+	var draft_semua_radioField=new Ext.form.Radio({
+		id:'draft_semua_radioField',
+		name:'draft_opsiField',
+		width: 100,
+		boxLabel: 'Semua Customer',
+		checked: true,
+		value: 'selected'
+	});
+	
+	var draft_number_radioField=new Ext.form.Radio({
+		id:'draft_number_radioField',
+		name:'draft_opsiField',
+		width: 100,
+		boxLabel: 'Nomer <br> P',
+		value: 'selected'
+	});
+	
+	var draft_kelamin_radioField=new Ext.form.Radio({
+		id:'draft_kelamin_radioField',
+		name:'draft_opsiField',
+		width: 100,
+		boxLabel: 'Jenis Kelamin',
+		value: 'selected'
+	});
+	
+	var draft_ultah_radioField=new Ext.form.Radio({
+		id:'draft_ultah_radioField',
+		name:'draft_opsiField',
+		width: 100,
+		boxLabel: 'Ulang Tahun',
+		value: 'selected'
+	});
+	
+	var draft_member_radioField=new Ext.form.Radio({
+		id:'draft_member_radioField',
+		name:'draft_opsiField',
+		width: 100,
+		boxLabel: 'Member',
+		value: 'selected'
+	});
+
+	var draft_destinationField = new Ext.form.FieldSet({
+		title: 'Opsi Tujuan',
+		anchor: '98%',
+		layout:'form',
+		frame: false,
+		border: true,
+		items:[{
+			     	layout: 'column',
+					frame: false,
+					border: false,
+					bodyStyle:'padding:5px',
+				 	items: [draft_semua_radioField]
+			   },{
+			     	layout: 'column',
+					frame: false,
+					border: false,
+					bodyStyle:'padding:5px',
+				 	items: [draft_group_radioField,draft_destgroupField]
+			   },{
+					layout: 'column',
+					frame: false,
+					border: false,
+					bodyStyle:'padding:5px',
+					items: [draft_number_radioField,draft_destnumField]
+			   },{
+				   	layout: 'column',
+					frame: false,
+					border: false,
+					bodyStyle:'padding:5px',
+					items: [draft_kelamin_radioField,draft_kelaminField]
+			   },{
+				   	layout: 'column',
+					frame: false,
+					border: false,
+					bodyStyle:'padding:5px',
+					items: [draft_ultah_radioField,draft_ultah_groupField]
+			   },{
+				   	layout: 'column',
+					frame: false,
+					border: false,
+					bodyStyle:'padding:5px',
+					items: [draft_member_radioField,draft_member_groupField]
+			   }]
+	});
+	
+	draft_detailField= new Ext.form.TextArea({
+		id: 'draft_detailField',
+		fieldLabel: 'Isi Pesan',
+		maxLength: 500,
+		bodyStyle:'padding:5px',
+		anchor: '95%',
+		allowBlank: false
+	});
+
+	
 	
 	/* Function for retrieve create Window Panel*/ 
 	draft_saveForm = new Ext.FormPanel({
-		labelAlign: 'top',
+		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
 		width: 500,        
@@ -671,7 +991,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [draft_destinationField, draft_messageField] 
+				items: [draft_destinationField, draft_detailField] 
 			}
 			],
 		buttons: [{
@@ -684,7 +1004,7 @@ Ext.onReady(function(){
 			,{
 				text: 'Cancel',
 				handler: function(){
-					draft_saveForm.hide();
+					draft_saveWindow.hide();
 				}
 			}
 		]
@@ -694,9 +1014,9 @@ Ext.onReady(function(){
 	/* Function for retrieve create Window Form */
 	draft_saveWindow= new Ext.Window({
 		id: 'draft_saveWindow',
-		title: post2db+' Draft',
-		closable:true,
-		closeAction: 'hide',
+		title: 'New SMS',
+		closable:false,
+		closeAction: 'close',
 		autoWidth: true,
 		autoHeight: true,
 		x:0,
@@ -708,6 +1028,70 @@ Ext.onReady(function(){
 		items: draft_saveForm
 	});
 	/* End Window */
+	
+	function setDisableAll(){
+		draft_destgroupField.setDisabled(true);
+		draft_destnumField.setDisabled(true);
+		draft_kelaminField.setDisabled(true);
+		draft_ultah_groupField.setDisabled(true);
+		draft_membershipField.setDisabled(true);
+		draft_member_expField.setDisabled(true);
+		
+		draft_destgroupField.allowBlank=true;
+		draft_destnumField.allowBlank=true;
+		draft_kelaminField.allowBlank=true;
+		draft_membershipField.allowBlank=true;
+		
+	}
+	
+		
+	draft_membershipField.on("select",function(){
+		if(draft_membershipField.getValue()=='Expired'){
+			draft_member_expField.setDisabled(false);
+		}else{
+			draft_member_expField.setDisabled(true);
+		}
+	});
+	
+	draft_group_radioField.on("check",function(){
+		if(draft_group_radioField.getValue()==true){
+			setDisableAll();
+			draft_destgroupField.setDisabled(false);
+			draft_destgroupField.allowBlank=false;
+		}		
+	});
+	
+	draft_number_radioField.on("check",function(){
+	 	if(draft_number_radioField.getValue()==true){
+			setDisableAll();
+			draft_destnumField.setDisabled(false);
+			draft_destnumField.allowBlank=false;
+	 	}
+	});
+	
+	draft_kelamin_radioField.on("check",function(){
+		if(draft_kelamin_radioField.getValue()==true){
+			setDisableAll();
+			draft_kelaminField.setDisabled(false);
+			draft_kelaminField.allowBlank=false;
+		}
+	});
+	
+	draft_ultah_radioField.on("check",function(){
+		if(draft_ultah_radioField.getValue()==true){
+			setDisableAll();
+			draft_ultah_groupField.setDisabled(false);
+		}
+	});
+	
+	draft_member_radioField.on("check",function(){
+		if(draft_member_radioField.getValue()==true){
+			setDisableAll();
+			draft_membershipField.setDisabled(false);
+			draft_membershipField.allowBlank=false;
+		}
+	});
+	
 	
 	/* Function for action list search */
 	function draft_list_search(){
@@ -951,17 +1335,6 @@ Ext.onReady(function(){
 		});
 	}
 	/*End of Function */
-	
-
-	draft_filterField.on('select',function(){
-		if(draft_filterField.getValue()=='Group'){
-			draft_destgroupField.getEl().up('.x-form-item').setDisplayed(true);
-			draft_destnumField.getEl().up('.x-form-item').setDisplayed(false);
-		}else{
-			draft_destgroupField.getEl().up('.x-form-item').setDisplayed(false);
-			draft_destnumField.getEl().up('.x-form-item').setDisplayed(true);
-		}
-	});
 	
 	
 });

@@ -626,7 +626,7 @@ Ext.onReady(function(){
 					{
 						xtype: 'itemselector',
 						name: 'itemselector',
-						fieldLabel: 'Member',
+						fieldLabel: 'Customer',
 						imagePath: './assets/images/',
 						multiselects: [{
 							width: 300,
@@ -684,7 +684,7 @@ Ext.onReady(function(){
 	/* Function for retrieve create Window Form */
 	phonegroup_saveWindow= new Ext.Window({
 		id: 'phonegroup_saveWindow',
-		title: post2db+'Phonegroup',
+		title: post2db+' Group Phonebook',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,
