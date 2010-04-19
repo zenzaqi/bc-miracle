@@ -58,7 +58,7 @@ var sms_ContextMenu;
 var post2db = '';
 var msg = '';
 var pageS=15;
-
+var today=new Date().format('Y-m-d');
 /* declare variable here for Field*/
 var sms_idField;
 var sms_namaField;
@@ -77,32 +77,52 @@ Ext.onReady(function(){
 	
 		if(is_sms_form_valid()){
 			var sms_pk="";
-			var sms_nomer="";
-			var sms_group="";
-			var sms_isi="";
 			var sms_opsi="";
+			var sms_dest="";
+			var sms_isi="";
 			
-			if(sms_destnumField.getValue()!=="") sms_nomer=sms_destnumField.getValue();
-			if(sms_destgroupField.getValue()!=="") sms_group=sms_destgroupField.getValue();
 			if(sms_detailField.getValue()!=="") sms_isi=sms_detailField.getValue();
-			if(phonegroup_filterField.getValue()!=="") sms_opsi=phonegroup_filterField.getValue();
+			if(sms_semua_radioField.getValue()==true){
+				sms_opsi='semua';
+			}else if(sms_group_radioField.getValue()==true){
+				sms_opsi='group';
+				sms_dest=sms_destgroupField.getValue();
+			}else if(sms_number_radioField.getValue()==true){
+				sms_opsi='number';
+				sms_dest=sms_destnumField.getValue();
+			}else if(sms_kelamin_radioField.getValue()==true){
+				sms_opsi='kelamin';
+				sms_dest=sms_kelaminField.getValue();
+			}else if(sms_ultah_radioField.getValue()==true){
+				sms_opsi='ultah';
+				sms_dest=sms_bulanlahir_startField.getValue() + '-' +sms_tgllahir_startField.getValue()+ 's/d'+sms_bulanlahir_endField.getValue() + '-' +sms_tgllahir_endField.getValue();
+			}else if(sms_member_radioField.getValue()==true){
+				sms_opsi='member';
+				if(sms_membershipField.getValue()=='Expired'){
+					sms_dest=sms_membershipField.getValue()+':'+sms_tglexp_startField.getValue().format('Y-m-d')+ 's/d'+sms_tglexp_endField.getValue().format('Y-m-d');
+				}else{
+					sms_dest=sms_membershipField.getValue();
+				}
+				
+				
+			}
 			
+			//console.log('group'+sms_number_radioField.getValue());
 			Ext.Ajax.request({  
 				waitMsg: 'Please wait...',
 				url: 'index.php?c=c_sms&m=sms_save',
+				timeout: 3600000,
 				params: {
-					isms_nomer	: sms_nomer,
-					isms_group	: sms_group,
-					isms_isi	: sms_isi,
 					isms_opsi	: sms_opsi,
+					isms_dest	: sms_dest,
+					isms_isi	: sms_isi,
 					isms_task	: post2db
 				}, 
 				success: function(response){             
 					var result=eval(response.responseText);
 					switch(result){
 						case 1:
-							Ext.MessageBox.alert(post2db+' OK','The sms was '+post2db+' successfully.');
-							//sms_saveWindow.close();
+							Ext.MessageBox.alert(post2db+' OK','SMS sukses !');
 							mainPanel.remove(mainPanel.getActiveTab().getId());
 							break;
 						default:
@@ -137,6 +157,7 @@ Ext.onReady(function(){
 				icon: Ext.MessageBox.WARNING
 			});
 		}
+	
 	}
  	/* End of Function */
   
@@ -171,21 +192,6 @@ Ext.onReady(function(){
         '</div></tpl>'
     );
 	
-	var phonegroup_filterField= new Ext.form.ComboBox({
-		id: 'phonegroup_filterField',
-		fieldLabel: '',
-		store:new Ext.data.SimpleStore({
-			fields:['pilih'],
-			data:[['Number'],['Group']]
-		}),
-		mode: 'local',
-		displayField: 'pilih',
-		valueField: 'pilih',
-		width: 94,
-		triggerAction: 'all'		
-	});
-	
-
 	
 	/* Identify  sms_nama Field */
 	var sms_destgroupField= new Ext.form.ComboBox({
@@ -204,7 +210,7 @@ Ext.onReady(function(){
 		triggerAction: 'all',
 		lazyRender:true,
 		listClass: 'x-combo-list-small',
-		anchor: '95%'
+		width: 300
 	});
 	/* Identify  sms_detail Field */
 	
@@ -212,46 +218,304 @@ Ext.onReady(function(){
 		id: 'sms_destnumField',
 		fieldLabel: 'Nomer (pisahkan dengan koma [,])',
 		maxLength: 250,
-		anchor: '95%'
+		maskRe: /^\+|,|([0-9]+)$/,
+		width: 300
+	});
+	
+	var bulanStore=new Ext.data.SimpleStore({
+		fields:['bulan_id','bulan_nama'],
+		data:[['01','Januari'],['02','Pebruari'],['03','Maret'],['04','April'],['05','Mei'],['06','Juni'],['07','Juli'],['08','Agustus'],['09','September'],['10','Oktober'],['11','Nopember'],['12','Desember']]
+	});
+	
+	var tanggalStore=new Ext.data.SimpleStore({
+		fields:['tanggal'],
+		data:[['01'],['02'],['03'],['04'],['05'],['06'],['07'],['08'],['09'],['10'],
+			  ['11'],['12'],['13'],['14'],['15'],['16'],['17'],['18'],['19'],['20'],
+			  ['21'],['22'],['23'],['24'],['25'],['26'],['27'],['28'],['29'],['30'],['31']]
+	});
+	
+	var sms_tgllahir_startField=new Ext.form.ComboBox({
+		id:	'sms_tgllahir_startField',
+		name: 'sms_tgllahir_startField',
+		typeAhead: true,
+		triggerAction: 'all',
+		store:tanggalStore,
+		mode: 'local',
+		width: 50,
+		displayField: 'tanggal',
+		valueField: 'tanggal',
+		value: '01',
+		lazyRender:true,
+		listClass: 'x-combo-list-small',
+		bodyStyle:'padding:5px'
+	});
+	
+	var sms_bulanlahir_startField=new Ext.form.ComboBox({
+		id:	'sms_bulanlahir_startField',
+		name: 'sms_bulanlahir_startField',
+		typeAhead: true,
+		triggerAction: 'all',
+		store: bulanStore,
+		mode: 'local',
+		value: '01',
+		width: 80,
+		displayField: 'bulan_nama',
+		valueField: 'bulan_id',
+		lazyRender:true,
+		listClass: 'x-combo-list-small',
+		bodyStyle:'padding:5px'
+	});
+	
+	var sms_tgllahir_endField=new Ext.form.ComboBox({
+		id:	'sms_tgllahir_endField',
+		name: 'sms_tgllahir_endField',
+		typeAhead: true,
+		triggerAction: 'all',
+		store: tanggalStore,
+		mode: 'local',
+		width: 50,
+		value: '01',
+		displayField: 'tanggal',
+		valueField: 'tanggal',
+		lazyRender:true,
+		listClass: 'x-combo-list-small',
+		bodyStyle:'padding:5px'
+	});
+	
+	var sms_tgllahir_labelField=new Ext.form.Label({
+		bodyStyle:'padding:5px',
+		html: '&nbsp; s/d ',
+		width: 30,
+		frame: false,
+		border: false
+	});
+	
+	var sms_tglexp_labelField=new Ext.form.Label({
+		bodyStyle:'padding:5px',
+		html: '&nbsp; s/d ',
+		width: 30,
+		frame: false,
+		border: false
+	});
+	
+	
+	var sms_bulanlahir_endField=new Ext.form.ComboBox({
+		id:	'sms_bulanlahir_endField',
+		name: 'sms_bulanlahir_endField',
+		typeAhead: true,
+		triggerAction: 'all',
+		store: bulanStore,
+		mode: 'local',
+		width: 80,
+		value: '01',
+		displayField: 'bulan_nama',
+		valueField: 'bulan_id',
+		lazyRender:true,
+		listClass: 'x-combo-list-small'
+	});
+	
+	var sms_ultah_groupField=new Ext.form.FieldSet({
+		id:	'sms_ultah_groupField',
+		name: 'sms_ultah_groupField',
+		layout: 'column',
+		frame: false,
+		border: false,
+		items:[sms_tgllahir_startField,sms_bulanlahir_startField,sms_tgllahir_labelField,sms_tgllahir_endField,sms_bulanlahir_endField]
+	
+	});
+	
+	var sms_membershipField=new Ext.form.ComboBox({
+		id:	'sms_membershipField',
+		name: 'sms_membershipField',
+		typeAhead: true,
+		triggerAction: 'all',
+		store: new Ext.data.SimpleStore({
+			fields:['membership'],
+			data:[['Semua'],['Aktif'],['Non Aktif'],['Expired']]
+		}),
+		mode: 'local',
+		width: 80,
+		value : 'Semua',
+		displayField: 'membership',
+		valueField: 'membership',
+		lazyRender:true,
+		listClass: 'x-combo-list-small'
+	});
+	
+	
+	var sms_tglexp_startField=new Ext.form.DateField({
+		id:	'sms_tglexp_startField',
+		name: 'sms_tglexp_startField',
+		format: 'Y-m-d',
+		value: today
+	});
+	
+	
+	var sms_tglexp_endField=new Ext.form.DateField({
+		id:	'sms_tglexp_endField',
+		name: 'sms_tglexp_endField',
+		format: 'Y-m-d',
+		value: today
+	});
+	
+	
+	
+	var sms_member_expField=new Ext.form.FieldSet({
+		layout: 'column',
+		frame: false,
+		border: false,
+		disabled : true,
+		bodyStyle:'padding-top:5px;padding-bottom:5px;padding-left:0px',
+		items: [sms_tglexp_startField,sms_tglexp_labelField,sms_tglexp_endField]
+	});
+	
+	var sms_member_groupField=new Ext.form.FieldSet({
+		id:	'sms_member_groupField',
+		name: 'sms_member_groupField',
+		layout: 'form',
+		frame: false,
+		border: false,
+		items:[{
+			   		layout:'column',
+					frame: false,
+					border: false,
+					bodyStyle:'padding-top:5px;padding-bottom:5px',
+					items: [sms_membershipField]
+			   },
+			   {
+			   		layout:'column',
+					frame: false,
+					border: false,
+					bodyStyle:'padding-top:5px;padding-bottom:5px',
+					items: [sms_member_expField]
+			   }]
+	});
+	
+	
+	var sms_kelaminField=new Ext.form.ComboBox({
+		id:	'sms_kelaminField',
+		name: 'sms_kelaminField',
+		typeAhead: true,
+		triggerAction: 'all',
+		store: new Ext.data.SimpleStore({
+			fields:['kelamin_id','kelamin_nama'],
+			data:[['L','Laki-laki'],['P','Perempuan']]
+		}),
+		mode: 'local',
+		width: 100,
+		value: 'P',
+		displayField: 'kelamin_nama',
+		valueField: 'kelamin_id',
+		lazyRender:true,
+		listClass: 'x-combo-list-small'
 	});
 	
 	function is_sms_form_valid(){
-		if(phonegroup_filterField.getValue()=='Group'){
-			if(sms_destgroupField.getValue()=="")
-				return false;
-			else
-				return true;
-		}else{
-			if(sms_destnumField.getValue()=="")
-				return false;
-			else
-				return true;
-		}
+		return (sms_destgroupField.isValid() && sms_destnumField.isValid() && sms_kelaminField.isValid() && sms_membershipField.isValid() && sms_detailField.isValid());
 	}
 	
+	
+	var sms_group_radioField=new Ext.form.Radio({
+		id:'sms_group_radioField',
+		name:'sms_opsiField',
+		width: 100,
+		boxLabel: 'Phonegroup',
+		value: 'selected'
+	});
+	
+	var sms_semua_radioField=new Ext.form.Radio({
+		id:'sms_semua_radioField',
+		name:'sms_opsiField',
+		width: 100,
+		boxLabel: 'Semua Customer',
+		checked: true,
+		value: 'selected'
+	});
+	
+	var sms_number_radioField=new Ext.form.Radio({
+		id:'sms_number_radioField',
+		name:'sms_opsiField',
+		width: 100,
+		boxLabel: 'Nomer <br> P',
+		value: 'selected'
+	});
+	
+	var sms_kelamin_radioField=new Ext.form.Radio({
+		id:'sms_kelamin_radioField',
+		name:'sms_opsiField',
+		width: 100,
+		boxLabel: 'Jenis Kelamin',
+		value: 'selected'
+	});
+	
+	var sms_ultah_radioField=new Ext.form.Radio({
+		id:'sms_ultah_radioField',
+		name:'sms_opsiField',
+		width: 100,
+		boxLabel: 'Ulang Tahun',
+		value: 'selected'
+	});
+	
+	var sms_member_radioField=new Ext.form.Radio({
+		id:'sms_member_radioField',
+		name:'sms_opsiField',
+		width: 100,
+		boxLabel: 'Member',
+		value: 'selected'
+	});
+
 	var sms_destinationField = new Ext.form.FieldSet({
-		title: 'Tujuan',
-		anchor: '95%',
-		layout:'column',
+		title: 'Opsi Tujuan',
+		anchor: '98%',
+		layout:'form',
+		frame: false,
+		border: true,
 		items:[{
-				   layout: 'form',
-				   labelWidth: 5,
-				   columnWidth: 0.3,
-				   border: false,
-				   items:[phonegroup_filterField]
+			     	layout: 'column',
+					frame: false,
+					border: false,
+					bodyStyle:'padding:5px',
+				 	items: [sms_semua_radioField]
 			   },{
-				   layout: 'form',
-				   columnWidth: 0.7,
-				   border: false,
-				   items:[sms_destgroupField,sms_destnumField]
+			     	layout: 'column',
+					frame: false,
+					border: false,
+					bodyStyle:'padding:5px',
+				 	items: [sms_group_radioField,sms_destgroupField]
+			   },{
+					layout: 'column',
+					frame: false,
+					border: false,
+					bodyStyle:'padding:5px',
+					items: [sms_number_radioField,sms_destnumField]
+			   },{
+				   	layout: 'column',
+					frame: false,
+					border: false,
+					bodyStyle:'padding:5px',
+					items: [sms_kelamin_radioField,sms_kelaminField]
+			   },{
+				   	layout: 'column',
+					frame: false,
+					border: false,
+					bodyStyle:'padding:5px',
+					items: [sms_ultah_radioField,sms_ultah_groupField]
+			   },{
+				   	layout: 'column',
+					frame: false,
+					border: false,
+					bodyStyle:'padding:5px',
+					items: [sms_member_radioField,sms_member_groupField]
 			   }]
 	});
-		
+	
 	sms_detailField= new Ext.form.TextArea({
 		id: 'sms_detailField',
-		fieldLabel: 'Isi',
+		fieldLabel: 'Isi Pesan',
 		maxLength: 500,
-		anchor: '95%'
+		bodyStyle:'padding:5px',
+		anchor: '95%',
+		allowBlank: false
 	});
 
 	
@@ -304,19 +568,74 @@ Ext.onReady(function(){
 		items: sms_saveForm
 	});
 	/* End Window */
-	sms_saveWindow.show();
-	phonegroup_filterField.setValue('Group');
-	sms_destnumField.getEl().up('.x-form-item').setDisplayed(false);
 	
-	phonegroup_filterField.on('select',function(){
-		if(phonegroup_filterField.getValue()=='Group'){
-			sms_destgroupField.getEl().up('.x-form-item').setDisplayed(true);
-			sms_destnumField.getEl().up('.x-form-item').setDisplayed(false);
+
+	sms_saveWindow.show();
+	
+	function setDisableAll(){
+		sms_destgroupField.setDisabled(true);
+		sms_destnumField.setDisabled(true);
+		sms_kelaminField.setDisabled(true);
+		sms_ultah_groupField.setDisabled(true);
+		sms_membershipField.setDisabled(true);
+		sms_member_expField.setDisabled(true);
+		
+		sms_destgroupField.allowBlank=true;
+		sms_destnumField.allowBlank=true;
+		sms_kelaminField.allowBlank=true;
+		sms_membershipField.allowBlank=true;
+	}
+	
+	setDisableAll();
+	
+	sms_membershipField.on("select",function(){
+		if(sms_membershipField.getValue()=='Expired'){
+			sms_member_expField.setDisabled(false);
 		}else{
-			sms_destgroupField.getEl().up('.x-form-item').setDisplayed(false);
-			sms_destnumField.getEl().up('.x-form-item').setDisplayed(true);
+			sms_member_expField.setDisabled(true);
 		}
 	});
+	
+	sms_group_radioField.on("check",function(){
+		if(sms_group_radioField.getValue()==true){
+			setDisableAll();
+			sms_destgroupField.setDisabled(false);
+			sms_destgroupField.allowBlank=false;
+		}		
+	});
+	
+	sms_number_radioField.on("check",function(){
+	 	if(sms_number_radioField.getValue()==true){
+			setDisableAll();
+			sms_destnumField.setDisabled(false);
+			sms_destnumField.allowBlank=false;
+	 	}
+	});
+	
+	sms_kelamin_radioField.on("check",function(){
+		if(sms_kelamin_radioField.getValue()==true){
+			setDisableAll();
+			sms_kelaminField.setDisabled(false);
+			sms_kelaminField.allowBlank=false;
+		}
+	});
+	
+	sms_ultah_radioField.on("check",function(){
+		if(sms_ultah_radioField.getValue()==true){
+			setDisableAll();
+			sms_ultah_groupField.setDisabled(false);
+		}
+	});
+	
+	sms_member_radioField.on("check",function(){
+		if(sms_member_radioField.getValue()==true){
+			setDisableAll();
+			sms_membershipField.setDisabled(false);
+			sms_membershipField.allowBlank=false;
+		}
+	});
+	
+	
 	
 });
 	</script>

@@ -58,7 +58,8 @@ var vu_stok_all_saldo_ContextMenu;
 var post2db = '';
 var msg = '';
 var pageS=15;
-
+var today=new Date().format('Y-m-d');
+var firstday=(new Date().format('Y-m'))+'-01';
 /* declare variable here for Field*/
 var produk_idField;
 var produk_namaField;
@@ -85,6 +86,7 @@ Ext.onReady(function(){
 	/* End of Function  */
 	/* setValue to EDIT */
 	function vu_stok_all_saldo_set_form(){
+		produk_periodeField.setValue(stok_tanggal_startField.getValue().format('Y-m-d') + " s/d " + stok_tanggal_endField.getValue().format('Y-m-d'));
 		produk_kodeField.setValue(vu_stok_all_saldoListEditorGrid.getSelectionModel().getSelected().get('produk_kode'));
 		produk_namaField.setValue(vu_stok_all_saldoListEditorGrid.getSelectionModel().getSelected().get('produk_nama'));
 		satuan_namaField.setValue(vu_stok_all_saldoListEditorGrid.getSelectionModel().getSelected().get('satuan_nama'));
@@ -93,11 +95,27 @@ Ext.onReady(function(){
 		vu_stok_detail_DataStore.setBaseParam('limit',pageS);
 		
 		vu_stok_detail_DataStore.setBaseParam('produk_id',get_pk_id());
+		vu_stok_detail_DataStore.setBaseParam('tanggal_start',stok_tanggal_startField.getValue().format('Y-m-d'));
+		vu_stok_detail_DataStore.setBaseParam('tanggal_end',stok_tanggal_endField.getValue().format('Y-m-d'));
 		vu_stok_detail_DataStore.load();
 	}
 	/* End setValue to EDIT*/
-  
- 
+  	
+	var stok_tanggal_startField=new Ext.form.DateField({
+		id: 'stok_tanggal_startField',
+		name: 'stok_tanggal_startField',
+		value: firstday,
+		format: 'Y-m-d'
+	});
+ 	
+	var stok_tanggal_endField=new Ext.form.DateField({
+		id: 'stok_tanggal_endField',
+		name: 'stok_tanggal_endField',
+		value: today,
+		format: 'Y-m-d'
+	});
+	
+		
 	/* Function for Update Confirm */
 	function vu_stok_all_saldo_confirm_update(){
 		/* only one record is selected here */
@@ -125,7 +143,7 @@ Ext.onReady(function(){
 			url: 'index.php?c=c_vu_stok_all_saldo&m=get_action', 
 			method: 'POST'
 		}),
-		baseParams:{task: "LIST", start:0, limit: pageS}, // parameter yang di $_POST ke Controller
+		baseParams:{task: "LIST", start:0, limit: pageS, tanggal_start: firstday, tanggal_end: today}, // parameter yang di $_POST ke Controller
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
@@ -135,7 +153,8 @@ Ext.onReady(function(){
 			{name: 'produk_nama', type: 'string', mapping: 'produk_nama'}, 
 			{name: 'produk_kode', type: 'string', mapping: 'produk_kode'}, 
 			{name: 'satuan_id', type: 'int', mapping: 'satuan_id'}, 
-			{name: 'satuan_nama', type: 'string', mapping: 'satuan_nama'}, 
+			{name: 'satuan_nama', type: 'string', mapping: 'satuan_nama'},
+			{name: 'stok_awal', type: 'float', mapping: 'stok_awal'},
 			{name: 'jumlah_terima', type: 'float', mapping: 'jumlah_terima'},
 			{name: 'jumlah_retur_beli', type: 'float', mapping: 'jumlah_retur_beli'}, 
 			{name: 'jumlah_jual', type: 'float', mapping: 'jumlah_jual'},
@@ -180,6 +199,15 @@ Ext.onReady(function(){
 			header: '<div align="center">Satuan</div>',
 			dataIndex: 'satuan_nama',
 			width: 150,
+			sortable: true,
+			readOnly: true
+		},
+		{
+			header: '<div align="center">Saldo Awal</div>',
+			dataIndex: 'stok_awal',
+			width: 150,
+			align: 'right',
+			renderer: Ext.util.Format.numberRenderer('0,000.00'),
 			sortable: true,
 			readOnly: true
 		},
@@ -238,7 +266,7 @@ Ext.onReady(function(){
 			readOnly: true
 		},
 		{
-			header: '<div align="center">Saldo</div>',
+			header: '<div align="center">Saldo Akhir</div>',
 			dataIndex: 'stok_saldo',
 			width: 150,
 			sortable: true,
@@ -251,6 +279,12 @@ Ext.onReady(function(){
 	vu_stok_all_saldo_ColumnModel.defaultSortable= true;
 	/* End of Function */
     
+	function periode_stok(){
+		vu_stok_all_saldo_DataStore.setBaseParam('tanggal_start',stok_tanggal_startField.getValue().format('Y-m-d'));
+		vu_stok_all_saldo_DataStore.setBaseParam('tanggal_end',stok_tanggal_endField.getValue().format('Y-m-d'));
+		vu_stok_all_saldo_DataStore.load();
+	}
+	
 	/* Declare DataStore and  show datagrid list */
 	vu_stok_all_saldoListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'vu_stok_all_saldoListEditorGrid',
@@ -276,11 +310,11 @@ Ext.onReady(function(){
 			tooltip: 'View selected record',
 			iconCls:'icon-update',
 			handler: vu_stok_all_saldo_confirm_update   // Confirm before updating
-		},{
+		},'-','<font color="white" ><b>Periode : &nbsp;</b></font>',stok_tanggal_startField,' <font color="white" >s/d</font> ',stok_tanggal_endField,{
 			text: 'Search',
 			tooltip: 'Advanced Search',
 			iconCls:'icon-search',
-			handler: display_form_search_window 
+			handler: periode_stok 
 		}, '-', 
 			new Ext.app.SearchField({
 			store: vu_stok_all_saldo_DataStore,
@@ -351,8 +385,6 @@ Ext.onReady(function(){
 	/* End of Function */
   	
 	vu_stok_all_saldoListEditorGrid.addListener('rowcontextmenu', onvu_stok_all_saldo_ListEditGridContextMenu);
-	vu_stok_all_saldo_DataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
-	//vu_stok_all_saldoListEditorGrid.on('afteredit', vu_stok_all_saldo_inline_update); // inLine Editing Record
 
 	/* Identify  produk_id Field */
 	produk_idField= new Ext.form.NumberField({
@@ -371,6 +403,15 @@ Ext.onReady(function(){
 	produk_kodeField= new Ext.form.TextField({
 		id: 'produk_kodeField',
 		fieldLabel: 'Kode',
+		maxLength: 250,
+		allowBlank: false,
+		readOnly: true,
+		anchor: '95%'
+	});
+	
+	produk_periodeField= new Ext.form.TextField({
+		id: 'produk_periodeField',
+		fieldLabel: 'Periode',
 		maxLength: 250,
 		allowBlank: false,
 		readOnly: true,
@@ -437,6 +478,10 @@ Ext.onReady(function(){
 			id: 'gudang_id'
 		},[
 			{name: 'gudang_id', type: 'int', mapping: 'gudang_id'}, 
+			{name: 'jumlah_awal', type: 'float', mapping: 'jumlah_awal'}, 
+			{name: 'jumlah_in', type: 'float', mapping: 'jumlah_in'}, 
+			{name: 'jumlah_out', type: 'float', mapping: 'jumlah_out'},
+			{name: 'jumlah_koreksi', type: 'float', mapping: 'jumlah_koreksi'}, 
 			{name: 'gudang_nama', type: 'string', mapping: 'gudang_nama'}, 
 			{name: 'jumlah_stok', type: 'float', mapping: 'jumlah_stok'}
 		]),
@@ -462,9 +507,44 @@ Ext.onReady(function(){
 			width: 200,
 			sortable: true,
 			readOnly: true
-		}, 
+		},
 		{
-			header: '<div align="center">Jumlah Stok</div>',
+			header: '<div align="center">Stok Awal</div>',
+			dataIndex: 'jumlah_awal',
+			align: 'right',
+			renderer: Ext.util.Format.numberRenderer('0,000.00'),
+			width: 150,
+			sortable: true,
+			readOnly: true
+		},
+		{
+			header: '<div align="center">Masuk</div>',
+			dataIndex: 'jumlah_in',
+			align: 'right',
+			renderer: Ext.util.Format.numberRenderer('0,000.00'),
+			width: 150,
+			sortable: true,
+			readOnly: true
+		},
+		{
+			header: '<div align="center">Keluar</div>',
+			dataIndex: 'jumlah_out',
+			align: 'right',
+			renderer: Ext.util.Format.numberRenderer('0,000.00'),
+			width: 150,
+			sortable: true,
+			readOnly: true
+		},{
+			header: '<div align="center">Koreksi</div>',
+			dataIndex: 'jumlah_koreksi',
+			align: 'right',
+			renderer: Ext.util.Format.numberRenderer('0,000.00'),
+			width: 150,
+			sortable: true,
+			readOnly: true
+		},
+		{
+			header: '<div align="center">Stok Saldo</div>',
 			dataIndex: 'jumlah_stok',
 			align: 'right',
 			renderer: Ext.util.Format.numberRenderer('0,000.00'),
@@ -488,7 +568,7 @@ Ext.onReady(function(){
 		frame: true,
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 490,
+	  	width: 590,
 		height: 200,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
@@ -502,13 +582,13 @@ Ext.onReady(function(){
 		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
-		width: 500,        
+		width: 600,        
 		items:[
 			{
 				columnWidth:0,
 				layout: 'form',
 				border:false,
-				items: [produk_kodeField,produk_namaField,satuan_namaField,stok_saldoField,vu_stok_detailListEditorGrid] 
+				items: [produk_periodeField,produk_kodeField,produk_namaField,satuan_namaField,stok_saldoField,vu_stok_detailListEditorGrid] 
 			}
 			],
 		buttons: [{

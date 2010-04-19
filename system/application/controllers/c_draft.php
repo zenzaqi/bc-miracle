@@ -59,27 +59,20 @@ class C_draft extends Controller {
 		}
 	}
 	
-	function sms_save(){
-		$isms_pk_id = (isset($_POST['isms_pk_id']) ? @$_POST['isms_pk_id'] : @$_GET['isms_pk_id']);
-		$isms_nomer = (isset($_POST['isms_nomer']) ? @$_POST['isms_nomer'] : @$_GET['isms_nomer']);
-		$isms_group = (isset($_POST['isms_group']) ? @$_POST['isms_group'] : @$_GET['isms_group']);
-		$isms_isi = (isset($_POST['isms_isi']) ? @$_POST['isms_isi'] : @$_GET['isms_isi']);
-		$isms_opsi = (isset($_POST['isms_opsi']) ? @$_POST['isms_opsi'] : @$_GET['isms_opsi']);
-		$isms_task = (isset($_POST['isms_task']) ? @$_POST['isms_task'] : @$_GET['isms_task']);
-		if($isms_task=="send"){
-			$result=$this->m_phonegroup->sms_save($isms_nomer,$isms_group,$isms_isi,$isms_opsi,$isms_task);
-			$result=$this->m_draft->draft_delete($isms_pk_id);
+	function draft_save(){
+		$idraft_id = (isset($_POST['idraft_id']) ? @$_POST['idraft_id'] : @$_GET['idraft_id']);
+		$idraft_dest = (isset($_POST['idraft_dest']) ? @$_POST['idraft_dest'] : @$_GET['idraft_dest']);
+		$idraft_isi = (isset($_POST['idraft_isi']) ? @$_POST['idraft_isi'] : @$_GET['idraft_isi']);
+		$idraft_opsi = (isset($_POST['idraft_opsi']) ? @$_POST['idraft_opsi'] : @$_GET['idraft_opsi']);
+		$idraft_task = (isset($_POST['idraft_task']) ? @$_POST['idraft_task'] : @$_GET['idraft_task']);
+		if($idraft_task=="send"){
+			$result=$this->m_phonegroup->sms_save($idraft_dest,$idraft_isi,$idraft_opsi,$idraft_task);
+			$result=$this->m_draft->draft_delete($idraft_id);
 		}else{
-			$draft_id=$isms_pk_id;
-			if($isms_opsi=='Group')
-				$draft_destination="Group:".$isms_group;
-			else
-				$draft_destination="Number:".$isms_nomer;
-			$draft_message=$isms_isi;
 			$draft_date=date('Y/m/d H:i:s');
 			$draft_update=$_SESSION[SESSION_USERID];
 			$draft_date_update=date("Y/m/d H:i:s");
-			$result = $this->m_draft->draft_update($draft_id,$draft_destination,$draft_message,$draft_date,$draft_update,$draft_date_update);
+			$result = $this->m_draft->draft_update($idraft_id,$idraft_dest,$idraft_isi,$idraft_opsi,$idraft_task,$draft_update,$draft_date_update);
 		}
 		echo $result;
 	}

@@ -77,8 +77,7 @@ class M_usergroups extends Model{
 			}
 		}
 		
-		
-		
+			
 		//function for get list record
 		function usergroups_list($filter,$start,$end){
 			$query = "SELECT * FROM usergroups";
@@ -115,7 +114,7 @@ class M_usergroups extends Model{
 			$this->db->where('group_id', $group_id);
 			$this->db->update('usergroups', $data);
 			
-			return '1';
+			return $group_id;
 			
 		}
 		
@@ -129,7 +128,7 @@ class M_usergroups extends Model{
 			);
 			$this->db->insert('usergroups', $data); 
 			if($this->db->affected_rows())
-				return '1';
+				return $this->db->insert_id();
 			else
 				return '0';
 		}

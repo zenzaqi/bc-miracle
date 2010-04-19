@@ -18,23 +18,19 @@ class M_phonegroup extends Model{
 			parent::Model();
 		}
 		
-		function sms_save($isms_nomer,$isms_group,$isms_isi,$isms_opsi,$isms_task){
-			
-			if($isms_opsi=="Group"){
-				$isms_dest=$isms_group;
-			}else
-				$isms_dest=$isms_nomer;
-			
+		function sms_save($isms_dest,$isms_isi,$isms_opsi,$isms_task){
 			$sql="";
 			if($isms_task=='draft'){
 				$sql="insert into draft(
+						draft_jenis,
 						draft_destination,
 						draft_message,
 						draft_date,
 						draft_creator,
 						draft_date_create)
 					 values(
-						'".$isms_opsi.":".$isms_dest."',
+						'".$isms_opsi."',
+						'".$isms_dest."',
 						'".$isms_isi."',
 						'".date('Y/m/d H:i:s')."',
 						'".$_SESSION[SESSION_USERID]."',
@@ -42,7 +38,29 @@ class M_phonegroup extends Model{
 				$this->db->query($sql);
 				//echo $sql;
 			}else{
-				if($isms_opsi=="Number"){
+				if($isms_opsi=="semua"){
+					$sql="select cust_hp from customer WHERE cust_hp<>'' AND cust_hp is not null";
+					$query=$this->db->query($sql);
+					foreach($query->result() as $row){
+						$sql="insert into outbox(
+								outbox_destination,
+								outbox_message,
+								outbox_date,
+								outbox_status,
+								outbox_creator,
+								outbox_date_create)
+							values(
+								'".$row->cust_hp."',
+								'".$isms_isi."',
+								'".date('Y/m/d H:i:s')."',
+								'unsent',
+								'".$_SESSION[SESSION_USERID]."',
+								'".date('Y/m/d H:i:s')."')";
+							//echo $sql;
+						$this->db->query($sql);
+						$sql="";
+					}
+				}elseif($isms_opsi=="number"){
 					$dest=split(",",$isms_dest);
 					foreach($dest as $listdest=>$value){
 						$sql="insert into outbox(
@@ -62,11 +80,11 @@ class M_phonegroup extends Model{
 						$this->db->query($sql);
 						$sql="";
 					}
-				}else{
+				}elseif($isms_opsi=="group"){
 					$sql="select phonegrouped_number from phonegrouped where phonegrouped_group='".$isms_dest."'";
 					$query=$this->db->query($sql);
 					foreach($query->result() as $row){
-						$sql="insert into outbox(
+						$sql_sms="insert into outbox(
 								outbox_destination,
 								outbox_message,
 								outbox_date,
@@ -81,9 +99,97 @@ class M_phonegroup extends Model{
 								'".$_SESSION[SESSION_USERID]."',
 								'".date('Y/m/d H:i:s')."')";
 							//echo $sql;
+						$this->db->query($sql_sms);
+					}
+				}elseif($isms_opsi=='kelamin'){
+					$sql="select cust_hp from customer where cust_kelamin='".$isms_dest."' AND cust_hp<>'' AND cust_hp is not null";
+					$query=$this->db->query($sql);
+					foreach($query->result() as $row){
+						$sql="insert into outbox(
+								outbox_destination,
+								outbox_message,
+								outbox_date,
+								outbox_status,
+								outbox_creator,
+								outbox_date_create)
+							values(
+								'".$row->cust_hp."',
+								'".$isms_isi."',
+								'".date('Y/m/d H:i:s')."',
+								'unsent',
+								'".$_SESSION[SESSION_USERID]."',
+								'".date('Y/m/d H:i:s')."')";
+							//echo $sql;
 						$this->db->query($sql);
 						$sql="";
 					}
+				}elseif($isms_opsi=='ultah'){
+					$tgl_start=substr($isms_dest,1,5);
+					$tgl_end=substr($isms_dest,8,5);
+					
+					$sql="select cust_hp from customer where date_format(cust_tgllahir,'%m-%d') >= '".$tgl_start."' AND 
+															 date_format(cust_tgllahir,'%m-%d') <= '".$tgl_end."' AND
+															 cust_hp<>'' AND cust_hp is not null" ;
+					$query=$this->db->query($sql);
+					foreach($query->result() as $row){
+						$sql="insert into outbox(
+								outbox_destination,
+								outbox_message,
+								outbox_date,
+								outbox_status,
+								outbox_creator,
+								outbox_date_create)
+							values(
+								'".$row->cust_hp."',
+								'".$isms_isi."',
+								'".date('Y/m/d H:i:s')."',
+								'unsent',
+								'".$_SESSION[SESSION_USERID]."',
+								'".date('Y/m/d H:i:s')."')";
+							//echo $sql;
+						$this->db->query($sql);
+						$sql="";
+					}
+				}elseif($isms_opsi=='member'){
+					$sms_opsi=split(":",$isms_dest);
+					$membership=$sms_opsi[0];
+					$expired=$sms_opsi[1];
+					if($expired!=="")
+					{
+						$tgl_start=substr($expired,1,10);
+						$tgl_end=substr($expired,13,10);
+					}
+					$sql="select cust_hp from vu_member_cust WHERE cust_hp<>'' AND cust_hp is not null";
+					if($membership=="Expired"){
+						$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
+						$sql .=" date_format(member_valid,'%Y-%m-%d') >='".$tgl_start."' AND 
+								 date_format(member_valid,'%Y-%m-%d') <='".$tgl_end."'";
+					}else if($membership!=="Semua"){
+						$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
+						$sql .=" member_status='".$membership."'";
+					}
+					
+					$query=$this->db->query($sql);
+					foreach($query->result() as $row){
+						$sql="insert into outbox(
+								outbox_destination,
+								outbox_message,
+								outbox_date,
+								outbox_status,
+								outbox_creator,
+								outbox_date_create)
+							values(
+								'".$row->cust_hp."',
+								'".$isms_isi."',
+								'".date('Y/m/d H:i:s')."',
+								'unsent',
+								'".$_SESSION[SESSION_USERID]."',
+								'".date('Y/m/d H:i:s')."')";
+							//echo $sql;
+						$this->db->query($sql);
+						$sql="";
+					}
+					
 				}
 			}
 			

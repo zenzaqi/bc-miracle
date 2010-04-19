@@ -83,8 +83,6 @@ Ext.onReady(function(){
 			var setmember_id_field_pk=null; 
 			var setmember_transhari_field=null; 
 			var setmember_pointhari_field=null;
-			var setmember_transbulan_field=null; 
-			var setmember_pointbulan_field=null;
 			var setmember_periodeaktif_field=null; 
 			var setmember_periodetenggang_field=null; 
 			var setmember_transtenggang_field=null;
@@ -92,8 +90,6 @@ Ext.onReady(function(){
 
 			if(setmember_transhariField.getValue()!== null){setmember_transhari_field = setmember_transhariField.getValue();}
 			if(setmember_pointhariField.getValue()!== null){setmember_pointhari_field = setmember_pointhariField.getValue();} 
-			if(setmember_transbulanField.getValue()!== null){setmember_transbulan_field = setmember_transbulanField.getValue();} 
-			if(setmember_pointbulanField.getValue()!== null){setmember_pointbulan_field = setmember_pointbulanField.getValue();} 
 			if(setmember_periodeaktifField.getValue()!== null){setmember_periodeaktif_field = setmember_periodeaktifField.getValue();} 
 			if(setmember_periodetenggangField.getValue()!== null){setmember_periodetenggang_field = setmember_periodetenggangField.getValue();} 
 			if(setmember_transtenggangField.getValue()!== null){setmember_transtenggang_field = setmember_transtenggangField.getValue();}
@@ -106,8 +102,6 @@ Ext.onReady(function(){
 					setmember_id				: setmember_id_field_pk, 
 					setmember_transhari			: setmember_transhari_field,
 					setmember_pointhari			: setmember_pointhari_field,
-					setmember_transbulan		: setmember_transbulan_field,
-					setmember_pointbulan		: setmember_pointbulan_field,
 					setmember_periodeaktif		: setmember_periodeaktif_field, 
 					setmember_periodetenggang	: setmember_periodetenggang_field,
 					setmember_transtenggang		: setmember_transtenggang_field,
@@ -220,29 +214,15 @@ Ext.onReady(function(){
 		maskRe: /([0-9]+)$/
 	});
 	
-	/* Identify  setmember_transbulan Field */
-	setmember_transbulanField= new Ext.form.NumberField({
-		id: 'setmember_transbulanField',
-		name: 'setmember_transbulan',
-		fieldLabel: 'Transaksi Minimum 1 Bulan',
-		allowNegatife : false,
-		blankText: '0',
-		allowDecimals: true,
-		anchor: '95%',
-		maskRe: /([0-9]+)$/
+	setmember_registerField=new Ext.form.FieldSet({
+		id:'setmember_registerField',
+		name: 'setmember_registerField',
+		title: 'Syarat Pendaftaran Member',
+		layout: 'form',
+		bodyStyle: 'padding: 5px;',
+		items:[setmember_transhariField, setmember_pointhariField]
 	});
 	
-	setmember_pointbulanField= new Ext.form.NumberField({
-		id: 'setmember_pointbulanField',
-		name: 'setmember_pointbulan',
-		fieldLabel: 'Point Minimum  1 Bulan',
-		allowNegatife : false,
-		blankText: '0',
-		allowBlank: false,
-		allowDecimals: true,
-		anchor: '95%',
-		maskRe: /([0-9]+)$/
-	});
 	
 	/* Identify  setmember_periodeaktif Field */
 	setmember_periodeaktifField= new Ext.form.NumberField({
@@ -270,7 +250,7 @@ Ext.onReady(function(){
 	setmember_transtenggangField= new Ext.form.NumberField({
 		id: 'setmember_transtenggangField',
 		name: 'setmember_transtenggang',
-		fieldLabel: 'Transaksi minimal masa Tenggang',
+		fieldLabel: 'Transaksi deposit minimum',
 		allowNegatife : false,
 		blankText: '0',
 		allowDecimals: true,
@@ -281,7 +261,7 @@ Ext.onReady(function(){
 	setmember_pointtenggangField= new Ext.form.NumberField({
 		id: 'setmember_pointtenggangField',
 		name: 'setmember_pointtenggang',
-		fieldLabel: 'Point Minimum  masa tenggang',
+		fieldLabel: 'Point deposit minimum',
 		allowNegatife : false,
 		blankText: '0',
 		allowBlank: false,
@@ -289,6 +269,25 @@ Ext.onReady(function(){
 		anchor: '95%',
 		maskRe: /([0-9]+)$/
 	});
+	
+	setmember_reloadField=new Ext.form.FieldSet({
+		id:'setmember_reloadField',
+		name: 'setmember_reloadField',
+		title: 'Syarat Perpanjangan Member',
+		layout: 'form',
+		bodyStyle: 'padding: 5px;',
+		items:[setmember_transtenggangField, setmember_pointtenggangField]
+	});
+	
+	setmember_periodeField=new Ext.form.FieldSet({
+		id:'setmember_periodeField',
+		name: 'setmember_periodeField',
+		title: 'Periode Member',
+		layout: 'form',
+		bodyStyle: 'padding: 5px;',
+		items:[setmember_periodeaktifField, setmember_periodetenggangField]
+	});
+	
 	
 	/* Function for retrieve create Window Panel*/ 
 	member_setup_saveForm = new Ext.FormPanel({
@@ -325,7 +324,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [setmember_transhariField,setmember_pointhariField, setmember_transbulanField, setmember_pointbulanField,setmember_periodeaktifField, setmember_periodetenggangField, setmember_transtenggangField,setmember_pointtenggangField] 
+				items: [setmember_registerField,setmember_reloadField,setmember_periodeField] 
 			}
 			],
 		buttons: [{

@@ -88,29 +88,28 @@ Ext.onReady(function(){
 			waitMsg: 'Please wait...',
 			url: 'index.php?c=c_usergroups&m=get_action',
 			params: {
-				task: "UPDATE",
-				group_id	: group_id_update_pk,				
-				group_name	:group_name_update,		
-				group_desc	:group_desc_update,		
-				group_active	:group_active_update		
+				task			: "UPDATE",
+				group_id		: group_id_update_pk,				
+				group_name		: group_name_update,		
+				group_desc		: group_desc_update,		
+				group_active	: group_active_update		
 			}, 
 			success: function(response){							
 				var result=eval(response.responseText);
-				switch(result){
-					case 1:
+				if(result!==0){
+						Ext.MessageBox.alert(post2db+' OK','Group dan Hak Akses sukses disimpan');
 						usergroups_DataStore.commitChanges();
 						usergroups_DataStore.reload();
-						break;
-					default:
+				}else{
 						Ext.MessageBox.show({
-							   title: 'Warning',
-							   msg: 'We could\'t not save the usergroups.',
-							   buttons: Ext.MessageBox.OK,
-							   animEl: 'save',
-							   icon: Ext.MessageBox.WARNING
+						   title: 'Warning',
+						   //msg: 'We could\'t not '+msg+' the Master_order_beli.',
+						   msg: 'Group dan Hak Akses tidak bisa disimpan',
+						   buttons: Ext.MessageBox.OK,
+						   animEl: 'save',
+						   icon: Ext.MessageBox.WARNING
 						});
-						break;
-				}
+				} 
 			},
 			failure: function(response){
 				var result=response.responseText;
@@ -144,32 +143,28 @@ Ext.onReady(function(){
 				waitMsg: 'Please wait...',
 				url: 'index.php?c=c_usergroups&m=get_action',
 				params: {
-					task: post2db,
-					group_id	: group_id_create_pk,	
-					group_name	: group_name_create,	
-					group_desc	: group_desc_create,	
+					task			: post2db,
+					group_id		: group_id_create_pk,	
+					group_name		: group_name_create,	
+					group_desc		: group_desc_create,	
 					group_active	: group_active_create	
 				}, 
 				success: function(response){             
 					var result=eval(response.responseText);
-					switch(result){
-						case 1:
-							Ext.MessageBox.alert(post2db+' OK','The Usergroups was '+msg+' successfully.');
-							permission_purge();
-							usergroups_DataStore.reload();
-							usergroups_createWindow.hide();
-							
-							break;
-						default:
+					if(result!==0){
+						permission_purge(result);
+						Ext.MessageBox.alert(post2db+' OK','Group dan Hak Akses sukses disimpan');
+						usergroups_createWindow.hide();
+					}else{
 							Ext.MessageBox.show({
 							   title: 'Warning',
-							   msg: 'We could\'t not '+msg+' the Usergroups.',
+							   //msg: 'We could\'t not '+msg+' the Master_order_beli.',
+							   msg: 'Group dan Hak Akses tidak bisa disimpan',
 							   buttons: Ext.MessageBox.OK,
 							   animEl: 'save',
 							   icon: Ext.MessageBox.WARNING
 							});
-						break;
-					}        
+					} 
 				},
 				failure: function(response){
 					var result=response.responseText;
@@ -207,7 +202,13 @@ Ext.onReady(function(){
 	function usergroups_reset_form(){
 		group_nameField.reset();
 		group_descField.reset();
-		group_activeField.reset();
+		group_activeField.setValue('Y');
+		group_allprivField.setValue(false);
+		group_allreadprivField.setValue(false);
+		group_allcreateprivField.setValue(false);
+		group_allupdateprivField.setValue(false);
+		group_alldeleteprivField.setValue(false);
+		
 	}
  	/* End of Function */
   
@@ -216,6 +217,12 @@ Ext.onReady(function(){
 		group_nameField.setValue(usergroupsListEditorGrid.getSelectionModel().getSelected().get('group_name'));
 		group_descField.setValue(usergroupsListEditorGrid.getSelectionModel().getSelected().get('group_desc'));
 		group_activeField.setValue(usergroupsListEditorGrid.getSelectionModel().getSelected().get('group_active'));
+		group_allprivField.setValue(false);
+		group_allreadprivField.setValue(false);
+		group_allcreateprivField.setValue(false);
+		group_allupdateprivField.setValue(false);
+		group_alldeleteprivField.setValue(false);
+		
 	}
 	/* End setValue to EDIT*/
   
@@ -228,10 +235,10 @@ Ext.onReady(function(){
   	/* Function for Displaying  create Window Form */
 	function display_form_window(){
 		if(!usergroups_createWindow.isVisible()){
-			usergroups_reset_form();
-			group_activeField.setValue('Aktif');
 			post2db='CREATE';
 			msg='created';
+			usergroups_reset_form();
+			group_activeField.setValue('Aktif');
 			usergroups_createWindow.show();
 			permission_DataStore.load({params:{group:0}});
 			//permissionListEditorGrid.reconfigure(permission_DataStore,permission_ColumnModel);
@@ -264,9 +271,9 @@ Ext.onReady(function(){
 	function usergroups_confirm_update(){
 		/* only one record is selected here */
 		if(usergroupsListEditorGrid.selModel.getCount() == 1) {
-			usergroups_set_form();
 			post2db='UPDATE';
 			msg='updated';
+			usergroups_set_form();
 			permission_DataStore.setBaseParam('group',get_pk_id());
 			permission_DataStore.load();
 			usergroups_createWindow.show();
@@ -642,7 +649,6 @@ Ext.onReady(function(){
 	});
 	
 	
-	
 	var readColumn = new Ext.grid.CheckColumn({
 		header: "Read", 
 		dataIndex: 'perm_read', 
@@ -737,7 +743,7 @@ Ext.onReady(function(){
 	);
 	
 	
-	function permission_save(){
+	function permission_save(pkid){
 		for(i=0;i<permission_DataStore.getCount();i++){
 			var perm_priv="";
 			var permission_record=permission_DataStore.getAt(i);
@@ -755,9 +761,9 @@ Ext.onReady(function(){
 					waitMsg: 'Please wait...',
 					url: 'index.php?c=c_usergroups&m=permission_save',
 					params:{
-						menu_id: permission_record.data.menu_id,
-						menu_group: get_pk_id(),
-						menu_priv: perm_priv
+						menu_id		: permission_record.data.menu_id,
+						menu_group	: pkid,
+						menu_priv	: perm_priv
 					},
 					timeout: 60000,
 					success: function(response){							
@@ -776,18 +782,21 @@ Ext.onReady(function(){
 				});
 			}
 		}
+		
+		usergroups_DataStore.reload();
 	}
 	//eof
 	
 	//function for purge detail
-	function permission_purge(){
+	function permission_purge(pkid){
 		Ext.Ajax.request({
 			waitMsg: 'Please wait...',
 			url: 'index.php?c=c_usergroups&m=permission_purge',
 			params:{ menu_group: get_pk_id()},
 			callback: function(opts, success, response){
 				if(success){
-					permission_save();
+					permission_save(pkid);
+					usergroups_DataStore.reload();
 				}
 			}
 		});
@@ -799,7 +808,7 @@ Ext.onReady(function(){
 	permissionListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'permissionListEditorGrid',
 		el: 'fp_permission',
-		title: 'List Of Permission',
+		title: 'Daftar Hak Akses',
 		autoHeight: true,
 		store: permission_DataStore, // DataStore
 		cm: permission_ColumnModel, // Nama-nama Columns
@@ -871,7 +880,7 @@ Ext.onReady(function(){
 	/* Function for retrieve create Window Form */
 	usergroups_createWindow= new Ext.Window({
 		id: 'usergroups_createWindow',
-		title: post2db+'Usergroups',
+		title: post2db+' Group dan Hak Akses User',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,
@@ -1000,7 +1009,7 @@ Ext.onReady(function(){
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
 	usergroups_searchWindow = new Ext.Window({
-		title: 'usergroups Search',
+		title: 'Pencarian Group User',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,
