@@ -1,0 +1,1 @@
+ALTER TABLE `outbox` CHANGE `outbox_message` `outbox_message` VARCHAR( 1000 ) NULL DEFAULT NULL ;
