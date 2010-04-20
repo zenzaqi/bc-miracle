@@ -20,10 +20,33 @@ class M_tindakan_medis extends Model{
 	
 	function customer_check_paket($cust_id, $rawat_id){
 		//* Mencari kepemilikan paket berdasarkan customer_id /
-		$sql="SELECT rpaket_jumlah, dpaket_id, dpaket_master, dpaket_paket FROM paket_isi_perawatan LEFT JOIN detail_jual_paket ON(rpaket_master=dpaket_paket) LEFT JOIN master_jual_paket ON(dpaket_master=jpaket_id) LEFT JOIN pengguna_paket ON(ppaket_master=jpaket_id) WHERE ppaket_cust='$cust_id' AND rpaket_perawatan='$rawat_id'";
-		$rs=$this->db->query($sql);
-		if($rs->num_rows()){
-			$check_paket_record=$rs->row();
+		$sql_punya_paket="SELECT rpaket_jumlah, dpaket_id, dpaket_master, dpaket_paket FROM paket_isi_perawatan LEFT JOIN detail_jual_paket ON(rpaket_master=dpaket_paket) LEFT JOIN master_jual_paket ON(dpaket_master=jpaket_id) LEFT JOIN pengguna_paket ON(ppaket_master=jpaket_id) WHERE ppaket_cust='$cust_id' AND rpaket_perawatan='$rawat_id'";
+		$rs_punya_paket=$this->db->query($sql_punya_paket);
+		if($rs_punya_paket->num_rows()){
+			$punya_paket_rows = $rs_punya_paket->num_rows();
+			$i=0;
+			foreach($rs_punya_paket->result() as $row_punya_paket){
+				$i++;
+				$sql_check_sisa="SELECT sum(dapaket_jumlah) AS total_item_terpakai FROM detail_ambil_paket WHERE dapaket_dpaket='$row_punya_paket->dpaket_id' AND dapaket_jpaket='$row_punya_paket->dpaket_master' AND dapaket_paket='$row_punya_paket->dpaket_paket' AND dapaket_item='$rawat_id' GROUP BY dapaket_item";
+				$rs_check_sisa=$this->db->query($sql_check_sisa);
+				if($rs_check_sisa->num_rows()){
+					$record_check_sisa = $rs_check_sisa->row();
+					if($row_punya_paket->rpaket_jumlah > $record_check_sisa->total_item_terpakai){
+						return $row_punya_paket;
+						break;
+					}else{
+						if($i==$punya_paket_rows){
+							return 0;
+						}
+					}
+					
+				}else{
+					return $row_punya_paket;
+					break;
+				}
+			}
+			
+			/*$check_paket_record=$rs->row();
 			
 			$rs_record=$rs->row_array();
 			$dpaket_id=$rs_record['dpaket_id'];
@@ -44,7 +67,7 @@ class M_tindakan_medis extends Model{
 			}else{
 				//return 1;
 				return $check_paket_record;
-			}
+			}*/
 		}else{
 			return 0;
 		}

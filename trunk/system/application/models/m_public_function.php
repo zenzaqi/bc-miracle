@@ -433,6 +433,34 @@ class M_public_function extends Model{
 		}
 	}
 	
+	function get_nomor_member($table,$field,$pattern,$length){
+		$date=date('y');
+		$len_pattern=strlen($pattern);
+		$len_lpad=$length-$len_pattern;
+		$sql="SELECT LPAD((RIGHT(MAX(".$field."),".$len_lpad.")+1),".$len_lpad.",0) AS max_key FROM ".$table." WHERE ".$field." LIKE '".$date."%'";
+		$query=$this->db->query($sql);
+		if($query->num_rows()){
+			$data=$query->row();
+			return $pattern.$data->max_key;
+			/*$data=$query->row();
+			$kode=$data->max_key;
+			if(is_null($kode))
+			{
+				$pad="";
+				for($i=1;$i<$len_lpad;$i++)
+					$pad.="0";
+				$kode=$pattern.$pad."1";
+			}
+			return $kode;*/
+		}else{
+			$pad="";
+			for($i=1;$i<$len_lpad;$i++)
+				$pad.="0";
+			$kode=$pattern.$pad."1";
+			return $kode;
+		}
+	}
+	
 	function get_kode_1($table,$field,$pattern,$length){
 		$len_pattern=strlen($pattern);
 		$len_lpad=$length-$len_pattern;

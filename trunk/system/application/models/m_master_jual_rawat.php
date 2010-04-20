@@ -352,6 +352,126 @@ class M_master_jual_rawat extends Model{
 			}
 		}
 		
+		function membership_insert($jrawat_id){
+			$sql="SELECT setmember_transhari, setmember_periodeaktif, setmember_periodetenggang, setmember_transtenggang FROM member_setup LIMIT 1";
+			$rs=$this->db->query($sql);
+			if($rs->num_rows()){
+				$rs_record=$rs->row_array();
+				$min_trans_member_baru=$rs_record['setmember_transhari'];
+				$periode_tenggang=$rs_record['setmember_periodetenggang'];
+				$min_trans_tenggang=$rs_record['setmember_transtenggang'];
+				$periode_aktif=$rs_record['setmember_periodeaktif'];
+			}
+			
+			$date_now=date('Y-m-d');
+			$sql="SELECT jrawat_cust FROM master_jual_rawat WHERE jrawat_id='$jrawat_id'";
+			$rs=$this->db->query($sql);
+			if($rs->num_rows()){
+				$rs_record=$rs->row_array();
+				$cust_id = $rs_record['jrawat_cust'];
+				
+				$jproduk_total_trans=0;
+				$jpaket_total_trans=0;
+				$jrawat_total_trans=0;
+				$cust_total_trans_now=0;
+				
+				$trans_jproduk = "SELECT sum(jproduk_totalbiaya) AS jproduk_total_trans FROM master_jual_produk WHERE jproduk_cust='$cust_id' AND jproduk_tanggal='$date_now' GROUP BY jproduk_cust";
+				$rs_trans_jproduk=$this->db->query($trans_jproduk);
+				if($rs_trans_jproduk->num_rows()){
+					$rs_trans_jproduk_record=$rs_trans_jproduk->row_array();
+					$jproduk_total_trans=$rs_trans_jproduk_record['jproduk_total_trans'];
+				}
+				
+				$trans_jpaket = "SELECT sum(jpaket_totalbiaya) AS jpaket_total_trans FROM master_jual_paket WHERE jpaket_cust='$cust_id' AND jpaket_tanggal='$date_now' GROUP BY jpaket_cust";
+				$rs_trans_jpaket=$this->db->query($trans_jpaket);
+				if($rs_trans_jpaket->num_rows()){
+					$rs_trans_jpaket_record=$rs_trans_jpaket->row_array();
+					$jpaket_total_trans=$rs_trans_jpaket_record['jpaket_total_trans'];
+				}
+				
+				$trans_jrawat = "SELECT sum(jrawat_totalbiaya) AS jrawat_total_trans FROM master_jual_rawat WHERE jrawat_cust='$cust_id' AND jrawat_tanggal='$date_now' GROUP BY jrawat_cust";
+				$rs_trans_jrawat=$this->db->query($trans_jrawat);
+				if($rs_trans_jrawat->num_rows()){
+					$rs_trans_jrawat_record=$rs_trans_jrawat->row_array();
+					$jrawat_total_trans=$rs_trans_jrawat_record['jrawat_total_trans'];
+				}
+				
+				$cust_total_trans_now = $jproduk_total_trans + $jpaket_total_trans + $jrawat_total_trans;
+				
+				$sql="SELECT member_cust, member_valid, member_no FROM member WHERE member_cust='$cust_id'";
+				$rs=$this->db->query($sql);
+				if($rs->num_rows()){
+					//* artinya: customer sudah menjadi MEMBER.
+					//* untuk itu: check tanggal member_valid /
+					$rs_record=$rs->row_array();
+					$member_cust=$rs_record['member_cust'];
+					$member_valid=$rs_record['member_valid'];
+					$member_no=$rs_record['member_no'];
+					
+					$akhir_tenggang=date('Y-m-d', strtotime("$member_valid +$periode_tenggang days"));
+					
+					if(($member_valid < $date_now) && ($member_valid < $akhir_tenggang)){
+						//* kartu member masuk masa tenggang /
+						//* untuk itu: check total_transaksi si customer di hari ini /
+						
+						$set_member_valid = date('Y-m-d', strtotime("$date_now +$periode_aktif days"));
+						
+						if($cust_total_trans_now >= $min_trans_tenggang){
+							//* Perpanjangan kartu member /
+							$dti_member=array(
+							"member_cust"=>$cust_id,
+							"member_no"=>$member_no,
+							"member_register"=>$date_now,
+							"member_valid"=>$set_member_valid,
+							"member_jenis"=>'perpanjangan',
+							"member_status"=>'Daftar'
+							);
+							$this->db->insert('member', $dti_member);
+						}else{
+							//* message: kartu member customer ini sementara tidak bisa digunakan, karena sudah masuk masa tenggang /
+						}
+					}else{
+						//* check tanggal member_valid, apakah member_valid > $date_now ? /
+						//* JIKA 'YA': kartu member customer ini masih Aktif ==> NO ACTION/
+						//* JIKA 'TIDAK': kartu member sudah hangus ==> message: kartu member customer ini sudah tidak bisa digunakan lagi karena kartu sudah hangus.
+						if($member_valid > $date_now){
+							//* NO ACTION /
+						}else{
+							//* message: kartu member customer ini sudah tidak bisa digunakan lagi karena kartu sudah hangus.
+						}
+					}
+				}else{
+					//* artinya: customer belum pernah menjadi MEMBER. /
+					//* untuk itu: check total_transaksi si customer di hari ini dan bandingkan dengan db.member_setup.setmember_transhari /
+					if($cust_total_trans_now >= $min_trans_member_baru){
+						//* Pendaftaran MEMBER BARU /
+						$member_no='-';
+						$sql = "SELECT cust_no FROM customer WHERE cust_id='$cust_id'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							$rs_record=$rs->row_array();
+							$pattern=date("ymd").substr($rs_record['cust_no'],2);
+							$member_no=$this->m_public_function->get_nomor_member('member','member_no',$pattern,16);
+						}
+						$set_member_valid = date('Y-m-d', strtotime("$date_now +$periode_aktif days"));
+						
+						$dti_member=array(
+						"member_cust"=>$cust_id,
+						"member_no"=>$member_no,
+						"member_register"=>$date_now,
+						"member_valid"=>$set_member_valid,
+						"member_jenis"=>'baru',
+						"member_status"=>'Daftar'
+						);
+						$this->db->insert('member', $dti_member);
+					}else{
+						//* Syarat menjadi MEMBER belum terpenuhi /
+						//* NO ACTION /
+					}
+				}
+			}
+		}
+		
 		//purge all detail from master
 		function detail_detail_jual_rawat_purge($master_id){
 			$sql="DELETE from detail_jual_rawat where drawat_master='".$master_id."'";
@@ -1131,10 +1251,19 @@ class M_master_jual_rawat extends Model{
 				}else{
 					return '1';
 				}*/
-				return '1';
+				//return '1';
+				if($this->db->affected_rows()){
+					if($cetak_jrawat==1){
+						return $jrawat_id;
+					}else{
+						return '0';
+					}
+				}else{
+					return '-1';
+				}
 			}
 			else
-				return '0';
+				return '-1';
 		}
 		
 		//function for create new record
