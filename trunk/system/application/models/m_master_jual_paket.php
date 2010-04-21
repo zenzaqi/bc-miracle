@@ -811,29 +811,60 @@ class M_master_jual_paket extends Model{
 			}
 			$dpaket_sisa_paket=$dpaket_jumlah*($rpaket_jumlah_total+$ipaket_jumlah_total);
 			
-			$data = array(
-				"dpaket_master"=>$dpaket_master, 
-				"dpaket_paket"=>$dpaket_paket,
-				"dpaket_kadaluarsa"=>$dpaket_kadaluarsa, 
-				"dpaket_jumlah"=>$dpaket_jumlah, 
-				"dpaket_harga"=>$dpaket_harga, 
-				"dpaket_diskon"=>$dpaket_diskon,
-				"dpaket_diskon_jenis"=>$dpaket_diskon_jenis,
-				"dpaket_sales"=>$dpaket_sales,
+			$sql="SELECT dpaket_id, dpaket_jumlah, dpaket_sisa_paket FROM detail_jual_paket WHERE dpaket_master='$dpaket_master' AND dpaket_paket='$dpaket_paket'";
+			$rs=$this->db->query($sql);
+			if($rs->num_rows()){
+				//* UPDATE detail_jual_paket untuk menambahkan dpaket_jumlah, ini dikarenakan kasir memasukkan paket yg sama lebih dari satu dalam satu Faktur /
+				$record = $rs->row_array();
+				$dpaket_id = $record['dpaket_id'];
+				$dpaket_jumlah_awal = $record['dpaket_jumlah'];
+				$dpaket_sisa_paket_awal = $record['dpaket_sisa_paket'];
+				$dpaket_jumlah+=$dpaket_jumlah_awal;
+				$dpaket_sisa_paket+=$dpaket_sisa_paket_awal;
+				
+				$dtu_dpaket=array(
+				"dpaket_jumlah"=>$dpaket_jumlah,
 				"dpaket_sisa_paket"=>$dpaket_sisa_paket
-			);
-			$this->db->insert('detail_jual_paket', $data); 
-			if($this->db->affected_rows()){
-				if($cetak==1 && ($count==($dcount-1))){
-					$this->membership_insert($dpaket_master);
-					return $dpaket_master;
-				}else if($cetak!==1 && ($count==($dcount-1))){
-					return '0';
-				}else if($count!==($dcount-1)){
-					return '-3';
-				}
-			}else
-				return '-1';
+				);
+				$this->db->where('dpaket_id', $dpaket_id);
+				$this->db->update('detail_jual_paket', $dtu_dpaket);
+				if($this->db->affected_rows()){
+					if($cetak==1 && ($count==($dcount-1))){
+						$this->membership_insert($dpaket_master);
+						return $dpaket_master;
+					}else if($cetak!==1 && ($count==($dcount-1))){
+						return '0';
+					}else if($count!==($dcount-1)){
+						return '-3';
+					}
+				}else
+					return '-1';
+			}else{
+				
+				$data = array(
+					"dpaket_master"=>$dpaket_master, 
+					"dpaket_paket"=>$dpaket_paket,
+					"dpaket_kadaluarsa"=>$dpaket_kadaluarsa, 
+					"dpaket_jumlah"=>$dpaket_jumlah, 
+					"dpaket_harga"=>$dpaket_harga, 
+					"dpaket_diskon"=>$dpaket_diskon,
+					"dpaket_diskon_jenis"=>$dpaket_diskon_jenis,
+					"dpaket_sales"=>$dpaket_sales,
+					"dpaket_sisa_paket"=>$dpaket_sisa_paket
+				);
+				$this->db->insert('detail_jual_paket', $data); 
+				if($this->db->affected_rows()){
+					if($cetak==1 && ($count==($dcount-1))){
+						$this->membership_insert($dpaket_master);
+						return $dpaket_master;
+					}else if($cetak!==1 && ($count==($dcount-1))){
+						return '0';
+					}else if($count!==($dcount-1)){
+						return '-3';
+					}
+				}else
+					return '-1';
+			}
 
 		}
 		//end of function
