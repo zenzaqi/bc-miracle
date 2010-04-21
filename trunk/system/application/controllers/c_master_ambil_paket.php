@@ -108,7 +108,12 @@ class C_master_ambil_paket extends Controller {
 		$dapaket_jumlah=trim(@$_POST["dapaket_jumlah"]);
 		$dapaket_cust=trim(@$_POST["dapaket_cust"]);
 		$tgl_ambil=trim(@$_POST["tgl_ambil"]);
-		$result=$this->m_master_ambil_paket->detail_ambil_paket_isi_perawatan_insert($dapaket_dpaket, $dapaket_jpaket, $dapaket_paket, $dapaket_item, $dapaket_jumlah, $dapaket_cust, $tgl_ambil);
+		
+		$count=trim(@$_POST['count']);
+		$dcount=trim(@$_POST['dcount']);
+		
+		$result=$this->m_master_ambil_paket->detail_ambil_paket_isi_perawatan_insert($dapaket_dpaket, $dapaket_jpaket, $dapaket_paket, $dapaket_item, $dapaket_jumlah, $dapaket_cust, $tgl_ambil, $count, $dcount);
+		echo $result;
 	}
 	
 	

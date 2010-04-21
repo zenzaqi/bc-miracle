@@ -174,7 +174,7 @@ Ext.onReady(function(){
 					case 1:
 						//ambil_paket_isi_perawatan_purge()
 						ambil_paket_isi_perawatan_insert();
-						Ext.MessageBox.alert(post2db+' OK','The Paket was '+msg+' successfully.');
+						//Ext.MessageBox.alert(post2db+' OK','The Paket was '+msg+' successfully.');
 						
 						ambil_paket_DataStore.baseParams = { task: 'LIST' };
 						ambil_paket_DataStore.reload({params: {start: 0, limit: pageS}});
@@ -1194,7 +1194,9 @@ Ext.onReady(function(){
 	
 	//function for insert detail
 	function ambil_paket_isi_perawatan_insert(){
+		var count_detail=ambil_paket_isi_perawatan_DataStore.getCount();
 		for(i=0;i<ambil_paket_isi_perawatan_DataStore.getCount();i++){
+			var count_i = i;
 			ambil_paket_isi_perawatan_record=ambil_paket_isi_perawatan_DataStore.getAt(i);
 			Ext.Ajax.request({
 				waitMsg: 'Mohon tunggu...',
@@ -1208,9 +1210,43 @@ Ext.onReady(function(){
 				//dapaket_sapaket	: ambil_paket_isi_perawatan_record.data.rpaket_perawatan, 
 				dapaket_jumlah	: ambil_paket_isi_perawatan_record.data.rpaket_jumlah,
 				dapaket_cust	: ambil_paket_isi_perawatan_record.data.rpaket_cust,
-				tgl_ambil		: ambil_paket_isi_perawatan_record.data.tgl_ambil.format('Y-m-d')
+				tgl_ambil		: ambil_paket_isi_perawatan_record.data.tgl_ambil.format('Y-m-d'),
+				count	: count_i,
+				dcount	: count_detail
 				
-				}
+				},
+				success: function(response){							
+					var result=eval(response.responseText);
+					if(result==0){
+						Ext.MessageBox.show({
+						   title: 'Warning',
+						   msg: 'Isi paket tidak mencukupi untuk diambil.',
+						   buttons: Ext.MessageBox.OK,
+						   animEl: 'save',
+						   icon: Ext.MessageBox.WARNING
+						});
+					}else if(result=='-1'){
+						Ext.MessageBox.show({
+						   title: 'Warning',
+						   msg: 'Customer tidak memiliki paket.',
+						   buttons: Ext.MessageBox.OK,
+						   animEl: 'save',
+						   icon: Ext.MessageBox.WARNING
+						});
+					}else if(result=='1'){
+						Ext.MessageBox.alert('OK','Paket telah selesai diambil.');
+					}
+				},
+				failure: function(response){
+					var result=response.responseText;
+					Ext.MessageBox.show({
+					   title: 'Error',
+					   msg: 'Could not connect to the database. retry later.',
+					   buttons: Ext.MessageBox.OK,
+					   animEl: 'database',
+					   icon: Ext.MessageBox.ERROR
+					});	
+				}	
 			});
 		}
 	}
