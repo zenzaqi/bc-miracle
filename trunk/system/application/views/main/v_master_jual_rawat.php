@@ -632,7 +632,6 @@ Ext.onReady(function(){
 					detail_jual_rawat_DataStore.load({params: {master_id:0}});
 					master_jual_rawat_createWindow.hide();
 				}else if(result==-3){
-					console.log("cetak apaket");
 					apaket_cetak();
 					master_jual_rawat_DataStore.reload();
 					detail_jual_rawat_DataStore.load({params: {master_id:0}});
