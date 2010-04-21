@@ -4173,11 +4173,11 @@ Ext.onReady(function(){
 						var result=eval(response.responseText);
 						if(result==0){
 							detail_jual_produk_DataStore.load({params: {master_id:0}});
-							Ext.Ajax.request({
+							/*Ext.Ajax.request({
 								waitMsg: 'Mohon tunggu...',
 								url: 'index.php?c=c_master_jual_produk&m=catatan_piutang_update',
 								params:{dproduk_master	: eval(get_pk_id())}
-							});
+							});*/
 							Ext.MessageBox.alert(jproduk_post2db+' OK','Data penjualan produk berhasil disimpan');
 							jproduk_post2db="CREATE";
 						}else if(result==-1){
@@ -4193,6 +4193,11 @@ Ext.onReady(function(){
 							});
 						}else if(result>0){
 							detail_jual_produk_DataStore.load({params: {master_id:0}});
+							Ext.Ajax.request({
+								waitMsg: 'Mohon tunggu...',
+								url: 'index.php?c=c_master_jual_produk&m=catatan_piutang_update',
+								params:{dproduk_master	: eval(get_pk_id())}
+							});
 							jproduk_cetak(result);
 							cetak_jproduk=0;
 							jproduk_post2db="CREATE";
