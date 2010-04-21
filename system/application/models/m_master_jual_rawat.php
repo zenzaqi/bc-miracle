@@ -1264,7 +1264,7 @@ class M_master_jual_rawat extends Model{
 			}
 			else
 				return '-1';
-			}elseif(substr($jrawat_nobukti,0,2)=='PK'){
+			}elseif((substr($jrawat_nobukti,0,2)=='PK') && $cetak_jrawat==1){
 				return '-3';
 			}
 		}
