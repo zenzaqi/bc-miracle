@@ -636,6 +636,8 @@ Ext.onReady(function(){
 					master_jual_rawat_DataStore.reload();
 					detail_jual_rawat_DataStore.load({params: {master_id:0}});
 					master_jual_rawat_createWindow.hide();
+				}else{
+					master_jual_rawat_createWindow.hide();
 				}
 				/*switch(result){
 					case 1:
@@ -987,6 +989,8 @@ Ext.onReady(function(){
 		update_group_carabayar2_jual_rawat();
 		update_group_carabayar3_jual_rawat();
 		
+		if(master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_nobukti').substring(0,2)=='PR'){
+		
 		switch(jrawat_caraField.getValue()){
 			case 'kwitansi':
 				kwitansi_jual_rawat_DataStore.load({
@@ -1281,6 +1285,7 @@ Ext.onReady(function(){
 					 	}
 				  });
 				break;
+		}
 		}
 		
 		//detail_jual_rawat_DataStore.load({params:{master_id: jrawat_idField.getValue()}});
