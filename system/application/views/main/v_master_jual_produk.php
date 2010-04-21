@@ -868,6 +868,8 @@ Ext.onReady(function(){
 		jproduk_nobuktiField.setValue(null);
 		jproduk_custField.reset();
 		jproduk_custField.setValue(null);
+		jproduk_cust_nomemberField.reset();
+		jproduk_cust_nomemberField.setValue(null);
 		jproduk_tanggalField.setValue(dt.format('Y-m-d'));
 		jproduk_diskonField.reset();
 		jproduk_diskonField.setValue(null);

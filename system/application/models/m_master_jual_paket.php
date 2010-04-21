@@ -809,7 +809,7 @@ class M_master_jual_paket extends Model{
 				$rs_ipaket_record=$rs_ipaket->row_array();
 				$ipaket_jumlah_total=$rs_ipaket_record["ipaket_jumlah_total"];
 			}
-			$dpaket_sisa_paket=$rpaket_jumlah_total+$ipaket_jumlah_total;
+			$dpaket_sisa_paket=$dpaket_jumlah*($rpaket_jumlah_total+$ipaket_jumlah_total);
 			
 			$data = array(
 				"dpaket_master"=>$dpaket_master, 

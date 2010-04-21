@@ -20,7 +20,7 @@ class M_tindakan_medis extends Model{
 	
 	function customer_check_paket($cust_id, $rawat_id){
 		//* Mencari kepemilikan paket berdasarkan customer_id /
-		$sql_punya_paket="SELECT rpaket_jumlah, dpaket_id, dpaket_master, dpaket_paket FROM paket_isi_perawatan LEFT JOIN detail_jual_paket ON(rpaket_master=dpaket_paket) LEFT JOIN master_jual_paket ON(dpaket_master=jpaket_id) LEFT JOIN pengguna_paket ON(ppaket_master=jpaket_id) WHERE ppaket_cust='$cust_id' AND rpaket_perawatan='$rawat_id'";
+		$sql_punya_paket="SELECT (dpaket_jumlah*rpaket_jumlah) AS rpaket_jumlah, dpaket_id, dpaket_master, dpaket_paket FROM paket_isi_perawatan LEFT JOIN detail_jual_paket ON(rpaket_master=dpaket_paket) LEFT JOIN master_jual_paket ON(dpaket_master=jpaket_id) LEFT JOIN pengguna_paket ON(ppaket_master=jpaket_id) WHERE ppaket_cust='$cust_id' AND rpaket_perawatan='$rawat_id'";
 		$rs_punya_paket=$this->db->query($sql_punya_paket);
 		if($rs_punya_paket->num_rows()){
 			$punya_paket_rows = $rs_punya_paket->num_rows();
@@ -441,7 +441,7 @@ class M_tindakan_medis extends Model{
 		$this->db->query($sql_sisa_paket);*/
 		
 		//$sql_sisa_paket="UPDATE detail_jual_paket SET dpaket_sisa_paket= (SELECT (paket_jmlisi-sum(dapaket_jumlah)) FROM detail_ambil_paket LEFT JOIN paket ON(dapaket_paket=paket_id) WHERE dapaket_dpaket='$dapaket_dpaket' AND dapaket_jpaket='$dapaket_jpaket' AND dapaket_paket='$dapaket_paket' GROUP BY dapaket_paket)";
-		$sql_sisa_paket="UPDATE detail_jual_paket SET dpaket_sisa_paket=(SELECT (paket_jmlisi-(sum(dapaket_jumlah))) FROM detail_ambil_paket LEFT JOIN paket ON(dapaket_paket=paket_id) WHERE paket_id='$dapaket_paket' AND dapaket_dpaket='$dapaket_dpaket' AND dapaket_jpaket='$dapaket_jpaket' GROUP BY dapaket_dpaket, dapaket_jpaket, dapaket_paket) WHERE detail_jual_paket.dpaket_master='$dapaket_jpaket' AND detail_jual_paket.dpaket_paket='$dapaket_paket'";
+		$sql_sisa_paket="UPDATE detail_jual_paket SET dpaket_sisa_paket=(SELECT ((dpaket_jumlah*paket_jmlisi)-(sum(dapaket_jumlah))) FROM detail_ambil_paket LEFT JOIN paket ON(dapaket_paket=paket_id) WHERE paket_id='$dapaket_paket' AND dapaket_dpaket='$dapaket_dpaket' AND dapaket_jpaket='$dapaket_jpaket' GROUP BY dapaket_dpaket, dapaket_jpaket, dapaket_paket) WHERE detail_jual_paket.dpaket_master='$dapaket_jpaket' AND detail_jual_paket.dpaket_paket='$dapaket_paket'";
 		$this->db->query($sql_sisa_paket);
 		
 		
