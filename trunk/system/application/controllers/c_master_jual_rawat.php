@@ -699,10 +699,16 @@ class C_master_jual_rawat extends Controller {
 	function print_paper(){
   		//POST varibale here
 		$jrawat_id=trim(@$_POST["jrawat_id"]);
+		$jrawat_cust=trim(@$_POST["jrawat_cust"]);
+		$jrawat_tanggal=trim(@$_POST["jrawat_tanggal"]);
 		
 		$result = $this->m_master_jual_rawat->print_paper($jrawat_id);
 		$rs=$result->row();
 		$detail_jrawat=$result->result();
+		
+		$result_apaket = $this->m_master_jual_rawat->print_paper_apaket_bycust($jrawat_cust, $jrawat_tanggal);
+		$detail_apaket=$result_apaket->result();
+		
 		$data['jrawat_nobukti']=$rs->jrawat_nobukti;
 		$data['jrawat_tanggal']=$rs->jrawat_tanggal;
 		$data['cust_no']=$rs->cust_no;
@@ -715,12 +721,36 @@ class C_master_jual_rawat extends Controller {
 		//$data['jrawat_creator']=$rs->jrawat_creator;
 		//$data['jrawat_totalbiaya']=$rs->jrawat_totalbiaya;
 		$data['detail_jrawat']=$detail_jrawat;
+		$data['detail_apaket']=$detail_apaket;
 		
 		$viewdata=$this->load->view("main/jrawat_formcetak",$data,TRUE);
 		$file = fopen("jrawat_paper.html",'w');
 		fwrite($file, $viewdata);	
 		fclose($file);
 		echo '1';        
+	}
+	
+	function print_paper_apaket(){
+		$dapaket_jpaket=trim(@$_POST["jrawat_id"]);
+		$dapaket_cust=trim(@$_POST["jrawat_cust"]);
+		$dapaket_date_create=trim(@$_POST["jrawat_tanggal"]);
+		
+		$result = $this->m_master_jual_rawat->print_paper_apaket($dapaket_jpaket, $dapaket_cust, $dapaket_date_create);
+		$rs=$result->row();
+		$detail_ambil_paket=$result->result();
+		
+		$data['dapaket_tanggal']=$rs->dapaket_date_create;
+		$data['cust_no']=$rs->cust_no;
+		$data['cust_nama']=$rs->cust_nama;
+		$data['cust_alamat']=$rs->cust_alamat;
+		$data['jpaket_nobukti']=$rs->jpaket_nobukti;
+		$data['detail_ambil_paket']=$detail_ambil_paket;
+		
+		$viewdata=$this->load->view("main/apaket_formcetak",$data,TRUE);
+		$file = fopen("apaket_paper.html",'w');
+		fwrite($file, $viewdata);	
+		fclose($file);
+		echo '1'; 
 	}
 	
 	// Encodes a SQL array into a JSON formated string
