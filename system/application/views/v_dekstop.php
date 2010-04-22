@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <!--	<title>Sistem Informasi Klinik - Miracle Aesthetic Clinic >> Experience the miracle touch !</title>-->
-	<title>New Miracle Aesthetic Clinic Information System</title>
+	<title>Miracle Information System</title>
 	<?=css_asset('ext-all.css');?>
     <?=css_asset('docs.css','main');?>
     <? //=css_asset('forms.css');?>
