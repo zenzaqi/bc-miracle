@@ -655,7 +655,7 @@ class M_master_jual_produk extends Model{
 			);
 			$this->db->insert('detail_jual_produk', $data); 
 			if($this->db->affected_rows()){
-				if($cetak==1){
+				/*if($cetak==1){
 					$produk_point=1;
 					$rp_perpoint = $this->get_rupiah_per_point();
 					$jumlah_point = $dproduk_jumlah * $produk_point * (floor($dproduk_harga/$rp_perpoint));
@@ -673,6 +673,10 @@ class M_master_jual_produk extends Model{
 							}
 						}
 					}
+				}*/
+				if($cetak==1 && ($count==($dcount-1))){
+					$this->membership_insert($dproduk_master);
+					return $dproduk_master;
 				}else if($cetak!==1 && ($count==($dcount-1))){
 					return '0';
 				}else if($count!==($dcount-1)){
