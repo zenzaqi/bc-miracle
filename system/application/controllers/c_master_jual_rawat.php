@@ -710,7 +710,7 @@ class C_master_jual_rawat extends Controller {
 		$detail_apaket=$result_apaket->result();
 		
 		$data['jrawat_nobukti']=$rs->jrawat_nobukti;
-		$data['jrawat_tanggal']=$rs->jrawat_tanggal;
+		$data['jrawat_tanggal']=date('d-m-Y', strtotime($rs->jrawat_tanggal));
 		$data['cust_no']=$rs->cust_no;
 		$data['cust_nama']=$rs->cust_nama;
 		$data['cust_alamat']=$rs->cust_alamat;
