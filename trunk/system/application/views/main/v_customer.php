@@ -2275,6 +2275,7 @@ Ext.onReady(function(){
 			text: 'Export Excel',
 			tooltip: 'Export to Excel(.xls) Document',
 			iconCls:'icon-xls',
+			disabled: true,
 			handler: customer_export_excel
 		}, '-',{
 			text: 'Print',
@@ -2378,6 +2379,7 @@ Ext.onReady(function(){
 			text: 'Export Excel', 
 			tooltip: 'Export to Excel(.xls) Document',
 			iconCls:'icon-xls',
+			disabled: true,
 			handler: customer_export_excel 
 		}
 		]
