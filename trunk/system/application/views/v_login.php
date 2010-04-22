@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>Selamat Datang | New Miracle Aesthetic Clinic Information System</title>
+<title>Selamat Datang | Miracle Information System</title>
 <link rel="shortcut icon" href="<?=base_url();?>favicon.ico" />
 <?=css_asset('ext-all.css');?>
 <?=css_asset('xtheme-slate.css');?>
