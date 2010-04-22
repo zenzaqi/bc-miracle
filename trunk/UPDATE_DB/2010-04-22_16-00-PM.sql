@@ -1,0 +1,1 @@
+ALTER TABLE `customer` ADD `cust_point` SMALLINT NOT NULL DEFAULT '0' AFTER `cust_cptelp` ;
