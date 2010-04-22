@@ -253,13 +253,13 @@ Ext.onReady(function(){
 	function gudang_confirm_delete(){
 		// only one gudang is selected here
 		if(gudangListEditorGrid.selModel.getCount() == 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', gudang_delete);
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', gudang_delete);
 		} else if(gudangListEditorGrid.selModel.getCount() > 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', gudang_delete);
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', gudang_delete);
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really delete something you haven\'t selected?',
+				msg: 'Anda belum memilih data yang akan dihapus',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -298,7 +298,7 @@ Ext.onReady(function(){
 			}
 			var encoded_array = Ext.encode(prez);
 			Ext.Ajax.request({ 
-				waitMsg: 'Please Wait',
+				waitMsg: 'Mohon tunggu...',
 				url: 'index.php?c=c_gudang&m=get_action', 
 				params: { task: "DELETE", ids:  encoded_array }, 
 				success: function(response){
@@ -376,36 +376,36 @@ Ext.onReady(function(){
 			hidden: false
 		},*/
 		{
-			header: 'Nama',
+			header: '<div align="center">' + 'Nama Gudang' + '</div>',
 			dataIndex: 'gudang_nama',
-			width: 150,
+			width: 120,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 250
           	})
 		},
 		{
-			header: 'Lokasi',
+			header: '<div align="center">' + 'Lokasi' + '</div>',
 			dataIndex: 'gudang_lokasi',
-			width: 150,
+			width: 100,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 250
           	})
 		},
 		{
-			header: 'Keterangan',
+			header: '<div align="center">' + 'Keterangan' + '</div>',
 			dataIndex: 'gudang_keterangan',
-			width: 150,
+			width: 200,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 250
           	})
 		},
 		{
-			header: 'Status',
+			header: '<div align="center">' + 'Status' + '</div>',
 			dataIndex: 'gudang_aktif',
-			width: 150,
+			width: 80,
 			sortable: true,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
@@ -466,7 +466,7 @@ Ext.onReady(function(){
 	gudangListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'gudangListEditorGrid',
 		el: 'fp_gudang',
-		title: 'List Of Gudang',
+		title: 'Daftar Gudang',
 		autoHeight: true,
 		store: gudang_DataStore, // DataStore
 		cm: gudang_ColumnModel, // Nama-nama Columns
@@ -475,7 +475,7 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 700,
+	  	width: 800,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: gudang_DataStore,
@@ -516,7 +516,7 @@ Ext.onReady(function(){
 				},
 				render: function(c){
 				Ext.get(this.id).set({qtitle:'Search By'});
-				Ext.get(this.id).set({qtip:'- Nama<br>- Lokasi<br>- Keterangan'});
+				Ext.get(this.id).set({qtip:'- Nama Gudang<br>- Lokasi<br>- Keterangan'});
 				}
 			},
 			width: 120
@@ -554,6 +554,7 @@ Ext.onReady(function(){
 			text: 'Delete', 
 			tooltip: 'Delete selected record', 
 			iconCls:'icon-delete',
+			disabled: true,
 			handler: gudang_confirm_delete 
 		},
 		'-',
@@ -597,7 +598,7 @@ Ext.onReady(function(){
 	/* Identify  gudang_nama Field */
 	gudang_namaField= new Ext.form.TextField({
 		id: 'gudang_namaField',
-		fieldLabel: 'Nama <span style="color: #ec0000">*</span>',
+		fieldLabel: 'Nama Gudang <span style="color: #ec0000">*</span>',
 		maxLength: 250,
 		allowBlank: false,
 		anchor: '95%'
@@ -822,7 +823,7 @@ Ext.onReady(function(){
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
 	gudang_searchWindow = new Ext.Window({
-		title: 'gudang Search',
+		title: 'Pencarian Gudang',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,
