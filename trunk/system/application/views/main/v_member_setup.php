@@ -87,6 +87,7 @@ Ext.onReady(function(){
 			var setmember_periodetenggang_field=null; 
 			var setmember_transtenggang_field=null;
 			var	setmember_pointtenggang_field=null;
+			var	setmember_rp_perpoint_field=null;
 
 			if(setmember_transhariField.getValue()!== null){setmember_transhari_field = setmember_transhariField.getValue();}
 			if(setmember_pointhariField.getValue()!== null){setmember_pointhari_field = setmember_pointhariField.getValue();} 
@@ -94,6 +95,7 @@ Ext.onReady(function(){
 			if(setmember_periodetenggangField.getValue()!== null){setmember_periodetenggang_field = setmember_periodetenggangField.getValue();} 
 			if(setmember_transtenggangField.getValue()!== null){setmember_transtenggang_field = setmember_transtenggangField.getValue();}
 			if(setmember_pointtenggangField.getValue()!== null){setmember_pointtenggang_field = setmember_pointtenggangField.getValue();} 
+			if(setmember_rp_perpointField.getValue()!== null){setmember_rp_perpoint_field = setmember_rp_perpointField.getValue();}
 						
 			Ext.Ajax.request({  
 				waitMsg: 'Please wait...',
@@ -106,6 +108,7 @@ Ext.onReady(function(){
 					setmember_periodetenggang	: setmember_periodetenggang_field,
 					setmember_transtenggang		: setmember_transtenggang_field,
 					setmember_pointtenggang		: setmember_pointtenggang_field,
+					setmember_rp_perpoint		: setmember_rp_perpoint_field,
 					task						: post2db
 				}, 
 				success: function(response){             
@@ -289,6 +292,27 @@ Ext.onReady(function(){
 	});
 	
 	
+	setmember_rp_perpointField= new Ext.form.NumberField({
+		id: 'setmember_rp_perpointField',
+		name: 'setmember_rp_perpoint',
+		fieldLabel: 'Jumlah Rupiah',
+		allowNegatife : false,
+		blankText: '0',
+		allowDecimals: true,
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
+	});
+	
+	setmember_rupiah_perpointField=new Ext.form.FieldSet({
+		id:'setmember_rupiah_perpointField',
+		name: 'setmember_rupiah_perpointField',
+		title: 'Set Rupiah per 1-Point',
+		layout: 'form',
+		bodyStyle: 'padding: 5px;',
+		items:[setmember_rp_perpointField]
+	});
+	
+	
 	/* Function for retrieve create Window Panel*/ 
 	member_setup_saveForm = new Ext.FormPanel({
 		url: 'index.php?c=c_member_setup&m=get_action',
@@ -308,6 +332,7 @@ Ext.onReady(function(){
 			{name: 'setmember_periodetenggang', type: 'int', mapping: 'setmember_periodetenggang'}, 
 			{name: 'setmember_transtenggang', type: 'float', mapping: 'setmember_transtenggang'},
 			{name: 'setmember_pointtenggang', type: 'int', mapping: 'setmember_pointtenggang'},
+			{name: 'setmember_rp_perpoint', type: 'float', mapping: 'setmember_rp_perpoint'},
 			{name: 'setmember_author', type: 'string', mapping: 'setmember_author'}, 
 			{name: 'setmember_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'setmember_date_create'}, 
 			{name: 'setmember_update', type: 'string', mapping: 'setmember_update'}, 
@@ -324,7 +349,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [setmember_registerField,setmember_reloadField,setmember_periodeField] 
+				items: [setmember_registerField,setmember_reloadField,setmember_periodeField,setmember_rupiah_perpointField] 
 			}
 			],
 		buttons: [{

@@ -386,7 +386,7 @@ class M_master_jual_produk extends Model{
 		function detail_detail_jual_produk_list($master_id,$query,$start,$end) {
 			//$query="SELECT *,konversi_nilai FROM detail_jual_produk LEFT JOIN satuan_konversi ON(dproduk_produk=konversi_produk AND dproduk_satuan=konversi_satuan) WHERE dproduk_master='".$master_id."'";
 			
-			$query = "SELECT detail_jual_produk.*,master_jual_produk.jproduk_bayar,master_jual_produk.jproduk_diskon,detail_jual_produk.konversi_nilai_temp*dproduk_harga*dproduk_jumlah as dproduk_subtotal,detail_jual_produk.konversi_nilai_temp*dproduk_harga*dproduk_jumlah*((100-dproduk_diskon)/100) as dproduk_subtotal_net FROM detail_jual_produk LEFT JOIN satuan_konversi ON(dproduk_produk=konversi_produk AND dproduk_satuan=konversi_satuan) LEFT JOIN master_jual_produk ON(dproduk_master=jproduk_id) WHERE dproduk_master='".$master_id."'";
+			$query = "SELECT detail_jual_produk.*,master_jual_produk.jproduk_bayar,master_jual_produk.jproduk_diskon,detail_jual_produk.konversi_nilai_temp*dproduk_harga*dproduk_jumlah as dproduk_subtotal,detail_jual_produk.konversi_nilai_temp*dproduk_harga*dproduk_jumlah*((100-dproduk_diskon)/100) as dproduk_subtotal_net, produk_point FROM detail_jual_produk LEFT JOIN satuan_konversi ON(dproduk_produk=konversi_produk AND dproduk_satuan=konversi_satuan) LEFT JOIN master_jual_produk ON(dproduk_master=jproduk_id) LEFT JOIN produk ON(dproduk_produk=produk_id) WHERE dproduk_master='".$master_id."'";
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
 			$limit = $query." LIMIT ".$start.",".$end;			
@@ -435,6 +435,18 @@ class M_master_jual_produk extends Model{
 			}
 		}
 		//eof
+		
+		function get_rupiah_per_point(){
+			$query = "SELECT setmember_rp_perpoint FROM member_setup LIMIT 1";
+			$result = $this->db->query($query);
+			if($result->num_rows()){
+				$data=$result->row();
+				$setmember_rp_perpoint=$data->setmember_rp_perpoint;
+				return $setmember_rp_perpoint;
+			}else{
+				return 0;
+			}
+		}
 		
 		function catatan_piutang_update($jproduk_id){
 			if($jproduk_id=="" || $jproduk_id==NULL || $jproduk_id==0){
@@ -547,15 +559,15 @@ class M_master_jual_produk extends Model{
 						
 						if($cust_total_trans_now >= $min_trans_tenggang){
 							//* Perpanjangan kartu member /
-							$dti_member=array(
-							"member_cust"=>$cust_id,
-							"member_no"=>$member_no,
-							"member_register"=>$date_now,
-							"member_valid"=>$set_member_valid,
-							"member_jenis"=>'perpanjangan',
-							"member_status"=>'Daftar'
+							$dti_membert=array(
+							"membert_cust"=>$cust_id,
+							"membert_no"=>$member_no,
+							"membert_register"=>$date_now,
+							"membert_valid"=>$set_member_valid,
+							"membert_jenis"=>'perpanjangan',
+							"membert_status"=>'Daftar'
 							);
-							$this->db->insert('member', $dti_member);
+							$this->db->insert('member_temp', $dti_membert);
 						}else{
 							//* message: kartu member customer ini sementara tidak bisa digunakan, karena sudah masuk masa tenggang /
 						}
@@ -584,15 +596,15 @@ class M_master_jual_produk extends Model{
 						}
 						$set_member_valid = date('Y-m-d', strtotime("$date_now +$periode_aktif days"));
 						
-						$dti_member=array(
-						"member_cust"=>$cust_id,
-						"member_no"=>$member_no,
-						"member_register"=>$date_now,
-						"member_valid"=>$set_member_valid,
-						"member_jenis"=>'baru',
-						"member_status"=>'Daftar'
+						$dti_membert=array(
+						"membert_cust"=>$cust_id,
+						"membert_no"=>$member_no,
+						"membert_register"=>$date_now,
+						"membert_valid"=>$set_member_valid,
+						"membert_jenis"=>'baru',
+						"membert_status"=>'Daftar'
 						);
-						$this->db->insert('member', $dti_member);
+						$this->db->insert('member_temp', $dti_membert);
 					}else{
 						//* Syarat menjadi MEMBER belum terpenuhi /
 						//* NO ACTION /
@@ -609,11 +621,17 @@ class M_master_jual_produk extends Model{
 		//*eof
 		
 		//insert detail record
-		function detail_detail_jual_produk_insert($dproduk_id ,$dproduk_master ,$dproduk_karyawan, $dproduk_produk ,$dproduk_satuan ,$dproduk_jumlah ,$dproduk_harga ,$dproduk_subtotal_net ,$dproduk_diskon,$dproduk_diskon_jenis,$dproduk_sales,$konversi_nilai_temp, $cetak, $count, $dcount){
+		function detail_detail_jual_produk_insert($dproduk_id ,$dproduk_master ,$dproduk_karyawan, $dproduk_produk ,$dproduk_satuan ,$dproduk_jumlah ,$dproduk_harga ,$dproduk_subtotal_net ,$dproduk_diskon,$dproduk_diskon_jenis,$dproduk_sales,$konversi_nilai_temp, $cetak, $count, $dcount, $produk_point){
+			$date_now=date('Y-m-d');
 			//if master id not capture from view then capture it from max pk from master table
 			if($dproduk_master=="" || $dproduk_master==NULL || $dproduk_master==0){
 				$dproduk_master=$this->get_master_id();
 			}
+			
+			$sql="SELECT jproduk_cust FROM master_jual_produk WHERE jproduk_id='$dproduk_master'";
+			$rs=$this->db->query($sql);
+			$record=$rs->row_array();
+			$jproduk_cust=$record['jproduk_cust'];
 			
 			/*$sql="select produk_satuan from produk where produk_id='".$dproduk_produk."'";
 			$query=$this->db->query($sql);
@@ -637,6 +655,20 @@ class M_master_jual_produk extends Model{
 			);
 			$this->db->insert('detail_jual_produk', $data); 
 			if($this->db->affected_rows()){
+				if($cetak==1){
+					$produk_point=1;
+					$rp_perpoint = $this->get_rupiah_per_point();
+					$jumlah_point = $dproduk_jumlah * $produk_point * (floor($dproduk_harga/$rp_perpoint));
+					$sql="SELECT member_id FROM member WHERE member_cust='$jproduk_cust' AND (member_valid >= '$date_now')";
+					$rs=$this->db->query($sql);
+					if($rs->num_rows()){
+						$record=$rs->row_array();
+						$member_id=$record['member_id'];
+						$sql="UPDATE member SET member_point = (member_point+$jumlah_point) WHERE member_id='$member_id'";
+						$this->db->query($sql);
+					}
+				}
+				
 				if($cetak==1 && ($count==($dcount-1))){
 					$this->membership_insert($dproduk_master);
 					return $dproduk_master;

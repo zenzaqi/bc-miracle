@@ -418,15 +418,15 @@ class M_master_jual_rawat extends Model{
 						
 						if($cust_total_trans_now >= $min_trans_tenggang){
 							//* Perpanjangan kartu member /
-							$dti_member=array(
-							"member_cust"=>$cust_id,
-							"member_no"=>$member_no,
-							"member_register"=>$date_now,
-							"member_valid"=>$set_member_valid,
-							"member_jenis"=>'perpanjangan',
-							"member_status"=>'Daftar'
+							$dti_membert=array(
+							"membert_cust"=>$cust_id,
+							"membert_no"=>$member_no,
+							"membert_register"=>$date_now,
+							"membert_valid"=>$set_member_valid,
+							"membert_jenis"=>'perpanjangan',
+							"membert_status"=>'Daftar'
 							);
-							$this->db->insert('member', $dti_member);
+							$this->db->insert('member_temp', $dti_membert);
 						}else{
 							//* message: kartu member customer ini sementara tidak bisa digunakan, karena sudah masuk masa tenggang /
 						}
@@ -455,15 +455,15 @@ class M_master_jual_rawat extends Model{
 						}
 						$set_member_valid = date('Y-m-d', strtotime("$date_now +$periode_aktif days"));
 						
-						$dti_member=array(
-						"member_cust"=>$cust_id,
-						"member_no"=>$member_no,
-						"member_register"=>$date_now,
-						"member_valid"=>$set_member_valid,
-						"member_jenis"=>'baru',
-						"member_status"=>'Daftar'
+						$dti_membert=array(
+						"membert_cust"=>$cust_id,
+						"membert_no"=>$member_no,
+						"membert_register"=>$date_now,
+						"membert_valid"=>$set_member_valid,
+						"membert_jenis"=>'baru',
+						"membert_status"=>'Daftar'
 						);
-						$this->db->insert('member', $dti_member);
+						$this->db->insert('member_temp', $dti_membert);
 					}else{
 						//* Syarat menjadi MEMBER belum terpenuhi /
 						//* NO ACTION /
