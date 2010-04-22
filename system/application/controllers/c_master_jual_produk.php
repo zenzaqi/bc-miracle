@@ -269,7 +269,9 @@ class C_master_jual_produk extends Controller {
 		$count=trim(@$_POST['count']);
 		$dcount=trim(@$_POST['dcount']);
 		
-		$result=$this->m_master_jual_produk->detail_detail_jual_produk_insert($dproduk_id ,$dproduk_master ,$dproduk_karyawan, $dproduk_produk ,$dproduk_satuan ,$dproduk_jumlah ,$dproduk_harga ,$dproduk_subtotal_net ,$dproduk_diskon,$dproduk_diskon_jenis,$dproduk_sales,$konversi_nilai_temp, $cetak, $count, $dcount);
+		$produk_point=trim(@$_POST['produk_point']);
+		
+		$result=$this->m_master_jual_produk->detail_detail_jual_produk_insert($dproduk_id ,$dproduk_master ,$dproduk_karyawan, $dproduk_produk ,$dproduk_satuan ,$dproduk_jumlah ,$dproduk_harga ,$dproduk_subtotal_net ,$dproduk_diskon,$dproduk_diskon_jenis,$dproduk_sales,$konversi_nilai_temp, $cetak, $count, $dcount, $produk_point);
 		echo $result;
 	}
 	

@@ -3612,7 +3612,8 @@ Ext.onReady(function(){
 			{name: 'konversi_nilai_temp', type: 'float', mapping: 'konversi_nilai_temp'},
 			{name: 'jproduk_bayar', type: 'float', mapping: 'jproduk_bayar'},
 			{name: 'jproduk_diskon', type: 'int', mapping: 'jproduk_diskon'},
-			{name: 'jproduk_cashback', type: 'float', mapping: 'jproduk_cashback'}
+			{name: 'jproduk_cashback', type: 'float', mapping: 'jproduk_cashback'},
+			{name: 'produk_point', type: 'int', mapping: 'produk_point'}
 	]);
 	//eof
 	
@@ -4168,7 +4169,8 @@ Ext.onReady(function(){
 						dproduk_sales			: detail_jual_produk_record.data.dproduk_sales,
 						konversi_nilai_temp	: detail_jual_produk_record.data.konversi_nilai_temp,
 						count	: count_i,
-						dcount	: count_detail
+						dcount	: count_detail,
+						produk_point	: detail_jual_produk_record.data.produk_point
 					},
 					timeout: 60000,
 					success: function(response){
