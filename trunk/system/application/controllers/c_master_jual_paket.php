@@ -716,7 +716,7 @@ class C_master_jual_paket extends Controller {
 		$rsiklan=$iklan->row();
 		$detail_jpaket=$result->result();
 		$data['jpaket_nobukti']=$rs->jpaket_nobukti;
-		$data['jpaket_tanggal']=$rs->jpaket_tanggal;
+		$data['jpaket_tanggal']=date('d-m-Y', strtotime($rs->jpaket_tanggal));
 		$data['cust_no']=$rs->cust_no;
 		$data['cust_nama']=$rs->cust_nama;
 		$data['iklantoday_keterangan']=$rsiklan->iklantoday_keterangan;

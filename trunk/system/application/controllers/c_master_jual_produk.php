@@ -699,7 +699,7 @@ class C_master_jual_produk extends Controller {
 		$rsiklan=$iklan->row();
 		$detail_jproduk=$result->result();
 		$data['jproduk_nobukti']=$rs->jproduk_nobukti;
-		$data['jproduk_tanggal']=$rs->jproduk_tanggal;
+		$data['jproduk_tanggal']=date('d-m-Y', strtotime($rs->jproduk_tanggal));
 		$data['cust_no']=$rs->cust_no;
 		$data['cust_nama']=$rs->cust_nama;
 		$data['iklantoday_keterangan']=$rsiklan->iklantoday_keterangan;
