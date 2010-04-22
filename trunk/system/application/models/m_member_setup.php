@@ -47,7 +47,6 @@ class M_member_setup extends Model{
 		
 		//function for create new record
 		function member_setup_create($setmember_transhari, $setmember_pointhari ,$setmember_transbulan, $setmember_pointbulan ,$setmember_periodeaktif ,$setmember_periodetenggang ,$setmember_transtenggang, $setmember_pointtenggang ,$setmember_author ,$setmember_date_create ){
-			$this->firephp->log('create');
 			$data = array(
 				"setmember_transhari"=>$setmember_transhari, 
 				"setmember_transbulan"=>$setmember_transbulan, 
