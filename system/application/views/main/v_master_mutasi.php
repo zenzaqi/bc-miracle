@@ -993,7 +993,7 @@ Ext.onReady(function(){
 				}
 			});
 		}
-		master_mutasi_DataStore.reload();	
+		master_mutasi_DataStore.load();
 	}
 	//eof
 	
@@ -1007,7 +1007,7 @@ Ext.onReady(function(){
 				detail_mutasi_insert(pkid);
 			}
 		});
-		master_mutasi_DataStore.reload();
+		master_mutasi_DataStore.load();
 	}
 	//eof
 	
