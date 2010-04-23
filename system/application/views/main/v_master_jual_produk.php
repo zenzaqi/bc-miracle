@@ -5407,7 +5407,8 @@ Ext.onReady(function(){
 		mode: 'local',
 		displayField: 'jproduk_cara',
 		valueField: 'value',
-		anchor: '60%', //'95%',
+		//anchor: '60%', //'95%',
+		width: 96,
 		triggerAction: 'all'	 
 	});
 	/* Identify  jproduk_keterangan Search Field */
@@ -5428,9 +5429,9 @@ Ext.onReady(function(){
 		mode: 'local',
 		displayField: 'jproduk_stat_dok',
 		valueField: 'value',
-		anchor: '60%', //'95%',
-		triggerAction: 'all'	 
-	
+		//anchor: '60%', //'95%',
+		width: 96,
+		triggerAction: 'all'	 	
 	});
 
 	

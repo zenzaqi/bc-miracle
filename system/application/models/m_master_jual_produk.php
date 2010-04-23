@@ -1779,11 +1779,11 @@ class M_master_jual_produk extends Model{
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " jproduk_tanggal <= '".$jproduk_tanggal_akhir."'";
 			};
-			if($jproduk_diskon!=''){
+/*			if($jproduk_diskon!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " jproduk_diskon LIKE '%".$jproduk_diskon."%'";
 			};
-			if($jproduk_cara!=''){
+*/			if($jproduk_cara!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " jproduk_cara LIKE '%".$jproduk_cara."%'";
 			};

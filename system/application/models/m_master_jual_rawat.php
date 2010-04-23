@@ -1651,11 +1651,11 @@ class M_master_jual_rawat extends Model{
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " jrawat_tanggal='".$jrawat_tgl_start."'";
 			}
-			if($jrawat_diskon!=''){
+/*			if($jrawat_diskon!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " jrawat_diskon LIKE '%".$jrawat_diskon."%'";
 			};
-			if($jrawat_cara!=''){
+*/			if($jrawat_cara!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " jrawat_cara LIKE '%".$jrawat_cara."%'";
 			};
