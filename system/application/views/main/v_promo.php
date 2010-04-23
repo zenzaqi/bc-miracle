@@ -476,12 +476,12 @@ Ext.onReady(function(){
 				cell.css = "readonlycell"; // Mengambil Value dari Class di dalam CSS 
 				return value;
 				},
-			hidden: false
+			hidden: true
 		},
 		{
-			header: 'Acara',
+			header: '<div align="center">' + 'Acara' + '</div>',
 			dataIndex: 'promo_acara',
-			width: 150,
+			width: 260,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 250,
@@ -489,34 +489,64 @@ Ext.onReady(function(){
           	})
 		}, 
 		{
-			header: 'Tempat',
+			header: '<div align="center">' + 'Tempat' + '</div>',
 			dataIndex: 'promo_tempat',
-			width: 150,
+			width: 200,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 250
           	})
 		}, 
 		{
-			header: 'Tgl Mulai',
+			header: '<div align="center">' + 'Tgl Mulai' + '</div>',
 			dataIndex: 'promo_tglmulai',
-			width: 150,
+			width: 70,
 			sortable: true,
-			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
+			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
 			editor: new Ext.form.DateField({
-				format: 'Y-m-d'
+				format: 'd-m-Y'
 			})
 		}, 
 		{
-			header: 'Tgl Selesai',
+			header: '<div align="center">' + 'Tgl Selesai' + '</div>',
 			dataIndex: 'promo_tglselesai',
-			width: 150,
+			width: 70,
 			sortable: true,
-			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
+			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
 			editor: new Ext.form.DateField({
-				format: 'Y-m-d'
+				format: 'd-m-Y'
 			})
 		},
+		{
+			header: '<div align="center">' + 'Cashback (Rp)' + '</div>',
+			dataIndex: 'promo_cashback',
+			align: 'right',
+			width: 100,
+			sortable: true,
+			renderer: Ext.util.Format.numberRenderer('0,000'),
+			editor: new Ext.form.NumberField({
+				allowDecimals: true,
+				allowNegative: false,
+				blankText: '0',
+				maxLength: 22,
+				maskRe: /([0-9]+)$/
+			})
+		}, 
+		{
+			header: '<div align="center">' + 'Min Transaksi (Rp)' + '</div>',
+			dataIndex: 'promo_mincash',
+			align: 'right',
+			width: 100,
+			sortable: true,
+			renderer: Ext.util.Format.numberRenderer('0,000'),
+			editor: new Ext.form.NumberField({
+				allowDecimals: true,
+				allowNegative: false,
+				blankText: '0',
+				maxLength: 22,
+				maskRe: /([0-9]+)$/
+			})
+		}, 
 		{
 			header: 'Creator',
 			dataIndex: 'promo_creator',
@@ -565,7 +595,7 @@ Ext.onReady(function(){
 	promoListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'promoListEditorGrid',
 		el: 'fp_promo',
-		title: 'List Of Promo',
+		title: 'Daftar Promo',
 		autoHeight: true,
 		store: promo_DataStore, // DataStore
 		cm: promo_ColumnModel, // Nama-nama Columns
@@ -574,7 +604,7 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 800,
+	  	width: 1220,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: promo_DataStore,
@@ -595,6 +625,7 @@ Ext.onReady(function(){
 		}, '-',{
 			text: 'Delete',
 			tooltip: 'Delete selected record',
+			disabled: true,
 			iconCls:'icon-delete',
 			handler: promo_confirm_delete   // Confirm before deleting
 		}, '-', {
@@ -640,6 +671,7 @@ Ext.onReady(function(){
 		{ 
 			text: 'Delete', 
 			tooltip: 'Delete selected record', 
+			disabled: true,
 			iconCls:'icon-delete',
 			handler: promo_confirm_delete 
 		},
