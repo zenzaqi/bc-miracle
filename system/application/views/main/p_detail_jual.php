@@ -86,7 +86,7 @@
 		   ?>
             <tr>
                 <td><? echo $i; ?></td>
-                <td><?php echo $print_list->produk_nama.")";?></td>
+                <td><?php echo $print_list->produk_nama;?></td>
                 <td><?php echo $print_list->satuan_nama; ?></td>
                 <td class="numeric"><?php echo number_format($print_list->jumlah_barang,0,",","."); ?></td>
                 <td class="numeric"><?php echo number_format($print_list->harga_satuan,2,",","."); ?></td>
