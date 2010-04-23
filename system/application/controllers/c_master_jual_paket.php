@@ -575,6 +575,7 @@ class C_master_jual_paket extends Controller {
 		$jpaket_nobukti=str_replace("'", '"',$jpaket_nobukti);
 		$jpaket_cust=trim(@$_POST["jpaket_cust"]);
 		$jpaket_tanggal=trim(@$_POST["jpaket_tanggal"]);
+		$jpaket_tanggal_akhir=trim(@$_POST["jpaket_tanggal_akhir"]);
 		$jpaket_diskon=trim(@$_POST["jpaket_diskon"]);
 		$jpaket_cashback=trim(@$_POST["jpaket_cashback"]);
 		$jpaket_voucher=trim(@$_POST["jpaket_voucher"]);
@@ -587,10 +588,13 @@ class C_master_jual_paket extends Controller {
 		$jpaket_keterangan=trim(@$_POST["jpaket_keterangan"]);
 		$jpaket_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$jpaket_keterangan);
 		$jpaket_keterangan=str_replace("'", '"',$jpaket_keterangan);
+		$jpaket_stat_dok=trim(@$_POST["jpaket_stat_dok"]);
+		$jpaket_stat_dok=str_replace("/(<\/?)(p)([^>]*>)", "",$jpaket_stat_dok);
+		$jpaket_stat_dok=str_replace("'", '"',$jpaket_stat_dok);
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_master_jual_paket->master_jual_paket_search($jpaket_id ,$jpaket_nobukti ,$jpaket_cust ,$jpaket_tanggal ,$jpaket_diskon ,$jpaket_cashback ,$jpaket_voucher ,$jpaket_cara ,$jpaket_bayar ,$jpaket_keterangan ,$start,$end);
+		$result = $this->m_master_jual_paket->master_jual_paket_search($jpaket_id ,$jpaket_nobukti ,$jpaket_cust ,$jpaket_tanggal, $jpaket_tanggal_akhir, $jpaket_diskon ,$jpaket_cashback ,$jpaket_voucher ,$jpaket_cara ,$jpaket_bayar , $jpaket_keterangan, $jpaket_stat_dok, $start, $end);
 		echo $result;
 	}
 

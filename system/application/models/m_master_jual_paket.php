@@ -1918,7 +1918,7 @@ class M_master_jual_paket extends Model{
 		}
 		
 		//function for advanced search record
-		function master_jual_paket_search($jpaket_id ,$jpaket_nobukti ,$jpaket_cust ,$jpaket_tanggal ,$jpaket_diskon ,$jpaket_cashback ,$jpaket_voucher ,$jpaket_cara ,$jpaket_bayar ,$jpaket_keterangan ,$start,$end){
+		function master_jual_paket_search($jpaket_id ,$jpaket_nobukti ,$jpaket_cust ,$jpaket_tanggal, $jpaket_tanggal_akhir, $jpaket_diskon ,$jpaket_cashback ,$jpaket_voucher ,$jpaket_cara ,$jpaket_bayar , $jpaket_keterangan, $jpaket_stat_dok, $start, $end){
 			//full query
 			$query="SELECT * FROM master_jual_paket,customer WHERE jpaket_cust=cust_id";
 			
@@ -1936,7 +1936,11 @@ class M_master_jual_paket extends Model{
 			};
 			if($jpaket_tanggal!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " jpaket_tanggal LIKE '%".$jpaket_tanggal."%'";
+				$query.= " jpaket_tanggal >= '".$jpaket_tanggal."'";
+			};
+			if($jpaket_tanggal_akhir!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " jpaket_tanggal <= '".$jpaket_tanggal_akhir."'";
 			};
 			if($jpaket_diskon!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -1949,6 +1953,10 @@ class M_master_jual_paket extends Model{
 			if($jpaket_keterangan!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " jpaket_keterangan LIKE '%".$jpaket_keterangan."%'";
+			};
+			if($jpaket_stat_dok!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " jpaket_stat_dok LIKE '%".$jpaket_stat_dok."%'";
 			};
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
