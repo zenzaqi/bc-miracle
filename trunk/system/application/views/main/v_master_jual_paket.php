@@ -166,9 +166,11 @@ var jpaket_idSearchField;
 var jpaket_nobuktiSearchField;
 var jpaket_custSearchField;
 var jpaket_tanggalSearchField;
+var jpaket_tanggal_akhirSearchField;
 var jpaket_diskonSearchField;
 var jpaket_caraSearchField;
 var jpaket_keteranganSearchField;
+var jpaket_stat_dokSearchField;
 var dt= new Date();
 
 var cetak_jpaket=0;
@@ -1719,7 +1721,7 @@ Ext.onReady(function(){
 		//clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 1200,	//800,
+	  	width: 1220,	//800,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: master_jual_paket_DataStore,
@@ -1893,7 +1895,7 @@ Ext.onReady(function(){
 	/* Identify  jpaket_nobukti Field */
 	jpaket_nobuktiField= new Ext.form.TextField({
 		id: 'jpaket_nobuktiField',
-		fieldLabel: 'No. Faktur',
+		fieldLabel: 'No Faktur',
 //		readOnly:true,	//sementara, utk input manual
 		maxLength: 30,
 //		anchor: '95%'
@@ -1922,7 +1924,7 @@ Ext.onReady(function(){
 	
 	jpaket_cust_nomemberField= new Ext.form.TextField({
 		id: 'jpaket_cust_nomemberField',
-		fieldLabel: 'No. Member',
+		fieldLabel: 'No Member',
 		readOnly: true
 	});
 	
@@ -2231,7 +2233,7 @@ Ext.onReady(function(){
 
 	jpaket_card_noField= new Ext.form.TextField({
 		id: 'jpaket_card_noField',
-		fieldLabel: 'No. Kartu',
+		fieldLabel: 'No Kartu',
 		maxLength: 30,
 		anchor: '95%'
 	});
@@ -2308,7 +2310,7 @@ Ext.onReady(function(){
 
 	jpaket_card_no2Field= new Ext.form.TextField({
 		id: 'jpaket_card_no2Field',
-		fieldLabel: 'No. Kartu',
+		fieldLabel: 'No Kartu',
 		maxLength: 30,
 		anchor: '95%'
 	});
@@ -2385,7 +2387,7 @@ Ext.onReady(function(){
 
 	jpaket_card_no3Field= new Ext.form.TextField({
 		id: 'jpaket_card_no3Field',
-		fieldLabel: 'No. Kartu',
+		fieldLabel: 'No Kartu',
 		maxLength: 30,
 		anchor: '95%'
 	});
@@ -2437,7 +2439,7 @@ Ext.onReady(function(){
 	
 	jpaket_cek_noField= new Ext.form.TextField({
 		id: 'jpaket_cek_noField',
-		fieldLabel: 'No. Cek/Giro',
+		fieldLabel: 'No Cek/Giro',
 		allowBlank: true,
 		anchor: '95%',
 		maxLength: 50
@@ -2510,7 +2512,7 @@ Ext.onReady(function(){
 	
 	jpaket_cek_no2Field= new Ext.form.TextField({
 		id: 'jpaket_cek_no2Field',
-		fieldLabel: 'No. Cek/Giro',
+		fieldLabel: 'No Cek/Giro',
 		allowBlank: true,
 		anchor: '95%',
 		maxLength: 50
@@ -2583,7 +2585,7 @@ Ext.onReady(function(){
 	
 	jpaket_cek_no3Field= new Ext.form.TextField({
 		id: 'jpaket_cek_no3Field',
-		fieldLabel: 'No. Cek/Giro',
+		fieldLabel: 'No Cek/Giro',
 		allowBlank: true,
 		anchor: '95%',
 		maxLength: 50
@@ -5063,17 +5065,21 @@ Ext.onReady(function(){
 		var jpaket_nobukti_search=null;
 		var jpaket_cust_search=null;
 		var jpaket_tanggal_search_date="";
+		var jpaket_tanggal_akhir_search_date="";
 		var jpaket_diskon_search=null;
 		var jpaket_cara_search=null;
 		var jpaket_keterangan_search=null;
+		var jpaket_stat_dok_search=null;
 
 		if(jpaket_idSearchField.getValue()!==null){jpaket_id_search=jpaket_idSearchField.getValue();}
 		if(jpaket_nobuktiSearchField.getValue()!==null){jpaket_nobukti_search=jpaket_nobuktiSearchField.getValue();}
 		if(jpaket_custSearchField.getValue()!==null){jpaket_cust_search=jpaket_custSearchField.getValue();}
 		if(jpaket_tanggalSearchField.getValue()!==""){jpaket_tanggal_search_date=jpaket_tanggalSearchField.getValue().format('Y-m-d');}
+		if(jpaket_tanggal_akhirSearchField.getValue()!==""){jpaket_tanggal_akhir_search_date=jpaket_tanggal_akhirSearchField.getValue().format('Y-m-d');}
 		if(jpaket_diskonSearchField.getValue()!==null){jpaket_diskon_search=jpaket_diskonSearchField.getValue();}
 		if(jpaket_caraSearchField.getValue()!==null){jpaket_cara_search=jpaket_caraSearchField.getValue();}
 		if(jpaket_keteranganSearchField.getValue()!==null){jpaket_keterangan_search=jpaket_keteranganSearchField.getValue();}
+		if(jpaket_stat_dokSearchField.getValue()!==null){jpaket_stat_dok_search=jpaket_stat_dokSearchField.getValue();}
 		// change the store parameters
 		master_jual_paket_DataStore.baseParams = {
 			task: 'SEARCH',
@@ -5082,9 +5088,11 @@ Ext.onReady(function(){
 			jpaket_nobukti	:	jpaket_nobukti_search, 
 			jpaket_cust	:	jpaket_cust_search, 
 			jpaket_tanggal	:	jpaket_tanggal_search_date, 
+			jpaket_tanggal_akhir	:	jpaket_tanggal_akhir_search_date, 
 			jpaket_diskon	:	jpaket_diskon_search, 
 			jpaket_cara	:	jpaket_cara_search, 
 			jpaket_keterangan	:	jpaket_keterangan_search, 
+			jpaket_stat_dok	:	jpaket_stat_dok_search, 
 		};
 		// Cause the datastore to do another query : 
 		master_jual_paket_DataStore.reload({params: {start: 0, limit: pageS}});
@@ -5104,9 +5112,11 @@ Ext.onReady(function(){
 		jpaket_nobuktiSearchField.reset();
 		jpaket_custSearchField.reset();
 		jpaket_tanggalSearchField.reset();
+		jpaket_tanggal_akhirSearchField.reset();
 		jpaket_diskonSearchField.reset();
 		jpaket_caraSearchField.reset();
 		jpaket_keteranganSearchField.reset();
+		jpaket_stat_dokSearchField.reset();
 	}
 	
 	/* Field for search */
@@ -5124,7 +5134,7 @@ Ext.onReady(function(){
 	/* Identify  jpaket_nobukti Search Field */
 	jpaket_nobuktiSearchField= new Ext.form.TextField({
 		id: 'jpaket_nobuktiSearchField',
-		fieldLabel: 'No.Faktur',
+		fieldLabel: 'No Faktur',
 		maxLength: 30,
 //		anchor: '95%'
 	
@@ -5142,7 +5152,11 @@ Ext.onReady(function(){
 		id: 'jpaket_tanggalSearchField',
 		fieldLabel: 'Tanggal',
 		format : 'd-m-Y',
-	
+	});
+	jpaket_tanggal_akhirSearchField= new Ext.form.DateField({
+		id: 'jpaket_tanggal_akhirSearchField',
+		fieldLabel: 's/d',
+		format : 'd-m-Y',	
 	});
 	/* Identify  jpaket_diskon Search Field */
 	jpaket_diskonSearchField= new Ext.form.NumberField({
@@ -5178,13 +5192,28 @@ Ext.onReady(function(){
 		anchor: '95%'
 	
 	});
-    
+ 
+	jpaket_stat_dokSearchField= new Ext.form.ComboBox({
+		id: 'jpaket_stat_dokSearchField',
+		fieldLabel: 'Status Dokumen',
+		store:new Ext.data.SimpleStore({
+			fields:['value', 'jpaket_stat_dok'],
+			data:[['Terbuka','Terbuka'], ['Tertutup','Tertutup'], ['Batal','Batal']]
+		}),
+		mode: 'local',
+		displayField: 'jpaket_stat_dok',
+		valueField: 'value',
+		//anchor: '60%', //'95%',
+		width: 96,
+		triggerAction: 'all'	 	
+	});
+ 
 	/* Function for retrieve search Form Panel */
 	master_jual_paket_searchForm = new Ext.FormPanel({
 		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
-		width: 300,        
+		width: 500,        
 		items: [{
 			layout:'column',
 			border:false,
@@ -5193,7 +5222,36 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [jpaket_nobuktiSearchField, jpaket_custSearchField, jpaket_tanggalSearchField, jpaket_diskonSearchField, jpaket_caraSearchField, jpaket_keteranganSearchField] 
+				items: [jpaket_nobuktiSearchField, jpaket_custSearchField, 
+
+					{
+						layout:'column',
+						border:false,
+						items:[
+						{
+							columnWidth:0.45,
+							layout: 'form',
+							border:false,
+							defaultType: 'datefield',
+							items: [						
+								jpaket_tanggalSearchField
+							]
+						},
+						{
+							columnWidth:0.30,
+							layout: 'form',
+							border:false,
+							labelWidth:30,
+							defaultType: 'datefield',
+							items: [						
+								jpaket_tanggal_akhirSearchField
+							]
+						}						
+								
+				        ]
+					},	
+				//jpaket_diskonSearchField, 
+				jpaket_caraSearchField, jpaket_keteranganSearchField, jpaket_stat_dokSearchField] 
 			}
 			]
 		}]
@@ -5213,7 +5271,7 @@ Ext.onReady(function(){
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
 	master_jual_paket_searchWindow = new Ext.Window({
-		title: 'master_jual_paket Search',
+		title: 'Pencarian Penjualan Paket',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,
