@@ -579,6 +579,7 @@ class C_master_jual_produk extends Controller {
 		$jproduk_nobukti=str_replace("'", '"',$jproduk_nobukti);
 		$jproduk_cust=trim(@$_POST["jproduk_cust"]);
 		$jproduk_tanggal=trim(@$_POST["jproduk_tanggal"]);
+		$jproduk_tanggal_akhir=trim(@$_POST["jproduk_tanggal_akhir"]);
 		$jproduk_diskon=trim(@$_POST["jproduk_diskon"]);
 		$jproduk_cara=trim(@$_POST["jproduk_cara"]);
 		$jproduk_cara=str_replace("/(<\/?)(p)([^>]*>)", "",$jproduk_cara);
@@ -586,10 +587,13 @@ class C_master_jual_produk extends Controller {
 		$jproduk_keterangan=trim(@$_POST["jproduk_keterangan"]);
 		$jproduk_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$jproduk_keterangan);
 		$jproduk_keterangan=str_replace("'", '"',$jproduk_keterangan);
+		$jproduk_stat_dok=trim(@$_POST["jproduk_stat_dok"]);
+		$jproduk_stat_dok=str_replace("/(<\/?)(p)([^>]*>)", "",$jproduk_stat_dok);
+		$jproduk_stat_dok=str_replace("'", '"',$jproduk_stat_dok);
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_master_jual_produk->master_jual_produk_search($jproduk_id ,$jproduk_nobukti ,$jproduk_cust ,$jproduk_tanggal ,$jproduk_diskon ,$jproduk_cara ,$jproduk_keterangan ,$start,$end);
+		$result = $this->m_master_jual_produk->master_jual_produk_search($jproduk_id, $jproduk_nobukti, $jproduk_cust, $jproduk_tanggal, $jproduk_tanggal_akhir, $jproduk_diskon, $jproduk_cara, $jproduk_keterangan, $jproduk_stat_dok, $start, $end);
 		echo $result;
 	}
 

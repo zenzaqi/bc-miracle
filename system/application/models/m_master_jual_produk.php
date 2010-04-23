@@ -692,7 +692,7 @@ class M_master_jual_produk extends Model{
 		function master_jual_produk_list($filter,$start,$end){
 			$date_now=date('Y-m-d');
 
-			$query = "SELECT jproduk_id, jproduk_nobukti, cust_nama, cust_no, cust_member, jproduk_cust, jproduk_tanggal, jproduk_diskon, jproduk_cashback, jproduk_cara, jproduk_cara2, jproduk_cara3, jproduk_bayar, IF(vu_jproduk.jproduk_totalbiaya!=0, vu_jproduk.jproduk_totalbiaya, vu_jproduk_totalbiaya.jproduk_totalbiaya) AS jproduk_totalbiaya, jproduk_keterangan, jproduk_stat_dok, jproduk_creator, jproduk_date_create, jproduk_update, jproduk_date_update, jproduk_revised FROM vu_jproduk LEFT JOIN vu_jproduk_totalbiaya ON(vu_jproduk_totalbiaya.dproduk_master=vu_jproduk.jproduk_id)";
+			$query = "SELECT jproduk_id, jproduk_nobukti, cust_nama, cust_no, cust_member, jproduk_cust, jproduk_tanggal, jproduk_diskon, jproduk_cashback, jproduk_cara, jproduk_cara2, jproduk_cara3, jproduk_bayar, IF(vu_jproduk.jproduk_totalbiaya!=0, vu_jproduk.jproduk_totalbiaya, vu_jproduk_totalbiaya.jproduk_totalbiaya) AS jproduk_totalbiaya, jproduk_keterangan, jproduk_stat_dok, jproduk_creator, jproduk_date_create, jproduk_update, jproduk_date_update, jproduk_revised, jproduk_stat_dok FROM vu_jproduk LEFT JOIN vu_jproduk_totalbiaya ON(vu_jproduk_totalbiaya.dproduk_master=vu_jproduk.jproduk_id)";
 			
 			// For simple search
 			if ($filter<>""){
@@ -1755,9 +1755,9 @@ class M_master_jual_produk extends Model{
 		}
 		
 		//function for advanced search record
-		function master_jual_produk_search($jproduk_id ,$jproduk_nobukti ,$jproduk_cust ,$jproduk_tanggal ,$jproduk_diskon ,$jproduk_cara ,$jproduk_keterangan ,$start,$end){
+		function master_jual_produk_search($jproduk_id, $jproduk_nobukti, $jproduk_cust, $jproduk_tanggal, $jproduk_tanggal_akhir, $jproduk_diskon, $jproduk_cara, $jproduk_keterangan, $jproduk_stat_dok, $start, $end){
 			//full query
-			$query="SELECT jproduk_id, jproduk_nobukti, cust_nama, cust_no, cust_member, jproduk_cust, jproduk_tanggal, jproduk_diskon, jproduk_cashback, jproduk_cara, jproduk_cara2, jproduk_cara3, jproduk_bayar, jproduk_totalbiaya, jproduk_keterangan, jproduk_creator, jproduk_date_create, jproduk_update, jproduk_date_update, jproduk_revised FROM vu_jproduk";
+			$query="SELECT jproduk_id, jproduk_nobukti, cust_nama, cust_no, cust_member, jproduk_cust, jproduk_tanggal, jproduk_diskon, jproduk_cashback, jproduk_cara, jproduk_cara2, jproduk_cara3, jproduk_bayar, jproduk_totalbiaya, jproduk_keterangan, jproduk_creator, jproduk_date_create, jproduk_update, jproduk_date_update, jproduk_revised, jproduk_stat_dok FROM vu_jproduk";
 			
 			if($jproduk_id!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -1773,7 +1773,11 @@ class M_master_jual_produk extends Model{
 			};
 			if($jproduk_tanggal!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " jproduk_tanggal LIKE '%".$jproduk_tanggal."%'";
+				$query.= " jproduk_tanggal >= '".$jproduk_tanggal."'";
+			};
+			if($jproduk_tanggal_akhir!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " jproduk_tanggal <= '".$jproduk_tanggal_akhir."'";
 			};
 			if($jproduk_diskon!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -1786,6 +1790,10 @@ class M_master_jual_produk extends Model{
 			if($jproduk_keterangan!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " jproduk_keterangan LIKE '%".$jproduk_keterangan."%'";
+			};
+			if($jproduk_stat_dok!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " jproduk_stat_dok LIKE '%".$jproduk_stat_dok."%'";
 			};
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();

@@ -166,9 +166,11 @@ var jproduk_idSearchField;
 var jproduk_nobuktiSearchField;
 var jproduk_custSearchField;
 var jproduk_tanggalSearchField;
+var jproduk_tanggal_akhirSearchField;
 var jproduk_diskonSearchField;
 var jproduk_caraSearchField;
 var jproduk_keteranganSearchField;
+var jproduk_stat_dokSearchField;
 var dt= new Date();
 
 var cetak_jproduk=0;
@@ -270,7 +272,7 @@ Ext.onReady(function(){
 					default:
 						Ext.MessageBox.show({
 						   title: 'Warning',
-						   msg: 'Data master_jual_produk tidak bisa disimpan',
+						   msg: 'Data penjualan produk tidak bisa disimpan',
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'save',
 						   icon: Ext.MessageBox.WARNING
@@ -1339,9 +1341,9 @@ Ext.onReady(function(){
 	function master_jual_produk_confirm_delete(){
 		// only one master_jual_produk is selected here
 		if(master_jual_produkListEditorGrid.selModel.getCount() == 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', master_jual_produk_delete);
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', master_jual_produk_delete);
 		} else if(master_jual_produkListEditorGrid.selModel.getCount() > 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', master_jual_produk_delete);
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', master_jual_produk_delete);
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
@@ -1926,7 +1928,7 @@ Ext.onReady(function(){
 				},
 				render: function(c){
 				Ext.get(this.id).set({qtitle:'Search By'});
-				Ext.get(this.id).set({qtip:'- No.Customer<br>- Nama Customer<br>- No.Faktur'});
+				Ext.get(this.id).set({qtip:'- No Cust<br>- Nama Cust<br>- No Faktur'});
 				}
 			},
 			width: 120
@@ -2058,7 +2060,7 @@ Ext.onReady(function(){
 	/* Identify  jproduk_nobukti Field */
 	jproduk_nobuktiField= new Ext.form.TextField({
 		id: 'jproduk_nobuktiField',
-		fieldLabel: 'No. Faktur',
+		fieldLabel: 'No Faktur',
 		readOnly:true,
 		maxLength: 30,
 		//anchor: '95%'
@@ -2086,7 +2088,7 @@ Ext.onReady(function(){
 	
 	jproduk_cust_nomemberField= new Ext.form.TextField({
 		id: 'jproduk_cust_nomemberField',
-		fieldLabel: 'No. Member',
+		fieldLabel: 'No Member',
 		readOnly: true
 	});
 	
@@ -2455,7 +2457,7 @@ Ext.onReady(function(){
 
 	jproduk_card_noField= new Ext.form.TextField({
 		id: 'jproduk_card_noField',
-		fieldLabel: 'No. Kartu',
+		fieldLabel: 'No Kartu',
 		maxLength: 30,
 		anchor: '95%'
 	});
@@ -2532,7 +2534,7 @@ Ext.onReady(function(){
 
 	jproduk_card_no2Field= new Ext.form.TextField({
 		id: 'jproduk_card_no2Field',
-		fieldLabel: 'No. Kartu',
+		fieldLabel: 'No Kartu',
 		maxLength: 30,
 		anchor: '95%'
 	});
@@ -2609,7 +2611,7 @@ Ext.onReady(function(){
 
 	jproduk_card_no3Field= new Ext.form.TextField({
 		id: 'jproduk_card_no3Field',
-		fieldLabel: 'No. Kartu',
+		fieldLabel: 'No Kartu',
 		maxLength: 30,
 		anchor: '95%'
 	});
@@ -2661,7 +2663,7 @@ Ext.onReady(function(){
 	
 	jproduk_cek_noField= new Ext.form.TextField({
 		id: 'jproduk_cek_noField',
-		fieldLabel: 'No. Cek/Giro',
+		fieldLabel: 'No Cek/Giro',
 		allowBlank: true,
 		anchor: '95%',
 		maxLength: 50
@@ -2734,7 +2736,7 @@ Ext.onReady(function(){
 	
 	jproduk_cek_no2Field= new Ext.form.TextField({
 		id: 'jproduk_cek_no2Field',
-		fieldLabel: 'No. Cek/Giro',
+		fieldLabel: 'No Cek/Giro',
 		allowBlank: true,
 		anchor: '95%',
 		maxLength: 50
@@ -2807,7 +2809,7 @@ Ext.onReady(function(){
 	
 	jproduk_cek_no3Field= new Ext.form.TextField({
 		id: 'jproduk_cek_no3Field',
-		fieldLabel: 'No. Cek/Giro',
+		fieldLabel: 'No Cek/Giro',
 		allowBlank: true,
 		anchor: '95%',
 		maxLength: 50
@@ -3612,8 +3614,7 @@ Ext.onReady(function(){
 			{name: 'konversi_nilai_temp', type: 'float', mapping: 'konversi_nilai_temp'},
 			{name: 'jproduk_bayar', type: 'float', mapping: 'jproduk_bayar'},
 			{name: 'jproduk_diskon', type: 'int', mapping: 'jproduk_diskon'},
-			{name: 'jproduk_cashback', type: 'float', mapping: 'jproduk_cashback'},
-			{name: 'produk_point', type: 'int', mapping: 'produk_point'}
+			{name: 'jproduk_cashback', type: 'float', mapping: 'jproduk_cashback'}
 	]);
 	//eof
 	
@@ -4169,8 +4170,7 @@ Ext.onReady(function(){
 						dproduk_sales			: detail_jual_produk_record.data.dproduk_sales,
 						konversi_nilai_temp	: detail_jual_produk_record.data.konversi_nilai_temp,
 						count	: count_i,
-						dcount	: count_detail,
-						produk_point	: detail_jual_produk_record.data.produk_point
+						dcount	: count_detail
 					},
 					timeout: 60000,
 					success: function(response){
@@ -4259,9 +4259,9 @@ Ext.onReady(function(){
 	function detail_jual_produk_confirm_delete(){
 		// only one record is selected here
 		if(detail_jual_produkListEditorGrid.selModel.getCount() == 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', detail_jual_produk_delete);
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', detail_jual_produk_delete);
 		} else if(detail_jual_produkListEditorGrid.selModel.getCount() > 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', detail_jual_produk_delete);
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', detail_jual_produk_delete);
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
@@ -5269,6 +5269,7 @@ Ext.onReady(function(){
 		var jproduk_nobukti_search=null;
 		var jproduk_cust_search=null;
 		var jproduk_tanggal_search_date="";
+		var jproduk_tanggal_akhir_search_date="";
 		var jproduk_diskon_search=null;
 		var jproduk_cara_search=null;
 		var jproduk_keterangan_search=null;
@@ -5277,9 +5278,11 @@ Ext.onReady(function(){
 		if(jproduk_nobuktiSearchField.getValue()!==null){jproduk_nobukti_search=jproduk_nobuktiSearchField.getValue();}
 		if(jproduk_custSearchField.getValue()!==null){jproduk_cust_search=jproduk_custSearchField.getValue();}
 		if(jproduk_tanggalSearchField.getValue()!==""){jproduk_tanggal_search_date=jproduk_tanggalSearchField.getValue().format('Y-m-d');}
+		if(jproduk_tanggal_akhirSearchField.getValue()!==""){jproduk_tanggal_akhir_search_date=jproduk_tanggal_akhirSearchField.getValue().format('Y-m-d');}
 		if(jproduk_diskonSearchField.getValue()!==null){jproduk_diskon_search=jproduk_diskonSearchField.getValue();}
 		if(jproduk_caraSearchField.getValue()!==null){jproduk_cara_search=jproduk_caraSearchField.getValue();}
 		if(jproduk_keteranganSearchField.getValue()!==null){jproduk_keterangan_search=jproduk_keteranganSearchField.getValue();}
+		if(jproduk_stat_dokSearchField.getValue()!==null){jproduk_stat_dok_search=jproduk_stat_dokSearchField.getValue();}
 		// change the store parameters
 		master_jual_produk_DataStore.baseParams = {
 			task: 'SEARCH',
@@ -5288,9 +5291,11 @@ Ext.onReady(function(){
 			jproduk_nobukti	:	jproduk_nobukti_search, 
 			jproduk_cust	:	jproduk_cust_search, 
 			jproduk_tanggal	:	jproduk_tanggal_search_date, 
+			jproduk_tanggal_akhir	:	jproduk_tanggal_akhir_search_date, 
 			jproduk_diskon	:	jproduk_diskon_search, 
 			jproduk_cara	:	jproduk_cara_search, 
 			jproduk_keterangan	:	jproduk_keterangan_search, 
+			jproduk_stat_dok	:	jproduk_stat_dok_search, 
 		};
 		// Cause the datastore to do another query : 
 		master_jual_produk_DataStore.reload({params: {start: 0, limit: pageS}});
@@ -5310,9 +5315,11 @@ Ext.onReady(function(){
 		jproduk_nobuktiSearchField.reset();
 		jproduk_custSearchField.reset();
 		jproduk_tanggalSearchField.reset();
+		jproduk_tanggal_akhirSearchField.reset();
 		jproduk_diskonSearchField.reset();
 		jproduk_caraSearchField.reset();
 		jproduk_keteranganSearchField.reset();
+		jproduk_stat_dokSearchField.reset();
 	}
 	
 	/* Field for search */
@@ -5330,23 +5337,50 @@ Ext.onReady(function(){
 	/* Identify  jproduk_nobukti Search Field */
 	jproduk_nobuktiSearchField= new Ext.form.TextField({
 		id: 'jproduk_nobuktiSearchField',
-		fieldLabel: 'No. Faktur',
+		fieldLabel: 'No Faktur',
 		maxLength: 30
 	//	anchor: '95%'
 	
 	});
+
 	/* Identify  jproduk_cust Search Field */
-	jproduk_custSearchField= new Ext.form.TextField({
+/*	jproduk_custSearchField= new Ext.form.TextField({
 		id: 'jproduk_custSearchField',
 		fieldLabel: 'Customer',
 		maxLength: 30,
 		anchor: '95%'
-	
 	});
+*/
+	jproduk_custSearchField= new Ext.form.ComboBox({
+		id: 'jproduk_custField',
+		fieldLabel: 'Customer',
+		store: cbo_cust_jual_produk_DataStore,
+		mode: 'remote',
+		displayField:'cust_nama',
+		valueField: 'cust_id',
+        typeAhead: false,
+        loadingText: 'Searching...',
+        pageSize:10,
+        hideTrigger:false,
+        tpl: customer_jual_produk_tpl,
+        //applyTo: 'search',
+        itemSelector: 'div.search-item',
+		triggerAction: 'all',
+		lazyRender:true,
+		listClass: 'x-combo-list-small',
+		anchor: '95%'
+	});
+
 	/* Identify  jproduk_tanggal Search Field */
 	jproduk_tanggalSearchField= new Ext.form.DateField({
 		id: 'jproduk_tanggalSearchField',
 		fieldLabel: 'Tanggal',
+		format : 'd-m-Y',
+	
+	});
+	jproduk_tanggal_akhirSearchField= new Ext.form.DateField({
+		id: 'jproduk_tanggal_akhirSearchField',
+		fieldLabel: 's/d',
 		format : 'd-m-Y',
 	
 	});
@@ -5372,25 +5406,39 @@ Ext.onReady(function(){
 		mode: 'local',
 		displayField: 'jproduk_cara',
 		valueField: 'value',
-		anchor: '95%',
+		anchor: '60%', //'95%',
 		triggerAction: 'all'	 
-	
 	});
 	/* Identify  jproduk_keterangan Search Field */
 	jproduk_keteranganSearchField= new Ext.form.TextArea({
 		id: 'jproduk_keteranganSearchField',
 		fieldLabel: 'Keterangan',
 		maxLength: 250,
-		anchor: '95%'
-	
+		anchor: '95%'	
 	});
     
+	jproduk_stat_dokSearchField= new Ext.form.ComboBox({
+		id: 'jproduk_stat_dokSearchField',
+		fieldLabel: 'Status Dokumen',
+		store:new Ext.data.SimpleStore({
+			fields:['value', 'jproduk_stat_dok'],
+			data:[['Terbuka','Terbuka'], ['Tertutup','Tertutup'], ['Batal','Batal']]
+		}),
+		mode: 'local',
+		displayField: 'jproduk_stat_dok',
+		valueField: 'value',
+		anchor: '60%', //'95%',
+		triggerAction: 'all'	 
+	
+	});
+
+	
 	/* Function for retrieve search Form Panel */
 	master_jual_produk_searchForm = new Ext.FormPanel({
 		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
-		width: 300,        
+		width: 500,        
 		items: [{
 			layout:'column',
 			border:false,
@@ -5399,7 +5447,39 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [jproduk_nobuktiSearchField, jproduk_custSearchField, jproduk_tanggalSearchField, jproduk_diskonSearchField, jproduk_caraSearchField, jproduk_keteranganSearchField] 
+				items: [jproduk_nobuktiSearchField, jproduk_custSearchField, 
+					{
+						layout:'column',
+						border:false,
+						items:[
+						{
+							columnWidth:0.45,
+							layout: 'form',
+							border:false,
+							defaultType: 'datefield',
+							items: [						
+								jproduk_tanggalSearchField
+							]
+						},
+						{
+							columnWidth:0.30,
+							layout: 'form',
+							border:false,
+							labelWidth:30,
+							defaultType: 'datefield',
+							items: [						
+								jproduk_tanggal_akhirSearchField
+							]
+						}						
+								
+				        ]
+					},	
+				
+				//jproduk_diskonSearchField, 
+				jproduk_caraSearchField, 
+				jproduk_keteranganSearchField,
+				jproduk_stat_dokSearchField 
+				] 
 			}
 			]
 		}]
@@ -5419,7 +5499,7 @@ Ext.onReady(function(){
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
 	master_jual_produk_searchWindow = new Ext.Window({
-		title: 'master_jual_produk Search',
+		title: 'Pencarian Penjualan Produk',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,
