@@ -1731,6 +1731,7 @@ Ext.onReady(function(){
 			text: 'Add',
 			tooltip: 'Add new record',
 			iconCls:'icon-adds',    				// this is defined in our styles.css
+			disabled: true,
 			handler: display_form_window
 		}, '-',{
 			text: 'Edit',
