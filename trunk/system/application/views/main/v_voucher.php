@@ -534,21 +534,21 @@ Ext.onReady(function(){
 				cell.css = "readonlycell"; // Mengambil Value dari Class di dalam CSS 
 				return value;
 				},
-			hidden: false
+			hidden: true
 		},
 		{
-			header: 'Nama Voucher',
+			header: '<div align="center">' + 'Nama Voucher' + '</div>',
 			dataIndex: 'voucher_nama',
-			width: 150,
+			width: 260,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 50
           	})
 		}, 
 		{
-			header: 'Jenis',
+			header: '<div align="center">' + 'Jenis' + '</div>',
 			dataIndex: 'voucher_jenis',
-			width: 150,
+			width: 120,
 			sortable: true,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
@@ -565,9 +565,10 @@ Ext.onReady(function(){
             })
 		}, 
 		{
-			header: 'Point',
+			header: '<div align="center">' + 'Poin' + '</div>',
 			dataIndex: 'voucher_point',
-			width: 150,
+			align: 'right',
+			width: 60,
 			sortable: true,
 			editor: new Ext.form.NumberField({
 				allowDecimals: false,
@@ -578,9 +579,10 @@ Ext.onReady(function(){
 			})
 		}, 
 		{
-			header: 'Jumlah',
+			header: '<div align="center">' + 'Jumlah' + '</div>',
 			dataIndex: 'voucher_jumlah',
-			width: 150,
+			align: 'right',
+			width: 60,
 			sortable: true,
 			editor: new Ext.form.NumberField({
 				allowDecimals: false,
@@ -591,20 +593,22 @@ Ext.onReady(function(){
 			})
 		}, 
 		{
-			header: 'Kadaluarsa',
+			header: '<div align="center">' + 'Kadaluarsa' + '</div>',
 			dataIndex: 'voucher_kadaluarsa',
-			width: 150,
+			width: 70,
 			sortable: true,
-			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
+			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
 			editor: new Ext.form.DateField({
-				format: 'Y-m-d'
+				format: 'd-m-Y'
 			})
 		}, 
 		{
-			header: 'Cashback',
+			header: '<div align="center">' + 'Cashback (Rp)' + '</div>',
 			dataIndex: 'voucher_cashback',
-			width: 150,
+			align: 'right',
+			width: 100,
 			sortable: true,
+			renderer: Ext.util.Format.numberRenderer('0,000'),
 			editor: new Ext.form.NumberField({
 				allowDecimals: true,
 				allowNegative: false,
@@ -614,10 +618,12 @@ Ext.onReady(function(){
 			})
 		}, 
 		{
-			header: 'Minimal Transaksi',
+			header: '<div align="center">' + 'Min Transaksi (Rp)' + '</div>',
 			dataIndex: 'voucher_mincash',
-			width: 150,
+			align: 'right',
+			width: 100,
 			sortable: true,
+			renderer: Ext.util.Format.numberRenderer('0,000'),
 			editor: new Ext.form.NumberField({
 				allowDecimals: true,
 				allowNegative: false,
@@ -627,9 +633,10 @@ Ext.onReady(function(){
 			})
 		}, 
 		{
-			header: 'Diskon (%)',
+			header: '<div align="center">' + 'Diskon (%)' + '</div>',
 			dataIndex: 'voucher_diskon',
-			width: 150,
+			align: 'right',
+			width: 60,
 			sortable: true,
 			editor: new Ext.form.NumberField({
 				allowDecimals: false,
@@ -640,9 +647,9 @@ Ext.onReady(function(){
 			})
 		}, 
 		{
-			header: 'Referensi Promo',
+			header: '<div align="center">' + 'Ref Promo' + '</div>',
 			dataIndex: 'voucher_promo',
-			width: 150,
+			width: 200,
 			sortable: true,
 			editor: new Ext.form.NumberField({
 				allowDecimals: false,
@@ -700,7 +707,7 @@ Ext.onReady(function(){
 	voucherListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'voucherListEditorGrid',
 		el: 'fp_voucher',
-		title: 'List Of Voucher',
+		title: 'Daftar Voucher',
 		autoHeight: true,
 		store: voucher_DataStore, // DataStore
 		cm: voucher_ColumnModel, // Nama-nama Columns
@@ -709,7 +716,7 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 800,
+	  	width: 1220,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: voucher_DataStore,
@@ -730,6 +737,7 @@ Ext.onReady(function(){
 		}, '-',{
 			text: 'Delete',
 			tooltip: 'Delete selected record',
+			disabled: true,
 			iconCls:'icon-delete',
 			handler: voucher_confirm_delete   // Confirm before deleting
 		}, '-', {
@@ -776,6 +784,7 @@ Ext.onReady(function(){
 			text: 'Delete', 
 			tooltip: 'Delete selected record', 
 			iconCls:'icon-delete',
+			disabled: true,
 			handler: voucher_confirm_delete 
 		},
 		'-',
