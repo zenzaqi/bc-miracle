@@ -134,7 +134,7 @@ Ext.onReady(function(){
 			success: function(response){							
 				var result=eval(response.responseText);
 				if(result!==0){
-						Ext.MessageBox.alert(post2db+' OK','Data Penerimaan Barang berhasil disimpan');
+						Ext.MessageBox.alert(post2db+' OK','Data penerimaan barang berhasil disimpan');
 						master_terima_beli_createWindow.hide();
 				}else{
 						Ext.MessageBox.show({
@@ -470,7 +470,8 @@ Ext.onReady(function(){
 			{name: 'tbeli_orderbeli_supplier', type: 'string', mapping: 'supplier_nama'},
 			{name: 'tbeli_orderbeli_supplier_id', type: 'int', mapping: 'supplier_id'}
 		]),
-		sortInfo:{field: 'tbeli_orderbeli_nama', direction: "ASC"}
+		//sortInfo:{field: 'tbeli_orderbeli_nama', direction: "ASC"}
+		sortInfo:{field: 'tbeli_orderbeli_tgl', direction: "DESC"}
 	});
 	
 	

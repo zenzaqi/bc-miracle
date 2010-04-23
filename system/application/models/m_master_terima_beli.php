@@ -239,7 +239,13 @@ class M_master_terima_beli extends Model{
 		
 		
 		function get_order_beli_list(){
-			$sql="SELECT * FROM master_order_beli,supplier WHERE order_supplier=supplier_id";
+			//$sql="SELECT * FROM master_order_beli,supplier WHERE order_supplier=supplier_id";
+			$sql=  "SELECT
+						order_id, order_no, order_tanggal, supplier_nama, supplier_id
+					FROM master_order_beli, supplier 
+					WHERE order_supplier = supplier_id
+						AND order_status = 'Terbuka'
+					ORDER BY order_tanggal desc";
 			$query = $this->db->query($sql);
 			$nbrows = $query->num_rows();
 			if($nbrows>0){
