@@ -89,9 +89,10 @@ class M_hpp extends Model{
 				
 		}
 		
-		function get_jumlah_beli($periode,$produk_id){
+		function get_jumlah_beli($periode_start, $periode_end,$produk_id){
 			$sql="SELECT sum(jumlah_konversi) as jumlah_beli from vu_hpp_beli 
-					where DATE_FORMAT(tanggal,'%Y-%m') = '".$periode."'
+					where DATE_FORMAT(tanggal,'%Y-%m-%d') >= '".$periode_start."' 
+					AND DATE_FORMAT(tanggal,'%Y-%m-%d') <= '".$periode_end."' 
 					AND produk_id='".$produk_id."'";
 			$query=$this->db->query($sql);
 			if($query->num_rows()>0){
@@ -101,9 +102,10 @@ class M_hpp extends Model{
 				return 0;
 		}
 		
-		function get_harga_beli($periode,$produk_id){
+		function get_harga_beli($periode_start, $periode_end, $produk_id){
 			$sql="SELECT avg(harga_beli) as harga_beli from vu_hpp_beli 
-					where DATE_FORMAT(tanggal,'%Y-%m') = '".$periode."'
+					where DATE_FORMAT(tanggal,'%Y-%m-%d') >= '".$periode_start."' 
+					AND DATE_FORMAT(tanggal,'%Y-%m-%d') <= '".$periode_end."' 
 					AND produk_id='".$produk_id."'";
 			$query=$this->db->query($sql);
 			if($query->num_rows()>0){
@@ -114,14 +116,14 @@ class M_hpp extends Model{
 			
 		}
 		
-		function get_nilai_persediaan($periode,$produk_id){
-			$persediaan=$this->get_harga_beli($periode,$produk_id)*$this->get_stok_saldo($periode, $produk_id);
+		function get_nilai_persediaan($periode_start,$periode_end,$produk_id){
+			$persediaan=$this->get_harga_beli($periode_start, $periode_end, $produk_id)*$this->get_stok_saldo($periode_end, $produk_id);
 			return $persediaan;
 		}
 		
 		function get_stok_saldo($periode, $produk_id){
 			$sql="SELECT sum(jumlah_saldo) as stok_saldo from vu_stok_all_saldo_tanggal 
-					where DATE_FORMAT(tanggal,'%Y-%m') <= '".$periode."'
+					where DATE_FORMAT(tanggal,'%Y-%m-%d') <= '".$periode."'
 					AND produk_id='".$produk_id."'";
 			$query=$this->db->query($sql);
 			//echo $sql;
@@ -146,18 +148,84 @@ class M_hpp extends Model{
 			$periode=$tahun."-".$bulan;
 		}
 		
-		//function for get list record
+		function hpp_list($produk_id, $tanggal_start, $tanggal_end, $filter,$start,$end){
+			$i=0;$j=0;
+			$sql="select * from vu_produk_satuan_terkecil ";
+			if($produk_id<>""){
+				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+				$sql.=" produk_id='".$produk_id."'";
+			}
+			
+			if($tanggal_start=="" || $tanggal_start==""){
+				$nbrows=0;
+			}else{
+				$query=$this->db->query($sql);
+				$nbrows=$query->num_rows();
+				
+				$limit=$sql." LIMIT ".$start.",".$end;
+				$query=$this->db->query($limit);
+				
+				//cari awal tanggal
+				$trans_first="";
+				$sql_tgl="SELECT distinct min(tanggal) as min_date from vu_hpp_tanggal";
+				$query_tgl=$this->db->query($sql_tgl);
+				if($query_tgl->num_rows()){
+					$row_tgl=$query_tgl->row();
+					$trans_first=$row_tgl->min_date;
+				}else
+					$trans_first="";
+				
+				foreach($query->result() as $row){
+
+					$persediaan_sebelum=$this->get_nilai_persediaan($trans_first,$tanggal_start,$row->produk_id);
+					$stok_sebelum=$this->get_stok_saldo($tanggal_start,$row->produk_id);
+					$harga_beli_sebelum=$this->get_harga_beli($trans_first, $tanggal_start, $row->produk_id);
+					
+					$stok_sekarang=$this->get_stok_saldo($tanggal_start, $tanggal_end, $row->produk_id);
+					$harga_beli_sekarang=($this->get_harga_beli($tanggal_start, $tanggal_end, $row->produk_id)+$harga_beli_sebelum)/2;
+					$persediaan_sekarang=$harga_beli_sekarang*$stok_sekarang;
+					
+					$jumlah_beli=$this->get_jumlah_beli($tanggal_start, $tanggal_end,$row->produk_id);
+
+					$data[$i]["produk_id"]=$row->produk_id;
+					$data[$i]["produk_kode"]=$row->produk_kode;
+					$data[$i]["produk_nama"]=$row->produk_nama;
+					$data[$i]["satuan_id"]=$row->satuan_id;
+					$data[$i]["satuan_kode"]=$row->satuan_kode;
+					$data[$i]["satuan_nama"]=$row->satuan_nama;
+					$data[$i]["stok_awal"]=$stok_sebelum;
+					$data[$i]["persediaan_awal"]=$persediaan_sebelum;
+					$data[$i]["stok_saldo"]=$stok_sekarang;
+					$data[$i]["persediaan_akhir"]=$persediaan_sekarang;
+					$data[$i]["jumlah_beli"]=$jumlah_beli;
+					$data[$i]["pembelian"]=$jumlah_beli*$harga_beli_sekarang;
+					$data[$i]["barang_jual"]=$persediaan_sebelum+$data[$i]["pembelian"];
+					$data[$i]["hpp"]=$data[$i]["barang_jual"]-$data[$i]["persediaan_akhir"];
+					$data[$i]["harga_satuan"]=$harga_beli_sekarang;
+					$i++;
+				}
+			}
+			
+			if($nbrows>0){
+				$jsonresult = json_encode($data);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+		
+/*		function for get list record
 		function hpp_list($produk_id, $filter,$start,$end){
 			$i=0;$j=0;
 			$sql="select * from vu_produk_satuan_terkecil where produk_id='".$produk_id."'";
 			$query=$this->db->query($sql);
-/*			$jumlah_periode=count($this->get_periode());
-			$nbrows=$query->num_rows()*$jumlah_periode;*/
+			$jumlah_periode=count($this->get_periode());
+			$nbrows=$query->num_rows()*$jumlah_periode;
 			$periode_tgl=$this->get_periode();
 			
-/*				$limit_pro=($jumlah_periode>$end?1:ceil($end/$jumlah_periode));
+				$limit_pro=($jumlah_periode>$end?1:ceil($end/$jumlah_periode));
 				$limit=$sql." LIMIT ".$start.",1";
-				$query=$this->db->query($limit);*/
+				$query=$this->db->query($limit);
 			$nbrows=count($periode_tgl);
 			foreach($query->result() as $row){
 				foreach($periode_tgl as $periode){
@@ -182,6 +250,7 @@ class M_hpp extends Model{
 						$data[$i]["satuan_id"]=$row->satuan_id;
 						$data[$i]["satuan_kode"]=$row->satuan_kode;
 						$data[$i]["satuan_nama"]=$row->satuan_nama;
+						$data[$i]["stok_awal"]=$stok_sekarang;
 						$data[$i]["persediaan_awal"]=$persediaan_sebelum;
 						$data[$i]["stok_saldo"]=$stok_sekarang;
 						$data[$i]["persediaan_akhir"]=$persediaan_sekarang;
@@ -203,7 +272,7 @@ class M_hpp extends Model{
 			} else {
 				return '({"total":"0", "results":""})';
 			}
-		}
+		}*/
 		
 		
 		//function for advanced search record

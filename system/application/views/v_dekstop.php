@@ -35,6 +35,8 @@
 	s.src = "./assets/js/locale/ext-lang-id.js";
 	s.charset = "ascii";
 	document.getElementsByTagName("head")[0].appendChild(s);
+	
+
 </script>
     <?=js_asset('PagingMemoryProxy.js');?>
   	<link rel="shortcut icon" href="<?=base_url();?>favicon.ico" />

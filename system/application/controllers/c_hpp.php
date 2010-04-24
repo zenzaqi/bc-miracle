@@ -36,7 +36,7 @@ class C_hpp extends Controller {
 	
 	//event handler action
 	function get_action(){
-		$task = $_POST['task'];
+		$task = isset($_POST['task']) ? @$_POST['task'] : @$_GET['task'];
 		switch($task){
 			case "LIST":
 				$this->hpp_list();
@@ -63,7 +63,10 @@ class C_hpp extends Controller {
 		$start = (integer) (isset($_POST['start']) ? @$_POST['start'] : @$_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? @$_POST['limit'] : @$_GET['limit']);
 		$produk_id = (integer) (isset($_POST['produk_id']) ? @$_POST['produk_id'] : @$_GET['produk_id']);
-		$result=$this->m_hpp->hpp_list($produk_id, $query,$start,$end);
+		$tanggal_start=(isset($_POST['tanggal_start']) ? @$_POST['tanggal_start'] : @$_GET['tanggal_start']);
+		$tanggal_end=(isset($_POST['tanggal_end']) ? @$_POST['tanggal_end'] : @$_GET['tanggal_end']);
+		
+		$result=$this->m_hpp->hpp_list($produk_id, $tanggal_start, $tanggal_end, $query,$start,$end);
 		echo $result;
 	}
 	
