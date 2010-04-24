@@ -57,10 +57,10 @@ class M_vu_stok_all_saldo extends Model{
 										sum(jumlah_keluar) as jumlah_keluar,
 										sum(jumlah_koreksi) as jumlah_koreksi
 								FROM vu_stok_gudang_besar_tanggal
-							WHERE produk_id='".$produk_id."' 
-							AND date_format(tanggal,'%Y-%m-%d')>='".$tanggal_start."'
-							AND date_format(tanggal,'%Y-%m-%d')<='".$tanggal_end."'
-							GROUP BY produk_id";
+								WHERE produk_id='".$produk_id."' 
+								AND date_format(tanggal,'%Y-%m-%d')>='".$tanggal_start."'
+								AND date_format(tanggal,'%Y-%m-%d')<='".$tanggal_end."'
+								GROUP BY produk_id";
 					$rs_mutasi=$this->db->query($sql_mutasi);
 					if($rs_mutasi->num_rows())
 					{
@@ -212,25 +212,30 @@ class M_vu_stok_all_saldo extends Model{
 		}
 		
 		//function for get list record
-		function vu_stok_all_saldo_list($tanggal_start,$tanggal_end,$filter,$start,$end){
+		function vu_stok_all_saldo_list($produk_id, $tanggal_start,$tanggal_end,$filter,$start,$end){
 			
 			$sql="SELECT * FROM vu_produk_satuan_terkecil";
-			if($filter!==""){
-				$sql.=eregi("WHERE",$query)?" AND ":" WHERE ";
+			if($produk_id!==""&&$produk_id!==0){
+				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+				$sql.="	produk_id='".$produk_id."' ";
+			}
+			
+			if($filter!==""&&$filter!==NULL){
+				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
 				$sql.="	produk_kode LIKE '%".addslashes($filter)."%' OR
-						produk_nama LIKE '%".addslashes($filter)."%' OR
-						satuan_kode LIKE '%".addslashes($filter)."%' OR
-						satuan_nama LIKE '%".addslashes($filter)."%'";
+						produk_nama LIKE '%".addslashes($filter)."%' ";
 			}
 			
 			$query_first=$this->db->query($sql);
 			$result = $this->db->query($sql);
 			$nbrows = $result->num_rows();
 			
+			if($produk_id=="")
+				$sql = $sql." LIMIT ".$start.",".$end;		
 			
-			if($end<=0) $end=15;
-			$limit = $sql." LIMIT ".$start.",".$end;		
-			$result = $this->db->query($limit); 
+			//echo $sql;
+			
+			$result = $this->db->query($sql); 
 			$i=0;
 			
 			foreach($result->result() as $rowproduk){
@@ -321,15 +326,7 @@ class M_vu_stok_all_saldo extends Model{
 				}
 				$i++;
 			}
-			// For simple search
-			/*if ($filter<>""){
-				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (produk_id LIKE '%".addslashes($filter)."%' OR produk_nama LIKE '%".addslashes($filter)."%' OR satuan_id LIKE '%".addslashes($filter)."%' OR satuan_nama LIKE '%".addslashes($filter)."%' OR stok_saldo LIKE '%".addslashes($filter)."%'  OR produk_kode LIKE '%".addslashes($filter)."%')";
-			}*/
-			//echo $query;
 			
-			 
-			//echo $limit;
 			if($nbrows>0){
 				
 				$jsonresult = json_encode($data);

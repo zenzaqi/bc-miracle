@@ -141,7 +141,8 @@ Ext.onReady(function(){
 		id: 'vu_stok_all_saldo_DataStore',
 		proxy: new Ext.data.HttpProxy({
 			url: 'index.php?c=c_vu_stok_all_saldo&m=get_action', 
-			method: 'POST'
+			method: 'POST',
+			timeout: 3600000
 		}),
 		baseParams:{task: "LIST", start:0, limit: pageS, tanggal_start: firstday, tanggal_end: today}, // parameter yang di $_POST ke Controller
 		reader: new Ext.data.JsonReader({
@@ -310,17 +311,17 @@ Ext.onReady(function(){
 			tooltip: 'View selected record',
 			iconCls:'icon-update',
 			handler: vu_stok_all_saldo_confirm_update   // Confirm before updating
-		},'-','<font color="white" ><b>Periode : &nbsp;</b></font>',stok_tanggal_startField,' <font color="white" >s/d</font> ',stok_tanggal_endField,{
+		},'-',{
 			text: 'Search',
 			tooltip: 'Advanced Search',
 			iconCls:'icon-search',
-			handler: periode_stok 
-		}, '-', 
+			handler: display_form_search_window 
+		}/*, '-', 
 			new Ext.app.SearchField({
 			store: vu_stok_all_saldo_DataStore,
 			params: {start: 0, limit: pageS},
 			width: 120
-		}),'-',{
+		})*/,'-',{
 			text: 'Refresh',
 			tooltip: 'Refresh datagrid',
 			handler: vu_stok_all_saldo_reset_search,
@@ -489,6 +490,38 @@ Ext.onReady(function(){
 	});
 	/* End of Function */
 	
+	/* Function for Retrieve DataStore */
+	produk_DataStore = new Ext.data.Store({
+		id: 'produk_DataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_hpp&m=get_produk_list', 
+			method: 'POST'
+		}),
+		baseParams:{task: "LIST", start: 0, limit:pageS}, // parameter yang di $_POST ke Controller
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'produk_id'
+		},[
+		/* dataIndex => insert intohpp_ColumnModel, Mapping => for initiate table column */ 
+			{name: 'produk_id', type: 'int', mapping: 'produk_id'}, 
+			{name: 'produk_kode', type: 'string', mapping: 'produk_kode'}, 
+			{name: 'produk_jenis', type: 'string', mapping: 'produk_jenis'}, 
+			{name: 'produk_nama', type: 'string', mapping: 'produk_nama'}, 
+			{name: 'satuan_id', type: 'int', mapping: 'satuan_id'}, 
+			{name: 'satuan_kode', type: 'string', mapping: 'satuan_kode'}, 
+			{name: 'satuan_nama', type: 'string', mapping: 'satuan_nama'}
+		]),
+		sortInfo:{field: 'produk_id', direction: "DESC"}
+	});
+	/* End of Function */
+	var produk_tpl = new Ext.XTemplate(
+        '<tpl for="."><div class="search-item">',
+            '<span><b>{produk_nama} ({produk_kode})</b><br /></span>',
+            'Satuan: {satuan_nama}',
+        '</div></tpl>'
+    );
+	
 	vu_stok_detail_ColumnModel = new Ext.grid.ColumnModel(
 		[{
 			header: '#',
@@ -622,24 +655,22 @@ Ext.onReady(function(){
 	/* Function for action list search */
 	function vu_stok_all_saldo_list_search(){
 		// render according to a SQL date format.
-		var produk_kode_search=null;
 		var produk_nama_search=null;
-		var satuan_id_search=null;
-		var satuan_nama_search=null;
-		var stok_saldo_search=null;
+		var tanggal_start_search="";
+		var tanggal_end_search="";
+		
+		if(stok_produk_namaSearchField.getValue()!==null){produk_nama_search=stok_produk_namaSearchField.getValue();}
+		if(stok_tanggal_startSearchField.getValue()!==null){tanggal_start_search=stok_tanggal_startSearchField.getValue();}
+		if(stok_tanggal_endSearchField.getValue()!==null){tanggal_end_search=stok_tanggal_endSearchField.getValue();}
+		
 
-		if(produk_kodeSearchField.getValue()!==null){produk_kode_search=produk_kodeSearchField.getValue();}
-		if(produk_namaSearchField.getValue()!==null){produk_nama_search=produk_namaSearchField.getValue();}
-		if(satuan_namaSearchField.getValue()!==null){satuan_nama_search=satuan_namaSearchField.getValue();}
-		if(stok_saldoSearchField.getValue()!==null){stok_saldo_search=stok_saldoSearchField.getValue();}
 		// change the store parameters
 		vu_stok_all_saldo_DataStore.baseParams = {
-			task: 'SEARCH',
+			task: 'LIST',
 			//variable here
-			produk_kode	:	produk_kode_search, 
-			produk_nama	:	produk_nama_search, 
-			satuan_nama	:	satuan_nama_search, 
-			stok_saldo	:	stok_saldo_search 
+			produk_id		:	produk_nama_search, 
+			tanggal_start	:	tanggal_start_search, 
+			tanggal_end		:	tanggal_end_search
 		};
 		// Cause the datastore to do another query : 
 		vu_stok_all_saldo_DataStore.reload({params: {start: 0, limit: pageS}});
@@ -657,8 +688,8 @@ Ext.onReady(function(){
 	
 	/* Field for search */
 	/* Identify  produk_id Search Field */
-	produk_idSearchField= new Ext.form.NumberField({
-		id: 'produk_idSearchField',
+		stok_produk_idSearchField= new Ext.form.NumberField({
+		id: 'stok_produk_idSearchField',
 		fieldLabel: 'Produk Id',
 		allowNegatife : false,
 		blankText: '0',
@@ -667,56 +698,86 @@ Ext.onReady(function(){
 		maskRe: /([0-9]+)$/
 	
 	});
-	/* Identify  produk_nama Search Field */
-	produk_namaSearchField= new Ext.form.TextField({
-		id: 'produk_namaSearchField',
-		fieldLabel: 'Produk Nama',
-		maxLength: 250,
-		anchor: '95%'
+	/* Identify  stok_produk_nama Search Field */
+	stok_produk_namaSearchField= new Ext.form.ComboBox({
+		id: 'stok_produk_namaSearchField',
+		fieldLabel: '-',
+		store: produk_DataStore,
+		mode: 'remote',
+		typeAhead: false,
+		displayField: 'produk_nama',
+		valueField: 'produk_id',
+		triggerAction: 'all',
+		lazyRender: false,
+		pageSize: pageS,
+		enableKeyEvents: true,
+		tpl: produk_tpl,
+		itemSelector: 'div.search-item',
+		triggerAction: 'all',
+		listClass: 'x-combo-list-small',
+		width: 300
 	
 	});
 	
-	produk_kodeSearchField= new Ext.form.TextField({
-		id: 'produk_kodeSearchField',
-		fieldLabel: 'Produk Kode',
-		maxLength: 250,
-		anchor: '95%'
-	
-	});
-	
-	/* Identify  satuan_id Search Field */
-	satuan_idSearchField= new Ext.form.NumberField({
-		id: 'satuan_idSearchField',
-		fieldLabel: 'Satuan Id',
-		allowNegatife : false,
-		blankText: '0',
-		allowDecimals: false,
-		anchor: '95%',
-		maskRe: /([0-9]+)$/
-	
-	});
-	
-	/* Identify  satuan_nama Search Field */
-	satuan_namaSearchField= new Ext.form.TextField({
-		id: 'satuan_namaSearchField',
-		fieldLabel: 'Satuan Nama',
-		maxLength: 250,
-		anchor: '95%'
-	
-	});
-	
-	/* Identify  stok_saldo Search Field */
-	stok_saldoSearchField= new Ext.form.NumberField({
-		id: 'stok_saldoSearchField',
-		fieldLabel: 'Stok Saldo',
-		allowNegatife : false,
-		blankText: '0',
-		allowDecimals: true,
-		anchor: '95%',
-		maskRe: /([0-9]+)$/
-	
+	stok_tanggal_startSearchField=new Ext.form.DateField({
+		id: 'stok_tanggal_startSearchField',
+		fieldLabel: 'Tanggal',
+		format: 'Y-m-d',		
+		value: firstday
 	});
     
+	stok_tanggal_endSearchField=new Ext.form.DateField({
+		id: 'stok_tanggal_endSearchField',
+		fieldLabel: 's/d',
+		format: 'Y-m-d',
+		value: firstday
+	});
+	
+	stok_produk_allField=new Ext.form.Radio({
+		name:'opsi_produk',
+		boxLabel: 'Semua',
+		checked: true,
+		width: 100
+	});
+	
+	stok_produk_selectField=new Ext.form.Radio({
+		name:'opsi_produk',
+		boxLabel: 'Produk',
+		width: 100
+	});
+	
+	stok_label_tanggalField=new Ext.form.Label({ html: ' &nbsp; s/d  &nbsp;'});
+	
+	stok_tanggal_opsiSearchField=new Ext.form.FieldSet({
+		id:'stok_tanggal_opsiSearchField',
+		title: 'Opsi Tanggal',
+		layout: 'column',
+		boduStyle: 'padding: 5px;',
+		frame: false,
+		items:[stok_tanggal_startSearchField, stok_label_tanggalField, stok_tanggal_endSearchField]
+	});
+	
+	stok_produk_opsiSearchField=new Ext.form.FieldSet({
+		id:'stok_produk_opsiSearchField',
+		title: 'Opsi Produk',
+		layout: 'form',
+		frame: false,
+		boduStyle: 'padding: 5px;',
+		items:[{
+			   		layout	: 'column',
+					border: false,
+					items	: [stok_produk_allField]
+			   },
+			   {
+				   layout	: 'column',
+				   border: false,
+				   items	: [stok_produk_selectField,stok_produk_namaSearchField]
+			   }
+			
+		]
+	});
+	
+	
 	/* Function for retrieve search Form Panel */
 	vu_stok_all_saldo_searchForm = new Ext.FormPanel({
 		labelAlign: 'left',
@@ -731,7 +792,7 @@ Ext.onReady(function(){
 				columnWidth: 1,
 				layout: 'form',
 				border:false,
-				items: [produk_namaSearchField,produk_kodeSearchField,satuan_namaSearchField,stok_saldoSearchField] 
+				items: [stok_produk_opsiSearchField,stok_tanggal_opsiSearchField] 
 			}
 			]
 		}]
@@ -900,6 +961,8 @@ Ext.onReady(function(){
 		});
 	}
 	/*End of Function */
+	
+	vu_stok_all_saldo_searchWindow.show();
 	
 });
 	</script>

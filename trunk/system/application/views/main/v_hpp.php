@@ -64,12 +64,14 @@ var hpp_produk_idField;
 var hpp_produk_namaField;
 var satuan_idField;
 var satuan_namaField;
-var stok_saldoField;
+var hpp_saldoField;
 var hpp_produk_idSearchField;
 var hpp_produk_namaSearchField;
 var satuan_idSearchField;
 var satuan_namaSearchField;
-var stok_saldoSearchField;
+var hpp_saldoSearchField;
+var today=new Date().format('Y-m-d');
+var firstday=(new Date().format('Y-m'))+'-01';
 
 /* on ready fuction */
 Ext.onReady(function(){
@@ -88,7 +90,7 @@ Ext.onReady(function(){
 		hpp_produk_kodeField.setValue(hppListEditorGrid.getSelectionModel().getSelected().get('hpp_produk_kode'));
 		hpp_produk_namaField.setValue(hppListEditorGrid.getSelectionModel().getSelected().get('hpp_produk_nama'));
 		satuan_namaField.setValue(hppListEditorGrid.getSelectionModel().getSelected().get('satuan_nama'));
-		stok_saldoField.setValue(hppListEditorGrid.getSelectionModel().getSelected().get('stok_saldo'));
+		hpp_saldoField.setValue(hppListEditorGrid.getSelectionModel().getSelected().get('hpp_saldo'));
 	}
 	/* End setValue to EDIT*/
   
@@ -97,9 +99,9 @@ Ext.onReady(function(){
 	function hpp_confirm_update(){
 		/* only one record is selected here */
 		if(hppListEditorGrid.selModel.getCount() == 1) {
-			hpp_set_form();
 			post2db='UPDATE';
 			msg='updated';
+			hpp_set_form();
 			hpp_saveWindow.show();
 		} else {
 			Ext.MessageBox.show({
@@ -115,37 +117,37 @@ Ext.onReady(function(){
   
   	var summary = new Ext.ux.grid.GroupSummary();
 	/* Function for Retrieve DataStore */
-	hpp_DataStore = new Ext.data.GroupingStore({
+	hpp_DataStore = new Ext.data.Store({
 		id: 'hpp_DataStore',
 		proxy: new Ext.data.HttpProxy({
 			url: 'index.php?c=c_hpp&m=get_action', 
-			method: 'POST'
+			method: 'POST',
+			timeout: 360000,
 		}),
-		groupField:'hpp_produk_nama',
 		baseParams:{task: "LIST", start: 0, limit:pageS, produk_id: 0}, // parameter yang di $_POST ke Controller
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
-			id: 'bulan'
+			id: 'hpp_produk_id'
 		},[
 		/* dataIndex => insert intohpp_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'hpp_produk_id', type: 'int', mapping: 'hpp_produk_id'}, 
-			{name: 'bulan', type: 'string', mapping: 'bulan'}, 
-			{name: 'hpp_produk_nama', type: 'string', mapping: 'hpp_produk_nama'}, 
-			{name: 'hpp_produk_kode', type: 'string', mapping: 'hpp_produk_kode'}, 
+			{name: 'hpp_awal', type: 'float', mapping: 'hpp_awal'}, 
+			{name: 'hpp_produk_nama', type: 'string', mapping: 'produk_nama'}, 
+			{name: 'hpp_produk_kode', type: 'string', mapping: 'produk_kode'}, 
 			{name: 'satuan_id', type: 'int', mapping: 'satuan_id'}, 
 			{name: 'satuan_kode', type: 'string', mapping: 'satuan_kode'}, 
 			{name: 'satuan_nama', type: 'string', mapping: 'satuan_nama'}, 
 			{name: 'persediaan_awal', type: 'float', mapping: 'persediaan_awal'},
 			{name: 'jumlah_beli', type: 'float', mapping: 'jumlah_beli'}, 
 			{name: 'pembelian', type: 'float', mapping: 'pembelian'},
-			{name: 'stok_saldo', type: 'float', mapping: 'stok_saldo'}, 
+			{name: 'hpp_saldo', type: 'float', mapping: 'hpp_saldo'}, 
 			{name: 'persediaan_akhir', type: 'float', mapping: 'persediaan_akhir'}, 
 			{name: 'barang_jual', type: 'float', mapping: 'barang_jual'}, 
 			{name: 'hpp', type: 'float', mapping: 'hpp'}, 
 			{name: 'harga_satuan', type: 'float', mapping: 'harga_satuan'} 
 		]),
-		sortInfo:{field: 'bulan', direction: "ASC"}
+		sortInfo:{field: 'hpp_produk_id', direction: "ASC"}
 	});
 	/* End of Function */
     
@@ -177,45 +179,37 @@ Ext.onReady(function(){
 	
   	/* Function for Identify of Window Column Model */
 	hpp_ColumnModel = new Ext.grid.ColumnModel(
-		[/*{
-			header: '#',
-			readOnly: true,
-			dataIndex: 'hpp_produk_id',
-			width: 40,
-			renderer: function(value, cell){
-				cell.css = "readonlycell"; // Mengambil Value dari Class di dalam CSS 
-				return value;
-				},
-			hidden: false
-		},*/
-		{
-			header: '<div align="center">Bulan</div>',
-			dataIndex: 'bulan',
-			width: 150,
-			sortable: true,
-			readOnly: true
-		}, 
-		/*{
+		[
+		 {
 			header: '<div align="center">Kode</div>',
 			dataIndex: 'hpp_produk_kode',
-			width: 150,
+			width: 100,
 			sortable: true,
 			readOnly: true
-		}, 
+		},
 		{
-			header: '<div align="center">Nama</div>',
+			header: '<div align="center">Nama Produk</div>',
 			dataIndex: 'hpp_produk_nama',
-			width: 350,
+			width: 250,
 			sortable: true,
 			readOnly: true
-		}, 
+		},
 		{
 			header: '<div align="center">Satuan</div>',
 			dataIndex: 'satuan_nama',
-			width: 150,
+			width: 100,
 			sortable: true,
 			readOnly: true
-		},*/
+		},
+		{
+			header: '<div align="center">Stok Awal</div>',
+			dataIndex: 'hpp_awal',
+			width: 100,
+			align: 'right',
+			renderer: Ext.util.Format.numberRenderer('0,000.00'),
+			sortable: true,
+			readOnly: true
+		},
 		{
 			header: '<div align="center">Nilai Pers. Awal</div>',
 			dataIndex: 'persediaan_awal',
@@ -228,7 +222,7 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">Pembelian</div>',
 			dataIndex: 'jumlah_beli',
-			width: 150,
+			width: 100,
 			sortable: true,
 			align: 'right',
 			renderer: Ext.util.Format.numberRenderer('0,000.00'),
@@ -245,8 +239,8 @@ Ext.onReady(function(){
 		},
 		{
 			header: '<div align="center">Stok Saldo</div>',
-			dataIndex: 'stok_saldo',
-			width: 150,
+			dataIndex: 'hpp_saldo',
+			width: 100,
 			sortable: true,
 			align: 'right',
 			renderer: Ext.util.Format.numberRenderer('0,000.00'),
@@ -281,7 +275,7 @@ Ext.onReady(function(){
 		},{
 			header: '<div align="center">Harga Satuan</div>',
 			dataIndex: 'harga_satuan',
-			width: 150,
+			width: 100,
 			sortable: true,
 			align: 'right',
 			renderer: Ext.util.Format.numberRenderer('0,000.00'),
@@ -339,16 +333,14 @@ Ext.onReady(function(){
 			store: hpp_DataStore,
 			displayInfo: true
 		}),
-		/*view: new Ext.grid.GroupingView({
-            forceFit: true,
-            showGroupName: false,
-            enableNoGroups: false,
-			enableGroupingMenu: true,
-            hideGroupedColumn: true
-        }),
-		plugins: summary,*/
-		tbar: [' <font color="WHITE"><b>Pilih Produk &nbsp; :</b></font>  ',
-		hpp_produk_kode_filterField,'-',{
+		tbar: [
+		{
+			text: 'Search',
+			tooltip: 'Search',
+			handler: display_form_search_window,
+			iconCls:'icon-search'
+		},'-',
+		{
 			text: 'Refresh',
 			tooltip: 'Refresh datagrid',
 			handler: hpp_reset_search,
@@ -439,13 +431,22 @@ Ext.onReady(function(){
 		anchor: '95%'
 	});
 	
-	hpp_produk_namaField= new Ext.form.TextField({
+	hpp_produk_namaField= new Ext.form.ComboBox({
 		id: 'hpp_produk_namaField',
-		fieldLabel: 'Nama',
-		maxLength: 250,
-		allowBlank: false,
-		readOnly: true,
-		anchor: '95%'
+		store: produk_DataStore,
+		mode: 'remote',
+		typeAhead: false,
+		displayField: 'produk_nama',
+		valueField: 'produk_id',
+		triggerAction: 'all',
+		lazyRender: false,
+		pageSize: pageS,
+		enableKeyEvents: true,
+		tpl: produk_tpl,
+		itemSelector: 'div.search-item',
+		triggerAction: 'all',
+		listClass: 'x-combo-list-small',
+		width: 300
 	});
 
 	/* Identify  satuan_id Field */
@@ -471,9 +472,9 @@ Ext.onReady(function(){
 		anchor: '95%'
 	});
 
-	/* Identify  stok_saldo Field */
-	stok_saldoField= new Ext.form.NumberField({
-		id: 'stok_saldoField',
+	/* Identify  hpp_saldo Field */
+	hpp_saldoField= new Ext.form.NumberField({
+		id: 'hpp_saldoField',
 		fieldLabel: 'Stok Saldo',
 		allowNegatife : false,
 		readOnly: true,
@@ -499,7 +500,7 @@ Ext.onReady(function(){
 				columnWidth:0,
 				layout: 'form',
 				border:false,
-				items: [hpp_produk_kodeField,hpp_produk_namaField,satuan_namaField,stok_saldoField] 
+				items: [hpp_produk_kodeField,hpp_produk_namaField,satuan_namaField,hpp_saldoField] 
 			}
 			],
 		buttons: [{
@@ -533,26 +534,21 @@ Ext.onReady(function(){
 	/* Function for action list search */
 	function hpp_list_search(){
 		// render according to a SQL date format.
-		var hpp_produk_id_search=null;
+		
 		var hpp_produk_nama_search=null;
-		var satuan_id_search=null;
-		var satuan_nama_search=null;
-		var stok_saldo_search=null;
+		var hpp_tanggal_start_search="";
+		var hpp_tanggal_end_search="";
+		
 
-		if(hpp_produk_idSearchField.getValue()!==null){hpp_produk_id_search=hpp_produk_idSearchField.getValue();}
-		if(hpp_produk_namaSearchField.getValue()!==null){hpp_produk_nama_search=hpp_produk_namaSearchField.getValue();}
-		if(satuan_idSearchField.getValue()!==null){satuan_id_search=satuan_idSearchField.getValue();}
-		if(satuan_namaSearchField.getValue()!==null){satuan_nama_search=satuan_namaSearchField.getValue();}
-		if(stok_saldoSearchField.getValue()!==null){stok_saldo_search=stok_saldoSearchField.getValue();}
-		// change the store parameters
+		if(hpp_produk_namaSearchField.getValue()!==null){ hpp_produk_nama_search=hpp_produk_namaSearchField.getValue();}
+		if(hpp_tanggal_startSearchField.getValue()!==""){ hpp_tanggal_start_search=hpp_tanggal_startSearchField.getValue().format('Y-m-d') };
+		if(hpp_tanggal_endSearchField.getValue()!==""){ hpp_tanggal_end_search=hpp_tanggal_endSearchField.getValue().format('Y-m-d') };
+		
 		hpp_DataStore.baseParams = {
-			task: 'SEARCH',
-			//variable here
-			hpp_produk_id	:	hpp_produk_id_search, 
-			hpp_produk_nama	:	hpp_produk_nama_search, 
-			satuan_id	:	satuan_id_search, 
-			satuan_nama	:	satuan_nama_search, 
-			stok_saldo	:	stok_saldo_search 
+			task			: 'LIST',
+			produk_id		: hpp_produk_nama_search,
+			tanggal_start	: hpp_tanggal_startSearchField,
+			tanggal_end		: hpp_tanggal_endSearchField
 		};
 		// Cause the datastore to do another query : 
 		hpp_DataStore.reload({params: {start: 0, limit: pageS}});
@@ -581,63 +577,91 @@ Ext.onReady(function(){
 	
 	});
 	/* Identify  hpp_produk_nama Search Field */
-	hpp_produk_namaSearchField= new Ext.form.TextField({
+	hpp_produk_namaSearchField= new Ext.form.ComboBox({
 		id: 'hpp_produk_namaSearchField',
-		fieldLabel: 'Produk Nama',
-		maxLength: 250,
-		anchor: '95%'
+		fieldLabel: '-',
+		store: produk_DataStore,
+		mode: 'remote',
+		typeAhead: false,
+		displayField: 'produk_nama',
+		valueField: 'produk_id',
+		triggerAction: 'all',
+		lazyRender: false,
+		pageSize: pageS,
+		enableKeyEvents: true,
+		tpl: produk_tpl,
+		itemSelector: 'div.search-item',
+		triggerAction: 'all',
+		listClass: 'x-combo-list-small',
+		width: 300
 	
 	});
-	/* Identify  satuan_id Search Field */
-	satuan_idSearchField= new Ext.form.NumberField({
-		id: 'satuan_idSearchField',
-		fieldLabel: 'Satuan Id',
-		allowNegatife : false,
-		blankText: '0',
-		allowDecimals: false,
-		anchor: '95%',
-		maskRe: /([0-9]+)$/
 	
-	});
-	/* Identify  satuan_nama Search Field */
-	satuan_namaSearchField= new Ext.form.TextField({
-		id: 'satuan_namaSearchField',
-		fieldLabel: 'Satuan Nama',
-		maxLength: 250,
-		anchor: '95%'
-	
-	});
-	/* Identify  stok_saldo Search Field */
-	stok_saldoSearchField= new Ext.form.NumberField({
-		id: 'stok_saldoSearchField',
-		fieldLabel: 'Stok Saldo',
-		allowNegatife : false,
-		blankText: '0',
-		allowDecimals: true,
-		anchor: '95%',
-		maskRe: /([0-9]+)$/
-	
+	hpp_tanggal_startSearchField=new Ext.form.DateField({
+		id: 'hpp_tanggal_startSearchField',
+		fieldLabel: 'Tanggal',
+		format: 'Y-m-d',		
+		value: firstday
 	});
     
+	hpp_tanggal_endSearchField=new Ext.form.DateField({
+		id: 'hpp_tanggal_endSearchField',
+		fieldLabel: 's/d',
+		format: 'Y-m-d',
+		value: firstday
+	});
+	
+	hpp_produk_allField=new Ext.form.Radio({
+		name:'opsi_produk',
+		boxLabel: 'Semua',
+		checked: true,
+		width: 100
+	});
+	
+	hpp_produk_selectField=new Ext.form.Radio({
+		name:'opsi_produk',
+		boxLabel: 'Produk',
+		width: 100
+	});
+	
+	hpp_label_tanggalField=new Ext.form.Label({ html: ' &nbsp; s/d  &nbsp;'});
+	
+	hpp_tanggal_opsiSearchField=new Ext.form.FieldSet({
+		id:'hpp_tanggal_opsiSearchField',
+		title: 'Opsi Tanggal',
+		layout: 'column',
+		boduStyle: 'padding: 5px;',
+		frame: false,
+		items:[hpp_tanggal_startSearchField, hpp_label_tanggalField, hpp_tanggal_endSearchField]
+	});
+	
+	hpp_produk_opsiSearchField=new Ext.form.FieldSet({
+		id:'hpp_produk_opsiSearchField',
+		title: 'Opsi Produk',
+		layout: 'form',
+		frame: false,
+		boduStyle: 'padding: 5px;',
+		items:[{
+			   		layout	: 'column',
+					border: false,
+					items	: [hpp_produk_allField]
+			   },
+			   {
+				   layout	: 'column',
+				   border: false,
+				   items	: [hpp_produk_selectField,hpp_produk_namaSearchField]
+			   }
+			
+		]
+	});
+	
 	/* Function for retrieve search Form Panel */
 	hpp_searchForm = new Ext.FormPanel({
-		labelAlign: 'top',
+		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
-		width: 400,        
-		items: [{
-			layout:'column',
-			border:false,
-			items:[
-			{
-				columnWidth: 1,
-				layout: 'form',
-				border:false,
-				items: [hpp_produk_idSearchField,hpp_produk_namaSearchField,satuan_namaSearchField,stok_saldoSearchField] 
-			}
-			]
-		}]
-		,
+		width: 450,        
+		items: [hpp_produk_opsiSearchField,hpp_tanggal_opsiSearchField],
 		buttons: [{
 				text: 'Search',
 				handler: hpp_list_search
@@ -653,7 +677,7 @@ Ext.onReady(function(){
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
 	hpp_searchWindow = new Ext.Window({
-		title: 'hpp Search',
+		title: 'Pencarian HPP',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,
@@ -685,7 +709,7 @@ Ext.onReady(function(){
 		var hpp_produk_nama_print=null;
 		var satuan_id_print=null;
 		var satuan_nama_print=null;
-		var stok_saldo_print=null;
+		var hpp_saldo_print=null;
 		var win;              
 		// check if we do have some search data...
 		if(hpp_DataStore.baseParams.query!==null){searchquery = hpp_DataStore.baseParams.query;}
@@ -693,7 +717,7 @@ Ext.onReady(function(){
 		if(hpp_DataStore.baseParams.hpp_produk_nama!==null){hpp_produk_nama_print = hpp_DataStore.baseParams.hpp_produk_nama;}
 		if(hpp_DataStore.baseParams.satuan_id!==null){satuan_id_print = hpp_DataStore.baseParams.satuan_id;}
 		if(hpp_DataStore.baseParams.satuan_nama!==null){satuan_nama_print = hpp_DataStore.baseParams.satuan_nama;}
-		if(hpp_DataStore.baseParams.stok_saldo!==null){stok_saldo_print = hpp_DataStore.baseParams.stok_saldo;}
+		if(hpp_DataStore.baseParams.hpp_saldo!==null){hpp_saldo_print = hpp_DataStore.baseParams.hpp_saldo;}
 
 		Ext.Ajax.request({   
 		waitMsg: 'Please Wait...',
@@ -706,7 +730,7 @@ Ext.onReady(function(){
 			hpp_produk_nama : hpp_produk_nama_print,
 			satuan_id : satuan_id_print,
 			satuan_nama : satuan_nama_print,
-			stok_saldo : stok_saldo_print,
+			hpp_saldo : hpp_saldo_print,
 		  	currentlisting: hpp_DataStore.baseParams.task // this tells us if we are searching or not
 		}, 
 		success: function(response){              
@@ -748,7 +772,7 @@ Ext.onReady(function(){
 		var hpp_produk_nama_2excel=null;
 		var satuan_id_2excel=null;
 		var satuan_nama_2excel=null;
-		var stok_saldo_2excel=null;
+		var hpp_saldo_2excel=null;
 		var win;              
 		// check if we do have some search data...
 		if(hpp_DataStore.baseParams.query!==null){searchquery = hpp_DataStore.baseParams.query;}
@@ -756,7 +780,7 @@ Ext.onReady(function(){
 		if(hpp_DataStore.baseParams.hpp_produk_nama!==null){hpp_produk_nama_2excel = hpp_DataStore.baseParams.hpp_produk_nama;}
 		if(hpp_DataStore.baseParams.satuan_id!==null){satuan_id_2excel = hpp_DataStore.baseParams.satuan_id;}
 		if(hpp_DataStore.baseParams.satuan_nama!==null){satuan_nama_2excel = hpp_DataStore.baseParams.satuan_nama;}
-		if(hpp_DataStore.baseParams.stok_saldo!==null){stok_saldo_2excel = hpp_DataStore.baseParams.stok_saldo;}
+		if(hpp_DataStore.baseParams.hpp_saldo!==null){hpp_saldo_2excel = hpp_DataStore.baseParams.hpp_saldo;}
 
 		Ext.Ajax.request({   
 		waitMsg: 'Please Wait...',
@@ -769,7 +793,7 @@ Ext.onReady(function(){
 			hpp_produk_nama : hpp_produk_nama_2excel,
 			satuan_id : satuan_id_2excel,
 			satuan_nama : satuan_nama_2excel,
-			stok_saldo : stok_saldo_2excel,
+			hpp_saldo : hpp_saldo_2excel,
 		  	currentlisting: hpp_DataStore.baseParams.task // this tells us if we are searching or not
 		},
 		success: function(response){              
@@ -803,11 +827,14 @@ Ext.onReady(function(){
 	}
 	/*End of Function */
 	
+	hpp_searchWindow.show();
+	
 	//EVENT
-	hpp_produk_kode_filterField.on("select", function(){
+	/*hpp_produk_kode_filterField.on("select", function(){
 		hpp_DataStore.setBaseParam('produk_id',hpp_produk_kode_filterField.getValue());
-		hpp_DataStore.reload();
-	});
+		hpp_DataStore.setBaseParam('task','LIST');
+		hpp_DataStore.load();
+	});*/
 });
 	</script>
 <body>

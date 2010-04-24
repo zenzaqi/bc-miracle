@@ -28,7 +28,7 @@ class C_stok extends Controller {
 	
 	//event handler action
 	function get_action(){
-		$task = $_POST['task'];
+		$task = isset($_POST['task'])?@$_POST['task']:@$_GET['task'];
 		switch($task){
 			case "LIST":
 				$this->stok_list();

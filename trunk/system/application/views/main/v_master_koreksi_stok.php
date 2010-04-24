@@ -66,6 +66,7 @@ var editor_detail_koreksi_stok;
 var post2db = '';
 var msg = '';
 var pageS=15;
+var today=new Date().format('Y-m-d');
 
 /* declare variable here for Field*/
 var koreksi_idField;
@@ -212,7 +213,7 @@ Ext.onReady(function(){
 		koreksi_gudangField.reset();
 		koreksi_gudangField.setValue(null);
 		koreksi_tanggalField.reset();
-		koreksi_tanggalField.setValue(null);
+		koreksi_tanggalField.setValue(today);
 		koreksi_keteranganField.reset();
 		koreksi_keteranganField.setValue(null);
 		
@@ -646,7 +647,8 @@ Ext.onReady(function(){
 	koreksi_tanggalField= new Ext.form.DateField({
 		id: 'koreksi_tanggalField',
 		fieldLabel: 'Tanggal',
-		format : 'Y-m-d'
+		format : 'Y-m-d',
+		value: today
 	});
 	/* Identify  koreksi_keterangan Field */
 	koreksi_keteranganField= new Ext.form.TextArea({
