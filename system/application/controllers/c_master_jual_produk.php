@@ -269,9 +269,7 @@ class C_master_jual_produk extends Controller {
 		$count=trim(@$_POST['count']);
 		$dcount=trim(@$_POST['dcount']);
 		
-		$produk_point=trim(@$_POST['produk_point']);
-		
-		$result=$this->m_master_jual_produk->detail_detail_jual_produk_insert($dproduk_id ,$dproduk_master ,$dproduk_karyawan, $dproduk_produk ,$dproduk_satuan ,$dproduk_jumlah ,$dproduk_harga ,$dproduk_subtotal_net ,$dproduk_diskon,$dproduk_diskon_jenis,$dproduk_sales,$konversi_nilai_temp, $cetak, $count, $dcount, $produk_point);
+		$result=$this->m_master_jual_produk->detail_detail_jual_produk_insert($dproduk_id ,$dproduk_master ,$dproduk_karyawan, $dproduk_produk ,$dproduk_satuan ,$dproduk_jumlah ,$dproduk_harga ,$dproduk_subtotal_net ,$dproduk_diskon,$dproduk_diskon_jenis,$dproduk_sales,$konversi_nilai_temp, $cetak, $count, $dcount);
 		echo $result;
 	}
 	
@@ -702,6 +700,11 @@ class C_master_jual_produk extends Controller {
 		$rs=$result->row();
 		$rsiklan=$iklan->row();
 		$detail_jproduk=$result->result();
+		
+		$cara_bayar=$this->m_master_jual_produk->cara_bayar($jproduk_id);
+		$cara_bayar2=$this->m_master_jual_produk->cara_bayar2($jproduk_id);
+		$cara_bayar3=$this->m_master_jual_produk->cara_bayar3($jproduk_id);
+		
 		$data['jproduk_nobukti']=$rs->jproduk_nobukti;
 		$data['jproduk_tanggal']=date('d-m-Y', strtotime($rs->jproduk_tanggal));
 		$data['cust_no']=$rs->cust_no;
@@ -709,12 +712,37 @@ class C_master_jual_produk extends Controller {
 		$data['iklantoday_keterangan']=$rsiklan->iklantoday_keterangan;
 		$data['cust_alamat']=$rs->cust_alamat;
 		$data['jumlah_subtotal']=ubah_rupiah($rs->jumlah_subtotal);
-		$data['jumlah_tunai']=ubah_rupiah($rs->jtunai_nilai);
+		//$data['jumlah_tunai']=ubah_rupiah($rs->jtunai_nilai);
+		$data['jumlah_bayar']=$rs->jproduk_bayar;
 		$data['jproduk_diskon']=$rs->jproduk_diskon;
 		$data['jproduk_cashback']=$rs->jproduk_cashback;
 		//$data['jproduk_creator']=$rs->jproduk_creator;
 		//$data['jproduk_totalbiaya']=$rs->jproduk_totalbiaya;
 		$data['detail_jproduk']=$detail_jproduk;
+		
+		if($cara_bayar!==NULL){
+			$data['cara_bayar']=$cara_bayar->jproduk_cara;
+			$data['bayar_nilai']=$cara_bayar->bayar_nilai;
+		}else{
+			$data['cara_bayar']="";
+			$data['bayar_nilai']="";
+		}
+		
+		if($cara_bayar2!==NULL){
+			$data['cara_bayar2']=$cara_bayar2->jproduk_cara2;
+			$data['bayar2_nilai']=$cara_bayar2->bayar2_nilai;
+		}else{
+			$data['cara_bayar2']="";
+			$data['bayar2_nilai']="";
+		}
+		
+		if($cara_bayar3!==NULL){
+			$data['cara_bayar3']=$cara_bayar3->jproduk_cara3;
+			$data['bayar3_nilai']=$cara_bayar3->bayar3_nilai;
+		}else{
+			$data['cara_bayar3']="";
+			$data['bayar3_nilai']="";
+		}
 		
 		$viewdata=$this->load->view("main/jproduk_formcetak",$data,TRUE);
 		$file = fopen("jproduk_paper.html",'w');

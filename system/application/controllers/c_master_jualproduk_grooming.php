@@ -18,7 +18,6 @@ class C_master_jualproduk_grooming extends Controller {
 		parent::Controller();
 		$this->load->model('m_master_jualproduk_grooming', '', TRUE);
 		$this->load->plugin('to_excel');
-		$this->load->library('firephp');
 	}
 	
 	

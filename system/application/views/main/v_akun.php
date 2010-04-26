@@ -1369,8 +1369,6 @@ Ext.onReady(function(){
 			var record_akun=akun_comboDataStore.getAt(j);
 			akun_jenisField.setValue(record_akun.data.akun_parent_jenis);
 		}
-		console.log('j='+j);
-		console.log('kode='+akun_parentField.getValue());
 		
 	});
 });

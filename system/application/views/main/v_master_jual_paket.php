@@ -3387,7 +3387,8 @@ Ext.onReady(function(){
 			{name: 'dpaket_subtotal_net', type: 'int', mapping: 'dpaket_subtotal_net'},
 			{name: 'jpaket_bayar', type: 'float', mapping: 'jpaket_bayar'},
 			{name: 'jpaket_diskon', type: 'int', mapping: 'jpaket_diskon'},
-			{name: 'jpaket_cashback', type: 'float', mapping: 'jpaket_cashback'}
+			{name: 'jpaket_cashback', type: 'float', mapping: 'jpaket_cashback'},
+			{name: 'paket_point', type: 'int', mapping: 'paket_point'}
 	]);
 	//eof
 	

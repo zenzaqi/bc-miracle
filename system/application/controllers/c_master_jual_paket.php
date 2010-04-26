@@ -719,6 +719,11 @@ class C_master_jual_paket extends Controller {
 		$rs=$result->row();
 		$rsiklan=$iklan->row();
 		$detail_jpaket=$result->result();
+		
+		$cara_bayar=$this->m_master_jual_paket->cara_bayar($jpaket_id);
+		$cara_bayar2=$this->m_master_jual_paket->cara_bayar2($jpaket_id);
+		$cara_bayar3=$this->m_master_jual_paket->cara_bayar3($jpaket_id);
+		
 		$data['jpaket_nobukti']=$rs->jpaket_nobukti;
 		$data['jpaket_tanggal']=date('d-m-Y', strtotime($rs->jpaket_tanggal));
 		$data['cust_no']=$rs->cust_no;
@@ -732,6 +737,30 @@ class C_master_jual_paket extends Controller {
 		//$data['jpaket_creator']=$rs->jpaket_creator;
 		//$data['jpaket_totalbiaya']=$rs->jpaket_totalbiaya;
 		$data['detail_jpaket']=$detail_jpaket;
+		
+		if($cara_bayar!==NULL){
+			$data['cara_bayar']=$cara_bayar->jpaket_cara;
+			$data['bayar_nilai']=$cara_bayar->bayar_nilai;
+		}else{
+			$data['cara_bayar']="";
+			$data['bayar_nilai']="";
+		}
+		
+		if($cara_bayar2!==NULL){
+			$data['cara_bayar2']=$cara_bayar2->jpaket_cara2;
+			$data['bayar2_nilai']=$cara_bayar2->bayar2_nilai;
+		}else{
+			$data['cara_bayar2']="";
+			$data['bayar2_nilai']="";
+		}
+		
+		if($cara_bayar3!==NULL){
+			$data['cara_bayar3']=$cara_bayar3->jpaket_cara3;
+			$data['bayar3_nilai']=$cara_bayar3->bayar3_nilai;
+		}else{
+			$data['cara_bayar3']="";
+			$data['bayar3_nilai']="";
+		}
 		
 		$viewdata=$this->load->view("main/jpaket_formcetak",$data,TRUE);
 		$file = fopen("jpaket_paper.html",'w');

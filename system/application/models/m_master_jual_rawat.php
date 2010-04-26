@@ -307,6 +307,34 @@ class M_master_jual_rawat extends Model{
 		}
 		//eof
 		
+		function member_point_update($jrawat_id){
+			$date_now=date('Y-m-d');
+			$sql="SELECT jrawat_cust FROM master_jual_rawat WHERE jrawat_id='$jrawat_id'";
+			$rs=$this->db->query($sql);
+			$record=$rs->row_array();
+			$jrawat_cust=$record['jrawat_cust'];
+			
+			$sql="SELECT member_id FROM member WHERE member_cust='$jrawat_cust' AND (member_valid >= '$date_now')";
+			$rs=$this->db->query($sql);
+			if($rs->num_rows()){
+				$sql="SELECT setmember_rp_perpoint FROM member_setup LIMIT 1";
+				$rs=$this->db->query($sql);
+				$record=$rs->row_array();
+				$setmember_rp_perpoint=$record['setmember_rp_perpoint'];
+				
+				$sql="SELECT drawat_jumlah, drawat_harga, rawat_point FROM detail_jual_rawat LEFT JOIN perawatan ON(drawat_rawat=rawat_id) WHERE drawat_master='$jrawat_id'";
+				$rs=$this->db->query($sql);
+				if($rs->num_rows()){
+					$jumlah_point = 0;
+					foreach($rs->result() as $row){
+						$jumlah_point += ($row->drawat_jumlah) * ($row->rawat_point) * (floor(($row->drawat_harga)/$setmember_rp_perpoint));
+					}
+					$sql="UPDATE customer SET cust_point = (cust_point+$jumlah_point) WHERE cust_id='$jrawat_cust'";
+					$this->db->query($sql);
+				}
+			}
+		}
+		
 		function catatan_piutang_update($jrawat_id){
 			if($jrawat_id=="" || $jrawat_id==NULL || $jrawat_id==0){
 				$jrawat_id=$this->get_master_id();
@@ -540,7 +568,7 @@ class M_master_jual_rawat extends Model{
 				
 			$query .= " ORDER BY jrawat_date_create DESC";
 			
-			$query2 = "SELECT jrawat_id, jrawat_nobukti, vu_jrawat_pk.cust_nama, jrawat_cust, vu_jrawat_pk.cust_no, vu_jrawat_pk.cust_member, jrawat_tanggal, jrawat_diskon, jrawat_cashback, jrawat_cara, jrawat_cara2, jrawat_cara3, jrawat_totalbiaya, jrawat_bayar, jrawat_keterangan, jrawat_creator, jrawat_date_create, jrawat_update, jrawat_date_update, jrawat_revised, keterangan_paket FROM vu_jrawat_pk WHERE date_format(vu_jrawat_pk.jrawat_date_create,'%Y-%m-%d')='$date_now' AND vu_jrawat_pk.jrawat_cust NOT IN(SELECT vu_jrawat_pr.jrawat_cust FROM vu_jrawat_pr WHERE date_format(vu_jrawat_pr.jrawat_date_create,'%Y-%m-%d')='$date_now')";
+			$query2 = "SELECT jrawat_id, jrawat_nobukti, vu_jrawat_pk.cust_nama, jrawat_cust, vu_jrawat_pk.cust_no, vu_jrawat_pk.cust_member, jrawat_tanggal, jrawat_diskon, jrawat_cashback, jrawat_cara, jrawat_cara2, jrawat_cara3, jrawat_totalbiaya, jrawat_bayar, jrawat_keterangan, jrawat_creator, jrawat_date_create, jrawat_update, jrawat_date_update, jrawat_revised, keterangan_paket FROM vu_jrawat_pk WHERE date_format(vu_jrawat_pk.jrawat_date_create,'%Y-%m-%d')='$date_now' AND vu_jrawat_pk.jrawat_cust NOT IN(SELECT vu_jrawat_pr.jrawat_cust FROM vu_jrawat_pr WHERE date_format(vu_jrawat_pr.jrawat_date_create,'%Y-%m-%d')='$date_now') AND vu_jrawat_pk.dapaket_stat_dok='Terbuka'";
 			
 			// For simple search
 			if ($filter<>""){
@@ -1037,7 +1065,7 @@ class M_master_jual_rawat extends Model{
 							$this->db->insert('jual_tunai', $data);
 						}
 						
-					}else if($jrawat_cara=='voucher'){
+					}else if($jrawat_cara2=='voucher'){
 						$sql="SELECT tvoucher_id FROM voucher_terima WHERE tvoucher_ref='$jrawat_nobukti'";
 						$rs=$this->db->query($sql);
 						if($rs->num_rows()){
@@ -1211,7 +1239,7 @@ class M_master_jual_rawat extends Model{
 							$this->db->insert('jual_tunai', $data);
 						}
 						
-					}else if($jrawat_cara=='voucher'){
+					}else if($jrawat_cara3=='voucher'){
 						$sql="SELECT tvoucher_id FROM voucher_terima WHERE tvoucher_ref='$jrawat_nobukti'";
 						$rs=$this->db->query($sql);
 						if($rs->num_rows()){
@@ -1252,18 +1280,20 @@ class M_master_jual_rawat extends Model{
 					return '1';
 				}*/
 				//return '1';
-				if($this->db->affected_rows()){
-					if($cetak_jrawat==1){
+				if($this->db->affected_rows() || $this->db->affected_rows()==0){
+					if($cetak_jrawat==1 && $jrawat_bayar>0){
+						$this->member_point_update($jrawat_id);
 						return $jrawat_id;
 					}else{
 						return '0';
 					}
-				}else{
+				}/*else{
 					return '-1';
-				}
+				}*/
 			}
-			else
+			else{
 				return '-1';
+			}
 			}elseif((substr($jrawat_nobukti,0,2)=='PK') && $cetak_jrawat==1){
 				return '-3';
 			}
@@ -1772,24 +1802,251 @@ class M_master_jual_rawat extends Model{
 			return $result;
 		}
 		
+		function detail_ambil_paket_status_update($dapaket_id){
+			$dtu_dapaket=array(
+			"dapaket_stat_dok"=>'Tertutup'
+			);
+			$this->db->where('dapaket_id', $dapaket_id);
+			$this->db->update('detail_ambil_paket', $dtu_dapaket);
+		}
+		
 		function print_paper($jrawat_id){
-			$sql="SELECT jrawat_tanggal, cust_no, cust_nama, cust_alamat, jrawat_nobukti, rawat_nama, drawat_jumlah, drawat_harga, drawat_diskon, (drawat_harga*((100-drawat_diskon)/100)) AS jumlah_subtotal, jrawat_creator, jtunai_nilai, jrawat_diskon, jrawat_cashback FROM detail_jual_rawat LEFT JOIN master_jual_rawat ON(drawat_master=jrawat_id) LEFT JOIN customer ON(jrawat_cust=cust_id) LEFT JOIN perawatan ON(drawat_rawat=rawat_id) LEFT JOIN jual_tunai ON(jtunai_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id'";
+			$sql="SELECT jrawat_tanggal, cust_no, cust_nama, cust_alamat, jrawat_nobukti, rawat_nama, drawat_jumlah, drawat_harga, drawat_diskon, (drawat_harga*((100-drawat_diskon)/100)) AS jumlah_subtotal, jrawat_creator, jrawat_diskon, jrawat_cashback, jrawat_bayar FROM detail_jual_rawat LEFT JOIN master_jual_rawat ON(drawat_master=jrawat_id) LEFT JOIN customer ON(jrawat_cust=cust_id) LEFT JOIN perawatan ON(drawat_rawat=rawat_id) WHERE jrawat_id='$jrawat_id'";
 			$result = $this->db->query($sql);
 			return $result;
 		}
 		
 		function print_paper_apaket($dapaket_jpaket, $dapaket_cust, $dapaket_date_create){
-			$sql = "SELECT jpaket_nobukti, paket_nama, rawat_nama, dapaket_jumlah, cust_no, cust_nama, cust_alamat, dapaket_date_create FROM detail_ambil_paket LEFT JOIN master_jual_paket ON(dapaket_jpaket=jpaket_id) LEFT JOIN paket ON(dapaket_paket=paket_id) LEFT JOIN customer ON(dapaket_cust=cust_id) LEFT JOIN perawatan ON(dapaket_item=rawat_id) WHERE dapaket_jpaket='$dapaket_jpaket' AND dapaket_cust='$dapaket_cust' AND date_format(dapaket_date_create,'%Y-%m-%d')='$dapaket_date_create'";
+			$sql = "SELECT dapaket_id, jpaket_nobukti, paket_nama, rawat_nama, dapaket_jumlah, cust_no, cust_nama, cust_alamat, dapaket_date_create FROM detail_ambil_paket LEFT JOIN master_jual_paket ON(dapaket_jpaket=jpaket_id) LEFT JOIN paket ON(dapaket_paket=paket_id) LEFT JOIN customer ON(dapaket_cust=cust_id) LEFT JOIN perawatan ON(dapaket_item=rawat_id) WHERE dapaket_jpaket='$dapaket_jpaket' AND dapaket_cust='$dapaket_cust' AND date_format(dapaket_date_create,'%Y-%m-%d')='$dapaket_date_create' AND dapaket_stat_dok='Terbuka'";
 			
 			$result = $this->db->query($sql);
+			foreach($result->result() as $row){
+				$this->detail_ambil_paket_status_update($row->dapaket_id);
+			}
 			return $result;
 		}
 		
 		function print_paper_apaket_bycust($dapaket_cust, $dapaket_date_create){
-			$sql = "SELECT jpaket_nobukti, paket_nama, rawat_nama, dapaket_jumlah, cust_no, cust_nama, cust_alamat, dapaket_date_create FROM detail_ambil_paket LEFT JOIN master_jual_paket ON(dapaket_jpaket=jpaket_id) LEFT JOIN paket ON(dapaket_paket=paket_id) LEFT JOIN customer ON(dapaket_cust=cust_id) LEFT JOIN perawatan ON(dapaket_item=rawat_id) WHERE dapaket_cust='$dapaket_cust' AND date_format(dapaket_date_create,'%Y-%m-%d')='$dapaket_date_create'";
+			$sql = "SELECT dapaket_id, jpaket_nobukti, paket_nama, rawat_nama, dapaket_jumlah, cust_no, cust_nama, cust_alamat, dapaket_date_create FROM detail_ambil_paket LEFT JOIN master_jual_paket ON(dapaket_jpaket=jpaket_id) LEFT JOIN paket ON(dapaket_paket=paket_id) LEFT JOIN customer ON(dapaket_cust=cust_id) LEFT JOIN perawatan ON(dapaket_item=rawat_id) WHERE dapaket_cust='$dapaket_cust' AND date_format(dapaket_date_create,'%Y-%m-%d')='$dapaket_date_create' AND dapaket_stat_dok='Terbuka'";
 			
 			$result = $this->db->query($sql);
+			foreach($result->result() as $row){
+				$this->detail_ambil_paket_status_update($row->dapaket_id);
+			}
 			return $result;
+		}
+		
+		function cara_bayar($jrawat_id){
+			$sql="SELECT jrawat_nobukti, jrawat_cara FROM master_jual_rawat WHERE jrawat_id='$jrawat_id'";
+			$rs=$this->db->query($sql);
+			if($rs->num_rows()){
+				$record=$rs->row();
+				if(($record->jrawat_cara !== NULL || $record->jrawat_cara !== '')){
+					if($record->jrawat_cara == 'tunai'){
+						$sql="SELECT jrawat_nobukti, jrawat_cara, jtunai_nilai AS bayar_nilai FROM master_jual_rawat LEFT JOIN jual_tunai ON(jtunai_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							return $rs->row();
+						}else{
+							return '';
+						}
+					}elseif($record->jrawat_cara == 'kwitansi'){
+						$sql="SELECT jrawat_nobukti, jrawat_cara, jkwitansi_nilai AS bayar_nilai FROM master_jual_rawat LEFT JOIN jual_kwitansi ON(jkwitansi_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							return $rs->row();
+						}else{
+							return '';
+						}
+					}elseif($record->jrawat_cara == 'card'){
+						$sql="SELECT jrawat_nobukti, jrawat_cara, jcard_nilai AS bayar_nilai FROM master_jual_rawat LEFT JOIN jual_card ON(jcard_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							return $rs->row();
+						}else{
+							return '';
+						}
+					}elseif($record->jrawat_cara == 'cek/giro'){
+						$sql="SELECT jrawat_nobukti, jrawat_cara, jcek_nilai AS bayar_nilai FROM master_jual_rawat LEFT JOIN jual_cek ON(jcek_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							return $rs->row();
+						}else{
+							return '';
+						}
+					}elseif($record->jrawat_cara == 'kwitansi'){
+						$sql="SELECT jrawat_nobukti, jrawat_cara, jkwitansi_nilai AS bayar_nilai FROM master_jual_rawat LEFT JOIN jual_kwitansi ON(jkwitansi_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							return $rs->row();
+						}else{
+							return '';
+						}
+					}elseif($record->jrawat_cara == 'transfer'){
+						$sql="SELECT jrawat_nobukti, jrawat_cara, jtransfer_nilai AS bayar_nilai FROM master_jual_rawat LEFT JOIN jual_transfer ON(jtransfer_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							return $rs->row();
+						}else{
+							return '';
+						}
+					}elseif($record->jrawat_cara == 'voucher'){
+						$sql="SELECT jrawat_nobukti, jrawat_cara, tvoucher_nilai AS bayar_nilai FROM master_jual_rawat LEFT JOIN voucher_terima ON(tvoucher_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							return $rs->row();
+						}else{
+							return '';
+						}
+					}
+				}else{
+					return '';
+				}
+			}else{
+				return '';
+			}
+		}
+		
+		function cara_bayar2($jrawat_id){
+			$sql="SELECT jrawat_nobukti, jrawat_cara2 FROM master_jual_rawat WHERE jrawat_id='$jrawat_id'";
+			$rs=$this->db->query($sql);
+			if($rs->num_rows()){
+				$record=$rs->row();
+				if(($record->jrawat_cara2 !== NULL || $record->jrawat_cara2 !== '')){
+					if($record->jrawat_cara2 == 'tunai'){
+						$sql="SELECT jrawat_nobukti, jrawat_cara2, jtunai_nilai AS bayar2_nilai FROM master_jual_rawat LEFT JOIN jual_tunai ON(jtunai_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							return $rs->row();
+						}else{
+							return NULL;
+						}
+					}elseif($record->jrawat_cara2 == 'kwitansi'){
+						$sql="SELECT jrawat_nobukti, jrawat_cara2, jkwitansi_nilai AS bayar2_nilai FROM master_jual_rawat LEFT JOIN jual_kwitansi ON(jkwitansi_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							return $rs->row();
+						}else{
+							return NULL;
+						}
+					}elseif($record->jrawat_cara2 == 'card'){
+						$sql="SELECT jrawat_nobukti, jrawat_cara2, jcard_nilai AS bayar2_nilai FROM master_jual_rawat LEFT JOIN jual_card ON(jcard_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							return $rs->row();
+						}else{
+							return NULL;
+						}
+					}elseif($record->jrawat_cara2 == 'cek/giro'){
+						$sql="SELECT jrawat_nobukti, jrawat_cara2, jcek_nilai AS bayar2_nilai FROM master_jual_rawat LEFT JOIN jual_cek ON(jcek_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							return $rs->row();
+						}else{
+							return NULL;
+						}
+					}elseif($record->jrawat_cara2 == 'kwitansi'){
+						$sql="SELECT jrawat_nobukti, jrawat_cara2, jkwitansi_nilai AS bayar2_nilai FROM master_jual_rawat LEFT JOIN jual_kwitansi ON(jkwitansi_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							return $rs->row();
+						}else{
+							return NULL;
+						}
+					}elseif($record->jrawat_cara2 == 'transfer'){
+						$sql="SELECT jrawat_nobukti, jrawat_cara2, jtransfer_nilai AS bayar2_nilai FROM master_jual_rawat LEFT JOIN jual_transfer ON(jtransfer_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							return $rs->row();
+						}else{
+							return NULL;
+						}
+					}elseif($record->jrawat_cara2 == 'voucher'){
+						$sql="SELECT jrawat_nobukti, jrawat_cara2, tvoucher_nilai AS bayar2_nilai FROM master_jual_rawat LEFT JOIN voucher_terima ON(tvoucher_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							return $rs->row();
+						}else{
+							return NULL;
+						}
+					}
+				}else{
+					return NULL;
+				}
+			}else{
+				return NULL;
+			}
+		}
+		
+		function cara_bayar3($jrawat_id){
+			$sql="SELECT jrawat_nobukti, jrawat_cara3 FROM master_jual_rawat WHERE jrawat_id='$jrawat_id'";
+			$rs=$this->db->query($sql);
+			if($rs->num_rows()){
+				$record=$rs->row();
+				if(($record->jrawat_cara3 !== NULL || $record->jrawat_cara3 !== '')){
+					if($record->jrawat_cara3 == 'tunai'){
+						$sql="SELECT jrawat_nobukti, jrawat_cara3, jtunai_nilai AS bayar3_nilai FROM master_jual_rawat LEFT JOIN jual_tunai ON(jtunai_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							return $rs->row();
+						}else{
+							return '';
+						}
+					}elseif($record->jrawat_cara3 == 'kwitansi'){
+						$sql="SELECT jrawat_nobukti, jrawat_cara3, jkwitansi_nilai AS bayar3_nilai FROM master_jual_rawat LEFT JOIN jual_kwitansi ON(jkwitansi_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							return $rs->row();
+						}else{
+							return '';
+						}
+					}elseif($record->jrawat_cara3 == 'card'){
+						$sql="SELECT jrawat_nobukti, jrawat_cara3, jcard_nilai AS bayar3_nilai FROM master_jual_rawat LEFT JOIN jual_card ON(jcard_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							return $rs->row();
+						}else{
+							return '';
+						}
+					}elseif($record->jrawat_cara3 == 'cek/giro'){
+						$sql="SELECT jrawat_nobukti, jrawat_cara3, jcek_nilai AS bayar3_nilai FROM master_jual_rawat LEFT JOIN jual_cek ON(jcek_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							return $rs->row();
+						}else{
+							return '';
+						}
+					}elseif($record->jrawat_cara3 == 'kwitansi'){
+						$sql="SELECT jrawat_nobukti, jrawat_cara3, jkwitansi_nilai AS bayar3_nilai FROM master_jual_rawat LEFT JOIN jual_kwitansi ON(jkwitansi_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							return $rs->row();
+						}else{
+							return '';
+						}
+					}elseif($record->jrawat_cara3 == 'transfer'){
+						$sql="SELECT jrawat_nobukti, jrawat_cara3, jtransfer_nilai AS bayar3_nilai FROM master_jual_rawat LEFT JOIN jual_transfer ON(jtransfer_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							return $rs->row();
+						}else{
+							return '';
+						}
+					}elseif($record->jrawat_cara3 == 'voucher'){
+						$sql="SELECT jrawat_nobukti, jrawat_cara3, tvoucher_nilai AS bayar3_nilai FROM master_jual_rawat LEFT JOIN voucher_terima ON(tvoucher_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							return $rs->row();
+						}else{
+							return '';
+						}
+					}
+				}else{
+					return '';
+				}
+			}else{
+				return '';
+			}
 		}
 		
 }
