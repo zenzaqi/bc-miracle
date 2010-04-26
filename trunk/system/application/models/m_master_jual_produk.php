@@ -493,6 +493,34 @@ class M_master_jual_produk extends Model{
 			}
 		}
 		
+		function member_point_update($dproduk_master){
+			$date_now=date('Y-m-d');
+			$sql="SELECT jproduk_cust FROM master_jual_produk WHERE jproduk_id='$dproduk_master'";
+			$rs=$this->db->query($sql);
+			$record=$rs->row_array();
+			$jproduk_cust=$record['jproduk_cust'];
+			
+			$sql="SELECT member_id FROM member WHERE member_cust='$jproduk_cust' AND (member_valid >= '$date_now')";
+			$rs=$this->db->query($sql);
+			if($rs->num_rows()){
+				$sql="SELECT setmember_rp_perpoint FROM member_setup LIMIT 1";
+				$rs=$this->db->query($sql);
+				$record=$rs->row_array();
+				$setmember_rp_perpoint=$record['setmember_rp_perpoint'];
+				
+				$sql="SELECT dproduk_jumlah, dproduk_harga, produk_point FROM detail_jual_produk LEFT JOIN produk ON(dproduk_produk=produk_id) WHERE dproduk_master='$dproduk_master'";
+				$rs=$this->db->query($sql);
+				if($rs->num_rows()){
+					$jumlah_point = 0;
+					foreach($rs->result() as $row){
+						$jumlah_point += ($row->dproduk_jumlah) * ($row->produk_point) * (floor(($row->dproduk_harga)/$setmember_rp_perpoint));
+					}
+					$sql="UPDATE customer SET cust_point = (cust_point+$jumlah_point) WHERE cust_id='$jproduk_cust'";
+					$this->db->query($sql);
+				}
+			}
+		}
+		
 		function membership_insert($jproduk_id){
 			$sql="SELECT setmember_transhari, setmember_periodeaktif, setmember_periodetenggang, setmember_transtenggang FROM member_setup LIMIT 1";
 			$rs=$this->db->query($sql);
@@ -621,26 +649,13 @@ class M_master_jual_produk extends Model{
 		//*eof
 		
 		//insert detail record
-		function detail_detail_jual_produk_insert($dproduk_id ,$dproduk_master ,$dproduk_karyawan, $dproduk_produk ,$dproduk_satuan ,$dproduk_jumlah ,$dproduk_harga ,$dproduk_subtotal_net ,$dproduk_diskon,$dproduk_diskon_jenis,$dproduk_sales,$konversi_nilai_temp, $cetak, $count, $dcount, $produk_point){
+		function detail_detail_jual_produk_insert($dproduk_id ,$dproduk_master ,$dproduk_karyawan, $dproduk_produk ,$dproduk_satuan ,$dproduk_jumlah ,$dproduk_harga ,$dproduk_subtotal_net ,$dproduk_diskon,$dproduk_diskon_jenis,$dproduk_sales,$konversi_nilai_temp, $cetak, $count, $dcount){
 			$date_now=date('Y-m-d');
 			//if master id not capture from view then capture it from max pk from master table
 			if($dproduk_master=="" || $dproduk_master==NULL || $dproduk_master==0){
 				$dproduk_master=$this->get_master_id();
 			}
 			
-			$sql="SELECT jproduk_cust FROM master_jual_produk WHERE jproduk_id='$dproduk_master'";
-			$rs=$this->db->query($sql);
-			$record=$rs->row_array();
-			$jproduk_cust=$record['jproduk_cust'];
-			
-			/*$sql="select produk_satuan from produk where produk_id='".$dproduk_produk."'";
-			$query=$this->db->query($sql);
-			if($query->num_rows()){
-				$data=$query->row();
-				$dproduk_satuan=$data->produk_satuan; //satuan_terkecil
-			}else
-				$dproduk_satuan=0;*/
-				
 			$data = array(
 				"dproduk_master"=>$dproduk_master, 
 				"dproduk_produk"=>$dproduk_produk, 
@@ -655,26 +670,8 @@ class M_master_jual_produk extends Model{
 			);
 			$this->db->insert('detail_jual_produk', $data); 
 			if($this->db->affected_rows()){
-				/*if($cetak==1){
-					$produk_point=1;
-					$rp_perpoint = $this->get_rupiah_per_point();
-					$jumlah_point = $dproduk_jumlah * $produk_point * (floor($dproduk_harga/$rp_perpoint));
-					$sql="SELECT member_id FROM member WHERE member_cust='$jproduk_cust' AND (member_valid >= '$date_now')";
-					$rs=$this->db->query($sql);
-					if($rs->num_rows()){
-						$record=$rs->row_array();
-						$member_id=$record['member_id'];
-						$sql="UPDATE customer SET cust_point = (cust_point+$jumlah_point) WHERE cust_id='$jproduk_cust'";
-						$this->db->query($sql);
-						if($this->db->affected_rows()){
-							if($count==($dcount-1)){
-								$this->membership_insert($dproduk_master);
-								return $dproduk_master;
-							}
-						}
-					}
-				}*/
 				if($cetak==1 && ($count==($dcount-1))){
+					$this->member_point_update($dproduk_master);
 					$this->membership_insert($dproduk_master);
 					return $dproduk_master;
 				}else if($cetak!==1 && ($count==($dcount-1))){
@@ -1897,9 +1894,199 @@ class M_master_jual_produk extends Model{
 		}
 		
 		function print_paper($jproduk_id){
-			$sql="SELECT jproduk_tanggal, cust_no, cust_nama, cust_alamat, jproduk_nobukti, produk_nama, dproduk_jumlah, satuan_nama, dproduk_harga, dproduk_diskon, (dproduk_harga*((100-dproduk_diskon)/100)) AS jumlah_subtotal, jproduk_creator, jtunai_nilai, jproduk_diskon, jproduk_cashback FROM detail_jual_produk LEFT JOIN master_jual_produk ON(dproduk_master=jproduk_id) LEFT JOIN customer ON(jproduk_cust=cust_id) LEFT JOIN produk ON(dproduk_produk=produk_id) LEFT JOIN satuan ON(dproduk_satuan=satuan_id) LEFT JOIN jual_tunai ON(jtunai_ref=jproduk_nobukti) WHERE dproduk_master='$jproduk_id'";
+			//$sql="SELECT jproduk_tanggal, cust_no, cust_nama, cust_alamat, jproduk_nobukti, produk_nama, dproduk_jumlah, satuan_nama, dproduk_harga, dproduk_diskon, (dproduk_harga*((100-dproduk_diskon)/100)) AS jumlah_subtotal, jproduk_creator, jtunai_nilai, jproduk_diskon, jproduk_cashback FROM detail_jual_produk LEFT JOIN master_jual_produk ON(dproduk_master=jproduk_id) LEFT JOIN customer ON(jproduk_cust=cust_id) LEFT JOIN produk ON(dproduk_produk=produk_id) LEFT JOIN satuan ON(dproduk_satuan=satuan_id) LEFT JOIN jual_tunai ON(jtunai_ref=jproduk_nobukti) WHERE dproduk_master='$jproduk_id'";
+			$sql="SELECT jproduk_tanggal, cust_no, cust_nama, cust_alamat, jproduk_nobukti, produk_nama, dproduk_jumlah, satuan_nama, dproduk_harga, dproduk_diskon, (dproduk_harga*((100-dproduk_diskon)/100)) AS jumlah_subtotal, jproduk_creator, jproduk_diskon, jproduk_cashback, jproduk_bayar FROM detail_jual_produk LEFT JOIN master_jual_produk ON(dproduk_master=jproduk_id) LEFT JOIN customer ON(jproduk_cust=cust_id) LEFT JOIN produk ON(dproduk_produk=produk_id) LEFT JOIN satuan ON(dproduk_satuan=satuan_id) WHERE dproduk_master='$jproduk_id'";
 			$result = $this->db->query($sql);
 			return $result;
+		}
+		
+		function cara_bayar($jproduk_id){
+			$sql="SELECT jproduk_nobukti, jproduk_cara FROM master_jual_produk WHERE jproduk_id='$jproduk_id'";
+			$rs=$this->db->query($sql);
+			if($rs->num_rows()){
+				$record=$rs->row();
+				if(($record->jproduk_cara !== NULL || $record->jproduk_cara !== '')){
+					if($record->jproduk_cara == 'tunai'){
+						$sql="SELECT jproduk_nobukti, jproduk_cara, jtunai_nilai AS bayar_nilai FROM master_jual_produk LEFT JOIN jual_tunai ON(jtunai_ref=jproduk_nobukti) WHERE jproduk_id='$jproduk_id'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							return $rs->row();
+						}else{
+							return '';
+						}
+					}elseif($record->jproduk_cara == 'kwitansi'){
+						$sql="SELECT jproduk_nobukti, jproduk_cara, jkwitansi_nilai AS bayar_nilai FROM master_jual_produk LEFT JOIN jual_kwitansi ON(jkwitansi_ref=jproduk_nobukti) WHERE jproduk_id='$jproduk_id'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							return $rs->row();
+						}else{
+							return '';
+						}
+					}elseif($record->jproduk_cara == 'card'){
+						$sql="SELECT jproduk_nobukti, jproduk_cara, jcard_nilai AS bayar_nilai FROM master_jual_produk LEFT JOIN jual_card ON(jcard_ref=jproduk_nobukti) WHERE jproduk_id='$jproduk_id'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							return $rs->row();
+						}else{
+							return '';
+						}
+					}elseif($record->jproduk_cara == 'cek/giro'){
+						$sql="SELECT jproduk_nobukti, jproduk_cara, jcek_nilai AS bayar_nilai FROM master_jual_produk LEFT JOIN jual_cek ON(jcek_ref=jproduk_nobukti) WHERE jproduk_id='$jproduk_id'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							return $rs->row();
+						}else{
+							return '';
+						}
+					}elseif($record->jproduk_cara == 'transfer'){
+						$sql="SELECT jproduk_nobukti, jproduk_cara, jtransfer_nilai AS bayar_nilai FROM master_jual_produk LEFT JOIN jual_transfer ON(jtransfer_ref=jproduk_nobukti) WHERE jproduk_id='$jproduk_id'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							return $rs->row();
+						}else{
+							return '';
+						}
+					}elseif($record->jproduk_cara == 'voucher'){
+						$sql="SELECT jproduk_nobukti, jproduk_cara, tvoucher_nilai AS bayar_nilai FROM master_jual_produk LEFT JOIN voucher_terima ON(tvoucher_ref=jproduk_nobukti) WHERE jproduk_id='$jproduk_id'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							return $rs->row();
+						}else{
+							return '';
+						}
+					}
+				}else{
+					return '';
+				}
+			}else{
+				return '';
+			}
+		}
+		
+		function cara_bayar2($jproduk_id){
+			$sql="SELECT jproduk_nobukti, jproduk_cara2 FROM master_jual_produk WHERE jproduk_id='$jproduk_id'";
+			$rs=$this->db->query($sql);
+			if($rs->num_rows()){
+				$record=$rs->row();
+				if(($record->jproduk_cara2 !== NULL || $record->jproduk_cara2 !== '')){
+					if($record->jproduk_cara2 == 'tunai'){
+						$sql="SELECT jproduk_nobukti, jproduk_cara2, jtunai_nilai AS bayar2_nilai FROM master_jual_produk LEFT JOIN jual_tunai ON(jtunai_ref=jproduk_nobukti) WHERE jproduk_id='$jproduk_id'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							return $rs->row();
+						}else{
+							return NULL;
+						}
+					}elseif($record->jproduk_cara2 == 'kwitansi'){
+						$sql="SELECT jproduk_nobukti, jproduk_cara2, jkwitansi_nilai AS bayar2_nilai FROM master_jual_produk LEFT JOIN jual_kwitansi ON(jkwitansi_ref=jproduk_nobukti) WHERE jproduk_id='$jproduk_id'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							return $rs->row();
+						}else{
+							return NULL;
+						}
+					}elseif($record->jproduk_cara2 == 'card'){
+						$sql="SELECT jproduk_nobukti, jproduk_cara2, jcard_nilai AS bayar2_nilai FROM master_jual_produk LEFT JOIN jual_card ON(jcard_ref=jproduk_nobukti) WHERE jproduk_id='$jproduk_id'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							return $rs->row();
+						}else{
+							return NULL;
+						}
+					}elseif($record->jproduk_cara2 == 'cek/giro'){
+						$sql="SELECT jproduk_nobukti, jproduk_cara2, jcek_nilai AS bayar2_nilai FROM master_jual_produk LEFT JOIN jual_cek ON(jcek_ref=jproduk_nobukti) WHERE jproduk_id='$jproduk_id'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							return $rs->row();
+						}else{
+							return NULL;
+						}
+					}elseif($record->jproduk_cara2 == 'transfer'){
+						$sql="SELECT jproduk_nobukti, jproduk_cara2, jtransfer_nilai AS bayar2_nilai FROM master_jual_produk LEFT JOIN jual_transfer ON(jtransfer_ref=jproduk_nobukti) WHERE jproduk_id='$jproduk_id'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							return $rs->row();
+						}else{
+							return NULL;
+						}
+					}elseif($record->jproduk_cara2 == 'voucher'){
+						$sql="SELECT jproduk_nobukti, jproduk_cara2, tvoucher_nilai AS bayar2_nilai FROM master_jual_produk LEFT JOIN voucher_terima ON(tvoucher_ref=jproduk_nobukti) WHERE jproduk_id='$jproduk_id'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							return $rs->row();
+						}else{
+							return NULL;
+						}
+					}
+				}else{
+					return NULL;
+				}
+			}else{
+				return NULL;
+			}
+		}
+		
+		function cara_bayar3($jproduk_id){
+			$sql="SELECT jproduk_nobukti, jproduk_cara3 FROM master_jual_produk WHERE jproduk_id='$jproduk_id'";
+			$rs=$this->db->query($sql);
+			if($rs->num_rows()){
+				$record=$rs->row();
+				if(($record->jproduk_cara3 !== NULL || $record->jproduk_cara3 !== '')){
+					if($record->jproduk_cara3 == 'tunai'){
+						$sql="SELECT jproduk_nobukti, jproduk_cara3, jtunai_nilai AS bayar3_nilai FROM master_jual_produk LEFT JOIN jual_tunai ON(jtunai_ref=jproduk_nobukti) WHERE jproduk_id='$jproduk_id'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							return $rs->row();
+						}else{
+							return '';
+						}
+					}elseif($record->jproduk_cara3 == 'kwitansi'){
+						$sql="SELECT jproduk_nobukti, jproduk_cara3, jkwitansi_nilai AS bayar3_nilai FROM master_jual_produk LEFT JOIN jual_kwitansi ON(jkwitansi_ref=jproduk_nobukti) WHERE jproduk_id='$jproduk_id'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							return $rs->row();
+						}else{
+							return '';
+						}
+					}elseif($record->jproduk_cara3 == 'card'){
+						$sql="SELECT jproduk_nobukti, jproduk_cara3, jcard_nilai AS bayar3_nilai FROM master_jual_produk LEFT JOIN jual_card ON(jcard_ref=jproduk_nobukti) WHERE jproduk_id='$jproduk_id'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							return $rs->row();
+						}else{
+							return '';
+						}
+					}elseif($record->jproduk_cara3 == 'cek/giro'){
+						$sql="SELECT jproduk_nobukti, jproduk_cara3, jcek_nilai AS bayar3_nilai FROM master_jual_produk LEFT JOIN jual_cek ON(jcek_ref=jproduk_nobukti) WHERE jproduk_id='$jproduk_id'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							return $rs->row();
+						}else{
+							return '';
+						}
+					}elseif($record->jproduk_cara3 == 'transfer'){
+						$sql="SELECT jproduk_nobukti, jproduk_cara3, jtransfer_nilai AS bayar3_nilai FROM master_jual_produk LEFT JOIN jual_transfer ON(jtransfer_ref=jproduk_nobukti) WHERE jproduk_id='$jproduk_id'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							return $rs->row();
+						}else{
+							return '';
+						}
+					}elseif($record->jproduk_cara3 == 'voucher'){
+						$sql="SELECT jproduk_nobukti, jproduk_cara3, tvoucher_nilai AS bayar3_nilai FROM master_jual_produk LEFT JOIN voucher_terima ON(tvoucher_ref=jproduk_nobukti) WHERE jproduk_id='$jproduk_id'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							return $rs->row();
+						}else{
+							return '';
+						}
+					}
+				}else{
+					return '';
+				}
+			}else{
+				return '';
+			}
 		}
 		
 		function iklan(){

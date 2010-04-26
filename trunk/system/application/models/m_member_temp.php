@@ -58,6 +58,11 @@ class M_member_temp extends Model{
 			
 			$this->db->where('membert_id', $membert_id);
 			$this->db->update('member_temp', $data);
+			if($this->db->affected_rows()){
+				//* INSERT to db.member untuk diproses menjadi member Miracle /
+				$sql="INSERT INTO member (member_cust, member_no, member_register, member_valid, member_jenis, member_status) SELECT membert_cust, membert_no, membert_register, membert_valid, membert_jenis, membert_status FROM member_temp WHERE member_temp.membert_id='$membert_id'";
+				$this->db->query($sql);
+			}
 			return '1';
 		}
 		

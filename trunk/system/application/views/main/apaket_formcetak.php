@@ -18,7 +18,7 @@ html,body,table,tr,td{
 	<tr>
 		<td height="90px"><table width="1240px" height="90px" border="0" cellspacing="0" cellpadding="0">
           <tr>
-            <td width="700px" align="center" valign="bottom">PENGAMBILAN PAKET </td>
+            <td width="700px" align="center" valign="bottom"><font style="font-size:18px; font-weight:bold; border:#000000 1px solid">PENGAMBILAN PAKET </font></td>
             <td width="540px" valign="top"><table width="540px" border="0" cellspacing="0" cellpadding="0">
               <tr>
                 <td width="60px" align="right">Tanggal</td>
@@ -67,8 +67,8 @@ html,body,table,tr,td{
 	  </td>
   </tr>
   <tr>
-  <td height="30px">
-  &nbsp;
+  <td height="30px">&nbsp;
+  
   </td>
   </tr>
 	<tr>

@@ -80,7 +80,7 @@ html,body,table,tr,td{
 	  <?php }?><br />
 	  <table width="1240px" border="0" cellspacing="0" cellpadding="0">
 		<tr>
-			<td><font style="font-weight:bold; border:#000000 1px solid">PENGAMBILAN PAKET</font></td>
+			<td><?php if($detail_apaket<>NULL){?><font style="font-weight:bold; border:#000000 1px solid">PENGAMBILAN PAKET</font><?php }?></td>
 		</tr>
 		<?php 
 		$j=0;
@@ -111,21 +111,21 @@ html,body,table,tr,td{
         </tr>
         <tr>
           <td>&nbsp;</td>
-          <td>&nbsp;</td>
+          <td><?php if($cara_bayar<>''){?><?=$cara_bayar;?>&nbsp;:&nbsp;<?=$bayar_nilai;?><?php }?></td>
           <td>&nbsp;</td>
           <td>&nbsp;</td>
           <td align="right"><?=rupiah($total_diskon);?></td>
         </tr>
         <tr>
           <td>&nbsp;</td>
+          <td><?php if($cara_bayar2<>''){?><?=$cara_bayar2;?>&nbsp;:&nbsp;<?=$bayar2_nilai;?><?php }?></td>
           <td>&nbsp;</td>
           <td>&nbsp;</td>
-          <td>&nbsp;</td>
-          <td align="right"><?=rupiah($jumlah_tunai);?></td>
+          <td align="right"><?=rupiah($jumlah_bayar);?></td>
         </tr>
         <tr>
           <td>&nbsp;</td>
-          <td>&nbsp;</td>
+          <td><?php if($cara_bayar3<>''){?><?=$cara_bayar3;?>&nbsp;:&nbsp;<?=$bayar3_nilai;?><?php }?></td>
           <td>&nbsp;</td>
           <td>&nbsp;</td>
           <td align="right"><?=rupiah($total);?></td>

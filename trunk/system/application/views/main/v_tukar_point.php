@@ -79,6 +79,44 @@ var epoint_jumlahSearchField;
 var epoint_voucherSearchField;
 var epoint_tanggalSearchField;
 
+var dt=new Date();
+
+function tukar_point_cetak(kwitansi_ref){
+	Ext.Ajax.request({   
+		waitMsg: 'Mohon tunggu...',
+		url: 'index.php?c=c_tukar_point&m=print_paper',
+		params: { kwitansi_ref : kwitansi_ref}, 
+		success: function(response){              
+			var result=eval(response.responseText);
+			switch(result){
+			case 1:
+				win = window.open('./kwitansi_paper.html','Cetak Kwitansi Tukar Poin','height=480,width=1240,resizable=1,scrollbars=0, menubar=0');
+				//win.print();
+				break;
+			default:
+				Ext.MessageBox.show({
+					title: 'Warning',
+					msg: 'Unable to print the grid!',
+					buttons: Ext.MessageBox.OK,
+					animEl: 'save',
+					icon: Ext.MessageBox.WARNING
+				});
+				break;
+			}  
+		},
+		failure: function(response){
+			var result=response.responseText;
+			Ext.MessageBox.show({
+			   title: 'Error',
+			   msg: 'Could not connect to the database. retry later.',
+			   buttons: Ext.MessageBox.OK,
+			   animEl: 'database',
+			   icon: Ext.MessageBox.ERROR
+			});		
+		} 	                     
+	});
+}
+
 /* on ready fuction */
 Ext.onReady(function(){
   	Ext.QuickTips.init();	/* Initiate quick tips icon */
@@ -168,8 +206,21 @@ Ext.onReady(function(){
 				epoint_tanggal	: epoint_tanggal_create_date, 
 			}, 
 			success: function(response){             
-				var result=eval(response.responseText);
-				switch(result){
+				var result=response.responseText;
+				if(result=='0' || result=='1'){
+					Ext.MessageBox.show({
+					   title: 'Warning',
+					   msg: 'Penukaran Poin tidak bisa disimpan',
+					   buttons: Ext.MessageBox.OK,
+					   animEl: 'save',
+					   icon: Ext.MessageBox.WARNING
+					});
+				}else{
+					tukar_point_cetak(result);
+					tukar_point_DataStore.reload();
+					tukar_point_createWindow.hide();
+				}
+				/*switch(result){
 					case 1:
 						Ext.MessageBox.alert(post2db+' OK','The Tukar_point was '+msg+' successfully.');
 						tukar_point_DataStore.reload();
@@ -184,7 +235,7 @@ Ext.onReady(function(){
 						   icon: Ext.MessageBox.WARNING
 						});
 						break;
-				}        
+				}        */
 			},
 			failure: function(response){
 				var result=response.responseText;
@@ -255,6 +306,7 @@ Ext.onReady(function(){
 			tukar_point_reset_form();
 			post2db='CREATE';
 			msg='created';
+			epoint_tanggalField.setValue(dt);
 			tukar_point_createWindow.show();
 		} else {
 			tukar_point_createWindow.toFront();
@@ -369,7 +421,8 @@ Ext.onReady(function(){
 			{name: 'epoint_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'epoint_date_create'}, 
 			{name: 'epoint_update', type: 'string', mapping: 'epoint_update'}, 
 			{name: 'epoint_date_update', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'epoint_date_update'}, 
-			{name: 'epoint_revised', type: 'int', mapping: 'epoint_revised'} 
+			{name: 'epoint_revised', type: 'int', mapping: 'epoint_revised'},
+			{name: 'epoint_nobukti', type: 'string', mapping: 'kwitansi_no'} 
 		]),
 		sortInfo:{field: 'epoint_id', direction: "DESC"}
 	});
@@ -475,8 +528,8 @@ Ext.onReady(function(){
 			})
 		}, 
 		{
-			header: 'Voucher',
-			dataIndex: 'epoint_voucher',
+			header: 'No. Kuitansi',
+			dataIndex: 'epoint_nobukti',
 			width: 150,
 			sortable: true,
 			readOnly: true
@@ -696,7 +749,7 @@ Ext.onReady(function(){
 		allowNegatife : false,
 		blankText: '0',
 		allowDecimals: false,
-				anchor: '95%',
+		width: 76,
 		maskRe: /([0-9]+)$/
 	});
 	/* Identify  epoint_voucher Field */
@@ -723,22 +776,24 @@ Ext.onReady(function(){
 	epoint_tanggalField= new Ext.form.DateField({
 		id: 'epoint_tanggalField',
 		fieldLabel: 'Tanggal',
-		format : 'Y-m-d',
+		format : 'Y-m-d'
 	});
+	
+	epoint_kwitansiField= new Ext.form.TextField();
 
 	
 	/* Function for retrieve create Window Panel*/ 
 	tukar_point_createForm = new Ext.FormPanel({
-		labelAlign: 'top',
+		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
-		width: 300,        
+		width: 400,        
 		items:[
 			{
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [epoint_idField, epoint_custField, epoint_jumlahField, epoint_voucherField, epoint_tanggalField] 
+				items: [epoint_idField, epoint_custField, epoint_jumlahField, epoint_tanggalField] 
 			}
 			],
 		buttons: [{

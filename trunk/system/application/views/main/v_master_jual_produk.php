@@ -186,7 +186,7 @@ function jproduk_cetak(master_id){
 			var result=eval(response.responseText);
 			switch(result){
 			case 1:
-				win = window.open('./jproduk_paper.html','Cetak Penjualan Produk','height=480,width=1240,resizable=1,scrollbars=0, menubar=0');
+				win = window.open('./jproduk_paper.html','Cetak Penjualan Produk','height=480,width=1340,resizable=1,scrollbars=0, menubar=0');
 				//win.print();
 				break;
 			default:

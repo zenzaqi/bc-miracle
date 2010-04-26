@@ -706,6 +706,10 @@ class C_master_jual_rawat extends Controller {
 		$rs=$result->row();
 		$detail_jrawat=$result->result();
 		
+		$cara_bayar=$this->m_master_jual_rawat->cara_bayar($jrawat_id);
+		$cara_bayar2=$this->m_master_jual_rawat->cara_bayar2($jrawat_id);
+		$cara_bayar3=$this->m_master_jual_rawat->cara_bayar3($jrawat_id);
+		
 		$result_apaket = $this->m_master_jual_rawat->print_paper_apaket_bycust($jrawat_cust, $jrawat_tanggal);
 		$detail_apaket=$result_apaket->result();
 		
@@ -715,13 +719,37 @@ class C_master_jual_rawat extends Controller {
 		$data['cust_nama']=$rs->cust_nama;
 		$data['cust_alamat']=$rs->cust_alamat;
 		$data['jumlah_subtotal']=ubah_rupiah($rs->jumlah_subtotal);
-		$data['jumlah_tunai']=ubah_rupiah($rs->jtunai_nilai);
+		$data['jumlah_bayar']=$rs->jrawat_bayar;
 		$data['jrawat_diskon']=$rs->jrawat_diskon;
 		$data['jrawat_cashback']=$rs->jrawat_cashback;
 		//$data['jrawat_creator']=$rs->jrawat_creator;
 		//$data['jrawat_totalbiaya']=$rs->jrawat_totalbiaya;
 		$data['detail_jrawat']=$detail_jrawat;
 		$data['detail_apaket']=$detail_apaket;
+		
+		if($cara_bayar!==NULL){
+			$data['cara_bayar']=$cara_bayar->jrawat_cara;
+			$data['bayar_nilai']=$cara_bayar->bayar_nilai;
+		}else{
+			$data['cara_bayar']="";
+			$data['bayar_nilai']="";
+		}
+		
+		if($cara_bayar2!==NULL){
+			$data['cara_bayar2']=$cara_bayar2->jrawat_cara2;
+			$data['bayar2_nilai']=$cara_bayar2->bayar2_nilai;
+		}else{
+			$data['cara_bayar2']="";
+			$data['bayar2_nilai']="";
+		}
+		
+		if($cara_bayar3!==NULL){
+			$data['cara_bayar3']=$cara_bayar3->jrawat_cara3;
+			$data['bayar3_nilai']=$cara_bayar3->bayar3_nilai;
+		}else{
+			$data['cara_bayar3']="";
+			$data['bayar3_nilai']="";
+		}
 		
 		$viewdata=$this->load->view("main/jrawat_formcetak",$data,TRUE);
 		$file = fopen("jrawat_paper.html",'w');

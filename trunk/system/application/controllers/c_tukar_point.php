@@ -17,6 +17,7 @@ class C_tukar_point extends Controller {
 	function C_tukar_point(){
 		parent::Controller();
 		$this->load->model('m_tukar_point', '', TRUE);
+		session_start();
 		$this->load->plugin('to_excel');
 	}
 	
@@ -91,7 +92,7 @@ class C_tukar_point extends Controller {
 		$epoint_jumlah=trim(@$_POST["epoint_jumlah"]);
 		$epoint_voucher=trim(@$_POST["epoint_voucher"]);
 		$epoint_tanggal=trim(@$_POST["epoint_tanggal"]);
-		$result = $this->m_tukar_point->tukar_point_update($epoint_id ,$epoint_cust ,$epoint_jumlah ,$epoint_voucher ,$epoint_tanggal      );
+		$result = $this->m_tukar_point->tukar_point_update($epoint_id ,$epoint_cust ,$epoint_jumlah ,$epoint_voucher ,$epoint_tanggal);
 		echo $result;
 	}
 	
@@ -103,7 +104,9 @@ class C_tukar_point extends Controller {
 		$epoint_jumlah=trim(@$_POST["epoint_jumlah"]);
 		$epoint_voucher=trim(@$_POST["epoint_voucher"]);
 		$epoint_tanggal=trim(@$_POST["epoint_tanggal"]);
-		$result=$this->m_tukar_point->tukar_point_create($epoint_cust ,$epoint_jumlah ,$epoint_voucher ,$epoint_tanggal );
+		$epoint_creator=$_SESSION[SESSION_USERID];
+		$epoint_date_create=date('Y-m-d');
+		$result=$this->m_tukar_point->tukar_point_create($epoint_cust ,$epoint_jumlah ,$epoint_voucher ,$epoint_tanggal ,$epoint_creator ,$epoint_date_create);
 		echo $result;
 	}
 
@@ -203,6 +206,30 @@ class C_tukar_point extends Controller {
 		to_excel($query,"tukar_point"); 
 		echo '1';
 			
+	}
+	
+	function print_paper(){
+  		//POST varibale here
+		$kwitansi_ref=trim(@$_POST["kwitansi_ref"]);
+		
+		
+		$result = $this->m_tukar_point->print_paper($kwitansi_ref);
+		$rs=$result->row();
+		$result_cara_bayar = $this->m_tukar_point->cara_bayar($kwitansi_ref);
+		
+		$data["kwitansi_no"]=$rs->kwitansi_no;
+		$data["kwitansi_tanggal"]=$rs->kwitansi_date_create;
+		$data["kwitansi_customer"]=$rs->cust_no."-".$rs->cust_nama;
+		$data["kwitansi_nilai"]="Rp. ".ubah_rupiah($rs->kwitansi_nilai);
+		$data["kwitansi_terbilang"]=strtoupper(terbilang($rs->kwitansi_nilai))." RUPIAH";
+		$data["kwitansi_keterangan"]=$rs->kwitansi_keterangan;
+		$data["kwitansi_cara"]=$rs->kwitansi_cara;
+		
+		$viewdata=$this->load->view("main/kwitansi_formcetak",$data,TRUE);
+		$file = fopen("kwitansi_paper.html",'w');
+		fwrite($file, $viewdata);	
+		fclose($file);
+		echo '1';        
 	}
 	
 	// Encodes a SQL array into a JSON formated string
