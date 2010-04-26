@@ -4111,7 +4111,7 @@ Ext.onReady(function(){
 			text: 'Delete',
 			tooltip: 'Delete detail selected record',
 			iconCls:'icon-delete',
-			disabled: true,
+			//disabled: true,
 			handler: detail_jual_produk_confirm_delete
 		}
 		]
