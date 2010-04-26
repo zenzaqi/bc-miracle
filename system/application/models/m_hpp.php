@@ -22,11 +22,11 @@ class M_hpp extends Model{
 		function get_produk_list($filter,$start,$end){
 			$sql="select * from vu_produk_satuan_terkecil";
 			if($filter<>""){
-				$sql.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$sql.="( produk_kode '%".addslashes($filter)."%' OR 
-						 produk_nama '%".addslashes($filter)."%' OR 
-						 satuan_kode '%".addslashes($filter)."%' OR 
-						 satuan_nama '%".addslashes($filter)."%')";
+				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+				$sql.="( produk_kode LIKE '%".addslashes($filter)."%' OR 
+						 produk_nama LIKE '%".addslashes($filter)."%' OR 
+						 satuan_kode LIKE '%".addslashes($filter)."%' OR 
+						 satuan_nama LIKE '%".addslashes($filter)."%')";
 			}
 			
 			$result = $this->db->query($sql);
