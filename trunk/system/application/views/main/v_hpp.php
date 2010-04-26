@@ -183,102 +183,102 @@ Ext.onReady(function(){
 		 {
 			header: '<div align="center">Kode</div>',
 			dataIndex: 'hpp_produk_kode',
-			width: 100,
+			width: 60,
 			sortable: true,
 			readOnly: true
 		},
 		{
 			header: '<div align="center">Nama Produk</div>',
 			dataIndex: 'hpp_produk_nama',
-			width: 250,
+			width: 200,
 			sortable: true,
 			readOnly: true
 		},
 		{
 			header: '<div align="center">Satuan</div>',
 			dataIndex: 'satuan_nama',
-			width: 100,
+			width: 60,
 			sortable: true,
 			readOnly: true
 		},
 		{
 			header: '<div align="center">Stok Awal</div>',
 			dataIndex: 'hpp_awal',
-			width: 100,
+			width: 60,
 			align: 'right',
 			renderer: Ext.util.Format.numberRenderer('0,000.00'),
 			sortable: true,
 			readOnly: true
 		},
 		{
-			header: '<div align="center">Nilai Pers. Awal</div>',
+			header: '<div align="center">Nilai Pers. Awal (Rp)</div>',
 			dataIndex: 'persediaan_awal',
-			width: 150,
+			width: 100,
 			align: 'right',
-			renderer: Ext.util.Format.numberRenderer('0,000.00'),
+			renderer: Ext.util.Format.numberRenderer('0,000'),
 			sortable: true,
 			readOnly: true
 		},
 		{
 			header: '<div align="center">Pembelian</div>',
 			dataIndex: 'jumlah_beli',
-			width: 100,
+			width: 60,
 			sortable: true,
 			align: 'right',
 			renderer: Ext.util.Format.numberRenderer('0,000.00'),
 			readOnly: true
 		},
 		{
-			header: '<div align="center">Nilai Pembelian</div>',
+			header: '<div align="center">Nilai Pembelian (Rp)</div>',
 			dataIndex: 'pembelian',
-			width: 150,
+			width: 100,
 			sortable: true,
 			align: 'right',
-			renderer: Ext.util.Format.numberRenderer('0,000.00'),
+			renderer: Ext.util.Format.numberRenderer('0,000'),
 			readOnly: true
 		},
 		{
 			header: '<div align="center">Stok Saldo</div>',
 			dataIndex: 'hpp_saldo',
-			width: 100,
+			width: 60,
 			sortable: true,
 			align: 'right',
 			renderer: Ext.util.Format.numberRenderer('0,000.00'),
 			readOnly: true
 		},
 		{
-			header: '<div align="center">Nilai Pers. Akhir</div>',
+			header: '<div align="center">Nilai Pers. Akhir (Rp)</div>',
 			dataIndex: 'persediaan_akhir',
-			width: 150,
+			width: 100,
 			sortable: true,
 			align: 'right',
-			renderer: Ext.util.Format.numberRenderer('0,000.00'),
+			renderer: Ext.util.Format.numberRenderer('0,000'),
 			readOnly: true
 		},
 		{
 			header: '<div align="center">Penjualan</div>',
 			dataIndex: 'barang_jual',
-			width: 150,
+			width: 60,
 			sortable: true,
 			align: 'right',
 			renderer: Ext.util.Format.numberRenderer('0,000.00'),
 			readOnly: true
 		},
 		{
-			header: '<div align="center">HPP</div>',
+			header: '<div align="center">HPP (Rp)</div>',
 			dataIndex: 'hpp',
-			width: 150,
+			width: 100,
 			sortable: true,
 			align: 'right',
-			renderer: Ext.util.Format.numberRenderer('0,000.00'),
+			renderer: Ext.util.Format.numberRenderer('0,000'),
 			readOnly: true
 		},{
-			header: '<div align="center">Harga Satuan</div>',
+			header: '<div align="center">Hrg Satuan (Rp)</div>',
 			dataIndex: 'harga_satuan',
 			width: 100,
 			sortable: true,
 			align: 'right',
-			renderer: Ext.util.Format.numberRenderer('0,000.00'),
+			renderer: Ext.util.Format.numberRenderer('0,000'),
 			readOnly: true
 		}
 		]);
@@ -327,7 +327,7 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 1200,
+	  	width: 1220,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: hpp_DataStore,
