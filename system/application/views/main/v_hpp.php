@@ -600,15 +600,16 @@ Ext.onReady(function(){
 	hpp_tanggal_startSearchField=new Ext.form.DateField({
 		id: 'hpp_tanggal_startSearchField',
 		fieldLabel: 'Tanggal',
-		format: 'Y-m-d',		
+		format: 'd-m-Y',		
 		value: firstday
 	});
     
 	hpp_tanggal_endSearchField=new Ext.form.DateField({
 		id: 'hpp_tanggal_endSearchField',
 		fieldLabel: 's/d',
-		format: 'Y-m-d',
-		value: firstday
+		format: 'd-m-Y',
+		//value: firstday
+		value: today
 	});
 	
 	hpp_produk_allField=new Ext.form.Radio({
