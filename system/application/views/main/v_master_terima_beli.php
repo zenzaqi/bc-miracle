@@ -664,7 +664,7 @@ Ext.onReady(function(){
 	master_terima_beliListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'master_terima_beliListEditorGrid',
 		el: 'fp_master_terima_beli',
-		title: 'Daftar Lembar Penerimaan Barang',
+		title: 'Daftar Penerimaan Barang',
 		autoHeight: true,
 		store: master_terima_beli_DataStore, // DataStore
 		cm: master_terima_beli_ColumnModel, // Nama-nama Columns

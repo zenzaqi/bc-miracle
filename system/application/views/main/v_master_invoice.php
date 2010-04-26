@@ -222,7 +222,7 @@ Ext.onReady(function(){
 					}else{
 						Ext.MessageBox.show({
 						   title: 'Warning',
-						   msg: 'We could\'t not '+msg+' the Master_invoice.',
+						   msg: 'Data penerimaan tagihan tidak bisa disimpan',
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'save',
 						   icon: Ext.MessageBox.WARNING
@@ -625,9 +625,9 @@ Ext.onReady(function(){
 			dataIndex: 'invoice_jatuhtempo',
 			width: 70,	//100,
 			sortable: true,
-			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
+			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
 			editor: new Ext.form.DateField({
-				format: 'Y-m-d'
+				format: 'd-m-Y'
 			})
 		}, 
 		{
