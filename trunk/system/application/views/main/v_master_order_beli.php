@@ -1074,6 +1074,7 @@ Ext.onReady(function(){
 			{name: 'dorder_master', type: 'int', mapping: 'dorder_master'}, 
 			{name: 'dorder_produk', type: 'int', mapping: 'dorder_produk'},
 			{name: 'produk_nama', type: 'string', mapping: 'produk_nama'},
+			{name: 'dorder_terima', type: 'float', mapping: 'jumlah_terima'}, 
 			{name: 'dorder_satuan', type: 'int', mapping: 'dorder_satuan'}, 
 			{name: 'dorder_jumlah', type: 'int', mapping: 'jumlah_barang'}, 
 			{name: 'dorder_harga', type: 'float', mapping: 'harga_satuan'}, 
@@ -1242,7 +1243,14 @@ Ext.onReady(function(){
 					subtotal=Ext.util.Format.number((record.data.dorder_harga * record.data.dorder_jumlah*(100-record.data.dorder_diskon)/100),"0,000");
                     return '<span>' + subtotal+ '</span>';
             }
-		}
+		},{
+			header: '<div align="center">Diterima</div>',
+			align: 'right',
+			dataIndex: 'dorder_terima',
+			width: 60,
+			sortable: true,
+			readOnly: true
+		},
 		]
 	);
 	detail_order_beli_ColumnModel.defaultSortable= true;

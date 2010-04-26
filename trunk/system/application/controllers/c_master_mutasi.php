@@ -17,13 +17,66 @@ class C_master_mutasi extends Controller {
 	function C_master_mutasi(){
 		parent::Controller();
 		$this->load->model('m_master_mutasi', '', TRUE);
-		$this->load->plugin('to_excel');
 	}
 	
 	//set index
 	function index(){
 		$this->load->helper('asset');
 		$this->load->view('main/v_master_mutasi');
+		$this->load->plugin('to_excel');
+	}
+	
+	function laporan(){
+		$this->load->view('main/v_lap_mutasi');
+	}
+	
+	function print_laporan(){
+		$tgl_awal=(isset($_POST['tgl_awal']) ? @$_POST['tgl_awal'] : @$_GET['tgl_awal']);
+		$tgl_akhir=(isset($_POST['tgl_akhir']) ? @$_POST['tgl_akhir'] : @$_GET['tgl_akhir']);
+		$bulan=(isset($_POST['bulan']) ? @$_POST['bulan'] : @$_GET['bulan']);
+		$tahun=(isset($_POST['tahun']) ? @$_POST['tahun'] : @$_GET['tahun']);
+		$opsi=(isset($_POST['opsi']) ? @$_POST['opsi'] : @$_GET['opsi']);
+		$periode=(isset($_POST['periode']) ? @$_POST['periode'] : @$_GET['periode']);
+		$group=(isset($_POST['group']) ? @$_POST['group'] : @$_GET['group']);
+		
+		$data["jenis"]='Produk';
+		if($periode=="all"){
+			$data["periode"]="Semua Periode";
+		}else if($periode=="bulan"){
+			$tgl_awal=$tahun."-".$bulan;
+			$data["periode"]=get_ina_month_name($bulan,'long')." ".$tahun;
+		}else if($periode=="tanggal"){
+			$data["periode"]="Periode ".$tgl_awal." s/d ".$tgl_akhir;
+		}
+		
+		$data["data_print"]=$this->m_master_mutasi->get_laporan($tgl_awal,$tgl_akhir,$periode,$opsi,$group);
+		if($opsi=='rekap'){
+				
+			switch($group){
+				case "Tanggal": $print_view=$this->load->view("main/p_rekap_mutasi_tanggal.php",$data,TRUE);break;
+				case "Supplier": $print_view=$this->load->view("main/p_rekap_mutasi_supplier.php",$data,TRUE);break;
+				default: $print_view=$this->load->view("main/p_rekap_mutasi.php",$data,TRUE);break;
+			}
+			
+		}else{
+			switch($group){
+				case "Tanggal": $print_view=$this->load->view("main/p_detail_mutasi_tanggal.php",$data,TRUE);break;
+				case "Supplier": $print_view=$this->load->view("main/p_detail_mutasi_supplier.php",$data,TRUE);break;
+				case "Produk": $print_view=$this->load->view("main/p_detail_mutasi_produk.php",$data,TRUE);break;
+				default: $print_view=$this->load->view("main/p_detail_mutasi.php",$data,TRUE);break;
+			}
+		}
+		
+		if(!file_exists("print")){
+			mkdir("print");
+		}
+		if($opsi=='rekap')
+			$print_file=fopen("print/report_mutasi.html","w+");
+		else
+			$print_file=fopen("print/report_mutasi.html","w+");
+			
+		fwrite($print_file, $print_view);
+		echo '1'; 
 	}
 	
 	function get_gudang_list(){

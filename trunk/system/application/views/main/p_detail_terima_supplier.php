@@ -54,6 +54,8 @@
 		   ?>
            <?php if($print_list->supplier_id==$print->supplier_id){ $i++;
 		   			$sub_jumlah+=$print_list->jumlah;
+					
+					$total_item+=$print_list->jumlah;
 		   ?>
             <tr>
                 <td><? echo $i; ?></td>
@@ -73,7 +75,7 @@
            </tr>
            <?php } $supplier=$print->supplier_id; ?>
 		<?php 
-			$total_item+=$sub_jumlah;
+			
 		
 		} ?>
         

@@ -30,6 +30,56 @@ class C_master_retur_beli extends Controller {
 		$this->load->view('main/v_lap_retur_beli');
 	}
 	
+	function print_laporan(){
+		$tgl_awal=(isset($_POST['tgl_awal']) ? @$_POST['tgl_awal'] : @$_GET['tgl_awal']);
+		$tgl_akhir=(isset($_POST['tgl_akhir']) ? @$_POST['tgl_akhir'] : @$_GET['tgl_akhir']);
+		$bulan=(isset($_POST['bulan']) ? @$_POST['bulan'] : @$_GET['bulan']);
+		$tahun=(isset($_POST['tahun']) ? @$_POST['tahun'] : @$_GET['tahun']);
+		$opsi=(isset($_POST['opsi']) ? @$_POST['opsi'] : @$_GET['opsi']);
+		$periode=(isset($_POST['periode']) ? @$_POST['periode'] : @$_GET['periode']);
+		$group=(isset($_POST['group']) ? @$_POST['group'] : @$_GET['group']);
+		
+		$data["jenis"]='Produk';
+		if($periode=="all"){
+			$data["periode"]="Semua Periode";
+		}else if($periode=="bulan"){
+			$tgl_awal=$tahun."-".$bulan;
+			$data["periode"]=get_ina_month_name($bulan,'long')." ".$tahun;
+		}else if($periode=="tanggal"){
+			$data["periode"]="Periode ".$tgl_awal." s/d ".$tgl_akhir;
+		}
+		
+		$data["data_print"]=$this->m_master_retur_beli->get_laporan($tgl_awal,$tgl_akhir,$periode,$opsi,$group);
+		if($opsi=='rekap'){
+				
+			switch($group){
+				case "Tanggal": $print_view=$this->load->view("main/p_rekap_retur_beli_tanggal.php",$data,TRUE);break;
+				case "Supplier": $print_view=$this->load->view("main/p_rekap_retur_beli_supplier.php",$data,TRUE);break;
+				default: $print_view=$this->load->view("main/p_rekap_retur_beli.php",$data,TRUE);break;
+			}
+			
+		}else{
+			switch($group){
+				case "Tanggal": $print_view=$this->load->view("main/p_detail_retur_beli_tanggal.php",$data,TRUE);break;
+				case "Supplier": $print_view=$this->load->view("main/p_detail_retur_beli_supplier.php",$data,TRUE);break;
+				case "Produk": $print_view=$this->load->view("main/p_detail_retur_beli_produk.php",$data,TRUE);break;
+				default: $print_view=$this->load->view("main/p_detail_retur_beli.php",$data,TRUE);break;
+			}
+		}
+		
+		if(!file_exists("print")){
+			mkdir("print");
+		}
+		if($opsi=='rekap')
+			$print_file=fopen("print/report_retur_beli.html","w+");
+		else
+			$print_file=fopen("print/report_retur_beli.html","w+");
+			
+		fwrite($print_file, $print_view);
+		echo '1'; 
+	}
+	
+	
 	function get_terima_beli_list(){
 		$result=$this->m_master_retur_beli->get_terima_beli_list();
 		echo $result;

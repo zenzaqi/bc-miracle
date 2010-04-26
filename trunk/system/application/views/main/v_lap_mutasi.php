@@ -44,19 +44,19 @@
 </style>
 <script>
 
-var rpt_invoiceWindow;
-var rpt_invoiceForm;
+var rpt_mutasiWindow;
+var rpt_mutasiForm;
 
-var rpt_invoice_tglawalField;
-var rpt_invoice_tglakhirField;
-var rpt_invoice_rekapField;
-var rpt_invoice_detailField;
-var rpt_invoice_bulanField;
-var rpt_invoice_tahunField;
-var rpt_invoice_opsitglField;
-var rpt_invoice_opsiblnField;
-var rpt_invoice_opsiallField;
-var rpt_invoice_groupField;
+var rpt_mutasi_tglawalField;
+var rpt_mutasi_tglakhirField;
+var rpt_mutasi_rekapField;
+var rpt_mutasi_detailField;
+var rpt_mutasi_bulanField;
+var rpt_mutasi_tahunField;
+var rpt_mutasi_opsitglField;
+var rpt_mutasi_opsiblnField;
+var rpt_mutasi_opsiallField;
+var rpt_mutasi_groupField;
 
 var today=new Date().format('Y-m-d');
 var yesterday=new Date().add(Date.DAY, -1).format('Y-m-d');
@@ -103,31 +103,31 @@ Ext.onReady(function(){
 	var group_master_Store= new Ext.data.SimpleStore({
 			id: 'group_master_Store',
 			fields:['group'],
-			data:[['No Faktur'],['Tanggal'],['Supplier']]
+			data:[['Tanggal'],['Gudang']]
 	});
 	
 	var group_detail_Store= new Ext.data.SimpleStore({
 			id: 'group_detail_Store',
 			fields:['group'],
-			data:[['No Faktur'],['Tanggal'],['Supplier'],['Produk']]
+			data:[['Tanggal'],['Gudang'],['Produk']]
 	});
 	
-	var rpt_invoice_groupField=new Ext.form.ComboBox({
-		id:'rpt_invoice_groupField',
+	var rpt_mutasi_groupField=new Ext.form.ComboBox({
+		id:'rpt_mutasi_groupField',
 		fieldLabel:'Kelompokkan',
 		store: group_master_Store,
 		mode: 'local',
 		displayField: 'group',
 		valueField: 'group',
-		value: 'No Faktur',
+		value: 'Tanggal',
 		width: 100,
 		triggerAction: 'all',
 		typeAhead: true,
 		lazyRender: true
 	});
 	
-	rpt_invoice_bulanField=new Ext.form.ComboBox({
-		id:'rpt_invoice_bulanField',
+	rpt_mutasi_bulanField=new Ext.form.ComboBox({
+		id:'rpt_mutasi_bulanField',
 		fieldLabel:' ',
 		store:new Ext.data.SimpleStore({
 			fields:['value', 'display'],
@@ -141,8 +141,8 @@ Ext.onReady(function(){
 		triggerAction: 'all'
 	});
 	
-	rpt_invoice_tahunField=new Ext.form.ComboBox({
-		id:'rpt_invoice_tahunField',
+	rpt_mutasi_tahunField=new Ext.form.ComboBox({
+		id:'rpt_mutasi_tahunField',
 		fieldLabel:' ',
 		store:new Ext.data.SimpleStore({
 			fields:['tahun'],
@@ -156,65 +156,65 @@ Ext.onReady(function(){
 		triggerAction: 'all'
 	});
 	
-	rpt_invoice_opsitglField=new Ext.form.Radio({
-		id:'rpt_invoice_opsitglField',
+	rpt_mutasi_opsitglField=new Ext.form.Radio({
+		id:'rpt_mutasi_opsitglField',
 		boxLabel:'Tanggal',
 		width:100,
 		name: 'filter_opsi'
 	});
 	
-	rpt_invoice_opsiblnField=new Ext.form.Radio({
-		id:'rpt_invoice_opsiblnField',
+	rpt_mutasi_opsiblnField=new Ext.form.Radio({
+		id:'rpt_mutasi_opsiblnField',
 		boxLabel:'Bulan',
 		width:100,
 		name: 'filter_opsi'
 	});
 	
-	rpt_invoice_opsiallField=new Ext.form.Radio({
-		id:'rpt_invoice_opsiallField',
+	rpt_mutasi_opsiallField=new Ext.form.Radio({
+		id:'rpt_mutasi_opsiallField',
 		boxLabel:'Semua',
 		name: 'filter_opsi',
 		checked: true
 	});
 	
-	rpt_invoice_tglawalField= new Ext.form.DateField({
-		id: 'rpt_invoice_tglawalField',
+	rpt_mutasi_tglawalField= new Ext.form.DateField({
+		id: 'rpt_mutasi_tglawalField',
 		fieldLabel: ' ',
 		format : 'Y-m-d',
-		name: 'rpt_invoice_tglawalField',
+		name: 'rpt_mutasi_tglawalField',
         vtype: 'daterange',
 		allowBlank: true,
 		width: 100,
-        endDateField: 'rpt_invoice_tglakhirField'
+        endDateField: 'rpt_mutasi_tglakhirField'
 	});
 	
-	rpt_invoice_tglakhirField= new Ext.form.DateField({
-		id: 'rpt_invoice_tglakhirField',
+	rpt_mutasi_tglakhirField= new Ext.form.DateField({
+		id: 'rpt_mutasi_tglakhirField',
 		fieldLabel: 's/d',
 		format : 'Y-m-d',
-		name: 'rpt_invoice_tglakhirField',
+		name: 'rpt_mutasi_tglakhirField',
         vtype: 'daterange',
 		allowBlank: true,
 		width: 100,
-        startDateField: 'rpt_invoice_tglawalField',
+        startDateField: 'rpt_mutasi_tglawalField',
 		value: today
 	});
 	
-	rpt_invoice_rekapField=new Ext.form.Radio({
-		id: 'rpt_invoice_rekapField',
+	rpt_mutasi_rekapField=new Ext.form.Radio({
+		id: 'rpt_mutasi_rekapField',
 		boxLabel: 'Rekap',
-		name: 'invoice_opsi',
+		name: 'mutasi_opsi',
 		checked: true
 	});
 	
-	rpt_invoice_detailField=new Ext.form.Radio({
-		id: 'rpt_invoice_detailField',
+	rpt_mutasi_detailField=new Ext.form.Radio({
+		id: 'rpt_mutasi_detailField',
 		boxLabel: 'Detail',
-		name: 'invoice_opsi'
+		name: 'mutasi_opsi'
 	});
 	
-	var rpt_invoice_periodeField=new Ext.form.FieldSet({
-		id:'rpt_invoice_periodeField',
+	var rpt_mutasi_periodeField=new Ext.form.FieldSet({
+		id:'rpt_mutasi_periodeField',
 		title : 'Periode',
 		layout: 'form',
 		bodyStyle:'padding: 0px 0px 0',
@@ -224,122 +224,122 @@ Ext.onReady(function(){
 		items:[{
 				layout: 'column',
 				border: false,
-				items:[rpt_invoice_opsiallField]
+				items:[rpt_mutasi_opsiallField]
 			},{
 				layout: 'column',
 				border: false,
-				items:[rpt_invoice_opsitglField, {
+				items:[rpt_mutasi_opsitglField, {
 					   		layout: 'form',
 							border: false,
 							labelWidth: 15,
 							bodyStyle:'padding:3px',
-							items:[rpt_invoice_tglawalField]
+							items:[rpt_mutasi_tglawalField]
 					   },{
 					   		layout: 'form',
 							border: false,
 							labelWidth: 15,
 							bodyStyle:'padding:3px',
 							labelSeparator: ' ', 
-							items:[rpt_invoice_tglakhirField]
+							items:[rpt_mutasi_tglakhirField]
 					   }]
 			},{
 				layout: 'column',
 				border: false,
-				items:[rpt_invoice_opsiblnField,{
+				items:[rpt_mutasi_opsiblnField,{
 					   		layout: 'form',
 							border: false,
 							labelWidth: 15,
 							bodyStyle:'padding:3px',
-							items:[rpt_invoice_bulanField]
+							items:[rpt_mutasi_bulanField]
 					   },{
 					   		layout: 'form',
 							border: false,
 							labelWidth: 15,
 							bodyStyle:'padding:3px',
 							labelSeparator: ' ', 
-							items:[rpt_invoice_tahunField]
+							items:[rpt_mutasi_tahunField]
 					   }]
 			}]
 	});
 	
-	var	rpt_invoice_opsiField=new Ext.form.FieldSet({
-		id: 'rpt_invoice_opsiField',
+	var	rpt_mutasi_opsiField=new Ext.form.FieldSet({
+		id: 'rpt_mutasi_opsiField',
 		title: 'Opsi',
 		border: true,
 		anchor: '98%',
-		items: [rpt_invoice_rekapField ,rpt_invoice_detailField]
+		items: [rpt_mutasi_rekapField ,rpt_mutasi_detailField]
 	});
 	
-	var	rpt_invoice_groupbyField=new Ext.form.FieldSet({
-		id: 'rpt_invoice_groupbyField',
+	var	rpt_mutasi_groupbyField=new Ext.form.FieldSet({
+		id: 'rpt_mutasi_groupbyField',
 		title: 'Group By',
 		border: true,
 		anchor: '98%',
-		items: [rpt_invoice_groupField]
+		items: [rpt_mutasi_groupField]
 	});
 	
 	function is_valid_form(){
-		if(rpt_invoice_opsitglField.getValue()==true){
-			rpt_invoice_tglawalField.allowBlank=false;
-			rpt_invoice_tglakhirField.allowBlank=false;
-			if(rpt_invoice_tglawalField.isValid() && rpt_invoice_tglakhirField.isValid())
+		if(rpt_mutasi_opsitglField.getValue()==true){
+			rpt_mutasi_tglawalField.allowBlank=false;
+			rpt_mutasi_tglakhirField.allowBlank=false;
+			if(rpt_mutasi_tglawalField.isValid() && rpt_mutasi_tglakhirField.isValid())
 				return true;
 			else
 				return false;
 		}else{
-			rpt_invoice_tglawalField.allowBlank=true;
-			rpt_invoice_tglakhirField.allowBlank=true;
+			rpt_mutasi_tglawalField.allowBlank=true;
+			rpt_mutasi_tglakhirField.allowBlank=true;
 			return true;
 		}
 	}
 	
 	/* Function for print List Grid */
-	function print_rpt_invoice(){
+	function print_rpt_mutasi(){
 		
-		var invoice_tglawal="";
-		var invoice_tglakhir="";
+		var mutasi_tglawal="";
+		var mutasi_tglakhir="";
 		var jrpdouk_opsi="";
-		var invoice_bulan="";
-		var invoice_tahun="";
-		var invoice_periode="";
-		var invoice_group="";
+		var mutasi_bulan="";
+		var mutasi_tahun="";
+		var mutasi_periode="";
+		var mutasi_group="";
 		
 		var win;               
 		if(is_valid_form()){
 			
-		if(rpt_invoice_tglawalField.getValue()!==""){invoice_tglawal = rpt_invoice_tglawalField.getValue().format('Y-m-d');}
-		if(rpt_invoice_tglakhirField.getValue()!==""){invoice_tglakhir = rpt_invoice_tglakhirField.getValue().format('Y-m-d');}
-		if(rpt_invoice_bulanField.getValue()!==""){invoice_bulan=rpt_invoice_bulanField.getValue(); }
-		if(rpt_invoice_tahunField.getValue()!==""){invoice_tahun=rpt_invoice_tahunField.getValue(); }
-		if(rpt_invoice_opsitglField.getValue()==true){
-			invoice_periode='tanggal';
-		}else if(rpt_invoice_opsiblnField.getValue()==true){
-			invoice_periode='bulan';
+		if(rpt_mutasi_tglawalField.getValue()!==""){mutasi_tglawal = rpt_mutasi_tglawalField.getValue().format('Y-m-d');}
+		if(rpt_mutasi_tglakhirField.getValue()!==""){mutasi_tglakhir = rpt_mutasi_tglakhirField.getValue().format('Y-m-d');}
+		if(rpt_mutasi_bulanField.getValue()!==""){mutasi_bulan=rpt_mutasi_bulanField.getValue(); }
+		if(rpt_mutasi_tahunField.getValue()!==""){mutasi_tahun=rpt_mutasi_tahunField.getValue(); }
+		if(rpt_mutasi_opsitglField.getValue()==true){
+			mutasi_periode='tanggal';
+		}else if(rpt_mutasi_opsiblnField.getValue()==true){
+			mutasi_periode='bulan';
 		}else{
-			invoice_periode='all';
+			mutasi_periode='all';
 		}
-		if(rpt_invoice_groupField.getValue()!==""){invoice_group=rpt_invoice_groupField.getValue(); }
+		if(rpt_mutasi_groupField.getValue()!==""){mutasi_group=rpt_mutasi_groupField.getValue(); }
 		
-		if(rpt_invoice_rekapField.getValue()==true){invoice_opsi='rekap';}else{invoice_opsi='detail';}
+		if(rpt_mutasi_rekapField.getValue()==true){mutasi_opsi='rekap';}else{mutasi_opsi='detail';}
 		
 			Ext.Ajax.request({   
 				waitMsg: 'Please Wait...',
-				url: 'index.php?c=c_master_invoice&m=print_laporan',
+				url: 'index.php?c=c_master_jual_produk&m=print_laporan',
 				params: {
-					tgl_awal	: invoice_tglawal,
-					tgl_akhir	: invoice_tglakhir,
-					opsi		: invoice_opsi,
-					bulan		: invoice_bulan,
-					tahun		: invoice_tahun,
-					periode		: invoice_periode,
-					group		: invoice_group
+					tgl_awal	: mutasi_tglawal,
+					tgl_akhir	: mutasi_tglakhir,
+					opsi		: mutasi_opsi,
+					bulan		: mutasi_bulan,
+					tahun		: mutasi_tahun,
+					periode		: mutasi_periode,
+					group		: mutasi_group
 					
 				}, 
 				success: function(response){              
 					var result=eval(response.responseText);
 					switch(result){
 					case 1:
-						win = window.open('./print/report_invoice.html','report_invoice','height=400,width=800,resizable=1,scrollbars=1, menubar=1');
+						win = window.open('./print/report_mutasi.html','report_mutasi','height=400,width=800,resizable=1,scrollbars=1, menubar=1');
 						//win.print();
 						break;
 					default:
@@ -376,23 +376,23 @@ Ext.onReady(function(){
 	}
 	/* Enf Function */
 	
-	rpt_invoiceForm = new Ext.FormPanel({
+	rpt_mutasiForm = new Ext.FormPanel({
 		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		x:0,
 		y:0,
 		width: 400, 
 		autoHeight: true,
-		items: [rpt_invoice_periodeField,rpt_invoice_opsiField, rpt_invoice_groupbyField],
+		items: [rpt_mutasi_periodeField,rpt_mutasi_opsiField, rpt_mutasi_groupbyField],
 		monitorValid:true,
 		buttons: [{
 				text: 'Print',
 				formBind: true,
-				handler: print_rpt_invoice
+				handler: print_rpt_mutasi
 			},{
 				text: 'Close',
 				handler: function(){
-					rpt_invoiceWindow.hide();
+					rpt_mutasiWindow.hide();
 					mainPanel.remove(mainPanel.getActiveTab().getId());
 				}
 		}]
@@ -400,8 +400,8 @@ Ext.onReady(function(){
 	});
 	
 	/* Form Advanced Search */
-	rpt_invoiceWindow = new Ext.Window({
-		title: 'Laporan Tagihan Pembelian',
+	rpt_mutasiWindow = new Ext.Window({
+		title: 'Laporan Mutasi',
 		closable:false,
 		closeAction: 'hide',
 		resizable: false,
@@ -410,40 +410,40 @@ Ext.onReady(function(){
 		x: 0,
 		y: 0,
 		modal: true,
-		renderTo: 'elwindow_rpt_invoice',
-		items: rpt_invoiceForm
+		renderTo: 'elwindow_rpt_mutasi',
+		items: rpt_mutasiForm
 	});
-  	rpt_invoiceWindow.show();
+  	rpt_mutasiWindow.show();
 	
 	//EVENTS
 	
-	rpt_invoice_rekapField.on("check", function(){
-		rpt_invoice_groupField.setValue('No faktur');
-		if(rpt_invoice_rekapField.getValue()==true){
-			rpt_invoice_groupField.bindStore(group_master_Store);
+	rpt_mutasi_rekapField.on("check", function(){
+		rpt_mutasi_groupField.setValue('No faktur');
+		if(rpt_mutasi_rekapField.getValue()==true){
+			rpt_mutasi_groupField.bindStore(group_master_Store);
 		}else
 		{
-			rpt_invoice_groupField.bindStore(group_detail_Store);
+			rpt_mutasi_groupField.bindStore(group_detail_Store);
 		}
 	});
 	
-	rpt_invoice_detailField.on("check", function(){
-		rpt_invoice_groupField.setValue('No Faktur');
-		if(rpt_invoice_detailField.getValue()==true){
-			rpt_invoice_groupField.bindStore(group_detail_Store);
+	rpt_mutasi_detailField.on("check", function(){
+		rpt_mutasi_groupField.setValue('Tanggal');
+		if(rpt_mutasi_detailField.getValue()==true){
+			rpt_mutasi_groupField.bindStore(group_detail_Store);
 		}else
 		{
-			rpt_invoice_groupField.bindStore(group_master_Store);
+			rpt_mutasi_groupField.bindStore(group_master_Store);
 		}
 	});
 	
-	rpt_invoice_opsitglField.on("check",function(){
-		if(rpt_invoice_opsitglField.getValue()==true){
-			rpt_invoice_tglawalField.allowBlank=false;
-			rpt_invoice_tglakhirField.allowBlank=false;
+	rpt_mutasi_opsitglField.on("check",function(){
+		if(rpt_mutasi_opsitglField.getValue()==true){
+			rpt_mutasi_tglawalField.allowBlank=false;
+			rpt_mutasi_tglakhirField.allowBlank=false;
 		}else{
-			rpt_invoice_tglawalField.allowBlank=true;
-			rpt_invoice_tglakhirField.allowBlank=true;
+			rpt_mutasi_tglawalField.allowBlank=true;
+			rpt_mutasi_tglakhirField.allowBlank=true;
 		}
 		
 	});
@@ -454,7 +454,7 @@ Ext.onReady(function(){
 <div>
 	<div class="col">
         <div id="fp_info"></div>
-		<div id="elwindow_rpt_invoice"></div>
+		<div id="elwindow_rpt_mutasi"></div>
     </div>
 </div>
 </body>
