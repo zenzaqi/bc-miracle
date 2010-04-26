@@ -20,7 +20,7 @@ class M_hpp extends Model{
 		
 		
 		function get_produk_list($filter,$start,$end){
-			$sql="select * from vu_produk_satuan_terkecil";
+			$sql="select * from vu_produk_satuan_terkecil WHERE produk_aktif='Aktif'";
 			if($filter<>""){
 				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
 				$sql.="( produk_kode LIKE '%".addslashes($filter)."%' OR 
@@ -150,7 +150,7 @@ class M_hpp extends Model{
 		
 		function hpp_list($produk_id, $tanggal_start, $tanggal_end, $filter,$start,$end){
 			$i=0;$j=0;
-			$sql="select * from vu_produk_satuan_terkecil ";
+			$sql="select * from vu_produk_satuan_terkecil WHERE produk_aktif='Aktif' ";
 			if($produk_id<>""){
 				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
 				$sql.=" produk_id='".$produk_id."'";
