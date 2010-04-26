@@ -18,7 +18,6 @@ class M_hpp extends Model{
 			parent::Model();
 		}
 		
-		
 		function get_produk_list($filter,$start,$end){
 			$sql="select * from vu_produk_satuan_terkecil WHERE produk_aktif='Aktif'";
 			if($filter<>""){
@@ -213,68 +212,7 @@ class M_hpp extends Model{
 				return '({"total":"0", "results":""})';
 			}
 		}
-		
-/*		function for get list record
-		function hpp_list($produk_id, $filter,$start,$end){
-			$i=0;$j=0;
-			$sql="select * from vu_produk_satuan_terkecil where produk_id='".$produk_id."'";
-			$query=$this->db->query($sql);
-			$jumlah_periode=count($this->get_periode());
-			$nbrows=$query->num_rows()*$jumlah_periode;
-			$periode_tgl=$this->get_periode();
-			
-				$limit_pro=($jumlah_periode>$end?1:ceil($end/$jumlah_periode));
-				$limit=$sql." LIMIT ".$start.",1";
-				$query=$this->db->query($limit);
-			$nbrows=count($periode_tgl);
-			foreach($query->result() as $row){
-				foreach($periode_tgl as $periode){
-					
-					if($j>=$start) {
-						$periode_tanggal=$periode["periode_tanggal"];
-						$periode_sebelum=$this->add_periode($periode_tanggal,-1);
-						$persediaan_sebelum=$this->get_nilai_persediaan($periode_sebelum,$row->produk_id);
-						$stok_sebelum=$this->get_stok_saldo($periode_sebelum,$row->produk_id);
-						$harga_beli_sebelum=$this->get_harga_beli($periode_sebelum,$row->produk_id);
-						
-						$stok_sekarang=$this->get_stok_saldo($periode_tanggal,$row->produk_id);
-						$harga_beli_sekarang=($this->get_harga_beli($periode_tanggal,$row->produk_id)+$harga_beli_sebelum)/2;
-						$persediaan_sekarang=$harga_beli_sekarang*$stok_sekarang;
-						
-						$jumlah_beli=$this->get_jumlah_beli($periode_tanggal,$row->produk_id);
-						
-						$data[$i]["bulan"]=$periode_tanggal;
-						$data[$i]["produk_id"]=$row->produk_id;
-						$data[$i]["produk_kode"]=$row->produk_kode;
-						$data[$i]["produk_nama"]=$row->produk_nama;
-						$data[$i]["satuan_id"]=$row->satuan_id;
-						$data[$i]["satuan_kode"]=$row->satuan_kode;
-						$data[$i]["satuan_nama"]=$row->satuan_nama;
-						$data[$i]["stok_awal"]=$stok_sekarang;
-						$data[$i]["persediaan_awal"]=$persediaan_sebelum;
-						$data[$i]["stok_saldo"]=$stok_sekarang;
-						$data[$i]["persediaan_akhir"]=$persediaan_sekarang;
-						$data[$i]["jumlah_beli"]=$jumlah_beli;
-						$data[$i]["pembelian"]=$jumlah_beli*$harga_beli_sekarang;
-						$data[$i]["barang_jual"]=$persediaan_sebelum+$data[$i]["pembelian"];
-						$data[$i]["hpp"]=$data[$i]["barang_jual"]-$data[$i]["persediaan_akhir"];
-						$data[$i]["harga_satuan"]=$harga_beli_sekarang;
-						$i++;
-					}
-					$j++;
-					if($j>=($end+$start)) break;
-				}
-			}
-			
-			if($nbrows>0){
-				$jsonresult = json_encode($data);
-				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
-			} else {
-				return '({"total":"0", "results":""})';
-			}
-		}*/
-		
-		
+				
 		//function for advanced search record
 		function hpp_search($produk_id ,$produk_nama ,$satuan_id ,$satuan_nama ,$stok_saldo ,$start,$end){
 			//full query
