@@ -255,9 +255,9 @@ class M_master_invoice extends Model{
 		
 		//function for create new record
 		function master_invoice_create($invoice_no ,$invoice_supplier ,$invoice_noterima ,$invoice_tanggal ,$invoice_diskon, $invoice_cashback, $invoice_uangmuka, $invoice_biaya, $invoice_jatuhtempo ,$invoice_penagih ){
-			$pattern="INV/".date("y/m")."/";
+			/*$pattern="INV/".date("y/m")."/";
 			$invoice_no=$this->m_public_function->get_kode_1('master_invoice','invoice_no',$pattern,14);
-			
+	*/		
 			$data = array(
 				"invoice_no"=>$invoice_no, 
 				"invoice_supplier"=>$invoice_supplier, 

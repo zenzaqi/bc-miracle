@@ -214,7 +214,7 @@ class M_vu_stok_all_saldo extends Model{
 		//function for get list record
 		function vu_stok_all_saldo_list($produk_id, $tanggal_start,$tanggal_end,$filter,$start,$end){
 			
-			$sql="SELECT * FROM vu_produk_satuan_terkecil";
+			$sql="SELECT * FROM vu_produk_satuan_terkecil WHERE produk_aktif='Aktif'";
 			if($produk_id!==""&&$produk_id!==0){
 				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
 				$sql.="	produk_id='".$produk_id."' ";
