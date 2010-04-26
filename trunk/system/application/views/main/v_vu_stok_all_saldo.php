@@ -180,7 +180,7 @@ Ext.onReady(function(){
 				cell.css = "readonlycell"; // Mengambil Value dari Class di dalam CSS 
 				return value;
 				},
-			hidden: false
+			hidden: true
 		},
 		{
 			header: '<div align="center">Kode</div>',
@@ -722,14 +722,14 @@ Ext.onReady(function(){
 	stok_tanggal_startSearchField=new Ext.form.DateField({
 		id: 'stok_tanggal_startSearchField',
 		fieldLabel: 'Tanggal',
-		format: 'Y-m-d',		
+		format: 'd-m-Y',		
 		value: firstday
 	});
     
 	stok_tanggal_endSearchField=new Ext.form.DateField({
 		id: 'stok_tanggal_endSearchField',
 		fieldLabel: 's/d',
-		format: 'Y-m-d',
+		format: 'd-m-Y',
 		value: firstday
 	});
 	
