@@ -37,13 +37,15 @@ class M_master_terima_beli extends Model{
 					$sql="SELECT * FROM vu_trans_terima WHERE tanggal>='".$tgl_awal."' AND tanggal<='".$tgl_akhir."' ".$order_by;
 			}else if($opsi=='detail'){
 				if($periode=='all')
-					$sql="SELECT * FROM vu_detail_terima ".$order_by;
+					$sql="SELECT * FROM vu_detail_terima_all ".$order_by;
 				else if($periode=='bulan')
-					$sql="SELECT * FROM vu_detail_terima WHERE tanggal like '".$tgl_awal."%' ".$order_by;
+					$sql="SELECT * FROM vu_detail_terima_all WHERE tanggal like '".$tgl_awal."%' ".$order_by;
 				else if($periode=='tanggal')
-					$sql="SELECT * FROM vu_detail_terima WHERE tanggal>='".$tgl_awal."' AND tanggal<='".$tgl_akhir."' ".$order_by;
+					$sql="SELECT * FROM vu_detail_terima_all WHERE tanggal>='".$tgl_awal."' AND tanggal<='".$tgl_akhir."' ".$order_by;
 			}
+			
 			//echo $sql;
+			
 			$query=$this->db->query($sql);
 			return $query->result();
 		}
@@ -238,6 +240,27 @@ class M_master_terima_beli extends Model{
 		}
 		
 		
+		function get_order_beli_search_list(){
+			$sql=  "SELECT
+						order_id, order_no, order_tanggal, supplier_nama, supplier_id
+					FROM master_order_beli, supplier, master_terima_beli 
+					WHERE order_supplier = supplier_id
+					AND order_id=terima_order
+					ORDER BY order_tanggal desc";
+			$query = $this->db->query($sql);
+			$nbrows = $query->num_rows();
+			if($nbrows>0){
+				foreach($query->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+		
+		
 		function get_order_beli_list(){
 			//$sql="SELECT * FROM master_order_beli,supplier WHERE order_supplier=supplier_id";
 			$sql=  "SELECT
@@ -345,6 +368,46 @@ class M_master_terima_beli extends Model{
 		}
 		//eof
 		
+		//check all order are receive
+		function check_all_order_done($master_id){
+			
+			$is_done=true;
+			
+			$sql="SELECT terima_order FROM master_terima_beli WHERE terima_id='".$master_id."'";
+			$query=$this->db->query($sql);
+			if($query->num_rows()){
+				$row=$query->row();
+				$no_order=$row->terima_order;
+			}else
+				$no_order="";
+			
+			if($no_order!==""){
+				$sql="SELECT dorder_produk,dorder_jumlah FROM detail_order_beli WHERE dorder_master='".$no_order."'";
+				$query=$this->db->query($sql);
+				foreach($query->result() as $result){
+					
+					$sql_terima="SELECT jumlah_terima FROM vu_detail_terima_order 
+									WHERE dorder_master='".$no_order."'
+									AND dterima_produk='".$result->dorder_produk."'  
+									AND jumlah_terima>=".$result->dorder_jumlah;
+					$query_terima=$this->db->query($sql_terima);
+					if($query_terima->num_rows()<1)
+					{
+						$is_done=false;
+						break;
+					}
+				}
+			}else{
+				$is_done=false;
+			}
+			
+			if($is_done==true){
+				$sql="UPDATE master_order_beli SET order_status='Tertutup' WHERE order_id='".$no_order."'";
+				$this->db->query($sql);
+			}
+			
+		}
+		
 		//purge all detail from master
 		function detail_detail_terima_beli_purge($master_id){
 			$sql="DELETE from detail_terima_beli where dterima_master='".$master_id."'";
@@ -382,7 +445,9 @@ class M_master_terima_beli extends Model{
 			// For simple search
 			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (terima_id LIKE '%".addslashes($filter)."%' OR terima_no LIKE '%".addslashes($filter)."%' OR terima_order LIKE '%".addslashes($filter)."%' OR terima_supplier LIKE '%".addslashes($filter)."%' OR terima_surat_jalan LIKE '%".addslashes($filter)."%' OR terima_pengirim LIKE '%".addslashes($filter)."%' OR terima_tanggal LIKE '%".addslashes($filter)."%' OR terima_keterangan LIKE '%".addslashes($filter)."%' )";
+				$query .= " (no_bukti LIKE '%".addslashes($filter)."%' OR order_no LIKE '%".addslashes($filter)."%' OR 
+							supplier_nama LIKE '%".addslashes($filter)."%' OR terima_surat_jalan LIKE '%".addslashes($filter)."%' 
+							OR terima_pengirim LIKE '%".addslashes($filter)."%' OR tanggal LIKE '%".addslashes($filter)."%' )";
 			}
 			
 			$result = $this->db->query($query);

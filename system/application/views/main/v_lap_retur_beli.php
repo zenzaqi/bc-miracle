@@ -324,7 +324,7 @@ Ext.onReady(function(){
 		
 			Ext.Ajax.request({   
 				waitMsg: 'Please Wait...',
-				url: 'index.php?c=c_master_jual_produk&m=print_laporan',
+				url: 'index.php?c=c_master_retur_beli&m=print_laporan',
 				params: {
 					tgl_awal	: returbeli_tglawal,
 					tgl_akhir	: returbeli_tglakhir,
@@ -339,7 +339,7 @@ Ext.onReady(function(){
 					var result=eval(response.responseText);
 					switch(result){
 					case 1:
-						win = window.open('./print/report_returbeli.html','report_returbeli','height=400,width=800,resizable=1,scrollbars=1, menubar=1');
+						win = window.open('./print/report_retur_beli.html','report_returbeli','height=400,width=800,resizable=1,scrollbars=1, menubar=1');
 						//win.print();
 						break;
 					default:
@@ -401,7 +401,7 @@ Ext.onReady(function(){
 	
 	/* Form Advanced Search */
 	rpt_returbeliWindow = new Ext.Window({
-		title: 'Laporan Pesanan Pembelian',
+		title: 'Laporan Retur Pembelian',
 		closable:false,
 		closeAction: 'hide',
 		resizable: false,

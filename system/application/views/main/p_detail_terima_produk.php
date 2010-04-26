@@ -20,30 +20,30 @@
 </head>
 <body>
 <table summary='Detail Jual'>
-	<caption>Laporan Detail Penerimaan Barang<br/><?php echo $periode; ?><br/>Group By Tanggal</caption>
+	<caption>Laporan Detail Penerimaan Barang<br/><?php echo $periode; ?><br/>Group By Produk</caption>
 	<thead>
     	<tr>
         	<th scope='col'>No</th>
+            <th scope='col'>Tanggal</th>
             <th scope='col'>No Faktur</th>
             <th scope='col'>Supplier</th>
-            <th scope='col'>Nama Barang</th>
-            <th scope='col'>Satuan</th>
             <th scope='col'>Jumlah</th>
+            <th scope='col'>Satuan</th>
             <th scope='col'>Jenis</th>
         </tr>
     </thead>
 	<tbody>
 		        
-        	<?php $i=0; $j=0; $tanggal=""; 
+        	<?php $i=0; $j=0; $produk=""; 
 					$total_item=0;
 					foreach($data_print as $print) { 
 					$sub_jumlah=0;
 						
 			?>
-			<?php if($tanggal!==$print->tanggal) { ?>
+			<?php if($produk!==$print->produk_id) { ?>
            <tr>
                 <td><b><? $j++; echo $j; ?></b></td>
-                <td colspan="7"><b><?php echo $print->tanggal;?></b></td>
+                <td colspan="7"><b><?php echo $print->produk_nama."( ".$print->produk_kode.")";?></b></td>
            </tr>
            <?php 	
 					
@@ -52,17 +52,15 @@
            <?php foreach($data_print as $print_list) {  
 		   			//$sub_jumlah=0;
 		   ?>
-           <?php if($print_list->tanggal==$print->tanggal){ $i++;
+           <?php if($print_list->produk_id==$print->produk_id){ $i++;
 		   			$sub_jumlah+=$print_list->jumlah;
-					
 					$total_item+=$print_list->jumlah;
-					
 		   ?>
             <tr>
                 <td><? echo $i; ?></td>
+                <td><?php echo $print_list->tanggal;?></td>
                 <td><?php echo $print_list->no_bukti;?></td>
                 <td><?php echo $print_list->supplier_nama."(".$print_list->supplier_akun.")";?></td>
-                <td><?php echo $print_list->produk_nama;?></td>
                 <td><?php echo $print_list->satuan_nama; ?></td>
                 <td class="numeric"><?php echo number_format($print_list->jumlah,0,",","."); ?></td>
                 <td class="numeric"><?php echo $print_list->jenis; ?></td>
@@ -74,7 +72,7 @@
                 <td align="right" class="numeric"><b><?php echo number_format($sub_jumlah,0,",","."); ?></b></td>
                 <td align="right" class="numeric">&nbsp;</td>
            </tr>
-           <?php } $tanggal=$print->tanggal; ?>
+           <?php } $produk=$print->produk_id; ?>
 		<?php 
 			
 		

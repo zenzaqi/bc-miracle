@@ -17,13 +17,13 @@ class C_master_terima_beli extends Controller {
 	function C_master_terima_beli(){
 		parent::Controller();
 		$this->load->model('m_master_terima_beli', '', TRUE);
-		$this->load->plugin('to_excel');
 	}
 	
 	//set index
 	function index(){
 		$this->load->helper('asset');
 		$this->load->view('main/v_master_terima_beli');
+		$this->load->plugin('to_excel');
 	}
 	
 	function laporan(){
@@ -140,6 +140,11 @@ class C_master_terima_beli extends Controller {
 	
 	function get_order_beli_list(){
 		$result=$this->m_master_terima_beli->get_order_beli_list();
+		echo $result;
+	}
+	
+	function get_order_beli_search_list(){
+		$result=$this->m_master_terima_beli->get_order_beli_search_list();
 		echo $result;
 	}
 	
@@ -260,6 +265,11 @@ class C_master_terima_beli extends Controller {
 				echo "{failure:true}";
 				break;
 		}
+	}
+	
+	function check_all_order_done(){
+		$master_id = (integer) (isset($_POST['master_id']) ? @$_POST['master_id'] : @$_GET['master_id']);
+		$this->m_master_terima_beli->check_all_order_done($master_id);
 	}
 	
 	//function fot list record

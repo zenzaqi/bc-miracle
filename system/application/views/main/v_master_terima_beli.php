@@ -422,7 +422,7 @@ Ext.onReady(function(){
 			url: 'index.php?c=c_master_terima_beli&m=get_action', 
 			method: 'POST'
 		}),
-		baseParams:{task: "LIST"}, // parameter yang di $_POST ke Controller
+		baseParams:{task: "LIST", start:0, limit: pageS}, // parameter yang di $_POST ke Controller
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
@@ -455,6 +455,29 @@ Ext.onReady(function(){
 		id: 'cbo_tbeli_orderbeli_DataSore',
 		proxy: new Ext.data.HttpProxy({
 			url: 'index.php?c=c_master_terima_beli&m=get_order_beli_list', 
+			method: 'POST'
+		}),
+		baseParams:{task: "LIST"}, // parameter yang di $_POST ke Controller
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'order_id'
+		},[
+		/* dataIndex => insert intocustomer_note_ColumnModel, Mapping => for initiate table column */ 
+			{name: 'tbeli_orderbeli_value', type: 'int', mapping: 'order_id'},
+			{name: 'tbeli_orderbeli_nama', type: 'string', mapping: 'order_no'},
+			{name: 'tbeli_orderbeli_tgl', type: 'date', dateFormat: 'Y-m-d', mapping: 'order_tanggal'},
+			{name: 'tbeli_orderbeli_supplier', type: 'string', mapping: 'supplier_nama'},
+			{name: 'tbeli_orderbeli_supplier_id', type: 'int', mapping: 'supplier_id'}
+		]),
+		//sortInfo:{field: 'tbeli_orderbeli_nama', direction: "ASC"}
+		sortInfo:{field: 'tbeli_orderbeli_tgl', direction: "DESC"}
+	});
+	
+	cbo_tbeli_orderbeli_search_DataSore = new Ext.data.Store({
+		id: 'cbo_tbeli_orderbeli_search_DataSore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_master_terima_beli&m=get_order_beli_search_list', 
 			method: 'POST'
 		}),
 		baseParams:{task: "LIST"}, // parameter yang di $_POST ke Controller
@@ -1491,6 +1514,19 @@ Ext.onReady(function(){
 				}		
 			});
 		}
+		//cek semua order terpenuhi
+		Ext.Ajax.request({
+			waitMsg: 'Please wait...',
+			url: 'index.php?c=c_master_terima_beli&m=check_all_order_done',
+			params:{
+				master_id : pkid
+			},
+			timeout: 5000,
+			success: function(response){							
+				var result=eval(response.responseText);
+			}		
+		});
+		
 		master_terima_beli_DataStore.reload();
 	}
 	//eof
@@ -1727,7 +1763,7 @@ Ext.onReady(function(){
 	terima_orderSearchField= new Ext.form.ComboBox({
 		id: 'terima_orderSearchField',
 		fieldLabel: 'No SP',
-		store: cbo_tbeli_orderbeli_DataSore,
+		store: cbo_tbeli_orderbeli_search_DataSore,
 		displayField:'tbeli_orderbeli_nama',
 		mode : 'remote',
 		valueField: 'tbeli_orderbeli_value',
