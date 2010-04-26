@@ -717,7 +717,7 @@ Ext.onReady(function(){
 	master_order_beliListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'master_order_beliListEditorGrid',
 		el: 'fp_master_order_beli',
-		title: 'Daftar Surat Pesanan Pembelian',
+		title: 'Daftar Surat Pesanan',
 		autoHeight: true,
 		store: master_order_beli_DataStore, // DataStore
 		cm: master_order_beli_ColumnModel, // Nama-nama Columns
