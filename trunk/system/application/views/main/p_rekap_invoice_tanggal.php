@@ -15,17 +15,17 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Laporan Rekap Tagihan Pembelian <?php echo $periode; ?></title>
+<title>Laporan Rekap Pesanan Pembelian <?php echo $periode; ?></title>
 <link rel='stylesheet' type='text/css' href='../assets/modules/main/css/printstyle.css'/>
 </head>
 <body>
 <table summary='Rekap Pesanan Pembelian'>
-	<caption>Laporan Tagihan Pembelian <br/><?php echo $periode; ?><br/>Group By Supplier</caption>
+	<caption>Laporan Pesanan Pembelian <br/><?php echo $periode; ?><br/>Group By Tanggal</caption>
 	<thead>
     	<tr>
         	<th scope='col'>No</th>
-            <th scope='col'>Tanggal</th>
-            <th scope='col'>No SP</th>           
+            <th scope='col'>No Tagihan</th>
+            <th scope='col'>Supplier</th>           
             <th scope='col'>Total Item</th>
             <th scope='col'>Sub Total (Rp)</th>
             <th scope='col'>Diskon(%)</th>
@@ -38,7 +38,7 @@
         </tr>
     </thead>
 	<tbody>
-		<?php $i=0; $j=0; $supplier=""; 
+		<?php $i=0; $j=0; $tanggal=""; 
 				$total_item=0;
 				$total_subtotal=0;
 				$total_cashback=0;
@@ -60,20 +60,18 @@
 				$i=0; 
 				
 				?>
-			<?php if($supplier!==$print->supplier_id) { 
+			<?php if($tanggal!==$print->tanggal) { 
 			
 					
 			?>
            <tr>
                 <td><b><? $j++; echo $j; ?></b></td>
-                <td colspan="12"><b><?php echo $print->supplier_nama." (".$print->supplier_akun.")";?></b></td>
+                <td colspan="12"><b><?php echo $print->tanggal;?></b></td>
            </tr>
-           <?php 	
-			?>
            <?php foreach($data_print as $print_list) {  ?>
-           <?php if($print_list->supplier_id==$print->supplier_id){ $i++;
-		   			
-					$sub_cashback+=$print->invoice_cashback;;
+           <?php if($print_list->tanggal==$print->tanggal){ $i++;
+		   
+		   			$sub_cashback+=$print->invoice_cashback;;
 					$sub_total+=$print->total_nilai;
 					$sub_biaya+=$print->invoice_biaya;
 					$sub_nilai+=$print->total_nilai;
@@ -91,13 +89,13 @@
 					$total_totalnilai+=$total_nilai;
 					$total_uangmuka+=$print->order_bayar;
 					$total_tagihan+=($print->total_nilai-$print->order_bayar);
-						
+					
 					
 		   ?>
             <tr>
                 <td><? echo $i; ?></td>
-               	<td><?php echo $print_list->tanggal; ?></td>
-                <td><?php echo $print_list->no_bukti; ?></td>
+               	<td><?php echo $print_list->no_bukti; ?></td>
+                <td><?php echo $print_list->supplier_nama."(".$print_list->supplier_akun.")"; ?></td>
                 <td align="right" class="numeric"><?php echo number_format($print_list->jumlah_barang,0,",","."); ?></td>
                 <td align="right" class="numeric"><?php echo number_format($print_list->total_nilai,2,",","."); ?></td>
                 <td align="right" class="numeric"><?php echo number_format($print_list->invoice_diskon,0,",","."); ?></td>
@@ -123,8 +121,7 @@
                 <td align="right" class="numeric">&nbsp;</td>
            </tr>
            <?php } 
-		   				
-		   			$supplier=$print->supplier_id; 
+		   			$tanggal=$print->tanggal; 
 			?>
 		<?php } ?>
 	</tbody>
