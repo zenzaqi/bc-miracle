@@ -19,6 +19,7 @@ class C_master_lunas_piutang extends Controller {
 		$this->load->model('m_master_lunas_piutang', '', TRUE);
 		session_start();
 		$this->load->plugin('to_excel');
+		$this->load->library('firephp');
 	}
 	
 	//set index
@@ -109,7 +110,13 @@ class C_master_lunas_piutang extends Controller {
 		$dpiutang_transfer_nama=trim(@$_POST["dpiutang_transfer_nama"]);
 		$dpiutang_transfer_nilai=trim(@$_POST["dpiutang_transfer_nilai"]);
 		
-		$result=$this->m_master_lunas_piutang->form_bayar_piutang_insert($dpiutang_master ,$dpiutang_nilai ,$dpiutang_cara ,$dpiutang_tunai_nilai ,$dpiutang_card_nama ,$dpiutang_card_edc ,$dpiutang_card_no ,$dpiutang_card_nilai ,$dpiutang_cek_nama ,$dpiutang_cek_no ,$dpiutang_cek_valid ,$dpiutang_cek_bank ,$dpiutang_cek_nilai ,$dpiutang_transfer_bank ,$dpiutang_transfer_nama ,$dpiutang_transfer_nilai );
+		$dpiutang_nobukti=trim(@$_POST["dpiutang_nobukti"]);
+		
+		$count=trim(@$_POST['count']);
+		$dcount=trim(@$_POST['dcount']);
+		
+		$result=$this->m_master_lunas_piutang->form_bayar_piutang_insert($dpiutang_master ,$dpiutang_nilai ,$dpiutang_cara ,$dpiutang_tunai_nilai ,$dpiutang_card_nama ,$dpiutang_card_edc ,$dpiutang_card_no ,$dpiutang_card_nilai ,$dpiutang_cek_nama ,$dpiutang_cek_no ,$dpiutang_cek_valid ,$dpiutang_cek_bank ,$dpiutang_cek_nilai ,$dpiutang_transfer_bank ,$dpiutang_transfer_nama ,$dpiutang_transfer_nilai ,$dpiutang_nobukti, $count, $dcount);
+		echo $result;
 	}
 	
 	//add detail
@@ -307,6 +314,28 @@ class C_master_lunas_piutang extends Controller {
 		to_excel($query,"master_lunas_piutang"); 
 		echo '1';
 			
+	}
+	
+	function print_paper(){
+		$dpiutang_nobukti=trim(@$_POST["dpiutang_nobukti"]);
+		
+		$result = $this->m_master_lunas_piutang->print_paper($dpiutang_nobukti);
+		$rs=$result->row();
+		$detail_lpiutang=$result->result();
+		
+		$data['dpiutang_nobukti']=$rs->dpiutang_nobukti;
+		$data['dpiutang_tanggal']=date('d-m-Y', strtotime($rs->dpiutang_tanggal));
+		$data['cust_no']=$rs->cust_no;
+		$data['cust_nama']=$rs->cust_nama;
+		$data['cust_alamat']=$rs->cust_alamat;
+		$data['cara_bayar']=$rs->dpiutang_cara;
+		$data['detail_lpiutang']=$detail_lpiutang;
+		
+		$viewdata=$this->load->view("main/piutang_formcetak",$data,TRUE);
+		$file = fopen("piutang_paper.html",'w');
+		fwrite($file, $viewdata);	
+		fclose($file);
+		echo '1';        
 	}
 	
 	// Encodes a SQL array into a JSON formated string

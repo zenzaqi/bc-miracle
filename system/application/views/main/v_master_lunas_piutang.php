@@ -80,6 +80,43 @@ var lpiutang_tanggalSearchField;
 var lpiutang_keteranganSearchField;
 
 
+function piutang_cetak(dpiutang_nobukti){
+	Ext.Ajax.request({   
+		waitMsg: 'Mohon tunggu...',
+		url: 'index.php?c=c_master_lunas_piutang&m=print_paper',
+		params: { dpiutang_nobukti : dpiutang_nobukti}, 
+		success: function(response){              
+			var result=eval(response.responseText);
+			switch(result){
+			case 1:
+				win = window.open('./piutang_paper.html','Cetak Pelunasan Piutang','height=480,width=1340,resizable=1,scrollbars=0, menubar=0');
+				//win.print();
+				break;
+			default:
+				Ext.MessageBox.show({
+					title: 'Warning',
+					msg: 'Unable to print the grid!',
+					buttons: Ext.MessageBox.OK,
+					animEl: 'save',
+					icon: Ext.MessageBox.WARNING
+				});
+				break;
+			}  
+		},
+		failure: function(response){
+			var result=response.responseText;
+			Ext.MessageBox.show({
+			   title: 'Error',
+			   msg: 'Could not connect to the database. retry later.',
+			   buttons: Ext.MessageBox.OK,
+			   animEl: 'database',
+			   icon: Ext.MessageBox.ERROR
+			});		
+		} 	                     
+	});
+}
+
+
 Ext.util.Format.comboRenderer = function(combo){
 	return function(value){
 		var record = combo.findRecord(combo.valueField, value);
@@ -179,8 +216,25 @@ Ext.onReady(function(){
 				piutang_cara	: piutang_cara_create
 			}, 
 			success: function(response){             
-				var result=eval(response.responseText);
-				switch(result){
+				//var result=eval(response.responseText);
+				var result=response.responseText;
+				if(result!==''){
+					form_bayar_piutang_insert(result);
+					Ext.MessageBox.alert(post2db+' OK','The Master_lunas_piutang was '+msg+' successfully.');
+					master_lunas_piutang_DataStore.reload();
+					single_lunas_piutang_createWindow.hide();
+				}else{
+					Ext.MessageBox.show({
+					   title: 'Warning',
+					   msg: 'We could\'t not '+msg+' the Master_lunas_piutang.',
+					   buttons: Ext.MessageBox.OK,
+					   animEl: 'save',
+					   icon: Ext.MessageBox.WARNING
+					});
+					master_lunas_piutang_DataStore.reload();
+					single_lunas_piutang_createWindow.hide();
+				}
+				/*switch(result){
 					case 1:
 						//form_bayar_piutang_purge();
 						form_bayar_piutang_insert();
@@ -197,7 +251,7 @@ Ext.onReady(function(){
 						   icon: Ext.MessageBox.WARNING
 						});
 						break;
-				}        
+				}        */
 			},
 			failure: function(response){
 				var result=response.responseText;
@@ -1349,7 +1403,11 @@ Ext.onReady(function(){
 		if(form_bayar_piutang_DataStore.getCount()>0){
 			var total_bayar=0;
 			for(i=0;i<form_bayar_piutang_DataStore.getCount();i++){
-				total_bayar += form_bayar_piutang_DataStore.getAt(i).data.lpiutang_bayar;
+				if(form_bayar_piutang_DataStore.getAt(i).data.lpiutang_bayar==undefined || form_bayar_piutang_DataStore.getAt(i).data.lpiutang_bayar==''){
+					total_bayar += 0;
+				}else{
+					total_bayar += form_bayar_piutang_DataStore.getAt(i).data.lpiutang_bayar;
+				}
 			}
 			piutang_total_bayarField.setValue(total_bayar);
 		}
@@ -1357,8 +1415,11 @@ Ext.onReady(function(){
 	//eof
 	
 	//function for insert detail
-	function form_bayar_piutang_insert(){
+	function form_bayar_piutang_insert(dpiutang_nobukti){
+		var count_detail=form_bayar_piutang_DataStore.getCount();
 		for(i=0;i<form_bayar_piutang_DataStore.getCount();i++){
+			var count_i = i;
+			console.log('count_i == '+ count_i);
 			form_bayar_piutang_record=form_bayar_piutang_DataStore.getAt(i);
 			
 			var dpiutang_cara_insert=null;
@@ -1423,13 +1484,39 @@ Ext.onReady(function(){
 				// Bayar Transfer
 				dpiutang_transfer_bank	:	dpiutang_transfer_bank_insert,
 				dpiutang_transfer_nama	:	dpiutang_transfer_nama_insert,
-				dpiutang_transfer_nilai	:	dpiutang_transfer_nilai_insert
+				dpiutang_transfer_nilai	:	dpiutang_transfer_nilai_insert,
+				dpiutang_nobukti	: dpiutang_nobukti,
+				count	: count_i,
+				dcount	: count_detail
 				},
-				callback: function(opts, success, response){
+				success: function(response){
+					var result=eval(response.responseText);
+					if(result==0){
+						master_lunas_piutang_DataStore.baseParams = { task: 'LIST' };
+						master_lunas_piutang_DataStore.reload({params: {start: 0, limit: pageS}});
+					}else if(result==1){
+						piutang_cetak(dpiutang_nobukti);
+						master_lunas_piutang_DataStore.baseParams = { task: 'LIST' };
+						master_lunas_piutang_DataStore.reload({params: {start: 0, limit: pageS}});
+					}else if(result==-1){
+						Ext.MessageBox.show({
+						   title: 'Warning',
+						   //msg: 'We could\'t not '+msg+' the Master_jual_produk.',
+						   msg: 'Data penjualan produk tidak bisa disimpan',
+						   buttons: Ext.MessageBox.OK,
+						   animEl: 'save',
+						   icon: Ext.MessageBox.WARNING
+						});
+						master_lunas_piutang_DataStore.baseParams = { task: 'LIST' };
+						master_lunas_piutang_DataStore.reload({params: {start: 0, limit: pageS}});
+					}
+				}
+				/*callback: function(opts, success, response){
+					console.log('dpiutang_nobukti'+ dpiutang_nobukti);
 					master_lunas_piutang_DataStore.baseParams = { task: 'LIST' };
 					// Cause the datastore to do another query : 
 					master_lunas_piutang_DataStore.reload({params: {start: 0, limit: pageS}});
-				}
+				}*/
 			});
 		}
 	}

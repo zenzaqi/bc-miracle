@@ -156,78 +156,84 @@ class M_master_lunas_piutang extends Model{
 		}
 		
 		//insert record bayar
-		function form_bayar_piutang_insert($dpiutang_master ,$dpiutang_nilai ,$dpiutang_cara ,$dpiutang_tunai_nilai ,$dpiutang_card_nama ,$dpiutang_card_edc ,$dpiutang_card_no ,$dpiutang_card_nilai ,$dpiutang_cek_nama ,$dpiutang_cek_no ,$dpiutang_cek_valid ,$dpiutang_cek_bank ,$dpiutang_cek_nilai ,$dpiutang_transfer_bank ,$dpiutang_transfer_nama ,$dpiutang_transfer_nilai ){
-			$pattern="LP/".date("ym")."-";
-			$dpiutang_nobukti=$this->m_public_function->get_kode_1('detail_lunas_piutang','dpiutang_nobukti',$pattern,12);
+		function form_bayar_piutang_insert($dpiutang_master ,$dpiutang_nilai ,$dpiutang_cara ,$dpiutang_tunai_nilai ,$dpiutang_card_nama ,$dpiutang_card_edc ,$dpiutang_card_no ,$dpiutang_card_nilai ,$dpiutang_cek_nama ,$dpiutang_cek_no ,$dpiutang_cek_valid ,$dpiutang_cek_bank ,$dpiutang_cek_nilai ,$dpiutang_transfer_bank ,$dpiutang_transfer_nama ,$dpiutang_transfer_nilai ,$dpiutang_nobukti, $count, $dcount){
+			//$pattern="LP/".date("ym")."-";
+			//$dpiutang_nobukti=$this->m_public_function->get_kode_1('detail_lunas_piutang','dpiutang_nobukti',$pattern,12);
 			//$dpiutang_nobukti=$this->get_nofaktur_lunas_piutang();
 			
-			$data = array(
-			"dpiutang_master"=>$dpiutang_master, 
-			"dpiutang_nobukti"=>$dpiutang_nobukti, 
-			"dpiutang_nilai"=>$dpiutang_nilai,
-			"dpiutang_cara"=>$dpiutang_cara
-			);
-			$this->db->insert('detail_lunas_piutang', $data); 
-			if($this->db->affected_rows()){
-				$this->sisa_piutang_update($dpiutang_master);
-				
-				if($dpiutang_cara!=null || $dpiutang_cara!=''){
-					if($dpiutang_cara=='card'){
-						
-						$data=array(
-							"jcard_nama"=>$dpiutang_card_nama,
-							"jcard_edc"=>$dpiutang_card_edc,
-							"jcard_no"=>$dpiutang_card_no,
-							"jcard_nilai"=>$dpiutang_nilai,
-							"jcard_ref"=>$dpiutang_nobukti
-							);
-						$this->db->insert('jual_card', $data); 
+			$this->firephp->log($dpiutang_nilai, 'dpiutang_nilai');
+			if($dpiutang_nilai>0 && $dpiutang_nilai<>''){
+				$data = array(
+				"dpiutang_master"=>$dpiutang_master, 
+				"dpiutang_nobukti"=>$dpiutang_nobukti, 
+				"dpiutang_nilai"=>$dpiutang_nilai,
+				"dpiutang_cara"=>$dpiutang_cara
+				);
+				$this->db->insert('detail_lunas_piutang', $data); 
+				if($this->db->affected_rows()){
+					$this->sisa_piutang_update($dpiutang_master);
 					
-					}else if($dpiutang_cara=='cek/giro'){
+					if($dpiutang_cara!=null || $dpiutang_cara!=''){
+						if($dpiutang_cara=='card'){
+							
+							$data=array(
+								"jcard_nama"=>$dpiutang_card_nama,
+								"jcard_edc"=>$dpiutang_card_edc,
+								"jcard_no"=>$dpiutang_card_no,
+								"jcard_nilai"=>$dpiutang_nilai,
+								"jcard_ref"=>$dpiutang_nobukti
+								);
+							$this->db->insert('jual_card', $data); 
 						
-						/*if($dpiutang_cek_nama=="" || $dpiutang_cek_nama==NULL){
-							if(is_int($dpiutang_cek_nama)){
-								$sql="select cust_nama from customer where cust_id='".$dpiutang_cust."'";
-								$query=$this->db->query($sql);
-								if($query->num_rows()){
-									$data=$query->row();
-									$dpiutang_cek_nama=$data->cust_nama;
+						}else if($dpiutang_cara=='cek/giro'){
+							
+							/*if($dpiutang_cek_nama=="" || $dpiutang_cek_nama==NULL){
+								if(is_int($dpiutang_cek_nama)){
+									$sql="select cust_nama from customer where cust_id='".$dpiutang_cust."'";
+									$query=$this->db->query($sql);
+									if($query->num_rows()){
+										$data=$query->row();
+										$dpiutang_cek_nama=$data->cust_nama;
+									}
+								}else{
+										$dpiutang_cek_nama=$dpiutang_cust;
 								}
-							}else{
-									$dpiutang_cek_nama=$dpiutang_cust;
-							}
-						}*/
-						$data=array(
-							"jcek_nama"=>$dpiutang_cek_nama,
-							"jcek_no"=>$dpiutang_cek_no,
-							"jcek_valid"=>$dpiutang_cek_valid,
-							"jcek_bank"=>$dpiutang_cek_bank,
-							"jcek_nilai"=>$dpiutang_nilai,
-							"jcek_ref"=>$dpiutang_nobukti
-							);
-						$this->db->insert('jual_cek', $data); 
-					}else if($dpiutang_cara=='transfer'){
-						
-						$data=array(
-							"jtransfer_bank"=>$dpiutang_transfer_bank,
-							"jtransfer_nama"=>$dpiutang_transfer_nama,
-							"jtransfer_nilai"=>$dpiutang_nilai,
-							"jtransfer_ref"=>$dpiutang_nobukti
-							);
-						$this->db->insert('jual_transfer', $data); 
-					}else if($dpiutang_cara=='tunai'){
-						
-						$data=array(
-							"jtunai_nilai"=>$dpiutang_nilai,
-							"jtunai_ref"=>$dpiutang_nobukti
-							);
-						$this->db->insert('jual_tunai', $data); 
+							}*/
+							$data=array(
+								"jcek_nama"=>$dpiutang_cek_nama,
+								"jcek_no"=>$dpiutang_cek_no,
+								"jcek_valid"=>$dpiutang_cek_valid,
+								"jcek_bank"=>$dpiutang_cek_bank,
+								"jcek_nilai"=>$dpiutang_nilai,
+								"jcek_ref"=>$dpiutang_nobukti
+								);
+							$this->db->insert('jual_cek', $data); 
+						}else if($dpiutang_cara=='transfer'){
+							
+							$data=array(
+								"jtransfer_bank"=>$dpiutang_transfer_bank,
+								"jtransfer_nama"=>$dpiutang_transfer_nama,
+								"jtransfer_nilai"=>$dpiutang_nilai,
+								"jtransfer_ref"=>$dpiutang_nobukti
+								);
+							$this->db->insert('jual_transfer', $data); 
+						}else if($dpiutang_cara=='tunai'){
+							
+							$data=array(
+								"jtunai_nilai"=>$dpiutang_nilai,
+								"jtunai_ref"=>$dpiutang_nobukti
+								);
+							$this->db->insert('jual_tunai', $data); 
+						}
 					}
-				}
-				
-				return '1';
-			}else
-				return '0';
+					if($count==($dcount-1)){
+						return '1';
+					}else{
+						return '0';
+					}
+				}else
+					return '-1';
+			}
 
 		}
 		//end of function
@@ -300,8 +306,11 @@ class M_master_lunas_piutang extends Model{
 			"fpiutang_creator"=>$fpiutang_creator
 			);
 			$this->db->insert('master_faktur_lunas_piutang', $dti_fpiutang);*/
+			$dpiutang_nobukti='';
+			$pattern="LP/".date("ym")."-";
+			$dpiutang_nobukti=$this->m_public_function->get_kode_1('detail_lunas_piutang','dpiutang_nobukti',$pattern,12);
 			
-			return '1';
+			return $dpiutang_nobukti;
 		}
 		
 		//function for create new record
@@ -451,6 +460,12 @@ class M_master_lunas_piutang extends Model{
 				};
 				$result = $this->db->query($query);
 			}
+			return $result;
+		}
+		
+		function print_paper($dpiutang_nobukti){
+			$sql="SELECT lpiutang_faktur, date_format(dpiutang_tanggal, 'Y-m-d') AS dpiutang_tanggal, cust_nama, cust_no, cust_alamat, dpiutang_cara, dpiutang_nobukti, dpiutang_nilai FROM detail_lunas_piutang LEFT JOIN master_lunas_piutang ON(dpiutang_master=lpiutang_id) LEFT JOIN customer ON(lpiutang_cust=cust_id) WHERE dpiutang_nobukti='$dpiutang_nobukti'";
+			$result = $this->db->query($sql);
 			return $result;
 		}
 		
