@@ -19,24 +19,13 @@ class C_lap_kunjungan extends Controller {
 		$this->load->model('m_lap_kunjungan', '', TRUE);
 		$this->load->plugin('to_excel');
 	}
-	
-	function punya_paket_checking(){
-		$this->m_lap_kunjungan->punya_paket_checking();
-	}
-	
+
 	//set index
 	function index(){
 		$this->load->helper('asset');
 		$this->load->view('main/v_lap_kunjungan');
 	}
 	
-	function get_dokter_list(){
-		//ID dokter pada tabel departemen adalah 8
-		$query = isset($_POST['query']) ? $_POST['query'] : "";
-		$tgl_app = isset($_POST['tgl_app']) ? $_POST['tgl_app'] : "";
-		$result=$this->m_public_function->get_petugas_list($query,$tgl_app,"Dokter");
-		echo $result;
-	}
 
 	//get master id, note: not done yet
 	function get_master_id(){
@@ -71,10 +60,10 @@ class C_lap_kunjungan extends Controller {
 				$this->lap_kunjungan_search2();
 				break;
 			case "PRINT":
-				$this->report_tindakan_print();
+				$this->lap_kunjungan_print();
 				break;
 			case "EXCEL":
-				$this->report_tindakan_export_excel();
+				$this->lap_lunjungan_export_excel();
 				break;
 			default:
 				echo "{failure:true}";
@@ -143,7 +132,7 @@ class C_lap_kunjungan extends Controller {
 		echo $result;
 	}
 	
-	function report_tindakan_print(){
+	function lap_kunjungan_print(){
   		//POST varibale here
 		$trawat_id=trim(@$_POST["trawat_id"]);
 		$trawat_cust=trim(@$_POST["trawat_cust"]);
@@ -153,7 +142,7 @@ class C_lap_kunjungan extends Controller {
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$result = $this->m_tindakan_medis->report_tindakan_print($trawat_id ,$trawat_cust ,$trawat_keterangan ,$option,$filter);
+		$result = $this->m_tindakan_medis->lap_kunjungan_print($trawat_id ,$trawat_cust ,$trawat_keterangan ,$option,$filter);
 		$nbrows=$result->num_rows();
 		$totcolumn=8;
    		/* We now have our array, let's build our HTML file */
@@ -196,14 +185,14 @@ class C_lap_kunjungan extends Controller {
 	/* End Of Function */
 
 	/* Function to Export Excel document */
-	function report_tindakan_export_excel(){
+	function lap_lunjungan_export_excel(){
 		//POST varibale here
 		$trawat_id=trim(@$_POST["trawat_id"]);
 		$trawat_dokter=trim(@$_POST["trawat_dokter"]);
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$query = $this->m_lap_kunjungan->report_tindakan_export_excel($trawat_id ,$trawat_dokter ,$option,$filter);
+		$query = $this->m_lap_kunjungan->lap_lunjungan_export_excel($trawat_id ,$trawat_dokter ,$option,$filter);
 		
 		to_excel($query,"tindakan"); 
 		echo '1';
