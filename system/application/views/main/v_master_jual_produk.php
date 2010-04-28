@@ -304,7 +304,8 @@ Ext.onReady(function(){
 			}
 		}
 	
-		if(is_master_jual_produk_form_valid() && dproduk_produk_id=="ada" && (/^\d+$/.test(jproduk_custField.getValue()) || get_pk_id())){	
+		//if(is_master_jual_produk_form_valid() && dproduk_produk_id=="ada" && (/^\d+$/.test(jproduk_custField.getValue()) || (get_jproduk_pk()!==0))){	
+		if(is_master_jual_produk_form_valid() && dproduk_produk_id=="ada" && ((/^\d+$/.test(jproduk_custField.getValue()) && jproduk_post2db=="CREATE") || jproduk_post2db=="UPDATE")){	
 		var jproduk_id_create_pk=null; 
 		var jproduk_nobukti_create=null; 
 		var jproduk_cust_create=null; 
@@ -395,7 +396,7 @@ Ext.onReady(function(){
 		var jproduk_transfer_nama3_create=null;
 		var jproduk_transfer_nilai3_create=null;
 
-		if(jproduk_idField.getValue()!== null){jproduk_id_create_pk = jproduk_idField.getValue();}else{jproduk_id_create_pk=get_pk_id();} 
+		if(jproduk_idField.getValue()!== null){jproduk_id_create_pk = jproduk_idField.getValue();}else{jproduk_id_create_pk=get_jproduk_pk();} 
 		if(jproduk_nobuktiField.getValue()!== null){jproduk_nobukti_create = jproduk_nobuktiField.getValue();} 
 		if(jproduk_custField.getValue()!== null){jproduk_cust_create = jproduk_custField.getValue();} 
 		if(jproduk_tanggalField.getValue()!== ""){jproduk_tanggal_create_date = jproduk_tanggalField.getValue().format('Y-m-d');} 
@@ -650,7 +651,7 @@ Ext.onReady(function(){
 	}
   
   	/* Function for get PK field */
-	function get_pk_id(){
+	function get_jproduk_pk(){
 		if(jproduk_post2db=='UPDATE')
 			return master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_id');
 		else 
@@ -1371,7 +1372,7 @@ Ext.onReady(function(){
 			//master_cara_bayarTabPanel.setActiveTab(0);
 			jproduk_post2db='UPDATE';
 			detail_jual_produk_DataStore.load({
-				params : {master_id : eval(get_pk_id()), start:0, limit:pageS},
+				params : {master_id : eval(get_jproduk_pk()), start:0, limit:pageS},
 				callback: function(opts, success, response){
 					if(success){
 						/*var subtotal_field=0;
@@ -4159,7 +4160,7 @@ Ext.onReady(function(){
 					params:{
 						cetak	: cetak_jproduk,
 						dproduk_id	: detail_jual_produk_record.data.dproduk_id, 
-						dproduk_master	: eval(get_pk_id()),
+						dproduk_master	: eval(get_jproduk_pk()),
 						dproduk_produk	: detail_jual_produk_record.data.dproduk_produk,
 						dproduk_karyawan: detail_jual_produk_record.data.dproduk_karyawan,
 						dproduk_satuan	: detail_jual_produk_record.data.dproduk_satuan,
@@ -4181,7 +4182,7 @@ Ext.onReady(function(){
 							/*Ext.Ajax.request({
 								waitMsg: 'Mohon tunggu...',
 								url: 'index.php?c=c_master_jual_produk&m=catatan_piutang_update',
-								params:{dproduk_master	: eval(get_pk_id())}
+								params:{dproduk_master	: eval(get_jproduk_pk())}
 							});*/
 							Ext.MessageBox.alert(jproduk_post2db+' OK','Data penjualan produk berhasil disimpan');
 							jproduk_post2db="CREATE";
@@ -4201,7 +4202,7 @@ Ext.onReady(function(){
 							Ext.Ajax.request({
 								waitMsg: 'Mohon tunggu...',
 								url: 'index.php?c=c_master_jual_produk&m=catatan_piutang_update',
-								params:{dproduk_master	: eval(get_pk_id())}
+								params:{dproduk_master	: eval(get_jproduk_pk())}
 							});
 							jproduk_cetak(result);
 							cetak_jproduk=0;
