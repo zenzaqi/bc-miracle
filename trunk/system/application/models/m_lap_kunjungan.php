@@ -36,24 +36,48 @@ class M_lap_kunjungan extends Model{
 		//function for get list record
 		function lap_kunjungan_list($filter,$start,$end){
 			$date_now=date('Y-m-d');
-			$query="select count(distinct cust), tgl_tindakan from
+			$query="select tgl_tindakan,
+sum(jum_cust_medis),
+sum(jum_cust_nonmedis),
+sum(jum_cust_produk), 
+sum(jum_cust_medis) + sum(jum_cust_nonmedis) + sum(jum_cust_produk) as total_jumlah
+from
 (
 	(
 		select 
-			tindakan.trawat_cust as cust,
+			count(distinct tindakan.trawat_cust) as jum_cust_medis,
+			0 as jum_cust_nonmedis,
+			0 as jum_cust_produk,
 			tindakan_detail.dtrawat_tglapp as tgl_tindakan
 		from tindakan
 		left join tindakan_detail on (tindakan.trawat_id=tindakan_detail.dtrawat_master)
-		where tindakan_detail.dtrawat_status='selesai'
-		
+		left join perawatan on (tindakan_detail.dtrawat_perawatan=perawatan.rawat_id)
+		where perawatan.rawat_kategori = 2 and tindakan_detail.dtrawat_status='selesai' and perawatan.rawat_harga <> 0
+		group by tgl_tindakan
 	)
 	union
 	(
 		select 
-			master_jual_produk.jproduk_cust as cust,
+			0 as jum_cust_medis,
+			count(distinct tindakan.trawat_cust) as jum_cust_nonmedis,
+			0 as jum_cust_produk,
+			tindakan_detail.dtrawat_tglapp as tgl_tindakan
+		from tindakan
+		left join tindakan_detail on (tindakan.trawat_id=tindakan_detail.dtrawat_master)
+		left join perawatan on (tindakan_detail.dtrawat_perawatan=perawatan.rawat_id)
+		where perawatan.rawat_kategori = 3 and tindakan_detail.dtrawat_status='selesai' and perawatan.rawat_harga <> 0
+		group by tgl_tindakan
+	)
+	union
+	(
+		select 
+			0 as jum_cust_medis,
+			0 as jum_cust_nonmedis,
+			count(distinct master_jual_produk.jproduk_cust) as jum_cust_produk,
 			master_jual_produk.jproduk_tanggal as tgl_tindakan
 		from master_jual_produk
 		where master_jual_produk.jproduk_stat_dok <> 'Batal'
+		group by tgl_tindakan
 	)
 ) as table_union
 where tgl_tindakan = '$date_now'
@@ -78,24 +102,48 @@ group by tgl_tindakan";
 		
 	function lap_kunjungan_non_list($filter,$start,$end){
 			$date_now=date('Y-m-d');
-			$query="select count(distinct cust) from
+			$query="select tgl_tindakan,
+sum(jum_cust_medis),
+sum(jum_cust_nonmedis),
+sum(jum_cust_produk), 
+sum(jum_cust_medis) + sum(jum_cust_nonmedis) + sum(jum_cust_produk) as total_jumlah
+from
 (
 	(
 		select 
-			tindakan.trawat_cust as cust,
+			count(distinct tindakan.trawat_cust) as jum_cust_medis,
+			0 as jum_cust_nonmedis,
+			0 as jum_cust_produk,
 			tindakan_detail.dtrawat_tglapp as tgl_tindakan
 		from tindakan
 		left join tindakan_detail on (tindakan.trawat_id=tindakan_detail.dtrawat_master)
-		where tindakan_detail.dtrawat_status='selesai'
-	
+		left join perawatan on (tindakan_detail.dtrawat_perawatan=perawatan.rawat_id)
+		where perawatan.rawat_kategori = 2 and tindakan_detail.dtrawat_status='selesai' and perawatan.rawat_harga <> 0
+		group by tgl_tindakan
 	)
 	union
 	(
 		select 
-			master_jual_produk.jproduk_cust as cust,
+			0 as jum_cust_medis,
+			count(distinct tindakan.trawat_cust) as jum_cust_nonmedis,
+			0 as jum_cust_produk,
+			tindakan_detail.dtrawat_tglapp as tgl_tindakan
+		from tindakan
+		left join tindakan_detail on (tindakan.trawat_id=tindakan_detail.dtrawat_master)
+		left join perawatan on (tindakan_detail.dtrawat_perawatan=perawatan.rawat_id)
+		where perawatan.rawat_kategori = 3 and tindakan_detail.dtrawat_status='selesai' and perawatan.rawat_harga <> 0
+		group by tgl_tindakan
+	)
+	union
+	(
+		select 
+			0 as jum_cust_medis,
+			0 as jum_cust_nonmedis,
+			count(distinct master_jual_produk.jproduk_cust) as jum_cust_produk,
 			master_jual_produk.jproduk_tanggal as tgl_tindakan
 		from master_jual_produk
 		where master_jual_produk.jproduk_stat_dok <> 'Batal'
+		group by tgl_tindakan
 	)
 ) as table_union
 where tgl_tindakan = '$date_now'";
@@ -104,7 +152,7 @@ where tgl_tindakan = '$date_now'";
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
 			
-			if($nbrows>0 || $nbrows2>0 || $nbrows3>0 || $nbrows4>0){
+			if($nbrows>0 || $nbrows2>0){
 				if($nbrows>0){
 					foreach($result->result() as $row){
 						$arr[] = $row;
@@ -123,24 +171,48 @@ where tgl_tindakan = '$date_now'";
 			//$query="SELECT * FROM vu_tindakan WHERE kategori_nama='Medis'";
 			//$query = "SELECT * FROM vu_tindakan WHERE (kategori_nama='Medis' OR dtrawat_petugas2='0')";
 			//$query ="select k.karyawan_username, p.rawat_nama, count(p.rawat_nama) as Jumlah_rawat, p.rawat_kredit, p.rawat_kredit*count(p.rawat_nama) as Total_kredit from tindakan_detail d left outer join karyawan k on k.karyawan_id=d.dtrawat_petugas1 left outer join perawatan p on p.rawat_id = d.dtrawat_perawatan";
-			$query = "select count(distinct cust), tgl_tindakan from
+			$query = "select tgl_tindakan,
+sum(jum_cust_medis),
+sum(jum_cust_nonmedis),
+sum(jum_cust_produk), 
+sum(jum_cust_medis) + sum(jum_cust_nonmedis) + sum(jum_cust_produk) as total_jumlah
+from
 (
 	(
 		select 
-			tindakan.trawat_cust as cust,
+			count(distinct tindakan.trawat_cust) as jum_cust_medis,
+			0 as jum_cust_nonmedis,
+			0 as jum_cust_produk,
 			tindakan_detail.dtrawat_tglapp as tgl_tindakan
 		from tindakan
 		left join tindakan_detail on (tindakan.trawat_id=tindakan_detail.dtrawat_master)
-		where tindakan_detail.dtrawat_status='selesai'
-	
+		left join perawatan on (tindakan_detail.dtrawat_perawatan=perawatan.rawat_id)
+		where perawatan.rawat_kategori = 2 and tindakan_detail.dtrawat_status='selesai' and perawatan.rawat_harga <> 0
+		group by tgl_tindakan
 	)
 	union
 	(
 		select 
-			master_jual_produk.jproduk_cust as cust,
+			0 as jum_cust_medis,
+			count(distinct tindakan.trawat_cust) as jum_cust_nonmedis,
+			0 as jum_cust_produk,
+			tindakan_detail.dtrawat_tglapp as tgl_tindakan
+		from tindakan
+		left join tindakan_detail on (tindakan.trawat_id=tindakan_detail.dtrawat_master)
+		left join perawatan on (tindakan_detail.dtrawat_perawatan=perawatan.rawat_id)
+		where perawatan.rawat_kategori = 3 and tindakan_detail.dtrawat_status='selesai' and perawatan.rawat_harga <> 0
+		group by tgl_tindakan
+	)
+	union
+	(
+		select 
+			0 as jum_cust_medis,
+			0 as jum_cust_nonmedis,
+			count(distinct master_jual_produk.jproduk_cust) as jum_cust_produk,
 			master_jual_produk.jproduk_tanggal as tgl_tindakan
 		from master_jual_produk
 		where master_jual_produk.jproduk_stat_dok <> 'Batal'
+		group by tgl_tindakan
 	)
 ) as table_union";
 			/*if($trawat_dokter!=''){
@@ -181,24 +253,48 @@ where tgl_tindakan = '$date_now'";
 			/*$query ="select sum(vu_kredit.total_kredit) as grand_total from(
 select k.karyawan_username, p.rawat_nama, count(p.rawat_nama) as Jumlah_rawat, p.rawat_kredit, p.rawat_kredit*count(p.rawat_nama) as Total_kredit from tindakan_detail d left outer join karyawan k on k.karyawan_id=d.dtrawat_petugas1 left outer join perawatan p on p.rawat_id = d.dtrawat_perawatan";
 */
-$query = "select count(distinct cust) from
+$query = "select
+sum(jum_cust_medis),
+sum(jum_cust_nonmedis),
+sum(jum_cust_produk), 
+sum(jum_cust_medis) + sum(jum_cust_nonmedis) + sum(jum_cust_produk) as total_jumlah
+from
 (
 	(
 		select 
-			tindakan.trawat_cust as cust,
+			count(distinct tindakan.trawat_cust) as jum_cust_medis,
+			0 as jum_cust_nonmedis,
+			0 as jum_cust_produk,
 			tindakan_detail.dtrawat_tglapp as tgl_tindakan
 		from tindakan
 		left join tindakan_detail on (tindakan.trawat_id=tindakan_detail.dtrawat_master)
-		where tindakan_detail.dtrawat_status='selesai'
-	
+		left join perawatan on (tindakan_detail.dtrawat_perawatan=perawatan.rawat_id)
+		where perawatan.rawat_kategori = 2 and tindakan_detail.dtrawat_status='selesai' and perawatan.rawat_harga <> 0
+		group by tgl_tindakan
 	)
 	union
 	(
 		select 
-			master_jual_produk.jproduk_cust as cust,
+			0 as jum_cust_medis,
+			count(distinct tindakan.trawat_cust) as jum_cust_nonmedis,
+			0 as jum_cust_produk,
+			tindakan_detail.dtrawat_tglapp as tgl_tindakan
+		from tindakan
+		left join tindakan_detail on (tindakan.trawat_id=tindakan_detail.dtrawat_master)
+		left join perawatan on (tindakan_detail.dtrawat_perawatan=perawatan.rawat_id)
+		where perawatan.rawat_kategori = 3 and tindakan_detail.dtrawat_status='selesai' and perawatan.rawat_harga <> 0
+		group by tgl_tindakan
+	)
+	union
+	(
+		select 
+			0 as jum_cust_medis,
+			0 as jum_cust_nonmedis,
+			count(distinct master_jual_produk.jproduk_cust) as jum_cust_produk,
 			master_jual_produk.jproduk_tanggal as tgl_tindakan
 		from master_jual_produk
 		where master_jual_produk.jproduk_stat_dok <> 'Batal'
+		group by tgl_tindakan
 	)
 ) as table_union";
 
