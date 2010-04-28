@@ -508,16 +508,68 @@ class M_master_jual_produk extends Model{
 				$record=$rs->row_array();
 				$setmember_rp_perpoint=$record['setmember_rp_perpoint'];
 				
-				$sql="SELECT dproduk_jumlah, dproduk_harga, produk_point FROM detail_jual_produk LEFT JOIN produk ON(dproduk_produk=produk_id) WHERE dproduk_master='$dproduk_master'";
+				$sql="SELECT dproduk_jumlah, dproduk_harga, produk_point, jproduk_diskon, jproduk_cashback FROM detail_jual_produk LEFT JOIN master_jual_produk ON(dproduk_master=jproduk_id) LEFT JOIN produk ON(dproduk_produk=produk_id) WHERE dproduk_master='$dproduk_master'";
 				$rs=$this->db->query($sql);
 				if($rs->num_rows()){
+					$one_record = $rs->row();
+					$jproduk_cashback = $one_record->jproduk_cashback;
+					$jproduk_diskon = $one_record->jproduk_diskon;
+					$jumlah_rupiah = 0;
 					$jumlah_point = 0;
 					foreach($rs->result() as $row){
-						$jumlah_point += ($row->dproduk_jumlah) * ($row->produk_point) * (floor(($row->dproduk_harga)/$setmember_rp_perpoint));
+						//$jumlah_point += ($row->dproduk_jumlah) * ($row->produk_point) * (floor(($row->dproduk_harga)/$setmember_rp_perpoint));
+						$jumlah_rupiah += ($row->dproduk_jumlah) * ($row->produk_point) * ($row->dproduk_harga);
 					}
-					$sql="UPDATE customer SET cust_point = (cust_point+$jumlah_point) WHERE cust_id='$jproduk_cust'";
+					$jumlah_rupiah -= $jproduk_cashback;
+					if($setmember_rp_perpoint<>0){
+						$jumlah_point = floor($jumlah_rupiah/$setmember_rp_perpoint);
+					}
+					$sql="UPDATE customer SET cust_point = (cust_point + $jumlah_point) WHERE cust_id='$jproduk_cust'";
 					$this->db->query($sql);
 				}
+			}
+		}
+		
+		function member_point_delete($dproduk_master){
+			$date_now=date('Y-m-d');
+			
+			$sql="SELECT jproduk_cust FROM master_jual_produk WHERE jproduk_id='$dproduk_master'";
+			$rs=$this->db->query($sql);
+			$record=$rs->row_array();
+			$jproduk_cust=$record['jproduk_cust'];
+			
+			$sql="SELECT member_id FROM member WHERE member_cust='$jproduk_cust' AND (member_valid >= '$date_now')";
+			$rs=$this->db->query($sql);
+			if($rs->num_rows()){
+				$sql="SELECT setmember_rp_perpoint FROM member_setup LIMIT 1";
+				$rs=$this->db->query($sql);
+				$record=$rs->row_array();
+				$setmember_rp_perpoint=$record['setmember_rp_perpoint'];
+				
+				$sql="SELECT dproduk_jumlah, dproduk_harga, produk_point, jproduk_diskon, jproduk_cashback FROM detail_jual_produk LEFT JOIN master_jual_produk ON(dproduk_master=jproduk_id) LEFT JOIN produk ON(dproduk_produk=produk_id) WHERE dproduk_master='$dproduk_master'";
+				$rs=$this->db->query($sql);
+				if($rs->num_rows()){
+					$one_record = $rs->row();
+					$jproduk_cashback = $one_record->jproduk_cashback;
+					$jproduk_diskon = $one_record->jproduk_diskon;
+					$jumlah_rupiah = 0;
+					$jumlah_point = 0;
+					foreach($rs->result() as $row){
+						//$jumlah_point += ($row->dproduk_jumlah) * ($row->produk_point) * (floor(($row->dproduk_harga)/$setmember_rp_perpoint));
+						$jumlah_rupiah += ($row->dproduk_jumlah) * ($row->produk_point) * ($row->dproduk_harga);
+					}
+					$jumlah_rupiah -= $jproduk_cashback;
+					if($setmember_rp_perpoint<>0){
+						$jumlah_point = floor($jumlah_rupiah/$setmember_rp_perpoint);
+					}
+					$sql="UPDATE customer SET cust_point = (cust_point - $jumlah_point) WHERE cust_id='$jproduk_cust'";
+					$this->db->query($sql);
+					return 1;
+				}else{
+					return 1;
+				}
+			}else{
+				return 1;
 			}
 		}
 		
@@ -643,8 +695,13 @@ class M_master_jual_produk extends Model{
 		
 		//purge all detail from master
 		function detail_detail_jual_produk_purge($master_id){
-			$sql="DELETE from detail_jual_produk where dproduk_master='".$master_id."'";
-			$result=$this->db->query($sql);
+			//* Mengurangi point di db.customer.cust_point /
+			$result_point_delete = $this->member_point_delete($master_id);
+			if($result_point_delete==1){
+				$sql="DELETE from detail_jual_produk where dproduk_master='".$master_id."'";
+				//$result=$this->db->query($sql);
+				$this->db->query($sql);
+			}
 		}
 		//*eof
 		
@@ -656,31 +713,59 @@ class M_master_jual_produk extends Model{
 				$dproduk_master=$this->get_master_id();
 			}
 			
-			$data = array(
-				"dproduk_master"=>$dproduk_master, 
-				"dproduk_produk"=>$dproduk_produk, 
-				"dproduk_karyawan"=>$dproduk_karyawan,
-				"dproduk_satuan"=>$dproduk_satuan, 
-				"dproduk_jumlah"=>$dproduk_jumlah, 
-				"dproduk_harga"=>$dproduk_harga, 
-				"dproduk_diskon"=>$dproduk_diskon,
-				"dproduk_diskon_jenis"=>$dproduk_diskon_jenis,
-				"dproduk_sales"=>$dproduk_sales,
-				"konversi_nilai_temp"=>$konversi_nilai_temp
-			);
-			$this->db->insert('detail_jual_produk', $data); 
-			if($this->db->affected_rows()){
-				if($cetak==1 && ($count==($dcount-1))){
-					$this->member_point_update($dproduk_master);
-					$this->membership_insert($dproduk_master);
-					return $dproduk_master;
-				}else if($cetak!==1 && ($count==($dcount-1))){
-					return '0';
-				}else if($count!==($dcount-1)){
-					return '-3';
-				}
-			}else
-				return '-1';
+			$sql="SELECT dproduk_id, dproduk_jumlah FROM detail_jual_produk WHERE dproduk_master='$dproduk_master' AND dproduk_produk='$dproduk_produk'";
+			$rs=$this->db->query($sql);
+			if($rs->num_rows()){
+				//* UPDATE detail_jual_produk untuk menambahkan dproduk_jumlah, ini dikarenakan kasir memasukkan produk yg sama lebih dari satu dalam satu Faktur /
+				$record = $rs->row_array();
+				$dproduk_id=$record['dproduk_id'];
+				$dproduk_jumlah_awal = $record['dproduk_jumlah'];
+				$dproduk_jumlah += $dproduk_jumlah_awal;
+				
+				$dtu_dproduk=array(
+				"dproduk_jumlah"=>$dproduk_jumlah
+				);
+				$this->db->where('dproduk_id', $dproduk_id);
+				$this->db->update('detail_jual_produk', $dtu_dproduk);
+				if($this->db->affected_rows()){
+					if($cetak==1 && ($count==($dcount-1))){
+						$this->member_point_update($dproduk_master);
+						$this->membership_insert($dproduk_master);
+						return $dproduk_master;
+					}else if($cetak!==1 && ($count==($dcount-1))){
+						return '0';
+					}else if($count!==($dcount-1)){
+						return '-3';
+					}
+				}else
+					return '-1';
+			}else{
+				$data = array(
+					"dproduk_master"=>$dproduk_master, 
+					"dproduk_produk"=>$dproduk_produk, 
+					"dproduk_karyawan"=>$dproduk_karyawan,
+					"dproduk_satuan"=>$dproduk_satuan, 
+					"dproduk_jumlah"=>$dproduk_jumlah, 
+					"dproduk_harga"=>$dproduk_harga, 
+					"dproduk_diskon"=>$dproduk_diskon,
+					"dproduk_diskon_jenis"=>$dproduk_diskon_jenis,
+					"dproduk_sales"=>$dproduk_sales,
+					"konversi_nilai_temp"=>$konversi_nilai_temp
+				);
+				$this->db->insert('detail_jual_produk', $data); 
+				if($this->db->affected_rows()){
+					if($cetak==1 && ($count==($dcount-1))){
+						$this->member_point_update($dproduk_master);
+						$this->membership_insert($dproduk_master);
+						return $dproduk_master;
+					}else if($cetak!==1 && ($count==($dcount-1))){
+						return '0';
+					}else if($count!==($dcount-1)){
+						return '-3';
+					}
+				}else
+					return '-1';
+			}
 
 		}
 		//end of function
