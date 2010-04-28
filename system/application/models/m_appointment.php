@@ -607,6 +607,7 @@ class M_appointment extends Model{
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 				$query .=" kategori_nama='Medis'";
 				if($tgl_app!=""){
+					$tgl_app=date('Y-m-d', strtotime($tgl_app));
 					$query .=" AND dapp_tglreservasi='$tgl_app'";
 				}else{
 					$query .=" AND dapp_tglreservasi >= '$dt'";
@@ -622,6 +623,7 @@ class M_appointment extends Model{
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 				$query .=" kategori_nama='Non Medis'";
 				if($tgl_app!=""){
+					$tgl_app=date('Y-m-d', strtotime($tgl_app));
 					$query .=" AND dapp_tglreservasi='$tgl_app'";
 				}else{
 					$query .=" AND dapp_tglreservasi >= '$dt'";

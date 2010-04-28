@@ -1259,7 +1259,7 @@ Ext.onReady(function(){
 			start: 0,
 			limit: pageS,
 			jenis_rawat: tbar_jenis_rawatField.getValue(),
-			tgl_app: tbar_nonmedis_tglField.getValue().format('d-m-Y')
+			tgl_app: tbar_nonmedis_tglField.getValue()
 		}});
 	});
      
