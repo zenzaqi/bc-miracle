@@ -210,7 +210,7 @@ Ext.onReady(function(){
 		[
 		{	
 			align : 'Right',
-			header: '<div align="right">' + 'Total Kunjungan Non-Transaksi' + '</div>',
+			header: '<div align="right">' + 'Total Kunjungan Non Transaksi' + '</div>',
 			dataIndex: 'jumlah_cust',
 			width: 80,	//55,
 			sortable: true
@@ -224,7 +224,7 @@ Ext.onReady(function(){
 	lap_kunjungan_nonListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'lap_kunjungan_nonListEditorGrid',
 		el: 'fp_lap_kunjungan_non',
-		title: 'Laporan Jumlah Kunjungan Non-Transaksi',
+		title: 'Laporan Jumlah Kunjungan Non Transaksi',
 		autoHeight: true,
 		store: lap_kunjungan_nontrans_DataStore, // DataStore
 		cm: lap_kunjungan_nontrans_ColumnModel, // Nama-nama Columns
