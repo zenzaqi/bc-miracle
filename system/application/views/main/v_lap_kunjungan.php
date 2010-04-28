@@ -153,7 +153,10 @@ Ext.onReady(function(){
 			{name: 'tgl_tindakan', type: 'date', dateFormat: 'Y-m-d', mapping: 'tgl_tindakan'},
 			{name: 'dtrawat_id', type: 'int', mapping: 'dtrawat_id'},
 			//{name: 'dtrawat_edit', type: 'string', mapping: 'Jumlah_rawat'},
-			{name: 'jumlah_cust', type: 'int', mapping: 'count(distinct cust)'}
+			{name: 'total_jumlah', type: 'int', mapping: 'total_jumlah'},
+			{name: 'jum_cust_medis', type: 'int', mapping: 'sum(jum_cust_medis)'},
+			{name: 'jum_cust_nonmedis', type: 'int', mapping: 'sum(jum_cust_nonmedis)'},
+			{name: 'jum_cust_produk', type: 'int', mapping: 'sum(jum_cust_produk)'}
 		])
 		//sortInfo:{field: 'tgl_tindakan', direction: "DESC"}
 	});
@@ -175,8 +178,10 @@ Ext.onReady(function(){
 		/* dataIndex => insert intolap_kunjunganColumnModel, Mapping => for initiate table column */ 
 			{name: 'dtrawat_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'dtrawat_date_create'},
 			{name: 'dtrawat_id', type: 'int', mapping: 'dtrawat_id'},
-			{name: 'jumlah_cust', type: 'int', mapping: 'count(distinct cust)'},
-			{name: 'dtrawat_kredit', type: 'int', mapping: 'total_cust'},
+			{name: 'total_jumlah', type: 'int', mapping: 'total_jumlah'},
+			{name: 'jum_cust_medis', type: 'int', mapping: 'sum(jum_cust_medis)'},
+			{name: 'jum_cust_nonmedis', type: 'int', mapping: 'sum(jum_cust_nonmedis)'},
+			{name: 'jum_cust_produk', type: 'int', mapping: 'sum(jum_cust_produk)'}
 		])
 		//sortInfo:{field: 'tindakan_dokter', direction: "DESC"}
 	});
@@ -195,11 +200,32 @@ Ext.onReady(function(){
 		}, 
 		{	
 			align : 'Right',
-			header: '<div align="center">' + 'Kunjungan' + '</div>',
-			dataIndex: 'jumlah_cust',
+			header: '<div align="center">' + 'Medis' + '</div>',
+			dataIndex: 'jum_cust_medis',
 			width: 80,	//55,
 			sortable: true
 		},
+		{	
+			align : 'Right',
+			header: '<div align="center">' + 'Non Medis' + '</div>',
+			dataIndex: 'jum_cust_nonmedis',
+			width: 80,	//55,
+			sortable: true
+		},
+		{	
+			align : 'Right',
+			header: '<div align="center">' + 'Produk' + '</div>',
+			dataIndex: 'jum_cust_produk',
+			width: 80,	//55,
+			sortable: true
+		},
+		{	
+			align : 'Right',
+			header: '<div align="center">' + 'Total' + '</div>',
+			dataIndex: 'total_jumlah',
+			width: 80,	//55,
+			sortable: true
+		}
 	]);
 	
 	lap_kunjunganColumnModel.defaultSortable= true;
@@ -210,7 +236,7 @@ Ext.onReady(function(){
 		{	
 			align : 'Right',
 			header: '<div align="right">' + 'Total Kunjungan' + '</div>',
-			dataIndex: 'jumlah_cust',
+			dataIndex: 'total_jumlah',
 			width: 80,	//55,
 			sortable: true
 		},
@@ -232,7 +258,7 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 300, //940,//1200,	//970,
+	  	width: 500, //940,//1200,	//970,
 		bbar: new Ext.PagingToolbar({
 			//pageSize: pageS,
 			disabled:true,
@@ -275,7 +301,7 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 300, //940,//1200,	//970,
+	  	width: 500, //940,//1200,	//970,
 	
 		/* Add Control on ToolBar */
 	
