@@ -63,12 +63,12 @@ html,body,table,tr,td{
         <tr>
           <td width="490px">&nbsp;<?=$i;?>.&nbsp;<?=$row->produk_nama;?></td>
           <td width="150px">&nbsp;<?=$row->dproduk_jumlah;?> <?=$row->satuan_nama;?></td>
-          <td width="160px" align="right">&nbsp;<?=rupiah($row->dproduk_harga);?></td>
+          <td width="160px" align="right">&nbsp;<?=rupiah(($row->dproduk_harga)*($row->konversi_nilai_temp));?></td>
           <td width="170px" align="right">&nbsp;<?=$row->dproduk_diskon;?></td>
-          <td width="270px" align="right">&nbsp;<?=rupiah(($row->dproduk_jumlah)*($row->jumlah_subtotal));?></td>
+          <td width="270px" align="right">&nbsp;<?=rupiah(($row->dproduk_jumlah)*($row->jumlah_subtotal)*($row->konversi_nilai_temp));?></td>
         </tr>
 		<?php 
-			$subtotal+=(($row->dproduk_jumlah)*($row->jumlah_subtotal));
+			$subtotal+=(($row->dproduk_jumlah)*($row->jumlah_subtotal)*($row->konversi_nilai_temp));
 		}
 		$total=($subtotal*((100-$jproduk_diskon)/100)-$jproduk_cashback);
 		$total_diskon=($subtotal*($jproduk_diskon/100));
@@ -99,21 +99,21 @@ html,body,table,tr,td{
         </tr>
         <tr>
           <td>&nbsp;</td>
-          <td><?php if($cara_bayar<>''){?><?=$cara_bayar;?>&nbsp;:&nbsp;<?=$bayar_nilai;?><?php }?></td>
+          <td><?php if($cara_bayar<>''){?><?=$cara_bayar;?>&nbsp;:&nbsp;<?=rupiah($bayar_nilai);?><?php }?></td>
           <td>&nbsp;</td>
           <td>&nbsp;</td>
           <td align="right"><?=rupiah($total_diskon);?></td>
         </tr>
         <tr>
           <td>&nbsp;</td>
-          <td><?php if($cara_bayar2<>''){?><?=$cara_bayar2;?>&nbsp;:&nbsp;<?=$bayar2_nilai;?><?php }?></td>
+          <td><?php if($cara_bayar2<>''){?><?=$cara_bayar2;?>&nbsp;:&nbsp;<?=rupiah($bayar2_nilai);?><?php }?></td>
           <td>&nbsp;</td>
           <td>&nbsp;</td>
           <td align="right"><?=rupiah($jumlah_bayar);?></td>
         </tr>
         <tr>
           <td>&nbsp;</td>
-          <td><?php if($cara_bayar3<>''){?><?=$cara_bayar3;?>&nbsp;:&nbsp;<?=$bayar3_nilai;?><?php }?></td>
+          <td><?php if($cara_bayar3<>''){?><?=$cara_bayar3;?>&nbsp;:&nbsp;<?=rupiah($bayar3_nilai);?><?php }?></td>
           <td>&nbsp;</td>
           <td>&nbsp;</td>
           <td align="right"><?=rupiah($total);?></td>
