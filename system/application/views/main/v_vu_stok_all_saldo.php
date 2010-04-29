@@ -660,8 +660,8 @@ Ext.onReady(function(){
 		var tanggal_end_search="";
 		
 		if(stok_produk_namaSearchField.getValue()!==null){produk_nama_search=stok_produk_namaSearchField.getValue();}
-		if(stok_tanggal_startSearchField.getValue()!==null){tanggal_start_search=stok_tanggal_startSearchField.getValue();}
-		if(stok_tanggal_endSearchField.getValue()!==null){tanggal_end_search=stok_tanggal_endSearchField.getValue();}
+		if(stok_tanggal_startSearchField.getValue()!==null){tanggal_start_search=stok_tanggal_startSearchField.getValue().format('Y-m-d');}
+		if(stok_tanggal_endSearchField.getValue()!==null){tanggal_end_search=stok_tanggal_endSearchField.getValue().format('Y-m-d');}
 		
 
 		// change the store parameters

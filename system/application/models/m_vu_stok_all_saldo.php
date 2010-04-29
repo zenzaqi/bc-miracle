@@ -302,6 +302,8 @@ class M_vu_stok_all_saldo extends Model{
 					`A`.`satuan_id`,
 					`A`.`satuan_nama`
 					";
+					//echo $sql_stokmutasi;
+					
 				$q_stokmutasi=$this->db->query($sql_stokmutasi);
 				if($q_stokmutasi->num_rows()){
 					$rs_stokmutasi=$q_stokmutasi->row();
@@ -312,8 +314,7 @@ class M_vu_stok_all_saldo extends Model{
 					$data[$i]["jumlah_retur_paket"]=$rs_stokmutasi->jumlah_retur_paket;
 					$data[$i]["jumlah_cabin"]=$rs_stokmutasi->jumlah_cabin;
 					$data[$i]["jumlah_koreksi"]=$rs_stokmutasi->jumlah_koreksi;
-					$data[$i]["stok_saldo"]=$data[$i]["stok_awal"]+$rs_stokmutasi->jumlah_saldo;
-					
+					$data[$i]["stok_saldo"]=$data[$i]["stok_awal"]+$rs_stokmutasi->jumlah_saldo;	
 				}else{
 					$data[$i]["jumlah_terima"]=0;
 					$data[$i]["jumlah_retur_beli"]=0;
