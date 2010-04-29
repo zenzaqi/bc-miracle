@@ -290,7 +290,7 @@ Ext.onReady(function(){
 	vu_stok_all_saldoListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'vu_stok_all_saldoListEditorGrid',
 		el: 'fp_vu_stok_all_saldo',
-		title: 'Kartu Stok',
+		title: 'Laporan Stok Akhir',
 		autoHeight: true,
 		store: vu_stok_all_saldo_DataStore, // DataStore
 		cm: vu_stok_all_saldo_ColumnModel, // Nama-nama Columns
@@ -812,7 +812,7 @@ Ext.onReady(function(){
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
 	vu_stok_all_saldo_searchWindow = new Ext.Window({
-		title: 'Pencarian Kartu Stok',
+		title: 'Pencarian Stok Akhir',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,
