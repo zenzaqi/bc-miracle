@@ -19,7 +19,6 @@ class C_master_lunas_piutang extends Controller {
 		$this->load->model('m_master_lunas_piutang', '', TRUE);
 		session_start();
 		$this->load->plugin('to_excel');
-		$this->load->library('firephp');
 	}
 	
 	//set index

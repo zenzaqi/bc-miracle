@@ -1419,7 +1419,6 @@ Ext.onReady(function(){
 		var count_detail=form_bayar_piutang_DataStore.getCount();
 		for(i=0;i<form_bayar_piutang_DataStore.getCount();i++){
 			var count_i = i;
-			console.log('count_i == '+ count_i);
 			form_bayar_piutang_record=form_bayar_piutang_DataStore.getAt(i);
 			
 			var dpiutang_cara_insert=null;

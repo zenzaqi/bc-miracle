@@ -111,21 +111,21 @@ html,body,table,tr,td{
         </tr>
         <tr>
           <td>&nbsp;</td>
-          <td><?php if($cara_bayar<>''){?><?=$cara_bayar;?>&nbsp;:&nbsp;<?=$bayar_nilai;?><?php }?></td>
+          <td><?php if($cara_bayar<>''){?><?=$cara_bayar;?>&nbsp;:&nbsp;<?=rupiah($bayar_nilai);?><?php }?></td>
           <td>&nbsp;</td>
           <td>&nbsp;</td>
           <td align="right"><?=rupiah($total_diskon);?></td>
         </tr>
         <tr>
           <td>&nbsp;</td>
-          <td><?php if($cara_bayar2<>''){?><?=$cara_bayar2;?>&nbsp;:&nbsp;<?=$bayar2_nilai;?><?php }?></td>
+          <td><?php if($cara_bayar2<>''){?><?=$cara_bayar2;?>&nbsp;:&nbsp;<?=rupiah($bayar2_nilai);?><?php }?></td>
           <td>&nbsp;</td>
           <td>&nbsp;</td>
           <td align="right"><?=rupiah($jumlah_bayar);?></td>
         </tr>
         <tr>
           <td>&nbsp;</td>
-          <td><?php if($cara_bayar3<>''){?><?=$cara_bayar3;?>&nbsp;:&nbsp;<?=$bayar3_nilai;?><?php }?></td>
+          <td><?php if($cara_bayar3<>''){?><?=$cara_bayar3;?>&nbsp;:&nbsp;<?=rupiah($bayar3_nilai);?><?php }?></td>
           <td>&nbsp;</td>
           <td>&nbsp;</td>
           <td align="right"><?=rupiah($total);?></td>
