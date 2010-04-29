@@ -66,7 +66,7 @@ class M_master_invoice extends Model{
 		}
 		
 		function get_produk_terima_list($terima_id,$query,$start,$end){
-			$sql="SELECT produk_id,produk_nama from produk 
+			$sql="SELECT distinct produk_id,produk_nama from produk 
 					WHERE produk_id IN (SELECT dterima_produk FROM detail_terima_beli WHERE dterima_master='".$terima_id."')";
 			$result = $this->db->query($sql);
 			$nbrows = $result->num_rows();
@@ -85,7 +85,7 @@ class M_master_invoice extends Model{
 		}
 		
 		function get_produk_invoice_list($master_id,$query,$start,$end){
-			$sql="SELECT produk_id,produk_nama from produk 
+			$sql="SELECT distinct produk_id,produk_nama from produk 
 					WHERE produk_id IN (SELECT dinvoice_produk FROM detail_invoice WHERE dinvoice_master='".$master_id."')";
 			$result = $this->db->query($sql);
 			$nbrows = $result->num_rows();

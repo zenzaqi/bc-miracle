@@ -67,7 +67,7 @@ class M_master_retur_beli extends Model{
 			}
 		}
 		function get_produk_selected_list($selected_id,$query,$start,$end){
-			$sql="SELECT produk_id,produk_nama,produk_kode,kategori_nama,satuan_id,satuan_nama,dinvoice_harga, dinvoice_diskon FROM vu_detail_invoice";
+			$sql="SELECT distinct produk_id,produk_nama,produk_kode,kategori_nama,satuan_id,satuan_nama,dinvoice_harga, dinvoice_diskon FROM vu_detail_invoice";
 			if($selected_id!=="")
 			{
 				$selected_id=substr($selected_id,0,strlen($selected_id)-1);
@@ -95,7 +95,7 @@ class M_master_retur_beli extends Model{
 				
 		function get_produk_all_list($terima_id, $selected_id, $query,$start,$end){
 			
-			$sql="SELECT produk_id,produk_nama,produk_kode,kategori_nama,satuan_id,satuan_nama,dinvoice_harga, dinvoice_diskon 
+			$sql="SELECT distinct produk_id,produk_nama,produk_kode,kategori_nama,satuan_id,satuan_nama,dinvoice_harga, dinvoice_diskon 
 					FROM vu_detail_invoice 
 					WHERE invoice_noterima='".$terima_id."'";
 			
@@ -121,7 +121,7 @@ class M_master_retur_beli extends Model{
 		}
 				
 		function get_produk_detail_list($master_id,$query,$start,$end){
-			$sql="SELECT produk_id,produk_nama,produk_kode,kategori_nama,satuan_id,satuan_nama,drbeli_harga, drbeli_diskon FROM vu_detail_retur_beli";
+			$sql="SELECT distinct produk_id,produk_nama,produk_kode,kategori_nama,satuan_id,satuan_nama,drbeli_harga, drbeli_diskon FROM vu_detail_retur_beli";
 			if($master_id<>"")
 				$sql.=" WHERE drbeli_master='".$master_id."'";
 			if($query!==""){
