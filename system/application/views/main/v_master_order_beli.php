@@ -584,10 +584,10 @@ Ext.onReady(function(){
 			readOnly: true
 		}, 
 		{
-			header: '<div align="center">' + 'Jumlah Item' + '</div>',
+			header: '<div align="center">' + 'Jml Item' + '</div>',
 			align: 'right',
 			dataIndex: 'order_jumlah',
-			width: 70,	//150,
+			width: 60,	//150,
 			sortable: true,
 			readOnly: true,
 			renderer: Ext.util.Format.numberRenderer('0,000')
@@ -665,9 +665,18 @@ Ext.onReady(function(){
             })
 		}, 
 		{
-			header: '<div align="center">' + 'Stat. Dok' + '</div>',
+			header: '<div align="center">' + 'Keterangan' + '</div>',
+			dataIndex: 'order_keterangan',
+			width: 150,
+			sortable: true,
+			editor: new Ext.form.TextField({
+				maxLength: 250
+          	})
+		}, 
+		{
+			header: '<div align="center">' + 'Stat Dok' + '</div>',
 			dataIndex: 'order_status',
-			width: 80
+			width: 60
 		}, 
 		{
 			header: 'Creator',
