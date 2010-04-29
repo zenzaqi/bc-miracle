@@ -268,7 +268,7 @@ class M_master_terima_beli extends Model{
 					FROM master_order_beli, supplier 
 					WHERE order_supplier = supplier_id
 						AND order_status = 'Terbuka'
-					ORDER BY order_tanggal desc";
+					ORDER BY order_no desc";
 			$query = $this->db->query($sql);
 			$nbrows = $query->num_rows();
 			if($nbrows>0){
