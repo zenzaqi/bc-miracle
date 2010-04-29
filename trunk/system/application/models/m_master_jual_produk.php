@@ -508,7 +508,7 @@ class M_master_jual_produk extends Model{
 				$record=$rs->row_array();
 				$setmember_rp_perpoint=$record['setmember_rp_perpoint'];
 				
-				$sql="SELECT dproduk_jumlah, dproduk_harga, produk_point, jproduk_diskon, jproduk_cashback FROM detail_jual_produk LEFT JOIN master_jual_produk ON(dproduk_master=jproduk_id) LEFT JOIN produk ON(dproduk_produk=produk_id) WHERE dproduk_master='$dproduk_master'";
+				$sql="SELECT dproduk_jumlah, dproduk_harga, dproduk_diskon, produk_point, jproduk_diskon, jproduk_cashback FROM detail_jual_produk LEFT JOIN master_jual_produk ON(dproduk_master=jproduk_id) LEFT JOIN produk ON(dproduk_produk=produk_id) WHERE dproduk_master='$dproduk_master'";
 				$rs=$this->db->query($sql);
 				if($rs->num_rows()){
 					$one_record = $rs->row();
@@ -518,7 +518,7 @@ class M_master_jual_produk extends Model{
 					$jumlah_point = 0;
 					foreach($rs->result() as $row){
 						//$jumlah_point += ($row->dproduk_jumlah) * ($row->produk_point) * (floor(($row->dproduk_harga)/$setmember_rp_perpoint));
-						$jumlah_rupiah += ($row->dproduk_jumlah) * ($row->produk_point) * ($row->dproduk_harga);
+						$jumlah_rupiah += ($row->dproduk_jumlah) * ($row->produk_point) * ($row->dproduk_harga) * ((100 - $row->dproduk_diskon)/100);
 					}
 					$jumlah_rupiah -= $jproduk_cashback;
 					if($setmember_rp_perpoint<>0){
@@ -546,7 +546,7 @@ class M_master_jual_produk extends Model{
 				$record=$rs->row_array();
 				$setmember_rp_perpoint=$record['setmember_rp_perpoint'];
 				
-				$sql="SELECT dproduk_jumlah, dproduk_harga, produk_point, jproduk_diskon, jproduk_cashback FROM detail_jual_produk LEFT JOIN master_jual_produk ON(dproduk_master=jproduk_id) LEFT JOIN produk ON(dproduk_produk=produk_id) WHERE dproduk_master='$dproduk_master'";
+				$sql="SELECT dproduk_jumlah, dproduk_harga, produk_point, dproduk_diskon, jproduk_diskon, jproduk_cashback FROM detail_jual_produk LEFT JOIN master_jual_produk ON(dproduk_master=jproduk_id) LEFT JOIN produk ON(dproduk_produk=produk_id) WHERE dproduk_master='$dproduk_master'";
 				$rs=$this->db->query($sql);
 				if($rs->num_rows()){
 					$one_record = $rs->row();
@@ -556,7 +556,7 @@ class M_master_jual_produk extends Model{
 					$jumlah_point = 0;
 					foreach($rs->result() as $row){
 						//$jumlah_point += ($row->dproduk_jumlah) * ($row->produk_point) * (floor(($row->dproduk_harga)/$setmember_rp_perpoint));
-						$jumlah_rupiah += ($row->dproduk_jumlah) * ($row->produk_point) * ($row->dproduk_harga);
+						$jumlah_rupiah += ($row->dproduk_jumlah) * ($row->produk_point) * ($row->dproduk_harga) * ((100 - $row->dproduk_diskon)/100);
 					}
 					$jumlah_rupiah -= $jproduk_cashback;
 					if($setmember_rp_perpoint<>0){
@@ -666,19 +666,19 @@ class M_master_jual_produk extends Model{
 					//* untuk itu: check total_transaksi si customer di hari ini dan bandingkan dengan db.member_setup.setmember_transhari /
 					if($cust_total_trans_now >= $min_trans_member_baru){
 						//* Pendaftaran MEMBER BARU /
-						$member_no='-';
-						$sql = "SELECT cust_no FROM customer WHERE cust_id='$cust_id'";
-						$rs=$this->db->query($sql);
-						if($rs->num_rows()){
-							$rs_record=$rs->row_array();
-							$pattern=date("ymd").substr($rs_record['cust_no'],2);
-							$member_no=$this->m_public_function->get_nomor_member('member','member_no',$pattern,16);
-						}
+						//$member_no='-';
+						//$sql = "SELECT cust_no FROM customer WHERE cust_id='$cust_id'";
+//						$rs=$this->db->query($sql);
+//						if($rs->num_rows()){
+//							$rs_record=$rs->row_array();
+//							$pattern=date("ymd").substr($rs_record['cust_no'],2);
+//							$member_no=$this->m_public_function->get_nomor_member('member','member_no',$pattern,16);
+//						}
 						$set_member_valid = date('Y-m-d', strtotime("$date_now +$periode_aktif days"));
 						
 						$dti_membert=array(
 						"membert_cust"=>$cust_id,
-						"membert_no"=>$member_no,
+						//"membert_no"=>$member_no,
 						"membert_register"=>$date_now,
 						"membert_valid"=>$set_member_valid,
 						"membert_jenis"=>'baru',

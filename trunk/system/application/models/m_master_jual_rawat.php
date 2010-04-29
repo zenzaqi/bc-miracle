@@ -322,16 +322,68 @@ class M_master_jual_rawat extends Model{
 				$record=$rs->row_array();
 				$setmember_rp_perpoint=$record['setmember_rp_perpoint'];
 				
-				$sql="SELECT drawat_jumlah, drawat_harga, rawat_point FROM detail_jual_rawat LEFT JOIN perawatan ON(drawat_rawat=rawat_id) WHERE drawat_master='$jrawat_id'";
+				$sql="SELECT drawat_jumlah, drawat_harga, rawat_point, drawat_diskon, jrawat_diskon, jrawat_cashback FROM detail_jual_rawat LEFT JOIN master_jual_rawat ON(drawat_master=jrawat_id) LEFT JOIN perawatan ON(drawat_rawat=rawat_id) WHERE drawat_master='$jrawat_id'";
 				$rs=$this->db->query($sql);
 				if($rs->num_rows()){
+					$one_record = $rs->row();
+					$jrawat_cashback = $one_record->jrawat_cashback;
+					$jrawat_diskon = $one_record->jrawat_diskon;
+					$jumlah_rupiah = 0;
 					$jumlah_point = 0;
 					foreach($rs->result() as $row){
-						$jumlah_point += ($row->drawat_jumlah) * ($row->rawat_point) * (floor(($row->drawat_harga)/$setmember_rp_perpoint));
+						//$jumlah_point += ($row->drawat_jumlah) * ($row->rawat_point) * (floor(($row->drawat_harga)/$setmember_rp_perpoint));
+						$jumlah_rupiah += ($row->drawat_jumlah) * ($row->rawat_point) * ($row->drawat_harga) * ((100 - $row->drawat_diskon)/100);
 					}
-					$sql="UPDATE customer SET cust_point = (cust_point+$jumlah_point) WHERE cust_id='$jrawat_cust'";
+					$jumlah_rupiah -= $jrawat_cashback;
+					if($setmember_rp_perpoint<>0){
+						$jumlah_point = floor($jumlah_rupiah/$setmember_rp_perpoint);
+					}
+					$sql="UPDATE customer SET cust_point = (cust_point + $jumlah_point) WHERE cust_id='$jrawat_cust'";
 					$this->db->query($sql);
 				}
+			}
+		}
+		
+		function member_point_delete($drawat_master){
+			$date_now=date('Y-m-d');
+			
+			$sql="SELECT jrawat_cust FROM master_jual_rawat WHERE jrawat_id='$drawat_master'";
+			$rs=$this->db->query($sql);
+			$record=$rs->row_array();
+			$jrawat_cust=$record['jrawat_cust'];
+			
+			$sql="SELECT member_id FROM member WHERE member_cust='$jrawat_cust' AND (member_valid >= '$date_now')";
+			$rs=$this->db->query($sql);
+			if($rs->num_rows()){
+				$sql="SELECT setmember_rp_perpoint FROM member_setup LIMIT 1";
+				$rs=$this->db->query($sql);
+				$record=$rs->row_array();
+				$setmember_rp_perpoint=$record['setmember_rp_perpoint'];
+				
+				$sql="SELECT drawat_jumlah, drawat_harga, rawat_point, drawat_diskon, jrawat_diskon, jrawat_cashback FROM detail_jual_rawat LEFT JOIN master_jual_rawat ON(drawat_master=jrawat_id) LEFT JOIN rawat ON(drawat_rawat=rawat_id) WHERE drawat_master='$drawat_master'";
+				$rs=$this->db->query($sql);
+				if($rs->num_rows()){
+					$one_record = $rs->row();
+					$jrawat_cashback = $one_record->jrawat_cashback;
+					$jrawat_diskon = $one_record->jrawat_diskon;
+					$jumlah_rupiah = 0;
+					$jumlah_point = 0;
+					foreach($rs->result() as $row){
+						//$jumlah_point += ($row->drawat_jumlah) * ($row->rawat_point) * (floor(($row->drawat_harga)/$setmember_rp_perpoint));
+						$jumlah_rupiah += ($row->drawat_jumlah) * ($row->rawat_point) * ($row->drawat_harga) * ((100 - $row->drawat_diskon)/100);
+					}
+					$jumlah_rupiah -= $jrawat_cashback;
+					if($setmember_rp_perpoint<>0){
+						$jumlah_point = floor($jumlah_rupiah/$setmember_rp_perpoint);
+					}
+					$sql="UPDATE customer SET cust_point = (cust_point - $jumlah_point) WHERE cust_id='$jrawat_cust'";
+					$this->db->query($sql);
+					return 1;
+				}else{
+					return 1;
+				}
+			}else{
+				return 1;
 			}
 		}
 		
@@ -473,19 +525,11 @@ class M_master_jual_rawat extends Model{
 					//* untuk itu: check total_transaksi si customer di hari ini dan bandingkan dengan db.member_setup.setmember_transhari /
 					if($cust_total_trans_now >= $min_trans_member_baru){
 						//* Pendaftaran MEMBER BARU /
-						$member_no='-';
-						$sql = "SELECT cust_no FROM customer WHERE cust_id='$cust_id'";
-						$rs=$this->db->query($sql);
-						if($rs->num_rows()){
-							$rs_record=$rs->row_array();
-							$pattern=date("ymd").substr($rs_record['cust_no'],2);
-							$member_no=$this->m_public_function->get_nomor_member('member','member_no',$pattern,16);
-						}
 						$set_member_valid = date('Y-m-d', strtotime("$date_now +$periode_aktif days"));
 						
 						$dti_membert=array(
 						"membert_cust"=>$cust_id,
-						"membert_no"=>$member_no,
+						//"membert_no"=>$member_no,
 						"membert_register"=>$date_now,
 						"membert_valid"=>$set_member_valid,
 						"membert_jenis"=>'baru',
@@ -502,8 +546,11 @@ class M_master_jual_rawat extends Model{
 		
 		//purge all detail from master
 		function detail_detail_jual_rawat_purge($master_id){
-			$sql="DELETE from detail_jual_rawat where drawat_master='".$master_id."'";
-			$result=$this->db->query($sql);
+			$result_point_delete = $this->member_point_delete($master_id);
+			if($result_point_delete==1){
+				$sql="DELETE from detail_jual_rawat where drawat_master='".$master_id."'";
+				$result=$this->db->query($sql);
+			}
 		}
 		//*eof
 		

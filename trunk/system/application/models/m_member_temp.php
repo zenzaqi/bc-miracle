@@ -59,9 +59,34 @@ class M_member_temp extends Model{
 			$this->db->where('membert_id', $membert_id);
 			$this->db->update('member_temp', $data);
 			if($this->db->affected_rows()){
+				if($membert_jenis<>'perpanjangan'){
+					$sql = "SELECT cust_no FROM customer WHERE cust_id='$membert_cust'";
+					$rs=$this->db->query($sql);
+					if($rs->num_rows()){
+						$rs_record=$rs->row_array();
+						$pattern=date("ymd").substr($rs_record['cust_no'],2);
+						$member_no=$this->m_public_function->get_nomor_member('member','member_no',$pattern,16);
+					}
+				}else if($membert_jenis<>'baru'){
+					$member_no=$membert_no;
+				}
 				//* INSERT to db.member untuk diproses menjadi member Miracle /
-				$sql="INSERT INTO member (member_cust, member_no, member_register, member_valid, member_jenis, member_status) SELECT membert_cust, membert_no, membert_register, membert_valid, membert_jenis, membert_status FROM member_temp WHERE member_temp.membert_id='$membert_id'";
-				$this->db->query($sql);
+				//$sql="INSERT INTO member (member_cust, member_no, member_register, member_valid, member_jenis, member_status) SELECT membert_cust, membert_no, membert_register, membert_valid, membert_jenis, membert_status FROM member_temp WHERE member_temp.membert_id='$membert_id'";
+				//$this->db->query($sql);
+				$sql="SELECT membert_cust, membert_register, membert_valid, membert_jenis, membert_status FROM member_temp WHERE member_temp.membert_id='$membert_id'";
+				$rs=$this->db->query($sql);
+				$record=$rs->row_array();
+				
+				$dti_member=array(
+				"member_cust"=>$record['membert_cust'],
+				"member_no"=>$member_no,
+				"member_register"=>$record['membert_register'],
+				"member_valid"=>$record['membert_valid'],
+				"member_jenis"=>$record['membert_jenis'],
+				"member_status"=>$record['membert_status']
+				);
+				$this->db->insert('member', $dti_member);
+				
 			}
 			return '1';
 		}

@@ -161,7 +161,6 @@ class M_master_lunas_piutang extends Model{
 			//$dpiutang_nobukti=$this->m_public_function->get_kode_1('detail_lunas_piutang','dpiutang_nobukti',$pattern,12);
 			//$dpiutang_nobukti=$this->get_nofaktur_lunas_piutang();
 			
-			$this->firephp->log($dpiutang_nilai, 'dpiutang_nilai');
 			if($dpiutang_nilai>0 && $dpiutang_nilai<>''){
 				$data = array(
 				"dpiutang_master"=>$dpiutang_master, 

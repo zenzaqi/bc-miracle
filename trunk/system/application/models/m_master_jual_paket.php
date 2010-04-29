@@ -523,16 +523,68 @@ class M_master_jual_paket extends Model{
 				$record=$rs->row_array();
 				$setmember_rp_perpoint=$record['setmember_rp_perpoint'];
 				
-				$sql="SELECT dpaket_jumlah, dpaket_harga, paket_point FROM detail_jual_paket LEFT JOIN paket ON(dpaket_paket=paket_id) WHERE dpaket_master='$dpaket_master'";
+				$sql="SELECT dpaket_jumlah, dpaket_harga, paket_point, dpaket_diskon, jpaket_diskon, jpaket_cashback FROM detail_jual_paket LEFT JOIN master_jual_paket ON(dpaket_master=jpaket_id) LEFT JOIN paket ON(dpaket_paket=paket_id) WHERE dpaket_master='$dpaket_master'";
 				$rs=$this->db->query($sql);
 				if($rs->num_rows()){
+					$one_record = $rs->row();
+					$jpaket_cashback = $one_record->jpaket_cashback;
+					$jpaket_diskon = $one_record->jpaket_diskon;
+					$jumlah_rupiah = 0;
 					$jumlah_point = 0;
 					foreach($rs->result() as $row){
-						$jumlah_point += ($row->dpaket_jumlah) * ($row->paket_point) * (floor(($row->dpaket_harga)/$setmember_rp_perpoint));
+						//$jumlah_point += ($row->dpaket_jumlah) * ($row->paket_point) * (floor(($row->dpaket_harga)/$setmember_rp_perpoint));
+						$jumlah_rupiah += ($row->dpaket_jumlah) * ($row->paket_point) * ($row->dpaket_harga) * ((100 - $row->dpaket_diskon)/100);
 					}
-					$sql="UPDATE customer SET cust_point = (cust_point+$jumlah_point) WHERE cust_id='$jpaket_cust'";
+					$jumlah_rupiah -= $jpaket_cashback;
+					if($setmember_rp_perpoint<>0){
+						$jumlah_point = floor($jumlah_rupiah/$setmember_rp_perpoint);
+					}
+					$sql="UPDATE customer SET cust_point = (cust_point + $jumlah_point) WHERE cust_id='$jpaket_cust'";
 					$this->db->query($sql);
 				}
+			}
+		}
+		
+		function member_point_delete($dpaket_master){
+			$date_now=date('Y-m-d');
+			
+			$sql="SELECT jpaket_cust FROM master_jual_paket WHERE jpaket_id='$dpaket_master'";
+			$rs=$this->db->query($sql);
+			$record=$rs->row_array();
+			$jpaket_cust=$record['jpaket_cust'];
+			
+			$sql="SELECT member_id FROM member WHERE member_cust='$jpaket_cust' AND (member_valid >= '$date_now')";
+			$rs=$this->db->query($sql);
+			if($rs->num_rows()){
+				$sql="SELECT setmember_rp_perpoint FROM member_setup LIMIT 1";
+				$rs=$this->db->query($sql);
+				$record=$rs->row_array();
+				$setmember_rp_perpoint=$record['setmember_rp_perpoint'];
+				
+				$sql="SELECT dpaket_jumlah, dpaket_harga, paket_point, dpaket_diskon, jpaket_diskon, jpaket_cashback FROM detail_jual_paket LEFT JOIN master_jual_paket ON(dpaket_master=jpaket_id) LEFT JOIN paket ON(dpaket_paket=paket_id) WHERE dpaket_master='$dpaket_master'";
+				$rs=$this->db->query($sql);
+				if($rs->num_rows()){
+					$one_record = $rs->row();
+					$jpaket_cashback = $one_record->jpaket_cashback;
+					$jpaket_diskon = $one_record->jpaket_diskon;
+					$jumlah_rupiah = 0;
+					$jumlah_point = 0;
+					foreach($rs->result() as $row){
+						//$jumlah_point += ($row->dpaket_jumlah) * ($row->paket_point) * (floor(($row->dpaket_harga)/$setmember_rp_perpoint));
+						$jumlah_rupiah += ($row->dpaket_jumlah) * ($row->paket_point) * ($row->dpaket_harga) * ((100 - $row->dpaket_diskon)/100);
+					}
+					$jumlah_rupiah -= $jpaket_cashback;
+					if($setmember_rp_perpoint<>0){
+						$jumlah_point = floor($jumlah_rupiah/$setmember_rp_perpoint);
+					}
+					$sql="UPDATE customer SET cust_point = (cust_point - $jumlah_point) WHERE cust_id='$jpaket_cust'";
+					$this->db->query($sql);
+					return 1;
+				}else{
+					return 1;
+				}
+			}else{
+				return 1;
 			}
 		}
 		
@@ -629,19 +681,11 @@ class M_master_jual_paket extends Model{
 					//* untuk itu: check total_transaksi si customer di hari ini dan bandingkan dengan db.member_setup.setmember_transhari /
 					if($cust_total_trans_now >= $min_trans_member_baru){
 						//* Pendaftaran MEMBER BARU /
-						$member_no='-';
-						$sql = "SELECT cust_no FROM customer WHERE cust_id='$cust_id'";
-						$rs=$this->db->query($sql);
-						if($rs->num_rows()){
-							$rs_record=$rs->row_array();
-							$pattern=date("ymd").substr($rs_record['cust_no'],2);
-							$member_no=$this->m_public_function->get_nomor_member('member','member_no',$pattern,16);
-						}
 						$set_member_valid = date('Y-m-d', strtotime("$date_now +$periode_aktif days"));
 						
 						$dti_membert=array(
 						"membert_cust"=>$cust_id,
-						"membert_no"=>$member_no,
+						//"membert_no"=>$member_no,
 						"membert_register"=>$date_now,
 						"membert_valid"=>$set_member_valid,
 						"membert_jenis"=>'baru',
@@ -658,8 +702,11 @@ class M_master_jual_paket extends Model{
 		
 		//purge all detail from master
 		function detail_detail_jual_paket_purge($master_id){
-			$sql="DELETE from detail_jual_paket where dpaket_master='".$master_id."'";
-			$result=$this->db->query($sql);
+			$result_point_delete = $this->member_point_delete($master_id);
+			if($result_point_delete==1){
+				$sql="DELETE from detail_jual_paket where dpaket_master='".$master_id."'";
+				$result=$this->db->query($sql);
+			}
 			
 			// You could do some checkups here and return '0' or other error consts.
 			// Make a single query to delete all of the master_jual_pakets at the same time :
