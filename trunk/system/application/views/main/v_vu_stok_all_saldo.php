@@ -730,7 +730,7 @@ Ext.onReady(function(){
 		id: 'stok_tanggal_endSearchField',
 		fieldLabel: 's/d',
 		format: 'd-m-Y',
-		value: firstday
+		value: today
 	});
 	
 	stok_produk_allField=new Ext.form.Radio({
