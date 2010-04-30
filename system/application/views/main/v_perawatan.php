@@ -755,7 +755,7 @@ Ext.onReady(function(){
 			})
 		}, 
 		{
-			header: '<div align="center">' + 'Point' + '</div>',
+			header: '<div align="center">' + 'Poin' + '</div>',
 			dataIndex: 'rawat_point',
 			align: 'right',
 			width: 80,	//100,
@@ -929,7 +929,7 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 1200,
+	  	width: 1220,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			hideParent:true,
@@ -1165,7 +1165,7 @@ Ext.onReady(function(){
 	rawat_pointField= new Ext.form.NumberField({
 		id: 'rawat_pointField',
 		name: 'rawat_pointField',
-		fieldLabel: 'Point',
+		fieldLabel: 'Poin',
 		allowNegatife : false,
 		emptyText: '0',
 		allowDecimals: false,
@@ -2133,7 +2133,7 @@ Ext.onReady(function(){
 	/* Identify  rawat_point Search Field */
 	rawat_pointSearchField= new Ext.form.NumberField({
 		id: 'rawat_pointSearchField',
-		fieldLabel: 'Point',
+		fieldLabel: 'Poin',
 		allowNegatife : false,
 		blankText: '0',
 		allowDecimals: false,
