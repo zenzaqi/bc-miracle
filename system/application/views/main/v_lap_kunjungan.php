@@ -116,7 +116,7 @@ var today=new Date().format('d-m-Y');
 //declare konstant
 var post2db = '';
 var msg = '';
-var pageS=15;
+var pageS=31;
 
 /* declare variable here for Field*/
 var lap_kunjungan_idSearchField;
@@ -143,7 +143,7 @@ Ext.onReady(function(){
 			url: 'index.php?c=c_lap_kunjungan&m=get_action', 
 			method: 'POST'
 		}),
-		baseParams:{task: "LIST",start:0,limit:pageS}, // parameter yang di $_POST ke Controller
+		baseParams:{task: "LIST",start:0,limit:31}, // parameter yang di $_POST ke Controller
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total'
@@ -153,7 +153,7 @@ Ext.onReady(function(){
 			{name: 'tgl_tindakan', type: 'date', dateFormat: 'Y-m-d', mapping: 'tgl_tindakan'},
 			{name: 'dtrawat_id', type: 'int', mapping: 'dtrawat_id'},
 			//{name: 'dtrawat_edit', type: 'string', mapping: 'Jumlah_rawat'},
-			{name: 'total_jumlah', type: 'int', mapping: 'total_jumlah'},
+			{name: 'jum_total', type: 'int', mapping: 'sum(jum_total)'},
 			{name: 'jum_cust_medis', type: 'int', mapping: 'sum(jum_cust_medis)'},
 			{name: 'jum_cust_nonmedis', type: 'int', mapping: 'sum(jum_cust_nonmedis)'},
 			{name: 'jum_cust_produk', type: 'int', mapping: 'sum(jum_cust_produk)'}
@@ -169,7 +169,7 @@ Ext.onReady(function(){
 			url: 'index.php?c=c_lap_kunjungan&m=get_action', 
 			method: 'POST'
 		}),
-		baseParams:{task: "LIST2",start:0,limit:pageS}, // parameter yang di $_POST ke Controller
+		baseParams:{task: "LIST2",start:0,limit:31}, // parameter yang di $_POST ke Controller
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total'
@@ -178,7 +178,7 @@ Ext.onReady(function(){
 		/* dataIndex => insert intolap_kunjunganColumnModel, Mapping => for initiate table column */ 
 			{name: 'dtrawat_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'dtrawat_date_create'},
 			{name: 'dtrawat_id', type: 'int', mapping: 'dtrawat_id'},
-			{name: 'total_jumlah', type: 'int', mapping: 'total_jumlah'},
+			{name: 'jum_total', type: 'int', mapping: 'sum(jum_total)'},
 			{name: 'jum_cust_medis', type: 'int', mapping: 'sum(jum_cust_medis)'},
 			{name: 'jum_cust_nonmedis', type: 'int', mapping: 'sum(jum_cust_nonmedis)'},
 			{name: 'jum_cust_produk', type: 'int', mapping: 'sum(jum_cust_produk)'}
@@ -222,7 +222,8 @@ Ext.onReady(function(){
 		{	
 			align : 'Right',
 			header: '<div align="center">' + 'Total' + '</div>',
-			dataIndex: 'total_jumlah',
+			tooltip: 'Jumlah ini TIDAK SELALU sama dengan Medis+nonMedis+Produk',
+			dataIndex: 'jum_total',
 			width: 80,	//55,
 			sortable: true
 		}
@@ -235,8 +236,38 @@ Ext.onReady(function(){
 		[
 		{	
 			align : 'Right',
-			header: '<div align="right">' + 'Total Kunjungan' + '</div>',
-			dataIndex: 'total_jumlah',
+			header: '<div align="center">' + 'Total' + '</div>',
+			dataIndex: '',
+			width: 100,	//55,
+			sortable: true
+		},
+		{	
+			align : 'Right',
+			header: '<div align="center">' + 'Medis' + '</div>',
+			dataIndex: 'jum_cust_medis',
+			width: 80,	//55,
+			sortable: true
+		},
+		{	
+			align : 'Right',
+			header: '<div align="center">' + 'Non Medis' + '</div>',
+			dataIndex: 'jum_cust_nonmedis',
+			width: 80,	//55,
+			sortable: true
+		},
+		
+		{	
+			align : 'Right',
+			header: '<div align="center">' + 'Produk' + '</div>',
+			dataIndex: 'jum_cust_produk',
+			width: 80,	//55,
+			sortable: true
+		},
+		
+		{	
+			align : 'Right',
+			header: '<div align="center">' + 'Grand Total' + '</div>',
+			dataIndex: 'jum_total',
 			width: 80,	//55,
 			sortable: true
 		},
@@ -277,11 +308,13 @@ Ext.onReady(function(){
 			text: 'Export Excel',
 			tooltip: 'Export to Excel(.xls) Document',
 			iconCls:'icon-xls',
+			disabled : true,
 			handler: lap_lunjungan_export_excel
 		}, '-',{
 			text: 'Print',
 			tooltip: 'Print Document',
 			iconCls:'icon-print',
+			disabled : true,
 			handler: lap_kunjungan_print  
 		}
 		]
@@ -340,8 +373,8 @@ Ext.onReady(function(){
   	/* End of Function */
 		
 	lap_kunjunganListEditorGrid.addListener('rowcontextmenu', onlap_kunjungan_ListEditGridContextMenu);
-	lap_kunjunganDataStore.load({params: {start: 0, limit: pageS}});
-	lap_totalkunjungan_DataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
+	lap_kunjunganDataStore.load({params: {start: 0, limit: 31}});
+	lap_totalkunjungan_DataStore.load({params: {start: 0, limit: 31}});	// load DataStore
 	//lap_kunjunganListEditorGrid.on('afteredit', tindakan_medis_update); // inLine Editing Record
 	
 	/*Detail Declaration */	
@@ -391,8 +424,8 @@ Ext.onReady(function(){
 			//trawat_dokter	:	report_tindakan_dokter_search,
 		};
 		// Cause the datastore to do another query : 
-		lap_kunjunganDataStore.reload({params: {start: 0, limit: pageS}});
-		lap_totalkunjungan_DataStore.reload({params: {start: 0, limit: pageS}});
+		lap_kunjunganDataStore.reload({params: {start: 0, limit: 31}});
+		lap_totalkunjungan_DataStore.reload({params: {start: 0, limit: 31}});
 		}
 		else {
 			Ext.MessageBox.show({
