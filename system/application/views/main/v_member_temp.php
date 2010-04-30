@@ -323,6 +323,7 @@ Ext.onReady(function(){
 		/* dataIndex => insert intomember_temp_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'membert_id', type: 'int', mapping: 'membert_id'}, 
 			{name: 'membert_cust', type: 'int', mapping: 'membert_cust'}, 
+			{name: 'membert_cust_no', type: 'string', mapping: 'cust_no'}, 
 			{name: 'membert_cust_nama', type: 'string', mapping: 'cust_nama'}, 
 			{name: 'membert_no', type: 'string', mapping: 'membert_no'}, 
 			{name: 'membert_register', type: 'date', dateFormat: 'Y-m-d', mapping: 'membert_register'}, 
@@ -346,42 +347,48 @@ Ext.onReady(function(){
 				cell.css = "readonlycell"; // Mengambil Value dari Class di dalam CSS 
 				return value;
 				},
-			hidden: false
+			hidden: true
 		},
 		{
-			header: 'Customer',
+			header: '<div align="center">' + 'No Cust' + '</div>',
+			dataIndex: 'membert_cust_no',
+			width: 80,
+			sortable: true
+		}, 
+		{
+			header: '<div align="center">' + 'Customer' + '</div>',
 			dataIndex: 'membert_cust_nama',
 			width: 200,
 			sortable: true
 		}, 
 		{
-			header: 'No. Member',
+			header: '<div align="center">' + 'No Member' + '</div>',
 			dataIndex: 'membert_no',
-			width: 120,
+			width: 100,
 			sortable: true
 		}, 
 		{
-			header: 'Tanggal Register',
+			header: '<div align="center">' + 'Tgl Daftar' + '</div>',
 			dataIndex: 'membert_register',
-			width: 100,
+			width: 70,
 			sortable: true,
-			renderer: Ext.util.Format.dateRenderer('Y-m-d')
+			renderer: Ext.util.Format.dateRenderer('d-m-Y')
 		}, 
 		{
-			header: 'Tanggal Valid',
+			header: '<div align="center">' + 'Tgl Valid' + '</div>',
 			dataIndex: 'membert_valid',
-			width: 100,
+			width: 70,
 			sortable: true,
-			renderer: Ext.util.Format.dateRenderer('Y-m-d')
+			renderer: Ext.util.Format.dateRenderer('d-m-Y')
 		}, 
 		{
-			header: 'Jenis',
+			header: '<div align="center">' + 'Jenis' + '</div>',
 			dataIndex: 'membert_jenis',
 			width: 80,
 			sortable: true
 		}, 
 		{
-			header: 'Status',
+			header: '<div align="center">' + 'Status' + '</div>',
 			dataIndex: 'membert_status',
 			width: 80,
 			sortable: true
@@ -406,7 +413,7 @@ Ext.onReady(function(){
 	member_tempListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'member_tempListEditorGrid',
 		el: 'fp_member_temp',
-		title: 'List Of Member Temp',
+		title: 'Pendaftaran Member',
 		autoHeight: true,
 		store: member_temp_DataStore, // DataStore
 		cm: member_temp_ColumnModel, // Nama-nama Columns
@@ -415,7 +422,7 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 800,
+	  	width: 1220,	//800,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: member_temp_DataStore,
@@ -434,8 +441,8 @@ Ext.onReady(function(){
 		            }
 				},
 				render: function(c){
-				Ext.get(this.id).set({qtitle:'Search By'});
-				Ext.get(this.id).set({qtip:'- Nama Customer'});
+				Ext.get(this.id).set({qtitle:'Search by'});
+				Ext.get(this.id).set({qtip:'- No Customer<br>- Nama Customer'});
 				}
 			},
 			width: 120
