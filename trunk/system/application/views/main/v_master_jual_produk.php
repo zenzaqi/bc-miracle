@@ -3939,7 +3939,7 @@ Ext.onReady(function(){
 		},
 		{
 			align : 'Right',
-			header: '<div align="center">' + 'Jumlah' + '</div>',
+			header: '<div align="center">' + 'Jml' + '</div>',
 			dataIndex: 'dproduk_jumlah',
 			width: 60, //80,
 			sortable: true,
@@ -3973,7 +3973,7 @@ Ext.onReady(function(){
 		},
 		{
 			align : 'Left',
-			header: '<div align="center">' + 'Jenis Diskon' + '</div>',
+			header: '<div align="center">' + 'Jns Diskon' + '</div>',
 			dataIndex: 'dproduk_diskon_jenis',
 			width: 80, //100,
 			sortable: true,
