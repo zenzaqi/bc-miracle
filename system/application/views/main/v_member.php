@@ -104,8 +104,8 @@ Ext.onReady(function(){
 		var member_point_update=null;
 		var member_jenis_update=null;
 		var member_status_update=null;
-		var member_tglserahterima_update_date=null;
-
+		var member_tglserahterima_update_date="";
+		
 		member_id_update_pk = oGrid_event.record.data.member_id;
 		if(oGrid_event.record.data.member_cust!== null){member_cust_update = oGrid_event.record.data.member_cust;}
 		if(oGrid_event.record.data.member_no!== null){member_no_update = oGrid_event.record.data.member_no;}
@@ -115,7 +115,7 @@ Ext.onReady(function(){
 		if(oGrid_event.record.data.member_point!== null){member_point_update = oGrid_event.record.data.member_point;}
 		if(oGrid_event.record.data.member_jenis!== null){member_jenis_update = oGrid_event.record.data.member_jenis;}
 		if(oGrid_event.record.data.member_status!== null){member_status_update = oGrid_event.record.data.member_status;}
-	 	if(oGrid_event.record.data.member_tglserahterima!== null){member_tglserahterima_update_date =oGrid_event.record.data.member_tglserahterima.format('Y-m-d');}
+	 	if(oGrid_event.record.data.member_tglserahterima!== ""){member_tglserahterima_update_date =oGrid_event.record.data.member_tglserahterima.format('Y-m-d');}
 
 		Ext.Ajax.request({  
 			waitMsg: 'Please wait...',
