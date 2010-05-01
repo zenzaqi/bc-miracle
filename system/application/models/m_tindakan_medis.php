@@ -20,7 +20,7 @@ class M_tindakan_medis extends Model{
 	
 	function customer_check_paket($cust_id, $rawat_id){
 		//* Mencari kepemilikan paket berdasarkan customer_id /
-		$sql_punya_paket="SELECT (dpaket_jumlah*rpaket_jumlah) AS rpaket_jumlah, dpaket_id, dpaket_master, dpaket_paket FROM paket_isi_perawatan LEFT JOIN detail_jual_paket ON(rpaket_master=dpaket_paket) LEFT JOIN master_jual_paket ON(dpaket_master=jpaket_id) LEFT JOIN pengguna_paket ON(ppaket_master=jpaket_id) WHERE ppaket_cust='$cust_id' AND rpaket_perawatan='$rawat_id'";
+		$sql_punya_paket="SELECT (dpaket_jumlah*rpaket_jumlah) AS rpaket_jumlah, dpaket_id, dpaket_master, dpaket_paket, dpaket_sisa_paket FROM paket_isi_perawatan LEFT JOIN detail_jual_paket ON(rpaket_master=dpaket_paket) LEFT JOIN master_jual_paket ON(dpaket_master=jpaket_id) LEFT JOIN pengguna_paket ON(ppaket_master=jpaket_id) WHERE ppaket_cust='$cust_id' AND rpaket_perawatan='$rawat_id'";
 		$rs_punya_paket=$this->db->query($sql_punya_paket);
 		if($rs_punya_paket->num_rows()){
 			$punya_paket_rows = $rs_punya_paket->num_rows();
@@ -31,7 +31,7 @@ class M_tindakan_medis extends Model{
 				$rs_check_sisa=$this->db->query($sql_check_sisa);
 				if($rs_check_sisa->num_rows()){
 					$record_check_sisa = $rs_check_sisa->row();
-					if($row_punya_paket->rpaket_jumlah > $record_check_sisa->total_item_terpakai){
+					if(($row_punya_paket->rpaket_jumlah > $record_check_sisa->total_item_terpakai) || (($row_punya_paket->rpaket_jumlah==0) && ($row_punya_paket->dpaket_sisa_paket > 0))){
 						return $row_punya_paket;
 						break;
 					}else{

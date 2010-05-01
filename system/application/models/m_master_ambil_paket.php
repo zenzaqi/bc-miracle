@@ -302,7 +302,7 @@ class M_master_ambil_paket extends Model{
 					$rs_check_sisa=$this->db->query($sql_check_sisa);
 					if($rs_check_sisa->num_rows()){
 						$record_check_sisa = $rs_check_sisa->row();
-						if(($row_punya_paket->rpaket_jumlah > $record_check_sisa->total_item_terpakai) || (($row_punya_paket->rpaket_jumlah==0) && ($row_punya_paket->dpaket_sisa_paket<>0))){
+						if(($row_punya_paket->rpaket_jumlah > $record_check_sisa->total_item_terpakai) || (($row_punya_paket->rpaket_jumlah==0) && ($row_punya_paket->dpaket_sisa_paket > 0))){
 							//return $row_punya_paket;
 							//* INSERT ke db.detail_ambil_paket sebagai History Pengambilan Paket /
 							$dti_dapaket=array(

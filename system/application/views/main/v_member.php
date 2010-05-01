@@ -468,10 +468,13 @@ Ext.onReady(function(){
 			dataIndex: 'member_no',
 			width: 100,
 			sortable: true,
-			editor: new Ext.form.TextField({
+			renderer: function(value, cell, record){
+				return value.substring(0,6) + ' - ' + value.substring(6,11) + ' - ' + value.substring(11);
+			}
+			/*editor: new Ext.form.TextField({
 				allowBlank: false,
 				maxLength: 50
-          	})
+          	})*/
 		}, 
 		{
 			header: '<div align="center">Tgl Daftar</div>',	//'<div align="center">Register</div>',
