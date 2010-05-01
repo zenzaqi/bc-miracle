@@ -4473,8 +4473,12 @@ Ext.onReady(function(){
 		var subtotal_net_harga=0;
 
 		var detail_jual_produk_record;
+		
+		var grid_record = detail_jual_produkListEditorGrid.getSelectionModel().getSelected();
+		var row_index = detail_jual_produkListEditorGrid.getStore().indexOf(grid_record);
+		
 		if(detail_jual_produk_DataStore.getCount()>0){
-			detail_jual_produk_record=detail_jual_produk_DataStore.getAt(0);
+			detail_jual_produk_record=detail_jual_produk_DataStore.getAt(row_index);
 			if(detail_jual_produk_record.data.dproduk_satuan==null){
 				/* JIKA detail satuan tidak dipilih ==> maka otomatis diisi dengan satuan default dari produk yang dipilih */
 				var ds=cbo_dproduk_satuanDataStore.find('djproduk_satuan_default','true');
