@@ -715,7 +715,7 @@ class M_master_jual_produk extends Model{
 			
 			$sql="SELECT dproduk_id, dproduk_jumlah FROM detail_jual_produk WHERE dproduk_master='$dproduk_master' AND dproduk_produk='$dproduk_produk'";
 			$rs=$this->db->query($sql);
-			if($rs->num_rows()){
+			if($rs->num_rows() && $dproduk_diskon<>100){
 				//* UPDATE detail_jual_produk untuk menambahkan dproduk_jumlah, ini dikarenakan kasir memasukkan produk yg sama lebih dari satu dalam satu Faktur /
 				$record = $rs->row_array();
 				$dproduk_id=$record['dproduk_id'];

@@ -1411,7 +1411,7 @@ Ext.onReady(function(){
 		var check_konversi_nilai=0;
 		for(j=0;j<satuan_konversi_DataStore.getCount();j++){
 			check_konversi_record=satuan_konversi_DataStore.getAt(j);
-			if(check_konversi_record.data.konversi_nilai==1){
+			if(check_konversi_record.data.konversi_default==true){
 				check_konversi_nilai+=1;
 				produk_satuanField.setValue(check_konversi_record.data.konversi_satuan);
 			}

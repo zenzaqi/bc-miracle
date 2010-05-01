@@ -4002,7 +4002,7 @@ Ext.onReady(function(){
 				allowDecimals: false,
 				allowNegative: false,
 				blankText: '0',
-				maxLength: 2,
+				maxLength: 3,
 				maskRe: /([0-9]+)$/
 			})
 		},
