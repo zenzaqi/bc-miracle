@@ -24,12 +24,12 @@ class M_penyesuaian_tindakan extends Model{
 			$query="select tindakan_adjust.adj_id, date_format(tindakan_adjust.adj_bln,'%Y-%m'), karyawan.karyawan_username, adj_count, vu_report_tindakan_terapis.terapis_count, (vu_report_tindakan_terapis.terapis_count+tindakan_adjust.adj_count) as new_count
 from tindakan_adjust 
 left join vu_report_tindakan_terapis on (vu_report_tindakan_terapis.terapis_id=tindakan_adjust.karyawan_id) and vu_report_tindakan_terapis.terapis_bulan=date_format(tindakan_adjust.adj_bln,'%Y-%m')
-left join karyawan on karyawan.karyawan_id=tindakan_adjust.karyawan_id where tindakan_adjust.adj_bln = '2010-04-15'";
+left join karyawan on karyawan.karyawan_id=tindakan_adjust.karyawan_id where tindakan_adjust.adj_bln = '2010-05-15'";
 			// For simple search
-			if ($filter<>""){
+			/*if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 				$query .= " (user_id LIKE '%".addslashes($filter)."%' OR user_name LIKE '%".addslashes($filter)."%' OR user_passwd LIKE '%".addslashes($filter)."%' OR user_karyawan LIKE '%".addslashes($filter)."%' OR user_log LIKE '%".addslashes($filter)."%' OR user_groups LIKE '%".addslashes($filter)."%' OR user_aktif LIKE '%".addslashes($filter)."%' )";
-			}
+			}*/
 			
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
