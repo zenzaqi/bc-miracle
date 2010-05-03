@@ -178,10 +178,17 @@ var looping=0;
 
 
 function jproduk_cetak(master_id){
+
+var jproduk_stat_dok_update=null;
+
+
 	Ext.Ajax.request({   
 		waitMsg: 'Mohon tunggu...',
 		url: 'index.php?c=c_master_jual_produk&m=print_paper',
-		params: { jproduk_id : master_id}, 
+		params: { 
+		jproduk_id : master_id,
+		jproduk_stat_dok	: jproduk_stat_dok_update
+		}, 
 		success: function(response){              
 			var result=eval(response.responseText);
 			switch(result){
@@ -3636,7 +3643,7 @@ Ext.onReady(function(){
 			method: 'POST'
 		}),baseParams: {start: 0, limit: pageS},
 		reader: detail_jual_produk_reader,
-		sortInfo:{field: 'dproduk_id', direction: "ASC"}
+		sortInfo:{field: 'master_id', direction: "ASC"}
 	});
 	/* End of Function */
 	
@@ -3687,7 +3694,7 @@ Ext.onReady(function(){
 		proxy: new Ext.data.HttpProxy({
 			url: 'index.php?c=c_master_jual_produk&m=get_reveral_list', 
 			method: 'POST'
-		}),baseParams: {start: 0, limit: 15 },
+		}),baseParams: {start: 0, limit: 100},
 			reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total'
