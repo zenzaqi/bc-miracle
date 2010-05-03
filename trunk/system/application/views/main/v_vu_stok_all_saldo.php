@@ -465,6 +465,7 @@ Ext.onReady(function(){
 	});
 
 	
+	
 	/* Function for Retrieve DataStore */
 	vu_stok_detail_DataStore = new Ext.data.Store({
 		id: 'vu_stok_detail_DataStore',
@@ -658,11 +659,13 @@ Ext.onReady(function(){
 		var produk_nama_search=null;
 		var tanggal_start_search="";
 		var tanggal_end_search="";
+		var opsi_satuan_search='default';
 		
 		if(stok_produk_namaSearchField.getValue()!==null){produk_nama_search=stok_produk_namaSearchField.getValue();}
+		if(stok_produk_allField.getValue()==true){ produk_nama_search=null; }
 		if(stok_tanggal_startSearchField.getValue()!==null){tanggal_start_search=stok_tanggal_startSearchField.getValue().format('Y-m-d');}
 		if(stok_tanggal_endSearchField.getValue()!==null){tanggal_end_search=stok_tanggal_endSearchField.getValue().format('Y-m-d');}
-		
+		if(stok_satuan_terkecilField.getValue()==true){ opsi_satuan_search='terkecil'; }else{ opsi_satuan_search='default'; }
 
 		// change the store parameters
 		vu_stok_all_saldo_DataStore.baseParams = {
@@ -670,7 +673,8 @@ Ext.onReady(function(){
 			//variable here
 			produk_id		:	produk_nama_search, 
 			tanggal_start	:	tanggal_start_search, 
-			tanggal_end		:	tanggal_end_search
+			tanggal_end		:	tanggal_end_search,
+			opsi_satuan		: 	opsi_satuan_search
 		};
 		// Cause the datastore to do another query : 
 		vu_stok_all_saldo_DataStore.reload({params: {start: 0, limit: pageS}});
@@ -746,6 +750,19 @@ Ext.onReady(function(){
 		width: 100
 	});
 	
+	stok_satuan_terkecilField=new Ext.form.Radio({
+		name:'opsi_satuan',
+		boxLabel: 'Satuan Terkecil',
+		width: 100
+	});
+	
+	stok_satuan_defaultField=new Ext.form.Radio({
+		name:'opsi_satuan',
+		boxLabel: 'Satuan Default',
+		checked: true,
+		width: 100
+	});
+	
 	stok_label_tanggalField=new Ext.form.Label({ html: ' &nbsp; s/d  &nbsp;'});
 	
 	stok_tanggal_opsiSearchField=new Ext.form.FieldSet({
@@ -777,13 +794,32 @@ Ext.onReady(function(){
 		]
 	});
 	
+	stok_satuan_opsiSearchField=new Ext.form.FieldSet({
+		id:'stok_satuan_opsiSearchField',
+		title: 'Opsi Satuan',
+		layout: 'form',
+		frame: false,
+		boduStyle: 'padding: 5px;',
+		items:[{
+			   		layout	: 'column',
+					border: false,
+					items	: [stok_satuan_defaultField]
+			   },
+			   {
+				   layout	: 'column',
+				   border: false,
+				   items	: [stok_satuan_terkecilField]
+			   }
+			
+		]
+	});
 	
 	/* Function for retrieve search Form Panel */
 	vu_stok_all_saldo_searchForm = new Ext.FormPanel({
 		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
-		width: 400,        
+		width: 450,        
 		items: [{
 			layout:'column',
 			border:false,
@@ -792,7 +828,7 @@ Ext.onReady(function(){
 				columnWidth: 1,
 				layout: 'form',
 				border:false,
-				items: [stok_produk_opsiSearchField,stok_tanggal_opsiSearchField] 
+				items: [stok_produk_opsiSearchField,stok_satuan_opsiSearchField, stok_tanggal_opsiSearchField] 
 			}
 			]
 		}]
@@ -853,7 +889,7 @@ Ext.onReady(function(){
 		if(vu_stok_all_saldo_DataStore.baseParams.satuan_id!==null){satuan_id_print = vu_stok_all_saldo_DataStore.baseParams.satuan_id;}
 		if(vu_stok_all_saldo_DataStore.baseParams.satuan_nama!==null){satuan_nama_print = vu_stok_all_saldo_DataStore.baseParams.satuan_nama;}
 		if(vu_stok_all_saldo_DataStore.baseParams.stok_saldo!==null){stok_saldo_print = vu_stok_all_saldo_DataStore.baseParams.stok_saldo;}
-
+		
 		Ext.Ajax.request({   
 		waitMsg: 'Please Wait...',
 		url: 'index.php?c=c_vu_stok_all_saldo&m=get_action',

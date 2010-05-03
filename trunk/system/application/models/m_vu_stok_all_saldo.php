@@ -212,9 +212,13 @@ class M_vu_stok_all_saldo extends Model{
 		}
 		
 		//function for get list record
-		function vu_stok_all_saldo_list($produk_id, $tanggal_start,$tanggal_end,$filter,$start,$end){
+		function vu_stok_all_saldo_list($produk_id, $opsi_satuan, $tanggal_start,$tanggal_end,$filter,$start,$end){
 			
-			$sql="SELECT * FROM vu_produk_satuan_terkecil WHERE produk_aktif='Aktif'";
+			if($opsi_satuan=='terkecil')
+				$sql="SELECT * FROM vu_produk_satuan_terkecil WHERE produk_aktif='Aktif'";
+			else
+				$sql="SELECT * FROM vu_produk_satuan_default WHERE produk_aktif='Aktif'";
+				
 			if($produk_id!==""&&$produk_id!==0){
 				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
 				$sql.="	produk_id='".$produk_id."' ";
@@ -246,7 +250,12 @@ class M_vu_stok_all_saldo extends Model{
 				$data[$i]["produk_nama"]=$rowproduk->produk_nama;
 				$data[$i]["satuan_id"]=$rowproduk->satuan_id;
 				$data[$i]["satuan_kode"]=$rowproduk->satuan_kode;
-				$data[$i]["satuan_nama"]=$rowproduk->satuan_nama;				
+				$data[$i]["satuan_nama"]=$rowproduk->satuan_nama;	
+				if($opsi_satuan=='terkecil')
+					$data[$i]["konversi_nilai"]=1;
+				else
+					$data[$i]["konversi_nilai"]=$rowproduk->konversi_nilai;
+				
 				//stok awal
 				$sql_stokawal = "SELECT
 					sum(`A`.`jumlah_terima`) as jumlah_terima,
@@ -273,7 +282,7 @@ class M_vu_stok_all_saldo extends Model{
 				$q_stokawal=$this->db->query($sql_stokawal);
 				if($q_stokawal->num_rows()){
 					$rs_stokawal=$q_stokawal->row();
-					$data[$i]["stok_awal"]=$rs_stokawal->jumlah_saldo;
+					$data[$i]["stok_awal"]=$rs_stokawal->jumlah_saldo*$data[$i]["konversi_nilai"];
 				}else{
 					$data[$i]["stok_awal"]=0;
 				}
@@ -307,14 +316,14 @@ class M_vu_stok_all_saldo extends Model{
 				$q_stokmutasi=$this->db->query($sql_stokmutasi);
 				if($q_stokmutasi->num_rows()){
 					$rs_stokmutasi=$q_stokmutasi->row();
-					$data[$i]["jumlah_terima"]=$rs_stokmutasi->jumlah_terima;
-					$data[$i]["jumlah_retur_beli"]=$rs_stokmutasi->jumlah_retur_beli;
-					$data[$i]["jumlah_jual"]=$rs_stokmutasi->jumlah_jual;
-					$data[$i]["jumlah_retur_produk"]=$rs_stokmutasi->jumlah_retur_produk;
-					$data[$i]["jumlah_retur_paket"]=$rs_stokmutasi->jumlah_retur_paket;
-					$data[$i]["jumlah_cabin"]=$rs_stokmutasi->jumlah_cabin;
-					$data[$i]["jumlah_koreksi"]=$rs_stokmutasi->jumlah_koreksi;
-					$data[$i]["stok_saldo"]=$data[$i]["stok_awal"]+$rs_stokmutasi->jumlah_saldo;	
+					$data[$i]["jumlah_terima"]=$rs_stokmutasi->jumlah_terima*$data[$i]["konversi_nilai"];
+					$data[$i]["jumlah_retur_beli"]=$rs_stokmutasi->jumlah_retur_beli*$data[$i]["konversi_nilai"];
+					$data[$i]["jumlah_jual"]=$rs_stokmutasi->jumlah_jual*$data[$i]["konversi_nilai"];
+					$data[$i]["jumlah_retur_produk"]=$rs_stokmutasi->jumlah_retur_produk*$data[$i]["konversi_nilai"];
+					$data[$i]["jumlah_retur_paket"]=$rs_stokmutasi->jumlah_retur_paket*$data[$i]["konversi_nilai"];
+					$data[$i]["jumlah_cabin"]=$rs_stokmutasi->jumlah_cabin*$data[$i]["konversi_nilai"];
+					$data[$i]["jumlah_koreksi"]=$rs_stokmutasi->jumlah_koreksi*$data[$i]["konversi_nilai"];
+					$data[$i]["stok_saldo"]=($data[$i]["stok_awal"]+$rs_stokmutasi->jumlah_saldo)*$data[$i]["konversi_nilai"];	
 				}else{
 					$data[$i]["jumlah_terima"]=0;
 					$data[$i]["jumlah_retur_beli"]=0;
@@ -323,7 +332,7 @@ class M_vu_stok_all_saldo extends Model{
 					$data[$i]["jumlah_retur_paket"]=0;
 					$data[$i]["jumlah_cabin"]=0;
 					$data[$i]["jumlah_koreksi"]=0;
-					$data[$i]["stok_saldo"]=$data[$i]["stok_awal"];
+					$data[$i]["stok_saldo"]=$data[$i]["stok_awal"]*$data[$i]["konversi_nilai"];
 				}
 				$i++;
 			}
