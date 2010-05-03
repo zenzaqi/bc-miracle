@@ -1411,7 +1411,7 @@ Ext.onReady(function(){
 		var check_konversi_nilai=0;
 		for(j=0;j<satuan_konversi_DataStore.getCount();j++){
 			check_konversi_record=satuan_konversi_DataStore.getAt(j);
-			if(check_konversi_record.data.konversi_default==true){
+			if(check_konversi_record.data.konversi_nilai==1){
 				check_konversi_nilai+=1;
 				produk_satuanField.setValue(check_konversi_record.data.konversi_satuan);
 			}
@@ -1424,7 +1424,7 @@ Ext.onReady(function(){
 			default:
 				Ext.MessageBox.show({
 				   title: 'Warning',
-				   msg: 'Harus menambahkan baris Detail dan <br>Konversi Nilai = 1 <br>harus ada minimal sejumlah 1.',
+				   msg: 'Baris Detail dengan Konversi Nilai = 1 <br>harus hanya terdapat satu data.',
 				   buttons: Ext.MessageBox.OK,
 				   animEl: 'save',
 				   minWidth: 250,
