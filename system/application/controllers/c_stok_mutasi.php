@@ -2,28 +2,28 @@
 /* 	These code was generated using phpCIGen v 0.1.b (21/04/2009)
 	#zaqi 		zaqi.smart@gmail.com,http://zenzaqi.blogspot.com, 
 	
-	+ Module  		: vu_stok_all_saldo Controller
+	+ Module  		: stok_mutasi Controller
 	+ Description	: For record controller process back-end
-	+ Filename 		: C_vu_stok_all_saldo.php
+	+ Filename 		: C_stok_mutasi.php
  	+ creator 		: 
  	+ Created on 09/Apr/2010 10:47:15
 	
 */
 
-//class of vu_stok_all_saldo
-class C_vu_stok_all_saldo extends Controller {
+//class of stok_mutasi
+class C_stok_mutasi extends Controller {
 
 	//constructor
-	function C_vu_stok_all_saldo(){
+	function C_stok_mutasi(){
 		parent::Controller();
 		session_start();
-		$this->load->model('m_vu_stok_all_saldo', '', TRUE);
+		$this->load->model('m_stok_mutasi', '', TRUE);
 	}
 	
 	//set index
 	function index(){
 		$this->load->plugin('to_excel');
-		$this->load->view('main/v_vu_stok_all_saldo');
+		$this->load->view('main/v_stok_mutasi');
 	}
 	
 	//event handler action
@@ -31,16 +31,16 @@ class C_vu_stok_all_saldo extends Controller {
 		$task = isset($_POST['task'])?@$_POST['task']:@$_GET['task'];
 		switch($task){
 			case "LIST":
-				$this->vu_stok_all_saldo_list();
+				$this->stok_mutasi_list();
 				break;
 			case "SEARCH":
-				$this->vu_stok_all_saldo_search();
+				$this->stok_mutasi_search();
 				break;
 			case "PRINT":
-				$this->vu_stok_all_saldo_print();
+				$this->stok_mutasi_print();
 				break;
 			case "EXCEL":
-				$this->vu_stok_all_saldo_export_excel();
+				$this->stok_mutasi_export_excel();
 				break;
 			default:
 				echo "{failure:true}";
@@ -48,21 +48,8 @@ class C_vu_stok_all_saldo extends Controller {
 		}
 	}
 	
-	
-	function get_detail_stok()
-	{
-		$query = isset($_POST['query']) ? @$_POST['query'] : "";
-		$start = (integer) (isset($_POST['start']) ? @$_POST['start'] : @$_GET['start']);
-		$end = (integer) (isset($_POST['limit']) ? @$_POST['limit'] : @$_GET['limit']);
-		$produk_id = (integer) (isset($_POST['produk_id']) ? @$_POST['produk_id'] : @$_GET['produk_id']);
-		$tanggal_start = (integer) (isset($_POST['tanggal_start']) ? @$_POST['tanggal_start'] : @$_GET['tanggal_start']);
-		$tanggal_end = (integer) (isset($_POST['tanggal_end']) ? @$_POST['tanggal_end'] : @$_GET['tanggal_end']);
-		
-		$result=$this->m_vu_stok_all_saldo->get_detail_stok($tanggal_start,$tanggal_end,$produk_id,$query,$start,$end);
-		echo $result;
-	}
 	//function fot list record
-	function vu_stok_all_saldo_list(){
+	function stok_mutasi_list(){
 		
 		$query = isset($_POST['query']) ? @$_POST['query'] : @$_GET['query'];
 		$start = (integer) (isset($_POST['start']) ? @$_POST['start'] : @$_GET['start']);
@@ -71,33 +58,14 @@ class C_vu_stok_all_saldo extends Controller {
 		$tanggal_start =(isset($_POST['tanggal_start']) ? @$_POST['tanggal_start'] : @$_GET['tanggal_start']);
 		$tanggal_end = (isset($_POST['tanggal_end']) ? @$_POST['tanggal_end'] : @$_GET['tanggal_end']);
 		$opsi_satuan = (isset($_POST['opsi_satuan']) ? @$_POST['opsi_satuan'] : @$_GET['opsi_satuan']);
+		$gudang = (isset($_POST['gudang']) ? @$_POST['gudang'] : @$_GET['gudang']);
 		
-		$result=$this->m_vu_stok_all_saldo->vu_stok_all_saldo_list($produk_id, $opsi_satuan, $tanggal_start,$tanggal_end,$query,$start,$end);
+		$result=$this->m_stok_mutasi->stok_mutasi_list($gudang, $produk_id, $opsi_satuan, $tanggal_start,$tanggal_end,$query,$start,$end);
 		echo $result;
 	}
 	
-	//function for create new record
 	
-	//function for advanced search
-	function vu_stok_all_saldo_search(){
-		//POST varibale here
-		$produk_kode=trim(@$_POST["produk_kode"]);
-		$produk_nama=trim(@$_POST["produk_nama"]);
-		$produk_nama=str_replace("/(<\/?)(p)([^>]*>)", "",$produk_nama);
-		$produk_nama=str_replace("'", "''",$produk_nama);
-		$satuan_nama=trim(@$_POST["satuan_nama"]);
-		$satuan_nama=str_replace("/(<\/?)(p)([^>]*>)", "",$satuan_nama);
-		$satuan_nama=str_replace("'", "''",$satuan_nama);
-		$stok_saldo=trim(@$_POST["stok_saldo"]);
-		
-		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
-		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_vu_stok_all_saldo->vu_stok_all_saldo_search($produk_kode ,$produk_nama ,$satuan_nama ,$stok_saldo ,$start,$end);
-		echo $result;
-	}
-
-
-	function vu_stok_all_saldo_print(){
+	function stok_mutasi_print(){
   		//POST varibale here
 		$produk_id=trim(@$_POST["produk_id"]);
 		$produk_nama=trim(@$_POST["produk_nama"]);
@@ -111,19 +79,19 @@ class C_vu_stok_all_saldo extends Controller {
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$data["data_print"] = $this->m_vu_stok_all_saldo->vu_stok_all_saldo_print($produk_id ,$produk_nama ,$satuan_id ,$satuan_nama ,$stok_saldo ,$option,$filter);
-		$print_view=$this->load->view("main/p_vu_stok_all_saldo.php",$data,TRUE);
+		$data["data_print"] = $this->m_stok_mutasi->stok_mutasi_print($produk_id ,$produk_nama ,$satuan_id ,$satuan_nama ,$stok_saldo ,$option,$filter);
+		$print_view=$this->load->view("main/p_stok_mutasi.php",$data,TRUE);
 		if(!file_exists("print")){
 			mkdir("print");
 		}
-		$print_file=fopen("print/vu_stok_all_saldo_printlist.html","w+");
+		$print_file=fopen("print/stok_mutasi_printlist.html","w+");
 		fwrite($print_file, $print_view);
 		echo '1';        
 	}
 	/* End Of Function */
 
 	/* Function to Export Excel document */
-	function vu_stok_all_saldo_export_excel(){
+	function stok_mutasi_export_excel(){
 		//POST varibale here
 		$produk_id=trim(@$_POST["produk_id"]);
 		$produk_nama=trim(@$_POST["produk_nama"]);
@@ -137,9 +105,9 @@ class C_vu_stok_all_saldo extends Controller {
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$query = $this->m_vu_stok_all_saldo->vu_stok_all_saldo_export_excel($produk_id ,$produk_nama ,$satuan_id ,$satuan_nama ,$stok_saldo ,$option,$filter);
+		$query = $this->m_stok_mutasi->stok_mutasi_export_excel($produk_id ,$produk_nama ,$satuan_id ,$satuan_nama ,$stok_saldo ,$option,$filter);
 		
-		to_excel($query,"vu_stok_all_saldo"); 
+		to_excel($query,"stok_mutasi"); 
 		echo '1';
 			
 	}
