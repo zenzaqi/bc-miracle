@@ -3687,7 +3687,7 @@ Ext.onReady(function(){
 		proxy: new Ext.data.HttpProxy({
 			url: 'index.php?c=c_master_jual_produk&m=get_reveral_list', 
 			method: 'POST'
-		}),baseParams: {start: 0, limit: 15 },
+		}),baseParams: {start: 0, limit: 100 },
 			reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total'
