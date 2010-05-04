@@ -192,7 +192,7 @@ Ext.onReady(function(){
 				columnWidth:0.98,
 				layout: 'form',
 				border:false,
-				items: [pass_user_idField, pass_user_passwdlamaField, pass_user_passwdField, pass_user_passwdulangField ] 
+				items: [pass_user_passwdlamaField, pass_user_passwdField, pass_user_passwdulangField ] 
 			}]
 		}],
 		monitorValid:true,

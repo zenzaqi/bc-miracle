@@ -19,7 +19,7 @@ class C_gpass extends Controller {
 	function C_gpass(){
 		parent::Controller();
 		session_start();
-		$this->load->model('m_gpass', '', TRUE);		
+		$this->load->model('m_gpass', '', TRUE);
 	}
 	
 	//set index
