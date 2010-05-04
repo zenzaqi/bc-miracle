@@ -254,7 +254,7 @@ class M_vu_stok_all_saldo extends Model{
 				if($opsi_satuan=='terkecil')
 					$data[$i]["konversi_nilai"]=1;
 				else
-					$data[$i]["konversi_nilai"]=$rowproduk->konversi_nilai;
+					$data[$i]["konversi_nilai"]=1/$rowproduk->konversi_nilai;
 				
 				//stok awal
 				$sql_stokawal = "SELECT
