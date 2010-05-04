@@ -91,8 +91,8 @@ class C_member extends Controller {
 		$member_status=str_replace("/(<\/?)(p)([^>]*>)", "",$member_status);
 		$member_status=str_replace(",", ",",$member_status);
 		$member_status=str_replace("'", '"',$member_status);
-		$member_tglserahterima=trim(@$_POST["member_tglserahterima"]);
-		$result = $this->m_member->member_update($member_id ,$member_cust ,$member_no ,$member_register ,$member_valid ,$member_nota_ref ,$member_point ,$member_jenis ,$member_status ,$member_tglserahterima      );
+		//$member_tglserahterima=trim(@$_POST["member_tglserahterima"]);
+		$result = $this->m_member->member_update($member_id ,$member_cust ,$member_no ,$member_register ,$member_valid ,$member_nota_ref ,$member_point ,$member_jenis ,$member_status );
 		echo $result;
 	}
 	

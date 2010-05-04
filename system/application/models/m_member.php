@@ -21,7 +21,7 @@ class M_member extends Model{
 		function member_cetak(){
 			
 			//$query = "UPDATE member set member_status='print' where member_status='register'";
-			$query = "UPDATE member set member_status='Cetak' where member_status='Daftar'";
+			$query = "UPDATE member set member_status='Cetak', member_tglserahterima=NULL where member_status='Daftar'";
 			$this->db->query($query);
 			//$query = "SELECT member.*,cust_nama as member_nama FROM member,customer where member_cust=cust_id and member_status='print'";
 			$query = "SELECT member.*,cust_nama as member_nama FROM member,customer where member_cust=cust_id and member_status='Cetak'";
@@ -30,9 +30,9 @@ class M_member extends Model{
 		}
 		
 		function member_aktivasi(){
-			
+			$date_now=date('Y-m-d');
 			//$query = "UPDATE member set member_status='aktif' where member_status='print'";
-			$query = "UPDATE member set member_status='Aktif' where member_status='Cetak'";
+			$query = "UPDATE member set member_status='Aktif', member_tglserahterima='$date_now' where member_status='Cetak'";
 			$this->db->query($query);
 			return '1';
 		}
@@ -64,7 +64,8 @@ class M_member extends Model{
 		}
 		
 		//function for update record
-		function member_update($member_id ,$member_cust ,$member_no ,$member_register ,$member_valid ,$member_nota_ref ,$member_point ,$member_jenis ,$member_status ,$member_tglserahterima ){
+		function member_update($member_id ,$member_cust ,$member_no ,$member_register ,$member_valid ,$member_nota_ref ,$member_point ,$member_jenis ,$member_status ){
+			$date_now=date('Y-m-d');
 			$data = array(
 				"member_id"=>$member_id, 
 			//	"member_cust"=>$member_cust, 
@@ -74,9 +75,16 @@ class M_member extends Model{
 				"member_nota_ref"=>$member_nota_ref, 
 				"member_point"=>$member_point, 
 				"member_jenis"=>$member_jenis, 
-				"member_status"=>$member_status, 
-				"member_tglserahterima"=>$member_tglserahterima 
+				"member_status"=>$member_status//, 
+				//"member_tglserahterima"=>$member_tglserahterima 
 			);
+			
+			if($member_status=='Aktif'){
+				$data['member_tglserahterima']=$date_now;
+			}else{
+				$data['member_tglserahterima']=NULL;
+			}
+			
 			$this->db->where('member_id', $member_id);
 			$this->db->update('member', $data);
 			
