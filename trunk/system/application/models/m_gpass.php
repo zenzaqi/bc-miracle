@@ -48,7 +48,7 @@ class M_gpass extends Model{
 					$key=true;
 			}
 			$data = array(	
-				"user_id"=>$user_id/*,		
+				/*"user_id"=>$user_id,		
 				"user_nama"=>$user_nama,			
 				"user_tgllahir"=>$user_tgllahir,			
 				"user_kelamin"=>$user_kelamin,
