@@ -1163,9 +1163,55 @@ Ext.onReady(function(){
 	}
 	/* Enf Function */
 	
+	function cetak_kartu_confirm(btn){
+		if(btn=='yes'){
+			Ext.Ajax.request({   
+			waitMsg: 'Mohon tunggu...',
+			url: 'index.php?c=c_member&m=member_cetak',
+			success: function(response){              
+				var result=eval(response.responseText);
+				switch(result){
+				case 1:
+					member_DataStore.reload();
+					win = window.open('./print/member_cetak_printlist.html','cetaklist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
+					win.print();
+					break;
+				default:
+					Ext.MessageBox.show({
+						title: 'Warning',
+						msg: 'Unable to print the grid!',
+						buttons: Ext.MessageBox.OK,
+						animEl: 'save',
+						icon: Ext.MessageBox.WARNING
+					});
+					break;
+				}  
+			},
+			failure: function(response){
+				var result=response.responseText;
+				Ext.MessageBox.show({
+				   title: 'Error',
+				   msg: 'Could not connect to the database. retry later.',
+				   buttons: Ext.MessageBox.OK,
+				   animEl: 'database',
+				   icon: Ext.MessageBox.ERROR
+				});		
+			} 	                     
+			});
+		}
+	}
+	
 	/* Function for print List Grid */
 	function member_cetak_kartu(){
-		Ext.Ajax.request({   
+		Ext.Msg.show({
+		  	title:'Konfirmasi Cetak?',
+		   	msg: 'Apakah Anda yakin akan mencetak semua kartu yang berstatus Daftar?',
+		   	buttons: Ext.Msg.YESNO,
+		   	fn: cetak_kartu_confirm,
+		   	animEl: 'elId',
+		   	icon: Ext.MessageBox.QUESTION
+		});
+		/*Ext.Ajax.request({   
 		waitMsg: 'Mohon tunggu...',
 		url: 'index.php?c=c_member&m=member_cetak',
 		success: function(response){              
@@ -1197,7 +1243,7 @@ Ext.onReady(function(){
 			   icon: Ext.MessageBox.ERROR
 			});		
 		} 	                     
-		});
+		});*/
 	}
 	/* Enf Function */
 	
