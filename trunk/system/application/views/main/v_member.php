@@ -115,7 +115,7 @@ Ext.onReady(function(){
 		if(oGrid_event.record.data.member_point!== null){member_point_update = oGrid_event.record.data.member_point;}
 		if(oGrid_event.record.data.member_jenis!== null){member_jenis_update = oGrid_event.record.data.member_jenis;}
 		if(oGrid_event.record.data.member_status!== null){member_status_update = oGrid_event.record.data.member_status;}
-	 	if(oGrid_event.record.data.member_tglserahterima!== ""){member_tglserahterima_update_date =oGrid_event.record.data.member_tglserahterima.format('Y-m-d');}
+	 	//if(oGrid_event.record.data.member_tglserahterima!== ""){member_tglserahterima_update_date =oGrid_event.record.data.member_tglserahterima.format('Y-m-d');}
 
 		Ext.Ajax.request({  
 			waitMsg: 'Please wait...',
@@ -130,8 +130,8 @@ Ext.onReady(function(){
 				member_nota_ref	: member_nota_ref_update,  
 				member_point	: member_point_update,  
 				member_jenis	: member_jenis_update,  
-				member_status	: member_status_update,  
-				member_tglserahterima	: member_tglserahterima_update_date, 
+				member_status	: member_status_update//,  
+				//member_tglserahterima	: member_tglserahterima_update_date, 
 			}, 
 			success: function(response){							
 				var result=eval(response.responseText);
