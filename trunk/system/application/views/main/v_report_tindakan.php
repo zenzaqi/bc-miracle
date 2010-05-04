@@ -285,7 +285,7 @@ Ext.onReady(function(){
 	  	width: 800, //940,//1200,	//970,
 		bbar: new Ext.PagingToolbar({
 			//pageSize: pageS,
-			disabled:true,
+			disabled:false,
 			store: report_tindakanDataStore,
 			displayInfo: true
 		}),
@@ -364,7 +364,7 @@ Ext.onReady(function(){
   	/* End of Function */
 		
 	report_tindakanListEditorGrid.addListener('rowcontextmenu', onreport_tindakanListEditGridContextMenu);
-	report_tindakanDataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
+	//report_tindakanDataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
 	//report_tindakanListEditorGrid.on('afteredit', tindakan_medis_update); // inLine Editing Record
 	
 	/*Detail Declaration */	
