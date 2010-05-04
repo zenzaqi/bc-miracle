@@ -469,7 +469,7 @@ Ext.onReady(function(){
 			width: 100,
 			sortable: true,
 			renderer: function(value, cell, record){
-				return value.substring(0,6) + ' - ' + value.substring(6,11) + ' - ' + value.substring(11);
+				return value.substring(0,6) + '-' + value.substring(6,11) + '-' + value.substring(11);
 			}
 			/*editor: new Ext.form.TextField({
 				allowBlank: false,
@@ -632,12 +632,15 @@ Ext.onReady(function(){
 			handler: member_confirm_update   // Confirm before updating
 		},'-',{
 			text: 'Cetak Kartu',
-			tooltip: 'Aktifkan Member yang teregister dan set status masa pencetakan',
+			//tooltip: 'Aktifkan Member yang teregister dan set status masa pencetakan',
+			tooltip: 'Cetak kartu member',
 			iconCls:'icon-aktivasi ',
 			handler: member_cetak_kartu
 		},'-',{
-			text: 'Aktivasi',
-			tooltip: 'Aktifkan Kartu Member yang statusnya cetak menjadi aktif',
+			//text: 'Aktivasi',
+			text: 'Diserahkan',
+			//tooltip: 'Aktifkan Kartu Member yang statusnya cetak menjadi aktif',
+			tooltip: 'Menyerahkan kartu member yang sudah tercetak',
 			iconCls:'icon-valid',
 			handler: member_aktivasi
 		}, '-',{
