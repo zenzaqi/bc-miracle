@@ -648,6 +648,7 @@ Ext.onReady(function(){
 			dataIndex: 'produk_kode',
 			width: 120,	//150,
 			sortable: true,
+			editable: false,
 			editor: new Ext.form.TextField({
 				allowBlank: false,
 				maxLength: 20
@@ -998,7 +999,7 @@ Ext.onReady(function(){
 		fieldLabel: 'Kode Baru',
 		maxLength: 20,
 		allowBlank: true,
-		readOnly: false,
+		readOnly: true,
 		emptyText: '(auto)',
 		width: 100
 	});
