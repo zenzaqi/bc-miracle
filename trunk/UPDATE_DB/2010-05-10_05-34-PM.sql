@@ -1,0 +1,164 @@
+-- phpMyAdmin SQL Dump
+-- version 2.11.9.2
+-- http://www.phpmyadmin.net
+--
+-- Host: localhost
+-- Waktu pembuatan: 10. Mei 2010 jam 18:02
+-- Versi Server: 5.0.67
+-- Versi PHP: 5.2.6
+
+SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+
+--
+-- Database: 'miracledb'
+--
+
+--
+-- Structure for view 'vu_stok_all'
+--
+DROP TABLE IF EXISTS `vu_stok_all`;
+
+CREATE OR REPLACE VIEW miracledb.vu_stok_all AS select date_format(vu_stok_jual_produk.jproduk_tanggal,_utf8'%Y-%m-%d') AS tanggal,vu_stok_jual_produk.produk_id AS produk_id,vu_stok_jual_produk.produk_kode AS produk_kode,vu_stok_jual_produk.produk_nama AS produk_nama,vu_stok_jual_produk.satuan_id AS satuan_id,vu_stok_jual_produk.satuan_kode AS satuan_kode,vu_stok_jual_produk.satuan_nama AS satuan_nama,vu_stok_jual_produk.konversi_default AS konversi_default,0 AS jumlah_terima,0 AS jumlah_retur_beli,vu_stok_jual_produk.jumlah_konversi AS jumlah_jual,0 AS jumlah_retur_produk,0 AS jumlah_retur_paket,0 AS jumlah_cabin,0 AS jumlah_koreksi from miracledb.vu_stok_jual_produk union select date_format(vu_stok_pakai_cabin.cabin_date_create,_utf8'%Y-%m-%d') AS tanggal,vu_stok_pakai_cabin.produk_id AS produk_id,vu_stok_pakai_cabin.produk_kode AS produk_kode,vu_stok_pakai_cabin.produk_nama AS produk_nama,vu_stok_pakai_cabin.satuan_id AS satuan_id,vu_stok_pakai_cabin.satuan_kode AS satuan_kode,vu_stok_pakai_cabin.satuan_nama AS satuan_nama,vu_stok_pakai_cabin.konversi_default AS konversi_default,0 AS jumlah_terima,0 AS jumlah_retur_beli,0 AS jumlah_jual,0 AS jumlah_retur_produk,0 AS jumlah_retur_paket,vu_stok_pakai_cabin.jumlah_konversi AS jumlah_cabin,0 AS jumlah_koreksi from miracledb.vu_stok_pakai_cabin union select date_format(vu_stok_retur_beli.rbeli_tanggal,_utf8'%Y-%m-%d') AS tanggal,vu_stok_retur_beli.produk_id AS produk_id,vu_stok_retur_beli.produk_kode AS produk_kode,vu_stok_retur_beli.produk_nama AS produk_nama,vu_stok_retur_beli.satuan_id AS satuan_id,vu_stok_retur_beli.satuan_kode AS satuan_kode,vu_stok_retur_beli.satuan_nama AS satuan_nama,vu_stok_retur_beli.konversi_default AS konversi_default,0 AS jumlah_terima,vu_stok_retur_beli.jumlah_konversi AS jumlah_retur_beli,0 AS jumlah_jual,0 AS jumlah_retur_produk,0 AS jumlah_retur_paket,0 AS jumlah_cabin,0 AS jumlah_koreksi from miracledb.vu_stok_retur_beli union select date_format(vu_stok_retur_jual_paket.rpaket_tanggal,_utf8'%Y-%m-%d') AS tanggal,vu_stok_retur_jual_paket.produk_id AS produk_id,vu_stok_retur_jual_paket.produk_kode AS produk_kode,vu_stok_retur_jual_paket.produk_nama AS produk_nama,vu_stok_retur_jual_paket.satuan_id AS satuan_id,vu_stok_retur_jual_paket.satuan_kode AS satuan_kode,vu_stok_retur_jual_paket.satuan_nama AS satuan_nama,vu_stok_retur_jual_paket.konversi_default AS konversi_default,0 AS jumlah_terima,0 AS jumlah_retur_beli,0 AS jumlah_jual,0 AS jumlah_retur_produk,vu_stok_retur_jual_paket.jumlah_konversi AS jumlah_retur_paket,0 AS jumlah_cabin,0 AS jumlah_koreksi from miracledb.vu_stok_retur_jual_paket union select date_format(vu_stok_retur_jual_produk.rproduk_tanggal,_utf8'%Y-%m-%d') AS tanggal,vu_stok_retur_jual_produk.produk_id AS produk_id,vu_stok_retur_jual_produk.produk_kode AS produk_kode,vu_stok_retur_jual_produk.produk_nama AS produk_nama,vu_stok_retur_jual_produk.satuan_id AS satuan_id,vu_stok_retur_jual_produk.satuan_kode AS satuan_kode,vu_stok_retur_jual_produk.satuan_nama AS satuan_nama,vu_stok_retur_jual_produk.konversi_default AS konversi_default,0 AS jumlah_terima,0 AS jumlah_retur_beli,0 AS jumlah_jual,vu_stok_retur_jual_produk.jumlah_konversi AS jumlah_retur_produk,0 AS jumlah_retur_paket,0 AS jumlah_cabin,0 AS jumlah_koreksi from miracledb.vu_stok_retur_jual_produk union select date_format(vu_stok_terima.terima_tanggal,_utf8'%Y-%m-%d') AS tanggal,vu_stok_terima.produk_id AS produk_id,vu_stok_terima.produk_kode AS produk_kode,vu_stok_terima.produk_nama AS produk_nama,vu_stok_terima.satuan_id AS satuan_id,vu_stok_terima.satuan_kode AS satuan_kode,vu_stok_terima.satuan_nama AS satuan_nama,vu_stok_terima.konversi_default AS konversi_default,vu_stok_terima.jumlah_konversi AS jumlah_terima,0 AS jumlah_retur_beli,0 AS jumlah_jual,0 AS jumlah_retur_produk,0 AS jumlah_retur_paket,0 AS jumlah_cabin,0 AS jumlah_koreksi from miracledb.vu_stok_terima union select date_format(vu_stok_koreksi.koreksi_tanggal,_utf8'%Y-%m-%d') AS tanggal,vu_stok_koreksi.produk_id AS produk_id,vu_stok_koreksi.produk_kode AS produk_kode,vu_stok_koreksi.produk_nama AS produk_nama,vu_stok_koreksi.satuan_id AS satuan_id,vu_stok_koreksi.satuan_kode AS satuan_kode,vu_stok_koreksi.satuan_nama AS satuan_nama,vu_stok_koreksi.konversi_default AS konversi_default,0 AS jumlah_terima,0 AS jumlah_retur_beli,0 AS jumlah_jual,0 AS jumlah_retur_produk,0 AS jumlah_retur_paket,0 AS jumlah_cabin,vu_stok_koreksi.jumlah_konversi AS jumlah_koreksi from miracledb.vu_stok_koreksi;
+
+-- --------------------------------------------------------
+--
+-- Structure for view 'vu_stok_all_saldo_tanggal'
+--
+DROP TABLE IF EXISTS `vu_stok_all_saldo_tanggal`;
+
+CREATE OR REPLACE VIEW miracledb.vu_stok_all_saldo_tanggal AS select vu_stok_all.tanggal AS tanggal,vu_produk_satuan_terkecil.produk_kode AS produk_kode,vu_stok_all.produk_id AS produk_id,vu_stok_all.produk_nama AS produk_nama,vu_produk_satuan_terkecil.satuan_kode AS satuan_kode,vu_produk_satuan_terkecil.satuan_id AS satuan_id,vu_produk_satuan_terkecil.satuan_nama AS satuan_nama,sum(vu_stok_all.jumlah_terima) AS jumlah_terima,sum(vu_stok_all.jumlah_retur_beli) AS jumlah_retur_beli,sum(vu_stok_all.jumlah_jual) AS jumlah_jual,sum(vu_stok_all.jumlah_retur_produk) AS jumlah_retur_produk,sum(vu_stok_all.jumlah_retur_paket) AS jumlah_retur_paket,sum(vu_stok_all.jumlah_cabin) AS jumlah_cabin,sum(vu_stok_all.jumlah_koreksi) AS jumlah_koreksi,((((((sum(vu_stok_all.jumlah_terima) - sum(vu_stok_all.jumlah_retur_beli)) - sum(vu_stok_all.jumlah_jual)) + sum(vu_stok_all.jumlah_retur_produk)) + sum(vu_stok_all.jumlah_retur_paket)) - sum(vu_stok_all.jumlah_cabin)) + sum(vu_stok_all.jumlah_koreksi)) AS jumlah_saldo from (miracledb.vu_stok_all join miracledb.vu_produk_satuan_terkecil on((vu_stok_all.produk_id = vu_produk_satuan_terkecil.produk_id))) group by vu_stok_all.tanggal,vu_stok_all.produk_id,vu_stok_all.produk_nama,vu_produk_satuan_terkecil.satuan_id,vu_produk_satuan_terkecil.satuan_kode,vu_produk_satuan_terkecil.satuan_nama;
+
+-- --------------------------------------------------------
+--
+-- Structure for view 'vu_stok_all_saldo'
+--
+DROP TABLE IF EXISTS `vu_stok_all_saldo`;
+
+CREATE OR REPLACE VIEW miracledb.vu_stok_all_saldo AS select a.produk_id AS produk_id,a.produk_kode AS produk_kode,a.produk_nama AS produk_nama,a.satuan_id AS satuan_id,a.satuan_nama AS satuan_nama,ifnull(sum(a.jumlah_terima),0) AS jumlah_terima,ifnull(sum(a.jumlah_retur_beli),0) AS jumlah_retur_beli,ifnull(sum(a.jumlah_jual),0) AS jumlah_jual,ifnull(sum(a.jumlah_retur_produk),0) AS jumlah_retur_produk,ifnull(sum(a.jumlah_retur_paket),0) AS jumlah_retur_paket,ifnull(sum(a.jumlah_cabin),0) AS jumlah_cabin,ifnull(sum(a.jumlah_koreksi),0) AS jumlah_koreksi,ifnull(sum(a.jumlah_saldo),0) AS stok_saldo from miracledb.vu_stok_all_saldo_tanggal a group by a.produk_id;
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view 'vu_stok_gudang_besar_tanggal'
+--
+DROP TABLE IF EXISTS `vu_stok_gudang_besar_tanggal`;
+
+CREATE OR REPLACE VIEW miracledb.vu_stok_gudang_besar_tanggal AS select vu_stok_all.tanggal AS tanggal,vu_stok_all.produk_kode AS produk_kode,vu_stok_all.produk_id AS produk_id,vu_stok_all.produk_nama AS produk_nama,vu_stok_all.satuan_kode AS satuan_kode,vu_stok_all.satuan_id AS satuan_id,vu_stok_all.satuan_nama AS satuan_nama,sum(vu_stok_all.jumlah_terima) AS jumlah_terima,sum(vu_stok_all.jumlah_retur_beli) AS jumlah_retur_beli,0 AS jumlah_keluar,0 AS jumlah_masuk,0 AS jumlah_koreksi from miracledb.vu_stok_all where ((vu_stok_all.jumlah_terima > 0) or (vu_stok_all.jumlah_retur_beli > 0)) group by vu_stok_all.tanggal union select distinct vu_stok_mutasi_all.mutasi_tanggal AS tanggal,vu_stok_mutasi_all.produk_kode AS produk_kode,vu_stok_mutasi_all.produk_id AS produk_id,vu_stok_mutasi_all.produk_nama AS produk_nama,vu_stok_mutasi_all.satuan_kode AS satuan_kode,vu_stok_mutasi_all.satuan_id AS satuan_id,vu_stok_mutasi_all.satuan_nama AS satuan_nama,0 AS jumlah_terima,0 AS jumlah_retur_beli,vu_stok_mutasi_all.jumlah_keluar AS jumlah_keluar,vu_stok_mutasi_all.jumlah_masuk AS jumlah_masuk,0 AS jumlah_koreksi from miracledb.vu_stok_mutasi_all where (vu_stok_mutasi_all.gudang_id = 1) group by vu_stok_mutasi_all.mutasi_tanggal union select distinct vu_stok_koreksi.koreksi_tanggal AS tanggal,vu_stok_koreksi.produk_kode AS produk_kode,vu_stok_koreksi.produk_id AS produk_id,vu_stok_koreksi.produk_nama AS produk_nama,vu_stok_koreksi.satuan_kode AS satuan_kode,vu_stok_koreksi.satuan_id AS satuan_id,vu_stok_koreksi.satuan_nama AS satuan_nama,0 AS jumlah_terima,0 AS jumlah_retur_beli,0 AS jumlah_keluar,0 AS jumlah_masuk,sum(vu_stok_koreksi.jumlah_konversi) AS jumlah_koreksi from miracledb.vu_stok_koreksi where (vu_stok_koreksi.koreksi_gudang = 1) group by vu_stok_koreksi.koreksi_tanggal;
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view 'vu_stok_gudang_all'
+--
+DROP TABLE IF EXISTS `vu_stok_gudang_all`;
+
+CREATE OR REPLACE VIEW miracledb.vu_stok_gudang_all AS select vu_stok_mutasi_all.gudang_id AS gudang_id,vu_stok_mutasi_all.gudang_nama AS gudang_nama,vu_stok_mutasi_all.produk_id AS produk_id,vu_stok_mutasi_all.produk_kode AS produk_kode,vu_stok_mutasi_all.produk_nama AS produk_nama,vu_stok_mutasi_all.satuan_id AS satuan_id,vu_stok_mutasi_all.satuan_kode AS satuan_kode,vu_stok_mutasi_all.satuan_nama AS satuan_nama,((sum(vu_stok_mutasi_all.jumlah_masuk) - sum(vu_stok_mutasi_all.jumlah_keluar)) + sum(vu_stok_mutasi_all.jumlah_koreksi)) AS jumlah_stok from miracledb.vu_stok_mutasi_all group by vu_stok_mutasi_all.gudang_id,vu_stok_mutasi_all.gudang_nama,vu_stok_mutasi_all.produk_id,vu_stok_mutasi_all.produk_kode,vu_stok_mutasi_all.produk_nama,vu_stok_mutasi_all.satuan_kode,vu_stok_mutasi_all.satuan_nama;
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view 'vu_stok_gudang_besar_saldo'
+--
+DROP TABLE IF EXISTS `vu_stok_gudang_besar_saldo`;
+
+CREATE OR REPLACE VIEW miracledb.vu_stok_gudang_besar_saldo AS select vu_stok_gudang_besar_tanggal.produk_id AS produk_id,vu_stok_gudang_besar_tanggal.produk_kode AS produk_kode,vu_stok_gudang_besar_tanggal.produk_nama AS produk_nama,vu_stok_gudang_besar_tanggal.satuan_id AS satuan_id,vu_stok_gudang_besar_tanggal.satuan_kode AS satuan_kode,vu_stok_gudang_besar_tanggal.satuan_nama AS satuan_nama,((((sum(vu_stok_gudang_besar_tanggal.jumlah_terima) - sum(vu_stok_gudang_besar_tanggal.jumlah_retur_beli)) - sum(vu_stok_gudang_besar_tanggal.jumlah_keluar)) + sum(vu_stok_gudang_besar_tanggal.jumlah_masuk)) + sum(vu_stok_gudang_besar_tanggal.jumlah_koreksi)) AS jumlah_stok from miracledb.vu_stok_gudang_besar_tanggal group by vu_stok_gudang_besar_tanggal.produk_kode,vu_stok_gudang_besar_tanggal.produk_nama,vu_stok_gudang_besar_tanggal.satuan_id,vu_stok_gudang_besar_tanggal.satuan_kode,vu_stok_gudang_besar_tanggal.satuan_nama;
+
+-- --------------------------------------------------------
+
+
+--
+-- Structure for view 'vu_stok_jual_produk'
+--
+DROP TABLE IF EXISTS `vu_stok_jual_produk`;
+
+CREATE OR REPLACE VIEW miracledb.vu_stok_jual_produk AS select miracledb.master_jual_produk.jproduk_tanggal AS jproduk_tanggal,miracledb.detail_jual_produk.dproduk_satuan AS dproduk_satuan,sum(miracledb.detail_jual_produk.dproduk_jumlah) AS dproduk_jumlah,miracledb.detail_jual_produk.dproduk_harga AS dproduk_harga,miracledb.satuan_konversi.konversi_nilai AS konversi_nilai,sum((miracledb.detail_jual_produk.dproduk_jumlah * miracledb.satuan_konversi.konversi_nilai)) AS jumlah_konversi,vu_produk_satuan_terkecil.produk_kode AS produk_kode,vu_produk_satuan_terkecil.produk_nama AS produk_nama,vu_produk_satuan_terkecil.produk_harga AS produk_harga,vu_produk_satuan_terkecil.produk_volume AS produk_volume,vu_produk_satuan_terkecil.produk_jenis AS produk_jenis,vu_produk_satuan_terkecil.produk_point AS produk_point,vu_produk_satuan_terkecil.konversi_produk AS konversi_produk,vu_produk_satuan_terkecil.konversi_satuan AS konversi_satuan,vu_produk_satuan_terkecil.satuan_id AS satuan_id,vu_produk_satuan_terkecil.satuan_kode AS satuan_kode,vu_produk_satuan_terkecil.satuan_nama AS satuan_nama,vu_produk_satuan_terkecil.satuan_aktif AS satuan_aktif,vu_produk_satuan_terkecil.produk_id AS produk_id,miracledb.satuan_konversi.konversi_default AS konversi_default from (((miracledb.detail_jual_produk join miracledb.master_jual_produk on((miracledb.master_jual_produk.jproduk_id = miracledb.detail_jual_produk.dproduk_master))) join miracledb.satuan_konversi on(((miracledb.detail_jual_produk.dproduk_satuan = miracledb.satuan_konversi.konversi_satuan) and (miracledb.detail_jual_produk.dproduk_produk = miracledb.satuan_konversi.konversi_produk)))) join miracledb.vu_produk_satuan_terkecil on((miracledb.detail_jual_produk.dproduk_produk = vu_produk_satuan_terkecil.produk_id))) group by miracledb.master_jual_produk.jproduk_tanggal,miracledb.detail_jual_produk.dproduk_satuan,miracledb.detail_jual_produk.dproduk_harga,miracledb.satuan_konversi.konversi_nilai,vu_produk_satuan_terkecil.produk_kode,vu_produk_satuan_terkecil.produk_nama,vu_produk_satuan_terkecil.produk_harga,vu_produk_satuan_terkecil.produk_volume,vu_produk_satuan_terkecil.produk_jenis,vu_produk_satuan_terkecil.produk_point,vu_produk_satuan_terkecil.konversi_satuan,vu_produk_satuan_terkecil.satuan_id,vu_produk_satuan_terkecil.satuan_kode,vu_produk_satuan_terkecil.satuan_nama,vu_produk_satuan_terkecil.satuan_aktif,vu_produk_satuan_terkecil.produk_id,miracledb.satuan_konversi.konversi_default;
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view 'vu_stok_koreksi'
+--
+DROP TABLE IF EXISTS `vu_stok_koreksi`;
+
+CREATE OR REPLACE VIEW miracledb.vu_stok_koreksi AS select miracledb.master_koreksi_stok.koreksi_tanggal AS koreksi_tanggal,miracledb.master_koreksi_stok.koreksi_gudang AS koreksi_gudang,miracledb.detail_koreksi_stok.dkoreksi_master AS dkoreksi_master,miracledb.detail_koreksi_stok.dkoreksi_produk AS dkoreksi_produk,miracledb.satuan_konversi.konversi_produk AS konversi_produk,miracledb.satuan_konversi.konversi_satuan AS konversi_satuan,miracledb.satuan_konversi.konversi_nilai AS konversi_nilai,miracledb.satuan_konversi.konversi_default AS konversi_default,miracledb.detail_koreksi_stok.dkoreksi_satuan AS dkoreksi_satuan,miracledb.detail_koreksi_stok.dkoreksi_jmlkoreksi AS dkoreksi_jmlkoreksi,(miracledb.detail_koreksi_stok.dkoreksi_jmlkoreksi * miracledb.satuan_konversi.konversi_nilai) AS jumlah_konversi,vu_produk_satuan_terkecil.produk_id AS produk_id,vu_produk_satuan_terkecil.produk_kode AS produk_kode,vu_produk_satuan_terkecil.produk_nama AS produk_nama,vu_produk_satuan_terkecil.produk_harga AS produk_harga,vu_produk_satuan_terkecil.produk_volume AS produk_volume,vu_produk_satuan_terkecil.produk_jenis AS produk_jenis,vu_produk_satuan_terkecil.produk_point AS produk_point,vu_produk_satuan_terkecil.satuan_id AS satuan_id,vu_produk_satuan_terkecil.satuan_kode AS satuan_kode,vu_produk_satuan_terkecil.satuan_nama AS satuan_nama,miracledb.gudang.gudang_id AS gudang_id,miracledb.gudang.gudang_nama AS gudang_nama,miracledb.gudang.gudang_lokasi AS gudang_lokasi from ((((miracledb.detail_koreksi_stok join miracledb.master_koreksi_stok on((miracledb.detail_koreksi_stok.dkoreksi_master = miracledb.master_koreksi_stok.koreksi_id))) join miracledb.satuan_konversi on(((miracledb.detail_koreksi_stok.dkoreksi_produk = miracledb.satuan_konversi.konversi_produk) and (miracledb.detail_koreksi_stok.dkoreksi_satuan = miracledb.satuan_konversi.konversi_satuan)))) join miracledb.vu_produk_satuan_terkecil on((miracledb.satuan_konversi.konversi_produk = vu_produk_satuan_terkecil.produk_id))) join miracledb.gudang on((miracledb.master_koreksi_stok.koreksi_gudang = miracledb.gudang.gudang_id)));
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view 'vu_stok_mutasi'
+--
+DROP TABLE IF EXISTS `vu_stok_mutasi`;
+
+CREATE OR REPLACE VIEW miracledb.vu_stok_mutasi AS select vu_detail_mutasi.mutasi_id AS mutasi_id,vu_detail_mutasi.mutasi_asal AS mutasi_asal,vu_detail_mutasi.gudang_asal_id AS gudang_asal_id,vu_detail_mutasi.gudang_asal_nama AS gudang_asal_nama,vu_detail_mutasi.gudang_asala_lokasi AS gudang_asala_lokasi,vu_detail_mutasi.mutasi_tujuan AS mutasi_tujuan,vu_detail_mutasi.gudang_tujuan_id AS gudang_tujuan_id,vu_detail_mutasi.gudang_tujuan_nama AS gudang_tujuan_nama,vu_detail_mutasi.gudang_tujuan_lokasi AS gudang_tujuan_lokasi,vu_detail_mutasi.mutasi_tanggal AS mutasi_tanggal,vu_detail_mutasi.dmutasi_id AS dmutasi_id,vu_detail_mutasi.dmutasi_produk AS dmutasi_produk,vu_produk_satuan_terkecil.produk_id AS produk_id,vu_produk_satuan_terkecil.produk_kode AS produk_kode,vu_produk_satuan_terkecil.produk_nama AS produk_nama,vu_produk_satuan_terkecil.produk_harga AS produk_harga,vu_produk_satuan_terkecil.produk_volume AS produk_volume,vu_produk_satuan_terkecil.produk_jenis AS produk_jenis,vu_produk_satuan_terkecil.produk_point AS produk_point,vu_produk_satuan_terkecil.konversi_produk AS konversi_produk,vu_produk_satuan_terkecil.konversi_satuan AS konversi_satuan,vu_produk_satuan_terkecil.konversi_nilai AS konversi_nilai,vu_produk_satuan_terkecil.satuan_id AS satuan_id,vu_produk_satuan_terkecil.satuan_kode AS satuan_kode,vu_produk_satuan_terkecil.satuan_nama AS satuan_nama,vu_detail_mutasi.dmutasi_jumlah AS dmutasi_jumlah,(vu_detail_mutasi.dmutasi_jumlah * vu_produk_satuan_terkecil.konversi_nilai) AS jumlah_konversi from (miracledb.vu_detail_mutasi join miracledb.vu_produk_satuan_terkecil on((vu_detail_mutasi.dmutasi_produk = vu_produk_satuan_terkecil.produk_id)));
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view 'vu_stok_mutasi_all'
+--
+DROP TABLE IF EXISTS `vu_stok_mutasi_all`;
+
+CREATE OR REPLACE VIEW miracledb.vu_stok_mutasi_all AS select a.mutasi_tanggal AS mutasi_tanggal,a.gudang_asal_id AS gudang_id,a.gudang_asal_nama AS gudang_nama,a.produk_id AS produk_id,a.produk_kode AS produk_kode,a.produk_nama AS produk_nama,a.satuan_id AS satuan_id,a.satuan_kode AS satuan_kode,a.satuan_nama AS satuan_nama,0 AS jumlah_masuk,a.jumlah_konversi AS jumlah_keluar,0 AS jumlah_koreksi from miracledb.vu_stok_mutasi a union select b.mutasi_tanggal AS mutasi_tanggal,b.gudang_tujuan_id AS gudang_id,b.gudang_tujuan_nama AS gudang_nama,b.produk_id AS produk_id,b.produk_kode AS produk_kode,b.produk_nama AS produk_nama,b.satuan_id AS satuan_id,b.satuan_kode AS satuan_kode,b.satuan_nama AS satuan_nama,b.jumlah_konversi AS jumlah_masuk,0 AS jumlah_keluar,0 AS jumlah_koreksi from miracledb.vu_stok_mutasi b union select c.koreksi_tanggal AS koreksi_tanggal,c.gudang_id AS gudang_id,c.gudang_nama AS gudang_nama,c.produk_id AS produk_id,c.produk_kode AS produk_kode,c.produk_nama AS produk_nama,c.satuan_id AS satuan_id,c.satuan_kode AS satuan_kode,c.satuan_nama AS satuan_nama,0 AS jumlah_masuk,0 AS jumlah_keluar,c.jumlah_konversi AS jumlah_konversi from miracledb.vu_stok_koreksi c;
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view 'vu_stok_pakai_cabin'
+--
+DROP TABLE IF EXISTS `vu_stok_pakai_cabin`;
+
+CREATE OR REPLACE VIEW miracledb.vu_stok_pakai_cabin AS select miracledb.detail_pakai_cabin.cabin_dtrawat AS cabin_dtrawat,miracledb.detail_pakai_cabin.cabin_rawat AS cabin_rawat,miracledb.detail_pakai_cabin.cabin_produk AS cabin_produk,miracledb.satuan_konversi.konversi_produk AS konversi_produk,miracledb.detail_pakai_cabin.cabin_satuan AS cabin_satuan,miracledb.satuan_konversi.konversi_satuan AS konversi_satuan,miracledb.detail_pakai_cabin.cabin_jumlah AS cabin_jumlah,miracledb.detail_pakai_cabin.cabin_date_create AS cabin_date_create,miracledb.satuan_konversi.konversi_nilai AS konversi_nilai,miracledb.satuan_konversi.konversi_default AS konversi_default,(miracledb.detail_pakai_cabin.cabin_jumlah * miracledb.satuan_konversi.konversi_nilai) AS jumlah_konversi,vu_produk_satuan_terkecil.produk_id AS produk_id,vu_produk_satuan_terkecil.produk_kode AS produk_kode,vu_produk_satuan_terkecil.produk_nama AS produk_nama,vu_produk_satuan_terkecil.produk_harga AS produk_harga,vu_produk_satuan_terkecil.produk_volume AS produk_volume,vu_produk_satuan_terkecil.produk_jenis AS produk_jenis,vu_produk_satuan_terkecil.produk_point AS produk_point,vu_produk_satuan_terkecil.satuan_id AS satuan_id,vu_produk_satuan_terkecil.satuan_kode AS satuan_kode,vu_produk_satuan_terkecil.satuan_nama AS satuan_nama from ((miracledb.detail_pakai_cabin join miracledb.satuan_konversi on(((miracledb.detail_pakai_cabin.cabin_produk = miracledb.satuan_konversi.konversi_produk) and (miracledb.detail_pakai_cabin.cabin_satuan = miracledb.satuan_konversi.konversi_satuan)))) join miracledb.vu_produk_satuan_terkecil on((miracledb.satuan_konversi.konversi_produk = vu_produk_satuan_terkecil.produk_id)));
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view 'vu_stok_retur_beli'
+--
+DROP TABLE IF EXISTS `vu_stok_retur_beli`;
+
+CREATE OR REPLACE VIEW miracledb.vu_stok_retur_beli AS select miracledb.master_retur_beli.rbeli_tanggal AS rbeli_tanggal,miracledb.detail_retur_beli.drbeli_master AS drbeli_master,miracledb.detail_retur_beli.drbeli_id AS drbeli_id,miracledb.detail_retur_beli.drbeli_produk AS drbeli_produk,miracledb.detail_retur_beli.drbeli_satuan AS drbeli_satuan,miracledb.satuan_konversi.konversi_produk AS konversi_produk,miracledb.satuan_konversi.konversi_satuan AS konversi_satuan,miracledb.satuan_konversi.konversi_nilai AS konversi_nilai,miracledb.satuan_konversi.konversi_default AS konversi_default,(miracledb.detail_retur_beli.drbeli_jumlah * miracledb.satuan_konversi.konversi_nilai) AS jumlah_konversi,vu_produk_satuan_terkecil.produk_id AS produk_id,vu_produk_satuan_terkecil.produk_kode AS produk_kode,vu_produk_satuan_terkecil.produk_nama AS produk_nama,vu_produk_satuan_terkecil.produk_harga AS produk_harga,vu_produk_satuan_terkecil.produk_volume AS produk_volume,vu_produk_satuan_terkecil.produk_jenis AS produk_jenis,vu_produk_satuan_terkecil.produk_point AS produk_point,vu_produk_satuan_terkecil.satuan_id AS satuan_id,vu_produk_satuan_terkecil.satuan_kode AS satuan_kode,vu_produk_satuan_terkecil.satuan_nama AS satuan_nama from (((miracledb.detail_retur_beli join miracledb.master_retur_beli on((miracledb.detail_retur_beli.drbeli_master = miracledb.master_retur_beli.rbeli_id))) join miracledb.satuan_konversi on(((miracledb.satuan_konversi.konversi_produk = miracledb.detail_retur_beli.drbeli_produk) and (miracledb.detail_retur_beli.drbeli_satuan = miracledb.satuan_konversi.konversi_satuan)))) join miracledb.vu_produk_satuan_terkecil on((miracledb.satuan_konversi.konversi_produk = vu_produk_satuan_terkecil.produk_id)));
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view 'vu_stok_retur_jual_paket'
+--
+DROP TABLE IF EXISTS `vu_stok_retur_jual_paket`;
+
+CREATE OR REPLACE VIEW miracledb.vu_stok_retur_jual_paket AS select miracledb.master_retur_jual_paket.rpaket_tanggal AS rpaket_tanggal,miracledb.detail_retur_paket_poduk.drpaket_id AS drpaket_id,miracledb.detail_retur_paket_poduk.drpaket_master AS drpaket_master,miracledb.detail_retur_paket_poduk.drpaket_produk AS drpaket_produk,miracledb.satuan_konversi.konversi_produk AS konversi_produk,miracledb.satuan_konversi.konversi_satuan AS konversi_satuan,miracledb.detail_retur_paket_poduk.drpaket_satuan AS drpaket_satuan,miracledb.detail_retur_paket_poduk.drpaket_jumlah AS drpaket_jumlah,miracledb.detail_retur_paket_poduk.drpaket_harga AS drpaket_harga,(miracledb.detail_retur_paket_poduk.drpaket_jumlah * miracledb.satuan_konversi.konversi_nilai) AS jumlah_konversi,miracledb.satuan_konversi.konversi_nilai AS konversi_nilai,miracledb.satuan_konversi.konversi_default AS konversi_default,vu_produk_satuan_terkecil.produk_id AS produk_id,vu_produk_satuan_terkecil.produk_kode AS produk_kode,vu_produk_satuan_terkecil.produk_nama AS produk_nama,vu_produk_satuan_terkecil.produk_harga AS produk_harga,vu_produk_satuan_terkecil.produk_volume AS produk_volume,vu_produk_satuan_terkecil.produk_jenis AS produk_jenis,vu_produk_satuan_terkecil.produk_point AS produk_point,vu_produk_satuan_terkecil.satuan_id AS satuan_id,vu_produk_satuan_terkecil.satuan_kode AS satuan_kode,vu_produk_satuan_terkecil.satuan_nama AS satuan_nama from (((miracledb.detail_retur_paket_poduk join miracledb.master_retur_jual_paket on((miracledb.detail_retur_paket_poduk.drpaket_master = miracledb.master_retur_jual_paket.rpaket_id))) join miracledb.satuan_konversi on(((miracledb.detail_retur_paket_poduk.drpaket_produk = miracledb.satuan_konversi.konversi_produk) and (miracledb.detail_retur_paket_poduk.drpaket_satuan = miracledb.satuan_konversi.konversi_satuan)))) join miracledb.vu_produk_satuan_terkecil on((miracledb.satuan_konversi.konversi_produk = vu_produk_satuan_terkecil.produk_id)));
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view 'vu_stok_retur_jual_produk'
+--
+DROP TABLE IF EXISTS `vu_stok_retur_jual_produk`;
+
+CREATE OR REPLACE VIEW miracledb.vu_stok_retur_jual_produk AS select miracledb.master_retur_jual_produk.rproduk_tanggal AS rproduk_tanggal,miracledb.detail_retur_jual_produk.drproduk_produk AS drproduk_produk,miracledb.satuan_konversi.konversi_produk AS konversi_produk,miracledb.satuan_konversi.konversi_satuan AS konversi_satuan,miracledb.detail_retur_jual_produk.drproduk_satuan AS drproduk_satuan,miracledb.detail_retur_jual_produk.drproduk_jumlah AS drproduk_jumlah,(miracledb.detail_retur_jual_produk.drproduk_jumlah * miracledb.satuan_konversi.konversi_nilai) AS jumlah_konversi,miracledb.satuan_konversi.konversi_nilai AS konversi_nilai,miracledb.satuan_konversi.konversi_default AS konversi_default,vu_produk_satuan_terkecil.produk_id AS produk_id,vu_produk_satuan_terkecil.produk_kode AS produk_kode,vu_produk_satuan_terkecil.produk_nama AS produk_nama,vu_produk_satuan_terkecil.produk_harga AS produk_harga,vu_produk_satuan_terkecil.produk_volume AS produk_volume,vu_produk_satuan_terkecil.produk_jenis AS produk_jenis,vu_produk_satuan_terkecil.produk_point AS produk_point,vu_produk_satuan_terkecil.satuan_id AS satuan_id,vu_produk_satuan_terkecil.satuan_kode AS satuan_kode,vu_produk_satuan_terkecil.satuan_nama AS satuan_nama from (((miracledb.detail_retur_jual_produk join miracledb.master_retur_jual_produk on((miracledb.detail_retur_jual_produk.drproduk_master = miracledb.master_retur_jual_produk.rproduk_id))) join miracledb.satuan_konversi on(((miracledb.detail_retur_jual_produk.drproduk_produk = miracledb.satuan_konversi.konversi_produk) and (miracledb.detail_retur_jual_produk.drproduk_satuan = miracledb.satuan_konversi.konversi_satuan)))) join miracledb.vu_produk_satuan_terkecil on((miracledb.satuan_konversi.konversi_produk = vu_produk_satuan_terkecil.produk_id)));
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view 'vu_stok_terima'
+--
+DROP TABLE IF EXISTS `vu_stok_terima`;
+
+CREATE OR REPLACE VIEW miracledb.vu_stok_terima AS select miracledb.detail_terima_beli.dterima_master AS dterima_master,miracledb.detail_terima_beli.dterima_produk AS dterima_produk,miracledb.satuan_konversi.konversi_id AS konversi_id,miracledb.satuan_konversi.konversi_produk AS konversi_produk,miracledb.satuan_konversi.konversi_satuan AS konversi_satuan,miracledb.detail_terima_beli.dterima_satuan AS dterima_satuan,miracledb.satuan_konversi.konversi_nilai AS konversi_nilai,miracledb.satuan_konversi.konversi_default AS konversi_default,(miracledb.detail_terima_beli.dterima_jumlah * miracledb.satuan_konversi.konversi_nilai) AS jumlah_konversi,miracledb.master_terima_beli.terima_tanggal AS terima_tanggal,vu_produk_satuan_terkecil.produk_id AS produk_id,vu_produk_satuan_terkecil.produk_kode AS produk_kode,vu_produk_satuan_terkecil.produk_nama AS produk_nama,vu_produk_satuan_terkecil.produk_harga AS produk_harga,vu_produk_satuan_terkecil.produk_volume AS produk_volume,vu_produk_satuan_terkecil.produk_jenis AS produk_jenis,vu_produk_satuan_terkecil.produk_point AS produk_point,vu_produk_satuan_terkecil.satuan_id AS satuan_id,vu_produk_satuan_terkecil.satuan_kode AS satuan_kode,vu_produk_satuan_terkecil.satuan_nama AS satuan_nama,miracledb.detail_terima_beli.dterima_jumlah AS dterima_jumlah from (((miracledb.detail_terima_beli join miracledb.satuan_konversi on(((miracledb.detail_terima_beli.dterima_produk = miracledb.satuan_konversi.konversi_produk) and (miracledb.detail_terima_beli.dterima_satuan = miracledb.satuan_konversi.konversi_satuan)))) join miracledb.master_terima_beli on((miracledb.detail_terima_beli.dterima_master = miracledb.master_terima_beli.terima_id))) join miracledb.vu_produk_satuan_terkecil on((miracledb.satuan_konversi.konversi_produk = vu_produk_satuan_terkecil.produk_id)));
+
+--
+-- Structure for view 'vu_stok_gudang_produk_saldo'
+--
+DROP TABLE IF EXISTS `vu_stok_gudang_produk_saldo`;
+
+CREATE OR REPLACE VIEW miracledb.vu_stok_gudang_produk_saldo AS select vu_stok_gudang_produk_tanggal.produk_id AS produk_id,vu_stok_gudang_produk_tanggal.produk_kode AS produk_kode,vu_stok_gudang_produk_tanggal.produk_nama AS produk_nama,vu_stok_gudang_produk_tanggal.satuan_id AS satuan_id,vu_stok_gudang_produk_tanggal.satuan_kode AS satuan_kode,vu_stok_gudang_produk_tanggal.satuan_nama AS satuan_nama,(((((sum(vu_stok_gudang_produk_tanggal.jumlah_retur_produk) + sum(vu_stok_gudang_produk_tanggal.jumlah_retur_paket)) - sum(vu_stok_gudang_produk_tanggal.jumlah_keluar)) + sum(vu_stok_gudang_produk_tanggal.jumlah_masuk)) + sum(vu_stok_gudang_produk_tanggal.jumlah_koreksi)) - sum(vu_stok_gudang_produk_tanggal.jumlah_jual)) AS jumlah_stok from miracledb.vu_stok_gudang_produk_tanggal group by vu_stok_gudang_produk_tanggal.produk_kode,vu_stok_gudang_produk_tanggal.produk_nama,vu_stok_gudang_produk_tanggal.satuan_id,vu_stok_gudang_produk_tanggal.satuan_kode,vu_stok_gudang_produk_tanggal.satuan_nama;
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view 'vu_stok_gudang_produk_tanggal'
+--
+DROP TABLE IF EXISTS `vu_stok_gudang_produk_tanggal`;
+
+CREATE OR REPLACE VIEW miracledb.vu_stok_gudang_produk_tanggal AS select vu_stok_all.tanggal AS tanggal,vu_stok_all.produk_id AS produk_id,vu_stok_all.produk_kode AS produk_kode,vu_stok_all.produk_nama AS produk_nama,vu_stok_all.satuan_kode AS satuan_kode,vu_stok_all.satuan_id AS satuan_id,vu_stok_all.satuan_nama AS satuan_nama,sum(vu_stok_all.jumlah_jual) AS jumlah_jual,sum(vu_stok_all.jumlah_retur_produk) AS jumlah_retur_produk,sum(vu_stok_all.jumlah_retur_paket) AS jumlah_retur_paket,0 AS jumlah_keluar,0 AS jumlah_masuk,0 AS jumlah_koreksi from miracledb.vu_stok_all group by vu_stok_all.tanggal,vu_stok_all.produk_id,vu_stok_all.produk_kode,vu_stok_all.produk_nama,vu_stok_all.satuan_kode,vu_stok_all.satuan_nama,vu_stok_all.satuan_id union select vu_stok_mutasi_all.mutasi_tanggal AS tanggal,vu_stok_mutasi_all.produk_id AS produk_id,vu_stok_mutasi_all.produk_kode AS produk_kode,vu_stok_mutasi_all.produk_nama AS produk_nama,vu_stok_mutasi_all.satuan_kode AS satuan_kode,vu_stok_mutasi_all.satuan_id AS satuan_id,vu_stok_mutasi_all.satuan_nama AS satuan_nama,0 AS jumlah_jual,0 AS jumlah_retur_produk,0 AS jumlah_retur_paket,vu_stok_mutasi_all.jumlah_keluar AS jumlah_keluar,vu_stok_mutasi_all.jumlah_masuk AS jumlah_masuk,0 AS jumlah_koreksi from miracledb.vu_stok_mutasi_all where (vu_stok_mutasi_all.gudang_id = 2) group by vu_stok_mutasi_all.mutasi_tanggal,vu_stok_mutasi_all.produk_id,vu_stok_mutasi_all.produk_kode,vu_stok_mutasi_all.produk_nama,vu_stok_mutasi_all.satuan_kode,vu_stok_mutasi_all.satuan_nama,vu_stok_mutasi_all.satuan_id union select vu_stok_koreksi.koreksi_tanggal AS tanggal,vu_stok_koreksi.produk_id AS produk_id,vu_stok_koreksi.produk_kode AS produk_kode,vu_stok_koreksi.produk_nama AS produk_nama,vu_stok_koreksi.satuan_kode AS satuan_kode,vu_stok_koreksi.satuan_id AS satuan_id,vu_stok_koreksi.satuan_nama AS satuan_nama,0 AS jumlah_jual,0 AS jumlah_retur_produk,0 AS jumlah_retur_paket,0 AS jumlah_keluar,0 AS jumlah_masuk,sum(vu_stok_koreksi.jumlah_konversi) AS jumlah_koreksi from miracledb.vu_stok_koreksi where (vu_stok_koreksi.koreksi_gudang = 2) group by vu_stok_koreksi.koreksi_tanggal,vu_stok_koreksi.produk_id,vu_stok_koreksi.produk_kode,vu_stok_koreksi.produk_nama,vu_stok_koreksi.satuan_kode,vu_stok_koreksi.satuan_nama,vu_stok_koreksi.satuan_id;
+
+-- --------------------------------------------------------

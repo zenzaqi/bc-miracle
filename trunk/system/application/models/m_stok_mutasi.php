@@ -18,6 +18,33 @@ class M_stok_mutasi extends Model{
 			parent::Model();
 		}
 		
+		function get_produk_list($filter,$start,$end){
+			$sql="select * from vu_produk_satuan_terkecil WHERE produk_aktif='Aktif'";
+			if($filter<>""){
+				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+				$sql.="( produk_kode LIKE '%".addslashes($filter)."%' OR 
+						 produk_nama LIKE '%".addslashes($filter)."%' OR 
+						 satuan_kode LIKE '%".addslashes($filter)."%' OR 
+						 satuan_nama LIKE '%".addslashes($filter)."%')";
+			}
+			
+			$result = $this->db->query($sql);
+			$nbrows = $result->num_rows();
+			$limit = $sql." LIMIT ".$start.",".$end;		
+			$result = $this->db->query($limit);   
+			
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+			
+		}
+		
 		function stok_mutasi_list($gudang, $produk_id, $opsi_satuan, $tanggal_start,$tanggal_end,$filter,$start,$end){
 			if($opsi_satuan=='terkecil')
 				$sql="SELECT * FROM vu_produk_satuan_terkecil WHERE produk_aktif='Aktif'";
