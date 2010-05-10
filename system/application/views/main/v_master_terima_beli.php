@@ -266,7 +266,10 @@ Ext.onReady(function(){
 		terima_keteranganField.setValue(null);
 		cbo_satuan_produkDataStore.load();
 		cbo_produk_detailDataStore.load();
+		
 		detail_terima_beli_DataStore.load();
+		detail_terima_bonus_DataStore.load();
+					
 	}
  	/* End of Function */
   
