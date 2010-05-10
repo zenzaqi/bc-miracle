@@ -26,15 +26,15 @@ html,body,table,tr,td{
               </tr>
 			  <tr>
                 <td align="right">Nomor</td>
-                <td>:&nbsp;&nbsp;<?=$cust_no;?></td>
+                <td>:&nbsp;&nbsp;<?=$jpaket_cust_no;?></td>
               </tr>
               <tr>
                 <td align="right">Nama</td>
-                <td>:&nbsp;&nbsp;<?=$cust_nama;?></td>
+                <td>:&nbsp;&nbsp;<?=$jpaket_cust_nama;?></td>
               </tr>
               <tr>
                 <td align="right">Alamat</td>
-                <td>:&nbsp;&nbsp;<?=$cust_alamat;?></td>
+                <td>:&nbsp;&nbsp;<?=$jpaket_cust_alamat;?></td>
               </tr>
             </table></td>
           </tr>
@@ -58,7 +58,7 @@ html,body,table,tr,td{
 		$i=0;
 		foreach($detail_ambil_paket as $list => $row) { $i+=1;?>
         <tr>
-          <td width="1240px">&nbsp;<?=$i;?>.&nbsp;<?=$row->paket_nama;?>&nbsp;(<?=$row->rawat_nama;?>&nbsp;-&nbsp;<?=$jpaket_nobukti;?>)</td>
+          <td width="1240px">&nbsp;<?=$i;?>.&nbsp;<?=$row->paket_nama;?>&nbsp;(<?=$row->rawat_nama;?>&nbsp;-&nbsp;<?=$jpaket_nobukti;?>)&nbsp;&nbsp;<strong>diambil oleh:</strong> <?=$row->dapaket_cust_no;?> - <?=$row->dapaket_cust_nama;?></td>
         </tr>
 		<?php 
 		}

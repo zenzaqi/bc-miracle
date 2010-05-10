@@ -55,7 +55,11 @@ class C_master_jual_produk extends Controller {
 		$data["total_diskon"]=$this->m_master_jual_produk->get_total_diskon($tgl_awal,$tgl_akhir,$periode,$opsi);
 		$data["total_nilai"]=$this->m_master_jual_produk->get_total_nilai($tgl_awal,$tgl_akhir,$periode,$opsi);
 		$data["data_print"]=$this->m_master_jual_produk->get_laporan($tgl_awal,$tgl_akhir,$periode,$opsi,$group);
-			
+		
+		if(!file_exists("print")){
+			mkdir("print");
+		}
+		
 		if($opsi=='rekap'){
 			$data["total_tunai"]=$this->m_master_jual_produk->get_total_tunai($tgl_awal,$tgl_akhir,$periode,$opsi);
 			$data["total_cek"]=$this->m_master_jual_produk->get_total_cek($tgl_awal,$tgl_akhir,$periode,$opsi);
@@ -69,6 +73,9 @@ class C_master_jual_produk extends Controller {
 				case "Customer": $print_view=$this->load->view("main/p_rekap_jual_customer.php",$data,TRUE);break;
 				default: $print_view=$this->load->view("main/p_rekap_jual.php",$data,TRUE);break;
 			}
+			$print_file=fopen("print/report_jproduk.html","w");
+			fwrite($print_file, $print_view);
+			echo '1'; 
 			
 		}else{
 			switch($group){
@@ -79,17 +86,21 @@ class C_master_jual_produk extends Controller {
 				case "Jenis Diskon": $print_view=$this->load->view("main/p_detail_jual_diskon.php",$data,TRUE);break;
 				default: $print_view=$this->load->view("main/p_detail_jual.php",$data,TRUE);break;
 			}
+			$print_file=fopen("print/report_jproduk.html","w");
+			fwrite($print_file, $print_view);
+			fclose($print_file);
+			echo '1'; 
 		}
-		if(!file_exists("print")){
+		/*if(!file_exists("print")){
 			mkdir("print");
-		}
-		if($opsi=='rekap')
+		}*/
+		/*if($opsi=='rekap')
 			$print_file=fopen("print/report_jproduk.html","w+");
 		else
-			$print_file=fopen("print/report_jproduk.html","w+");
+			$print_file=fopen("print/report_jproduk.html","w+");*/
 			
-		fwrite($print_file, $print_view);
-		echo '1'; 
+		/*fwrite($print_file, $print_view);
+		echo '1'; */
 	}
 	
 	function get_konversi_list(){
