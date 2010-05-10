@@ -32,7 +32,7 @@ class M_member extends Model{
 		function member_aktivasi(){
 			$date_now=date('Y-m-d');
 			//$query = "UPDATE member set member_status='aktif' where member_status='print'";
-			$query = "UPDATE member set member_status='Aktif', member_tglserahterima='$date_now' where member_status='Cetak'";
+			$query = "UPDATE member set member_status='Serah Terima', member_tglserahterima='$date_now' where member_status='Cetak'";
 			$this->db->query($query);
 			return '1';
 		}
@@ -79,7 +79,7 @@ class M_member extends Model{
 				//"member_tglserahterima"=>$member_tglserahterima 
 			);
 			
-			if($member_status=='Aktif'){
+			if($member_status=='Serah Terima'){
 				$data['member_tglserahterima']=$date_now;
 			}else{
 				$data['member_tglserahterima']=NULL;
