@@ -103,7 +103,7 @@ class M_produk extends Model{
 		}*/
 		
 		function get_kode($pattern){
-			$result=$this->m_public_function->get_kode_1("produk","produk_kode",$pattern,6);
+			$result=$this->m_public_function->get_kode_1("produk","produk_kode",$pattern,7);
 			return $result;
 		}
 		//function for get list record
@@ -221,7 +221,7 @@ class M_produk extends Model{
 			
 			//generate produk kode
 			//get group kode
-			/*$group_kode="";
+			$group_kode="";
 			$jenis_kode="";
 			$sql_g="SELECT group_id,group_kode FROM produk_group WHERE group_id='".$produk_group."'";
 			$rs_g=$this->db->query($sql_g);
@@ -255,8 +255,8 @@ class M_produk extends Model{
 			$pattern=$group_kode.$jenis_kode;
 			//echo $jenis_kode;
 			$produk_kode=$this->get_kode($pattern);
-			if($produk_kode!=="" && strlen($produk_kode)==6)
-				$data["produk_kode"]=$produk_kode;*/
+			if($produk_kode!=="" && strlen($produk_kode)==7)
+				$data["produk_kode"]=$produk_kode;
 				
 			$sql="SELECT produk_du FROM produk WHERE produk_du!='".$produk_du."' AND produk_id='".$produk_id."'";
 			$rs=$this->db->query($sql);
@@ -330,10 +330,10 @@ class M_produk extends Model{
 				$jenis_kode=$rs_sql_g->jenis_kode;
 				$data["produk_jenis"]=$produk_jenis;
 			}
-			/*$pattern=$group_kode.$jenis_kode;
+			$pattern=$group_kode.$jenis_kode;
 			$produk_kode=$this->get_kode($pattern);
-			if($produk_kode!=="" && strlen($produk_kode)==6)
-				$data["produk_kode"]=$produk_kode;*/
+			if($produk_kode!=="" && strlen($produk_kode)==7)
+				$data["produk_kode"]=$produk_kode;
 				
 			$this->db->insert('produk', $data); 
 			if($this->db->affected_rows())
