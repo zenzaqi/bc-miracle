@@ -18,7 +18,7 @@
 <title>Laporan Detail Penjualan <?php echo $jenis; ?> <?php echo $periode; ?></title>
 <link rel='stylesheet' type='text/css' href='../assets/modules/main/css/printstyle.css'/>
 </head>
-<body>
+<body onload="window.print();">
 <table summary='Detail Jual'>
 	<caption>Laporan Detail Penjualan <?php echo $jenis; ?><br/><?php echo $periode; ?><br/>Group By Tanggal</caption>
 	<thead>
@@ -56,7 +56,7 @@
         <tr>
         	<td class="clear">&nbsp;</td>
         	<th scope='row' nowrap="nowrap">Total Diskon (Rp)</th>
-            <td class="numeric clear" nowrap="nowrap" ><?php echo number_format($total_diskon,2,",","."); ?></td>
+            <td class="numeric clear" nowrap="nowrap" ><?php echo number_format($total_diskon,0,",","."); ?></td>
             <td colspan="9" class="clear">&nbsp;</td>
         </tr>
         <tr>
@@ -93,12 +93,12 @@
                 <td><?php echo $print_list->produk_nama."( ".$print_list->produk_kode.")"; ?></td>
                 <td><?php echo $print_list->satuan_nama; ?></td>
                 <td class="numeric"><?php echo number_format($print_list->jumlah_barang,0,",","."); ?></td>
-                <td class="numeric"><?php echo number_format($print_list->harga_satuan,2,",","."); ?></td>
+                <td class="numeric"><?php echo number_format($print_list->harga_satuan,0,",","."); ?></td>
                 <td class="numeric"><?php echo number_format($print_list->diskon,0,",","."); ?></td>
-                <td class="numeric"><?php echo number_format($print_list->diskon_nilai,2,",","."); ?></td>
+                <td class="numeric"><?php echo number_format($print_list->diskon_nilai,0,",","."); ?></td>
                 <td class="numeric"><?php echo $print_list->diskon_jenis; ?></td>
                 <td><?php echo $print_list->sales; ?></td>
-                <td class="numeric"><?php echo number_format($print_list->subtotal,2,",","."); ?></td>
+                <td class="numeric"><?php echo number_format($print_list->subtotal,0,",","."); ?></td>
            </tr>
            <?php } ?>
            <?php } ?>
@@ -107,10 +107,10 @@
                 <td align="right" class="numeric"><b><?php echo number_format($sub_jumlah_barang,0,",","."); ?></b></td>
                 <td align="right" class="numeric">&nbsp;</td>
                 <td align="right" class="numeric">&nbsp;</td>
-                <td align="right" class="numeric"><b><?php echo number_format($sub_diskon,2,",","."); ?></b></td>
+                <td align="right" class="numeric"><b><?php echo number_format($sub_diskon,0,",","."); ?></b></td>
                 <td align="right" class="numeric">&nbsp;</td>
                 <td align="right" class="numeric">&nbsp;</td>
-                <td align="right" class="numeric"><b><?php echo number_format($sub_total,2,",","."); ?></b></td>
+                <td align="right" class="numeric"><b><?php echo number_format($sub_total,0,",","."); ?></b></td>
            </tr>
            <?php } $tanggal=$print->tanggal; ?>
 		<?php } ?>

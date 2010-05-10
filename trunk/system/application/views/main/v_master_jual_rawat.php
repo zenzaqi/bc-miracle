@@ -212,13 +212,15 @@ function apaket_cetak(){
 	Ext.Ajax.request({   
 		waitMsg: 'Please Wait...',
 		url: 'index.php?c=c_master_jual_rawat&m=print_paper_apaket',
-		params: { jrawat_id : jrawat_idField.getValue(), jrawat_cust : jrawat_cust_idField.getValue(), jrawat_tanggal : jrawat_tanggalField.getValue().format('Y-m-d')	}, 
+		//params: { jrawat_id : jrawat_idField.getValue(), jrawat_cust : jrawat_cust_idField.getValue(), jrawat_tanggal : jrawat_tanggalField.getValue().format('Y-m-d')	}, 
+		params: { jrawat_id : jrawat_idField.getValue(), dpaket_id : dpaket_idField.getValue(), jrawat_tanggal : jrawat_tanggalField.getValue().format('Y-m-d')	}, 
 		success: function(response){              
 			var result=eval(response.responseText);
 			switch(result){
 			case 1:
 				win = window.open('./apaket_paper.html','Cetak Pengambilan Paket','height=480,width=1240,resizable=1,scrollbars=0, menubar=0');
 				//win.print();
+				master_jual_rawat_DataStore.reload();
 				break;
 			default:
 				Ext.MessageBox.show({
@@ -942,6 +944,7 @@ Ext.onReady(function(){
 		var diskon_field=0;
 		var cashback_field=0;
 		
+		dpaket_idField.setValue(master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('dpaket_id'));
 		jrawat_idField.setValue(master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_id'));
 		jrawat_nobuktiField.setValue(master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_nobukti'));
 		jrawat_custField.setValue(master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_cust'));
@@ -1365,8 +1368,9 @@ Ext.onReady(function(){
 			cbo_kwitansi_jual_rawat_DataStore.load();
 			master_cara_bayarTabPanel.setActiveTab(0);
 			post2db='UPDATE';
-			//detail_jual_rawat_DataStore.load({params : {master_id : eval(get_pk_id()), start:0, limit:pageS}});
-			detail_ambil_paketDataStore.load({params: {master_id : master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_cust_id'), tanggal: master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_tanggal').format('Y-m-d'), start:0, limit:pageS}});
+			
+			//2010-05-06 ==> detail_ambil_paketDataStore.load({params: {master_id : master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_cust_id'), tanggal: master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_tanggal').format('Y-m-d'), start:0, limit:pageS}});
+			detail_ambil_paketDataStore.load({params: {dpaket_id : master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('dpaket_id'), tanggal: master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_tanggal').format('Y-m-d'), start:0, limit:pageS}});
 			cbo_drawat_rawatDataStore.load({
 				params: {query:master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_id')},
 				callback:function(opts, success, response){
@@ -1488,7 +1492,8 @@ Ext.onReady(function(){
 			{name: 'jrawat_update', type: 'string', mapping: 'jrawat_update'}, 
 			{name: 'jrawat_date_update', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'jrawat_date_update'}, 
 			{name: 'jrawat_revised', type: 'int', mapping: 'jrawat_revised'},
-			{name: 'keterangan_paket', type: 'string', mapping: 'keterangan_paket'}
+			{name: 'keterangan_paket', type: 'string', mapping: 'keterangan_paket'},
+			{name: 'dpaket_id', type: 'int', mapping: 'dpaket_id'}
 		]),
 		sortInfo:{field: 'jrawat_nobukti', direction: "DESC"}
 	});
@@ -2300,6 +2305,8 @@ Ext.onReady(function(){
 		enableKeyEvents: true,
 		maskRe: /([0-9]+)$/
 	});
+	
+	dpaket_idField= new Ext.form.NumberField();
 	
 	
 	master_jual_rawat_voucherGroup= new Ext.form.FieldSet({

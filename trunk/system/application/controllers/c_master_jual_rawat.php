@@ -250,9 +250,10 @@ class C_master_jual_rawat extends Controller {
 		$query = isset($_POST['query']) ? $_POST['query'] : "";
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$master_id = (integer) (isset($_POST['master_id']) ? $_POST['master_id'] : $_GET['master_id']);
+		//$master_id = (integer) (isset($_POST['master_id']) ? $_POST['master_id'] : $_GET['master_id']);
+		$dpaket_id = (integer) (isset($_POST['dpaket_id']) ? $_POST['dpaket_id'] : 0);
 		$tanggal = isset($_POST['tanggal']) ? $_POST['tanggal'] : $_GET['tanggal'];
-		$result=$this->m_master_jual_rawat->detail_ambil_paket_list($master_id,$tanggal,$query,$start,$end);
+		$result=$this->m_master_jual_rawat->detail_ambil_paket_list($dpaket_id,$tanggal,$query,$start,$end);
 		echo $result;
 	}
 	//end of handler
@@ -760,17 +761,22 @@ class C_master_jual_rawat extends Controller {
 	
 	function print_paper_apaket(){
 		$dapaket_jpaket=trim(@$_POST["jrawat_id"]);
-		$dapaket_cust=trim(@$_POST["jrawat_cust"]);
+		//$dapaket_cust=trim(@$_POST["jrawat_cust"]);
+		$dapaket_dpaket=trim(@$_POST["dpaket_id"]);
 		$dapaket_date_create=trim(@$_POST["jrawat_tanggal"]);
 		
-		$result = $this->m_master_jual_rawat->print_paper_apaket($dapaket_jpaket, $dapaket_cust, $dapaket_date_create);
+		//$result = $this->m_master_jual_rawat->print_paper_apaket($dapaket_jpaket, $dapaket_cust, $dapaket_date_create);
+		$result = $this->m_master_jual_rawat->print_paper_apaket($dapaket_jpaket, $dapaket_dpaket, $dapaket_date_create);
 		$rs=$result->row();
 		$detail_ambil_paket=$result->result();
 		
 		$data['dapaket_tanggal']=$rs->dapaket_date_create;
-		$data['cust_no']=$rs->cust_no;
-		$data['cust_nama']=$rs->cust_nama;
-		$data['cust_alamat']=$rs->cust_alamat;
+		//$data['cust_no']=$rs->cust_no;
+		//$data['cust_nama']=$rs->cust_nama;
+		//$data['cust_alamat']=$rs->cust_alamat;
+		$data['jpaket_cust_no']=$rs->jpaket_cust_no;
+		$data['jpaket_cust_nama']=$rs->jpaket_cust_nama;
+		$data['jpaket_cust_alamat']=$rs->jpaket_cust_alamat;
 		$data['jpaket_nobukti']=$rs->jpaket_nobukti;
 		$data['detail_ambil_paket']=$detail_ambil_paket;
 		

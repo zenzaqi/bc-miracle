@@ -18,7 +18,7 @@
 <title>Laporan Detail Penjualan <?php echo $jenis; ?> <?php echo $periode; ?></title>
 <link rel='stylesheet' type='text/css' href='../assets/modules/main/css/printstyle.css'/>
 </head>
-<body>
+<body onload="window.print();">
 <table summary='Detail Jual'>
 	<caption>Laporan Detail Penjualan <?php echo $jenis; ?><br/><?php echo $periode; ?><br/>Group By Sales</caption>
 	<thead>
