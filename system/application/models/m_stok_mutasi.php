@@ -89,6 +89,8 @@ class M_stok_mutasi extends Model{
 								AND date_format(tanggal,'%Y-%m-%d')>='".$tanggal_start."'
 								AND date_format(tanggal,'%Y-%m-%d')<='".$tanggal_end."'
 								GROUP BY produk_id";
+					//echo $sql_mutasi;
+					
 					$rs_mutasi=$this->db->query($sql_mutasi);
 					if($rs_mutasi->num_rows())
 					{

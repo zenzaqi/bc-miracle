@@ -105,8 +105,8 @@ Ext.onReady(function(){
 			{name: 'satuan_id', type: 'int', mapping: 'satuan_id'}, 
 			{name: 'satuan_nama', type: 'string', mapping: 'satuan_nama'},
 			{name: 'jumlah_awal', type: 'float', mapping: 'jumlah_awal'}, 
-			{name: 'jumlah_in', type: 'float', mapping: 'jumlah_in'}, 
-			{name: 'jumlah_out', type: 'float', mapping: 'jumlah_out'},
+			{name: 'jumlah_in', type: 'float', mapping: 'jumlah_masuk'}, 
+			{name: 'jumlah_out', type: 'float', mapping: 'jumlah_keluar'},
 			{name: 'jumlah_koreksi', type: 'float', mapping: 'jumlah_koreksi'}, 
 			{name: 'gudang_nama', type: 'string', mapping: 'gudang_nama'}, 
 			{name: 'jumlah_stok', type: 'float', mapping: 'jumlah_stok'}
