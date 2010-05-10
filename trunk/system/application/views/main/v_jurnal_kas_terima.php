@@ -66,6 +66,7 @@ var editor_jurnal_kas_terima_detail;
 var post2db = '';
 var msg = '';
 var pageS=15;
+var today=new Date().format('Y-m-d');
 
 /* declare variable here for Field*/
 var jmkas_idField;
@@ -87,7 +88,6 @@ var jmkas_refSearchField;
 var jmkas_postingSearchField;
 var jmkas_tglpostingSearchField;
 
-var dt = new Date();
 
 /* on ready fuction */
 Ext.onReady(function(){
@@ -119,16 +119,14 @@ Ext.onReady(function(){
 			waitMsg: 'Please wait...',
 			url: 'index.php?c=c_jurnal_kas_terima&m=get_action',
 			params: {
-				task: "UPDATE",
-				jmkas_id	: jmkas_id_update_pk, 
-				jmkas_akun	:jmkas_akun_update,  
-				jmkas_tanggal	: jmkas_tanggal_update_date, 
-				jmkas_keterangan	:jmkas_keterangan_update,  
-				jmkas_nilai	:jmkas_nilai_update,  
-				jmkas_asal	:jmkas_asal_update,  
-				jmkas_ref	:jmkas_ref_update,  
-				jmkas_posting	:jmkas_posting_update,  
-				jmkas_tglposting	: jmkas_tglposting_update_date, 
+				task				: "UPDATE",
+				jmkas_id			: jmkas_id_update_pk, 
+				jmkas_akun			: jmkas_akun_update,  
+				jmkas_tanggal		: jmkas_tanggal_update_date, 
+				jmkas_keterangan	: jmkas_keterangan_update,  
+				jmkas_nilai			: jmkas_nilai_update,  
+				jmkas_asal			: jmkas_asal_update,  
+				jmkas_ref			: jmkas_ref_update
 			}, 
 			success: function(response){							
 				var result=eval(response.responseText);
@@ -190,31 +188,28 @@ Ext.onReady(function(){
 				waitMsg: 'Please wait...',
 				url: 'index.php?c=c_jurnal_kas_terima&m=get_action',
 				params: {
-					task: post2db,
-					jmkas_id	: jmkas_id_create_pk, 
-					jmkas_akun	: jmkas_akun_create, 
-					jmkas_tanggal	: jmkas_tanggal_create_date, 
+					task				: post2db,
+					jmkas_id			: jmkas_id_create_pk, 
+					jmkas_akun			: jmkas_akun_create, 
+					jmkas_tanggal		: jmkas_tanggal_create_date, 
 					jmkas_keterangan	: jmkas_keterangan_create, 
-					jmkas_nilai	: jmkas_nilai_create, 
-					jmkas_asal	: jmkas_asal_create, 
-					jmkas_ref	: jmkas_ref_create, 
-					jmkas_posting	: jmkas_posting_create, 
-					jmkas_tglposting	: jmkas_tglposting_create_date, 
+					jmkas_nilai			: jmkas_nilai_create, 
+					jmkas_asal			: jmkas_asal_create, 
+					jmkas_ref			: jmkas_ref_create
 				}, 
 				success: function(response){             
 					var result=eval(response.responseText);
 					switch(result){
 						case 1:
 							jurnal_kas_terima_detail_purge()
-							jurnal_kas_terima_detail_insert();
-							Ext.MessageBox.alert(post2db+' OK','The Jurnal_kas_terima was '+msg+' successfully.');
+							Ext.MessageBox.alert(post2db+' OK','Jurnal terima kas berhasil disimpan !');
 							jurnal_kas_terima_DataStore.reload();
 							jurnal_kas_terima_createWindow.hide();
 							break;
 						default:
 							Ext.MessageBox.show({
 							   title: 'Warning',
-							   msg: 'We could\'t not '+msg+' the Jurnal_kas_terima.',
+							   msg: 'Maaf, jurnal terima kas gagal disimpan.',
 							   buttons: Ext.MessageBox.OK,
 							   animEl: 'save',
 							   icon: Ext.MessageBox.WARNING
@@ -280,10 +275,6 @@ Ext.onReady(function(){
 		jmkas_asalField.setValue(null);
 		jmkas_refField.reset();
 		jmkas_refField.setValue(null);
-		jmkas_postingField.reset();
-		jmkas_postingField.setValue(null);
-		jmkas_tglpostingField.reset();
-		jmkas_tglpostingField.setValue(null);
 	}
  	/* End of Function */
   
@@ -296,24 +287,21 @@ Ext.onReady(function(){
 		jmkas_nilaiField.setValue(jurnal_kas_terimaListEditorGrid.getSelectionModel().getSelected().get('jmkas_nilai'));
 		jmkas_asalField.setValue(jurnal_kas_terimaListEditorGrid.getSelectionModel().getSelected().get('jmkas_asal'));
 		jmkas_refField.setValue(jurnal_kas_terimaListEditorGrid.getSelectionModel().getSelected().get('jmkas_ref'));
-		jmkas_postingField.setValue(jurnal_kas_terimaListEditorGrid.getSelectionModel().getSelected().get('jmkas_posting'));
-		jmkas_tglpostingField.setValue(jurnal_kas_terimaListEditorGrid.getSelectionModel().getSelected().get('jmkas_tglposting'));
 	}
 	/* End setValue to EDIT*/
   
 	/* Function for Check if the form is valid */
 	function is_jurnal_kas_terima_form_valid(){
-		return (true &&  jmkas_akunField.isValid() && true &&  true &&  true &&  true &&  true &&  true &&  true &&  true &&  true &&  true &&  true &&  true  );
+		return (jmkas_akunField.isValid());
 	}
   	/* End of Function */
   
   	/* Function for Displaying  create Window Form */
 	function display_form_window(){
 		if(!jurnal_kas_terima_createWindow.isVisible()){
-			jurnal_kas_terima_reset_form();
 			post2db='CREATE';
 			msg='created';
-			jmkas_tanggalField.setValue(dt);
+			jurnal_kas_terima_reset_form();
 			jurnal_kas_terima_createWindow.show();
 		} else {
 			jurnal_kas_terima_createWindow.toFront();
