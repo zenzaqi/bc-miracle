@@ -17,6 +17,7 @@ class C_member extends Controller {
 	function C_member(){
 		parent::Controller();
 		$this->load->model('m_member', '', TRUE);
+		session_start();
 		$this->load->plugin('to_excel');
 	}
 	
@@ -24,6 +25,14 @@ class C_member extends Controller {
 	function index(){
 		$this->load->helper('asset');
 		$this->load->view('main/v_member');
+	}
+	
+	function get_customer_list(){
+		$query = isset($_POST['query']) ? $_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		$result=$this->m_public_function->get_customer_list($query,$start,$end);
+		echo $result;
 	}
 	
 	//event handler action
@@ -50,6 +59,9 @@ class C_member extends Controller {
 				break;
 			case "EXCEL":
 				$this->member_export_excel();
+				break;
+			case "MEMBERADD":
+				$this->member_add();
 				break;
 			default:
 				echo "{failure:true}";
@@ -118,6 +130,15 @@ class C_member extends Controller {
 		$member_status=str_replace("'", '"',$member_status);
 		$member_tglserahterima=trim(@$_POST["member_tglserahterima"]);
 		$result=$this->m_member->member_create($member_cust ,$member_no ,$member_register ,$member_valid ,$member_nota_ref ,$member_point ,$member_jenis ,$member_status ,$member_tglserahterima );
+		echo $result;
+	}
+	
+	//Adding Member Tanpa-Transaksi
+	function member_add(){
+		//POST varible here
+		//auto increment, don't accept anything from form values
+		$member_cust=trim(@$_POST["member_cust"]);
+		$result=$this->m_member->member_add($member_cust );
 		echo $result;
 	}
 

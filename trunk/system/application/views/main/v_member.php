@@ -248,6 +248,63 @@ Ext.onReady(function(){
 		}
 	}
  	/* End of Function */
+	
+	/* Function ADD member tanpa transaksi */
+	function member_add(){
+	
+		if(is_member_form_valid()){	
+		var member_add_cust_add=null;
+
+		if(member_add_custField.getValue()!== null){member_add_cust_add = member_add_custField.getValue();} 
+
+		Ext.Ajax.request({  
+			waitMsg: 'Please wait...',
+			url: 'index.php?c=c_member&m=get_action',
+			params: {
+				task			: 'MEMBERADD',
+				member_cust		: member_add_cust_add
+			}, 
+			success: function(response){             
+				var result=eval(response.responseText);
+				switch(result){
+					case 1:
+						Ext.MessageBox.alert(' OK','The Member was add successfully.');
+						member_DataStore.reload();
+						member_createWindow.hide();
+						break;
+					default:
+						Ext.MessageBox.show({
+						   title: 'Warning',
+						   msg: 'We could\'t not '+msg+' the Member.',
+						   buttons: Ext.MessageBox.OK,
+						   animEl: 'save',
+						   icon: Ext.MessageBox.WARNING
+						});
+						break;
+				}        
+			},
+			failure: function(response){
+				var result=response.responseText;
+				Ext.MessageBox.show({
+					   title: 'Error',
+					   msg: 'Could not connect to the database. retry later.',
+					   buttons: Ext.MessageBox.OK,
+					   animEl: 'database',
+					   icon: Ext.MessageBox.ERROR
+				});	
+			}                      
+		});
+		} else {
+			Ext.MessageBox.show({
+				title: 'Warning',
+				msg: 'Your Form is not valid!.',
+				buttons: Ext.MessageBox.OK,
+				animEl: 'save',
+				icon: Ext.MessageBox.WARNING
+			});
+		}
+	}
+ 	/* End of Function */
   
   	/* Function for get PK field */
 	function get_pk_id(){
@@ -310,7 +367,7 @@ Ext.onReady(function(){
 			post2db='CREATE';
 			msg='created';
 			member_reset_form();
-			member_createWindow.show();
+			member_addWindow.show();
 		} else {
 			member_createWindow.toFront();
 		}
@@ -435,6 +492,37 @@ Ext.onReady(function(){
 		sortInfo:{field: 'member_id', direction: "DESC"}
 	});
 	/* End of Function */
+	
+	//ComboBox ambil data Customer
+	member_add_cutomerDataStore = new Ext.data.Store({
+		id: 'member_add_cutomerDataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_member&m=get_customer_list', 
+			method: 'POST'
+		}),
+		baseParams:{start: 0, limit: 10 }, // parameter yang di $_POST ke Controller
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'cust_id'
+		},[
+		/* dataIndex => insert intocustomer_note_ColumnModel, Mapping => for initiate table column */ 
+			{name: 'cust_id', type: 'int', mapping: 'cust_id'},
+			{name: 'cust_no', type: 'string', mapping: 'cust_no'},
+			{name: 'cust_nama', type: 'string', mapping: 'cust_nama'},
+			{name: 'cust_tgllahir', type: 'date', dateFormat: 'Y-m-d', mapping: 'cust_tgllahir'},
+			{name: 'cust_alamat', type: 'string', mapping: 'cust_alamat'},
+			{name: 'cust_telprumah', type: 'string', mapping: 'cust_telprumah'}
+		]),
+		sortInfo:{field: 'cust_no', direction: "ASC"}
+	});
+	//Template yang akan tampil di ComboBox
+	var member_add_tpl = new Ext.XTemplate(
+        '<tpl for="."><div class="search-item">',
+            '<span><b>{cust_no} : {cust_nama}</b> | Tgl-Lahir:{cust_tgllahir:date("M j, Y")}<br /></span>',
+            'Alamat: {cust_alamat}&nbsp;&nbsp;&nbsp;[Telp. {cust_telprumah}]',
+        '</div></tpl>'
+    );
     
   	/* Function for Identify of Window Column Model */
 	member_ColumnModel = new Ext.grid.ColumnModel(
@@ -469,7 +557,7 @@ Ext.onReady(function(){
 			width: 100,
 			sortable: true,
 			renderer: function(value, cell, record){
-				return value.substring(0,6) + '-' + value.substring(6,11) + '-' + value.substring(11);
+				return value.substring(0,6) + '-' + value.substring(6,12) + '-' + value.substring(12);
 			}
 			/*editor: new Ext.form.TextField({
 				allowBlank: false,
@@ -619,12 +707,12 @@ Ext.onReady(function(){
 		}),
 		/* Add Control on ToolBar */
 		tbar: [
-		/*{
+		{
 			text: 'Add',
 			tooltip: 'Add new record',
 			iconCls:'icon-adds',    				// this is defined in our styles.css
 			handler: display_form_window
-		}, '-',*/
+		}, '-',
 		{
 			text: 'Edit',
 			tooltip: 'Edit selected record',
@@ -830,6 +918,43 @@ Ext.onReady(function(){
 		fieldLabel: 'Tanggal Penyerahan',
 		format : 'Y-m-d'
 	});
+	
+	/* Identify  member_add_customer Field */
+	member_add_custField= new Ext.form.ComboBox({
+		id: 'member_add_custField',
+		fieldLabel: 'Customer',
+		store: member_add_cutomerDataStore,
+		mode: 'remote',
+		displayField:'cust_nama',
+		valueField: 'cust_id',
+        typeAhead: false,
+        loadingText: 'Searching...',
+        pageSize:10,
+        hideTrigger:false,
+        tpl: member_add_tpl,
+        //applyTo: 'search',
+        itemSelector: 'div.search-item',
+		triggerAction: 'query',
+		lazyRender:true,
+		listClass: 'x-combo-list-small',
+		allowBlank: true,
+		anchor: '95%',
+		queryDelay:1200,
+		listeners:{
+			/*beforequery: function(qe){
+	            delete qe.combo.lastQuery;
+	        },*/
+			specialkey: function(f,e){
+				if(e.getKey() == e.ENTER){
+					member_add_cutomerDataStore.load({params: {query:member_add_custField.getValue()}});
+	            }
+			},
+			render: function(c){
+				Ext.get(this.id).set({qtitle:'Search By'});
+				Ext.get(this.id).set({qtip:'- No.Customer<br>- Nama Customer<br>- No.Telp Rumah<br>- No.Telp Kantor<br>- No.HP'});
+			}
+		}
+	});
 
 	
 	/* Function for retrieve create Window Panel*/ 
@@ -868,6 +993,36 @@ Ext.onReady(function(){
 	});
 	/* End  of Function*/
 	
+	/* Function for retrieve create Window Panel*/ 
+	member_addForm = new Ext.FormPanel({
+		labelAlign: 'left',
+		labelWidth: 120,
+		bodyStyle:'padding:5px',
+		autoHeight:true,
+		layout: 'column',
+		width: 400,        
+		items:[
+			{
+				columnWidth:1,
+				layout: 'form',
+				border:false,
+				items: [member_add_custField] 
+			}
+			],
+		buttons: [{
+				text: 'Save and Close',
+				handler: member_add
+			}
+			,{
+				text: 'Cancel',
+				handler: function(){
+					member_addWindow.hide();
+				}
+			}
+		]
+	});
+	/* End  of Function*/
+	
 	/* Function for retrieve create Window Form */
 	member_createWindow= new Ext.Window({
 		id: 'member_createWindow',
@@ -883,6 +1038,24 @@ Ext.onReady(function(){
 		modal: true,
 		renderTo: 'elwindow_member_create',
 		items: member_createForm
+	});
+	/* End Window */
+	
+	/* Function for retrieve create Window Form */
+	member_addWindow= new Ext.Window({
+		id: 'member_addWindow',
+		title: 'Add Member',
+		closable:true,
+		closeAction: 'hide',
+		autoWidth: true,
+		autoHeight: true,
+		x:0,
+		y:0,
+		plain:true,
+		layout: 'fit',
+		modal: true,
+		renderTo: 'elwindow_member_create',
+		items: member_addForm
 	});
 	/* End Window */
 	
