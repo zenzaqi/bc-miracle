@@ -270,7 +270,7 @@ Ext.onReady(function(){
 					case 1:
 						Ext.MessageBox.alert(' OK','The Member was add successfully.');
 						member_DataStore.reload();
-						member_createWindow.hide();
+						member_addWindow.hide();
 						break;
 					default:
 						Ext.MessageBox.show({
