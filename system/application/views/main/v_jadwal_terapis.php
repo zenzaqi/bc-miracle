@@ -300,27 +300,19 @@ Ext.onReady(function(){
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
 	  	width: 400,
-		/*bbar: new Ext.PagingToolbar({
+		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: jadwal_terapisDataStore,
 			displayInfo: true
-		})*/
+		}),
 		/* Add Control on ToolBar */
 		tbar: [
 		{
-			text: 'Search',
-			tooltip: 'Advanced Search',
-			iconCls:'icon-search',
-			handler: display_form_search_window 
-		},
-		
-		
-	{
 			text: 'Refresh',
 			tooltip: 'Refresh datagrid',
 			handler: jterapis_reset_search,
 			iconCls:'icon-refresh'
-		}
+		}, '-', tbar_jterapis_tglField
 		]
 	});
 	jadwal_terapisListEditorGrid.render();
@@ -382,8 +374,6 @@ Ext.onReady(function(){
 			tgl_app: tbar_jterapis_tglField.getValue()
 		}});
 	});
-	
-	
 	
 	
 		function jterapis_search(){
