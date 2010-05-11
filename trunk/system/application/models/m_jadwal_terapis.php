@@ -22,8 +22,14 @@ class M_jadwal_terapis extends Model{
 		function jadwal_terapis_list($filter,$start,$end,$tgl_app){
 			
 			//$query = "SELECT * FROM users,karyawan,usergroups WHERE user_karyawan=karyawan_id AND user_groups=group_id";
-			$dt=date('Y-m-d');
+			//$dt=date('Y-m-d');
 			$month=date('Y-m');
+			
+			if($tgl_app<>''){
+				$dt=date('Y-m-d', strtotime($tgl_app));
+			}else{
+				$dt=date('Y-m-d');
+			}
 			
 			$query = "select distinct
 						karyawan.karyawan_username,
@@ -77,6 +83,11 @@ class M_jadwal_terapis extends Model{
 					where absensi.absensi_tgl = '$dt' and absensi.absensi_shift = 'OFF'
 					order by terapis_count_day desc";
 		
+		$nbrows = 0;
+		$nbrows2 = 0;
+		$nbrows3 = 0;
+		$nbrows4 = 0;
+		
 		$result = $this->db->query($query);
 		$nbrows = $result->num_rows();
 		//$limit = $query." LIMIT ".$start.",".$end;		
@@ -89,6 +100,8 @@ class M_jadwal_terapis extends Model{
 		
 		$result4 = $this->db->query($query4);
 		$nbrows4 = $result4->num_rows();
+		
+		$nbrows = $nbrows + $nbrows2 + $nbrows3 + $nbrows4;
 		
 		if($nbrows>0 || $nbrows2>0 || $nbrows3>0 || $nbrows4>0){
 			if($nbrows>0){
@@ -260,6 +273,7 @@ group by karyawan.karyawan_username";
 			//$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 			//$query.=" k.karyawan_id != 60 and p.rawat_id is not null"; //60 = Available . Dr
 			//$query.=" group by karyawan.karyawan_username";
+		
 		$result = $this->db->query($query);
 		$nbrows = $result->num_rows();
 
@@ -271,6 +285,7 @@ group by karyawan.karyawan_username";
 		
 		$result4 = $this->db->query($query4);
 		$nbrows4 = $result4->num_rows();
+		
 		
 		if($nbrows>0 || $nbrows2>0 || $nbrows3>0 || $nbrows4>0){
 			if($nbrows>0){
