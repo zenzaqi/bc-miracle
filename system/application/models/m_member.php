@@ -134,7 +134,6 @@ class M_member extends Model{
 			}
 			
 			$member_valid = date('Y-m-d', strtotime("$date_now +$periode_aktif days"));
-			
 			$data = array(
 				"member_cust"=>$member_cust, 
 				"member_no"=>$member_no, 
@@ -142,7 +141,8 @@ class M_member extends Model{
 				"member_valid"=>$member_valid, 
 				"member_jenis"=>'baru', 
 				"member_status"=>'Daftar', 
-				"member_tglserahterima"=>NULL
+				"member_tglserahterima"=>NULL,
+				"member_creator"=>@$_SESSION[SESSION_USERID]
 			);
 			$this->db->insert('member', $data); 
 			if($this->db->affected_rows())
