@@ -438,7 +438,23 @@ class M_appointment extends Model{
 
 		}
 		
-		function detail_appointment_detail_nonmedis_insert($dapp_nonmedis_id ,$dapp_nonmedis_master ,$dapp_nonmedis_perawatan ,$dapp_nonmedis_tglreservasi ,$dapp_nonmedis_jamreservasi ,$dapp_nonmedis_petugas2 ,$dapp_nonmedis_status ,$dapp_nonmedis_tgldatang ,$dapp_nonmedis_jamdatang ,$dapp_nonmedis_keterangan ,$dapp_nonmedis_counter ,$app_cara ,$app_customer ,$app_keterangan ,$dapp_user){
+		function detail_appointment_detail_nonmedis_insert(
+			$dapp_nonmedis_id ,
+			$dapp_nonmedis_master ,
+			$dapp_nonmedis_perawatan ,
+			$dapp_nonmedis_tglreservasi ,
+			$dapp_nonmedis_jamreservasi ,
+			$dapp_nonmedis_petugas2 ,
+			$dapp_nonmedis_status ,
+			$dapp_nonmedis_tgldatang ,
+			$dapp_nonmedis_jamdatang ,
+			$dapp_nonmedis_keterangan ,
+			$dapp_nonmedis_counter ,
+			$dapp_nonmedis_warna_terapis, 
+			$app_cara ,
+			$app_customer ,
+			$app_keterangan ,
+			$dapp_user){
 			/* JIKA $dapp_medis_petugas=="" ==> diisi db.karyawan.karyawan_id WHERE username="Available dr." */
 			if($dapp_nonmedis_petugas2==""){
 				$sql="SELECT karyawan_id FROM karyawan WHERE karyawan_no='999'";
@@ -463,6 +479,7 @@ class M_appointment extends Model{
 				
 				if($app_cara=="Datang")
 					$dapp_nonmedis_keterangan="[W] ".$dapp_nonmedis_keterangan;
+					
 				$data = array(
 					"dapp_master"=>$dapp_nonmedis_master, 
 					"dapp_perawatan"=>$dapp_nonmedis_perawatan, 
@@ -475,6 +492,7 @@ class M_appointment extends Model{
 					"dapp_jamdatang"=>$dapp_nonmedis_jamdatang,
 					"dapp_keterangan"=>$dapp_nonmedis_keterangan,
 					"dapp_counter"=>$dapp_nonmedis_counter,
+					"dapp_warna_terapis"=>$dapp_nonmedis_warna_terapis,
 					"dapp_creator"=>$dapp_user
 				);
 				$this->db->insert('appointment_detail', $data); 
@@ -582,6 +600,7 @@ class M_appointment extends Model{
 							"dapp_jamreservasi"=>$dapp_nonmedis_jamreservasi, 
 							"dapp_petugas2"=>$dapp_nonmedis_petugas2, 
 							"dapp_keterangan"=>$dapp_nonmedis_keterangan,
+							"dapp_warna_terapis"=>$dapp_nonmedis_warna_terapis,
 							"dapp_creator"=>$dapp_user
 						);
 						$this->db->where('dapp_id', $dapp_nonmedis_id);
@@ -675,7 +694,7 @@ class M_appointment extends Model{
 		}
 		
 		//function for update record
-		function appointment_update($app_id ,$app_customer ,$dapp_tglreservasi ,$app_cara ,$app_keterangan,$dapp_id, $dapp_status, $dokter_nama, $terapis_nama, $kategori_nama, $rawat_id, $dokter_id, $terapis_id, $dapp_jamreservasi, $cust_id, $dapp_dokter_no, $dapp_terapis_no, $dapp_dokter_ganti, $dapp_terapis_ganti, $dapp_keterangan, $dapp_locked, $dapp_counter, $app_user){
+		function appointment_update($app_id ,$app_customer ,$dapp_tglreservasi ,$app_cara ,$app_keterangan,$dapp_id, $dapp_status, $dokter_nama, $terapis_nama, $kategori_nama, $rawat_id, $dokter_id, $terapis_id, $dapp_jamreservasi, $cust_id, $dapp_dokter_no, $dapp_terapis_no, $dapp_dokter_ganti, $dapp_terapis_ganti, $dapp_keterangan, $dapp_locked, $dapp_counter, $dapp_warna_terapis, $app_user){
 			$dapp_locked=0;
 			$sql="SELECT dapp_locked FROM appointment_detail WHERE dapp_id='$dapp_id'";
 			$rs=$this->db->query($sql);
@@ -867,6 +886,7 @@ class M_appointment extends Model{
 					$data_dapp["dapp_tglreservasi"]=$dapp_tglreservasi;
 					$data_dapp["dapp_jamreservasi"]=$dapp_jamreservasi;
 					$data_dapp["dapp_keterangan"]=$dapp_keterangan;
+					$data_dapp["dapp_warna_terapis"]=$dapp_warna_terapis;
 					$data_dapp["dapp_update"]=$app_user;
 					$data_dapp["dapp_date_update"]=$dt;
 					$sql="SELECT dapp_revised FROM appointment_detail WHERE dapp_id='$dapp_id' AND dapp_master='$app_id'";
@@ -981,6 +1001,7 @@ class M_appointment extends Model{
 					$data_dapp["dapp_tglreservasi"]=$dapp_tglreservasi;
 					$data_dapp["dapp_jamreservasi"]=$dapp_jamreservasi;
 					$data_dapp["dapp_keterangan"]=$dapp_keterangan;
+					$data_dapp["dapp_warna_terapis"]=$dapp_warna_terapis;
 					$data_dapp["dapp_update"]=$app_user;
 					$data_dapp["dapp_date_update"]=$dt;
 					$sql="SELECT dapp_revised FROM appointment_detail WHERE dapp_id='$dapp_id' AND dapp_master='$app_id'";
@@ -1025,6 +1046,7 @@ class M_appointment extends Model{
 				$data_dapp["dapp_tglreservasi"]=$dapp_tglreservasi;
 				$data_dapp["dapp_jamreservasi"]=$dapp_jamreservasi;
 				$data_dapp["dapp_keterangan"]=$dapp_keterangan;
+				$data_dapp["dapp_warna_terapis"]=$dapp_warna_terapis;
 				$data_dapp["dapp_update"]=$app_user;
 				$data_dapp["dapp_date_update"]=$dt;
 				$sql="SELECT dapp_revised FROM appointment_detail WHERE dapp_id='$dapp_id' AND dapp_master='$app_id'";

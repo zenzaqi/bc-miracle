@@ -39,12 +39,16 @@ class M_member extends Model{
 		
 		//function for get list record
 		function member_list($filter,$start,$end){
-			$query = "SELECT member.*,cust_nama, cust_no FROM member,customer where member_cust=cust_id ";
+			$query =   "SELECT 
+							member.*,
+							cust_nama, cust_no 
+						FROM member, customer 
+						where member_cust=cust_id and member_status <> 'Serah Terima'";
 			
 			// For simple search
 			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (member_id LIKE '%".addslashes($filter)."%' OR member_cust LIKE '%".addslashes($filter)."%' OR member_no LIKE '%".addslashes($filter)."%' OR member_register LIKE '%".addslashes($filter)."%' OR member_valid LIKE '%".addslashes($filter)."%' OR member_nota_ref LIKE '%".addslashes($filter)."%' OR member_point LIKE '%".addslashes($filter)."%' OR member_jenis LIKE '%".addslashes($filter)."%' OR member_status LIKE '%".addslashes($filter)."%' OR member_tglserahterima LIKE '%".addslashes($filter)."%' )";
+				$query .= " (cust_nama LIKE '%".addslashes($filter)."%' OR cust_no LIKE '%".addslashes($filter)."%' OR member_no LIKE '%".addslashes($filter)."%' OR member_register LIKE '%".addslashes($filter)."%' OR member_valid LIKE '%".addslashes($filter)."%' OR member_nota_ref LIKE '%".addslashes($filter)."%' OR member_point LIKE '%".addslashes($filter)."%' OR member_jenis LIKE '%".addslashes($filter)."%' OR member_status LIKE '%".addslashes($filter)."%' OR member_tglserahterima LIKE '%".addslashes($filter)."%' )";
 			}
 			
 			$result = $this->db->query($query);

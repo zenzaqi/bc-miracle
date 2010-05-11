@@ -195,6 +195,7 @@ Ext.onReady(function(){
 		var dapp_keterangan_update="";
 		var dapp_locked_update=0;
 		var dapp_counter_update=true;
+		var dapp_warna_terapis_update="";
 
 		app_id_update_pk = oGrid_event.record.data.app_id;
 		if(oGrid_event.record.data.app_customer!== null){app_customer_update = oGrid_event.record.data.app_customer;}
@@ -218,6 +219,7 @@ Ext.onReady(function(){
 		if(oGrid_event.record.data.dapp_keterangan!== ""){dapp_keterangan_update = oGrid_event.record.data.dapp_keterangan;}
 		dapp_locked_update = oGrid_event.record.data.dapp_locked;
 		dapp_counter_update = oGrid_event.record.data.dapp_counter;
+		dapp_warna_terapis_update = oGrid_event.record.data.dapp_warna_terapis;
 
 		Ext.Ajax.request({  
 			waitMsg: 'Mohon tunggu...',
@@ -245,7 +247,8 @@ Ext.onReady(function(){
 				dapp_terapis_ganti	:dapp_terapis_ganti_update,
 				dapp_keterangan	: dapp_keterangan_update,
 				dapp_locked	: dapp_locked_update,
-				dapp_counter : dapp_counter_update
+				dapp_counter : dapp_counter_update,
+				dapp_warna_terapis : dapp_warna_terapis_update
 			}, 
 			success: function(response){							
 				var result=eval(response.responseText);
@@ -719,7 +722,8 @@ Ext.onReady(function(){
 			{name: 'dapp_keterangan', type: 'string', mapping: 'dapp_keterangan'},
 			{name: 'rawat_warna', type: 'int', mapping: 'rawat_warna'},
 			{name: 'dapp_locked', type: 'int', mapping: 'dapp_locked'},
-			{name: 'dapp_counter', type: 'string', mapping: 'dapp_counter'}
+			{name: 'dapp_counter', type: 'string', mapping: 'dapp_counter'},
+			{name: 'dapp_warna_terapis', type: 'string', mapping: 'dapp_warna_terapis'}
 		]),
 		sortInfo:{field: 'dapp_tglreservasi', direction: "ASC"},
 		groupField: 'dokter_username'
@@ -885,7 +889,7 @@ Ext.onReady(function(){
 			dataIndex: 'terapis_username',
 			width: 140,
 			sortable: false,
-			editor: new Ext.form.ComboBox({
+				editor: new Ext.form.ComboBox({
 				store: dapp_terapisDataStore,
 				mode: 'remote',
 				tpl: dapp_terapis_tpl,
@@ -895,7 +899,18 @@ Ext.onReady(function(){
 				itemSelector: 'div.search-item',
 				triggerAction: 'all',
 				anchor: '95%'
-			})
+			}),
+			renderer: function(value, cell, record){
+				cell.css = "readonlycell";
+				if(record.data.dapp_warna_terapis=="true"){
+					return '<span style="color:red;">' + value + '</span>';
+				}
+				if(record.data.dapp_warna_terapis=="false"){
+					return '<span style="color:black;">' + value + '</span>';
+				}
+				return value;
+			}
+		
 		}, 
 		{
 			header: 'Kategori',
@@ -1973,7 +1988,8 @@ Ext.onReady(function(){
 			{name: 'dapp_nonmedis_tgldatang', type: 'date', dateFormat: 'Y-m-d', mapping: 'dapp_tgldatang'}, 
 			{name: 'dapp_nonmedis_jamdatang', type: 'string', mapping: 'dapp_jamdatang'},
 			{name: 'dapp_nonmedis_keterangan', type: 'string', mapping: 'dapp_keterangan'},
-			{name: 'dapp_nonmedis_counter', type: 'bool', mapping: 'dapp_counter'}
+			{name: 'dapp_nonmedis_counter', type: 'string', mapping: 'dapp_counter'},
+			{name: 'dapp_nonmedis_warna_terapis', type: 'string', mapping: 'dapp_warna_terapis'},
 	]);
 	//eof
 	
@@ -2107,6 +2123,18 @@ Ext.onReady(function(){
 			renderer: Ext.util.Format.comboRenderer(combo_dapp_terapis_nonmedis)
 		},
 		{
+            xtype: 'booleancolumn',
+            header: 'App',
+            dataIndex: 'dapp_nonmedis_warna_terapis',
+            align: 'center',
+            width: 60,
+            trueText: 'Yes',
+            falseText: 'No',
+            editor: {
+                xtype: 'checkbox'
+            }
+        },
+		{
 			header: 'Status',
 			dataIndex: 'dapp_nonmedis_status',
 			width: 100,
@@ -2203,7 +2231,8 @@ Ext.onReady(function(){
 //			dapp_nonmedis_petugas	:'',		
 			dapp_nonmedis_petugas2	:'',		
 			dapp_nonmedis_status	:'reservasi',
-			dapp_nonmedis_counter	:true
+			dapp_nonmedis_counter	:true,
+			dapp_warna_terapis : false,
 		});
 		editor_appointment_detail_nonmedis.stopEditing();
 		appointment_detail_nonmedisDataStore.insert(0, edit_appointment_detail_nonmedis);
@@ -2239,6 +2268,7 @@ Ext.onReady(function(){
 					dapp_nonmedis_status	: appointment_detail_nonmedis_record.data.dapp_nonmedis_status,
 					dapp_nonmedis_keterangan	: appointment_detail_nonmedis_record.data.dapp_nonmedis_keterangan,
 					dapp_nonmedis_counter	: appointment_detail_nonmedis_record.data.dapp_nonmedis_counter,
+					dapp_nonmedis_warna_terapis	: appointment_detail_nonmedis_record.data.dapp_nonmedis_warna_terapis,
 					app_cara	: app_caraField.getValue(),
 					app_customer	: app_customerField.getValue(),
 					app_keterangan	: app_keteranganField.getValue()
