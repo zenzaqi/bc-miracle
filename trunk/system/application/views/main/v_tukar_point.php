@@ -447,7 +447,8 @@ Ext.onReady(function(){
 			{name: 'cust_nama', type: 'string', mapping: 'cust_nama'},
 			{name: 'cust_tgllahir', type: 'date', dateFormat: 'Y-m-d', mapping: 'cust_tgllahir'},
 			{name: 'cust_alamat', type: 'string', mapping: 'cust_alamat'},
-			{name: 'cust_telprumah', type: 'string', mapping: 'cust_telprumah'}
+			{name: 'cust_telprumah', type: 'string', mapping: 'cust_telprumah'},
+			{name: 'cust_point', type: 'int', mapping: 'cust_point'}
 		]),
 		sortInfo:{field: 'cust_no', direction: "ASC"}
 	});
@@ -742,10 +743,21 @@ Ext.onReady(function(){
 		listClass: 'x-combo-list-small',
 		anchor: '95%'
 	});
+	/* Identify  epoint_sisa Field */
+	epoint_sisaField= new Ext.form.NumberField({
+		id: 'epoint_sisaField',
+		fieldLabel: 'Sisa Poin',
+		allowNegatife : false,
+		blankText: '0',
+		allowDecimals: false,
+		readOnly: true,
+		width: 76,
+		maskRe: /([0-9]+)$/
+	});
 	/* Identify  epoint_jumlah Field */
 	epoint_jumlahField= new Ext.form.NumberField({
 		id: 'epoint_jumlahField',
-		fieldLabel: 'Jumlah Point',
+		fieldLabel: 'Poin Diambil',
 		allowNegatife : false,
 		blankText: '0',
 		allowDecimals: false,
@@ -780,6 +792,13 @@ Ext.onReady(function(){
 	});
 	
 	epoint_kwitansiField= new Ext.form.TextField();
+	
+	epoint_custField.on('select', function(){
+		var j=cbo_cust_point_DataStore.find('cust_id',epoint_custField.getValue());
+		if(cbo_cust_point_DataStore.getCount()){
+			epoint_sisaField.setValue(cbo_cust_point_DataStore.getAt(j).data.cust_point);
+		}
+	});
 
 	
 	/* Function for retrieve create Window Panel*/ 
@@ -793,7 +812,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [epoint_idField, epoint_custField, epoint_jumlahField, epoint_tanggalField] 
+				items: [epoint_tanggalField, epoint_custField, epoint_sisaField, epoint_jumlahField, epoint_idField] 
 			}
 			],
 		buttons: [{

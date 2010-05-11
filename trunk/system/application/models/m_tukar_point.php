@@ -72,7 +72,7 @@ class M_tukar_point extends Model{
 			return '1';
 		}
 		
-		//function for create new record
+		/*//function for create new record
 		function tukar_point_create($epoint_cust ,$epoint_jumlah ,$epoint_voucher ,$epoint_tanggal ,$epoint_creator ,$epoint_date_create ){
 			$pattern="EP/".date("ym")."-";
 			$epoint_nobukti=$this->m_public_function->get_kode_1('tukar_point','epoint_nobukti',$pattern,12);
@@ -92,6 +92,54 @@ class M_tukar_point extends Model{
 			);
 			$this->db->insert('tukar_point', $data); 
 			if($this->db->affected_rows()){
+				// Ditukar dengan Kuitansi
+				$epoint_id = $this->get_master_id();
+				$pattern="KU/".date('ym')."-";
+				$kwitansi_no=$this->m_public_function->get_kode_1("cetak_kwitansi","kwitansi_no",$pattern,12);
+				
+				$epoint_nilai = (floor($epoint_jumlah/$kelipatan_tukar_point)) * $kelipatan_point_konversi_rp;
+				
+				$dti_kwitansi=array(
+				"kwitansi_no"=>$kwitansi_no, 
+				"kwitansi_cust"=>$epoint_cust, 
+				"kwitansi_ref"=>$epoint_nobukti, 
+				"kwitansi_cara"=>'poin', 
+				"kwitansi_nilai"=>$epoint_nilai,
+				"kwitansi_status"=>'Terbuka'
+				);
+				$this->db->insert('cetak_kwitansi', $dti_kwitansi);
+				if($this->db->affected_rows()){
+					$sql="UPDATE customer SET cust_point = (cust_point - $epoint_jumlah) WHERE cust_id='$epoint_cust'";
+					$this->db->query($sql);
+					return $epoint_nobukti;
+				}else{
+					return '1';
+				}
+			}else
+				return '0';
+		}*/
+		
+		//Penukaran Poin ==> Voucher
+		function tukar_point_create($epoint_cust ,$epoint_jumlah ,$epoint_voucher ,$epoint_tanggal ,$epoint_creator ,$epoint_date_create ){
+			$pattern="EP/".date("ym")."-";
+			$epoint_nobukti=$this->m_public_function->get_kode_1('tukar_point','epoint_nobukti',$pattern,12);
+			
+			$kelipatan_tukar_point=20;
+			$kelipatan_point_konversi_rp=50000;
+			
+			$epoint_jumlah = $epoint_jumlah - ($epoint_jumlah % $kelipatan_tukar_point);
+			
+			$data = array(
+				"epoint_nobukti"=>$epoint_nobukti,
+				"epoint_cust"=>$epoint_cust, 
+				"epoint_jumlah"=>$epoint_jumlah, 
+				"epoint_tanggal"=>$epoint_tanggal,
+				"epoint_creator"=>$epoint_creator,
+				"epoint_date_create"=>$epoint_date_create
+			);
+			$this->db->insert('tukar_point', $data); 
+			if($this->db->affected_rows()){
+				// Ditukar dengan Voucher
 				$epoint_id = $this->get_master_id();
 				$pattern="KU/".date('ym')."-";
 				$kwitansi_no=$this->m_public_function->get_kode_1("cetak_kwitansi","kwitansi_no",$pattern,12);

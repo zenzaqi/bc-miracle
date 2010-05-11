@@ -86,6 +86,7 @@ Ext.onReady(function(){
 			url: 'index.php?c=c_report_tukar_point&m=get_customer_list', 
 			method: 'POST'
 		}),
+		baseParams: {query: '', start: 0, limit: 15 },
 			reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',

@@ -136,18 +136,12 @@ class M_produk extends Model{
 		
 		//function for update record
 		function produk_update($produk_id ,$produk_kode ,$produk_kodelama ,$produk_group ,$produk_kategori ,$produk_kontribusi, $produk_jenis ,$produk_nama ,$produk_satuan ,$produk_du ,$produk_dm ,$produk_point ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif ){
-		if ($produk_aktif=="")
-			$produk_aktif = "Aktif";
+			if ($produk_aktif=="")
+				$produk_aktif = "Aktif";
 			$data = array(
-//				"produk_id"=>$produk_id, 
 				"produk_kode"=>$produk_kode, 
 				"produk_kodelama"=>$produk_kodelama, 
-//				"produk_group"=>$produk_group, 
-//				"produk_kategori"=>$produk_kategori, 
 				"produk_nama"=>$produk_nama, 
-//				"produk_satuan"=>$produk_satuan, 
-//				"produk_du"=>$produk_du, 
-//				"produk_dm"=>$produk_dm, 
 				"produk_point"=>$produk_point, 
 				"produk_volume"=>$produk_volume, 
 				"produk_harga"=>$produk_harga, 
@@ -155,38 +149,15 @@ class M_produk extends Model{
 				"produk_aktif"=>$produk_aktif 
 			);
 			
-			$sql="SELECT group_id,group_duproduk,group_dmproduk FROM produk_group WHERE group_id='".$produk_group."'";
-			$rs=$this->db->query($sql);
-			if($rs->num_rows()){
-				$data["produk_group"]=$produk_group;
-				$rs_sql=$rs->row();
-				$data["produk_du"]=$rs_sql->group_duproduk;
-				$data["produk_dm"]=$rs_sql->group_dmproduk;
+			$sql_produk_awal = "SELECT produk_group, produk_jenis FROM produk WHERE produk_id='$produk_id'";
+			$rs_produk_awal = $this->db->query($sql_produk_awal);
+			if($rs_produk_awal->num_rows()){
+				$record_produk_awal = $rs_produk_awal->row_array();
+				$produk_group_awal = $record_produk_awal['produk_group'];
+				$produk_jenis_awal = $record_produk_awal['produk_jenis'];
 			}
 			
-//			$sql="SELECT kategori_id FROM kategori WHERE kategori_id='".$produk_kategori."'";
-//			$rs=$this->db->query($sql);
-//			if($rs->num_rows())
-//				$data["produk_kategori"]=$produk_kategori;
-			
-			$sql="SELECT kategori2_id FROM kategori2 WHERE kategori2_id='".$produk_kontribusi."'";
-			$rs=$this->db->query($sql);
-			if($rs->num_rows())
-				$data["produk_kontribusi"]=$produk_kontribusi;
-				
-			$sql="SELECT jenis_id FROM jenis WHERE jenis_id='".$produk_jenis."'";
-			$rs=$this->db->query($sql);
-			if($rs->num_rows())
-				$data["produk_jenis"]=$produk_jenis;
-				
-			$sql="SELECT satuan_id FROM satuan WHERE satuan_id='".$produk_satuan."'";
-			$rs=$this->db->query($sql);
-			if($rs->num_rows())
-				$data["produk_satuan"]=$produk_satuan;
-			
-			/*$sql="SELECT * FROM produk WHERE produk_id='".$produk_id."' AND produk_group='".$produk_group."' AND produk_jenis='".$produk_jenis."'";
-			$rs=$this->db->query($sql);
-			if(!($rs->num_rows())){
+			if(is_numeric($produk_group) || is_numeric($produk_jenis)){
 				$sql_g="SELECT group_id,group_kode FROM produk_group WHERE group_id='".$produk_group."'";
 				$rs_g=$this->db->query($sql_g);
 				if($rs_g->num_rows()){
@@ -216,58 +187,28 @@ class M_produk extends Model{
 						$jenis_kode=$rs_sql_j->jenis_kode;
 					}
 				}
-				$data["produk_kode"]=$this->get_kode($group_kode,$jenis_kode);
-			}*/
+				$pattern=$group_kode.$jenis_kode;
+				$produk_kode=$this->get_kode($pattern);
+				if($produk_kode!=="" && strlen($produk_kode)==7){
+					$data["produk_kode"]=$produk_kode;
+				}
+			}
 			
-			//generate produk kode
-			//get group kode
-			$group_kode="";
-			$jenis_kode="";
-			$sql_g="SELECT group_id,group_kode FROM produk_group WHERE group_id='".$produk_group."'";
-			$rs_g=$this->db->query($sql_g);
-			if($rs_g->num_rows()){
-				$rs_sql_g=$rs_g->row();
-				$group_kode=$rs_sql_g->group_kode;
-				$data["produk_group"]=$produk_group;
-			}else{
-				$sql_g="select SUBSTRING(produk_kode,1,2) as group_kode from produk where produk_id='".$produk_id."'";
-				$rs_g=$this->db->query($sql_g);
-				if($rs_g->num_rows()){
-					$rs_sql_g=$rs_g->row();
-					$group_kode=$rs_sql_g->group_kode;
-				}
-			}
-			//get jenis kode
-			$sql_j="SELECT jenis_id,jenis_kode FROM jenis WHERE jenis_id='".$produk_jenis."'";
-			$rs_j=$this->db->query($sql_j);
-			if($rs_j->num_rows()){
-				$rs_sql_j=$rs_j->row();
-				$jenis_kode=$rs_sql_j->jenis_kode;
-				$data["produk_jenis"]=$produk_jenis;
-			}else{
-				$sql_j="select SUBSTRING(produk_kode,3,2) as jenis_kode from produk where produk_id='".$produk_id."'";
-				$rs_j=$this->db->query($sql_j);
-				if($rs_j->num_rows()){
-					$rs_sql_j=$rs_j->row();
-					$jenis_kode=$rs_sql_j->jenis_kode;
-				}
-			}
-			$pattern=$group_kode.$jenis_kode;
-			//echo $jenis_kode;
-			$produk_kode=$this->get_kode($pattern);
-			if($produk_kode!=="" && strlen($produk_kode)==7)
-				$data["produk_kode"]=$produk_kode;
+//			$sql="SELECT kategori_id FROM kategori WHERE kategori_id='".$produk_kategori."'";
+//			$rs=$this->db->query($sql);
+//			if($rs->num_rows())
+//				$data["produk_kategori"]=$produk_kategori;
+			
+			$sql="SELECT kategori2_id FROM kategori2 WHERE kategori2_id='".$produk_kontribusi."'";
+			$rs=$this->db->query($sql);
+			if($rs->num_rows())
+				$data["produk_kontribusi"]=$produk_kontribusi;
 				
-			$sql="SELECT produk_du FROM produk WHERE produk_du!='".$produk_du."' AND produk_id='".$produk_id."'";
+			$sql="SELECT satuan_id FROM satuan WHERE satuan_id='".$produk_satuan."'";
 			$rs=$this->db->query($sql);
 			if($rs->num_rows())
-				$data["produk_du"]=$produk_du;
-			
-			$sql="SELECT produk_dm FROM produk WHERE produk_dm!='".$produk_dm."' AND produk_id='".$produk_id."'";
-			$rs=$this->db->query($sql);
-			if($rs->num_rows())
-				$data["produk_dm"]=$produk_dm;
-			
+				$data["produk_satuan"]=$produk_satuan;
+						
 			$this->db->where('produk_id', $produk_id);
 			$this->db->update('produk', $data);
 			
