@@ -142,7 +142,7 @@ class M_voucher extends Model{
 		
 		//get master id, note : not done yet
 		function get_master_id() {
-			$query = "SELECT max(voucher_id) as master_id from voucher";
+			$query = "SELECT max(voucher_id) AS master_id FROM voucher WHERE voucher_creator='".@$_SESSION[SESSION_USERID]."'";
 			$result = $this->db->query($query);
 			if($result->num_rows()){
 				$data=$result->row();
@@ -273,7 +273,7 @@ class M_voucher extends Model{
 		}
 		
 		//function for update record
-		function voucher_update($voucher_id ,$voucher_nama ,$voucher_jenis ,$voucher_point ,$voucher_jumlah ,$voucher_kadaluarsa ,$voucher_cashback ,$voucher_mincash ,$voucher_diskon ,$voucher_promo ,$voucher_allproduk ,$voucher_allrawat ){
+		function voucher_update($voucher_id ,$voucher_nama ,$voucher_jenis ,$voucher_point ,$voucher_jumlah ,$voucher_kadaluarsa ,$voucher_cashback ,$voucher_mincash ,$voucher_diskon ,$voucher_promo ,$voucher_allproduk ,$voucher_allrawat ,$voucher_acara){
 			$data = array(
 				"voucher_id"=>$voucher_id, 
 				"voucher_nama"=>$voucher_nama, 
@@ -285,6 +285,7 @@ class M_voucher extends Model{
 				"voucher_mincash"=>$voucher_mincash, 
 				"voucher_diskon"=>$voucher_diskon, 
 				"voucher_promo"=>$voucher_promo, 
+				"voucher_acara"=>$voucher_acara,
 				"voucher_allproduk"=>$voucher_allproduk, 
 				"voucher_allrawat"=>$voucher_allrawat 
 			);
@@ -309,7 +310,7 @@ class M_voucher extends Model{
 		}
 		
 		//function for create new record
-		function voucher_create($voucher_nama ,$voucher_jenis ,$voucher_point ,$voucher_jumlah ,$voucher_kadaluarsa ,$voucher_cashback ,$voucher_mincash ,$voucher_diskon ,$voucher_promo ,$voucher_allproduk ,$voucher_allrawat ){
+		function voucher_create($voucher_nama ,$voucher_jenis ,$voucher_point ,$voucher_jumlah ,$voucher_kadaluarsa ,$voucher_cashback ,$voucher_mincash ,$voucher_diskon ,$voucher_promo ,$voucher_allproduk ,$voucher_allrawat ,$voucher_acara ,$voucher_nomor_awal ,$voucher_nomor_akhir ,$voucher_creator){
 			$data = array(
 				"voucher_nama"=>$voucher_nama, 
 				"voucher_jenis"=>$voucher_jenis, 
@@ -320,24 +321,29 @@ class M_voucher extends Model{
 				"voucher_mincash"=>$voucher_mincash, 
 				"voucher_diskon"=>$voucher_diskon, 
 				"voucher_promo"=>$voucher_promo, 
+				"voucher_acara"=>$voucher_acara,
 				"voucher_allproduk"=>$voucher_allproduk, 
-				"voucher_allrawat"=>$voucher_allrawat 
+				"voucher_allrawat"=>$voucher_allrawat,
+				"voucher_creator"=>$voucher_creator
 			);
 			$this->db->insert('voucher', $data); 
 			if($this->db->affected_rows()){
 				$this->db->trans_start();
-				for($i=0;$i<$voucher_jumlah;$i++){
-					if($voucher_jenis=='reward')
+				$kvoucher_master = $this->get_master_id();
+				//for($i=0;$i<$voucher_jumlah;$i++){
+				for($kvoucher_nomor=$voucher_nomor_awal;$kvoucher_nomor<=$voucher_nomor_akhir;$kvoucher_nomor++){
+					/*if($voucher_jenis=='reward')
 						$no_voucher=$this->get_voucher_nomor('MRV');
 					else
-						$no_voucher=$this->get_voucher_nomor('MPV');
+						$no_voucher=$this->get_voucher_nomor('MPV');*/
 						
-					$sql="insert into voucher_kupon(kvoucher_master,kvoucher_nomor) values('".$this->get_master_id()."','".$no_voucher."')";
+					//$sql="insert into voucher_kupon(kvoucher_master,kvoucher_nomor) values('".$this->get_master_id()."','".$no_voucher."')";
+					$sql="insert into voucher_kupon(kvoucher_master,kvoucher_nomor) values('".$kvoucher_master."','".$kvoucher_nomor."')";
 					$this->db->query($sql);
 				}
 				$this->db->trans_complete(); 
 				
-				return '1';
+				return $kvoucher_master;
 			}else
 				return '0';
 		}
@@ -558,6 +564,12 @@ class M_voucher extends Model{
 				};
 				$result = $this->db->query($query);
 			}
+			return $result;
+		}
+		
+		function print_paper($kvoucher_master){
+			$sql="SELECT * FROM voucher_kupon LEFT JOIN voucher ON(kvoucher_master=voucher_id) WHERE kvoucher_master='$kvoucher_master'";
+			$result = $this->db->query($sql);
 			return $result;
 		}
 		

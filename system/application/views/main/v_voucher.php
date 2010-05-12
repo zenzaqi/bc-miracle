@@ -101,6 +101,42 @@ var voucher_promoSearchField;
 var voucher_allprodukSearchField;
 var voucher_allrawatSearchField;
 
+function voucher_cetak(master_id){
+	Ext.Ajax.request({   
+		waitMsg: 'Mohon tunggu...',
+		url: 'index.php?c=c_voucher&m=print_paper',
+		params: { kvoucher_master : master_id}, 
+		success: function(response){              
+			var result=eval(response.responseText);
+			switch(result){
+			case 1:
+				win = window.open('./voucher_paper.html','Cetak Voucher','height=480,width=1340,resizable=1,scrollbars=0, menubar=0');
+				//win.print();
+				break;
+			default:
+				Ext.MessageBox.show({
+					title: 'Warning',
+					msg: 'Unable to print the grid!',
+					buttons: Ext.MessageBox.OK,
+					animEl: 'save',
+					icon: Ext.MessageBox.WARNING
+				});
+				break;
+			}  
+		},
+		failure: function(response){
+			var result=response.responseText;
+			Ext.MessageBox.show({
+			   title: 'Error',
+			   msg: 'Could not connect to the database. retry later.',
+			   buttons: Ext.MessageBox.OK,
+			   animEl: 'database',
+			   icon: Ext.MessageBox.ERROR
+			});		
+		} 	                     
+	});
+}
+
 /* on ready fuction */
 Ext.onReady(function(){
   	Ext.QuickTips.init();	/* Initiate quick tips icon */
@@ -186,7 +222,7 @@ Ext.onReady(function(){
   	/* Function for add data, open window create form */
 	function voucher_create(){
 	
-		if(is_voucher_form_valid()){	
+		if(is_voucher_form_valid() && (voucher_nomor_awalField.getValue()<voucher_nomor_akhirField.getValue())){	
 		var voucher_id_create_pk=null; 
 		var voucher_nama_create=null; 
 		var voucher_jenis_create=null; 
@@ -199,6 +235,9 @@ Ext.onReady(function(){
 		var voucher_promo_create=null; 
 		var voucher_allproduk_create=null; 
 		var voucher_allrawat_create=null; 
+		var voucher_acara_create="";
+		var voucher_nomor_awal_create="";
+		var voucher_nomor_akhir_create="";
 
 		if(voucher_idField.getValue()!== null){voucher_id_create_pk = voucher_idField.getValue();}else{voucher_id_create_pk=get_pk_id();} 
 		if(voucher_namaField.getValue()!== null){voucher_nama_create = voucher_namaField.getValue();} 
@@ -212,6 +251,9 @@ Ext.onReady(function(){
 		if(voucher_promoField.getValue()!== null){voucher_promo_create = voucher_promoField.getValue();} 
 		if(voucher_allprodukField.getValue()!== null){voucher_allproduk_create = voucher_allprodukField.getValue();} 
 		if(voucher_allrawatField.getValue()!== null){voucher_allrawat_create = voucher_allrawatField.getValue();} 
+		if(voucher_acaraField.getValue()!== ""){voucher_acara_create = voucher_acaraField.getValue();} 
+		if(voucher_nomor_awalField.getValue()!== ""){voucher_nomor_awal_create = voucher_nomor_awalField.getValue();} 
+		if(voucher_nomor_akhirField.getValue()!== ""){voucher_nomor_akhir_create = voucher_nomor_akhirField.getValue();} 
 
 		Ext.Ajax.request({  
 			waitMsg: 'Please wait...',
@@ -230,26 +272,42 @@ Ext.onReady(function(){
 				voucher_promo	: voucher_promo_create, 
 				voucher_allproduk	: voucher_allproduk_create, 
 				voucher_allrawat	: voucher_allrawat_create, 
+				voucher_acara	: voucher_acara_create,
+				voucher_nomor_awal	: voucher_nomor_awal_create,
+				voucher_nomor_akhir	: voucher_nomor_akhir_create
 			}, 
 			success: function(response){             
 				var result=eval(response.responseText);
 				switch(result){
 					case 1:
-						
+						Ext.MessageBox.alert(post2db+' OK','The Voucher was '+msg+' successfully.');
+						voucher_DataStore.reload();
+						voucher_createWindow.hide();
+						break;
+					case 2:
+						//EDIT where tidak untuk semua produk atau tidak semua perawatan
 						Ext.MessageBox.alert(post2db+' OK','The Voucher was '+msg+' successfully.');
 						voucher_DataStore.reload();
 						voucher_produk_purge();
 						voucher_perawatan_purge();
 						voucher_createWindow.hide();
 						break;
-					default:
+					case -1:
 						Ext.MessageBox.show({
 						   title: 'Warning',
-						   msg: 'We could\'t not '+msg+' the Voucher.',
+						   msg: 'Data tidak bisa disimpan.',
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'save',
 						   icon: Ext.MessageBox.WARNING
 						});
+						voucher_DataStore.reload();
+						voucher_createWindow.hide();
+						break;
+					default:
+						Ext.MessageBox.alert(post2db+' OK','Data berhasil disimpan.');
+						voucher_DataStore.reload();
+						voucher_createWindow.hide();
+						voucher_cetak(result);
 						break;
 				}        
 			},
@@ -292,7 +350,7 @@ Ext.onReady(function(){
 		voucher_namaField.reset();
 		voucher_namaField.setValue(null);
 		//voucher_jenisField.reset();
-		voucher_jenisField.setValue('reward');
+		//voucher_jenisField.setValue('reward');
 		//voucher_pointField.reset();
 		voucher_pointField.setValue(0);
 		//voucher_jumlahField.reset();
@@ -349,7 +407,7 @@ Ext.onReady(function(){
   
 	/* Function for Check if the form is valid */
 	function is_voucher_form_valid(){
-		return ( voucher_namaField.isValid() );
+		return ( voucher_namaField.isValid() && voucher_nomor_awalField.isValid() && voucher_nomor_awalField.isValid() );
 	}
   	/* End of Function */
   
@@ -494,20 +552,20 @@ Ext.onReady(function(){
     cbo_voucher_promoDataStore = new Ext.data.Store({
 		id: 'cbo_voucher_promoDataStore',
 		proxy: new Ext.data.HttpProxy({
-			url: 'index.php?c=c_voucher&m=get_voucher_list', 
+			url: 'index.php?c=c_voucher&m=get_promo_list', 
 			method: 'POST'
 		}),
 			reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
-			id: 'produk_id'
+			id: 'promo_id'
 		},[
-			{name: 'voucher_id', type: 'int', mapping: 'voucher_id'},
-			{name: 'voucher_acara', type: 'string', mapping: 'voucher_acara'},
-			{name: 'voucher_tempat', type: 'string', mapping: 'voucher_tempat'},
-			{name: 'voucher_tglmulai', type: 'date', dateFormat: 'Y-m-d', mapping: 'voucher_tglmulai'}, 
-			{name: 'voucher_tglselesai', type: 'date', dateFormat: 'Y-m-d', mapping: 'voucher_tglselesai'}, 
-			{name: 'voucher_cashback', type: 'float', mapping: 'voucher_cashback'}, 
+			{name: 'voucher_id', type: 'int', mapping: 'promo_id'},
+			{name: 'voucher_acara', type: 'string', mapping: 'promo_acara'},
+			{name: 'voucher_tempat', type: 'string', mapping: 'promo_tempat'},
+			{name: 'voucher_tglmulai', type: 'date', dateFormat: 'Y-m-d', mapping: 'promo_tglmulai'}, 
+			{name: 'voucher_tglselesai', type: 'date', dateFormat: 'Y-m-d', mapping: 'promo_tglselesai'}, 
+			{name: 'voucher_cashback', type: 'float', mapping: 'promo_cashback'}, 
 			{name: 'voucher_mincash', type: 'float', mapping: 'voucher_mincash'}, 
 			{name: 'voucher_diskon', type: 'float', mapping: 'voucher_diskon'}, 
 			{name: 'voucher_allproduk', type: 'string', mapping: 'voucher_allproduk'}, 
@@ -952,6 +1010,34 @@ Ext.onReady(function(){
 		anchor: '95%',
 		triggerAction: 'all'	
 	});
+	voucher_acaraField= new Ext.form.TextField({
+		id: 'voucher_acaraField',
+		fieldLabel: 'Nama Acara',
+		maxLength: 50,
+		anchor: '95%'
+	});
+	/* Cetak Nomor Voucher Awal */
+	voucher_nomor_awalField= new Ext.form.NumberField({
+		id: 'voucher_nomor_awalField',
+		fieldLabel: 'Nomor Awal',
+		allowNegatife : false,
+		blankText: '0',
+		allowDecimals: true,
+		allowBlank: false,
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
+	});
+	/* Cetak Nomor Voucher Akhir */
+	voucher_nomor_akhirField= new Ext.form.NumberField({
+		id: 'voucher_nomor_akhirField',
+		fieldLabel: 'Nomor Akhir',
+		allowNegatife : false,
+		blankText: '0',
+		allowDecimals: true,
+		allowBlank: false,
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
+	});
   	/*Fieldset Master*/
 	voucher_masterGroup = new Ext.form.FieldSet({
 		title: 'Master',
@@ -963,7 +1049,7 @@ Ext.onReady(function(){
 				columnWidth:0.6,
 				layout: 'form',
 				border:false,
-				items: [voucher_namaField, voucher_jenisField, voucher_promoField, voucher_pointField, voucher_jumlahField, voucher_kadaluarsaField, voucher_idField] 
+				items: [voucher_namaField, voucher_jenisField, voucher_acaraField, voucher_pointField, voucher_jumlahField, voucher_kadaluarsaField, voucher_idField] 
 			}
 			,{
 				columnWidth:0.4,
@@ -974,6 +1060,27 @@ Ext.onReady(function(){
 			}
 			]
 	
+	});
+	
+	voucher_nomorGroup= new Ext.form.FieldSet({
+		title: 'Nomor Cetak',
+		autoHeight: true,
+		collapsible: true,
+		layout:'column',
+		items:[
+			{
+				columnWidth:0.5,
+				layout: 'form',
+				border:false,
+				items: [voucher_nomor_awalField] 
+			}
+			,{
+				columnWidth:0.5,
+				layout: 'form',
+				border:false,
+				items: [voucher_nomor_akhirField] 
+			}
+			]
 	});
 	
 		
@@ -1561,7 +1668,7 @@ Ext.onReady(function(){
 		bodyStyle:'padding:5px',
 		autoHeight:true,
 		width: 700,        
-		items: [voucher_masterGroup,detail_tab_voucher]
+		items: [voucher_masterGroup,voucher_nomorGroup,detail_tab_voucher]
 		,
 		buttons: [{
 				text: 'Save and Close',
@@ -2038,11 +2145,13 @@ Ext.onReady(function(){
 	
 	voucher_jenisField.on("select",function(){
 		if(voucher_jenisField.getValue()=='reward'){
-			voucher_promoField.getEl().up('.x-form-item').setDisplayed(false);
+			//voucher_promoField.getEl().up('.x-form-item').setDisplayed(false);
+			voucher_acaraField.getEl().up('.x-form-item').setDisplayed(false);
 			voucher_pointField.getEl().up('.x-form-item').setDisplayed(true);
 
 		}else{
-			voucher_promoField.getEl().up('.x-form-item').setDisplayed(true);
+			//voucher_promoField.getEl().up('.x-form-item').setDisplayed(true);
+			voucher_acaraField.getEl().up('.x-form-item').setDisplayed(true);
 			voucher_pointField.getEl().up('.x-form-item').setDisplayed(false);
 		}
 	});
