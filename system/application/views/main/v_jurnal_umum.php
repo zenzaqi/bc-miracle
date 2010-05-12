@@ -1,13 +1,13 @@
-<?
-/* 	These code was generated using phpCIGen v 0.1.b (1/08/2009)
+<?php
+/* 	These code was generated using phpCIGen v 0.1.b (24/06/2009)
 	#zaqi 		zaqi.smart@gmail.com,http://zenzaqi.blogspot.com, 
 	#CV. Trust Solution, jl. Saronojiwo 19 Surabaya, http://www.ts.co.id
 	
 	+ Module  		: jurnal_umum View
 	+ Description	: For record view
 	+ Filename 		: v_jurnal_umum.php
- 	+ Author  		: 
- 	+ Created on 30/Sep/2009 11:25:17
+ 	+ creator  		: 
+ 	+ Created on 01/Apr/2010 12:13:56
 	
 */
 ?>
@@ -47,91 +47,84 @@
 var jurnal_umum_DataStore;
 var jurnal_umum_ColumnModel;
 var jurnal_umumListEditorGrid;
-var jurnal_umum_createForm;
-var jurnal_umum_createWindow;
+var jurnal_umum_saveForm;
+var jurnal_umum_saveWindow;
 var jurnal_umum_searchForm;
 var jurnal_umum_searchWindow;
 var jurnal_umum_SelectedRow;
 var jurnal_umum_ContextMenu;
-//for detail data
-var jurnal_umum_detail_DataStor;
-var jurnal_umum_detailListEditorGrid;
-var jurnal_umum_detail_ColumnModel;
-var jurnal_umum_detail_proxy;
-var jurnal_umum_detail_writer;
-var jurnal_umum_detail_reader;
-var editor_jurnal_umum_detail;
 
 //declare konstant
 var post2db = '';
 var msg = '';
 var pageS=15;
+var today=new Date().format('Y-m-d');
 
 /* declare variable here for Field*/
-var jumum_idField;
-var jumum_tanggalField;
-var jumum_penggunaField;
-var jumum_keteranganField;
-var jumum_postingField;
-var jumum_tglpostingField;
-var jumum_idSearchField;
-var jumum_tanggalSearchField;
-var jumum_penggunaSearchField;
-var jumum_keteranganSearchField;
-var jumum_postingSearchField;
-var jumum_tglpostingSearchField;
-
-var dt=new Date();
+var jurnal_idField;
+var jurnal_tanggalField;
+var jurnal_akunField;
+var jurnal_keteranganField;
+var jurnal_norefField;
+var jurnal_debetField;
+var jurnal_kreditField;
+var jurnal_unitField;
+var jurnal_postField;
+var jurnal_date_postField;
+var jurnal_idSearchField;
+var jurnal_tanggalSearchField;
+var jurnal_akunSearchField;
+var jurnal_keteranganSearchField;
+var jurnal_norefSearchField;
+var jurnal_debetSearchField;
+var jurnal_kreditSearchField;
+var jurnal_unitSearchField;
+var jurnal_postSearchField;
+var jurnal_date_postSearchField;
 
 /* on ready fuction */
 Ext.onReady(function(){
   	Ext.QuickTips.init();	/* Initiate quick tips icon */
   
   	/* Function for Saving inLine Editing */
-	function jurnal_umum_update(oGrid_event){
-		var jumum_id_update_pk="";
-		var jumum_tanggal_update_date="";
-		var jumum_pengguna_update=null;
-		var jumum_keterangan_update=null;
-		var jumum_posting_update=null;
-		var jumum_tglposting_update_date="";
+	function jurnal_umum_inline_update(oGrid_event){
+		var jurnal_id_update_pk="";
+		var jurnal_tanggal_update_date="";
+		var jurnal_keterangan_update=null;
+		var jurnal_noref_update=null;
+		var jurnal_unit_update=null;
 
-		jumum_id_update_pk = oGrid_event.record.data.jumum_id;
-	 	if(oGrid_event.record.data.jumum_tanggal!== ""){jumum_tanggal_update_date =oGrid_event.record.data.jumum_tanggal.format('Y-m-d');}
-		if(oGrid_event.record.data.jumum_pengguna!== null){jumum_pengguna_update = oGrid_event.record.data.jumum_pengguna;}
-		if(oGrid_event.record.data.jumum_keterangan!== null){jumum_keterangan_update = oGrid_event.record.data.jumum_keterangan;}
-		if(oGrid_event.record.data.jumum_posting!== null){jumum_posting_update = oGrid_event.record.data.jumum_posting;}
-	 	if(oGrid_event.record.data.jumum_tglposting!== ""){jumum_tglposting_update_date =oGrid_event.record.data.jumum_tglposting.format('Y-m-d');}
+
+		jurnal_id_update_pk = oGrid_event.record.data.jurnal_id;
+	 	if(oGrid_event.record.data.jurnal_tanggal!== ""){jurnal_tanggal_update_date =oGrid_event.record.data.jurnal_tanggal.format('Y-m-d');}
+		if(oGrid_event.record.data.jurnal_keterangan!== null){jurnal_keterangan_update = oGrid_event.record.data.jurnal_keterangan;}
+		if(oGrid_event.record.data.jurnal_noref!== null){jurnal_noref_update = oGrid_event.record.data.jurnal_noref;}
+		if(oGrid_event.record.data.jurnal_unit!== null){jurnal_unit_update = oGrid_event.record.data.jurnal_unit;}
 
 		Ext.Ajax.request({  
 			waitMsg: 'Please wait...',
 			url: 'index.php?c=c_jurnal_umum&m=get_action',
 			params: {
-				task: "UPDATE",
-				jumum_id	: jumum_id_update_pk, 
-				jumum_tanggal	: jumum_tanggal_update_date, 
-				jumum_pengguna	:jumum_pengguna_update,  
-				jumum_keterangan	:jumum_keterangan_update,  
-				jumum_posting	:jumum_posting_update,  
-				jumum_tglposting	: jumum_tglposting_update_date, 
+				jurnal_id			: jurnal_id_update_pk, 
+				jurnal_tanggal		: jurnal_tanggal_update_date, 
+				jurnal_keterangan	: jurnal_keterangan_update,
+				jurnal_noref		: jurnal_noref_update,
+				jurnal_unit			: jurnal_unit_update,
+				task				: "UPDATE"
 			}, 
-			success: function(response){							
+			success: function(response){             
 				var result=eval(response.responseText);
-				switch(result){
-					case 1:
-						jurnal_umum_DataStore.commitChanges();
-						jurnal_umum_DataStore.reload();
-						break;
-					default:
+				if(result!==0){
+						jurnal_umum_DataStore.load();
+					}else{
 						Ext.MessageBox.show({
 						   title: 'Warning',
-						   msg: 'We could\'t not save the jurnal_umum.',
+						   msg: 'Data Jurnal Umum tidak bisa disimpan',
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'save',
 						   icon: Ext.MessageBox.WARNING
 						});
-						break;
-				}
+				} 
 			},
 			failure: function(response){
 				var result=response.responseText;
@@ -147,56 +140,49 @@ Ext.onReady(function(){
 	}
   	/* End of Function */
   
-  	/* Function for add data, open window create form */
-	function jurnal_umum_create(){
-		if(jumum_dtotal_kreditField.getValue()==jumum_dtotal_debetField.getValue()){
-			if(is_jurnal_umum_form_valid()){	
-			var jumum_id_create=null; 
-			var jumum_tanggal_create_date=""; 
-			var jumum_pengguna_create=null; 
-			var jumum_keterangan_create=null; 
-			var jumum_posting_create=null; 
-			var jumum_tglposting_create_date=""; 
+  	/* Function for add and edit data form, open window form */
+	function jurnal_umum_save(){
 	
-			if(jumum_idField.getValue()!== null){jumum_id_create_pk = jumum_idField.getValue();} 
-			if(jumum_tanggalField.getValue()!== ""){jumum_tanggal_create_date = jumum_tanggalField.getValue().format('Y-m-d');} 
-			if(jumum_penggunaField.getValue()!== null){jumum_pengguna_create = jumum_penggunaField.getValue();} 
-			if(jumum_keteranganField.getValue()!== null){jumum_keterangan_create = jumum_keteranganField.getValue();} 
-			if(jumum_postingField.getValue()!== null){jumum_posting_create = jumum_postingField.getValue();} 
-			if(jumum_tglpostingField.getValue()!== ""){jumum_tglposting_create_date = jumum_tglpostingField.getValue().format('Y-m-d');} 
-	
+		if(is_jurnal_umum_form_valid()){	
+			var jurnal_id_field_pk=null; 
+			var jurnal_tanggal_field_date=""; 
+			var jurnal_keterangan_field=null; 
+			var jurnal_noref_field=null; 
+			var jurnal_unit_field=null; 
+
+			jurnal_id_field_pk=get_pk_id();
+			if(jurnal_tanggalField.getValue()!== ""){jurnal_tanggal_field_date = jurnal_tanggalField.getValue().format('Y-m-d');} 
+			if(jurnal_keteranganField.getValue()!== null){jurnal_keterangan_field = jurnal_keteranganField.getValue();} 
+			if(jurnal_norefField.getValue()!== null){jurnal_noref_field = jurnal_norefField.getValue();} 
+			if(jurnal_unitField.getValue()!== null){jurnal_unit_field = jurnal_unitField.getValue();} 
+
 			Ext.Ajax.request({  
 				waitMsg: 'Please wait...',
 				url: 'index.php?c=c_jurnal_umum&m=get_action',
 				params: {
-					task: post2db,
-					jumum_id	: jumum_id_create_pk, 
-					jumum_tanggal	: jumum_tanggal_create_date, 
-					jumum_pengguna	: jumum_pengguna_create, 
-					jumum_keterangan	: jumum_keterangan_create, 
-					jumum_posting	: jumum_posting_create, 
-					jumum_tglposting	: jumum_tglposting_create_date, 
+					jurnal_id			: jurnal_id_field_pk, 
+					jurnal_tanggal		: jurnal_tanggal_field_date, 
+					jurnal_keterangan	: jurnal_keterangan_field, 
+					jurnal_noref		: jurnal_noref_field, 
+					jurnal_unit			: jurnal_unit_field, 
+					task				: post2db
 				}, 
 				success: function(response){             
 					var result=eval(response.responseText);
-					switch(result){
-						case 1:
-							jurnal_umum_detail_purge()
-							jurnal_umum_detail_insert();
-							Ext.MessageBox.alert(post2db+' OK','The Jurnal_umum was '+msg+' successfully.');
-							jurnal_umum_DataStore.reload();
-							jurnal_umum_createWindow.hide();
-							break;
-						default:
+					if(result!==0){
+							detail_jurnal_purge(result)
+							jurnal_umum_DataStore.load();
+							Ext.MessageBox.alert(post2db+' OK','Data Jurnal Umum berhasil disimpan');
+							jurnal_umum_saveWindow.hide();
+						}else{
 							Ext.MessageBox.show({
 							   title: 'Warning',
-							   msg: 'We could\'t not '+msg+' the Jurnal_umum.',
+							   msg: 'Data Jurnal Umum tidak bisa disimpan',
 							   buttons: Ext.MessageBox.OK,
 							   animEl: 'save',
 							   icon: Ext.MessageBox.WARNING
 							});
-							break;
-					}        
+					} 
 				},
 				failure: function(response){
 					var result=response.responseText;
@@ -209,23 +195,14 @@ Ext.onReady(function(){
 					});	
 				}                      
 			});
-			} else {
-				Ext.MessageBox.show({
-					title: 'Warning',
-					msg: 'Your Form is not valid!.',
-					buttons: Ext.MessageBox.OK,
-					animEl: 'save',
-					icon: Ext.MessageBox.WARNING
-				});
-			}
-		} else{
+			
+		} else {
 			Ext.MessageBox.show({
-			   title: 'Warning',
-			   minWidth: 315,
-			   msg: 'Total Kredit harus = Total Debet.',
-			   buttons: Ext.MessageBox.OK,
-			   animEl: 'save',
-			   icon: Ext.MessageBox.WARNING
+				title: 'Warning',
+				msg: 'Your Form is not valid!.',
+				buttons: Ext.MessageBox.OK,
+				animEl: 'save',
+				icon: Ext.MessageBox.WARNING
 			});
 		}
 	}
@@ -234,7 +211,7 @@ Ext.onReady(function(){
   	/* Function for get PK field */
 	function get_pk_id(){
 		if(post2db=='UPDATE')
-			return jurnal_umumListEditorGrid.getSelectionModel().getSelected().get('jumum_id');
+			return jurnal_umumListEditorGrid.getSelectionModel().getSelected().get('jurnal_id');
 		else 
 			return 0;
 	}
@@ -242,48 +219,60 @@ Ext.onReady(function(){
 	
 	/* Reset form before loading */
 	function jurnal_umum_reset_form(){
-		jumum_idField.reset();
-		jumum_idField.setValue(null);
-		jumum_tanggalField.reset();
-		jumum_tanggalField.setValue(null);
-		jumum_penggunaField.reset();
-		jumum_penggunaField.setValue(null);
-		jumum_keteranganField.reset();
-		jumum_keteranganField.setValue(null);
-		jumum_postingField.reset();
-		jumum_postingField.setValue(null);
-		jumum_tglpostingField.reset();
-		jumum_tglpostingField.setValue(null);
+		jurnal_tanggalField.reset();
+		jurnal_tanggalField.setValue(null);
+		jurnal_keteranganField.reset();
+		jurnal_keteranganField.setValue(null);
+		jurnal_norefField.reset();
+		jurnal_norefField.setValue(null);
+		cbo_akunDataStore.setBaseParam('task','all');
+		cbo_akunDataStore.setBaseParam('master_id', get_pk_id());
+		cbo_akunDataStore.load({
+			callback: function(r,opt,success){
+				if(success==true){
+					detail_jurnal_DataStore.setBaseParam('master_id',get_pk_id());
+					detail_jurnal_DataStore.load();
+				}
+			}
+		});
 	}
  	/* End of Function */
   
 	/* setValue to EDIT */
 	function jurnal_umum_set_form(){
-		jumum_idField.setValue(jurnal_umumListEditorGrid.getSelectionModel().getSelected().get('jumum_id'));
-		jumum_tanggalField.setValue(jurnal_umumListEditorGrid.getSelectionModel().getSelected().get('jumum_tanggal'));
-		jumum_penggunaField.setValue(jurnal_umumListEditorGrid.getSelectionModel().getSelected().get('jumum_pengguna'));
-		jumum_keteranganField.setValue(jurnal_umumListEditorGrid.getSelectionModel().getSelected().get('jumum_keterangan'));
-		jumum_postingField.setValue(jurnal_umumListEditorGrid.getSelectionModel().getSelected().get('jumum_posting'));
-		jumum_tglpostingField.setValue(jurnal_umumListEditorGrid.getSelectionModel().getSelected().get('jumum_tglposting'));
+		jurnal_tanggalField.setValue(jurnal_umumListEditorGrid.getSelectionModel().getSelected().get('jurnal_tanggal'));
+		jurnal_keteranganField.setValue(jurnal_umumListEditorGrid.getSelectionModel().getSelected().get('jurnal_keterangan'));
+		jurnal_norefField.setValue(jurnal_umumListEditorGrid.getSelectionModel().getSelected().get('jurnal_noref'));
+		
+		cbo_akunDataStore.setBaseParam('task','detail');
+		cbo_akunDataStore.setBaseParam('master_id', get_pk_id());
+		cbo_akunDataStore.load({
+			callback: function(r,opt,success){
+				if(success==true){
+					detail_jurnal_DataStore.setBaseParam('master_id',get_pk_id());
+					detail_jurnal_DataStore.load();
+				}
+			}
+		});
+		
 	}
 	/* End setValue to EDIT*/
   
 	/* Function for Check if the form is valid */
 	function is_jurnal_umum_form_valid(){
-		return (jumum_idField.isValid() && jumum_tanggalField.isValid() && jumum_penggunaField.isValid() && true &&  true &&  jumum_tglpostingField.isValid() && true &&  true &&  true &&  true &&  true  );
+		return (jurnal_tanggalField.isValid() && (jurnal_totaldebetField.getValue()==jurnal_totalkreditField.getValue()));
 	}
   	/* End of Function */
   
   	/* Function for Displaying  create Window Form */
 	function display_form_window(){
-		if(!jurnal_umum_createWindow.isVisible()){
-			jurnal_umum_reset_form();
+		if(!jurnal_umum_saveWindow.isVisible()){
 			post2db='CREATE';
 			msg='created';
-			jumum_tanggalField.setValue(dt);
-			jurnal_umum_createWindow.show();
+			jurnal_umum_reset_form();
+			jurnal_umum_saveWindow.show();
 		} else {
-			jurnal_umum_createWindow.toFront();
+			jurnal_umum_saveWindow.toFront();
 		}
 	}
   	/* End of Function */
@@ -311,11 +300,10 @@ Ext.onReady(function(){
 	function jurnal_umum_confirm_update(){
 		/* only one record is selected here */
 		if(jurnal_umumListEditorGrid.selModel.getCount() == 1) {
-			jurnal_umum_set_form();
 			post2db='UPDATE';
-			jurnal_umum_detail_DataStore.load({params : {master_id : eval(get_pk_id()), start:0, limit:pageS}});
 			msg='updated';
-			jurnal_umum_createWindow.show();
+			jurnal_umum_set_form();
+			jurnal_umum_saveWindow.show();
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
@@ -334,7 +322,7 @@ Ext.onReady(function(){
 			var selections = jurnal_umumListEditorGrid.selModel.getSelections();
 			var prez = [];
 			for(i = 0; i< jurnal_umumListEditorGrid.selModel.getCount(); i++){
-				prez.push(selections[i].json.jumum_id);
+				prez.push(selections[i].json.jurnal_id);
 			}
 			var encoded_array = Ext.encode(prez);
 			Ext.Ajax.request({ 
@@ -374,157 +362,202 @@ Ext.onReady(function(){
   	/* End of Function */
   
 	/* Function for Retrieve DataStore */
-	jurnal_umum_DataStore = new Ext.data.Store({
+	jurnal_umum_DataStore = new Ext.data.GroupingStore({
 		id: 'jurnal_umum_DataStore',
 		proxy: new Ext.data.HttpProxy({
 			url: 'index.php?c=c_jurnal_umum&m=get_action', 
 			method: 'POST'
 		}),
-		baseParams:{task: "LIST"}, // parameter yang di $_POST ke Controller
+		groupField:'jurnal_tanggal',
+		baseParams:{task: "LIST", start: 0, limit: pageS}, // parameter yang di $_POST ke Controller
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
-			id: 'jumum_id'
+			id: 'jurnal_detalid'
 		},[
-		/* dataIndex => insert intojurnal_umum_ColumnModel, Mapping => for initiate table column */ 
-			{name: 'jumum_id', type: 'int', mapping: 'jumum_id'}, 
-			{name: 'jumum_tanggal', type: 'date', dateFormat: 'Y-m-d', mapping: 'jumum_tanggal'}, 
-			{name: 'jumum_pengguna', type: 'string', mapping: 'jumum_pengguna'}, 
-			{name: 'jumum_keterangan', type: 'string', mapping: 'jumum_keterangan'}, 
-			{name: 'jumum_posting', type: 'string', mapping: 'jumum_posting'}, 
-			{name: 'jumum_tglposting', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'jumum_tglposting'}, 
-			{name: 'jumum_creator', type: 'string', mapping: 'jumum_creator'}, 
-			{name: 'jumum_date_create', type: 'date', dateFormat: 'Y-m-d', mapping: 'jumum_date_create'}, 
-			{name: 'jumum_update', type: 'string', mapping: 'jumum_update'}, 
-			{name: 'jumum_date_update', type: 'date', dateFormat: 'Y-m-d', mapping: 'jumum_date_update'}, 
-			{name: 'jumum_revised', type: 'int', mapping: 'jumum_revised'} 
+			{name: 'jurnal_id', type: 'int', mapping: 'jurnal_id'},
+			{name: 'jurnal_detalid', type: 'int', mapping: 'djurnal_id'}, 
+			{name: 'jurnal_tanggal', type: 'date', dateFormat: 'Y-m-d', mapping: 'jurnal_tanggal'}, 
+			{name: 'jurnal_akun', type: 'string', mapping: 'akun_kode'}, 
+			{name: 'jurnal_akun_nama', type: 'string', mapping: 'akun_nama'}, 
+			{name: 'jurnal_keterangan', type: 'string', mapping: 'djurnal_detail'}, 
+			{name: 'jurnal_noref', type: 'string', mapping: 'jurnal_noref'}, 
+			{name: 'jurnal_debet', type: 'float', mapping: 'djurnal_debet'}, 
+			{name: 'jurnal_kredit', type: 'float', mapping: 'djurnal_kredit'}, 
+			{name: 'jurnal_saldo', type: 'float'}, 
+			{name: 'jurnal_unit', type: 'int', mapping: 'jurnal_unit'}, 
+			{name: 'jurnal_author', type: 'string', mapping: 'jurnal_author'}, 
+			{name: 'jurnal_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'jurnal_date_create'}, 
+			{name: 'jurnal_update', type: 'string', mapping: 'jurnal_update'}, 
+			{name: 'jurnal_date_update', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'jurnal_date_update'}, 
+			{name: 'jurnal_post', type: 'string', mapping: 'jurnal_post'}, 
+			{name: 'jurnal_date_post', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'jurnal_date_post'}, 
+			{name: 'jurnal_revised', type: 'int', mapping: 'jurnal_revised'} 
 		]),
-		sortInfo:{field: 'jumum_id', direction: "DESC"}
+		sortInfo:{field: 'jurnal_detalid', direction: "DESC"}
+
 	});
 	/* End of Function */
     
+	Ext.ux.grid.GroupSummary.Calculations['totalSaldo'] = function(v, record, field){
+        return v + (record.data.jurnal_debet-record.data.jurnal_kredit);
+    };
+	
   	/* Function for Identify of Window Column Model */
 	jurnal_umum_ColumnModel = new Ext.grid.ColumnModel(
 		[{
 			header: '#',
 			readOnly: true,
-			dataIndex: 'jumum_id',
+			dataIndex: 'jurnal_detalid',
 			width: 40,
 			renderer: function(value, cell){
 				cell.css = "readonlycell"; // Mengambil Value dari Class di dalam CSS 
 				return value;
 				},
+			
 			hidden: false
 		},
 		{
 			header: 'Tanggal',
-			dataIndex: 'jumum_tanggal',
-			width: 150,
+			dataIndex: 'jurnal_tanggal',
+			width: 100,
 			sortable: true,
 			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
 			editor: new Ext.form.DateField({
-				allowBlank: false,
 				format: 'Y-m-d'
 			})
 		}, 
 		{
-			header: 'Pengguna',
-			dataIndex: 'jumum_pengguna',
-			width: 150,
+			header: 'No. Akun',
+			dataIndex: 'jurnal_akun',
+			width: 100,
 			sortable: true,
-			editor: new Ext.form.TextField({
-				allowBlank: false,
-				maxLength: 100
-          	})
+			editor: new Ext.form.NumberField({
+				allowDecimals: false,
+				allowNegative: false,
+				blankText: '0',
+				maxLength: 11,
+				maskRe: /([0-9]+)$/
+			}),
+			summaryType: 'count',
+				hideable: false,
+				summaryRenderer: function(v, params, data){
+					return ((v === 0 || v > 1) ? '(' + v +' data transaksi)' : '(1 data transaksi)');
+			},
+		}, 
+		{
+			header: 'Nama Akun',
+			dataIndex: 'jurnal_akun_nama',
+			width: 200,
+			sortable: true,
+			editor: new Ext.form.TextArea({
+				maxLength: 250			
+			})
 		}, 
 		{
 			header: 'Keterangan',
-			dataIndex: 'jumum_keterangan',
-			width: 150,
+			dataIndex: 'jurnal_keterangan',
+			width: 200,
 			sortable: true,
 			editor: new Ext.form.TextField({
-				maxLength: 250
-          	})
-		}, 
-		{
-			header: 'Posting',
-			dataIndex: 'jumum_posting',
-			width: 150,
-			sortable: true,
-			editor: new Ext.form.ComboBox({
-				typeAhead: true,
-				triggerAction: 'all',
-				store:new Ext.data.SimpleStore({
-					fields:['jumum_posting_value', 'jumum_posting_display'],
-					data: [['T','T'],['Y','Y']]
-					}),
-				mode: 'local',
-               	displayField: 'jumum_posting_display',
-               	valueField: 'jumum_posting_value',
-               	lazyRender:true,
-               	listClass: 'x-combo-list-small'
-            })
-		}, 
-		{
-			header: 'Tglposting',
-			dataIndex: 'jumum_tglposting',
-			width: 150,
-			sortable: true,
-			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
-			editor: new Ext.form.DateField({
-				allowBlank: false,
-				format: 'Y-m-d'
+				maxLength: 50			
 			})
 		}, 
 		{
-			header: 'Creator',
-			dataIndex: 'jumum_creator',
-			width: 150,
+			header: 'Nilai Debet (Rp)',
+			dataIndex: 'jurnal_debet',
+			width: 100,
+			align: 'right',
+			summaryType: 'sum',
+			renderer: Ext.util.Format.numberRenderer('0,000'),
 			sortable: true,
-			hidden: true,
-			readOnly: true,
+			readOnly: true
 		}, 
 		{
-			header: 'Date Create',
-			dataIndex: 'jumum_date_create',
-			width: 150,
+			header: 'Nilai Kredit (Rp)',
+			dataIndex: 'jurnal_kredit',
+			width: 100,
+			align: 'right',
+			renderer: Ext.util.Format.numberRenderer('0,000'),
+			summaryType: 'sum',
 			sortable: true,
-			hidden: true,
-			readOnly: true,
+			readOnly: true
 		}, 
 		{
-			header: 'Update',
-			dataIndex: 'jumum_update',
+			header: 'Unit',
+			dataIndex: 'jurnal_unit',
 			width: 150,
 			sortable: true,
-			hidden: true,
 			readOnly: true,
+			hidden: true
 		}, 
 		{
-			header: 'Date Update',
-			dataIndex: 'jumum_date_update',
+			header: 'Author',
+			dataIndex: 'jurnal_author',
 			width: 150,
 			sortable: true,
 			hidden: true,
-			readOnly: true,
+			readOnly: true
+		}, 
+		{
+			header: 'Create on',
+			dataIndex: 'jurnal_date_create',
+			width: 150,
+			sortable: true,
+			hidden: true,
+			readOnly: true
+		}, 
+		{
+			header: 'Last Update by',
+			dataIndex: 'jurnal_update',
+			width: 150,
+			sortable: true,
+			hidden: true,
+			readOnly: true
+		}, 
+		{
+			header: 'Last Update on',
+			dataIndex: 'jurnal_date_update',
+			width: 150,
+			sortable: true,
+			hidden: true,
+			readOnly: true
+		}, 
+		{
+			header: 'Posting',
+			dataIndex: 'jurnal_post',
+			width: 150,
+			sortable: true,
+			hidden: true,
+			readOnly: true
+		}, 
+		{
+			header: 'Posted on',
+			dataIndex: 'jurnal_date_post',
+			width: 150,
+			sortable: true,
+			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
+			hidden: true,
+			readOnly: true
 		}, 
 		{
 			header: 'Revised',
-			dataIndex: 'jumum_revised',
+			dataIndex: 'jurnal_revised',
 			width: 150,
 			sortable: true,
 			hidden: true,
-			readOnly: true,
+			readOnly: true
 		}	]);
 	
 	jurnal_umum_ColumnModel.defaultSortable= true;
 	/* End of Function */
-    
+    var summary = new Ext.ux.grid.GroupSummary();
+
 	/* Declare DataStore and  show datagrid list */
 	jurnal_umumListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'jurnal_umumListEditorGrid',
 		el: 'fp_jurnal_umum',
-		title: 'List Of Jurnal_umum',
+		title: 'Daftar Jurnal Umum',
 		autoHeight: true,
 		store: jurnal_umum_DataStore, // DataStore
 		cm: jurnal_umum_ColumnModel, // Nama-nama Columns
@@ -533,13 +566,20 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 800,
+	  	width: 1024,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: jurnal_umum_DataStore,
 			displayInfo: true
 		}),
-		/* Add Control on ToolBar */
+		view: new Ext.grid.GroupingView({
+            forceFit: true,
+            showGroupName: false,
+            enableNoGroups: false,
+			enableGroupingMenu: false,
+            hideGroupedColumn: true
+        }),
+		plugins: summary,
 		tbar: [
 		{
 			text: 'Add',
@@ -632,203 +672,236 @@ Ext.onReady(function(){
 	
 	/* function for editing row via context menu */
 	function jurnal_umum_editContextMenu(){
-		jurnal_umumListEditorGrid.startEditing(jurnal_umum_SelectedRow,1);
+		//jurnal_umumListEditorGrid.startEditing(jurnal_umum_SelectedRow,1);
+		jurnal_umum_confirm_update();
   	}
 	/* End of Function */
   	
 	jurnal_umumListEditorGrid.addListener('rowcontextmenu', onjurnal_umum_ListEditGridContextMenu);
 	jurnal_umum_DataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
-	jurnal_umumListEditorGrid.on('afteredit', jurnal_umum_update); // inLine Editing Record
+
 	
-	/* Identify  jumum_id Field */
-	jumum_idField= new Ext.form.NumberField({
-		id: 'jumum_idField',
+	/* Identify  jurnal_tanggal Field */
+	jurnal_tanggalField= new Ext.form.DateField({
+		id: 'jurnal_tanggalField',
+		fieldLabel: 'Tanggal',
+		format : 'Y-m-d',
+		value: today,
+		allowBlank: false
+	});
+	
+	jurnal_noField=new Ext.form.TextField({
+		id: 'jurnal_noField',
+		fieldLabel: 'No Jurnal',
+		anchor: '95%',
+		readOnly: true
+	});
+	
+	/* Identify  jurnal_akun Field */
+	jurnal_akunField= new Ext.form.NumberField({
+		id: 'jurnal_akunField',
+		fieldLabel: 'Akun',
 		allowNegatife : false,
 		blankText: '0',
-		allowBlank: false,
 		allowDecimals: false,
-				hidden: true,
-		readOnly: true,
 		anchor: '95%',
 		maskRe: /([0-9]+)$/
 	});
-	/* Identify  jumum_tanggal Field */
-	jumum_tanggalField= new Ext.form.DateField({
-		id: 'jumum_tanggalField',
-		fieldLabel: 'Tanggal',
-		format : 'Y-m-d',
-		allowBlank: false,
-		disabled: true
-	});
-	/* Identify  jumum_pengguna Field */
-	jumum_penggunaField= new Ext.form.TextField({
-		id: 'jumum_penggunaField',
-		fieldLabel: 'Pengguna',
-		maxLength: 100,
-		allowBlank: false,
-		anchor: '95%'
-	});
-	/* Identify  jumum_keterangan Field */
-	jumum_keteranganField= new Ext.form.TextArea({
-		id: 'jumum_keteranganField',
+	/* Identify  jurnal_keterangan Field */
+	jurnal_keteranganField= new Ext.form.TextArea({
+		id: 'jurnal_keteranganField',
 		fieldLabel: 'Keterangan',
 		maxLength: 250,
 		anchor: '95%'
 	});
-	/* Identify  jumum_posting Field */
-	jumum_postingField= new Ext.form.ComboBox({
-		id: 'jumum_postingField',
-		fieldLabel: 'Posting',
-		store:new Ext.data.SimpleStore({
-			fields:['jumum_posting_value', 'jumum_posting_display'],
-			data:[['T','T'],['Y','Y']]
-		}),
-		mode: 'local',
-		displayField: 'jumum_posting_display',
-		valueField: 'jumum_posting_value',
-		anchor: '95%',
-		triggerAction: 'all'	
+	/* Identify  jurnal_noref Field */
+	jurnal_norefField= new Ext.form.TextField({
+		id: 'jurnal_norefField',
+		fieldLabel: 'No Ref',
+		maxLength: 50,
+		anchor: '95%'
 	});
-	/* Identify  jumum_tglposting Field */
-	jumum_tglpostingField= new Ext.form.DateField({
-		id: 'jumum_tglpostingField',
-		fieldLabel: 'Tglposting',
-		format : 'Y-m-d',
-		allowBlank: false,
-	});
-  	
-	jumum_dtotal_kreditField= new Ext.form.NumberField({
-		id: 'jumum_dtotal_kreditField',
-		fieldLabel: 'Detail Total Kredit',
+	/* Identify  jurnal_debet Field */
+	jurnal_debetField= new Ext.form.NumberField({
+		id: 'jurnal_debetField',
+		fieldLabel: 'Nilai Debet',
 		allowNegatife : false,
 		blankText: '0',
 		allowDecimals: true,
-		readOnly: true,
+		enableKeyEvents: true,
 		anchor: '95%',
 		maskRe: /([0-9]+)$/
 	});
-	jumum_dtotal_debetField= new Ext.form.NumberField({
-		id: 'jumum_dtotal_debetField',
-		fieldLabel: 'Detail Total Debit',
+	/* Identify  jurnal_kredit Field */
+	jurnal_kreditField= new Ext.form.NumberField({
+		id: 'jurnal_kreditField',
+		fieldLabel: 'Nilai Kredit',
 		allowNegatife : false,
 		blankText: '0',
 		allowDecimals: true,
-		readOnly: true,
+		enableKeyEvents: true,
 		anchor: '95%',
 		maskRe: /([0-9]+)$/
 	});
 	
-	/*Fieldset Master*/
-	jurnal_umum_masterGroup = new Ext.form.FieldSet({
+	jurnal_totaldebetField= new Ext.form.NumberField({
+		id: 'jurnal_totaldebetField',
+		fieldLabel: 'Total Debet',
+		allowNegatife : false,
+		blankText: '0',
+		allowDecimals: true,
+		width: 150,
+		readOnly: true,
+		maskRe: /([0-9]+)$/
+	});
+	/* Identify  jurnal_kredit Field */
+	jurnal_totalkreditField= new Ext.form.NumberField({
+		id: 'jurnal_totalkreditField',
+		fieldLabel: 'Total Kredit',
+		allowNegatife : false,
+		blankText: '0',
+		allowDecimals: true,
+		width: 150,
+		readOnly: true,
+		maskRe: /([0-9]+)$/
+	});
+	
+	balance_Group = new Ext.form.FieldSet({
+		title: 'Balance',
+		autoHeight: true,
+		collapsible: true,
+		layout:'column',
+		labelSeparator : ':',
+		items:[
+			{
+				columnWidth:0.5,
+				layout: 'form',
+				labelAlign: 'left',
+				border:false,
+				items: [jurnal_totaldebetField] 
+			},{
+				columnWidth:0.5,
+				layout: 'form',
+				labelAlign: 'left',
+				border:false,
+				items: [jurnal_totalkreditField] 
+			}
+			]
+	
+	});
+	
+	master_Group = new Ext.form.FieldSet({
 		title: 'Master',
 		autoHeight: true,
 		collapsible: true,
 		layout:'column',
+		labelSeparator : ':',
 		items:[
 			{
 				columnWidth:0.5,
 				layout: 'form',
+				labelAlign: 'left',
 				border:false,
-				items: [jumum_tanggalField, jumum_penggunaField] 
-			},
-			{
+				items: [jurnal_tanggalField, jurnal_noField] 
+			},{
 				columnWidth:0.5,
 				layout: 'form',
+				labelAlign: 'left',
 				border:false,
-				items: [jumum_keteranganField, jumum_idField] 
+				items: [jurnal_keteranganField] 
 			}
 			]
 	
 	});
 	
-	jurnal_umum_dtotal_nilaiGroup = new Ext.form.FieldSet({
-		title: '-',
-		autoHeight: true,
-		collapsible: true,
-		layout:'column',
-		items:[
-			{
-				columnWidth:0.5,
-				layout: 'form',
-				border:false,
-				items: [jumum_dtotal_debetField] 
-			},
-			{
-				columnWidth:0.5,
-				layout: 'form',
-				border:false,
-				items: [jumum_dtotal_kreditField] 
-			}
-			]
-	
+	/* Identify  jurnal_unit Field */
+	jurnal_unitField= new Ext.form.NumberField({
+		id: 'jurnal_unitField',
+		fieldLabel: 'Unit',
+		allowNegatife : false,
+		blankText: '0',
+		allowDecimals: false,
+				anchor: '95%',
+		maskRe: /([0-9]+)$/
 	});
+	/* Identify  jurnal_post Field */
+	jurnal_postField= new Ext.form.ComboBox({
+		id: 'jurnal_postField',
+		fieldLabel: 'Post',
+		store:new Ext.data.SimpleStore({
+			fields:['jurnal_post_value', 'jurnal_post_display'],
+			data:[['T','T'],['Y','Y']]
+		}),
+		mode: 'local',
+		displayField: 'jurnal_post_display',
+		valueField: 'jurnal_post_value',
+		anchor: '95%',
+		triggerAction: 'all'	
+	});
+	/* Identify  jurnal_date_post Field */
+	jurnal_date_postField= new Ext.form.DateField({
+		id: 'jurnal_date_postField',
+		fieldLabel: 'Jurnal Date Post',
+		format : 'Y-m-d',
+	});
+
 	
-		
-	/*Detail Declaration */
-		
-	// Function for json reader of detail
-	var jurnal_umum_detail_reader=new Ext.data.JsonReader({
+	//DETAIL DECLARATION
+	var jurnal_detail_reader=new Ext.data.JsonReader({
 		root: 'results',
 		totalProperty: 'total',
-		id: ''
+		id: 'jurnal_id'
 	},[
-	/* dataIndex => insert intoperawatan_ColumnModel, Mapping => for initiate table column */ 
-			{name: 'djumum_id', type: 'int', mapping: 'djumum_id'}, 
-			{name: 'djumum_master', type: 'int', mapping: 'djumum_master'}, 
-			{name: 'djumum_akun', type: 'int', mapping: 'djumum_akun'}, 
-			{name: 'djumum_keterangan', type: 'string', mapping: 'djumum_keterangan'}, 
-			{name: 'djumum_debet', type: 'float', mapping: 'djumum_debet'}, 
-			{name: 'djumum_kredit', type: 'float', mapping: 'djumum_kredit'} 
+		{name: 'jurnal_id', type: 'int', mapping: 'djurnal_id'}, 
+		{name: 'jurnal_akun', type: 'int', mapping: 'djurnal_akun'}, 
+		{name: 'jurnal_detail', type: 'string', mapping: 'djurnal_detail'},
+		{name: 'jurnal_debet', type: 'float', mapping: 'djurnal_debet'}, 
+		{name: 'jurnal_kredit', type: 'float', mapping: 'djurnal_kredit'}			
 	]);
 	//eof
 	
 	//function for json writer of detail
-	var jurnal_umum_detail_writer = new Ext.data.JsonWriter({
+	var detail_jurnal_writer = new Ext.data.JsonWriter({
 		encode: true,
 		writeAllFields: false
 	});
-	//eof
 	
-	/* Function for Retrieve DataStore of detail*/
-	jurnal_umum_detail_DataStore = new Ext.data.Store({
-		id: 'jurnal_umum_detail_DataStore',
+	detail_jurnal_DataStore = new Ext.data.Store({
+		id: 'detail_jurnal_DataStore',
 		proxy: new Ext.data.HttpProxy({
-			url: 'index.php?c=c_jurnal_umum&m=detail_jurnal_umum_detail_list', 
+			url: 'index.php?c=c_jurnal_umum&m=get_detail_jurnal_list', 
 			method: 'POST'
 		}),
-		reader: jurnal_umum_detail_reader,
-		baseParams:{master_id: jumum_idField.getValue()},
-		sortInfo:{field: 'djumum_id', direction: "ASC"}
+		reader: jurnal_detail_reader,
+		baseParams:{start:0, limit:pageS, task: 'detail', master_id: 0},
+		sortInfo:{field: 'jurnal_id', direction: 'DESC'}
 	});
 	/* End of Function */
 	
+	
 	//function for editor of detail
-	var editor_jurnal_umum_detail= new Ext.ux.grid.RowEditor({
+	var editor_detail_jurnal= new Ext.ux.grid.RowEditor({
         saveText: 'Update'
     });
-	//eof
 	
-	/* GET detail akun */
-	cbo_djumum_akunDataStore = new Ext.data.Store({
-		id: 'cbo_djumum_akunDataStore',
+	cbo_akunDataStore = new Ext.data.Store({
+		id: 'cbo_akunDataStore',
 		proxy: new Ext.data.HttpProxy({
 			url: 'index.php?c=c_jurnal_umum&m=get_akun_list', 
 			method: 'POST'
 		}),
-		baseParams:{task: "LIST", start:0, limit: 10}, // parameter yang di $_POST ke Controller
+		baseParams:{start:0,limit:pageS,task:'detail'},
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
 			id: 'akun_id'
 		},[
-		/* dataIndex => insert intocustomer_note_ColumnModel, Mapping => for initiate table column */ 
-			{name: 'jumum_akun_value', type: 'int', mapping: 'akun_id'},
-			{name: 'jumum_akun_nama', type: 'string', mapping: 'akun_nama'},
-			{name: 'jumum_akun_kode', type: 'string', mapping: 'akun_kode'}
+			{name: 'akun_id', type: 'int', mapping: 'akun_id'},
+			{name: 'akun_kode', type: 'string', mapping: 'akun_kode'},
+			{name: 'akun_nama', type: 'string', mapping: 'akun_nama'}
 		]),
-		sortInfo:{field: 'jumum_akun_nama', direction: "ASC"}
+		sortInfo:{field: 'akun_kode', direction: "ASC"}
 	});
-	/* END akun datasource */
 	
 	Ext.util.Format.comboRenderer = function(combo){
 		return function(value){
@@ -837,92 +910,99 @@ Ext.onReady(function(){
 		}
 	}
 	
-	var combo_djumum_akun=new Ext.form.ComboBox({
-			store: cbo_djumum_akunDataStore,
+	var akun_tpl = new Ext.XTemplate(
+        '<tpl for="."><div class="search-item">',
+            '<span><b>[{akun_kode}] - {akun_nama}</b></span>',
+        '</div></tpl>'
+    );
+	
+	var combo_akun=new Ext.form.ComboBox({
+			store: cbo_akunDataStore,
 			mode: 'remote',
-			typeAhead: true,
-			displayField: 'jumum_akun_nama',
-			valueField: 'jumum_akun_value',
+			typeAhead: false,
+			displayField: 'akun_nama',
+			valueField: 'akun_id',
 			triggerAction: 'all',
-			lazyRender:true
-
+			lazyRender: false,
+			pageSize: pageS,
+			enableKeyEvents: true,
+			tpl: akun_tpl,
+			itemSelector: 'div.search-item',
+			triggerAction: 'all',
+			listClass: 'x-combo-list-small',
+			anchor: '95%'
 	});
 	
-	//declaration of detail coloumn model
-	jurnal_umum_detail_ColumnModel = new Ext.grid.ColumnModel(
+	detail_jurnal_ColumnModel = new Ext.grid.ColumnModel(
 		[
-		{
-			header: 'Akun',
-			dataIndex: 'djumum_akun',
-			width: 150,
+		 {
+			header: '<div align="center">' + 'Nama Akun' + '</div>',
+			dataIndex: 'jurnal_akun',
+			width: 200,	//250,
 			sortable: true,
-			editor: combo_djumum_akun,
-			renderer: Ext.util.Format.comboRenderer(combo_djumum_akun)
+			editor: combo_akun,
+			renderer: Ext.util.Format.comboRenderer(combo_akun)
 		},
 		{
-			header: 'Keterangan',
-			dataIndex: 'djumum_keterangan',
-			width: 150,
-			sortable: true,
-			editor: new Ext.form.TextField({
-				maxLength: 250
-          	})
+			header: '<div align="center">' + 'Kode Akun' + '</div>',
+			dataIndex: 'jurnal_akun',
+			width: 80,
+			editor: jurnal_akunField,
+			readOnly: true
+		},{
+			header: '<div align="center">' + 'Keterangan' + '</div>',
+			dataIndex: 'jurnal_detail',
+			width: 200,
+			editor: new Ext.form.TextField({})
 		},
 		{
-			header: 'Debet',
-			dataIndex: 'djumum_debet',
-			width: 150,
+			header: '<div align="center">' + 'Debet' + '</div>',
+			align: 'right',
+			dataIndex: 'jurnal_debet',
+			width: 60,	//100,
 			sortable: true,
-			editor: new Ext.form.NumberField({
-				allowBlank: false,
-				allowDecimals: true,
-				allowNegative: false,
-				blankText: '0',
-				maxLength: 22,
-				maskRe: /([0-9]+)$/
-			})
+			renderer: Ext.util.Format.numberRenderer('0,000'),
+			editor: jurnal_debetField
 		},
 		{
-			header: 'Kredit',
-			dataIndex: 'djumum_kredit',
-			width: 150,
+			header: '<div align="center">' + 'Kredit' + '</div>',
+			align: 'right',
+			dataIndex: 'jurnal_kredit',
+			width: 60,	//100,
 			sortable: true,
-			editor: new Ext.form.NumberField({
-				allowBlank: false,
-				allowDecimals: true,
-				allowNegative: false,
-				blankText: '0',
-				maxLength: 22,
-				maskRe: /([0-9]+)$/
-			})
-		}]
+			renderer: Ext.util.Format.numberRenderer('0,000'),
+			editor: jurnal_kreditField
+			
+		}
+		]
 	);
-	jurnal_umum_detail_ColumnModel.defaultSortable= true;
-	//eof
+	detail_jurnal_ColumnModel.defaultSortable= true;
+	
+	
 	
 	
 	
 	//declaration of detail list editor grid
-	jurnal_umum_detailListEditorGrid =  new Ext.grid.EditorGridPanel({
-		id: 'jurnal_umum_detailListEditorGrid',
-		el: 'fp_jurnal_umum_detail',
-		title: 'Detail jurnal_umum_detail',
+	detail_jurnalListEditorGrid =  new Ext.grid.EditorGridPanel({
+		id: 'detail_jurnalListEditorGrid',
+		el: 'fp_detail_jurnal',
+		title: 'Detail Jurnal',
 		height: 250,
-		width: 690,
+		width: 790,	//690,
 		autoScroll: true,
-		store: jurnal_umum_detail_DataStore, // DataStore
-		colModel: jurnal_umum_detail_ColumnModel, // Nama-nama Columns
+		store: detail_jurnal_DataStore, // DataStore
+		colModel: detail_jurnal_ColumnModel, // Nama-nama Columns
 		enableColLock:false,
 		region: 'center',
         margins: '0 5 5 5',
-		plugins: [editor_jurnal_umum_detail],
+		plugins: [editor_detail_jurnal],
 		frame: true,
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true},
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
-			store: jurnal_umum_detail_DataStore,
+			store: detail_jurnal_DataStore,
 			displayInfo: true
 		}),
 		/* Add Control on ToolBar */
@@ -931,80 +1011,83 @@ Ext.onReady(function(){
 			text: 'Add',
 			tooltip: 'Add new detail record',
 			iconCls:'icon-adds',    				// this is defined in our styles.css
-			handler: jurnal_umum_detail_add
+			handler: detail_jurnal_add
 		}, '-',{
 			text: 'Delete',
 			tooltip: 'Delete detail selected record',
 			iconCls:'icon-delete',
-			handler: jurnal_umum_detail_confirm_delete
+			handler: detail_jurnal_confirm_delete
 		}
 		]
 	});
 	//eof
 	
-	
 	//function of detail add
-	function jurnal_umum_detail_add(){
-		var edit_jurnal_umum_detail= new jurnal_umum_detailListEditorGrid.store.recordType({
-			djumum_id	:'',		
-			djumum_master	:'',		
-			djumum_akun	:'',		
-			djumum_keterangan	:'',		
-			djumum_debet	:'',		
-			djumum_kredit	:''		
+	function detail_jurnal_add(){
+		var edit_detail_jurnal= new detail_jurnalListEditorGrid.store.recordType({
+			jurnal_id			:'',		
+			jurnal_akun			:null,		
+			jurnal_detail		:null,		
+			jurnal_debet		:0,		
+			jurnal_kredit		:0	
 		});
-		editor_jurnal_umum_detail.stopEditing();
-		jurnal_umum_detail_DataStore.insert(0, edit_jurnal_umum_detail);
-		jurnal_umum_detailListEditorGrid.getView().refresh();
-		jurnal_umum_detailListEditorGrid.getSelectionModel().selectRow(0);
-		editor_jurnal_umum_detail.startEditing(0);
+		editor_detail_jurnal.stopEditing();
+		detail_jurnal_DataStore.insert(0, edit_detail_jurnal);
+		detail_jurnalListEditorGrid.getView().refresh();
+		detail_jurnalListEditorGrid.getSelectionModel().selectRow(0);
+		editor_detail_jurnal.startEditing(0);
 	}
 	
 	//function for refresh detail
-	function refresh_jurnal_umum_detail(){
-		jurnal_umum_detail_DataStore.commitChanges();
-		jurnal_umum_detailListEditorGrid.getView().refresh();
+	function refresh_detail_jurnal(){
+		detail_jurnal_DataStore.commitChanges();
+		detail_jurnalListEditorGrid.getView().refresh();
 	}
 	//eof
 	
 	//function for insert detail
-	function jurnal_umum_detail_insert(){
-		for(i=0;i<jurnal_umum_detail_DataStore.getCount();i++){
-			jurnal_umum_detail_record=jurnal_umum_detail_DataStore.getAt(i);
+	function detail_jurnal_insert(pkid){
+		for(i=0;i<detail_jurnal_DataStore.getCount();i++){
+			detail_jurnal_record=detail_jurnal_DataStore.getAt(i);
 			Ext.Ajax.request({
 				waitMsg: 'Please wait...',
-				url: 'index.php?c=c_jurnal_umum&m=detail_jurnal_umum_detail_insert',
+				url: 'index.php?c=c_jurnal_umum&m=detail_jurnal_insert',
 				params:{
-				djumum_id	: jurnal_umum_detail_record.data.djumum_id, 
-				djumum_master	: eval(jumum_idField.getValue()), 
-				djumum_akun	: jurnal_umum_detail_record.data.djumum_akun, 
-				djumum_keterangan	: jurnal_umum_detail_record.data.djumum_keterangan, 
-				djumum_debet	: jurnal_umum_detail_record.data.djumum_debet, 
-				djumum_kredit	: jurnal_umum_detail_record.data.djumum_kredit 
+				jurnal_id		: detail_jurnal_record.data.jurnal_id, 
+				jurnal_master	: pkid, 
+				jurnal_akun		: detail_jurnal_record.data.jurnal_id, 
+				jurnal_detail	: detail_jurnal_record.data.jurnal_detail, 
+				jurnal_debet	: detail_jurnal_record.data.jurnal_debet, 
+				jurnal_kredit	: detail_jurnal_record.data.jurnal_kredit
 				
 				}
 			});
 		}
+		jurnal_umum_DataStore.reload();		
 	}
 	//eof
 	
 	//function for purge detail
-	function jurnal_umum_detail_purge(){
+	function detail_jurnal_purge(pkid){
 		Ext.Ajax.request({
 			waitMsg: 'Please wait...',
-			url: 'index.php?c=c_jurnal_umum&m=detail_jurnal_umum_detail_purge',
-			params:{ master_id: eval(jumum_idField.getValue()) }
+			url: 'index.php?c=c_jurnal_umum&m=detail_jurnal_purge',
+			params:{ jurnal_master: pkid },
+			success:function(response){
+				detail_jurnal_insert(pkid);
+			}
 		});
+		jurnal_umum_DataStore.reload();
 	}
 	//eof
 	
 	/* Function for Delete Confirm of detail */
-	function jurnal_umum_detail_confirm_delete(){
+	function detail_jurnal_confirm_delete(){
 		// only one record is selected here
-		if(jurnal_umum_detailListEditorGrid.selModel.getCount() == 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', jurnal_umum_detail_delete);
-		} else if(jurnal_umum_detailListEditorGrid.selModel.getCount() > 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', jurnal_umum_detail_delete);
+		if(detail_jurnalListEditorGrid.selModel.getCount() == 1){
+			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', detail_jurnal_delete);
+		} else if(detail_jurnalListEditorGrid.selModel.getCount() > 1){
+			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', detail_jurnal_delete);
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
@@ -1018,35 +1101,39 @@ Ext.onReady(function(){
 	//eof
 	
 	//function for Delete of detail
-	function jurnal_umum_detail_delete(btn){
+	function detail_jurnal_delete(btn){
 		if(btn=='yes'){
-			var s = jurnal_umum_detailListEditorGrid.getSelectionModel().getSelections();
+			var s = detail_jurnalListEditorGrid.getSelectionModel().getSelections();
 			for(var i = 0, r; r = s[i]; i++){
-				jurnal_umum_detail_DataStore.remove(r);
+				detail_jurnal_DataStore.remove(r);
 			}
-		}  
+		} 
+		detail_jurnal_DataStore.commitChanges();
 	}
 	//eof
 	
-	//event on update of detail data store
-	jurnal_umum_detail_DataStore.on('update', refresh_jurnal_umum_detail);
-	
 	/* Function for retrieve create Window Panel*/ 
-	jurnal_umum_createForm = new Ext.FormPanel({
-		labelAlign: 'top',
+	jurnal_umum_saveForm = new Ext.FormPanel({
+		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
-		width: 700,        
-		items: [jurnal_umum_masterGroup,jurnal_umum_detailListEditorGrid,jurnal_umum_dtotal_nilaiGroup]
-		,
+		width: 800,        
+		items:[
+			{
+				columnWidth:1,
+				layout: 'form',
+				border:false,
+				items: [master_Group, detail_jurnalListEditorGrid, balance_Group ] 
+			}
+			],
 		buttons: [{
 				text: 'Save and Close',
-				handler: jurnal_umum_create
+				handler: jurnal_umum_save
 			}
 			,{
 				text: 'Cancel',
 				handler: function(){
-					jurnal_umum_createWindow.hide();
+					jurnal_umum_saveWindow.hide();
 				}
 			}
 		]
@@ -1054,9 +1141,9 @@ Ext.onReady(function(){
 	/* End  of Function*/
 	
 	/* Function for retrieve create Window Form */
-	jurnal_umum_createWindow= new Ext.Window({
-		id: 'jurnal_umum_createWindow',
-		title: post2db+'Jurnal_umum',
+	jurnal_umum_saveWindow= new Ext.Window({
+		id: 'jurnal_umum_saveWindow',
+		title: post2db+'Jurnal Umum',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,
@@ -1066,52 +1153,49 @@ Ext.onReady(function(){
 		plain:true,
 		layout: 'fit',
 		modal: true,
-		renderTo: 'elwindow_jurnal_umum_create',
-		items: jurnal_umum_createForm
+		renderTo: 'elwindow_jurnal_umum_save',
+		items: jurnal_umum_saveForm
 	});
 	/* End Window */
-	
-	function detail_jumum_dtotaldk(){
-		var total_kredit=0;
-		var total_debet=0;
-		for(i=0;i<jurnal_umum_detail_DataStore.getCount();i++){
-			detail_jumum_record=jurnal_umum_detail_DataStore.getAt(i);
-			total_kredit=total_kredit+detail_jumum_record.data.djumum_kredit;
-			total_debet=total_debet+detail_jumum_record.data.djumum_debet;
-		}
-		jumum_dtotal_kreditField.setValue(total_kredit);
-		jumum_dtotal_debetField.setValue(total_debet);
-	}
-	
-	jurnal_umum_detail_DataStore.on('update',detail_jumum_dtotaldk);
-	jurnal_umum_detail_DataStore.on('load',detail_jumum_dtotaldk);
 	
 	/* Function for action list search */
 	function jurnal_umum_list_search(){
 		// render according to a SQL date format.
-		var jumum_id_search=null;
-		var jumum_tanggal_search_date="";
-		var jumum_pengguna_search=null;
-		var jumum_keterangan_search=null;
-		var jumum_posting_search=null;
-		var jumum_tglposting_search_date="";
+		var jurnal_id_search=null;
+		var jurnal_tanggal_search_date="";
+		var jurnal_akun_search=null;
+		var jurnal_keterangan_search=null;
+		var jurnal_noref_search=null;
+		var jurnal_debet_search=null;
+		var jurnal_kredit_search=null;
+		var jurnal_unit_search=null;
+		var jurnal_post_search=null;
+		var jurnal_date_post_search_date="";
 
-		if(jumum_idSearchField.getValue()!==null){jumum_id_search=jumum_idSearchField.getValue();}
-		if(jumum_tanggalSearchField.getValue()!==""){jumum_tanggal_search_date=jumum_tanggalSearchField.getValue().format('Y-m-d');}
-		if(jumum_penggunaSearchField.getValue()!==null){jumum_pengguna_search=jumum_penggunaSearchField.getValue();}
-		if(jumum_keteranganSearchField.getValue()!==null){jumum_keterangan_search=jumum_keteranganSearchField.getValue();}
-		if(jumum_postingSearchField.getValue()!==null){jumum_posting_search=jumum_postingSearchField.getValue();}
-		if(jumum_tglpostingSearchField.getValue()!==""){jumum_tglposting_search_date=jumum_tglpostingSearchField.getValue().format('Y-m-d');}
+		if(jurnal_idSearchField.getValue()!==null){jurnal_id_search=jurnal_idSearchField.getValue();}
+		if(jurnal_tanggalSearchField.getValue()!==""){jurnal_tanggal_search_date=jurnal_tanggalSearchField.getValue().format('Y-m-d');}
+		if(jurnal_akunSearchField.getValue()!==null){jurnal_akun_search=jurnal_akunSearchField.getValue();}
+		if(jurnal_keteranganSearchField.getValue()!==null){jurnal_keterangan_search=jurnal_keteranganSearchField.getValue();}
+		if(jurnal_norefSearchField.getValue()!==null){jurnal_noref_search=jurnal_norefSearchField.getValue();}
+		if(jurnal_debetSearchField.getValue()!==null){jurnal_debet_search=jurnal_debetSearchField.getValue();}
+		if(jurnal_kreditSearchField.getValue()!==null){jurnal_kredit_search=jurnal_kreditSearchField.getValue();}
+		if(jurnal_unitSearchField.getValue()!==null){jurnal_unit_search=jurnal_unitSearchField.getValue();}
+		if(jurnal_postSearchField.getValue()!==null){jurnal_post_search=jurnal_postSearchField.getValue();}
+		if(jurnal_date_postSearchField.getValue()!==""){jurnal_date_post_search_date=jurnal_date_postSearchField.getValue().format('Y-m-d');}
 		// change the store parameters
 		jurnal_umum_DataStore.baseParams = {
 			task: 'SEARCH',
 			//variable here
-			jumum_id	:	jumum_id_search, 
-			jumum_tanggal	:	jumum_tanggal_search_date, 
-			jumum_pengguna	:	jumum_pengguna_search, 
-			jumum_keterangan	:	jumum_keterangan_search, 
-			jumum_posting	:	jumum_posting_search, 
-			jumum_tglposting	:	jumum_tglposting_search_date, 
+			jurnal_id	:	jurnal_id_search, 
+			jurnal_tanggal	:	jurnal_tanggal_search_date, 
+			jurnal_akun	:	jurnal_akun_search, 
+			jurnal_keterangan	:	jurnal_keterangan_search, 
+			jurnal_noref	:	jurnal_noref_search, 
+			jurnal_debet	:	jurnal_debet_search, 
+			jurnal_kredit	:	jurnal_kredit_search, 
+			jurnal_unit	:	jurnal_unit_search, 
+			jurnal_post	:	jurnal_post_search, 
+			jurnal_date_post	:	jurnal_date_post_search_date, 
 		};
 		// Cause the datastore to do another query : 
 		jurnal_umum_DataStore.reload({params: {start: 0, limit: pageS}});
@@ -1128,10 +1212,10 @@ Ext.onReady(function(){
 	/* End of Fuction */
 	
 	/* Field for search */
-	/* Identify  jumum_id Search Field */
-	jumum_idSearchField= new Ext.form.NumberField({
-		id: 'jumum_idSearchField',
-		fieldLabel: 'Jumum Id',
+	/* Identify  jurnal_id Search Field */
+	jurnal_idSearchField= new Ext.form.NumberField({
+		id: 'jurnal_idSearchField',
+		fieldLabel: 'Jurnal Id',
 		allowNegatife : false,
 		blankText: '0',
 		allowDecimals: false,
@@ -1139,48 +1223,92 @@ Ext.onReady(function(){
 		maskRe: /([0-9]+)$/
 	
 	});
-	/* Identify  jumum_tanggal Search Field */
-	jumum_tanggalSearchField= new Ext.form.DateField({
-		id: 'jumum_tanggalSearchField',
-		fieldLabel: 'Jumum Tanggal',
+	/* Identify  jurnal_tanggal Search Field */
+	jurnal_tanggalSearchField= new Ext.form.DateField({
+		id: 'jurnal_tanggalSearchField',
+		fieldLabel: 'Jurnal Tanggal',
 		format : 'Y-m-d',
 	
 	});
-	/* Identify  jumum_pengguna Search Field */
-	jumum_penggunaSearchField= new Ext.form.TextField({
-		id: 'jumum_penggunaSearchField',
-		fieldLabel: 'Jumum Pengguna',
-		maxLength: 100,
-		anchor: '95%'
+	/* Identify  jurnal_akun Search Field */
+	jurnal_akunSearchField= new Ext.form.NumberField({
+		id: 'jurnal_akunSearchField',
+		fieldLabel: 'Jurnal Akun',
+		allowNegatife : false,
+		blankText: '0',
+		allowDecimals: false,
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
 	
 	});
-	/* Identify  jumum_keterangan Search Field */
-	jumum_keteranganSearchField= new Ext.form.TextField({
-		id: 'jumum_keteranganSearchField',
-		fieldLabel: 'Jumum Keterangan',
+	/* Identify  jurnal_keterangan Search Field */
+	jurnal_keteranganSearchField= new Ext.form.TextField({
+		id: 'jurnal_keteranganSearchField',
+		fieldLabel: 'Jurnal Keterangan',
 		maxLength: 250,
 		anchor: '95%'
 	
 	});
-	/* Identify  jumum_posting Search Field */
-	jumum_postingSearchField= new Ext.form.ComboBox({
-		id: 'jumum_postingSearchField',
-		fieldLabel: 'Jumum Posting',
+	/* Identify  jurnal_noref Search Field */
+	jurnal_norefSearchField= new Ext.form.TextField({
+		id: 'jurnal_norefSearchField',
+		fieldLabel: 'Jurnal Noref',
+		maxLength: 50,
+		anchor: '95%'
+	
+	});
+	/* Identify  jurnal_debet Search Field */
+	jurnal_debetSearchField= new Ext.form.NumberField({
+		id: 'jurnal_debetSearchField',
+		fieldLabel: 'Jurnal Debet',
+		allowNegatife : false,
+		blankText: '0',
+		allowDecimals: true,
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
+	
+	});
+	/* Identify  jurnal_kredit Search Field */
+	jurnal_kreditSearchField= new Ext.form.NumberField({
+		id: 'jurnal_kreditSearchField',
+		fieldLabel: 'Jurnal Kredit',
+		allowNegatife : false,
+		blankText: '0',
+		allowDecimals: true,
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
+	
+	});
+	/* Identify  jurnal_unit Search Field */
+	jurnal_unitSearchField= new Ext.form.NumberField({
+		id: 'jurnal_unitSearchField',
+		fieldLabel: 'Jurnal Unit',
+		allowNegatife : false,
+		blankText: '0',
+		allowDecimals: false,
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
+	
+	});
+	/* Identify  jurnal_post Search Field */
+	jurnal_postSearchField= new Ext.form.ComboBox({
+		id: 'jurnal_postSearchField',
+		fieldLabel: 'Jurnal Post',
 		store:new Ext.data.SimpleStore({
-			fields:['value', 'jumum_posting'],
+			fields:['value', 'jurnal_post'],
 			data:[['T','T'],['Y','Y']]
 		}),
 		mode: 'local',
-		displayField: 'jumum_posting',
+		displayField: 'jurnal_post',
 		valueField: 'value',
 		anchor: '95%',
 		triggerAction: 'all'	 
 	
 	});
-	/* Identify  jumum_tglposting Search Field */
-	jumum_tglpostingSearchField= new Ext.form.DateField({
-		id: 'jumum_tglpostingSearchField',
-		fieldLabel: 'Jumum Tglposting',
+	/* Identify  jurnal_date_post Search Field */
+	jurnal_date_postSearchField= new Ext.form.DateField({
+		id: 'jurnal_date_postSearchField',
+		fieldLabel: 'Jurnal Date Post',
 		format : 'Y-m-d',
 	
 	});
@@ -1199,7 +1327,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [jumum_idSearchField, jumum_tanggalSearchField, jumum_penggunaSearchField, jumum_keteranganSearchField, jumum_postingSearchField, jumum_tglpostingSearchField] 
+				items: [jurnal_tanggalSearchField, jurnal_akunSearchField, jurnal_keteranganSearchField, jurnal_norefSearchField, jurnal_debetSearchField, jurnal_kreditSearchField, jurnal_unitSearchField, ] 
 			}
 			]
 		}]
@@ -1217,6 +1345,8 @@ Ext.onReady(function(){
 	});
     /* End of Function */ 
 	 
+	
+
 	/* Function for retrieve search Window Form, used for andvaced search */
 	jurnal_umum_searchWindow = new Ext.Window({
 		title: 'jurnal_umum Search',
@@ -1247,21 +1377,27 @@ Ext.onReady(function(){
 	/* Function for print List Grid */
 	function jurnal_umum_print(){
 		var searchquery = "";
-		var jumum_id_print=null;
-		var jumum_tanggal_print_date="";
-		var jumum_pengguna_print=null;
-		var jumum_keterangan_print=null;
-		var jumum_posting_print=null;
-		var jumum_tglposting_print_date="";
+		var jurnal_tanggal_print_date="";
+		var jurnal_akun_print=null;
+		var jurnal_keterangan_print=null;
+		var jurnal_noref_print=null;
+		var jurnal_debet_print=null;
+		var jurnal_kredit_print=null;
+		var jurnal_unit_print=null;
+		var jurnal_post_print=null;
+		var jurnal_date_post_print_date="";
 		var win;              
 		// check if we do have some search data...
 		if(jurnal_umum_DataStore.baseParams.query!==null){searchquery = jurnal_umum_DataStore.baseParams.query;}
-		if(jurnal_umum_DataStore.baseParams.jumum_id!==null){jumum_id_print = jurnal_umum_DataStore.baseParams.jumum_id;}
-		if(jurnal_umum_DataStore.baseParams.jumum_tanggal!==""){jumum_tanggal_print_date = jurnal_umum_DataStore.baseParams.jumum_tanggal;}
-		if(jurnal_umum_DataStore.baseParams.jumum_pengguna!==null){jumum_pengguna_print = jurnal_umum_DataStore.baseParams.jumum_pengguna;}
-		if(jurnal_umum_DataStore.baseParams.jumum_keterangan!==null){jumum_keterangan_print = jurnal_umum_DataStore.baseParams.jumum_keterangan;}
-		if(jurnal_umum_DataStore.baseParams.jumum_posting!==null){jumum_posting_print = jurnal_umum_DataStore.baseParams.jumum_posting;}
-		if(jurnal_umum_DataStore.baseParams.jumum_tglposting!==""){jumum_tglposting_print_date = jurnal_umum_DataStore.baseParams.jumum_tglposting;}
+		if(jurnal_umum_DataStore.baseParams.jurnal_tanggal!==""){jurnal_tanggal_print_date = jurnal_umum_DataStore.baseParams.jurnal_tanggal;}
+		if(jurnal_umum_DataStore.baseParams.jurnal_akun!==null){jurnal_akun_print = jurnal_umum_DataStore.baseParams.jurnal_akun;}
+		if(jurnal_umum_DataStore.baseParams.jurnal_keterangan!==null){jurnal_keterangan_print = jurnal_umum_DataStore.baseParams.jurnal_keterangan;}
+		if(jurnal_umum_DataStore.baseParams.jurnal_noref!==null){jurnal_noref_print = jurnal_umum_DataStore.baseParams.jurnal_noref;}
+		if(jurnal_umum_DataStore.baseParams.jurnal_debet!==null){jurnal_debet_print = jurnal_umum_DataStore.baseParams.jurnal_debet;}
+		if(jurnal_umum_DataStore.baseParams.jurnal_kredit!==null){jurnal_kredit_print = jurnal_umum_DataStore.baseParams.jurnal_kredit;}
+		if(jurnal_umum_DataStore.baseParams.jurnal_unit!==null){jurnal_unit_print = jurnal_umum_DataStore.baseParams.jurnal_unit;}
+		if(jurnal_umum_DataStore.baseParams.jurnal_post!==null){jurnal_post_print = jurnal_umum_DataStore.baseParams.jurnal_post;}
+		if(jurnal_umum_DataStore.baseParams.jurnal_date_post!==""){jurnal_date_post_print_date = jurnal_umum_DataStore.baseParams.jurnal_date_post;}
 
 		Ext.Ajax.request({   
 		waitMsg: 'Please Wait...',
@@ -1270,19 +1406,22 @@ Ext.onReady(function(){
 			task: "PRINT",
 		  	query: searchquery,                    		// if we are doing a quicksearch, use this
 			//if we are doing advanced search, use this
-			jumum_id : jumum_id_print,
-		  	jumum_tanggal : jumum_tanggal_print_date, 
-			jumum_pengguna : jumum_pengguna_print,
-			jumum_keterangan : jumum_keterangan_print,
-			jumum_posting : jumum_posting_print,
-		  	jumum_tglposting : jumum_tglposting_print_date, 
+		  	jurnal_tanggal : jurnal_tanggal_print_date, 
+			jurnal_akun : jurnal_akun_print,
+			jurnal_keterangan : jurnal_keterangan_print,
+			jurnal_noref : jurnal_noref_print,
+			jurnal_debet : jurnal_debet_print,
+			jurnal_kredit : jurnal_kredit_print,
+			jurnal_unit : jurnal_unit_print,
+			jurnal_post : jurnal_post_print,
+		  	jurnal_date_post : jurnal_date_post_print_date, 
 		  	currentlisting: jurnal_umum_DataStore.baseParams.task // this tells us if we are searching or not
 		}, 
 		success: function(response){              
 		  	var result=eval(response.responseText);
 		  	switch(result){
 		  	case 1:
-				win = window.open('./jurnal_umumlist.html','jurnal_umumlist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
+				win = window.open('./print/jurnal_umum_printlist.html','jurnal_umumlist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
 				win.print();
 				break;
 		  	default:
@@ -1313,21 +1452,27 @@ Ext.onReady(function(){
 	/* Function for print Export to Excel Grid */
 	function jurnal_umum_export_excel(){
 		var searchquery = "";
-		var jumum_id_2excel=null;
-		var jumum_tanggal_2excel_date="";
-		var jumum_pengguna_2excel=null;
-		var jumum_keterangan_2excel=null;
-		var jumum_posting_2excel=null;
-		var jumum_tglposting_2excel_date="";
+		var jurnal_tanggal_2excel_date="";
+		var jurnal_akun_2excel=null;
+		var jurnal_keterangan_2excel=null;
+		var jurnal_noref_2excel=null;
+		var jurnal_debet_2excel=null;
+		var jurnal_kredit_2excel=null;
+		var jurnal_unit_2excel=null;
+		var jurnal_post_2excel=null;
+		var jurnal_date_post_2excel_date="";
 		var win;              
 		// check if we do have some search data...
 		if(jurnal_umum_DataStore.baseParams.query!==null){searchquery = jurnal_umum_DataStore.baseParams.query;}
-		if(jurnal_umum_DataStore.baseParams.jumum_id!==null){jumum_id_2excel = jurnal_umum_DataStore.baseParams.jumum_id;}
-		if(jurnal_umum_DataStore.baseParams.jumum_tanggal!==""){jumum_tanggal_2excel_date = jurnal_umum_DataStore.baseParams.jumum_tanggal;}
-		if(jurnal_umum_DataStore.baseParams.jumum_pengguna!==null){jumum_pengguna_2excel = jurnal_umum_DataStore.baseParams.jumum_pengguna;}
-		if(jurnal_umum_DataStore.baseParams.jumum_keterangan!==null){jumum_keterangan_2excel = jurnal_umum_DataStore.baseParams.jumum_keterangan;}
-		if(jurnal_umum_DataStore.baseParams.jumum_posting!==null){jumum_posting_2excel = jurnal_umum_DataStore.baseParams.jumum_posting;}
-		if(jurnal_umum_DataStore.baseParams.jumum_tglposting!==""){jumum_tglposting_2excel_date = jurnal_umum_DataStore.baseParams.jumum_tglposting;}
+		if(jurnal_umum_DataStore.baseParams.jurnal_tanggal!==""){jurnal_tanggal_2excel_date = jurnal_umum_DataStore.baseParams.jurnal_tanggal;}
+		if(jurnal_umum_DataStore.baseParams.jurnal_akun!==null){jurnal_akun_2excel = jurnal_umum_DataStore.baseParams.jurnal_akun;}
+		if(jurnal_umum_DataStore.baseParams.jurnal_keterangan!==null){jurnal_keterangan_2excel = jurnal_umum_DataStore.baseParams.jurnal_keterangan;}
+		if(jurnal_umum_DataStore.baseParams.jurnal_noref!==null){jurnal_noref_2excel = jurnal_umum_DataStore.baseParams.jurnal_noref;}
+		if(jurnal_umum_DataStore.baseParams.jurnal_debet!==null){jurnal_debet_2excel = jurnal_umum_DataStore.baseParams.jurnal_debet;}
+		if(jurnal_umum_DataStore.baseParams.jurnal_kredit!==null){jurnal_kredit_2excel = jurnal_umum_DataStore.baseParams.jurnal_kredit;}
+		if(jurnal_umum_DataStore.baseParams.jurnal_unit!==null){jurnal_unit_2excel = jurnal_umum_DataStore.baseParams.jurnal_unit;}
+		if(jurnal_umum_DataStore.baseParams.jurnal_post!==null){jurnal_post_2excel = jurnal_umum_DataStore.baseParams.jurnal_post;}
+		if(jurnal_umum_DataStore.baseParams.jurnal_date_post!==""){jurnal_date_post_2excel_date = jurnal_umum_DataStore.baseParams.jurnal_date_post;}
 
 		Ext.Ajax.request({   
 		waitMsg: 'Please Wait...',
@@ -1336,12 +1481,15 @@ Ext.onReady(function(){
 			task: "EXCEL",
 		  	query: searchquery,                    		// if we are doing a quicksearch, use this
 			//if we are doing advanced search, use this
-			jumum_id : jumum_id_2excel,
-		  	jumum_tanggal : jumum_tanggal_2excel_date, 
-			jumum_pengguna : jumum_pengguna_2excel,
-			jumum_keterangan : jumum_keterangan_2excel,
-			jumum_posting : jumum_posting_2excel,
-		  	jumum_tglposting : jumum_tglposting_2excel_date, 
+		  	jurnal_tanggal : jurnal_tanggal_2excel_date, 
+			jurnal_akun : jurnal_akun_2excel,
+			jurnal_keterangan : jurnal_keterangan_2excel,
+			jurnal_noref : jurnal_noref_2excel,
+			jurnal_debet : jurnal_debet_2excel,
+			jurnal_kredit : jurnal_kredit_2excel,
+			jurnal_unit : jurnal_unit_2excel,
+			jurnal_post : jurnal_post_2excel,
+		  	jurnal_date_post : jurnal_date_post_2excel_date, 
 		  	currentlisting: jurnal_umum_DataStore.baseParams.task // this tells us if we are searching or not
 		},
 		success: function(response){              
@@ -1375,15 +1523,52 @@ Ext.onReady(function(){
 	}
 	/*End of Function */
 	
+	function set_balance(){
+		var total_debet=0;
+		var total_kredit=0;
+		for(i=0;i<detail_jurnal_DataStore.getCount();i++){
+			var data_balance=detail_jurnal_DataStore.getAt(i);
+			total_debet=total_debet+data_balance.data.jurnal_debet;
+			total_kredit=total_kredit+data_balance.data.jurnal_kredit;
+			
+		}
+		jurnal_totaldebetField.setValue(total_debet);
+		jurnal_totalkreditField.setValue(total_kredit);
+	}
+	
+	//EVENTS
+	detail_jurnal_DataStore.on('update',function(){
+		refresh_detail_jurnal();
+		set_balance();
+	});
+	
+	jurnal_umumListEditorGrid.on('afteredit', jurnal_umum_inline_update); // inLine Editing Record
+	
+	
+	jurnal_debetField.on('keyup',function(){
+		set_balance();
+	});
+	
+	jurnal_kreditField.on('keyup',function(){
+		set_balance();
+	});
+	combo_akun.on('select',function(){
+		j=cbo_akunDataStore.find('akun_id',combo_akun.getValue());
+		if(j>-1){
+			var data_akun=cbo_akunDataStore.getAt(j);
+			jurnal_akunField.setValue(data_akun.data.akun_kode);
+		}
+	});
 });
 	</script>
 <body>
 <div>
 	<div class="col">
         <div id="fp_jurnal_umum"></div>
-         <div id="fp_jurnal_umum_detail"></div>
-		<div id="elwindow_jurnal_umum_create"></div>
+        <div id="fp_detail_jurnal"></div>
+		<div id="elwindow_jurnal_umum_save"></div>
         <div id="elwindow_jurnal_umum_search"></div>
     </div>
 </div>
 </body>
+</html>
