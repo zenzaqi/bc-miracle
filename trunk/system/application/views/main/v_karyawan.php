@@ -65,7 +65,10 @@ var karyawan_npwpField;
 var karyawan_usernameField;
 var karyawan_namaField;
 var karyawan_kelaminField;
+var karyawan_pph21Field;
+var karyawan_marriageField;
 var karyawan_tgllahirField;
+var karyawan_tmplahirField;
 var karyawan_alamatField;
 var karyawan_kotaField;
 var karyawan_kodeposField;
@@ -82,6 +85,7 @@ var karyawan_departemenField;
 var karyawan_golonganField;
 var karyawan_golongantxtField;
 var karyawan_tglmasukField;
+var karyawan_tglbatasField;
 var karyawan_atasanField;
 var karyawan_aktifField;
 
@@ -243,7 +247,10 @@ Ext.onReady(function(){
 		var karyawan_username_create=null;
 		var karyawan_nama_create=null;
 		var karyawan_kelamin_create=null;
+		var karyawan_pph21_create=null;
+		var karyawan_marriage_create=null;
 		var karyawan_tgllahir_create_date="";
+		var karyawan_tmplahir_create=null;
 		var karyawan_alamat_create=null;
 		var karyawan_kota_create=null;
 		var karyawan_kodepos_create=null;
@@ -260,6 +267,7 @@ Ext.onReady(function(){
 		var karyawan_golongan_create=null;
 		var karyawan_golongantxt_create=null;
 		var karyawan_tglmasuk_create_date="";
+		var karyawan_tglbatas_create_date="";
 		var karyawan_atasan_create=null;
 		var karyawan_aktif_create=null;
 
@@ -269,7 +277,10 @@ Ext.onReady(function(){
 		if(karyawan_usernameField.getValue()!== null){karyawan_username_create = karyawan_usernameField.getValue();}
 		if(karyawan_namaField.getValue()!== null){karyawan_nama_create = karyawan_namaField.getValue();}
 		if(karyawan_kelaminField.getValue()!== null){karyawan_kelamin_create = karyawan_kelaminField.getValue();}
+		if(karyawan_pph21Field.getValue()!== null){karyawan_pph21_create = karyawan_pph21Field.getValue();}
+		if(karyawan_marriageField.getValue()!== null){karyawan_marriage_create = karyawan_marriageField.getValue();}
 		if(karyawan_tgllahirField.getValue()!== ""){karyawan_tgllahir_create_date = karyawan_tgllahirField.getValue().format('Y-m-d');}
+		if(karyawan_tmplahirField.getValue()!== ""){karyawan_tmplahir_create = karyawan_tmplahirField.getValue();}
 		if(karyawan_alamatField.getValue()!== null){karyawan_alamat_create = karyawan_alamatField.getValue();}
 		if(karyawan_kotaField.getValue()!== null){karyawan_kota_create = karyawan_kotaField.getValue();}
 		if(karyawan_kodeposField.getValue()!== null){karyawan_kodepos_create = karyawan_kodeposField.getValue();}
@@ -286,6 +297,7 @@ Ext.onReady(function(){
 		if(karyawan_golonganField.getValue()!== null){karyawan_golongan_create = karyawan_golonganField.getValue();}
 		if(karyawan_golongantxtField.getValue()!== null){karyawan_golongantxt_create = karyawan_golongantxtField.getValue();}
 		if(karyawan_tglmasukField.getValue()!== ""){karyawan_tglmasuk_create_date = karyawan_tglmasukField.getValue().format('Y-m-d');}
+		if(karyawan_tglbatasField.getValue()!== ""){karyawan_tglbatas_create_date = karyawan_tglbatasField.getValue().format('Y-m-d');}
 		if(karyawan_atasanField.getValue()!== null){karyawan_atasan_create = karyawan_atasanField.getValue();}
 		if(karyawan_aktifField.getValue()!== null){karyawan_aktif_create = karyawan_aktifField.getValue();}
 
@@ -300,7 +312,10 @@ Ext.onReady(function(){
 					karyawan_username	: karyawan_username_create,	
 					karyawan_nama	: karyawan_nama_create,	
 					karyawan_kelamin	: karyawan_kelamin_create,	
-					karyawan_tgllahir	: karyawan_tgllahir_create_date,					
+					karyawan_pph21	: karyawan_pph21_create,
+					karyawan_marriage	: karyawan_marriage_create,
+					karyawan_tgllahir	: karyawan_tgllahir_create_date,	
+					karyawan_tmplahir	: karyawan_tmplahir_create,					
 					karyawan_alamat	: karyawan_alamat_create,	
 					karyawan_kota	: karyawan_kota_create,	
 					karyawan_kodepos	: karyawan_kodepos_create,	
@@ -316,7 +331,8 @@ Ext.onReady(function(){
 					karyawan_departemen	: karyawan_departemen_create,	
 					karyawan_idgolongan	: karyawan_golongan_create,	
 					karyawan_golongantxt	: karyawan_golongantxt_create,	
-					karyawan_tglmasuk	: karyawan_tglmasuk_create_date,					
+					karyawan_tglmasuk	: karyawan_tglmasuk_create_date,	
+					karyawan_tgl_batas	: karyawan_tglbatas_create_date,					
 					karyawan_atasan	: karyawan_atasan_create,	
 					karyawan_aktif	: karyawan_aktif_create,	
 				}, 
@@ -390,8 +406,14 @@ Ext.onReady(function(){
 		karyawan_namaField.setValue(null);
 		karyawan_kelaminField.reset();
 		karyawan_kelaminField.setValue(null);
+		karyawan_pph21Field.reset();
+		karyawan_pph21Field.setValue(null);
+		karyawan_marriageField.reset();
+		karyawan_marriageField.setValue(null);
 		karyawan_tgllahirField.reset();
 		karyawan_tgllahirField.setValue(null);
+		karyawan_tmplahirField.reset();
+		karyawan_tmplahirField.setValue(null);
 		karyawan_alamatField.reset();
 		karyawan_alamatField.setValue(null);
 		karyawan_kotaField.reset();
@@ -422,6 +444,8 @@ Ext.onReady(function(){
 		karyawan_golonganField.setValue(null);
 		karyawan_tglmasukField.reset();
 		karyawan_tglmasukField.setValue(null);
+		karyawan_tglbatasField.reset();
+		karyawan_tglbatasField.setValue(null);
 		karyawan_atasanField.reset();
 		karyawan_atasanField.setValue(null);
 		karyawan_aktifField.reset();
@@ -436,7 +460,10 @@ Ext.onReady(function(){
 		karyawan_usernameField.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_username'));
 		karyawan_namaField.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_nama'));
 		karyawan_kelaminField.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_kelamin'));
+		karyawan_pph21Field.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_pph21'));
+		karyawan_marriageField.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_marriage'));
 		karyawan_tgllahirField.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_tgllahir'));
+		karyawan_tmplahirField.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_tmplahir'));
 		karyawan_alamatField.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_alamat'));
 		karyawan_kotaField.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_kota'));
 		karyawan_kodeposField.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_kodepos'));
@@ -452,6 +479,7 @@ Ext.onReady(function(){
 		karyawan_departemenField.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_departemen'));
 		karyawan_golonganField.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_idgolongan'));
 		karyawan_tglmasukField.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_tglmasuk'));
+		karyawan_tglbatasField.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_tgl_batas'));
 		karyawan_atasanField.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_atasan'));
 		karyawan_aktifField.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_aktif'));
 	}
@@ -459,7 +487,7 @@ Ext.onReady(function(){
   
 	/* Function for Check if the form is valid */
 	function is_karyawan_form_valid(){
-		return ( karyawan_namaField.isValid() && karyawan_usernameField.isValid() &&  karyawan_cabangField.isValid() && karyawan_jabatanField.isValid() && karyawan_departemenField.isValid() && karyawan_kelaminField.isValid() );
+		return ( karyawan_namaField.isValid() && karyawan_usernameField.isValid() &&  karyawan_cabangField.isValid() && karyawan_jabatanField.isValid() && karyawan_departemenField.isValid() && karyawan_kelaminField.isValid() && karyawan_marriageField.isValid() );
 	}
   	/* End of Function */
   
@@ -611,6 +639,10 @@ Ext.onReady(function(){
 			{name: 'karyawan_idgolongan', type: 'string', mapping: 'nama_golongan'},
 			{name: 'karyawan_tglmasuk', type: 'date', dateFormat: 'Y-m-d', mapping: 'karyawan_tglmasuk'},
 			{name: 'karyawan_atasan', type: 'int', mapping: 'karyawan_atasan'},
+			{name: 'karyawan_pph21', type: 'string', mapping: 'karyawan_pph21'},
+			{name: 'karyawan_marriage', type: 'string', mapping: 'karyawan_marriage'},
+			{name: 'karyawan_tgl_batas', type: 'date', mapping: 'karyawan_tgl_batas'},
+			{name: 'karyawan_tmplahir', type: 'string', mapping: 'karyawan_tmplahir'},
 			{name: 'karyawan_aktif', type: 'string', mapping: 'karyawan_aktif'},
 			{name: 'karyawan_creator', type: 'string', mapping: 'karyawan_creator'},
 			{name: 'karyawan_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'karyawan_date_create'},
@@ -746,6 +778,17 @@ Ext.onReady(function(){
 			hidden: true
 		},
 		{
+			/*index=2*/
+			header: 'PPH 21',
+			dataIndex: 'karyawan_pph21',
+			width: 50,
+			sortable: true,
+			editor: new Ext.form.TextField({
+				maxLength: 30
+          	}),
+			hidden: true
+		},
+		{
 			/*index=3*/
 			header: '<div align="center">' + 'Nickname' + '</div>',
 			dataIndex: 'karyawan_username',
@@ -786,6 +829,26 @@ Ext.onReady(function(){
             })
 		},
 		{
+			/*index=5*/
+			header: '<div align="center">' + 'Menikah' + '</div>',
+			dataIndex: 'karyawan_marriage',
+			width: 80,
+			sortable: true,
+			editor: new Ext.form.ComboBox({
+				typeAhead: true,
+				triggerAction: 'all',
+				store:new Ext.data.SimpleStore({
+					fields:['karyawan_marriage_value', 'karyawan_marriage_display'],
+					data: [['Single','Belum'],['Marriage','Menikah']]
+					}),
+				mode: 'local',
+               	displayField: 'karyawan_marriage_display',
+               	valueField: 'karyawan_marriage_value',
+               	lazyRender:true,
+               	listClass: 'x-combo-list-small'
+            })
+		},
+		{
 			/*index=6*/
 			header: '<div align="center">' + 'Tgl Lahir' + '</div>',
 			dataIndex: 'karyawan_tgllahir',
@@ -795,6 +858,16 @@ Ext.onReady(function(){
 			editor: new Ext.form.DateField({
 				format: 'Y-m-d'
 			})
+		},
+		{
+			/*index=7*/
+			header: '<div align="center">' + 'Tmp Lahir' + '</div>',
+			dataIndex: 'karyawan_tmplahir',
+			width: 100,
+			sortable: true,
+			editor: new Ext.form.TextField({
+				maxLength: 200
+          	})
 		},
 		{
 			/*index=7*/
@@ -985,6 +1058,18 @@ Ext.onReady(function(){
 			editor: new Ext.form.DateField({
 				format: 'Y-m-d'
 			}),
+			hidden: true
+		},
+		{
+			/*index=6*/
+			header: '<div align="center">' + 'Tgl Batas' + '</div>',
+			dataIndex: 'karyawan_tgl_batas',
+			width: 80,
+			sortable: true,
+			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
+			editor: new Ext.form.DateField({
+				format: 'Y-m-d'
+			}),	
 			hidden: true
 		},
 		{
@@ -1272,11 +1357,51 @@ Ext.onReady(function(){
 		width: 80,
 		triggerAction: 'all'	
 	});
+	/* Identify  karyawan_kelamin Field */
+	karyawan_marriageField= new Ext.form.ComboBox({
+		id: 'karyawan_marriageField',
+		fieldLabel: 'Status Pernikahan <span style="color: #ec0000">*</span>',
+		store:new Ext.data.SimpleStore({
+			fields:['karyawan_marriage_value', 'karyawan_marriage_display'],
+			data:[['Single','Belum Menikah'],['Marriage','Menikah']]
+		}),
+		mode: 'local',
+		editable:false,
+		allowBlank: false,
+		displayField: 'karyawan_marriage_display',
+		valueField: 'karyawan_marriage_value',
+		width: 100,
+		triggerAction: 'all'	
+	});
+	/* Identify  karyawan_kelamin Field */
+	karyawan_pph21Field= new Ext.form.ComboBox({
+		id: 'karyawan_pph21Field',
+		fieldLabel: 'PPH 21 <span style="color: #ec0000">*</span>',
+		store:new Ext.data.SimpleStore({
+			fields:['karyawan_pph21_value', 'karyawan_pph21_display'],
+			data:[['TK','TK'],['K','K'],['K/1','K/1'],['K/2','K/2'],['K/3','K/3'],['TK/1','TK/1'],['TK/2','TK/2'],['TK/3','TK/3']]
+		}),
+		mode: 'local',
+		editable:false,
+		allowBlank: false,
+		displayField: 'karyawan_pph21_display',
+		valueField: 'karyawan_pph21_value',
+		width: 80,
+		triggerAction: 'all'	
+	});
 	/* Identify  karyawan_tgllahir Field */
 	karyawan_tgllahirField= new Ext.form.DateField({
 		id: 'karyawan_tgllahirField',
 		fieldLabel: 'Tgl Lahir',
 		format : 'Y-m-d',
+	});
+	/* Identify  karyawan_tmplahir Field */
+	karyawan_tmplahirField= new Ext.form.TextField({
+		id: 'karyawan_tmplahirField',
+		fieldLabel: 'Tempat Lahir <span style="color: #ec0000">*</span>',
+		maxLength: 100,
+		allowBlank: false,
+		anchor: '95%'
 	});
 	/* Identify  karyawan_alamat Field */
 	karyawan_alamatField= new Ext.form.TextField({
@@ -1417,6 +1542,12 @@ Ext.onReady(function(){
 		fieldLabel: 'Tanggal Masuk',
 		format : 'Y-m-d',
 	});
+	/* Identify  karyawan_tgl_batas Field */
+	karyawan_tglbatasField= new Ext.form.DateField({
+		id: 'karyawan_tglbatasField',
+		fieldLabel: 'Tanggal Batas',
+		format : 'Y-m-d',
+	});
 	/* Identify  karyawan_atasan Field */
 	karyawan_atasanField= new Ext.form.ComboBox({
 		id: 'karyawan_atasanField',
@@ -1468,7 +1599,7 @@ Ext.onReady(function(){
 		autoHeight: true,
 		defaultType: 'textfield',
 		anchor: '95%',
-		items:[karyawan_tglmasukField, karyawan_cabangField ,karyawan_jabatanField, karyawan_departemenField, karyawan_golonganField, karyawan_atasanField, karyawan_emiracleField]
+		items:[karyawan_tglmasukField, karyawan_tglbatasField, karyawan_cabangField ,karyawan_jabatanField, karyawan_departemenField, karyawan_golonganField, karyawan_atasanField, karyawan_emiracleField, karyawan_pph21Field]
 	});
 	
 	/* Function for retrieve create Window Panel*/ 
@@ -1486,12 +1617,12 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [karyawan_noField, karyawan_npwpField, karyawan_namaField, karyawan_usernameField, karyawan_tgllahirField, karyawan_kelaminField, group_alamat, group_kontak ] 
+				items: [karyawan_noField, karyawan_npwpField, karyawan_namaField, karyawan_usernameField, karyawan_tmplahirField, karyawan_tgllahirField, karyawan_kelaminField, karyawan_marriageField, group_alamat, group_kontak ] 
 			}
 			,{
 				columnWidth:0.5,
 				layout: 'form',
-				border:false,
+				border:false,	
 				items: [group_pekerjaan, karyawan_keteranganField, karyawan_aktifField] 
 			}
 			]
@@ -1736,6 +1867,21 @@ Ext.onReady(function(){
 		}),
 		mode: 'local',
 		displayField: 'karyawan_kelamin',
+		valueField: 'value',
+		width: 80,
+		triggerAction: 'all'	 
+	
+	});
+	/* Identify  karyawan_marriage Search Field */
+	karyawan_marriageSearchField= new Ext.form.ComboBox({
+		id: 'karyawan_marriageSearchField',
+		fieldLabel: 'Status Pernikahan',
+		store:new Ext.data.SimpleStore({
+			fields:['value', 'karyawan_marriage'],
+			data:[['Single','Single'],['Marriage','Menikah']]
+		}),
+		mode: 'local',
+		displayField: 'karyawan_marriage',
 		valueField: 'value',
 		width: 80,
 		triggerAction: 'all'	 
