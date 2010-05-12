@@ -17,6 +17,7 @@ class C_voucher extends Controller {
 	function C_voucher(){
 		parent::Controller();
 		$this->load->model('m_voucher', '', TRUE);
+		session_start();
 		$this->load->plugin('to_excel');
 	}
 	
@@ -26,8 +27,8 @@ class C_voucher extends Controller {
 		$this->load->view('main/v_voucher');
 	}
 	
-	function get_voucher_list(){
-		$result=$this->m_voucher->get_voucher_list();
+	function get_promo_list(){
+		$result=$this->m_voucher->get_promo_list();
 		echo $result;
 	}
 	
@@ -181,7 +182,10 @@ class C_voucher extends Controller {
 		$voucher_mincash=trim(@$_POST["voucher_mincash"]);
 		$voucher_diskon=trim(@$_POST["voucher_diskon"]);
 		$voucher_promo=trim(@$_POST["voucher_promo"]);
-		$voucher_allproduk=trim(@$_POST["voucher_allproduk"]);
+		$voucher_acara=trim(@$_POST["voucher_acara"]);
+		$voucher_acara=str_replace("/(<\/?)(p)([^>]*>)", "",$voucher_acara);
+		$voucher_acara=str_replace("'", '"',$voucher_acara);
+		/*$voucher_allproduk=trim(@$_POST["voucher_allproduk"]);
 		if($voucher_allproduk==true)
 			$voucher_allproduk='Y';
 		else
@@ -190,8 +194,10 @@ class C_voucher extends Controller {
 		if($voucher_allrawat==true)
 			$voucher_allrawat='Y';
 		else
-			$voucher_allrawat='T';
-		$result = $this->m_voucher->voucher_update($voucher_id ,$voucher_nama ,$voucher_jenis ,$voucher_point ,$voucher_jumlah ,$voucher_kadaluarsa ,$voucher_cashback ,$voucher_mincash ,$voucher_diskon ,$voucher_promo ,$voucher_allproduk ,$voucher_allrawat      );
+			$voucher_allrawat='T';*/
+		$voucher_allproduk='Y';
+		$voucher_allrawat='Y';
+		$result = $this->m_voucher->voucher_update($voucher_id ,$voucher_nama ,$voucher_jenis ,$voucher_point ,$voucher_jumlah ,$voucher_kadaluarsa ,$voucher_cashback ,$voucher_mincash ,$voucher_diskon ,$voucher_promo ,$voucher_allproduk ,$voucher_allrawat ,$voucher_acara);
 		echo $result;
 	}
 	
@@ -212,7 +218,12 @@ class C_voucher extends Controller {
 		$voucher_mincash=trim(@$_POST["voucher_mincash"]);
 		$voucher_diskon=trim(@$_POST["voucher_diskon"]);
 		$voucher_promo=trim(@$_POST["voucher_promo"]);
-		$voucher_allproduk=trim(@$_POST["voucher_allproduk"]);
+		$voucher_acara=trim(@$_POST["voucher_acara"]);
+		$voucher_acara=str_replace("/(<\/?)(p)([^>]*>)", "",$voucher_acara);
+		$voucher_acara=str_replace("'", '"',$voucher_acara);
+		$voucher_nomor_awal=trim(@$_POST["voucher_nomor_awal"]);
+		$voucher_nomor_akhir=trim(@$_POST["voucher_nomor_akhir"]);
+		/*$voucher_allproduk=trim(@$_POST["voucher_allproduk"]);
 		if($voucher_allproduk==true)
 			$voucher_allproduk='Y';
 		else
@@ -221,8 +232,11 @@ class C_voucher extends Controller {
 		if($voucher_allrawat==true)
 			$voucher_allrawat='Y';
 		else
-			$voucher_allrawat='T';
-		$result=$this->m_voucher->voucher_create($voucher_nama ,$voucher_jenis ,$voucher_point ,$voucher_jumlah ,$voucher_kadaluarsa ,$voucher_cashback ,$voucher_mincash ,$voucher_diskon ,$voucher_promo ,$voucher_allproduk ,$voucher_allrawat );
+			$voucher_allrawat='T';*/
+		$voucher_allproduk='Y';
+		$voucher_allrawat='Y';
+		$voucher_creator=@$_SESSION[SESSION_USERID];
+		$result=$this->m_voucher->voucher_create($voucher_nama ,$voucher_jenis ,$voucher_point ,$voucher_jumlah ,$voucher_kadaluarsa ,$voucher_cashback ,$voucher_mincash ,$voucher_diskon ,$voucher_promo ,$voucher_allproduk ,$voucher_allrawat ,$voucher_acara ,$voucher_nomor_awal ,$voucher_nomor_akhir ,$voucher_creator);
 		echo $result;
 	}
 
@@ -381,6 +395,39 @@ class C_voucher extends Controller {
 		to_excel($query,"voucher"); 
 		echo '1';
 			
+	}
+	
+	function print_paper(){
+  		//POST varibale here
+		$kvoucher_master=trim(@$_POST["kvoucher_master"]);
+		
+		
+		$result = $this->m_voucher->print_paper($kvoucher_master);
+		$iklan = $this->m_master_jual_produk->iklan();
+		$rs=$result->row();
+		$rsiklan=$iklan->row();
+		$detail_jproduk=$result->result();
+		
+		$data['jproduk_nobukti']=$rs->jproduk_nobukti;
+		$data['jproduk_tanggal']=date('d-m-Y', strtotime($rs->jproduk_tanggal));
+		$data['cust_no']=$rs->cust_no;
+		$data['cust_nama']=$rs->cust_nama;
+		$data['iklantoday_keterangan']=$rsiklan->iklantoday_keterangan;
+		$data['cust_alamat']=$rs->cust_alamat;
+		$data['jumlah_subtotal']=ubah_rupiah($rs->jumlah_subtotal);
+		//$data['jumlah_tunai']=ubah_rupiah($rs->jtunai_nilai);
+		$data['jumlah_bayar']=$rs->jproduk_bayar;
+		$data['jproduk_diskon']=$rs->jproduk_diskon;
+		$data['jproduk_cashback']=$rs->jproduk_cashback;
+		//$data['jproduk_creator']=$rs->jproduk_creator;
+		//$data['jproduk_totalbiaya']=$rs->jproduk_totalbiaya;
+		$data['detail_jproduk']=$detail_jproduk;
+		
+		$viewdata=$this->load->view("main/voucher_formcetak",$data,TRUE);
+		$file = fopen("voucher_paper.html",'w');
+		fwrite($file, $viewdata);	
+		fclose($file);
+		echo '1';        
 	}
 	
 	// Encodes a SQL array into a JSON formated string
