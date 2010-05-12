@@ -509,7 +509,7 @@ Ext.onReady(function(){
 			{name: 'resep_no', type: 'string', mapping: 'resep_no'},
 			{name: 'resep_id', type: 'int', mapping: 'resep_id'},
 			{name: 'resep_namadokter', type: 'string', mapping: 'karyawan_username'},
-			{name: 'resep_sip', type: 'string', mapping: 'resep_sip'},
+			{name: 'resep_sip', type: 'string', mapping: 'karyawan_sip'},
 			{name: 'resep_tanggal', type: 'date', dateFormat: 'Y-m-d', mapping: 'resep_tanggal'}, 
 			{name: 'resep_creator', type: 'string', mapping: 'resep_creator'}, 
 			{name: 'resep_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'resep_date_create'}, 
@@ -565,6 +565,7 @@ Ext.onReady(function(){
 		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
 			{name: 'karyawan_display', type: 'string', mapping: 'karyawan_nama'},
 			{name: 'karyawan_username', type: 'string', mapping: 'karyawan_username'},
+			{name: 'karyawan_sip', type: 'string', mapping: 'karyawan_sip'},
 			{name: 'karyawan_value', type: 'int', mapping: 'karyawan_id'},
 			{name: 'karyawan_jmltindakan', type: 'int', mapping: 'reportt_jmltindakan'}
 		]),
@@ -583,7 +584,8 @@ Ext.onReady(function(){
 			header: '<div align="center">' + 'No Customer' + '</div>',
 			dataIndex: 'resep_cust_no',
 			width: 80,	//210,
-			sortable: true
+			sortable: true,
+			readOnly: true
 			
 		}, 
 		{
@@ -612,7 +614,8 @@ Ext.onReady(function(){
 			header: '<div align="center">' + 'No SIP' + '</div>',
 			dataIndex: 'resep_sip',
 			width: 80,	//210,
-			sortable: true
+			sortable: true,
+			readOnly: true
 			
 		}, 
 		
@@ -852,7 +855,8 @@ Ext.onReady(function(){
 		id: 'resep_sipField',
 		fieldLabel: 'SIP',
 		maxLength: 10,
-		allowBlank: true
+		allowBlank: true,
+		readOnly: true,
 		//anchor: '95%'
 	});
 	
@@ -887,7 +891,8 @@ Ext.onReady(function(){
 		id: 'resep_nocustField',
 		fieldLabel: 'No Cust',
 		maxLength: 10,
-		allowBlank: true
+		allowBlank: true,
+		readOnly: true,
 		//anchor: '95%'
 	});
 	

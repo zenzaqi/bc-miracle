@@ -102,11 +102,11 @@ class M_karyawan extends Model{
 		//function for get list record
 		function karyawan_list($filter,$start,$end){
 			//$query = "SELECT * FROM karyawan,departemen,cabang,jabatan,golongan where karyawan_departemen=departemen_id and karyawan_cabang=cabang_id and karyawan_jabatan=jabatan_id and karyawan_idgolongan=id_karyawan_golongan";
-			$query = "SELECT karyawan.*, departemen.*, cabang.*, golongan.* FROM karyawan
-left join departemen on (departemen.departemen_id=karyawan.karyawan_departemen)
-left join cabang on (cabang.cabang_id=karyawan.karyawan_cabang)
-left join jabatan on (jabatan.jabatan_id=karyawan.karyawan_jabatan)
-left join golongan on (golongan.id_golongan=karyawan.karyawan_idgolongan)";
+			$query = "SELECT karyawan.*, departemen.*, cabang.*, jabatan.jabatan_nama, golongan.* FROM karyawan
+						left join departemen on (departemen.departemen_id=karyawan.karyawan_departemen)
+						left join cabang on (cabang.cabang_id=karyawan.karyawan_cabang)
+						left join jabatan on (jabatan.jabatan_id=karyawan.karyawan_jabatan)
+						left join golongan on (golongan.id_golongan=karyawan.karyawan_idgolongan)";
 			// For simple search
 			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
@@ -130,17 +130,21 @@ left join golongan on (golongan.id_golongan=karyawan.karyawan_idgolongan)";
 		}
 		
 		//function for update record
-		function karyawan_update($karyawan_id ,$karyawan_no ,$karyawan_npwp ,$karyawan_username ,$karyawan_nama ,$karyawan_kelamin ,$karyawan_tgllahir ,$karyawan_alamat ,$karyawan_kota ,$karyawan_kodepos ,$karyawan_email ,$karyawan_emiracle ,$karyawan_keterangan ,$karyawan_notelp ,$karyawan_notelp2 ,$karyawan_notelp3, $karyawan_notelp4 ,$karyawan_cabang ,$karyawan_jabatan ,$karyawan_departemen ,$karyawan_idgolongan ,$karyawan_tglmasuk ,$karyawan_atasan ,$karyawan_aktif ,$karyawan_creator ,$karyawan_date_create ,$karyawan_update ,$karyawan_date_update ,$karyawan_revised ){
+		function karyawan_update($karyawan_id ,$karyawan_no ,$karyawan_sip, $karyawan_npwp ,$karyawan_username ,$karyawan_nama ,$karyawan_kelamin ,$karyawan_pph21, $karyawan_marriage, $karyawan_tgllahir ,$karyawan_tmplahir, $karyawan_alamat ,$karyawan_kota ,$karyawan_kodepos ,$karyawan_email ,$karyawan_emiracle ,$karyawan_keterangan ,$karyawan_notelp ,$karyawan_notelp2 ,$karyawan_notelp3, $karyawan_notelp4 ,$karyawan_cabang ,$karyawan_jabatan ,$karyawan_departemen ,$karyawan_idgolongan ,$karyawan_tglmasuk ,$karyawan_atasan ,$karyawan_aktif ,$karyawan_creator ,$karyawan_date_create ,$karyawan_update ,$karyawan_date_update ,$karyawan_revised ){
 		if ($karyawan_aktif=="")
 			$karyawan_aktif = "Aktif";
 			$data = array(
 				"karyawan_id"=>$karyawan_id,			
-				"karyawan_no"=>$karyawan_no,			
+				"karyawan_no"=>$karyawan_no,
+				"karyawan_sip"=>$karyawan_sip,
 				"karyawan_npwp"=>$karyawan_npwp,			
 				"karyawan_username"=>$karyawan_username,			
 				"karyawan_nama"=>$karyawan_nama,			
-				"karyawan_kelamin"=>$karyawan_kelamin,			
-				"karyawan_tgllahir"=>$karyawan_tgllahir,			
+				"karyawan_kelamin"=>$karyawan_kelamin,
+				"karyawan_pph21"=>$karyawan_pph21,
+				"karyawan_marriage"=>$karyawan_marriage,
+				"karyawan_tgllahir"=>$karyawan_tgllahir,
+				"karyawan_tmplahir"=>$karyawan_tmplahir,
 				"karyawan_alamat"=>$karyawan_alamat,			
 				"karyawan_kota"=>$karyawan_kota,			
 				"karyawan_kodepos"=>$karyawan_kodepos,			
@@ -195,12 +199,13 @@ left join golongan on (golongan.id_golongan=karyawan.karyawan_idgolongan)";
 		}
 		
 		//function for create new record
-		function karyawan_create($karyawan_no ,$karyawan_npwp ,$karyawan_username ,$karyawan_nama ,$karyawan_kelamin ,$karyawan_pph21 ,$karyawan_marriage ,$karyawan_tgllahir ,$karyawan_tmplahir ,$karyawan_alamat ,$karyawan_kota ,$karyawan_kodepos ,$karyawan_email ,$karyawan_emiracle ,$karyawan_keterangan ,$karyawan_notelp ,$karyawan_notelp2 ,$karyawan_notelp3, $karyawan_notelp4 ,$karyawan_cabang ,$karyawan_jabatan ,$karyawan_departemen ,$karyawan_idgolongan ,$karyawan_tglmasuk ,$karyawan_tgl_batas ,$karyawan_atasan ,$karyawan_aktif ,$karyawan_creator ,$karyawan_date_create ,$karyawan_update ,$karyawan_date_update ,$karyawan_revised ){
+		function karyawan_create($karyawan_no ,$karyawan_sip, $karyawan_npwp ,$karyawan_username ,$karyawan_nama ,$karyawan_kelamin ,$karyawan_pph21 ,$karyawan_marriage ,$karyawan_tgllahir ,$karyawan_tmplahir ,$karyawan_alamat ,$karyawan_kota ,$karyawan_kodepos ,$karyawan_email ,$karyawan_emiracle ,$karyawan_keterangan ,$karyawan_notelp ,$karyawan_notelp2 ,$karyawan_notelp3, $karyawan_notelp4 ,$karyawan_cabang ,$karyawan_jabatan ,$karyawan_departemen ,$karyawan_idgolongan ,$karyawan_tglmasuk ,$karyawan_tgl_batas ,$karyawan_atasan ,$karyawan_aktif ,$karyawan_creator ,$karyawan_date_create ,$karyawan_update ,$karyawan_date_update ,$karyawan_revised ){
 		if ($karyawan_aktif=="")
 			$karyawan_aktif = "Aktif";
 			$data = array(
 	
-				"karyawan_no"=>$karyawan_no,	
+				"karyawan_no"=>$karyawan_no,
+				"karyawan_sip"=>$karyawan_sip,
 				"karyawan_npwp"=>$karyawan_npwp,	
 				"karyawan_username"=>$karyawan_username,	
 				"karyawan_nama"=>$karyawan_nama,	
