@@ -5,8 +5,8 @@
 	+ Module  		: jurnal_umum Controller
 	+ Description	: For record controller process back-end
 	+ Filename 		: C_jurnal_umum.php
- 	+ Author  		: 
- 	+ Created on 30/Sep/2009 11:25:17
+ 	+ creator 		: 
+ 	+ Created on 01/Apr/2010 12:13:56
 	
 */
 
@@ -16,64 +16,15 @@ class C_jurnal_umum extends Controller {
 	//constructor
 	function C_jurnal_umum(){
 		parent::Controller();
+		session_start();
 		$this->load->model('m_jurnal_umum', '', TRUE);
-		$this->load->plugin('to_excel');
-	}
-	
-	function get_akun_list(){
-		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
-		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result=$this->m_public_function->get_akun_list($start,$end);
-		echo $result;
 	}
 	
 	//set index
 	function index(){
-		$this->load->helper('asset');
+		$this->load->plugin('to_excel');
 		$this->load->view('main/v_jurnal_umum');
 	}
-	
-	//for detail action
-	//list detail handler action
-	function  detail_jurnal_umum_detail_list(){
-		$query = isset($_POST['query']) ? $_POST['query'] : "";
-		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
-		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$master_id = (integer) (isset($_POST['master_id']) ? $_POST['master_id'] : $_GET['master_id']);
-		$result=$this->m_jurnal_umum->detail_jurnal_umum_detail_list($master_id,$query,$start,$end);
-		echo $result;
-	}
-	//end of handler
-	
-	//purge all detail
-	function detail_jurnal_umum_detail_purge(){
-		$master_id = (integer) (isset($_POST['master_id']) ? $_POST['master_id'] : $_GET['master_id']);
-		$result=$this->m_jurnal_umum->detail_jurnal_umum_detail_purge($master_id);
-	}
-	//eof
-	
-	//get master id, note: not done yet
-	function get_master_id(){
-		$result=$this->m_jurnal_umum->get_master_id();
-		echo $result;
-	}
-	//
-	
-	//add detail
-	function detail_jurnal_umum_detail_insert(){
-	//POST variable here
-		$djumum_id=trim(@$_POST["djumum_id"]);
-		$djumum_master=trim(@$_POST["djumum_master"]);
-		$djumum_akun=trim(@$_POST["djumum_akun"]);
-		$djumum_keterangan=trim(@$_POST["djumum_keterangan"]);
-		$djumum_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$djumum_keterangan);
-		$djumum_keterangan=str_replace("\\", "",$djumum_keterangan);
-		$djumum_keterangan=str_replace("'", '"',$djumum_keterangan);
-		$djumum_debet=trim(@$_POST["djumum_debet"]);
-		$djumum_kredit=trim(@$_POST["djumum_kredit"]);
-		$result=$this->m_jurnal_umum->detail_jurnal_umum_detail_insert($djumum_id ,$djumum_master ,$djumum_akun ,$djumum_keterangan ,$djumum_debet ,$djumum_kredit );
-	}
-	
 	
 	//event handler action
 	function get_action(){
@@ -109,57 +60,110 @@ class C_jurnal_umum extends Controller {
 	//function fot list record
 	function jurnal_umum_list(){
 		
-		$query = isset($_POST['query']) ? $_POST['query'] : "";
-		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
-		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		$query = isset($_POST['query']) ? @$_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? @$_POST['start'] : @$_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? @$_POST['limit'] : @$_GET['limit']);
 		$result=$this->m_jurnal_umum->jurnal_umum_list($query,$start,$end);
 		echo $result;
 	}
-
-	//function for update record
-	function jurnal_umum_update(){
-		//POST variable here
-		$jumum_id=trim(@$_POST["jumum_id"]);
-		$jumum_tanggal=trim(@$_POST["jumum_tanggal"]);
-		$jumum_pengguna=trim(@$_POST["jumum_pengguna"]);
-		$jumum_pengguna=str_replace("/(<\/?)(p)([^>]*>)", "",$jumum_pengguna);
-		$jumum_pengguna=str_replace(",", ",",$jumum_pengguna);
-		$jumum_pengguna=str_replace("'", '"',$jumum_pengguna);
-		$jumum_keterangan=trim(@$_POST["jumum_keterangan"]);
-		$jumum_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$jumum_keterangan);
-		$jumum_keterangan=str_replace(",", ",",$jumum_keterangan);
-		$jumum_keterangan=str_replace("'", '"',$jumum_keterangan);
-		$jumum_posting=trim(@$_POST["jumum_posting"]);
-		$jumum_posting=str_replace("/(<\/?)(p)([^>]*>)", "",$jumum_posting);
-		$jumum_posting=str_replace(",", ",",$jumum_posting);
-		$jumum_posting=str_replace("'", '"',$jumum_posting);
-		$jumum_tglposting=trim(@$_POST["jumum_tglposting"]);
-		$result = $this->m_jurnal_umum->jurnal_umum_update($jumum_id ,$jumum_tanggal ,$jumum_pengguna ,$jumum_keterangan ,$jumum_posting ,$jumum_tglposting      );
+	
+	//function fot list record
+	function get_detail_jurnal_list(){
+		
+		$query = isset($_POST['query']) ? @$_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? @$_POST['start'] : @$_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? @$_POST['limit'] : @$_GET['limit']);
+		$master_id = (integer) (isset($_POST['master_id']) ? @$_POST['master_id'] : @$_GET['master_id']);
+		$task = isset($_POST['task']) ? @$_POST['task'] : @$_GET['task'];
+		
+		$result=$this->m_jurnal_umum->get_detail_jurnal_list($task,$master_id,$query,$start,$end);
+		echo $result;
+	}
+	
+	//function fot list record
+	function get_akun_list(){
+		$query = isset($_POST['query']) ? @$_POST['query'] : "";
+		$task = isset($_POST['task']) ? @$_POST['task'] : @$_GET['task'];
+		$master_id = (integer) isset($_POST['master_id']) ? @$_POST['master_id'] : @$_GET['master_id'];
+		$selected_id = isset($_POST['selected_id']) ? @$_POST['selected_id'] : @$_GET['selected_id'];
+		
+		$start = (integer) (isset($_POST['start']) ? @$_POST['start'] : @$_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? @$_POST['limit'] : @$_GET['limit']);
+		$result=$this->m_jurnal_umum->get_akun_list($task, $master_id, $selected_id,$query,$start,$end);
+		echo $result;
+	}
+	
+	function detail_jurnal_insert(){
+		$jurnal_id = isset($_POST["jurnal_id"])?@$_POST["jurnal_id"]:@$_GET["jurnal_id"];
+		$jurnal_master = isset($_POST["jurnal_master"])?@$_POST["jurnal_master"]:@$_GET["jurnal_master"];
+		$jurnal_akun = isset($_POST["jurnal_akun"])?@$_POST["jurnal_akun"]:@$_GET["jurnal_akun"];
+		$jurnal_detail = isset($_POST["jurnal_detail"])?@$_POST["jurnal_detail"]:@$_GET["jurnal_detail"];
+		$jurnal_debet = isset($_POST["jurnal_debet"])?@$_POST["jurnal_debet"]:@$_GET["jurnal_debet"];
+		$jurnal_kredit = isset($_POST["jurnal_kredit"])?@$_POST["jurnal_kredit"]:@$_GET["jurnal_kredit"];
+		$result=$this->m_jurnal_umum->detail_jurnal_insert($jurnal_id,$jurnal_master,$jurnal_akun,$jurnal_detail, $jurnal_debet,$jurnal_kredit);
+		echo $result;
+	}
+	
+	function detail_jurnal_purge(){
+		$jurnal_master = isset($_POST["jurnal_master"])?@$_POST["jurnal_master"]:@$_GET["jurnal_master"];
+		$result=$this->m_jurnal_umum->detail_jurnal_purge($jurnal_master);
 		echo $result;
 	}
 	
 	//function for create new record
 	function jurnal_umum_create(){
 		//POST varible here
-		$jumum_id=trim(@$_POST["jumum_id"]);
-		$jumum_tanggal=trim(@$_POST["jumum_tanggal"]);
-		$jumum_pengguna=trim(@$_POST["jumum_pengguna"]);
-		$jumum_pengguna=str_replace("/(<\/?)(p)([^>]*>)", "",$jumum_pengguna);
-		$jumum_pengguna=str_replace("'", '"',$jumum_pengguna);
-		$jumum_keterangan=trim(@$_POST["jumum_keterangan"]);
-		$jumum_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$jumum_keterangan);
-		$jumum_keterangan=str_replace("'", '"',$jumum_keterangan);
-		$jumum_posting=trim(@$_POST["jumum_posting"]);
-		$jumum_posting=str_replace("/(<\/?)(p)([^>]*>)", "",$jumum_posting);
-		$jumum_posting=str_replace("'", '"',$jumum_posting);
-		$jumum_tglposting=trim(@$_POST["jumum_tglposting"]);
-		$result=$this->m_jurnal_umum->jurnal_umum_create($jumum_id ,$jumum_tanggal ,$jumum_pengguna ,$jumum_keterangan ,$jumum_posting ,$jumum_tglposting );
+		//auto increment, don't accept anything from form values
+		$jurnal_tanggal=trim(@$_POST["jurnal_tanggal"]);
+		$jurnal_keterangan=trim(@$_POST["jurnal_keterangan"]);
+		$jurnal_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$jurnal_keterangan);
+		$jurnal_keterangan=str_replace("'", "''",$jurnal_keterangan);
+		$jurnal_noref=trim(@$_POST["jurnal_noref"]);
+		$jurnal_noref=str_replace("/(<\/?)(p)([^>]*>)", "",$jurnal_noref);
+		$jurnal_noref=str_replace("'", "''",$jurnal_noref);
+		$jurnal_unit=trim(@$_POST["jurnal_unit"]);
+		$jurnal_author=@$_SESSION[SESSION_USERID];
+		$jurnal_date_create=date(LONG_FORMATDATE);
+		//$jurnal_update=NULL;
+		//$jurnal_date_update=NULL;
+//		$jurnal_post=trim(@$_POST["jurnal_post"]);
+//		$jurnal_post=str_replace("/(<\/?)(p)([^>]*>)", "",$jurnal_post);
+//		$jurnal_post=str_replace("'", "''",$jurnal_post);
+//		$jurnal_date_post=trim(@$_POST["jurnal_date_post"]);
+		//$jurnal_revised=0;
+		$result=$this->m_jurnal_umum->jurnal_umum_create($jurnal_tanggal ,$jurnal_keterangan ,$jurnal_noref ,$jurnal_unit ,$jurnal_author ,$jurnal_date_create );
 		echo $result;
 	}
-
+	
+	
+	//function for update record
+	function jurnal_umum_update(){
+		//POST variable here
+		$jurnal_id=trim(@$_POST["jurnal_id"]);
+		$jurnal_tanggal=trim(@$_POST["jurnal_tanggal"]);
+		$jurnal_keterangan=trim(@$_POST["jurnal_keterangan"]);
+		$jurnal_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$jurnal_keterangan);
+		$jurnal_keterangan=str_replace("'", "''",$jurnal_keterangan);
+		$jurnal_noref=trim(@$_POST["jurnal_noref"]);
+		$jurnal_noref=str_replace("/(<\/?)(p)([^>]*>)", "",$jurnal_noref);
+		$jurnal_noref=str_replace("'", "''",$jurnal_noref);
+		$jurnal_unit=trim(@$_POST["jurnal_unit"]);
+		//$jurnal_author="jurnal_author";
+		//$jurnal_date_create="jurnal_date_create";
+		$jurnal_update=@$_SESSION[SESSION_USERID];
+		$jurnal_date_update=date(LONG_FORMATDATE);
+		/*$jurnal_post=trim(@$_POST["jurnal_post"]);
+		$jurnal_post=str_replace("/(<\/?)(p)([^>]*>)", "",$jurnal_post);
+		$jurnal_post=str_replace("'", "''",$jurnal_post);
+		$jurnal_date_post=trim(@$_POST["jurnal_date_post"]);
+*/		//$jurnal_revised="(revised+1)";
+		$result = $this->m_jurnal_umum->jurnal_umum_update($jurnal_id,$jurnal_tanggal,$jurnal_keterangan,$jurnal_noref,$jurnal_unit,$jurnal_update,$jurnal_date_update);
+		echo $result;
+	}
+	
 	//function for delete selected record
 	function jurnal_umum_delete(){
-		$ids = $_POST['ids']; // Get our array back and translate it :
+		$ids = @$_POST['ids']; // Get our array back and translate it :
 		$pkid = json_decode(stripslashes($ids));
 		$result=$this->m_jurnal_umum->jurnal_umum_delete($pkid);
 		echo $result;
@@ -168,87 +172,76 @@ class C_jurnal_umum extends Controller {
 	//function for advanced search
 	function jurnal_umum_search(){
 		//POST varibale here
-		$jumum_id=trim(@$_POST["jumum_id"]);
-		$jumum_tanggal=trim(@$_POST["jumum_tanggal"]);
-		$jumum_pengguna=trim(@$_POST["jumum_pengguna"]);
-		$jumum_pengguna=str_replace("/(<\/?)(p)([^>]*>)", "",$jumum_pengguna);
-		$jumum_pengguna=str_replace("'", '"',$jumum_pengguna);
-		$jumum_keterangan=trim(@$_POST["jumum_keterangan"]);
-		$jumum_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$jumum_keterangan);
-		$jumum_keterangan=str_replace("'", '"',$jumum_keterangan);
-		$jumum_posting=trim(@$_POST["jumum_posting"]);
-		$jumum_posting=str_replace("/(<\/?)(p)([^>]*>)", "",$jumum_posting);
-		$jumum_posting=str_replace("'", '"',$jumum_posting);
-		$jumum_tglposting=trim(@$_POST["jumum_tglposting"]);
+		$jurnal_id=trim(@$_POST["jurnal_id"]);
+		$jurnal_tanggal=trim(@$_POST["jurnal_tanggal"]);
+		$jurnal_akun=trim(@$_POST["jurnal_akun"]);
+		$jurnal_keterangan=trim(@$_POST["jurnal_keterangan"]);
+		$jurnal_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$jurnal_keterangan);
+		$jurnal_keterangan=str_replace("'", "''",$jurnal_keterangan);
+		$jurnal_noref=trim(@$_POST["jurnal_noref"]);
+		$jurnal_noref=str_replace("/(<\/?)(p)([^>]*>)", "",$jurnal_noref);
+		$jurnal_noref=str_replace("'", "''",$jurnal_noref);
+		$jurnal_debet=trim(@$_POST["jurnal_debet"]);
+		$jurnal_kredit=trim(@$_POST["jurnal_kredit"]);
+		$jurnal_unit=trim(@$_POST["jurnal_unit"]);
+		$jurnal_author=trim(@$_POST["jurnal_author"]);
+		$jurnal_author=str_replace("/(<\/?)(p)([^>]*>)", "",$jurnal_author);
+		$jurnal_author=str_replace("'", "''",$jurnal_author);
+		$jurnal_date_create=trim(@$_POST["jurnal_date_create"]);
+		$jurnal_update=trim(@$_POST["jurnal_update"]);
+		$jurnal_update=str_replace("/(<\/?)(p)([^>]*>)", "",$jurnal_update);
+		$jurnal_update=str_replace("'", "''",$jurnal_update);
+		$jurnal_date_update=trim(@$_POST["jurnal_date_update"]);
+		$jurnal_post=trim(@$_POST["jurnal_post"]);
+		$jurnal_post=str_replace("/(<\/?)(p)([^>]*>)", "",$jurnal_post);
+		$jurnal_post=str_replace("'", "''",$jurnal_post);
+		$jurnal_date_post=trim(@$_POST["jurnal_date_post"]);
+		$jurnal_revised=trim(@$_POST["jurnal_revised"]);
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_jurnal_umum->jurnal_umum_search($jumum_id ,$jumum_tanggal ,$jumum_pengguna ,$jumum_keterangan ,$jumum_posting ,$jumum_tglposting ,$start,$end);
+		$result = $this->m_jurnal_umum->jurnal_umum_search($jurnal_id ,$jurnal_tanggal ,$jurnal_akun ,$jurnal_keterangan ,$jurnal_noref ,$jurnal_debet ,$jurnal_kredit ,$jurnal_unit ,$jurnal_author ,$jurnal_date_create ,$jurnal_update ,$jurnal_date_update ,$jurnal_post ,$jurnal_date_post ,$jurnal_revised ,$start,$end);
 		echo $result;
 	}
 
 
 	function jurnal_umum_print(){
   		//POST varibale here
-		$jumum_id=trim(@$_POST["jumum_id"]);
-		$jumum_tanggal=trim(@$_POST["jumum_tanggal"]);
-		$jumum_pengguna=trim(@$_POST["jumum_pengguna"]);
-		$jumum_pengguna=str_replace("/(<\/?)(p)([^>]*>)", "",$jumum_pengguna);
-		$jumum_pengguna=str_replace("'", '"',$jumum_pengguna);
-		$jumum_keterangan=trim(@$_POST["jumum_keterangan"]);
-		$jumum_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$jumum_keterangan);
-		$jumum_keterangan=str_replace("'", '"',$jumum_keterangan);
-		$jumum_posting=trim(@$_POST["jumum_posting"]);
-		$jumum_posting=str_replace("/(<\/?)(p)([^>]*>)", "",$jumum_posting);
-		$jumum_posting=str_replace("'", '"',$jumum_posting);
-		$jumum_tglposting=trim(@$_POST["jumum_tglposting"]);
+		$jurnal_id=trim(@$_POST["jurnal_id"]);
+		$jurnal_tanggal=trim(@$_POST["jurnal_tanggal"]);
+		$jurnal_akun=trim(@$_POST["jurnal_akun"]);
+		$jurnal_keterangan=trim(@$_POST["jurnal_keterangan"]);
+		$jurnal_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$jurnal_keterangan);
+		$jurnal_keterangan=str_replace("'", "'",$jurnal_keterangan);
+		$jurnal_noref=trim(@$_POST["jurnal_noref"]);
+		$jurnal_noref=str_replace("/(<\/?)(p)([^>]*>)", "",$jurnal_noref);
+		$jurnal_noref=str_replace("'", "'",$jurnal_noref);
+		$jurnal_debet=trim(@$_POST["jurnal_debet"]);
+		$jurnal_kredit=trim(@$_POST["jurnal_kredit"]);
+		$jurnal_unit=trim(@$_POST["jurnal_unit"]);
+		$jurnal_author=trim(@$_POST["jurnal_author"]);
+		$jurnal_author=str_replace("/(<\/?)(p)([^>]*>)", "",$jurnal_author);
+		$jurnal_author=str_replace("'", "'",$jurnal_author);
+		$jurnal_date_create=trim(@$_POST["jurnal_date_create"]);
+		$jurnal_update=trim(@$_POST["jurnal_update"]);
+		$jurnal_update=str_replace("/(<\/?)(p)([^>]*>)", "",$jurnal_update);
+		$jurnal_update=str_replace("'", "'",$jurnal_update);
+		$jurnal_date_update=trim(@$_POST["jurnal_date_update"]);
+		$jurnal_post=trim(@$_POST["jurnal_post"]);
+		$jurnal_post=str_replace("/(<\/?)(p)([^>]*>)", "",$jurnal_post);
+		$jurnal_post=str_replace("'", "'",$jurnal_post);
+		$jurnal_date_post=trim(@$_POST["jurnal_date_post"]);
+		$jurnal_revised=trim(@$_POST["jurnal_revised"]);
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$result = $this->m_jurnal_umum->jurnal_umum_print($jumum_id ,$jumum_tanggal ,$jumum_pengguna ,$jumum_keterangan ,$jumum_posting ,$jumum_tglposting ,$option,$filter);
-		$nbrows=$result->num_rows();
-		$totcolumn=11;
-   		/* We now have our array, let's build our HTML file */
-		$file = fopen("jurnal_umumlist.html",'w');
-		fwrite($file, "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' /><title>Printing the Jurnal_umum Grid</title><link rel='stylesheet' type='text/css' href='assets/modules/main/css/printstyle.css'/></head>");
-		fwrite($file, "<body><table summary='Jurnal_umum List'><caption>JURNAL_UMUM</caption><thead><tr><th scope='col'>Jumum Id</th><th scope='col'>Jumum Tanggal</th><th scope='col'>Jumum Pengguna</th><th scope='col'>Jumum Keterangan</th><th scope='col'>Jumum Posting</th><th scope='col'>Jumum Tglposting</th><th scope='col'>Jumum Creator</th><th scope='col'>Jumum Date Create</th><th scope='col'>Jumum Update</th><th scope='col'>Jumum Date Update</th><th scope='col'>Jumum Revised</th></tr></thead><tfoot><tr><th scope='row'>Total</th><td colspan='$totcolumn'>");
-		fwrite($file, $nbrows);
-		fwrite($file, " Jurnal_umum</td></tr></tfoot><tbody>");
-		$i=0;
-		if($nbrows>0){
-			foreach($result->result_array() as $data){
-				fwrite($file,'<tr');
-				if($i%1==0){
-					fwrite($file," class='odd'");
-				}
-			
-				fwrite($file, "><th scope='row' id='r97'>");
-				fwrite($file, $data['jumum_id']);
-				fwrite($file,"</th><td>");
-				fwrite($file, $data['jumum_tanggal']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['jumum_pengguna']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['jumum_keterangan']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['jumum_posting']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['jumum_tglposting']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['jumum_creator']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['jumum_date_create']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['jumum_update']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['jumum_date_update']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['jumum_revised']);
-				fwrite($file, "</td></tr>");
-			}
+		$data["data_print"] = $this->m_jurnal_umum->jurnal_umum_print($jurnal_id ,$jurnal_tanggal ,$jurnal_akun ,$jurnal_keterangan ,$jurnal_noref ,$jurnal_debet ,$jurnal_kredit ,$jurnal_unit ,$jurnal_author ,$jurnal_date_create ,$jurnal_update ,$jurnal_date_update ,$jurnal_post ,$jurnal_date_post ,$jurnal_revised ,$option,$filter);
+		$print_view=$this->load->view("main/p_jurnal_umum.php",$data,TRUE);
+		if(!file_exists("print")){
+			mkdir("print");
 		}
-		fwrite($file, "</tbody></table></body></html>");	
-		fclose($file);
+		$print_file=fopen("print/jurnal_umum_printlist.html","w+");
+		fwrite($print_file, $print_view);
 		echo '1';        
 	}
 	/* End Of Function */
@@ -256,22 +249,35 @@ class C_jurnal_umum extends Controller {
 	/* Function to Export Excel document */
 	function jurnal_umum_export_excel(){
 		//POST varibale here
-		$jumum_id=trim(@$_POST["jumum_id"]);
-		$jumum_tanggal=trim(@$_POST["jumum_tanggal"]);
-		$jumum_pengguna=trim(@$_POST["jumum_pengguna"]);
-		$jumum_pengguna=str_replace("/(<\/?)(p)([^>]*>)", "",$jumum_pengguna);
-		$jumum_pengguna=str_replace("'", '"',$jumum_pengguna);
-		$jumum_keterangan=trim(@$_POST["jumum_keterangan"]);
-		$jumum_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$jumum_keterangan);
-		$jumum_keterangan=str_replace("'", '"',$jumum_keterangan);
-		$jumum_posting=trim(@$_POST["jumum_posting"]);
-		$jumum_posting=str_replace("/(<\/?)(p)([^>]*>)", "",$jumum_posting);
-		$jumum_posting=str_replace("'", '"',$jumum_posting);
-		$jumum_tglposting=trim(@$_POST["jumum_tglposting"]);
+		$jurnal_id=trim(@$_POST["jurnal_id"]);
+		$jurnal_tanggal=trim(@$_POST["jurnal_tanggal"]);
+		$jurnal_akun=trim(@$_POST["jurnal_akun"]);
+		$jurnal_keterangan=trim(@$_POST["jurnal_keterangan"]);
+		$jurnal_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$jurnal_keterangan);
+		$jurnal_keterangan=str_replace("'", "\'",$jurnal_keterangan);
+		$jurnal_noref=trim(@$_POST["jurnal_noref"]);
+		$jurnal_noref=str_replace("/(<\/?)(p)([^>]*>)", "",$jurnal_noref);
+		$jurnal_noref=str_replace("'", "\'",$jurnal_noref);
+		$jurnal_debet=trim(@$_POST["jurnal_debet"]);
+		$jurnal_kredit=trim(@$_POST["jurnal_kredit"]);
+		$jurnal_unit=trim(@$_POST["jurnal_unit"]);
+		$jurnal_author=trim(@$_POST["jurnal_author"]);
+		$jurnal_author=str_replace("/(<\/?)(p)([^>]*>)", "",$jurnal_author);
+		$jurnal_author=str_replace("'", "\'",$jurnal_author);
+		$jurnal_date_create=trim(@$_POST["jurnal_date_create"]);
+		$jurnal_update=trim(@$_POST["jurnal_update"]);
+		$jurnal_update=str_replace("/(<\/?)(p)([^>]*>)", "",$jurnal_update);
+		$jurnal_update=str_replace("'", "\'",$jurnal_update);
+		$jurnal_date_update=trim(@$_POST["jurnal_date_update"]);
+		$jurnal_post=trim(@$_POST["jurnal_post"]);
+		$jurnal_post=str_replace("/(<\/?)(p)([^>]*>)", "",$jurnal_post);
+		$jurnal_post=str_replace("'", "\'",$jurnal_post);
+		$jurnal_date_post=trim(@$_POST["jurnal_date_post"]);
+		$jurnal_revised=trim(@$_POST["jurnal_revised"]);
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$query = $this->m_jurnal_umum->jurnal_umum_export_excel($jumum_id ,$jumum_tanggal ,$jumum_pengguna ,$jumum_keterangan ,$jumum_posting ,$jumum_tglposting ,$option,$filter);
+		$query = $this->m_jurnal_umum->jurnal_umum_export_excel($jurnal_id ,$jurnal_tanggal ,$jurnal_akun ,$jurnal_keterangan ,$jurnal_noref ,$jurnal_debet ,$jurnal_kredit ,$jurnal_unit ,$jurnal_author ,$jurnal_date_create ,$jurnal_update ,$jurnal_date_update ,$jurnal_post ,$jurnal_date_post ,$jurnal_revised ,$option,$filter);
 		
 		to_excel($query,"jurnal_umum"); 
 		echo '1';
@@ -282,7 +288,7 @@ class C_jurnal_umum extends Controller {
 	function JEncode($arr){
 		if (version_compare(PHP_VERSION,"5.2","<"))
 		{    
-			require_once("./JSON.php"); //if php<5.2 need JSON class
+			require_once("../../../../sia-pmmp/system/application/controllers/JSON.php"); //if php<5.2 need JSON class
 			$json = new Services_JSON();//instantiate new json object
 			$data=$json->encode($arr);  //encode the data in json format
 		} else {
@@ -295,7 +301,7 @@ class C_jurnal_umum extends Controller {
 	function JDecode($arr){
 		if (version_compare(PHP_VERSION,"5.2","<"))
 		{    
-			require_once("./JSON.php"); //if php<5.2 need JSON class
+			require_once("../../../../sia-pmmp/system/application/controllers/JSON.php"); //if php<5.2 need JSON class
 			$json = new Services_JSON();//instantiate new json object
 			$data=$json->decode($arr);  //decode the data in json format
 		} else {
@@ -304,12 +310,6 @@ class C_jurnal_umum extends Controller {
 		return $data;
 	}
 	
-	// Encodes a YYYY-MM-DD into a MM-DD-YYYY string
-	function codeDate ($date) {
-	  $tab = explode ("-", $date);
-	  $r = $tab[1]."/".$tab[2]."/".$tab[0];
-	  return $r;
-	}
 	
 }
 ?>
