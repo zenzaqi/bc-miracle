@@ -61,6 +61,7 @@ var pageS=15;
 /* declare variable here */
 var karyawan_idField;
 var karyawan_noField;
+var karyawan_sipField;
 var karyawan_npwpField;
 var karyawan_usernameField;
 var karyawan_namaField;
@@ -243,6 +244,7 @@ Ext.onReady(function(){
 		
 		var karyawan_id_create_pk=null;
 		var karyawan_no_create=null;
+		var karyawan_sip_create=null;
 		var karyawan_npwp_create=null;
 		var karyawan_username_create=null;
 		var karyawan_nama_create=null;
@@ -273,6 +275,7 @@ Ext.onReady(function(){
 
 		karyawan_id_create_pk=get_pk_id();
 		if(karyawan_noField.getValue()!== null){karyawan_no_create = karyawan_noField.getValue();}
+		if(karyawan_sipField.getValue()!== null){karyawan_sip_create = karyawan_sipField.getValue();}
 		if(karyawan_npwpField.getValue()!== null){karyawan_npwp_create = karyawan_npwpField.getValue();}
 		if(karyawan_usernameField.getValue()!== null){karyawan_username_create = karyawan_usernameField.getValue();}
 		if(karyawan_namaField.getValue()!== null){karyawan_nama_create = karyawan_namaField.getValue();}
@@ -307,7 +310,8 @@ Ext.onReady(function(){
 				params: {
 					task: post2db,
 					karyawan_id	: karyawan_id_create_pk,	
-					karyawan_no	: karyawan_no_create,	
+					karyawan_no	: karyawan_no_create,
+					karyawan_sip: karyawan_sip_create,
 					karyawan_npwp	: karyawan_npwp_create,	
 					karyawan_username	: karyawan_username_create,	
 					karyawan_nama	: karyawan_nama_create,	
@@ -398,6 +402,8 @@ Ext.onReady(function(){
 	function karyawan_reset_form(){
 		karyawan_noField.reset();
 		karyawan_noField.setValue(null);
+		karyawan_sipField.reset();
+		karyawan_sipField.setValue(null);
 		karyawan_npwpField.reset();
 		karyawan_npwpField.setValue(null);
 		karyawan_usernameField.reset();
@@ -456,6 +462,7 @@ Ext.onReady(function(){
 	/* setValue to EDIT */
 	function karyawan_set_form(){
 		karyawan_noField.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_no'));
+		karyawan_sipField.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_sip'));
 		karyawan_npwpField.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_npwp'));
 		karyawan_usernameField.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_username'));
 		karyawan_namaField.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_nama'));
@@ -618,6 +625,7 @@ Ext.onReady(function(){
 		/* dataIndex => insert intokaryawan_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'karyawan_id', type: 'int', mapping: 'karyawan_id'},
 			{name: 'karyawan_no', type: 'string', mapping: 'karyawan_no'},
+			{name: 'karyawan_sip', type: 'string', mapping: 'karyawan_sip'},
 			{name: 'karyawan_npwp', type: 'string', mapping: 'karyawan_npwp'},
 			{name: 'karyawan_username', type: 'string', mapping: 'karyawan_username'},
 			{name: 'karyawan_nama', type: 'string', mapping: 'karyawan_nama'},
@@ -1318,6 +1326,15 @@ Ext.onReady(function(){
 		allowBlank: false,
 		anchor: '95%'
 	});
+	
+	/*Identify karyawan_sip Field*/
+	karyawan_sipField= new Ext.form.TextField({
+		id: 'karyawan_sipField',
+		fieldLabel: '&nbsp; &nbsp; &nbsp; SIP',
+		maxLength: 15,
+		width : 100
+	});
+	
 	/* Identify  karyawan_npwp Field */
 	karyawan_npwpField= new Ext.form.TextField({
 		id: 'karyawan_npwpField',
@@ -1599,7 +1616,7 @@ Ext.onReady(function(){
 		autoHeight: true,
 		defaultType: 'textfield',
 		anchor: '95%',
-		items:[karyawan_tglmasukField, karyawan_tglbatasField, karyawan_cabangField ,karyawan_jabatanField, karyawan_departemenField, karyawan_golonganField, karyawan_atasanField, karyawan_emiracleField, karyawan_pph21Field]
+		items:[karyawan_tglmasukField, karyawan_tglbatasField, karyawan_cabangField ,karyawan_jabatanField, karyawan_sipField, karyawan_departemenField, karyawan_golonganField, karyawan_atasanField, karyawan_emiracleField, karyawan_pph21Field]
 	});
 	
 	/* Function for retrieve create Window Panel*/ 

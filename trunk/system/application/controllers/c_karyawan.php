@@ -104,6 +104,10 @@ class C_karyawan extends Controller {
 		$karyawan_no=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_no);
 		$karyawan_no=str_replace(",", ",",$karyawan_no);
 		$karyawan_no=str_replace("'", '"',$karyawan_no);
+		$karyawan_sip=trim(@$_POST["karyawan_sip"]);
+		$karyawan_sip=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_sip);
+		$karyawan_sip=str_replace(",", ",",$karyawan_sip);
+		$karyawan_sip=str_replace("'", '"',$karyawan_sip);
 		$karyawan_npwp=trim(@$_POST["karyawan_npwp"]);
 		$karyawan_npwp=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_npwp);
 		$karyawan_npwp=str_replace(",", ",",$karyawan_npwp);
@@ -120,7 +124,19 @@ class C_karyawan extends Controller {
 		$karyawan_kelamin=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_kelamin);
 		$karyawan_kelamin=str_replace(",", ",",$karyawan_kelamin);
 		$karyawan_kelamin=str_replace("'", '"',$karyawan_kelamin);
+		$karyawan_pph21=trim(@$_POST["karyawan_pph21"]);
+		$karyawan_pph21=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_pph21);
+		$karyawan_pph21=str_replace(",", ",",$karyawan_pph21);
+		$karyawan_pph21=str_replace("'", '"',$karyawan_pph21);
+		$karyawan_marriage=trim(@$_POST["karyawan_marriage"]);
+		$karyawan_marriage=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_marriage);
+		$karyawan_marriage=str_replace(",", ",",$karyawan_marriage);
+		$karyawan_marriage=str_replace("'", '"',$karyawan_marriage);
 		$karyawan_tgllahir=trim(@$_POST["karyawan_tgllahir"]);
+		$karyawan_tmplahir=trim(@$_POST["karyawan_tmplahir"]);
+		$karyawan_tmplahir=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_tmplahir);
+		$karyawan_tmplahir=str_replace(",", ",",$karyawan_tmplahir);
+		$karyawan_tmplahir=str_replace("'", '"',$karyawan_tmplahir);
 		$karyawan_alamat=trim(@$_POST["karyawan_alamat"]);
 		$karyawan_alamat=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_alamat);
 		$karyawan_alamat=str_replace(",", ",",$karyawan_alamat);
@@ -188,7 +204,7 @@ class C_karyawan extends Controller {
 		$karyawan_update=str_replace("'", '"',$karyawan_update);
 		$karyawan_date_update=trim(@$_POST["karyawan_date_update"]);
 		$karyawan_revised=trim(@$_POST["karyawan_revised"]);
-		$result = $this->m_karyawan->karyawan_update($karyawan_id ,$karyawan_no ,$karyawan_npwp ,$karyawan_username ,$karyawan_nama ,$karyawan_kelamin ,$karyawan_tgllahir ,$karyawan_alamat ,$karyawan_kota ,$karyawan_kodepos ,$karyawan_email ,$karyawan_emiracle ,$karyawan_keterangan ,$karyawan_notelp ,$karyawan_notelp2 ,$karyawan_notelp3, $karyawan_notelp4 ,$karyawan_cabang ,$karyawan_jabatan ,$karyawan_departemen ,$karyawan_idgolongan ,$karyawan_tglmasuk ,$karyawan_atasan ,$karyawan_aktif ,$karyawan_creator ,$karyawan_date_create ,$karyawan_update ,$karyawan_date_update ,$karyawan_revised );
+		$result = $this->m_karyawan->karyawan_update($karyawan_id ,$karyawan_no ,$karyawan_sip, $karyawan_npwp ,$karyawan_username ,$karyawan_nama ,$karyawan_kelamin ,$karyawan_pph21, $karyawan_marriage, $karyawan_tgllahir ,$karyawan_tmplahir, $karyawan_alamat ,$karyawan_kota ,$karyawan_kodepos ,$karyawan_email ,$karyawan_emiracle ,$karyawan_keterangan ,$karyawan_notelp ,$karyawan_notelp2 ,$karyawan_notelp3, $karyawan_notelp4 ,$karyawan_cabang ,$karyawan_jabatan ,$karyawan_departemen ,$karyawan_idgolongan ,$karyawan_tglmasuk ,$karyawan_atasan ,$karyawan_aktif ,$karyawan_creator ,$karyawan_date_create ,$karyawan_update ,$karyawan_date_update ,$karyawan_revised );
 		echo $result;
 	}
 	
@@ -199,6 +215,9 @@ class C_karyawan extends Controller {
 		$karyawan_no=trim(@$_POST["karyawan_no"]);
 		$karyawan_no=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_no);
 		$karyawan_no=str_replace("'", '"',$karyawan_no);
+		$karyawan_sip=trim(@$_POST["karyawan_sip"]);
+		$karyawan_sip=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_sip);
+		$karyawan_sip=str_replace("'", '"',$karyawan_sip);
 		$karyawan_npwp=trim(@$_POST["karyawan_npwp"]);
 		$karyawan_npwp=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_npwp);
 		$karyawan_npwp=str_replace("'", '"',$karyawan_npwp);
@@ -277,7 +296,7 @@ class C_karyawan extends Controller {
 		$karyawan_update=str_replace("'", '"',$karyawan_update);
 		$karyawan_date_update=trim(@$_POST["karyawan_date_update"]);
 		$karyawan_revised=trim(@$_POST["karyawan_revised"]);
-		$result=$this->m_karyawan->karyawan_create($karyawan_no ,$karyawan_npwp ,$karyawan_username ,$karyawan_nama ,$karyawan_kelamin ,$karyawan_pph21 ,$karyawan_marriage ,$karyawan_tgllahir ,$karyawan_tmplahir ,$karyawan_alamat ,$karyawan_kota ,$karyawan_kodepos ,$karyawan_email ,$karyawan_emiracle ,$karyawan_keterangan ,$karyawan_notelp ,$karyawan_notelp2 ,$karyawan_notelp3, $karyawan_notelp4 ,$karyawan_cabang ,$karyawan_jabatan ,$karyawan_departemen ,$karyawan_idgolongan ,$karyawan_tglmasuk ,$karyawan_tglbatas ,$karyawan_atasan ,$karyawan_aktif ,$karyawan_creator ,$karyawan_date_create ,$karyawan_update ,$karyawan_date_update ,$karyawan_revised );
+		$result=$this->m_karyawan->karyawan_create($karyawan_no ,$karyawan_sip, $karyawan_npwp ,$karyawan_username ,$karyawan_nama ,$karyawan_kelamin ,$karyawan_pph21 ,$karyawan_marriage ,$karyawan_tgllahir ,$karyawan_tmplahir ,$karyawan_alamat ,$karyawan_kota ,$karyawan_kodepos ,$karyawan_email ,$karyawan_emiracle ,$karyawan_keterangan ,$karyawan_notelp ,$karyawan_notelp2 ,$karyawan_notelp3, $karyawan_notelp4 ,$karyawan_cabang ,$karyawan_jabatan ,$karyawan_departemen ,$karyawan_idgolongan ,$karyawan_tglmasuk ,$karyawan_tglbatas ,$karyawan_atasan ,$karyawan_aktif ,$karyawan_creator ,$karyawan_date_create ,$karyawan_update ,$karyawan_date_update ,$karyawan_revised );
 		echo $result;
 	}
 
