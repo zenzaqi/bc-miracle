@@ -76,6 +76,9 @@ var apaket_fakturSearchField;
 var apaket_custSearchField;
 var apaket_paketSearchField;
 var apaket_kadaluarsaSearchField;
+var apaket_kadaluarsa_akhirSearchField;
+var apaket_tgl_fakturSearchField;
+var apaket_tgl_faktur_akhirSearchField;
 
 var dt = new Date();
 
@@ -614,7 +617,7 @@ Ext.onReady(function(){
 			renderer: Ext.util.Format.dateRenderer('d-m-Y')
 		} */
 		{
-			header: '<div align="center">' + 'Tgl Exp' + '</div>',
+			header: '<div align="center">' + 'Tgl Kadaluarsa' + '</div>',
 			dataIndex: 'dpaket_kadaluarsa',
 			width: 70,
 			sortable: true,
@@ -686,7 +689,7 @@ Ext.onReady(function(){
 		            }
 				},
 				render: function(c){
-				Ext.get(this.id).set({qtitle:'Search by (Tgl Faktur >= 2007):'});
+				Ext.get(this.id).set({qtitle:'Search by (khusus belum kadaluarsa):'});
 				Ext.get(this.id).set({qtip:' - No Customer<br> - Nama Customer<br> - Kode Paket<br> - Nama Paket'});
 				}
 			},
@@ -1573,19 +1576,26 @@ Ext.onReady(function(){
 		var apaket_cust_search=null;
 		var apaket_paket_search=null;
 		var apaket_kadaluarsa_search=null;
+		var apaket_kadaluarsa_akhir_search=null;
 
 		if(apaket_fakturSearchField.getValue()!==null){apaket_faktur_search=apaket_fakturSearchField.getValue();}
 		if(apaket_custSearchField.getValue()!==null){apaket_cust_search=apaket_custSearchField.getValue();}
 		if(apaket_paketSearchField.getValue()!==null){apaket_paket_search=apaket_paketSearchField.getValue();}
 		if(apaket_kadaluarsaSearchField.getValue()!==""){apaket_kadaluarsa_search=apaket_kadaluarsaSearchField.getValue().format('Y-m-d');}
+		if(apaket_kadaluarsa_akhirSearchField.getValue()!==""){apaket_kadaluarsa_akhir_search=apaket_kadaluarsa_akhirSearchField.getValue().format('Y-m-d');}
+		if(apaket_tgl_fakturSearchField.getValue()!==""){apaket_tgl_faktur_search=apaket_tgl_fakturSearchField.getValue().format('Y-m-d');}
+		if(apaket_tgl_faktur_akhirSearchField.getValue()!==""){apaket_tgl_faktur_akhir_search=apaket_tgl_faktur_akhirSearchField.getValue().format('Y-m-d');}
 		// change the store parameters
 		ambil_paket_DataStore.baseParams = {
 			task: 'SEARCH',
 			//variable here
-			apaket_faktur	:	apaket_faktur_search, 
-			apaket_cust	:	apaket_cust_search, 
-			apaket_paket	:	apaket_paket_search, 
-			apaket_kadaluarsa	:	apaket_kadaluarsa_search
+			apaket_faktur			:	apaket_faktur_search, 
+			apaket_cust				:	apaket_cust_search, 
+			apaket_paket			:	apaket_paket_search, 
+			apaket_kadaluarsa		:	apaket_kadaluarsa_search,
+			apaket_kadaluarsa_akhir	:	apaket_kadaluarsa_akhir_search,
+			apaket_tgl_faktur		:	apaket_tgl_faktur_search,
+			apaket_tgl_faktur_akhir	:	apaket_tgl_faktur_akhir_search,
 		};
 		// Cause the datastore to do another query : 
 		ambil_paket_DataStore.reload({params: {start: 0, limit: pageS}});
@@ -1607,13 +1617,16 @@ Ext.onReady(function(){
 		apaket_custSearchField.reset();
 		apaket_paketSearchField.reset();
 		apaket_kadaluarsaSearchField.reset();
+		apaket_kadaluarsa_akhirSearchField.reset();
+		apaket_tgl_fakturSearchField.reset();
+		apaket_tgl_faktur_akhirSearchField.reset();
 	}
 	
 	/* Field for search */
 	/* Identify  ambil_paket_id Search Field */
 	apaket_fakturSearchField= new Ext.form.TextField({
 		id: 'apaket_fakturSearchField',
-		fieldLabel: 'No.Faktur',
+		fieldLabel: 'No Faktur',
 		maxLength: 20,
 		anchor: '95%'
 	});
@@ -1664,6 +1677,21 @@ Ext.onReady(function(){
 		fieldLabel: 'Tanggal Kadaluarsa',
 		format : 'd-m-Y'
 	});
+	apaket_kadaluarsa_akhirSearchField= new Ext.form.DateField({
+		id: 'apaket_kadaluarsa_akhirSearchField',
+		fieldLabel: 's/d',
+		format : 'd-m-Y'
+	});
+	apaket_tgl_fakturSearchField= new Ext.form.DateField({
+		id: 'apaket_tgl_fakturSearchField',
+		fieldLabel: 'Tanggal Faktur',
+		format : 'd-m-Y'
+	});
+	apaket_tgl_faktur_akhirSearchField= new Ext.form.DateField({
+		id: 'apaket_tgl_faktur_akhirSearchField',
+		fieldLabel: 's/d',
+		format : 'd-m-Y'
+	});
     
 	/* Function for retrieve search Form Panel */
 	ambil_paket_searchForm = new Ext.FormPanel({
@@ -1680,16 +1708,63 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [apaket_fakturSearchField, apaket_custSearchField, apaket_paketSearchField, apaket_kadaluarsaSearchField] 
-			}/*
- 
-			,{
-				columnWidth:0.5,
-				layout: 'form',
-				border:false,
-				items: [apaket_kadaluarsaSearchField] 
-			}*/
-			]
+				items: [
+					apaket_custSearchField, 
+					{
+						layout:'column',
+						border:false,
+						items:[
+						{
+							columnWidth:0.60,
+							layout: 'form',
+							border:false,
+							defaultType: 'datefield',
+							items: [						
+								apaket_tgl_fakturSearchField
+							]
+						},
+						{
+							columnWidth:0.40,
+							layout: 'form',
+							border:false,
+							labelWidth:35,
+							defaultType: 'datefield',
+							items: [						
+								apaket_tgl_faktur_akhirSearchField
+							]
+						}								
+						]
+					},
+					apaket_fakturSearchField, 
+					apaket_paketSearchField, 
+					{
+						layout:'column',
+						border:false,
+						items:[
+						{
+							columnWidth:0.60,
+							layout: 'form',
+							border:false,
+							defaultType: 'datefield',
+							items: [						
+								apaket_kadaluarsaSearchField
+							]
+						},
+						{
+							columnWidth:0.40,
+							layout: 'form',
+							border:false,
+							labelWidth:35,
+							defaultType: 'datefield',
+							items: [						
+								apaket_kadaluarsa_akhirSearchField
+							]
+						}								
+						]
+					}
+				] 
+			}
+ 			]
 		}]
 		,
 		buttons: [{
@@ -1707,7 +1782,7 @@ Ext.onReady(function(){
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
 	ambil_paket_searchWindow = new Ext.Window({
-		title: 'ambil_paket Search',
+		title: 'Pencarian Pengambilan Paket',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,
@@ -1747,7 +1822,7 @@ Ext.onReady(function(){
 		if(ambil_paket_DataStore.baseParams.ambil_paket_expired!==null){ambil_paket_expired_print = ambil_paket_DataStore.baseParams.ambil_paket_expired;}
 
 		Ext.Ajax.request({   
-		waitMsg: 'Please Wait...',
+		waitMsg: 'Mohon tunggu...',
 		url: 'index.php?c=c_master_ambil_paket&m=get_action',
 		params: {
 			task: "PRINT",

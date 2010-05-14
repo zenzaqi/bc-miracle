@@ -207,10 +207,13 @@ class C_master_ambil_paket extends Controller {
 		$apaket_cust=trim(@$_POST["apaket_cust"]);
 		$apaket_paket=trim(@$_POST["apaket_paket"]);
 		$apaket_kadaluarsa=trim(@$_POST["apaket_kadaluarsa"]);
+		$apaket_kadaluarsa_akhir=trim(@$_POST["apaket_kadaluarsa_akhir"]);
+		$apaket_tgl_faktur=trim(@$_POST["apaket_tgl_faktur"]);
+		$apaket_tgl_faktur_akhir=trim(@$_POST["apaket_tgl_faktur_akhir"]);
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_master_ambil_paket->ambil_paket_search($apaket_faktur ,$apaket_cust ,$apaket_paket ,$apaket_kadaluarsa ,$start,$end);
+		$result = $this->m_master_ambil_paket->ambil_paket_search($apaket_faktur, $apaket_cust, $apaket_paket, $apaket_kadaluarsa, $apaket_kadaluarsa_akhir, $apaket_tgl_faktur, $apaket_tgl_faktur_akhir, $start, $end);
 		echo $result;
 	}
 
