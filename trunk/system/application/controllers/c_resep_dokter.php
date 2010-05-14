@@ -19,6 +19,7 @@ class C_resep_dokter extends Controller {
 		$this->load->model('m_resep_dokter', '', TRUE);
 		session_start();
 		$this->load->plugin('to_excel');
+		//$this->load->library('firephp');
 	}
 	
 	//set index
@@ -79,9 +80,7 @@ class C_resep_dokter extends Controller {
 		$dresep_id=trim(@$_POST["dresep_id"]);
 		$dresep_master=trim(@$_POST["dresep_master"]);
 		$dresep_produk=trim(@$_POST["dresep_produk"]);
-		
 		$cetak=trim(@$_POST['cetak']);
-		
 		$count=trim(@$_POST['count']);
 		$dcount=trim(@$_POST['dcount']);
 
@@ -91,6 +90,7 @@ class C_resep_dokter extends Controller {
 
 	function detail_resepdokter_purge(){
 		$master_id = (integer) (isset($_POST['master_id']) ? $_POST['master_id'] : $_GET['master_id']);
+		//$this->firephp->log($master_id,'masterer');
 		$result=$this->m_resep_dokter->detail_resepdokter_purge($master_id);
 	}
 	
@@ -293,7 +293,7 @@ class C_resep_dokter extends Controller {
 		$data['cust_nama']=$rs->cust_nama;
 		$data['cust_alamat']=$rs->cust_alamat;
 		$data['iklantoday_keterangan']=$rsiklan->iklantoday_keterangan;
-		$data['resep_tanggal']=$rs->resep_tanggal;
+		$data['resep_tanggal']=date("d-m-Y",strtotime($rs->resep_tanggal));
 		$data['resep_no']=$rs->resep_no;
 		$data['produk_nama']=$rs->produk_nama;
 		$data['detail_resepdokter']=$detail_resepdokter;
