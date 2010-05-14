@@ -36,6 +36,18 @@ class C_resep_dokter extends Controller {
 		echo $result;
 	}
 	
+	function get_auto_karyawan_sip(){
+		$karyawan_id = (integer) (isset($_POST['karyawan_id']) ? $_POST['karyawan_id'] : $_GET['karyawan_id']);
+		$result=$this->m_public_function->get_auto_karyawan_sip($karyawan_id);
+		echo $result;
+	}
+	
+	function get_auto_cust_no(){
+		$cust_id = (integer) (isset($_POST['cust_id']) ? $_POST['cust_id'] : $_GET['cust_id']);
+		$result=$this->m_public_function->get_auto_cust_no($cust_id);
+		echo $result;
+	}
+	
 	function get_dokter_list(){
 		//ID dokter pada tabel departemen adalah 8
 		$query = isset($_POST['query']) ? $_POST['query'] : "";
@@ -140,18 +152,10 @@ class C_resep_dokter extends Controller {
 		//POST variable here
 		$resep_id=trim(@$_POST["resep_id"]);
 		$resep_custid=trim(@$_POST["resep_custid"]);
-		$resep_no=trim(@$_POST["resep_no"]);
-		$resep_no=str_replace("/(<\/?)(p)([^>]*>)", "",$resep_no);
-		$resep_no=str_replace(",", "\,",$resep_no);
-		$resep_no=str_replace("'", "''",$resep_no);
-		
-		$resep_sip=trim(@$_POST["resep_sip"]);
-		$resep_sip=str_replace("/(<\/?)(p)([^>]*>)", "",$resep_sip);
-		$resep_sip=str_replace(",", "\,",$resep_sip);
-		$resep_sip=str_replace("'", "''",$resep_sip);
 		$resep_tanggal=trim(@$_POST["resep_tanggal"]);
+		$resep_dokterid=trim(@$_POST["resep_dokterid"]);
 		$mode_edit=trim(@$_POST["mode_edit"]);
-		$result = $this->m_resep_dokter->resep_dokter_update($resep_id, $resep_custid ,$resep_no, $resep_sip, $resep_tanggal, $mode_edit);
+		$result = $this->m_resep_dokter->resep_dokter_update($resep_id, $resep_custid, $resep_tanggal, $resep_dokterid, $mode_edit);
 		echo $result;
 	}
 	
@@ -164,15 +168,12 @@ class C_resep_dokter extends Controller {
 		$resep_no=trim(@$_POST["resep_no"]);
 		$resep_no=str_replace("/(<\/?)(p)([^>]*>)", "",$resep_no);
 		$resep_no=str_replace("'", "''",$resep_no);
-		$resep_sip=trim(@$_POST["resep_sip"]);
-		$resep_sip=str_replace("/(<\/?)(p)([^>]*>)", "",$resep_sip);
-		$resep_sip=str_replace("'", "''",$resep_sip);
 		$resep_tanggal=trim(@$_POST["resep_tanggal"]);
 		$resep_keterangan=trim(@$_POST["resep_keterangan"]);
 		$resep_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$resep_keterangan);
 		$resep_keterangan=str_replace("'", "''",$resep_keterangan);
 		
-		$result=$this->m_resep_dokter->resep_dokter_create($resep_custid, $resep_dokterid, $resep_no, $resep_sip, $resep_tanggal, $resep_keterangan);
+		$result=$this->m_resep_dokter->resep_dokter_create($resep_custid, $resep_dokterid, $resep_no, $resep_tanggal, $resep_keterangan);
 		echo $result;
 	}
 
