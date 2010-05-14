@@ -61,7 +61,7 @@ class M_public_function extends Model{
 			$departemen_id=0;*/
 		//$sql="SELECT karyawan_id,karyawan_no,karyawan_nama,karyawan_username,reportt_jmltindakan FROM karyawan INNER JOIN jabatan ON(karyawan_jabatan=jabatan_id) INNER JOIN absensi ON(karyawan_no=absensi_nik) LEFT JOIN report_tindakan ON(karyawan_no=reportt_nik) WHERE karyawan_jabatan=jabatan_id AND karyawan_no=absensi_nik AND absensi_shift!='OFF' AND jabatan_nama='$karyawan_jabatan' AND karyawan_aktif='Aktif'";
 		$bln_now=date('Y-m');
-		$sql="SELECT karyawan_id,karyawan_no,karyawan_nama,karyawan_username,reportt_jmltindakan FROM karyawan INNER JOIN jabatan ON(karyawan_jabatan=jabatan_id) LEFT JOIN (SELECT * FROM report_tindakan WHERE reportt_bln LIKE '$bln_now%') as rt ON(karyawan_id=rt.reportt_karyawan_id) WHERE karyawan_jabatan=jabatan_id AND jabatan_nama='$karyawan_jabatan' AND karyawan_aktif='Aktif'";
+		$sql="SELECT karyawan_id,karyawan_no,karyawan_nama, karyawan_sip,karyawan_username,reportt_jmltindakan FROM karyawan INNER JOIN jabatan ON(karyawan_jabatan=jabatan_id) LEFT JOIN (SELECT * FROM report_tindakan WHERE reportt_bln LIKE '$bln_now%') as rt ON(karyawan_id=rt.reportt_karyawan_id) WHERE karyawan_jabatan=jabatan_id AND jabatan_nama='$karyawan_jabatan' AND karyawan_aktif='Aktif'";
 		if($query<>""){
 			$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
 			$sql .= " (karyawan_nama LIKE '%".addslashes($query)."%')";
@@ -351,6 +351,37 @@ class M_public_function extends Model{
 		}
 	}
 	
+	function get_auto_karyawan_sip($karyawan_id){
+		$sql = "SELECT karyawan_sip from karyawan where karyawan_id='".$karyawan_id."' and karyawan_aktif!='Tidak Aktif' order by karyawan_id desc limit 1";
+		$query = $this->db->query($sql);
+		$nbrows = $query->num_rows();
+		if($nbrows>0){
+			foreach($query->result() as $row){
+				$arr[] = $row;
+			}
+			$jsonresult = json_encode($arr);
+			return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+		} else {
+			return '({"total":"0", "results":""})';
+		}
+	}
+	
+	function get_auto_cust_no($cust_id){
+		$sql = "SELECT cust_no from customer where cust_id='".$cust_id."' and cust_aktif!='Tidak Aktif' order by cust_id desc limit 1";
+		$query = $this->db->query($sql);
+		$nbrows = $query->num_rows();
+		if($nbrows>0){
+			foreach($query->result() as $row){
+				$arr[] = $row;
+			}
+			$jsonresult = json_encode($arr);
+			return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+		} else {
+			return '({"total":"0", "results":""})';
+		}
+	}
+	
+	
 	function get_customer_list($query,$start,$end){
 		$sql="SELECT cust_id,cust_no,cust_nama,cust_tgllahir,cust_alamat,cust_telprumah,cust_point FROM customer WHERE cust_aktif='Aktif'";
 		if($query<>""){
@@ -509,6 +540,33 @@ class M_public_function extends Model{
 			return $kode;
 		}
 	}
+	
+	function get_resep_kode($table,$field,$pattern,$length){
+		$len_pattern=strlen($pattern);
+		$len_lpad=$length-$len_pattern;
+		$sql="select concat(left(max(".$field."),".$len_pattern."),LPAD((right(max(".$field."),".$len_lpad.")+1),".$len_lpad.",0)) as max_key from ".$table." where ".$field." like '".$pattern."%'";
+		$query=$this->db->query($sql);
+		if($query->num_rows()){
+			$data=$query->row();
+			$kode=$data->max_key;
+			if(is_null($kode))
+			{
+				$pad="";
+				for($i=1;$i<$len_lpad;$i++)
+					$pad.="0";
+				$kode=$pattern.$pad."1";
+			}
+			return $kode;
+		}else{
+			$pad="";
+			for($i=1;$i<$len_lpad;$i++)
+				$pad.="0";
+			$kode=$pattern.$pad."1";
+			return $kode;
+		}
+	}
+	
+	
 	
 	function get_satuan_list(){
 		$sql="SELECT satuan_id,satuan_kode,satuan_nama FROM satuan where satuan_aktif='Aktif'";

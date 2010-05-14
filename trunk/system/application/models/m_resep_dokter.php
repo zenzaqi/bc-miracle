@@ -136,22 +136,84 @@ class M_resep_dokter extends Model{
 		
 		function resepdokter_detail_insert($dresep_id ,$dresep_master ,$dresep_produk, $cetak, $count, $dcount){
 			//if master id not capture from view then capture it from max pk from master table
+			$date_now=date('d-m-Y');
 			if($dresep_master=="" || $dresep_master==NULL || $dresep_master==0){
 				$dresep_master=$this->get_master_id();
 			}
-				$date_now=date('d-m-Y');
+			
+			$sql="SELECT dresep_id FROM detail_resep_dokter WHERE dresep_master='$dresep_master' AND dresep_produk='$dresep_produk'";
+			$rs=$this->db->query($sql);
+			if($rs->num_rows()){
+				if($dproduk_diskon<>100){
+					//* UPDATE detail_resep_dokter untuk menambahkan dproduk_jumlah, ini dikarenakan kasir memasukkan produk yg sama lebih dari satu dalam satu Faktur /
+					$record = $rs->row_array();
+					$dresep_id=$record['dresep_id'];
+					$dproduk_jumlah_awal = $record['dresep_produk'];
+					$dtu_dproduk=array(
+					"dresep_produk"=>$dresep_produk
+					);
+					$this->db->where('dresep_id', $dresep_id);
+					$this->db->update('detail_resep_dokter', $dtu_dproduk);
+					if($this->db->affected_rows()){
+						if($cetak==1 && ($count==($dcount-1))){
+							return $dresep_master;
+						}else if($cetak!==1 && ($count==($dcount-1))){
+							return '0';
+						}else if($count!==($dcount-1)){
+							return '-3';
+						}
+					}else{
+						return '-1';
+					}
+				}else{
+					$data = array(
+						"dresep_master"=>$dresep_master, 
+						"dresep_produk"=>$dresep_produk, 
+					);
+					$this->db->insert('detail_resep_dokter', $data); 
+					if($this->db->affected_rows()){
+						if($cetak==1 && ($count==($dcount-1))){
+							return $dresep_master;
+						}else if($cetak!==1 && ($count==($dcount-1))){
+							return '0';
+						}else if($count!==($dcount-1)){
+							return '-3';
+						}
+					}else{
+						return '-1';
+					}
+				}
+			}else{
 				$data = array(
 					"dresep_master"=>$dresep_master, 
-					"dresep_produk"=>$dresep_produk,
-					//"dpcard_keterangan"=>$dpcard_keterangan,
-					//"dpcard_tanggal"=>$dpcard_tanggal,
+					"dresep_produk"=>$dresep_produk, 
 				);
 				$this->db->insert('detail_resep_dokter', $data); 
+				if($this->db->affected_rows()){
+					if($cetak==1 && ($count==($dcount-1))){
+						return $dresep_master;
+					}else if($cetak!==1 && ($count==($dcount-1))){
+						return '0';
+					}else if($count!==($dcount-1)){
+						return '-3';
+					}
+				}else
+					return '-1';
+			}
+			
+			/*if($dresep_master=="" || $dresep_master==NULL || $dresep_master==0){
+				$dresep_master=$this->get_master_id();
+			}
+			$sql="SELECT dresep_id FROM detail_resep_dokter WHERE dresep_master='$dresep_master' AND dresep_produk='$dresep_produk'";
+			$rs=$this->db->query($sql);
+			
+			$this->db->where('dresep_id', $dresep_id);
+			$this->db->insert('detail_resep_dokter', $data); 
+				
 			if($this->db->affected_rows()){
 				if($cetak==1 && ($count==($dcount-1))){
 					//$this->membership_insert($dproduk_master);
-					return $dresep_master;
-				}else if($cetak!==1 && ($count==($dcount-1))){
+					//return $dresep_master;
 					return '0';
 				}else if($count!==($dcount-1)){
 					return '-3';
@@ -159,6 +221,25 @@ class M_resep_dokter extends Model{
 			}else
 				return '-1';
 			
+			$data = array(
+				"dresep_master"=>$dresep_master, 
+				"dresep_produk"=>$dresep_produk
+				);
+				
+			$this->db->insert('detail_resep_dokter', $data); 
+				
+			if($this->db->affected_rows()){
+				if($cetak==1 && ($count==($dcount-1))){
+					//$this->membership_insert($dproduk_master);
+					//return $dresep_master;
+					return '0';
+				}else if($count!==($dcount-1)){
+					return '-3';
+				}
+			}else
+				return '-1';
+				*/
+				
 		}
 		
 		function detail_resepdokter_purge($master_id){
@@ -169,14 +250,6 @@ class M_resep_dokter extends Model{
 		//function for get list record
 		function resep_dokter_list($filter,$start,$end){
 			$date_now=date('d-m-Y');
-			//$query = "SELECT * FROM vu_tindakan WHERE kategori_nama='Medis' AND dtrawat_tglapp='$date_now'"; //TAMPILAN MEDIS SAJA
-			//$query = "SELECT medis.* FROM vu_tindakan medis WHERE (medis.kategori_nama='Medis' OR medis.dtrawat_master IN(SELECT nonmedis.dtrawat_master FROM vu_tindakan nonmedis WHERE nonmedis.kategori_nama='Non Medis' AND date_format(dtrawat_tglapp,'%Y-%m-%d') = date_format('$date_now','%Y-%m-%d') AND nonmedis.dtrawat_dapp='0')) AND date_format(dtrawat_tglapp,'%Y-%m-%d') = date_format('$date_now','%Y-%m-%d')";
-			//$query = "SELECT * FROM vu_tindakan WHERE date_format(dtrawat_tglapp,'%Y-%m-%d') = date_format('$date_now','%Y-%m-%d') AND (kategori_nama='Medis' OR dtrawat_petugas2='0')";
-			
-			/*$query = "select rekomendasi_card.*,customer.cust_no, customer.cust_nama, karyawan.karyawan_username, karyawan.karyawan_id, karyawan.karyawan_nama
-from rekomendasi_card
-left join customer on (customer.cust_id=rekomendasi_card.card_cust)
-left join karyawan on (karyawan.karyawan_id = rekomendasi_card.card_dokter)";*/
 
 			$query = "select resep_dokter.*,customer.cust_no, customer.cust_nama, karyawan.karyawan_username, karyawan.karyawan_id, karyawan.karyawan_nama, karyawan.karyawan_sip
 from resep_dokter
@@ -208,14 +281,13 @@ left join karyawan on (karyawan.karyawan_id = resep_dokter.resep_dokterid)";
 		}
 		
 	//function for update record
-	function resep_dokter_update($resep_id, $resep_custid ,$resep_no, $resep_sip, $resep_tanggal, $mode_edit){
+	function resep_dokter_update($resep_id, $resep_custid , $resep_tanggal, $resep_dokterid, $mode_edit){
 		/* Checking db.tindakan_detail WHERE db.tindakan_detail.dtrawat_id = $dtrawat_id DAN semua Field,
 		 * JIKA ada salah satu Field yang berubah maka akan di-UPDATE
 		 */ 
 		$data=array(
-		"resep_no"=>$resep_no,
-		"resep_sip"=>$resep_sip,
 		"resep_tanggal"=>$resep_tanggal
+		//"resep_dokterid"=>$resep_dokterid
 		);
 
 		
@@ -229,7 +301,6 @@ left join karyawan on (karyawan.karyawan_id = resep_dokter.resep_dokterid)";
 			if($rs_check->num_rows()){
 				$rs_check_record=$rs_check->row_array();
 				$card_locked=$rs_check_record["card_locked"];
-				//$dtrawat_perawatan_awal=$rs_check_record["dtrawat_perawatan"];
 				$card_dokter_awal=$rs_check_record["card_dokter"];
 				$trawat_keterangan_awal=$rs_check_record["card_keterangan"];
 				
@@ -248,36 +319,15 @@ left join karyawan on (karyawan.karyawan_id = resep_dokter.resep_dokterid)";
 					$card_dokter=$card_dokter_id;
 				
 				if($dtrawat_status_awal<>$dtrawat_status && $dtrawat_locked==0){ 
-					/*artinya: Status BErubah && db.tindakan_detail is UNLOCK
-					 * perubahan hanya pada STATUS di mode VIEW.LIST
-					 */ 
 					$date_now=date('d-m-Y');
-					/*$data_tindakan=array(
-					"trawat_keterangan"=>$trawat_keterangan
-					);
-					$this->db->where("trawat_id", $trawat_id);
-					$this->db->update("tindakan", $data_tindakan);*/
-					
 					$data_dtindakan=array(
 					"dtrawat_status"=>$dtrawat_status,
 					);
-					/*$sql="SELECT rawat_id FROM perawatan WHERE rawat_id='$dtrawat_perawatan'";
-					$rs=$this->db->query($sql);
-					if($rs->num_rows())
-						$data_dtindakan["dtrawat_perawatan"]=$dtrawat_perawatan;*/
-					
+			
 					$this->db->where("resep_id", $resep_id);
 					$this->db->update("rekomendasi_card", $data_dtindakan);
 					
-					
 					if($dtrawat_status_awal!='selesai' && $dtrawat_status=='selesai' && $dtrawat_ambil_paket=='true'){
-						/* 
-						# status ['!selesai'>>'selesai']: ini artinya bahwa customer dengan perawatan yang terpilih belum masuk ke Kasir manapun dan akan dimasukkan ke Kasir.
-						# kemudian checkbox "ambil paket" = 'true', maka ini berarti Customer dengan perawatan yg terpilih sudah di-check kepemilikan paketnya dan memang benar dia punya paket itu, tp untuk akurasi di-check kembali kepemilikan paketnya sebelum dimasukkan ke Kasir Pengambilan Paket:
-						1. Checking kepemilikan paket => db.vu_tindakan.cust_punya_paket='ada'
-						2. INSERT ke db.history_ambil_paket
-						3. UPDATE db.tindakan_detail.status = 'selesai' ==> sudah dilakukan sebelum masuk fungsi IF ini
-						*/
 						$sql="SELECT cust_punya_paket FROM vu_tindakan WHERE dtrawat_id='$dtrawat_id' AND cust_punya_paket='ada'";
 						$rs=$this->db->query($sql);
 						if($rs->num_rows()){
@@ -302,13 +352,6 @@ left join karyawan on (karyawan.karyawan_id = resep_dokter.resep_dokterid)";
 							}
 						}
 					}elseif($dtrawat_status_awal=='selesai' && $dtrawat_status!='selesai' && $dtrawat_ambil_paket=='true'){
-						/*
-						# status ['selesai'>>'!selesai']: ini artinya bahwa sebelumnya customer dengan perawatan yang terpilih ini sudah masuk ke Kasir.
-						# kemudian checkbox "ambil paket" = 'true', maka ini berarti masuk ke Kasir Pengambilan Paket:
-						1. DELETE dari db.history_ambil_paket
-						2. UPDATE db.tindakan_detail.status = '!selesai' ==> sudah dilakukan sebelum fungsi IF ini
-						3. meng-UNLOCK db.appointment_detail.dapp_locked
-						*/
 						$this->db->where('hapaket_dtrawat', $dtrawat_id);
 						$this->db->delete('history_ambil_paket');
 						if($this->db->affected_rows()){
@@ -323,26 +366,11 @@ left join karyawan on (karyawan.karyawan_id = resep_dokter.resep_dokterid)";
 							return '0';
 						}
 					}elseif($dtrawat_status_awal=='selesai' && $dtrawat_status!='selesai' && $dtrawat_ambil_paket=='false'){
-						/*
-						# status ['selesai'>>'!selesai']: ini artinya bahwa sebelumnya customer dengan perawatan yang terpilih ini sudah masuk ke Kasir.
-						# kemudian checkbox "ambil paket" = 'false', maka ini berarti masuk ke Kasir Perawatan:
-						1. DELETE dari detail_jual_paket
-						2. UPDATE db.tindakan_detail.status = '!selesai' ==> sudah dilakukan sebelum fungsi IF ini
-						3. meng-UNLOCK db.appointment_detail.dapp_locked
-						*/
 						$this->detail_jual_rawat_delete($dtrawat_id, $dtrawat_dapp);
 						return '1';
 					}
 					return '1';
 				}elseif($dtrawat_ambil_paket_awal=='false' && $dtrawat_ambil_paket=='true' && $dtrawat_status_awal=='selesai'){
-					/*
-					# status='selesai': ini artinya bahwa customer dengan perawatan yang terpilih sudah masuk ke Kasir Perawatan.
-					# kemudian checkbox "ambil paket" diganti dari [false ke true], maka ini berarti perawatan saat tindakan-perawatan ini akan diambilkan dari Paket yang dimiliki Customer sehingga secara otomatis akan memindahkan dari yg sebelumnya di Kasir Perawatan ke Kasir Pengambilan Paket:
-					1. Checking kepemilikan paket => db.vu_tindakan.cust_punya_paket='ada'
-					2. DELETE dari detail_jual_rawat
-					3. INSERT ke db.history_ambil_paket
-					4. UPDATE db.tindakan_detail.dtrawat_ambil_paket = 'true'
-					*/
 					$sql="SELECT cust_punya_paket FROM vu_tindakan WHERE dtrawat_id='$dtrawat_id' AND cust_punya_paket='ada'";
 					$rs=$this->db->query($sql);
 					if($rs->num_rows()){
@@ -353,12 +381,6 @@ left join karyawan on (karyawan.karyawan_id = resep_dokter.resep_dokterid)";
 						return '0';
 					}
 				}elseif($dtrawat_ambil_paket_awal=='false' && $dtrawat_ambil_paket=='true' && $dtrawat_status_awal!='selesai'){
-					/*
-					# status='!selesai': ini artinya bahwa customer dengan perawatan yang terpilih belum masuk ke Kasir manapun.
-					# kemudian checkbox "ambil paket" diganti dari [false ke true], maka ini berarti perawatan saat tindakan-perawatan ini akan diambilkan dari Paket yang dimiliki Customer ketika statusnya nanti berubah ke 'selesai':
-					1. Checking kepemilikan paket => db.vu_tindakan.cust_punya_paket='ada'
-					2. UPDATE db.tindakan_detail.dtrawat_ambil_paket = 'true'
-					*/
 					$sql="SELECT cust_punya_paket FROM vu_tindakan WHERE dtrawat_id='$dtrawat_id' AND cust_punya_paket='ada'";
 					$rs=$this->db->query($sql);
 					if($rs->num_rows()){
@@ -376,13 +398,6 @@ left join karyawan on (karyawan.karyawan_id = resep_dokter.resep_dokterid)";
 						return '0';
 					}
 				}elseif($dtrawat_ambil_paket_awal=='true' && $dtrawat_ambil_paket=='false' && $dtrawat_status_awal=='selesai'){
-					/*
-					# status='selesai' && checkbox "ambil paket" sebelumnya 'true': ini berarti customer dengan perawatan yang terpilih sudah masuk ke Kasir Pengambilan Paket.
-					# kemudian checkbox "ambil paket" diganti dari [true ke false], maka ini berarti Pengambilan Paket di-Batal-kan, dan secara otomatis akan memindahkan dari yg sebelumnya di Kasir Pengambilan Paket ke Kasir Perawatan:
-					1. UPDATE db.tindakan_detail.dtrawat_ambil_paket = 'false'
-					2. DELETE dari db.history_ambil_paket
-					3. INSERT ke db.detail_jual_rawat
-					*/
 					$dtu_dtrawat=array(
 					"dtrawat_ambil_paket"=>'false'
 					);
@@ -393,11 +408,6 @@ left join karyawan on (karyawan.karyawan_id = resep_dokter.resep_dokterid)";
 					return '1';
 					
 				}elseif($dtrawat_ambil_paket_awal=='true' && $dtrawat_ambil_paket=='false' && $dtrawat_status_awal!='selesai'){
-					/*
-					# status='!selesai': ini berarti customer dengan perawatan yang terpilih belum masuk ke Kasir manapun.
-					# kemudian checkbox "ambil paket" diganti dari [true ke false], maka:
-					1. UPDATE db.tindakan_detail.dtrawat_ambil_paket = 'false'
-					*/
 					$dtu_dtrawat=array(
 					"dtrawat_ambil_paket"=>'false'
 					);
@@ -411,12 +421,6 @@ left join karyawan on (karyawan.karyawan_id = resep_dokter.resep_dokterid)";
 					
 				}elseif($dtrawat_perawatan_awal<>$dtrawat_perawatan && $dtrawat_locked==0){
 					if($dtrawat_ambil_paket=='true' && $dtrawat_status=='selesai'){
-						/*
-						# ini berarti tindakan perawatan ini sudah masuk ke Kasir Pengambilan Paket, maka:
-						1. Checking kepemilikan paket ==> db.vu_tindakan.cust_punya_paket='ada'
-						2. JIKA 'ada' ==> UPDATE db.tindakan_detail.dtrawat_perawatan <= [rawat_id pengganti = $dtrawat_perawatan], JIKA 'tidak ada' ==> message
-						3. UPDATE db.history_ambil_paket.hapaket_rawat <= [rawat_id pengganti = $dtrawat_perawatan]
-						*/
 						$sql="SELECT cust_punya_paket FROM vu_tindakan WHERE dtrawat_id='$dtrawat_id' AND cust_punya_paket='ada'";
 						$rs=$this->db->query($sql);
 						if($rs->num_rows()){
@@ -437,10 +441,6 @@ left join karyawan on (karyawan.karyawan_id = resep_dokter.resep_dokterid)";
 							return '0';
 						}
 					}elseif($dtrawat_ambil_paket=='true' && $dtrawat_status!='selesai'){
-						/*
-						# ini artinya tindakan perawatan ini belum masuk ke Kasir manapun:
-						1. UDPATE db.tindakan_detail.dtrawat_perawatan = [rawat_id pengganti]
-						*/
 						$dtu_dtrawat=array(
 						"dtrawat_perawatan"=>$dtrawat_perawatan
 						);
@@ -452,12 +452,6 @@ left join karyawan on (karyawan.karyawan_id = resep_dokter.resep_dokterid)";
 							return '0';
 						}
 					}elseif($dtrawat_ambil_paket=='false' && $dtrawat_status=='selesai'){
-						/*
-						# ini artinya: dari status='selesai', perawatan sebelum diganti sudah masuk ke Kasir Perawatan.
-						# untuk itu:
-						1. UPDATE db.tindakan_detail.dtrawat_rawat = [rawat_id pengganti]
-						2. UPDATE Kasir Perawatan WHERE db.detail_jual_rawat.drawat_dtrawat = db.tindakan_detail.dtrawat_id
-						*/
 						$dtu_dtrawat=array(
 						"dtrawat_perawatan"=>$dtrawat_perawatan
 						);
@@ -465,10 +459,6 @@ left join karyawan on (karyawan.karyawan_id = resep_dokter.resep_dokterid)";
 						$this->db->update('rekomendasi_card', $dtu_dtrawat);
 						return '1';
 					}elseif($dtrawat_ambil_paket=='false' && $dtrawat_status!='selesai'){
-						/*
-						# ini artinya: perawatan ini belum masuk ke Kasir manapun, maka: 
-						1. UPDATE db.tindakan_detail.dtrawat_perawatan saja =[rawat_id pengganti]
-						*/
 						$dtu_dtrawat=array(
 						"dtrawat_perawatan"=>$dtrawat_perawatan
 						);
@@ -482,17 +472,7 @@ left join karyawan on (karyawan.karyawan_id = resep_dokter.resep_dokterid)";
 					}
 					
 					return '1';
-				}/*elseif($card_dokter_awal<>$card_dokter && $card_locked==0){ /* ada perubahan pada db.tindakan_detail.dtrawat_petugas1 */
-					/* UPDATE db.tindakan_detail  
-					$data_dtindakan=array(
-					"card_dokter"=>$card_dokter
-					);
-					$this->db->where('resep_id', $resep_id);
-					$this->db->update('rekomendasi_card',$data_dtindakan);
-					return '1';
-				}*/elseif($trawat_keterangan_awal<>$card_keterangan && $card_locked==0){
-					/* ada perubahan keterangan_detail */
-					/* UPDATE db.tindakan_detail  */
+				}elseif($trawat_keterangan_awal<>$card_keterangan && $card_locked==0){
 					$data_dtindakan=array(
 					"card_keterangan"=>$card_keterangan
 					);
@@ -513,14 +493,16 @@ left join karyawan on (karyawan.karyawan_id = resep_dokter.resep_dokterid)";
 	}
 		
 		//function for create new record
-		function resep_dokter_create($resep_custid, $resep_dokterid, $resep_no, $resep_sip, $resep_tanggal, $resep_keterangan){
-			$time_now=date('H:i:s');
-			$date_now=date('d-m-Y');
+		function resep_dokter_create($resep_custid, $resep_dokterid, $resep_no, $resep_tanggal, $resep_keterangan){
+			
+			$pattern="RS/".date("ym")."-";
+			$resep_no=$this->m_public_function->get_resep_kode('resep_dokter','resep_no',$pattern,12);
+			
+			//$date_now=date('d-m-Y');
 			$data = array(
 			"resep_custid"=>$resep_custid,
 			"resep_dokterid"=>$resep_dokterid,
 			"resep_no"=>$resep_no,
-			"resep_sip"=>$resep_sip,
 			"resep_tanggal"=>$resep_tanggal,
 			"resep_keterangan"=>$resep_keterangan
 			);

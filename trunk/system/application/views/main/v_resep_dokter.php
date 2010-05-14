@@ -120,7 +120,6 @@ var pageS=15;
 var cetak_resepdokter=0;
 var dt = new Date();
 
-
 /* declare variable here for Field*/
 var resep_idField;
 var resep_noField;
@@ -167,8 +166,6 @@ console.log('master_id',+master_id);
 	});
 }
 
-
-
 /* on ready fuction */
 Ext.onReady(function(){
   	Ext.QuickTips.init();	/* Initiate quick tips icon */
@@ -178,14 +175,16 @@ Ext.onReady(function(){
 		var trawat_id_update_pk="";
 		var resep_id_update_pk="";
 		var resepdokter_cust_update=null;
-		var resep_no_update=null;
+		var resep_dokterid_update=null;
+		var resep_customer_update=null;
 		var resep_tanggal_update="";
 		var dtrawat_status_update=null;
 		var card_cust_id_update=null;
 
 		resep_id_update_pk = oGrid_event.record.data.resep_id;
 		if(oGrid_event.record.data.resep_custid!== null){resepdokter_cust_update = oGrid_event.record.data.resep_custid;}
-		if(oGrid_event.record.data.resep_no!== null){resep_no_update = oGrid_event.record.data.resep_no;}
+		if(oGrid_event.record.data.resep_dokterid!== null){resep_dokterid_update = oGrid_event.record.data.resep_dokterid;}
+		if(oGrid_event.record.data.resep_customer!== null){resep_customer_update = oGrid_event.record.data.resep_customer;}
 		if(oGrid_event.record.data.resep_tanggal!== ""){resep_tanggal_update =oGrid_event.record.data.resep_tanggal.format('Y-m-d');}
 		dtrawat_status_update = oGrid_event.record.data.dtrawat_status;
 		card_cust_id_update = oGrid_event.record.data.card_cust_id;
@@ -198,7 +197,8 @@ Ext.onReady(function(){
 				mode_edit: "update_list",
 				resep_id		: resep_id_update_pk,
 				resep_custid	:resepdokter_cust_update,  
-				resep_no	:resep_no_update, 
+				resep_dokterid :resep_dokterid_update,
+				resep_customer:resep_customer_update,
 				resep_tanggal: resep_tanggal_update,
 				dtrawat_status	:dtrawat_status_update,
 				card_cust_id	:card_cust_id_update
@@ -234,8 +234,6 @@ Ext.onReady(function(){
 		var trawat_id_create=null; 
 		var card_id_create=null;
 		var resep_cust_create=null;
-		var resep_nocust_create=null;
-		var resep_sip_create=null;
 		var resep_tanggal_create="";
 		var resep_dokter_create=null;
 		var resep_no_create=null;
@@ -243,9 +241,7 @@ Ext.onReady(function(){
 		if(resep_idField.getValue()!== null){trawat_id_create = resep_idField.getValue();}else{trawat_id_create=get_pk_id();} 
 		if(resep_dokterField.getValue()!== null){resep_dokter_create = resep_dokterField.getValue();}
 		if(resep_custField.getValue()!== null){resep_cust_create = resep_custField.getValue();}
-		if(resep_sipField.getValue()!== null){resep_sip_create = resep_sipField.getValue();}
 		if(resep_tanggalField.getValue()!== ""){resep_tanggal_create = resep_tanggalField.getValue().format('Y-m-d');}
-		//if(resep_nocustField.getValue()!== null){resep_nocust_create = resep_nocustField.getValue();}
 		if(resep_noField.getValue()!== null){resep_no_create = resep_noField.getValue();} 
 
 		Ext.Ajax.request({  
@@ -256,19 +252,14 @@ Ext.onReady(function(){
 				resep_id	: trawat_id_create, 
 				resep_custid	: resep_cust_create,
 				resep_tanggal	: resep_tanggal_create,
-				//resep_nocust	: resep_nocust_create,
 				resep_dokterid : resep_dokter_create,
-				resep_no	: resep_no_create,
-				resep_sip	: resep_sip_create
+				resep_no	: resep_no_create
 			}, 
 			success: function(response){             
 				var result=eval(response.responseText);
 				switch(result){
 					case 1:
 						detail_resepdokter_purge();
-						//resepdokter_detail_insert();
-						//resep_dokter_detailDataStore.load({params: {master_id:0}});
-						//resep_dokter_detailDataStore.remove(r);
 						resep_dokter_createWindow.hide();
 						break;
 					default:
@@ -306,12 +297,10 @@ Ext.onReady(function(){
 	}
  	/* End of Function */
   
-  
   	function save_andPrint(){
 		cetak_resepdokter=1;
 		resepdokter_create();
 	}
-  
   
   	/* Function for get PK field */
 	function get_pk_id(){
@@ -337,7 +326,6 @@ Ext.onReady(function(){
 		resep_custField.setValue(null);
 		resep_sipField.reset();
 		resep_sipField.setValue(null);
-
 	}
  	/* End of Function */
   
@@ -353,23 +341,38 @@ Ext.onReady(function(){
 	}
 	/* End setValue to EDIT*/
 
-   /*function load_nocustomer(){
-		if(resep_custField.getValue()!=''){
-			nocustomerDataStore.load({
-					params : { member_cust: jproduk_custField.getValue() },
+   function load_karyawan_sip(){
+		if(resep_dokterField.getValue()!=''){
+			auto_karyawansip_DataStore.load({
+					params : { karyawan_id: resep_dokterField.getValue() },
 					callback: function(opts, success, response)  {
 						 if (success) {
-							if(nocustomerDataStore.getCount()){
-								jproduk_member_record=nocustomerDataStore.getAt(0).data;
-								jproduk_cust_nomemberField.setValue(jproduk_member_record.member_no);
+							if(auto_karyawansip_DataStore.getCount()){
+								resep_auto_sip=auto_karyawansip_DataStore.getAt(0).data;
+								resep_sipField.setValue(resep_auto_sip.karyawan_sip);
 							}
 						}
 					}
 			}); 
 		}
-	}*/
-  
-
+	}
+	
+	 function load_cust_no(){
+		if(resep_custField.getValue()!=''){
+			auto_custno_DataStore.load({
+					params : { cust_id: resep_custField.getValue() },
+					callback: function(opts, success, response)  {
+						 if (success) {
+							if(auto_custno_DataStore.getCount()){
+								resep_auto_custno=auto_custno_DataStore.getAt(0).data;
+								resep_nocustField.setValue(resep_auto_custno.cust_no);
+							}
+						}
+					}
+			}); 
+		}
+	}
+	
 	/* Function for Check if the form is valid */
 	function is_resepdokterform_valid(){
 		return (true &&  resep_dokterField.isValid() && resep_custField.isValid() &&  true &&  true &&  true &&  true &&  true  );
@@ -515,7 +518,7 @@ Ext.onReady(function(){
 			{name: 'resep_date_update', type: 'date', dateFormat: 'Y-m-d', mapping: 'resep_date_update'}, 
 			{name: 'resep_revised', type: 'int', mapping: 'resep_revised'}
 		]),
-		sortInfo:{field: 'resep_cust_no', direction: "ASC"}
+		sortInfo:{field: 'resep_tanggal', direction: "DESC"}
 	});
 	/* End of Function */
 	
@@ -563,7 +566,7 @@ Ext.onReady(function(){
 		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
 			{name: 'karyawan_display', type: 'string', mapping: 'karyawan_nama'},
 			{name: 'karyawan_username', type: 'string', mapping: 'karyawan_username'},
-			{name: 'karyawan_sip', type: 'string', mapping: 'karyawan_sip'},
+			//{name: 'karyawan_sip', type: 'string', mapping: 'karyawan_sip'},
 			{name: 'karyawan_value', type: 'int', mapping: 'karyawan_id'},
 			{name: 'karyawan_jmltindakan', type: 'int', mapping: 'reportt_jmltindakan'}
 		]),
@@ -579,7 +582,7 @@ Ext.onReady(function(){
 	resep_dokterColumnModel = new Ext.grid.ColumnModel(
 		[
 		{
-			header: 'Tanggal',
+			header: '<div align="center">' + 'Tanggal' + '</div>',
 			dataIndex: 'resep_tanggal',
 			width: 80,
 			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
@@ -612,7 +615,7 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Dokter' + '</div>',
 			dataIndex: 'resep_namadokter',
-			width: 80,
+			width: 60,
 			sortable: true,
 			editable:false
 		}, 
@@ -694,7 +697,7 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 800,	//970,
+	  	width: 650,	//970,
 		bbar: new Ext.PagingToolbar({
 			disabled:false,
 			store: resep_dokterDataStore,
@@ -832,8 +835,7 @@ Ext.onReady(function(){
 		id: 'resep_noField',
 		fieldLabel: 'No Resep',
 		maxLength: 50,
-		allowBlank: true,
-		anchor: '95%'
+		readOnly : true
 	});
 	
 	resep_dokterField= new Ext.form.ComboBox({
@@ -860,10 +862,7 @@ Ext.onReady(function(){
 	resep_sipField= new Ext.form.TextField({
 		id: 'resep_sipField',
 		fieldLabel: 'SIP',
-		maxLength: 50,
-		allowBlank: true,
-		readOnly: true,
-		anchor: '95%'
+		readOnly: true
 	});
 	
 	resep_tanggalField= new Ext.form.DateField({
@@ -873,7 +872,6 @@ Ext.onReady(function(){
 	});
 	
 	resep_custField= new Ext.form.ComboBox({
-		//id: 'rekomendasi_custField',
 		fieldLabel: 'Customer <span id="help_customer" style="font-size:11px;color:#F00">[?]</span>',
 		store: cbo_resepdokter_customerDataStore,
 		mode: 'remote',
@@ -896,13 +894,8 @@ Ext.onReady(function(){
 	resep_nocustField= new Ext.form.TextField({
 		id: 'resep_nocustField',
 		fieldLabel: 'No Cust',
-		maxLength: 10,
-		allowBlank: true,
 		readOnly: true,
-		//anchor: '95%'
 	});
-	
-	//rekomendasi_custidField= new Ext.form.NumberField();
 
   	/*Fieldset Master*/
 	resepdokter_masterGroup = new Ext.form.FieldSet({
@@ -957,8 +950,6 @@ Ext.onReady(function(){
 			{name: 'dresep_id', type: 'int', mapping: 'dresep_id'}, 
 			{name: 'dresep_master', type: 'int', mapping: 'dresep_master'}, 
 			{name: 'dresep_produk', type: 'int', mapping: 'dresep_produk'}
-			//{name: 'dpcard_tanggal', type: 'date', dateFormat: 'Y-m-d', mapping: 'dpcard_tanggal'},
-			//{name: 'dpcard_keterangan', type: 'string', mapping: 'dpcard_keterangan'}
 	]);
 	//eof
 	
@@ -992,10 +983,11 @@ Ext.onReady(function(){
 		sortInfo:{field: 'dproduk_produk_display', direction: "ASC"}
 	});
 	
-	/*	nocustomerDataStore = new Ext.data.Store({
-		id: 'nocustomerDataStore',
+
+	auto_karyawansip_DataStore = new Ext.data.Store({
+		id: 'auto_karyawansip_DataStore',
 		proxy: new Ext.data.HttpProxy({
-			url: 'index.php?c=c_resep_dokter&m=get_nocustomer', 
+			url: 'index.php?c=c_resep_dokter&m=get_auto_karyawan_sip', 
 			method: 'POST'
 		}),
 			reader: new Ext.data.JsonReader({
@@ -1003,12 +995,27 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: ''
 		},[
-		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column 
+			{name: 'karyawan_sip', type: 'string', mapping: 'karyawan_sip'}
+		]),
+		sortInfo:{field: 'karyawan_sip', direction: "ASC"}
+	});
+	
+	auto_custno_DataStore = new Ext.data.Store({
+		id: 'auto_custno_DataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_resep_dokter&m=get_auto_cust_no', 
+			method: 'POST'
+		}),
+			reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: ''
+		},[
 			{name: 'cust_no', type: 'string', mapping: 'cust_no'}
-			
 		]),
 		sortInfo:{field: 'cust_no', direction: "ASC"}
-	});*/
+	});
+	
 
 	/* Function for Retrieve DataStore of detail*/
 	resep_dokter_detailDataStore = new Ext.data.Store({
@@ -1048,7 +1055,7 @@ Ext.onReady(function(){
 			align : 'Left',
 			header: '<div align="center">' + 'Produk' + '</div>',
 			dataIndex: 'dresep_produk',
-			width: 200, //250
+			width: 100, //250
 			sortable: true,
 			allowBlank: false,
 			editor: combo_resepdokter_detailproduk,
@@ -1064,7 +1071,7 @@ Ext.onReady(function(){
 		el: 'fp_detail_resep_dokter',
 		title: 'Detail Resep Dokter',
 		height: 200,
-		width: 888,
+		width: 400,
 		autoScroll: true,
 		store: resep_dokter_detailDataStore, // DataStore
 		colModel: resep_dokter_detailColumnModel, // Nama-nama Columns
@@ -1102,9 +1109,7 @@ Ext.onReady(function(){
 		var edit_detail_resepdokter= new resep_dokter_detailListEditorGrid.store.recordType({
 			dresep_id	:'',		
 			dresep_master	:'',		
-			dresep_produk	:''
-			//dpcard_tanggal	: dt.dateFormat('Y-m-d'),
-			//dpcard_keterangan	:''	
+			dresep_produk	:''	
 		});
 		editor_detail_resepdokter.stopEditing();
 		resep_dokter_detailDataStore.insert(0, edit_detail_resepdokter);
@@ -1132,7 +1137,8 @@ Ext.onReady(function(){
 					params:{
 						cetak	: cetak_resepdokter,
 					dresep_id	: produk_detail_record.data.dresep_id, 
-					dresep_master	: eval(resep_idField.getValue()), 
+					dresep_master	: eval(get_pk_id()), 
+					//dresep_master	: eval(resep_idField.getValue()), 
 					dresep_produk	: produk_detail_record.data.dresep_produk,
 					count	: count_i,
 					dcount	: count_detail
@@ -1230,6 +1236,26 @@ Ext.onReady(function(){
 	resep_dokter_detailDataStore.on('update', refresh_detail_resepdokter);
 	/* END PRODUK DETAIL*/
 	
+	resep_dokterField.on("select",function(){
+		load_karyawan_sip();
+		j=auto_karyawansip_DataStore.find('karyawan_id',resep_dokterField.getValue());
+		if(j>-1)
+			resep_sipField.setValue(auto_karyawan_sip_DataStore.getAt(j).karyawan_sip);
+		else
+			resep_sipField.setValue("");
+	});
+	
+	
+	resep_custField.on("select",function(){
+		load_cust_no();
+		g=auto_custno_DataStore.find('cust_id',resep_custField.getValue());
+		if(g>-1)
+			resep_nocustField.setValue(auto_cust_no_DataStore.getAt(j).cust_no);
+		else
+			resep_nocustField.setValue("");
+	});
+	
+	
 	var detail_tab_resepdokter = new Ext.TabPanel({
 		plain:true,
 		activeTab: 0,
@@ -1242,7 +1268,7 @@ Ext.onReady(function(){
 		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
-		width: 930,        
+		width: 600,        
 		items: [resepdokter_masterGroup, detail_tab_resepdokter]
 		,
 		buttons: [{
@@ -1369,7 +1395,6 @@ Ext.onReady(function(){
         loadingText: 'Searching...',
         pageSize:10,
         hideTrigger:false,
-        //tpl: rekomendasi_perawatan_tpl,
         //applyTo: 'search',
         itemSelector: 'div.search-item',
 		triggerAction: 'all',

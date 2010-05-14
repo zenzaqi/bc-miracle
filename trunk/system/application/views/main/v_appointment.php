@@ -853,7 +853,7 @@ Ext.onReady(function(){
 			}
 		}, 
 		{
-			header: '<div align="center">' + 'No. Cust' + '</div>',
+			header: '<div align="center">' + 'No Cust' + '</div>',
 			dataIndex: 'cust_no',
 			width: 75,
 			sortable: false,
@@ -887,7 +887,7 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Therapist' + '</div>',
 			dataIndex: 'terapis_username',
-			width: 140,
+			width: 80,
 			sortable: false,
 				editor: new Ext.form.ComboBox({
 				store: dapp_terapisDataStore,
@@ -954,7 +954,7 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Keterangan' + '</div>',
 			dataIndex: 'dapp_keterangan',
-			width: 260,
+			width: 220,
 			sortable: false,
 			editor: new Ext.form.TextField({
 				maxLength: 100
