@@ -51,5 +51,21 @@ $db['default']['char_set'] = "utf8";
 $db['default']['dbcollat'] = "utf8_general_ci";
 
 
+
+
+$db['smsd']['hostname'] = "localhost";
+$db['smsd']['username'] = "root";
+$db['smsd']['password'] = "";
+$db['smsd']['database'] = "smsd";
+$db['smsd']['dbdriver'] = "mysql";
+$db['smsd']['dbprefix'] = "";
+$db['smsd']['pconnect'] = FALSE;
+$db['smsd']['db_debug'] = TRUE;
+$db['smsd']['cache_on'] = FALSE;
+$db['smsd']['cachedir'] = "";
+$db['smsd']['char_set'] = "utf8";
+$db['smsd']['dbcollat'] = "utf8_general_ci";
+
+
 /* End of file database.php */
 /* Location: ./system/application/config/database.php */

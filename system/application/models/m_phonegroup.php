@@ -16,6 +16,7 @@ class M_phonegroup extends Model{
 		//constructor
 		function M_phonegroup() {
 			parent::Model();
+			$this->sms = $this->load->database('smsd', TRUE);
 		}
 		
 		function sms_save($isms_dest,$isms_isi,$isms_opsi,$isms_task){
@@ -39,91 +40,120 @@ class M_phonegroup extends Model{
 				//echo $sql;
 			}else{
 				if($isms_opsi=="semua"){
+					$class=-1;
 					$sql="select cust_hp from customer WHERE cust_hp<>'' AND cust_hp is not null";
 					$query=$this->db->query($sql);
 					foreach($query->result() as $row){
 						$sql="insert into outbox(
-								outbox_destination,
-								outbox_message,
-								outbox_date,
-								outbox_status,
-								outbox_creator,
-								outbox_date_create)
+								UpdatedInDB,
+								InsertIntoDB,
+								Class,
+								DestinationNumber,
+								TextDecoded,
+								RelativeValidity,
+								SenderID,
+								DeliveryReport,
+								Coding)
 							values(
+								'".date('Y-m-d H:i:s')."',
+								'".date('Y-m-d H:i:s')."',
+								'".$class."',
 								'".$row->cust_hp."',
 								'".$isms_isi."',
-								'".date('Y/m/d H:i:s')."',
-								'unsent',
-								'".$_SESSION[SESSION_USERID]."',
-								'".date('Y/m/d H:i:s')."')";
-							//echo $sql;
-						$this->db->query($sql);
+								'".$class."',
+								'',
+								'no',
+								'Default_No_Compression')";
+						
+						$this->sms->query($sql);
 						$sql="";
 					}
 				}elseif($isms_opsi=="number"){
 					$dest=split(",",$isms_dest);
+					$class=-1;
 					foreach($dest as $listdest=>$value){
+						//$sql="insert into outbox(UpdatedInDB,InsertIntoDB,Class,DestinationNumber,TextDecoded,SendingDateTime,RelativeValidity ,SenderID,DeliveryReport,Coding) VALUES(now(),now(),'-1','085231460022','hello world yak opo kabare',now(),'-1','','yes','Default_No_Compression')";
 						$sql="insert into outbox(
-								outbox_destination,
-								outbox_message,
-								outbox_date,
-								outbox_status,
-								outbox_creator,
-								outbox_date_create)
+								UpdatedInDB,
+								InsertIntoDB,
+								Class,
+								DestinationNumber,
+								TextDecoded,
+								RelativeValidity,
+								SenderID,
+								DeliveryReport,
+								Coding)
 							values(
+								'".date('Y-m-d H:i:s')."',
+								'".date('Y-m-d H:i:s')."',
+								'".$class."',
 								'".$value."',
 								'".$isms_isi."',
-								'".date('Y/m/d H:i:s')."',
-								'unsent',
-								'".$_SESSION[SESSION_USERID]."',
-								'".date('Y/m/d H:i:s')."')";
-						$this->db->query($sql);
+								'".$class."',
+								'',
+								'no',
+								'Default_No_Compression')";
+						$this->sms->query($sql);
 						$sql="";
 					}
 				}elseif($isms_opsi=="group"){
 					$sql="select phonegrouped_number from phonegrouped where phonegrouped_group='".$isms_dest."'";
 					$query=$this->db->query($sql);
+					$class=-1;
 					foreach($query->result() as $row){
 						$sql_sms="insert into outbox(
-								outbox_destination,
-								outbox_message,
-								outbox_date,
-								outbox_status,
-								outbox_creator,
-								outbox_date_create)
+								UpdatedInDB,
+								InsertIntoDB,
+								Class,
+								DestinationNumber,
+								TextDecoded,
+								RelativeValidity,
+								SenderID,
+								DeliveryReport,
+								Coding)
 							values(
+								'".date('Y-m-d H:i:s')."',
+								'".date('Y-m-d H:i:s')."',
+								'".$class."',
 								'".$row->phonegrouped_number."',
 								'".$isms_isi."',
-								'".date('Y/m/d H:i:s')."',
-								'unsent',
-								'".$_SESSION[SESSION_USERID]."',
-								'".date('Y/m/d H:i:s')."')";
-							//echo $sql;
-						$this->db->query($sql_sms);
+								'".$class."',
+								'',
+								'no',
+								'Default_No_Compression')";
+						$this->sms->query($sql_sms);
 					}
 				}elseif($isms_opsi=='kelamin'){
+					$class=-1;
 					$sql="select cust_hp from customer where cust_kelamin='".$isms_dest."' AND cust_hp<>'' AND cust_hp is not null";
 					$query=$this->db->query($sql);
 					foreach($query->result() as $row){
 						$sql="insert into outbox(
-								outbox_destination,
-								outbox_message,
-								outbox_date,
-								outbox_status,
-								outbox_creator,
-								outbox_date_create)
+								UpdatedInDB,
+								InsertIntoDB,
+								Class,
+								DestinationNumber,
+								TextDecoded,
+								RelativeValidity,
+								SenderID,
+								DeliveryReport,
+								Coding)
 							values(
+								'".date('Y-m-d H:i:s')."',
+								'".date('Y-m-d H:i:s')."',
+								'".$class."',
 								'".$row->cust_hp."',
 								'".$isms_isi."',
-								'".date('Y/m/d H:i:s')."',
-								'unsent',
-								'".$_SESSION[SESSION_USERID]."',
-								'".date('Y/m/d H:i:s')."')";
-							//echo $sql;
-						$this->db->query($sql);
+								'".$class."',
+								'',
+								'no',
+								'Default_No_Compression')";
+						
+						$this->sms->query($sql);
 						$sql="";
 					}
 				}elseif($isms_opsi=='ultah'){
+					$class=-1;
 					$tgl_start=substr($isms_dest,1,5);
 					$tgl_end=substr($isms_dest,8,5);
 					
@@ -133,21 +163,27 @@ class M_phonegroup extends Model{
 					$query=$this->db->query($sql);
 					foreach($query->result() as $row){
 						$sql="insert into outbox(
-								outbox_destination,
-								outbox_message,
-								outbox_date,
-								outbox_status,
-								outbox_creator,
-								outbox_date_create)
+								UpdatedInDB,
+								InsertIntoDB,
+								Class,
+								DestinationNumber,
+								TextDecoded,
+								RelativeValidity,
+								SenderID,
+								DeliveryReport,
+								Coding)
 							values(
+								'".date('Y-m-d H:i:s')."',
+								'".date('Y-m-d H:i:s')."',
+								'".$class."',
 								'".$row->cust_hp."',
 								'".$isms_isi."',
-								'".date('Y/m/d H:i:s')."',
-								'unsent',
-								'".$_SESSION[SESSION_USERID]."',
-								'".date('Y/m/d H:i:s')."')";
-							//echo $sql;
-						$this->db->query($sql);
+								'".$class."',
+								'',
+								'no',
+								'Default_No_Compression')";
+						
+						$this->sms->query($sql);
 						$sql="";
 					}
 				}elseif($isms_opsi=='member'){
@@ -169,24 +205,32 @@ class M_phonegroup extends Model{
 						$sql .=" member_status='".$membership."'";
 					}
 					
+					$class=-1;
+					
 					$query=$this->db->query($sql);
 					foreach($query->result() as $row){
 						$sql="insert into outbox(
-								outbox_destination,
-								outbox_message,
-								outbox_date,
-								outbox_status,
-								outbox_creator,
-								outbox_date_create)
+								UpdatedInDB,
+								InsertIntoDB,
+								Class,
+								DestinationNumber,
+								TextDecoded,
+								RelativeValidity,
+								SenderID,
+								DeliveryReport,
+								Coding)
 							values(
+								'".date('Y-m-d H:i:s')."',
+								'".date('Y-m-d H:i:s')."',
+								'".$class."',
 								'".$row->cust_hp."',
 								'".$isms_isi."',
-								'".date('Y/m/d H:i:s')."',
-								'unsent',
-								'".$_SESSION[SESSION_USERID]."',
-								'".date('Y/m/d H:i:s')."')";
-							//echo $sql;
-						$this->db->query($sql);
+								'".$class."',
+								'',
+								'no',
+								'Default_No_Compression')";
+						
+						$this->sms->query($sql);
 						$sql="";
 					}
 					
