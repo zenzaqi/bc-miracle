@@ -4153,7 +4153,7 @@ Ext.onReady(function(){
 		for(i=0;i<detail_jual_produk_DataStore.getCount();i++){
 			var count_i = i;
 			detail_jual_produk_record=detail_jual_produk_DataStore.getAt(i);
-			if(detail_jual_produk_record.data.dproduk_produk!==null&&detail_jual_produk_record.data.dproduk_produk.dproduk_produk!==""){
+			if(detail_jual_produk_record.data.dproduk_produk!==null || detail_jual_produk_record.data.dproduk_produk!==""){
 				Ext.Ajax.request({
 					waitMsg: 'Mohon tunggu...',
 					url: 'index.php?c=c_master_jual_produk&m=detail_detail_jual_produk_insert',
