@@ -781,7 +781,8 @@ Ext.onReady(function(){
 	});
 	var dapp_dokter_tpl = new Ext.XTemplate(
         '<tpl for="."><div class="search-item">',
-            '<span><b>{dokter_username}</b> | {dokter_display} | <b>{dokter_count}</b>',
+            //'<span><b>{dokter_username}</b> | {dokter_display} | <b>{dokter_count}</b>',
+			'<span>{dokter_username}',
         '</div></tpl>'
     );
 
@@ -806,7 +807,8 @@ Ext.onReady(function(){
 	});
 	var dapp_terapis_tpl = new Ext.XTemplate(
         '<tpl for="."><div class="search-item">',
-            '<span><b>{terapis_count}</b> | <b>{terapis_username}</b> | <b>{absensi_shift}</b></span>',
+            //'<span><b>{terapis_count}</b> | <b>{terapis_username}</b> | <b>{absensi_shift}</b></span>',
+			'<span>{terapis_username} | {absensi_shift}</span>', //terapis_count tdk perlu ditampilkan, karena sudah ada di Jadwal Therapist
         '</div></tpl>'
     );
     
@@ -855,14 +857,14 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'No Cust' + '</div>',
 			dataIndex: 'cust_no',
-			width: 75,
+			width: 70,
 			sortable: false,
 			renderer: disable_color
 		}, 
 		{
 			header: '<div align="center">' + 'Customer' + '</div>',
 			dataIndex: 'cust_nama',
-			width: 190,
+			width: 160,
 			sortable: false,
 			renderer: disable_color
 		}, 
@@ -870,7 +872,7 @@ Ext.onReady(function(){
 	
 			header: 'Dokter',
 			dataIndex: 'dokter_username',
-			width: 70,
+			width: 80,
 			sortable: false,
 			editor: new Ext.form.ComboBox({
 				store: dapp_dokterDataStore,
@@ -1756,7 +1758,7 @@ Ext.onReady(function(){
 		{
 			header: 'Dokter',
 			dataIndex: 'dapp_medis_petugas',
-			width: 210,
+			width: 100,
 			sortable: true,
 			editor: combo_dapp_dokter_medis,
 			renderer: Ext.util.Format.comboRenderer(combo_dapp_dokter_medis)
@@ -2117,7 +2119,7 @@ Ext.onReady(function(){
 		{
 			header: 'Therapist',
 			dataIndex: 'dapp_nonmedis_petugas2',
-			width: 210,
+			width: 100,	//210,
 			sortable: true,
 			editor: combo_dapp_terapis_nonmedis,
 			renderer: Ext.util.Format.comboRenderer(combo_dapp_terapis_nonmedis)
@@ -2127,7 +2129,7 @@ Ext.onReady(function(){
             header: 'App',
             dataIndex: 'dapp_nonmedis_warna_terapis',
             align: 'center',
-            width: 60,
+            width: 50,
             trueText: 'Yes',
             falseText: 'No',
             editor: {
@@ -2165,7 +2167,7 @@ Ext.onReady(function(){
             header: 'Hitung',
             dataIndex: 'dapp_nonmedis_counter',
             align: 'center',
-            width: 60,
+            width: 50,
             trueText: 'Yes',
             falseText: 'No',
             editor: {
