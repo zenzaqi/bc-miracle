@@ -318,7 +318,7 @@ Ext.onReady(function(){
 		resep_dokterField.reset();
 		resep_dokterField.setValue(null);
 		resep_noField.reset();
-		resep_noField.setValue(null);
+		resep_noField.setValue('No Resep Auto');
 		resep_tanggalField.setValue(dt.format('Y-m-d'));
 		resep_nocustField.reset();
 		resep_nocustField.setValue(null);
@@ -584,26 +584,12 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Tanggal' + '</div>',
 			dataIndex: 'resep_tanggal',
-			width: 80,
+			width: 60,
 			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
 			sortable: true,
 			hidden: false
-		}, 
-		{
-			header: '<div align="center">' + 'No Customer' + '</div>',
-			dataIndex: 'resep_cust_no',
-			width: 60,	//210,
-			sortable: true,
-			readOnly: true
-			
-		}, 
-		{
-			header: '<div align="center">' + 'Customer' + '</div>',
-			dataIndex: 'resep_namacust',
-			width: 120,	//210,
-			sortable: true
-		}, 
-		
+		},
+
 		{
 			header: '<div align="center">' + 'No Resep' + '</div>',
 			dataIndex: 'resep_no',
@@ -619,6 +605,7 @@ Ext.onReady(function(){
 			sortable: true,
 			editable:false
 		}, 
+		
 		{
 			header: '<div align="center">' + 'No SIP' + '</div>',
 			dataIndex: 'resep_sip',
@@ -629,9 +616,24 @@ Ext.onReady(function(){
 		}, 
 		
 		{
+			header: '<div align="center">' + 'No Customer' + '</div>',
+			dataIndex: 'resep_cust_no',
+			width: 60,	//210,
+			sortable: true,
+			readOnly: true
+			
+		}, 
+		{
+			header: '<div align="center">' + 'Customer' + '</div>',
+			dataIndex: 'resep_namacust',
+			width: 200,	//210,
+			sortable: true
+		}
+		
+		/*{
 			header: 'Creator',
 			dataIndex: 'resep_creator',
-			width: 150,
+			width: 20,
 			sortable: true,
 			hidden: true,
 			readOnly: true,
@@ -639,7 +641,7 @@ Ext.onReady(function(){
 		{
 			header: 'Tanggal',
 			dataIndex: 'resep_date_create',
-			width: 150,
+			width: 10,
 			renderer: Ext.util.Format.dateRenderer('Y-m-d H:i:s'),
 			sortable: true,
 			hidden: true
@@ -647,7 +649,7 @@ Ext.onReady(function(){
 		{
 			header: 'Update',
 			dataIndex: 'resep_update',
-			width: 150,
+			width: 10,
 			sortable: true,
 			hidden: true,
 			readOnly: true,
@@ -655,7 +657,7 @@ Ext.onReady(function(){
 		{
 			header: 'Date Update',
 			dataIndex: 'resep_date_update',
-			width: 150,
+			width: 10,
 			sortable: true,
 			hidden: true,
 			readOnly: true,
@@ -663,11 +665,11 @@ Ext.onReady(function(){
 		{
 			header: 'Revised',
 			dataIndex: 'resep_revised',
-			width: 150,
+			width: 10,
 			sortable: true,
 			hidden: true,
 			readOnly: true,
-		}	]);
+		}*/	]);
 	
 	resep_dokterColumnModel.defaultSortable= true;
 	/* End of Function */
@@ -692,12 +694,12 @@ Ext.onReady(function(){
 		autoHeight: true,
 		store: resep_dokterDataStore, // DataStore
 		cm: resep_dokterColumnModel, // Nama-nama Columns
-		enableColLock:false,
+		enableColLock:true,
 		frame: true,
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 650,	//970,
+	  	width: 800,	//970,
 		bbar: new Ext.PagingToolbar({
 			disabled:false,
 			store: resep_dokterDataStore,
@@ -721,12 +723,6 @@ Ext.onReady(function(){
 			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
 			handler: resepdokter_confirm_delete   // Confirm before deleting
-		}, '-', {
-			text: 'Search',
-			tooltip: 'Advanced Search',
-			iconCls:'icon-search',
-			disabled: true,
-			handler: display_form_search_window 
 		}, '-', 
 			new Ext.app.SearchField({
 			store: resep_dokterDataStore,
@@ -742,7 +738,7 @@ Ext.onReady(function(){
 				Ext.get(this.id).set({qtip:'- Nama Customer<br>- No Resep'});
 				}
 			},
-			width: 120
+			width: 100
 		}),'-',{
 			text: 'Refresh',
 			tooltip: 'Refresh datagrid',
@@ -834,6 +830,7 @@ Ext.onReady(function(){
 	resep_noField= new Ext.form.TextField({
 		id: 'resep_noField',
 		fieldLabel: 'No Resep',
+		emptyText: '(No Resep Auto)',
 		maxLength: 50,
 		readOnly : true
 	});
@@ -856,7 +853,7 @@ Ext.onReady(function(){
 		listClass: 'x-combo-list-small',
 		allowBlank: false,
 		disabled:false,
-		anchor: '95%'
+		anchor: '90%'
 	});
 	
 	resep_sipField= new Ext.form.TextField({
@@ -872,7 +869,7 @@ Ext.onReady(function(){
 	});
 	
 	resep_custField= new Ext.form.ComboBox({
-		fieldLabel: 'Customer <span id="help_customer" style="font-size:11px;color:#F00">[?]</span>',
+		fieldLabel: 'Customer',
 		store: cbo_resepdokter_customerDataStore,
 		mode: 'remote',
 		displayField:'cust_nama',
@@ -888,7 +885,7 @@ Ext.onReady(function(){
 		listClass: 'x-combo-list-small',
 		allowBlank: false,
 		disabled:false,
-		anchor: '95%'
+		anchor: '90%'
 	});
 	
 	resep_nocustField= new Ext.form.TextField({
@@ -905,7 +902,7 @@ Ext.onReady(function(){
 		layout:'column',
 		items:[
 			{
-				columnWidth:0.5,
+				columnWidth:1,
 				layout: 'form',
 				border:false,
 				items: [resep_tanggalField, resep_noField, resep_dokterField, resep_sipField, resep_custField,resep_nocustField, resep_idField] 
@@ -1055,7 +1052,7 @@ Ext.onReady(function(){
 			align : 'Left',
 			header: '<div align="center">' + 'Produk' + '</div>',
 			dataIndex: 'dresep_produk',
-			width: 100, //250
+			width: 800, //250
 			sortable: true,
 			allowBlank: false,
 			editor: combo_resepdokter_detailproduk,
@@ -1071,7 +1068,7 @@ Ext.onReady(function(){
 		el: 'fp_detail_resep_dokter',
 		title: 'Detail Resep Dokter',
 		height: 200,
-		width: 400,
+		width: 800,
 		autoScroll: true,
 		store: resep_dokter_detailDataStore, // DataStore
 		colModel: resep_dokter_detailColumnModel, // Nama-nama Columns
@@ -1268,7 +1265,7 @@ Ext.onReady(function(){
 		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
-		width: 600,        
+		width: 450,        
 		items: [resepdokter_masterGroup, detail_tab_resepdokter]
 		,
 		buttons: [{
