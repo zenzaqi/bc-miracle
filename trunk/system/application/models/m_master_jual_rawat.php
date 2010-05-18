@@ -227,11 +227,17 @@ class M_master_jual_rawat extends Model{
 		
 		//fungsi untuk pengambilan paket
 		//get record list
-		function detail_ambil_paket_list($dpaket_id,$tanggal,$query,$start,$end) {
+		function detail_ambil_paket_list($dpaket_id,$tanggal,$dapaket_cust,$query,$start,$end) {
 			$date_now=date('Y-m-d');
 			/* ambil history pengambilan paket dari $master_id===customer_id untuk transaksi hari ini */
 			//2010-05-06 ==> $query = "SELECT jpaket_nobukti, paket_nama, rawat_nama, dapaket_jumlah, cust_nama FROM detail_ambil_paket LEFT JOIN master_jual_paket ON(dapaket_jpaket=jpaket_id) LEFT JOIN paket ON(dapaket_paket=paket_id) LEFT JOIN customer ON(dapaket_cust=cust_id) LEFT JOIN perawatan ON(dapaket_item=rawat_id) WHERE dapaket_cust='$master_id' AND date_format(dapaket_date_create,'%Y-%m-%d')='$tanggal'";
-			$query = "SELECT jpaket_nobukti, paket_nama, rawat_nama, dapaket_jumlah, cust_nama FROM detail_ambil_paket LEFT JOIN master_jual_paket ON(dapaket_jpaket=jpaket_id) LEFT JOIN paket ON(dapaket_paket=paket_id) LEFT JOIN customer ON(dapaket_cust=cust_id) LEFT JOIN perawatan ON(dapaket_item=rawat_id) WHERE dapaket_dpaket='$dpaket_id' AND date_format(dapaket_date_create,'%Y-%m-%d')='$tanggal'";
+			if($dpaket_id=="" || $dpaket_id==0){
+				//* Transaksi Perawatan satuan sekaligus pengambilan paket per customer/
+				$query = "SELECT jpaket_nobukti, paket_nama, rawat_nama, dapaket_jumlah, cust_nama FROM detail_ambil_paket LEFT JOIN master_jual_paket ON(dapaket_jpaket=jpaket_id) LEFT JOIN paket ON(dapaket_paket=paket_id) LEFT JOIN customer ON(dapaket_cust=cust_id) LEFT JOIN perawatan ON(dapaket_item=rawat_id) WHERE date_format(dapaket_date_create,'%Y-%m-%d')='$tanggal' AND dapaket_cust='$dapaket_cust' AND dapaket_stat_dok='Terbuka'";
+			}else if($dpaket_id>0){
+				//* Transaksi Perawatan hanya pengambilan paket per customer /
+				$query = "SELECT jpaket_nobukti, paket_nama, rawat_nama, dapaket_jumlah, cust_nama FROM detail_ambil_paket LEFT JOIN master_jual_paket ON(dapaket_jpaket=jpaket_id) LEFT JOIN paket ON(dapaket_paket=paket_id) LEFT JOIN customer ON(dapaket_cust=cust_id) LEFT JOIN perawatan ON(dapaket_item=rawat_id) WHERE dapaket_dpaket='$dpaket_id' AND date_format(dapaket_date_create,'%Y-%m-%d')='$tanggal' AND dapaket_stat_dok='Terbuka' AND dapaket_cust='$dapaket_cust'";
+			}
 			
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
@@ -1850,6 +1856,14 @@ class M_master_jual_rawat extends Model{
 			return $result;
 		}
 		
+		function master_jual_rawat_status_update($jrawat_id){
+			$dtu_jrawat=array(
+			"jrawat_stat_dok"=>'Tertutup'
+			);
+			$this->db->where('jrawat_id', $jrawat_id);
+			$this->db->update('master_jual_rawat', $dtu_jrawat);
+		}
+		
 		function detail_ambil_paket_status_update($dapaket_id){
 			$dtu_dapaket=array(
 			"dapaket_stat_dok"=>'Tertutup'
@@ -1861,6 +1875,7 @@ class M_master_jual_rawat extends Model{
 		function print_paper($jrawat_id){
 			$sql="SELECT jrawat_tanggal, cust_no, cust_nama, cust_alamat, jrawat_nobukti, rawat_nama, drawat_jumlah, drawat_harga, drawat_diskon, (drawat_harga*((100-drawat_diskon)/100)) AS jumlah_subtotal, jrawat_creator, jrawat_diskon, jrawat_cashback, jrawat_bayar FROM detail_jual_rawat LEFT JOIN master_jual_rawat ON(drawat_master=jrawat_id) LEFT JOIN customer ON(jrawat_cust=cust_id) LEFT JOIN perawatan ON(drawat_rawat=rawat_id) WHERE jrawat_id='$jrawat_id'";
 			$result = $this->db->query($sql);
+			$this->master_jual_rawat_status_update($jrawat_id);
 			return $result;
 		}
 		
