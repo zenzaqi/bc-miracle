@@ -3864,7 +3864,10 @@ Ext.onReady(function(){
 		}
 	});
 
-	temp_konv_nilai=new Ext.form.NumberField();
+	temp_konv_nilai=new Ext.form.NumberField({
+		allowDecimals: true,
+		decimalPrecision: 9
+	});
 
 	combo_satuan_produk.on('focus', function(){
 		cbo_dproduk_satuanDataStore.setBaseParam('produk_id',combo_jual_produk.getValue());
@@ -4486,7 +4489,6 @@ Ext.onReady(function(){
 					detail_jual_produk_record.data.dproduk_satuan=cbo_dproduk_satuanDataStore.getAt(ds).data.djproduk_satuan_value;
 				}
 			}
-			
 			detail_jual_produk_record.data.konversi_nilai_temp=temp_konv_nilai.getValue();
 			var j=cbo_dproduk_produkDataStore.find('dproduk_produk_value',detail_jual_produk_record.data.dproduk_produk);
 			if(j>=0){
