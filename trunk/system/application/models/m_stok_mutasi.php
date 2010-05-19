@@ -50,7 +50,8 @@ class M_stok_mutasi extends Model{
 				$sql="SELECT * FROM vu_produk_satuan_terkecil WHERE produk_aktif='Aktif'";
 			else
 				$sql="SELECT * FROM vu_produk_satuan_default WHERE produk_aktif='Aktif'";
-				
+			
+
 			if($produk_id!==""&&$produk_id!==0){
 				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
 				$sql.="	produk_id='".$produk_id."' ";
@@ -62,14 +63,17 @@ class M_stok_mutasi extends Model{
 						produk_nama LIKE '%".addslashes($filter)."%' ";
 			}
 			
-			$query_first=$this->db->query($sql);
+			//echo $sql;
+			
+			
+			//$query_first=$this->db->query($sql);
 			$result = $this->db->query($sql);
 			$nbrows = $result->num_rows();
 			
 			if($produk_id=="")
 				$sql = $sql." LIMIT ".$start.",".$end;		
 			
-			//echo $sql;
+			//echo "gudang=".$gudang;
 			
 			$result = $this->db->query($sql); 
 			$i=0;
@@ -84,8 +88,13 @@ class M_stok_mutasi extends Model{
 				if($opsi_satuan=='terkecil')
 					$data[$i]["konversi_nilai"]=1;
 				else
-					$data[$i]["konversi_nilai"]=1/$rowproduk->konversi_nilai;
-
+					$data[$i]["konversi_nilai"]=round(1/$rowproduk->konversi_nilai,3);
+				
+				$data[$i]["jumlah_masuk"]=0;
+				$data[$i]["jumlah_keluar"]=0;
+				$data[$i]["jumlah_koreksi"]=0;
+				$data[$i]["jumlah_stok"]=0;
+						
 				//untuk gudang besar
 				if($gudang==1)
 				{
@@ -99,7 +108,7 @@ class M_stok_mutasi extends Model{
 					if($q_stokawal->num_rows())
 					{
 						$ds_stokawal=$q_stokawal->row();
-						$data[$i]["jumlah_awal"]=$ds_stokawal->jumlah_awal*$data[$i]["konversi_nilai"];
+						$data[$i]["jumlah_awal"]=round(($ds_stokawal->jumlah_awal==NULL?0:$ds_stokawal->jumlah_awal)*$data[$i]["konversi_nilai"],3);
 					}else{
 						$data[$i]["jumlah_awal"]=0;
 					}
@@ -122,16 +131,16 @@ class M_stok_mutasi extends Model{
 					if($rs_mutasi->num_rows())
 					{
 						$ds_mutasi=$rs_mutasi->row();
-						$data[$i]["jumlah_masuk"]=($ds_mutasi->jumlah_terima+$ds_mutasi->jumlah_masuk)*$data[$i]["konversi_nilai"];
-						$data[$i]["jumlah_keluar"]=($ds_mutasi->jumlah_keluar+$ds_mutasi->jumlah_retur_beli)*$data[$i]["konversi_nilai"];
-						$data[$i]["jumlah_koreksi"]=($ds_mutasi->jumlah_koreksi)*$data[$i]["konversi_nilai"];
-						$data[$i]["jumlah_stok"]=($data[$i]["jumlah_awal"]+$data[$i]["jumlah_masuk"]-$data[$i]["jumlah_keluar"]+$data[$i]["jumlah_koreksi"])*$data[$i]["konversi_nilai"];
+						$data[$i]["jumlah_masuk"]=round(($ds_mutasi->jumlah_terima+$ds_mutasi->jumlah_masuk)*$data[$i]["konversi_nilai"],3);
+						$data[$i]["jumlah_keluar"]=round(($ds_mutasi->jumlah_keluar+$ds_mutasi->jumlah_retur_beli)*$data[$i]["konversi_nilai"],0);
+						$data[$i]["jumlah_koreksi"]=round(($ds_mutasi->jumlah_koreksi)*$data[$i]["konversi_nilai"],3);
+						$data[$i]["jumlah_stok"]=round(($data[$i]["jumlah_awal"]+$data[$i]["jumlah_masuk"]-$data[$i]["jumlah_keluar"]+$data[$i]["jumlah_koreksi"]),3);
 						
 					}else{
 						$data[$i]["jumlah_masuk"]=0;
 						$data[$i]["jumlah_keluar"]=0;
 						$data[$i]["jumlah_koreksi"]=0;
-						$data[$i]["jumlah_stok"]=$data[$i]["jumlah_awal"]*$data[$i]["konversi_nilai"];
+						$data[$i]["jumlah_stok"]=round(($data[$i]["jumlah_awal"]+$data[$i]["jumlah_masuk"]-$data[$i]["jumlah_keluar"]+$data[$i]["jumlah_koreksi"]),3);
 					}
 				
 				}elseif($gudang==2)
