@@ -93,7 +93,7 @@ Ext.onReady(function(){
 			method: 'POST',
 			timeout: 3600000
 		}),
-		baseParams:{task: "LIST", start:0, limit: pageS}, // parameter yang di $_POST ke Controller
+		baseParams:{task: "LIST", start:0, limit: pageS, produk_id:0, query: null}, // parameter yang di $_POST ke Controller
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
@@ -300,8 +300,7 @@ Ext.onReady(function(){
 		if(stok_mutasi_gudangSearchField.getValue()!==null){ gudang_search=stok_mutasi_gudangSearchField.getValue()}
 		// change the store parameters
 		stok_mutasi_DataStore.baseParams = {
-			task: 'LIST',
-			//variable here
+			task			: 'LIST',
 			produk_id		:	produk_nama_search, 
 			tanggal_start	:	tanggal_start_search, 
 			tanggal_end		:	tanggal_end_search,
@@ -309,7 +308,7 @@ Ext.onReady(function(){
 			gudang			: 	gudang_search
 		};
 		// Cause the datastore to do another query : 
-		stok_mutasi_DataStore.reload({params: {start: 0, limit: pageS}});
+		stok_mutasi_DataStore.reload({params: {start: 0, limit: pageS, query: null}});
 	}
 		
 	/* Function for reset search result */
