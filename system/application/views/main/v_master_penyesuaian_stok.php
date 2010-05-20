@@ -108,12 +108,11 @@ Ext.onReady(function(){
 			waitMsg: 'Please wait...',
 			url: 'index.php?c=c_master_penyesuaian_stok&m=get_action',
 			params: {
-				task: "UPDATE",
-				koreksi_id	: get_pk_id(),				koreksi_gudang	:koreksi_gudang_update,		
-				koreksi_tanggal	: koreksi_tanggal_update_date,				koreksi_keterangan	:koreksi_keterangan_update,		
-				koreksi_creator	:koreksi_creator_update,		
-				koreksi_date_create	: koreksi_date_create_update_date,				koreksi_update	:koreksi_update_update,		
-				koreksi_date_update	: koreksi_date_update_update_date,				koreksi_revised	:koreksi_revised_update		
+				task				: "UPDATE",
+				koreksi_id			: get_pk_id(),				
+				koreksi_gudang		: koreksi_gudang_update,		
+				koreksi_tanggal		: koreksi_tanggal_update_date,				
+				koreksi_keterangan	: koreksi_keterangan_update		
 			}, 
 			success: function(response){							
 				var result=eval(response.responseText);
