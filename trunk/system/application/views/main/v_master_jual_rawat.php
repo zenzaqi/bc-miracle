@@ -3769,7 +3769,8 @@ Ext.onReady(function(){
 			{name: 'drawat_sales', type: 'string', mapping: 'drawat_sales'},
 			{name: 'drawat_diskon_jenis', type: 'string', mapping: 'drawat_diskon_jenis'},
 			{name: 'drawat_subtotal', type: 'float', mapping: 'drawat_subtotal'},
-			{name: 'drawat_subtotal_net', type: 'int', mapping: 'drawat_subtotal_net'}
+			{name: 'drawat_subtotal_net', type: 'int', mapping: 'drawat_subtotal_net'},
+			{name: 'dtrawat_keterangan', type: 'string', mapping: 'dtrawat_keterangan'}
 	]);
 	//eof
 	
@@ -3877,7 +3878,7 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Perawatan' + '</div>',
 			dataIndex: 'drawat_rawat',
-			width: 400,	//250,
+			width: 300,	//250,
 			sortable: true,
 			allowBlank: false,
 			editor: combo_jual_rawat,
@@ -3887,8 +3888,8 @@ Ext.onReady(function(){
 			align: 'Right',
 			header: '<div align="center">' + 'Jumlah' + '</div>',
 			dataIndex: 'drawat_jumlah',
-			width: 60,	//80,
-			sortable: true,
+			width: 45,	//80,
+			sortable: false,
 			renderer: Ext.util.Format.numberRenderer('0,000'),
 			editor: new Ext.form.NumberField({
 				allowDecimals: false,
@@ -3902,7 +3903,7 @@ Ext.onReady(function(){
 			align: 'Right',
 			header: '<div align="center">' + 'Harga (Rp)' + '</div>',
 			dataIndex: 'drawat_harga',
-			width: 100,	//150,
+			width: 80,	//150,
 			sortable: true,
 			renderer: Ext.util.Format.numberRenderer('0,000')
 		}
@@ -3920,7 +3921,7 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Jenis Diskon' + '</div>',
 			dataIndex: 'drawat_diskon_jenis',
-			width: 80,	//100,
+			width: 70,	//100,
 			sortable: true,
 			editor: new Ext.form.ComboBox({
 				store:new Ext.data.SimpleStore({
@@ -3940,8 +3941,8 @@ Ext.onReady(function(){
 			align: 'Right',
 			header: '<div align="center">' + 'Diskon (%)' + '</div>',
 			dataIndex: 'drawat_diskon',
-			width: 80, //90,
-			sortable: true,
+			width: 60, //90,
+			sortable: false,
 //			renderer: Ext.util.Format.numberRenderer('0,000%'),
 			renderer: Ext.util.Format.numberRenderer('0,000'),
 			editor: new Ext.form.NumberField({
@@ -3963,13 +3964,13 @@ Ext.onReady(function(){
 					return Ext.util.Format.number(record.data.drawat_harga* record.data.drawat_jumlah*(100-record.data.drawat_diskon)/100,'0,000');
 
             }
-/*		},{
-			header: 'Sales',
-			dataIndex: 'drawat_sales',
-			width: 150,
-			sortable: true,
-			reaOnly: true
-*/		}]
+		},
+		{
+			header: '<div align="center">' + 'Keterangan' + '</div>',
+			dataIndex: 'dtrawat_keterangan',
+			width: 160,	//150,
+			sortable: false
+		}]
 	);
 	detail_jual_rawat_ColumnModel.defaultSortable= true;
 	//eof

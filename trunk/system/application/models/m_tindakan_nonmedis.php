@@ -161,7 +161,7 @@ class M_tindakan_nonmedis extends Model{
 	/* eof detail_jual_rawat_delete */
 	
 	/* INSERT ke db.detail_jual_rawat */
-	function detail_jual_rawat_insert($trawat_id, $cust_member, $trawat_cust_id, $dtrawat_id, $dtrawat_perawatan_id, $rawat_harga, $rawat_dm, $rawat_du, $dtrawat_dapp){
+	function detail_jual_rawat_insert($trawat_id, $cust_member, $trawat_cust_id, $dtrawat_id, $dtrawat_perawatan_id, $rawat_harga, $rawat_dm, $rawat_du, $dtrawat_dapp, $dtrawat_jumlah){
 		/*
 		1. check di master_jual_rawat, apakah customer ini pada hari sekarang sudah masuk ke Kasir
 		2. JIKA customer ini sudah 'ada' di db.master_jual_rawat ==> INSERT ke db.detail_jual_rawat
@@ -184,13 +184,17 @@ class M_tindakan_nonmedis extends Model{
 			/* artinya: customer yang dimaksud 'sudah masuk' di db.master_jual_rawat pada hari ini
 			 * maka Hanya INSERT ke db.detail_jual_rawat
 			 */
+			if($dtrawat_jumlah=="" || $dtrawat_jumlah==0){
+				$dtrawat_jumlah=1;
+			}
+			
 			$rs_record=$rs->row_array();
 			$jrawat_id=$rs_record["jrawat_id"];
 			$dti_drawat=array(
 			"drawat_master"=>$jrawat_id,
 			"drawat_dtrawat"=>$dtrawat_id,
 			"drawat_rawat"=>$dtrawat_perawatan_id,
-			"drawat_jumlah"=>1,
+			"drawat_jumlah"=>$dtrawat_jumlah,
 			"drawat_harga"=>$rawat_harga,
 			"drawat_diskon"=>$diskon,
 			"drawat_diskon_jenis"=>$diskon_jenis
@@ -230,7 +234,7 @@ class M_tindakan_nonmedis extends Model{
 				"drawat_master"=>$jrawat_id,
 				"drawat_dtrawat"=>$dtrawat_id,
 				"drawat_rawat"=>$dtrawat_perawatan_id,
-				"drawat_jumlah"=>1,
+				"drawat_jumlah"=>$dtrawat_jumlah,
 				"drawat_harga"=>$rawat_harga,
 				"drawat_diskon"=>$diskon,
 				"drawat_diskon_jenis"=>$diskon_jenis
@@ -292,7 +296,10 @@ class M_tindakan_nonmedis extends Model{
 	}
 	
 	/* INSERT ke db.detail_ambil_paket */
-	function detail_ambil_paket_insert($dapaket_dpaket, $dapaket_jpaket, $dapaket_paket, $dapaket_item, $trawat_cust_id, $dtrawat_id, $dtrawat_dapp){
+	function detail_ambil_paket_insert($dapaket_dpaket, $dapaket_jpaket, $dapaket_paket, $dapaket_item, $trawat_cust_id, $dtrawat_id, $dtrawat_dapp, $dtrawat_jumlah){
+		if($dtrawat_jumlah=="" || $dtrawat_jumlah==0){
+			$dtrawat_jumlah=1;
+		}
 		$dti_dapaket=array(
 		//"dapaket_master"=>$apaket_id,
 		"dapaket_dpaket"=>$dapaket_dpaket,
@@ -301,7 +308,7 @@ class M_tindakan_nonmedis extends Model{
 		"dapaket_item"=>$dapaket_item,
 		"dapaket_jenis_item"=>'perawatan',
 		//"dapaket_sapaket"=>$sapaket_id,
-		"dapaket_jumlah"=>1,
+		"dapaket_jumlah"=>$dtrawat_jumlah,
 		//"dapaket_cust"=>$trawat_cust,
 		"dapaket_cust"=>$trawat_cust_id,
 		"dapaket_dtrawat"=>$dtrawat_id
@@ -454,7 +461,7 @@ class M_tindakan_nonmedis extends Model{
 	}
 	//*eof
 	
-	function detail_tindakan_nonmedis_detail_insert($dtrawat_id ,$dtrawat_master ,$dtrawat_perawatan ,$dtrawat_petugas1 ,$dtrawat_petugas2 ,$dtrawat_jamreservasi ,$dtrawat_kategori ,$dtrawat_status ,$dtrawat_keterangan ,$dtrawat_ambil_paket ,$dtrawat_cust){
+	function detail_tindakan_nonmedis_detail_insert($dtrawat_id ,$dtrawat_master ,$dtrawat_perawatan ,$dtrawat_petugas1 ,$dtrawat_petugas2 ,$dtrawat_jamreservasi ,$dtrawat_kategori ,$dtrawat_status ,$dtrawat_keterangan ,$dtrawat_ambil_paket ,$dtrawat_cust ,$jumlah){
 		/* hanya INSERT record tindakan_detail-nonmedis yang baru */
 		$date_now=date('Y-m-d');
 		if(!is_numeric($dtrawat_id)){
@@ -464,7 +471,8 @@ class M_tindakan_nonmedis extends Model{
 			"dtrawat_petugas2"=>$dtrawat_petugas2,
 			"dtrawat_tglapp"=>$date_now,
 			"dtrawat_jam"=>$dtrawat_jamreservasi,
-			"dtrawat_keterangan"=>$dtrawat_keterangan
+			"dtrawat_keterangan"=>$dtrawat_keterangan,
+			"dtrawat_jumlah"=>$jumlah
 			);
 			$this->db->insert('tindakan_detail', $dti_dtrawat);
 			if($this->db->affected_rows()){
@@ -491,7 +499,7 @@ class M_tindakan_nonmedis extends Model{
 			}
 		}
 		
-		$sql="SELECT dtrawat_id,dtrawat_locked,dtrawat_perawatan,dtrawat_petugas2,dtrawat_jam,dtrawat_keterangan FROM tindakan_detail WHERE dtrawat_id='$dtrawat_id'";
+		$sql="SELECT dtrawat_id,dtrawat_locked,dtrawat_perawatan,dtrawat_petugas2,dtrawat_jam,dtrawat_keterangan,dtrawat_jumlah FROM tindakan_detail WHERE dtrawat_id='$dtrawat_id'";
 		$rs=$this->db->query($sql);
 		if($rs->num_rows()){
 			$rs_record=$rs->row_array();
@@ -500,6 +508,7 @@ class M_tindakan_nonmedis extends Model{
 			$dtrawat_petugas2_awal=$rs_record["dtrawat_petugas2"];
 			$dtrawat_jam_awal=$rs_record["dtrawat_jam"];
 			$dtrawat_keterangan_awal=$rs_record["dtrawat_keterangan"];
+			$dtrawat_jumlah_awal=$rs_record["dtrawat_jumlah"];
 			/*
 			# ini artinya: record detail tindakan sudah ada di db.tindakan_detail, sehingga yg bisa dilakukan adalah EDITING record detail JIKA UNLOCK
 			1. Check $dtrawat_status, JIKA ='selesai' ==> sudah masuk ke Kasir, JIKA !='selesai' ==> belum masuk ke Kasir manapun
@@ -507,13 +516,14 @@ class M_tindakan_nonmedis extends Model{
 			3. JIKA db.tindakan_detail.dtrawat_locked=0 ==> BOLEH di-EDIT
 			4. JIKA $dtrawat_status!='selesai' ==> silakan di-EDIT
 			*/
-			if($dtrawat_locked==0 && ($dtrawat_perawatan_awal<>$dtrawat_perawatan || $dtrawat_petugas2_awal<>$dtrawat_petugas2 || $dtrawat_jam_awal<>$dtrawat_jamreservasi || $dtrawat_keterangan_awal<>$dtrawat_keterangan)){
+			if($dtrawat_locked==0 && ($dtrawat_perawatan_awal<>$dtrawat_perawatan || $dtrawat_petugas2_awal<>$dtrawat_petugas2 || $dtrawat_jam_awal<>$dtrawat_jamreservasi || $dtrawat_keterangan_awal<>$dtrawat_keterangan || $dtrawat_jumlah_awal<>$jumlah)){
 				/* ini berarti: ada field yg berubah untuk dilakukan editing */
 				$dtu_dtrawat=array(
 				"dtrawat_perawatan"=>$dtrawat_perawatan,
 				"dtrawat_petugas2"=>$dtrawat_petugas2,
 				"dtrawat_jam"=>$dtrawat_jamreservasi,
-				"dtrawat_keterangan"=>$dtrawat_keterangan
+				"dtrawat_keterangan"=>$dtrawat_keterangan,
+				"dtrawat_jumlah"=>$jumlah
 				);
 				$this->db->where('dtrawat_id', $dtrawat_id);
 				$this->db->update('tindakan_detail', $dtu_dtrawat);
@@ -607,7 +617,7 @@ class M_tindakan_nonmedis extends Model{
 		}
 		
 		//function for update record
-	function tindakan_update($trawat_id ,$trawat_cust ,$trawat_keterangan ,$dtrawat_status ,$trawat_cust_id ,$dtrawat_perawatan_id ,$dtrawat_perawatan ,$dtrawat_id ,$rawat_harga ,$rawat_du ,$rawat_dm ,$cust_member ,$dtrawat_terapis ,$dtrawat_terapis_id ,$dtrawat_keterangan ,$dtrawat_dapp ,$dtrawat_ambil_paket ,$dapaket_dpaket ,$dapaket_jpaket ,$dapaket_paket ,$dapaket_item ,$mode_edit){
+	function tindakan_update($trawat_id ,$trawat_cust ,$trawat_keterangan ,$dtrawat_status ,$trawat_cust_id ,$dtrawat_perawatan_id ,$dtrawat_perawatan ,$dtrawat_id ,$rawat_harga ,$rawat_du ,$rawat_dm ,$cust_member ,$dtrawat_terapis ,$dtrawat_terapis_id ,$dtrawat_keterangan ,$dtrawat_dapp ,$dtrawat_ambil_paket ,$dapaket_dpaket ,$dapaket_jpaket ,$dapaket_paket ,$dapaket_item ,$dtrawat_jumlah ,$mode_edit){
 		
 		/* Checking db.tindakan_detail WHERE db.tindakan_detail.dtrawat_id = $dtrawat_id DAN semua Field,
 		 * JIKA ada salah satu Field yang berubah maka akan di-UPDATE
@@ -685,7 +695,7 @@ class M_tindakan_nonmedis extends Model{
 						}*/
 						$sql_check_paket=$this->customer_check_paket($trawat_cust_id, $dtrawat_perawatan_id);
 						if($sql_check_paket){
-							$this->detail_ambil_paket_insert($sql_check_paket->dpaket_id, $sql_check_paket->dpaket_master, $sql_check_paket->dpaket_paket, $dtrawat_perawatan_id, $trawat_cust_id, $dtrawat_id, $dtrawat_dapp);
+							$this->detail_ambil_paket_insert($sql_check_paket->dpaket_id, $sql_check_paket->dpaket_master, $sql_check_paket->dpaket_paket, $dtrawat_perawatan_id, $trawat_cust_id, $dtrawat_id, $dtrawat_dapp, $dtrawat_jumlah);
 							return '1';
 						}
 					}elseif($dtrawat_status_awal!='selesai' && $dtrawat_status=='selesai' && $dtrawat_ambil_paket=='false'){
@@ -695,7 +705,7 @@ class M_tindakan_nonmedis extends Model{
 						1. INSERT ke db.detail_jual_rawat
 						2. UPDATE db.tindakan_detail.status = 'selesai' ==> sudah dilakukan sebelum masuk fungsi IF ini
 						*/
-						$this->detail_jual_rawat_insert($trawat_id, $cust_member, $trawat_cust_id, $dtrawat_id, $dtrawat_perawatan_id, $rawat_harga, $rawat_dm, $rawat_du, $dtrawat_dapp);
+						$this->detail_jual_rawat_insert($trawat_id, $cust_member, $trawat_cust_id, $dtrawat_id, $dtrawat_perawatan_id, $rawat_harga, $rawat_dm, $rawat_du, $dtrawat_dapp, $dtrawat_jumlah);
 						return '1';
 						
 					}elseif($dtrawat_status_awal=='selesai' && $dtrawat_status!='selesai' && $dtrawat_ambil_paket=='true'){
@@ -746,7 +756,7 @@ class M_tindakan_nonmedis extends Model{
 						$this->detail_jual_rawat_delete($dtrawat_id, $dtrawat_dapp);
 						//* 3. INSERT ke db.detail_ambil_paket /
 						//$this->detail_ambil_paket_insert($dapaket_dpaket, $dapaket_jpaket, $dapaket_paket, $dtrawat_perawatan_id, $trawat_cust_id, $dtrawat_id, $dtrawat_dapp);
-						$this->detail_ambil_paket_insert($sql_check_paket->dpaket_id, $sql_check_paket->dpaket_master, $sql_check_paket->dpaket_paket, $dtrawat_perawatan_id, $trawat_cust_id, $dtrawat_id, $dtrawat_dapp);
+						$this->detail_ambil_paket_insert($sql_check_paket->dpaket_id, $sql_check_paket->dpaket_master, $sql_check_paket->dpaket_paket, $dtrawat_perawatan_id, $trawat_cust_id, $dtrawat_id, $dtrawat_dapp, $dtrawat_jumlah);
 						return '1';
 					}else{
 						return '-1';
@@ -807,7 +817,7 @@ class M_tindakan_nonmedis extends Model{
 					
 					$this->detail_ambil_paket_delete($dtrawat_id, $dtrawat_dapp, $dapaket_dpaket, $dapaket_jpaket, $dapaket_paket);
 					
-					$this->detail_jual_rawat_insert($trawat_id, $cust_member, $trawat_cust_id, $dtrawat_id, $dtrawat_perawatan_id, $rawat_harga, $rawat_dm, $rawat_du, $dtrawat_dapp);
+					$this->detail_jual_rawat_insert($trawat_id, $cust_member, $trawat_cust_id, $dtrawat_id, $dtrawat_perawatan_id, $rawat_harga, $rawat_dm, $rawat_du, $dtrawat_dapp, $dtrawat_jumlah);
 					return '1';
 					
 				}elseif($dtrawat_ambil_paket_awal=='true' && $dtrawat_ambil_paket=='false' && $dtrawat_status_awal!='selesai'){

@@ -111,7 +111,8 @@ class C_tindakan_nonmedis extends Controller {
 		$dtrawat_keterangan=str_replace("\\", "",$dtrawat_keterangan);
 		$dtrawat_ambil_paket=trim(@$_POST["dtrawat_ambil_paket"]);
 		$dtrawat_cust=trim(@$_POST["dtrawat_cust"]);
-		$result=$this->m_tindakan_nonmedis->detail_tindakan_nonmedis_detail_insert($dtrawat_id ,$dtrawat_master ,$dtrawat_perawatan ,$dtrawat_petugas1 ,$dtrawat_petugas2 ,$dtrawat_jam ,$dtrawat_kategori ,$dtrawat_status ,$dtrawat_keterangan ,$dtrawat_ambil_paket ,$dtrawat_cust);
+		$jumlah=trim(@$_POST["jumlah"]);
+		$result=$this->m_tindakan_nonmedis->detail_tindakan_nonmedis_detail_insert($dtrawat_id ,$dtrawat_master ,$dtrawat_perawatan ,$dtrawat_petugas1 ,$dtrawat_petugas2 ,$dtrawat_jam ,$dtrawat_kategori ,$dtrawat_status ,$dtrawat_keterangan ,$dtrawat_ambil_paket ,$dtrawat_cust ,$jumlah);
 		echo $result;
 	}
 	
@@ -186,8 +187,9 @@ class C_tindakan_nonmedis extends Controller {
 		$dapaket_jpaket=trim(@$_POST["dapaket_jpaket"]);
 		$dapaket_paket=trim(@$_POST["dapaket_paket"]);
 		$dapaket_item=trim(@$_POST["dapaket_item"]);
+		$dtrawat_jumlah=trim(@$_POST["dtrawat_jumlah"]);
 		$mode_edit=trim(@$_POST["mode_edit"]);
-		$result = $this->m_tindakan_nonmedis->tindakan_update($trawat_id ,$trawat_cust ,$trawat_keterangan ,$dtrawat_status ,$trawat_cust_id ,$dtrawat_perawatan_id ,$dtrawat_perawatan ,$dtrawat_id ,$rawat_harga ,$rawat_du ,$rawat_dm ,$cust_member ,$dtrawat_terapis ,$dtrawat_terapis_id ,$dtrawat_keterangan ,$dtrawat_dapp ,$dtrawat_ambil_paket ,$dapaket_dpaket ,$dapaket_jpaket ,$dapaket_paket ,$dapaket_item ,$mode_edit);
+		$result = $this->m_tindakan_nonmedis->tindakan_update($trawat_id ,$trawat_cust ,$trawat_keterangan ,$dtrawat_status ,$trawat_cust_id ,$dtrawat_perawatan_id ,$dtrawat_perawatan ,$dtrawat_id ,$rawat_harga ,$rawat_du ,$rawat_dm ,$cust_member ,$dtrawat_terapis ,$dtrawat_terapis_id ,$dtrawat_keterangan ,$dtrawat_dapp ,$dtrawat_ambil_paket ,$dapaket_dpaket ,$dapaket_jpaket ,$dapaket_paket ,$dapaket_item ,$dtrawat_jumlah ,$mode_edit);
 		echo $result;
 	}
 	
