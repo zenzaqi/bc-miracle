@@ -1761,8 +1761,7 @@ Ext.onReady(function(){
 							]
 						}								
 						]
-					},
-					all_paket_searchField
+					}
 				] 
 			}
  			]
