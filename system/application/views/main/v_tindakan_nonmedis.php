@@ -177,6 +177,7 @@ Ext.onReady(function(){
 		dapaket_jpaket_update = oGrid_event.record.data.dapaket_jpaket;
 		dapaket_paket_update = oGrid_event.record.data.dapaket_paket;
 		dapaket_item_update = oGrid_event.record.data.dapaket_item;
+		dtrawat_jumlah_update = oGrid_event.record.data.dtrawat_jumlah;
 
 		Ext.Ajax.request({  
 			waitMsg: 'Please wait...',
@@ -204,7 +205,8 @@ Ext.onReady(function(){
 				dapaket_dpaket	: dapaket_dpaket_update,
 				dapaket_jpaket	: dapaket_jpaket_update,
 				dapaket_paket	: dapaket_paket_update,
-				dapaket_item	: dapaket_item_update
+				dapaket_item	: dapaket_item_update,
+				dtrawat_jumlah	: dtrawat_jumlah_update
 			}, 
 			success: function(response){							
 				var result=eval(response.responseText);
@@ -532,7 +534,8 @@ Ext.onReady(function(){
 			{name: 'dapaket_dpaket', type: 'int', mapping: 'dpaket_id'},
 			{name: 'dapaket_jpaket', type: 'int', mapping: 'dpaket_master'},
 			{name: 'dapaket_paket', type: 'int', mapping: 'dpaket_paket'},
-			{name: 'dtrawat_edit', type: 'string', mapping: 'dtrawat_edit'}
+			{name: 'dtrawat_edit', type: 'string', mapping: 'dtrawat_edit'},
+			{name: 'dtrawat_jumlah', type: 'int', mapping: 'jumlah'}
 		])/*,
 		sortInfo:{field: 'dtrawat_id', direction: "DESC"}*/
 	});
@@ -1041,7 +1044,8 @@ Ext.onReady(function(){
 			{name: 'dtrawat_kategori', type: 'string', mapping: 'dtrawat_kategori'}, 
 			{name: 'dtrawat_status', type: 'string', mapping: 'dtrawat_status'},
 			{name: 'dtrawat_keterangan', type: 'string', mapping: 'dtrawat_keterangan'},
-			{name: 'dtrawat_ambil_paket', type: 'bool', mapping: 'dtrawat_ambil_paket'}
+			{name: 'dtrawat_ambil_paket', type: 'bool', mapping: 'dtrawat_ambil_paket'},
+			{name: 'jumlah', type: 'int', mapping: 'jumlah'}
 	]);
 	//eof
 	
@@ -1156,7 +1160,7 @@ Ext.onReady(function(){
 			header: '<div align="center">' + 'Perawatan' + '</div>',
 			dataIndex: 'dtrawat_perawatan',
 			width: 300,	//290,
-			sortable: true,
+			sortable: false,
 			editor: combo_dtrawat_perawatan,
 			renderer: Ext.util.Format.comboRenderer(combo_dtrawat_perawatan)
 		},
@@ -1164,7 +1168,7 @@ Ext.onReady(function(){
 			header: '<div align="center">' + 'Therapist' + '</div>',
 			dataIndex: 'dtrawat_petugas2',
 			width: 140,	//200,
-			sortable: true,
+			sortable: false,
 			editor: combo_dapp_terapis,
 			renderer: Ext.util.Format.comboRenderer(combo_dapp_terapis)
 		},
@@ -1172,7 +1176,7 @@ Ext.onReady(function(){
 			header: '<div align="center">' + 'Jam App' + '</div>',
 			dataIndex: 'dtrawat_jam',
 			width: 60,	//100,
-			sortable: true,
+			sortable: false,
 			editor: new Ext.form.TimeField({
 				format: 'H:i:s',
 				minValue: '7:00',
@@ -1185,7 +1189,7 @@ Ext.onReady(function(){
 			header: '<div align="center">' + 'Status' + '</div>',
 			dataIndex: 'dtrawat_status',
 			width: 80,	//100,
-			sortable: true,
+			sortable: false,
 			editable:false,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
@@ -1205,9 +1209,19 @@ Ext.onReady(function(){
 			header: '<div align="center">' + 'Detail Keterangan' + '</div>',
 			dataIndex: 'dtrawat_keterangan',
 			width: 200,
-			sortable: true,
+			sortable: false,
 			editor: new Ext.form.TextField({
 				maxLength: 250,
+			})
+		},
+		{
+			header: '<div align="center">' + 'Qty' + '</div>',
+			dataIndex: 'jumlah',
+			width: 80,
+			sortable: false,
+			editor: new Ext.form.NumberField({
+				maxLength: 2,
+				allowNegative: false
 			})
 		},checkColumn]
 	);
@@ -1303,7 +1317,8 @@ Ext.onReady(function(){
 					dtrawat_status	: tindakan_nonmedis_detail_record.data.dtrawat_status, 
 					dtrawat_keterangan	: tindakan_nonmedis_detail_record.data.dtrawat_keterangan,
 					dtrawat_ambil_paket	: tindakan_nonmedis_detail_record.data.dtrawat_ambil_paket,
-					dtrawat_cust	: trawat_nonmedis_custidField.getValue()
+					dtrawat_cust	: trawat_nonmedis_custidField.getValue(),
+					jumlah	: tindakan_nonmedis_detail_record.data.jumlah
 					},
 					callback: function(opts, success, response){
 						if(success){

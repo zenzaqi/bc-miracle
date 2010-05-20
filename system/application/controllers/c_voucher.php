@@ -403,16 +403,13 @@ class C_voucher extends Controller {
 		
 		
 		$result = $this->m_voucher->print_paper($kvoucher_master);
-		$iklan = $this->m_master_jual_produk->iklan();
 		$rs=$result->row();
-		$rsiklan=$iklan->row();
 		$detail_jproduk=$result->result();
 		
 		$data['jproduk_nobukti']=$rs->jproduk_nobukti;
 		$data['jproduk_tanggal']=date('d-m-Y', strtotime($rs->jproduk_tanggal));
 		$data['cust_no']=$rs->cust_no;
 		$data['cust_nama']=$rs->cust_nama;
-		$data['iklantoday_keterangan']=$rsiklan->iklantoday_keterangan;
 		$data['cust_alamat']=$rs->cust_alamat;
 		$data['jumlah_subtotal']=ubah_rupiah($rs->jumlah_subtotal);
 		//$data['jumlah_tunai']=ubah_rupiah($rs->jtunai_nilai);
