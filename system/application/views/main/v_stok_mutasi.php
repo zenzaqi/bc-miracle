@@ -217,7 +217,7 @@ Ext.onReady(function(){
 			readOnly: true
 		},
 		{
-			header: '<div align="center">Stok Saldo</div>',
+			header: '<div align="center">Stok Akhir</div>',
 			dataIndex: 'jumlah_stok',
 			align: 'right',
 			renderer: Ext.util.Format.numberRenderer('0,000.00'),
@@ -243,7 +243,7 @@ Ext.onReady(function(){
 	stok_mutasiListEditorGrid =  new Ext.grid.GridPanel({
 		id: 'stok_mutasiListEditorGrid',
 		el: 'fp_vu_stok_mutasi',
-		title: 'Stok Gudang',
+		title: 'Stok Mutasi',
 		autoHeight: true,
 		store: stok_mutasi_DataStore, // DataStore
 		cm: stok_mutasi_ColumnModel, // Nama-nama Columns
@@ -519,7 +519,7 @@ Ext.onReady(function(){
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
 	stok_mutasi_searchWindow = new Ext.Window({
-		title: 'Pencarian Stok Akhir',
+		title: 'Pencarian Stok Mutasi',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,

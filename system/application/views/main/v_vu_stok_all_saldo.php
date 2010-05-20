@@ -204,7 +204,7 @@ Ext.onReady(function(){
 			readOnly: true
 		},
 		{
-			header: '<div align="center">Saldo Awal</div>',
+			header: '<div align="center">Stok Awal</div>',
 			dataIndex: 'stok_awal',
 			width: 150,
 			align: 'right',
@@ -267,7 +267,7 @@ Ext.onReady(function(){
 			readOnly: true
 		},
 		{
-			header: '<div align="center">Saldo Akhir</div>',
+			header: '<div align="center">Stok Akhir</div>',
 			dataIndex: 'stok_saldo',
 			width: 150,
 			sortable: true,
@@ -578,7 +578,7 @@ Ext.onReady(function(){
 			readOnly: true
 		},
 		{
-			header: '<div align="center">Stok Saldo</div>',
+			header: '<div align="center">Stok Akhir</div>',
 			dataIndex: 'jumlah_stok',
 			align: 'right',
 			renderer: Ext.util.Format.numberRenderer('0,000.00'),
