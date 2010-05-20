@@ -427,8 +427,9 @@ FROM ((`paket` INNER JOIN `produk_group` ON `paket`.`paket_group`=`produk_group`
 	
 	//function for advanced search record
 	function paket_search($paket_id, $paket_kode, $paket_kodelama, $paket_nama, $paket_group, $paket_keterangan, $paket_du, $paket_dm, $paket_point, $paket_harga, $paket_expired, $paket_aktif, $start, $end){
-		if ($paket_aktif=="")
+		if ($paket_aktif==""){
 			$paket_aktif = "Aktif";
+		}
 		//full query
 		$query="select * from paket,produk_group where paket_group=group_id";
 		
@@ -478,7 +479,7 @@ FROM ((`paket` INNER JOIN `produk_group` ON `paket`.`paket_group`=`produk_group`
 		};
 		if($paket_aktif!=''){
 			$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-			$query.= " paket_aktif LIKE '%".$paket_aktif."%'";
+			$query.= " paket_aktif = '".$paket_aktif."'";
 		};
 		$result = $this->db->query($query);
 		$nbrows = $result->num_rows();
