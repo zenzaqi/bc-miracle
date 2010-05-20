@@ -238,7 +238,7 @@ Ext.onReady(function(){
 			readOnly: true
 		},
 		{
-			header: '<div align="center">Stok Saldo</div>',
+			header: '<div align="center">Stok Akhir</div>',
 			dataIndex: 'hpp_saldo',
 			width: 60,
 			sortable: true,
