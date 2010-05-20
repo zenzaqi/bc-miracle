@@ -179,9 +179,9 @@ class M_stok_mutasi extends Model{
 					{
 						$ds_mutasi=$rs_mutasi->row();
 						$data[$i]["jumlah_masuk"]=($ds_mutasi->jumlah_retur_produk+$ds_mutasi->jumlah_retur_paket+$ds_mutasi->jumlah_masuk)*$data[$i]["konversi_nilai"];
-						$data[$i]["jumlah_keluar"]=($ds_mutasi->jumlah_keluar)*$data[$i]["konversi_nilai"];
+						$data[$i]["jumlah_keluar"]=($ds_mutasi->jumlah_keluar+$ds_mutasi->jumlah_jual)*$data[$i]["konversi_nilai"];
 						$data[$i]["jumlah_koreksi"]=($ds_mutasi->jumlah_koreksi)*$data[$i]["konversi_nilai"];
-						$data[$i]["jumlah_stok"]=($data[$i]["jumlah_awal"]+$data[$i]["jumlah_masuk"]-$data[$i]["jumlah_keluar"]+$data[$i]["jumlah_koreksi"])*$data[$i]["konversi_nilai"];
+						$data[$i]["jumlah_stok"]=($data[$i]["jumlah_awal"]+$data[$i]["jumlah_masuk"]-$data[$i]["jumlah_keluar"]+$data[$i]["jumlah_koreksi"]);
 						
 					}else{
 						$data[$i]["jumlah_masuk"]=0;
