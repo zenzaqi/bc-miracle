@@ -674,8 +674,8 @@ Ext.onReady(function(){
 			disabled:true,
 			handler: ambil_paket_confirm_delete   // Confirm before deleting
 		}, '-', {
-			text: 'Search',
-			tooltip: 'Advanced Search',
+			text: 'Advanced Search',
+			tooltip: 'Pencarian Detail',
 			iconCls:'icon-search',
 			handler: display_form_search_window 
 		}, '-', 
@@ -1692,7 +1692,7 @@ Ext.onReady(function(){
 		fieldLabel: 's/d',
 		format : 'd-m-Y'
 	});
-    
+	
 	/* Function for retrieve search Form Panel */
 	ambil_paket_searchForm = new Ext.FormPanel({
 		labelAlign: 'left',
@@ -1761,7 +1761,8 @@ Ext.onReady(function(){
 							]
 						}								
 						]
-					}
+					},
+					all_paket_searchField
 				] 
 			}
  			]
@@ -1779,6 +1780,7 @@ Ext.onReady(function(){
 		]
 	});
     /* End of Function */ 
+	
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
 	ambil_paket_searchWindow = new Ext.Window({
