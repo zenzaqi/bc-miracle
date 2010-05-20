@@ -243,7 +243,7 @@ Ext.onReady(function(){
 	stok_mutasiListEditorGrid =  new Ext.grid.GridPanel({
 		id: 'stok_mutasiListEditorGrid',
 		el: 'fp_vu_stok_mutasi',
-		title: 'Stok Mutasi',
+		title: 'Laporan Stok Mutasi',
 		autoHeight: true,
 		store: stok_mutasi_DataStore, // DataStore
 		cm: stok_mutasi_ColumnModel, // Nama-nama Columns
