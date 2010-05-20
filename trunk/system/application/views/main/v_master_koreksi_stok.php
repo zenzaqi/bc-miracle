@@ -769,7 +769,9 @@ Ext.onReady(function(){
 		},[
 		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
 			{name: 'satuan_id', type: 'int', mapping: 'satuan_id'},
-			{name: 'satuan_nama', type: 'string', mapping: 'satuan_nama'}
+			{name: 'satuan_nama', type: 'string', mapping: 'satuan_nama'},
+			{name: 'satuan_kode', type: 'string', mapping: 'satuan_kode'},
+			{name: 'konversi_nilai', type: 'float', mapping: 'konversi_nilai'}
 		]),
 		sortInfo:{field: 'satuan_id', direction: "ASC"}
 	});
@@ -815,6 +817,7 @@ Ext.onReady(function(){
 	var stok_awalField=new Ext.form.NumberField({
 		allowDecimals: true,
 		allowNegative: true,
+		decimalPrecision: 2,
 		blankText: '0',
 		maxLength: 11,
 		readOnly: true,
@@ -826,6 +829,7 @@ Ext.onReady(function(){
 		allowNegative: true,
 		blankText: '0',
 		maxLength: 11,
+		decimalPrecision: 2,
 		enableKeyEvents: true,
 		maskRe: /([0-9]+)$/
 	});
@@ -835,6 +839,7 @@ Ext.onReady(function(){
 		allowNegative: true,
 		enableKeyEvents: true,
 		blankText: '0',
+		decimalPrecision: 2,
 		maxLength: 11,
 		maskRe: /([0-9]+)$/
 	});
@@ -1335,7 +1340,7 @@ Ext.onReady(function(){
 	koreksi_gudangField.on("select",function(){
 		cbo_stok_produkDataStore.setBaseParam('gudang',koreksi_gudangField.getValue());
 		cbo_stok_produkDataStore.setBaseParam('task','list');
-		cbo_stok_produkDataStore.reload();
+		//cbo_stok_produkDataStore.reload();
 	});
 	
 	combo_stok_produk.on("focus",function(){
@@ -1367,6 +1372,27 @@ Ext.onReady(function(){
 		combo_stok_satuan.render();
 		stok_awalField.setValue(jumlah_awal);
 		stok_saldoField.setValue(stok_awalField.getValue()+stok_terkoreksiField.getValue());
+	});
+	
+	combo_stok_satuan.on("select",function(){
+		var jumlah_awal=0;
+		var konversi=1;
+		var j=cbo_stok_produkDataStore.find('produk_id',combo_stok_produk.getValue());
+		if(j>=0){
+			var record_produk=cbo_stok_produkDataStore.getAt(j);
+			jumlah_awal=record_produk.data.produk_stok;
+		}
+		
+		
+		var j=cbo_stok_satuanDataStore.find('satuan_id',combo_stok_satuan.getValue());
+		if(j>=0){
+			var record_satuan=cbo_stok_satuanDataStore.getAt(j);
+			konversi=record_satuan.data.konversi_nilai;
+			//console.log('konversi'+konversi);
+			jumlah_konversi=Math.round(jumlah_awal/konversi,2);
+			stok_awalField.setValue(jumlah_konversi);
+			stok_saldoField.setValue(stok_awalField.getValue()+stok_terkoreksiField.getValue());
+		}
 	});
 	
 	stok_terkoreksiField.on("keyup", function(){
