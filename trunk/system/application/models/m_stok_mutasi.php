@@ -88,7 +88,7 @@ class M_stok_mutasi extends Model{
 				if($opsi_satuan=='terkecil')
 					$data[$i]["konversi_nilai"]=1;
 				else
-					$data[$i]["konversi_nilai"]=round(1/$rowproduk->konversi_nilai,3);
+					$data[$i]["konversi_nilai"]=1/$rowproduk->konversi_nilai;
 				
 				$data[$i]["jumlah_masuk"]=0;
 				$data[$i]["jumlah_keluar"]=0;
