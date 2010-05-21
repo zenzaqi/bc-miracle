@@ -132,16 +132,16 @@ Ext.onReady(function(){
 		},[
 		/* dataIndex => insert intohpp_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'hpp_produk_id', type: 'int', mapping: 'hpp_produk_id'}, 
-			{name: 'hpp_awal', type: 'float', mapping: 'hpp_awal'}, 
 			{name: 'hpp_produk_nama', type: 'string', mapping: 'produk_nama'}, 
 			{name: 'hpp_produk_kode', type: 'string', mapping: 'produk_kode'}, 
 			{name: 'satuan_id', type: 'int', mapping: 'satuan_id'}, 
 			{name: 'satuan_kode', type: 'string', mapping: 'satuan_kode'}, 
 			{name: 'satuan_nama', type: 'string', mapping: 'satuan_nama'}, 
+			{name: 'hpp_awal', type: 'float', mapping: 'stok_awal'}, 
 			{name: 'persediaan_awal', type: 'float', mapping: 'persediaan_awal'},
 			{name: 'jumlah_beli', type: 'float', mapping: 'jumlah_beli'}, 
 			{name: 'pembelian', type: 'float', mapping: 'pembelian'},
-			{name: 'hpp_saldo', type: 'float', mapping: 'hpp_saldo'}, 
+			{name: 'hpp_saldo', type: 'float', mapping: 'stok_saldo'}, 
 			{name: 'persediaan_akhir', type: 'float', mapping: 'persediaan_akhir'}, 
 			{name: 'barang_jual', type: 'float', mapping: 'barang_jual'}, 
 			{name: 'hpp', type: 'float', mapping: 'hpp'}, 
@@ -541,9 +541,10 @@ Ext.onReady(function(){
 		
 
 		if(hpp_produk_namaSearchField.getValue()!==null){ hpp_produk_nama_search=hpp_produk_namaSearchField.getValue();}
+		if(hpp_produk_allField.getValue()==true){ hpp_produk_nama_search=null; }
 		if(hpp_tanggal_startSearchField.getValue()!==""){ hpp_tanggal_start_search=hpp_tanggal_startSearchField.getValue().format('Y-m-d') };
 		if(hpp_tanggal_endSearchField.getValue()!==""){ hpp_tanggal_end_search=hpp_tanggal_endSearchField.getValue().format('Y-m-d') };
-		
+	
 		hpp_DataStore.baseParams = {
 			task			: 'LIST',
 			produk_id		: hpp_produk_nama_search,

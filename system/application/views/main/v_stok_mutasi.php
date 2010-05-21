@@ -534,8 +534,20 @@ Ext.onReady(function(){
 	});
     /* End of Function */ 
 	 
+	function reset_search_form(){
+		stok_mutasi_gudangSearchField.reset();
+		stok_mutasi_gudangSearchField.setValue(null);
+		stok_mutasi_satuan_defaultField.setValue(true);
+		stok_mutasi_produk_allField.setValue(true);
+		stok_mutasi_produk_namaSearchField.reset();
+		stok_mutasi_produk_namaSearchField.setValue(null);
+		
+	}
+	
   	/* Function for Displaying  Search Window Form */
 	function display_form_search_window(){
+		reset_search_form();
+		
 		if(!stok_mutasi_searchWindow.isVisible()){
 			stok_mutasi_searchWindow.show();
 		} else {
