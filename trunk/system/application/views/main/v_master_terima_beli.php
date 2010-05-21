@@ -267,7 +267,9 @@ Ext.onReady(function(){
 		cbo_satuan_produkDataStore.load();
 		cbo_produk_detailDataStore.load();
 		
+		detail_terima_beli_DataStore.setBaseParam('master_id', 0);
 		detail_terima_beli_DataStore.load();
+		detail_terima_bonus_DataStore.setBaseParam('master_id', 0);
 		detail_terima_bonus_DataStore.load();
 					
 	}

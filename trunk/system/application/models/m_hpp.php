@@ -149,7 +149,7 @@ class M_hpp extends Model{
 		
 		function hpp_list($produk_id, $tanggal_start, $tanggal_end, $filter,$start,$end){
 			$i=0;$j=0;
-			$sql="select * from vu_produk_satuan_terkecil WHERE produk_aktif='Aktif' ";
+			$sql="select * from vu_produk_satuan_default WHERE produk_aktif='Aktif' ";
 			if($produk_id<>""){
 				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
 				$sql.=" produk_id='".$produk_id."'";
@@ -180,21 +180,22 @@ class M_hpp extends Model{
 					$stok_sebelum=$this->get_stok_saldo($tanggal_start,$row->produk_id);
 					$harga_beli_sebelum=$this->get_harga_beli($trans_first, $tanggal_start, $row->produk_id);
 					
-					$stok_sekarang=$this->get_stok_saldo($tanggal_start, $tanggal_end, $row->produk_id);
+					$stok_sekarang=$this->get_stok_saldo($tanggal_end, $row->produk_id);
 					$harga_beli_sekarang=($this->get_harga_beli($tanggal_start, $tanggal_end, $row->produk_id)+$harga_beli_sebelum)/2;
 					$persediaan_sekarang=$harga_beli_sekarang*$stok_sekarang;
 					
 					$jumlah_beli=$this->get_jumlah_beli($tanggal_start, $tanggal_end,$row->produk_id);
-
+					$data[$i]["konversi_nilai"]=1/$row->konversi_nilai;
+					
 					$data[$i]["produk_id"]=$row->produk_id;
 					$data[$i]["produk_kode"]=$row->produk_kode;
 					$data[$i]["produk_nama"]=$row->produk_nama;
 					$data[$i]["satuan_id"]=$row->satuan_id;
 					$data[$i]["satuan_kode"]=$row->satuan_kode;
 					$data[$i]["satuan_nama"]=$row->satuan_nama;
-					$data[$i]["stok_awal"]=$stok_sebelum;
+					$data[$i]["stok_awal"]=$stok_sebelum*$data[$i]["konversi_nilai"];
 					$data[$i]["persediaan_awal"]=$persediaan_sebelum;
-					$data[$i]["stok_saldo"]=$stok_sekarang;
+					$data[$i]["stok_saldo"]=$stok_sekarang*$data[$i]["konversi_nilai"];
 					$data[$i]["persediaan_akhir"]=$persediaan_sekarang;
 					$data[$i]["jumlah_beli"]=$jumlah_beli;
 					$data[$i]["pembelian"]=$jumlah_beli*$harga_beli_sekarang;
