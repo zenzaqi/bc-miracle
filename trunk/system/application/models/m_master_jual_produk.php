@@ -694,6 +694,12 @@ class M_master_jual_produk extends Model{
 			}
 		}
 		
+		function stat_dok_tertutup_update($jproduk_id){
+			//* status dokumen menjadi tertutup setelah Faktur selesai di-cetak /
+			$sql="UPDATE master_jual_produk SET jproduk_stat_dok='Tertutup' WHERE jproduk_id='$jproduk_id'";
+			$this->db->query($sql);
+		}
+		
 		//purge all detail from master
 		function detail_detail_jual_produk_purge($master_id){
 			//* Mengurangi point di db.customer.cust_point /
@@ -733,6 +739,7 @@ class M_master_jual_produk extends Model{
 						if($cetak==1 && ($count==($dcount-1))){
 							$this->member_point_update($dproduk_master);
 							$this->membership_insert($dproduk_master);
+							$this->stat_dok_tertutup_update($dproduk_master);
 							return $dproduk_master;
 						}else if($cetak!==1 && ($count==($dcount-1))){
 							return '0';
@@ -760,6 +767,7 @@ class M_master_jual_produk extends Model{
 						if($cetak==1 && ($count==($dcount-1))){
 							$this->member_point_update($dproduk_master);
 							$this->membership_insert($dproduk_master);
+							$this->stat_dok_tertutup_update($dproduk_master);
 							return $dproduk_master;
 						}else if($cetak!==1 && ($count==($dcount-1))){
 							return '0';
@@ -788,6 +796,7 @@ class M_master_jual_produk extends Model{
 					if($cetak==1 && ($count==($dcount-1))){
 						$this->member_point_update($dproduk_master);
 						$this->membership_insert($dproduk_master);
+						$this->stat_dok_tertutup_update($dproduk_master);
 						return $dproduk_master;
 					}else if($cetak!==1 && ($count==($dcount-1))){
 						return '0';
