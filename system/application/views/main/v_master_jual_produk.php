@@ -936,6 +936,19 @@ Ext.onReady(function(){
 
 		jproduk_bayarField.reset();
 		jproduk_bayarField.setValue(null);
+		
+		//if(jproduk_post2db=="CREATE"){
+			jproduk_custField.setDisabled(false);
+			jproduk_tanggalField.setDisabled(false);
+			jproduk_custField.setDisabled(false);
+			jproduk_custField.setDisabled(false);
+			jproduk_tanggalField.setDisabled(false);
+			jproduk_keteranganField.setDisabled(false);
+			master_cara_bayarTabPanel.setDisabled(false);
+			detail_jual_produkListEditorGrid.setDisabled(false);
+			jproduk_diskonField.setDisabled(false);
+			jproduk_cashback_cfField.setDisabled(false);
+		//}
 	}
  	/* End of Function */
 	
@@ -960,6 +973,7 @@ Ext.onReady(function(){
 		jproduk_idField.setValue(master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_id'));
 		jproduk_nobuktiField.setValue(master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_nobukti'));
 		jproduk_custField.setValue(master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_cust'));
+		jproduk_cust_idField.setValue(master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_cust_id'));
 		jproduk_tanggalField.setValue(master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_tanggal'));
 		jproduk_caraField.setValue(master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_cara'));
 		jproduk_stat_dokField.setValue(master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_stat_dok'));
@@ -1301,11 +1315,34 @@ Ext.onReady(function(){
 		//detail_jual_produk_DataStore.load({params:{master_id: jproduk_idField.getValue()}});
 	}
 	/* End setValue to EDIT*/
+	
+	function master_jual_produk_set_updating(){
+		if(jproduk_post2db=="UPDATE" && master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_stat_dok')=="Terbuka"){
+			jproduk_custField.setDisabled(true);
+			jproduk_tanggalField.setDisabled(true);
+		}
+		if(jproduk_post2db=="UPDATE" && master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_stat_dok')=="Tertutup"){
+			jproduk_custField.setDisabled(true);
+			jproduk_tanggalField.setDisabled(true);
+			jproduk_keteranganField.setDisabled(true);
+			master_cara_bayarTabPanel.setDisabled(true);
+			detail_jual_produkListEditorGrid.setDisabled(true);
+			jproduk_diskonField.setDisabled(true);
+			jproduk_cashback_cfField.setDisabled(true);
+		}
+	}
   
     function load_membership(){
+		var cust_id=0;
+		if(jproduk_post2db=="CREATE"){
+			cust_id=jproduk_custField.getValue();
+		}else if(jproduk_post2db=="UPDATE"){
+			cust_id=jproduk_cust_idField.getValue();
+		}
+		
 		if(jproduk_custField.getValue()!=''){
 			memberDataStore.load({
-					params : { member_cust: jproduk_custField.getValue() },
+					params : { member_cust: cust_id},
 					callback: function(opts, success, response)  {
 						 if (success) {
 							if(memberDataStore.getCount()){
@@ -1398,6 +1435,7 @@ Ext.onReady(function(){
 						jproduk_subTotalField.setValue(subtotal_field);
 						jproduk_totalField.setValue(total_field);*/
 						master_jual_produk_set_form();
+						master_jual_produk_set_updating();
 					}
 				}
 			});
@@ -2087,6 +2125,7 @@ Ext.onReady(function(){
 		listClass: 'x-combo-list-small',
 		anchor: '95%'
 	});
+	jproduk_cust_idField= new Ext.form.NumberField();
 	
 	jproduk_cust_nomemberField= new Ext.form.TextField({
 		id: 'jproduk_cust_nomemberField',
