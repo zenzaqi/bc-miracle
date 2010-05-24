@@ -614,7 +614,8 @@ Ext.onReady(function(){
 		}),baseParams: {start: 0, limit: 15 },
 		reader: new Ext.data.JsonReader({
 			root: 'results',
-			totalProperty: 'total'
+			totalProperty: 'total',
+			id: 'karyawan_id'
 		},[
 		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
 			{name: 'karyawan_display', type: 'string', mapping: 'karyawan_nama'},
@@ -681,11 +682,15 @@ Ext.onReady(function(){
 			editor: new Ext.form.ComboBox({
 				store: dtrawat_karyawanDataStore,
 				mode: 'remote',
+				typeAhead: true,
 				displayField: 'karyawan_username',
 				valueField: 'karyawan_value',
+				tpl: karyawan_terapis_tpl,
 				loadingText: 'Searching...',
+				itemSelector: 'div.search-item',
 				triggerAction: 'all',
 				anchor: '95%'
+				
 			})
 		}, 
 		{

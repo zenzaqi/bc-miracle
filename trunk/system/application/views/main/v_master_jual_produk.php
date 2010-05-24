@@ -3970,9 +3970,10 @@ Ext.onReady(function(){
 			width: 100, //150,
 			sortable: true,
 			readOnly: true,
-			renderer: function(v, params, record){
+			renderer: Ext.util.Format.numberRenderer('0,000')
+			/*renderer: function(v, params, record){
 				return Ext.util.Format.number(record.data.konversi_nilai_temp*record.data.dproduk_harga* record.data.dproduk_jumlah,'0,000');
-			}
+			}*/
 		},
 		{
 			align : 'Left',
@@ -4451,6 +4452,8 @@ Ext.onReady(function(){
 	
 	function load_total_produk_bayar(){
 		var jumlah_item=0;
+		var harga_default=0;
+		var harga_bysatuan=0;
 		var subtotal_harga=0;
 		var total_harga=0;
 		var total_hutang=0;
@@ -4492,8 +4495,12 @@ Ext.onReady(function(){
 			detail_jual_produk_record.data.konversi_nilai_temp=temp_konv_nilai.getValue();
 			var j=cbo_dproduk_produkDataStore.find('dproduk_produk_value',detail_jual_produk_record.data.dproduk_produk);
 			if(j>=0){
-				detail_jual_produk_record.data.dproduk_harga=cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_harga;
-				subtotal_harga=eval(detail_jual_produk_record.data.konversi_nilai_temp*detail_jual_produk_record.data.dproduk_jumlah*detail_jual_produk_record.data.dproduk_harga);
+				//detail_jual_produk_record.data.dproduk_harga=cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_harga;
+				harga_default=cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_harga;
+				
+				harga_bysatuan=eval(detail_jual_produk_record.data.konversi_nilai_temp*harga_default);
+				//subtotal_harga=eval(detail_jual_produk_record.data.konversi_nilai_temp*detail_jual_produk_record.data.dproduk_jumlah*detail_jual_produk_record.data.dproduk_harga);
+				subtotal_harga=eval(detail_jual_produk_record.data.konversi_nilai_temp*detail_jual_produk_record.data.dproduk_jumlah*harga_default);
 				//detail_jual_produk_record.data.dproduk_satuan=cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_satuan;
 				if(detail_jual_produk_record.data.dproduk_diskon==""){
 					if(jproduk_cust_nomemberField.getValue()!=""){
@@ -4511,6 +4518,7 @@ Ext.onReady(function(){
 					}
 				}
 			}
+			detail_jual_produk_record.data.dproduk_harga=harga_bysatuan;
 			detail_jual_produk_record.data.dproduk_subtotal=subtotal_harga;
 			detail_jual_produk_record.data.dproduk_subtotal_net=subtotal_harga*((100-detail_jual_produk_record.data.dproduk_diskon)/100);
 		}
