@@ -904,6 +904,8 @@ Ext.onReady(function(){
 
 		jproduk_jumlahField.reset();
 		jproduk_jumlahField.setValue(null);
+		
+		jproduk_pesanLabel.setText("");
 
 		tunai_jual_produk_reset_form();
 		tunai2_jual_produk_reset_form();
