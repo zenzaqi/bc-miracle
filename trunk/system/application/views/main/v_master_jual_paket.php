@@ -829,6 +829,19 @@ Ext.onReady(function(){
 
 		jpaket_bayarField.reset();
 		jpaket_bayarField.setValue(null);
+		
+		/* Enable if jpaket_post2db="CREATE" */
+		jpaket_custField.setDisabled(false);
+		jpaket_tanggalField.setDisabled(false);
+		jpaket_custField.setDisabled(false);
+		jpaket_custField.setDisabled(false);
+		jpaket_tanggalField.setDisabled(false);
+		jpaket_keteranganField.setDisabled(false);
+		master_cara_bayarTabPanel.setDisabled(false);
+		detail_jual_paketListEditorGrid.setDisabled(false);
+		detail_pengguna_paketListEditorGrid.setDisabled(false);
+		jpaket_diskonField.setDisabled(false);
+		jpaket_cashback_cfField.setDisabled(false);
 	}
  	/* End of Function */
 	
@@ -1148,6 +1161,23 @@ Ext.onReady(function(){
 		//detail_jual_paket_DataStore.load({params:{master_id: jpaket_idField.getValue()}});
 	}
 	/* End setValue to EDIT*/
+	
+	function master_jual_paket_set_updating(){
+		if(jpaket_post2db=="UPDATE" && master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_stat_dok')=="Terbuka"){
+			jpaket_custField.setDisabled(true);
+			jpaket_tanggalField.setDisabled(true);
+		}
+		if(jpaket_post2db=="UPDATE" && master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_stat_dok')=="Tertutup"){
+			jpaket_custField.setDisabled(true);
+			jpaket_tanggalField.setDisabled(true);
+			jpaket_keteranganField.setDisabled(true);
+			master_cara_bayarTabPanel.setDisabled(true);
+			detail_jual_paketListEditorGrid.setDisabled(true);
+			detail_pengguna_paketListEditorGrid.setDisabled(true);
+			jpaket_diskonField.setDisabled(true);
+			jpaket_cashback_cfField.setDisabled(true);
+		}
+	}
   
     function load_membership(){
 		if(jpaket_custField.getValue()!=''){
@@ -1222,6 +1252,7 @@ Ext.onReady(function(){
 							callback: function(opts, success, response){
 								if(success){
 									master_jual_paket_set_form();
+									master_jual_paket_set_updating();
 								}
 							}
 						});

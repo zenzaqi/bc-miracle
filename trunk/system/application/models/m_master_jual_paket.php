@@ -2151,7 +2151,13 @@ class M_master_jual_paket extends Model{
 			return $result;
 		}
 		
+		function master_jual_paket_status_update($jpaket_id){
+			$sql="UPDATE master_jual_paket SET jpaket_stat_dok='Tertutup' WHERE jpaket_id='$jpaket_id'";
+			$this->db->query($sql);
+		}
+		
 		function print_paper($jpaket_id){
+			$this->master_jual_paket_status_update($jpaket_id);
 			//$this->firephp->log($jpaket_id, "jpaket_id");
 			$sql="SELECT jpaket_tanggal, cust_no, cust_nama, cust_alamat, jpaket_nobukti, paket_nama, dpaket_jumlah, dpaket_harga, dpaket_diskon, (dpaket_harga*((100-dpaket_diskon)/100)) AS jumlah_subtotal, jpaket_creator, jtunai_nilai, jpaket_diskon, jpaket_cashback FROM detail_jual_paket LEFT JOIN master_jual_paket ON(dpaket_master=jpaket_id) LEFT JOIN customer ON(jpaket_cust=cust_id) LEFT JOIN paket ON(dpaket_paket=paket_id) LEFT JOIN jual_tunai ON(jtunai_ref=jpaket_nobukti) WHERE jpaket_id='$jpaket_id'";
 			$result = $this->db->query($sql);
