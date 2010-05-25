@@ -308,7 +308,21 @@ Ext.onReady(function(){
 			gudang			: 	gudang_search
 		};
 		// Cause the datastore to do another query : 
-		stok_mutasi_DataStore.reload({params: {start: 0, limit: pageS, query: null}});
+		Ext.MessageBox.show({
+		   msg: 'Sedang memproses data, silakan tunggu...',
+		   progressText: 'proses...',
+		   width:350,
+		   wait:true
+		});
+		
+		stok_mutasi_DataStore.reload({
+			params: {start: 0, limit: pageS, query: null},
+			callback: function(r,opt,success){
+				if(success==true){
+					Ext.MessageBox.hide();
+				}					 
+			}
+		});
 	}
 		
 	/* Function for reset search result */
