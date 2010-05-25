@@ -1468,7 +1468,7 @@ Ext.onReady(function(){
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
-			id: 'jrawat_nobukti'
+			id: 'jrawat_cust'
 		},[
 		/* dataIndex => insert intomaster_jual_rawat_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'jrawat_id', type: 'int', mapping: 'jrawat_id'}, 
