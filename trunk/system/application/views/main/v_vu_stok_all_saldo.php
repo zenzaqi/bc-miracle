@@ -676,8 +676,23 @@ Ext.onReady(function(){
 			tanggal_end		:	tanggal_end_search,
 			opsi_satuan		: 	opsi_satuan_search
 		};
+		
+		Ext.MessageBox.show({
+		   msg: 'Sedang memproses data, silakan tunggu...',
+		   progressText: 'proses...',
+		   width:350,
+		   wait:true
+		});
+		
 		// Cause the datastore to do another query : 
-		vu_stok_all_saldo_DataStore.reload({params: {start: 0, limit: pageS}});
+		vu_stok_all_saldo_DataStore.reload({
+			params: {start: 0, limit: pageS},
+			callback: function(r,opt,success){
+				if(success==true){
+					Ext.MessageBox.hide();
+				}					 
+			}
+		});
 	}
 		
 	/* Function for reset search result */

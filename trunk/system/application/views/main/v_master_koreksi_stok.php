@@ -1379,6 +1379,13 @@ Ext.onReady(function(){
 		var jumlah_awal=0;
 		var satuan_id=0;
 		
+		Ext.MessageBox.show({
+		   msg: 'Sedang mengambil data, silakan tunggu...',
+		   progressText: 'proses...',
+		   width:350,
+		   wait:true
+		});
+		
 		cbo_stok_satuanDataStore.setBaseParam('task','produk');
 		cbo_stok_satuanDataStore.setBaseParam('selected_id',combo_stok_produk.getValue());
 		
@@ -1400,10 +1407,12 @@ Ext.onReady(function(){
 					combo_stok_satuan.render();
 					stok_awalField.setValue(jumlah_awal);
 					stok_saldoField.setValue(stok_awalField.getValue()+stok_terkoreksiField.getValue());
-						
+					
+					Ext.MessageBox.hide();
 				}
 			}
 		});
+		
 		
 		
 	});
