@@ -1119,7 +1119,8 @@ Ext.onReady(function(){
 	});
 	var karyawan_tpl = new Ext.XTemplate(
         '<tpl for="."><div class="search-item">',
-            '<span><b>{dtrawat_karyawan_username}</b> | {dtrawat_karyawan_display} | <b>{dtrawat_karyawan_jmltindakan}</b></span>',
+            //'<span><b>{dtrawat_karyawan_username}</b> | {dtrawat_karyawan_display} | <b>{dtrawat_karyawan_jmltindakan}</b></span>',
+			'<span>{dtrawat_karyawan_username}</span>',
         '</div></tpl>'
     );
 	
@@ -1170,9 +1171,20 @@ Ext.onReady(function(){
 			renderer: Ext.util.Format.comboRenderer(combo_dtrawat_perawatan)
 		},
 		{
+			header: '<div align="center">' + 'Jumlah' + '</div>',
+			align: 'right',
+			dataIndex: 'jumlah',
+			width: 60,
+			sortable: false,
+			editor: new Ext.form.NumberField({
+				maxLength: 2,
+				allowNegative: false
+			})
+		},
+		{
 			header: '<div align="center">' + 'Therapist' + '</div>',
 			dataIndex: 'dtrawat_petugas2',
-			width: 140,	//200,
+			width: 100,	//200,
 			sortable: false,
 			editor: combo_dapp_terapis,
 			renderer: Ext.util.Format.comboRenderer(combo_dapp_terapis)
@@ -1213,22 +1225,13 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Detail Keterangan' + '</div>',
 			dataIndex: 'dtrawat_keterangan',
-			width: 200,
+			width: 240,
 			sortable: false,
 			editor: new Ext.form.TextField({
 				maxLength: 250,
 			})
 		},
-		{
-			header: '<div align="center">' + 'Qty' + '</div>',
-			dataIndex: 'jumlah',
-			width: 80,
-			sortable: false,
-			editor: new Ext.form.NumberField({
-				maxLength: 2,
-				allowNegative: false
-			})
-		},checkColumn]
+		checkColumn]
 	);
 	tindakan_nonmedis_detail_ColumnModel.defaultSortable= true;
 	//eof

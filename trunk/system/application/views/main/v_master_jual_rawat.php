@@ -3886,7 +3886,7 @@ Ext.onReady(function(){
 		},
 		{
 			align: 'Right',
-			header: '<div align="center">' + 'Jumlah' + '</div>',
+			header: '<div align="center">' + 'Jml' + '</div>',
 			dataIndex: 'drawat_jumlah',
 			width: 45,	//80,
 			sortable: false,
