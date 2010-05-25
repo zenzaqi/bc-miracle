@@ -54,7 +54,7 @@ class M_master_koreksi_stok extends Model{
 				$sql="SELECT distinct produk_id,produk_kode,produk_nama,jumlah_stok,satuan_kode, satuan_nama FROM vu_stok_gudang_all";
 				$sql.=(eregi("WHERE",$sql)?" AND ":" WHERE ")." gudang_id =".$gudang."";
 			}*/
-			$sql="SELECT distinct produk_id,produk_kode,produk_nama,satuan_kode, satuan_nama FROM vu_produk_satuan_default";
+			$sql="SELECT distinct produk_id,produk_kode,produk_nama,satuan_kode, satuan_nama FROM vu_produk_satuan_default WHERE produk_aktif='Aktif'";
 			if($selected_id!=="")
 			{
 				$selected_id=substr($selected_id,0,strlen($selected_id)-1);
@@ -93,7 +93,7 @@ class M_master_koreksi_stok extends Model{
 			if($query!==""){
 				$sql.=(eregi("WHERE",$sql)?" AND ":" WHERE ")." produk_nama like '%".$query."%' OR produk_kode like '%".$query."%'";
 			}*/
-			$sql="SELECT distinct produk_id,produk_kode,produk_nama,satuan_kode, satuan_nama FROM vu_produk_satuan_default";
+			$sql="SELECT distinct produk_id,produk_kode,produk_nama,satuan_kode, satuan_nama FROM vu_produk_satuan_default WHERE produk_aktif='Aktif'";
 			if($query!==""){
 				$sql.=(eregi("WHERE",$sql)?" AND ":" WHERE ")." produk_nama like '%".$query."%' OR produk_kode like '%".$query."%'";
 			}
@@ -125,7 +125,7 @@ class M_master_koreksi_stok extends Model{
 			}
 			*/
 			
-			$sql="SELECT distinct produk_id,produk_kode,produk_nama,satuan_kode, satuan_nama FROM vu_produk_satuan_default";
+			$sql="SELECT distinct produk_id,produk_kode,produk_nama,satuan_kode, satuan_nama FROM vu_produk_satuan_default WHERE produk_aktif='Aktif'";
 			
 			if($master_id<>""){
 				$sql.=(eregi("WHERE",$sql)?" AND ":" WHERE ");
