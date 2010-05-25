@@ -639,6 +639,7 @@ Ext.onReady(function(){
         typeAhead: false,
         hideTrigger:false,
 		triggerAction: 'all',
+		allowBlank: false,
 		lazyRender:true,
 		listClass: 'x-combo-list-small',
 		anchor: '95%'
@@ -734,6 +735,29 @@ Ext.onReady(function(){
 		}
 	}
 	
+	cbo_stok_byprodukDataStore= new Ext.data.Store({
+		id: 'cbo_stok_byprodukDataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_master_koreksi_stok&m=get_produk_stok', 
+			method: 'POST'
+		}),baseParams:{produk_id:0, gudang:0},
+			reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'produk_id'
+		},[
+		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
+			{name: 'produk_id', type: 'int', mapping: 'produk_id'},
+			{name: 'produk_nama', type: 'string', mapping: 'produk_nama'},
+			{name: 'produk_kode', type: 'string', mapping: 'produk_kode'},
+			{name: 'produk_satuan', type: 'string', mapping: 'satuan_nama'},
+			{name: 'produk_satuan_id', type: 'int', mapping: 'satuan_id'},
+			{name: 'produk_stok', type: 'float', mapping: 'jumlah_stok'}
+		]),
+		sortInfo:{field: 'produk_id', direction: "ASC"}
+	});
+	
+	
 	cbo_stok_produkDataStore = new Ext.data.Store({
 		id: 'cbo_stok_produkDataStore',
 		proxy: new Ext.data.HttpProxy({
@@ -750,8 +774,7 @@ Ext.onReady(function(){
 			{name: 'produk_nama', type: 'string', mapping: 'produk_nama'},
 			{name: 'produk_kode', type: 'string', mapping: 'produk_kode'},
 			{name: 'produk_satuan', type: 'string', mapping: 'satuan_nama'},
-			{name: 'produk_satuan_id', type: 'int', mapping: 'satuan_id'},
-			{name: 'produk_stok', type: 'float', mapping: 'jumlah_stok'}
+			{name: 'produk_satuan_id', type: 'int', mapping: 'satuan_id'}
 		]),
 		sortInfo:{field: 'produk_id', direction: "ASC"}
 	});
@@ -779,7 +802,6 @@ Ext.onReady(function(){
 	var produk_tpl = new Ext.XTemplate(
         '<tpl for="."><div class="search-item">',
             '<span><b>{produk_nama} ({produk_kode})</b><br /></span>',
-            'stok: {produk_stok} {produk_satuan}',
         '</div></tpl>'
     );
 	
@@ -817,11 +839,10 @@ Ext.onReady(function(){
 	var stok_awalField=new Ext.form.NumberField({
 		allowDecimals: true,
 		allowNegative: true,
-		decimalPrecision: 2,
 		blankText: '0',
 		maxLength: 11,
 		readOnly: true,
-		maskRe: /([0-9]+)$/
+		maskRe: /([0-9.]+)$/
 	});
 	
 	var stok_terkoreksiField=new Ext.form.NumberField({
@@ -829,9 +850,8 @@ Ext.onReady(function(){
 		allowNegative: true,
 		blankText: '0',
 		maxLength: 11,
-		decimalPrecision: 2,
 		enableKeyEvents: true,
-		maskRe: /([0-9]+)$/
+		maskRe: /([0-9.]+)$/
 	});
 	
 	var stok_saldoField=new Ext.form.NumberField({
@@ -839,7 +859,6 @@ Ext.onReady(function(){
 		allowNegative: true,
 		enableKeyEvents: true,
 		blankText: '0',
-		decimalPrecision: 2,
 		maxLength: 11,
 		maskRe: /([0-9]+)$/
 	});
@@ -1041,6 +1060,7 @@ Ext.onReady(function(){
 		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
+		monitorValid: true,
 		width: 800,        
 		items: [master_koreksi_stok_masterGroup,detail_koreksi_stokListEditorGrid],
 		buttons: [{
@@ -1357,29 +1377,75 @@ Ext.onReady(function(){
 	
 	
 	combo_stok_produk.on("select",function(){
-		cbo_stok_satuanDataStore.setBaseParam('task','produk');
-		cbo_stok_satuanDataStore.setBaseParam('selected_id',combo_stok_produk.getValue());
 		var jumlah_awal=0;
 		var satuan_id=0;
-		var j=cbo_stok_produkDataStore.find('produk_id',combo_stok_produk.getValue());
-		if(j>=0){
-			var record_produk=cbo_stok_produkDataStore.getAt(j);
-			satuan_id=record_produk.data.produk_satuan_id;
-			jumlah_awal=record_produk.data.produk_stok;
-		}
-		cbo_stok_satuanDataStore.reload();
-		combo_stok_satuan.setValue(satuan_id);
-		combo_stok_satuan.render();
-		stok_awalField.setValue(jumlah_awal);
-		stok_saldoField.setValue(stok_awalField.getValue()+stok_terkoreksiField.getValue());
+		
+		cbo_stok_satuanDataStore.setBaseParam('task','produk');
+		cbo_stok_satuanDataStore.setBaseParam('selected_id',combo_stok_produk.getValue());
+		
+		cbo_stok_byprodukDataStore.setBaseParam('produk_id',combo_stok_produk.getValue());
+		cbo_stok_byprodukDataStore.setBaseParam('gudang',koreksi_gudangField.getValue());
+		cbo_stok_byprodukDataStore.load({
+			callback: function(r,opt,success){
+				if(success==true){
+					var j=cbo_stok_byprodukDataStore.find('produk_id',combo_stok_produk.getValue());
+					if(j>=0){
+						var record_produk=cbo_stok_byprodukDataStore.getAt(j);
+						satuan_id=record_produk.data.produk_satuan_id;
+						jumlah_awal=record_produk.data.produk_stok;
+						
+						cbo_stok_satuanDataStore.reload();
+						combo_stok_satuan.setValue(satuan_id);
+						combo_stok_satuan.render();
+						stok_awalField.setValue(jumlah_awal);
+						stok_saldoField.setValue(stok_awalField.getValue()+stok_terkoreksiField.getValue());
+					}
+				}
+			}
+		});
+		
+		
 	});
+	
+	
+	function rounding(num, dec) {
+		var result = Math.round(num*Math.pow(10,dec))/Math.pow(10,dec);
+		return result;
+	}
+
+	/*function rounding(val,prec){
+		var num=String(val).split(".");
+		console.log(val+"-"+num.length);
+		if(num.length>1){
+			var dec=num[1].substring(0,2);
+			var underdec=parseInt(num[1].substring(2,3));
+			console.log('dec:'+dec);
+			console.log('urderdec:'+underdec);
+			
+			
+			if(dec.length<2){
+				dec=dec+"0";
+			}
+			dec=parseInt(dec);
+			
+			if(underdec>=5){
+				dec=dec+1;
+			}
+			
+			if(dec<10){
+				dec="0"+1;
+			}
+			return num[0]+"."+dec;
+		}else
+			return val+".00";
+	}*/
 	
 	combo_stok_satuan.on("select",function(){
 		var jumlah_awal=0;
 		var konversi=1;
-		var j=cbo_stok_produkDataStore.find('produk_id',combo_stok_produk.getValue());
+		var j=cbo_stok_byprodukDataStore.find('produk_id',combo_stok_produk.getValue());
 		if(j>=0){
-			var record_produk=cbo_stok_produkDataStore.getAt(j);
+			var record_produk=cbo_stok_byprodukDataStore.getAt(j);
 			jumlah_awal=record_produk.data.produk_stok;
 		}
 		
@@ -1389,18 +1455,19 @@ Ext.onReady(function(){
 			var record_satuan=cbo_stok_satuanDataStore.getAt(j);
 			konversi=record_satuan.data.konversi_nilai;
 			//console.log('konversi'+konversi);
-			jumlah_konversi=Math.round(jumlah_awal/konversi,2);
+			jumlah_konversi=jumlah_awal/konversi;
+			jumlah_konversi=rounding(jumlah_konversi,2);
 			stok_awalField.setValue(jumlah_konversi);
 			stok_saldoField.setValue(stok_awalField.getValue()+stok_terkoreksiField.getValue());
 		}
 	});
 	
 	stok_terkoreksiField.on("keyup", function(){
-		stok_saldoField.setValue(stok_awalField.getValue()+stok_terkoreksiField.getValue());
+		stok_saldoField.setValue(rounding(stok_awalField.getValue()+stok_terkoreksiField.getValue(),2));
 	});
 	
 	stok_saldoField.on("keyup", function(){
-		stok_terkoreksiField.setValue(stok_saldoField.getValue()-stok_awalField.getValue());
+		stok_terkoreksiField.setValue(rounding(stok_saldoField.getValue()-stok_awalField.getValue(),2));
 	});
 	
 	detail_koreksi_stok_DataStore.on("update",function(){

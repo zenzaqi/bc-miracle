@@ -49,6 +49,14 @@ class C_master_koreksi_stok extends Controller {
 		echo $result;
 	}
 	
+	function get_produk_stok(){
+		$gudang = (integer) (isset($_POST['gudang']) ? @$_POST['gudang'] : @$_GET['gudang']);
+		$produk_id = isset($_POST['produk_id']) ? @$_POST['produk_id'] : @$_GET['produk_id'];
+		$result=$this->m_master_koreksi_stok->get_stok_produk_selected($gudang, $produk_id);
+
+		echo $result;
+	}
+	
 	function get_satuan_list(){
 		$task = isset($_POST['task']) ? @$_POST['task'] : @$_GET['task'];
 		$selected_id = isset($_POST['selected_id']) ? @$_POST['selected_id'] : @$_GET['selected_id'];

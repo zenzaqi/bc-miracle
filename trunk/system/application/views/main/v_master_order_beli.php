@@ -1404,9 +1404,9 @@ Ext.onReady(function(){
 		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
-		width: 700,        
-		items: [master_order_beli_masterGroup,detail_order_beliListEditorGrid,master_order_beli_bayarGroup]
-		,
+		width: 700,
+		monitorValid: true,
+		items: [master_order_beli_masterGroup,detail_order_beliListEditorGrid,master_order_beli_bayarGroup],
 		buttons: [{
 				text: 'Save and Close',
 				handler: master_order_beli_create
