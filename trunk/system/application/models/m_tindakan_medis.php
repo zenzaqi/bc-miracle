@@ -18,9 +18,11 @@ class M_tindakan_medis extends Model{
 		parent::Model();
 	}
 	
-	function customer_check_paket($cust_id, $rawat_id){
+	function global_customer_check_paket($cust_id, $rawat_id){
+		$return_row_punya_paket = 0;
 		//* Mencari kepemilikan paket berdasarkan customer_id /
 		$sql_punya_paket="SELECT (dpaket_jumlah*rpaket_jumlah) AS rpaket_jumlah, dpaket_id, dpaket_master, dpaket_paket, dpaket_sisa_paket FROM paket_isi_perawatan LEFT JOIN detail_jual_paket ON(rpaket_master=dpaket_paket) LEFT JOIN master_jual_paket ON(dpaket_master=jpaket_id) LEFT JOIN pengguna_paket ON(ppaket_master=jpaket_id) WHERE ppaket_cust='$cust_id' AND rpaket_perawatan='$rawat_id'";
+		
 		$rs_punya_paket=$this->db->query($sql_punya_paket);
 		if($rs_punya_paket->num_rows()){
 			$punya_paket_rows = $rs_punya_paket->num_rows();
@@ -46,30 +48,47 @@ class M_tindakan_medis extends Model{
 				}
 			}
 			
-			/*$check_paket_record=$rs->row();
-			
-			$rs_record=$rs->row_array();
-			$dpaket_id=$rs_record['dpaket_id'];
-			$dpaket_master=$rs_record['dpaket_master'];
-			$dpaket_paket=$rs_record['dpaket_paket'];
-			$rpaket_jumlah=$rs_record['rpaket_jumlah'];
-			$sql="SELECT sum(dapaket_jumlah) AS total_item_terpakai FROM detail_ambil_paket WHERE dapaket_dpaket='$dpaket_id' AND dapaket_jpaket='$dpaket_master' AND dapaket_paket='$dpaket_paket' AND dapaket_item='$rawat_id' GROUP BY dapaket_item";
-			$rs=$this->db->query($sql);
-			if($rs->num_rows()){
-				$rs_record=$rs->row_array();
-				$total_item_terpakai=$rs_record['total_item_terpakai'];
-				if($rpaket_jumlah > $total_item_terpakai){
-					//return 1;
-					return $check_paket_record;
-				}else{
-					return 0;
-				}
-			}else{
-				//return 1;
-				return $check_paket_record;
-			}*/
 		}else{
 			return 0;
+		}
+	}
+	
+	function customer_check_paket($cust_id, $rawat_id){
+		$return_row_punya_paket = 0;
+		//* Mencari kepemilikan paket berdasarkan customer_id /
+		$sql_punya_paket="SELECT (dpaket_jumlah*rpaket_jumlah) AS rpaket_jumlah, dpaket_id, dpaket_master, dpaket_paket, dpaket_sisa_paket FROM paket_isi_perawatan LEFT JOIN detail_jual_paket ON(rpaket_master=dpaket_paket) LEFT JOIN master_jual_paket ON(dpaket_master=jpaket_id) LEFT JOIN pengguna_paket ON(ppaket_master=jpaket_id) WHERE ppaket_cust='$cust_id' AND rpaket_perawatan='$rawat_id' AND jpaket_cust='$cust_id'";
+		
+		$rs_punya_paket=$this->db->query($sql_punya_paket);
+		if($rs_punya_paket->num_rows()){
+			$punya_paket_rows = $rs_punya_paket->num_rows();
+			$i=0;
+			foreach($rs_punya_paket->result() as $row_punya_paket){
+				$i++;
+				$sql_check_sisa="SELECT sum(dapaket_jumlah) AS total_item_terpakai FROM detail_ambil_paket WHERE dapaket_dpaket='$row_punya_paket->dpaket_id' AND dapaket_jpaket='$row_punya_paket->dpaket_master' AND dapaket_paket='$row_punya_paket->dpaket_paket' AND dapaket_item='$rawat_id' GROUP BY dapaket_item";
+				$rs_check_sisa=$this->db->query($sql_check_sisa);
+				if($rs_check_sisa->num_rows()){
+					$record_check_sisa = $rs_check_sisa->row();
+					if(($row_punya_paket->rpaket_jumlah > $record_check_sisa->total_item_terpakai) || (($row_punya_paket->rpaket_jumlah==0) && ($row_punya_paket->dpaket_sisa_paket > 0))){
+						return $row_punya_paket;
+						break;
+					}else{
+						if($i==$punya_paket_rows){
+							$return_global_customer_check_paket = $this->global_customer_check_paket();
+							return $return_global_customer_check_paket;
+							//return 0;
+						}
+					}
+					
+				}else{
+					return $row_punya_paket;
+					break;
+				}
+			}
+			
+		}else{
+			$return_global_customer_check_paket = $this->global_customer_check_paket();
+			return $return_global_customer_check_paket;
+			//return 0;
 		}
 	}
 		
