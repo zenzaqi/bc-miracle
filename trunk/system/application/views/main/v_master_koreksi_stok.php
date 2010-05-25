@@ -808,7 +808,7 @@ Ext.onReady(function(){
 	var combo_stok_produk=new Ext.form.ComboBox({
 		store: cbo_stok_produkDataStore,
 		mode: 'remote',
-		typeAhead: true,
+		typeAhead: false,
 		displayField: 'produk_nama',
 		valueField: 'produk_id',
 		triggerAction: 'all',
@@ -819,7 +819,6 @@ Ext.onReady(function(){
 		tpl : produk_tpl,
 		itemSelector: 'div.search-item',
 		triggerAction: 'all',
-		lazyRender:true,
 		listClass: 'x-combo-list-small',
 		anchor: '95%'
 
@@ -1393,13 +1392,15 @@ Ext.onReady(function(){
 						var record_produk=cbo_stok_byprodukDataStore.getAt(j);
 						satuan_id=record_produk.data.produk_satuan_id;
 						jumlah_awal=record_produk.data.produk_stok;
-						
-						cbo_stok_satuanDataStore.reload();
-						combo_stok_satuan.setValue(satuan_id);
-						combo_stok_satuan.render();
-						stok_awalField.setValue(jumlah_awal);
-						stok_saldoField.setValue(stok_awalField.getValue()+stok_terkoreksiField.getValue());
+
 					}
+					
+					cbo_stok_satuanDataStore.load();
+					combo_stok_satuan.setValue(satuan_id);
+					combo_stok_satuan.render();
+					stok_awalField.setValue(jumlah_awal);
+					stok_saldoField.setValue(stok_awalField.getValue()+stok_terkoreksiField.getValue());
+						
 				}
 			}
 		});
