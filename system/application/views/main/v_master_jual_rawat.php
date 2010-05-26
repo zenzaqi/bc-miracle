@@ -612,6 +612,7 @@ Ext.onReady(function(){
 				var result=eval(response.responseText);
 				if(result==0){
 					Ext.MessageBox.alert(post2db+' OK','Data penjualan perawatan berhasil disimpan');
+					detail_jual_rawat_update();
 					master_jual_rawat_DataStore.reload();
 					detail_jual_rawat_DataStore.load({params: {master_id:0}});
 					master_jual_rawat_createWindow.hide();
@@ -630,6 +631,7 @@ Ext.onReady(function(){
 						url: 'index.php?c=c_master_jual_rawat&m=catatan_piutang_update',
 						params:{drawat_master	: eval(jrawat_idField.getValue())}
 					});
+					detail_jual_rawat_update();
 					master_jual_rawat_DataStore.reload();
 					detail_jual_rawat_DataStore.load({params: {master_id:0}});
 					master_jual_rawat_createWindow.hide();
@@ -4145,6 +4147,36 @@ Ext.onReady(function(){
 		detail_jual_rawat_DataStore.commitChanges();
 	}
 	//eof
+	
+	function detail_jual_rawat_update(){
+		var count_detail=detail_jual_rawat_DataStore.getCount();
+		for(i=0;i<detail_jual_rawat_DataStore.getCount();i++){
+			detail_jual_rawat_record=detail_jual_rawat_DataStore.getAt(i);
+			if(detail_jual_rawat_record.data.drawat_rawat!==null&&detail_jual_rawat_record.data.drawat_rawat.drawat_rawat!==""){
+				Ext.Ajax.request({
+					waitMsg: 'Mohon tunggu...',
+					url: 'index.php?c=c_master_jual_rawat&m=detail_jual_rawat_update',
+					params:{
+						drawat_id	: detail_jual_rawat_record.data.drawat_id
+					},
+					timeout: 60000,
+					success: function(response){							
+						var result=eval(response.responseText);
+					},
+					failure: function(response){
+						var result=response.responseText;
+						Ext.MessageBox.show({
+						   title: 'Error',
+						   msg: 'Could not connect to the database. retry later.',
+						   buttons: Ext.MessageBox.OK,
+						   animEl: 'database',
+						   icon: Ext.MessageBox.ERROR
+						});	
+					}		
+				});
+			}
+		}
+	}
 	
 	
 	function update_group_carabayar_jual_rawat(){

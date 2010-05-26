@@ -604,6 +604,20 @@ class M_master_jual_rawat extends Model{
 		}
 		//end of function
 		
+		function detail_jual_rawat_update($drawat_id ){
+			/*$dtu_drawat=array(
+			""
+			);
+			
+			$this->db->where('drawat_id', $drawat_id);
+			$this->db->update('detail_jual_rawat', $dtu_drawat);
+			if($this->db->affected_rows()){
+				return "{success:true}";
+			}else
+				return "{failure:true}";*/
+
+		}
+		
 		//function for get list record
 		function master_jual_rawat_list($filter,$start,$end){
 			$date_now=date('Y-m-d');

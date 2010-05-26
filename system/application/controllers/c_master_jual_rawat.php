@@ -244,6 +244,13 @@ class C_master_jual_rawat extends Controller {
 		$result=$this->m_master_jual_rawat->detail_detail_jual_rawat_insert($drawat_id ,$drawat_master ,$drawat_rawat ,$drawat_jumlah ,$drawat_harga ,$drawat_diskon ,$drawat_diskon_jenis ,$drawat_sales ,$jrawat_id);
 	}
 	
+	function detail_jual_rawat_update(){
+	//POST variable here
+		$drawat_id=trim(@$_POST["drawat_id"]);
+		
+		$result=$this->m_master_jual_rawat->detail_jual_rawat_update($drawat_id );
+	}
+	
 	//for detail pengambilan paket
 	//list detail handler action
 	function  detail_ambil_paket_list(){
