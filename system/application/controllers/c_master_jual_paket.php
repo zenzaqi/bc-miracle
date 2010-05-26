@@ -109,6 +109,15 @@ class C_master_jual_paket extends Controller {
 		echo $result;
 	}
 	
+	function get_reveral_list(){
+		$query = isset($_POST['query']) ? $_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		$result=$this->m_master_jual_paket->get_reveral_list($query,$start,$end);
+		echo $result;
+	}
+	
+	
 	function get_customer_list(){
 		$query = isset($_POST['query']) ? $_POST['query'] : "";
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
@@ -252,6 +261,7 @@ class C_master_jual_paket extends Controller {
 		$dpaket_id=trim(@$_POST["dpaket_id"]);
 		$dpaket_master=trim(@$_POST["dpaket_master"]);
 		$dpaket_paket=trim(@$_POST["dpaket_paket"]);
+		$dpaket_karyawan=trim(@$_POST["dpaket_karyawan"]);
 		$dpaket_kadaluarsa=trim(@$_POST["dpaket_kadaluarsa"]);
 		$dpaket_jumlah=trim(@$_POST["dpaket_jumlah"]);
 		$dpaket_harga=trim(@$_POST["dpaket_harga"]);
@@ -267,7 +277,7 @@ class C_master_jual_paket extends Controller {
 		$count=trim(@$_POST['count']);
 		$dcount=trim(@$_POST['dcount']);
 		
-		$result=$this->m_master_jual_paket->detail_detail_jual_paket_insert($dpaket_id ,$dpaket_master ,$dpaket_paket, $dpaket_kadaluarsa ,$dpaket_jumlah ,$dpaket_harga ,$dpaket_diskon ,$dpaket_diskon_jenis ,$dpaket_sales, $cetak, $count, $dcount);
+		$result=$this->m_master_jual_paket->detail_detail_jual_paket_insert($dpaket_id ,$dpaket_master ,$dpaket_paket, $dpaket_karyawan, $dpaket_kadaluarsa ,$dpaket_jumlah ,$dpaket_harga ,$dpaket_diskon ,$dpaket_diskon_jenis ,$dpaket_sales, $cetak, $count, $dcount);
 		echo $result;
 	}
 	

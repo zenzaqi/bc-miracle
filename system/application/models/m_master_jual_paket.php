@@ -99,6 +99,30 @@ class M_master_jual_paket extends Model{
 				return "";
 		}
 		
+		function get_reveral_list($query,$start,$end){
+		$sql="SELECT karyawan_id,karyawan_no,karyawan_username,karyawan_nama,karyawan_tgllahir,karyawan_alamat
+		FROM karyawan where karyawan_aktif='Aktif'";
+		if($query<>""){
+			$sql=$sql." and (karyawan_no like '%".$query."%' or karyawan_nama like '%".$query."%') ";
+		}
+		
+		$result = $this->db->query($sql);
+		$nbrows = $result->num_rows();
+		$limit = $sql." LIMIT ".$start.",".$end;			
+		$result = $this->db->query($limit);  
+		if($nbrows>0){
+			foreach($result->result() as $row){
+				$arr[] = $row;
+			}
+			$jsonresult = json_encode($arr);
+			return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+		} else {
+			return '({"total":"0", "results":""})';
+		}
+	}
+		
+		
+		
 		function get_total_nilai($tgl_awal,$tgl_akhir,$periode,$opsi){
 			if($opsi=='rekap'){
 				if($periode=='all')
@@ -872,7 +896,7 @@ class M_master_jual_paket extends Model{
 		}*/
 		
 		//insert detail record
-		function detail_detail_jual_paket_insert($dpaket_id ,$dpaket_master ,$dpaket_paket, $dpaket_kadaluarsa ,$dpaket_jumlah ,$dpaket_harga ,$dpaket_diskon,$dpaket_diskon_jenis,$dpaket_sales, $cetak, $count, $dcount){
+		function detail_detail_jual_paket_insert($dpaket_id ,$dpaket_master ,$dpaket_paket, $dpaket_karyawan, $dpaket_kadaluarsa ,$dpaket_jumlah ,$dpaket_harga ,$dpaket_diskon,$dpaket_diskon_jenis,$dpaket_sales, $cetak, $count, $dcount){
 			//if master id not capture from view then capture it from max pk from master table
 			if($dpaket_master=="" || $dpaket_master==NULL || $dpaket_master==0){
 				$dpaket_master=$this->get_master_id();
@@ -911,6 +935,7 @@ class M_master_jual_paket extends Model{
 				
 				$dtu_dpaket=array(
 				"dpaket_jumlah"=>$dpaket_jumlah,
+				"dpaket_karyawan"=>$dpaket_karyawan,
 				"dpaket_sisa_paket"=>$dpaket_sisa_paket
 				);
 				$this->db->where('dpaket_id', $dpaket_id);
@@ -932,6 +957,7 @@ class M_master_jual_paket extends Model{
 				$data = array(
 					"dpaket_master"=>$dpaket_master, 
 					"dpaket_paket"=>$dpaket_paket,
+					"dpaket_karyawan"=>$dpaket_karyawan,
 					"dpaket_kadaluarsa"=>$dpaket_kadaluarsa, 
 					"dpaket_jumlah"=>$dpaket_jumlah, 
 					"dpaket_harga"=>$dpaket_harga, 
