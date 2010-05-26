@@ -4,7 +4,7 @@ ALTER TABLE `detail_koreksi_stok` CHANGE `dkoreksi_jmlawal` `dkoreksi_jmlawal` D
 ALTER TABLE `detail_koreksi_stok` CHANGE `dkoreksi_jmlkoreksi` `dkoreksi_jmlkoreksi` DOUBLE( 11, 2 ) NULL DEFAULT NULL;  
 ALTER TABLE `detail_koreksi_stok` CHANGE `dkoreksi_jmlsaldo` `dkoreksi_jmlsaldo` DOUBLE( 11, 2 ) NULL DEFAULT NULL;
 
-ALTER TABLE `detail_pakai_cabin` ADD `cabin_stok` DOUBLE( 11, 2 ) NULL DEFAULT NULL  
+ALTER TABLE `detail_pakai_cabin` ADD `cabin_gudang` int(11) NULL DEFAULT NULL;  
 
 UPDATE detail_pakai_cabin,vu_perawatan SET cabin_gudang=gudang_id WHERE cabin_rawat=rawat_id;
 
