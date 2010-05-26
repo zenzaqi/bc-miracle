@@ -194,7 +194,7 @@ class M_stok_mutasi extends Model{
 					//gudang lainnya
 
 					//stok awal
-					$sql_stokawal="SELECT sum(jumlah_masuk)-sum(jumlah_keluar)+sum(jumlah_koreksi)+sum(jumlah_pakai) as jumlah_awal
+					$sql_stokawal="SELECT sum(jumlah_masuk)-sum(jumlah_keluar)+sum(jumlah_koreksi)-sum(jumlah_pakai) as jumlah_awal
 									FROM vu_stok_mutasi_all
 									WHERE produk_id='".$rowproduk->produk_id."' 
 									AND date_format(mutasi_tanggal,'%Y-%m-%d')<'".$tanggal_start."'
