@@ -674,7 +674,7 @@ Ext.onReady(function(){
 			disabled:true,
 			handler: ambil_paket_confirm_delete   // Confirm before deleting
 		}, '-', {
-			text: 'Advanced Search',
+			text: 'Adv Search',
 			tooltip: 'Pencarian Detail',
 			iconCls:'icon-search',
 			handler: display_form_search_window 
