@@ -1162,6 +1162,8 @@ Ext.onReady(function(){
 	}
 	/* End setValue to EDIT*/
 	
+	
+	/*Function utk mengnon-aktifkan beberapa field ketika status dok diganti Tertutup*/
 	function master_jual_paket_set_updating(){
 		if(jpaket_post2db=="UPDATE" && master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_stat_dok')=="Terbuka"){
 			jpaket_custField.setDisabled(true);
@@ -1179,6 +1181,10 @@ Ext.onReady(function(){
 		}
 	}
   
+  
+  
+  
+
     function load_membership(){
 		if(jpaket_custField.getValue()!=''){
 			memberDataStore.load({

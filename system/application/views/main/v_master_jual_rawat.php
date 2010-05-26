@@ -926,6 +926,19 @@ Ext.onReady(function(){
 		update_group_carabayar_jual_rawat();
 		update_group_carabayar2_jual_rawat();
 		update_group_carabayar3_jual_rawat();
+		
+		jrawat_custField.setDisabled(false);
+		jrawat_tanggalField.setDisabled(false);
+		jrawat_custField.setDisabled(false);
+		jrawat_custField.setDisabled(false);
+		jrawat_tanggalField.setDisabled(false);
+		jrawat_keteranganField.setDisabled(false);
+		master_cara_bayarTabPanel.setDisabled(false);
+		detail_jual_rawatListEditorGrid.setDisabled(false);
+		jrawat_diskonField.setDisabled(false);
+		jrawat_cashback_cfField.setDisabled(false);
+		
+		
 	}
  	/* End of Function */
 	
@@ -1299,6 +1312,24 @@ Ext.onReady(function(){
 	}
 	/* End setValue to EDIT*/
   
+	function master_jual_rawat_set_updating(){
+		if(post2db=="UPDATE" && master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_stat_dok')=="Terbuka"){
+			jrawat_custField.setDisabled(true);
+			jrawat_tanggalField.setDisabled(true);
+		}
+		if(post2db=="UPDATE" && master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_stat_dok')=="Tertutup"){
+			jrawat_custField.setDisabled(true);
+			jrawat_tanggalField.setDisabled(true);
+			jrawat_keteranganField.setDisabled(true);
+			master_cara_bayarTabPanel.setDisabled(true);
+			detail_jual_rawatListEditorGrid.setDisabled(true);
+			jrawat_diskonField.setDisabled(true);
+			jrawat_cashback_cfField.setDisabled(true);
+		}
+	}
+	
+  
+ 
     function load_membership(){
 		if(jrawat_custField.getValue()!=''){
 			memberDataStore.load({
@@ -1382,6 +1413,7 @@ Ext.onReady(function(){
 							callback:function(opts, success, response){
 								if(success){
 									master_jual_rawat_set_form();
+									master_jual_rawat_set_updating();
 								}
 							}
 						});

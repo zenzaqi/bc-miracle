@@ -2135,5 +2135,11 @@ class M_master_jual_rawat extends Model{
 			}
 		}
 		
+		function iklan(){
+			$sql="SELECT * from iklan_today";
+			$result = $this->db->query($sql);
+			return $result;
+		}
+		
 }
 ?>

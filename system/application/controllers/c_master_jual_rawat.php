@@ -714,7 +714,9 @@ class C_master_jual_rawat extends Controller {
 		$jrawat_tanggal=trim(@$_POST["jrawat_tanggal"]);
 		
 		$result = $this->m_master_jual_rawat->print_paper($jrawat_id);
+		$iklan = $this->m_master_jual_rawat->iklan();
 		$rs=$result->row();
+		$rsiklan=$iklan->row();
 		$detail_jrawat=$result->result();
 		
 		$cara_bayar=$this->m_master_jual_rawat->cara_bayar($jrawat_id);
@@ -737,6 +739,7 @@ class C_master_jual_rawat extends Controller {
 		//$data['jrawat_totalbiaya']=$rs->jrawat_totalbiaya;
 		$data['detail_jrawat']=$detail_jrawat;
 		$data['detail_apaket']=$detail_apaket;
+		$data['iklantoday_keterangan']=$rsiklan->iklantoday_keterangan;
 		
 		if($cara_bayar!==NULL){
 			$data['cara_bayar']=$cara_bayar->jrawat_cara;
