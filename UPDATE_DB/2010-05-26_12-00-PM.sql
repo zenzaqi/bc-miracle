@@ -1,0 +1,1 @@
+ALTER TABLE `detail_jual_paket` ADD `dpaket_karyawan` INT( 11 ) NULL DEFAULT NULL AFTER `dpaket_paket` 
