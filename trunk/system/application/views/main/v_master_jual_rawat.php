@@ -68,7 +68,7 @@ var detail_jual_rawat_reader;
 var editor_detail_jual_rawat;
 
 //declare konstant
-var post2db = '';
+var jrawat_post2db = '';
 var msg = '';
 var pageS=15;
 
@@ -515,7 +515,7 @@ Ext.onReady(function(){
 			waitMsg: 'Mohon tunggu...',
 			url: 'index.php?c=c_master_jual_rawat&m=get_action',
 			params: {
-				task: post2db,
+				task: jrawat_post2db,
 				cetak_jrawat:cetak_jrawat,
 				jrawat_id			: 	jrawat_id_create_pk, 
 				jrawat_nobukti		: 	jrawat_nobukti_create, 
@@ -611,7 +611,7 @@ Ext.onReady(function(){
 			success: function(response){             
 				var result=eval(response.responseText);
 				if(result==0){
-					Ext.MessageBox.alert(post2db+' OK','Data penjualan perawatan berhasil disimpan');
+					Ext.MessageBox.alert(jrawat_post2db+' OK','Data penjualan perawatan berhasil disimpan');
 					detail_jual_rawat_update();
 					master_jual_rawat_DataStore.reload();
 					detail_jual_rawat_DataStore.load({params: {master_id:0}});
@@ -647,8 +647,8 @@ Ext.onReady(function(){
 					case 1:
 						//detail_jual_rawat_purge();
 						//detail_jual_rawat_insert();
-						//Ext.MessageBox.alert(post2db+' OK','The Master_jual_rawat was '+msg+' successfully.');
-						//Ext.MessageBox.alert(post2db+' OK','Data penjualan perawatan berhasil disimpan');
+						//Ext.MessageBox.alert(jrawat_post2db+' OK','The Master_jual_rawat was '+msg+' successfully.');
+						//Ext.MessageBox.alert(jrawat_post2db+' OK','Data penjualan perawatan berhasil disimpan');
 						if(cetak_jrawat==1){
 							jrawat_cetak();
 						}
@@ -716,7 +716,7 @@ Ext.onReady(function(){
   
   	/* Function for get PK field */
 	function get_pk_id(){
-		if(post2db=='UPDATE')
+		if(jrawat_post2db=='UPDATE')
 			return master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_id');
 		else 
 			return 0;
@@ -937,8 +937,6 @@ Ext.onReady(function(){
 		detail_jual_rawatListEditorGrid.setDisabled(false);
 		jrawat_diskonField.setDisabled(false);
 		jrawat_cashback_cfField.setDisabled(false);
-		
-		
 	}
  	/* End of Function */
 	
@@ -1311,13 +1309,13 @@ Ext.onReady(function(){
 		//load_total_rawat_bayar();
 	}
 	/* End setValue to EDIT*/
-  
+	
 	function master_jual_rawat_set_updating(){
-		if(post2db=="UPDATE" && master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_stat_dok')=="Terbuka"){
+		if(jrawat_post2db=="UPDATE" && master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_stat_dok')=="Terbuka"){
 			jrawat_custField.setDisabled(true);
 			jrawat_tanggalField.setDisabled(true);
 		}
-		if(post2db=="UPDATE" && master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_stat_dok')=="Tertutup"){
+		if(jrawat_post2db=="UPDATE" && master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_stat_dok')=="Tertutup"){
 			jrawat_custField.setDisabled(true);
 			jrawat_tanggalField.setDisabled(true);
 			jrawat_keteranganField.setDisabled(true);
@@ -1327,9 +1325,7 @@ Ext.onReady(function(){
 			jrawat_cashback_cfField.setDisabled(true);
 		}
 	}
-	
   
- 
     function load_membership(){
 		if(jrawat_custField.getValue()!=''){
 			memberDataStore.load({
@@ -1359,7 +1355,7 @@ Ext.onReady(function(){
 			master_jual_rawat_cardGroup.setVisible(true);
 			detail_jual_rawat_DataStore.load({params: {master_id:0}});
 			detail_ambil_paketDataStore.load({params: {master_id : 0, start:0, limit:pageS}});
-			post2db="CREATE";
+			jrawat_post2db="CREATE";
 			msg='created';
 			master_cara_bayarTabPanel.setActiveTab(0);
 			master_jual_rawat_createWindow.show();
@@ -1400,10 +1396,11 @@ Ext.onReady(function(){
 			//cbo_perawatanDataStore.load({params: {query:master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_id')}});
 			cbo_kwitansi_jual_rawat_DataStore.load();
 			master_cara_bayarTabPanel.setActiveTab(0);
-			post2db='UPDATE';
+			jrawat_post2db='UPDATE';
 			
 			//2010-05-06 ==> detail_ambil_paketDataStore.load({params: {master_id : master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_cust_id'), tanggal: master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_tanggal').format('Y-m-d'), start:0, limit:pageS}});
 			detail_ambil_paketDataStore.load({params: {dpaket_id : master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('dpaket_id'), tanggal: master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_tanggal').format('Y-m-d'), dapaket_cust: master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_cust_id'), start:0, limit:pageS}});
+			if(master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('keterangan_paket')!=="paket"){
 			cbo_drawat_rawatDataStore.load({
 				params: {query:master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_id')},
 				callback:function(opts, success, response){
@@ -1420,6 +1417,10 @@ Ext.onReady(function(){
 					}
 				}
 			});
+			}else{
+				master_jual_rawat_set_form();
+				master_jual_rawat_set_updating();
+			}
 			/*detail_jual_rawat_DataStore.load({
 				params : {master_id : master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_id'), start:0, limit:pageS},
 				callback:function(opts, success, response){
@@ -4737,8 +4738,8 @@ Ext.onReady(function(){
 	/* Function for retrieve create Window Form */
 	master_jual_rawat_createWindow= new Ext.Window({
 		id: 'master_jual_rawat_createWindow',
-//		title: post2db+'Master_jual_rawat',
-		title: post2db+'Penjualan Perawatan',
+//		title: jrawat_post2db+'Master_jual_rawat',
+		title: jrawat_post2db+'Penjualan Perawatan',
 		closable:true,
 		closeAction: 'hide',
 		//autoWidth: true,
@@ -5144,7 +5145,7 @@ Ext.onReady(function(){
 	/*End of Function */
 	
 	/*function pertamax(){
-		post2db="CREATE";
+		jrawat_post2db="CREATE";
 		jrawat_tanggalField.setValue(dt.format('Y-m-d'));
 		master_jual_rawat_createForm.render();
 	}
