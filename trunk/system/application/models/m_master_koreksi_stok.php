@@ -132,9 +132,9 @@ class M_master_koreksi_stok extends Model{
 				$sql.=" produk_id IN(SELECT dkoreksi_produk FROM detail_koreksi_stok WHERE dkoreksi_master='".$master_id."')";
 			}
 			
-			if($query!==""){
+			/*if($query!==""){
 				$sql.=(eregi("WHERE",$sql)?" AND ":" WHERE ")." produk_nama like '%".$query."%' OR produk_kode like '%".$query."%'";
-			}
+			}*/
 			
 			$result = $this->db->query($sql);
 			$nbrows = $result->num_rows();
@@ -284,7 +284,7 @@ class M_master_koreksi_stok extends Model{
 		
 		//function for get list record
 		function master_koreksi_stok_list($filter,$start,$end){
-			$query = "SELECT * FROM master_koreksi_stok,gudang WHERE koreksi_gudang=gudang_id";
+			$query = "SELECT distinct * FROM master_koreksi_stok,gudang WHERE koreksi_gudang=gudang_id";
 			
 			// For simple search
 			if ($filter<>""){

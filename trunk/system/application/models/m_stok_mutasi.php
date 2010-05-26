@@ -194,10 +194,11 @@ class M_stok_mutasi extends Model{
 					//gudang lainnya
 
 					//stok awal
-					$sql_stokawal="SELECT sum(jumlah_masuk)-sum(jumlah_keluar)+sum(jumlah_koreksi) as jumlah_awal
+					$sql_stokawal="SELECT sum(jumlah_masuk)-sum(jumlah_keluar)+sum(jumlah_koreksi)+sum(jumlah_pakai) as jumlah_awal
 									FROM vu_stok_mutasi_all
 									WHERE produk_id='".$rowproduk->produk_id."' 
 									AND date_format(mutasi_tanggal,'%Y-%m-%d')<'".$tanggal_start."'
+									AND gudang_id='".$gudang."' 
 									GROUP BY produk_id";
 					$q_stokawal=$this->db->query($sql_stokawal);
 					if($q_stokawal->num_rows())
@@ -209,7 +210,7 @@ class M_stok_mutasi extends Model{
 					}
 					
 					//pake cabin
-					$sql_cabin="SELECT sum(jumlah_konversi) as jumlah_cabin
+			/*		$sql_cabin="SELECT sum(jumlah_konversi) as jumlah_cabin
 								FROM vu_stok_pakai_cabin
 								WHERE produk_id='".$rowproduk->produk_id."' 
 								AND date_format(cabin_date_create,'%Y-%m-%d')<'".$tanggal_start."'
@@ -220,16 +221,18 @@ class M_stok_mutasi extends Model{
 						$ds_cabin=$q_cabin->row();
 						$data[$i]["jumlah_awal"]=($data[$i]["jumlah_awal"]-$ds_cabin->jumlah_cabin)*$data[$i]["konversi_nilai"];
 					}
-					
+					*/
 					
 					//mutasi
 					$sql_mutasi="SELECT 	sum(jumlah_masuk) as jumlah_masuk,
 											sum(jumlah_keluar) as jumlah_keluar,
-											sum(jumlah_koreksi) as jumlah_koreksi
+											sum(jumlah_koreksi) as jumlah_koreksi,
+											sum(jumlah_pakai) as jumlah_cabin
 									FROM vu_stok_mutasi_all
 									WHERE produk_id='".$rowproduk->produk_id."' 
 									AND date_format(mutasi_tanggal,'%Y-%m-%d')>='".$tanggal_start."'
 									AND date_format(mutasi_tanggal,'%Y-%m-%d')<='".$tanggal_end."'
+									AND gudang_id='".$gudang."' 
 									GROUP BY produk_id";
 									
 					$rs_mutasi=$this->db->query($sql_mutasi);
@@ -237,7 +240,7 @@ class M_stok_mutasi extends Model{
 					{
 						$ds_mutasi=$rs_mutasi->row();
 						$data[$i]["jumlah_masuk"]=$ds_mutasi->jumlah_masuk*$data[$i]["konversi_nilai"];
-						$data[$i]["jumlah_keluar"]=$ds_mutasi->jumlah_keluar*$data[$i]["konversi_nilai"];
+						$data[$i]["jumlah_keluar"]=($ds_mutasi->jumlah_keluar+$ds_mutasi->jumlah_cabin)*$data[$i]["konversi_nilai"];
 						$data[$i]["jumlah_koreksi"]=$ds_mutasi->jumlah_koreksi*$data[$i]["konversi_nilai"];
 						$data[$i]["jumlah_stok"]=($data[$i]["jumlah_awal"]+$data[$i]["jumlah_masuk"]-$data[$i]["jumlah_keluar"]+$data[$i]["jumlah_koreksi"])*$data[$i]["konversi_nilai"];
 						
@@ -249,7 +252,7 @@ class M_stok_mutasi extends Model{
 					}
 					
 					//pake cabin
-					$sql_cabin="SELECT sum(jumlah_konversi) as jumlah_cabin
+				/*	$sql_cabin="SELECT sum(jumlah_konversi) as jumlah_cabin
 								FROM vu_stok_pakai_cabin
 								WHERE produk_id='".$rowproduk->produk_id."' 
 								AND date_format(cabin_date_create,'%Y-%m-%d')>='".$tanggal_start."'
@@ -261,7 +264,7 @@ class M_stok_mutasi extends Model{
 						$ds_cabin=$q_cabin->row();
 						$data[$i]["jumlah_stok"]=($data[$i]["jumlah_stok"]-$ds_cabin->jumlah_cabin)*$data[$i]["konversi_nilai"];
 						$data[$i]["jumlah_keluar"]=($data[$i]["jumlah_keluar"]+$ds_cabin->jumlah_cabin)*$data[$i]["konversi_nilai"];
-					}
+					}*/
 					
 				}
 				$i++;
