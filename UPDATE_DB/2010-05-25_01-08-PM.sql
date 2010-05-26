@@ -1,10 +1,12 @@
-ALTER TABLE `detail_mutasi` CHANGE `dmutasi_jumlah` `dmutasi_jumlah` DOUBLE( 11, 2 ) NULL DEFAULT NULL  
+ALTER TABLE `detail_mutasi` CHANGE `dmutasi_jumlah` `dmutasi_jumlah` DOUBLE( 11, 2 ) NULL DEFAULT NULL; 
 
-ALTER TABLE `detail_koreksi_stok` CHANGE `dkoreksi_jmlawal` `dkoreksi_jmlawal` DOUBLE( 11, 2 ) NULL DEFAULT NULL
-ALTER TABLE `detail_koreksi_stok` CHANGE `dkoreksi_jmlkoreksi` `dkoreksi_jmlawal` DOUBLE( 11, 2 ) NULL DEFAULT NULL  
-ALTER TABLE `detail_koreksi_stok` CHANGE `dkoreksi_jmlsaldo` `dkoreksi_jmlawal` DOUBLE( 11, 2 ) NULL DEFAULT NULL 
+ALTER TABLE `detail_koreksi_stok` CHANGE `dkoreksi_jmlawal` `dkoreksi_jmlawal` DOUBLE( 11, 2 ) NULL DEFAULT NULL;
+ALTER TABLE `detail_koreksi_stok` CHANGE `dkoreksi_jmlkoreksi` `dkoreksi_jmlkoreksi` DOUBLE( 11, 2 ) NULL DEFAULT NULL;  
+ALTER TABLE `detail_koreksi_stok` CHANGE `dkoreksi_jmlsaldo` `dkoreksi_jmlsaldo` DOUBLE( 11, 2 ) NULL DEFAULT NULL;
 
 ALTER TABLE `detail_pakai_cabin` ADD `cabin_stok` DOUBLE( 11, 2 ) NULL DEFAULT NULL  
+
+UPDATE detail_pakai_cabin,vu_perawatan SET cabin_gudang=gudang_id WHERE cabin_rawat=rawat_id;
 
 CREATE OR REPLACE VIEW `vu_stok_pakai_cabin` AS select `detail_pakai_cabin`.`cabin_dtrawat` AS `cabin_dtrawat`,`detail_pakai_cabin`.`cabin_rawat` AS `cabin_rawat`,`detail_pakai_cabin`.`cabin_produk` AS `cabin_produk`,`satuan_konversi`.`konversi_produk` AS `konversi_produk`,`detail_pakai_cabin`.`cabin_satuan` AS `cabin_satuan`,`satuan_konversi`.`konversi_satuan` AS `konversi_satuan`,`detail_pakai_cabin`.`cabin_jumlah` AS `cabin_jumlah`,`detail_pakai_cabin`.`cabin_date_create` AS `cabin_date_create`,`satuan_konversi`.`konversi_nilai` AS `konversi_nilai`,`satuan_konversi`.`konversi_default` AS `konversi_default`,(`detail_pakai_cabin`.`cabin_jumlah` * `satuan_konversi`.`konversi_nilai`) AS `jumlah_konversi`,`vu_produk_satuan_terkecil`.`produk_id` AS `produk_id`,`vu_produk_satuan_terkecil`.`produk_kode` AS `produk_kode`,`vu_produk_satuan_terkecil`.`produk_nama` AS `produk_nama`,`vu_produk_satuan_terkecil`.`produk_harga` AS `produk_harga`,`vu_produk_satuan_terkecil`.`produk_volume` AS `produk_volume`,`vu_produk_satuan_terkecil`.`produk_jenis` AS `produk_jenis`,`vu_produk_satuan_terkecil`.`produk_point` AS `produk_point`,`vu_produk_satuan_terkecil`.`satuan_id` AS `satuan_id`,`vu_produk_satuan_terkecil`.`satuan_kode` AS `satuan_kode`,`vu_produk_satuan_terkecil`.`satuan_nama` AS `satuan_nama`,`detail_pakai_cabin`.`cabin_gudang` AS `cabin_gudang`,`gudang`.`gudang_id` AS `gudang_id`,`gudang`.`gudang_nama` AS `gudang_nama`,`gudang`.`gudang_lokasi` AS `gudang_lokasi` from (((`detail_pakai_cabin` join `satuan_konversi` on(((`detail_pakai_cabin`.`cabin_produk` = `satuan_konversi`.`konversi_produk`) and (`detail_pakai_cabin`.`cabin_satuan` = `satuan_konversi`.`konversi_satuan`)))) join `vu_produk_satuan_terkecil` on((`satuan_konversi`.`konversi_produk` = `vu_produk_satuan_terkecil`.`produk_id`))) join `gudang` on((`detail_pakai_cabin`.`cabin_gudang` = `gudang`.`gudang_id`)));
 
