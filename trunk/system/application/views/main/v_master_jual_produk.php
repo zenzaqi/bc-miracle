@@ -1323,7 +1323,7 @@ Ext.onReady(function(){
 			jproduk_custField.setDisabled(true);
 			jproduk_tanggalField.setDisabled(true);
 		}
-		if(jproduk_post2db=="UPDATE" && master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_stat_dok')=="Tertutup"){
+		/*if(jproduk_post2db=="UPDATE" && master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_stat_dok')=="Tertutup"){
 			jproduk_custField.setDisabled(true);
 			jproduk_tanggalField.setDisabled(true);
 			jproduk_keteranganField.setDisabled(true);
@@ -1331,7 +1331,7 @@ Ext.onReady(function(){
 			detail_jual_produkListEditorGrid.setDisabled(true);
 			jproduk_diskonField.setDisabled(true);
 			jproduk_cashback_cfField.setDisabled(true);
-		}
+		}*/
 	}
   
     function load_membership(){
