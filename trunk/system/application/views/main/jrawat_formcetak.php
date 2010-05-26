@@ -16,10 +16,10 @@ html,body,table,tr,td{
 <body onload="window.print();window.close();">
 <table width="1240px" border="0px" cellpadding="0px" cellspacing="0px">
 	<tr>
-		<td height="90px"><table width="1240px" height="90px" border="0" cellspacing="0" cellpadding="0">
+		<td height="110px"><table width="1240px" height="110px" border="0" cellspacing="0" cellpadding="0">
           <tr>
-            <td width="700px" align="center" valign="bottom">&nbsp;</td>
-            <td width="540px" valign="top"><table width="540px" border="0" cellspacing="0" cellpadding="0">
+            <td width="700px" align="bottom" valign="bottom">&nbsp;</td>
+            <td width="540px" valign="bottom"><table width="540px" border="0" cellspacing="0" cellpadding="0">
               <tr>
                 <td width="60px" align="right">Tanggal</td>
                 <td width="480px">:&nbsp;&nbsp;<?=$jrawat_tanggal;?></td>
@@ -41,7 +41,7 @@ html,body,table,tr,td{
         </table></td>
 	</tr>
 	<tr>
-	  <td height="34px"><table width="1240px" height="34px" border="0" cellspacing="0" cellpadding="0">
+	  <td height="20px"><table width="1240px" height="10px" border="0" cellspacing="0" cellpadding="0">
         <tr>
           <td width="200px">&nbsp;</td>
           <td width="1040px" valign="bottom"><?=$jrawat_nobukti;?></td>
@@ -49,10 +49,10 @@ html,body,table,tr,td{
       </table></td>
   </tr>
   	<tr>
-	  <td width="1240px" height="25px">&nbsp;</td>
+	  <td width="1240px" height="30px">&nbsp;</td>
   </tr>
 	<tr>
-	  <td width="1240px" height="230px" valign="top">
+	  <td width="1240px" height="200px" valign="top">
 	  <?php if($detail_jrawat){?>
 	  <table width="1240px" border="0" cellspacing="0" cellpadding="0">
 	  <?php }?>
@@ -93,6 +93,10 @@ html,body,table,tr,td{
 	  </table>
 	  </td>
   </tr>
+  <tr>
+  <td height="30px">
+  <?=$iklantoday_keterangan;?>
+  </td>
 	<tr>
 	  <td width="1240px"><table width="1240px" border="0" cellspacing="0" cellpadding="0">
         <tr>
