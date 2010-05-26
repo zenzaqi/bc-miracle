@@ -348,16 +348,19 @@ class M_master_koreksi_stok extends Model{
 			if(sizeof($pkid)<1){
 				return '0';
 			} else if (sizeof($pkid) == 1){
-				$query = "DELETE FROM master_koreksi_stok WHERE koreksi_id = ".$pkid[0];
+				$query = "DELETE master_koreksi_stok,detail_koreksi_stok  
+							FROM master_koreksi_stok,detail_koreksi_stok WHERE koreksi_id=dkoreksi_master AND koreksi_id = ".$pkid[0];
 				$this->db->query($query);
 			} else {
-				$query = "DELETE FROM master_koreksi_stok WHERE ";
+				$query = "DELETE master_koreksi_stok,detail_koreksi_stok  
+							FROM master_koreksi_stok,detail_koreksi_stok WHERE koreksi_id=dkoreksi_master AND (";
 				for($i = 0; $i < sizeof($pkid); $i++){
 					$query = $query . "koreksi_id= ".$pkid[$i];
 					if($i<sizeof($pkid)-1){
 						$query = $query . " OR ";
 					}     
 				}
+				$query.=")";
 				$this->db->query($query);
 			}
 			if($this->db->affected_rows()>0)
