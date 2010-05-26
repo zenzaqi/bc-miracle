@@ -365,7 +365,10 @@ Ext.onReady(function(){
 			header: '<div align="center">' + 'No Member' + '</div>',
 			dataIndex: 'membert_no',
 			width: 100,
-			sortable: true
+			sortable: true,
+			renderer: function(value, cell, record){
+				return value.substring(0,6) + '-' + value.substring(6,12) + '-' + value.substring(12);
+			}
 		}, 
 		{
 			header: '<div align="center">' + 'Tgl Daftar' + '</div>',
