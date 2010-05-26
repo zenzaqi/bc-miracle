@@ -3397,6 +3397,15 @@ Ext.onReady(function(){
 				layout: 'form',
 				border:false,
 				items: [jpaket_tanggalField, jpaket_keteranganField, jpaket_stat_dokField] 
+			},
+			{
+				columnWidth:0.72,
+				//layout: 'column',
+				//border:false,
+				buttons: [{
+				text: '<span style="font-weight:bold">Edit Dokumen</span>'
+				//handler: show_windowGrid
+				}]
 			}
 			]
 	
@@ -3414,6 +3423,7 @@ Ext.onReady(function(){
 			{name: 'dpaket_id', type: 'int', mapping: 'dpaket_id'}, 
 			{name: 'dpaket_master', type: 'int', mapping: 'dpaket_master'}, 
 			{name: 'dpaket_paket', type: 'int', mapping: 'dpaket_paket'},
+			{name: 'dpaket_karyawan', type: 'int', mapping: 'dpaket_karyawan'},
 			{name: 'dpaket_kadaluarsa', type: 'date', dateFormat: 'Y-m-d', mapping: 'dpaket_kadaluarsa'}, 
 			{name: 'dpaket_jumlah', type: 'int', mapping: 'dpaket_jumlah'}, 
 			{name: 'dpaket_harga', type: 'float', mapping: 'dpaket_harga'}, 
@@ -3485,6 +3495,32 @@ Ext.onReady(function(){
 		sortInfo:{field: 'dpaket_paket_display', direction: "ASC"}
 	});
 	
+	cbo_dpaket_reveralDataStore = new Ext.data.Store({
+		id: 'cbo_dpaket_reveralDataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_master_jual_paket&m=get_reveral_list', 
+			method: 'POST'
+		}),baseParams: {start: 0, limit: 100 },
+			reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total'
+			//id: 'produk_id'
+		},[
+			{name: 'karyawan_display', type: 'string', mapping: 'karyawan_username'},
+			//{name: 'karyawan_id', type: 'int', mapping: 'karyawan_id'},
+			{name: 'karyawan_no', type: 'string', mapping: 'karyawan_no'},
+			{name: 'nama_karyawan', type: 'string', mapping: 'karyawan_nama'},
+			{name: 'karyawan_value', type: 'int', mapping: 'karyawan_id'}
+		]),
+		sortInfo:{field: 'karyawan_no', direction: "ASC"}
+	});
+	var reveral_paket_tpl = new Ext.XTemplate(
+        '<tpl for="."><div class="search-item">',
+            '<span><b>{nama_karyawan}</b> | {karyawan_display}</span>',
+        '</div></tpl>'
+    );
+	
+	
 	
 	memberDataStore = new Ext.data.Store({
 		id: 'memberDataStore',
@@ -3527,6 +3563,27 @@ Ext.onReady(function(){
 			anchor: '95%'
 
 	});
+	
+	var combo_reveral_paket=new Ext.form.ComboBox({
+			store: cbo_dpaket_reveralDataStore,
+			mode: 'remote',
+			displayField: 'karyawan_display',
+			valueField: 'karyawan_value',
+			typeAhead: false,
+			loadingText: 'Searching...',
+			pageSize:pageS,
+			hideTrigger:false,
+			tpl: reveral_paket_tpl,
+			//applyTo: 'search',
+			itemSelector: 'div.search-item',
+			triggerAction: 'all',
+			lazyRender:true,
+			listClass: 'x-combo-list-small',
+			anchor: '95%'
+
+	});
+	
+	
 	
 	dpaket_idField=new Ext.form.NumberField();
 	
@@ -3642,6 +3699,17 @@ Ext.onReady(function(){
 					return Ext.util.Format.number(record.data.dpaket_harga* record.data.dpaket_jumlah*(100-record.data.dpaket_diskon)/100,'0,000');
             }
 		},
+		{
+			align : 'Left',
+			header: '<div align="center">' + 'Referal' + '</div>',
+			dataIndex: 'dpaket_karyawan',
+			width: 150, //250
+			sortable: true,
+			allowBlank: false,
+			editor: combo_reveral_paket,
+			renderer: Ext.util.Format.comboRenderer(combo_reveral_paket)
+		},
+		
 		/*{
 			header: 'Sales',
 			dataIndex: 'dpaket_sales',
@@ -3716,7 +3784,8 @@ Ext.onReady(function(){
 		var edit_detail_jual_paket= new detail_jual_paketListEditorGrid.store.recordType({
 			dpaket_id	:'',		
 			dpaket_master	:'',		
-			dpaket_paket	:null,		
+			dpaket_paket	:null,
+			dpaket_karyawan :null,
 			dpaket_jumlah	:null,
 			dpaket_kadaluarsa	:null,
 			dpaket_harga	:null,
@@ -3753,6 +3822,7 @@ Ext.onReady(function(){
 						dpaket_id	: detail_jual_paket_record.data.dpaket_id, 
 						dpaket_master	: eval(get_pk_id()),
 						dpaket_paket	: detail_jual_paket_record.data.dpaket_paket, 
+						dpaket_karyawan : detail_jual_paket_record.data.dpaket_karyawan,
 						dpaket_jumlah	: detail_jual_paket_record.data.dpaket_jumlah,
 						dpaket_kadaluarsa	: detail_jual_paket_record.data.dpaket_kadaluarsa.format('Y-m-d'),
 						dpaket_harga	: detail_jual_paket_record.data.dpaket_harga, 
