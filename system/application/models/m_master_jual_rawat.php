@@ -631,19 +631,19 @@ class M_master_jual_rawat extends Model{
 			//normal LIST by Hendri
 			else{
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query.=" date_format(jrawat_date_create,'%Y-%m-%d')='$date_now' AND (jrawat_bayar is null OR jrawat_bayar = 0) ";
+				$query.=" date_format(jrawat_date_create,'%Y-%m-%d')='$date_now' AND (jrawat_bayar is null OR jrawat_bayar = 0) AND jrawat_stat_dok<>'Batal'";
 				}
 				
 			$query .= " ORDER BY jrawat_date_create DESC";
-			
-			$query2 = "SELECT jrawat_id, jrawat_nobukti, vu_jrawat_pk.cust_nama, jrawat_cust, vu_jrawat_pk.cust_no, vu_jrawat_pk.cust_member, jrawat_tanggal, jrawat_diskon, jrawat_cashback, jrawat_cara, jrawat_cara2, jrawat_cara3, jrawat_totalbiaya, jrawat_bayar, jrawat_keterangan, jrawat_creator, jrawat_date_create, jrawat_update, jrawat_date_update, jrawat_revised, keterangan_paket, dpaket_id FROM vu_jrawat_pk WHERE date_format(vu_jrawat_pk.jrawat_date_create,'%Y-%m-%d')='$date_now' AND vu_jrawat_pk.jrawat_cust NOT IN(SELECT vu_jrawat_pr.jrawat_cust FROM vu_jrawat_pr WHERE date_format(vu_jrawat_pr.jrawat_date_create,'%Y-%m-%d')='$date_now') AND vu_jrawat_pk.dapaket_stat_dok='Terbuka'";
+			//echo $query;
+			$query2 = "SELECT jrawat_id, jrawat_nobukti, vu_jrawat_pk.cust_nama, jrawat_cust, vu_jrawat_pk.cust_no, vu_jrawat_pk.cust_member, jrawat_tanggal, jrawat_diskon, jrawat_cashback, jrawat_cara, jrawat_cara2, jrawat_cara3, jrawat_totalbiaya, jrawat_bayar, jrawat_keterangan, jrawat_creator, jrawat_date_create, jrawat_update, jrawat_date_update, jrawat_revised, keterangan_paket, dpaket_id, dapaket_stat_dok AS jrawat_stat_dok FROM vu_jrawat_pk WHERE date_format(vu_jrawat_pk.jrawat_date_create,'%Y-%m-%d')='$date_now' AND vu_jrawat_pk.jrawat_cust NOT IN(SELECT vu_jrawat_pr.jrawat_cust FROM vu_jrawat_pr WHERE date_format(vu_jrawat_pr.jrawat_date_create,'%Y-%m-%d')='$date_now' AND vu_jrawat_pr.jrawat_stat_dok<>'Batal') AND vu_jrawat_pk.dapaket_stat_dok='Terbuka'";
 			
 			// For simple search
 			if ($filter<>""){
 				$query2 .=eregi("WHERE",$query2)? " AND ":" WHERE ";
 				$query2 .= " (jrawat_nobukti LIKE '%".addslashes($filter)."%' OR cust_no LIKE '%".addslashes($filter)."%' OR cust_nama LIKE '%".addslashes($filter)."%' OR cust_member LIKE '%".addslashes($filter)."%')";
 			}
-			
+			//echo $query2;
 			$nbrows=0;
 			$nbrows2=0;
 			$result = $this->db->query($query);
