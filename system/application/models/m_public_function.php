@@ -186,7 +186,25 @@ class M_public_function extends Model{
 	}
 	
 	function get_voucher_list($query,$start,$end){
-			$query = "SELECT * FROM voucher,voucher_kupon where kvoucher_master=voucher_id";
+			$query = "SELECT * FROM voucher LEFT JOIN voucher_kupon ON(kvoucher_master=voucher_id)";
+			$result = $this->db->query($query);
+			$nbrows = $result->num_rows();
+			$limit = $query." LIMIT ".$start.",".$end;			
+			$result = $this->db->query($limit); 
+		
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+	}
+	
+	function get_evoucher_list($query,$start,$end){
+			$query = "SELECT * FROM voucher LEFT JOIN voucher_kupon ON(kvoucher_master=voucher_id) WHERE voucher_jenis='reward'";
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
 			$limit = $query." LIMIT ".$start.",".$end;			
@@ -471,8 +489,6 @@ class M_public_function extends Model{
 		$query=$this->db->query($sql);
 		if($query->num_rows()){
 			$data=$query->row();
-			return $pattern.$data->max_key;
-			/*$data=$query->row();
 			$kode=$data->max_key;
 			if(is_null($kode))
 			{
@@ -481,7 +497,7 @@ class M_public_function extends Model{
 					$pad.="0";
 				$kode=$pattern.$pad."1";
 			}
-			return $kode;*/
+			return $kode;
 		}else{
 			$pad="";
 			for($i=1;$i<$len_lpad;$i++)
@@ -859,7 +875,6 @@ class M_public_function extends Model{
 		//$sql="SELECT * FROM vu_perawatan WHERE kategori_nama='Medis' AND rawat_aktif='Aktif'";//join dr tabel: perawatan,produk_group,kategori2,kategori,jenis,gudang
 		$sql="SELECT rawat_id,rawat_harga,rawat_kode,group_nama,kategori_nama,rawat_du,rawat_dm,rawat_nama FROM perawatan LEFT JOIN produk_group ON(rawat_group=group_id) LEFT JOIN kategori ON(rawat_kategori=kategori_id) WHERE kategori_nama='Medis' AND rawat_aktif='Aktif'";
 		if($query<>"" && is_numeric($query)==false){
-			//$this->firephp->log("YESSS");
 			$sql.=" and (rawat_kode like '%".$query."%' or rawat_nama like '%".$query."%')";
 			//$sql.=" and (rawat_kode like '%".$query."%' or rawat_nama like '%".$query."%' or group_nama like '%".$query."%')";
 		}else{
