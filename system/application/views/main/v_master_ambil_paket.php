@@ -79,6 +79,7 @@ var apaket_kadaluarsaSearchField;
 var apaket_kadaluarsa_akhirSearchField;
 var apaket_tgl_fakturSearchField;
 var apaket_tgl_faktur_akhirSearchField;
+var apaket_sisaSearchField;
 
 var dt = new Date();
 
@@ -675,7 +676,7 @@ Ext.onReady(function(){
 			handler: ambil_paket_confirm_delete   // Confirm before deleting
 		}, '-', {
 			text: 'Adv Search',
-			tooltip: 'Pencarian Detail',
+			tooltip: 'Advanced Search',
 			iconCls:'icon-search',
 			handler: display_form_search_window 
 		}, '-', 
@@ -1197,78 +1198,60 @@ Ext.onReady(function(){
 	
 	//function for insert detail
 	function ambil_paket_isi_perawatan_insert(){
-		var count_notvalid = 0;
 		var count_detail=ambil_paket_isi_perawatan_DataStore.getCount();
 		for(i=0;i<ambil_paket_isi_perawatan_DataStore.getCount();i++){
 			var count_i = i;
 			ambil_paket_isi_perawatan_record=ambil_paket_isi_perawatan_DataStore.getAt(i);
-			if((/^\d+$/.test(ambil_paket_isi_perawatan_record.data.rpaket_cust)) && ambil_paket_isi_perawatan_record.data.rpaket_cust!==""){
-				//var count_i = i;
-				//ambil_paket_isi_perawatan_record=ambil_paket_isi_perawatan_DataStore.getAt(i);
-				Ext.Ajax.request({
-					waitMsg: 'Mohon tunggu...',
-					url: 'index.php?c=c_master_ambil_paket&m=detail_ambil_paket_isi_perawatan_insert',
-					params:{
-					//dapaket_master	: eval(apaket_idField.getValue()), 
-					dapaket_dpaket	: eval(get_pk_id()), 
-					dapaket_jpaket	: eval(apaket_jpaketField.getValue()),
-					dapaket_paket	: eval(apaket_paketField.getValue()),
-					dapaket_item	: ambil_paket_isi_perawatan_record.data.rpaket_perawatan,
-					//dapaket_sapaket	: ambil_paket_isi_perawatan_record.data.rpaket_perawatan, 
-					dapaket_jumlah	: ambil_paket_isi_perawatan_record.data.rpaket_jumlah,
-					dapaket_cust	: ambil_paket_isi_perawatan_record.data.rpaket_cust,
-					tgl_ambil		: ambil_paket_isi_perawatan_record.data.tgl_ambil.format('Y-m-d'),
-					count	: count_i,
-					dcount	: count_detail
-					
-					},
-					success: function(response){							
-						var result=eval(response.responseText);
-						if(result==0){
-							Ext.MessageBox.show({
-							   title: 'Warning',
-							   msg: 'Isi paket tidak mencukupi untuk diambil.',
-							   buttons: Ext.MessageBox.OK,
-							   animEl: 'save',
-							   icon: Ext.MessageBox.WARNING
-							});
-						}else if(result=='-1'){
-							Ext.MessageBox.show({
-							   title: 'Warning',
-							   msg: 'Customer tidak memiliki paket.',
-							   buttons: Ext.MessageBox.OK,
-							   animEl: 'save',
-							   icon: Ext.MessageBox.WARNING
-							});
-						}else if(result=='1'){
-							Ext.MessageBox.alert('OK','Paket telah selesai diambil.');
-						}
-					},
-					failure: function(response){
-						var result=response.responseText;
+			Ext.Ajax.request({
+				waitMsg: 'Mohon tunggu...',
+				url: 'index.php?c=c_master_ambil_paket&m=detail_ambil_paket_isi_perawatan_insert',
+				params:{
+				//dapaket_master	: eval(apaket_idField.getValue()), 
+				dapaket_dpaket	: eval(get_pk_id()), 
+				dapaket_jpaket	: eval(apaket_jpaketField.getValue()),
+				dapaket_paket	: eval(apaket_paketField.getValue()),
+				dapaket_item	: ambil_paket_isi_perawatan_record.data.rpaket_perawatan,
+				//dapaket_sapaket	: ambil_paket_isi_perawatan_record.data.rpaket_perawatan, 
+				dapaket_jumlah	: ambil_paket_isi_perawatan_record.data.rpaket_jumlah,
+				dapaket_cust	: ambil_paket_isi_perawatan_record.data.rpaket_cust,
+				tgl_ambil		: ambil_paket_isi_perawatan_record.data.tgl_ambil.format('Y-m-d'),
+				count	: count_i,
+				dcount	: count_detail
+				
+				},
+				success: function(response){							
+					var result=eval(response.responseText);
+					if(result==0){
 						Ext.MessageBox.show({
-						   title: 'Error',
-						   msg: 'Could not connect to the database. retry later.',
+						   title: 'Warning',
+						   msg: 'Isi paket tidak mencukupi untuk diambil.',
 						   buttons: Ext.MessageBox.OK,
-						   animEl: 'database',
-						   icon: Ext.MessageBox.ERROR
-						});	
-					}	
-				});
-			}else{
-				count_notvalid+=1;
-			}
-			
-			if(count_i == (count_detail-1) && count_notvalid>0){
-				Ext.MessageBox.show({
-				   title: 'Warning',
-				   msg: 'Ada '+count_notvalid+' data yang tidak bisa disimpan <br/>karena kolom Pemakai masih kosong.',
-				   buttons: Ext.MessageBox.OK,
-				   animEl: 'save',
-				   width: 300,
-				   icon: Ext.MessageBox.WARNING
-				});
-			}
+						   animEl: 'save',
+						   icon: Ext.MessageBox.WARNING
+						});
+					}else if(result=='-1'){
+						Ext.MessageBox.show({
+						   title: 'Warning',
+						   msg: 'Customer tidak memiliki paket.',
+						   buttons: Ext.MessageBox.OK,
+						   animEl: 'save',
+						   icon: Ext.MessageBox.WARNING
+						});
+					}else if(result=='1'){
+						Ext.MessageBox.alert('OK','Paket telah selesai diambil.');
+					}
+				},
+				failure: function(response){
+					var result=response.responseText;
+					Ext.MessageBox.show({
+					   title: 'Error',
+					   msg: 'Could not connect to the database. retry later.',
+					   buttons: Ext.MessageBox.OK,
+					   animEl: 'database',
+					   icon: Ext.MessageBox.ERROR
+					});	
+				}	
+			});
 		}
 	}
 	//eof
@@ -1595,10 +1578,14 @@ Ext.onReady(function(){
 		var apaket_paket_search=null;
 		var apaket_kadaluarsa_search=null;
 		var apaket_kadaluarsa_akhir_search=null;
+		var apakaet_sisa_search=null;
+		var apaket_tgl_faktur_search=null;
+		var apaket_tgl_faktur_akhir_search=null;
 
 		if(apaket_fakturSearchField.getValue()!==null){apaket_faktur_search=apaket_fakturSearchField.getValue();}
 		if(apaket_custSearchField.getValue()!==null){apaket_cust_search=apaket_custSearchField.getValue();}
 		if(apaket_paketSearchField.getValue()!==null){apaket_paket_search=apaket_paketSearchField.getValue();}
+		if(apaket_sisaSearchField.getValue()!==null){apaket_sisa_search=apaket_sisaSearchField.getValue();}
 		if(apaket_kadaluarsaSearchField.getValue()!==""){apaket_kadaluarsa_search=apaket_kadaluarsaSearchField.getValue().format('Y-m-d');}
 		if(apaket_kadaluarsa_akhirSearchField.getValue()!==""){apaket_kadaluarsa_akhir_search=apaket_kadaluarsa_akhirSearchField.getValue().format('Y-m-d');}
 		if(apaket_tgl_fakturSearchField.getValue()!==""){apaket_tgl_faktur_search=apaket_tgl_fakturSearchField.getValue().format('Y-m-d');}
@@ -1614,6 +1601,7 @@ Ext.onReady(function(){
 			apaket_kadaluarsa_akhir	:	apaket_kadaluarsa_akhir_search,
 			apaket_tgl_faktur		:	apaket_tgl_faktur_search,
 			apaket_tgl_faktur_akhir	:	apaket_tgl_faktur_akhir_search,
+			apaket_sisa				:	apaket_sisa_search,
 		};
 		// Cause the datastore to do another query : 
 		ambil_paket_DataStore.reload({params: {start: 0, limit: pageS}});
@@ -1634,6 +1622,7 @@ Ext.onReady(function(){
 		apaket_fakturSearchField.reset();
 		apaket_custSearchField.reset();
 		apaket_paketSearchField.reset();
+		apaket_sisaSearchField.reset();
 		apaket_kadaluarsaSearchField.reset();
 		apaket_kadaluarsa_akhirSearchField.reset();
 		apaket_tgl_fakturSearchField.reset();
@@ -1711,6 +1700,22 @@ Ext.onReady(function(){
 		format : 'd-m-Y'
 	});
 	
+	apaket_sisaSearchField= new Ext.form.ComboBox({
+		id: 'apaket_sisaSearchField',
+		fieldLabel: 'Sisa',
+		store:new Ext.data.SimpleStore({
+			fields:['apaket_sisa_value', 'apaket_sisa_display'],
+			data:[['0','Semua'],['1','Lebih dari 0']]
+		}),
+		mode: 'local',
+		displayField: 'apaket_sisa_display',
+		valueField: 'apaket_sisa_value',
+		anchor: '95%',
+		triggerAction: 'all'	
+	});
+	
+	
+    
 	/* Function for retrieve search Form Panel */
 	ambil_paket_searchForm = new Ext.FormPanel({
 		labelAlign: 'left',
@@ -1754,7 +1759,8 @@ Ext.onReady(function(){
 						]
 					},
 					apaket_fakturSearchField, 
-					apaket_paketSearchField, 
+					apaket_paketSearchField,
+					apaket_sisaSearchField,				
 					{
 						layout:'column',
 						border:false,
@@ -1797,7 +1803,6 @@ Ext.onReady(function(){
 		]
 	});
     /* End of Function */ 
-	
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
 	ambil_paket_searchWindow = new Ext.Window({

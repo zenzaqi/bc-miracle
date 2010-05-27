@@ -759,8 +759,8 @@ Ext.onReady(function(){
 			iconCls:'icon-delete',
 			handler: master_order_beli_confirm_delete   // Confirm before deleting
 		}, '-', {
-			text: 'Search',
-			tooltip: 'Advanced Search',
+			text: 'Adv Search',
+			tooltip: 'Pencarian detail',
 			iconCls:'icon-search',
 			handler: display_form_search_window 
 		}, '-', 
@@ -982,7 +982,7 @@ Ext.onReady(function(){
 	/* Identify  order_bayar Field */
 	order_jumlahField= new Ext.form.NumberField({
 		id: 'order_jumlahField',
-		fieldLabel: 'Jumlah Item',
+		fieldLabel: 'Total Item',
 		allowNegatife : false,
 		emptyText: '0',
 		allowDecimals: false,
@@ -1253,7 +1253,7 @@ Ext.onReady(function(){
                     return '<span>' + subtotal+ '</span>';
             }
 		},{
-			header: '<div align="center">Diterima</div>',
+			header: '<div align="center">Jml Terima</div>',
 			align: 'right',
 			dataIndex: 'dorder_terima',
 			width: 60,

@@ -252,7 +252,7 @@ Ext.onReady(function(){
 		terima_idField.reset();
 		terima_idField.setValue(null);
 		terima_noField.reset();
-		terima_noField.setValue(null);
+		terima_noField.setValue('(Auto)');
 		terima_orderField.reset();
 		terima_orderField.setValue(null);
 		terima_supplierField.reset();
@@ -584,7 +584,7 @@ Ext.onReady(function(){
 			readOnly: true
 		},
 		{
-			header: '<div align="center">' + 'Jumlah Item' + '</div>',
+			header: '<div align="center">' + 'Total Item' + '</div>',
 			align: 'right',
 			dataIndex: 'jumlah_barang',
 			width: 60,	//150,
@@ -702,8 +702,8 @@ Ext.onReady(function(){
 			iconCls:'icon-delete',
 			handler: master_terima_beli_confirm_delete   // Confirm before deleting
 		}, '-', {
-			text: 'Search',
-			tooltip: 'Advanced Search',
+			text: 'Adv Search',
+			tooltip: 'Pencarian detail',
 			iconCls:'icon-search',
 			handler: display_form_search_window 
 		}, '-', 
@@ -871,7 +871,7 @@ Ext.onReady(function(){
 	/* Identify  order_bayar Field */
 	terima_jumlahField= new Ext.form.NumberField({
 		id: 'terima_jumlahField',
-		fieldLabel: 'Jumlah Item',
+		fieldLabel: 'Total Item',
 		allowNegatife : false,
 		emptyText: '0',
 		allowDecimals: true,
