@@ -88,13 +88,15 @@ class M_hpp extends Model{
 				
 		}
 		
-		function get_jumlah_beli($periode_start, $periode_end,$produk_id){
-			$sql="SELECT sum(jumlah_konversi) as jumlah_beli from vu_hpp_beli 
+		function get_jumlah_beli($periode_start, $periode_end, $produk_id){
+			$sql="SELECT sum(jumlah_konversi) as jumlah_beli from vu_hpp_beli_terima 
 					where DATE_FORMAT(tanggal,'%Y-%m-%d') >= '".$periode_start."' 
 					AND DATE_FORMAT(tanggal,'%Y-%m-%d') <= '".$periode_end."' 
 					AND produk_id='".$produk_id."'";
+			//echo $sql;
+			
 			$query=$this->db->query($sql);
-			if($query->num_rows()>0){
+			if($query->num_rows()){
 				$row=$query->row();
 				return $row->jumlah_beli;
 			}else
@@ -102,17 +104,28 @@ class M_hpp extends Model{
 		}
 		
 		function get_harga_beli($periode_start, $periode_end, $produk_id){
-			$sql="SELECT avg(harga_beli) as harga_beli from vu_hpp_beli 
+			$sql="SELECT avg(harga_beli) as harga_beli from vu_hpp_beli_terima 
 					where DATE_FORMAT(tanggal,'%Y-%m-%d') >= '".$periode_start."' 
 					AND DATE_FORMAT(tanggal,'%Y-%m-%d') <= '".$periode_end."' 
 					AND produk_id='".$produk_id."'";
 			$query=$this->db->query($sql);
-			if($query->num_rows()>0){
+			if($query->num_rows()){
 				$row=$query->row();
-				return $row->harga_beli;
-			}else
+				if($row->harga_beli>0)
+					return $row->harga_beli;
+				else{
+					$sql="SELECT produk_harga,konversi_nilai FROM vu_produk_satuan_default WHERE produk_id='".$produk_id."'";
+					$query=$this->db->query($sql);
+					if($query->num_rows()){
+						$row=$query->row();
+						return $row->produk_harga/$row->konversi_nilai;
+					}else{
+						return 0;					
+					}
+				}
+			}else{
 				return 0;
-			
+			}
 		}
 		
 		function get_nilai_persediaan($periode_start,$periode_end,$produk_id){
@@ -175,31 +188,39 @@ class M_hpp extends Model{
 					$trans_first="";
 				
 				foreach($query->result() as $row){
-
-					$persediaan_sebelum=$this->get_nilai_persediaan($trans_first,$tanggal_start,$row->produk_id);
-					$stok_sebelum=$this->get_stok_saldo($tanggal_start,$row->produk_id);
-					$harga_beli_sebelum=$this->get_harga_beli($trans_first, $tanggal_start, $row->produk_id);
-					
-					$stok_sekarang=$this->get_stok_saldo($tanggal_end, $row->produk_id);
-					$harga_beli_sekarang=($this->get_harga_beli($tanggal_start, $tanggal_end, $row->produk_id)+$harga_beli_sebelum)/2;
-					$persediaan_sekarang=$harga_beli_sekarang*$stok_sekarang;
-					
-					$jumlah_beli=$this->get_jumlah_beli($tanggal_start, $tanggal_end,$row->produk_id);
+					$jumlah_beli=0;
+					$persediaan_sebelum=0;
+					$stok_sebelum=0;
+					$harga_beli_sebelum=0;
+					$stok_sekarang=0;
+					$harga_beli_sekarang=0;
+					$persediaan_sekarang=0;
 					$data[$i]["konversi_nilai"]=1/$row->konversi_nilai;
 					
+					$persediaan_sebelum=$this->get_nilai_persediaan($trans_first,$tanggal_start,$row->produk_id);
+					$stok_sebelum=$this->get_stok_saldo($tanggal_start,$row->produk_id)*$data[$i]["konversi_nilai"];
+					$harga_beli_sebelum=$this->get_harga_beli($trans_first, $tanggal_start, $row->produk_id)/$data[$i]["konversi_nilai"];
+					
+					$stok_sekarang=$this->get_stok_saldo($tanggal_end, $row->produk_id)*$data[$i]["konversi_nilai"];
+					$harga_beli_sekarang=($this->get_harga_beli($tanggal_start, $tanggal_end, $row->produk_id)/$data[$i]["konversi_nilai"]+$harga_beli_sebelum)/2;
+					$persediaan_sekarang=$harga_beli_sekarang*$stok_sekarang;
+					
+					$jumlah_beli=$this->get_jumlah_beli($tanggal_start, $tanggal_end, $row->produk_id)*$data[$i]["konversi_nilai"];
+					
+										
 					$data[$i]["produk_id"]=$row->produk_id;
 					$data[$i]["produk_kode"]=$row->produk_kode;
 					$data[$i]["produk_nama"]=$row->produk_nama;
 					$data[$i]["satuan_id"]=$row->satuan_id;
 					$data[$i]["satuan_kode"]=$row->satuan_kode;
 					$data[$i]["satuan_nama"]=$row->satuan_nama;
-					$data[$i]["stok_awal"]=$stok_sebelum*$data[$i]["konversi_nilai"];
+					$data[$i]["stok_awal"]=$stok_sebelum;
 					$data[$i]["persediaan_awal"]=$persediaan_sebelum;
-					$data[$i]["stok_saldo"]=$stok_sekarang*$data[$i]["konversi_nilai"];
+					$data[$i]["stok_saldo"]=$stok_sekarang;
 					$data[$i]["persediaan_akhir"]=$persediaan_sekarang;
 					$data[$i]["jumlah_beli"]=$jumlah_beli;
-					$data[$i]["pembelian"]=$jumlah_beli*$harga_beli_sekarang;
-					$data[$i]["barang_jual"]=$persediaan_sebelum+$data[$i]["pembelian"];
+					$data[$i]["pembelian"]=$harga_beli_sekarang*$jumlah_beli;
+					$data[$i]["barang_jual"]=($stok_sebelum+$jumlah_beli)-$stok_sekarang;
 					$data[$i]["hpp"]=$data[$i]["barang_jual"]-$data[$i]["persediaan_akhir"];
 					$data[$i]["harga_satuan"]=$harga_beli_sekarang;
 					$i++;

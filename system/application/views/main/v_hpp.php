@@ -8,7 +8,6 @@
 	+ Filename 		: v_hpp.php
  	+ creator  		: 
  	+ Created on 09/Apr/2010 10:47:15
-	
 */
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -95,6 +94,13 @@ Ext.onReady(function(){
 	/* End setValue to EDIT*/
   
  
+ 	function hpp_reset_form(){
+		hpp_produk_namaSearchField.reset();
+		hpp_produk_namaSearchField.setValue(null);
+		hpp_tanggal_startSearchField.setValue(firstday);
+		hpp_tanggal_startSearchField.setValue(today);
+	}
+	
 	/* Function for Update Confirm */
 	function hpp_confirm_update(){
 		/* only one record is selected here */
@@ -128,10 +134,10 @@ Ext.onReady(function(){
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
-			id: 'hpp_produk_id'
+			id: 'produk_id'
 		},[
 		/* dataIndex => insert intohpp_ColumnModel, Mapping => for initiate table column */ 
-			{name: 'hpp_produk_id', type: 'int', mapping: 'hpp_produk_id'}, 
+			{name: 'hpp_produk_id', type: 'int', mapping: 'produk_id'}, 
 			{name: 'hpp_produk_nama', type: 'string', mapping: 'produk_nama'}, 
 			{name: 'hpp_produk_kode', type: 'string', mapping: 'produk_kode'}, 
 			{name: 'satuan_id', type: 'int', mapping: 'satuan_id'}, 
@@ -542,17 +548,32 @@ Ext.onReady(function(){
 
 		if(hpp_produk_namaSearchField.getValue()!==null){ hpp_produk_nama_search=hpp_produk_namaSearchField.getValue();}
 		if(hpp_produk_allField.getValue()==true){ hpp_produk_nama_search=null; }
-		if(hpp_tanggal_startSearchField.getValue()!==""){ hpp_tanggal_start_search=hpp_tanggal_startSearchField.getValue().format('Y-m-d') };
-		if(hpp_tanggal_endSearchField.getValue()!==""){ hpp_tanggal_end_search=hpp_tanggal_endSearchField.getValue().format('Y-m-d') };
+		if(hpp_tanggal_startSearchField.getValue()!==null){ hpp_tanggal_start_search=hpp_tanggal_startSearchField.getValue().format('Y-m-d'); };
+		if(hpp_tanggal_endSearchField.getValue()!==null){ hpp_tanggal_end_search=hpp_tanggal_endSearchField.getValue().format('Y-m-d'); };
 	
 		hpp_DataStore.baseParams = {
 			task			: 'LIST',
 			produk_id		: hpp_produk_nama_search,
-			tanggal_start	: hpp_tanggal_startSearchField,
-			tanggal_end		: hpp_tanggal_endSearchField
+			tanggal_start	: hpp_tanggal_start_search,
+			tanggal_end		: hpp_tanggal_end_search
 		};
+		
+		Ext.MessageBox.show({
+		   msg: 'Sedang memproses data, silakan tunggu...',
+		   progressText: 'proses...',
+		   width:350,
+		   wait:true
+		});
+		
 		// Cause the datastore to do another query : 
-		hpp_DataStore.reload({params: {start: 0, limit: pageS}});
+		hpp_DataStore.reload({
+			params: {start: 0, limit: pageS},
+			callback: function(r,opt,success){
+				if(success==true){
+					Ext.MessageBox.hide();
+				}					 
+			}
+		});
 	}
 		
 	/* Function for reset search result */
@@ -609,7 +630,6 @@ Ext.onReady(function(){
 		id: 'hpp_tanggal_endSearchField',
 		fieldLabel: 's/d',
 		format: 'd-m-Y',
-		//value: firstday
 		value: today
 	});
 	
@@ -696,6 +716,7 @@ Ext.onReady(function(){
 	 
   	/* Function for Displaying  Search Window Form */
 	function display_form_search_window(){
+		hpp_reset_form();
 		if(!hpp_searchWindow.isVisible()){
 			hpp_searchWindow.show();
 		} else {
