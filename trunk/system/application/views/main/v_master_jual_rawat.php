@@ -612,7 +612,11 @@ Ext.onReady(function(){
 				var result=eval(response.responseText);
 				if(result==0){
 					Ext.MessageBox.alert(jrawat_post2db+' OK','Data penjualan perawatan berhasil disimpan');
-					detail_jual_rawat_update();
+					if(jrawat_post2db=="UPDATE"){
+						detail_jual_rawat_update();
+					}else if(jrawat_post2db=="CREATE"){
+						detail_jual_rawat_insert();
+					}
 					master_jual_rawat_DataStore.reload();
 					detail_jual_rawat_DataStore.load({params: {master_id:0}});
 					master_jual_rawat_createWindow.hide();
@@ -631,7 +635,11 @@ Ext.onReady(function(){
 						url: 'index.php?c=c_master_jual_rawat&m=catatan_piutang_update',
 						params:{drawat_master	: eval(jrawat_idField.getValue())}
 					});
-					detail_jual_rawat_update();
+					if(jrawat_post2db=="UPDATE"){
+						detail_jual_rawat_update();
+					}else if(jrawat_post2db=="CREATE"){
+						detail_jual_rawat_insert();
+					}
 					master_jual_rawat_DataStore.reload();
 					detail_jual_rawat_DataStore.load({params: {master_id:0}});
 					master_jual_rawat_createWindow.hide();
@@ -643,45 +651,6 @@ Ext.onReady(function(){
 				}else{
 					master_jual_rawat_createWindow.hide();
 				}
-				/*switch(result){
-					case 1:
-						//detail_jual_rawat_purge();
-						//detail_jual_rawat_insert();
-						//Ext.MessageBox.alert(jrawat_post2db+' OK','The Master_jual_rawat was '+msg+' successfully.');
-						//Ext.MessageBox.alert(jrawat_post2db+' OK','Data penjualan perawatan berhasil disimpan');
-						if(cetak_jrawat==1){
-							jrawat_cetak();
-						}
-						Ext.Ajax.request({
-							waitMsg: 'Mohon tunggu...',
-							url: 'index.php?c=c_master_jual_rawat&m=catatan_piutang_update',
-							params:{drawat_master	: eval(jrawat_idField.getValue())}
-						});
-						master_jual_rawat_DataStore.reload();
-						detail_jual_rawat_DataStore.load({params: {master_id:0}});
-						master_jual_rawat_createWindow.hide();
-						break;
-					case 0:
-						Ext.MessageBox.show({
-						   title: 'Warning',
-//						   msg: 'We could\'t not '+msg+' the Master_jual_rawat.',
-						   msg: 'Data Penjualan Perawatan tidak bisa disimpan',
-						   buttons: Ext.MessageBox.OK,
-						   animEl: 'save',
-						   icon: Ext.MessageBox.WARNING
-						});
-						break;
-					default:
-						Ext.MessageBox.show({
-						   title: 'Warning',
-						   //msg: 'We could\'t not '+msg+' the Master_jual_produk.',
-						   msg: 'Data penjualan perawatan tidak bisa disimpan',
-						   buttons: Ext.MessageBox.OK,
-						   animEl: 'save',
-						   icon: Ext.MessageBox.WARNING
-						});
-						break;
-				}*/
 				master_jual_rawat_reset_allForm();
 				master_cara_bayarTabPanel.setActiveTab(0);
 			},
