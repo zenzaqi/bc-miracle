@@ -32,6 +32,13 @@ class M_master_koreksi_stok extends Model{
 			
 			$result = $this->db->query($sql);
 			$nbrows = $result->num_rows();
+			if($nbrows<1){
+				$sql="SELECT distinct produk_id,produk_kode,produk_nama,0 as jumlah_stok,satuan_kode,satuan_id, satuan_nama 
+						FROM vu_produk_satuan_terkecil
+						WHERE produk_id='".$produk_id."'";
+				$result = $this->db->query($sql);
+				$nbrows = $result->num_rows();
+			}
 			
 			if($nbrows>0){
 				foreach($result->result() as $row){
@@ -60,9 +67,9 @@ class M_master_koreksi_stok extends Model{
 				$selected_id=substr($selected_id,0,strlen($selected_id)-1);
 				$sql.=(eregi("WHERE",$sql)?" AND ":" WHERE ")." produk_id IN(".$selected_id.")";
 			}
-			if($query!==""){
+			/*if($query!==""){
 				$sql.=(eregi("WHERE",$sql)?" AND ":" WHERE ")." produk_nama like '%".$query."%' OR produk_kode like '%".$query."%'";
-			}
+			}*/
 			
 			$result = $this->db->query($sql);
 			$nbrows = $result->num_rows();

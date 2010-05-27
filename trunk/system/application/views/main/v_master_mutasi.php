@@ -215,6 +215,24 @@ Ext.onReady(function(){
 	}
 	/* End of Function  */
 	
+	function get_asal_id(){
+		if(isNaN(parseInt(mutasi_asalField.getValue())) || parseInt(mutasi_asalField.getValue())==0)
+		{
+			return master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_asal_id');
+		}else{
+			return mutasi_asalField.getValue();
+		}
+	}
+	
+	function get_tujuan_id(){
+		if(isNaN(parseInt(mutasi_tujuanField.getValue())) || parseInt(mutasi_tujuanField.getValue())==0)
+		{
+			return master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_tujuan_id');
+		}else{
+			return mutasi_tujuanField.getValue();
+		}
+	}
+	
 	/* Reset form before loading */
 	function master_mutasi_reset_form(){
 		mutasi_idField.reset();
@@ -393,6 +411,7 @@ Ext.onReady(function(){
 			{name: 'mutasi_asal', type: 'string', mapping: 'gudang_asal_nama'}, 
 			{name: 'mutasi_asal_id', type: 'int', mapping: 'mutasi_asal'}, 
 			{name: 'mutasi_tujuan', type: 'string', mapping: 'gudang_tujuan_nama'},
+			{name: 'mutasi_tujuan_id', type: 'string', mapping: 'mutasi_tujuan'},
 			{name: 'mutasi_jumlah', type: 'float', mapping: 'jumlah_barang'}, 
 			{name: 'mutasi_tanggal', type: 'date', dateFormat: 'Y-m-d', mapping: 'mutasi_tanggal'}, 
 			{name: 'mutasi_keterangan', type: 'string', mapping: 'mutasi_keterangan'}, 
@@ -1388,7 +1407,7 @@ Ext.onReady(function(){
 	master_mutasiListEditorGrid.on('afteredit', master_mutasi_update); // inLine Editing Record
 	
 	mutasi_asalField.on("select",function(){
-		cbo_mutasi_produkDataStore.setBaseParam('gudang',mutasi_asalField.getValue());
+		cbo_mutasi_produkDataStore.setBaseParam('gudang', get_asal_id());
 		cbo_mutasi_produkDataStore.setBaseParam('task','list');
 		cbo_mutasi_produkDataStore.reload();
 	});
