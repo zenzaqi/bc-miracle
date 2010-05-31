@@ -19,7 +19,7 @@ class M_jurnal_umum extends Model{
 		}
 		
 		function get_akun_list($task, $master_id, $selected_id, $filter="",$start=0,$end=15){
-			$sql = "SELECT * from tbl_m_akun";
+			$sql = "SELECT * from akun";
 			if($task=='detail'){
 				$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
 				$sql .=" akun_id IN (SELECT djurnal_akun FROM jurnal_umum_detail WHERE djurnal_master='".$master_id."')";
@@ -54,7 +54,7 @@ class M_jurnal_umum extends Model{
 	
 		function get_detail_jurnal_list($task,$master_id,$query,$start,$end){
 			
-			$query="SELECT * from jurnal_umum_detail WHERE djurnal_master='".$master_id."'";
+			$query="SELECT * from vu_jurnal_umum WHERE djurnal_master='".$master_id."'";
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
 			$limit = $query." LIMIT ".$start.",".$end;		
@@ -73,7 +73,7 @@ class M_jurnal_umum extends Model{
 		
 		//function for get list record
 		function jurnal_umum_list($filter,$start,$end){
-			$query = "SELECT * FROM vu_t_jurnal";
+			$query = "SELECT * FROM vu_jurnal_umum where jurnal_jenis='umum'";
 
 			// For simple search
 /*			if ($filter<>""){
