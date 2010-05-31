@@ -615,7 +615,7 @@ Ext.onReady(function(){
 					if(jrawat_post2db=="UPDATE"){
 						detail_jual_rawat_update();
 					}else if(jrawat_post2db=="CREATE"){
-						detail_jual_rawat_insert();
+						detail_jual_rawat_insert_nocetak();
 					}
 					master_jual_rawat_DataStore.reload();
 					detail_jual_rawat_DataStore.load({params: {master_id:0}});
@@ -4108,6 +4108,43 @@ Ext.onReady(function(){
 		}
 	}
 	//eof
+	function detail_jual_rawat_insert_nocetak(){
+		var count_detail=detail_jual_rawat_DataStore.getCount();
+		for(i=0;i<detail_jual_rawat_DataStore.getCount();i++){
+			detail_jual_rawat_record=detail_jual_rawat_DataStore.getAt(i);
+			if(detail_jual_rawat_record.data.drawat_rawat!==null&&detail_jual_rawat_record.data.drawat_rawat.drawat_rawat!==""){
+				Ext.Ajax.request({
+					waitMsg: 'Mohon tunggu...',
+					url: 'index.php?c=c_master_jual_rawat&m=detail_detail_jual_rawat_insert',
+					params:{
+						drawat_id	: detail_jual_rawat_record.data.drawat_id, 
+						drawat_master	: eval(jrawat_idField.getValue()), 
+						drawat_rawat	: detail_jual_rawat_record.data.drawat_rawat, 
+						drawat_jumlah	: detail_jual_rawat_record.data.drawat_jumlah, 
+						drawat_harga	: detail_jual_rawat_record.data.drawat_harga, 
+						drawat_diskon	: detail_jual_rawat_record.data.drawat_diskon,
+						drawat_diskon_jenis	: detail_jual_rawat_record.data.drawat_diskon_jenis,
+						drawat_sales			: detail_jual_rawat_record.data.drawat_sales,
+						jrawat_id		: eval(jrawat_idField.getValue())
+					},
+					timeout: 60000,
+					success: function(response){							
+						var result=eval(response.responseText);
+					},
+					failure: function(response){
+						var result=response.responseText;
+						Ext.MessageBox.show({
+						   title: 'Error',
+						   msg: 'Could not connect to the database. retry later.',
+						   buttons: Ext.MessageBox.OK,
+						   animEl: 'database',
+						   icon: Ext.MessageBox.ERROR
+						});	
+					}		
+				});
+			}
+		}
+	}
 	
 	//function for purge detail
 	function detail_jual_rawat_purge(){
