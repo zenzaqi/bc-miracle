@@ -768,7 +768,7 @@ class M_tindakan_medis extends Model{
 		// For simple search
 		if ($filter<>""){
 			$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-			$query .= " (cust_nama LIKE '%".addslashes($filter)."%' OR rawat_nama LIKE '%".addslashes($filter)."%' OR karyawan_username LIKE '%".addslashes($filter)."%' OR karyawan_nama LIKE '%".addslashes($filter)."%' OR dtrawat_status LIKE '%".addslashes($filter)."%')";
+			$query .= " (cust_nama LIKE '%".addslashes($filter)."%' OR rawat_nama LIKE '%".addslashes($filter)."%' OR dokter_username LIKE '%".addslashes($filter)."%' OR dokter_nama LIKE '%".addslashes($filter)."%' OR dtrawat_status LIKE '%".addslashes($filter)."%')";
 		}
 		$query.=" AND dtrawat_status='siap'";
 		
@@ -779,7 +779,7 @@ class M_tindakan_medis extends Model{
 		// For simple search
 		if ($filter<>""){
 			$query2 .=eregi("WHERE",$query2)? " AND ":" WHERE ";
-			$query2 .= " (cust_nama LIKE '%".addslashes($filter)."%' OR rawat_nama LIKE '%".addslashes($filter)."%' OR karyawan_username LIKE '%".addslashes($filter)."%' OR karyawan_nama LIKE '%".addslashes($filter)."%' OR dtrawat_status LIKE '%".addslashes($filter)."%')";
+			$query2 .= " (cust_nama LIKE '%".addslashes($filter)."%' OR rawat_nama LIKE '%".addslashes($filter)."%' OR dokter_username LIKE '%".addslashes($filter)."%' OR dokter_nama LIKE '%".addslashes($filter)."%' OR dtrawat_status LIKE '%".addslashes($filter)."%')";
 		}
 		$query2.=" AND dtrawat_status='datang'";
 		
@@ -790,7 +790,7 @@ class M_tindakan_medis extends Model{
 		// For simple search
 		if ($filter<>""){
 			$query3 .=eregi("WHERE",$query3)? " AND ":" WHERE ";
-			$query3 .= " (cust_nama LIKE '%".addslashes($filter)."%' OR rawat_nama LIKE '%".addslashes($filter)."%' OR karyawan_username LIKE '%".addslashes($filter)."%' OR karyawan_nama LIKE '%".addslashes($filter)."%' OR dtrawat_status LIKE '%".addslashes($filter)."%')";
+			$query3 .= " (cust_nama LIKE '%".addslashes($filter)."%' OR rawat_nama LIKE '%".addslashes($filter)."%' OR dokter_username LIKE '%".addslashes($filter)."%' OR dokter_nama LIKE '%".addslashes($filter)."%' OR dtrawat_status LIKE '%".addslashes($filter)."%')";
 		}
 		$query3.=" AND dtrawat_status='selesai'";
 		
@@ -801,7 +801,7 @@ class M_tindakan_medis extends Model{
 		// For simple search
 		if ($filter<>""){
 			$query4 .=eregi("WHERE",$query4)? " AND ":" WHERE ";
-			$query4 .= " (cust_nama LIKE '%".addslashes($filter)."%' OR rawat_nama LIKE '%".addslashes($filter)."%' OR karyawan_username LIKE '%".addslashes($filter)."%' OR karyawan_nama LIKE '%".addslashes($filter)."%' OR dtrawat_status LIKE '%".addslashes($filter)."%')";
+			$query4 .= " (cust_nama LIKE '%".addslashes($filter)."%' OR rawat_nama LIKE '%".addslashes($filter)."%' OR dokter_username LIKE '%".addslashes($filter)."%' OR dokter_nama LIKE '%".addslashes($filter)."%' OR dtrawat_status LIKE '%".addslashes($filter)."%')";
 		}
 		$query4.=" AND dtrawat_status='batal'";
 		

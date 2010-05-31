@@ -1,0 +1,1 @@
+ALTER TABLE `voucher_kupon` ADD `kvoucher_cust` INT NOT NULL DEFAULT '0';

@@ -311,6 +311,9 @@ class M_voucher extends Model{
 		
 		//function for create new record
 		function voucher_create($voucher_nama ,$voucher_jenis ,$voucher_point ,$voucher_jumlah ,$voucher_kadaluarsa ,$voucher_cashback ,$voucher_mincash ,$voucher_diskon ,$voucher_promo ,$voucher_allproduk ,$voucher_allrawat ,$voucher_acara ,$voucher_nomor_awal ,$voucher_nomor_akhir ,$voucher_creator){
+			if($voucher_kadaluarsa==""){
+				$voucher_kadaluarsa=NULL;
+			}
 			$data = array(
 				"voucher_nama"=>$voucher_nama, 
 				"voucher_jenis"=>$voucher_jenis, 

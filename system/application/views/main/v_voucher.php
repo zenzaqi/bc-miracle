@@ -307,7 +307,7 @@ Ext.onReady(function(){
 						Ext.MessageBox.alert(post2db+' OK','Data berhasil disimpan.');
 						voucher_DataStore.reload();
 						voucher_createWindow.hide();
-						voucher_cetak(result);
+						//voucher_cetak(result);
 						break;
 				}        
 			},
