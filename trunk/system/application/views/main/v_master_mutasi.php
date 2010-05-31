@@ -247,10 +247,10 @@ Ext.onReady(function(){
 		mutasi_keteranganField.setValue(null);
 		
 		cbo_mutasi_satuanDataStore.setBaseParam('task','detail');
-		cbo_mutasi_satuanDataStore.setBaseParam('master_id',get_pk_id());
+		cbo_mutasi_satuanDataStore.setBaseParam('master_id',0);
 		cbo_mutasi_satuanDataStore.load();
 		
-		cbo_mutasi_produkDataStore.setBaseParam('master_id',get_pk_id());
+		cbo_mutasi_produkDataStore.setBaseParam('master_id',0);
 		cbo_mutasi_produkDataStore.setBaseParam('task','detail');
 		cbo_mutasi_produkDataStore.load({
 			callback: function(r,opt,success){
