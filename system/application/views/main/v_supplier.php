@@ -825,6 +825,7 @@ Ext.onReady(function(){
 			text: 'Delete', 
 			tooltip: 'Delete selected record', 
 			iconCls:'icon-delete',
+			disabled: true,
 			handler: supplier_confirm_delete 
 		},
 		'-',
