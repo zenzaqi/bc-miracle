@@ -233,10 +233,10 @@ class M_master_jual_rawat extends Model{
 			//2010-05-06 ==> $query = "SELECT jpaket_nobukti, paket_nama, rawat_nama, dapaket_jumlah, cust_nama FROM detail_ambil_paket LEFT JOIN master_jual_paket ON(dapaket_jpaket=jpaket_id) LEFT JOIN paket ON(dapaket_paket=paket_id) LEFT JOIN customer ON(dapaket_cust=cust_id) LEFT JOIN perawatan ON(dapaket_item=rawat_id) WHERE dapaket_cust='$master_id' AND date_format(dapaket_date_create,'%Y-%m-%d')='$tanggal'";
 			if($dpaket_id=="" || $dpaket_id==0){
 				//* Transaksi Perawatan satuan sekaligus pengambilan paket per customer/
-				$query = "SELECT jpaket_nobukti, paket_nama, rawat_nama, dapaket_jumlah, cust_nama FROM detail_ambil_paket LEFT JOIN master_jual_paket ON(dapaket_jpaket=jpaket_id) LEFT JOIN paket ON(dapaket_paket=paket_id) LEFT JOIN customer ON(dapaket_cust=cust_id) LEFT JOIN perawatan ON(dapaket_item=rawat_id) WHERE date_format(dapaket_date_create,'%Y-%m-%d')='$tanggal' AND dapaket_cust='$dapaket_cust' AND dapaket_stat_dok='Terbuka'";
+				$query = "SELECT dapaket_id, jpaket_nobukti, paket_nama, rawat_nama, dapaket_jumlah, cust_nama FROM detail_ambil_paket LEFT JOIN master_jual_paket ON(dapaket_jpaket=jpaket_id) LEFT JOIN paket ON(dapaket_paket=paket_id) LEFT JOIN customer ON(dapaket_cust=cust_id) LEFT JOIN perawatan ON(dapaket_item=rawat_id) WHERE date_format(dapaket_date_create,'%Y-%m-%d')='$tanggal' AND dapaket_cust='$dapaket_cust' AND dapaket_stat_dok='Terbuka'";
 			}else if($dpaket_id>0){
 				//* Transaksi Perawatan hanya pengambilan paket per customer /
-				$query = "SELECT jpaket_nobukti, paket_nama, rawat_nama, dapaket_jumlah, cust_nama FROM detail_ambil_paket LEFT JOIN master_jual_paket ON(dapaket_jpaket=jpaket_id) LEFT JOIN paket ON(dapaket_paket=paket_id) LEFT JOIN customer ON(dapaket_cust=cust_id) LEFT JOIN perawatan ON(dapaket_item=rawat_id) WHERE dapaket_dpaket='$dpaket_id' AND date_format(dapaket_date_create,'%Y-%m-%d')='$tanggal' AND dapaket_stat_dok='Terbuka' AND dapaket_cust='$dapaket_cust'";
+				$query = "SELECT dapaket_id, jpaket_nobukti, paket_nama, rawat_nama, dapaket_jumlah, cust_nama FROM detail_ambil_paket LEFT JOIN master_jual_paket ON(dapaket_jpaket=jpaket_id) LEFT JOIN paket ON(dapaket_paket=paket_id) LEFT JOIN customer ON(dapaket_cust=cust_id) LEFT JOIN perawatan ON(dapaket_item=rawat_id) WHERE dapaket_dpaket='$dpaket_id' AND date_format(dapaket_date_create,'%Y-%m-%d')='$tanggal' AND dapaket_stat_dok='Terbuka' AND dapaket_cust='$dapaket_cust'";
 			}
 			
 			$result = $this->db->query($query);
@@ -617,6 +617,35 @@ class M_master_jual_rawat extends Model{
 				return "{failure:true}";*/
 
 		}
+        
+        function detail_ambil_paket_update($dapaket_id ){
+            /*$dtu_dapaket=array(
+			"dapaket_stat_dok"=>'Batal'
+			);
+			
+			$this->db->where('dapaket_id', $dapaket_id);
+			$this->db->update('detail_ambil_paket', $dtu_dapaket);*/
+            //* Pengambilan Paket di-Batalkan /
+            $sql="SELECT dapaket_paket, dapaket_dpaket, paket_jmlisi, sum(dapaket_jumlah) AS total_pakai_paket FROM detail_ambil_paket LEFT JOIN paket ON(dapaket_paket=paket_id) WHERE dapaket_id='$dapaket_id' GROUP BY dapaket_dpaket";
+            $rs=$this->db->query($sql);
+            if($rs->num_rows()){
+                $record = $rs->row_array();
+                $dpaket_id = $record['dapaket_dpaket'];
+                $paket_id = $record['dapaket_paket'];
+                $sisa_paket = $record['paket_jmlisi'] - $record['total_pakai_paket'];
+                //* UPDATE db.detail_jual_paket.dpaket_sisa_paket/
+                $sql="UPDATE detail_jual_paket SET dpaket_sisa_paket = $sisa_paket";
+                $this->db->query($sql);
+            }
+            
+            $sql="DELETE FROM detail_ambil_paket WHERE dapaket_id='$dapaket_id'";
+            $this->db->query($sql);
+			if($this->db->affected_rows()){
+				return "{success:true}";
+			}else
+				return "{failure:true}";
+
+		}
 		
 		//function for get list record
 		function master_jual_rawat_list($filter,$start,$end){
@@ -673,697 +702,699 @@ class M_master_jual_rawat extends Model{
 		
 		//function for update record
 		function master_jual_rawat_update($jrawat_id ,$jrawat_nobukti ,$jrawat_cust ,$jrawat_tanggal ,$jrawat_stat_dok, $jrawat_diskon ,$jrawat_cara ,$jrawat_cara2 ,$jrawat_cara3 ,$jrawat_keterangan , $jrawat_cashback, $jrawat_tunai_nilai, $jrawat_tunai_nilai2, $jrawat_tunai_nilai3, $jrawat_voucher_no, $jrawat_voucher_cashback, $jrawat_voucher_no2, $jrawat_voucher_cashback2, $jrawat_voucher_no3, $jrawat_voucher_cashback3, $jrawat_total, $jrawat_bayar, $jrawat_subtotal, $jrawat_hutang, $jrawat_kwitansi_no, $jrawat_kwitansi_nama, $jrawat_kwitansi_nilai, $jrawat_kwitansi_no2, $jrawat_kwitansi_nama2, $jrawat_kwitansi_nilai2, $jrawat_kwitansi_no3, $jrawat_kwitansi_nama3, $jrawat_kwitansi_nilai3, $jrawat_card_nama, $jrawat_card_edc, $jrawat_card_no, $jrawat_card_nilai, $jrawat_card_nama2, $jrawat_card_edc2, $jrawat_card_no2, $jrawat_card_nilai2, $jrawat_card_nama3, $jrawat_card_edc3, $jrawat_card_no3, $jrawat_card_nilai3, $jrawat_cek_nama, $jrawat_cek_no, $jrawat_cek_valid, $jrawat_cek_bank, $jrawat_cek_nilai, $jrawat_cek_nama2, $jrawat_cek_no2, $jrawat_cek_valid2, $jrawat_cek_bank2, $jrawat_cek_nilai2, $jrawat_cek_nama3, $jrawat_cek_no3, $jrawat_cek_valid3, $jrawat_cek_bank3, $jrawat_cek_nilai3, $jrawat_transfer_bank, $jrawat_transfer_nama, $jrawat_transfer_nilai, $jrawat_transfer_bank2, $jrawat_transfer_nama2, $jrawat_transfer_nilai2, $jrawat_transfer_bank3, $jrawat_transfer_nama3, $jrawat_transfer_nilai3 ,$cetak_jrawat){
-				if ($jrawat_stat_dok=="")
+			if ($jrawat_stat_dok=="")
 				$jrawat_stat_dok = "Terbuka";
 			if(substr($jrawat_nobukti,0,2)=='PR'){
-			$sql="SELECT jrawat_cara, jrawat_cara2, jrawat_cara3 FROM master_jual_rawat WHERE jrawat_id='$jrawat_id'";
-			$rs=$this->db->query($sql);
-			if($rs->num_rows()){
-				$rs_record=$rs->row_array();
-				$jrawat_cara_awal=$rs_record["jrawat_cara"];
-				$jrawat_cara2_awal=$rs_record["jrawat_cara2"];
-				$jrawat_cara3_awal=$rs_record["jrawat_cara3"];
-				if($jrawat_cara_awal<>$jrawat_cara){
-					if($jrawat_cara_awal=="tunai"){
-						$sql="delete from jual_tunai where jtunai_ref='".$jrawat_nobukti."'";
-						$this->db->query($sql);
-					}
-					if($jrawat_cara_awal=="kwitansi"){
-						$sql="delete from jual_kwitansi where jkwitansi_ref='".$jrawat_nobukti."'";
-						$this->db->query($sql);
-					}
-					if($jrawat_cara_awal=="card"){
-						$sql="delete from jual_card where jcard_ref='".$jrawat_nobukti."'";
-						$this->db->query($sql);
-					}
-					if($jrawat_cara_awal=="cek/giro"){
-						$sql="delete from jual_cek where jcek_ref='".$jrawat_nobukti."'";
-						$this->db->query($sql);
-					}
-					if($jrawat_cara_awal=="transfer"){
-						$sql="delete from jual_transfer where jtransfer_ref='".$jrawat_nobukti."'";
-						$this->db->query($sql);
-					}
-					if($jrawat_cara_awal=="voucher"){
-						$sql="delete from voucher_terima where tvoucher_ref='".$jrawat_nobukti."'";
-						$this->db->query($sql);
-					}
-				}
-				
-				if($jrawat_cara2_awal<>$jrawat_cara2){
-					if($jrawat_cara2_awal=="tunai"){
-						$sql="delete from jual_tunai where jtunai_ref='".$jrawat_nobukti."'";
-						$this->db->query($sql);
-					}
-					if($jrawat_cara2_awal=="kwitansi"){
-						$sql="delete from jual_kwitansi where jkwitansi_ref='".$jrawat_nobukti."'";
-						$this->db->query($sql);
-					}
-					if($jrawat_cara2_awal=="card"){
-						$sql="delete from jual_card where jcard_ref='".$jrawat_nobukti."'";
-						$this->db->query($sql);
-					}
-					if($jrawat_cara2_awal=="cek/giro"){
-						$sql="delete from jual_cek where jcek_ref='".$jrawat_nobukti."'";
-						$this->db->query($sql);
-					}
-					if($jrawat_cara2_awal=="transfer"){
-						$sql="delete from jual_transfer where jtransfer_ref='".$jrawat_nobukti."'";
-						$this->db->query($sql);
-					}
-					if($jrawat_cara2_awal=="voucher"){
-						$sql="delete from voucher_terima where tvoucher_ref='".$jrawat_nobukti."'";
-						$this->db->query($sql);
-					}
-				}
-				
-				if($jrawat_cara3_awal<>$jrawat_cara3){
-					if($jrawat_cara3_awal=="tunai"){
-						$sql="delete from jual_tunai where jtunai_ref='".$jrawat_nobukti."'";
-						$this->db->query($sql);
-					}
-					if($jrawat_cara3_awal=="kwitansi"){
-						$sql="delete from jual_kwitansi where jkwitansi_ref='".$jrawat_nobukti."'";
-						$this->db->query($sql);
-					}
-					if($jrawat_cara3_awal=="card"){
-						$sql="delete from jual_card where jcard_ref='".$jrawat_nobukti."'";
-						$this->db->query($sql);
-					}
-					if($jrawat_cara3_awal=="cek/giro"){
-						$sql="delete from jual_cek where jcek_ref='".$jrawat_nobukti."'";
-						$this->db->query($sql);
-					}
-					if($jrawat_cara3_awal=="transfer"){
-						$sql="delete from jual_transfer where jtransfer_ref='".$jrawat_nobukti."'";
-						$this->db->query($sql);
-					}
-					if($jrawat_cara3_awal=="voucher"){
-						$sql="delete from voucher_terima where tvoucher_ref='".$jrawat_nobukti."'";
-						$this->db->query($sql);
-					}
-				}
-			}
-			//UPDATE table.master_jual_rawat
-			$data = array(
-				"jrawat_id"=>$jrawat_id, 
-				//"jrawat_nobukti"=>$jrawat_nobukti, 
-				"jrawat_tanggal"=>$jrawat_tanggal, 
-				"jrawat_diskon"=>$jrawat_diskon,
-				"jrawat_cashback"=>$jrawat_cashback,
-				"jrawat_bayar"=>$jrawat_bayar,
-				"jrawat_totalbiaya"=>$jrawat_total,
-				"jrawat_cara"=>$jrawat_cara, 
-				//"jrawat_cara2"=>$jrawat_cara2, 
-				//"jrawat_cara3"=>$jrawat_cara3,
-				"jrawat_keterangan"=>$jrawat_keterangan,
-				"jrawat_stat_dok"=>$jrawat_stat_dok,
-				"jrawat_update"=>$_SESSION[SESSION_USERID]
-			);
-			if($jrawat_cara2!=null)
-				$data["jrawat_cara2"]=$jrawat_cara2;
-			if($jrawat_cara3!=null)
-				$data["jrawat_cara3"]=$jrawat_cara3;
-			$sql="select cust_id from customer where cust_id='".$jrawat_cust."'";
-			$query=$this->db->query($sql);
-			if($query->num_rows())
-				$data["jrawat_cust"]=$jrawat_cust;
-				
-			$this->db->where('jrawat_id', $jrawat_id);
-			$this->db->update('master_jual_rawat', $data);
-			
-			//if($cetak_jrawat==1){
-				$sql="SELECT drawat_dtrawat FROM detail_jual_rawat WHERE drawat_master='$jrawat_id'";
-				$rs=$this->db->query($sql);
-				if($rs->num_rows()){
-					$sql="UPDATE tindakan_detail SET dtrawat_locked=1 ";
-					//$sql.=eregi("WHERE",$sql)?" OR ":" WHERE ";
-					foreach($rs->result() as $row_drawat){
-						$sql.=eregi("WHERE",$sql)?" OR ":" WHERE ";
-						$sql.="dtrawat_id='".$row_drawat->drawat_dtrawat."' ";
-					}
-					$this->db->query($sql);
-				}
-			//}
-			
-			if($this->db->affected_rows() || $this->db->affected_rows()==0){
-				//delete all transaksi
-				/*$sql="delete from jual_kwitansi where jkwitansi_ref='".$jrawat_nobukti."'";
-				$this->db->query($sql);
-				$sql="delete from jual_card where jcard_ref='".$jrawat_nobukti."'";
-				$this->db->query($sql);
-				$sql="delete from jual_cek where jcek_ref='".$jrawat_nobukti."'";
-				$this->db->query($sql);
-				$sql="delete from jual_transfer where jtransfer_ref='".$jrawat_nobukti."'";
-				$this->db->query($sql);
-				$sql="delete from jual_kredit where jkredit_ref='".$jrawat_nobukti."'";
-				$this->db->query($sql);
-				$sql="delete from jual_tunai where jtunai_ref='".$jrawat_nobukti."'";
-				$this->db->query($sql);*/
-				if($jrawat_cara!=null || $jrawat_cara!=''){
-					//kwitansi
-					if($jrawat_cara=='kwitansi'){
-						if($jrawat_kwitansi_nama=="" || $jrawat_kwitansi_nama==NULL){
-							if(is_int($jrawat_kwitansi_nama)){
-								$sql="select cust_nama from customer where cust_id='".$jrawat_cust."'";
-								$query=$this->db->query($sql);
-								if($query->num_rows()){
-									$data=$query->row();
-									$jrawat_kwitansi_nama=$data->cust_nama;
-								}
-							}else{
-									$jrawat_kwitansi_nama=$jpaket_cust;
-							}
-						}
-						
-						$sql="SELECT jkwitansi_id FROM jual_kwitansi WHERE jkwitansi_ref='$jrawat_nobukti'";
-						$rs=$this->db->query($sql);
-						if($rs->num_rows()){
-							$data=array(
-								"jkwitansi_master"=>$jrawat_kwitansi_no,
-								"jkwitansi_nilai"=>$jrawat_kwitansi_nilai
-							);
-							$this->db->where('jkwitansi_ref', $jrawat_nobukti);
-							$this->db->update('jual_kwitansi', $data);
-						}else{
-							$data=array(
-								"jkwitansi_ref"=>$jrawat_nobukti,
-								"jkwitansi_master"=>$jrawat_kwitansi_no,
-								"jkwitansi_nilai"=>$jrawat_kwitansi_nilai,
-								"jkwitansi_transaksi"=>"jual_rawat"
-							);
-							$this->db->insert('jual_kwitansi', $data);
-						}
-					
-					}else if($jrawat_cara=='card'){
-						$sql="SELECT jcard_id FROM jual_card WHERE jcard_ref='$jrawat_nobukti'";
-						$rs=$this->db->query($sql);
-						if($rs->num_rows()){
-							$data=array(
-								"jcard_nama"=>$jrawat_card_nama,
-								"jcard_edc"=>$jrawat_card_edc,
-								"jcard_no"=>$jrawat_card_no,
-								"jcard_nilai"=>$jrawat_card_nilai
-								);
-							$this->db->where('jcard_ref', $jrawat_nobukti);
-							$this->db->update('jual_card', $data);
-						}else{
-							$data=array(
-								"jcard_ref"=>$jrawat_nobukti,
-								"jcard_nama"=>$jrawat_card_nama,
-								"jcard_edc"=>$jrawat_card_edc,
-								"jcard_no"=>$jrawat_card_no,
-								"jcard_nilai"=>$jrawat_card_nilai,
-								"jcard_transaksi"=>"jual_rawat"
-								);
-							$this->db->insert('jual_card', $data);
-						}
-					
-					}else if($jrawat_cara=='cek/giro'){
-						
-						if($jrawat_cek_nama=="" || $jrawat_cek_nama==NULL){
-							if(is_int($jrawat_cek_nama)){
-								$sql="select cust_nama from customer where cust_id='".$jrawat_cust."'";
-								$query=$this->db->query($sql);
-								if($query->num_rows()){
-									$data=$query->row();
-									$jrawat_cek_nama=$data->cust_nama;
-								}
-							}else{
-									$jrawat_cek_nama=$jrawat_cust;
-							}
-						}
-						
-						$sql="SELECT jcek_id FROM jual_cek WHERE jcek_ref='$jrawat_nobukti'";
-						$rs=$this->db->query($sql);
-						if($rs->num_rows()){
-							$data=array(
-								"jcek_nama"=>$jrawat_cek_nama,
-								"jcek_no"=>$jrawat_cek_no,
-								"jcek_valid"=>$jrawat_cek_valid,
-								"jcek_bank"=>$jrawat_cek_bank,
-								"jcek_nilai"=>$jrawat_cek_nilai
-								);
-							$this->db->where('jcek_ref', $jrawat_nobukti);
-							$this->db->update('jual_cek', $data);
-						}else{
-							$data=array(
-								"jcek_ref"=>$jrawat_nobukti,
-								"jcek_nama"=>$jrawat_cek_nama,
-								"jcek_no"=>$jrawat_cek_no,
-								"jcek_valid"=>$jrawat_cek_valid,
-								"jcek_bank"=>$jrawat_cek_bank,
-								"jcek_nilai"=>$jrawat_cek_nilai,
-								"jcek_transaksi"=>"jual_rawat"
-								);
-							$this->db->insert('jual_cek', $data);
-						}
-						
-					}else if($jrawat_cara=='transfer'){
-						$sql="SELECT jtransfer_id FROM jual_transfer WHERE jtransfer_ref='$jrawat_nobukti'";
-						$rs=$this->db->query($sql);
-						if($rs->num_rows()){
-							$data=array(
-								"jtransfer_bank"=>$jrawat_transfer_bank,
-								"jtransfer_nama"=>$jrawat_transfer_nama,
-								"jtransfer_nilai"=>$jrawat_transfer_nilai
-								);
-							$this->db->where('jtransfer_ref', $jrawat_nobukti);
-							$this->db->update('jual_transfer', $data);
-						}else{
-							$data=array(
-								"jtransfer_ref"=>$jrawat_nobukti,
-								"jtransfer_bank"=>$jrawat_transfer_bank,
-								"jtransfer_nama"=>$jrawat_transfer_nama,
-								"jtransfer_nilai"=>$jrawat_transfer_nilai,
-								"jtransfer_transaksi"=>"jual_rawat"
-								);
-							$this->db->insert('jual_transfer', $data);
-						}
-						
-					}else if($jrawat_cara=='tunai'){
-						$sql="SELECT jtunai_id FROM jual_tunai WHERE jtunai_ref='$jrawat_nobukti'";
-						$rs=$this->db->query($sql);
-						if($rs->num_rows()){
-							$data=array(
-								"jtunai_nilai"=>$jrawat_tunai_nilai
-								);
-							$this->db->where('jtunai_ref', $jrawat_nobukti);
-							$this->db->update('jual_tunai', $data);
-						}else{
-							$data=array(
-								"jtunai_nilai"=>$jrawat_tunai_nilai,
-								"jtunai_ref"=>$jrawat_nobukti,
-								"jtunai_transaksi"=>"jual_rawat"
-								);
-							$this->db->insert('jual_tunai', $data);
-						}
-						
-					}else if($jrawat_cara=='voucher'){
-						$sql="SELECT tvoucher_id FROM voucher_terima WHERE tvoucher_ref='$jrawat_nobukti'";
-						$rs=$this->db->query($sql);
-						if($rs->num_rows()){
-							/*$get_voucher_cashback=0;
-							$sql="SELECT voucher_cashback FROM voucher_kupon LEFT JOIN voucher ON(kvoucher_master=voucher_id) WHERE kvoucher_nomor='$jrawat_voucher_no'";
-							$rs=$this->db->query($sql);
-							if($rs->num_rows()){
-								$rs_record=$rs->row_array();
-								$get_voucher_cashback=$rs_record["voucher_cashback"];
-							}*/
-							$data=array(
-								"tvoucher_novoucher"=>$jrawat_voucher_no,
-								"tvoucher_nilai"=>$jrawat_voucher_cashback
-								);
-							$this->db->where('tvoucher_ref', $jrawat_nobukti);
-							$this->db->update('voucher_terima', $data);
-						}else{
-							/*$get_voucher_cashback=0;
-							$sql="SELECT voucher_cashback FROM voucher_kupon LEFT JOIN voucher ON(kvoucher_master=voucher_id) WHERE kvoucher_nomor='$jrawat_voucher_no'";
-							$rs=$this->db->query($sql);
-							if($rs->num_rows()){
-								$rs_record=$rs->row_array();
-								$get_voucher_cashback=$rs_record["voucher_cashback"];
-							}*/
-							$data=array(
-								"tvoucher_novoucher"=>$jrawat_voucher_no,
-								"tvoucher_ref"=>$jrawat_nobukti,
-								"tvoucher_nilai"=>$jrawat_voucher_cashback,
-								"tvoucher_transaksi"=>"jual_rawat"
-								);
-							$this->db->insert('voucher_terima', $data);
-						}
-					}
-				}
-				if($jrawat_cara2!=null || $jrawat_cara2!=''){
-					//kwitansi
-					if($jrawat_cara2=='kwitansi'){
-						if($jrawat_kwitansi_nama2=="" || $jrawat_kwitansi_nama2==NULL){
-							if(is_int($jrawat_kwitansi_nama2)){
-								$sql="select cust_nama from customer where cust_id='".$jrawat_cust."'";
-								$query=$this->db->query($sql);
-								if($query->num_rows()){
-									$data=$query->row();
-									$jrawat_kwitansi_nama2=$data->cust_nama;
-								}
-							}else{
-									$jrawat_kwitansi_nama2=$jpaket_cust;
-							}
-						}
-						
-						$sql="SELECT jkwitansi_id FROM jual_kwitansi WHERE jkwitansi_ref='$jrawat_nobukti'";
-						$rs=$this->db->query($sql);
-						if($rs->num_rows()){
-							$data=array(
-								"jkwitansi_master"=>$jrawat_kwitansi_no2,
-								"jkwitansi_nilai"=>$jrawat_kwitansi_nilai2
-							);
-							$this->db->where('jkwitansi_ref', $jrawat_nobukti);
-							$this->db->update('jual_kwitansi', $data);
-						}else{
-							$data=array(
-								"jkwitansi_ref"=>$jrawat_nobukti,
-								"jkwitansi_master"=>$jrawat_kwitansi_no2,
-								"jkwitansi_nilai"=>$jrawat_kwitansi_nilai2,
-								"jkwitansi_transaksi"=>"jual_rawat"
-							);
-							$this->db->insert('jual_kwitansi', $data);
-						}
-					
-					}else if($jrawat_cara2=='card'){
-						$sql="SELECT jcard_id FROM jual_card WHERE jcard_ref='$jrawat_nobukti'";
-						$rs=$this->db->query($sql);
-						if($rs->num_rows()){
-							$data=array(
-								"jcard_nama"=>$jrawat_card_nama2,
-								"jcard_edc"=>$jrawat_card_edc2,
-								"jcard_no"=>$jrawat_card_no2,
-								"jcard_nilai"=>$jrawat_card_nilai2
-								);
-							$this->db->where('jcard_ref', $jrawat_nobukti);
-							$this->db->update('jual_card', $data);
-						}else{
-							$data=array(
-								"jcard_ref"=>$jrawat_nobukti,
-								"jcard_nama"=>$jrawat_card_nama2,
-								"jcard_edc"=>$jrawat_card_edc2,
-								"jcard_no"=>$jrawat_card_no2,
-								"jcard_nilai"=>$jrawat_card_nilai2,
-								"jcard_transaksi"=>"jual_rawat"
-								);
-							$this->db->insert('jual_card', $data);
-						}
-					
-					}else if($jrawat_cara2=='cek/giro'){
-						
-						if($jrawat_cek_nama2=="" || $jrawat_cek_nama2==NULL){
-							if(is_int($jrawat_cek_nama2)){
-								$sql="select cust_nama from customer where cust_id='".$jrawat_cust."'";
-								$query=$this->db->query($sql);
-								if($query->num_rows()){
-									$data=$query->row();
-									$jrawat_cek_nama2=$data->cust_nama;
-								}
-							}else{
-									$jrawat_cek_nama2=$jrawat_cust;
-							}
-						}
-						
-						$sql="SELECT jcek_id FROM jual_cek WHERE jcek_ref='$jrawat_nobukti'";
-						$rs=$this->db->query($sql);
-						if($rs->num_rows()){
-							$data=array(
-								"jcek_nama"=>$jrawat_cek_nama2,
-								"jcek_no"=>$jrawat_cek_no2,
-								"jcek_valid"=>$jrawat_cek_valid2,
-								"jcek_bank"=>$jrawat_cek_bank2,
-								"jcek_nilai"=>$jrawat_cek_nilai2
-								);
-							$this->db->where('jcek_ref', $jrawat_nobukti);
-							$this->db->update('jual_cek', $data);
-						}else{
-							$data=array(
-								"jcek_ref"=>$jrawat_nobukti,
-								"jcek_nama"=>$jrawat_cek_nama2,
-								"jcek_no"=>$jrawat_cek_no2,
-								"jcek_valid"=>$jrawat_cek_valid2,
-								"jcek_bank"=>$jrawat_cek_bank2,
-								"jcek_nilai"=>$jrawat_cek_nilai2,
-								"jcek_transaksi"=>"jual_rawat"
-								);
-							$this->db->insert('jual_cek', $data);
-						}
-						
-					}else if($jrawat_cara2=='transfer'){
-						$sql="SELECT jtransfer_id FROM jual_transfer WHERE jtransfer_ref='$jrawat_nobukti'";
-						$rs=$this->db->query($sql);
-						if($rs->num_rows()){
-							$data=array(
-								"jtransfer_bank"=>$jrawat_transfer_bank2,
-								"jtransfer_nama"=>$jrawat_transfer_nama2,
-								"jtransfer_nilai"=>$jrawat_transfer_nilai2
-								);
-							$this->db->where('jtransfer_ref', $jrawat_nobukti);
-							$this->db->update('jual_transfer', $data);
-						}else{
-							$data=array(
-								"jtransfer_ref"=>$jrawat_nobukti,
-								"jtransfer_bank"=>$jrawat_transfer_bank2,
-								"jtransfer_nama"=>$jrawat_transfer_nama2,
-								"jtransfer_nilai"=>$jrawat_transfer_nilai2,
-								"jtransfer_transaksi"=>"jual_rawat"
-								);
-							$this->db->insert('jual_transfer', $data);
-						}
-						
-					}else if($jrawat_cara2=='tunai'){
-						$sql="SELECT jtunai_id FROM jual_tunai WHERE jtunai_ref='$jrawat_nobukti'";
-						$rs=$this->db->query($sql);
-						if($rs->num_rows()){
-							$data=array(
-								"jtunai_nilai"=>$jrawat_tunai_nilai2
-								);
-							$this->db->where('jtunai_ref', $jrawat_nobukti);
-							$this->db->update('jual_tunai', $data);
-						}else{
-							$data=array(
-								"jtunai_nilai"=>$jrawat_tunai_nilai2,
-								"jtunai_ref"=>$jrawat_nobukti,
-								"jtunai_transaksi"=>"jual_rawat"
-								);
-							$this->db->insert('jual_tunai', $data);
-						}
-						
-					}else if($jrawat_cara2=='voucher'){
-						$sql="SELECT tvoucher_id FROM voucher_terima WHERE tvoucher_ref='$jrawat_nobukti'";
-						$rs=$this->db->query($sql);
-						if($rs->num_rows()){
-							/*$get_voucher_cashback=0;
-							$sql="SELECT voucher_cashback FROM voucher_kupon LEFT JOIN voucher ON(kvoucher_master=voucher_id) WHERE kvoucher_nomor='$jrawat_voucher_no'";
-							$rs=$this->db->query($sql);
-							if($rs->num_rows()){
-								$rs_record=$rs->row_array();
-								$get_voucher_cashback=$rs_record["voucher_cashback"];
-							}*/
-							$data=array(
-								"tvoucher_novoucher"=>$jrawat_voucher_no2,
-								"tvoucher_nilai"=>$jrawat_voucher_cashback2
-								);
-							$this->db->where('tvoucher_ref', $jrawat_nobukti);
-							$this->db->update('voucher_terima', $data);
-						}else{
-							/*$get_voucher_cashback=0;
-							$sql="SELECT voucher_cashback FROM voucher_kupon LEFT JOIN voucher ON(kvoucher_master=voucher_id) WHERE kvoucher_nomor='$jrawat_voucher_no'";
-							$rs=$this->db->query($sql);
-							if($rs->num_rows()){
-								$rs_record=$rs->row_array();
-								$get_voucher_cashback=$rs_record["voucher_cashback"];
-							}*/
-							$data=array(
-								"tvoucher_novoucher"=>$jrawat_voucher_no2,
-								"tvoucher_ref"=>$jrawat_nobukti,
-								"tvoucher_nilai"=>$jrawat_voucher_cashback2,
-								"tvoucher_transaksi"=>"jual_rawat"
-								);
-							$this->db->insert('voucher_terima', $data);
-						}
-					}
-				}
-				if($jrawat_cara3!=null || $jrawat_cara3!=''){
-					//kwitansi
-					if($jrawat_cara3=='kwitansi'){
-						if($jrawat_kwitansi_nama3=="" || $jrawat_kwitansi_nama3==NULL){
-							if(is_int($jrawat_kwitansi_nama3)){
-								$sql="select cust_nama from customer where cust_id='".$jrawat_cust."'";
-								$query=$this->db->query($sql);
-								if($query->num_rows()){
-									$data=$query->row();
-									$jrawat_kwitansi_nama3=$data->cust_nama;
-								}
-							}else{
-									$jrawat_kwitansi_nama3=$jpaket_cust;
-							}
-						}
-						
-						$sql="SELECT jkwitansi_id FROM jual_kwitansi WHERE jkwitansi_ref='$jrawat_nobukti'";
-						$rs=$this->db->query($sql);
-						if($rs->num_rows()){
-							$data=array(
-								"jkwitansi_master"=>$jrawat_kwitansi_no3,
-								"jkwitansi_nilai"=>$jrawat_kwitansi_nilai3
-							);
-							$this->db->where('jkwitansi_ref', $jrawat_nobukti);
-							$this->db->update('jual_kwitansi', $data);
-						}else{
-							$data=array(
-								"jkwitansi_ref"=>$jrawat_nobukti,
-								"jkwitansi_master"=>$jrawat_kwitansi_no3,
-								"jkwitansi_nilai"=>$jrawat_kwitansi_nilai3,
-								"jkwitansi_transaksi"=>"jual_rawat"
-							);
-							$this->db->insert('jual_kwitansi', $data);
-						}
-					
-					}else if($jrawat_cara3=='card'){
-						$sql="SELECT jcard_id FROM jual_card WHERE jcard_ref='$jrawat_nobukti'";
-						$rs=$this->db->query($sql);
-						if($rs->num_rows()){
-							$data=array(
-								"jcard_nama"=>$jrawat_card_nama3,
-								"jcard_edc"=>$jrawat_card_edc3,
-								"jcard_no"=>$jrawat_card_no3,
-								"jcard_nilai"=>$jrawat_card_nilai3
-								);
-							$this->db->where('jcard_ref', $jrawat_nobukti);
-							$this->db->update('jual_card', $data);
-						}else{
-							$data=array(
-								"jcard_ref"=>$jrawat_nobukti,
-								"jcard_nama"=>$jrawat_card_nama3,
-								"jcard_edc"=>$jrawat_card_edc3,
-								"jcard_no"=>$jrawat_card_no3,
-								"jcard_nilai"=>$jrawat_card_nilai3,
-								"jcard_transaksi"=>"jual_rawat"
-								);
-							$this->db->insert('jual_card', $data);
-						}
-					
-					}else if($jrawat_cara3=='cek/giro'){
-						
-						if($jrawat_cek_nama3=="" || $jrawat_cek_nama3==NULL){
-							if(is_int($jrawat_cek_nama3)){
-								$sql="select cust_nama from customer where cust_id='".$jrawat_cust."'";
-								$query=$this->db->query($sql);
-								if($query->num_rows()){
-									$data=$query->row();
-									$jrawat_cek_nama3=$data->cust_nama;
-								}
-							}else{
-									$jrawat_cek_nama3=$jrawat_cust;
-							}
-						}
-						
-						$sql="SELECT jcek_id FROM jual_cek WHERE jcek_ref='$jrawat_nobukti'";
-						$rs=$this->db->query($sql);
-						if($rs->num_rows()){
-							$data=array(
-								"jcek_nama"=>$jrawat_cek_nama3,
-								"jcek_no"=>$jrawat_cek_no3,
-								"jcek_valid"=>$jrawat_cek_valid3,
-								"jcek_bank"=>$jrawat_cek_bank3,
-								"jcek_nilai"=>$jrawat_cek_nilai3
-								);
-							$this->db->where('jcek_ref', $jrawat_nobukti);
-							$this->db->update('jual_cek', $data);
-						}else{
-							$data=array(
-								"jcek_ref"=>$jrawat_nobukti,
-								"jcek_nama"=>$jrawat_cek_nama3,
-								"jcek_no"=>$jrawat_cek_no3,
-								"jcek_valid"=>$jrawat_cek_valid3,
-								"jcek_bank"=>$jrawat_cek_bank3,
-								"jcek_nilai"=>$jrawat_cek_nilai3,
-								"jcek_transaksi"=>"jual_rawat"
-								);
-							$this->db->insert('jual_cek', $data);
-						}
-						
-					}else if($jrawat_cara3=='transfer'){
-						$sql="SELECT jtransfer_id FROM jual_transfer WHERE jtransfer_ref='$jrawat_nobukti'";
-						$rs=$this->db->query($sql);
-						if($rs->num_rows()){
-							$data=array(
-								"jtransfer_bank"=>$jrawat_transfer_bank3,
-								"jtransfer_nama"=>$jrawat_transfer_nama3,
-								"jtransfer_nilai"=>$jrawat_transfer_nilai3
-								);
-							$this->db->where('jtransfer_ref', $jrawat_nobukti);
-							$this->db->update('jual_transfer', $data);
-						}else{
-							$data=array(
-								"jtransfer_ref"=>$jrawat_nobukti,
-								"jtransfer_bank"=>$jrawat_transfer_bank3,
-								"jtransfer_nama"=>$jrawat_transfer_nama3,
-								"jtransfer_nilai"=>$jrawat_transfer_nilai3,
-								"jtransfer_transaksi"=>"jual_rawat"
-								);
-							$this->db->insert('jual_transfer', $data);
-						}
-						
-					}else if($jrawat_cara3=='tunai'){
-						$sql="SELECT jtunai_id FROM jual_tunai WHERE jtunai_ref='$jrawat_nobukti'";
-						$rs=$this->db->query($sql);
-						if($rs->num_rows()){
-							$data=array(
-								"jtunai_nilai"=>$jrawat_tunai_nilai3
-								);
-							$this->db->where('jtunai_ref', $jrawat_nobukti);
-							$this->db->update('jual_tunai', $data);
-						}else{
-							$data=array(
-								"jtunai_nilai"=>$jrawat_tunai_nilai3,
-								"jtunai_ref"=>$jrawat_nobukti,
-								"jtunai_transaksi"=>"jual_rawat"
-								);
-							$this->db->insert('jual_tunai', $data);
-						}
-						
-					}else if($jrawat_cara3=='voucher'){
-						$sql="SELECT tvoucher_id FROM voucher_terima WHERE tvoucher_ref='$jrawat_nobukti'";
-						$rs=$this->db->query($sql);
-						if($rs->num_rows()){
-							/*$get_voucher_cashback=0;
-							$sql="SELECT voucher_cashback FROM voucher_kupon LEFT JOIN voucher ON(kvoucher_master=voucher_id) WHERE kvoucher_nomor='$jrawat_voucher_no'";
-							$rs=$this->db->query($sql);
-							if($rs->num_rows()){
-								$rs_record=$rs->row_array();
-								$get_voucher_cashback=$rs_record["voucher_cashback"];
-							}*/
-							$data=array(
-								"tvoucher_novoucher"=>$jrawat_voucher_no3,
-								"tvoucher_nilai"=>$jrawat_voucher_cashback3
-								);
-							$this->db->where('tvoucher_ref', $jrawat_nobukti);
-							$this->db->update('voucher_terima', $data);
-						}else{
-							/*$get_voucher_cashback=0;
-							$sql="SELECT voucher_cashback FROM voucher_kupon LEFT JOIN voucher ON(kvoucher_master=voucher_id) WHERE kvoucher_nomor='$jrawat_voucher_no'";
-							$rs=$this->db->query($sql);
-							if($rs->num_rows()){
-								$rs_record=$rs->row_array();
-								$get_voucher_cashback=$rs_record["voucher_cashback"];
-							}*/
-							$data=array(
-								"tvoucher_novoucher"=>$jrawat_voucher_no3,
-								"tvoucher_ref"=>$jrawat_nobukti,
-								"tvoucher_nilai"=>$jrawat_voucher_cashback3,
-								"tvoucher_transaksi"=>"jual_rawat"
-								);
-							$this->db->insert('voucher_terima', $data);
-						}
-					}
-				}
-				/*if($cetak_jrawat==1){
-					return $jrawat_id;
-				}else{
-					return '1';
-				}*/
-				//return '1';
-				if($this->db->affected_rows() || $this->db->affected_rows()==0){
-					if($cetak_jrawat==1 && $jrawat_bayar>0){
-						$this->member_point_update($jrawat_id);
-						return $jrawat_id;
-					}else{
-						return '0';
-					}
-				}/*else{
-					return '-1';
-				}*/
-			}
-			else{
-				return '-1';
-			}
+                $sql="SELECT jrawat_cara, jrawat_cara2, jrawat_cara3 FROM master_jual_rawat WHERE jrawat_id='$jrawat_id'";
+                $rs=$this->db->query($sql);
+                if($rs->num_rows()){
+                    $rs_record=$rs->row_array();
+                    $jrawat_cara_awal=$rs_record["jrawat_cara"];
+                    $jrawat_cara2_awal=$rs_record["jrawat_cara2"];
+                    $jrawat_cara3_awal=$rs_record["jrawat_cara3"];
+                    if($jrawat_cara_awal<>$jrawat_cara){
+                        if($jrawat_cara_awal=="tunai"){
+                            $sql="delete from jual_tunai where jtunai_ref='".$jrawat_nobukti."'";
+                            $this->db->query($sql);
+                        }
+                        if($jrawat_cara_awal=="kwitansi"){
+                            $sql="delete from jual_kwitansi where jkwitansi_ref='".$jrawat_nobukti."'";
+                            $this->db->query($sql);
+                        }
+                        if($jrawat_cara_awal=="card"){
+                            $sql="delete from jual_card where jcard_ref='".$jrawat_nobukti."'";
+                            $this->db->query($sql);
+                        }
+                        if($jrawat_cara_awal=="cek/giro"){
+                            $sql="delete from jual_cek where jcek_ref='".$jrawat_nobukti."'";
+                            $this->db->query($sql);
+                        }
+                        if($jrawat_cara_awal=="transfer"){
+                            $sql="delete from jual_transfer where jtransfer_ref='".$jrawat_nobukti."'";
+                            $this->db->query($sql);
+                        }
+                        if($jrawat_cara_awal=="voucher"){
+                            $sql="delete from voucher_terima where tvoucher_ref='".$jrawat_nobukti."'";
+                            $this->db->query($sql);
+                        }
+                    }
+                    
+                    if($jrawat_cara2_awal<>$jrawat_cara2){
+                        if($jrawat_cara2_awal=="tunai"){
+                            $sql="delete from jual_tunai where jtunai_ref='".$jrawat_nobukti."'";
+                            $this->db->query($sql);
+                        }
+                        if($jrawat_cara2_awal=="kwitansi"){
+                            $sql="delete from jual_kwitansi where jkwitansi_ref='".$jrawat_nobukti."'";
+                            $this->db->query($sql);
+                        }
+                        if($jrawat_cara2_awal=="card"){
+                            $sql="delete from jual_card where jcard_ref='".$jrawat_nobukti."'";
+                            $this->db->query($sql);
+                        }
+                        if($jrawat_cara2_awal=="cek/giro"){
+                            $sql="delete from jual_cek where jcek_ref='".$jrawat_nobukti."'";
+                            $this->db->query($sql);
+                        }
+                        if($jrawat_cara2_awal=="transfer"){
+                            $sql="delete from jual_transfer where jtransfer_ref='".$jrawat_nobukti."'";
+                            $this->db->query($sql);
+                        }
+                        if($jrawat_cara2_awal=="voucher"){
+                            $sql="delete from voucher_terima where tvoucher_ref='".$jrawat_nobukti."'";
+                            $this->db->query($sql);
+                        }
+                    }
+                    
+                    if($jrawat_cara3_awal<>$jrawat_cara3){
+                        if($jrawat_cara3_awal=="tunai"){
+                            $sql="delete from jual_tunai where jtunai_ref='".$jrawat_nobukti."'";
+                            $this->db->query($sql);
+                        }
+                        if($jrawat_cara3_awal=="kwitansi"){
+                            $sql="delete from jual_kwitansi where jkwitansi_ref='".$jrawat_nobukti."'";
+                            $this->db->query($sql);
+                        }
+                        if($jrawat_cara3_awal=="card"){
+                            $sql="delete from jual_card where jcard_ref='".$jrawat_nobukti."'";
+                            $this->db->query($sql);
+                        }
+                        if($jrawat_cara3_awal=="cek/giro"){
+                            $sql="delete from jual_cek where jcek_ref='".$jrawat_nobukti."'";
+                            $this->db->query($sql);
+                        }
+                        if($jrawat_cara3_awal=="transfer"){
+                            $sql="delete from jual_transfer where jtransfer_ref='".$jrawat_nobukti."'";
+                            $this->db->query($sql);
+                        }
+                        if($jrawat_cara3_awal=="voucher"){
+                            $sql="delete from voucher_terima where tvoucher_ref='".$jrawat_nobukti."'";
+                            $this->db->query($sql);
+                        }
+                    }
+                }
+                //UPDATE table.master_jual_rawat
+                $data = array(
+                    "jrawat_id"=>$jrawat_id, 
+                    //"jrawat_nobukti"=>$jrawat_nobukti, 
+                    "jrawat_tanggal"=>$jrawat_tanggal, 
+                    "jrawat_diskon"=>$jrawat_diskon,
+                    "jrawat_cashback"=>$jrawat_cashback,
+                    "jrawat_bayar"=>$jrawat_bayar,
+                    "jrawat_totalbiaya"=>$jrawat_total,
+                    "jrawat_cara"=>$jrawat_cara, 
+                    //"jrawat_cara2"=>$jrawat_cara2, 
+                    //"jrawat_cara3"=>$jrawat_cara3,
+                    "jrawat_keterangan"=>$jrawat_keterangan,
+                    "jrawat_stat_dok"=>$jrawat_stat_dok,
+                    "jrawat_update"=>$_SESSION[SESSION_USERID]
+                );
+                if($jrawat_cara2!=null)
+                    $data["jrawat_cara2"]=$jrawat_cara2;
+                if($jrawat_cara3!=null)
+                    $data["jrawat_cara3"]=$jrawat_cara3;
+                $sql="select cust_id from customer where cust_id='".$jrawat_cust."'";
+                $query=$this->db->query($sql);
+                if($query->num_rows())
+                    $data["jrawat_cust"]=$jrawat_cust;
+                    
+                $this->db->where('jrawat_id', $jrawat_id);
+                $this->db->update('master_jual_rawat', $data);
+                
+                //if($cetak_jrawat==1){
+                    $sql="SELECT drawat_dtrawat FROM detail_jual_rawat WHERE drawat_master='$jrawat_id'";
+                    $rs=$this->db->query($sql);
+                    if($rs->num_rows()){
+                        $sql="UPDATE tindakan_detail SET dtrawat_locked=1 ";
+                        //$sql.=eregi("WHERE",$sql)?" OR ":" WHERE ";
+                        foreach($rs->result() as $row_drawat){
+                            $sql.=eregi("WHERE",$sql)?" OR ":" WHERE ";
+                            $sql.="dtrawat_id='".$row_drawat->drawat_dtrawat."' ";
+                        }
+                        $this->db->query($sql);
+                    }
+                //}
+                
+                if($this->db->affected_rows() || $this->db->affected_rows()==0){
+                    //delete all transaksi
+                    /*$sql="delete from jual_kwitansi where jkwitansi_ref='".$jrawat_nobukti."'";
+                    $this->db->query($sql);
+                    $sql="delete from jual_card where jcard_ref='".$jrawat_nobukti."'";
+                    $this->db->query($sql);
+                    $sql="delete from jual_cek where jcek_ref='".$jrawat_nobukti."'";
+                    $this->db->query($sql);
+                    $sql="delete from jual_transfer where jtransfer_ref='".$jrawat_nobukti."'";
+                    $this->db->query($sql);
+                    $sql="delete from jual_kredit where jkredit_ref='".$jrawat_nobukti."'";
+                    $this->db->query($sql);
+                    $sql="delete from jual_tunai where jtunai_ref='".$jrawat_nobukti."'";
+                    $this->db->query($sql);*/
+                    if($jrawat_cara!=null || $jrawat_cara!=''){
+                        //kwitansi
+                        if($jrawat_cara=='kwitansi'){
+                            if($jrawat_kwitansi_nama=="" || $jrawat_kwitansi_nama==NULL){
+                                if(is_int($jrawat_kwitansi_nama)){
+                                    $sql="select cust_nama from customer where cust_id='".$jrawat_cust."'";
+                                    $query=$this->db->query($sql);
+                                    if($query->num_rows()){
+                                        $data=$query->row();
+                                        $jrawat_kwitansi_nama=$data->cust_nama;
+                                    }
+                                }else{
+                                        $jrawat_kwitansi_nama=$jpaket_cust;
+                                }
+                            }
+                            
+                            $sql="SELECT jkwitansi_id FROM jual_kwitansi WHERE jkwitansi_ref='$jrawat_nobukti'";
+                            $rs=$this->db->query($sql);
+                            if($rs->num_rows()){
+                                $data=array(
+                                    "jkwitansi_master"=>$jrawat_kwitansi_no,
+                                    "jkwitansi_nilai"=>$jrawat_kwitansi_nilai
+                                );
+                                $this->db->where('jkwitansi_ref', $jrawat_nobukti);
+                                $this->db->update('jual_kwitansi', $data);
+                            }else{
+                                $data=array(
+                                    "jkwitansi_ref"=>$jrawat_nobukti,
+                                    "jkwitansi_master"=>$jrawat_kwitansi_no,
+                                    "jkwitansi_nilai"=>$jrawat_kwitansi_nilai,
+                                    "jkwitansi_transaksi"=>"jual_rawat"
+                                );
+                                $this->db->insert('jual_kwitansi', $data);
+                            }
+                        
+                        }else if($jrawat_cara=='card'){
+                            $sql="SELECT jcard_id FROM jual_card WHERE jcard_ref='$jrawat_nobukti'";
+                            $rs=$this->db->query($sql);
+                            if($rs->num_rows()){
+                                $data=array(
+                                    "jcard_nama"=>$jrawat_card_nama,
+                                    "jcard_edc"=>$jrawat_card_edc,
+                                    "jcard_no"=>$jrawat_card_no,
+                                    "jcard_nilai"=>$jrawat_card_nilai
+                                    );
+                                $this->db->where('jcard_ref', $jrawat_nobukti);
+                                $this->db->update('jual_card', $data);
+                            }else{
+                                $data=array(
+                                    "jcard_ref"=>$jrawat_nobukti,
+                                    "jcard_nama"=>$jrawat_card_nama,
+                                    "jcard_edc"=>$jrawat_card_edc,
+                                    "jcard_no"=>$jrawat_card_no,
+                                    "jcard_nilai"=>$jrawat_card_nilai,
+                                    "jcard_transaksi"=>"jual_rawat"
+                                    );
+                                $this->db->insert('jual_card', $data);
+                            }
+                        
+                        }else if($jrawat_cara=='cek/giro'){
+                            
+                            if($jrawat_cek_nama=="" || $jrawat_cek_nama==NULL){
+                                if(is_int($jrawat_cek_nama)){
+                                    $sql="select cust_nama from customer where cust_id='".$jrawat_cust."'";
+                                    $query=$this->db->query($sql);
+                                    if($query->num_rows()){
+                                        $data=$query->row();
+                                        $jrawat_cek_nama=$data->cust_nama;
+                                    }
+                                }else{
+                                        $jrawat_cek_nama=$jrawat_cust;
+                                }
+                            }
+                            
+                            $sql="SELECT jcek_id FROM jual_cek WHERE jcek_ref='$jrawat_nobukti'";
+                            $rs=$this->db->query($sql);
+                            if($rs->num_rows()){
+                                $data=array(
+                                    "jcek_nama"=>$jrawat_cek_nama,
+                                    "jcek_no"=>$jrawat_cek_no,
+                                    "jcek_valid"=>$jrawat_cek_valid,
+                                    "jcek_bank"=>$jrawat_cek_bank,
+                                    "jcek_nilai"=>$jrawat_cek_nilai
+                                    );
+                                $this->db->where('jcek_ref', $jrawat_nobukti);
+                                $this->db->update('jual_cek', $data);
+                            }else{
+                                $data=array(
+                                    "jcek_ref"=>$jrawat_nobukti,
+                                    "jcek_nama"=>$jrawat_cek_nama,
+                                    "jcek_no"=>$jrawat_cek_no,
+                                    "jcek_valid"=>$jrawat_cek_valid,
+                                    "jcek_bank"=>$jrawat_cek_bank,
+                                    "jcek_nilai"=>$jrawat_cek_nilai,
+                                    "jcek_transaksi"=>"jual_rawat"
+                                    );
+                                $this->db->insert('jual_cek', $data);
+                            }
+                            
+                        }else if($jrawat_cara=='transfer'){
+                            $sql="SELECT jtransfer_id FROM jual_transfer WHERE jtransfer_ref='$jrawat_nobukti'";
+                            $rs=$this->db->query($sql);
+                            if($rs->num_rows()){
+                                $data=array(
+                                    "jtransfer_bank"=>$jrawat_transfer_bank,
+                                    "jtransfer_nama"=>$jrawat_transfer_nama,
+                                    "jtransfer_nilai"=>$jrawat_transfer_nilai
+                                    );
+                                $this->db->where('jtransfer_ref', $jrawat_nobukti);
+                                $this->db->update('jual_transfer', $data);
+                            }else{
+                                $data=array(
+                                    "jtransfer_ref"=>$jrawat_nobukti,
+                                    "jtransfer_bank"=>$jrawat_transfer_bank,
+                                    "jtransfer_nama"=>$jrawat_transfer_nama,
+                                    "jtransfer_nilai"=>$jrawat_transfer_nilai,
+                                    "jtransfer_transaksi"=>"jual_rawat"
+                                    );
+                                $this->db->insert('jual_transfer', $data);
+                            }
+                            
+                        }else if($jrawat_cara=='tunai'){
+                            $sql="SELECT jtunai_id FROM jual_tunai WHERE jtunai_ref='$jrawat_nobukti'";
+                            $rs=$this->db->query($sql);
+                            if($rs->num_rows()){
+                                $data=array(
+                                    "jtunai_nilai"=>$jrawat_tunai_nilai
+                                    );
+                                $this->db->where('jtunai_ref', $jrawat_nobukti);
+                                $this->db->update('jual_tunai', $data);
+                            }else{
+                                $data=array(
+                                    "jtunai_nilai"=>$jrawat_tunai_nilai,
+                                    "jtunai_ref"=>$jrawat_nobukti,
+                                    "jtunai_transaksi"=>"jual_rawat"
+                                    );
+                                $this->db->insert('jual_tunai', $data);
+                            }
+                            
+                        }else if($jrawat_cara=='voucher'){
+                            $sql="SELECT tvoucher_id FROM voucher_terima WHERE tvoucher_ref='$jrawat_nobukti'";
+                            $rs=$this->db->query($sql);
+                            if($rs->num_rows()){
+                                /*$get_voucher_cashback=0;
+                                $sql="SELECT voucher_cashback FROM voucher_kupon LEFT JOIN voucher ON(kvoucher_master=voucher_id) WHERE kvoucher_nomor='$jrawat_voucher_no'";
+                                $rs=$this->db->query($sql);
+                                if($rs->num_rows()){
+                                    $rs_record=$rs->row_array();
+                                    $get_voucher_cashback=$rs_record["voucher_cashback"];
+                                }*/
+                                $data=array(
+                                    "tvoucher_novoucher"=>$jrawat_voucher_no,
+                                    "tvoucher_nilai"=>$jrawat_voucher_cashback
+                                    );
+                                $this->db->where('tvoucher_ref', $jrawat_nobukti);
+                                $this->db->update('voucher_terima', $data);
+                            }else{
+                                /*$get_voucher_cashback=0;
+                                $sql="SELECT voucher_cashback FROM voucher_kupon LEFT JOIN voucher ON(kvoucher_master=voucher_id) WHERE kvoucher_nomor='$jrawat_voucher_no'";
+                                $rs=$this->db->query($sql);
+                                if($rs->num_rows()){
+                                    $rs_record=$rs->row_array();
+                                    $get_voucher_cashback=$rs_record["voucher_cashback"];
+                                }*/
+                                $data=array(
+                                    "tvoucher_novoucher"=>$jrawat_voucher_no,
+                                    "tvoucher_ref"=>$jrawat_nobukti,
+                                    "tvoucher_nilai"=>$jrawat_voucher_cashback,
+                                    "tvoucher_transaksi"=>"jual_rawat"
+                                    );
+                                $this->db->insert('voucher_terima', $data);
+                            }
+                        }
+                    }
+                    if($jrawat_cara2!=null || $jrawat_cara2!=''){
+                        //kwitansi
+                        if($jrawat_cara2=='kwitansi'){
+                            if($jrawat_kwitansi_nama2=="" || $jrawat_kwitansi_nama2==NULL){
+                                if(is_int($jrawat_kwitansi_nama2)){
+                                    $sql="select cust_nama from customer where cust_id='".$jrawat_cust."'";
+                                    $query=$this->db->query($sql);
+                                    if($query->num_rows()){
+                                        $data=$query->row();
+                                        $jrawat_kwitansi_nama2=$data->cust_nama;
+                                    }
+                                }else{
+                                        $jrawat_kwitansi_nama2=$jpaket_cust;
+                                }
+                            }
+                            
+                            $sql="SELECT jkwitansi_id FROM jual_kwitansi WHERE jkwitansi_ref='$jrawat_nobukti'";
+                            $rs=$this->db->query($sql);
+                            if($rs->num_rows()){
+                                $data=array(
+                                    "jkwitansi_master"=>$jrawat_kwitansi_no2,
+                                    "jkwitansi_nilai"=>$jrawat_kwitansi_nilai2
+                                );
+                                $this->db->where('jkwitansi_ref', $jrawat_nobukti);
+                                $this->db->update('jual_kwitansi', $data);
+                            }else{
+                                $data=array(
+                                    "jkwitansi_ref"=>$jrawat_nobukti,
+                                    "jkwitansi_master"=>$jrawat_kwitansi_no2,
+                                    "jkwitansi_nilai"=>$jrawat_kwitansi_nilai2,
+                                    "jkwitansi_transaksi"=>"jual_rawat"
+                                );
+                                $this->db->insert('jual_kwitansi', $data);
+                            }
+                        
+                        }else if($jrawat_cara2=='card'){
+                            $sql="SELECT jcard_id FROM jual_card WHERE jcard_ref='$jrawat_nobukti'";
+                            $rs=$this->db->query($sql);
+                            if($rs->num_rows()){
+                                $data=array(
+                                    "jcard_nama"=>$jrawat_card_nama2,
+                                    "jcard_edc"=>$jrawat_card_edc2,
+                                    "jcard_no"=>$jrawat_card_no2,
+                                    "jcard_nilai"=>$jrawat_card_nilai2
+                                    );
+                                $this->db->where('jcard_ref', $jrawat_nobukti);
+                                $this->db->update('jual_card', $data);
+                            }else{
+                                $data=array(
+                                    "jcard_ref"=>$jrawat_nobukti,
+                                    "jcard_nama"=>$jrawat_card_nama2,
+                                    "jcard_edc"=>$jrawat_card_edc2,
+                                    "jcard_no"=>$jrawat_card_no2,
+                                    "jcard_nilai"=>$jrawat_card_nilai2,
+                                    "jcard_transaksi"=>"jual_rawat"
+                                    );
+                                $this->db->insert('jual_card', $data);
+                            }
+                        
+                        }else if($jrawat_cara2=='cek/giro'){
+                            
+                            if($jrawat_cek_nama2=="" || $jrawat_cek_nama2==NULL){
+                                if(is_int($jrawat_cek_nama2)){
+                                    $sql="select cust_nama from customer where cust_id='".$jrawat_cust."'";
+                                    $query=$this->db->query($sql);
+                                    if($query->num_rows()){
+                                        $data=$query->row();
+                                        $jrawat_cek_nama2=$data->cust_nama;
+                                    }
+                                }else{
+                                        $jrawat_cek_nama2=$jrawat_cust;
+                                }
+                            }
+                            
+                            $sql="SELECT jcek_id FROM jual_cek WHERE jcek_ref='$jrawat_nobukti'";
+                            $rs=$this->db->query($sql);
+                            if($rs->num_rows()){
+                                $data=array(
+                                    "jcek_nama"=>$jrawat_cek_nama2,
+                                    "jcek_no"=>$jrawat_cek_no2,
+                                    "jcek_valid"=>$jrawat_cek_valid2,
+                                    "jcek_bank"=>$jrawat_cek_bank2,
+                                    "jcek_nilai"=>$jrawat_cek_nilai2
+                                    );
+                                $this->db->where('jcek_ref', $jrawat_nobukti);
+                                $this->db->update('jual_cek', $data);
+                            }else{
+                                $data=array(
+                                    "jcek_ref"=>$jrawat_nobukti,
+                                    "jcek_nama"=>$jrawat_cek_nama2,
+                                    "jcek_no"=>$jrawat_cek_no2,
+                                    "jcek_valid"=>$jrawat_cek_valid2,
+                                    "jcek_bank"=>$jrawat_cek_bank2,
+                                    "jcek_nilai"=>$jrawat_cek_nilai2,
+                                    "jcek_transaksi"=>"jual_rawat"
+                                    );
+                                $this->db->insert('jual_cek', $data);
+                            }
+                            
+                        }else if($jrawat_cara2=='transfer'){
+                            $sql="SELECT jtransfer_id FROM jual_transfer WHERE jtransfer_ref='$jrawat_nobukti'";
+                            $rs=$this->db->query($sql);
+                            if($rs->num_rows()){
+                                $data=array(
+                                    "jtransfer_bank"=>$jrawat_transfer_bank2,
+                                    "jtransfer_nama"=>$jrawat_transfer_nama2,
+                                    "jtransfer_nilai"=>$jrawat_transfer_nilai2
+                                    );
+                                $this->db->where('jtransfer_ref', $jrawat_nobukti);
+                                $this->db->update('jual_transfer', $data);
+                            }else{
+                                $data=array(
+                                    "jtransfer_ref"=>$jrawat_nobukti,
+                                    "jtransfer_bank"=>$jrawat_transfer_bank2,
+                                    "jtransfer_nama"=>$jrawat_transfer_nama2,
+                                    "jtransfer_nilai"=>$jrawat_transfer_nilai2,
+                                    "jtransfer_transaksi"=>"jual_rawat"
+                                    );
+                                $this->db->insert('jual_transfer', $data);
+                            }
+                            
+                        }else if($jrawat_cara2=='tunai'){
+                            $sql="SELECT jtunai_id FROM jual_tunai WHERE jtunai_ref='$jrawat_nobukti'";
+                            $rs=$this->db->query($sql);
+                            if($rs->num_rows()){
+                                $data=array(
+                                    "jtunai_nilai"=>$jrawat_tunai_nilai2
+                                    );
+                                $this->db->where('jtunai_ref', $jrawat_nobukti);
+                                $this->db->update('jual_tunai', $data);
+                            }else{
+                                $data=array(
+                                    "jtunai_nilai"=>$jrawat_tunai_nilai2,
+                                    "jtunai_ref"=>$jrawat_nobukti,
+                                    "jtunai_transaksi"=>"jual_rawat"
+                                    );
+                                $this->db->insert('jual_tunai', $data);
+                            }
+                            
+                        }else if($jrawat_cara2=='voucher'){
+                            $sql="SELECT tvoucher_id FROM voucher_terima WHERE tvoucher_ref='$jrawat_nobukti'";
+                            $rs=$this->db->query($sql);
+                            if($rs->num_rows()){
+                                /*$get_voucher_cashback=0;
+                                $sql="SELECT voucher_cashback FROM voucher_kupon LEFT JOIN voucher ON(kvoucher_master=voucher_id) WHERE kvoucher_nomor='$jrawat_voucher_no'";
+                                $rs=$this->db->query($sql);
+                                if($rs->num_rows()){
+                                    $rs_record=$rs->row_array();
+                                    $get_voucher_cashback=$rs_record["voucher_cashback"];
+                                }*/
+                                $data=array(
+                                    "tvoucher_novoucher"=>$jrawat_voucher_no2,
+                                    "tvoucher_nilai"=>$jrawat_voucher_cashback2
+                                    );
+                                $this->db->where('tvoucher_ref', $jrawat_nobukti);
+                                $this->db->update('voucher_terima', $data);
+                            }else{
+                                /*$get_voucher_cashback=0;
+                                $sql="SELECT voucher_cashback FROM voucher_kupon LEFT JOIN voucher ON(kvoucher_master=voucher_id) WHERE kvoucher_nomor='$jrawat_voucher_no'";
+                                $rs=$this->db->query($sql);
+                                if($rs->num_rows()){
+                                    $rs_record=$rs->row_array();
+                                    $get_voucher_cashback=$rs_record["voucher_cashback"];
+                                }*/
+                                $data=array(
+                                    "tvoucher_novoucher"=>$jrawat_voucher_no2,
+                                    "tvoucher_ref"=>$jrawat_nobukti,
+                                    "tvoucher_nilai"=>$jrawat_voucher_cashback2,
+                                    "tvoucher_transaksi"=>"jual_rawat"
+                                    );
+                                $this->db->insert('voucher_terima', $data);
+                            }
+                        }
+                    }
+                    if($jrawat_cara3!=null || $jrawat_cara3!=''){
+                        //kwitansi
+                        if($jrawat_cara3=='kwitansi'){
+                            if($jrawat_kwitansi_nama3=="" || $jrawat_kwitansi_nama3==NULL){
+                                if(is_int($jrawat_kwitansi_nama3)){
+                                    $sql="select cust_nama from customer where cust_id='".$jrawat_cust."'";
+                                    $query=$this->db->query($sql);
+                                    if($query->num_rows()){
+                                        $data=$query->row();
+                                        $jrawat_kwitansi_nama3=$data->cust_nama;
+                                    }
+                                }else{
+                                        $jrawat_kwitansi_nama3=$jpaket_cust;
+                                }
+                            }
+                            
+                            $sql="SELECT jkwitansi_id FROM jual_kwitansi WHERE jkwitansi_ref='$jrawat_nobukti'";
+                            $rs=$this->db->query($sql);
+                            if($rs->num_rows()){
+                                $data=array(
+                                    "jkwitansi_master"=>$jrawat_kwitansi_no3,
+                                    "jkwitansi_nilai"=>$jrawat_kwitansi_nilai3
+                                );
+                                $this->db->where('jkwitansi_ref', $jrawat_nobukti);
+                                $this->db->update('jual_kwitansi', $data);
+                            }else{
+                                $data=array(
+                                    "jkwitansi_ref"=>$jrawat_nobukti,
+                                    "jkwitansi_master"=>$jrawat_kwitansi_no3,
+                                    "jkwitansi_nilai"=>$jrawat_kwitansi_nilai3,
+                                    "jkwitansi_transaksi"=>"jual_rawat"
+                                );
+                                $this->db->insert('jual_kwitansi', $data);
+                            }
+                        
+                        }else if($jrawat_cara3=='card'){
+                            $sql="SELECT jcard_id FROM jual_card WHERE jcard_ref='$jrawat_nobukti'";
+                            $rs=$this->db->query($sql);
+                            if($rs->num_rows()){
+                                $data=array(
+                                    "jcard_nama"=>$jrawat_card_nama3,
+                                    "jcard_edc"=>$jrawat_card_edc3,
+                                    "jcard_no"=>$jrawat_card_no3,
+                                    "jcard_nilai"=>$jrawat_card_nilai3
+                                    );
+                                $this->db->where('jcard_ref', $jrawat_nobukti);
+                                $this->db->update('jual_card', $data);
+                            }else{
+                                $data=array(
+                                    "jcard_ref"=>$jrawat_nobukti,
+                                    "jcard_nama"=>$jrawat_card_nama3,
+                                    "jcard_edc"=>$jrawat_card_edc3,
+                                    "jcard_no"=>$jrawat_card_no3,
+                                    "jcard_nilai"=>$jrawat_card_nilai3,
+                                    "jcard_transaksi"=>"jual_rawat"
+                                    );
+                                $this->db->insert('jual_card', $data);
+                            }
+                        
+                        }else if($jrawat_cara3=='cek/giro'){
+                            
+                            if($jrawat_cek_nama3=="" || $jrawat_cek_nama3==NULL){
+                                if(is_int($jrawat_cek_nama3)){
+                                    $sql="select cust_nama from customer where cust_id='".$jrawat_cust."'";
+                                    $query=$this->db->query($sql);
+                                    if($query->num_rows()){
+                                        $data=$query->row();
+                                        $jrawat_cek_nama3=$data->cust_nama;
+                                    }
+                                }else{
+                                        $jrawat_cek_nama3=$jrawat_cust;
+                                }
+                            }
+                            
+                            $sql="SELECT jcek_id FROM jual_cek WHERE jcek_ref='$jrawat_nobukti'";
+                            $rs=$this->db->query($sql);
+                            if($rs->num_rows()){
+                                $data=array(
+                                    "jcek_nama"=>$jrawat_cek_nama3,
+                                    "jcek_no"=>$jrawat_cek_no3,
+                                    "jcek_valid"=>$jrawat_cek_valid3,
+                                    "jcek_bank"=>$jrawat_cek_bank3,
+                                    "jcek_nilai"=>$jrawat_cek_nilai3
+                                    );
+                                $this->db->where('jcek_ref', $jrawat_nobukti);
+                                $this->db->update('jual_cek', $data);
+                            }else{
+                                $data=array(
+                                    "jcek_ref"=>$jrawat_nobukti,
+                                    "jcek_nama"=>$jrawat_cek_nama3,
+                                    "jcek_no"=>$jrawat_cek_no3,
+                                    "jcek_valid"=>$jrawat_cek_valid3,
+                                    "jcek_bank"=>$jrawat_cek_bank3,
+                                    "jcek_nilai"=>$jrawat_cek_nilai3,
+                                    "jcek_transaksi"=>"jual_rawat"
+                                    );
+                                $this->db->insert('jual_cek', $data);
+                            }
+                            
+                        }else if($jrawat_cara3=='transfer'){
+                            $sql="SELECT jtransfer_id FROM jual_transfer WHERE jtransfer_ref='$jrawat_nobukti'";
+                            $rs=$this->db->query($sql);
+                            if($rs->num_rows()){
+                                $data=array(
+                                    "jtransfer_bank"=>$jrawat_transfer_bank3,
+                                    "jtransfer_nama"=>$jrawat_transfer_nama3,
+                                    "jtransfer_nilai"=>$jrawat_transfer_nilai3
+                                    );
+                                $this->db->where('jtransfer_ref', $jrawat_nobukti);
+                                $this->db->update('jual_transfer', $data);
+                            }else{
+                                $data=array(
+                                    "jtransfer_ref"=>$jrawat_nobukti,
+                                    "jtransfer_bank"=>$jrawat_transfer_bank3,
+                                    "jtransfer_nama"=>$jrawat_transfer_nama3,
+                                    "jtransfer_nilai"=>$jrawat_transfer_nilai3,
+                                    "jtransfer_transaksi"=>"jual_rawat"
+                                    );
+                                $this->db->insert('jual_transfer', $data);
+                            }
+                            
+                        }else if($jrawat_cara3=='tunai'){
+                            $sql="SELECT jtunai_id FROM jual_tunai WHERE jtunai_ref='$jrawat_nobukti'";
+                            $rs=$this->db->query($sql);
+                            if($rs->num_rows()){
+                                $data=array(
+                                    "jtunai_nilai"=>$jrawat_tunai_nilai3
+                                    );
+                                $this->db->where('jtunai_ref', $jrawat_nobukti);
+                                $this->db->update('jual_tunai', $data);
+                            }else{
+                                $data=array(
+                                    "jtunai_nilai"=>$jrawat_tunai_nilai3,
+                                    "jtunai_ref"=>$jrawat_nobukti,
+                                    "jtunai_transaksi"=>"jual_rawat"
+                                    );
+                                $this->db->insert('jual_tunai', $data);
+                            }
+                            
+                        }else if($jrawat_cara3=='voucher'){
+                            $sql="SELECT tvoucher_id FROM voucher_terima WHERE tvoucher_ref='$jrawat_nobukti'";
+                            $rs=$this->db->query($sql);
+                            if($rs->num_rows()){
+                                /*$get_voucher_cashback=0;
+                                $sql="SELECT voucher_cashback FROM voucher_kupon LEFT JOIN voucher ON(kvoucher_master=voucher_id) WHERE kvoucher_nomor='$jrawat_voucher_no'";
+                                $rs=$this->db->query($sql);
+                                if($rs->num_rows()){
+                                    $rs_record=$rs->row_array();
+                                    $get_voucher_cashback=$rs_record["voucher_cashback"];
+                                }*/
+                                $data=array(
+                                    "tvoucher_novoucher"=>$jrawat_voucher_no3,
+                                    "tvoucher_nilai"=>$jrawat_voucher_cashback3
+                                    );
+                                $this->db->where('tvoucher_ref', $jrawat_nobukti);
+                                $this->db->update('voucher_terima', $data);
+                            }else{
+                                /*$get_voucher_cashback=0;
+                                $sql="SELECT voucher_cashback FROM voucher_kupon LEFT JOIN voucher ON(kvoucher_master=voucher_id) WHERE kvoucher_nomor='$jrawat_voucher_no'";
+                                $rs=$this->db->query($sql);
+                                if($rs->num_rows()){
+                                    $rs_record=$rs->row_array();
+                                    $get_voucher_cashback=$rs_record["voucher_cashback"];
+                                }*/
+                                $data=array(
+                                    "tvoucher_novoucher"=>$jrawat_voucher_no3,
+                                    "tvoucher_ref"=>$jrawat_nobukti,
+                                    "tvoucher_nilai"=>$jrawat_voucher_cashback3,
+                                    "tvoucher_transaksi"=>"jual_rawat"
+                                    );
+                                $this->db->insert('voucher_terima', $data);
+                            }
+                        }
+                    }
+                    /*if($cetak_jrawat==1){
+                        return $jrawat_id;
+                    }else{
+                        return '1';
+                    }*/
+                    //return '1';
+                    if($this->db->affected_rows() || $this->db->affected_rows()==0){
+                        if($cetak_jrawat==1 && $jrawat_bayar>0){
+                            $this->member_point_update($jrawat_id);
+                            return $jrawat_id;
+                        }else{
+                            return '0';
+                        }
+                    }else{
+                        return '-1';
+                    }
+                }
+                else{
+                    return '-1';
+                }
 			}elseif((substr($jrawat_nobukti,0,2)=='PK') && $cetak_jrawat==1){
 				return '-3';
+			}elseif((substr($jrawat_nobukti,0,2)=='PK') && $cetak_jrawat<>1 && $jrawat_stat_dok=='Batal'){
+				return '-4';
 			}
 		}
 		
