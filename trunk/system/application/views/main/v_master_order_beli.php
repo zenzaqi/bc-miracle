@@ -62,6 +62,7 @@ var detail_order_beli_writer;
 var detail_order_beli_reader;
 var editor_detail_order_beli;
 var today=new Date().format('Y-m-d');
+var firstday=(new Date().format('Y-m'))+'-01';
 //declare konstant
 var post2db = '';
 var msg = '';
@@ -1459,7 +1460,9 @@ Ext.onReady(function(){
 		var order_id_search=null;
 		var order_no_search=null;
 		var order_supplier_search=null;
-		var order_tanggal_search_date="";
+		var order_tanggal_mulai_search_date="";
+		var order_tanggal_akhir_search_date="";
+		
 		var order_carabayar_search=null;
 		var order_diskon_search=null;
 		var order_biaya_search=null;
@@ -1469,7 +1472,8 @@ Ext.onReady(function(){
 		if(order_idSearchField.getValue()!==null){order_id_search=order_idSearchField.getValue();}
 		if(order_noSearchField.getValue()!==null){order_no_search=order_noSearchField.getValue();}
 		if(order_supplierSearchField.getValue()!==null){order_supplier_search=order_supplierSearchField.getValue();}
-		if(order_tanggalSearchField.getValue()!==""){order_tanggal_search_date=order_tanggalSearchField.getValue().format('Y-m-d');}
+		if(order_tanggal_mulaiSearchField.getValue()!==""){order_tanggal_mulai_search_date=order_tanggal_mulaiSearchField.getValue().format('Y-m-d');}
+		if(order_tanggal_akhirSearchField.getValue()!==""){order_tanggal_akhir_search_date=order_tanggal_akhirSearchField.getValue().format('Y-m-d');}
 		if(order_carabayarSearchField.getValue()!==null){order_carabayar_search=order_carabayarSearchField.getValue();}
 		if(order_diskonSearchField.getValue()!==null){order_diskon_search=order_diskonSearchField.getValue();}
 		if(order_biayaSearchField.getValue()!==null){order_biaya_search=order_biayaSearchField.getValue();}
@@ -1479,14 +1483,15 @@ Ext.onReady(function(){
 		master_order_beli_DataStore.baseParams = {
 			task: 'SEARCH',
 			//variable here
-			order_id	:	order_id_search, 
-			order_no	:	order_no_search, 
-			order_supplier	:	order_supplier_search, 
-			order_tanggal	:	order_tanggal_search_date, 
-			order_carabayar	:	order_carabayar_search, 
-			order_diskon	:	order_diskon_search, 
-			order_biaya	:	order_biaya_search, 
-			order_bayar	:	order_bayar_search, 
+			order_id			:	order_id_search, 
+			order_no			:	order_no_search, 
+			order_supplier		:	order_supplier_search, 
+			order_tanggal_mulai	:	order_tanggal_mulai_search_date, 
+			order_tanggal_akhir	:	order_tanggal_akhir_search_date, 
+			order_carabayar		:	order_carabayar_search, 
+			order_diskon		:	order_diskon_search, 
+			order_biaya			:	order_biaya_search, 
+			order_bayar			:	order_bayar_search, 
 			order_keterangan	:	order_keterangan_search, 
 		};
 		// Cause the datastore to do another query : 
@@ -1506,7 +1511,10 @@ Ext.onReady(function(){
 	function master_order_beli_reset_SearchForm(){
 		order_noSearchField.reset();
 		order_supplierSearchField.reset();
-		order_tanggalSearchField.reset();
+		order_tanggal_mulaiSearchField.reset();
+		//order_tanggal_mulaiSearchField.setValue(firstday);
+		order_tanggal_akhirSearchField.reset();
+		//order_tanggal_akhirSearchField.setValue(today);
 		order_carabayarSearchField.reset();
 		order_diskonSearchField.reset();
 		order_cashbackSearchField.reset();
@@ -1560,12 +1568,35 @@ Ext.onReady(function(){
 	
 	});
 	/* Identify  order_tanggal Search Field */
-	order_tanggalSearchField= new Ext.form.DateField({
-		id: 'order_tanggalSearchField',
+	order_tanggal_mulaiSearchField= new Ext.form.DateField({
+		id: 'order_tanggal_mulaiSearchField',
 		fieldLabel: 'Tanggal',
-		format : 'd-m-Y'
+		format : 'd-m-Y',
+		value: firstday
 	
 	});
+	
+	order_tanggal_akhirSearchField= new Ext.form.DateField({
+		id: 'order_tanggal_akhirSearchField',
+		fieldLabel: 'Tanggal',
+		format : 'd-m-Y',
+		value: today
+	
+	});
+	
+	order_label_tanggal_labelField=new Ext.form.Label({html: 'Tanggal :' });
+	
+	order_label_tanggalField= new Ext.form.Label({ html: ' &nbsp; s/d  &nbsp;' });
+	
+	order_tanggalSearchField=new Ext.form.FieldSet({
+		id:'order_tanggalSearchField',
+		title: 'Opsi Tanggal',
+		layout: 'column',
+		boduStyle: 'padding: 5px;',
+		frame: false,
+		items:[order_tanggal_mulaiSearchField, order_label_tanggalField, order_tanggal_akhirSearchField]
+	});
+	
 	/* Identify  order_carabayar Search Field */
 	order_carabayarSearchField= new Ext.form.ComboBox({
 		id: 'order_carabayarSearchField',

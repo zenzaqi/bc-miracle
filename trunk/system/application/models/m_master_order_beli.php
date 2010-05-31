@@ -360,7 +360,7 @@ class M_master_order_beli extends Model{
 		}
 		
 		//function for advanced search record
-		function master_order_beli_search($order_id ,$order_no ,$order_supplier ,$order_tanggal ,$order_carabayar ,$order_diskon,$order_cashback ,$order_biaya ,$order_bayar ,$order_keterangan, $order_status, $start,$end){
+		function master_order_beli_search($order_id ,$order_no ,$order_supplier ,$order_tanggal_mulai, $order_tanggal_akhir ,$order_carabayar ,$order_diskon,$order_cashback ,$order_biaya ,$order_bayar ,$order_keterangan, $order_status, $start,$end){
 			//full query
 			$query = "SELECT * FROM vu_trans_order";
 			
@@ -376,9 +376,10 @@ class M_master_order_beli extends Model{
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " order_supplier LIKE '%".$order_supplier."%'";
 			};
-			if($order_tanggal!=''){
+			if($order_tanggal_mulai!='' && $order_tanggal_akhir){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " order_tanggal LIKE '%".$order_tanggal."%'";
+				$query.= " date_format(tanggal,'%Y-%m-%d')>='".$order_tanggal_mulai."' 
+							AND date_format(tanggal,'%Y-%m-%d')<='".$order_tanggal_akhir."' ";
 			};
 			if($order_carabayar!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";

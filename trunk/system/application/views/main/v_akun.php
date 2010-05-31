@@ -484,7 +484,7 @@ Ext.onReady(function(){
 	});
 	//eof
      
-	var tree = new Ext.ux.tree.ColumnTree({
+/*	var tree = new Ext.ux.tree.ColumnTree({
         width: 550,
         height: 300,
         rootVisible:false,
@@ -505,7 +505,7 @@ Ext.onReady(function(){
             dataIndex:'user'
         }],
         loader: new Ext.tree.TreeLoader({
-            dataUrl:'<?=base_url();?>assets/column-data.json',
+            dataUrl:'<? //=base_url();?>assets/column-data.json',
             uiProviders:{
                 'col': Ext.ux.tree.ColumnNodeUI
             }
@@ -513,7 +513,7 @@ Ext.onReady(function(){
         root: new Ext.tree.AsyncTreeNode({
             text:'task'
         })
-    });
+    });*/
 	
 	/*var Tree = Ext.tree;
 
@@ -534,8 +534,8 @@ Ext.onReady(function(){
     });*/
 
     // render the tree
-    tree.render('fp_akun_tree');
-    tree.getRootNode().expand();
+/*    tree.render('fp_akun_tree');
+    tree.getRootNode().expand();*/
 
 
 	
@@ -821,11 +821,12 @@ Ext.onReady(function(){
 		store:new Ext.data.SimpleStore({
 			fields:['akun_jenis_value', 'akun_jenis_display'],
 			data: [
-					['Aktiva','Aktiva'],
-					['Hutang','Hutang'],
-					['Modal','Modal'],
+					['Aset','Aset'],
+					['Kewajiban','Kewajiban'],
+					['Ekuitas','Ekuitas'],
 					['Pendapatan','Pendapatan'],
-					['Biaya','Biaya']
+					['Beban','Beban'],
+					['Lain-lain','Lain-lain']
 				]
 			}),
 		mode: 'local',
@@ -1034,11 +1035,11 @@ Ext.onReady(function(){
 		store:new Ext.data.SimpleStore({
 			fields:['akun_jenisSearch_value', 'akun_jenisSearch_display'],
 			data: [
-					['Aktiva','Aktiva'],
-					['Hutang','Hutang'],
-					['Modal','Modal'],
+					['Aset','Aset'],
+					['Kewajiban','Kewajiban'],
+					['Ekuitas','Ekuitas'],
 					['Pendapatan','Pendapatan'],
-					['Biaya','Biaya']
+					['Beban','Beban']
 				]
 			}),
 		mode: 'local',

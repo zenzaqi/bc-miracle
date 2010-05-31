@@ -376,7 +376,7 @@ Ext.onReady(function(){
 			id: 'jurnal_detalid'
 		},[
 			{name: 'jurnal_id', type: 'int', mapping: 'jurnal_id'},
-			{name: 'jurnal_detalid', type: 'int', mapping: 'djurnal_id'}, 
+			{name: 'jurnal_detailid', type: 'int', mapping: 'djurnal_id'}, 
 			{name: 'jurnal_tanggal', type: 'date', dateFormat: 'Y-m-d', mapping: 'jurnal_tanggal'}, 
 			{name: 'jurnal_akun', type: 'string', mapping: 'akun_kode'}, 
 			{name: 'jurnal_akun_nama', type: 'string', mapping: 'akun_nama'}, 
@@ -394,7 +394,7 @@ Ext.onReady(function(){
 			{name: 'jurnal_date_post', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'jurnal_date_post'}, 
 			{name: 'jurnal_revised', type: 'int', mapping: 'jurnal_revised'} 
 		]),
-		sortInfo:{field: 'jurnal_detalid', direction: "DESC"}
+		sortInfo:{field: 'jurnal_detailid', direction: "DESC"}
 
 	});
 	/* End of Function */
@@ -408,7 +408,7 @@ Ext.onReady(function(){
 		[{
 			header: '#',
 			readOnly: true,
-			dataIndex: 'jurnal_detalid',
+			dataIndex: 'jurnal_detailid',
 			width: 40,
 			renderer: function(value, cell){
 				cell.css = "readonlycell"; // Mengambil Value dari Class di dalam CSS 
@@ -850,13 +850,14 @@ Ext.onReady(function(){
 	var jurnal_detail_reader=new Ext.data.JsonReader({
 		root: 'results',
 		totalProperty: 'total',
-		id: 'jurnal_id'
+		id: 'djurnal_id'
 	},[
-		{name: 'jurnal_id', type: 'int', mapping: 'djurnal_id'}, 
-		{name: 'jurnal_akun', type: 'int', mapping: 'djurnal_akun'}, 
-		{name: 'jurnal_detail', type: 'string', mapping: 'djurnal_detail'},
-		{name: 'jurnal_debet', type: 'float', mapping: 'djurnal_debet'}, 
-		{name: 'jurnal_kredit', type: 'float', mapping: 'djurnal_kredit'}			
+	   	{name: 'djurnal_id', type: 'int', mapping: 'djurnal_id'},
+		{name: 'djurnal_akun', type: 'int', mapping: 'djurnal_akun'},
+		{name: 'djurnal_kode', type: 'string', mapping: 'akun_kode'}, 
+		{name: 'djurnal_detail', type: 'string', mapping: 'djurnal_detail'},
+		{name: 'djurnal_debet', type: 'float', mapping: 'djurnal_debet'}, 
+		{name: 'djurnal_kredit', type: 'float', mapping: 'djurnal_kredit'}			
 	]);
 	//eof
 	
@@ -874,7 +875,7 @@ Ext.onReady(function(){
 		}),
 		reader: jurnal_detail_reader,
 		baseParams:{start:0, limit:pageS, task: 'detail', master_id: 0},
-		sortInfo:{field: 'jurnal_id', direction: 'DESC'}
+		sortInfo:{field: 'djurnal_akun', direction: 'DESC'}
 	});
 	/* End of Function */
 	
@@ -928,7 +929,6 @@ Ext.onReady(function(){
 			enableKeyEvents: true,
 			tpl: akun_tpl,
 			itemSelector: 'div.search-item',
-			triggerAction: 'all',
 			listClass: 'x-combo-list-small',
 			anchor: '95%'
 	});
@@ -937,7 +937,7 @@ Ext.onReady(function(){
 		[
 		 {
 			header: '<div align="center">' + 'Nama Akun' + '</div>',
-			dataIndex: 'jurnal_akun',
+			dataIndex: 'djurnal_akun',
 			width: 200,	//250,
 			sortable: true,
 			editor: combo_akun,
@@ -945,20 +945,20 @@ Ext.onReady(function(){
 		},
 		{
 			header: '<div align="center">' + 'Kode Akun' + '</div>',
-			dataIndex: 'jurnal_akun',
+			dataIndex: 'djurnal_kode',
 			width: 80,
 			editor: jurnal_akunField,
 			readOnly: true
 		},{
 			header: '<div align="center">' + 'Keterangan' + '</div>',
-			dataIndex: 'jurnal_detail',
+			dataIndex: 'djurnal_detail',
 			width: 200,
 			editor: new Ext.form.TextField({})
 		},
 		{
 			header: '<div align="center">' + 'Debet' + '</div>',
 			align: 'right',
-			dataIndex: 'jurnal_debet',
+			dataIndex: 'djurnal_debet',
 			width: 60,	//100,
 			sortable: true,
 			renderer: Ext.util.Format.numberRenderer('0,000'),
@@ -967,7 +967,7 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Kredit' + '</div>',
 			align: 'right',
-			dataIndex: 'jurnal_kredit',
+			dataIndex: 'djurnal_kredit',
 			width: 60,	//100,
 			sortable: true,
 			renderer: Ext.util.Format.numberRenderer('0,000'),
@@ -1025,11 +1025,10 @@ Ext.onReady(function(){
 	//function of detail add
 	function detail_jurnal_add(){
 		var edit_detail_jurnal= new detail_jurnalListEditorGrid.store.recordType({
-			jurnal_id			:'',		
-			jurnal_akun			:null,		
-			jurnal_detail		:null,		
-			jurnal_debet		:0,		
-			jurnal_kredit		:0	
+			djurnal_akun			:null,		
+			djurnal_detail		:null,		
+			djurnal_debet		:0,		
+			djurnal_kredit		:0	
 		});
 		editor_detail_jurnal.stopEditing();
 		detail_jurnal_DataStore.insert(0, edit_detail_jurnal);
@@ -1053,12 +1052,11 @@ Ext.onReady(function(){
 				waitMsg: 'Please wait...',
 				url: 'index.php?c=c_jurnal_umum&m=detail_jurnal_insert',
 				params:{
-				jurnal_id		: detail_jurnal_record.data.jurnal_id, 
 				jurnal_master	: pkid, 
-				jurnal_akun		: detail_jurnal_record.data.jurnal_id, 
-				jurnal_detail	: detail_jurnal_record.data.jurnal_detail, 
-				jurnal_debet	: detail_jurnal_record.data.jurnal_debet, 
-				jurnal_kredit	: detail_jurnal_record.data.jurnal_kredit
+				jurnal_akun		: detail_jurnal_record.data.djurnal_akun, 
+				jurnal_detail	: detail_jurnal_record.data.djurnal_detail, 
+				jurnal_debet	: detail_jurnal_record.data.djurnal_debet, 
+				jurnal_kredit	: detail_jurnal_record.data.djurnal_kredit
 				
 				}
 			});
@@ -1528,8 +1526,8 @@ Ext.onReady(function(){
 		var total_kredit=0;
 		for(i=0;i<detail_jurnal_DataStore.getCount();i++){
 			var data_balance=detail_jurnal_DataStore.getAt(i);
-			total_debet=total_debet+data_balance.data.jurnal_debet;
-			total_kredit=total_kredit+data_balance.data.jurnal_kredit;
+			total_debet=total_debet+data_balance.data.djurnal_debet;
+			total_kredit=total_kredit+data_balance.data.djurnal_kredit;
 			
 		}
 		jurnal_totaldebetField.setValue(total_debet);
@@ -1538,7 +1536,8 @@ Ext.onReady(function(){
 	
 	//EVENTS
 	detail_jurnal_DataStore.on('update',function(){
-		refresh_detail_jurnal();
+		//refresh_detail_jurnal();
+		detail_jurnal_DataStore.commitChanges();
 		set_balance();
 	});
 	
@@ -1552,6 +1551,7 @@ Ext.onReady(function(){
 	jurnal_kreditField.on('keyup',function(){
 		set_balance();
 	});
+	
 	combo_akun.on('select',function(){
 		j=cbo_akunDataStore.find('akun_id',combo_akun.getValue());
 		if(j>-1){
@@ -1559,6 +1559,7 @@ Ext.onReady(function(){
 			jurnal_akunField.setValue(data_akun.data.akun_kode);
 		}
 	});
+	
 });
 	</script>
 <body>
