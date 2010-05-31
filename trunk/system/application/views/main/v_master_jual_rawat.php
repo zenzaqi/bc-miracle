@@ -1327,6 +1327,7 @@ Ext.onReady(function(){
 			jrawat_post2db="CREATE";
 			msg='created';
 			master_cara_bayarTabPanel.setActiveTab(0);
+			master_jual_rawat_createForm.savePrintButton.disable();
 			master_jual_rawat_createWindow.show();
 		} else {
 			master_jual_rawat_createWindow.toFront();
@@ -1401,6 +1402,7 @@ Ext.onReady(function(){
 			//master_jual_rawat_set_form();
 			msg='updated';
 			//master_jual_rawat_createWindow.hide();
+			master_jual_rawat_createForm.savePrintButton.enable();
 			master_jual_rawat_createWindow.show();
 		} else {
 			Ext.MessageBox.show({
@@ -3930,7 +3932,7 @@ Ext.onReady(function(){
 			editor: new Ext.form.ComboBox({
 				store:new Ext.data.SimpleStore({
 					fields:['diskon_jenis_value'],
-					data:[['DU'],['DM'],['Promo'],['Reward'],['Ultah'],['Kolega']]
+					data:[['DU'],['DM'],['Promo'],['Ultah'],['Kolega']]
 				}),
 				mode: 'local',
 				displayField: 'diskon_jenis_value',
@@ -4006,7 +4008,7 @@ Ext.onReady(function(){
 		colModel: detail_jual_rawat_ColumnModel, // Nama-nama Columns
 		enableColLock:false,
 		region: 'center',
-        margins: '0 5 5 5',
+		margins: '0 5 5 5',
 		plugins: [editor_detail_jual_rawat],
 		frame: true,
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
@@ -4722,6 +4724,7 @@ Ext.onReady(function(){
 		buttons: [
 			{
 				text: 'Save and Print',
+				ref: '../savePrintButton',
 				handler: save_andPrint
 			},
 			{
