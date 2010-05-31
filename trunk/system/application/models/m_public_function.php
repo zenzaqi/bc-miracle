@@ -204,7 +204,7 @@ class M_public_function extends Model{
 	}
 	
 	function get_evoucher_list($query,$start,$end){
-			$query = "SELECT * FROM voucher LEFT JOIN voucher_kupon ON(kvoucher_master=voucher_id) WHERE voucher_jenis='reward'";
+			$query = "SELECT voucher_id, voucher_jenis, voucher_nama, voucher_point, voucher_kadaluarsa, voucher_cashback, voucher_mincash, voucher_diskon, voucher_promo, voucher_allproduk, voucher_allrawat FROM voucher LEFT JOIN voucher_kupon ON(kvoucher_master=voucher_id) WHERE voucher_jenis='reward' AND kvoucher_cust=0 GROUP BY voucher_id";
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
 			$limit = $query." LIMIT ".$start.",".$end;			

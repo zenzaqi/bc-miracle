@@ -120,8 +120,48 @@ class M_tukar_point extends Model{
 		}*/
 		
 		//Penukaran Poin ==> Voucher
-		function tukar_point_create($epoint_cust ,$epoint_jumlah ,$epoint_voucher ,$epoint_tanggal ,$epoint_creator ,$epoint_date_create ){
+		function tukar_point_create($epoint_cust ,$epoint_jumlah ,$epoint_voucher ,$epoint_tanggal ,$epoint_kadaluarsa ,$epoint_jml_lbr ,$epoint_creator ,$epoint_date_create ){
 			$pattern="EP/".date("ym")."-";
+			$epoint_nobukti=$this->m_public_function->get_kode_1('tukar_point','epoint_nobukti',$pattern,12);
+			
+			/* Dilakukan pencarian voucher_kupon, apakah $epoint_voucher ini masih memiliki kupon */
+			$sql = "SELECT * FROM voucher_kupon WHERE kvoucher_master='$epoint_voucher' AND kvoucher_cust=0 ORDER BY kvoucher_nomor ASC LIMIT $epoint_jml_lbr";
+			$rs = $this->db->query($sql);
+			if($rs->num_rows()){
+				foreach($rs->result() as $row){
+					$kvoucher_id = $row->kvoucher_id;
+					$sql="UPDATE voucher_kupon SET kvoucher_cust = $epoint_cust WHERE kvoucher_id='$kvoucher_id'";
+					$this->db->query($sql);
+				}
+				
+				$dtu_voucher=array(
+					"voucher_kadaluarsa"=>$epoint_kadaluarsa
+				);
+				$this->db->where('voucher_id', $epoint_voucher);
+				$this->db->update('voucher', $dtu_voucher);
+				
+				$data = array(
+					"epoint_nobukti"=>$epoint_nobukti,
+					"epoint_cust"=>$epoint_cust, 
+					"epoint_jumlah"=>$epoint_jumlah, 
+					"epoint_tanggal"=>$epoint_tanggal,
+					"epoint_creator"=>$epoint_creator,
+					"epoint_date_create"=>$epoint_date_create
+				);
+				$this->db->insert('tukar_point', $data);
+				if($this->db->affected_rows()){
+					$sql = "UPDATE customer SET cust_point = (cust_point - $epoint_jumlah) WHERE cust_id='$epoint_cust'";
+					$this->db->query($sql);
+					return $epoint_nobukti;
+				}else{
+					return '0';
+				}
+			}else{
+				return '0';
+			}
+			
+			
+			/*$pattern="EP/".date("ym")."-";
 			$epoint_nobukti=$this->m_public_function->get_kode_1('tukar_point','epoint_nobukti',$pattern,12);
 			
 			$kelipatan_tukar_point=20;
@@ -163,7 +203,7 @@ class M_tukar_point extends Model{
 					return '1';
 				}
 			}else
-				return '0';
+				return '0';*/
 		}
 		
 		//fcuntion for delete record

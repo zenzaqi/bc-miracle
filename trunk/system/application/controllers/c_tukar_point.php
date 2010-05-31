@@ -19,6 +19,7 @@ class C_tukar_point extends Controller {
 		$this->load->model('m_tukar_point', '', TRUE);
 		session_start();
 		$this->load->plugin('to_excel');
+		$this->load->library('firephp');
 	}
 	
 	//set index
@@ -35,11 +36,11 @@ class C_tukar_point extends Controller {
 		echo $result;
 	}
 	
-	function  get_voucher_list(){
+	function  get_evoucher_list(){
 		$query = isset($_POST['query']) ? $_POST['query'] : "";
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result=$this->m_public_function->get_voucher_list($query,$start,$end);
+		$result=$this->m_public_function->get_evoucher_list($query,$start,$end);
 		echo $result;
 	}
 	
@@ -104,9 +105,11 @@ class C_tukar_point extends Controller {
 		$epoint_jumlah=trim(@$_POST["epoint_jumlah"]);
 		$epoint_voucher=trim(@$_POST["epoint_voucher"]);
 		$epoint_tanggal=trim(@$_POST["epoint_tanggal"]);
+		$epoint_kadaluarsa=trim(@$_POST["epoint_kadaluarsa"]);
+		$epoint_jml_lbr=trim(@$_POST["epoint_jml_lbr"]);
 		$epoint_creator=$_SESSION[SESSION_USERID];
 		$epoint_date_create=date('Y-m-d');
-		$result=$this->m_tukar_point->tukar_point_create($epoint_cust ,$epoint_jumlah ,$epoint_voucher ,$epoint_tanggal ,$epoint_creator ,$epoint_date_create);
+		$result=$this->m_tukar_point->tukar_point_create($epoint_cust ,$epoint_jumlah ,$epoint_voucher ,$epoint_tanggal ,$epoint_kadaluarsa ,$epoint_jml_lbr ,$epoint_creator ,$epoint_date_create);
 		echo $result;
 	}
 
@@ -212,6 +215,21 @@ class C_tukar_point extends Controller {
   		//POST varibale here
 		$kwitansi_ref=trim(@$_POST["kwitansi_ref"]);
 		
+		$result = $this->m_tukar_point->print_paper($kwitansi_ref);
+		$rs=$result->row();
+		
+		$data["kwitansi_no"]=$rs->kwitansi_no;
+		
+		$viewdata=$this->load->view("main/voucher_formcetak",$data,TRUE);
+		$file = fopen("voucher_paper.html",'w');
+		fwrite($file, $viewdata);	
+		fclose($file);
+		echo '1';
+		
+		
+		/* tukar kuitansi */
+		/*$kwitansi_ref=trim(@$_POST["kwitansi_ref"]);
+		
 		
 		$result = $this->m_tukar_point->print_paper($kwitansi_ref);
 		$rs=$result->row();
@@ -229,7 +247,7 @@ class C_tukar_point extends Controller {
 		$file = fopen("kwitansi_paper.html",'w');
 		fwrite($file, $viewdata);	
 		fclose($file);
-		echo '1';        
+		echo '1';        */
 	}
 	
 	// Encodes a SQL array into a JSON formated string

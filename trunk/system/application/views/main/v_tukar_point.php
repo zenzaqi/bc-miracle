@@ -181,77 +181,83 @@ Ext.onReady(function(){
   	/* Function for add data, open window create form */
 	function tukar_point_create(){
 	
-		if(is_tukar_point_form_valid()){	
-		var epoint_id_create_pk=null; 
-		var epoint_cust_create=null; 
-		var epoint_jumlah_create=null; 
-		var epoint_voucher_create=null; 
-		var epoint_tanggal_create_date=""; 
-
-		if(epoint_idField.getValue()!== null){epoint_id_create = epoint_idField.getValue();}else{epoint_id_create_pk=get_pk_id();} 
-		if(epoint_custField.getValue()!== null){epoint_cust_create = epoint_custField.getValue();} 
-		if(epoint_jumlahField.getValue()!== null){epoint_jumlah_create = epoint_jumlahField.getValue();} 
-		if(epoint_voucherField.getValue()!== null){epoint_voucher_create = epoint_voucherField.getValue();} 
-		if(epoint_tanggalField.getValue()!== ""){epoint_tanggal_create_date = epoint_tanggalField.getValue().format('Y-m-d');} 
-
-		Ext.Ajax.request({  
-			waitMsg: 'Please wait...',
-			url: 'index.php?c=c_tukar_point&m=get_action',
-			params: {
-				task: post2db,
-				epoint_id	: epoint_id_create_pk, 
-				epoint_cust	: epoint_cust_create, 
-				epoint_jumlah	: epoint_jumlah_create, 
-				epoint_voucher	: epoint_voucher_create, 
-				epoint_tanggal	: epoint_tanggal_create_date, 
-			}, 
-			success: function(response){             
-				var result=response.responseText;
-				if(result=='0' || result=='1'){
-					Ext.MessageBox.show({
-					   title: 'Warning',
-					   msg: 'Penukaran Poin tidak bisa disimpan',
-					   buttons: Ext.MessageBox.OK,
-					   animEl: 'save',
-					   icon: Ext.MessageBox.WARNING
-					});
-				}else{
-					tukar_point_cetak(result);
-					tukar_point_DataStore.reload();
-					tukar_point_createWindow.hide();
-				}
-				/*switch(result){
-					case 1:
-						Ext.MessageBox.alert(post2db+' OK','The Tukar_point was '+msg+' successfully.');
-						tukar_point_DataStore.reload();
-						tukar_point_createWindow.hide();
-						break;
-					default:
+		if(is_tukar_point_form_valid() && (epoint_sisaField.getValue()>=epoint_jumlahField.getValue())){	
+			var epoint_id_create_pk=null; 
+			var epoint_cust_create=null; 
+			var epoint_jumlah_create=null; 
+			var epoint_voucher_create=null; 
+			var epoint_tanggal_create_date="";
+			var epoint_kadaluarsa_create_date="";
+			var epoint_jml_lbr_create=1;
+	
+			if(epoint_idField.getValue()!== null){epoint_id_create = epoint_idField.getValue();}else{epoint_id_create_pk=get_pk_id();} 
+			if(epoint_custField.getValue()!== null){epoint_cust_create = epoint_custField.getValue();} 
+			if(epoint_jumlahField.getValue()!== null){epoint_jumlah_create = epoint_jumlahField.getValue();} 
+			if(epoint_voucherField.getValue()!== null){epoint_voucher_create = epoint_voucherField.getValue();} 
+			if(epoint_tanggalField.getValue()!== ""){epoint_tanggal_create_date = epoint_tanggalField.getValue().format('Y-m-d');}
+			if(epoint_kadaluarsaField.getValue()!== ""){epoint_kadaluarsa_create_date = epoint_kadaluarsaField.getValue().format('Y-m-d');}
+			if(epoint_jml_lbrField.getValue()!== "" || epoint_jml_lbrField.getValue()!== 0){epoint_jml_lbr_create = epoint_jml_lbrField.getValue();} 
+	
+			Ext.Ajax.request({  
+				waitMsg: 'Please wait...',
+				url: 'index.php?c=c_tukar_point&m=get_action',
+				params: {
+					task: post2db,
+					epoint_id	: epoint_id_create_pk, 
+					epoint_cust	: epoint_cust_create, 
+					epoint_jumlah	: epoint_jumlah_create, 
+					epoint_voucher	: epoint_voucher_create, 
+					epoint_tanggal	: epoint_tanggal_create_date,
+					epoint_kadaluarsa : epoint_kadaluarsa_create_date,
+					epoint_jml_lbr	: epoint_jml_lbr_create
+				}, 
+				success: function(response){             
+					var result=response.responseText;
+					if(result=='0' || result=='1'){
 						Ext.MessageBox.show({
 						   title: 'Warning',
-						   msg: 'We could\'t not '+msg+' the Tukar_point.',
+						   msg: 'Penukaran Poin tidak bisa disimpan',
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'save',
 						   icon: Ext.MessageBox.WARNING
 						});
-						break;
-				}        */
-			},
-			failure: function(response){
-				var result=response.responseText;
-				Ext.MessageBox.show({
-					   title: 'Error',
-					   msg: 'Could not connect to the database. retry later.',
-					   buttons: Ext.MessageBox.OK,
-					   animEl: 'database',
-					   icon: Ext.MessageBox.ERROR
-				});	
-			}                      
-		});
+					}else{
+						//tukar_point_cetak(result);
+						tukar_point_DataStore.reload();
+						tukar_point_createWindow.hide();
+					}
+					/*switch(result){
+						case 1:
+							Ext.MessageBox.alert(post2db+' OK','The Tukar_point was '+msg+' successfully.');
+							tukar_point_DataStore.reload();
+							tukar_point_createWindow.hide();
+							break;
+						default:
+							Ext.MessageBox.show({
+							   title: 'Warning',
+							   msg: 'We could\'t not '+msg+' the Tukar_point.',
+							   buttons: Ext.MessageBox.OK,
+							   animEl: 'save',
+							   icon: Ext.MessageBox.WARNING
+							});
+							break;
+					}        */
+				},
+				failure: function(response){
+					var result=response.responseText;
+					Ext.MessageBox.show({
+						   title: 'Error',
+						   msg: 'Could not connect to the database. retry later.',
+						   buttons: Ext.MessageBox.OK,
+						   animEl: 'database',
+						   icon: Ext.MessageBox.ERROR
+					});	
+				}                      
+			});
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'Your Form is not valid!.',
+				msg: 'Tidak bisa melakukan penyimpanan <br/>karena ada nilai yang tidak sesuai!.',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -281,6 +287,10 @@ Ext.onReady(function(){
 		epoint_voucherField.setValue(null);
 		epoint_tanggalField.reset();
 		epoint_tanggalField.setValue(null);
+		epoint_sisaField.reset();
+		epoint_sisaField.setValue(null);
+		epoint_jml_lbrField.reset();
+		epoint_jml_lbrField.setValue(1);
 	}
  	/* End of Function */
   
@@ -456,17 +466,18 @@ Ext.onReady(function(){
 	cbo_voucher_pointDataStore = new Ext.data.Store({
 		id: 'cbo_voucher_pointDataStore',
 		proxy: new Ext.data.HttpProxy({
-			url: 'index.php?c=c_tukar_point&m=get_voucher_list', 
+			url: 'index.php?c=c_tukar_point&m=get_evoucher_list', 
 			method: 'POST'
 		}),baseParams: {start:0, limit: 10},
-			reader: new Ext.data.JsonReader({
+		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
-			id: 'voucher_nomor'
+			id: 'voucher_id'
 		},[
 		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
-			{name: 'voucher_id', type: 'int', mapping: 'kvoucher_id'},
-			{name: 'voucher_nomor', type: 'string', mapping: 'kvoucher_nomor'},
+			//{name: 'voucher_id', type: 'int', mapping: 'kvoucher_id'},
+			//{name: 'voucher_nomor', type: 'string', mapping: 'kvoucher_nomor'},
+			{name: 'voucher_id', type: 'int', mapping: 'voucher_id'},
 			{name: 'voucher_jenis', type: 'string', mapping: 'voucher_jenis'},
 			{name: 'voucher_nama', type: 'string', mapping: 'voucher_nama'}, 
 			{name: 'voucher_point', type: 'int', mapping: 'voucher_point'}, 
@@ -478,12 +489,12 @@ Ext.onReady(function(){
 			{name: 'voucher_allproduk', type: 'string', mapping: 'voucher_allproduk'}, 
 			{name: 'voucher_allrawat', type: 'string', mapping: 'voucher_allrawat'}
 		]),
-		sortInfo:{field: 'voucher_nomor', direction: "ASC"}
+		sortInfo:{field: 'voucher_nama', direction: "ASC"}
 	});
 	
 	var voucher_point_tpl = new Ext.XTemplate(
         '<tpl for="."><div class="search-item">',
-            '<span><b>{voucher_nomor}</b>| {voucher_nama}<br/>Jenis: {voucher_jenis}</span>',
+            '<span><b>{voucher_nama}</b><br/>Jenis: {voucher_jenis}</span>',
 		'</div></tpl>'	
     );
 	
@@ -764,30 +775,68 @@ Ext.onReady(function(){
 		width: 76,
 		maskRe: /([0-9]+)$/
 	});
+	voucher_point_tempField= new Ext.form.NumberField({
+		id: 'voucher_point_tempField',
+		fieldLabel: 'Minimal Poin',
+		allowNegatife : false,
+		blankText: '0',
+		allowDecimals: false,
+		readOnly: true,
+		width: 76,
+		maskRe: /([0-9]+)$/
+	});
 	/* Identify  epoint_voucher Field */
 	epoint_voucherField= new Ext.form.ComboBox({
 		id: 'epoint_voucherField',
 		fieldLabel: 'Voucher',
 		store: cbo_voucher_pointDataStore,
 		mode: 'remote',
-		displayField:'voucher_nomor',
+		displayField:'voucher_nama',
 		valueField: 'voucher_id',
-        typeAhead: false,
-        loadingText: 'Searching...',
-        pageSize:10,
-        hideTrigger:false,
-        tpl: voucher_point_tpl,
-        //applyTo: 'search',
-        itemSelector: 'div.search-item',
+		typeAhead: false,
+		loadingText: 'Searching...',
+		pageSize:10,
+		hideTrigger:false,
+		tpl: voucher_point_tpl,
+		//applyTo: 'search',
+		itemSelector: 'div.search-item',
 		triggerAction: 'all',
 		lazyRender:true,
 		listClass: 'x-combo-list-small',
 		anchor: '95%'
 	});
+	epoint_jml_lbrField= new Ext.form.NumberField({
+		id: 'epoint_jml_lbrField',
+		fieldLabel: 'Jumlah Lembar',
+		allowNegatife : false,
+		blankText: '0',
+		allowDecimals: false,
+		enableKeyEvents: true,
+		width: 76,
+		listeners: {
+			'keyup': function(){
+				var total_ambil = this.getValue()*voucher_point_tempField.getValue();
+				if(epoint_sisaField.getValue()>=total_ambil){
+					epoint_jumlahField.setValue(total_ambil);
+				}else{
+					Ext.Msg.alert('Warning', 'Sisa Poin tidak mencukupi.');
+				}
+			}
+		},
+		maskRe: /([0-9]+)$/
+	});
 	/* Identify  epoint_tanggal Field */
 	epoint_tanggalField= new Ext.form.DateField({
 		id: 'epoint_tanggalField',
 		fieldLabel: 'Tanggal',
+		format : 'Y-m-d'
+	});
+	
+	/* Identify  epoint_tanggal Field */
+	epoint_kadaluarsaField= new Ext.form.DateField({
+		id: 'epoint_kadaluarsaField',
+		fieldLabel: 'Kadaluarsa',
+		allowBlank: false,
 		format : 'Y-m-d'
 	});
 	
@@ -797,6 +846,17 @@ Ext.onReady(function(){
 		var j=cbo_cust_point_DataStore.find('cust_id',epoint_custField.getValue());
 		if(cbo_cust_point_DataStore.getCount()){
 			epoint_sisaField.setValue(cbo_cust_point_DataStore.getAt(j).data.cust_point);
+		}
+	});
+	
+	epoint_voucherField.on('select', function(){
+		var j=cbo_voucher_pointDataStore.find('voucher_id', epoint_voucherField.getValue());
+		if(cbo_voucher_pointDataStore.getCount()){
+			epoint_jumlahField.setValue(cbo_voucher_pointDataStore.getAt(j).data.voucher_point);
+			voucher_point_tempField.setValue(cbo_voucher_pointDataStore.getAt(j).data.voucher_point);
+			if(epoint_sisaField.getValue()<epoint_jumlahField.getValue()){
+				Ext.Msg.alert('Warning', 'Sisa Poin tidak mencukupi.');
+			}
 		}
 	});
 
@@ -812,7 +872,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [epoint_tanggalField, epoint_custField, epoint_sisaField, epoint_jumlahField, epoint_idField] 
+				items: [epoint_tanggalField, epoint_custField, epoint_voucherField, voucher_point_tempField, epoint_jml_lbrField, epoint_jumlahField, epoint_sisaField, epoint_kadaluarsaField, epoint_idField] 
 			}
 			],
 		buttons: [{
