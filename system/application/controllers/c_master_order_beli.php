@@ -275,15 +275,15 @@ class C_master_order_beli extends Controller {
 		$order_no=str_replace("/(<\/?)(p)([^>]*>)", "",$order_no);
 		$order_no=str_replace("'", '"',$order_no);
 		$order_supplier=trim(@$_POST["order_supplier"]);
-		$order_tanggal_mulai=trim(@$_POST["order_tanggal_mulai"]);
+		$order_tanggal=trim(@$_POST["order_tanggal"]);
 		$order_tanggal_akhir=trim(@$_POST["order_tanggal_akhir"]);
 		$order_carabayar=trim(@$_POST["order_carabayar"]);
 		$order_carabayar=str_replace("/(<\/?)(p)([^>]*>)", "",$order_carabayar);
 		$order_carabayar=str_replace("'", '"',$order_carabayar);
-		$order_diskon=trim(@$_POST["order_diskon"]);
-		$order_cashback=trim(@$_POST["order_cashback"]);
-		$order_biaya=trim(@$_POST["order_biaya"]);
-		$order_bayar=trim(@$_POST["order_bayar"]);
+//		$order_diskon=trim(@$_POST["order_diskon"]);
+//		$order_cashback=trim(@$_POST["order_cashback"]);
+//		$order_biaya=trim(@$_POST["order_biaya"]);
+//		$order_bayar=trim(@$_POST["order_bayar"]);
 		$order_keterangan=trim(@$_POST["order_keterangan"]);
 		$order_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$order_keterangan);
 		$order_keterangan=str_replace("'", '"',$order_keterangan);
@@ -293,7 +293,7 @@ class C_master_order_beli extends Controller {
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_master_order_beli->master_order_beli_search($order_id ,$order_no ,$order_supplier ,$order_tanggal_mulai, $order_tanggal_akhir ,$order_carabayar ,$order_diskon, $order_cashback ,$order_biaya ,$order_bayar ,$order_keterangan, $order_status, $start,$end);
+		$result = $this->m_master_order_beli->master_order_beli_search($order_id ,$order_no ,$order_supplier ,$order_tanggal, $order_tanggal_akhir, $order_carabayar, /*$order_diskon, $order_cashback ,$order_biaya ,$order_bayar ,*/ $order_keterangan, $order_status, $start,$end);
 		echo $result;
 	}
 
