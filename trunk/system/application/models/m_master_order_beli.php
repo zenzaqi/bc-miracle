@@ -360,7 +360,7 @@ class M_master_order_beli extends Model{
 		}
 		
 		//function for advanced search record
-		function master_order_beli_search($order_id ,$order_no ,$order_supplier ,$order_tanggal_mulai, $order_tanggal_akhir ,$order_carabayar ,$order_diskon,$order_cashback ,$order_biaya ,$order_bayar ,$order_keterangan, $order_status, $start,$end){
+		function master_order_beli_search($order_id ,$order_no ,$order_supplier, $order_tanggal, $order_tanggal_akhir, $order_carabayar, /*$order_diskon,$order_cashback ,$order_biaya ,$order_bayar ,*/ $order_keterangan, $order_status, $start,$end){
 			//full query
 			$query = "SELECT * FROM vu_trans_order";
 			
@@ -370,22 +370,26 @@ class M_master_order_beli extends Model{
 			};
 			if($order_no!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " order_no LIKE '%".$order_no."%'";
+				$query.= " no_bukti LIKE '%".$order_no."%'";
 			};
 			if($order_supplier!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " order_supplier LIKE '%".$order_supplier."%'";
+				$query.= " order_supplier = ".$order_supplier;
 			};
-			if($order_tanggal_mulai!='' && $order_tanggal_akhir){
+			if($order_tanggal!='' && $order_tanggal_akhir){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " date_format(tanggal,'%Y-%m-%d')>='".$order_tanggal_mulai."' 
+				$query.= " date_format(tanggal,'%Y-%m-%d')>='".$order_tanggal."' 
 							AND date_format(tanggal,'%Y-%m-%d')<='".$order_tanggal_akhir."' ";
 			};
-			if($order_carabayar!=''){
+/*			if($order_tanggal_akhir!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " tanggal <= '".$order_tanggal_akhir."'";
+			};
+*/			if($order_carabayar!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " order_carabayar LIKE '%".$order_carabayar."%'";
 			};
-			if($order_diskon!=''){
+/*			if($order_diskon!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " order_diskon LIKE '%".$order_diskon."%'";
 			};
@@ -401,7 +405,7 @@ class M_master_order_beli extends Model{
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " order_bayar LIKE '%".$order_bayar."%'";
 			};
-			if($order_keterangan!=''){
+*/			if($order_keterangan!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " order_keterangan LIKE '%".$order_keterangan."%'";
 			};

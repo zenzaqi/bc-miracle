@@ -82,10 +82,11 @@ var order_idSearchField;
 var order_noSearchField;
 var order_supplierSearchField;
 var order_tanggalSearchField;
+var order_tanggal_akhirSearchField;
 var order_carabayarSearchField;
-var order_diskonSearchField;
-var order_biayaSearchField;
-var order_bayarSearchField;
+//var order_diskonSearchField;
+//var order_biayaSearchField;
+//var order_bayarSearchField;
 var order_keteranganSearchField;
 var order_statusSearchField;
 
@@ -140,13 +141,13 @@ Ext.onReady(function(){
 			success: function(response){							
 				var result=eval(response.responseText);
 				if(result!==0){
-						Ext.MessageBox.alert(post2db+' OK','Data Surat Pesanan Pembelian berhasil disimpan');
+						Ext.MessageBox.alert(post2db+' OK','Data Surat Pesanan berhasil disimpan');
 						master_order_beli_createWindow.hide();
 				}else{
 						Ext.MessageBox.show({
 						   title: 'Warning',
 						   //msg: 'We could\'t not '+msg+' the Master_order_beli.',
-						   msg: 'Data Surat Pesanan Pembelian tidak bisa disimpan',
+						   msg: 'Data Surat Pesanan tidak bisa disimpan',
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'save',
 						   icon: Ext.MessageBox.WARNING
@@ -217,13 +218,13 @@ Ext.onReady(function(){
 				var result=eval(response.responseText);
 				if(result!==0){
 						detail_order_beli_purge(result)
-						Ext.MessageBox.alert(post2db+' OK','Data Surat Pesanan Pembelian berhasil disimpan');
+						Ext.MessageBox.alert(post2db+' OK','Data Surat Pesanan berhasil disimpan');
 						master_order_beli_createWindow.hide();
 				}else{
 						Ext.MessageBox.show({
 						   title: 'Warning',
 						   //msg: 'We could\'t not '+msg+' the Master_order_beli.',
-						   msg: 'Data Surat Pesanan Pembelian tidak bisa disimpan',
+						   msg: 'Data Surat Pesanan tidak bisa disimpan',
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'save',
 						   icon: Ext.MessageBox.WARNING
@@ -758,6 +759,7 @@ Ext.onReady(function(){
 			text: 'Delete',
 			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
+			disabled: true,
 			handler: master_order_beli_confirm_delete   // Confirm before deleting
 		}, '-', {
 			text: 'Adv Search',
@@ -803,6 +805,7 @@ Ext.onReady(function(){
 			text: 'Delete', 
 			tooltip: 'Delete selected record', 
 			iconCls:'icon-delete',
+			disabled: true,
 			handler: master_order_beli_confirm_delete 
 		},
 		'-',
@@ -913,7 +916,7 @@ Ext.onReady(function(){
 		fieldLabel: 'Status Dok',
 		store:new Ext.data.SimpleStore({
 			fields:['order_status_value', 'order_status_display'],
-			data:[['Terbuka','Terbuka'],['Tertutup','Tertutup']]
+			data:[['Terbuka','Terbuka'],['Tertutup','Tertutup'],['Batal', 'Batal']]
 		}),
 		mode: 'local',
 		displayField: 'order_status_display',
@@ -1336,7 +1339,7 @@ Ext.onReady(function(){
 		for(i=0;i<detail_order_beli_DataStore.getCount();i++){
 			detail_order_beli_record=detail_order_beli_DataStore.getAt(i);
 			Ext.Ajax.request({
-				waitMsg: 'Please wait...',
+				waitMsg: 'Mohon tunggu...',
 				url: 'index.php?c=c_master_order_beli&m=detail_detail_order_beli_insert',
 				params:{
 				dorder_id		: detail_order_beli_record.data.dorder_id, 
@@ -1358,7 +1361,7 @@ Ext.onReady(function(){
 	//function for purge detail
 	function detail_order_beli_purge(pkid){
 		Ext.Ajax.request({
-			waitMsg: 'Please wait...',
+			waitMsg: 'Mohon tunggu...',
 			url: 'index.php?c=c_master_order_beli&m=detail_detail_order_beli_purge',
 			params:{ master_id: pkid },
 			success:function(response){
@@ -1426,7 +1429,7 @@ Ext.onReady(function(){
 	/* Function for retrieve create Window Form */
 	master_order_beli_createWindow= new Ext.Window({
 		id: 'master_order_beli_createWindow',
-		title: post2db+'Surat Pesanan Pembelian',
+		title: post2db+'Surat Pesanan',
 		closable:true,
 		closeAction: 'hide',
 		width: 940,
@@ -1460,25 +1463,26 @@ Ext.onReady(function(){
 		var order_id_search=null;
 		var order_no_search=null;
 		var order_supplier_search=null;
-		var order_tanggal_mulai_search_date="";
+		var order_tanggal_search_date="";
 		var order_tanggal_akhir_search_date="";
-		
 		var order_carabayar_search=null;
-		var order_diskon_search=null;
-		var order_biaya_search=null;
-		var order_bayar_search=null;
+//		var order_diskon_search=null;
+//		var order_biaya_search=null;
+//		var order_bayar_search=null;
 		var order_keterangan_search=null;
 
 		if(order_idSearchField.getValue()!==null){order_id_search=order_idSearchField.getValue();}
 		if(order_noSearchField.getValue()!==null){order_no_search=order_noSearchField.getValue();}
 		if(order_supplierSearchField.getValue()!==null){order_supplier_search=order_supplierSearchField.getValue();}
-		if(order_tanggal_mulaiSearchField.getValue()!==""){order_tanggal_mulai_search_date=order_tanggal_mulaiSearchField.getValue().format('Y-m-d');}
+		if(order_tanggalSearchField.getValue()!==""){order_tanggal_search_date=order_tanggalSearchField.getValue().format('Y-m-d');}
 		if(order_tanggal_akhirSearchField.getValue()!==""){order_tanggal_akhir_search_date=order_tanggal_akhirSearchField.getValue().format('Y-m-d');}
 		if(order_carabayarSearchField.getValue()!==null){order_carabayar_search=order_carabayarSearchField.getValue();}
-		if(order_diskonSearchField.getValue()!==null){order_diskon_search=order_diskonSearchField.getValue();}
-		if(order_biayaSearchField.getValue()!==null){order_biaya_search=order_biayaSearchField.getValue();}
-		if(order_bayarSearchField.getValue()!==null){order_bayar_search=order_bayarSearchField.getValue();}
+//		if(order_diskonSearchField.getValue()!==null){order_diskon_search=order_diskonSearchField.getValue();}
+//		if(order_biayaSearchField.getValue()!==null){order_biaya_search=order_biayaSearchField.getValue();}
+//		if(order_bayarSearchField.getValue()!==null){order_bayar_search=order_bayarSearchField.getValue();}
 		if(order_keteranganSearchField.getValue()!==null){order_keterangan_search=order_keteranganSearchField.getValue();}
+		if(order_statusSearchField.getValue()!==null){order_status_search=order_statusSearchField.getValue();}
+		
 		// change the store parameters
 		master_order_beli_DataStore.baseParams = {
 			task: 'SEARCH',
@@ -1486,13 +1490,14 @@ Ext.onReady(function(){
 			order_id			:	order_id_search, 
 			order_no			:	order_no_search, 
 			order_supplier		:	order_supplier_search, 
-			order_tanggal_mulai	:	order_tanggal_mulai_search_date, 
+			order_tanggal		:	order_tanggal_search_date, 
 			order_tanggal_akhir	:	order_tanggal_akhir_search_date, 
 			order_carabayar		:	order_carabayar_search, 
-			order_diskon		:	order_diskon_search, 
-			order_biaya			:	order_biaya_search, 
-			order_bayar			:	order_bayar_search, 
-			order_keterangan	:	order_keterangan_search, 
+//			order_diskon	:	order_diskon_search, 
+//			order_biaya	:	order_biaya_search, 
+//			order_bayar	:	order_bayar_search, 
+			order_keterangan	:	order_keterangan_search,
+			order_status		:	order_status_search
 		};
 		// Cause the datastore to do another query : 
 		master_order_beli_DataStore.reload({params: {start: 0, limit: pageS}});
@@ -1511,16 +1516,17 @@ Ext.onReady(function(){
 	function master_order_beli_reset_SearchForm(){
 		order_noSearchField.reset();
 		order_supplierSearchField.reset();
-		order_tanggal_mulaiSearchField.reset();
-		//order_tanggal_mulaiSearchField.setValue(firstday);
+		order_tanggalSearchField.reset();
+		//order_tanggalSearchField.setValue(firstday);
 		order_tanggal_akhirSearchField.reset();
 		//order_tanggal_akhirSearchField.setValue(today);
 		order_carabayarSearchField.reset();
-		order_diskonSearchField.reset();
-		order_cashbackSearchField.reset();
-		order_biayaSearchField.reset();
-		order_bayarSearchField.reset();
+//		order_diskonSearchField.reset();
+//		order_cashbackSearchField.reset();
+//		order_biayaSearchField.reset();
+//		order_bayarSearchField.reset();
 		order_keteranganSearchField.reset();
+		order_statusSearchField.reset();
 	}
 	
 	
@@ -1568,35 +1574,34 @@ Ext.onReady(function(){
 	
 	});
 	/* Identify  order_tanggal Search Field */
-	order_tanggal_mulaiSearchField= new Ext.form.DateField({
-		id: 'order_tanggal_mulaiSearchField',
+	order_tanggalSearchField= new Ext.form.DateField({
+		id: 'order_tanggalSearchField',
 		fieldLabel: 'Tanggal',
-		format : 'd-m-Y',
-		value: firstday
+		format : 'd-m-Y'
+//		value: firstday
 	
 	});
-	
+
 	order_tanggal_akhirSearchField= new Ext.form.DateField({
 		id: 'order_tanggal_akhirSearchField',
-		fieldLabel: 'Tanggal',
-		format : 'd-m-Y',
-		value: today
-	
+		fieldLabel: 's/d',
+		format : 'd-m-Y'
+//		value: today	
 	});
 	
 	order_label_tanggal_labelField=new Ext.form.Label({html: 'Tanggal :' });
 	
 	order_label_tanggalField= new Ext.form.Label({ html: ' &nbsp; s/d  &nbsp;' });
 	
-	order_tanggalSearchField=new Ext.form.FieldSet({
-		id:'order_tanggalSearchField',
+	order_tanggalSearchFieldSet=new Ext.form.FieldSet({
+		id:'order_tanggalSearchFieldSet',
 		title: 'Opsi Tanggal',
 		layout: 'column',
 		boduStyle: 'padding: 5px;',
 		frame: false,
-		items:[order_tanggal_mulaiSearchField, order_label_tanggalField, order_tanggal_akhirSearchField]
+		items:[order_tanggalSearchField, order_label_tanggalField, order_tanggal_akhirSearchField]
 	});
-	
+
 	/* Identify  order_carabayar Search Field */
 	order_carabayarSearchField= new Ext.form.ComboBox({
 		id: 'order_carabayarSearchField',
@@ -1608,11 +1613,11 @@ Ext.onReady(function(){
 		mode: 'local',
 		displayField: 'order_carabayar',
 		valueField: 'value',
-		anchor: '80%',
+		anchor: '41%',
 		triggerAction: 'all'	 
 	
 	});
-	/* Identify  order_diskon Search Field */
+/*
 	order_diskonSearchField= new Ext.form.NumberField({
 		id: 'order_diskonSearchField',
 		fieldLabel: 'Diskon (%)',
@@ -1635,8 +1640,7 @@ Ext.onReady(function(){
 		maskRe: /([0-9]+)$/
 	
 	});
-	
-	/* Identify  order_biaya Search Field */
+
 	order_biayaSearchField= new Ext.form.NumberField({
 		id: 'order_biayaSearchField',
 		fieldLabel: 'Biaya',
@@ -1647,7 +1651,7 @@ Ext.onReady(function(){
 		maskRe: /([0-9]+)$/
 	
 	});
-	/* Identify  order_bayar Search Field */
+
 	order_bayarSearchField= new Ext.form.NumberField({
 		id: 'order_bayarSearchField',
 		fieldLabel: 'Bayar',
@@ -1658,21 +1662,38 @@ Ext.onReady(function(){
 		maskRe: /([0-9]+)$/
 	
 	});
+*/	
+
 	/* Identify  order_keterangan Search Field */
 	order_keteranganSearchField= new Ext.form.TextField({
 		id: 'order_keteranganSearchField',
 		fieldLabel: 'Keterangan',
 		maxLength: 500,
 		anchor: '95%'
+	});
+	
+	order_statusSearchField= new Ext.form.ComboBox({
+		id: 'order_statusSearchField',
+		fieldLabel: 'Status',
+		store:new Ext.data.SimpleStore({
+			fields:['value', 'order_status'],
+			data:[['Terbuka','Terbuka'],['Tertutup','Tertutup'],['Batal','Batal']]
+		}),
+		mode: 'local',
+		displayField: 'order_status',
+		valueField: 'value',
+		anchor: '41%',
+		triggerAction: 'all'	 
 	
 	});
+
     
 	/* Function for retrieve search Form Panel */
 	master_order_beli_searchForm = new Ext.FormPanel({
 		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
-		width: 300,        
+		width: 500,        
 		items: [{
 			layout:'column',
 			border:false,
@@ -1681,7 +1702,42 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [order_noSearchField, order_supplierSearchField, order_tanggalSearchField, order_carabayarSearchField, order_diskonSearchField,order_cashbackSearchField,  order_biayaSearchField, order_keteranganSearchField] 
+				items: [
+					order_noSearchField, 
+					order_supplierSearchField, 	
+					order_tanggalSearchFieldSet,					
+/*					{
+						layout:'column',
+						border:false,
+						items:[
+						{
+							columnWidth:0.45,
+							layout: 'form',
+							border:false,
+							defaultType: 'datefield',
+							items: [						
+								order_tanggalSearchField
+							]
+						},
+						{
+							columnWidth:0.30,
+							layout: 'form',
+							border:false,
+							labelWidth:30,
+							defaultType: 'datefield',
+							items: [						
+								order_tanggal_akhirSearchField
+							]
+						}						
+				        ]
+					},	
+*/
+					order_carabayarSearchField, 
+					//order_diskonSearchField,
+					//order_cashbackSearchField,  
+					//order_biayaSearchField, 
+					order_keteranganSearchField,
+					order_statusSearchField] 
 			}
 			]
 		}]
@@ -1701,7 +1757,7 @@ Ext.onReady(function(){
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
 	master_order_beli_searchWindow = new Ext.Window({
-		title: 'Percarian Surat Pesanan Pembelian',
+		title: 'Percarian Surat Pesanan',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,
