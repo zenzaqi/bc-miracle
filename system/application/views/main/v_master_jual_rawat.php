@@ -648,7 +648,12 @@ Ext.onReady(function(){
 					master_jual_rawat_DataStore.reload();
 					detail_jual_rawat_DataStore.load({params: {master_id:0}});
 					master_jual_rawat_createWindow.hide();
-				}else{
+				}else if(result==-4){
+                    detail_ambil_paket_update();
+                    //master_jual_rawat_DataStore.reload();
+					//detail_jual_rawat_DataStore.load({params: {master_id:0}});
+					master_jual_rawat_createWindow.hide();
+                }else{
 					master_jual_rawat_createWindow.hide();
 				}
 				master_jual_rawat_reset_allForm();
@@ -2262,7 +2267,13 @@ Ext.onReady(function(){
 		width: 100,
 		triggerAction: 'all'	
 	});
-	
+	jrawat_stat_dokField.on('select', function(){
+        if(jrawat_stat_dokField.getValue()=='Batal'){
+            master_jual_rawat_createForm.savePrintButton.disable();
+        }else{
+            master_jual_rawat_createForm.savePrintButton.enable();
+        }
+    });
 	
 	
 	
@@ -4218,6 +4229,36 @@ Ext.onReady(function(){
 			}
 		}
 	}
+    
+    function detail_ambil_paket_update(){
+		var count_detail=detail_ambil_paketDataStore.getCount();
+		for(i=0;i<detail_ambil_paketDataStore.getCount();i++){
+			detail_ambil_paket_record=detail_ambil_paketDataStore.getAt(i);
+            Ext.Ajax.request({
+                waitMsg: 'Mohon tunggu...',
+                url: 'index.php?c=c_master_jual_rawat&m=detail_ambil_paket_update',
+                params:{
+                    dapaket_id	: detail_ambil_paket_record.data.dapaket_id
+                },
+                timeout: 60000,
+                success: function(response){							
+                    var result=eval(response.responseText);
+                    Ext.MessageBox.alert(' OK','Status Dokumen telah berhasil diupdate.');
+                    master_jual_rawat_DataStore.reload();
+                },
+                failure: function(response){
+                    var result=response.responseText;
+                    Ext.MessageBox.show({
+                       title: 'Error',
+                       msg: 'Could not connect to the database. retry later.',
+                       buttons: Ext.MessageBox.OK,
+                       animEl: 'database',
+                       icon: Ext.MessageBox.ERROR
+                    });	
+                }		
+            });
+		}
+	}
 	
 	
 	function update_group_carabayar_jual_rawat(){
@@ -4618,7 +4659,8 @@ Ext.onReady(function(){
 		id: ''
 	},[
 	/* dataIndex => insert intopeprodukan_ColumnModel, Mapping => for initiate table column */ 
-			{name: 'jpaket_nobukti', type: 'string', mapping: 'jpaket_nobukti'}, 
+			{name: 'dapaket_id', type: 'int', mapping: 'dapaket_id'}, 
+            {name: 'jpaket_nobukti', type: 'string', mapping: 'jpaket_nobukti'}, 
 			{name: 'paket_nama', type: 'string', mapping: 'paket_nama'}, 
 			{name: 'rawat_nama', type: 'string', mapping: 'rawat_nama'}, 
 			{name: 'dapaket_jumlah', type: 'int', mapping: 'dapaket_jumlah'}, 
