@@ -216,8 +216,10 @@ Ext.onReady(function(){
 		koreksi_tanggalField.setValue(today);
 		koreksi_keteranganField.reset();
 		koreksi_keteranganField.setValue(null);
+		detail_koreksi_stok_DataStore.removeAll();
 		
-		cbo_stok_satuanDataStore.setBaseParam('task','detail');
+		
+		/*cbo_stok_satuanDataStore.setBaseParam('task','detail');
 		cbo_stok_satuanDataStore.setBaseParam('master_id',get_pk_id());
 		cbo_stok_satuanDataStore.load();
 		
@@ -231,7 +233,7 @@ Ext.onReady(function(){
 					detail_koreksi_stok_DataStore.load();
 				}
 			}
-		});
+		});*/
 		
 	}
  	/* End of Function */

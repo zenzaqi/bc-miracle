@@ -129,20 +129,20 @@ Ext.onReady(function(){
 			url: 'index.php?c=c_buku_besar&m=get_action', 
 			method: 'POST'
 		}),
-		baseParams:{task: "LIST"}, // parameter yang di $_POST ke Controller
+		baseParams:{task: "LIST", start: 0, limit: pageS, query: null}, // parameter yang di $_POST ke Controller
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
-			id: 'buku_id'
+			id: 'buku_tanggal'
 		},[
-		/* dataIndex => insert intobuku_besar_ColumnModel, Mapping => for initiate table column */ 
-			{name: 'buku_id', type: 'int', mapping: 'buku_id'}, 
+	
 			{name: 'buku_tanggal', type: 'date', dateFormat: 'Y-m-d', mapping: 'buku_tanggal'}, 
-			{name: 'buku_akun', type: 'int', mapping: 'buku_akun'}, 
+			{name: 'buku_akun', type: 'int', mapping: 'buku_akun'},
+			{name: 'buku_akun_kode', type: 'string', mapping: 'buku_akun_kode'}, 
+			{name: 'buku_akun_nama', type: 'string', mapping: 'buku_akun_nama'}, 
 			{name: 'buku_debet', type: 'float', mapping: 'buku_debet'}, 
 			{name: 'buku_kredit', type: 'float', mapping: 'buku_kredit'}, 
-			{name: 'buku_saldo_debet', type: 'float', mapping: 'buku_saldo_debet'}, 
-			{name: 'buku_saldo_kredit', type: 'float', mapping: 'buku_saldo_kredit'}
+			{name: 'buku_saldo', type: 'float', mapping: 'buku_saldo'}
 		]),
 		sortInfo:{field: 'buku_tanggal', direction: "ASC"}
 	});
@@ -172,22 +172,12 @@ Ext.onReady(function(){
 	
   	/* Function for Identify of Window Column Model */
 	buku_besar_ColumnModel = new Ext.grid.ColumnModel(
-		[{
-			header: '#',
-			readOnly: true,
-			dataIndex: 'buku_id',
-			width: 40,
-			renderer: function(value, cell){
-				cell.css = "readonlycell"; // Mengambil Value dari Class di dalam CSS 
-				return value;
-				},
-			hidden: false
-		},
+		[
 		{
 			header: 'Tanggal',
 			dataIndex: 'buku_tanggal',
 			width: 150,
-			sortable: true,
+			sortable: false,
 			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
 			readOnly: true
 		}, 
@@ -195,44 +185,37 @@ Ext.onReady(function(){
 			header: 'Kode',
 			dataIndex: 'buku_akun_kode',
 			width: 100,
-			sortable: true,
+			sortable: false,
 			readOnly: true
 		}, 
 		{
 			header: 'Akun',
 			dataIndex: 'buku_akun_nama',
 			width: 250,
-			sortable: true,
+			sortable: false,
 			readOnly: true
 		}, 
 		{
 			header: 'Debet',
 			dataIndex: 'buku_debet',
 			width: 150,
-			sortable: true,
+			sortable: false,
 			readOnly: true
 		}, 
 		{
 			header: 'Kredit',
 			dataIndex: 'buku_kredit',
 			width: 150,
-			sortable: true,
+			sortable: false,
 			readOnly: true
 		}, 
 		{
-			header: 'Saldo Debet',
-			dataIndex: 'buku_saldo_debet',
+			header: 'Saldo',
+			dataIndex: 'buku_saldo',
 			width: 150,
-			sortable: true,
+			sortable: false,
 			readOnly: true
-		}, 
-		{
-			header: 'Saldo Kredit',
-			dataIndex: 'buku_saldo_kredit',
-			width: 150,
-			sortable: true,
-			readOnly: true
-		}	
+		}
 		]);
 	
 	buku_besar_ColumnModel.defaultSortable= true;
@@ -347,7 +330,7 @@ Ext.onReady(function(){
 	function buku_besar_list_search(){
 		// render according to a SQL date format.
 		
-		if(is_form_valid()){
+		if(is_valid_form()){
 			
 			var buku_tglawal_search="";
 			var buku_tglakhir_search="";
@@ -365,7 +348,7 @@ Ext.onReady(function(){
 				buku_periode_search='all';
 			}
 			
-			if(buku_tglawal_searchFieldgetValue()!==""){order_tglawal_search = buku_tglawal_searchField.getValue().format('Y-m-d');}
+			if(buku_tglawal_searchField.getValue()!==""){order_tglawal_search = buku_tglawal_searchField.getValue().format('Y-m-d');}
 			if(buku_tglakhir_searchField.getValue()!==""){order_tglakhir_search = buku_tglakhir_searchField.getValue().format('Y-m-d');}
 			if(buku_bulan_searchField.getValue()!==""){order_bulan_search=buku_bulan_searchField.getValue(); }
 			if(buku_tahun_searchField.getValue()!==""){order_tahun_search=buku_tahun_searchField.getValue(); }
@@ -374,13 +357,25 @@ Ext.onReady(function(){
 			
 			// change the store parameters
 			buku_besar_DataStore.baseParams = {
-				task: 'SEARCH',
+				task			: 'SEARCH',
+				buku_periode	: 	buku_periode_search,
 				buku_tglawal	:	buku_tglawal_search,
 				buku_tglakhir	:	buku_tglakhir_search, 
 				buku_bulan		: 	buku_bulan_search,
 				buku_tahun		:	buku_tahun_search,
 				buku_akun		:	buku_akun_search
 			};
+			
+			buku_besar_DataStore.load({params: {start: 0, limit:pageS, query: null}});
+			
+		}else{
+			Ext.MessageBox.show({
+				title: 'Warning',
+				msg: 'Isian tidak valid',
+				buttons: Ext.MessageBox.OK,
+				animEl: 'save',
+				icon: Ext.MessageBox.WARNING
+			});
 		}
 	}
 		
@@ -612,7 +607,7 @@ Ext.onReady(function(){
 			buku_periode_search='all';
 		}
 		
-		if(buku_tglawal_searchFieldgetValue()!==""){order_tglawal_search = buku_tglawal_searchField.getValue().format('Y-m-d');}
+		if(buku_tglawal_searchField.getValue()!==""){order_tglawal_search = buku_tglawal_searchField.getValue().format('Y-m-d');}
 		if(buku_tglakhir_searchField.getValue()!==""){order_tglakhir_search = buku_tglakhir_searchField.getValue().format('Y-m-d');}
 		if(buku_bulan_searchField.getValue()!==""){order_bulan_search=buku_bulan_searchField.getValue(); }
 		if(buku_tahun_searchField.getValue()!==""){order_tahun_search=buku_tahun_searchField.getValue(); }
@@ -625,7 +620,8 @@ Ext.onReady(function(){
 		url: 'index.php?c=c_buku_besar&m=get_action',
 		params: {
 			task: "PRINT",
-		  	query: searchquery,                    		
+		  	query: searchquery,    
+			buku_periode		: 	buku_periode_search,
 			buku_tglawal	:	buku_tglawal_search,
 			buku_tglakhir	:	buku_tglakhir_search, 
 			buku_bulan		: 	buku_bulan_search,
@@ -684,7 +680,7 @@ Ext.onReady(function(){
 			buku_periode_search='all';
 		}
 		
-		if(buku_tglawal_searchFieldgetValue()!==""){order_tglawal_search = buku_tglawal_searchField.getValue().format('Y-m-d');}
+		if(buku_tglawal_searchField.getValue()!==""){order_tglawal_search = buku_tglawal_searchField.getValue().format('Y-m-d');}
 		if(buku_tglakhir_searchField.getValue()!==""){order_tglakhir_search = buku_tglakhir_searchField.getValue().format('Y-m-d');}
 		if(buku_bulan_searchField.getValue()!==""){order_bulan_search=buku_bulan_searchField.getValue(); }
 		if(buku_tahun_searchField.getValue()!==""){order_tahun_search=buku_tahun_searchField.getValue(); }
