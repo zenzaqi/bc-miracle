@@ -260,8 +260,27 @@ class M_master_jual_rawat extends Model{
 		//get record list
 		function detail_detail_jual_rawat_list($master_id,$query,$start,$end) {
 			//$query = "SELECT *,drawat_harga*drawat_jumlah as drawat_subtotal, drawat_harga*drawat_jumlah*(100-drawat_diskon)/100 as drawat_subtotal_net FROM detail_jual_rawat where drawat_master='".$master_id."'";
-			$query = "SELECT drawat_id,drawat_master,drawat_rawat,drawat_jumlah,perawatan.rawat_harga as drawat_harga,drawat_diskon,drawat_sales,drawat_diskon_jenis,drawat_harga*drawat_jumlah as drawat_subtotal, drawat_harga*drawat_jumlah*(100-drawat_diskon)/100 as drawat_subtotal_net, dtrawat_keterangan FROM detail_jual_rawat LEFT JOIN perawatan ON(rawat_id=drawat_rawat) LEFT JOIN tindakan_detail ON(drawat_dtrawat=dtrawat_id) WHERE drawat_master='".$master_id."'";
-			$result = $this->db->query($query);
+			$query = "SELECT
+                    drawat_id
+                    ,drawat_master
+                    ,drawat_rawat
+                    ,drawat_jumlah
+                    ,perawatan.rawat_harga as drawat_harga
+                    ,drawat_diskon
+                    ,drawat_sales
+                    ,drawat_diskon_jenis
+                    ,drawat_harga*drawat_jumlah as drawat_subtotal
+                    ,drawat_harga*drawat_jumlah*(100-drawat_diskon)/100 as drawat_subtotal_net
+                    ,dtrawat_keterangan
+                    ,IF((dtrawat_petugas1=0),IF((dtrawat_petugas2=0),NULL,terapis.karyawan_username),dokter.karyawan_username) AS referal
+                FROM detail_jual_rawat
+                LEFT JOIN perawatan ON(rawat_id=drawat_rawat)
+                LEFT JOIN tindakan_detail ON(drawat_dtrawat=dtrawat_id)
+                LEFT JOIN karyawan AS dokter ON(dtrawat_petugas1=dokter.karyawan_id)
+                LEFT JOIN karyawan AS terapis ON(dtrawat_petugas2=terapis.karyawan_id)
+                WHERE drawat_master='".$master_id."'";
+			
+            $result = $this->db->query($query);
 			$nbrows = $result->num_rows();
 			$limit = $query." LIMIT ".$start.",".$end;			
 			$result = $this->db->query($limit);  
@@ -641,9 +660,9 @@ class M_master_jual_rawat extends Model{
             $sql="DELETE FROM detail_ambil_paket WHERE dapaket_id='$dapaket_id'";
             $this->db->query($sql);
 			if($this->db->affected_rows()){
-				return "{success:true}";
+				return '1';
 			}else
-				return "{failure:true}";
+				return '0';
 
 		}
 		

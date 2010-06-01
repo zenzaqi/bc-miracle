@@ -70,6 +70,8 @@ var draft_destinationSearchField;
 var draft_messageSearchField;
 var draft_dateSearchField;
 
+var today = new Date();
+
 /* on ready fuction */
 Ext.onReady(function(){
   	Ext.QuickTips.init();	/* Initiate quick tips icon */

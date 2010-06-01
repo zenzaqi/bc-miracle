@@ -139,7 +139,20 @@ class M_master_ambil_paket extends Model{
 			
 			//$query = "SELECT date_format(dapaket_date_create, '%Y-%m-%d') AS tgl_ambil, rawat_nama, dapaket_jumlah, cust_nama FROM detail_ambil_paket LEFT JOIN master_ambil_paket ON(dapaket_master=apaket_id) LEFT JOIN perawatan ON(apaket_item=rawat_id) LEFT JOIN customer ON(dapaket_cust=cust_id) WHERE apaket_jpaket='$dpaket_master' AND apaket_paket='$dpaket_paket' ORDER BY dapaket_date_create";
 			
-			$query = "SELECT date_format(dapaket_date_create, '%Y-%m-%d') AS tgl_ambil, rawat_nama, dapaket_jumlah, cust_nama FROM detail_ambil_paket LEFT JOIN perawatan ON(dapaket_item=rawat_id) LEFT JOIN customer ON(dapaket_cust=cust_id) WHERE dapaket_dpaket='$dapaket_dpaket' ORDER BY dapaket_date_create";
+			$query = "SELECT
+					date_format(dapaket_date_create, '%Y-%m-%d') AS tgl_ambil
+					,rawat_nama
+					,dapaket_jumlah
+					,cust_nama
+					,IF((dtrawat_petugas1=0),IF((dtrawat_petugas2=0),NULL,terapis.karyawan_username),dokter.karyawan_username) AS referal
+				FROM detail_ambil_paket
+				LEFT JOIN perawatan ON(dapaket_item=rawat_id)
+				LEFT JOIN customer ON(dapaket_cust=cust_id)
+				LEFT JOIN tindakan_detail ON(dapaket_dtrawat=dtrawat_id)
+				LEFT JOIN karyawan AS dokter ON(dtrawat_petugas1=dokter.karyawan_id)
+                LEFT JOIN karyawan AS terapis ON(dtrawat_petugas2=terapis.karyawan_id)
+				WHERE dapaket_dpaket='$dapaket_dpaket'
+				ORDER BY dapaket_date_create";
 
 
 			$result = $this->db->query($query);

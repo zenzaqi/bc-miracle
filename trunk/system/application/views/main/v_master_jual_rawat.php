@@ -614,6 +614,7 @@ Ext.onReady(function(){
 					Ext.MessageBox.alert(jrawat_post2db+' OK','Data penjualan perawatan berhasil disimpan');
 					if(jrawat_post2db=="UPDATE"){
 						detail_jual_rawat_update();
+                        detail_ambil_paket_update();
 					}else if(jrawat_post2db=="CREATE"){
 						detail_jual_rawat_insert_nocetak();
 					}
@@ -1333,6 +1334,7 @@ Ext.onReady(function(){
 			msg='created';
 			master_cara_bayarTabPanel.setActiveTab(0);
 			master_jual_rawat_createForm.savePrintButton.disable();
+            master_cara_bayarTabPanel.setDisabled(true);
 			master_jual_rawat_createWindow.show();
 		} else {
 			master_jual_rawat_createWindow.toFront();
@@ -1408,6 +1410,7 @@ Ext.onReady(function(){
 			msg='updated';
 			//master_jual_rawat_createWindow.hide();
 			master_jual_rawat_createForm.savePrintButton.enable();
+            master_cara_bayarTabPanel.setDisabled(false);
 			master_jual_rawat_createWindow.show();
 		} else {
 			Ext.MessageBox.show({
@@ -3787,7 +3790,8 @@ Ext.onReady(function(){
 			{name: 'drawat_diskon_jenis', type: 'string', mapping: 'drawat_diskon_jenis'},
 			{name: 'drawat_subtotal', type: 'float', mapping: 'drawat_subtotal'},
 			{name: 'drawat_subtotal_net', type: 'int', mapping: 'drawat_subtotal_net'},
-			{name: 'dtrawat_keterangan', type: 'string', mapping: 'dtrawat_keterangan'}
+			{name: 'dtrawat_keterangan', type: 'string', mapping: 'dtrawat_keterangan'},
+            {name: 'referal', type: 'string', mapping: 'referal'}
 	]);
 	//eof
 	
@@ -3987,6 +3991,12 @@ Ext.onReady(function(){
 			dataIndex: 'dtrawat_keterangan',
 			width: 160,	//150,
 			sortable: false
+		},
+        {
+			header: '<div align="center">' + 'Referal' + '</div>',
+			dataIndex: 'referal',
+			width: 160,	//150,
+			sortable: false
 		}]
 	);
 	detail_jual_rawat_ColumnModel.defaultSortable= true;
@@ -4024,7 +4034,7 @@ Ext.onReady(function(){
 		frame: true,
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
-		viewConfig: { forceFit:true},
+		viewConfig: { forceFit:false},
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: detail_jual_rawat_DataStore,
@@ -4243,8 +4253,12 @@ Ext.onReady(function(){
                 timeout: 60000,
                 success: function(response){							
                     var result=eval(response.responseText);
-                    Ext.MessageBox.alert(' OK','Status Dokumen telah berhasil diupdate.');
-                    master_jual_rawat_DataStore.reload();
+                    if(result==1){
+                        Ext.MessageBox.alert(' Updating Pengambilan Paket','Status Dokumen telah berhasil diupdate.');
+                        master_jual_rawat_DataStore.reload();
+                    }else if(result==0){
+                        Ext.MessageBox.alert(' Updating Pengambilan Paket','Tidak ada data yang diupdate.');
+                    }
                 },
                 failure: function(response){
                     var result=response.responseText;
