@@ -373,14 +373,15 @@ class M_master_retur_beli extends Model{
 		}
 		
 		//function for update record
-		function master_retur_beli_update($rbeli_id ,$rbeli_nobukti ,$rbeli_terima ,$rbeli_supplier ,$rbeli_tanggal ,$rbeli_keterangan ){
+		function master_retur_beli_update($rbeli_id ,$rbeli_nobukti ,$rbeli_terima ,$rbeli_supplier ,$rbeli_tanggal ,$rbeli_keterangan, $rbeli_status ){
 			$data = array(
 				"rbeli_id"=>$rbeli_id, 
 				"rbeli_nobukti"=>$rbeli_nobukti, 
 //				"rbeli_terima"=>$rbeli_terima, 
 //				"rbeli_supplier"=>$rbeli_supplier, 
 				"rbeli_tanggal"=>$rbeli_tanggal, 
-				"rbeli_keterangan"=>$rbeli_keterangan 
+				"rbeli_keterangan"=>$rbeli_keterangan,
+				"rbeli_status"=>$rbeli_status
 			);
 			$sql="SELECT supplier_id FROM supplier,master_terima_beli 
 					WHERE terima_supplier=supplier_id and terima_id='".$rbeli_terima."'";
@@ -402,7 +403,7 @@ class M_master_retur_beli extends Model{
 		}
 		
 		//function for create new record
-		function master_retur_beli_create($rbeli_nobukti ,$rbeli_terima ,$rbeli_supplier ,$rbeli_tanggal ,$rbeli_keterangan ){
+		function master_retur_beli_create($rbeli_nobukti ,$rbeli_terima ,$rbeli_supplier ,$rbeli_tanggal ,$rbeli_keterangan, $rbeli_status ){
 			
 			$pattern="RB/".date("y/m")."/";
 			$rbeli_nobukti=$this->m_public_function->get_kode_1('master_retur_beli','rbeli_nobukti',$pattern,13);
@@ -411,7 +412,8 @@ class M_master_retur_beli extends Model{
 				"rbeli_nobukti"=>$rbeli_nobukti, 
 				"rbeli_terima"=>$rbeli_terima, 
 				"rbeli_tanggal"=>$rbeli_tanggal, 
-				"rbeli_keterangan"=>$rbeli_keterangan 
+				"rbeli_keterangan"=>$rbeli_keterangan,
+				"rbeli_status"=>$rbeli_status
 			);
 			$sql="SELECT supplier_id FROM supplier,master_terima_beli 
 					WHERE terima_supplier=supplier_id and terima_id='".$rbeli_terima."'";
@@ -454,7 +456,7 @@ class M_master_retur_beli extends Model{
 		}
 		
 		//function for advanced search record
-		function master_retur_beli_search($rbeli_id ,$rbeli_nobukti ,$rbeli_terima ,$rbeli_supplier ,$rbeli_tanggal ,$rbeli_keterangan ,$start,$end){
+		function master_retur_beli_search($rbeli_id ,$rbeli_nobukti ,$rbeli_terima ,$rbeli_supplier ,$rbeli_tanggal ,$rbeli_keterangan ,$rbeli_status, $start,$end){
 			//full query
 			$query="select * from vu_trans_retur_beli";
 			
@@ -481,6 +483,11 @@ class M_master_retur_beli extends Model{
 			if($rbeli_keterangan!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " rbeli_keterangan LIKE '%".$rbeli_keterangan."%'";
+			};
+			
+			if($rbeli_status!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " rbeli_status LIKE '%".$rbeli_status."%'";
 			};
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
