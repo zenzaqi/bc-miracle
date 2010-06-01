@@ -908,7 +908,8 @@ Ext.onReady(function(){
 			{name: 'rawat_nama', type: 'string', mapping: 'rawat_nama'},
 			{name: 'dapaket_jumlah', type: 'int', mapping: 'dapaket_jumlah'},
 			{name: 'cust_nama', type: 'string', mapping: 'cust_nama'},
-			{name: 'tgl_ambil', type: 'date', dateFormat: 'Y-m-d', mapping: 'tgl_ambil'}
+			{name: 'tgl_ambil', type: 'date', dateFormat: 'Y-m-d', mapping: 'tgl_ambil'},
+			{name: 'referal', type: 'string', mapping: 'referal'}
 		]),
 		sortInfo:{field: 'cust_nama', direction: "ASC"}//,
 //		groupField: 'apaket_faktur'	//simplified, by hendri
@@ -953,14 +954,14 @@ Ext.onReady(function(){
 */		{
 			header: '<div align="center">' + 'Tgl Ambil' + '</div>',
 			dataIndex: 'tgl_ambil',
-			width: 70,
+			width: 90,
 			sortable: true,
 			renderer: Ext.util.Format.dateRenderer('d-m-Y')
 		}, 
 		{
 			header: '<div align="center">' + 'Perawatan' + '</div>',
 			dataIndex: 'rawat_nama',
-			width: 210
+			width: 450
 		},
 		{
 			header: '<div align="center">' + 'Jumlah' + '</div>',
@@ -972,7 +973,11 @@ Ext.onReady(function(){
 		},{
 			header: '<div align="center">' + 'Pemakai' + '</div>',
 			dataIndex: 'cust_nama',
-			width: 210
+			width: 410
+		},{
+			header: '<div align="center">' + 'Referal' + '</div>',
+			dataIndex: 'referal',
+			width: 190
 		}]
     );
     detail_ambil_paketColumnModel.defaultSortable= true;
