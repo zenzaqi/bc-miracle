@@ -235,7 +235,12 @@ class C_master_retur_beli extends Controller {
 		$rbeli_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$rbeli_keterangan);
 		$rbeli_keterangan=str_replace(",", ",",$rbeli_keterangan);
 		$rbeli_keterangan=str_replace("'", '"',$rbeli_keterangan);
-		$result = $this->m_master_retur_beli->master_retur_beli_update($rbeli_id ,$rbeli_nobukti ,$rbeli_terima ,$rbeli_supplier ,$rbeli_tanggal ,$rbeli_keterangan      );
+		
+		$rbeli_status=trim(@$_POST["rbeli_status"]);
+		$rbeli_status=str_replace("/(<\/?)(p)([^>]*>)", "",$rbeli_status);
+		$rbeli_status=str_replace(",", ",",$rbeli_status);
+		$rbeli_status=str_replace("'", '"',$rbeli_status);
+		$result = $this->m_master_retur_beli->master_retur_beli_update($rbeli_id ,$rbeli_nobukti ,$rbeli_terima ,$rbeli_supplier ,$rbeli_tanggal ,$rbeli_keterangan, $rbeli_status );
 		echo $result;
 	}
 	
@@ -250,7 +255,11 @@ class C_master_retur_beli extends Controller {
 		$rbeli_keterangan=trim(@$_POST["rbeli_keterangan"]);
 		$rbeli_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$rbeli_keterangan);
 		$rbeli_keterangan=str_replace("'", '"',$rbeli_keterangan);
-		$result=$this->m_master_retur_beli->master_retur_beli_create($rbeli_nobukti ,$rbeli_terima ,$rbeli_supplier ,$rbeli_tanggal ,$rbeli_keterangan );
+		
+		$rbeli_status=trim(@$_POST["rbeli_status"]);
+		$rbeli_status=str_replace("/(<\/?)(p)([^>]*>)", "",$rbeli_status);
+		$rbeli_status=str_replace("'", '"',$rbeli_status);
+		$result=$this->m_master_retur_beli->master_retur_beli_create($rbeli_nobukti ,$rbeli_terima ,$rbeli_supplier ,$rbeli_tanggal ,$rbeli_keterangan, $rbeli_status);
 		echo $result;
 	}
 
@@ -274,9 +283,13 @@ class C_master_retur_beli extends Controller {
 		$rbeli_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$rbeli_keterangan);
 		$rbeli_keterangan=str_replace("'", '"',$rbeli_keterangan);
 		
+		$rbeli_status=trim(@$_POST["rbeli_status"]);
+		$rbeli_status=str_replace("/(<\/?)(p)([^>]*>)", "",$rbeli_status);
+		$rbeli_status=str_replace("'", '"',$rbeli_status);
+		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_master_retur_beli->master_retur_beli_search($rbeli_id ,$rbeli_nobukti ,$rbeli_terima ,$rbeli_supplier ,$rbeli_tanggal ,$rbeli_keterangan ,$start,$end);
+		$result = $this->m_master_retur_beli->master_retur_beli_search($rbeli_id ,$rbeli_nobukti ,$rbeli_terima ,$rbeli_supplier ,$rbeli_tanggal ,$rbeli_keterangan ,$rbeli_status, $start,$end);
 		echo $result;
 	}
 
