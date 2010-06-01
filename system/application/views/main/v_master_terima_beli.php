@@ -600,7 +600,7 @@ Ext.onReady(function(){
 			header: '<div align="center">' + 'Total Item' + '</div>',
 			align: 'right',
 			dataIndex: 'jumlah_barang',
-			width: 60,	//150,
+			width: 80,	//150,
 			sortable: true,
 			readOnly: true,
 			renderer: Ext.util.Format.numberRenderer('0,000')
@@ -628,16 +628,23 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Nama Pengirim' + '</div>',
 			dataIndex: 'terima_pengirim',
-			width: 200,	//150,
+			width: 120,	//150,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 30
           	})
 		}, 
 		{
+			header: '<div align="center">' + 'Keterangan' + '</div>',
+			dataIndex: 'terima_keterangan',
+			sortable: true,
+			width: 200
+		}, 
+		{
 			header: '<div align="center">' + 'Stat Dok' + '</div>',
 			dataIndex: 'terima_status',
-			width: 60
+			sortable: true,
+			width: 80
 		}, 
 		{
 			header: 'Creator',
@@ -718,6 +725,7 @@ Ext.onReady(function(){
 			text: 'Delete',
 			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
+			disabled: true,
 			handler: master_terima_beli_confirm_delete   // Confirm before deleting
 		}, '-', {
 			text: 'Adv Search',
@@ -763,6 +771,7 @@ Ext.onReady(function(){
 			text: 'Delete', 
 			tooltip: 'Delete selected record', 
 			iconCls:'icon-delete',
+			disabled: true,
 			handler: master_terima_beli_confirm_delete 
 		},
 		'-',

@@ -77,6 +77,7 @@ var koreksi_idSearchField;
 var koreksi_gudangSearchField;
 var koreksi_tanggalSearchField;
 var koreksi_keteranganSearchField;
+var koreksi_statusSearchField;
 
 /* on ready fuction */
 Ext.onReady(function(){
@@ -88,12 +89,14 @@ Ext.onReady(function(){
 		var koreksi_gudang_update=null;
 		var koreksi_tanggal_update_date="";
 		var koreksi_keterangan_update=null;
+		var koreksi_status_update=null;
 
 		koreksi_id_update_pk = get_pk_id();
 		if(oGrid_event.record.data.koreksi_gudang!== null){koreksi_gudang_update = oGrid_event.record.data.koreksi_gudang;}
 	 	if(oGrid_event.record.data.koreksi_tanggal!== ""){koreksi_tanggal_update_date =oGrid_event.record.data.koreksi_tanggal.format('Y-m-d');}
 		if(oGrid_event.record.data.koreksi_keterangan!== null){koreksi_keterangan_update = oGrid_event.record.data.koreksi_keterangan;}
-
+		if(oGrid_event.record.data.koreksi_status!== null){koreksi_status_update = oGrid_event.record.data.koreksi_status;}
+			
 		Ext.Ajax.request({  
 			waitMsg: 'Please wait...',
 			url: 'index.php?c=c_master_koreksi_stok&m=get_action',
@@ -102,7 +105,8 @@ Ext.onReady(function(){
 				koreksi_id			: koreksi_id_update_pk, 
 				koreksi_gudang		: koreksi_gudang_update,  
 				koreksi_tanggal		: koreksi_tanggal_update_date, 
-				koreksi_keterangan	: koreksi_keterangan_update 
+				koreksi_keterangan	: koreksi_keterangan_update,
+				koreksi_status		: koreksi_status_update
 			}, 
 			success: function(response){							
 				var result=eval(response.responseText);
@@ -140,12 +144,14 @@ Ext.onReady(function(){
 		var koreksi_id_create_pk=null; 
 		var koreksi_gudang_create=null; 
 		var koreksi_tanggal_create_date=""; 
-		var koreksi_keterangan_create=null; 
+		var koreksi_keterangan_create=null;
+		var koreksi_status_create=null;
 
 		koreksi_id_create_pk=get_pk_id();
 		if(koreksi_gudangField.getValue()!== null){koreksi_gudang_create = koreksi_gudangField.getValue();} 
 		if(koreksi_tanggalField.getValue()!== ""){koreksi_tanggal_create_date = koreksi_tanggalField.getValue().format('Y-m-d');} 
-		if(koreksi_keteranganField.getValue()!== null){koreksi_keterangan_create = koreksi_keteranganField.getValue();} 
+		if(koreksi_keteranganField.getValue()!== null){koreksi_keterangan_create = koreksi_keteranganField.getValue();}
+		if(koreksi_statusField.getValue()!== null){koreksi_status_create = koreksi_statusField.getValue();} 
 
 		Ext.Ajax.request({  
 			waitMsg: 'Please wait...',
@@ -155,7 +161,8 @@ Ext.onReady(function(){
 				koreksi_id			: koreksi_id_create_pk, 
 				koreksi_gudang		: koreksi_gudang_create, 
 				koreksi_tanggal		: koreksi_tanggal_create_date, 
-				koreksi_keterangan	: koreksi_keterangan_create
+				koreksi_keterangan	: koreksi_keterangan_create,
+				koreksi_status		: koreksi_status_create
 			}, 
 			success: function(response){             
 				var result=eval(response.responseText);
@@ -216,10 +223,11 @@ Ext.onReady(function(){
 		koreksi_tanggalField.setValue(today);
 		koreksi_keteranganField.reset();
 		koreksi_keteranganField.setValue(null);
-		detail_koreksi_stok_DataStore.removeAll();
+		koreksi_statusField.reset();
+		koreksi_statusField.setValue('Terbuka');
+//		detail_koreksi_stok_DataStore.removeAll();				
 		
-		
-		/*cbo_stok_satuanDataStore.setBaseParam('task','detail');
+		cbo_stok_satuanDataStore.setBaseParam('task','detail');
 		cbo_stok_satuanDataStore.setBaseParam('master_id',get_pk_id());
 		cbo_stok_satuanDataStore.load();
 		
@@ -229,11 +237,13 @@ Ext.onReady(function(){
 		cbo_stok_produkDataStore.load({
 			callback: function(r,opt,success){
 				if(success==true){
-					detail_koreksi_stok_DataStore.setBaseParam('master_id',get_pk_id());
+					detail_koreksi_stok_DataStore.setBaseParam('master_id', 0);
 					detail_koreksi_stok_DataStore.load();
 				}
 			}
-		});*/
+		});
+		
+		
 		
 	}
  	/* End of Function */
@@ -255,6 +265,7 @@ Ext.onReady(function(){
 		koreksi_gudangField.setValue(master_koreksi_stokListEditorGrid.getSelectionModel().getSelected().get('koreksi_gudang'));
 		koreksi_tanggalField.setValue(master_koreksi_stokListEditorGrid.getSelectionModel().getSelected().get('koreksi_tanggal'));
 		koreksi_keteranganField.setValue(master_koreksi_stokListEditorGrid.getSelectionModel().getSelected().get('koreksi_keterangan'));
+		koreksi_statusField.setValue(master_koreksi_stokListEditorGrid.getSelectionModel().getSelected().get('koreksi_status'));
 		
 		cbo_stok_satuanDataStore.setBaseParam('task','detail');
 		cbo_stok_satuanDataStore.setBaseParam('master_id',get_pk_id());
@@ -396,7 +407,8 @@ Ext.onReady(function(){
 			{name: 'koreksi_gudang', type: 'string', mapping: 'gudang_nama'},
 			{name: 'koreksi_gudang_id', type: 'int', mapping: 'gudang_id'},
 			{name: 'koreksi_tanggal', type: 'date', dateFormat: 'Y-m-d', mapping: 'koreksi_tanggal'}, 
-			{name: 'koreksi_keterangan', type: 'string', mapping: 'koreksi_keterangan'}, 
+			{name: 'koreksi_keterangan', type: 'string', mapping: 'koreksi_keterangan'},
+			{name: 'koreksi_status', type: 'string', mapping: 'koreksi_status'}, 
 			{name: 'koreksi_creator', type: 'string', mapping: 'koreksi_creator'}, 
 			{name: 'koreksi_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'koreksi_date_create'}, 
 			{name: 'koreksi_update', type: 'string', mapping: 'koreksi_update'}, 
@@ -464,6 +476,13 @@ Ext.onReady(function(){
 				maxLength: 500
           	})
 		}, 
+		
+		{
+			header: '<div align="center">' + 'Stat Dok' + '</div>',
+			dataIndex: 'koreksi_status',
+			width: 60
+		}, 
+		
 		{
 			header: 'Creator',
 			dataIndex: 'koreksi_creator',
@@ -544,9 +563,10 @@ Ext.onReady(function(){
 			text: 'Delete',
 			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
+			disabled : true,
 			handler: master_koreksi_stok_confirm_delete   // Confirm before deleting
 		}, '-', {
-			text: 'Search',
+			text: 'Adv Search',
 			tooltip: 'Advanced Search',
 			iconCls:'icon-search',
 			handler: display_form_search_window 
@@ -589,6 +609,7 @@ Ext.onReady(function(){
 			text: 'Delete', 
 			tooltip: 'Delete selected record', 
 			iconCls:'icon-delete',
+			disabled : true,
 			handler: master_koreksi_stok_confirm_delete 
 		},
 		'-',
@@ -671,6 +692,24 @@ Ext.onReady(function(){
 		maxLength: 500,
 		anchor: '95%'
 	});
+	
+	koreksi_statusField= new Ext.form.ComboBox({
+		id: 'koreksi_statusField',
+		fieldLabel: 'Status Dok',
+		store:new Ext.data.SimpleStore({
+			fields:['koreksi_status_value', 'koreksi_status_display'],
+			data:[['Terbuka','Terbuka'],['Tertutup','Tertutup'],['Batal', 'Batal']]
+		}),
+		mode: 'local',
+		displayField: 'koreksi_status_display',
+		valueField: 'koreksi_status_value',
+		anchor: '80%',
+		allowBlank: false,
+		triggerAction: 'all'	
+	});
+	
+	
+	
   	/*Fieldset Master*/
 	master_koreksi_stok_masterGroup = new Ext.form.FieldSet({
 		title: 'Master',
@@ -688,7 +727,7 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [koreksi_keteranganField] 
+				items: [koreksi_keteranganField, koreksi_statusField] 
 			}
 			]
 	
@@ -931,13 +970,12 @@ Ext.onReady(function(){
 	//eof
 	
 	
-	
 	//declaration of detail list editor grid
 	detail_koreksi_stokListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'detail_koreksi_stokListEditorGrid',
 		el: 'fp_detail_koreksi_stok',
 		title: 'Detail Item',
-		height: 250,
+		height: 450,
 		width: 800,
 		autoScroll: true,
 		store: detail_koreksi_stok_DataStore, // DataStore
@@ -966,6 +1004,7 @@ Ext.onReady(function(){
 			text: 'Delete',
 			tooltip: 'Delete detail selected record',
 			iconCls:'icon-delete',
+			disabled : true,
 			handler: detail_koreksi_stok_confirm_delete
 		}
 		]
@@ -1115,11 +1154,13 @@ Ext.onReady(function(){
 		var koreksi_gudang_search=null;
 		var koreksi_tanggal_search_date="";
 		var koreksi_keterangan_search=null;
+		var koreksi_status_search=null;
 
 		if(koreksi_idSearchField.getValue()!==null){koreksi_id_search=koreksi_idSearchField.getValue();}
 		if(koreksi_gudangSearchField.getValue()!==null){koreksi_gudang_search=koreksi_gudangSearchField.getValue();}
 		if(koreksi_tanggalSearchField.getValue()!==""){koreksi_tanggal_search_date=koreksi_tanggalSearchField.getValue().format('Y-m-d');}
 		if(koreksi_keteranganSearchField.getValue()!==null){koreksi_keterangan_search=koreksi_keteranganSearchField.getValue();}
+		if(koreksi_statusSearchField.getValue()!==null){koreksi_status_search=koreksi_statusSearchField.getValue();}
 		// change the store parameters
 		master_koreksi_stok_DataStore.baseParams = {
 			task				: 'SEARCH',
@@ -1127,7 +1168,8 @@ Ext.onReady(function(){
 			koreksi_id			: koreksi_id_search, 
 			koreksi_gudang		: koreksi_gudang_search, 
 			koreksi_tanggal		: koreksi_tanggal_search_date, 
-			koreksi_keterangan	: koreksi_keterangan_search
+			koreksi_keterangan	: koreksi_keterangan_search,
+			koreksi_status		: koreksi_status_search
 		};
 		// Cause the datastore to do another query : 
 		master_koreksi_stok_DataStore.reload({params: {start: 0, limit: pageS}});
@@ -1147,6 +1189,7 @@ Ext.onReady(function(){
 		koreksi_gudangSearchField.reset();
 		koreksi_tanggalSearchField.reset();
 		koreksi_keteranganSearchField.reset();
+		koreksi_statusSearchField.reset();
 	}
 	
 	
@@ -1193,6 +1236,55 @@ Ext.onReady(function(){
 		anchor: '95%'
 	
 	});
+	
+	koreksi_statusSearchField= new Ext.form.ComboBox({
+		id: 'koreksi_statusSearchField',
+		fieldLabel: 'Status',
+		store:new Ext.data.SimpleStore({
+			fields:['value', 'koreksi_status'],
+			data:[['Terbuka','Terbuka'],['Tertutup','Tertutup'],['Batal','Batal']]
+		}),
+		mode: 'local',
+		displayField: 'koreksi_status',
+		valueField: 'value',
+		anchor: '80%',
+		triggerAction: 'all'	 
+	});
+	
+	koreksi_tanggal_akhirSearchField= new Ext.form.DateField({
+		id: 'terima_tanggal_akhirSearchField',
+		fieldLabel: 's/d',
+		format : 'd-m-Y'
+	});
+
+	koreksi_label_tanggalField= new Ext.form.Label({ html: ' &nbsp; s/d  &nbsp;' });
+	
+	
+	koreksi_tanggalSearchFieldSet=new Ext.form.FieldSet({
+		id:'koreksi_tanggalSearchFieldSet',
+		title: 'Opsi Tanggal',
+		layout: 'column',
+		boduStyle: 'padding: 5px;',
+		frame: false,
+		items:[koreksi_tanggalSearchField, koreksi_label_tanggalField, koreksi_tanggal_akhirSearchField]
+	});
+	
+	koreksi_statusSearchField= new Ext.form.ComboBox({
+		id: 'koreksi_statusSearchField',
+		fieldLabel: 'Status',
+		store:new Ext.data.SimpleStore({
+			fields:['value', 'koreksi_status'],
+			data:[['Terbuka','Terbuka'],['Tertutup','Tertutup'],['Batal','Batal']]
+		}),
+		mode: 'local',
+		displayField: 'koreksi_status',
+		valueField: 'value',
+		anchor: '80%',
+		triggerAction: 'all'	 
+	
+	});
+	
+	
     
 	/* Function for retrieve search Form Panel */
 	master_koreksi_stok_searchForm = new Ext.FormPanel({
@@ -1208,7 +1300,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [koreksi_gudangSearchField, koreksi_tanggalSearchField, koreksi_keteranganSearchField] 
+				items: [koreksi_gudangSearchField, koreksi_tanggalSearchFieldSet, koreksi_keteranganSearchField, koreksi_statusSearchField] 
 			}
 			]
 		}]

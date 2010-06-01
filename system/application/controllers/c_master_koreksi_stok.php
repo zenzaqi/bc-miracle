@@ -169,7 +169,11 @@ class C_master_koreksi_stok extends Controller {
 		$koreksi_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$koreksi_keterangan);
 		$koreksi_keterangan=str_replace(",", ",",$koreksi_keterangan);
 		$koreksi_keterangan=str_replace("'", '"',$koreksi_keterangan);
-		$result = $this->m_master_koreksi_stok->master_koreksi_stok_update($koreksi_id ,$koreksi_gudang ,$koreksi_tanggal ,$koreksi_keterangan      );
+		$koreksi_status=trim(@$_POST["koreksi_status"]);
+		$koreksi_status=str_replace("/(<\/?)(p)([^>]*>)", "",$koreksi_status);
+		$koreksi_status=str_replace(",", ",",$koreksi_status);
+		$koreksi_status=str_replace("'", '"',$koreksi_status);
+		$result = $this->m_master_koreksi_stok->master_koreksi_stok_update($koreksi_id ,$koreksi_gudang ,$koreksi_tanggal ,$koreksi_keterangan, $koreksi_status);
 		echo $result;
 	}
 	
@@ -182,7 +186,10 @@ class C_master_koreksi_stok extends Controller {
 		$koreksi_keterangan=trim(@$_POST["koreksi_keterangan"]);
 		$koreksi_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$koreksi_keterangan);
 		$koreksi_keterangan=str_replace("'", '"',$koreksi_keterangan);
-		$result=$this->m_master_koreksi_stok->master_koreksi_stok_create($koreksi_gudang ,$koreksi_tanggal ,$koreksi_keterangan );
+		$koreksi_status=trim(@$_POST["koreksi_status"]);
+		$koreksi_status=str_replace("/(<\/?)(p)([^>]*>)", "",$koreksi_status);
+		$koreksi_status=str_replace("'", '"',$koreksi_status);
+		$result=$this->m_master_koreksi_stok->master_koreksi_stok_create($koreksi_gudang ,$koreksi_tanggal ,$koreksi_keterangan, $koreksi_status);
 		echo $result;
 	}
 
@@ -203,10 +210,13 @@ class C_master_koreksi_stok extends Controller {
 		$koreksi_keterangan=trim(@$_POST["koreksi_keterangan"]);
 		$koreksi_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$koreksi_keterangan);
 		$koreksi_keterangan=str_replace("'", '"',$koreksi_keterangan);
+		$koreksi_status=trim(@$_POST["koreksi_status"]);
+		$koreksi_status=str_replace("/(<\/?)(p)([^>]*>)", "",$koreksi_status);
+		$koreksi_status=str_replace("'", '"',$koreksi_status);
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_master_koreksi_stok->master_koreksi_stok_search($koreksi_id ,$koreksi_gudang ,$koreksi_tanggal ,$koreksi_keterangan ,$start,$end);
+		$result = $this->m_master_koreksi_stok->master_koreksi_stok_search($koreksi_id ,$koreksi_gudang ,$koreksi_tanggal ,$koreksi_keterangan, $koreksi_status, $start,$end);
 		echo $result;
 	}
 

@@ -272,13 +272,14 @@ class M_master_mutasi extends Model{
 		}
 		
 		//function for update record
-		function master_mutasi_update($mutasi_id ,$mutasi_asal ,$mutasi_tujuan ,$mutasi_tanggal ,$mutasi_keterangan ){
+		function master_mutasi_update($mutasi_id ,$mutasi_asal ,$mutasi_tujuan ,$mutasi_tanggal ,$mutasi_keterangan, $mutasi_status){
 			$data = array(
 				"mutasi_id"=>$mutasi_id, 
 //				"mutasi_asal"=>$mutasi_asal, 
 //				"mutasi_tujuan"=>$mutasi_tujuan, 
 				"mutasi_tanggal"=>$mutasi_tanggal, 
-				"mutasi_keterangan"=>$mutasi_keterangan 
+				"mutasi_keterangan"=>$mutasi_keterangan,
+				"mutasi_status"=>$mutasi_status
 			);
 			$sql="SELECT gudang_id FROM gudang WHERE gudang_id='".$mutasi_asal."'";
 			$rs=$this->db->query($sql);
@@ -297,12 +298,13 @@ class M_master_mutasi extends Model{
 		}
 		
 		//function for create new record
-		function master_mutasi_create($mutasi_asal ,$mutasi_tujuan ,$mutasi_tanggal ,$mutasi_keterangan ){
+		function master_mutasi_create($mutasi_asal ,$mutasi_tujuan ,$mutasi_tanggal ,$mutasi_keterangan, $mutasi_status){
 			$data = array(
 				"mutasi_asal"=>$mutasi_asal, 
 				"mutasi_tujuan"=>$mutasi_tujuan, 
 				"mutasi_tanggal"=>$mutasi_tanggal, 
-				"mutasi_keterangan"=>$mutasi_keterangan 
+				"mutasi_keterangan"=>$mutasi_keterangan,
+				"mutasi_status"=>$mutasi_status
 			);
 			$this->db->insert('master_mutasi', $data); 
 			if($this->db->affected_rows())
@@ -337,7 +339,7 @@ class M_master_mutasi extends Model{
 		}
 		
 		//function for advanced search record
-		function master_mutasi_search($mutasi_id ,$mutasi_asal ,$mutasi_tujuan ,$mutasi_tanggal ,$mutasi_keterangan ,$start,$end){
+		function master_mutasi_search($mutasi_id ,$mutasi_asal ,$mutasi_tujuan ,$mutasi_tanggal ,$mutasi_keterangan ,$mutasi_status, $start,$end){
 			//full query
 			$query = "SELECT * FROM vu_trans_mutasi";
 			
@@ -360,6 +362,11 @@ class M_master_mutasi extends Model{
 			if($mutasi_keterangan!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " mutasi_keterangan LIKE '%".$mutasi_keterangan."%'";
+			};
+			
+			if($mutasi_status!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " mutasi_status LIKE '%".$mutasi_status."%'";
 			};
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
