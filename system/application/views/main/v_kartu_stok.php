@@ -111,6 +111,27 @@ Ext.onReady(function(){
 	/* End of Function */
 	
 	/* Function for Retrieve DataStore */
+	kartu_stok_awal_DataStore = new Ext.data.Store({
+		id: 'kartu_stok_awal_DataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_kartu_stok&m=kartu_stok_awal', 
+			method: 'POST',
+			timeout: 3600000
+		}),
+		baseParams:{start:0, limit: pageS, produk_id:0, query: null}, // parameter yang di $_POST ke Controller
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'stok_awal'
+		},[
+		/* dataIndex => insert intohpp_ColumnModel, Mapping => for initiate table column */ 
+			{name: 'stok_awal', type: 'float', mapping: 'stok_awal'}
+		]),
+		sortInfo:{field: 'stok_awal', direction: "ASC"}
+	});
+	/* End of Function */
+	
+	/* Function for Retrieve DataStore */
 	kartu_stok_produk_DataStore = new Ext.data.Store({
 		id: 'kartu_stok_produk_DataStore',
 		proxy: new Ext.data.HttpProxy({
@@ -216,18 +237,29 @@ Ext.onReady(function(){
 	});
 	
 	
-	kartu_stok_awalField=new Ext.form.TextField({
+	kartu_stok_awalField=new Ext.form.NumberField({
 		id: 'kartu_stok_awalField',
 		name: 'kartu_stok_awalField',
 		fieldLabel: '<b>Stok Awal</b>',
-		readOnly: true
+		readOnly: true,
+		allowDecimals: true,
+		allowNegative: true,
+		blankText: '0',
+		maxLength: 11,
+		readOnly: true,
+		maskRe: /([0-9.]+)$/
 	});
 	
-	kartu_stok_saldoField=new Ext.form.TextField({
+	kartu_stok_saldoField=new Ext.form.NumberField({
 		id: 'kartu_stok_saldoField',
 		name: 'kartu_stok_saldoField',
 		fieldLabel: '<b>Stok Akhir</b>',
-		readOnly: true
+		allowDecimals: true,
+		allowNegative: true,
+		blankText: '0',
+		maxLength: 11,
+		readOnly: true,
+		maskRe: /([0-9.]+)$/
 	});
 	
 	kartu_stok_masterField=new Ext.form.FieldSet({
@@ -244,11 +276,15 @@ Ext.onReady(function(){
 	});
 
 	
+	function rounding(num, dec) {
+		var result = Math.round(num*Math.pow(10,dec))/Math.pow(10,dec);
+		return result;
+	}
 	
 	/* Declare DataStore and  show datagrid list */
 	kartu_stokListEditorGrid =  new Ext.grid.GridPanel({
 		id: 'kartu_stokListEditorGrid',
-		title: 'Laporan Stok Mutasi',
+		title: 'Kartu Stok',
 		el: 'fp_vu_kartu_stok',
 		autoHeight: true,
 		store: kartu_stok_DataStore, // DataStore
@@ -328,13 +364,31 @@ Ext.onReady(function(){
 		var opsi_satuan_search='default';
 		var gudang_search=null;
 		
+		
+		
+		
+		
 		if(kartu_stok_produk_namaSearchField.getValue()!==null){produk_nama_search=kartu_stok_produk_namaSearchField.getValue();}
 		/*if(kartu_stok_produk_allField.getValue()==true){ produk_nama_search=null; }*/
 		if(kartu_stok_tanggal_startSearchField.getValue()!==null){tanggal_start_search=kartu_stok_tanggal_startSearchField.getValue().format('Y-m-d');}
 		if(kartu_stok_tanggal_endSearchField.getValue()!==null){tanggal_end_search=kartu_stok_tanggal_endSearchField.getValue().format('Y-m-d');}
 		if(kartu_stok_satuan_terkecilField.getValue()==true){ opsi_satuan_search='terkecil'; }else{ opsi_satuan_search='default'; }
 		if(kartu_stok_gudangSearchField.getValue()!==null){ gudang_search=kartu_stok_gudangSearchField.getValue()}
-		// change the store parameters
+		
+		kartu_stok_produk_DataStore.load({
+		 	params:{satuan: opsi_satuan_search },
+		 	callback: function(r,opt,success){
+				if(success==true){
+					var j=kartu_stok_produk_DataStore.find('produk_id',kartu_stok_produk_namaSearchField.getValue());
+					if(j>-1){
+						var produk_record=kartu_stok_produk_DataStore.getAt(j);
+						kartu_stok_produkField.setValue(produk_record.data.produk_nama);
+						kartu_stok_satuanField.setValue(produk_record.data.satuan_nama);
+					}
+				}
+			}
+		});
+		
 		kartu_stok_DataStore.baseParams = {
 			task			: 'LIST',
 			produk_id		:	produk_nama_search, 
@@ -355,7 +409,41 @@ Ext.onReady(function(){
 			params: {start: 0, limit: pageS, query: null},
 			callback: function(r,opt,success){
 				if(success==true){
-					Ext.MessageBox.hide();
+					kartu_stok_awal_DataStore.baseParams = {
+						task			: 'LIST',
+						produk_id		:	produk_nama_search, 
+						tanggal_start	:	tanggal_start_search, 
+						tanggal_end		:	tanggal_end_search,
+						opsi_satuan		: 	opsi_satuan_search,
+						gudang			: 	gudang_search
+					};
+					kartu_stok_awal_DataStore.load({
+						callback: function(r,opt,success){
+							if(success==true){ 
+								var stok_masuk=0;
+								var stok_keluar=0;
+								var stok_koreksi=0;
+								var stok_akhir=0;
+								var stok_awal=0;
+								
+								var data_awal=kartu_stok_awal_DataStore.getAt(0);
+								stok_awal=rounding(data_awal.data.stok_awal,2);
+								kartu_stok_awalField.setValue(stok_awal);
+								for(i=0;i<kartu_stok_DataStore.getCount();i++){
+									data_stok=kartu_stok_DataStore.getAt(i);
+									stok_masuk+=data_stok.data.stok_masuk;
+									stok_keluar+=data_stok.data.stok_keluar;
+									stok_koreksi+=data_stok.data.stok_koreksi;
+									
+								}
+								stok_akhir=rounding(stok_awal+stok_masuk-stok_keluar+stok_koreksi,2);
+								
+								kartu_stok_saldoField.setValue(stok_akhir);
+								Ext.MessageBox.hide(); 
+							}
+						}
+					});
+					
 				}					 
 			}
 		});
@@ -733,7 +821,7 @@ Ext.onReady(function(){
 	}
 	/*End of Function */
 	
-
+	
 	kartu_stok_searchWindow.show();
 	
 });
