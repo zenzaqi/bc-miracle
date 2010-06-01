@@ -316,12 +316,13 @@ class M_master_koreksi_stok extends Model{
 		}
 		
 		//function for update record
-		function master_koreksi_stok_update($koreksi_id ,$koreksi_gudang ,$koreksi_tanggal ,$koreksi_keterangan ){
+		function master_koreksi_stok_update($koreksi_id ,$koreksi_gudang ,$koreksi_tanggal ,$koreksi_keterangan, $koreksi_status){
 			$data = array(
 				"koreksi_id"=>$koreksi_id, 
 //				"koreksi_gudang"=>$koreksi_gudang, 
 				"koreksi_tanggal"=>$koreksi_tanggal, 
-				"koreksi_keterangan"=>$koreksi_keterangan 
+				"koreksi_keterangan"=>$koreksi_keterangan,
+				"koreksi_status"=>$koreksi_status
 			);
 			$sql="SELECT gudang_id FROM gudang WHERE gudang_id='".$koreksi_gudang."'";
 			$rs=$this->db->query($sql);
@@ -335,11 +336,12 @@ class M_master_koreksi_stok extends Model{
 		}
 		
 		//function for create new record
-		function master_koreksi_stok_create($koreksi_gudang ,$koreksi_tanggal ,$koreksi_keterangan ){
+		function master_koreksi_stok_create($koreksi_gudang ,$koreksi_tanggal ,$koreksi_keterangan, $koreksi_status){
 			$data = array(
 				"koreksi_gudang"=>$koreksi_gudang, 
 				"koreksi_tanggal"=>$koreksi_tanggal, 
-				"koreksi_keterangan"=>$koreksi_keterangan 
+				"koreksi_keterangan"=>$koreksi_keterangan,
+				"koreksi_status"=>$koreksi_status
 			);
 			$this->db->insert('master_koreksi_stok', $data); 
 			if($this->db->affected_rows())
@@ -377,9 +379,9 @@ class M_master_koreksi_stok extends Model{
 		}
 		
 		//function for advanced search record
-		function master_koreksi_stok_search($koreksi_id ,$koreksi_gudang ,$koreksi_tanggal ,$koreksi_keterangan ,$start,$end){
+		function master_koreksi_stok_search($koreksi_id ,$koreksi_gudang ,$koreksi_tanggal ,$koreksi_keterangan, $koreksi_status, $start,$end){
 			//full query
-			$query="select * from master_koreksi_stok";
+			$query="SELECT distinct * FROM master_koreksi_stok,gudang WHERE koreksi_gudang=gudang_id";
 			
 			if($koreksi_id!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -397,6 +399,11 @@ class M_master_koreksi_stok extends Model{
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " koreksi_keterangan LIKE '%".$koreksi_keterangan."%'";
 			};
+			if($koreksi_status!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " koreksi_status LIKE '%".$koreksi_status."%'";
+			};
+			
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
 			

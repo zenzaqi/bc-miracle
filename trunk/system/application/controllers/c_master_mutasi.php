@@ -208,7 +208,12 @@ class C_master_mutasi extends Controller {
 		$mutasi_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$mutasi_keterangan);
 		$mutasi_keterangan=str_replace(",", ",",$mutasi_keterangan);
 		$mutasi_keterangan=str_replace("'", '"',$mutasi_keterangan);
-		$result = $this->m_master_mutasi->master_mutasi_update($mutasi_id ,$mutasi_asal ,$mutasi_tujuan ,$mutasi_tanggal ,$mutasi_keterangan      );
+		
+		$mutasi_status=trim(@$_POST["mutasi_status"]);
+		$mutasi_status=str_replace("/(<\/?)(p)([^>]*>)", "",$mutasi_status);
+		$mutasi_status=str_replace(",", ",",$mutasi_status);
+		$mutasi_status=str_replace("'", '"',$mutasi_status);
+		$result = $this->m_master_mutasi->master_mutasi_update($mutasi_id ,$mutasi_asal ,$mutasi_tujuan ,$mutasi_tanggal ,$mutasi_keterangan, $mutasi_status);
 		echo $result;
 	}
 	
@@ -222,7 +227,11 @@ class C_master_mutasi extends Controller {
 		$mutasi_keterangan=trim(@$_POST["mutasi_keterangan"]);
 		$mutasi_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$mutasi_keterangan);
 		$mutasi_keterangan=str_replace("'", '"',$mutasi_keterangan);
-		$result=$this->m_master_mutasi->master_mutasi_create($mutasi_asal ,$mutasi_tujuan ,$mutasi_tanggal ,$mutasi_keterangan );
+		
+		$mutasi_status=trim(@$_POST["mutasi_status"]);
+		$mutasi_status=str_replace("/(<\/?)(p)([^>]*>)", "",$mutasi_status);
+		$mutasi_status=str_replace("'", '"',$mutasi_status);
+		$result=$this->m_master_mutasi->master_mutasi_create($mutasi_asal ,$mutasi_tujuan ,$mutasi_tanggal ,$mutasi_keterangan, $mutasi_status );
 		echo $result;
 	}
 
@@ -245,9 +254,13 @@ class C_master_mutasi extends Controller {
 		$mutasi_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$mutasi_keterangan);
 		$mutasi_keterangan=str_replace("'", '"',$mutasi_keterangan);
 		
+		$mutasi_status=trim(@$_POST["mutasi_status"]);
+		$mutasi_status=str_replace("/(<\/?)(p)([^>]*>)", "",$mutasi_status);
+		$mutasi_status=str_replace("'", '"',$mutasi_status);
+		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_master_mutasi->master_mutasi_search($mutasi_id ,$mutasi_asal ,$mutasi_tujuan ,$mutasi_tanggal ,$mutasi_keterangan ,$start,$end);
+		$result = $this->m_master_mutasi->master_mutasi_search($mutasi_id ,$mutasi_asal ,$mutasi_tujuan ,$mutasi_tanggal ,$mutasi_keterangan ,$mutasi_status, $start,$end);
 		echo $result;
 	}
 
