@@ -585,7 +585,11 @@ Ext.onReady(function(){
 				var result=eval(response.responseText);
 				switch(result){
 					case 0:
-						detail_jual_produk_purge();
+						if(jproduk_post2db=='CREATE'){
+								detail_jual_produk_insert();
+						}else if(jproduk_post2db=='UPDATE'){
+								detail_jual_produk_purge();
+						}
 						//detail_jual_produk_insert();
 						//Ext.MessageBox.alert(jproduk_post2db+' OK','The Master_jual_produk was '+msg+' successfully.');
 						//Ext.MessageBox.alert(jproduk_post2db+' OK','Data penjualan produk berhasil disimpan');
@@ -3949,6 +3953,33 @@ Ext.onReady(function(){
 			
 		}
 	});
+	
+	var djenis_diskonField = new Ext.form.ComboBox({
+		store:new Ext.data.SimpleStore({
+			fields:['diskon_jenis_value'],
+			data:[['DU'],['DM'],['Promo'],['Ultah'],['Kolega'],['Bonus']]
+		}),
+		mode: 'local',
+		displayField: 'diskon_jenis_value',
+		valueField: 'diskon_jenis_value',
+		allowBlank: true,
+		anchor: '50%',
+		triggerAction: 'all',
+		lazyRenderer: true
+	});
+	djenis_diskonField.on('select', function(){
+		if(djenis_diskonField.getValue()=='Bonus'){
+			djumlah_diskonField.setValue(100);
+		}
+	});
+	
+	var djumlah_diskonField = new Ext.form.NumberField({
+		allowDecimals: false,
+		allowNegative: false,
+		blankText: '0',
+		maxLength: 3,
+		maskRe: /([0-9]+)$/
+	})
 		
 
 	//declaration of detail coloumn model
@@ -3959,7 +3990,7 @@ Ext.onReady(function(){
 			header: '<div align="center">' + 'Produk' + '</div>',
 			dataIndex: 'dproduk_produk',
 			width: 300, //250
-			sortable: true,
+			sortable: false,
 			allowBlank: false,
 			editor: combo_jual_produk,
 			renderer: Ext.util.Format.comboRenderer(combo_jual_produk)
@@ -3969,7 +4000,7 @@ Ext.onReady(function(){
 			header: '<div align="center">' + 'Satuan' + '</div>',
 			dataIndex: 'dproduk_satuan',
 			width: 60, //80,
-			sortable: true,
+			sortable: false,
 			editor: combo_satuan_produk,
 			renderer: Ext.util.Format.comboRenderer(combo_satuan_produk)
 /*
@@ -3986,7 +4017,7 @@ Ext.onReady(function(){
 			header: '<div align="center">' + 'Jml' + '</div>',
 			dataIndex: 'dproduk_jumlah',
 			width: 60, //80,
-			sortable: true,
+			sortable: false,
 			renderer: Ext.util.Format.numberRenderer('0,000'),
 			editor: new Ext.form.NumberField({
 				allowDecimals: false,
@@ -4009,7 +4040,7 @@ Ext.onReady(function(){
 			header: '<div align="center">' + 'Sub Total (Rp)' + '</div>',
 			dataIndex: 'dproduk_subtotal',
 			width: 100, //150,
-			sortable: true,
+			sortable: false,
 			readOnly: true,
 			renderer: Ext.util.Format.numberRenderer('0,000')
 			/*renderer: function(v, params, record){
@@ -4021,42 +4052,24 @@ Ext.onReady(function(){
 			header: '<div align="center">' + 'Jns Diskon' + '</div>',
 			dataIndex: 'dproduk_diskon_jenis',
 			width: 80, //100,
-			sortable: true,
-			editor: new Ext.form.ComboBox({
-				store:new Ext.data.SimpleStore({
-					fields:['diskon_jenis_value'],
-					data:[['DU'],['DM'],['Promo'],['Reward'],['Ultah'],['Kolega']]
-				}),
-				mode: 'local',
-				displayField: 'diskon_jenis_value',
-				valueField: 'diskon_jenis_value',
-				allowBlank: true,
-				anchor: '50%',
-				triggerAction: 'all',
-				lazyRenderer: true
-			})
+			sortable: false,
+			editor: djenis_diskonField
 		},
 		{
 			align : 'Right',
 			header: '<div align="center">' + 'Diskon (%)' + '</div>',
 			dataIndex: 'dproduk_diskon',
 			width: 80, //90,
-			sortable: true,
+			sortable: false,
 			renderer: Ext.util.Format.numberRenderer('0,000'),
-			editor: new Ext.form.NumberField({
-				allowDecimals: false,
-				allowNegative: false,
-				blankText: '0',
-				maxLength: 3,
-				maskRe: /([0-9]+)$/
-			})
+			editor: djumlah_diskonField
 		},
 		{
 			align :'Right',
 			header: '<div align="center">' + 'Sub Tot Net (Rp)' + '</div>',
 			dataIndex: 'dproduk_subtotal_net',
 			width: 100, //150,
-			sortable: true,
+			sortable: false,
 			reaOnly: true,
 			renderer: function(v, params, record){
 					return Ext.util.Format.number(record.data.dproduk_subtotal*(100-record.data.dproduk_diskon)/100,'0,000');
@@ -4068,7 +4081,7 @@ Ext.onReady(function(){
 			header: '<div align="center">' + 'Referal' + '</div>',
 			dataIndex: 'dproduk_karyawan',
 			width: 150, //250
-			sortable: true,
+			sortable: false,
 			allowBlank: false,
 			editor: combo_reveral,
 			renderer: Ext.util.Format.comboRenderer(combo_reveral)

@@ -720,10 +720,10 @@ class M_master_jual_produk extends Model{
 				$dproduk_master=$this->get_master_id();
 			}
 			
-			$sql="SELECT dproduk_id, dproduk_jumlah FROM detail_jual_produk WHERE dproduk_master='$dproduk_master' AND dproduk_produk='$dproduk_produk'";
+			$sql="SELECT dproduk_id, dproduk_jumlah FROM detail_jual_produk WHERE dproduk_master='$dproduk_master' AND dproduk_produk='$dproduk_produk' AND dproduk_diskon_jenis<>'Bonus'";
 			$rs=$this->db->query($sql);
 			if($rs->num_rows()){
-				if($dproduk_diskon<>100){
+				if($dproduk_diskon_jenis<>'Bonus'){
 					//* UPDATE detail_jual_produk untuk menambahkan dproduk_jumlah, ini dikarenakan kasir memasukkan produk yg sama lebih dari satu dalam satu Faktur /
 					$record = $rs->row_array();
 					$dproduk_id=$record['dproduk_id'];
@@ -749,7 +749,7 @@ class M_master_jual_produk extends Model{
 					}else{
 						return '-1';
 					}
-				}else{
+				}else if($dproduk_diskon_jenis=='Bonus'){
 					$data = array(
 						"dproduk_master"=>$dproduk_master, 
 						"dproduk_produk"=>$dproduk_produk, 
