@@ -3,24 +3,24 @@
     #songbee	mukhlisona@gmail.com
 	#CV. Trust Solution, jl. Saronojiwo 19 Surabaya, http://www.ts.co.id
 	
-	+ Module  		: labarugi Model
+	+ Module  		: neraca Model
 	+ Description	: For record model process back-end
-	+ Filename 		: c_labarugi.php
+	+ Filename 		: c_neraca.php
  	+ Author  		: Zainal, Anam
  	+ Created on 12/Mar/2010 10:45:40
 	
 */
 
-class M_labarugi extends Model{
+class M_neraca extends Model{
 		
 		//constructor
-		function M_labarugi() {
+		function M_neraca() {
 			parent::Model();
 		}
 	
 		//function for get list record
-		function labarugi_list($filter,$start,$end){
-			$query = "SELECT * FROM labarugi";
+		function neraca_list($filter,$start,$end){
+			$query = "SELECT * FROM neraca";
 			
 			// For simple search
 			if ($filter<>""){
@@ -48,14 +48,13 @@ class M_labarugi extends Model{
 	
 		
 		//function for advanced search record
-		function labarugi_search($buku_periode, $buku_tglawal, $buku_tglakhir, $buku_bulan, $buku_tahun, $buku_akun, $start,$end){
+		function neraca_search($buku_periode, $buku_tglawal, $buku_tglakhir, $buku_bulan, $buku_tahun, $buku_akun, $start,$end){
 			
 			if($buku_periode=="all"){
 				$sql="SELECT buku_akun,akun_kode,akun_nama,sum(buku_debet) as debet,sum(buku_kredit) as kredit
 					FROM	buku_besar,akun
 					WHERE  	buku_akun=akun_id AND
-							buku_akun like '".$buku_akun."%' AND
-							(akun_jenis='Pendapatan' OR akun_jenis='Beban')
+							buku_akun like '".$buku_akun."%' 
 					GROUP BY buku_akun,akun_kode,akun_nama
 					ORDER BY buku_akun ASC";
 			}else if($buku_periode=="tanggal"){
@@ -65,8 +64,7 @@ class M_labarugi extends Model{
 					WHERE  	buku_akun=akun_id AND
 							date_format(buku_tanggal,'%Y-%m-%d')>='".$buku_tglawal."' AND
 							date_format(buku_tanggal,'%Y-%m-%d')<='".$buku_tglakhir."' AND
-							buku_akun like '".$buku_akun."%' AND
-							(akun_jenis='Pendapatan' OR akun_jenis='Beban')						
+							buku_akun like '".$buku_akun."%' 					
 					GROUP BY buku_akun,akun_kode,akun_nama
 					ORDER BY buku_akun ASC";
 					
@@ -116,22 +114,22 @@ class M_labarugi extends Model{
 					$query_sebelum=$this->db->query($sql_sebelum);
 					if($query_sebelum->num_rows()){
 						$data_sebelum=$query_sebelum->row();
-						$data[$i]["labarugi_debet_sebelum"]=$row->debet;
-						$data[$i]["labarugi_kredit_sebelum"]=$row->kredit;
+						$data[$i]["neraca_debet_sebelum"]=$row->debet;
+						$data[$i]["neraca_kredit_sebelum"]=$row->kredit;
 					}else{
-						$data[$i]["labarugi_debet_sebelum"]=0;
-						$data[$i]["labarugi_kredit_sebelum"]=0;
+						$data[$i]["neraca_debet_sebelum"]=0;
+						$data[$i]["neraca_kredit_sebelum"]=0;
 					}
 				}else{
-						$data[$i]["labarugi_debet_sebelum"]=0;
-						$data[$i]["labarugi_kredit_sebelum"]=0;
+						$data[$i]["neraca_debet_sebelum"]=0;
+						$data[$i]["neraca_kredit_sebelum"]=0;
 				}
 					
-				$data[$i]["labarugi_akun"]=$row->buku_akun;
-				$data[$i]["labarugi_akun_kode"]=$row->akun_kode;
-				$data[$i]["labarugi_akun_nama"]=$row->akun_nama;
-				$data[$i]["labarugi_debet"]=$row->debet;
-				$data[$i]["labarugi_kredit"]=$row->kredit;
+				$data[$i]["neraca_akun"]=$row->buku_akun;
+				$data[$i]["neraca_akun_kode"]=$row->akun_kode;
+				$data[$i]["neraca_akun_nama"]=$row->akun_nama;
+				$data[$i]["neraca_debet"]=$row->debet;
+				$data[$i]["neraca_kredit"]=$row->kredit;
 				
 				$i++;
 			}
@@ -145,9 +143,9 @@ class M_labarugi extends Model{
 		}
 		
 		//function for print record
-		function labarugi_print($buku_id ,$buku_tanggal ,$buku_akun ,$buku_debet ,$buku_kredit ,$buku_saldo_debet ,$buku_saldo_kredit ,$option,$filter){
+		function neraca_print($buku_id ,$buku_tanggal ,$buku_akun ,$buku_debet ,$buku_kredit ,$buku_saldo_debet ,$buku_saldo_kredit ,$option,$filter){
 			//full query
-			$query="select * from labarugi";
+			$query="select * from neraca";
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 				$query .= " (buku_id LIKE '%".addslashes($filter)."%' OR buku_tanggal LIKE '%".addslashes($filter)."%' OR buku_akun LIKE '%".addslashes($filter)."%' OR buku_debet LIKE '%".addslashes($filter)."%' OR buku_kredit LIKE '%".addslashes($filter)."%' OR buku_saldo_debet LIKE '%".addslashes($filter)."%' OR buku_saldo_kredit LIKE '%".addslashes($filter)."%' )";
@@ -187,9 +185,9 @@ class M_labarugi extends Model{
 		}
 		
 		//function  for export to excel
-		function labarugi_export_excel($buku_id ,$buku_tanggal ,$buku_akun ,$buku_debet ,$buku_kredit ,$buku_saldo_debet ,$buku_saldo_kredit ,$option,$filter){
+		function neraca_export_excel($buku_id ,$buku_tanggal ,$buku_akun ,$buku_debet ,$buku_kredit ,$buku_saldo_debet ,$buku_saldo_kredit ,$option,$filter){
 			//full query
-			$query="select * from labarugi";
+			$query="select * from neraca";
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 				$query .= " (buku_id LIKE '%".addslashes($filter)."%' OR buku_tanggal LIKE '%".addslashes($filter)."%' OR buku_akun LIKE '%".addslashes($filter)."%' OR buku_debet LIKE '%".addslashes($filter)."%' OR buku_kredit LIKE '%".addslashes($filter)."%' OR buku_saldo_debet LIKE '%".addslashes($filter)."%' OR buku_saldo_kredit LIKE '%".addslashes($filter)."%' )";
