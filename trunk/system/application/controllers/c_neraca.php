@@ -2,28 +2,28 @@
 /* 	These code was generated using phpCIGen v 0.1.b (21/04/2009)
 	#zaqi 		zaqi.smart@gmail.com,http://zenzaqi.blogspot.com, 
 	
-	+ Module  		: labarugi Controller
+	+ Module  		: neraca Controller
 	+ Description	: For record controller process back-end
-	+ Filename 		: C_labarugi.php
+	+ Filename 		: C_neraca.php
  	+ creator 		: 
  	+ Created on 09/Apr/2010 10:47:15
 	
 */
 
-//class of labarugi
-class C_labarugi extends Controller {
+//class of neraca
+class C_neraca extends Controller {
 
 	//constructor
-	function C_labarugi(){
+	function C_neraca(){
 		parent::Controller();
 		session_start();
-		$this->load->model('m_labarugi', '', TRUE);
+		$this->load->model('m_neraca', '', TRUE);
 	}
 	
 	//set index
 	function index(){
 		$this->load->plugin('to_excel');
-		$this->load->view('main/v_labarugi');
+		$this->load->view('main/v_neraca');
 	}
 	
 		
@@ -32,16 +32,16 @@ class C_labarugi extends Controller {
 		$task = isset($_POST['task']) ? @$_POST['task'] : @$_GET['task'];
 		switch($task){
 			case "LIST":
-				$this->labarugi_list();
+				$this->neraca_list();
 				break;
 			case "SEARCH":
-				$this->labarugi_search();
+				$this->neraca_search();
 				break;
 			case "PRINT":
-				$this->labarugi_print();
+				$this->neraca_print();
 				break;
 			case "EXCEL":
-				$this->labarugi_export_excel();
+				$this->neraca_export_excel();
 				break;
 			default:
 				echo "{failure:true}";
@@ -50,43 +50,43 @@ class C_labarugi extends Controller {
 	}
 	
 	//function fot list record
-	function labarugi_list(){
+	function neraca_list(){
 		
 		$query = isset($_POST['query']) ? $_POST['query'] : "";
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result=$this->m_labarugi->labarugi_list($query,$start,$end);
+		$result=$this->m_neraca->neraca_list($query,$start,$end);
 		echo $result;
 	}
 
 	
 	//function for advanced search
-	function labarugi_search(){
+	function neraca_search(){
 		//POST varibale here
-		$labarugi_periode=trim(@$_POST["labarugi_periode"]);
-		$labarugi_tglawal=trim(@$_POST["labarugi_tglawal"]);
-		$labarugi_tglakhir=trim(@$_POST["labarugi_tglakhir"]);
-		$labarugi_bulan=trim(@$_POST["labarugi_bulan"]);
-		$labarugi_tahun=trim(@$_POST["labarugi_tahun"]);
-		$labarugi_akun=trim(@$_POST["labarugi_akun"]);
+		$neraca_periode=trim(@$_POST["neraca_periode"]);
+		$neraca_tglawal=trim(@$_POST["neraca_tglawal"]);
+		$neraca_tglakhir=trim(@$_POST["neraca_tglakhir"]);
+		$neraca_bulan=trim(@$_POST["neraca_bulan"]);
+		$neraca_tahun=trim(@$_POST["neraca_tahun"]);
+		$neraca_akun=trim(@$_POST["neraca_akun"]);
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
 		
-		$result = $this->m_labarugi->labarugi_search($labarugi_periode, $labarugi_tglawal, $labarugi_tglakhir, $labarugi_bulan, $labarugi_tahun, $labarugi_akun, $start,$end);
+		$result = $this->m_neraca->neraca_search($neraca_periode, $neraca_tglawal, $neraca_tglakhir, $neraca_bulan, $neraca_tahun, $neraca_akun, $start,$end);
 		echo $result;
 	}
 
 
-	function labarugi_print(){
+	function neraca_print(){
   		//POST varibale here
-		$labarugi_id=trim(@$_POST["labarugi_id"]);
-		$labarugi_tanggal=trim(@$_POST["labarugi_tanggal"]);
-		$labarugi_akun=trim(@$_POST["labarugi_akun"]);
-		$labarugi_debet=trim(@$_POST["labarugi_debet"]);
-		$labarugi_kredit=trim(@$_POST["labarugi_kredit"]);
-		$labarugi_saldo_debet=trim(@$_POST["labarugi_saldo_debet"]);
-		$labarugi_saldo_kredit=trim(@$_POST["labarugi_saldo_kredit"]);
+		$neraca_id=trim(@$_POST["neraca_id"]);
+		$neraca_tanggal=trim(@$_POST["neraca_tanggal"]);
+		$neraca_akun=trim(@$_POST["neraca_akun"]);
+		$neraca_debet=trim(@$_POST["neraca_debet"]);
+		$neraca_kredit=trim(@$_POST["neraca_kredit"]);
+		$neraca_saldo_debet=trim(@$_POST["neraca_saldo_debet"]);
+		$neraca_saldo_kredit=trim(@$_POST["neraca_saldo_kredit"]);
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
@@ -96,21 +96,21 @@ class C_labarugi extends Controller {
 	/* End Of Function */
 
 	/* Function to Export Excel document */
-	function labarugi_export_excel(){
+	function neraca_export_excel(){
 		//POST varibale here
-		$labarugi_id=trim(@$_POST["labarugi_id"]);
-		$labarugi_tanggal=trim(@$_POST["labarugi_tanggal"]);
-		$labarugi_akun=trim(@$_POST["labarugi_akun"]);
-		$labarugi_debet=trim(@$_POST["labarugi_debet"]);
-		$labarugi_kredit=trim(@$_POST["labarugi_kredit"]);
-		$labarugi_saldo_debet=trim(@$_POST["labarugi_saldo_debet"]);
-		$labarugi_saldo_kredit=trim(@$_POST["labarugi_saldo_kredit"]);
+		$neraca_id=trim(@$_POST["neraca_id"]);
+		$neraca_tanggal=trim(@$_POST["neraca_tanggal"]);
+		$neraca_akun=trim(@$_POST["neraca_akun"]);
+		$neraca_debet=trim(@$_POST["neraca_debet"]);
+		$neraca_kredit=trim(@$_POST["neraca_kredit"]);
+		$neraca_saldo_debet=trim(@$_POST["neraca_saldo_debet"]);
+		$neraca_saldo_kredit=trim(@$_POST["neraca_saldo_kredit"]);
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$query = $this->m_labarugi->labarugi_export_excel($labarugi_id ,$labarugi_tanggal ,$labarugi_akun ,$labarugi_debet ,$labarugi_kredit ,$labarugi_saldo_debet ,$labarugi_saldo_kredit ,$option,$filter);
+		$query = $this->m_neraca->neraca_export_excel($neraca_id ,$neraca_tanggal ,$neraca_akun ,$neraca_debet ,$neraca_kredit ,$neraca_saldo_debet ,$neraca_saldo_kredit ,$option,$filter);
 		
-		to_excel($query,"labarugi"); 
+		to_excel($query,"neraca"); 
 		echo '1';
 			
 	}

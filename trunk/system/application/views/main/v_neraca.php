@@ -3,9 +3,9 @@
 	#zaqi 		zaqi.smart@gmail.com,http://zenzaqi.blogspot.com, 
 	#CV. Trust Solution, jl. Saronojiwo 19 Surabaya, http://www.ts.co.id
 	
-	+ Module  		: labarugi View
+	+ Module  		: neraca View
 	+ Description	: For record view
-	+ Filename 		: v_labarugi.php
+	+ Filename 		: v_neraca.php
  	+ Author  		: 
  	+ Created on 21/Aug/2009 06:51:08
 	
@@ -44,15 +44,15 @@
     </style>
 <script>
 /* declare function */		
-var labarugi_DataStore;
-var labarugi_ColumnModel;
-var labarugiListEditorGrid;
-var labarugi_createForm;
-var labarugi_createWindow;
-var labarugi_searchForm;
-var labarugi_searchWindow;
-var labarugi_SelectedRow;
-var labarugi_ContextMenu;
+var neraca_DataStore;
+var neraca_ColumnModel;
+var neracaListEditorGrid;
+var neraca_createForm;
+var neraca_createWindow;
+var neraca_searchForm;
+var neraca_searchWindow;
+var neraca_SelectedRow;
+var neraca_ContextMenu;
 //for detail data
 var _DataStor;
 var ListEditorGrid;
@@ -68,20 +68,20 @@ var msg = '';
 var pageS=15;
 
 /* declare variable here for Field*/
-var labarugi_idField;
-var labarugi_tanggalField;
-var labarugi_akunField;
-var labarugi_debetField;
-var labarugi_kreditField;
-var labarugi_saldo_debetField;
-var labarugi_saldo_kreditField;
-var labarugi_idSearchField;
-var labarugi_tanggalSearchField;
-var labarugi_akunSearchField;
-var labarugi_debetSearchField;
-var labarugi_kreditSearchField;
-var labarugi_saldo_debetSearchField;
-var labarugi_saldo_kreditSearchField;
+var neraca_idField;
+var neraca_tanggalField;
+var neraca_akunField;
+var neraca_debetField;
+var neraca_kreditField;
+var neraca_saldo_debetField;
+var neraca_saldo_kreditField;
+var neraca_idSearchField;
+var neraca_tanggalSearchField;
+var neraca_akunSearchField;
+var neraca_debetSearchField;
+var neraca_kreditSearchField;
+var neraca_saldo_debetSearchField;
+var neraca_saldo_kreditSearchField;
 var today=new Date().format('Y-m-d');
 var yesterday=new Date().add(Date.DAY, -1).format('Y-m-d');
 var thismonth=new Date().format('m');
@@ -121,7 +121,7 @@ $bulan="";
 Ext.onReady(function(){
   	Ext.QuickTips.init();	/* Initiate quick tips icon */
   
-  	var labarugi_saldoField=new Ext.form.NumberField({
+  	var neraca_saldoField=new Ext.form.NumberField({
 		fieldLabel: 'Saldo Laba Rugi',
 		allowNegatife : false,
 		blankText: '0',
@@ -132,97 +132,81 @@ Ext.onReady(function(){
 	});
 	
 	/* Function for Retrieve DataStore */
-	labarugi_DataStore =new Ext.data.GroupingStore({
-		id: 'labarugi_DataStore',
+	neraca_DataStore =new Ext.data.GroupingStore({
+		id: 'neraca_DataStore',
 		proxy: new Ext.data.HttpProxy({
-			url: 'index.php?c=c_labarugi&m=get_action', 
+			url: 'index.php?c=c_neraca&m=get_action', 
 			method: 'POST'
 		}),
-		groupField:'labarugi_jenis',
+		groupField:'neraca_jenis',
 		baseParams:{task: "LIST", start: 0, limit: pageS}, // parameter yang di $_POST ke Controller
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
-			id: 'labarugi_akun'
+			id: 'neraca_akun'
 		},[
-			{name: 'labarugi_jenis', type: 'string', mapping: 'labarugi_jenis'}, 
-			{name: 'labarugi_akun', type: 'int', mapping: 'labarugi_akun'}, 
-			{name: 'labarugi_akun_kode', type: 'string', mapping: 'labarugi_akun_kode'}, 
-			{name: 'labarugi_akun_nama', type: 'string', mapping: 'labarugi_akun_nama'}, 
-			{name: 'labarugi_debet', type: 'float', mapping: 'labarugi_debet'}, 
-			{name: 'labarugi_kredit', type: 'float', mapping: 'labarugi_kredit'}, 
-			{name: 'labarugi_saldo_debet', type: 'float', mapping: 'labarugi_debet_sebelum'}, 
-			{name: 'labarugi_saldo_kredit', type: 'float', mapping: 'labarugi_kredit_sebelum'}
+			{name: 'neraca_jenis', type: 'string', mapping: 'neraca_jenis'}, 
+			{name: 'neraca_akun', type: 'int', mapping: 'neraca_akun'}, 
+			{name: 'neraca_akun_kode', type: 'string', mapping: 'neraca_akun_kode'}, 
+			{name: 'neraca_akun_nama', type: 'string', mapping: 'neraca_akun_nama'}, 
+			{name: 'neraca_debet', type: 'float', mapping: 'neraca_debet'}, 
+			{name: 'neraca_kredit', type: 'float', mapping: 'neraca_kredit'}
 		]),
-		sortInfo:{field: 'labarugi_akun', direction: "ASC"}
+		sortInfo:{field: 'neraca_akun', direction: "ASC"}
 	});
 	/* End of Function */
     
 
   	/* Function for Identify of Window Column Model */
-	labarugi_ColumnModel = new Ext.grid.ColumnModel(
+	neraca_ColumnModel = new Ext.grid.ColumnModel(
 		[{
 			header: 'Jenis',
-			dataIndex: 'labarugi_jenis',
+			dataIndex: 'neraca_jenis',
 			width: 100,
 			sortable: true,
 			readOnly: true
 		},
 		{
 			header: 'Kode',
-			dataIndex: 'labarugi_akun_kode',
+			dataIndex: 'neraca_akun_kode',
 			width: 100,
 			sortable: true,
 			readOnly: true
 		}, 
 		{
 			header: 'Akun',
-			dataIndex: 'labarugi_akun_nama',
+			dataIndex: 'neraca_akun_nama',
 			width: 250,
 			sortable: true,
 			readOnly: true
 		}, 
 		{
 			header: 'Debet',
-			dataIndex: 'labarugi_debet',
+			dataIndex: 'neraca_debet',
 			width: 150,
 			sortable: true,
 			readOnly: true
 		}, 
 		{
 			header: 'Kredit',
-			dataIndex: 'labarugi_kredit',
+			dataIndex: 'neraca_kredit',
 			width: 150,
 			sortable: true,
 			readOnly: true
-		}, 
-		{
-			header: 'Debet s/d Sebelum',
-			dataIndex: 'labarugi_saldo_debet',
-			width: 150,
-			sortable: true,
-			readOnly: true
-		}, 
-		{
-			header: 'Kredit s/d Sebelum',
-			dataIndex: 'labarugi_saldo_kredit',
-			width: 150,
-			sortable: true,
-			readOnly: true
-		}	
+		}
 		]);
 	
-	labarugi_ColumnModel.defaultSortable= true;
+	neraca_ColumnModel.defaultSortable= true;
 	/* End of Function */
     
 	/* Declare DataStore and  show datagrid list */
-	labarugiListEditorGrid =  new Ext.grid.EditorGridPanel({
-		id: 'labarugiListEditorGrid',
-		el: 'fp_labarugi',
-		title: 'Laporan Laba/Rugi',
+	neracaListEditorGrid =  new Ext.grid.EditorGridPanel({
+		id: 'neracaListEditorGrid',
+		el: 'fp_neraca',
+		title: 'Laporan Neraca',
 		autoHeight: true,
-		store: labarugi_DataStore, // DataStore
-		cm: labarugi_ColumnModel, // Nama-nama Columns
+		store: neraca_DataStore, // DataStore
+		cm: neraca_ColumnModel, // Nama-nama Columns
 		enableColLock:false,
 		frame: true,
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
@@ -238,12 +222,9 @@ Ext.onReady(function(){
         }),
 		bbar: [new Ext.PagingToolbar({
 			pageSize: pageS,
-			store: labarugi_DataStore,
+			store: neraca_DataStore,
 			displayInfo: true
-		}), {
-			'text':'Saldo Laba Rugi'
-		},
-		labarugi_saldoField],
+		})],
 		tbar: [
 		{
 			text: 'Search',
@@ -253,22 +234,22 @@ Ext.onReady(function(){
 		},'-',{
 			text: 'Refresh',
 			tooltip: 'Refresh datagrid',
-			handler: labarugi_reset_search,
+			handler: neraca_reset_search,
 			iconCls:'icon-refresh'
 		},'-',{
 			text: 'Export Excel',
 			tooltip: 'Export to Excel(.xls) Document',
 			iconCls:'icon-xls',
-			handler: labarugi_export_excel
+			handler: neraca_export_excel
 		}, '-',{
 			text: 'Print',
 			tooltip: 'Print Document',
 			iconCls:'icon-print',
-			handler: labarugi_print  
+			handler: neraca_print  
 		}
 		]
 	});
-	labarugiListEditorGrid.render();
+	neracaListEditorGrid.render();
 	/* End of DataStore */
      
 	 function rounding(num, dec) {
@@ -277,109 +258,109 @@ Ext.onReady(function(){
 	}
 	
 	/* Create Context Menu */
-	labarugi_ContextMenu = new Ext.menu.Menu({
-		id: 'labarugi_ListEditorGridContextMenu',
+	neraca_ContextMenu = new Ext.menu.Menu({
+		id: 'neraca_ListEditorGridContextMenu',
 		items: [
 		{ 
 			text: 'Print',
 			tooltip: 'Print Document',
 			iconCls:'icon-print',
-			handler: labarugi_print 
+			handler: neraca_print 
 		},
 		{ 
 			text: 'Export Excel', 
 			tooltip: 'Export to Excel(.xls) Document',
 			iconCls:'icon-xls',
-			handler: labarugi_export_excel 
+			handler: neraca_export_excel 
 		}
 		]
 	}); 
 	/* End of Declaration */
 	
 	/* Event while selected row via context menu */
-	function onlabarugi_ListEditGridContextMenu(grid, rowIndex, e) {
+	function onneraca_ListEditGridContextMenu(grid, rowIndex, e) {
 		e.stopEvent();
 		var coords = e.getXY();
-		labarugi_ContextMenu.rowRecord = grid.store.getAt(rowIndex);
+		neraca_ContextMenu.rowRecord = grid.store.getAt(rowIndex);
 		grid.selModel.selectRow(rowIndex);
-		labarugi_SelectedRow=rowIndex;
-		labarugi_ContextMenu.showAt([coords[0], coords[1]]);
+		neraca_SelectedRow=rowIndex;
+		neraca_ContextMenu.showAt([coords[0], coords[1]]);
   	}
   	/* End of Function */
 	
 	/* function for editing row via context menu */
-	function labarugi_editContextMenu(){
-		labarugiListEditorGrid.startEditing(labarugi_SelectedRow,1);
+	function neraca_editContextMenu(){
+		neracaListEditorGrid.startEditing(neraca_SelectedRow,1);
   	}
 	/* End of Function */
   	
-	function labarugi_update(){
+	function neraca_update(){
 	}
 	
-	labarugiListEditorGrid.addListener('rowcontextmenu', onlabarugi_ListEditGridContextMenu);
-	labarugiListEditorGrid.on('afteredit', labarugi_update); // inLine Editing Record
+	neracaListEditorGrid.addListener('rowcontextmenu', onneraca_ListEditGridContextMenu);
+	neracaListEditorGrid.on('afteredit', neraca_update); // inLine Editing Record
 	
 	function is_valid_form(){
-		if(labarugi_opsitgl_searchField.getValue()==true){
-			labarugi_tglawal_searchField.allowBlank=false;
-			labarugi_tglakhir_searchField.allowBlank=false;
-			if(labarugi_tglawal_searchField.isValid() && labarugi_tglakhir_searchField.isValid())
+		if(neraca_opsitgl_searchField.getValue()==true){
+			neraca_tglawal_searchField.allowBlank=false;
+			neraca_tglakhir_searchField.allowBlank=false;
+			if(neraca_tglawal_searchField.isValid() && neraca_tglakhir_searchField.isValid())
 				return true;
 			else
 				return false;
 		}else{
-			labarugi_tglawal_searchField.allowBlank=true;
-			labarugi_tglakhir_searchField.allowBlank=true;
+			neraca_tglawal_searchField.allowBlank=true;
+			neraca_tglakhir_searchField.allowBlank=true;
 			return true;
 		}
 	}
 	
 	/* Function for action list search */
-	function labarugi_list_search(){
+	function neraca_list_search(){
 		// render according to a SQL date format.
 		
 		if(is_valid_form()){
 			
-			var labarugi_tglawal_search="";
-			var labarugi_tglakhir_search="";
-			var labarugi_opsi_search="";
-			var labarugi_bulan_search="";
-			var labarugi_tahun_search="";
-			var labarugi_periode_search="";
-			var labarugi_akun_search=null;
+			var neraca_tglawal_search="";
+			var neraca_tglakhir_search="";
+			var neraca_opsi_search="";
+			var neraca_bulan_search="";
+			var neraca_tahun_search="";
+			var neraca_periode_search="";
+			var neraca_akun_search=null;
 			
-			if(labarugi_opsitgl_searchField.getValue()==true){
-				labarugi_periode_search='tanggal';
-			}else if(labarugi_opsibln_searchField.getValue()==true){
-				labarugi_periode_search='bulan';
+			if(neraca_opsitgl_searchField.getValue()==true){
+				neraca_periode_search='tanggal';
+			}else if(neraca_opsibln_searchField.getValue()==true){
+				neraca_periode_search='bulan';
 			}else{
-				labarugi_periode_search='all';
+				neraca_periode_search='all';
 			}
 			
-			if(labarugi_tglawal_searchField.getValue()!==""){order_tglawal_search = labarugi_tglawal_searchField.getValue().format('Y-m-d');}
-			if(labarugi_tglakhir_searchField.getValue()!==""){order_tglakhir_search = labarugi_tglakhir_searchField.getValue().format('Y-m-d');}
-			if(labarugi_bulan_searchField.getValue()!==""){order_bulan_search=labarugi_bulan_searchField.getValue(); }
-			if(labarugi_tahun_searchField.getValue()!==""){order_tahun_search=labarugi_tahun_searchField.getValue(); }
+			if(neraca_tglawal_searchField.getValue()!==""){order_tglawal_search = neraca_tglawal_searchField.getValue().format('Y-m-d');}
+			if(neraca_tglakhir_searchField.getValue()!==""){order_tglakhir_search = neraca_tglakhir_searchField.getValue().format('Y-m-d');}
+			if(neraca_bulan_searchField.getValue()!==""){order_bulan_search=neraca_bulan_searchField.getValue(); }
+			if(neraca_tahun_searchField.getValue()!==""){order_tahun_search=neraca_tahun_searchField.getValue(); }
 			
 			// change the store parameters
-			labarugi_DataStore.baseParams = {
+			neraca_DataStore.baseParams = {
 				task: 'SEARCH',
-				labarugi_periode	:	labarugi_periode_search,
-				labarugi_tglawal	:	labarugi_tglawal_search,
-				labarugi_tglakhir	:	labarugi_tglakhir_search, 
-				labarugi_bulan		: 	labarugi_bulan_search,
-				labarugi_tahun		:	labarugi_tahun_search
+				neraca_periode	:	neraca_periode_search,
+				neraca_tglawal	:	neraca_tglawal_search,
+				neraca_tglakhir	:	neraca_tglakhir_search, 
+				neraca_bulan		: 	neraca_bulan_search,
+				neraca_tahun		:	neraca_tahun_search
 			};
 			
-			labarugi_DataStore.load({params:{start:0,limit:pageS, query:null}});
+			neraca_DataStore.load({params:{start:0,limit:pageS, query:null}});
 		}
 	}
 		
 	/* Function for reset search result */
-	function labarugi_reset_search(){
+	function neraca_reset_search(){
 		// reset the store parameters
-		labarugi_DataStore.baseParams = { task: 'LIST' };
-		labarugi_searchWindow.close();
+		neraca_DataStore.baseParams = { task: 'LIST' };
+		neraca_searchWindow.close();
 	};
 	/* End of Fuction */
 	
@@ -389,8 +370,8 @@ Ext.onReady(function(){
         '</div></tpl>'
     );
 	
-	labarugi_bulan_searchField=new Ext.form.ComboBox({
-		id:'labarugi_bulan_searchField',
+	neraca_bulan_searchField=new Ext.form.ComboBox({
+		id:'neraca_bulan_searchField',
 		fieldLabel:' ',
 		store:new Ext.data.SimpleStore({
 			fields:['value', 'display'],
@@ -404,8 +385,8 @@ Ext.onReady(function(){
 		triggerAction: 'all'
 	});
 	
-	labarugi_tahun_searchField=new Ext.form.ComboBox({
-		id:'labarugi_tahun_searchField',
+	neraca_tahun_searchField=new Ext.form.ComboBox({
+		id:'neraca_tahun_searchField',
 		fieldLabel:' ',
 		store:new Ext.data.SimpleStore({
 			fields:['tahun'],
@@ -420,54 +401,54 @@ Ext.onReady(function(){
 	});
 	
 	
-	labarugi_opsitgl_searchField=new Ext.form.Radio({
-		id:'labarugi_opsitgl_searchField',
+	neraca_opsitgl_searchField=new Ext.form.Radio({
+		id:'neraca_opsitgl_searchField',
 		boxLabel:'Tanggal',
 		width:100,
 		name: 'filter_opsi'
 	});
 	
-	labarugi_opsibln_searchField=new Ext.form.Radio({
-		id:'labarugi_opsibln_searchField',
+	neraca_opsibln_searchField=new Ext.form.Radio({
+		id:'neraca_opsibln_searchField',
 		boxLabel:'Bulan',
 		width:100,
 		name: 'filter_opsi'
 	});
 	
-	labarugi_opsiall_searchField=new Ext.form.Radio({
-		id:'labarugi_opsiall_searchField',
+	neraca_opsiall_searchField=new Ext.form.Radio({
+		id:'neraca_opsiall_searchField',
 		boxLabel:'s/d Sekarang',
 		name: 'filter_opsi',
 		checked: true
 	});
 	
-	labarugi_tglawal_searchField= new Ext.form.DateField({
-		id: 'labarugi_tglawal_searchField',
+	neraca_tglawal_searchField= new Ext.form.DateField({
+		id: 'neraca_tglawal_searchField',
 		fieldLabel: ' ',
 		format : 'Y-m-d',
-		name: 'labarugi_tglawal_searchField',
+		name: 'neraca_tglawal_searchField',
         vtype: 'daterange',
 		allowBlank: true,
 		width: 100,
-        endDateField: 'labarugi_tglakhir_searchField'
+        endDateField: 'neraca_tglakhir_searchField'
 	});
 	
-	labarugi_tglakhir_searchField= new Ext.form.DateField({
-		id: 'labarugi_tglakhir_searchField',
+	neraca_tglakhir_searchField= new Ext.form.DateField({
+		id: 'neraca_tglakhir_searchField',
 		fieldLabel: 's/d',
 		format : 'Y-m-d',
-		name: 'labarugi_tglakhirField',
+		name: 'neraca_tglakhirField',
         vtype: 'daterange',
 		allowBlank: true,
 		width: 100,
-        startDateField: 'labarugi_tglawal_searchField',
+        startDateField: 'neraca_tglawal_searchField',
 		value: today
 	});
 	
 	
 	
-	var labarugi_periode_searchField=new Ext.form.FieldSet({
-		id:'labarugi_periode_searchField',
+	var neraca_periode_searchField=new Ext.form.FieldSet({
+		id:'neraca_periode_searchField',
 		title : 'Periode',
 		layout: 'form',
 		bodyStyle:'padding: 0px 0px 0',
@@ -477,40 +458,40 @@ Ext.onReady(function(){
 		items:[{
 				layout: 'column',
 				border: false,
-				items:[labarugi_opsiall_searchField]
+				items:[neraca_opsiall_searchField]
 			},{
 				layout: 'column',
 				border: false,
-				items:[labarugi_opsitgl_searchField, {
+				items:[neraca_opsitgl_searchField, {
 					   		layout: 'form',
 							border: false,
 							labelWidth: 15,
 							bodyStyle:'padding:3px',
-							items:[labarugi_tglawal_searchField]
+							items:[neraca_tglawal_searchField]
 					   },{
 					   		layout: 'form',
 							border: false,
 							labelWidth: 15,
 							bodyStyle:'padding:3px',
 							labelSeparator: ' ', 
-							items:[labarugi_tglakhir_searchField]
+							items:[neraca_tglakhir_searchField]
 					   }]
 			},{
 				layout: 'column',
 				border: false,
-				items:[labarugi_opsibln_searchField,{
+				items:[neraca_opsibln_searchField,{
 					   		layout: 'form',
 							border: false,
 							labelWidth: 15,
 							bodyStyle:'padding:3px',
-							items:[labarugi_bulan_searchField]
+							items:[neraca_bulan_searchField]
 					   },{
 					   		layout: 'form',
 							border: false,
 							labelWidth: 15,
 							bodyStyle:'padding:3px',
 							labelSeparator: ' ', 
-							items:[labarugi_tahun_searchField]
+							items:[neraca_tahun_searchField]
 					   }]
 			}]
 	});
@@ -518,19 +499,19 @@ Ext.onReady(function(){
 	
 	
 	/* Function for retrieve search Form Panel */
-	labarugi_searchForm = new Ext.FormPanel({
+	neraca_searchForm = new Ext.FormPanel({
 		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
 		width: 400,        
-		items: [labarugi_periode_searchField],
+		items: [neraca_periode_searchField],
 		buttons: [{
 				text: 'Search',
-				handler: labarugi_list_search
+				handler: neraca_list_search
 			},{
 				text: 'Close',
 				handler: function(){
-					labarugi_searchWindow.hide();
+					neraca_searchWindow.hide();
 				}
 			}
 		]
@@ -538,7 +519,7 @@ Ext.onReady(function(){
     /* End of Function */ 
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
-	labarugi_searchWindow = new Ext.Window({
+	neraca_searchWindow = new Ext.Window({
 		title: 'Buku Besar',
 		closable:true,
 		closeAction: 'hide',
@@ -549,61 +530,61 @@ Ext.onReady(function(){
 		x: 0,
 		y: 0,
 		modal: true,
-		renderTo: 'elwindow_labarugi_search',
-		items: labarugi_searchForm
+		renderTo: 'elwindow_neraca_search',
+		items: neraca_searchForm
 	});
     /* End of Function */ 
 	 
   	/* Function for Displaying  Search Window Form */
 	function display_form_search_window(){
-		if(!labarugi_searchWindow.isVisible()){
-			labarugi_searchWindow.show();
+		if(!neraca_searchWindow.isVisible()){
+			neraca_searchWindow.show();
 		} else {
-			labarugi_searchWindow.toFront();
+			neraca_searchWindow.toFront();
 		}
 	}
   	/* End Function */
 	
 	/* Function for print List Grid */
-	function labarugi_print(){
+	function neraca_print(){
 		var searchquery = "";
 		var win;              
-		var labarugi_tglawal_search="";
-		var labarugi_tglakhir_search="";
-		var labarugi_opsi_search="";
-		var labarugi_bulan_search="";
-		var labarugi_tahun_search="";
-		var labarugi_periode_search="";
+		var neraca_tglawal_search="";
+		var neraca_tglakhir_search="";
+		var neraca_opsi_search="";
+		var neraca_bulan_search="";
+		var neraca_tahun_search="";
+		var neraca_periode_search="";
 		
-		if(labarugi_opsitgl_searchField.getValue()==true){
-			labarugi_periode_search='tanggal';
-		}else if(labarugi_opsibln_searchField.getValue()==true){
-			labarugi_periode_search='bulan';
+		if(neraca_opsitgl_searchField.getValue()==true){
+			neraca_periode_search='tanggal';
+		}else if(neraca_opsibln_searchField.getValue()==true){
+			neraca_periode_search='bulan';
 		}else{
-			labarugi_periode_search='all';
+			neraca_periode_search='all';
 		}
 		
-		if(labarugi_tglawal_searchField.getValue()!==""){order_tglawal_search = labarugi_tglawal_searchField.getValue().format('Y-m-d');}
-		if(labarugi_tglakhir_searchField.getValue()!==""){order_tglakhir_search = labarugi_tglakhir_searchField.getValue().format('Y-m-d');}
-		if(labarugi_bulan_searchField.getValue()!==""){order_bulan_search=labarugi_bulan_searchField.getValue(); }
-		if(labarugi_tahun_searchField.getValue()!==""){order_tahun_search=labarugi_tahun_searchField.getValue(); }
+		if(neraca_tglawal_searchField.getValue()!==""){order_tglawal_search = neraca_tglawal_searchField.getValue().format('Y-m-d');}
+		if(neraca_tglakhir_searchField.getValue()!==""){order_tglakhir_search = neraca_tglakhir_searchField.getValue().format('Y-m-d');}
+		if(neraca_bulan_searchField.getValue()!==""){order_bulan_search=neraca_bulan_searchField.getValue(); }
+		if(neraca_tahun_searchField.getValue()!==""){order_tahun_search=neraca_tahun_searchField.getValue(); }
 	
 		Ext.Ajax.request({   
 		waitMsg: 'Please Wait...',
-		url: 'index.php?c=c_labarugi&m=get_action',
+		url: 'index.php?c=c_neraca&m=get_action',
 		params: {
 			task: "PRINT",
 		  	query: searchquery,                    		
-			labarugi_tglawal	:	labarugi_tglawal_search,
-			labarugi_tglakhir	:	labarugi_tglakhir_search, 
-			labarugi_bulan		: 	labarugi_bulan_search,
-			labarugi_tahun		:	labarugi_tahun_search
+			neraca_tglawal	:	neraca_tglawal_search,
+			neraca_tglakhir	:	neraca_tglakhir_search, 
+			neraca_bulan		: 	neraca_bulan_search,
+			neraca_tahun		:	neraca_tahun_search
 		}, 
 		success: function(response){              
 		  	var result=eval(response.responseText);
 		  	switch(result){
 		  	case 1:
-				win = window.open('./labarugilist.html','labarugilist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
+				win = window.open('./neracalist.html','neracalist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
 				win.print();
 				break;
 		  	default:
@@ -632,41 +613,41 @@ Ext.onReady(function(){
 	/* Enf Function */
 	
 	/* Function for print Export to Excel Grid */
-	function labarugi_export_excel(){
+	function neraca_export_excel(){
 		var searchquery = "";
 		var win;              
-		var labarugi_tglawal_search="";
-		var labarugi_tglakhir_search="";
-		var labarugi_opsi_search="";
-		var labarugi_bulan_search="";
-		var labarugi_tahun_search="";
-		var labarugi_periode_search="";
+		var neraca_tglawal_search="";
+		var neraca_tglakhir_search="";
+		var neraca_opsi_search="";
+		var neraca_bulan_search="";
+		var neraca_tahun_search="";
+		var neraca_periode_search="";
 		
-		if(labarugi_opsitgl_searchField.getValue()==true){
-			labarugi_periode_search='tanggal';
-		}else if(labarugi_opsibln_searchField.getValue()==true){
-			labarugi_periode_search='bulan';
+		if(neraca_opsitgl_searchField.getValue()==true){
+			neraca_periode_search='tanggal';
+		}else if(neraca_opsibln_searchField.getValue()==true){
+			neraca_periode_search='bulan';
 		}else{
-			labarugi_periode_search='all';
+			neraca_periode_search='all';
 		}
 		
-		if(labarugi_tglawal_searchField.getValue()!==""){order_tglawal_search = labarugi_tglawal_searchField.getValue().format('Y-m-d');}
-		if(labarugi_tglakhir_searchField.getValue()!==""){order_tglakhir_search = labarugi_tglakhir_searchField.getValue().format('Y-m-d');}
-		if(labarugi_bulan_searchField.getValue()!==""){order_bulan_search=labarugi_bulan_searchField.getValue(); }
-		if(labarugi_tahun_searchField.getValue()!==""){order_tahun_search=labarugi_tahun_searchField.getValue(); }
+		if(neraca_tglawal_searchField.getValue()!==""){order_tglawal_search = neraca_tglawal_searchField.getValue().format('Y-m-d');}
+		if(neraca_tglakhir_searchField.getValue()!==""){order_tglakhir_search = neraca_tglakhir_searchField.getValue().format('Y-m-d');}
+		if(neraca_bulan_searchField.getValue()!==""){order_bulan_search=neraca_bulan_searchField.getValue(); }
+		if(neraca_tahun_searchField.getValue()!==""){order_tahun_search=neraca_tahun_searchField.getValue(); }
 	
 
 		Ext.Ajax.request({   
 		waitMsg: 'Please Wait...',
-		url: 'index.php?c=c_labarugi&m=get_action',
+		url: 'index.php?c=c_neraca&m=get_action',
 		params: {
 			task: "EXCEL",
 		  	query: searchquery,                    		
-		  	labarugi_tglawal	:	labarugi_tglawal_search,
-			labarugi_tglakhir	:	labarugi_tglakhir_search, 
-			labarugi_bulan		: 	labarugi_bulan_search,
-			labarugi_tahun		:	labarugi_tahun_search,
-		  	currentlisting: labarugi_DataStore.baseParams.task 
+		  	neraca_tglawal	:	neraca_tglawal_search,
+			neraca_tglakhir	:	neraca_tglakhir_search, 
+			neraca_bulan		: 	neraca_bulan_search,
+			neraca_tahun		:	neraca_tahun_search,
+		  	currentlisting: neraca_DataStore.baseParams.task 
 		},
 		success: function(response){              
 		  	var result=eval(response.responseText);
@@ -706,9 +687,9 @@ Ext.onReady(function(){
 <body>
 <div>
 	<div class="col">
-        <div id="fp_labarugi"></div>
-		<div id="elwindow_labarugi_create"></div>
-        <div id="elwindow_labarugi_search"></div>
+        <div id="fp_neraca"></div>
+		<div id="elwindow_neraca_create"></div>
+        <div id="elwindow_neraca_search"></div>
     </div>
 </div>
 </body>
