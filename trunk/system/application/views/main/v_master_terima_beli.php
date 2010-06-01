@@ -85,6 +85,7 @@ var terima_surat_jalanSearchField;
 var terima_pengirimSearchField;
 var terima_tanggalSearchField;
 var terima_keteranganSearchField;
+var terima_statusSearchField;
 
 Ext.util.Format.comboRenderer = function(combo){
 		return function(value){
@@ -107,6 +108,8 @@ Ext.onReady(function(){
 		var terima_pengirim_update=null;
 		var terima_tanggal_update_date="";
 		var terima_keterangan_update=null;
+		var terima_status_update=null;
+		
 
 		terima_id_update_pk = oGrid_event.record.data.terima_id;
 		if(oGrid_event.record.data.terima_no!== null){terima_no_update = oGrid_event.record.data.terima_no;}
@@ -116,6 +119,7 @@ Ext.onReady(function(){
 		if(oGrid_event.record.data.terima_pengirim!== null){terima_pengirim_update = oGrid_event.record.data.terima_pengirim;}
 	 	if(oGrid_event.record.data.terima_tanggal!== ""){terima_tanggal_update_date =oGrid_event.record.data.terima_tanggal.format('Y-m-d');}
 		if(oGrid_event.record.data.terima_keterangan!== null){terima_keterangan_update = oGrid_event.record.data.terima_keterangan;}
+		if(oGrid_event.record.data.terima_status!== null){terima_status_update = oGrid_event.record.data.terima_status;}
 
 		Ext.Ajax.request({  
 			waitMsg: 'Please wait...',
@@ -129,7 +133,8 @@ Ext.onReady(function(){
 				terima_surat_jalan	: terima_surat_jalan_update,  
 				terima_pengirim		: terima_pengirim_update,  
 				terima_tanggal		: terima_tanggal_update_date, 
-				terima_keterangan	: terima_keterangan_update  
+				terima_keterangan	: terima_keterangan_update,
+				terima_status		: terima_status_update
 			}, 
 			success: function(response){							
 				var result=eval(response.responseText);
@@ -172,6 +177,7 @@ Ext.onReady(function(){
 		var terima_pengirim_create=null; 
 		var terima_tanggal_create_date=""; 
 		var terima_keterangan_create=null; 
+		var terima_status_create=null;
 
 		if(terima_idField.getValue()!== null){terima_id_create_pk = terima_idField.getValue();}else{terima_id_create_pk=get_pk_id();} 
 		if(terima_noField.getValue()!== null){terima_no_create = terima_noField.getValue();} 
@@ -181,6 +187,7 @@ Ext.onReady(function(){
 		if(terima_pengirimField.getValue()!== null){terima_pengirim_create = terima_pengirimField.getValue();} 
 		if(terima_tanggalField.getValue()!== ""){terima_tanggal_create_date = terima_tanggalField.getValue().format('Y-m-d');} 
 		if(terima_keteranganField.getValue()!== null){terima_keterangan_create = terima_keteranganField.getValue();} 
+		if(terima_statusField.getValue()!== null){terima_status_create = terima_statusField.getValue();} 
 
 		Ext.Ajax.request({  
 			waitMsg: 'Please wait...',
@@ -194,7 +201,8 @@ Ext.onReady(function(){
 				terima_surat_jalan	: terima_surat_jalan_create, 
 				terima_pengirim		: terima_pengirim_create, 
 				terima_tanggal		: terima_tanggal_create_date, 
-				terima_keterangan	: terima_keterangan_create 
+				terima_keterangan	: terima_keterangan_create,
+				terima_status		: terima_status_create
 			}, 
 			success: function(response){             
 				var result=eval(response.responseText);
@@ -264,6 +272,9 @@ Ext.onReady(function(){
 		terima_tanggalField.setValue(today);
 		terima_keteranganField.reset();
 		terima_keteranganField.setValue(null);
+		terima_statusField.reset();
+		terima_statusField.setValue('Terbuka');
+		
 		cbo_satuan_produkDataStore.load();
 		cbo_produk_detailDataStore.load();
 		
@@ -287,6 +298,7 @@ Ext.onReady(function(){
 		terima_pengirimField.setValue(master_terima_beliListEditorGrid.getSelectionModel().getSelected().get('terima_pengirim'));
 		terima_tanggalField.setValue(master_terima_beliListEditorGrid.getSelectionModel().getSelected().get('terima_tanggal'));
 		terima_keteranganField.setValue(master_terima_beliListEditorGrid.getSelectionModel().getSelected().get('terima_keterangan'));
+		terima_statusField.setValue(master_terima_beliListEditorGrid.getSelectionModel().getSelected().get('terima_status'));
 		
 		cbo_satuan_produkDataStore.setBaseParam('task','detail');
 		cbo_satuan_produkDataStore.setBaseParam('master_id',get_pk_id());
@@ -446,6 +458,7 @@ Ext.onReady(function(){
 			{name: 'terima_pengirim', type: 'string', mapping: 'terima_pengirim'}, 
 			{name: 'terima_tanggal', type: 'date', dateFormat: 'Y-m-d', mapping: 'tanggal'}, 
 			{name: 'terima_keterangan', type: 'string', mapping: 'terima_keterangan'}, 
+			{name: 'terima_status', type: 'string', mapping: 'terima_status'}, 
 			{name: 'terima_creator', type: 'string', mapping: 'terima_creator'}, 
 			{name: 'terima_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'terima_date_create'}, 
 			{name: 'terima_update', type: 'string', mapping: 'terima_update'}, 
@@ -620,6 +633,11 @@ Ext.onReady(function(){
 			editor: new Ext.form.TextField({
 				maxLength: 30
           	})
+		}, 
+		{
+			header: '<div align="center">' + 'Stat Dok' + '</div>',
+			dataIndex: 'terima_status',
+			width: 60
 		}, 
 		{
 			header: 'Creator',
@@ -868,6 +886,8 @@ Ext.onReady(function(){
 		anchor: '95%'
 	});
 	
+	
+	
 	/* Identify  order_bayar Field */
 	terima_jumlahField= new Ext.form.NumberField({
 		id: 'terima_jumlahField',
@@ -890,6 +910,22 @@ Ext.onReady(function(){
 		maskRe: /([0-9]+)$/
 	});
 	
+	terima_statusField= new Ext.form.ComboBox({
+		id: 'terima_statusField',
+		fieldLabel: 'Status Dok',
+		store:new Ext.data.SimpleStore({
+			fields:['terima_status_value', 'terima_status_display'],
+			data:[['Terbuka','Terbuka'],['Tertutup','Tertutup'],['Batal', 'Batal']]
+		}),
+		mode: 'local',
+		displayField: 'terima_status_display',
+		valueField: 'terima_status_value',
+		anchor: '80%',
+		allowBlank: false,
+		triggerAction: 'all'	
+	});
+	
+	
 
   	/*Fieldset Master*/
 	master_terima_beli_masterGroup = new Ext.form.FieldSet({
@@ -904,11 +940,12 @@ Ext.onReady(function(){
 				border:false,
 				items: [terima_noField, terima_orderField, terima_supplierField, terima_surat_jalanField] 
 			}
-			,{
+			,
+			{
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [terima_pengirimField, terima_tanggalField, terima_keteranganField,terima_idField] 
+				items: [terima_pengirimField, terima_tanggalField, terima_keteranganField,terima_statusField,terima_idField] 
 			}
 			]
 	
@@ -1697,6 +1734,7 @@ Ext.onReady(function(){
 		var terima_pengirim_search=null;
 		var terima_tanggal_search_date="";
 		var terima_keterangan_search=null;
+		var terima_status_search=null;
 
 		if(terima_idSearchField.getValue()!==null){terima_id_search=terima_idSearchField.getValue();}
 		if(terima_noSearchField.getValue()!==null){terima_no_search=terima_noSearchField.getValue();}
@@ -1706,6 +1744,7 @@ Ext.onReady(function(){
 		if(terima_pengirimSearchField.getValue()!==null){terima_pengirim_search=terima_pengirimSearchField.getValue();}
 		if(terima_tanggalSearchField.getValue()!==""){terima_tanggal_search_date=terima_tanggalSearchField.getValue().format('Y-m-d');}
 		if(terima_keteranganSearchField.getValue()!==null){terima_keterangan_search=terima_keteranganSearchField.getValue();}
+		if(terima_statusSearchField.getValue()!==null){terima_status_search=terima_statusSearchField.getValue();}
 		// change the store parameters
 		master_terima_beli_DataStore.baseParams = {
 			task: 'SEARCH',
@@ -1717,7 +1756,8 @@ Ext.onReady(function(){
 			terima_surat_jalan	: terima_surat_jalan_search, 
 			terima_pengirim		: terima_pengirim_search, 
 			terima_tanggal		: terima_tanggal_search_date, 
-			terima_keterangan	: terima_keterangan_search 
+			terima_keterangan	: terima_keterangan_search,
+			terima_status		: terima_status_search
 		};
 		// Cause the datastore to do another query : 
 		master_terima_beli_DataStore.reload({params: {start: 0, limit: pageS}});
@@ -1741,6 +1781,7 @@ Ext.onReady(function(){
 		terima_pengirimSearchField.reset();
 		terima_tanggalSearchField.reset();
 		terima_keteranganSearchField.reset();
+		terima_statusSearchField.reset();
 	}
 	
 
@@ -1830,7 +1871,42 @@ Ext.onReady(function(){
 		maxLength: 500,
 		anchor: '95%'
 	});
+	
+	terima_tanggal_akhirSearchField= new Ext.form.DateField({
+		id: 'terima_tanggal_akhirSearchField',
+		fieldLabel: 's/d',
+		format : 'd-m-Y'
+	});
+
+	terima_label_tanggalField= new Ext.form.Label({ html: ' &nbsp; s/d  &nbsp;' });
     
+	
+	terima_tanggalSearchFieldSet=new Ext.form.FieldSet({
+		id:'terima_tanggalSearchFieldSet',
+		title: 'Opsi Tanggal',
+		layout: 'column',
+		boduStyle: 'padding: 5px;',
+		frame: false,
+		items:[terima_tanggalSearchField, terima_label_tanggalField, terima_tanggal_akhirSearchField]
+	});
+	
+	terima_statusSearchField= new Ext.form.ComboBox({
+		id: 'terima_statusSearchField',
+		fieldLabel: 'Status',
+		store:new Ext.data.SimpleStore({
+			fields:['value', 'terima_status'],
+			data:[['Terbuka','Terbuka'],['Tertutup','Tertutup'],['Batal','Batal']]
+		}),
+		mode: 'local',
+		displayField: 'terima_status',
+		valueField: 'value',
+		anchor: '80%',
+		triggerAction: 'all'	 
+	
+	});
+	
+	
+
 	/* Function for retrieve search Form Panel */
 	master_terima_beli_searchForm = new Ext.FormPanel({
 		labelAlign: 'left',
@@ -1845,7 +1921,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [terima_noSearchField, terima_orderSearchField, terima_surat_jalanSearchField, terima_pengirimSearchField, terima_tanggalSearchField, terima_keteranganSearchField] 
+				items: [terima_noSearchField, terima_orderSearchField, terima_surat_jalanSearchField, terima_pengirimSearchField, terima_tanggalSearchFieldSet, terima_keteranganSearchField, terima_statusSearchField] 
 			}
 			]
 		}]

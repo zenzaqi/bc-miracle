@@ -305,7 +305,11 @@ class C_master_terima_beli extends Controller {
 		$terima_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$terima_keterangan);
 		$terima_keterangan=str_replace(",", ",",$terima_keterangan);
 		$terima_keterangan=str_replace("'", '"',$terima_keterangan);
-		$result = $this->m_master_terima_beli->master_terima_beli_update($terima_id ,$terima_no ,$terima_order ,$terima_supplier ,$terima_surat_jalan ,$terima_pengirim ,$terima_tanggal ,$terima_keterangan      );
+		$terima_status=trim(@$_POST["terima_status"]);
+		$terima_status=str_replace("/(<\/?)(p)([^>]*>)", "",$terima_status);
+		$terima_status=str_replace(",", ",",$terima_status);
+		$terima_status=str_replace("'", '"',$terima_status);
+		$result = $this->m_master_terima_beli->master_terima_beli_update($terima_id ,$terima_no ,$terima_order ,$terima_supplier ,$terima_surat_jalan ,$terima_pengirim ,$terima_tanggal ,$terima_keterangan, $terima_status  );
 		echo $result;
 	}
 	
@@ -328,7 +332,11 @@ class C_master_terima_beli extends Controller {
 		$terima_keterangan=trim(@$_POST["terima_keterangan"]);
 		$terima_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$terima_keterangan);
 		$terima_keterangan=str_replace("'", '"',$terima_keterangan);
-		$result=$this->m_master_terima_beli->master_terima_beli_create($terima_no ,$terima_order ,$terima_supplier ,$terima_surat_jalan ,$terima_pengirim ,$terima_tanggal ,$terima_keterangan );
+		$terima_status=trim(@$_POST["terima_status"]);
+		$terima_status=str_replace("/(<\/?)(p)([^>]*>)", "",$terima_status);
+		$terima_status=str_replace("'", '"',$terima_status);
+		
+		$result=$this->m_master_terima_beli->master_terima_beli_create($terima_no ,$terima_order ,$terima_supplier ,$terima_surat_jalan ,$terima_pengirim ,$terima_tanggal ,$terima_keterangan, $terima_status);
 		echo $result;
 	}
 
@@ -359,10 +367,13 @@ class C_master_terima_beli extends Controller {
 		$terima_keterangan=trim(@$_POST["terima_keterangan"]);
 		$terima_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$terima_keterangan);
 		$terima_keterangan=str_replace("'", '"',$terima_keterangan);
+		$terima_status=trim(@$_POST["terima_status"]);
+		$terima_status=str_replace("/(<\/?)(p)([^>]*>)", "",$terima_status);
+		$terima_status=str_replace("'", '"',$terima_status);
 		
 		$start = (integer) (isset($_POST['start']) ? @$_POST['start'] : @$_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? @$_POST['limit'] : @$_GET['limit']);
-		$result = $this->m_master_terima_beli->master_terima_beli_search($terima_id ,$terima_no ,$terima_order ,$terima_supplier ,$terima_surat_jalan ,$terima_pengirim ,$terima_tanggal ,$terima_keterangan ,$start,$end);
+		$result = $this->m_master_terima_beli->master_terima_beli_search($terima_id ,$terima_no ,$terima_order ,$terima_supplier ,$terima_surat_jalan ,$terima_pengirim ,$terima_tanggal ,$terima_keterangan ,$terima_status, $start,$end);
 		echo $result;
 	}
 
