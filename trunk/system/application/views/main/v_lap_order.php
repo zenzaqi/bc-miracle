@@ -298,7 +298,7 @@ Ext.onReady(function(){
 		
 		var order_tglawal="";
 		var order_tglakhir="";
-		var jrpdouk_opsi="";
+		var order_opsi="";
 		var order_bulan="";
 		var order_tahun="";
 		var order_periode="";

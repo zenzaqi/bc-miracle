@@ -2,45 +2,46 @@
 /* 	These code was generated using phpCIGen v 0.1.b (21/04/2009)
 	#zaqi 		zaqi.smart@gmail.com,http://zenzaqi.blogspot.com, 
 	
-	+ Module  		: kartu_stok Controller
+	+ Module  		: labarugi Controller
 	+ Description	: For record controller process back-end
-	+ Filename 		: C_kartu_stok.php
+	+ Filename 		: C_labarugi.php
  	+ creator 		: 
  	+ Created on 09/Apr/2010 10:47:15
 	
 */
 
-//class of kartu_stok
-class C_kartu_stok extends Controller {
+//class of labarugi
+class C_labarugi extends Controller {
 
 	//constructor
-	function C_kartu_stok(){
+	function C_labarugi(){
 		parent::Controller();
 		session_start();
-		$this->load->model('m_kartu_stok', '', TRUE);
+		$this->load->model('m_labarugi', '', TRUE);
 	}
 	
 	//set index
 	function index(){
 		$this->load->plugin('to_excel');
-		$this->load->view('main/v_kartu_stok');
+		$this->load->view('main/v_labarugi');
 	}
 	
+		
 	//event handler action
 	function get_action(){
-		$task = isset($_POST['task'])?@$_POST['task']:@$_GET['task'];
+		$task = isset($_POST['task']) ? @$_POST['task'] : @$_GET['task'];
 		switch($task){
 			case "LIST":
-				$this->kartu_stok_list();
+				$this->labarugi_list();
 				break;
 			case "SEARCH":
-				$this->kartu_stok_search();
+				$this->labarugi_search();
 				break;
 			case "PRINT":
-				$this->kartu_stok_print();
+				$this->labarugi_print();
 				break;
 			case "EXCEL":
-				$this->kartu_stok_export_excel();
+				$this->labarugi_export_excel();
 				break;
 			default:
 				echo "{failure:true}";
@@ -49,37 +50,41 @@ class C_kartu_stok extends Controller {
 	}
 	
 	//function fot list record
-	function kartu_stok_list(){
+	function labarugi_list(){
 		
-		$query = isset($_POST['query']) ? @$_POST['query'] : @$_GET['query'];
+		$query = isset($_POST['query']) ? @$_POST['query'] : "";
 		$start = (integer) (isset($_POST['start']) ? @$_POST['start'] : @$_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? @$_POST['limit'] : @$_GET['limit']);
 		$produk_id = (integer) (isset($_POST['produk_id']) ? @$_POST['produk_id'] : @$_GET['produk_id']);
-		$tanggal_start =(isset($_POST['tanggal_start']) ? @$_POST['tanggal_start'] : @$_GET['tanggal_start']);
-		$tanggal_end = (isset($_POST['tanggal_end']) ? @$_POST['tanggal_end'] : @$_GET['tanggal_end']);
-		$opsi_satuan = (isset($_POST['opsi_satuan']) ? @$_POST['opsi_satuan'] : @$_GET['opsi_satuan']);
-		$gudang = (isset($_POST['gudang']) ? @$_POST['gudang'] : @$_GET['gudang']);
+		$tanggal_start=(isset($_POST['tanggal_start']) ? @$_POST['tanggal_start'] : @$_GET['tanggal_start']);
+		$tanggal_end=(isset($_POST['tanggal_end']) ? @$_POST['tanggal_end'] : @$_GET['tanggal_end']);
 		
-		$result=$this->m_kartu_stok->kartu_stok_list($gudang, $produk_id, $opsi_satuan, $tanggal_start,$tanggal_end,$query,$start,$end);
-		echo $result;
-	}
-	
-	function kartu_stok_awal(){
-		$query = isset($_POST['query']) ? @$_POST['query'] : @$_GET['query'];
-		$start = (integer) (isset($_POST['start']) ? @$_POST['start'] : @$_GET['start']);
-		$end = (integer) (isset($_POST['limit']) ? @$_POST['limit'] : @$_GET['limit']);
-		$produk_id = (integer) (isset($_POST['produk_id']) ? @$_POST['produk_id'] : @$_GET['produk_id']);
-		$tanggal_start =(isset($_POST['tanggal_start']) ? @$_POST['tanggal_start'] : @$_GET['tanggal_start']);
-		$tanggal_end = (isset($_POST['tanggal_end']) ? @$_POST['tanggal_end'] : @$_GET['tanggal_end']);
-		$opsi_satuan = (isset($_POST['opsi_satuan']) ? @$_POST['opsi_satuan'] : @$_GET['opsi_satuan']);
-		$gudang = (isset($_POST['gudang']) ? @$_POST['gudang'] : @$_GET['gudang']);
-		
-		$result=$this->m_kartu_stok->kartu_stok_awal($gudang, $produk_id, $opsi_satuan, $tanggal_start,$tanggal_end,$query,$start,$end);
+		$result=$this->m_labarugi->labarugi_list($produk_id, $tanggal_start, $tanggal_end, $query,$start,$end);
 		echo $result;
 	}
 	
 	
-	function kartu_stok_print(){
+	//function for advanced search
+	function labarugi_search(){
+		//POST varibale here
+		$produk_id=trim(@$_POST["produk_id"]);
+		$produk_nama=trim(@$_POST["produk_nama"]);
+		$produk_nama=str_replace("/(<\/?)(p)([^>]*>)", "",$produk_nama);
+		$produk_nama=str_replace("'", "''",$produk_nama);
+		$satuan_id=trim(@$_POST["satuan_id"]);
+		$satuan_nama=trim(@$_POST["satuan_nama"]);
+		$satuan_nama=str_replace("/(<\/?)(p)([^>]*>)", "",$satuan_nama);
+		$satuan_nama=str_replace("'", "''",$satuan_nama);
+		$stok_saldo=trim(@$_POST["stok_saldo"]);
+		
+		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		$result = $this->m_labarugi->labarugi_search($produk_id ,$produk_nama ,$satuan_id ,$satuan_nama ,$stok_saldo ,$start,$end);
+		echo $result;
+	}
+
+
+	function labarugi_print(){
   		//POST varibale here
 		$produk_id=trim(@$_POST["produk_id"]);
 		$produk_nama=trim(@$_POST["produk_nama"]);
@@ -93,19 +98,19 @@ class C_kartu_stok extends Controller {
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$data["data_print"] = $this->m_kartu_stok->kartu_stok_print($produk_id ,$produk_nama ,$satuan_id ,$satuan_nama ,$stok_saldo ,$option,$filter);
-		$print_view=$this->load->view("main/p_kartu_stok.php",$data,TRUE);
+		$data["data_print"] = $this->m_labarugi->labarugi_print($produk_id ,$produk_nama ,$satuan_id ,$satuan_nama ,$stok_saldo ,$option,$filter);
+		$print_view=$this->load->view("main/p_labarugi.php",$data,TRUE);
 		if(!file_exists("print")){
 			mkdir("print");
 		}
-		$print_file=fopen("print/kartu_stok_printlist.html","w+");
+		$print_file=fopen("print/labarugi_printlist.html","w+");
 		fwrite($print_file, $print_view);
 		echo '1';        
 	}
 	/* End Of Function */
 
 	/* Function to Export Excel document */
-	function kartu_stok_export_excel(){
+	function labarugi_export_excel(){
 		//POST varibale here
 		$produk_id=trim(@$_POST["produk_id"]);
 		$produk_nama=trim(@$_POST["produk_nama"]);
@@ -119,9 +124,9 @@ class C_kartu_stok extends Controller {
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$query = $this->m_kartu_stok->kartu_stok_export_excel($produk_id ,$produk_nama ,$satuan_id ,$satuan_nama ,$stok_saldo ,$option,$filter);
+		$query = $this->m_labarugi->labarugi_export_excel($produk_id ,$produk_nama ,$satuan_id ,$satuan_nama ,$stok_saldo ,$option,$filter);
 		
-		to_excel($query,"kartu_stok"); 
+		to_excel($query,"labarugi"); 
 		echo '1';
 			
 	}

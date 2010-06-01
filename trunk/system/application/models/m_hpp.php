@@ -18,8 +18,13 @@ class M_hpp extends Model{
 			parent::Model();
 		}
 		
-		function get_produk_list($filter,$start,$end){
-			$sql="select * from vu_produk_satuan_terkecil WHERE produk_aktif='Aktif'";
+		function get_produk_list($filter,$start,$end,$satuan){
+			if($satuan=='default')
+				$sql="select * from vu_produk_satuan_default WHERE produk_aktif='Aktif'";
+			else
+				$sql="select * from vu_produk_satuan_terkecil WHERE produk_aktif='Aktif'";
+			//echo $sql;
+			
 			if($filter<>""){
 				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
 				$sql.="( produk_kode LIKE '%".addslashes($filter)."%' OR 

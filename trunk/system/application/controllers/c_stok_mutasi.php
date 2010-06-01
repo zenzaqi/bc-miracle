@@ -64,7 +64,7 @@ class C_stok_mutasi extends Controller {
 		echo $result;
 	}
 	
-	
+		
 	function stok_mutasi_print(){
   		//POST varibale here
 		$produk_id=trim(@$_POST["produk_id"]);

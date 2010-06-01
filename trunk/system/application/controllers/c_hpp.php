@@ -30,7 +30,8 @@ class C_hpp extends Controller {
 		$query = isset($_POST['query']) ? @$_POST['query'] : "";
 		$start = (integer) (isset($_POST['start']) ? @$_POST['start'] : @$_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? @$_POST['limit'] : @$_GET['limit']);
-		$result=$this->m_hpp->get_produk_list($query,$start,$end);
+		$satuan=(isset($_POST['satuan']) ? @$_POST['satuan'] : @$_GET['satuan']);
+		$result=$this->m_hpp->get_produk_list($query,$start,$end,$satuan);
 		echo $result;
 	}
 	

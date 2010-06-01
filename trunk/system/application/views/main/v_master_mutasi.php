@@ -246,7 +246,9 @@ Ext.onReady(function(){
 		mutasi_keteranganField.reset();
 		mutasi_keteranganField.setValue(null);
 		
-		cbo_mutasi_satuanDataStore.setBaseParam('task','detail');
+		detail_mutasi_DataStore.removeAll();
+		
+		/*cbo_mutasi_satuanDataStore.setBaseParam('task','detail');
 		cbo_mutasi_satuanDataStore.setBaseParam('master_id',0);
 		cbo_mutasi_satuanDataStore.load();
 		
@@ -259,7 +261,7 @@ Ext.onReady(function(){
 					detail_mutasi_DataStore.load();
 				}
 			}
-		});
+		});*/
 	}
  	/* End of Function */
   
@@ -818,7 +820,8 @@ Ext.onReady(function(){
 		id: 'cbo_mutasi_produkDataStore',
 		proxy: new Ext.data.HttpProxy({
 			url: 'index.php?c=c_master_mutasi&m=get_produk_list', 
-			method: 'POST'
+			method: 'POST',
+			timeout: 3600000
 		}),baseParams: {start: 0, limit: pageS, gudang: 0, task: 'list'},
 			reader: new Ext.data.JsonReader({
 			root: 'results',
@@ -1400,8 +1403,8 @@ Ext.onReady(function(){
 	/*End of Function */
 	
 	//EVENTS
-	detail_mutasi_DataStore.on("update",detail_mutasi_total);
-	detail_mutasi_DataStore.on("load",detail_mutasi_total);
+	/*detail_mutasi_DataStore.on("update",detail_mutasi_total);*/
+	/*detail_mutasi_DataStore.on("load",detail_mutasi_total);*/
 	master_mutasiListEditorGrid.addListener('rowcontextmenu', onmaster_mutasi_ListEditGridContextMenu);
 	master_mutasi_DataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
 	master_mutasiListEditorGrid.on('afteredit', master_mutasi_update); // inLine Editing Record
@@ -1409,28 +1412,70 @@ Ext.onReady(function(){
 	mutasi_asalField.on("select",function(){
 		cbo_mutasi_produkDataStore.setBaseParam('gudang', get_asal_id());
 		cbo_mutasi_produkDataStore.setBaseParam('task','list');
-		cbo_mutasi_produkDataStore.reload();
+		/*cbo_mutasi_produkDataStore.reload();*/
 	});
 	
 	combo_mutasi_produk.on("focus",function(){
+		Ext.MessageBox.show({
+		   msg: 'Sedang mengambil data, silakan tunggu...',
+		   progressText: 'proses...',
+		   width:350,
+		   wait:true
+		});
+		
 		cbo_mutasi_produkDataStore.setBaseParam('task','list');
 		var selectedquery=detail_mutasiListEditorGrid.getSelectionModel().getSelected().get('produk_nama');
 		cbo_mutasi_produkDataStore.setBaseParam('query',selectedquery);
-		
-		//cbo_order_produk_DataStore.load();
+		cbo_mutasi_produkDataStore.load({
+			callback: function(r,opt,success){
+				if(success==true){
+					Ext.MessageBox.hide();
+				}else{
+					Ext.MessageBox.show({
+						   title: 'Error',
+						   msg: 'Could not connect to the database. retry later.',
+						   buttons: Ext.MessageBox.OK,
+						   animEl: 'database',
+						   icon: Ext.MessageBox.ERROR
+					});	
+				}
+			}
+		});
 	});
 	
 	combo_mutasi_satuan.on("focus",function(){
 		cbo_mutasi_satuanDataStore.setBaseParam('task','produk');
 		cbo_mutasi_satuanDataStore.setBaseParam('selected_id',combo_mutasi_produk.getValue());
-		cbo_mutasi_satuanDataStore.load();
+		cbo_mutasi_satuanDataStore.load({});
 	});
 	
 	
 	combo_mutasi_produk.on("select",function(){
+		
+		
 		cbo_mutasi_satuanDataStore.setBaseParam('task','produk');
 		cbo_mutasi_satuanDataStore.setBaseParam('selected_id',combo_mutasi_produk.getValue());
-		cbo_mutasi_satuanDataStore.reload();
+		cbo_mutasi_satuanDataStore.load({
+			callback: function(r,opt,success){
+				if(success==true){
+					if(cbo_mutasi_satuanDataStore.getCount()>0){
+							var satuan_default=cbo_mutasi_satuanDataStore.getAt(0);
+							combo_mutasi_satuan.setValue(satuan_default.data.satuan_id);
+					}
+					
+				}else{
+					Ext.MessageBox.show({
+						   title: 'Error',
+						   msg: 'Could not connect to the database. retry later.',
+						   buttons: Ext.MessageBox.OK,
+						   animEl: 'database',
+						   icon: Ext.MessageBox.ERROR
+					});	
+				}
+			}
+		});
+		
+		
 	});
 	
 	detail_mutasi_DataStore.on("update",function(){

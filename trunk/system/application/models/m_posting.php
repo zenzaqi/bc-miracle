@@ -23,10 +23,10 @@ class M_posting extends Model{
 			$tanggal=date('Y-m-d H:i:s');
 			if($periode=='tanggal'){
 				//post transaksi jurnal kas
-				$sql_post_kas="UPDATE jurnal_kasbank SET kasbank_post='Y',kasbank_date_post='".$tanggal."' 
+				/*$sql_post_kas="UPDATE jurnal_kasbank SET kasbank_post='Y',kasbank_date_post='".$tanggal."' 
 						WHERE date_format(kasbank_tanggal,'%Y-%m-%d')>='".$tgl_awal."' 
 						AND date_format(kasbank_tanggal,'%Y-%m-%d')<='".$tgl_akhir."'";
-				$this->db->query($sql_post_kas);
+				$this->db->query($sql_post_kas);*/
 				
 				//post transaksi jurnal umum
 				$sql_post_umum="UPDATE jurnal_umum SET jurnal_post='Y',jurnal_date_post='".$tanggal."' 
@@ -34,7 +34,18 @@ class M_posting extends Model{
 						AND date_format(jurnal_tanggal,'%Y-%m-%d')<='".$tgl_akhir."'";
 				$this->db->query($sql_post_umum);
 				
-				//post transaksi penerimaan
+				$sql_delete="DELETE from buku_besar WHERE date_format(buku_tanggal,'%Y-%m-%d')>='".$tgl_awal."' 
+						AND date_format(buku_tanggal,'%Y-%m-%d')<='".$tgl_akhir."'";
+				$this->db->query($sql_delete);
+				
+				$sql_insert="INSERT INTO buku_besar(buku_tanggal,buku_akun,buku_debet,buku_kredit,buku_date_create)
+							  	SELECT jurnal_tanggal, djurnal_akun, djurnal_debet, djurnal_kredit, NOW()
+								FROM vu_jurnal_umum
+							 	WHERE jurnal_post='Y' AND date_format(jurnal_tanggal,'%Y-%m-%d')>='".$tgl_awal."' 
+							 	AND date_format(jurnal_tanggal,'%Y-%m-%d')<='".$tgl_akhir."'";
+				$this->db->query($sql_insert);
+				
+				/*//post transaksi penerimaan
 				$sql_post_terima="UPDATE jurnal_pembelian SET terima_post='Y',terima_date_post='".$tanggal."' 
 						WHERE date_format(terima_tanggal,'%Y-%m-%d')>='".$tgl_awal."' 
 						AND date_format(terima_tanggal,'%Y-%m-%d')<='".$tgl_akhir."'";
@@ -44,20 +55,30 @@ class M_posting extends Model{
 				$sql_post_terima="UPDATE jurnal_penjualan SET terima_post='Y',terima_date_post='".$tanggal."' 
 						WHERE date_format(terima_tanggal,'%Y-%m-%d')>='".$tgl_awal."' 
 						AND date_format(terima_tanggal,'%Y-%m-%d')<='".$tgl_akhir."'";
-				$this->db->query($sql_post_terima);
+				$this->db->query($sql_post_terima);*/
 				
 			}else if($periode=='bulan'){
 				//post transaksi jurnal kas
-				$sql_post_kas="UPDATE jurnal_kasbank SET kasbank_post='Y',kasbank_date_post='".$tanggal."' 
+				/*$sql_post_kas="UPDATE jurnal_kasbank SET kasbank_post='Y',kasbank_date_post='".$tanggal."' 
 						WHERE date_format(kasbank_tanggal,'%Y-%m')='".$tahun."-".$bulan."'";
-				$this->db->query($sql_post_kas);
+				$this->db->query($sql_post_kas);*/
 				
 				//post transaksi jurnal umum
 				$sql_post_umum="UPDATE jurnal_umum SET jurnal_post='Y',jurnal_date_post='".$tanggal."' 
 						WHERE date_format(jurnal_tanggal,'%Y-%m')='".$tahun."-".$bulan."'";
 				$this->db->query($sql_post_umum);
 				
-				//post transaksi penerimaan
+				$sql_delete="DELETE from buku_besar WHERE date_format(buku_tanggal,'%Y-%m')='".$tahun."-".$bulan."'";
+				$this->db->query($sql_delete);
+				
+				$sql_insert="INSERT INTO buku_besar(buku_tanggal,buku_akun,buku_debet,buku_kredit,buku_date_create)
+							  	SELECT jurnal_tanggal, djurnal_akun, djurnal_debet, djurnal_kredit, NOW()
+								FROM vu_jurnal_umum
+							 	WHERE jurnal_post='Y' AND date_format(jurnal_tanggal,'%Y-%m')='".$tahun."-".$bulan."'";
+				$this->db->query($sql_insert);
+				
+				
+				/*//post transaksi penerimaan
 				$sql_post_terima="UPDATE jurnal_pembelian SET terima_post='Y',terima_date_post='".$tanggal."' 
 						WHERE date_format(terima_tanggal,'%Y-%m')='".$tahun."-".$bulan."'";
 				$this->db->query($sql_post_terima);
@@ -65,7 +86,7 @@ class M_posting extends Model{
 				//post transaksi penerimaan
 				$sql_post_terima="UPDATE jurnal_penjualan SET terima_post='Y',terima_date_post='".$tanggal."' 
 						WHERE date_format(terima_tanggal,'%Y-%m')='".$tahun."-".$bulan."'";
-				$this->db->query($sql_post_terima);
+				$this->db->query($sql_post_terima);*/
 
 			}
 			
