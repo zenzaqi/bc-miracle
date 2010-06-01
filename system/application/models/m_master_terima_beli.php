@@ -467,7 +467,7 @@ class M_master_terima_beli extends Model{
 		}
 		
 		//function for update record
-		function master_terima_beli_update($terima_id ,$terima_no ,$terima_order ,$terima_supplier ,$terima_surat_jalan ,$terima_pengirim ,$terima_tanggal ,$terima_keterangan ){
+		function master_terima_beli_update($terima_id ,$terima_no ,$terima_order ,$terima_supplier ,$terima_surat_jalan ,$terima_pengirim ,$terima_tanggal ,$terima_keterangan, $terima_status ){
 			$data = array(
 				"terima_id"=>$terima_id, 
 				"terima_no"=>$terima_no, 
@@ -476,7 +476,8 @@ class M_master_terima_beli extends Model{
 				"terima_surat_jalan"=>$terima_surat_jalan, 
 				"terima_pengirim"=>$terima_pengirim, 
 				"terima_tanggal"=>$terima_tanggal, 
-				"terima_keterangan"=>$terima_keterangan 
+				"terima_keterangan"=>$terima_keterangan,
+				"terima_status"=>$terima_status
 			);
 			$sql="SELECT supplier_id FROM supplier WHERE supplier_id='".$terima_supplier."'";
 			$rs=$this->db->query($sql);
@@ -495,7 +496,7 @@ class M_master_terima_beli extends Model{
 		}
 		
 		//function for create new record
-		function master_terima_beli_create($terima_no ,$terima_order ,$terima_supplier ,$terima_surat_jalan ,$terima_pengirim ,$terima_tanggal ,$terima_keterangan ){
+		function master_terima_beli_create($terima_no ,$terima_order ,$terima_supplier ,$terima_surat_jalan ,$terima_pengirim ,$terima_tanggal ,$terima_keterangan, $terima_status ){
 //			$pattern="LPB/".date("y/m")."/";
 //			$terima_no=$this->m_public_function->get_kode_1('master_terima_beli','terima_no',$pattern,14);
 			$pattern="PB/".date("ym")."-";
@@ -508,7 +509,8 @@ class M_master_terima_beli extends Model{
 				"terima_surat_jalan"=>$terima_surat_jalan, 
 				"terima_pengirim"=>$terima_pengirim, 
 				"terima_tanggal"=>$terima_tanggal, 
-				"terima_keterangan"=>$terima_keterangan 
+				"terima_keterangan"=>$terima_keterangan,
+				"terima_status"=>$terima_status
 			);
 			$this->db->insert('master_terima_beli', $data); 
 			if($this->db->affected_rows())
@@ -543,7 +545,7 @@ class M_master_terima_beli extends Model{
 		}
 		
 		//function for advanced search record
-		function master_terima_beli_search($terima_id ,$terima_no ,$terima_order ,$terima_supplier ,$terima_surat_jalan ,$terima_pengirim ,$terima_tanggal ,$terima_keterangan ,$start,$end){
+		function master_terima_beli_search($terima_id ,$terima_no ,$terima_order ,$terima_supplier ,$terima_surat_jalan ,$terima_pengirim ,$terima_tanggal ,$terima_keterangan ,$terima_status, $start,$end){
 			//full query
 			$query="SELECT *  FROM vu_trans_terima";
 			
@@ -579,6 +581,11 @@ class M_master_terima_beli extends Model{
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " terima_keterangan LIKE '%".$terima_keterangan."%'";
 			};
+			if($terima_status!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " terima_status LIKE '%".$terima_status."%'";
+			};
+			
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
 			
