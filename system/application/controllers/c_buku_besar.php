@@ -33,12 +33,6 @@ class C_buku_besar extends Controller {
 			case "LIST":
 				$this->buku_besar_list();
 				break;
-			case "UPDATE":
-				$this->buku_besar_update();
-				break;
-			case "CREATE":
-				$this->buku_besar_create();
-				break;
 			case "DELETE":
 				$this->buku_besar_delete();
 				break;
@@ -67,56 +61,21 @@ class C_buku_besar extends Controller {
 		echo $result;
 	}
 
-	//function for update record
-	function buku_besar_update(){
-		//POST variable here
-		$buku_id=trim(@$_POST["buku_id"]);
-		$buku_tanggal=trim(@$_POST["buku_tanggal"]);
-		$buku_akun=trim(@$_POST["buku_akun"]);
-		$buku_debet=trim(@$_POST["buku_debet"]);
-		$buku_kredit=trim(@$_POST["buku_kredit"]);
-		$buku_saldo_debet=trim(@$_POST["buku_saldo_debet"]);
-		$buku_saldo_kredit=trim(@$_POST["buku_saldo_kredit"]);
-		$result = $this->m_buku_besar->buku_besar_update($buku_id ,$buku_tanggal ,$buku_akun ,$buku_debet ,$buku_kredit ,$buku_saldo_debet ,$buku_saldo_kredit      );
-		echo $result;
-	}
 	
-	//function for create new record
-	function buku_besar_create(){
-		//POST varible here
-		//auto increment, don't accept anything from form values
-		$buku_tanggal=trim(@$_POST["buku_tanggal"]);
-		$buku_akun=trim(@$_POST["buku_akun"]);
-		$buku_debet=trim(@$_POST["buku_debet"]);
-		$buku_kredit=trim(@$_POST["buku_kredit"]);
-		$buku_saldo_debet=trim(@$_POST["buku_saldo_debet"]);
-		$buku_saldo_kredit=trim(@$_POST["buku_saldo_kredit"]);
-		$result=$this->m_buku_besar->buku_besar_create($buku_tanggal ,$buku_akun ,$buku_debet ,$buku_kredit ,$buku_saldo_debet ,$buku_saldo_kredit );
-		echo $result;
-	}
-
-	//function for delete selected record
-	function buku_besar_delete(){
-		$ids = $_POST['ids']; // Get our array back and translate it :
-		$pkid = json_decode(stripslashes($ids));
-		$result=$this->m_buku_besar->buku_besar_delete($pkid);
-		echo $result;
-	}
-
 	//function for advanced search
 	function buku_besar_search(){
 		//POST varibale here
-		$buku_id=trim(@$_POST["buku_id"]);
-		$buku_tanggal=trim(@$_POST["buku_tanggal"]);
+		$buku_periode=trim(@$_POST["buku_periode"]);
+		$buku_tglawal=trim(@$_POST["buku_tglawal"]);
+		$buku_tglakhir=trim(@$_POST["buku_tglakhir"]);
+		$buku_bulan=trim(@$_POST["buku_bulan"]);
+		$buku_tahun=trim(@$_POST["buku_tahun"]);
 		$buku_akun=trim(@$_POST["buku_akun"]);
-		$buku_debet=trim(@$_POST["buku_debet"]);
-		$buku_kredit=trim(@$_POST["buku_kredit"]);
-		$buku_saldo_debet=trim(@$_POST["buku_saldo_debet"]);
-		$buku_saldo_kredit=trim(@$_POST["buku_saldo_kredit"]);
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_buku_besar->buku_besar_search($buku_id ,$buku_tanggal ,$buku_akun ,$buku_debet ,$buku_kredit ,$buku_saldo_debet ,$buku_saldo_kredit ,$start,$end);
+		
+		$result = $this->m_buku_besar->buku_besar_search($buku_periode, $buku_tglawal, $buku_tglakhir, $buku_bulan, $buku_tahun, $buku_akun, $start,$end);
 		echo $result;
 	}
 
@@ -133,52 +92,7 @@ class C_buku_besar extends Controller {
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$result = $this->m_buku_besar->buku_besar_print($buku_id ,$buku_tanggal ,$buku_akun ,$buku_debet ,$buku_kredit ,$buku_saldo_debet ,$buku_saldo_kredit ,$option,$filter);
-		$nbrows=$result->num_rows();
-		$totcolumn=12;
-   		/* We now have our array, let's build our HTML file */
-		$file = fopen("buku_besarlist.html",'w');
-		fwrite($file, "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' /><title>Printing the Buku_besar Grid</title><link rel='stylesheet' type='text/css' href='assets/modules/main/css/printstyle.css'/></head>");
-		fwrite($file, "<body><table summary='Buku_besar List'><caption>BUKU_BESAR</caption><thead><tr><th scope='col'>Buku Id</th><th scope='col'>Buku Tanggal</th><th scope='col'>Buku Akun</th><th scope='col'>Buku Debet</th><th scope='col'>Buku Kredit</th><th scope='col'>Buku Saldo Debet</th><th scope='col'>Buku Saldo Kredit</th><th scope='col'>Buku Creator</th><th scope='col'>Buku Date Create</th><th scope='col'>Buku Update</th><th scope='col'>Buku Date Update</th><th scope='col'>Buku Revised</th></tr></thead><tfoot><tr><th scope='row'>Total</th><td colspan='$totcolumn'>");
-		fwrite($file, $nbrows);
-		fwrite($file, " Buku_besar</td></tr></tfoot><tbody>");
-		$i=0;
-		if($nbrows>0){
-			foreach($result->result_array() as $data){
-				fwrite($file,'<tr');
-				if($i%1==0){
-					fwrite($file," class='odd'");
-				}
-			
-				fwrite($file, "><th scope='row' id='r97'>");
-				fwrite($file, $data['buku_id']);
-				fwrite($file,"</th><td>");
-				fwrite($file, $data['buku_tanggal']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['buku_akun']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['buku_debet']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['buku_kredit']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['buku_saldo_debet']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['buku_saldo_kredit']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['buku_creator']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['buku_date_create']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['buku_update']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['buku_date_update']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['buku_revised']);
-				fwrite($file, "</td></tr>");
-			}
-		}
-		fwrite($file, "</tbody></table></body></html>");	
-		fclose($file);
+		
 		echo '1';        
 	}
 	/* End Of Function */
