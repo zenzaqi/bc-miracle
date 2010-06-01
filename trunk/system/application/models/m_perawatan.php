@@ -393,15 +393,15 @@ class M_perawatan extends Model{
 				$data["rawat_kode"]=$rawat_kode;
 			}*/
 			
-			/*if(is_numeric($rawat_group) || is_numeric($rawat_jenis)){
-				$sql_g="SELECT group_id,group_kode FROM produk_group WHERE group_id='".$produk_group."'";
+			if(is_numeric($rawat_group) || is_numeric($rawat_jenis)){
+				$sql_g="SELECT group_id,group_kode FROM produk_group WHERE group_id='".$rawat_group."'";
 				$rs_g=$this->db->query($sql_g);
 				if($rs_g->num_rows()){
 					$rs_sql_g=$rs_g->row();
 					$group_kode=$rs_sql_g->group_kode;
-					$data["produk_group"]=$produk_group;
+					$data["rawat_group"]=$produk_group;
 				}else{
-					$sql_g="SELECT group_kode FROM produk,produk_group WHERE produk_group=group_id AND produk_id='".$produk_id."'";
+					$sql_g="SELECT group_kode FROM produk,produk_group WHERE produk_group=group_id AND produk_id='".$rawat_id."'";
 					$rs_g=$this->db->query($sql_g);
 					if($rs_g->num_rows()){
 						$rs_sql_g=$rs_g->row();
@@ -409,14 +409,14 @@ class M_perawatan extends Model{
 					}
 				}
 				
-				$sql_j="SELECT jenis_id,jenis_kode FROM jenis WHERE jenis_id='".$produk_jenis."'";
+				$sql_j="SELECT jenis_id,jenis_kode FROM jenis WHERE jenis_id='".$rawat_jenis."'";
 				$rs_j=$this->db->query($sql_j);
 				if($rs_j->num_rows()){
 					$rs_sql_j=$rs_j->row();
 					$jenis_kode=$rs_sql_j->jenis_kode;
-					$data["produk_jenis"]=$produk_jenis;
+					$data["rawat_jenis"]=$rawat_jenis;
 				}else{
-					$sql_j="SELECT jenis_kode FROM produk,jenis WHERE produk_jenis=jenis_id AND produk_id='".$produk_id."'";
+					$sql_j="SELECT jenis_kode FROM produk,jenis WHERE produk_jenis=jenis_id AND produk_id='".$rawat_id."'";
 					$rs_j=$this->db->query($sql_j);
 					if($rs_j->num_rows()){
 						$rs_sql_j=$rs_j->row();
@@ -424,11 +424,11 @@ class M_perawatan extends Model{
 					}
 				}
 				$pattern=$group_kode.$jenis_kode;
-				$produk_kode=$this->get_kode($pattern);
-				if($produk_kode!=="" && strlen($produk_kode)==7){
-					$data["produk_kode"]=$produk_kode;
+				$rawat_kode=$this->get_kode($pattern);
+				if($rawat_kode!=="" && strlen($rawat_kode)==6){
+					$data["rawat_kode"]=$rawat_kode;
 				}
-			}*/
+			}
 				
 			$sql="SELECT rawat_du FROM perawatan WHERE rawat_du!='".$rawat_du."' AND rawat_id='".$rawat_id."'";
 			$rs=$this->db->query($sql);
