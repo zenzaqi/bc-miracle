@@ -201,6 +201,11 @@ class C_master_mutasi extends Controller {
 	function master_mutasi_update(){
 		//POST variable here
 		$mutasi_id=trim(@$_POST["mutasi_id"]);
+		$mutasi_no=trim(@$_POST["mutasi_no"]);
+		$mutasi_no=str_replace("/(<\/?)(p)([^>]*>)", "",$mutasi_no);
+		$mutasi_no=str_replace(",", ",",$mutasi_no);
+		$mutasi_no=str_replace("'", '"',$mutasi_no);
+		
 		$mutasi_asal=trim(@$_POST["mutasi_asal"]);
 		$mutasi_tujuan=trim(@$_POST["mutasi_tujuan"]);
 		$mutasi_tanggal=trim(@$_POST["mutasi_tanggal"]);
@@ -213,7 +218,7 @@ class C_master_mutasi extends Controller {
 		$mutasi_status=str_replace("/(<\/?)(p)([^>]*>)", "",$mutasi_status);
 		$mutasi_status=str_replace(",", ",",$mutasi_status);
 		$mutasi_status=str_replace("'", '"',$mutasi_status);
-		$result = $this->m_master_mutasi->master_mutasi_update($mutasi_id ,$mutasi_asal ,$mutasi_tujuan ,$mutasi_tanggal ,$mutasi_keterangan, $mutasi_status);
+		$result = $this->m_master_mutasi->master_mutasi_update($mutasi_id ,$mutasi_no, $mutasi_asal ,$mutasi_tujuan ,$mutasi_tanggal ,$mutasi_keterangan, $mutasi_status);
 		echo $result;
 	}
 	
@@ -221,6 +226,9 @@ class C_master_mutasi extends Controller {
 	function master_mutasi_create(){
 		//POST varible here
 		//auto increment, don't accept anything from form values
+		$mutasi_no=trim(@$_POST["mutasi_no"]);
+		$mutasi_no=str_replace("/(<\/?)(p)([^>]*>)", "",$mutasi_no);
+		$mutasi_no=str_replace("'", '"',$mutasi_no);
 		$mutasi_asal=trim(@$_POST["mutasi_asal"]);
 		$mutasi_tujuan=trim(@$_POST["mutasi_tujuan"]);
 		$mutasi_tanggal=trim(@$_POST["mutasi_tanggal"]);
@@ -231,7 +239,7 @@ class C_master_mutasi extends Controller {
 		$mutasi_status=trim(@$_POST["mutasi_status"]);
 		$mutasi_status=str_replace("/(<\/?)(p)([^>]*>)", "",$mutasi_status);
 		$mutasi_status=str_replace("'", '"',$mutasi_status);
-		$result=$this->m_master_mutasi->master_mutasi_create($mutasi_asal ,$mutasi_tujuan ,$mutasi_tanggal ,$mutasi_keterangan, $mutasi_status );
+		$result=$this->m_master_mutasi->master_mutasi_create($mutasi_no, $mutasi_asal ,$mutasi_tujuan ,$mutasi_tanggal ,$mutasi_keterangan, $mutasi_status );
 		echo $result;
 	}
 
