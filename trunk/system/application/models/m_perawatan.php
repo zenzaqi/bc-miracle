@@ -351,45 +351,11 @@ class M_perawatan extends Model{
 			if($rs->num_rows())
 				$data["rawat_gudang"]=$rawat_gudang;
 			
-			/*$sql="SELECT * FROM perawatan WHERE rawat_id='".$rawat_id."' AND rawat_group='".$rawat_group."' AND rawat_jenis='".$rawat_jenis."'";
-			$rs=$this->db->query($sql);
-			if(!($rs->num_rows())){
-				$sql_g="SELECT group_id,group_kode FROM produk_group WHERE group_id='".$rawat_group."'";
-				$rs_g=$this->db->query($sql_g);
-				if($rs_g->num_rows()){
-					$rs_sql_g=$rs_g->row();
-					$group_kode=$rs_sql_g->group_kode;
-					$data["rawat_group"]=$rawat_group;
-				}else{
-					$sql_g="SELECT group_kode FROM perawatan,produk_group WHERE rawat_group=group_id AND rawat_id='".$rawat_id."'";
-					$rs_g=$this->db->query($sql_g);
-					if($rs_g->num_rows()){
-						$rs_sql_g=$rs_g->row();
-						$group_kode=$rs_sql_g->group_kode;
-					}
-				}
-				
-				$sql_j="SELECT jenis_id,jenis_kode FROM jenis WHERE jenis_id='".$rawat_jenis."'";
-				$rs_j=$this->db->query($sql_j);
-				if($rs_j->num_rows()){
-					$rs_sql_j=$rs_j->row();
-					$jenis_kode=$rs_sql_j->jenis_kode;
-					$data["rawat_jenis"]=$rawat_jenis;
-				}else{
-					$sql_j="SELECT jenis_kode FROM perawatan,jenis WHERE rawat_jenis=jenis_id AND rawat_id='".$rawat_id."'";
-					$rs_j=$this->db->query($sql_j);
-					if($rs_j->num_rows()){
-						$rs_sql_j=$rs_j->row();
-						$jenis_kode=$rs_sql_j->jenis_kode;
-					}
-				}
-				$data["rawat_kode"]=$this->get_kode($group_kode,$jenis_kode);
-			}*/
 			
 			//generate rawat kode
 			//get group kode
-			$group_kode="";
-			$jenis_kode="";
+			//$group_kode="";
+			//$jenis_kode="";
 			
 			$sql_g="SELECT group_id,group_kode FROM produk_group WHERE group_id='".$rawat_group."'";
 			$rs_g=$this->db->query($sql_g);
@@ -421,14 +387,48 @@ class M_perawatan extends Model{
 				}
 			}
 			
-			$pattern=$group_kode.$jenis_kode;
-			/*$rawat_kode=$this->get_kode($pattern);
-			if($pattern!=="" && strlen($pattern)==4)
-				$data["rawat_kode"]=$rawat_kode;*/
-			//if rawat_kode!=""
-			if($rawat_kode!=""){
+			/*$pattern=$group_kode.$jenis_kode;
+			$rawat_kode=$this->get_kode($pattern);
+			if($rawat_kode!=="" && strlen($rawat_kode)==6){
 				$data["rawat_kode"]=$rawat_kode;
-			}
+			}*/
+			
+			/*if(is_numeric($rawat_group) || is_numeric($rawat_jenis)){
+				$sql_g="SELECT group_id,group_kode FROM produk_group WHERE group_id='".$produk_group."'";
+				$rs_g=$this->db->query($sql_g);
+				if($rs_g->num_rows()){
+					$rs_sql_g=$rs_g->row();
+					$group_kode=$rs_sql_g->group_kode;
+					$data["produk_group"]=$produk_group;
+				}else{
+					$sql_g="SELECT group_kode FROM produk,produk_group WHERE produk_group=group_id AND produk_id='".$produk_id."'";
+					$rs_g=$this->db->query($sql_g);
+					if($rs_g->num_rows()){
+						$rs_sql_g=$rs_g->row();
+						$group_kode=$rs_sql_g->group_kode;
+					}
+				}
+				
+				$sql_j="SELECT jenis_id,jenis_kode FROM jenis WHERE jenis_id='".$produk_jenis."'";
+				$rs_j=$this->db->query($sql_j);
+				if($rs_j->num_rows()){
+					$rs_sql_j=$rs_j->row();
+					$jenis_kode=$rs_sql_j->jenis_kode;
+					$data["produk_jenis"]=$produk_jenis;
+				}else{
+					$sql_j="SELECT jenis_kode FROM produk,jenis WHERE produk_jenis=jenis_id AND produk_id='".$produk_id."'";
+					$rs_j=$this->db->query($sql_j);
+					if($rs_j->num_rows()){
+						$rs_sql_j=$rs_j->row();
+						$jenis_kode=$rs_sql_j->jenis_kode;
+					}
+				}
+				$pattern=$group_kode.$jenis_kode;
+				$produk_kode=$this->get_kode($pattern);
+				if($produk_kode!=="" && strlen($produk_kode)==7){
+					$data["produk_kode"]=$produk_kode;
+				}
+			}*/
 				
 			$sql="SELECT rawat_du FROM perawatan WHERE rawat_du!='".$rawat_du."' AND rawat_id='".$rawat_id."'";
 			$rs=$this->db->query($sql);
@@ -504,11 +504,10 @@ class M_perawatan extends Model{
 				$data["rawat_jenis"]=$rawat_jenis;
 			}
 			
-			//$pattern=$group_kode.$jenis_kode;
-			//echo $jenis_kode;
-			/*$rawat_kode=$this->get_kode($pattern);
-			if($pattern!=="" && strlen($pattern)==4)
-				$data["rawat_kode"]=$rawat_kode;*/
+			$pattern=$group_kode.$jenis_kode;
+			$rawat_kode=$this->get_kode($pattern);
+			if($rawat_kode!=="" && strlen($rawat_kode)==6)
+				$data["rawat_kode"]=$rawat_kode;
 				
 			$this->db->insert('perawatan', $data); 
 			if($this->db->affected_rows())
