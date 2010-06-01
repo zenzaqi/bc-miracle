@@ -272,9 +272,10 @@ class M_master_mutasi extends Model{
 		}
 		
 		//function for update record
-		function master_mutasi_update($mutasi_id ,$mutasi_asal ,$mutasi_tujuan ,$mutasi_tanggal ,$mutasi_keterangan, $mutasi_status){
+		function master_mutasi_update($mutasi_id ,$mutasi_no, $mutasi_asal ,$mutasi_tujuan ,$mutasi_tanggal ,$mutasi_keterangan, $mutasi_status){
 			$data = array(
 				"mutasi_id"=>$mutasi_id, 
+				"mutasi_no"=>$mutasi_no,
 //				"mutasi_asal"=>$mutasi_asal, 
 //				"mutasi_tujuan"=>$mutasi_tujuan, 
 				"mutasi_tanggal"=>$mutasi_tanggal, 
@@ -298,8 +299,12 @@ class M_master_mutasi extends Model{
 		}
 		
 		//function for create new record
-		function master_mutasi_create($mutasi_asal ,$mutasi_tujuan ,$mutasi_tanggal ,$mutasi_keterangan, $mutasi_status){
+		function master_mutasi_create($mutasi_no, $mutasi_asal ,$mutasi_tujuan ,$mutasi_tanggal ,$mutasi_keterangan, $mutasi_status){
+			$pattern="MB/".date("ym")."-";
+			$mutasi_no=$this->m_public_function->get_kode_1('master_mutasi','mutasi_no',$pattern,12);
+			
 			$data = array(
+				"mutasi_no"=>$mutasi_no,
 				"mutasi_asal"=>$mutasi_asal, 
 				"mutasi_tujuan"=>$mutasi_tujuan, 
 				"mutasi_tanggal"=>$mutasi_tanggal, 
@@ -363,11 +368,11 @@ class M_master_mutasi extends Model{
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " mutasi_keterangan LIKE '%".$mutasi_keterangan."%'";
 			};
-			
 			if($mutasi_status!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " mutasi_status LIKE '%".$mutasi_status."%'";
 			};
+			
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
 			
