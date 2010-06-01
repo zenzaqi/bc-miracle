@@ -1484,13 +1484,13 @@ Ext.onReady(function(){
 		cbo_mutasi_produkDataStore.reload();
 	});
 	
-	combo_mutasi_produk.on("focus",function(){
+	/*combo_mutasi_produk.on("focus",function(){
 		cbo_mutasi_produkDataStore.setBaseParam('task','list');
 		var selectedquery=detail_mutasiListEditorGrid.getSelectionModel().getSelected().get('produk_nama');
 		cbo_mutasi_produkDataStore.setBaseParam('query',selectedquery);
 		
 		//cbo_order_produk_DataStore.load();
-	});
+	});*/
 	
 	combo_mutasi_satuan.on("focus",function(){
 		cbo_mutasi_satuanDataStore.setBaseParam('task','produk');
