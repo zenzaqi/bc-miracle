@@ -1,0 +1,1 @@
+ALTER TABLE `master_terima_beli` ADD `terima_status` ENUM( 'Terbuka', 'Tertutup','Batal' ) NULL DEFAULT 'Terbuka' AFTER `terima_keterangan` 
