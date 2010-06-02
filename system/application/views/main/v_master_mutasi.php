@@ -941,7 +941,7 @@ Ext.onReady(function(){
 			loadingText: 'Searching...',
 			pageSize: pageS,
 			hideTrigger:false,
-			tpl : produk_tpl,
+			//tpl : produk_tpl,
 			itemSelector: 'div.search-item',
 			triggerAction: 'all',
 			lazyRender:true,
@@ -1095,7 +1095,6 @@ Ext.onReady(function(){
 				detail_mutasi_insert(pkid);
 			}
 		});
-		master_mutasi_DataStore.load();
 	}
 	//eof
 	
