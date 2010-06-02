@@ -368,7 +368,7 @@ Ext.onReady(function(){
 				cell.css = "readonlycell"; // Mengambil Value dari Class di dalam CSS 
 				return value;
 				},
-			hidden: false
+			hidden: true
 		},
 		{
 			header: 'Nama Group',
@@ -383,7 +383,7 @@ Ext.onReady(function(){
 		{
 			header: 'Keterangan',
 			dataIndex: 'group_desc',
-			width: 150,
+			width: 200,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 250
@@ -392,7 +392,7 @@ Ext.onReady(function(){
 		{
 			header: 'Status',
 			dataIndex: 'group_active',
-			width: 150,
+			width: 80,
 			sortable: true,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
@@ -416,7 +416,7 @@ Ext.onReady(function(){
 	usergroupsListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'usergroupsListEditorGrid',
 		el: 'fp_usergroups',
-		title: 'List Of Usergroups',
+		title: 'Daftar Grup User',
 		autoHeight: true,
 		store: usergroups_DataStore, // DataStore
 		cm: usergroups_ColumnModel, // Nama-nama Columns
@@ -447,6 +447,7 @@ Ext.onReady(function(){
 			text: 'Delete',
 			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
+			disabled: true,
 			handler: usergroups_confirm_delete   // Confirm before deleting
 		}, '-', {
 			text: 'Search',
@@ -492,6 +493,7 @@ Ext.onReady(function(){
 			text: 'Delete', 
 			tooltip: 'Delete selected record', 
 			iconCls:'icon-delete',
+			disabled: true,
 			handler: usergroups_confirm_delete 
 		},
 		'-',
