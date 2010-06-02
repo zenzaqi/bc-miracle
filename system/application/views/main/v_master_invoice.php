@@ -71,20 +71,24 @@ var today=new Date().format('Y-m-d');
 /* declare variable here for Field*/
 var invoice_idField;
 var invoice_noField;
+var invoice_no_autoField;
 var invoice_supplierField;
 var invoice_noterimaField;
 var invoice_tanggalField;
 var invoice_biayaField;
 var invoice_jatuhtempoField;
 var invoice_penagihField;
+var invoice_keteranganField;
 var invoice_idSearchField;
 var invoice_noSearchField;
+var invoice_no_autoSearchField;
 var invoice_supplierSearchField;
 var invoice_noterimaSearchField;
 var invoice_tanggalSearchField;
 var invoice_nilaiSearchField;
 var invoice_jatuhtempoSearchField;
 var invoice_penagihSearchField;
+var invoice_statusSearchField;
 
 /* on ready fuction */
 Ext.onReady(function(){
@@ -94,6 +98,7 @@ Ext.onReady(function(){
 	function master_invoice_update(oGrid_event){
 		var invoice_id_update_pk="";
 		var invoice_no_update=null;
+		var invoice_no_auto_update=null;
 		var invoice_supplier_update=null;
 		var invoice_noterima_update=null;
 		var invoice_tanggal_update_date="";
@@ -103,9 +108,12 @@ Ext.onReady(function(){
 		var invoice_cashback_update=null;
 		var invoice_uangmuka_update=null;
 		var invoice_biaya_update=null;
+		var invoice_keterangan_update=null;
+		var invoice_status_update=null;
 		
 		invoice_id_update_pk = oGrid_event.record.data.invoice_id;
 		if(oGrid_event.record.data.invoice_no!== null){invoice_no_update = oGrid_event.record.data.invoice_no;}
+		if(oGrid_event.record.data.invoice_no_auto!== null){invoice_no_auto_update = oGrid_event.record.data.invoice_no_auto;}
 		if(oGrid_event.record.data.invoice_supplier!== null){invoice_supplier_update = oGrid_event.record.data.invoice_supplier;}
 		if(oGrid_event.record.data.invoice_noterima!== null){invoice_noterima_update = oGrid_event.record.data.invoice_noterima;}
 	 	if(oGrid_event.record.data.invoice_tanggal!== ""){invoice_tanggal_update_date =oGrid_event.record.data.invoice_tanggal.format('Y-m-d');}
@@ -115,6 +123,8 @@ Ext.onReady(function(){
 		if(oGrid_event.record.data.invoice_cashback!== null){invoice_cashback_update = oGrid_event.record.data.invoice_cashback;}
 		if(oGrid_event.record.data.invoice_uangmuka!== null){invoice_uangmuka_update = oGrid_event.record.data.invoice_uangmuka;}
 		if(oGrid_event.record.data.invoice_biaya!== null){invoice_biaya_update = oGrid_event.record.data.invoice_biaya;}
+		if(oGrid_event.record.data.invoice_keterangan!== null){invoice_keterangan_update = oGrid_event.record.data.invoice_keterangan;}
+		if(oGrid_event.record.data.invoice_status!== null){invoice_status_update = oGrid_event.record.data.invoice_status;}
 	
 		Ext.Ajax.request({  
 			waitMsg: 'Mohon tunggu...',
@@ -122,7 +132,8 @@ Ext.onReady(function(){
 			params: {
 				task				: "UPDATE",
 				invoice_id			: invoice_id_update_pk, 
-				invoice_no			: invoice_no_update,  
+				invoice_no			: invoice_no_update, 
+				invoice_no_auto		: invoice_no_auto_update,
 				invoice_supplier	: invoice_supplier_update,  
 				invoice_noterima	: invoice_noterima_update,  
 				invoice_tanggal		: invoice_tanggal_update_date, 
@@ -131,7 +142,9 @@ Ext.onReady(function(){
 				invoice_biaya		: invoice_biaya_update,
 				invoice_uangmuka	: invoice_uangmuka_update,
 				invoice_jatuhtempo	: invoice_jatuhtempo_update_date, 
-				invoice_penagih		: invoice_penagih_update
+				invoice_penagih		: invoice_penagih_update,
+				invoice_keterangan	: invoice_keterangan_update,
+				invoice_status		: invoice_status_update
 			}, 
 			success: function(response){							
 				var result=eval(response.responseText);
@@ -169,6 +182,7 @@ Ext.onReady(function(){
 		if(is_master_invoice_form_valid()){	
 		var invoice_id_create_pk=null; 
 		var invoice_no_create=null; 
+		var invoice_no_auto_create=null;
 		var invoice_supplier_create=null; 
 		var invoice_noterima_create=null; 
 		var invoice_tanggal_create_date=""; 
@@ -180,9 +194,12 @@ Ext.onReady(function(){
 		var invoice_biaya_create=null;
 		var invoice_uangmuka_create=null;
 		var invoice_total_create=null;
+		var invoice_keterangan_create=null;
+		var invoice_status_creeate=null;
 		
 		if(invoice_idField.getValue()!== null){invoice_id_create_pk = invoice_idField.getValue();}else{invoice_id_create_pk=get_pk_id();} 
 		if(invoice_noField.getValue()!== null){invoice_no_create = invoice_noField.getValue();} 
+		if(invoice_no_autoField.getValue()!== null){invoice_no_auto_create = invoice_no_autoField.getValue();} 
 		if(invoice_supplierField.getValue()!== null){invoice_supplier_create = invoice_supplier_idField.getValue();} 
 		if(invoice_noterimaField.getValue()!== null){invoice_noterima_create = invoice_noterimaField.getValue();} 
 		if(invoice_tanggalField.getValue()!== ""){invoice_tanggal_create_date = invoice_tanggalField.getValue().format('Y-m-d');} 
@@ -193,6 +210,8 @@ Ext.onReady(function(){
 		if(invoice_biayaField.getValue()!== null){invoice_biaya_create = invoice_biayaField.getValue();} 
 		if(invoice_uangmukaField.getValue()!==null){invoice_uangmuka_create = invoice_uangmukaField.getValue();}
 		if(invoice_totalField.getValue()!==null){invoice_total_create = invoice_totalField.getValue();}
+		if(invoice_keteranganField.getValue()!==null){invoice_keterangan_create = invoice_keteranganField.getValue();}
+		if(invoice_statusField.getValue()!==null){invoice_status_create = invoice_statusField.getValue();}
 		
 		Ext.Ajax.request({  
 			waitMsg: 'Please wait...',
@@ -201,6 +220,7 @@ Ext.onReady(function(){
 				task				: post2db,
 				invoice_id			: invoice_id_create_pk, 
 				invoice_no			: invoice_no_create, 
+				invoice_no_auto		: invoice_no_auto_create,
 				invoice_supplier	: invoice_supplier_create, 
 				invoice_noterima	: invoice_noterima_create, 
 				invoice_tanggal		: invoice_tanggal_create_date, 
@@ -210,7 +230,9 @@ Ext.onReady(function(){
 				invoice_cashback	: invoice_cashback_create,
 				invoice_biaya		: invoice_biaya_create,
 				invoice_uangmuka	: invoice_uangmuka_create,
-				invoice_total		: invoice_total_create
+				invoice_total		: invoice_total_create,
+				invoice_keterangan	: invoice_keterangan_create,
+				invoice_status		: invoice_status_create
 			}, 
 			success: function(response){             
 				var result=eval(response.responseText);
@@ -267,6 +289,8 @@ Ext.onReady(function(){
 		invoice_idField.setValue(null);
 		invoice_noField.reset();
 		invoice_noField.setValue(null);
+		invoice_no_autoField.reset();
+		invoice_no_autoField.setValue('(Auto)');
 		invoice_supplierField.reset();
 		invoice_supplierField.setValue(null);
 		invoice_noterimaField.reset();
@@ -279,6 +303,11 @@ Ext.onReady(function(){
 		invoice_jatuhtempoField.setValue(today);
 		invoice_penagihField.reset();
 		invoice_penagihField.setValue(null);
+		invoice_keteranganField.reset();
+		invoice_keteranganField.setValue(null);
+		invoice_statusField.reset();
+		invoice_statusField.setValue('Terbuka');
+		
 		invoice_diskonField.setValue(0);
 		invoice_cashbackField.setValue(0);
 		invoice_uangmukaField.setValue(0);
@@ -293,6 +322,7 @@ Ext.onReady(function(){
 	function master_invoice_set_form(){
 		invoice_idField.setValue(master_invoiceListEditorGrid.getSelectionModel().getSelected().get('invoice_id'));
 		invoice_noField.setValue(master_invoiceListEditorGrid.getSelectionModel().getSelected().get('invoice_no'));
+		invoice_no_autoField.setValue(master_invoiceListEditorGrid.getSelectionModel().getSelected().get('invoice_no_auto'));
 		invoice_supplierField.setValue(master_invoiceListEditorGrid.getSelectionModel().getSelected().get('invoice_supplier'));
 		invoice_noterimaField.setValue(master_invoiceListEditorGrid.getSelectionModel().getSelected().get('invoice_noterima'));
 		invoice_tanggalField.setValue(master_invoiceListEditorGrid.getSelectionModel().getSelected().get('invoice_tanggal'));
@@ -303,6 +333,8 @@ Ext.onReady(function(){
 		invoice_cashbackField.setValue(master_invoiceListEditorGrid.getSelectionModel().getSelected().get('invoice_cashback'));
 		invoice_uangmukaField.setValue(master_invoiceListEditorGrid.getSelectionModel().getSelected().get('invoice_uangmuka'));
 		invoice_totalField.setValue(master_invoiceListEditorGrid.getSelectionModel().getSelected().get('invoice_total'));
+		invoice_keteranganField.setValue(master_invoiceListEditorGrid.getSelectionModel().getSelected().get('invoice_keterangan'));
+		invoice_statusField.setValue(master_invoiceListEditorGrid.getSelectionModel().getSelected().get('invoice_status'));	
 			
 		cbo_invoice_produkDataStore.setBaseParam('master_id',get_pk_id());
 		cbo_invoice_produkDataStore.setBaseParam('task','detail');
@@ -444,6 +476,7 @@ Ext.onReady(function(){
 		/* dataIndex => insert intomaster_invoice_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'invoice_id', type: 'int', mapping: 'invoice_id'}, 
 			{name: 'invoice_no', type: 'string', mapping: 'no_bukti'}, 
+			{name: 'invoice_no_auto', type: 'string', mapping: 'no_bukti_auto'}, 
 			{name: 'invoice_supplier', type: 'string', mapping: 'supplier_nama'}, 
 			{name: 'invoice_noterima', type: 'string', mapping: 'terima_no'}, 
 			{name: 'invoice_tanggal', type: 'date', dateFormat: 'Y-m-d', mapping: 'tanggal'}, 
@@ -454,7 +487,9 @@ Ext.onReady(function(){
 			{name: 'invoice_jumlah', type: 'float', mapping: 'jumlah_barang'},
 			{name: 'invoice_total', type: 'float', mapping: 'total_nilai'},
 			{name: 'invoice_jatuhtempo', type: 'date', dateFormat: 'Y-m-d', mapping: 'invoice_jatuhtempo'}, 
-			{name: 'invoice_penagih', type: 'string', mapping: 'invoice_penagih'}, 
+			{name: 'invoice_penagih', type: 'string', mapping: 'invoice_penagih'},
+			{name: 'invoice_keterangan', type: 'string', mapping: 'invoice_keterangan'},
+			{name: 'invoice_status', type: 'string', mapping: 'invoice_status'},  			
 			{name: 'invoice_creator', type: 'string', mapping: 'invoice_creator'}, 
 			{name: 'invoice_date_create', type: 'date', dateFormat: 'Y-m-d', mapping: 'invoice_date_create'}, 
 			{name: 'invoice_update', type: 'string', mapping: 'invoice_update'}, 
@@ -537,6 +572,17 @@ Ext.onReady(function(){
 				format: 'd-m-Y'
 			})
 		},
+		
+		{
+			header: '<div align="center">' + 'No PT' + '</div>',
+			dataIndex: 'invoice_no_auto',
+			width: 100,	//150,
+			sortable: true,
+			editor: new Ext.form.TextField({
+				maxLength: 50
+          	})
+		}, 
+		
 		{
 			header: '<div align="center">No Tagihan</div>',
 			dataIndex: 'invoice_no',
@@ -580,7 +626,7 @@ Ext.onReady(function(){
 			header: '<div align="center">Diskon (%)</div>',
 			dataIndex: 'invoice_diskon',
 			align: 'right',
-			width: 60,	//100,
+			width: 50,	//100,
 			sortable: true,
 			readOnly: true,
 			renderer: Ext.util.Format.numberRenderer('0,000')
@@ -589,7 +635,7 @@ Ext.onReady(function(){
 			header: '<div align="center">Diskon (Rp)</div>',
 			dataIndex: 'invoice_cashback',
 			align: 'right',
-			width: 100,
+			width: 80,
 			sortable: true,
 			readOnly: true,
 			renderer: Ext.util.Format.numberRenderer('0,000')
@@ -598,7 +644,7 @@ Ext.onReady(function(){
 			header: '<div align="center">Biaya (Rp)</div>',
 			dataIndex: 'invoice_biaya',
 			align: 'right',
-			width: 100,
+			width: 80,
 			sortable: true,
 			renderer: Ext.util.Format.numberRenderer('0,000'),
 			editor: new Ext.form.NumberField({
@@ -612,7 +658,7 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">Total Nilai (Rp)</div>',
 			align: 'right',
-			width: 100,
+			width:80,
 			sortable: true,
 			readOnly: true,
 			renderer: function(v, params, record){
@@ -630,6 +676,20 @@ Ext.onReady(function(){
 				format: 'd-m-Y'
 			})
 		}, 
+		
+		{
+			header: '<div align="center">' + 'Keterangan' + '</div>',
+			dataIndex: 'invoice_keterangan',
+			sortable: true,
+			width: 150
+		}, 
+		{
+			header: '<div align="center">' + 'Stat Dok' + '</div>',
+			dataIndex: 'invoice_status',
+			sortable: true,
+			width: 80
+		}, 
+		
 		{
 			header: 'Penagih',
 			dataIndex: 'invoice_penagih',
@@ -719,9 +779,10 @@ Ext.onReady(function(){
 			text: 'Delete',
 			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
+			disabled : true,
 			handler: master_invoice_confirm_delete   // Confirm before deleting
 		}, '-', {
-			text: 'Search',
+			text: 'Adv Search',
 			tooltip: 'Advanced Search',
 			iconCls:'icon-search',
 			handler: display_form_search_window 
@@ -764,6 +825,7 @@ Ext.onReady(function(){
 			text: 'Delete', 
 			tooltip: 'Delete selected record', 
 			iconCls:'icon-delete',
+			disabled : true,
 			handler: master_invoice_confirm_delete 
 		},
 		'-',
@@ -820,6 +882,17 @@ Ext.onReady(function(){
 		maxLength: 50,
 		anchor: '95%'
 	});
+	
+	/* Identify invoice_no_auto Field*/
+	invoice_no_autoField= new Ext.form.TextField({
+		id: 'invoice_no_autoField',
+		fieldLabel: 'No PT',
+		emptyText: '(Auto)',
+		readOnly: true,
+		maxLength: 50,
+		anchor: '95%'
+	});
+	
 	/* Identify  invoice_supplier Field */
 	invoice_supplierField= new Ext.form.TextField({
 		id: 'invoice_supplierField',
@@ -949,6 +1022,31 @@ Ext.onReady(function(){
 		anchor: '95%'
 	});
 	
+	/* Identify invoice_keterangan Field*/
+	invoice_keteranganField= new Ext.form.TextArea({
+		id: 'invoice_keteranganField',
+		fieldLabel: 'Keterangan',
+		maxLength: 500,
+		anchor: '95%'
+	});
+	
+	/* Identify invoice_status Field*/
+	invoice_statusField= new Ext.form.ComboBox({
+		id: 'invoice_statusField',
+		fieldLabel: 'Status Dok',
+		store:new Ext.data.SimpleStore({
+			fields:['invoice_status_value', 'invoice_status_display'],
+			data:[['Terbuka','Terbuka'],['Tertutup','Tertutup'],['Batal', 'Batal']]
+		}),
+		mode: 'local',
+		displayField: 'invoice_status_display',
+		valueField: 'invoice_status_value',
+		anchor: '80%',
+		allowBlank: false,
+		triggerAction: 'all'	
+	});
+	
+	
 	invoice_orderDataStore = new Ext.data.Store({
 		id: 'invoice_orderDataStore',
 		proxy: new Ext.data.HttpProxy({
@@ -1005,13 +1103,13 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [invoice_idField, invoice_noField, invoice_noterimaField, invoice_supplierField] 
+				items: [invoice_idField, invoice_no_autoField, invoice_supplierField , invoice_noField, invoice_noterimaField] 
 			},
 			{
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [invoice_tanggalField, invoice_jatuhtempoField, invoice_penagihField, invoice_idField] 
+				items: [invoice_tanggalField, invoice_jatuhtempoField, invoice_penagihField, invoice_keteranganField, invoice_statusField, invoice_idField] 
 			}
 			]
 	
@@ -1413,33 +1511,43 @@ Ext.onReady(function(){
 		// render according to a SQL date format.
 		var invoice_id_search=null;
 		var invoice_no_search=null;
+		var invoice_no_auto_search=null;
 		var invoice_supplier_search=null;
 		var invoice_noterima_search=null;
 		var invoice_tanggal_search_date="";
 		var invoice_nilai_search=null;
 		var invoice_jatuhtempo_search_date="";
 		var invoice_penagih_search=null;
+		var invoice_keterangan_search=null;
+		var invoice_status_search=null;
 
 		if(invoice_idSearchField.getValue()!==null){invoice_id_search=invoice_idSearchField.getValue();}
 		if(invoice_noSearchField.getValue()!==null){invoice_no_search=invoice_noSearchField.getValue();}
+		if(invoice_no_autoSearchField.getValue()!==null){invoice_no_auto_search=invoice_no_autoSearchField.getValue();}
 		if(invoice_supplierSearchField.getValue()!==null){invoice_supplier_search=invoice_supplierSearchField.getValue();}
 		if(invoice_noterimaSearchField.getValue()!==null){invoice_noterima_search=invoice_noterimaSearchField.getValue();}
 		if(invoice_tanggalSearchField.getValue()!==""){invoice_tanggal_search_date=invoice_tanggalSearchField.getValue().format('Y-m-d');}
 		if(invoice_nilaiSearchField.getValue()!==null){invoice_nilai_search=invoice_nilaiSearchField.getValue();}
 		if(invoice_jatuhtempoSearchField.getValue()!==""){invoice_jatuhtempo_search_date=invoice_jatuhtempoSearchField.getValue().format('Y-m-d');}
 		if(invoice_penagihSearchField.getValue()!==null){invoice_penagih_search=invoice_penagihSearchField.getValue();}
+		if(invoice_keteranganSearchField.getValue()!==null){invoice_keterangan_search=invoice_keteranganSearchField.getValue();}
+		if(invoice_statusSearchField.getValue()!==null){invoice_status_search=invoice_statusSearchField.getValue();}
+		
 		// change the store parameters
 		master_invoice_DataStore.baseParams = {
 			task: 'SEARCH',
 			//variable here
 			invoice_id	:	invoice_id_search, 
 			invoice_no	:	invoice_no_search, 
+			invoice_no_auto		:	invoice_no_auto_search,
 			invoice_supplier	:	invoice_supplier_search, 
 			invoice_noterima	:	invoice_noterima_search, 
 			invoice_tanggal	:	invoice_tanggal_search_date, 
 			invoice_nilai	:	invoice_nilai_search, 
 			invoice_jatuhtempo	:	invoice_jatuhtempo_search_date, 
 			invoice_penagih	:	invoice_penagih_search, 
+			invoice_keterangan	:	invoice_keterangan_search,
+			invoice_status		:	invoice_status_search
 		};
 		// Cause the datastore to do another query : 
 		master_invoice_DataStore.reload({params: {start: 0, limit: pageS}});
@@ -1457,12 +1565,15 @@ Ext.onReady(function(){
 
 	function master_invoice_reset_SearchForm(){
 		invoice_noSearchField.reset();
+		invoice_no_autoSearchField.reset();
 		invoice_supplierSearchField.reset();
 		invoice_noterimaSearchField.reset();
 		invoice_tanggalSearchField.reset();
 		invoice_nilaiSearchField.reset();
 		invoice_jatuhtempoSearchField.reset();
 		invoice_penagihSearchField.reset();
+		invoice_keteranganSearchField.reset();
+		invoice_statusSearchField.reset();
 	}
 	
 	/* Field for search */
@@ -1483,8 +1594,17 @@ Ext.onReady(function(){
 		fieldLabel: 'No Tagihan',
 		maxLength: 50,
 		anchor: '95%'
+	});
+	
+	/* Identify  invoice_no_auto Search Field */
+	invoice_no_autoSearchField= new Ext.form.TextField({
+		id: 'invoice_no_autoSearchField',
+		fieldLabel: 'No PT',
+		maxLength: 50,
+		anchor: '95%'
 	
 	});
+	
 	/* Identify  invoice_supplier Search Field */
 	invoice_supplierSearchField= new Ext.form.NumberField({
 		id: 'invoice_supplierSearchField',
@@ -1548,8 +1668,51 @@ Ext.onReady(function(){
 		fieldLabel: 'Penagih',
 		maxLength: 50,
 		anchor: '95%'
+	});
+	
+	/* Identify  invoice_keterangan Search Field */
+	invoice_keteranganSearchField= new Ext.form.TextField({
+		id: 'invoice_keteranganSearchField',
+		fieldLabel: 'Keterangan',
+		maxLength: 500,
+		anchor: '95%'
+	});
+	
+	
+	invoice_tanggal_akhirSearchField= new Ext.form.DateField({
+		id: 'invoice_tanggal_akhirSearchField',
+		fieldLabel: 's/d',
+		format : 'd-m-Y'
+	});
+
+	invoice_label_tanggalField= new Ext.form.Label({ html: ' &nbsp; s/d  &nbsp;' });
+    
+	
+	invoice_tanggalSearchFieldSet=new Ext.form.FieldSet({
+		id:'invoice_tanggalSearchFieldSet',
+		title: 'Opsi Tanggal',
+		layout: 'column',
+		boduStyle: 'padding: 5px;',
+		frame: false,
+		items:[invoice_tanggalSearchField, invoice_label_tanggalField, invoice_tanggal_akhirSearchField]
+	});
+	
+	invoice_statusSearchField= new Ext.form.ComboBox({
+		id: 'invoice_statusSearchField',
+		fieldLabel: 'Status',
+		store:new Ext.data.SimpleStore({
+			fields:['value', 'invoice_status'],
+			data:[['Terbuka','Terbuka'],['Tertutup','Tertutup'],['Batal','Batal']]
+		}),
+		mode: 'local',
+		displayField: 'invoice_status',
+		valueField: 'value',
+		anchor: '80%',
+		triggerAction: 'all'	 
 	
 	});
+	
+
     
 	/* Function for retrieve search Form Panel */
 	master_invoice_searchForm = new Ext.FormPanel({
@@ -1565,7 +1728,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [invoice_noSearchField, invoice_noterimaSearchField, invoice_tanggalSearchField, invoice_nilaiSearchField, invoice_jatuhtempoSearchField, invoice_penagihSearchField] 
+				items: [invoice_no_autoSearchField, invoice_noSearchField, invoice_noterimaSearchField, invoice_tanggalSearchFieldSet, invoice_nilaiSearchField, invoice_jatuhtempoSearchField, invoice_penagihSearchField, invoice_keteranganSearchField, invoice_statusSearchField] 
 			}
 			]
 		}]

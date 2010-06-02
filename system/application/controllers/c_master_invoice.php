@@ -208,6 +208,11 @@ class C_master_invoice extends Controller {
 		$invoice_no=str_replace("/(<\/?)(p)([^>]*>)", "",$invoice_no);
 		$invoice_no=str_replace(",", ",",$invoice_no);
 		$invoice_no=str_replace("'", '"',$invoice_no);
+		
+		$invoice_no_auto=trim(@$_POST["invoice_no_auto"]);
+		$invoice_no_auto=str_replace("/(<\/?)(p)([^>]*>)", "",$invoice_no_auto);
+		$invoice_no_auto=str_replace(",", ",",$invoice_no_auto);
+		$invoice_no_auto=str_replace("'", '"',$invoice_no_auto);
 		$invoice_supplier=trim(@$_POST["invoice_supplier"]);
 		$invoice_noterima=trim(@$_POST["invoice_noterima"]);
 		$invoice_tanggal=trim(@$_POST["invoice_tanggal"]);
@@ -220,7 +225,17 @@ class C_master_invoice extends Controller {
 		$invoice_penagih=str_replace("/(<\/?)(p)([^>]*>)", "",$invoice_penagih);
 		$invoice_penagih=str_replace(",", ",",$invoice_penagih);
 		$invoice_penagih=str_replace("'", '"',$invoice_penagih);
-		$result = $this->m_master_invoice->master_invoice_update($invoice_id ,$invoice_no ,$invoice_supplier ,$invoice_noterima ,$invoice_tanggal ,$invoice_diskon, $invoice_cashback, $invoice_uangmuka, $invoice_biaya ,$invoice_jatuhtempo ,$invoice_penagih      );
+		$invoice_keterangan=trim(@$_POST["invoice_keterangan"]);
+		$invoice_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$invoice_keterangan);
+		$invoice_keterangan=str_replace(",", ",",$invoice_keterangan);
+		$invoice_keterangan=str_replace("'", '"',$invoice_keterangan);
+		$invoice_status=trim(@$_POST["invoice_status"]);
+		$invoice_status=str_replace("/(<\/?)(p)([^>]*>)", "",$invoice_status);
+		$invoice_status=str_replace(",", ",",$invoice_status);
+		$invoice_status=str_replace("'", '"',$invoice_status);
+		
+		
+		$result = $this->m_master_invoice->master_invoice_update($invoice_id ,$invoice_no ,$invoice_no_auto, $invoice_supplier ,$invoice_noterima ,$invoice_tanggal ,$invoice_diskon, $invoice_cashback, $invoice_uangmuka, $invoice_biaya ,$invoice_jatuhtempo ,$invoice_penagih, $invoice_keterangan, $invoice_status);
 		echo $result;
 	}
 	
@@ -231,6 +246,9 @@ class C_master_invoice extends Controller {
 		$invoice_no=trim(@$_POST["invoice_no"]);
 		$invoice_no=str_replace("/(<\/?)(p)([^>]*>)", "",$invoice_no);
 		$invoice_no=str_replace("'", '"',$invoice_no);
+		$invoice_no_auto=trim(@$_POST["invoice_no_auto"]);
+		$invoice_no_auto=str_replace("/(<\/?)(p)([^>]*>)", "",$invoice_no_auto);
+		$invoice_no_auto=str_replace("'", '"',$invoice_no_auto);
 		$invoice_supplier=trim(@$_POST["invoice_supplier"]);
 		$invoice_noterima=trim(@$_POST["invoice_noterima"]);
 		$invoice_tanggal=trim(@$_POST["invoice_tanggal"]);
@@ -242,7 +260,13 @@ class C_master_invoice extends Controller {
 		$invoice_penagih=trim(@$_POST["invoice_penagih"]);
 		$invoice_penagih=str_replace("/(<\/?)(p)([^>]*>)", "",$invoice_penagih);
 		$invoice_penagih=str_replace("'", '"',$invoice_penagih);
-		$result=$this->m_master_invoice->master_invoice_create($invoice_no ,$invoice_supplier ,$invoice_noterima ,$invoice_tanggal ,$invoice_diskon, $invoice_cashback, $invoice_uangmuka, $invoice_biaya, $invoice_jatuhtempo ,$invoice_penagih );
+		$invoice_keterangan=trim(@$_POST["invoice_keterangan"]);
+		$invoice_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$invoice_keterangan);
+		$invoice_keterangan=str_replace("'", '"',$invoice_keterangan);
+		$invoice_status=trim(@$_POST["invoice_status"]);
+		$invoice_status=str_replace("/(<\/?)(p)([^>]*>)", "",$invoice_status);
+		$invoice_status=str_replace("'", '"',$invoice_status);
+		$result=$this->m_master_invoice->master_invoice_create($invoice_no ,$invoice_no_auto, $invoice_supplier ,$invoice_noterima ,$invoice_tanggal ,$invoice_diskon, $invoice_cashback, $invoice_uangmuka, $invoice_biaya, $invoice_jatuhtempo ,$invoice_penagih, $invoice_keterangan, $invoice_status);
 		echo $result;
 	}
 
@@ -261,6 +285,10 @@ class C_master_invoice extends Controller {
 		$invoice_no=trim(@$_POST["invoice_no"]);
 		$invoice_no=str_replace("/(<\/?)(p)([^>]*>)", "",$invoice_no);
 		$invoice_no=str_replace("'", '"',$invoice_no);
+		
+		$invoice_no_auto=trim(@$_POST["invoice_no_auto"]);
+		$invoice_no_auto=str_replace("/(<\/?)(p)([^>]*>)", "",$invoice_no_auto);
+		$invoice_no_auto=str_replace("'", '"',$invoice_no_auto);
 		$invoice_supplier=trim(@$_POST["invoice_supplier"]);
 		$invoice_noterima=trim(@$_POST["invoice_noterima"]);
 		$invoice_tanggal=trim(@$_POST["invoice_tanggal"]);
@@ -273,9 +301,17 @@ class C_master_invoice extends Controller {
 		$invoice_penagih=str_replace("/(<\/?)(p)([^>]*>)", "",$invoice_penagih);
 		$invoice_penagih=str_replace("'", '"',$invoice_penagih);
 		
+		$invoice_keterangan=trim(@$_POST["invoice_keterangan"]);
+		$invoice_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$invoice_keterangan);
+		$invoice_keterangan=str_replace("'", '"',$invoice_keterangan);
+		$invoice_status=trim(@$_POST["invoice_status"]);
+		$invoice_status=str_replace("/(<\/?)(p)([^>]*>)", "",$invoice_status);
+		$invoice_status=str_replace("'", '"',$invoice_status);
+		
+		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_master_invoice->master_invoice_search($invoice_id ,$invoice_no ,$invoice_supplier ,$invoice_noterima ,$invoice_tanggal ,$invoice_diskon, $invoice_cashback, $invoice_uangmuka, $invoice_biaya,$invoice_jatuhtempo ,$invoice_penagih ,$start,$end);
+		$result = $this->m_master_invoice->master_invoice_search($invoice_id ,$invoice_no ,$invoice_no_auto, $invoice_supplier ,$invoice_noterima ,$invoice_tanggal ,$invoice_diskon, $invoice_cashback, $invoice_uangmuka, $invoice_biaya,$invoice_jatuhtempo ,$invoice_penagih, $invoice_keterangan, $invoice_status, $start,$end);
 		echo $result;
 	}
 
