@@ -19,7 +19,7 @@ class M_master_mutasi extends Model{
 		}
 		
 		function get_produk_selected_list($gudang,$selected_id,$query,$start,$end){
-			if($gudang==1){
+			/*if($gudang==1){
 				$sql="SELECT distinct produk_id,produk_kode,produk_nama,jumlah_stok FROM vu_stok_gudang_besar_saldo";
 			}elseif($gudang==2){
 				$sql="SELECT distinct produk_id,produk_kode,produk_nama,jumlah_stok FROM vu_stok_gudang_produk_saldo";
@@ -27,6 +27,15 @@ class M_master_mutasi extends Model{
 				$sql="SELECT distinct produk_id,produk_kode,produk_nama,jumlah_stok FROM vu_stok_gudang_all";
 				$sql.=(eregi("WHERE",$sql)?" AND ":" WHERE ")." gudang_id =".$gudang."";
 			}
+			*/
+			if($gudang==1){
+				$sql="SELECT distinct produk_id,produk_kode,produk_nama,0 FROM vu_produk_satuan_default";
+			}elseif($gudang==2){
+				$sql="SELECT distinct produk_id,produk_kode,produk_nama,0 FROM vu_produk_satuan_default";
+			}else{
+				$sql="SELECT distinct produk_id,produk_kode,produk_nama,0 FROM vu_produk_satuan_default";
+			}
+			
 			if($selected_id!=="")
 			{
 				$selected_id=substr($selected_id,0,strlen($selected_id)-1);
@@ -54,14 +63,23 @@ class M_master_mutasi extends Model{
 				
 		function get_produk_all_list($gudang,$selected_id,$query,$start,$end){
 			
-			if($gudang==1){
+			/*if($gudang==1){
 				$sql="SELECT distinct produk_id,produk_kode,produk_nama,satuan_nama,jumlah_stok FROM vu_stok_gudang_besar_saldo";
 			}elseif($gudang==2){
 				$sql="SELECT distinct produk_id,produk_kode,produk_nama,satuan_nama,jumlah_stok FROM vu_stok_gudang_produk_saldo";
 			}else{
 				$sql="SELECT distinct produk_id,produk_kode,produk_nama,satuan_nama,jumlah_stok FROM vu_stok_gudang_all";
 				$sql.=(eregi("WHERE",$sql)?" AND ":" WHERE ")." gudang_id =".$gudang."";
+			}*/
+			
+			if($gudang==1){
+				$sql="SELECT distinct produk_id,produk_kode,produk_nama,0 FROM vu_produk_satuan_default";
+			}elseif($gudang==2){
+				$sql="SELECT distinct produk_id,produk_kode,produk_nama,0 FROM vu_produk_satuan_default";
+			}else{
+				$sql="SELECT distinct produk_id,produk_kode,produk_nama,0 FROM vu_produk_satuan_default";
 			}
+			
 			if($query!==""){
 				$sql.=(eregi("WHERE",$sql)?" AND ":" WHERE ")." produk_nama like '%".$query."%' OR produk_kode like '%".$query."%'";
 			}
@@ -84,13 +102,21 @@ class M_master_mutasi extends Model{
 		
 			
 		function get_produk_detail_list($gudang,$master_id,$query,$start,$end){
-			if($gudang==1){
+			/*if($gudang==1){
 				$sql="SELECT distinct produk_id,produk_kode,produk_nama,jumlah_stok FROM vu_stok_gudang_besar_saldo";
 			}elseif($gudang==2){
 				$sql="SELECT distinct produk_id,produk_kode,produk_nama,jumlah_stok FROM vu_stok_gudang_produk_saldo";
 			}else{
 				$sql="SELECT distinct produk_id,produk_kode,produk_nama,jumlah_stok FROM vu_stok_gudang_all";
 				$sql.=(eregi("WHERE",$sql)?" AND ":" WHERE ")." gudang_id =".$gudang."";
+			}*/
+			
+			if($gudang==1){
+				$sql="SELECT distinct produk_id,produk_kode,produk_nama,0 FROM vu_produk_satuan_default";
+			}elseif($gudang==2){
+				$sql="SELECT distinct produk_id,produk_kode,produk_nama,0 FROM vu_produk_satuan_default";
+			}else{
+				$sql="SELECT distinct produk_id,produk_kode,produk_nama,0 FROM vu_produk_satuan_default";
 			}
 			
 			if($master_id<>""){

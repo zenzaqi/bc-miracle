@@ -532,7 +532,7 @@ Ext.onReady(function(){
 			{name: 'dorder_master', type: 'int', mapping: 'order_id'},
 			{name: 'dterima_produk', type: 'int', mapping: 'dorder_produk'},
 			{name: 'dorder_produk_nama', type: 'string', mapping: 'produk_nama'},
-			{name: 'dterima_jumlah', type: 'int', mapping: 'jumlah_barang'},
+			{name: 'dterima_jumlah', type: 'float', mapping: 'jumlah_sisa'},
 			{name: 'dterima_satuan', type: 'int', mapping: 'dorder_satuan'},
 			{name: 'dorder_produk_satuan', type: 'string', mapping: 'satuan_nama'},
 			{name: 'dorder_produk_harga', type: 'int', mapping: 'dorder_harga'},
@@ -844,10 +844,11 @@ Ext.onReady(function(){
 		tpl: tbeli_orderbeli_tpl,
 		itemSelector: 'div.search-item',
 		triggerAction: 'all',
-		lazyRender:true,
+		lazyRender: true,
 		listClass: 'x-combo-list-small',
 		anchor: '95%'
 	});
+	
 	terima_order_idField= new Ext.form.NumberField();
 	/* Identify  terima_supplier Field */
 	terima_supplierField= new Ext.form.TextField({
