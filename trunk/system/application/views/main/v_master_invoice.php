@@ -67,7 +67,7 @@ var post2db = '';
 var msg = '';
 var pageS=15;
 var today=new Date().format('Y-m-d');
-
+var tempday=new Date().format('Y-m-d',+0,+0,+14);
 /* declare variable here for Field*/
 var invoice_idField;
 var invoice_noField;
@@ -898,7 +898,8 @@ Ext.onReady(function(){
 		id: 'invoice_supplierField',
 		fieldLabel: 'Supplier',
 		maxLength: 50,
-		editable: false,
+		//editable: ,
+		readOnly : true,
 		anchor: '95%'
 	});
 	invoice_supplier_idField=new Ext.form.NumberField();
@@ -1013,6 +1014,7 @@ Ext.onReady(function(){
 		id: 'invoice_jatuhtempoField',
 		fieldLabel: 'Jatuh Tempo',
 		format : 'd-m-Y'
+		//value : tempday
 	});
 	/* Identify  invoice_penagih Field */
 	invoice_penagihField= new Ext.form.TextField({
@@ -1103,7 +1105,7 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [invoice_idField, invoice_no_autoField, invoice_supplierField , invoice_noField, invoice_noterimaField] 
+				items: [invoice_idField, invoice_no_autoField, invoice_noterimaField, invoice_supplierField , invoice_noField] 
 			},
 			{
 				columnWidth:0.5,
