@@ -1,0 +1,1 @@
+ALTER TABLE `appointment` CHANGE `app_cara` `app_cara` ENUM( 'Datang', 'Telp', 'SMS', 'Update' ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL 
