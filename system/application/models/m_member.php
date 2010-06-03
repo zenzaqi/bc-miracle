@@ -68,26 +68,26 @@ class M_member extends Model{
 		}
 		
 		//function for update record
-		function member_update($member_id ,$member_cust ,$member_no ,$member_register ,$member_valid ,$member_nota_ref ,$member_point ,$member_jenis ,$member_status ){
+		function member_update($member_id ,$member_no ){
 			$date_now=date('Y-m-d');
 			$data = array(
-				"member_id"=>$member_id, 
+				//"member_id"=>$member_id, 
 			//	"member_cust"=>$member_cust, 
 				"member_no"=>$member_no, 
-				"member_register"=>$member_register, 
-				"member_valid"=>$member_valid, 
-				"member_nota_ref"=>$member_nota_ref, 
-				"member_point"=>$member_point, 
-				"member_jenis"=>$member_jenis, 
-				"member_status"=>$member_status//, 
+				//"member_register"=>$member_register, 
+				//"member_valid"=>$member_valid, 
+				//"member_nota_ref"=>$member_nota_ref, 
+				//"member_point"=>$member_point, 
+				//"member_jenis"=>$member_jenis, 
+				//"member_status"=>$member_status//, 
 				//"member_tglserahterima"=>$member_tglserahterima 
 			);
 			
-			if($member_status=='Serah Terima'){
+			/*if($member_status=='Serah Terima'){
 				$data['member_tglserahterima']=$date_now;
 			}else{
 				$data['member_tglserahterima']=NULL;
-			}
+			}*/
 			
 			$this->db->where('member_id', $member_id);
 			$this->db->update('member', $data);
@@ -299,7 +299,7 @@ class M_member extends Model{
 		//function  for export to excel
 		function member_export_excel($member_id ,$member_cust ,$member_no ,$member_register ,$member_valid ,$member_nota_ref ,$member_point ,$member_jenis ,$member_status ,$member_tglserahterima ,$option,$filter){
 			//full query
-			$query="select * from member";
+			$query="SELECT cust_no AS no_cust, cust_nama AS customer, member_no AS no_member, member_register AS tgl_daftar, member_valid AS tgl_valid, cust_point AS poin, member_jenis AS jenis, member_status AS status, member_tglserahterima AS tgl_penyerahan FROM member LEFT JOIN customer ON(member_cust=cust_id)";
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 				$query .= " (member_id LIKE '%".addslashes($filter)."%' OR member_cust LIKE '%".addslashes($filter)."%' OR member_no LIKE '%".addslashes($filter)."%' OR member_register LIKE '%".addslashes($filter)."%' OR member_valid LIKE '%".addslashes($filter)."%' OR member_nota_ref LIKE '%".addslashes($filter)."%' OR member_point LIKE '%".addslashes($filter)."%' OR member_jenis LIKE '%".addslashes($filter)."%' OR member_status LIKE '%".addslashes($filter)."%' OR member_tglserahterima LIKE '%".addslashes($filter)."%' )";

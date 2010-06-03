@@ -523,6 +523,16 @@ Ext.onReady(function(){
             'Alamat: {cust_alamat}&nbsp;&nbsp;&nbsp;[Telp. {cust_telprumah}]',
         '</div></tpl>'
     );
+	
+	var list_member_noField = new Ext.form.TextField({
+		allowDecimals: false,
+		allowNegative: false,
+		allowBlank: false,
+		blankText: '0',
+		maxLength: 16,
+		readOnly: false,
+		maskRe: /([0-9]+)$/
+	});
     
   	/* Function for Identify of Window Column Model */
 	member_ColumnModel = new Ext.grid.ColumnModel(
@@ -556,13 +566,10 @@ Ext.onReady(function(){
 			dataIndex: 'member_no',
 			width: 100,
 			sortable: true,
+			editor: list_member_noField,
 			renderer: function(value, cell, record){
 				return value.substring(0,6) + '-' + value.substring(6,12) + '-' + value.substring(12);
 			}
-			/*editor: new Ext.form.TextField({
-				allowBlank: false,
-				maxLength: 50
-          	})*/
 		}, 
 		{
 			header: '<div align="center">Tgl Daftar</div>',	//'<div align="center">Register</div>',
@@ -707,7 +714,7 @@ Ext.onReady(function(){
 		}),
 		/* Add Control on ToolBar */
 		tbar: [
-		{
+		/*{
 			text: 'Add',
 			tooltip: 'Add new record',
 			iconCls:'icon-adds',    				// this is defined in our styles.css
@@ -718,7 +725,7 @@ Ext.onReady(function(){
 			tooltip: 'Edit selected record',
 			iconCls:'icon-update',
 			handler: member_confirm_update   // Confirm before updating
-		},'-',{
+		},'-',*/{
 			text: 'Cetak Kartu',
 			//tooltip: 'Aktifkan Member yang teregister dan set status masa pencetakan',
 			tooltip: 'Cetak kartu member',
