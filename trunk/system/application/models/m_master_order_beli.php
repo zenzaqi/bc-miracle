@@ -280,7 +280,7 @@ class M_master_order_beli extends Model{
 		}
 		
 		//function for update record
-		function master_order_beli_update($order_id ,$order_no ,$order_supplier ,$order_tanggal ,$order_carabayar ,$order_diskon, $order_cashback ,$order_biaya ,$order_bayar ,$order_keterangan, $order_status){
+		function master_order_beli_update($order_id ,$order_no ,$order_supplier ,$order_tanggal ,$order_carabayar ,$order_diskon, $order_cashback ,$order_biaya ,$order_bayar ,$order_keterangan, $order_status, $order_status_acc){
 			$data = array(
 				"order_id"=>$order_id, 
 				"order_no"=>$order_no, 
@@ -291,7 +291,8 @@ class M_master_order_beli extends Model{
 				"order_biaya"=>$order_biaya, 
 				"order_bayar"=>$order_bayar, 
 				"order_keterangan"=>$order_keterangan,
-				"order_status"=>$order_status 
+				"order_status"=>$order_status,
+				"order_status_acc"=>$order_status_acc
 			);
 			$sql="select supplier_id from supplier where supplier_id='".$order_supplier."'";
 			$query=$this->db->query($sql);
@@ -305,7 +306,7 @@ class M_master_order_beli extends Model{
 		}
 		
 		//function for create new record
-		function master_order_beli_create($order_no ,$order_supplier ,$order_tanggal ,$order_carabayar ,$order_diskon, $order_cashback ,$order_biaya ,$order_bayar ,$order_keterangan, $order_status){
+		function master_order_beli_create($order_no ,$order_supplier ,$order_tanggal ,$order_carabayar ,$order_diskon, $order_cashback ,$order_biaya ,$order_bayar ,$order_keterangan, $order_status, $order_status_acc){
 			$date_now=date('Y-m-d');
 			if($order_tanggal==""){
 				$order_tanggal=$date_now;
@@ -324,7 +325,8 @@ class M_master_order_beli extends Model{
 				"order_biaya"=>$order_biaya, 
 				"order_bayar"=>$order_bayar, 
 				"order_keterangan"=>$order_keterangan,
-				"order_status"=>$order_status 
+				"order_status"=>$order_status,
+				"order_status_acc"=>$order_status_acc
 			);
 			
 			$this->db->insert('master_order_beli', $data); 

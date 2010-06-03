@@ -229,7 +229,11 @@ class C_master_order_beli extends Controller {
 		$order_status=str_replace("/(<\/?)(p)([^>]*>)", "",$order_status);
 		$order_status=str_replace(",", ",",$order_status);
 		$order_status=str_replace("'", '"',$order_status);
-		$result = $this->m_master_order_beli->master_order_beli_update($order_id, $order_no, $order_supplier, $order_tanggal, $order_carabayar, $order_diskon, $order_cashback, $order_biaya, $order_bayar, $order_keterangan, $order_status);
+		$order_status_acc=trim(@$_POST["order_status_acc"]);
+		$order_status_acc=str_replace("/(<\/?)(p)([^>]*>)", "",$order_status_acc);
+		$order_status_acc=str_replace(",", ",",$order_status_acc);
+		$order_status_acc=str_replace("'", '"',$order_status_acc);
+		$result = $this->m_master_order_beli->master_order_beli_update($order_id, $order_no, $order_supplier, $order_tanggal, $order_carabayar, $order_diskon, $order_cashback, $order_biaya, $order_bayar, $order_keterangan, $order_status, $order_status_acc);
 		echo $result;
 	}
 	
@@ -255,7 +259,10 @@ class C_master_order_beli extends Controller {
 		$order_status=trim(@$_POST["order_status"]);
 		$order_status=str_replace("/(<\/?)(p)([^>]*>)", "",$order_status);
 		$order_status=str_replace("'", '"',$order_status);
-		$result=$this->m_master_order_beli->master_order_beli_create($order_no, $order_supplier, $order_tanggal, $order_carabayar, $order_diskon, $order_cashback, $order_biaya, $order_bayar, $order_keterangan, $order_status);
+		$order_status_acc=trim(@$_POST["order_status_acc"]);
+		$order_status_acc=str_replace("/(<\/?)(p)([^>]*>)", "",$order_status_acc);
+		$order_status_acc=str_replace("'", '"',$order_status_acc);
+		$result=$this->m_master_order_beli->master_order_beli_create($order_no, $order_supplier, $order_tanggal, $order_carabayar, $order_diskon, $order_cashback, $order_biaya, $order_bayar, $order_keterangan, $order_status, $order_status_acc);
 		echo $result;
 	}
 

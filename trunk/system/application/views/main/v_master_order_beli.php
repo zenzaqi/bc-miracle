@@ -89,6 +89,7 @@ var order_carabayarSearchField;
 //var order_bayarSearchField;
 var order_keteranganSearchField;
 var order_statusSearchField;
+var order_status_accSearchField;
 
 /* on ready fuction */
 Ext.onReady(function(){
@@ -107,7 +108,8 @@ Ext.onReady(function(){
 		var order_bayar_update=null;
 		var order_keterangan_update=null;
 		var order_status_update=null;
-		var order_cashback_update=null
+		var order_cashback_update=null;
+		var order_status_acc_update=null;
 		
 		order_id_update_pk = oGrid_event.record.data.order_id;
 		if(oGrid_event.record.data.order_no!== null){order_no_update = oGrid_event.record.data.order_no;}
@@ -120,6 +122,7 @@ Ext.onReady(function(){
 		if(oGrid_event.record.data.order_bayar!== null){order_bayar_update = oGrid_event.record.data.order_bayar;}
 		if(oGrid_event.record.data.order_keterangan!== null){order_keterangan_update = oGrid_event.record.data.order_keterangan;}
 		if(oGrid_event.record.data.order_status!== null){order_status_update = oGrid_event.record.data.order_status;}
+		if(oGrid_event.record.data.order_status_acc!== null){order_status_acc_update = oGrid_event.record.data.order_status_acc;}
 
 		Ext.Ajax.request({  
 			waitMsg: 'Please wait...',
@@ -136,7 +139,8 @@ Ext.onReady(function(){
 				order_bayar		: order_bayar_update,  
 				order_keterangan: order_keterangan_update,
 				order_status	: order_status_update,
-				order_cashback	: order_cashback_update
+				order_cashback	: order_cashback_update,
+				order_status_acc: order_status_acc_update
 			}, 
 			success: function(response){							
 				var result=eval(response.responseText);
@@ -184,6 +188,7 @@ Ext.onReady(function(){
 		var order_bayar_create=null; 
 		var order_keterangan_create=null; 
 		var order_status_create=null; 
+		var order_status_acc_create=null;
 
 		if(order_idField.getValue()!== null){order_id_create_pk = order_idField.getValue();}else{order_id_create_pk=get_pk_id();} 
 		if(order_noField.getValue()!== null){order_no_create = order_noField.getValue();} 
@@ -196,6 +201,7 @@ Ext.onReady(function(){
 		if(order_bayarField.getValue()!== null){order_bayar_create = order_bayarField.getValue();} 
 		if(order_keteranganField.getValue()!== null){order_keterangan_create = order_keteranganField.getValue();} 
 		if(order_statusField.getValue()!== null){order_status_create = order_statusField.getValue();} 
+		if(order_status_accField.getValue()!== null){order_status_acc_create = order_status_accField.getValue();} 
 
 		Ext.Ajax.request({  
 			waitMsg: 'Mohon tunggu...',
@@ -212,7 +218,8 @@ Ext.onReady(function(){
 				order_biaya			: order_biaya_create, 
 				order_bayar			: order_bayar_create, 
 				order_keterangan	: order_keterangan_create,
-				order_status		: order_status_create
+				order_status		: order_status_create,
+				order_status_acc	: order_status_acc_create
 			}, 
 			success: function(response){             
 				var result=eval(response.responseText);
@@ -288,6 +295,8 @@ Ext.onReady(function(){
 		order_keteranganField.setValue(null);
 		order_statusField.reset();
 		order_statusField.setValue('Terbuka');
+		order_status_accField.reset();
+		order_status_accField.setValue('Terbuka');
 		cbo_order_satuanDataStore.load();
 		cbo_order_produk_DataStore.load();
 		detail_order_beli_DataStore.load();
@@ -323,6 +332,7 @@ Ext.onReady(function(){
 		order_bayarField.setValue(master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_bayar'));
 		order_keteranganField.setValue(master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_keterangan'));
 		order_statusField.setValue(master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_status'));
+		order_status_accField.setValue(master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_status_acc'));
 		
 		cbo_order_satuanDataStore.setBaseParam('task','detail');
 		cbo_order_satuanDataStore.setBaseParam('master_id',get_pk_id());
@@ -473,6 +483,7 @@ Ext.onReady(function(){
 			{name: 'order_bayar', type: 'float', mapping: 'order_bayar'}, 
 			{name: 'order_keterangan', type: 'string', mapping: 'order_keterangan'}, 
 			{name: 'order_status', type: 'string', mapping: 'order_status'}, 
+			{name: 'order_status_acc', type: 'string', mapping: 'order_status_acc'},
 			{name: 'order_creator', type: 'string', mapping: 'order_creator'}, 
 			{name: 'order_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'order_date_create'}, 
 			{name: 'order_update', type: 'string', mapping: 'order_update'}, 
@@ -678,6 +689,12 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Stat Dok' + '</div>',
 			dataIndex: 'order_status',
+			width: 60
+		}, 
+		
+		{
+			header: '<div align="center">' + 'Stat Acc' + '</div>',
+			dataIndex: 'order_status_acc',
 			width: 60
 		}, 
 		{
@@ -921,10 +938,27 @@ Ext.onReady(function(){
 		mode: 'local',
 		displayField: 'order_status_display',
 		valueField: 'order_status_value',
-		anchor: '80%',
+		anchor: '60%',
 		allowBlank: false,
 		triggerAction: 'all'	
 	});
+	
+	order_status_accField= new Ext.form.ComboBox({
+		id: 'order_status_accField',
+		fieldLabel: 'Status Acc',
+		store:new Ext.data.SimpleStore({
+			fields:['order_status_acc_value', 'order_status_acc_display'],
+			data:[['Terbuka','Terbuka'],['Tertutup','Tertutup']]
+		}),
+		mode: 'local',
+		displayField: 'order_status_acc_display',
+		valueField: 'order_status_acc_value',
+		anchor: '60%',
+		allowBlank: false,
+		triggerAction: 'all'	
+	});
+	
+	
 	/* Identify  order_diskon Field */
 	order_diskonField= new Ext.form.NumberField({
 		id: 'order_diskonField',
@@ -1044,7 +1078,7 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [order_keteranganField, order_statusField, order_idField] 
+				items: [order_keteranganField, order_statusField, order_status_accField, order_idField] 
 			}
 			]
 	
@@ -1470,6 +1504,8 @@ Ext.onReady(function(){
 //		var order_biaya_search=null;
 //		var order_bayar_search=null;
 		var order_keterangan_search=null;
+		var order_status_search=null;
+		var order_status_acc_search=null;
 
 		if(order_idSearchField.getValue()!==null){order_id_search=order_idSearchField.getValue();}
 		if(order_noSearchField.getValue()!==null){order_no_search=order_noSearchField.getValue();}
@@ -1482,6 +1518,7 @@ Ext.onReady(function(){
 //		if(order_bayarSearchField.getValue()!==null){order_bayar_search=order_bayarSearchField.getValue();}
 		if(order_keteranganSearchField.getValue()!==null){order_keterangan_search=order_keteranganSearchField.getValue();}
 		if(order_statusSearchField.getValue()!==null){order_status_search=order_statusSearchField.getValue();}
+		if(order_status_accSearchField.getValue()!==null){order_status_acc_search=order_status_accSearchField.getValue();}
 		
 		// change the store parameters
 		master_order_beli_DataStore.baseParams = {
@@ -1497,7 +1534,8 @@ Ext.onReady(function(){
 //			order_biaya	:	order_biaya_search, 
 //			order_bayar	:	order_bayar_search, 
 			order_keterangan	:	order_keterangan_search,
-			order_status		:	order_status_search
+			order_status		:	order_status_search,
+			order_status_acc	:	order_status_acc_search
 		};
 		// Cause the datastore to do another query : 
 		master_order_beli_DataStore.reload({params: {start: 0, limit: pageS}});
@@ -1527,6 +1565,7 @@ Ext.onReady(function(){
 //		order_bayarSearchField.reset();
 		order_keteranganSearchField.reset();
 		order_statusSearchField.reset();
+		order_status_accSearchField.reset();
 	}
 	
 	
@@ -1684,7 +1723,20 @@ Ext.onReady(function(){
 		valueField: 'value',
 		anchor: '41%',
 		triggerAction: 'all'	 
+	});
 	
+	order_status_accSearchField= new Ext.form.ComboBox({
+		id: 'order_status_accSearchField',
+		fieldLabel: 'Status',
+		store:new Ext.data.SimpleStore({
+			fields:['value', 'order_status_acc'],
+			data:[['Terbuka','Terbuka'],['Tertutup','Tertutup']]
+		}),
+		mode: 'local',
+		displayField: 'order_status_acc',
+		valueField: 'value',
+		anchor: '41%',
+		triggerAction: 'all'	 
 	});
 
     
@@ -1737,7 +1789,8 @@ Ext.onReady(function(){
 					//order_cashbackSearchField,  
 					//order_biayaSearchField, 
 					order_keteranganSearchField,
-					order_statusSearchField] 
+					order_statusSearchField,
+					order_status_accSearchField] 
 			}
 			]
 		}]
