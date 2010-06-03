@@ -55,16 +55,28 @@ class C_stok_mutasi extends Controller {
 		$start = (integer) (isset($_POST['start']) ? @$_POST['start'] : @$_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? @$_POST['limit'] : @$_GET['limit']);
 		$produk_id = (integer) (isset($_POST['produk_id']) ? @$_POST['produk_id'] : @$_GET['produk_id']);
+		$group1_id = (integer) (isset($_POST['group1_id']) ? @$_POST['group1_id'] : @$_GET['group1_id']);
 		$tanggal_start =(isset($_POST['tanggal_start']) ? @$_POST['tanggal_start'] : @$_GET['tanggal_start']);
 		$tanggal_end = (isset($_POST['tanggal_end']) ? @$_POST['tanggal_end'] : @$_GET['tanggal_end']);
 		$opsi_satuan = (isset($_POST['opsi_satuan']) ? @$_POST['opsi_satuan'] : @$_GET['opsi_satuan']);
+		$opsi_produk = (isset($_POST['opsi_produk']) ? @$_POST['opsi_produk'] : @$_GET['opsi_produk']);
 		$gudang = (isset($_POST['gudang']) ? @$_POST['gudang'] : @$_GET['gudang']);
 		
-		$result=$this->m_stok_mutasi->stok_mutasi_list($gudang, $produk_id, $opsi_satuan, $tanggal_start,$tanggal_end,$query,$start,$end);
+		$result=$this->m_stok_mutasi->stok_mutasi_list($gudang, $produk_id, $group1_id, $opsi_produk, $opsi_satuan, $tanggal_start,$tanggal_end,$query,$start,$end);
 		echo $result;
 	}
 	
-		
+	
+	function get_group1_list(){
+		$query = isset($_POST['query']) ? @$_POST['query'] : @$_GET['query'];
+		$start = (integer) (isset($_POST['start']) ? @$_POST['start'] : @$_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? @$_POST['limit'] : @$_GET['limit']);
+			
+		$result=$this->m_public_function->get_group1_list($query,$start,$end);
+		echo $result;
+	}
+	
+	
 	function stok_mutasi_print(){
   		//POST varibale here
 		$produk_id=trim(@$_POST["produk_id"]);

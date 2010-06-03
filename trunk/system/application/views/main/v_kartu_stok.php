@@ -102,6 +102,7 @@ Ext.onReady(function(){
 		/* dataIndex => insert intohpp_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'stok_tanggal', type: 'date', dateFormat: 'Y-m-d', mapping: 'tanggal'}, 
 			{name: 'stok_nobukti', type: 'string', mapping: 'no_bukti'}, 
+			{name: 'stok_keterangan', type: 'string', mapping: 'keterangan'}, 
 			{name: 'stok_masuk', type: 'float', mapping: 'masuk'}, 
 			{name: 'stok_keluar', type: 'float', mapping: 'keluar'}, 
 			{name: 'stok_koreksi', type: 'float', mapping: 'koreksi'}
@@ -178,6 +179,13 @@ Ext.onReady(function(){
 			header: '<div align="center">No Bukti</div>',
 			dataIndex: 'stok_nobukti',
 			width: 150,
+			sortable: true,
+			readOnly: true
+		}, 
+		{
+			header: '<div align="center">Keterangan</div>',
+			dataIndex: 'stok_keterangan',
+			width: 350,
 			sortable: true,
 			readOnly: true
 		}, 
@@ -293,7 +301,7 @@ Ext.onReady(function(){
 		frame: true,
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 1024,
+	  	width: 1200,
 		autoHeight: true,
 		bbar: [new Ext.PagingToolbar({
 			pageSize: pageS,

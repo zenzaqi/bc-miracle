@@ -51,6 +51,26 @@ class M_public_function extends Model{
 		}
 	}
 	
+	function get_group1_list($query,$start,$end){
+		$sql="SELECT * FROM produk_group WHERE group_aktif='Aktif'";
+
+		$result = $this->db->query($sql);
+		
+		$nbrows = $result->num_rows();
+		$limit = $sql." LIMIT ".$start.",".$end;			
+		$result = $this->db->query($limit); 
+	
+		if($nbrows>0){
+			foreach($result->result() as $row){
+				$arr[] = $row;
+			}
+			$jsonresult = json_encode($arr);
+			return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+		} else {
+			return '({"total":"0", "results":""})';
+		}
+	}
+	
 	function get_petugas_list($query, $tgl_app="", $karyawan_jabatan){
 		//$sql="SELECT karyawan_id,karyawan_no,karyawan_nama FROM karyawan WHERE karyawan_departemen='$departemen_id' AND karyawan_aktif='Aktif'";
 /*		if($rawat_kategori==2)
