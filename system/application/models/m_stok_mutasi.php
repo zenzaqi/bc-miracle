@@ -45,14 +45,16 @@ class M_stok_mutasi extends Model{
 			
 		}
 		
-		function stok_mutasi_list($gudang, $produk_id, $opsi_satuan, $tanggal_start,$tanggal_end,$filter,$start,$end){
+		function stok_mutasi_list($gudang, $produk_id, $group1_id, $opsi_produk, $opsi_satuan, $tanggal_start,$tanggal_end,$filter,$start,$end){
 			if($opsi_satuan=='terkecil')
 				$sql="SELECT * FROM vu_produk_satuan_terkecil WHERE produk_aktif='Aktif'";
 			else
 				$sql="SELECT * FROM vu_produk_satuan_default WHERE produk_aktif='Aktif'";
 			
-
-			if($produk_id!==""&&$produk_id!==0){
+			if($opsi_produk=='group1' & $group1_id!=="" & $group1_id!==0){
+				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+				$sql.="	produk_group='".$group1_id."' ";
+			}elseif($opsi_produk=='produk' & $produk_id!=="" & $produk_id!==0){
 				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
 				$sql.="	produk_id='".$produk_id."' ";
 			}
@@ -210,7 +212,7 @@ class M_stok_mutasi extends Model{
 					}
 					
 					//pake cabin
-			/*		$sql_cabin="SELECT sum(jumlah_konversi) as jumlah_cabin
+					$sql_cabin="SELECT sum(jumlah_konversi) as jumlah_cabin
 								FROM vu_stok_pakai_cabin
 								WHERE produk_id='".$rowproduk->produk_id."' 
 								AND date_format(cabin_date_create,'%Y-%m-%d')<'".$tanggal_start."'
@@ -221,7 +223,7 @@ class M_stok_mutasi extends Model{
 						$ds_cabin=$q_cabin->row();
 						$data[$i]["jumlah_awal"]=($data[$i]["jumlah_awal"]-$ds_cabin->jumlah_cabin)*$data[$i]["konversi_nilai"];
 					}
-					*/
+					
 					
 					//mutasi
 					$sql_mutasi="SELECT 	sum(jumlah_masuk) as jumlah_masuk,
@@ -252,7 +254,7 @@ class M_stok_mutasi extends Model{
 					}
 					
 					//pake cabin
-				/*	$sql_cabin="SELECT sum(jumlah_konversi) as jumlah_cabin
+					$sql_cabin="SELECT sum(jumlah_konversi) as jumlah_cabin
 								FROM vu_stok_pakai_cabin
 								WHERE produk_id='".$rowproduk->produk_id."' 
 								AND date_format(cabin_date_create,'%Y-%m-%d')>='".$tanggal_start."'
@@ -264,7 +266,7 @@ class M_stok_mutasi extends Model{
 						$ds_cabin=$q_cabin->row();
 						$data[$i]["jumlah_stok"]=($data[$i]["jumlah_stok"]-$ds_cabin->jumlah_cabin)*$data[$i]["konversi_nilai"];
 						$data[$i]["jumlah_keluar"]=($data[$i]["jumlah_keluar"]+$ds_cabin->jumlah_cabin)*$data[$i]["konversi_nilai"];
-					}*/
+					}
 					
 				}
 				$i++;
