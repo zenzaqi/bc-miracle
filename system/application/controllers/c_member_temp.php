@@ -17,7 +17,6 @@ class C_member_temp extends Controller {
 	function C_member_temp(){
 		parent::Controller();
 		$this->load->model('m_member_temp', '', TRUE);
-		$this->load->library('firephp');
 	}
 	
 	//set index

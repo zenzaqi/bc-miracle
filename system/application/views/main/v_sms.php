@@ -66,6 +66,9 @@ var sms_detailField;
 var sms_idSearchField;
 var sms_namaSearchField;
 var sms_detailSearchField;
+var sms_count_isiField;
+var max_isi=320;
+var dua_sms = 'no';
 
 /* on ready fuction */
 Ext.onReady(function(){
@@ -107,7 +110,6 @@ Ext.onReady(function(){
 				
 			}
 			
-			//console.log('group'+sms_number_radioField.getValue());
 			Ext.Ajax.request({  
 				waitMsg: 'Please wait...',
 				url: 'index.php?c=c_sms&m=sms_save',
@@ -515,7 +517,36 @@ Ext.onReady(function(){
 		maxLength: 500,
 		bodyStyle:'padding:5px',
 		anchor: '95%',
-		allowBlank: false
+		allowBlank: false,
+		enableKeyEvents: true,
+		maxLength: 320
+	});
+	
+	sms_count_isiField= new Ext.form.NumberField({
+		width: 40
+	});
+	
+	sms_detailField.on('keyup', function(){
+		var isi_length = sms_detailField.getValue().length;
+		var sisa_length = max_isi - isi_length;
+		sms_count_isiField.setValue(isi_length);
+		if(dua_sms=='no' && isi_length==161){
+			//* satu sms terlewati /
+			Ext.Msg.alert('Content SMS', 'Pengiriman = 2 SMS.');
+			dua_sms = 'yes';
+		}else if(isi_length==321){
+			//* dua sms terlewati /
+			Ext.MessageBox.show({
+				title: 'Warning',
+				width: 200,
+				msg: 'Maksimal pengiriman adalah 2 SMS.',
+				buttons: Ext.MessageBox.OK,
+				animEl: 'save',
+				icon: Ext.MessageBox.WARNING
+			 });
+		}else if(isi_length==160 && dua_sms=='yes'){
+			dua_sms = 'no';
+		}
 	});
 
 	
@@ -531,7 +562,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [sms_destinationField, sms_detailField] 
+				items: [sms_destinationField, sms_detailField, sms_count_isiField] 
 			}
 			],
 		buttons: [{
@@ -571,6 +602,7 @@ Ext.onReady(function(){
 	
 
 	sms_saveWindow.show();
+	//sms_count_isiField.setValue(max_isi);
 	
 	function setDisableAll(){
 		sms_destgroupField.setDisabled(true);
