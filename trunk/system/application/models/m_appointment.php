@@ -353,6 +353,9 @@ class M_appointment extends Model{
 				
 				if($app_cara=="Datang")
 					$dapp_medis_keterangan="[W] ".$dapp_medis_keterangan;
+				if($app_cara=="Update")
+					$dapp_medis_keterangan="[U] ".$dapp_medis_keterangan;
+					
 				$data = array(
 					"dapp_master"=>$dapp_medis_master, 
 					"dapp_perawatan"=>$dapp_medis_perawatan, 
@@ -531,6 +534,8 @@ class M_appointment extends Model{
 				
 				if($app_cara=="Datang")
 					$dapp_nonmedis_keterangan="[W] ".$dapp_nonmedis_keterangan;
+				if($app_cara=="Update")
+					$dapp_nonmedis_keterangan="[U] ".$dapp_nonmedis_keterangan;
 					
 				$data = array(
 					"dapp_master"=>$dapp_nonmedis_master, 

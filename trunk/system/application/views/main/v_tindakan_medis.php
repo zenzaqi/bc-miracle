@@ -125,6 +125,7 @@ var trawat_medis_custField;
 var trawat_medis_keteranganField;
 var trawat_medis_idSearchField;
 var trawat_medis_custSearchField;
+var trawat_medis_dokterSearchField;
 var trawat_medis_keteranganSearchField;
 
 /*var conn = new Ext.data.Connection({
@@ -857,8 +858,8 @@ Ext.onReady(function(){
 			disabled:true,
 			handler: tindakan_medisconfirm_delete   // Confirm before deleting
 		}, '-', {
-			text: 'Search',
-			tooltip: 'Advanced Search',
+			text: 'Adv Search',
+			tooltip: 'Pencarian detail',
 			iconCls:'icon-search',
 			handler: display_form_search_window 
 		}, '-', 
@@ -1934,6 +1935,8 @@ Ext.onReady(function(){
 		trawat_medis_idSearchField.setValue(null);
 		trawat_medis_custSearchField.reset();
 		trawat_medis_custSearchField.setValue(null);
+		trawat_medis_dokterSearchField.reset();
+		trawat_medis_dokterSearchField.setValue(null);
 		trawat_medis_keteranganSearchField.reset();
 		trawat_medis_keteranganSearchField.setValue(null);
 		trawat_medis_rawatSearchField.reset();

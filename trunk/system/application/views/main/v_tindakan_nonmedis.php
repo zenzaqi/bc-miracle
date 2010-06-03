@@ -125,6 +125,7 @@ var trawat_nonmedis_custField;
 var trawat_nonmedis_keteranganField;
 var trawat_nonmedis_idSearchField;
 var trawat_nonmedis_custSearchField;
+var trawat_nonmedis_terapisSearchField;
 //var trawat_nonmedis_appointmentSearchField;
 var trawat_nonmedis_keteranganSearchField;
 
@@ -675,6 +676,18 @@ Ext.onReady(function(){
 			})
 		}, 
 		{
+			xtype: 'booleancolumn',
+			header: 'Ambil Paket',
+			dataIndex: 'dtrawat_ambil_paket',
+			width: 60,	//65,
+			align: 'center',
+			trueText: 'Yes',
+			falseText: 'No',
+			editor: {
+                xtype: 'checkbox'
+            }
+		},
+		{
 			header: '<div align="center">' + 'Therapist' + '</div>',
 			dataIndex: 'dtrawat_petugas2',
 			width: 80,
@@ -736,18 +749,6 @@ Ext.onReady(function(){
 			sortable: true,
 			hidden: true
 		}, 
-		{
-			xtype: 'booleancolumn',
-			header: 'Ambil Paket',
-			dataIndex: 'dtrawat_ambil_paket',
-			width: 60,	//65,
-			align: 'center',
-			trueText: 'Yes',
-			falseText: 'No',
-			editor: {
-                xtype: 'checkbox'
-            }
-		},
 		{
 			header: '<div align="center">' + 'Info Paket' + '</div>',
 			dataIndex: 'cust_punya_paket',
@@ -1655,6 +1656,8 @@ Ext.onReady(function(){
 		trawat_nonmedis_idSearchField.setValue(null);
 		trawat_nonmedis_custSearchField.reset();
 		trawat_nonmedis_custSearchField.setValue(null);
+		trawat_nonmedis_terapisSearchField.reset();
+		trawat_nonmedis_terapisSearchField.setValue(null);
 		trawat_nonmedis_keteranganSearchField.reset();
 		trawat_nonmedis_keteranganSearchField.setValue(null);
 		Ext.getCmp('trawat_nonmedis_tglStartAppSearchField').reset();

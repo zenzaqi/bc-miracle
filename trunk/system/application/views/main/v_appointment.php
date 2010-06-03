@@ -1396,7 +1396,7 @@ Ext.onReady(function(){
 		fieldLabel: 'Cara',
 		store:new Ext.data.SimpleStore({
 			fields:['app_cara_value', 'app_cara_display'],
-			data:[['Datang','Walk-in'],['Telp','Telp'],['SMS','SMS']]
+			data:[['Datang','Walk-in'],['Update','Update'],['Telp','Telp'],['SMS','SMS']]
 		}),
 		mode: 'local',
 		name:'app_cara',
@@ -1863,6 +1863,7 @@ Ext.onReady(function(){
 		for(i=0;i<appointment_detail_medisDataStore.getCount();i++){
 			appointment_detail_medis_record=appointment_detail_medisDataStore.getAt(i);
 			if(app_caraField.getValue()=="Datang"){appointment_detail_medis_record.data.dapp_medis_status="Datang"}
+			if(app_caraField.getValue()=="Update"){appointment_detail_medis_record.data.dapp_medis_status="Konfirmasi"}
 			if(appointment_detail_medis_record.data.dapp_medis_perawatan!=""){
 				Ext.Ajax.request({
 					waitMsg: 'Please wait...',
@@ -2255,6 +2256,7 @@ Ext.onReady(function(){
 		for(i=0;i<appointment_detail_nonmedisDataStore.getCount();i++){
 			appointment_detail_nonmedis_record=appointment_detail_nonmedisDataStore.getAt(i);
 			if(app_caraField.getValue()=="Datang"){appointment_detail_nonmedis_record.data.dapp_nonmedis_status="Datang"}
+			if(app_caraField.getValue()=="Update"){appointment_detail_nonmedis_record.data.dapp_nonmedis_status="Konfirmasi"}
 			if(appointment_detail_nonmedis_record.data.dapp_nonmedis_perawatan!=""){
 				Ext.Ajax.request({
 					waitMsg: 'Please wait...',
@@ -2501,7 +2503,7 @@ Ext.onReady(function(){
 		fieldLabel: 'Cara',
 		store:new Ext.data.SimpleStore({
 			fields:['value', 'app_cara'],
-			data:[['Datang','Datang'],['Telp','Telp'],['SMS','SMS']]
+			data:[['Datang','Walk-in'],['Update','Update'],['Telp','Telp'],['SMS','SMS']]
 		}),
 		mode: 'local',
 		displayField: 'app_cara',
