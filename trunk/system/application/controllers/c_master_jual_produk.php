@@ -273,14 +273,14 @@ class C_master_jual_produk extends Controller {
 		$dproduk_diskon=trim(@$_POST["dproduk_diskon"]);
 		$dproduk_diskon_jenis=trim(@$_POST["dproduk_diskon_jenis"]);
 		$dproduk_sales=trim(@$_POST["dproduk_sales"]);
-		$konversi_nilai_temp=trim(@$_POST["konversi_nilai_temp"]);
+		//$konversi_nilai_temp=trim(@$_POST["konversi_nilai_temp"]);
 		
 		$cetak=trim(@$_POST['cetak']);
 		
 		$count=trim(@$_POST['count']);
 		$dcount=trim(@$_POST['dcount']);
 		
-		$result=$this->m_master_jual_produk->detail_detail_jual_produk_insert($dproduk_id ,$dproduk_master ,$dproduk_karyawan, $dproduk_produk ,$dproduk_satuan ,$dproduk_jumlah ,$dproduk_harga ,$dproduk_subtotal_net ,$dproduk_diskon,$dproduk_diskon_jenis,$dproduk_sales,$konversi_nilai_temp, $cetak, $count, $dcount);
+		$result=$this->m_master_jual_produk->detail_detail_jual_produk_insert($dproduk_id ,$dproduk_master ,$dproduk_karyawan, $dproduk_produk ,$dproduk_satuan ,$dproduk_jumlah ,$dproduk_harga ,$dproduk_subtotal_net ,$dproduk_diskon,$dproduk_diskon_jenis,$dproduk_sales,$cetak, $count, $dcount);
 		echo $result;
 	}
 	

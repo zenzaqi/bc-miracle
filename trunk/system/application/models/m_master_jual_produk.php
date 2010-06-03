@@ -387,7 +387,7 @@ class M_master_jual_produk extends Model{
 		function detail_detail_jual_produk_list($master_id,$query,$start,$end) {
 			//$query="SELECT *,konversi_nilai FROM detail_jual_produk LEFT JOIN satuan_konversi ON(dproduk_produk=konversi_produk AND dproduk_satuan=konversi_satuan) WHERE dproduk_master='".$master_id."'";
 			
-			$query = "SELECT detail_jual_produk.*,master_jual_produk.jproduk_bayar,master_jual_produk.jproduk_diskon,detail_jual_produk.konversi_nilai_temp*dproduk_harga*dproduk_jumlah as dproduk_subtotal,detail_jual_produk.konversi_nilai_temp*dproduk_harga*dproduk_jumlah*((100-dproduk_diskon)/100) as dproduk_subtotal_net, produk_point FROM detail_jual_produk LEFT JOIN satuan_konversi ON(dproduk_produk=konversi_produk AND dproduk_satuan=konversi_satuan) LEFT JOIN master_jual_produk ON(dproduk_master=jproduk_id) LEFT JOIN produk ON(dproduk_produk=produk_id) WHERE dproduk_master='".$master_id."'";
+			$query = "SELECT detail_jual_produk.*,master_jual_produk.jproduk_bayar,master_jual_produk.jproduk_diskon,dproduk_harga*dproduk_jumlah as dproduk_subtotal,dproduk_harga*dproduk_jumlah*((100-dproduk_diskon)/100) as dproduk_subtotal_net, produk_point, produk_harga AS produk_harga_default FROM detail_jual_produk LEFT JOIN satuan_konversi ON(dproduk_produk=konversi_produk AND dproduk_satuan=konversi_satuan) LEFT JOIN master_jual_produk ON(dproduk_master=jproduk_id) LEFT JOIN produk ON(dproduk_produk=produk_id) WHERE dproduk_master='".$master_id."'";
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
 			$limit = $query." LIMIT ".$start.",".$end;			
@@ -713,7 +713,7 @@ class M_master_jual_produk extends Model{
 		//*eof
 		
 		//insert detail record
-		function detail_detail_jual_produk_insert($dproduk_id ,$dproduk_master ,$dproduk_karyawan, $dproduk_produk ,$dproduk_satuan ,$dproduk_jumlah ,$dproduk_harga ,$dproduk_subtotal_net ,$dproduk_diskon,$dproduk_diskon_jenis,$dproduk_sales,$konversi_nilai_temp, $cetak, $count, $dcount){
+		function detail_detail_jual_produk_insert($dproduk_id ,$dproduk_master ,$dproduk_karyawan, $dproduk_produk ,$dproduk_satuan ,$dproduk_jumlah ,$dproduk_harga ,$dproduk_subtotal_net ,$dproduk_diskon,$dproduk_diskon_jenis,$dproduk_sales,$cetak, $count, $dcount){
 			$date_now=date('Y-m-d');
 			//if master id not capture from view then capture it from max pk from master table
 			if($dproduk_master=="" || $dproduk_master==NULL || $dproduk_master==0){
@@ -760,7 +760,7 @@ class M_master_jual_produk extends Model{
 						"dproduk_diskon"=>$dproduk_diskon,
 						"dproduk_diskon_jenis"=>$dproduk_diskon_jenis,
 						"dproduk_sales"=>$dproduk_sales,
-						"konversi_nilai_temp"=>$konversi_nilai_temp
+						//"konversi_nilai_temp"=>$konversi_nilai_temp
 					);
 					$this->db->insert('detail_jual_produk', $data); 
 					if($this->db->affected_rows()){
@@ -789,7 +789,7 @@ class M_master_jual_produk extends Model{
 					"dproduk_diskon"=>$dproduk_diskon,
 					"dproduk_diskon_jenis"=>$dproduk_diskon_jenis,
 					"dproduk_sales"=>$dproduk_sales,
-					"konversi_nilai_temp"=>$konversi_nilai_temp
+					//"konversi_nilai_temp"=>$konversi_nilai_temp
 				);
 				$this->db->insert('detail_jual_produk', $data); 
 				if($this->db->affected_rows()){
@@ -2020,7 +2020,7 @@ class M_master_jual_produk extends Model{
 		
 		function print_paper($jproduk_id){
 			//$sql="SELECT jproduk_tanggal, cust_no, cust_nama, cust_alamat, jproduk_nobukti, produk_nama, dproduk_jumlah, satuan_nama, dproduk_harga, dproduk_diskon, (dproduk_harga*((100-dproduk_diskon)/100)) AS jumlah_subtotal, jproduk_creator, jtunai_nilai, jproduk_diskon, jproduk_cashback FROM detail_jual_produk LEFT JOIN master_jual_produk ON(dproduk_master=jproduk_id) LEFT JOIN customer ON(jproduk_cust=cust_id) LEFT JOIN produk ON(dproduk_produk=produk_id) LEFT JOIN satuan ON(dproduk_satuan=satuan_id) LEFT JOIN jual_tunai ON(jtunai_ref=jproduk_nobukti) WHERE dproduk_master='$jproduk_id'";
-			$sql="SELECT jproduk_tanggal, cust_no, cust_nama, cust_alamat, jproduk_nobukti, produk_nama, dproduk_jumlah, satuan_nama, dproduk_harga, dproduk_diskon, (dproduk_harga*((100-dproduk_diskon)/100)) AS jumlah_subtotal, jproduk_creator, jproduk_diskon, jproduk_cashback, jproduk_bayar, konversi_nilai_temp FROM detail_jual_produk LEFT JOIN master_jual_produk ON(dproduk_master=jproduk_id) LEFT JOIN customer ON(jproduk_cust=cust_id) LEFT JOIN produk ON(dproduk_produk=produk_id) LEFT JOIN satuan ON(dproduk_satuan=satuan_id) WHERE dproduk_master='$jproduk_id' ORDER BY dproduk_diskon ASC";
+			$sql="SELECT jproduk_tanggal, cust_no, cust_nama, cust_alamat, jproduk_nobukti, produk_nama, dproduk_jumlah, satuan_nama, dproduk_harga, dproduk_diskon, (dproduk_harga*((100-dproduk_diskon)/100)) AS jumlah_subtotal, jproduk_creator, jproduk_diskon, jproduk_cashback, jproduk_bayar FROM detail_jual_produk LEFT JOIN master_jual_produk ON(dproduk_master=jproduk_id) LEFT JOIN customer ON(jproduk_cust=cust_id) LEFT JOIN produk ON(dproduk_produk=produk_id) LEFT JOIN satuan ON(dproduk_satuan=satuan_id) WHERE dproduk_master='$jproduk_id' ORDER BY dproduk_diskon ASC";
 			$result = $this->db->query($sql);
 			return $result;
 		}

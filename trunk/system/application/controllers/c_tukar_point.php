@@ -19,7 +19,6 @@ class C_tukar_point extends Controller {
 		$this->load->model('m_tukar_point', '', TRUE);
 		session_start();
 		$this->load->plugin('to_excel');
-		$this->load->library('firephp');
 	}
 	
 	//set index
