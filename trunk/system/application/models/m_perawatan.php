@@ -399,7 +399,7 @@ class M_perawatan extends Model{
 				if($rs_g->num_rows()){
 					$rs_sql_g=$rs_g->row();
 					$group_kode=$rs_sql_g->group_kode;
-					$data["rawat_group"]=$produk_group;
+					$data["rawat_group"]=$rawat_group;
 				}else{
 					$sql_g="SELECT group_kode FROM produk,produk_group WHERE produk_group=group_id AND produk_id='".$rawat_id."'";
 					$rs_g=$this->db->query($sql_g);

@@ -83,14 +83,13 @@ class C_member extends Controller {
 	function member_update(){
 		//POST variable here
 		$member_id=trim(@$_POST["member_id"]);
-		$member_cust=trim(@$_POST["member_cust"]);
+		//$member_cust=trim(@$_POST["member_cust"]);
 		$member_no=trim(@$_POST["member_no"]);
 		$member_no=str_replace("/(<\/?)(p)([^>]*>)", "",$member_no);
-		$member_no=str_replace(",", ",",$member_no);
 		$member_no=str_replace("'", '"',$member_no);
-		$member_register=trim(@$_POST["member_register"]);
-		$member_valid=trim(@$_POST["member_valid"]);
-		$member_nota_ref=trim(@$_POST["member_nota_ref"]);
+		//$member_register=trim(@$_POST["member_register"]);
+		//$member_valid=trim(@$_POST["member_valid"]);
+		/*$member_nota_ref=trim(@$_POST["member_nota_ref"]);
 		$member_nota_ref=str_replace("/(<\/?)(p)([^>]*>)", "",$member_nota_ref);
 		$member_nota_ref=str_replace(",", ",",$member_nota_ref);
 		$member_nota_ref=str_replace("'", '"',$member_nota_ref);
@@ -102,9 +101,10 @@ class C_member extends Controller {
 		$member_status=trim(@$_POST["member_status"]);
 		$member_status=str_replace("/(<\/?)(p)([^>]*>)", "",$member_status);
 		$member_status=str_replace(",", ",",$member_status);
-		$member_status=str_replace("'", '"',$member_status);
+		$member_status=str_replace("'", '"',$member_status);*/
 		//$member_tglserahterima=trim(@$_POST["member_tglserahterima"]);
-		$result = $this->m_member->member_update($member_id ,$member_cust ,$member_no ,$member_register ,$member_valid ,$member_nota_ref ,$member_point ,$member_jenis ,$member_status );
+		//$result = $this->m_member->member_update($member_id ,$member_cust ,$member_no ,$member_register ,$member_valid ,$member_nota_ref ,$member_point ,$member_jenis ,$member_status );
+		$result = $this->m_member->member_update($member_id ,$member_no );
 		echo $result;
 	}
 	
