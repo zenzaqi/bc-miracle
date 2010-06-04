@@ -525,16 +525,23 @@ class M_master_terima_beli extends Model{
 			if(sizeof($pkid)<1){
 				return '0';
 			} else if (sizeof($pkid) == 1){
-				$query = "DELETE FROM master_terima_beli WHERE terima_id = ".$pkid[0];
+				$query = "DELETE master_terima_beli,detail_terima_beli,detail_terima_bonus 
+							FROM master_terima_beli,detail_terima_beli,detail_terima_bonus  WHERE terima_id = '".$pkid[0]."' 
+							AND (dterima_master=terima_id OR dtbonus_master=terima_id)";
 				$this->db->query($query);
 			} else {
-				$query = "DELETE FROM master_terima_beli WHERE ";
+				$query = "DELETE master_terima_beli,detail_terima_beli,detail_terima_bonus 
+							FROM master_terima_beli,detail_terima_beli,detail_terima_bonus 
+							WHERE (";
 				for($i = 0; $i < sizeof($pkid); $i++){
 					$query = $query . "terima_id= ".$pkid[$i];
 					if($i<sizeof($pkid)-1){
 						$query = $query . " OR ";
 					}     
 				}
+				
+				$query.=")";
+				$query.=" AND (dterima_master=terima_id OR dtbonus_master=terima_id)";
 				$this->db->query($query);
 			}
 			if($this->db->affected_rows()>0)
