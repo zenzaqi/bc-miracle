@@ -650,12 +650,12 @@ Ext.onReady(function(){
 					detail_jual_rawat_DataStore.load({params: {master_id:0}});
 					master_jual_rawat_createWindow.hide();
 				}else if(result==-4){
-                    detail_ambil_paket_update();
-                    //master_jual_rawat_DataStore.reload();
-					//detail_jual_rawat_DataStore.load({params: {master_id:0}});
-					master_jual_rawat_createWindow.hide();
-                }else{
-					master_jual_rawat_createWindow.hide();
+                                        detail_ambil_paket_update();
+                                        //master_jual_rawat_DataStore.reload();
+                                        //detail_jual_rawat_DataStore.load({params: {master_id:0}});
+                                        master_jual_rawat_createWindow.hide();
+                                }else{
+                                        master_jual_rawat_createWindow.hide();
 				}
 				master_jual_rawat_reset_allForm();
 				master_cara_bayarTabPanel.setActiveTab(0);
@@ -4242,8 +4242,8 @@ Ext.onReady(function(){
     
     function detail_ambil_paket_update(){
 		var count_detail=detail_ambil_paketDataStore.getCount();
-		for(i=0;i<detail_ambil_paketDataStore.getCount();i++){
-			detail_ambil_paket_record=detail_ambil_paketDataStore.getAt(i);
+	for(i=0;i<detail_ambil_paketDataStore.getCount();i++){
+	    detail_ambil_paket_record=detail_ambil_paketDataStore.getAt(i);
             Ext.Ajax.request({
                 waitMsg: 'Mohon tunggu...',
                 url: 'index.php?c=c_master_jual_rawat&m=detail_ambil_paket_update',
@@ -4271,8 +4271,8 @@ Ext.onReady(function(){
                     });	
                 }		
             });
-		}
 	}
+    }
 	
 	
 	function update_group_carabayar_jual_rawat(){

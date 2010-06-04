@@ -1779,6 +1779,27 @@ Ext.onReady(function(){
 	});
 	/* End of GET Voucher-Terima-List.Store */
 	
+	/* GET Voucher-Terima-List.Store */
+	jproduk_diskon_promoDataStore = new Ext.data.Store({
+		id: 'jproduk_diskon_promoDataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_master_jual_produk&m=get_promo_onerow',
+			method: 'POST'
+		}),
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'tvoucher_id'
+		},[
+		/* dataIndex => insert intomaster_jual_produk_ColumnModel, Mapping => for initiate table column */ 
+			{name: 'tvoucher_id', type: 'int', mapping: 'tvoucher_id'}, 
+			{name: 'tvoucher_novoucher', type: 'string', mapping: 'tvoucher_novoucher'}, 
+			{name: 'tvoucher_nilai', type: 'float', mapping: 'tvoucher_nilai'}
+		]),
+		sortInfo:{field: 'tvoucher_id', direction: "DESC"}
+	});
+	/* End of GET Voucher-Terima-List.Store */
+	
   	/* Function for Identify of Window Column Model */
 	master_jual_produk_ColumnModel = new Ext.grid.ColumnModel(
 		[{
