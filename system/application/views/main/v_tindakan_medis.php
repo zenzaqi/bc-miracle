@@ -307,7 +307,7 @@ Ext.onReady(function(){
 					case 1:
 						//tindakan_medisdetail_purge();
 						tindakan_medisdetail_insert();
-						dtindakan_jual_nonmedis_insert();
+						//dtindakan_jual_nonmedis_insert();
 						//Ext.MessageBox.alert(post2db+' OK','The Tindakan was '+msg+' successfully.');
 						tindakan_medis_createWindow.hide();
 						break;
@@ -1324,6 +1324,7 @@ Ext.onReady(function(){
 					},
 					callback: function(opts, success, response){
 						if(success){
+								dtindakan_jual_nonmedis_insert();
 							tindakan_medisDataStore.reload();
 							/*var result = response.responseText;
 							switch(result){

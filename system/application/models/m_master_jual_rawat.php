@@ -646,21 +646,34 @@ class M_master_jual_rawat extends Model{
 			$this->db->where('dapaket_id', $dapaket_id);
 			$this->db->update('detail_ambil_paket', $dtu_dapaket);*/
             //* Pengambilan Paket di-Batalkan /
+            $dpaket_id = 0;
             $sql="SELECT dapaket_paket, dapaket_dpaket, paket_jmlisi, sum(dapaket_jumlah) AS total_pakai_paket FROM detail_ambil_paket LEFT JOIN paket ON(dapaket_paket=paket_id) WHERE dapaket_id='$dapaket_id' GROUP BY dapaket_dpaket";
             $rs=$this->db->query($sql);
             if($rs->num_rows()){
                 $record = $rs->row_array();
                 $dpaket_id = $record['dapaket_dpaket'];
                 $paket_id = $record['dapaket_paket'];
-                $sisa_paket = $record['paket_jmlisi'] - $record['total_pakai_paket'];
-                //* UPDATE db.detail_jual_paket.dpaket_sisa_paket/
-                $sql="UPDATE detail_jual_paket SET dpaket_sisa_paket = $sisa_paket";
-                $this->db->query($sql);
+                $paket_jmlisi = $record['paket_jmlisi'];
             }
             
             $sql="DELETE FROM detail_ambil_paket WHERE dapaket_id='$dapaket_id'";
             $this->db->query($sql);
 			if($this->db->affected_rows()){
+                $sisa_paket = 0;
+                $sql="SELECT
+                        sum(dapaket_jumlah) AS total_pakai_paket
+                    FROM detail_ambil_paket
+                    WHERE dapaket_dpaket='$dpaket_id'
+                    GROUP BY dapaket_dpaket";
+                $rs = $this->db->query($sql);
+                if($rs->num_rows()){
+                    $record = $rs->row_array();
+                    $sisa_paket = $paket_jmlisi - $record['total_pakai_paket'];
+                }else{
+                    $sisa_paket = $paket_jmlisi;
+                }
+                $sql="UPDATE detail_jual_paket SET dpaket_sisa_paket = $sisa_paket WHERE dpaket_id='$dpaket_id'";
+                $this->db->query($sql);
 				return '1';
 			}else
 				return '0';
@@ -670,7 +683,33 @@ class M_master_jual_rawat extends Model{
 		//function for get list record
 		function master_jual_rawat_list($filter,$start,$end){
 			$date_now=date('Y-m-d');
-			$query = "SELECT jrawat_id, jrawat_nobukti, vu_jrawat_pr.cust_nama, jrawat_cust, vu_jrawat_pr.cust_no, vu_jrawat_pr.cust_member, jrawat_tanggal, jrawat_diskon, jrawat_cashback, jrawat_cara, jrawat_cara2, jrawat_cara3, IF(vu_jrawat_pr.jrawat_totalbiaya!=0, vu_jrawat_pr.jrawat_totalbiaya, vu_jrawat_totalbiaya.jrawat_totalbiaya) AS jrawat_totalbiaya, jrawat_bayar, jrawat_keterangan, jrawat_stat_dok, jrawat_creator, jrawat_date_create, jrawat_update, jrawat_date_update, jrawat_revised, keterangan_paket, dpaket_id FROM vu_jrawat_pr LEFT JOIN vu_jrawat_totalbiaya ON(vu_jrawat_totalbiaya.drawat_master=vu_jrawat_pr.jrawat_id)";
+			$query = "SELECT
+                    jrawat_id,
+                    jrawat_nobukti,
+                    vu_jrawat_pr.cust_nama,
+                    jrawat_cust,
+                    vu_jrawat_pr.cust_no,
+                    vu_jrawat_pr.cust_member,
+                    jrawat_tanggal,
+                    jrawat_diskon,
+                    jrawat_cashback,
+                    jrawat_cara,
+                    jrawat_cara2,
+                    jrawat_cara3,
+                    IF(vu_jrawat_pr.jrawat_totalbiaya!=0, vu_jrawat_pr.jrawat_totalbiaya, vu_jrawat_totalbiaya.jrawat_totalbiaya) AS jrawat_totalbiaya,
+                    jrawat_bayar,
+                    jrawat_keterangan,
+                    jrawat_stat_dok,
+                    jrawat_creator,
+                    jrawat_date_create,
+                    jrawat_update,
+                    jrawat_date_update,
+                    jrawat_revised,
+                    keterangan_paket,
+                    dpaket_id
+                FROM vu_jrawat_pr
+                LEFT JOIN vu_jrawat_totalbiaya ON(vu_jrawat_totalbiaya.drawat_master=vu_jrawat_pr.jrawat_id)
+                WHERE vu_jrawat_pr.jrawat_stat_dok='Terbuka' AND date_format(vu_jrawat_pr.jrawat_date_create,'%Y-%m-%d')='$date_now'";
 			
 			// For simple search
 			if ($filter<>""){
@@ -680,12 +719,44 @@ class M_master_jual_rawat extends Model{
 			//normal LIST by Hendri
 			else{
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query.=" date_format(jrawat_date_create,'%Y-%m-%d')='$date_now' AND (jrawat_bayar is null OR jrawat_bayar = 0) AND jrawat_stat_dok<>'Batal'";
+				$query.=" date_format(jrawat_date_create,'%Y-%m-%d')='$date_now' AND (jrawat_bayar is null OR jrawat_bayar = 0)";
 				}
 				
 			$query .= " ORDER BY jrawat_date_create DESC";
-			//echo $query;
-			$query2 = "SELECT jrawat_id, jrawat_nobukti, vu_jrawat_pk.cust_nama, jrawat_cust, vu_jrawat_pk.cust_no, vu_jrawat_pk.cust_member, jrawat_tanggal, jrawat_diskon, jrawat_cashback, jrawat_cara, jrawat_cara2, jrawat_cara3, jrawat_totalbiaya, jrawat_bayar, jrawat_keterangan, jrawat_creator, jrawat_date_create, jrawat_update, jrawat_date_update, jrawat_revised, keterangan_paket, dpaket_id, dapaket_stat_dok AS jrawat_stat_dok FROM vu_jrawat_pk WHERE date_format(vu_jrawat_pk.jrawat_date_create,'%Y-%m-%d')='$date_now' AND vu_jrawat_pk.jrawat_cust NOT IN(SELECT vu_jrawat_pr.jrawat_cust FROM vu_jrawat_pr WHERE date_format(vu_jrawat_pr.jrawat_date_create,'%Y-%m-%d')='$date_now' AND vu_jrawat_pr.jrawat_stat_dok<>'Batal') AND vu_jrawat_pk.dapaket_stat_dok='Terbuka'";
+			//echo $query.".......";
+			$query2 = "SELECT
+                    jrawat_id,
+                    jrawat_nobukti,
+                    vu_jrawat_pk.cust_nama,
+                    jrawat_cust,
+                    vu_jrawat_pk.cust_no,
+                    vu_jrawat_pk.cust_member,
+                    jrawat_tanggal,
+                    jrawat_diskon,
+                    jrawat_cashback,
+                    jrawat_cara,
+                    jrawat_cara2,
+                    jrawat_cara3,
+                    jrawat_totalbiaya,
+                    jrawat_bayar,
+                    jrawat_keterangan,
+                    jrawat_creator,
+                    jrawat_date_create,
+                    jrawat_update,
+                    jrawat_date_update,
+                    jrawat_revised,
+                    keterangan_paket,
+                    dpaket_id,
+                    dapaket_stat_dok AS jrawat_stat_dok
+                FROM vu_jrawat_pk
+                WHERE date_format(vu_jrawat_pk.jrawat_date_create,'%Y-%m-%d')='$date_now'
+                    AND vu_jrawat_pk.jrawat_cust NOT IN(
+                        SELECT vu_jrawat_pr.jrawat_cust
+                        FROM vu_jrawat_pr
+                        WHERE date_format(vu_jrawat_pr.jrawat_date_create,'%Y-%m-%d'
+                    )='$date_now'
+                    AND vu_jrawat_pr.jrawat_stat_dok='Terbuka')
+                    AND vu_jrawat_pk.dapaket_stat_dok='Terbuka'";
 			
 			// For simple search
 			if ($filter<>""){
@@ -713,7 +784,7 @@ class M_master_jual_rawat extends Model{
 					}
 				}
 				$nbrows=$nbrows+$nbrows2;
-				$jsonresult = json_encode($arr);
+                $jsonresult = json_encode($arr);
 				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
 			} else {
 				return '({"total":"0", "results":""})';

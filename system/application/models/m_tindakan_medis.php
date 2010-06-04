@@ -750,7 +750,41 @@ class M_tindakan_medis extends Model{
 					if(!$rs->num_rows()){
 						$this->db->insert('detail_jual_rawat', $data_to_drawat);
 					}
-				}
+				}else{
+                        //* customer di tanggal sekarang belum ada di db.master_jual_rawat /
+                        $pattern="PR/".date("ym")."-";
+                        $jrawat_nobukti=$this->m_public_function->get_kode_1('master_jual_rawat','jrawat_nobukti',$pattern,12);
+                        $dti_jrawat=array(
+                        "jrawat_nobukti"=>$jrawat_nobukti,
+                        "jrawat_cust"=>$customer_id,
+                        "jrawat_tanggal"=>$date_now
+                        );
+                        $this->db->insert('master_jual_rawat', $dti_jrawat);
+                        if($this->db->affected_rows()){
+                                /* INSERT to db.detail_jual_rawat */
+                                $sql="SELECT jrawat_id FROM master_jual_rawat WHERE jrawat_cust='$customer_id' AND jrawat_tanggal='$date_now'";
+                                $rs=$this->db->query($sql);
+                                if($rs->num_rows()){
+                                    $rs_record=$rs->row_array();
+                                    $jrawat_id=$rs_record["jrawat_id"];
+                                }
+                                
+                                $dti_drawat=array(
+                                "drawat_master"=>$jrawat_id,
+                                "drawat_dtrawat"=>$dtrawat_id,
+                                "drawat_rawat"=>$dtrawat_perawatan,
+                                "drawat_jumlah"=>1,
+                                "drawat_harga"=>$rawat_harga,
+                                "drawat_diskon"=>$drawat_diskon,
+                                "drawat_diskon_jenis"=>$drawat_diskon_jenis
+                                );
+                                $this->db->insert('detail_jual_rawat', $dti_drawat);
+                                if($this->db->affected_rows()){
+                                    $this->detail_pakai_cabin_insert($dtrawat_id, $dtrawat_perawatan, $jrawat_nobukti);
+                                }
+                        }
+                        
+                }
 			}
 							
 		}elseif(is_numeric($dtrawat_id)==true){
