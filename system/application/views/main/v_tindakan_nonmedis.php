@@ -1295,7 +1295,7 @@ Ext.onReady(function(){
 		});
 		editor_tindakan_nonmedis_detail.stopEditing();
 		tindakan_nonmedis_detail_DataStore.insert(0, edit_tindakan_nonmedis_detail);
-		tindakan_nonmedis_detailListEditorGrid.getView().refresh();
+		//tindakan_nonmedis_detailListEditorGrid.getView().refresh();
 		tindakan_nonmedis_detailListEditorGrid.getSelectionModel().selectRow(0);
 		editor_tindakan_nonmedis_detail.startEditing(0);
 	}

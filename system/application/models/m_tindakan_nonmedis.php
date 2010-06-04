@@ -507,38 +507,38 @@ class M_tindakan_nonmedis extends Model{
 				}
 				return 'Detail telah berhasil ditambahkan';
 			}
-		}
-		
-		$sql="SELECT dtrawat_id,dtrawat_locked,dtrawat_perawatan,dtrawat_petugas2,dtrawat_jam,dtrawat_keterangan,dtrawat_jumlah FROM tindakan_detail WHERE dtrawat_id='$dtrawat_id'";
-		$rs=$this->db->query($sql);
-		if($rs->num_rows()){
-			$rs_record=$rs->row_array();
-			$dtrawat_locked=$rs_record["dtrawat_locked"];
-			$dtrawat_perawatan_awal=$rs_record["dtrawat_perawatan"];
-			$dtrawat_petugas2_awal=$rs_record["dtrawat_petugas2"];
-			$dtrawat_jam_awal=$rs_record["dtrawat_jam"];
-			$dtrawat_keterangan_awal=$rs_record["dtrawat_keterangan"];
-			$dtrawat_jumlah_awal=$rs_record["dtrawat_jumlah"];
-			/*
-			# ini artinya: record detail tindakan sudah ada di db.tindakan_detail, sehingga yg bisa dilakukan adalah EDITING record detail JIKA UNLOCK
-			1. Check $dtrawat_status, JIKA ='selesai' ==> sudah masuk ke Kasir, JIKA !='selesai' ==> belum masuk ke Kasir manapun
-			2. JIKA $dtrawat_status='selesai' ==> check db.tindakan_detail.dtrawat_locked [1/0]
-			3. JIKA db.tindakan_detail.dtrawat_locked=0 ==> BOLEH di-EDIT
-			4. JIKA $dtrawat_status!='selesai' ==> silakan di-EDIT
-			*/
-			if($dtrawat_locked==0 && ($dtrawat_perawatan_awal<>$dtrawat_perawatan || $dtrawat_petugas2_awal<>$dtrawat_petugas2 || $dtrawat_jam_awal<>$dtrawat_jamreservasi || $dtrawat_keterangan_awal<>$dtrawat_keterangan || $dtrawat_jumlah_awal<>$jumlah)){
-				/* ini berarti: ada field yg berubah untuk dilakukan editing */
-				$dtu_dtrawat=array(
-				"dtrawat_perawatan"=>$dtrawat_perawatan,
-				"dtrawat_petugas2"=>$dtrawat_petugas2,
-				"dtrawat_jam"=>$dtrawat_jamreservasi,
-				"dtrawat_keterangan"=>$dtrawat_keterangan,
-				"dtrawat_jumlah"=>$jumlah
-				);
-				$this->db->where('dtrawat_id', $dtrawat_id);
-				$this->db->update('tindakan_detail', $dtu_dtrawat);
-			}
-		}
+		}else if(is_numeric($dtrawat_id)){
+                $sql="SELECT dtrawat_id,dtrawat_locked,dtrawat_perawatan,dtrawat_petugas2,dtrawat_jam,dtrawat_keterangan,dtrawat_jumlah FROM tindakan_detail WHERE dtrawat_id='$dtrawat_id'";
+                $rs=$this->db->query($sql);
+                if($rs->num_rows()){
+                    $rs_record=$rs->row_array();
+                    $dtrawat_locked=$rs_record["dtrawat_locked"];
+                    $dtrawat_perawatan_awal=$rs_record["dtrawat_perawatan"];
+                    $dtrawat_petugas2_awal=$rs_record["dtrawat_petugas2"];
+                    $dtrawat_jam_awal=$rs_record["dtrawat_jam"];
+                    $dtrawat_keterangan_awal=$rs_record["dtrawat_keterangan"];
+                    $dtrawat_jumlah_awal=$rs_record["dtrawat_jumlah"];
+                    /*
+                    # ini artinya: record detail tindakan sudah ada di db.tindakan_detail, sehingga yg bisa dilakukan adalah EDITING record detail JIKA UNLOCK
+                    1. Check $dtrawat_status, JIKA ='selesai' ==> sudah masuk ke Kasir, JIKA !='selesai' ==> belum masuk ke Kasir manapun
+                    2. JIKA $dtrawat_status='selesai' ==> check db.tindakan_detail.dtrawat_locked [1/0]
+                    3. JIKA db.tindakan_detail.dtrawat_locked=0 ==> BOLEH di-EDIT
+                    4. JIKA $dtrawat_status!='selesai' ==> silakan di-EDIT
+                    */
+                    if($dtrawat_locked==0 && ($dtrawat_perawatan_awal<>$dtrawat_perawatan || $dtrawat_petugas2_awal<>$dtrawat_petugas2 || $dtrawat_jam_awal<>$dtrawat_jamreservasi || $dtrawat_keterangan_awal<>$dtrawat_keterangan || $dtrawat_jumlah_awal<>$jumlah)){
+                        /* ini berarti: ada field yg berubah untuk dilakukan editing */
+                        $dtu_dtrawat=array(
+                        "dtrawat_perawatan"=>$dtrawat_perawatan,
+                        "dtrawat_petugas2"=>$dtrawat_petugas2,
+                        "dtrawat_jam"=>$dtrawat_jamreservasi,
+                        "dtrawat_keterangan"=>$dtrawat_keterangan,
+                        "dtrawat_jumlah"=>$jumlah
+                        );
+                        $this->db->where('dtrawat_id', $dtrawat_id);
+                        $this->db->update('tindakan_detail', $dtu_dtrawat);
+                    }
+                }
+        }
 	}
 	
 		//function for get list record
