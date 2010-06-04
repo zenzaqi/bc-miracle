@@ -67,7 +67,7 @@ var firstday=(new Date().format('Y-m'))+'-01';
 var post2db = '';
 var msg = '';
 var pageS=15;
-
+var acc_group=<?=$_SESSION[SESSION_GROUPID];?>;
 /* declare variable here for Field*/
 var order_idField;
 var order_noField;
@@ -314,7 +314,7 @@ Ext.onReady(function(){
 				}
 			}
 		});
-		
+		check_acc();
 	}
  	/* End of Function */
   
@@ -348,6 +348,9 @@ Ext.onReady(function(){
 				}
 			}
 		});
+		
+		check_acc();
+		
 	}
 	/* End setValue to EDIT*/
   
@@ -390,6 +393,15 @@ Ext.onReady(function(){
 	}
   	/* End of Function */
   
+  	function check_acc(){
+		if(acc_group!==9){
+			order_harga_satuanField.setDisabled(true);
+			order_diskon_satuanField.setDisabled(true);
+		}else{
+			order_harga_satuanField.setDisabled(false);
+			order_diskon_satuanField.setDisabled(false);
+		}
+	}
 	/* Function for Update Confirm */
 	function master_order_beli_confirm_update(){
 		/* only one record is selected here */
@@ -1211,7 +1223,25 @@ Ext.onReady(function(){
 			lazyRender:true,
 
 	});
-
+	
+	var order_harga_satuanField=new Ext.form.NumberField({
+		allowDecimals: true,
+		allowNegative: false,
+		blankText: '0',
+		maxLength: 22,
+		maskRe: /([0-9]+)$/
+	});
+	
+	var order_diskon_satuanField=new Ext.form.NumberField({
+		allowDecimals: true,
+		allowNegative: false,
+		blankText: '0',
+		maxLength: 22,
+		maskRe: /([0-9]+)$/
+	});
+	
+	
+	
 	//declaration of detail coloumn model
 	detail_order_beli_ColumnModel = new Ext.grid.ColumnModel(
 		[
@@ -1251,13 +1281,7 @@ Ext.onReady(function(){
 			dataIndex: 'dorder_harga',
 			width: 100,	//150,
 			sortable: true,
-			editor: new Ext.form.NumberField({
-				allowDecimals: true,
-				allowNegative: false,
-				blankText: '0',
-				maxLength: 22,
-				maskRe: /([0-9]+)$/
-			}),
+			editor:  order_harga_satuanField,
 			renderer: function(val){
 				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
 			}
@@ -1270,14 +1294,7 @@ Ext.onReady(function(){
 			width: 60,	//100,
 			renderer: Ext.util.Format.numberRenderer('0,000'),
 			sortable: true,
-			editor: new Ext.form.NumberField({
-				allowDecimals: true,
-				allowNegative: false,
-				blankText: '0',
-				emptyText: '0',
-				maxLength: 12,
-				maskRe: /([0-9]+)$/
-			}),
+			editor: order_diskon_satuanField,
 		},
 		{
 			header: '<div align="center">' + 'Sub Total (Rp)' + '</div>',
@@ -1551,6 +1568,7 @@ Ext.onReady(function(){
 	};
 	/* End of Fuction */
 	
+
 	function master_order_beli_reset_SearchForm(){
 		order_noSearchField.reset();
 		order_supplierSearchField.reset();
@@ -1566,6 +1584,7 @@ Ext.onReady(function(){
 		order_keteranganSearchField.reset();
 		order_statusSearchField.reset();
 		order_status_accSearchField.reset();
+		
 	}
 	
 	
