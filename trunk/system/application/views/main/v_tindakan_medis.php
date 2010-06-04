@@ -1289,7 +1289,7 @@ Ext.onReady(function(){
 		});
 		editor_tindakan_medis_detail.stopEditing();
 		tindakan_medis_detail_DataStore.insert(0, edit_tindakan_medisdetail);
-		tindakan_medisdetailListEditorGrid.getView().refresh();
+		//tindakan_medisdetailListEditorGrid.getView().refresh();
 		tindakan_medisdetailListEditorGrid.getSelectionModel().selectRow(0);
 		editor_tindakan_medis_detail.startEditing(0);
 	}
