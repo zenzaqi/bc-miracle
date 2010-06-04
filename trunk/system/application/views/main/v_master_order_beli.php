@@ -617,7 +617,7 @@ Ext.onReady(function(){
 			readOnly: true,
 			renderer: Ext.util.Format.numberRenderer('0,000')
 		},
-		<? if($_SESSION[SESSION_GROUPID]==9) { ?>
+		<? if(($_SESSION[SESSION_GROUPID]==9) || ($_SESSION[SESSION_GROUPID]==1)){ ?>
 		{
 			header: '<div align="center">' + 'Sub Total (Rp)' + '</div>',
 			align: 'right',
@@ -1278,7 +1278,7 @@ Ext.onReady(function(){
 				maskRe: /([0-9]+)$/
 			})
 		},
-		<? if($_SESSION[SESSION_GROUPID]==9){ ?>
+		<? if(($_SESSION[SESSION_GROUPID]==9 || ($_SESSION[SESSION_GROUPID]==1))){ ?>
 		{
 			header: '<div align="center">' + 'Harga (Rp)' + '</div>',
 			align: 'right',
