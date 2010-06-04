@@ -354,12 +354,12 @@ Ext.onReady(function(){
 				cell.css = "readonlycell"; // Mengambil Value dari Class di dalam CSS 
 				return value;
 				},
-			hidden: false
+			hidden: true
 		},
 		{
 			header: 'Nama Group',
 			dataIndex: 'phonegroup_nama',
-			width: 150,
+			width: 100,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 250
@@ -368,7 +368,7 @@ Ext.onReady(function(){
 		{
 			header: 'Keterangan',
 			dataIndex: 'phonegroup_detail',
-			width: 150,
+			width: 300,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 500
@@ -422,7 +422,7 @@ Ext.onReady(function(){
 	phonegroupListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'phonegroupListEditorGrid',
 		el: 'fp_phonegroup',
-		title: 'List Of Phonegroup',
+		title: 'Daftar Phone Group',
 		autoHeight: true,
 		store: phonegroup_DataStore, // DataStore
 		cm: phonegroup_ColumnModel, // Nama-nama Columns
@@ -453,6 +453,7 @@ Ext.onReady(function(){
 			text: 'Delete',
 			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
+			disabled: true,
 			handler: phonegroup_confirm_delete   // Confirm before deleting
 		}, '-', {
 			text: 'Search',
@@ -498,6 +499,7 @@ Ext.onReady(function(){
 			text: 'Delete', 
 			tooltip: 'Delete selected record', 
 			iconCls:'icon-delete',
+			disabled: true,
 			handler: phonegroup_confirm_delete 
 		},
 		'-',
@@ -592,7 +594,7 @@ Ext.onReady(function(){
 	/* Identify  phonegroup_nama Field */
 	phonegroup_namaField= new Ext.form.TextField({
 		id: 'phonegroup_namaField',
-		fieldLabel: 'Nama Group',
+		fieldLabel: 'Nama Grup',
 		maxLength: 250,
 		anchor: '95%'
 	});
@@ -1056,7 +1058,7 @@ Ext.onReady(function(){
 	/* Function for retrieve create Window Form */
 	phonegroup_saveWindow= new Ext.Window({
 		id: 'phonegroup_saveWindow',
-		title: post2db+' Group Phonebook',
+		title: post2db+' Phone Group',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,
@@ -1118,7 +1120,7 @@ Ext.onReady(function(){
 	/* Identify  phonegroup_nama Search Field */
 	phonegroup_namaSearchField= new Ext.form.TextField({
 		id: 'phonegroup_namaSearchField',
-		fieldLabel: 'Nama Group',
+		fieldLabel: 'Nama Grup',
 		maxLength: 250,
 		anchor: '95%'
 	
