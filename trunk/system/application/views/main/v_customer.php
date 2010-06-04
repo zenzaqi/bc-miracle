@@ -2467,6 +2467,7 @@ Ext.onReady(function(){
 		allowBlank: false,
 		anchor: '50%'
 	});
+	
 	cust_nolamaField= new Ext.form.TextField({
 		id: 'cust_nolamaField',
 		fieldLabel: 'No Customer (Lama)',

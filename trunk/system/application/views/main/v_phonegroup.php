@@ -568,7 +568,7 @@ Ext.onReady(function(){
 			url: 'index.php?c=c_phonegroup&m=get_available', 
 			method: 'POST'
 		}),
-		baseParams:{id: get_pk_id(),start:0, limit: 15 }, // parameter yang di $_POST ke Controller
+		baseParams:{id: get_pk_id(),start:0, limit: 15, task: 'all'}, // parameter yang di $_POST ke Controller
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
@@ -603,15 +603,381 @@ Ext.onReady(function(){
 		maxLength: 500,
 		anchor: '95%'
 	});
-
 	
+	
+	//datastore of profesi
+	cbo_pgcust_profesi_DataStore = new Ext.data.Store({
+		id: 'cbo_pgcust_profesi_DataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_customer&m=get_profesi_list', 
+			method: 'POST'
+		}),
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'cust_profesi'
+		},[
+		/* dataIndex => insert intocustomer_ColumnModel, Mapping => for initiate table column */ 
+			{name: 'cust_profesi_display', type: 'string', mapping: 'cust_profesi'}
+		]),
+		sortInfo:{field: 'cust_profesi_display', direction: "ASC"}
+	});
+	/* eof */
+	
+	//datastore of hobi
+	cbo_pgcust_hobi_DataStore = new Ext.data.Store({
+		id: 'cbo_pgcust_hobi_DataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_customer&m=get_hobi_list', 
+			method: 'POST'
+		}),
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'cust_hobi'
+		},[
+		/* dataIndex => insert intocustomer_ColumnModel, Mapping => for initiate table column */ 
+			{name: 'cust_hobi_display', type: 'string', mapping: 'cust_hobi'}
+		]),
+		sortInfo:{field: 'cust_hobi_display', direction: "ASC"}
+	});
+	/* eof */
+	
+	//datastore of hobi
+	cbo_pgcust_cabang_DataStore = new Ext.data.Store({
+		id: 'cbo_pgcust_cabang_DataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_customer&m=get_cabang_list', 
+			method: 'POST'
+		}),
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'cabang_id'
+		},[
+		/* dataIndex => insert intocustomer_ColumnModel, Mapping => for initiate table column */ 
+			{name: 'cust_cabang_value', type: 'int', mapping: 'cabang_id'},
+			{name: 'cust_cabang_display', type: 'string', mapping: 'cabang_nama'}
+		]),
+		sortInfo:{field: 'cust_cabang_display', direction: "ASC"}
+	});
+	/* eof */
+	
+	
+	var cbo_propinsi_DataStore = new Ext.data.Store({
+		id: 'cbo_propinsi_DataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_customer&m=get_propinsi_list', 
+			method: 'POST'
+		}),
+		baseParams:{start: 0, limit: 10 }, // parameter yang di $_POST ke Controller
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'propinsi_nama'
+		},[
+		/* dataIndex => insert intocustomer_note_ColumnModel, Mapping => for initiate table column */ 
+			{name: 'propinsi_nama', type: 'string', mapping: 'propinsi_nama'},
+		]),
+		sortInfo:{field: 'propinsi_nama', direction: "ASC"}
+	});
+	
+	var pgcust_kota_SearchField=new Ext.form.TextField({
+		id: 'pgcust_kota_SearchField',
+		name: 'pgcust_kota_SearchField',
+		fieldLabel: 'Kota',
+		anchor: '98%'
+	});
+	
+	/* Identify  cust_kelamin Field */
+	var pgcust_kelamin_SearchField= new Ext.form.ComboBox({
+		id: 'pgcust_kelamin_SearchField',
+		fieldLabel: 'Jenis Kelamin',
+		store:new Ext.data.SimpleStore({
+			fields:['cust_kelamin_value', 'cust_kelamin_display'],
+			data:[['L','Laki-laki'],['P','Perempuan']]
+		}),
+		mode: 'local',
+		editable: false,
+		displayField: 'cust_kelamin_display',
+		valueField: 'cust_kelamin_value',
+		//allowBlank: false,
+		anchor: '55%',
+		triggerAction: 'all'	
+	});
+	
+	var pgcust_propinsi_SearchField= new Ext.form.ComboBox({
+		id: 'pgcust_propinsi_SearchField',
+		fieldLabel: 'Propinsi',
+		maxLength: 100,
+		store: cbo_propinsi_DataStore,
+		mode: 'remote',
+		editable: false,
+		displayField: 'propinsi_nama',
+		valueField: 'propinsi_nama',
+		anchor: '98%',
+		triggerAction: 'all'
+	});
+	
+	/* Identify  cust_agama Field */
+	var pgcust_agama_SearchField= new Ext.form.ComboBox({
+		id: 'pgcust_agama_SearchField',
+		fieldLabel: 'Agama',
+		maxLength: 50,
+		store:new Ext.data.SimpleStore({
+			fields:['cust_agama_value_display'],
+			data: [['Islam'],['Katholik'],['Kristen'],['Hindu'],['Budha'],['Konghucu'],['Lainnya']]
+		}),
+		mode: 'local',
+		editable: false,
+		displayField: 'cust_agama_value_display',
+		valueField: 'cust_agama_value_display',
+		anchor: '60%',
+		triggerAction: 'all'	
+	});
+	
+	/* Identify  cust_pendidikan Field */
+	var pgcust_pendidikan_SearchField= new Ext.form.ComboBox({
+		id: 'pgcust_pendidikan_SearchField',
+		fieldLabel: 'Pendidikan',
+		maxLength: 50,
+		store:new Ext.data.SimpleStore({
+			fields:['cust_pendidikan_value_display'],
+			data: [['SMA'],['Diploma/Akademi'],['Sarjana (S1)'],['Pasca Sarjana (S2)'],['Doktoral (S3)'],['Lainnya']]
+		}),
+		mode: 'local',
+		editable: false,
+		//allowBlank: false,
+		displayField: 'cust_pendidikan_value_display',
+		valueField: 'cust_pendidikan_value_display',
+		anchor: '70%',
+		triggerAction: 'all'
+	});
+	
+	var pgcust_profesi_SearchField= new Ext.form.ComboBox({
+		id: 'pgcust_profesi_SearchField',
+		fieldLabel: 'Profesi',
+		maxLength: 100,
+		store: cbo_pgcust_profesi_DataStore,
+		mode: 'remote',
+		displayField: 'cust_profesi_display',
+		valueField: 'cust_profesi_display',
+		anchor: '98%',
+		pageSize: pageS,
+		triggerAction: 'all'
+	});
+	
+	var pgcust_umur_SearchField= new Ext.form.TextField({
+		id: 'pgcust_umur_SearchField',
+		fieldLabel: 'Umur',
+		anchor:'50%'
+	});
+	
+	var pgcust_hobi_SearchField= new Ext.form.ComboBox({
+		id: 'pgcust_hobi_SearchField',
+		fieldLabel: 'Hobi',
+		maxLength: 500,
+		store: cbo_pgcust_hobi_DataStore,
+		mode: 'remote',
+		displayField: 'cust_hobi_display',
+		valueField: 'cust_hobi_display',
+		anchor: '98%',
+		pageSize: pageS,
+		triggerAction: 'all'
+	});
+	
+	var pgcust_stsnikah_SearchField= new Ext.form.ComboBox({
+		id: 'pgcust_stsnikah_SearchField',
+		fieldLabel: 'Status Pernikahan',
+		store:new Ext.data.SimpleStore({
+			fields:['cust_statusnikah_value', 'cust_statusnikah_display'],
+			data:[['menikah','menikah'],['belum menikah','belum menikah']]
+		}),
+		mode: 'local',
+		editable: false,
+		//allowBlank: false,
+		displayField: 'cust_statusnikah_display',
+		valueField: 'cust_statusnikah_value',
+		anchor: '70%',
+		triggerAction: 'all'	
+	});
+	
+	var pgcust_priority_SearchField= new Ext.form.ComboBox({
+		id: 'pgcust_priority_SearchField',
+		fieldLabel: 'Priority',
+		store:new Ext.data.SimpleStore({
+			fields:['cust_priority_value', 'cust_priority_display'],
+			data:[['Core','Core'],['Reguler','Reguler'],['Low','Low']]
+		}),
+		mode: 'local',
+		editable: false,
+		//allowBlank: false,
+		displayField: 'cust_priority_display',
+		valueField: 'cust_priority_value',
+		anchor: '60%',
+		triggerAction: 'all'	
+	});
+	
+	/* Identify  cust_unit Field */
+	var pgcust_unit_SearchField= new Ext.form.ComboBox({
+		id: 'pgcust_unit_SearchField',
+		fieldLabel: 'Cabang',
+		store: cbo_pgcust_cabang_DataStore,
+		mode: 'remote',
+		emptyText: 'Miracle Thamrin',
+		editable: false,
+		//allowBlank: false,
+		displayField: 'cust_cabang_display',
+		valueField: 'cust_cabang_value',
+		anchor: '95%',
+		triggerAction: 'all'
+	});
+	/* Identify  cust_aktif Field */
+	var pgcust_aktif_SearchField= new Ext.form.ComboBox({
+		id: 'pgcust_aktif_SearchField',
+		fieldLabel: 'Status',
+		store:new Ext.data.SimpleStore({
+			fields:['cust_aktif_value', 'cust_aktif_display'],
+			data:[['Aktif','Aktif'],['Tidak Aktif','Tidak Aktif']]
+		}),
+		mode: 'local',
+		emptyText: 'Aktif',
+		//allowBlank: true,
+		displayField: 'cust_aktif_display',
+		valueField: 'cust_aktif_value',
+		anchor: '60%',
+		triggerAction: 'all'	
+	});
+	
+	
+	function phonegroup_cust_reset_search(){
+		pgcust_umur_SearchField.reset();
+		pgcust_agama_SearchField.reset();
+		pgcust_kota_SearchField.reset();
+		pgcust_propinsi_SearchField.reset();
+		pgcust_pendidikan_SearchField.reset();
+		pgcust_kelamin_SearchField.reset();
+		pgcust_profesi_SearchField.reset();
+		pgcust_stsnikah_SearchField.reset();
+		pgcust_priority_SearchField.reset();
+		pgcust_unit_SearchField.reset();
+		pgcust_aktif_SearchField.reset();
+	}
+	
+	function phonegroup_cust_list_search(){
+		var cust_umur_search="";
+		var cust_agama_search="";
+		var cust_kota_search="";
+		var cust_propinsi_search="";
+		var cust_kelamin_search="";
+		var cust_pendidikan_search="";
+		var cust_profesi_search="";
+		var cust_hobi_search="";
+		var cust_stsnikah_search="";
+		var cust_priority_search="";
+		var cust_unit_search="";
+		var cust_aktif_search="";
+		
+		if( pgcust_umur_SearchField.getValue()!==""){ cust_umur_search=pgcust_umur_SearchField.getValue(); }
+		if( pgcust_agama_SearchField.getValue()!==""){ cust_agama_search=pgcust_agama_SearchField.getValue(); }
+		if( pgcust_kota_SearchField.getValue()!==""){ cust_kota_search=pgcust_kota_SearchField.getValue(); }
+		if( pgcust_propinsi_SearchField.getValue()!==""){ cust_propinsi_search=pgcust_propinsi_SearchField.getValue(); }
+		if( pgcust_pendidikan_SearchField.getValue()!==""){ cust_pendidikan_search=pgcust_pendidikan_SearchField.getValue(); }
+		if( pgcust_kelamin_SearchField.getValue()!==""){ cust_kelamin_search=pgcust_kelamin_SearchField.getValue(); }
+		if( pgcust_profesi_SearchField.getValue()!==""){ cust_profesi_search=pgcust_profesi_SearchField.getValue(); }
+		if( pgcust_stsnikah_SearchField.getValue()!==""){ cust_stsnikah_search=pgcust_stsnikah_SearchField.getValue(); }
+		if( pgcust_priority_SearchField.getValue()!==""){ cust_priority_search=pgcust_priority_SearchField.getValue(); }
+		if( pgcust_unit_SearchField.getValue()!==""){ cust_unit_search=pgcust_unit_SearchField.getValue(); }
+		if( pgcust_aktif_SearchField.getValue()!==""){ cust_aktif_search=pgcust_aktif_SearchField.getValue(); }
+		
+		phonenumber_DataStore.baseParams = {
+			task			: 	'search',
+			umur			:	cust_umur_search, 
+			agama			:	cust_agama_search, 
+			kota			:	cust_kota_search,
+			propinsi		:	cust_propinsi_search,
+			pendidikan		:	cust_pendidikan_search,
+			kelamin			:	cust_kelamin_search,
+			profesi			:	cust_profesi_search,
+			hobi			:	cust_hobi_search,
+			stsnikah		:	cust_stsnikah_search,
+			priority		:	cust_priority_search,
+			unit			:	cust_unit_search,
+			aktif			:	cust_aktif_search
+		};
+		// Cause the datastore to do another query : 
+		phonenumber_DataStore.reload({params: {start: 0, limit: pageS}});
+		
+	}
+	
+	/* Function for retrieve search Form Panel */
+	var phonegroup_cust_searchForm = new Ext.FormPanel({
+		labelAlign: 'left',
+		bodyStyle:'padding:5px',
+		autoHeight:true,
+		width: 700,
+		layout: 'column',
+		border: true,
+		items:[
+			{
+			   	layout: 'form',
+				columnWidth: 0.5,
+				border: false,
+				items: [pgcust_umur_SearchField, pgcust_agama_SearchField, pgcust_kota_SearchField, pgcust_propinsi_SearchField, pgcust_kelamin_SearchField, pgcust_pendidikan_SearchField  ]			   			   
+			 },{
+				layout: 'form',
+				columnWidth: 0.5,
+				border: false,
+				items: [pgcust_profesi_SearchField, pgcust_hobi_SearchField, pgcust_stsnikah_SearchField, pgcust_priority_SearchField, pgcust_unit_SearchField, pgcust_aktif_SearchField ]	
+				   
+			}
+		],
+		buttons: [{
+				text: 'Search',
+				handler: phonegroup_cust_list_search
+			},{
+				text: 'Close',
+				handler: function(){
+					phonegroup_cust_searchWindow.hide();
+				}
+			}
+		]
+	});
+    /* End of Function */ 
+	
+	/* Function for retrieve search Window Form, used for andvaced search */
+	var phonegroup_cust_searchWindow = new Ext.Window({
+		title: 'Customer Search',
+		closable:true,
+		closeAction: 'hide',
+		autoWidth: true,
+		autoHeight: true,
+		plain:true,
+		layout: 'fit',
+		x: 0,
+		y: 0,
+		modal: true,
+		renderTo: 'elwindow_phonegroup_cust_search',
+		items: phonegroup_cust_searchForm
+	});
+    /* End of Function */ 
+	
+
+	function display_cust_phonegroup_form_search_window(){
+		phonegroup_cust_reset_search();
+		if(!phonegroup_cust_searchWindow.isVisible()){
+			phonegroup_cust_searchWindow.show();
+		} else {
+			phonegroup_cust_searchWindow.toFront();
+		}
+	}
 	
 	/* Function for retrieve create Window Panel*/ 
 	phonegroup_saveForm = new Ext.FormPanel({
 		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
-		width: 650,        
+		width: 750,        
 		items:[
 			{
 				columnWidth:1,
@@ -629,19 +995,25 @@ Ext.onReady(function(){
 						fieldLabel: 'Customer',
 						imagePath: './assets/images/',
 						multiselects: [{
-							width: 300,
+							width: 350,
 							height: 200,
 							store: phonenumber_DataStore,
 							displayField: 'phonenumber_nama',
 							valueField: 'phonenumber_number',
 							tpl: cust_tpl,
-							tbar: new Ext.PagingToolbar({
+							tbar:[new Ext.PagingToolbar({
 								pageSize: 15,
 								store: phonenumber_DataStore,
 								displayInfo: false
-							})
+							}),{
+								text: 'Search',
+								tooltip: 'Advanced Search',
+								iconCls:'icon-search',
+								handler: display_cust_phonegroup_form_search_window
+							}
+							]
 						},{
-							width: 300,
+							width: 350,
 							height: 200,
 							store: phonegrouped_DataStore,
 							displayField: 'phonenumber_nama',
@@ -762,7 +1134,7 @@ Ext.onReady(function(){
     
 	/* Function for retrieve search Form Panel */
 	phonegroup_searchForm = new Ext.FormPanel({
-		labelAlign: 'top',
+		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
 		width: 300,        
@@ -941,6 +1313,7 @@ Ext.onReady(function(){
         <div id="fp_phonegroup"></div>
 		<div id="elwindow_phonegroup_save"></div>
         <div id="elwindow_phonegroup_search"></div>
+        <div id="elwindow_phonegroup_cust_search"></div>
     </div>
 </div>
 </body>
