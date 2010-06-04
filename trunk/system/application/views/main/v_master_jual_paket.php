@@ -1166,20 +1166,20 @@ Ext.onReady(function(){
 	/*Function utk mengnon-aktifkan beberapa field ketika status dok diganti Tertutup*/
 	function master_jual_paket_set_updating(){
 		if(jpaket_post2db=="UPDATE" && master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_stat_dok')=="Terbuka"){
-			jpaket_custField.setDisabled(true);
-			jpaket_tanggalField.setDisabled(true);
-			jpaket_keteranganField.setDisabled(true);
+			jpaket_custField.setDisabled(false);
+			jpaket_tanggalField.setDisabled(false);
+			jpaket_keteranganField.setDisabled(false);
 			master_cara_bayarTabPanel.setDisabled(false);
-			detail_jual_paketListEditorGrid.setDisabled(true);
-			detail_pengguna_paketListEditorGrid.setDisabled(true);
-			jpaket_diskonField.setDisabled(true);
-			jpaket_cashback_cfField.setDisabled(true);
+			detail_jual_paketListEditorGrid.setDisabled(false);
+			detail_pengguna_paketListEditorGrid.setDisabled(false);
+			jpaket_diskonField.setDisabled(false);
+			jpaket_cashback_cfField.setDisabled(false);
 		}
 		if(jpaket_post2db=="UPDATE" && master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_stat_dok')=="Tertutup"){
 			jpaket_custField.setDisabled(true);
 			jpaket_tanggalField.setDisabled(true);
 			jpaket_keteranganField.setDisabled(true);
-			master_cara_bayarTabPanel.setDisabled(true);
+			master_cara_bayarTabPanel.setDisabled(false);
 			detail_jual_paketListEditorGrid.setDisabled(true);
 			detail_pengguna_paketListEditorGrid.setDisabled(true);
 			jpaket_diskonField.setDisabled(true);
