@@ -933,7 +933,7 @@ Ext.onReady(function(){
 	var combo_mutasi_produk=new Ext.form.ComboBox({
 			store: cbo_mutasi_produkDataStore,
 			mode: 'remote',
-			typeAhead: true,
+			typeAhead: false,
 			displayField: 'mutasi_produk_nama',
 			valueField: 'mutasi_produk_id',
 			triggerAction: 'all',
@@ -944,7 +944,6 @@ Ext.onReady(function(){
 			//tpl : produk_tpl,
 			itemSelector: 'div.search-item',
 			triggerAction: 'all',
-			lazyRender:true,
 			listClass: 'x-combo-list-small',
 			anchor: '95%'
 
