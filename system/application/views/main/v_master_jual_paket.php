@@ -1168,6 +1168,12 @@ Ext.onReady(function(){
 		if(jpaket_post2db=="UPDATE" && master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_stat_dok')=="Terbuka"){
 			jpaket_custField.setDisabled(true);
 			jpaket_tanggalField.setDisabled(true);
+			jpaket_keteranganField.setDisabled(true);
+			master_cara_bayarTabPanel.setDisabled(false);
+			detail_jual_paketListEditorGrid.setDisabled(true);
+			detail_pengguna_paketListEditorGrid.setDisabled(true);
+			jpaket_diskonField.setDisabled(true);
+			jpaket_cashback_cfField.setDisabled(true);
 		}
 		if(jpaket_post2db=="UPDATE" && master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_stat_dok')=="Tertutup"){
 			jpaket_custField.setDisabled(true);
