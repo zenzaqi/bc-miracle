@@ -218,6 +218,75 @@ class M_phonegroup extends Model{
 			
 		}
 		
+		function get_cust_available($umur, $agama, $kota, $propinsi, $pendidikan, $kelamin, $profesi, $hobi, $stsnikah, $priority, $unit, $aktif, $query,$start,$end){
+			
+			$sql="select concat(cust_nama,' (',cust_no,')') as cust_nama, cust_no,cust_hp from vu_customer where cust_hp not in(select phonegrouped_number from phonegrouped) and cust_hp<>''";
+			
+			if($umur!=""){
+				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+				$sql.= " cust_umur LIKE '%".$umur."%'";
+			}
+			
+			if($kota!=""){
+				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+				$sql.= " cust_kota LIKE '%".$kota."%'";
+			}
+			if($propinsi!=""){
+				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+				$sql.= " cust_propinsi LIKE '%".$propinsi."%'";
+			}
+			if($pendidikan!=""){
+				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+				$sql.= " cust_pendidikan LIKE '%".$pendidikan."%'";
+			}
+			if($kelamin!=""){
+				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+				$sql.= " cust_kelamin LIKE '%".$kelamin."%'";
+			}
+			if($profesi!=""){
+				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+				$sql.= " cust_profesi LIKE '%".$profesi."%'";
+			}
+			if($hobi!=""){
+				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+				$sql.= " cust_hobi LIKE '%".$hobi."%'";
+			}
+			if($priority!=""){
+				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+				$sql.= " cust_priority LIKE '%".$priority."%'";
+			}
+			if($unit!=""){
+				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+				$sql.= " cust_unit LIKE '%".$unit."%'";
+			}
+			
+			if($aktif!=""){
+				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+				$sql.= " cust_aktif LIKE '%".$aktif."%'";
+			}
+			
+			if($query!==""){
+				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+				$sql.=" cust_nama like '%".$query."%' or cust_hp like '%".$query."%'";
+			}
+			
+			$result = $this->db->query($sql);
+			$nbrows = $result->num_rows();
+			$limit = $sql." LIMIT ".$start.",".$end;		
+			$result = $this->db->query($limit);  
+			
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+			
+		}
+		
 		function get_phonegrouped($id,$query,$start,$end){
 			$sql="select concat(cust_nama,' (',cust_no,')') as cust_nama, cust_no,cust_hp from customer where cust_hp in(select phonegrouped_number from phonegrouped where phonegrouped_group='".$id."')";
 			if($query!==""){

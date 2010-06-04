@@ -60,11 +60,32 @@ class C_phonegroup extends Controller {
 	function get_available(){
 		$id=isset($_POST['id']) ? @$_POST['id'] : "";
 		$query = isset($_POST['query']) ? @$_POST['query'] : "";
+		$task = isset($_POST['task']) ? @$_POST['task'] : @$_GET['task'];
 		$start = (integer) (isset($_POST['start']) ? @$_POST['start'] : @$_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? @$_POST['limit'] : @$_GET['limit']);
-		$result=$this->m_phonegroup->get_available($query,$start,$end);
+		// SEARCH
+		$task = isset($_POST['task']) ? @$_POST['task'] : @$_GET['task'];
+		$umur = isset($_POST['umur']) ? @$_POST['umur'] : @$_GET['umur'];
+		$agama = isset($_POST['agama']) ? @$_POST['agama'] : @$_GET['agama'];
+		$kota = isset($_POST['kota']) ? @$_POST['kota'] : @$_GET['kota'];
+		$propinsi = isset($_POST['propinsi']) ? @$_POST['propinsi'] : @$_GET['propinsi'];
+		$pendidikan = isset($_POST['pendidikan']) ? @$_POST['pendidikan'] : @$_GET['pendidikan'];
+		$kelamin = isset($_POST['kelamin']) ? @$_POST['kelamin'] : @$_GET['kelamin'];
+		$profesi = isset($_POST['profesi']) ? @$_POST['profesi'] : @$_GET['profesi'];
+		$hobi = isset($_POST['hobi']) ? @$_POST['hobi'] : @$_GET['hobi'];
+		$stsnikah = isset($_POST['stsnikah']) ? @$_POST['stsnikah'] : @$_GET['stsnikah'];
+		$priority = isset($_POST['priority']) ? @$_POST['priority'] : @$_GET['priority'];
+		$unit = isset($_POST['unit']) ? @$_POST['unit'] : @$_GET['unit'];
+		$aktif = isset($_POST['aktif']) ? @$_POST['aktif'] : @$_GET['aktif'];
+																  
+		if($task=='search')
+			$result=$this->m_phonegroup->get_cust_available($umur, $agama, $kota, $propinsi, $pendidikan, $kelamin, $profesi, $hobi, $stsnikah, $priority, $unit, $aktif, $query,$start,$end);
+		else
+			$result=$this->m_phonegroup->get_available($query,$start,$end);
 		echo $result;
 	}
+	
+	
 	function get_phonegrouped(){
 		$id=isset($_POST['id']) ? @$_POST['id'] : "";
 		$query = isset($_POST['query']) ? @$_POST['query'] : "";
