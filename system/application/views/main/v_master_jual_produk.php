@@ -3908,7 +3908,6 @@ Ext.onReady(function(){
 	combo_jual_produk.on('select',function(){
 		for(i=0;i<detail_jual_produk_DataStore.getCount();i++){	
 			detail_jual_produk_record=detail_jual_produk_DataStore.getAt(i);
-			var c_dtStore=0;
 			var j=cbo_dproduk_produkDataStore.find('dproduk_produk_value',combo_jual_produk.getValue());
 			if(cbo_dproduk_produkDataStore.getCount()){
 				dproduk_idField.setValue(cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_value);
