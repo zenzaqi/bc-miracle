@@ -3491,8 +3491,6 @@ Ext.onReady(function(){
 			{name: 'dpaket_paket_value', type: 'int', mapping: 'paket_id'},
 			{name: 'dpaket_paket_harga', type: 'float', mapping: 'paket_harga'},
 			{name: 'dpaket_paket_kode', type: 'string', mapping: 'paket_kode'},
-//			{name: 'dpaket_paket_group', type: 'string', mapping: 'group_nama'},
-//			{name: 'dpaket_paket_kategori', type: 'string', mapping: 'kategori_nama'},
 			{name: 'dpaket_paket_du', type: 'float', mapping: 'paket_du'},
 			{name: 'dpaket_paket_dm', type: 'float', mapping: 'paket_dm'},
 			{name: 'dpaket_paket_display', type: 'string', mapping: 'paket_nama'},
@@ -3553,7 +3551,6 @@ Ext.onReady(function(){
 	var combo_jual_paket=new Ext.form.ComboBox({
 			store: cbo_dpaket_paketDataStore,
 			mode: 'remote',
-			typeAhead: true,
 			displayField: 'dpaket_paket_display',
 			valueField: 'dpaket_paket_value',
 			typeAhead: false,
@@ -3567,7 +3564,39 @@ Ext.onReady(function(){
 			lazyRender:true,
 			listClass: 'x-combo-list-small',
 			anchor: '95%'
-
+	});
+	
+	dpaket_idField=new Ext.form.NumberField();
+	
+	combo_jual_paket.on('select',function(){
+		for(i=0;i<detail_jual_paket_DataStore.getCount();i++){	
+			detail_jual_paket_record=detail_jual_paket_DataStore.getAt(i);
+			var j=cbo_dpaket_paketDataStore.find('dpaket_paket_value',combo_jual_paket.getValue());
+			if(cbo_dpaket_paketDataStore.getCount()){
+				dpaket_idField.setValue(cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_value);
+				dpaket_jumlahField.setValue(1);
+				var dpaket_jumlah_diskon = 0;
+				//* Check no_member JIKA <>"" ==> jenis-diskon=DM /
+				if(jpaket_cust_nomemberField.getValue()!==""){
+						dpaket_jenisdiskonField.setValue('DM');
+						dpaket_jumlah_diskon = cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_dm;
+						dpaket_jumlahdiskonField.setValue(cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_dm);
+				}else{
+						dpaket_jenisdiskonField.setValue('DU');
+						dpaket_jumlah_diskon = cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_du;
+						dpaket_jumlahdiskonField.setValue(cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_du);
+				}
+				
+				var DayLength=1*24*60*60*1000;
+				var Days=cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_expired;
+				//var dt_kadaluarsa=new Date(dt*1+DayLength*Days);
+				var dt_kadaluarsa=new Date(jpaket_tanggalField.getValue()*1+DayLength*Days);
+				dpaket_kadaluarsaField.setValue(dt_kadaluarsa);
+				dpaket_hargaField.setValue(cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_harga);
+				dpaket_subtotalField.setValue(cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_harga);
+				dpaket_subtotalnetField.setValue(((100-dpaket_jumlah_diskon)/100)*cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_harga);
+			}
+		}
 	});
 	
 	var combo_reveral_paket=new Ext.form.ComboBox({
@@ -3589,19 +3618,64 @@ Ext.onReady(function(){
 
 	});
 	
+	var dpaket_kadaluarsaField= new Ext.form.DateField({
+		id: 'dpaket_kadaluarsaField',
+		readOnly: true,
+		format : 'd-m-Y',
+	});
 	
+	var dpaket_hargaField= new Ext.form.NumberField({
+		id: 'dpaket_hargaField',
+		allowNegatife : false,
+		allowDecimals: false,
+		readOnly: true,
+		maskRe: /([0-9]+)$/
+	});
 	
-	dpaket_idField=new Ext.form.NumberField();
+	var dpaket_subtotalField= new Ext.form.NumberField({
+		id: 'dpaket_subtotalField',
+		allowNegatife : false,
+		allowDecimals: false,
+		readOnly: true,
+		maskRe: /([0-9]+)$/
+	});
 	
-	combo_jual_paket.on('select',function(){
-		for(i=0;i<detail_jual_paket_DataStore.getCount();i++){	
-			detail_jual_paket_record=detail_jual_paket_DataStore.getAt(i);
-			var c_dtStore=0;
-			var j=cbo_dpaket_paketDataStore.find('dpaket_paket_value',combo_jual_paket.getValue());
-			if(cbo_dpaket_paketDataStore.getCount()){
-				dpaket_idField.setValue(cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_value);
-			}
-		}
+	var dpaket_subtotalnetField= new Ext.form.NumberField({
+		id: 'dpaket_subtotalnetField',
+		allowNegatife : false,
+		allowDecimals: false,
+		readOnly: true,
+		maskRe: /([0-9]+)$/
+	});
+	
+	var dpaket_jumlahField= new Ext.form.NumberField({
+		allowDecimals: false,
+		allowNegative: false,
+		blankText: '0',
+		maxLength: 11,
+		maskRe: /([0-9]+)$/
+	});
+	
+	var dpaket_jenisdiskonField= new Ext.form.ComboBox({
+		store:new Ext.data.SimpleStore({
+			fields:['diskon_jenis_value'],
+			data:[['DU'],['DM'],['Promo'],['Ultah'],['Kolega']]
+		}),
+		mode: 'local',
+		displayField: 'diskon_jenis_value',
+		valueField: 'diskon_jenis_value',
+		allowBlank: true,
+		anchor: '50%',
+		triggerAction: 'all',
+		lazyRenderer: true
+	});
+	
+	var dpaket_jumlahdiskonField= new Ext.form.NumberField({
+		allowDecimals: false,
+		allowNegative: false,
+		blankText: '0',
+		maxLength: 11,
+		maskRe: /([0-9]+)$/
 	});
 		
 
@@ -3612,7 +3686,7 @@ Ext.onReady(function(){
 			header: '<div align="center">' + 'Paket' + '</div>',
 			dataIndex: 'dpaket_paket',
 			width: 300, //298,
-			sortable: true,
+			sortable: false,
 			editor: combo_jual_paket,
 			renderer: Ext.util.Format.comboRenderer(combo_jual_paket)
 		},
@@ -3621,22 +3695,17 @@ Ext.onReady(function(){
 			header: '<div align="center">' + 'Jumlah' + '</div>',
 			dataIndex: 'dpaket_jumlah',
 			width: 60, //70,
-			sortable: true,
+			sortable: false,
 			renderer: Ext.util.Format.numberRenderer('0,000'),
-			editor: new Ext.form.NumberField({
-				allowDecimals: false,
-				allowNegative: false,
-				blankText: '0',
-				maxLength: 11,
-				maskRe: /([0-9]+)$/
-			})
+			editor: dpaket_jumlahField
 		},
 		{
 			align : 'Left',
 			header: '<div align="center">' + 'Kadaluarsa' + '</div>',
 			dataIndex: 'dpaket_kadaluarsa',
-			width: 70,//90,
-			sortable: true,
+			width: 80,//90,
+			sortable: false,
+			editor: dpaket_kadaluarsaField,
 			renderer: Ext.util.Format.dateRenderer('d-m-Y')/*,
 			editor: new Ext.form.DateField({
 				format: 'Y-m-d'
@@ -3647,70 +3716,55 @@ Ext.onReady(function(){
 			header: '<div align="center">' + 'Harga (Rp)' + '</div>',
 			dataIndex: 'dpaket_harga',
 			width: 100, //80,
-			sortable: true,
+			sortable: false,
+			editor: dpaket_hargaField,
 			renderer: Ext.util.Format.numberRenderer('0,000')
 		},{
 			align : 'Right',
 			header: '<div align="center">' + 'Sub Total (Rp)' + '</div>',
-			dataIndex: 'dpaket_diskon',
+			dataIndex: 'dpaket_subtotal',
 			width: 100, //80,
-			sortable: true,
-			reaOnly: true,
+			sortable: false,
+			editor: dpaket_subtotalField,
+			renderer: Ext.util.Format.numberRenderer('0,000')/*,
 			renderer: function(v, params, record){
 					return Ext.util.Format.number(record.data.dpaket_harga* record.data.dpaket_jumlah,'0,000');
-            }
-		},
-		{
-			align : 'Right',
-			header: '<div align="center">' + 'Diskon (%)' + '</div>',
-			dataIndex: 'dpaket_diskon',
-			width: 80,
-			sortable: true,
-			renderer: Ext.util.Format.numberRenderer('0,000'),
-			editor: new Ext.form.NumberField({
-				allowDecimals: false,
-				allowNegative: false,
-				blankText: '0',
-				maxLength: 2,
-				maskRe: /([0-9]+)$/
-			})
+            }*/
 		},
 		{
 			align : 'Left',
 			header: '<div align="center">' + 'Jenis Diskon' + '</div>',
 			dataIndex: 'dpaket_diskon_jenis',
 			width: 80,
-			sortable: true,
-			editor: new Ext.form.ComboBox({
-				store:new Ext.data.SimpleStore({
-					fields:['diskon_jenis_value'],
-					data:[['DU'],['DM'],['Promo'],['Reward'],['Ultah'],['Kolega']]
-				}),
-				mode: 'local',
-				displayField: 'diskon_jenis_value',
-				valueField: 'diskon_jenis_value',
-				allowBlank: true,
-				anchor: '50%',
-				triggerAction: 'all',
-				lazyRenderer: true
-			})
+			sortable: false,
+			editor: dpaket_jenisdiskonField
+		},
+		{
+			align : 'Right',
+			header: '<div align="center">' + 'Diskon (%)' + '</div>',
+			dataIndex: 'dpaket_diskon',
+			width: 80,
+			sortable: false,
+			editor: dpaket_jumlahdiskonField,
+			renderer: Ext.util.Format.numberRenderer('0,000')
 		},{
 			align : 'Right',
 			header: '<div align="center">' + 'Sub Tot Net (Rp)' + '</div>',
-			dataIndex: 'dpaket_diskon',
+			dataIndex: 'dpaket_subtotal_net',
 			width: 100, //80,
-			sortable: true,
-			reaOnly: true,
-			renderer: function(v, params, record){
+			sortable: false,
+			editor: dpaket_subtotalnetField,
+			renderer: Ext.util.Format.numberRenderer('0,000')
+			/*renderer: function(v, params, record){
 					return Ext.util.Format.number(record.data.dpaket_harga* record.data.dpaket_jumlah*(100-record.data.dpaket_diskon)/100,'0,000');
-            }
+            }*/
 		},
 		{
 			align : 'Left',
 			header: '<div align="center">' + 'Referal' + '</div>',
 			dataIndex: 'dpaket_karyawan',
 			width: 150, //250
-			sortable: true,
+			sortable: false,
 			allowBlank: false,
 			editor: combo_reveral_paket,
 			renderer: Ext.util.Format.comboRenderer(combo_reveral_paket)
@@ -3761,7 +3815,7 @@ Ext.onReady(function(){
 		frame: true,
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
-		viewConfig: { forceFit:true},
+		viewConfig: { forceFit:false},
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: detail_jual_paket_DataStore,
@@ -4708,13 +4762,178 @@ Ext.onReady(function(){
 	}
 	/* END LOAD TOTAL BAYAR */
 	
+	
+	function load_total_bayar(){
+		var jumlah_item=0;
+		var subtotal_harga=0;
+		var total_harga=0;
+		var total_hutang=0;
+		var total_bayar=0;
+		var subtotal_harga_field=0;
+
+		var transfer_nilai=0;
+		var transfer_nilai2=0;
+		var transfer_nilai3=0;
+		var kwitansi_nilai=0;
+		var kwitansi_nilai2=0;
+		var kwitansi_nilai3=0;
+		var card_nilai=0;
+		var card_nilai2=0;
+		var card_nilai3=0;
+		var cek_nilai=0;
+		var cek_nilai2=0;
+		var cek_nilai3=0;
+		var voucher_nilai=0;
+		var voucher_nilai2=0;
+		var voucher_nilai3=0;
+
+		var subtotal_net_harga=0;
+		
+		/* dpaket_kadaluarsa => disetValue sesuai dgn setting jml-hari Expired dari Master Paket */
+
+		var detail_jual_paket_record;
+		
+		//(record.data.dpaket_subtotal* record.data.dpaket_jumlah*(100-record.data.dpaket_diskon)/100,'0,000')
+		for(i=0;i<detail_jual_paket_DataStore.getCount();i++){
+			jumlah_item=jumlah_item+eval(detail_jual_paket_DataStore.getAt(i).data.dpaket_jumlah);
+			subtotal_harga_field+=detail_jual_paket_DataStore.getAt(i).data.dpaket_subtotal_net;
+		}
+		
+		jpaket_jumlahField.setValue(jumlah_item);
+		//jpaket_subTotalField.setValue(subtotal_harga*(100-detail_jual_paket_record.data.dpaket_diskon)/100);
+		jpaket_subTotalField.setValue(subtotal_harga_field);
+		total_harga=subtotal_harga_field*(100-jpaket_diskonField.getValue())/100 - jpaket_cashbackField.getValue();
+		total_harga=(total_harga>0?Math.round(total_harga):0);
+		//jpaket_subTotalField.setValue(total_harga);
+		jpaket_totalField.setValue(total_harga);
+
+		
+
+		transfer_nilai=jpaket_transfer_nilaiField.getValue();
+		if(/^\d+$/.test(transfer_nilai))
+			transfer_nilai=jpaket_transfer_nilaiField.getValue();
+		else
+			transfer_nilai=0;
+		
+		transfer_nilai2=jpaket_transfer_nilai2Field.getValue();
+		if(/^\d+$/.test(transfer_nilai2))
+			transfer_nilai2=jpaket_transfer_nilai2Field.getValue();
+		else
+			transfer_nilai2=0;
+		
+		transfer_nilai3=jpaket_transfer_nilai3Field.getValue();
+		if(/^\d+$/.test(transfer_nilai3))
+			transfer_nilai3=jpaket_transfer_nilai3Field.getValue();
+		else
+			transfer_nilai3=0;
+		
+		kwitansi_nilai=jpaket_kwitansi_nilaiField.getValue();
+		if(/^\d+$/.test(kwitansi_nilai))
+			kwitansi_nilai=jpaket_kwitansi_nilaiField.getValue();
+		else
+			kwitansi_nilai=0;
+		
+		kwitansi_nilai2=jpaket_kwitansi_nilai2Field.getValue();
+		if(/^\d+$/.test(kwitansi_nilai2))
+			kwitansi_nilai2=jpaket_kwitansi_nilai2Field.getValue();
+		else
+			kwitansi_nilai2=0;
+		
+		kwitansi_nilai3=jpaket_kwitansi_nilai3Field.getValue();
+		if(/^\d+$/.test(kwitansi_nilai3))
+			kwitansi_nilai3=jpaket_kwitansi_nilai3Field.getValue();
+		else
+			kwitansi_nilai3=0;
+		
+		card_nilai=jpaket_card_nilaiField.getValue();
+		if(/^\d+$/.test(card_nilai))
+			card_nilai=jpaket_card_nilaiField.getValue();
+		else
+			card_nilai=0;
+		
+		card_nilai2=jpaket_card_nilai2Field.getValue();
+		if(/^\d+$/.test(card_nilai2))
+			card_nilai2=jpaket_card_nilai2Field.getValue();
+		else
+			card_nilai2=0;
+		
+		card_nilai3=jpaket_card_nilai3Field.getValue();
+		if(/^\d+$/.test(card_nilai3))
+			card_nilai3=jpaket_card_nilai3Field.getValue();
+		else
+			card_nilai3=0;
+		
+		cek_nilai=jpaket_cek_nilaiField.getValue();
+		if(/^\d+$/.test(cek_nilai))
+			cek_nilai=jpaket_cek_nilaiField.getValue();
+		else
+			cek_nilai=0;
+		
+		cek_nilai2=jpaket_cek_nilai2Field.getValue();
+		if(/^\d+$/.test(cek_nilai2))
+			cek_nilai2=jpaket_cek_nilai2Field.getValue();
+		else
+			cek_nilai2=0;
+		
+		cek_nilai3=jpaket_cek_nilai3Field.getValue();
+		if(/^\d+$/.test(cek_nilai3))
+			cek_nilai3=jpaket_cek_nilai3Field.getValue();
+		else
+			cek_nilai3=0;
+		
+		voucher_nilai=jpaket_voucher_cashbackField.getValue();
+		if(/^\d+$/.test(voucher_nilai))
+			voucher_nilai=jpaket_voucher_cashbackField.getValue();
+		else
+			voucher_nilai=0;
+		
+		voucher_nilai2=jpaket_voucher_cashback3Field.getValue();
+		if(/^\d+$/.test(voucher_nilai2))
+			voucher_nilai2=jpaket_voucher_cashback3Field.getValue();
+		else
+			voucher_nilai2=0;
+		
+		voucher_nilai3=jpaket_voucher_cashback3Field.getValue();
+		if(/^\d+$/.test(voucher_nilai3))
+			voucher_nilai3=jpaket_voucher_cashback3Field.getValue();
+		else
+			voucher_nilai3=0;
+
+		tunai_nilai=jpaket_tunai_nilaiField.getValue();
+		if(/^\d+$/.test(tunai_nilai))
+			tunai_nilai=jpaket_tunai_nilaiField.getValue();
+		else
+			tunai_nilai=0;
+
+		tunai_nilai2=jpaket_tunai_nilai2Field.getValue();
+		if(/^\d+$/.test(tunai_nilai2))
+			tunai_nilai2=jpaket_tunai_nilai2Field.getValue();
+		else
+			tunai_nilai2=0;
+
+		tunai_nilai3=jpaket_tunai_nilai3Field.getValue();
+		if(/^\d+$/.test(tunai_nilai3))
+			tunai_nilai3=jpaket_tunai_nilai3Field.getValue();
+		else
+			tunai_nilai3=0;
+
+
+		total_bayar=transfer_nilai+transfer_nilai2+transfer_nilai3+kwitansi_nilai+kwitansi_nilai2+kwitansi_nilai3+card_nilai+card_nilai2+card_nilai3+cek_nilai+cek_nilai2+cek_nilai3+voucher_nilai+voucher_nilai2+voucher_nilai3+tunai_nilai+tunai_nilai2+tunai_nilai3;
+		total_bayar=(total_bayar>0?Math.round(total_bayar):0);
+		jpaket_bayarField.setValue(total_bayar);
+
+		total_hutang=total_harga-total_bayar;
+		total_hutang=(total_hutang>0?Math.round(total_hutang):0);
+		jpaket_hutangField.setValue(total_hutang);
+	}
+	
 	function load_all_jual_paket(){
 		//load_detail_jual_paket();
 		load_total_paket_bayar();
 	}
 	//event on update of detail data store
-	detail_jual_paket_DataStore.on("update",load_all_jual_paket);
-	//detail_jual_paket_DataStore.on("load",load_total_paket_bayar);
+	//detail_jual_paket_DataStore.on("update",load_all_jual_paket);
+	detail_jual_paket_DataStore.on("update",load_total_bayar);
 	jpaket_bayarField.on("keyup",load_total_paket_bayar);
 	jpaket_diskonField.on("keyup",load_total_paket_bayar);
 	jpaket_cashbackField.on("keyup",function(){if(jpaket_post2db=="CREATE"){load_total_paket_bayar();}else if(jpaket_post2db=="UPDATE"){load_total_bayar_updating();}});
