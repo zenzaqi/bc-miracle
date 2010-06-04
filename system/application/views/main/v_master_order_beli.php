@@ -617,6 +617,7 @@ Ext.onReady(function(){
 			readOnly: true,
 			renderer: Ext.util.Format.numberRenderer('0,000')
 		},
+		<? if($_SESSION[SESSION_GROUPID]==9) { ?>
 		{
 			header: '<div align="center">' + 'Sub Total (Rp)' + '</div>',
 			align: 'right',
@@ -670,6 +671,8 @@ Ext.onReady(function(){
                     return '<span>' + order_total_nilai+ '</span>';
             }
 		},
+		<? } ?>
+		
 		{
 			header: '<div align="center">' + 'Cara Bayar' + '</div>',
 			dataIndex: 'order_carabayar',
@@ -1275,6 +1278,7 @@ Ext.onReady(function(){
 				maskRe: /([0-9]+)$/
 			})
 		},
+		<? if($_SESSION[SESSION_GROUPID]==9){ ?>
 		{
 			header: '<div align="center">' + 'Harga (Rp)' + '</div>',
 			align: 'right',
@@ -1307,7 +1311,9 @@ Ext.onReady(function(){
 					subtotal=Ext.util.Format.number((record.data.dorder_harga * record.data.dorder_jumlah*(100-record.data.dorder_diskon)/100),"0,000");
                     return '<span>' + subtotal+ '</span>';
             }
-		},{
+		},
+		<? } ?>
+		{
 			header: '<div align="center">Jml Terima</div>',
 			align: 'right',
 			dataIndex: 'dorder_terima',
