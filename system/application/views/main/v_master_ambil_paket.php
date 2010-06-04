@@ -1043,6 +1043,30 @@ Ext.onReady(function(){
     });
 	//eof
 	
+	cbo_referalDataStore = new Ext.data.Store({
+		id: 'cbo_referalDataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_master_ambil_paket&m=get_referal_list', 
+			method: 'POST'
+		}),baseParams: {start: 0, limit: 15 },
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total'
+		},[
+		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
+			{name: 'karyawan_nama', type: 'string', mapping: 'karyawan_nama'},
+			{name: 'karyawan_username', type: 'string', mapping: 'karyawan_username'},
+			{name: 'karyawan_id', type: 'int', mapping: 'karyawan_id'}
+		]),
+		sortInfo:{field: 'karyawan_username', direction: "ASC"}
+	});
+	var cbo_referal_tpl = new Ext.XTemplate(
+        '<tpl for="."><div class="search-item">',
+            //'<span><b>{dokter_username}</b> | {dokter_display} | <b>{dokter_count}</b>',
+			'<span>{karyawan_username}',
+        '</div></tpl>'
+    );
+	
 	var combo_paket_isi_rawat=new Ext.form.ComboBox({
 			store: cbo_paket_isi_rawatDataStore,
 			mode: 'local',
@@ -1086,13 +1110,28 @@ Ext.onReady(function(){
 		cbo_ambil_paket_custDataStore.reload();
 	});
 	
+	var combo_referal= new Ext.form.ComboBox({
+			store: cbo_referalDataStore,
+			mode: 'remote',
+			tpl: cbo_referal_tpl,
+			displayField: 'karyawan_username',
+			valueField: 'karyawan_id',
+			loadingText: 'Searching...',
+			itemSelector: 'div.search-item',
+			triggerAction: 'all',
+			anchor: '95%'
+	});
+	combo_referal.on('focus', function(){
+		cbo_referalDataStore.reload();
+	});
+	
 	//declaration of detail coloumn model
 	ambil_paket_isi_perawatan_ColumnModel = new Ext.grid.ColumnModel(
 		[
 		{
 			header: '<div align="center">' + 'Tgl Ambil' + '</div>',
 			dataIndex: 'tgl_ambil',
-			width: 70,
+			width: 90,
 			sortable: true,
 			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
 			editor: new Ext.form.DateField({
@@ -1127,6 +1166,14 @@ Ext.onReady(function(){
 			sortable: true,
 			editor: combo_cust_ambil_paket,
 			renderer: Ext.util.Format.comboRenderer(combo_cust_ambil_paket)
+		},
+		{
+			header: '<div align="center">' + 'Referal' + '</div>',
+			dataIndex: 'referal',
+			width: 120,	//150,
+			sortable: true,
+			editor: combo_referal,
+			renderer: Ext.util.Format.comboRenderer(combo_referal)
 		}]
 	);
 	ambil_paket_isi_perawatan_ColumnModel.defaultSortable= true;
@@ -1140,7 +1187,7 @@ Ext.onReady(function(){
 		el: 'fp_ambil_paket_isi_perawatan',
 		title: 'Ambil Paket Perawatan',
 		height: 250,
-		width: 690,
+		width: 710,
 		autoScroll: true,
 		store: ambil_paket_isi_perawatan_DataStore, // DataStore
 		colModel: ambil_paket_isi_perawatan_ColumnModel, // Nama-nama Columns
@@ -1181,7 +1228,8 @@ Ext.onReady(function(){
 			tgl_ambil		: dt.dateFormat('Y-m-d'),
 			rpaket_perawatan: '',		
 			rpaket_jumlah	: '',		
-			rpaket_cust		: ''
+			rpaket_cust		: '',
+			referal			: ''
 		});
 		editor_ambil_paket_isi_perawatan.stopEditing();
 		ambil_paket_isi_perawatan_DataStore.insert(0, edit_ambil_paket_isi_perawatan);
@@ -1220,6 +1268,7 @@ Ext.onReady(function(){
 				dapaket_jumlah	: ambil_paket_isi_perawatan_record.data.rpaket_jumlah,
 				dapaket_cust	: ambil_paket_isi_perawatan_record.data.rpaket_cust,
 				tgl_ambil		: ambil_paket_isi_perawatan_record.data.tgl_ambil.format('Y-m-d'),
+				dapaket_referal	: ambil_paket_isi_perawatan_record.data.referal,
 				count	: count_i,
 				dcount	: count_detail
 				

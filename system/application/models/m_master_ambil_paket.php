@@ -18,6 +18,25 @@ class M_master_ambil_paket extends Model{
 			parent::Model();
 		}
 		
+		function get_referal_list(){
+			$sql=  "SELECT 
+						karyawan_id,karyawan_nama,karyawan_username
+					FROM karyawan 
+					INNER JOIN jabatan ON(karyawan_jabatan=jabatan_id) 
+					WHERE karyawan_aktif='Aktif' AND (jabatan_nama='Dokter' OR jabatan_nama='Therapist')";
+			$query = $this->db->query($sql);
+			$nbrows = $query->num_rows();
+			if($nbrows>0){
+				foreach($query->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+		
 		function get_paket_list($query,$start,$end){
 			/*$rs_rows=0;
 			if(is_numeric($query)==true){
@@ -144,17 +163,17 @@ class M_master_ambil_paket extends Model{
 					,rawat_nama
 					,dapaket_jumlah
 					,cust_nama
-					,IF((dtrawat_petugas1=0),IF((dtrawat_petugas2=0),NULL,terapis.karyawan_username),dokter.karyawan_username) AS referal
+					,IF((isnull(terapis.karyawan_username) AND isnull(dokter.karyawan_username)),referal.karyawan_username,IF((dtrawat_petugas1=0),IF((dtrawat_petugas2=0),NULL,terapis.karyawan_username),dokter.karyawan_username)) AS referal
 				FROM detail_ambil_paket
 				LEFT JOIN perawatan ON(dapaket_item=rawat_id)
 				LEFT JOIN customer ON(dapaket_cust=cust_id)
 				LEFT JOIN tindakan_detail ON(dapaket_dtrawat=dtrawat_id)
 				LEFT JOIN karyawan AS dokter ON(dtrawat_petugas1=dokter.karyawan_id)
                 LEFT JOIN karyawan AS terapis ON(dtrawat_petugas2=terapis.karyawan_id)
+				LEFT JOIN karyawan AS referal ON(dapaket_referal=referal.karyawan_id)
 				WHERE dapaket_dpaket='$dapaket_dpaket'
 				ORDER BY dapaket_date_create";
-
-
+			
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
 			$limit = $query." LIMIT ".$start.",".$end;			
@@ -300,7 +319,7 @@ class M_master_ambil_paket extends Model{
 		//end of function
 		
 		//insert detail record
-		function detail_ambil_paket_isi_perawatan_insert($dapaket_dpaket, $dapaket_jpaket, $dapaket_paket, $dapaket_item, $dapaket_jumlah, $dapaket_cust, $tgl_ambil, $count, $dcount){
+		function detail_ambil_paket_isi_perawatan_insert($dapaket_dpaket, $dapaket_jpaket, $dapaket_paket, $dapaket_item, $dapaket_jumlah, $dapaket_cust, $tgl_ambil, $dapaket_referal, $count, $dcount){
 			$nilai_return='0';
 			//* Check apakah sisa_item dari $dapaket_item tsb masih memiliki sisa ? /
 			$sql_punya_paket="SELECT (dpaket_jumlah*rpaket_jumlah) AS rpaket_jumlah, dpaket_id, dpaket_master, dpaket_paket, dpaket_sisa_paket FROM paket_isi_perawatan LEFT JOIN detail_jual_paket ON(rpaket_master=dpaket_paket) LEFT JOIN master_jual_paket ON(dpaket_master=jpaket_id) WHERE dpaket_id='$dapaket_dpaket' AND rpaket_perawatan='$dapaket_item'";
@@ -326,7 +345,8 @@ class M_master_ambil_paket extends Model{
 							"dapaket_jenis_item"=>'perawatan',
 							"dapaket_jumlah"=>$dapaket_jumlah,
 							"dapaket_cust"=>$dapaket_cust,
-							"dapaket_date_create"=>$tgl_ambil
+							"dapaket_date_create"=>$tgl_ambil,
+							"dapaket_referal"=>$dapaket_referal
 							);
 							$this->db->insert('detail_ambil_paket', $dti_dapaket);
 							
@@ -382,7 +402,8 @@ class M_master_ambil_paket extends Model{
 						"dapaket_jenis_item"=>'perawatan',
 						"dapaket_jumlah"=>$dapaket_jumlah,
 						"dapaket_cust"=>$dapaket_cust,
-						"dapaket_date_create"=>$tgl_ambil
+						"dapaket_date_create"=>$tgl_ambil,
+						"dapaket_referal"=>$dapaket_referal
 						);
 						$this->db->insert('detail_ambil_paket', $dti_dapaket);
 						
