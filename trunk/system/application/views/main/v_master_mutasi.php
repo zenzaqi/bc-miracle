@@ -933,20 +933,19 @@ Ext.onReady(function(){
 	var combo_mutasi_produk=new Ext.form.ComboBox({
 			store: cbo_mutasi_produkDataStore,
 			mode: 'remote',
-			typeAhead: false,
 			displayField: 'mutasi_produk_nama',
 			valueField: 'mutasi_produk_id',
-			triggerAction: 'all',
-			lazyRender:true,
+			typeAhead: false,
 			loadingText: 'Searching...',
-			pageSize: pageS,
+			pageSize:pageS,
 			hideTrigger:false,
-			//tpl : produk_tpl,
+			tpl: produk_tpl,
+			//applyTo: 'search',
 			itemSelector: 'div.search-item',
 			triggerAction: 'all',
+			lazyRender:true,
 			listClass: 'x-combo-list-small',
 			anchor: '95%'
-
 	});
 	
 	var combo_mutasi_satuan=new Ext.form.ComboBox({
@@ -1522,9 +1521,10 @@ Ext.onReady(function(){
 	master_mutasiListEditorGrid.on('afteredit', master_mutasi_update); // inLine Editing Record
 	
 	mutasi_asalField.on("select",function(){
-		cbo_mutasi_produkDataStore.setBaseParam('gudang', get_asal_id());
+		//cbo_mutasi_produkDataStore.setBaseParam('gudang', get_asal_id()); //by masongbee
+		cbo_mutasi_produkDataStore.setBaseParam('gudang', mutasi_asalField.getValue()); //by masongbee
 		cbo_mutasi_produkDataStore.setBaseParam('task','list');
-		cbo_mutasi_produkDataStore.reload();
+		//cbo_mutasi_produkDataStore.reload();
 	});
 	
 	/*combo_mutasi_produk.on("focus",function(){
