@@ -1378,25 +1378,34 @@ Ext.onReady(function(){
 			//2010-05-06 ==> detail_ambil_paketDataStore.load({params: {master_id : master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_cust_id'), tanggal: master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_tanggal').format('Y-m-d'), start:0, limit:pageS}});
 			detail_ambil_paketDataStore.load({params: {dpaket_id : master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('dpaket_id'), tanggal: master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_tanggal').format('Y-m-d'), dapaket_cust: master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_cust_id'), start:0, limit:pageS}});
 			if(master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('keterangan_paket')!=="paket"){
-			cbo_drawat_rawatDataStore.load({
-				params: {query:master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_id')},
-				callback:function(opts, success, response){
-					if(success){
-						detail_jual_rawat_DataStore.load({
-							params : {master_id : master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_id'), start:0, limit:pageS},
-							callback:function(opts, success, response){
-								if(success){
-									master_jual_rawat_set_form();
-									master_jual_rawat_set_updating();
-								}
-							}
-						});
-					}
-				}
-			});
+                            cbo_drawat_rawatDataStore.load({
+                                    params: {query:master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_id')},
+                                    callback:function(opts, success, response){
+                                            if(success){
+                                                    detail_jual_rawat_DataStore.load({
+                                                            params : {master_id : master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_id'), start:0, limit:pageS},
+                                                            callback:function(opts, success, response){
+                                                                    if(success){
+                                                                            master_jual_rawat_set_form();
+                                                                            master_jual_rawat_set_updating();
+                                                                    }
+                                                            }
+                                                    });
+                                            }
+                                    }
+                            });
 			}else{
-				master_jual_rawat_set_form();
-				master_jual_rawat_set_updating();
+                            detail_jual_rawat_DataStore.load({
+                                params : {master_id : 0, start:0, limit:pageS},
+                                callback:function(opts, success, response){
+                                    if(success){
+                                        master_jual_rawat_set_form();
+                                        master_jual_rawat_set_updating();
+                                    }
+                                }
+                            });
+                            //master_jual_rawat_set_form();
+                            //master_jual_rawat_set_updating();
 			}
 			/*detail_jual_rawat_DataStore.load({
 				params : {master_id : master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_id'), start:0, limit:pageS},
