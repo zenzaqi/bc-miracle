@@ -3675,7 +3675,12 @@ Ext.onReady(function(){
 		allowNegative: false,
 		blankText: '0',
 		maxLength: 11,
+		enableKeyEvents: true,
 		maskRe: /([0-9]+)$/
+	});
+	dpaket_jumlahdiskonField.on('keyup', function(){
+		var sub_total_net = ((100-dpaket_jumlahdiskonField.getValue())/100)*dpaket_subtotalField.getValue();
+		dpaket_subtotalnetField.setValue(sub_total_net);
 	});
 		
 
