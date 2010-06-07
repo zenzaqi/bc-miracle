@@ -54,7 +54,7 @@ var master_order_beli_searchWindow;
 var master_order_beli_SelectedRow;
 var master_order_beli_ContextMenu;
 //for detail data
-var detail_order_beli_DataStor;
+var detail_order_beli_DataStore;
 var detail_order_beliListEditorGrid;
 var detail_order_beli_ColumnModel;
 var detail_order_beli_proxy;
@@ -68,6 +68,7 @@ var post2db = '';
 var msg = '';
 var pageS=15;
 var acc_group=<?=$_SESSION[SESSION_GROUPID];?>;
+var stat='ADD';
 /* declare variable here for Field*/
 var order_idField;
 var order_noField;
@@ -507,7 +508,7 @@ Ext.onReady(function(){
 	/* End of Function */
 	
 	/* Function for Retrieve Supplier DataStore */
-	cbo_order_produk_DataStore = new Ext.data.Store({
+	var cbo_order_produk_DataStore = new Ext.data.Store({
 		id: 'cbo_order_produk_DataStore',
 		proxy: new Ext.data.HttpProxy({
 			url: 'index.php?c=c_master_order_beli&m=get_produk_list', 
@@ -1168,7 +1169,11 @@ Ext.onReady(function(){
 	
 	//function for editor of detail
 	var editor_detail_order_beli= new Ext.ux.grid.RowEditor({
-        saveText: 'Update'
+        saveText: 'Update',
+		listeners: function(){
+			stat='ADD';
+			console.log(stat);
+		}
     });
 	//eof
 	
@@ -2019,13 +2024,13 @@ Ext.onReady(function(){
 	//master_order_beli_DataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
 	master_order_beliListEditorGrid.on('afteredit', master_order_beli_update); // inLine Editing Record
 	
-	combo_order_produk.on("focus",function(){
+	/*combo_order_produk.on("focus",function(){
 		cbo_order_produk_DataStore.setBaseParam('task','list');
 		var selectedquery=detail_order_beliListEditorGrid.getSelectionModel().getSelected().get('produk_nama');
 		cbo_order_produk_DataStore.setBaseParam('query',selectedquery);
 		
 		//cbo_order_produk_DataStore.load();
-	});
+	});*/
 	
 	combo_order_satuan.on("focus",function(){
 		cbo_order_satuanDataStore.setBaseParam('task','produk');
@@ -2060,9 +2065,10 @@ Ext.onReady(function(){
 		cbo_order_satuanDataStore.setBaseParam('task','selected');
 		cbo_order_satuanDataStore.setBaseParam('selected_id',satuan_selected);
 		cbo_order_satuanDataStore.load();
-		//detail_order_beliListEditorGrid.getView().refresh();
+		stat='EDIT';
 	});
-		
+	
+	
 	
 });
 	</script>
