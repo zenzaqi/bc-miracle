@@ -8,7 +8,6 @@
 	+ Filename 		: c_kartu_stok.php
  	+ creator 		: 
  	+ Created on 09/Apr/2010 10:47:15
-	
 */
 
 class M_kartu_stok extends Model{
@@ -192,7 +191,7 @@ class M_kartu_stok extends Model{
 					$sql="SELECT tanggal,rbeli_nobukti as no_bukti, concat('Retur ke ',supplier_nama) as keterangan, jumlah_barang*konversi_nilai*".$konversi." as keluar, 0 as masuk, 0 as koreksi 
 							FROM vu_detail_retur_beli,satuan_konversi 
 						 	WHERE vu_detail_retur_beli.satuan_id=satuan_konversi.konversi_satuan AND produk_id=konversi_produk
-							AND produk_id='".$produk_id."' 
+							AND konversi_produk='".$produk_id."' 
 							AND date_format(tanggal,'%Y-%m-%d')>='".$tanggal_start."' AND date_format(tanggal,'%Y-%m-%d')<='".$tanggal_end."'";
 							
 					$result=$this->db->query($sql);
@@ -230,7 +229,7 @@ class M_kartu_stok extends Model{
 							as masuk, 0 as keluar, 0 as koreksi 
 							FROM vu_detail_retur_jual_produk,satuan_konversi 
 						 	WHERE vu_detail_retur_jual_produk.drproduk_satuan=satuan_konversi.konversi_satuan AND drproduk_produk=konversi_produk
-							AND produk_id='".$produk_id."' 
+							AND konversi_produk='".$produk_id."' 
 							AND date_format(rproduk_tanggal,'%Y-%m-%d')>='".$tanggal_start."' AND date_format(rproduk_tanggal,'%Y-%m-%d')<='".$tanggal_end."'";
 							
 					$result=$this->db->query($sql);
