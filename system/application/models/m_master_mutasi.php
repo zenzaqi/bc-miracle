@@ -124,10 +124,10 @@ class M_master_mutasi extends Model{
 				$sql.=" produk_id IN(SELECT dmutasi_produk FROM detail_mutasi WHERE dmutasi_master='".$master_id."')";
 			}
 			
-			/*if($query!==""){
+			if($query!==""){
 				$sql.=(eregi("WHERE",$sql)?" AND ":" WHERE ")." produk_nama like '%".$query."%' OR produk_kode like '%".$query."%'";
 			}
-			*/
+			
 			$result = $this->db->query($sql);
 			$nbrows = $result->num_rows();
 			$limit = $sql." LIMIT ".$start.",".$end;			

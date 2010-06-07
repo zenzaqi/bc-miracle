@@ -183,7 +183,7 @@ Ext.onReady(function(){
 			success: function(response){             
 				var result=eval(response.responseText);
 				if(result!==0){
-						detail_mutasi_purge(result)
+						detail_mutasi_purge(result);
 						Ext.MessageBox.alert(post2db+' OK','Data mutasi barang berhasil disimpan');
 						master_mutasi_createWindow.hide();
 				}else{
@@ -420,7 +420,7 @@ Ext.onReady(function(){
 			url: 'index.php?c=c_master_mutasi&m=get_action', 
 			method: 'POST'
 		}),
-		baseParams:{task: "LIST"}, // parameter yang di $_POST ke Controller
+		baseParams:{task: "LIST", start: 0, limit: pageS}, // parameter yang di $_POST ke Controller
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
@@ -1051,7 +1051,7 @@ Ext.onReady(function(){
 		});
 		editor_detail_mutasi.stopEditing();
 		detail_mutasi_DataStore.insert(0, edit_detail_mutasi);
-		detail_mutasiListEditorGrid.getView().refresh();
+		//detail_mutasiListEditorGrid.getView().refresh();
 		detail_mutasiListEditorGrid.getSelectionModel().selectRow(0);
 		editor_detail_mutasi.startEditing(0);
 	}
@@ -1075,11 +1075,14 @@ Ext.onReady(function(){
 				dmutasi_produk	: detail_mutasi_record.data.dmutasi_produk, 
 				dmutasi_satuan	: detail_mutasi_record.data.dmutasi_satuan, 
 				dmutasi_jumlah	: detail_mutasi_record.data.dmutasi_jumlah 
-				
+				},
+				callback: function(opts, success, response){
+					if(success){
+						master_mutasi_DataStore.load();
+					}
 				}
 			});
 		}
-		master_mutasi_DataStore.load();
 	}
 	//eof
 	
@@ -1128,7 +1131,7 @@ Ext.onReady(function(){
 	//eof
 	
 	//event on update of detail data store
-	detail_mutasi_DataStore.on('update', refresh_detail_mutasi);
+	//detail_mutasi_DataStore.on('update', refresh_detail_mutasi);
 	
 	/* Function for retrieve create Window Panel*/ 
 	master_mutasi_createForm = new Ext.FormPanel({
@@ -1527,13 +1530,13 @@ Ext.onReady(function(){
 		//cbo_mutasi_produkDataStore.reload();
 	});
 	
-	/*combo_mutasi_produk.on("focus",function(){
+	combo_mutasi_produk.on("focus",function(){
 		cbo_mutasi_produkDataStore.setBaseParam('task','list');
 		var selectedquery=detail_mutasiListEditorGrid.getSelectionModel().getSelected().get('produk_nama');
 		cbo_mutasi_produkDataStore.setBaseParam('query',selectedquery);
 		
 		//cbo_order_produk_DataStore.load();
-	});*/
+	});
 	
 	combo_mutasi_satuan.on("focus",function(){
 		cbo_mutasi_satuanDataStore.setBaseParam('task','produk');
