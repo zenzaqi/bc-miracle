@@ -72,12 +72,12 @@ class M_master_mutasi extends Model{
 				$sql.=(eregi("WHERE",$sql)?" AND ":" WHERE ")." gudang_id =".$gudang."";
 			}*/
 			if($gudang==1){
-				//$sql="SELECT distinct produk_id,produk_kode,produk_nama,satuan_nama,0 FROM vu_produk_satuan_default"; //by masongbee
-				$sql="SELECT distinct produk_id,produk_kode,produk_nama,satuan_nama,jumlah_stok FROM vu_stok_gudang_besar_saldo";
+				$sql="SELECT distinct produk_id,produk_kode,produk_nama,0 FROM vu_produk_satuan_default";
+				//$sql="SELECT distinct produk_id,produk_kode,produk_nama,satuan_nama,jumlah_stok FROM vu_stok_gudang_besar_saldo"; //by masongbee
 			}elseif($gudang==2){
-				$sql="SELECT distinct produk_id,produk_kode,produk_nama,satuan_nama,0 FROM vu_produk_satuan_default";
+				$sql="SELECT distinct produk_id,produk_kode,produk_nama,0 FROM vu_produk_satuan_default";
 			}else{
-				$sql="SELECT distinct produk_id,produk_kode,produk_nama,satuan_nama,0 FROM vu_produk_satuan_default";
+				$sql="SELECT distinct produk_id,produk_kode,produk_nama,0 FROM vu_produk_satuan_default";
 			}
 			
 			if($query!==""){
