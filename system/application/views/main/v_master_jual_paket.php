@@ -1179,7 +1179,7 @@ Ext.onReady(function(){
 			jpaket_custField.setDisabled(true);
 			jpaket_tanggalField.setDisabled(true);
 			jpaket_keteranganField.setDisabled(true);
-			master_cara_bayarTabPanel.setDisabled(false);
+			master_cara_bayarTabPanel.setDisabled(true);
 			detail_jual_paketListEditorGrid.setDisabled(true);
 			detail_pengguna_paketListEditorGrid.setDisabled(true);
 			jpaket_diskonField.setDisabled(true);
