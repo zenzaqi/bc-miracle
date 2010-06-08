@@ -22,12 +22,9 @@ class M_outbox extends Model{
 		function outbox_list($filter,$start,$end){
 			$query = "SELECT * FROM outbox";
 			
-			// For simple search
-			// For simple search
-			
 			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (outbox_id LIKE '%".addslashes($filter)."%' OR outbox_destination LIKE '%".addslashes($filter)."%' OR outbox_message LIKE '%".addslashes($filter)."%' OR outbox_date LIKE '%".addslashes($filter)."%' OR outbox_creator LIKE '%".addslashes($filter)."%' OR outbox_date_create LIKE '%".addslashes($filter)."%' OR outbox_update LIKE '%".addslashes($filter)."%' OR outbox_date_update LIKE '%".addslashes($filter)."%' OR outbox_revised LIKE '%".addslashes($filter)."%' )";
+				$query .= " (outbox_id LIKE '%".addslashes($filter)."%' OR outbox_destination LIKE '%".addslashes($filter)."%' OR outbox_message LIKE '%".addslashes($filter)."%' )";
 			}
 			
 			$result = $this->db->query($query);
@@ -130,22 +127,7 @@ class M_outbox extends Model{
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " outbox_creator LIKE '%".$outbox_creator."%'";
 			};
-			if($outbox_date_create!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " outbox_date_create LIKE '%".$outbox_date_create."%'";
-			};
-			if($outbox_update!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " outbox_update LIKE '%".$outbox_update."%'";
-			};
-			if($outbox_date_update!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " outbox_date_update LIKE '%".$outbox_date_update."%'";
-			};
-			if($outbox_revised!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " outbox_revised LIKE '%".$outbox_revised."%'";
-			};
+			
 			
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
