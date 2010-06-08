@@ -26,6 +26,16 @@ class C_phonegroup extends Controller {
 		$this->load->view('main/v_phonegroup');
 	}
 	
+	
+	function get_customer_list(){
+		$query = isset($_POST['query']) ? $_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		$result=$this->m_public_function->get_customer_list($query,$start,$end);
+		echo $result;
+	}
+	
+	
 	//event handler action
 	function get_action(){
 		$task = $_POST['task'];
@@ -77,9 +87,11 @@ class C_phonegroup extends Controller {
 		$priority = isset($_POST['priority']) ? @$_POST['priority'] : @$_GET['priority'];
 		$unit = isset($_POST['unit']) ? @$_POST['unit'] : @$_GET['unit'];
 		$aktif = isset($_POST['aktif']) ? @$_POST['aktif'] : @$_GET['aktif'];
+		$no = isset($_POST['no']) ? @$_POST['no'] : @$_GET['no'];
+		$nama = isset($_POST['nama']) ? @$_POST['nama'] : @$_GET['nama'];
 																  
 		if($task=='search')
-			$result=$this->m_phonegroup->get_cust_available($umur, $agama, $kota, $propinsi, $pendidikan, $kelamin, $profesi, $hobi, $stsnikah, $priority, $unit, $aktif, $query,$start,$end);
+			$result=$this->m_phonegroup->get_cust_available($umur, $agama, $kota, $propinsi, $pendidikan, $kelamin, $profesi, $hobi, $stsnikah, $priority, $unit, $aktif, $no, $nama, $query,$start,$end);
 		else
 			$result=$this->m_phonegroup->get_available($query,$start,$end);
 		echo $result;
