@@ -656,14 +656,15 @@ class M_master_jual_rawat extends Model{
                 $paket_jmlisi = $record['paket_jmlisi'];
             }
             
-            $sql="DELETE FROM detail_ambil_paket WHERE dapaket_id='$dapaket_id'";
+            //backup_20100607 ==> $sql="DELETE FROM detail_ambil_paket WHERE dapaket_id='$dapaket_id'";
+            $sql="UPDATE detail_ambil_paket SET dapaket_stat_dok='Batal' WHERE dapaket_id='$dapaket_id'";
             $this->db->query($sql);
 			if($this->db->affected_rows()){
                 $sisa_paket = 0;
                 $sql="SELECT
                         sum(dapaket_jumlah) AS total_pakai_paket
                     FROM detail_ambil_paket
-                    WHERE dapaket_dpaket='$dpaket_id'
+                    WHERE dapaket_dpaket='$dpaket_id' AND dapaket_stat_dok<>'Batal'
                     GROUP BY dapaket_dpaket";
                 $rs = $this->db->query($sql);
                 if($rs->num_rows()){
@@ -756,7 +757,8 @@ class M_master_jual_rawat extends Model{
                         WHERE date_format(vu_jrawat_pr.jrawat_date_create,'%Y-%m-%d'
                     )='$date_now'
                     AND vu_jrawat_pr.jrawat_stat_dok='Terbuka')
-                    AND vu_jrawat_pk.dapaket_stat_dok='Terbuka'";
+                ORDER BY vu_jrawat_pk.dapaket_stat_dok";
+                    //AND vu_jrawat_pk.dapaket_stat_dok='Terbuka'";
 			
 			// For simple search
 			if ($filter<>""){
@@ -1482,7 +1484,7 @@ class M_master_jual_rawat extends Model{
                 else{
                     return '-1';
                 }
-			}elseif((substr($jrawat_nobukti,0,2)=='PK') && $cetak_jrawat==1){
+			}elseif((substr($jrawat_nobukti,0,2)=='') && $cetak_jrawat==1){
 				return '-3';
 			}elseif((substr($jrawat_nobukti,0,2)=='PK') && $cetak_jrawat<>1 && $jrawat_stat_dok=='Batal'){
 				return '-4';

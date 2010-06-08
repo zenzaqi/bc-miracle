@@ -909,7 +909,8 @@ Ext.onReady(function(){
 			{name: 'dapaket_jumlah', type: 'int', mapping: 'dapaket_jumlah'},
 			{name: 'cust_nama', type: 'string', mapping: 'cust_nama'},
 			{name: 'tgl_ambil', type: 'date', dateFormat: 'Y-m-d', mapping: 'tgl_ambil'},
-			{name: 'referal', type: 'string', mapping: 'referal'}
+			{name: 'referal', type: 'string', mapping: 'referal'},
+			{name: 'dapaket_stat_dok', type: 'string', mapping: 'dapaket_stat_dok'}
 		]),
 		sortInfo:{field: 'cust_nama', direction: "ASC"}//,
 //		groupField: 'apaket_faktur'	//simplified, by hendri
@@ -961,7 +962,7 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Perawatan' + '</div>',
 			dataIndex: 'rawat_nama',
-			width: 450
+			width: 440
 		},
 		{
 			header: '<div align="center">' + 'Jumlah' + '</div>',
@@ -973,11 +974,15 @@ Ext.onReady(function(){
 		},{
 			header: '<div align="center">' + 'Pemakai' + '</div>',
 			dataIndex: 'cust_nama',
-			width: 410
+			width: 380
 		},{
 			header: '<div align="center">' + 'Referal' + '</div>',
 			dataIndex: 'referal',
-			width: 190
+			width: 140
+		},{
+			header: '<div align="center">' + 'Dokumen' + '</div>',
+			dataIndex: 'dapaket_stat_dok',
+			width: 90
 		}]
     );
     detail_ambil_paketColumnModel.defaultSortable= true;
