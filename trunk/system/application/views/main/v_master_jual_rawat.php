@@ -509,6 +509,7 @@ Ext.onReady(function(){
 		if(jrawat_transfer_bank3Field.getValue()!== null){jrawat_transfer_bank3_create = jrawat_transfer_bank3Field.getValue();} 
 		if(jrawat_transfer_nama3Field.getValue()!== null){jrawat_transfer_nama3_create = jrawat_transfer_nama3Field.getValue();}
 		if(jrawat_transfer_nilai3Field.getValue()!== null){jrawat_transfer_nilai3_create = jrawat_transfer_nilai3Field.getValue();} 
+		
 		Ext.Ajax.request({  
 			waitMsg: 'Please wait...',
 			waitMsg: 'Mohon tunggu...',
@@ -609,13 +610,13 @@ Ext.onReady(function(){
 			}, 
 			success: function(response){             
 				var result=eval(response.responseText);
-                                if(result==0){
+				if(result==0){
 					Ext.MessageBox.alert(jrawat_post2db+' OK','Data penjualan perawatan berhasil disimpan');
 					if(jrawat_post2db=="UPDATE"){
-					    detail_jual_rawat_update();
-                                            detail_ambil_paket_update();
+						detail_jual_rawat_update();
+                        detail_ambil_paket_update();
 					}else if(jrawat_post2db=="CREATE"){
-					    detail_jual_rawat_insert_nocetak();
+						detail_jual_rawat_insert_nocetak();
 					}
 					master_jual_rawat_DataStore.reload();
 					detail_jual_rawat_DataStore.load({params: {master_id:0}});
@@ -933,9 +934,7 @@ Ext.onReady(function(){
 		
 		dpaket_idField.setValue(master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('dpaket_id'));
 		jrawat_idField.setValue(master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_id'));
-                if(master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('keterangan_paket')!=='paket'){
-                    jrawat_nobuktiField.setValue(master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_nobukti'));
-                }
+		jrawat_nobuktiField.setValue(master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_nobukti'));
 		jrawat_custField.setValue(master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_cust'));
 		jrawat_cust_idField.setValue(master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_cust_id'));
 		jrawat_tanggalField.setValue(master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_tanggal'));
@@ -1290,8 +1289,9 @@ Ext.onReady(function(){
 		if(jrawat_post2db=="UPDATE" && master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_stat_dok')=="Terbuka"){
 			jrawat_custField.setDisabled(true);
 			jrawat_tanggalField.setDisabled(true);
+			jrawat_stat_dokField.setDisabled(false);
 		}
-		if(jrawat_post2db=="UPDATE" && (master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_stat_dok')=="Tertutup" || master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_stat_dok')=="Batal")){
+		if(jrawat_post2db=="UPDATE" && master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_stat_dok')=="Tertutup"){
 			jrawat_custField.setDisabled(true);
 			jrawat_tanggalField.setDisabled(true);
 			jrawat_keteranganField.setDisabled(true);
@@ -1299,7 +1299,6 @@ Ext.onReady(function(){
 			detail_jual_rawatListEditorGrid.setDisabled(true);
 			jrawat_diskonField.setDisabled(true);
 			jrawat_cashback_cfField.setDisabled(true);
-                        jrawat_stat_dokField.setDisabled(true);
 		}
 	}
   
@@ -4252,7 +4251,7 @@ Ext.onReady(function(){
 	}
     
     function detail_ambil_paket_update(){
-	var count_detail=detail_ambil_paketDataStore.getCount();
+		var count_detail=detail_ambil_paketDataStore.getCount();
 	for(i=0;i<detail_ambil_paketDataStore.getCount();i++){
 	    detail_ambil_paket_record=detail_ambil_paketDataStore.getAt(i);
             Ext.Ajax.request({
