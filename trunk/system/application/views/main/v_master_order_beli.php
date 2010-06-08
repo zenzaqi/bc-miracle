@@ -1169,11 +1169,11 @@ Ext.onReady(function(){
 	
 	//function for editor of detail
 	var editor_detail_order_beli= new Ext.ux.grid.RowEditor({
-        saveText: 'Update',
+        saveText: 'Update'/*,
 		listeners: function(){
 			stat='ADD';
 			console.log(stat);
-		}
+		}*/
     });
 	//eof
 	
