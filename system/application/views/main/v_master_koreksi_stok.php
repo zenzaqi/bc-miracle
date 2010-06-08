@@ -245,6 +245,7 @@ Ext.onReady(function(){
 		
 		
 		
+		
 	}
  	/* End of Function */
   
@@ -969,6 +970,11 @@ Ext.onReady(function(){
 	detail_koreksi_stok_ColumnModel.defaultSortable= true;
 	//eof
 	
+	var detail_koreksi_pagingToolbar= new Ext.PagingToolbar({
+			pageSize: pageS,
+			store: detail_koreksi_stok_DataStore,
+			displayInfo: true
+		});
 	
 	//declaration of detail list editor grid
 	detail_koreksi_stokListEditorGrid =  new Ext.grid.EditorGridPanel({
@@ -988,12 +994,7 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true},
-		bbar: new Ext.PagingToolbar({
-			pageSize: pageS,
-			store: detail_koreksi_stok_DataStore,
-			displayInfo: true
-		}),
-		/* Add Control on ToolBar */
+		bbar: detail_koreksi_pagingToolbar,
 		tbar: [
 		{
 			text: 'Add',
@@ -1595,10 +1596,10 @@ Ext.onReady(function(){
 		});
 		
 		
+		
 		//detail_order_beliListEditorGrid.getView().refresh();
 	});
-	
-	
+		
 });
 	</script>
 <body>
