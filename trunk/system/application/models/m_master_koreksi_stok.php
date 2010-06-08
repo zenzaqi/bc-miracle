@@ -132,11 +132,11 @@ class M_master_koreksi_stok extends Model{
 			}
 			*/
 			
-			$sql="SELECT distinct produk_id,produk_kode,produk_nama,satuan_kode, satuan_nama FROM vu_produk_satuan_default WHERE produk_aktif='Aktif'";
+			$sql="SELECT distinct produk_id,produk_kode,produk_nama,satuan_kode, satuan_nama FROM vu_produk_satuan_default";
 			
 			if($master_id<>""){
 				$sql.=(eregi("WHERE",$sql)?" AND ":" WHERE ");
-				$sql.=" produk_id IN(SELECT dkoreksi_produk FROM detail_koreksi_stok WHERE dkoreksi_master='".$master_id."')";
+				$sql.=" produk_id IN(SELECT dkoreksi_produk FROM detail_koreksi_stok WHERE dkoreksi_master='".$master_id."') ORDER by produk_id ASC";
 			}
 			
 			/*if($query!==""){
@@ -145,9 +145,9 @@ class M_master_koreksi_stok extends Model{
 			
 			$result = $this->db->query($sql);
 			$nbrows = $result->num_rows();
-			$limit = $sql." LIMIT ".$start.",".$end;			
+			/*$limit = $sql." LIMIT ".$start.",".$end;			
 			$result = $this->db->query($limit);  
-			
+			*/
 			if($nbrows>0){
 				foreach($result->result() as $row){
 					$arr[] = $row;
@@ -225,7 +225,7 @@ class M_master_koreksi_stok extends Model{
 		//function for detail
 		//get record list
 		function detail_detail_koreksi_stok_list($master_id,$query,$start,$end) {
-			$query = "SELECT * FROM detail_koreksi_stok where dkoreksi_master='".$master_id."'";
+			$query = "SELECT * FROM detail_koreksi_stok WHERE dkoreksi_master='".$master_id."' AND dkoreksi_produk<>0 ORDER by dkoreksi_produk ASC";
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
 			$limit = $query." LIMIT ".$start.",".$end;			
