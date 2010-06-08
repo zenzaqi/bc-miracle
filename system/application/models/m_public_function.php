@@ -471,8 +471,14 @@ class M_public_function extends Model{
 		}
 	}
 	
-	function get_supplier_list($start,$end){
+	function get_supplier_list($query,$start,$end){
 		$sql="SELECT supplier_id,supplier_nama,supplier_alamat,supplier_kota,supplier_notelp FROM supplier where supplier_aktif='Aktif'";
+		
+		if($query<>""){
+			$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
+			$sql .= " (supplier_nama LIKE '%".addslashes($query)."%')";
+		}
+		
 		$result = $this->db->query($sql);
 		$nbrows = $result->num_rows();
 		$limit = $sql." LIMIT ".$start.",".$end;		
