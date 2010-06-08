@@ -19,6 +19,11 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 -- Struktur dari tabel `detail_koreksi_stok`
 --
 
+
+INSERT INTO `master_koreksi_stok` (`koreksi_id`, `koreksi_gudang`, `koreksi_tanggal`, `koreksi_keterangan`, `koreksi_status`, `koreksi_creator`, `koreksi_date_create`, `koreksi_update`, `koreksi_date_update`, `koreksi_revised`) VALUES
+(13, 1, '2010-06-07', NULL, 'Terbuka', NULL, NULL, NULL, NULL, NULL);
+
+
 INSERT INTO `detail_koreksi_stok` (`dkoreksi_id`, `dkoreksi_master`, `dkoreksi_produk`, `dkoreksi_satuan`, `dkoreksi_jmlawal`, `dkoreksi_jmlkoreksi`, `dkoreksi_jmlsaldo`, `dkoreksi_ket`) VALUES
 (13, 10, 13, 13, 42.00, 60.00, 102.00, ''),
 (14, 11, 25, 14, 0.00, 60.00, 60.00, ''),
