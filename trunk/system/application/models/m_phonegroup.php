@@ -71,7 +71,7 @@ class M_phonegroup extends Model{
 								outbox_creator,
 								outbox_date_create)
 							values(
-								'".$value."',
+								'".trim($value)."',
 								'".$isms_isi."',
 								'".date('Y/m/d H:i:s')."',
 								'unsent',
@@ -79,11 +79,31 @@ class M_phonegroup extends Model{
 								'".date('Y/m/d H:i:s')."')";
 						$this->db->query($sql);
 						$sql="";
+						$sql="";
 					}
 				}elseif($isms_opsi=="group"){
-					$sql="select phonegrouped_number from phonegrouped where phonegrouped_group='".$isms_dest."'";
-					$query=$this->db->query($sql);
-					foreach($query->result() as $row){
+					
+					$sql_sms="INSERT INTO outbox(
+								outbox_destination,
+								outbox_message,
+								outbox_date,
+								outbox_status,
+								outbox_creator,
+								outbox_date_create)
+							SELECT 
+								phonegrouped_number,
+								'".$isms_isi."',
+								'".date('Y/m/d H:i:s')."',
+								'unsent',
+								'".$_SESSION[SESSION_USERID]."',
+								'".date('Y/m/d H:i:s')."'
+							FROM phonegrouped
+							WHERE phonegrouped_group='".$isms_dest."'";
+					$this->db->query($sql_sms);
+					
+					/*$sql="select phonegrouped_number from phonegrouped where phonegrouped_group='".$isms_dest."'";
+					$query=$this->db->query($sql);*/
+					/*foreach($query->result() as $row){
 						$sql_sms="insert into outbox(
 								outbox_destination,
 								outbox_message,
@@ -98,9 +118,9 @@ class M_phonegroup extends Model{
 								'unsent',
 								'".$_SESSION[SESSION_USERID]."',
 								'".date('Y/m/d H:i:s')."')";
-							//echo $sql;
+							echo $sql;
 						$this->db->query($sql_sms);
-					}
+					}*/
 				}elseif($isms_opsi=='kelamin'){
 					$sql="select cust_hp from customer where cust_kelamin='".$isms_dest."' AND cust_hp<>'' AND cust_hp is not null";
 					$query=$this->db->query($sql);
