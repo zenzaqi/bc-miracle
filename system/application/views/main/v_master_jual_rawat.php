@@ -1288,8 +1288,8 @@ Ext.onReady(function(){
 	
 	function master_jual_rawat_set_updating(){
             if(jrawat_post2db=="UPDATE" && master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_stat_dok')=="Terbuka"){
-                jrawat_custField.setDisabled(true);
-                jrawat_tanggalField.setDisabled(true);
+                jrawat_custField.setDisabled(false);
+                jrawat_tanggalField.setDisabled(false);
                 jrawat_keteranganField.setDisabled(false);
                 master_cara_bayarTabPanel.setDisabled(false);
                 detail_jual_rawatListEditorGrid.setDisabled(false);
@@ -1305,7 +1305,7 @@ Ext.onReady(function(){
                 detail_jual_rawatListEditorGrid.setDisabled(true);
                 jrawat_diskonField.setDisabled(true);
                 jrawat_cashback_cfField.setDisabled(true);
-                jrawat_stat_dokField.setDisabled(true);
+                jrawat_stat_dokField.setDisabled(false);
             }
 	}
   

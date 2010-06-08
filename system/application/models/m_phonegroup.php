@@ -71,7 +71,7 @@ class M_phonegroup extends Model{
 								outbox_creator,
 								outbox_date_create)
 							values(
-								'".trim($value)."',
+								'".$value."',
 								'".$isms_isi."',
 								'".date('Y/m/d H:i:s')."',
 								'unsent',
@@ -79,31 +79,11 @@ class M_phonegroup extends Model{
 								'".date('Y/m/d H:i:s')."')";
 						$this->db->query($sql);
 						$sql="";
-						$sql="";
 					}
 				}elseif($isms_opsi=="group"){
-					
-					$sql_sms="INSERT INTO outbox(
-								outbox_destination,
-								outbox_message,
-								outbox_date,
-								outbox_status,
-								outbox_creator,
-								outbox_date_create)
-							SELECT 
-								phonegrouped_number,
-								'".$isms_isi."',
-								'".date('Y/m/d H:i:s')."',
-								'unsent',
-								'".$_SESSION[SESSION_USERID]."',
-								'".date('Y/m/d H:i:s')."'
-							FROM phonegrouped
-							WHERE phonegrouped_group='".$isms_dest."'";
-					$this->db->query($sql_sms);
-					
-					/*$sql="select phonegrouped_number from phonegrouped where phonegrouped_group='".$isms_dest."'";
-					$query=$this->db->query($sql);*/
-					/*foreach($query->result() as $row){
+					$sql="select phonegrouped_number from phonegrouped where phonegrouped_group='".$isms_dest."'";
+					$query=$this->db->query($sql);
+					foreach($query->result() as $row){
 						$sql_sms="insert into outbox(
 								outbox_destination,
 								outbox_message,
@@ -118,9 +98,9 @@ class M_phonegroup extends Model{
 								'unsent',
 								'".$_SESSION[SESSION_USERID]."',
 								'".date('Y/m/d H:i:s')."')";
-							echo $sql;
+							//echo $sql;
 						$this->db->query($sql_sms);
-					}*/
+					}
 				}elseif($isms_opsi=='kelamin'){
 					$sql="select cust_hp from customer where cust_kelamin='".$isms_dest."' AND cust_hp<>'' AND cust_hp is not null";
 					$query=$this->db->query($sql);
@@ -238,7 +218,7 @@ class M_phonegroup extends Model{
 			
 		}
 		
-		function get_cust_available($umur, $agama, $kota, $propinsi, $pendidikan, $kelamin, $profesi, $hobi, $stsnikah, $priority, $unit, $aktif, $query,$start,$end){
+		function get_cust_available($umur, $agama, $kota, $propinsi, $pendidikan, $kelamin, $profesi, $hobi, $stsnikah, $priority, $unit, $aktif, $no, $nama, $query,$start,$end){
 			
 			$sql="select concat(cust_nama,' (',cust_no,')') as cust_nama, cust_no,cust_hp from vu_customer where cust_hp not in(select phonegrouped_number from phonegrouped) and cust_hp<>''";
 			
@@ -285,9 +265,19 @@ class M_phonegroup extends Model{
 				$sql.= " cust_aktif LIKE '%".$aktif."%'";
 			}
 			
+			if($no!=""){
+				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+				$sql.= " cust_no LIKE '%".$no."%'";
+			}
+			
+			if($nama!=""){
+				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+				$sql.= " cust_nama LIKE '%".$nama."%'";
+			}
+			
 			if($query!==""){
 				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
-				$sql.=" cust_nama like '%".$query."%' or cust_hp like '%".$query."%'";
+				$sql.=" cust_hp like '%".$query."%'";
 			}
 			
 			$result = $this->db->query($sql);

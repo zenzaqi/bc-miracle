@@ -519,6 +519,17 @@ Ext.onReady(function(){
 	}); 
 	/* End of Declaration */
 	
+	var customer_tpl = new Ext.XTemplate(
+        '<tpl for="."><div class="search-item">',
+//            '<span><b>{cust_no} : {cust_nama}</b> | Tgl-Lahir:{cust_tgllahir:date("M j, Y")}<br /></span>',
+//            'Alamat: {cust_alamat}&nbsp;&nbsp;&nbsp;[Telp. {cust_telprumah}]',
+            '<span><b>{cust_no} : {cust_nama}</b><br /></span>',
+            '{cust_alamat} | {cust_telprumah}',
+        '</div></tpl>'
+    );
+	
+	
+	
 	/* Event while selected row via context menu */
 	function onphonegroup_ListEditGridContextMenu(grid, rowIndex, e) {
 		e.stopEvent();
@@ -684,10 +695,48 @@ Ext.onReady(function(){
 		sortInfo:{field: 'propinsi_nama', direction: "ASC"}
 	});
 	
+
+	/*cbo_cust_DataStore = new Ext.data.Store({
+		id: 'cbo_cust_DataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_phonegroup&m=get_customer_list', 
+			method: 'POST'
+		}),
+		baseParams:{start: 0, limit: 10 }, // parameter yang di $_POST ke Controller
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'cust_id'
+		},[
+			{name: 'cust_id', type: 'int', mapping: 'cust_id'},
+			{name: 'cust_no', type: 'string', mapping: 'cust_no'},
+			{name: 'cust_nama', type: 'string', mapping: 'cust_nama'},
+			{name: 'cust_tgllahir', type: 'date', dateFormat: 'Y-m-d', mapping: 'cust_tgllahir'},
+			{name: 'cust_alamat', type: 'string', mapping: 'cust_alamat'},
+			{name: 'cust_telprumah', type: 'string', mapping: 'cust_telprumah'}
+		]),
+		sortInfo:{field: 'cust_no', direction: "ASC"}
+	});*/
+	
+	
 	var pgcust_kota_SearchField=new Ext.form.TextField({
 		id: 'pgcust_kota_SearchField',
 		name: 'pgcust_kota_SearchField',
 		fieldLabel: 'Kota',
+		anchor: '98%'
+	});
+	
+	var pgcust_no_SearchField=new Ext.form.TextField({
+		id: 'pgcust_no_SearchField',
+		name: 'pgcust_no_SearchField',
+		fieldLabel: 'No Customer',
+		anchor: '98%'
+	});
+	
+	var pgcust_nama_SearchField=new Ext.form.TextField({
+		id: 'pgcust_nama_SearchField',
+		name: 'pgcust_nama_SearchField',
+		fieldLabel: 'Nama Customer',
 		anchor: '98%'
 	});
 	
@@ -707,6 +756,28 @@ Ext.onReady(function(){
 		anchor: '55%',
 		triggerAction: 'all'	
 	});
+	
+	/*var pgcust_custSearchField= new Ext.form.ComboBox({
+		id: 'pgcust_custSearchField',
+		fieldLabel: 'Customer',
+		store: cbo_cust_DataStore,
+		mode: 'remote',
+		displayField:'cust_nama',
+		valueField: 'cust_id',
+        typeAhead: false,
+        loadingText: 'Searching...',
+        pageSize:10,
+        hideTrigger:false,
+        tpl: customer_tpl,
+        //applyTo: 'search',
+        itemSelector: 'div.search-item',
+		triggerAction: 'all',
+		lazyRender:true,
+		listClass: 'x-combo-list-small',
+		anchor: '95%'
+	});*/
+	
+	
 	
 	var pgcust_propinsi_SearchField= new Ext.form.ComboBox({
 		id: 'pgcust_propinsi_SearchField',
@@ -856,6 +927,9 @@ Ext.onReady(function(){
 		pgcust_umur_SearchField.reset();
 		pgcust_agama_SearchField.reset();
 		pgcust_kota_SearchField.reset();
+		//pgcust_custSearchField.reset();
+		pgcust_no_SearchField.reset();
+		pgcust_nama_SearchField.reset();
 		pgcust_propinsi_SearchField.reset();
 		pgcust_pendidikan_SearchField.reset();
 		pgcust_kelamin_SearchField.reset();
@@ -879,6 +953,8 @@ Ext.onReady(function(){
 		var cust_priority_search="";
 		var cust_unit_search="";
 		var cust_aktif_search="";
+		var cust_no_search="";
+		var cust_nama_search="";
 		
 		if( pgcust_umur_SearchField.getValue()!==""){ cust_umur_search=pgcust_umur_SearchField.getValue(); }
 		if( pgcust_agama_SearchField.getValue()!==""){ cust_agama_search=pgcust_agama_SearchField.getValue(); }
@@ -891,6 +967,9 @@ Ext.onReady(function(){
 		if( pgcust_priority_SearchField.getValue()!==""){ cust_priority_search=pgcust_priority_SearchField.getValue(); }
 		if( pgcust_unit_SearchField.getValue()!==""){ cust_unit_search=pgcust_unit_SearchField.getValue(); }
 		if( pgcust_aktif_SearchField.getValue()!==""){ cust_aktif_search=pgcust_aktif_SearchField.getValue(); }
+		if( pgcust_no_SearchField.getValue()!==""){ cust_no_search=pgcust_no_SearchField.getValue(); }
+		if( pgcust_nama_SearchField.getValue()!==""){ cust_nama_search=pgcust_nama_SearchField.getValue(); }
+		//if( pgcust_custSearchField.getValue()!==""){ cust_nama_search=pgcust_custSearchField.getValue(); }
 		
 		phonenumber_DataStore.baseParams = {
 			task			: 	'search',
@@ -905,7 +984,9 @@ Ext.onReady(function(){
 			stsnikah		:	cust_stsnikah_search,
 			priority		:	cust_priority_search,
 			unit			:	cust_unit_search,
-			aktif			:	cust_aktif_search
+			aktif			:	cust_aktif_search,
+			no				:	cust_no_search,
+			nama			:	cust_nama_search
 		};
 		// Cause the datastore to do another query : 
 		phonenumber_DataStore.reload({params: {start: 0, limit: pageS}});
@@ -925,7 +1006,7 @@ Ext.onReady(function(){
 			   	layout: 'form',
 				columnWidth: 0.5,
 				border: false,
-				items: [pgcust_umur_SearchField, pgcust_agama_SearchField, pgcust_kota_SearchField, pgcust_propinsi_SearchField, pgcust_kelamin_SearchField, pgcust_pendidikan_SearchField  ]			   			   
+				items: [pgcust_no_SearchField, pgcust_nama_SearchField, pgcust_umur_SearchField, pgcust_agama_SearchField, pgcust_kota_SearchField, pgcust_propinsi_SearchField, pgcust_kelamin_SearchField, pgcust_pendidikan_SearchField  ]			   			   
 			 },{
 				layout: 'form',
 				columnWidth: 0.5,
@@ -1302,7 +1383,7 @@ Ext.onReady(function(){
 	phonegroup_saveWindow.on("show",function(){
 			phonegrouped_DataStore.setBaseParam('id',get_pk_id());
 			phonenumber_DataStore.setBaseParam('id',get_pk_id());
-			phonenumber_DataStore.load();
+			//phonenumber_DataStore.load();
 			phonegrouped_DataStore.load();
 	});
 	
