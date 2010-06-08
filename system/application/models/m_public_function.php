@@ -54,6 +54,11 @@ class M_public_function extends Model{
 	function get_group1_list($query,$start,$end){
 		$sql="SELECT * FROM produk_group WHERE group_aktif='Aktif'";
 
+		if($query<>""){
+			$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
+			$sql .= " (group_nama LIKE '%".addslashes($query)."%' OR group_kode LIKE '%".addslashes($query)."%')";
+		}
+		
 		$result = $this->db->query($sql);
 		
 		$nbrows = $result->num_rows();
