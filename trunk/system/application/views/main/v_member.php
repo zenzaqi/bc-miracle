@@ -751,7 +751,18 @@ Ext.onReady(function(){
 		}, '-', 
 			new Ext.app.SearchField({
 			store: member_DataStore,
-			params: {start: 0, limit: pageS},
+			params: {task: 'LIST',start: 0, limit: pageS},
+			listeners:{
+				specialkey: function(f,e){
+					if(e.getKey() == e.ENTER){
+						member_DataStore.baseParams={task:'LIST',start: 0, limit: pageS};
+		            }
+				},
+				render: function(c){
+				Ext.get(this.id).set({qtitle:'Search By'});
+				Ext.get(this.id).set({qtip:'- No Cust<br>- Nama Cust<br>- No Faktur'});
+				}
+			},
 			width: 120
 		}),'-',{
 			text: 'Refresh',
@@ -779,9 +790,9 @@ Ext.onReady(function(){
 		id: 'member_ListEditorGridContextMenu',
 		items: [
 		{ 
-			text: 'Edit', tooltip: 'Edit selected record', 
+			text: 'Diserahkan', tooltip: 'Penyerahan Member Card ke Customer', 
 			iconCls:'icon-update',
-			handler: member_editContextMenu 
+			handler: member_aktivasi 
 		},
 		{ 
 			text: 'Delete', 
@@ -911,7 +922,7 @@ Ext.onReady(function(){
 		store:new Ext.data.SimpleStore({
 			fields:['member_status_value', 'member_status_display'],
 			//data:[['tidak aktif','tidak aktif'],['print','print'],['aktif','aktif'],['register','register']]
-			data: [['Daftar', 'Daftar'], ['Cetak', 'Cetak'], ['Aktif', 'Aktif']]
+			data: [['Daftar', 'Daftar'], ['Cetak', 'Cetak'], ['Serah Terima', 'Serah Terima']]
 		}),
 		mode: 'local',
 		displayField: 'member_status_display',
@@ -1216,7 +1227,7 @@ Ext.onReady(function(){
 		store:new Ext.data.SimpleStore({
 			fields:['value', 'member_status'],
 		//	data:[['tidak aktif','Tidak aktif'],['print','Print'],['aktif','Aktif'],['register','Register']]
-			data: [['Daftar', 'Daftar'], ['Cetak', 'Cetak'], ['Aktif', 'Aktif']]
+			data: [['Daftar', 'Daftar'], ['Cetak', 'Cetak'], ['Serah Terima', 'Serah Terima']]
 		}),
 		mode: 'local',
 		displayField: 'member_status',
@@ -1253,7 +1264,7 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [member_pointSearchField, member_jenisSearchField, member_statusSearchField, member_tglserahterimaSearchField] 
+				items: [member_jenisSearchField, member_statusSearchField, member_tglserahterimaSearchField] 
 			}
 			]
 		}]
@@ -1302,44 +1313,59 @@ Ext.onReady(function(){
 	
 	/* Function for aktivasi Grid */
 	function member_aktivasi(){
-		Ext.Ajax.request({   
-		waitMsg: 'Please Wait...',
-		url: 'index.php?c=c_member&m=member_aktivasi',
-		success: function(response){              
-		  	var result=eval(response.responseText);
-		  	switch(result){
-		  	case 1:
-				Ext.MessageBox.show({
-					title: 'Warning',
-					msg: 'Aktivasi Member Sukses!',
-					buttons: Ext.MessageBox.OK,
-					animEl: 'save',
-					icon: Ext.MessageBox.OK
-				});
-				member_DataStore.reload();
-				break;
-		  	default:
-				Ext.MessageBox.show({
-					title: 'Warning',
-					msg: 'Unable to print the grid!',
-					buttons: Ext.MessageBox.OK,
-					animEl: 'save',
-					icon: Ext.MessageBox.WARNING
-				});
-				break;
-		  	}  
-		},
-		failure: function(response){
-		  	var result=response.responseText;
+		if(memberListEditorGrid.selModel.getCount() == 1) {
+			Ext.Ajax.request({
+				waitMsg: 'Please Wait...',
+				url: 'index.php?c=c_member&m=member_aktivasi',
+				params: {
+					member_id : memberListEditorGrid.getSelectionModel().getSelected().get('member_id')
+				}, 
+				success: function(response){
+					var result=eval(response.responseText);
+					switch(result){
+					case 1:
+						Ext.MessageBox.show({
+							title: 'Warning',
+							msg: 'Aktivasi Member Sukses!',
+							buttons: Ext.MessageBox.OK,
+							animEl: 'save',
+							icon: Ext.MessageBox.OK
+						});
+						member_DataStore.reload();
+						break;
+					default:
+						Ext.MessageBox.show({
+							title: 'Warning',
+							msg: 'Unable to print the grid!',
+							buttons: Ext.MessageBox.OK,
+							animEl: 'save',
+							icon: Ext.MessageBox.WARNING
+						});
+						break;
+					}  
+				},
+				failure: function(response){
+					var result=response.responseText;
+					Ext.MessageBox.show({
+					   title: 'Error',
+					   msg: 'Could not connect to the database. retry later.',
+					   buttons: Ext.MessageBox.OK,
+					   animEl: 'database',
+					   icon: Ext.MessageBox.ERROR
+					});		
+				}
+			});
+			
+		} else {
 			Ext.MessageBox.show({
-			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
-			   buttons: Ext.MessageBox.OK,
-			   animEl: 'database',
-			   icon: Ext.MessageBox.ERROR
-			});		
-		} 	                     
-		});
+				title: 'Warning',
+				msg: 'You can\'t really update something you haven\'t selected?',
+				buttons: Ext.MessageBox.OK,
+				animEl: 'save',
+				icon: Ext.MessageBox.WARNING
+			});
+		}
+		
 	}
 	/* Enf Function */
 	

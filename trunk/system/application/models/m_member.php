@@ -29,10 +29,10 @@ class M_member extends Model{
 			return $row->result();
 		}
 		
-		function member_aktivasi(){
+		function member_aktivasi($member_id){
 			$date_now=date('Y-m-d');
 			//$query = "UPDATE member set member_status='aktif' where member_status='print'";
-			$query = "UPDATE member set member_status='Serah Terima', member_tglserahterima='$date_now' where member_status='Cetak'";
+			$query = "UPDATE member set member_status='Serah Terima', member_tglserahterima='$date_now' WHERE member_status='Cetak' AND member_id='$member_id'";
 			$this->db->query($query);
 			return '1';
 		}
@@ -183,15 +183,15 @@ class M_member extends Model{
 		//function for advanced search record
 		function member_search($member_id ,$member_cust ,$member_no ,$member_register ,$member_valid ,$member_nota_ref ,$member_point ,$member_jenis ,$member_status ,$member_tglserahterima ,$start,$end){
 			//full query
-			$query="select * from member";
+			$query="SELECT 
+						member.*,
+						cust_nama, cust_no 
+					FROM member, customer 
+					where member_cust=cust_id";
 			
-			if($member_id!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " member_id LIKE '%".$member_id."%'";
-			};
 			if($member_cust!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " member_cust LIKE '%".$member_cust."%'";
+				$query.= " cust_nama LIKE '%".$member_cust."%'";
 			};
 			if($member_no!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -199,32 +199,29 @@ class M_member extends Model{
 			};
 			if($member_register!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " member_register LIKE '%".$member_register."%'";
+				$query.= " member_register = '".$member_register."'";
 			};
 			if($member_valid!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " member_valid LIKE '%".$member_valid."%'";
+				$query.= " member_valid = '".$member_valid."'";
 			};
 			if($member_nota_ref!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " member_nota_ref LIKE '%".$member_nota_ref."%'";
 			};
-			if($member_point!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " member_point LIKE '%".$member_point."%'";
-			};
 			if($member_jenis!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " member_jenis LIKE '%".$member_jenis."%'";
+				$query.= " member_jenis = '".$member_jenis."'";
 			};
 			if($member_status!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " member_status LIKE '%".$member_status."%'";
+				$query.= " member_status = '".$member_status."'";
 			};
 			if($member_tglserahterima!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " member_tglserahterima LIKE '%".$member_tglserahterima."%'";
+				$query.= " member_tglserahterima = '".$member_tglserahterima."'";
 			};
+			
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
 			

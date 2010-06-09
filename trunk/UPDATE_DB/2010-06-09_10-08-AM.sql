@@ -1,0 +1,1 @@
+ALTER TABLE `member` CHANGE `member_status` `member_status` ENUM( 'Daftar', 'Cetak', 'Serah Terima' ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL DEFAULT 'Daftar';

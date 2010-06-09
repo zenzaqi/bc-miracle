@@ -247,8 +247,9 @@ class C_master_jual_rawat extends Controller {
 	function detail_jual_rawat_update(){
 	//POST variable here
 		$drawat_id=trim(@$_POST["drawat_id"]);
+        $drawat_diskon=trim(@$_POST["drawat_diskon"]);
 		
-		$result=$this->m_master_jual_rawat->detail_jual_rawat_update($drawat_id );
+		$result=$this->m_master_jual_rawat->detail_jual_rawat_update($drawat_id ,$drawat_diskon);
 	}
 	
 	//for detail pengambilan paket
