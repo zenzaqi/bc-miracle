@@ -71,6 +71,7 @@ var editor_detail_jual_produk;
 var jproduk_post2db = '';
 var msg = '';
 var pageS=15;
+var today=new Date().format('d-m-Y');
 
 /* declare variable here for Field*/
 var jproduk_idField;
@@ -1981,7 +1982,7 @@ Ext.onReady(function(){
 			disabled: true,
 			handler: master_jual_produk_confirm_delete   // Confirm before deleting
 		}, '-', {
-			text: 'Search',
+			text: 'Adv Search',
 			tooltip: 'Advanced Search',
 			iconCls:'icon-search',
 			handler: display_form_search_window 
@@ -5852,6 +5853,8 @@ Ext.onReady(function(){
 		if(jproduk_stat_dokSearchField.getValue()!==null){jproduk_stat_dok_search=jproduk_stat_dokSearchField.getValue();}
 		// change the store parameters
 		master_jual_produk_DataStore.baseParams = {
+		
+		
 			task: 'SEARCH',
 			//variable here
 			jproduk_id	:	jproduk_id_search, 
@@ -5882,7 +5885,9 @@ Ext.onReady(function(){
 		jproduk_nobuktiSearchField.reset();
 		jproduk_custSearchField.reset();
 		jproduk_tanggalSearchField.reset();
+		jproduk_tanggalSearchField.setValue(today);
 		jproduk_tanggal_akhirSearchField.reset();
+		jproduk_tanggal_akhirSearchField.setValue(today);
 		jproduk_diskonSearchField.reset();
 		jproduk_caraSearchField.reset();
 		jproduk_keteranganSearchField.reset();

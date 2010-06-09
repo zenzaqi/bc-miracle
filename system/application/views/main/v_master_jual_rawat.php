@@ -71,6 +71,7 @@ var editor_detail_jual_rawat;
 var jrawat_post2db = '';
 var msg = '';
 var pageS=15;
+var today=new Date().format('d-m-Y');
 
 /* declare variable here for Field*/
 var jrawat_idField;
@@ -1988,7 +1989,7 @@ Ext.onReady(function(){
 			disabled: true,
 			handler: master_jual_rawat_confirm_delete   // Confirm before deleting
 		}, '-', {
-			text: 'Search',
+			text: 'Adv Search',
 			tooltip: 'Advanced Search',
 			iconCls:'icon-search',
 			handler: display_form_search_window 
@@ -5150,9 +5151,9 @@ Ext.onReady(function(){
 		jrawat_stat_dokSearchField.reset();
 		jrawat_stat_dokSearchField.setValue(null);
 		Ext.getCmp('jrawat_tanggalStartAppSearchField').reset();
-		Ext.getCmp('jrawat_tanggalStartAppSearchField').setValue(null);
+		Ext.getCmp('jrawat_tanggalStartAppSearchField').setValue(today);
 		Ext.getCmp('jrawat_tanggalEndAppSearchField').reset();
-		Ext.getCmp('jrawat_tanggalEndAppSearchField').setValue(null);
+		Ext.getCmp('jrawat_tanggalEndAppSearchField').setValue(today);
 	}
 	
 	/* Field for search */
