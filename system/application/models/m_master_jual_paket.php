@@ -349,25 +349,41 @@ class M_master_jual_paket extends Model{
 			}
 		}
 		
-		function detail_pengguna_paket_insert($ppaket_master, $ppaket_cust){
+		function detail_pengguna_paket_insert($ppaket_id, $ppaket_master, $ppaket_cust){
 			//if master id not capture from view then capture it from max pk from master table
 			if($ppaket_master=="" || $ppaket_master==NULL || $ppaket_master==0){
 				$ppaket_master=$this->get_master_id();
 			}
-			$data = array(
+			
+			if($ppaket_id==''){
+				//* Adding Pemakai Paket /
+				$dti_ppaket = array(
 				"ppaket_master"=>$ppaket_master, 
 				"ppaket_cust"=>$ppaket_cust
-			);
-			$sql="SELECT ppaket_id FROM pengguna_paket WHERE ppaket_master='$ppaket_master' AND ppaket_cust='$ppaket_cust'";
-			$rs=$this->db->query($sql);
-			if(!$rs->num_rows()){
-				$this->db->insert('pengguna_paket', $data); 
+				);
+				$sql="SELECT ppaket_id FROM pengguna_paket WHERE ppaket_master='$ppaket_master' AND ppaket_cust='$ppaket_cust'";
+				$rs=$this->db->query($sql);
+				if(!$rs->num_rows()){
+					//* Customer ini belum masuk ke dalam Daftar Pemakai Paket dari Faktur ppaket_master /
+					$this->db->insert('pengguna_paket', $dti_ppaket); 
+					if($this->db->affected_rows()){
+						return '1';
+					}else
+						return '0';
+				}
+			}elseif(is_numeric($ppaket_id)==true){
+				//* Editing Pemakai Paket /
+				$dtu_ppaket = array(
+				"ppaket_cust"=>$ppaket_cust
+				);
+				$this->db->where('ppaket_id', $ppaket_id);
+				$this->db->update('pengguna_paket', $dtu_ppaket);
 				if($this->db->affected_rows()){
 					return '1';
 				}else
 					return '0';
 			}
-
+			
 		}
 		
 		function get_paket_list($query,$start,$end){
@@ -758,7 +774,10 @@ class M_master_jual_paket extends Model{
 		//*eof
 		
 		function detail_pengguna_paket_purge($master_id){
-			$sql="DELETE FROM pengguna_paket WHERE ppaket_master='".$master_id."'";
+			$sql="DELETE pengguna_paket
+				FROM pengguna_paket LEFT JOIN master_jual_paket ON(ppaket_master=jpaket_id)
+				WHERE ppaket_master='".$master_id."'
+					AND ppaket_cust<>jpaket_cust";
 			$result=$this->db->query($sql);
 			return '1';
 		}
@@ -2184,7 +2203,6 @@ class M_master_jual_paket extends Model{
 		
 		function print_paper($jpaket_id){
 			$this->master_jual_paket_status_update($jpaket_id);
-			//$this->firephp->log($jpaket_id, "jpaket_id");
 			$sql="SELECT jpaket_tanggal, cust_no, cust_nama, cust_alamat, jpaket_nobukti, paket_nama, dpaket_jumlah, dpaket_harga, dpaket_diskon, (dpaket_harga*((100-dpaket_diskon)/100)) AS jumlah_subtotal, jpaket_creator, jtunai_nilai, jpaket_diskon, jpaket_cashback FROM detail_jual_paket LEFT JOIN master_jual_paket ON(dpaket_master=jpaket_id) LEFT JOIN customer ON(jpaket_cust=cust_id) LEFT JOIN paket ON(dpaket_paket=paket_id) LEFT JOIN jual_tunai ON(jtunai_ref=jpaket_nobukti) WHERE jpaket_id='$jpaket_id'";
 			$result = $this->db->query($sql);
 			return $result;
@@ -2380,7 +2398,6 @@ class M_master_jual_paket extends Model{
 		}
 		
 			function iklan(){
-			//$this->firephp->log($jproduk_id, "jproduk_id");
 			$sql="SELECT * from iklan_today";
 			$result = $this->db->query($sql);
 			return $result;
