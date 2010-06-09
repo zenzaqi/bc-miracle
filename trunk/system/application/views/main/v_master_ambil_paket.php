@@ -980,7 +980,7 @@ Ext.onReady(function(){
 			dataIndex: 'referal',
 			width: 140
 		},{
-			header: '<div align="center">' + 'Dokumen' + '</div>',
+			header: '<div align="center">' + 'Stat Dok' + '</div>',
 			dataIndex: 'dapaket_stat_dok',
 			width: 90
 		}]
