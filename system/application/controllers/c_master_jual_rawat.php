@@ -304,6 +304,9 @@ class C_master_jual_rawat extends Controller {
 			case "EXCEL":
 				$this->master_jual_rawat_export_excel();
 				break;
+            case "DDELETE":
+				$this->detail_jual_rawat_delete();
+				break;
 			default:
 				echo "{failure:true}";
 				break;
@@ -574,6 +577,13 @@ class C_master_jual_rawat extends Controller {
 		$result=$this->m_master_jual_rawat->master_jual_rawat_delete($pkid);
 		echo $result;
 	}
+    
+    function detail_jual_rawat_delete(){
+        $ids = $_POST['ids'];
+        $drawat_id = json_decode(stripslashes($ids));
+        $result=$this->m_master_jual_rawat->detail_jual_rawat_delete($drawat_id);
+		echo $result;
+    }
 
 	//function for advanced search
 	function master_jual_rawat_search(){

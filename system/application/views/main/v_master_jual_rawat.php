@@ -4124,7 +4124,7 @@ Ext.onReady(function(){
 			text: 'Delete',
 			tooltip: 'Delete detail selected record',
 			iconCls:'icon-delete',
-			disabled: true,
+			disabled: false,
 			handler: detail_jual_rawat_confirm_delete
 		}
 		]
@@ -4274,7 +4274,48 @@ Ext.onReady(function(){
 	//function for Delete of detail
 	function detail_jual_rawat_delete(btn){
             if(btn=='yes'){
-                if(detail_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('drawat_dtrawat')==''){
+                if(detail_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('drawat_dtrawat')=='' && detail_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('drawat_id')!==''){
+                    var selections = detail_jual_rawatListEditorGrid.selModel.getSelections();
+                    var prez = [];
+                    for(i = 0; i< detail_jual_rawatListEditorGrid.selModel.getCount(); i++){
+                        prez.push(selections[i].json.drawat_id);
+                    }
+                    var encoded_array = Ext.encode(prez);
+                    Ext.Ajax.request({
+                        waitMsg: 'Mohon tunggu...',
+                        url: 'index.php?c=c_master_jual_rawat&m=get_action', 
+                        params: { task: "DDELETE", ids:  encoded_array }, 
+                        success: function(response){
+                            var result=eval(response.responseText);
+                            switch(result){
+                                case 1:  // Success : simply reload
+                                    //master_jual_rawat_DataStore.reload();
+                                    detail_jual_rawat_DataStore.remove(selections[0]);
+                                    break;
+                                default:
+                                    Ext.MessageBox.show({
+                                        title: 'Warning',
+                                        msg: 'Could not delete the entire selection',
+                                        buttons: Ext.MessageBox.OK,
+                                        animEl: 'save',
+                                        icon: Ext.MessageBox.WARNING
+                                    });
+                                    break;
+                            }
+                        },
+                        failure: function(response){
+                                var result=response.responseText;
+                                Ext.MessageBox.show({
+                                   title: 'Error',
+                                   msg: 'Could not connect to the database. retry later.',
+                                   buttons: Ext.MessageBox.OK,
+                                   animEl: 'database',
+                                   icon: Ext.MessageBox.ERROR
+                                });	
+                        }
+                    });
+                    
+                }else if(detail_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('drawat_id')==''){
                     var s = detail_jual_rawatListEditorGrid.getSelectionModel().getSelections();
                     for(var i = 0, r; r = s[i]; i++){
                         detail_jual_rawat_DataStore.remove(r);
