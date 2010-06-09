@@ -726,14 +726,14 @@ Ext.onReady(function(){
 			iconCls:'icon-update',
 			handler: member_confirm_update   // Confirm before updating
 		},'-',*/{
-			text: 'Cetak Kartu',
+			text: 'Cetak Kartu Semua',
 			//tooltip: 'Aktifkan Member yang teregister dan set status masa pencetakan',
 			tooltip: 'Cetak kartu member',
 			iconCls:'icon-aktivasi ',
 			handler: member_cetak_kartu
 		},'-',{
 			//text: 'Aktivasi',
-			text: 'Diserahkan',
+			text: 'Serah Terima',
 			//tooltip: 'Aktifkan Kartu Member yang statusnya cetak menjadi aktif',
 			tooltip: 'Menyerahkan kartu member yang sudah tercetak',
 			iconCls:'icon-valid',
@@ -742,9 +742,10 @@ Ext.onReady(function(){
 			text: 'Delete',
 			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
+			disabled: true,
 			handler: member_confirm_delete   // Confirm before deleting
 		}, '-', {
-			text: 'Search',
+			text: 'Adv Search',
 			tooltip: 'Advanced Search',
 			iconCls:'icon-search',
 			handler: display_form_search_window 
@@ -790,7 +791,7 @@ Ext.onReady(function(){
 		id: 'member_ListEditorGridContextMenu',
 		items: [
 		{ 
-			text: 'Diserahkan', tooltip: 'Penyerahan Member Card ke Customer', 
+			text: 'Serah Terima', tooltip: 'Penyerahan Member Card ke Customer', 
 			iconCls:'icon-update',
 			handler: member_aktivasi 
 		},
@@ -798,6 +799,7 @@ Ext.onReady(function(){
 			text: 'Delete', 
 			tooltip: 'Delete selected record', 
 			iconCls:'icon-delete',
+			disabled: true,
 			handler: member_confirm_delete 
 		},
 		'-',
@@ -1410,8 +1412,8 @@ Ext.onReady(function(){
 	/* Function for print List Grid */
 	function member_cetak_kartu(){
 		Ext.Msg.show({
-		  	title:'Konfirmasi Cetak?',
-		   	msg: 'Apakah Anda yakin akan mencetak semua kartu yang berstatus Daftar?',
+		  	title:'Cetak Kartu Semua',
+		   	msg: 'Anda yakin untuk mencetak semua kartu yang berstatus Daftar?',
 		   	buttons: Ext.Msg.YESNO,
 		   	fn: cetak_kartu_confirm,
 		   	animEl: 'elId',

@@ -71,6 +71,7 @@ var editor_detail_jual_paket;
 var jpaket_post2db = '';
 var msg = '';
 var pageS=15;
+var today=new Date().format('d-m-Y');
 
 /* declare variable here for Field*/
 var jpaket_idField;
@@ -1805,7 +1806,7 @@ Ext.onReady(function(){
 			disabled: true,
 			handler: master_jual_paket_confirm_delete   // Confirm before deleting
 		}, '-', {
-			text: 'Search',
+			text: 'Adv Search',
 			tooltip: 'Advanced Search',
 			iconCls:'icon-search',
 			handler: display_form_search_window 
@@ -3418,7 +3419,7 @@ Ext.onReady(function(){
 				border:false,
 				items: [jpaket_tanggalField, jpaket_keteranganField, jpaket_stat_dokField] 
 			},
-			{
+			/*{
 				columnWidth:0.72,
 				//layout: 'column',
 				//border:false,
@@ -3426,7 +3427,7 @@ Ext.onReady(function(){
 				text: '<span style="font-weight:bold">Edit Dokumen</span>'
 				//handler: show_windowGrid
 				}]
-			}
+			}*/
 			]
 	
 	});
@@ -5468,7 +5469,9 @@ Ext.onReady(function(){
 		jpaket_nobuktiSearchField.reset();
 		jpaket_custSearchField.reset();
 		jpaket_tanggalSearchField.reset();
+		jpaket_tanggalSearchField.setValue(today);
 		jpaket_tanggal_akhirSearchField.reset();
+		jpaket_tanggal_akhirSearchField.setValue(today);
 		jpaket_diskonSearchField.reset();
 		jpaket_caraSearchField.reset();
 		jpaket_keteranganSearchField.reset();
