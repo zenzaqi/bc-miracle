@@ -3746,13 +3746,13 @@ Ext.onReady(function(){
 		frame: true,
 		items:[
 			   {
-				columnWidth:0.7,
+				columnWidth:0.5,
 				layout: 'form',
 				border:false,
 				items: [master_cara_bayarTabPanel] 
 			}
 			,{
-				columnWidth:0.3,
+				columnWidth:0.5,
 				labelWidth: 120,
 				layout: 'form',
     			labelPad: 0,
@@ -3926,7 +3926,7 @@ Ext.onReady(function(){
 			align: 'Right',
 			header: '<div align="center">' + 'Jml' + '</div>',
 			dataIndex: 'drawat_jumlah',
-			width: 45,	//80,
+			width: 60, //45,	//80,
 			sortable: false,
 			renderer: Ext.util.Format.numberRenderer('0,000'),
 			editor: new Ext.form.NumberField({
@@ -3957,7 +3957,7 @@ Ext.onReady(function(){
             }
 		},
 		{
-			header: '<div align="center">' + 'Jenis Diskon' + '</div>',
+			header: '<div align="center">' + 'Jns Diskon' + '</div>',
 			dataIndex: 'drawat_diskon_jenis',
 			width: 70,	//100,
 			sortable: true,
@@ -4006,7 +4006,7 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Keterangan' + '</div>',
 			dataIndex: 'dtrawat_keterangan',
-			width: 160,	//150,
+			width: 220,	//150,
 			sortable: false
 		},
         {
@@ -4040,7 +4040,7 @@ Ext.onReady(function(){
 		el: 'fp_detail_jual_rawat',
 		title: 'Detail Penjualan Perawatan',
 		height: 225,	//250,
-		width: 940,	//938,
+		width: 1180, //940,	//938,
 		autoScroll: true,
 		store: detail_jual_rawat_DataStore, // DataStore
 		colModel: detail_jual_rawat_ColumnModel, // Nama-nama Columns
@@ -4761,9 +4761,9 @@ Ext.onReady(function(){
 		id: 'detail_ambil_paketListGrid',
 		el: 'fp_detail_ambil_paket',
 		//title: 'Detail Pengambilan Paket',
-		title: 'Info Paket (dari Kasir - Pengambilan Paket)',
-		height: 150,	//250,
-		width: 940,	//938,
+		title: 'Informasi Pengambilan Paket',
+		height: 160,	//250,
+		width: 1180, //940,	//938,
 		autoScroll: true,
 		store: detail_ambil_paketDataStore, // DataStore
 		colModel: detail_ambil_paketColumnModel, // Nama-nama Columns
@@ -4825,7 +4825,7 @@ Ext.onReady(function(){
 		closable:true,
 		closeAction: 'hide',
 		//autoWidth: true,
-		width:965,
+		width: 1220, //965,
 		autoHeight: true,
 		x:0,
 		y:0,
