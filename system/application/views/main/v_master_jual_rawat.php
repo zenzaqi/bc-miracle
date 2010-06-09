@@ -4272,13 +4272,23 @@ Ext.onReady(function(){
 	
 	//function for Delete of detail
 	function detail_jual_rawat_delete(btn){
-		if(btn=='yes'){
-			var s = detail_jual_rawatListEditorGrid.getSelectionModel().getSelections();
-			for(var i = 0, r; r = s[i]; i++){
-				detail_jual_rawat_DataStore.remove(r);
-			}
-		} 
-		detail_jual_rawat_DataStore.commitChanges();
+            if(btn=='yes'){
+                if(detail_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('drawat_dtrawat')==''){
+                    var s = detail_jual_rawatListEditorGrid.getSelectionModel().getSelections();
+                    for(var i = 0, r; r = s[i]; i++){
+                        detail_jual_rawat_DataStore.remove(r);
+                    }
+                }else{
+                    Ext.MessageBox.show({
+                        title: 'Warning',
+                        msg: 'Silakan menghubungi bagian Tindakan',
+                        buttons: Ext.MessageBox.OK,
+                        animEl: 'save',
+                        icon: Ext.MessageBox.WARNING
+                    });
+                }
+            } 
+            detail_jual_rawat_DataStore.commitChanges();
 	}
 	//eof
 	

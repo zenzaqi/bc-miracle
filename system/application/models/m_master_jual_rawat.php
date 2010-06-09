@@ -627,27 +627,37 @@ class M_master_jual_rawat extends Model{
 		
 		function detail_jual_rawat_update($drawat_id ,$drawat_master ,$drawat_dtrawat ,$drawat_rawat ,$drawat_jumlah ,$drawat_harga ,$drawat_diskon ,$drawat_diskon_jenis){
             if($drawat_id==''){
-                //* Insert to db.detail_jual_rawat /
-                /*$dti_drawat=array(
-                "drawat_master"
-                "drawat_rawat"
-                "drawat_jumlah"
-                "drawat_harga"
-                "drawat_diskon"
-                "drawat_diskon_jenis"
-                );*/
-            }else{
-                //* Update to db.detail_jual_rawat /
-                //$dtu_
+                //* Insert to db.detail_jual_rawat WHERE detail yang ditambahkan adalah data baru /
+                $dti_drawat=array(
+                "drawat_master"=>$drawat_master,
+                "drawat_rawat"=>$drawat_rawat,
+                "drawat_jumlah"=>$drawat_jumlah,
+                "drawat_harga"=>$drawat_harga,
+                "drawat_diskon"=>$drawat_diskon,
+                "drawat_diskon_jenis"=>$drawat_diskon_jenis
+                );
+                $this->db->insert('detail_jual_rawat', $dti_drawat);
+            }elseif(is_numeric($drawat_id)==true && $drawat_dtrawat==''){
+                //* Update to db.detail_jual_rawat WHERE detail yang ditambahkan dari Kasir Perawatan bukan dari Tindakan /
+                $dtu_drawat=array(
+                "drawat_rawat"=>$drawat_rawat,
+                "drawat_jumlah"=>$drawat_jumlah,
+                "drawat_harga"=>$drawat_harga,
+                "drawat_diskon"=>$drawat_diskon,
+                "drawat_diskon_jenis"=>$drawat_diskon_jenis
+                );
+                $this->db->where('drawat_id', $drawat_id);
+                $this->db->update('detail_jual_rawat', $dtu_drawat);
+            }elseif(is_numeric($drawat_id)==true && $drawat_dtrawat>0){
+                //* Update to db.detail_jual_rawat WHERE data detail adalah dari Tindakan /
+                $dtu_drawat=array(
+                "drawat_diskon"=>$drawat_diskon,
+                "drawat_diskon_jenis"=>$drawat_diskon_jenis
+                );
+                $this->db->where('drawat_id', $drawat_id);
+                $this->db->update('detail_jual_rawat', $dtu_drawat);
             }
             
-            
-			$dtu_drawat=array(
-			"drawat_diskon"=>$drawat_diskon
-			);
-			
-			$this->db->where('drawat_id', $drawat_id);
-			$this->db->update('detail_jual_rawat', $dtu_drawat);
 			if($this->db->affected_rows()){
 				return "{success:true}";
 			}else
