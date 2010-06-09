@@ -517,6 +517,7 @@ class M_public_function extends Model{
 		$len_pattern=strlen($pattern);
 		$len_lpad=$length-$len_pattern;
 		$sql="SELECT LPAD((RIGHT(MAX(SUBSTRING(".$field.",-4)),".$len_lpad.")+1),".$len_lpad.",0) AS max_key FROM ".$table." WHERE ".$field." LIKE '".$date."%'";
+		
 		$query=$this->db->query($sql);
 		if($query->num_rows()){
 			$data=$query->row();
@@ -527,6 +528,8 @@ class M_public_function extends Model{
 				for($i=1;$i<$len_lpad;$i++)
 					$pad.="0";
 				$kode=$pattern.$pad."1";
+			}else{
+				$kode=$pattern.$kode;
 			}
 			return $kode;
 		}else{

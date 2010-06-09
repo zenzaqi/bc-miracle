@@ -3746,13 +3746,13 @@ Ext.onReady(function(){
 		frame: true,
 		items:[
 			   {
-				columnWidth:0.5,
+				columnWidth:0.7,
 				layout: 'form',
 				border:false,
 				items: [master_cara_bayarTabPanel] 
 			}
 			,{
-				columnWidth:0.5,
+				columnWidth:0.3,
 				labelWidth: 120,
 				layout: 'form',
     			labelPad: 0,
@@ -3908,113 +3908,149 @@ Ext.onReady(function(){
 			}
 		}
 	});
-		
+        
+        var drawat_hargaField= new Ext.form.NumberField({
+            allowDecimals: false,
+            allowNegative: false,
+            blankText: '0',
+            maxLength: 11,
+            readOnly: true,
+            maskRe: /([0-9]+)$/
+        });
+        
+        var drawat_subtotalField= new Ext.form.NumberField({
+            allowDecimals: false,
+            allowNegative: false,
+            blankText: '0',
+            maxLength: 11,
+            readOnly: true,
+            maskRe: /([0-9]+)$/
+        });
+        
+        var drawat_subtotal_netField= new Ext.form.NumberField({
+            allowDecimals: false,
+            allowNegative: false,
+            blankText: '0',
+            maxLength: 11,
+            readOnly: true,
+            maskRe: /([0-9]+)$/
+        });
+        
+        var drawat_diskonField= new Ext.form.NumberField({
+            allowDecimals: false,
+            allowNegative: false,
+            blankText: '0',
+            maxLength: 3,
+            enableKeyEvents: true,
+            maskRe: /([0-9]+)$/
+        });
+        drawat_diskonField.on('keyup', function(){
+		var sub_total_net = ((100-drawat_diskonField.getValue())/100)*drawat_subtotalField.getValue();
+		drawat_subtotal_netField.setValue(sub_total_net);
+	});
+	
 
 	//declaration of detail coloumn model
 	detail_jual_rawat_ColumnModel = new Ext.grid.ColumnModel(
-		[
-		{
-			header: '<div align="center">' + 'Perawatan' + '</div>',
-			dataIndex: 'drawat_rawat',
-			width: 300,	//250,
-			sortable: true,
-			allowBlank: false,
-			editor: combo_jual_rawat,
-			renderer: Ext.util.Format.comboRenderer(combo_jual_rawat)
-		},
-		{
-			align: 'Right',
-			header: '<div align="center">' + 'Jml' + '</div>',
-			dataIndex: 'drawat_jumlah',
-			width: 60, //45,	//80,
-			sortable: false,
-			renderer: Ext.util.Format.numberRenderer('0,000'),
-			editor: new Ext.form.NumberField({
-				allowDecimals: false,
-				allowNegative: false,
-				blankText: '0',
-				maxLength: 11,
-				maskRe: /([0-9]+)$/
-			})
-		},
-		{
-			align: 'Right',
-			header: '<div align="center">' + 'Harga (Rp)' + '</div>',
-			dataIndex: 'drawat_harga',
-			width: 80,	//150,
-			sortable: true,
-			renderer: Ext.util.Format.numberRenderer('0,000')
-		}
-		,{
-			align: 'Right',
-			header: '<div align="center">' + 'Sub Total (Rp)' + '</div>',
-			dataIndex: 'drawat_subtotal',
-			width: 100, //150,
-			sortable: true,
-			reaOnly: true,
-			renderer: function(v, params, record){
-					return Ext.util.Format.number(record.data.drawat_harga* record.data.drawat_jumlah,'0,000');
+            [
+            {
+                    header: '<div align="center">' + 'Perawatan' + '</div>',
+                    dataIndex: 'drawat_rawat',
+                    width: 300,	//250,
+                    sortable: true,
+                    allowBlank: false,
+                    editor: combo_jual_rawat,
+                    renderer: Ext.util.Format.comboRenderer(combo_jual_rawat)
+            },
+            {
+                    align: 'Right',
+                    header: '<div align="center">' + 'Jml' + '</div>',
+                    dataIndex: 'drawat_jumlah',
+                    width: 45,	//80,
+                    sortable: false,
+                    renderer: Ext.util.Format.numberRenderer('0,000'),
+                    editor: new Ext.form.NumberField({
+                            allowDecimals: false,
+                            allowNegative: false,
+                            blankText: '0',
+                            maxLength: 11,
+                            maskRe: /([0-9]+)$/
+                    })
+            },
+            {
+                    align: 'Right',
+                    header: '<div align="center">' + 'Harga (Rp)' + '</div>',
+                    dataIndex: 'drawat_harga',
+                    width: 80,	//150,
+                    sortable: true,
+                    editor: drawat_hargaField,
+                    renderer: Ext.util.Format.numberRenderer('0,000')
             }
-		},
-		{
-			header: '<div align="center">' + 'Jns Diskon' + '</div>',
-			dataIndex: 'drawat_diskon_jenis',
-			width: 70,	//100,
-			sortable: true,
-			editor: new Ext.form.ComboBox({
-				store:new Ext.data.SimpleStore({
-					fields:['diskon_jenis_value'],
-					data:[['DU'],['DM'],['Promo'],['Ultah'],['Kolega']]
-				}),
-				mode: 'local',
-				displayField: 'diskon_jenis_value',
-				valueField: 'diskon_jenis_value',
-				allowBlank: true,
-				anchor: '50%',
-				triggerAction: 'all',
-				lazyRenderer: true
-			})
-		},
-		{
-			align: 'Right',
-			header: '<div align="center">' + 'Diskon (%)' + '</div>',
-			dataIndex: 'drawat_diskon',
-			width: 60, //90,
-			sortable: false,
+            ,{
+                    align: 'Right',
+                    header: '<div align="center">' + 'Sub Total (Rp)' + '</div>',
+                    dataIndex: 'drawat_subtotal',
+                    width: 100, //150,
+                    sortable: true,
+                    editor: drawat_subtotalField,
+                    renderer: Ext.util.Format.numberRenderer('0,000')
+                    /*,renderer: function(v, params, record){
+                        return Ext.util.Format.number(record.data.drawat_harga* record.data.drawat_jumlah,'0,000');
+                    }*/
+            },
+            {
+                    header: '<div align="center">' + 'Jenis Diskon' + '</div>',
+                    dataIndex: 'drawat_diskon_jenis',
+                    width: 70,	//100,
+                    sortable: true,
+                    editor: new Ext.form.ComboBox({
+                            store:new Ext.data.SimpleStore({
+                                    fields:['diskon_jenis_value'],
+                                    data:[['DU'],['DM'],['Promo'],['Ultah'],['Kolega']]
+                            }),
+                            mode: 'local',
+                            displayField: 'diskon_jenis_value',
+                            valueField: 'diskon_jenis_value',
+                            allowBlank: true,
+                            anchor: '50%',
+                            triggerAction: 'all',
+                            lazyRenderer: true
+                    })
+            },
+            {
+                    align: 'Right',
+                    header: '<div align="center">' + 'Diskon (%)' + '</div>',
+                    dataIndex: 'drawat_diskon',
+                    width: 60, //90,
+                    sortable: false,
+                    editor: drawat_diskonField,
 //			renderer: Ext.util.Format.numberRenderer('0,000%'),
-			renderer: Ext.util.Format.numberRenderer('0,000'),
-			editor: new Ext.form.NumberField({
-				allowDecimals: false,
-				allowNegative: false,
-				blankText: '0',
-				maxLength: 2,
-				maskRe: /([0-9]+)$/
-			})
-		},
-		{
-			align: 'Right',
-			header: '<div align="center">' + 'Sub Tot Net (Rp)' + '</div>',
-			dataIndex: 'drawat_subtotal_net',
-			width: 100, //150,
-			sortable: true,
-			reaOnly: true,
-			renderer: function(v, params, record){
-					return Ext.util.Format.number(record.data.drawat_harga* record.data.drawat_jumlah*(100-record.data.drawat_diskon)/100,'0,000');
-
-            }
-		},
-		{
-			header: '<div align="center">' + 'Keterangan' + '</div>',
-			dataIndex: 'dtrawat_keterangan',
-			width: 220,	//150,
-			sortable: false
-		},
-        {
-			header: '<div align="center">' + 'Referal' + '</div>',
-			dataIndex: 'referal',
-			width: 160,	//150,
-			sortable: false
-		}]
+                    renderer: Ext.util.Format.numberRenderer('0,000')
+            },
+            {
+                    align: 'Right',
+                    header: '<div align="center">' + 'Sub Tot Net (Rp)' + '</div>',
+                    dataIndex: 'drawat_subtotal_net',
+                    width: 100, //150,
+                    sortable: true,
+                    editor: drawat_subtotal_netField,
+                    renderer: Ext.util.Format.numberRenderer('0,000')
+                    /*,renderer: function(v, params, record){
+                        return Ext.util.Format.number(record.data.drawat_harga* record.data.drawat_jumlah*(100-record.data.drawat_diskon)/100,'0,000');
+                    }*/
+            },
+            {
+                    header: '<div align="center">' + 'Keterangan' + '</div>',
+                    dataIndex: 'dtrawat_keterangan',
+                    width: 160,	//150,
+                    sortable: false
+            },
+    {
+                    header: '<div align="center">' + 'Referal' + '</div>',
+                    dataIndex: 'referal',
+                    width: 160,	//150,
+                    sortable: false
+            }]
 	);
 	detail_jual_rawat_ColumnModel.defaultSortable= true;
 	//eof
@@ -4040,7 +4076,7 @@ Ext.onReady(function(){
 		el: 'fp_detail_jual_rawat',
 		title: 'Detail Penjualan Perawatan',
 		height: 225,	//250,
-		width: 1180, //940,	//938,
+		width: 940,	//938,
 		autoScroll: true,
 		store: detail_jual_rawat_DataStore, // DataStore
 		colModel: detail_jual_rawat_ColumnModel, // Nama-nama Columns
@@ -4228,33 +4264,34 @@ Ext.onReady(function(){
 	//eof
 	
 	function detail_jual_rawat_update(){
-		var count_detail=detail_jual_rawat_DataStore.getCount();
-		for(i=0;i<detail_jual_rawat_DataStore.getCount();i++){
-			detail_jual_rawat_record=detail_jual_rawat_DataStore.getAt(i);
-			if(detail_jual_rawat_record.data.drawat_rawat!==null&&detail_jual_rawat_record.data.drawat_rawat.drawat_rawat!==""){
-				Ext.Ajax.request({
-					waitMsg: 'Mohon tunggu...',
-					url: 'index.php?c=c_master_jual_rawat&m=detail_jual_rawat_update',
-					params:{
-						drawat_id	: detail_jual_rawat_record.data.drawat_id
-					},
-					timeout: 60000,
-					success: function(response){							
-						var result=eval(response.responseText);
-					},
-					failure: function(response){
-						var result=response.responseText;
-						Ext.MessageBox.show({
-						   title: 'Error',
-						   msg: 'Could not connect to the database. retry later.',
-						   buttons: Ext.MessageBox.OK,
-						   animEl: 'database',
-						   icon: Ext.MessageBox.ERROR
-						});	
-					}		
-				});
-			}
-		}
+            var count_detail=detail_jual_rawat_DataStore.getCount();
+            for(i=0;i<detail_jual_rawat_DataStore.getCount();i++){
+                detail_jual_rawat_record=detail_jual_rawat_DataStore.getAt(i);
+                if(detail_jual_rawat_record.data.drawat_rawat!==null&&detail_jual_rawat_record.data.drawat_rawat.drawat_rawat!==""){
+                    Ext.Ajax.request({
+                        waitMsg: 'Mohon tunggu...',
+                        url: 'index.php?c=c_master_jual_rawat&m=detail_jual_rawat_update',
+                        params:{
+                            drawat_id: detail_jual_rawat_record.data.drawat_id,
+                            drawat_diskon: detail_jual_rawat_record.data.drawat_diskon
+                        },
+                        timeout: 60000,
+                        success: function(response){							
+                            var result=eval(response.responseText);
+                        },
+                        failure: function(response){
+                            var result=response.responseText;
+                            Ext.MessageBox.show({
+                               title: 'Error',
+                               msg: 'Could not connect to the database. retry later.',
+                               buttons: Ext.MessageBox.OK,
+                               animEl: 'database',
+                               icon: Ext.MessageBox.ERROR
+                            });	
+                        }		
+                    });
+                }
+            }
 	}
     
     function detail_ambil_paket_update(){
@@ -4611,13 +4648,186 @@ Ext.onReady(function(){
 			jrawat_lunasLabel.setText("");
 		}
 	}
+        
+        function load_total_bayar(){
+            var jumlah_item=0;
+            var subtotal_harga=0;
+            var total_harga=0;
+            var total_hutang=0;
+            var total_bayar=0;
+
+            var total_harga2=0;
+            var total_bayar2=0;
+
+            var transfer_nilai=0;
+            var transfer_nilai2=0;
+            var transfer_nilai3=0;
+            var kwitansi_nilai=0;
+            var kwitansi_nilai2=0;
+            var kwitansi_nilai3=0;
+            var card_nilai=0;
+            var card_nilai2=0;
+            var card_nilai3=0;
+            var cek_nilai=0;
+            var cek_nilai2=0;
+            var cek_nilai3=0;
+            var voucher_nilai=0;
+            var voucher_nilai2=0;
+            var voucher_nilai3=0;
+            
+            var detail_jual_rawat_record;
+            for(i=0;i<detail_jual_rawat_DataStore.getCount();i++){
+                jumlah_item=jumlah_item+eval(detail_jual_rawat_DataStore.getAt(i).data.drawat_jumlah);
+                subtotal_harga+=detail_jual_rawat_DataStore.getAt(i).data.drawat_subtotal_net;
+            }
+            jrawat_jumlahField.setValue(jumlah_item);
+            
+            jrawat_subTotalField.setValue(subtotal_harga);
+            total_harga=subtotal_harga*(100-jrawat_diskonField.getValue())/100 - jrawat_cashbackField.getValue();
+            total_harga=(total_harga>0?Math.round(total_harga):0);
+            //jrawat_subTotalField.setValue(total_harga);
+            jrawat_totalField.setValue(total_harga);
+
+            
+
+            transfer_nilai=jrawat_transfer_nilaiField.getValue();
+            if(/^\d+$/.test(transfer_nilai))
+                    transfer_nilai=jrawat_transfer_nilaiField.getValue();
+            else
+                    transfer_nilai=0;
+            
+            transfer_nilai2=jrawat_transfer_nilai2Field.getValue();
+            if(/^\d+$/.test(transfer_nilai2))
+                    transfer_nilai2=jrawat_transfer_nilai2Field.getValue();
+            else
+                    transfer_nilai2=0;
+            
+            transfer_nilai3=jrawat_transfer_nilai3Field.getValue();
+            if(/^\d+$/.test(transfer_nilai3))
+                    transfer_nilai3=jrawat_transfer_nilai3Field.getValue();
+            else
+                    transfer_nilai3=0;
+            
+            kwitansi_nilai=jrawat_kwitansi_nilaiField.getValue();
+            if(/^\d+$/.test(kwitansi_nilai))
+                    kwitansi_nilai=jrawat_kwitansi_nilaiField.getValue();
+            else
+                    kwitansi_nilai=0;
+            
+            kwitansi_nilai2=jrawat_kwitansi_nilai2Field.getValue();
+            if(/^\d+$/.test(kwitansi_nilai2))
+                    kwitansi_nilai2=jrawat_kwitansi_nilai2Field.getValue();
+            else
+                    kwitansi_nilai2=0;
+            
+            kwitansi_nilai3=jrawat_kwitansi_nilai3Field.getValue();
+            if(/^\d+$/.test(kwitansi_nilai3))
+                    kwitansi_nilai3=jrawat_kwitansi_nilai3Field.getValue();
+            else
+                    kwitansi_nilai3=0;
+            
+            card_nilai=jrawat_card_nilaiField.getValue();
+            if(/^\d+$/.test(card_nilai))
+                    card_nilai=jrawat_card_nilaiField.getValue();
+            else
+                    card_nilai=0;
+            
+            card_nilai2=jrawat_card_nilai2Field.getValue();
+            if(/^\d+$/.test(card_nilai2))
+                    card_nilai2=jrawat_card_nilai2Field.getValue();
+            else
+                    card_nilai2=0;
+            
+            card_nilai3=jrawat_card_nilai3Field.getValue();
+            if(/^\d+$/.test(card_nilai3))
+                    card_nilai3=jrawat_card_nilai3Field.getValue();
+            else
+                    card_nilai3=0;
+            
+            cek_nilai=jrawat_cek_nilaiField.getValue();
+            if(/^\d+$/.test(cek_nilai))
+                    cek_nilai=jrawat_cek_nilaiField.getValue();
+            else
+                    cek_nilai=0;
+            
+            cek_nilai2=jrawat_cek_nilai2Field.getValue();
+            if(/^\d+$/.test(cek_nilai2))
+                    cek_nilai2=jrawat_cek_nilai2Field.getValue();
+            else
+                    cek_nilai2=0;
+            
+            cek_nilai3=jrawat_cek_nilai3Field.getValue();
+            if(/^\d+$/.test(cek_nilai3))
+                    cek_nilai3=jrawat_cek_nilai3Field.getValue();
+            else
+                    cek_nilai3=0;
+            
+            voucher_nilai=jrawat_voucher_cashbackField.getValue();
+            if(/^\d+$/.test(voucher_nilai))
+                    voucher_nilai=jrawat_voucher_cashbackField.getValue();
+            else
+                    voucher_nilai=0;
+            
+            voucher_nilai2=jrawat_voucher_cashback2Field.getValue();
+            if(/^\d+$/.test(voucher_nilai2))
+                    voucher_nilai2=jrawat_voucher_cashback2Field.getValue();
+            else
+                    voucher_nilai2=0;
+            
+            voucher_nilai3=jrawat_voucher_cashback3Field.getValue();
+            if(/^\d+$/.test(voucher_nilai3))
+                    voucher_nilai3=jrawat_voucher_cashback3Field.getValue();
+            else
+                    voucher_nilai3=0;
+
+            tunai_nilai=jrawat_tunai_nilaiField.getValue();
+            if(/^\d+$/.test(tunai_nilai))
+                    tunai_nilai=jrawat_tunai_nilaiField.getValue();
+            else
+                    tunai_nilai=0;
+
+            tunai_nilai2=jrawat_tunai_nilai2Field.getValue();
+            if(/^\d+$/.test(tunai_nilai2))
+                    tunai_nilai2=jrawat_tunai_nilai2Field.getValue();
+            else
+                    tunai_nilai2=0;
+
+            tunai_nilai3=jrawat_tunai_nilai3Field.getValue();
+            if(/^\d+$/.test(tunai_nilai3))
+                    tunai_nilai3=jrawat_tunai_nilai3Field.getValue();
+            else
+                    tunai_nilai3=0;
+
+
+            total_bayar=transfer_nilai+transfer_nilai2+transfer_nilai3+kwitansi_nilai+kwitansi_nilai2+kwitansi_nilai3+card_nilai+card_nilai2+card_nilai3+cek_nilai+cek_nilai2+cek_nilai3+voucher_nilai+voucher_nilai2+voucher_nilai3+tunai_nilai+tunai_nilai2+tunai_nilai3;
+            total_bayar=(total_bayar>0?Math.round(total_bayar):0);
+            jrawat_bayarField.setValue(total_bayar);
+
+            //total_hutang=total_harga-jrawat_bayarField.getValue()-jrawat_transfer_nilaiField.getValue()-jrawat_transfer_nilai2Field.getValue()-jrawat_transfer_nilai3Field.getValue()-jrawat_kwitansi_nilaiField.getValue()-jrawat_kwitansi_nilai2Field.getValue()-jrawat_kwitansi_nilai3Field.getValue()-jrawat_card_nilaiField.getValue()-jrawat_card_nilai2Field.getValue()-jrawat_card_nilai3Field.getValue()-jrawat_cek_nilaiField.getValue()-jrawat_cek_nilai2Field.getValue()-jrawat_cek_nilai3Field.getValue()-jrawat_voucher_cashbackField.getValue()-jrawat_voucher_cashback2Field.getValue()-jrawat_voucher_cashback3Field.getValue();
+            total_hutang=total_harga-total_bayar;
+            
+            total_hutang=(total_hutang>0?Math.round(total_hutang):0);
+            jrawat_hutangField.setValue(total_hutang);
+            
+            if(total_bayar>total_harga){
+                    jrawat_pesanLabel.setText("Kelebihan Jumlah Bayar");
+            }else if(total_bayar<total_harga || total_bayar==total_harga){
+                    jrawat_pesanLabel.setText("");
+            }
+            if(total_bayar==total_harga){
+                    jrawat_lunasLabel.setText("LUNAS");
+            }else if(total_bayar!==total_harga){
+                    jrawat_lunasLabel.setText("");
+            }
+	}
 	
 	function load_all_jual_rawat(){
 		//load_detail_jual_rawat();
 		load_total_rawat_bayar();
 	}
 	//event on update of detail data store
-	detail_jual_rawat_DataStore.on("update",load_all_jual_rawat);
+	//detail_jual_rawat_DataStore.on("update",load_all_jual_rawat);
+        detail_jual_rawat_DataStore.on("update",load_total_bayar);
 	//detail_jual_rawat_DataStore.on("load",load_total_rawat_bayar);
 	jrawat_bayarField.on("keyup",load_total_rawat_bayar);
 	jrawat_diskonField.on("keyup",load_total_rawat_bayar);
@@ -4761,9 +4971,9 @@ Ext.onReady(function(){
 		id: 'detail_ambil_paketListGrid',
 		el: 'fp_detail_ambil_paket',
 		//title: 'Detail Pengambilan Paket',
-		title: 'Informasi Pengambilan Paket',
-		height: 160,	//250,
-		width: 1180, //940,	//938,
+		title: 'Info Paket (dari Kasir - Pengambilan Paket)',
+		height: 150,	//250,
+		width: 940,	//938,
 		autoScroll: true,
 		store: detail_ambil_paketDataStore, // DataStore
 		colModel: detail_ambil_paketColumnModel, // Nama-nama Columns
@@ -4825,7 +5035,7 @@ Ext.onReady(function(){
 		closable:true,
 		closeAction: 'hide',
 		//autoWidth: true,
-		width: 1220, //965,
+		width:965,
 		autoHeight: true,
 		x:0,
 		y:0,

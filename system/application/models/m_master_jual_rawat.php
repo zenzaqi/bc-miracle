@@ -624,9 +624,9 @@ class M_master_jual_rawat extends Model{
 		}
 		//end of function
 		
-		function detail_jual_rawat_update($drawat_id ){
-			/*$dtu_drawat=array(
-			""
+		function detail_jual_rawat_update($drawat_id ,$drawat_diskon){
+			$dtu_drawat=array(
+			"drawat_diskon"=>$drawat_diskon
 			);
 			
 			$this->db->where('drawat_id', $drawat_id);
@@ -634,7 +634,7 @@ class M_master_jual_rawat extends Model{
 			if($this->db->affected_rows()){
 				return "{success:true}";
 			}else
-				return "{failure:true}";*/
+				return "{failure:true}";
 
 		}
         

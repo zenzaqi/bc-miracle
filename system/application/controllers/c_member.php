@@ -191,8 +191,8 @@ class C_member extends Controller {
 	}
 	
 	function member_aktivasi(){
-		
-		$result=$this->m_member->member_aktivasi();
+		$member_id=trim(@$_POST["member_id"]);
+		$result=$this->m_member->member_aktivasi($member_id);
 		echo '1';    
 	}
 	
