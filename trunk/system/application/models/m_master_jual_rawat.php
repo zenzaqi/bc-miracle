@@ -665,6 +665,30 @@ class M_master_jual_rawat extends Model{
 
 		}
         
+        function detail_jual_rawat_delete($drawat_id){
+            // You could do some checkups here and return '0' or other error consts.
+			// Make a single query to delete all of the master_jual_rawats at the same time :
+			if(sizeof($drawat_id)<1){
+				return '0';
+			} else if (sizeof($drawat_id) == 1){
+				$query = "DELETE FROM detail_jual_rawat WHERE drawat_id = ".$drawat_id[0];
+				$this->db->query($query);
+			} else {
+				$query = "DELETE FROM master_jual_rawat WHERE ";
+				for($i = 0; $i < sizeof($pkid); $i++){
+					$query = $query . "jrawat_id= ".$pkid[$i];
+					if($i<sizeof($pkid)-1){
+						$query = $query . " OR ";
+					}     
+				}
+				$this->db->query($query);
+			}
+			if($this->db->affected_rows()>0)
+				return '1';
+			else
+				return '0';
+        }
+        
         function detail_ambil_paket_update($dapaket_id ){
             /*$dtu_dapaket=array(
 			"dapaket_stat_dok"=>'Batal'
