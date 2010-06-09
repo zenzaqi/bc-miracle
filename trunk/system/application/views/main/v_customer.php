@@ -2823,7 +2823,7 @@ Ext.onReady(function(){
 	/* Identify  cust_referensi Field */
 	cust_referensiField= new Ext.form.ComboBox({
 		id: 'cust_referensiField',
-		fieldLabel: 'Referensi',
+		fieldLabel: 'Referal',
 		store: cbo_cust_ref_DataStore,
 		mode: 'remote',
 		editable: false,
@@ -2839,13 +2839,14 @@ Ext.onReady(function(){
 		triggerAction: 'all',
 		lazyRender:true,
 		listClass: 'x-combo-list-small',
-		anchor: '95%'
+		anchor: '95%',
+		editable: true
 	});
 	
 	/* Identify  cust_referensi Field */
 	cust_referensilainField= new Ext.form.ComboBox({
 		id: 'cust_referensilainField',
-		fieldLabel: 'Referensi Lain',
+		fieldLabel: 'Referal Lain',
 		maxLength: 250,
 		anchor: '50%',
 		store: cbo_reflain_DataStore,
@@ -2865,7 +2866,7 @@ Ext.onReady(function(){
 	cust_referensilaintxtField= new Ext.form.TextField({
 		id: 'cust_referensilaintxtField',
 		fieldLabel: '&nbsp;&nbsp;&nbsp;Tambah (Optional)',
-		emptyText: 'Referensi lainnya...',
+		emptyText: 'Referal lainnya...',
 		maxLength: 250,
 		anchor: '50%'
 	});
