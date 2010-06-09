@@ -1341,8 +1341,8 @@ Ext.onReady(function(){
 			jrawat_post2db="CREATE";
 			msg='created';
 			master_cara_bayarTabPanel.setActiveTab(0);
-			master_jual_rawat_createForm.savePrintButton.disable();
-            master_cara_bayarTabPanel.setDisabled(true);
+			master_jual_rawat_createForm.savePrintButton.enable();
+                        master_cara_bayarTabPanel.setDisabled(false);
 			master_jual_rawat_createWindow.show();
 		} else {
 			master_jual_rawat_createWindow.toFront();
@@ -3797,18 +3797,19 @@ Ext.onReady(function(){
 		id: ''
 	},[
 	/* dataIndex => insert intopeprodukan_ColumnModel, Mapping => for initiate table column */ 
-			{name: 'drawat_id', type: 'int', mapping: 'drawat_id'}, 
-			{name: 'drawat_master', type: 'int', mapping: 'drawat_master'}, 
-			{name: 'drawat_rawat', type: 'int', mapping: 'drawat_rawat'}, 
-			{name: 'drawat_jumlah', type: 'int', mapping: 'drawat_jumlah'}, 
-			{name: 'drawat_harga', type: 'float', mapping: 'drawat_harga'}, 
-			{name: 'drawat_diskon', type: 'int', mapping: 'drawat_diskon'},
-			{name: 'drawat_sales', type: 'string', mapping: 'drawat_sales'},
-			{name: 'drawat_diskon_jenis', type: 'string', mapping: 'drawat_diskon_jenis'},
-			{name: 'drawat_subtotal', type: 'float', mapping: 'drawat_subtotal'},
-			{name: 'drawat_subtotal_net', type: 'int', mapping: 'drawat_subtotal_net'},
-			{name: 'dtrawat_keterangan', type: 'string', mapping: 'dtrawat_keterangan'},
-            {name: 'referal', type: 'string', mapping: 'referal'}
+            {name: 'drawat_id', type: 'int', mapping: 'drawat_id'}, 
+            {name: 'drawat_master', type: 'int', mapping: 'drawat_master'}, 
+            {name: 'drawat_rawat', type: 'int', mapping: 'drawat_rawat'}, 
+            {name: 'drawat_jumlah', type: 'int', mapping: 'drawat_jumlah'}, 
+            {name: 'drawat_harga', type: 'float', mapping: 'drawat_harga'}, 
+            {name: 'drawat_diskon', type: 'int', mapping: 'drawat_diskon'},
+            {name: 'drawat_sales', type: 'string', mapping: 'drawat_sales'},
+            {name: 'drawat_diskon_jenis', type: 'string', mapping: 'drawat_diskon_jenis'},
+            {name: 'drawat_subtotal', type: 'float', mapping: 'drawat_subtotal'},
+            {name: 'drawat_subtotal_net', type: 'int', mapping: 'drawat_subtotal_net'},
+            {name: 'dtrawat_keterangan', type: 'string', mapping: 'dtrawat_keterangan'},
+            {name: 'referal', type: 'string', mapping: 'referal'},
+            {name: 'drawat_dtrawat', type: 'int', mapping: 'drawat_dtrawat'}
 	]);
 	//eof
 	
@@ -3877,37 +3878,59 @@ Ext.onReady(function(){
 	}*/
 	
 	var combo_jual_rawat=new Ext.form.ComboBox({
-			store: cbo_drawat_rawatDataStore,
-			mode: 'remote',
-			displayField: 'drawat_rawat_display',
-			valueField: 'drawat_rawat_value',
-			typeAhead: false,
-			loadingText: 'Searching...',
-			pageSize:pageS,
-			hideTrigger:false,
-			tpl: rawat_jual_rawat_tpl,
-			//applyTo: 'search',
-			itemSelector: 'div.search-item',
-			triggerAction: 'all',
-			lazyRender:true,
-			listClass: 'x-combo-list-small',
-			anchor: '95%'
-
+            store: cbo_drawat_rawatDataStore,
+            mode: 'remote',
+            displayField: 'drawat_rawat_display',
+            valueField: 'drawat_rawat_value',
+            typeAhead: false,
+            loadingText: 'Searching...',
+            pageSize:pageS,
+            hideTrigger:false,
+            tpl: rawat_jual_rawat_tpl,
+            //applyTo: 'search',
+            itemSelector: 'div.search-item',
+            triggerAction: 'all',
+            lazyRender:true,
+            listClass: 'x-combo-list-small',
+            enableKeyEvents: true,
+            anchor: '95%'
 	});
 	
 	drawat_idField=new Ext.form.NumberField();
 	
 	combo_jual_rawat.on('select',function(){
-		for(i=0;i<detail_jual_rawat_DataStore.getCount();i++){	
-			detail_jual_rawat_record=detail_jual_rawat_DataStore.getAt(i);
-			var c_dtStore=0;
-			var j=cbo_drawat_rawatDataStore.find('drawat_rawat_value',combo_jual_rawat.getValue());
-			if(cbo_drawat_rawatDataStore.getCount()){
-				drawat_idField.setValue(cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_value);
-				//detail_jual_rawat_record.data.drawat_jumlah='2';
-			}
-		}
+            drawat_jumlahField.setValue(1);
+            for(i=0;i<detail_jual_rawat_DataStore.getCount();i++){	
+                detail_jual_rawat_record=detail_jual_rawat_DataStore.getAt(i);
+                var j=cbo_drawat_rawatDataStore.find('drawat_rawat_value',combo_jual_rawat.getValue());
+                if(cbo_drawat_rawatDataStore.getCount()){
+                    //* Check no_member JIKA <>"" ==> jenis-diskon=DM /
+                    var drawat_diskon = 0;
+                    if(jrawat_cust_nomemberField.getValue()!==""){
+                        drawat_jenis_diskonField.setValue('DM');
+                        drawat_diskon = cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_dm;
+                        drawat_diskonField.setValue(cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_dm);
+                    }else{
+                        drawat_jenis_diskonField.setValue('DU');
+                        drawat_diskon = cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_du;
+                        drawat_diskonField.setValue(cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_du);
+                    }
+                    drawat_idField.setValue(cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_value);
+                    drawat_hargaField.setValue(cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_harga);
+                    drawat_subtotalField.setValue(1*cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_harga);
+                    drawat_subtotal_netField.setValue(((100-drawat_diskon)/100) * (1*cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_harga));
+                }
+            }
 	});
+        
+        var drawat_jumlahField= new Ext.form.NumberField({
+            allowDecimals: false,
+            allowNegative: false,
+            blankText: '0',
+            maxLength: 2,
+            readOnly: false,
+            maskRe: /([0-9]+)$/
+        });
         
         var drawat_hargaField= new Ext.form.NumberField({
             allowDecimals: false,
@@ -3926,6 +3949,20 @@ Ext.onReady(function(){
             readOnly: true,
             maskRe: /([0-9]+)$/
         });
+        
+        var drawat_jenis_diskonField= new Ext.form.ComboBox({
+            store:new Ext.data.SimpleStore({
+                fields:['diskon_jenis_value'],
+                data:[['DU'],['DM'],['Promo'],['Ultah'],['Kolega']]
+            }),
+            mode: 'local',
+            displayField: 'diskon_jenis_value',
+            valueField: 'diskon_jenis_value',
+            allowBlank: true,
+            anchor: '50%',
+            triggerAction: 'all',
+            lazyRenderer: true
+        })
         
         var drawat_subtotal_netField= new Ext.form.NumberField({
             allowDecimals: false,
@@ -3968,14 +4005,8 @@ Ext.onReady(function(){
                     dataIndex: 'drawat_jumlah',
                     width: 60,	//80,
                     sortable: false,
+                    editor: drawat_jumlahField,
                     renderer: Ext.util.Format.numberRenderer('0,000'),
-                    editor: new Ext.form.NumberField({
-                            allowDecimals: false,
-                            allowNegative: false,
-                            blankText: '0',
-                            maxLength: 11,
-                            maskRe: /([0-9]+)$/
-                    })
             },
             {
                     align: 'Right',
@@ -4003,19 +4034,7 @@ Ext.onReady(function(){
                     dataIndex: 'drawat_diskon_jenis',
                     width: 70,	//100,
                     sortable: true,
-                    editor: new Ext.form.ComboBox({
-                            store:new Ext.data.SimpleStore({
-                                    fields:['diskon_jenis_value'],
-                                    data:[['DU'],['DM'],['Promo'],['Ultah'],['Kolega']]
-                            }),
-                            mode: 'local',
-                            displayField: 'diskon_jenis_value',
-                            valueField: 'diskon_jenis_value',
-                            allowBlank: true,
-                            anchor: '50%',
-                            triggerAction: 'all',
-                            lazyRenderer: true
-                    })
+                    editor: drawat_jenis_diskonField
             },
             {
                     align: 'Right',
@@ -4273,7 +4292,13 @@ Ext.onReady(function(){
                         url: 'index.php?c=c_master_jual_rawat&m=detail_jual_rawat_update',
                         params:{
                             drawat_id: detail_jual_rawat_record.data.drawat_id,
-                            drawat_diskon: detail_jual_rawat_record.data.drawat_diskon
+                            drawat_master: eval(get_pk_id()),
+                            drawat_dtrawat: detail_jual_rawat_record.data.drawat_dtrawat,
+                            drawat_rawat: detail_jual_rawat_record.data.drawat_rawat,
+                            drawat_jumlah: detail_jual_rawat_record.data.drawat_jumlah,
+                            drawat_harga: detail_jual_rawat_record.data.drawat_harga,
+                            drawat_diskon: detail_jual_rawat_record.data.drawat_diskon,
+                            drawat_diskon_jenis: detail_jual_rawat_record.data.drawat_diskon_jenis
                         },
                         timeout: 60000,
                         success: function(response){							
@@ -4650,6 +4675,8 @@ Ext.onReady(function(){
 	}
         
         function load_total_bayar(){
+            //var grid_record = detail_jual_rawatListEditorGrid.getSelectionModel().getSelected();
+	    //var row_index = detail_jual_rawatListEditorGrid.getStore().indexOf(grid_record);
             var jumlah_item=0;
             var subtotal_harga=0;
             var total_harga=0;

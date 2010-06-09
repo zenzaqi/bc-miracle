@@ -274,6 +274,7 @@ class M_master_jual_rawat extends Model{
                     ,drawat_harga*drawat_jumlah*(100-drawat_diskon)/100 as drawat_subtotal_net
                     ,dtrawat_keterangan
                     ,IF((dtrawat_petugas1=0),IF((dtrawat_petugas2=0),NULL,terapis.karyawan_username),dokter.karyawan_username) AS referal
+                    ,drawat_dtrawat
                 FROM detail_jual_rawat
                 LEFT JOIN perawatan ON(rawat_id=drawat_rawat)
                 LEFT JOIN tindakan_detail ON(drawat_dtrawat=dtrawat_id)
@@ -624,7 +625,23 @@ class M_master_jual_rawat extends Model{
 		}
 		//end of function
 		
-		function detail_jual_rawat_update($drawat_id ,$drawat_diskon){
+		function detail_jual_rawat_update($drawat_id ,$drawat_master ,$drawat_dtrawat ,$drawat_rawat ,$drawat_jumlah ,$drawat_harga ,$drawat_diskon ,$drawat_diskon_jenis){
+            if($drawat_id==''){
+                //* Insert to db.detail_jual_rawat /
+                /*$dti_drawat=array(
+                "drawat_master"
+                "drawat_rawat"
+                "drawat_jumlah"
+                "drawat_harga"
+                "drawat_diskon"
+                "drawat_diskon_jenis"
+                );*/
+            }else{
+                //* Update to db.detail_jual_rawat /
+                //$dtu_
+            }
+            
+            
 			$dtu_drawat=array(
 			"drawat_diskon"=>$drawat_diskon
 			);

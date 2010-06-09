@@ -247,9 +247,15 @@ class C_master_jual_rawat extends Controller {
 	function detail_jual_rawat_update(){
 	//POST variable here
 		$drawat_id=trim(@$_POST["drawat_id"]);
+        $drawat_master=trim(@$_POST["drawat_master"]);
+        $drawat_dtrawat=trim(@$_POST["drawat_dtrawat"]);
+        $drawat_rawat=trim(@$_POST["drawat_rawat"]);
+        $drawat_jumlah=trim(@$_POST["drawat_jumlah"]);
+        $drawat_harga=trim(@$_POST["drawat_harga"]);
         $drawat_diskon=trim(@$_POST["drawat_diskon"]);
-		
-		$result=$this->m_master_jual_rawat->detail_jual_rawat_update($drawat_id ,$drawat_diskon);
+        $drawat_diskon_jenis=trim(@$_POST["drawat_diskon_jenis"]);
+        
+		$result=$this->m_master_jual_rawat->detail_jual_rawat_update($drawat_id ,$drawat_master ,$drawat_dtrawat ,$drawat_rawat ,$drawat_jumlah ,$drawat_harga ,$drawat_diskon ,$drawat_diskon_jenis);
 	}
 	
 	//for detail pengambilan paket
