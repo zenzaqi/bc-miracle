@@ -808,7 +808,7 @@ Ext.onReady(function(){
 	var dapp_terapis_tpl = new Ext.XTemplate(
         '<tpl for="."><div class="search-item">',
             //'<span><b>{terapis_count}</b> | <b>{terapis_username}</b> | <b>{absensi_shift}</b></span>',
-			'<span>{terapis_username} | {absensi_shift}</span>', //terapis_count tdk perlu ditampilkan, karena sudah ada di Jadwal Therapist
+			'<span>{terapis_username}</span>', //terapis_count & shift tdk perlu ditampilkan, karena sudah ada di Jadwal Therapist
         '</div></tpl>'
     );
     
