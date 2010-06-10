@@ -137,7 +137,20 @@ class M_tindakan_medis extends Model{
 	//get record list
 	function detail_tindakan_detail_list($master_id,$query,$start,$end) {
 		//$query = "SELECT * FROM tindakan_detail,perawatan,karyawan WHERE dtrawat_perawatan=rawat_id AND dtrawat_petugas1=karyawan_id AND dtrawat_master='".$master_id."'";
-		$query="SELECT * FROM tindakan_detail INNER JOIN perawatan ON(dtrawat_perawatan=rawat_id) INNER JOIN karyawan ON(dtrawat_petugas1=karyawan_id) LEFT JOIN kategori ON(rawat_kategori=kategori_id) WHERE dtrawat_master='".$master_id."' AND kategori_nama='Medis'";
+		$query="SELECT dtrawat_id
+                        ,dtrawat_master
+                        ,dtrawat_perawatan
+                        ,dtrawat_petugas1
+                        ,dtrawat_jam
+                        ,dtrawat_kategori
+                        ,dtrawat_status
+                        ,dtrawat_keterangan
+                        ,dtrawat_ambil_paket
+                FROM tindakan_detail
+                INNER JOIN perawatan ON(dtrawat_perawatan=rawat_id)
+                INNER JOIN karyawan ON(dtrawat_petugas1=karyawan_id)
+                LEFT JOIN kategori ON(rawat_kategori=kategori_id)
+                WHERE dtrawat_master='".$master_id."' AND kategori_nama='Medis'";
 		$result = $this->db->query($query);
 		$nbrows = $result->num_rows();
 		$limit = $query." LIMIT ".$start.",".$end;			
@@ -595,7 +608,7 @@ class M_tindakan_medis extends Model{
 	}
 	//*eof
 	
-	function detail_tindakan_medis_detail_insert($dtrawat_id ,$dtrawat_master ,$dtrawat_perawatan ,$dtrawat_petugas1 ,$dtrawat_petugas2 ,$dtrawat_jamreservasi ,$dtrawat_kategori ,$dtrawat_status ,$dtrawat_keterangan ,$dtrawat_ambil_paket ,$dtrawat_cust){
+	function detail_tindakan_medis_detail_insert($dtrawat_id ,$dtrawat_master ,$dtrawat_perawatan ,$dtrawat_petugas1 ,$dtrawat_petugas2 ,$dtrawat_jamreservasi ,$dtrawat_kategori ,$dtrawat_status ,$dtrawat_keterangan ,$dtrawat_ambil_paket ,$dtrawat_cust ,$count ,$dcount){
 		/* hanya INSERT record tindakan_detail-medis yang baru */
 		$date_now=date('Y-m-d');
 		if(!is_numeric($dtrawat_id)){
@@ -629,9 +642,15 @@ class M_tindakan_medis extends Model{
 					);
 					$this->db->insert('report_tindakan', $data_reportt);
 				}
-				return 'Detail telah berhasil ditambahkan';
+				//return 'Detail telah berhasil ditambahkan';
+                if($count==($dcount-1)){
+                    return '1';
+                }elseif($count<>($dcount-1)){
+                    return '0';
+                }
 			}
 		}elseif(is_numeric($dtrawat_id)){
+            
                 $sql="SELECT dtrawat_id,dtrawat_locked,dtrawat_perawatan,dtrawat_petugas1,dtrawat_jam,dtrawat_keterangan FROM tindakan_detail WHERE dtrawat_id='$dtrawat_id'";
                 $rs=$this->db->query($sql);
                 if($rs->num_rows()){
@@ -658,6 +677,17 @@ class M_tindakan_medis extends Model{
                         );
                         $this->db->where('dtrawat_id', $dtrawat_id);
                         $this->db->update('tindakan_detail', $dtu_dtrawat);
+                        if($count==($dcount-1)){
+                            return '1';
+                        }elseif($count<>($dcount-1)){
+                            return '0';
+                        }
+                    }else{
+                        if($count==($dcount-1)){
+                            return '1';
+                        }elseif($count<>($dcount-1)){
+                            return '0';
+                        }
                     }
                 }
         }
@@ -685,6 +715,7 @@ class M_tindakan_medis extends Model{
 	
 	function detail_tindakan_nonmedis_detail_purge($master_id){
         //* ambil dulu db.tindakan_detail.dtrawat_id berdasarkan dtrawat_master untuk digunakan men-Delete db.detail_jual_rawat jika memang sudah masuk di db.detail_jual_rawat
+        //* $master_id === db.tindakan.trawat_id /
         $sql="SELECT dtrawat_id
                 FROM tindakan_detail
                 INNER JOIN perawatan ON(dtrawat_perawatan=rawat_id)
@@ -698,12 +729,19 @@ class M_tindakan_medis extends Model{
                         $this->db->query($sql);
                 }
         }
+        
+        /* untuk mend-DELETE tindakan-non-medis yang ada di Form Tindakan Medis adalah dengan filter:
+        // db.tindakan_detail.dtrawat_dtrawat = db.tindakan_detail.dtrawat_id(dimana id ini memiliki db.tindakan_detail.dtrawat_dapp
+        // ato yg berasal dari db.appointment_detail) */
 		$sql="DELETE tindakan_detail
                 FROM tindakan_detail
                 INNER JOIN perawatan ON(dtrawat_perawatan=rawat_id)
                 LEFT JOIN kategori ON(rawat_kategori=kategori_id)
                 WHERE dtrawat_master='".$master_id."'
-                        AND kategori_nama='Non Medis'";
+                        AND kategori_nama='Non Medis'
+                        AND dtrawat_dapp=0
+                        AND dtrawat_petugas1=0
+                        AND dtrawat_petugas2=0";
 		$result=$this->db->query($sql);
 	}
 	

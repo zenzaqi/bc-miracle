@@ -1303,45 +1303,59 @@ Ext.onReady(function(){
 	
 	//function for insert detail
 	function tindakan_medisdetail_insert(){
+		var count_detail=tindakan_medis_detail_DataStore.getCount();
 		for(i=0;i<tindakan_medis_detail_DataStore.getCount();i++){
-			tindakan_medisdetail_record=tindakan_medis_detail_DataStore.getAt(i);
-			if(tindakan_medisdetail_record.data.dtrawat_perawatan!=""){
-				Ext.Ajax.request({
-					waitMsg: 'Please wait...',
-					url: 'index.php?c=c_tindakan_medis&m=detail_tindakan_medis_detail_insert',
-					params:{
-					dtrawat_id	: tindakan_medisdetail_record.data.dtrawat_id, 
-					dtrawat_master	: eval(trawat_medis_idField.getValue()), 
-					dtrawat_perawatan	: tindakan_medisdetail_record.data.dtrawat_perawatan, 
-					dtrawat_petugas1	: tindakan_medisdetail_record.data.dtrawat_petugas1, 
-					dtrawat_petugas2	: tindakan_medisdetail_record.data.dtrawat_petugas2, 
-					dtrawat_jamreservasi	: tindakan_medisdetail_record.data.dtrawat_jam, 
-					dtrawat_kategori	: tindakan_medisdetail_record.data.dtrawat_kategori, 
-					dtrawat_status	: tindakan_medisdetail_record.data.dtrawat_status,
-					dtrawat_keterangan	: tindakan_medisdetail_record.data.dtrawat_keterangan,
-					dtrawat_ambil_paket	: tindakan_medisdetail_record.data.dtrawat_ambil_paket,
-					dtrawat_cust	: trawat_medis_custidField.getValue()
-					},
-					callback: function(opts, success, response){
-						if(success){
-								dtindakan_jual_nonmedis_insert();
-							tindakan_medisDataStore.reload();
-							/*var result = response.responseText;
-							switch(result){
-								default:
+				var count_i = i;
+				tindakan_medisdetail_record=tindakan_medis_detail_DataStore.getAt(i);
+				if(tindakan_medisdetail_record.data.dtrawat_perawatan!=""){
+						Ext.Ajax.request({
+								waitMsg: 'Please wait...',
+								url: 'index.php?c=c_tindakan_medis&m=detail_tindakan_medis_detail_insert',
+								params:{
+								dtrawat_id	: tindakan_medisdetail_record.data.dtrawat_id, 
+								dtrawat_master	: eval(trawat_medis_idField.getValue()), 
+								dtrawat_perawatan	: tindakan_medisdetail_record.data.dtrawat_perawatan, 
+								dtrawat_petugas1	: tindakan_medisdetail_record.data.dtrawat_petugas1, 
+								dtrawat_petugas2	: tindakan_medisdetail_record.data.dtrawat_petugas2, 
+								dtrawat_jamreservasi	: tindakan_medisdetail_record.data.dtrawat_jam, 
+								dtrawat_kategori	: tindakan_medisdetail_record.data.dtrawat_kategori, 
+								dtrawat_status	: tindakan_medisdetail_record.data.dtrawat_status,
+								dtrawat_keterangan	: tindakan_medisdetail_record.data.dtrawat_keterangan,
+								dtrawat_ambil_paket	: tindakan_medisdetail_record.data.dtrawat_ambil_paket,
+								dtrawat_cust	: trawat_medis_custidField.getValue(),
+								count	: count_i,
+								dcount	: count_detail
+								},
+								success: function(response){
+									var result=eval(response.responseText);
+									if(result==1){
+										dtindakan_jual_nonmedis_insert();
+										tindakan_medisDataStore.reload();
+									}else if(result==0){
+										tindakan_medisDataStore.reload();
+									}else{
+										tindakan_medisDataStore.reload();
+										Ext.MessageBox.show({
+											title: 'Error',
+											msg: 'Data detail tindakan medis tidak bisa disimpan.',
+											buttons: Ext.MessageBox.OK,
+											animEl: 'database',
+											icon: Ext.MessageBox.ERROR
+										});	
+									}
+								},
+								failure: function(response){
+									var result=response.responseText;
 									Ext.MessageBox.show({
-									   title: 'Warning',
-									   msg: result,
+									   title: 'Error',
+									   msg: 'Could not connect to the database. retry later.',
 									   buttons: Ext.MessageBox.OK,
-									   animEl: 'save',
-									   icon: Ext.MessageBox.INFO
-									});
-									break;
-							}*/
-						}
-					}
-				});
-			}
+									   animEl: 'database',
+									   icon: Ext.MessageBox.ERROR
+									});	
+								}
+						});
+				}
 		}
 	}
 	//eof
@@ -1613,6 +1627,9 @@ Ext.onReady(function(){
 					dtrawat_perawatan	: tindakan_nonmedis_detail_record.data.dtrawat_perawatan, 
 					dtrawat_keterangan	: tindakan_nonmedis_detail_record.data.dtrawat_keterangan,
 					customer_id	: trawat_medis_custidField.getValue()
+					},
+					callback: function(opts, success, response){
+						tindakan_medisDataStore.reload();
 					}
 				});
 			}
