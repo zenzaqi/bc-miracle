@@ -380,7 +380,8 @@ class M_public_function extends Model{
 	}
 		
 	function get_member_by_cust($member_cust){
-		$sql = "SELECT * from member where member_cust='".$member_cust."' and member_status!='tidak aktif' order by member_id desc limit 1";
+		//$sql = "SELECT * from member where member_cust='".$member_cust."' and member_status!='tidak aktif' order by member_id desc limit 1";
+		$sql = "SELECT * from member where member_cust='".$member_cust."' and member_valid > now() order by member_id desc limit 1";
 		$query = $this->db->query($sql);
 		$nbrows = $query->num_rows();
 		if($nbrows>0){
