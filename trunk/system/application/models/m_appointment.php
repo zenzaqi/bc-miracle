@@ -508,6 +508,7 @@ class M_appointment extends Model{
 			$dapp_nonmedis_warna_terapis, 
 			$app_cara ,
 			$app_customer ,
+			$app_customer_id ,
 			$app_keterangan ,
 			$dapp_user){
 			/* JIKA $dapp_medis_petugas=="" ==> diisi db.karyawan.karyawan_id WHERE username="Available dr." */
@@ -565,6 +566,13 @@ class M_appointment extends Model{
 					if($app_cara=="Datang"){
 						$date_now=date('Y-m-d');
 						$time_now=date('H:i:s');
+						
+						if(is_numeric($app_customer)==true){
+							$app_customer = $app_customer;
+						}else{
+							$app_customer = $app_customer_id;
+						}
+						
 						/* INSERT ke db.tindakan dan db.tindakan_detail JIKA $dapp_status=='datang' */
 						$sql="SELECT trawat_id FROM tindakan WHERE trawat_cust='$app_customer' AND date_format(trawat_date_create,'%Y-%m-%d')='$date_now'";
 						$rs=$this->db->query($sql);
