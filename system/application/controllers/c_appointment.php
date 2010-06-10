@@ -19,7 +19,6 @@ class C_appointment extends Controller {
 		session_start();
 		$this->load->model('m_appointment', '', TRUE);
 		$this->load->plugin('to_excel');
-		//$this->load->library('firephp');
 	}
 	
 	//set index
@@ -193,6 +192,7 @@ class C_appointment extends Controller {
 		$dapp_nonmedis_warna_terapis=trim(@$_POST["dapp_nonmedis_warna_terapis"]);
 		$app_cara=trim(@$_POST["app_cara"]);
 		$app_customer=trim(@$_POST["app_customer"]);
+		$app_customer_id=trim(@$_POST["app_customer_id"]);
 		$app_keterangan=trim(@$_POST["app_keterangan"]);
 		$app_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$app_keterangan);
 		$app_keterangan=str_replace("\\", "",$app_keterangan);
@@ -214,6 +214,7 @@ class C_appointment extends Controller {
 			$dapp_nonmedis_warna_terapis ,
 			$app_cara ,
 			$app_customer ,
+			$app_customer_id ,
 			$app_keterangan ,
 			$dapp_user);
 	}

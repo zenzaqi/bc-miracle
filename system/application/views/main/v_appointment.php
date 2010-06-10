@@ -2275,6 +2275,7 @@ Ext.onReady(function(){
 					dapp_nonmedis_warna_terapis	: appointment_detail_nonmedis_record.data.dapp_nonmedis_warna_terapis,
 					app_cara	: app_caraField.getValue(),
 					app_customer	: app_customerField.getValue(),
+					app_customer_id	: app_customer_idField.getValue(),
 					app_keterangan	: app_keteranganField.getValue()
 					},
 					callback: function(opts, success, response){
