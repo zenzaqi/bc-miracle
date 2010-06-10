@@ -1956,7 +1956,7 @@ Ext.onReady(function(){
 		//clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 1200,	//800,
+	  	width: 1220,	//800,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: master_jual_produk_DataStore,
@@ -4215,6 +4215,7 @@ Ext.onReady(function(){
 			editor: temp_konv_nilai
 		},*/
 		{
+			//field ini HARUS dimunculkan, utk penghitungan harga
 			align : 'Right',
 			header: '<div align="center">' + 'Harga Default' + '</div>',
 			dataIndex: 'produk_harga_default',
@@ -4272,7 +4273,7 @@ Ext.onReady(function(){
 		el: 'fp_detail_jual_produk',
 		title: 'Detail Penjualan Produk',
 		height: 250,
-		width: 918,
+		width: 1200,	//918,
 		autoScroll: true,
 		store: detail_jual_produk_DataStore, // DataStore
 		colModel: detail_jual_produk_ColumnModel, // Nama-nama Columns
@@ -5768,7 +5769,7 @@ Ext.onReady(function(){
 		el: 'form_produk_addEdit',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
-		width: 	940,
+		width: 	1220,	//940,
 		frame: true,
 		layout: 'fit',
 		items: [master_jual_produk_masterGroup,detail_jual_produkListEditorGrid,master_jual_produk_bayarGroup]
