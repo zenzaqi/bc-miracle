@@ -17,11 +17,12 @@ class C_member_temp extends Controller {
 	function C_member_temp(){
 		parent::Controller();
 		$this->load->model('m_member_temp', '', TRUE);
+		session_start();
+		$this->load->plugin('to_excel');
 	}
 	
 	//set index
 	function index(){
-		$this->load->plugin('to_excel');
 		$this->load->helper('asset');
 		$this->load->view('main/v_member_temp');
 	}
