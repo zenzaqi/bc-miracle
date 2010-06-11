@@ -1908,6 +1908,15 @@ class M_master_jual_rawat extends Model{
 				return '0';
 		}
 		
+		function master_jual_rawat_batal($jrawat_nobukti){
+			$dtu_jrawat=array(
+			"jrawat_stat_dok"=>'Batal'
+			);
+			$this->db->where('jrawat_nobukti', $jrawat_nobukti);
+			$this->db->update('master_jual_rawat', $dtu_jrawat);
+			return '1';
+		}
+		
 		//function for advanced search record
 		function master_jual_rawat_search($jrawat_id ,$jrawat_nobukti ,$jrawat_cust ,$jrawat_diskon , $jrawat_stat_dok, $jrawat_cashback ,$jrawat_voucher ,$jrawat_cara ,$jrawat_bayar ,$jrawat_keterangan ,$jrawat_tgl_start ,$jrawat_tgl_end ,$start,$end){
 			//full query
