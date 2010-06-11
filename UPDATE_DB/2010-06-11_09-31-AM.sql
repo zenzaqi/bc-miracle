@@ -1,0 +1,1 @@
+ALTER TABLE `info` ADD `info_cabang` INT( 10 ) NOT NULL ;
