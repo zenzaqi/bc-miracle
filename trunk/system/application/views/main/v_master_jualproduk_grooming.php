@@ -2175,7 +2175,7 @@ Ext.onReady(function(){
 		anchor: '95%'
 	});
 	jpgrooming_voucher_noField.on('select', function(){
-		j=cbo_voucher_jpgroomingDataStore.find('voucher_nomor',jpgrooming_voucher_noField.getValue());
+		j=cbo_voucher_jpgroomingDataStore.findExact('voucher_nomor',jpgrooming_voucher_noField.getValue(),0);
 		if(j>-1){
 			jpgrooming_voucher_cashbackField.setValue(cbo_voucher_jpgroomingDataStore.getAt(j).data.voucher_cashback);
 			if(post2db=="CREATE")
@@ -2242,7 +2242,7 @@ Ext.onReady(function(){
 		anchor: '95%'
 	});
 	jpgrooming_voucher_no2Field.on('select', function(){
-		j=cbo_voucher_jpgroomingDataStore.find('voucher_nomor',jpgrooming_voucher_no2Field.getValue());
+		j=cbo_voucher_jpgroomingDataStore.findExact('voucher_nomor',jpgrooming_voucher_no2Field.getValue(),0);
 		if(j>-1){
 			jpgrooming_voucher_cashback2Field.setValue(cbo_voucher_jpgroomingDataStore.getAt(j).data.voucher_cashback);
 			if(post2db=="CREATE")
@@ -2309,7 +2309,7 @@ Ext.onReady(function(){
 		anchor: '95%'
 	});
 	jpgrooming_voucher_no3Field.on('select', function(){
-		j=cbo_voucher_jpgroomingDataStore.find('voucher_nomor',jpgrooming_voucher_no3Field.getValue());
+		j=cbo_voucher_jpgroomingDataStore.findExact('voucher_nomor',jpgrooming_voucher_no3Field.getValue(),0);
 		if(j>-1){
 			jpgrooming_voucher_cashback3Field.setValue(cbo_voucher_jpgroomingDataStore.getAt(j).data.voucher_cashback);
 			if(post2db=="CREATE")
@@ -3150,7 +3150,7 @@ Ext.onReady(function(){
 	});
 	
 	jpgrooming_kwitansi_noField.on("select",function(){
-			j=cbo_kwitansi_jpgrooming_DataStore.find('ckwitansi_id',jpgrooming_kwitansi_noField.getValue());
+			j=cbo_kwitansi_jpgrooming_DataStore.findExact('ckwitansi_id',jpgrooming_kwitansi_noField.getValue(),0);
 			if(j>-1){
 				jpgrooming_kwitansi_namaField.setValue(cbo_kwitansi_jpgrooming_DataStore.getAt(j).data.ckwitansi_cust_nama);
 				jpgrooming_kwitansi_sisaField.setValue(cbo_kwitansi_jpgrooming_DataStore.getAt(j).data.total_sisa);
@@ -3213,7 +3213,7 @@ Ext.onReady(function(){
 	});
 	
 	jpgrooming_kwitansi_no2Field.on("select",function(){
-			j=cbo_kwitansi_jpgrooming_DataStore.find('ckwitansi_id',jpgrooming_kwitansi_no2Field.getValue());
+			j=cbo_kwitansi_jpgrooming_DataStore.findExact('ckwitansi_id',jpgrooming_kwitansi_no2Field.getValue(),0);
 			if(j>-1){
 				jpgrooming_kwitansi_nama2Field.setValue(cbo_kwitansi_jpgrooming_DataStore.getAt(j).data.ckwitansi_cust_nama);
 				jpgrooming_kwitansi_sisa2Field.setValue(cbo_kwitansi_jpgrooming_DataStore.getAt(j).data.total_sisa);
@@ -3276,7 +3276,7 @@ Ext.onReady(function(){
 	});
 	
 	jpgrooming_kwitansi_no3Field.on("select",function(){
-			j=cbo_kwitansi_jpgrooming_DataStore.find('ckwitansi_id',jpgrooming_kwitansi_no3Field.getValue());
+			j=cbo_kwitansi_jpgrooming_DataStore.findExact('ckwitansi_id',jpgrooming_kwitansi_no3Field.getValue(),0);
 			if(j>-1){
 				jpgrooming_kwitansi_nama3Field.setValue(cbo_kwitansi_jpgrooming_DataStore.getAt(j).data.ckwitansi_cust_nama);
 				jpgrooming_kwitansi_sisa3Field.setValue(cbo_kwitansi_jpgrooming_DataStore.getAt(j).data.total_sisa);
@@ -3722,30 +3722,26 @@ Ext.onReady(function(){
 	djproduk_satuan_nilaiField=new Ext.form.NumberField();
 	
 	combo_jpgrooming.on('select',function(){
-		for(i=0;i<detail_jpgrooming_DataStore.getCount();i++){	
-			detail_jual_produk_record=detail_jpgrooming_DataStore.getAt(i);
-			var c_dtStore=0;
-			var j=cbo_dpgrooming_produkDataStore.find('dpgrooming_produk_value',combo_jpgrooming.getValue());
-			if(cbo_dpgrooming_produkDataStore.getCount()){
-				dpgrooming_idField.setValue(cbo_dpgrooming_produkDataStore.getAt(j).data.dpgrooming_produk_value);
-				cbo_dpgrooming_satuanDataStore.load({
-					params: {produk_id:dpgrooming_idField.getValue()},
-					callback: function(opts, success, response){
-						if(success){
-							var nilai_default=0;
-							var st=cbo_dpgrooming_satuanDataStore.find('djproduk_satuan_default','true');
-							if(cbo_dpgrooming_satuanDataStore.getCount()>=0){
-								nilai_default=cbo_dpgrooming_satuanDataStore.getAt(st).data.djproduk_satuan_nilai;
-								if(nilai_default===1){
-									temp_konv_nilai.setValue(nilai_default);
-								}else if(nilai_default!==1){
-									temp_konv_nilai.setValue(nilai_default*(1/nilai_default));
-								}
+		var j=cbo_dpgrooming_produkDataStore.findExact('dpgrooming_produk_value',combo_jpgrooming.getValue(),0);
+		if(cbo_dpgrooming_produkDataStore.getCount()){
+			dpgrooming_idField.setValue(cbo_dpgrooming_produkDataStore.getAt(j).data.dpgrooming_produk_value);
+			cbo_dpgrooming_satuanDataStore.load({
+				params: {produk_id:dpgrooming_idField.getValue()},
+				callback: function(opts, success, response){
+					if(success){
+						var nilai_default=0;
+						var st=cbo_dpgrooming_satuanDataStore.findExact('djproduk_satuan_default','true',0);
+						if(cbo_dpgrooming_satuanDataStore.getCount()>=0){
+							nilai_default=cbo_dpgrooming_satuanDataStore.getAt(st).data.djproduk_satuan_nilai;
+							if(nilai_default===1){
+								temp_konv_nilai.setValue(nilai_default);
+							}else if(nilai_default!==1){
+								temp_konv_nilai.setValue(nilai_default*(1/nilai_default));
 							}
 						}
 					}
-				});
-			}
+				}
+			});
 		}
 	});
 
@@ -3756,8 +3752,8 @@ Ext.onReady(function(){
 		cbo_dpgrooming_satuanDataStore.load();
 	});
 	combo_satuan_jpgrooming.on('select', function(){
-		var j=cbo_dpgrooming_satuanDataStore.find('djproduk_satuan_value',combo_satuan_jpgrooming.getValue());
-		var jt=cbo_dpgrooming_satuanDataStore.find('djproduk_satuan_default','true');
+		var j=cbo_dpgrooming_satuanDataStore.findExact('djproduk_satuan_value',combo_satuan_jpgrooming.getValue(),0);
+		var jt=cbo_dpgrooming_satuanDataStore.findExact('djproduk_satuan_default','true',0);
 		var nilai_terpilih=0;
 		var nilai_default=0;
 		if(cbo_dpgrooming_satuanDataStore.getCount()>=0){
@@ -3815,7 +3811,7 @@ Ext.onReady(function(){
 			renderer: Ext.util.Format.comboRenderer(combo_satuan_jpgrooming)
 /*
 			renderer: function(v, params, record){
-				j=cbo_dpgrooming_produkDataStore.find('dpgrooming_produk_value',record.data.dpgrooming_produk);
+				j=cbo_dpgrooming_produkDataStore.findExact('dpgrooming_produk_value',record.data.dpgrooming_produk,0);
 				if(j>-1){
 					return cbo_dpgrooming_produkDataStore.getAt(j).data.dpgrooming_produk_satuan;
 				}
@@ -4219,7 +4215,7 @@ Ext.onReady(function(){
 		var detail_jual_produk_record;
 		for(i=0;i<detail_jpgrooming_DataStore.getCount();i++){
 			detail_jual_produk_record=detail_jpgrooming_DataStore.getAt(i);
-			var j=cbo_dpgrooming_produkDataStore.find('dpgrooming_produk_value',detail_jual_produk_record.data.dpgrooming_produk);
+			var j=cbo_dpgrooming_produkDataStore.findExact('dpgrooming_produk_value',detail_jual_produk_record.data.dpgrooming_produk,0);
 			if(j>0){
 				detail_jual_produk_record.data.dpgrooming_harga=cbo_dpgrooming_produkDataStore.getAt(j).data.dpgrooming_produk_harga;
 				//detail_jual_produk_record.data.dpgrooming_satuan=cbo_dpgrooming_produkDataStore.getAt(j).data.dpgrooming_produk_satuan;
@@ -4287,14 +4283,14 @@ Ext.onReady(function(){
 			detail_jual_produk_record=detail_jpgrooming_DataStore.getAt(0);
 			if(detail_jual_produk_record.data.dpgrooming_satuan==null){
 				/* JIKA detail satuan tidak dipilih ==> maka otomatis diisi dengan satuan default dari produk yang dipilih */
-				var ds=cbo_dpgrooming_satuanDataStore.find('djproduk_satuan_default','true');
+				var ds=cbo_dpgrooming_satuanDataStore.findExact('djproduk_satuan_default','true',0);
 				if(ds>=0){
 					detail_jual_produk_record.data.dpgrooming_satuan=cbo_dpgrooming_satuanDataStore.getAt(ds).data.djproduk_satuan_value;
 				}
 			}
 			
 			detail_jual_produk_record.data.konversi_nilai_temp=temp_konv_nilai.getValue();
-			var j=cbo_dpgrooming_produkDataStore.find('dpgrooming_produk_value',detail_jual_produk_record.data.dpgrooming_produk);
+			var j=cbo_dpgrooming_produkDataStore.findExact('dpgrooming_produk_value',detail_jual_produk_record.data.dpgrooming_produk,0);
 			if(j>=0){
 				detail_jual_produk_record.data.dpgrooming_harga=cbo_dpgrooming_produkDataStore.getAt(j).data.dpgrooming_produk_harga;
 				subtotal_harga=eval(detail_jual_produk_record.data.konversi_nilai_temp*detail_jual_produk_record.data.dpgrooming_jumlah*detail_jual_produk_record.data.dpgrooming_harga);
@@ -4977,13 +4973,13 @@ Ext.onReady(function(){
 	jpgrooming_cara3Field.on("select",update_group_carabayar3_jpgrooming);
 	jpgrooming_karyawanField.on("select",function(){
 		/*load_membership();
-		j=memberDataStore.find('member_cust',jpgrooming_karyawanField.getValue());
+		j=memberDataStore.findExact('member_cust',jpgrooming_karyawanField.getValue(),0);
 		if(j>-1)
 			jpgrooming_cust_nomemberField.setValue(memberDataStore.getAt(j).member_no);
 		else
 			jpgrooming_cust_nomemberField.setValue("");
 */
-		cbo_karyawan=jpgrooming_karyawanDataStore.find('karyawan_id',jpgrooming_karyawanField.getValue());
+		cbo_karyawan=jpgrooming_karyawanDataStore.findExact('karyawan_id',jpgrooming_karyawanField.getValue(),0);
 		if(cbo_karyawan>-1){
 			cbo_kwitansi_jpgrooming_DataStore.load({params: {kwitansi_cust: jpgrooming_karyawanDataStore.getAt(cbo_karyawan).data.karyawan_id}});
 			jpgrooming_cek_namaField.setValue(jpgrooming_karyawanDataStore.getAt(cbo_karyawan).data.karyawan_nama);

@@ -319,7 +319,7 @@ var editor_cust_note;
 			params:{cust_id: customerListEditorGrid.getSelectionModel().getSelected().get('cust_id'), start: 0, limit: pageS },
 			callback: function(opts, success, response)  {
 				if (success) {
-					j=cust_member_DataStore.find('member_aktif','Y');
+					j=cust_member_DataStore.findExact('member_aktif','Y',0);
 					if(j>-1) cust_memberField.setValue(cust_member_DataStore.getAt(j).data.member_no);
 				}
 			}

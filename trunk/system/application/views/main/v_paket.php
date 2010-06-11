@@ -1039,7 +1039,7 @@ Ext.onReady(function(){
 	});
 	
 	paket_groupField.on('select', function(){
-		var record=cbo_paket_groupDataStore.find('paket_group_value', paket_groupField.getValue());
+		var record=cbo_paket_groupDataStore.findExact('paket_group_value', paket_groupField.getValue(),0);
 		if(cbo_paket_groupDataStore.getCount()){
 			paket_duField.setValue(cbo_paket_groupDataStore.getAt(record).data.paket_group_dupaket);
 			paket_dmField.setValue(cbo_paket_groupDataStore.getAt(record).data.paket_group_dmpaket);
@@ -1471,7 +1471,7 @@ Ext.onReady(function(){
 			width: 100,
 			sortable: true,
 			renderer: function(v, params, record){
-				j=cbo_produk_listDataStore.find('produk_id',record.data.ipaket_produk);
+				j=cbo_produk_listDataStore.findExact('produk_id',record.data.ipaket_produk,0);
 				if(j>-1)
 					return cbo_produk_listDataStore.getAt(j).data.produk_satuan;
 			}

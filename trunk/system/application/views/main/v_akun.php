@@ -1365,7 +1365,7 @@ Ext.onReady(function(){
 	
 	akun_parentField.on("select",function(){
 		akun_comboDataStore.reload({params:{start:0}});
-		var j= akun_comboDataStore.find('akun_id',akun_parentField.getValue());
+		var j= akun_comboDataStore.findExact('akun_id',akun_parentField.getValue(),0);
 		if(j>=0){
 			var record_akun=akun_comboDataStore.getAt(j);
 			akun_jenisField.setValue(record_akun.data.akun_parent_jenis);

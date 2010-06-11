@@ -1553,7 +1553,7 @@ Ext.onReady(function(){
 	});
 	
 	combo_akun.on('select',function(){
-		j=cbo_akunDataStore.find('akun_id',combo_akun.getValue());
+		j=cbo_akunDataStore.findExact('akun_id',combo_akun.getValue(),0);
 		if(j>-1){
 			var data_akun=cbo_akunDataStore.getAt(j);
 			jurnal_akunField.setValue(data_akun.data.akun_kode);

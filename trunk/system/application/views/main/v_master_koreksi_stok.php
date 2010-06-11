@@ -1501,7 +1501,7 @@ Ext.onReady(function(){
 		cbo_stok_byprodukDataStore.load({
 			callback: function(r,opt,success){
 				if(success==true){
-					var j=cbo_stok_byprodukDataStore.find('produk_id',combo_stok_produk.getValue());
+					var j=cbo_stok_byprodukDataStore.findExact('produk_id',combo_stok_produk.getValue(),0);
 					if(j>=0){
 						var record_produk=cbo_stok_byprodukDataStore.getAt(j);
 						satuan_id=record_produk.data.produk_satuan_id;
@@ -1544,14 +1544,14 @@ Ext.onReady(function(){
 	combo_stok_satuan.on("select",function(){
 		var jumlah_awal=0;
 		var konversi=1;
-		var j=cbo_stok_byprodukDataStore.find('produk_id',combo_stok_produk.getValue());
+		var j=cbo_stok_byprodukDataStore.findExact('produk_id',combo_stok_produk.getValue(),0);
 		if(j>=0){
 			var record_produk=cbo_stok_byprodukDataStore.getAt(j);
 			jumlah_awal=record_produk.data.produk_stok;
 		}
 		
 		
-		var j=cbo_stok_satuanDataStore.find('satuan_id',combo_stok_satuan.getValue());
+		var j=cbo_stok_satuanDataStore.findExact('satuan_id',combo_stok_satuan.getValue(),0);
 		if(j>=0){
 			var record_satuan=cbo_stok_satuanDataStore.getAt(j);
 			konversi=record_satuan.data.konversi_nilai;

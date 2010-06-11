@@ -843,14 +843,14 @@ Ext.onReady(function(){
 	epoint_kwitansiField= new Ext.form.TextField();
 	
 	epoint_custField.on('select', function(){
-		var j=cbo_cust_point_DataStore.find('cust_id',epoint_custField.getValue());
+		var j=cbo_cust_point_DataStore.findExact('cust_id',epoint_custField.getValue(),0);
 		if(cbo_cust_point_DataStore.getCount()){
 			epoint_sisaField.setValue(cbo_cust_point_DataStore.getAt(j).data.cust_point);
 		}
 	});
 	
 	epoint_voucherField.on('select', function(){
-		var j=cbo_voucher_pointDataStore.find('voucher_id', epoint_voucherField.getValue());
+		var j=cbo_voucher_pointDataStore.findExact('voucher_id', epoint_voucherField.getValue(),0);
 		if(cbo_voucher_pointDataStore.getCount()){
 			epoint_jumlahField.setValue(cbo_voucher_pointDataStore.getAt(j).data.voucher_point);
 			voucher_point_tempField.setValue(cbo_voucher_pointDataStore.getAt(j).data.voucher_point);
