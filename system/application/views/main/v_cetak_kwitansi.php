@@ -44,6 +44,61 @@
     </style>
 <script>
 
+Ext.namespace('Ext.ux.plugin');
+
+Ext.ux.plugin.triggerfieldTooltip = function(config){
+    Ext.apply(this, config);
+};
+
+Ext.extend(Ext.ux.plugin.triggerfieldTooltip, Ext.util.Observable,{
+    init: function(component){
+        this.component = component;
+        this.component.on('render', this.onRender, this);
+    },
+    
+    //private
+    onRender: function(){
+        if(this.component.tooltip){
+            if(typeof this.component.tooltip == 'object'){
+                Ext.QuickTips.register(Ext.apply({
+                      target: this.component.trigger
+                }, this.component.tooltip));
+            } else {
+                this.component.trigger.dom[this.component.tooltipType] = this.component.tooltip;
+            }
+        }
+    }
+}); 
+
+Ext.apply(Ext.form.VTypes, {
+    daterange : function(val, field) {
+        var date = field.parseDate(val);
+
+        if(!date){
+            return;
+        }
+        if (field.startDateField && (!this.dateRangeMax || (date.getTime() != this.dateRangeMax.getTime()))) {
+            var start = Ext.getCmp(field.startDateField);
+            start.setMaxValue(date);
+            start.validate();
+            this.dateRangeMax = date;
+        } 
+        else if (field.endDateField && (!this.dateRangeMin || (date.getTime() != this.dateRangeMin.getTime()))) {
+            var end = Ext.getCmp(field.endDateField);
+            end.setMinValue(date);
+            end.validate();
+            this.dateRangeMin = date;
+        }
+        /*
+         * Always return true since we're only using this vtype to set the
+         * min/max allowed values (these are tested for after the vtype test)
+         */
+        return true;
+    }
+});
+
+
+
 /* declare function */		
 var cetak_kwitansi_DataStore;
 var cetak_kwitansi_ColumnModel;
@@ -67,11 +122,13 @@ var editor_jual_kwitansi;
 var post2db = '';
 var msg = '';
 var pageS=15;
+var dt = new Date();
 
 /* declare variable here for Field*/
 var kwitansi_idField;
 var kwitansi_noField;
 var kwitansi_custField;
+var kwitansi_tanggalField;
 var kwitansi_refField;
 var kwitansi_nilaiField;
 var kwitansi_keteranganField;
@@ -227,6 +284,7 @@ Ext.onReady(function(){
 		var kwitansi_id_update_pk="";
 		var kwitansi_no_update=null;
 		var kwitansi_cust_update=null;
+		var kwitansi_tanggal_update="";
 		var kwitansi_ref_update=null;
 		var kwitansi_nilai_update=null;
 		var kwitansi_keterangan_update=null;
@@ -235,6 +293,7 @@ Ext.onReady(function(){
 		kwitansi_id_update_pk = oGrid_event.record.data.kwitansi_id;
 		if(oGrid_event.record.data.kwitansi_no!== null){kwitansi_no_update = oGrid_event.record.data.kwitansi_no;}
 		if(oGrid_event.record.data.kwitansi_cust!== null){kwitansi_cust_update = oGrid_event.record.data.kwitansi_cust;}
+		if(oGrid_event.record.data.kwitansi_tanggal!== ""){kwitansi_tanggal_update =oGrid_event.record.data.kwitansi_tanggal.format('Y-m-d');}
 		if(oGrid_event.record.data.kwitansi_ref!== null){kwitansi_ref_update = oGrid_event.record.data.kwitansi_ref;}
 		if(oGrid_event.record.data.kwitansi_nilai!== null){kwitansi_nilai_update = oGrid_event.record.data.kwitansi_nilai;}
 		if(oGrid_event.record.data.kwitansi_keterangan!== null){kwitansi_keterangan_update = oGrid_event.record.data.kwitansi_keterangan;}
@@ -247,7 +306,8 @@ Ext.onReady(function(){
 				task: "UPDATE",
 				kwitansi_id	: kwitansi_id_update_pk, 
 				kwitansi_no	:kwitansi_no_update,  
-				kwitansi_cust	:kwitansi_cust_update,  
+				kwitansi_cust	:kwitansi_cust_update,
+				kwitansi_tanggal:kwitansi_tanggal_update,
 				kwitansi_ref	:kwitansi_ref_update,  
 				kwitansi_nilai	:kwitansi_nilai_update,  
 				kwitansi_keterangan	:kwitansi_keterangan_update,  
@@ -293,6 +353,7 @@ Ext.onReady(function(){
 				var kwitansi_id_create_pk=null; 
 				var kwitansi_no_create=null; 
 				var kwitansi_cust_create=null; 
+				var kwitansi_tanggal_create=null;
 				var kwitansi_ref_create=null; 
 				var kwitansi_nilai_create=null; 
 				var kwitansi_keterangan_create=null; 
@@ -321,7 +382,8 @@ Ext.onReady(function(){
 				kwitansi_id_create_pk=get_pk_id();
 				if(kwitansi_idField.getValue()!== null){kwitansi_id_create = kwitansi_idField.getValue();}else{kwitansi_id_create_pk=get_pk_id();} 
 				if(kwitansi_noField.getValue()!== null){kwitansi_no_create = kwitansi_noField.getValue();} 
-				if(kwitansi_custField.getValue()!== null){kwitansi_cust_create = kwitansi_custField.getValue();} 
+				if(kwitansi_custField.getValue()!== null){kwitansi_cust_create = kwitansi_custField.getValue();}
+				if(kwitansi_tanggalField.getValue()!== ""){kwitansi_tanggal_create = kwitansi_tanggalField.getValue().format('Y-m-d');}
 				if(kwitansi_refField.getValue()!== null){kwitansi_ref_create = kwitansi_refField.getValue();} 
 				if(kwitansi_nilaiField.getValue()!== null){kwitansi_nilai_create = kwitansi_nilaiField.getValue();} 
 				if(kwitansi_keteranganField.getValue()!== null){kwitansi_keterangan_create = kwitansi_keteranganField.getValue();} 
@@ -354,7 +416,8 @@ Ext.onReady(function(){
 						task: post2db,
 						kwitansi_id	: kwitansi_id_create_pk, 
 						kwitansi_no	: kwitansi_no_create, 
-						kwitansi_cust	: kwitansi_cust_create, 
+						kwitansi_cust	: kwitansi_cust_create,
+						kwitansi_tanggal: kwitansi_tanggal_create,
 						kwitansi_ref	: kwitansi_ref_create, 
 						kwitansi_nilai	: kwitansi_nilai_create, 
 						kwitansi_keterangan	: kwitansi_keterangan_create, 
@@ -448,6 +511,7 @@ Ext.onReady(function(){
 		kwitansi_noField.setValue(null);
 		kwitansi_custField.reset();
 		kwitansi_custField.setValue(null);
+		kwitansi_tanggalField.setValue(dt.format('Y-m-d'));
 		kwitansi_refField.reset();
 		kwitansi_refField.setValue(null);
 		kwitansi_nilaiField.reset();
@@ -542,6 +606,7 @@ Ext.onReady(function(){
 		kwitansi_idField.setValue(cetak_kwitansiListEditorGrid.getSelectionModel().getSelected().get('kwitansi_id'));
 		kwitansi_noField.setValue(cetak_kwitansiListEditorGrid.getSelectionModel().getSelected().get('kwitansi_no'));
 		kwitansi_custField.setValue(cetak_kwitansiListEditorGrid.getSelectionModel().getSelected().get('cust_nama'));
+		kwitansi_tanggalField.setValue(cetak_kwitansiListEditorGrid.getSelectionModel().getSelected().get('kwitansi_tanggal'));
 		kwitansi_refField.setValue(cetak_kwitansiListEditorGrid.getSelectionModel().getSelected().get('kwitansi_ref'));
 		kwitansi_nilaiField.setValue(cetak_kwitansiListEditorGrid.getSelectionModel().getSelected().get('kwitansi_nilai'));
 		kwitansi_nilai_cfField.setValue(CurrencyFormatted(cetak_kwitansiListEditorGrid.getSelectionModel().getSelected().get('kwitansi_nilai')));
@@ -794,6 +859,7 @@ Ext.onReady(function(){
 			{name: 'kwitansi_id', type: 'int', mapping: 'kwitansi_id'}, 
 			{name: 'kwitansi_no', type: 'string', mapping: 'kwitansi_no'}, 
 			{name: 'kwitansi_cust', type: 'int', mapping: 'kwitansi_cust'},
+			{name: 'kwitansi_tanggal', type: 'date', dateFormat: 'Y-m-d', mapping: 'kwitansi_tanggal'}, 
 			{name: 'cust_nama', type: 'string', mapping: 'cust_nama'},
 			{name: 'cust_no', type: 'string', mapping: 'cust_no'},
 			{name: 'kwitansi_cara', type: 'string', mapping: 'kwitansi_cara'}, 
@@ -1361,6 +1427,14 @@ Ext.onReady(function(){
 		itemCls: 'rmoney',
 		width: 120
 	});
+	
+	/*Identify kwitansi_tanggal Field  */
+	kwitansi_tanggalField= new Ext.form.DateField({
+		id: 'kwitansi_tanggalField',
+		fieldLabel: 'Tanggal',
+		format : 'd-m-Y'
+	});
+	
 	/* Identify  kwitansi_total_bayar Field */
 	kwitansi_total_bayarField= new Ext.ux.form.CFTextField({
 		id: 'kwitansi_total_bayarField',
@@ -1775,7 +1849,7 @@ Ext.onReady(function(){
 				columnWidth:0.48,
 				layout: 'form',
 				border:false,
-				items: [kwitansi_noField, kwitansi_custField, kwitansi_nilai_cfField, kwitansi_terbilangLabel, kwitansi_idField] 
+				items: [kwitansi_tanggalField, kwitansi_noField, kwitansi_custField, kwitansi_nilai_cfField, kwitansi_terbilangLabel, kwitansi_idField] 
 			},
 			{
 				columnWidth:0.02,
