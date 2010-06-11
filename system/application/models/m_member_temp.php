@@ -61,12 +61,15 @@ class M_member_temp extends Model{
 				$this->db->update('member_temp', $dtu_member);
 				if($this->db->affected_rows()){
 					if($membert_jenis<>'perpanjangan'){
-						$sql = "SELECT cust_no FROM customer WHERE cust_id='$membert_cust'";
+						//* db.member.member_no TIDAK BERUBAH /
+						//$sql = "SELECT cust_no FROM customer WHERE cust_id='$membert_cust'";
+						$sql = "SELECT member_no FROM vu_member WHERE member_cust='$membert_cust'";
 						$rs=$this->db->query($sql);
 						if($rs->num_rows()){
 							$rs_record=$rs->row_array();
-							$pattern=date("ymd").substr($rs_record['cust_no'],2);
-							$member_no=$this->m_public_function->get_nomor_member('member','member_no',$pattern,16);
+							//$pattern=date("ymd").substr($rs_record['cust_no'],2);
+							//$member_no=$this->m_public_function->get_nomor_member('member','member_no',$pattern,16);
+							$member_no = $rs_record['member_no'];
 						}
 					}else if($membert_jenis<>'baru'){
 						$member_no=$membert_no;
