@@ -1,0 +1,1 @@
+ALTER TABLE `cetak_kwitansi` ADD `kwitansi_tanggal` DATE NOT NULL AFTER `kwitansi_cust` 
