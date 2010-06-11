@@ -1,0 +1,1 @@
+CREATE OR REPLACE VIEW `vu_member` AS select `member`.`member_id` AS `member_id`,`member`.`member_cust` AS `member_cust`,`member`.`member_valid` AS `member_valid`,`member`.`member_no` AS `member_no` from `member` where (`member`.`member_valid` > date_format(now(),'%Y-%m-%d'));
