@@ -353,7 +353,7 @@ class M_master_retur_jual_produk extends Model{
 //			$query = "SELECT * FROM master_retur_jual_produk LEFT JOIN customer ON(rproduk_cust=cust_id) LEFT JOIN master_jual_produk ON(rproduk_nobuktijual=jproduk_id) LEFT JOIN cetak_kwitansi ON(kwitansi_ref=rproduk_nobukti)";
 			$query =   "SELECT
 							rproduk_id, rproduk_nobukti, jproduk_nobukti, cust_no, cust_nama, cust_id, 
-							rproduk_tanggal, rproduk_keterangan, rproduk_creator, 		
+							rproduk_tanggal, rproduk_keterangan, rproduk_creator,	
 							rproduk_date_create, rproduk_update, rproduk_date_update, rproduk_revised, kwitansi_id, kwitansi_nilai, kwitansi_keterangan
 						FROM master_retur_jual_produk m
 						LEFT JOIN customer c ON(m.rproduk_cust=c.cust_id) 
@@ -363,7 +363,7 @@ class M_master_retur_jual_produk extends Model{
 			// For simple search
 			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (rproduk_nobukti LIKE '%".addslashes($filter)."%' OR rproduk_nobuktijual LIKE '%".addslashes($filter)."%' OR rproduk_cust LIKE '%".addslashes($filter)."%' )";
+				$query .= " (rproduk_nobukti LIKE '%".addslashes($filter)."%' OR jproduk_nobukti LIKE '%".addslashes($filter)."%' OR cust_nama LIKE '%".addslashes($filter)."%' OR cust_no LIKE '%".addslashes($filter)."%' )";
 			}
 			
 			$result = $this->db->query($query);
