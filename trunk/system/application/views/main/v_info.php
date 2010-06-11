@@ -46,6 +46,7 @@
 /* declare function */		
 var info_createForm;
 var info_createWindow;
+var auto_cust_no_DataStore;
 
 Ext.onReady(function(){
   Ext.QuickTips.init();
@@ -60,7 +61,116 @@ Ext.onReady(function(){
 		hidden: true
 	});
 	
-	 	
+	
+	info_namaField= new Ext.form.TextField({
+		id: 'info_namaField',
+		name: 'info_nama',
+		fieldLabel: 'Nama',
+		anchor: '95%',
+		readOnly : true
+	});
+	
+	info_alamatField= new Ext.form.TextField({
+		id: 'info_alamatField',
+		name: 'info_alamat',
+		fieldLabel: 'Alamat',
+		anchor: '95%',
+		readOnly : true
+	});
+	
+	info_id_cabangField= new Ext.form.TextField({
+		id: 'info_id_cabangField',
+		fieldLabel: 'ID Cabang',
+		name: 'info_cabang',
+		anchor: '95%',
+		readOnly : true,
+		//hidden : true
+	});
+	
+	
+	cbo_cabangDataStore = new Ext.data.Store({
+		id: 'cbo_cabangDataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_info&m=get_cabang_list', 
+			method: 'POST'
+		}),baseParams: {start: 0, limit: 15 },
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total'
+		},[
+		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
+			{name: 'cabang_display', type: 'string', mapping: 'cabang_nama'},
+			{name: 'cabang_value', type: 'int', mapping: 'cabang_id'},
+		]),
+		sortInfo:{field: 'cabang_display', direction: "ASC"}
+	});
+	
+	var cabang_tpl = new Ext.XTemplate(
+        '<tpl for="."><div class="search-item">',
+            '<span><b>{cabang_display}</b></span>',
+        '</div></tpl>'
+    );
+	
+	//auto no
+	auto_cabang_DataStore = new Ext.data.Store({
+		id: 'auto_cabang_DataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_info&m=get_auto_cabang', 
+			method: 'POST'
+		}),
+			reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: ''
+		},[
+			{name: 'cabang_nama', type: 'string', mapping: 'cabang_nama'},
+			{name: 'cabang_alamat', type: 'string', mapping: 'cabang_alamat'},
+			{name: 'cabang_id', type: 'string', mapping: 'cabang_id'}
+		]),
+		sortInfo:{field: 'cabang_nama', direction: "ASC"}
+	});
+	
+	
+	
+	function load_cust_no(){
+		if(cabangField.getValue()!=''){
+			auto_cabang_DataStore.load({
+					params : { cabang_id: cabangField.getValue() },
+					callback: function(opts, success, response)  {
+						 if (success) {
+							if(auto_cabang_DataStore.getCount()){
+								info_auto_nama=auto_cabang_DataStore.getAt(0).data;
+								info_namaField.setValue(info_auto_nama.cabang_nama);
+								info_alamatField.setValue(info_auto_nama.cabang_alamat);
+								info_id_cabangField.setValue(info_auto_nama.cabang_id);
+							}
+						}
+					}
+			}); 
+		}
+	}
+	
+	cabangField= new Ext.form.ComboBox({
+		id: 'cabangField',
+		fieldLabel: 'Cabang',
+		store: cbo_cabangDataStore,
+		mode: 'remote',
+		displayField:'cabang_display',
+		valueField: 'cabang_value',
+        typeAhead: false,
+        loadingText: 'Searching...',
+        //pageSize:10,
+        hideTrigger:false,
+        tpl: cabang_tpl,
+        itemSelector: 'div.search-item',
+		triggerAction: 'all',
+		lazyRender:true,
+		listClass: 'x-combo-list-small',
+		allowBlank: true,
+		disabled:false,
+		anchor: '95%'
+	});
+	
 	/* Function for retrieve Add Window Panel*/
 	info_createForm = new Ext.FormPanel({
 		url: 'index.php?c=c_info&m=get_detail_info',
@@ -71,7 +181,9 @@ Ext.onReady(function(){
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			id: 'info_id'
-		},[
+		},
+		
+		[
 			{name: 'info_id', type: 'int', mapping: 'info_id'},
 			{name: 'info_nama', type: 'string', mapping: 'info_nama'},
 			{name: 'info_alamat', type: 'string', mapping: 'info_alamat'},
@@ -83,8 +195,12 @@ Ext.onReady(function(){
 			{name: 'info_logo', type: 'string', mapping: 'info_logo'},
 			{name: 'info_icon', type: 'string', mapping: 'info_icon'},
 			{name: 'info_background', type: 'string', mapping: 'info_background'},
-			{name: 'info_theme', type: 'string', mapping: 'info_theme'}
-		]),
+			{name: 'info_theme', type: 'string', mapping: 'info_theme'},
+			{name: 'info_cabang', type: 'string', mapping: 'info_cabang'}
+		]
+	
+		),
+		
 		items: [{
 			layout:'column',
 			border:false,
@@ -92,13 +208,13 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [
-				{
+				items: [info_namaField, info_alamatField, info_id_cabangField,
+				/*{
 					xtype: 'textfield',
 					readOnly: true,
 					id: 'info_namaField',
 					fieldLabel: 'Nama',
-					name: 'info_nama',
+					name: 'cabang_nama',
 					maxLength: 150,
 					allowBlank: false,
 					anchor: '95%'
@@ -112,10 +228,10 @@ Ext.onReady(function(){
 					maxLength: 250,
 					allowBlank: false,
 					anchor: '95%'
-				},
+				},			
 				{
 					xtype: 'textfield',
-					id: 'info_notelpField',
+					//id: 'info_notelpField',
 					fieldLabel: 'No.Telp',
 					name: 'info_notelp',
 					maxLength: 50,
@@ -144,7 +260,7 @@ Ext.onReady(function(){
 					name: 'info_website',
 					maxLength: 65,
 					anchor: '95%'
-				},
+				},*/
 				{
 					xtype: 'textfield',
 					id: 'info_sloganField',
@@ -153,7 +269,7 @@ Ext.onReady(function(){
 					maxLength: 250,
 					anchor: '95%'
 				},
-				info_idField
+				info_idField,cabangField
 				]
 			}]
 		}],
@@ -197,6 +313,15 @@ Ext.onReady(function(){
 		}]
 	});
 	/* End Function*/
+	
+	cabangField.on("select",function(){
+		load_cust_no();
+		g=auto_cabang_DataStore.find('cabang_id',cabangField.getValue());
+		if(g>-1)
+			cabangField.setValue(auto_cust_no_DataStore.getAt(j).cabangField);
+		else
+			cabangField.setValue("");
+	});
 	
 	/* Function for retrieve Add Window Form */
 	info_createWindow= new Ext.Window({

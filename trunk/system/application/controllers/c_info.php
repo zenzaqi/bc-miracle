@@ -26,8 +26,21 @@ class C_info extends Controller {
 		$this->load->view('main/v_info');
 	}
 	
+	function get_auto_cabang(){
+		$cabang_id = (integer) (isset($_POST['cabang_id']) ? $_POST['cabang_id'] : $_GET['cabang_id']);
+		$result=$this->m_info->get_auto_cabang($cabang_id);
+		echo $result;
+	}
+	
 	function get_detail_info(){
 		$result=$this->m_info->get_detail_info();
+		echo $result;
+	}
+	function get_cabang_list(){
+		//ID dokter pada tabel departemen adalah 8
+		//$query = isset($_POST['query']) ? $_POST['query'] : "";
+		//$tgl_app = isset($_POST['tgl_app']) ? $_POST['tgl_app'] : "";
+		$result=$this->m_public_function->get_cabang_list();
 		echo $result;
 	}
 	
@@ -98,7 +111,8 @@ class C_info extends Controller {
 		$info_slogan=trim(@$_POST["info_slogan"]);
 		$info_slogan=str_replace("/(<\/?)(p)([^>]*>)", "",$info_slogan);
 		$info_slogan=str_replace("'", '"',$info_slogan);
-		$result = $this->m_info->info_update($info_id ,$info_nama ,$info_alamat ,$info_notelp ,$info_nofax ,$info_email ,$info_website ,$info_slogan);
+		$info_cabang=trim(@$_POST["info_cabang"]);
+		$result = $this->m_info->info_update($info_id ,$info_nama ,$info_alamat ,$info_notelp ,$info_nofax ,$info_email ,$info_website ,$info_slogan, $info_cabang);
 		echo $result;
 	}
 	

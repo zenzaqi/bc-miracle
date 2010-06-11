@@ -34,6 +34,22 @@ class M_info extends Model{
 			}
 		}
 		
+		
+		//auto cabang
+		function get_auto_cabang ($cabang_id){
+		$sql = "SELECT * from cabang where cabang_id='".$cabang_id."' and cabang_aktif!='Tidak Aktif' order by cabang_id desc limit 1";
+		$query = $this->db->query($sql);
+		$nbrows = $query->num_rows();
+		if($nbrows>0){
+			foreach($query->result() as $row){
+				$arr[] = $row;
+			}
+			$jsonresult = json_encode($arr);
+			return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+		} else {
+			return '({"total":"0", "results":""})';
+		}
+		}
 		//function for get list record
 		function info_list($filter,$start,$end){
 			$query = "SELECT * FROM info";
@@ -61,7 +77,7 @@ class M_info extends Model{
 		}
 		
 		//function for update record
-		function info_update($info_id ,$info_nama ,$info_alamat ,$info_notelp ,$info_nofax ,$info_email ,$info_website ,$info_slogan){
+		function info_update($info_id ,$info_nama ,$info_alamat ,$info_notelp ,$info_nofax ,$info_email ,$info_website ,$info_slogan, $info_cabang){
 			$data = array(
 				"info_id"=>$info_id,			
 				"info_nama"=>$info_nama,			
@@ -70,7 +86,8 @@ class M_info extends Model{
 				"info_nofax"=>$info_nofax,			
 				"info_email"=>$info_email,			
 				"info_website"=>$info_website,			
-				"info_slogan"=>$info_slogan
+				"info_slogan"=>$info_slogan,
+				"info_cabang"=>$info_cabang
 			);
 			$this->db->where('info_id', $info_id);
 			$this->db->update('info', $data);
