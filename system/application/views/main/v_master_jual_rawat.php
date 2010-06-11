@@ -330,7 +330,7 @@ Ext.onReady(function(){
   	/* Function for add data, open window create form */
 	function master_jual_rawat_create(){
 	
-		if(is_master_jual_rawat_form_valid()){	
+		if(is_master_jual_rawat_form_valid() && (jrawat_stat_dokField.getValue()!=='Batal')){	
 		var jrawat_id_create_pk=null; 
 		var jrawat_nobukti_create=null; 
 		var jrawat_cust_create=null; 
@@ -614,7 +614,7 @@ Ext.onReady(function(){
 					Ext.MessageBox.alert(jrawat_post2db+' OK','Data penjualan perawatan berhasil disimpan');
 					if(jrawat_post2db=="UPDATE"){
 					    detail_jual_rawat_update();
-                                            detail_ambil_paket_update();
+                        detail_ambil_paket_update();
 					}else if(jrawat_post2db=="CREATE"){
 					    detail_jual_rawat_insert_nocetak();
 					}
@@ -650,12 +650,12 @@ Ext.onReady(function(){
 					detail_jual_rawat_DataStore.load({params: {master_id:0}});
 					master_jual_rawat_createWindow.hide();
 				}else if(result==-4){
-                                        detail_ambil_paket_update();
-                                        //master_jual_rawat_DataStore.reload();
-                                        //detail_jual_rawat_DataStore.load({params: {master_id:0}});
-                                        master_jual_rawat_createWindow.hide();
-                                }else{
-                                        master_jual_rawat_createWindow.hide();
+					detail_ambil_paket_update();
+					//master_jual_rawat_DataStore.reload();
+					//detail_jual_rawat_DataStore.load({params: {master_id:0}});
+					master_jual_rawat_createWindow.hide();
+				}else{
+					master_jual_rawat_createWindow.hide();
 				}
 				master_jual_rawat_reset_allForm();
 				master_cara_bayarTabPanel.setActiveTab(0);
@@ -669,9 +669,43 @@ Ext.onReady(function(){
 					   animEl: 'database',
 					   icon: Ext.MessageBox.ERROR
 				});	
-			}                      
+			}
 		});
-		} else {
+		}else if(jrawat_post2db=="UPDATE" && (jrawat_stat_dokField.getValue()=='Batal')){
+			var jrawat_nobukti_create=null;
+			
+			if(jrawat_nobuktiField.getValue()!== null){jrawat_nobukti_create = jrawat_nobuktiField.getValue();}
+			
+			Ext.Ajax.request({  
+				waitMsg: 'Please wait...',
+				waitMsg: 'Mohon tunggu...',
+				url: 'index.php?c=c_master_jual_rawat&m=get_action',
+				params: {
+					task: 'BATAL',
+					jrawat_nobukti	: 	jrawat_nobukti_create
+				},
+				success: function(response){
+					var result=eval(response.responseText);
+					if(result==1){
+						Ext.MessageBox.alert(' OK','Dokumen telah dibatalkan');
+					}
+					master_jual_rawat_reset_allForm();
+					master_cara_bayarTabPanel.setActiveTab(0);
+					master_jual_rawat_createWindow.hide();
+					master_jual_rawat_DataStore.reload();
+				},
+				failure: function(response){
+					var result=response.responseText;
+					Ext.MessageBox.show({
+						   title: 'Error',
+						   msg: 'Could not connect to the database. retry later.',
+						   buttons: Ext.MessageBox.OK,
+						   animEl: 'database',
+						   icon: Ext.MessageBox.ERROR
+					});	
+				}
+			});
+		}else {
 			Ext.MessageBox.show({
 				title: 'Warning',
 //				msg: 'Your Form is not valid!.',
