@@ -730,9 +730,7 @@ class M_tindakan_medis extends Model{
                 }
         }
         
-        /* untuk mend-DELETE tindakan-non-medis yang ada di Form Tindakan Medis adalah dengan filter:
-        // db.tindakan_detail.dtrawat_dtrawat = db.tindakan_detail.dtrawat_id(dimana id ini memiliki db.tindakan_detail.dtrawat_dapp
-        // ato yg berasal dari db.appointment_detail) */
+        //* untuk mend-DELETE tindakan-non-medis yang ada di Form Tindakan Medis */
 		$sql="DELETE tindakan_detail
                 FROM tindakan_detail
                 INNER JOIN perawatan ON(dtrawat_perawatan=rawat_id)

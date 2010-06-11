@@ -1157,7 +1157,7 @@ Ext.onReady(function(){
 	});
 	
 	produk_groupField.on('select', function(){
-		var record=cbo_produk_groupDataStore.find('produk_group_value', produk_groupField.getValue());
+		var record=cbo_produk_groupDataStore.findExact('produk_group_value', produk_groupField.getValue(),0);
 		if(cbo_produk_groupDataStore.getCount()){
 			produk_duField.setValue(cbo_produk_groupDataStore.getAt(record).data.produk_group_duproduk);
 			produk_dmField.setValue(cbo_produk_groupDataStore.getAt(record).data.produk_group_dmproduk);

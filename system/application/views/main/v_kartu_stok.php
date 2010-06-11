@@ -387,7 +387,7 @@ Ext.onReady(function(){
 		 	params:{satuan: opsi_satuan_search },
 		 	callback: function(r,opt,success){
 				if(success==true){
-					var j=kartu_stok_produk_DataStore.find('produk_id',kartu_stok_produk_namaSearchField.getValue());
+					var j=kartu_stok_produk_DataStore.findExact('produk_id',kartu_stok_produk_namaSearchField.getValue(),0);
 					if(j>-1){
 						var produk_record=kartu_stok_produk_DataStore.getAt(j);
 						kartu_stok_produkField.setValue(produk_record.data.produk_nama);

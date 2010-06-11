@@ -1688,7 +1688,7 @@ Ext.onReady(function(){
 		detail_retur_beli_total();
 		for(i=0;i<detail_retur_beli_DataStore.getCount();i++){
 			var detail_data=detail_retur_beli_DataStore.getAt(i);
-			var j=cbo_produk_DataStore.find('produk_id',detail_data.data.drbeli_produk);
+			var j=cbo_produk_DataStore.findExact('produk_id',detail_data.data.drbeli_produk,0);
 			if(j>-1)
 			{
 				var data_combo=cbo_produk_DataStore.getAt(j);
@@ -1729,7 +1729,7 @@ Ext.onReady(function(){
 			cbo_satuan_DataStore.setBaseParam('task','produk');
 			cbo_satuan_DataStore.setBaseParam('selected_id',combo_detail_produk.getValue());
 			cbo_satuan_DataStore.load();
-			var j=cbo_produk_DataStore.find('produk_id',combo_detail_produk.getValue());
+			var j=cbo_produk_DataStore.findExact('produk_id',combo_detail_produk.getValue(),0);
 			if(j>-1)
 			{
 				var data_combo=cbo_produk_DataStore.getAt(j);

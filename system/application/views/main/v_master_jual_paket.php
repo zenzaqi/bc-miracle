@@ -2125,7 +2125,7 @@ Ext.onReady(function(){
 		anchor: '95%'
 	});
 	jpaket_voucher_noField.on('select', function(){
-		j=cbo_voucher_jual_paketDataStore.find('voucher_nomor',jpaket_kwitansi_noField.getValue());
+		j=cbo_voucher_jual_paketDataStore.findExact('voucher_nomor',jpaket_kwitansi_noField.getValue(),0);
 		if(j>-1){
 			jpaket_kwitansi_namaField.setValue(cbo_kwitansi_jual_paket_DataStore.getAt(j).data.ckwitansi_cust_nama);
 		}
@@ -3048,7 +3048,7 @@ Ext.onReady(function(){
 	});
 	
 	jpaket_kwitansi_noField.on("select",function(){
-			j=cbo_kwitansi_jual_paket_DataStore.find('ckwitansi_id',jpaket_kwitansi_noField.getValue());
+			j=cbo_kwitansi_jual_paket_DataStore.findExact('ckwitansi_id',jpaket_kwitansi_noField.getValue(),0);
 			if(j>-1){
 				jpaket_kwitansi_namaField.setValue(cbo_kwitansi_jual_paket_DataStore.getAt(j).data.ckwitansi_cust_nama);
 				jpaket_kwitansi_sisaField.setValue(cbo_kwitansi_jual_paket_DataStore.getAt(j).data.total_sisa);
@@ -3119,7 +3119,7 @@ Ext.onReady(function(){
 	});
 	
 	jpaket_kwitansi_no2Field.on("select",function(){
-			j=cbo_kwitansi_jual_paket_DataStore.find('ckwitansi_id',jpaket_kwitansi_no2Field.getValue());
+			j=cbo_kwitansi_jual_paket_DataStore.findExact('ckwitansi_id',jpaket_kwitansi_no2Field.getValue(),0);
 			if(j>-1){
 				jpaket_kwitansi_nama2Field.setValue(cbo_kwitansi_jual_paket_DataStore.getAt(j).data.ckwitansi_cust_nama);
 				jpaket_kwitansi_sisa2Field.setValue(cbo_kwitansi_jual_paket_DataStore.getAt(j).data.total_sisa);
@@ -3190,7 +3190,7 @@ Ext.onReady(function(){
 	});
 	
 	jpaket_kwitansi_no3Field.on("select",function(){
-			j=cbo_kwitansi_jual_paket_DataStore.find('ckwitansi_id',jpaket_kwitansi_no3Field.getValue());
+			j=cbo_kwitansi_jual_paket_DataStore.findExact('ckwitansi_id',jpaket_kwitansi_no3Field.getValue(),0);
 			if(j>-1){
 				jpaket_kwitansi_nama3Field.setValue(cbo_kwitansi_jual_paket_DataStore.getAt(j).data.ckwitansi_cust_nama);
 				jpaket_kwitansi_sisa3Field.setValue(cbo_kwitansi_jual_paket_DataStore.getAt(j).data.total_sisa);
@@ -3584,33 +3584,30 @@ Ext.onReady(function(){
 	dpaket_idField=new Ext.form.NumberField();
 	
 	combo_jual_paket.on('select',function(){
-		for(i=0;i<detail_jual_paket_DataStore.getCount();i++){	
-			detail_jual_paket_record=detail_jual_paket_DataStore.getAt(i);
-			var j=cbo_dpaket_paketDataStore.find('dpaket_paket_value',combo_jual_paket.getValue());
-			if(cbo_dpaket_paketDataStore.getCount()){
-				dpaket_idField.setValue(cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_value);
-				dpaket_jumlahField.setValue(1);
-				var dpaket_jumlah_diskon = 0;
-				//* Check no_member JIKA <>"" ==> jenis-diskon=DM /
-				if(jpaket_cust_nomemberField.getValue()!==""){
-						dpaket_jenisdiskonField.setValue('DM');
-						dpaket_jumlah_diskon = cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_dm;
-						dpaket_jumlahdiskonField.setValue(cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_dm);
-				}else{
-						dpaket_jenisdiskonField.setValue('DU');
-						dpaket_jumlah_diskon = cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_du;
-						dpaket_jumlahdiskonField.setValue(cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_du);
-				}
-				
-				var DayLength=1*24*60*60*1000;
-				var Days=cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_expired;
-				//var dt_kadaluarsa=new Date(dt*1+DayLength*Days);
-				var dt_kadaluarsa=new Date(jpaket_tanggalField.getValue()*1+DayLength*Days);
-				dpaket_kadaluarsaField.setValue(dt_kadaluarsa);
-				dpaket_hargaField.setValue(cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_harga);
-				dpaket_subtotalField.setValue(cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_harga);
-				dpaket_subtotalnetField.setValue(((100-dpaket_jumlah_diskon)/100)*cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_harga);
+		var j=cbo_dpaket_paketDataStore.findExact('dpaket_paket_value',combo_jual_paket.getValue(),0);
+		if(cbo_dpaket_paketDataStore.getCount()){
+			dpaket_idField.setValue(cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_value);
+			dpaket_jumlahField.setValue(1);
+			var dpaket_jumlah_diskon = 0;
+			//* Check no_member JIKA <>"" ==> jenis-diskon=DM /
+			if(jpaket_cust_nomemberField.getValue()!==""){
+					dpaket_jenisdiskonField.setValue('DM');
+					dpaket_jumlah_diskon = cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_dm;
+					dpaket_jumlahdiskonField.setValue(cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_dm);
+			}else{
+					dpaket_jenisdiskonField.setValue('DU');
+					dpaket_jumlah_diskon = cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_du;
+					dpaket_jumlahdiskonField.setValue(cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_du);
 			}
+			
+			var DayLength=1*24*60*60*1000;
+			var Days=cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_expired;
+			//var dt_kadaluarsa=new Date(dt*1+DayLength*Days);
+			var dt_kadaluarsa=new Date(jpaket_tanggalField.getValue()*1+DayLength*Days);
+			dpaket_kadaluarsaField.setValue(dt_kadaluarsa);
+			dpaket_hargaField.setValue(cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_harga);
+			dpaket_subtotalField.setValue(cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_harga);
+			dpaket_subtotalnetField.setValue(((100-dpaket_jumlah_diskon)/100)*cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_harga);
 		}
 	});
 	
@@ -4424,7 +4421,7 @@ Ext.onReady(function(){
 		var detail_jual_paket_record;
 		for(i=0;i<detail_jual_paket_DataStore.getCount();i++){
 			detail_jual_paket_record=detail_jual_paket_DataStore.getAt(i);
-			var j=cbo_dpaket_paketDataStore.find('dpaket_paket_value',detail_jual_paket_record.data.dpaket_paket);
+			var j=cbo_dpaket_paketDataStore.findExact('dpaket_paket_value',detail_jual_paket_record.data.dpaket_paket,0);
 			if(j>-1){
 				detail_jual_paket_record.data.dpaket_harga=cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_harga;
 				if(detail_jual_paket_record.data.dpaket_diskon==""){
@@ -4477,7 +4474,7 @@ Ext.onReady(function(){
 		var detail_jual_paket_record;
 		if(detail_jual_paket_DataStore.getCount()>0){
 			detail_jual_paket_record=detail_jual_paket_DataStore.getAt(0);
-			var j=cbo_dpaket_paketDataStore.find('dpaket_paket_value',detail_jual_paket_record.data.dpaket_paket);
+			var j=cbo_dpaket_paketDataStore.findExact('dpaket_paket_value',detail_jual_paket_record.data.dpaket_paket,0);
 			if(j>=0){
 				detail_jual_paket_record.data.dpaket_harga=cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_harga;
 				var DayLength=1*24*60*60*1000;
@@ -5310,13 +5307,13 @@ Ext.onReady(function(){
 	jpaket_cara3Field.on("select",update_group_carabayar3_jual_paket);
 	jpaket_custField.on("select",function(){
 		load_membership();
-		j=memberDataStore.find('member_cust',jpaket_custField.getValue());
+		j=memberDataStore.findExact('member_cust',jpaket_custField.getValue(),0);
 		if(j>-1)
 			jpaket_cust_nomemberField.setValue(memberDataStore.getAt(j).member_no);
 		else
 			jpaket_cust_nomemberField.setValue("");
 
-		cbo_cust=cbo_cust_jual_paket_DataStore.find('cust_id',jpaket_custField.getValue());
+		cbo_cust=cbo_cust_jual_paket_DataStore.findExact('cust_id',jpaket_custField.getValue(),0);
 		if(cbo_cust>-1){
 			cbo_kwitansi_jual_paket_DataStore.load({params: {kwitansi_cust: cbo_cust_jual_paket_DataStore.getAt(cbo_cust).data.cust_id}});
 			jpaket_cek_namaField.setValue(cbo_cust_jual_paket_DataStore.getAt(cbo_cust).data.cust_nama);

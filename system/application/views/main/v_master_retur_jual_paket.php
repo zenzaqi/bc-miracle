@@ -1104,7 +1104,7 @@ Ext.onReady(function(){
 		detail_retur_paket_tokwitansiListEditorGrid.getView().refresh();
 		detail_retur_tokwitansi_record=detail_retur_paket_tokwitansiDataStore.getAt(0);
 		if(detail_retur_paket_tokwitansiDataStore.getCount()>=0){
-			var drtokwitansi = cbo_drpaket_rawatDataStore.find('drpaket_rawat_value',detail_retur_tokwitansi_record.data.drpaket_rawat);
+			var drtokwitansi = cbo_drpaket_rawatDataStore.findExact('drpaket_rawat_value',detail_retur_tokwitansi_record.data.drpaket_rawat,0);
 			if(drtokwitansi>=0){
 				detail_retur_tokwitansi_record.data.drpaket_harga=cbo_drpaket_rawatDataStore.getAt(drtokwitansi).data.drpaket_rawat_harga;
 				

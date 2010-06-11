@@ -758,7 +758,7 @@ Ext.onReady(function(){
 	
 	// function select data store
 	// kasbank_masuk_akunField.on('select', function(){
-		// var index=tbl_m_akun_DataStore.find('akun_id',kasbank_masuk_akunField.getValue());
+		// var index=tbl_m_akun_DataStore.findExact('akun_id',kasbank_masuk_akunField.getValue(),0);
 		// if(index>-1){
 			// kasbank_masuk_kodeakunField.setValue(tbl_m_akun_DataStore.getAt(index).data.akun_kode);
 		// }

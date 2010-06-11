@@ -1239,7 +1239,7 @@ Ext.onReady(function(){
 	});
 	
 	rawat_groupField.on('select', function(){
-		var record=cbo_rawat_groupDataStore.find('rawat_group_value', rawat_groupField.getValue());
+		var record=cbo_rawat_groupDataStore.findExact('rawat_group_value', rawat_groupField.getValue(),0);
 		if(cbo_rawat_groupDataStore.getCount()){
 			rawat_duField.setValue(cbo_rawat_groupDataStore.getAt(record).data.rawat_group_durawat);
 			rawat_dmField.setValue(cbo_rawat_groupDataStore.getAt(record).data.rawat_group_dmrawat);
@@ -1521,7 +1521,7 @@ Ext.onReady(function(){
 			renderer: Ext.util.Format.comboRenderer(combo_dproduk_satuan)*/
 			readOnly: true,
 			renderer: function(v, params, record){
-				j=cbo_rawat_produkDataStore.find('rawat_produk_value',record.data.krawat_produk);
+				j=cbo_rawat_produkDataStore.findExact('rawat_produk_value',record.data.krawat_produk,0);
 				if(j>-1)
 					return cbo_rawat_produkDataStore.getAt(j).data.rawat_produk_satuan;
 			}

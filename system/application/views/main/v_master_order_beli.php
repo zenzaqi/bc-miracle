@@ -1022,15 +1022,12 @@ Ext.onReady(function(){
 	});
 	
 	/* Identify  order_bayar Field */
-	order_totalField= new Ext.form.NumberField({
+	order_totalField= new Ext.ux.form.CFTextField({
 		id: 'order_totalField',
 		fieldLabel: '<span><b>Total (Rp)</b></span>',
-		allowNegatife : false,
-		emptyText: '0',
-		allowDecimals: true,
+		valueRenderer: 'numberToCurrency',
 		readOnly: true,
-		anchor: '95%',
-		maskRe: /([0-9]+)$/
+		anchor: '95%'
 	});
 	
 	/* Identify  order_bayar Field */
@@ -1057,15 +1054,12 @@ Ext.onReady(function(){
 		maskRe: /([0-9]+)$/
 	});
 	
-	order_totalbayarField= new Ext.form.NumberField({
+	order_totalbayarField= new Ext.ux.form.CFTextField({
 		id: 'order_totalbayarField',
 		fieldLabel: 'Total Bayar (Rp)',
-		allowNegatife : false,
-		emptyText: '0',
-		allowDecimals: true,
+		valueRenderer: 'numberToCurrency',
 		readOnly: true,
-		anchor: '95%',
-		maskRe: /([0-9]+)$/
+		anchor: '95%'
 	});
 	/* END Field master_order_beli_bayarGroup */
 	
@@ -1384,7 +1378,7 @@ Ext.onReady(function(){
 		});
 		editor_detail_order_beli.stopEditing();
 		detail_order_beli_DataStore.insert(0, edit_detail_order_beli);
-		detail_order_beliListEditorGrid.getView().refresh();
+		//detail_order_beliListEditorGrid.getView().refresh();
 		detail_order_beliListEditorGrid.getSelectionModel().selectRow(0);
 		editor_detail_order_beli.startEditing(0);
 	}
@@ -2024,13 +2018,13 @@ Ext.onReady(function(){
 	//master_order_beli_DataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
 	master_order_beliListEditorGrid.on('afteredit', master_order_beli_update); // inLine Editing Record
 	
-	/*combo_order_produk.on("focus",function(){
+	combo_order_produk.on("focus",function(){
 		cbo_order_produk_DataStore.setBaseParam('task','list');
 		var selectedquery=detail_order_beliListEditorGrid.getSelectionModel().getSelected().get('produk_nama');
 		cbo_order_produk_DataStore.setBaseParam('query',selectedquery);
 		
 		//cbo_order_produk_DataStore.load();
-	});*/
+	});
 	
 	combo_order_satuan.on("focus",function(){
 		cbo_order_satuanDataStore.setBaseParam('task','produk');

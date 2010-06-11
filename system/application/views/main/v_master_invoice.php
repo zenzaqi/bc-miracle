@@ -1964,7 +1964,7 @@ Ext.onReady(function(){
 		});
 		get_total_tagihan();
 		
-		var j=cbo_invoice_tbeliDataStore.find('cbo_invoice_terima_id',invoice_noterimaField.getValue());
+		var j=cbo_invoice_tbeliDataStore.findExact('cbo_invoice_terima_id',invoice_noterimaField.getValue(),0);
 		
 		if(cbo_invoice_tbeliDataStore.getCount()){
 			invoice_supplierField.setValue(cbo_invoice_tbeliDataStore.getAt(j).data.cbo_invoice_terima_supplier);

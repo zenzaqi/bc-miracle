@@ -207,7 +207,7 @@ Ext.onReady(function(){
 	var member_cust_namaField= new Ext.form.TextField();
 	
 	member_exc_add_custField.on('select', function(){
-		var j=member_exc_add_cutomerDataStore.find('cust_id',member_exc_add_custField.getValue());
+		var j=member_exc_add_cutomerDataStore.findExact('cust_id',member_exc_add_custField.getValue(),0);
 		if(member_exc_add_cutomerDataStore.getCount()){
 			member_cust_namaField.setValue(member_exc_add_cutomerDataStore.getAt(j).data.cust_nama);
 		}

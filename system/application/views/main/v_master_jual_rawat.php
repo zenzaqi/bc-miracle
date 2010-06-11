@@ -2327,7 +2327,7 @@ Ext.onReady(function(){
 		anchor: '95%'
 	});
 	jrawat_voucher_noField.on('select', function(){
-		j=cbo_voucher_jual_rawatDataStore.find('voucher_nomor',jrawat_voucher_noField.getValue());
+		j=cbo_voucher_jual_rawatDataStore.findExact('voucher_nomor',jrawat_voucher_noField.getValue(),0);
 		if(j>-1){
 			jrawat_voucher_cashbackField.setValue(cbo_voucher_jual_rawatDataStore.getAt(j).data.voucher_cashback);
 			load_total_rawat_bayar();
@@ -2386,7 +2386,7 @@ Ext.onReady(function(){
 		anchor: '95%'
 	});
 	jrawat_voucher_no2Field.on('select', function(){
-		j=cbo_voucher_jual_rawatDataStore.find('voucher_nomor',jrawat_voucher_no2Field.getValue());
+		j=cbo_voucher_jual_rawatDataStore.findExact('voucher_nomor',jrawat_voucher_no2Field.getValue(),0);
 		if(j>-1){
 			jrawat_voucher_cashback2Field.setValue(cbo_voucher_jual_rawatDataStore.getAt(j).data.voucher_cashback);
 			load_total_rawat_bayar();
@@ -2443,7 +2443,7 @@ Ext.onReady(function(){
 		anchor: '95%'
 	});
 	jrawat_voucher_no3Field.on('select', function(){
-		j=cbo_voucher_jual_rawatDataStore.find('voucher_nomor',jrawat_voucher_no3Field.getValue());
+		j=cbo_voucher_jual_rawatDataStore.findExact('voucher_nomor',jrawat_voucher_no3Field.getValue(),0);
 		if(j>-1){
 			jrawat_voucher_cashback3Field.setValue(cbo_voucher_jual_rawatDataStore.getAt(j).data.voucher_cashback);
 			load_total_rawat_bayar();
@@ -3410,7 +3410,7 @@ Ext.onReady(function(){
 	});
 	
 	jrawat_kwitansi_noField.on("select",function(){
-			j=cbo_kwitansi_jual_rawat_DataStore.find('ckwitansi_id',jrawat_kwitansi_noField.getValue());
+			j=cbo_kwitansi_jual_rawat_DataStore.findExact('ckwitansi_id',jrawat_kwitansi_noField.getValue(),0);
 			if(j>-1){
 				jrawat_kwitansi_namaField.setValue(cbo_kwitansi_jual_rawat_DataStore.getAt(j).data.ckwitansi_cust_nama);
 				jrawat_kwitansi_sisaField.setValue(cbo_kwitansi_jual_rawat_DataStore.getAt(j).data.total_sisa);
@@ -3483,7 +3483,7 @@ Ext.onReady(function(){
 	});
 	
 	jrawat_kwitansi_no2Field.on("select",function(){
-			j=cbo_kwitansi_jual_rawat_DataStore.find('ckwitansi_id',jrawat_kwitansi_no2Field.getValue());
+			j=cbo_kwitansi_jual_rawat_DataStore.findExact('ckwitansi_id',jrawat_kwitansi_no2Field.getValue(),0);
 			if(j>-1){
 				jrawat_kwitansi_nama2Field.setValue(cbo_kwitansi_jual_rawat_DataStore.getAt(j).data.ckwitansi_cust_nama);
 				jrawat_kwitansi_sisa2Field.setValue(cbo_kwitansi_jual_rawat_DataStore.getAt(j).data.total_sisa);
@@ -3556,7 +3556,7 @@ Ext.onReady(function(){
 	});
 	
 	jrawat_kwitansi_no3Field.on("select",function(){
-			j=cbo_kwitansi_jual_rawat_DataStore.find('ckwitansi_id',jrawat_kwitansi_no3Field.getValue());
+			j=cbo_kwitansi_jual_rawat_DataStore.findExact('ckwitansi_id',jrawat_kwitansi_no3Field.getValue(),0);
 			if(j>-1){
 				jrawat_kwitansi_nama3Field.setValue(cbo_kwitansi_jual_rawat_DataStore.getAt(j).data.ckwitansi_cust_nama);
 				jrawat_kwitansi_sisa3Field.setValue(cbo_kwitansi_jual_rawat_DataStore.getAt(j).data.total_sisa);
@@ -3891,9 +3891,9 @@ Ext.onReady(function(){
             //applyTo: 'search',
             itemSelector: 'div.search-item',
             triggerAction: 'all',
-            lazyRender:true,
+            lazyRender:false,
             listClass: 'x-combo-list-small',
-            enableKeyEvents: true,
+            //enableKeyEvents: true,
             anchor: '95%'
 	});
 	
@@ -3901,26 +3901,23 @@ Ext.onReady(function(){
 	
 	combo_jual_rawat.on('select',function(){
             drawat_jumlahField.setValue(1);
-            for(i=0;i<detail_jual_rawat_DataStore.getCount();i++){	
-                detail_jual_rawat_record=detail_jual_rawat_DataStore.getAt(i);
-                var j=cbo_drawat_rawatDataStore.find('drawat_rawat_value',combo_jual_rawat.getValue());
-                if(cbo_drawat_rawatDataStore.getCount()){
-                    //* Check no_member JIKA <>"" ==> jenis-diskon=DM /
-                    var drawat_diskon = 0;
-                    if(jrawat_cust_nomemberField.getValue()!==""){
-                        drawat_jenis_diskonField.setValue('DM');
-                        drawat_diskon = cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_dm;
-                        drawat_diskonField.setValue(cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_dm);
-                    }else{
-                        drawat_jenis_diskonField.setValue('DU');
-                        drawat_diskon = cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_du;
-                        drawat_diskonField.setValue(cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_du);
-                    }
-                    drawat_idField.setValue(cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_value);
-                    drawat_hargaField.setValue(cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_harga);
-                    drawat_subtotalField.setValue(1*cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_harga);
-                    drawat_subtotal_netField.setValue(((100-drawat_diskon)/100) * (1*cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_harga));
+            var j=cbo_drawat_rawatDataStore.findExact('drawat_rawat_value',combo_jual_rawat.getValue(),0);
+            if(cbo_drawat_rawatDataStore.getCount()){
+                //* Check no_member JIKA <>"" ==> jenis-diskon=DM /
+                var drawat_diskon = 0;
+                if(jrawat_cust_nomemberField.getValue()!==""){
+                    drawat_jenis_diskonField.setValue('DM');
+                    drawat_diskon = cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_dm;
+                    drawat_diskonField.setValue(cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_dm);
+                }else{
+                    drawat_jenis_diskonField.setValue('DU');
+                    drawat_diskon = cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_du;
+                    drawat_diskonField.setValue(cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_du);
                 }
+                drawat_idField.setValue(cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_value);
+                drawat_hargaField.setValue(cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_harga);
+                drawat_subtotalField.setValue(1*cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_harga);
+                drawat_subtotal_netField.setValue(((100-drawat_diskon)/100) * (1*cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_harga));
             }
 	});
         
@@ -4513,7 +4510,7 @@ Ext.onReady(function(){
 		var detail_jual_rawat_record;
 		for(i=0;i<detail_jual_rawat_DataStore.getCount();i++){
 			detail_jual_rawat_record=detail_jual_rawat_DataStore.getAt(i);
-			var j=cbo_drawat_rawatDataStore.find('drawat_rawat_value',detail_jual_rawat_record.data.drawat_rawat);
+			var j=cbo_drawat_rawatDataStore.findExact('drawat_rawat_value',detail_jual_rawat_record.data.drawat_rawat,0);
 			if(j>0){
 				detail_jual_rawat_record.data.drawat_harga=cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_harga;
 				//detail_jual_rawat_record.data.drawat_satuan=cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_satuan;
@@ -4563,7 +4560,7 @@ Ext.onReady(function(){
 		var detail_jual_rawat_record;
 		for(i=0;i<detail_jual_rawat_DataStore.getCount();i++){
 			detail_jual_rawat_record=detail_jual_rawat_DataStore.getAt(i);
-			var j=cbo_drawat_rawatDataStore.find('drawat_rawat_value',detail_jual_rawat_record.data.drawat_rawat);
+			var j=cbo_drawat_rawatDataStore.findExact('drawat_rawat_value',detail_jual_rawat_record.data.drawat_rawat,0);
 			if(j>=0){
 				detail_jual_rawat_record.data.drawat_harga=cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_harga;
 				//detail_jual_rawat_record.data.drawat_satuan=cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_satuan;
@@ -4941,13 +4938,13 @@ Ext.onReady(function(){
 	jrawat_cara3Field.on("select",update_group_carabayar3_jual_rawat);
 	jrawat_custField.on("select",function(){
 		load_membership();
-		j=memberDataStore.find('member_cust',jrawat_custField.getValue());
+		j=memberDataStore.findExact('member_cust',jrawat_custField.getValue(),0);
 		if(j>-1)
 			jrawat_cust_nomemberField.setValue(memberDataStore.getAt(j).member_no);
 		else
 			jrawat_cust_nomemberField.setValue("");
 
-		cbo_cust=cbo_cust_jual_rawat_DataStore.find('cust_id',jrawat_custField.getValue());
+		cbo_cust=cbo_cust_jual_rawat_DataStore.findExact('cust_id',jrawat_custField.getValue(),0);
 		if(cbo_cust>-1){
 			//cbo_kwitansi_jual_rawat_DataStore.load({params: {kwitansi_cust: cbo_cust_jual_rawat_DataStore.getAt(cbo_cust).data.cust_id}});
 			jrawat_cek_namaField.setValue(cbo_cust_jual_rawat_DataStore.getAt(cbo_cust).data.cust_nama);

@@ -827,7 +827,7 @@ Ext.onReady(function(){
 	});
 	
 	rproduk_nobuktijualField.on('select', function(){
-		var j=cbo_retur_produk_DataStore.find('retur_produk_value',rproduk_nobuktijualField.getValue());
+		var j=cbo_retur_produk_DataStore.findExact('retur_produk_value',rproduk_nobuktijualField.getValue(),0);
 		if(cbo_retur_produk_DataStore.getCount()){
 			rproduk_custField.setValue(cbo_retur_produk_DataStore.getAt(j).data.retur_produk_nama_customer);
 			rproduk_custidField.setValue(cbo_retur_produk_DataStore.getAt(j).data.retur_produk_customer_id);
@@ -1103,7 +1103,7 @@ Ext.onReady(function(){
 		detail_retur_jual_produkListEditorGrid.getView().refresh();
 		detail_retur_produk_record=detail_retur_jual_produk_DataStore.getAt(0);
 		if(detail_retur_jual_produk_DataStore.getCount()>=0){
-			var dproduk = cbo_drproduk_produkDataStore.find('drproduk_produk_value',detail_retur_produk_record.data.drproduk_produk);
+			var dproduk = cbo_drproduk_produkDataStore.findExact('drproduk_produk_value',detail_retur_produk_record.data.drproduk_produk,0);
 			if(dproduk>=0){
 				detail_retur_produk_record.data.drproduk_satuan=cbo_drproduk_produkDataStore.getAt(dproduk).data.drproduk_produk_satuan;
 				detail_retur_produk_record.data.drproduk_harga=cbo_drproduk_produkDataStore.getAt(dproduk).data.drproduk_produk_harga;
