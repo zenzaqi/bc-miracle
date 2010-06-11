@@ -270,7 +270,7 @@ class M_master_jual_rawat extends Model{
                     ,drawat_diskon
                     ,drawat_sales
                     ,drawat_diskon_jenis
-                    ,drawat_harga*drawat_jumlah as drawat_subtotal
+                    ,perawatan.rawat_harga*drawat_jumlah as drawat_subtotal
                     ,drawat_harga*drawat_jumlah*(100-drawat_diskon)/100 as drawat_subtotal_net
                     ,dtrawat_keterangan
                     ,IF((dtrawat_petugas1=0),IF((dtrawat_petugas2=0),NULL,terapis.karyawan_username),dokter.karyawan_username) AS referal
