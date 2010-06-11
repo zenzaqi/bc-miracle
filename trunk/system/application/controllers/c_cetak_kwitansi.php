@@ -177,6 +177,7 @@ class C_cetak_kwitansi extends Controller {
 		$kwitansi_no=str_replace(",", "\,",$kwitansi_no);
 		$kwitansi_no=str_replace("'", "''",$kwitansi_no);
 		$kwitansi_cust=trim(@$_POST["kwitansi_cust"]);
+		$kwitansi_tanggal=trim(@$_POST["kwitansi_tanggal"]);
 		$kwitansi_ref=trim(@$_POST["kwitansi_ref"]);
 		$kwitansi_nilai=trim(@$_POST["kwitansi_nilai"]);
 		$kwitansi_keterangan=trim(@$_POST["kwitansi_keterangan"]);
@@ -188,7 +189,7 @@ class C_cetak_kwitansi extends Controller {
 		$kwitansi_status=str_replace(",", "\,",$kwitansi_status);
 		$kwitansi_status=str_replace("'", "''",$kwitansi_status);
 		$kwitansi_update=$_SESSION[SESSION_USERID];
-		$result = $this->m_cetak_kwitansi->cetak_kwitansi_update($kwitansi_id ,$kwitansi_no ,$kwitansi_cust ,$kwitansi_ref ,$kwitansi_nilai ,$kwitansi_keterangan ,$kwitansi_status ,$kwitansi_update );
+		$result = $this->m_cetak_kwitansi->cetak_kwitansi_update($kwitansi_id ,$kwitansi_no ,$kwitansi_cust ,$kwitansi_tanggal, $kwitansi_ref ,$kwitansi_nilai ,$kwitansi_keterangan ,$kwitansi_status ,$kwitansi_update );
 		echo $result;
 	}
 	
@@ -200,6 +201,7 @@ class C_cetak_kwitansi extends Controller {
 		$kwitansi_no=str_replace("/(<\/?)(p)([^>]*>)", "",$kwitansi_no);
 		$kwitansi_no=str_replace("'", "''",$kwitansi_no);
 		$kwitansi_cust=trim(@$_POST["kwitansi_cust"]);
+		$kwitansi_tanggal=trim(@$_POST["kwitansi_tanggal"]);
 		$kwitansi_ref=trim(@$_POST["kwitansi_ref"]);
 		$kwitansi_nilai=trim(@$_POST["kwitansi_nilai"]);
 		$kwitansi_keterangan=trim(@$_POST["kwitansi_keterangan"]);
@@ -234,7 +236,7 @@ class C_cetak_kwitansi extends Controller {
 		
 		$kwitansi_creator=$_SESSION[SESSION_USERID];
 		
-		$result=$this->m_cetak_kwitansi->cetak_kwitansi_create($kwitansi_no ,$kwitansi_cust ,$kwitansi_ref ,$kwitansi_nilai ,$kwitansi_keterangan ,$kwitansi_status ,$kwitansi_cara ,$kwitansi_bayar ,$kwitansi_tunai_nilai ,$kwitansi_card_nama ,$kwitansi_card_edc ,$kwitansi_card_no ,$kwitansi_card_nilai ,$kwitansi_cek_nama ,$kwitansi_cek_no ,$kwitansi_cek_valid ,$kwitansi_cek_bank ,$kwitansi_cek_nilai ,$kwitansi_transfer_bank ,$kwitansi_transfer_nama ,$kwitansi_transfer_nilai ,$kwitansi_creator );
+		$result=$this->m_cetak_kwitansi->cetak_kwitansi_create($kwitansi_no ,$kwitansi_cust ,$kwitansi_tanggal, $kwitansi_ref ,$kwitansi_nilai ,$kwitansi_keterangan ,$kwitansi_status ,$kwitansi_cara ,$kwitansi_bayar ,$kwitansi_tunai_nilai ,$kwitansi_card_nama ,$kwitansi_card_edc ,$kwitansi_card_no ,$kwitansi_card_nilai ,$kwitansi_cek_nama ,$kwitansi_cek_no ,$kwitansi_cek_valid ,$kwitansi_cek_bank ,$kwitansi_cek_nilai ,$kwitansi_transfer_bank ,$kwitansi_transfer_nama ,$kwitansi_transfer_nilai ,$kwitansi_creator );
 		echo $result;
 	}
 
