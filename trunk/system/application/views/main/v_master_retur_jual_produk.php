@@ -663,6 +663,17 @@ Ext.onReady(function(){
 			new Ext.app.SearchField({
 			store: master_retur_jual_produk_DataStore,
 			params: {start: 0, limit: pageS},
+			listeners:{
+				specialkey: function(f,e){
+					if(e.getKey() == e.ENTER){
+						master_retur_jual_produk_DataStore.baseParams={task:'LIST',start: 0, limit: pageS};
+		            }
+				},
+				render: function(c){
+				Ext.get(this.id).set({qtitle:'Search By (aktif only)'});
+				Ext.get(this.id).set({qtip:'- No Faktur<br>- No Faktur Jual<br>- No Cust<br>- Customer'});
+				}
+			},
 			width: 120
 		}),'-',{
 			text: 'Refresh',
