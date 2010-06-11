@@ -52,43 +52,91 @@ class M_member_temp extends Model{
 		
 		//function for update record
 		function member_temp_update($membert_id,$membert_cust,$membert_no,$membert_register,$membert_valid,$membert_jenis,$membert_status, $membert_check_daftar){
-			$data = array(
-				"membert_check_daftar"=>$membert_check_daftar
-			);
-			
-			$this->db->where('membert_id', $membert_id);
-			$this->db->update('member_temp', $data);
-			if($this->db->affected_rows()){
-				if($membert_jenis<>'perpanjangan'){
-					$sql = "SELECT cust_no FROM customer WHERE cust_id='$membert_cust'";
-					$rs=$this->db->query($sql);
-					if($rs->num_rows()){
-						$rs_record=$rs->row_array();
-						$pattern=date("ymd").substr($rs_record['cust_no'],2);
-						$member_no=$this->m_public_function->get_nomor_member('member','member_no',$pattern,16);
-					}
-				}else if($membert_jenis<>'baru'){
-					$member_no=$membert_no;
-				}
-				//* INSERT to db.member untuk diproses menjadi member Miracle /
-				//$sql="INSERT INTO member (member_cust, member_no, member_register, member_valid, member_jenis, member_status) SELECT membert_cust, membert_no, membert_register, membert_valid, membert_jenis, membert_status FROM member_temp WHERE member_temp.membert_id='$membert_id'";
-				//$this->db->query($sql);
-				$sql="SELECT membert_cust, membert_register, membert_valid, membert_jenis, membert_status FROM member_temp WHERE member_temp.membert_id='$membert_id'";
-				$rs=$this->db->query($sql);
-				$record=$rs->row_array();
-				
-				$dti_member=array(
-				"member_cust"=>$record['membert_cust'],
-				"member_no"=>$member_no,
-				"member_register"=>$record['membert_register'],
-				"member_valid"=>$record['membert_valid'],
-				"member_jenis"=>$record['membert_jenis'],
-				"member_status"=>$record['membert_status']
+			if($membert_check_daftar=='true'){
+				//* proses didaftarkan ke db.member sebagai member Miracle /
+				$dtu_member = array(
+					"membert_check_daftar"=>$membert_check_daftar
 				);
-				$this->db->insert('member', $dti_member);
-				
+				$this->db->where('membert_id', $membert_id);
+				$this->db->update('member_temp', $dtu_member);
+				if($this->db->affected_rows()){
+					if($membert_jenis<>'perpanjangan'){
+						$sql = "SELECT cust_no FROM customer WHERE cust_id='$membert_cust'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							$rs_record=$rs->row_array();
+							$pattern=date("ymd").substr($rs_record['cust_no'],2);
+							$member_no=$this->m_public_function->get_nomor_member('member','member_no',$pattern,16);
+						}
+					}else if($membert_jenis<>'baru'){
+						$member_no=$membert_no;
+					}
+					//* INSERT to db.member untuk diproses menjadi member Miracle /
+					/*$sql="SELECT membert_cust, membert_register, membert_valid, membert_jenis, membert_status FROM member_temp WHERE member_temp.membert_id='$membert_id'";
+					$rs=$this->db->query($sql);
+					$record=$rs->row_array();
+					
+					$dti_member=array(
+					"member_cust"=>$record['membert_cust'],
+					"member_no"=>$member_no,
+					"member_register"=>$record['membert_register'],
+					"member_valid"=>$record['membert_valid'],
+					"member_jenis"=>$record['membert_jenis'],
+					"member_status"=>$record['membert_status']
+					);
+					$this->db->insert('member', $dti_member);*/
+					$dti_member=array(
+					"member_cust"=>$membert_cust,
+					"member_no"=>$member_no,
+					"member_register"=>$membert_register,
+					"member_valid"=>$membert_valid,
+					"member_jenis"=>$membert_jenis,
+					"member_status"=>$membert_status,
+					"member_membert"=>$membert_id,
+					"member_creator"=>@$_SESSION[SESSION_USERID]
+					);
+					$this->db->insert('member', $dti_member);
+					if($this->db->affected_rows()){
+						//* UPDATE db.customer.cust_member dari db.member.member_id /
+						$this->cust_member_update($membert_cust);
+					}
+				}
+			}else{
+				//* proses pembatalan member di db.member /
+				$dtu_member = array(
+					"membert_check_daftar"=>$membert_check_daftar
+				);
+				$this->db->where('membert_id', $membert_id);
+				$this->db->update('member_temp', $dtu_member);
+				if($this->db->affected_rows()){
+					$this->db->where('member_membert', $membert_id);
+					$this->db->delete('member');
+					if($this->db->affected_rows()){
+						//* UPDATE db.customer.cust_member ke cust_member sebelumnya /
+						$this->cust_member_update($membert_cust);
+					}
+				}
 			}
 			return '1';
+		}
+		
+		function cust_member_update($cust_id){
+			$sql = "SELECT member_id FROM vu_member WHERE member_cust='$cust_id'";
+			$rs=$this->db->query($sql);
+			if($rs->num_rows()){
+				$record = $rs->row_array();
+				$dtu_customer=array(
+				"cust_member"=>$record['member_id']
+				);
+				$this->db->where('cust_id', $cust_id);
+				$this->db->update('customer', $dtu_customer);
+			}else{
+				$dtu_customer=array(
+				"cust_member"=>0
+				);
+				$this->db->where('cust_id', $cust_id);
+				$this->db->update('customer', $dtu_customer);
+			}
 		}
 		
 		//fcuntion for delete record
