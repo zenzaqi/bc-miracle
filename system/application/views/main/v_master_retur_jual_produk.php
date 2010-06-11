@@ -802,8 +802,7 @@ Ext.onReady(function(){
 		id: 'rproduk_custField',
 		fieldLabel: 'Customer',
 		maxLength: 100,
-		anchor: '95%',
-		readOnly: true
+		anchor: '95%'
 	});
 	rproduk_custidField= new Ext.form.NumberField();
 	/* Identify  rproduk_tanggal Field */
@@ -1334,14 +1333,15 @@ Ext.onReady(function(){
 	
 	});
 	/* Identify  rproduk_cust Search Field */
-	rproduk_custSearchField= new Ext.form.NumberField({
+	rproduk_custSearchField= new Ext.form.TextField({
 		id: 'rproduk_custSearchField',
 		fieldLabel: 'Customer',
-		allowNegatife : false,
-		blankText: '0',
-		allowDecimals: false,
-		anchor: '95%',
-		maskRe: /([0-9]+)$/
+		//allowNegatife : false,
+		//blankText: '0',
+		//allowDecimals: false,
+		maxLength: 100,
+		anchor: '95%'
+		//maskRe: /([0-9]+)$/
 	
 	});
 	/* Identify  rproduk_tanggal Search Field */

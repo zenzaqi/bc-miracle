@@ -463,7 +463,14 @@ class M_master_retur_jual_produk extends Model{
 		//function for advanced search record
 		function master_retur_jual_produk_search($rproduk_id ,$rproduk_nobukti ,$rproduk_nobuktijual ,$rproduk_cust ,$rproduk_tanggal ,$rproduk_keterangan ,$start,$end){
 			//full query
-			$query="select * from master_retur_jual_produk";
+			$query="SELECT
+							rproduk_id, rproduk_nobukti, jproduk_nobukti, cust_no, cust_nama, cust_id, 
+							rproduk_tanggal, rproduk_keterangan, rproduk_creator,	
+							rproduk_date_create, rproduk_update, rproduk_date_update, rproduk_revised, kwitansi_id, kwitansi_nilai, kwitansi_keterangan
+						FROM master_retur_jual_produk m
+						LEFT JOIN customer c ON(m.rproduk_cust=c.cust_id) 
+						LEFT JOIN master_jual_produk mp ON(m.rproduk_nobuktijual=mp.jproduk_id) 
+						LEFT JOIN cetak_kwitansi ck ON(ck.kwitansi_ref=m.rproduk_nobukti)";
 			
 			if($rproduk_id!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -475,11 +482,11 @@ class M_master_retur_jual_produk extends Model{
 			};
 			if($rproduk_nobuktijual!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " rproduk_nobuktijual LIKE '%".$rproduk_nobuktijual."%'";
+				$query.= " jproduk_nobukti LIKE '%".$rproduk_nobuktijual."%'";
 			};
 			if($rproduk_cust!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " rproduk_cust LIKE '%".$rproduk_cust."%'";
+				$query.= " cust_nama LIKE '%".$rproduk_cust."%'";
 			};
 			if($rproduk_tanggal!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
