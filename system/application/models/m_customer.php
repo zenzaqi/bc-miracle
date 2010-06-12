@@ -154,7 +154,7 @@ class M_customer extends Model{
 		
 		//function for get list record
 		function customer_list($filter,$start,$end){
-			$query = "SELECT * FROM vu_customer";
+			$query =   "SELECT * FROM vu_customer";
 			
 			// For simple search
 			if ($filter<>""){
