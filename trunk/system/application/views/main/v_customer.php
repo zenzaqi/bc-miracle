@@ -315,7 +315,9 @@ var editor_cust_note;
 		cust_tweeterField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_tweeter'));
 		cust_fb2Field.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_fb2'));
 		cust_tweeter2Field.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_tweeter2'));
-		cust_member_DataStore.load({
+		cust_memberField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('member_no'));
+		
+/*		cust_member_DataStore.load({
 			params:{cust_id: customerListEditorGrid.getSelectionModel().getSelected().get('cust_id'), start: 0, limit: pageS },
 			callback: function(opts, success, response)  {
 				if (success) {
@@ -324,7 +326,7 @@ var editor_cust_note;
 				}
 			}
 		});
-		
+*/		
 		cust_note_DataStore.load({
 			params:{cust_id: customerListEditorGrid.getSelectionModel().getSelected().get('cust_id'), start: 0, limit: pageS }
 		});
@@ -1478,8 +1480,9 @@ Ext.onReady(function(){
 			{name: 'cust_referensi', type: 'int', mapping: 'cust_nama_ref'},
 			{name: 'cust_referensilain', type: 'string', mapping: 'cust_referensilain'},
 			{name: 'cust_keterangan', type: 'string', mapping: 'cust_keterangan'},
-			{name: 'cust_member', type: 'string', mapping: 'cust_member'},
-			{name: 'cust_statusmember', type: 'string', mapping: 'cust_statusmember'},
+			//{name: 'cust_member', type: 'string', mapping: 'cust_member'},
+			{name: 'member_no', type: 'string', mapping: 'member_no'},
+//			{name: 'cust_statusmember', type: 'string', mapping: 'cust_statusmember'},
 			{name: 'cust_terdaftar', type: 'date', dateFormat: 'Y-m-d', mapping: 'cust_terdaftar'},
 			{name: 'cust_statusnikah', type: 'string', mapping: 'cust_statusnikah'},
 			{name: 'cust_priority', type: 'string', mapping: 'cust_priority'},
@@ -1638,7 +1641,7 @@ Ext.onReady(function(){
 //			header: 'No Customer',
 			header: '<div align="center">' + 'No Cust' + '</div>',
 			dataIndex: 'cust_no',
-			width: 70,	//90,
+			width: 50,	//90,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 50
@@ -1647,16 +1650,27 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Nama Lengkap' + '</div>',
 			dataIndex: 'cust_nama',
-			width: 180,	//167,
+			width: 160,	//167,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 50
           	})
 		},
 		{
+			header: '<div align="center">' + 'No Member' + '</div>',
+			dataIndex: 'member_no',
+			width: 90,	//150,
+			sortable: true,
+			//hidden: true,
+			readOnly: true,
+				renderer: function(value, cell, record){
+					return value.substring(0,6) + '-' + value.substring(6,12) + '-' + value.substring(12);
+				}
+		},
+		{
 			header: '<div align="center">' + 'L/P' + '</div>',
 			dataIndex: 'cust_kelamin',
-			width: 27,
+			width: 20,
 			sortable: true,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
@@ -1675,7 +1689,7 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Alamat' + '</div>',
 			dataIndex: 'cust_alamat',
-			width: 180,	//127,
+			width: 160,	//127,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 250
@@ -1694,7 +1708,7 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Kota' + '</div>',
 			dataIndex: 'cust_kota',
-			width: 80,	//97,
+			width: 60,	//97,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 100
@@ -1734,7 +1748,7 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Telp Rumah' + '</div>',
 			dataIndex: 'cust_telprumah',
-			width: 80,	//97,
+			width: 60,	//97,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 30,
@@ -1866,7 +1880,7 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Tgl Lahir' + '</div>',
 			dataIndex: 'cust_tgllahir',
-			width: 70,	//67,
+			width: 60,	//67,
 			sortable: true,
 //			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
 			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
@@ -1905,7 +1919,7 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Stat Nikah' + '</div>',
 			dataIndex: 'cust_statusnikah',
-			width: 80,
+			width: 60,
 			sortable: true,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
@@ -1926,7 +1940,7 @@ Ext.onReady(function(){
 
 			header: '<div align="center">' + 'Priority' + '</div>',
 			dataIndex: 'cust_priority',
-			width: 60,
+			width: 40,
 			sortable: true,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
@@ -1949,7 +1963,7 @@ Ext.onReady(function(){
 //			header: 'Aktif',
 			header: '<div align="center">' + 'Status' + '</div>',
 			dataIndex: 'cust_aktif',
-			width: 80,	//150,
+			width: 50,	//150,
 			sortable: true,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
@@ -1966,15 +1980,7 @@ Ext.onReady(function(){
             }),
 //			hidden: true
 		},
-		{
-			header: '<div align="center">' + 'No Member' + '</div>',
-			dataIndex: 'cust_member',
-			width: 80,	//150,
-			sortable: true,
-			//hidden: true,
-			readOnly: true
-		},
-		
+/*		
 		{
 			header: '<div align="center">' + 'Stat Member' + '</div>',
 			dataIndex: 'cust_statusmember',
@@ -1994,7 +2000,7 @@ Ext.onReady(function(){
                	listClass: 'x-combo-list-small'
             })
 		},
-		
+*/		
 		
 		
 		{
@@ -2220,7 +2226,7 @@ Ext.onReady(function(){
 		//clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 1200, //940,
+	  	width: 1220, //940,
 	  	//autoWidth: true,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
