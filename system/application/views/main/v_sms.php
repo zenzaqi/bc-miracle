@@ -430,7 +430,7 @@ Ext.onReady(function(){
 		name:'sms_opsiField',
 		width: 100,
 		boxLabel: 'Semua Customer',
-		checked: true,
+//		checked: true,
 		value: 'selected'
 	});
 	
@@ -439,6 +439,7 @@ Ext.onReady(function(){
 		name:'sms_opsiField',
 		width: 100,
 		boxLabel: 'Nomer <br> P',
+		checked: true,
 		value: 'selected'
 	});
 	
