@@ -39,16 +39,26 @@ class M_member extends Model{
 		
 		//function for get list record
 		function member_list($filter,$start,$end){
-			$query =   "SELECT 
+/*			$query =   "SELECT 
 							member.*,
 							cust_nama, cust_no 
-						FROM member, customer 
-						where member_cust=cust_id and member_status <> 'Serah Terima'";
+						FROM member, customer";
+*/
+			$query =   "SELECT 
+							m.*,
+							c.cust_nama, c.cust_no 
+						FROM member m
+						LEFT JOIN customer c on c.cust_id = m.member_cust";
 			
 			// For simple search
 			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (cust_nama LIKE '%".addslashes($filter)."%' OR cust_no LIKE '%".addslashes($filter)."%' OR member_no LIKE '%".addslashes($filter)."%' OR member_register LIKE '%".addslashes($filter)."%' OR member_valid LIKE '%".addslashes($filter)."%' OR member_nota_ref LIKE '%".addslashes($filter)."%' OR member_point LIKE '%".addslashes($filter)."%' OR member_jenis LIKE '%".addslashes($filter)."%' OR member_status LIKE '%".addslashes($filter)."%' OR member_tglserahterima LIKE '%".addslashes($filter)."%' )";
+				//$query .= " (cust_nama LIKE '%".addslashes($filter)."%' OR cust_no LIKE '%".addslashes($filter)."%' OR member_no LIKE '%".addslashes($filter)."%' OR member_register LIKE '%".addslashes($filter)."%' OR member_valid LIKE '%".addslashes($filter)."%' OR member_nota_ref LIKE '%".addslashes($filter)."%' OR member_point LIKE '%".addslashes($filter)."%' OR member_jenis LIKE '%".addslashes($filter)."%' OR member_status LIKE '%".addslashes($filter)."%' OR member_tglserahterima LIKE '%".addslashes($filter)."%' )";
+				$query .= " (cust_nama LIKE '%".addslashes($filter)."%' OR cust_no LIKE '%".addslashes($filter)."%' OR member_no LIKE '%".addslashes($filter)."%')";
+			} 
+			else {
+//				$query .= "where member_cust=cust_id and member_status <> 'Serah Terima'";
+				$query .= "where member_status <> 'Serah Terima'";
 			}
 			
 			$result = $this->db->query($query);
@@ -181,17 +191,23 @@ class M_member extends Model{
 		}
 		
 		//function for advanced search record
-		function member_search($member_id ,$member_cust ,$member_no ,$member_register ,$member_valid ,$member_nota_ref ,$member_point ,$member_jenis ,$member_status ,$member_tglserahterima ,$start,$end){
+		function member_search($member_id ,$member_cust ,$member_no ,$member_register, $member_register_end, $member_valid, $member_valid_end, $member_point ,$member_jenis ,$member_status ,$member_tglserahterima, $member_tglserahterima_end, $start,$end){
 			//full query
-			$query="SELECT 
+/*			$query="SELECT 
 						member.*,
 						cust_nama, cust_no 
 					FROM member, customer 
 					where member_cust=cust_id";
+*/
+				$query =   "SELECT 
+							m.*,
+							c.cust_nama, c.cust_no 
+						FROM member m
+						LEFT JOIN customer c on c.cust_id = m.member_cust ";
 			
 			if($member_cust!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_nama LIKE '%".$member_cust."%'";
+				$query.= " m.member_cust = ".$member_cust;
 			};
 			if($member_no!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -199,16 +215,25 @@ class M_member extends Model{
 			};
 			if($member_register!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " member_register = '".$member_register."'";
+				$query.= " member_register >= '".$member_register."'";
+			};
+			if($member_register_end!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " member_register <= '".$member_register_end."'";
 			};
 			if($member_valid!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " member_valid = '".$member_valid."'";
+				$query.= " member_valid >= '".$member_valid."'";
 			};
-			if($member_nota_ref!=''){
+			if($member_valid_end!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " member_valid <= '".$member_valid_end."'";
+			};
+/*			if($member_nota_ref!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " member_nota_ref LIKE '%".$member_nota_ref."%'";
 			};
+*/
 			if($member_jenis!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " member_jenis = '".$member_jenis."'";
@@ -219,7 +244,11 @@ class M_member extends Model{
 			};
 			if($member_tglserahterima!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " member_tglserahterima = '".$member_tglserahterima."'";
+				$query.= " member_tglserahterima >= '".$member_tglserahterima."'";
+			};
+			if($member_tglserahterima_end!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " member_tglserahterima <= '".$member_tglserahterima_end."'";
 			};
 			
 			$result = $this->db->query($query);

@@ -159,10 +159,12 @@ class C_member extends Controller {
 		$member_no=str_replace("/(<\/?)(p)([^>]*>)", "",$member_no);
 		$member_no=str_replace("'", '"',$member_no);
 		$member_register=trim(@$_POST["member_register"]);
+		$member_register_end=trim(@$_POST["member_register_end"]);
 		$member_valid=trim(@$_POST["member_valid"]);
-		$member_nota_ref=trim(@$_POST["member_nota_ref"]);
-		$member_nota_ref=str_replace("/(<\/?)(p)([^>]*>)", "",$member_nota_ref);
-		$member_nota_ref=str_replace("'", '"',$member_nota_ref);
+		$member_valid_end=trim(@$_POST["member_valid_end"]);
+//		$member_nota_ref=trim(@$_POST["member_nota_ref"]);
+//		$member_nota_ref=str_replace("/(<\/?)(p)([^>]*>)", "",$member_nota_ref);
+//		$member_nota_ref=str_replace("'", '"',$member_nota_ref);
 		$member_point=trim(@$_POST["member_point"]);
 		$member_jenis=trim(@$_POST["member_jenis"]);
 		$member_jenis=str_replace("/(<\/?)(p)([^>]*>)", "",$member_jenis);
@@ -171,10 +173,11 @@ class C_member extends Controller {
 		$member_status=str_replace("/(<\/?)(p)([^>]*>)", "",$member_status);
 		$member_status=str_replace("'", '"',$member_status);
 		$member_tglserahterima=trim(@$_POST["member_tglserahterima"]);
+		$member_tglserahterima_end=trim(@$_POST["member_tglserahterima_end"]);
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_member->member_search($member_id ,$member_cust ,$member_no ,$member_register ,$member_valid ,$member_nota_ref ,$member_point ,$member_jenis ,$member_status ,$member_tglserahterima ,$start,$end);
+		$result = $this->m_member->member_search($member_id ,$member_cust ,$member_no ,$member_register, $member_register_end, $member_valid, $member_valid_end, $member_point ,$member_jenis ,$member_status, $member_tglserahterima, $member_tglserahterima_end, $start,$end);
 		echo $result;
 	}
 
