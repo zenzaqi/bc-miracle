@@ -1522,12 +1522,18 @@ class M_master_jual_rawat extends Model{
                     }*/
                     //return '1';
                     if($this->db->affected_rows() || $this->db->affected_rows()==0){
-                        if($cetak_jrawat==1 && $jrawat_bayar>0){
+						if($cetak_jrawat==1){
                             $this->member_point_update($jrawat_id);
                             return $jrawat_id;
                         }else{
                             return '0';
                         }
+                        /*if($cetak_jrawat==1 && $jrawat_bayar>0){
+                            $this->member_point_update($jrawat_id);
+                            return $jrawat_id;
+                        }else{
+                            return '0';
+                        }*/
                     }else{
                         return '-1';
                     }

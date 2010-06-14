@@ -641,7 +641,7 @@ Ext.onReady(function(){
 						}else if(jrawat_post2db=="CREATE"){
 							detail_jual_rawat_insert();
 						}
-						master_jual_rawat_DataStore.reload();
+						master_jual_rawat_DataStore.load();
 						detail_jual_rawat_DataStore.load({params: {master_id:0}});
 						master_jual_rawat_createWindow.hide();
 					}else if(result==-3){
@@ -938,8 +938,6 @@ Ext.onReady(function(){
 		
 		jrawat_custField.setDisabled(false);
 		jrawat_tanggalField.setDisabled(false);
-		jrawat_custField.setDisabled(false);
-		jrawat_custField.setDisabled(false);
 		jrawat_tanggalField.setDisabled(false);
 		jrawat_keteranganField.setDisabled(false);
 		master_cara_bayarTabPanel.setDisabled(false);
@@ -1323,8 +1321,8 @@ Ext.onReady(function(){
 	
 	function master_jual_rawat_set_updating(){
             if(jrawat_post2db=="UPDATE" && master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_stat_dok')=="Terbuka"){
-                jrawat_custField.setDisabled(false);
-                jrawat_tanggalField.setDisabled(false);
+                jrawat_custField.setDisabled(true);
+                jrawat_tanggalField.setDisabled(true);
                 jrawat_keteranganField.setDisabled(false);
                 master_cara_bayarTabPanel.setDisabled(false);
                 detail_jual_rawatListEditorGrid.setDisabled(false);
