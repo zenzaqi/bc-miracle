@@ -111,7 +111,7 @@ Ext.onReady(function(){
 			}
 			
 			Ext.Ajax.request({  
-				waitMsg: 'Please wait...',
+				waitMsg: 'Mohon tunggu...',
 				url: 'index.php?c=c_sms&m=sms_save',
 				timeout: 3600000,
 				params: {
@@ -124,13 +124,13 @@ Ext.onReady(function(){
 					var result=eval(response.responseText);
 					switch(result){
 						case 1:
-							Ext.MessageBox.alert(post2db+' OK','SMS sukses !');
+							Ext.MessageBox.alert(post2db+' OK','New SMS berhasil disimpan. Cek di Outbox untuk status pengiriman');
 							mainPanel.remove(mainPanel.getActiveTab().getId());
 							break;
 						default:
 							Ext.MessageBox.show({
 							   title: 'Warning',
-							   msg: 'We could\'t not '+msg+' the sms.',
+							   msg: 'New SMS tidak dapat disimpan',
 							   buttons: Ext.MessageBox.OK,
 							   animEl: 'save',
 							   icon: Ext.MessageBox.WARNING
