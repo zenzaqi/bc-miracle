@@ -179,13 +179,13 @@ class C_master_lunas_piutang extends Controller {
 		$lpiutang_no=str_replace(",", ",",$lpiutang_no);
 		$lpiutang_no=str_replace("'", '"',$lpiutang_no);
 		$lpiutang_cust=trim(@$_POST["lpiutang_cust"]);
-		$lpiutang_tanggal=trim(@$_POST["lpiutang_tanggal"]);
+		$lpiutang_faktur_tanggal=trim(@$_POST["lpiutang_faktur_tanggal"]);
 		$lpiutang_keterangan=trim(@$_POST["lpiutang_keterangan"]);
 		$lpiutang_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$lpiutang_keterangan);
 		$lpiutang_keterangan=str_replace(",", ",",$lpiutang_keterangan);
 		$lpiutang_keterangan=str_replace("'", '"',$lpiutang_keterangan);
 		$piutang_cara=trim(@$_POST["piutang_cara"]);
-		$result = $this->m_master_lunas_piutang->master_lunas_piutang_update($lpiutang_id ,$lpiutang_no ,$lpiutang_cust ,$lpiutang_tanggal ,$lpiutang_keterangan ,$piutang_cara);
+		$result = $this->m_master_lunas_piutang->master_lunas_piutang_update($lpiutang_id ,$lpiutang_no ,$lpiutang_cust ,$lpiutang_faktur_tanggal ,$lpiutang_keterangan ,$piutang_cara);
 		echo $result;
 	}
 	
@@ -197,11 +197,11 @@ class C_master_lunas_piutang extends Controller {
 		$lpiutang_no=str_replace("/(<\/?)(p)([^>]*>)", "",$lpiutang_no);
 		$lpiutang_no=str_replace("'", '"',$lpiutang_no);
 		$lpiutang_cust=trim(@$_POST["lpiutang_cust"]);
-		$lpiutang_tanggal=trim(@$_POST["lpiutang_tanggal"]);
+		$lpiutang_faktur_tanggal=trim(@$_POST["lpiutang_faktur_tanggal"]);
 		$lpiutang_keterangan=trim(@$_POST["lpiutang_keterangan"]);
 		$lpiutang_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$lpiutang_keterangan);
 		$lpiutang_keterangan=str_replace("'", '"',$lpiutang_keterangan);
-		$result=$this->m_master_lunas_piutang->master_lunas_piutang_create($lpiutang_no ,$lpiutang_cust ,$lpiutang_tanggal ,$lpiutang_keterangan );
+		$result=$this->m_master_lunas_piutang->master_lunas_piutang_create($lpiutang_no ,$lpiutang_cust ,$lpiutang_faktur_tanggal ,$lpiutang_keterangan );
 		echo $result;
 	}
 
@@ -221,14 +221,14 @@ class C_master_lunas_piutang extends Controller {
 		$lpiutang_no=str_replace("/(<\/?)(p)([^>]*>)", "",$lpiutang_no);
 		$lpiutang_no=str_replace("'", '"',$lpiutang_no);
 		$lpiutang_cust=trim(@$_POST["lpiutang_cust"]);
-		$lpiutang_tanggal=trim(@$_POST["lpiutang_tanggal"]);
+		$lpiutang_faktur_tanggal=trim(@$_POST["lpiutang_faktur_tanggal"]);
 		$lpiutang_keterangan=trim(@$_POST["lpiutang_keterangan"]);
 		$lpiutang_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$lpiutang_keterangan);
 		$lpiutang_keterangan=str_replace("'", '"',$lpiutang_keterangan);
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_master_lunas_piutang->master_lunas_piutang_search($lpiutang_id ,$lpiutang_no ,$lpiutang_cust ,$lpiutang_tanggal ,$lpiutang_keterangan ,$start,$end);
+		$result = $this->m_master_lunas_piutang->master_lunas_piutang_search($lpiutang_id ,$lpiutang_no ,$lpiutang_cust ,$lpiutang_faktur_tanggal ,$lpiutang_keterangan ,$start,$end);
 		echo $result;
 	}
 
@@ -240,14 +240,14 @@ class C_master_lunas_piutang extends Controller {
 		$lpiutang_no=str_replace("/(<\/?)(p)([^>]*>)", "",$lpiutang_no);
 		$lpiutang_no=str_replace("'", '"',$lpiutang_no);
 		$lpiutang_cust=trim(@$_POST["lpiutang_cust"]);
-		$lpiutang_tanggal=trim(@$_POST["lpiutang_tanggal"]);
+		$lpiutang_faktur_tanggal=trim(@$_POST["lpiutang_faktur_tanggal"]);
 		$lpiutang_keterangan=trim(@$_POST["lpiutang_keterangan"]);
 		$lpiutang_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$lpiutang_keterangan);
 		$lpiutang_keterangan=str_replace("'", '"',$lpiutang_keterangan);
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$result = $this->m_master_lunas_piutang->master_lunas_piutang_print($lpiutang_id ,$lpiutang_no ,$lpiutang_cust ,$lpiutang_tanggal ,$lpiutang_keterangan ,$option,$filter);
+		$result = $this->m_master_lunas_piutang->master_lunas_piutang_print($lpiutang_id ,$lpiutang_no ,$lpiutang_cust ,$lpiutang_faktur_tanggal ,$lpiutang_keterangan ,$option,$filter);
 		$nbrows=$result->num_rows();
 		$totcolumn=10;
    		/* We now have our array, let's build our HTML file */
@@ -271,7 +271,7 @@ class C_master_lunas_piutang extends Controller {
 				fwrite($file,"</td><td>");
 				fwrite($file, $data['lpiutang_cust']);
 				fwrite($file,"</td><td>");
-				fwrite($file, $data['lpiutang_tanggal']);
+				fwrite($file, $data['lpiutang_faktur_tanggal']);
 				fwrite($file,"</td><td>");
 				fwrite($file, $data['lpiutang_keterangan']);
 				fwrite($file, "</td></tr>");
@@ -301,14 +301,14 @@ class C_master_lunas_piutang extends Controller {
 		$lpiutang_no=str_replace("/(<\/?)(p)([^>]*>)", "",$lpiutang_no);
 		$lpiutang_no=str_replace("'", '"',$lpiutang_no);
 		$lpiutang_cust=trim(@$_POST["lpiutang_cust"]);
-		$lpiutang_tanggal=trim(@$_POST["lpiutang_tanggal"]);
+		$lpiutang_faktur_tanggal=trim(@$_POST["lpiutang_faktur_tanggal"]);
 		$lpiutang_keterangan=trim(@$_POST["lpiutang_keterangan"]);
 		$lpiutang_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$lpiutang_keterangan);
 		$lpiutang_keterangan=str_replace("'", '"',$lpiutang_keterangan);
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$query = $this->m_master_lunas_piutang->master_lunas_piutang_export_excel($lpiutang_id ,$lpiutang_no ,$lpiutang_cust ,$lpiutang_tanggal ,$lpiutang_keterangan ,$option,$filter);
+		$query = $this->m_master_lunas_piutang->master_lunas_piutang_export_excel($lpiutang_id ,$lpiutang_no ,$lpiutang_cust ,$lpiutang_faktur_tanggal ,$lpiutang_keterangan ,$option,$filter);
 		
 		to_excel($query,"master_lunas_piutang"); 
 		echo '1';

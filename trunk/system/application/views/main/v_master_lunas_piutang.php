@@ -190,14 +190,14 @@ Ext.onReady(function(){
 	
 		if(is_master_lunas_piutang_form_valid()){	
 		var lpiutang_id_create_pk=null; 
-		var lpiutang_nobukti_create=null; 
+		var lpiutang_faktur_create=null; 
 		var lpiutang_cust_create=null; 
 		var lpiutang_tanggal_create_date=""; 
 		var lpiutang_keterangan_create=null; 
 		var piutang_cara_create=null;
 
 		if(lpiutang_idField.getValue()!== null){lpiutang_id_create = lpiutang_idField.getValue();}else{lpiutang_id_create_pk=get_pk_id();} 
-		if(lpiutang_fakturField.getValue()!== null){lpiutang_nobukti_create = lpiutang_fakturField.getValue();} 
+		if(lpiutang_fakturField.getValue()!== null){lpiutang_faktur_create = lpiutang_fakturField.getValue();} 
 		if(lpiutang_custField.getValue()!== null){lpiutang_cust_create = lpiutang_custField.getValue();} 
 		if(lpiutang_tanggalField.getValue()!== ""){lpiutang_tanggal_create_date = lpiutang_tanggalField.getValue().format('Y-m-d');} 
 		if(lpiutang_keteranganField.getValue()!== null){lpiutang_keterangan_create = lpiutang_keteranganField.getValue();} 
@@ -209,7 +209,7 @@ Ext.onReady(function(){
 			params: {
 				task: post2db,
 				lpiutang_id	: lpiutang_id_create_pk, 
-				lpiutang_nobukti	: lpiutang_nobukti_create, 
+				lpiutang_faktur	: lpiutang_faktur_create, 
 				lpiutang_cust	: lpiutang_cust_create, 
 				lpiutang_tanggal	: lpiutang_tanggal_create_date, 
 				lpiutang_keterangan	: lpiutang_keterangan_create, 
@@ -353,7 +353,7 @@ Ext.onReady(function(){
 	/* setValue to EDIT */
 	function master_lunas_piutang_set_form(){
 		lpiutang_idField.setValue(master_lunas_piutangListEditorGrid.getSelectionModel().getSelected().get('lpiutang_id'));
-		lpiutang_fakturField.setValue(master_lunas_piutangListEditorGrid.getSelectionModel().getSelected().get('lpiutang_nobukti'));
+		lpiutang_fakturField.setValue(master_lunas_piutangListEditorGrid.getSelectionModel().getSelected().get('lpiutang_faktur'));
 		lpiutang_custField.setValue(master_lunas_piutangListEditorGrid.getSelectionModel().getSelected().get('cust_nama'));
 		lpiutang_tanggalField.setValue(master_lunas_piutangListEditorGrid.getSelectionModel().getSelected().get('lpiutang_tanggal'));
 		lpiutang_keteranganField.setValue(master_lunas_piutangListEditorGrid.getSelectionModel().getSelected().get('lpiutang_keterangan'));
@@ -485,7 +485,7 @@ Ext.onReady(function(){
 			url: 'index.php?c=c_master_lunas_piutang&m=get_action', 
 			method: 'POST'
 		}),
-		baseParams:{task: "LIST"}, // parameter yang di $_POST ke Controller
+		baseParams:{task: "LIST", start:0, limit:pageS}, // parameter yang di $_POST ke Controller
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',

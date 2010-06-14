@@ -265,7 +265,7 @@ class M_master_lunas_piutang extends Model{
 			// For simple search
 			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (lpiutang_id LIKE '%".addslashes($filter)."%' OR lpiutang_nobukti LIKE '%".addslashes($filter)."%' OR lpiutang_cust LIKE '%".addslashes($filter)."%' OR lpiutang_tanggal LIKE '%".addslashes($filter)."%' OR lpiutang_keterangan LIKE '%".addslashes($filter)."%' )";
+				$query .= " (lpiutang_id LIKE '%".addslashes($filter)."%' OR lpiutang_faktur LIKE '%".addslashes($filter)."%' OR lpiutang_cust LIKE '%".addslashes($filter)."%' OR lpiutang_faktur_tanggal LIKE '%".addslashes($filter)."%' OR lpiutang_keterangan LIKE '%".addslashes($filter)."%' )";
 			}
 			
 			$result = $this->db->query($query);
@@ -285,12 +285,12 @@ class M_master_lunas_piutang extends Model{
 		}
 		
 		//function for update record
-		function master_lunas_piutang_update($lpiutang_id ,$lpiutang_nobukti ,$lpiutang_cust ,$lpiutang_tanggal ,$lpiutang_keterangan ,$piutang_cara){
+		function master_lunas_piutang_update($lpiutang_id ,$lpiutang_faktur ,$lpiutang_cust ,$lpiutang_faktur_tanggal ,$lpiutang_keterangan ,$piutang_cara){
 			/*$data = array(
 				"lpiutang_id"=>$lpiutang_id, 
-				"lpiutang_nobukti"=>$lpiutang_nobukti, 
+				"lpiutang_faktur"=>$lpiutang_faktur, 
 				"lpiutang_cust"=>$lpiutang_cust, 
-				"lpiutang_tanggal"=>$lpiutang_tanggal, 
+				"lpiutang_faktur_tanggal"=>$lpiutang_faktur_tanggal, 
 				"lpiutang_keterangan"=>$lpiutang_keterangan 
 			);
 			$this->db->where('lpiutang_id', $lpiutang_id);
@@ -313,11 +313,11 @@ class M_master_lunas_piutang extends Model{
 		}
 		
 		//function for create new record
-		function master_lunas_piutang_create($lpiutang_nobukti ,$lpiutang_cust ,$lpiutang_tanggal ,$lpiutang_keterangan ){
+		function master_lunas_piutang_create($lpiutang_faktur ,$lpiutang_cust ,$lpiutang_faktur_tanggal ,$lpiutang_keterangan ){
 			$data = array(
-				"lpiutang_nobukti"=>$lpiutang_nobukti, 
+				"lpiutang_faktur"=>$lpiutang_faktur, 
 				"lpiutang_cust"=>$lpiutang_cust, 
-				"lpiutang_tanggal"=>$lpiutang_tanggal, 
+				"lpiutang_faktur_tanggal"=>$lpiutang_faktur_tanggal, 
 				"lpiutang_keterangan"=>$lpiutang_keterangan 
 			);
 			$this->db->insert('master_lunas_piutang', $data); 
@@ -353,7 +353,7 @@ class M_master_lunas_piutang extends Model{
 		}
 		
 		//function for advanced search record
-		function master_lunas_piutang_search($lpiutang_id ,$lpiutang_nobukti ,$lpiutang_cust ,$lpiutang_tanggal ,$lpiutang_keterangan ,$start,$end){
+		function master_lunas_piutang_search($lpiutang_id ,$lpiutang_faktur ,$lpiutang_cust ,$lpiutang_faktur_tanggal ,$lpiutang_keterangan ,$start,$end){
 			//full query
 			$query="select * from master_lunas_piutang";
 			
@@ -361,17 +361,17 @@ class M_master_lunas_piutang extends Model{
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " lpiutang_id LIKE '%".$lpiutang_id."%'";
 			};
-			if($lpiutang_nobukti!=''){
+			if($lpiutang_faktur!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " lpiutang_nobukti LIKE '%".$lpiutang_nobukti."%'";
+				$query.= " lpiutang_faktur LIKE '%".$lpiutang_faktur."%'";
 			};
 			if($lpiutang_cust!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " lpiutang_cust LIKE '%".$lpiutang_cust."%'";
 			};
-			if($lpiutang_tanggal!=''){
+			if($lpiutang_faktur_tanggal!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " lpiutang_tanggal LIKE '%".$lpiutang_tanggal."%'";
+				$query.= " lpiutang_faktur_tanggal LIKE '%".$lpiutang_faktur_tanggal."%'";
 			};
 			if($lpiutang_keterangan!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -395,29 +395,29 @@ class M_master_lunas_piutang extends Model{
 		}
 		
 		//function for print record
-		function master_lunas_piutang_print($lpiutang_id ,$lpiutang_nobukti ,$lpiutang_cust ,$lpiutang_tanggal ,$lpiutang_keterangan ,$option,$filter){
+		function master_lunas_piutang_print($lpiutang_id ,$lpiutang_faktur ,$lpiutang_cust ,$lpiutang_faktur_tanggal ,$lpiutang_keterangan ,$option,$filter){
 			//full query
 			$query="select * from master_lunas_piutang";
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (lpiutang_id LIKE '%".addslashes($filter)."%' OR lpiutang_nobukti LIKE '%".addslashes($filter)."%' OR lpiutang_cust LIKE '%".addslashes($filter)."%' OR lpiutang_tanggal LIKE '%".addslashes($filter)."%' OR lpiutang_keterangan LIKE '%".addslashes($filter)."%' )";
+				$query .= " (lpiutang_id LIKE '%".addslashes($filter)."%' OR lpiutang_faktur LIKE '%".addslashes($filter)."%' OR lpiutang_cust LIKE '%".addslashes($filter)."%' OR lpiutang_faktur_tanggal LIKE '%".addslashes($filter)."%' OR lpiutang_keterangan LIKE '%".addslashes($filter)."%' )";
 				$result = $this->db->query($query);
 			} else if($option=='SEARCH'){
 				if($lpiutang_id!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " lpiutang_id LIKE '%".$lpiutang_id."%'";
 				};
-				if($lpiutang_nobukti!=''){
+				if($lpiutang_faktur!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " lpiutang_nobukti LIKE '%".$lpiutang_nobukti."%'";
+					$query.= " lpiutang_faktur LIKE '%".$lpiutang_faktur."%'";
 				};
 				if($lpiutang_cust!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " lpiutang_cust LIKE '%".$lpiutang_cust."%'";
 				};
-				if($lpiutang_tanggal!=''){
+				if($lpiutang_faktur_tanggal!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " lpiutang_tanggal LIKE '%".$lpiutang_tanggal."%'";
+					$query.= " lpiutang_faktur_tanggal LIKE '%".$lpiutang_faktur_tanggal."%'";
 				};
 				if($lpiutang_keterangan!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -429,29 +429,29 @@ class M_master_lunas_piutang extends Model{
 		}
 		
 		//function  for export to excel
-		function master_lunas_piutang_export_excel($lpiutang_id ,$lpiutang_nobukti ,$lpiutang_cust ,$lpiutang_tanggal ,$lpiutang_keterangan ,$option,$filter){
+		function master_lunas_piutang_export_excel($lpiutang_id ,$lpiutang_faktur ,$lpiutang_cust ,$lpiutang_faktur_tanggal ,$lpiutang_keterangan ,$option,$filter){
 			//full query
 			$query="select * from master_lunas_piutang";
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (lpiutang_id LIKE '%".addslashes($filter)."%' OR lpiutang_nobukti LIKE '%".addslashes($filter)."%' OR lpiutang_cust LIKE '%".addslashes($filter)."%' OR lpiutang_tanggal LIKE '%".addslashes($filter)."%' OR lpiutang_keterangan LIKE '%".addslashes($filter)."%' )";
+				$query .= " (lpiutang_id LIKE '%".addslashes($filter)."%' OR lpiutang_faktur LIKE '%".addslashes($filter)."%' OR lpiutang_cust LIKE '%".addslashes($filter)."%' OR lpiutang_faktur_tanggal LIKE '%".addslashes($filter)."%' OR lpiutang_keterangan LIKE '%".addslashes($filter)."%' )";
 				$result = $this->db->query($query);
 			} else if($option=='SEARCH'){
 				if($lpiutang_id!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " lpiutang_id LIKE '%".$lpiutang_id."%'";
 				};
-				if($lpiutang_nobukti!=''){
+				if($lpiutang_faktur!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " lpiutang_nobukti LIKE '%".$lpiutang_nobukti."%'";
+					$query.= " lpiutang_faktur LIKE '%".$lpiutang_faktur."%'";
 				};
 				if($lpiutang_cust!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " lpiutang_cust LIKE '%".$lpiutang_cust."%'";
 				};
-				if($lpiutang_tanggal!=''){
+				if($lpiutang_faktur_tanggal!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " lpiutang_tanggal LIKE '%".$lpiutang_tanggal."%'";
+					$query.= " lpiutang_faktur_tanggal LIKE '%".$lpiutang_faktur_tanggal."%'";
 				};
 				if($lpiutang_keterangan!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";

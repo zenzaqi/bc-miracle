@@ -58,7 +58,7 @@ class M_member extends Model{
 			} 
 			else {
 //				$query .= "where member_cust=cust_id and member_status <> 'Serah Terima'";
-				$query .= "where member_status <> 'Serah Terima'";
+				$query .= " WHERE member_status <> 'Serah Terima'";
 			}
 			
 			$result = $this->db->query($query);
