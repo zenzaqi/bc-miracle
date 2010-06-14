@@ -3665,7 +3665,13 @@ Ext.onReady(function(){
 		allowNegative: false,
 		blankText: '0',
 		maxLength: 11,
+		enableKeyEvents: true,
 		maskRe: /([0-9]+)$/
+	});
+	dpaket_jumlahField.on('keyup', function(){
+		var sub_total = dpaket_jumlahField.getValue()*dpaket_hargaField.getValue();
+		dpaket_subtotalField.setValue(sub_total);
+		dpaket_subtotalnetField.setValue(((100-dpaket_jumlahdiskonField.getValue())/100)*sub_total);
 	});
 	
 	var dpaket_jenisdiskonField= new Ext.form.ComboBox({
