@@ -269,10 +269,22 @@ class M_tindakan_medis extends Model{
 				 * AND kategori = 'Non Medis',
 				 * JIKA "ada" ini artinya di menu Tindakan Medis juga menjual Tindakan Non-Medis
 				 */
-				$sql="SELECT dtrawat_id,dtrawat_perawatan,dtrawat_keterangan,rawat_harga,rawat_dm,rawat_du FROM tindakan_detail INNER JOIN perawatan ON(dtrawat_perawatan=rawat_id) LEFT JOIN kategori ON(rawat_kategori=kategori_id) WHERE dtrawat_master='$trawat_id' AND kategori_nama='Non Medis' AND dtrawat_petugas1='0' AND dtrawat_petugas2='0'";
+				/*$sql="SELECT dtrawat_id
+						,dtrawat_perawatan
+						,dtrawat_keterangan
+						,rawat_harga
+						,rawat_dm
+						,rawat_du
+					FROM tindakan_detail
+					INNER JOIN perawatan ON(dtrawat_perawatan=rawat_id)
+					LEFT JOIN kategori ON(rawat_kategori=kategori_id)
+					WHERE dtrawat_master='$trawat_id'
+						AND kategori_nama='Non Medis'
+						AND dtrawat_petugas1='0'
+						AND dtrawat_petugas2='0'";
 				$rs=$this->db->query($sql);
 				if($rs->num_rows()){
-					/* hasilnya "ADA", maka akan ditambahkan ke db.detail_jual_rawat */
+					//* hasilnya "ADA", maka akan ditambahkan ke db.detail_jual_rawat /
 					$rs_record=$rs->row_array();
 					$dtj_nonmedis_perawatan=$rs_record["dtrawat_perawatan"];
 					$dtj_nonmedis_rawat_harga=$rs_record["rawat_harga"];
@@ -301,7 +313,7 @@ class M_tindakan_medis extends Model{
 							$this->detail_pakai_cabin_insert($dtj_nonmedis_dtrawat_id, $dtj_nonmedis_perawatan, $jrawat_nobukti);
 						}
 					}
-				}
+				}*/
 			}
 		}else{ 
 			/* artinya: di db.master_jual_rawat BELUM ADA */
@@ -347,10 +359,22 @@ class M_tindakan_medis extends Model{
 					 * AND kategori = 'Non Medis',
 					 * JIKA "ada" ini artinya di menu Tindakan Medis juga menjual Tindakan Non-Medis
 					 */
-					$sql="SELECT dtrawat_id,dtrawat_perawatan,dtrawat_keterangan,rawat_harga,rawat_dm,rawat_du FROM tindakan_detail INNER JOIN perawatan ON(dtrawat_perawatan=rawat_id) LEFT JOIN kategori ON(rawat_kategori=kategori_id) WHERE dtrawat_master='$trawat_id' AND kategori_nama='Non Medis' AND dtrawat_petugas1='0' AND dtrawat_petugas2='0'";
+					/*$sql="SELECT dtrawat_id
+							,dtrawat_perawatan
+							,dtrawat_keterangan
+							,rawat_harga
+							,rawat_dm
+							,rawat_du
+						FROM tindakan_detail
+						INNER JOIN perawatan ON(dtrawat_perawatan=rawat_id)
+						LEFT JOIN kategori ON(rawat_kategori=kategori_id)
+						WHERE dtrawat_master='$trawat_id'
+							AND kategori_nama='Non Medis'
+							AND dtrawat_petugas1='0'
+							AND dtrawat_petugas2='0'";
 					$rs=$this->db->query($sql);
 					if($rs->num_rows()){
-						/* hasilnya "ADA", maka akan ditambahkan ke db.detail_jual_rawat */
+						//* hasilnya "ADA", maka akan ditambahkan ke db.detail_jual_rawat /
 						$rs_record=$rs->row_array();
 						$dtj_nonmedis_perawatan=$rs_record["dtrawat_perawatan"];
 						$dtj_nonmedis_rawat_harga=$rs_record["rawat_harga"];
@@ -379,7 +403,7 @@ class M_tindakan_medis extends Model{
 								$this->detail_pakai_cabin_insert($dtj_nonmedis_dtrawat_id, $dtj_nonmedis_perawatan, $jrawat_nobukti);
 							}
 						}
-					}
+					}*/
 				}
 			}
 		}
