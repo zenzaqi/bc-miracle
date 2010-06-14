@@ -93,6 +93,15 @@ class C_master_retur_jual_produk extends Controller {
 		echo $result;
 	}
 	
+	function get_customer_list(){
+		$query = isset($_POST['query']) ? $_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		$result=$this->m_public_function->get_customer_list($query,$start,$end);
+		echo $result;
+	}
+	
+	
 	//for detail action
 	//list detail handler action
 	function  detail_detail_retur_jual_produk_list(){
@@ -191,7 +200,13 @@ class C_master_retur_jual_produk extends Controller {
 		$rproduk_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$rproduk_keterangan);
 		$rproduk_keterangan=str_replace(",", ",",$rproduk_keterangan);
 		$rproduk_keterangan=str_replace("'", '"',$rproduk_keterangan);
-		$result = $this->m_master_retur_jual_produk->master_retur_jual_produk_update($rproduk_id ,$rproduk_nobukti ,$rproduk_nobuktijual ,$rproduk_cust ,$rproduk_tanggal ,$rproduk_keterangan      );
+		
+		$rproduk_status=trim(@$_POST["rproduk_status"]);
+		$rproduk_status=str_replace("/(<\/?)(p)([^>]*>)", "",$rproduk_status);
+		$rproduk_status=str_replace(",", ",",$rproduk_status);
+		$rproduk_status=str_replace("'", '"',$rproduk_status);
+		
+		$result = $this->m_master_retur_jual_produk->master_retur_jual_produk_update($rproduk_id ,$rproduk_nobukti ,$rproduk_nobuktijual ,$rproduk_cust ,$rproduk_tanggal ,$rproduk_keterangan, $rproduk_status     );
 		echo $result;
 	}
 	
@@ -210,11 +225,16 @@ class C_master_retur_jual_produk extends Controller {
 		$rproduk_keterangan=trim(@$_POST["rproduk_keterangan"]);
 		$rproduk_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$rproduk_keterangan);
 		$rproduk_keterangan=str_replace("'", '"',$rproduk_keterangan);
+		
+		$rproduk_status=trim(@$_POST["rproduk_status"]);
+		$rproduk_status=str_replace("/(<\/?)(p)([^>]*>)", "",$rproduk_status);
+		$rproduk_status=str_replace("'", '"',$rproduk_status);
+		
 		$rproduk_kwitansi_nilai=trim(@$_POST["rproduk_kwitansi_nilai"]);
 		$rproduk_kwitansi_keterangan=trim(@$_POST["rproduk_kwitansi_keterangan"]);
 		$rproduk_kwitansi_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$rproduk_kwitansi_keterangan);
 		$rproduk_kwitansi_keterangan=str_replace("'", '"',$rproduk_kwitansi_keterangan);
-		$result=$this->m_master_retur_jual_produk->master_retur_jual_produk_create($rproduk_nobukti ,$rproduk_nobuktijual ,$rproduk_cust ,$rproduk_tanggal ,$rproduk_keterangan ,$rproduk_kwitansi_nilai ,$rproduk_kwitansi_keterangan);
+		$result=$this->m_master_retur_jual_produk->master_retur_jual_produk_create($rproduk_nobukti ,$rproduk_nobuktijual ,$rproduk_cust ,$rproduk_tanggal ,$rproduk_keterangan , $rproduk_status, $rproduk_kwitansi_nilai ,$rproduk_kwitansi_keterangan);
 		echo $result;
 	}
 
@@ -242,9 +262,13 @@ class C_master_retur_jual_produk extends Controller {
 		$rproduk_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$rproduk_keterangan);
 		$rproduk_keterangan=str_replace("'", '"',$rproduk_keterangan);
 		
+		$rproduk_status=trim(@$_POST["rproduk_status"]);
+		$rproduk_status=str_replace("/(<\/?)(p)([^>]*>)", "",$rproduk_status);
+		$rproduk_status=str_replace("'", '"',$rproduk_status);
+		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_master_retur_jual_produk->master_retur_jual_produk_search($rproduk_id ,$rproduk_nobukti ,$rproduk_nobuktijual ,$rproduk_cust ,$rproduk_tanggal ,$rproduk_keterangan ,$start,$end);
+		$result = $this->m_master_retur_jual_produk->master_retur_jual_produk_search($rproduk_id ,$rproduk_nobukti ,$rproduk_nobuktijual ,$rproduk_cust ,$rproduk_tanggal ,$rproduk_keterangan , $rproduk_status, $start,$end);
 		echo $result;
 	}
 

@@ -353,7 +353,7 @@ class M_master_retur_jual_produk extends Model{
 //			$query = "SELECT * FROM master_retur_jual_produk LEFT JOIN customer ON(rproduk_cust=cust_id) LEFT JOIN master_jual_produk ON(rproduk_nobuktijual=jproduk_id) LEFT JOIN cetak_kwitansi ON(kwitansi_ref=rproduk_nobukti)";
 			$query =   "SELECT
 							rproduk_id, rproduk_nobukti, jproduk_nobukti, cust_no, cust_nama, cust_id, 
-							rproduk_tanggal, rproduk_keterangan, rproduk_creator,	
+							rproduk_tanggal, rproduk_keterangan, rproduk_status, rproduk_creator,	
 							rproduk_date_create, rproduk_update, rproduk_date_update, rproduk_revised, kwitansi_id, kwitansi_nilai, kwitansi_keterangan
 						FROM master_retur_jual_produk m
 						LEFT JOIN customer c ON(m.rproduk_cust=c.cust_id) 
@@ -383,14 +383,15 @@ class M_master_retur_jual_produk extends Model{
 		}
 		
 		//function for update record
-		function master_retur_jual_produk_update($rproduk_id ,$rproduk_nobukti ,$rproduk_nobuktijual ,$rproduk_cust ,$rproduk_tanggal ,$rproduk_keterangan ){
+		function master_retur_jual_produk_update($rproduk_id ,$rproduk_nobukti ,$rproduk_nobuktijual ,$rproduk_cust ,$rproduk_tanggal ,$rproduk_keterangan , $rproduk_status){
 			$data = array(
 				"rproduk_id"=>$rproduk_id, 
 				"rproduk_nobukti"=>$rproduk_nobukti, 
 				"rproduk_nobuktijual"=>$rproduk_nobuktijual, 
 				"rproduk_cust"=>$rproduk_cust, 
 				"rproduk_tanggal"=>$rproduk_tanggal, 
-				"rproduk_keterangan"=>$rproduk_keterangan 
+				"rproduk_keterangan"=>$rproduk_keterangan,
+				"rproduk_status"=>$rproduk_status
 			);
 			$this->db->where('rproduk_id', $rproduk_id);
 			$this->db->update('master_retur_jual_produk', $data);
@@ -399,7 +400,7 @@ class M_master_retur_jual_produk extends Model{
 		}
 		
 		//function for create new record
-		function master_retur_jual_produk_create($rproduk_nobukti ,$rproduk_nobuktijual ,$rproduk_cust ,$rproduk_tanggal ,$rproduk_keterangan ,$rproduk_kwitansi_nilai ,$rproduk_kwitansi_keterangan){
+		function master_retur_jual_produk_create($rproduk_nobukti ,$rproduk_nobuktijual ,$rproduk_cust ,$rproduk_tanggal ,$rproduk_keterangan , $rproduk_status, $rproduk_kwitansi_nilai ,$rproduk_kwitansi_keterangan){
 //			$pattern="RFT/".date("ym")."-";
 			$pattern="RJ/".date("ym")."-";
 			$rproduk_nobukti=$this->m_public_function->get_kode_1('master_retur_jual_produk','rproduk_nobukti',$pattern,12);
@@ -409,7 +410,8 @@ class M_master_retur_jual_produk extends Model{
 				"rproduk_nobuktijual"=>$rproduk_nobuktijual, 
 				"rproduk_cust"=>$rproduk_cust, 
 				"rproduk_tanggal"=>$rproduk_tanggal, 
-				"rproduk_keterangan"=>$rproduk_keterangan 
+				"rproduk_keterangan"=>$rproduk_keterangan,
+				"rproduk_status"=>$rproduk_status
 			);
 			$this->db->insert('master_retur_jual_produk', $data); 
 			if($this->db->affected_rows()){
@@ -461,11 +463,11 @@ class M_master_retur_jual_produk extends Model{
 		}
 		
 		//function for advanced search record
-		function master_retur_jual_produk_search($rproduk_id ,$rproduk_nobukti ,$rproduk_nobuktijual ,$rproduk_cust ,$rproduk_tanggal ,$rproduk_keterangan ,$start,$end){
+		function master_retur_jual_produk_search($rproduk_id ,$rproduk_nobukti ,$rproduk_nobuktijual ,$rproduk_cust ,$rproduk_tanggal ,$rproduk_keterangan , $rproduk_status, $start,$end){
 			//full query
 			$query="SELECT
 							rproduk_id, rproduk_nobukti, jproduk_nobukti, cust_no, cust_nama, cust_id, 
-							rproduk_tanggal, rproduk_keterangan, rproduk_creator,	
+							rproduk_tanggal, rproduk_keterangan, rproduk_status, rproduk_creator,	
 							rproduk_date_create, rproduk_update, rproduk_date_update, rproduk_revised, kwitansi_id, kwitansi_nilai, kwitansi_keterangan
 						FROM master_retur_jual_produk m
 						LEFT JOIN customer c ON(m.rproduk_cust=c.cust_id) 
@@ -496,6 +498,11 @@ class M_master_retur_jual_produk extends Model{
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " rproduk_keterangan LIKE '%".$rproduk_keterangan."%'";
 			};
+			if($rproduk_status!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " rproduk_status LIKE '%".$rproduk_status."%'";
+			};
+			
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
 			
