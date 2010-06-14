@@ -306,7 +306,10 @@ Ext.onReady(function(){
 		}
 	
 		//if(is_master_jual_produk_form_valid() && dproduk_produk_id=="ada" && (/^\d+$/.test(jproduk_custField.getValue()) || (get_jproduk_pk()!==0))){	
-		if(is_master_jual_produk_form_valid() && dproduk_produk_id=="ada" && ((/^\d+$/.test(jproduk_custField.getValue()) && jproduk_post2db=="CREATE") || jproduk_post2db=="UPDATE") && jproduk_stat_dokField.getValue()=='Terbuka'){
+		if(is_master_jual_produk_form_valid()
+		   && dproduk_produk_id=="ada"
+		   && ((/^\d+$/.test(jproduk_custField.getValue()) && jproduk_post2db=="CREATE") || jproduk_post2db=="UPDATE")
+		   && jproduk_stat_dokField.getValue()=='Terbuka'){
 			var jproduk_id_create_pk=null; 
 			var jproduk_nobukti_create=null; 
 			var jproduk_cust_create=null; 
@@ -4387,9 +4390,11 @@ Ext.onReady(function(){
 							});*/
 							Ext.MessageBox.alert(jproduk_post2db+' OK','Data penjualan produk berhasil disimpan');
 							jproduk_post2db="CREATE";
+							jproduk_stat_dokField.setValue('Terbuka');
 						}else if(result==-1){
 							//detail_jual_produk_DataStore.load({params: {master_id:0}});
 							jproduk_post2db="CREATE";
+							jproduk_stat_dokField.setValue('Terbuka');
 							Ext.MessageBox.show({
 							   title: 'Warning',
 							   //msg: 'We could\'t not '+msg+' the Master_jual_produk.',
@@ -4408,6 +4413,7 @@ Ext.onReady(function(){
 							jproduk_cetak(result);
 							cetak_jproduk=0;
 							jproduk_post2db="CREATE";
+							jproduk_stat_dokField.setValue('Terbuka');
 						}
 						/*switch(result){
 							case 0:
@@ -5813,6 +5819,7 @@ Ext.onReady(function(){
 						master_jual_produk_cardGroup.setVisible(true);
 						master_cara_bayarTabPanel.setActiveTab(0);
 						jproduk_post2db="CREATE";
+						jproduk_stat_dokField.setValue('Terbuka');
 						jproduk_diskonField.setValue(0);
 						jproduk_cashbackField.setValue(0);
 						jproduk_pesanLabel.setText('');
