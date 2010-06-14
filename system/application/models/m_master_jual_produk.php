@@ -709,6 +709,7 @@ class M_master_jual_produk extends Model{
 				//$result=$this->db->query($sql);
 				$this->db->query($sql);
 			}
+			return "{success:true}";
 		}
 		//*eof
 		
@@ -720,7 +721,35 @@ class M_master_jual_produk extends Model{
 				$dproduk_master=$this->get_master_id();
 			}
 			
-			$sql="SELECT dproduk_id, dproduk_jumlah FROM detail_jual_produk WHERE dproduk_master='$dproduk_master' AND dproduk_produk='$dproduk_produk' AND dproduk_diskon_jenis<>'Bonus'";
+			$data = array(
+			"dproduk_master"=>$dproduk_master, 
+			"dproduk_produk"=>$dproduk_produk, 
+			"dproduk_karyawan"=>$dproduk_karyawan,
+			"dproduk_satuan"=>$dproduk_satuan, 
+			"dproduk_jumlah"=>$dproduk_jumlah, 
+			"dproduk_harga"=>$dproduk_harga, 
+			"dproduk_diskon"=>$dproduk_diskon,
+			"dproduk_diskon_jenis"=>$dproduk_diskon_jenis,
+			"dproduk_sales"=>$dproduk_sales,
+			//"konversi_nilai_temp"=>$konversi_nilai_temp
+			);
+			$this->db->insert('detail_jual_produk', $data); 
+			if($this->db->affected_rows()){
+				if($cetak==1 && ($count==($dcount-1))){
+					$this->member_point_update($dproduk_master);
+					$this->membership_insert($dproduk_master);
+					$this->stat_dok_tertutup_update($dproduk_master);
+					return $dproduk_master;
+				}else if($cetak!==1 && ($count==($dcount-1))){
+					return '0';
+				}else if($count!==($dcount-1)){
+					return '-3';
+				}
+			}else{
+				return '-1';
+			}
+			
+			/*$sql="SELECT dproduk_id, dproduk_jumlah FROM detail_jual_produk WHERE dproduk_master='$dproduk_master' AND dproduk_produk='$dproduk_produk' AND dproduk_diskon_jenis<>'Bonus'";
 			$rs=$this->db->query($sql);
 			if($rs->num_rows()){
 				if($dproduk_diskon_jenis<>'Bonus'){
@@ -805,8 +834,7 @@ class M_master_jual_produk extends Model{
 					}
 				}else
 					return '-1';
-			}
-
+			}*/
 		}
 		//end of function
 		
