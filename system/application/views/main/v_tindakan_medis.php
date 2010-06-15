@@ -1427,7 +1427,8 @@ Ext.onReady(function(){
 			{name: 'dtrawat_jam', type: 'string', mapping: 'dtrawat_jam'}, 
 			{name: 'dtrawat_kategori', type: 'string', mapping: 'dtrawat_kategori'}, 
 			{name: 'dtrawat_status', type: 'string', mapping: 'dtrawat_status'},
-			{name: 'dtrawat_keterangan', type: 'string', mapping: 'dtrawat_keterangan'} 
+			{name: 'dtrawat_keterangan', type: 'string', mapping: 'dtrawat_keterangan'},
+			{name: 'dtrawat_jumlah', type: 'int', mapping: 'dtrawat_jumlah'}
 	]);
 	//eof
 	
@@ -1518,29 +1519,37 @@ Ext.onReady(function(){
 			triggerAction: 'all'
 	});
 	
+	var dtindakan_nonmedisField= new Ext.form.NumberField({
+		id: 'dtindakan_nonmedisField',
+		allowNegatife : false,
+		blankText: '0',
+		allowDecimals: false,
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
+	});
+	
 	//declaration of detail coloumn model
 	tindakan_nonmedis_detailColumnModel = new Ext.grid.ColumnModel(
 		[
 		{
 			header: '<div align="center">' + 'Perawatan' + '</div>',
 			dataIndex: 'dtrawat_perawatan',
-			width: 290,
+			width: 400,
 			sortable: true,
 			editor: combo_perawatan_dtjnonmedis,
 			renderer: Ext.util.Format.comboRenderer(combo_perawatan_dtjnonmedis)
 		},
-		/*{
-			header: 'Therapist',
-			dataIndex: 'dtrawat_petugas2',
-			width: 200,
+		{
+			header: 'Jumlah',
+			dataIndex: 'dtrawat_jumlah',
+			width: 60,
 			sortable: true,
-			editor: combo_dtindakan_terapis,
-			renderer: Ext.util.Format.comboRenderer(combo_dtindakan_terapis)
-		},*/
+			editor: dtindakan_nonmedisField
+		},
 		{
 			header: '<div align="center">' + 'Detail Keterangan' + '</div>',
 			dataIndex: 'dtrawat_keterangan',
-			width: 200,
+			width: 428,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 250,
@@ -1597,11 +1606,12 @@ Ext.onReady(function(){
 	function dtindakan_jual_nonmedis_add(){
 		var edit_tindakan_nonmedis_detail= new dtindakan_jual_nonmedisListEditorGrid.store.recordType({
 			dtrawat_perawatan	:'',
+			dtrawat_jumlah	: 1,
 			dtrawat_keterangan	:''		
 		});
 		editor_dtindakan_jual_nonmedis.stopEditing();
 		dtindakan_jual_nonmedisDataStore.insert(0, edit_tindakan_nonmedis_detail);
-		dtindakan_jual_nonmedisListEditorGrid.getView().refresh();
+		//dtindakan_jual_nonmedisListEditorGrid.getView().refresh();
 		dtindakan_jual_nonmedisListEditorGrid.getSelectionModel().selectRow(0);
 		editor_dtindakan_jual_nonmedis.startEditing(0);
 	}
@@ -1626,7 +1636,8 @@ Ext.onReady(function(){
 					dtrawat_master	: eval(trawat_medis_idField.getValue()), 
 					dtrawat_perawatan	: tindakan_nonmedis_detail_record.data.dtrawat_perawatan, 
 					dtrawat_keterangan	: tindakan_nonmedis_detail_record.data.dtrawat_keterangan,
-					customer_id	: trawat_medis_custidField.getValue()
+					customer_id	: trawat_medis_custidField.getValue(),
+					dtrawat_jumlah	: tindakan_nonmedis_detail_record.data.dtrawat_jumlah
 					},
 					callback: function(opts, success, response){
 						tindakan_medisDataStore.reload();
@@ -1660,9 +1671,9 @@ Ext.onReady(function(){
 		// only one record is selected here
 		if(dtindakan_jual_nonmedisListEditorGrid.selModel.getCount() == 1){
 			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', dtindakan_jual_nonmedis_delete);
-		} else if(dtindakan_jual_nonmedisListEditorGrid.selModel.getCount() > 1){
+		} /*else if(dtindakan_jual_nonmedisListEditorGrid.selModel.getCount() > 1){
 			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', dtindakan_jual_nonmedis_delete);
-		} else {
+		}*/ else {
 			Ext.MessageBox.show({
 				title: 'Warning',
 				msg: 'You can\'t really delete something you haven\'t selected?',
@@ -1677,9 +1688,20 @@ Ext.onReady(function(){
 	//function for Delete of detail
 	function dtindakan_jual_nonmedis_delete(btn){
 		if(btn=='yes'){
-			var s = dtindakan_jual_nonmedisListEditorGrid.getSelectionModel().getSelections();
-			for(var i = 0, r; r = s[i]; i++){
-				dtindakan_jual_nonmedisDataStore.remove(r);
+			if((/^\d+$/.test(dtindakan_jual_nonmedisListEditorGrid.getSelectionModel().getSelected().get('dtrawat_id')))==false){
+				var s = dtindakan_jual_nonmedisListEditorGrid.getSelectionModel().getSelections();
+				for(var i = 0, r; r = s[i]; i++){
+					dtindakan_jual_nonmedisDataStore.remove(r);
+				}
+			}else{
+				Ext.MessageBox.show({
+					title: 'Warning',
+					width: 300,
+					msg: 'Data tidak bisa didelete, <br/>silakan dibatalkan di List Tindakan Medis.',
+					buttons: Ext.MessageBox.OK,
+					animEl: 'save',
+					icon: Ext.MessageBox.WARNING
+				});
 			}
 		}  
 	}

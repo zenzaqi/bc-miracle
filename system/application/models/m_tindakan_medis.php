@@ -767,11 +767,15 @@ class M_tindakan_medis extends Model{
 		$result=$this->db->query($sql);
 	}
 	
-	function detail_dtindakan_jual_nonmedis_insert($dtrawat_id ,$dtrawat_master ,$dtrawat_perawatan ,$dtrawat_keterangan ,$customer_id ){
+	function detail_dtindakan_jual_nonmedis_insert($dtrawat_id ,$dtrawat_master ,$dtrawat_perawatan ,$dtrawat_keterangan ,$customer_id ,$dtrawat_jumlah){
 		$date_now=date('Y-m-d');
         //if master id not capture from view then capture it from max pk from master table
 		if($dtrawat_master=="" || $dtrawat_master==NULL){
 			$dtrawat_master=$this->get_master_id();
+		}
+		
+		if($dtrawat_jumlah==''){
+			$dtrawat_jumlah=1;
 		}
         
 		if(is_numeric($dtrawat_id)==false && is_numeric($dtrawat_perawatan)==true){
@@ -783,6 +787,7 @@ class M_tindakan_medis extends Model{
 				"dtrawat_keterangan"=>$dtrawat_keterangan,
 				"dtrawat_tglapp"=>$date_now,
 				"dtrawat_status"=>"selesai",
+				"dtrawat_jumlah"=>$dtrawat_jumlah,
                 "dtrawat_creator"=>@$_SESSION[SESSION_USERID]
 			);
 			$this->db->insert('tindakan_detail', $data); 
@@ -831,7 +836,7 @@ class M_tindakan_medis extends Model{
 					$data_to_drawat=array(
 					"drawat_master"=>$jrawat_id,
 					"drawat_rawat"=>$dtrawat_perawatan,
-					"drawat_jumlah"=>1,
+					"drawat_jumlah"=>$dtrawat_jumlah,
 					"drawat_harga"=>$rawat_harga,
 					"drawat_diskon"=>$drawat_diskon,
 					"drawat_diskon_jenis"=>$drawat_diskon_jenis,
@@ -865,7 +870,7 @@ class M_tindakan_medis extends Model{
                                 "drawat_master"=>$jrawat_id,
                                 "drawat_dtrawat"=>$dtrawat_id,
                                 "drawat_rawat"=>$dtrawat_perawatan,
-                                "drawat_jumlah"=>1,
+                                "drawat_jumlah"=>$dtrawat_jumlah,
                                 "drawat_harga"=>$rawat_harga,
                                 "drawat_diskon"=>$drawat_diskon,
                                 "drawat_diskon_jenis"=>$drawat_diskon_jenis
