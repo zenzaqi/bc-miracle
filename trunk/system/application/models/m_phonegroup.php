@@ -152,28 +152,47 @@ class M_phonegroup extends Model{
 						$this->db->query($sql);
 						$sql="";
 					}
-				}elseif($isms_opsi=='member'){
+				}
+				elseif($isms_opsi=='member'){
+
+
 					$sms_opsi=split(":",$isms_dest);
 					$membership=$sms_opsi[0];
 					$expired=$sms_opsi[1];
-					if($expired!=="")
+
+					//if($expired!=="")
+					if($expired!=="x")
 					{
 						$tgl_start=substr($expired,1,10);
 						$tgl_end=substr($expired,13,10);
 					}
-					$sql="select cust_hp from vu_member_cust WHERE cust_hp<>'' AND cust_hp is not null";
+					//$sql="select cust_hp from vu_member_cust WHERE cust_hp<>'' AND cust_hp is not null";
+					$sql=  "select cust_hp, cust_id from vu_customer
+							WHERE cust_hp<>'' AND cust_hp is not null";
 					if($membership=="Expired"){
 						$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
 						$sql .=" date_format(member_valid,'%Y-%m-%d') >='".$tgl_start."' AND 
 								 date_format(member_valid,'%Y-%m-%d') <='".$tgl_end."'";
-					}else if($membership!=="Semua"){
+					}
+/*					else if($membership!=="Semua"){
 						$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
 						$sql .=" member_status='".$membership."'";
 					}
-					
+*/
+					else if($membership=="Aktif"){
+						$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
+						$sql .=" date_format(member_valid,'%Y-%m-%d') >='".date('Y-m-d')."'";
+//						$sql .=" date_format(member_valid,'%Y-%m-%d') >='2010-06-15'";
+					}
+					else if($membership=="Non Aktif"){
+						$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
+						$sql .=" date_format(member_valid,'%Y-%m-%d') <'".date('Y-m-d')."'";
+					}
+				
 					$query=$this->db->query($sql);
 					foreach($query->result() as $row){
 						$sql="insert into outbox(
+								outbox_cust,
 								outbox_destination,
 								outbox_message,
 								outbox_date,
@@ -181,6 +200,7 @@ class M_phonegroup extends Model{
 								outbox_creator,
 								outbox_date_create)
 							values(
+								'".$row->cust_id."',
 								'".$row->cust_hp."',
 								'".$isms_isi."',
 								'".date('Y/m/d H:i:s')."',
@@ -193,6 +213,7 @@ class M_phonegroup extends Model{
 					}
 					
 				}
+
 			}
 			
 			return '1';

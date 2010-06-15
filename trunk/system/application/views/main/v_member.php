@@ -1446,7 +1446,7 @@ Ext.onReady(function(){
 					case 1:
 						Ext.MessageBox.show({
 							title: 'Warning',
-							msg: 'Aktivasi Member Sukses!',
+							msg: 'Serah terima customer berhasil disimpan',
 							buttons: Ext.MessageBox.OK,
 							animEl: 'save',
 							icon: Ext.MessageBox.OK

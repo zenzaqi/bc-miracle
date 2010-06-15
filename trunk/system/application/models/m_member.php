@@ -330,7 +330,7 @@ class M_member extends Model{
 					member_no AS no_member,
 					member_register AS tgl_daftar,
 					member_valid AS tgl_valid,
-					cust_point AS poin,
+--					cust_point AS poin,
 					member_jenis AS jenis,
 					member_status AS status,
 					member_tglserahterima AS tgl_penyerahan

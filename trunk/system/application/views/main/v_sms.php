@@ -104,7 +104,8 @@ Ext.onReady(function(){
 				if(sms_membershipField.getValue()=='Expired'){
 					sms_dest=sms_membershipField.getValue()+':'+sms_tglexp_startField.getValue().format('Y-m-d')+ 's/d'+sms_tglexp_endField.getValue().format('Y-m-d');
 				}else{
-					sms_dest=sms_membershipField.getValue();
+//					sms_dest=sms_membershipField.getValue();
+					sms_dest=sms_membershipField.getValue() + ':' + 'x';
 				}
 				
 				
