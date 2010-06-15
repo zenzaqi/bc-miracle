@@ -130,7 +130,7 @@ class C_master_order_beli extends Controller {
 		elseif($task=='list')
 			$result=$this->m_master_order_beli->get_produk_all_list($query,$start,$end);
 		elseif($task=='selected')
-			$result=$this->m_master_order_beli->get_produk_selected_list($selected_id,$query,$start,$end);
+			$result=$this->m_master_order_beli->get_produk_selected_list($master_id,$selected_id,$query,$start,$end);
 		echo $result;
 	}
 	//

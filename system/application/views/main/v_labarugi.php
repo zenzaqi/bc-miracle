@@ -154,10 +154,11 @@ Ext.onReady(function(){
 			{name: 'labarugi_saldo_debet', type: 'float', mapping: 'labarugi_debet_sebelum'}, 
 			{name: 'labarugi_saldo_kredit', type: 'float', mapping: 'labarugi_kredit_sebelum'}
 		]),
-		sortInfo:{field: 'labarugi_akun', direction: "ASC"}
+		sortInfo:{field: 'labarugi_akun_kode', direction: "ASC"}
 	});
 	/* End of Function */
     
+	 var summary = new Ext.ux.grid.GroupSummary();
 
   	/* Function for Identify of Window Column Model */
 	labarugi_ColumnModel = new Ext.grid.ColumnModel(
@@ -165,7 +166,7 @@ Ext.onReady(function(){
 			header: 'Jenis',
 			dataIndex: 'labarugi_jenis',
 			width: 100,
-			sortable: true,
+			sortable: false,
 			readOnly: true
 		},
 		{
@@ -186,28 +187,20 @@ Ext.onReady(function(){
 			header: 'Debet',
 			dataIndex: 'labarugi_debet',
 			width: 150,
+			align :'right',
 			sortable: true,
-			readOnly: true
+			readOnly: true,
+			summaryType: 'sum',
+			renderer: Ext.util.Format.numberRenderer('0,000')
 		}, 
 		{
 			header: 'Kredit',
 			dataIndex: 'labarugi_kredit',
 			width: 150,
 			sortable: true,
-			readOnly: true
-		}, 
-		{
-			header: 'Debet s/d Sebelum',
-			dataIndex: 'labarugi_saldo_debet',
-			width: 150,
-			sortable: true,
-			readOnly: true
-		}, 
-		{
-			header: 'Kredit s/d Sebelum',
-			dataIndex: 'labarugi_saldo_kredit',
-			width: 150,
-			sortable: true,
+			align :'right',
+			summaryType: 'sum',
+			renderer: Ext.util.Format.numberRenderer('0,000'),
 			readOnly: true
 		}	
 		]);
@@ -244,6 +237,7 @@ Ext.onReady(function(){
 			'text':'Saldo Laba Rugi'
 		},
 		labarugi_saldoField],
+		plugins: summary,
 		tbar: [
 		{
 			text: 'Search',
@@ -334,6 +328,21 @@ Ext.onReady(function(){
 		}
 	}
 	
+	function get_saldo(){
+		var debet=0;
+		var kredit=0;
+		var saldo=0;
+		for(i=0;i<labarugi_DataStore.getCount();i++){
+			record_lr=labarugi_DataStore.getAt(i);
+			debet+=record_lr.data.labarugi_debet;
+			kredit+=record_lr.data.labarugi_kredit;
+			
+		}
+		saldo=kredit-debet;
+		//console.log('saldo :'+debet);
+		labarugi_saldoField.setValue(saldo);
+	}
+	
 	/* Function for action list search */
 	function labarugi_list_search(){
 		// render according to a SQL date format.
@@ -371,7 +380,14 @@ Ext.onReady(function(){
 				labarugi_tahun		:	labarugi_tahun_search
 			};
 			
-			labarugi_DataStore.load({params:{start:0,limit:pageS, query:null}});
+			labarugi_DataStore.load({
+				params:{start:0,limit:pageS, query:null},
+				callback: function(r,opt,success){
+					if(success==true){
+						get_saldo();
+					}
+				}
+			});
 		}
 	}
 		
@@ -566,14 +582,14 @@ Ext.onReady(function(){
 	
 	/* Function for print List Grid */
 	function labarugi_print(){
-		var searchquery = "";
-		var win;              
+			
 		var labarugi_tglawal_search="";
 		var labarugi_tglakhir_search="";
 		var labarugi_opsi_search="";
 		var labarugi_bulan_search="";
 		var labarugi_tahun_search="";
 		var labarugi_periode_search="";
+		var labarugi_akun_search=null;
 		
 		if(labarugi_opsitgl_searchField.getValue()==true){
 			labarugi_periode_search='tanggal';
@@ -587,13 +603,14 @@ Ext.onReady(function(){
 		if(labarugi_tglakhir_searchField.getValue()!==""){order_tglakhir_search = labarugi_tglakhir_searchField.getValue().format('Y-m-d');}
 		if(labarugi_bulan_searchField.getValue()!==""){order_bulan_search=labarugi_bulan_searchField.getValue(); }
 		if(labarugi_tahun_searchField.getValue()!==""){order_tahun_search=labarugi_tahun_searchField.getValue(); }
+		
 	
 		Ext.Ajax.request({   
 		waitMsg: 'Please Wait...',
 		url: 'index.php?c=c_labarugi&m=get_action',
 		params: {
-			task: "PRINT",
-		  	query: searchquery,                    		
+			task: "PRINT",                 		
+			labarugi_periode	:	labarugi_periode_search,
 			labarugi_tglawal	:	labarugi_tglawal_search,
 			labarugi_tglakhir	:	labarugi_tglakhir_search, 
 			labarugi_bulan		: 	labarugi_bulan_search,
@@ -603,7 +620,7 @@ Ext.onReady(function(){
 		  	var result=eval(response.responseText);
 		  	switch(result){
 		  	case 1:
-				win = window.open('./labarugilist.html','labarugilist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
+				win = window.open('./print/lap_labarugi.html','labarugilist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
 				win.print();
 				break;
 		  	default:
@@ -698,6 +715,7 @@ Ext.onReady(function(){
 		});
 	}
 	/*End of Function */
+	
 	
 	display_form_search_window();
 	

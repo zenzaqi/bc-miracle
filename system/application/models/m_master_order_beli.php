@@ -49,12 +49,16 @@ class M_master_order_beli extends Model{
 		}
 		
 		
-		function get_produk_selected_list($selected_id,$query,$start,$end){
+		function get_produk_selected_list($master_id,$selected_id,$query,$start,$end){
 			$sql="SELECT distinct produk_id,produk_nama,produk_kode,kategori_nama FROM vu_produk ";
+			
+			if($master_id!=="")
+				$sql.=" WHERE produk_id IN(SELECT dorder_produk FROM detail_order_beli WHERE dorder_master='".$master_id."')";
+				
 			if($selected_id!=="")
 			{
 				$selected_id=substr($selected_id,0,strlen($selected_id)-1);
-				$sql.=(eregi("WHERE",$sql)?" AND ":" WHERE ")." produk_id IN(".$selected_id.")";
+				$sql.=(eregi("WHERE",$sql)?" OR ":" WHERE ")." produk_id IN(".$selected_id.")";
 			}
 			if($query!==""){
 				$sql.=(eregi("WHERE",$sql)?" AND ":" WHERE ")." produk_nama like '%".$query."%' OR produk_kode like '%".$query."%'";
@@ -62,9 +66,9 @@ class M_master_order_beli extends Model{
 			
 			$result = $this->db->query($sql);
 			$nbrows = $result->num_rows();
-			$limit = $sql." LIMIT ".$start.",".$end;			
+/*			$limit = $sql." LIMIT ".$start.",".$end;			
 			$result = $this->db->query($limit);  
-			
+			*/
 			if($nbrows>0){
 				foreach($result->result() as $row){
 					$arr[] = $row;
@@ -78,9 +82,9 @@ class M_master_order_beli extends Model{
 				
 		function get_produk_all_list($query,$start,$end){
 			
-			$sql="SELECT distinct produk_id,produk_nama,produk_kode,kategori_nama FROM vu_satuan_konversi WHERE produk_aktif='Aktif'";
+			$sql="SELECT distinct produk_id,produk_nama,produk_kode,kategori_nama FROM vu_produk WHERE produk_aktif='Aktif'";
 			if($query!==""){
-				$sql.=(eregi("WHERE",$sql)?" AND ":" WHERE ")." produk_nama like '%".$query."%' OR produk_kode like '%".$query."%'";
+				$sql.=(eregi("WHERE",$sql)?" AND ":" WHERE ")." (produk_nama like '%".$query."%' OR produk_kode like '%".$query."%')";
 			}
 			
 			$result = $this->db->query($sql);
@@ -104,14 +108,15 @@ class M_master_order_beli extends Model{
 			$sql="SELECT distinct produk_id,produk_nama,produk_kode,kategori_nama FROM vu_produk";
 			if($master_id<>"")
 				$sql.=" WHERE produk_id IN(SELECT dorder_produk FROM detail_order_beli WHERE dorder_master='".$master_id."')";
-			if($query!==""){
+				
+			/*if($query!==""){
 				$sql.=(eregi("WHERE",$sql)?" AND ":" WHERE ")." produk_nama like '%".$query."%' OR produk_kode like '%".$query."%'";
-			}
+			}*/
 			
 			$result = $this->db->query($sql);
 			$nbrows = $result->num_rows();
-			$limit = $sql." LIMIT ".$start.",".$end;			
-			$result = $this->db->query($limit);  
+/*			$limit = $sql." LIMIT ".$start.",".$end;			
+			$result = $this->db->query($limit);*/  
 			
 			if($nbrows>0){
 				foreach($result->result() as $row){
@@ -193,8 +198,8 @@ class M_master_order_beli extends Model{
 			$query = "SELECT * FROM vu_detail_order_beli where dorder_master='".$master_id."'";
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
-			$limit = $query." LIMIT ".$start.",".$end;			
-			$result = $this->db->query($limit);  
+/*			$limit = $query." LIMIT ".$start.",".$end;			
+			$result = $this->db->query($limit); */ 
 			
 			if($nbrows>0){
 				foreach($result->result() as $row){
