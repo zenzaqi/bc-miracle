@@ -476,6 +476,18 @@ class M_master_retur_jual_produk extends Model{
 		}
 		
 		function master_retur_jual_produk_batal($rproduk_id){
+			$sql = "SELECT rproduk_nobukti FROM master_retur_jual_produk WHERE rproduk_id='$rproduk_id'";
+			$rs = $this->db->query($sql);
+			if($rs->num_rows()){
+				$record = $rs->row_array();
+				$kwitansi_ref = $record['rproduk_nobukti'];
+				$dtu_kwitansi=array(
+				"kwitansi_status"=>'Batal'
+				);
+				$this->db->where('kwitansi_ref', $kwitansi_ref);
+				$this->db->update('cetak_kwitansi', $dtu_kwitansi);
+			}
+			
 			$dtu_rproduk=array(
 			"rproduk_status"=>'Batal'
 			);
