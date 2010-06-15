@@ -34,7 +34,17 @@ class M_master_retur_jual_produk extends Model{
 		}
 		
 		//$sql="select * from vu_produk WHERE produk_aktif='Aktif'";
-		$sql="SELECT produk_id, produk_nama, satuan_id, satuan_kode, (produk_harga*((100-dproduk_diskon)/100)*((100-jproduk_diskon)/100)-jproduk_cashback) AS retur_produk_harga FROM detail_jual_produk LEFT JOIN master_jual_produk ON(dproduk_master=jproduk_id) LEFT JOIN produk ON(dproduk_produk=produk_id) LEFT JOIN satuan ON(dproduk_satuan=satuan_id) WHERE dproduk_master='$query'";
+		$sql="SELECT produk_id
+				,produk_nama
+				,satuan_id
+				,satuan_kode
+				,(produk_harga*((100-dproduk_diskon)/100)*((100-jproduk_diskon)/100)-jproduk_cashback) AS retur_produk_harga
+				,dproduk_jumlah
+			FROM detail_jual_produk
+			LEFT JOIN master_jual_produk ON(dproduk_master=jproduk_id)
+			LEFT JOIN produk ON(dproduk_produk=produk_id)
+			LEFT JOIN satuan ON(dproduk_satuan=satuan_id)
+			WHERE dproduk_master='$query'";
 		/*if($query<>"" && is_numeric($query)==false){
 			$sql.=eregi("WHERE",$sql)? " AND ":" WHERE ";
 			$sql.=" (produk_kode like '%".$query."%' or produk_nama like '%".$query."%' or satuan_nama like '%".$query."%' or kategori_nama like '%".$query."%' or group_nama like '%".$query."%') ";
@@ -411,7 +421,9 @@ class M_master_retur_jual_produk extends Model{
 				"rproduk_cust"=>$rproduk_cust, 
 				"rproduk_tanggal"=>$rproduk_tanggal, 
 				"rproduk_keterangan"=>$rproduk_keterangan,
-				"rproduk_status"=>$rproduk_status
+				//"rproduk_status"=>$rproduk_status
+				"rproduk_status"=>'Tertutup',
+				"rproduk_creator"=>@$_SESSION[SESSION_USERID]
 			);
 			$this->db->insert('master_retur_jual_produk', $data); 
 			if($this->db->affected_rows()){
@@ -424,7 +436,8 @@ class M_master_retur_jual_produk extends Model{
 				"kwitansi_cara"=>'retur', 
 				"kwitansi_nilai"=>$rproduk_kwitansi_nilai, 
 				"kwitansi_keterangan"=>$rproduk_kwitansi_keterangan, 
-				"kwitansi_status"=>'Terbuka'
+				"kwitansi_status"=>'Terbuka',
+				"kwitansi_creator"=>@$_SESSION[SESSION_USERID]
 				);
 				$this->db->insert('cetak_kwitansi', $dti_kwitansi);
 				if($this->db->affected_rows()){
@@ -460,6 +473,15 @@ class M_master_retur_jual_produk extends Model{
 				return '1';
 			else
 				return '0';
+		}
+		
+		function master_retur_jual_produk_batal($rproduk_id){
+			$dtu_rproduk=array(
+			"rproduk_status"=>'Batal'
+			);
+			$this->db->where('rproduk_id', $rproduk_id);
+			$this->db->update('master_retur_jual_produk', $dtu_rproduk);
+			return '1';
 		}
 		
 		//function for advanced search record
