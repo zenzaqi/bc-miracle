@@ -89,8 +89,8 @@ class M_master_order_beli extends Model{
 			
 			$result = $this->db->query($sql);
 			$nbrows = $result->num_rows();
-			$limit = $sql." LIMIT ".$start.",".$end;			
-			$result = $this->db->query($limit);  
+/*			$limit = $sql." LIMIT ".$start.",".$end;			
+			$result = $this->db->query($limit); */ 
 			
 			if($nbrows>0){
 				foreach($result->result() as $row){
@@ -265,8 +265,10 @@ class M_master_order_beli extends Model{
 			// For simple search
 			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (order_id LIKE '%".addslashes($filter)."%' OR order_no LIKE '%".addslashes($filter)."%' OR order_supplier LIKE '%".addslashes($filter)."%' OR order_tanggal LIKE '%".addslashes($filter)."%' OR order_carabayar LIKE '%".addslashes($filter)."%' OR order_diskon LIKE '%".addslashes($filter)."%'	OR order_cashback LIKE '%".addslashes($filter)."%' OR order_biaya LIKE '%".addslashes($filter)."%' OR order_bayar LIKE '%".addslashes($filter)."%' OR order_keterangan LIKE '%".addslashes($filter)."%' )";
+				$query .= " (no_bukti LIKE '%".addslashes($filter)."%' OR supplier_nama LIKE '%".addslashes($filter)."%' OR tanggal LIKE '%".addslashes($filter)."%' OR order_carabayar LIKE '%".addslashes($filter)."%' OR order_diskon LIKE '%".addslashes($filter)."%' OR order_keterangan LIKE '%".addslashes($filter)."%' )";
 			}
+			
+			$query.=" ORDER BY order_id DESC";
 			
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
