@@ -278,9 +278,9 @@ Ext.onReady(function(){
 		cbo_satuan_produkDataStore.load();
 		cbo_produk_detailDataStore.load();
 		
-		detail_terima_beli_DataStore.setBaseParam('master_id', 0);
+		detail_terima_beli_DataStore.setBaseParam('master_id', -1);
 		detail_terima_beli_DataStore.load();
-		detail_terima_bonus_DataStore.setBaseParam('master_id', 0);
+		detail_terima_bonus_DataStore.setBaseParam('master_id', -1);
 		detail_terima_bonus_DataStore.load();
 					
 	}
@@ -1186,11 +1186,11 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true},
-		bbar: new Ext.PagingToolbar({
+		/*bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: detail_terima_beli_DataStore,
 			displayInfo: true
-		}),
+		}),*/
 		/* Add Control on ToolBar */
 		tbar: [
 		{
@@ -1490,11 +1490,11 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true},
-		bbar: new Ext.PagingToolbar({
+		/*bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: detail_terima_bonus_DataStore,
 			displayInfo: true
-		}),
+		}),*/
 		/* Add Control on ToolBar */
 		tbar: [
 		{
@@ -2145,18 +2145,19 @@ Ext.onReady(function(){
 			detail_terima_beli_record=detail_terima_beli_DataStore.getAt(i);
 			query_selected=query_selected+detail_terima_beli_record.data.dterima_produk+",";
 		}
+		cbo_produk_detailDataStore.setBaseParam('query',null);
 		cbo_produk_detailDataStore.setBaseParam('task','selected');
 		cbo_produk_detailDataStore.setBaseParam('selected_id',query_selected);
 		cbo_produk_detailDataStore.load();
 		
 		for(i=0;i<detail_terima_beli_DataStore.getCount();i++){
 			detail_terima_beli_record=detail_terima_beli_DataStore.getAt(i);
-			satuan_selected=satuan_selected+detail_terima_beli_record.data.dorder_satuan+",";
+			satuan_selected=satuan_selected+detail_terima_beli_record.data.dterima_satuan+",";
 		}
 		
 		for(i=0;i<detail_terima_bonus_DataStore.getCount();i++){
 			detail_terima_beli_record=detail_terima_bonus_DataStore.getAt(i);
-			satuan_selected=satuan_selected+detail_terima_beli_record.data.dorder_satuan+",";
+			satuan_selected=satuan_selected+detail_terima_beli_record.data.dtbonus_satuan+",";
 		}
 		
 		cbo_satuan_produkDataStore.setBaseParam('task','selected');
@@ -2174,6 +2175,7 @@ Ext.onReady(function(){
 			detail_terima_bonus_record=detail_terima_bonus_DataStore.getAt(i);
 			query_selected=query_selected+detail_terima_bonus_record.data.dbonus_produk+",";
 		}
+		cbo_produk_bonusDataStore.setBaseParam('query',null);
 		cbo_produk_bonusDataStore.setBaseParam('task','selected');
 		cbo_produk_bonusDataStore.setBaseParam('selected_id',query_selected);
 		cbo_produk_bonusDataStore.load();
@@ -2181,12 +2183,12 @@ Ext.onReady(function(){
 		
 		for(i=0;i<detail_terima_bonus_DataStore.getCount();i++){
 			detail_terima_beli_record=detail_terima_bonus_DataStore.getAt(i);
-			satuan_selected=satuan_selected+detail_terima_beli_record.data.dorder_satuan+",";
+			satuan_selected=satuan_selected+detail_terima_beli_record.data.dtbonus_satuan+",";
 		}
 		
 		for(i=0;i<detail_terima_beli_DataStore.getCount();i++){
 			detail_terima_beli_record=detail_terima_beli_DataStore.getAt(i);
-			satuan_selected=satuan_selected+detail_terima_beli_record.data.dorder_satuan+",";
+			satuan_selected=satuan_selected+detail_terima_beli_record.data.dterima_satuan+",";
 		}
 		
 		cbo_satuan_produkDataStore.setBaseParam('task','selected');

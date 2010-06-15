@@ -50,20 +50,25 @@ class M_master_terima_beli extends Model{
 			return $query->result();
 		}
 		
-		function get_produk_selected_list($selected_id,$query,$start,$end){
+		function get_produk_selected_list($master_id, $selected_id,$query,$start,$end){
 			$sql="SELECT distinct produk_id,produk_nama,produk_kode,kategori_nama FROM vu_produk ";
+			
+			/*if($master_id!=="")
+				$sql.=(eregi("WHERE",$sql)?" AND ":" WHERE ")." produk_id IN(SELECT dterima_produk FROM detail_terima_beli WHERE dterima_order='".$master_id."')";*/
+				
 			if($selected_id!==""&strlen($selected_id)>1)
 			{
 				$selected_id=substr($selected_id,0,strlen($selected_id)-1);
-				$sql.=" WHERE produk_id IN(".$selected_id.")";
+				$sql.=(eregi("WHERE",$sql)?" AND ":" WHERE ")." produk_id IN(".$selected_id.")";
 			}
+			
 			if($query!==""){
-				$sql.=(eregi("WHERE",$sql)?" AND ":" WHERE ")." produk_nama like '%".$query."%' OR produk_kode like '%".$query."%'";
+				$sql.=(eregi("WHERE",$sql)?" AND ":" WHERE ")."( produk_nama like '%".$query."%' OR produk_kode like '%".$query."%')";
 			}
 			$result = $this->db->query($sql);
 			$nbrows = $result->num_rows();
-			$limit = $sql." LIMIT ".$start.",".$end;			
-			$result = $this->db->query($limit);  
+/*			$limit = $sql." LIMIT ".$start.",".$end;			
+			$result = $this->db->query($limit);  */
 			
 			if($nbrows>0){
 				foreach($result->result() as $row){
@@ -85,8 +90,8 @@ class M_master_terima_beli extends Model{
 			
 			$result = $this->db->query($sql);
 			$nbrows = $result->num_rows();
-			$limit = $sql." LIMIT ".$start.",".$end;			
-			$result = $this->db->query($limit);  
+/*			$limit = $sql." LIMIT ".$start.",".$end;			
+			$result = $this->db->query($limit);  */
 			
 			if($nbrows>0){
 				foreach($result->result() as $row){
@@ -108,10 +113,13 @@ class M_master_terima_beli extends Model{
 				$sql.=(eregi("WHERE",$sql)?" AND ":" WHERE ")." produk_nama like '%".$query."%' OR produk_kode like '%".$query."%'";
 			}
 			
+			/*echo $sql;*/
+			
+			
 			$result = $this->db->query($sql);
 			$nbrows = $result->num_rows();
-			$limit = $sql." LIMIT ".$start.",".$end;			
-			$result = $this->db->query($limit);  
+/*			$limit = $sql." LIMIT ".$start.",".$end;			
+			$result = $this->db->query($limit); */ 
 			
 			if($nbrows>0){
 				foreach($result->result() as $row){
@@ -134,9 +142,9 @@ class M_master_terima_beli extends Model{
 			
 			$result = $this->db->query($sql);
 			$nbrows = $result->num_rows();
-			$limit = $sql." LIMIT ".$start.",".$end;			
+/*			$limit = $sql." LIMIT ".$start.",".$end;			
 			$result = $this->db->query($limit);  
-			
+			*/
 			if($nbrows>0){
 				foreach($result->result() as $row){
 					$arr[] = $row;
@@ -225,8 +233,8 @@ class M_master_terima_beli extends Model{
 			
 			$result = $this->db->query($sql);
 			$nbrows = $result->num_rows();
-			$limit = $sql." LIMIT ".$start.",".$end;			
-			$result = $this->db->query($limit);  
+/*			$limit = $sql." LIMIT ".$start.",".$end;			
+			$result = $this->db->query($limit); */ 
 			
 			if($nbrows>0){
 				foreach($result->result() as $row){
@@ -287,8 +295,8 @@ class M_master_terima_beli extends Model{
 			$query = "SELECT * FROM vu_detail_terima_bonus where dtbonus_master='".$master_id."'";
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
-			$limit = $query." LIMIT ".$start.",".$end;			
-			$result = $this->db->query($limit);  
+/*			$limit = $query." LIMIT ".$start.",".$end;			
+			$result = $this->db->query($limit); */ 
 			
 			if($nbrows>0){
 				foreach($result->result() as $row){
@@ -338,8 +346,10 @@ class M_master_terima_beli extends Model{
 			$query = "SELECT * FROM vu_detail_terima_produk where dterima_master='".$master_id."'";
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
-			$limit = $query." LIMIT ".$start.",".$end;			
-			$result = $this->db->query($limit);  
+			//echo $query;
+			
+		/*	$limit = $query." LIMIT ".$start.",".$end;			
+			$result = $this->db->query($limit); */ 
 			
 			if($nbrows>0){
 				foreach($result->result() as $row){
