@@ -269,7 +269,7 @@ Ext.onReady(function(){
 		else if(post2db=='CREATE')
 			return order_idField.getValue();
 		else 
-			return 0;
+			return -1;
 	}
 	/* End of Function  */
 	
@@ -756,7 +756,11 @@ Ext.onReady(function(){
 	
 	//master_order_beli_ColumnModel.defaultSortable= true;
 	/* End of Function */
-    
+    var master_order_paging_toolbar=new Ext.PagingToolbar({
+			pageSize: pageS,
+			store: master_order_beli_DataStore,
+			displayInfo: true
+		});
 	/* Declare DataStore and  show datagrid list */
 	master_order_beliListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'master_order_beliListEditorGrid',
@@ -771,11 +775,7 @@ Ext.onReady(function(){
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
 	  	width: 1220,	//900,
-		bbar: new Ext.PagingToolbar({
-			pageSize: pageS,
-			store: master_order_beli_DataStore,
-			displayInfo: true
-		}),
+		bbar: master_order_paging_toolbar,
 		/* Add Control on ToolBar */
 		tbar: [
 		{
@@ -926,7 +926,7 @@ Ext.onReady(function(){
 		id: 'order_tanggalField',
 		name: 'order_tanggalField',
 		fieldLabel: 'Tanggal',
-		emptyText : dt.format('d-m-Y'),
+		//emptyText : dt.format('d-m-Y'),
 		format : 'd-m-Y'
 	});
 	/* Identify  order_carabayar Field */
@@ -1324,7 +1324,12 @@ Ext.onReady(function(){
 	);
 	detail_order_beli_ColumnModel.defaultSortable= true;
 	//eof
-	
+	var detail_order_bAdd=new Ext.Button({
+		text: 'Add',
+		tooltip: 'Add new detail record',
+		iconCls:'icon-adds',    				// this is defined in our styles.css
+		handler: detail_order_beli_add
+	});
 	//declaration of detail list editor grid
 	detail_order_beliListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'detail_order_beliListEditorGrid',
@@ -1343,19 +1348,14 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true},
-		bbar: new Ext.PagingToolbar({
+		/*bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: detail_order_beli_DataStore,
 			displayInfo: true
-		}),
+		}),*/
 		/* Add Control on ToolBar */
-		tbar: [
-		{
-			text: 'Add',
-			tooltip: 'Add new detail record',
-			iconCls:'icon-adds',    				// this is defined in our styles.css
-			handler: detail_order_beli_add
-		}, '-',{
+		tbar: [detail_order_bAdd
+		, '-',{
 			text: 'Delete',
 			tooltip: 'Delete detail selected record',
 			iconCls:'icon-delete',
@@ -2044,11 +2044,13 @@ Ext.onReady(function(){
 		var satuan_selected="";
 		detail_order_beli_DataStore.commitChanges();
 		detail_order_beli_total();
+		cbo_order_produk_DataStore.lastQuery=null;
 		for(i=0;i<detail_order_beli_DataStore.getCount();i++){
 			detail_order_beli_record=detail_order_beli_DataStore.getAt(i);
 			query_selected=query_selected+detail_order_beli_record.data.dorder_produk+",";
 		}
 		cbo_order_produk_DataStore.setBaseParam('task','selected');
+		cbo_order_produk_DataStore.setBaseParam('master_id',get_pk_id());
 		cbo_order_produk_DataStore.setBaseParam('selected_id',query_selected);
 		cbo_order_produk_DataStore.load();
 		
@@ -2062,7 +2064,19 @@ Ext.onReady(function(){
 		stat='EDIT';
 	});
 	
+	detail_order_beli_DataStore.on("load", function(){
+		if(detail_order_beli_DataStore.getCount()==pageS && detail_order_beli_DataStore.getTotalCount()>pageS){
+			detail_order_bAdd.disabled=true;
+		}else{
+			detail_order_bAdd.disabled=false;
+		}
+		
+			
+	});
 	
+	/*master_order_paging_toolbar.on("change", function(){	
+			console.log('aktive page :');
+	});*/
 	
 });
 	</script>
