@@ -310,6 +310,9 @@ class C_master_jual_produk extends Controller {
 			case "EXCEL":
 				$this->master_jual_produk_export_excel();
 				break;
+			case "BATAL":
+				$this->master_jual_produk_batal();
+				break;
 			default:
 				echo "{failure:true}";
 				break;
@@ -576,6 +579,12 @@ class C_master_jual_produk extends Controller {
 		$ids = $_POST['ids']; // Get our array back and translate it :
 		$pkid = json_decode(stripslashes($ids));
 		$result=$this->m_master_jual_produk->master_jual_produk_delete($pkid);
+		echo $result;
+	}
+	
+	function master_jual_produk_batal(){
+		$jproduk_id=trim($_POST["jproduk_id"]);
+		$result=$this->m_master_jual_produk->master_jual_produk_batal($jproduk_id);
 		echo $result;
 	}
 
