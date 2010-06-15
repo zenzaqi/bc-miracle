@@ -20,7 +20,11 @@ class M_outbox extends Model{
 		
 		//function for get list record
 		function outbox_list($filter,$start,$end){
-			$query = "SELECT * FROM outbox";
+			$query =   "SELECT 
+							o.*, 
+							c.cust_no, c.cust_nama 
+						FROM outbox o
+						LEFT JOIN customer c on c.cust_id = o.outbox_cust";
 			
 			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";

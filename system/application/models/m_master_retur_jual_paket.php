@@ -285,14 +285,15 @@ class M_master_retur_jual_paket extends Model{
 	}
 	
 	//function for update record
-	function master_retur_jual_paket_update($rpaket_id ,$rpaket_nobukti ,$rpaket_nobuktijual ,$rpaket_cust ,$rpaket_tanggal ,$rpaket_keterangan ){
+	function master_retur_jual_paket_update($rpaket_id ,$rpaket_nobukti ,$rpaket_nobuktijual ,$rpaket_cust ,$rpaket_tanggal ,$rpaket_keterangan, $rpaket_status ){
 		$data = array(
 			"rpaket_id"=>$rpaket_id, 
 			"rpaket_nobukti"=>$rpaket_nobukti, 
 			//"rpaket_nobuktijual"=>$rpaket_nobuktijual, 
 			"rpaket_cust"=>$rpaket_cust, 
 			"rpaket_tanggal"=>$rpaket_tanggal, 
-			"rpaket_keterangan"=>$rpaket_keterangan 
+			"rpaket_keterangan"=>$rpaket_keterangan,
+			"rpaket_status"=>$rpaket_status
 		);
 		$sql="SELECT jpaket_id FROM master_jual_paket WHERE jpaket_id='".$rpaket_nobuktijual."'";
 		$rs=$this->db->query($sql);
@@ -306,7 +307,7 @@ class M_master_retur_jual_paket extends Model{
 	}
 	
 	//function for create new record
-	function master_retur_jual_paket_create($rpaket_nobukti ,$rpaket_nobuktijual ,$rpaket_cust ,$rpaket_tanggal ,$rpaket_keterangan ,$rpaket_kwitansi_nilai ,$rpaket_kwitansi_keterangan ){
+	function master_retur_jual_paket_create($rpaket_nobukti ,$rpaket_nobuktijual ,$rpaket_cust ,$rpaket_tanggal ,$rpaket_keterangan ,$rpaket_status, $rpaket_kwitansi_nilai ,$rpaket_kwitansi_keterangan ){
 		//$pattern="RPK/".date("ym")."-";
 		$pattern="RP/".date("ym")."-";
 		$rpaket_nobukti=$this->m_public_function->get_kode_1('master_retur_jual_paket','rpaket_nobukti',$pattern,12);
@@ -316,7 +317,8 @@ class M_master_retur_jual_paket extends Model{
 			"rpaket_nobuktijual"=>$rpaket_nobuktijual, 
 			"rpaket_cust"=>$rpaket_cust, 
 			"rpaket_tanggal"=>$rpaket_tanggal, 
-			"rpaket_keterangan"=>$rpaket_keterangan 
+			"rpaket_keterangan"=>$rpaket_keterangan,
+			"rpaket_status"=>$rpaket_status
 		);
 		$this->db->insert('master_retur_jual_paket', $data); 
 		if($this->db->affected_rows()){
@@ -367,7 +369,7 @@ class M_master_retur_jual_paket extends Model{
 	}
 	
 	//function for advanced search record
-	function master_retur_jual_paket_search($rpaket_id ,$rpaket_nobukti ,$rpaket_nobuktijual ,$rpaket_cust ,$rpaket_tanggal ,$rpaket_keterangan ,$start,$end){
+	function master_retur_jual_paket_search($rpaket_id ,$rpaket_nobukti ,$rpaket_nobuktijual ,$rpaket_cust ,$rpaket_tanggal ,$rpaket_keterangan ,$rpaket_status, $start,$end){
 		//full query
 		$query="select * from master_retur_jual_paket";
 		
@@ -394,6 +396,11 @@ class M_master_retur_jual_paket extends Model{
 		if($rpaket_keterangan!=''){
 			$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 			$query.= " rpaket_keterangan LIKE '%".$rpaket_keterangan."%'";
+		};
+		
+		if($rpaket_status!=''){
+			$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+			$query.= " rpaket_status LIKE '%".$rpaket_status."%'";
 		};
 		$result = $this->db->query($query);
 		$nbrows = $result->num_rows();

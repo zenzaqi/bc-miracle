@@ -127,12 +127,13 @@ class M_phonegroup extends Model{
 					$tgl_start=substr($isms_dest,1,5);
 					$tgl_end=substr($isms_dest,8,5);
 					
-					$sql="select cust_hp from customer where date_format(cust_tgllahir,'%m-%d') >= '".$tgl_start."' AND 
+					$sql="select cust_hp, cust_id from customer where date_format(cust_tgllahir,'%m-%d') >= '".$tgl_start."' AND 
 															 date_format(cust_tgllahir,'%m-%d') <= '".$tgl_end."' AND
 															 cust_hp<>'' AND cust_hp is not null" ;
 					$query=$this->db->query($sql);
 					foreach($query->result() as $row){
 						$sql="insert into outbox(
+								outbox_cust,
 								outbox_destination,
 								outbox_message,
 								outbox_date,
@@ -140,6 +141,7 @@ class M_phonegroup extends Model{
 								outbox_creator,
 								outbox_date_create)
 							values(
+								'".$row->cust_id."',
 								'".$row->cust_hp."',
 								'".$isms_isi."',
 								'".date('Y/m/d H:i:s')."',

@@ -340,6 +340,8 @@ Ext.onReady(function(){
 		},[
 		/* dataIndex => insert intooutbox_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'outbox_id', type: 'int', mapping: 'outbox_id'}, 
+			{name: 'outbox_cust_no', type: 'string', mapping: 'cust_no'},
+			{name: 'outbox_cust_nama', type: 'string', mapping: 'cust_nama'},
 			{name: 'outbox_destination', type: 'string', mapping: 'outbox_destination'}, 
 			{name: 'outbox_message', type: 'string', mapping: 'outbox_message'}, 
 			{name: 'outbox_date', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'outbox_date'}, 
@@ -365,33 +367,48 @@ Ext.onReady(function(){
 				cell.css = "readonlycell"; // Mengambil Value dari Class di dalam CSS 
 				return value;
 				},
-			hidden: false
+			hidden: true
 		},
 		{
-			header: 'Destination',
-			dataIndex: 'outbox_destination',
-			width: 150,
-			sortable: true,
-			readOnly: true
-		}, 
-		{
-			header: 'Message',
-			dataIndex: 'outbox_message',
-			width: 150,
-			sortable: true,
-			readOnly: true
-		}, 
-		{
-			header: 'Date',
+			header: '<div align="center">Tanggal Kirim</div>',
 			dataIndex: 'outbox_date',
-			width: 150,
+			width: 60,
 			sortable: true,
-			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
+			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
 			readOnly: true
-		},{
-			header: 'Status',
+		},
+		{
+			header: '<div align="center">Isi Pesan</div>',
+			dataIndex: 'outbox_message',
+			width: 300,
+			sortable: true,
+			readOnly: true
+		}, 
+		{
+			header: '<div align="center">No Cust</div>',
+			dataIndex: 'outbox_cust_no',
+			width: 60,
+			sortable: true,
+			readOnly: true
+		}, 
+		{
+			header: '<div align="center">Customer</div>',
+			dataIndex: 'outbox_cust_nama',
+			width: 160,
+			sortable: true,
+			readOnly: true
+		}, 
+		{
+			header: '<div align="center">No HP</div>',
+			dataIndex: 'outbox_destination',
+			width: 60,
+			sortable: true,
+			readOnly: true
+		}, 
+		{
+			header: '<div align="center">Status</div>',
 			dataIndex: 'outbox_status',
-			width: 150,
+			width: 60,
 			sortable: true,
 			readOnly: true
 		}, 
@@ -443,7 +460,7 @@ Ext.onReady(function(){
 	outboxListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'outboxListEditorGrid',
 		el: 'fp_outbox',
-		title: 'List Of SMS Outbox',
+		title: 'Outbox',
 		autoHeight: true,
 		store: outbox_DataStore, // DataStore
 		cm: outbox_ColumnModel, // Nama-nama Columns
@@ -452,7 +469,7 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 700,
+	  	width: 1220,	//700,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: outbox_DataStore,
@@ -464,6 +481,7 @@ Ext.onReady(function(){
 			text: 'Delete',
 			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
+			disabled: true,
 			handler: outbox_confirm_delete   // Confirm before deleting
 		}, '-', {
 			text: 'Search',
@@ -504,6 +522,7 @@ Ext.onReady(function(){
 			text: 'Delete', 
 			tooltip: 'Delete selected record', 
 			iconCls:'icon-delete',
+			disabled: true,
 			handler: outbox_confirm_delete 
 		},
 		'-',
