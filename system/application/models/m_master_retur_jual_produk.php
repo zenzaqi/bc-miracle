@@ -397,8 +397,8 @@ class M_master_retur_jual_produk extends Model{
 			$data = array(
 				"rproduk_id"=>$rproduk_id, 
 				"rproduk_nobukti"=>$rproduk_nobukti, 
-				"rproduk_nobuktijual"=>$rproduk_nobuktijual, 
-				"rproduk_cust"=>$rproduk_cust, 
+				//"rproduk_nobuktijual"=>$rproduk_nobuktijual, 
+				//"rproduk_cust"=>$rproduk_cust, 
 				"rproduk_tanggal"=>$rproduk_tanggal, 
 				"rproduk_keterangan"=>$rproduk_keterangan,
 				"rproduk_status"=>$rproduk_status
