@@ -17,6 +17,7 @@ class C_master_retur_jual_produk extends Controller {
 	function C_master_retur_jual_produk(){
 		parent::Controller();
 		$this->load->model('m_master_retur_jual_produk', '', TRUE);
+		session_start();
 		$this->load->plugin('to_excel');
 	}
 	
@@ -166,6 +167,9 @@ class C_master_retur_jual_produk extends Controller {
 			case "EXCEL":
 				$this->master_retur_jual_produk_export_excel();
 				break;
+			case "BATAL":
+				$this->master_retur_jual_produk_batal();
+				break;
 			default:
 				echo "{failure:true}";
 				break;
@@ -243,6 +247,12 @@ class C_master_retur_jual_produk extends Controller {
 		$ids = $_POST['ids']; // Get our array back and translate it :
 		$pkid = json_decode(stripslashes($ids));
 		$result=$this->m_master_retur_jual_produk->master_retur_jual_produk_delete($pkid);
+		echo $result;
+	}
+	
+	function master_retur_jual_produk_batal(){
+		$rproduk_id=trim(@$_POST["rproduk_id"]);
+		$result=$this->m_master_retur_jual_produk->master_retur_jual_produk_batal($rproduk_id);
 		echo $result;
 	}
 
