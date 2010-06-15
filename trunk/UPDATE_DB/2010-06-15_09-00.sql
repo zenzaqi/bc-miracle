@@ -1,0 +1,1 @@
+ALTER TABLE `outbox` ADD `outbox_cust` INT NULL AFTER `outbox_id` 

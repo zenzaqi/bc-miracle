@@ -606,6 +606,7 @@ Ext.onReady(function(){
 			align: 'right',
 			width: 60,
 			sortable: true,
+			hidden: true,
 			editor: new Ext.form.NumberField({
 				allowBlank: false,
 				allowDecimals: false,
