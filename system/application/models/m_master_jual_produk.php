@@ -1876,6 +1876,15 @@ class M_master_jual_produk extends Model{
 				return '0';
 		}
 		
+		function master_jual_produk_batal($jproduk_id){
+			$dtu_jproduk=array(
+			"jproduk_stat_dok"=>'Batal'
+			);
+			$this->db->where('jproduk_id', $jproduk_id);
+			$this->db->update('master_jual_produk', $dtu_jproduk);
+			return '1';
+		}
+		
 		//function for advanced search record
 		function master_jual_produk_search($jproduk_id, $jproduk_nobukti, $jproduk_cust, $jproduk_tanggal, $jproduk_tanggal_akhir, $jproduk_diskon, $jproduk_cara, $jproduk_keterangan, $jproduk_stat_dok, $start, $end){
 			//full query

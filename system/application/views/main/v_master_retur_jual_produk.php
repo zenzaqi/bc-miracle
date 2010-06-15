@@ -1065,6 +1065,38 @@ Ext.onReady(function(){
 
 	});
 	
+	var drproduk_jumlahField= new Ext.form.NumberField({
+		allowDecimals: false,
+		allowNegative: false,
+		blankText: '0',
+		maxLength: 3,
+		enableKeyEvents: true,
+		maskRe: /([0-9]+)$/
+	});
+	drproduk_jumlahField.on('keyup', function(){
+		var sub_total = 0;
+		sub_total = drproduk_jumlahField.getValue()*drproduk_hargaField.getValue();
+		drproduk_subtotalField.setValue(sub_total);
+	});
+	
+	var drproduk_hargaField= new Ext.form.NumberField({
+		allowDecimals: false,
+		allowNegative: false,
+		blankText: '0',
+		readOnly: true,
+		enableKeyEvents: true,
+		maskRe: /([0-9]+)$/
+	});
+	
+	var drproduk_subtotalField= new Ext.form.NumberField({
+		allowDecimals: false,
+		allowNegative: false,
+		blankText: '0',
+		readOnly: true,
+		enableKeyEvents: true,
+		maskRe: /([0-9]+)$/
+	});
+	
 	//declaration of detail coloumn model
 	detail_retur_jual_produk_ColumnModel = new Ext.grid.ColumnModel(
 		[
