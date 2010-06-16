@@ -93,13 +93,18 @@ Ext.onReady(function(){
 			}else if(sms_number_radioField.getValue()==true){
 				sms_opsi='number';
 				sms_dest=sms_destnumField.getValue();
-			}else if(sms_kelamin_radioField.getValue()==true){
+			}
+			
+/*			else if(sms_kelamin_radioField.getValue()==true){
 				sms_opsi='kelamin';
 				sms_dest=sms_kelaminField.getValue();
-			}else if(sms_ultah_radioField.getValue()==true){
+			}
+			else if(sms_ultah_radioField.getValue()==true){
 				sms_opsi='ultah';
 				sms_dest=sms_bulanlahir_startField.getValue() + '-' +sms_tgllahir_startField.getValue()+ 's/d'+sms_bulanlahir_endField.getValue() + '-' +sms_tgllahir_endField.getValue();
-			}else if(sms_member_radioField.getValue()==true){
+			}
+*/			
+			else if(sms_member_radioField.getValue()==true){
 				sms_opsi='member';
 				if(sms_membershipField.getValue()=='Expired'){
 					sms_dest=sms_membershipField.getValue()+':'+sms_tglexp_startField.getValue().format('Y-m-d')+ 's/d'+sms_tglexp_endField.getValue().format('Y-m-d');
@@ -316,17 +321,7 @@ Ext.onReady(function(){
 		lazyRender:true,
 		listClass: 'x-combo-list-small'
 	});
-	
-	var sms_ultah_groupField=new Ext.form.FieldSet({
-		id:	'sms_ultah_groupField',
-		name: 'sms_ultah_groupField',
-		layout: 'column',
-		frame: false,
-		border: false,
-		items:[sms_tgllahir_startField,sms_bulanlahir_startField,sms_tgllahir_labelField,sms_tgllahir_endField,sms_bulanlahir_endField]
-	
-	});
-	
+		
 	var sms_membershipField=new Ext.form.ComboBox({
 		id:	'sms_membershipField',
 		name: 'sms_membershipField',
@@ -338,7 +333,8 @@ Ext.onReady(function(){
 		}),
 		mode: 'local',
 		width: 80,
-		value : 'Semua',
+		//value : 'Semua',
+		value : 'Aktif',
 		displayField: 'membership',
 		valueField: 'membership',
 		lazyRender:true,
@@ -349,20 +345,41 @@ Ext.onReady(function(){
 	var sms_tglexp_startField=new Ext.form.DateField({
 		id:	'sms_tglexp_startField',
 		name: 'sms_tglexp_startField',
-		format: 'Y-m-d',
+		format: 'd-m-Y',
 		value: today
 	});
-	
-	
+		
 	var sms_tglexp_endField=new Ext.form.DateField({
 		id:	'sms_tglexp_endField',
 		name: 'sms_tglexp_endField',
-		format: 'Y-m-d',
+		format: 'd-m-Y',
 		value: today
 	});
 	
+	var sms_tglultah_startField=new Ext.form.DateField({
+		id:	'sms_tglultah_startField',
+		name: 'sms_tglultah_startField',
+		format: 'd-m-Y',
+		value: today
+	});
+		
+	var sms_tglultah_endField=new Ext.form.DateField({
+		id:	'sms_tglultah_endField',
+		name: 'sms_tglultah_endField',
+		format: 'd-m-Y',
+		value: today
+	});
 	
-	
+	var sms_ultah_groupField=new Ext.form.FieldSet({
+		id:	'sms_ultah_groupField',
+		name: 'sms_ultah_groupField',
+		layout: 'column',
+		frame: false,
+		border: false,
+	//	items:[sms_tgllahir_startField,sms_bulanlahir_startField,sms_tgllahir_labelField,sms_tgllahir_endField,sms_bulanlahir_endField]
+		items:[sms_tglultah_startField, sms_tgllahir_labelField, sms_tglultah_endField]	
+	});
+
 	var sms_member_expField=new Ext.form.FieldSet({
 		layout: 'column',
 		frame: false,
@@ -444,34 +461,50 @@ Ext.onReady(function(){
 		value: 'selected'
 	});
 	
-	var sms_kelamin_radioField=new Ext.form.Radio({
+/*	var sms_kelamin_radioField=new Ext.form.Radio({
 		id:'sms_kelamin_radioField',
 		name:'sms_opsiField',
 		width: 100,
 		boxLabel: 'Jenis Kelamin',
 		value: 'selected'
 	});
-	
+*/	
 	sms_kelamin_checkField=new Ext.form.Checkbox({
 		id: 'sms_kelamin_checkField',
 		boxLabel: 'Jenis Kelamin',
 		width: 100,
 		handler: function(node,checked){
 			if (checked) {
+				sms_kelaminField.setDisabled(false);
 				//Ext.Msg.alert('Status', 'Changes saved successfully.');
 			}
 			else {
+				sms_kelaminField.setDisabled(true);
 			}
 		}
 	});
 
 	
-	var sms_ultah_radioField=new Ext.form.Radio({
+/*	var sms_ultah_radioField=new Ext.form.Radio({
 		id:'sms_ultah_radioField',
 		name:'sms_opsiField',
 		width: 100,
 		boxLabel: 'Ulang Tahun',
 		value: 'selected'
+	});
+*/	
+	var sms_ultah_checkField=new Ext.form.Checkbox({
+		id:'sms_ultah_checkField',
+		width: 100,
+		boxLabel: 'Ulang Tahun',
+		handler: function(node,checked){
+			if (checked) {
+				sms_ultah_groupField.setDisabled(false);
+			}
+			else {
+				sms_ultah_groupField.setDisabled(true);
+			}
+		}		
 	});
 	
 	var sms_member_radioField=new Ext.form.Radio({
@@ -540,19 +573,19 @@ Ext.onReady(function(){
 					frame: false,
 					border: false,
 					bodyStyle:'padding:5px',
+					items: [sms_member_radioField,sms_member_groupField]
+			   },{
+				   	layout: 'column',
+					frame: false,
+					border: false,
+					bodyStyle:'padding:5px',
 					items: [sms_kelamin_checkField,sms_kelaminField]
 			   },{
 				   	layout: 'column',
 					frame: false,
 					border: false,
 					bodyStyle:'padding:5px',
-					items: [sms_ultah_radioField,sms_ultah_groupField]
-			   },{
-				   	layout: 'column',
-					frame: false,
-					border: false,
-					bodyStyle:'padding:5px',
-					items: [sms_member_radioField,sms_member_groupField]
+					items: [sms_ultah_checkField,sms_ultah_groupField]
 			   }]
 	});
 
@@ -652,7 +685,7 @@ Ext.onReady(function(){
 	function setDisableAll(){
 		sms_destgroupField.setDisabled(true);
 		sms_destnumField.setDisabled(true);
-//		sms_kelaminField.setDisabled(true);
+		sms_kelaminField.setDisabled(true);
 		sms_ultah_groupField.setDisabled(true);
 		sms_membershipField.setDisabled(true);
 		sms_member_expField.setDisabled(true);
@@ -661,6 +694,9 @@ Ext.onReady(function(){
 		sms_destnumField.allowBlank=true;
 		sms_kelaminField.allowBlank=true;
 		sms_membershipField.allowBlank=true;
+		
+		sms_kelamin_checkField.setValue(false);
+		sms_ultah_checkField.setValue(false);
 	}
 	
 	setDisableAll();
@@ -689,7 +725,7 @@ Ext.onReady(function(){
 	 	}
 	});
 	
-	sms_kelamin_radioField.on("check",function(){
+/*	sms_kelamin_radioField.on("check",function(){
 		if(sms_kelamin_radioField.getValue()==true){
 			setDisableAll();
 			sms_kelaminField.setDisabled(false);
@@ -703,7 +739,7 @@ Ext.onReady(function(){
 			sms_ultah_groupField.setDisabled(false);
 		}
 	});
-	
+*/	
 	sms_member_radioField.on("check",function(){
 		if(sms_member_radioField.getValue()==true){
 			setDisableAll();
