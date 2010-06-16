@@ -245,18 +245,23 @@ Ext.onReady(function(){
 	function outbox_confirm_delete(){
 		// only one outbox is selected here
 		if(outboxListEditorGrid.selModel.getCount() == 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', outbox_delete);
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', outbox_delete);
 		} else if(outboxListEditorGrid.selModel.getCount() > 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', outbox_delete);
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', outbox_delete);
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really delete something you haven\'t selected?',
+				msg: 'Anda belum memilih data yang akan dihapus',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
 			});
 		}
+	}
+
+	function outbox_confirm_delete_all(){
+		// only one outbox is selected here
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus semua data?', outbox_delete_all);
 	}
   	/* End of Function */
   
@@ -290,7 +295,7 @@ Ext.onReady(function(){
 			}
 			var encoded_array = Ext.encode(prez);
 			Ext.Ajax.request({ 
-				waitMsg: 'Please Wait',
+				waitMsg: 'Mohon tunggu',
 				url: 'index.php?c=c_outbox&m=get_action', 
 				params: { task: "DELETE", ids:  encoded_array }, 
 				success: function(response){
@@ -323,6 +328,44 @@ Ext.onReady(function(){
 			});
 		}  
 	}
+
+	function outbox_delete_all(btn){
+		if(btn=='yes'){
+			Ext.Ajax.request({ 
+				waitMsg: 'Mohon tunggu...',
+				url: 'index.php?c=c_outbox&m=get_action', 
+				params: { task: "DELETE ALL" }, 
+				success: function(response){
+					var result=eval(response.responseText);
+					switch(result){
+						case 1:  // Success : simply reload
+							outbox_DataStore.reload();
+							break;
+						default:
+							Ext.MessageBox.show({
+								title: 'Warning',
+								msg: 'Could not delete the entire selection',
+								buttons: Ext.MessageBox.OK,
+								animEl: 'save',
+								icon: Ext.MessageBox.WARNING
+							});
+							break;
+					}
+				},
+				failure: function(response){
+					var result=response.responseText;
+					Ext.MessageBox.show({
+					   title: 'Error',
+					   msg: 'Could not connect to the database. retry later.',
+					   buttons: Ext.MessageBox.OK,
+					   animEl: 'database',
+					   icon: Ext.MessageBox.ERROR
+					});	
+				}
+			});
+		}  
+	}
+
   	/* End of Function */
   
 	/* Function for Retrieve DataStore */
@@ -352,7 +395,7 @@ Ext.onReady(function(){
 			{name: 'outbox_date_update', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'outbox_date_update'}, 
 			{name: 'outbox_revised', type: 'int', mapping: 'outbox_revised'} 
 		]),
-		sortInfo:{field: 'outbox_id', direction: "DESC"}
+//		sortInfo:{field: 'outbox_id', direction: "DESC"}
 	});
 	/* End of Function */
     
@@ -481,10 +524,14 @@ Ext.onReady(function(){
 			text: 'Delete',
 			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
-			disabled: true,
 			handler: outbox_confirm_delete   // Confirm before deleting
 		}, '-', {
-			text: 'Search',
+			text: 'Delete All',
+			tooltip: 'Delete selected record',
+			iconCls:'icon-delete',
+			handler: outbox_confirm_delete_all   // Confirm before deleting
+		}, '-', {
+			text: 'Adv Search',
 			tooltip: 'Advanced Search',
 			iconCls:'icon-search',
 			handler: display_form_search_window 
@@ -522,7 +569,6 @@ Ext.onReady(function(){
 			text: 'Delete', 
 			tooltip: 'Delete selected record', 
 			iconCls:'icon-delete',
-			disabled: true,
 			handler: outbox_confirm_delete 
 		},
 		'-',

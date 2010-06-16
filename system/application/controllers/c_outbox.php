@@ -42,6 +42,9 @@ class C_outbox extends Controller {
 			case "DELETE":
 				$this->outbox_delete();
 				break;
+			case "DELETE ALL":
+				$this->outbox_delete_all();
+				break;
 			case "SEARCH":
 				$this->outbox_search();
 				break;
@@ -113,6 +116,11 @@ class C_outbox extends Controller {
 		$ids = @$_POST['ids']; // Get our array back and translate it :
 		$pkid = json_decode(stripslashes($ids));
 		$result=$this->m_outbox->outbox_delete($pkid);
+		echo $result;
+	}
+
+	function outbox_delete_all(){
+		$result=$this->m_outbox->outbox_delete_all();
 		echo $result;
 	}
 
