@@ -497,7 +497,7 @@ class M_master_retur_jual_produk extends Model{
 		}
 		
 		//function for advanced search record
-		function master_retur_jual_produk_search($rproduk_id ,$rproduk_nobukti ,$rproduk_nobuktijual ,$rproduk_cust ,$rproduk_tanggal ,$rproduk_keterangan , $rproduk_status, $start,$end){
+		function master_retur_jual_produk_search($rproduk_id ,$rproduk_nobukti ,$rproduk_nobuktijual ,$rproduk_cust ,$rproduk_tanggal , $rproduk_tanggal_akhir, $rproduk_keterangan , $rproduk_status, $start,$end){
 			//full query
 			$query="SELECT
 							rproduk_id, rproduk_nobukti, jproduk_nobukti, cust_no, cust_nama, cust_id, 
@@ -524,10 +524,14 @@ class M_master_retur_jual_produk extends Model{
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " cust_nama LIKE '%".$rproduk_cust."%'";
 			};
-			if($rproduk_tanggal!=''){
+			if($rproduk_tanggal!='' && $rproduk_tanggal_akhir!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " rproduk_tanggal LIKE '%".$rproduk_tanggal."%'";
-			};
+				$query.= " rproduk_tanggal BETWEEN '".$rproduk_tanggal."' AND '".$rproduk_tanggal_akhir."'";
+			}
+			else if($rproduk_tanggal!='' && $rproduk_tanggal_akhir==''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " rproduk_tanggal='".$rproduk_tanggal."'";
+			}
 			if($rproduk_keterangan!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " rproduk_keterangan LIKE '%".$rproduk_keterangan."%'";
