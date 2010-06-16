@@ -452,6 +452,20 @@ Ext.onReady(function(){
 		value: 'selected'
 	});
 	
+	sms_kelamin_checkField=new Ext.form.Checkbox({
+		id: 'sms_kelamin_checkField',
+		boxLabel: 'Jenis Kelamin',
+		width: 100,
+		handler: function(node,checked){
+			if (checked) {
+				//Ext.Msg.alert('Status', 'Changes saved successfully.');
+			}
+			else {
+			}
+		}
+	});
+
+	
 	var sms_ultah_radioField=new Ext.form.Radio({
 		id:'sms_ultah_radioField',
 		name:'sms_opsiField',
@@ -469,7 +483,7 @@ Ext.onReady(function(){
 	});
 
 	var sms_destinationField = new Ext.form.FieldSet({
-		title: 'Opsi Tujuan',
+		title: 'Tujuan',
 		anchor: '98%',
 		layout:'form',
 		frame: false,
@@ -492,7 +506,8 @@ Ext.onReady(function(){
 					border: false,
 					bodyStyle:'padding:5px',
 					items: [sms_number_radioField,sms_destnumField]
-			   },{
+			   },
+/*			   {
 				   	layout: 'column',
 					frame: false,
 					border: false,
@@ -510,10 +525,38 @@ Ext.onReady(function(){
 					border: false,
 					bodyStyle:'padding:5px',
 					items: [sms_member_radioField,sms_member_groupField]
-			   }]
+			   }
+*/			   ]
 	});
 	
-	sms_detailField= new Ext.form.TextArea({
+	var sms_opsiField = new Ext.form.FieldSet({
+		title: 'Pilihan',
+		anchor: '98%',
+		layout:'form',
+		frame: false,
+		border: true,
+		items:[{
+				   	layout: 'column',
+					frame: false,
+					border: false,
+					bodyStyle:'padding:5px',
+					items: [sms_kelamin_checkField,sms_kelaminField]
+			   },{
+				   	layout: 'column',
+					frame: false,
+					border: false,
+					bodyStyle:'padding:5px',
+					items: [sms_ultah_radioField,sms_ultah_groupField]
+			   },{
+				   	layout: 'column',
+					frame: false,
+					border: false,
+					bodyStyle:'padding:5px',
+					items: [sms_member_radioField,sms_member_groupField]
+			   }]
+	});
+
+		sms_detailField= new Ext.form.TextArea({
 		id: 'sms_detailField',
 		fieldLabel: 'Isi Pesan',
 		maxLength: 500,
@@ -564,7 +607,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [sms_destinationField, sms_detailField, sms_count_isiField] 
+				items: [sms_destinationField, sms_opsiField, sms_detailField, sms_count_isiField] 
 			}
 			],
 		buttons: [{
@@ -609,7 +652,7 @@ Ext.onReady(function(){
 	function setDisableAll(){
 		sms_destgroupField.setDisabled(true);
 		sms_destnumField.setDisabled(true);
-		sms_kelaminField.setDisabled(true);
+//		sms_kelaminField.setDisabled(true);
 		sms_ultah_groupField.setDisabled(true);
 		sms_membershipField.setDisabled(true);
 		sms_member_expField.setDisabled(true);

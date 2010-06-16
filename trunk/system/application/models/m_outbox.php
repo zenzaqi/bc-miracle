@@ -24,12 +24,14 @@ class M_outbox extends Model{
 							o.*, 
 							c.cust_no, c.cust_nama 
 						FROM outbox o
-						LEFT JOIN customer c on c.cust_id = o.outbox_cust";
+						LEFT JOIN customer c on c.cust_id = o.outbox_cust ";
 			
 			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 				$query .= " (outbox_id LIKE '%".addslashes($filter)."%' OR outbox_destination LIKE '%".addslashes($filter)."%' OR outbox_message LIKE '%".addslashes($filter)."%' )";
 			}
+
+			$query .= " ORDER BY outbox_status ASC ";
 			
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
@@ -100,6 +102,19 @@ class M_outbox extends Model{
 				}
 				$this->db->query($query);
 			}
+			if($this->db->affected_rows()>0)
+				return '1';
+			else
+				return '0';
+		}
+
+		function outbox_delete_all(){
+			// You could do some checkups here and return '0' or other error consts.
+			// Make a single query to delete all of the outboxs at the same time :
+			$query = "DELETE FROM outbox ";
+			$this->db->query($query);
+			 
+			
 			if($this->db->affected_rows()>0)
 				return '1';
 			else
