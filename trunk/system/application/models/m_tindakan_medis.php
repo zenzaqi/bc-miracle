@@ -219,7 +219,7 @@ class M_tindakan_medis extends Model{
 	/* eof detail_jual_rawat_delete */
 	
 	/* INSERT ke db.detail_jual_rawat */
-	function detail_jual_rawat_insert($trawat_id, $cust_member, $trawat_cust_id, $dtrawat_id, $dtrawat_perawatan_id, $rawat_harga, $rawat_dm, $rawat_du, $dtrawat_dapp){
+	function detail_jual_rawat_insert($cust_member, $trawat_cust_id, $dtrawat_id, $dtrawat_perawatan_id, $rawat_harga, $rawat_dm, $rawat_du, $dtrawat_dapp, $drawat_jumlah){
 		/*
 		1. check di master_jual_rawat, apakah customer ini pada hari sekarang sudah masuk ke Kasir
 		2. JIKA customer ini sudah 'ada' di db.master_jual_rawat ==> INSERT ke db.detail_jual_rawat
@@ -249,7 +249,7 @@ class M_tindakan_medis extends Model{
 			"drawat_master"=>$jrawat_id,
 			"drawat_dtrawat"=>$dtrawat_id,
 			"drawat_rawat"=>$dtrawat_perawatan_id,
-			"drawat_jumlah"=>1,
+			"drawat_jumlah"=>$drawat_jumlah,
 			"drawat_harga"=>$rawat_harga,
 			"drawat_diskon"=>$diskon,
 			"drawat_diskon_jenis"=>$diskon_jenis
@@ -339,7 +339,7 @@ class M_tindakan_medis extends Model{
 				"drawat_master"=>$jrawat_id,
 				"drawat_dtrawat"=>$dtrawat_id,
 				"drawat_rawat"=>$dtrawat_perawatan_id,
-				"drawat_jumlah"=>1,
+				"drawat_jumlah"=>$drawat_jumlah,
 				"drawat_harga"=>$rawat_harga,
 				"drawat_diskon"=>$diskon,
 				"drawat_diskon_jenis"=>$diskon_jenis
@@ -720,7 +720,12 @@ class M_tindakan_medis extends Model{
 	/* START NON-MEDIS Function */
 	function dtindakan_jual_nonmedis_list($master_id,$query,$start,$end) {
 		//$query = "SELECT * FROM tindakan_detail,perawatan,karyawan WHERE dtrawat_perawatan=rawat_id AND dtrawat_petugas1=karyawan_id AND dtrawat_master='".$master_id."'";
-		$query="SELECT * FROM vu_tindakan WHERE dtrawat_master='".$master_id."' AND kategori_nama='Non Medis' AND dtrawat_petugas2='0'";
+		$query="SELECT *
+			FROM vu_tindakan
+			WHERE dtrawat_master='".$master_id."'
+				AND kategori_nama='Non Medis'
+				AND dtrawat_petugas2='0'
+				AND dtrawat_status<>'batal'";
 		$result = $this->db->query($query);
 		$nbrows = $result->num_rows();
 		$limit = $query." LIMIT ".$start.",".$end;			
@@ -767,140 +772,134 @@ class M_tindakan_medis extends Model{
 		$result=$this->db->query($sql);
 	}
 	
-	function detail_dtindakan_jual_nonmedis_insert($dtrawat_id ,$dtrawat_master ,$dtrawat_perawatan ,$dtrawat_keterangan ,$customer_id ,$dtrawat_jumlah){
+	function detail_dtindakan_jual_nonmedis_insert($array_dtrawat_id ,$dtrawat_master ,$array_dtrawat_perawatan ,$array_dtrawat_keterangan ,$customer_id ,$array_dtrawat_jumlah){
 		$date_now=date('Y-m-d');
         //if master id not capture from view then capture it from max pk from master table
 		if($dtrawat_master=="" || $dtrawat_master==NULL){
 			$dtrawat_master=$this->get_master_id();
 		}
 		
-		if($dtrawat_jumlah==''){
-			$dtrawat_jumlah=1;
-		}
-        
-		if(is_numeric($dtrawat_id)==false && is_numeric($dtrawat_perawatan)==true){
-                //* record baru yg belum ada di db.tindakan_detail /
+		for($i = 0; $i < sizeof($array_dtrawat_perawatan); $i++){
+			$dtrawat_id = $array_dtrawat_id[$i];
+			$dtrawat_perawatan = $array_dtrawat_perawatan[$i];
+			$dtrawat_keterangan = $array_dtrawat_keterangan[$i];
+			$dtrawat_jumlah = $array_dtrawat_jumlah[$i];
 			
-			$data = array(
-				"dtrawat_master"=>$dtrawat_master, 
-				"dtrawat_perawatan"=>$dtrawat_perawatan, 
-				"dtrawat_keterangan"=>$dtrawat_keterangan,
-				"dtrawat_tglapp"=>$date_now,
-				"dtrawat_status"=>"selesai",
-				"dtrawat_jumlah"=>$dtrawat_jumlah,
-                "dtrawat_creator"=>@$_SESSION[SESSION_USERID]
-			);
-			$this->db->insert('tindakan_detail', $data); 
-			if($this->db->affected_rows()){
-				//$sql="SELECT * FROM tindakan_detail WHERE dtrawat_master='$dtrawat_master' AND ";
-				$sql="SELECT rawat_harga,rawat_dm,rawat_du FROM perawatan WHERE rawat_id='$dtrawat_perawatan'";
-				$rs=$this->db->query($sql);
-				if($rs->num_rows()){
-					$rs_record=$rs->row_array();
-					$rawat_harga=$rs_record["rawat_harga"];
-					$rawat_dm=$rs_record["rawat_dm"];
-					$rawat_du=$rs_record["rawat_du"];
-				}
+			if(is_numeric($dtrawat_id)==false && is_numeric($dtrawat_perawatan)==true){
+                //* record baru yg belum ada di db.tindakan_detail /
 				
-				/* Chekc Customer_Member */
-				$cust_member="";
-				$sql="SELECT cust_member FROM customer WHERE cust_id='$customer_id'";
-				$rs=$this->db->query($sql);
-				if($rs->num_rows()){
-					$rs_record=$rs->row_array();
-					$cust_member=$rs_record["cust_member"];
-				}
-				if($cust_member!=""){
-					$drawat_diskon=$rawat_dm;
-					$drawat_diskon_jenis="DM";
-				}elseif($cust_member==""){
-					$drawat_diskon=$rawat_du;
-					$drawat_diskon_jenis="DU";
-				}
-                
-                //* proses pengambilan db.tindakan_detail.dtrawat_id untuk dimasukkan ke db.detail_jual_rawat /
-                $sql = "SELECT max(dtrawat_id) AS dtrawat_id FROM tindakan_detail WHERE dtrawat_master='$dtrawat_master' AND date_format(dtrawat_date_create,'%Y-%m-%d')='$date_now' AND dtrawat_creator='".@$_SESSION[SESSION_USERID]."'";
-                $rs=$this->db->query($sql);
-                if($rs->num_rows()){
-                        $record = $rs->row_array();
-                        $dtrawat_id = $record['dtrawat_id'];
-                }
-				
-				/* karena otomatis status jual_nonmedis = 'selesai', maka harus di-INSERT ke db.detail_jual_rawat */
-				$sql="SELECT jrawat_id FROM master_jual_rawat WHERE jrawat_cust='$customer_id' AND jrawat_tanggal='$date_now'";
-				$rs=$this->db->query($sql);
-				if($rs->num_rows()){
-					$rs_record=$rs->row_array();
-					$jrawat_id=$rs_record["jrawat_id"];
-					
-					$data_to_drawat=array(
-					"drawat_master"=>$jrawat_id,
-					"drawat_rawat"=>$dtrawat_perawatan,
-					"drawat_jumlah"=>$dtrawat_jumlah,
-					"drawat_harga"=>$rawat_harga,
-					"drawat_diskon"=>$drawat_diskon,
-					"drawat_diskon_jenis"=>$drawat_diskon_jenis,
-                    "drawat_dtrawat"=>$dtrawat_id
-					);
-					$sql="SELECT drawat_id FROM detail_jual_rawat WHERE drawat_master='$jrawat_id' AND drawat_rawat='$dtrawat_perawatan' AND drawat_date_create LIKE '$date_now%'";
-					$rs=$this->db->query($sql);
-					if(!$rs->num_rows()){
-						$this->db->insert('detail_jual_rawat', $data_to_drawat);
-					}
-				}else{
-                        //* customer di tanggal sekarang belum ada di db.master_jual_rawat /
-                        $pattern="PR/".date("ym")."-";
-                        $jrawat_nobukti=$this->m_public_function->get_kode_1('master_jual_rawat','jrawat_nobukti',$pattern,12);
-                        $dti_jrawat=array(
-                        "jrawat_nobukti"=>$jrawat_nobukti,
-                        "jrawat_cust"=>$customer_id,
-                        "jrawat_tanggal"=>$date_now
-                        );
-                        $this->db->insert('master_jual_rawat', $dti_jrawat);
-                        if($this->db->affected_rows()){
-                                /* INSERT to db.detail_jual_rawat */
-                                $sql="SELECT jrawat_id FROM master_jual_rawat WHERE jrawat_cust='$customer_id' AND jrawat_tanggal='$date_now'";
-                                $rs=$this->db->query($sql);
-                                if($rs->num_rows()){
-                                    $rs_record=$rs->row_array();
-                                    $jrawat_id=$rs_record["jrawat_id"];
-                                }
-                                
-                                $dti_drawat=array(
-                                "drawat_master"=>$jrawat_id,
-                                "drawat_dtrawat"=>$dtrawat_id,
-                                "drawat_rawat"=>$dtrawat_perawatan,
-                                "drawat_jumlah"=>$dtrawat_jumlah,
-                                "drawat_harga"=>$rawat_harga,
-                                "drawat_diskon"=>$drawat_diskon,
-                                "drawat_diskon_jenis"=>$drawat_diskon_jenis
-                                );
-                                $this->db->insert('detail_jual_rawat', $dti_drawat);
-                                if($this->db->affected_rows()){
-                                    $this->detail_pakai_cabin_insert($dtrawat_id, $dtrawat_perawatan, $jrawat_nobukti);
-                                }
-                        }
-                        
-                }
-			}
-							
-		}elseif(is_numeric($dtrawat_id)==true){
-                //* record sudah ada di tindakan detail, disini proses editing /
-			$sql="SELECT dtrawat_id,dtrawat_perawatan,dtrawat_petugas1,dtrawat_jam FROM tindakan_detail WHERE dtrawat_perawatan='$dtrawat_perawatan' AND dtrawat_petugas1='$dtrawat_petugas1' AND dtrawat_jam='$dtrawat_jam' AND dtrawat_id='$dtrawat_id'";
-			$rs=$this->db->query($sql);
-			if(!$rs->num_rows()){
+				//* status langsung = 'selesai' /
 				$data = array(
-				"dtrawat_perawatan"=>$dtrawat_perawatan, 
-				"dtrawat_keterangan"=>$dtrawat_keterangan
+					"dtrawat_master"=>$dtrawat_master, 
+					"dtrawat_perawatan"=>$dtrawat_perawatan, 
+					"dtrawat_keterangan"=>$dtrawat_keterangan,
+					"dtrawat_tglapp"=>$date_now,
+					"dtrawat_status"=>"selesai",
+					"dtrawat_jumlah"=>$dtrawat_jumlah,
+					"dtrawat_creator"=>@$_SESSION[SESSION_USERID]
 				);
-				$this->db->where('dtrawat_id',$dtrawat_id);
-				$this->db->update('tindakan_detail',$data);
-			}
+				$this->db->insert('tindakan_detail', $data); 
+				if($this->db->affected_rows()){
+					//$sql="SELECT * FROM tindakan_detail WHERE dtrawat_master='$dtrawat_master' AND ";
+					$sql="SELECT rawat_harga,rawat_dm,rawat_du FROM perawatan WHERE rawat_id='$dtrawat_perawatan'";
+					$rs=$this->db->query($sql);
+					if($rs->num_rows()){
+						$rs_record=$rs->row_array();
+						$rawat_harga=$rs_record["rawat_harga"];
+						$rawat_dm=$rs_record["rawat_dm"];
+						$rawat_du=$rs_record["rawat_du"];
+					}
+					
+					//* Chekc Customer_Member /
+					$cust_member="";
+					$sql="SELECT cust_member FROM customer WHERE cust_id='$customer_id'";
+					$rs=$this->db->query($sql);
+					if($rs->num_rows()){
+						$rs_record=$rs->row_array();
+						$cust_member=$rs_record["cust_member"];
+					}
+					if($cust_member!=""){
+						$drawat_diskon=$rawat_dm;
+						$drawat_diskon_jenis="DM";
+					}elseif($cust_member==""){
+						$drawat_diskon=$rawat_du;
+						$drawat_diskon_jenis="DU";
+					}
+					
+					//* proses pengambilan db.tindakan_detail.dtrawat_id untuk dimasukkan ke db.detail_jual_rawat /
+					$sql = "SELECT max(dtrawat_id) AS dtrawat_id FROM tindakan_detail WHERE dtrawat_master='$dtrawat_master' AND date_format(dtrawat_date_create,'%Y-%m-%d')='$date_now' AND dtrawat_creator='".@$_SESSION[SESSION_USERID]."'";
+					$rs=$this->db->query($sql);
+					if($rs->num_rows()){
+						$record = $rs->row_array();
+						$dtrawat_id = $record['dtrawat_id'];
+					}
+					
+					//* karena otomatis status jual_nonmedis = 'selesai', maka harus di-INSERT ke db.detail_jual_rawat /
+					$sql="SELECT jrawat_id, jrawat_nobukti FROM master_jual_rawat WHERE jrawat_cust='$customer_id' AND jrawat_tanggal='$date_now'";
+					$rs=$this->db->query($sql);
+					if($rs->num_rows()){
+						$rs_record=$rs->row_array();
+						$jrawat_id=$rs_record["jrawat_id"];
+						$jrawat_nobukti=$rs_record["jrawat_nobukti"];
+						
+						//* Karena insert tindakan dari menu Tindakan sendiri, maka ($dtrawat_dapp = (-1)) alias insert bukan dari Appointment
+						$dtrawat_dapp = -1;
+						$this->detail_jual_rawat_insert($cust_member, $customer_id, $dtrawat_id, $dtrawat_perawatan, $rawat_harga, $rawat_dm, $rawat_du, $dtrawat_dapp, $dtrawat_jumlah);
+						
+					}else{
+						//* customer di tanggal sekarang belum ada di db.master_jual_rawat /
+						$pattern="PR/".date("ym")."-";
+						$jrawat_nobukti=$this->m_public_function->get_kode_1('master_jual_rawat','jrawat_nobukti',$pattern,12);
+						$dti_jrawat=array(
+						"jrawat_nobukti"=>$jrawat_nobukti,
+						"jrawat_cust"=>$customer_id,
+						"jrawat_tanggal"=>$date_now
+						);
+						$this->db->insert('master_jual_rawat', $dti_jrawat);
+						if($this->db->affected_rows()){
+							//* INSERT to db.detail_jual_rawat /
+							$sql="SELECT jrawat_id FROM master_jual_rawat WHERE jrawat_cust='$customer_id' AND jrawat_tanggal='$date_now'";
+							$rs=$this->db->query($sql);
+							if($rs->num_rows()){
+								$rs_record=$rs->row_array();
+								$jrawat_id=$rs_record["jrawat_id"];
+							}
+							
+							//* Karena insert tindakan dari menu Tindakan sendiri, maka ($dtrawat_dapp = (-1)) alias insert bukan dari Appointment
+							$dtrawat_dapp = -1;
+							$this->detail_jual_rawat_insert($cust_member, $customer_id, $dtrawat_id, $dtrawat_perawatan, $rawat_harga, $rawat_dm, $rawat_du, $dtrawat_dapp, $dtrawat_jumlah);
+							
+						}
+							
+					}
+				}
+								
+			}/*elseif(is_numeric($dtrawat_id)==true){
+				//* record sudah ada di tindakan detail, disini proses editing /
+				$sql="SELECT dtrawat_id
+						,dtrawat_perawatan
+						,dtrawat_petugas1
+						,dtrawat_jam
+					FROM tindakan_detail
+					WHERE dtrawat_perawatan='$dtrawat_perawatan'
+						AND dtrawat_petugas1='$dtrawat_petugas1'
+						AND dtrawat_jam='$dtrawat_jam'
+						AND dtrawat_id='$dtrawat_id'";
+				$rs=$this->db->query($sql);
+				if(!$rs->num_rows()){
+					$data = array(
+					"dtrawat_perawatan"=>$dtrawat_perawatan, 
+					"dtrawat_keterangan"=>$dtrawat_keterangan
+					);
+					$this->db->where('dtrawat_id',$dtrawat_id);
+					$this->db->update('tindakan_detail',$data);
+				}
+			}*/
+			
 		}
-
 	}
 	/* END NON-MEDIS Function */
-		
+	
 	//function for get list record
 	function tindakan_list($filter,$start,$end){
 		$date_now=date('Y-m-d');
@@ -1079,7 +1078,10 @@ class M_tindakan_medis extends Model{
 						1. INSERT ke db.detail_jual_rawat
 						2. UPDATE db.tindakan_detail.status = 'selesai' ==> sudah dilakukan sebelum masuk fungsi IF ini
 						*/
-						$this->detail_jual_rawat_insert($trawat_id, $cust_member, $trawat_cust_id, $dtrawat_id, $dtrawat_perawatan_id, $rawat_harga, $rawat_dm, $rawat_du, $dtrawat_dapp);
+						
+						//* Perawatan defaultnya adalah jumlah = 1 /
+						$dtrawat_jumlah = 1;
+						$this->detail_jual_rawat_insert($cust_member, $trawat_cust_id, $dtrawat_id, $dtrawat_perawatan_id, $rawat_harga, $rawat_dm, $rawat_du, $dtrawat_dapp, $dtrawat_jumlah);
 						return '1';
 						
 					}elseif($dtrawat_status_awal=='selesai' && $dtrawat_status!='selesai' && $dtrawat_ambil_paket=='true'){
@@ -1194,7 +1196,9 @@ class M_tindakan_medis extends Model{
 					
 					$this->detail_ambil_paket_delete($dtrawat_id, $dtrawat_dapp, $dapaket_dpaket, $dapaket_jpaket, $dapaket_paket);
 					
-					$this->detail_jual_rawat_insert($trawat_id, $cust_member, $trawat_cust_id, $dtrawat_id, $dtrawat_perawatan_id, $rawat_harga, $rawat_dm, $rawat_du, $dtrawat_dapp);
+					//* Perawatan defaultnya adalah jumlah = 1 /
+					$dtrawat_jumlah = 1;
+					$this->detail_jual_rawat_insert($cust_member, $trawat_cust_id, $dtrawat_id, $dtrawat_perawatan_id, $rawat_harga, $rawat_dm, $rawat_du, $dtrawat_dapp, $dtrawat_jumlah);
 					return '1';
 					
 				}elseif($dtrawat_ambil_paket_awal=='true' && $dtrawat_ambil_paket=='false' && $dtrawat_status_awal!='selesai'){

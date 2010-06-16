@@ -146,7 +146,7 @@ class C_tindakan_medis extends Controller {
 	}
 	
 	function detail_dtindakan_jual_nonmedis_insert(){
-		$dtrawat_id=trim(@$_POST["dtrawat_id"]);
+		/*$dtrawat_id=trim(@$_POST["dtrawat_id"]);
 		$dtrawat_master=trim(@$_POST["dtrawat_master"]);
 		$dtrawat_perawatan=trim(@$_POST["dtrawat_perawatan"]);
 		$dtrawat_keterangan=trim(@$_POST["dtrawat_keterangan"]);
@@ -154,7 +154,24 @@ class C_tindakan_medis extends Controller {
 		$dtrawat_keterangan=str_replace("\\", "",$dtrawat_keterangan);
 		$customer_id=trim(@$_POST["customer_id"]);
 		$dtrawat_jumlah=trim(@$_POST["dtrawat_jumlah"]);
-		$result=$this->m_tindakan_medis->detail_dtindakan_jual_nonmedis_insert($dtrawat_id ,$dtrawat_master ,$dtrawat_perawatan ,$dtrawat_keterangan ,$customer_id ,$dtrawat_jumlah);
+		$result=$this->m_tindakan_medis->detail_dtindakan_jual_nonmedis_insert($dtrawat_id ,$dtrawat_master ,$dtrawat_perawatan ,$dtrawat_keterangan ,$customer_id ,$dtrawat_jumlah);*/
+		$dtrawat_id = $_POST['dtrawat_id']; // Get our array back and translate it :
+		$array_dtrawat_id = json_decode(stripslashes($dtrawat_id));
+		
+		$dtrawat_master=trim(@$_POST["dtrawat_master"]);
+		
+		$dtrawat_perawatan = $_POST['dtrawat_perawatan']; // Get our array back and translate it :
+		$array_dtrawat_perawatan = json_decode(stripslashes($dtrawat_perawatan));
+		
+		$dtrawat_keterangan = $_POST['dtrawat_keterangan']; // Get our array back and translate it :
+		$array_dtrawat_keterangan = json_decode(stripslashes($dtrawat_keterangan));
+		
+		$dtrawat_jumlah = $_POST['dtrawat_jumlah']; // Get our array back and translate it :
+		$array_dtrawat_jumlah = json_decode(stripslashes($dtrawat_jumlah));
+		
+		$customer_id=trim(@$_POST["customer_id"]);
+		
+		$result=$this->m_tindakan_medis->detail_dtindakan_jual_nonmedis_insert($array_dtrawat_id ,$dtrawat_master ,$array_dtrawat_perawatan ,$array_dtrawat_keterangan ,$customer_id ,$array_dtrawat_jumlah);
 	}
 	/* END NON-MEDIS Function */
 	

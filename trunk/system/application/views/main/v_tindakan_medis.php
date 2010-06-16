@@ -1625,7 +1625,49 @@ Ext.onReady(function(){
 	
 	//function for insert detail
 	function dtindakan_jual_nonmedis_insert(){
-		if(dtindakan_jual_nonmedisDataStore.getCount()!=0){
+		var dtrawat_id = [];
+		var dtrawat_perawatan = [];
+		var dtrawat_keterangan = [];
+		var dtrawat_jumlah = [];
+		
+		var dcount = dtindakan_jual_nonmedisDataStore.getCount() - 1;
+		
+		if(dtindakan_jual_nonmedisDataStore.getCount()>0){
+			for(i=0; i<dtindakan_jual_nonmedisDataStore.getCount();i++){
+				dtrawat_id.push(dtindakan_jual_nonmedisDataStore.getAt(i).data.dtrawat_id);
+				dtrawat_perawatan.push(dtindakan_jual_nonmedisDataStore.getAt(i).data.dtrawat_perawatan);
+				dtrawat_keterangan.push(dtindakan_jual_nonmedisDataStore.getAt(i).data.dtrawat_keterangan);
+				dtrawat_jumlah.push(dtindakan_jual_nonmedisDataStore.getAt(i).data.dtrawat_jumlah);
+				
+				if(i==dcount){
+					var encoded_array_dtrawat_id = Ext.encode(dtrawat_id);
+					var encoded_array_dtrawat_perawatan = Ext.encode(dtrawat_perawatan);
+					var encoded_array_dtrawat_keterangan = Ext.encode(dtrawat_keterangan);
+					var encoded_array_dtrawat_jumlah = Ext.encode(dtrawat_jumlah);
+					
+					Ext.Ajax.request({
+						waitMsg: 'Please wait...',
+						url: 'index.php?c=c_tindakan_medis&m=detail_dtindakan_jual_nonmedis_insert',
+						params:{
+							dtrawat_id	: encoded_array_dtrawat_id,
+							dtrawat_master	: eval(trawat_medis_idField.getValue()),
+							dtrawat_perawatan	: encoded_array_dtrawat_perawatan,
+							dtrawat_keterangan	: encoded_array_dtrawat_keterangan,
+							dtrawat_jumlah	: encoded_array_dtrawat_jumlah,
+							customer_id	: trawat_medis_custidField.getValue()
+						},
+						callback: function(opts, success, response){
+							tindakan_medisDataStore.reload();
+						}
+					});
+				}
+			}
+		}else if(dtindakan_jual_nonmedisDataStore.getCount()==0){
+			dtindakan_jual_nonmedis_purge();
+		}
+		
+		
+		/*if(dtindakan_jual_nonmedisDataStore.getCount()!=0){
 			for(i=0;i<dtindakan_jual_nonmedisDataStore.getCount();i++){
 				tindakan_nonmedis_detail_record=dtindakan_jual_nonmedisDataStore.getAt(i);
 				Ext.Ajax.request({
@@ -1646,7 +1688,7 @@ Ext.onReady(function(){
 			}
 		}else if(dtindakan_jual_nonmedisDataStore.getCount()==0){
 			dtindakan_jual_nonmedis_purge();
-		}
+		}*/
 	}
 	//eof
 	
