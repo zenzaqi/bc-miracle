@@ -369,7 +369,7 @@ class M_master_retur_jual_paket extends Model{
 	}
 	
 	//function for advanced search record
-	function master_retur_jual_paket_search($rpaket_id ,$rpaket_nobukti ,$rpaket_nobuktijual ,$rpaket_cust ,$rpaket_tanggal ,$rpaket_keterangan ,$rpaket_status, $start,$end){
+	function master_retur_jual_paket_search($rpaket_id ,$rpaket_nobukti ,$rpaket_nobuktijual ,$rpaket_cust ,$rpaket_tanggal , $rpaket_tanggal_akhir, $rpaket_keterangan ,$rpaket_status, $start,$end){
 		//full query
 		$query="select * from master_retur_jual_paket";
 		
@@ -389,10 +389,14 @@ class M_master_retur_jual_paket extends Model{
 			$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 			$query.= " rpaket_cust LIKE '%".$rpaket_cust."%'";
 		};
-		if($rpaket_tanggal!=''){
-			$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-			$query.= " rpaket_tanggal LIKE '%".$rpaket_tanggal."%'";
-		};
+		if($rpaket_tanggal!='' && $rpaket_tanggal_akhir!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " rpaket_tanggal BETWEEN '".$rpaket_tanggal."' AND '".$rpaket_tanggal_akhir."'";
+			}
+		else if($rpaket_tanggal!='' && $rpaket_tanggal_akhir==''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " rpaket_tanggal='".$rpaket_tanggal."'";
+			}
 		if($rpaket_keterangan!=''){
 			$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 			$query.= " rpaket_keterangan LIKE '%".$rpaket_keterangan."%'";

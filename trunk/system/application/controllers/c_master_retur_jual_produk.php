@@ -43,6 +43,7 @@ class C_master_retur_jual_produk extends Controller {
 		echo $result;
 	}
 	
+	
 	function laporan(){
 		$this->load->view('main/v_lap_retur_produk');
 	}
@@ -268,6 +269,7 @@ class C_master_retur_jual_produk extends Controller {
 		$rproduk_nobuktijual=str_replace("'", '"',$rproduk_nobuktijual);
 		$rproduk_cust=trim(@$_POST["rproduk_cust"]);
 		$rproduk_tanggal=trim(@$_POST["rproduk_tanggal"]);
+		$rproduk_tanggal_akhir=trim(@$_POST["rproduk_tanggal_akhir"]);
 		$rproduk_keterangan=trim(@$_POST["rproduk_keterangan"]);
 		$rproduk_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$rproduk_keterangan);
 		$rproduk_keterangan=str_replace("'", '"',$rproduk_keterangan);
@@ -278,7 +280,7 @@ class C_master_retur_jual_produk extends Controller {
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_master_retur_jual_produk->master_retur_jual_produk_search($rproduk_id ,$rproduk_nobukti ,$rproduk_nobuktijual ,$rproduk_cust ,$rproduk_tanggal ,$rproduk_keterangan , $rproduk_status, $start,$end);
+		$result = $this->m_master_retur_jual_produk->master_retur_jual_produk_search($rproduk_id ,$rproduk_nobukti ,$rproduk_nobuktijual ,$rproduk_cust ,$rproduk_tanggal, $rproduk_tanggal_akhir, $rproduk_keterangan , $rproduk_status, $start,$end);
 		echo $result;
 	}
 

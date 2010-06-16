@@ -456,7 +456,7 @@ class M_master_terima_beli extends Model{
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 				$query .= " (no_bukti LIKE '%".addslashes($filter)."%' OR order_no LIKE '%".addslashes($filter)."%' OR 
 							supplier_nama LIKE '%".addslashes($filter)."%' OR terima_surat_jalan LIKE '%".addslashes($filter)."%' 
-							OR terima_pengirim LIKE '%".addslashes($filter)."%' OR tanggal LIKE '%".addslashes($filter)."%' )";
+							OR terima_pengirim LIKE '%".addslashes($filter)."%')";
 			}
 			
 			$result = $this->db->query($query);

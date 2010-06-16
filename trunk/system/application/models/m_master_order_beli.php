@@ -265,7 +265,7 @@ class M_master_order_beli extends Model{
 			// For simple search
 			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (no_bukti LIKE '%".addslashes($filter)."%' OR supplier_nama LIKE '%".addslashes($filter)."%' OR tanggal LIKE '%".addslashes($filter)."%' OR order_carabayar LIKE '%".addslashes($filter)."%' OR order_diskon LIKE '%".addslashes($filter)."%' OR order_keterangan LIKE '%".addslashes($filter)."%' )";
+				$query .= " (no_bukti LIKE '%".addslashes($filter)."%' OR supplier_nama LIKE '%".addslashes($filter)."%' OR order_carabayar LIKE '%".addslashes($filter)."%' )";
 			}
 			
 			$query.=" ORDER BY order_id DESC";

@@ -66,6 +66,7 @@ var editor_detail_retur_paket_tokwitansi;
 var post2db = '';
 var msg = '';
 var pageS=15;
+var today=new Date().format('d-m-Y');
 
 /* declare variable here for Field*/
 var rpaket_idField;
@@ -80,6 +81,7 @@ var rpaket_nobuktiSearchField;
 var rpaket_nobuktijualSearchField;
 var rpaket_custSearchField;
 var rpaket_tanggalSearchField;
+var rpaket_tanggal_akhirSearchField;
 var rpaket_keteranganSearchField;
 var rpaket_statusSearchField;
 
@@ -590,9 +592,6 @@ Ext.onReady(function(){
             'Alamat: {cust_alamat}&nbsp;&nbsp;&nbsp;[Telp. {cust_telprumah}]',
         '</div></tpl>'
     );
-	
-	
-	
 	
     
   	/* Function for Identify of Window Column Model */
@@ -1338,6 +1337,7 @@ Ext.onReady(function(){
 		var rpaket_nobuktijual_search=null;
 		var rpaket_cust_search=null;
 		var rpaket_tanggal_search_date="";
+		var rpaket_tanggal_akhir_search_date="";
 		var rpaket_keterangan_search=null;
 		var rpaket_status_search=null;
 
@@ -1346,6 +1346,7 @@ Ext.onReady(function(){
 		if(rpaket_nobuktijualSearchField.getValue()!==null){rpaket_nobuktijual_search=rpaket_nobuktijualSearchField.getValue();}
 		if(rpaket_custSearchField.getValue()!==null){rpaket_cust_search=rpaket_custSearchField.getValue();}
 		if(rpaket_tanggalSearchField.getValue()!==""){rpaket_tanggal_search_date=rpaket_tanggalSearchField.getValue().format('Y-m-d');}
+		if(rpaket_tanggal_akhirSearchField.getValue()!==""){rpaket_tanggal_akhir_search_date=rpaket_tanggal_akhirSearchField.getValue().format('Y-m-d');}
 		if(rpaket_keteranganSearchField.getValue()!==null){rpaket_keterangan_search=rpaket_keteranganSearchField.getValue();}
 		if(rpaket_statusSearchField.getValue()!==null){rpaket_status_search=rpaket_statusSearchField.getValue();}
 		// change the store parameters
@@ -1357,6 +1358,7 @@ Ext.onReady(function(){
 			rpaket_nobuktijual	:	rpaket_nobuktijual_search, 
 			rpaket_cust	:	rpaket_cust_search, 
 			rpaket_tanggal	:	rpaket_tanggal_search_date, 
+			rpaket_tanggal_akhir : rpaket_tanggal_akhir_search_date,
 			rpaket_keterangan	:	rpaket_keterangan_search,
 			rpaket_status		:	rpaket_status_search
 		};
@@ -1379,6 +1381,8 @@ Ext.onReady(function(){
 		rpaket_nobuktijualSearchField.reset();
 		rpaket_custSearchField.reset();
 		rpaket_tanggalSearchField.reset();
+		rpaket_tanggal_akhirSearchField.reset();
+		rpaket_tanggal_akhirSearchField.setValue(today);
 		rpaket_keteranganSearchField.reset();
 		rpaket_statusSearchField.reset();
 	}

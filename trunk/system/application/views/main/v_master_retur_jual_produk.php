@@ -66,6 +66,7 @@ var editor_detail_retur_jual_produk;
 var rproduk_post2db = '';
 var msg = '';
 var pageS=15;
+var today=new Date().format('d-m-Y');
 
 /* declare variable here for Field*/
 var rproduk_idField;
@@ -80,6 +81,7 @@ var rproduk_nobuktiSearchField;
 var rproduk_nobuktijualSearchField;
 var rproduk_custSearchField;
 var rproduk_tanggalSearchField;
+var rproduk_tanggal_akhirSearchField;
 var rproduk_keteranganSearchField;
 var rproduk_statusSearchField;
 
@@ -1099,7 +1101,6 @@ Ext.onReady(function(){
 		'</div></tpl>'
     );
 	
-	
 	cbo_drproduk_satuanDataStore = new Ext.data.Store({
 		id: 'cbo_drproduk_satuanDataStore',
 		proxy: new Ext.data.HttpProxy({
@@ -1116,6 +1117,39 @@ Ext.onReady(function(){
 		]),
 		sortInfo:{field: 'drproduk_satuan_display', direction: "ASC"}
 	});
+	
+	//ComboBox ambil data Customer
+	cbo_rproduk_customerDataStore = new Ext.data.Store({
+		id: 'cbo_rproduk_customerDataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_master_retur_jual_produk&m=get_customer_list', 
+			method: 'POST'
+		}),
+		baseParams:{start: 0, limit:pageS }, // parameter yang di $_POST ke Controller
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'cust_id'
+		},[
+		/* dataIndex => insert intocustomer_note_ColumnModel, Mapping => for initiate table column */ 
+			{name: 'cust_id', type: 'int', mapping: 'cust_id'},
+			{name: 'cust_no', type: 'string', mapping: 'cust_no'},
+			{name: 'cust_nama', type: 'string', mapping: 'cust_nama'},
+			{name: 'cust_tgllahir', type: 'date', dateFormat: 'Y-m-d', mapping: 'cust_tgllahir'},
+			{name: 'cust_alamat', type: 'string', mapping: 'cust_alamat'},
+			{name: 'cust_telprumah', type: 'string', mapping: 'cust_telprumah'}
+		]),
+		sortInfo:{field: 'cust_no', direction: "ASC"}
+	});
+	//Template yang akan tampil di ComboBox
+	var customer_rproduk_tpl = new Ext.XTemplate(
+        '<tpl for="."><div class="search-item">',
+            '<span><b>{cust_no} : {cust_nama}</b> | Tgl-Lahir:{cust_tgllahir:date("M j, Y")}<br /></span>',
+            'Alamat: {cust_alamat}&nbsp;&nbsp;&nbsp;[Telp. {cust_telprumah}]',
+        '</div></tpl>'
+    );
+	
+
 	var combo_retur_produk=new Ext.form.ComboBox({
 			store: cbo_drproduk_produkDataStore,
 			mode: 'local',
@@ -1464,6 +1498,7 @@ Ext.onReady(function(){
 		var rproduk_nobuktijual_search=null;
 		var rproduk_cust_search=null;
 		var rproduk_tanggal_search_date="";
+		var rproduk_tanggal_akhir_search_date="";
 		var rproduk_keterangan_search=null;
 		var rproduk_status_search=null;
 
@@ -1472,6 +1507,7 @@ Ext.onReady(function(){
 		if(rproduk_nobuktijualSearchField.getValue()!==null){rproduk_nobuktijual_search=rproduk_nobuktijualSearchField.getValue();}
 		if(rproduk_custSearchField.getValue()!==null){rproduk_cust_search=rproduk_custSearchField.getValue();}
 		if(rproduk_tanggalSearchField.getValue()!==""){rproduk_tanggal_search_date=rproduk_tanggalSearchField.getValue().format('Y-m-d');}
+		if(rproduk_tanggal_akhirSearchField.getValue()!==""){rproduk_tanggal_akhir_search_date=rproduk_tanggal_akhirSearchField.getValue().format('Y-m-d');}
 		if(rproduk_keteranganSearchField.getValue()!==null){rproduk_keterangan_search=rproduk_keteranganSearchField.getValue();}
 		if(rproduk_statusSearchField.getValue()!==null){rproduk_status_search=rproduk_statusSearchField.getValue();}
 		// change the store parameters
@@ -1483,6 +1519,7 @@ Ext.onReady(function(){
 			rproduk_nobuktijual	:	rproduk_nobuktijual_search, 
 			rproduk_cust	:	rproduk_cust_search, 
 			rproduk_tanggal	:	rproduk_tanggal_search_date, 
+			rproduk_tanggal_akhir : rproduk_tanggal_akhir_search_date,
 			rproduk_keterangan	:	rproduk_keterangan_search,
 			rproduk_status		:	rproduk_status_search,
 		};
@@ -1505,6 +1542,8 @@ Ext.onReady(function(){
 		rproduk_nobuktijualSearchField.reset();
 		rproduk_custSearchField.reset();
 		rproduk_tanggalSearchField.reset();
+		rproduk_tanggal_akhirSearchField.reset();
+		rproduk_tanggal_akhirSearchField.setValue(today);
 		rproduk_keteranganSearchField.reset();
 		rproduk_statusSearchField.reset();
 	}
@@ -1538,18 +1577,28 @@ Ext.onReady(function(){
 		anchor: '95%'
 	
 	});
-	/* Identify  rproduk_cust Search Field */
-	rproduk_custSearchField= new Ext.form.TextField({
-		id: 'rproduk_custSearchField',
-		fieldLabel: 'Customer',
-		//allowNegatife : false,
-		//blankText: '0',
-		//allowDecimals: false,
-		maxLength: 100,
-		anchor: '95%'
-		//maskRe: /([0-9]+)$/
 	
+	/* Identify  rproduk_cust Search Field */
+	rproduk_custSearchField= new Ext.form.ComboBox({
+		fieldLabel: 'Customer',
+		store: cbo_rproduk_customerDataStore,
+		mode: 'remote',
+		displayField:'cust_nama',
+		valueField: 'cust_nama',
+        typeAhead: false,
+        loadingText: 'Searching...',
+        pageSize:10,
+        hideTrigger:false,
+		tpl: customer_rproduk_tpl,
+        itemSelector: 'div.search-item',
+		triggerAction: 'all',
+		lazyRender:true,
+		listClass: 'x-combo-list-small',
+		allowBlank: false,
+		disabled:false,
+		anchor: '95%'
 	});
+	
 	/* Identify  rproduk_tanggal Search Field */
 	rproduk_tanggalSearchField= new Ext.form.DateField({
 		id: 'rproduk_tanggalSearchField',

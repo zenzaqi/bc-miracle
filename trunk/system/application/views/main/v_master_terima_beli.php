@@ -736,6 +736,17 @@ Ext.onReady(function(){
 			new Ext.app.SearchField({
 			store: master_terima_beli_DataStore,
 			params: {start: 0, limit: pageS},
+			listeners:{
+				specialkey: function(f,e){
+					if(e.getKey() == e.ENTER){
+						master_order_beli_DataStore.baseParams={task:'LIST',start: 0, limit: pageS};
+		            }
+				},
+				render: function(c){
+				Ext.get(this.id).set({qtitle:'Search By (aktif only)'});
+				Ext.get(this.id).set({qtip:'- No SP<br>- No PB<br>- Supplier<br>- No Surat Jalan<br>- Nama Pengirim'});
+				}
+			},
 			width: 120
 		}),'-',{
 			text: 'Refresh',
@@ -1776,9 +1787,9 @@ Ext.onReady(function(){
 	/* Function for reset search result */
 	function master_terima_beli_reset_search(){
 		// reset the store parameters
-		master_terima_beli_DataStore.baseParams = { task: 'LIST' };
+		master_terima_beli_DataStore.baseParams = { task: 'LIST',start:0,limit:15  };
 		// Cause the datastore to do another query : 
-		master_terima_beli_DataStore.reload({params: {start: 0, limit: pageS}});
+		master_terima_beli_DataStore.load({params: {start: 0, limit: 15}});
 		master_terima_beli_searchWindow.close();
 	};
 	/* End of Fuction */

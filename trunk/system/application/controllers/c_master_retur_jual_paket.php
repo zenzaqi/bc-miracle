@@ -213,6 +213,7 @@ class C_master_retur_jual_paket extends Controller {
 		$rpaket_nobuktijual=str_replace("'", '"',$rpaket_nobuktijual);
 		$rpaket_cust=trim(@$_POST["rpaket_cust"]);
 		$rpaket_tanggal=trim(@$_POST["rpaket_tanggal"]);
+		$rpaket_tanggal_akhir=trim(@$_POST["rpaket_tanggal_akhir"]);
 		$rpaket_keterangan=trim(@$_POST["rpaket_keterangan"]);
 		$rpaket_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$rpaket_keterangan);
 		$rpaket_keterangan=str_replace("'", '"',$rpaket_keterangan);
@@ -223,7 +224,7 @@ class C_master_retur_jual_paket extends Controller {
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_master_retur_jual_paket->master_retur_jual_paket_search($rpaket_id ,$rpaket_nobukti ,$rpaket_nobuktijual ,$rpaket_cust ,$rpaket_tanggal ,$rpaket_keterangan ,$rpaket_status, $start,$end);
+		$result = $this->m_master_retur_jual_paket->master_retur_jual_paket_search($rpaket_id ,$rpaket_nobukti ,$rpaket_nobuktijual ,$rpaket_cust ,$rpaket_tanggal ,$rpaket_tanggal_akhir, $rpaket_keterangan ,$rpaket_status, $start,$end);
 		echo $result;
 	}
 
