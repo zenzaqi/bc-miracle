@@ -83,6 +83,8 @@ Ext.onReady(function(){
 			var sms_opsi="";
 			var sms_dest="";
 			var sms_isi="";
+			var sms_jnsklm = "";
+			var sms_ultah = "";
 			
 			if(sms_detailField.getValue()!=="") sms_isi=sms_detailField.getValue();
 			if(sms_semua_radioField.getValue()==true){
@@ -106,14 +108,21 @@ Ext.onReady(function(){
 */			
 			else if(sms_member_radioField.getValue()==true){
 				sms_opsi='member';
+				
 				if(sms_membershipField.getValue()=='Expired'){
 					sms_dest=sms_membershipField.getValue()+':'+sms_tglexp_startField.getValue().format('Y-m-d')+ 's/d'+sms_tglexp_endField.getValue().format('Y-m-d');
-				}else{
+				}
+				else{
 //					sms_dest=sms_membershipField.getValue();
 					sms_dest=sms_membershipField.getValue() + ':' + 'x';
 				}
 				
-				
+				if (sms_kelamin_checkField.getValue()==true) {
+					sms_jnsklm = sms_kelaminField.getValue();
+				}
+				if (sms_ultah_checkField.getValue()==true) {
+					sms_ultah = sms_tglultah_startField.getValue().format('Y-m-d') + 's/d' + sms_tglultah_endField.getValue().format('Y-m-d');
+				}
 			}
 			
 			Ext.Ajax.request({  
@@ -124,7 +133,9 @@ Ext.onReady(function(){
 					isms_opsi	: sms_opsi,
 					isms_dest	: sms_dest,
 					isms_isi	: sms_isi,
-					isms_task	: post2db
+					isms_task	: post2db,
+					isms_jnsklm	: sms_jnsklm,
+					isms_ultah	: sms_ultah
 				}, 
 				success: function(response){             
 					var result=eval(response.responseText);
@@ -305,7 +316,13 @@ Ext.onReady(function(){
 		frame: false,
 		border: false
 	});
-	
+	var sms_tglexp_label2Field=new Ext.form.Label({
+		bodyStyle:'padding:5px',
+		html: 'exp: ',
+		width: 30,
+		frame: false,
+		border: false
+	});	
 	
 	var sms_bulanlahir_endField=new Ext.form.ComboBox({
 		id:	'sms_bulanlahir_endField',
@@ -386,7 +403,7 @@ Ext.onReady(function(){
 		border: false,
 		disabled : true,
 		bodyStyle:'padding-top:5px;padding-bottom:5px;padding-left:0px',
-		items: [sms_tglexp_startField,sms_tglexp_labelField,sms_tglexp_endField]
+		items: [sms_tglexp_label2Field, sms_tglexp_startField,sms_tglexp_labelField,sms_tglexp_endField]
 	});
 	
 	var sms_member_groupField=new Ext.form.FieldSet({
@@ -697,6 +714,8 @@ Ext.onReady(function(){
 		
 		sms_kelamin_checkField.setValue(false);
 		sms_ultah_checkField.setValue(false);
+		sms_kelamin_checkField.setDisabled(true);
+		sms_ultah_checkField.setDisabled(true);
 	}
 	
 	setDisableAll();
@@ -745,7 +764,9 @@ Ext.onReady(function(){
 			setDisableAll();
 			sms_membershipField.setDisabled(false);
 			sms_membershipField.allowBlank=false;
-		}
+			sms_kelamin_checkField.setDisabled(false);
+			sms_ultah_checkField.setDisabled(false);
+	}
 	});
 	
 	

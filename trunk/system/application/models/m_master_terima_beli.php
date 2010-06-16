@@ -459,6 +459,8 @@ class M_master_terima_beli extends Model{
 							OR terima_pengirim LIKE '%".addslashes($filter)."%')";
 			}
 			
+			$query .= " ORDER BY no_bukti DESC ";
+			
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
 			$limit = $query." LIMIT ".$start.",".$end;		

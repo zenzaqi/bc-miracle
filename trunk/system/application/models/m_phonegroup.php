@@ -18,7 +18,7 @@ class M_phonegroup extends Model{
 			parent::Model();
 		}
 		
-		function sms_save($isms_dest,$isms_isi,$isms_opsi,$isms_task){
+		function sms_save($isms_dest,$isms_isi,$isms_opsi,$isms_task, $isms_jnsklm, $isms_ultah){
 			$sql="";
 			if($isms_task=='draft'){
 				$sql="insert into draft(
@@ -101,7 +101,8 @@ class M_phonegroup extends Model{
 							//echo $sql;
 						$this->db->query($sql_sms);
 					}
-				}elseif($isms_opsi=='kelamin'){
+				}
+/*				elseif($isms_opsi=='kelamin'){
 					$sql="select cust_hp from customer where cust_kelamin='".$isms_dest."' AND cust_hp<>'' AND cust_hp is not null";
 					$query=$this->db->query($sql);
 					foreach($query->result() as $row){
@@ -123,7 +124,9 @@ class M_phonegroup extends Model{
 						$this->db->query($sql);
 						$sql="";
 					}
-				}elseif($isms_opsi=='ultah'){
+				}
+
+				elseif($isms_opsi=='ultah'){
 					$tgl_start=substr($isms_dest,1,5);
 					$tgl_end=substr($isms_dest,8,5);
 					
@@ -153,6 +156,7 @@ class M_phonegroup extends Model{
 						$sql="";
 					}
 				}
+*/				
 				elseif($isms_opsi=='member'){
 
 
@@ -166,9 +170,11 @@ class M_phonegroup extends Model{
 						$tgl_start=substr($expired,1,10);
 						$tgl_end=substr($expired,13,10);
 					}
+					
 					//$sql="select cust_hp from vu_member_cust WHERE cust_hp<>'' AND cust_hp is not null";
 					$sql=  "select cust_hp, cust_id from vu_customer
 							WHERE cust_hp<>'' AND cust_hp is not null";
+							
 					if($membership=="Expired"){
 						$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
 						$sql .=" date_format(member_valid,'%Y-%m-%d') >='".$tgl_start."' AND 
@@ -182,11 +188,24 @@ class M_phonegroup extends Model{
 					else if($membership=="Aktif"){
 						$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
 						$sql .=" date_format(member_valid,'%Y-%m-%d') >='".date('Y-m-d')."'";
-//						$sql .=" date_format(member_valid,'%Y-%m-%d') >='2010-06-15'";
 					}
 					else if($membership=="Non Aktif"){
 						$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
 						$sql .=" date_format(member_valid,'%Y-%m-%d') <'".date('Y-m-d')."'";
+					}
+					
+					if ($isms_jnsklm !== "") {
+						$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
+						$sql .=" cust_kelamin = '".$isms_jnsklm."'";
+					}
+					
+					if ($isms_ultah !== "") {
+						$tgl_ultah_start=substr($isms_ultah,5,5);
+						$tgl_ultah_end=substr($isms_ultah,18,5);
+						
+						$sql .= eregi("WHERE",$sql)? " AND ":" WHERE ";
+						$sql .= " date_format(cust_tgllahir,'%m-%d') >= '".$tgl_ultah_start."' AND 
+															 date_format(cust_tgllahir,'%m-%d') <= '".$tgl_ultah_end."'";					
 					}
 				
 					$query=$this->db->query($sql);

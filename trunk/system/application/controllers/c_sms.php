@@ -36,12 +36,14 @@ class C_sms extends Controller {
 	
 	function sms_save(){
 		$result=0;
-		$isms_dest = (isset($_POST['isms_dest']) ? @$_POST['isms_dest'] : @$_GET['isms_dest']);
-		$isms_isi = (isset($_POST['isms_isi']) ? @$_POST['isms_isi'] : @$_GET['isms_isi']);
-		$isms_opsi = (isset($_POST['isms_opsi']) ? @$_POST['isms_opsi'] : @$_GET['isms_opsi']);
-		$isms_task = (isset($_POST['isms_task']) ? @$_POST['isms_task'] : @$_GET['isms_task']);
+		$isms_dest 		= (isset($_POST['isms_dest']) ? @$_POST['isms_dest'] : @$_GET['isms_dest']);
+		$isms_isi 		= (isset($_POST['isms_isi']) ? @$_POST['isms_isi'] : @$_GET['isms_isi']);
+		$isms_opsi 		= (isset($_POST['isms_opsi']) ? @$_POST['isms_opsi'] : @$_GET['isms_opsi']);
+		$isms_task 		= (isset($_POST['isms_task']) ? @$_POST['isms_task'] : @$_GET['isms_task']);
+		$isms_jnsklm 	= (isset($_POST['isms_jnsklm']) ? @$_POST['isms_jnsklm'] : @$_GET['isms_jnsklm']);
+		$isms_ultah 	= (isset($_POST['isms_ultah']) ? @$_POST['isms_ultah'] : @$_GET['isms_ultah']);
 		
-		$result=$this->m_phonegroup->sms_save($isms_dest,$isms_isi,$isms_opsi,$isms_task);
+		$result=$this->m_phonegroup->sms_save($isms_dest,$isms_isi,$isms_opsi,$isms_task, $isms_jnsklm, $isms_ultah);
 		
 		echo $result;
 	}
