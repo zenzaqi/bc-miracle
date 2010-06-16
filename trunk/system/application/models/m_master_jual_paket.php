@@ -298,10 +298,10 @@ class M_master_jual_paket extends Model{
 				$rs_rows=$rs->num_rows();
 			}
 			
-			$sql="SELECT cust_id,cust_no,cust_nama,cust_tgllahir,cust_alamat,cust_telprumah FROM customer where cust_aktif='Aktif'";
+			$sql="SELECT cust_id,cust_no,cust_nama,cust_tgllahir,cust_alamat,cust_telprumah FROM customer WHERE cust_aktif='Aktif'";
 			if($query<>"" && is_numeric($query)==false){
 				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
-				$sql.=" (cust_nama like '%".$query."%' ) ";
+				$sql.=" (cust_nama like '%".$query."%' OR cust_no like '%".$query."%' ) ";
 			}else{
 				if($rs_rows){
 					$filter="";
