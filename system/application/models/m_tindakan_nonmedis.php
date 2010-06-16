@@ -471,74 +471,98 @@ class M_tindakan_nonmedis extends Model{
 	}
 	//*eof
 	
-	function detail_tindakan_nonmedis_detail_insert($dtrawat_id ,$dtrawat_master ,$dtrawat_perawatan ,$dtrawat_petugas1 ,$dtrawat_petugas2 ,$dtrawat_jamreservasi ,$dtrawat_kategori ,$dtrawat_status ,$dtrawat_keterangan ,$dtrawat_ambil_paket ,$dtrawat_cust ,$jumlah){
+	function detail_tindakan_nonmedis_detail_insert($array_dtrawat_id ,$dtrawat_master ,$array_dtrawat_perawatan ,$array_dtrawat_petugas2 ,$array_dtrawat_jam ,$array_dtrawat_status ,$array_dtrawat_keterangan ,$dtrawat_cust ,$array_jumlah){
 		/* hanya INSERT record tindakan_detail-nonmedis yang baru */
 		$date_now=date('Y-m-d');
-		if(!is_numeric($dtrawat_id)){
-			$dti_dtrawat=array(
-			"dtrawat_master"=>$dtrawat_master,
-			"dtrawat_perawatan"=>$dtrawat_perawatan,
-			"dtrawat_petugas2"=>$dtrawat_petugas2,
-			"dtrawat_tglapp"=>$date_now,
-			"dtrawat_jam"=>$dtrawat_jamreservasi,
-			"dtrawat_keterangan"=>$dtrawat_keterangan,
-			"dtrawat_jumlah"=>$jumlah
-			);
-			$this->db->insert('tindakan_detail', $dti_dtrawat);
-			if($this->db->affected_rows()){
-				$bln_now=date('Y-m');
-				/* meng-Counter db.report_tindakan dari Dokter yang dipilih */
-				$sql="SELECT reportt_jmltindakan FROM report_tindakan WHERE reportt_bln LIKE '$bln_now%' AND reportt_karyawan_id='$dtrawat_petugas1'";
+		
+		$size_array = sizeof($array_dtrawat_perawatan) - 1;
+		
+		for($i = 0; $i < sizeof($array_dtrawat_perawatan); $i++){
+			$dtrawat_id = $array_dtrawat_id[$i];
+			$dtrawat_perawatan = $array_dtrawat_perawatan[$i];
+			$dtrawat_petugas2 = $array_dtrawat_petugas2[$i];
+			$dtrawat_jam = $array_dtrawat_jam[$i];
+			$dtrawat_status = $array_dtrawat_status[$i];
+			$dtrawat_keterangan = $array_dtrawat_keterangan[$i];
+			$jumlah = $array_jumlah[$i];
+			
+			if(!is_numeric($dtrawat_id)){
+				$dti_dtrawat=array(
+				"dtrawat_master"=>$dtrawat_master,
+				"dtrawat_perawatan"=>$dtrawat_perawatan,
+				"dtrawat_petugas2"=>$dtrawat_petugas2,
+				"dtrawat_tglapp"=>$date_now,
+				"dtrawat_jam"=>$dtrawat_jam,
+				"dtrawat_keterangan"=>$dtrawat_keterangan,
+				"dtrawat_jumlah"=>$jumlah
+				);
+				$this->db->insert('tindakan_detail', $dti_dtrawat);
+				if($this->db->affected_rows()){
+					$bln_now=date('Y-m');
+					/* meng-Counter db.report_tindakan dari Terapis yang dipilih */
+					$sql="SELECT reportt_jmltindakan FROM report_tindakan WHERE reportt_bln LIKE '$bln_now%' AND reportt_karyawan_id='$dtrawat_petugas2'";
+					$rs=$this->db->query($sql);
+					if($rs->num_rows()){
+						$rs_record=$rs->row_array();
+						$data_reportt=array(
+						"reportt_jmltindakan"=>$rs_record["reportt_jmltindakan"]+1
+						);
+						$this->db->where('reportt_karyawan_id', $dtrawat_petugas2);
+						$this->db->update('report_tindakan', $data_reportt);
+					}else if(!$rs->num_rows()){
+						$data_reportt=array(
+						"reportt_karyawan_id"=>$dtrawat_petugas2,
+						"reportt_bln"=>$date_now,
+						"reportt_jmltindakan"=>1
+						);
+						$this->db->insert('report_tindakan', $data_reportt);
+					}
+					if($i==$size_array){
+						return '1';
+					}
+				}
+			}else if(is_numeric($dtrawat_id)){
+				$sql="SELECT dtrawat_id,dtrawat_locked,dtrawat_perawatan,dtrawat_petugas2,dtrawat_jam,dtrawat_keterangan,dtrawat_jumlah FROM tindakan_detail WHERE dtrawat_id='$dtrawat_id'";
 				$rs=$this->db->query($sql);
 				if($rs->num_rows()){
 					$rs_record=$rs->row_array();
-					$data_reportt=array(
-					"reportt_jmltindakan"=>$rs_record["reportt_jmltindakan"]+1
-					);
-					$this->db->where('reportt_karyawan_id', $dtrawat_petugas2);
-					$this->db->update('report_tindakan', $data_reportt);
-				}else if(!$rs->num_rows()){
-					$data_reportt=array(
-					"reportt_karyawan_id"=>$dtrawat_petugas2,
-					"reportt_bln"=>$date_now,
-					"reportt_jmltindakan"=>1
-					);
-					$this->db->insert('report_tindakan', $data_reportt);
+					$dtrawat_locked=$rs_record["dtrawat_locked"];
+					$dtrawat_perawatan_awal=$rs_record["dtrawat_perawatan"];
+					$dtrawat_petugas2_awal=$rs_record["dtrawat_petugas2"];
+					$dtrawat_jam_awal=$rs_record["dtrawat_jam"];
+					$dtrawat_keterangan_awal=$rs_record["dtrawat_keterangan"];
+					$dtrawat_jumlah_awal=$rs_record["dtrawat_jumlah"];
+					/*
+					# ini artinya: record detail tindakan sudah ada di db.tindakan_detail, sehingga yg bisa dilakukan adalah EDITING record detail JIKA UNLOCK
+					1. Check $dtrawat_status, JIKA ='selesai' ==> sudah masuk ke Kasir, JIKA !='selesai' ==> belum masuk ke Kasir manapun
+					2. JIKA $dtrawat_status='selesai' ==> check db.tindakan_detail.dtrawat_locked [1/0]
+					3. JIKA db.tindakan_detail.dtrawat_locked=0 ==> BOLEH di-EDIT
+					4. JIKA $dtrawat_status!='selesai' ==> silakan di-EDIT
+					*/
+					if($dtrawat_locked==0 && ($dtrawat_perawatan_awal<>$dtrawat_perawatan || $dtrawat_petugas2_awal<>$dtrawat_petugas2 || $dtrawat_jam_awal<>$dtrawat_jam || $dtrawat_keterangan_awal<>$dtrawat_keterangan || $dtrawat_jumlah_awal<>$jumlah)){
+						/* ini berarti: ada field yg berubah untuk dilakukan editing */
+						$dtu_dtrawat=array(
+						"dtrawat_perawatan"=>$dtrawat_perawatan,
+						"dtrawat_petugas2"=>$dtrawat_petugas2,
+						"dtrawat_jam"=>$dtrawat_jam,
+						"dtrawat_keterangan"=>$dtrawat_keterangan,
+						"dtrawat_jumlah"=>$jumlah
+						);
+						$this->db->where('dtrawat_id', $dtrawat_id);
+						$this->db->update('tindakan_detail', $dtu_dtrawat);
+						if($i==$size_array){
+							return '1';
+						}
+					}else{
+						if($i==$size_array){
+							return '1';
+						}
+					}
 				}
-				return 'Detail telah berhasil ditambahkan';
 			}
-		}else if(is_numeric($dtrawat_id)){
-                $sql="SELECT dtrawat_id,dtrawat_locked,dtrawat_perawatan,dtrawat_petugas2,dtrawat_jam,dtrawat_keterangan,dtrawat_jumlah FROM tindakan_detail WHERE dtrawat_id='$dtrawat_id'";
-                $rs=$this->db->query($sql);
-                if($rs->num_rows()){
-                    $rs_record=$rs->row_array();
-                    $dtrawat_locked=$rs_record["dtrawat_locked"];
-                    $dtrawat_perawatan_awal=$rs_record["dtrawat_perawatan"];
-                    $dtrawat_petugas2_awal=$rs_record["dtrawat_petugas2"];
-                    $dtrawat_jam_awal=$rs_record["dtrawat_jam"];
-                    $dtrawat_keterangan_awal=$rs_record["dtrawat_keterangan"];
-                    $dtrawat_jumlah_awal=$rs_record["dtrawat_jumlah"];
-                    /*
-                    # ini artinya: record detail tindakan sudah ada di db.tindakan_detail, sehingga yg bisa dilakukan adalah EDITING record detail JIKA UNLOCK
-                    1. Check $dtrawat_status, JIKA ='selesai' ==> sudah masuk ke Kasir, JIKA !='selesai' ==> belum masuk ke Kasir manapun
-                    2. JIKA $dtrawat_status='selesai' ==> check db.tindakan_detail.dtrawat_locked [1/0]
-                    3. JIKA db.tindakan_detail.dtrawat_locked=0 ==> BOLEH di-EDIT
-                    4. JIKA $dtrawat_status!='selesai' ==> silakan di-EDIT
-                    */
-                    if($dtrawat_locked==0 && ($dtrawat_perawatan_awal<>$dtrawat_perawatan || $dtrawat_petugas2_awal<>$dtrawat_petugas2 || $dtrawat_jam_awal<>$dtrawat_jamreservasi || $dtrawat_keterangan_awal<>$dtrawat_keterangan || $dtrawat_jumlah_awal<>$jumlah)){
-                        /* ini berarti: ada field yg berubah untuk dilakukan editing */
-                        $dtu_dtrawat=array(
-                        "dtrawat_perawatan"=>$dtrawat_perawatan,
-                        "dtrawat_petugas2"=>$dtrawat_petugas2,
-                        "dtrawat_jam"=>$dtrawat_jamreservasi,
-                        "dtrawat_keterangan"=>$dtrawat_keterangan,
-                        "dtrawat_jumlah"=>$jumlah
-                        );
-                        $this->db->where('dtrawat_id', $dtrawat_id);
-                        $this->db->update('tindakan_detail', $dtu_dtrawat);
-                    }
-                }
-        }
+		
+		}
+		
 	}
 	
 		//function for get list record

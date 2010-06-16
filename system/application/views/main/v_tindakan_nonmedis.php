@@ -1309,46 +1309,79 @@ Ext.onReady(function(){
 	
 	//function for insert detail
 	function tindakan_nonmedis_detail_insert(){
-		for(i=0;i<tindakan_nonmedis_detail_DataStore.getCount();i++){
-			tindakan_nonmedis_detail_record=tindakan_nonmedis_detail_DataStore.getAt(i);
-			if(tindakan_nonmedis_detail_record.data.dtrawat_perawatan!=""){
-				Ext.Ajax.request({
-					waitMsg: 'Please wait...',
-					url: 'index.php?c=c_tindakan_nonmedis&m=detail_tindakan_nonmedis_detail_insert',
-					params:{
-					dtrawat_id	: tindakan_nonmedis_detail_record.data.dtrawat_id, 
-					dtrawat_master	: eval(trawat_nonmedis_idField.getValue()), 
-					dtrawat_perawatan	: tindakan_nonmedis_detail_record.data.dtrawat_perawatan, 
-					dtrawat_petugas1	: tindakan_nonmedis_detail_record.data.dtrawat_petugas1, 
-					dtrawat_petugas2	: tindakan_nonmedis_detail_record.data.dtrawat_petugas2, 
-					dtrawat_jam	: tindakan_nonmedis_detail_record.data.dtrawat_jam, 
-					dtrawat_kategori	: tindakan_nonmedis_detail_record.data.dtrawat_kategori, 
-					dtrawat_status	: tindakan_nonmedis_detail_record.data.dtrawat_status, 
-					dtrawat_keterangan	: tindakan_nonmedis_detail_record.data.dtrawat_keterangan,
-					dtrawat_ambil_paket	: tindakan_nonmedis_detail_record.data.dtrawat_ambil_paket,
-					dtrawat_cust	: trawat_nonmedis_custidField.getValue(),
-					jumlah	: tindakan_nonmedis_detail_record.data.jumlah
-					},
-					callback: function(opts, success, response){
-						if(success){
-							tindakan_nonmedis_DataStore.reload();
-							/*var result = response.responseText;
-							switch(result){
-								default:
-									Ext.MessageBox.show({
-									   title: 'Warning',
-									   msg: result,
-									   buttons: Ext.MessageBox.OK,
-									   width: 300,
-									   animEl: 'save'
-									});
-									break;
-							}*/
+		var dtrawat_id=[];
+		var dtrawat_perawatan=[];
+		var dtrawat_petugas2=[];
+		var dtrawat_jam=[];
+		var dtrawat_status=[];
+		var dtrawat_keterangan=[];
+		var jumlah=[];
+		
+		var dcount = tindakan_nonmedis_detail_DataStore.getCount() - 1;
+		
+		if(tindakan_nonmedis_detail_DataStore.getCount()>0){
+			for(i=0; i<tindakan_nonmedis_detail_DataStore.getCount();i++){
+				dtrawat_id.push(tindakan_nonmedis_detail_DataStore.getAt(i).data.dtrawat_id);
+				dtrawat_perawatan.push(tindakan_nonmedis_detail_DataStore.getAt(i).data.dtrawat_perawatan);
+				dtrawat_petugas2.push(tindakan_nonmedis_detail_DataStore.getAt(i).data.dtrawat_petugas2);
+				dtrawat_jam.push(tindakan_nonmedis_detail_DataStore.getAt(i).data.dtrawat_jam);
+				dtrawat_status.push(tindakan_nonmedis_detail_DataStore.getAt(i).data.dtrawat_status);
+				dtrawat_keterangan.push(tindakan_nonmedis_detail_DataStore.getAt(i).data.dtrawat_keterangan);
+				jumlah.push(tindakan_nonmedis_detail_DataStore.getAt(i).data.jumlah);
+				
+				if(i==dcount){
+					var encoded_array_dtrawat_id = Ext.encode(dtrawat_id);
+					var encoded_array_dtrawat_perawatan = Ext.encode(dtrawat_perawatan);
+					var encoded_array_dtrawat_petugas2 = Ext.encode(dtrawat_petugas2);
+					var encoded_array_dtrawat_jam = Ext.encode(dtrawat_jam);
+					var encoded_array_dtrawat_status = Ext.encode(dtrawat_status);
+					var encoded_array_dtrawat_keterangan = Ext.encode(dtrawat_keterangan);
+					var encoded_array_jumlah = Ext.encode(jumlah);
+					
+					Ext.Ajax.request({
+						waitMsg: 'Please wait...',
+						url: 'index.php?c=c_tindakan_nonmedis&m=detail_tindakan_nonmedis_detail_insert',
+						params:{
+						dtrawat_id	: encoded_array_dtrawat_id,
+						dtrawat_master	: eval(trawat_nonmedis_idField.getValue()),
+						dtrawat_perawatan	: encoded_array_dtrawat_perawatan,
+						dtrawat_petugas2	: encoded_array_dtrawat_petugas2,
+						dtrawat_jam	: encoded_array_dtrawat_jam,
+						dtrawat_status	: encoded_array_dtrawat_status,
+						dtrawat_keterangan	: encoded_array_dtrawat_keterangan,
+						dtrawat_cust	: trawat_nonmedis_custidField.getValue(),
+						jumlah	: encoded_array_jumlah
+						},
+						success: function(response){
+							var result=eval(response.responseText);
+							if(result==1){
+								tindakan_nonmedis_DataStore.reload();
+							}else{
+								tindakan_medisDataStore.reload();
+								Ext.MessageBox.show({
+									title: 'Error',
+									msg: 'Data detail tindakan medis tidak bisa disimpan.',
+									buttons: Ext.MessageBox.OK,
+									animEl: 'database',
+									icon: Ext.MessageBox.ERROR
+								});	
+							}
+						},
+						failure: function(response){
+							var result=response.responseText;
+							Ext.MessageBox.show({
+							   title: 'Error',
+							   msg: 'Could not connect to the database. retry later.',
+							   buttons: Ext.MessageBox.OK,
+							   animEl: 'database',
+							   icon: Ext.MessageBox.ERROR
+							});	
 						}
-					}
-				});
+					});
+				}
 			}
 		}
+		
 	}
 	//eof
 	
