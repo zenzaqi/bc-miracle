@@ -1303,60 +1303,78 @@ Ext.onReady(function(){
 	
 	//function for insert detail
 	function tindakan_medisdetail_insert(){
-		var count_detail=tindakan_medis_detail_DataStore.getCount();
-		for(i=0;i<tindakan_medis_detail_DataStore.getCount();i++){
-				var count_i = i;
-				tindakan_medisdetail_record=tindakan_medis_detail_DataStore.getAt(i);
-				if(tindakan_medisdetail_record.data.dtrawat_perawatan!=""){
-						Ext.Ajax.request({
-								waitMsg: 'Please wait...',
-								url: 'index.php?c=c_tindakan_medis&m=detail_tindakan_medis_detail_insert',
-								params:{
-								dtrawat_id	: tindakan_medisdetail_record.data.dtrawat_id, 
-								dtrawat_master	: eval(trawat_medis_idField.getValue()), 
-								dtrawat_perawatan	: tindakan_medisdetail_record.data.dtrawat_perawatan, 
-								dtrawat_petugas1	: tindakan_medisdetail_record.data.dtrawat_petugas1, 
-								dtrawat_petugas2	: tindakan_medisdetail_record.data.dtrawat_petugas2, 
-								dtrawat_jamreservasi	: tindakan_medisdetail_record.data.dtrawat_jam, 
-								dtrawat_kategori	: tindakan_medisdetail_record.data.dtrawat_kategori, 
-								dtrawat_status	: tindakan_medisdetail_record.data.dtrawat_status,
-								dtrawat_keterangan	: tindakan_medisdetail_record.data.dtrawat_keterangan,
-								dtrawat_ambil_paket	: tindakan_medisdetail_record.data.dtrawat_ambil_paket,
-								dtrawat_cust	: trawat_medis_custidField.getValue(),
-								count	: count_i,
-								dcount	: count_detail
-								},
-								success: function(response){
-									var result=eval(response.responseText);
-									if(result==1){
-										dtindakan_jual_nonmedis_insert();
-										tindakan_medisDataStore.reload();
-									}else if(result==0){
-										tindakan_medisDataStore.reload();
-									}else{
-										tindakan_medisDataStore.reload();
-										Ext.MessageBox.show({
-											title: 'Error',
-											msg: 'Data detail tindakan medis tidak bisa disimpan.',
-											buttons: Ext.MessageBox.OK,
-											animEl: 'database',
-											icon: Ext.MessageBox.ERROR
-										});	
-									}
-								},
-								failure: function(response){
-									var result=response.responseText;
-									Ext.MessageBox.show({
-									   title: 'Error',
-									   msg: 'Could not connect to the database. retry later.',
-									   buttons: Ext.MessageBox.OK,
-									   animEl: 'database',
-									   icon: Ext.MessageBox.ERROR
-									});	
-								}
-						});
+		var dtrawat_id=[];
+		var dtrawat_perawatan=[];
+		var dtrawat_petugas1=[];
+		var dtrawat_jamreservasi=[];
+		var dtrawat_status=[];
+		var dtrawat_keterangan=[];
+		
+		var dcount = tindakan_medis_detail_DataStore.getCount() - 1;
+		
+		if(tindakan_medis_detail_DataStore.getCount()>0){
+			for(i=0; i<tindakan_medis_detail_DataStore.getCount();i++){
+				dtrawat_id.push(tindakan_medis_detail_DataStore.getAt(i).data.dtrawat_id);
+				dtrawat_perawatan.push(tindakan_medis_detail_DataStore.getAt(i).data.dtrawat_perawatan);
+				dtrawat_petugas1.push(tindakan_medis_detail_DataStore.getAt(i).data.dtrawat_petugas1);
+				dtrawat_jamreservasi.push(tindakan_medis_detail_DataStore.getAt(i).data.dtrawat_jam);
+				dtrawat_status.push(tindakan_medis_detail_DataStore.getAt(i).data.dtrawat_status);
+				dtrawat_keterangan.push(tindakan_medis_detail_DataStore.getAt(i).data.dtrawat_keterangan);
+				
+				if(i==dcount){
+					var encoded_array_dtrawat_id = Ext.encode(dtrawat_id);
+					var encoded_array_dtrawat_perawatan = Ext.encode(dtrawat_perawatan);
+					var encoded_array_dtrawat_petugas1 = Ext.encode(dtrawat_petugas1);
+					var encoded_array_dtrawat_jamreservasi = Ext.encode(dtrawat_jamreservasi);
+					var encoded_array_dtrawat_status = Ext.encode(dtrawat_status);
+					var encoded_array_dtrawat_keterangan = Ext.encode(dtrawat_keterangan);
+					
+					Ext.Ajax.request({
+						waitMsg: 'Please wait...',
+						url: 'index.php?c=c_tindakan_medis&m=detail_tindakan_medis_detail_insert',
+						params:{
+						dtrawat_id	: encoded_array_dtrawat_id,
+						dtrawat_master	: eval(trawat_medis_idField.getValue()), 
+						dtrawat_perawatan	: encoded_array_dtrawat_perawatan,
+						dtrawat_petugas1	: encoded_array_dtrawat_petugas1,
+						dtrawat_jamreservasi	: encoded_array_dtrawat_jamreservasi,
+						dtrawat_status	: encoded_array_dtrawat_status,
+						dtrawat_keterangan	: encoded_array_dtrawat_keterangan,
+						dtrawat_cust	: trawat_medis_custidField.getValue()
+						},
+						success: function(response){
+							var result=eval(response.responseText);
+							if(result==1){
+								dtindakan_jual_nonmedis_insert();
+								tindakan_medisDataStore.reload();
+							}else if(result==0){
+								tindakan_medisDataStore.reload();
+							}else{
+								tindakan_medisDataStore.reload();
+								Ext.MessageBox.show({
+									title: 'Error',
+									msg: 'Data detail tindakan medis tidak bisa disimpan.',
+									buttons: Ext.MessageBox.OK,
+									animEl: 'database',
+									icon: Ext.MessageBox.ERROR
+								});	
+							}
+						},
+						failure: function(response){
+							var result=response.responseText;
+							Ext.MessageBox.show({
+							   title: 'Error',
+							   msg: 'Could not connect to the database. retry later.',
+							   buttons: Ext.MessageBox.OK,
+							   animEl: 'database',
+							   icon: Ext.MessageBox.ERROR
+							});	
+						}
+					});
 				}
+			}
 		}
+		
 	}
 	//eof
 	

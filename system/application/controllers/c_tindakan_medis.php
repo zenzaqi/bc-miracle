@@ -91,34 +91,30 @@ class C_tindakan_medis extends Controller {
 	
 	//add detail
 	function detail_tindakan_medis_detail_insert(){
-	//POST variable here
-		$dtrawat_id=trim(@$_POST["dtrawat_id"]);
+		//POST variable here
+		$dtrawat_id = $_POST['dtrawat_id']; // Get our array back and translate it :
+		$array_dtrawat_id = json_decode(stripslashes($dtrawat_id));
+		
 		$dtrawat_master=trim(@$_POST["dtrawat_master"]);
-		$dtrawat_perawatan=trim(@$_POST["dtrawat_perawatan"]);
-		$dtrawat_petugas1=trim(@$_POST["dtrawat_petugas1"]);
-		$dtrawat_petugas2=trim(@$_POST["dtrawat_petugas2"]);
-		$dtrawat_jamreservasi=trim(@$_POST["dtrawat_jamreservasi"]);
-		$dtrawat_jamreservasi=str_replace("/(<\/?)(p)([^>]*>)", "",$dtrawat_jamreservasi);
-		$dtrawat_jamreservasi=str_replace("\\", "",$dtrawat_jamreservasi);
-		$dtrawat_jamreservasi=str_replace("'", "''",$dtrawat_jamreservasi);
-		$dtrawat_kategori=trim(@$_POST["dtrawat_kategori"]);
-		$dtrawat_kategori=str_replace("/(<\/?)(p)([^>]*>)", "",$dtrawat_kategori);
-		$dtrawat_kategori=str_replace("\\", "",$dtrawat_kategori);
-		$dtrawat_kategori=str_replace("'", "''",$dtrawat_kategori);
-		$dtrawat_status=trim(@$_POST["dtrawat_status"]);
-		$dtrawat_status=str_replace("/(<\/?)(p)([^>]*>)", "",$dtrawat_status);
-		$dtrawat_status=str_replace("\\", "",$dtrawat_status);
-		$dtrawat_status=str_replace("'", "''",$dtrawat_status);
-		$dtrawat_keterangan=trim(@$_POST["dtrawat_keterangan"]);
-		$dtrawat_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$dtrawat_keterangan);
-		$dtrawat_keterangan=str_replace("\\", "",$dtrawat_keterangan);
-		$dtrawat_ambil_paket=trim(@$_POST["dtrawat_ambil_paket"]);
+		
+		$dtrawat_perawatan = $_POST['dtrawat_perawatan']; // Get our array back and translate it :
+		$array_dtrawat_perawatan = json_decode(stripslashes($dtrawat_perawatan));
+		
+		$dtrawat_petugas1 = $_POST['dtrawat_petugas1']; // Get our array back and translate it :
+		$array_dtrawat_petugas1 = json_decode(stripslashes($dtrawat_petugas1));
+		
+		$dtrawat_jamreservasi = $_POST['dtrawat_jamreservasi']; // Get our array back and translate it :
+		$array_dtrawat_jamreservasi = json_decode(stripslashes($dtrawat_jamreservasi));
+		
+		$dtrawat_status = $_POST['dtrawat_status']; // Get our array back and translate it :
+		$array_dtrawat_status = json_decode(stripslashes($dtrawat_status));
+		
+		$dtrawat_keterangan = $_POST['dtrawat_keterangan']; // Get our array back and translate it :
+		$array_dtrawat_keterangan = json_decode(stripslashes($dtrawat_keterangan));
+		
 		$dtrawat_cust=trim(@$_POST["dtrawat_cust"]);
 		
-		$count=trim(@$_POST["count"]);
-		$dcount=trim(@$_POST["dcount"]);
-		
-		$result=$this->m_tindakan_medis->detail_tindakan_medis_detail_insert($dtrawat_id ,$dtrawat_master ,$dtrawat_perawatan ,$dtrawat_petugas1 ,$dtrawat_petugas2 ,$dtrawat_jamreservasi ,$dtrawat_kategori ,$dtrawat_status ,$dtrawat_keterangan ,$dtrawat_ambil_paket ,$dtrawat_cust ,$count ,$dcount);
+		$result=$this->m_tindakan_medis->detail_tindakan_medis_detail_insert($array_dtrawat_id ,$dtrawat_master ,$array_dtrawat_perawatan ,$array_dtrawat_petugas1 ,$array_dtrawat_jamreservasi ,$array_dtrawat_status ,$array_dtrawat_keterangan ,$dtrawat_cust );
 		echo $result;
 	}
 	
