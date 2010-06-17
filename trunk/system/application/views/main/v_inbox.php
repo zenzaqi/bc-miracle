@@ -364,28 +364,28 @@ Ext.onReady(function(){
 				cell.css = "readonlycell"; // Mengambil Value dari Class di dalam CSS 
 				return value;
 				},
-			hidden: false
+			hidden: true
 		},
 		{
-			header: 'Sender',
-			dataIndex: 'inbox_sender',
-			width: 150,
-			sortable: true,
-			readOnly: true
-		}, 
-		{
-			header: 'Message',
-			dataIndex: 'inbox_message',
-			width: 150,
-			sortable: true,
-			readOnly: true
-		}, 
-		{
-			header: 'Date',
+			header: '<div align="center">Tanggal</div>',
 			dataIndex: 'inbox_date',
-			width: 150,
+			width: 40,
 			sortable: true,
 			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
+			readOnly: true
+		}, 
+		{
+			header: '<div align="center">Pengirim</div>',
+			dataIndex: 'inbox_sender',
+			width: 40,
+			sortable: true,
+			readOnly: true
+		}, 
+		{
+			header: '<div align="center">Isi Pesan</div>',
+			dataIndex: 'inbox_message',
+			width: 210,
+			sortable: true,
 			readOnly: true
 		}, 
 		{
@@ -436,7 +436,7 @@ Ext.onReady(function(){
 	inboxListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'inboxListEditorGrid',
 		el: 'fp_inbox',
-		title: 'List Of SMS Inbox',
+		title: 'Inbox SMS',
 		autoHeight: true,
 		store: inbox_DataStore, // DataStore
 		cm: inbox_ColumnModel, // Nama-nama Columns
@@ -445,7 +445,7 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 700,
+	  	width: 800,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: inbox_DataStore,
@@ -457,9 +457,10 @@ Ext.onReady(function(){
 			text: 'Delete',
 			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
+			disabled: true,
 			handler: inbox_confirm_delete   // Confirm before deleting
 		}, '-', {
-			text: 'Search',
+			text: 'Adv Search',
 			tooltip: 'Advanced Search',
 			iconCls:'icon-search',
 			handler: display_form_search_window 
@@ -497,6 +498,7 @@ Ext.onReady(function(){
 			text: 'Delete', 
 			tooltip: 'Delete selected record', 
 			iconCls:'icon-delete',
+			disabled: true,
 			handler: inbox_confirm_delete 
 		},
 		'-',

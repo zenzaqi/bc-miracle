@@ -89,7 +89,7 @@ Ext.onReady(function(){
 		if(oGrid_event.record.data.draft_message!== null){draft_message_update = oGrid_event.record.data.draft_message;}
 	 	
 		Ext.Ajax.request({  
-			waitMsg: 'Please wait...',
+			waitMsg: 'Mohon tunggu...',
 			url: 'index.php?c=c_draft&m=get_action',
 			params: {
 				draft_id	: draft_id_update_pk, 
@@ -106,7 +106,7 @@ Ext.onReady(function(){
 					default:
 						Ext.MessageBox.show({
 						   title: 'Warning',
-						   msg: 'We could\'t not save the Draft.',
+						   msg: 'Draft SMS tidak bisa disimpan',
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'save',
 						   icon: Ext.MessageBox.WARNING
@@ -156,13 +156,13 @@ Ext.onReady(function(){
 	function draft_confirm_delete(){
 		// only one draft is selected here
 		if(draftListEditorGrid.selModel.getCount() == 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', draft_delete);
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', draft_delete);
 		} else if(draftListEditorGrid.selModel.getCount() > 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', draft_delete);
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', draft_delete);
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really delete something you haven\'t selected?',
+				msg: 'Anda belum memilih data yang akan dihapus',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -179,6 +179,8 @@ Ext.onReady(function(){
 			msg='updated';
 			draft_saveWindow.show();
 			draft_set_form();
+			setDisableAll();
+			draft_destnumField.setDisabled(false);
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
@@ -302,21 +304,21 @@ Ext.onReady(function(){
 		}, 
 */
 		{
-			header: 'Isi Pesan',
+			header: '<div align="center">Tanggal</div>',
+			dataIndex: 'draft_date',
+			width: 40,
+			sortable: true,
+			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
+			readOnly: true
+		}, 
+		{
+			header: '<div align="center">Isi Pesan</div>',
 			dataIndex: 'draft_message',
 			width: 250,
 			sortable: true,
 			editor: new Ext.form.TextArea({
 				height: 5
 			})
-		}, 
-		{
-			header: 'Date',
-			dataIndex: 'draft_date',
-			width: 150,
-			sortable: true,
-			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
-			readOnly: true
 		}, 
 		{
 			header: 'Creator',
@@ -394,7 +396,7 @@ Ext.onReady(function(){
 			iconCls:'icon-delete',
 			handler: draft_confirm_delete   // Confirm before deleting
 		}, '-', {
-			text: 'Search',
+			text: 'Adv Search',
 			tooltip: 'Advanced Search',
 			iconCls:'icon-search',
 			handler: display_form_search_window 
