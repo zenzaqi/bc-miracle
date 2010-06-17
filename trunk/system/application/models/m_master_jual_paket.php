@@ -371,7 +371,7 @@ class M_master_jual_paket extends Model{
 					}else
 						return '0';
 				}
-			}elseif(is_numeric($ppaket_id)==true){
+			}/*elseif(is_numeric($ppaket_id)==true){
 				//* Editing Pemakai Paket /
 				$dtu_ppaket = array(
 				"ppaket_cust"=>$ppaket_cust
@@ -382,7 +382,7 @@ class M_master_jual_paket extends Model{
 					return '1';
 				}else
 					return '0';
-			}
+			}*/
 			
 		}
 		
@@ -2046,6 +2046,18 @@ class M_master_jual_paket extends Model{
 				}
 				$this->db->query($query);
 			}
+			if($this->db->affected_rows()>0)
+				return '1';
+			else
+				return '0';
+		}
+		
+		function master_jual_paket_batal($jpaket_id){
+			$dtu_jpaket=array(
+			"jpaket_stat_dok"=>'Batal'
+			);
+			$this->db->where('jpaket_id', $jpaket_id);
+			$this->db->update('master_jual_paket', $dtu_jpaket);
 			if($this->db->affected_rows()>0)
 				return '1';
 			else

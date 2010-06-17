@@ -479,8 +479,9 @@ class M_master_ambil_paket extends Model{
 						LEFT JOIN master_jual_paket ON(dpaket_master=jpaket_id) 
 						LEFT JOIN customer ON(jpaket_cust=cust_id) 
 						LEFT JOIN paket ON(dpaket_paket=paket_id) 
-						WHERE dpaket_sisa_paket >= 0 AND 
-							dpaket_kadaluarsa >= now() ";
+						WHERE dpaket_sisa_paket >= 0
+							AND date_format(dpaket_kadaluarsa,'%Y-%m-%d') >= date_format(now(),'%Y-%m-%d')
+							AND jpaket_stat_dok='Tertutup' ";
 
 			// For simple search
 			if ($filter<>""){
