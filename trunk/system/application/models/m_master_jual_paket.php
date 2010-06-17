@@ -2053,15 +2053,28 @@ class M_master_jual_paket extends Model{
 		}
 		
 		function master_jual_paket_batal($jpaket_id){
-			$dtu_jpaket=array(
-			"jpaket_stat_dok"=>'Batal'
-			);
-			$this->db->where('jpaket_id', $jpaket_id);
-			$this->db->update('master_jual_paket', $dtu_jpaket);
-			if($this->db->affected_rows()>0)
-				return '1';
-			else
+			$sql = "SELECT dapaket_id FROM detail_ambil_paket WHERE dapaket_jpaket='$jpaket_id'";
+			$rs = $this->db->query($sql);
+			if($rs->num_rows()){
+				//* artinya: Customer sudah pernah mengambil paket pada Faktur ini. Sehingga tidak boleh di-Batal-kan. /
 				return '0';
+			}else{
+				//* artinya: Customer belum pernah ambil paket pada Faktur ini. Sehingga masih boleh di-Batal-kan /
+				$dtu_jpaket = "UPDATE master_jual_paket SET jpaket_stat_dok='Batal'
+					WHERE jpaket_id='$jpaket_id'
+						AND jpaket_tanggal=date_format(now(),'%Y-%m-%d') ";
+				$this->db->query($dtu_jpaket);
+				/*$dtu_jpaket=array(
+				"jpaket_stat_dok"=>'Batal'
+				);
+				$this->db->where('jpaket_id', $jpaket_id);
+				$this->db->update('master_jual_paket', $dtu_jpaket);*/
+				if($this->db->affected_rows()>0)
+					return '1';
+				else
+					return '-1';
+			}
+			
 		}
 		
 		//function for advanced search record

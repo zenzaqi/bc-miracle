@@ -304,10 +304,21 @@ Ext.onReady(function(){
 					case 1:
 						Ext.Msg.alert('OK', 'Pembatalan sudah dilakukan.');
 						break;
+					case 0:
+						Ext.MessageBox.show({
+						   title: 'Warning',
+						   width: 400,
+						   msg: 'Pembatalan tidak bisa dilakukan, <br/>karena Paket pada Faktur ini sudah pernah diambil.',
+						   buttons: Ext.MessageBox.OK,
+						   animEl: 'save',
+						   icon: Ext.MessageBox.WARNING
+						});
+						break;
 					default:
 						Ext.MessageBox.show({
 						   title: 'Warning',
-						   msg: 'Pembatalan tidak bisa dilakukan.',
+						   width: 450,
+						   msg: 'Pembatalan tidak bisa dilakukan, <br/>karena Pembatalan hanya boleh dilakukan pada Faktur yang terbit hari ini.',
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'save',
 						   icon: Ext.MessageBox.WARNING
