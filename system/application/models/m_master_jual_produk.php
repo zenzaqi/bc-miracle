@@ -251,18 +251,18 @@ class M_master_jual_produk extends Model{
 		
 		
 		
-		function get_produk_list($query,$start,$end){
+	function get_produk_list($query,$start,$end){
 		$rs_rows=0;
 		if(is_numeric($query)==true){
 			$sql_dproduk="SELECT dproduk_produk FROM detail_jual_produk WHERE dproduk_master='$query'";
 			$rs=$this->db->query($sql_dproduk);
 			$rs_rows=$rs->num_rows();
-		}		
-
+		}
+		
 		$sql="select * from vu_produk WHERE produk_aktif='Aktif'";
 		if($query<>"" && is_numeric($query)==false){
 			$sql.=eregi("WHERE",$sql)? " AND ":" WHERE ";
-			$sql.=" (produk_kode like '%".$query."%' or produk_nama like '%".$query."%' or satuan_nama like '%".$query."%' or kategori_nama like '%".$query."%' or group_nama like '%".$query."%') ";
+			$sql.=" (produk_kode like '%".$query."%' or produk_nama like '%".$query."%' ) ";
 		}else{
 			if($rs_rows){
 				$filter="";
