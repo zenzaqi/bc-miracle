@@ -83,7 +83,7 @@ Ext.onReady(function(){
 		if(oGrid_event.record.data.phonegroup_detail!== null){phonegroup_detail_update = oGrid_event.record.data.phonegroup_detail;}
 
 		Ext.Ajax.request({  
-			waitMsg: 'Please wait...',
+			waitMsg: 'Mohon tunggu...',
 			url: 'index.php?c=c_phonegroup&m=get_action',
 			params: {
 				phonegroup_id	: phonegroup_id_update_pk, 
@@ -101,7 +101,7 @@ Ext.onReady(function(){
 					default:
 						Ext.MessageBox.show({
 						   title: 'Warning',
-						   msg: 'We could\'t not save the Phonegroup.',
+						   msg: 'Data Phone Group tidak bisa disimpan',
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'save',
 						   icon: Ext.MessageBox.WARNING
