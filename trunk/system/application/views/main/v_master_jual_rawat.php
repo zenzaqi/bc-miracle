@@ -2200,6 +2200,7 @@ Ext.onReady(function(){
 	jrawat_cust_nomemberField= new Ext.form.TextField({
 		id: 'jrawat_cust_nomemberField',
 		fieldLabel: 'No Member',
+		emptyText : '(Auto)',
 		readOnly: true
 	});
 	
@@ -5221,7 +5222,7 @@ Ext.onReady(function(){
 		jrawat_stat_dokSearchField.reset();
 		jrawat_stat_dokSearchField.setValue(null);
 		Ext.getCmp('jrawat_tanggalStartAppSearchField').reset();
-		Ext.getCmp('jrawat_tanggalStartAppSearchField').setValue(today);
+		//Ext.getCmp('jrawat_tanggalStartAppSearchField').setValue(today);
 		Ext.getCmp('jrawat_tanggalEndAppSearchField').reset();
 		Ext.getCmp('jrawat_tanggalEndAppSearchField').setValue(today);
 	}

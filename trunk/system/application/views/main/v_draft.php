@@ -70,6 +70,10 @@ var draft_destinationSearchField;
 var draft_messageSearchField;
 var draft_dateSearchField;
 
+var draft_count_isiField;
+var max_isi=320;
+var dua_sms = 'no';
+
 var today = new Date();
 
 /* on ready fuction */
@@ -178,7 +182,7 @@ Ext.onReady(function(){
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really update something you haven\'t selected?',
+				msg: 'Anda belum memilih data yang akan diubah',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -197,7 +201,7 @@ Ext.onReady(function(){
 			}
 			var encoded_array = Ext.encode(prez);
 			Ext.Ajax.request({ 
-				waitMsg: 'Please Wait',
+				waitMsg: 'Mohon tunggu...',
 				url: 'index.php?c=c_draft&m=get_action', 
 				params: { task: "DELETE", ids:  encoded_array }, 
 				success: function(response){
@@ -248,13 +252,15 @@ Ext.onReady(function(){
 		/* dataIndex => insert intodraft_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'draft_id', type: 'int', mapping: 'draft_id'},
 			{name: 'draft_destid', type: 'int', mapping: 'draft_destid'},
-			{name: 'draft_jenis', type: 'string', mapping: 'draft_jenis'}, 
+
+/*			{name: 'draft_jenis', type: 'string', mapping: 'draft_jenis'}, 
 			{name: 'draft_destnama', type: 'string', mapping: 'draft_destination'}, 
 			{name: 'draft_destnama_view', type: 'string', mapping: 'draft_destination_view'},
 			{name: 'draft_dest_tglawal', type: 'int', mapping: 'draft_destination_tglawal'}, 
 			{name: 'draft_dest_blnawal', type: 'int', mapping: 'draft_destination_blnawal'}, 
 			{name: 'draft_dest_tglakhir', type: 'int', mapping: 'draft_destination_tglakhir'},
 			{name: 'draft_dest_blnakhir', type: 'int', mapping: 'draft_destination_blnakhir'}, 
+*/
 			{name: 'draft_message', type: 'string', mapping: 'draft_message'}, 
 			{name: 'draft_date', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'draft_date'}, 
 			{name: 'draft_creator', type: 'string', mapping: 'draft_creator'}, 
@@ -278,9 +284,9 @@ Ext.onReady(function(){
 				cell.css = "readonlycell"; // Mengambil Value dari Class di dalam CSS 
 				return value;
 				},
-			hidden: false
+			hidden: true
 		},
-		{
+/*		{
 			header: 'Jenis',
 			dataIndex: 'draft_jenis',
 			width: 80,
@@ -294,6 +300,7 @@ Ext.onReady(function(){
 			sortable: true,
 			readOnly: true
 		}, 
+*/
 		{
 			header: 'Isi Pesan',
 			dataIndex: 'draft_message',
@@ -474,14 +481,16 @@ Ext.onReady(function(){
 	
 	/* setValue to EDIT */
 	function draft_set_form(){
-		var f_jenis=draftListEditorGrid.getSelectionModel().getSelected().get('draft_jenis');
+/*		var f_jenis=draftListEditorGrid.getSelectionModel().getSelected().get('draft_jenis');
 		var f_dest=draftListEditorGrid.getSelectionModel().getSelected().get('draft_destnama');
 		var f_dest_tgl_awal=draftListEditorGrid.getSelectionModel().getSelected().get('draft_dest_tglawal');
 		var f_dest_bln_awal=draftListEditorGrid.getSelectionModel().getSelected().get('draft_dest_blnawal');
 		var f_dest_tgl_akhir=draftListEditorGrid.getSelectionModel().getSelected().get('draft_dest_tglakhir');
 		var f_dest_bln_akhir=draftListEditorGrid.getSelectionModel().getSelected().get('draft_dest_blnakhir');
+*/		
 		var f_isi=draftListEditorGrid.getSelectionModel().getSelected().get('draft_message');
-		if(f_jenis=='Semua'){
+
+/*		if(f_jenis=='Semua'){
 			draft_semua_radioField.setValue(true);
 		}else if(f_jenis=='Group'){
 			draft_group_radioField.setValue(true);
@@ -523,6 +532,7 @@ Ext.onReady(function(){
 				draft_member_expField.setDisabled(false);
 			}
 		}
+*/		
 		draft_detailField.setValue(f_isi);
 		//setDisableAll();
 	}
@@ -540,10 +550,11 @@ Ext.onReady(function(){
 			var draft_opsi="";
 			var draft_dest="";
 			var draft_isi="";
-			var sms_jnsklm = "";
-			var sms_ultah = "";
+			var draft_jnsklm = "";
+			var draft_ultah = "";
 			
 			if(draft_detailField.getValue()!=="") draft_isi=draft_detailField.getValue();
+
 			if(draft_semua_radioField.getValue()==true){
 				draft_opsi='semua';
 			}else if(draft_group_radioField.getValue()==true){
@@ -600,7 +611,12 @@ Ext.onReady(function(){
 					var result=eval(response.responseText);
 					switch(result){
 						case 1:
-							Ext.MessageBox.alert(post2db+' OK','Send SMS sukses. Cek di Outbox untuk status pengiriman');
+							if (post2db=='send') {
+								Ext.MessageBox.alert(post2db+' OK','Send SMS sukses. Cek di Outbox untuk status pengiriman');
+							}
+							else {
+								Ext.MessageBox.alert(post2db+' OK','Draft SMS berhasil disimpan');
+							}
 							draft_saveWindow.hide();
 							draft_DataStore.reload();
 							break;
@@ -1110,7 +1126,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [draft_destinationField, draft_detailField] 
+				items: [draft_destinationField, draft_opsiField, draft_detailField, draft_count_isiField] 
 			}
 			],
 		buttons: [{

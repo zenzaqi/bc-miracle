@@ -38,7 +38,9 @@ class M_draft extends Model{
 				$i=0;
 				foreach($result->result() as $row){
 					$arr[$i]["draft_id"]=$row->draft_id;
-					$arr[$i]["draft_jenis"]=ucwords($row->draft_jenis);
+
+// yg disimpan cukup msg nya saja. by hendri 2010-06-16					
+/*					$arr[$i]["draft_jenis"]=ucwords($row->draft_jenis);
 					if($row->draft_jenis=='group'){
 						$sql="select phonegroup_nama from phonegroup where phonegroup_id='".$row->draft_destination."'";
 						$query=$this->db->query($sql);
@@ -106,6 +108,7 @@ class M_draft extends Model{
 							$arr[$i]["draft_destination_blnakhir"]="";
 						}
 					}
+*/					
 					$arr[$i]["draft_message"]=$row->draft_message;
 					$arr[$i]["draft_date"]=$row->draft_date;
 					$arr[$i]["draft_creator"]=$row->draft_creator;

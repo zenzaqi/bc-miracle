@@ -141,7 +141,12 @@ Ext.onReady(function(){
 					var result=eval(response.responseText);
 					switch(result){
 						case 1:
-							Ext.MessageBox.alert(post2db+' OK','Send SMS sukses. Cek di Outbox untuk status pengiriman');
+							if (post2db=='send') {
+								Ext.MessageBox.alert(post2db+' OK','Send SMS sukses. Cek di Outbox untuk status pengiriman');
+							}
+							else {
+								Ext.MessageBox.alert(post2db+' OK','New SMS berhasil disimpan di Draft SMS');
+							}
 							mainPanel.remove(mainPanel.getActiveTab().getId());
 							break;
 						default:
