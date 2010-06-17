@@ -586,7 +586,8 @@ class M_master_ambil_paket extends Model{
 						FROM detail_jual_paket 
 						LEFT JOIN master_jual_paket ON(dpaket_master=jpaket_id) 
 						LEFT JOIN customer ON(jpaket_cust=cust_id) 
-						LEFT JOIN paket ON(dpaket_paket=paket_id) ";
+						LEFT JOIN paket ON(dpaket_paket=paket_id)
+						WHERE jpaket_stat_dok='Tertutup'";
 			
 			if($apaket_faktur!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
