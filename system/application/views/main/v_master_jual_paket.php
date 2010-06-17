@@ -1984,6 +1984,7 @@ Ext.onReady(function(){
 	jpaket_cust_nomemberField= new Ext.form.TextField({
 		id: 'jpaket_cust_nomemberField',
 		fieldLabel: 'No Member',
+		emptyText : '(Auto)',
 		readOnly: true
 	});
 	
@@ -5472,7 +5473,7 @@ Ext.onReady(function(){
 		jpaket_nobuktiSearchField.reset();
 		jpaket_custSearchField.reset();
 		jpaket_tanggalSearchField.reset();
-		jpaket_tanggalSearchField.setValue(today);
+		//jpaket_tanggalSearchField.setValue(today);
 		jpaket_tanggal_akhirSearchField.reset();
 		jpaket_tanggal_akhirSearchField.setValue(today);
 		jpaket_diskonSearchField.reset();
@@ -5502,12 +5503,24 @@ Ext.onReady(function(){
 	
 	});
 	/* Identify  jpaket_cust Search Field */
-	jpaket_custSearchField= new Ext.form.TextField({
+	jpaket_custSearchField= new Ext.form.ComboBox({
 		id: 'jpaket_custSearchField',
 		fieldLabel: 'Customer',
-		maxLength: 30,
+		store: cbo_cust_jual_paket_DataStore,
+		mode: 'remote',
+		displayField:'cust_nama',
+		valueField: 'cust_id',
+        typeAhead: false,
+        loadingText: 'Searching...',
+        pageSize:10,
+        hideTrigger:false,
+        tpl: customer_jual_paket_tpl,
+        //applyTo: 'search',
+        itemSelector: 'div.search-item',
+		triggerAction: 'all',
+		lazyRender:true,
+		listClass: 'x-combo-list-small',
 		anchor: '95%'
-	
 	});
 	/* Identify  jpaket_tanggal Search Field */
 	jpaket_tanggalSearchField= new Ext.form.DateField({
@@ -5542,7 +5555,7 @@ Ext.onReady(function(){
 		mode: 'local',
 		displayField: 'jpaket_cara',
 		valueField: 'value',
-		anchor: '95%',
+		anchor: '45%',
 		triggerAction: 'all'	 
 	
 	});

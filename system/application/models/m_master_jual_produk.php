@@ -251,11 +251,6 @@ class M_master_jual_produk extends Model{
 		
 		
 		
-		
-		
-		
-		
-		
 		function get_produk_list($query,$start,$end){
 		$rs_rows=0;
 		if(is_numeric($query)==true){
@@ -1900,7 +1895,7 @@ class M_master_jual_produk extends Model{
 			};
 			if($jproduk_cust!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " jproduk_cust LIKE '%".$jproduk_cust."%'";
+				$query.= " jproduk_cust = '".$jproduk_cust."'";
 			};
 			if($jproduk_tanggal!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";

@@ -2067,7 +2067,7 @@ class M_master_jual_paket extends Model{
 			};
 			if($jpaket_cust!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_nama LIKE '%".$jpaket_cust."%'";
+				$query.= " cust_id = '".$jpaket_cust."'";
 			};
 			if($jpaket_tanggal!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";

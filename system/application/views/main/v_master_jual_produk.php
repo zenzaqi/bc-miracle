@@ -2227,6 +2227,7 @@ Ext.onReady(function(){
 	jproduk_cust_nomemberField= new Ext.form.TextField({
 		id: 'jproduk_cust_nomemberField',
 		fieldLabel: 'No Member',
+		emptyText : '(Auto)',
 		readOnly: true
 	});
 	
@@ -5845,7 +5846,7 @@ Ext.onReady(function(){
 			},
 			{
 				xtype:'spacer',
-				width: 560
+				width: 800
 			},
 			{
 				text: 'Save and Print',
@@ -5950,7 +5951,7 @@ Ext.onReady(function(){
 		jproduk_nobuktiSearchField.reset();
 		jproduk_custSearchField.reset();
 		jproduk_tanggalSearchField.reset();
-		jproduk_tanggalSearchField.setValue(today);
+		//jproduk_tanggalSearchField.setValue(today);
 		jproduk_tanggal_akhirSearchField.reset();
 		jproduk_tanggal_akhirSearchField.setValue(today);
 		jproduk_diskonSearchField.reset();

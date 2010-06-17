@@ -20,7 +20,7 @@ class M_phonegroup extends Model{
 		
 		function sms_save($isms_dest,$isms_isi,$isms_opsi,$isms_task, $isms_jnsklm, $isms_ultah){
 			$sql="";
-			if($isms_task=='draft'){
+/*			if($isms_task=='draft'){
 				$sql="insert into draft(
 						draft_jenis,
 						draft_destination,
@@ -37,7 +37,24 @@ class M_phonegroup extends Model{
 						'".date('Y/m/d H:i:s')."')";
 				$this->db->query($sql);
 				//echo $sql;
-			}else{
+			}
+*/			
+			//yg disimpan cukup message & tanggalnya aja. by hendri 2010-06-16
+			if($isms_task=='draft'){
+				$sql="insert into draft(
+						draft_message,
+						draft_date,
+						draft_creator,
+						draft_date_create)
+					 values(
+						'".$isms_isi."',
+						'".date('Y/m/d H:i:s')."',
+						'".$_SESSION[SESSION_USERID]."',
+						'".date('Y/m/d H:i:s')."')";
+				$this->db->query($sql);
+				//echo $sql;
+			}
+			else{
 				if($isms_opsi=="semua"){
 					$sql="select cust_hp from customer WHERE cust_hp<>'' AND cust_hp is not null";
 					$query=$this->db->query($sql);
