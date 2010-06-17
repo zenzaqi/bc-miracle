@@ -141,13 +141,13 @@ Ext.onReady(function(){
 					var result=eval(response.responseText);
 					switch(result){
 						case 1:
-							Ext.MessageBox.alert(post2db+' OK','New SMS berhasil disimpan. Cek di Outbox untuk status pengiriman');
+							Ext.MessageBox.alert(post2db+' OK','Send SMS sukses. Cek di Outbox untuk status pengiriman');
 							mainPanel.remove(mainPanel.getActiveTab().getId());
 							break;
 						default:
 							Ext.MessageBox.show({
 							   title: 'Warning',
-							   msg: 'New SMS tidak dapat disimpan',
+							   msg: 'New SMS tidak bisa disimpan',
 							   buttons: Ext.MessageBox.OK,
 							   animEl: 'save',
 							   icon: Ext.MessageBox.WARNING
@@ -170,7 +170,7 @@ Ext.onReady(function(){
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'Your Form is not valid!.',
+				msg: 'Form anda belum lengkap',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -178,9 +178,7 @@ Ext.onReady(function(){
 		}
 	
 	}
- 	/* End of Function */
-  
-  	
+ 	/* End of Function */  	
 	
   	/* Function for Retrieve DataStore */
 	phonegroup_DataStore = new Ext.data.Store({
@@ -253,7 +251,7 @@ Ext.onReady(function(){
 			  ['21'],['22'],['23'],['24'],['25'],['26'],['27'],['28'],['29'],['30'],['31']]
 	});
 	
-	var sms_tgllahir_startField=new Ext.form.ComboBox({
+/*	var sms_tgllahir_startField=new Ext.form.ComboBox({
 		id:	'sms_tgllahir_startField',
 		name: 'sms_tgllahir_startField',
 		typeAhead: true,
@@ -301,6 +299,21 @@ Ext.onReady(function(){
 		bodyStyle:'padding:5px'
 	});
 	
+	var sms_bulanlahir_endField=new Ext.form.ComboBox({
+		id:	'sms_bulanlahir_endField',
+		name: 'sms_bulanlahir_endField',
+		typeAhead: true,
+		triggerAction: 'all',
+		store: bulanStore,
+		mode: 'local',
+		width: 80,
+		value: '01',
+		displayField: 'bulan_nama',
+		valueField: 'bulan_id',
+		lazyRender:true,
+		listClass: 'x-combo-list-small'
+	});
+*/		
 	var sms_tgllahir_labelField=new Ext.form.Label({
 		bodyStyle:'padding:5px',
 		html: '&nbsp; s/d ',
@@ -316,6 +329,7 @@ Ext.onReady(function(){
 		frame: false,
 		border: false
 	});
+	
 	var sms_tglexp_label2Field=new Ext.form.Label({
 		bodyStyle:'padding:5px',
 		html: 'exp: ',
@@ -324,21 +338,6 @@ Ext.onReady(function(){
 		border: false
 	});	
 	
-	var sms_bulanlahir_endField=new Ext.form.ComboBox({
-		id:	'sms_bulanlahir_endField',
-		name: 'sms_bulanlahir_endField',
-		typeAhead: true,
-		triggerAction: 'all',
-		store: bulanStore,
-		mode: 'local',
-		width: 80,
-		value: '01',
-		displayField: 'bulan_nama',
-		valueField: 'bulan_id',
-		lazyRender:true,
-		listClass: 'x-combo-list-small'
-	});
-		
 	var sms_membershipField=new Ext.form.ComboBox({
 		id:	'sms_membershipField',
 		name: 'sms_membershipField',
@@ -427,8 +426,7 @@ Ext.onReady(function(){
 					items: [sms_member_expField]
 			   }]
 	});
-	
-	
+		
 	var sms_kelaminField=new Ext.form.ComboBox({
 		id:	'sms_kelaminField',
 		name: 'sms_kelaminField',
@@ -456,7 +454,7 @@ Ext.onReady(function(){
 		id:'sms_group_radioField',
 		name:'sms_opsiField',
 		width: 100,
-		boxLabel: 'Phonegroup',
+		boxLabel: 'Phone Group',
 		value: 'selected'
 	});
 	
@@ -465,7 +463,6 @@ Ext.onReady(function(){
 		name:'sms_opsiField',
 		width: 100,
 		boxLabel: 'Semua Customer',
-//		checked: true,
 		value: 'selected'
 	});
 	
@@ -473,7 +470,7 @@ Ext.onReady(function(){
 		id:'sms_number_radioField',
 		name:'sms_opsiField',
 		width: 100,
-		boxLabel: 'Nomer <br> P',
+		boxLabel: 'Nomor <br> P',
 		checked: true,
 		value: 'selected'
 	});
@@ -500,7 +497,6 @@ Ext.onReady(function(){
 			}
 		}
 	});
-
 	
 /*	var sms_ultah_radioField=new Ext.form.Radio({
 		id:'sms_ultah_radioField',
@@ -606,7 +602,7 @@ Ext.onReady(function(){
 			   }]
 	});
 
-		sms_detailField= new Ext.form.TextArea({
+	sms_detailField= new Ext.form.TextArea({
 		id: 'sms_detailField',
 		fieldLabel: 'Isi Pesan',
 		maxLength: 500,
@@ -643,8 +639,6 @@ Ext.onReady(function(){
 			dua_sms = 'no';
 		}
 	});
-
-	
 	
 	/* Function for retrieve create Window Panel*/ 
 	sms_saveForm = new Ext.FormPanel({
@@ -664,7 +658,7 @@ Ext.onReady(function(){
 				text: 'Send',
 				handler: function(){ sms_save('send'); }
 			},{
-				text: 'Draft',
+				text: 'Save to Draft',
 				handler: function(){ sms_save('draft'); }
 			}
 			,{
@@ -766,7 +760,7 @@ Ext.onReady(function(){
 			sms_membershipField.allowBlank=false;
 			sms_kelamin_checkField.setDisabled(false);
 			sms_ultah_checkField.setDisabled(false);
-	}
+		}
 	});
 	
 	
