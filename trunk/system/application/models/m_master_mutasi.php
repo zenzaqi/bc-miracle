@@ -278,8 +278,10 @@ class M_master_mutasi extends Model{
 			// For simple search
 			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (mutasi_id LIKE '%".addslashes($filter)."%' OR mutasi_asal LIKE '%".addslashes($filter)."%' OR mutasi_tujuan LIKE '%".addslashes($filter)."%' OR mutasi_tanggal LIKE '%".addslashes($filter)."%' OR mutasi_keterangan LIKE '%".addslashes($filter)."%' )";
+				$query .= " (mutasi_no LIKE '%".addslashes($filter)."%' OR gudang_asal_nama LIKE '%".addslashes($filter)."%' OR gudang_tujuan_nama LIKE '%".addslashes($filter)."%' OR mutasi_keterangan LIKE '%".addslashes($filter)."%' )";
 			}
+			
+			$query .= " ORDER BY mutasi_no DESC ";
 			
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
