@@ -65,9 +65,11 @@ class C_draft extends Controller {
 		$idraft_isi = (isset($_POST['idraft_isi']) ? @$_POST['idraft_isi'] : @$_GET['idraft_isi']);
 		$idraft_opsi = (isset($_POST['idraft_opsi']) ? @$_POST['idraft_opsi'] : @$_GET['idraft_opsi']);
 		$idraft_task = (isset($_POST['idraft_task']) ? @$_POST['idraft_task'] : @$_GET['idraft_task']);
+		$idraft_jnsklm = (isset($_POST['idraft_jnsklm']) ? @$_POST['idraft_jnsklm'] : @$_GET['idraft_jnsklm']);
+		$idraft_ultah = (isset($_POST['idraft_ultah']) ? @$_POST['idraft_ultah'] : @$_GET['idraft_ultah']);
 		if($idraft_task=="send"){
-			$result=$this->m_phonegroup->sms_save($idraft_dest,$idraft_isi,$idraft_opsi,$idraft_task);
-			$result=$this->m_draft->draft_delete($idraft_id);
+			$result=$this->m_phonegroup->sms_save($idraft_dest,$idraft_isi,$idraft_opsi,$idraft_task, $idraft_jnsklm, $idraft_ultah);
+//			$result=$this->m_draft->draft_delete($idraft_id);
 		}else{
 			$draft_date=date('Y/m/d H:i:s');
 			$draft_update=$_SESSION[SESSION_USERID];
