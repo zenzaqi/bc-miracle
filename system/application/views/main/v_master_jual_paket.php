@@ -289,6 +289,50 @@ Ext.onReady(function(){
 		});   
 	}
   	/* End of Function */
+  	
+	function master_jual_paket_batal(){
+		Ext.Ajax.request({  
+			waitMsg: 'Mohon  Tunggu...',
+			url: 'index.php?c=c_master_jual_paket&m=get_action',
+			params: {
+				task: 'BATAL',
+				jpaket_id	: jpaket_idField.getValue()
+			}, 
+			success: function(response){             
+				var result=eval(response.responseText);
+				switch(result){
+					case 1:
+						Ext.Msg.alert('OK', 'Pembatalan sudah dilakukan.');
+						break;
+					default:
+						Ext.MessageBox.show({
+						   title: 'Warning',
+						   msg: 'Pembatalan tidak bisa dilakukan.',
+						   buttons: Ext.MessageBox.OK,
+						   animEl: 'save',
+						   icon: Ext.MessageBox.WARNING
+						});
+						break;
+				}
+				detail_jual_paket_DataStore.load({params: {master_id:0}});
+				master_jual_paket_reset_allForm();
+				jpaket_caraField.setValue("card");
+				master_jual_paket_cardGroup.setVisible(true);
+				master_cara_bayarTabPanel.setActiveTab(0);
+				jpaket_post2db="CREATE";
+			},
+			failure: function(response){
+				var result=response.responseText;
+				Ext.MessageBox.show({
+					   title: 'Error',
+					   msg: 'Could not connect to the database. retry later.',
+					   buttons: Ext.MessageBox.OK,
+					   animEl: 'database',
+					   icon: Ext.MessageBox.ERROR
+				});	
+			}                      
+		});
+	}
   
   	/* Function for add data, open window create form */
 	function master_jual_paket_create(){
@@ -300,7 +344,7 @@ Ext.onReady(function(){
 			}
 		}
 		
-		if(is_master_jual_paket_form_valid()&& dpaket_paket_id=="ada" && ((/^\d+$/.test(jpaket_custField.getValue()) && jpaket_post2db=="CREATE") || jpaket_post2db=="UPDATE") && jpaket_stat_dokField.getValue()=='Terbuka'){
+		if(is_master_jual_paket_form_valid() && dpaket_paket_id=="ada" && ((/^\d+$/.test(jpaket_custField.getValue()) && jpaket_post2db=="CREATE") || jpaket_post2db=="UPDATE") && jpaket_stat_dokField.getValue()=='Terbuka'){
 			var jpaket_id_create_pk=null; 
 			var jpaket_nobukti_create=null; 
 			var jpaket_cust_create=null; 
@@ -617,20 +661,30 @@ Ext.onReady(function(){
 					});	
 				}                      
 			});
-		}else if(jpaket_post2db=="UPDATE" && jpaket_stat_dokField.getValue()=='Tertutup' && (detail_pengguna_paket_DataStore.getCount()>0)){
-			detail_pengguna_paket_purge();
-			master_jual_paket_reset_allForm();
-			jpaket_caraField.setValue("card");
-			master_jual_paket_cardGroup.setVisible(true);
-			master_cara_bayarTabPanel.setActiveTab(0);
-		}else if(jpaket_post2db=="UPDATE" && jpaket_stat_dokField.getValue()=='Tertutup' && (detail_pengguna_paket_DataStore.getCount()==0)){
-			detail_pengguna_paket_purge();
-			master_jual_paket_reset_allForm();
-			jpaket_caraField.setValue("card");
-			master_jual_paket_cardGroup.setVisible(true);
-			master_cara_bayarTabPanel.setActiveTab(0);
-			Ext.Msg.alert('OK', 'Tidak ada penambahan daftar pemakai paket.');
-		}else {
+		}else if(jpaket_post2db=="UPDATE" && jpaket_stat_dokField.getValue()!=='Terbuka'){
+			if((jpaket_stat_dokField.getValue()=='Tertutup') && (detail_pengguna_paket_DataStore.getCount()>0)){
+				detail_pengguna_paket_insert();
+				detail_jual_paket_DataStore.load({params: {master_id:0}});
+				master_jual_paket_reset_allForm();
+				jpaket_caraField.setValue("card");
+				master_jual_paket_cardGroup.setVisible(true);
+				master_cara_bayarTabPanel.setActiveTab(0);
+			}else if((jpaket_stat_dokField.getValue()=='Tertutup') && (detail_pengguna_paket_DataStore.getCount()==0)){
+				detail_jual_paket_DataStore.load({params: {master_id:0}});
+				master_jual_paket_reset_allForm();
+				jpaket_caraField.setValue("card");
+				master_jual_paket_cardGroup.setVisible(true);
+				master_cara_bayarTabPanel.setActiveTab(0);
+				jpaket_post2db="CREATE";
+				Ext.Msg.alert('OK', 'Tidak ada penambahan daftar pemakai paket.');
+			}else if(jpaket_stat_dokField.getValue()=='Batal'){
+				master_jual_paket_batal();
+				master_jual_paket_reset_allForm();
+				jpaket_caraField.setValue("card");
+				master_jual_paket_cardGroup.setVisible(true);
+				master_cara_bayarTabPanel.setActiveTab(0);
+			}
+		}else{
 			Ext.MessageBox.show({
 				title: 'Warning',
 				msg: 'Form anda belum lengkap!',
