@@ -359,7 +359,7 @@ Ext.onReady(function(){
 	draftListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'draftListEditorGrid',
 		el: 'fp_draft',
-		title: 'List Of SMS Draft',
+		title: 'Draft SMS',
 		autoHeight: true,
 		store: draft_DataStore, // DataStore
 		cm: draft_ColumnModel, // Nama-nama Columns
@@ -540,6 +540,8 @@ Ext.onReady(function(){
 			var draft_opsi="";
 			var draft_dest="";
 			var draft_isi="";
+			var sms_jnsklm = "";
+			var sms_ultah = "";
 			
 			if(draft_detailField.getValue()!=="") draft_isi=draft_detailField.getValue();
 			if(draft_semua_radioField.getValue()==true){
@@ -550,24 +552,39 @@ Ext.onReady(function(){
 			}else if(draft_number_radioField.getValue()==true){
 				draft_opsi='number';
 				draft_dest=draft_destnumField.getValue();
-			}else if(draft_kelamin_radioField.getValue()==true){
+			}
+			
+/*			else if(draft_kelamin_radioField.getValue()==true){
 				draft_opsi='kelamin';
 				draft_dest=draft_kelaminField.getValue();
-			}else if(draft_ultah_radioField.getValue()==true){
+			}
+			else if(draft_ultah_radioField.getValue()==true){
 				draft_opsi='ultah';
 				draft_dest=draft_bulanlahir_startField.getValue() + '-' +draft_tgllahir_startField.getValue()+ 's/d'+draft_bulanlahir_endField.getValue() + '-' +draft_tgllahir_endField.getValue();
-			}else if(draft_member_radioField.getValue()==true){
+			}
+*/			
+			else if(draft_member_radioField.getValue()==true){
 				draft_opsi='member';
+				
 				if(draft_membershipField.getValue()=='Expired'){
 					draft_dest=draft_membershipField.getValue()+':'+draft_tglexp_startField.getValue().format('Y-m-d')+ 's/d'+draft_tglexp_endField.getValue().format('Y-m-d');
-				}else{
-					draft_dest=draft_membershipField.getValue();
+				}
+				else{
+//					draft_dest=draft_membershipField.getValue();
+					draft_dest=draft_membershipField.getValue() + ':' + 'x';
 				}	
+				
+				if (draft_kelamin_checkField.getValue()==true) {
+					draft_jnsklm = draft_kelaminField.getValue();
+				}
+				if (draft_ultah_checkField.getValue()==true) {
+					draft_ultah = draft_tglultah_startField.getValue().format('Y-m-d') + 's/d' + draft_tglultah_endField.getValue().format('Y-m-d');
+				}
 			}
 			
 			//console.log('group'+draft_number_radioField.getValue());
 			Ext.Ajax.request({  
-				waitMsg: 'Please wait...',
+				waitMsg: 'Mohon tunggu...',
 				url: 'index.php?c=c_draft&m=draft_save',
 				timeout: 3600000,
 				params: {
@@ -575,20 +592,22 @@ Ext.onReady(function(){
 					idraft_opsi	: draft_opsi,
 					idraft_dest	: draft_dest,
 					idraft_isi	: draft_isi,
-					idraft_task	: post2db
+					idraft_task	: post2db,
+					idraft_jnsklm	: draft_jnsklm,
+					idraft_ultah	: draft_ultah
 				}, 
 				success: function(response){             
 					var result=eval(response.responseText);
 					switch(result){
 						case 1:
-							Ext.MessageBox.alert(post2db+' OK','SMS sukses !');
+							Ext.MessageBox.alert(post2db+' OK','Send SMS sukses. Cek di Outbox untuk status pengiriman');
 							draft_saveWindow.hide();
 							draft_DataStore.reload();
 							break;
 						default:
 							Ext.MessageBox.show({
 							   title: 'Warning',
-							   msg: 'We could\'t not '+msg+' the sms.',
+							   msg: 'Draft SMS tidak bisa disimpan',
 							   buttons: Ext.MessageBox.OK,
 							   animEl: 'save',
 							   icon: Ext.MessageBox.WARNING
@@ -611,7 +630,7 @@ Ext.onReady(function(){
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'Your Form is not valid!.',
+				msg: 'Form anda belum lengkap',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -740,8 +759,6 @@ Ext.onReady(function(){
 		bodyStyle:'padding:5px'
 	});
 	
-
-	
 	var draft_bulanlahir_endField=new Ext.form.ComboBox({
 		id:	'draft_bulanlahir_endField',
 		name: 'draft_bulanlahir_endField',
@@ -773,19 +790,14 @@ Ext.onReady(function(){
 		border: false
 	});
 	
-	
-	
-	
-	var draft_ultah_groupField=new Ext.form.FieldSet({
-		id:	'draft_ultah_groupField',
-		name: 'draft_ultah_groupField',
-		layout: 'column',
+	var draft_tglexp_label2Field=new Ext.form.Label({
+		bodyStyle:'padding:5px',
+		html: 'exp: ',
+		width: 30,
 		frame: false,
-		border: false,
-		items:[draft_tgllahir_startField,draft_bulanlahir_startField,draft_tgllahir_labelField,draft_tgllahir_endField,draft_bulanlahir_endField]
-	
+		border: false
 	});
-	
+
 	var draft_membershipField=new Ext.form.ComboBox({
 		id:	'draft_membershipField',
 		name: 'draft_membershipField',
@@ -804,24 +816,44 @@ Ext.onReady(function(){
 		listClass: 'x-combo-list-small'
 	});
 	
-	
 	var draft_tglexp_startField=new Ext.form.DateField({
 		id:	'draft_tglexp_startField',
 		name: 'draft_tglexp_startField',
-		format: 'Y-m-d',
+		format: 'd-m-Y',
 		value: today
 	});
-	
 	
 	var draft_tglexp_endField=new Ext.form.DateField({
 		id:	'draft_tglexp_endField',
 		name: 'draft_tglexp_endField',
-		format: 'Y-m-d',
+		format: 'd-m-Y',
 		value: today
 	});
 	
+	var draft_tglultah_startField=new Ext.form.DateField({
+		id:	'draft_tglultah_startField',
+		name: 'draft_tglultah_startField',
+		format: 'd-m-Y',
+		value: today
+	});
+		
+	var draft_tglultah_endField=new Ext.form.DateField({
+		id:	'draft_tglultah_endField',
+		name: 'draft_tglultah_endField',
+		format: 'd-m-Y',
+		value: today
+	});
 	
-	
+	var draft_ultah_groupField=new Ext.form.FieldSet({
+		id:	'draft_ultah_groupField',
+		name: 'draft_ultah_groupField',
+		layout: 'column',
+		frame: false,
+		border: false,
+//		items:[draft_tgllahir_startField,draft_bulanlahir_startField,draft_tgllahir_labelField,draft_tgllahir_endField,draft_bulanlahir_endField]
+		items:[draft_tglultah_startField, draft_tgllahir_labelField, draft_tglultah_endField]	
+	});
+		
 	var draft_member_expField=new Ext.form.FieldSet({
 		layout: 'column',
 		frame: false,
@@ -881,7 +913,7 @@ Ext.onReady(function(){
 		id:'draft_group_radioField',
 		name:'draft_opsiField',
 		width: 100,
-		boxLabel: 'Phonegroup',
+		boxLabel: 'Phone Group',
 		value: 'selected'
 	});
 	
@@ -890,7 +922,6 @@ Ext.onReady(function(){
 		name:'draft_opsiField',
 		width: 100,
 		boxLabel: 'Semua Customer',
-		checked: true,
 		value: 'selected'
 	});
 	
@@ -898,26 +929,56 @@ Ext.onReady(function(){
 		id:'draft_number_radioField',
 		name:'draft_opsiField',
 		width: 100,
-		boxLabel: 'Nomer <br> P',
+		boxLabel: 'Nomor <br> P',
+		checked: true,
 		value: 'selected'
 	});
 	
-	var draft_kelamin_radioField=new Ext.form.Radio({
+/*	var draft_kelamin_radioField=new Ext.form.Radio({
 		id:'draft_kelamin_radioField',
 		name:'draft_opsiField',
 		width: 100,
 		boxLabel: 'Jenis Kelamin',
 		value: 'selected'
 	});
-	
-	var draft_ultah_radioField=new Ext.form.Radio({
+*/	
+	draft_kelamin_checkField=new Ext.form.Checkbox({
+		id: 'draft_kelamin_checkField',
+		boxLabel: 'Jenis Kelamin',
+		width: 100,
+		handler: function(node,checked){
+			if (checked) {
+				draft_kelaminField.setDisabled(false);
+				//Ext.Msg.alert('Status', 'Changes saved successfully.');
+			}
+			else {
+				draft_kelaminField.setDisabled(true);
+			}
+		}
+	});
+
+/*	var draft_ultah_radioField=new Ext.form.Radio({
 		id:'draft_ultah_radioField',
 		name:'draft_opsiField',
 		width: 100,
 		boxLabel: 'Ulang Tahun',
 		value: 'selected'
 	});
-	
+*/	
+	var draft_ultah_checkField=new Ext.form.Checkbox({
+		id:'draft_ultah_checkField',
+		width: 100,
+		boxLabel: 'Ulang Tahun',
+		handler: function(node,checked){
+			if (checked) {
+				draft_ultah_groupField.setDisabled(false);
+			}
+			else {
+				draft_ultah_groupField.setDisabled(true);
+			}
+		}		
+	});
+
 	var draft_member_radioField=new Ext.form.Radio({
 		id:'draft_member_radioField',
 		name:'draft_opsiField',
@@ -927,7 +988,7 @@ Ext.onReady(function(){
 	});
 
 	var draft_destinationField = new Ext.form.FieldSet({
-		title: 'Opsi Tujuan',
+		title: 'Tujuan',
 		anchor: '98%',
 		layout:'form',
 		frame: false,
@@ -950,7 +1011,8 @@ Ext.onReady(function(){
 					border: false,
 					bodyStyle:'padding:5px',
 					items: [draft_number_radioField,draft_destnumField]
-			   },{
+			   },
+/*			   {
 				   	layout: 'column',
 					frame: false,
 					border: false,
@@ -968,6 +1030,34 @@ Ext.onReady(function(){
 					border: false,
 					bodyStyle:'padding:5px',
 					items: [draft_member_radioField,draft_member_groupField]
+			   }
+*/			   ]
+	});
+	
+	var draft_opsiField = new Ext.form.FieldSet({
+		title: 'Pilihan',
+		anchor: '98%',
+		layout:'form',
+		frame: false,
+		border: true,
+		items:[{
+				   	layout: 'column',
+					frame: false,
+					border: false,
+					bodyStyle:'padding:5px',
+					items: [draft_member_radioField, draft_member_groupField]
+			   },{
+				   	layout: 'column',
+					frame: false,
+					border: false,
+					bodyStyle:'padding:5px',
+					items: [draft_kelamin_checkField, draft_kelaminField]
+			   },{
+				   	layout: 'column',
+					frame: false,
+					border: false,
+					bodyStyle:'padding:5px',
+					items: [draft_ultah_checkField, draft_ultah_groupField]
 			   }]
 	});
 	
@@ -977,11 +1067,38 @@ Ext.onReady(function(){
 		maxLength: 500,
 		bodyStyle:'padding:5px',
 		anchor: '95%',
-		allowBlank: false
+		allowBlank: false,		
+		enableKeyEvents: true,
+		maxLength: 320		
 	});
 
+	draft_count_isiField= new Ext.form.NumberField({
+		width: 40
+	});	
 	
-	
+	draft_detailField.on('keyup', function(){
+		var isi_length = draft_detailField.getValue().length;
+		var sisa_length = max_isi - isi_length;
+		draft_count_isiField.setValue(isi_length);
+		if(dua_sms=='no' && isi_length==161){
+			//* satu sms terlewati /
+			Ext.Msg.alert('Content SMS', 'Pengiriman = 2 SMS.');
+			dua_sms = 'yes';
+		}else if(isi_length==321){
+			//* dua sms terlewati /
+			Ext.MessageBox.show({
+				title: 'Warning',
+				width: 200,
+				msg: 'Maksimal pengiriman adalah 2 SMS.',
+				buttons: Ext.MessageBox.OK,
+				animEl: 'save',
+				icon: Ext.MessageBox.WARNING
+			 });
+		}else if(isi_length==160 && dua_sms=='yes'){
+			dua_sms = 'no';
+		}
+	});
+
 	/* Function for retrieve create Window Panel*/ 
 	draft_saveForm = new Ext.FormPanel({
 		labelAlign: 'left',
@@ -1000,7 +1117,7 @@ Ext.onReady(function(){
 				text: 'Send',
 				handler: function(){ draft_save('send'); }
 			},{
-				text: 'Draft',
+				text: 'Save',
 				handler: function(){ draft_save('draft'); }
 			}
 			,{
@@ -1016,7 +1133,7 @@ Ext.onReady(function(){
 	/* Function for retrieve create Window Form */
 	draft_saveWindow= new Ext.Window({
 		id: 'draft_saveWindow',
-		title: 'New SMS',
+		title: 'Draft SMS',
 		closable:false,
 		closeAction: 'close',
 		autoWidth: true,
@@ -1044,8 +1161,11 @@ Ext.onReady(function(){
 		draft_kelaminField.allowBlank=true;
 		draft_membershipField.allowBlank=true;
 		
-	}
-	
+		draft_kelamin_checkField.setValue(false);
+		draft_ultah_checkField.setValue(false);
+		draft_kelamin_checkField.setDisabled(true);
+		draft_ultah_checkField.setDisabled(true);
+	}	
 		
 	draft_membershipField.on("select",function(){
 		if(draft_membershipField.getValue()=='Expired'){
@@ -1071,7 +1191,7 @@ Ext.onReady(function(){
 	 	}
 	});
 	
-	draft_kelamin_radioField.on("check",function(){
+/*	draft_kelamin_radioField.on("check",function(){
 		if(draft_kelamin_radioField.getValue()==true){
 			setDisableAll();
 			draft_kelaminField.setDisabled(false);
@@ -1085,12 +1205,14 @@ Ext.onReady(function(){
 			draft_ultah_groupField.setDisabled(false);
 		}
 	});
-	
+*/	
 	draft_member_radioField.on("check",function(){
 		if(draft_member_radioField.getValue()==true){
 			setDisableAll();
 			draft_membershipField.setDisabled(false);
 			draft_membershipField.allowBlank=false;
+			sms_kelamin_checkField.setDisabled(false);
+			sms_ultah_checkField.setDisabled(false);
 		}
 	});
 	

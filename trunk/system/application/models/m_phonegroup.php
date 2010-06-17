@@ -167,7 +167,7 @@ class M_phonegroup extends Model{
 					//if($expired!=="")
 					if($expired!=="x")
 					{
-						$tgl_start=substr($expired,1,10);
+						$tgl_start=substr($expired,0,10);
 						$tgl_end=substr($expired,13,10);
 					}
 					
@@ -192,6 +192,10 @@ class M_phonegroup extends Model{
 					else if($membership=="Non Aktif"){
 						$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
 						$sql .=" date_format(member_valid,'%Y-%m-%d') <'".date('Y-m-d')."'";
+					}
+					else if($membership=="Semua"){
+						$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
+						$sql .=" member_no is not NULL ";
 					}
 					
 					if ($isms_jnsklm !== "") {
