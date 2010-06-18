@@ -3,9 +3,9 @@
     #songbee	mukhlisona@gmail.com
 	#CV. Trust Solution, jl. Saronojiwo 19 Surabaya, http://www.ts.co.id
 	
-	+ Module  		: tindakan Model
+	+ Module  		: resep dokter Model
 	+ Description	: For record model process back-end
-	+ Filename 		: c_tindakan.php
+	+ Filename 		: c_resep_dokter.php
  	+ Author  		: masongbee
  	+ Created on 27/Oct/2009 14:21:34
 	
@@ -83,6 +83,54 @@ class M_resep_dokter extends Model{
 	}
 	
 
+	function get_paket_list($query,$start,$end){
+			$rs_rows=0;
+			if(is_numeric($query)==true){
+				$sql_paket="SELECT distinct(dresep_paket) FROM detail_resep_dokter_kombinasi WHERE dresep_master='$query'";
+				$rs=$this->db->query($sql_paket);
+				$rs_rows=$rs->num_rows();
+			}
+			
+//			$sql="SELECT paket_id, paket_harga, paket_kode, group_nama, kategori_nama, paket_du, paket_dm, paket_nama, paket_expired FROM paket INNER JOIN produk_group ON paket.paket_group=produk_group.group_id INNER JOIN kategori ON produk_group.group_kelompok=kategori.kategori_id WHERE kategori.kategori_jenis='paket' AND paket_aktif='Aktif'";
+			$sql=  "SELECT 
+						paket_id, paket_harga, paket_kode, paket_du, paket_dm, paket_nama, paket_expired 
+					FROM paket 
+					WHERE paket_aktif='Aktif'";
+
+			if($query<>"" && is_numeric($query)==false){
+				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+				$sql.=" (paket_kode LIKE '%".addslashes($query)."%' OR paket_nama LIKE '%".addslashes($query)."%' ) ";
+			}else{
+				if($rs_rows){
+					$filter="";
+					$sql.=eregi("AND",$query)? " OR ":" AND ";
+					foreach($rs->result() as $row_paket){
+						
+						$filter.="OR paket_id='".$row_paket->dresep_paket."' ";
+					}
+					$sql=$sql."(".substr($filter,2,strlen($filter)).")";
+				}
+			}
+			
+			$result = $this->db->query($sql);
+			$nbrows = $result->num_rows();
+			if($end!=0){
+				$limit = $sql." LIMIT ".$start.",".$end;			
+				$result = $this->db->query($limit);
+			}
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+			
+		}
+	
+	
 	
 	function having_cust_member_checking($cust_id){
 		$sql="SELECT cust_member FROM customer WHERE cust_id='$cust_id'";
@@ -95,6 +143,75 @@ class M_resep_dokter extends Model{
 			return '';
 		}
 	}
+	
+	
+	
+	function get_satuan_produk_list($selected_id){
+			
+			$sql="SELECT satuan_id,satuan_kode,satuan_nama FROM vu_satuan_konversi WHERE produk_aktif='Aktif'
+					AND satuan_id in(SELECT distinct dterima_satuan FROM detail_terima_beli)";
+			
+			if($selected_id!==""){
+				$sql.=(eregi("WHERE",$sql)?" AND ":" WHERE ")." produk_id='".$selected_id."'";
+			}
+			
+			$result = $this->db->query($sql);
+			$nbrows = $result->num_rows();
+			
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+		
+		function get_satuan_selected_list($selected_id){
+			$sql="SELECT satuan_id,satuan_kode,satuan_nama FROM satuan";
+			if($selected_id!=="")
+			{
+				$selected_id=substr($selected_id,0,strlen($selected_id)-1);
+				$sql.=" WHERE satuan_id IN(".$selected_id.")";
+			}
+
+			$result = $this->db->query($sql);
+			$nbrows = $result->num_rows();
+			
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+		
+		function get_satuan_detail_list($master_id){
+			$sql="SELECT satuan_id,satuan_kode,satuan_nama FROM satuan";
+			if($master_id<>"")
+				$sql.=" WHERE satuan_id IN(SELECT drbeli_satuan FROM detail_retur_beli WHERE drbeli_master='".$master_id."')";
+			
+			$result = $this->db->query($sql);
+			$nbrows = $result->num_rows();
+			
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+	
+	
+	
 	
 	/* INSERT ke db.history_ambil_paket */
 	function history_ambil_paket_delete($dtrawat_id, $dtrawat_dapp){
@@ -111,12 +228,14 @@ class M_resep_dokter extends Model{
 	}
 	/* eof history_ambil_paket_insert */
 				
-		function detail_resepdokter_list($master_id,$query,$start,$end) {
+	function detail_resepdokter_lepasan_list($master_id,$query,$start,$end) {
 			//$query="SELECT *,konversi_nilai FROM detail_jual_produk LEFT JOIN satuan_konversi ON(dpcard_produk=konversi_produk AND dpcard_satuan=konversi_satuan) WHERE dpcard_master='".$master_id."'";     //date_format(dpcard_tanggal,'%Y-%m-%d') as dpcard_tanggal, dpcard_keterangan
-			$query = "SELECT dresep_id, dresep_master, dresep_produk 
-			FROM detail_resep_dokter
-			INNER JOIN produk ON(dresep_produk=produk_id)
-			WHERE dresep_master='".$master_id."'";
+			$query = "SELECT dresepl_id, dresepl_master, dresepl_produk, dresepl_tambahan, dresepl_satuan, dresepl_jumlah, satuan_nama
+			FROM detail_resep_dokter_lepasan
+			LEFT JOIN produk ON(dresepl_produk=produk_id)
+			LEFT JOIN paket ON (dresepl_paket=paket_id)
+			LEFT JOIN satuan ON (dresepl_satuan=satuan_id)
+			WHERE dresepl_master='".$master_id."'";
 			
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
@@ -134,29 +253,153 @@ class M_resep_dokter extends Model{
 			}
 		}
 		
-		function resepdokter_detail_insert($dresep_id ,$dresep_master ,$dresep_produk, $cetak, $count, $dcount){
+	function detail_resepdokter_kombinasi_list($master_id,$query,$start,$end) {
+			//$query="SELECT *,konversi_nilai FROM detail_jual_produk LEFT JOIN satuan_konversi ON(dpcard_produk=konversi_produk AND dpcard_satuan=konversi_satuan) WHERE dpcard_master='".$master_id."'";     //date_format(dpcard_tanggal,'%Y-%m-%d') as dpcard_tanggal, dpcard_keterangan
+			$query = "SELECT dresepk_id, dresepk_master, dresepk_paket
+			FROM detail_resep_dokter_kombinasi
+			LEFT JOIN paket ON (dresepk_paket=paket_id)
+			WHERE dresepk_master='".$master_id."'";
+			
+			$result = $this->db->query($query);
+			$nbrows = $result->num_rows();
+			$limit = $query." LIMIT ".$start.",".$end;			
+			$result = $this->db->query($limit);  
+			
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+		
+	function detail_resepdokter_tambahan_list($master_id,$query,$start,$end) {
+			//$query="SELECT *,konversi_nilai FROM detail_jual_produk LEFT JOIN satuan_konversi ON(dpcard_produk=konversi_produk AND dpcard_satuan=konversi_satuan) WHERE dpcard_master='".$master_id."'";     //date_format(dpcard_tanggal,'%Y-%m-%d') as dpcard_tanggal, dpcard_keterangan
+			$query = "SELECT dresept_id, dresept_master, dresept_tambahan, dresept_satuan, dresept_jumlah
+			FROM detail_resep_dokter_tambahan
+			WHERE dresept_master='".$master_id."'";
+			
+			$result = $this->db->query($query);
+			$nbrows = $result->num_rows();
+			$limit = $query." LIMIT ".$start.",".$end;			
+			$result = $this->db->query($limit);  
+			
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}	
+		
+		
+	function resepdokter_detail_lepasan_insert($dresepl_id ,$dresepl_master ,$dresepl_produk, $dresepl_tambahan, $dresepl_satuan, $dresepl_jumlah, $cetak, $count, $dcount){
 			//if master id not capture from view then capture it from max pk from master table
 			$date_now=date('d-m-Y');
-			if($dresep_master=="" || $dresep_master==NULL || $dresep_master==0){
-				$dresep_master=$this->get_master_id();
+			if($dresepl_master=="" || $dresepl_master==NULL || $dresepl_master==0){
+				$dresepl_master=$this->get_master_id();
 			}
 			
-			$sql="SELECT dresep_id FROM detail_resep_dokter WHERE dresep_master='$dresep_master' AND dresep_produk='$dresep_produk'";
+			$sql="SELECT dresepl_id FROM detail_resep_dokter_lepasan WHERE dresepl_master='$dresepl_master' AND dresepl_produk='$dresepl_produk'";
 			$rs=$this->db->query($sql);
 			if($rs->num_rows()){
-				if($dproduk_diskon<>100){
+				//if($dresepl_tambahan<>100){
 					//* UPDATE detail_resep_dokter untuk menambahkan dproduk_jumlah, ini dikarenakan kasir memasukkan produk yg sama lebih dari satu dalam satu Faktur /
 					$record = $rs->row_array();
-					$dresep_id=$record['dresep_id'];
-					$dproduk_jumlah_awal = $record['dresep_produk'];
+					$dresepl_id=$record['dresepl_id'];
+					$dproduk_jumlah_awal = $record['dresepl_produk'];
 					$dtu_dproduk=array(
-					"dresep_produk"=>$dresep_produk
+					"dresepl_produk"=>$dresepl_produk,
+					"dresepl_tambahan"=>$dresepl_tambahan,
+					"dresepl_satuan"=>$dresepl_satuan,
+					"dresepl_jumlah"=>$dresepl_jumlah
 					);
-					$this->db->where('dresep_id', $dresep_id);
-					$this->db->update('detail_resep_dokter', $dtu_dproduk);
+					$this->db->where('dresepl_id', $dresepl_id);
+					$this->db->update('detail_resep_dokter_lepasan', $dtu_dproduk);
 					if($this->db->affected_rows()){
 						if($cetak==1 && ($count==($dcount-1))){
-							return $dresep_master;
+							return $dresepl_master;
+						}else if($cetak!==1 && ($count==($dcount-1))){
+							return '0';
+						}else if($count!==($dcount-1)){
+							return '-3';
+						}
+					}else{
+						return '-1';
+					}
+				//}
+				//else{
+					$data = array(
+						"dresepl_master"=>$dresepl_master, 
+						"dresepl_produk"=>$dresepl_produk,
+						"dresepl_tambahan"=>$dresepl_tambahan,
+						"dresepl_satuan"=>$dresepl_satuan,
+						"dresepl_jumlah"=>$dresepl_jumlah
+					);
+					$this->db->insert('detail_resep_dokter_lepasan', $data); 
+					if($this->db->affected_rows()){
+						if($cetak==1 && ($count==($dcount-1))){
+							return $dresepl_master;
+						}else if($cetak!==1 && ($count==($dcount-1))){
+							return '0';
+						}else if($count!==($dcount-1)){
+							return '-3';
+						}
+					}else{
+						return '-1';
+					}
+				//}
+			}else{
+				$data = array(
+					"dresepl_master"=>$dresepl_master, 
+					"dresepl_produk"=>$dresepl_produk, 
+					"dresepl_tambahan"=>$dresepl_tambahan,
+					"dresepl_satuan"=>$dresepl_satuan,
+					"dresepl_jumlah"=>$dresepl_jumlah
+				);
+				$this->db->insert('detail_resep_dokter_lepasan', $data); 
+				if($this->db->affected_rows()){
+					if($cetak==1 && ($count==($dcount-1))){
+						return $dresepl_master;
+					}else if($cetak!==1 && ($count==($dcount-1))){
+						return '0';
+					}else if($count!==($dcount-1)){
+						return '-3';
+					}
+				}else
+					return '-1';
+			}
+		}
+		
+	function resepdokter_detail_kombinasi_insert($dresepk_id ,$dresepk_master ,$dresepk_paket, $cetak, $count, $dcount){
+			//if master id not capture from view then capture it from max pk from master table
+			$date_now=date('d-m-Y');
+			if($dresepk_master=="" || $dresepk_master==NULL || $dresepk_master==0){
+				$dresepk_master=$this->get_master_id();
+			}
+			
+			$sql="SELECT dresepk_id FROM detail_resep_dokter_kombinasi WHERE dresepk_master='$dresepk_master' AND dresepk_paket='$dresepk_paket'";
+			$rs=$this->db->query($sql);
+			if($rs->num_rows()){
+				/*if($dproduk_diskon<>100){
+					//* UPDATE detail_resep_dokter untuk menambahkan dproduk_jumlah, ini dikarenakan kasir memasukkan produk yg sama lebih dari satu dalam satu Faktur /
+					$record = $rs->row_array();
+					$dresepk_id=$record['dresepk_id'];
+					$dpaket_jumlah_awal = $record['dresepk_paket'];
+					$dtu_dproduk=array(
+					"dresepk_paket"=>$dresepk_paket
+					);
+					$this->db->where('dresepk_id', $dresepk_id);
+					$this->db->update('detail_resep_dokter_kombinasi', $dtu_dproduk);
+					if($this->db->affected_rows()){
+						if($cetak==1 && ($count==($dcount-1))){
+							return $dresepk_master;
 						}else if($cetak!==1 && ($count==($dcount-1))){
 							return '0';
 						}else if($count!==($dcount-1)){
@@ -167,13 +410,13 @@ class M_resep_dokter extends Model{
 					}
 				}else{
 					$data = array(
-						"dresep_master"=>$dresep_master, 
-						"dresep_produk"=>$dresep_produk, 
+						"dresepk_master"=>$dresepk_master, 
+						"dresepk_paket"=>$dresepk_paket,
 					);
-					$this->db->insert('detail_resep_dokter', $data); 
+					$this->db->insert('detail_resep_dokter_kombinasi', $data); 
 					if($this->db->affected_rows()){
 						if($cetak==1 && ($count==($dcount-1))){
-							return $dresep_master;
+							return $dresepk_master;
 						}else if($cetak!==1 && ($count==($dcount-1))){
 							return '0';
 						}else if($count!==($dcount-1)){
@@ -182,16 +425,16 @@ class M_resep_dokter extends Model{
 					}else{
 						return '-1';
 					}
-				}
+				}*/
 			}else{
 				$data = array(
-					"dresep_master"=>$dresep_master, 
-					"dresep_produk"=>$dresep_produk, 
+					"dresepk_master"=>$dresepk_master, 
+					"dresepk_paket"=>$dresepk_paket,
 				);
-				$this->db->insert('detail_resep_dokter', $data); 
+				$this->db->insert('detail_resep_dokter_kombinasi', $data); 
 				if($this->db->affected_rows()){
 					if($cetak==1 && ($count==($dcount-1))){
-						return $dresep_master;
+						return $dresepk_master;
 					}else if($cetak!==1 && ($count==($dcount-1))){
 						return '0';
 					}else if($count!==($dcount-1)){
@@ -200,52 +443,99 @@ class M_resep_dokter extends Model{
 				}else
 					return '-1';
 			}
-			
-			/*if($dresep_master=="" || $dresep_master==NULL || $dresep_master==0){
-				$dresep_master=$this->get_master_id();
-			}
-			$sql="SELECT dresep_id FROM detail_resep_dokter WHERE dresep_master='$dresep_master' AND dresep_produk='$dresep_produk'";
-			$rs=$this->db->query($sql);
-			
-			$this->db->where('dresep_id', $dresep_id);
-			$this->db->insert('detail_resep_dokter', $data); 
-				
-			if($this->db->affected_rows()){
-				if($cetak==1 && ($count==($dcount-1))){
-					//$this->membership_insert($dproduk_master);
-					//return $dresep_master;
-					return '0';
-				}else if($count!==($dcount-1)){
-					return '-3';
-				}
-			}else
-				return '-1';
-			
-			$data = array(
-				"dresep_master"=>$dresep_master, 
-				"dresep_produk"=>$dresep_produk
-				);
-				
-			$this->db->insert('detail_resep_dokter', $data); 
-				
-			if($this->db->affected_rows()){
-				if($cetak==1 && ($count==($dcount-1))){
-					//$this->membership_insert($dproduk_master);
-					//return $dresep_master;
-					return '0';
-				}else if($count!==($dcount-1)){
-					return '-3';
-				}
-			}else
-				return '-1';
-				*/
-				
 		}
 		
-		function detail_resepdokter_purge($master_id){
-			$sql="DELETE detail_resep_dokter FROM detail_resep_dokter INNER JOIN produk ON(dresep_produk=produk_id) WHERE dresep_master='".$master_id."'";
+		
+	function resepdokter_detail_tambahan_insert($dresept_id ,$dresept_master, $dresept_tambahan, $dresept_satuan, $dresept_jumlah, $cetak_tambahan, $count_tambahan, $dcount_tambahan){
+			//if master id not capture from view then capture it from max pk from master table
+			$date_now=date('d-m-Y');
+			if($dresept_master=="" || $dresept_master==NULL || $dresept_master==0){
+				$dresept_master=$this->get_master_id();
+			}
+			
+			$sql="SELECT dresept_id, dresept_tambahan, dresept_master FROM detail_resep_dokter_tambahan WHERE dresept_master='$dresept_master' and dresept_tambahan='$dresept_tambahan'";
+			$rs=$this->db->query($sql);
+			if($rs->num_rows()){
+				//if($dresept_tambahan<>100){
+					//* UPDATE detail_resep_dokter untuk menambahkan dproduk_jumlah, ini dikarenakan kasir memasukkan produk yg sama lebih dari satu dalam satu Faktur /
+					$record_tambahan = $rs->row_array();
+					$dresept_id=$record_tambahan['dresept_id'];
+					$dtu_tambahan=array(
+					"dresept_tambahan"=>$dresept_tambahan,
+					"dresept_satuan"=>$dresept_satuan,
+					"dresept_jumlah"=>$dresept_jumlah
+					);
+					$this->db->where('dresept_id', $dresept_id);
+					$this->db->update('detail_resep_dokter_tambahan', $dtu_tambahan);
+					if($this->db->affected_rows()){
+						if($cetak_tambahan==1 && ($count_tambahan==($dcount_tambahan-1))){
+							return $dresept_master;
+						}else if($cetak_tambahan!==1 && ($count_tambahan==($dcount_tambahan-1))){
+							return '0';
+						}else if($count_tambahan!==($dcount_tambahan-1)){
+							return '-3';
+						}
+					}else{
+						return '-1';
+					}
+				//}
+				//else{
+					$data = array(
+						"dresept_master"=>$dresept_master, 
+						"dresept_tambahan"=>$dresept_tambahan,
+						"dresept_satuan"=>$dresept_satuan,
+						"dresept_jumlah"=>$dresept_jumlah
+					);
+					$this->db->insert('detail_resep_dokter_tambahan', $data); 
+					if($this->db->affected_rows()){
+						if($cetak_tambahan==1 && ($count_tambahan==($dcount_tambahan-1))){
+							return $dresept_master;
+						}else if($cetak_tambahan!==1 && ($count_tambahan==($dcount_tambahan-1))){
+							return '0';
+						}else if($count_tambahan!==($dcount_tambahan-1)){
+							return '-3';
+						}
+					}else{
+						return '-1';
+					}
+				//}
+			}else{
+				$data = array(
+					"dresept_master"=>$dresept_master, 
+					"dresept_tambahan"=>$dresept_tambahan,
+					"dresept_satuan"=>$dresept_satuan,
+					"dresept_jumlah"=>$dresept_jumlah
+				);
+				$this->db->insert('detail_resep_dokter_tambahan', $data); 
+				if($this->db->affected_rows()){
+					if($cetak_tambahan==1 && ($count_tambahan==($dcount_tambahan-1))){
+						return $dresept_master;
+					}else if($cetak_tambahan!==1 && ($count_tambahan==($dcount_tambahan-1))){
+						return '0';
+					}else if($count_tambahan!==($dcount_tambahan-1)){
+						return '-3';
+					}
+				}else
+					return '-1';
+			}
+		}
+		
+		
+		function detail_resepdokter_lepasan_purge($master_id){
+			$sql="DELETE detail_resep_dokter_lepasan FROM detail_resep_dokter_lepasan INNER JOIN produk ON(dresepl_produk=produk_id) WHERE dresepl_master='".$master_id."'";
 			$result=$this->db->query($sql);
 		}
+		
+		function detail_resepdokter_kombinasi_purge($master_id){
+			$sql="DELETE detail_resep_dokter_kombinasi FROM detail_resep_dokter_kombinasi INNER JOIN paket ON(dresepk_paket=paket_id) WHERE dresepk_master='".$master_id."'";
+			$result=$this->db->query($sql);
+		}
+		
+		function detail_resepdokter_tambahan_purge($master_id){
+			$sql="DELETE detail_resep_dokter_tambahan FROM detail_resep_dokter_tambahan WHERE dresept_master='".$master_id."'";
+			$result=$this->db->query($sql);
+		}
+		
 		
 		//function for get list record
 		function resep_dokter_list($filter,$start,$end){
@@ -282,9 +572,6 @@ left join karyawan on (karyawan.karyawan_id = resep_dokter.resep_dokterid)";
 		
 	//function for update record
 	function resep_dokter_update($resep_id, $resep_custid , $resep_tanggal, $resep_dokterid, $mode_edit){
-		/* Checking db.tindakan_detail WHERE db.tindakan_detail.dtrawat_id = $dtrawat_id DAN semua Field,
-		 * JIKA ada salah satu Field yang berubah maka akan di-UPDATE
-		 */ 
 		$data=array(
 		"resep_tanggal"=>$resep_tanggal
 		//"resep_dokterid"=>$resep_dokterid
@@ -517,7 +804,6 @@ left join karyawan on (karyawan.karyawan_id = resep_dokter.resep_dokterid)";
 		//fcuntion for delete record
 		function resep_dokter_delete($pkid){
 			// You could do some checkups here and return '0' or other error consts.
-			// Make a single query to delete all of the tindakans at the same time :
 			if(sizeof($pkid)<1){
 				return '0';
 			} else if (sizeof($pkid) == 1){
@@ -542,7 +828,6 @@ left join karyawan on (karyawan.karyawan_id = resep_dokter.resep_dokterid)";
 		//function for advanced search record
 		function resep_dokter_search($trawat_id ,$card_cust ,$trawat_tglapp_start ,$trawat_tglapp_end ,$trawat_rawat ,$trawat_dokter ,$trawat_status ,$start,$end){
 			//full query
-			//$query="SELECT * FROM vu_tindakan WHERE kategori_nama='Medis'";
 			$query = "SELECT * FROM vu_tindakan WHERE (kategori_nama='Medis' OR dtrawat_petugas2='0')";
 			
 			if($trawat_id!=''){
@@ -646,22 +931,89 @@ left join karyawan on (karyawan.karyawan_id = resep_dokter.resep_dokterid)";
 			//$this->firephp->log($jproduk_id, "jproduk_id");
 			
 			//$sql="SELECT resep_tanggal, cust_no, cust_nama, produk_nama, resep_no, karyawan_nama, karyawan_sip FROM detail_jual_produk LEFT JOIN master_jual_produk ON(dresep_master=resep_id) LEFT JOIN customer ON(resep_custid=cust_id) LEFT JOIN produk ON(dresep_produk=produk_id) WHERE dresep_master='$resep_id'";
-			$sql="SELECT resep_dokter.resep_tanggal, customer.cust_no, customer.cust_nama, customer.cust_alamat, produk.produk_nama, resep_dokter.resep_no, karyawan.karyawan_nama, karyawan.karyawan_sip 
-FROM detail_resep_dokter 
-LEFT JOIN resep_dokter ON(dresep_master=resep_id)
-LEFT JOIN customer ON(resep_custid=cust_id) 
-LEFT JOIN karyawan ON(resep_dokterid=karyawan_id)
-LEFT JOIN produk ON(dresep_produk=produk_id) 
-WHERE dresep_master='$resep_id'";
-			$result = $this->db->query($sql);
+			$sql1="SELECT	resep_dokter.resep_tanggal, resep_dokter.resep_no,
+							customer.cust_no, customer.cust_nama, customer.cust_alamat, 
+							produk.produk_nama, 
+							karyawan.karyawan_nama, karyawan.karyawan_sip,
+							satuan.satuan_nama,
+							detail_resep_dokter_lepasan.dresepl_jumlah
+					FROM detail_resep_dokter_lepasan
+						LEFT JOIN resep_dokter ON(dresepl_master=resep_id)
+						LEFT JOIN customer ON(resep_custid=cust_id)
+						LEFT JOIN karyawan ON(resep_dokterid=karyawan_id)
+						LEFT JOIN produk ON(dresepl_produk=produk_id)
+						LEFT JOIN satuan ON (dresepl_satuan = satuan_id)
+							WHERE dresepl_master= '$resep_id'";
+
+			$sql2 = "SELECT 	resep_dokter.resep_tanggal, resep_dokter.resep_no,
+								customer.cust_no, customer.cust_nama, customer.cust_alamat, 
+								karyawan.karyawan_nama, karyawan.karyawan_sip,
+								detail_resep_dokter_tambahan.dresept_tambahan, detail_resep_dokter_tambahan.dresept_satuan, detail_resep_dokter_tambahan.dresept_jumlah
+					FROM detail_resep_dokter_tambahan
+						LEFT JOIN resep_dokter ON(dresept_master=resep_id)
+						LEFT JOIN customer ON(resep_custid=cust_id)
+						LEFT JOIN karyawan ON(resep_dokterid=karyawan_id)
+							WHERE dresept_master= '$resep_id'";
+
+			$result = $this->db->query($sql1);
+			//$result2 = $this->db->query($sql2);
+			
 			return $result;
+			//return $result2;
+			
+			
 		}
+		
+		
+		function print_paper2($resep_id){
+			//$this->firephp->log($jproduk_id, "jproduk_id");
+			
+			//$sql="SELECT resep_tanggal, cust_no, cust_nama, produk_nama, resep_no, karyawan_nama, karyawan_sip FROM detail_jual_produk LEFT JOIN master_jual_produk ON(dresep_master=resep_id) LEFT JOIN customer ON(resep_custid=cust_id) LEFT JOIN produk ON(dresep_produk=produk_id) WHERE dresep_master='$resep_id'";
+			$sql1="SELECT	resep_dokter.resep_tanggal, resep_dokter.resep_no,
+							customer.cust_no, customer.cust_nama, customer.cust_alamat, 
+							produk.produk_nama, 
+							karyawan.karyawan_nama, karyawan.karyawan_sip,
+							satuan.satuan_nama,
+							detail_resep_dokter_lepasan.dresepl_jumlah
+					FROM detail_resep_dokter_lepasan
+						LEFT JOIN resep_dokter ON(dresepl_master=resep_id)
+						LEFT JOIN customer ON(resep_custid=cust_id)
+						LEFT JOIN karyawan ON(resep_dokterid=karyawan_id)
+						LEFT JOIN produk ON(dresepl_produk=produk_id)
+						LEFT JOIN satuan ON (dresepl_satuan = satuan_id)
+							WHERE dresepl_master= '$resep_id'";
+
+			$sql2 = "SELECT 	resep_dokter.resep_tanggal, resep_dokter.resep_no,
+								customer.cust_no, customer.cust_nama, customer.cust_alamat, 
+								karyawan.karyawan_nama, karyawan.karyawan_sip,
+								detail_resep_dokter_tambahan.dresept_tambahan, detail_resep_dokter_tambahan.dresept_satuan, detail_resep_dokter_tambahan.dresept_jumlah
+					FROM detail_resep_dokter_tambahan
+						LEFT JOIN resep_dokter ON(dresept_master=resep_id)
+						LEFT JOIN customer ON(resep_custid=cust_id)
+						LEFT JOIN karyawan ON(resep_dokterid=karyawan_id)
+							WHERE dresept_master= '$resep_id'";
+
+			$result1 = $this->db->query($sql1);
+			$result2 = $this->db->query($sql2);
+			
+			return $result2;
+			//return $result2;
+			
+			
+			
+			
+		}
+		
+		
+		
+		
+		
 		
 		function iklan(){
 			//$this->firephp->log($jproduk_id, "jproduk_id");
 			$sql="SELECT * from iklan_today";
-			$result = $this->db->query($sql);
-			return $result;
+			$result1 = $this->db->query($sql);
+			return $result1;
 		}
 		
 		
