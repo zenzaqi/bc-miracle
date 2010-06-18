@@ -468,29 +468,20 @@ Ext.onReady(function(){
 			dataIndex: 'koreksi_tanggal',
 			width: 70,	//100,
 			sortable: true,
-			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
-			editor: new Ext.form.DateField({
-				format: 'd-m-Y'
-			})
+			renderer: Ext.util.Format.dateRenderer('d-m-Y')
 		},
 		
 		{
 			header: '<div align="center">' + 'No PS' + '</div>',
 			dataIndex: 'koreksi_no',
 			width: 100,	//150,
-			sortable: true,
-			editor: new Ext.form.TextField({
-				maxLength: 50
-          	})
-		}, 
-		
-		
+			sortable: true
+		}, 		
 		{
 			header: '<div align="center">Gudang</div>',
 			dataIndex: 'koreksi_gudang',
 			width: 150,
-			sortable: true,
-			readOnly: true
+			sortable: true
 		}, 
 		{
 			header: '<div align="center">Keterangan</div>',
