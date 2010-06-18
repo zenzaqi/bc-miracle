@@ -1600,6 +1600,7 @@ Ext.onReady(function(){
 			{name: 'jproduk_cust', type: 'string', mapping: 'cust_nama'}, 
 			{name: 'jproduk_cust_no', type: 'string', mapping: 'cust_no'}, 
 			{name: 'jproduk_cust_member', type: 'string', mapping: 'cust_member'}, 
+			{name: 'jproduk_cust_member_no', type: 'string', mapping: 'member_no'}, 
 			{name: 'jproduk_cust_id', type: 'int', mapping: 'jproduk_cust'}, 
 			{name: 'jproduk_tanggal', type: 'date', dateFormat: 'Y-m-d', mapping: 'jproduk_tanggal'}, 
 			{name: 'jproduk_diskon', type: 'int', mapping: 'jproduk_diskon'}, 
@@ -1918,17 +1919,20 @@ Ext.onReady(function(){
 		}, 
 		{
 			header: '<div align="center">' + 'No Member' + '</div>',
-			dataIndex: 'jproduk_cust_member',
-			width: 80,	//185,
+			dataIndex: 'jproduk_cust_member_no',
+			width: 100,	//185,
 			sortable: true,
-			readOnly: true
+			readOnly: true,
+			renderer: function(value, cell, record){
+				return value.substring(0,6) + '-' + value.substring(6,12) + '-' + value.substring(12);
+			}
 		}, 
 		{
 		//	header: 'Jumlah Bayar',
 			header: '<div align="center">' + 'Total (Rp)' + '</div>',
 			align: 'right',
 			dataIndex: 'jproduk_total',
-			width: 100,	//150,
+			width: 80,	//150,
 			sortable: true,
 			readOnly: true,
 			renderer: function(val){
@@ -1938,10 +1942,10 @@ Ext.onReady(function(){
 		},
 		{
 		//	header: 'Jumlah Bayar',
-			header: '<div align="center">' + 'Total Bayar (Rp)' + '</div>',
+			header: '<div align="center">' + 'Tot Bayar (Rp)' + '</div>',
 			align: 'right',
 			dataIndex: 'jproduk_bayar',
-			width: 100,	//150,
+			width: 80,	//150,
 			sortable: true,
 			readOnly: true,
 			renderer: function(val){
@@ -1952,7 +1956,7 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Keterangan' + '</div>',
 			dataIndex: 'jproduk_keterangan',
-			width: 200,	//150,
+			width: 180,	//150,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 250
@@ -1961,12 +1965,9 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Stat Dok' + '</div>',
 			dataIndex: 'jproduk_stat_dok',
-			width: 80,	//150,
+			width: 60,	//150,
 			sortable: true
-		}, 
-		
-		
-		
+		}, 	
 		{
 			header: 'Creator',
 			dataIndex: 'jproduk_creator',
@@ -5886,7 +5887,7 @@ Ext.onReady(function(){
 		closable:true,
 		closeAction: 'hide',
 		//autoWidth: true,
-		width: 1200,	//810,
+		width: 1220,	//810,
 		autoHeight: true,
 		x:0,
 		y:0,
