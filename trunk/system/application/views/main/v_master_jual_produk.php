@@ -1378,9 +1378,65 @@ Ext.onReady(function(){
 				break;
 		}
 		
+		jproduk_stat_dokField.on("select",function(){
+		var status_awal = master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_stat_dok');
+		if(status_awal =='Terbuka' && jproduk_stat_dokField.getValue()=='Tertutup')
+		{
+		Ext.MessageBox.show({
+			msg: 'Tidak bisa, harus print dulu supaya status menjadi Tertutup',
+		   //progressText: 'proses...',
+			buttons: Ext.MessageBox.OK,
+			animEl: 'save',
+			icon: Ext.MessageBox.WARNING
+		   });
+		jproduk_stat_dokField.setValue('Terbuka');
+		}
+		
+		else if(status_awal =='Tertutup' && jproduk_stat_dokField.getValue()=='Terbuka')
+		{
+		Ext.MessageBox.show({
+			msg: 'Status yang sudah Tertutup tidak dapat diganti Terbuka',
+			buttons: Ext.MessageBox.OK,
+			animEl: 'save',
+			icon: Ext.MessageBox.WARNING
+		   });
+		jproduk_stat_dokField.setValue('Tertutup');
+		}
+		
+		else if(status_awal =='Batal' && jproduk_stat_dokField.getValue()=='Terbuka')
+		{
+		Ext.MessageBox.show({
+			msg: 'Status yang sudah Tertutup tidak dapat diganti Terbuka',
+			buttons: Ext.MessageBox.OK,
+			animEl: 'save',
+			icon: Ext.MessageBox.WARNING
+		   });
+		jproduk_stat_dokField.setValue('Tertutup');
+		}
+		
+		else if(jproduk_stat_dokField.getValue()=='Batal')
+		{
+		Ext.MessageBox.confirm('Confirmation','Apakah anda yakin merubah status ini menjadi Batal? status Batal sudah tidak bisa diganti lagi', jproduk_status_delete);
+		}
+		
+		});		
+		
 		//detail_jual_produk_DataStore.load({params:{master_id: jproduk_idField.getValue()}});
 	}
 	/* End setValue to EDIT*/
+	
+	function jproduk_status_delete(btn){
+	if(btn=='yes')
+	{
+		jproduk_stat_dokField.setValue('Batal');
+	}  
+	else
+		jproduk_stat_dokField.setValue(master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_stat_dok'));
+	}
+	
+	
+	
+	
 	
 	function master_jual_produk_set_updating(){
 		if(jproduk_post2db=="UPDATE" && master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_stat_dok')=="Terbuka"){

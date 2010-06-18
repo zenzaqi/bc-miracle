@@ -84,6 +84,7 @@ var jrawat_caraField;
 var jrawat_cara2Field;
 var jrawat_cara3Field;
 var jrawat_keteranganField;
+var jrawat_stat_dokField;
 //tunai
 var jrawat_tunai_nilaiField;
 //tunai-2
@@ -1312,12 +1313,66 @@ Ext.onReady(function(){
 				break;
 		}
 		}
-		
 		//detail_jual_rawat_DataStore.load({params:{master_id: jrawat_idField.getValue()}});
 		//detail_jual_rawat_DataStore.load({params : {master_id : master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_id'), start:0, limit:pageS},callback:function(opts, success, response){if(success)load_total_rawat_bayar();}});
 		//load_total_rawat_bayar();
+		
+		jrawat_stat_dokField.on("select",function(){
+		var status_awal = master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_stat_dok');
+		if(status_awal =='Terbuka' && jrawat_stat_dokField.getValue()=='Tertutup')
+		{
+		Ext.MessageBox.show({
+			msg: 'Tidak bisa, harus print dulu supaya status menjadi Tertutup',
+		   //progressText: 'proses...',
+			buttons: Ext.MessageBox.OK,
+			animEl: 'save',
+			icon: Ext.MessageBox.WARNING
+		   });
+		jrawat_stat_dokField.setValue('Terbuka');
+		}
+		
+		else if(status_awal =='Tertutup' && jrawat_stat_dokField.getValue()=='Terbuka')
+		{
+		Ext.MessageBox.show({
+			msg: 'Status yang sudah Tertutup tidak dapat diganti Terbuka',
+			buttons: Ext.MessageBox.OK,
+			animEl: 'save',
+			icon: Ext.MessageBox.WARNING
+		   });
+		jrawat_stat_dokField.setValue('Tertutup');
+		}
+		
+		else if(status_awal =='Batal' && jrawat_stat_dokField.getValue()=='Terbuka')
+		{
+		Ext.MessageBox.show({
+			msg: 'Status yang sudah Tertutup tidak dapat diganti Terbuka',
+			buttons: Ext.MessageBox.OK,
+			animEl: 'save',
+			icon: Ext.MessageBox.WARNING
+		   });
+		jrawat_stat_dokField.setValue('Tertutup');
+		}
+		
+		else if(jrawat_stat_dokField.getValue()=='Batal')
+		{
+		Ext.MessageBox.confirm('Confirmation','Apakah anda yakin merubah status ini menjadi Batal? status Batal sudah tidak bisa diganti lagi', jrawat_status_delete);
+		}
+		
+		});		
+		
 	}
 	/* End setValue to EDIT*/
+	
+	function jrawat_status_delete(btn){
+	if(btn=='yes')
+	{
+		jrawat_stat_dokField.setValue('Batal');
+	}  
+	else
+		jrawat_stat_dokField.setValue(master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_stat_dok'));
+	}
+	
+	
 	
 	function master_jual_rawat_set_updating(){
             if(jrawat_post2db=="UPDATE" && master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_stat_dok')=="Terbuka"){
@@ -1340,6 +1395,18 @@ Ext.onReady(function(){
                 jrawat_cashback_cfField.setDisabled(true);
                 jrawat_stat_dokField.setDisabled(false);
             }
+			
+			if(jrawat_post2db=="UPDATE" && master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_stat_dok')=="Batal"){
+				jrawat_custField.setDisabled(true);
+				jrawat_tanggalField.setDisabled(true);
+				jrawat_keteranganField.setDisabled(true);
+				jrawat_stat_dokField.setDisabled(true);
+				master_cara_bayarTabPanel.setDisabled(true);
+				detail_jual_rawatListEditorGrid.setDisabled(true);
+				jrawat_diskonField.setDisabled(true);
+				jrawat_cashback_cfField.setDisabled(true);
+		}
+			
 	}
   
     function load_membership(){
