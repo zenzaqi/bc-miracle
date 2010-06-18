@@ -369,15 +369,15 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">Tanggal</div>',
 			dataIndex: 'inbox_date',
-			width: 40,
+			width: 20,
 			sortable: true,
-			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
+			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
 			readOnly: true
 		}, 
 		{
 			header: '<div align="center">Pengirim</div>',
 			dataIndex: 'inbox_sender',
-			width: 40,
+			width: 20,
 			sortable: true,
 			readOnly: true
 		}, 
@@ -445,7 +445,7 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 800,
+	  	width: 1220,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: inbox_DataStore,
