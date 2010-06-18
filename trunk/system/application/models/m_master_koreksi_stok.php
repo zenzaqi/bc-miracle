@@ -316,9 +316,10 @@ class M_master_koreksi_stok extends Model{
 		}
 		
 		//function for update record
-		function master_koreksi_stok_update($koreksi_id ,$koreksi_gudang ,$koreksi_tanggal ,$koreksi_keterangan, $koreksi_status){
+		function master_koreksi_stok_update($koreksi_id , $koreksi_no, $koreksi_gudang ,$koreksi_tanggal ,$koreksi_keterangan, $koreksi_status){
 			$data = array(
 				"koreksi_id"=>$koreksi_id, 
+				"koreksi_no"=>$koreksi_no,
 //				"koreksi_gudang"=>$koreksi_gudang, 
 				"koreksi_tanggal"=>$koreksi_tanggal, 
 				"koreksi_keterangan"=>$koreksi_keterangan,
@@ -336,8 +337,12 @@ class M_master_koreksi_stok extends Model{
 		}
 		
 		//function for create new record
-		function master_koreksi_stok_create($koreksi_gudang ,$koreksi_tanggal ,$koreksi_keterangan, $koreksi_status){
+		function master_koreksi_stok_create($koreksi_no, $koreksi_gudang ,$koreksi_tanggal ,$koreksi_keterangan, $koreksi_status){
+			$pattern="PS/".date("ym")."-";
+			$koreksi_no=$this->m_public_function->get_kode_1('master_koreksi_stok','koreksi_no',$pattern,12);
+			
 			$data = array(
+				"koreksi_no"=>$koreksi_no,
 				"koreksi_gudang"=>$koreksi_gudang, 
 				"koreksi_tanggal"=>$koreksi_tanggal, 
 				"koreksi_keterangan"=>$koreksi_keterangan,
@@ -379,7 +384,7 @@ class M_master_koreksi_stok extends Model{
 		}
 		
 		//function for advanced search record
-		function master_koreksi_stok_search($koreksi_id ,$koreksi_gudang ,$koreksi_tanggal ,$koreksi_keterangan, $koreksi_status, $start,$end){
+		function master_koreksi_stok_search($koreksi_id , $koreksi_no, $koreksi_gudang ,$koreksi_tanggal ,$koreksi_keterangan, $koreksi_status, $start,$end){
 			//full query
 			$query="SELECT distinct * FROM master_koreksi_stok,gudang WHERE koreksi_gudang=gudang_id";
 			
@@ -387,6 +392,12 @@ class M_master_koreksi_stok extends Model{
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " koreksi_id LIKE '%".$koreksi_id."%'";
 			};
+			
+			if($koreksi_no!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " koreksi_no LIKE '%".$koreksi_no."%'";
+			};
+			
 			if($koreksi_gudang!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " koreksi_gudang LIKE '%".$koreksi_gudang."%'";
