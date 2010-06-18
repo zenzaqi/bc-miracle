@@ -744,7 +744,7 @@ class M_master_jual_paket extends Model{
 		function detail_detail_jual_paket_purge($master_id){
 			$result_point_delete = $this->member_point_delete($master_id);
 			if($result_point_delete==1){
-				$sql="DELETE from detail_jual_paket where dpaket_master='".$master_id."'";
+				$sql="DELETE FROM detail_jual_paket WHERE dpaket_master='".$master_id."'";
 				$result=$this->db->query($sql);
 			}
 			
@@ -927,21 +927,116 @@ class M_master_jual_paket extends Model{
 			$rpaket_jumlah_total=0;
 			$ipaket_jumlah_total=0;
 			
-			$sql_rpaket="SELECT sum(rpaket_jumlah) AS rpaket_jumlah_total FROM paket_isi_perawatan WHERE rpaket_master='$dpaket_paket' ORDER BY rpaket_master";
+			//* mendapatkan jumlah_total_perawatan dalam paket /
+			$sql_rpaket="SELECT sum(rpaket_jumlah) AS rpaket_jumlah_total
+				FROM paket_isi_perawatan
+				WHERE rpaket_master='$dpaket_paket'
+				ORDER BY rpaket_master";
 			$rs_rpaket=$this->db->query($sql_rpaket);
 			if($rs_rpaket->num_rows()){
 				$rs_rpaket_record=$rs_rpaket->row_array();
 				$rpaket_jumlah_total=$rs_rpaket_record["rpaket_jumlah_total"];
 			}
-			$sql_ipaket="SELECT sum(ipaket_jumlah) AS ipaket_jumlah_total FROM paket_isi_produk WHERE ipaket_master='$dpaket_paket' ORDER BY ipaket_master";
+			
+			//* mendapatkan jumlah_total_produk dalam paket /
+			$sql_ipaket="SELECT sum(ipaket_jumlah) AS ipaket_jumlah_total
+				FROM paket_isi_produk
+				WHERE ipaket_master='$dpaket_paket'
+				ORDER BY ipaket_master";
 			$rs_ipaket=$this->db->query($sql_ipaket);
 			if($rs_ipaket->num_rows()){
 				$rs_ipaket_record=$rs_ipaket->row_array();
 				$ipaket_jumlah_total=$rs_ipaket_record["ipaket_jumlah_total"];
 			}
+			
+			//* jumlah total yang masuk ke detail_jual_paket.dpaket_sisa_paket = jumlah paket yang dibeli * (jumlah isi paket) /
 			$dpaket_sisa_paket=$dpaket_jumlah*($rpaket_jumlah_total+$ipaket_jumlah_total);
 			
-			$sql="SELECT dpaket_id, dpaket_jumlah, dpaket_sisa_paket FROM detail_jual_paket WHERE dpaket_master='$dpaket_master' AND dpaket_paket='$dpaket_paket'";
+			//* checking $dpaket_id ==> apakah is_numeric AND sudah ada di db.detail_jual_paket.dpaket_id ?? /
+			if(is_numeric($dpaket_id)){
+				//* detail ini sudah ada dalam db.detail_jual_paket ==> updating /
+				//* checking lagi, apakah $dpaket_master(identik = db.master_jual_paket.jpaket_id) AND $dpaket_id sudah diambil ataukah belum di db.detail_ambil_paket,
+				//* JIKA sudah pernah diambil ==> maka $dpaket_id ini tidak boleh dilakukan updating atau penghapusan /
+				$sql = "SELECT dapaket_id FROM detail_ambil_paket WHERE dapaket_jpaket='$dpaket_master' AND dapaket_dpaket='$dpaket_id'";
+				$rs = $this->db->query($sql);
+				if($rs->num_rows()){
+					//* artinya: isi paket sudah pernah diambil, sehingga tidak boleh di-edit /
+					if($cetak==1 && ($count==($dcount-1))){
+						$this->member_point_update($dpaket_master);
+						$this->membership_insert($dpaket_master);
+						return $dpaket_master;
+					}else if($cetak!==1 && ($count==($dcount-1))){
+						return '0';
+					}else if($count!==($dcount-1)){
+						return '-3';
+					}
+				}else{
+					//* artinya: isi paket belum pernah diambil, sehingga masih boleh di-edit /
+					$dtu_dpaket = array(
+						//"dpaket_master"=>$dpaket_master, 
+						"dpaket_paket"=>$dpaket_paket,
+						"dpaket_karyawan"=>$dpaket_karyawan,
+						"dpaket_kadaluarsa"=>$dpaket_kadaluarsa, 
+						"dpaket_jumlah"=>$dpaket_jumlah, 
+						"dpaket_harga"=>$dpaket_harga, 
+						"dpaket_diskon"=>$dpaket_diskon,
+						"dpaket_diskon_jenis"=>$dpaket_diskon_jenis,
+						"dpaket_sales"=>$dpaket_sales,
+						"dpaket_sisa_paket"=>$dpaket_sisa_paket
+					);
+					$this->db->where('dpaket_id', $dpaket_id);
+					$this->db->update('detail_jual_paket', $dtu_dpaket); 
+					if($this->db->affected_rows()){
+						if($cetak==1 && ($count==($dcount-1))){
+							$this->member_point_update($dpaket_master);
+							$this->membership_insert($dpaket_master);
+							return $dpaket_master;
+						}else if($cetak!==1 && ($count==($dcount-1))){
+							return '0';
+						}else if($count!==($dcount-1)){
+							return '-3';
+						}
+					}else
+						return '-1';
+				}
+			}else{
+				//* Adding detail baru /
+				$data = array(
+					"dpaket_master"=>$dpaket_master, 
+					"dpaket_paket"=>$dpaket_paket,
+					"dpaket_karyawan"=>$dpaket_karyawan,
+					"dpaket_kadaluarsa"=>$dpaket_kadaluarsa, 
+					"dpaket_jumlah"=>$dpaket_jumlah, 
+					"dpaket_harga"=>$dpaket_harga, 
+					"dpaket_diskon"=>$dpaket_diskon,
+					"dpaket_diskon_jenis"=>$dpaket_diskon_jenis,
+					"dpaket_sales"=>$dpaket_sales,
+					"dpaket_sisa_paket"=>$dpaket_sisa_paket
+				);
+				$this->db->insert('detail_jual_paket', $data); 
+				if($this->db->affected_rows()){
+					if($cetak==1 && ($count==($dcount-1))){
+						$this->member_point_update($dpaket_master);
+						$this->membership_insert($dpaket_master);
+						return $dpaket_master;
+					}else if($cetak!==1 && ($count==($dcount-1))){
+						return '0';
+					}else if($count!==($dcount-1)){
+						return '-3';
+					}
+				}else
+					return '-1';
+			}
+			
+			
+			
+			//* checking apakah paket yang dibeli sudah ada dalam db.detail_jual_paket, JIKA sudah ada maka yang dilakukan adalah updating db.detail_jual_paket.dpaket_jumlah /
+			/*$sql="SELECT dpaket_id
+					,dpaket_jumlah
+					,dpaket_sisa_paket
+				FROM detail_jual_paket
+				WHERE dpaket_master='$dpaket_master'
+					AND dpaket_paket='$dpaket_paket'";
 			$rs=$this->db->query($sql);
 			if($rs->num_rows()){
 				//* UPDATE detail_jual_paket untuk menambahkan dpaket_jumlah, ini dikarenakan kasir memasukkan paket yg sama lebih dari satu dalam satu Faktur /
@@ -998,8 +1093,8 @@ class M_master_jual_paket extends Model{
 					}
 				}else
 					return '-1';
-			}
-
+			}*/
+			
 		}
 		//end of function
 		

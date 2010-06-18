@@ -636,12 +636,10 @@ Ext.onReady(function(){
 					var result=eval(response.responseText);
 					switch(result){
 						case 1:
-							detail_jual_paket_purge();
-							detail_pengguna_paket_purge();
-							/*detail_pengguna_paket_insert();
-							Ext.MessageBox.alert('OK', 'Data penjualan paket berhasil disimpan');*/
-							//detail_jual_paket_DataStore.load({params: {master_id:0}});
-							//detail_pengguna_paket_DataStore.load({params: {master_id:0}});
+							//detail_jual_paket_purge();
+							//detail_pengguna_paket_purge();
+							detail_jual_paket_insert();
+							detail_pengguna_paket_insert();
 							master_jual_paket_createWindow.hide();
 							break;
 						default:
