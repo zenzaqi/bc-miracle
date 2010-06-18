@@ -1541,6 +1541,7 @@ Ext.onReady(function(){
 			{name: 'jrawat_cust_id', type: 'int', mapping: 'jrawat_cust'},
 			{name: 'cust_no', type: 'string', mapping: 'cust_no'},
 			{name: 'cust_member', type: 'string', mapping: 'cust_member'},
+			{name: 'cust_member_no', type: 'string', mapping: 'member_no'},
 			{name: 'jrawat_tanggal', type: 'date', dateFormat: 'Y-m-d', mapping: 'jrawat_tanggal'}, 
 			{name: 'jrawat_diskon', type: 'int', mapping: 'jrawat_diskon'}, 
 			{name: 'jrawat_cashback', type: 'float', mapping: 'jrawat_cashback'},
@@ -1854,17 +1855,15 @@ Ext.onReady(function(){
 			dataIndex: 'jrawat_tanggal',
 			width: 70,	//78,
 			sortable: true,
-//			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
 			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
 			editor: new Ext.form.DateField({
-//				format: 'Y-m-d'
 				format: 'd-m-Y'
 			})
 		}, 
 		{
 			header: '<div align="center">' + 'No Faktur' + '</div>',
 			dataIndex: 'jrawat_nobukti',
-			width: 90,	//82,
+			width: 80,	//82,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 30
@@ -1887,16 +1886,19 @@ Ext.onReady(function(){
 		{
 //			header: 'Member Customer',
 			header: '<div align="center">' + 'No Member' + '</div>',
-			dataIndex: 'cust_member',
-			width: 80,	//100,
+			dataIndex: 'cust_member_no',
+			width: 100,
 			sortable: false,
-			readOnly: true
+			readOnly: true,
+			renderer: function(value, cell, record){
+				return value.substring(0,6) + '-' + value.substring(6,12) + '-' + value.substring(12);
+			}
 		}, 
 		{
 			header: '<div align="center">' + 'Total (Rp)' + '</div>',
 			dataIndex: 'jrawat_total',
 			align: 'right',
-			width: 100,
+			width: 80,
 			sortable: true,
 			readOnly: true,
 			renderer: function(val){
@@ -1906,10 +1908,10 @@ Ext.onReady(function(){
 			
 		},
 		{
-			header: '<div align="center">' + 'Total Bayar (Rp)' + '</div>',
+			header: '<div align="center">' + 'Tot Bayar (Rp)' + '</div>',
 			align: 'right',
 			dataIndex: 'jrawat_bayar',
-			width: 100,
+			width: 80,
 			sortable: true,
 			readOnly: true,
 			renderer: function(val){
@@ -1930,12 +1932,12 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Paket' + '</div>',
 			dataIndex: 'keterangan_paket',
-			width: 80
+			width: 60
 		}, 
 		{
 			header: '<div align="center">' + 'Stat Dok' + '</div>',
 			dataIndex: 'jrawat_stat_dok',
-			width: 80
+			width: 60
 		}, 
 		{
 			header: 'Creator',

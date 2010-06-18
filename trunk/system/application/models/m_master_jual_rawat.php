@@ -742,6 +742,7 @@ class M_master_jual_rawat extends Model{
                     jrawat_cust,
                     vu_jrawat_pr.cust_no,
                     vu_jrawat_pr.cust_member,
+					vu_jrawat_pr.member_no,
                     jrawat_tanggal,
                     jrawat_diskon,
                     jrawat_cashback,
