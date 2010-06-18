@@ -70,10 +70,12 @@ var today=new Date().format('Y-m-d');
 
 /* declare variable here for Field*/
 var koreksi_idField;
+var koreksi_noField;
 var koreksi_gudangField;
 var koreksi_tanggalField;
 var koreksi_keteranganField;
 var koreksi_idSearchField;
+var koreksi_noSearchField;
 var koreksi_gudangSearchField;
 var koreksi_tanggalSearchField;
 var koreksi_keteranganSearchField;
@@ -86,12 +88,14 @@ Ext.onReady(function(){
   	/* Function for Saving inLine Editing */
 	function master_koreksi_stok_update(oGrid_event){
 		var koreksi_id_update_pk="";
+		var koreksi_no_update=null;
 		var koreksi_gudang_update=null;
 		var koreksi_tanggal_update_date="";
 		var koreksi_keterangan_update=null;
 		var koreksi_status_update=null;
 
 		koreksi_id_update_pk = get_pk_id();
+		if(oGrid_event.record.data.koreksi_no!== null){koreksi_no_update = oGrid_event.record.data.koreksi_no;}
 		if(oGrid_event.record.data.koreksi_gudang!== null){koreksi_gudang_update = oGrid_event.record.data.koreksi_gudang;}
 	 	if(oGrid_event.record.data.koreksi_tanggal!== ""){koreksi_tanggal_update_date =oGrid_event.record.data.koreksi_tanggal.format('Y-m-d');}
 		if(oGrid_event.record.data.koreksi_keterangan!== null){koreksi_keterangan_update = oGrid_event.record.data.koreksi_keterangan;}
@@ -103,6 +107,7 @@ Ext.onReady(function(){
 			params: {
 				task				: "UPDATE",
 				koreksi_id			: koreksi_id_update_pk, 
+				koreksi_no			: koreksi_no_update,
 				koreksi_gudang		: koreksi_gudang_update,  
 				koreksi_tanggal		: koreksi_tanggal_update_date, 
 				koreksi_keterangan	: koreksi_keterangan_update,
@@ -142,12 +147,14 @@ Ext.onReady(function(){
 	
 		if(is_master_koreksi_stok_form_valid()){	
 		var koreksi_id_create_pk=null; 
+		var koreksi_no_create_pk=null;
 		var koreksi_gudang_create=null; 
 		var koreksi_tanggal_create_date=""; 
 		var koreksi_keterangan_create=null;
 		var koreksi_status_create=null;
 
 		koreksi_id_create_pk=get_pk_id();
+		if(koreksi_noField.getValue()!== null){koreksi_no_create = koreksi_noField.getValue();} 
 		if(koreksi_gudangField.getValue()!== null){koreksi_gudang_create = koreksi_gudangField.getValue();} 
 		if(koreksi_tanggalField.getValue()!== ""){koreksi_tanggal_create_date = koreksi_tanggalField.getValue().format('Y-m-d');} 
 		if(koreksi_keteranganField.getValue()!== null){koreksi_keterangan_create = koreksi_keteranganField.getValue();}
@@ -159,6 +166,7 @@ Ext.onReady(function(){
 			params: {
 				task				: post2db,
 				koreksi_id			: koreksi_id_create_pk, 
+				koreksi_no			: koreksi_no_create,
 				koreksi_gudang		: koreksi_gudang_create, 
 				koreksi_tanggal		: koreksi_tanggal_create_date, 
 				koreksi_keterangan	: koreksi_keterangan_create,
@@ -217,6 +225,8 @@ Ext.onReady(function(){
 	function master_koreksi_stok_reset_form(){
 		koreksi_idField.reset();
 		koreksi_idField.setValue(null);
+		koreksi_noField.reset();
+		koreksi_noField.setValue('(Auto)');
 		koreksi_gudangField.reset();
 		koreksi_gudangField.setValue(null);
 		koreksi_tanggalField.reset();
@@ -263,6 +273,7 @@ Ext.onReady(function(){
 		cbo_koreksi_gudangDataSore.load();
 		
 		koreksi_idField.setValue(master_koreksi_stokListEditorGrid.getSelectionModel().getSelected().get('koreksi_id'));
+		koreksi_noField.setValue(master_koreksi_stokListEditorGrid.getSelectionModel().getSelected().get('koreksi_no'));
 		koreksi_gudangField.setValue(master_koreksi_stokListEditorGrid.getSelectionModel().getSelected().get('koreksi_gudang'));
 		koreksi_tanggalField.setValue(master_koreksi_stokListEditorGrid.getSelectionModel().getSelected().get('koreksi_tanggal'));
 		koreksi_keteranganField.setValue(master_koreksi_stokListEditorGrid.getSelectionModel().getSelected().get('koreksi_keterangan'));
@@ -405,6 +416,7 @@ Ext.onReady(function(){
 		},[
 		/* dataIndex => insert intomaster_koreksi_stok_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'koreksi_id', type: 'int', mapping: 'koreksi_id'}, 
+			{name: 'koreksi_no', type: 'string', mapping: 'koreksi_no'},
 			{name: 'koreksi_gudang', type: 'string', mapping: 'gudang_nama'},
 			{name: 'koreksi_gudang_id', type: 'int', mapping: 'gudang_id'},
 			{name: 'koreksi_tanggal', type: 'date', dateFormat: 'Y-m-d', mapping: 'koreksi_tanggal'}, 
@@ -461,6 +473,18 @@ Ext.onReady(function(){
 				format: 'd-m-Y'
 			})
 		},
+		
+		{
+			header: '<div align="center">' + 'No PS' + '</div>',
+			dataIndex: 'koreksi_no',
+			width: 100,	//150,
+			sortable: true,
+			editor: new Ext.form.TextField({
+				maxLength: 50
+          	})
+		}, 
+		
+		
 		{
 			header: '<div align="center">Gudang</div>',
 			dataIndex: 'koreksi_gudang',
@@ -663,6 +687,18 @@ Ext.onReady(function(){
 		anchor: '95%',
 		maskRe: /([0-9]+)$/
 	});
+	
+	/* Identify  koreksi_no Field */
+	koreksi_noField= new Ext.form.TextField({
+		id: 'koreksi_noField',
+		fieldLabel: 'No PS',
+		emptyText: '(Auto)',
+		readOnly: true,
+		maxLength: 50,
+		anchor: '95%'
+	});
+	
+	
 	/* Identify  koreksi_gudang Field */
 	koreksi_gudangField= new Ext.form.ComboBox({
 		id: 'koreksi_gudangField',
@@ -722,7 +758,7 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [koreksi_gudangField, koreksi_tanggalField,koreksi_idField] 
+				items: [koreksi_noField, koreksi_gudangField, koreksi_tanggalField,koreksi_idField] 
 			}
 			,{
 				columnWidth:0.5,
@@ -1152,12 +1188,14 @@ Ext.onReady(function(){
 	function master_koreksi_stok_list_search(){
 		// render according to a SQL date format.
 		var koreksi_id_search=null;
+		var koreksi_no_search=null;
 		var koreksi_gudang_search=null;
 		var koreksi_tanggal_search_date="";
 		var koreksi_keterangan_search=null;
 		var koreksi_status_search=null;
 
 		if(koreksi_idSearchField.getValue()!==null){koreksi_id_search=koreksi_idSearchField.getValue();}
+		if(koreksi_noSearchField.getValue()!==null){koreksi_no_search=koreksi_noSearchField.getValue();}
 		if(koreksi_gudangSearchField.getValue()!==null){koreksi_gudang_search=koreksi_gudangSearchField.getValue();}
 		if(koreksi_tanggalSearchField.getValue()!==""){koreksi_tanggal_search_date=koreksi_tanggalSearchField.getValue().format('Y-m-d');}
 		if(koreksi_keteranganSearchField.getValue()!==null){koreksi_keterangan_search=koreksi_keteranganSearchField.getValue();}
@@ -1167,6 +1205,7 @@ Ext.onReady(function(){
 			task				: 'SEARCH',
 			//variable here
 			koreksi_id			: koreksi_id_search, 
+			koreksi_no			: koreksi_no_search,
 			koreksi_gudang		: koreksi_gudang_search, 
 			koreksi_tanggal		: koreksi_tanggal_search_date, 
 			koreksi_keterangan	: koreksi_keterangan_search,
@@ -1187,6 +1226,7 @@ Ext.onReady(function(){
 	/* End of Fuction */
 	
 	function master_koreksi_stok_reset_SearchForm(){
+		koreksi_noSearchField.reset();
 		koreksi_gudangSearchField.reset();
 		koreksi_tanggalSearchField.reset();
 		koreksi_keteranganSearchField.reset();
@@ -1206,6 +1246,16 @@ Ext.onReady(function(){
 		maskRe: /([0-9]+)$/
 	
 	});
+	
+	/* Identify  koreksi_no Search Field */
+	koreksi_noSearchField= new Ext.form.TextField({
+		id: 'koreksi_noSearchField',
+		fieldLabel: 'No PS',
+		maxLength: 50,
+		anchor: '95%'
+	
+	});
+	
 	/* Identify  koreksi_gudang Search Field */
 	koreksi_gudangSearchField= new Ext.form.ComboBox({
 		id: 'koreksi_gudangSearchField',
@@ -1301,7 +1351,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [koreksi_gudangSearchField, koreksi_tanggalSearchFieldSet, koreksi_keteranganSearchField, koreksi_statusSearchField] 
+				items: [koreksi_noSearchField, koreksi_gudangSearchField, koreksi_tanggalSearchFieldSet, koreksi_keteranganSearchField, koreksi_statusSearchField] 
 			}
 			]
 		}]

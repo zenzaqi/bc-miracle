@@ -163,6 +163,10 @@ class C_master_koreksi_stok extends Controller {
 	function master_koreksi_stok_update(){
 		//POST variable here
 		$koreksi_id=trim(@$_POST["koreksi_id"]);
+		$koreksi_no=trim(@$_POST["koreksi_no"]);
+		$koreksi_no=str_replace("/(<\/?)(p)([^>]*>)", "",$koreksi_no);
+		$koreksi_no=str_replace(",", ",",$koreksi_no);
+		$koreksi_no=str_replace("'", '"',$koreksi_no);
 		$koreksi_gudang=trim(@$_POST["koreksi_gudang"]);
 		$koreksi_tanggal=trim(@$_POST["koreksi_tanggal"]);
 		$koreksi_keterangan=trim(@$_POST["koreksi_keterangan"]);
@@ -173,7 +177,7 @@ class C_master_koreksi_stok extends Controller {
 		$koreksi_status=str_replace("/(<\/?)(p)([^>]*>)", "",$koreksi_status);
 		$koreksi_status=str_replace(",", ",",$koreksi_status);
 		$koreksi_status=str_replace("'", '"',$koreksi_status);
-		$result = $this->m_master_koreksi_stok->master_koreksi_stok_update($koreksi_id ,$koreksi_gudang ,$koreksi_tanggal ,$koreksi_keterangan, $koreksi_status);
+		$result = $this->m_master_koreksi_stok->master_koreksi_stok_update($koreksi_id , $koreksi_no, $koreksi_gudang ,$koreksi_tanggal ,$koreksi_keterangan, $koreksi_status);
 		echo $result;
 	}
 	
@@ -181,6 +185,9 @@ class C_master_koreksi_stok extends Controller {
 	function master_koreksi_stok_create(){
 		//POST varible here
 		//auto increment, don't accept anything from form values
+		$koreksi_no=trim(@$_POST["koreksi_no"]);
+		$koreksi_no=str_replace("/(<\/?)(p)([^>]*>)", "",$koreksi_no);
+		$koreksi_no=str_replace("'", '"',$koreksi_no);
 		$koreksi_gudang=trim(@$_POST["koreksi_gudang"]);
 		$koreksi_tanggal=trim(@$_POST["koreksi_tanggal"]);
 		$koreksi_keterangan=trim(@$_POST["koreksi_keterangan"]);
@@ -189,7 +196,7 @@ class C_master_koreksi_stok extends Controller {
 		$koreksi_status=trim(@$_POST["koreksi_status"]);
 		$koreksi_status=str_replace("/(<\/?)(p)([^>]*>)", "",$koreksi_status);
 		$koreksi_status=str_replace("'", '"',$koreksi_status);
-		$result=$this->m_master_koreksi_stok->master_koreksi_stok_create($koreksi_gudang ,$koreksi_tanggal ,$koreksi_keterangan, $koreksi_status);
+		$result=$this->m_master_koreksi_stok->master_koreksi_stok_create($koreksi_no, $koreksi_gudang ,$koreksi_tanggal ,$koreksi_keterangan, $koreksi_status);
 		echo $result;
 	}
 
@@ -205,6 +212,9 @@ class C_master_koreksi_stok extends Controller {
 	function master_koreksi_stok_search(){
 		//POST varibale here
 		$koreksi_id=trim(@$_POST["koreksi_id"]);
+		$koreksi_no=trim(@$_POST["koreksi_no"]);
+		$koreksi_no=str_replace("/(<\/?)(p)([^>]*>)", "",$koreksi_no);
+		$koreksi_no=str_replace("'", '"',$koreksi_no);
 		$koreksi_gudang=trim(@$_POST["koreksi_gudang"]);
 		$koreksi_tanggal=trim(@$_POST["koreksi_tanggal"]);
 		$koreksi_keterangan=trim(@$_POST["koreksi_keterangan"]);
@@ -216,7 +226,7 @@ class C_master_koreksi_stok extends Controller {
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_master_koreksi_stok->master_koreksi_stok_search($koreksi_id ,$koreksi_gudang ,$koreksi_tanggal ,$koreksi_keterangan, $koreksi_status, $start,$end);
+		$result = $this->m_master_koreksi_stok->master_koreksi_stok_search($koreksi_id , $koreksi_no, $koreksi_gudang ,$koreksi_tanggal ,$koreksi_keterangan, $koreksi_status, $start,$end);
 		echo $result;
 	}
 
