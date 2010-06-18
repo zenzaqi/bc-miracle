@@ -2,22 +2,22 @@
 /* 	These code was generated using phpCIGen v 0.1.b (21/04/2009)
 	#zaqi 		zaqi.smart@gmail.com,http://zenzaqi.blogspot.com, 
 	
-	+ Module  		: tindakan Controller
+	+ Module  		: resep dokter Controller
 	+ Description	: For record controller process back-end
-	+ Filename 		: C_tindakan_medis.php
+	+ Filename 		: C_resep_dokter.php
  	+ Author  		: masongbee
  	+ Created on 27/Oct/2009 14:21:34
 	
 */
 
-//class of tindakan
+//class of resep dokter
 class C_resep_dokter extends Controller {
 
 	//constructor
 	function C_resep_dokter(){
 		parent::Controller();
 		$this->load->model('m_resep_dokter', '', TRUE);
-		session_start();
+		//session_start();
 		$this->load->plugin('to_excel');
 		//$this->load->library('firephp');
 	}
@@ -79,32 +79,125 @@ class C_resep_dokter extends Controller {
 		echo $result;
 	}
 	
-	function detail_resepdokter_list(){
+	function get_paket_list(){
+		$query = isset($_POST['query']) ? $_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		$result = $this->m_resep_dokter->get_paket_list($query,$start,$end);
+		echo $result;
+	}
+	
+	
+	function get_satuan_list(){
+		$task = isset($_POST['task']) ? @$_POST['task'] : @$_GET['task'];
+		$selected_id = isset($_POST['selected_id']) ? @$_POST['selected_id'] : @$_GET['selected_id'];
+		$master_id = (integer) (isset($_POST['master_id']) ? @$_POST['master_id'] : @$_GET['master_id']);
+		
+		if($task=='detail')
+			$result=$this->m_resep_dokter->get_satuan_detail_list($master_id);
+		elseif($task=='produk')
+			$result=$this->m_resep_dokter->get_satuan_produk_list($selected_id);
+		elseif($task=='selected')
+			$result=$this->m_resep_dokter->get_satuan_selected_list($selected_id);
+			
+		echo $result;
+	}
+	
+	
+	
+	function detail_resepdokter_lepasan_list(){
 		$query = isset($_POST['query']) ? $_POST['query'] : "";
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
 		$master_id = (integer) (isset($_POST['master_id']) ? $_POST['master_id'] : $_GET['master_id']);
-		$result=$this->m_resep_dokter->detail_resepdokter_list($master_id,$query,$start,$end);
+		$result=$this->m_resep_dokter->detail_resepdokter_lepasan_list($master_id,$query,$start,$end);
 		echo $result;
 	}
 	
-	function resepdokter_detail_insert(){
-		$dresep_id=trim(@$_POST["dresep_id"]);
-		$dresep_master=trim(@$_POST["dresep_master"]);
-		$dresep_produk=trim(@$_POST["dresep_produk"]);
+	function detail_resepdokter_kombinasi_list(){
+		$query = isset($_POST['query']) ? $_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		$master_id = (integer) (isset($_POST['master_id']) ? $_POST['master_id'] : $_GET['master_id']);
+		$result=$this->m_resep_dokter->detail_resepdokter_kombinasi_list($master_id,$query,$start,$end);
+		echo $result;
+	}
+	
+	function detail_resepdokter_tambahan_list(){
+		$query = isset($_POST['query']) ? $_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		$master_id = (integer) (isset($_POST['master_id']) ? $_POST['master_id'] : $_GET['master_id']);
+		$result=$this->m_resep_dokter->detail_resepdokter_tambahan_list($master_id,$query,$start,$end);
+		echo $result;
+	}
+	
+	
+	function resepdokter_detail_lepasan_insert(){
+		$dresepl_id=trim(@$_POST["dresepl_id"]);
+		$dresepl_master=trim(@$_POST["dresepl_master"]);
+		$dresepl_produk=trim(@$_POST["dresepl_produk"]);
+		$dresepl_tambahan=trim(@$_POST["dresepl_tambahan"]);
+		$dresepl_satuan=trim(@$_POST["dresepl_satuan"]);
+		$dresepl_jumlah=trim(@$_POST["dresepl_jumlah"]);
 		$cetak=trim(@$_POST['cetak']);
 		$count=trim(@$_POST['count']);
 		$dcount=trim(@$_POST['dcount']);
 
-		$result=$this->m_resep_dokter->resepdokter_detail_insert($dresep_id ,$dresep_master ,$dresep_produk, $cetak, $count, $dcount);
+		$result=$this->m_resep_dokter->resepdokter_detail_lepasan_insert($dresepl_id ,$dresepl_master ,$dresepl_produk, $dresepl_tambahan, $dresepl_satuan, $dresepl_jumlah, $cetak, $count, $dcount);
 		echo $result;
 	}
+	
+	function resepdokter_detail_kombinasi_insert(){
+		$dresepk_id=trim(@$_POST["dresepk_id"]);
+		$dresepk_master=trim(@$_POST["dresepk_master"]);
+		$dresepk_paket=trim(@$_POST["dresepk_paket"]);
+		//$dresepl_tambahan=trim(@$_POST["dresepl_tambahan"]);
+		$cetak=trim(@$_POST['cetak']);
+		$count=trim(@$_POST['count']);
+		$dcount=trim(@$_POST['dcount']);
 
-	function detail_resepdokter_purge(){
+		$result=$this->m_resep_dokter->resepdokter_detail_kombinasi_insert($dresepk_id ,$dresepk_master ,$dresepk_paket, $cetak, $count, $dcount);
+		echo $result;
+	}
+	
+	
+	function resepdokter_detail_tambahan_insert(){
+		$dresept_id=trim(@$_POST["dresept_id"]);
+		$dresept_master=trim(@$_POST["dresept_master"]);
+		//$dresepl_produk=trim(@$_POST["dresepl_produk"]);
+		$dresept_tambahan=trim(@$_POST["dresept_tambahan"]);
+		$dresept_tambahan=str_replace("/(<\/?)(p)([^>]*>)", "",$dresept_tambahan);
+		$dresept_tambahan=str_replace("\\", "",$dresept_tambahan);
+		$dresept_satuan=trim(@$_POST["dresept_satuan"]);
+		$dresept_jumlah=trim(@$_POST["dresept_jumlah"]);
+		$cetak_tambahan=trim(@$_POST['cetak_tambahan']);
+		$count_tambahan=trim(@$_POST['count_tambahan']);
+		$dcount_tambahan=trim(@$_POST['dcount_tambahan']);
+
+		$result=$this->m_resep_dokter->resepdokter_detail_tambahan_insert($dresept_id ,$dresept_master ,$dresept_tambahan, $dresept_satuan, $dresept_jumlah, $cetak_tambahan, $count_tambahan, $dcount_tambahan);
+		echo $result;
+	}
+	
+
+	function detail_resepdokter_lepasan_purge(){
 		$master_id = (integer) (isset($_POST['master_id']) ? $_POST['master_id'] : $_GET['master_id']);
 		//$this->firephp->log($master_id,'masterer');
-		$result=$this->m_resep_dokter->detail_resepdokter_purge($master_id);
+		$result=$this->m_resep_dokter->detail_resepdokter_lepasan_purge($master_id);
 	}
+	
+	function detail_resepdokter_kombinasi_purge(){
+		$master_id = (integer) (isset($_POST['master_id']) ? $_POST['master_id'] : $_GET['master_id']);
+		//$this->firephp->log($master_id,'masterer');
+		$result=$this->m_resep_dokter->detail_resepdokter_kombinasi_purge($master_id);
+	}
+	
+	function detail_resepdokter_tambahan_purge(){
+		$master_id = (integer) (isset($_POST['master_id']) ? $_POST['master_id'] : $_GET['master_id']);
+		//$this->firephp->log($master_id,'masterer');
+		$result=$this->m_resep_dokter->detail_resepdokter_tambahan_purge($master_id);
+	}
+	
 	
 	//event handler action
 	function get_action(){
@@ -284,10 +377,16 @@ class C_resep_dokter extends Controller {
 		$resep_id=trim(@$_POST["resep_id"]);
 
 		$result = $this->m_resep_dokter->print_paper($resep_id);
+		$result2 = $this->m_resep_dokter->print_paper2($resep_id);
+		
 		$iklan = $this->m_resep_dokter->iklan();
 		$rs=$result->row();
+		$rs2=$result2->row();
 		$rsiklan=$iklan->row();
+		
 		$detail_resepdokter=$result->result();
+		$detail_resepdokter_tambahan=$result2->result();
+		
 		$data['karyawan_nama']=$rs->karyawan_nama;
 		$data['karyawan_sip']=$rs->karyawan_sip;
 		$data['cust_no']=$rs->cust_no;
@@ -297,8 +396,17 @@ class C_resep_dokter extends Controller {
 		$data['resep_tanggal']=date("d-m-Y",strtotime($rs->resep_tanggal));
 		$data['resep_no']=$rs->resep_no;
 		$data['produk_nama']=$rs->produk_nama;
+		$data['satuan_nama']=$rs->satuan_nama;
+		$data['dresepl_jumlah']=$rs->dresepl_jumlah;
+		
+		$data['dresept_tambahan']=$rs2->dresept_tambahan;
+		$data['dresept_satuan']=$rs2->dresept_satuan;
+		$data['dresept_jumlah']=$rs2->dresept_jumlah;
+		
 		$data['detail_resepdokter']=$detail_resepdokter;
+		$data['detail_resepdokter_tambahan']=$detail_resepdokter_tambahan;
 		$viewdata=$this->load->view("main/resepdokter_formcetak",$data,TRUE);
+		
 		$file = fopen("resepdokter_paper.html",'w');
 		fwrite($file, $viewdata);	
 		fclose($file);
