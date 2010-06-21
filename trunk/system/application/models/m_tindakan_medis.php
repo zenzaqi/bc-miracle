@@ -507,10 +507,25 @@ class M_tindakan_medis extends Model{
 		$this->db->query($sql_sisa_paket);*/
 		
 		//* UPDATE db.detail_jual_paket.dpaket_sisa_paket ==> sisa paket dari paket yang dibeli akan diupdate akibat dari pengambilan paket /
-		$sql_sisa_paket = "UPDATE detail_jual_paket
+		/*$sql_sisa_paket = "UPDATE detail_jual_paket
 			SET dpaket_sisa_paket =
 				(SElECT vu_total_sisa_paket.total_sisa_paket FROM vu_total_sisa_paket WHERE vu_total_sisa_paket.dpaket_id='$dapaket_dpaket')
-			WHERE dpaket_id='$dapaket_dpaket'";
+			WHERE dpaket_id='$dapaket_dpaket'";*/
+		$sql_sisa_paket="UPDATE detail_jual_paket
+			SET dpaket_sisa_paket=
+				(
+				SELECT ((dpaket_jumlah*paket_jmlisi)-(sum(dapaket_jumlah)))
+				FROM detail_ambil_paket
+				LEFT JOIN paket ON(dapaket_paket=paket_id)
+				WHERE paket_id='$dapaket_paket'
+					AND dapaket_dpaket='$dapaket_dpaket'
+					AND dapaket_jpaket='$dapaket_jpaket'
+					AND dapaket_stat_dok<>'Batal'
+				GROUP BY dapaket_dpaket, dapaket_jpaket, dapaket_paket
+				)
+			WHERE detail_jual_paket.dpaket_id='$dapaket_dpaket'
+				AND detail_jual_paket.dpaket_master='$dapaket_jpaket'
+				AND detail_jual_paket.dpaket_paket='$dapaket_paket'";
 		$this->db->query($sql_sisa_paket);
 		
 	}
