@@ -388,9 +388,92 @@ Ext.onReady(function(){
 			rproduk_keteranganField.setDisabled(false);
 			rproduk_kwitansi_keteranganField.setDisabled(false);
 		}
+		
+		rproduk_statusField.on("select",function(){
+		var status_awal = master_retur_jual_produkListEditorGrid.getSelectionModel().getSelected().get('rproduk_status');
+		if(status_awal =='Terbuka' && rproduk_statusField.getValue()=='Tertutup')
+		{
+		Ext.MessageBox.show({
+			msg: 'Tidak bisa, harus print dulu supaya status menjadi Tertutup',
+		   //progressText: 'proses...',
+			buttons: Ext.MessageBox.OK,
+			animEl: 'save',
+			icon: Ext.MessageBox.WARNING
+		   });
+		rproduk_statusField.setValue('Terbuka');
+		}
+		
+		else if(status_awal =='Tertutup' && rproduk_statusField.getValue()=='Terbuka')
+		{
+		Ext.MessageBox.show({
+			msg: 'Status yang sudah Tertutup tidak dapat diganti Terbuka',
+			buttons: Ext.MessageBox.OK,
+			animEl: 'save',
+			icon: Ext.MessageBox.WARNING
+		   });
+		rproduk_statusField.setValue('Tertutup');
+		}
+		
+		else if(status_awal =='Batal' && rproduk_statusField.getValue()=='Terbuka')
+		{
+		Ext.MessageBox.show({
+			msg: 'Status yang sudah Tertutup tidak dapat diganti Terbuka',
+			buttons: Ext.MessageBox.OK,
+			animEl: 'save',
+			icon: Ext.MessageBox.WARNING
+		   });
+		rproduk_statusField.setValue('Tertutup');
+		}
+		
+		else if(rproduk_statusField.getValue()=='Batal')
+		{
+		Ext.MessageBox.confirm('Confirmation','Apakah anda yakin merubah status ini menjadi Batal? status Batal sudah tidak bisa diganti lagi', rproduk_status_delete);
+		}
+		
+		});		
+	
 	}
 	/* End setValue to EDIT*/
-  
+	
+	function rproduk_status_delete(btn){
+	if(btn=='yes')
+	{
+		rproduk_statusField.setValue('Batal');
+	}  
+	else
+		rproduk_statusField.setValue(master_retur_jual_produkListEditorGrid.getSelectionModel().getSelected().get('rproduk_status'));
+	}
+	
+	
+	/* function for set_status*/
+	function master_retur_jual_produk_set_updating(){
+		if(rproduk_post2db=="UPDATE" && master_retur_jual_produkListEditorGrid.getSelectionModel().getSelected().get('rproduk_status')=="Terbuka"){
+				rproduk_custField.setDisabled(true);
+                rproduk_tanggalField.setDisabled(true);
+                rproduk_keteranganField.setDisabled(false);
+                detail_retur_jual_produkListEditorGrid.setDisabled(false);
+				rproduk_kwitansi_keteranganField.setDisabled(false);
+                rproduk_statusField.setDisabled(false);
+		}
+		if(rproduk_post2db=="UPDATE" && master_retur_jual_produkListEditorGrid.getSelectionModel().getSelected().get('rproduk_status')=="Tertutup"){
+			    rproduk_custField.setDisabled(true);
+                rproduk_tanggalField.setDisabled(true);
+                rproduk_keteranganField.setDisabled(true);
+                detail_retur_jual_produkListEditorGrid.setDisabled(true);
+				rproduk_kwitansi_keteranganField.setDisabled(true);
+                rproduk_statusField.setDisabled(false);
+		}
+		if(rproduk_post2db=="UPDATE" && master_retur_jual_produkListEditorGrid.getSelectionModel().getSelected().get('rproduk_status')=="Batal"){
+				rproduk_custField.setDisabled(true);
+				rproduk_tanggalField.setDisabled(true);
+				rproduk_keteranganField.setDisabled(true);
+				rproduk_statusField.setDisabled(true);
+				detail_retur_jual_produkListEditorGrid.setDisabled(true);
+				rproduk_kwitansi_keteranganField.setDisabled(true);
+		}
+	}
+	
+
 	/* Function for Check if the form is valid */
 	function is_master_retur_jual_produk_form_valid(){
 		return (true &&  true &&  true &&  true &&  true &&  true &&  true &&  true &&  true &&  true &&  true  );
@@ -444,6 +527,7 @@ Ext.onReady(function(){
 				params : {master_id : eval(get_pk_id()), start:0, limit:pageS},
 				callback: function(opts, success, response){
 					master_retur_jual_produk_set_form();
+					master_retur_jual_produk_set_updating();
 				}
 			});
 			msg='updated';
