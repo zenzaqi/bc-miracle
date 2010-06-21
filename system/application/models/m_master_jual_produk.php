@@ -686,7 +686,7 @@ class M_master_jual_produk extends Model{
 						}
 					}
 				}else{
-					//* artinya: customer belum pernah menjadi MEMBER. /
+					//* artinya: customer belum pernah menjadi MEMBER (belum masuk ke db.member). /
 					//* untuk itu: check total_transaksi si customer di hari ini dan bandingkan dengan db.member_setup.setmember_transhari /
 					if($cust_total_trans_now >= $min_trans_member_baru){
 						//* Pendaftaran MEMBER BARU /
@@ -706,7 +706,9 @@ class M_master_jual_produk extends Model{
 						}
 					}else{
 						//* Syarat menjadi MEMBER belum terpenuhi /
-						//* NO ACTION /
+						//* deleting di db.member_temp (jika sebelumnya sudah diinsert), karena melakukan pembatalan transaksi sehingga total transaksi hari ini tidak memenuhi syarat menjadi member /
+						$this->db->where('membert_cust', $cust_id);
+						$this->db->delete('member_temp');
 					}
 				}
 			}
@@ -1957,6 +1959,7 @@ class M_master_jual_produk extends Model{
 			if($this->db->affected_rows()){
 				//* udpating db.customer.cust_point ==> proses mengurangi jumlah poin (dikurangi dengan db.master_jual_produk.jproduk_point yg sudah dimasukkan ketika cetak faktur), karena dilakukan pembatalan /
 				$this->member_point_batal($jproduk_id);
+				$this->membership_insert($jproduk_id);
 				return '1';
 			}else{
 				return '0';
