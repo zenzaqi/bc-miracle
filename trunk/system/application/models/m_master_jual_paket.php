@@ -563,7 +563,16 @@ class M_master_jual_paket extends Model{
 				$record=$rs->row_array();
 				$setmember_rp_perpoint=$record['setmember_rp_perpoint'];
 				
-				$sql="SELECT dpaket_jumlah, dpaket_harga, paket_point, dpaket_diskon, jpaket_diskon, jpaket_cashback FROM detail_jual_paket LEFT JOIN master_jual_paket ON(dpaket_master=jpaket_id) LEFT JOIN paket ON(dpaket_paket=paket_id) WHERE dpaket_master='$dpaket_master'";
+				$sql="SELECT dpaket_jumlah
+						,dpaket_harga
+						,paket_point
+						,dpaket_diskon
+						,jpaket_diskon
+						,jpaket_cashback
+					FROM detail_jual_paket
+					LEFT JOIN master_jual_paket ON(dpaket_master=jpaket_id)
+					LEFT JOIN paket ON(dpaket_paket=paket_id)
+					WHERE dpaket_master='$dpaket_master'";
 				$rs=$this->db->query($sql);
 				if($rs->num_rows()){
 					$one_record = $rs->row();
@@ -572,7 +581,6 @@ class M_master_jual_paket extends Model{
 					$jumlah_rupiah = 0;
 					$jumlah_point = 0;
 					foreach($rs->result() as $row){
-						//$jumlah_point += ($row->dpaket_jumlah) * ($row->paket_point) * (floor(($row->dpaket_harga)/$setmember_rp_perpoint));
 						$jumlah_rupiah += ($row->dpaket_jumlah) * ($row->paket_point) * ($row->dpaket_harga) * ((100 - $row->dpaket_diskon)/100);
 					}
 					$jumlah_rupiah -= $jpaket_cashback;
@@ -915,12 +923,136 @@ class M_master_jual_paket extends Model{
 		}*/
 		
 		//insert detail record
-		function detail_detail_jual_paket_insert($dpaket_id ,$dpaket_master ,$dpaket_paket, $dpaket_karyawan, $dpaket_kadaluarsa ,$dpaket_jumlah ,$dpaket_harga ,$dpaket_diskon,$dpaket_diskon_jenis,$dpaket_sales, $cetak, $count, $dcount){
+		function detail_detail_jual_paket_insert($array_dpaket_id ,$dpaket_master ,$array_dpaket_paket, $array_dpaket_karyawan, $array_dpaket_kadaluarsa ,$array_dpaket_jumlah ,$array_dpaket_harga ,$array_dpaket_diskon ,$array_dpaket_diskon_jenis ,$array_dpaket_sales, $cetak){
 			//if master id not capture from view then capture it from max pk from master table
 			if($dpaket_master=="" || $dpaket_master==NULL || $dpaket_master==0){
 				$dpaket_master=$this->get_master_id();
 			}
-			if($dpaket_kadaluarsa=="")
+			
+			$size_array = sizeof($array_dpaket_paket) - 1;
+			
+			for($i = 0; $i < sizeof($array_dpaket_paket); $i++){
+				$dpaket_id = $array_dpaket_id[$i];
+				$dpaket_paket = $array_dpaket_paket[$i];
+				$dpaket_karyawan = $array_dpaket_karyawan[$i];
+				$dpaket_kadaluarsa = $array_dpaket_kadaluarsa[$i];
+				$dpaket_jumlah = $array_dpaket_jumlah[$i];
+				$dpaket_harga = $array_dpaket_harga[$i];
+				$dpaket_diskon = $array_dpaket_diskon[$i];
+				$dpaket_diskon_jenis = $array_dpaket_diskon_jenis[$i];
+				$dpaket_sales = $array_dpaket_sales[$i];
+				
+				if($dpaket_kadaluarsa==""){
+					$dpaket_kadaluarsa=NULL;
+				}
+				
+				$dpaket_sisa_paket=0;
+				$rpaket_jumlah_total=0;
+				$ipaket_jumlah_total=0;
+				
+				//* mendapatkan jumlah_total_perawatan dalam paket /
+				$sql_rpaket="SELECT sum(rpaket_jumlah) AS rpaket_jumlah_total
+					FROM paket_isi_perawatan
+					WHERE rpaket_master='$dpaket_paket'
+					ORDER BY rpaket_master";
+				$rs_rpaket=$this->db->query($sql_rpaket);
+				if($rs_rpaket->num_rows()){
+					$rs_rpaket_record=$rs_rpaket->row_array();
+					$rpaket_jumlah_total=$rs_rpaket_record["rpaket_jumlah_total"];
+				}
+				
+				//* mendapatkan jumlah_total_produk dalam paket /
+				$sql_ipaket="SELECT sum(ipaket_jumlah) AS ipaket_jumlah_total
+					FROM paket_isi_produk
+					WHERE ipaket_master='$dpaket_paket'
+					ORDER BY ipaket_master";
+				$rs_ipaket=$this->db->query($sql_ipaket);
+				if($rs_ipaket->num_rows()){
+					$rs_ipaket_record=$rs_ipaket->row_array();
+					$ipaket_jumlah_total=$rs_ipaket_record["ipaket_jumlah_total"];
+				}
+				
+				//* jumlah total yang masuk ke detail_jual_paket.dpaket_sisa_paket = jumlah paket yang dibeli * (jumlah isi paket) /
+				$dpaket_sisa_paket=$dpaket_jumlah*($rpaket_jumlah_total+$ipaket_jumlah_total);
+				
+				//* checking $dpaket_id ==> apakah is_numeric AND sudah ada di db.detail_jual_paket.dpaket_id ?? /
+				if(is_numeric($dpaket_id)){
+					//* detail ini sudah ada dalam db.detail_jual_paket ==> updating /
+					//* checking lagi, apakah $dpaket_master(identik = db.master_jual_paket.jpaket_id) AND $dpaket_id sudah diambil ataukah belum di db.detail_ambil_paket,
+					//* JIKA sudah pernah diambil ==> maka $dpaket_id ini tidak boleh dilakukan updating atau penghapusan /
+					$sql = "SELECT dapaket_id FROM detail_ambil_paket WHERE dapaket_jpaket='$dpaket_master' AND dapaket_dpaket='$dpaket_id'";
+					$rs = $this->db->query($sql);
+					if($rs->num_rows()){
+						//* artinya: isi paket sudah pernah diambil, sehingga tidak boleh di-edit ==> tidak ada action /
+						if($cetak==1 && $i==$size_array){
+							//* proses cetak /
+							$this->member_point_update($dpaket_master);
+							$this->membership_insert($dpaket_master);
+							return $dpaket_master;
+						}else if($cetak<>1 && $i==$size_array){
+							return '0';
+						}
+					}else{
+						//* artinya: isi paket belum pernah diambil, sehingga masih boleh di-edit /
+						$dtu_dpaket = array(
+							//"dpaket_master"=>$dpaket_master, 
+							"dpaket_paket"=>$dpaket_paket,
+							"dpaket_karyawan"=>$dpaket_karyawan,
+							"dpaket_kadaluarsa"=>$dpaket_kadaluarsa, 
+							"dpaket_jumlah"=>$dpaket_jumlah, 
+							"dpaket_harga"=>$dpaket_harga, 
+							"dpaket_diskon"=>$dpaket_diskon,
+							"dpaket_diskon_jenis"=>$dpaket_diskon_jenis,
+							"dpaket_sales"=>$dpaket_sales,
+							"dpaket_sisa_paket"=>$dpaket_sisa_paket
+						);
+						$this->db->where('dpaket_id', $dpaket_id);
+						$this->db->update('detail_jual_paket', $dtu_dpaket); 
+						if($this->db->affected_rows()){
+							if($cetak==1 && $i==$size_array){
+								//* proses cetak /
+								$this->member_point_update($dpaket_master);
+								$this->membership_insert($dpaket_master);
+								return $dpaket_master;
+							}else if($cetak<>1 && $i==$size_array){
+								return '0';
+							}
+						}else
+							return '-1';
+					}
+				}else{
+					//* Adding detail baru /
+					$data = array(
+						"dpaket_master"=>$dpaket_master, 
+						"dpaket_paket"=>$dpaket_paket,
+						"dpaket_karyawan"=>$dpaket_karyawan,
+						"dpaket_kadaluarsa"=>$dpaket_kadaluarsa, 
+						"dpaket_jumlah"=>$dpaket_jumlah, 
+						"dpaket_harga"=>$dpaket_harga, 
+						"dpaket_diskon"=>$dpaket_diskon,
+						"dpaket_diskon_jenis"=>$dpaket_diskon_jenis,
+						"dpaket_sales"=>$dpaket_sales,
+						"dpaket_sisa_paket"=>$dpaket_sisa_paket
+					);
+					$this->db->insert('detail_jual_paket', $data); 
+					if($this->db->affected_rows()){
+						if($cetak==1 && $i==$size_array){
+							//* proses cetak /
+							$this->member_point_update($dpaket_master);
+							$this->membership_insert($dpaket_master);
+							return $dpaket_master;
+						}else if($cetak<>1 && $i==$size_array){
+							return '0';
+						}
+					}else
+						return '-1';
+				}
+				
+			}
+			
+			
+			
+			/*if($dpaket_kadaluarsa=="")
 				$dpaket_kadaluarsa=NULL;
 			
 			$dpaket_sisa_paket=0;
@@ -1026,7 +1158,7 @@ class M_master_jual_paket extends Model{
 					}
 				}else
 					return '-1';
-			}
+			}*/
 			
 			
 			

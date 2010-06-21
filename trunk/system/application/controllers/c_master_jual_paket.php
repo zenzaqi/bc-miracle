@@ -258,27 +258,39 @@ class C_master_jual_paket extends Controller {
 	
 	//add detail
 	function detail_detail_jual_paket_insert(){
-	//POST variable here
-		$dpaket_id=trim(@$_POST["dpaket_id"]);
+		//POST variable here
+		$dpaket_id = $_POST['dpaket_id']; // Get our array back and translate it :
+		$array_dpaket_id = json_decode(stripslashes($dpaket_id));
+		
 		$dpaket_master=trim(@$_POST["dpaket_master"]);
-		$dpaket_paket=trim(@$_POST["dpaket_paket"]);
-		$dpaket_karyawan=trim(@$_POST["dpaket_karyawan"]);
-		$dpaket_kadaluarsa=trim(@$_POST["dpaket_kadaluarsa"]);
-		$dpaket_jumlah=trim(@$_POST["dpaket_jumlah"]);
-		$dpaket_harga=trim(@$_POST["dpaket_harga"]);
-		$dpaket_diskon=trim(@$_POST["dpaket_diskon"]);
-		$dpaket_diskon_jenis=trim(@$_POST["dpaket_diskon_jenis"]);
-		$dpaket_sales=trim(@$_POST["dpaket_sales"]);
-		$dpaket_sales=str_replace("/(<\/?)(p)([^>]*>)", "",$dpaket_sales);
-		$dpaket_sales=str_replace("\\", "",$dpaket_sales);
-		$dpaket_sales=str_replace("'", '"',$dpaket_sales);
+		
+		$dpaket_paket = $_POST['dpaket_paket']; // Get our array back and translate it :
+		$array_dpaket_paket = json_decode(stripslashes($dpaket_paket));
+		
+		$dpaket_karyawan = $_POST['dpaket_karyawan']; // Get our array back and translate it :
+		$array_dpaket_karyawan = json_decode(stripslashes($dpaket_karyawan));
+		
+		$dpaket_kadaluarsa = $_POST['dpaket_kadaluarsa']; // Get our array back and translate it :
+		$array_dpaket_kadaluarsa = json_decode(stripslashes($dpaket_kadaluarsa));
+		
+		$dpaket_jumlah = $_POST['dpaket_jumlah']; // Get our array back and translate it :
+		$array_dpaket_jumlah = json_decode(stripslashes($dpaket_jumlah));
+		
+		$dpaket_harga = $_POST['dpaket_harga']; // Get our array back and translate it :
+		$array_dpaket_harga = json_decode(stripslashes($dpaket_harga));
+		
+		$dpaket_diskon_jenis = $_POST['dpaket_diskon_jenis']; // Get our array back and translate it :
+		$array_dpaket_diskon_jenis = json_decode(stripslashes($dpaket_diskon_jenis));
+		
+		$dpaket_diskon = $_POST['dpaket_diskon']; // Get our array back and translate it :
+		$array_dpaket_diskon = json_decode(stripslashes($dpaket_diskon));
+		
+		$dpaket_sales = $_POST['dpaket_sales']; // Get our array back and translate it :
+		$array_dpaket_sales = json_decode(stripslashes($dpaket_sales));
 		
 		$cetak=trim(@$_POST['cetak']);
 		
-		$count=trim(@$_POST['count']);
-		$dcount=trim(@$_POST['dcount']);
-		
-		$result=$this->m_master_jual_paket->detail_detail_jual_paket_insert($dpaket_id ,$dpaket_master ,$dpaket_paket, $dpaket_karyawan, $dpaket_kadaluarsa ,$dpaket_jumlah ,$dpaket_harga ,$dpaket_diskon ,$dpaket_diskon_jenis ,$dpaket_sales, $cetak, $count, $dcount);
+		$result=$this->m_master_jual_paket->detail_detail_jual_paket_insert($array_dpaket_id ,$dpaket_master ,$array_dpaket_paket, $array_dpaket_karyawan, $array_dpaket_kadaluarsa ,$array_dpaket_jumlah ,$array_dpaket_harga ,$array_dpaket_diskon ,$array_dpaket_diskon_jenis ,$array_dpaket_sales, $cetak);
 		echo $result;
 	}
 	

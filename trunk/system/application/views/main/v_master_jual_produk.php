@@ -597,7 +597,7 @@ Ext.onReady(function(){
 							if(jproduk_post2db=='CREATE'){
 									detail_jual_produk_insert();
 							}else if(jproduk_post2db=='UPDATE'){
-									detail_jual_produk_purge();
+									detail_jual_produk_insert();
 							}
 							//detail_jual_produk_insert();
 							//Ext.MessageBox.alert(jproduk_post2db+' OK','The Master_jual_produk was '+msg+' successfully.');
@@ -4462,7 +4462,110 @@ Ext.onReady(function(){
 	
 	//function for insert detail
 	function detail_jual_produk_insert(){
-		var count_detail=detail_jual_produk_DataStore.getCount();
+		var dproduk_id=[];
+		var dproduk_produk=[];
+		var dproduk_karyawan=[];
+		var dproduk_satuan=[];
+		var dproduk_jumlah=[];
+		var dproduk_harga=[];
+		var dproduk_subtotal_net=[];
+		var dproduk_diskon=[];
+		var dproduk_diskon_jenis=[];
+		var dproduk_sales=[];
+		
+		var dcount = detail_jual_produk_DataStore.getCount() - 1;
+		
+		if(detail_jual_produk_DataStore.getCount()>0){
+			for(i=0; i<detail_jual_produk_DataStore.getCount();i++){
+				dproduk_id.push(detail_jual_produk_DataStore.getAt(i).data.dproduk_id);
+				dproduk_produk.push(detail_jual_produk_DataStore.getAt(i).data.dproduk_produk);
+				dproduk_karyawan.push(detail_jual_produk_DataStore.getAt(i).data.dproduk_karyawan);
+				dproduk_satuan.push(detail_jual_produk_DataStore.getAt(i).data.dproduk_satuan);
+				dproduk_jumlah.push(detail_jual_produk_DataStore.getAt(i).data.dproduk_jumlah);
+				dproduk_harga.push(detail_jual_produk_DataStore.getAt(i).data.dproduk_harga);
+				dproduk_subtotal_net.push(detail_jual_produk_DataStore.getAt(i).data.dproduk_subtotal_net);
+				dproduk_diskon.push(detail_jual_produk_DataStore.getAt(i).data.dproduk_diskon);
+				dproduk_diskon_jenis.push(detail_jual_produk_DataStore.getAt(i).data.dproduk_diskon_jenis);
+				dproduk_sales.push(detail_jual_produk_DataStore.getAt(i).data.dproduk_sales);
+				
+				if(i==dcount){
+					var encoded_array_dproduk_id = Ext.encode(dproduk_id);
+					var encoded_array_dproduk_produk = Ext.encode(dproduk_produk);
+					var encoded_array_dproduk_karyawan = Ext.encode(dproduk_karyawan);
+					var encoded_array_dproduk_satuan = Ext.encode(dproduk_satuan);
+					var encoded_array_dproduk_jumlah = Ext.encode(dproduk_jumlah);
+					var encoded_array_dproduk_harga = Ext.encode(dproduk_harga);
+					var encoded_array_dproduk_subtotal_net = Ext.encode(dproduk_subtotal_net);
+					var encoded_array_dproduk_diskon = Ext.encode(dproduk_diskon);
+					var encoded_array_dproduk_diskon_jenis = Ext.encode(dproduk_diskon_jenis);
+					var encoded_array_dproduk_sales = Ext.encode(dproduk_sales);
+					
+					Ext.Ajax.request({
+						waitMsg: 'Mohon tunggu...',
+						url: 'index.php?c=c_master_jual_produk&m=detail_detail_jual_produk_insert',
+						params:{
+							cetak	: cetak_jproduk,
+							dproduk_id	: encoded_array_dproduk_id,
+							dproduk_master	: eval(get_jproduk_pk()),
+							dproduk_produk	: encoded_array_dproduk_produk,
+							dproduk_karyawan: encoded_array_dproduk_karyawan,
+							dproduk_satuan	: encoded_array_dproduk_satuan,
+							dproduk_jumlah	: encoded_array_dproduk_jumlah,
+							dproduk_harga	: encoded_array_dproduk_harga,
+							dproduk_subtotal_net	: encoded_array_dproduk_subtotal_net,
+							dproduk_diskon	: encoded_array_dproduk_diskon,
+							dproduk_diskon_jenis	: encoded_array_dproduk_diskon_jenis,
+							dproduk_sales			: encoded_array_dproduk_sales
+						},
+						timeout: 60000,
+						success: function(response){
+							var result=eval(response.responseText);
+							if(result==0){
+								detail_jual_produk_DataStore.load({params: {master_id:0}});
+								Ext.MessageBox.alert(jproduk_post2db+' OK','Data penjualan produk berhasil disimpan');
+								jproduk_post2db="CREATE";
+							}else if(result==-1){
+								detail_jual_produk_DataStore.load({params: {master_id:0}});
+								jproduk_post2db="CREATE";
+								Ext.MessageBox.show({
+								   title: 'Warning',
+								   msg: 'Data penjualan produk tidak bisa disimpan',
+								   buttons: Ext.MessageBox.OK,
+								   animEl: 'save',
+								   icon: Ext.MessageBox.WARNING
+								});
+							}else if(result>0){
+								detail_jual_produk_DataStore.load({params: {master_id:0}});
+								Ext.Ajax.request({
+									waitMsg: 'Mohon tunggu...',
+									url: 'index.php?c=c_master_jual_produk&m=catatan_piutang_update',
+									params:{dproduk_master	: eval(get_jproduk_pk())}
+								});
+								jproduk_cetak(result);
+								cetak_jproduk=0;
+								jproduk_post2db="CREATE";
+							}
+						},
+						failure: function(response){
+							var result=response.responseText;
+							Ext.MessageBox.show({
+							   title: 'Error',
+							   msg: 'Could not connect to the database. retry later.',
+							   buttons: Ext.MessageBox.OK,
+							   animEl: 'database',
+							   icon: Ext.MessageBox.ERROR
+							});	
+						}		
+					});
+					
+				}
+			}
+		}
+		
+		
+		
+		
+		/*var count_detail=detail_jual_produk_DataStore.getCount();
 		for(i=0;i<detail_jual_produk_DataStore.getCount();i++){
 			var count_i = i;
 			detail_jual_produk_record=detail_jual_produk_DataStore.getAt(i);
@@ -4497,7 +4600,7 @@ Ext.onReady(function(){
 								url: 'index.php?c=c_master_jual_produk&m=catatan_piutang_update',
 								params:{dproduk_master	: eval(get_jproduk_pk())}
 							});*/
-							Ext.MessageBox.alert(jproduk_post2db+' OK','Data penjualan produk berhasil disimpan');
+							/*Ext.MessageBox.alert(jproduk_post2db+' OK','Data penjualan produk berhasil disimpan');
 							jproduk_post2db="CREATE";
 						}else if(result==-1){
 							detail_jual_produk_DataStore.load({params: {master_id:0}});
@@ -4537,7 +4640,7 @@ Ext.onReady(function(){
 								jproduk_cetak(result);
 								master_jual_produk_createWindow.hide();
 								break;
-						}*/
+						}*//*
 					},
 					failure: function(response){
 						var result=response.responseText;
@@ -4551,7 +4654,7 @@ Ext.onReady(function(){
 					}		
 				});
 			}
-		}
+		}*/
 	}
 	//eof
 	
