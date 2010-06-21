@@ -1383,7 +1383,7 @@ Ext.onReady(function(){
 		if(status_awal =='Terbuka' && jproduk_stat_dokField.getValue()=='Tertutup')
 		{
 		Ext.MessageBox.show({
-			msg: 'Tidak bisa, harus print dulu supaya status menjadi Tertutup',
+			msg: 'Dokumen tidak bisa ditutup. Gunakan Save & Print untuk menutup dokumen',
 		   //progressText: 'proses...',
 			buttons: Ext.MessageBox.OK,
 			animEl: 'save',
@@ -1416,7 +1416,7 @@ Ext.onReady(function(){
 		
 		else if(jproduk_stat_dokField.getValue()=='Batal')
 		{
-		Ext.MessageBox.confirm('Confirmation','Apakah anda yakin merubah status ini menjadi Batal? status Batal sudah tidak bisa diganti lagi', jproduk_status_delete);
+		Ext.MessageBox.confirm('Confirmation','Anda yakin untuk membatalkan dokumen ini? Pembatalan dokumen tidak bisa dikembalikan lagi', jproduk_status_delete);
 		}
 		
 		});		
@@ -1434,14 +1434,17 @@ Ext.onReady(function(){
 		jproduk_stat_dokField.setValue(master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_stat_dok'));
 	}
 	
-	
-	
-	
-	
+
 	function master_jual_produk_set_updating(){
 		if(jproduk_post2db=="UPDATE" && master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_stat_dok')=="Terbuka"){
 			jproduk_custField.setDisabled(true);
 			jproduk_tanggalField.setDisabled(true);
+			jproduk_keteranganField.setDisabled(false);
+			master_cara_bayarTabPanel.setDisabled(false);
+            detail_jual_produkListEditorGrid.setDisabled(false);
+            jproduk_diskonField.setDisabled(false);
+            jproduk_cashback_cfField.setDisabled(false);
+            jproduk_stat_dokField.setDisabled(false);
 		}
 		if(jproduk_post2db=="UPDATE" && master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_stat_dok')=="Tertutup"){
 			jproduk_custField.setDisabled(true);
@@ -1451,6 +1454,7 @@ Ext.onReady(function(){
 			detail_jual_produkListEditorGrid.setDisabled(true);
 			jproduk_diskonField.setDisabled(true);
 			jproduk_cashback_cfField.setDisabled(true);
+			jproduk_stat_dokField.setDisabled(false);
 		}
 		if(jproduk_post2db=="UPDATE" && master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_stat_dok')=="Batal"){
 			jproduk_custField.setDisabled(true);

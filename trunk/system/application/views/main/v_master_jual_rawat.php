@@ -1322,7 +1322,7 @@ Ext.onReady(function(){
 		if(status_awal =='Terbuka' && jrawat_stat_dokField.getValue()=='Tertutup')
 		{
 		Ext.MessageBox.show({
-			msg: 'Tidak bisa, harus print dulu supaya status menjadi Tertutup',
+			msg: 'Dokumen tidak bisa ditutup. Gunakan Save & Print untuk menutup dokumen',
 		   //progressText: 'proses...',
 			buttons: Ext.MessageBox.OK,
 			animEl: 'save',
@@ -1355,7 +1355,7 @@ Ext.onReady(function(){
 		
 		else if(jrawat_stat_dokField.getValue()=='Batal')
 		{
-		Ext.MessageBox.confirm('Confirmation','Apakah anda yakin merubah status ini menjadi Batal? status Batal sudah tidak bisa diganti lagi', jrawat_status_delete);
+		Ext.MessageBox.confirm('Confirmation','Anda yakin untuk membatalkan dokumen ini? Pembatalan dokumen tidak bisa dikembalikan lagi', jrawat_status_delete);
 		}
 		
 		});		
@@ -1379,7 +1379,7 @@ Ext.onReady(function(){
                 jrawat_custField.setDisabled(true);
                 jrawat_tanggalField.setDisabled(true);
                 jrawat_keteranganField.setDisabled(false);
-                master_cara_bayarTabPanel.setDisabled(false);
+				master_cara_bayarTabPanel.setDisabled(false);
                 detail_jual_rawatListEditorGrid.setDisabled(false);
                 jrawat_diskonField.setDisabled(false);
                 jrawat_cashback_cfField.setDisabled(false);
