@@ -60,18 +60,17 @@ class M_member_temp extends Model{
 				$this->db->where('membert_id', $membert_id);
 				$this->db->update('member_temp', $dtu_member);
 				if($this->db->affected_rows()){
-					if($membert_jenis<>'perpanjangan'){
+					if($membert_jenis=='baru'){
 						//* db.member.member_no TIDAK BERUBAH /
-						//$sql = "SELECT cust_no FROM customer WHERE cust_id='$membert_cust'";
-						$sql = "SELECT member_no FROM vu_member WHERE member_cust='$membert_cust'";
+						$sql = "SELECT cust_no FROM customer WHERE cust_id='$membert_cust'";
 						$rs=$this->db->query($sql);
 						if($rs->num_rows()){
 							$rs_record=$rs->row_array();
-							//$pattern=date("ymd").substr($rs_record['cust_no'],2);
-							//$member_no=$this->m_public_function->get_nomor_member('member','member_no',$pattern,16);
-							$member_no = $rs_record['member_no'];
+							$pattern=date("ymd").substr($rs_record['cust_no'],2);
+							$member_no=$this->m_public_function->get_nomor_member('member','member_no',$pattern,16);
+							//$member_no = $rs_record['member_no'];
 						}
-					}else if($membert_jenis<>'baru'){
+					}else if($membert_jenis=='perpanjangan'){
 						$member_no=$membert_no;
 					}
 					//* INSERT to db.member untuk diproses menjadi member Miracle /
@@ -124,7 +123,8 @@ class M_member_temp extends Model{
 		}
 		
 		function cust_member_update($cust_id){
-			$sql = "SELECT member_id FROM vu_member WHERE member_cust='$cust_id'";
+			$date_now = date('Y-m-d');
+			$sql = "SELECT max(member_id) AS member_id FROM member WHERE member_cust='$cust_id' AND member_valid>'$date_now'";
 			$rs=$this->db->query($sql);
 			if($rs->num_rows()){
 				$record = $rs->row_array();

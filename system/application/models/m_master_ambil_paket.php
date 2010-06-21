@@ -273,51 +273,6 @@ class M_master_ambil_paket extends Model{
 		}
 		//*eof
 		
-		//insert detail record
-		/*function detail_ambil_paket_isi_perawatan_insert($dapaket_master ,$dapaket_sapaket ,$dapaket_jumlah ,$dapaket_cust, $tgl_ambil){
-			//* INSERT ke db.detail_ambil_paket sebagai History Pengambilan Paket /
-			$dti_dapaket=array(
-			"dapaket_master"=>$dapaket_master,
-			//"dapaket_sapaket"=>$dapaket_sapaket,
-			"dapaket_jumlah"=>$dapaket_jumlah,
-			"dapaket_cust"=>$dapaket_cust,
-			"tgl_ambil"		=>$tgl_ambil
-			);
-			$this->db->insert('detail_ambil_paket', $dti_dapaket);
-			
-			if($this->db->affected_rows()){
-				$sql_sisa_item="SELECT sapaket_id, IF((sapaket_jmlisi_item-(sum(dapaket_jumlah)))!='null', (sapaket_jmlisi_item-(sum(dapaket_jumlah))), 0) as total_sisa_item FROM submaster_apaket_item LEFT JOIN detail_ambil_paket ON(dapaket_sapaket=sapaket_id) WHERE sapaket_id='$dapaket_sapaket' GROUP BY sapaket_id";
-				$rs_sisa_item=$this->db->query($sql_sisa_item);
-				if($rs_sisa_item->num_rows()){
-					//* UPDATE db.submaster_apaket_item.sapaket_sisa_item /
-					$rs_sisa_item_record=$rs_sisa_item->row_array();
-					$total_sisa_item=$rs_sisa_item_record["total_sisa_item"];
-					$dtu_sapaket=array(
-					"sapaket_sisa_item"=>$total_sisa_item
-					);
-					$this->db->where('sapaket_id', $dapaket_sapaket);
-					$this->db->update('submaster_apaket_item', $dtu_sapaket);
-				}
-				
-				$sql_sisa_paket="SELECT apaket_id, IF((apaket_paket_jumlah-(sum(dapaket_jumlah)))!='null', (apaket_paket_jumlah-(sum(dapaket_jumlah))), 0) as total_sisa_paket FROM master_ambil_paket LEFT JOIN detail_ambil_paket ON(dapaket_master=apaket_id) WHERE apaket_id='$dapaket_master' GROUP BY apaket_id";
-				$rs_sisa_paket=$this->db->query($sql_sisa_paket);
-				if($rs_sisa_paket->num_rows()){
-					//* UPDATE db.master_ambil_paket.apaket_sisa_paket /
-					$rs_sisa_paket_record=$rs_sisa_paket->row_array();
-					$total_sisa_paket=$rs_sisa_paket_record["total_sisa_paket"];
-					$dtu_apaket=array(
-					"apaket_sisa_paket"=>$total_sisa_paket
-					);
-					$this->db->where('apaket_id', $dapaket_master);
-					$this->db->update('master_ambil_paket', $dtu_apaket);
-				}
-				
-				return '1';
-			}else
-				return '0';
-
-		}*/
-		//end of function
 		
 		//insert detail record
 		function detail_ambil_paket_isi_perawatan_insert($dapaket_dpaket, $dapaket_jpaket, $dapaket_paket, $dapaket_item, $dapaket_jumlah, $dapaket_cust, $tgl_ambil, $dapaket_referal, $count, $dcount){
@@ -352,31 +307,25 @@ class M_master_ambil_paket extends Model{
 							$this->db->insert('detail_ambil_paket', $dti_dapaket);
 							
 							if($this->db->affected_rows()){
-								//* UPDATE db.master_ambil_paket.apaket_sisa_item /
-								//* Ambil rawat_id untuk mengetahui jumlah paket isi perawatan /
-								/*$sql="SELECT apaket_jpaket, apaket_paket, apaket_item FROM master_ambil_paket WHERE apaket_jenis_item='perawatan' AND apaket_id='$dapaket_master'";
-								$rs=$this->db->query($sql);
-								if($rs->num_rows()){
-									$rs_record=$rs->row_array();
-									$apaket_jpaket=$rs_record["apaket_jpaket"];
-									$apaket_paket=$rs_record["apaket_paket"];
-									$apaket_item=$rs_record["apaket_item"];
-									
-									$sql="SELECT rpaket_jumlah FROM paket_isi_perawatan WHERE rpaket_master='$apaket_paket' AND rpaket_perawatan='$apaket_item'";
-									$rs=$this->db->query($sql);
-									if($rs->num_rows()){
-										$rs_record=$rs->row_array();
-										$rpaket_jumlah=$rs_record["rpaket_jumlah"];
-										
-										$sql_sisa_item="UPDATE master_ambil_paket SET apaket_sisa_item=(SELECT $rpaket_jumlah-sum(dapaket_jumlah) FROM detail_ambil_paket WHERE dapaket_master='$dapaket_master' GROUP BY dapaket_master)";
-										$this->db->query($sql_sisa_item);
-									}
-									
-									//* UPDATE db.detail_jual_paket.dapaket_sisa_paket /
-									$sql_sisa_paket="UPDATE detail_jual_paket SET dpaket_sisa_paket=(SELECT sum(apaket_sisa_item) FROM master_ambil_paket WHERE apaket_jpaket='$apaket_jpaket' AND apaket_paket='$apaket_paket' GROUP BY apaket_jpaket AND apaket_paket)";
-									$this->db->query($sql_sisa_paket);
-								}*/
-								$sql_sisa_paket="UPDATE detail_jual_paket SET dpaket_sisa_paket=(SELECT ((dpaket_jumlah*paket_jmlisi)-(sum(dapaket_jumlah))) FROM detail_ambil_paket LEFT JOIN paket ON(dapaket_paket=paket_id) WHERE paket_id='$dapaket_paket' AND dapaket_dpaket='$dapaket_dpaket' AND dapaket_jpaket='$dapaket_jpaket' AND dapaket_stat_dok<>'Batal' GROUP BY dapaket_dpaket, dapaket_jpaket, dapaket_paket) WHERE detail_jual_paket.dpaket_id='$dapaket_dpaket' AND detail_jual_paket.dpaket_master='$dapaket_jpaket' AND detail_jual_paket.dpaket_paket='$dapaket_paket'";
+								//* UPDATE db.detail_jual_paket.dpaket_sisa_paket ==> sisa paket dari paket yang dibeli akan diupdate akibat dari pengambilan paket /
+								/*$sql_sisa_paket="UPDATE detail_jual_paket
+									SET dpaket_sisa_paket=(
+										SELECT ((dpaket_jumlah*paket_jmlisi)-(sum(dapaket_jumlah)))
+										FROM detail_ambil_paket
+										LEFT JOIN paket ON(dapaket_paket=paket_id)
+										WHERE paket_id='$dapaket_paket'
+											AND dapaket_dpaket='$dapaket_dpaket'
+											AND dapaket_jpaket='$dapaket_jpaket'
+											AND dapaket_stat_dok<>'Batal'
+										GROUP BY dapaket_dpaket, dapaket_jpaket, dapaket_paket
+									)
+									WHERE detail_jual_paket.dpaket_id='$dapaket_dpaket'
+										AND detail_jual_paket.dpaket_master='$dapaket_jpaket'
+										AND detail_jual_paket.dpaket_paket='$dapaket_paket'";*/
+								$sql_sisa_paket = "UPDATE detail_jual_paket
+									SET dpaket_sisa_paket =
+										(SElECT vu_total_sisa_paket.total_sisa_paket FROM vu_total_sisa_paket WHERE vu_total_sisa_paket.dpaket_id='$dapaket_dpaket')
+									WHERE dpaket_id='$dapaket_dpaket'";
 								$this->db->query($sql_sisa_paket);
 								
 								$nilai_return='1';
@@ -409,31 +358,11 @@ class M_master_ambil_paket extends Model{
 						$this->db->insert('detail_ambil_paket', $dti_dapaket);
 						
 						if($this->db->affected_rows()){
-							//* UPDATE db.master_ambil_paket.apaket_sisa_item /
-							//* Ambil rawat_id untuk mengetahui jumlah paket isi perawatan /
-							/*$sql="SELECT apaket_jpaket, apaket_paket, apaket_item FROM master_ambil_paket WHERE apaket_jenis_item='perawatan' AND apaket_id='$dapaket_master'";
-							$rs=$this->db->query($sql);
-							if($rs->num_rows()){
-								$rs_record=$rs->row_array();
-								$apaket_jpaket=$rs_record["apaket_jpaket"];
-								$apaket_paket=$rs_record["apaket_paket"];
-								$apaket_item=$rs_record["apaket_item"];
-								
-								$sql="SELECT rpaket_jumlah FROM paket_isi_perawatan WHERE rpaket_master='$apaket_paket' AND rpaket_perawatan='$apaket_item'";
-								$rs=$this->db->query($sql);
-								if($rs->num_rows()){
-									$rs_record=$rs->row_array();
-									$rpaket_jumlah=$rs_record["rpaket_jumlah"];
-									
-									$sql_sisa_item="UPDATE master_ambil_paket SET apaket_sisa_item=(SELECT $rpaket_jumlah-sum(dapaket_jumlah) FROM detail_ambil_paket WHERE dapaket_master='$dapaket_master' GROUP BY dapaket_master)";
-									$this->db->query($sql_sisa_item);
-								}
-								
-								//* UPDATE db.detail_jual_paket.dapaket_sisa_paket /
-								$sql_sisa_paket="UPDATE detail_jual_paket SET dpaket_sisa_paket=(SELECT sum(apaket_sisa_item) FROM master_ambil_paket WHERE apaket_jpaket='$apaket_jpaket' AND apaket_paket='$apaket_paket' GROUP BY apaket_jpaket AND apaket_paket)";
-								$this->db->query($sql_sisa_paket);
-							}*/
-							$sql_sisa_paket="UPDATE detail_jual_paket SET dpaket_sisa_paket=(SELECT ((dpaket_jumlah*paket_jmlisi)-(sum(dapaket_jumlah))) FROM detail_ambil_paket LEFT JOIN paket ON(dapaket_paket=paket_id) WHERE paket_id='$dapaket_paket' AND dapaket_dpaket='$dapaket_dpaket' AND dapaket_jpaket='$dapaket_jpaket' AND dapaket_stat_dok<>'Batal' GROUP BY dapaket_dpaket, dapaket_jpaket, dapaket_paket) WHERE detail_jual_paket.dpaket_master='$dapaket_jpaket' AND detail_jual_paket.dpaket_paket='$dapaket_paket'";
+							//* UPDATE db.detail_jual_paket.dpaket_sisa_paket ==> sisa paket dari paket yang dibeli akan diupdate akibat dari pengambilan paket /
+							$sql_sisa_paket = "UPDATE detail_jual_paket
+								SET dpaket_sisa_paket =
+									(SElECT vu_total_sisa_paket.total_sisa_paket FROM vu_total_sisa_paket WHERE vu_total_sisa_paket.dpaket_id='$dapaket_dpaket')
+								WHERE dpaket_id='$dapaket_dpaket'";
 							$this->db->query($sql_sisa_paket);
 							
 							$nilai_return='1';
