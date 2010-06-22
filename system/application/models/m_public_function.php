@@ -20,9 +20,11 @@ class M_public_function extends Model{
 			$query = $this->db->query($sql);
 			return $query->result();
 	}
-		
+			
 	function get_order_beli_detail_by_order_id($orderid){
-		$sql="SELECT * FROM vu_detail_order_beli WHERE dorder_master='".$orderid."'";
+		$sql="SELECT dorder_produk,produk_nama,jumlah_order, jumlah_order-sum(dterima_jumlah) as jumlah_sisa, dorder-satuan
+				FROM vu_detail_terima_order WHERE dorder_master='".$orderid."'
+				GROUP BY dorder_produk";
 		$query = $this->db->query($sql);
 		$nbrows = $query->num_rows();
 		if($nbrows>0){

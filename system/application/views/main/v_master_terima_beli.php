@@ -207,6 +207,7 @@ Ext.onReady(function(){
 			success: function(response){             
 				var result=eval(response.responseText);
 				if(result!==0){
+						terima_idField.setValue(result);
 						detail_terima_beli_purge(result);
 						detail_terima_bonus_purge(result);
 						Ext.MessageBox.alert(post2db+' OK','Data Penerimaan Barang berhasil disimpan');
@@ -1031,7 +1032,8 @@ Ext.onReady(function(){
 			{name: 'dterima_produk', type: 'int', mapping: 'dterima_produk'}, 
 			{name: 'produk_nama', type: 'string', mapping: 'produk_nama'},
 			{name: 'dterima_satuan', type: 'int', mapping: 'dterima_satuan'}, 
-			{name: 'dterima_jumlah', type: 'int', mapping: 'dterima_jumlah'} 
+			{name: 'dterima_jumlah', type: 'int', mapping: 'dterima_jumlah'},
+			{name: 'dterima_order', type: 'int', mapping: 'jumlah_order'} 
 	]);
 	//eof
 	
@@ -1176,6 +1178,14 @@ Ext.onReady(function(){
 				maxLength: 11,
 				maskRe: /([0-9]+)$/
 			})
+		},{
+			header: '<div align="center">Jumlah Pesanan</div>',
+			align: 'right',
+			dataIndex: 'dterima_order',
+			width: 100,
+			sortable: true,
+			renderer: Ext.util.Format.numberRenderer('0,000'),
+			readOnly: true
 		}]
 	);
 	//eof
@@ -1227,7 +1237,8 @@ Ext.onReady(function(){
 			dterima_master	:'',		
 			dterima_produk	:'',		
 			dterima_satuan	:'',		
-			dterima_jumlah	:''		
+			dterima_jumlah	: 0,
+			dterima_order	: 0
 		});
 		editor_detail_terima_beli.stopEditing();
 		detail_terima_beli_DataStore.insert(0, edit_detail_terima_beli);
@@ -1694,6 +1705,9 @@ Ext.onReady(function(){
 		buttons: [{
 				text: 'Save and Close',
 				handler: master_terima_beli_create
+			},{
+				text: 'Cetak',
+				handler: master_terima_beli_cetak_faktur
 			}
 			,{
 				text: 'Cancel',
@@ -1988,6 +2002,46 @@ Ext.onReady(function(){
 	}
   	/* End Function */
 	
+	function master_terima_beli_cetak_faktur(){
+		
+		Ext.Ajax.request({   
+		waitMsg: 'Please Wait...',
+		url: 'index.php?c=c_master_terima_beli&m=print_faktur',
+		params: {
+			faktur	: terima_idField.getValue()
+		}, 
+		success: function(response){              
+		  	var result=eval(response.responseText);
+		  	switch(result){
+		  	case 1:
+				win = window.open('./print/master_terima_faktur.html','master_terima_faktur','height=800,width=600,resizable=1,scrollbars=1, menubar=1');
+				win.print();
+				break;
+		  	default:
+				Ext.MessageBox.show({
+					title: 'Warning',
+					msg: 'Unable to print the grid!',
+					buttons: Ext.MessageBox.OK,
+					animEl: 'save',
+					icon: Ext.MessageBox.WARNING
+				});
+				break;
+		  	}  
+		},
+		failure: function(response){
+		  	var result=response.responseText;
+			Ext.MessageBox.show({
+			   title: 'Error',
+			   msg: 'Could not connect to the database. retry later.',
+			   buttons: Ext.MessageBox.OK,
+			   animEl: 'database',
+			   icon: Ext.MessageBox.ERROR
+			});		
+		} 	                     
+		});
+		
+	}
+	
 	/* Function for print List Grid */
 	function master_terima_beli_print(){
 		var searchquery = "";
@@ -2184,7 +2238,7 @@ Ext.onReady(function(){
 		var satuan_selected="";
 		for(i=0;i<detail_terima_bonus_DataStore.getCount();i++){
 			detail_terima_bonus_record=detail_terima_bonus_DataStore.getAt(i);
-			query_selected=query_selected+detail_terima_bonus_record.data.dbonus_produk+",";
+			query_selected=query_selected+detail_terima_bonus_record.data.dtbonus_produk+",";
 		}
 		cbo_produk_bonusDataStore.setBaseParam('query',null);
 		cbo_produk_bonusDataStore.setBaseParam('task','selected');
