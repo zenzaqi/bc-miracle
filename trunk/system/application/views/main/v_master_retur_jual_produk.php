@@ -75,7 +75,7 @@ var rproduk_nobuktijualField;
 var rproduk_custField;
 var rproduk_tanggalField;
 var rproduk_keteranganField;
-var rproduk_statusField;
+var rproduk_stat_dokField;
 var rproduk_idSearchField;
 var rproduk_nobuktiSearchField;
 var rproduk_nobuktijualSearchField;
@@ -83,7 +83,7 @@ var rproduk_custSearchField;
 var rproduk_tanggalSearchField;
 var rproduk_tanggal_akhirSearchField;
 var rproduk_keteranganSearchField;
-var rproduk_statusSearchField;
+var rproduk_stat_dokSearchField;
 
 var dt= new Date();
 
@@ -197,14 +197,14 @@ Ext.onReady(function(){
   	/* Function for add data, open window create form */
 	function master_retur_jual_produk_create(){
 	
-		if(is_master_retur_jual_produk_form_valid() && rproduk_post2db=='CREATE' && rproduk_statusField.getValue()=='Terbuka'){
+		if(is_master_retur_jual_produk_form_valid() && rproduk_post2db=='CREATE' && rproduk_stat_dokField.getValue()=='Terbuka'){
 			var rproduk_id_create_pk=null; 
 			var rproduk_nobukti_create=null; 
 			var rproduk_nobuktijual_create=null; 
 			var rproduk_cust_create=null; 
 			var rproduk_tanggal_create_date=""; 
 			var rproduk_keterangan_create=null;
-			var rproduk_status_create=null;
+			var rproduk_stat_dok_create=null;
 			var rproduk_kwitansi_nilai_create=null; 
 			var rproduk_kwitansi_keterangan_create=null;
 			
@@ -214,7 +214,7 @@ Ext.onReady(function(){
 			if(rproduk_custField.getValue()!== null){rproduk_cust_create = rproduk_custidField.getValue();} 
 			if(rproduk_tanggalField.getValue()!== ""){rproduk_tanggal_create_date = rproduk_tanggalField.getValue().format('Y-m-d');} 
 			if(rproduk_keteranganField.getValue()!== null){rproduk_keterangan_create = rproduk_keteranganField.getValue();}
-			if(rproduk_statusField.getValue()!== null){rproduk_status_create = rproduk_statusField.getValue();} 
+			if(rproduk_stat_dokField.getValue()!== null){rproduk_stat_dok_create = rproduk_stat_dokField.getValue();} 
 			if(rproduk_kwitansi_nilaiField.getValue()!== null){rproduk_kwitansi_nilai_create = rproduk_kwitansi_nilaiField.getValue();} 
 			if(rproduk_kwitansi_keteranganField.getValue()!== null){rproduk_kwitansi_keterangan_create = rproduk_kwitansi_keteranganField.getValue();} 
 			
@@ -229,7 +229,7 @@ Ext.onReady(function(){
 					rproduk_cust	: rproduk_cust_create, 
 					rproduk_tanggal	: rproduk_tanggal_create_date, 
 					rproduk_keterangan	: rproduk_keterangan_create,
-					rproduk_status		: rproduk_status_create,
+					rproduk_stat_dok		: rproduk_stat_dok_create,
 					rproduk_kwitansi_nilai	: rproduk_kwitansi_nilai_create, 
 					rproduk_kwitansi_keterangan	: rproduk_kwitansi_keterangan_create
 				}, 
@@ -263,11 +263,11 @@ Ext.onReady(function(){
 					});	
 				}                      
 			});
-		}else if(rproduk_post2db=='UPDATE' && rproduk_statusField.getValue()=='Tertutup'){
+		}else if(rproduk_post2db=='UPDATE' && rproduk_stat_dokField.getValue()=='Tertutup'){
 			retur_jproduk_cetak(rproduk_nobuktiField.getValue());
 			master_retur_jual_produk_DataStore.reload();
 			master_retur_jual_produk_createWindow.hide();
-		}else if(rproduk_post2db=='UPDATE' && rproduk_statusField.getValue()=='Batal'){
+		}else if(rproduk_post2db=='UPDATE' && rproduk_stat_dokField.getValue()=='Batal'){
 			var rproduk_id_create_pk=rproduk_idField.getValue();
 			Ext.Ajax.request({  
 				waitMsg: 'Mohon  Tunggu...',
@@ -344,18 +344,18 @@ Ext.onReady(function(){
 		rproduk_tanggalField.setValue(dt.format('Y-m-d'));
 		rproduk_keteranganField.reset();
 		rproduk_keteranganField.setValue(null);
-		rproduk_statusField.reset();
-		rproduk_statusField.setValue('Terbuka');
+		rproduk_stat_dokField.reset();
+		rproduk_stat_dokField.setValue('Terbuka');
 		rproduk_kwitansi_nilaiField.reset();
 		rproduk_kwitansi_nilaiField.setValue(null);
 		rproduk_nobuktijualField.setDisabled(false);
 		rproduk_custField.setDisabled(false);
 		rproduk_tanggalField.setDisabled(false);
-		if(rproduk_statusField.getValue()=='Tertutup'){
+		if(rproduk_stat_dokField.getValue()=='Tertutup'){
 			detail_retur_jual_produkListEditorGrid.setDisabled(true);
 			rproduk_keteranganField.setDisabled(true);
 			rproduk_kwitansi_keteranganField.setDisabled(true);
-		}else if(rproduk_statusField.getValue()=='Terbuka'){
+		}else if(rproduk_stat_dokField.getValue()=='Terbuka'){
 			detail_retur_jual_produkListEditorGrid.setDisabled(false);
 			rproduk_keteranganField.setDisabled(false);
 			rproduk_kwitansi_keteranganField.setDisabled(false);
@@ -373,25 +373,25 @@ Ext.onReady(function(){
 		rproduk_custidField.setValue(master_retur_jual_produkListEditorGrid.getSelectionModel().getSelected().get('rproduk_cust_id'));
 		rproduk_tanggalField.setValue(master_retur_jual_produkListEditorGrid.getSelectionModel().getSelected().get('rproduk_tanggal'));
 		rproduk_keteranganField.setValue(master_retur_jual_produkListEditorGrid.getSelectionModel().getSelected().get('rproduk_keterangan'));
-		rproduk_statusField.setValue(master_retur_jual_produkListEditorGrid.getSelectionModel().getSelected().get('rproduk_status'));
+		rproduk_stat_dokField.setValue(master_retur_jual_produkListEditorGrid.getSelectionModel().getSelected().get('rproduk_stat_dok'));
 		rproduk_kwitansi_nilaiField.setValue(master_retur_jual_produkListEditorGrid.getSelectionModel().getSelected().get('kwitansi_nilai'));
 		rproduk_kwitansi_keteranganField.setValue(master_retur_jual_produkListEditorGrid.getSelectionModel().getSelected().get('kwitansi_keterangan'));
 		rproduk_nobuktijualField.setDisabled(true);
 		rproduk_custField.setDisabled(true);
 		rproduk_tanggalField.setDisabled(true);
-		if(master_retur_jual_produkListEditorGrid.getSelectionModel().getSelected().get('rproduk_status')=='Tertutup'){
+		if(master_retur_jual_produkListEditorGrid.getSelectionModel().getSelected().get('rproduk_stat_dok')=='Tertutup'){
 			detail_retur_jual_produkListEditorGrid.setDisabled(true);
 			rproduk_keteranganField.setDisabled(true);
 			rproduk_kwitansi_keteranganField.setDisabled(true);
-		}else if(master_retur_jual_produkListEditorGrid.getSelectionModel().getSelected().get('rproduk_status')=='Terbuka'){
+		}else if(master_retur_jual_produkListEditorGrid.getSelectionModel().getSelected().get('rproduk_stat_dok')=='Terbuka'){
 			detail_retur_jual_produkListEditorGrid.setDisabled(false);
 			rproduk_keteranganField.setDisabled(false);
 			rproduk_kwitansi_keteranganField.setDisabled(false);
 		}
 		
-		rproduk_statusField.on("select",function(){
-		var status_awal = master_retur_jual_produkListEditorGrid.getSelectionModel().getSelected().get('rproduk_status');
-		if(status_awal =='Terbuka' && rproduk_statusField.getValue()=='Tertutup')
+		rproduk_stat_dokField.on("select",function(){
+		var status_awal = master_retur_jual_produkListEditorGrid.getSelectionModel().getSelected().get('rproduk_stat_dok');
+		if(status_awal =='Terbuka' && rproduk_stat_dokField.getValue()=='Tertutup')
 		{
 		Ext.MessageBox.show({
 			msg: 'Tidak bisa, harus print dulu supaya status menjadi Tertutup',
@@ -400,10 +400,10 @@ Ext.onReady(function(){
 			animEl: 'save',
 			icon: Ext.MessageBox.WARNING
 		   });
-		rproduk_statusField.setValue('Terbuka');
+		rproduk_stat_dokField.setValue('Terbuka');
 		}
 		
-		else if(status_awal =='Tertutup' && rproduk_statusField.getValue()=='Terbuka')
+		else if(status_awal =='Tertutup' && rproduk_stat_dokField.getValue()=='Terbuka')
 		{
 		Ext.MessageBox.show({
 			msg: 'Status yang sudah Tertutup tidak dapat diganti Terbuka',
@@ -411,10 +411,10 @@ Ext.onReady(function(){
 			animEl: 'save',
 			icon: Ext.MessageBox.WARNING
 		   });
-		rproduk_statusField.setValue('Tertutup');
+		rproduk_stat_dokField.setValue('Tertutup');
 		}
 		
-		else if(status_awal =='Batal' && rproduk_statusField.getValue()=='Terbuka')
+		else if(status_awal =='Batal' && rproduk_stat_dokField.getValue()=='Terbuka')
 		{
 		Ext.MessageBox.show({
 			msg: 'Status yang sudah Tertutup tidak dapat diganti Terbuka',
@@ -422,12 +422,12 @@ Ext.onReady(function(){
 			animEl: 'save',
 			icon: Ext.MessageBox.WARNING
 		   });
-		rproduk_statusField.setValue('Tertutup');
+		rproduk_stat_dokField.setValue('Tertutup');
 		}
 		
-		else if(rproduk_statusField.getValue()=='Batal')
+		else if(rproduk_stat_dokField.getValue()=='Batal')
 		{
-		Ext.MessageBox.confirm('Confirmation','Apakah anda yakin merubah status ini menjadi Batal? status Batal sudah tidak bisa diganti lagi', rproduk_status_delete);
+		Ext.MessageBox.confirm('Confirmation','Apakah anda yakin merubah status ini menjadi Batal? status Batal sudah tidak bisa diganti lagi', rproduk_stat_dok_delete);
 		}
 		
 		});		
@@ -435,39 +435,39 @@ Ext.onReady(function(){
 	}
 	/* End setValue to EDIT*/
 	
-	function rproduk_status_delete(btn){
+	function rproduk_stat_dok_delete(btn){
 	if(btn=='yes')
 	{
-		rproduk_statusField.setValue('Batal');
+		rproduk_stat_dokField.setValue('Batal');
 	}  
 	else
-		rproduk_statusField.setValue(master_retur_jual_produkListEditorGrid.getSelectionModel().getSelected().get('rproduk_status'));
+		rproduk_stat_dokField.setValue(master_retur_jual_produkListEditorGrid.getSelectionModel().getSelected().get('rproduk_stat_dok'));
 	}
 	
 	
 	/* function for set_status*/
 	function master_retur_jual_produk_set_updating(){
-		if(rproduk_post2db=="UPDATE" && master_retur_jual_produkListEditorGrid.getSelectionModel().getSelected().get('rproduk_status')=="Terbuka"){
+		if(rproduk_post2db=="UPDATE" && master_retur_jual_produkListEditorGrid.getSelectionModel().getSelected().get('rproduk_stat_dok')=="Terbuka"){
 				rproduk_custField.setDisabled(true);
                 rproduk_tanggalField.setDisabled(true);
                 rproduk_keteranganField.setDisabled(false);
                 detail_retur_jual_produkListEditorGrid.setDisabled(false);
 				rproduk_kwitansi_keteranganField.setDisabled(false);
-                rproduk_statusField.setDisabled(false);
+                rproduk_stat_dokField.setDisabled(false);
 		}
-		if(rproduk_post2db=="UPDATE" && master_retur_jual_produkListEditorGrid.getSelectionModel().getSelected().get('rproduk_status')=="Tertutup"){
+		if(rproduk_post2db=="UPDATE" && master_retur_jual_produkListEditorGrid.getSelectionModel().getSelected().get('rproduk_stat_dok')=="Tertutup"){
 			    rproduk_custField.setDisabled(true);
                 rproduk_tanggalField.setDisabled(true);
                 rproduk_keteranganField.setDisabled(true);
                 detail_retur_jual_produkListEditorGrid.setDisabled(true);
 				rproduk_kwitansi_keteranganField.setDisabled(true);
-                rproduk_statusField.setDisabled(false);
+                rproduk_stat_dokField.setDisabled(false);
 		}
-		if(rproduk_post2db=="UPDATE" && master_retur_jual_produkListEditorGrid.getSelectionModel().getSelected().get('rproduk_status')=="Batal"){
+		if(rproduk_post2db=="UPDATE" && master_retur_jual_produkListEditorGrid.getSelectionModel().getSelected().get('rproduk_stat_dok')=="Batal"){
 				rproduk_custField.setDisabled(true);
 				rproduk_tanggalField.setDisabled(true);
 				rproduk_keteranganField.setDisabled(true);
-				rproduk_statusField.setDisabled(true);
+				rproduk_stat_dokField.setDisabled(true);
 				detail_retur_jual_produkListEditorGrid.setDisabled(true);
 				rproduk_kwitansi_keteranganField.setDisabled(true);
 		}
@@ -611,7 +611,7 @@ Ext.onReady(function(){
 			{name: 'rproduk_cust_id', type: 'int', mapping: 'cust_id'}, 
 			{name: 'rproduk_tanggal', type: 'date', dateFormat: 'Y-m-d', mapping: 'rproduk_tanggal'}, 
 			{name: 'rproduk_keterangan', type: 'string', mapping: 'rproduk_keterangan'}, 
-			{name: 'rproduk_status', type: 'string', mapping: 'rproduk_status'}, 
+			{name: 'rproduk_stat_dok', type: 'string', mapping: 'rproduk_stat_dok'}, 
 			{name: 'rproduk_creator', type: 'string', mapping: 'rproduk_creator'}, 
 			{name: 'rproduk_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'rproduk_date_create'}, 
 			{name: 'rproduk_update', type: 'string', mapping: 'rproduk_update'}, 
@@ -763,7 +763,7 @@ Ext.onReady(function(){
 		
 		{
 			header: '<div align="center">' + 'Stat Dok' + '</div>',
-			dataIndex: 'rproduk_status',
+			dataIndex: 'rproduk_stat_dok',
 			width: 60
 		}, 
 		
@@ -1038,17 +1038,17 @@ Ext.onReady(function(){
 		anchor: '95%'
 	});
 	
-	/* Identify rproduk_status Field */
-	rproduk_statusField= new Ext.form.ComboBox({
-		id: 'rproduk_statusField',
+	/* Identify rproduk_stat_dok Field */
+	rproduk_stat_dokField= new Ext.form.ComboBox({
+		id: 'rproduk_stat_dokField',
 		fieldLabel: 'Status Dok',
 		store:new Ext.data.SimpleStore({
-			fields:['rproduk_status_value', 'rproduk_status_display'],
+			fields:['rproduk_stat_dok_value', 'rproduk_stat_dok_display'],
 			data:[['Terbuka','Terbuka'],['Tertutup','Tertutup'],['Batal', 'Batal']]
 		}),
 		mode: 'local',
-		displayField: 'rproduk_status_display',
-		valueField: 'rproduk_status_value',
+		displayField: 'rproduk_stat_dok_display',
+		valueField: 'rproduk_stat_dok_value',
 		anchor: '80%',
 		allowBlank: false,
 		triggerAction: 'all'	
@@ -1107,7 +1107,7 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [rproduk_tanggalField, rproduk_keteranganField, rproduk_statusField, rproduk_idField] 
+				items: [rproduk_tanggalField, rproduk_keteranganField, rproduk_stat_dokField, rproduk_idField] 
 			}
 			]
 	
@@ -1584,7 +1584,7 @@ Ext.onReady(function(){
 		var rproduk_tanggal_search_date="";
 		var rproduk_tanggal_akhir_search_date="";
 		var rproduk_keterangan_search=null;
-		var rproduk_status_search=null;
+		var rproduk_stat_dok_search=null;
 
 		if(rproduk_idSearchField.getValue()!==null){rproduk_id_search=rproduk_idSearchField.getValue();}
 		if(rproduk_nobuktiSearchField.getValue()!==null){rproduk_nobukti_search=rproduk_nobuktiSearchField.getValue();}
@@ -1593,7 +1593,7 @@ Ext.onReady(function(){
 		if(rproduk_tanggalSearchField.getValue()!==""){rproduk_tanggal_search_date=rproduk_tanggalSearchField.getValue().format('Y-m-d');}
 		if(rproduk_tanggal_akhirSearchField.getValue()!==""){rproduk_tanggal_akhir_search_date=rproduk_tanggal_akhirSearchField.getValue().format('Y-m-d');}
 		if(rproduk_keteranganSearchField.getValue()!==null){rproduk_keterangan_search=rproduk_keteranganSearchField.getValue();}
-		if(rproduk_statusSearchField.getValue()!==null){rproduk_status_search=rproduk_statusSearchField.getValue();}
+		if(rproduk_stat_dokSearchField.getValue()!==null){rproduk_stat_dok_search=rproduk_stat_dokSearchField.getValue();}
 		// change the store parameters
 		master_retur_jual_produk_DataStore.baseParams = {
 			task: 'SEARCH',
@@ -1605,7 +1605,7 @@ Ext.onReady(function(){
 			rproduk_tanggal	:	rproduk_tanggal_search_date, 
 			rproduk_tanggal_akhir : rproduk_tanggal_akhir_search_date,
 			rproduk_keterangan	:	rproduk_keterangan_search,
-			rproduk_status		:	rproduk_status_search,
+			rproduk_stat_dok		:	rproduk_stat_dok_search,
 		};
 		// Cause the datastore to do another query : 
 		master_retur_jual_produk_DataStore.reload({params: {start: 0, limit: pageS}});
@@ -1629,7 +1629,7 @@ Ext.onReady(function(){
 		rproduk_tanggal_akhirSearchField.reset();
 		rproduk_tanggal_akhirSearchField.setValue(today);
 		rproduk_keteranganSearchField.reset();
-		rproduk_statusSearchField.reset();
+		rproduk_stat_dokSearchField.reset();
 	}
 	
 	
@@ -1717,15 +1717,15 @@ Ext.onReady(function(){
 	});
 	
 	
-	rproduk_statusSearchField= new Ext.form.ComboBox({
-		id: 'rproduk_statusSearchField',
+	rproduk_stat_dokSearchField= new Ext.form.ComboBox({
+		id: 'rproduk_stat_dokSearchField',
 		fieldLabel: 'Status',
 		store:new Ext.data.SimpleStore({
-			fields:['value', 'rproduk_status'],
+			fields:['value', 'rproduk_stat_dok'],
 			data:[['Terbuka','Terbuka'],['Tertutup','Tertutup'],['Batal','Batal']]
 		}),
 		mode: 'local',
-		displayField: 'rproduk_status',
+		displayField: 'rproduk_stat_dok',
 		valueField: 'value',
 		anchor: '80%',
 		triggerAction: 'all'	 
@@ -1747,7 +1747,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [rproduk_nobuktiSearchField, rproduk_nobuktijualSearchField, rproduk_custSearchField, rproduk_tanggalSearchFieldSet, rproduk_keteranganSearchField, rproduk_statusSearchField] 
+				items: [rproduk_nobuktiSearchField, rproduk_nobuktijualSearchField, rproduk_custSearchField, rproduk_tanggalSearchFieldSet, rproduk_keteranganSearchField, rproduk_stat_dokSearchField] 
 			}
 			]
 		}]
