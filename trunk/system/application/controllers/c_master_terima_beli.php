@@ -30,6 +30,24 @@ class C_master_terima_beli extends Controller {
 		$this->load->view('main/v_lap_terima_beli');
 	}
 	
+	function print_faktur(){
+		
+		$faktur=(isset($_POST['faktur']) ? @$_POST['faktur'] : @$_GET['faktur']);
+		$opsi="faktur";
+		$data["data_print"]=$this->m_master_terima_beli->get_laporan("","","",$opsi,"",$faktur);
+		$print_view=$this->load->view("main/p_penerimaan_barang.php",$data,TRUE);
+		
+		if(!file_exists("print")){
+			mkdir("print");
+		}
+		
+		$print_file=fopen("print/master_terima_faktur.html","w+");
+		
+		fwrite($print_file, $print_view);
+		echo '1'; 
+		
+	}
+	
 	function print_laporan(){
 		$tgl_awal=(isset($_POST['tgl_awal']) ? @$_POST['tgl_awal'] : @$_GET['tgl_awal']);
 		$tgl_akhir=(isset($_POST['tgl_akhir']) ? @$_POST['tgl_akhir'] : @$_GET['tgl_akhir']);
@@ -49,7 +67,7 @@ class C_master_terima_beli extends Controller {
 			$data["periode"]="Periode ".$tgl_awal." s/d ".$tgl_akhir;
 		}
 		
-		$data["data_print"]=$this->m_master_terima_beli->get_laporan($tgl_awal,$tgl_akhir,$periode,$opsi,$group);
+		$data["data_print"]=$this->m_master_terima_beli->get_laporan($tgl_awal,$tgl_akhir,$periode,$opsi,$group,"");
 		if($opsi=='rekap'){
 				
 			switch($group){

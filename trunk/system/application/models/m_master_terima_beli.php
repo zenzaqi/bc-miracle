@@ -18,7 +18,7 @@ class M_master_terima_beli extends Model{
 			parent::Model();
 		}
 		
-		function get_laporan($tgl_awal,$tgl_akhir,$periode,$opsi,$group){
+		function get_laporan($tgl_awal,$tgl_akhir,$periode,$opsi,$group,$faktur){
 			
 			switch($group){
 				case "Tanggal": $order_by=" ORDER BY tanggal";break;
@@ -42,7 +42,11 @@ class M_master_terima_beli extends Model{
 					$sql="SELECT * FROM vu_detail_terima_all WHERE tanggal like '".$tgl_awal."%' ".$order_by;
 				else if($periode=='tanggal')
 					$sql="SELECT * FROM vu_detail_terima_all WHERE tanggal>='".$tgl_awal."' AND tanggal<='".$tgl_akhir."' ".$order_by;
+			}else if($opsi=='faktur'){
+				$sql="SELECT * FROM vu_detail_terima_all WHERE master='".$faktur."'";
 			}
+			//echo $sql;
+			$query=$this->db->query($sql);
 			
 			//echo $sql;
 			

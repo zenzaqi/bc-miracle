@@ -225,6 +225,7 @@ Ext.onReady(function(){
 			success: function(response){             
 				var result=eval(response.responseText);
 				if(result!==0){
+						order_idField.value(result);
 						detail_order_beli_purge(result)
 						Ext.MessageBox.alert(post2db+' OK','Data Surat Pesanan berhasil disimpan');
 						master_order_beli_createWindow.hide();
@@ -1481,6 +1482,9 @@ Ext.onReady(function(){
 		buttons: [{
 				text: 'Save and Close',
 				handler: master_order_beli_create
+			},{
+				text: 'Cetak',
+				handler: master_order_beli_cetak_faktur
 			}
 			,{
 				text: 'Cancel',
@@ -1584,7 +1588,47 @@ Ext.onReady(function(){
 	};
 	/* End of Fuction */
 	
-
+	function master_order_beli_cetak_faktur(){
+		
+		Ext.Ajax.request({   
+		waitMsg: 'Please Wait...',
+		url: 'index.php?c=c_master_order_beli&m=print_faktur',
+		params: {
+			faktur	: order_idField.getValue()
+		}, 
+		success: function(response){              
+		  	var result=eval(response.responseText);
+		  	switch(result){
+		  	case 1:
+				win = window.open('./print/master_order_faktur.html','master_order_faktur','height=800,width=600,resizable=1,scrollbars=1, menubar=1');
+				win.print();
+				break;
+		  	default:
+				Ext.MessageBox.show({
+					title: 'Warning',
+					msg: 'Unable to print the grid!',
+					buttons: Ext.MessageBox.OK,
+					animEl: 'save',
+					icon: Ext.MessageBox.WARNING
+				});
+				break;
+		  	}  
+		},
+		failure: function(response){
+		  	var result=response.responseText;
+			Ext.MessageBox.show({
+			   title: 'Error',
+			   msg: 'Could not connect to the database. retry later.',
+			   buttons: Ext.MessageBox.OK,
+			   animEl: 'database',
+			   icon: Ext.MessageBox.ERROR
+			});		
+		} 	                     
+		});
+		
+	}
+	
+	
 	function master_order_beli_reset_SearchForm(){
 		order_noSearchField.reset();
 		order_supplierSearchField.reset();
