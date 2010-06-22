@@ -628,7 +628,8 @@ Ext.onReady(function(){
 	});
     var karyawan_terapis_tpl = new Ext.XTemplate(
             '<tpl for="."><div class="search-item">',
-                '<span><b>{karyawan_username}</b> | {karyawan_display} | <b>{karyawan_jmltindakan}</b></span>',
+            //    '<span><b>{karyawan_username}</b> | {karyawan_display} | <b>{karyawan_jmltindakan}</b></span>',
+                '<span>{karyawan_username}</span>',
             '</div></tpl>'
         );
     
