@@ -424,12 +424,24 @@ Ext.onReady(function(){
 		//trawat_medis_perawatanDataStore.load();
 		cbo_dtindakan_dokterDataStore.load();
 		if(tindakanListEditorGrid.selModel.getCount() == 1) {
-			trawat_medis_perawatanDataStore.load({params:{query:tindakanListEditorGrid.getSelectionModel().getSelected().get('trawat_id')}});
-			cbo_perawatan_dtjnonmedisDataStore.load({params:{query:tindakanListEditorGrid.getSelectionModel().getSelected().get('trawat_id')}});
+			trawat_medis_perawatanDataStore.load({
+				params:{query:get_trawat_id},
+				callback: function(opts, success, response){
+					if(success){
+						tindakan_medis_detail_DataStore.load({params : {master_id : eval(get_pk_id()), start:0, limit:pageS}});
+					}
+				}
+			});
+			cbo_perawatan_dtjnonmedisDataStore.load({
+				params:{query:get_trawat_id},
+				callback: function(opts, success, response){
+					if(success){
+						dtindakan_jual_nonmedisDataStore.load({params : {master_id : eval(get_pk_id()), start:0, limit:pageS}});
+					}
+				}
+			});
 			tindakan_medis_set_form();
 			post2db='UPDATE';
-			tindakan_medis_detail_DataStore.load({params : {master_id : eval(get_pk_id()), start:0, limit:pageS}});
-			dtindakan_jual_nonmedisDataStore.load({params : {master_id : eval(get_pk_id()), start:0, limit:pageS}});
 			msg='updated';
 			tindakan_medis_createWindow.show();
 		} else {
@@ -1652,7 +1664,11 @@ Ext.onReady(function(){
 		
 		if(dtindakan_jual_nonmedisDataStore.getCount()>0){
 			for(i=0; i<dtindakan_jual_nonmedisDataStore.getCount();i++){
-				dtrawat_id.push(dtindakan_jual_nonmedisDataStore.getAt(i).data.dtrawat_id);
+				if(dtindakan_jual_nonmedisDataStore.getAt(i).data.dtrawat_id==undefined){
+					dtrawat_id.push('');
+				}else{
+					dtrawat_id.push(dtindakan_jual_nonmedisDataStore.getAt(i).data.dtrawat_id);
+				}
 				dtrawat_perawatan.push(dtindakan_jual_nonmedisDataStore.getAt(i).data.dtrawat_perawatan);
 				dtrawat_keterangan.push(dtindakan_jual_nonmedisDataStore.getAt(i).data.dtrawat_keterangan);
 				dtrawat_jumlah.push(dtindakan_jual_nonmedisDataStore.getAt(i).data.dtrawat_jumlah);
