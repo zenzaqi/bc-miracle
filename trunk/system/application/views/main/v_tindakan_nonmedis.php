@@ -918,6 +918,7 @@ Ext.onReady(function(){
 			text: 'Delete', 
 			tooltip: 'Delete selected record', 
 			iconCls:'icon-delete',
+			disabled:true,
 			handler: tindakan_nonmedis_confirm_delete 
 		},
 		'-',
