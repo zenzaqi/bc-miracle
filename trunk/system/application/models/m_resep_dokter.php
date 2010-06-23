@@ -149,7 +149,7 @@ class M_resep_dokter extends Model{
 	function get_satuan_produk_list($selected_id){
 			
 			$sql="SELECT satuan_id,satuan_kode,satuan_nama FROM vu_satuan_konversi WHERE produk_aktif='Aktif'
-					AND satuan_id in(SELECT distinct dterima_satuan FROM detail_terima_beli)";
+					AND satuan_id in(SELECT distinct dresepl_satuan FROM detail_resep_dokter_lepasan)";
 			
 			if($selected_id!==""){
 				$sql.=(eregi("WHERE",$sql)?" AND ":" WHERE ")." produk_id='".$selected_id."'";
@@ -194,7 +194,7 @@ class M_resep_dokter extends Model{
 		function get_satuan_detail_list($master_id){
 			$sql="SELECT satuan_id,satuan_kode,satuan_nama FROM satuan";
 			if($master_id<>"")
-				$sql.=" WHERE satuan_id IN(SELECT drbeli_satuan FROM detail_retur_beli WHERE drbeli_master='".$master_id."')";
+				$sql.=" WHERE satuan_id IN(SELECT dresepl_satuan FROM detail_resep_dokter_lepasan WHERE dresepl_master='".$master_id."')";
 			
 			$result = $this->db->query($sql);
 			$nbrows = $result->num_rows();
@@ -233,7 +233,6 @@ class M_resep_dokter extends Model{
 			$query = "SELECT dresepl_id, dresepl_master, dresepl_produk, dresepl_tambahan, dresepl_satuan, dresepl_jumlah, satuan_nama
 			FROM detail_resep_dokter_lepasan
 			LEFT JOIN produk ON(dresepl_produk=produk_id)
-			LEFT JOIN paket ON (dresepl_paket=paket_id)
 			LEFT JOIN satuan ON (dresepl_satuan=satuan_id)
 			WHERE dresepl_master='".$master_id."'";
 			
@@ -313,7 +312,7 @@ class M_resep_dokter extends Model{
 					//* UPDATE detail_resep_dokter untuk menambahkan dproduk_jumlah, ini dikarenakan kasir memasukkan produk yg sama lebih dari satu dalam satu Faktur /
 					$record = $rs->row_array();
 					$dresepl_id=$record['dresepl_id'];
-					$dproduk_jumlah_awal = $record['dresepl_produk'];
+					//$dproduk_jumlah_awal = $record['dresepl_produk'];
 					$dtu_dproduk=array(
 					"dresepl_produk"=>$dresepl_produk,
 					"dresepl_tambahan"=>$dresepl_tambahan,
