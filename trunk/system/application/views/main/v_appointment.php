@@ -129,7 +129,7 @@ var appointment_detail_nonmedis_reader;
 var editor_appointment_detail_nonmedis;
 
 //declare konstant
-var post2db = '';
+var app_post2db = '';
 var msg = '';
 var pageS=100;
 var dmedis_record='';
@@ -350,7 +350,7 @@ Ext.onReady(function(){
 			waitMsg: 'Mohon tunggu...',
 			url: 'index.php?c=c_appointment&m=get_action',
 			params: {
-				task: post2db,
+				task: app_post2db,
 				app_id	: app_id_create_pk, 
 				app_customer	: app_customer_create, 
 				app_tanggal	: app_tanggal_create_date, 
@@ -371,8 +371,8 @@ Ext.onReady(function(){
 						appointment_detail_nonmedis_insert();
 //						appointment_detail_medis_purge();
 //						appointment_detail_nonmedis_purge();
-						//Ext.MessageBox.alert(post2db+' OK','The Appointment was '+msg+' successfully.');
-						Ext.MessageBox.alert(post2db+' OK','Data appointment berhasil disimpan');
+						//Ext.MessageBox.alert(app_post2db+' OK','The Appointment was '+msg+' successfully.');
+						Ext.MessageBox.alert(app_post2db+' OK','Data appointment berhasil disimpan');
 						//appointment_DataStore.reload();
 						appointment_createWindow.hide();
 						break;
@@ -444,7 +444,7 @@ Ext.onReady(function(){
   
   	/* Function for get PK field */
 	function get_pk_id(){
-		if(post2db=='UPDATE'){
+		if(app_post2db=='UPDATE'){
 			return appointmentListEditorGrid.getSelectionModel().getSelected().get('app_id');
 		}else {
 			return 0;
@@ -503,7 +503,7 @@ Ext.onReady(function(){
 		dapp_dokterDataStore.reload();
 		dapp_terapisDataStore.reload();
 		if(!appointment_createWindow.isVisible()){
-			post2db='CREATE';
+			app_post2db='CREATE';
 			appointment_detail_medisDataStore.load({
 				params : {master_id : 0, start:0, limit:pageS}/*,
 				callback: function(opts, success, response)  {
@@ -568,7 +568,7 @@ Ext.onReady(function(){
 			if(medis_orNonMedis=="Non Medis")
 				detail_tab_perawatan.setActiveTab(1);
 			appointment_set_form();
-			post2db='UPDATE';
+			app_post2db='UPDATE';
 			appointment_detail_medisDataStore.load({params : {master_id : eval(get_pk_id()), start:0, limit:pageS}});
 			appointment_detail_nonmedisDataStore.load({params : {master_id : eval(get_pk_id()), start:0, limit:pageS}});
 			msg='updated';
@@ -1855,9 +1855,9 @@ Ext.onReady(function(){
 	//function for insert detail medis
 	var cbo_customer_master = 0;
 	function appointment_detail_medis_insert(){
-		if(post2db=="CREATE"){
+		if(app_post2db=="CREATE"){
 			cbo_customer_master = app_customerField.getValue();
-		}else if(post2db=="UPDATE"){
+		}else if(app_post2db=="UPDATE"){
 			cbo_customer_master = app_customer_idField.getValue();
 		}
 		for(i=0;i<appointment_detail_medisDataStore.getCount();i++){
@@ -2378,7 +2378,7 @@ Ext.onReady(function(){
 	/* Function for retrieve create Window Form */
 	appointment_createWindow= new Ext.Window({
 		id: 'appointment_createWindow',
-		title: post2db+'Appointment',
+		title: app_post2db+'Appointment',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,

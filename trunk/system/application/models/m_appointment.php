@@ -1198,6 +1198,12 @@ class M_appointment extends Model{
 							"app_creator"=>$app_user
 						);
 						$this->db->insert('appointment', $data);
+						if($this->db->affected_rows())
+							return '1';
+						else
+							return '0';
+					}else{
+						return '0';
 					}
 				}elseif($app_cust_telp_baru=='0' && $app_cust_hp_baru=='0'){
 					return '3';
@@ -1211,11 +1217,11 @@ class M_appointment extends Model{
 					"app_creator"=>$app_user
 				);
 				$this->db->insert('appointment', $data);
-			} 
-			if($this->db->affected_rows())
-				return '1';
-			else
-				return '0';
+				if($this->db->affected_rows())
+					return '1';
+				else
+					return '0';
+			}
 			
 		}
 		
