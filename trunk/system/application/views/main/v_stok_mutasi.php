@@ -390,14 +390,13 @@ Ext.onReady(function(){
 		typeAhead: false,
 		displayField: 'produk_nama',
 		valueField: 'produk_id',
-		triggerAction: 'all',
-		lazyRender: false,
+		triggerAction: 'query',
+		lazyRender: true,
+		loadingText: 'Loading...',
 		pageSize: pageS,
-		enableKeyEvents: true,
 		tpl: produk_tpl,
 		itemSelector: 'div.search-item',
-		triggerAction: 'all',
-		listClass: 'x-combo-list-small',
+		//listClass: 'x-combo-list-small',
 		width: 300
 	
 	});

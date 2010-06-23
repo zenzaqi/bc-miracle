@@ -363,6 +363,14 @@ Ext.onReady(function(){
 	kartu_stokListEditorGrid.render();
 	kartu_stokListEditorGrid.show();
 	
+	function is_valid_form(){
+		if(kartu_stok_produk_namaSearchField.getValue()!=="" && kartu_stok_gudangSearchField.getValue()!=="")
+		{
+			return true;
+		}else
+			return false;
+	}
+	
 	/* Function for action list search */
 	function kartu_stok_list_search(){
 		// render according to a SQL date format.
@@ -374,7 +382,7 @@ Ext.onReady(function(){
 		
 		
 		
-		
+		if(is_valid_form()){
 		
 		if(kartu_stok_produk_namaSearchField.getValue()!==null){produk_nama_search=kartu_stok_produk_namaSearchField.getValue();}
 		/*if(kartu_stok_produk_allField.getValue()==true){ produk_nama_search=null; }*/
@@ -455,6 +463,16 @@ Ext.onReady(function(){
 				}					 
 			}
 		});
+		
+		}else{
+			Ext.MessageBox.show({
+				title: 'Warning',
+				msg: 'Gudang dan Nama produk harus dipilih!',
+				buttons: Ext.MessageBox.OK,
+				animEl: 'search',
+				icon: Ext.MessageBox.WARNING
+			});
+		}
 	}
 		
 	/* Function for reset search result */
@@ -489,9 +507,8 @@ Ext.onReady(function(){
 		displayField: 'produk_nama',
 		valueField: 'produk_id',
 		triggerAction: 'all',
-		lazyRender: false,
+		lazyRender: true,
 		pageSize: pageS,
-		enableKeyEvents: true,
 		tpl: produk_tpl,
 		itemSelector: 'div.search-item',
 		triggerAction: 'all',

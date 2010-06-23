@@ -96,8 +96,72 @@ class M_stok_mutasi extends Model{
 				$data[$i]["jumlah_keluar"]=0;
 				$data[$i]["jumlah_koreksi"]=0;
 				$data[$i]["jumlah_stok"]=0;
+				
+				$sql_stok_awal="SELECT 	sum(jml_terima_barang*konversi_nilai)
+										+sum(jml_terima_bonus*konversi_nilai)
+										-sum(jml_retur_beli*konversi_nilai)
+										-sum(jml_mutasi_keluar*konversi_nilai)
+										+sum(jml_mutasi_masuk*konversi_nilai)
+										+sum(jml_koreksi_stok*konversi_nilai)
+										-sum(jml_jual_produk*konversi_nilai)
+										-sum(jml_jual_grooming*konversi_nilai)
+										+sum(jml_retur_produk*konversi_nilai)
+										+sum(jml_retur_paket*konversi_nilai)
+										-sum(jml_pakai_cabin*konversi_nilai)
+										as jumlah_awal
+								FROM	vu_stok_new_produk
+								WHERE   date_format(tanggal,'%Y-%m-%d')<'".$tanggal_start."'
+										AND produk_id='".$rowproduk->produk_id."'
+										AND gudang='".$gudang."'
+										AND status='Tertutup'
+								GROUP BY produk_id";
+							
+				$q_stokawal=$this->db->query($sql_stok_awal);
+				if($q_stokawal->num_rows())
+				{
+					$ds_stokawal=$q_stokawal->row();
+					$data[$i]["jumlah_awal"]=round(($ds_stokawal->jumlah_awal==NULL?0:$ds_stokawal->jumlah_awal)*$data[$i]["konversi_nilai"],3);
+				}else{
+					$data[$i]["jumlah_awal"]=0;
+				}
 						
-				//untuk gudang besar
+				//stok mutasi
+				$sql_stok_mutasi="SELECT 	sum(jml_terima_barang*konversi_nilai)
+										+sum(jml_terima_bonus*konversi_nilai)
+										+sum(jml_mutasi_masuk*konversi_nilai)
+										+sum(jml_retur_produk*konversi_nilai)
+										+sum(jml_retur_paket*konversi_nilai) as jumlah_masuk,
+										sum(jml_koreksi_stok*konversi_nilai) as jumlah_koreksi,
+										-sum(jml_retur_beli*konversi_nilai)
+										-sum(jml_mutasi_keluar*konversi_nilai)
+										-sum(jml_jual_produk*konversi_nilai)
+										-sum(jml_jual_grooming*konversi_nilai)
+										-sum(jml_pakai_cabin*konversi_nilai) as jumlah_keluar
+								FROM	vu_stok_new_produk
+								WHERE   date_format(tanggal,'%Y-%m-%d')<'".$tanggal_start."'
+										AND produk_id='".$rowproduk->produk_id."'
+										AND gudang='".$gudang."'
+										AND status='Tertutup'
+								GROUP BY produk_id";
+							
+				$rs_mutasi=$this->db->query($sql_stok_mutasi);
+					if($rs_mutasi->num_rows())
+					{
+						$ds_mutasi=$rs_mutasi->row();
+						$data[$i]["jumlah_masuk"]=round($ds_mutasi->jumlah_masuk*$data[$i]["konversi_nilai"],3);
+						$data[$i]["jumlah_keluar"]=round($ds_mutasi->jumlah_keluar*$data[$i]["konversi_nilai"],0);
+						$data[$i]["jumlah_koreksi"]=round($ds_mutasi->jumlah_koreksi*$data[$i]["konversi_nilai"],3);
+						$data[$i]["jumlah_stok"]=round(($data[$i]["jumlah_awal"]+$data[$i]["jumlah_masuk"]-$data[$i]["jumlah_keluar"]+$data[$i]["jumlah_koreksi"]),3);
+						
+					}else{
+						$data[$i]["jumlah_masuk"]=0;
+						$data[$i]["jumlah_keluar"]=0;
+						$data[$i]["jumlah_koreksi"]=0;
+						$data[$i]["jumlah_stok"]=round(($data[$i]["jumlah_awal"]+$data[$i]["jumlah_masuk"]-$data[$i]["jumlah_keluar"]+$data[$i]["jumlah_koreksi"]),3);
+					}
+				$i++;
+			}
+				/*//untuk gudang besar
 				if($gudang==1)
 				{
 					
@@ -268,9 +332,8 @@ class M_stok_mutasi extends Model{
 						$data[$i]["jumlah_keluar"]=($data[$i]["jumlah_keluar"]+$ds_cabin->jumlah_cabin)*$data[$i]["konversi_nilai"];
 					}
 					
-				}
-				$i++;
-			}
+				}*/
+				
 			
 			if($nbrows>0){
 				
