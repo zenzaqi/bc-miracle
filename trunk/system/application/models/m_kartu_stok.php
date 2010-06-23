@@ -81,7 +81,35 @@ class M_kartu_stok extends Model{
 				
 				$i=0;
 				
-				if($gudang==1)
+				$sql_stok_awal="SELECT 	sum(jml_terima_barang*konversi_nilai)
+										+sum(jml_terima_bonus*konversi_nilai)
+										-sum(jml_retur_beli*konversi_nilai)
+										-sum(jml_mutasi_keluar*konversi_nilai)
+										+sum(jml_mutasi_masuk*konversi_nilai)
+										+sum(jml_koreksi_stok*konversi_nilai)
+										-sum(jml_jual_produk*konversi_nilai)
+										-sum(jml_jual_grooming*konversi_nilai)
+										+sum(jml_retur_produk*konversi_nilai)
+										+sum(jml_retur_paket*konversi_nilai)
+										-sum(jml_pakai_cabin*konversi_nilai)
+										as jumlah_awal
+								FROM	vu_stok_new_produk
+								WHERE   date_format(tanggal,'%Y-%m-%d')<'".$tanggal_start."'
+										AND produk_id='".$row->produk_id."'
+										AND gudang='".$gudang."'
+										AND status='Tertutup'
+								GROUP BY produk_id";
+							
+				$q_stokawal=$this->db->query($sql_stok_awal);
+				if($q_stokawal->num_rows())
+				{
+					$ds_stokawal=$q_stokawal->row();
+					$data[0]["stok_awal"]=round(($ds_stokawal->jumlah_awal==NULL?0:$ds_stokawal->jumlah_awal)*$data[$i]["konversi_nilai"],3);
+				}else{
+					$data[0]["stok_awal"]=0;
+				}
+				
+				/*if($gudang==1)
 				{
 					//stok awal
 				
@@ -125,10 +153,10 @@ class M_kartu_stok extends Model{
 						$ds_stokawal=$q_stokawal->row();
 						$this->stok_awal=round(($ds_stokawal->jumlah_awal==NULL?0:$ds_stokawal->jumlah_awal)*$konversi,3);
 					}
-				}
+				}*/
 			}
 			
-			$data[0]["stok_awal"]=$this->stok_awal;
+			//$data[0]["stok_awal"]=$this->stok_awal;
 			
 			if($nbrows>0 && sizeof($data)>0){
 				$jsonresult = json_encode($data);
@@ -157,19 +185,285 @@ class M_kartu_stok extends Model{
 						produk_nama LIKE '%".addslashes($filter)."%' ";
 			}
 			
+			$i=0;
 			
 			$result=$this->db->query($sql);
 			$nbrows=$result->num_rows();
 			if($result->num_rows()){
-				$row=$result->row();
+				$rowproduk=$result->row();
 				if($opsi_satuan=='terkecil')
 					$konversi=1;
 				else
-					$konversi=1/$row->konversi_nilai;
+					$konversi=1/$rowproduk->konversi_nilai;
 				
-				$i=0;
+								
+				//Pembelian -> Masuk
+				$sql="SELECT 	tanggal,
+								no_bukti, 
+								concat('Beli dari ', supplier_nama) as keterangan, 
+								jml_terima_barang*konversi_nilai+jml_terima_bonus*konversi_nilai as masuk,
+								0 as keluar,
+								0 as koreksi
+						FROM	vu_stok_new_produk,supplier
+						WHERE   date_format(tanggal,'%Y-%m-%d')<'".$tanggal_start."'
+								AND produk_id='".$rowproduk->produk_id."'
+								AND gudang='".$gudang."'
+								AND supplier_id=asal
+								AND status='Tertutup'
+								AND jenis_transaksi='PB'";
+								
+				$result=$this->db->query($sql);
+				foreach($result->result() as $rowbeli){
+					$data[$i]['tanggal']=$rowbeli->tanggal;
+					$data[$i]['no_bukti']=$rowbeli->no_bukti;
+					$data[$i]['keterangan']=$rowbeli->keterangan;
+					$data[$i]['masuk']=$rowbeli->masuk*$konversi;
+					$data[$i]['keluar']=$rowbeli->keluar*$konversi;
+					$data[$i]['koreksi']=$rowbeli->koreksi*$konversi;					
+					$i++;
+				}
 				
-				if($gudang==1)
+				//Retur Beli ->keluar
+				$sql="SELECT 	tanggal,
+								no_bukti, 
+								concat('Retur Beli dari ', supplier_nama) as keterangan, 
+								0 as masuk,
+								jml_retur_beli*konversi_nilai as keluar,
+								0 as koreksi
+						FROM	vu_stok_new_produk,supplier
+						WHERE   date_format(tanggal,'%Y-%m-%d')<'".$tanggal_start."'
+								AND produk_id='".$rowproduk->produk_id."'
+								AND gudang='".$gudang."'
+								AND supplier_id=asal
+								AND status='Tertutup'
+								AND jenis_transaksi='RB'";
+								
+				$result=$this->db->query($sql);
+				foreach($result->result() as $rowrbeli){
+					$data[$i]['tanggal']=$rowrbeli->tanggal;
+					$data[$i]['no_bukti']=$rowrbeli->no_bukti;
+					$data[$i]['keterangan']=$rowrbeli->keterangan;
+					$data[$i]['masuk']=$rowrbeli->masuk*$konversi;
+					$data[$i]['keluar']=$rowrbeli->keluar*$konversi;
+					$data[$i]['koreksi']=$rowrbeli->koreksi*$konversi;					
+					$i++;
+				}
+				
+				//Mutasi Keluar ->keluar
+				$sql="SELECT 	tanggal,
+								no_bukti, 
+								concat('Mutasi ke gudang ', gudang_nama) as keterangan, 
+								0 as masuk,
+								jml_mutasi_keluar*konversi_nilai as keluar,
+								0 as koreksi
+						FROM	vu_stok_new_produk,gudang
+						WHERE   date_format(tanggal,'%Y-%m-%d')<'".$tanggal_start."'
+								AND produk_id='".$rowproduk->produk_id."'
+								AND gudang='".$gudang."'
+								AND gudang_id=tujuan
+								AND status='Tertutup'
+								AND jenis_transaksi='mutasi'
+								AND keterangan='mutasi keluar'";
+								
+				$result=$this->db->query($sql);
+				foreach($result->result() as $rowkmutasi){
+					$data[$i]['tanggal']=$rowkmutasi->tanggal;
+					$data[$i]['no_bukti']=$rowkmutasi->no_bukti;
+					$data[$i]['keterangan']=$rowkmutasi->keterangan;
+					$data[$i]['masuk']=$rowkmutasi->masuk*$konversi;
+					$data[$i]['keluar']=$rowkmutasi->keluar*$konversi;
+					$data[$i]['koreksi']=$rowkmutasi->koreksi*$konversi;					
+					$i++;
+				}
+				
+				//Mutasi Masuk ->masuk
+				$sql="SELECT 	tanggal,
+								no_bukti, 
+								concat('Mutasi dari gudang ', gudang_nama) as keterangan, 
+								jml_mutasi_masuk*konversi_nilai as masuk,
+								0 as keluar,
+								0 as koreksi
+						FROM	vu_stok_new_produk,gudang
+						WHERE   date_format(tanggal,'%Y-%m-%d')<'".$tanggal_start."'
+								AND produk_id='".$rowproduk->produk_id."'
+								AND gudang='".$gudang."'
+								AND gudang_id=asal
+								AND status='Tertutup'
+								AND jenis_transaksi='mutasi'
+								AND keterangan='mutasi masuk'";
+								
+				$result=$this->db->query($sql);
+				foreach($result->result() as $rowmmutasi){
+					$data[$i]['tanggal']=$rowmmutasi->tanggal;
+					$data[$i]['no_bukti']=$rowmmutasi->no_bukti;
+					$data[$i]['keterangan']=$rowmmutasi->keterangan;
+					$data[$i]['masuk']=$rowmmutasi->masuk*$konversi;
+					$data[$i]['keluar']=$rowmmutasi->keluar*$konversi;
+					$data[$i]['koreksi']=$rowmmutasi->koreksi*$konversi;					
+					$i++;
+				}
+				
+				//Koreksi ->koreksi
+				$sql="SELECT 	tanggal,
+								no_bukti, 
+								'Koreksi stok' as keterangan, 
+								0 as masuk,
+								0 as keluar,
+								jml_koreksi_stok*konversi_nilai as koreksi
+						FROM	vu_stok_new_produk
+						WHERE   date_format(tanggal,'%Y-%m-%d')<'".$tanggal_start."'
+								AND produk_id='".$rowproduk->produk_id."'
+								AND gudang='".$gudang."'
+								AND status='Tertutup'
+								AND jenis_transaksi='koreksi'";
+								
+				$result=$this->db->query($sql);
+				foreach($result->result() as $rowmmutasi){
+					$data[$i]['tanggal']=$rowmmutasi->tanggal;
+					$data[$i]['no_bukti']=$rowmmutasi->no_bukti;
+					$data[$i]['keterangan']=$rowmmutasi->keterangan;
+					$data[$i]['masuk']=$rowmmutasi->masuk*$konversi;
+					$data[$i]['keluar']=$rowmmutasi->keluar*$konversi;
+					$data[$i]['koreksi']=$rowmmutasi->koreksi*$konversi;					
+					$i++;
+				}
+				
+				//Penjualan produk -> keluar
+				$sql="SELECT 	tanggal,
+								no_bukti, 
+								concat('Jual Produk oleh ', cust_nama) as keterangan, 
+								0 as masuk,
+								jml_jual_produk*konversi_nilai as keluar,
+								0 as koreksi
+						FROM	vu_stok_new_produk,customer
+						WHERE   date_format(tanggal,'%Y-%m-%d')<'".$tanggal_start."'
+								AND produk_id='".$rowproduk->produk_id."'
+								AND gudang='".$gudang."'
+								AND cust_id=asal
+								AND status='Tertutup'
+								AND jenis_transaksi='jual produk'
+								AND keterangan='customer'";
+								
+				$result=$this->db->query($sql);
+				foreach($result->result() as $rowpjual){
+					$data[$i]['tanggal']=$rowpjual->tanggal;
+					$data[$i]['no_bukti']=$rowpjual->no_bukti;
+					$data[$i]['keterangan']=$rowpjual->keterangan;
+					$data[$i]['masuk']=$rowpjual->masuk*$konversi;
+					$data[$i]['keluar']=$rowpjual->keluar*$konversi;
+					$data[$i]['koreksi']=$rowpjual->koreksi*$konversi;					
+					$i++;
+				}
+				
+				//Penjualan grooming -> keluar
+				$sql="SELECT 	tanggal,
+								no_bukti, 
+								concat('Jual Grooming oleh ', karyawan_nama) as keterangan, 
+								0 as masuk,
+								jml_jual_grooming*konversi_nilai as keluar,
+								0 as koreksi
+						FROM	vu_stok_new_produk,karyawan
+						WHERE   date_format(tanggal,'%Y-%m-%d')<'".$tanggal_start."'
+								AND produk_id='".$rowproduk->produk_id."'
+								AND gudang='".$gudang."'
+								AND karyawan_id=tujuan
+								AND status='Tertutup'
+								AND jenis_transaksi='jual produk'
+								AND keterangan='grooming'";
+								
+				$result=$this->db->query($sql);
+				foreach($result->result() as $rowgjual){
+					$data[$i]['tanggal']=$rowgjual->tanggal;
+					$data[$i]['no_bukti']=$rowgjual->no_bukti;
+					$data[$i]['keterangan']=$rowgjual->keterangan;
+					$data[$i]['masuk']=$rowgjual->masuk*$konversi;
+					$data[$i]['keluar']=$rowgjual->keluar*$konversi;
+					$data[$i]['koreksi']=$rowgjual->koreksi*$konversi;					
+					$i++;
+				}
+				
+				
+				//Retur Penjualan Produk -> masuk
+				$sql="SELECT 	tanggal,
+								no_bukti, 
+								concat('Retur Produk oleh ', cust_nama) as keterangan, 
+								jml_retur_produk*konversi_nilai as masuk,
+								0 as keluar,
+								0 as koreksi
+						FROM	vu_stok_new_produk,customer
+						WHERE   date_format(tanggal,'%Y-%m-%d')<'".$tanggal_start."'
+								AND produk_id='".$rowproduk->produk_id."'
+								AND gudang='".$gudang."'
+								AND cust_id=asal
+								AND status='Tertutup'
+								AND jenis_transaksi='retur jual'
+								AND keterangan='produk retur'";
+								
+				$result=$this->db->query($sql);
+				foreach($result->result() as $rowrjual){
+					$data[$i]['tanggal']=$rowrjual->tanggal;
+					$data[$i]['no_bukti']=$rowrjual->no_bukti;
+					$data[$i]['keterangan']=$rowrjual->keterangan;
+					$data[$i]['masuk']=$rowrjual->masuk*$konversi;
+					$data[$i]['keluar']=$rowrjual->keluar*$konversi;
+					$data[$i]['koreksi']=$rowrjual->koreksi*$konversi;					
+					$i++;
+				}
+				
+				//Retur Penjualan Paket -> masuk
+				$sql="SELECT 	tanggal,
+								no_bukti, 
+								concat('Retur Produk oleh ', cust_nama) as keterangan, 
+								jml_retur_paket*konversi_nilai as masuk,
+								0 as keluar,
+								0 as koreksi
+						FROM	vu_stok_new_produk,customer
+						WHERE   date_format(tanggal,'%Y-%m-%d')<'".$tanggal_start."'
+								AND produk_id='".$rowproduk->produk_id."'
+								AND gudang='".$gudang."'
+								AND cust_id=asal
+								AND status='Tertutup'
+								AND jenis_transaksi='retur jual'
+								AND keterangan='paket retur'";
+								
+				$result=$this->db->query($sql);
+				foreach($result->result() as $rowrjual){
+					$data[$i]['tanggal']=$rowrjual->tanggal;
+					$data[$i]['no_bukti']=$rowrjual->no_bukti;
+					$data[$i]['keterangan']=$rowrjual->keterangan;
+					$data[$i]['masuk']=$rowrjual->masuk*$konversi;
+					$data[$i]['keluar']=$rowrjual->keluar*$konversi;
+					$data[$i]['koreksi']=$rowrjual->koreksi*$konversi;					
+					$i++;
+				}
+				
+				//Pakai cabin -> keluar
+				$sql="SELECT 	tanggal,
+								no_bukti, 
+								concat('Retur Produk oleh ', cust_nama) as keterangan, 
+								0 as masuk,
+								jml_pakai_cabin*konversi_nilai as keluar,
+								0 as koreksi
+						FROM	vu_stok_new_produk,customer
+						WHERE   date_format(tanggal,'%Y-%m-%d')<'".$tanggal_start."'
+								AND produk_id='".$rowproduk->produk_id."'
+								AND gudang='".$gudang."'
+								AND cust_id=asal
+								AND status='Tertutup'
+								AND jenis_transaksi='pakai cabin'";
+								
+				$result=$this->db->query($sql);
+				foreach($result->result() as $rowcabin){
+					$data[$i]['tanggal']=$rowcabin->tanggal;
+					$data[$i]['no_bukti']=$rowcabin->no_bukti;
+					$data[$i]['keterangan']=$rowcabin->keterangan;
+					$data[$i]['masuk']=$rowcabin->masuk*$konversi;
+					$data[$i]['keluar']=$rowcabin->keluar*$konversi;
+					$data[$i]['koreksi']=$rowcabin->koreksi*$konversi;					
+					$i++;
+				}
+				
+				/*if($gudang==1)
 				{
 					//pembelian
 					$sql="SELECT tanggal,no_bukti, concat('Pembelian dari ', supplier_nama) as keterangan, jumlah*konversi_nilai*".$konversi." as masuk, 0 as keluar, 0 as koreksi 
@@ -316,7 +610,7 @@ class M_kartu_stok extends Model{
 					$data[$i]['keluar']=$rowkoreksi->keluar;
 					$data[$i]['koreksi']=$rowkoreksi->koreksi;
 					$i++;
-				}
+				}*/
 			
 			} 
 			
