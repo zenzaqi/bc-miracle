@@ -368,6 +368,12 @@ class M_master_jual_rawat extends Model{
 					}
 					$sql="UPDATE customer SET cust_point = (cust_point + $jumlah_point) WHERE cust_id='$jrawat_cust'";
 					$this->db->query($sql);
+					
+					$dtu_jrawat=array(
+					"jrawat_point"=>$jumlah_point
+					);
+					$this->db->where('jrawat_id', $jrawat_id);
+					$this->db->update('master_jual_rawat', $dtu_jrawat);
 				}
 			}
 		}
@@ -412,6 +418,18 @@ class M_master_jual_rawat extends Model{
 				}
 			}else{
 				return 1;
+			}
+		}
+		
+		function member_point_batal($jrawat_id){
+			$sql = "SELECT jrawat_point, jrawat_cust FROM master_jual_rawat WHERE jrawat_id='$jrawat_id'";
+			$rs = $this->db->query($sql);
+			if($rs->num_rows()){
+				$record = $rs->row_array();
+				$jrawat_point = $record['jrawat_point'];
+				$jrawat_cust = $record['jrawat_cust'];
+				$sql="UPDATE customer SET cust_point = (cust_point - $jrawat_point) WHERE cust_id='$jrawat_cust'";
+				$this->db->query($sql);
 			}
 		}
 		
@@ -461,6 +479,10 @@ class M_master_jual_rawat extends Model{
 		}
 		
 		function membership_insert($jrawat_id){
+			$date_now=date('Y-m-d');
+			$this->db->where('membert_register <', $date_now);
+			$this->db->delete('member_temp');
+			
 			$sql="SELECT setmember_transhari, setmember_periodeaktif, setmember_periodetenggang, setmember_transtenggang FROM member_setup LIMIT 1";
 			$rs=$this->db->query($sql);
 			if($rs->num_rows()){
@@ -537,6 +559,9 @@ class M_master_jual_rawat extends Model{
 							$this->db->insert('member_temp', $dti_membert);
 						}else{
 							//* message: kartu member customer ini sementara tidak bisa digunakan, karena sudah masuk masa tenggang /
+							//* deleting customer pada db.member_temp (yang mungkin sebelumnya dimasukkan), dikarenakan ada pembatalan transaksi sehingga $cust_total_trans_now tidak memenuhi syarat /
+							$this->db->where('membert_cust', $cust_id);
+							$this->db->delete('member_temp');
 						}
 					}else{
 						//* check tanggal member_valid, apakah member_valid > $date_now ? /
@@ -555,18 +580,23 @@ class M_master_jual_rawat extends Model{
 						//* Pendaftaran MEMBER BARU /
 						$set_member_valid = date('Y-m-d', strtotime("$date_now +$periode_aktif days"));
 						
-						$dti_membert=array(
-						"membert_cust"=>$cust_id,
-						//"membert_no"=>$member_no,
-						"membert_register"=>$date_now,
-						"membert_valid"=>$set_member_valid,
-						"membert_jenis"=>'baru',
-						"membert_status"=>'Daftar'
-						);
-						$this->db->insert('member_temp', $dti_membert);
+						$sql = "SELECT membert_id FROM member_temp WHERE membert_cust='$cust_id'";
+						$rs = $this->db->query($sql);
+						if(!($rs->num_rows())){
+							$dti_membert=array(
+							"membert_cust"=>$cust_id,
+							"membert_register"=>$date_now,
+							"membert_valid"=>$set_member_valid,
+							"membert_jenis"=>'baru',
+							"membert_status"=>'Daftar'
+							);
+							$this->db->insert('member_temp', $dti_membert);
+						}
 					}else{
 						//* Syarat menjadi MEMBER belum terpenuhi /
-						//* NO ACTION /
+						//* deleting di db.member_temp (jika sebelumnya sudah diinsert), karena melakukan pembatalan transaksi sehingga total transaksi hari ini tidak memenuhi syarat menjadi member /
+						$this->db->where('membert_cust', $cust_id);
+						$this->db->delete('member_temp');
 					}
 				}
 			}
@@ -1524,7 +1554,9 @@ class M_master_jual_rawat extends Model{
                     //return '1';
                     if($this->db->affected_rows() || $this->db->affected_rows()==0){
 						if($cetak_jrawat==1){
+							$this->master_jual_rawat_status_update($jrawat_id);
                             $this->member_point_update($jrawat_id);
+							$this->membership_insert($jrawat_id);
                             return $jrawat_id;
                         }else{
                             return '0';
@@ -1877,7 +1909,9 @@ class M_master_jual_rawat extends Model{
 				
 				if($this->db->affected_rows() || $this->db->affected_rows()==0){
 					if($cetak_jrawat==1 && $jrawat_bayar>0){
+						$this->master_jual_rawat_status_update($jrawat_id);
 						$this->member_point_update($jrawat_id);
+						$this->membership_insert($jrawat_id);
 						return $jrawat_id;
 					}else{
 						return '0';
@@ -1916,12 +1950,30 @@ class M_master_jual_rawat extends Model{
 		}
 		
 		function master_jual_rawat_batal($jrawat_nobukti){
+			$date_now = date('Y-m-d');
+			$jrawat_id = 0;
+			
+			$sql = "SELECT jrawat_id FROM master_jual_rawat WHERE jrawat_nobukti='$jrawat_nobukti'";
+			$rs = $this->db->query($sql);
+			if($rs->num_rows()){
+				$record = $rs->row_array();
+				$jrawat_id = $record['jrawat_id'];
+			}
+			
 			$dtu_jrawat=array(
 			"jrawat_stat_dok"=>'Batal'
 			);
 			$this->db->where('jrawat_nobukti', $jrawat_nobukti);
+			$this->db->where('jrawat_tanggal', $date_now);
 			$this->db->update('master_jual_rawat', $dtu_jrawat);
-			return '1';
+			if($this->db->affected_rows()){
+				//* udpating db.customer.cust_point ==> proses mengurangi jumlah poin (dikurangi dengan db.master_jual_produk.jproduk_point yg sudah dimasukkan ketika cetak faktur), karena dilakukan pembatalan /
+				$this->member_point_batal($jrawat_id);
+				$this->membership_insert($jrawat_id);
+				return '1';
+			}else{
+				return '0';
+			}
 		}
 		
 		//function for advanced search record
@@ -2089,7 +2141,7 @@ class M_master_jual_rawat extends Model{
 		function print_paper($jrawat_id){
 			$sql="SELECT jrawat_tanggal, cust_no, cust_nama, cust_alamat, jrawat_nobukti, rawat_nama, drawat_jumlah, drawat_harga, drawat_diskon, (drawat_harga*((100-drawat_diskon)/100)) AS jumlah_subtotal, jrawat_creator, jrawat_diskon, jrawat_cashback, jrawat_bayar FROM detail_jual_rawat LEFT JOIN master_jual_rawat ON(drawat_master=jrawat_id) LEFT JOIN customer ON(jrawat_cust=cust_id) LEFT JOIN perawatan ON(drawat_rawat=rawat_id) WHERE jrawat_id='$jrawat_id'";
 			$result = $this->db->query($sql);
-			$this->master_jual_rawat_status_update($jrawat_id);
+			//$this->master_jual_rawat_status_update($jrawat_id);
 			return $result;
 		}
 		

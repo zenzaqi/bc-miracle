@@ -642,6 +642,18 @@ class M_master_jual_paket extends Model{
 			}
 		}
 		
+		function member_point_batal($jpaket_id){
+			$sql = "SELECT jpaket_point, jpaket_cust FROM master_jual_paket WHERE jpaket_id='$jpaket_id'";
+			$rs = $this->db->query($sql);
+			if($rs->num_rows()){
+				$record = $rs->row_array();
+				$jpaket_point = $record['jpaket_point'];
+				$jpaket_cust = $record['jpaket_cust'];
+				$sql="UPDATE customer SET cust_point = (cust_point - $jpaket_point) WHERE cust_id='$jpaket_cust'";
+				$this->db->query($sql);
+			}
+		}
+		
 		function membership_insert($jpaket_id){
 			$date_now=date('Y-m-d');
 			$this->db->where('membert_register <', $date_now);
@@ -723,6 +735,9 @@ class M_master_jual_paket extends Model{
 							$this->db->insert('member_temp', $dti_membert);
 						}else{
 							//* message: kartu member customer ini sementara tidak bisa digunakan, karena sudah masuk masa tenggang /
+							//* deleting customer pada db.member_temp (yang mungkin sebelumnya dimasukkan), dikarenakan ada pembatalan transaksi sehingga $cust_total_trans_now tidak memenuhi syarat /
+							$this->db->where('membert_cust', $cust_id);
+							$this->db->delete('member_temp');
 						}
 					}else{
 						//* check tanggal member_valid, apakah member_valid > $date_now ? /
@@ -741,18 +756,23 @@ class M_master_jual_paket extends Model{
 						//* Pendaftaran MEMBER BARU /
 						$set_member_valid = date('Y-m-d', strtotime("$date_now +$periode_aktif days"));
 						
-						$dti_membert=array(
-						"membert_cust"=>$cust_id,
-						//"membert_no"=>$member_no,
-						"membert_register"=>$date_now,
-						"membert_valid"=>$set_member_valid,
-						"membert_jenis"=>'baru',
-						"membert_status"=>'Daftar'
-						);
-						$this->db->insert('member_temp', $dti_membert);
+						$sql = "SELECT membert_id FROM member_temp WHERE membert_cust='$cust_id'";
+						$rs = $this->db->query($sql);
+						if(!($rs->num_rows())){
+							$dti_membert=array(
+							"membert_cust"=>$cust_id,
+							"membert_register"=>$date_now,
+							"membert_valid"=>$set_member_valid,
+							"membert_jenis"=>'baru',
+							"membert_status"=>'Daftar'
+							);
+							$this->db->insert('member_temp', $dti_membert);
+						}
 					}else{
 						//* Syarat menjadi MEMBER belum terpenuhi /
-						//* NO ACTION /
+						//* deleting di db.member_temp (jika sebelumnya sudah diinsert), karena melakukan pembatalan transaksi sehingga total transaksi hari ini tidak memenuhi syarat menjadi member /
+						$this->db->where('membert_cust', $cust_id);
+						$this->db->delete('member_temp');
 					}
 				}
 			}
@@ -2293,6 +2313,7 @@ class M_master_jual_paket extends Model{
 		}
 		
 		function master_jual_paket_batal($jpaket_id){
+			$date_now = date('Y-m-d');
 			$sql = "SELECT dapaket_id FROM detail_ambil_paket WHERE dapaket_jpaket='$jpaket_id'";
 			$rs = $this->db->query($sql);
 			if($rs->num_rows()){
@@ -2300,15 +2321,15 @@ class M_master_jual_paket extends Model{
 				return '0';
 			}else{
 				//* artinya: Customer belum pernah ambil paket pada Faktur ini. Sehingga masih boleh di-Batal-kan /
-				$dtu_jpaket = "UPDATE master_jual_paket SET jpaket_stat_dok='Batal'
+				/*$dtu_jpaket = "UPDATE master_jual_paket SET jpaket_stat_dok='Batal'
 					WHERE jpaket_id='$jpaket_id'
-						AND jpaket_tanggal=date_format(now(),'%Y-%m-%d') ";
-				$this->db->query($dtu_jpaket);
-				/*$dtu_jpaket=array(
+						AND jpaket_tanggal=date_format(now(),'%Y-%m-%d') ";*/
+				$dtu_jpaket = array(
 				"jpaket_stat_dok"=>'Batal'
 				);
 				$this->db->where('jpaket_id', $jpaket_id);
-				$this->db->update('master_jual_paket', $dtu_jpaket);*/
+				$this->db->where('jpaket_tanggal', $date_now);
+				$this->db->update('master_jual_paket', $dtu_jpaket);
 				if($this->db->affected_rows()>0)
 					return '1';
 				else

@@ -928,8 +928,6 @@ left join karyawan on (karyawan.karyawan_id = resep_dokter.resep_dokterid)";
 		
 		
 		function print_paper($resep_id){
-			//$this->firephp->log($jproduk_id, "jproduk_id");
-			
 			//$sql="SELECT resep_tanggal, cust_no, cust_nama, produk_nama, resep_no, karyawan_nama, karyawan_sip FROM detail_jual_produk LEFT JOIN master_jual_produk ON(dresep_master=resep_id) LEFT JOIN customer ON(resep_custid=cust_id) LEFT JOIN produk ON(dresep_produk=produk_id) WHERE dresep_master='$resep_id'";
 			$sql1="SELECT	resep_dokter.resep_tanggal, resep_dokter.resep_no,
 							customer.cust_no, customer.cust_nama, customer.cust_alamat, 
@@ -966,8 +964,6 @@ left join karyawan on (karyawan.karyawan_id = resep_dokter.resep_dokterid)";
 		
 		
 		function print_paper2($resep_id){
-			//$this->firephp->log($jproduk_id, "jproduk_id");
-			
 			//$sql="SELECT resep_tanggal, cust_no, cust_nama, produk_nama, resep_no, karyawan_nama, karyawan_sip FROM detail_jual_produk LEFT JOIN master_jual_produk ON(dresep_master=resep_id) LEFT JOIN customer ON(resep_custid=cust_id) LEFT JOIN produk ON(dresep_produk=produk_id) WHERE dresep_master='$resep_id'";
 			$sql1="SELECT	resep_dokter.resep_tanggal, resep_dokter.resep_no,
 							customer.cust_no, customer.cust_nama, customer.cust_alamat, 
@@ -1010,7 +1006,6 @@ left join karyawan on (karyawan.karyawan_id = resep_dokter.resep_dokterid)";
 		
 		
 		function iklan(){
-			//$this->firephp->log($jproduk_id, "jproduk_id");
 			$sql="SELECT * from iklan_today";
 			$result1 = $this->db->query($sql);
 			return $result1;

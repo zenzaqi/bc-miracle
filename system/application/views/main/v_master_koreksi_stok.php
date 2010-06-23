@@ -1596,7 +1596,6 @@ Ext.onReady(function(){
 		if(j>=0){
 			var record_satuan=cbo_stok_satuanDataStore.getAt(j);
 			konversi=record_satuan.data.konversi_nilai;
-			//console.log('konversi'+konversi);
 			jumlah_konversi=jumlah_awal/konversi;
 			jumlah_konversi=rounding(jumlah_konversi,2);
 			stok_awalField.setValue(jumlah_konversi);

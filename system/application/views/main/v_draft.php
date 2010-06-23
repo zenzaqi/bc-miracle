@@ -595,7 +595,6 @@ Ext.onReady(function(){
 				}
 			}
 			
-			//console.log('group'+draft_number_radioField.getValue());
 			Ext.Ajax.request({  
 				waitMsg: 'Mohon tunggu...',
 				url: 'index.php?c=c_draft&m=draft_save',
