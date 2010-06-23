@@ -1396,7 +1396,7 @@ Ext.onReady(function(){
 		fieldLabel: 'Cara',
 		store:new Ext.data.SimpleStore({
 			fields:['app_cara_value', 'app_cara_display'],
-			data:[['Datang','Walk-in'],['Update','Update'],['Telp','Telp'],['SMS','SMS']]
+			data:[['Telp','Telp'],['Update','In-Day-Telp'],['Datang','Walk-in'],['Rekomendasi','Rekomendasi']]
 		}),
 		mode: 'local',
 		name:'app_cara',
@@ -2502,7 +2502,7 @@ Ext.onReady(function(){
 		fieldLabel: 'Cara',
 		store:new Ext.data.SimpleStore({
 			fields:['value', 'app_cara'],
-			data:[['Datang','Walk-in'],['Update','Update'],['Telp','Telp'],['SMS','SMS']]
+			data:[['Telp','Telp'],['Update','In-Day-Telp'],['Datang','Walk-in'],['Rekomendasi','Rekomendasi']]
 		}),
 		mode: 'local',
 		displayField: 'app_cara',
