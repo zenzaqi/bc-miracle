@@ -113,7 +113,7 @@ class M_stok_mutasi extends Model{
 								WHERE   date_format(tanggal,'%Y-%m-%d')<'".$tanggal_start."'
 										AND produk_id='".$rowproduk->produk_id."'
 										AND gudang='".$gudang."'
-										AND status='Tertutup'
+										AND status<>'Batal'
 								GROUP BY produk_id";
 							
 				$q_stokawal=$this->db->query($sql_stok_awal);
@@ -141,7 +141,7 @@ class M_stok_mutasi extends Model{
 								WHERE   date_format(tanggal,'%Y-%m-%d')<'".$tanggal_start."'
 										AND produk_id='".$rowproduk->produk_id."'
 										AND gudang='".$gudang."'
-										AND status='Tertutup'
+										AND status<>'Batal'
 								GROUP BY produk_id";
 							
 				$rs_mutasi=$this->db->query($sql_stok_mutasi);
