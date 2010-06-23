@@ -1225,7 +1225,7 @@ class M_tindakan_medis extends Model{
 				else 
 					$dtrawat_dokter=$dtrawat_dokter_id;
 				
-				if($dtrawat_status_awal<>$dtrawat_status && $dtrawat_locked==0){ 
+				if($dtrawat_status_awal<>$dtrawat_status && $dtrawat_locked==0){
 					/*artinya: Status BErubah && db.tindakan_detail is UNLOCK
 					 * perubahan hanya pada STATUS di mode VIEW.LIST
 					 */ 
@@ -1544,7 +1544,7 @@ class M_tindakan_medis extends Model{
 					}
 					
 					return '1';
-				}elseif($dtrawat_dokter_awal<>$dtrawat_dokter && $dtrawat_locked==0){ /* ada perubahan pada db.tindakan_detail.dtrawat_petugas1 */
+				}elseif($dtrawat_dokter_awal<>$dtrawat_dokter && is_numeric($dtrawat_dokter)==true && $dtrawat_locked==0){ /* ada perubahan pada db.tindakan_detail.dtrawat_petugas1 */
 					/* UPDATE db.tindakan_detail  */
 					$data_dtindakan=array(
 					"dtrawat_petugas1"=>$dtrawat_dokter
