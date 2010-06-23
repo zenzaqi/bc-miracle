@@ -69,9 +69,20 @@ var inbox_senderSearchField;
 var inbox_messageSearchField;
 var inbox_dateSearchField;
 
+var task = {
+	run: function(){
+	   inbox_DataStore.load({params:{start:0,limit:pageS}});
+	},
+	interval: 5000
+}
+var runner = new Ext.util.TaskRunner();
+
+
 /* on ready fuction */
 Ext.onReady(function(){
   	Ext.QuickTips.init();	/* Initiate quick tips icon */
+  
+   runner.start(task);
   
   	/* Function for Saving inLine Editing */
 	function inbox_inline_update(oGrid_event){
@@ -853,14 +864,7 @@ Ext.onReady(function(){
 });
 
 
-var task = {
-	run: function(){
-	   inbox_DataStore.load({params:{start:0,limit:pageS}});
-	},
-	interval: 5000
-}
-var runner = new Ext.util.TaskRunner();
-runner.start(task);
+
 	
 
 	</script>

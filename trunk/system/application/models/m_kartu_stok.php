@@ -97,7 +97,7 @@ class M_kartu_stok extends Model{
 								WHERE   date_format(tanggal,'%Y-%m-%d')<'".$tanggal_start."'
 										AND produk_id='".$row->produk_id."'
 										AND gudang='".$gudang."'
-										AND status='Tertutup'
+										AND status<>'Batal'
 								GROUP BY produk_id";
 							
 				$q_stokawal=$this->db->query($sql_stok_awal);
@@ -209,7 +209,7 @@ class M_kartu_stok extends Model{
 								AND produk_id='".$rowproduk->produk_id."'
 								AND gudang='".$gudang."'
 								AND supplier_id=asal
-								AND status='Tertutup'
+								AND status<>'Batal'
 								AND jenis_transaksi='PB'";
 								
 				$result=$this->db->query($sql);
@@ -235,7 +235,7 @@ class M_kartu_stok extends Model{
 								AND produk_id='".$rowproduk->produk_id."'
 								AND gudang='".$gudang."'
 								AND supplier_id=asal
-								AND status='Tertutup'
+								AND status<>'Batal'
 								AND jenis_transaksi='RB'";
 								
 				$result=$this->db->query($sql);
@@ -261,7 +261,7 @@ class M_kartu_stok extends Model{
 								AND produk_id='".$rowproduk->produk_id."'
 								AND gudang='".$gudang."'
 								AND gudang_id=tujuan
-								AND status='Tertutup'
+								AND status<>'Batal'
 								AND jenis_transaksi='mutasi'
 								AND keterangan='mutasi keluar'";
 								
@@ -288,7 +288,7 @@ class M_kartu_stok extends Model{
 								AND produk_id='".$rowproduk->produk_id."'
 								AND gudang='".$gudang."'
 								AND gudang_id=asal
-								AND status='Tertutup'
+								AND status<>'Batal'
 								AND jenis_transaksi='mutasi'
 								AND keterangan='mutasi masuk'";
 								
@@ -314,7 +314,7 @@ class M_kartu_stok extends Model{
 						WHERE   date_format(tanggal,'%Y-%m-%d')<'".$tanggal_start."'
 								AND produk_id='".$rowproduk->produk_id."'
 								AND gudang='".$gudang."'
-								AND status='Tertutup'
+								AND status<>'Batal'
 								AND jenis_transaksi='koreksi'";
 								
 				$result=$this->db->query($sql);
@@ -340,7 +340,7 @@ class M_kartu_stok extends Model{
 								AND produk_id='".$rowproduk->produk_id."'
 								AND gudang='".$gudang."'
 								AND cust_id=asal
-								AND status='Tertutup'
+								AND status<>'Batal'
 								AND jenis_transaksi='jual produk'
 								AND keterangan='customer'";
 								
@@ -367,7 +367,7 @@ class M_kartu_stok extends Model{
 								AND produk_id='".$rowproduk->produk_id."'
 								AND gudang='".$gudang."'
 								AND karyawan_id=tujuan
-								AND status='Tertutup'
+								AND status<>'Batal'
 								AND jenis_transaksi='jual produk'
 								AND keterangan='grooming'";
 								
@@ -395,7 +395,7 @@ class M_kartu_stok extends Model{
 								AND produk_id='".$rowproduk->produk_id."'
 								AND gudang='".$gudang."'
 								AND cust_id=asal
-								AND status='Tertutup'
+								AND status<>'Batal'
 								AND jenis_transaksi='retur jual'
 								AND keterangan='produk retur'";
 								
@@ -422,7 +422,7 @@ class M_kartu_stok extends Model{
 								AND produk_id='".$rowproduk->produk_id."'
 								AND gudang='".$gudang."'
 								AND cust_id=asal
-								AND status='Tertutup'
+								AND status<>'Batal'
 								AND jenis_transaksi='retur jual'
 								AND keterangan='paket retur'";
 								
@@ -449,7 +449,7 @@ class M_kartu_stok extends Model{
 								AND produk_id='".$rowproduk->produk_id."'
 								AND gudang='".$gudang."'
 								AND cust_id=asal
-								AND status='Tertutup'
+								AND status<>'Batal'
 								AND jenis_transaksi='pakai cabin'";
 								
 				$result=$this->db->query($sql);
