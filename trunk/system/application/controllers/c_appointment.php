@@ -198,7 +198,6 @@ class C_appointment extends Controller {
 		$app_keterangan=str_replace("\\", "",$app_keterangan);
 		$app_keterangan=str_replace("'", "''",$app_keterangan);
 		$dapp_user=$_SESSION[SESSION_USERID];
-		//$this->firephp->log($dapp_nonmedis_counter_terapis, 'counter_terapis');
 		$result=$this->m_appointment->detail_appointment_detail_nonmedis_insert(
 			$dapp_nonmedis_id ,
 			$dapp_nonmedis_master ,

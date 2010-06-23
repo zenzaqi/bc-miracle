@@ -1605,7 +1605,6 @@ Ext.onReady(function(){
 			jumlah_total_debet+=record_data.data.dkasbank_keluar_debet;
 			jumlah_total_keluar_kredit+=record_data.data.dkasbank_keluar_kredit;
 		}
-		console.log('jml debet'+jumlah_total_debet);
 		total_debet.setValue(jumlah_total_debet);
 		total_keluar_kredit.setValue(jumlah_total_keluar_kredit);
 	}

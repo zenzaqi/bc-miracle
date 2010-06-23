@@ -1608,7 +1608,6 @@ Ext.onReady(function(){
 			jumlah_total_debet+=record_data.data.dkasbank_masuk_debet;
 			jumlah_total_masuk_kredit+=record_data.data.dkasbank_masuk_kredit;
 		}
-		console.log('jml debet'+jumlah_total_debet);
 		total_debet.setValue(jumlah_total_debet);
 		total_masuk_kredit.setValue(jumlah_total_masuk_kredit);
 	}

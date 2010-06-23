@@ -339,7 +339,6 @@ Ext.onReady(function(){
 			
 		}
 		saldo=kredit-debet;
-		//console.log('saldo :'+debet);
 		labarugi_saldoField.setValue(saldo);
 	}
 	

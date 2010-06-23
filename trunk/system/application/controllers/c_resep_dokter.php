@@ -19,7 +19,6 @@ class C_resep_dokter extends Controller {
 		$this->load->model('m_resep_dokter', '', TRUE);
 		//session_start();
 		$this->load->plugin('to_excel');
-		//$this->load->library('firephp');
 	}
 	
 	//set index
@@ -182,19 +181,16 @@ class C_resep_dokter extends Controller {
 
 	function detail_resepdokter_lepasan_purge(){
 		$master_id = (integer) (isset($_POST['master_id']) ? $_POST['master_id'] : $_GET['master_id']);
-		//$this->firephp->log($master_id,'masterer');
 		$result=$this->m_resep_dokter->detail_resepdokter_lepasan_purge($master_id);
 	}
 	
 	function detail_resepdokter_kombinasi_purge(){
 		$master_id = (integer) (isset($_POST['master_id']) ? $_POST['master_id'] : $_GET['master_id']);
-		//$this->firephp->log($master_id,'masterer');
 		$result=$this->m_resep_dokter->detail_resepdokter_kombinasi_purge($master_id);
 	}
 	
 	function detail_resepdokter_tambahan_purge(){
 		$master_id = (integer) (isset($_POST['master_id']) ? $_POST['master_id'] : $_GET['master_id']);
-		//$this->firephp->log($master_id,'masterer');
 		$result=$this->m_resep_dokter->detail_resepdokter_tambahan_purge($master_id);
 	}
 	

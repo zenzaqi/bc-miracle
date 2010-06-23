@@ -63,7 +63,7 @@ var detail_retur_paket_tokwitansi_reader;
 var editor_detail_retur_paket_tokwitansi;
 
 //declare konstant
-var post2db = '';
+var rpaket_post2db = '';
 var msg = '';
 var pageS=15;
 var today=new Date().format('d-m-Y');
@@ -75,7 +75,7 @@ var rpaket_nobuktijualField;
 var rpaket_custField;
 var rpaket_tanggalField;
 var rpaket_keteranganField;
-var rpaket_statusField;
+var rpaket_stat_dokField;
 var rpaket_idSearchField;
 var rpaket_nobuktiSearchField;
 var rpaket_nobuktijualSearchField;
@@ -83,7 +83,7 @@ var rpaket_custSearchField;
 var rpaket_tanggalSearchField;
 var rpaket_tanggal_akhirSearchField;
 var rpaket_keteranganSearchField;
-var rpaket_statusSearchField;
+var rpaket_stat_dokSearchField;
 
 function retur_jpaket_cetak(kwitansi_ref){
 	Ext.Ajax.request({   
@@ -148,7 +148,7 @@ Ext.onReady(function(){
 		var rpaket_cust_update=null;
 		var rpaket_tanggal_update_date="";
 		var rpaket_keterangan_update=null;
-		var rpaket_status_update=null;
+		var rpaket_stat_dok_update=null;
 
 		rpaket_id_update_pk = oGrid_event.record.data.rpaket_id;
 		if(oGrid_event.record.data.rpaket_nobukti!== null){rpaket_nobukti_update = oGrid_event.record.data.rpaket_nobukti;}
@@ -156,7 +156,7 @@ Ext.onReady(function(){
 		if(oGrid_event.record.data.rpaket_cust!== null){rpaket_cust_update = oGrid_event.record.data.rpaket_cust;}
 	 	if(oGrid_event.record.data.rpaket_tanggal!== ""){rpaket_tanggal_update_date =oGrid_event.record.data.rpaket_tanggal.format('Y-m-d');}
 		if(oGrid_event.record.data.rpaket_keterangan!== null){rpaket_keterangan_update = oGrid_event.record.data.rpaket_keterangan;}
-		if(oGrid_event.record.data.rpaket_status!== null){rpaket_status_update = oGrid_event.record.data.rpaket_status;}
+		if(oGrid_event.record.data.rpaket_stat_dok!== null){rpaket_stat_dok_update = oGrid_event.record.data.rpaket_stat_dok;}
 
 		Ext.Ajax.request({  
 			waitMsg: 'Please wait...',
@@ -169,7 +169,7 @@ Ext.onReady(function(){
 				rpaket_cust	:rpaket_cust_update,  
 				rpaket_tanggal	: rpaket_tanggal_update_date, 
 				rpaket_keterangan	:rpaket_keterangan_update, 
-				rpaket_status		:rpaket_status_update,
+				rpaket_stat_dok		:rpaket_stat_dok_update,
 			}, 
 			success: function(response){							
 				var result=eval(response.responseText);
@@ -206,91 +206,99 @@ Ext.onReady(function(){
   	/* Function for add data, open window create form */
 	function master_retur_jual_paket_create(){
 	
-		if(is_master_retur_jual_paket_form_valid()){	
-		var rpaket_id_create_pk=null; 
-		var rpaket_nobukti_create=null; 
-		var rpaket_nobuktijual_create=null; 
-		var rpaket_cust_create=null; 
-		var rpaket_tanggal_create_date=""; 
-		var rpaket_keterangan_create=null; 
-		var rpaket_status_create=null;
-		var rpaket_kwitansi_nilai_create=null; 
-		var rpaket_kwitansi_keterangan_create=null; 
-
-		if(rpaket_idField.getValue()!== null){rpaket_id_create_pk = rpaket_idField.getValue();}else{rpaket_id_create_pk=get_pk_id();} 
-		if(rpaket_nobuktiField.getValue()!= null){rpaket_nobukti_create = rpaket_nobuktiField.getValue();} 
-		if(rpaket_nobuktijualField.getValue()!= null){rpaket_nobuktijual_create = rpaket_nobuktijualField.getValue();} 
-		if(rpaket_custField.getValue()!= null){rpaket_cust_create = rpaket_custidField.getValue();} 
-		if(rpaket_tanggalField.getValue()!= ""){rpaket_tanggal_create_date = rpaket_tanggalField.getValue().format('Y-m-d');} 
-		if(rpaket_keteranganField.getValue()!= null){rpaket_keterangan_create = rpaket_keteranganField.getValue();} 
-		if(rpaket_kwitansi_nilaiField.getValue()!== null){rpaket_kwitansi_nilai_create = rpaket_kwitansi_nilaiField.getValue();} 
-		if(rpaket_kwitansi_keteranganField.getValue()!== null){rpaket_kwitansi_keterangan_create = rpaket_kwitansi_keteranganField.getValue();} 
-		if(rpaket_statusField.getValue()!= null){rpaket_status_create = rpaket_statusField.getValue();} 
-		
-
-		Ext.Ajax.request({  
-			waitMsg: 'Please wait...',
-			url: 'index.php?c=c_master_retur_jual_paket&m=get_action',
-			params: {
-				task: post2db,
-				rpaket_id	: rpaket_id_create_pk, 
-				rpaket_nobukti	: rpaket_nobukti_create, 
-				rpaket_nobuktijual	: rpaket_nobuktijual_create, 
-				rpaket_cust	: rpaket_cust_create, 
-				rpaket_tanggal	: rpaket_tanggal_create_date, 
-				rpaket_keterangan	: rpaket_keterangan_create,
-				rpaket_status		: rpaket_status_create,
-				rpaket_kwitansi_nilai	: rpaket_kwitansi_nilai_create, 
-				rpaket_kwitansi_keterangan	: rpaket_kwitansi_keterangan_create
-			}, 
-			success: function(response){             
-				//var result=eval(response.responseText);
-				var result=response.responseText;
-				if(result=='0' || result=='1'){
-					Ext.MessageBox.show({
-					   title: 'Warning',
-					   msg: 'Data retur penjualan paket tidak bisa disimpan',
-					   buttons: Ext.MessageBox.OK,
-					   animEl: 'save',
-					   icon: Ext.MessageBox.WARNING
-					});
-				}else{
-					retur_jpaket_cetak(result);
-					detail_retur_paket_tokwitansi_purge();
-					detail_retur_paket_tokwitansi_insert();
-					master_retur_jual_paket_DataStore.reload();
-					master_retur_jual_paket_createWindow.hide();
-				}
-				/*switch(result){
-					case 1:
-						detail_retur_paket_tokwitansi_purge();
-						detail_retur_paket_tokwitansi_insert();
-						Ext.MessageBox.alert(post2db+' OK','Data retur penjualan paket berhasil disimpan');
-						master_retur_jual_paket_DataStore.reload();
-						master_retur_jual_paket_createWindow.hide();
-						break;
-					default:
+		if(is_master_retur_jual_paket_form_valid()){
+			if(rpaket_kwitansi_nilaiField.getValue()>10000){
+				var rpaket_id_create_pk=null; 
+				var rpaket_nobukti_create=null; 
+				var rpaket_nobuktijual_create=null; 
+				var rpaket_cust_create=null; 
+				var rpaket_tanggal_create_date=""; 
+				var rpaket_keterangan_create=null; 
+				var rpaket_stat_dok_create=null;
+				var rpaket_kwitansi_nilai_create=null; 
+				var rpaket_kwitansi_keterangan_create=null;
+				
+				if(rpaket_idField.getValue()!== null){rpaket_id_create_pk = rpaket_idField.getValue();}else{rpaket_id_create_pk=get_pk_id();} 
+				if(rpaket_nobuktiField.getValue()!= null){rpaket_nobukti_create = rpaket_nobuktiField.getValue();} 
+				if(rpaket_nobuktijualField.getValue()!= null){rpaket_nobuktijual_create = rpaket_nobuktijualField.getValue();} 
+				if(rpaket_custField.getValue()!= null){rpaket_cust_create = rpaket_custidField.getValue();} 
+				if(rpaket_tanggalField.getValue()!= ""){rpaket_tanggal_create_date = rpaket_tanggalField.getValue().format('Y-m-d');} 
+				if(rpaket_keteranganField.getValue()!= null){rpaket_keterangan_create = rpaket_keteranganField.getValue();} 
+				if(rpaket_kwitansi_nilaiField.getValue()!== null){rpaket_kwitansi_nilai_create = rpaket_kwitansi_nilaiField.getValue();} 
+				if(rpaket_kwitansi_keteranganField.getValue()!== null){rpaket_kwitansi_keterangan_create = rpaket_kwitansi_keteranganField.getValue();} 
+				if(rpaket_stat_dokField.getValue()!= null){rpaket_stat_dok_create = rpaket_stat_dokField.getValue();} 
+				
+				Ext.Ajax.request({  
+					waitMsg: 'Please wait...',
+					url: 'index.php?c=c_master_retur_jual_paket&m=get_action',
+					params: {
+						task: rpaket_post2db,
+						rpaket_id	: rpaket_id_create_pk, 
+						rpaket_nobukti	: rpaket_nobukti_create, 
+						rpaket_nobuktijual	: rpaket_nobuktijual_create, 
+						rpaket_cust	: rpaket_cust_create, 
+						rpaket_tanggal	: rpaket_tanggal_create_date, 
+						rpaket_keterangan	: rpaket_keterangan_create,
+						rpaket_stat_dok		: rpaket_stat_dok_create,
+						rpaket_kwitansi_nilai	: rpaket_kwitansi_nilai_create, 
+						rpaket_kwitansi_keterangan	: rpaket_kwitansi_keterangan_create
+					}, 
+					success: function(response){             
+						//var result=eval(response.responseText);
+						var result=response.responseText;
+						if(result=='0' || result=='1'){
+							Ext.MessageBox.show({
+							   title: 'Warning',
+							   msg: 'Data retur penjualan paket tidak bisa disimpan',
+							   buttons: Ext.MessageBox.OK,
+							   animEl: 'save',
+							   icon: Ext.MessageBox.WARNING
+							});
+						}else{
+							retur_jpaket_cetak(result);
+							detail_retur_paket_tokwitansi_purge();
+							master_retur_jual_paket_DataStore.reload();
+							master_retur_jual_paket_createWindow.hide();
+						}
+						/*switch(result){
+							case 1:
+								detail_retur_paket_tokwitansi_purge();
+								detail_retur_paket_tokwitansi_insert();
+								Ext.MessageBox.alert(rpaket_post2db+' OK','Data retur penjualan paket berhasil disimpan');
+								master_retur_jual_paket_DataStore.reload();
+								master_retur_jual_paket_createWindow.hide();
+								break;
+							default:
+								Ext.MessageBox.show({
+								   title: 'Warning',
+								   msg: 'Data retur penjualan paket tidak bisa disimpan',
+								   buttons: Ext.MessageBox.OK,
+								   animEl: 'save',
+								   icon: Ext.MessageBox.WARNING
+								});
+								break;
+						}        */
+					},
+					failure: function(response){
+						var result=response.responseText;
 						Ext.MessageBox.show({
-						   title: 'Warning',
-						   msg: 'Data retur penjualan paket tidak bisa disimpan',
-						   buttons: Ext.MessageBox.OK,
-						   animEl: 'save',
-						   icon: Ext.MessageBox.WARNING
-						});
-						break;
-				}        */
-			},
-			failure: function(response){
-				var result=response.responseText;
+							   title: 'Error',
+							   msg: 'Could not connect to the database. retry later.',
+							   buttons: Ext.MessageBox.OK,
+							   animEl: 'database',
+							   icon: Ext.MessageBox.ERROR
+						});	
+					}                      
+				});
+			}else{
 				Ext.MessageBox.show({
-					   title: 'Error',
-					   msg: 'Could not connect to the database. retry later.',
-					   buttons: Ext.MessageBox.OK,
-					   animEl: 'database',
-					   icon: Ext.MessageBox.ERROR
-				});	
-			}                      
-		});
+					title: 'Warning',
+					msg: 'Nilai Kuitansi yang di-Retur harus lebih dari Rp10.000,-.',
+					buttons: Ext.MessageBox.OK,
+					animEl: 'save',
+					icon: Ext.MessageBox.WARNING
+				});
+			}
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
@@ -305,7 +313,7 @@ Ext.onReady(function(){
   
   	/* Function for get PK field */
 	function get_pk_id(){
-		if(post2db=='UPDATE')
+		if(rpaket_post2db=='UPDATE')
 			return master_retur_jual_paketListEditorGrid.getSelectionModel().getSelected().get('rpaket_id');
 		else 
 			return 0;
@@ -326,8 +334,12 @@ Ext.onReady(function(){
 		rpaket_tanggalField.setValue(null);
 		rpaket_keteranganField.reset();
 		rpaket_keteranganField.setValue(null);
-		rpaket_statusField.reset();
-		rpaket_statusField.setValue('Terbuka');
+		rpaket_stat_dokField.reset();
+		rpaket_stat_dokField.setValue('Terbuka');
+		rpaket_kwitansi_nilaiField.reset();
+		rpaket_kwitansi_nilaiField.setValue(null);
+		rpaket_jpaket_total_bayarField.reset();
+		rpaket_jpaket_total_bayarField.setValue(null);
 	}
  	/* End of Function */
   
@@ -340,9 +352,10 @@ Ext.onReady(function(){
 		rpaket_custidField.setValue(master_retur_jual_paketListEditorGrid.getSelectionModel().getSelected().get('rpaket_cust_id'));
 		rpaket_tanggalField.setValue(master_retur_jual_paketListEditorGrid.getSelectionModel().getSelected().get('rpaket_tanggal'));
 		rpaket_keteranganField.setValue(master_retur_jual_paketListEditorGrid.getSelectionModel().getSelected().get('rpaket_keterangan'));
-		rpaket_statusField.setValue(master_retur_jual_paketListEditorGrid.getSelectionModel().getSelected().get('rpaket_status'));
+		rpaket_stat_dokField.setValue(master_retur_jual_paketListEditorGrid.getSelectionModel().getSelected().get('rpaket_stat_dok'));
 		rpaket_kwitansi_nilaiField.setValue(master_retur_jual_paketListEditorGrid.getSelectionModel().getSelected().get('kwitansi_nilai'));
 		rpaket_kwitansi_keteranganField.setValue(master_retur_jual_paketListEditorGrid.getSelectionModel().getSelected().get('kwitansi_keterangan'));
+		rpaket_jpaket_total_bayarField.setValue(master_retur_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_bayar'));
 	}
 	/* End setValue to EDIT*/
   
@@ -358,7 +371,7 @@ Ext.onReady(function(){
 			detail_retur_paket_tokwitansiDataStore.setBaseParam('master_id',0);
 			detail_retur_paket_tokwitansiDataStore.load();
 			master_retur_jual_paket_reset_form();
-			post2db='CREATE';
+			rpaket_post2db='CREATE';
 			msg='created';
 			master_retur_jual_paket_createWindow.show();
 		} else {
@@ -391,7 +404,7 @@ Ext.onReady(function(){
 		/* only one record is selected here */
 		if(master_retur_jual_paketListEditorGrid.selModel.getCount() == 1) {
 			master_retur_jual_paket_set_form();
-			post2db='UPDATE';
+			rpaket_post2db='UPDATE';
 			detail_retur_paket_tokwitansiDataStore.load({params: {master_id:master_retur_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_id'), start:0, limit:pageS}});
 			msg='updated';
 			master_retur_jual_paket_createWindow.show();
@@ -475,7 +488,7 @@ Ext.onReady(function(){
 			{name: 'rpaket_cust_id', type: 'int', mapping: 'cust_id'}, 
 			{name: 'rpaket_tanggal', type: 'date', dateFormat: 'Y-m-d', mapping: 'rpaket_tanggal'}, 
 			{name: 'rpaket_keterangan', type: 'string', mapping: 'rpaket_keterangan'}, 
-			{name: 'rpaket_status', type: 'string', mapping: 'rpaket_status'}, 
+			{name: 'rpaket_stat_dok', type: 'string', mapping: 'rpaket_stat_dok'}, 
 			{name: 'rpaket_creator', type: 'string', mapping: 'rpaket_creator'}, 
 			{name: 'rpaket_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'rpaket_date_create'}, 
 			{name: 'rpaket_update', type: 'string', mapping: 'rpaket_update'}, 
@@ -483,14 +496,15 @@ Ext.onReady(function(){
 			{name: 'rpaket_revised', type: 'int', mapping: 'rpaket_revised'},
 			{name: 'kwitansi_id', type: 'int', mapping: 'kwitansi_id'},
 			{name: 'kwitansi_nilai', type: 'float', mapping: 'kwitansi_nilai'},
-			{name: 'kwitansi_keterangan', type: 'string', mapping: 'kwitansi_keterangan'} 
+			{name: 'kwitansi_keterangan', type: 'string', mapping: 'kwitansi_keterangan'},
+			{name: 'jpaket_bayar', type: 'float', mapping: 'jpaket_bayar'}
 		]),
 		sortInfo:{field: 'rpaket_id', direction: "DESC"}
 	});
 	/* End of Function */
 	
-	cbo_retur_paket_DataSore = new Ext.data.Store({
-		id: 'cbo_retur_paket_DataSore',
+	cbo_retur_paket_DataStore = new Ext.data.Store({
+		id: 'cbo_retur_paket_DataStore',
 		proxy: new Ext.data.HttpProxy({
 			url: 'index.php?c=c_master_retur_jual_paket&m=get_jual_paket_list', 
 			method: 'POST'
@@ -678,7 +692,7 @@ Ext.onReady(function(){
 		
 		{
 			header: '<div align="center">' + 'Stat Dok' + '</div>',
-			dataIndex: 'rpaket_status',
+			dataIndex: 'rpaket_stat_dok',
 			width: 60
 		}, 
 		
@@ -881,7 +895,7 @@ Ext.onReady(function(){
 	rpaket_nobuktijualField= new Ext.form.ComboBox({
 		id: 'rpaket_nobuktijualField',
 		fieldLabel: 'No Faktur Jual',
-		store: cbo_retur_paket_DataSore,
+		store: cbo_retur_paket_DataStore,
 		mode: 'remote',
 		displayField:'retur_paket_display',
 		valueField: 'retur_paket_value',
@@ -922,24 +936,24 @@ Ext.onReady(function(){
 	});
 	
 	
-	/* Identify rpaket_status Field */
-	rpaket_statusField= new Ext.form.ComboBox({
-		id: 'rpaket_statusField',
+	/* Identify rpaket_stat_dok Field */
+	rpaket_stat_dokField= new Ext.form.ComboBox({
+		id: 'rpaket_stat_dokField',
 		fieldLabel: 'Status Dok',
 		store:new Ext.data.SimpleStore({
-			fields:['rpaket_status_value', 'rpaket_status_display'],
+			fields:['rpaket_stat_dok_value', 'rpaket_stat_dok_display'],
 			data:[['Terbuka','Terbuka'],['Tertutup','Tertutup'],['Batal', 'Batal']]
 		}),
 		mode: 'local',
-		displayField: 'rpaket_status_display',
-		valueField: 'rpaket_status_value',
+		displayField: 'rpaket_stat_dok_display',
+		valueField: 'rpaket_stat_dok_value',
 		anchor: '80%',
 		allowBlank: false,
 		triggerAction: 'all'	
 	});
 	
 	
-	rpaket_kwitansi_nilaiField= new Ext.ux.form.CFTextField({
+	/*rpaket_kwitansi_nilaiField= new Ext.ux.form.CFTextField({
 		id: 'rpaket_kwitansi_nilaiField',
 		fieldLabel: 'Nilai Kuitansi(Rp)',
 		valueRenderer: 'numberToCurrency',
@@ -949,6 +963,17 @@ Ext.onReady(function(){
 		readOnly: true,
 		anchor: '95%'//,
 		//maskRe: /([0-9]+)$/
+	});*/
+	rpaket_kwitansi_nilaiField= new Ext.form.NumberField({
+		id: 'rpaket_kwitansi_nilaiField',
+		fieldLabel: 'Nilai Kuitansi(Rp)',
+		//valueRenderer: 'numberToCurrency',
+		//allowNegatife : false,
+		//blankText: '0',
+		//allowDecimals: true,
+		readOnly: true,
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
 	});
 	rpaket_kwitansi_keteranganField= new Ext.form.TextArea({
 		id: 'rpaket_kwitansi_keteranganField',
@@ -957,23 +982,40 @@ Ext.onReady(function(){
 		anchor: '95%'
 	});
 	
-	rpaket_jpaket_total_bayarField= new Ext.ux.form.CFTextField({
+	/*rpaket_jpaket_total_bayarField= new Ext.ux.form.CFTextField({
 		id: 'rpaket_jpaket_total_bayarField',
 		fieldLabel: 'No.Faktur Jual - Total Bayar',
 		valueRenderer: 'numberToCurrency',
 		readOnly: true,
 		anchor: '95%'
+	});*/
+	rpaket_jpaket_total_bayarField= new Ext.form.NumberField({
+		id: 'rpaket_jpaket_total_bayarField',
+		fieldLabel: 'No.Faktur Jual - Total Bayar',
+		//valueRenderer: 'numberToCurrency',
+		readOnly: true,
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
 	});
 	
 	rpaket_nobuktijualField.on('select', function(){
-		var j=cbo_retur_paket_DataSore.find('retur_paket_value',rpaket_nobuktijualField.getValue());
-		if(cbo_retur_paket_DataSore.getCount()){
-			rpaket_custField.setValue(cbo_retur_paket_DataSore.getAt(j).data.retur_paket_nama_customer);
-			rpaket_custidField.setValue(cbo_retur_paket_DataSore.getAt(j).data.retur_paket_customer_id);
-			rpaket_jpaket_total_bayarField.setValue(cbo_retur_paket_DataSore.getAt(j).data.jpaket_total_bayar);
-			rpaket_kwitansi_nilaiField.setValue(cbo_retur_paket_DataSore.getAt(j).data.jpaket_total_retur);
+		var j=cbo_retur_paket_DataStore.find('retur_paket_value',rpaket_nobuktijualField.getValue());
+		if(cbo_retur_paket_DataStore.getCount()){
+			rpaket_custField.setValue(cbo_retur_paket_DataStore.getAt(j).data.retur_paket_nama_customer);
+			rpaket_custidField.setValue(cbo_retur_paket_DataStore.getAt(j).data.retur_paket_customer_id);
+			rpaket_jpaket_total_bayarField.setValue(cbo_retur_paket_DataStore.getAt(j).data.jpaket_total_bayar);
+			rpaket_kwitansi_nilaiField.setValue(cbo_retur_paket_DataStore.getAt(j).data.jpaket_total_retur);
 			//cbo_drpaket_rawatDataStore.load({params: {query: rpaket_nobuktijualField.getValue()}});
-			detail_retur_paket_tokwitansiDataStore.load({params: {master_id:rpaket_nobuktijualField.getValue(), start:0, limit:pageS}});
+			detail_retur_paket_tokwitansiDataStore.load({
+				params: {master_id:rpaket_nobuktijualField.getValue(), start:0, limit:pageS},
+				callback: function(opts, success, response){
+					if(success){
+						if(detail_retur_paket_tokwitansiDataStore.getCount()==0){
+							rpaket_kwitansi_nilaiField.setValue(cbo_retur_paket_DataStore.getAt(j).data.jpaket_total_bayar);
+						}
+					}
+				}
+			});
 		}
 	});
 	
@@ -994,7 +1036,7 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [rpaket_tanggalField, rpaket_keteranganField, rpaket_statusField, rpaket_idField] 
+				items: [rpaket_tanggalField, rpaket_keteranganField, rpaket_stat_dokField, rpaket_idField] 
 			}
 			]
 	
@@ -1120,7 +1162,7 @@ Ext.onReady(function(){
 	detail_retur_paket_tokwitansiListEditorGrid =  new Ext.grid.GridPanel({
 		id: 'detail_retur_paket_tokwitansiListEditorGrid',
 		el: 'fp_detail_retur_paket_tokwitansi',
-		title: 'Detail detail_retur_paket_rawat',
+		title: 'Detail Pemakaian Perawatan dalam Paket',
 		height: 250,
 		width: 690,
 		autoScroll: true,
@@ -1129,9 +1171,9 @@ Ext.onReady(function(){
 		enableColLock:false,
 		region: 'center',
         margins: '0 5 5 5',
-		//plugins: [editor_detail_retur_paket_tokwitansi],
+		plugins: [editor_detail_retur_paket_tokwitansi],
 		frame: true,
-		//clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
+		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true},
 		bbar: new Ext.PagingToolbar({
@@ -1160,11 +1202,10 @@ Ext.onReady(function(){
 	//function of detail add
 	function detail_retur_paket_tokwitansi_add(){
 		var edit_detail_retur_paket_tokwitansi= new detail_retur_paket_tokwitansiListEditorGrid.store.recordType({
-			drpaket_id	:'',		
-			drpaket_master	:'',		
-			drpaket_rawat	:'',		
-			drpaket_jumlah	:'',		
-			drpaket_harga	:''		
+			rawat_nama	:'',		
+			total_ambil_item	:'',		
+			rawat_harga	:'',
+			drpaket_subtotal	:''
 		});
 		editor_detail_retur_paket_tokwitansi.stopEditing();
 		detail_retur_paket_tokwitansiDataStore.insert(0, edit_detail_retur_paket_tokwitansi);
@@ -1204,7 +1245,14 @@ Ext.onReady(function(){
 	
 	//function for insert detail
 	function detail_retur_paket_tokwitansi_insert(){
-		for(i=0;i<detail_retur_paket_tokwitansiDataStore.getCount();i++){
+		Ext.Ajax.request({
+			waitMsg: 'Please wait...',
+			url: 'index.php?c=c_master_retur_jual_paket&m=detail_retur_paket_tokwitansi_insert',
+			params:{
+				drpaket_master	: eval(rpaket_idField.getValue())
+			}
+		});
+		/*for(i=0;i<detail_retur_paket_tokwitansiDataStore.getCount();i++){
 			detail_retur_paket_rawat_record=detail_retur_paket_tokwitansiDataStore.getAt(i);
 			Ext.Ajax.request({
 				waitMsg: 'Please wait...',
@@ -1218,7 +1266,7 @@ Ext.onReady(function(){
 				
 				}
 			});
-		}
+		}*/
 	}
 	//eof
 	
@@ -1227,7 +1275,12 @@ Ext.onReady(function(){
 		Ext.Ajax.request({
 			waitMsg: 'Please wait...',
 			url: 'index.php?c=c_master_retur_jual_paket&m=detail_retur_paket_tokwitansi_purge',
-			params:{ master_id: eval(rpaket_idField.getValue()) }
+			params:{ master_id: eval(rpaket_idField.getValue()) },
+			callback: function(opts, success, response){
+				if(success){
+					detail_retur_paket_tokwitansi_insert();
+				}
+			}
 		});
 	}
 	//eof
@@ -1314,7 +1367,7 @@ Ext.onReady(function(){
 	/* Function for retrieve create Window Form */
 	master_retur_jual_paket_createWindow= new Ext.Window({
 		id: 'master_retur_jual_paket_createWindow',
-		title: post2db+'Retur Penjualan Paket',
+		title: rpaket_post2db+'Retur Penjualan Paket',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,
@@ -1339,7 +1392,7 @@ Ext.onReady(function(){
 		var rpaket_tanggal_search_date="";
 		var rpaket_tanggal_akhir_search_date="";
 		var rpaket_keterangan_search=null;
-		var rpaket_status_search=null;
+		var rpaket_stat_dok_search=null;
 
 		if(rpaket_idSearchField.getValue()!==null){rpaket_id_search=rpaket_idSearchField.getValue();}
 		if(rpaket_nobuktiSearchField.getValue()!==null){rpaket_nobukti_search=rpaket_nobuktiSearchField.getValue();}
@@ -1348,7 +1401,7 @@ Ext.onReady(function(){
 		if(rpaket_tanggalSearchField.getValue()!==""){rpaket_tanggal_search_date=rpaket_tanggalSearchField.getValue().format('Y-m-d');}
 		if(rpaket_tanggal_akhirSearchField.getValue()!==""){rpaket_tanggal_akhir_search_date=rpaket_tanggal_akhirSearchField.getValue().format('Y-m-d');}
 		if(rpaket_keteranganSearchField.getValue()!==null){rpaket_keterangan_search=rpaket_keteranganSearchField.getValue();}
-		if(rpaket_statusSearchField.getValue()!==null){rpaket_status_search=rpaket_statusSearchField.getValue();}
+		if(rpaket_stat_dokSearchField.getValue()!==null){rpaket_stat_dok_search=rpaket_stat_dokSearchField.getValue();}
 		// change the store parameters
 		master_retur_jual_paket_DataStore.baseParams = {
 			task: 'SEARCH',
@@ -1360,7 +1413,7 @@ Ext.onReady(function(){
 			rpaket_tanggal	:	rpaket_tanggal_search_date, 
 			rpaket_tanggal_akhir : rpaket_tanggal_akhir_search_date,
 			rpaket_keterangan	:	rpaket_keterangan_search,
-			rpaket_status		:	rpaket_status_search
+			rpaket_stat_dok		:	rpaket_stat_dok_search
 		};
 		// Cause the datastore to do another query : 
 		master_retur_jual_paket_DataStore.reload({params: {start: 0, limit: pageS}});
@@ -1384,7 +1437,7 @@ Ext.onReady(function(){
 		rpaket_tanggal_akhirSearchField.reset();
 		rpaket_tanggal_akhirSearchField.setValue(today);
 		rpaket_keteranganSearchField.reset();
-		rpaket_statusSearchField.reset();
+		rpaket_stat_dokSearchField.reset();
 	}
 	
 	
@@ -1472,15 +1525,15 @@ Ext.onReady(function(){
 	});
 	
 	
-	rpaket_statusSearchField= new Ext.form.ComboBox({
-		id: 'rpaket_statusSearchField',
+	rpaket_stat_dokSearchField= new Ext.form.ComboBox({
+		id: 'rpaket_stat_dokSearchField',
 		fieldLabel: 'Status',
 		store:new Ext.data.SimpleStore({
-			fields:['value', 'rpaket_status'],
+			fields:['value', 'rpaket_stat_dok'],
 			data:[['Terbuka','Terbuka'],['Tertutup','Tertutup'],['Batal','Batal']]
 		}),
 		mode: 'local',
-		displayField: 'rpaket_status',
+		displayField: 'rpaket_stat_dok',
 		valueField: 'value',
 		anchor: '80%',
 		triggerAction: 'all'	 
@@ -1502,7 +1555,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [rpaket_nobuktiSearchField, rpaket_nobuktijualSearchField, rpaket_custSearchField, rpaket_tanggalSearchFieldSet, rpaket_keteranganSearchField, rpaket_statusSearchField] 
+				items: [rpaket_nobuktiSearchField, rpaket_nobuktijualSearchField, rpaket_custSearchField, rpaket_tanggalSearchFieldSet, rpaket_keteranganSearchField, rpaket_stat_dokSearchField] 
 			}
 			]
 		}]

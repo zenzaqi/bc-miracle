@@ -1951,10 +1951,12 @@ class M_master_jual_produk extends Model{
 		}
 		
 		function master_jual_produk_batal($jproduk_id){
+			$date_now = date('Y-m-d');
 			$dtu_jproduk=array(
 			"jproduk_stat_dok"=>'Batal'
 			);
 			$this->db->where('jproduk_id', $jproduk_id);
+			$this->db->where('jproduk_tanggal', $date_now);
 			$this->db->update('master_jual_produk', $dtu_jproduk);
 			if($this->db->affected_rows()){
 				//* udpating db.customer.cust_point ==> proses mengurangi jumlah poin (dikurangi dengan db.master_jual_produk.jproduk_point yg sudah dimasukkan ketika cetak faktur), karena dilakukan pembatalan /
