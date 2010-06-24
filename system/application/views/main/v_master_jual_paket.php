@@ -2019,6 +2019,7 @@ Ext.onReady(function(){
 		id: 'jpaket_nobuktiField',
 		fieldLabel: 'No Faktur',
 		readOnly:true,	//sementara, utk input manual
+		emptyText : '(Auto)',
 		maxLength: 30,
 //		anchor: '95%'
 	});

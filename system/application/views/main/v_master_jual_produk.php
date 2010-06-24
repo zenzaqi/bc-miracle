@@ -2260,6 +2260,7 @@ Ext.onReady(function(){
 	jproduk_nobuktiField= new Ext.form.TextField({
 		id: 'jproduk_nobuktiField',
 		fieldLabel: 'No Faktur',
+		emptyText : '(Auto)',
 		readOnly:true,
 		maxLength: 30,
 		//anchor: '95%'
