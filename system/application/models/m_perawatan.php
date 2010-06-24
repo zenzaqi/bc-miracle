@@ -544,9 +544,9 @@ class M_perawatan extends Model{
 		//function for advanced search record
 		function perawatan_search($rawat_id ,$rawat_kode ,$rawat_kodelama ,$rawat_nama ,$rawat_group ,$rawat_kategori ,$rawat_jenis ,$rawat_keterangan ,$rawat_du ,$rawat_dm ,$rawat_point , $rawat_kredit, $rawat_jumlah_tindakan, $rawat_harga ,$rawat_gudang ,$rawat_aktif ,$start,$end){
 			//full query
-			if($rawat_aktif==""){
+			/*if($rawat_aktif==""){
 				$rawat_aktif="Aktif";
-			}
+			}*/
 			$query="SELECT * FROM vu_perawatan";
 			
 			if($rawat_id!=''){
