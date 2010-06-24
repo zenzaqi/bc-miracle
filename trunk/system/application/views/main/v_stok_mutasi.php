@@ -169,6 +169,9 @@ Ext.onReady(function(){
         '</div></tpl>'
     );
 	
+	var stok_mutasi_gudangField=new Ext.form.TextField({});
+	var stok_mutasi_periodeField=new Ext.form.TextField({ width: 300 });
+	
 	stok_mutasi_ColumnModel = new Ext.grid.ColumnModel(
 		[{
 			header: '#',
@@ -228,7 +231,7 @@ Ext.onReady(function(){
 			width: 150,
 			sortable: true,
 			readOnly: true
-		},{
+		}/*,{
 			header: '<div align="center">Koreksi</div>',
 			dataIndex: 'jumlah_koreksi',
 			align: 'right',
@@ -236,7 +239,8 @@ Ext.onReady(function(){
 			width: 150,
 			sortable: true,
 			readOnly: true
-		},
+		},*/
+		,
 		{
 			header: '<div align="center">Stok Akhir</div>',
 			dataIndex: 'jumlah_stok',
@@ -278,7 +282,14 @@ Ext.onReady(function(){
 			pageSize: pageS,
 			store: stok_mutasi_DataStore,
 			displayInfo: true
-		}),tbar: [{
+		}),tbar: [
+		'<b>Gudang  : </b>',
+		stok_mutasi_gudangField,
+		'-',
+		'<b>Periode : </b>',
+		stok_mutasi_periodeField,
+		'-',
+		{
 			text: 'Search',
 			tooltip: 'Advanced Search',
 			iconCls:'icon-search',
@@ -315,6 +326,24 @@ Ext.onReady(function(){
 		var opsi_produk_search='all';
 		var gudang_search=null;
 		
+		
+		mutasi_gudang_DataSore.load({
+		 	callback: function(r,opt,success){
+				if(success==true){
+					//console.log('gudang : ' + stok_mutasi_gudangSearchField.getValue());
+					var j=mutasi_gudang_DataSore.findExact('mutasi_gudang_value',stok_mutasi_gudangSearchField.getValue(),0);
+					//console.log('gudang : ' + j);
+					if(j>-1){
+						var gudang_record=mutasi_gudang_DataSore.getAt(j);
+						stok_mutasi_gudangField.setValue(gudang_record.data.mutasi_gudang_nama);
+						//console.log('gudang : ' + gudang_record.data.gudang_nama);
+					}
+				}
+			}
+		});
+		
+		stok_mutasi_periodeField.setValue(stok_mutasi_tanggal_startSearchField.getValue().format('Y-m-d')+ ' s/d ' + stok_mutasi_tanggal_endSearchField.getValue().format('Y-m-d'));
+						
 		if(stok_mutasi_produk_namaSearchField.getValue()!==null){produk_nama_search=stok_mutasi_produk_namaSearchField.getValue();}
 		if(stok_mutasi_group1SearchField.getValue()!==null){group1_search=stok_mutasi_group1SearchField.getValue();}
 		
