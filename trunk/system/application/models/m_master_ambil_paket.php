@@ -400,19 +400,25 @@ class M_master_ambil_paket extends Model{
 						LEFT OUTER JOIN customer c on c.cust_id = m.apaket_cust
 						LEFT OUTER JOIN paket p on p.paket_id = m.apaket_paket
 						WHERE apaket_sisa_paket >= 0 AND apaket_faktur_tanggal >= '2007-01-01'"; //by hendri*/
-			$query =   "SELECT 
-							dpaket_master, dpaket_paket, 
-							cust_no, cust_nama, 
-							jpaket_tanggal, jpaket_nobukti, 
-							paket_kode, paket_nama, 
-							dpaket_id, dpaket_sisa_paket, dpaket_kadaluarsa 
-						FROM detail_jual_paket 
-						LEFT JOIN master_jual_paket ON(dpaket_master=jpaket_id) 
-						LEFT JOIN customer ON(jpaket_cust=cust_id) 
-						LEFT JOIN paket ON(dpaket_paket=paket_id) 
-						WHERE dpaket_sisa_paket >= 0
-							AND date_format(dpaket_kadaluarsa,'%Y-%m-%d') >= date_format(now(),'%Y-%m-%d')
-							AND jpaket_stat_dok='Tertutup' ";
+			$query = "SELECT dpaket_master
+					,dpaket_paket
+					,cust_id
+					,cust_no
+					,cust_nama
+					,jpaket_tanggal
+					,jpaket_nobukti
+					,paket_kode
+					,paket_nama
+					,dpaket_id
+					,dpaket_sisa_paket
+					,dpaket_kadaluarsa 
+				FROM detail_jual_paket 
+				LEFT JOIN master_jual_paket ON(dpaket_master=jpaket_id) 
+				LEFT JOIN customer ON(jpaket_cust=cust_id) 
+				LEFT JOIN paket ON(dpaket_paket=paket_id) 
+				WHERE dpaket_sisa_paket >= 0
+					AND date_format(dpaket_kadaluarsa,'%Y-%m-%d') >= date_format(now(),'%Y-%m-%d')
+					AND jpaket_stat_dok='Tertutup' ";
 
 			// For simple search
 			if ($filter<>""){

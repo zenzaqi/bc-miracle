@@ -1326,12 +1326,41 @@ Ext.onReady(function(){
 		
 		if(tindakan_medis_detail_DataStore.getCount()>0){
 			for(i=0; i<tindakan_medis_detail_DataStore.getCount();i++){
-				dtrawat_id.push(tindakan_medis_detail_DataStore.getAt(i).data.dtrawat_id);
-				dtrawat_perawatan.push(tindakan_medis_detail_DataStore.getAt(i).data.dtrawat_perawatan);
-				dtrawat_petugas1.push(tindakan_medis_detail_DataStore.getAt(i).data.dtrawat_petugas1);
-				dtrawat_jamreservasi.push(tindakan_medis_detail_DataStore.getAt(i).data.dtrawat_jam);
-				dtrawat_status.push(tindakan_medis_detail_DataStore.getAt(i).data.dtrawat_status);
-				dtrawat_keterangan.push(tindakan_medis_detail_DataStore.getAt(i).data.dtrawat_keterangan);
+				if(tindakan_medis_detail_DataStore.getAt(i).data.dtrawat_id==undefined){
+					dtrawat_id.push('');
+				}else{
+					dtrawat_id.push(tindakan_medis_detail_DataStore.getAt(i).data.dtrawat_id);
+				}
+				
+				if(tindakan_medis_detail_DataStore.getAt(i).data.dtrawat_perawatan==undefined){
+					dtrawat_perawatan.push('');
+				}else{
+					dtrawat_perawatan.push(tindakan_medis_detail_DataStore.getAt(i).data.dtrawat_perawatan);
+				}
+				
+				if(tindakan_medis_detail_DataStore.getAt(i).data.dtrawat_petugas1==undefined){
+					dtrawat_petugas1.push('');
+				}else{
+					dtrawat_petugas1.push(tindakan_medis_detail_DataStore.getAt(i).data.dtrawat_petugas1);
+				}
+				
+				if(tindakan_medis_detail_DataStore.getAt(i).data.dtrawat_jam==undefined){
+					dtrawat_jamreservasi.push('');
+				}else{
+					dtrawat_jamreservasi.push(tindakan_medis_detail_DataStore.getAt(i).data.dtrawat_jam);
+				}
+				
+				if(tindakan_medis_detail_DataStore.getAt(i).data.dtrawat_status==undefined){
+					dtrawat_status.push('');
+				}else{
+					dtrawat_status.push(tindakan_medis_detail_DataStore.getAt(i).data.dtrawat_status);
+				}
+				
+				if(tindakan_medis_detail_DataStore.getAt(i).data.dtrawat_keterangan==undefined){
+					dtrawat_keterangan.push('');
+				}else{
+					dtrawat_keterangan.push(tindakan_medis_detail_DataStore.getAt(i).data.dtrawat_keterangan);
+				}
 				
 				if(i==dcount){
 					var encoded_array_dtrawat_id = Ext.encode(dtrawat_id);
@@ -1669,9 +1698,24 @@ Ext.onReady(function(){
 				}else{
 					dtrawat_id.push(dtindakan_jual_nonmedisDataStore.getAt(i).data.dtrawat_id);
 				}
-				dtrawat_perawatan.push(dtindakan_jual_nonmedisDataStore.getAt(i).data.dtrawat_perawatan);
-				dtrawat_keterangan.push(dtindakan_jual_nonmedisDataStore.getAt(i).data.dtrawat_keterangan);
-				dtrawat_jumlah.push(dtindakan_jual_nonmedisDataStore.getAt(i).data.dtrawat_jumlah);
+				
+				if(dtindakan_jual_nonmedisDataStore.getAt(i).data.dtrawat_perawatan==undefined){
+					dtrawat_perawatan.push('');
+				}else{
+					dtrawat_perawatan.push(dtindakan_jual_nonmedisDataStore.getAt(i).data.dtrawat_perawatan);
+				}
+				
+				if(dtindakan_jual_nonmedisDataStore.getAt(i).data.dtrawat_keterangan==undefined){
+					dtrawat_keterangan.push('');
+				}else{
+					dtrawat_keterangan.push(dtindakan_jual_nonmedisDataStore.getAt(i).data.dtrawat_keterangan);
+				}
+				
+				if(dtindakan_jual_nonmedisDataStore.getAt(i).data.dtrawat_jumlah==undefined){
+					dtrawat_jumlah.push('');
+				}else{
+					dtrawat_jumlah.push(dtindakan_jual_nonmedisDataStore.getAt(i).data.dtrawat_jumlah);
+				}
 				
 				if(i==dcount){
 					var encoded_array_dtrawat_id = Ext.encode(dtrawat_id);

@@ -3697,6 +3697,7 @@ Ext.onReady(function(){
 	var dpaket_kadaluarsaField= new Ext.form.DateField({
 		id: 'dpaket_kadaluarsaField',
 		readOnly: true,
+		disabled: true,
 		format : 'd-m-Y',
 	});
 	
@@ -3977,15 +3978,55 @@ Ext.onReady(function(){
 		
 		if(detail_jual_paket_DataStore.getCount()>0){
 			for(i=0; i<detail_jual_paket_DataStore.getCount();i++){
-				dpaket_id.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_id);
-				dpaket_paket.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_paket);
-				dpaket_karyawan.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_karyawan);
-				dpaket_jumlah.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_jumlah);
+				if(detail_jual_paket_DataStore.getAt(i).data.dpaket_id==undefined){
+					dpaket_id.push('');
+				}else{
+					dpaket_id.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_id);
+				}
+				
+				if(detail_jual_paket_DataStore.getAt(i).data.dpaket_paket==undefined){
+					dpaket_paket.push('');
+				}else{
+					dpaket_paket.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_paket);
+				}
+				
+				if(detail_jual_paket_DataStore.getAt(i).data.dpaket_karyawan==undefined){
+					dpaket_karyawan.push('');
+				}else{
+					dpaket_karyawan.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_karyawan);
+				}
+				
+				if(detail_jual_paket_DataStore.getAt(i).data.dpaket_jumlah==undefined){
+					dpaket_jumlah.push('');
+				}else{
+					dpaket_jumlah.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_jumlah);
+				}
+				
 				dpaket_kadaluarsa.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_kadaluarsa.format('Y-m-d'));
-				dpaket_harga.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_harga);
-				dpaket_diskon.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_diskon);
-				dpaket_diskon_jenis.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_diskon_jenis);
-				dpaket_sales.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_sales);
+				
+				if(detail_jual_paket_DataStore.getAt(i).data.dpaket_harga==undefined){
+					dpaket_harga.push('');
+				}else{
+					dpaket_harga.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_harga);
+				}
+				
+				if(detail_jual_paket_DataStore.getAt(i).data.dpaket_diskon==undefined){
+					dpaket_diskon.push('');
+				}else{
+					dpaket_diskon.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_diskon);
+				}
+				
+				if(detail_jual_paket_DataStore.getAt(i).data.dpaket_diskon_jenis==undefined){
+					dpaket_diskon_jenis.push('');
+				}else{
+					dpaket_diskon_jenis.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_diskon_jenis);
+				}
+				
+				if(detail_jual_paket_DataStore.getAt(i).data.dpaket_sales==undefined){
+					dpaket_sales.push('');
+				}else{
+					dpaket_sales.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_sales);
+				}
 				
 				if(i==dcount){
 					var encoded_array_dpaket_id = Ext.encode(dpaket_id);
