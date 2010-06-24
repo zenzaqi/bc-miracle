@@ -467,7 +467,7 @@ Ext.onReady(function(){
 		}else{
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'Gudang dan Nama produk harus dipilih!',
+				msg: 'Form anda belum lengkap',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'search',
 				icon: Ext.MessageBox.WARNING
@@ -684,7 +684,7 @@ Ext.onReady(function(){
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
 	kartu_stok_searchWindow = new Ext.Window({
-		title: 'Pencarian Stok Mutasi',
+		title: 'Pencarian Kartu Stok',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,

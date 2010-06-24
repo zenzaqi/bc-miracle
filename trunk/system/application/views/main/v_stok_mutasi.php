@@ -484,13 +484,13 @@ Ext.onReady(function(){
 	stok_mutasi_produk_allField=new Ext.form.Radio({
 		name:'opsi_produk',
 		boxLabel: 'Semua',
-		checked: true,
 		width: 100
 	});
 	
 	stok_mutasi_produk_selectField=new Ext.form.Radio({
 		name:'opsi_produk',
 		boxLabel: 'Produk',
+		checked: true,
 		width: 100
 	});
 	
