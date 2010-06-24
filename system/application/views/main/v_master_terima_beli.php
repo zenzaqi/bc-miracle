@@ -1299,7 +1299,7 @@ Ext.onReady(function(){
 			success: function(response){							
 				var result=eval(response.responseText);
 				detail_terima_beli_insert(pkid);
-				detail_terima_bonus_purge(result,opsi);
+				detail_terima_bonus_purge(pkid,opsi);
 			},
 			failure: function(response){
 				var result=response.responseText;
@@ -1710,11 +1710,11 @@ Ext.onReady(function(){
 		items: [master_terima_beli_masterGroup,detail_tab_terima]
 		,
 		buttons: [{
-				text: 'Save and Close',
-				handler: master_terima_beli_create
+				text: 'Save and Print',
+				handler: function() { master_terima_beli_create('print'); }
 			},{
-				text: 'Cetak',
-				handler: master_terima_beli_cetak_faktur
+				text: 'Save',
+				handler: function() { master_terima_beli_create(''); }
 			}
 			,{
 				text: 'Cancel',
@@ -2266,6 +2266,7 @@ Ext.onReady(function(){
 		cbo_satuan_produkDataStore.setBaseParam('task','selected');
 		cbo_satuan_produkDataStore.setBaseParam('selected_id',satuan_selected);
 		cbo_satuan_produkDataStore.load();
+		detail_terima_bonus_total();
 		
 	});
 	

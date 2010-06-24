@@ -315,6 +315,9 @@ Ext.onReady(function(){
 		
 		cbo_invoice_produkDataStore.load();
 		cbo_invoice_satuanDataStore.load();
+		detail_invoice_DataStore.setBaseParam('master_id',-1);
+		detail_invoice_DataStore.load();
+					
 	}
  	/* End of Function */
   
@@ -1082,12 +1085,12 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'dterima_id'
 		},[
-			{name: 'dinvoice_id', type: 'int', mapping: 'dterima_id'},
-			{name: 'dinvoice_produk', type: 'int', mapping: 'dterima_produk'},
-			{name: 'dinvoice_satuan', type: 'int', mapping: 'dterima_satuan'},
-			{name: 'dinvoice_jumlah', type: 'int', mapping: 'dterima_jumlah'},
-			{name: 'dinvoice_harga', type: 'int', mapping: 'dorder_harga'},
-			{name: 'dinvoice_diskon', type: 'int', mapping: 'dorder_diskon'}
+			{name: 'dinvoice_id', type: 'int', mapping:     'master_terima'},
+			{name: 'dinvoice_produk', type: 'int', mapping: 'produk'},
+			{name: 'dinvoice_satuan', type: 'int', mapping: 'satuan'},
+			{name: 'dinvoice_jumlah', type: 'int', mapping: 'jumlah_terima'},
+			{name: 'dinvoice_harga', type: 'int', mapping:  'harga'},
+			{name: 'dinvoice_diskon', type: 'int', mapping: 'diskon'}
 		]),
 		sortInfo:{field: 'dinvoice_id', direction: "ASC"}
 	});
@@ -1347,12 +1350,12 @@ Ext.onReady(function(){
 		frame: true,
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
-		viewConfig: { forceFit:true},
+		viewConfig: { forceFit:true}/*,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: detail_invoice_DataStore,
 			displayInfo: true
-		})
+		})*/
 	});
 	//eof
 	
@@ -1947,9 +1950,7 @@ Ext.onReady(function(){
 	});
 	
 	invoice_noterimaField.on('select', function(){
-		cbo_invoice_produkDataStore.setBaseParam('terima_id',invoice_noterimaField.getValue());
-		cbo_invoice_produkDataStore.setBaseParam('task','terima');
-		cbo_invoice_produkDataStore.load();
+		
 		invoice_orderDataStore.setBaseParam('terima_id',invoice_noterimaField.getValue());
 		invoice_orderDataStore.load({
 			callback:function(opts, response, success){
@@ -1964,27 +1965,39 @@ Ext.onReady(function(){
 		});
 		get_total_tagihan();
 		
-		var j=cbo_invoice_tbeliDataStore.findExact('cbo_invoice_terima_id',invoice_noterimaField.getValue(),0);
+		cbo_invoice_produkDataStore.setBaseParam('terima_id',invoice_noterimaField.getValue());
+		cbo_invoice_produkDataStore.setBaseParam('task','terima');
+		cbo_invoice_produkDataStore.load({
+			callback:function(opts, response, success){
+				if(success==true){
+					var j=cbo_invoice_tbeliDataStore.findExact('cbo_invoice_terima_id',invoice_noterimaField.getValue(),0);
 		
-		if(cbo_invoice_tbeliDataStore.getCount()){
-			invoice_supplierField.setValue(cbo_invoice_tbeliDataStore.getAt(j).data.cbo_invoice_terima_supplier);
-			invoice_supplier_idField.setValue(cbo_invoice_tbeliDataStore.getAt(j).data.cbo_invoice_terima_supplier_id);
-				
-			invoice_dtbeliDataStore.load({
-				params: {master:invoice_noterimaField.getValue()},
-				callback: function(opts, response, success){
-					if(success==true){
-						detail_invoice_DataStore.removeAll();
-						for(i=0;i<invoice_dtbeliDataStore.getTotalCount();i++){
-							var dtbeli_record=invoice_dtbeliDataStore.getAt(i);
-							detail_invoice_DataStore.insert(i,dtbeli_record);	
-						}
-						get_total_invoice();
+					if(cbo_invoice_tbeliDataStore.getCount()){
+						invoice_supplierField.setValue(cbo_invoice_tbeliDataStore.getAt(j).data.cbo_invoice_terima_supplier);
+						invoice_supplier_idField.setValue(cbo_invoice_tbeliDataStore.getAt(j).data.cbo_invoice_terima_supplier_id);
+							
+						invoice_dtbeliDataStore.load({
+							params: {master:invoice_noterimaField.getValue()},
+							callback: function(opts, response, success){
+								if(success==true){
+									detail_invoice_DataStore.removeAll();
+									for(i=0;i<invoice_dtbeliDataStore.getTotalCount();i++){
+										var dtbeli_record=invoice_dtbeliDataStore.getAt(i);
+										detail_invoice_DataStore.insert(i,dtbeli_record);	
+									}
+									get_total_invoice();
+								}
+							}
+						});
+						detail_invoice_DataStore.commitChanges();
 					}
 				}
-			});
-			detail_invoice_DataStore.commitChanges();
-		}
+			}
+										 
+		});
+		
+		
+		
 	});
 	
 });

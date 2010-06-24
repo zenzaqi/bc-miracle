@@ -400,8 +400,8 @@ class M_master_terima_beli extends Model{
 				foreach($query->result() as $result){
 					
 					$sql_terima="SELECT jumlah_terima FROM vu_detail_terima_order 
-									WHERE dorder_master='".$no_order."'
-									AND dterima_produk='".$result->dorder_produk."'  
+									WHERE master_order='".$no_order."'
+									AND produk='".$result->dorder_produk."'  
 									AND jumlah_terima>=".$result->dorder_jumlah;
 					$query_terima=$this->db->query($sql_terima);
 					if($query_terima->num_rows()<1)

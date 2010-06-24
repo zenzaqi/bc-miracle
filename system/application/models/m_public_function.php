@@ -26,7 +26,7 @@ class M_public_function extends Model{
 				FROM vu_detail_terima_order WHERE dorder_master='".$orderid."'
 				GROUP BY dorder_produk";*/
 		$sql="SELECT produk as dorder_produk,satuan as dorder_satuan,sum(jumlah_order) as jumlah_order, sum(jumlah_terima) as jumlah_terima, sum(jumlah_sisa) as jumlah_sisa
-				FROM vu_detail_terima_order WHERE master='".$orderid."'
+				FROM vu_detail_terima_order WHERE master_order='".$orderid."'
 				GROUP BY produk,satuan";
 				
 		$query = $this->db->query($sql);
