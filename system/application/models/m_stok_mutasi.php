@@ -68,6 +68,7 @@ class M_stok_mutasi extends Model{
 			//echo $sql;
 			
 			
+			
 			//$query_first=$this->db->query($sql);
 			$result = $this->db->query($sql);
 			$nbrows = $result->num_rows();

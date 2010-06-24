@@ -18,7 +18,36 @@ class M_vu_stok_all_saldo extends Model{
 			parent::Model();
 		}
 		
-		function get_detail_stok($tanggal_start,$tanggal_end,$produk_id,$query,$start,$end){
+		function get_stok_awal($produk_id,$tanggal_start){
+			$sql_stok_awal="SELECT 	sum(jml_terima_barang*konversi_nilai)
+										+sum(jml_terima_bonus*konversi_nilai)
+										-sum(jml_retur_beli*konversi_nilai)
+										-sum(jml_mutasi_keluar*konversi_nilai)
+										+sum(jml_mutasi_masuk*konversi_nilai)
+										+sum(jml_koreksi_stok*konversi_nilai)
+										-sum(jml_jual_produk*konversi_nilai)
+										-sum(jml_jual_grooming*konversi_nilai)
+										+sum(jml_retur_produk*konversi_nilai)
+										+sum(jml_retur_paket*konversi_nilai)
+										-sum(jml_pakai_cabin*konversi_nilai)
+										as jumlah_awal
+								FROM	vu_stok_new_produk
+								WHERE   date_format(tanggal,'%Y-%m-%d')<'".$tanggal_start."'
+										AND produk_id='".$produk_id."'
+										AND status<>'Batal'
+								GROUP BY produk_id";
+						
+				$q_stokawal=$this->db->query($sql_stok_awal);
+				if($q_stokawal->num_rows())
+				{
+					$ds_stokawal=$q_stokawal->row();
+					return $ds_stokawal->jumlah_awal;
+				}else{
+					return 0;
+				}
+		}
+		
+		function get_detail_stok($opsi_satuan,$tanggal_start,$tanggal_end,$produk_id,$query,$start,$end){
 			$sql="select * from gudang";
 			$result = $this->db->query($sql);
 			$nbrows = $result->num_rows();
@@ -26,13 +55,110 @@ class M_vu_stok_all_saldo extends Model{
 			$limit = $sql." LIMIT ".$start.",".$end;		
 			$result = $this->db->query($limit);  
 			$i=0;
+			
+			if($opsi_satuan=='terkecil')
+				$sql_produk="SELECT * FROM vu_produk_satuan_terkecil WHERE produk_aktif='Aktif'";
+			else
+				$sql_produk="SELECT * FROM vu_produk_satuan_default WHERE produk_aktif='Aktif'";
+					
 			foreach($result->result() as $row){
 				
 				$data[$i]["gudang_id"]=$row->gudang_id;
 				$data[$i]["gudang_nama"]=$row->gudang_nama;
+				$data[$i]["jumlah_masuk"]=0;
+				$data[$i]["jumlah_keluar"]=0;
+				$data[$i]["jumlah_koreksi"]=0;
+				$data[$i]["jumlah_stok"]=0;
+				
+				$result_produk=$this->db->query($sql_produk);
+				if($result_produk->num_rows()){
+					$rowproduk=$result_produk->row();
+					$data[$i]["produk_id"]=$rowproduk->produk_id;
+					$data[$i]["produk_kode"]=$rowproduk->produk_kode;
+					$data[$i]["produk_nama"]=$rowproduk->produk_nama;
+					$data[$i]["satuan_id"]=$rowproduk->satuan_id;
+					$data[$i]["satuan_kode"]=$rowproduk->satuan_kode;
+					$data[$i]["satuan_nama"]=$rowproduk->satuan_nama;	
+					if($opsi_satuan=='terkecil')
+						$data[$i]["konversi_nilai"]=1;
+					else
+						$data[$i]["konversi_nilai"]=1/$rowproduk->konversi_nilai;
 					
+					
+					
+					$sql_stok_awal="SELECT 	sum(jml_terima_barang*konversi_nilai)
+											+sum(jml_terima_bonus*konversi_nilai)
+											-sum(jml_retur_beli*konversi_nilai)
+											-sum(jml_mutasi_keluar*konversi_nilai)
+											+sum(jml_mutasi_masuk*konversi_nilai)
+											+sum(jml_koreksi_stok*konversi_nilai)
+											-sum(jml_jual_produk*konversi_nilai)
+											-sum(jml_jual_grooming*konversi_nilai)
+											+sum(jml_retur_produk*konversi_nilai)
+											+sum(jml_retur_paket*konversi_nilai)
+											-sum(jml_pakai_cabin*konversi_nilai)
+											as jumlah_awal
+									FROM	vu_stok_new_produk
+									WHERE   date_format(tanggal,'%Y-%m-%d')<'".$tanggal_start."'
+											AND produk_id='".$rowproduk->produk_id."'
+											AND gudang='".$row->gudang_id."'
+											AND status<>'Batal'
+									GROUP BY produk_id";
+								
+					$q_stokawal=$this->db->query($sql_stok_awal);
+					if($q_stokawal->num_rows())
+					{
+						$ds_stokawal=$q_stokawal->row();
+						$data[$i]["jumlah_awal"]=round(($ds_stokawal->jumlah_awal==NULL?0:$ds_stokawal->jumlah_awal)*$data[$i]["konversi_nilai"],3);
+					}else{
+						$data[$i]["jumlah_awal"]=0;
+					}
+						
+					//stok mutasi
+					$sql_stok_mutasi="SELECT 	ifnull(sum(jml_terima_barang*konversi_nilai)
+										+sum(jml_terima_bonus*konversi_nilai)
+										+sum(jml_mutasi_masuk*konversi_nilai)
+										+sum(jml_retur_produk*konversi_nilai)
+										+sum(jml_retur_paket*konversi_nilai),0) as jumlah_masuk,
+										ifnull(sum(jml_koreksi_stok*konversi_nilai),0) as jumlah_koreksi,
+										ifnull(sum(jml_retur_beli*konversi_nilai)
+										+sum(jml_mutasi_keluar*konversi_nilai)
+										+sum(jml_jual_produk*konversi_nilai)
+										+sum(jml_jual_grooming*konversi_nilai)
+										+sum(jml_pakai_cabin*konversi_nilai),0) as jumlah_keluar
+								FROM	vu_stok_new_produk
+								WHERE   date_format(tanggal,'%Y-%m-%d')>='".$tanggal_start."'
+										AND date_format(tanggal,'%Y-%m-%d')<='".$tanggal_end."'
+										AND produk_id='".$rowproduk->produk_id."'
+										AND gudang='".$row->gudang_id."'
+										AND status<>'Batal'
+								GROUP BY produk_id";
+					//echo $sql_stok_mutasi;
+					
+					$rs_mutasi=$this->db->query($sql_stok_mutasi);
+					if($rs_mutasi->num_rows())
+					{
+						$ds_mutasi=$rs_mutasi->row();
+						$data[$i]["jumlah_masuk"]==round($ds_mutasi->jumlah_masuk*$data[$i]["konversi_nilai"],3);;
+						$data[$i]["jumlah_keluar"]=round($ds_mutasi->jumlah_keluar*$data[$i]["konversi_nilai"],3);;
+						$data[$i]["jumlah_koreksi"]=round($ds_mutasi->jumlah_koreksi*$data[$i]["konversi_nilai"],3);
+						$data[$i]["jumlah_stok"]=round(($data[$i]["jumlah_awal"]+$data[$i]["jumlah_masuk"]+$data[$i]["jumlah_koreksi"]-$data[$i]["jumlah_keluar"]),3);
+					}else{
+						$data[$i]["jumlah_masuk"]=0;
+						$data[$i]["jumlah_keluar"]=0;
+						$data[$i]["jumlah_koreksi"]=0;
+						$data[$i]["jumlah_stok"]=round(($data[$i]["jumlah_awal"]+$data[$i]["jumlah_masuk"]+$data[$i]["jumlah_koreksi"]-$data[$i]["jumlah_keluar"]),3);
+					}
+
+				}
+			
+				$i++;
+			}
+				
+				//stok mutasi
+				
 				//untuk gudang besar
-				if($row->gudang_id==1)
+				/*if($row->gudang_id==1)
 				{
 					
 					//saldo awal
@@ -197,9 +323,9 @@ class M_vu_stok_all_saldo extends Model{
 						$data[$i]["jumlah_keluar"]=$data[$i]["jumlah_keluar"]+$ds_cabin->jumlah_cabin;
 					}
 					
-				}
-				$i++;
-			}
+				}*/
+			/*	$i++;
+			}*/
 			
 			if($nbrows>0){
 				
@@ -247,6 +373,8 @@ class M_vu_stok_all_saldo extends Model{
 				
 				$data[$i]["produk_id"]=$rowproduk->produk_id;
 				$data[$i]["produk_kode"]=$rowproduk->produk_kode;
+				$data[$i]["tanggal_start"]=$tanggal_start;
+				$data[$i]["tanggal_end"]=$tanggal_end;
 				$data[$i]["produk_nama"]=$rowproduk->produk_nama;
 				$data[$i]["satuan_id"]=$rowproduk->satuan_id;
 				$data[$i]["satuan_kode"]=$rowproduk->satuan_kode;
@@ -256,7 +384,53 @@ class M_vu_stok_all_saldo extends Model{
 				else
 					$data[$i]["konversi_nilai"]=1/$rowproduk->konversi_nilai;
 				
-				//stok awal
+				$sql_stok="SELECT   sum(jml_terima_barang*konversi_nilai)+ 
+									sum(jml_terima_bonus*konversi_nilai) as jumlah_terima,
+									sum(jml_mutasi_masuk*konversi_nilai) as jumlah_masuk,
+									sum(jml_retur_produk*konversi_nilai) as jumlah_retur_produk,
+									sum(jml_retur_paket*konversi_nilai) as jumlah_retur_paket,
+									sum(jml_koreksi_stok*konversi_nilai) as jumlah_koreksi,
+									sum(jml_retur_beli*konversi_nilai) as jumlah_retur_beli,
+									sum(jml_mutasi_keluar*konversi_nilai) as jumlah_keluar,
+									sum(jml_jual_produk*konversi_nilai)+sum(jml_jual_grooming*konversi_nilai) as jumlah_jual,
+									sum(jml_pakai_cabin*konversi_nilai) as jumlah_pakai_cabin
+							FROM	vu_stok_new_produk
+							WHERE   date_format(tanggal,'%Y-%m-%d')>='".$tanggal_start."'
+									AND date_format(tanggal,'%Y-%m-%d')<='".$tanggal_end."'
+									AND produk_id='".$rowproduk->produk_id."' 
+									AND status<>'Batal'
+							GROUP BY produk_id";
+				$rsdata=$this->db->query($sql_stok);
+				if($rsdata->num_rows()){
+					$row=$rsdata->row();
+					$data[$i]["stok_awal"]=$this->get_stok_awal($rowproduk->produk_id,$tanggal_start)*$data[$i]["konversi_nilai"];
+					$data[$i]["jumlah_terima"]=$row->jumlah_terima*$data[$i]["konversi_nilai"];
+					$data[$i]["jumlah_masuk"]=$row->jumlah_masuk*$data[$i]["konversi_nilai"];
+					$data[$i]["jumlah_keluar"]=$row->jumlah_keluar*$data[$i]["konversi_nilai"];
+					$data[$i]["jumlah_retur_beli"]=$row->jumlah_retur_beli*$data[$i]["konversi_nilai"];
+					$data[$i]["jumlah_jual"]=$row->jumlah_jual*$data[$i]["konversi_nilai"];
+					$data[$i]["jumlah_retur_produk"]=$row->jumlah_retur_produk*$data[$i]["konversi_nilai"];
+					$data[$i]["jumlah_retur_paket"]=$row->jumlah_retur_paket*$data[$i]["konversi_nilai"];
+					$data[$i]["jumlah_koreksi"]=$row->jumlah_koreksi*$data[$i]["konversi_nilai"];
+					$data[$i]["jumlah_pakai_cabin"]=$row->jumlah_pakai_cabin*$data[$i]["konversi_nilai"];
+					$data[$i]["stok_saldo"]=round($data[$i]["stok_awal"]+$data[$i]["jumlah_terima"]+$data[$i]["jumlah_masuk"]-$data[$i]["jumlah_keluar"]-$data[$i]["jumlah_retur_beli"]-$data[$i]["jumlah_jual"]+$data[$i]["jumlah_retur_produk"]+$data[$i]["jumlah_retur_paket"]+$data[$i]["jumlah_koreksi"]-$data[$i]["jumlah_pakai_cabin"],3);	
+				}else{
+					$data[$i]["stok_awal"]=$this->get_stok_awal($rowproduk->produk_id,$tanggal_start)*$data[$i]["konversi_nilai"];
+					$data[$i]["jumlah_terima"]=0;
+					$data[$i]["jumlah_masuk"]=0;
+					$data[$i]["jumlah_keluar"]=0;
+					$data[$i]["jumlah_retur_beli"]=0;
+					$data[$i]["jumlah_jual"]=0;
+					$data[$i]["jumlah_retur_produk"]=0;
+					$data[$i]["jumlah_retur_paket"]=0;
+					$data[$i]["jumlah_koreksi"]=0;
+					$data[$i]["jumlah_pakai_cabin"]=0;
+					$data[$i]["stok_saldo"]=round($data[$i]["stok_awal"]+$data[$i]["jumlah_terima"]+$data[$i]["jumlah_masuk"]-$data[$i]["jumlah_keluar"]-$data[$i]["jumlah_retur_beli"]-$data[$i]["jumlah_jual"]+$data[$i]["jumlah_retur_produk"]+$data[$i]["jumlah_retur_paket"]+$data[$i]["jumlah_koreksi"]-$data[$i]["jumlah_pakai_cabin"],3);
+				}
+				$i++;
+		
+				
+				/*//stok awal
 				$sql_stokawal = "SELECT
 					sum(`A`.`jumlah_terima`) as jumlah_terima,
 					sum(`A`.`jumlah_retur_beli`) as jumlah_retur_beli,
@@ -333,8 +507,8 @@ class M_vu_stok_all_saldo extends Model{
 					$data[$i]["jumlah_cabin"]=0;
 					$data[$i]["jumlah_koreksi"]=0;
 					$data[$i]["stok_saldo"]=$data[$i]["stok_awal"]*$data[$i]["konversi_nilai"];
-				}
-				$i++;
+				}*/
+
 			}
 			
 			if($nbrows>0){

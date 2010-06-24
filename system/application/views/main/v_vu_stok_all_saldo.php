@@ -93,11 +93,17 @@ Ext.onReady(function(){
 		stok_saldoField.setValue(vu_stok_all_saldoListEditorGrid.getSelectionModel().getSelected().get('stok_saldo'));
 		vu_stok_detail_DataStore.setBaseParam('start',0);
 		vu_stok_detail_DataStore.setBaseParam('limit',pageS);
-		
+		if(vu_stok_all_saldoListEditorGrid.getSelectionModel().getSelected().get('konversi_default')==true)
+			vu_stok_detail_DataStore.setBaseParam('satuan','default');
+		else
+			vu_stok_detail_DataStore.setBaseParam('satuan','terkecil');
+			
 		vu_stok_detail_DataStore.setBaseParam('produk_id',get_pk_id());
-		vu_stok_detail_DataStore.setBaseParam('tanggal_start',stok_tanggal_startField.getValue().format('Y-m-d'));
-		vu_stok_detail_DataStore.setBaseParam('tanggal_end',stok_tanggal_endField.getValue().format('Y-m-d'));
-		vu_stok_detail_DataStore.load();
+		vu_stok_detail_DataStore.setBaseParam('tanggal_start',vu_stok_all_saldoListEditorGrid.getSelectionModel().getSelected().get('tanggal_start').format('Y-m-d'));
+		vu_stok_detail_DataStore.setBaseParam('tanggal_end',vu_stok_all_saldoListEditorGrid.getSelectionModel().getSelected().get('tanggal_end').format('Y-m-d'));
+		vu_stok_detail_DataStore.load({params:{'produk_id':get_pk_id(}});
+		vu_stok_detail_DataStore.commitChanges();
+		
 	}
 	/* End setValue to EDIT*/
   	
@@ -152,6 +158,8 @@ Ext.onReady(function(){
 		},[
 			{name: 'produk_id', type: 'int', mapping: 'produk_id'}, 
 			{name: 'produk_nama', type: 'string', mapping: 'produk_nama'}, 
+			{name: 'tanggal_start', type: 'date', formatDate:'Y-m-d', mapping: 'tanggal_start'}, 
+			{name: 'tanggal_end', type: 'date', formatDate:'Y-m-d', mapping: 'tanggal_end'}, 
 			{name: 'produk_kode', type: 'string', mapping: 'produk_kode'}, 
 			{name: 'satuan_id', type: 'int', mapping: 'satuan_id'}, 
 			{name: 'satuan_nama', type: 'string', mapping: 'satuan_nama'},
@@ -481,8 +489,8 @@ Ext.onReady(function(){
 		},[
 			{name: 'gudang_id', type: 'int', mapping: 'gudang_id'}, 
 			{name: 'jumlah_awal', type: 'float', mapping: 'jumlah_awal'}, 
-			{name: 'jumlah_in', type: 'float', mapping: 'jumlah_in'}, 
-			{name: 'jumlah_out', type: 'float', mapping: 'jumlah_out'},
+			{name: 'jumlah_in', type: 'float', mapping: 'jumlah_masuk'}, 
+			{name: 'jumlah_out', type: 'float', mapping: 'jumlah_keluar'},
 			{name: 'jumlah_koreksi', type: 'float', mapping: 'jumlah_koreksi'}, 
 			{name: 'gudang_nama', type: 'string', mapping: 'gudang_nama'}, 
 			{name: 'jumlah_stok', type: 'float', mapping: 'jumlah_stok'}
