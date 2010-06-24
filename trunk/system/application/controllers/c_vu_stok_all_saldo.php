@@ -55,10 +55,11 @@ class C_vu_stok_all_saldo extends Controller {
 		$start = (integer) (isset($_POST['start']) ? @$_POST['start'] : @$_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? @$_POST['limit'] : @$_GET['limit']);
 		$produk_id = (integer) (isset($_POST['produk_id']) ? @$_POST['produk_id'] : @$_GET['produk_id']);
-		$tanggal_start = (integer) (isset($_POST['tanggal_start']) ? @$_POST['tanggal_start'] : @$_GET['tanggal_start']);
-		$tanggal_end = (integer) (isset($_POST['tanggal_end']) ? @$_POST['tanggal_end'] : @$_GET['tanggal_end']);
+		$tanggal_start = (isset($_POST['tanggal_start']) ? @$_POST['tanggal_start'] : @$_GET['tanggal_start']);
+		$tanggal_end =  (isset($_POST['tanggal_end']) ? @$_POST['tanggal_end'] : @$_GET['tanggal_end']);
+		$satuan = isset($_POST['satuan']) ? @$_POST['satuan'] : @$_GET['satuan'];
 		
-		$result=$this->m_vu_stok_all_saldo->get_detail_stok($tanggal_start,$tanggal_end,$produk_id,$query,$start,$end);
+		$result=$this->m_vu_stok_all_saldo->get_detail_stok($satuan, $tanggal_start,$tanggal_end,$produk_id,$query,$start,$end);
 		echo $result;
 	}
 	//function fot list record
