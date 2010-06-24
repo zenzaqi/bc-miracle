@@ -1971,7 +1971,32 @@ class M_master_jual_produk extends Model{
 		//function for advanced search record
 		function master_jual_produk_search($jproduk_id, $jproduk_nobukti, $jproduk_cust, $jproduk_tanggal, $jproduk_tanggal_akhir, $jproduk_diskon, $jproduk_cara, $jproduk_keterangan, $jproduk_stat_dok, $start, $end){
 			//full query
-			$query="SELECT jproduk_id, jproduk_nobukti, cust_nama, cust_no, cust_member, member_no, jproduk_cust, jproduk_tanggal, jproduk_diskon, jproduk_cashback, jproduk_cara, jproduk_cara2, jproduk_cara3, jproduk_bayar, jproduk_totalbiaya, jproduk_keterangan, jproduk_creator, jproduk_date_create, jproduk_update, jproduk_date_update, jproduk_revised, jproduk_stat_dok FROM vu_jproduk";
+			//$query="SELECT jproduk_id, jproduk_nobukti, cust_nama, cust_no, cust_member, member_no, jproduk_cust, jproduk_tanggal, jproduk_diskon, jproduk_cashback, jproduk_cara, jproduk_cara2, jproduk_cara3, jproduk_bayar, jproduk_totalbiaya, jproduk_keterangan, jproduk_creator, jproduk_date_create, jproduk_update, jproduk_date_update, jproduk_revised, jproduk_stat_dok FROM vu_jproduk";
+			$query = "SELECT jproduk_id
+					,jproduk_nobukti
+					,cust_nama
+					,cust_no
+					,cust_member
+					,member_no
+					,jproduk_cust
+					,jproduk_tanggal
+					,jproduk_diskon
+					,jproduk_cashback
+					,jproduk_cara
+					,jproduk_cara2
+					,jproduk_cara3
+					,jproduk_bayar
+					,IF(vu_jproduk.jproduk_totalbiaya!=0, vu_jproduk.jproduk_totalbiaya, vu_jproduk_totalbiaya.jproduk_totalbiaya) AS jproduk_totalbiaya
+					,jproduk_keterangan
+					,jproduk_stat_dok
+					,jproduk_creator
+					,jproduk_date_create
+					,jproduk_update
+					,jproduk_date_update
+					,jproduk_revised
+					,jproduk_stat_dok
+				FROM vu_jproduk
+				LEFT JOIN vu_jproduk_totalbiaya ON(vu_jproduk_totalbiaya.dproduk_master=vu_jproduk.jproduk_id)";
 			
 			if($jproduk_id!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
