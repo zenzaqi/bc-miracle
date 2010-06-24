@@ -66,12 +66,16 @@ class M_master_invoice extends Model{
 		}
 		
 		function get_produk_terima_list($terima_id,$query,$start,$end){
-			$sql="SELECT distinct produk_id,produk_nama from produk 
-					WHERE produk_id IN (SELECT dterima_produk FROM detail_terima_beli WHERE dterima_master='".$terima_id."')";
+			/*$sql="SELECT distinct produk_id,produk_nama from produk 
+					WHERE produk_id IN (SELECT dterima_produk FROM detail_terima_beli WHERE dterima_master='".$terima_id."')";*/
+			$sql="SELECT produk_id,produk_nama
+					FROM detail_terima_beli,produk
+					WHERE dterima_produk=produk_id AND dterima_master='".$terima_id."'";
+					
 			$result = $this->db->query($sql);
 			$nbrows = $result->num_rows();
-			$limit = $sql." LIMIT ".$start.",".$end;			
-			$result = $this->db->query($limit);  
+			/*$limit = $sql." LIMIT ".$start.",".$end;			
+			$result = $this->db->query($limit);  */
 			
 			if($nbrows>0){
 				foreach($result->result() as $row){
@@ -85,12 +89,16 @@ class M_master_invoice extends Model{
 		}
 		
 		function get_produk_invoice_list($master_id,$query,$start,$end){
-			$sql="SELECT distinct produk_id,produk_nama from produk 
-					WHERE produk_id IN (SELECT dinvoice_produk FROM detail_invoice WHERE dinvoice_master='".$master_id."')";
+			/*$sql="SELECT distinct produk_id,produk_nama from produk 
+					WHERE produk_id IN (SELECT dinvoice_produk FROM detail_invoice WHERE dinvoice_master='".$master_id."')";*/
+			$sql="SELECT produk_id,produk_nama
+					FROM detail_invoice,produk
+					WHERE dinvoice_produk=produk_id AND dinvoice_master='".$master_id."'";
+					
 			$result = $this->db->query($sql);
 			$nbrows = $result->num_rows();
-			$limit = $sql." LIMIT ".$start.",".$end;			
-			$result = $this->db->query($limit);  
+			/*$limit = $sql." LIMIT ".$start.",".$end;			
+			$result = $this->db->query($limit);  */
 			
 			if($nbrows>0){
 				foreach($result->result() as $row){
@@ -105,7 +113,8 @@ class M_master_invoice extends Model{
 		
 		function get_dtbeli_list($dterima_master){
 			//$sql="SELECT * FROM detail_terima_beli WHERE dterima_master=$dterima_master";
-			$sql="SELECT * FROM detail_terima_beli,master_terima_beli,detail_order_beli WHERE dterima_master=terima_id AND dorder_master=terima_order AND dterima_master=$dterima_master AND dterima_produk=dorder_produk";
+			/*$sql="SELECT * FROM detail_terima_beli,master_terima_beli,detail_order_beli WHERE dterima_master=terima_id AND dorder_master=terima_order AND dterima_master=$dterima_master AND dterima_produk=dorder_produk";*/
+			$sql="SELECT * FROM vu_detail_terima_order WHERE master_terima=$dterima_master";
 			$query = $this->db->query($sql);
 			$nbrows = $query->num_rows();
 			if($nbrows>0){
@@ -119,11 +128,24 @@ class M_master_invoice extends Model{
 			}
 		}
 		
-		function get_tbeli_list(){
+		function get_tbeli_list($filter,$start,$end){
 			$sql="SELECT * FROM master_terima_beli,supplier WHERE terima_supplier=supplier_id 
-					AND terima_id NOT IN(SELECT invoice_noterima FROM master_invoice)";
+					AND terima_id NOT IN(SELECT invoice_noterima FROM master_invoice)
+					AND terima_status<>'Batal'";
+			
+			if ($filter<>""){
+				$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
+				$sql .= " (terima_no LIKE '%".addslashes($filter)."%' OR supplier_nama LIKE '%".addslashes($filter)."%')";
+			}
+			
+			$start=($start==""?0:$start);
+			$end=($end==""?15:$end);
+			
 			$query = $this->db->query($sql);
 			$nbrows = $query->num_rows();
+			$limit = $sql." LIMIT ".$start.",".$end;		
+			$result = $this->db->query($limit);  
+			
 			if($nbrows>0){
 				foreach($query->result() as $row){
 					$arr[] = $row;
@@ -141,8 +163,8 @@ class M_master_invoice extends Model{
 			$query = "SELECT * FROM detail_invoice where dinvoice_master='".$master_id."'";
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
-			$limit = $query." LIMIT ".$start.",".$end;			
-			$result = $this->db->query($limit);  
+/*			$limit = $query." LIMIT ".$start.",".$end;			
+			$result = $this->db->query($limit);  */
 			
 			if($nbrows>0){
 				foreach($result->result() as $row){

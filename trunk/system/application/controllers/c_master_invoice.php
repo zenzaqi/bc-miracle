@@ -106,7 +106,11 @@ class C_master_invoice extends Controller {
 	}
 	
 	function get_tbeli_list(){
-		$result=$this->m_master_invoice->get_tbeli_list();
+		$query = isset($_POST['query']) ? @$_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? @$_POST['start'] : @$_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? @$_POST['limit'] : @$_GET['limit']);
+		
+		$result=$this->m_master_invoice->get_tbeli_list($query,$start, $end);
 		echo $result;
 	}
 	
