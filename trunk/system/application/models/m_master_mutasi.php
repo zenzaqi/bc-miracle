@@ -47,8 +47,8 @@ class M_master_mutasi extends Model{
 			
 			$result = $this->db->query($sql);
 			$nbrows = $result->num_rows();
-			$limit = $sql." LIMIT ".$start.",".$end;			
-			$result = $this->db->query($limit);  
+/*			$limit = $sql." LIMIT ".$start.",".$end;			
+			$result = $this->db->query($limit);  */
 			
 			if($nbrows>0){
 				foreach($result->result() as $row){
@@ -86,8 +86,8 @@ class M_master_mutasi extends Model{
 			
 			$result = $this->db->query($sql);
 			$nbrows = $result->num_rows();
-			$limit = $sql." LIMIT ".$start.",".$end;			
-			$result = $this->db->query($limit);  
+/*			$limit = $sql." LIMIT ".$start.",".$end;			
+			$result = $this->db->query($limit);  */
 			
 			if($nbrows>0){
 				foreach($result->result() as $row){
@@ -130,8 +130,8 @@ class M_master_mutasi extends Model{
 			
 			$result = $this->db->query($sql);
 			$nbrows = $result->num_rows();
-			$limit = $sql." LIMIT ".$start.",".$end;			
-			$result = $this->db->query($limit);  
+/*			$limit = $sql." LIMIT ".$start.",".$end;			
+			$result = $this->db->query($limit);  */
 			
 			if($nbrows>0){
 				foreach($result->result() as $row){
@@ -213,9 +213,9 @@ class M_master_mutasi extends Model{
 			$query = "SELECT * FROM detail_mutasi where dmutasi_master='".$master_id."' ORDER by dmutasi_id DESC";
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
-			$limit = $query." LIMIT ".$start.",".$end;			
+/*			$limit = $query." LIMIT ".$start.",".$end;			
 			$result = $this->db->query($limit);  
-			
+			*/
 			if($nbrows>0){
 				foreach($result->result() as $row){
 					$arr[] = $row;

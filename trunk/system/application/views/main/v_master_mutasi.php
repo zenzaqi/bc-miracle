@@ -959,6 +959,7 @@ Ext.onReady(function(){
 			anchor: '95%'
 	});
 	
+	
 	var combo_mutasi_satuan=new Ext.form.ComboBox({
 			store: cbo_mutasi_satuanDataStore ,
 			mode: 'remote',
@@ -1028,11 +1029,11 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true},
-		bbar: new Ext.PagingToolbar({
+		/*bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: detail_mutasi_DataStore,
 			displayInfo: true
-		}),
+		}),*/
 		/* Add Control on ToolBar */
 		tbar: [
 		{

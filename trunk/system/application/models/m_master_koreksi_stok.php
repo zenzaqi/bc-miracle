@@ -19,7 +19,7 @@ class M_master_koreksi_stok extends Model{
 		}
 		
 		function get_stok_produk_selected($gudang,$produk_id){
-			if($gudang==1){
+			/*if($gudang==1){
 				$sql="SELECT distinct produk_id,produk_kode,produk_nama,jumlah_stok,satuan_kode,satuan_id, satuan_nama FROM vu_stok_gudang_besar_saldo 
 						WHERE produk_id='".$produk_id."'";
 			}elseif($gudang==2){
@@ -28,10 +28,30 @@ class M_master_koreksi_stok extends Model{
 			}else{
 				$sql="SELECT distinct produk_id,produk_kode,produk_nama,jumlah_stok,satuan_kode,satuan_id, satuan_nama FROM vu_stok_gudang_all";
 				$sql.=(eregi("WHERE",$sql)?" AND ":" WHERE ")." gudang_id ='".$gudang."' AND produk_id='".$produk_id."'";
-			}
+			}*/
+			
+			$sql="SELECT 	produk_id, sum(jml_terima_barang*konversi_nilai)
+										+sum(jml_terima_bonus*konversi_nilai)
+										-sum(jml_retur_beli*konversi_nilai)
+										-sum(jml_mutasi_keluar*konversi_nilai)
+										+sum(jml_mutasi_masuk*konversi_nilai)
+										+sum(jml_koreksi_stok*konversi_nilai)
+										-sum(jml_jual_produk*konversi_nilai)
+										-sum(jml_jual_grooming*konversi_nilai)
+										+sum(jml_retur_produk*konversi_nilai)
+										+sum(jml_retur_paket*konversi_nilai)
+										-sum(jml_pakai_cabin*konversi_nilai)
+										as jumlah_stok
+								FROM	vu_stok_new_produk
+								WHERE   produk_id='".$produk_id."'
+										AND gudang='".$gudang."'
+										AND status<>'Batal'
+								GROUP BY produk_id";
+			//echo $sql;
 			
 			$result = $this->db->query($sql);
 			$nbrows = $result->num_rows();
+			
 			if($nbrows<1){
 				$sql="SELECT distinct produk_id,produk_kode,produk_nama,0 as jumlah_stok,satuan_kode,satuan_id, satuan_nama 
 						FROM vu_produk_satuan_terkecil
@@ -73,8 +93,8 @@ class M_master_koreksi_stok extends Model{
 			
 			$result = $this->db->query($sql);
 			$nbrows = $result->num_rows();
-			$limit = $sql." LIMIT ".$start.",".$end;			
-			$result = $this->db->query($limit);  
+/*			$limit = $sql." LIMIT ".$start.",".$end;			
+			$result = $this->db->query($limit);  */
 			
 			if($nbrows>0){
 				foreach($result->result() as $row){
@@ -228,9 +248,9 @@ class M_master_koreksi_stok extends Model{
 			$query = "SELECT * FROM detail_koreksi_stok WHERE dkoreksi_master='".$master_id."' AND dkoreksi_produk<>0 ORDER by dkoreksi_produk ASC";
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
-			$limit = $query." LIMIT ".$start.",".$end;			
+/*			$limit = $query." LIMIT ".$start.",".$end;			
 			$result = $this->db->query($limit);  
-			
+			*/
 			if($nbrows>0){
 				foreach($result->result() as $row){
 					$arr[] = $row;

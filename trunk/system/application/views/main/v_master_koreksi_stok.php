@@ -1021,7 +1021,7 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true},
-		bbar: detail_koreksi_pagingToolbar,
+		/*bbar: detail_koreksi_pagingToolbar,*/
 		tbar: [
 		{
 			text: 'Add',
