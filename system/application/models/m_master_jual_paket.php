@@ -593,7 +593,7 @@ class M_master_jual_paket extends Model{
 					$dtu_jpaket=array(
 					"jpaket_point"=>$jumlah_point
 					);
-					$this->db->where('jproduk_id', $dpaket_master);
+					$this->db->where('jpaket_id', $dpaket_master);
 					$this->db->update('master_jual_paket', $dtu_jpaket);
 				}
 			}
