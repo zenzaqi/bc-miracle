@@ -635,7 +635,10 @@ Ext.onReady(function(){
 				}                      
 			});
 		}else if(jproduk_post2db=='UPDATE' && jproduk_stat_dokField.getValue()=='Tertutup'){
-			jproduk_cetak(jproduk_id_for_cetak);
+			if(cetak_jproduk==1){
+				jproduk_cetak(jproduk_id_for_cetak);
+				cetak_jproduk=0;
+			}
 			master_jual_produk_reset_allForm();
 			jproduk_caraField.setValue("card");
 			master_jual_produk_cardGroup.setVisible(true);
@@ -665,7 +668,8 @@ Ext.onReady(function(){
 					}else{
 						Ext.MessageBox.show({
 						   title: 'Warning',
-						   msg: 'Dokumen Penjualan Produk tidak bisa dibatalkan.',
+						   width: 400,
+						   msg: 'Dokumen Penjualan Produk tidak bisa dibatalkan, <br/>karena yang boleh dibatalkan adalah Dokumen yang terbit hari ini saja.',
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'save',
 						   icon: Ext.MessageBox.WARNING
@@ -1003,18 +1007,18 @@ Ext.onReady(function(){
 		jproduk_bayarField.reset();
 		jproduk_bayarField.setValue(null);
 		
-		//if(jproduk_post2db=="CREATE"){
-			jproduk_custField.setDisabled(false);
-			jproduk_tanggalField.setDisabled(false);
-			jproduk_custField.setDisabled(false);
-			jproduk_custField.setDisabled(false);
-			jproduk_tanggalField.setDisabled(false);
-			jproduk_keteranganField.setDisabled(false);
-			master_cara_bayarTabPanel.setDisabled(false);
-			detail_jual_produkListEditorGrid.setDisabled(false);
-			jproduk_diskonField.setDisabled(false);
-			jproduk_cashback_cfField.setDisabled(false);
-		//}
+		/* Enable if jpaket_post2db="CREATE" */
+		jproduk_custField.setDisabled(false);
+		jproduk_tanggalField.setDisabled(false);
+		jproduk_custField.setDisabled(false);
+		jproduk_custField.setDisabled(false);
+		jproduk_tanggalField.setDisabled(false);
+		jproduk_keteranganField.setDisabled(false);
+		master_cara_bayarTabPanel.setDisabled(false);
+		detail_jual_produkListEditorGrid.setDisabled(false);
+		jproduk_diskonField.setDisabled(false);
+		jproduk_cashback_cfField.setDisabled(false);
+		master_jual_produk_createForm.jproduk_savePrint.enable();
 	}
  	/* End of Function */
 	
@@ -1464,6 +1468,7 @@ Ext.onReady(function(){
 			detail_jual_produkListEditorGrid.setDisabled(true);
 			jproduk_diskonField.setDisabled(true);
 			jproduk_cashback_cfField.setDisabled(true);
+			master_jual_produk_createForm.jproduk_savePrint.disable();
 		}
 	}
   
@@ -6065,6 +6070,7 @@ Ext.onReady(function(){
 			},
 			{
 				text: 'Save and Print',
+				ref: '../jproduk_savePrint',
 				handler: save_andPrint
 			},
 			{
