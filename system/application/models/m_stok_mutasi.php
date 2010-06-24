@@ -132,11 +132,11 @@ class M_stok_mutasi extends Model{
 										+sum(jml_retur_produk*konversi_nilai)
 										+sum(jml_retur_paket*konversi_nilai) as jumlah_masuk,
 										sum(jml_koreksi_stok*konversi_nilai) as jumlah_koreksi,
-										-sum(jml_retur_beli*konversi_nilai)
-										-sum(jml_mutasi_keluar*konversi_nilai)
-										-sum(jml_jual_produk*konversi_nilai)
-										-sum(jml_jual_grooming*konversi_nilai)
-										-sum(jml_pakai_cabin*konversi_nilai) as jumlah_keluar
+										sum(jml_retur_beli*konversi_nilai)
+										+sum(jml_mutasi_keluar*konversi_nilai)
+										+sum(jml_jual_produk*konversi_nilai)
+										+sum(jml_jual_grooming*konversi_nilai)
+										+sum(jml_pakai_cabin*konversi_nilai) as jumlah_keluar
 								FROM	vu_stok_new_produk
 								WHERE   date_format(tanggal,'%Y-%m-%d')>='".$tanggal_start."'
 										AND date_format(tanggal,'%Y-%m-%d')<='".$tanggal_end."'
