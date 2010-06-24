@@ -1264,6 +1264,17 @@ Ext.onReady(function(){
 			jpaket_cashback_cfField.setDisabled(true);
 			master_jual_paket_createForm.jpaketSavePrintButton.disable();
 		}
+		if(jpaket_post2db=="UPDATE" && master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_stat_dok')=="Batal"){
+			jpaket_custField.setDisabled(true);
+			jpaket_tanggalField.setDisabled(true);
+			jpaket_keteranganField.setDisabled(true);
+			master_cara_bayarTabPanel.setDisabled(true);
+			detail_jual_paketListEditorGrid.setDisabled(true);
+			detail_pengguna_paketListEditorGrid.setDisabled(true);
+			jpaket_diskonField.setDisabled(true);
+			jpaket_cashback_cfField.setDisabled(true);
+			master_jual_paket_createForm.jpaketSavePrintButton.disable();
+		}
 	}
   
   
@@ -1518,7 +1529,7 @@ Ext.onReady(function(){
 			url: 'index.php?c=c_master_jual_paket&m=get_kwitansi_list', 
 			method: 'POST'
 		}),
-		//baseParams: {start:0, limit:pageS},
+		baseParams: {start:0, limit:pageS},
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
@@ -5603,6 +5614,10 @@ Ext.onReady(function(){
 					detail_pengguna_paket_DataStore.removeAll();
 					master_cara_bayarTabPanel.setActiveTab(0);
 					jpaket_post2db="CREATE";
+					jpaket_diskonField.setValue(0);
+					jpaket_cashbackField.setValue(0);
+					jpaket_pesanLabel.setText('');
+					jpaket_lunasLabel.setText('');
 				}
 			}
 		]
