@@ -115,7 +115,8 @@ class M_kartu_stok extends Model{
 				
 					$sql_stokawal="SELECT sum(jumlah_terima)-sum(jumlah_retur_beli)+sum(jumlah_masuk)-sum(jumlah_keluar)+sum(jumlah_koreksi) jumlah_awal 									FROM vu_stok_gudang_besar_tanggal
 							WHERE produk_id='".$produk_id."' 
-							AND date_format(tanggal,'%Y-%m-%d')<'".$tanggal_start."'
+							AND date_format(tanggal,'%Y-%m-%d')>='".$tanggal_start."'
+AND date_format(tanggal,'%Y-%m-%d')<='".$tanggal_end."'
 							GROUP BY produk_id";
 					$q_stokawal=$this->db->query($sql_stokawal);
 					if($q_stokawal->num_rows())
@@ -130,7 +131,8 @@ class M_kartu_stok extends Model{
 					$sql_stokawal="SELECT sum(jumlah_masuk)+sum(jumlah_retur_produk)+sum(jumlah_retur_paket)-sum(jumlah_jual)-sum(jumlah_keluar)+sum(jumlah_koreksi) as jumlah_awal
 									FROM vu_stok_gudang_produk_tanggal
 									WHERE produk_id='".$produk_id."' 
-									AND date_format(tanggal,'%Y-%m-%d')<'".$tanggal_start."'
+									AND date_format(tanggal,'%Y-%m-%d')>='".$tanggal_start."'
+AND date_format(tanggal,'%Y-%m-%d')<='".$tanggal_end."'
 									GROUP BY produk_id";
 					$q_stokawal=$this->db->query($sql_stokawal);
 					if($q_stokawal->num_rows())
@@ -205,7 +207,8 @@ class M_kartu_stok extends Model{
 								0 as keluar,
 								0 as koreksi
 						FROM	vu_stok_new_produk,supplier
-						WHERE   date_format(tanggal,'%Y-%m-%d')<'".$tanggal_start."'
+						WHERE   date_format(tanggal,'%Y-%m-%d')>='".$tanggal_start."'
+								AND date_format(tanggal,'%Y-%m-%d')<='".$tanggal_end."'
 								AND produk_id='".$rowproduk->produk_id."'
 								AND gudang='".$gudang."'
 								AND supplier_id=asal
@@ -231,7 +234,8 @@ class M_kartu_stok extends Model{
 								jml_retur_beli*konversi_nilai as keluar,
 								0 as koreksi
 						FROM	vu_stok_new_produk,supplier
-						WHERE   date_format(tanggal,'%Y-%m-%d')<'".$tanggal_start."'
+						WHERE   date_format(tanggal,'%Y-%m-%d')>='".$tanggal_start."'
+								AND date_format(tanggal,'%Y-%m-%d')<='".$tanggal_end."'
 								AND produk_id='".$rowproduk->produk_id."'
 								AND gudang='".$gudang."'
 								AND supplier_id=asal
@@ -257,7 +261,8 @@ class M_kartu_stok extends Model{
 								jml_mutasi_keluar*konversi_nilai as keluar,
 								0 as koreksi
 						FROM	vu_stok_new_produk,gudang
-						WHERE   date_format(tanggal,'%Y-%m-%d')<'".$tanggal_start."'
+						WHERE   date_format(tanggal,'%Y-%m-%d')>='".$tanggal_start."'
+								AND date_format(tanggal,'%Y-%m-%d')<='".$tanggal_end."'
 								AND produk_id='".$rowproduk->produk_id."'
 								AND gudang='".$gudang."'
 								AND gudang_id=tujuan
@@ -284,7 +289,8 @@ class M_kartu_stok extends Model{
 								0 as keluar,
 								0 as koreksi
 						FROM	vu_stok_new_produk,gudang
-						WHERE   date_format(tanggal,'%Y-%m-%d')<'".$tanggal_start."'
+						WHERE   date_format(tanggal,'%Y-%m-%d')>='".$tanggal_start."'
+								AND date_format(tanggal,'%Y-%m-%d')<='".$tanggal_end."'
 								AND produk_id='".$rowproduk->produk_id."'
 								AND gudang='".$gudang."'
 								AND gudang_id=asal
@@ -311,7 +317,8 @@ class M_kartu_stok extends Model{
 								0 as keluar,
 								jml_koreksi_stok*konversi_nilai as koreksi
 						FROM	vu_stok_new_produk
-						WHERE   date_format(tanggal,'%Y-%m-%d')<'".$tanggal_start."'
+						WHERE   date_format(tanggal,'%Y-%m-%d')>='".$tanggal_start."'
+								AND date_format(tanggal,'%Y-%m-%d')<='".$tanggal_end."'
 								AND produk_id='".$rowproduk->produk_id."'
 								AND gudang='".$gudang."'
 								AND status<>'Batal'
@@ -336,7 +343,8 @@ class M_kartu_stok extends Model{
 								jml_jual_produk*konversi_nilai as keluar,
 								0 as koreksi
 						FROM	vu_stok_new_produk,customer
-						WHERE   date_format(tanggal,'%Y-%m-%d')<'".$tanggal_start."'
+						WHERE   date_format(tanggal,'%Y-%m-%d')>='".$tanggal_start."'
+								AND date_format(tanggal,'%Y-%m-%d')<='".$tanggal_end."'
 								AND produk_id='".$rowproduk->produk_id."'
 								AND gudang='".$gudang."'
 								AND cust_id=asal
@@ -363,7 +371,8 @@ class M_kartu_stok extends Model{
 								jml_jual_grooming*konversi_nilai as keluar,
 								0 as koreksi
 						FROM	vu_stok_new_produk,karyawan
-						WHERE   date_format(tanggal,'%Y-%m-%d')<'".$tanggal_start."'
+						WHERE   date_format(tanggal,'%Y-%m-%d')>='".$tanggal_start."'
+								AND date_format(tanggal,'%Y-%m-%d')<='".$tanggal_end."'
 								AND produk_id='".$rowproduk->produk_id."'
 								AND gudang='".$gudang."'
 								AND karyawan_id=tujuan
@@ -391,7 +400,8 @@ class M_kartu_stok extends Model{
 								0 as keluar,
 								0 as koreksi
 						FROM	vu_stok_new_produk,customer
-						WHERE   date_format(tanggal,'%Y-%m-%d')<'".$tanggal_start."'
+						WHERE   date_format(tanggal,'%Y-%m-%d')>='".$tanggal_start."'
+								AND date_format(tanggal,'%Y-%m-%d')<='".$tanggal_end."'
 								AND produk_id='".$rowproduk->produk_id."'
 								AND gudang='".$gudang."'
 								AND cust_id=asal
@@ -418,7 +428,8 @@ class M_kartu_stok extends Model{
 								0 as keluar,
 								0 as koreksi
 						FROM	vu_stok_new_produk,customer
-						WHERE   date_format(tanggal,'%Y-%m-%d')<'".$tanggal_start."'
+						WHERE   date_format(tanggal,'%Y-%m-%d')>='".$tanggal_start."'
+								AND date_format(tanggal,'%Y-%m-%d')<='".$tanggal_end."'
 								AND produk_id='".$rowproduk->produk_id."'
 								AND gudang='".$gudang."'
 								AND cust_id=asal
@@ -445,7 +456,8 @@ class M_kartu_stok extends Model{
 								jml_pakai_cabin*konversi_nilai as keluar,
 								0 as koreksi
 						FROM	vu_stok_new_produk,customer
-						WHERE   date_format(tanggal,'%Y-%m-%d')<'".$tanggal_start."'
+						WHERE   date_format(tanggal,'%Y-%m-%d')>='".$tanggal_start."'
+								AND date_format(tanggal,'%Y-%m-%d')<='".$tanggal_end."'
 								AND produk_id='".$rowproduk->produk_id."'
 								AND gudang='".$gudang."'
 								AND cust_id=asal
