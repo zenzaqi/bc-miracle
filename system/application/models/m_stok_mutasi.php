@@ -138,7 +138,8 @@ class M_stok_mutasi extends Model{
 										-sum(jml_jual_grooming*konversi_nilai)
 										-sum(jml_pakai_cabin*konversi_nilai) as jumlah_keluar
 								FROM	vu_stok_new_produk
-								WHERE   date_format(tanggal,'%Y-%m-%d')<'".$tanggal_start."'
+								WHERE   date_format(tanggal,'%Y-%m-%d')>='".$tanggal_start."'
+										AND date_format(tanggal,'%Y-%m-%d')<='".$tanggal_end."'
 										AND produk_id='".$rowproduk->produk_id."'
 										AND gudang='".$gudang."'
 										AND status<>'Batal'
@@ -149,15 +150,21 @@ class M_stok_mutasi extends Model{
 					{
 						$ds_mutasi=$rs_mutasi->row();
 						$data[$i]["jumlah_masuk"]=round($ds_mutasi->jumlah_masuk*$data[$i]["konversi_nilai"],3);
-						$data[$i]["jumlah_keluar"]=round($ds_mutasi->jumlah_keluar*$data[$i]["konversi_nilai"],0);
+						$data[$i]["jumlah_keluar"]=round($ds_mutasi->jumlah_keluar*$data[$i]["konversi_nilai"],3);
 						$data[$i]["jumlah_koreksi"]=round($ds_mutasi->jumlah_koreksi*$data[$i]["konversi_nilai"],3);
-						$data[$i]["jumlah_stok"]=round(($data[$i]["jumlah_awal"]+$data[$i]["jumlah_masuk"]-$data[$i]["jumlah_keluar"]+$data[$i]["jumlah_koreksi"]),3);
+						if($data[$i]["jumlah_koreksi"]<0)
+							$data[$i]["jumlah_keluar"]=round($data[$i]["jumlah_keluar"]+abs($data[$i]["jumlah_koreksi"]*$data[$i]["konversi_nilai"]),3);
+						else
+							$data[$i]["jumlah_masuk"]=round($data[$i]["jumlah_masuk"]+abs($data[$i]["jumlah_koreksi"]*$data[$i]["konversi_nilai"]),3);
+							
+						
+						$data[$i]["jumlah_stok"]=round(($data[$i]["jumlah_awal"]+$data[$i]["jumlah_masuk"]-$data[$i]["jumlah_keluar"]),3);
 						
 					}else{
 						$data[$i]["jumlah_masuk"]=0;
 						$data[$i]["jumlah_keluar"]=0;
 						$data[$i]["jumlah_koreksi"]=0;
-						$data[$i]["jumlah_stok"]=round(($data[$i]["jumlah_awal"]+$data[$i]["jumlah_masuk"]-$data[$i]["jumlah_keluar"]+$data[$i]["jumlah_koreksi"]),3);
+						$data[$i]["jumlah_stok"]=round(($data[$i]["jumlah_awal"]+$data[$i]["jumlah_masuk"]-$data[$i]["jumlah_keluar"]),3);
 					}
 				$i++;
 			}
