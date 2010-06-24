@@ -1034,7 +1034,6 @@ Ext.onReady(function(){
 		var diskon_field=0;
 		var cashback_field=0;
 	
-		
 		//master_jual_produk_reset_form();
 		jproduk_idField.setValue(master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_id'));
 		jproduk_nobuktiField.setValue(master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_nobukti'));
@@ -6137,6 +6136,8 @@ Ext.onReady(function(){
 		
 		
 			task: 'SEARCH',
+			start: 0,
+			limit: pageS,
 			//variable here
 			jproduk_id	:	jproduk_id_search, 
 			jproduk_nobukti	:	jproduk_nobukti_search, 
@@ -6205,7 +6206,7 @@ Ext.onReady(function(){
 	});
 */
 	jproduk_custSearchField= new Ext.form.ComboBox({
-		id: 'jproduk_custField',
+		id: 'jproduk_custSearchField',
 		fieldLabel: 'Customer',
 		store: cbo_cust_jual_produk_DataStore,
 		mode: 'remote',
