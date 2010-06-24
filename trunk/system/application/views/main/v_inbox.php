@@ -69,20 +69,20 @@ var inbox_senderSearchField;
 var inbox_messageSearchField;
 var inbox_dateSearchField;
 
-var task = {
+var taskinbox = {
 	run: function(){
 	   inbox_DataStore.load({params:{start:0,limit:pageS}});
 	},
 	interval: 5000
 }
-var runner = new Ext.util.TaskRunner();
+var runinbox = new Ext.util.TaskRunner();
 
 
 /* on ready fuction */
 Ext.onReady(function(){
   	Ext.QuickTips.init();	/* Initiate quick tips icon */
   
-   runner.start(task);
+   runinbox.start(taskinbox);
   
   	/* Function for Saving inLine Editing */
 	function inbox_inline_update(oGrid_event){
@@ -860,6 +860,13 @@ Ext.onReady(function(){
 		} 	                     
 		});
 	}
+	
+	mainPanel.on('remove', function(){
+		console.log('panel : '+ mainPanel.getId());
+		runinbox.stop(taskinbox);
+	});
+	//mainPanel.remove(mainPanel.getActiveTab().getId());
+	
 	/*End of Function */
 });
 

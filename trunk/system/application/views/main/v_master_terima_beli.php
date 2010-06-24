@@ -166,7 +166,7 @@ Ext.onReady(function(){
   	/* End of Function */
   
   	/* Function for add data, open window create form */
-	function master_terima_beli_create(){
+	function master_terima_beli_create(opsi){
 	
 		if(is_master_terima_beli_form_valid()){	
 		var terima_id_create_pk=null; 
@@ -208,8 +208,7 @@ Ext.onReady(function(){
 				var result=eval(response.responseText);
 				if(result!==0){
 						terima_idField.setValue(result);
-						detail_terima_beli_purge(result);
-						detail_terima_bonus_purge(result);
+						detail_terima_beli_purge(result,opsi);
 						Ext.MessageBox.alert(post2db+' OK','Data Penerimaan Barang berhasil disimpan');
 						master_terima_beli_createWindow.hide();
 				}else{
@@ -534,6 +533,7 @@ Ext.onReady(function(){
 			{name: 'dterima_produk', type: 'int', mapping: 'dorder_produk'},
 			{name: 'dorder_produk_nama', type: 'string', mapping: 'produk_nama'},
 			{name: 'dterima_jumlah', type: 'float', mapping: 'jumlah_sisa'},
+			{name: 'dterima_order', type: 'float', mapping: 'jumlah_order'},
 			{name: 'dterima_satuan', type: 'int', mapping: 'dorder_satuan'},
 			{name: 'dorder_produk_satuan', type: 'string', mapping: 'satuan_nama'},
 			{name: 'dorder_produk_harga', type: 'int', mapping: 'dorder_harga'},
@@ -1290,7 +1290,7 @@ Ext.onReady(function(){
 	//eof
 	
 	//function for purge detail
-	function detail_terima_beli_purge(pkid){
+	function detail_terima_beli_purge(pkid,opsi){
 		Ext.Ajax.request({
 			waitMsg: 'Please wait...',
 			url: 'index.php?c=c_master_terima_beli&m=detail_detail_terima_beli_purge',
@@ -1299,6 +1299,7 @@ Ext.onReady(function(){
 			success: function(response){							
 				var result=eval(response.responseText);
 				detail_terima_beli_insert(pkid);
+				detail_terima_bonus_purge(result,opsi);
 			},
 			failure: function(response){
 				var result=response.responseText;
@@ -1575,6 +1576,7 @@ Ext.onReady(function(){
 				timeout: 5000,
 				success: function(response){							
 					var result=eval(response.responseText);
+					master_terima_beli_DataStore.reload();
 				},
 				failure: function(response){
 					var result=response.responseText;
@@ -1598,15 +1600,16 @@ Ext.onReady(function(){
 			timeout: 5000,
 			success: function(response){							
 				var result=eval(response.responseText);
+				master_terima_beli_DataStore.reload();
 			}		
 		});
 		
-		master_terima_beli_DataStore.reload();
+		
 	}
 	//eof
 	
 	//function for purge detail
-	function detail_terima_bonus_purge(pkid){
+	function detail_terima_bonus_purge(pkid,opsi){
 		Ext.Ajax.request({
 			waitMsg: 'Please wait...',
 			url: 'index.php?c=c_master_terima_beli&m=detail_detail_terima_bonus_purge',
@@ -1615,6 +1618,10 @@ Ext.onReady(function(){
 			success: function(response){							
 				var result=eval(response.responseText);
 				detail_terima_bonus_insert(pkid);
+				if(opsi=='print'){
+					master_terima_beli_cetak_faktur();
+				}
+				master_terima_beli_DataStore.reload();
 			},
 			failure: function(response){
 				var result=response.responseText;
