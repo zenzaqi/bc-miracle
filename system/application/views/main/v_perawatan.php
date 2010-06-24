@@ -241,7 +241,7 @@ Ext.onReady(function(){
 		if(rawat_aktifField.getValue()!== null){rawat_aktif_create = rawat_aktifField.getValue();} 
 
 		Ext.Ajax.request({  
-			waitMsg: 'Please wait...',
+			waitMsg: 'Mohon tunggu...',
 			url: 'index.php?c=c_perawatan&m=get_action',
 			params: {
 				task: post2db,
@@ -269,14 +269,14 @@ Ext.onReady(function(){
 					case 1:
 						perawatan_konsumsi_purge();
 						perawatan_alat_purge();
-						Ext.MessageBox.alert(post2db+' OK','The Perawatan was '+msg+' successfully.');
+						Ext.MessageBox.alert(post2db+' OK','Data perawatan berhasil disimpan');
 						perawatan_DataStore.reload();
 						perawatan_createWindow.hide();
 						break;
 					default:
 						Ext.MessageBox.show({
 						   title: 'Warning',
-						   msg: 'We could\'t not '+msg+' the Perawatan.',
+						   msg: 'Data perawatan tidak bisa disimpan',
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'save',
 						   icon: Ext.MessageBox.WARNING
@@ -298,7 +298,7 @@ Ext.onReady(function(){
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'Your Form is not valid!.',
+				msg: 'Form anda belum lengkap',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -386,7 +386,7 @@ Ext.onReady(function(){
   
 	/* Function for Check if the form is valid */
 	function is_perawatan_form_valid(){
-		return (rawat_namaField.isValid() && rawat_groupField.isValid() && rawat_jenisField.isValid() );
+		return (rawat_namaField.isValid() && rawat_groupField.isValid() && rawat_jenisField.isValid() && rawat_gudangField.isValid() );
 	}
   	/* End of Function */
   
@@ -442,7 +442,7 @@ Ext.onReady(function(){
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really update something you haven\'t selected?',
+				msg: 'Anda belum memilih data yang akan diubah',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -1009,6 +1009,7 @@ Ext.onReady(function(){
 			text: 'Delete', 
 			tooltip: 'Delete selected record', 
 			iconCls:'icon-delete',
+			disabled: true,
 			handler: perawatan_confirm_delete 
 		},
 		'-',
@@ -1505,17 +1506,17 @@ Ext.onReady(function(){
 	perawatan_konsumsi_ColumnModel = new Ext.grid.ColumnModel(
 		[
 		{
-			header: 'Nama Produk',
+			header: '<div align="center">Produk</div>',
 			dataIndex: 'krawat_produk',
-			width: 250,
+			width: 300,
 			sortable: true,
 			editor: combo_rawat_produk,
 			renderer: Ext.util.Format.comboRenderer(combo_rawat_produk)
 		},
 		{
-			header: 'Satuan',
+			header: '<div align="center">Satuan</div>',
 			dataIndex: 'krawat_satuan',
-			width: 100,
+			width: 60,
 			sortable: true,
 			/*editor: combo_dproduk_satuan,
 			renderer: Ext.util.Format.comboRenderer(combo_dproduk_satuan)*/
@@ -1527,9 +1528,10 @@ Ext.onReady(function(){
 			}
 		},
 		{
-			header: 'Jumlah',
+			header: '<div align="center">Jumlah</div>',
 			dataIndex: 'krawat_jumlah',
-			width: 100,
+			align: 'right',
+			width: 40,
 			sortable: true,
 			editor: new Ext.form.NumberField({
 				allowDecimals: true,
