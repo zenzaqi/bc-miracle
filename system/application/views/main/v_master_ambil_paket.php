@@ -252,6 +252,7 @@ Ext.onReady(function(){
 		apaket_paketField.setValue(ambil_paketListEditorGrid.getSelectionModel().getSelected().get('dpaket_paket'));
 //		apaket_cust_noField.setValue(ambil_paketListEditorGrid.getSelectionModel().getSelected().get('apaket_cust_no'));
 //		apaket_cust_namaField.setValue(ambil_paketListEditorGrid.getSelectionModel().getSelected().get('apaket_cust_nama'));
+		apaket_cust_idField.setValue(ambil_paketListEditorGrid.getSelectionModel().getSelected().get('cust_id'));
 		apaket_cust_noField.setValue(ambil_paketListEditorGrid.getSelectionModel().getSelected().get('cust_no'));
 		apaket_cust_namaField.setValue(ambil_paketListEditorGrid.getSelectionModel().getSelected().get('cust_nama'));
 		//apaket_fakturField.setValue(ambil_paketListEditorGrid.getSelectionModel().getSelected().get('apaket_faktur'));
@@ -407,8 +408,9 @@ Ext.onReady(function(){
 			{name: 'dpaket_kadaluarsa', type: 'date', dateFormat:'Y-m-d', mapping: 'dpaket_kadaluarsa'}, 
 			//{name: 'apaket_cust', type: 'int', mapping: 'apaket_cust'}, 
 //			{name: 'apaket_cust_no', type: 'string', mapping: 'apaket_cust_no'}, 
-//			{name: 'apaket_cust_nama', type: 'string', mapping: 'apaket_cust_nama'}, 
-			{name: 'cust_no', type: 'string', mapping: 'cust_no'}, 
+//			{name: 'apaket_cust_nama', type: 'string', mapping: 'apaket_cust_nama'},
+			{name: 'cust_id', type: 'int', mapping: 'cust_id'},
+			{name: 'cust_no', type: 'string', mapping: 'cust_no'},
 			{name: 'cust_nama', type: 'string', mapping: 'cust_nama'}, 
 			//{name: 'apaket_paket', type: 'int', mapping: 'apaket_paket'},
 //			{name: 'apaket_paket_kode', type: 'string', mapping: 'apaket_paket_kode'},
@@ -784,6 +786,13 @@ Ext.onReady(function(){
 		width: 94,
 		maskRe: /([0-9]+)$/
 	});
+	apaket_cust_idField= new Ext.form.NumberField({
+		id: 'apaket_cust_idField',
+		fieldLabel: 'Customer ID',
+		readOnly: true,
+		width: 94,
+		maskRe: /([0-9]+)$/
+	});
 	/* Identify  apaket_cust_no Field */
 	apaket_cust_noField= new Ext.form.TextField({
 		id: 'apaket_cust_noField',
@@ -1089,7 +1098,22 @@ Ext.onReady(function(){
 			allowBlank: true,
 			listClass: 'x-combo-list-small',
 			anchor: '95%'
-
+	});
+	combo_paket_isi_rawat.on('select', function(){
+		var j=cbo_paket_isi_rawatDataStore.findExact('isi_rawat_value',combo_paket_isi_rawat.getValue(),0);
+		if(cbo_paket_isi_rawatDataStore.getCount()){
+			cbo_ambil_paket_custDataStore.load({
+				params: {dpaket_master:ambil_paketListEditorGrid.getSelectionModel().getSelected().get('dpaket_master')},
+				callback: function(opts, success, response){
+					if(success){
+						var cust_ambil = cbo_ambil_paket_custDataStore.findExact('pengguna_paket_value',apaket_cust_idField.getValue(),0);
+						if(cbo_ambil_paket_custDataStore.getCount()>=0){
+							combo_cust_ambil_paket.setValue(cbo_ambil_paket_custDataStore.getAt(cust_ambil).data.pengguna_paket_value);
+						}
+					}
+				}
+			});
+		}
 	});
 	
 	var combo_cust_ambil_paket=new Ext.form.ComboBox({
@@ -1232,7 +1256,7 @@ Ext.onReady(function(){
 		var edit_ambil_paket_isi_perawatan= new ambil_paket_isi_perawatanListEditorGrid.store.recordType({
 			tgl_ambil		: dt.dateFormat('Y-m-d'),
 			rpaket_perawatan: '',		
-			rpaket_jumlah	: '',		
+			rpaket_jumlah	: 1,		
 			rpaket_cust		: '',
 			referal			: ''
 		});
