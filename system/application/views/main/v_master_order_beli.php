@@ -175,7 +175,7 @@ Ext.onReady(function(){
   	/* End of Function */
   
   	/* Function for add data, open window create form */
-	function master_order_beli_create(){
+	function master_order_beli_create(opsi){
 	
 		if(is_master_order_beli_form_valid()){	
 		var order_id_create_pk=null; 
@@ -225,9 +225,10 @@ Ext.onReady(function(){
 			success: function(response){             
 				var result=eval(response.responseText);
 				if(result!==0){
-						order_idField.value(result);
-						detail_order_beli_purge(result)
+						
 						Ext.MessageBox.alert(post2db+' OK','Data Surat Pesanan berhasil disimpan');
+						order_idField.setValue(result);
+						detail_order_beli_purge(result, opsi)
 						master_order_beli_createWindow.hide();
 				}else{
 						Ext.MessageBox.show({
@@ -1427,16 +1428,20 @@ Ext.onReady(function(){
 	
 	
 	//function for purge detail
-	function detail_order_beli_purge(pkid){
+	function detail_order_beli_purge(pkid,opsi){
 		Ext.Ajax.request({
 			waitMsg: 'Mohon tunggu...',
 			url: 'index.php?c=c_master_order_beli&m=detail_detail_order_beli_purge',
 			params:{ master_id: pkid },
 			success:function(response){
 				detail_order_beli_insert(pkid);
+				if(opsi=='print'){
+					master_order_beli_cetak_faktur();
+				}
+				master_order_beli_DataStore.reload();
 			}
 		});
-		master_order_beli_DataStore.reload();
+		
 	}
 	//eof
 	
@@ -1480,11 +1485,11 @@ Ext.onReady(function(){
 		monitorValid: true,
 		items: [master_order_beli_masterGroup,detail_order_beliListEditorGrid,master_order_beli_bayarGroup],
 		buttons: [{
-				text: 'Save and Close',
-				handler: master_order_beli_create
+				text: 'Save and Print',
+				handler: function() { master_order_beli_create('print'); }
 			},{
-				text: 'Cetak',
-				handler: master_order_beli_cetak_faktur
+				text: 'Save',
+				handler: function() { master_order_beli_create(''); }
 			}
 			,{
 				text: 'Cancel',
@@ -1600,8 +1605,9 @@ Ext.onReady(function(){
 		  	var result=eval(response.responseText);
 		  	switch(result){
 		  	case 1:
-				win = window.open('./print/master_order_faktur.html','master_order_faktur','height=800,width=600,resizable=1,scrollbars=1, menubar=1');
+				win = window.open('./print/master_order_faktur.html','master_order_faktur','height=800,width=670,resizable=1,scrollbars=1, menubar=1');
 				win.print();
+				win.close();
 				break;
 		  	default:
 				Ext.MessageBox.show({

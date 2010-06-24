@@ -22,9 +22,13 @@ class M_public_function extends Model{
 	}
 			
 	function get_order_beli_detail_by_order_id($orderid){
-		$sql="SELECT dorder_produk,produk_nama,jumlah_order, jumlah_order-sum(dterima_jumlah) as jumlah_sisa, dorder-satuan
+		/*$sql="SELECT dorder_produk,produk_nama,jumlah_order, jumlah_order-sum(dterima_jumlah) as jumlah_sisa, dorder-satuan
 				FROM vu_detail_terima_order WHERE dorder_master='".$orderid."'
-				GROUP BY dorder_produk";
+				GROUP BY dorder_produk";*/
+		$sql="SELECT produk as dorder_produk,satuan as dorder_satuan,sum(jumlah_order) as jumlah_order, sum(jumlah_terima) as jumlah_terima, sum(jumlah_sisa) as jumlah_sisa
+				FROM vu_detail_terima_order WHERE master='".$orderid."'
+				GROUP BY produk,satuan";
+				
 		$query = $this->db->query($sql);
 		$nbrows = $query->num_rows();
 		if($nbrows>0){
