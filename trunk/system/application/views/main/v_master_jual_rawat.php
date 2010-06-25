@@ -890,6 +890,8 @@ Ext.onReady(function(){
 		jrawat_cust_nomemberField.reset();
 		jrawat_cust_nomemberField.setValue(null);
 		
+		jrawat_valid_memberField.setValue("");
+		
 		jrawat_jumlahField.reset();
 		jrawat_jumlahField.setValue(null);
 		jrawat_diskonField.reset();
@@ -1418,6 +1420,7 @@ Ext.onReady(function(){
 							if(memberDataStore.getCount()){
 								jrawat_member_record=memberDataStore.getAt(0).data;
 								jrawat_cust_nomemberField.setValue(jrawat_member_record.member_no);
+								jrawat_valid_memberField.setValue(jrawat_member_record.member_valid);
 							}
 						}
 					}
@@ -2272,6 +2275,16 @@ Ext.onReady(function(){
 		fieldLabel: 'No Member',
 		emptyText : '(Auto)',
 		readOnly: true
+	});
+	
+	jrawat_valid_memberField= new Ext.form.DateField({
+		id: 'jrawat_valid_memberField',
+		fieldLabel: 'Member Valid',
+		emptyText : '(Auto)',
+		readOnly: true,
+		disabled : true,
+		//renderer: Ext.util.Format.dateRenderer('d-m-Y'),
+		format : 'd-m-Y'
 	});
 	
 	/* Identify  jrawat_tanggal Field */
@@ -3880,7 +3893,7 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [jrawat_nobuktiField, jrawat_custField, jrawat_cust_nomemberField] 
+				items: [jrawat_nobuktiField, jrawat_custField, jrawat_cust_nomemberField, jrawat_valid_memberField] 
 			}
 			,{
 				columnWidth:0.5,
@@ -3963,6 +3976,7 @@ Ext.onReady(function(){
 		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
 			{name: 'member_id', type: 'int', mapping: 'member_id'},
 			{name: 'member_no', type: 'string', mapping: 'member_no'},
+			{name: 'member_valid', type: 'date', dateFormat: 'Y-m-d', mapping: 'member_valid'}, 
 			{name: 'member_point' , type: 'int', mapping: 'member_point'},
 			{name: 'member_jenis' , type: 'string', mapping: 'member_jenis'},
 			{name: 'member_aktif' , type: 'string', mapping: 'member_aktif'}
@@ -5042,11 +5056,15 @@ Ext.onReady(function(){
 	jrawat_custField.on("select",function(){
 		load_membership();
 		j=memberDataStore.findExact('member_cust',jrawat_custField.getValue(),0);
-		if(j>-1)
+		if(j>-1){
 			jrawat_cust_nomemberField.setValue(memberDataStore.getAt(j).member_no);
+			jrawat_valid_memberField.setValue(memberDataStore.getAt(j).member_valid);
+		}
 		else
+		{
 			jrawat_cust_nomemberField.setValue("");
-
+			jrawat_valid_memberField.setValue("");
+		}
 		cbo_cust=cbo_cust_jual_rawat_DataStore.findExact('cust_id',jrawat_custField.getValue(),0);
 		if(cbo_cust>-1){
 			//cbo_kwitansi_jual_rawat_DataStore.load({params: {kwitansi_cust: cbo_cust_jual_rawat_DataStore.getAt(cbo_cust).data.cust_id}});
