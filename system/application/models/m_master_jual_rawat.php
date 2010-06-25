@@ -231,14 +231,28 @@ class M_master_jual_rawat extends Model{
 			$date_now=date('Y-m-d');
 			/* ambil history pengambilan paket dari $master_id===customer_id untuk transaksi hari ini */
 			//2010-05-06 ==> $query = "SELECT jpaket_nobukti, paket_nama, rawat_nama, dapaket_jumlah, cust_nama FROM detail_ambil_paket LEFT JOIN master_jual_paket ON(dapaket_jpaket=jpaket_id) LEFT JOIN paket ON(dapaket_paket=paket_id) LEFT JOIN customer ON(dapaket_cust=cust_id) LEFT JOIN perawatan ON(dapaket_item=rawat_id) WHERE dapaket_cust='$master_id' AND date_format(dapaket_date_create,'%Y-%m-%d')='$tanggal'";
-			if($dpaket_id=="" || $dpaket_id==0){
+			/*2010-06-23 ==> if($dpaket_id=="" || $dpaket_id==0){
 				//* Transaksi Perawatan satuan sekaligus pengambilan paket per customer/
 				$query = "SELECT dapaket_id, jpaket_nobukti, paket_nama, rawat_nama, dapaket_jumlah, cust_nama FROM detail_ambil_paket LEFT JOIN master_jual_paket ON(dapaket_jpaket=jpaket_id) LEFT JOIN paket ON(dapaket_paket=paket_id) LEFT JOIN customer ON(dapaket_cust=cust_id) LEFT JOIN perawatan ON(dapaket_item=rawat_id) WHERE date_format(dapaket_date_create,'%Y-%m-%d')='$tanggal' AND dapaket_cust='$dapaket_cust' AND dapaket_stat_dok='Terbuka'";
 			}else if($dpaket_id>0){
 				//* Transaksi Perawatan hanya pengambilan paket per customer /
 				//$query = "SELECT dapaket_id, jpaket_nobukti, paket_nama, rawat_nama, dapaket_jumlah, cust_nama FROM detail_ambil_paket LEFT JOIN master_jual_paket ON(dapaket_jpaket=jpaket_id) LEFT JOIN paket ON(dapaket_paket=paket_id) LEFT JOIN customer ON(dapaket_cust=cust_id) LEFT JOIN perawatan ON(dapaket_item=rawat_id) WHERE dapaket_dpaket='$dpaket_id' AND date_format(dapaket_date_create,'%Y-%m-%d')='$tanggal' AND dapaket_stat_dok='Terbuka' AND dapaket_cust='$dapaket_cust'";
-                                $query = "SELECT dapaket_id, jpaket_nobukti, paket_nama, rawat_nama, dapaket_jumlah, cust_nama FROM detail_ambil_paket LEFT JOIN master_jual_paket ON(dapaket_jpaket=jpaket_id) LEFT JOIN paket ON(dapaket_paket=paket_id) LEFT JOIN customer ON(dapaket_cust=cust_id) LEFT JOIN perawatan ON(dapaket_item=rawat_id) WHERE date_format(dapaket_date_create,'%Y-%m-%d')='$tanggal' AND dapaket_cust='$dapaket_cust' AND dapaket_stat_dok='Terbuka' AND dapaket_cust='$dapaket_cust'";
-			}
+                $query = "SELECT dapaket_id, jpaket_nobukti, paket_nama, rawat_nama, dapaket_jumlah, cust_nama FROM detail_ambil_paket LEFT JOIN master_jual_paket ON(dapaket_jpaket=jpaket_id) LEFT JOIN paket ON(dapaket_paket=paket_id) LEFT JOIN customer ON(dapaket_cust=cust_id) LEFT JOIN perawatan ON(dapaket_item=rawat_id) WHERE date_format(dapaket_date_create,'%Y-%m-%d')='$tanggal' AND dapaket_cust='$dapaket_cust' AND dapaket_stat_dok='Terbuka' AND dapaket_cust='$dapaket_cust'";
+			}*/
+			$query = "SELECT dapaket_id
+					,jpaket_nobukti
+					,paket_nama
+					,rawat_nama
+					,dapaket_jumlah
+					,cust_nama
+				FROM detail_ambil_paket
+				LEFT JOIN master_jual_paket ON(dapaket_jpaket=jpaket_id)
+				LEFT JOIN paket ON(dapaket_paket=paket_id)
+				LEFT JOIN customer ON(dapaket_cust=cust_id)
+				LEFT JOIN perawatan ON(dapaket_item=rawat_id)
+				WHERE date_format(dapaket_date_create,'%Y-%m-%d')='$tanggal'
+					AND dapaket_cust='$dapaket_cust'
+					AND dapaket_stat_dok='Terbuka'";
 			
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
@@ -805,9 +819,9 @@ class M_master_jual_rawat extends Model{
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 				$query.=" date_format(jrawat_date_create,'%Y-%m-%d')='$date_now' AND (jrawat_bayar is null OR jrawat_bayar = 0)";
 				}
-				
+			
 			$query .= " ORDER BY jrawat_date_create DESC";
-			//echo $query.".......";
+			
 			$query2 = "SELECT
                     jrawat_id,
                     jrawat_nobukti,
@@ -837,18 +851,17 @@ class M_master_jual_rawat extends Model{
                     AND vu_jrawat_pk.jrawat_cust NOT IN(
                         SELECT vu_jrawat_pr.jrawat_cust
                         FROM vu_jrawat_pr
-                        WHERE date_format(vu_jrawat_pr.jrawat_date_create,'%Y-%m-%d'
-                    )='$date_now'
-                    AND vu_jrawat_pr.jrawat_stat_dok='Terbuka')
-                ORDER BY vu_jrawat_pk.dapaket_stat_dok";
-                    //AND vu_jrawat_pk.dapaket_stat_dok='Terbuka'";
+                        WHERE date_format(vu_jrawat_pr.jrawat_date_create,'%Y-%m-%d')='$date_now'
+							AND vu_jrawat_pr.jrawat_stat_dok='Terbuka')
+                    AND vu_jrawat_pk.dapaket_stat_dok='Terbuka'";
 			
 			// For simple search
 			if ($filter<>""){
 				$query2 .=eregi("WHERE",$query2)? " AND ":" WHERE ";
 				$query2 .= " (jrawat_nobukti LIKE '%".addslashes($filter)."%' OR cust_no LIKE '%".addslashes($filter)."%' OR cust_nama LIKE '%".addslashes($filter)."%' OR cust_member LIKE '%".addslashes($filter)."%')";
 			}
-			//echo $query2;
+			$query2 .= " ORDER BY vu_jrawat_pk.dapaket_stat_dok DESC";
+			
 			$nbrows=0;
 			$nbrows2=0;
 			$result = $this->db->query($query);
@@ -2147,7 +2160,7 @@ class M_master_jual_rawat extends Model{
 		}
 		
 		function print_paper_apaket($dapaket_jpaket, $dapaket_dpaket, $dapaket_date_create){
-			$sql = "SELECT dapaket_id, jpaket_nobukti, paket_nama, rawat_nama, dapaket_jumlah, jpaket_customer.cust_nama AS jpaket_cust_nama, jpaket_customer.cust_no AS jpaket_cust_no, jpaket_customer.cust_alamat AS jpaket_cust_alamat, dapaket_customer.cust_no AS dapaket_cust_no, dapaket_customer.cust_nama AS dapaket_cust_nama, dapaket_customer.cust_alamat AS dapaket_cust_alamat, dapaket_date_create FROM detail_ambil_paket LEFT JOIN master_jual_paket ON(dapaket_jpaket=jpaket_id) LEFT JOIN paket ON(dapaket_paket=paket_id) LEFT JOIN customer AS dapaket_customer ON(dapaket_cust=dapaket_customer.cust_id) LEFT JOIN perawatan ON(dapaket_item=rawat_id) LEFT JOIN customer AS jpaket_customer ON(jpaket_cust=jpaket_customer.cust_id) WHERE dapaket_jpaket='$dapaket_jpaket' AND dapaket_dpaket='$dapaket_dpaket' AND date_format(dapaket_date_create,'%Y-%m-%d')='$dapaket_date_create' AND dapaket_stat_dok='Terbuka'";
+			$sql = "SELECT dapaket_id, jpaket_nobukti, paket_nama, rawat_nama, dapaket_jumlah, jpaket_customer.cust_nama AS jpaket_cust_nama, jpaket_customer.cust_no AS jpaket_cust_no, jpaket_customer.cust_alamat AS jpaket_cust_alamat, dapaket_customer.cust_no AS dapaket_cust_no, dapaket_customer.cust_nama AS dapaket_cust_nama, dapaket_customer.cust_alamat AS dapaket_cust_alamat, dapaket_date_create FROM detail_ambil_paket LEFT JOIN master_jual_paket ON(dapaket_jpaket=jpaket_id) LEFT JOIN paket ON(dapaket_paket=paket_id) LEFT JOIN customer AS dapaket_customer ON(dapaket_cust=dapaket_customer.cust_id) LEFT JOIN perawatan ON(dapaket_item=rawat_id) LEFT JOIN customer AS jpaket_customer ON(jpaket_cust=jpaket_customer.cust_id) WHERE dapaket_jpaket='$dapaket_jpaket' AND dapaket_dpaket='$dapaket_dpaket' AND date_format(dapaket_date_create,'%Y-%m-%d')='$dapaket_date_create'";
 			
 			$result = $this->db->query($sql);
 			foreach($result->result() as $row){
