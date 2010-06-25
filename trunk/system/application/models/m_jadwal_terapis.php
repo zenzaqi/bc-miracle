@@ -36,7 +36,8 @@ class M_jadwal_terapis extends Model{
 						ifnull(vu_report_tindakan_terapis.terapis_count,0) as terapis_count,
 						absensi.absensi_shift,
 						absensi.absensi_tgl,
-						ifnull(vu_jterapis.terapis_count_day,0) as terapis_count_day
+						ifnull(vu_jterapis.terapis_count_day,0) as terapis_count_day,
+						absensi.absensi_keterangan
 					from absensi
 						left join vu_report_tindakan_terapis on (vu_report_tindakan_terapis.terapis_id=absensi.absensi_karyawan_id and vu_report_tindakan_terapis.terapis_bulan = '$month')
 						left join karyawan on (absensi.absensi_karyawan_id = karyawan.karyawan_id)
@@ -49,7 +50,8 @@ class M_jadwal_terapis extends Model{
 						ifnull(vu_report_tindakan_terapis.terapis_count,0) as terapis_count,
 						absensi.absensi_shift,
 						absensi.absensi_tgl,
-						ifnull(vu_jterapis.terapis_count_day,0) as terapis_count_day
+						ifnull(vu_jterapis.terapis_count_day,0) as terapis_count_day,
+						absensi.absensi_keterangan
 					from absensi
 						left join vu_report_tindakan_terapis on (vu_report_tindakan_terapis.terapis_id=absensi.absensi_karyawan_id and vu_report_tindakan_terapis.terapis_bulan = '$month')
 						left join karyawan on (absensi.absensi_karyawan_id = karyawan.karyawan_id)
@@ -62,7 +64,8 @@ class M_jadwal_terapis extends Model{
 						ifnull(vu_report_tindakan_terapis.terapis_count,0) as terapis_count,
 						absensi.absensi_shift,
 						absensi.absensi_tgl,
-						ifnull(vu_jterapis.terapis_count_day,0) as terapis_count_day
+						ifnull(vu_jterapis.terapis_count_day,0) as terapis_count_day,
+						absensi.absensi_keterangan
 					from absensi
 						left join vu_report_tindakan_terapis on (vu_report_tindakan_terapis.terapis_id=absensi.absensi_karyawan_id and vu_report_tindakan_terapis.terapis_bulan = '$month')
 						left join karyawan on (absensi.absensi_karyawan_id = karyawan.karyawan_id)
@@ -75,7 +78,8 @@ class M_jadwal_terapis extends Model{
 						ifnull(vu_report_tindakan_terapis.terapis_count,0) as terapis_count,
 						absensi.absensi_shift,
 						absensi.absensi_tgl,
-						ifnull(vu_jterapis.terapis_count_day,0) as terapis_count_day
+						ifnull(vu_jterapis.terapis_count_day,0) as terapis_count_day,
+						absensi.absensi_keterangan
 					from absensi
 						left join vu_report_tindakan_terapis on (vu_report_tindakan_terapis.terapis_id=absensi.absensi_karyawan_id and vu_report_tindakan_terapis.terapis_bulan = '$month')
 						left join karyawan on (absensi.absensi_karyawan_id = karyawan.karyawan_id)
@@ -209,7 +213,8 @@ group by karyawan.karyawan_username";
 						ifnull(vu_report_tindakan_terapis.terapis_count,0) as terapis_count,
 						absensi.absensi_shift,
 						absensi.absensi_tgl,
-						ifnull(vu_jterapis.terapis_count_day,0) as terapis_count_day
+						ifnull(vu_jterapis.terapis_count_day,0) as terapis_count_day,
+						absensi.absensi_keterangan
 					from absensi
 						left join vu_report_tindakan_terapis on (vu_report_tindakan_terapis.terapis_id=absensi.absensi_karyawan_id and vu_report_tindakan_terapis.terapis_bulan = date_format('$trawat_tglapp_start','%Y-%m'))
 						left join karyawan on (absensi.absensi_karyawan_id = karyawan.karyawan_id)
@@ -221,7 +226,8 @@ group by karyawan.karyawan_username";
 						ifnull(vu_report_tindakan_terapis.terapis_count,0) as terapis_count,
 						absensi.absensi_shift,
 						absensi.absensi_tgl,
-						ifnull(vu_jterapis.terapis_count_day,0) as terapis_count_day
+						ifnull(vu_jterapis.terapis_count_day,0) as terapis_count_day,
+						absensi.absensi_keterangan
 					from absensi
 						left join vu_report_tindakan_terapis on (vu_report_tindakan_terapis.terapis_id=absensi.absensi_karyawan_id and vu_report_tindakan_terapis.terapis_bulan = date_format('$trawat_tglapp_start','%Y-%m'))
 						left join karyawan on (absensi.absensi_karyawan_id = karyawan.karyawan_id)
@@ -233,7 +239,8 @@ group by karyawan.karyawan_username";
 						ifnull(vu_report_tindakan_terapis.terapis_count,0) as terapis_count,
 						absensi.absensi_shift,
 						absensi.absensi_tgl,
-						ifnull(vu_jterapis.terapis_count_day,0) as terapis_count_day
+						ifnull(vu_jterapis.terapis_count_day,0) as terapis_count_day,
+						absensi.absensi_keterangan
 					from absensi
 						left join vu_report_tindakan_terapis on (vu_report_tindakan_terapis.terapis_id=absensi.absensi_karyawan_id and vu_report_tindakan_terapis.terapis_bulan = date_format('$trawat_tglapp_start','%Y-%m'))
 						left join karyawan on (absensi.absensi_karyawan_id = karyawan.karyawan_id)
@@ -245,7 +252,8 @@ group by karyawan.karyawan_username";
 						ifnull(vu_report_tindakan_terapis.terapis_count,0) as terapis_count,
 						absensi.absensi_shift,
 						absensi.absensi_tgl,
-						ifnull(vu_jterapis.terapis_count_day,0) as terapis_count_day
+						ifnull(vu_jterapis.terapis_count_day,0) as terapis_count_day,
+						absensi.absensi_keterangan
 					from absensi
 						left join vu_report_tindakan_terapis on (vu_report_tindakan_terapis.terapis_id=absensi.absensi_karyawan_id and vu_report_tindakan_terapis.terapis_bulan = date_format('$trawat_tglapp_start','%Y-%m'))
 						left join karyawan on (absensi.absensi_karyawan_id = karyawan.karyawan_id)
