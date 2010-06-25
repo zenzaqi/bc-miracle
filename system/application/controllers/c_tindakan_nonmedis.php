@@ -17,6 +17,7 @@ class C_tindakan_nonmedis extends Controller {
 	function C_tindakan_nonmedis(){
 		parent::Controller();
 		$this->load->model('m_tindakan_nonmedis', '', TRUE);
+		session_start();
 		$this->load->plugin('to_excel');
 	}
 	
@@ -105,9 +106,6 @@ class C_tindakan_nonmedis extends Controller {
 		
 		$dtrawat_jam = $_POST['dtrawat_jam']; // Get our array back and translate it :
 		$array_dtrawat_jam = json_decode(stripslashes($dtrawat_jam));
-		
-		$dtrawat_status = $_POST['dtrawat_status']; // Get our array back and translate it :
-		$array_dtrawat_status = json_decode(stripslashes($dtrawat_status));
 		
 		$dtrawat_status = $_POST['dtrawat_status']; // Get our array back and translate it :
 		$array_dtrawat_status = json_decode(stripslashes($dtrawat_status));
