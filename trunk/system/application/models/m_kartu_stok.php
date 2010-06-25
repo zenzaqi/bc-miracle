@@ -280,6 +280,7 @@ AND date_format(tanggal,'%Y-%m-%d')<='".$tanggal_end."'
 					$data[$i]['koreksi']=$rowkmutasi->koreksi*$konversi;					
 					$i++;
 				}
+				//$this->firephp->log($sql);
 				
 				//Mutasi Masuk ->masuk
 				$sql="SELECT 	tanggal,
