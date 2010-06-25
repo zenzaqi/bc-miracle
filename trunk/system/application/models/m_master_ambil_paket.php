@@ -158,8 +158,8 @@ class M_master_ambil_paket extends Model{
 			
 			//$query = "SELECT date_format(dapaket_date_create, '%Y-%m-%d') AS tgl_ambil, rawat_nama, dapaket_jumlah, cust_nama FROM detail_ambil_paket LEFT JOIN master_ambil_paket ON(dapaket_master=apaket_id) LEFT JOIN perawatan ON(apaket_item=rawat_id) LEFT JOIN customer ON(dapaket_cust=cust_id) WHERE apaket_jpaket='$dpaket_master' AND apaket_paket='$dpaket_paket' ORDER BY dapaket_date_create";
 			
-			$query = "SELECT
-					date_format(dapaket_date_create, '%Y-%m-%d') AS tgl_ambil
+			$query = "SELECT dapaket_id
+					,date_format(dapaket_date_create, '%Y-%m-%d') AS tgl_ambil
 					,rawat_nama
 					,dapaket_jumlah
 					,cust_nama
@@ -423,7 +423,11 @@ class M_master_ambil_paket extends Model{
 			// For simple search
 			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (cust_nama LIKE '%".addslashes($filter)."%' OR cust_no LIKE '%".addslashes($filter)."%' OR paket_kode LIKE '%".addslashes($filter)."%' OR paket_nama LIKE '%".addslashes($filter)."%')";
+				$query .= " (cust_nama LIKE '%".addslashes($filter)."%'
+					OR cust_no LIKE '%".addslashes($filter)."%'
+					OR paket_kode LIKE '%".addslashes($filter)."%'
+					OR paket_nama LIKE '%".addslashes($filter)."%'
+					OR jpaket_nobukti LIKE '%".addslashes($filter)."%')";
 			}
 
 			$query .= " ORDER BY jpaket_nobukti DESC";
@@ -496,6 +500,22 @@ class M_master_ambil_paket extends Model{
 				return '1';
 			else
 				return '0';
+		}
+		
+		function ambil_paket_batal($dapaket_id){
+			//Membatalkan satu pengambilan paket /
+			if (sizeof($dapaket_id) == 1){
+				$query = "UPDATE detail_ambil_paket SET dapaket_stat_dok='Batal'
+					WHERE date_format(dapaket_date_create, '%Y-%m-%d')=date_format(now(), '%Y-%m-%d') AND dapaket_id = ".$dapaket_id[0];
+				$this->db->query($query);
+				if($this->db->affected_rows()>0)
+					return '1';
+				else
+					return '0';
+			}else{
+				return '0';
+			}
+			
 		}
 		
 		//function for advanced search record

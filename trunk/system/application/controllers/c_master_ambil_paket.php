@@ -17,6 +17,7 @@ class C_master_ambil_paket extends Controller {
 	function C_master_ambil_paket(){
 		parent::Controller();
 		$this->load->model('m_master_ambil_paket', '', TRUE);
+		session_start();
 		$this->load->plugin('to_excel');
 	}
 	
@@ -148,6 +149,9 @@ class C_master_ambil_paket extends Controller {
 			case "EXCEL":
 				$this->ambil_paket_export_excel();
 				break;
+			case "BATAL":
+				$this->ambil_paket_batal();
+				break;
 			default:
 				echo "{failure:true}";
 				break;
@@ -201,6 +205,13 @@ class C_master_ambil_paket extends Controller {
 		$ids = $_POST['ids']; // Get our array back and translate it :
 		$pkid = json_decode(stripslashes($ids));
 		$result=$this->m_master_ambil_paket->ambil_paket_delete($pkid);
+		echo $result;
+	}
+	
+	function ambil_paket_batal(){
+		$dapaket_id = $_POST['dapaket_id']; // Get our array back and translate it :
+		$dapaket_id = json_decode(stripslashes($dapaket_id));
+		$result=$this->m_master_ambil_paket->ambil_paket_batal($dapaket_id);
 		echo $result;
 	}
 
