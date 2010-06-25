@@ -78,6 +78,7 @@ var jproduk_idField;
 var jproduk_nobuktiField;
 var jproduk_custField;
 var jproduk_tanggalField;
+//var jproduk_member_validField;
 var jproduk_diskonField;
 var jproduk_bayarField;
 var jproduk_caraField;
@@ -941,6 +942,9 @@ Ext.onReady(function(){
 		jproduk_custField.setValue(null);
 		jproduk_cust_nomemberField.reset();
 		jproduk_cust_nomemberField.setValue(null);
+		//jproduk_valid_memberField.reset();
+		//jproduk_valid_memberField.setValue(dt.format('Y-m-d'));
+		jproduk_valid_memberField.setValue("");
 		jproduk_tanggalField.setValue(dt.format('Y-m-d'));
 		jproduk_diskonField.reset();
 		jproduk_diskonField.setValue(null);
@@ -1488,6 +1492,7 @@ Ext.onReady(function(){
 							if(memberDataStore.getCount()){
 								jproduk_member_record=memberDataStore.getAt(0).data;
 								jproduk_cust_nomemberField.setValue(jproduk_member_record.member_no);
+								jproduk_valid_memberField.setValue(jproduk_member_record.member_valid);
 							}
 						}
 					}
@@ -2298,6 +2303,18 @@ Ext.onReady(function(){
 		emptyText : '(Auto)',
 		readOnly: true
 	});
+	
+	jproduk_valid_memberField= new Ext.form.DateField({
+		id: 'jproduk_valid_memberField',
+		fieldLabel: 'Member Valid',
+		emptyText : '(Auto)',
+		readOnly: true,
+		disabled : true,
+		//renderer: Ext.util.Format.dateRenderer('d-m-Y'),
+		format : 'd-m-Y'
+	});
+	
+	
 	
 	/* Identify  jproduk_tanggal Field */
 	jproduk_tanggalField= new Ext.form.DateField({
@@ -3784,7 +3801,7 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [jproduk_nobuktiField, jproduk_custField, jproduk_cust_nomemberField] 
+				items: [jproduk_nobuktiField, jproduk_custField, jproduk_cust_nomemberField,jproduk_valid_memberField] 
 			}
 			,{
 				columnWidth:0.5,
@@ -3971,6 +3988,7 @@ Ext.onReady(function(){
 		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
 			{name: 'member_id', type: 'int', mapping: 'member_id'},
 			{name: 'member_no', type: 'string', mapping: 'member_no'},
+			{name: 'member_valid', type: 'date', dateFormat: 'Y-m-d', mapping: 'member_valid'}, 
 			{name: 'member_point' , type: 'int', mapping: 'member_point'},
 			{name: 'member_jenis' , type: 'string', mapping: 'member_jenis'},
 			{name: 'member_aktif' , type: 'string', mapping: 'member_aktif'}
@@ -6014,8 +6032,10 @@ Ext.onReady(function(){
 							if(memberDataStore.getCount()){
 								jproduk_member_record=memberDataStore.getAt(0).data;
 								jproduk_cust_nomemberField.setValue(jproduk_member_record.member_no);
+								jproduk_valid_memberField.setValue(jproduk_member_record.member_valid);
 							}else{
 								jproduk_cust_nomemberField.setValue("");
+								jproduk_valid_memberField.setValue("");
 							}
 						}
 					}
@@ -6522,6 +6542,8 @@ Ext.onReady(function(){
 		jproduk_post2db="CREATE";
 		jproduk_stat_dokField.setValue('Terbuka');
 		jproduk_tanggalField.setValue(dt.format('Y-m-d'));
+		//jproduk_valid_memberField.reset();
+		//jproduk_valid_memberField.setValue(dt.format('Y-m-d'));
 		master_jual_produk_createForm.render();
 		jproduk_caraField.setValue('card');
 		master_jual_produk_cardGroup.setVisible(true);

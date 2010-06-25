@@ -213,6 +213,7 @@ Ext.onReady(function(){
 			{name: 'terapis_count_day', type: 'int', mapping: 'terapis_count_day'},
 			{name: 'absensi_shift', type: 'string', mapping: 'absensi_shift'},
 			{name: 'new_count', type: 'int', mapping: 'new_count'},
+			{name: 'absensi_keterangan', type: 'string', mapping: 'absensi_keterangan'}
 		])
 		//sortInfo:{field: 'karyawan_username', direction: "ASC"}
 	});
@@ -262,14 +263,21 @@ Ext.onReady(function(){
 			align : 'Right',
 			header: '<div align="center">' + 'Jml Tindakan' + '<br>' +'(Bulan)' + '</div>',
 			dataIndex: 'terapis_count',
-			width: 60,	//150,
+			width: 70,	//150,
 			sortable: true,		
 		},		
 		{
 			align : 'Right',
 			header: '<div align="center">' + 'Jml Tindakan' + '<br>' +'(Hari Ini)' + '</div>',
 			dataIndex: 'terapis_count_day',
-			width: 60,	//150,
+			width: 70,	//150,
+			sortable: true,
+		},
+		{
+			align : 'Right',
+			header: '<div align="center">' + 'Keterangan' + '</div>',
+			dataIndex: 'absensi_keterangan',
+			width: 150,	//150,
 			sortable: true,
 		}
 		]
@@ -299,7 +307,7 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 400,
+	  	width: 500,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: jadwal_terapisDataStore,
