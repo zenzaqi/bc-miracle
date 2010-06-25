@@ -1,0 +1,1 @@
+ALTER TABLE `absensi` ADD `absensi_keterangan` VARCHAR( 100 ) NOT NULL ;
