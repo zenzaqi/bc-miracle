@@ -377,6 +377,7 @@ Ext.onReady(function(){
 						appointment_createWindow.hide();
 						break;
 					case 2:
+						Ext.MessageBox.hide();
 						Ext.MessageBox.show({
 						   title: 'Warning',
 						   msg: 'Customer sudah terdaftar.',
@@ -386,6 +387,7 @@ Ext.onReady(function(){
 						});
 						break;
 					case 3:
+						Ext.MessageBox.hide();
 						Ext.MessageBox.show({
 						   title: 'Warning',
 						   msg: 'No telp atau no ponsel customer baru tidak boleh kosong.',
@@ -395,6 +397,7 @@ Ext.onReady(function(){
 						});
 						break;
 					default:
+						Ext.MessageBox.hide();
 						Ext.MessageBox.show({
 						   title: 'Warning',
 						   msg: 'Data appointment tidak bisa disimpan',
@@ -406,6 +409,7 @@ Ext.onReady(function(){
 				}
 			},
 			failure: function(response){
+				Ext.MessageBox.hide();
 				var result=response.responseText;
 				Ext.MessageBox.show({
 					   title: 'Error',
@@ -418,6 +422,7 @@ Ext.onReady(function(){
 		});
 		} else {
 			if(!/^\d+$/.test(app_customerField.getValue())){
+				Ext.MessageBox.hide();
 				Ext.MessageBox.show({
 					title: 'Warning',
 //					msg: 'Customer harus di-Pilih <br>bukan isian!.',
@@ -428,6 +433,7 @@ Ext.onReady(function(){
 					icon: Ext.MessageBox.WARNING
 				});
 			}else {
+				Ext.MessageBox.hide();
 				Ext.MessageBox.show({
 					title: 'Warning',
 //					msg: 'Ada DATA yang BELUM di-ISI!.',
@@ -1883,8 +1889,10 @@ Ext.onReady(function(){
 					app_keterangan	: app_keteranganField.getValue()
 					},
 					callback: function(opts, success, response){
-						if(success)
+						if(success){
 							appointment_DataStore.reload();
+							Ext.MessageBox.hide();
+						}
 					}
 				});
 			}
@@ -2278,8 +2286,10 @@ Ext.onReady(function(){
 					app_keterangan	: app_keteranganField.getValue()
 					},
 					callback: function(opts, success, response){
-						if(success)
+						if(success){
 							appointment_DataStore.reload();
+							Ext.MessageBox.hide();
+						}
 					}
 				});
 			}
@@ -2362,6 +2372,7 @@ Ext.onReady(function(){
 		items: [appointment_masterGroup,appointment_custBaruGroup,detail_tab_perawatan]
 		,
 		buttons: [{
+				id: 'app_saveClose',
 				text: 'Save and Close',
 				handler: appointment_create
 			}
@@ -2374,6 +2385,17 @@ Ext.onReady(function(){
 		]
 	});
 	/* End  of Function*/
+	Ext.getCmp('app_saveClose').on('click', function(){
+		Ext.MessageBox.show({
+           title: 'Please wait',
+           msg: 'Loading items...',
+           progressText: 'Initializing...',
+           width:300,
+		   wait:true,
+		   waitConfig: {interval:200},
+           closable:false
+       });
+	});
 	
 	/* Function for retrieve create Window Form */
 	appointment_createWindow= new Ext.Window({
