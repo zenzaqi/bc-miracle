@@ -101,7 +101,7 @@ Ext.onReady(function(){
 		vu_stok_detail_DataStore.setBaseParam('produk_id',get_pk_id());
 		vu_stok_detail_DataStore.setBaseParam('tanggal_start',vu_stok_all_saldoListEditorGrid.getSelectionModel().getSelected().get('tanggal_start').format('Y-m-d'));
 		vu_stok_detail_DataStore.setBaseParam('tanggal_end',vu_stok_all_saldoListEditorGrid.getSelectionModel().getSelected().get('tanggal_end').format('Y-m-d'));
-		vu_stok_detail_DataStore.load({params:{'produk_id':get_pk_id()}});
+		vu_stok_detail_DataStore.load();
 		
 	}
 	/* End setValue to EDIT*/

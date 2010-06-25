@@ -60,7 +60,8 @@ class M_vu_stok_all_saldo extends Model{
 				$sql_produk="SELECT * FROM vu_produk_satuan_terkecil WHERE produk_aktif='Aktif'";
 			else
 				$sql_produk="SELECT * FROM vu_produk_satuan_default WHERE produk_aktif='Aktif'";
-					
+			$sql_produk.=" AND produk_id='".$produk_id."'";
+			
 			foreach($result->result() as $row){
 				
 				$data[$i]["gudang_id"]=$row->gudang_id;
@@ -71,6 +72,7 @@ class M_vu_stok_all_saldo extends Model{
 				$data[$i]["jumlah_stok"]=0;
 				
 				$result_produk=$this->db->query($sql_produk);
+				
 				if($result_produk->num_rows()){
 					$rowproduk=$result_produk->row();
 					$data[$i]["produk_id"]=$rowproduk->produk_id;
@@ -134,25 +136,27 @@ class M_vu_stok_all_saldo extends Model{
 										AND status<>'Batal'
 								GROUP BY produk_id";
 					//echo $sql_stok_mutasi;
-					
+/*					$this->firephp->log($sql_stok_mutasi);
+					$this->firephp->log($data[$i]["konversi_nilai"]);*/
 					$rs_mutasi=$this->db->query($sql_stok_mutasi);
-					if($rs_mutasi->num_rows())
+					if($rs_mutasi->num_rows()>0)
 					{
 						$ds_mutasi=$rs_mutasi->row();
-						$data[$i]["jumlah_masuk"]==round($ds_mutasi->jumlah_masuk*$data[$i]["konversi_nilai"],3);;
+						$data[$i]["jumlah_masuk"]=round($ds_mutasi->jumlah_masuk*$data[$i]["konversi_nilai"],3);;
 						$data[$i]["jumlah_keluar"]=round($ds_mutasi->jumlah_keluar*$data[$i]["konversi_nilai"],3);;
 						$data[$i]["jumlah_koreksi"]=round($ds_mutasi->jumlah_koreksi*$data[$i]["konversi_nilai"],3);
 						$data[$i]["jumlah_stok"]=round(($data[$i]["jumlah_awal"]+$data[$i]["jumlah_masuk"]+$data[$i]["jumlah_koreksi"]-$data[$i]["jumlah_keluar"]),3);
+						
 					}else{
 						$data[$i]["jumlah_masuk"]=0;
 						$data[$i]["jumlah_keluar"]=0;
 						$data[$i]["jumlah_koreksi"]=0;
 						$data[$i]["jumlah_stok"]=round(($data[$i]["jumlah_awal"]+$data[$i]["jumlah_masuk"]+$data[$i]["jumlah_koreksi"]-$data[$i]["jumlah_keluar"]),3);
 					}
-
+					$i++;
 				}
 			
-				$i++;
+				
 			}
 				
 				//stok mutasi
