@@ -476,6 +476,16 @@ class M_tindakan_nonmedis extends Model{
 			$jumlah = $array_jumlah[$i];
 			
 			if(!is_numeric($dtrawat_id)){
+				//* data baru /
+				if($dtrawat_petugas2==''){
+					$sql = "SELECT karyawan_id FROM karyawan WHERE karyawan_no=999";
+					$rs = $this->db->query($sql);
+					$record = $rs->row_array();
+					$dtrawat_petugas2=$record['karyawan_id'];
+				}
+				if($dtrawat_jam==''){
+					$dtrawat_jam=date('H:i:s');
+				}
 				$dti_dtrawat=array(
 				"dtrawat_master"=>$dtrawat_master,
 				"dtrawat_perawatan"=>$dtrawat_perawatan,
