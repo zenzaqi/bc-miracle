@@ -825,6 +825,16 @@ class M_tindakan_medis extends Model{
 			$dtrawat_keterangan = $array_dtrawat_keterangan[$i];
 			
 			if(!is_numeric($dtrawat_id)){
+				//* data baru /
+				if($dtrawat_petugas1==''){
+					$sql = "SELECT karyawan_id FROM karyawan WHERE karyawan_no=99";
+					$rs = $this->db->query($sql);
+					$record = $rs->row_array();
+					$dtrawat_petugas1=$record['karyawan_id'];
+				}
+				if($dtrawat_jamreservasi==''){
+					$dtrawat_jamreservasi=date('H:i:s');
+				}
 				$dti_dtrawat=array(
 				"dtrawat_master"=>$dtrawat_master,
 				"dtrawat_perawatan"=>$dtrawat_perawatan,
