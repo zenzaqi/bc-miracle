@@ -338,6 +338,7 @@ Ext.onReady(function(){
 			}                      
 		});
 		} else {
+			Ext.MessageBox.hide();
 			Ext.MessageBox.show({
 				title: 'Warning',
 				msg: 'Your Form is not valid!.',
@@ -1397,12 +1398,13 @@ Ext.onReady(function(){
 						jumlah	: encoded_array_jumlah
 						},
 						success: function(response){
-							Ext.MessageBox.hide();
 							var result=eval(response.responseText);
 							if(result==1){
 								tindakan_nonmedis_DataStore.reload();
+								Ext.MessageBox.hide();
 							}else{
 								tindakan_medisDataStore.reload();
+								Ext.MessageBox.hide();
 								Ext.MessageBox.show({
 									title: 'Error',
 									msg: 'Data detail tindakan medis tidak bisa disimpan.',
@@ -1489,7 +1491,7 @@ Ext.onReady(function(){
 		items: [tindakan_nonmedis_masterGroup,tindakan_nonmedis_detailListEditorGrid]
 		,
 		buttons: [{
-				id: 'saveClose',
+				id: 'tnonmedis_saveClose',
 				text: 'Save and Close',
 				ref: '../saveCloseBtn',
 				handler: tindakan_nonmedis_create
@@ -1503,7 +1505,7 @@ Ext.onReady(function(){
 		]
 	});
 	/* End  of Function*/
-	Ext.getCmp('saveClose').on('click', function(){
+	Ext.getCmp('tnonmedis_saveClose').on('click', function(){
 		Ext.MessageBox.show({
            title: 'Please wait',
            msg: 'Loading items...',
