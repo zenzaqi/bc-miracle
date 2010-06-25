@@ -2287,6 +2287,7 @@ Ext.onReady(function(){
 			text: 'Print',
 			tooltip: 'Print Document',
 			iconCls:'icon-print',
+			disabled: true,
 			handler: customer_print  
 		}
 		]
@@ -2380,6 +2381,7 @@ Ext.onReady(function(){
 			text: 'Print',
 			tooltip: 'Print Document',
 			iconCls:'icon-print',
+			disabled: true,
 			handler: customer_print 
 		},
 		{ 
