@@ -742,6 +742,13 @@ Ext.onReady(function(){
 		master_jual_rawat_create();
 	}
   
+	
+	function save_button(){
+		cetak_jrawat=0;
+		master_jual_rawat_create();
+	}
+  
+  
   	/* Function for get PK field */
 	function get_pk_id(){
 		if(jrawat_post2db=='UPDATE')
@@ -5240,7 +5247,8 @@ Ext.onReady(function(){
 			},
 			{
 				text: 'Save',
-				handler: master_jual_rawat_create
+				//id : 'save_button',
+				handler: save_button
 			},
 			{
 				text: 'Cancel',
@@ -5253,6 +5261,11 @@ Ext.onReady(function(){
 		]
 	});
 	/* End  of Function*/
+	
+	/*Ext.getCmp('save_button').on('click',function({
+	cetak_jrawat=0;
+	}
+	));*/
 	
 	
 	/* Function for retrieve create Window Form */
