@@ -843,6 +843,8 @@ Ext.onReady(function(){
 		jpaket_custField.setValue(null);
 		jpaket_cust_nomemberField.reset();
 		jpaket_cust_nomemberField.setValue(null);
+		
+		jpaket_valid_memberField.setValue("");
 		jpaket_tanggalField.setValue(dt.format('Y-m-d'));
 		jpaket_diskonField.reset();
 		jpaket_diskonField.setValue(null);
@@ -1290,6 +1292,7 @@ Ext.onReady(function(){
 							if(memberDataStore.getCount()){
 								jpaket_member_record=memberDataStore.getAt(0).data;
 								jpaket_cust_nomemberField.setValue(jpaket_member_record.member_no);
+								jpaket_valid_memberField.setValue(jpaket_member_record.member_valid);
 							}
 						}
 					}
@@ -2062,6 +2065,16 @@ Ext.onReady(function(){
 		emptyText : '(Auto)',
 		readOnly: true
 	});
+	
+	jpaket_valid_memberField= new Ext.form.DateField({
+		id: 'jpaket_valid_memberField',
+		fieldLabel: 'Valid Member',
+		emptyText : '(Auto)',
+		disabled : true,
+		readOnly: true,
+		format : 'd-m-Y'
+	});
+	
 	
 	/* Identify  jpaket_tanggal Field */
 	jpaket_tanggalField= new Ext.form.DateField({
@@ -3487,7 +3500,7 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [jpaket_nobuktiField, jpaket_custField, jpaket_cust_nomemberField] 
+				items: [jpaket_nobuktiField, jpaket_custField, jpaket_cust_nomemberField,jpaket_valid_memberField] 
 			}
 			,{
 				columnWidth:0.5,
@@ -3631,6 +3644,7 @@ Ext.onReady(function(){
 		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
 			{name: 'member_id', type: 'int', mapping: 'member_id'},
 			{name: 'member_no', type: 'string', mapping: 'member_no'},
+			{name: 'member_valid', type: 'date', dateFormat: 'Y-m-d', mapping: 'member_valid'}, 
 			{name: 'member_point' , type: 'int', mapping: 'member_point'},
 			{name: 'member_jenis' , type: 'string', mapping: 'member_jenis'},
 			{name: 'member_aktif' , type: 'string', mapping: 'member_aktif'}
@@ -5537,10 +5551,14 @@ Ext.onReady(function(){
 	jpaket_custField.on("select",function(){
 		load_membership();
 		j=memberDataStore.findExact('member_cust',jpaket_custField.getValue(),0);
-		if(j>-1)
+		if(j>-1){
 			jpaket_cust_nomemberField.setValue(memberDataStore.getAt(j).member_no);
-		else
+			jpaket_valid_memberField.setValue(memberDataStore.getAt(j).member_valid);
+		}
+		else{
 			jpaket_cust_nomemberField.setValue("");
+			jpaket_valid_memberField.setValue("");
+		}
 
 		cbo_cust=cbo_cust_jual_paket_DataStore.findExact('cust_id',jpaket_custField.getValue(),0);
 		if(cbo_cust>-1){
