@@ -720,6 +720,7 @@ Ext.onReady(function(){
 	
 	ambil_paketListEditorGrid.on('rowclick', function (ambil_paketListEditorGrid, rowIndex, eventObj) {
         var recordMaster = ambil_paketListEditorGrid.getSelectionModel().getSelected();
+		dapaket_dpaket_idField.setValue(recordMaster.get("dpaket_id"));
         //detail_ambil_paketStore.load({params : {dpaket_master : recordMaster.get("dpaket_master"), dpaket_paket : recordMaster.get("dpaket_paket")}});
 		detail_ambil_paketStore.load({params : {dapaket_dpaket : recordMaster.get("dpaket_id")}});
 		//ambil_paket_DataStore.reload();
@@ -778,6 +779,8 @@ Ext.onReady(function(){
 	ambil_paketListEditorGrid.addListener('rowcontextmenu', onambil_paket_ListEditGridContextMenu);
 	ambil_paket_DataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
 	ambil_paketListEditorGrid.on('afteredit', ambil_paket_update); // inLine Editing Record
+	
+	dapaket_dpaket_idField= new Ext.form.NumberField();
 	
 	apaket_idField= new Ext.form.NumberField({
 		id: 'apaket_idField',
@@ -914,6 +917,7 @@ Ext.onReady(function(){
 		},[
 //			{name: 'apaket_faktur', type: 'string', mapping: 'apaket_faktur'},	//simplified, by hendri
 //			{name: 'paket_nama', type: 'string', mapping: 'paket_nama'},		//simplified, by hendri
+			{name: 'dapaket_id', type: 'int', mapping: 'dapaket_id'},
 			{name: 'rawat_nama', type: 'string', mapping: 'rawat_nama'},
 			{name: 'dapaket_jumlah', type: 'int', mapping: 'dapaket_jumlah'},
 			{name: 'cust_nama', type: 'string', mapping: 'cust_nama'},
@@ -1012,6 +1016,66 @@ Ext.onReady(function(){
         width: 1220	//940	//800
     });
     history_ambil_paketPanel.render('history_ambil_paket');
+	
+	history_ambil_paketPanel.on('rowdblclick', function(objGrid, rowindex, e){
+		if(history_ambil_paketPanel.selModel.getSelected().get('dapaket_stat_dok')!=='Batal' && history_ambil_paketPanel.selModel.getCount() == 1){
+			Ext.MessageBox.confirm('Batal','Anda yakin mem-Batal-kan pengambilan paket ini?', function(btn){
+				if(btn=='yes'){
+					var selections = history_ambil_paketPanel.selModel.getSelections();
+					var dapaket_id = [];
+					for(i = 0; i< history_ambil_paketPanel.selModel.getCount(); i++){
+						dapaket_id.push(selections[i].json.dapaket_id);
+					}
+					var encoded_array_dapaket_id = Ext.encode(dapaket_id);
+					
+					Ext.Ajax.request({
+						waitMsg: 'Mohon tunggu...',
+						url: 'index.php?c=c_master_ambil_paket&m=get_action', 
+						params: {
+							task: "BATAL",
+							dapaket_id: encoded_array_dapaket_id
+						},
+						success: function(response){
+							var result=eval(response.responseText);
+							switch(result){
+								case 1:  // Success : simply reload
+									Ext.MessageBox.show({
+										title: 'OK',
+										msg: 'Pengambilan Paket telah dibatalkan.',
+										buttons: Ext.MessageBox.OK,
+										animEl: 'save',
+										icon: Ext.MessageBox.OK
+									});
+									ambil_paket_DataStore.reload();
+									detail_ambil_paketStore.load({params: {dapaket_dpaket: dapaket_dpaket_idField.getValue()}});
+									break;
+								default:
+									Ext.MessageBox.show({
+										title: 'Warning',
+										msg: 'Pengambilan Paket tidak bisa dibatalkan.',
+										buttons: Ext.MessageBox.OK,
+										animEl: 'save',
+										icon: Ext.MessageBox.WARNING
+									});
+									break;
+							}
+						},
+						failure: function(response){
+							var result=response.responseText;
+							Ext.MessageBox.show({
+							   title: 'Error',
+							   msg: 'Could not connect to the database. retry later.',
+							   buttons: Ext.MessageBox.OK,
+							   animEl: 'database',
+							   icon: Ext.MessageBox.ERROR
+							});	
+						}
+					});
+				}
+			});
+		}
+		
+	});
 
 	/* END History Ambil Paket */
 	
