@@ -173,7 +173,7 @@ class M_master_ambil_paket extends Model{
                 LEFT JOIN karyawan AS terapis ON(dtrawat_petugas2=terapis.karyawan_id)
 				LEFT JOIN karyawan AS referal ON(dapaket_referal=referal.karyawan_id)
 				WHERE dapaket_dpaket='$dapaket_dpaket'
-				ORDER BY dapaket_date_create";
+				ORDER BY dapaket_date_create DESC";
 			
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
