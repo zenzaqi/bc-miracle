@@ -329,6 +329,9 @@ class C_master_jual_produk extends Controller {
 			case "BATAL":
 				$this->master_jual_produk_batal();
 				break;
+            case "DDELETE":
+				$this->detail_jual_produk_delete();
+				break;
 			default:
 				echo "{failure:true}";
 				break;
@@ -597,6 +600,12 @@ class C_master_jual_produk extends Controller {
 		$result=$this->m_master_jual_produk->master_jual_produk_delete($pkid);
 		echo $result;
 	}
+    
+    function detail_jual_produk_delete(){
+        $dproduk_id = trim(@$_POST["dproduk_id"]); // Get our array back and translate it :
+		$result=$this->m_master_jual_produk->detail_jual_produk_delete($dproduk_id);
+		echo $result;
+    }
 	
 	function master_jual_produk_batal(){
 		$jproduk_id=trim($_POST["jproduk_id"]);
