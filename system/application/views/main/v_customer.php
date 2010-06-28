@@ -1482,6 +1482,7 @@ Ext.onReady(function(){
 			{name: 'cust_keterangan', type: 'string', mapping: 'cust_keterangan'},
 			//{name: 'cust_member', type: 'string', mapping: 'cust_member'},
 			{name: 'member_no', type: 'string', mapping: 'member_no'},
+			{name: 'member_valid', type: 'date', dateFormat: 'Y-m-d', mapping: 'member_valid'}, 
 //			{name: 'cust_statusmember', type: 'string', mapping: 'cust_statusmember'},
 			{name: 'cust_terdaftar', type: 'date', dateFormat: 'Y-m-d', mapping: 'cust_terdaftar'},
 			{name: 'cust_statusnikah', type: 'string', mapping: 'cust_statusnikah'},
@@ -1667,6 +1668,16 @@ Ext.onReady(function(){
 					return value.substring(0,6) + '-' + value.substring(6,12) + '-' + value.substring(12);
 				}
 		},
+		
+		{
+			header: '<div align="center">Tgl Valid</div>',
+			dataIndex: 'member_valid',
+			width: 70,
+			sortable: true,
+			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
+			readOnly: true
+		}, 
+		
 		{
 			header: '<div align="center">' + 'L/P' + '</div>',
 			dataIndex: 'cust_kelamin',
@@ -1748,7 +1759,7 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Telp Rumah' + '</div>',
 			dataIndex: 'cust_telprumah',
-			width: 60,	//97,
+			width: 55,	//97,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 30,
@@ -1780,7 +1791,7 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'No Ponsel' + '</div>',
 			dataIndex: 'cust_hp',
-			width: 80,	//97,
+			width: 65,	//97,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 25,
@@ -1963,7 +1974,7 @@ Ext.onReady(function(){
 //			header: 'Aktif',
 			header: '<div align="center">' + 'Status' + '</div>',
 			dataIndex: 'cust_aktif',
-			width: 50,	//150,
+			width: 45,	//150,
 			sortable: true,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
@@ -2226,7 +2237,7 @@ Ext.onReady(function(){
 		//clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 1220, //940,
+	  	width: 1235, //940,
 	  	//autoWidth: true,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
