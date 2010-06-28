@@ -1407,7 +1407,17 @@ Ext.onReady(function(){
                 jrawat_tanggalField.setDisabled(true);
                 jrawat_keteranganField.setDisabled(false);
 				master_cara_bayarTabPanel.setDisabled(false);
-                detail_jual_rawatListEditorGrid.setDisabled(false);
+				detail_jual_rawatListEditorGrid.djrawat_add.enable();
+				detail_jual_rawatListEditorGrid.djrawat_delete.enable();
+				combo_jual_rawat.setDisabled(false);
+				drawat_jumlahField.setDisabled(false);
+				drawat_hargaField.setDisabled(false);
+				drawat_subtotalField.setDisabled(false);
+				drawat_jenis_diskonField.setDisabled(false);
+				drawat_diskonField.setDisabled(false);
+				drawat_subtotal_netField.setDisabled(false);
+				
+                //detail_jual_rawatListEditorGrid.setDisabled(false);
                 jrawat_diskonField.setDisabled(false);
                 jrawat_cashback_cfField.setDisabled(false);
                 jrawat_stat_dokField.setDisabled(false);
@@ -1417,7 +1427,17 @@ Ext.onReady(function(){
                 jrawat_tanggalField.setDisabled(true);
                 jrawat_keteranganField.setDisabled(true);
                 master_cara_bayarTabPanel.setDisabled(true);
-                detail_jual_rawatListEditorGrid.setDisabled(true);
+				detail_jual_rawatListEditorGrid.djrawat_add.disable();
+				detail_jual_rawatListEditorGrid.djrawat_delete.disable();
+				combo_jual_rawat.setDisabled(true);
+				drawat_jumlahField.setDisabled(true);
+				drawat_hargaField.setDisabled(true);
+				drawat_subtotalField.setDisabled(true);
+				drawat_jenis_diskonField.setDisabled(true);
+				drawat_diskonField.setDisabled(true);
+				drawat_subtotal_netField.setDisabled(true);
+				
+                //detail_jual_rawatListEditorGrid.setDisabled(true);
                 jrawat_diskonField.setDisabled(true);
                 jrawat_cashback_cfField.setDisabled(true);
                 jrawat_stat_dokField.setDisabled(false);
@@ -1429,7 +1449,16 @@ Ext.onReady(function(){
 				jrawat_keteranganField.setDisabled(true);
 				jrawat_stat_dokField.setDisabled(true);
 				master_cara_bayarTabPanel.setDisabled(true);
-				detail_jual_rawatListEditorGrid.setDisabled(true);
+				detail_jual_rawatListEditorGrid.djrawat_add.disable();
+				detail_jual_rawatListEditorGrid.djrawat_delete.disable();
+				combo_jual_rawat.setDisabled(true);
+				drawat_jumlahField.setDisabled(true);
+				drawat_hargaField.setDisabled(true);
+				drawat_subtotalField.setDisabled(true);
+				drawat_jenis_diskonField.setDisabled(true);
+				drawat_diskonField.setDisabled(true);
+				drawat_subtotal_netField.setDisabled(true);
+				//detail_jual_rawatListEditorGrid.setDisabled(true);
 				jrawat_diskonField.setDisabled(true);
 				jrawat_cashback_cfField.setDisabled(true);
 		}
@@ -4271,11 +4300,13 @@ Ext.onReady(function(){
 			text: 'Add',
 			tooltip: 'Add new detail record',
 			iconCls:'icon-adds',    				// this is defined in our styles.css
+			ref : '../djrawat_add',
 			handler: detail_jual_rawat_add
 		}, '-',{
 			text: 'Delete',
 			tooltip: 'Delete detail selected record',
 			iconCls:'icon-delete',
+			ref : '../djrawat_delete',
 			disabled: false,
 			handler: detail_jual_rawat_confirm_delete
 		}

@@ -1448,7 +1448,19 @@ Ext.onReady(function(){
 			jproduk_tanggalField.setDisabled(true);
 			jproduk_keteranganField.setDisabled(false);
 			master_cara_bayarTabPanel.setDisabled(false);
-            detail_jual_produkListEditorGrid.setDisabled(false);
+			detail_jual_produkListEditorGrid.djproduk_add.enable();
+			detail_jual_produkListEditorGrid.djproduk_delete.enable();
+			combo_jual_produk.setDisabled(false);
+			combo_satuan_produk.setDisabled(false);
+			djumlah_beli_produkField.setDisabled(false);
+			dharga_konversiField.setDisabled(false);
+			dsub_totalField.setDisabled(false);
+			djenis_diskonField.setDisabled(false);
+			djumlah_diskonField.setDisabled(false);
+			dsub_total_netField.setDisabled(false);
+			combo_reveral.setDisabled(false);
+			dharga_defaultField.setDisabled(false);
+            //detail_jual_produkListEditorGrid.setDisabled(false);
             jproduk_diskonField.setDisabled(false);
             jproduk_cashback_cfField.setDisabled(false);
             jproduk_stat_dokField.setDisabled(false);
@@ -1458,7 +1470,19 @@ Ext.onReady(function(){
 			jproduk_tanggalField.setDisabled(true);
 			jproduk_keteranganField.setDisabled(true);
 			master_cara_bayarTabPanel.setDisabled(true);
-			detail_jual_produkListEditorGrid.setDisabled(true);
+			detail_jual_produkListEditorGrid.djproduk_add.disable();
+			detail_jual_produkListEditorGrid.djproduk_delete.disable();
+			combo_jual_produk.setDisabled(true);
+			combo_satuan_produk.setDisabled(true);
+			djumlah_beli_produkField.setDisabled(true);
+			dharga_konversiField.setDisabled(true);
+			dsub_totalField.setDisabled(true);
+			djenis_diskonField.setDisabled(true);
+			djumlah_diskonField.setDisabled(true);
+			dsub_total_netField.setDisabled(true);
+			combo_reveral.setDisabled(true);
+			dharga_defaultField.setDisabled(true);
+			//detail_jual_produkListEditorGrid.setDisabled(true);
 			jproduk_diskonField.setDisabled(true);
 			jproduk_cashback_cfField.setDisabled(true);
 			jproduk_stat_dokField.setDisabled(false);
@@ -1469,7 +1493,19 @@ Ext.onReady(function(){
 			jproduk_keteranganField.setDisabled(true);
 			jproduk_stat_dokField.setDisabled(true);
 			master_cara_bayarTabPanel.setDisabled(true);
-			detail_jual_produkListEditorGrid.setDisabled(true);
+			detail_jual_produkListEditorGrid.djproduk_add.disable();
+			detail_jual_produkListEditorGrid.djproduk_delete.disable();
+			combo_jual_produk.setDisabled(true);
+			combo_satuan_produk.setDisabled(true);
+			djumlah_beli_produkField.setDisabled(true);
+			dharga_konversiField.setDisabled(true);
+			dsub_totalField.setDisabled(true);
+			djenis_diskonField.setDisabled(true);
+			djumlah_diskonField.setDisabled(true);
+			dsub_total_netField.setDisabled(true);
+			combo_reveral.setDisabled(true);
+			dharga_defaultField.setDisabled(true);
+			//detail_jual_produkListEditorGrid.setDisabled(true);
 			jproduk_diskonField.setDisabled(true);
 			jproduk_cashback_cfField.setDisabled(true);
 			master_jual_produk_createForm.jproduk_savePrint.disable();
@@ -2106,6 +2142,7 @@ Ext.onReady(function(){
 		{
 			text: 'Add',
 			tooltip: 'Add new record',
+			id : 'Add_detail',
 			iconCls:'icon-adds',    				// this is defined in our styles.css
 			disabled: true,
 			handler: display_form_window
@@ -4453,11 +4490,13 @@ Ext.onReady(function(){
 			text: 'Add',
 			tooltip: 'Add new detail record',
 			iconCls:'icon-adds',    				// this is defined in our styles.css
+			ref : '../djproduk_add',
 			handler: detail_jual_produk_add
 		}, '-',{
 			text: 'Delete',
 			tooltip: 'Delete detail selected record',
 			iconCls:'icon-delete',
+			ref : '../djproduk_delete',
 			//disabled: true,
 			handler: detail_jual_produk_confirm_delete
 		}
