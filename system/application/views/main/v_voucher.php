@@ -529,6 +529,7 @@ Ext.onReady(function(){
 		},[
 		/* dataIndex => insert intovoucher_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'voucher_id', type: 'int', mapping: 'voucher_id'}, 
+			{name: 'voucher_no', type: 'string', mapping: 'voucher_no'}, 
 			{name: 'voucher_nama', type: 'string', mapping: 'voucher_nama'}, 
 			{name: 'voucher_jenis', type: 'string', mapping: 'voucher_jenis'}, 
 			{name: 'voucher_point', type: 'int', mapping: 'voucher_point'}, 
@@ -595,6 +596,15 @@ Ext.onReady(function(){
 			hidden: true
 		},
 		{
+			header: '<div align="center">' + 'No Voucher' + '</div>',
+			dataIndex: 'voucher_no',
+			width: 100,
+			sortable: true,
+			editor: new Ext.form.TextField({
+				maxLength: 50
+          	})
+		}, 
+		{
 			header: '<div align="center">' + 'Nama Voucher' + '</div>',
 			dataIndex: 'voucher_nama',
 			width: 260,
@@ -608,6 +618,7 @@ Ext.onReady(function(){
 			dataIndex: 'voucher_jenis',
 			width: 120,
 			sortable: true,
+			hidden: true,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
 				triggerAction: 'all',
@@ -642,6 +653,7 @@ Ext.onReady(function(){
 			align: 'right',
 			width: 60,
 			sortable: true,
+			hidden: true,
 			editor: new Ext.form.NumberField({
 				allowDecimals: false,
 				allowNegative: false,
@@ -681,6 +693,7 @@ Ext.onReady(function(){
 			align: 'right',
 			width: 100,
 			sortable: true,
+			hidden: true,
 			renderer: Ext.util.Format.numberRenderer('0,000'),
 			editor: new Ext.form.NumberField({
 				allowDecimals: true,
@@ -696,6 +709,7 @@ Ext.onReady(function(){
 			align: 'right',
 			width: 60,
 			sortable: true,
+			hidden: true,
 			editor: new Ext.form.NumberField({
 				allowDecimals: false,
 				allowNegative: false,
@@ -709,6 +723,7 @@ Ext.onReady(function(){
 			dataIndex: 'voucher_promo',
 			width: 200,
 			sortable: true,
+			hidden: true,
 			editor: new Ext.form.NumberField({
 				allowDecimals: false,
 				allowNegative: false,
@@ -765,7 +780,7 @@ Ext.onReady(function(){
 	voucherListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'voucherListEditorGrid',
 		el: 'fp_voucher',
-		title: 'Daftar Voucher',
+		title: 'Daftar Voucher Penukaran Poin',
 		autoHeight: true,
 		store: voucher_DataStore, // DataStore
 		cm: voucher_ColumnModel, // Nama-nama Columns
@@ -774,7 +789,7 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 1220,
+	  	width: 800,	//1220,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: voucher_DataStore,
@@ -791,6 +806,7 @@ Ext.onReady(function(){
 			text: 'Edit',
 			tooltip: 'Edit selected record',
 			iconCls:'icon-update',
+			disabled: true,
 			handler: voucher_confirm_update   // Confirm before updating
 		}, '-',{
 			text: 'Delete',
@@ -835,6 +851,7 @@ Ext.onReady(function(){
 		items: [
 		{ 
 			text: 'Edit', tooltip: 'Edit selected record', 
+			disabled: true,
 			iconCls:'icon-update',
 			handler: voucher_editContextMenu 
 		},
