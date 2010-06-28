@@ -310,7 +310,7 @@ Ext.onReady(function(){
 		if(jproduk_idField.getValue()!== null){
 			jproduk_id_for_cetak = jproduk_idField.getValue();
 		}
-	
+        
 		//if(is_master_jual_produk_form_valid() && dproduk_produk_id=="ada" && (/^\d+$/.test(jproduk_custField.getValue()) || (get_jproduk_pk()!==0))){	
 		if(is_master_jual_produk_form_valid()
 		   && dproduk_produk_id=="ada"
@@ -405,7 +405,7 @@ Ext.onReady(function(){
 			var jproduk_transfer_bank3_create="";
 			var jproduk_transfer_nama3_create=null;
 			var jproduk_transfer_nilai3_create=null;
-	
+            
 			if(jproduk_idField.getValue()!== null){jproduk_id_create_pk = jproduk_idField.getValue();}else{jproduk_id_create_pk=get_jproduk_pk();} 
 			if(jproduk_nobuktiField.getValue()!== null){jproduk_nobukti_create = jproduk_nobuktiField.getValue();} 
 			if(jproduk_custField.getValue()!== null){jproduk_cust_create = jproduk_custField.getValue();} 
@@ -596,9 +596,9 @@ Ext.onReady(function(){
 					switch(result){
 						case 0:
 							if(jproduk_post2db=='CREATE'){
-									detail_jual_produk_insert();
+								detail_jual_produk_insert();
 							}else if(jproduk_post2db=='UPDATE'){
-									detail_jual_produk_insert();
+								detail_jual_produk_insert();
 							}
 							//detail_jual_produk_insert();
 							//Ext.MessageBox.alert(jproduk_post2db+' OK','The Master_jual_produk was '+msg+' successfully.');
@@ -4255,6 +4255,12 @@ Ext.onReady(function(){
 		[
 		{
 			align : 'Left',
+			header: 'ID',
+			dataIndex: 'dproduk_id',
+            hidden: true
+		},
+        {
+			align : 'Left',
 			header: '<div align="center">' + 'Produk' + '</div>',
 			dataIndex: 'dproduk_produk',
 			width: 300, //250
@@ -4754,9 +4760,9 @@ Ext.onReady(function(){
 		// only one record is selected here
 		if(detail_jual_produkListEditorGrid.selModel.getCount() == 1){
 			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', detail_jual_produk_delete);
-		} else if(detail_jual_produkListEditorGrid.selModel.getCount() > 1){
+		} /*else if(detail_jual_produkListEditorGrid.selModel.getCount() > 1){
 			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', detail_jual_produk_delete);
-		} else {
+		}*/ else {
 			Ext.MessageBox.show({
 				title: 'Warning',
 				msg: 'You can\'t really delete something you haven\'t selected?',
@@ -4771,10 +4777,58 @@ Ext.onReady(function(){
 	//function for Delete of detail
 	function detail_jual_produk_delete(btn){
 		if(btn=='yes'){
-			var s = detail_jual_produkListEditorGrid.getSelectionModel().getSelections();
-			for(var i = 0, r; r = s[i]; i++){
-				detail_jual_produk_DataStore.remove(r);
-				load_detail_update();
+            var selections = detail_jual_produkListEditorGrid.getSelectionModel().getSelections();
+			for(var i = 0, record; record = selections[i]; i++){
+                if(record.data.dproduk_id==''){
+                    detail_jual_produk_DataStore.remove(record);
+                }else if((/^\d+$/.test(record.data.dproduk_id))){
+                    //Delete dari db.detail_jual_produk
+                    Ext.MessageBox.show({
+                        title: 'Please wait',
+                        msg: 'Loading items...',
+                        progressText: 'Initializing...',
+                        width:300,
+                        wait:true,
+                        waitConfig: {interval:200},
+                        closable:false
+                    });
+                    detail_jual_produk_DataStore.remove(record);
+                    Ext.Ajax.request({ 
+                        waitMsg: 'Please Wait',
+                        url: 'index.php?c=c_master_jual_produk&m=get_action', 
+                        params: { task: "DDELETE", dproduk_id:  record.data.dproduk_id }, 
+                        success: function(response){
+                            var result=eval(response.responseText);
+                            switch(result){
+                                case 1:  // Success : simply reload
+                                    load_detail_update();
+                                    Ext.MessageBox.hide();
+                                    break;
+                                default:
+                                    Ext.MessageBox.hide();
+                                    Ext.MessageBox.show({
+                                        title: 'Warning',
+                                        msg: 'Could not delete the entire selection',
+                                        buttons: Ext.MessageBox.OK,
+                                        animEl: 'save',
+                                        icon: Ext.MessageBox.WARNING
+                                    });
+                                    break;
+                            }
+                        },
+                        failure: function(response){
+                            Ext.MessageBox.hide();
+                            var result=response.responseText;
+                            Ext.MessageBox.show({
+                               title: 'Error',
+                               msg: 'Could not connect to the database. retry later.',
+                               buttons: Ext.MessageBox.OK,
+                               animEl: 'database',
+                               icon: Ext.MessageBox.ERROR
+                            });	
+                        }
+                    });
+                }
 			}
 		} 
 		//detail_jual_produk_DataStore.commitChanges();
