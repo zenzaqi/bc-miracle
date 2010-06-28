@@ -1250,7 +1250,18 @@ Ext.onReady(function(){
 			jpaket_tanggalField.setDisabled(false);
 			jpaket_keteranganField.setDisabled(false);
 			master_cara_bayarTabPanel.setDisabled(false);
-			detail_jual_paketListEditorGrid.setDisabled(false);
+			detail_jual_paketListEditorGrid.djpaket_add.enable();
+			detail_jual_paketListEditorGrid.djpaket_delete.enable();
+			combo_jual_paket.setDisabled(false);
+			dpaket_jumlahField.setDisabled(false);
+			dpaket_kadaluarsaField.setDisabled(false);
+			dpaket_hargaField.setDisabled(false);
+			dpaket_subtotalField.setDisabled(false);
+			dpaket_jenisdiskonField.setDisabled(false);
+			dpaket_jumlahdiskonField.setDisabled(false);
+			dpaket_subtotalnetField.setDisabled(false);
+			combo_reveral_paket.setDisabled(false);
+			//detail_jual_paketListEditorGrid.setDisabled(false);
 			detail_pengguna_paketListEditorGrid.setDisabled(false);
 			jpaket_diskonField.setDisabled(false);
 			jpaket_cashback_cfField.setDisabled(false);
@@ -1260,7 +1271,18 @@ Ext.onReady(function(){
 			jpaket_tanggalField.setDisabled(true);
 			jpaket_keteranganField.setDisabled(true);
 			master_cara_bayarTabPanel.setDisabled(true);
-			detail_jual_paketListEditorGrid.setDisabled(true);
+			detail_jual_paketListEditorGrid.djpaket_add.disable();
+			detail_jual_paketListEditorGrid.djpaket_delete.disable();
+			combo_jual_paket.setDisabled(true);
+			dpaket_jumlahField.setDisabled(true);
+			dpaket_kadaluarsaField.setDisabled(true);
+			dpaket_hargaField.setDisabled(true);
+			dpaket_subtotalField.setDisabled(true);
+			dpaket_jenisdiskonField.setDisabled(true);
+			dpaket_jumlahdiskonField.setDisabled(true);
+			dpaket_subtotalnetField.setDisabled(true);
+			combo_reveral_paket.setDisabled(true);
+			//detail_jual_paketListEditorGrid.setDisabled(true);
 			//detail_pengguna_paketListEditorGrid.setDisabled(true);
 			jpaket_diskonField.setDisabled(true);
 			jpaket_cashback_cfField.setDisabled(true);
@@ -1271,7 +1293,18 @@ Ext.onReady(function(){
 			jpaket_tanggalField.setDisabled(true);
 			jpaket_keteranganField.setDisabled(true);
 			master_cara_bayarTabPanel.setDisabled(true);
-			detail_jual_paketListEditorGrid.setDisabled(true);
+			detail_jual_paketListEditorGrid.djpaket_add.disable();
+			detail_jual_paketListEditorGrid.djpaket_delete.disable();
+			combo_jual_paket.setDisabled(true);
+			dpaket_jumlahField.setDisabled(true);
+			dpaket_kadaluarsaField.setDisabled(true);
+			dpaket_hargaField.setDisabled(true);
+			dpaket_subtotalField.setDisabled(true);
+			dpaket_jenisdiskonField.setDisabled(true);
+			dpaket_jumlahdiskonField.setDisabled(true);
+			dpaket_subtotalnetField.setDisabled(true);
+			combo_reveral_paket.setDisabled(true);
+			//detail_jual_paketListEditorGrid.setDisabled(true);
 			detail_pengguna_paketListEditorGrid.setDisabled(true);
 			jpaket_diskonField.setDisabled(true);
 			jpaket_cashback_cfField.setDisabled(true);
@@ -1453,6 +1486,7 @@ Ext.onReady(function(){
 			{name: 'jpaket_cust_id', type: 'int', mapping: 'jpaket_cust'},
 			{name: 'jpaket_cust_no', type: 'string', mapping: 'cust_no'},		//additional by hendri
 			{name: 'jpaket_cust_member', type: 'string', mapping: 'cust_member'},		//additional by hendri
+			{name: 'jpaket_cust_member_no', type: 'string', mapping: 'member_no'},
 			{name: 'jpaket_tanggal', type: 'date', dateFormat: 'Y-m-d', mapping: 'jpaket_tanggal'}, 
 			{name: 'jpaket_diskon', type: 'int', mapping: 'jpaket_diskon'}, 
 			{name: 'jpaket_cashback', type: 'float', mapping: 'jpaket_cashback'},
@@ -1751,8 +1785,8 @@ Ext.onReady(function(){
 			readOnly: true
 		}, 
 		{
-			header: '<div align="center">' + 'Member' + '</div>',
-			dataIndex: 'jpaket_cust_member',
+			header: '<div align="center">' + 'No Member' + '</div>',
+			dataIndex: 'member_no',
 			width: 80,	//185,
 			sortable: true,
 			readOnly: true
@@ -3948,11 +3982,13 @@ Ext.onReady(function(){
 			text: 'Add',
 			tooltip: 'Add new detail record',
 			iconCls:'icon-adds',    				// this is defined in our styles.css
+			ref : '../djpaket_add',
 			handler: detail_jual_paket_add
 		}, '-',{
 			text: 'Delete',
 			tooltip: 'Delete detail selected record',
 			iconCls:'icon-delete',
+			ref : '../djpaket_delete',
 			disabled: false,
 			handler: detail_jual_paket_confirm_delete
 		}
