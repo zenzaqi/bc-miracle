@@ -17,12 +17,12 @@ class C_master_order_beli extends Controller {
 		parent::Controller();
 		session_start();
 		$this->load->model('m_master_order_beli', '', TRUE);
-		$this->load->plugin('to_excel');
+		
 	}
 	
 	//set index
 	function index(){
-		
+		$this->load->plugin('to_excel');
 		$this->load->helper('asset');
 		$this->load->view('main/v_master_order_beli');
 	}

@@ -72,7 +72,11 @@ class M_kartu_stok extends Model{
 			
 			$result=$this->db->query($sql);
 			$nbrows=$result->num_rows();
-			if($result->num_rows()){
+			//$this->firephp->log('sql : '.$sql);
+			//echo $sql;
+			$data[0]["stok_awal"]=0;
+			
+			if($nbrows>0){
 				$row=$result->row();
 				if($opsi_satuan=='terkecil')
 					$konversi=1;
@@ -99,12 +103,14 @@ class M_kartu_stok extends Model{
 										AND gudang='".$gudang."'
 										AND status<>'Batal'
 								GROUP BY produk_id";
-							
+				//$this->firephp->log('sql : '.$sql_stok_awal);
+				//echo $sql_stok_awal;
+				
 				$q_stokawal=$this->db->query($sql_stok_awal);
 				if($q_stokawal->num_rows())
 				{
 					$ds_stokawal=$q_stokawal->row();
-					$data[0]["stok_awal"]=round(($ds_stokawal->jumlah_awal==NULL?0:$ds_stokawal->jumlah_awal)*$data[$i]["konversi_nilai"],3);
+					$data[0]["stok_awal"]=round(($ds_stokawal->jumlah_awal==NULL?0:$ds_stokawal->jumlah_awal)*$konversi,3);
 				}else{
 					$data[0]["stok_awal"]=0;
 				}
@@ -160,7 +166,7 @@ AND date_format(tanggal,'%Y-%m-%d')<='".$tanggal_end."'
 			
 			//$data[0]["stok_awal"]=$this->stok_awal;
 			
-			if($nbrows>0 && sizeof($data)>0){
+			if($nbrows>0){
 				$jsonresult = json_encode($data);
 				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
 			} else {
@@ -280,7 +286,7 @@ AND date_format(tanggal,'%Y-%m-%d')<='".$tanggal_end."'
 					$data[$i]['koreksi']=$rowkmutasi->koreksi*$konversi;					
 					$i++;
 				}
-				//$this->firephp->log($sql);
+				$this->firephp->log($sql);
 				
 				//Mutasi Masuk ->masuk
 				$sql="SELECT 	tanggal,

@@ -198,10 +198,12 @@ class M_master_order_beli extends Model{
 		//get record list
 		function detail_detail_order_beli_list($master_id,$query,$start,$end) {
 			$query = "SELECT * FROM vu_detail_order_beli where dorder_master='".$master_id."'";
+			$this->firephp->log($query);
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
 /*			$limit = $query." LIMIT ".$start.",".$end;			
 			$result = $this->db->query($limit); */ 
+			
 			
 			if($nbrows>0){
 				foreach($result->result() as $row){
