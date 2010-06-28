@@ -609,6 +609,7 @@ Ext.onReady(function(){
 			dataIndex: 'voucher_nama',
 			width: 260,
 			sortable: true,
+			hidden: true,
 			editor: new Ext.form.TextField({
 				maxLength: 50
           	})
@@ -789,7 +790,7 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 800,	//1220,
+	  	width: 500,	//1220,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: voucher_DataStore,

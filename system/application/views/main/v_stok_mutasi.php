@@ -372,7 +372,7 @@ Ext.onReady(function(){
 		};
 		// Cause the datastore to do another query : 
 		Ext.MessageBox.show({
-		   msg: 'Sedang memproses data, silakan tunggu...',
+		   msg: 'Sedang memproses data, mohon tunggu...',
 		   progressText: 'proses...',
 		   width:350,
 		   wait:true

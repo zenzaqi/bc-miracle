@@ -184,9 +184,10 @@ Ext.onReady(function(){
 		}, 
 		{
 			header: '<div align="center">Keterangan</div>',
-			dataIndex: 'stok_keterangan',
+			dataIndex: '',
 			width: 350,
 			sortable: true,
+			//hidden: true,
 			readOnly: true
 		}, 
 		{
@@ -212,6 +213,7 @@ Ext.onReady(function(){
 			align: 'right',
 			renderer: Ext.util.Format.numberRenderer('0,000.00'),
 			width: 150,
+			hidden: true,
 			sortable: true,
 			readOnly: true
 		}]);
@@ -301,7 +303,7 @@ Ext.onReady(function(){
 		frame: true,
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 1200,
+	  	width: 800,
 		autoHeight: true,
 		bbar: [new Ext.PagingToolbar({
 			pageSize: pageS,
@@ -315,7 +317,7 @@ Ext.onReady(function(){
 		},
 		kartu_stok_awalField,
 		{
-			'text':'Stok Saldo'
+			'text':'Stok Akhir'
 		},
 		{
 			'text':':'
@@ -415,7 +417,7 @@ Ext.onReady(function(){
 		};
 		// Cause the datastore to do another query : 
 		Ext.MessageBox.show({
-		   msg: 'Sedang memproses data, silakan tunggu...',
+		   msg: 'Sedang memproses data, mohon tunggu...',
 		   progressText: 'proses...',
 		   width:350,
 		   wait:true
