@@ -1949,6 +1949,16 @@ class M_master_jual_produk extends Model{
 			else
 				return '0';
 		}
+        
+        //Delete detail_jual_produk
+        function detail_jual_produk_delete($dproduk_id){
+            $query = "DELETE FROM detail_jual_produk WHERE dproduk_id = ".$dproduk_id;
+            $this->db->query($query);
+            if($this->db->affected_rows()>0)
+                return '1';
+            else
+                return '0';
+		}
 		
 		function master_jual_produk_batal($jproduk_id){
 			$date_now = date('Y-m-d');
