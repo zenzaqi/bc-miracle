@@ -274,7 +274,6 @@ Ext.onReady(function(){
 			sortable: true,
 		},
 		{
-			align : 'Right',
 			header: '<div align="center">' + 'Keterangan' + '</div>',
 			dataIndex: 'absensi_keterangan',
 			width: 150,	//150,
