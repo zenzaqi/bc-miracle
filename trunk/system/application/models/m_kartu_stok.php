@@ -341,7 +341,7 @@ AND date_format(tanggal,'%Y-%m-%d')<='".$tanggal_end."'
 					$data[$i]['keluar']=$rowmmutasi->keluar*$konversi;
 					$data[$i]['koreksi']=$rowmmutasi->koreksi*$konversi;	
 					if($rowmmutasi->koreksi>0)
-						$data[$i]['masuk']=	abs($$rowmmutasi->koreksi)*$konversi;
+						$data[$i]['masuk']=	abs($rowmmutasi->koreksi)*$konversi;
 					else
 						$data[$i]['keluar']=abs($rowmmutasi->koreksi)*$konversi;
 					$i++;
