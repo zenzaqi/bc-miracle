@@ -336,9 +336,14 @@ AND date_format(tanggal,'%Y-%m-%d')<='".$tanggal_end."'
 					$data[$i]['tanggal']=$rowmmutasi->tanggal;
 					$data[$i]['no_bukti']=$rowmmutasi->no_bukti;
 					$data[$i]['keterangan']=$rowmmutasi->keterangan;
+					
 					$data[$i]['masuk']=$rowmmutasi->masuk*$konversi;
 					$data[$i]['keluar']=$rowmmutasi->keluar*$konversi;
-					$data[$i]['koreksi']=$rowmmutasi->koreksi*$konversi;					
+					$data[$i]['koreksi']=$rowmmutasi->koreksi*$konversi;	
+					if($rowmmutasi->koreksi>0)
+						$data[$i]['masuk']=	$rowmmutasi->koreksi*$konversi;
+					else
+						$data[$i]['keluar']=	$rowmmutasi->koreksi*$konversi;
 					$i++;
 				}
 				
@@ -354,7 +359,7 @@ AND date_format(tanggal,'%Y-%m-%d')<='".$tanggal_end."'
 								AND date_format(tanggal,'%Y-%m-%d')<='".$tanggal_end."'
 								AND produk_id='".$rowproduk->produk_id."'
 								AND gudang='".$gudang."'
-								AND cust_id=asal
+								AND cust_id=tujuan
 								AND status<>'Batal'
 								AND jenis_transaksi='jual produk'
 								AND keterangan='customer'";
@@ -467,7 +472,7 @@ AND date_format(tanggal,'%Y-%m-%d')<='".$tanggal_end."'
 								AND date_format(tanggal,'%Y-%m-%d')<='".$tanggal_end."'
 								AND produk_id='".$rowproduk->produk_id."'
 								AND gudang='".$gudang."'
-								AND cust_id=asal
+								AND cust_id=tujuan
 								AND status<>'Batal'
 								AND jenis_transaksi='pakai cabin'";
 								
