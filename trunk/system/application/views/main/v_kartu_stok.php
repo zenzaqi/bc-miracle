@@ -451,7 +451,7 @@ Ext.onReady(function(){
 									data_stok=kartu_stok_DataStore.getAt(i);
 									stok_masuk+=data_stok.data.stok_masuk;
 									stok_keluar+=data_stok.data.stok_keluar;
-									stok_koreksi+=data_stok.data.stok_koreksi;
+									//stok_koreksi+=data_stok.data.stok_koreksi;
 									
 								}
 								stok_akhir=rounding(stok_awal+stok_masuk-stok_keluar+stok_koreksi,2);
