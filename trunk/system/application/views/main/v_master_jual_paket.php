@@ -1786,8 +1786,8 @@ Ext.onReady(function(){
 		}, 
 		{
 			header: '<div align="center">' + 'No Member' + '</div>',
-			dataIndex: 'member_no',
-			width: 80,	//185,
+			dataIndex: 'jpaket_cust_member_no',
+			width: 90,	//185,
 			sortable: true,
 			readOnly: true
 		}, 
@@ -1818,7 +1818,7 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Keterangan' + '</div>',
 			dataIndex: 'jpaket_keterangan',
-			width: 150,
+			width: 130,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 250
