@@ -184,7 +184,7 @@ Ext.onReady(function(){
 		}, 
 		{
 			header: '<div align="center">Keterangan</div>',
-			dataIndex: '',
+			dataIndex: 'stok_keterangan',
 			width: 350,
 			sortable: true,
 			//hidden: true,
