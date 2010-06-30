@@ -373,7 +373,15 @@ class M_tindakan_nonmedis extends Model{
 	/* INSERT db.detail_pakai_cabin */
 	function detail_pakai_cabin_insert($cabin_dtrawat, $cabin_rawat, $cabin_bukti){
 		//* Mencatat pemakaian Standard Bahan dari perawatan($cabin_rawat) yang terpakai /
-		$sql="SELECT krawat_produk, krawat_satuan, krawat_jumlah, produk_satuan FROM perawatan_konsumsi LEFT JOIN produk ON(krawat_produk=produk_id) WHERE krawat_master='$cabin_rawat'";
+		$sql="SELECT krawat_produk
+				,krawat_satuan
+				,krawat_jumlah
+				,produk_satuan
+				,rawat_gudang
+			FROM perawatan_konsumsi
+			LEFT JOIN produk ON(krawat_produk=produk_id)
+			LEFT JOIN perawatan ON(krawat_master=rawat_id)
+			WHERE krawat_master='$cabin_rawat'";
 		$rs=$this->db->query($sql);
 		if($rs->num_rows()){
 			foreach($rs->result_array() as $row){
@@ -383,7 +391,8 @@ class M_tindakan_nonmedis extends Model{
 				"cabin_produk"=>$row['krawat_produk'],
 				"cabin_satuan"=>$row['produk_satuan'],
 				"cabin_jumlah"=>$row['krawat_jumlah'],
-                "cabin_bukti"=>$cabin_bukti
+                "cabin_bukti"=>$cabin_bukti,
+				"cabin_gudang"=>$row['rawat_gudang']
 				);
 				$this->db->insert('detail_pakai_cabin', $dti_cabin);
 			}
