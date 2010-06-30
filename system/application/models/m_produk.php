@@ -144,7 +144,9 @@ class M_produk extends Model{
 				"produk_nama"=>$produk_nama, 
 				"produk_point"=>$produk_point, 
 				"produk_volume"=>$produk_volume, 
-				"produk_harga"=>$produk_harga, 
+				"produk_harga"=>$produk_harga,
+				"produk_du"=>$produk_du,
+				"produk_dm"=>$produk_dm,
 				"produk_keterangan"=>$produk_keterangan, 
 				"produk_aktif"=>$produk_aktif 
 			);
