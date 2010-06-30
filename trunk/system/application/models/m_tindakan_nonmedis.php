@@ -320,7 +320,8 @@ class M_tindakan_nonmedis extends Model{
 		"dapaket_jumlah"=>$dtrawat_jumlah,
 		//"dapaket_cust"=>$trawat_cust,
 		"dapaket_cust"=>$trawat_cust_id,
-		"dapaket_dtrawat"=>$dtrawat_id
+		"dapaket_dtrawat"=>$dtrawat_id,
+		"dapaket_creator"=>@$_SESSION[SESSION_USERID]
 		);
 		$this->db->insert('detail_ambil_paket', $dti_dapaket);
 		if($this->db->affected_rows()){

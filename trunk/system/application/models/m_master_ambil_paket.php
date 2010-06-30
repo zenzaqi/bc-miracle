@@ -301,6 +301,7 @@ class M_master_ambil_paket extends Model{
 							"dapaket_jenis_item"=>'perawatan',
 							"dapaket_jumlah"=>$dapaket_jumlah,
 							"dapaket_cust"=>$dapaket_cust,
+							"dapaket_creator"=>@$_SESSION[SESSION_USERID],
 							"dapaket_date_create"=>$tgl_ambil,
 							"dapaket_referal"=>$dapaket_referal
 							);
@@ -353,6 +354,7 @@ class M_master_ambil_paket extends Model{
 						"dapaket_jenis_item"=>'perawatan',
 						"dapaket_jumlah"=>$dapaket_jumlah,
 						"dapaket_cust"=>$dapaket_cust,
+						"dapaket_creator"=>@$_SESSION[SESSION_USERID],
 						"dapaket_date_create"=>$tgl_ambil,
 						"dapaket_referal"=>$dapaket_referal
 						);
