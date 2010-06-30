@@ -665,7 +665,8 @@ class M_tindakan_medis extends Model{
 		"dapaket_jumlah"=>1,
 		//"dapaket_cust"=>$trawat_cust,
 		"dapaket_cust"=>$trawat_cust_id,
-		"dapaket_dtrawat"=>$dtrawat_id
+		"dapaket_dtrawat"=>$dtrawat_id,
+		"dapaket_creator"=>@$_SESSION[SESSION_USERID]
 		);
 		$this->db->insert('detail_ambil_paket', $dti_dapaket);
 		if($this->db->affected_rows()){

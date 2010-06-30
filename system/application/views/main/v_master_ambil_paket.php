@@ -63,7 +63,7 @@ var ambil_paket_isi_perawatan_reader;
 var editor_ambil_paket_isi_perawatan;
 
 //declare konstant
-var post2db = '';
+var apaket_post2db = '';
 var msg = '';
 var pageS=15;
 
@@ -166,7 +166,7 @@ Ext.onReady(function(){
 			waitMsg: 'Please wait...',
 			url: 'index.php?c=c_master_ambil_paket&m=get_action',
 			params: {
-				task: post2db,
+				task: apaket_post2db,
 				ambil_paket_id	: ambil_paket_id_create, 
 				ambil_paket_kode	: ambil_paket_kode_create, 
 				ambil_paket_nama	: ambil_paket_nama_create, 
@@ -178,7 +178,7 @@ Ext.onReady(function(){
 					case 1:
 						//ambil_paket_isi_perawatan_purge()
 						ambil_paket_isi_perawatan_insert();
-						//Ext.MessageBox.alert(post2db+' OK','The Paket was '+msg+' successfully.');
+						//Ext.MessageBox.alert(apaket_post2db+' OK','The Paket was '+msg+' successfully.');
 						
 						ambil_paket_DataStore.baseParams = { task: 'LIST' };
 						ambil_paket_DataStore.reload({params: {start: 0, limit: pageS}});
@@ -223,9 +223,9 @@ Ext.onReady(function(){
   
   	/* Function for get PK field */
 	function get_pk_id(){
-		if(post2db=='UPDATE')
+		if(apaket_post2db=='UPDATE')
 			return ambil_paketListEditorGrid.getSelectionModel().getSelected().get('dpaket_id');
-		else if(post2db=='CREATE')
+		else if(apaket_post2db=='CREATE')
 			return apaket_paketField.getValue();
 		else 
 			return 0;
@@ -281,7 +281,7 @@ Ext.onReady(function(){
 	function display_form_window(){
 		if(!ambil_paket_createWindow.isVisible()){
 			ambil_paket_reset_form();
-			post2db='CREATE';
+			apaket_post2db='CREATE';
 			msg='created';
 			ambil_paket_createWindow.show();
 		} else {
@@ -322,7 +322,7 @@ Ext.onReady(function(){
 			cbo_paket_isi_rawatDataStore.load({params:{dapaket_dpaket:ambil_paketListEditorGrid.getSelectionModel().getSelected().get('dpaket_id'),dapaket_jpaket:ambil_paketListEditorGrid.getSelectionModel().getSelected().get('dpaket_master'),dapaket_paket:ambil_paketListEditorGrid.getSelectionModel().getSelected().get('dpaket_paket')}});
 			cbo_ambil_paket_custDataStore.load({params:{dpaket_master:ambil_paketListEditorGrid.getSelectionModel().getSelected().get('dpaket_master')}});
 			//cbo_paket_isi_rawatDataStore.load({params:{master_id:0}});
-			post2db='UPDATE';
+			apaket_post2db='UPDATE';
 			//ambil_paket_isi_perawatan_DataStore.load({params : {master_id : eval(get_pk_id()), start:0, limit:pageS}});
 			msg='updated';
 			ambil_paket_createWindow.show();
@@ -1702,7 +1702,7 @@ Ext.onReady(function(){
 	/* Function for retrieve create Window Form */
 	ambil_paket_createWindow= new Ext.Window({
 		id: 'ambil_paket_createWindow',
-		title: post2db+'Paket',
+		title: apaket_post2db+'Paket',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,
