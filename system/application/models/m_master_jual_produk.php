@@ -775,7 +775,8 @@ class M_master_jual_produk extends Model{
 						"dproduk_harga"=>$dproduk_harga, 
 						"dproduk_diskon"=>$dproduk_diskon,
 						"dproduk_diskon_jenis"=>$dproduk_diskon_jenis,
-						"dproduk_sales"=>$dproduk_sales
+						"dproduk_sales"=>$dproduk_sales,
+                        "dproduk_creator"=>@$_SESSION[SESSION_USERID]
 					);
 					$this->db->insert('detail_jual_produk', $dti_jproduk);
 					if($this->db->affected_rows()){
@@ -934,13 +935,16 @@ class M_master_jual_produk extends Model{
 		
 		//function for update record
 		function master_jual_produk_update($jproduk_id ,$jproduk_nobukti ,$jproduk_cust ,$jproduk_tanggal , $jproduk_stat_dok, $jproduk_diskon ,$jproduk_cara ,$jproduk_cara2 ,$jproduk_cara3 ,$jproduk_keterangan , $jproduk_cashback, $jproduk_tunai_nilai, $jproduk_tunai_nilai2, $jproduk_tunai_nilai3, $jproduk_voucher_no, $jproduk_voucher_cashback, $jproduk_voucher_no2, $jproduk_voucher_cashback2, $jproduk_voucher_no3, $jproduk_voucher_cashback3, $jproduk_bayar, $jproduk_subtotal, $jproduk_total, $jproduk_hutang, $jproduk_kwitansi_no, $jproduk_kwitansi_nama, $jproduk_kwitansi_nilai, $jproduk_kwitansi_no2, $jproduk_kwitansi_nama2, $jproduk_kwitansi_nilai2, $jproduk_kwitansi_no3, $jproduk_kwitansi_nama3, $jproduk_kwitansi_nilai3, $jproduk_card_nama, $jproduk_card_edc, $jproduk_card_no, $jproduk_card_nilai, $jproduk_card_nama2, $jproduk_card_edc2, $jproduk_card_no2, $jproduk_card_nilai2, $jproduk_card_nama3, $jproduk_card_edc3, $jproduk_card_no3, $jproduk_card_nilai3, $jproduk_cek_nama, $jproduk_cek_no, $jproduk_cek_valid, $jproduk_cek_bank, $jproduk_cek_nilai, $jproduk_cek_nama2, $jproduk_cek_no2, $jproduk_cek_valid2, $jproduk_cek_bank2, $jproduk_cek_nilai2, $jproduk_cek_nama3, $jproduk_cek_no3, $jproduk_cek_valid3, $jproduk_cek_bank3, $jproduk_cek_nilai3, $jproduk_transfer_bank, $jproduk_transfer_nama, $jproduk_transfer_nilai, $jproduk_transfer_bank2, $jproduk_transfer_nama2, $jproduk_transfer_nilai2, $jproduk_transfer_bank3, $jproduk_transfer_nama3, $jproduk_transfer_nilai3){
+            $datetime_now=date('Y-m-d H:i:s');
 			if ($jproduk_stat_dok=="")
 				$jproduk_stat_dok = "Terbuka";
-			
-			$sql="SELECT jproduk_cara, jproduk_cara2, jproduk_cara3 FROM master_jual_produk WHERE jproduk_id='$jproduk_id'";
+			$jproduk_revised=1;
+            
+			$sql="SELECT jproduk_cara, jproduk_cara2, jproduk_cara3, jproduk_revised FROM master_jual_produk WHERE jproduk_id='$jproduk_id'";
 			$rs=$this->db->query($sql);
 			if($rs->num_rows()){
 				$rs_record=$rs->row_array();
+                $jproduk_revised=$rs_record["jproduk_revised"];
 				$jproduk_cara_awal=$rs_record["jproduk_cara"];
 				$jproduk_cara2_awal=$rs_record["jproduk_cara2"];
 				$jproduk_cara3_awal=$rs_record["jproduk_cara3"];
@@ -1037,7 +1041,10 @@ class M_master_jual_produk extends Model{
 				"jproduk_stat_dok"=>$jproduk_stat_dok,
 				//"jproduk_cara2"=>$jproduk_cara2, 
 				//"jproduk_cara3"=>$jproduk_cara3,
-				"jproduk_keterangan"=>$jproduk_keterangan 
+				"jproduk_keterangan"=>$jproduk_keterangan,
+                "jproduk_update"=>@$_SESSION[SESSION_USERID],
+                "jproduk_date_update"=>$datetime_now,
+                "jproduk_revised"=>$jproduk_revised
 			);
 			if($jproduk_cara2!=null)
 				$data["jproduk_cara2"]=$jproduk_cara2;
@@ -1962,12 +1969,21 @@ class M_master_jual_produk extends Model{
 		
 		function master_jual_produk_batal($jproduk_id){
 			$date_now = date('Y-m-d');
-			$dtu_jproduk=array(
+            $datetime_now = date('Y-m-d H:i:s');
+            $sql = "UPDATE master_jual_produk
+                SET jproduk_stat_dok='Batal'
+                    ,jproduk_update='".@$_SESSION[SESSION_USERID]."'
+                    ,jproduk_date_update='".$datetime_now."'
+                    ,jproduk_revised=jproduk_revised+1
+                WHERE jproduk_id=".$jproduk_id."
+                    AND jproduk_tanggal='".$date_now."' ";
+			/*$dtu_jproduk=array(
 			"jproduk_stat_dok"=>'Batal'
 			);
 			$this->db->where('jproduk_id', $jproduk_id);
 			$this->db->where('jproduk_tanggal', $date_now);
-			$this->db->update('master_jual_produk', $dtu_jproduk);
+			$this->db->update('master_jual_produk', $dtu_jproduk);*/
+            $this->db->query($sql);
 			if($this->db->affected_rows()){
 				//* udpating db.customer.cust_point ==> proses mengurangi jumlah poin (dikurangi dengan db.master_jual_produk.jproduk_point yg sudah dimasukkan ketika cetak faktur), karena dilakukan pembatalan /
 				$this->member_point_batal($jproduk_id);
