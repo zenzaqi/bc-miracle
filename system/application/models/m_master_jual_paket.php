@@ -954,6 +954,7 @@ class M_master_jual_paket extends Model{
 		
 		//insert detail record
 		function detail_detail_jual_paket_insert($array_dpaket_id ,$dpaket_master ,$array_dpaket_paket, $array_dpaket_karyawan, $array_dpaket_kadaluarsa ,$array_dpaket_jumlah ,$array_dpaket_harga ,$array_dpaket_diskon ,$array_dpaket_diskon_jenis ,$array_dpaket_sales, $cetak){
+			$datetime_now = date('Y-m-d H:i:s');
 			//if master id not capture from view then capture it from max pk from master table
 			if($dpaket_master=="" || $dpaket_master==NULL || $dpaket_master==0){
 				$dpaket_master=$this->get_master_id();
@@ -1007,6 +1008,13 @@ class M_master_jual_paket extends Model{
 				
 				//* checking $dpaket_id ==> apakah is_numeric AND sudah ada di db.detail_jual_paket.dpaket_id ?? /
 				if(is_numeric($dpaket_id)){
+					$dpaket_revised=0;
+					$sql = "SELECT dpaket_revised FROM detail_jual_paket WHERE dpaket_id=".$dpaket_id;
+					$rs = $this->db->query($sql);
+					if($rs->num_rows()){
+						$record = $rs->row_array();
+						$dpaket_revised = $record['dpaket_revised'];
+					}
 					//* detail ini sudah ada dalam db.detail_jual_paket ==> updating /
 					//* checking lagi, apakah $dpaket_master(identik = db.master_jual_paket.jpaket_id) AND $dpaket_id sudah diambil ataukah belum di db.detail_ambil_paket,
 					//* JIKA sudah pernah diambil ==> maka $dpaket_id ini tidak boleh dilakukan updating atau penghapusan /
@@ -1035,7 +1043,10 @@ class M_master_jual_paket extends Model{
 							"dpaket_diskon"=>$dpaket_diskon,
 							"dpaket_diskon_jenis"=>$dpaket_diskon_jenis,
 							"dpaket_sales"=>$dpaket_sales,
-							"dpaket_sisa_paket"=>$dpaket_sisa_paket
+							"dpaket_sisa_paket"=>$dpaket_sisa_paket,
+							"dpaket_update"=>@$_SESSION[SESSION_USERID],
+							"dpaket_date_update"=>$datetime_now,
+							"dpaket_revised"=>$dpaket_revised+1
 						);
 						$this->db->where('dpaket_id', $dpaket_id);
 						$this->db->update('detail_jual_paket', $dtu_dpaket); 
@@ -1064,7 +1075,8 @@ class M_master_jual_paket extends Model{
 						"dpaket_diskon"=>$dpaket_diskon,
 						"dpaket_diskon_jenis"=>$dpaket_diskon_jenis,
 						"dpaket_sales"=>$dpaket_sales,
-						"dpaket_sisa_paket"=>$dpaket_sisa_paket
+						"dpaket_sisa_paket"=>$dpaket_sisa_paket,
+						"dpaket_creator"=>@$_SESSION[SESSION_USERID]
 					);
 					$this->db->insert('detail_jual_paket', $data); 
 					if($this->db->affected_rows()){
@@ -1313,13 +1325,16 @@ class M_master_jual_paket extends Model{
 		
 		//function for update record
 		function master_jual_paket_update($jpaket_id ,$jpaket_nobukti ,$jpaket_cust ,$jpaket_tanggal ,$jpaket_stat_dok, $jpaket_diskon ,$jpaket_cara ,$jpaket_cara2 ,$jpaket_cara3 ,$jpaket_keterangan , $jpaket_cashback, $jpaket_tunai_nilai, $jpaket_tunai_nilai2, $jpaket_tunai_nilai3, $jpaket_voucher_no, $jpaket_voucher_cashback, $jpaket_voucher_no2, $jpaket_voucher_cashback2, $jpaket_voucher_no3, $jpaket_voucher_cashback3, $jpaket_bayar, $jpaket_subtotal, $jpaket_hutang, $jpaket_kwitansi_no, $jpaket_kwitansi_nama, $jpaket_kwitansi_nilai, $jpaket_kwitansi_no2, $jpaket_kwitansi_nama2, $jpaket_kwitansi_nilai2, $jpaket_kwitansi_no3, $jpaket_kwitansi_nama3, $jpaket_kwitansi_nilai3, $jpaket_card_nama, $jpaket_card_edc, $jpaket_card_no, $jpaket_card_nilai, $jpaket_card_nama2, $jpaket_card_edc2, $jpaket_card_no2, $jpaket_card_nilai2, $jpaket_card_nama3, $jpaket_card_edc3, $jpaket_card_no3, $jpaket_card_nilai3, $jpaket_cek_nama, $jpaket_cek_no, $jpaket_cek_valid, $jpaket_cek_bank, $jpaket_cek_nilai, $jpaket_cek_nama2, $jpaket_cek_no2, $jpaket_cek_valid2, $jpaket_cek_bank2, $jpaket_cek_nilai2, $jpaket_cek_nama3, $jpaket_cek_no3, $jpaket_cek_valid3, $jpaket_cek_bank3, $jpaket_cek_nilai3, $jpaket_transfer_bank, $jpaket_transfer_nama, $jpaket_transfer_nilai, $jpaket_transfer_bank2, $jpaket_transfer_nama2, $jpaket_transfer_nilai2, $jpaket_transfer_bank3, $jpaket_transfer_nama3, $jpaket_transfer_nilai3){
+			$datetime_now=date('Y-m-d H:i:s');
 			if ($jpaket_stat_dok=="")
 				$jpaket_stat_dok = "Terbuka";
+			$jpaket_revised=0;
 			
-			$sql="SELECT jpaket_cara, jpaket_cara2, jpaket_cara3 FROM master_jual_paket WHERE jpaket_id='$jpaket_id'";
+			$sql="SELECT jpaket_cara, jpaket_cara2, jpaket_cara3, jpaket_revised FROM master_jual_paket WHERE jpaket_id='$jpaket_id'";
 			$rs=$this->db->query($sql);
 			if($rs->num_rows()){
 				$rs_record=$rs->row_array();
+				$jpaket_revised=$rs_record["jpaket_revised"];
 				$jpaket_cara_awal=$rs_record["jpaket_cara"];
 				$jpaket_cara2_awal=$rs_record["jpaket_cara2"];
 				$jpaket_cara3_awal=$rs_record["jpaket_cara3"];
@@ -1404,7 +1419,10 @@ class M_master_jual_paket extends Model{
 				//"jpaket_cara2"=>$jpaket_cara2, 
 				//"jpaket_cara3"=>$jpaket_cara3,
 				"jpaket_keterangan"=>$jpaket_keterangan,
-				"jpaket_stat_dok"=>$jpaket_stat_dok
+				"jpaket_stat_dok"=>$jpaket_stat_dok,
+				"jpaket_update"=>@$_SESSION[SESSION_USERID],
+				"jpaket_date_update"=>$datetime_now,
+				"jpaket_revised"=>$jpaket_revised+1
 			);
 			if($jpaket_cara2!=null)
 				$data["jpaket_cara2"]=$jpaket_cara2;
@@ -2314,6 +2332,7 @@ class M_master_jual_paket extends Model{
 		
 		function master_jual_paket_batal($jpaket_id){
 			$date_now = date('Y-m-d');
+			$datetime_now = date('Y-m-d H:i:s');
 			$sql = "SELECT dapaket_id FROM detail_ambil_paket WHERE dapaket_jpaket='$jpaket_id'";
 			$rs = $this->db->query($sql);
 			if($rs->num_rows()){
@@ -2324,12 +2343,20 @@ class M_master_jual_paket extends Model{
 				/*$dtu_jpaket = "UPDATE master_jual_paket SET jpaket_stat_dok='Batal'
 					WHERE jpaket_id='$jpaket_id'
 						AND jpaket_tanggal=date_format(now(),'%Y-%m-%d') ";*/
-				$dtu_jpaket = array(
+				$sql = "UPDATE master_jual_paket
+					SET jpaket_stat_dok='Batal'
+						jpaket_update='".@$_SESSION[SESSION_USERID]."'
+						jpaket_date_update='".$datetime_now."'
+					WHERE jpaket_id='".$jpaket_id."'
+						jpaket_tanggal='".$date_now."' ";
+				$this->db->query($sql);
+				/*$dtu_jpaket = array(
 				"jpaket_stat_dok"=>'Batal'
 				);
 				$this->db->where('jpaket_id', $jpaket_id);
 				$this->db->where('jpaket_tanggal', $date_now);
-				$this->db->update('master_jual_paket', $dtu_jpaket);
+				$this->db->update('master_jual_paket', $dtu_jpaket);*/
+				
 				if($this->db->affected_rows()>0)
 					return '1';
 				else
@@ -2484,7 +2511,13 @@ class M_master_jual_paket extends Model{
 		}
 		
 		function master_jual_paket_status_update($jpaket_id){
-			$sql="UPDATE master_jual_paket SET jpaket_stat_dok='Tertutup' WHERE jpaket_id='$jpaket_id'";
+			$datetime_now=date('Y-m-d H:i:s');
+			$sql="UPDATE master_jual_paket
+				SET jpaket_stat_dok='Tertutup'
+					,jpaket_update='".@$_SESSION[SESSION_USERID]."'
+					,jpaket_date_update='".$datetime_now."'
+					,jpaket_revised=jpaket_revised+1
+				WHERE jpaket_id='$jpaket_id'";
 			$this->db->query($sql);
 		}
 		

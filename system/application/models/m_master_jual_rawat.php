@@ -891,10 +891,13 @@ class M_master_jual_rawat extends Model{
 		
 		//function for update record
 		function master_jual_rawat_update($jrawat_id ,$jrawat_nobukti ,$jrawat_cust ,$jrawat_tanggal ,$jrawat_stat_dok, $jrawat_diskon ,$jrawat_cara ,$jrawat_cara2 ,$jrawat_cara3 ,$jrawat_keterangan , $jrawat_cashback, $jrawat_tunai_nilai, $jrawat_tunai_nilai2, $jrawat_tunai_nilai3, $jrawat_voucher_no, $jrawat_voucher_cashback, $jrawat_voucher_no2, $jrawat_voucher_cashback2, $jrawat_voucher_no3, $jrawat_voucher_cashback3, $jrawat_total, $jrawat_bayar, $jrawat_subtotal, $jrawat_hutang, $jrawat_kwitansi_no, $jrawat_kwitansi_nama, $jrawat_kwitansi_nilai, $jrawat_kwitansi_no2, $jrawat_kwitansi_nama2, $jrawat_kwitansi_nilai2, $jrawat_kwitansi_no3, $jrawat_kwitansi_nama3, $jrawat_kwitansi_nilai3, $jrawat_card_nama, $jrawat_card_edc, $jrawat_card_no, $jrawat_card_nilai, $jrawat_card_nama2, $jrawat_card_edc2, $jrawat_card_no2, $jrawat_card_nilai2, $jrawat_card_nama3, $jrawat_card_edc3, $jrawat_card_no3, $jrawat_card_nilai3, $jrawat_cek_nama, $jrawat_cek_no, $jrawat_cek_valid, $jrawat_cek_bank, $jrawat_cek_nilai, $jrawat_cek_nama2, $jrawat_cek_no2, $jrawat_cek_valid2, $jrawat_cek_bank2, $jrawat_cek_nilai2, $jrawat_cek_nama3, $jrawat_cek_no3, $jrawat_cek_valid3, $jrawat_cek_bank3, $jrawat_cek_nilai3, $jrawat_transfer_bank, $jrawat_transfer_nama, $jrawat_transfer_nilai, $jrawat_transfer_bank2, $jrawat_transfer_nama2, $jrawat_transfer_nilai2, $jrawat_transfer_bank3, $jrawat_transfer_nama3, $jrawat_transfer_nilai3 ,$cetak_jrawat){
+			$datetime_now = date('Y-m-d H:i:s');
 			if ($jrawat_stat_dok=="")
 				$jrawat_stat_dok = "Terbuka";
+			$jrawat_revised=0;
+			
 			if(substr($jrawat_nobukti,0,2)=='PR'){
-                $sql="SELECT jrawat_cara, jrawat_cara2, jrawat_cara3 FROM master_jual_rawat WHERE jrawat_id='$jrawat_id'";
+                $sql="SELECT jrawat_cara, jrawat_cara2, jrawat_cara3, jrawat_revised FROM master_jual_rawat WHERE jrawat_id='$jrawat_id'";
                 $rs=$this->db->query($sql);
                 if($rs->num_rows()){
                     $rs_record=$rs->row_array();
@@ -996,7 +999,9 @@ class M_master_jual_rawat extends Model{
                     //"jrawat_cara3"=>$jrawat_cara3,
                     "jrawat_keterangan"=>$jrawat_keterangan,
                     "jrawat_stat_dok"=>$jrawat_stat_dok,
-                    "jrawat_update"=>$_SESSION[SESSION_USERID]
+                    "jrawat_update"=>$_SESSION[SESSION_USERID],
+					"jrawat_date_update"=>$datetime_now,
+					"jrawat_revised"=>$jrawat_revised+1
                 );
                 if($jrawat_cara2!=null)
                     $data["jrawat_cara2"]=$jrawat_cara2;
@@ -1615,8 +1620,7 @@ class M_master_jual_rawat extends Model{
 				//"jrawat_cara3"=>$jrawat_cara3, 
 				"jrawat_keterangan"=>$jrawat_keterangan,
 				"jrawat_stat_dok"=>$jrawat_stat_dok,
-				"jrawat_creator"=>$_SESSION[SESSION_USERID],
-				"jrawat_update"=>$_SESSION[SESSION_USERID]
+				"jrawat_creator"=>$_SESSION[SESSION_USERID]
 			);
 			if($jrawat_cara2!=null)
 				$data["jrawat_cara2"]=$jrawat_cara2;
@@ -1965,21 +1969,30 @@ class M_master_jual_rawat extends Model{
 		
 		function master_jual_rawat_batal($jrawat_nobukti){
 			$date_now = date('Y-m-d');
+			$datetime_now = date('Y-m-d H:i:s');
 			$jrawat_id = 0;
 			
-			$sql = "SELECT jrawat_id FROM master_jual_rawat WHERE jrawat_nobukti='$jrawat_nobukti'";
+			$sql = "SELECT jrawat_id, jrawat_revised FROM master_jual_rawat WHERE jrawat_nobukti='$jrawat_nobukti'";
 			$rs = $this->db->query($sql);
 			if($rs->num_rows()){
 				$record = $rs->row_array();
 				$jrawat_id = $record['jrawat_id'];
 			}
 			
-			$dtu_jrawat=array(
+            $sql = "UPDATE master_jual_rawat
+                SET jrawat_stat_dok='Batal'
+                    ,jrawat_update='".@$_SESSION[SESSION_USERID]."'
+                    ,jrawat_date_update='".$datetime_now."'
+                    ,jrawat_revised=jrawat_revised+1
+                WHERE jrawat_id=".$jrawat_id."
+                    AND jrawat_tanggal='".$date_now."' ";
+            $this->db->query($sql);
+			/*$dtu_jrawat=array(
 			"jrawat_stat_dok"=>'Batal'
 			);
 			$this->db->where('jrawat_nobukti', $jrawat_nobukti);
 			$this->db->where('jrawat_tanggal', $date_now);
-			$this->db->update('master_jual_rawat', $dtu_jrawat);
+			$this->db->update('master_jual_rawat', $dtu_jrawat);*/
 			if($this->db->affected_rows()){
 				//* udpating db.customer.cust_point ==> proses mengurangi jumlah poin (dikurangi dengan db.master_jual_produk.jproduk_point yg sudah dimasukkan ketika cetak faktur), karena dilakukan pembatalan /
 				$this->member_point_batal($jrawat_id);
@@ -2137,11 +2150,20 @@ class M_master_jual_rawat extends Model{
 		}
 		
 		function master_jual_rawat_status_update($jrawat_id){
-			$dtu_jrawat=array(
+			$datetime_now = date('Y-m-d H:i:s');
+			$sql="UPDATE master_jual_rawat
+                SET jrawat_stat_dok='Tertutup'
+                    ,jrawat_update='".@$_SESSION[SESSION_USERID]."'
+                    ,jrawat_date_update='".$datetime_now."'
+                    ,jrawat_revised=jproduk_revised+1
+                WHERE jrawat_id='$jrawat_id'";
+			$this->db->query($sql);
+			
+			/*$dtu_jrawat=array(
 			"jrawat_stat_dok"=>'Tertutup'
 			);
 			$this->db->where('jrawat_id', $jrawat_id);
-			$this->db->update('master_jual_rawat', $dtu_jrawat);
+			$this->db->update('master_jual_rawat', $dtu_jrawat);*/
 		}
 		
 		function detail_ambil_paket_status_update($dapaket_id){

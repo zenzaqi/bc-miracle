@@ -716,7 +716,13 @@ class M_master_jual_produk extends Model{
 		
 		function stat_dok_tertutup_update($jproduk_id){
 			//* status dokumen menjadi tertutup setelah Faktur selesai di-cetak /
-			$sql="UPDATE master_jual_produk SET jproduk_stat_dok='Tertutup' WHERE jproduk_id='$jproduk_id'";
+            $datetime_now = date('Y-m-d H:i:s');
+			$sql="UPDATE master_jual_produk
+                SET jproduk_stat_dok='Tertutup'
+                    ,jproduk_update='".@$_SESSION[SESSION_USERID]."'
+                    ,jproduk_date_update='".$datetime_now."'
+                    ,jproduk_revised=jproduk_revised+1
+                WHERE jproduk_id='$jproduk_id'";
 			$this->db->query($sql);
 		}
 		
@@ -938,7 +944,7 @@ class M_master_jual_produk extends Model{
             $datetime_now=date('Y-m-d H:i:s');
 			if ($jproduk_stat_dok=="")
 				$jproduk_stat_dok = "Terbuka";
-			$jproduk_revised=1;
+			$jproduk_revised=0;
             
 			$sql="SELECT jproduk_cara, jproduk_cara2, jproduk_cara3, jproduk_revised FROM master_jual_produk WHERE jproduk_id='$jproduk_id'";
 			$rs=$this->db->query($sql);
@@ -1044,7 +1050,7 @@ class M_master_jual_produk extends Model{
 				"jproduk_keterangan"=>$jproduk_keterangan,
                 "jproduk_update"=>@$_SESSION[SESSION_USERID],
                 "jproduk_date_update"=>$datetime_now,
-                "jproduk_revised"=>$jproduk_revised
+                "jproduk_revised"=>$jproduk_revised+1
 			);
 			if($jproduk_cara2!=null)
 				$data["jproduk_cara2"]=$jproduk_cara2;
@@ -1977,13 +1983,14 @@ class M_master_jual_produk extends Model{
                     ,jproduk_revised=jproduk_revised+1
                 WHERE jproduk_id=".$jproduk_id."
                     AND jproduk_tanggal='".$date_now."' ";
+            $this->db->query($sql);
 			/*$dtu_jproduk=array(
 			"jproduk_stat_dok"=>'Batal'
 			);
 			$this->db->where('jproduk_id', $jproduk_id);
 			$this->db->where('jproduk_tanggal', $date_now);
 			$this->db->update('master_jual_produk', $dtu_jproduk);*/
-            $this->db->query($sql);
+            
 			if($this->db->affected_rows()){
 				//* udpating db.customer.cust_point ==> proses mengurangi jumlah poin (dikurangi dengan db.master_jual_produk.jproduk_point yg sudah dimasukkan ketika cetak faktur), karena dilakukan pembatalan /
 				$this->member_point_batal($jproduk_id);
