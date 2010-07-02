@@ -297,6 +297,7 @@ class M_tindakan_nonmedis extends Model{
 	
 	/* INSERT ke db.detail_ambil_paket */
 	function detail_ambil_paket_insert($dapaket_dpaket, $dapaket_jpaket, $dapaket_paket, $dapaket_item, $trawat_cust_id, $dtrawat_id, $dtrawat_dapp, $dtrawat_jumlah){
+		$datetime_now=date('Y-m-d H:i:s');
         //* Mengambil db.master_jual_paket.jpaket_nobukti ==> masukkan ke db.detail_pakai_cabin /
 		$jpaket_nobukti = "";
 		$sql="SELECT jpaket_nobukti FROM master_jual_paket WHERE jpaket_id='$dapaket_jpaket'";
@@ -333,11 +334,18 @@ class M_tindakan_nonmedis extends Model{
 			$this->db->update('appointment_detail', $dtu_dapp);
 			
 			/* UPDATE db.tindakan_detail.dtrawat_ambil_paket = 'true' */
-			$dtu_dtrawat=array(
+			$sql="UPDATE tindakan_detail
+				SET dtrawat_ambil_paket='true'
+					,dtrawat_update='".@$_SESSION[SESSION_USERID]."'
+					,dtrawat_date_update='".$datetime_now."'
+					,dtrawat_revised=dtrawat_revised+1
+				WHERE dtrawat_id='$dtrawat_id'";
+			$this->db->query($sql);
+			/*$dtu_dtrawat=array(
 			"dtrawat_ambil_paket"=>'true'
 			);
 			$this->db->where('dtrawat_id', $dtrawat_id);
-			$this->db->update('tindakan_detail', $dtu_dtrawat);
+			$this->db->update('tindakan_detail', $dtu_dtrawat);*/
 			
 			$this->total_sisa_paket_update($dapaket_dpaket, $dapaket_jpaket, $dapaket_paket);
 			
@@ -473,6 +481,7 @@ class M_tindakan_nonmedis extends Model{
 	function detail_tindakan_nonmedis_detail_insert($array_dtrawat_id ,$dtrawat_master ,$array_dtrawat_perawatan ,$array_dtrawat_petugas2 ,$array_dtrawat_jam ,$array_dtrawat_status ,$array_dtrawat_keterangan ,$dtrawat_cust ,$array_jumlah){
 		/* hanya INSERT record tindakan_detail-nonmedis yang baru */
 		$date_now=date('Y-m-d');
+		$datetime_now=date('Y-m-d H:i:s');
 		
 		$size_array = sizeof($array_dtrawat_perawatan) - 1;
 		
@@ -503,7 +512,8 @@ class M_tindakan_nonmedis extends Model{
 				"dtrawat_tglapp"=>$date_now,
 				"dtrawat_jam"=>$dtrawat_jam,
 				"dtrawat_keterangan"=>$dtrawat_keterangan,
-				"dtrawat_jumlah"=>$jumlah
+				"dtrawat_jumlah"=>$jumlah,
+				"dtrawat_creator"=>@$_SESSION[SESSION_USERID]
 				);
 				$this->db->insert('tindakan_detail', $dti_dtrawat);
 				if($this->db->affected_rows()){
@@ -550,7 +560,18 @@ class M_tindakan_nonmedis extends Model{
 					*/
 					if($dtrawat_locked==0 && ($dtrawat_perawatan_awal<>$dtrawat_perawatan || $dtrawat_petugas2_awal<>$dtrawat_petugas2 || $dtrawat_jam_awal<>$dtrawat_jam || $dtrawat_keterangan_awal<>$dtrawat_keterangan || $dtrawat_jumlah_awal<>$jumlah)){
 						/* ini berarti: ada field yg berubah untuk dilakukan editing */
-						$dtu_dtrawat=array(
+						$sql="UPDATE tindakan_detail
+							SET dtrawat_perawatan='$dtrawat_perawatan'
+								,dtrawat_petugas2='$dtrawat_petugas2'
+								,dtrawat_jam='$dtrawat_jam'
+								,dtrawat_keterangan='$dtrawat_keterangan'
+								,dtrawat_jumlah='$jumlah'
+								,dtrawat_update='".@$_SESSION[SESSION_USERID]."'
+								,dtrawat_date_update='".$datetime_now."'
+								,dtrawat_revised=dtrawat_revised+1
+							WHERE dtrawat_id='$dtrawat_id'";
+						$this->db->query($sql);
+						/*$dtu_dtrawat=array(
 						"dtrawat_perawatan"=>$dtrawat_perawatan,
 						"dtrawat_petugas2"=>$dtrawat_petugas2,
 						"dtrawat_jam"=>$dtrawat_jam,
@@ -558,7 +579,7 @@ class M_tindakan_nonmedis extends Model{
 						"dtrawat_jumlah"=>$jumlah
 						);
 						$this->db->where('dtrawat_id', $dtrawat_id);
-						$this->db->update('tindakan_detail', $dtu_dtrawat);
+						$this->db->update('tindakan_detail', $dtu_dtrawat);*/
 						if($i==$size_array){
 							return '1';
 						}
@@ -661,7 +682,7 @@ class M_tindakan_nonmedis extends Model{
 		
 		//function for update record
 	function tindakan_update($trawat_id ,$trawat_cust ,$trawat_keterangan ,$dtrawat_status ,$trawat_cust_id ,$dtrawat_perawatan_id ,$dtrawat_perawatan ,$dtrawat_id ,$rawat_harga ,$rawat_du ,$rawat_dm ,$cust_member ,$dtrawat_terapis ,$dtrawat_terapis_id ,$dtrawat_keterangan ,$dtrawat_dapp ,$dtrawat_ambil_paket ,$dapaket_dpaket ,$dapaket_jpaket ,$dapaket_paket ,$dapaket_item ,$dtrawat_jumlah ,$mode_edit){
-		
+		$datetime_now=date('Y-m-d H:i:s');
 		/* Checking db.tindakan_detail WHERE db.tindakan_detail.dtrawat_id = $dtrawat_id DAN semua Field,
 		 * JIKA ada salah satu Field yang berubah maka akan di-UPDATE
 		 */ 
@@ -831,11 +852,18 @@ class M_tindakan_nonmedis extends Model{
 					}*/
 					$sql_check_paket=$this->customer_check_paket($trawat_cust_id, $dtrawat_perawatan_id);
 					if($sql_check_paket){
-						$dtu_dtrawat=array(
+						$sql="UPDATE tindakan_detail
+							SET dtrawat_ambil_paket='true'
+								,dtrawat_update='".@$_SESSION[SESSION_USERID]."'
+								,dtrawat_date_update='".$datetime_now."'
+								,dtrawat_revised=dtrawat_revised+1
+							WHERE dtrawat_id='$dtrawat_id'";
+						$this->db->query($sql);
+						/*$dtu_dtrawat=array(
 						"dtrawat_ambil_paket"=>'true'
 						);
 						$this->db->where('dtrawat_id', $dtrawat_id);
-						$this->db->update('tindakan_detail', $dtu_dtrawat);
+						$this->db->update('tindakan_detail', $dtu_dtrawat);*/
 						if($this->db->affected_rows()){
 							return '1';
 						}else{
@@ -852,11 +880,18 @@ class M_tindakan_nonmedis extends Model{
 					2. DELETE dari db.detail_ambil_paket
 					3. INSERT ke db.detail_jual_rawat
 					*/
-					$dtu_dtrawat=array(
+					$sql="UPDATE tindakan_detail
+						SET dtrawat_ambil_paket='false'
+							,dtrawat_update='".@$_SESSION[SESSION_USERID]."'
+							,dtrawat_date_update='".$datetime_now."'
+							,dtrawat_revised=dtrawat_revised+1
+						WHERE dtrawat_id='$dtrawat_id'";
+					$this->db->query($sql);
+					/*$dtu_dtrawat=array(
 					"dtrawat_ambil_paket"=>'false'
 					);
 					$this->db->where('dtrawat_id', $dtrawat_id);
-					$this->db->update('tindakan_detail', $dtu_dtrawat);
+					$this->db->update('tindakan_detail', $dtu_dtrawat);*/
 					
 					$this->detail_ambil_paket_delete($dtrawat_id, $dtrawat_dapp, $dapaket_dpaket, $dapaket_jpaket, $dapaket_paket);
 					
@@ -869,11 +904,18 @@ class M_tindakan_nonmedis extends Model{
 					# kemudian checkbox "ambil paket" diganti dari [true ke false], maka:
 					1. UPDATE db.tindakan_detail.dtrawat_ambil_paket = 'false'
 					*/
-					$dtu_dtrawat=array(
+					$sql="UPDATE tindakan_detail
+						SET dtrawat_ambil_paket='false'
+							,dtrawat_update='".@$_SESSION[SESSION_USERID]."'
+							,dtrawat_date_update='".$datetime_now."'
+							,dtrawat_revised=dtrawat_revised+1
+						WHERE dtrawat_id='$dtrawat_id'";
+					$this->db->query($sql);
+					/*$dtu_dtrawat=array(
 					"dtrawat_ambil_paket"=>'false'
 					);
 					$this->db->where('dtrawat_id', $dtrawat_id);
-					$this->db->update('tindakan_detail', $dtu_dtrawat);
+					$this->db->update('tindakan_detail', $dtu_dtrawat);*/
 					if($this->db->affected_rows()){
 						return '1';
 					}else{
