@@ -1122,8 +1122,8 @@ Ext.onReady(function(){
 			disabled: true,
 			handler: appointment_confirm_delete   // Confirm before deleting
 		}, '-', {
-			text: 'Search',
-			tooltip: 'Advanced Search',
+			text: 'Adv Search',
+			tooltip: 'Pencarian detail',
 			iconCls:'icon-search',
 			handler: display_form_search_window 
 		}, '-', 
