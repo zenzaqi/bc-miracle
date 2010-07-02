@@ -2155,7 +2155,7 @@ class M_master_jual_rawat extends Model{
                 SET jrawat_stat_dok='Tertutup'
                     ,jrawat_update='".@$_SESSION[SESSION_USERID]."'
                     ,jrawat_date_update='".$datetime_now."'
-                    ,jrawat_revised=jproduk_revised+1
+                    ,jrawat_revised=jrawat_revised+1
                 WHERE jrawat_id='$jrawat_id'";
 			$this->db->query($sql);
 			
