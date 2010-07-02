@@ -442,7 +442,8 @@ class M_tindakan_medis extends Model{
 			"drawat_jumlah"=>$drawat_jumlah,
 			"drawat_harga"=>$rawat_harga,
 			"drawat_diskon"=>$diskon,
-			"drawat_diskon_jenis"=>$diskon_jenis
+			"drawat_diskon_jenis"=>$diskon_jenis,
+			"drawat_creator"=>@$_SESSION[SESSION_USERID]
 			);
 			$this->db->insert('detail_jual_rawat', $dti_drawat);
 			if($this->db->affected_rows()){
@@ -513,7 +514,8 @@ class M_tindakan_medis extends Model{
 			$data_jrawat=array(
 			"jrawat_nobukti"=>$jrawat_nobukti,
 			"jrawat_cust"=>$trawat_cust_id,
-			"jrawat_tanggal"=>$date_now
+			"jrawat_tanggal"=>$date_now,
+			"jrawat_creator"=>@$_SESSION[SESSION_USERID]
 			);
 			$this->db->insert('master_jual_rawat', $data_jrawat);
 			if($this->db->affected_rows()){
@@ -532,7 +534,8 @@ class M_tindakan_medis extends Model{
 				"drawat_jumlah"=>$drawat_jumlah,
 				"drawat_harga"=>$rawat_harga,
 				"drawat_diskon"=>$diskon,
-				"drawat_diskon_jenis"=>$diskon_jenis
+				"drawat_diskon_jenis"=>$diskon_jenis,
+				"drawat_creator"=>@$_SESSION[SESSION_USERID]
 				);
 				$this->db->insert('detail_jual_rawat', $dti_drawat);
 				if($this->db->affected_rows()){
@@ -603,6 +606,8 @@ class M_tindakan_medis extends Model{
 	/* UPDATE db.detail_jual_rawat */
 	function detail_jual_rawat_update($dtrawat_perawatan, $dtrawat_id, $cust_member){
 		/* ambil data detail dari $dtrawat_perawatan */
+		$datetime_now=date('Y-m-d H:i:s');
+		
 		$sql="SELECT rawat_harga, rawat_dm, rawat_du FROM perawatan WHERE rawat_id='$dtrawat_perawatan'";
 		$rs=$this->db->query($sql);
 		if($rs->num_rows()){
@@ -617,14 +622,25 @@ class M_tindakan_medis extends Model{
 			}
 		}
 		
-		$dtu_drawat=array(
+		$sql="UPDATE detail_jual_rawat
+			SET drawat_rawat='$dtrawat_perawatan'
+				,drawat_harga='$rawat_harga'
+				,drawat_diskon='$diskon'
+				,drawat_diskon_jenis='$diskon_jenis'
+				,drawat_update='".@$_SESSION[SESSION_USERID]."'
+				,drawat_date_update='$datetime_now'
+				,drawat_revised=drawat_revised=1
+			WHERE drawat_dtrawat='$dtrawat_id'";
+		$this->db->query($sql);
+		
+		/*$dtu_drawat=array(
 		"drawat_rawat"=>$dtrawat_perawatan,
 		"drawat_harga"=>$rawat_harga,
 		"drawat_diskon"=>$diskon,
 		"drawat_diskon_jenis"=>$diskon_jenis
 		);
 		$this->db->where('drawat_dtrawat', $dtrawat_id);
-		$this->db->update('detail_jual_rawat', $dtu_drawat);
+		$this->db->update('detail_jual_rawat', $dtu_drawat);*/
 		if($this->db->affected_rows()){
 			$this->detail_pakai_cabin_update($dtrawat_id, $dtrawat_perawatan);
 		}
@@ -646,6 +662,7 @@ class M_tindakan_medis extends Model{
 	/* INSERT ke db.detail_ambil_paket */
 	function detail_ambil_paket_insert($dapaket_dpaket, $dapaket_jpaket, $dapaket_paket, $dapaket_item, $trawat_cust_id, $dtrawat_id, $dtrawat_dapp){
 		//* Mengambil db.master_jual_paket.jpaket_nobukti ==> masukkan ke db.detail_pakai_cabin /
+		$datetime_now = date('Y-m-d H:i:s');
 		$jpaket_nobukti = "";
 		$sql="SELECT jpaket_nobukti FROM master_jual_paket WHERE jpaket_id='$dapaket_jpaket'";
 		$rs=$this->db->query($sql);
@@ -678,11 +695,20 @@ class M_tindakan_medis extends Model{
 			$this->db->update('appointment_detail', $dtu_dapp);
 			
 			/* UPDATE db.tindakan_detail.dtrawat_ambil_paket = 'true' */
-			$dtu_dtrawat=array(
-			"dtrawat_ambil_paket"=>'true'
+			$sql="UPDATE tindakan_detail
+				SET dtrawat_ambil_paket='true'
+					,dtrawat_update='".@$_SESSION[SESSION_USERID]."'
+					,dtrawat_date_update='".$datetime_now."'
+					,dtrawat_revised=dtrawat_revised+1
+				WHERE dtrawat_id='$dtrawat_id'";
+			$this->db->query($sql);
+			/*$dtu_dtrawat=array(
+			"dtrawat_ambil_paket"=>'true',
+			"dtrawat_update"=>@$_SESSION[SESSION_USERID],
+			"dtrawat_date_update"=>$datetime_now
 			);
 			$this->db->where('dtrawat_id', $dtrawat_id);
-			$this->db->update('tindakan_detail', $dtu_dtrawat);
+			$this->db->update('tindakan_detail', $dtu_dtrawat);*/
 			
 			$this->total_sisa_paket_update($dapaket_dpaket, $dapaket_jpaket, $dapaket_paket);
 			
@@ -823,6 +849,7 @@ class M_tindakan_medis extends Model{
 	function detail_tindakan_medis_detail_insert($array_dtrawat_id ,$dtrawat_master ,$array_dtrawat_perawatan ,$array_dtrawat_petugas1 ,$array_dtrawat_jamreservasi ,$array_dtrawat_status ,$array_dtrawat_keterangan ,$dtrawat_cust ){
 		/* hanya INSERT record tindakan_detail-medis yang baru */
 		$date_now=date('Y-m-d');
+		$datetime_now=date('Y-m-d H:i:s');
 		
 		$size_array = sizeof($array_dtrawat_perawatan) - 1;
 		
@@ -904,14 +931,24 @@ class M_tindakan_medis extends Model{
 					*/
 					if($dtrawat_locked==0 && ($dtrawat_perawatan_awal<>$dtrawat_perawatan || $dtrawat_petugas1_awal<>$dtrawat_petugas1 || $dtrawat_jam_awal<>$dtrawat_jamreservasi || $dtrawat_keterangan_awal<>$dtrawat_keterangan)){
 						/* ini berarti: ada field yg berubah untuk dilakukan editing */
-						$dtu_dtrawat=array(
+						$sql="UPDATE tindakan_detail
+							SET dtrawat_perawatan=".$dtrawat_perawatan."
+								,dtrawat_petugas1=".$dtrawat_petugas1."
+								,dtrawat_jam='$dtrawat_jamreservasi'
+								,dtrawat_keterangan='$dtrawat_keterangan'
+								,dtrawat_update='".@$_SESSION[SESSION_USERID]."'
+								,dtrawat_date_update='$datetime_now'
+								,dtrawat_revised=dtrawat_revised+1
+							WHERE dtrawat_id='$dtrawat_id'";
+						$this->db->query($sql);
+						/*$dtu_dtrawat=array(
 						"dtrawat_perawatan"=>$dtrawat_perawatan,
 						"dtrawat_petugas1"=>$dtrawat_petugas1,
 						"dtrawat_jam"=>$dtrawat_jamreservasi,
 						"dtrawat_keterangan"=>$dtrawat_keterangan
 						);
 						$this->db->where('dtrawat_id', $dtrawat_id);
-						$this->db->update('tindakan_detail', $dtu_dtrawat);
+						$this->db->update('tindakan_detail', $dtu_dtrawat);*/ //2010-07-01
 						/*if($count==($dcount-1)){
 							return '1';
 						}elseif($count<>($dcount-1)){
@@ -1072,7 +1109,8 @@ class M_tindakan_medis extends Model{
 						$dti_jrawat=array(
 						"jrawat_nobukti"=>$jrawat_nobukti,
 						"jrawat_cust"=>$customer_id,
-						"jrawat_tanggal"=>$date_now
+						"jrawat_tanggal"=>$date_now,
+						"jrawat_creator"=>@$_SESSION[SESSION_USERID]
 						);
 						$this->db->insert('master_jual_rawat', $dti_jrawat);
 						if($this->db->affected_rows()){
@@ -1211,7 +1249,8 @@ class M_tindakan_medis extends Model{
 	function tindakan_update($trawat_id ,$trawat_cust ,$trawat_keterangan ,$dtrawat_status ,$trawat_cust_id ,$dtrawat_perawatan_id ,$dtrawat_perawatan ,$dtrawat_id ,$rawat_harga ,$rawat_du ,$rawat_dm ,$cust_member ,$dtrawat_dokter ,$dtrawat_dokter_id ,$dtrawat_keterangan ,$dtrawat_dapp ,$dtrawat_ambil_paket ,$dapaket_dpaket ,$dapaket_jpaket ,$dapaket_paket ,$dapaket_item ,$mode_edit){
 		/* Checking db.tindakan_detail WHERE db.tindakan_detail.dtrawat_id = $dtrawat_id DAN semua Field,
 		 * JIKA ada salah satu Field yang berubah maka akan di-UPDATE
-		 */ 
+		 */
+		$datetime_now=date('Y-m-d H:i:s');
 		$data_tindakan=array(
 		"trawat_keterangan"=>$trawat_keterangan
 		);
@@ -1384,11 +1423,18 @@ class M_tindakan_medis extends Model{
 					}*/
 					$sql_check_paket=$this->customer_check_paket($trawat_cust_id, $dtrawat_perawatan_id);
 					if($sql_check_paket){
-						$dtu_dtrawat=array(
+						$sql="UPDATE tindakan_detail
+							SET dtrawat_ambil_paket='true'
+								,dtrawat_update='".@$_SESSION[SESSION_USERID]."'
+								,dtrawat_date_update='$datetime_now'
+								,dtrawat_revised=dtrawat_revised+1
+							WHERE dtrawat_id='$dtrawat_id'";
+						$this->db->query($sql);
+						/*$dtu_dtrawat=array(
 						"dtrawat_ambil_paket"=>'true'
 						);
 						$this->db->where('dtrawat_id', $dtrawat_id);
-						$this->db->update('tindakan_detail', $dtu_dtrawat);
+						$this->db->update('tindakan_detail', $dtu_dtrawat);*/
 						if($this->db->affected_rows()){
 							return '1';
 						}else{
@@ -1405,11 +1451,18 @@ class M_tindakan_medis extends Model{
 					2. DELETE dari db.detail_ambil_paket
 					3. INSERT ke db.detail_jual_rawat
 					*/
-					$dtu_dtrawat=array(
+					$sql="UPDATE tindakan_detail
+						SET dtrawat_ambil_paket='false'
+							,dtrawat_update='".@$_SESSION[SESSION_USERID]."'
+							,dtrawat_date_update='$datetime_now'
+							,dtrawat_revised=dtrawat_revised+1
+						WHERE dtrawat_id='$dtrawat_id'";
+					$this->db->query($sql);
+					/*$dtu_dtrawat=array(
 					"dtrawat_ambil_paket"=>'false'
 					);
 					$this->db->where('dtrawat_id', $dtrawat_id);
-					$this->db->update('tindakan_detail', $dtu_dtrawat);
+					$this->db->update('tindakan_detail', $dtu_dtrawat);*/
 					
 					$this->detail_ambil_paket_delete($dtrawat_id, $dtrawat_dapp, $dapaket_dpaket, $dapaket_jpaket, $dapaket_paket);
 					
@@ -1424,11 +1477,18 @@ class M_tindakan_medis extends Model{
 					# kemudian checkbox "ambil paket" diganti dari [true ke false], maka:
 					1. UPDATE db.tindakan_detail.dtrawat_ambil_paket = 'false'
 					*/
-					$dtu_dtrawat=array(
+					$sql="UPDATE tindakan_detail
+						SET dtrawat_ambil_paket='false'
+							,dtrawat_update='".@$_SESSION[SESSION_USERID]."'
+							,dtrawat_date_update='$datetime_now'
+							,dtrawat_revised=dtrawat_revised+1
+						WHERE dtrawat_id='$dtrawat_id'";
+					$this->db->query($sql);
+					/*$dtu_dtrawat=array(
 					"dtrawat_ambil_paket"=>'false'
 					);
 					$this->db->where('dtrawat_id', $dtrawat_id);
-					$this->db->update('tindakan_detail', $dtu_dtrawat);
+					$this->db->update('tindakan_detail', $dtu_dtrawat);*/
 					if($this->db->affected_rows()){
 						return '1';
 					}else{
@@ -1489,11 +1549,18 @@ class M_tindakan_medis extends Model{
 						$sql_check_paket=$this->customer_check_paket($trawat_cust_id, $dtrawat_perawatan);
 						if($sql_check_paket){
 							//* UPDATE db.tindakan_detail /
-							$dtu_dtrawat=array(
+							$sql="UPDATE tindakan_detail
+								SET dtrawat_perawatan='$dtrawat_perawatan'
+									,dtrawat_update='".@$_SESSION[SESSION_USERID]."'
+									,dtrawat_date_update='$datetime_now'
+									,dtrawat_revised=dtrawat_revised+1
+								WHERE dtrawat_id='$dtrawat_id'";
+							$this->db->query($sql);
+							/*$dtu_dtrawat=array(
 							"dtrawat_perawatan"=>$dtrawat_perawatan
 							);
 							$this->db->where('dtrawat_id', $dtrawat_id);
-							$this->db->update('tindakan_detail', $dtu_dtrawat);
+							$this->db->update('tindakan_detail', $dtu_dtrawat);*/
 							//* UPDATE db.detail_ambil_paket /
 							$dapaket_dpaket_ganti=$sql_check_paket->dpaket_id;
 							$dapaket_jpaket_ganti=$sql_check_paket->dpaket_master;
@@ -1521,11 +1588,18 @@ class M_tindakan_medis extends Model{
 						# ini artinya tindakan perawatan ini belum masuk ke Kasir manapun:
 						1. UDPATE db.tindakan_detail.dtrawat_perawatan = [rawat_id pengganti]
 						*/
-						$dtu_dtrawat=array(
+						$sql="UPDATE tindakan_detail
+							SET dtrawat_perawatan='$dtrawat_perawatan'
+								,dtrawat_update='".@$_SESSION[SESSION_USERID]."'
+								,dtrawat_date_update='$datetime_now'
+								,dtrawat_revised=dtrawat_revised+1
+							WHERE dtrawat_id='$dtrawat_id'";
+						$this->db->query($sql);
+						/*$dtu_dtrawat=array(
 						"dtrawat_perawatan"=>$dtrawat_perawatan
 						);
 						$this->db->where('dtrawat_id', $dtrawat_id);
-						$this->db->update('tindakan_detail', $dtu_dtrawat);
+						$this->db->update('tindakan_detail', $dtu_dtrawat);*/
 						if($this->db->affected_rows()){
 							return '1';
 						}else{
@@ -1538,11 +1612,18 @@ class M_tindakan_medis extends Model{
 						1. UPDATE db.tindakan_detail.dtrawat_rawat = [rawat_id pengganti]
 						2. UPDATE Kasir Perawatan WHERE db.detail_jual_rawat.drawat_dtrawat = db.tindakan_detail.dtrawat_id
 						*/
-						$dtu_dtrawat=array(
+						$sql="UPDATE tindakan_detail
+							SET dtrawat_perawatan='$dtrawat_perawatan'
+								,dtrawat_update='".@$_SESSION[SESSION_USERID]."'
+								,dtrawat_date_update='$datetime_now'
+								,dtrawat_revised=dtrawat_revised+1
+							WHERE dtrawat_id='$dtrawat_id'";
+						$this->db->query($sql);
+						/*$dtu_dtrawat=array(
 						"dtrawat_perawatan"=>$dtrawat_perawatan
 						);
 						$this->db->where('dtrawat_id', $dtrawat_id);
-						$this->db->update('tindakan_detail', $dtu_dtrawat);
+						$this->db->update('tindakan_detail', $dtu_dtrawat);*/
 						
 						$this->detail_jual_rawat_update($dtrawat_perawatan, $dtrawat_id, $cust_member);
 						return '1';
@@ -1551,11 +1632,18 @@ class M_tindakan_medis extends Model{
 						# ini artinya: perawatan ini belum masuk ke Kasir manapun, maka: 
 						1. UPDATE db.tindakan_detail.dtrawat_perawatan saja =[rawat_id pengganti]
 						*/
-						$dtu_dtrawat=array(
+						$sql="UPDATE tindakan_detail
+							SET dtrawat_perawatan='$dtrawat_perawatan'
+								,dtrawat_update='".@$_SESSION[SESSION_USERID]."'
+								,dtrawat_date_update='$datetime_now'
+								,dtrawat_revised=dtrawat_revised+1
+							WHERE dtrawat_id='$dtrawat_id'";
+						$this->db->query($sql);
+						/*$dtu_dtrawat=array(
 						"dtrawat_perawatan"=>$dtrawat_perawatan
 						);
 						$this->db->where('dtrawat_id', $dtrawat_id);
-						$this->db->update('tindakan_detail', $dtu_dtrawat);
+						$this->db->update('tindakan_detail', $dtu_dtrawat);*/
 						if($this->db->affected_rows()){
 							return '1';
 						}else{
@@ -1566,20 +1654,34 @@ class M_tindakan_medis extends Model{
 					return '1';
 				}elseif($dtrawat_dokter_awal<>$dtrawat_dokter && is_numeric($dtrawat_dokter)==true && $dtrawat_locked==0){ /* ada perubahan pada db.tindakan_detail.dtrawat_petugas1 */
 					/* UPDATE db.tindakan_detail  */
-					$data_dtindakan=array(
+					$sql="UPDATE tindakan_detail
+						SET dtrawat_petugas1='$dtrawat_dokter'
+							,dtrawat_update='".@$_SESSION[SESSION_USERID]."'
+							,dtrawat_date_update='$datetime_now'
+							,dtrawat_revised=dtrawat_revised+1
+						WHERE dtrawat_id='$dtrawat_id'";
+					$this->db->query($sql);
+					/*$data_dtindakan=array(
 					"dtrawat_petugas1"=>$dtrawat_dokter
 					);
 					$this->db->where('dtrawat_id', $dtrawat_id);
-					$this->db->update('tindakan_detail',$data_dtindakan);
+					$this->db->update('tindakan_detail',$data_dtindakan);*/
 					return '1';
 				}elseif($dtrawat_keterangan_awal<>$dtrawat_keterangan && $dtrawat_locked==0){
 					/* ada perubahan keterangan_detail */
 					/* UPDATE db.tindakan_detail  */
-					$data_dtindakan=array(
+					$sql="UPDATE tindakan_detail
+						SET dtrawat_keterangan='$dtrawat_keterangan'
+							,dtrawat_update='".@$_SESSION[SESSION_USERID]."'
+							,dtrawat_date_update='$datetime_now'
+							,dtrawat_revised=dtrawat_revised+1
+						WHERE dtrawat_id='$dtrawat_id'";
+					$this->db->query($sql);
+					/*$data_dtindakan=array(
 					"dtrawat_keterangan"=>$dtrawat_keterangan
 					);
 					$this->db->where('dtrawat_id', $dtrawat_id);
-					$this->db->update('tindakan_detail',$data_dtindakan);
+					$this->db->update('tindakan_detail',$data_dtindakan);*/
 					return '1';
 				}elseif($dtrawat_locked==1){
 					return '2';
