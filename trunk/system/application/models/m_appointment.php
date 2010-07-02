@@ -423,7 +423,8 @@ class M_appointment extends Model{
 							"dtrawat_jam"=>$dapp_medis_jamreservasi,
 							"dtrawat_tglapp"=>$dapp_medis_tglreservasi,
 							"dtrawat_keterangan"=>$dapp_medis_keterangan,
-							"dtrawat_status"=>$dapp_medis_status
+							"dtrawat_status"=>$dapp_medis_status,
+							"dtrawat_creator"=>@$_SESSION[SESSION_USERID]
 							);
 							$sql_cek_dtindakan="SELECT dtrawat_dapp FROM tindakan_detail WHERE dtrawat_dapp='$dapp_id'";
 							$rs=$this->db->query($sql_cek_dtindakan);
@@ -437,7 +438,7 @@ class M_appointment extends Model{
 							"trawat_jamdatang"=>$time_now,
 							//"trawat_appointment"=>$kategori_nama,
 							"trawat_keterangan"=>$app_keterangan,
-							"trawat_date_create"=>$date_now
+							"trawat_creator"=>@$_SESSION[SESSION_USERID]
 							);
 							$this->db->insert('tindakan', $data_tindakan);
 							
@@ -457,7 +458,8 @@ class M_appointment extends Model{
 								"dtrawat_jam"=>$dapp_medis_jamreservasi,
 								"dtrawat_tglapp"=>$dapp_medis_tglreservasi,
 								"dtrawat_keterangan"=>$dapp_medis_keterangan,
-								"dtrawat_status"=>$dapp_medis_status
+								"dtrawat_status"=>$dapp_medis_status,
+								"dtrawat_creator"=>@$_SESSION[SESSION_USERID]
 								);
 								$this->db->insert('tindakan_detail', $data_dtindakan);
 							}
@@ -606,7 +608,8 @@ class M_appointment extends Model{
 							"dtrawat_jam"=>$dapp_nonmedis_jamreservasi,
 							"dtrawat_tglapp"=>$dapp_nonmedis_tglreservasi,
 							"dtrawat_keterangan"=>$dapp_nonmedis_keterangan,
-							"dtrawat_status"=>$dapp_nonmedis_status
+							"dtrawat_status"=>$dapp_nonmedis_status,
+							"dtrawat_creator"=>@$_SESSION[SESSION_USERID]
 							);
 							$sql_cek_dtindakan="SELECT dtrawat_dapp FROM tindakan_detail WHERE dtrawat_dapp='$dapp_id'";
 							$rs=$this->db->query($sql_cek_dtindakan);
@@ -620,7 +623,7 @@ class M_appointment extends Model{
 							"trawat_jamdatang"=>$time_now,
 							//"trawat_appointment"=>$kategori_nama,
 							"trawat_keterangan"=>$app_keterangan,
-							"trawat_date_create"=>$date_now
+							"trawat_creator"=>@$_SESSION[SESSION_USERID]
 							);
 							$this->db->insert('tindakan', $data_tindakan);
 							
@@ -640,7 +643,8 @@ class M_appointment extends Model{
 								"dtrawat_jam"=>$dapp_nonmedis_jamreservasi,
 								"dtrawat_tglapp"=>$dapp_nonmedis_tglreservasi,
 								"dtrawat_keterangan"=>$dapp_nonmedis_keterangan,
-								"dtrawat_status"=>$dapp_nonmedis_status
+								"dtrawat_status"=>$dapp_nonmedis_status,
+								"dtrawat_creator"=>@$_SESSION[SESSION_USERID]
 								);
 								$this->db->insert('tindakan_detail', $data_dtindakan);
 							}
@@ -996,7 +1000,8 @@ class M_appointment extends Model{
 						"dtrawat_jam"=>$dapp_jamreservasi,
 						"dtrawat_tglapp"=>$dapp_tglreservasi,
 						"dtrawat_keterangan"=>$dapp_keterangan,
-						"dtrawat_status"=>$dapp_status
+						"dtrawat_status"=>$dapp_status,
+						"dtrawat_creator"=>@$_SESSION[SESSION_USERID]
 						);
 						$sql_petugas1="SELECT karyawan_id FROM karyawan WHERE karyawan_id='$dapp_dokter_ganti'";
 						$rs_petugas1=$this->db->query($sql_petugas1);
@@ -1024,7 +1029,7 @@ class M_appointment extends Model{
 						"trawat_jamdatang"=>$time_now,
 						//"trawat_appointment"=>$kategori_nama,
 						"trawat_keterangan"=>$app_keterangan,
-						"trawat_date_create"=>$date_now
+						"trawat_creator"=>@$_SESSION[SESSION_USERID]
 						);
 						$this->db->insert('tindakan', $data_tindakan);
 						if($this->db->affected_rows()){
@@ -1041,7 +1046,8 @@ class M_appointment extends Model{
 							"dtrawat_jam"=>$dapp_jamreservasi,
 							"dtrawat_tglapp"=>$dapp_tglreservasi,
 							"dtrawat_keterangan"=>$dapp_keterangan,
-							"dtrawat_status"=>$dapp_status
+							"dtrawat_status"=>$dapp_status,
+							"dtrawat_creator"=>@$_SESSION[SESSION_USERID]
 							);
 							$sql_petugas1="SELECT karyawan_id FROM karyawan WHERE karyawan_id='$dapp_dokter_ganti'";
 							$rs_petugas1=$this->db->query($sql_petugas1);
