@@ -555,6 +555,7 @@ Ext.onReady(function(){
 			text: 'Delete',
 			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
+			disabled: true,
 			handler: users_confirm_delete   // Confirm before deleting
 		}, '-', {
 			text: 'Search',
@@ -600,6 +601,7 @@ Ext.onReady(function(){
 			text: 'Delete', 
 			tooltip: 'Delete selected record', 
 			iconCls:'icon-delete',
+			disabled: true,
 			handler: users_confirm_delete 
 		},
 		'-',

@@ -862,9 +862,9 @@ Ext.onReady(function(){
 			dataIndex: 'karyawan_tgllahir',
 			width: 80,
 			sortable: true,
-			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
+			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
 			editor: new Ext.form.DateField({
-				format: 'Y-m-d'
+				format: 'd-m-Y'
 			})
 		},
 		{
@@ -1183,7 +1183,7 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 1200,
+	  	width: 1220,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: karyawan_DataStore,
@@ -1272,6 +1272,7 @@ Ext.onReady(function(){
 			text: 'Delete', 
 			tooltip: 'Delete selected record', 
 			iconCls:'icon-delete',
+			disabled: true,
 			handler: karyawan_confirm_delete 
 		},
 		'-',
@@ -1410,7 +1411,7 @@ Ext.onReady(function(){
 	karyawan_tgllahirField= new Ext.form.DateField({
 		id: 'karyawan_tgllahirField',
 		fieldLabel: 'Tgl Lahir',
-		format : 'Y-m-d',
+		format : 'd-m-Y',
 	});
 	/* Identify  karyawan_tmplahir Field */
 	karyawan_tmplahirField= new Ext.form.TextField({
@@ -1908,7 +1909,7 @@ Ext.onReady(function(){
 	karyawan_tgllahirSearchField= new Ext.form.DateField({
 		id: 'karyawan_tgllahirSearchField',
 		fieldLabel: 'Tgl Lahir',
-		format : 'Y-m-d',
+		format : 'd-m-Y',
 	
 	});
 	/* Identify  karyawan_alamat Search Field */
