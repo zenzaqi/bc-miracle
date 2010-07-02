@@ -91,7 +91,10 @@ class M_tindakan_nonmedis extends Model{
 	//function for detail
 	//get record list
 	function detail_tindakan_detail_list($master_id,$query,$start,$end) {
-		$query = "SELECT * FROM vu_tindakan WHERE dtrawat_master='".$master_id."' AND dtrawat_petugas2!='0'";
+		$query = "SELECT * FROM vu_tindakan
+			WHERE dtrawat_master='".$master_id."'
+				AND dtrawat_petugas2!='0'
+				AND date_format(dtrawat_tglapp, '%Y-%m-%d')=date_format(now(), '%Y-%m-%d')";
 		$result = $this->db->query($query);
 		$nbrows = $result->num_rows();
 		$limit = $query." LIMIT ".$start.",".$end;			
