@@ -197,7 +197,7 @@ class M_master_order_beli extends Model{
 		//function for detail
 		//get record list
 		function detail_detail_order_beli_list($master_id,$query,$start,$end) {
-			$query = "SELECT * FROM vu_detail_order_beli where dorder_master='".$master_id."'";
+			$query = "SELECT distinct * FROM vu_detail_order_beli where dorder_master='".$master_id."'";
 
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
@@ -253,7 +253,22 @@ class M_master_order_beli extends Model{
 				"dorder_harga"=>$dorder_harga, 
 				"dorder_diskon"=>$dorder_diskon 
 			);
-			$this->db->insert('detail_order_beli', $data); 
+			
+			$sql="SELECT dorder_id,dorder_jumlah FROM detail_order_beli 
+					WHERE dorder_master='".$dorder_master."' 
+					AND dorder_produk='".$dorder_produk."' 
+					AND dorder_satuan='".$dorder_satuan."'";
+			$result=$this->db->query($sql);
+			if($result->num_rows()){
+				$row=$result->row();
+				$data["dorder_jumlah"]+=$row->dorder_jumlah;
+				$this->db->where('dorder_id', $row->dorder_id);
+				$this->db->update('detail_order_beli', $data);
+			}else{
+				$this->db->insert('detail_order_beli', $data); 
+			}
+			
+			
 			if($this->db->affected_rows())
 				return '1';
 			else
