@@ -435,7 +435,7 @@ AND date_format(tanggal,'%Y-%m-%d')<='".$tanggal_end."'
 				//Retur Penjualan Paket -> masuk
 				$sql="SELECT 	tanggal,
 								no_bukti, 
-								concat('Retur Produk oleh ', cust_nama) as keterangan, 
+								concat('Retur Produk (Paket) oleh ', cust_nama) as keterangan, 
 								jml_retur_paket*konversi_nilai as masuk,
 								0 as keluar,
 								0 as koreksi
@@ -446,7 +446,7 @@ AND date_format(tanggal,'%Y-%m-%d')<='".$tanggal_end."'
 								AND gudang='".$gudang."'
 								AND cust_id=asal
 								AND status<>'Batal'
-								AND jenis_transaksi='retur jual'
+								AND jenis_transaksi='retur paket'
 								AND keterangan='paket retur'";
 								
 				$result=$this->db->query($sql);
@@ -463,7 +463,7 @@ AND date_format(tanggal,'%Y-%m-%d')<='".$tanggal_end."'
 				//Pakai cabin -> keluar
 				$sql="SELECT 	tanggal,
 								no_bukti, 
-								concat('Retur Produk oleh ', cust_nama) as keterangan, 
+								concat('Pakai u/ Perawatan oleh ', cust_nama) as keterangan, 
 								0 as masuk,
 								jml_pakai_cabin*konversi_nilai as keluar,
 								0 as koreksi
