@@ -257,6 +257,7 @@ Ext.onReady(function(){
 		blankText: '0',
 		maxLength: 11,
 		readOnly: true,
+		width: 60,
 		maskRe: /([0-9.]+)$/
 	});
 	
@@ -269,6 +270,7 @@ Ext.onReady(function(){
 		blankText: '0',
 		maxLength: 11,
 		readOnly: true,
+		width: 60,
 		maskRe: /([0-9.]+)$/
 	});
 	
