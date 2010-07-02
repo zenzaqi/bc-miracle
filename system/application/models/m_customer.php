@@ -18,8 +18,12 @@ class M_customer extends Model{
 			parent::Model();
 		}
 		
-		function get_profesi_list(){
-			$sql="SELECT distinct(cust_profesi) FROM customer WHERE cust_profesi!=null or cust_profesi!=''";
+		function get_profesi_list($query){
+			$sql="SELECT distinct(cust_profesi) FROM customer WHERE (cust_profesi!=null OR cust_profesi!='')";
+			if($query<>""){
+				$sql=$sql." AND (cust_profesi like '%".$query."%') ";
+			}
+			
 			$result = $this->db->query($sql);
 			$nbrows = $result->num_rows();
 			$result = $this->db->query($sql);  
@@ -117,8 +121,12 @@ class M_customer extends Model{
 			}
 		}
 		
-		function get_hobi_list(){
-			$sql="select distinct(cust_hobi) from customer where cust_hobi!=null or cust_hobi!=''";
+		function get_hobi_list($query){
+			$sql="SELECT distinct(cust_hobi) FROM customer WHERE (cust_hobi!=null OR cust_hobi!='')";
+			if($query<>""){
+				$sql=$sql." AND (cust_hobi LIKE '%".$query."%') ";
+			}
+			
 			$result = $this->db->query($sql);
 			$nbrows = $result->num_rows();
 			$result = $this->db->query($sql);  

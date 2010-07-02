@@ -62,12 +62,14 @@ class C_customer extends Controller {
 	
 	
 	function get_profesi_list(){
-		$result=$this->m_customer->get_profesi_list();
+		$query = isset($_POST['query']) ? $_POST['query'] : "";
+		$result=$this->m_customer->get_profesi_list($query);
 		echo $result;
 	}
 	
 	function get_hobi_list(){
-		$result=$this->m_customer->get_hobi_list();
+		$query = isset($_POST['query']) ? $_POST['query'] : "";
+		$result=$this->m_customer->get_hobi_list($query);
 		echo $result;
 	}
 	
