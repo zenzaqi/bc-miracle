@@ -346,7 +346,7 @@ class M_appointment extends Model{
 	//*eof
 	
 	//insert detail record
-	function detail_appointment_detail_medis_insert($array_dapp_medis_id ,$dapp_medis_master ,$array_dapp_medis_perawatan ,$array_dapp_medis_tglreservasi ,$array_dapp_medis_jamreservasi ,$array_dapp_medis_petugas ,$dapp_medis_status ,$array_dapp_medis_keterangan ,$app_cara ,$app_customer ,$app_keterangan ,$dapp_user){
+	function detail_appointment_detail_medis_insert($array_dapp_medis_id ,$dapp_medis_master ,$array_dapp_medis_perawatan ,$array_dapp_medis_tglreservasi ,$array_dapp_medis_jamreservasi ,$array_dapp_medis_petugas ,$array_dapp_medis_status ,$array_dapp_medis_keterangan ,$app_cara ,$app_customer ,$app_keterangan ,$dapp_user){
 		$date_now=date('Y-m-d');
 		$datetime_now=date('Y-m-d H:i:s');
 		
@@ -358,6 +358,7 @@ class M_appointment extends Model{
 			$dapp_medis_tglreservasi = $array_dapp_medis_tglreservasi[$i];
 			$dapp_medis_jamreservasi = $array_dapp_medis_jamreservasi[$i];
 			$dapp_medis_petugas = $array_dapp_medis_petugas[$i];
+			$dapp_medis_status = $array_dapp_medis_status[$i];
 			$dapp_medis_keterangan = $array_dapp_medis_keterangan[$i];
 			
 			if(is_numeric($dapp_medis_id)){
@@ -529,9 +530,6 @@ class M_appointment extends Model{
 							);
 							$this->db->where('reportt_karyawan_id', $dapp_medis_petugas);
 							$this->db->update('report_tindakan', $data_reportt);
-							if($i==$size_array){
-								return '1';
-							}
 						}else{
 							$data_reportt=array(
 							"reportt_karyawan_id"=>$dapp_medis_petugas,
@@ -554,285 +552,136 @@ class M_appointment extends Model{
 			
 		}
 		
-		/* JIKA $dapp_medis_petugas=="" ==> diisi db.karyawan.karyawan_id WHERE username="Available dr." */
-		/*if($dapp_medis_petugas==""){
-			$sql="SELECT karyawan_id FROM karyawan WHERE karyawan_no='99'";
-			$rs=$this->db->query($sql);
-			if($rs->num_rows()){
-				$rs_record=$rs->row_array();
-				$dapp_medis_petugas=$rs_record["karyawan_id"];
-			}
-		}
-		
-		$sql="SELECT dapp_id FROM appointment_detail WHERE dapp_id='$dapp_medis_id'";
-		$rs=$this->db->query($sql);
-		if(!$rs->num_rows()){
-			//if master id not capture from view then capture it from max pk from master table
-			if($dapp_medis_master=="" || $dapp_medis_master==NULL){
-				$dapp_medis_master=$this->get_master_id();
-			}
-			if($dapp_medis_status=="datang" || $dapp_medis_status=="Datang"){
-				$dapp_medis_tgldatang=date('Y-m-d');
-				$dapp_medis_jamdatang=date('H:i:s');
-			}
-			
-			if($app_cara=="Datang")
-				$dapp_medis_keterangan="[W] ".$dapp_medis_keterangan;
-			if($app_cara=="Update")
-				$dapp_medis_keterangan="[ID] ".$dapp_medis_keterangan;
-				
-			$data = array(
-				"dapp_master"=>$dapp_medis_master, 
-				"dapp_perawatan"=>$dapp_medis_perawatan, 
-				"dapp_tglreservasi"=>$dapp_medis_tglreservasi, 
-				"dapp_jamreservasi"=>$dapp_medis_jamreservasi, 
-				"dapp_petugas"=>$dapp_medis_petugas, 
-				"dapp_status"=>$dapp_medis_status, 
-				"dapp_tgldatang"=>$dapp_medis_tgldatang, 
-				"dapp_jamdatang"=>$dapp_medis_jamdatang,
-				"dapp_keterangan"=>$dapp_medis_keterangan,
-				"dapp_creator"=>$dapp_user
-			);
-			$this->db->insert('appointment_detail', $data); 
-			if($this->db->affected_rows()){
-				//* Check dan Ambil db.appointment_detail.dapp_id yang telah "barusan" ter-input /
-				$sql="SELECT dapp_id FROM appointment_detail WHERE dapp_master='$dapp_medis_master' AND dapp_perawatan='$dapp_medis_perawatan' AND dapp_tglreservasi='$dapp_medis_tglreservasi'";
-				$rs=$this->db->query($sql);
-				if($rs->num_rows()){
-					$rs_record=$rs->row_array();
-					$dapp_id=$rs_record["dapp_id"];
-				}
-				//* JIKA Cara Appointment = 'Walk-in' alias 'Datang', maka INSERT ke db.tindakan atau dan db.tindakan_detail /
-				if($app_cara=="Datang"){
-					$date_now=date('Y-m-d');
-					$time_now=date('H:i:s');
-					//* INSERT ke db.tindakan dan db.tindakan_detail JIKA $dapp_status=='datang' /
-					$sql="SELECT trawat_id FROM tindakan WHERE trawat_cust='$app_customer' AND date_format(trawat_date_create,'%Y-%m-%d')='$date_now'";
-					$rs=$this->db->query($sql);
-					if($rs->num_rows()){ //* artinya: di db.tindakan telah masuk appointment = $app_customer pada trawat_date_create(tanggal-input) = $date_now /
-						$rs_record=$rs->row_array();
-						$dtrawat_master=$rs_record["trawat_id"]; //ambil ID dr tabel tindakan
-						//Karena di db.tindakan telah ada $app_customer && trawat_date_create='$date_now', maka HANYA INSERT to db.tindakan_detail
-						$data_dtindakan=array(
-						"dtrawat_master"=>$dtrawat_master,
-						"dtrawat_dapp"=>$dapp_id,
-						"dtrawat_perawatan"=>$dapp_medis_perawatan,
-						"dtrawat_petugas1"=>$dapp_medis_petugas,
-						"dtrawat_jam"=>$dapp_medis_jamreservasi,
-						"dtrawat_tglapp"=>$dapp_medis_tglreservasi,
-						"dtrawat_keterangan"=>$dapp_medis_keterangan,
-						"dtrawat_status"=>$dapp_medis_status,
-						"dtrawat_creator"=>@$_SESSION[SESSION_USERID]
-						);
-						$sql_cek_dtindakan="SELECT dtrawat_dapp FROM tindakan_detail WHERE dtrawat_dapp='$dapp_id'";
-						$rs=$this->db->query($sql_cek_dtindakan);
-						if(!$rs->num_rows()){
-							$this->db->insert('tindakan_detail', $data_dtindakan);
-						}
-					}else{ //* artinya: di db.tindakan BELUM masuk $app_customer && trawat_date_create(tanggal-input) = $date_now /
-						//* INSERT to db.tindakan /
-						$data_tindakan=array(
-						"trawat_cust"=>$app_customer,
-						"trawat_jamdatang"=>$time_now,
-						//"trawat_appointment"=>$kategori_nama,
-						"trawat_keterangan"=>$app_keterangan,
-						"trawat_creator"=>@$_SESSION[SESSION_USERID]
-						);
-						$this->db->insert('tindakan', $data_tindakan);
-						
-						if($this->db->affected_rows()){
-							//* Telah ter-insert ke db.tindakan, maka mulai INSERT db.tindakan_detail /
-							$sql="SELECT trawat_id FROM tindakan WHERE trawat_cust='$app_customer' AND date_format(trawat_date_create,'%Y-%m-%d')='$date_now'";
-							$rs=$this->db->query($sql);
-							if($rs->num_rows()){
-								$rs_record=$rs->row_array();
-								$dtrawat_master=$rs_record["trawat_id"];
-							}
-							$data_dtindakan=array(
-							"dtrawat_master"=>$dtrawat_master,
-							"dtrawat_dapp"=>$dapp_id,
-							"dtrawat_perawatan"=>$dapp_medis_perawatan,
-							"dtrawat_petugas1"=>$dapp_medis_petugas,
-							"dtrawat_jam"=>$dapp_medis_jamreservasi,
-							"dtrawat_tglapp"=>$dapp_medis_tglreservasi,
-							"dtrawat_keterangan"=>$dapp_medis_keterangan,
-							"dtrawat_status"=>$dapp_medis_status,
-							"dtrawat_creator"=>@$_SESSION[SESSION_USERID]
-							);
-							$this->db->insert('tindakan_detail', $data_dtindakan);
-						}
-					}
-					//UPDATE/INSERT ke db.report_tindakan dari Dokter && $app_cara=='datang'
-					$bln_now=date('Y-m');
-					$sql="SELECT reportt_jmltindakan FROM report_tindakan WHERE reportt_bln LIKE '$bln_now%' AND reportt_karyawan_id='$dapp_medis_petugas'";
-					$rs=$this->db->query($sql);
-					if($rs->num_rows()){
-						$rs_record=$rs->row_array();
-						$data_reportt=array(
-						"reportt_jmltindakan"=>$rs_record["reportt_jmltindakan"]+1
-						);
-						$this->db->where('reportt_karyawan_id', $dapp_medis_petugas);
-						$this->db->update('report_tindakan', $data_reportt);
-					}else if(!$rs->num_rows()){
-						$data_reportt=array(
-						"reportt_karyawan_id"=>$dapp_medis_petugas,
-						"reportt_bln"=>$date_now,
-						"reportt_jmltindakan"=>1
-						);
-						$this->db->insert('report_tindakan', $data_reportt);
-					}
-				}
-				return '1';
-			}else{
-				return '0';
-			}
-		}else{
-			$sql="SELECT dapp_id FROM appointment_detail WHERE dapp_id='$dapp_medis_id' AND dapp_perawatan='$dapp_medis_perawatan' AND dapp_tglreservasi='$dapp_medis_tglreservasi' AND dapp_jamreservasi='$dapp_medis_jamreservasi' AND dapp_petugas='$dapp_medis_petugas' AND dapp_keterangan='$dapp_medis_keterangan'";
-			$rs=$this->db->query($sql);
-			if(!$rs->num_rows()){
-				$sql="SELECT dapp_locked FROM appointment_detail WHERE dapp_id='$dapp_medis_id' AND dapp_locked=0";
-				$rs=$this->db->query($sql);
-				if($rs->num_rows()){
-					$data = array(
-						//"dapp_master"=>$dapp_medis_master, 
-						"dapp_perawatan"=>$dapp_medis_perawatan, 
-						"dapp_tglreservasi"=>$dapp_medis_tglreservasi, 
-						"dapp_jamreservasi"=>$dapp_medis_jamreservasi, 
-						"dapp_petugas"=>$dapp_medis_petugas, 
-						"dapp_keterangan"=>$dapp_medis_keterangan,
-						"dapp_creator"=>$dapp_user
-					);
-					$this->db->where('dapp_id', $dapp_medis_id);
-					$this->db->update('appointment_detail', $data); 
-				}
-			}
-			return '1';
-		}*/
-
 	}
 	
 	function detail_appointment_detail_nonmedis_insert(
-		$dapp_nonmedis_id ,
+		$array_dapp_nonmedis_id ,
 		$dapp_nonmedis_master ,
-		$dapp_nonmedis_perawatan ,
-		$dapp_nonmedis_tglreservasi ,
-		$dapp_nonmedis_jamreservasi ,
-		$dapp_nonmedis_petugas2 ,
-		$dapp_nonmedis_status ,
-		$dapp_nonmedis_tgldatang ,
-		$dapp_nonmedis_jamdatang ,
-		$dapp_nonmedis_keterangan ,
-		$dapp_nonmedis_counter ,
-		$dapp_nonmedis_warna_terapis, 
+		$array_dapp_nonmedis_perawatan ,
+		$array_dapp_nonmedis_tglreservasi ,
+		$array_dapp_nonmedis_jamreservasi ,
+		$array_dapp_nonmedis_petugas2 ,
+		$array_dapp_nonmedis_status ,
+		$array_dapp_nonmedis_keterangan ,
+		$array_dapp_nonmedis_counter ,
+		$array_dapp_nonmedis_warna_terapis, 
 		$app_cara ,
 		$app_customer ,
-		$app_customer_id ,
 		$app_keterangan ,
 		$dapp_user){
-		/* JIKA $dapp_medis_petugas=="" ==> diisi db.karyawan.karyawan_id WHERE username="Available dr." */
-		if($dapp_nonmedis_petugas2==""){
-			$sql="SELECT karyawan_id FROM karyawan WHERE karyawan_no='999'";
-			$rs=$this->db->query($sql);
-			if($rs->num_rows()){
-				$rs_record=$rs->row_array();
-				$dapp_nonmedis_petugas2=$rs_record["karyawan_id"];
-			}
-		}
 		
-		$sql="SELECT dapp_id FROM appointment_detail WHERE dapp_id='$dapp_nonmedis_id'";
-		$rs=$this->db->query($sql);
-		if(!$rs->num_rows()){
-			//if master id not capture from view then capture it from max pk from master table
-			if($dapp_nonmedis_master=="" || $dapp_nonmedis_master==NULL){
-				$dapp_nonmedis_master=$this->get_master_id();
-			}
-			if($dapp_nonmedis_status=="datang" || $dapp_nonmedis_status=="Datang"){
-				$dapp_nonmedis_tgldatang=date('Y-m-d');
-				$dapp_nonmedis_jamdatang=date('H:i:s');
-			}
+		$date_now=date('Y-m-d');
+		$datetime_now=date('Y-m-d H:i:s');
+		
+		$size_array = sizeof($array_dapp_nonmedis_perawatan) - 1;
+		
+		for($i = 0; $i < sizeof($array_dapp_nonmedis_perawatan); $i++){
+			$dapp_nonmedis_id = $array_dapp_nonmedis_id[$i];
+			$dapp_nonmedis_perawatan = $array_dapp_nonmedis_perawatan[$i];
+			$dapp_nonmedis_tglreservasi = $array_dapp_nonmedis_tglreservasi[$i];
+			$dapp_nonmedis_jamreservasi = $array_dapp_nonmedis_jamreservasi[$i];
+			$dapp_nonmedis_petugas2 = $array_dapp_nonmedis_petugas2[$i];
+			$dapp_nonmedis_status = $array_dapp_nonmedis_status[$i];
+			$dapp_nonmedis_keterangan = $array_dapp_nonmedis_keterangan[$i];
+			$dapp_nonmedis_counter = $array_dapp_nonmedis_counter[$i];
+			$dapp_nonmedis_warna_terapis = $array_dapp_nonmedis_warna_terapis[$i];
 			
-			if($app_cara=="Datang")
-				$dapp_nonmedis_keterangan="[W] ".$dapp_nonmedis_keterangan;
-			if($app_cara=="Update")
-				$dapp_nonmedis_keterangan="[ID] ".$dapp_nonmedis_keterangan;
-				
-			$data = array(
-				"dapp_master"=>$dapp_nonmedis_master, 
-				"dapp_perawatan"=>$dapp_nonmedis_perawatan, 
-				"dapp_tglreservasi"=>$dapp_nonmedis_tglreservasi, 
-				"dapp_jamreservasi"=>$dapp_nonmedis_jamreservasi, 
-				"dapp_petugas2"=>$dapp_nonmedis_petugas2, 
-//				"dapp_petugas2"=>$dapp_medis_petugas2, 
-				"dapp_status"=>$dapp_nonmedis_status, 
-				"dapp_tgldatang"=>$dapp_nonmedis_tgldatang, 
-				"dapp_jamdatang"=>$dapp_nonmedis_jamdatang,
-				"dapp_keterangan"=>$dapp_nonmedis_keterangan,
-				"dapp_counter"=>$dapp_nonmedis_counter,
-				"dapp_warna_terapis"=>$dapp_nonmedis_warna_terapis,
-				"dapp_creator"=>$dapp_user
-			);
-			$this->db->insert('appointment_detail', $data); 
-			if($this->db->affected_rows()){
-				/* Check dan Ambil db.appointment_detail.dapp_id yang telah "barusan" ter-input */
-				$sql="SELECT dapp_id FROM appointment_detail WHERE dapp_master='$dapp_nonmedis_master' AND dapp_perawatan='$dapp_nonmedis_perawatan' AND dapp_tglreservasi='$dapp_nonmedis_tglreservasi'";
+			if(is_numeric($dapp_nonmedis_id)){
+				//Detail sudah ada ==> mode Edit
+				$sql="SELECT dapp_id FROM appointment_detail WHERE dapp_id='$dapp_nonmedis_id' AND dapp_perawatan='$dapp_nonmedis_perawatan' AND dapp_tglreservasi='$dapp_nonmedis_tglreservasi' AND dapp_jamreservasi='$dapp_nonmedis_jamreservasi' AND dapp_petugas='$dapp_nonmedis_petugas2' AND dapp_keterangan='$dapp_nonmedis_keterangan'";
 				$rs=$this->db->query($sql);
-				if($rs->num_rows()){
-					$rs_record=$rs->row_array();
-					$dapp_id=$rs_record["dapp_id"];
-				}
-				/* JIKA Cara Appointment = 'Walk-in' alias 'Datang', maka INSERT ke db.tindakan atau dan db.tindakan_detail */
-				if($app_cara=="Datang"){
-					$date_now=date('Y-m-d');
-					$time_now=date('H:i:s');
-					
-					if(is_numeric($app_customer)==true){
-						$app_customer = $app_customer;
-					}else{
-						$app_customer = $app_customer_id;
-					}
-					
-					/* INSERT ke db.tindakan dan db.tindakan_detail JIKA $dapp_status=='datang' */
-					$sql="SELECT trawat_id FROM tindakan WHERE trawat_cust='$app_customer' AND date_format(trawat_date_create,'%Y-%m-%d')='$date_now'";
+				if(!$rs->num_rows()){
+					$sql="SELECT dapp_locked FROM appointment_detail WHERE dapp_id='$dapp_nonmedis_id' AND dapp_locked=0";
 					$rs=$this->db->query($sql);
-					if($rs->num_rows()){ /* artinya: di db.tindakan telah masuk appointment = $app_customer pada trawat_date_create(tanggal-input) = $date_now */
+					if($rs->num_rows()){
+						$data = array(
+							//"dapp_master"=>$dapp_medis_master, 
+							"dapp_perawatan"=>$dapp_nonmedis_perawatan, 
+							"dapp_tglreservasi"=>$dapp_nonmedis_tglreservasi, 
+							"dapp_jamreservasi"=>$dapp_nonmedis_jamreservasi, 
+							"dapp_petugas2"=>$dapp_nonmedis_petugas2, 
+							"dapp_keterangan"=>$dapp_nonmedis_keterangan,
+							"dapp_warna_terapis"=>$dapp_nonmedis_warna_terapis,
+							"dapp_creator"=>$dapp_user
+						);
+						$this->db->where('dapp_id', $dapp_nonmedis_id);
+						$this->db->update('appointment_detail', $data); 
+					}
+				}
+				if($i==$size_array){
+					return '1';
+				}
+				
+			}else{
+				//Detail Baru
+				/* JIKA $dapp_medis_petugas=="" ==> diisi db.karyawan.karyawan_id WHERE username="Available dr." */
+				if($dapp_nonmedis_petugas2==""){
+					$sql="SELECT karyawan_id FROM karyawan WHERE karyawan_no='999'";
+					$rs=$this->db->query($sql);
+					if($rs->num_rows()){
 						$rs_record=$rs->row_array();
-						$dtrawat_master=$rs_record["trawat_id"]; //ambil ID dr tabel tindakan
-						//Karena di db.tindakan telah ada $app_customer && trawat_date_create='$date_now', maka HANYA INSERT to db.tindakan_detail
-						$data_dtindakan=array(
-						"dtrawat_master"=>$dtrawat_master,
-						"dtrawat_dapp"=>$dapp_id,
-						"dtrawat_perawatan"=>$dapp_nonmedis_perawatan,
-						"dtrawat_petugas2"=>$dapp_nonmedis_petugas2,
-						"dtrawat_jam"=>$dapp_nonmedis_jamreservasi,
-						"dtrawat_tglapp"=>$dapp_nonmedis_tglreservasi,
-						"dtrawat_keterangan"=>$dapp_nonmedis_keterangan,
-						"dtrawat_status"=>$dapp_nonmedis_status,
-						"dtrawat_creator"=>@$_SESSION[SESSION_USERID]
-						);
-						$sql_cek_dtindakan="SELECT dtrawat_dapp FROM tindakan_detail WHERE dtrawat_dapp='$dapp_id'";
-						$rs=$this->db->query($sql_cek_dtindakan);
-						if(!$rs->num_rows()){
-							$this->db->insert('tindakan_detail', $data_dtindakan);
-						}
-					}else{ /* artinya: di db.tindakan BELUM masuk $app_customer && trawat_date_create(tanggal-input) = $date_now */
-						/* INSERT to db.tindakan */
-						$data_tindakan=array(
-						"trawat_cust"=>$app_customer,
-						"trawat_jamdatang"=>$time_now,
-						//"trawat_appointment"=>$kategori_nama,
-						"trawat_keterangan"=>$app_keterangan,
-						"trawat_creator"=>@$_SESSION[SESSION_USERID]
-						);
-						$this->db->insert('tindakan', $data_tindakan);
+						$dapp_nonmedis_petugas2=$rs_record["karyawan_id"];
+					}
+				}
+				
+				//if master id not capture from view then capture it from max pk from master table
+				if($dapp_nonmedis_master=="" || $dapp_nonmedis_master==NULL){
+					$dapp_nonmedis_master=$this->get_master_id();
+				}
+				
+				$dapp_nonmedis_tgldatang=NULL;
+				$dapp_nonmedis_jamdatang='';
+				if($dapp_nonmedis_status=="datang" || $dapp_nonmedis_status=="Datang"){
+					$dapp_nonmedis_tglreservasi=date('Y-m-d');
+					
+					$dapp_nonmedis_tgldatang=date('Y-m-d');
+					$dapp_nonmedis_jamdatang=date('H:i:s');
+				}
+				
+				if($app_cara=="Datang")
+					$dapp_nonmedis_keterangan="[W] ".$dapp_nonmedis_keterangan;
+				if($app_cara=="Update")
+					$dapp_nonmedis_keterangan="[ID] ".$dapp_nonmedis_keterangan;
+				
+				$data = array(
+					"dapp_master"=>$dapp_nonmedis_master, 
+					"dapp_perawatan"=>$dapp_nonmedis_perawatan, 
+					"dapp_tglreservasi"=>$dapp_nonmedis_tglreservasi, 
+					"dapp_jamreservasi"=>$dapp_nonmedis_jamreservasi, 
+					"dapp_petugas2"=>$dapp_nonmedis_petugas2, 
+					"dapp_status"=>$dapp_nonmedis_status, 
+					"dapp_tgldatang"=>$dapp_nonmedis_tgldatang, 
+					"dapp_jamdatang"=>$dapp_nonmedis_jamdatang,
+					"dapp_keterangan"=>$dapp_nonmedis_keterangan,
+					"dapp_counter"=>$dapp_nonmedis_counter,
+					"dapp_warna_terapis"=>$dapp_nonmedis_warna_terapis,
+					"dapp_creator"=>$dapp_user
+				);
+				$this->db->insert('appointment_detail', $data); 
+				if($this->db->affected_rows()){
+					/* Check dan Ambil db.appointment_detail.dapp_id yang telah "barusan" ter-input */
+					$sql="SELECT dapp_id
+						FROM appointment_detail
+						WHERE dapp_master='$dapp_nonmedis_master'
+							AND dapp_perawatan='$dapp_nonmedis_perawatan'
+							AND dapp_tglreservasi='$dapp_nonmedis_tglreservasi'";
+					$rs=$this->db->query($sql);
+					if($rs->num_rows()){
+						$rs_record=$rs->row_array();
+						$dapp_id=$rs_record["dapp_id"];
+					}
+					/* JIKA Cara Appointment = 'Walk-in' alias 'Datang', maka INSERT ke db.tindakan atau dan db.tindakan_detail */
+					if($app_cara=="Datang"){
+						$date_now=date('Y-m-d');
+						$time_now=date('H:i:s');
 						
-						if($this->db->affected_rows()){
-							/* Telah ter-insert ke db.tindakan, maka mulai INSERT db.tindakan_detail */
-							$sql="SELECT trawat_id FROM tindakan WHERE trawat_cust='$app_customer' AND date_format(trawat_date_create,'%Y-%m-%d')='$date_now'";
-							$rs=$this->db->query($sql);
-							if($rs->num_rows()){
-								$rs_record=$rs->row_array();
-								$dtrawat_master=$rs_record["trawat_id"];
-							}
+						/* INSERT ke db.tindakan dan db.tindakan_detail JIKA $dapp_status=='datang' */
+						$sql="SELECT trawat_id FROM tindakan WHERE trawat_cust='$app_customer' AND date_format(trawat_date_create,'%Y-%m-%d')='$date_now'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){ /* artinya: di db.tindakan telah masuk appointment = $app_customer pada trawat_date_create(tanggal-input) = $date_now */
+							$rs_record=$rs->row_array();
+							$dtrawat_master=$rs_record["trawat_id"]; //ambil ID dr tabel tindakan
+							//Karena di db.tindakan telah ada $app_customer && trawat_date_create='$date_now', maka HANYA INSERT to db.tindakan_detail
 							$data_dtindakan=array(
 							"dtrawat_master"=>$dtrawat_master,
 							"dtrawat_dapp"=>$dapp_id,
@@ -844,57 +693,88 @@ class M_appointment extends Model{
 							"dtrawat_status"=>$dapp_nonmedis_status,
 							"dtrawat_creator"=>@$_SESSION[SESSION_USERID]
 							);
-							$this->db->insert('tindakan_detail', $data_dtindakan);
+							$sql_cek_dtindakan="SELECT dtrawat_dapp FROM tindakan_detail WHERE dtrawat_dapp='$dapp_id'";
+							$rs=$this->db->query($sql_cek_dtindakan);
+							if(!$rs->num_rows()){
+								$this->db->insert('tindakan_detail', $data_dtindakan);
+							}
+						}else{ /* artinya: di db.tindakan BELUM masuk $app_customer && trawat_date_create(tanggal-input) = $date_now */
+							if($app_customer==''){
+								$sql = "SELECT app_customer
+									FROM appointment_detail
+									LEFT JOIN appointment ON(dapp_master=app_id)
+									WHERE dapp_master='$dapp_nonmedis_master'";
+								$rs = $this->db->query($sql);
+								if($rs->num_rows()){
+									$record = $rs->row_array();
+									$app_customer = $record['app_customer'];
+								}
+							}
+							
+							/* INSERT to db.tindakan */
+							$data_tindakan=array(
+							"trawat_cust"=>$app_customer,
+							"trawat_jamdatang"=>$time_now,
+							//"trawat_appointment"=>$kategori_nama,
+							"trawat_keterangan"=>$app_keterangan,
+							"trawat_creator"=>@$_SESSION[SESSION_USERID]
+							);
+							$this->db->insert('tindakan', $data_tindakan);
+							if($this->db->affected_rows()){
+								/* Telah ter-insert ke db.tindakan, maka mulai INSERT db.tindakan_detail */
+								$sql="SELECT trawat_id FROM tindakan WHERE trawat_cust='$app_customer' AND date_format(trawat_date_create,'%Y-%m-%d')='$date_now'";
+								$rs=$this->db->query($sql);
+								if($rs->num_rows()){
+									$rs_record=$rs->row_array();
+									$dtrawat_master=$rs_record["trawat_id"];
+								}
+								$data_dtindakan=array(
+								"dtrawat_master"=>$dtrawat_master,
+								"dtrawat_dapp"=>$dapp_id,
+								"dtrawat_perawatan"=>$dapp_nonmedis_perawatan,
+								"dtrawat_petugas2"=>$dapp_nonmedis_petugas2,
+								"dtrawat_jam"=>$dapp_nonmedis_jamreservasi,
+								"dtrawat_tglapp"=>$dapp_nonmedis_tglreservasi,
+								"dtrawat_keterangan"=>$dapp_nonmedis_keterangan,
+								"dtrawat_status"=>$dapp_nonmedis_status,
+								"dtrawat_creator"=>@$_SESSION[SESSION_USERID]
+								);
+								$this->db->insert('tindakan_detail', $data_dtindakan);
+							}
+						}
+						//UPDATE/INSERT ke db.report_tindakan dari Dokter && $app_cara=='datang'
+						$bln_now=date('Y-m');
+						$sql="SELECT reportt_jmltindakan FROM report_tindakan WHERE reportt_bln LIKE '$bln_now%' AND reportt_karyawan_id='$dapp_nonmedis_petugas2'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows() && $dapp_nonmedis_counter=='true'){
+							$rs_record=$rs->row_array();
+							$data_reportt=array(
+							"reportt_jmltindakan"=>$rs_record["reportt_jmltindakan"]+1
+							);
+							$this->db->where('reportt_karyawan_id', $dapp_nonmedis_petugas2);
+							$this->db->update('report_tindakan', $data_reportt);
+						}else if(!$rs->num_rows() && $dapp_nonmedis_counter=='true'){
+							$data_reportt=array(
+							"reportt_karyawan_id"=>$dapp_nonmedis_petugas2,
+							"reportt_bln"=>$date_now,
+							"reportt_jmltindakan"=>1
+							);
+							$this->db->insert('report_tindakan', $data_reportt);
 						}
 					}
-					//UPDATE/INSERT ke db.report_tindakan dari Dokter && $app_cara=='datang'
-					$bln_now=date('Y-m');
-					$sql="SELECT reportt_jmltindakan FROM report_tindakan WHERE reportt_bln LIKE '$bln_now%' AND reportt_karyawan_id='$dapp_nonmedis_petugas2'";
-					$rs=$this->db->query($sql);
-					if($rs->num_rows() && $dapp_nonmedis_counter=='true'){
-						$rs_record=$rs->row_array();
-						$data_reportt=array(
-						"reportt_jmltindakan"=>$rs_record["reportt_jmltindakan"]+1
-						);
-						$this->db->where('reportt_karyawan_id', $dapp_nonmedis_petugas2);
-						$this->db->update('report_tindakan', $data_reportt);
-					}else if(!$rs->num_rows() && $dapp_nonmedis_counter=='true'){
-						$data_reportt=array(
-						"reportt_karyawan_id"=>$dapp_nonmedis_petugas2,
-						"reportt_bln"=>$date_now,
-						"reportt_jmltindakan"=>1
-						);
-						$this->db->insert('report_tindakan', $data_reportt);
+					if($i==$size_array){
+						return '1';
+					}
+				}else{
+					if($i==$size_array){
+						return '0';
 					}
 				}
-				return '1';
-			}else{
-				return '0';
+				
 			}
-		}else{
-			$sql="SELECT dapp_id FROM appointment_detail WHERE dapp_id='$dapp_nonmedis_id' AND dapp_perawatan='$dapp_nonmedis_perawatan' AND dapp_tglreservasi='$dapp_nonmedis_tglreservasi' AND dapp_jamreservasi='$dapp_nonmedis_jamreservasi' AND dapp_petugas='$dapp_nonmedis_petugas2' AND dapp_keterangan='$dapp_nonmedis_keterangan'";
-			$rs=$this->db->query($sql);
-			if(!$rs->num_rows()){
-				$sql="SELECT dapp_locked FROM appointment_detail WHERE dapp_id='$dapp_nonmedis_id' AND dapp_locked=0";
-				$rs=$this->db->query($sql);
-				if($rs->num_rows()){
-					$data = array(
-						//"dapp_master"=>$dapp_medis_master, 
-						"dapp_perawatan"=>$dapp_nonmedis_perawatan, 
-						"dapp_tglreservasi"=>$dapp_nonmedis_tglreservasi, 
-						"dapp_jamreservasi"=>$dapp_nonmedis_jamreservasi, 
-						"dapp_petugas2"=>$dapp_nonmedis_petugas2, 
-						"dapp_keterangan"=>$dapp_nonmedis_keterangan,
-						"dapp_warna_terapis"=>$dapp_nonmedis_warna_terapis,
-						"dapp_creator"=>$dapp_user
-					);
-					$this->db->where('dapp_id', $dapp_nonmedis_id);
-					$this->db->update('appointment_detail', $data); 
-				}
-			}
-			return '1';
+			
 		}
-
+		
 	}
 	//end of function
 	
