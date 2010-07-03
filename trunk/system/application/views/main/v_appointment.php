@@ -313,119 +313,119 @@ Ext.onReady(function(){
 		var appointment_detail_nonmedis_record;
 		for(i=0;i<appointment_detail_medisDataStore.getCount();i++){
 			appointment_detail_medis_record=appointment_detail_medisDataStore.getAt(i);
-			if(appointment_detail_medis_record.data.dapp_medis_perawatan!="" && appointment_detail_medis_record.data.dapp_medis_jamreservasi!=""){
+			if(appointment_detail_medis_record.data.dapp_medis_perawatan!=""
+               && appointment_detail_medis_record.data.dapp_medis_tglreservasi!=""
+               && appointment_detail_medis_record.data.dapp_medis_jamreservasi!=""){
 				dmedis_record='ada';
 			}
 		}
 		for(i=0;i<appointment_detail_nonmedisDataStore.getCount();i++){
 			appointment_detail_nonmedis_record=appointment_detail_nonmedisDataStore.getAt(i);
-			if(appointment_detail_nonmedis_record.data.dapp_nonmedis_perawatan!="" && appointment_detail_nonmedis_record.data.dapp_nonmedis_jamreservasi!=""){
+			if(appointment_detail_nonmedis_record.data.dapp_nonmedis_perawatan!=""
+               && appointment_detail_nonmedis_record.data.dapp_nonmedis_tglreservasi!=""
+               && appointment_detail_nonmedis_record.data.dapp_nonmedis_jamreservasi!=""){
 				dnonmedis_record='ada';
 			}
 		}
-		if(is_appointment_form_valid() && ((app_customerField.getValue()!==null && /^\d+$/.test(app_customerField.getValue()) || app_id_create_pk!=="") || app_cust_namaBaruField.getValue()!==null) && (dmedis_record=='ada' || dnonmedis_record=='ada')){
-		var app_id_create_pk=null; 
-		var app_customer_create=""; 
-		var app_tanggal_create_date=""; 
-		var app_cara_create=null; 
-		var app_keterangan_create=null; 
-
-		var app_cust_namaBaru_create;
-		var app_cust_telpBaru_create;
-		var app_cust_hpBaru_create;
-		var app_cust_keteranganBaru_create;
-
-		if(app_idField.getValue()!== null){app_id_create_pk = app_idField.getValue();}else{app_id_create_pk=get_pk_id();} 
-		if(app_customerField.getValue()!== null){app_customer_create = app_customerField.getValue();} 
-		if(app_tanggalField.getValue()!== ""){app_tanggal_create_date = app_tanggalField.getValue().format('Y-m-d');} 
-		if(app_caraField.getValue()!== null){app_cara_create = app_caraField.getValue();} 
-		if(app_keteranganField.getValue()!== null){app_keterangan_create = app_keteranganField.getValue();}
-		if(app_cust_namaBaruField.getValue()!== null){app_cust_namaBaru_create = app_cust_namaBaruField.getValue();}  
-		if(app_cust_telpBaruField.getValue()!== null){app_cust_telpBaru_create = app_cust_telpBaruField.getValue();}
-		if(app_cust_hpBaruField.getValue()!== null){app_cust_hpBaru_create = app_cust_hpBaruField.getValue();}
-		if(app_cust_keteranganBaruField.getValue()!== null){app_cust_keteranganBaru_create = app_cust_keteranganBaruField.getValue();}
-			 
-
-		Ext.Ajax.request({  
-			waitMsg: 'Mohon tunggu...',
-			url: 'index.php?c=c_appointment&m=get_action',
-			params: {
-				task: app_post2db,
-				app_id	: app_id_create_pk, 
-				app_customer	: app_customer_create, 
-				app_tanggal	: app_tanggal_create_date, 
-				app_cara	: app_cara_create, 
-				app_keterangan	: app_keterangan_create, 
-				app_cust_nama_baru	: app_cust_namaBaru_create,
-				app_cust_telp_baru	: app_cust_telpBaru_create,
-				app_cust_hp_baru	: app_cust_hpBaru_create,
-				app_cust_keterangan_baru	: app_cust_keteranganBaru_create
-				
-			}, 
-			success: function(response){             
-				var result=eval(response.responseText);
-				switch(result){
-					case 1:
-						//appointment_detail_purge();
-						appointment_detail_medis_insert();
-						appointment_detail_nonmedis_insert();
-//						appointment_detail_medis_purge();
-//						appointment_detail_nonmedis_purge();
-						//Ext.MessageBox.alert(app_post2db+' OK','The Appointment was '+msg+' successfully.');
-						Ext.MessageBox.alert(app_post2db+' OK','Data appointment berhasil disimpan');
-						//appointment_DataStore.reload();
-						appointment_createWindow.hide();
-						break;
-					case 2:
-						Ext.MessageBox.hide();
-						Ext.MessageBox.show({
-						   title: 'Warning',
-						   msg: 'Customer sudah terdaftar.',
-						   buttons: Ext.MessageBox.OK,
-						   animEl: 'save',
-						   icon: Ext.MessageBox.WARNING
-						});
-						break;
-					case 3:
-						Ext.MessageBox.hide();
-						Ext.MessageBox.show({
-						   title: 'Warning',
-						   msg: 'No telp atau no ponsel customer baru tidak boleh kosong.',
-						   buttons: Ext.MessageBox.OK,
-						   animEl: 'save',
-						   icon: Ext.MessageBox.WARNING
-						});
-						break;
-					default:
-						Ext.MessageBox.hide();
-						Ext.MessageBox.show({
-						   title: 'Warning',
-						   msg: 'Data appointment tidak bisa disimpan',
-						   buttons: Ext.MessageBox.OK,
-						   animEl: 'save',
-						   icon: Ext.MessageBox.WARNING
-						});
-						break;
-				}
-			},
-			failure: function(response){
-				Ext.MessageBox.hide();
-				var result=response.responseText;
-				Ext.MessageBox.show({
-					   title: 'Error',
-					   msg: 'Could not connect to the database. retry later.',
-					   buttons: Ext.MessageBox.OK,
-					   animEl: 'database',
-					   icon: Ext.MessageBox.ERROR
-				});	
-			}                      
-		});
+		if(is_appointment_form_valid()
+           && ((app_customerField.getValue()!==null
+                && /^\d+$/.test(app_customerField.getValue())
+                || app_id_create_pk!=="") || app_cust_namaBaruField.getValue()!==null)
+           && (dmedis_record=='ada' || dnonmedis_record=='ada')){
+            var app_id_create_pk=null; 
+            var app_customer_create=""; 
+            var app_tanggal_create_date=""; 
+            var app_cara_create=null; 
+            var app_keterangan_create=null; 
+            var app_cust_namaBaru_create;
+            var app_cust_telpBaru_create;
+            var app_cust_hpBaru_create;
+            var app_cust_keteranganBaru_create;
+            
+            if(app_idField.getValue()!== null){app_id_create_pk = app_idField.getValue();}else{app_id_create_pk=get_pk_id();} 
+            if(app_customerField.getValue()!== null){app_customer_create = app_customerField.getValue();} 
+            if(app_tanggalField.getValue()!== ""){app_tanggal_create_date = app_tanggalField.getValue().format('Y-m-d');} 
+            if(app_caraField.getValue()!== null){app_cara_create = app_caraField.getValue();} 
+            if(app_keteranganField.getValue()!== null){app_keterangan_create = app_keteranganField.getValue();}
+            if(app_cust_namaBaruField.getValue()!== null){app_cust_namaBaru_create = app_cust_namaBaruField.getValue();}  
+            if(app_cust_telpBaruField.getValue()!== null){app_cust_telpBaru_create = app_cust_telpBaruField.getValue();}
+            if(app_cust_hpBaruField.getValue()!== null){app_cust_hpBaru_create = app_cust_hpBaruField.getValue();}
+            if(app_cust_keteranganBaruField.getValue()!== null){app_cust_keteranganBaru_create = app_cust_keteranganBaruField.getValue();}
+            
+            Ext.Ajax.request({  
+                waitMsg: 'Mohon tunggu...',
+                url: 'index.php?c=c_appointment&m=get_action',
+                params: {
+                    task: app_post2db,
+                    app_id	: app_id_create_pk, 
+                    app_customer	: app_customer_create, 
+                    app_tanggal	: app_tanggal_create_date, 
+                    app_cara	: app_cara_create, 
+                    app_keterangan	: app_keterangan_create, 
+                    app_cust_nama_baru	: app_cust_namaBaru_create,
+                    app_cust_telp_baru	: app_cust_telpBaru_create,
+                    app_cust_hp_baru	: app_cust_hpBaru_create,
+                    app_cust_keterangan_baru	: app_cust_keteranganBaru_create
+                    
+                }, 
+                success: function(response){             
+                    var result=eval(response.responseText);
+                    switch(result){
+                        case 1:
+                            appointment_detail_medis_insert();
+                            appointment_detail_nonmedis_insert();
+                            Ext.MessageBox.alert(app_post2db+' OK','Data appointment berhasil disimpan');
+                            appointment_createWindow.hide();
+                            break;
+                        case 2:
+                            Ext.MessageBox.hide();
+                            Ext.MessageBox.show({
+                               title: 'Warning',
+                               msg: 'Customer sudah terdaftar.',
+                               buttons: Ext.MessageBox.OK,
+                               animEl: 'save',
+                               icon: Ext.MessageBox.WARNING
+                            });
+                            break;
+                        case 3:
+                            Ext.MessageBox.hide();
+                            Ext.MessageBox.show({
+                               title: 'Warning',
+                               msg: 'No telp atau no ponsel customer baru tidak boleh kosong.',
+                               buttons: Ext.MessageBox.OK,
+                               animEl: 'save',
+                               icon: Ext.MessageBox.WARNING
+                            });
+                            break;
+                        default:
+                            Ext.MessageBox.hide();
+                            Ext.MessageBox.show({
+                               title: 'Warning',
+                               msg: 'Data appointment tidak bisa disimpan',
+                               buttons: Ext.MessageBox.OK,
+                               animEl: 'save',
+                               icon: Ext.MessageBox.WARNING
+                            });
+                            break;
+                    }
+                },
+                failure: function(response){
+                    Ext.MessageBox.hide();
+                    var result=response.responseText;
+                    Ext.MessageBox.show({
+                           title: 'Error',
+                           msg: 'Could not connect to the database. retry later.',
+                           buttons: Ext.MessageBox.OK,
+                           animEl: 'database',
+                           icon: Ext.MessageBox.ERROR
+                    });	
+                }                      
+            });
 		} else {
 			if(!/^\d+$/.test(app_customerField.getValue())){
 				Ext.MessageBox.hide();
 				Ext.MessageBox.show({
 					title: 'Warning',
-//					msg: 'Customer harus di-Pilih <br>bukan isian!.',
 					msg: 'Customer harus dipilih, <br>bukan isian',
 					buttons: Ext.MessageBox.OK,
 					minWidth: 250,
@@ -436,7 +436,6 @@ Ext.onReady(function(){
 				Ext.MessageBox.hide();
 				Ext.MessageBox.show({
 					title: 'Warning',
-//					msg: 'Ada DATA yang BELUM di-ISI!.',
 					msg: 'Ada data yang belum diinputkan',
 					buttons: Ext.MessageBox.OK,
 					minWidth: 250,
@@ -1669,7 +1668,8 @@ Ext.onReady(function(){
 			lazyRender:true,
 			allowBlank: true,
 			listClass: 'x-combo-list-small',
-			anchor: '95%'
+			anchor: '95%',
+            maskRe: /([^0-9]+)$/
 
 	});
 	
@@ -1859,17 +1859,142 @@ Ext.onReady(function(){
 	//eof
 	
 	//function for insert detail medis
-	var cbo_customer_master = 0;
+	
 	function appointment_detail_medis_insert(){
+        var cbo_customer_master = 0;
 		if(app_post2db=="CREATE"){
-			cbo_customer_master = app_customerField.getValue();
+            if(app_cust_namaBaruField!==''){
+                cbo_customer_master = '';
+            }else{
+                cbo_customer_master = app_customerField.getValue();
+            }
 		}else if(app_post2db=="UPDATE"){
 			cbo_customer_master = app_customer_idField.getValue();
 		}
-		for(i=0;i<appointment_detail_medisDataStore.getCount();i++){
+        var dapp_medis_id = [];
+        var dapp_medis_perawatan = [];
+        var dapp_medis_tglreservasi = [];
+        var dapp_medis_jamreservasi = [];
+        var dapp_medis_petugas = [];
+        var dapp_medis_keterangan = [];
+        
+        var dcount = appointment_detail_medisDataStore.getCount() - 1;
+        
+        if(appointment_detail_medisDataStore.getCount()>0){
+            var var_dapp_medis_status = '';
+            if(app_caraField.getValue()=="Datang"){
+                var_dapp_medis_status="Datang";
+            }
+            if(app_caraField.getValue()=="Update"){
+                var_dapp_medis_status="Konfirmasi";
+            }
+            
+            for(i=0;i<appointment_detail_medisDataStore.getCount();i++){
+                appointment_detail_medis_record=appointment_detail_medisDataStore.getAt(i);
+                
+                if((/^\d+$/.test(appointment_detail_medis_record.data.dapp_medis_perawatan))
+				   && appointment_detail_medis_record.data.dapp_medis_perawatan!==undefined
+				   && appointment_detail_medis_record.data.dapp_medis_perawatan!==''
+				   && appointment_detail_medis_record.data.dapp_medis_perawatan!==0){
+                    if(appointment_detail_medis_record.data.dapp_medis_id==undefined){
+						dapp_medis_id.push('');
+					}else{
+						dapp_medis_id.push(appointment_detail_medis_record.data.dapp_medis_id);
+					}
+                    
+                    dapp_medis_perawatan.push(appointment_detail_medis_record.data.dapp_medis_perawatan);
+                    
+                    if(appointment_detail_medis_record.data.dapp_medis_tglreservasi==undefined || appointment_detail_medis_record.data.dapp_medis_tglreservasi==''){
+						dapp_medis_tglreservasi.push('');
+					}else{
+						dapp_medis_tglreservasi.push(appointment_detail_medis_record.data.dapp_medis_tglreservasi.format('Y-m-d'));
+					}
+                    
+                    if(appointment_detail_medis_record.data.dapp_medis_jamreservasi==undefined){
+						dapp_medis_jamreservasi.push('');
+					}else{
+						dapp_medis_jamreservasi.push(appointment_detail_medis_record.data.dapp_medis_jamreservasi);
+					}
+                    
+                    if(appointment_detail_medis_record.data.dapp_medis_petugas==undefined){
+						dapp_medis_petugas.push('');
+					}else{
+						dapp_medis_petugas.push(appointment_detail_medis_record.data.dapp_medis_petugas);
+					}
+                    
+                    if(appointment_detail_medis_record.data.dapp_medis_keterangan==undefined){
+						dapp_medis_keterangan.push('');
+					}else{
+						dapp_medis_keterangan.push(appointment_detail_medis_record.data.dapp_medis_keterangan);
+					}
+                    
+                }
+                
+                if(i==dcount){
+                    var encoded_array_dapp_medis_id = Ext.encode(dapp_medis_id);
+                    var encoded_array_dapp_medis_perawatan = Ext.encode(dapp_medis_perawatan);
+                    var encoded_array_dapp_medis_tglreservasi = Ext.encode(dapp_medis_tglreservasi);
+                    var encoded_array_dapp_medis_jamreservasi = Ext.encode(dapp_medis_jamreservasi);
+                    var encoded_array_dapp_medis_petugas = Ext.encode(dapp_medis_petugas);
+                    var encoded_array_dapp_medis_keterangan = Ext.encode(dapp_medis_keterangan);
+                    
+                    Ext.Ajax.request({
+                        waitMsg: 'Please wait...',
+                        url: 'index.php?c=c_appointment&m=detail_appointment_detail_medis_insert',
+                        params:{
+                        dapp_medis_id	: encoded_array_dapp_medis_id,
+                        dapp_medis_master	: eval(app_idField.getValue()), 
+                        dapp_medis_perawatan	: encoded_array_dapp_medis_perawatan,
+                        dapp_medis_tglreservasi	: encoded_array_dapp_medis_tglreservasi,
+                        dapp_medis_jamreservasi	: encoded_array_dapp_medis_jamreservasi,
+                        dapp_medis_petugas	: encoded_array_dapp_medis_petugas,
+                        dapp_medis_status	: var_dapp_medis_status,
+                        dapp_medis_keterangan	: encoded_array_dapp_medis_keterangan,
+                        app_cara	: app_caraField.getValue(),
+                        app_customer	: cbo_customer_master,
+                        app_keterangan	: app_keteranganField.getValue()
+                        },
+                        success: function(response){
+							var result=eval(response.responseText);
+							if(result==1){
+								appointment_DataStore.reload();
+							}else{
+								appointment_DataStore.reload();
+								Ext.MessageBox.hide();
+								Ext.MessageBox.show({
+									title: 'Error',
+									msg: 'Data detail Appointment tidak bisa disimpan.',
+									buttons: Ext.MessageBox.OK,
+									animEl: 'database',
+									icon: Ext.MessageBox.ERROR
+								});	
+							}
+						},
+						failure: function(response){
+							Ext.MessageBox.hide();
+							var result=response.responseText;
+							Ext.MessageBox.show({
+							   title: 'Error',
+							   msg: 'Could not connect to the database. retry later.',
+							   buttons: Ext.MessageBox.OK,
+							   animEl: 'database',
+							   icon: Ext.MessageBox.ERROR
+							});	
+						}
+                    });
+                }
+                
+            }
+        }
+        
+		/*for(i=0;i<appointment_detail_medisDataStore.getCount();i++){
 			appointment_detail_medis_record=appointment_detail_medisDataStore.getAt(i);
-			if(app_caraField.getValue()=="Datang"){appointment_detail_medis_record.data.dapp_medis_status="Datang"}
-			if(app_caraField.getValue()=="Update"){appointment_detail_medis_record.data.dapp_medis_status="Konfirmasi"}
+			if(app_caraField.getValue()=="Datang"){
+                appointment_detail_medis_record.data.dapp_medis_status="Datang";
+            }
+			if(app_caraField.getValue()=="Update"){
+                appointment_detail_medis_record.data.dapp_medis_status="Konfirmasi";
+            }
 			if(appointment_detail_medis_record.data.dapp_medis_perawatan!=""){
 				Ext.Ajax.request({
 					waitMsg: 'Please wait...',
@@ -1896,7 +2021,7 @@ Ext.onReady(function(){
 					}
 				});
 			}
-		}
+		}*/
 	}
 	//eof
 	

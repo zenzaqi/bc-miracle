@@ -129,38 +129,45 @@ class C_appointment extends Controller {
 	
 	//add detail
 	function detail_appointment_detail_medis_insert(){
-	//POST variable here
-		$dapp_medis_id=trim(@$_POST["dapp_medis_id"]);
+		//POST variable here
+		$dapp_medis_id = $_POST['dapp_medis_id']; // Get our array back and translate it :
+		$array_dapp_medis_id = json_decode(stripslashes($dapp_medis_id));
+		
 		$dapp_medis_master=trim(@$_POST["dapp_medis_master"]);
-		$dapp_medis_perawatan=trim(@$_POST["dapp_medis_perawatan"]);
-		$dapp_medis_tglreservasi=trim(@$_POST["dapp_medis_tglreservasi"]);
-		$dapp_medis_jamreservasi=trim(@$_POST["dapp_medis_jamreservasi"]);
-		$dapp_medis_jamreservasi=str_replace("/(<\/?)(p)([^>]*>)", "",$dapp_medis_jamreservasi);
-		$dapp_medis_jamreservasi=str_replace("\\", "",$dapp_medis_jamreservasi);
-		$dapp_medis_jamreservasi=str_replace("'", "''",$dapp_medis_jamreservasi);
-		$dapp_medis_petugas=trim(@$_POST["dapp_medis_petugas"]);
-//		$dapp_medis_petugas2=trim(@$_POST["dapp_medis_petugas2"]);
+		
+		$dapp_medis_perawatan = $_POST['dapp_medis_perawatan']; // Get our array back and translate it :
+		$array_dapp_medis_perawatan = json_decode(stripslashes($dapp_medis_perawatan));
+		
+		$dapp_medis_tglreservasi = $_POST['dapp_medis_tglreservasi']; // Get our array back and translate it :
+		$array_dapp_medis_tglreservasi = json_decode(stripslashes($dapp_medis_tglreservasi));
+		
+		$dapp_medis_jamreservasi = $_POST['dapp_medis_jamreservasi']; // Get our array back and translate it :
+		$array_dapp_medis_jamreservasi = json_decode(stripslashes($dapp_medis_jamreservasi));
+		
+		$dapp_medis_petugas = $_POST['dapp_medis_petugas']; // Get our array back and translate it :
+		$array_dapp_medis_petugas = json_decode(stripslashes($dapp_medis_petugas));
+		
 		$dapp_medis_status=trim(@$_POST["dapp_medis_status"]);
 		$dapp_medis_status=str_replace("/(<\/?)(p)([^>]*>)", "",$dapp_medis_status);
 		$dapp_medis_status=str_replace("\\", "",$dapp_medis_status);
 		$dapp_medis_status=str_replace("'", "''",$dapp_medis_status);
-		$dapp_medis_tgldatang=trim(@$_POST["dapp_medis_tgldatang"]);
-		$dapp_medis_jamdatang=trim(@$_POST["dapp_medis_jamdatang"]);
-		$dapp_medis_jamdatang=str_replace("/(<\/?)(p)([^>]*>)", "",$dapp_medis_jamdatang);
-		$dapp_medis_jamdatang=str_replace("\\", "",$dapp_medis_jamdatang);
-		$dapp_medis_jamdatang=str_replace("'", "''",$dapp_medis_jamdatang);
-		$dapp_medis_keterangan=trim(@$_POST["dapp_medis_keterangan"]);
-		$dapp_medis_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$dapp_medis_keterangan);
-		$dapp_medis_keterangan=str_replace("\\", "",$dapp_medis_keterangan);
-		$dapp_medis_keterangan=str_replace("'", "''",$dapp_medis_keterangan);
+		
+		$dapp_medis_keterangan = $_POST['dapp_medis_keterangan']; // Get our array back and translate it :
+		$array_dapp_medis_keterangan = json_decode(stripslashes($dapp_medis_keterangan));
+		
 		$app_cara=trim(@$_POST["app_cara"]);
+		
 		$app_customer=trim(@$_POST["app_customer"]);
+		
 		$app_keterangan=trim(@$_POST["app_keterangan"]);
 		$app_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$app_keterangan);
 		$app_keterangan=str_replace("\\", "",$app_keterangan);
 		$app_keterangan=str_replace("'", "''",$app_keterangan);
+		
 		$dapp_user=$_SESSION[SESSION_USERID];
-		$result=$this->m_appointment->detail_appointment_detail_medis_insert($dapp_medis_id ,$dapp_medis_master ,$dapp_medis_perawatan ,$dapp_medis_tglreservasi ,$dapp_medis_jamreservasi ,$dapp_medis_petugas ,$dapp_medis_status ,$dapp_medis_tgldatang ,$dapp_medis_jamdatang ,$dapp_medis_keterangan ,$app_cara ,$app_customer ,$app_keterangan ,$dapp_user);
+		
+		$result=$this->m_appointment->detail_appointment_detail_medis_insert($array_dapp_medis_id ,$dapp_medis_master ,$array_dapp_medis_perawatan ,$array_dapp_medis_tglreservasi ,$array_dapp_medis_jamreservasi ,$array_dapp_medis_petugas ,$dapp_medis_status ,$array_dapp_medis_keterangan ,$app_cara ,$app_customer ,$app_keterangan ,$dapp_user);
+		echo $result;
 	}
 	
 	function detail_appointment_detail_nonmedis_insert(){
