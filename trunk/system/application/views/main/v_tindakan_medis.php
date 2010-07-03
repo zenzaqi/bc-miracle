@@ -1161,7 +1161,7 @@ Ext.onReady(function(){
 			itemSelector: 'div.search-item',
 			triggerAction: 'all',
 			lazyRender:true,
-			maskRe: /([A-Za-z]+)$/
+			maskRe: /([^0-9]+)$/
 	});
 	
 	var combo_dapp_dokter=new Ext.form.ComboBox({
