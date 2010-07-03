@@ -264,8 +264,27 @@ var editor_cust_note;
 		cust_propinsiField.setValue('Jawa Timur');
 		cust_negaraField.setValue('Indonesia');
 		cust_priorityField.setValue('Reguler');
-		cust_unitField.setValue('Miracle Thamrin');
+		
+		
+		//cust_unitField.setValue('Miracle Thamrin');
 		cust_aktifField.setValue('Aktif');
+		
+		cbo_cust_cabang_DataStore.load({
+					//params : { cabang_id: cabangField.getValue() },
+					callback: function(opts, success, response)  {
+						 if (success) {
+							if(cbo_cust_cabang_DataStore.getCount()){
+								info_auto_cabang=cbo_cust_cabang_DataStore.getAt(0).data;
+								cust_unitField.setValue(info_auto_cabang.cust_cabang_display);
+								//info_alamatField.setValue(info_auto_nama.cabang_alamat);
+								//info_id_cabangField.setValue(info_auto_nama.cabang_id);
+							}
+						}
+					}
+			}); 
+		
+		
+		
 		
 	}
   
@@ -344,6 +363,7 @@ var editor_cust_note;
 	function display_form_window(){
 		if(!customer_createWindow.isVisible()){
 			customer_reset_form();
+			//cbo_cust_cabang_DataStore.load();
 			customer_set_defaultForm();
 			cust_terdaftarField.setValue(dt.format('Y-m-d'));
 			post2db='CREATE';
@@ -352,6 +372,8 @@ var editor_cust_note;
 			customer_createForm.saveButton.enable();
 			//Ext.getCmp('btn_saveclose').setDisabled(false);
 			customer_createWindow.show();
+			customer_createForm.load();
+			
 		} else {
 			customer_createWindow.toFront();
 		}
@@ -2966,7 +2988,7 @@ Ext.onReady(function(){
 		fieldLabel: 'Cabang',
 		store: cbo_cust_cabang_DataStore,
 		mode: 'remote',
-		emptyText: 'Miracle Thamrin',
+		//emptyText: 'Miracle Thamrin',
 		editable: false,
 		//allowBlank: false,
 		displayField: 'cust_cabang_display',
@@ -2974,6 +2996,16 @@ Ext.onReady(function(){
 		anchor: '95%',
 		triggerAction: 'all'
 	});
+	
+	/*cust_unitField= new Ext.form.TextField({
+		id: 'cust_unitField',
+		name: 'cabang_nama',
+		fieldLabel: 'Cabang',
+		anchor: '95%',
+		readOnly : true
+	});*/
+	
+	
 	/* Identify  cust_aktif Field */
 	cust_aktifField= new Ext.form.ComboBox({
 		id: 'cust_aktifField',
@@ -3151,11 +3183,25 @@ Ext.onReady(function(){
 	
 	/* Function for retrieve create Window Panel*/ 
 	customer_createForm = new Ext.FormPanel({
+		//url: 'index.php?c=c_customer&m=get_cabang2',
 		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
 		//height:680,
-		width: 950,        
+		width: 950,       
+		
+		/*reader: new Ext.data.JsonReader({
+			root: 'results',
+			id: 'cabang_id'
+		},
+		
+		[
+			{name: 'cabang_id', type: 'int', mapping: 'cabang_id'},
+			{name: 'cabang_nama', type: 'string', mapping: 'cabang_nama'}
+		]
+	
+		),*/
+
 		items: tab_customer
 		,buttons: [{
 				text: 'Save and Close',
