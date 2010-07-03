@@ -78,10 +78,17 @@ class C_customer extends Controller {
 		echo $result;
 	}
 	
-	function get_cabang_list(){
+	/*function get_cabang_list(){
 		$result=$this->m_public_function->get_cabang_list();
 		echo $result;
+	}*/
+	
+	
+	function get_cabang_list(){
+		$result=$this->m_customer->get_cabang_list();
+		echo $result;
 	}
+	
 	
 	function get_cust_member(){
 		$cust_id = isset($_POST['cust_id']) ? $_POST['cust_id'] : "";

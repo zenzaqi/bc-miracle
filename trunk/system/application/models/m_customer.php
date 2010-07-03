@@ -53,6 +53,26 @@ class M_customer extends Model{
 		}
 		//eof
 		
+		function get_cabang_list(){
+		$sql="SELECT cabang_id,cabang_nama
+FROM cabang 
+LEFT JOIN info on (info.info_cabang = cabang.cabang_id)
+where cabang.cabang_id = info.info_cabang";
+		$query = $this->db->query($sql);
+		$nbrows = $query->num_rows();
+		if($nbrows>0){
+			foreach($query->result() as $row){
+				$arr[] = $row;
+			}
+			$jsonresult = json_encode($arr);
+			return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+		} else {
+			return '({"total":"0", "results":""})';
+		}
+	}
+		
+		
+		
 		//purge all detail from master
 		function cust_note_purge($master_id){
 			$sql="DELETE from customer_note where note_customer='".$master_id."'";
@@ -190,8 +210,34 @@ class M_customer extends Model{
 		function customer_update($cust_id, $cust_no ,$cust_nolama ,$cust_nama, $cust_panggilan ,$cust_kelamin ,$cust_alamat ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara,$cust_alamat2 ,$cust_kota2 ,$cust_kodepos2 ,$cust_propinsi2 ,$cust_negara2 ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_fb ,$cust_tweeter , $cust_email2 ,$cust_fb2 ,$cust_tweeter2 ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tmptlahir ,$cust_tgllahir ,$cust_hobi ,$cust_referensi,$cust_referensilain ,$cust_keterangan ,$cust_member ,$cust_terdaftar ,$cust_statusnikah ,$cust_priority , $cust_jmlanak ,$cust_unit ,$cust_aktif ,$cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$cust_cp ,$cust_cptelp ){
 			if ($cust_aktif=="")
 				$cust_aktif = "Aktif";
-			if ($cust_unit=="" || $cust_unit=="Miracle Thamrin")
+			if ($cust_unit=="Miracle Thamrin")
 				$cust_unit = 1;
+			if ($cust_unit=="Miracle HR Muhammad")
+				$cust_unit = 2;
+			if ($cust_unit=="Corporate")
+				$cust_unit = 7;
+			if ($cust_unit=="Miracle Kertajaya Indah")
+				$cust_unit = 8;
+			if ($cust_unit=="Miracle Tunjungan Plaza")
+				$cust_unit = 9;
+			if ($cust_unit=="Miracle Malang")
+				$cust_unit = 10;
+			if ($cust_unit=="Miracle Denpasar")
+				$cust_unit = 11;
+			if ($cust_unit=="Miracle Kuta")
+				$cust_unit = 12;
+			if ($cust_unit=="Miracle Jakarta")
+				$cust_unit = 13;
+			if ($cust_unit=="Miracle Makassar")
+				$cust_unit = 14;
+			if ($cust_unit=="Miracle Balikpapan")
+				$cust_unit = 15;
+			if ($cust_unit=="Miracle Batam")
+				$cust_unit = 16;
+			if ($cust_unit=="Manyar Garden")
+				$cust_unit = 17;
+			if ($cust_unit=="Miracle Medan")
+				$cust_unit = 18;
 			$date_now = date('Y-m-d H:i:s');
 /*			if($cust_kota=="" || $cust_kota==NULL)
 				$cust_kota="Surabaya";
@@ -277,10 +323,40 @@ class M_customer extends Model{
 		
 		//function for create new record
 		function customer_create($cust_no ,$cust_nolama ,$cust_nama, $cust_panggilan ,$cust_kelamin ,$cust_alamat ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara,$cust_alamat2 ,$cust_kota2 ,$cust_kodepos2 ,$cust_propinsi2 ,$cust_negara2 ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_fb ,$cust_tweeter , $cust_email2 ,$cust_fb2 ,$cust_tweeter2 ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tmptlahir ,$cust_tgllahir ,$cust_hobi ,$cust_referensi,$cust_referensilain ,$cust_keterangan ,$cust_member ,$cust_terdaftar ,$cust_statusnikah , $cust_priority , $cust_jmlanak ,$cust_unit ,$cust_aktif ,$cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$cust_cp ,$cust_cptelp ){
+			
+			$query =   "SELECT * FROM info";
+			
 			if ($cust_aktif=="")
 				$cust_aktif = "Aktif";
-			if ($cust_unit=="" || $cust_unit=="Miracle Thamrin")
+			if ($cust_unit=="Miracle Thamrin")
 				$cust_unit = 1;
+			if ($cust_unit=="Miracle HR Muhammad")
+				$cust_unit = 2;
+			if ($cust_unit=="Corporate")
+				$cust_unit = 7;
+			if ($cust_unit=="Miracle Kertajaya Indah")
+				$cust_unit = 8;
+			if ($cust_unit=="Miracle Tunjungan Plaza")
+				$cust_unit = 9;
+			if ($cust_unit=="Miracle Malang")
+				$cust_unit = 10;
+			if ($cust_unit=="Miracle Denpasar")
+				$cust_unit = 11;
+			if ($cust_unit=="Miracle Kuta")
+				$cust_unit = 12;
+			if ($cust_unit=="Miracle Jakarta")
+				$cust_unit = 13;
+			if ($cust_unit=="Miracle Makassar")
+				$cust_unit = 14;
+			if ($cust_unit=="Miracle Balikpapan")
+				$cust_unit = 15;
+			if ($cust_unit=="Miracle Batam")
+				$cust_unit = 16;
+			if ($cust_unit=="Manyar Garden")
+				$cust_unit = 17;
+			if ($cust_unit=="Miracle Medan")
+				$cust_unit = 18;
+				
 			$date_now = date('Y-m-d H:i:s');
 /*			if($cust_kota=="" || $cust_kota==NULL)
 				$cust_kota="Surabaya";
