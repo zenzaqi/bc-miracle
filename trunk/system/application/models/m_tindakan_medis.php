@@ -426,7 +426,11 @@ class M_tindakan_medis extends Model{
 			$diskon=$rawat_du;
 		}
 		
-		$sql="SELECT jrawat_id, jrawat_nobukti FROM master_jual_rawat WHERE jrawat_cust='$trawat_cust_id' AND jrawat_tanggal='$date_now'";
+		$sql="SELECT jrawat_id, jrawat_nobukti
+			FROM master_jual_rawat
+			WHERE jrawat_cust='$trawat_cust_id'
+				AND jrawat_tanggal='$date_now'
+				AND jrawat_stat_dok='Terbuka'";
 		$rs=$this->db->query($sql);
 		if($rs->num_rows()){
 			/* artinya: customer yang dimaksud 'sudah masuk' di db.master_jual_rawat pada hari ini
@@ -506,7 +510,7 @@ class M_tindakan_medis extends Model{
 					}
 				}*/
 			}
-		}else{ 
+		}else{
 			/* artinya: di db.master_jual_rawat BELUM ADA */
 			/* INSERT to db.master_jual_rawat AND table.detail_jual_rawat */
 			$pattern="PR/".date("ym")."-";
@@ -520,7 +524,11 @@ class M_tindakan_medis extends Model{
 			$this->db->insert('master_jual_rawat', $data_jrawat);
 			if($this->db->affected_rows()){
 				/* INSERT to db.detail_jual_rawat */
-				$sql="SELECT jrawat_id FROM master_jual_rawat WHERE jrawat_cust='$trawat_cust_id' AND jrawat_tanggal='$date_now'";
+				$sql="SELECT jrawat_id
+					FROM master_jual_rawat
+					WHERE jrawat_cust='$trawat_cust_id'
+						AND jrawat_tanggal='$date_now'
+						AND jrawat_stat_dok='Terbuka'";
 				$rs=$this->db->query($sql);
 				if($rs->num_rows()){
 					$rs_record=$rs->row_array();
@@ -672,15 +680,12 @@ class M_tindakan_medis extends Model{
 		}
 		
 		$dti_dapaket=array(
-		//"dapaket_master"=>$apaket_id,
 		"dapaket_dpaket"=>$dapaket_dpaket,
 		"dapaket_jpaket"=>$dapaket_jpaket,
 		"dapaket_paket"=>$dapaket_paket,
 		"dapaket_item"=>$dapaket_item,
 		"dapaket_jenis_item"=>'perawatan',
-		//"dapaket_sapaket"=>$sapaket_id,
 		"dapaket_jumlah"=>1,
-		//"dapaket_cust"=>$trawat_cust,
 		"dapaket_cust"=>$trawat_cust_id,
 		"dapaket_dtrawat"=>$dtrawat_id,
 		"dapaket_creator"=>@$_SESSION[SESSION_USERID]
@@ -1091,7 +1096,12 @@ class M_tindakan_medis extends Model{
 					}
 					
 					//* karena otomatis status jual_nonmedis = 'selesai', maka harus di-INSERT ke db.detail_jual_rawat /
-					$sql="SELECT jrawat_id, jrawat_nobukti FROM master_jual_rawat WHERE jrawat_cust='$customer_id' AND jrawat_tanggal='$date_now'";
+					//checking db.master_jual_rawat terlebih dahulu, apakah pada hari ini customer ini telah melakukan perawatan yg belum cetak faktur ()
+					$sql="SELECT jrawat_id, jrawat_nobukti
+						FROM master_jual_rawat
+						WHERE jrawat_cust='$customer_id'
+							AND jrawat_tanggal='$date_now'
+							AND jrawat_stat_dok='Terbuka'";
 					$rs=$this->db->query($sql);
 					if($rs->num_rows()){
 						$rs_record=$rs->row_array();
@@ -1115,7 +1125,12 @@ class M_tindakan_medis extends Model{
 						$this->db->insert('master_jual_rawat', $dti_jrawat);
 						if($this->db->affected_rows()){
 							//* INSERT to db.detail_jual_rawat /
-							$sql="SELECT jrawat_id FROM master_jual_rawat WHERE jrawat_cust='$customer_id' AND jrawat_tanggal='$date_now'";
+							//ambil jrawat_id di db.master_jual_rawat yang jrawat_stat_dok masih 'Terbuka' untuk customer ini
+							$sql="SELECT jrawat_id
+								FROM master_jual_rawat
+								WHERE jrawat_cust='$customer_id'
+									AND jrawat_tanggal='$date_now'
+									AND jrawat_stat_dok='Terbuka'";
 							$rs=$this->db->query($sql);
 							if($rs->num_rows()){
 								$rs_record=$rs->row_array();
