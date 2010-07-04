@@ -180,7 +180,11 @@ class M_tindakan_nonmedis extends Model{
 			$diskon=$rawat_du;
 		}
 		
-		$sql="SELECT jrawat_id, jrawat_nobukti FROM master_jual_rawat WHERE jrawat_cust='$trawat_cust_id' AND jrawat_tanggal='$date_now'";
+		$sql="SELECT jrawat_id, jrawat_nobukti
+			FROM master_jual_rawat
+			WHERE jrawat_cust='$trawat_cust_id'
+				AND jrawat_tanggal='$date_now'
+				AND jrawat_stat_dok='Terbuka'";
 		$rs=$this->db->query($sql);
 		if($rs->num_rows()){
 			/* artinya: customer yang dimaksud 'sudah masuk' di db.master_jual_rawat pada hari ini
@@ -226,7 +230,11 @@ class M_tindakan_nonmedis extends Model{
 			$this->db->insert('master_jual_rawat', $data_jrawat);
 			if($this->db->affected_rows()){
 				/* INSERT to db.detail_jual_rawat */
-				$sql="SELECT jrawat_id FROM master_jual_rawat WHERE jrawat_cust='$trawat_cust_id' AND jrawat_tanggal='$date_now'";
+				$sql="SELECT jrawat_id
+					FROM master_jual_rawat
+					WHERE jrawat_cust='$trawat_cust_id'
+						AND jrawat_tanggal='$date_now'
+						AND jrawat_stat_dok='Terbuka'";
 				$rs=$this->db->query($sql);
 				if($rs->num_rows()){
 					$rs_record=$rs->row_array();
