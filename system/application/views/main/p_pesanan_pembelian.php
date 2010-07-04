@@ -5,7 +5,7 @@
 <title>Laporan Pesanan Pembelian</title>
 </head>
 
-<body>
+<body onload="window.print();window.close();">
 <table width="700" border="1" cellspacing="0" cellpadding="0">
   <tr>
     <td height="120" valign="top"><table width="100%" border="0" cellspacing="0" cellpadding="0">
@@ -13,13 +13,13 @@
         <td width="55%" align="center"><br/><h2>LAPORAN <br/>
           PESANAN PEMBELIAN<br/>"THAMRIN"</h2></p></td>
         <td width="45%"><table width="100%" border="0" cellspacing="0" cellpadding="0">
-        <?php 
+        <!--<//?php 
 		foreach($data_print as $print) { 
 			$no_bukti=$print->no_bukti;
 			$tanggal=$print->tanggal;
 			$supplier_nama=$print->supplier_nama;
 		}
-		?>
+		?>--><!-- by masongbee-->
           <tr>
             <td width="24%" align="right"><strong>No.</strong></td>
             <td width="4%">&nbsp;</td>

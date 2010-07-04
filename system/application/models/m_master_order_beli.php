@@ -47,7 +47,8 @@ class M_master_order_beli extends Model{
 			}
 			//echo $sql;
 			$query=$this->db->query($sql);
-			return $query->result();
+			//return $query->result();
+            return $query; //by masongbee
 		}
 		
 		
@@ -239,9 +240,68 @@ class M_master_order_beli extends Model{
 		//*eof
 		
 		//insert detail record
-		function detail_detail_order_beli_insert($dorder_id ,$dorder_master ,$dorder_produk ,$dorder_satuan ,$dorder_jumlah ,$dorder_harga ,$dorder_diskon ){
+		function detail_detail_order_beli_insert($array_dorder_id
+                                                 ,$dorder_master
+                                                 ,$array_dorder_produk
+                                                 ,$array_dorder_satuan
+                                                 ,$array_dorder_jumlah
+                                                 ,$array_dorder_harga
+                                                 ,$array_dorder_diskon ){
+            
+            if($dorder_master=="" || $dorder_master==NULL){
+                $dorder_master=$this->get_master_id();
+            }
+            
+            $size_array = sizeof($array_dorder_produk) - 1;
+            
+            for($i = 0; $i < sizeof($array_dorder_produk); $i++){
+                $dorder_id = $array_dorder_id[$i];
+                $dorder_produk = $array_dorder_produk[$i];
+                $dorder_satuan = $array_dorder_satuan[$i];
+                $dorder_jumlah = $array_dorder_jumlah[$i];
+                $dorder_harga = $array_dorder_harga[$i];
+                $dorder_diskon = $array_dorder_diskon[$i];
+                
+                //if(is_numeric($dorder_id)){
+                    //artinya: detail ini sudah pernah diinputkan ==> mode Edit
+                //}else{
+                    //artinya: detail ini belum pernah diinputkan ==> mode Add
+                    //sementara meski 'is_numeric($dorder_id)==true' belum difungsikan, karena sebelum fungsi detail_detail_order_beli_insert()
+                    //sudah terjadi fungsi purge(), sehingga semua masih dianggap data detail baru.
+                    $dti_dorder = array(
+                        "dorder_master"=>$dorder_master, 
+                        "dorder_produk"=>$dorder_produk, 
+                        "dorder_satuan"=>$dorder_satuan, 
+                        "dorder_jumlah"=>$dorder_jumlah, 
+                        "dorder_harga"=>$dorder_harga, 
+                        "dorder_diskon"=>$dorder_diskon 
+                    );
+                    
+                    $sql="SELECT dorder_id,dorder_jumlah FROM detail_order_beli 
+                            WHERE dorder_master='".$dorder_master."' 
+                            AND dorder_produk='".$dorder_produk."' 
+                            AND dorder_satuan='".$dorder_satuan."'";
+                    $result=$this->db->query($sql);
+                    if($result->num_rows()){
+                        $row=$result->row();
+                        $data["dorder_jumlah"]+=$row->dorder_jumlah;
+                        $this->db->where('dorder_id', $row->dorder_id);
+                        $this->db->update('detail_order_beli', $dti_dorder);
+                    }else{
+                        $this->db->insert('detail_order_beli', $dti_dorder); 
+                    }
+                    
+                    if($this->db->affected_rows() && ($i==$size_array))
+                        return '1';
+                    elseif(!($this->db->affected_rows()) && ($i==$size_array))
+                        return '0';
+                    
+                //}
+                
+            }
+            
 			//if master id not capture from view then capture it from max pk from master table
-			if($dorder_master=="" || $dorder_master==NULL){
+			/*if($dorder_master=="" || $dorder_master==NULL){
 				$dorder_master=$this->get_master_id();
 			}
 			
@@ -272,8 +332,8 @@ class M_master_order_beli extends Model{
 			if($this->db->affected_rows())
 				return '1';
 			else
-				return '0';
-
+				return '0';*/ //by masongbee
+            
 		}
 		//end of function
 		
