@@ -17,12 +17,12 @@ class C_master_order_beli extends Controller {
 		parent::Controller();
 		session_start();
 		$this->load->model('m_master_order_beli', '', TRUE);
+        $this->load->plugin('to_excel');
 		
 	}
 	
 	//set index
 	function index(){
-		$this->load->plugin('to_excel');
 		$this->load->helper('asset');
 		$this->load->view('main/v_master_order_beli');
 	}
@@ -35,7 +35,13 @@ class C_master_order_beli extends Controller {
 		
 		$faktur=(isset($_POST['faktur']) ? @$_POST['faktur'] : @$_GET['faktur']);
 		$opsi="faktur";
-		$data["data_print"]=$this->m_master_order_beli->get_laporan("","","",$opsi,"",$faktur);
+        //$data['data_print'] = $this->m_master_order_beli->get_laporan("","","",$opsi,"",$faktur); //comment by masongbee
+        $result = $this->m_master_order_beli->get_laporan("","","",$opsi,"",$faktur);
+		$data['data_print'] = $result->result();
+        $record = $result->row();
+        $data['no_bukti'] = $record->no_bukti;
+        $data['tanggal'] = $record->tanggal;
+        $data['supplier_nama'] = $record->supplier_nama;
 		$print_view=$this->load->view("main/p_pesanan_pembelian.php",$data,TRUE);
 		
 		if(!file_exists("print")){
@@ -171,8 +177,8 @@ class C_master_order_beli extends Controller {
 	
 	//add detail
 	function detail_detail_order_beli_insert(){
-	//POST variable here
-		$dorder_id=trim(@$_POST["dorder_id"]);
+        //POST variable here
+		/*$dorder_id=trim(@$_POST["dorder_id"]);
 		$dorder_master=trim(@$_POST["dorder_master"]);
 		$dorder_produk=trim(@$_POST["dorder_produk"]);
 		$dorder_satuan=trim(@$_POST["dorder_satuan"]);
@@ -180,6 +186,36 @@ class C_master_order_beli extends Controller {
 		$dorder_harga=trim(@$_POST["dorder_harga"]);
 		$dorder_diskon=trim(@$_POST["dorder_diskon"]);
 		$result=$this->m_master_order_beli->detail_detail_order_beli_insert($dorder_id ,$dorder_master ,$dorder_produk ,$dorder_satuan ,$dorder_jumlah ,$dorder_harga ,$dorder_diskon );
+        */ //by masongbee
+        $dorder_id = $_POST['dorder_id']; // Get our array back and translate it :
+		$array_dorder_id = json_decode(stripslashes($dorder_id));
+        
+        $dorder_master=trim(@$_POST["dorder_master"]);
+        
+        $dorder_produk = $_POST['dorder_produk']; // Get our array back and translate it :
+		$array_dorder_produk = json_decode(stripslashes($dorder_produk));
+        
+        $dorder_satuan = $_POST['dorder_satuan']; // Get our array back and translate it :
+		$array_dorder_satuan = json_decode(stripslashes($dorder_satuan));
+        
+        $dorder_jumlah = $_POST['dorder_jumlah']; // Get our array back and translate it :
+		$array_dorder_jumlah = json_decode(stripslashes($dorder_jumlah));
+        
+        $dorder_harga = $_POST['dorder_harga']; // Get our array back and translate it :
+		$array_dorder_harga = json_decode(stripslashes($dorder_harga));
+        
+        $dorder_diskon = $_POST['dorder_diskon']; // Get our array back and translate it :
+		$array_dorder_diskon = json_decode(stripslashes($dorder_diskon));
+        
+        $result=$this->m_master_order_beli->detail_detail_order_beli_insert($array_dorder_id
+                                                                            ,$dorder_master
+                                                                            ,$array_dorder_produk
+                                                                            ,$array_dorder_satuan
+                                                                            ,$array_dorder_jumlah
+                                                                            ,$array_dorder_harga
+                                                                            ,$array_dorder_diskon );
+        echo $result;
+        
 	}
 	
 	

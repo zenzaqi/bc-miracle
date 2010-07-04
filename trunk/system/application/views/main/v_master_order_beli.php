@@ -300,11 +300,11 @@ Ext.onReady(function(){
 		order_statusField.setValue('Terbuka');
 		order_status_accField.reset();
 		order_status_accField.setValue('Terbuka');
-		cbo_order_satuanDataStore.load();
-		cbo_order_produk_DataStore.load();
-		detail_order_beli_DataStore.load();
+		/*cbo_order_satuanDataStore.load();
+		cbo_order_produk_DataStore.load();*/
+		detail_order_beli_DataStore.load({params: {master_id:-1}});
 		
-		cbo_order_satuanDataStore.setBaseParam('task','detail');
+		/*cbo_order_satuanDataStore.setBaseParam('task','detail');
 		cbo_order_satuanDataStore.setBaseParam('master_id',get_pk_id());
 		cbo_order_satuanDataStore.load();
 		
@@ -316,7 +316,7 @@ Ext.onReady(function(){
 					detail_order_beli_DataStore.load();
 				}
 			}
-		});
+		});*/
 		check_acc();
 	}
  	/* End of Function */
@@ -1404,8 +1404,105 @@ Ext.onReady(function(){
 	//eof
 	
 	//function for insert detail
-	function detail_order_beli_insert(pkid){
-		for(i=0;i<detail_order_beli_DataStore.getCount();i++){
+	function detail_order_beli_insert(pkid,opsi){
+        var dorder_id = [];
+        var dorder_produk = [];
+        var dorder_satuan = [];
+        var dorder_jumlah = [];
+        var dorder_harga = [];
+        var dorder_diskon = [];
+        
+        var dcount = detail_order_beli_DataStore.getCount() - 1;
+        
+        if(detail_order_beli_DataStore.getCount()>0){
+            for(i=0; i<detail_order_beli_DataStore.getCount();i++){
+                if((/^\d+$/.test(detail_order_beli_DataStore.getAt(i).data.dorder_produk))
+				   && detail_order_beli_DataStore.getAt(i).data.dorder_produk!==undefined
+				   && detail_order_beli_DataStore.getAt(i).data.dorder_produk!==''
+				   && detail_order_beli_DataStore.getAt(i).data.dorder_produk!==0){
+                    
+                    if(detail_order_beli_DataStore.getAt(i).data.dorder_id==undefined){
+						dorder_id.push('');
+					}else{
+						dorder_id.push(detail_order_beli_DataStore.getAt(i).data.dorder_id);
+					}
+                    
+					dorder_produk.push(detail_order_beli_DataStore.getAt(i).data.dorder_produk);
+                    
+                    if(detail_order_beli_DataStore.getAt(i).data.dorder_satuan==undefined){
+						dorder_satuan.push('');
+					}else{
+						dorder_satuan.push(detail_order_beli_DataStore.getAt(i).data.dorder_satuan);
+					}
+                    
+                    if(detail_order_beli_DataStore.getAt(i).data.dorder_jumlah==undefined){
+						dorder_jumlah.push('');
+					}else{
+						dorder_jumlah.push(detail_order_beli_DataStore.getAt(i).data.dorder_jumlah);
+					}
+                    
+                    if(detail_order_beli_DataStore.getAt(i).data.dorder_harga==undefined){
+						dorder_harga.push('');
+					}else{
+						dorder_harga.push(detail_order_beli_DataStore.getAt(i).data.dorder_harga);
+					}
+                    
+                    if(detail_order_beli_DataStore.getAt(i).data.dorder_diskon==undefined){
+						dorder_diskon.push('');
+					}else{
+						dorder_diskon.push(detail_order_beli_DataStore.getAt(i).data.dorder_diskon);
+					}
+                    
+                }
+                
+                if(i==dcount){
+                    var encoded_array_dorder_id = Ext.encode(dorder_id);
+                    var encoded_array_dorder_produk = Ext.encode(dorder_produk);
+                    var encoded_array_dorder_satuan = Ext.encode(dorder_satuan);
+                    var encoded_array_dorder_jumlah = Ext.encode(dorder_jumlah);
+                    var encoded_array_dorder_harga = Ext.encode(dorder_harga);
+                    var encoded_array_dorder_diskon = Ext.encode(dorder_diskon);
+                    
+                    Ext.Ajax.request({
+                        waitMsg: 'Mohon tunggu...',
+                        url: 'index.php?c=c_master_order_beli&m=detail_detail_order_beli_insert',
+                        params:{
+                            dorder_id		: encoded_array_dorder_id,
+                            dorder_master	: pkid, 
+                            dorder_produk	: encoded_array_dorder_produk,
+                            dorder_satuan	: encoded_array_dorder_satuan,
+                            dorder_jumlah	: encoded_array_dorder_jumlah,
+                            dorder_harga	: encoded_array_dorder_harga,
+                            dorder_diskon	: encoded_array_dorder_diskon
+                        },
+                        success:function(response){
+                            var result=eval(response.responseText);
+                            
+                            if(result==1 && opsi=='print'){
+                                master_order_beli_cetak_faktur();
+                            }else{
+                                //affected_rows tidak terjadi
+                            }
+                            master_order_beli_DataStore.reload();
+                        },
+                        failure: function(response){
+							Ext.MessageBox.hide();
+							var result=response.responseText;
+							Ext.MessageBox.show({
+							   title: 'Error',
+							   msg: 'Could not connect to the database. retry later.',
+							   buttons: Ext.MessageBox.OK,
+							   animEl: 'database',
+							   icon: Ext.MessageBox.ERROR
+							});	
+						}
+                    });
+                    
+                }
+            }
+        }
+        
+		/*for(i=0;i<detail_order_beli_DataStore.getCount();i++){
 			detail_order_beli_record=detail_order_beli_DataStore.getAt(i);
 			Ext.Ajax.request({
 				waitMsg: 'Mohon tunggu...',
@@ -1418,11 +1515,16 @@ Ext.onReady(function(){
 				dorder_jumlah	: detail_order_beli_record.data.dorder_jumlah, 
 				dorder_harga	: detail_order_beli_record.data.dorder_harga, 
 				dorder_diskon	: detail_order_beli_record.data.dorder_diskon 
-				
-				}
+				},
+                success:function(response){
+                    if(opsi=='print'){
+                        master_order_beli_cetak_faktur();
+                    }
+                    master_order_beli_DataStore.reload(); //by masongbee
+                }
 			});
 		}
-		master_order_beli_DataStore.reload();		
+		master_order_beli_DataStore.reload();		*/ //by masongbee
 	}
 	//eof
 	
@@ -1434,11 +1536,11 @@ Ext.onReady(function(){
 			url: 'index.php?c=c_master_order_beli&m=detail_detail_order_beli_purge',
 			params:{ master_id: pkid },
 			success:function(response){
-				detail_order_beli_insert(pkid);
-				if(opsi=='print'){
+				detail_order_beli_insert(pkid,opsi); //by masongbee
+				/*if(opsi=='print'){
 					master_order_beli_cetak_faktur();
 				}
-				master_order_beli_DataStore.reload();
+				master_order_beli_DataStore.reload();*/ //by masongbee
 			}
 		});
 		
@@ -1606,8 +1708,8 @@ Ext.onReady(function(){
 		  	switch(result){
 		  	case 1:
 				win = window.open('./print/master_order_faktur.html','master_order_faktur','height=800,width=670,resizable=1,scrollbars=1, menubar=1');
-				win.print();
-				win.close();
+				//win.print();
+				//win.close();
 				break;
 		  	default:
 				Ext.MessageBox.show({
