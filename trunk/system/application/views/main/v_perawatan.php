@@ -1960,6 +1960,7 @@ Ext.onReady(function(){
 		if(rawat_hargaSearchField.getValue()!==null){rawat_harga_search=rawat_hargaSearchField.getValue();}
 		if(rawat_gudangSearchField.getValue()!==null){rawat_gudang_search=rawat_gudangSearchField.getValue();}
 		if(rawat_aktifSearchField.getValue()!==null){rawat_aktif_search=rawat_aktifSearchField.getValue();}
+		
 		// change the store parameters
 		perawatan_DataStore.baseParams = {
 			task: 'SEARCH',
@@ -2213,10 +2214,8 @@ Ext.onReady(function(){
 		mode: 'local',
 		displayField: 'rawat_aktif',
 		valueField: 'value',
-		emptyText: 'Aktif',
-		//anchor: '95%',
-		width: 80,
-		triggerAction: 'all'	 
+		width: 120,
+		triggerAction: 'all'
 	
 	});
     
