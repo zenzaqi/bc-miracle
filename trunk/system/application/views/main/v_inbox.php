@@ -862,7 +862,6 @@ Ext.onReady(function(){
 	}
 	
 	mainPanel.on('remove', function(){
-		console.log('panel : '+ mainPanel.getId());
 		runinbox.stop(taskinbox);
 	});
 	//mainPanel.remove(mainPanel.getActiveTab().getId());

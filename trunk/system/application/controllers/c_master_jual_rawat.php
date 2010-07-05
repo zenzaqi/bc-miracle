@@ -228,8 +228,8 @@ class C_master_jual_rawat extends Controller {
 	
 	//add detail
 	function detail_detail_jual_rawat_insert(){
-	//POST variable here
-		$drawat_id=trim(@$_POST["drawat_id"]);
+		//POST variable here
+		/*$drawat_id=trim(@$_POST["drawat_id"]);
 		$drawat_master=trim(@$_POST["drawat_master"]);
 		$drawat_rawat=trim(@$_POST["drawat_rawat"]);
 		$drawat_jumlah=trim(@$_POST["drawat_jumlah"]);
@@ -241,12 +241,46 @@ class C_master_jual_rawat extends Controller {
 		$drawat_sales=str_replace("\\", "",$drawat_sales);
 		$drawat_sales=str_replace("'", '"',$drawat_sales);
 		$jrawat_id=trim(@$_POST["jrawat_id"]);
-		$result=$this->m_master_jual_rawat->detail_detail_jual_rawat_insert($drawat_id ,$drawat_master ,$drawat_rawat ,$drawat_jumlah ,$drawat_harga ,$drawat_diskon ,$drawat_diskon_jenis ,$drawat_sales ,$jrawat_id);
+		$result=$this->m_master_jual_rawat->detail_detail_jual_rawat_insert($drawat_id ,$drawat_master ,$drawat_rawat ,$drawat_jumlah ,$drawat_harga ,$drawat_diskon ,$drawat_diskon_jenis ,$drawat_sales ,$jrawat_id);*/
+		$drawat_id = $_POST['drawat_id']; // Get our array back and translate it :
+		$array_drawat_id = json_decode(stripslashes($drawat_id));
+		
+		$drawat_master=trim(@$_POST["drawat_master"]);
+		
+		$drawat_rawat = $_POST['drawat_rawat']; // Get our array back and translate it :
+		$array_drawat_rawat = json_decode(stripslashes($drawat_rawat));
+		
+		$drawat_jumlah = $_POST['drawat_jumlah']; // Get our array back and translate it :
+		$array_drawat_jumlah = json_decode(stripslashes($drawat_jumlah));
+		
+		$drawat_harga = $_POST['drawat_harga']; // Get our array back and translate it :
+		$array_drawat_harga = json_decode(stripslashes($drawat_harga));
+		
+		$drawat_diskon = $_POST['drawat_diskon']; // Get our array back and translate it :
+		$array_drawat_diskon = json_decode(stripslashes($drawat_diskon));
+		
+		$drawat_diskon_jenis = $_POST['drawat_diskon_jenis']; // Get our array back and translate it :
+		$array_drawat_diskon_jenis = json_decode(stripslashes($drawat_diskon_jenis));
+		
+		$drawat_sales = $_POST['drawat_sales']; // Get our array back and translate it :
+		$array_drawat_sales = json_decode(stripslashes($drawat_sales));
+		
+		$jrawat_id=trim(@$_POST["jrawat_id"]);
+		
+		$result=$this->m_master_jual_rawat->detail_detail_jual_rawat_insert($array_drawat_id
+																			,$drawat_master
+																			,$array_drawat_rawat
+																			,$array_drawat_jumlah
+																			,$array_drawat_harga
+																			,$array_drawat_diskon
+																			,$array_drawat_diskon_jenis
+																			,$array_drawat_sales
+																			,$jrawat_id);
 	}
 	
 	function detail_jual_rawat_update(){
 	//POST variable here
-		$drawat_id=trim(@$_POST["drawat_id"]);
+		/*$drawat_id=trim(@$_POST["drawat_id"]);
         $drawat_master=trim(@$_POST["drawat_master"]);
         $drawat_dtrawat=trim(@$_POST["drawat_dtrawat"]);
         $drawat_rawat=trim(@$_POST["drawat_rawat"]);
@@ -255,7 +289,38 @@ class C_master_jual_rawat extends Controller {
         $drawat_diskon=trim(@$_POST["drawat_diskon"]);
         $drawat_diskon_jenis=trim(@$_POST["drawat_diskon_jenis"]);
         
-		$result=$this->m_master_jual_rawat->detail_jual_rawat_update($drawat_id ,$drawat_master ,$drawat_dtrawat ,$drawat_rawat ,$drawat_jumlah ,$drawat_harga ,$drawat_diskon ,$drawat_diskon_jenis);
+		$result=$this->m_master_jual_rawat->detail_jual_rawat_update($drawat_id ,$drawat_master ,$drawat_dtrawat ,$drawat_rawat ,$drawat_jumlah ,$drawat_harga ,$drawat_diskon ,$drawat_diskon_jenis);*/
+		$drawat_id = $_POST['drawat_id']; // Get our array back and translate it :
+		$array_drawat_id = json_decode(stripslashes($drawat_id));
+		
+		$drawat_master=trim(@$_POST["drawat_master"]);
+		
+		$drawat_dtrawat = $_POST['drawat_dtrawat']; // Get our array back and translate it :
+		$array_drawat_dtrawat = json_decode(stripslashes($drawat_dtrawat));
+		
+		$drawat_rawat = $_POST['drawat_rawat']; // Get our array back and translate it :
+		$array_drawat_rawat = json_decode(stripslashes($drawat_rawat));
+		
+		$drawat_jumlah = $_POST['drawat_jumlah']; // Get our array back and translate it :
+		$array_drawat_jumlah = json_decode(stripslashes($drawat_jumlah));
+		
+		$drawat_harga = $_POST['drawat_harga']; // Get our array back and translate it :
+		$array_drawat_harga = json_decode(stripslashes($drawat_harga));
+		
+		$drawat_diskon = $_POST['drawat_diskon']; // Get our array back and translate it :
+		$array_drawat_diskon = json_decode(stripslashes($drawat_diskon));
+		
+		$drawat_diskon_jenis = $_POST['drawat_diskon_jenis']; // Get our array back and translate it :
+		$array_drawat_diskon_jenis = json_decode(stripslashes($drawat_diskon_jenis));
+		
+		$result=$this->m_master_jual_rawat->detail_jual_rawat_update($array_drawat_id
+																	 ,$drawat_master
+																	 ,$array_drawat_dtrawat
+																	 ,$array_drawat_rawat
+																	 ,$array_drawat_jumlah
+																	 ,$array_drawat_harga
+																	 ,$array_drawat_diskon
+																	 ,$array_drawat_diskon_jenis);
 	}
 	
 	//for detail pengambilan paket
@@ -804,13 +869,15 @@ class C_master_jual_rawat extends Controller {
 	}
 	
 	function print_paper_apaket(){
-		$dapaket_jpaket=trim(@$_POST["jrawat_id"]);
-		//$dapaket_cust=trim(@$_POST["jrawat_cust"]);
-		$dapaket_dpaket=trim(@$_POST["dpaket_id"]);
-		$dapaket_date_create=trim(@$_POST["jrawat_tanggal"]);
+		//$dapaket_jpaket=trim(@$_POST["jrawat_id"]);
+		//$dapaket_dpaket=trim(@$_POST["dpaket_id"]);
+		//$dapaket_date_create=trim(@$_POST["jrawat_tanggal"]);
+		$dapaket_cust=trim(@$_POST["dapaket_cust"]);
+		$dapaket_date_create=trim(@$_POST["tanggal"]);
 		
 		//$result = $this->m_master_jual_rawat->print_paper_apaket($dapaket_jpaket, $dapaket_cust, $dapaket_date_create);
-		$result = $this->m_master_jual_rawat->print_paper_apaket($dapaket_jpaket, $dapaket_dpaket, $dapaket_date_create);
+		//$result = $this->m_master_jual_rawat->print_paper_apaket($dapaket_jpaket, $dapaket_dpaket, $dapaket_date_create);
+		$result = $this->m_master_jual_rawat->print_paper_apaket($dapaket_cust ,$dapaket_date_create);
 		$rs=$result->row();
 		$detail_ambil_paket=$result->result();
 		
@@ -821,7 +888,7 @@ class C_master_jual_rawat extends Controller {
 		$data['jpaket_cust_no']=$rs->jpaket_cust_no;
 		$data['jpaket_cust_nama']=$rs->jpaket_cust_nama;
 		$data['jpaket_cust_alamat']=$rs->jpaket_cust_alamat;
-		$data['jpaket_nobukti']=$rs->jpaket_nobukti;
+		//$data['jpaket_nobukti']=$rs->jpaket_nobukti;
 		$data['detail_ambil_paket']=$detail_ambil_paket;
 		
 		$viewdata=$this->load->view("main/apaket_formcetak",$data,TRUE);
