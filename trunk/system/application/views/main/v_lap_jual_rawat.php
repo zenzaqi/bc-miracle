@@ -321,8 +321,16 @@ Ext.onReady(function(){
 		if(rpt_jrawat_groupField.getValue()!==""){jrawat_group=rpt_jrawat_groupField.getValue(); }
 		if(rpt_jrawat_rekapField.getValue()==true){jrawat_opsi='rekap';}else{jrawat_opsi='detail';}
 		
+		Ext.MessageBox.show({
+		   msg: 'Sedang memproses data, mohon tunggu...',
+		   progressText: 'proses...',
+		   width:350,
+		   wait:true
+		});
+		
 			Ext.Ajax.request({   
 				waitMsg: 'Please Wait...',
+				timeout: 3600000,
 				url: 'index.php?c=c_master_jual_rawat&m=print_laporan',
 				params: {
 					tgl_awal	: jrawat_tglawal,
@@ -338,8 +346,9 @@ Ext.onReady(function(){
 					var result=eval(response.responseText);
 					switch(result){
 					case 1:
+						Ext.MessageBox.hide(); 
 						win = window.open('./print/report_jrawat.html','report_jrawat','height=400,width=800,resizable=1,scrollbars=1, menubar=1');
-						win.print();
+						//win.print();
 						break;
 					default:
 						Ext.MessageBox.show({

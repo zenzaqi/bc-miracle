@@ -32,18 +32,18 @@ class M_master_jual_rawat extends Model{
 			
 			if($opsi=='rekap'){
 				if($periode=='all')
-					$sql="SELECT * FROM vu_trans_rawat ".$order_by;
+					$sql="SELECT * FROM vu_trans_rawat WHERE jrawat_stat_dok<>'Batal' ".$order_by;
 				else if($periode=='bulan')
-					$sql="SELECT * FROM vu_trans_rawat WHERE tanggal like '".$tgl_awal."%' ".$order_by;
+					$sql="SELECT * FROM vu_trans_rawat WHERE jrawat_stat_dok<>'Batal' AND tanggal like '".$tgl_awal."%' ".$order_by;
 				else if($periode=='tanggal')
-					$sql="SELECT * FROM vu_trans_rawat WHERE tanggal>='".$tgl_awal."' AND tanggal<='".$tgl_akhir."' ".$order_by;
+					$sql="SELECT * FROM vu_trans_rawat WHERE  jrawat_stat_dok<>'Batal' AND tanggal>='".$tgl_awal."' AND tanggal<='".$tgl_akhir."' ".$order_by;
 			}else if($opsi=='detail'){
 				if($periode=='all')
-					$sql="SELECT * FROM vu_detail_jual_rawat ".$order_by;
+					$sql="SELECT * FROM vu_detail_jual_rawat WHERE jrawat_stat_dok<>'Batal' ".$order_by;
 				else if($periode=='bulan')
-					$sql="SELECT * FROM vu_detail_jual_rawat WHERE tanggal like '".$tgl_awal."%' ".$order_by;
+					$sql="SELECT * FROM vu_detail_jual_rawat WHERE jrawat_stat_dok<>'Batal' AND tanggal like '".$tgl_awal."%' ".$order_by;
 				else if($periode=='tanggal')
-					$sql="SELECT * FROM vu_detail_jual_rawat WHERE tanggal>='".$tgl_awal."' AND tanggal<='".$tgl_akhir."' ".$order_by;
+					$sql="SELECT * FROM vu_detail_jual_rawat WHERE jrawat_stat_dok<>'Batal' AND tanggal>='".$tgl_awal."' AND tanggal<='".$tgl_akhir."' ".$order_by;
 			}
 			
 			$query=$this->db->query($sql);
