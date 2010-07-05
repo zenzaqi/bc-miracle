@@ -1,5 +1,5 @@
 UPDATE detail_pakai_cabin,perawatan set cabin_gudang=rawat_gudang
-WHERE detail_pakai_cabin.cabin_rawat=perawatan.rawat_id AND cabing_gudang is NULL;
+WHERE detail_pakai_cabin.cabin_rawat=perawatan.rawat_id AND cabin_gudang is NULL;
 
 UPDATE detail_pakai_cabin,tindakan,tindakan_detail
 SET detail_pakai_cabin.cabin_cust=tindakan.trawat_cust
