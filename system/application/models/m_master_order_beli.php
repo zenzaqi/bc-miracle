@@ -284,9 +284,10 @@ class M_master_order_beli extends Model{
                     $result=$this->db->query($sql);
                     if($result->num_rows()){
                         $row=$result->row();
-                        $data["dorder_jumlah"]+=$row->dorder_jumlah;
+                        //$data["dorder_jumlah"]+=$row->dorder_jumlah;
+                        $data["dorder_jumlah"] = $row->dorder_jumlah + $dorder_jumlah;
                         $this->db->where('dorder_id', $row->dorder_id);
-                        $this->db->update('detail_order_beli', $dti_dorder);
+                        $this->db->update('detail_order_beli', $data);
                     }else{
                         $this->db->insert('detail_order_beli', $dti_dorder); 
                     }
