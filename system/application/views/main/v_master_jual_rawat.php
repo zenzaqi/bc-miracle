@@ -3803,7 +3803,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [jrawat_kwitansi_noField,jrawat_kwitansk_namaField,jrawat_kwitansi_sisaField,jrawat_kwitansi_nilai_cfField] 
+				items: [jrawat_kwitansi_noField,jrawat_kwitansi_namaField,jrawat_kwitansi_sisaField,jrawat_kwitansi_nilai_cfField] 
 			}
 		]
 	
