@@ -708,6 +708,8 @@ Ext.onReady(function(){
 	function save_andPrint(){
 		cetak_jpaket=1;
 		master_jual_paket_create();
+		jpaket_pesanLabel.setText('');
+		jpaket_lunasLabel.setText('');
 	}
   
   	/* Function for get PK field */
@@ -876,6 +878,8 @@ Ext.onReady(function(){
 
 		jpaket_jumlahField.reset();
 		jpaket_jumlahField.setValue(null);
+		
+		jpaket_pesanLabel.setText('');
 
 		tunai_jual_paket_reset_form();
 		tunai2_jual_paket_reset_form();
@@ -2004,7 +2008,8 @@ Ext.onReady(function(){
 	
 	/* function for editing row via context menu */
 	function master_jual_paket_editContextMenu(){
-		master_jual_paketListEditorGrid.startEditing(master_jual_paket_SelectedRow,1);
+		//master_jual_paketListEditorGrid.startEditing(master_jual_paket_SelectedRow,1);
+		master_jual_paket_confirm_update();
   	}
 	/* End of Function */
   	
@@ -3460,6 +3465,21 @@ Ext.onReady(function(){
 		maskRe: /([0-9]+)$/
 	});*/
 	
+	jpaket_pesanLabel= new Ext.form.Label({
+		style: {
+			marginLeft: '100px',
+			fontSize: '14px',
+			color: '#CC0000'
+		}
+	});
+	jpaket_lunasLabel= new Ext.form.Label({
+		style: {
+			marginLeft: '100px',
+			fontSize: '14px',
+			color: '#006600'
+		}
+	});
+	
 	
 	master_cara_bayarTabPanel = new Ext.TabPanel({
 		plain:true,
@@ -3517,7 +3537,7 @@ Ext.onReady(function(){
 				baseCls: 'x-plain',
 				border:false,
 				labelAlign: 'left',
-				items: [jpaket_jumlahField, jpaket_subTotalField, jpaket_diskonField, jpaket_cashback_cfField, {xtype: 'spacer',height:10},jpaket_totalField, jpaket_bayarField,jpaket_hutangField] 
+				items: [jpaket_jumlahField, jpaket_subTotalField, jpaket_diskonField, jpaket_cashback_cfField, {xtype: 'spacer',height:10},jpaket_totalField, jpaket_bayarField,jpaket_hutangField ,jpaket_pesanLabel ,jpaket_lunasLabel] 
 			}
 			]
 	
@@ -4913,6 +4933,17 @@ Ext.onReady(function(){
 		total_hutang=total_harga-total_bayar;
 		total_hutang=(total_hutang>0?Math.round(total_hutang):0);
 		jpaket_hutangField.setValue(total_hutang);
+		
+		if(total_bayar>total_harga){
+			jpaket_pesanLabel.setText("Kelebihan Jumlah Bayar");
+		}else if(total_bayar<total_harga || total_bayar==total_harga){
+			jpaket_pesanLabel.setText("");
+		}
+		if(total_bayar==total_harga){
+			jpaket_lunasLabel.setText("LUNAS");
+		}else if(total_bayar!==total_harga){
+			jpaket_lunasLabel.setText("");
+		}
 	}
 
 	function load_total_bayar_updating(){
@@ -5058,6 +5089,18 @@ Ext.onReady(function(){
 		jpaket_diskonField.setValue(jpaket_diskonField.getValue());
 		jpaket_cashbackField.setValue(jpaket_cashbackField.getValue());
 		jpaket_cashback_cfField.setValue(CurrencyFormatted(jpaket_cashbackField.getValue()));
+		
+		if(total_bayar>update_total_field){
+			jpaket_pesanLabel.setText("Kelebihan Jumlah Bayar");
+		}else if(total_bayar<update_total_field || total_bayar==update_total_field){
+			jpaket_pesanLabel.setText("");
+		}
+		if(total_bayar==update_total_field){
+			jpaket_lunasLabel.setText("LUNAS");
+		}else if(total_bayar!==update_total_field){
+			jpaket_lunasLabel.setText("");
+		}
+		
 	}
 	/* END LOAD TOTAL BAYAR */
 	
@@ -5224,6 +5267,18 @@ Ext.onReady(function(){
 		total_hutang=total_harga-total_bayar;
 		total_hutang=(total_hutang>0?Math.round(total_hutang):0);
 		jpaket_hutangField.setValue(total_hutang);
+		
+		if(total_bayar>total_harga){
+			jpaket_pesanLabel.setText("Kelebihan Jumlah Bayar");
+		}else if(total_bayar<total_harga || total_bayar==total_harga){
+			jpaket_pesanLabel.setText("");
+		}
+		if(total_bayar==total_harga){
+			jpaket_lunasLabel.setText("LUNAS");
+		}else if(total_bayar!==total_harga){
+			jpaket_lunasLabel.setText("");
+		}
+		
 	}
 	
 	function load_all_jual_paket(){
