@@ -18,6 +18,7 @@
 <title>Laporan Rekap Penjualan Produk Periode <?php echo $tgl_mulai." s/d ".$tgl_akhir; ?></title>
 <link rel='stylesheet' type='text/css' href='../assets/modules/main/css/printstyle.css'/>
 </head>
+<body onload="window.print()">
 <table summary='Phonegroup List'>
 	<caption>Laporan Rekap Penjualan Produk Periode <?php echo $tgl_mulai." s/d ".$tgl_akhir; ?></caption>
 	<thead>
@@ -67,6 +68,5 @@
        </tr>
 		<?php } ?>
 	</tbody>
-<body>
 </body>
 </html>

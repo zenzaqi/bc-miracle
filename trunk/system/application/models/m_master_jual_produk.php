@@ -33,18 +33,18 @@ class M_master_jual_produk extends Model{
 			
 			if($opsi=='rekap'){
 				if($periode=='all')
-					$sql="SELECT * FROM vu_trans_produk ".$order_by;
+					$sql="SELECT * FROM vu_trans_produk WHERE jproduk_stat_dok<>'Batal' ".$order_by;
 				else if($periode=='bulan')
-					$sql="SELECT * FROM vu_trans_produk WHERE tanggal like '".$tgl_awal."%' ".$order_by;
+					$sql="SELECT * FROM vu_trans_produk WHERE jproduk_stat_dok<>'Batal' AND tanggal like '".$tgl_awal."%' ".$order_by;
 				else if($periode=='tanggal')
-					$sql="SELECT * FROM vu_trans_produk WHERE tanggal>='".$tgl_awal."' AND tanggal<='".$tgl_akhir."' ".$order_by;
+					$sql="SELECT * FROM vu_trans_produk WHERE jproduk_stat_dok<>'Batal' AND tanggal>='".$tgl_awal."' AND tanggal<='".$tgl_akhir."' ".$order_by;
 			}else if($opsi=='detail'){
 				if($periode=='all')
-					$sql="SELECT * FROM vu_detail_jual_produk ".$order_by;
+					$sql="SELECT * FROM vu_detail_jual_produk WHERE jproduk_stat_dok<>'Batal' ".$order_by;
 				else if($periode=='bulan')
-					$sql="SELECT * FROM vu_detail_jual_produk WHERE tanggal like '".$tgl_awal."%' ".$order_by;
+					$sql="SELECT * FROM vu_detail_jual_produk WHERE jproduk_stat_dok<>'Batal' AND tanggal like '".$tgl_awal."%' ".$order_by;
 				else if($periode=='tanggal')
-					$sql="SELECT * FROM vu_detail_jual_produk WHERE tanggal>='".$tgl_awal."' AND tanggal<='".$tgl_akhir."' ".$order_by;
+					$sql="SELECT * FROM vu_detail_jual_produk WHERE jproduk_stat_dok<>'Batal' AND tanggal>='".$tgl_awal."' AND tanggal<='".$tgl_akhir."' ".$order_by;
 			}
 			//echo $sql;
 			
