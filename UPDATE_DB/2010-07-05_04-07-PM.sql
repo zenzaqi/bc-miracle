@@ -54,11 +54,11 @@ AS
            ON ((`paket`.`paket_kontribusi` =
                    `kategori2`.`kategori2_id`)));
 
-CREATE OR REPLACE VIEW `miracledb`.`vu_trans_paket`
+CREATE OR REPLACE VIEW `vu_trans_paket`
 AS
-   SELECT `miracledb`.`master_jual_paket`.`jpaket_nobukti` AS `no_bukti`,
-          `miracledb`.`master_jual_paket`.`jpaket_cust` AS `cust_id`,
-          `miracledb`.`master_jual_paket`.`jpaket_tanggal` AS `tanggal`,
+   SELECT `master_jual_paket`.`jpaket_nobukti` AS `no_bukti`,
+          `master_jual_paket`.`jpaket_cust` AS `cust_id`,
+          `master_jual_paket`.`jpaket_tanggal` AS `tanggal`,
           `vu_customer`.`cust_no` AS `cust_no`,
           `vu_customer`.`cust_member` AS `cust_member`,
           `vu_customer`.`cust_nama` AS `cust_nama`,
@@ -69,57 +69,57 @@ AS
              AS `jumlah_barang`,
           ifnull(`vu_total_jual_paket_group`.`total_nilai`, 0)
              AS `total_nilai`,
-          ifnull(`miracledb`.`master_jual_paket`.`jpaket_diskon`, 0)
+          ifnull(`master_jual_paket`.`jpaket_diskon`, 0)
              AS `diskon`,
-          ifnull(`miracledb`.`master_jual_paket`.`jpaket_cashback`, 0)
+          ifnull(`master_jual_paket`.`jpaket_cashback`, 0)
              AS `cashback`,
-          ifnull(`miracledb`.`jual_kredit`.`jkredit_nilai`, 0) AS `kredit`,
-          ifnull(`miracledb`.`jual_cek`.`jcek_nilai`, 0) AS `cek`,
-          ifnull(`miracledb`.`jual_card`.`jcard_nilai`, 0) AS `card`,
-          ifnull(`miracledb`.`jual_kwitansi`.`jkwitansi_nilai`, 0)
+          ifnull(`jual_kredit`.`jkredit_nilai`, 0) AS `kredit`,
+          ifnull(`jual_cek`.`jcek_nilai`, 0) AS `cek`,
+          ifnull(`jual_card`.`jcard_nilai`, 0) AS `card`,
+          ifnull(`jual_kwitansi`.`jkwitansi_nilai`, 0)
              AS `kuintansi`,
-          ifnull(`miracledb`.`jual_transfer`.`jtransfer_nilai`, 0)
+          ifnull(`jual_transfer`.`jtransfer_nilai`, 0)
              AS `transfer`,
-          ifnull(`miracledb`.`jual_tunai`.`jtunai_nilai`, 0) AS `tunai`,
+          ifnull(`jual_tunai`.`jtunai_nilai`, 0) AS `tunai`,
           jpaket_stat_dok
-     FROM (   (   (   (   (   (   (   (   `miracledb`.`master_jual_paket`
+     FROM (   (   (   (   (   (   (   (   `master_jual_paket`
                                        LEFT JOIN
-                                          `miracledb`.
+                                          
                                           `vu_total_jual_paket_group`
                                        ON ((`vu_total_jual_paket_group`.
                                             `dpaket_master` =
-                                               `miracledb`.
+                                               
                                                `master_jual_paket`.
                                                `jpaket_id`)))
                                    LEFT JOIN
-                                      `miracledb`.`vu_customer`
-                                   ON ((`miracledb`.`master_jual_paket`.
+                                      `vu_customer`
+                                   ON ((`master_jual_paket`.
                                         `jpaket_cust` =
                                            `vu_customer`.`cust_id`)))
                                LEFT JOIN
-                                  `miracledb`.`jual_card`
-                               ON ((`miracledb`.`jual_card`.`jcard_ref` =
-                                       `miracledb`.`master_jual_paket`.
+                                  `jual_card`
+                               ON ((`jual_card`.`jcard_ref` =
+                                       `master_jual_paket`.
                                        `jpaket_nobukti`)))
                            LEFT JOIN
-                              `miracledb`.`jual_cek`
-                           ON ((`miracledb`.`jual_cek`.`jcek_ref` =
-                                   `miracledb`.`master_jual_paket`.
+                              `jual_cek`
+                           ON ((`jual_cek`.`jcek_ref` =
+                                   `master_jual_paket`.
                                    `jpaket_nobukti`)))
                        LEFT JOIN
-                          `miracledb`.`jual_kredit`
-                       ON ((`miracledb`.`jual_kredit`.`jkredit_ref` =
-                               `miracledb`.`master_jual_paket`.
+                          `jual_kredit`
+                       ON ((`jual_kredit`.`jkredit_ref` =
+                               `master_jual_paket`.
                                `jpaket_nobukti`)))
                    LEFT JOIN
-                      `miracledb`.`jual_kwitansi`
-                   ON ((`miracledb`.`jual_kwitansi`.`jkwitansi_ref` =
-                           `miracledb`.`master_jual_paket`.`jpaket_nobukti`)))
+                      `jual_kwitansi`
+                   ON ((`jual_kwitansi`.`jkwitansi_ref` =
+                           `master_jual_paket`.`jpaket_nobukti`)))
                LEFT JOIN
-                  `miracledb`.`jual_transfer`
-               ON ((`miracledb`.`jual_transfer`.`jtransfer_ref` =
-                       `miracledb`.`master_jual_paket`.`jpaket_nobukti`)))
+                  `jual_transfer`
+               ON ((`jual_transfer`.`jtransfer_ref` =
+                       `master_jual_paket`.`jpaket_nobukti`)))
            LEFT JOIN
-              `miracledb`.`jual_tunai`
-           ON ((`miracledb`.`jual_tunai`.`jtunai_ref` =
-                   `miracledb`.`master_jual_paket`.`jpaket_nobukti`)));
+              `jual_tunai`
+           ON ((`jual_tunai`.`jtunai_ref` =
+                   `master_jual_paket`.`jpaket_nobukti`)));
