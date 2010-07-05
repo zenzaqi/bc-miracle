@@ -150,7 +150,7 @@ class M_master_jual_paket extends Model{
 		function get_total_cek($tgl_awal,$tgl_akhir,$periode,$opsi){
 			if($opsi=='rekap'){
 				if($periode=='all')
-					$sql="SELECT SUM(cek) as total_cek FROM vu_trans_paket jpaket_stat_dok<>'Batal'";
+					$sql="SELECT SUM(cek) as total_cek FROM vu_trans_paket WHERE jpaket_stat_dok<>'Batal'";
 				else if($periode=='bulan')
 					$sql="SELECT SUM(cek) as total_cek FROM vu_trans_paket WHERE jpaket_stat_dok<>'Batal' AND  tanggal like '".$tgl_awal."%'";
 				else if($periode=='tanggal')
