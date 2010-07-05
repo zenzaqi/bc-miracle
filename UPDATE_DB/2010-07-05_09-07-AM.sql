@@ -1,0 +1,1 @@
+ALTER TABLE `detail_pakai_cabin` ADD `cabin_cust` INT NOT NULL ;

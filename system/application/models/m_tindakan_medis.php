@@ -458,57 +458,8 @@ class M_tindakan_medis extends Model{
 				$this->db->where('dapp_id', $dtrawat_dapp);
 				$this->db->update('appointment_detail', $dtu_dapp);
 				
-				$this->detail_pakai_cabin_insert($dtrawat_id, $dtrawat_perawatan_id, $jrawat_nobukti);
+				$this->detail_pakai_cabin_insert($dtrawat_id, $dtrawat_perawatan_id, $jrawat_nobukti ,$trawat_cust_id);
 				
-				/* Checking di db.tindakan_detail WHERE tindakan_detail.dtrawat_master = $trawat_id 
-				 * AND kategori = 'Non Medis',
-				 * JIKA "ada" ini artinya di menu Tindakan Medis juga menjual Tindakan Non-Medis
-				 */
-				/*$sql="SELECT dtrawat_id
-						,dtrawat_perawatan
-						,dtrawat_keterangan
-						,rawat_harga
-						,rawat_dm
-						,rawat_du
-					FROM tindakan_detail
-					INNER JOIN perawatan ON(dtrawat_perawatan=rawat_id)
-					LEFT JOIN kategori ON(rawat_kategori=kategori_id)
-					WHERE dtrawat_master='$trawat_id'
-						AND kategori_nama='Non Medis'
-						AND dtrawat_petugas1='0'
-						AND dtrawat_petugas2='0'";
-				$rs=$this->db->query($sql);
-				if($rs->num_rows()){
-					//* hasilnya "ADA", maka akan ditambahkan ke db.detail_jual_rawat /
-					$rs_record=$rs->row_array();
-					$dtj_nonmedis_perawatan=$rs_record["dtrawat_perawatan"];
-					$dtj_nonmedis_rawat_harga=$rs_record["rawat_harga"];
-					$dtj_nonmedis_dtrawat_id=$rs_record["dtrawat_id"];
-					if($cust_member!=""){
-						$dtj_nonmedis_diskon_jenis="DM";
-						$dtj_nonmedis_diskon=$rs_record["rawat_dm"];
-					}elseif($cust_member==""){
-						$dtj_nonmedis_diskon_jenis="DU";
-						$dtj_nonmedis_diskon=$rs_record["rawat_du"];
-					}
-					$data_dtj_nonmedis=array(
-					"drawat_master"=>$jrawat_id,
-					"drawat_dtrawat"=>$dtj_nonmedis_dtrawat_id,
-					"drawat_rawat"=>$dtj_nonmedis_perawatan,
-					"drawat_jumlah"=>1,
-					"drawat_harga"=>$dtj_nonmedis_rawat_harga,
-					"drawat_diskon"=>$dtj_nonmedis_diskon,
-					"drawat_diskon_jenis"=>$dtj_nonmedis_diskon_jenis
-					);
-					$sql="SELECT drawat_id FROM detail_jual_rawat WHERE drawat_master='$jrawat_id' AND drawat_rawat='$dtj_nonmedis_perawatan' AND drawat_date_create LIKE '$date_now%'";
-					$rs=$this->db->query($sql);
-					if(!$rs->num_rows()){
-						$this->db->insert('detail_jual_rawat', $data_dtj_nonmedis);
-						if($this->db->affected_rows()){
-							$this->detail_pakai_cabin_insert($dtj_nonmedis_dtrawat_id, $dtj_nonmedis_perawatan, $jrawat_nobukti);
-						}
-					}
-				}*/
 			}
 		}else{
 			/* artinya: di db.master_jual_rawat BELUM ADA */
@@ -554,57 +505,8 @@ class M_tindakan_medis extends Model{
 					$this->db->where('dapp_id', $dtrawat_dapp);
 					$this->db->update('appointment_detail', $dtu_dapp);
 					
-					$this->detail_pakai_cabin_insert($dtrawat_id, $dtrawat_perawatan_id, $jrawat_nobukti);
+					$this->detail_pakai_cabin_insert($dtrawat_id, $dtrawat_perawatan_id, $jrawat_nobukti ,$trawat_cust_id);
 					
-					/* Checking di db.tindakan_detail WHERE tindakan_detail.dtrawat_master = $trawat_id 
-					 * AND kategori = 'Non Medis',
-					 * JIKA "ada" ini artinya di menu Tindakan Medis juga menjual Tindakan Non-Medis
-					 */
-					/*$sql="SELECT dtrawat_id
-							,dtrawat_perawatan
-							,dtrawat_keterangan
-							,rawat_harga
-							,rawat_dm
-							,rawat_du
-						FROM tindakan_detail
-						INNER JOIN perawatan ON(dtrawat_perawatan=rawat_id)
-						LEFT JOIN kategori ON(rawat_kategori=kategori_id)
-						WHERE dtrawat_master='$trawat_id'
-							AND kategori_nama='Non Medis'
-							AND dtrawat_petugas1='0'
-							AND dtrawat_petugas2='0'";
-					$rs=$this->db->query($sql);
-					if($rs->num_rows()){
-						//* hasilnya "ADA", maka akan ditambahkan ke db.detail_jual_rawat /
-						$rs_record=$rs->row_array();
-						$dtj_nonmedis_perawatan=$rs_record["dtrawat_perawatan"];
-						$dtj_nonmedis_rawat_harga=$rs_record["rawat_harga"];
-						$dtj_nonmedis_dtrawat_id=$rs_record["dtrawat_id"];
-						if($cust_member!=""){
-							$dtj_nonmedis_diskon_jenis="DM";
-							$dtj_nonmedis_diskon=$rs_record["rawat_dm"];
-						}elseif($cust_member==""){
-							$dtj_nonmedis_diskon_jenis="DU";
-							$dtj_nonmedis_diskon=$rs_record["rawat_du"];
-						}
-						$data_dtj_nonmedis=array(
-						"drawat_master"=>$jrawat_id,
-						"drawat_dtrawat"=>$dtj_nonmedis_dtrawat_id,
-						"drawat_rawat"=>$dtj_nonmedis_perawatan,
-						"drawat_jumlah"=>1,
-						"drawat_harga"=>$dtj_nonmedis_rawat_harga,
-						"drawat_diskon"=>$dtj_nonmedis_diskon,
-						"drawat_diskon_jenis"=>$dtj_nonmedis_diskon_jenis
-						);
-						$sql="SELECT drawat_id FROM detail_jual_rawat WHERE drawat_master='$jrawat_id' AND drawat_rawat='$dtj_nonmedis_perawatan' AND drawat_date_create LIKE '$date_now%'";
-						$rs=$this->db->query($sql);
-						if(!$rs->num_rows()){
-							$this->db->insert('detail_jual_rawat', $data_dtj_nonmedis);
-							if($this->db->affected_rows()){
-								$this->detail_pakai_cabin_insert($dtj_nonmedis_dtrawat_id, $dtj_nonmedis_perawatan, $jrawat_nobukti);
-							}
-						}
-					}*/
 				}
 			}
 		}
@@ -637,7 +539,7 @@ class M_tindakan_medis extends Model{
 				,drawat_diskon_jenis='$diskon_jenis'
 				,drawat_update='".@$_SESSION[SESSION_USERID]."'
 				,drawat_date_update='$datetime_now'
-				,drawat_revised=drawat_revised=1
+				,drawat_revised=drawat_revised+1
 			WHERE drawat_dtrawat='$dtrawat_id'";
 		$this->db->query($sql);
 		
@@ -717,7 +619,7 @@ class M_tindakan_medis extends Model{
 			
 			$this->total_sisa_paket_update($dapaket_dpaket, $dapaket_jpaket, $dapaket_paket);
 			
-			$this->detail_pakai_cabin_insert($dtrawat_id, $dapaket_item, $jpaket_nobukti);
+			$this->detail_pakai_cabin_insert($dtrawat_id, $dapaket_item, $jpaket_nobukti ,$trawat_cust_id);
 		}
 	}
 	/* eof detail_ambil_paket_insert */
@@ -753,7 +655,7 @@ class M_tindakan_medis extends Model{
 	}
 	
 	/* INSERT db.detail_pakai_cabin */
-	function detail_pakai_cabin_insert($cabin_dtrawat, $cabin_rawat, $cabin_bukti){
+	function detail_pakai_cabin_insert($cabin_dtrawat ,$cabin_rawat ,$cabin_bukti ,$cabin_cust){
 		//* Mencatat pemakaian Standard Bahan dari perawatan($cabin_rawat) yang terpakai /
 		$sql="SELECT krawat_produk
 				,krawat_satuan
@@ -774,7 +676,8 @@ class M_tindakan_medis extends Model{
 				"cabin_satuan"=>$row['produk_satuan'],
 				"cabin_jumlah"=>$row['krawat_jumlah'],
 				"cabin_bukti"=>$cabin_bukti,
-				"cabin_gudang"=>$row['rawat_gudang']
+				"cabin_gudang"=>$row['rawat_gudang'],
+				"cabin_cust"=>$cabin_cust
 				);
 				$this->db->insert('detail_pakai_cabin', $dti_cabin);
 			}
@@ -798,8 +701,28 @@ class M_tindakan_medis extends Model{
 		$this->db->where('cabin_dtrawat', $cabin_dtrawat);
 		$this->db->delete('detail_pakai_cabin');
 		if($this->db->affected_rows()){
+			//ambil jrawat_nobukti dan jrawat_cust from master_jual_rawat
+			$sql = "SELECT jrawat_nobukti ,jrawat_cust
+				FROM tindakan_detail
+				LEFT JOIN detail_jual_rawat ON(drawat_dtrawat=dtrawat_id)
+				LEFT JOIN master_jual_rawat ON(drawat_master=jrawat_id)
+				WHERE dtrawat_id='$cabin_dtrawat'";
+			$rs = $this->db->query($sql);
+			if($this->db->affected_rows()){
+				$record = $rs->row_array();
+				$cabin_bukti = $record['jrawat_nobukti'];
+				$cabin_cust = $record['jrawat_cust'];
+			}
 			//* Mencatat pemakaian Standard Bahan dari perawatan($cabin_rawat) yang terpakai /
-			$sql="SELECT krawat_produk, krawat_satuan, krawat_jumlah, produk_satuan FROM perawatan_konsumsi LEFT JOIN produk ON(krawat_produk=produk_id) WHERE krawat_master='$cabin_rawat'";
+			$sql="SELECT krawat_produk
+					,krawat_satuan
+					,krawat_jumlah
+					,produk_satuan
+					,rawat_gudang
+				FROM perawatan_konsumsi
+				LEFT JOIN produk ON(krawat_produk=produk_id)
+				LEFT JOIN perawatan ON(krawat_master=rawat_id)
+				WHERE krawat_master='$cabin_rawat'";
 			$rs=$this->db->query($sql);
 			if($rs->num_rows()){
 				foreach($rs->result_array() as $row){
@@ -808,7 +731,10 @@ class M_tindakan_medis extends Model{
 					"cabin_rawat"=>$cabin_rawat,
 					"cabin_produk"=>$row['krawat_produk'],
 					"cabin_satuan"=>$row['produk_satuan'],
-					"cabin_jumlah"=>$row['krawat_jumlah']
+					"cabin_jumlah"=>$row['krawat_jumlah'],
+					"cabin_bukti"=>$cabin_bukti,
+					"cabin_gudang"=>$row['rawat_gudang'],
+					"cabin_cust"=>$cabin_cust
 					);
 					$this->db->insert('detail_pakai_cabin', $dti_cabin);
 				}
