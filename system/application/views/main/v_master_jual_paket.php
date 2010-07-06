@@ -347,6 +347,7 @@ Ext.onReady(function(){
   
   	/* Function for add data, open window create form */
 	function master_jual_paket_create(){
+		
 		var dpaket_paket_id="";
 		for(i=0; i<detail_jual_paket_DataStore.getCount(); i++){
 			detail_jual_paket_record=detail_jual_paket_DataStore.getAt(i);
@@ -805,6 +806,15 @@ Ext.onReady(function(){
 	}
 	/* End of Function  */
 	
+	function get_stat_dok(){
+		if(jpaket_post2db=='UPDATE')
+			return master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_stat_dok');
+		else 
+			return 'Terbuka';
+	}
+	
+	
+	
 	// Reset kwitansi option
 	function kwitansi_jual_paket_reset_form(){
 		jpaket_kwitansi_namaField.reset();
@@ -1010,6 +1020,16 @@ Ext.onReady(function(){
 		jpaket_diskonField.setDisabled(false);
 		jpaket_cashback_cfField.setDisabled(false);
 		master_jual_paket_createForm.jpaketSavePrintButton.enable();
+		
+		if(jpaket_post2db=='UPDATE' && (get_stat_dok()=='Tertutup' || get_stat_dok()=='Batal')){
+            detail_jual_paketListEditorGrid.djpaket_add.disable();
+            detail_jual_paketListEditorGrid.djpaket_delete.disable();
+        }else{
+            detail_jual_paketListEditorGrid.djpaket_add.enable();
+            detail_jual_paketListEditorGrid.djpaket_delete.enable();
+        }
+		
+		
 	}
  	/* End of Function */
 	
@@ -1326,9 +1346,69 @@ Ext.onReady(function(){
 				break;
 		}
 		
+		
+		jpaket_stat_dokField.on("select",function(){
+		var status_awal = master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_stat_dok');
+		if(status_awal =='Terbuka' && jpaket_stat_dokField.getValue()=='Tertutup')
+		{
+		Ext.MessageBox.show({
+			msg: 'Dokumen tidak bisa ditutup. Gunakan Save & Print untuk menutup dokumen',
+		   //progressText: 'proses...',
+			buttons: Ext.MessageBox.OK,
+			animEl: 'save',
+			icon: Ext.MessageBox.WARNING
+		   });
+		jpaket_stat_dokField.setValue('Terbuka');
+		}
+		
+		else if(status_awal =='Tertutup' && jpaket_stat_dokField.getValue()=='Terbuka')
+		{
+		Ext.MessageBox.show({
+			msg: 'Status yang sudah Tertutup tidak dapat diganti Terbuka',
+			buttons: Ext.MessageBox.OK,
+			animEl: 'save',
+			icon: Ext.MessageBox.WARNING
+		   });
+		jpaket_stat_dokField.setValue('Tertutup');
+		}
+		
+		else if(status_awal =='Batal' && jpaket_stat_dokField.getValue()=='Terbuka')
+		{
+		Ext.MessageBox.show({
+			msg: 'Status yang sudah Tertutup tidak dapat diganti Terbuka',
+			buttons: Ext.MessageBox.OK,
+			animEl: 'save',
+			icon: Ext.MessageBox.WARNING
+		   });
+		jpaket_stat_dokField.setValue('Tertutup');
+		}
+		
+		else if(jpaket_stat_dokField.getValue()=='Batal')
+		{
+		Ext.MessageBox.confirm('Confirmation','Anda yakin untuk membatalkan dokumen ini? Pembatalan dokumen tidak bisa dikembalikan lagi', jpaket_status_batal);
+		}
+        
+        else if(status_awal =='Tertutup' && jpaket_stat_dokField.getValue()=='Tertutup'){
+            master_jual_paket_createForm.jpaketSavePrintButton.enable();
+        }
+		
+		});	
+		
 		//detail_jual_paket_DataStore.load({params:{master_id: jpaket_idField.getValue()}});
 	}
 	/* End setValue to EDIT*/
+	
+	function jpaket_status_batal(btn){
+	if(btn=='yes')
+	{
+		jpaket_stat_dokField.setValue('Batal');
+        master_jual_paket_createForm.jpaketSavePrintButton.disable();
+	}  
+	else
+		jpaket_stat_dokField.setValue(master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_stat_dok'));
+	}
+	
+	
 	
 	
 	/*Function utk mengnon-aktifkan beberapa field ketika status dok diganti Tertutup*/
@@ -1374,7 +1454,7 @@ Ext.onReady(function(){
 			//detail_pengguna_paketListEditorGrid.setDisabled(true);
 			jpaket_diskonField.setDisabled(true);
 			jpaket_cashback_cfField.setDisabled(true);
-			master_jual_paket_createForm.jpaketSavePrintButton.disable();
+			//master_jual_paket_createForm.jpaketSavePrintButton.disable();
 		}
 		if(jpaket_post2db=="UPDATE" && master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_stat_dok')=="Batal"){
 			jpaket_custField.setDisabled(true);

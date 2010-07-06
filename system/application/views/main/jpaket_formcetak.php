@@ -16,6 +16,9 @@ html,body,table,tr,td{
 <body onload="window.print();window.close()">
 <table width="1240px" border="0px" cellpadding="0px" cellspacing="0px">
 	<tr>
+		<td height="10px"><table width="1240px" height="90px" border="0" cellspacing="0" cellpadding="0">
+		<br>
+		</td>
 		<td height="90px"><table width="1240px" height="90px" border="0" cellspacing="0" cellpadding="0">
           <tr>
             <td width="700px" align="center" valign="bottom">&nbsp;</td>

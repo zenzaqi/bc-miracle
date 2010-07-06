@@ -56,10 +56,11 @@ class M_phonegroup extends Model{
 			}
 			else{
 				if($isms_opsi=="semua"){
-					$sql="select cust_hp from customer WHERE cust_hp<>'' AND cust_hp is not null";
+					$sql="select cust_id, cust_hp from customer WHERE cust_hp<>'' AND cust_hp is not null";
 					$query=$this->db->query($sql);
 					foreach($query->result() as $row){
 						$sql="insert into outbox(
+								outbox_cust,
 								outbox_destination,
 								outbox_message,
 								outbox_date,
@@ -67,6 +68,7 @@ class M_phonegroup extends Model{
 								outbox_creator,
 								outbox_date_create)
 							values(
+								'".$row->cust_id."',
 								'".$row->cust_hp."',
 								'".$isms_isi."',
 								'".date('Y/m/d H:i:s')."',
