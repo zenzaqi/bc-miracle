@@ -355,7 +355,9 @@ Ext.onReady(function(){
 			}
 		}
 		
-		if(is_master_jual_paket_form_valid() && dpaket_paket_id=="ada" && ((/^\d+$/.test(jpaket_custField.getValue()) && jpaket_post2db=="CREATE") || jpaket_post2db=="UPDATE") && jpaket_stat_dokField.getValue()=='Terbuka'){
+		if(is_master_jual_paket_form_valid() && dpaket_paket_id=="ada"
+		   && ((/^\d+$/.test(jpaket_custField.getValue()) && jpaket_post2db=="CREATE") || jpaket_post2db=="UPDATE")
+		   && jpaket_stat_dokField.getValue()=='Terbuka'){
 			var jpaket_id_create_pk=null; 
 			var jpaket_nobukti_create=null; 
 			var jpaket_cust_create=null; 

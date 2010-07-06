@@ -529,8 +529,8 @@ class M_master_jual_paket extends Model{
 					/* UPDATE db.master_lunas_piutang */
 					$dtu_lpiutang=array(
 					"lpiutang_cust"=>$lpiutang_cust,
-					"lpiutang_total"=>lpiutang_total,
-					"lpiutang_sisa"=>lpiutang_total
+					"lpiutang_total"=>$lpiutang_total,
+					"lpiutang_sisa"=>$lpiutang_total
 					);
 					$this->db->where('lpiutang_faktur', $lpiutang_faktur);
 					$this->db->update('master_lunas_piutang', $dtu_lpiutang);
