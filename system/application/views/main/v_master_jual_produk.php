@@ -4871,6 +4871,7 @@ Ext.onReady(function(){
 			for(var i = 0, record; record = selections[i]; i++){
                 if(record.data.dproduk_id==''){
                     detail_jual_produk_DataStore.remove(record);
+					load_detail_update();
                 }else if((/^\d+$/.test(record.data.dproduk_id))){
                     //Delete dari db.detail_jual_produk
                     Ext.MessageBox.show({

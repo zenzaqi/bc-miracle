@@ -323,6 +323,9 @@ class C_master_jual_paket extends Controller {
 			case "BATAL":
 				$this->master_jual_paket_batal();
 				break;
+			case "DDELETE":
+				$this->detail_jual_paket_delete();
+				break;
 			default:
 				echo "{failure:true}";
 				break;
@@ -591,6 +594,12 @@ class C_master_jual_paket extends Controller {
 		$result=$this->m_master_jual_paket->master_jual_paket_delete($pkid);
 		echo $result;
 	}
+	
+	function detail_jual_paket_delete(){
+        $dpaket_id = trim(@$_POST["dpaket_id"]); // Get our array back and translate it :
+		$result=$this->m_master_jual_paket->detail_jual_paket_delete($dpaket_id);
+		echo $result;
+    }
 	
 	function master_jual_paket_batal(){
 		$jpaket_id=trim($_POST["jpaket_id"]);
