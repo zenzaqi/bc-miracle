@@ -19,19 +19,38 @@ class M_tindakan_nonmedis extends Model{
 	}
 	
 	function global_customer_check_paket($cust_id, $rawat_id){
+		$return_row_punya_paket = 0;
 		//* Mencari kepemilikan paket berdasarkan customer_id /
-		$sql_punya_paket="SELECT rpaket_jumlah, dpaket_id, dpaket_master, dpaket_paket FROM paket_isi_perawatan LEFT JOIN detail_jual_paket ON(rpaket_master=dpaket_paket) LEFT JOIN master_jual_paket ON(dpaket_master=jpaket_id) LEFT JOIN pengguna_paket ON(ppaket_master=jpaket_id) WHERE ppaket_cust='$cust_id' AND rpaket_perawatan='$rawat_id'";
+		$sql_punya_paket="SELECT (dpaket_jumlah*rpaket_jumlah) AS rpaket_jumlah
+				,dpaket_id
+				,dpaket_master
+				,dpaket_paket
+				,dpaket_sisa_paket
+			FROM paket_isi_perawatan
+			LEFT JOIN detail_jual_paket ON(rpaket_master=dpaket_paket)
+			LEFT JOIN master_jual_paket ON(dpaket_master=jpaket_id)
+			LEFT JOIN pengguna_paket ON(ppaket_master=jpaket_id)
+			WHERE ppaket_cust='$cust_id'
+				AND rpaket_perawatan='$rawat_id'";
+		
 		$rs_punya_paket=$this->db->query($sql_punya_paket);
 		if($rs_punya_paket->num_rows()){
 			$punya_paket_rows = $rs_punya_paket->num_rows();
 			$i=0;
 			foreach($rs_punya_paket->result() as $row_punya_paket){
 				$i++;
-				$sql_check_sisa="SELECT sum(dapaket_jumlah) AS total_item_terpakai FROM detail_ambil_paket WHERE dapaket_dpaket='$row_punya_paket->dpaket_id' AND dapaket_jpaket='$row_punya_paket->dpaket_master' AND dapaket_paket='$row_punya_paket->dpaket_paket' AND dapaket_item='$rawat_id' AND dapaket_stat_dok<>'Batal' GROUP BY dapaket_item";
+				$sql_check_sisa="SELECT sum(dapaket_jumlah) AS total_item_terpakai
+					FROM detail_ambil_paket
+					WHERE dapaket_dpaket='$row_punya_paket->dpaket_id'
+						AND dapaket_jpaket='$row_punya_paket->dpaket_master'
+						AND dapaket_paket='$row_punya_paket->dpaket_paket'
+						AND dapaket_item='$rawat_id'
+						AND dapaket_stat_dok<>'Batal'
+					GROUP BY dapaket_item";
 				$rs_check_sisa=$this->db->query($sql_check_sisa);
 				if($rs_check_sisa->num_rows()){
 					$record_check_sisa = $rs_check_sisa->row();
-					if($row_punya_paket->rpaket_jumlah > $record_check_sisa->total_item_terpakai){
+					if(($row_punya_paket->rpaket_jumlah > $record_check_sisa->total_item_terpakai) || (($row_punya_paket->rpaket_jumlah==0) && ($row_punya_paket->dpaket_sisa_paket > 0))){
 						return $row_punya_paket;
 						break;
 					}else{
@@ -52,19 +71,39 @@ class M_tindakan_nonmedis extends Model{
 	}
 	
 	function customer_check_paket($cust_id, $rawat_id){
+		$return_row_punya_paket = 0;
 		//* Mencari kepemilikan paket berdasarkan customer_id /
-		$sql_punya_paket="SELECT rpaket_jumlah, dpaket_id, dpaket_master, dpaket_paket FROM paket_isi_perawatan LEFT JOIN detail_jual_paket ON(rpaket_master=dpaket_paket) LEFT JOIN master_jual_paket ON(dpaket_master=jpaket_id) LEFT JOIN pengguna_paket ON(ppaket_master=jpaket_id) WHERE ppaket_cust='$cust_id' AND rpaket_perawatan='$rawat_id' AND jpaket_cust='$cust_id'";
+		$sql_punya_paket="SELECT (dpaket_jumlah*rpaket_jumlah) AS rpaket_jumlah
+				,dpaket_id
+				,dpaket_master
+				,dpaket_paket
+				,dpaket_sisa_paket
+			FROM paket_isi_perawatan
+			LEFT JOIN detail_jual_paket ON(rpaket_master=dpaket_paket)
+			LEFT JOIN master_jual_paket ON(dpaket_master=jpaket_id)
+			LEFT JOIN pengguna_paket ON(ppaket_master=jpaket_id)
+			WHERE ppaket_cust='$cust_id'
+				AND rpaket_perawatan='$rawat_id'
+				AND jpaket_cust='$cust_id'";
+		
 		$rs_punya_paket=$this->db->query($sql_punya_paket);
 		if($rs_punya_paket->num_rows()){
 			$punya_paket_rows = $rs_punya_paket->num_rows();
 			$i=0;
 			foreach($rs_punya_paket->result() as $row_punya_paket){
 				$i++;
-				$sql_check_sisa="SELECT sum(dapaket_jumlah) AS total_item_terpakai FROM detail_ambil_paket WHERE dapaket_dpaket='$row_punya_paket->dpaket_id' AND dapaket_jpaket='$row_punya_paket->dpaket_master' AND dapaket_paket='$row_punya_paket->dpaket_paket' AND dapaket_item='$rawat_id' AND dapaket_stat_dok<>'Batal' GROUP BY dapaket_item";
+				$sql_check_sisa="SELECT sum(dapaket_jumlah) AS total_item_terpakai
+					FROM detail_ambil_paket
+					WHERE dapaket_dpaket='$row_punya_paket->dpaket_id'
+						AND dapaket_jpaket='$row_punya_paket->dpaket_master'
+						AND dapaket_paket='$row_punya_paket->dpaket_paket'
+						AND dapaket_item='$rawat_id'
+						AND dapaket_stat_dok<>'Batal'
+					GROUP BY dapaket_item";
 				$rs_check_sisa=$this->db->query($sql_check_sisa);
 				if($rs_check_sisa->num_rows()){
 					$record_check_sisa = $rs_check_sisa->row();
-					if($row_punya_paket->rpaket_jumlah > $record_check_sisa->total_item_terpakai){
+					if(($row_punya_paket->rpaket_jumlah > $record_check_sisa->total_item_terpakai) || (($row_punya_paket->rpaket_jumlah==0) && ($row_punya_paket->dpaket_sisa_paket > 0))){
 						return $row_punya_paket;
 						break;
 					}else{
@@ -86,6 +125,7 @@ class M_tindakan_nonmedis extends Model{
 			return $return_global_customer_check_paket;
 			//return 0;
 		}
+		
 	}
 	
 	//function for detail
@@ -163,7 +203,7 @@ class M_tindakan_nonmedis extends Model{
 	/* eof detail_jual_rawat_delete */
 	
 	/* INSERT ke db.detail_jual_rawat */
-	function detail_jual_rawat_insert($trawat_id, $cust_member, $trawat_cust_id, $dtrawat_id, $dtrawat_perawatan_id, $rawat_harga, $rawat_dm, $rawat_du, $dtrawat_dapp, $dtrawat_jumlah){
+	function detail_jual_rawat_insert($cust_member, $trawat_cust_id, $dtrawat_id, $dtrawat_perawatan_id, $rawat_harga, $rawat_dm, $rawat_du, $dtrawat_dapp, $dtrawat_jumlah){
 		/*
 		1. check di master_jual_rawat, apakah customer ini pada hari sekarang sudah masuk ke Kasir
 		2. JIKA customer ini sudah 'ada' di db.master_jual_rawat ==> INSERT ke db.detail_jual_rawat
@@ -204,7 +244,8 @@ class M_tindakan_nonmedis extends Model{
 			"drawat_jumlah"=>$dtrawat_jumlah,
 			"drawat_harga"=>$rawat_harga,
 			"drawat_diskon"=>$diskon,
-			"drawat_diskon_jenis"=>$diskon_jenis
+			"drawat_diskon_jenis"=>$diskon_jenis,
+			"drawat_creator"=>@$_SESSION[SESSION_USERID]
 			);
 			$this->db->insert('detail_jual_rawat', $dti_drawat);
 			if($this->db->affected_rows()){
@@ -225,7 +266,8 @@ class M_tindakan_nonmedis extends Model{
 			$data_jrawat=array(
 			"jrawat_nobukti"=>$jrawat_nobukti,
 			"jrawat_cust"=>$trawat_cust_id,
-			"jrawat_tanggal"=>$date_now
+			"jrawat_tanggal"=>$date_now,
+			"jrawat_creator"=>@$_SESSION[SESSION_USERID]
 			);
 			$this->db->insert('master_jual_rawat', $data_jrawat);
 			if($this->db->affected_rows()){
@@ -248,7 +290,8 @@ class M_tindakan_nonmedis extends Model{
 				"drawat_jumlah"=>$dtrawat_jumlah,
 				"drawat_harga"=>$rawat_harga,
 				"drawat_diskon"=>$diskon,
-				"drawat_diskon_jenis"=>$diskon_jenis
+				"drawat_diskon_jenis"=>$diskon_jenis,
+				"drawat_creator"=>@$_SESSION[SESSION_USERID]
 				);
 				$this->db->insert('detail_jual_rawat', $dti_drawat);
 				if($this->db->affected_rows()){
@@ -324,8 +367,8 @@ class M_tindakan_nonmedis extends Model{
 	
 	/* INSERT ke db.detail_ambil_paket */
 	function detail_ambil_paket_insert($dapaket_dpaket, $dapaket_jpaket, $dapaket_paket, $dapaket_item, $trawat_cust_id, $dtrawat_id, $dtrawat_dapp, $dtrawat_jumlah){
+		//* Mengambil db.master_jual_paket.jpaket_nobukti ==> masukkan ke db.detail_pakai_cabin /
 		$datetime_now=date('Y-m-d H:i:s');
-        //* Mengambil db.master_jual_paket.jpaket_nobukti ==> masukkan ke db.detail_pakai_cabin /
 		$jpaket_nobukti = "";
 		$sql="SELECT jpaket_nobukti FROM master_jual_paket WHERE jpaket_id='$dapaket_jpaket'";
 		$rs=$this->db->query($sql);
@@ -338,15 +381,12 @@ class M_tindakan_nonmedis extends Model{
 			$dtrawat_jumlah=1;
 		}
 		$dti_dapaket=array(
-		//"dapaket_master"=>$apaket_id,
 		"dapaket_dpaket"=>$dapaket_dpaket,
 		"dapaket_jpaket"=>$dapaket_jpaket,
 		"dapaket_paket"=>$dapaket_paket,
 		"dapaket_item"=>$dapaket_item,
 		"dapaket_jenis_item"=>'perawatan',
-		//"dapaket_sapaket"=>$sapaket_id,
 		"dapaket_jumlah"=>$dtrawat_jumlah,
-		//"dapaket_cust"=>$trawat_cust,
 		"dapaket_cust"=>$trawat_cust_id,
 		"dapaket_dtrawat"=>$dtrawat_id,
 		"dapaket_creator"=>@$_SESSION[SESSION_USERID]
@@ -470,6 +510,7 @@ class M_tindakan_nonmedis extends Model{
 					,krawat_satuan
 					,krawat_jumlah
 					,produk_satuan
+					,rawat_gudang
 				FROM perawatan_konsumsi
 				LEFT JOIN produk ON(krawat_produk=produk_id)
 				LEFT JOIN perawatan ON(krawat_master=rawat_id)
@@ -523,7 +564,12 @@ class M_tindakan_nonmedis extends Model{
 	
 	//purge all detail from master
 	function detail_tindakan_nonmedis_detail_purge($master_id){
-		$sql="DELETE from tindakan_detail where dtrawat_master='".$master_id."'";
+		//$sql="DELETE from tindakan_detail where dtrawat_master='".$master_id."'";
+		$sql="DELETE tindakan_detail
+			FROM tindakan_detail
+			INNER JOIN perawatan ON dtrawat_perawatan=rawat_id
+			LEFT JOIN kategori ON rawat_kategori=kategori_id
+			WHERE kategori_nama='Non Medis' AND dtrawat_master='".$master_id."'";
 		$result=$this->db->query($sql);
 	}
 	//*eof
@@ -819,7 +865,7 @@ class M_tindakan_nonmedis extends Model{
 						1. INSERT ke db.detail_jual_rawat
 						2. UPDATE db.tindakan_detail.status = 'selesai' ==> sudah dilakukan sebelum masuk fungsi IF ini
 						*/
-						$this->detail_jual_rawat_insert($trawat_id, $cust_member, $trawat_cust_id, $dtrawat_id, $dtrawat_perawatan_id, $rawat_harga, $rawat_dm, $rawat_du, $dtrawat_dapp, $dtrawat_jumlah);
+						$this->detail_jual_rawat_insert($cust_member, $trawat_cust_id, $dtrawat_id, $dtrawat_perawatan_id, $rawat_harga, $rawat_dm, $rawat_du, $dtrawat_dapp, $dtrawat_jumlah);
 						return '1';
 						
 					}elseif($dtrawat_status_awal=='selesai' && $dtrawat_status!='selesai' && $dtrawat_ambil_paket=='true'){
@@ -945,7 +991,7 @@ class M_tindakan_nonmedis extends Model{
 					
 					$this->detail_ambil_paket_delete($dtrawat_id, $dtrawat_dapp, $dapaket_dpaket, $dapaket_jpaket, $dapaket_paket);
 					
-					$this->detail_jual_rawat_insert($trawat_id, $cust_member, $trawat_cust_id, $dtrawat_id, $dtrawat_perawatan_id, $rawat_harga, $rawat_dm, $rawat_du, $dtrawat_dapp, $dtrawat_jumlah);
+					$this->detail_jual_rawat_insert($cust_member, $trawat_cust_id, $dtrawat_id, $dtrawat_perawatan_id, $rawat_harga, $rawat_dm, $rawat_du, $dtrawat_dapp, $dtrawat_jumlah);
 					return '1';
 					
 				}elseif($dtrawat_ambil_paket_awal=='true' && $dtrawat_ambil_paket=='false' && $dtrawat_status_awal!='selesai'){
