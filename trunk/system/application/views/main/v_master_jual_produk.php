@@ -1040,15 +1040,30 @@ Ext.onReady(function(){
 		detail_jual_produkListEditorGrid.setDisabled(false);
 		jproduk_diskonField.setDisabled(false);
 		jproduk_cashback_cfField.setDisabled(false);
+		
+		detail_jual_produkListEditorGrid.djproduk_add.enable();
+        detail_jual_produkListEditorGrid.djproduk_delete.enable();
+		
+		combo_jual_produk.setDisabled(false);
+		combo_satuan_produk.setDisabled(false);
+		djumlah_beli_produkField.setDisabled(false);
+		dharga_konversiField.setDisabled(false);
+		dsub_totalField.setDisabled(false);
+		djenis_diskonField.setDisabled(false);
+		djumlah_diskonField.setDisabled(false);
+		dsub_total_netField.setDisabled(false);
+		combo_reveral.setDisabled(false);
+		dharga_defaultField.setDisabled(false);
+		
 		master_jual_produk_createForm.jproduk_savePrint.enable();
         
-        if(jproduk_post2db=='UPDATE' && (get_stat_dok()=='Tertutup' || get_stat_dok()=='Batal')){
+       /* if(jproduk_post2db=='UPDATE' && (get_stat_dok()=='Tertutup' || get_stat_dok()=='Batal')){
             detail_jual_produkListEditorGrid.djproduk_add.disable();
             detail_jual_produkListEditorGrid.djproduk_delete.disable();
         }else{
             detail_jual_produkListEditorGrid.djproduk_add.enable();
             detail_jual_produkListEditorGrid.djproduk_delete.enable();
-        }
+        }*/
 	}
  	/* End of Function */
 	
