@@ -355,6 +355,11 @@ Ext.onReady(function(){
 			}
 		}
 		
+		var jpaket_id_for_cetak = 0;
+		if(jpaket_idField.getValue()!== null){
+			jpaket_id_for_cetak = jpaket_idField.getValue();
+		}
+		
 		if(is_master_jual_paket_form_valid() && dpaket_paket_id=="ada"
 		   && ((/^\d+$/.test(jpaket_custField.getValue()) && jpaket_post2db=="CREATE") || jpaket_post2db=="UPDATE")
 		   && jpaket_stat_dokField.getValue()=='Terbuka'){
@@ -672,8 +677,73 @@ Ext.onReady(function(){
 					});	
 				}                      
 			});
-		}else if(jpaket_post2db=="UPDATE" && jpaket_stat_dokField.getValue()!=='Terbuka'){
-			if((jpaket_stat_dokField.getValue()=='Tertutup') && (detail_pengguna_paket_DataStore.getCount()>0)){
+		}else if(jpaket_post2db=='UPDATE' && jpaket_stat_dokField.getValue()=='Tertutup'){
+			if(cetak_jpaket==1){
+				jpaket_cetak(jpaket_id_for_cetak);
+				cetak_jpaket=0;
+			}
+			detail_pengguna_paket_insert();
+			master_jual_paket_reset_allForm();
+            detail_jual_paket_DataStore.load({params: {master_id: -1}});
+			jpaket_caraField.setValue("card");
+			master_jual_paket_cardGroup.setVisible(true);
+			master_cara_bayarTabPanel.setActiveTab(0);
+		}else if(jpaket_post2db=="UPDATE" && jpaket_stat_dokField.getValue()=='Batal'){
+			Ext.Ajax.request({  
+				waitMsg: 'Mohon  Tunggu...',
+				url: 'index.php?c=c_master_jual_paket&m=get_action',
+				params: {
+					task: 'BATAL',
+					jpaket_id	: jpaket_idField.getValue()
+				}, 
+				success: function(response){             
+					var result=eval(response.responseText);
+					if(result==1){
+                        jpaket_post2db='CREATE';
+						Ext.MessageBox.show({
+						   title: 'Warning',
+						   msg: 'Dokumen Penjualan Paket telah dibatalkan.',
+						   buttons: Ext.MessageBox.OK,
+						   animEl: 'save',
+						   icon: Ext.MessageBox.OK
+						});
+						jpaket_caraField.setValue("card");
+						master_jual_paket_cardGroup.setVisible(true);
+						master_cara_bayarTabPanel.setActiveTab(0);
+                        master_jual_paket_reset_allForm();
+					}else{
+                        jpaket_post2db='CREATE';
+						Ext.MessageBox.show({
+						   title: 'Warning',
+						   width: 400,
+						   msg: 'Dokumen Penjualan Produk tidak bisa dibatalkan, <br/>karena yang boleh dibatalkan adalah Dokumen yang terbit hari ini saja.',
+						   buttons: Ext.MessageBox.OK,
+						   animEl: 'save',
+						   icon: Ext.MessageBox.WARNING
+						});
+					}
+				},
+				failure: function(response){
+                    jpaket_post2db='CREATE';
+					var result=response.responseText;
+					Ext.MessageBox.show({
+						   title: 'Error',
+						   msg: 'Could not connect to the database. retry later.',
+						   buttons: Ext.MessageBox.OK,
+						   animEl: 'database',
+						   icon: Ext.MessageBox.ERROR
+					});	
+				}                      
+			});
+            detail_jual_paket_DataStore.load({params: {master_id: -1}});
+			jpaket_caraField.setValue("card");
+			master_jual_paket_cardGroup.setVisible(true);
+			master_cara_bayarTabPanel.setActiveTab(0);
+            master_jual_paket_reset_allForm();
+			
+			
+			
+			/*if((jpaket_stat_dokField.getValue()=='Tertutup') && (detail_pengguna_paket_DataStore.getCount()>0)){
 				detail_pengguna_paket_insert();
 				detail_jual_paket_DataStore.load({params: {master_id:0}});
 				master_jual_paket_reset_allForm();
@@ -694,15 +764,27 @@ Ext.onReady(function(){
 				jpaket_caraField.setValue("card");
 				master_jual_paket_cardGroup.setVisible(true);
 				master_cara_bayarTabPanel.setActiveTab(0);
-			}
+			}*/
 		}else{
-			Ext.MessageBox.show({
-				title: 'Warning',
-				msg: 'Form anda belum lengkap!',
-				buttons: Ext.MessageBox.OK,
-				animEl: 'save',
-				icon: Ext.MessageBox.WARNING
-			});
+			if(dpaket_paket_id!="ada"){
+				Ext.MessageBox.show({
+					title: 'Warning',
+					//msg: 'Detail Penjualan Produk <br>harus Ada!.',
+					msg: 'Detail penjualan paket tidak boleh kosong',
+					buttons: Ext.MessageBox.OK,
+					minWidth: 250,
+					animEl: 'save',
+					icon: Ext.MessageBox.WARNING
+				});
+			}else {
+				Ext.MessageBox.show({
+					title: 'Warning',
+					msg: 'Form anda belum lengkap',
+					buttons: Ext.MessageBox.OK,
+					animEl: 'save',
+					icon: Ext.MessageBox.WARNING
+				});
+			}
 		}
 	}
  	/* End of Function */

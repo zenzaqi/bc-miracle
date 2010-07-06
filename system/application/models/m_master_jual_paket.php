@@ -2345,10 +2345,12 @@ class M_master_jual_paket extends Model{
 						AND jpaket_tanggal=date_format(now(),'%Y-%m-%d') ";*/
 				$sql = "UPDATE master_jual_paket
 					SET jpaket_stat_dok='Batal'
-						jpaket_update='".@$_SESSION[SESSION_USERID]."'
-						jpaket_date_update='".$datetime_now."'
+						,jpaket_update='".@$_SESSION[SESSION_USERID]."'
+						,jpaket_date_update='".$datetime_now."'
+						,jpaket_revised=jpaket_revised+1
 					WHERE jpaket_id='".$jpaket_id."'
-						jpaket_tanggal='".$date_now."' ";
+						AND jpaket_tanggal='".$date_now."' ";
+						
 				$this->db->query($sql);
 				/*$dtu_jpaket = array(
 				"jpaket_stat_dok"=>'Batal'
