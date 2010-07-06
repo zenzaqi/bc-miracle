@@ -391,8 +391,8 @@ class C_master_jual_paket extends Controller {
 		$jpaket_bayar=trim($_POST["jpaket_bayar"]);
 		$jpaket_subtotal=trim($_POST["jpaket_subtotal"]);
 		$jpaket_hutang=trim($_POST["jpaket_hutang"]);
-		if($jpaket_cara=='tunai')
-			$jpaket_bayar=$jpaket_subtotal;
+		/*if($jpaket_cara=='tunai')
+			$jpaket_bayar=$jpaket_subtotal;*/
 		//card
 		$jpaket_card_nama=trim($_POST["jpaket_card_nama"]);
 		$jpaket_card_edc=trim($_POST["jpaket_card_edc"]);
