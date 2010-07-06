@@ -2330,6 +2330,27 @@ class M_master_jual_paket extends Model{
 				return '0';
 		}
 		
+		//Delete detail_jual_paket
+        function detail_jual_paket_delete($dpaket_id){
+            $date_now = date('Y-m-d');
+			$datetime_now = date('Y-m-d H:i:s');
+			$sql = "SELECT dapaket_id FROM detail_ambil_paket WHERE dapaket_dpaket='$dpaket_id'";
+			$rs = $this->db->query($sql);
+			if($rs->num_rows()){
+				//* artinya: Customer sudah pernah mengambil perawatan di paket ini. Sehingga tidak boleh di-Batal-kan. /
+				return '0';
+			}else{
+				//* artinya: Customer belum pernah ambil perawatan di paket ini. Sehingga masih boleh di-delete /
+				$query = "DELETE FROM detail_jual_paket WHERE dpaket_id = ".$dpaket_id;
+				$this->db->query($query);
+				if($this->db->affected_rows()>0)
+					return '1';
+				else
+					return '-1';
+			}
+			
+		}
+		
 		function master_jual_paket_batal($jpaket_id){
 			$date_now = date('Y-m-d');
 			$datetime_now = date('Y-m-d H:i:s');

@@ -347,7 +347,6 @@ Ext.onReady(function(){
   
   	/* Function for add data, open window create form */
 	function master_jual_paket_create(){
-		
 		var dpaket_paket_id="";
 		for(i=0; i<detail_jual_paket_DataStore.getCount(); i++){
 			detail_jual_paket_record=detail_jual_paket_DataStore.getAt(i);
@@ -806,15 +805,6 @@ Ext.onReady(function(){
 	}
 	/* End of Function  */
 	
-	function get_stat_dok(){
-		if(jpaket_post2db=='UPDATE')
-			return master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_stat_dok');
-		else 
-			return 'Terbuka';
-	}
-	
-	
-	
 	// Reset kwitansi option
 	function kwitansi_jual_paket_reset_form(){
 		jpaket_kwitansi_namaField.reset();
@@ -1020,16 +1010,6 @@ Ext.onReady(function(){
 		jpaket_diskonField.setDisabled(false);
 		jpaket_cashback_cfField.setDisabled(false);
 		master_jual_paket_createForm.jpaketSavePrintButton.enable();
-		
-		if(jpaket_post2db=='UPDATE' && (get_stat_dok()=='Tertutup' || get_stat_dok()=='Batal')){
-            detail_jual_paketListEditorGrid.djpaket_add.disable();
-            detail_jual_paketListEditorGrid.djpaket_delete.disable();
-        }else{
-            detail_jual_paketListEditorGrid.djpaket_add.enable();
-            detail_jual_paketListEditorGrid.djpaket_delete.enable();
-        }
-		
-		
 	}
  	/* End of Function */
 	
@@ -1346,69 +1326,9 @@ Ext.onReady(function(){
 				break;
 		}
 		
-		
-		jpaket_stat_dokField.on("select",function(){
-		var status_awal = master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_stat_dok');
-		if(status_awal =='Terbuka' && jpaket_stat_dokField.getValue()=='Tertutup')
-		{
-		Ext.MessageBox.show({
-			msg: 'Dokumen tidak bisa ditutup. Gunakan Save & Print untuk menutup dokumen',
-		   //progressText: 'proses...',
-			buttons: Ext.MessageBox.OK,
-			animEl: 'save',
-			icon: Ext.MessageBox.WARNING
-		   });
-		jpaket_stat_dokField.setValue('Terbuka');
-		}
-		
-		else if(status_awal =='Tertutup' && jpaket_stat_dokField.getValue()=='Terbuka')
-		{
-		Ext.MessageBox.show({
-			msg: 'Status yang sudah Tertutup tidak dapat diganti Terbuka',
-			buttons: Ext.MessageBox.OK,
-			animEl: 'save',
-			icon: Ext.MessageBox.WARNING
-		   });
-		jpaket_stat_dokField.setValue('Tertutup');
-		}
-		
-		else if(status_awal =='Batal' && jpaket_stat_dokField.getValue()=='Terbuka')
-		{
-		Ext.MessageBox.show({
-			msg: 'Status yang sudah Tertutup tidak dapat diganti Terbuka',
-			buttons: Ext.MessageBox.OK,
-			animEl: 'save',
-			icon: Ext.MessageBox.WARNING
-		   });
-		jpaket_stat_dokField.setValue('Tertutup');
-		}
-		
-		else if(jpaket_stat_dokField.getValue()=='Batal')
-		{
-		Ext.MessageBox.confirm('Confirmation','Anda yakin untuk membatalkan dokumen ini? Pembatalan dokumen tidak bisa dikembalikan lagi', jpaket_status_batal);
-		}
-        
-        else if(status_awal =='Tertutup' && jpaket_stat_dokField.getValue()=='Tertutup'){
-            master_jual_paket_createForm.jpaketSavePrintButton.enable();
-        }
-		
-		});	
-		
 		//detail_jual_paket_DataStore.load({params:{master_id: jpaket_idField.getValue()}});
 	}
 	/* End setValue to EDIT*/
-	
-	function jpaket_status_batal(btn){
-	if(btn=='yes')
-	{
-		jpaket_stat_dokField.setValue('Batal');
-        master_jual_paket_createForm.jpaketSavePrintButton.disable();
-	}  
-	else
-		jpaket_stat_dokField.setValue(master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_stat_dok'));
-	}
-	
-	
 	
 	
 	/*Function utk mengnon-aktifkan beberapa field ketika status dok diganti Tertutup*/
@@ -1454,7 +1374,7 @@ Ext.onReady(function(){
 			//detail_pengguna_paketListEditorGrid.setDisabled(true);
 			jpaket_diskonField.setDisabled(true);
 			jpaket_cashback_cfField.setDisabled(true);
-			//master_jual_paket_createForm.jpaketSavePrintButton.disable();
+			master_jual_paket_createForm.jpaketSavePrintButton.disable();
 		}
 		if(jpaket_post2db=="UPDATE" && master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_stat_dok')=="Batal"){
 			jpaket_custField.setDisabled(true);
@@ -4467,67 +4387,72 @@ Ext.onReady(function(){
 	//function for Delete of detail
 	function detail_jual_paket_delete(btn){
 		if(btn=='yes'){
-			var s = detail_jual_paketListEditorGrid.getSelectionModel().getSelections();
-			for(var i = 0, r; r = s[i]; i++){
-				detail_jual_paket_DataStore.remove(r);
+            var selections = detail_jual_paketListEditorGrid.getSelectionModel().getSelections();
+			for(var i = 0, record; record = selections[i]; i++){
+                if(record.data.dpaket_id==''){
+                    detail_jual_paket_DataStore.remove(record);
+					load_detail_update();
+                }else if((/^\d+$/.test(record.data.dpaket_id))){
+                    //Delete dari db.detail_jual_paket
+                    Ext.MessageBox.show({
+                        title: 'Please wait',
+                        msg: 'Loading items...',
+                        progressText: 'Initializing...',
+                        width:300,
+                        wait:true,
+                        waitConfig: {interval:200},
+                        closable:false
+                    });
+                    detail_jual_paket_DataStore.remove(record);
+                    Ext.Ajax.request({ 
+                        waitMsg: 'Please Wait',
+                        url: 'index.php?c=c_master_jual_paket&m=get_action', 
+                        params: { task: "DDELETE", dpaket_id:  record.data.dpaket_id }, 
+                        success: function(response){
+							var result=eval(response.responseText);
+							switch(result){
+								case 1:
+									load_detail_update();
+                                    Ext.MessageBox.hide();
+									//Ext.Msg.alert('OK', 'Penghapusan secara permanen sudah dilakukan.');
+									break;
+								case 0:
+									Ext.MessageBox.show({
+									   title: 'Warning',
+									   width: 400,
+									   msg: 'Penghapusan tidak bisa dilakukan, <br/>karena sudah pernah dilakukan pengambilan perawatan dalam Paket ini.',
+									   buttons: Ext.MessageBox.OK,
+									   animEl: 'save',
+									   icon: Ext.MessageBox.WARNING
+									});
+									break;
+								default:
+									Ext.MessageBox.hide();
+                                    Ext.MessageBox.show({
+                                        title: 'Warning',
+                                        msg: 'Could not delete the entire selection',
+                                        buttons: Ext.MessageBox.OK,
+                                        animEl: 'save',
+                                        icon: Ext.MessageBox.WARNING
+                                    });
+                                    break;
+							}
+                        },
+                        failure: function(response){
+                            Ext.MessageBox.hide();
+                            var result=response.responseText;
+                            Ext.MessageBox.show({
+                               title: 'Error',
+                               msg: 'Could not connect to the database. retry later.',
+                               buttons: Ext.MessageBox.OK,
+                               animEl: 'database',
+                               icon: Ext.MessageBox.ERROR
+                            });	
+                        }
+                    });
+                }
 			}
 		} 
-		detail_jual_paket_DataStore.commitChanges();
-		
-		/*if(btn=='yes'){
-			var selections = detail_jual_paketListEditorGrid.selModel.getSelections();
-			
-			var prez = [];
-			for(i = 0; i< detail_jual_paketListEditorGrid.selModel.getCount(); i++){
-				prez.push(selections[i].json.dpaket_id);
-				
-			}
-			var encoded_array = Ext.encode(prez);
-			
-			Ext.Ajax.request({ 
-				waitMsg: 'Please Wait',
-				url: 'index.php?c=c_master_jual_paket&m=detail_detail_jual_paket_purge',
-				params: { ids:  encoded_array }, 
-				success: function(response){
-					Ext.MessageBox.show({
-					   	title: 'Please wait',
-					   	msg: 'Loading items...',
-					   	progressText: 'Initializing...',
-					   	width:300,
-					   	progress:true,
-					   	closable:false,
-					   	animEl: 'mb6'
-				   	});
-			
-				   	// this hideous block creates the bogus progress
-				   	var f = function(v){
-						return function(){
-							if(v == 12){
-								Ext.MessageBox.hide();
-								Ext.MessageBox.alert('Status', 'The data has been deleted.');
-							}else{
-								var i = v/11;
-								Ext.MessageBox.updateProgress(i, Math.round(100*i)+'% completed');
-							}
-					   };
-				   	};
-				   	for(var i = 1; i < 13; i++){
-					   setTimeout(f(i), i*100);
-				   	}
-					detail_jual_paket_DataStore.reload();
-				},
-				failure: function(response){
-					var result=response.responseText;
-					Ext.MessageBox.show({
-					   title: 'Error',
-					   msg: 'Could not connect to the database. retry later.',
-					   buttons: Ext.MessageBox.OK,
-					   animEl: 'database',
-					   icon: Ext.MessageBox.ERROR
-					});	
-				}
-			});
-		}*/
 		
 	}
 	//eof
@@ -5267,6 +5192,179 @@ Ext.onReady(function(){
 		
 	}
 	/* END LOAD TOTAL BAYAR */
+	
+	function load_detail_update(){
+		var jumlah_item=0;
+		var subtotal_harga=0;
+		var total_harga=0;
+		var total_hutang=0;
+		var total_bayar=0;
+		var subtotal_harga_field=0;
+
+		var transfer_nilai=0;
+		var transfer_nilai2=0;
+		var transfer_nilai3=0;
+		var kwitansi_nilai=0;
+		var kwitansi_nilai2=0;
+		var kwitansi_nilai3=0;
+		var card_nilai=0;
+		var card_nilai2=0;
+		var card_nilai3=0;
+		var cek_nilai=0;
+		var cek_nilai2=0;
+		var cek_nilai3=0;
+		var voucher_nilai=0;
+		var voucher_nilai2=0;
+		var voucher_nilai3=0;
+
+		var subtotal_net_harga=0;
+		
+		var detail_jual_paket_record;
+		
+		for(i=0;i<detail_jual_paket_DataStore.getCount();i++){
+			jumlah_item=jumlah_item+eval(detail_jual_paket_DataStore.getAt(i).data.dpaket_jumlah);
+			subtotal_harga_field+=detail_jual_paket_DataStore.getAt(i).data.dpaket_subtotal_net;
+		}
+		
+		jpaket_jumlahField.setValue(jumlah_item);
+		
+		jpaket_subTotalField.setValue(subtotal_harga_field);
+		
+		total_harga=subtotal_harga_field*(100-jpaket_diskonField.getValue())/100 - jpaket_cashbackField.getValue();
+		total_harga=(total_harga>0?Math.round(total_harga):0);
+		jpaket_totalField.setValue(total_harga);
+
+		
+
+		transfer_nilai=jpaket_transfer_nilaiField.getValue();
+		if(/^\d+$/.test(transfer_nilai))
+			transfer_nilai=jpaket_transfer_nilaiField.getValue();
+		else
+			transfer_nilai=0;
+		
+		transfer_nilai2=jpaket_transfer_nilai2Field.getValue();
+		if(/^\d+$/.test(transfer_nilai2))
+			transfer_nilai2=jpaket_transfer_nilai2Field.getValue();
+		else
+			transfer_nilai2=0;
+		
+		transfer_nilai3=jpaket_transfer_nilai3Field.getValue();
+		if(/^\d+$/.test(transfer_nilai3))
+			transfer_nilai3=jpaket_transfer_nilai3Field.getValue();
+		else
+			transfer_nilai3=0;
+		
+		kwitansi_nilai=jpaket_kwitansi_nilaiField.getValue();
+		if(/^\d+$/.test(kwitansi_nilai))
+			kwitansi_nilai=jpaket_kwitansi_nilaiField.getValue();
+		else
+			kwitansi_nilai=0;
+		
+		kwitansi_nilai2=jpaket_kwitansi_nilai2Field.getValue();
+		if(/^\d+$/.test(kwitansi_nilai2))
+			kwitansi_nilai2=jpaket_kwitansi_nilai2Field.getValue();
+		else
+			kwitansi_nilai2=0;
+		
+		kwitansi_nilai3=jpaket_kwitansi_nilai3Field.getValue();
+		if(/^\d+$/.test(kwitansi_nilai3))
+			kwitansi_nilai3=jpaket_kwitansi_nilai3Field.getValue();
+		else
+			kwitansi_nilai3=0;
+		
+		card_nilai=jpaket_card_nilaiField.getValue();
+		if(/^\d+$/.test(card_nilai))
+			card_nilai=jpaket_card_nilaiField.getValue();
+		else
+			card_nilai=0;
+		
+		card_nilai2=jpaket_card_nilai2Field.getValue();
+		if(/^\d+$/.test(card_nilai2))
+			card_nilai2=jpaket_card_nilai2Field.getValue();
+		else
+			card_nilai2=0;
+		
+		card_nilai3=jpaket_card_nilai3Field.getValue();
+		if(/^\d+$/.test(card_nilai3))
+			card_nilai3=jpaket_card_nilai3Field.getValue();
+		else
+			card_nilai3=0;
+		
+		cek_nilai=jpaket_cek_nilaiField.getValue();
+		if(/^\d+$/.test(cek_nilai))
+			cek_nilai=jpaket_cek_nilaiField.getValue();
+		else
+			cek_nilai=0;
+		
+		cek_nilai2=jpaket_cek_nilai2Field.getValue();
+		if(/^\d+$/.test(cek_nilai2))
+			cek_nilai2=jpaket_cek_nilai2Field.getValue();
+		else
+			cek_nilai2=0;
+		
+		cek_nilai3=jpaket_cek_nilai3Field.getValue();
+		if(/^\d+$/.test(cek_nilai3))
+			cek_nilai3=jpaket_cek_nilai3Field.getValue();
+		else
+			cek_nilai3=0;
+		
+		voucher_nilai=jpaket_voucher_cashbackField.getValue();
+		if(/^\d+$/.test(voucher_nilai))
+			voucher_nilai=jpaket_voucher_cashbackField.getValue();
+		else
+			voucher_nilai=0;
+		
+		voucher_nilai2=jpaket_voucher_cashback3Field.getValue();
+		if(/^\d+$/.test(voucher_nilai2))
+			voucher_nilai2=jpaket_voucher_cashback3Field.getValue();
+		else
+			voucher_nilai2=0;
+		
+		voucher_nilai3=jpaket_voucher_cashback3Field.getValue();
+		if(/^\d+$/.test(voucher_nilai3))
+			voucher_nilai3=jpaket_voucher_cashback3Field.getValue();
+		else
+			voucher_nilai3=0;
+
+		tunai_nilai=jpaket_tunai_nilaiField.getValue();
+		if(/^\d+$/.test(tunai_nilai))
+			tunai_nilai=jpaket_tunai_nilaiField.getValue();
+		else
+			tunai_nilai=0;
+
+		tunai_nilai2=jpaket_tunai_nilai2Field.getValue();
+		if(/^\d+$/.test(tunai_nilai2))
+			tunai_nilai2=jpaket_tunai_nilai2Field.getValue();
+		else
+			tunai_nilai2=0;
+
+		tunai_nilai3=jpaket_tunai_nilai3Field.getValue();
+		if(/^\d+$/.test(tunai_nilai3))
+			tunai_nilai3=jpaket_tunai_nilai3Field.getValue();
+		else
+			tunai_nilai3=0;
+
+
+		total_bayar=transfer_nilai+transfer_nilai2+transfer_nilai3+kwitansi_nilai+kwitansi_nilai2+kwitansi_nilai3+card_nilai+card_nilai2+card_nilai3+cek_nilai+cek_nilai2+cek_nilai3+voucher_nilai+voucher_nilai2+voucher_nilai3+tunai_nilai+tunai_nilai2+tunai_nilai3;
+		total_bayar=(total_bayar>0?Math.round(total_bayar):0);
+		jpaket_bayarField.setValue(total_bayar);
+
+		total_hutang=total_harga-total_bayar;
+		total_hutang=(total_hutang>0?Math.round(total_hutang):0);
+		jpaket_hutangField.setValue(total_hutang);
+		
+		if(total_bayar>total_harga){
+			jpaket_pesanLabel.setText("Kelebihan Jumlah Bayar");
+		}else if(total_bayar<total_harga || total_bayar==total_harga){
+			jpaket_pesanLabel.setText("");
+		}
+		if(total_bayar==total_harga){
+			jpaket_lunasLabel.setText("LUNAS");
+		}else if(total_bayar!==total_harga){
+			jpaket_lunasLabel.setText("");
+		}
+		
+	}
 	
 	
 	function load_total_bayar(){
