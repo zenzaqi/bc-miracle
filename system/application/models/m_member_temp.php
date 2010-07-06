@@ -66,7 +66,7 @@ class M_member_temp extends Model{
 						$rs=$this->db->query($sql);
 						if($rs->num_rows()){
 							$rs_record=$rs->row_array();
-							$pattern=date("ymd").substr($rs_record['cust_no'],-1,6);
+							$pattern=date("ymd").substr($rs_record['cust_no'],-6);
 							$member_no=$this->m_public_function->get_nomor_member('member','member_no',$pattern,16);
 							//$member_no = $rs_record['member_no'];
 						}
