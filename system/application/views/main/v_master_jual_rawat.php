@@ -1017,6 +1017,19 @@ Ext.onReady(function(){
 		detail_jual_rawatListEditorGrid.setDisabled(false);
 		jrawat_diskonField.setDisabled(false);
 		jrawat_cashback_cfField.setDisabled(false);
+		
+		detail_jual_rawatListEditorGrid.djrawat_add.enable();
+        detail_jual_rawatListEditorGrid.djrawat_delete.enable();
+		master_jual_rawat_createForm.savePrintButton.enable();
+		
+		combo_jual_rawat.setDisabled(false);
+		drawat_jumlahField.setDisabled(false);
+		drawat_hargaField.setDisabled(false);
+		drawat_subtotalField.setDisabled(false);
+		drawat_jenis_diskonField.setDisabled(false);
+		drawat_diskonField.setDisabled(false);
+		drawat_subtotal_netField.setDisabled(false);
+		
 	}
  	/* End of Function */
 	
