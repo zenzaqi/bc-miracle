@@ -864,8 +864,8 @@ class M_master_jual_rawat extends Model{
                     jrawat_cust,
                     vu_jrawat_pr.cust_no,
                     vu_jrawat_pr.cust_member,
-					vu_jrawat_pr.member_no,
-					vu_jrawat_pr.member_valid,
+					/*vu_jrawat_pr.member_no,
+					vu_jrawat_pr.member_valid,*/
                     jrawat_tanggal,
                     jrawat_diskon,
                     jrawat_cashback,
@@ -976,13 +976,15 @@ class M_master_jual_rawat extends Model{
 			$jrawat_revised=0;
 			
 			if(substr($jrawat_nobukti,0,2)=='PR'){
-                $sql="SELECT jrawat_cara, jrawat_cara2, jrawat_cara3, jrawat_revised FROM master_jual_rawat WHERE jrawat_id='$jrawat_id'";
+                $sql="SELECT jrawat_cara, jrawat_cara2, jrawat_cara3, jrawat_date_create, jrawat_revised FROM master_jual_rawat WHERE jrawat_id='$jrawat_id'";
                 $rs=$this->db->query($sql);
                 if($rs->num_rows()){
                     $rs_record=$rs->row_array();
                     $jrawat_cara_awal=$rs_record["jrawat_cara"];
                     $jrawat_cara2_awal=$rs_record["jrawat_cara2"];
                     $jrawat_cara3_awal=$rs_record["jrawat_cara3"];
+					$jrawat_date_create=$rs_record["jrawat_date_create"];
+					
                     if($jrawat_cara_awal<>$jrawat_cara){
                         if($jrawat_cara_awal=="tunai"){
                             $sql="delete from jual_tunai where jtunai_ref='".$jrawat_nobukti."'";
@@ -1152,7 +1154,8 @@ class M_master_jual_rawat extends Model{
                                     "jkwitansi_ref"=>$jrawat_nobukti,
                                     "jkwitansi_master"=>$jrawat_kwitansi_no,
                                     "jkwitansi_nilai"=>$jrawat_kwitansi_nilai,
-                                    "jkwitansi_transaksi"=>"jual_rawat"
+                                    "jkwitansi_transaksi"=>"jual_rawat",
+									"jkwitansi_date_create"=>$jrawat_date_create
                                 );
                                 $this->db->insert('jual_kwitansi', $data);
                             }
@@ -1176,7 +1179,8 @@ class M_master_jual_rawat extends Model{
                                     "jcard_edc"=>$jrawat_card_edc,
                                     "jcard_no"=>$jrawat_card_no,
                                     "jcard_nilai"=>$jrawat_card_nilai,
-                                    "jcard_transaksi"=>"jual_rawat"
+                                    "jcard_transaksi"=>"jual_rawat",
+									"jcard_date_create"=>$jrawat_date_create
                                     );
                                 $this->db->insert('jual_card', $data);
                             }
@@ -1216,7 +1220,8 @@ class M_master_jual_rawat extends Model{
                                     "jcek_valid"=>$jrawat_cek_valid,
                                     "jcek_bank"=>$jrawat_cek_bank,
                                     "jcek_nilai"=>$jrawat_cek_nilai,
-                                    "jcek_transaksi"=>"jual_rawat"
+                                    "jcek_transaksi"=>"jual_rawat",
+									"jcek_date_create"=>$jrawat_date_create
                                     );
                                 $this->db->insert('jual_cek', $data);
                             }
@@ -1238,7 +1243,8 @@ class M_master_jual_rawat extends Model{
                                     "jtransfer_bank"=>$jrawat_transfer_bank,
                                     "jtransfer_nama"=>$jrawat_transfer_nama,
                                     "jtransfer_nilai"=>$jrawat_transfer_nilai,
-                                    "jtransfer_transaksi"=>"jual_rawat"
+                                    "jtransfer_transaksi"=>"jual_rawat",
+									"jtransfer_date_create"=>$jrawat_date_create
                                     );
                                 $this->db->insert('jual_transfer', $data);
                             }
@@ -1256,7 +1262,8 @@ class M_master_jual_rawat extends Model{
                                 $data=array(
                                     "jtunai_nilai"=>$jrawat_tunai_nilai,
                                     "jtunai_ref"=>$jrawat_nobukti,
-                                    "jtunai_transaksi"=>"jual_rawat"
+                                    "jtunai_transaksi"=>"jual_rawat",
+									"jtunai_date_create"=>$jrawat_date_create
                                     );
                                 $this->db->insert('jual_tunai', $data);
                             }
@@ -1290,7 +1297,8 @@ class M_master_jual_rawat extends Model{
                                     "tvoucher_novoucher"=>$jrawat_voucher_no,
                                     "tvoucher_ref"=>$jrawat_nobukti,
                                     "tvoucher_nilai"=>$jrawat_voucher_cashback,
-                                    "tvoucher_transaksi"=>"jual_rawat"
+                                    "tvoucher_transaksi"=>"jual_rawat",
+									"tvoucher_date_create"=>$jrawat_date_create
                                     );
                                 $this->db->insert('voucher_terima', $data);
                             }
@@ -1326,7 +1334,8 @@ class M_master_jual_rawat extends Model{
                                     "jkwitansi_ref"=>$jrawat_nobukti,
                                     "jkwitansi_master"=>$jrawat_kwitansi_no2,
                                     "jkwitansi_nilai"=>$jrawat_kwitansi_nilai2,
-                                    "jkwitansi_transaksi"=>"jual_rawat"
+                                    "jkwitansi_transaksi"=>"jual_rawat",
+									"jkwitansi_date_create"=>$jrawat_date_create
                                 );
                                 $this->db->insert('jual_kwitansi', $data);
                             }
@@ -1350,7 +1359,8 @@ class M_master_jual_rawat extends Model{
                                     "jcard_edc"=>$jrawat_card_edc2,
                                     "jcard_no"=>$jrawat_card_no2,
                                     "jcard_nilai"=>$jrawat_card_nilai2,
-                                    "jcard_transaksi"=>"jual_rawat"
+                                    "jcard_transaksi"=>"jual_rawat",
+									"jcard_date_create"=>$jrawat_date_create
                                     );
                                 $this->db->insert('jual_card', $data);
                             }
@@ -1390,7 +1400,8 @@ class M_master_jual_rawat extends Model{
                                     "jcek_valid"=>$jrawat_cek_valid2,
                                     "jcek_bank"=>$jrawat_cek_bank2,
                                     "jcek_nilai"=>$jrawat_cek_nilai2,
-                                    "jcek_transaksi"=>"jual_rawat"
+                                    "jcek_transaksi"=>"jual_rawat",
+									"jcek_date_create"=>$jrawat_date_create
                                     );
                                 $this->db->insert('jual_cek', $data);
                             }
@@ -1412,7 +1423,8 @@ class M_master_jual_rawat extends Model{
                                     "jtransfer_bank"=>$jrawat_transfer_bank2,
                                     "jtransfer_nama"=>$jrawat_transfer_nama2,
                                     "jtransfer_nilai"=>$jrawat_transfer_nilai2,
-                                    "jtransfer_transaksi"=>"jual_rawat"
+                                    "jtransfer_transaksi"=>"jual_rawat",
+									"jtransfer_date_create"=>$jrawat_date_create
                                     );
                                 $this->db->insert('jual_transfer', $data);
                             }
@@ -1430,7 +1442,8 @@ class M_master_jual_rawat extends Model{
                                 $data=array(
                                     "jtunai_nilai"=>$jrawat_tunai_nilai2,
                                     "jtunai_ref"=>$jrawat_nobukti,
-                                    "jtunai_transaksi"=>"jual_rawat"
+                                    "jtunai_transaksi"=>"jual_rawat",
+									"jtunai_date_create"=>$jrawat_date_create
                                     );
                                 $this->db->insert('jual_tunai', $data);
                             }
@@ -1464,7 +1477,8 @@ class M_master_jual_rawat extends Model{
                                     "tvoucher_novoucher"=>$jrawat_voucher_no2,
                                     "tvoucher_ref"=>$jrawat_nobukti,
                                     "tvoucher_nilai"=>$jrawat_voucher_cashback2,
-                                    "tvoucher_transaksi"=>"jual_rawat"
+                                    "tvoucher_transaksi"=>"jual_rawat",
+									"tvoucher_date_create"=>$jrawat_date_create
                                     );
                                 $this->db->insert('voucher_terima', $data);
                             }
@@ -1500,7 +1514,8 @@ class M_master_jual_rawat extends Model{
                                     "jkwitansi_ref"=>$jrawat_nobukti,
                                     "jkwitansi_master"=>$jrawat_kwitansi_no3,
                                     "jkwitansi_nilai"=>$jrawat_kwitansi_nilai3,
-                                    "jkwitansi_transaksi"=>"jual_rawat"
+                                    "jkwitansi_transaksi"=>"jual_rawat",
+									"jkwitansi_date_create"=>$jrawat_date_create
                                 );
                                 $this->db->insert('jual_kwitansi', $data);
                             }
@@ -1524,7 +1539,8 @@ class M_master_jual_rawat extends Model{
                                     "jcard_edc"=>$jrawat_card_edc3,
                                     "jcard_no"=>$jrawat_card_no3,
                                     "jcard_nilai"=>$jrawat_card_nilai3,
-                                    "jcard_transaksi"=>"jual_rawat"
+                                    "jcard_transaksi"=>"jual_rawat",
+									"jcard_date_create"=>$jrawat_date_create
                                     );
                                 $this->db->insert('jual_card', $data);
                             }
@@ -1564,7 +1580,8 @@ class M_master_jual_rawat extends Model{
                                     "jcek_valid"=>$jrawat_cek_valid3,
                                     "jcek_bank"=>$jrawat_cek_bank3,
                                     "jcek_nilai"=>$jrawat_cek_nilai3,
-                                    "jcek_transaksi"=>"jual_rawat"
+                                    "jcek_transaksi"=>"jual_rawat",
+									"jcek_date_create"=>$jrawat_date_create
                                     );
                                 $this->db->insert('jual_cek', $data);
                             }
@@ -1586,7 +1603,8 @@ class M_master_jual_rawat extends Model{
                                     "jtransfer_bank"=>$jrawat_transfer_bank3,
                                     "jtransfer_nama"=>$jrawat_transfer_nama3,
                                     "jtransfer_nilai"=>$jrawat_transfer_nilai3,
-                                    "jtransfer_transaksi"=>"jual_rawat"
+                                    "jtransfer_transaksi"=>"jual_rawat",
+									"jtransfer_date_create"=>$jrawat_date_create
                                     );
                                 $this->db->insert('jual_transfer', $data);
                             }
@@ -1604,7 +1622,8 @@ class M_master_jual_rawat extends Model{
                                 $data=array(
                                     "jtunai_nilai"=>$jrawat_tunai_nilai3,
                                     "jtunai_ref"=>$jrawat_nobukti,
-                                    "jtunai_transaksi"=>"jual_rawat"
+                                    "jtunai_transaksi"=>"jual_rawat",
+									"jtunai_date_create"=>$jrawat_date_create
                                     );
                                 $this->db->insert('jual_tunai', $data);
                             }
@@ -1638,7 +1657,8 @@ class M_master_jual_rawat extends Model{
                                     "tvoucher_novoucher"=>$jrawat_voucher_no3,
                                     "tvoucher_ref"=>$jrawat_nobukti,
                                     "tvoucher_nilai"=>$jrawat_voucher_cashback3,
-                                    "tvoucher_transaksi"=>"jual_rawat"
+                                    "tvoucher_transaksi"=>"jual_rawat",
+									"tvoucher_date_create"=>$jrawat_date_create
                                     );
                                 $this->db->insert('voucher_terima', $data);
                             }
@@ -1707,6 +1727,13 @@ class M_master_jual_rawat extends Model{
 				$data["jrawat_cara3"]=$jrawat_cara3;
 			$this->db->insert('master_jual_rawat', $data); 
 			if($this->db->affected_rows()){
+				//Ambil db.master_jual_paket.jpaket_date_create untuk dimasukkan ke Cara Bayar
+				$sql = "SELECT jrawat_date_create FROM master_jual_rawat WHERE jrawat_nobukti='$jrawat_nobukti'";
+				$rs = $this->db->query($sql);
+				if($this->db->affected_rows()){
+					$record = $rs->row_array();
+					$jrawat_date_create = $record['jrawat_date_create'];
+				}
 				
 				//delete all transaksi
 				/*$sql="delete from jual_kwitansi where jkwitansi_ref='".$jrawat_nobukti."'";
@@ -1741,7 +1768,8 @@ class M_master_jual_rawat extends Model{
 							"jkwitansi_master"=>$jrawat_kwitansi_no,
 							"jkwitansi_nilai"=>$jrawat_kwitansi_nilai,
 							"jkwitansi_ref"=>$jrawat_nobukti,
-							"jkwitansi_transaksi"=>"jual_rawat"
+							"jkwitansi_transaksi"=>"jual_rawat",
+							"jkwitansi_date_create"=>$jrawat_date_create
 						);
 						$this->db->insert('jual_kwitansi', $data); 
 					
@@ -1753,7 +1781,8 @@ class M_master_jual_rawat extends Model{
 							"jcard_no"=>$jrawat_card_no,
 							"jcard_nilai"=>$jrawat_card_nilai,
 							"jcard_ref"=>$jrawat_nobukti,
-							"jcard_transaksi"=>"jual_rawat"
+							"jcard_transaksi"=>"jual_rawat",
+							"jcard_date_create"=>$jrawat_date_create
 							);
 						$this->db->insert('jual_card', $data); 
 					
@@ -1778,7 +1807,8 @@ class M_master_jual_rawat extends Model{
 							"jcek_bank"=>$jrawat_cek_bank,
 							"jcek_nilai"=>$jrawat_cek_nilai,
 							"jcek_ref"=>$jrawat_nobukti,
-							"jcek_transaksi"=>"jual_rawat"
+							"jcek_transaksi"=>"jual_rawat",
+							"jcek_date_create"=>$jrawat_date_create
 							);
 						$this->db->insert('jual_cek', $data); 
 					}else if($jrawat_cara=='transfer'){
@@ -1788,7 +1818,8 @@ class M_master_jual_rawat extends Model{
 							"jtransfer_nama"=>$jrawat_transfer_nama,
 							"jtransfer_nilai"=>$jrawat_transfer_nilai,
 							"jtransfer_ref"=>$jrawat_nobukti,
-							"jtransfer_transaksi"=>"jual_rawat"
+							"jtransfer_transaksi"=>"jual_rawat",
+							"jtransfer_date_create"=>$jrawat_date_create
 							);
 						$this->db->insert('jual_transfer', $data); 
 					}else if($jrawat_cara=='tunai'){
@@ -1796,7 +1827,8 @@ class M_master_jual_rawat extends Model{
 						$data=array(
 							"jtunai_nilai"=>$jrawat_tunai_nilai,
 							"jtunai_ref"=>$jrawat_nobukti,
-							"jtunai_transaksi"=>"jual_rawat"
+							"jtunai_transaksi"=>"jual_rawat",
+							"jtunai_date_create"=>$jrawat_date_create
 							);
 						$this->db->insert('jual_tunai', $data); 
 					}else if($jrawat_cara=='voucher'){
@@ -1811,7 +1843,8 @@ class M_master_jual_rawat extends Model{
 							"tvoucher_novoucher"=>$jrawat_voucher_no,
 							"tvoucher_ref"=>$jrawat_nobukti,
 							"tvoucher_nilai"=>$jrawat_voucher_cashback,
-							"tvoucher_transaksi"=>"jual_rawat"
+							"tvoucher_transaksi"=>"jual_rawat",
+							"tvoucher_date_create"=>$jrawat_date_create
 							);
 						$this->db->insert('voucher_terima', $data); 
 					}
@@ -1835,7 +1868,8 @@ class M_master_jual_rawat extends Model{
 							"jkwitansi_master"=>$jrawat_kwitansi_no2,
 							"jkwitansi_nilai"=>$jrawat_hutang,
 							"jkwitansi_ref"=>$jrawat_nobukti,
-							"jkwitansi_transaksi"=>"jual_rawat"
+							"jkwitansi_transaksi"=>"jual_rawat",
+							"jkwitansi_date_create"=>$jrawat_date_create
 						);
 						$this->db->insert('jual_kwitansi', $data); 
 					
@@ -1846,7 +1880,8 @@ class M_master_jual_rawat extends Model{
 							"jcard_no"=>$jrawat_card_no2,
 							"jcard_nilai"=>$jrawat_card_nilai2,
 							"jcard_ref"=>$jrawat_nobukti,
-							"jcard_transaksi"=>"jual_rawat"
+							"jcard_transaksi"=>"jual_rawat",
+							"jcard_date_create"=>$jrawat_date_create
 							);
 						$this->db->insert('jual_card', $data); 
 					
@@ -1871,7 +1906,8 @@ class M_master_jual_rawat extends Model{
 							"jcek_bank"=>$jrawat_cek_bank2,
 							"jcek_nilai"=>$jrawat_cek_nilai,
 							"jcek_ref"=>$jrawat_nobukti,
-							"jcek_transaksi"=>"jual_rawat"
+							"jcek_transaksi"=>"jual_rawat",
+							"jcek_date_create"=>$jrawat_date_create
 							);
 						$this->db->insert('jual_cek', $data); 
 					}else if($jrawat_cara2=='transfer'){
@@ -1881,7 +1917,8 @@ class M_master_jual_rawat extends Model{
 							"jtransfer_nama"=>$jrawat_transfer_nama2,
 							"jtransfer_nilai"=>$jrawat_transfer_nilai2,
 							"jtransfer_ref"=>$jrawat_nobukti,
-							"jtransfer_transaksi"=>"jual_rawat"
+							"jtransfer_transaksi"=>"jual_rawat",
+							"jtransfer_date_create"=>$jrawat_date_create
 							);
 						$this->db->insert('jual_transfer', $data); 
 					}else if($jrawat_cara2=='tunai'){
@@ -1889,7 +1926,8 @@ class M_master_jual_rawat extends Model{
 						$data=array(
 							"jtunai_nilai"=>$jrawat_tunai_nilai2,
 							"jtunai_ref"=>$jrawat_nobukti,
-							"jtunai_transaksi"=>"jual_rawat"
+							"jtunai_transaksi"=>"jual_rawat",
+							"jtunai_date_create"=>$jrawat_date_create
 							);
 						$this->db->insert('jual_tunai', $data); 
 					}else if($jrawat_cara=='voucher'){
@@ -1904,7 +1942,8 @@ class M_master_jual_rawat extends Model{
 							"tvoucher_novoucher"=>$jrawat_voucher_no2,
 							"tvoucher_ref"=>$jrawat_nobukti,
 							"tvoucher_nilai"=>$jrawat_voucher_cashback2,
-							"tvoucher_transaksi"=>"jual_rawat"
+							"tvoucher_transaksi"=>"jual_rawat",
+							"tvoucher_date_create"=>$jrawat_date_create
 							);
 						$this->db->insert('voucher_terima', $data); 
 					}
@@ -1928,7 +1967,8 @@ class M_master_jual_rawat extends Model{
 							"jkwitansi_master"=>$jrawat_kwitansi_no3,
 							"jkwitansi_nilai"=>$jrawat_hutang,
 							"jkwitansi_ref"=>$jrawat_nobukti,
-							"jkwitansi_transaksi"=>"jual_rawat"
+							"jkwitansi_transaksi"=>"jual_rawat",
+							"jkwitansi_date_create"=>$jrawat_date_create
 						);
 						$this->db->insert('jual_kwitansi', $data); 
 					
@@ -1940,7 +1980,8 @@ class M_master_jual_rawat extends Model{
 							"jcard_no"=>$jrawat_card_no3,
 							"jcard_nilai"=>$jrawat_hutang,
 							"jcard_ref"=>$jrawat_nobukti,
-							"jcard_transaksi"=>"jual_rawat"
+							"jcard_transaksi"=>"jual_rawat",
+							"jcard_date_create"=>$jrawat_date_create
 							);
 						$this->db->insert('jual_card', $data); 
 					
@@ -1965,7 +2006,8 @@ class M_master_jual_rawat extends Model{
 							"jcek_bank"=>$jrawat_cek_bank3,
 							"jcek_nilai"=>$jrawat_cek_nilai,
 							"jcek_ref"=>$jrawat_nobukti,
-							"jcek_transaksi"=>"jual_rawat"
+							"jcek_transaksi"=>"jual_rawat",
+							"jcek_date_create"=>$jrawat_date_create
 							);
 						$this->db->insert('jual_cek', $data); 
 					}else if($jrawat_cara3=='transfer'){
@@ -1975,7 +2017,8 @@ class M_master_jual_rawat extends Model{
 							"jtransfer_nama"=>$jrawat_transfer_nama3,
 							"jtransfer_nilai"=>$jrawat_transfer_nilai3,
 							"jtransfer_ref"=>$jrawat_nobukti,
-							"jtransfer_transaksi"=>"jual_rawat"
+							"jtransfer_transaksi"=>"jual_rawat",
+							"jtransfer_date_create"=>$jrawat_date_create
 							);
 						$this->db->insert('jual_transfer', $data); 
 					}else if($jrawat_cara3=='tunai'){
@@ -1983,7 +2026,8 @@ class M_master_jual_rawat extends Model{
 						$data=array(
 							"jtunai_nilai"=>$jrawat_tunai_nilai3,
 							"jtunai_ref"=>$jrawat_nobukti,
-							"jtunai_transaksi"=>"jual_rawat"
+							"jtunai_transaksi"=>"jual_rawat",
+							"jtunai_date_create"=>$jrawat_date_create
 							);
 						$this->db->insert('jual_tunai', $data); 
 					}else if($jrawat_cara=='voucher'){
@@ -1998,7 +2042,8 @@ class M_master_jual_rawat extends Model{
 							"tvoucher_novoucher"=>$jrawat_voucher_no,
 							"tvoucher_ref"=>$jrawat_nobukti,
 							"tvoucher_nilai"=>$jrawat_voucher_cashback3,
-							"tvoucher_transaksi"=>"jual_rawat"
+							"tvoucher_transaksi"=>"jual_rawat",
+							"tvoucher_date_create"=>$jrawat_date_create
 							);
 						$this->db->insert('voucher_terima', $data); 
 					}
@@ -2086,7 +2131,7 @@ class M_master_jual_rawat extends Model{
 		function master_jual_rawat_search($jrawat_id ,$jrawat_nobukti ,$jrawat_cust ,$jrawat_diskon , $jrawat_stat_dok, $jrawat_cashback ,$jrawat_voucher ,$jrawat_cara ,$jrawat_bayar ,$jrawat_keterangan ,$jrawat_tgl_start ,$jrawat_tgl_end ,$start,$end){
 			//full query
 			//$query="SELECT * FROM master_jual_rawat,customer WHERE jrawat_cust=cust_id";
-			$query = "SELECT jrawat_id
+			/*$query = "SELECT jrawat_id
 					,jrawat_nobukti
 					,cust_nama
 					,jrawat_cust
@@ -2111,8 +2156,36 @@ class M_master_jual_rawat extends Model{
 					,jrawat_revised
 					,IF(substring(jrawat_nobukti,1,2)='PK', 'paket', '') as keterangan_paket
 				FROM vu_jrawat_pr
-                LEFT JOIN vu_jrawat_totalbiaya ON(vu_jrawat_totalbiaya.drawat_master=vu_jrawat_pr.jrawat_id)";
+                LEFT JOIN vu_jrawat_totalbiaya ON(vu_jrawat_totalbiaya.drawat_master=vu_jrawat_pr.jrawat_id)";*/
 				//FROM master_jual_rawat, vu_customer WHERE jrawat_cust=cust_id";
+			$query = "SELECT
+                    jrawat_id,
+                    jrawat_nobukti,
+                    vu_jrawat_pr.cust_nama,
+                    jrawat_cust,
+                    vu_jrawat_pr.cust_no,
+                    vu_jrawat_pr.cust_member,
+					/*vu_jrawat_pr.member_no,
+					vu_jrawat_pr.member_valid,*/
+                    jrawat_tanggal,
+                    jrawat_diskon,
+                    jrawat_cashback,
+                    jrawat_cara,
+                    jrawat_cara2,
+                    jrawat_cara3,
+                    IF(vu_jrawat_pr.jrawat_totalbiaya!=0, vu_jrawat_pr.jrawat_totalbiaya, vu_jrawat_totalbiaya.jrawat_totalbiaya) AS jrawat_totalbiaya,
+                    jrawat_bayar,
+                    jrawat_keterangan,
+                    jrawat_stat_dok,
+                    jrawat_creator,
+                    jrawat_date_create,
+                    jrawat_update,
+                    jrawat_date_update,
+                    jrawat_revised,
+                    keterangan_paket,
+                    dpaket_id
+                FROM vu_jrawat_pr
+                LEFT JOIN vu_jrawat_totalbiaya ON(vu_jrawat_totalbiaya.drawat_master=vu_jrawat_pr.jrawat_id)";
 				
 			if($jrawat_id!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -2149,7 +2222,6 @@ class M_master_jual_rawat extends Model{
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " jrawat_stat_dok LIKE '%".$jrawat_stat_dok."%'";
 			};
-			
 			
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();

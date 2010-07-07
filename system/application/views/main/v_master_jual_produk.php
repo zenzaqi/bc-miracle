@@ -4615,64 +4615,65 @@ Ext.onReady(function(){
 		
 		if(detail_jual_produk_DataStore.getCount()>0){
 			for(i=0; i<detail_jual_produk_DataStore.getCount();i++){
-				if(detail_jual_produk_DataStore.getAt(i).data.dproduk_id==undefined){
-					dproduk_id.push('');
-				}else{
-					dproduk_id.push(detail_jual_produk_DataStore.getAt(i).data.dproduk_id);
-				}
-				
-				if(detail_jual_produk_DataStore.getAt(i).data.dproduk_produk==undefined){
-					dproduk_produk.push('');
-				}else{
+				if((/^\d+$/.test(detail_jual_produk_DataStore.getAt(i).data.dproduk_produk))
+				   && detail_jual_produk_DataStore.getAt(i).data.dproduk_produk!==undefined
+				   && detail_jual_produk_DataStore.getAt(i).data.dproduk_produk!==''
+				   && detail_jual_produk_DataStore.getAt(i).data.dproduk_produk!==0){
+					if(detail_jual_produk_DataStore.getAt(i).data.dproduk_id==undefined){
+						dproduk_id.push('');
+					}else{
+						dproduk_id.push(detail_jual_produk_DataStore.getAt(i).data.dproduk_id);
+					}
+					
 					dproduk_produk.push(detail_jual_produk_DataStore.getAt(i).data.dproduk_produk);
-				}
-				
-				if(detail_jual_produk_DataStore.getAt(i).data.dproduk_karyawan==undefined){
-					dproduk_karyawan.push('');
-				}else{
-					dproduk_karyawan.push(detail_jual_produk_DataStore.getAt(i).data.dproduk_karyawan);
-				}
-				
-				if(detail_jual_produk_DataStore.getAt(i).data.dproduk_satuan==undefined){
-					dproduk_satuan.push('');
-				}else{
-					dproduk_satuan.push(detail_jual_produk_DataStore.getAt(i).data.dproduk_satuan);
-				}
-				
-				if(detail_jual_produk_DataStore.getAt(i).data.dproduk_jumlah==undefined){
-					dproduk_jumlah.push('');
-				}else{
-					dproduk_jumlah.push(detail_jual_produk_DataStore.getAt(i).data.dproduk_jumlah);
-				}
-				
-				if(detail_jual_produk_DataStore.getAt(i).data.dproduk_harga==undefined){
-					dproduk_harga.push('');
-				}else{
-					dproduk_harga.push(detail_jual_produk_DataStore.getAt(i).data.dproduk_harga);
-				}
-				
-				if(detail_jual_produk_DataStore.getAt(i).data.dproduk_subtotal_net==undefined){
-					dproduk_subtotal_net.push('');
-				}else{
-					dproduk_subtotal_net.push(detail_jual_produk_DataStore.getAt(i).data.dproduk_subtotal_net);
-				}
-				
-				if(detail_jual_produk_DataStore.getAt(i).data.dproduk_diskon==undefined){
-					dproduk_diskon.push('');
-				}else{
-					dproduk_diskon.push(detail_jual_produk_DataStore.getAt(i).data.dproduk_diskon);
-				}
-				
-				if(detail_jual_produk_DataStore.getAt(i).data.dproduk_diskon_jenis){
-					dproduk_diskon_jenis.push('');
-				}else{
-					dproduk_diskon_jenis.push(detail_jual_produk_DataStore.getAt(i).data.dproduk_diskon_jenis);
-				}
-				
-				if(detail_jual_produk_DataStore.getAt(i).data.dproduk_sales==undefined){
-					dproduk_sales.push('');
-				}else{
-					dproduk_sales.push(detail_jual_produk_DataStore.getAt(i).data.dproduk_sales);
+					
+					if(detail_jual_produk_DataStore.getAt(i).data.dproduk_karyawan==undefined){
+						dproduk_karyawan.push('');
+					}else{
+						dproduk_karyawan.push(detail_jual_produk_DataStore.getAt(i).data.dproduk_karyawan);
+					}
+					
+					if(detail_jual_produk_DataStore.getAt(i).data.dproduk_satuan==undefined){
+						dproduk_satuan.push('');
+					}else{
+						dproduk_satuan.push(detail_jual_produk_DataStore.getAt(i).data.dproduk_satuan);
+					}
+					
+					if(detail_jual_produk_DataStore.getAt(i).data.dproduk_jumlah==undefined){
+						dproduk_jumlah.push('');
+					}else{
+						dproduk_jumlah.push(detail_jual_produk_DataStore.getAt(i).data.dproduk_jumlah);
+					}
+					
+					if(detail_jual_produk_DataStore.getAt(i).data.dproduk_harga==undefined){
+						dproduk_harga.push('');
+					}else{
+						dproduk_harga.push(detail_jual_produk_DataStore.getAt(i).data.dproduk_harga);
+					}
+					
+					if(detail_jual_produk_DataStore.getAt(i).data.dproduk_subtotal_net==undefined){
+						dproduk_subtotal_net.push('');
+					}else{
+						dproduk_subtotal_net.push(detail_jual_produk_DataStore.getAt(i).data.dproduk_subtotal_net);
+					}
+					
+					if(detail_jual_produk_DataStore.getAt(i).data.dproduk_diskon==undefined){
+						dproduk_diskon.push('');
+					}else{
+						dproduk_diskon.push(detail_jual_produk_DataStore.getAt(i).data.dproduk_diskon);
+					}
+					
+					if(detail_jual_produk_DataStore.getAt(i).data.dproduk_diskon_jenis){
+						dproduk_diskon_jenis.push('');
+					}else{
+						dproduk_diskon_jenis.push(detail_jual_produk_DataStore.getAt(i).data.dproduk_diskon_jenis);
+					}
+					
+					if(detail_jual_produk_DataStore.getAt(i).data.dproduk_sales==undefined){
+						dproduk_sales.push('');
+					}else{
+						dproduk_sales.push(detail_jual_produk_DataStore.getAt(i).data.dproduk_sales);
+					}
 				}
 				
 				if(i==dcount){
