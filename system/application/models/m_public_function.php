@@ -10,11 +10,11 @@ class M_public_function extends Model{
 	function get_laporan_terima_kas($tgl_awal,$tgl_akhir,$periode,$opsi){
 			$sql="";
 			if($periode=='all')
-				$sql="SELECT jenis_transaksi,sum(nilai_card) as nilai_card,sum(nilai_cek) as nilai_cek, sum(nilai_kredit) as nilai_kredit, sum(nilai_kwitansi) as nilai_kwitansi, sum(nilai_transfer) as nilai_transfer,sum(nilai_tunai) as nilai_tunai,sum(nilai_voucher) as nilai_voucher FROM vu_trans_terima_jual GROUP BY jenis_transaksi ORDER BY jenis_transaksi";
+				$sql="SELECT jenis_transaksi,sum(nilai_card) as nilai_card,sum(nilai_cek) as nilai_cek, sum(nilai_kredit) as nilai_kredit, sum(nilai_kwitansi) as nilai_kwitansi, sum(nilai_transfer) as nilai_transfer,sum(nilai_tunai) as nilai_tunai,sum(nilai_voucher) as nilai_voucher FROM vu_trans_terima_jual WHERE stat_dok<>'Batal' GROUP BY jenis_transaksi ORDER BY jenis_transaksi";
 			else if($periode=='bulan')
-				$sql="SELECT jenis_transaksi,sum(nilai_card) as nilai_card,sum(nilai_cek) as nilai_cek, sum(nilai_kredit) as nilai_kredit, sum(nilai_kwitansi) as nilai_kwitansi, sum(nilai_transfer) as nilai_transfer,sum(nilai_tunai) as nilai_tunai,sum(nilai_voucher) as nilai_voucher FROM vu_trans_terima_jual WHERE tanggal like '".$tgl_awal."%' GROUP BY  jenis_transaksi ORDER BY jenis_transaksi";
+				$sql="SELECT jenis_transaksi,sum(nilai_card) as nilai_card,sum(nilai_cek) as nilai_cek, sum(nilai_kredit) as nilai_kredit, sum(nilai_kwitansi) as nilai_kwitansi, sum(nilai_transfer) as nilai_transfer,sum(nilai_tunai) as nilai_tunai,sum(nilai_voucher) as nilai_voucher FROM vu_trans_terima_jual WHERE tanggal like '".$tgl_awal."%' AND stat_dok<>'Batal' GROUP BY  jenis_transaksi ORDER BY jenis_transaksi";
 			else if($periode=='tanggal')
-				$sql="SELECT jenis_transaksi,sum(nilai_card) as nilai_card,sum(nilai_cek) as nilai_cek, sum(nilai_kredit) as nilai_kredit, sum(nilai_kwitansi) as nilai_kwitansi, sum(nilai_transfer) as nilai_transfer,sum(nilai_tunai) as nilai_tunai,sum(nilai_voucher) as nilai_voucher FROM vu_trans_terima_jual WHERE tanggal>='".$tgl_awal."' AND tanggal<='".$tgl_akhir."' GROUP BY  jenis_transaksi ORDER BY jenis_transaksi";
+				$sql="SELECT jenis_transaksi,sum(nilai_card) as nilai_card,sum(nilai_cek) as nilai_cek, sum(nilai_kredit) as nilai_kredit, sum(nilai_kwitansi) as nilai_kwitansi, sum(nilai_transfer) as nilai_transfer,sum(nilai_tunai) as nilai_tunai,sum(nilai_voucher) as nilai_voucher FROM vu_trans_terima_jual WHERE tanggal>='".$tgl_awal."' AND tanggal<='".$tgl_akhir."' AND stat_dok<>'Batal' GROUP BY  jenis_transaksi ORDER BY jenis_transaksi";
 
 			//echo $sql;
 			$query = $this->db->query($sql);
