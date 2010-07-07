@@ -1499,9 +1499,15 @@ Ext.onReady(function(){
   
 
     function load_membership(){
+		var cust_id=0;
+		if(jpaket_post2db=="CREATE"){
+			cust_id=jpaket_custField.getValue();
+		}else if(jpaket_post2db=="UPDATE"){
+			cust_id=jpaket_cust_idField.getValue();
+		}
 		if(jpaket_custField.getValue()!=''){
 			memberDataStore.load({
-					params : { member_cust: jpaket_custField.getValue() },
+					params : { member_cust: cust_id },
 					callback: function(opts, success, response)  {
 						 if (success) {
 							if(memberDataStore.getCount()){
@@ -4238,54 +4244,55 @@ Ext.onReady(function(){
 		
 		if(detail_jual_paket_DataStore.getCount()>0){
 			for(i=0; i<detail_jual_paket_DataStore.getCount();i++){
-				if(detail_jual_paket_DataStore.getAt(i).data.dpaket_id==undefined){
-					dpaket_id.push('');
-				}else{
-					dpaket_id.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_id);
-				}
-				
-				if(detail_jual_paket_DataStore.getAt(i).data.dpaket_paket==undefined){
-					dpaket_paket.push('');
-				}else{
+				if((/^\d+$/.test(detail_jual_paket_DataStore.getAt(i).data.dpaket_paket))
+				   && detail_jual_paket_DataStore.getAt(i).data.dpaket_paket!==undefined
+				   && detail_jual_paket_DataStore.getAt(i).data.dpaket_paket!==''
+				   && detail_jual_paket_DataStore.getAt(i).data.dpaket_paket!==0){
+					if(detail_jual_paket_DataStore.getAt(i).data.dpaket_id==undefined){
+						dpaket_id.push('');
+					}else{
+						dpaket_id.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_id);
+					}
+					
 					dpaket_paket.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_paket);
-				}
-				
-				if(detail_jual_paket_DataStore.getAt(i).data.dpaket_karyawan==undefined){
-					dpaket_karyawan.push('');
-				}else{
-					dpaket_karyawan.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_karyawan);
-				}
-				
-				if(detail_jual_paket_DataStore.getAt(i).data.dpaket_jumlah==undefined){
-					dpaket_jumlah.push('');
-				}else{
-					dpaket_jumlah.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_jumlah);
-				}
-				
-				dpaket_kadaluarsa.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_kadaluarsa.format('Y-m-d'));
-				
-				if(detail_jual_paket_DataStore.getAt(i).data.dpaket_harga==undefined){
-					dpaket_harga.push('');
-				}else{
-					dpaket_harga.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_harga);
-				}
-				
-				if(detail_jual_paket_DataStore.getAt(i).data.dpaket_diskon==undefined){
-					dpaket_diskon.push('');
-				}else{
-					dpaket_diskon.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_diskon);
-				}
-				
-				if(detail_jual_paket_DataStore.getAt(i).data.dpaket_diskon_jenis==undefined){
-					dpaket_diskon_jenis.push('');
-				}else{
-					dpaket_diskon_jenis.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_diskon_jenis);
-				}
-				
-				if(detail_jual_paket_DataStore.getAt(i).data.dpaket_sales==undefined){
-					dpaket_sales.push('');
-				}else{
-					dpaket_sales.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_sales);
+					
+					if(detail_jual_paket_DataStore.getAt(i).data.dpaket_karyawan==undefined){
+						dpaket_karyawan.push('');
+					}else{
+						dpaket_karyawan.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_karyawan);
+					}
+					
+					if(detail_jual_paket_DataStore.getAt(i).data.dpaket_jumlah==undefined){
+						dpaket_jumlah.push('');
+					}else{
+						dpaket_jumlah.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_jumlah);
+					}
+					
+					dpaket_kadaluarsa.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_kadaluarsa.format('Y-m-d'));
+					
+					if(detail_jual_paket_DataStore.getAt(i).data.dpaket_harga==undefined){
+						dpaket_harga.push('');
+					}else{
+						dpaket_harga.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_harga);
+					}
+					
+					if(detail_jual_paket_DataStore.getAt(i).data.dpaket_diskon==undefined){
+						dpaket_diskon.push('');
+					}else{
+						dpaket_diskon.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_diskon);
+					}
+					
+					if(detail_jual_paket_DataStore.getAt(i).data.dpaket_diskon_jenis==undefined){
+						dpaket_diskon_jenis.push('');
+					}else{
+						dpaket_diskon_jenis.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_diskon_jenis);
+					}
+					
+					if(detail_jual_paket_DataStore.getAt(i).data.dpaket_sales==undefined){
+						dpaket_sales.push('');
+					}else{
+						dpaket_sales.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_sales);
+					}
 				}
 				
 				if(i==dcount){
@@ -5643,7 +5650,22 @@ Ext.onReady(function(){
 	}
 	//event on update of detail data store
 	//detail_jual_paket_DataStore.on("update",load_all_jual_paket);
-	detail_jual_paket_DataStore.on("update",load_total_bayar);
+	detail_jual_paket_DataStore.on("update",function(){
+		var dcount = detail_jual_paket_DataStore.getCount() - 1;
+		for(i=0; i<detail_jual_paket_DataStore.getCount();i++){
+			if((/^\d+$/.test(detail_jual_paket_DataStore.getAt(i).data.dpaket_paket)==false)
+			   || detail_jual_paket_DataStore.getAt(i).data.dpaket_paket==undefined
+			   || detail_jual_paket_DataStore.getAt(i).data.dpaket_paket==''
+			   || detail_jual_paket_DataStore.getAt(i).data.dpaket_paket==0){
+				var grid_record = detail_jual_paket_DataStore.getAt(i);
+				detail_jual_paket_DataStore.remove(grid_record);
+			}
+			if(i==dcount){
+				load_total_bayar();
+			}
+		}
+		
+	});
 	jpaket_bayarField.on("keyup",load_total_paket_bayar);
 	jpaket_diskonField.on("keyup",load_total_paket_bayar);
 	jpaket_cashbackField.on("keyup",function(){if(jpaket_post2db=="CREATE"){load_total_paket_bayar();}else if(jpaket_post2db=="UPDATE"){load_total_bayar_updating();}});
