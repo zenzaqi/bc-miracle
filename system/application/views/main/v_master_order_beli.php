@@ -1381,13 +1381,13 @@ Ext.onReady(function(){
 	//function of detail add
 	function detail_order_beli_add(){
 		var edit_detail_order_beli= new detail_order_beliListEditorGrid.store.recordType({
-			dorder_id	:'',		
+			dorder_id		:'',		
 			dorder_master	:'',		
-			dorder_produk	:null,		
+			dorder_produk	:0,		
 			dorder_satuan	:null,		
-			dorder_jumlah	:null,		
-			dorder_harga	:null,		
-			dorder_diskon	:null		
+			dorder_jumlah	:0,		
+			dorder_harga	:0,		
+			dorder_diskon	:0		
 		});
 		editor_detail_order_beli.stopEditing();
 		detail_order_beli_DataStore.insert(0, edit_detail_order_beli);
