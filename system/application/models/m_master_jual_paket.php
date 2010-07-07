@@ -2309,6 +2309,24 @@ class M_master_jual_paket extends Model{
 					$jpaket_date_create = $record['jpaket_date_create'];
 				}
 				
+				$sql="delete from jual_tunai where jtunai_ref='".$jpaket_nobukti."'";
+				$this->db->query($sql);
+				
+				$sql="delete from jual_kwitansi where jkwitansi_ref='".$jpaket_nobukti."'";
+				$this->db->query($sql);
+				
+				$sql="delete from jual_card where jcard_ref='".$jpaket_nobukti."'";
+				$this->db->query($sql);
+						
+				$sql="delete from jual_cek where jcek_ref='".$jpaket_nobukti."'";
+				$this->db->query($sql);
+				
+				$sql="delete from jual_transfer where jtransfer_ref='".$jpaket_nobukti."'";
+				$this->db->query($sql);
+				
+				$sql="delete from voucher_terima where tvoucher_ref='".$jpaket_nobukti."'";
+				$this->db->query($sql);
+				
 				if($jpaket_cara!=null || $jpaket_cara!=''){
 					//kwitansi
 					if($jpaket_cara=='kwitansi'){
