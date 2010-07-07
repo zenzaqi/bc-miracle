@@ -273,7 +273,7 @@ Ext.onReady(function(){
 		cbo_mutasi_produkDataStore.load({
 			callback: function(r,opt,success){
 				if(success==true){
-					detail_mutasi_DataStore.setBaseParam('master_id',get_pk_id());
+					detail_mutasi_DataStore.setBaseParam('master_id',-1);
 					detail_mutasi_DataStore.load();
 				}
 			}
