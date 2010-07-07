@@ -31,7 +31,8 @@ class M_tindakan_medis extends Model{
 			LEFT JOIN master_jual_paket ON(dpaket_master=jpaket_id)
 			LEFT JOIN pengguna_paket ON(ppaket_master=jpaket_id)
 			WHERE ppaket_cust='$cust_id'
-				AND rpaket_perawatan='$rawat_id'";
+				AND rpaket_perawatan='$rawat_id'
+				AND jpaket_stat_dok<>'Batal'";
 		
 		$rs_punya_paket=$this->db->query($sql_punya_paket);
 		if($rs_punya_paket->num_rows()){
@@ -158,7 +159,8 @@ class M_tindakan_medis extends Model{
 			LEFT JOIN pengguna_paket ON(ppaket_master=jpaket_id)
 			WHERE ppaket_cust='$cust_id'
 				AND rpaket_perawatan='$rawat_id'
-				AND jpaket_cust='$cust_id'";
+				AND jpaket_cust='$cust_id'
+				AND jpaket_stat_dok<>'Batal'";
 		
 		$rs_punya_paket=$this->db->query($sql_punya_paket);
 		if($rs_punya_paket->num_rows()){
