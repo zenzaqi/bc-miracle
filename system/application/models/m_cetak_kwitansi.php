@@ -168,6 +168,7 @@ class M_cetak_kwitansi extends Model{
 		
 		//function for create new record
 		function cetak_kwitansi_create($kwitansi_no ,$kwitansi_cust ,$kwitansi_tanggal, $kwitansi_ref ,$kwitansi_nilai ,$kwitansi_keterangan ,$kwitansi_status ,$kwitansi_cara ,$kwitansi_bayar ,$kwitansi_tunai_nilai ,$kwitansi_card_nama ,$kwitansi_card_edc ,$kwitansi_card_no ,$kwitansi_card_nilai ,$kwitansi_cek_nama ,$kwitansi_cek_no ,$kwitansi_cek_valid ,$kwitansi_cek_bank ,$kwitansi_cek_nilai ,$kwitansi_transfer_bank ,$kwitansi_transfer_nama ,$kwitansi_transfer_nilai ,$kwitansi_creator ){
+			$datetime_now = date('Y-m-d H:i:s');
 			if($kwitansi_status=="")
 				$kwitansi_status="Aktif";
 			
@@ -184,7 +185,8 @@ class M_cetak_kwitansi extends Model{
 				"kwitansi_keterangan"=>$kwitansi_keterangan, 
 				"kwitansi_status"=>$kwitansi_status,
 				"kwitansi_cara"=>$kwitansi_cara,
-				"kwitansi_creator"=>$kwitansi_creator
+				"kwitansi_creator"=>$kwitansi_creator,
+				"kwitansi_date_create"=>$datetime_now
 			);
 			$this->db->insert('cetak_kwitansi', $data); 
 			if($this->db->affected_rows()){
@@ -198,7 +200,10 @@ class M_cetak_kwitansi extends Model{
 							"jcard_edc"=>$kwitansi_card_edc,
 							"jcard_no"=>$kwitansi_card_no,
 							"jcard_nilai"=>$kwitansi_card_nilai,
-							"jcard_ref"=>$kwitansi_no
+							"jcard_ref"=>$kwitansi_no,
+							"jcard_transaksi"=>"jual_kwitansi",
+							"jcard_date_create"=>$datetime_now,
+							"jcard_stat_dok"=>'Terbuka'
 							);
 						$this->db->insert('jual_card', $data); 
 					
@@ -222,7 +227,10 @@ class M_cetak_kwitansi extends Model{
 							"jcek_valid"=>$kwitansi_cek_valid,
 							"jcek_bank"=>$kwitansi_cek_bank,
 							"jcek_nilai"=>$kwitansi_cek_nilai,
-							"jcek_ref"=>$kwitansi_no
+							"jcek_ref"=>$kwitansi_no,
+							"jcek_transaksi"=>"jual_kwitansi",
+							"jcek_date_create"=>$datetime_now,
+							"jcek_stat_dok"=>'Terbuka'
 							);
 						$this->db->insert('jual_cek', $data); 
 					}else if($kwitansi_cara=='transfer'){
@@ -231,14 +239,20 @@ class M_cetak_kwitansi extends Model{
 							"jtransfer_bank"=>$kwitansi_transfer_bank,
 							"jtransfer_nama"=>$kwitansi_transfer_nama,
 							"jtransfer_nilai"=>$kwitansi_transfer_nilai,
-							"jtransfer_ref"=>$kwitansi_no
+							"jtransfer_ref"=>$kwitansi_no,
+							"jtransfer_transaksi"=>"jual_kwitansi",
+							"jtransfer_date_create"=>$datetime_now,
+							"jtransfer_stat_dok"=>'Terbuka'
 							);
 						$this->db->insert('jual_transfer', $data); 
 					}else if($kwitansi_cara=='tunai'){
 						
 						$data=array(
 							"jtunai_nilai"=>$kwitansi_tunai_nilai,
-							"jtunai_ref"=>$kwitansi_no
+							"jtunai_ref"=>$kwitansi_no,
+							"jtunai_transaksi"=>"jual_kwitansi",
+							"jtunai_date_create"=>$datetime_now,
+							"jtunai_stat_dok"=>'Terbuka'
 							);
 						$this->db->insert('jual_tunai', $data); 
 					}
