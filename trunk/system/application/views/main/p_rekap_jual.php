@@ -88,7 +88,7 @@
         <tr>
         	<td class="clear">&nbsp;</td>
         	<th scope='row' nowrap="nowrap">Total Kuintansi (Rp)</th>
-            <td  nowrap="nowrap" align="right" class="numeric clear"><?php echo number_format($total_kuintansi,2,",","."); ?></td>
+            <td  nowrap="nowrap" align="right" class="numeric clear"><?php echo number_format($total_kuitansi,2,",","."); ?></td>
              <td colspan='11' class="clear" >&nbsp;</td>
         </tr>
         <tr>
@@ -118,7 +118,7 @@
             <td align="right" class="numeric"><?php echo number_format($print->tunai,2,",","."); ?></td>
             <td align="right" class="numeric"><?php echo number_format($print->cek,2,",","."); ?></td>
             <td align="right" class="numeric"><?php echo number_format($print->transfer,2,",","."); ?></td>
-            <td align="right" class="numeric"><?php echo number_format($print->kuintansi,2,",","."); ?></td>
+            <td align="right" class="numeric"><?php echo number_format($print->kuitansi,2,",","."); ?></td>
             <td align="right" class="numeric"><?php echo number_format($print->card,2,",","."); ?></td>
             <td align="right" class="numeric"><?php echo number_format($print->kredit,2,",","."); ?></td>
        </tr>

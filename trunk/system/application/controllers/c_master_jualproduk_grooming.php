@@ -60,7 +60,7 @@ class C_master_jualproduk_grooming extends Controller {
 			$data["total_cek"]=$this->m_master_jualproduk_grooming->get_total_cek($tgl_awal,$tgl_akhir,$periode,$opsi);
 			$data["total_transfer"]=$this->m_master_jualproduk_grooming->get_total_transfer($tgl_awal,$tgl_akhir,$periode,$opsi);
 			$data["total_card"]=$this->m_master_jualproduk_grooming->get_total_card($tgl_awal,$tgl_akhir,$periode,$opsi);
-			$data["total_kuintansi"]=$this->m_master_jualproduk_grooming->get_total_kuintansi($tgl_awal,$tgl_akhir,$periode,$opsi);
+			$data["total_kuitansi"]=$this->m_master_jualproduk_grooming->get_total_kuitansi($tgl_awal,$tgl_akhir,$periode,$opsi);
 			$data["total_kredit"]=$this->m_master_jualproduk_grooming->get_total_kredit($tgl_awal,$tgl_akhir,$periode,$opsi);	
 			
 			switch($group){

@@ -87,7 +87,7 @@
         <tr>
         	<td class="clear">&nbsp;</td>
         	<th scope='row' nowrap="nowrap">Total Kuintansi (Rp)</th>
-            <td  nowrap="nowrap" align="right" class="numeric clear"><?php echo number_format($total_kuintansi,2,",","."); ?></td>
+            <td  nowrap="nowrap" align="right" class="numeric clear"><?php echo number_format($total_kuitansi,2,",","."); ?></td>
              <td colspan='10' class="clear" >&nbsp;</td>
         </tr>
         <tr>
@@ -115,7 +115,7 @@
 					$sub_tunai=0;
 					$sub_cek=0;
 					$sub_transfer=0;
-					$sub_kuintansi=0;
+					$sub_kuitansi=0;
 					$sub_card=0;
 					$sub_kredit=0;
 					$sub_jumlah_barang=0;
@@ -129,7 +129,7 @@
 					$sub_tunai+=$print_list->tunai;
 					$sub_cek+=$print_list->tunai;
 					$sub_transfer+=$print_list->transfer;
-					$sub_kuintansi+=$print_list->kuintansi;
+					$sub_kuitansi+=$print_list->kuitansi;
 					$sub_card+=$print_list->card;
 					$sub_kredit+=$print_list->kredit;
 		   ?>
@@ -144,7 +144,7 @@
                 <td align="right" class="numeric"><?php echo number_format($print_list->tunai,2,",","."); ?></td>
                 <td align="right" class="numeric"><?php echo number_format($print_list->cek,2,",","."); ?></td>
                 <td align="right" class="numeric"><?php echo number_format($print_list->transfer,2,",","."); ?></td>
-                <td align="right" class="numeric"><?php echo number_format($print_list->kuintansi,2,",","."); ?></td>
+                <td align="right" class="numeric"><?php echo number_format($print_list->kuitansi,2,",","."); ?></td>
                 <td align="right" class="numeric"><?php echo number_format($print_list->card,2,",","."); ?></td>
                 <td align="right" class="numeric"><?php echo number_format($print_list->kredit,2,",","."); ?></td>
            </tr>
@@ -158,7 +158,7 @@
                 <td align="right" class="numeric"><b><?php echo number_format($sub_tunai,2,",","."); ?></b></td>
                 <td align="right" class="numeric"><b><?php echo number_format($sub_cek,2,",","."); ?></b></td>
                 <td align="right" class="numeric"><b><?php echo number_format($sub_transfer,2,",","."); ?></b></td>
-                <td align="right" class="numeric"><b><?php echo number_format($sub_kuintansi,2,",","."); ?></b></td>
+                <td align="right" class="numeric"><b><?php echo number_format($sub_kuitansi,2,",","."); ?></b></td>
                 <td align="right" class="numeric"><b><?php echo number_format($sub_card,2,",","."); ?></b></td>
                 <td align="right" class="numeric"><b><?php echo number_format($sub_kredit,2,",","."); ?></b></td>
            </tr>

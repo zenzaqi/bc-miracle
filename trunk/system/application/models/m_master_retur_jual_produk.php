@@ -256,19 +256,19 @@ class M_master_retur_jual_produk extends Model{
 				return "";
 		}
 		
-		function get_total_kuintansi($tgl_awal,$tgl_akhir,$periode,$opsi){
+		function get_total_kuitansi($tgl_awal,$tgl_akhir,$periode,$opsi){
 			if($opsi=='rekap'){
 				if($periode=='all')
-					$sql="SELECT SUM(kuintansi) as total_kuintansi FROM vu_trans_retur_produk";
+					$sql="SELECT SUM(kuitansi) as total_kuitansi FROM vu_trans_retur_produk";
 				else if($periode=='bulan')
-					$sql="SELECT SUM(kuintansi) as total_kuintansi FROM vu_trans_retur_produk WHERE tanggal like '".$tgl_awal."%'";
+					$sql="SELECT SUM(kuitansi) as total_kuitansi FROM vu_trans_retur_produk WHERE tanggal like '".$tgl_awal."%'";
 				else if($periode=='tanggal')
-					$sql="SELECT SUM(kuintansi) as total_kuintansi FROM vu_trans_retur_produk WHERE tanggal>='".$tgl_awal."' AND tanggal<='".$tgl_akhir."'";
+					$sql="SELECT SUM(kuitansi) as total_kuitansi FROM vu_trans_retur_produk WHERE tanggal>='".$tgl_awal."' AND tanggal<='".$tgl_akhir."'";
 			}
 			$query=$this->db->query($sql);
 			if($query->num_rows()){
 				$data=$query->row();
-				return $data->total_kuintansi;
+				return $data->total_kuitansi;
 			}else
 				return "";
 		}
