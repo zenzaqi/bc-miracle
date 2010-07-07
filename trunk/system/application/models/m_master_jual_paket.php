@@ -2215,7 +2215,7 @@ class M_master_jual_paket extends Model{
 							"jtunai_ref"=>$jpaket_nobukti,
 							"jtunai_transaksi"=>"jual_paket",
 							"jtunai_date_create"=>$jpaket_date_create,
-							"jtransfer_stat_dok"=>'Terbuka'
+							"jtunai_stat_dok"=>'Terbuka'
 							);
 						$this->db->insert('jual_tunai', $dti_jtunai);
 						
