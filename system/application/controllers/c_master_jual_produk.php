@@ -65,7 +65,7 @@ class C_master_jual_produk extends Controller {
 			$data["total_cek"]=$this->m_master_jual_produk->get_total_cek($tgl_awal,$tgl_akhir,$periode,$opsi);
 			$data["total_transfer"]=$this->m_master_jual_produk->get_total_transfer($tgl_awal,$tgl_akhir,$periode,$opsi);
 			$data["total_card"]=$this->m_master_jual_produk->get_total_card($tgl_awal,$tgl_akhir,$periode,$opsi);
-			$data["total_kuintansi"]=$this->m_master_jual_produk->get_total_kuintansi($tgl_awal,$tgl_akhir,$periode,$opsi);
+			$data["total_kuitansi"]=$this->m_master_jual_produk->get_total_kuitansi($tgl_awal,$tgl_akhir,$periode,$opsi);
 			$data["total_kredit"]=$this->m_master_jual_produk->get_total_kredit($tgl_awal,$tgl_akhir,$periode,$opsi);	
 			
 			switch($group){
@@ -746,9 +746,11 @@ class C_master_jual_produk extends Controller {
 		$rsiklan=$iklan->row();
 		$detail_jproduk=$result->result();
 		
-		$cara_bayar=$this->m_master_jual_produk->cara_bayar($jproduk_id);
+		$array_cara_bayar = $this->m_master_jual_produk->get_cara_bayar($jproduk_id);
+		
+		/*$cara_bayar=$this->m_master_jual_produk->cara_bayar($jproduk_id);
 		$cara_bayar2=$this->m_master_jual_produk->cara_bayar2($jproduk_id);
-		$cara_bayar3=$this->m_master_jual_produk->cara_bayar3($jproduk_id);
+		$cara_bayar3=$this->m_master_jual_produk->cara_bayar3($jproduk_id);*/
 		
 		$data['jproduk_nobukti']=$rs->jproduk_nobukti;
 		$data['jproduk_tanggal']=date('d-m-Y', strtotime($rs->jproduk_tanggal));
@@ -765,28 +767,36 @@ class C_master_jual_produk extends Controller {
 		//$data['jproduk_totalbiaya']=$rs->jproduk_totalbiaya;
 		$data['detail_jproduk']=$detail_jproduk;
 		
-		if($cara_bayar!==NULL){
-			$data['cara_bayar']=$cara_bayar->jproduk_cara;
-			$data['bayar_nilai']=$cara_bayar->bayar_nilai;
-		}else{
-			$data['cara_bayar']="";
-			$data['bayar_nilai']="";
-		}
-		
-		if($cara_bayar2!==NULL){
-			$data['cara_bayar2']=$cara_bayar2->jproduk_cara2;
-			$data['bayar2_nilai']=$cara_bayar2->bayar2_nilai;
-		}else{
-			$data['cara_bayar2']="";
-			$data['bayar2_nilai']="";
-		}
-		
-		if($cara_bayar3!==NULL){
-			$data['cara_bayar3']=$cara_bayar3->jproduk_cara3;
-			$data['bayar3_nilai']=$cara_bayar3->bayar3_nilai;
-		}else{
-			$data['cara_bayar3']="";
-			$data['bayar3_nilai']="";
+		if(count($array_cara_bayar)){
+			$data['cara_bayar1']='';
+			$data['nilai_bayar1']='';
+			
+			$data['cara_bayar2']='';
+			$data['nilai_bayar2']='';
+			
+			$data['cara_bayar3']='';
+			$data['nilai_bayar3']='';
+			
+			$i=1;
+			foreach($array_cara_bayar as $row){
+				if($row->cek > 0){
+					$data['cara_bayar'.$i]='cek/giro';
+					$data['nilai_bayar'.$i]=$row->cek;
+				}else if($row->card > 0){
+					$data['cara_bayar'.$i]='card';
+					$data['nilai_bayar'.$i]=$row->card;
+				}else if($row->kuitansi > 0){
+					$data['cara_bayar'.$i]='kuitansi';
+					$data['nilai_bayar'.$i]=$row->kuitansi;
+				}else if($row->transfer > 0){
+					$data['cara_bayar'.$i]='transfer';
+					$data['nilai_bayar'.$i]=$row->transfer;
+				}else if($row->tunai > 0){
+					$data['cara_bayar'.$i]='tunai';
+					$data['nilai_bayar'.$i]=$row->tunai;
+				}
+				$i++;
+			}
 		}
 		
 		$viewdata=$this->load->view("main/jproduk_formcetak",$data,TRUE);

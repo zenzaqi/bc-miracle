@@ -210,19 +210,19 @@ class M_master_jual_produk extends Model{
 				return "";
 		}
 		
-		function get_total_kuintansi($tgl_awal,$tgl_akhir,$periode,$opsi){
+		function get_total_kuitansi($tgl_awal,$tgl_akhir,$periode,$opsi){
 			if($opsi=='rekap'){
 				if($periode=='all')
-					$sql="SELECT SUM(kuintansi) as total_kuintansi FROM vu_trans_produk WHERE jproduk_stat_dok<>'Batal'";
+					$sql="SELECT SUM(kuitansi) as total_kuitansi FROM vu_trans_produk WHERE jproduk_stat_dok<>'Batal'";
 				else if($periode=='bulan')
-					$sql="SELECT SUM(kuintansi) as total_kuintansi FROM vu_trans_produk WHERE jproduk_stat_dok<>'Batal' AND tanggal like '".$tgl_awal."%'";
+					$sql="SELECT SUM(kuitansi) as total_kuitansi FROM vu_trans_produk WHERE jproduk_stat_dok<>'Batal' AND tanggal like '".$tgl_awal."%'";
 				else if($periode=='tanggal')
-					$sql="SELECT SUM(kuintansi) as total_kuintansi FROM vu_trans_produk WHERE jproduk_stat_dok<>'Batal' AND tanggal>='".$tgl_awal."' AND tanggal<='".$tgl_akhir."'";
+					$sql="SELECT SUM(kuitansi) as total_kuitansi FROM vu_trans_produk WHERE jproduk_stat_dok<>'Batal' AND tanggal>='".$tgl_awal."' AND tanggal<='".$tgl_akhir."'";
 			}
 			$query=$this->db->query($sql);
 			if($query->num_rows()){
 				$data=$query->row();
-				return $data->total_kuintansi;
+				return $data->total_kuitansi;
 			}else
 				return "";
 		}
@@ -2461,6 +2461,24 @@ class M_master_jual_produk extends Model{
 			$sql="SELECT jproduk_tanggal, cust_no, cust_nama, cust_alamat, jproduk_nobukti, produk_nama, dproduk_jumlah, satuan_nama, dproduk_harga, dproduk_diskon, (dproduk_harga*((100-dproduk_diskon)/100)) AS jumlah_subtotal, jproduk_creator, jproduk_diskon, jproduk_cashback, jproduk_bayar FROM detail_jual_produk LEFT JOIN master_jual_produk ON(dproduk_master=jproduk_id) LEFT JOIN customer ON(jproduk_cust=cust_id) LEFT JOIN produk ON(dproduk_produk=produk_id) LEFT JOIN satuan ON(dproduk_satuan=satuan_id) WHERE dproduk_master='$jproduk_id' ORDER BY dproduk_diskon ASC";
 			$result = $this->db->query($sql);
 			return $result;
+		}
+		
+		function get_cara_bayar($jproduk_id){
+			$sql="SELECT jproduk_nobukti, jproduk_cara FROM master_jual_produk WHERE jproduk_id='$jproduk_id'";
+			$rs=$this->db->query($sql);
+			if($rs->num_rows()){
+				$record=$rs->row_array();
+				$sql = "SELECT cek ,card ,kuitansi ,transfer ,tunai FROM vu_trans_produk WHERE no_bukti='".$record['jproduk_nobukti']."'";
+				$rs = $this->db->query($sql);
+				if($rs->num_rows()){
+					return $rs->result();
+				}else{
+					return '';
+				}
+			}else{
+				return '';
+			}
+			
 		}
 		
 		function cara_bayar($jproduk_id){
