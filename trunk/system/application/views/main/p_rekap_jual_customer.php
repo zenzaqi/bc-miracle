@@ -33,7 +33,7 @@
             <th scope='col'>Tunai (Rp)</th>
             <th scope='col'>Cek/Giro (Rp)</th>
             <th scope='col'>Transfer (Rp)</th>
-            <th scope='col'>Kuintansi (Rp)</th>
+            <th scope='col'>Kuitansi (Rp)</th>
             <th scope='col'>Credit Card (Rp)</th>
             <th scope='col'>Kredit (Rp)</th>
         </tr>
@@ -86,7 +86,7 @@
         </tr>
         <tr>
         	<td class="clear">&nbsp;</td>
-        	<th scope='row' nowrap="nowrap">Total Kuintansi (Rp)</th>
+        	<th scope='row' nowrap="nowrap">Total Kuitansi (Rp)</th>
             <td  nowrap="nowrap" align="right" class="numeric clear"><?php echo number_format($total_kuitansi,2,",","."); ?></td>
              <td colspan='10' class="clear" >&nbsp;</td>
         </tr>
