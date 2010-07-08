@@ -160,6 +160,13 @@ var app_cust_keteranganBaruField;
 
 var dt = new Date();
 
+var var_dokter_dstore = true;
+var var_terapis_dstore = true;
+var var_detail_medis_dstore = true;
+var var_detail_nonmedis_dstore = true;
+var var_dmedis_insert = true;
+var var_dnonmedis_insert = true;
+
 Ext.util.Format.comboRenderer = function(combo){
 	return function(value){
 		var record = combo.findRecord(combo.valueField, value);
@@ -170,9 +177,10 @@ Ext.util.Format.comboRenderer = function(combo){
 /* on ready fuction */
 Ext.onReady(function(){
   	Ext.QuickTips.init();	/* Initiate quick tips icon */
-  
+	
   	/* Function for Saving inLine Editing */
 	function appointment_update(oGrid_event){
+		appointmentListEditorGrid.setDisabled(true);
 		var app_id_update_pk="";
 		var app_customer_update=null;
 		var dapp_tglreservasi_update_date="";
@@ -255,8 +263,14 @@ Ext.onReady(function(){
 				switch(result){
 					case 1:
 						appointment_DataStore.commitChanges();
-						appointment_DataStore.reload();
-						dapp_dokterDataStore.load();
+						appointment_DataStore.reload({
+							callback: function(opts, success, response){
+								if(success){
+									appointmentListEditorGrid.setDisabled(false);
+								}
+							}
+						});
+						//dapp_dokterDataStore.load();
 						break;
 					case 2:
 						Ext.MessageBox.show({
@@ -267,9 +281,22 @@ Ext.onReady(function(){
 						   animEl: 'save',
 						   icon: Ext.MessageBox.WARNING
 						});
-						appointment_DataStore.reload();
+						appointment_DataStore.reload({
+							callback: function(opts, success, response){
+								if(success){
+									appointmentListEditorGrid.setDisabled(false);
+								}
+							}
+						});
 						break;
 					case 3:
+						appointment_DataStore.reload({
+							callback: function(opts, success, response){
+								if(success){
+									appointmentListEditorGrid.setDisabled(false);
+								}
+							}
+						});
 						Ext.MessageBox.show({
 						   title: 'Warning',
 						   width: 250,
@@ -278,12 +305,11 @@ Ext.onReady(function(){
 						   animEl: 'save',
 						   icon: Ext.MessageBox.WARNING
 						});
-						appointment_DataStore.reload();
 						break;
 					default:
+						appointmentListEditorGrid.setDisabled(false);
 						Ext.MessageBox.show({
 						   title: 'Warning',
-//						   msg: 'We could\'t not save the appointment.',
 						   msg: 'Data appointment tidak bisa disimpan',
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'save',
@@ -293,6 +319,7 @@ Ext.onReady(function(){
 				}
 			},
 			failure: function(response){
+				appointmentListEditorGrid.setDisabled(false);
 				var result=response.responseText;
 				Ext.MessageBox.show({
 				   title: 'Error',
@@ -373,16 +400,19 @@ Ext.onReady(function(){
                     switch(result){
                         case 1:
                             if(dmedis_record=='ada'){
+								var_dmedis_insert = false;
                                 appointment_detail_medis_insert();
                             }
                             if(dnonmedis_record=='ada'){
+								var_dnonmedis_insert = false;
                                 appointment_detail_nonmedis_insert();
                             }
-                            Ext.MessageBox.alert(app_post2db+' OK','Data appointment berhasil disimpan');
-                            appointment_createWindow.hide();
+                            //Ext.MessageBox.alert(app_post2db+' OK','Data appointment berhasil disimpan');
+                            //appointment_createWindow.hide();
                             break;
                         case 2:
-                            Ext.MessageBox.hide();
+                            //Ext.MessageBox.hide();
+							appointment_createWindow.setDisabled(false);
                             Ext.MessageBox.show({
                                title: 'Warning',
                                msg: 'Customer sudah terdaftar.',
@@ -392,7 +422,8 @@ Ext.onReady(function(){
                             });
                             break;
                         case 3:
-                            Ext.MessageBox.hide();
+                            //Ext.MessageBox.hide();
+							appointment_createWindow.setDisabled(false);
                             Ext.MessageBox.show({
                                title: 'Warning',
                                msg: 'No telp atau no ponsel customer baru tidak boleh kosong.',
@@ -402,7 +433,8 @@ Ext.onReady(function(){
                             });
                             break;
                         default:
-                            Ext.MessageBox.hide();
+                            //Ext.MessageBox.hide();
+							appointment_createWindow.setDisabled(false);
                             Ext.MessageBox.show({
                                title: 'Warning',
                                msg: 'Data appointment tidak bisa disimpan',
@@ -414,7 +446,8 @@ Ext.onReady(function(){
                     }
                 },
                 failure: function(response){
-                    Ext.MessageBox.hide();
+                    //Ext.MessageBox.hide();
+					appointment_createWindow.setDisabled(false);
                     var result=response.responseText;
                     Ext.MessageBox.show({
                            title: 'Error',
@@ -427,7 +460,8 @@ Ext.onReady(function(){
             });
 		} else {
 			if(!/^\d+$/.test(app_customerField.getValue())){
-				Ext.MessageBox.hide();
+				//Ext.MessageBox.hide();
+				appointment_createWindow.setDisabled(false);
 				Ext.MessageBox.show({
 					title: 'Warning',
 					msg: 'Customer harus dipilih, <br>bukan isian',
@@ -437,7 +471,8 @@ Ext.onReady(function(){
 					icon: Ext.MessageBox.WARNING
 				});
 			}else {
-				Ext.MessageBox.hide();
+				//Ext.MessageBox.hide();
+				appointment_createWindow.setDisabled(false);
 				Ext.MessageBox.show({
 					title: 'Warning',
 					msg: 'Ada data yang belum diinputkan',
@@ -505,6 +540,18 @@ Ext.onReady(function(){
 		return true;
 	}
   	/* End of Function */
+  	
+	function window_enable(){
+		if(var_dokter_dstore==true && var_terapis_dstore==true && var_detail_medis_dstore==true && var_detail_nonmedis_dstore==true){
+			appointment_createWindow.setDisabled(false);
+		}
+	}
+	
+	function detail_insert_finish(){
+		if(var_dmedis_insert==true && var_dnonmedis_insert==true){
+			appointment_createWindow.setDisabled(false);
+		}
+	}
   
   	/* Function for Displaying  create Window Form */
 	function display_form_window(){
@@ -799,6 +846,16 @@ Ext.onReady(function(){
 			'<span>{dokter_username}',
         '</div></tpl>'
     );
+	dapp_dokterDataStore.on('beforeload', function(){
+		var_dokter_dstore = false;
+		appointment_createWindow.setDisabled(true);
+	});
+	dapp_dokterDataStore.on('load', function(opts, success, response){
+		if(success){
+			var_dokter_dstore = true;
+			window_enable();
+		}
+	});
 
 	dapp_terapisDataStore = new Ext.data.Store({
 		id: 'dapp_terapisDataStore',
@@ -825,6 +882,16 @@ Ext.onReady(function(){
 			'<span>{terapis_username}</span>', //terapis_count & shift tdk perlu ditampilkan, karena sudah ada di Jadwal Therapist
         '</div></tpl>'
     );
+	dapp_terapisDataStore.on('beforeload', function(){
+		var_terapis_dstore = false;
+		appointment_createWindow.setDisabled(true);
+	});
+	dapp_terapisDataStore.on('load', function(opts, success, response){
+		if(success){
+			var_terapis_dstore = true;
+			window_enable();
+		}
+	});
     
   	/* Function for Identify of Window Column Model */
 	appointment_ColumnModel = new Ext.grid.ColumnModel(
@@ -1649,6 +1716,16 @@ Ext.onReady(function(){
 		sortInfo:{field: 'dapp_medis_id', direction: "ASC"}
 	});
 	/* End of Function */
+	appointment_detail_medisDataStore.on('beforeload', function(){
+		var_detail_medis_dstore = false;
+		appointment_createWindow.setDisabled(true);
+	});
+	appointment_detail_medisDataStore.on('load', function(opts, success, response){
+		if(success){
+			var_detail_medis_dstore = true;
+			window_enable();
+		}
+	});
 	
 	//function for editor of detail
 	var editor_appointment_detail_medis= new Ext.ux.grid.RowEditor({
@@ -1978,10 +2055,16 @@ Ext.onReady(function(){
                         success: function(response){
 							var result=eval(response.responseText);
 							if(result==1){
+								var_dmedis_insert = true;
+								detail_insert_finish();
+								Ext.MessageBox.alert(app_post2db+' OK','Data appointment berhasil disimpan');
 								appointment_DataStore.reload();
+								appointment_createWindow.hide();
 							}else{
+								var_dmedis_insert = true;
+								detail_insert_finish();
 								appointment_DataStore.reload();
-								Ext.MessageBox.hide();
+								//Ext.MessageBox.hide();
 								Ext.MessageBox.show({
 									title: 'Error',
 									msg: 'Data detail Appointment tidak bisa disimpan.',
@@ -1992,7 +2075,9 @@ Ext.onReady(function(){
 							}
 						},
 						failure: function(response){
-							Ext.MessageBox.hide();
+							var_dmedis_insert = true;
+							detail_insert_finish();
+							//Ext.MessageBox.hide();
 							var result=response.responseText;
 							Ext.MessageBox.show({
 							   title: 'Error',
@@ -2133,6 +2218,16 @@ Ext.onReady(function(){
 		sortInfo:{field: 'dapp_nonmedis_id', direction: "ASC"}
 	});
 	/* End of Function */
+	appointment_detail_nonmedisDataStore.on('beforeload', function(){
+		var_detail_nonmedis_dstore = false;
+		appointment_createWindow.setDisabled(true);
+	});
+	appointment_detail_nonmedisDataStore.on('load', function(opts, success, response){
+		if(success){
+			var_detail_nonmedis_dstore = true;
+			window_enable();
+		}
+	});
 	
 	//function for editor of detail nonmedis
 	var editor_appointment_detail_nonmedis= new Ext.ux.grid.RowEditor({
@@ -2500,10 +2595,16 @@ Ext.onReady(function(){
                         success: function(response){
 							var result=eval(response.responseText);
 							if(result==1){
+								var_dnonmedis_insert = true;
+								detail_insert_finish();
+								Ext.MessageBox.alert(app_post2db+' OK','Data appointment berhasil disimpan');
 								appointment_DataStore.reload();
+								appointment_createWindow.hide();
 							}else{
+								var_dnonmedis_insert = true;
+								detail_insert_finish();
 								appointment_DataStore.reload();
-								Ext.MessageBox.hide();
+								//Ext.MessageBox.hide();
 								Ext.MessageBox.show({
 									title: 'Error',
 									msg: 'Data detail Appointment tidak bisa disimpan.',
@@ -2514,7 +2615,9 @@ Ext.onReady(function(){
 							}
 						},
 						failure: function(response){
-							Ext.MessageBox.hide();
+							var_dnonmedis_insert = true;
+							detail_insert_finish();
+							//Ext.MessageBox.hide();
 							var result=response.responseText;
 							Ext.MessageBox.show({
 							   title: 'Error',
@@ -2626,7 +2729,7 @@ Ext.onReady(function(){
 	});
 	/* End  of Function*/
 	Ext.getCmp('app_saveClose').on('click', function(){
-		Ext.MessageBox.show({
+		/*Ext.MessageBox.show({
            title: 'Please wait',
            msg: 'Loading items...',
            progressText: 'Initializing...',
@@ -2634,7 +2737,8 @@ Ext.onReady(function(){
 		   wait:true,
 		   waitConfig: {interval:200},
            closable:false
-       });
+       });*/
+		appointment_createWindow.setDisabled(true);
 	});
 	
 	/* Function for retrieve create Window Form */

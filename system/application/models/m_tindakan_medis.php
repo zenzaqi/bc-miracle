@@ -794,58 +794,7 @@ class M_tindakan_medis extends Model{
 			$dtrawat_status = $array_dtrawat_status[$i];
 			$dtrawat_keterangan = $array_dtrawat_keterangan[$i];
 			
-			if(!is_numeric($dtrawat_id)){
-				//* data baru /
-				if($dtrawat_petugas1==''){
-					$sql = "SELECT karyawan_id FROM karyawan WHERE karyawan_no=99";
-					$rs = $this->db->query($sql);
-					$record = $rs->row_array();
-					$dtrawat_petugas1=$record['karyawan_id'];
-				}
-				if($dtrawat_jamreservasi==''){
-					$dtrawat_jamreservasi=date('H:i:s');
-				}
-				$dti_dtrawat=array(
-				"dtrawat_master"=>$dtrawat_master,
-				"dtrawat_perawatan"=>$dtrawat_perawatan,
-				"dtrawat_petugas1"=>$dtrawat_petugas1,
-				"dtrawat_tglapp"=>$date_now,
-				"dtrawat_jam"=>$dtrawat_jamreservasi,
-				"dtrawat_keterangan"=>$dtrawat_keterangan,
-				"dtrawat_creator"=>@$_SESSION[SESSION_USERID]
-				);
-				$this->db->insert('tindakan_detail', $dti_dtrawat);
-				if($this->db->affected_rows()){
-					$bln_now=date('Y-m');
-					/* meng-Counter db.report_tindakan dari Dokter yang dipilih */
-					$sql="SELECT reportt_jmltindakan FROM report_tindakan WHERE reportt_bln LIKE '$bln_now%' AND reportt_karyawan_id='$dtrawat_petugas1'";
-					$rs=$this->db->query($sql);
-					if($rs->num_rows()){
-						$rs_record=$rs->row_array();
-						$data_reportt=array(
-						"reportt_jmltindakan"=>$rs_record["reportt_jmltindakan"]+1
-						);
-						$this->db->where('reportt_karyawan_id', $dtrawat_petugas1);
-						$this->db->update('report_tindakan', $data_reportt);
-					}else if(!$rs->num_rows()){
-						$data_reportt=array(
-						"reportt_karyawan_id"=>$dtrawat_petugas1,
-						"reportt_bln"=>$date_now,
-						"reportt_jmltindakan"=>1
-						);
-						$this->db->insert('report_tindakan', $data_reportt);
-					}
-					//return 'Detail telah berhasil ditambahkan';
-					/*if($count==($dcount-1)){
-						return '1';
-					}elseif($count<>($dcount-1)){
-						return '0';
-					}*/
-					if($i==$size_array){
-						return '1';
-					}
-				}
-			}elseif(is_numeric($dtrawat_id)){
+			if(is_numeric($dtrawat_id)){
 				$sql="SELECT dtrawat_id,dtrawat_locked,dtrawat_perawatan,dtrawat_petugas1,dtrawat_jam,dtrawat_keterangan FROM tindakan_detail WHERE dtrawat_id='$dtrawat_id'";
 				$rs=$this->db->query($sql);
 				if($rs->num_rows()){
@@ -882,23 +831,66 @@ class M_tindakan_medis extends Model{
 						);
 						$this->db->where('dtrawat_id', $dtrawat_id);
 						$this->db->update('tindakan_detail', $dtu_dtrawat);*/ //2010-07-01
-						/*if($count==($dcount-1)){
-							return '1';
-						}elseif($count<>($dcount-1)){
-							return '0';
-						}*/
 						if($i==$size_array){
 							return '1';
 						}
 					}else{
-						/*if($count==($dcount-1)){
-							return '1';
-						}elseif($count<>($dcount-1)){
-							return '0';
-						}*/
 						if($i==$size_array){
 							return '1';
 						}
+					}
+				}else{
+					if($i==$size_array){
+						return '1';
+					}
+				}
+			}else{
+				//* data baru /
+				if($dtrawat_petugas1==''){
+					$sql = "SELECT karyawan_id FROM karyawan WHERE karyawan_no=99";
+					$rs = $this->db->query($sql);
+					$record = $rs->row_array();
+					$dtrawat_petugas1=$record['karyawan_id'];
+				}
+				if($dtrawat_jamreservasi==''){
+					$dtrawat_jamreservasi=date('H:i:s');
+				}
+				$dti_dtrawat=array(
+				"dtrawat_master"=>$dtrawat_master,
+				"dtrawat_perawatan"=>$dtrawat_perawatan,
+				"dtrawat_petugas1"=>$dtrawat_petugas1,
+				"dtrawat_tglapp"=>$date_now,
+				"dtrawat_jam"=>$dtrawat_jamreservasi,
+				"dtrawat_keterangan"=>$dtrawat_keterangan,
+				"dtrawat_creator"=>@$_SESSION[SESSION_USERID]
+				);
+				$this->db->insert('tindakan_detail', $dti_dtrawat);
+				if($this->db->affected_rows()){
+					$bln_now=date('Y-m');
+					/* meng-Counter db.report_tindakan dari Dokter yang dipilih */
+					$sql="SELECT reportt_jmltindakan FROM report_tindakan WHERE reportt_bln LIKE '$bln_now%' AND reportt_karyawan_id='$dtrawat_petugas1'";
+					$rs=$this->db->query($sql);
+					if($rs->num_rows()){
+						$rs_record=$rs->row_array();
+						$data_reportt=array(
+						"reportt_jmltindakan"=>$rs_record["reportt_jmltindakan"]+1
+						);
+						$this->db->where('reportt_karyawan_id', $dtrawat_petugas1);
+						$this->db->update('report_tindakan', $data_reportt);
+					}else{
+						$data_reportt=array(
+						"reportt_karyawan_id"=>$dtrawat_petugas1,
+						"reportt_bln"=>$date_now,
+						"reportt_jmltindakan"=>1
+						);
+						$this->db->insert('report_tindakan', $data_reportt);
+					}
+					if($i==$size_array){
+						return '1';
+					}
+				}else{
+					if($i==$size_array){
+						return '1';
 					}
 				}
 			}
