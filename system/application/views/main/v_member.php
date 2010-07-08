@@ -634,7 +634,7 @@ Ext.onReady(function(){
 				store:new Ext.data.SimpleStore({
 					fields:['member_status_value', 'member_status_display'],
 					//data: [['tidak aktif','tidak aktif'],['print','print'],['aktif','aktif'],['register','register']]
-					data: [['Daftar', 'Daftar'], ['Cetak', 'Cetak'], ['Aktif', 'Aktif']]
+					data: [['Daftar', 'Daftar'], ['Cetak', 'Cetak'], ['Serah Terima', 'Serah Terima']]
 					}),
 				mode: 'local',
                	displayField: 'member_status_display',
