@@ -130,7 +130,7 @@ var trawat_medis_keteranganSearchField;
 
 var var_dokter_dstore = true;
 var var_perawatan_medis_dstore = true;
-var var_perawatan_nonmedis_dstore = true;
+var var_perawatan_nonmedis_inmedis_dstore = true;
 var var_dtindakan_jnonmedis_dstore = true;
 var var_dtindakan_medis_dstore = true;
 
@@ -218,6 +218,7 @@ Ext.onReady(function(){
 				var result=eval(response.responseText);
 				switch(result){
 					case -1:
+						tindakan_medisDataStore.reload();
 						tindakanListEditorGrid.setDisabled(false);
 						Ext.MessageBox.show({
 						   title: 'Warning',
@@ -227,7 +228,6 @@ Ext.onReady(function(){
 						   animEl: 'save',
 						   icon: Ext.MessageBox.WARNING
 						});
-						tindakan_medisDataStore.reload();
 						break;
 					default:
 						tindakan_medisDataStore.commitChanges();
@@ -245,6 +245,7 @@ Ext.onReady(function(){
 				}
 			},
 			failure: function(response){
+				tindakan_medisDataStore.reload();
 				tindakanListEditorGrid.setDisabled(false);
 				var result=response.responseText;
 				Ext.MessageBox.show({
@@ -285,7 +286,7 @@ Ext.onReady(function(){
 				switch(result){
 					case 1:
 						tindakan_medisdetail_insert();
-						tindakan_medis_createWindow.hide();
+						//tindakan_medis_createWindow.hide();
 						break;
 					default:
 						tindakan_medis_createWindow.setDisabled(false);
@@ -608,7 +609,7 @@ Ext.onReady(function(){
 	trawat_medis_perawatanDataStore.on('load', function(opts, success, response){
 		if(success){
 			var_perawatan_medis_dstore = true;
-			window_editing_lock();
+			window_medis_editing_lock();
 		}
 	});
 
@@ -642,7 +643,7 @@ Ext.onReady(function(){
 	cbo_dtindakan_dokterDataStore.on('load', function(opts, success, response){
 		if(success){
 			var_dokter_dstore = true;
-			window_editing_lock();
+			window_medis_editing_lock();
 		}
 	});
     
@@ -1073,7 +1074,7 @@ Ext.onReady(function(){
 	tindakan_medis_detail_DataStore.on('load', function(opts, success, response){
 		if(success){
 			var_dtindakan_medis_dstore = true;
-			window_editing_lock();
+			window_medis_editing_lock();
 		}
 	});
 	
@@ -1399,10 +1400,12 @@ Ext.onReady(function(){
 								dtindakan_jual_nonmedis_insert();
 								tindakan_medisDataStore.reload();
 							}else if(result==0){
+								tindakan_medis_createWindow.hide();
 								tindakan_medisDataStore.reload();
 								//Ext.MessageBox.hide();
 								tindakan_medis_createWindow.setDisabled(false);
 							}else{
+								tindakan_medis_createWindow.hide();
 								tindakan_medisDataStore.reload();
 								//Ext.MessageBox.hide();
 								tindakan_medis_createWindow.setDisabled(false);
@@ -1416,6 +1419,7 @@ Ext.onReady(function(){
 							}
 						},
 						failure: function(response){
+							tindakan_medis_createWindow.hide();
 							//Ext.MessageBox.hide();
 							tindakan_medis_createWindow.setDisabled(false);
 							var result=response.responseText;
@@ -1533,7 +1537,7 @@ Ext.onReady(function(){
 	dtindakan_jual_nonmedisDataStore.on('load', function(opts, success, response){
 		if(success){
 			var_dtindakan_jnonmedis_dstore = true;
-			window_editing_lock();
+			window_medis_editing_lock();
 		}
 	});
 	
@@ -1577,13 +1581,13 @@ Ext.onReady(function(){
 		'</div></tpl>'
     );
 	cbo_perawatan_dtjnonmedisDataStore.on('beforeload', function(){
-		var_perawatan_nonmedis_dstore = false;
+		var_perawatan_nonmedis_inmedis_dstore = false;
 		tindakan_medis_createWindow.setDisabled(true);
 	});
 	cbo_perawatan_dtjnonmedisDataStore.on('load', function(opts, success, response){
 		if(success){
-			var_perawatan_nonmedis_dstore = true;
-			window_editing_lock();
+			var_perawatan_nonmedis_inmedis_dstore = true;
+			window_medis_editing_lock();
 		}
 	});
 	
@@ -1774,6 +1778,7 @@ Ext.onReady(function(){
 						},
 						callback: function(opts, success, response){
 							if(success){
+								tindakan_medis_createWindow.hide();
 								tindakan_medisDataStore.reload();
 								//Ext.MessageBox.hide();
 								tindakan_medis_createWindow.setDisabled(false);
@@ -1821,6 +1826,7 @@ Ext.onReady(function(){
 			params:{ master_id: eval(trawat_medis_idField.getValue()) },
 			callback: function(opts, success, response){
 				if(success){
+					tindakan_medis_createWindow.hide();
 					//dtindakan_jual_nonmedis_insert();
 					//dtindakan_jual_nonmedisDataStore.reload();
 					tindakan_medisDataStore.reload();
@@ -2303,8 +2309,8 @@ Ext.onReady(function(){
 	/*End of Function */
 	
 	/* START Screen Lock Function*/
-	function window_editing_lock(){
-		if(var_dokter_dstore==true && var_perawatan_medis_dstore==true && var_perawatan_nonmedis_dstore==true
+	function window_medis_editing_lock(){
+		if(var_dokter_dstore==true && var_perawatan_medis_dstore==true && var_perawatan_nonmedis_inmedis_dstore==true
 		   && var_dtindakan_medis_dstore==true && var_dtindakan_jnonmedis_dstore==true){
 			tindakan_medis_createWindow.setDisabled(false);
 		}
