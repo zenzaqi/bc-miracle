@@ -1383,7 +1383,7 @@ Ext.onReady(function(){
 		var edit_detail_order_beli= new detail_order_beliListEditorGrid.store.recordType({
 			dorder_id		:'',		
 			dorder_master	:'',		
-			dorder_produk	:0,		
+			dorder_produk	:null,		
 			dorder_satuan	:null,		
 			dorder_jumlah	:0,		
 			dorder_harga	:0,		
