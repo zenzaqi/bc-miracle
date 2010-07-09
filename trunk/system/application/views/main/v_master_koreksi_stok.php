@@ -244,18 +244,8 @@ Ext.onReady(function(){
 		cbo_stok_produkDataStore.setBaseParam('master_id',get_pk_id());
 		cbo_stok_produkDataStore.setBaseParam('task','detail');
 		cbo_stok_produkDataStore.setBaseParam('gudang',0);
-		cbo_stok_produkDataStore.load({
-			callback: function(r,opt,success){
-				if(success==true){
-					detail_koreksi_stok_DataStore.setBaseParam('master_id', 0);
-					detail_koreksi_stok_DataStore.load();
-				}
-			}
-		});
-		
-		
-		
-		
+		cbo_stok_produkDataStore.load();
+		detail_koreksi_stok_DataStore.setBaseParam('master_id', -1);		
 	}
  	/* End of Function */
   
