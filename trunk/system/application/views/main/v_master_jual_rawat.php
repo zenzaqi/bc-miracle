@@ -250,6 +250,19 @@ function apaket_cetak(cust_id ,tanggal_ambil){
 	});
 }
 
+var var_jrawat_dstore = true;
+var var_jrawat_dapaket_dstore = true;
+var var_jrawat_perawatan_dstore = true;
+var var_jrawat_drawat_dstore = true;
+var var_jrawat_member_dstore = true;
+var var_jrawat_card_dstore = true;
+var var_jrawat_tunai_dstore = true;
+var var_jrawat_cek_dstore = true;
+var var_jrawat_transfer_dstore = true;
+var var_jrawat_kwitansi_dstore = true;
+var var_jrawat_kwitansi_byref_dstore = true;
+
+
 /* on ready fuction */
 Ext.onReady(function(){
   	Ext.QuickTips.init();	/* Initiate quick tips icon */
@@ -658,7 +671,7 @@ Ext.onReady(function(){
 							//untuk digabungkan dengan pengambilan paket jika ada
 							//detail_jual_rawat_insert('cetak'); //dimatikan
 						}
-						master_jual_rawat_DataStore.load();
+						master_jual_rawat_DataStore.reload();
 						detail_jual_rawat_DataStore.load({params: {master_id:0}});
 						master_jual_rawat_createWindow.hide();
 					}else if(result==-3){
@@ -693,9 +706,10 @@ Ext.onReady(function(){
 			//hanya diperbolehkan untuk proses cetak saja
 			var cetak_jrawat_id = master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_id');
 			var cetak_customer_id = master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_cust_id');
-			var cetak_tanggal = master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_tanggal');
+			var cetak_tanggal = master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_tanggal').format('Y-m-d');
 			
-			if(master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_nobukti')==''){
+			//if(master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_nobukti')==''){
+			if(jrawat_nobuktiField.getValue()==''){
 				//proses cetak pengambilan paket saja
 				
 				apaket_cetak(cetak_customer_id ,cetak_tanggal);
@@ -1604,16 +1618,6 @@ Ext.onReady(function(){
 			master_cara_bayarTabPanel.setActiveTab(0);
 			jrawat_post2db='UPDATE';
 			
-			//2010-05-06 ==> detail_ambil_paketDataStore.load({params: {master_id : master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_cust_id'), tanggal: master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_tanggal').format('Y-m-d'), start:0, limit:pageS}});
-			detail_ambil_paketDataStore.load({
-				params: {
-					dpaket_id : master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('dpaket_id'),
-					tanggal: master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_tanggal').format('Y-m-d'),
-					dapaket_cust: master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_cust_id'),
-					start:0,
-					limit:pageS
-				}
-			});
 			if(master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('keterangan_paket')!=="paket"){
 				cbo_drawat_rawatDataStore.load({
 					params: {query:master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_id')},
@@ -1623,8 +1627,24 @@ Ext.onReady(function(){
 								params : {master_id : master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_id'), start:0, limit:pageS},
 								callback:function(opts, success, response){
 									if(success){
-										master_jual_rawat_set_form();
-										master_jual_rawat_set_updating();
+										detail_ambil_paketDataStore.load({
+											params: {
+												dpaket_id : master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('dpaket_id'),
+												tanggal: master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_tanggal').format('Y-m-d'),
+												dapaket_cust: master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_cust_id'),
+												dapaket_stat_dok: master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_stat_dok'),
+												start:0,
+												limit:pageS
+											},
+											callback:function(opts, success, response){
+												if(success){
+													master_jual_rawat_set_form();
+													master_jual_rawat_set_updating();
+													master_jual_rawat_createWindow.setDisabled(false);
+												}
+											}
+										});
+										
 									}
 								}
 							});
@@ -1636,29 +1656,37 @@ Ext.onReady(function(){
 					params : {master_id : 0, start:0, limit:pageS},
 					callback:function(opts, success, response){
 						if(success){
-							master_jual_rawat_set_form();
-							master_jual_rawat_set_updating();
+							detail_ambil_paketDataStore.load({
+								params: {
+									dpaket_id : master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('dpaket_id'),
+									tanggal: master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_tanggal').format('Y-m-d'),
+									dapaket_cust: master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_cust_id'),
+									dapaket_stat_dok: master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_stat_dok'),
+									start:0,
+									limit:pageS
+								},
+								callback:function(opts, success, response){
+									if(success){
+										master_jual_rawat_set_form();
+										master_jual_rawat_set_updating();
+										master_jual_rawat_createWindow.setDisabled(false);
+									}
+								}
+							});
+							
+							
 						}
 					}
 				});
-				//master_jual_rawat_set_form();
-				//master_jual_rawat_set_updating();
 			}
-			/*detail_jual_rawat_DataStore.load({
-				params : {master_id : master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_id'), start:0, limit:pageS},
-				callback:function(opts, success, response){
-					if(success){
-						master_jual_rawat_set_form();
-					}
-				}
-			});*/
-			//master_jual_rawat_set_form();
+			
 			msg='updated';
 			//master_jual_rawat_createWindow.hide();
 			master_jual_rawat_createForm.savePrintButton.enable();
             master_cara_bayarTabPanel.setDisabled(false);
 			master_jual_rawat_createWindow.show();
 		} else {
+			master_jual_rawat_createWindow.setDisabled(false);
 			Ext.MessageBox.show({
 				title: 'Warning',
 //				msg: 'You can\'t really update something you haven\'t selected?',
@@ -1853,6 +1881,16 @@ Ext.onReady(function(){
 		sortInfo:{field: 'ckwitansi_no', direction: "ASC"}
 	});
 	/* End of Function */
+	/*cbo_kwitansi_jual_rawat_DataStore.on('beforeload', function(){
+		var_jrawat_kwitansi_dstore = false;
+		master_jual_rawat_createWindow.setDisabled(true);
+	});
+	cbo_kwitansi_jual_rawat_DataStore.on('load', function(opts, success, response){
+		if(success){
+			var_jrawat_kwitansi_dstore = true;
+			window_jrawat_editing_lock();
+		}
+	});*/
 	
 	/* Function for Retrieve Kwitansi DataStore */
 	kwitansi_jual_rawat_DataStore = new Ext.data.Store({
@@ -1875,6 +1913,16 @@ Ext.onReady(function(){
 		sortInfo:{field: 'jkwitansi_id', direction: "DESC"}
 	});
 	/* End of Function */
+	/*kwitansi_jual_rawat_DataStore.on('beforeload', function(){
+		var_jrawat_kwitansi_byref_dstore = false;
+		master_jual_rawat_createWindow.setDisabled(true);
+	});
+	kwitansi_jual_rawat_DataStore.on('load', function(opts, success, response){
+		if(success){
+			var_jrawat_kwitansi_byref_dstore = true;
+			window_jrawat_editing_lock();
+		}
+	});*/
 	
 	/* Function for Retrieve Kwitansi DataStore */
 	card_jual_rawat_DataStore = new Ext.data.Store({
@@ -1898,6 +1946,16 @@ Ext.onReady(function(){
 		sortInfo:{field: 'jcard_id', direction: "DESC"}
 	});
 	/* End of Function */
+	/*card_jual_rawat_DataStore.on('beforeload', function(){
+		var_jrawat_card_dstore = false;
+		master_jual_rawat_createWindow.setDisabled(true);
+	});
+	card_jual_rawat_DataStore.on('load', function(opts, success, response){
+		if(success){
+			var_jrawat_card_dstore = true;
+			window_jrawat_editing_lock();
+		}
+	});*/
 	
 	/* Function for Retrieve Kwitansi DataStore */
 	cek_jual_rawat_DataStore = new Ext.data.Store({
@@ -1922,6 +1980,16 @@ Ext.onReady(function(){
 		sortInfo:{field: 'jcek_id', direction: "DESC"}
 	});
 	/* End of Function */
+	/*cek_jual_rawat_DataStore.on('beforeload', function(){
+		var_jrawat_card_dstore = false;
+		master_jual_rawat_createWindow.setDisabled(true);
+	});
+	cek_jual_rawat_DataStore.on('load', function(opts, success, response){
+		if(success){
+			var_jrawat_card_dstore = true;
+			window_jrawat_editing_lock();
+		}
+	});*/
 	
 	/* Function for Retrieve Transfer DataStore */
 	transfer_jual_rawat_DataStore = new Ext.data.Store({
@@ -1944,6 +2012,16 @@ Ext.onReady(function(){
 		sortInfo:{field: 'jtransfer_id', direction: "DESC"}
 	});
 	/* End of Function */
+	/*transfer_jual_rawat_DataStore.on('beforeload', function(){
+		var_jrawat_transfer_dstore = false;
+		master_jual_rawat_createWindow.setDisabled(true);
+	});
+	transfer_jual_rawat_DataStore.on('load', function(opts, success, response){
+		if(success){
+			var_jrawat_transfer_dstore = true;
+			window_jrawat_editing_lock();
+		}
+	});*/
 	
 	/* Function for Retrieve Tunai DataStore */
 	tunai_jual_rawat_DataStore = new Ext.data.Store({
@@ -1964,6 +2042,16 @@ Ext.onReady(function(){
 		sortInfo:{field: 'jtunai_id', direction: "DESC"}
 	});
 	/* End of Function */
+	/*tunai_jual_rawat_DataStore.on('beforeload', function(){
+		var_jrawat_tunai_dstore = false;
+		master_jual_rawat_createWindow.setDisabled(true);
+	});
+	tunai_jual_rawat_DataStore.on('load', function(opts, success, response){
+		if(success){
+			var_jrawat_tunai_dstore = true;
+			window_jrawat_editing_lock();
+		}
+	});*/
 	
 	/* GET Bank-List.Store */
 	jrawat_bankDataStore = new Ext.data.Store({
@@ -2007,6 +2095,16 @@ Ext.onReady(function(){
 		]),
 		sortInfo:{field: 'drawat_rawat_display', direction: "ASC"}
 	});
+	/*cbo_drawat_rawatDataStore.on('beforeload', function(){
+		var_jrawat_perawatan_dstore = false;
+		master_jual_rawat_createWindow.setDisabled(true);
+	});
+	cbo_drawat_rawatDataStore.on('load', function(opts, success, response){
+		if(success){
+			var_jrawat_perawatan_dstore = true;
+			window_jrawat_editing_lock();
+		}
+	});*/
 	
 	cbo_perawatanDataStore = new Ext.data.Store({
 		id: 'cbo_perawatanDataStore',
@@ -2207,6 +2305,7 @@ Ext.onReady(function(){
 			iconCls:'icon-adds',    				// this is defined in our styles.css
 			handler: display_form_window
 		}, '-',{
+			id: 'jrawat_updateBtn',
 			text: 'Edit',
 			tooltip: 'Edit selected record',
 			iconCls:'icon-update',
@@ -2258,6 +2357,9 @@ Ext.onReady(function(){
 	});
 	master_jual_rawatListEditorGrid.render();
 	/* End of DataStore */
+	Ext.getCmp('jrawat_updateBtn').on('click', function(){
+		master_jual_rawat_createWindow.setDisabled(true);
+	});
      
 	/* Create Context Menu */
 	master_jual_rawat_ContextMenu = new Ext.menu.Menu({
@@ -4074,6 +4176,16 @@ Ext.onReady(function(){
 		sortInfo:{field: 'drawat_id', direction: "ASC"}
 	});
 	/* End of Function */
+	/*detail_jual_rawat_DataStore.on('beforeload', function(){
+		var_jrawat_drawat_dstore = false;
+		master_jual_rawat_createWindow.setDisabled(true);
+	});
+	detail_jual_rawat_DataStore.on('load', function(opts, success, response){
+		if(success){
+			var_jrawat_drawat_dstore = true;
+			window_jrawat_editing_lock();
+		}
+	});*/
 	
 	//function for editor of detail
 	var editor_detail_jual_rawat= new Ext.ux.grid.RowEditor({
@@ -4109,6 +4221,16 @@ Ext.onReady(function(){
 		]),
 		sortInfo:{field: 'member_id', direction: "ASC"}
 	});
+	/*memberDataStore.on('beforeload', function(){
+		var_jrawat_member_dstore = false;
+		master_jual_rawat_createWindow.setDisabled(true);
+	});
+	memberDataStore.on('load', function(opts, success, response){
+		if(success){
+			var_jrawat_member_dstore = true;
+			window_jrawat_editing_lock();
+		}
+	});*/
 	
 	
 		
@@ -5490,6 +5612,16 @@ Ext.onReady(function(){
 		sortInfo:{field: 'jpaket_nobukti', direction: "ASC"}
 	});
 	/* End of Function */
+	/*detail_ambil_paketDataStore.on('beforeload', function(){
+		var_jrawat_dapaket_dstore = false;
+		master_jual_rawat_createWindow.setDisabled(true);
+	});
+	detail_ambil_paketDataStore.on('load', function(opts, success, response){
+		if(success){
+			var_jrawat_dapaket_dstore = true;
+			window_jrawat_editing_lock();
+		}
+	});*/
 	
 	detail_ambil_paketColumnModel = new Ext.grid.ColumnModel(
 		[
