@@ -35,16 +35,16 @@ class M_master_jual_produk extends Model{
 				if($periode=='all')
 					$sql="SELECT * FROM vu_trans_produk WHERE jproduk_stat_dok<>'Batal' ".$order_by;
 				else if($periode=='bulan')
-					$sql="SELECT * FROM vu_trans_produk WHERE jproduk_stat_dok<>'Batal' AND tanggal like '".$tgl_awal."%' ".$order_by;
+					$sql="SELECT * FROM vu_trans_produk WHERE jproduk_stat_dok<>'Batal' AND date_format(tanggal,'%Y-%m') like  '".$tgl_awal."%' ".$order_by;
 				else if($periode=='tanggal')
-					$sql="SELECT * FROM vu_trans_produk WHERE jproduk_stat_dok<>'Batal' AND tanggal>='".$tgl_awal."' AND tanggal<='".$tgl_akhir."' ".$order_by;
+					$sql="SELECT * FROM vu_trans_produk WHERE jproduk_stat_dok<>'Batal' AND date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."' ".$order_by;
 			}else if($opsi=='detail'){
 				if($periode=='all')
 					$sql="SELECT * FROM vu_detail_jual_produk WHERE jproduk_stat_dok<>'Batal' ".$order_by;
 				else if($periode=='bulan')
-					$sql="SELECT * FROM vu_detail_jual_produk WHERE jproduk_stat_dok<>'Batal' AND tanggal like '".$tgl_awal."%' ".$order_by;
+					$sql="SELECT * FROM vu_detail_jual_produk WHERE jproduk_stat_dok<>'Batal' AND date_format(tanggal,'%Y-%m') like  '".$tgl_awal."%' ".$order_by;
 				else if($periode=='tanggal')
-					$sql="SELECT * FROM vu_detail_jual_produk WHERE jproduk_stat_dok<>'Batal' AND tanggal>='".$tgl_awal."' AND tanggal<='".$tgl_akhir."' ".$order_by;
+					$sql="SELECT * FROM vu_detail_jual_produk WHERE jproduk_stat_dok<>'Batal' AND date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."' ".$order_by;
 			}
 			//echo $sql;
 			
@@ -58,16 +58,16 @@ class M_master_jual_produk extends Model{
 				if($periode=='all')
 					$sql="SELECT SUM(jumlah_barang) as total_item FROM vu_trans_produk WHERE jproduk_stat_dok<>'Batal'";
 				else if($periode=='bulan')
-					$sql="SELECT SUM(jumlah_barang) as total_item FROM vu_trans_produk WHERE jproduk_stat_dok<>'Batal' AND tanggal like '".$tgl_awal."%'";
+					$sql="SELECT SUM(jumlah_barang) as total_item FROM vu_trans_produk WHERE jproduk_stat_dok<>'Batal' AND date_format(tanggal,'%Y-%m') like  '".$tgl_awal."%'";
 				else if($periode=='tanggal')
-					$sql="SELECT SUM(jumlah_barang) as total_item FROM vu_trans_produk WHERE jproduk_stat_dok<>'Batal' AND tanggal>='".$tgl_awal."' AND tanggal<='".$tgl_akhir."'";
+					$sql="SELECT SUM(jumlah_barang) as total_item FROM vu_trans_produk WHERE jproduk_stat_dok<>'Batal' AND date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."'";
 			}else if($opsi=='detail'){
 				if($periode=='all')
 					$sql="SELECT SUM(jumlah_barang) as total_item FROM vu_detail_jual_produk WHERE jproduk_stat_dok<>'Batal'";
 				else if($periode=='bulan')
-					$sql="SELECT SUM(jumlah_barang) as total_item FROM vu_detail_jual_produk WHERE jproduk_stat_dok<>'Batal' AND tanggal like '".$tgl_awal."%'";
+					$sql="SELECT SUM(jumlah_barang) as total_item FROM vu_detail_jual_produk WHERE jproduk_stat_dok<>'Batal' AND date_format(tanggal,'%Y-%m') like  '".$tgl_awal."%'";
 				else if($periode=='tanggal')
-					$sql="SELECT SUM(jumlah_barang) as total_item FROM vu_detail_jual_produk WHERE jproduk_stat_dok<>'Batal' AND tanggal>='".$tgl_awal."' AND tanggal<='".$tgl_akhir."'";
+					$sql="SELECT SUM(jumlah_barang) as total_item FROM vu_detail_jual_produk WHERE jproduk_stat_dok<>'Batal' AND date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."'";
 			}
 			$query=$this->db->query($sql);
 			if($query->num_rows()){
@@ -82,16 +82,16 @@ class M_master_jual_produk extends Model{
 				if($periode=='all')
 					$sql="SELECT SUM(cashback) as total_diskon FROM vu_trans_produk WHERE jproduk_stat_dok<>'Batal'";
 				else if($periode=='bulan')
-					$sql="SELECT SUM(cashback) as total_diskon FROM vu_trans_produk WHERE jproduk_stat_dok<>'Batal' AND tanggal like '".$tgl_awal."%'";
+					$sql="SELECT SUM(cashback) as total_diskon FROM vu_trans_produk WHERE jproduk_stat_dok<>'Batal' AND date_format(tanggal,'%Y-%m') like  '".$tgl_awal."%'";
 				else if($periode=='tanggal')
-					$sql="SELECT SUM(cashback) as total_diskon FROM vu_trans_produk WHERE jproduk_stat_dok<>'Batal' AND tanggal>='".$tgl_awal."' AND tanggal<='".$tgl_akhir."'";
+					$sql="SELECT SUM(cashback) as total_diskon FROM vu_trans_produk WHERE jproduk_stat_dok<>'Batal' AND date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."'";
 			}else if($opsi=='detail'){
 				if($periode=='all')
 					$sql="SELECT SUM(diskon_nilai) as total_diskon FROM vu_detail_jual_produk WHERE jproduk_stat_dok<>'Batal'";
 				else if($periode=='bulan')
-					$sql="SELECT SUM(diskon_nilai) as total_diskon FROM vu_detail_jual_produk WHERE jproduk_stat_dok<>'Batal' AND tanggal like '".$tgl_awal."%'";
+					$sql="SELECT SUM(diskon_nilai) as total_diskon FROM vu_detail_jual_produk WHERE jproduk_stat_dok<>'Batal' AND date_format(tanggal,'%Y-%m') like  '".$tgl_awal."%'";
 				else if($periode=='tanggal')
-					$sql="SELECT SUM(diskon_nilai) as total_diskon FROM vu_detail_jual_produk WHERE jproduk_stat_dok<>'Batal' AND tanggal>='".$tgl_awal."' AND tanggal<='".$tgl_akhir."'";
+					$sql="SELECT SUM(diskon_nilai) as total_diskon FROM vu_detail_jual_produk WHERE jproduk_stat_dok<>'Batal' AND date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."'";
 			}
 			$query=$this->db->query($sql);
 			if($query->num_rows()){
@@ -106,16 +106,16 @@ class M_master_jual_produk extends Model{
 				if($periode=='all')
 					$sql="SELECT SUM(total_nilai) as total_nilai FROM vu_trans_produk WHERE jproduk_stat_dok<>'Batal'";
 				else if($periode=='bulan')
-					$sql="SELECT SUM(total_nilai) as total_nilai FROM vu_trans_produk WHERE jproduk_stat_dok<>'Batal' AND tanggal like '".$tgl_awal."%'";
+					$sql="SELECT SUM(total_nilai) as total_nilai FROM vu_trans_produk WHERE jproduk_stat_dok<>'Batal' AND date_format(tanggal,'%Y-%m') like  '".$tgl_awal."%'";
 				else if($periode=='tanggal')
-					$sql="SELECT SUM(total_nilai) as total_nilai FROM vu_trans_produk WHERE jproduk_stat_dok<>'Batal' AND tanggal>='".$tgl_awal."' AND tanggal<='".$tgl_akhir."'";
+					$sql="SELECT SUM(total_nilai) as total_nilai FROM vu_trans_produk WHERE jproduk_stat_dok<>'Batal' AND date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."'";
 			}else if($opsi=='detail'){
 				if($periode=='all')
 					$sql="SELECT SUM(subtotal) as total_nilai FROM vu_detail_jual_produk WHERE jproduk_stat_dok<>'Batal'";
 				else if($periode=='bulan')
-					$sql="SELECT SUM(subtotal) as total_nilai FROM vu_detail_jual_produk WHERE jproduk_stat_dok<>'Batal' AND tanggal like '".$tgl_awal."%'";
+					$sql="SELECT SUM(subtotal) as total_nilai FROM vu_detail_jual_produk WHERE jproduk_stat_dok<>'Batal' AND date_format(tanggal,'%Y-%m') like  '".$tgl_awal."%'";
 				else if($periode=='tanggal')
-					$sql="SELECT SUM(subtotal) as total_nilai FROM vu_detail_jual_produk WHERE jproduk_stat_dok<>'Batal' AND tanggal>='".$tgl_awal."' AND tanggal<='".$tgl_akhir."'";
+					$sql="SELECT SUM(subtotal) as total_nilai FROM vu_detail_jual_produk WHERE jproduk_stat_dok<>'Batal' AND date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."'";
 			}
 			$query=$this->db->query($sql);
 			if($query->num_rows()){
@@ -130,9 +130,9 @@ class M_master_jual_produk extends Model{
 				if($periode=='all')
 					$sql="SELECT SUM(cek) as total_cek FROM vu_trans_produk WHERE jproduk_stat_dok<>'Batal'";
 				else if($periode=='bulan')
-					$sql="SELECT SUM(cek) as total_cek FROM vu_trans_produk WHERE jproduk_stat_dok<>'Batal' AND tanggal like '".$tgl_awal."%'";
+					$sql="SELECT SUM(cek) as total_cek FROM vu_trans_produk WHERE jproduk_stat_dok<>'Batal' AND date_format(tanggal,'%Y-%m') like  '".$tgl_awal."%'";
 				else if($periode=='tanggal')
-					$sql="SELECT SUM(cek) as total_cek FROM vu_trans_produk WHERE jproduk_stat_dok<>'Batal' AND tanggal>='".$tgl_awal."' AND tanggal<='".$tgl_akhir."'";
+					$sql="SELECT SUM(cek) as total_cek FROM vu_trans_produk WHERE jproduk_stat_dok<>'Batal' AND date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."'";
 			}
 			$query=$this->db->query($sql);
 			if($query->num_rows()){
@@ -147,9 +147,9 @@ class M_master_jual_produk extends Model{
 				if($periode=='all')
 					$sql="SELECT SUM(tunai) as total_tunai FROM vu_trans_produk WHERE jproduk_stat_dok<>'Batal'";
 				else if($periode=='bulan')
-					$sql="SELECT SUM(tunai) as total_tunai FROM vu_trans_produk WHERE jproduk_stat_dok<>'Batal' AND tanggal like '".$tgl_awal."%'";
+					$sql="SELECT SUM(tunai) as total_tunai FROM vu_trans_produk WHERE jproduk_stat_dok<>'Batal' AND date_format(tanggal,'%Y-%m') like  '".$tgl_awal."%'";
 				else if($periode=='tanggal')
-					$sql="SELECT SUM(tunai) as total_tunai FROM vu_trans_produk WHERE jproduk_stat_dok<>'Batal' AND tanggal>='".$tgl_awal."' AND tanggal<='".$tgl_akhir."'";
+					$sql="SELECT SUM(tunai) as total_tunai FROM vu_trans_produk WHERE jproduk_stat_dok<>'Batal' AND date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."'";
 			}
 			$query=$this->db->query($sql);
 			if($query->num_rows()){
@@ -164,9 +164,9 @@ class M_master_jual_produk extends Model{
 				if($periode=='all')
 					$sql="SELECT SUM(transfer) as total_transfer FROM vu_trans_produk WHERE jproduk_stat_dok<>'Batal'";
 				else if($periode=='bulan')
-					$sql="SELECT SUM(transfer) as total_transfer FROM vu_trans_produk WHERE jproduk_stat_dok<>'Batal' AND tanggal like '".$tgl_awal."%'";
+					$sql="SELECT SUM(transfer) as total_transfer FROM vu_trans_produk WHERE jproduk_stat_dok<>'Batal' AND date_format(tanggal,'%Y-%m') like  '".$tgl_awal."%'";
 				else if($periode=='tanggal')
-					$sql="SELECT SUM(transfer) as total_transfer FROM vu_trans_produk WHERE jproduk_stat_dok<>'Batal' AND tanggal>='".$tgl_awal."' AND tanggal<='".$tgl_akhir."'";
+					$sql="SELECT SUM(transfer) as total_transfer FROM vu_trans_produk WHERE jproduk_stat_dok<>'Batal' AND date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."'";
 			}
 			$query=$this->db->query($sql);
 			if($query->num_rows()){
@@ -181,9 +181,9 @@ class M_master_jual_produk extends Model{
 				if($periode=='all')
 					$sql="SELECT SUM(card) as total_card FROM vu_trans_produk WHERE jproduk_stat_dok<>'Batal'";
 				else if($periode=='bulan')
-					$sql="SELECT SUM(card) as total_card FROM vu_trans_produk WHERE jproduk_stat_dok<>'Batal' AND tanggal like '".$tgl_awal."%'";
+					$sql="SELECT SUM(card) as total_card FROM vu_trans_produk WHERE jproduk_stat_dok<>'Batal' AND date_format(tanggal,'%Y-%m') like  '".$tgl_awal."%'";
 				else if($periode=='tanggal')
-					$sql="SELECT SUM(card) as total_card FROM vu_trans_produk WHERE jproduk_stat_dok<>'Batal' AND tanggal>='".$tgl_awal."' AND tanggal<='".$tgl_akhir."'";
+					$sql="SELECT SUM(card) as total_card FROM vu_trans_produk WHERE jproduk_stat_dok<>'Batal' AND date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."'";
 			}
 			$query=$this->db->query($sql);
 			if($query->num_rows()){
@@ -198,9 +198,9 @@ class M_master_jual_produk extends Model{
 				if($periode=='all')
 					$sql="SELECT SUM(kredit) as total_kredit FROM vu_trans_produk WHERE jproduk_stat_dok<>'Batal'";
 				else if($periode=='bulan')
-					$sql="SELECT SUM(kredit) as total_kredit FROM vu_trans_produk WHERE jproduk_stat_dok<>'Batal' AND tanggal like '".$tgl_awal."%'";
+					$sql="SELECT SUM(kredit) as total_kredit FROM vu_trans_produk WHERE jproduk_stat_dok<>'Batal' AND date_format(tanggal,'%Y-%m') like  '".$tgl_awal."%'";
 				else if($periode=='tanggal')
-					$sql="SELECT SUM(kredit) as total_kredit FROM vu_trans_produk WHERE jproduk_stat_dok<>'Batal' AND tanggal>='".$tgl_awal."' AND tanggal<='".$tgl_akhir."'";
+					$sql="SELECT SUM(kredit) as total_kredit FROM vu_trans_produk WHERE jproduk_stat_dok<>'Batal' AND date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."'";
 			}
 			$query=$this->db->query($sql);
 			if($query->num_rows()){
@@ -215,9 +215,9 @@ class M_master_jual_produk extends Model{
 				if($periode=='all')
 					$sql="SELECT SUM(kuitansi) as total_kuitansi FROM vu_trans_produk WHERE jproduk_stat_dok<>'Batal'";
 				else if($periode=='bulan')
-					$sql="SELECT SUM(kuitansi) as total_kuitansi FROM vu_trans_produk WHERE jproduk_stat_dok<>'Batal' AND tanggal like '".$tgl_awal."%'";
+					$sql="SELECT SUM(kuitansi) as total_kuitansi FROM vu_trans_produk WHERE jproduk_stat_dok<>'Batal' AND date_format(tanggal,'%Y-%m') like  '".$tgl_awal."%'";
 				else if($periode=='tanggal')
-					$sql="SELECT SUM(kuitansi) as total_kuitansi FROM vu_trans_produk WHERE jproduk_stat_dok<>'Batal' AND tanggal>='".$tgl_awal."' AND tanggal<='".$tgl_akhir."'";
+					$sql="SELECT SUM(kuitansi) as total_kuitansi FROM vu_trans_produk WHERE jproduk_stat_dok<>'Batal' AND date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."'";
 			}
 			$query=$this->db->query($sql);
 			if($query->num_rows()){
@@ -2333,11 +2333,11 @@ class M_master_jual_produk extends Model{
 			};
 			if($jproduk_tanggal!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " jproduk_tanggal >= '".$jproduk_tanggal."'";
+				$query.= " jproduk_date_format(tanggal,'%Y-%m-%d')>= '".$jproduk_tanggal."'";
 			};
 			if($jproduk_tanggal_akhir!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " jproduk_tanggal <= '".$jproduk_tanggal_akhir."'";
+				$query.= " jproduk_date_format(tanggal,'%Y-%m-%d')<= '".$jproduk_tanggal_akhir."'";
 			};
 /*			if($jproduk_diskon!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -2378,7 +2378,7 @@ class M_master_jual_produk extends Model{
 			$query="select * from master_jual_produk";
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (jproduk_id LIKE '%".addslashes($filter)."%' OR jproduk_nobukti LIKE '%".addslashes($filter)."%' OR jproduk_cust LIKE '%".addslashes($filter)."%' OR jproduk_tanggal LIKE '%".addslashes($filter)."%' OR jproduk_diskon LIKE '%".addslashes($filter)."%' OR jproduk_cara LIKE '%".addslashes($filter)."%' OR jproduk_keterangan LIKE '%".addslashes($filter)."%' )";
+				$query .= " (jproduk_id LIKE '%".addslashes($filter)."%' OR jproduk_nobukti LIKE '%".addslashes($filter)."%' OR jproduk_cust LIKE '%".addslashes($filter)."%' OR jproduk_date_format(tanggal,'%Y-%m') like  '%".addslashes($filter)."%' OR jproduk_diskon LIKE '%".addslashes($filter)."%' OR jproduk_cara LIKE '%".addslashes($filter)."%' OR jproduk_keterangan LIKE '%".addslashes($filter)."%' )";
 				$result = $this->db->query($query);
 			} else if($option=='SEARCH'){
 				if($jproduk_id!=''){
@@ -2395,7 +2395,7 @@ class M_master_jual_produk extends Model{
 				};
 				if($jproduk_tanggal!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " jproduk_tanggal LIKE '%".$jproduk_tanggal."%'";
+					$query.= " jproduk_date_format(tanggal,'%Y-%m') like  '%".$jproduk_tanggal."%'";
 				};
 				if($jproduk_diskon!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -2420,7 +2420,7 @@ class M_master_jual_produk extends Model{
 			$query="select * from master_jual_produk";
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (jproduk_id LIKE '%".addslashes($filter)."%' OR jproduk_nobukti LIKE '%".addslashes($filter)."%' OR jproduk_cust LIKE '%".addslashes($filter)."%' OR jproduk_tanggal LIKE '%".addslashes($filter)."%' OR jproduk_diskon LIKE '%".addslashes($filter)."%' OR jproduk_cara LIKE '%".addslashes($filter)."%' OR jproduk_keterangan LIKE '%".addslashes($filter)."%' )";
+				$query .= " (jproduk_id LIKE '%".addslashes($filter)."%' OR jproduk_nobukti LIKE '%".addslashes($filter)."%' OR jproduk_cust LIKE '%".addslashes($filter)."%' OR jproduk_date_format(tanggal,'%Y-%m') like  '%".addslashes($filter)."%' OR jproduk_diskon LIKE '%".addslashes($filter)."%' OR jproduk_cara LIKE '%".addslashes($filter)."%' OR jproduk_keterangan LIKE '%".addslashes($filter)."%' )";
 				$result = $this->db->query($query);
 			} else if($option=='SEARCH'){
 				if($jproduk_id!=''){
@@ -2437,7 +2437,7 @@ class M_master_jual_produk extends Model{
 				};
 				if($jproduk_tanggal!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " jproduk_tanggal LIKE '%".$jproduk_tanggal."%'";
+					$query.= " jproduk_date_format(tanggal,'%Y-%m') like  '%".$jproduk_tanggal."%'";
 				};
 				if($jproduk_diskon!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
