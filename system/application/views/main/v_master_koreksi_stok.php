@@ -221,6 +221,14 @@ Ext.onReady(function(){
 	}
 	/* End of Function  */
 	
+	function check_gudang(){
+		if(koreksi_gudangField.getValue()=="" || koreksi_gudangField.getValue()==null){
+			detail_koreksi_stokListEditorGrid.setDisabled(true);
+		}else{
+			detail_koreksi_stokListEditorGrid.setDisabled(false);
+		}
+	}
+	
 	/* Reset form before loading */
 	function master_koreksi_stok_reset_form(){
 		koreksi_idField.reset();
@@ -247,7 +255,9 @@ Ext.onReady(function(){
 		cbo_stok_produkDataStore.load();
 		detail_koreksi_stok_DataStore.setBaseParam('master_id', -1);		
 		detail_koreksi_stok_DataStore.load();
+		check_gudang();
 	}
+	
  	/* End of Function */
   
   	function get_gudang_id(){
@@ -285,6 +295,8 @@ Ext.onReady(function(){
 				}
 			}
 		});
+		
+		check_gudang();
 	}
 	/* End setValue to EDIT*/
   
@@ -1498,6 +1510,7 @@ Ext.onReady(function(){
 	koreksi_gudangField.on("select",function(){
 		cbo_stok_produkDataStore.setBaseParam('gudang',get_gudang_id());
 		cbo_stok_produkDataStore.setBaseParam('task','list');
+		check_gudang();
 		//cbo_stok_produkDataStore.reload();
 	});
 	
