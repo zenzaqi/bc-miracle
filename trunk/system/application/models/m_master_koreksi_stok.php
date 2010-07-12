@@ -316,7 +316,7 @@ class M_master_koreksi_stok extends Model{
 			// For simple search
 			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (koreksi_id LIKE '%".addslashes($filter)."%' OR koreksi_gudang LIKE '%".addslashes($filter)."%' OR koreksi_tanggal LIKE '%".addslashes($filter)."%' OR koreksi_keterangan LIKE '%".addslashes($filter)."%' )";
+				$query .= " (koreksi_id LIKE '%".addslashes($filter)."%' OR koreksi_gudang LIKE '%".addslashes($filter)."%' OR koreksi_date_format(tanggal, '%Y-%m') like  '%".addslashes($filter)."%' OR koreksi_keterangan LIKE '%".addslashes($filter)."%' )";
 			}
 			
 			$result = $this->db->query($query);
@@ -424,7 +424,7 @@ class M_master_koreksi_stok extends Model{
 			};
 			if($koreksi_tanggal!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " koreksi_tanggal LIKE '%".$koreksi_tanggal."%'";
+				$query.= " koreksi_date_format(tanggal, '%Y-%m') like  '%".$koreksi_tanggal."%'";
 			};
 			if($koreksi_keterangan!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -458,7 +458,7 @@ class M_master_koreksi_stok extends Model{
 			$query="select * from master_koreksi_stok";
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (koreksi_id LIKE '%".addslashes($filter)."%' OR koreksi_gudang LIKE '%".addslashes($filter)."%' OR koreksi_tanggal LIKE '%".addslashes($filter)."%' OR koreksi_keterangan LIKE '%".addslashes($filter)."%' )";
+				$query .= " (koreksi_id LIKE '%".addslashes($filter)."%' OR koreksi_gudang LIKE '%".addslashes($filter)."%' OR koreksi_date_format(tanggal, '%Y-%m') like  '%".addslashes($filter)."%' OR koreksi_keterangan LIKE '%".addslashes($filter)."%' )";
 				$result = $this->db->query($query);
 			} else if($option=='SEARCH'){
 				if($koreksi_id!=''){
@@ -471,7 +471,7 @@ class M_master_koreksi_stok extends Model{
 				};
 				if($koreksi_tanggal!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " koreksi_tanggal LIKE '%".$koreksi_tanggal."%'";
+					$query.= " koreksi_date_format(tanggal, '%Y-%m') like  '%".$koreksi_tanggal."%'";
 				};
 				if($koreksi_keterangan!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -488,7 +488,7 @@ class M_master_koreksi_stok extends Model{
 			$query="select * from master_koreksi_stok";
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (koreksi_id LIKE '%".addslashes($filter)."%' OR koreksi_gudang LIKE '%".addslashes($filter)."%' OR koreksi_tanggal LIKE '%".addslashes($filter)."%' OR koreksi_keterangan LIKE '%".addslashes($filter)."%' )";
+				$query .= " (koreksi_id LIKE '%".addslashes($filter)."%' OR koreksi_gudang LIKE '%".addslashes($filter)."%' OR koreksi_date_format(tanggal, '%Y-%m') like  '%".addslashes($filter)."%' OR koreksi_keterangan LIKE '%".addslashes($filter)."%' )";
 				$result = $this->db->query($query);
 			} else if($option=='SEARCH'){
 				if($koreksi_id!=''){
@@ -501,7 +501,7 @@ class M_master_koreksi_stok extends Model{
 				};
 				if($koreksi_tanggal!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " koreksi_tanggal LIKE '%".$koreksi_tanggal."%'";
+					$query.= " koreksi_date_format(tanggal, '%Y-%m') like  '%".$koreksi_tanggal."%'";
 				};
 				if($koreksi_keterangan!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
