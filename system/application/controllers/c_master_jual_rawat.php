@@ -333,7 +333,10 @@ class C_master_jual_rawat extends Controller {
 		$dpaket_id = (integer) (isset($_POST['dpaket_id']) ? $_POST['dpaket_id'] : 0);
 		$tanggal = isset($_POST['tanggal']) ? $_POST['tanggal'] : "";
 		$dapaket_cust = isset($_POST['dapaket_cust']) ? $_POST['dapaket_cust'] : 0;
-		$result=$this->m_master_jual_rawat->detail_ambil_paket_list($dpaket_id,$tanggal,$dapaket_cust,$query,$start,$end);
+		$dapaket_stat_dok=trim(@$_POST["dapaket_stat_dok"]);
+		$dapaket_stat_dok=str_replace("/(<\/?)(p)([^>]*>)", "",$dapaket_stat_dok);
+		$dapaket_stat_dok=str_replace("'", '"',$dapaket_stat_dok);
+		$result=$this->m_master_jual_rawat->detail_ambil_paket_list($dpaket_id,$tanggal,$dapaket_cust,$query,$dapaket_stat_dok,$start,$end);
 		echo $result;
 	}
 	//end of handler

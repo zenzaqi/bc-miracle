@@ -227,7 +227,7 @@ class M_master_jual_rawat extends Model{
 		
 		//fungsi untuk pengambilan paket
 		//get record list
-		function detail_ambil_paket_list($dpaket_id,$tanggal,$dapaket_cust,$query,$start,$end) {
+		function detail_ambil_paket_list($dpaket_id,$tanggal,$dapaket_cust,$query,$dapaket_stat_dok,$start,$end) {
 			$date_now=date('Y-m-d');
 			/* ambil history pengambilan paket dari $master_id===customer_id untuk transaksi hari ini */
 			//2010-05-06 ==> $query = "SELECT jpaket_nobukti, paket_nama, rawat_nama, dapaket_jumlah, cust_nama FROM detail_ambil_paket LEFT JOIN master_jual_paket ON(dapaket_jpaket=jpaket_id) LEFT JOIN paket ON(dapaket_paket=paket_id) LEFT JOIN customer ON(dapaket_cust=cust_id) LEFT JOIN perawatan ON(dapaket_item=rawat_id) WHERE dapaket_cust='$master_id' AND date_format(dapaket_date_create,'%Y-%m-%d')='$tanggal'";
@@ -252,7 +252,7 @@ class M_master_jual_rawat extends Model{
 				LEFT JOIN perawatan ON(dapaket_item=rawat_id)
 				WHERE date_format(dapaket_date_create,'%Y-%m-%d')='$tanggal'
 					AND dapaket_cust='$dapaket_cust'
-					AND dapaket_stat_dok='Terbuka'";
+					AND dapaket_stat_dok='$dapaket_stat_dok'";
 			
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
@@ -2342,35 +2342,7 @@ class M_master_jual_rawat extends Model{
 		
 		//function for advanced search record
 		function master_jual_rawat_search($jrawat_id ,$jrawat_nobukti ,$jrawat_cust ,$jrawat_diskon , $jrawat_stat_dok, $jrawat_cashback ,$jrawat_voucher ,$jrawat_cara ,$jrawat_bayar ,$jrawat_keterangan ,$jrawat_tgl_start ,$jrawat_tgl_end ,$start,$end){
-			//full query
-			//$query="SELECT * FROM master_jual_rawat,customer WHERE jrawat_cust=cust_id";
-			/*$query = "SELECT jrawat_id
-					,jrawat_nobukti
-					,cust_nama
-					,jrawat_cust
-					,cust_no
-					,cust_member
-					,member_no
-					,member_valid
-					,jrawat_tanggal
-					,jrawat_diskon
-					,jrawat_cashback
-					,jrawat_cara
-					,jrawat_cara2
-					,jrawat_cara3
-					,IF(vu_jrawat_pr.jrawat_totalbiaya!=0, vu_jrawat_pr.jrawat_totalbiaya, vu_jrawat_totalbiaya.jrawat_totalbiaya) AS jrawat_totalbiaya
-					,jrawat_bayar
-					,jrawat_stat_dok
-					,jrawat_keterangan
-					,jrawat_creator
-					,jrawat_date_create
-					,jrawat_update
-					,jrawat_date_update
-					,jrawat_revised
-					,IF(substring(jrawat_nobukti,1,2)='PK', 'paket', '') as keterangan_paket
-				FROM vu_jrawat_pr
-                LEFT JOIN vu_jrawat_totalbiaya ON(vu_jrawat_totalbiaya.drawat_master=vu_jrawat_pr.jrawat_id)";*/
-				//FROM master_jual_rawat, vu_customer WHERE jrawat_cust=cust_id";
+			//pencarian perawatan satuan di db.detail_jual_rawat
 			$query = "SELECT
                     jrawat_id,
                     jrawat_nobukti,
@@ -2419,11 +2391,7 @@ class M_master_jual_rawat extends Model{
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " jrawat_tanggal='".$jrawat_tgl_start."'";
 			}
-/*			if($jrawat_diskon!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " jrawat_diskon LIKE '%".$jrawat_diskon."%'";
-			};
-*/			if($jrawat_cara!=''){
+			if($jrawat_cara!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " jrawat_cara LIKE '%".$jrawat_cara."%'";
 			};
@@ -2433,10 +2401,113 @@ class M_master_jual_rawat extends Model{
 			};
 			if($jrawat_stat_dok!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " jrawat_stat_dok LIKE '%".$jrawat_stat_dok."%'";
+				$query.= " jrawat_stat_dok = '".$jrawat_stat_dok."'";
 			};
 			
+			$query .= " ORDER BY jrawat_date_create DESC";
+			
+			
+			//pencarian pengambilan paket di db.detail_ambil_paket
+			$query2 = "SELECT
+                    jrawat_id,
+                    jrawat_nobukti,
+                    vu_jrawat_pk.cust_nama,
+                    jrawat_cust,
+                    vu_jrawat_pk.cust_no,
+                    vu_jrawat_pk.cust_member,
+                    jrawat_tanggal,
+                    jrawat_diskon,
+                    jrawat_cashback,
+                    jrawat_cara,
+                    jrawat_cara2,
+                    jrawat_cara3,
+                    jrawat_totalbiaya,
+                    jrawat_bayar,
+                    jrawat_keterangan,
+                    jrawat_creator,
+                    jrawat_date_create,
+                    jrawat_update,
+                    jrawat_date_update,
+                    jrawat_revised,
+                    keterangan_paket,
+                    dpaket_id,
+                    dapaket_stat_dok AS jrawat_stat_dok
+                FROM vu_jrawat_pk ";
+			
+			if($jrawat_id!=''){
+				$query2.=eregi("WHERE",$query2)?" AND ":" WHERE ";
+				$query2.= " jrawat_id LIKE '%".$jrawat_id."%'";
+			};
+			if($jrawat_nobukti!=''){
+				$query2.=eregi("WHERE",$query2)?" AND ":" WHERE ";
+				$query2.= " jrawat_nobukti LIKE '%".$jrawat_nobukti."%'";
+			};
+			if($jrawat_cust!=''){
+				$query2.=eregi("WHERE",$query2)?" AND ":" WHERE ";
+				$query2.= " jrawat_cust = '".$jrawat_cust."'";
+			};
+			
+			if($jrawat_tgl_start!='' && $jrawat_tgl_end!=''){
+				$query2.=eregi("WHERE",$query2)?" AND ":" WHERE ";
+				//$query2.= " jrawat_tanggal BETWEEN '".$jrawat_tgl_start."' AND '".$jrawat_tgl_end."'";
+				$query2.= " date_format(vu_jrawat_pk.jrawat_date_create,'%Y-%m-%d') BETWEEN '".$jrawat_tgl_start."' AND '".$jrawat_tgl_end."'
+					AND vu_jrawat_pk.jrawat_cust NOT IN(
+                        SELECT vu_jrawat_pr.jrawat_cust
+                        FROM vu_jrawat_pr
+                        WHERE date_format(vu_jrawat_pr.jrawat_date_create,'%Y-%m-%d') BETWEEN '".$jrawat_tgl_start."' AND '".$jrawat_tgl_end."')";
+			}else if($jrawat_tgl_start!='' && $jrawat_tgl_end==''){
+				$query2.=eregi("WHERE",$query2)?" AND ":" WHERE ";
+				//$query2.= " jrawat_tanggal='".$jrawat_tgl_start."'";
+				$query2.= " date_format(vu_jrawat_pk.jrawat_date_create,'%Y-%m-%d') = '".$jrawat_tgl_start."' 
+					AND vu_jrawat_pk.jrawat_cust NOT IN(
+                        SELECT vu_jrawat_pr.jrawat_cust
+                        FROM vu_jrawat_pr
+                        WHERE date_format(vu_jrawat_pr.jrawat_date_create,'%Y-%m-%d') = '".$jrawat_tgl_start."' )";
+			}
+			
+			if($jrawat_cara!=''){
+				$query2.=eregi("WHERE",$query2)?" AND ":" WHERE ";
+				$query2.= " jrawat_cara LIKE '%".$jrawat_cara."%'";
+			};
+			if($jrawat_keterangan!=''){
+				$query2.=eregi("WHERE",$query2)?" AND ":" WHERE ";
+				$query2.= " jrawat_keterangan LIKE '%".$jrawat_keterangan."%'";
+			};
+			if($jrawat_stat_dok!=''){
+				$query2.=eregi("WHERE",$query2)?" AND ":" WHERE ";
+				$query2.= " vu_jrawat_pk.dapaket_stat_dok = '".$jrawat_stat_dok."'";
+			};
+			
+			$query2 .= " ORDER BY vu_jrawat_pk.dapaket_stat_dok DESC";
+			
+			$nbrows=0;
+			$nbrows2=0;
 			$result = $this->db->query($query);
+			$nbrows = $result->num_rows();
+			
+			$result2 = $this->db->query($query2);
+			$nbrows2 = $result2->num_rows();
+			
+			if($nbrows>0 || $nbrows2>0){
+				if($nbrows>0){
+					foreach($result->result() as $row){
+						$arr[] = $row;
+					}
+				}
+				if($nbrows2>0){
+					foreach($result2->result() as $row2){
+						$arr[] = $row2;
+					}
+				}
+				$nbrows=$nbrows+$nbrows2;
+                $jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+			
+			
+			/*$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
 			
 			$limit = $query." LIMIT ".$start.",".$end;		
@@ -2450,7 +2521,7 @@ class M_master_jual_rawat extends Model{
 				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
 			} else {
 				return '({"total":"0", "results":""})';
-			}
+			}*/
 		}
 		
 		//function for print record
@@ -2565,7 +2636,25 @@ class M_master_jual_rawat extends Model{
 		}
 		
 		function print_paper($jrawat_id){
-			$sql="SELECT jrawat_tanggal, cust_no, cust_nama, cust_alamat, jrawat_nobukti, rawat_nama, drawat_jumlah, drawat_harga, drawat_diskon, (drawat_harga*((100-drawat_diskon)/100)) AS jumlah_subtotal, jrawat_creator, jrawat_diskon, jrawat_cashback, jrawat_bayar FROM detail_jual_rawat LEFT JOIN master_jual_rawat ON(drawat_master=jrawat_id) LEFT JOIN customer ON(jrawat_cust=cust_id) LEFT JOIN perawatan ON(drawat_rawat=rawat_id) WHERE jrawat_id='$jrawat_id'";
+			$sql="SELECT jrawat_tanggal
+					,cust_no
+					,cust_nama
+					,cust_alamat
+					,jrawat_nobukti
+					,rawat_nama
+					,drawat_jumlah
+					,drawat_harga
+					,drawat_diskon
+					,(drawat_harga*((100-drawat_diskon)/100)) AS jumlah_subtotal
+					,jrawat_creator
+					,jrawat_diskon
+					,jrawat_cashback
+					,jrawat_bayar
+				FROM detail_jual_rawat
+				LEFT JOIN master_jual_rawat ON(drawat_master=jrawat_id)
+				LEFT JOIN customer ON(jrawat_cust=cust_id)
+				LEFT JOIN perawatan ON(drawat_rawat=rawat_id)
+				WHERE jrawat_id='$jrawat_id'";
 			$result = $this->db->query($sql);
 			//$this->master_jual_rawat_status_update($jrawat_id);
 			return $result;
