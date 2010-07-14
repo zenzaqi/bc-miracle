@@ -762,9 +762,11 @@ class C_master_jual_paket extends Controller {
 		$rsiklan=$iklan->row();
 		$detail_jpaket=$result->result();
 		
-		$cara_bayar=$this->m_master_jual_paket->cara_bayar($jpaket_id);
+		$array_cara_bayar = $this->m_master_jual_paket->get_cara_bayar($jpaket_id);
+		
+		/*$cara_bayar=$this->m_master_jual_paket->cara_bayar($jpaket_id);
 		$cara_bayar2=$this->m_master_jual_paket->cara_bayar2($jpaket_id);
-		$cara_bayar3=$this->m_master_jual_paket->cara_bayar3($jpaket_id);
+		$cara_bayar3=$this->m_master_jual_paket->cara_bayar3($jpaket_id);*/
 		
 		$data['jpaket_nobukti']=$rs->jpaket_nobukti;
 		$data['jpaket_tanggal']=date('d-m-Y', strtotime($rs->jpaket_tanggal));
@@ -780,7 +782,39 @@ class C_master_jual_paket extends Controller {
 		//$data['jpaket_totalbiaya']=$rs->jpaket_totalbiaya;
 		$data['detail_jpaket']=$detail_jpaket;
 		
-		if($cara_bayar!==NULL){
+		if(count($array_cara_bayar)){
+			$data['cara_bayar1']='';
+			$data['nilai_bayar1']='';
+			
+			$data['cara_bayar2']='';
+			$data['nilai_bayar2']='';
+			
+			$data['cara_bayar3']='';
+			$data['nilai_bayar3']='';
+			
+			$i=1;
+			foreach($array_cara_bayar as $row){
+				if($row->cek > 0){
+					$data['cara_bayar'.$i]='cek/giro';
+					$data['nilai_bayar'.$i]=$row->cek;
+				}else if($row->card > 0){
+					$data['cara_bayar'.$i]='card';
+					$data['nilai_bayar'.$i]=$row->card;
+				}else if($row->kuitansi > 0){
+					$data['cara_bayar'.$i]='kuitansi';
+					$data['nilai_bayar'.$i]=$row->kuitansi;
+				}else if($row->transfer > 0){
+					$data['cara_bayar'.$i]='transfer';
+					$data['nilai_bayar'.$i]=$row->transfer;
+				}else if($row->tunai > 0){
+					$data['cara_bayar'.$i]='tunai';
+					$data['nilai_bayar'.$i]=$row->tunai;
+				}
+				$i++;
+			}
+		}
+		
+		/*if($cara_bayar!==NULL){
 			$data['cara_bayar']=$cara_bayar->jpaket_cara;
 			$data['bayar_nilai']=$cara_bayar->bayar_nilai;
 		}else{
@@ -802,7 +836,7 @@ class C_master_jual_paket extends Controller {
 		}else{
 			$data['cara_bayar3']="";
 			$data['bayar3_nilai']="";
-		}
+		}*/
 		
 		$viewdata=$this->load->view("main/jpaket_formcetak",$data,TRUE);
 		$file = fopen("jpaket_paper.html",'w');
