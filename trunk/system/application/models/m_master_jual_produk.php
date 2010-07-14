@@ -2333,11 +2333,11 @@ class M_master_jual_produk extends Model{
 			};
 			if($jproduk_tanggal!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " jproduk_date_format(tanggal,'%Y-%m-%d')>= '".$jproduk_tanggal."'";
+				$query.= " jproduk_tanggal>= '".$jproduk_tanggal."'";
 			};
 			if($jproduk_tanggal_akhir!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " jproduk_date_format(tanggal,'%Y-%m-%d')<= '".$jproduk_tanggal_akhir."'";
+				$query.= " jproduk_tanggal<= '".$jproduk_tanggal_akhir."'";
 			};
 /*			if($jproduk_diskon!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
