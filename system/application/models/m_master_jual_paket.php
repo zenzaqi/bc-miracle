@@ -2771,11 +2771,11 @@ class M_master_jual_paket extends Model{
 			};
 			if($jpaket_tanggal!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " jpaket_date_format(tanggal, '%Y-%m-%d')>= '".$jpaket_tanggal."'";
+				$query.= " jpaket_tanggal>= '".$jpaket_tanggal."'";
 			};
 			if($jpaket_tanggal_akhir!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " jpaket_date_format(tanggal, '%Y-%m-%d')<= '".$jpaket_tanggal_akhir."'";
+				$query.= " jpaket_tanggal<= '".$jpaket_tanggal_akhir."'";
 			};
 			if($jpaket_diskon!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -2912,6 +2912,24 @@ class M_master_jual_paket extends Model{
 			$sql="SELECT jpaket_tanggal, cust_no, cust_nama, cust_alamat, jpaket_nobukti, paket_nama, dpaket_jumlah, dpaket_harga, dpaket_diskon, (dpaket_harga*((100-dpaket_diskon)/100)) AS jumlah_subtotal, jpaket_creator, jtunai_nilai, jpaket_diskon, jpaket_cashback FROM detail_jual_paket LEFT JOIN master_jual_paket ON(dpaket_master=jpaket_id) LEFT JOIN customer ON(jpaket_cust=cust_id) LEFT JOIN paket ON(dpaket_paket=paket_id) LEFT JOIN jual_tunai ON(jtunai_ref=jpaket_nobukti) WHERE jpaket_id='$jpaket_id'";
 			$result = $this->db->query($sql);
 			return $result;
+		}
+		
+		function get_cara_bayar($jpaket_id){
+			$sql="SELECT jpaket_nobukti, jpaket_cara FROM master_jual_paket WHERE jpaket_id='$jpaket_id'";
+			$rs=$this->db->query($sql);
+			if($rs->num_rows()){
+				$record=$rs->row_array();
+				$sql = "SELECT cek ,card ,kuitansi ,transfer ,tunai FROM vu_trans_paket WHERE no_bukti='".$record['jpaket_nobukti']."'";
+				$rs = $this->db->query($sql);
+				if($rs->num_rows()){
+					return $rs->result();
+				}else{
+					return '';
+				}
+			}else{
+				return '';
+			}
+			
 		}
 		
 		function cara_bayar($jpaket_id){
