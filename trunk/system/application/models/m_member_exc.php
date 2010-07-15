@@ -36,7 +36,7 @@ class M_member_exc extends Model{
 			$rs=$this->db->query($sql);
 			if($rs->num_rows()){
 				$rs_record=$rs->row_array();
-				$pattern=date("ymd").substr($rs_record['cust_no'],2);
+				$pattern=date("dmy").substr($rs_record['cust_no'],2);
 				$member_no=$this->m_public_function->get_nomor_member('member','member_no',$pattern,16);
 			}
 			
