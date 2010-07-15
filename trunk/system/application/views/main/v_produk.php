@@ -337,7 +337,7 @@ Ext.onReady(function(){
 		produk_dmField.reset();
 		produk_dmField.setValue(null);
 		produk_pointField.reset();
-		produk_pointField.setValue(1);
+		produk_pointField.setValue(null);
 		produk_volumeField.reset();
 		produk_volumeField.setValue(null);
 		produk_hargaField.reset();
