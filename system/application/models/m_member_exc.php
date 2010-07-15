@@ -67,9 +67,10 @@ class M_member_exc extends Model{
 					"member_creator"=>@$_SESSION[SESSION_USERID]
 					);
 					$this->db->insert('member', $dti_member); 
-					if($this->db->affected_rows())
+					if($this->db->affected_rows()){
+						$this->cust_member_update($member_cust);
 						return '1';
-					else
+					}else
 						return '0';
 				}
 				
@@ -93,14 +94,35 @@ class M_member_exc extends Model{
 					"member_creator"=>@$_SESSION[SESSION_USERID]
 					);
 					$this->db->insert('member', $data); 
-					if($this->db->affected_rows())
+					if($this->db->affected_rows()){
+						$this->cust_member_update($member_cust);
 						return '1';
-					else
+					}else
 						return '0';
 				}
 				
 			}
 			
+		}
+		
+		function cust_member_update($cust_id){
+			$date_now = date('Y-m-d');
+			$sql = "SELECT max(member_id) AS member_id FROM member WHERE member_cust='$cust_id' AND member_valid>'$date_now'";
+			$rs=$this->db->query($sql);
+			if($rs->num_rows()){
+				$record = $rs->row_array();
+				$dtu_customer=array(
+				"cust_member"=>$record['member_id']
+				);
+				$this->db->where('cust_id', $cust_id);
+				$this->db->update('customer', $dtu_customer);
+			}else{
+				$dtu_customer=array(
+				"cust_member"=>0
+				);
+				$this->db->where('cust_id', $cust_id);
+				$this->db->update('customer', $dtu_customer);
+			}
 		}
 		
 		
