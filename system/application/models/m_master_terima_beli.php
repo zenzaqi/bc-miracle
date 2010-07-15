@@ -18,6 +18,13 @@ class M_master_terima_beli extends Model{
 			parent::Model();
 		}
 		
+		function get_cabang(){
+			$sql="SELECT info_nama FROM info";
+			
+			$query2=$this->db->query($sql);
+            return $query2; //by isaac
+		}
+		
 		function get_laporan($tgl_awal,$tgl_akhir,$periode,$opsi,$group,$faktur){
 			
 			switch($group){

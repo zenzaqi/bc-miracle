@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Laporan Pesanan Pembelian</title>
+<title>Surat Pesanan Pembelian</title>
 </head>
 
 <body onload="window.print();window.close();">
@@ -10,8 +10,8 @@
   <tr>
     <td height="120" valign="top"><table width="100%" border="0" cellspacing="0" cellpadding="0">
       <tr>
-        <td width="55%" align="center"><br/><h2>LAPORAN <br/>
-          PESANAN PEMBELIAN<br/>"THAMRIN"</h2></p></td>
+        <td width="55%" align="center"><br/><h2>SURAT <br/>
+          PESANAN PEMBELIAN <br><?=$info_nama;?><br/></h2></p></td>
         <td width="45%"><table width="100%" border="0" cellspacing="0" cellpadding="0">
         <!--<//?php 
 		foreach($data_print as $print) { 
@@ -45,7 +45,7 @@
     </table></td>
   </tr>
   <tr>
-    <td height="1028" valign="top"><table width="100%" border="1" cellspacing="0" cellpadding="0">
+    <td valign="top"><table width="100%" border="1" cellspacing="0" cellpadding="0">
    
       <tr>
         <td width="4%">&nbsp;</td>

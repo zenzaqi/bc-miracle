@@ -37,9 +37,12 @@ class C_master_order_beli extends Controller {
 		$opsi="faktur";
         //$data['data_print'] = $this->m_master_order_beli->get_laporan("","","",$opsi,"",$faktur); //comment by masongbee
         $result = $this->m_master_order_beli->get_laporan("","","",$opsi,"",$faktur);
+		$result2 = $this->m_master_order_beli->get_cabang();
 		$data['data_print'] = $result->result();
         $record = $result->row();
-        $data['no_bukti'] = $record->no_bukti;
+        $record2 = $result2->row();
+		$data['info_nama'] = $record2->info_nama;
+		$data['no_bukti'] = $record->no_bukti;
         $data['tanggal'] = $record->tanggal;
         $data['supplier_nama'] = $record->supplier_nama;
 		$print_view=$this->load->view("main/p_pesanan_pembelian.php",$data,TRUE);
