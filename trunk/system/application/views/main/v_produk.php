@@ -337,7 +337,7 @@ Ext.onReady(function(){
 		produk_dmField.reset();
 		produk_dmField.setValue(null);
 		produk_pointField.reset();
-		produk_pointField.setValue(null);
+		produk_pointField.setValue(1);
 		produk_volumeField.reset();
 		produk_volumeField.setValue(null);
 		produk_hargaField.reset();
@@ -741,7 +741,7 @@ Ext.onReady(function(){
 			})
 		}, 
 		{
-			header: '<div align="center">' + 'Point' + '</div>',
+			header: '<div align="center">' + 'Poin' + '</div>',
 			align: 'right',
 			dataIndex: 'produk_point',
 			width: 60,	//100,
@@ -1105,9 +1105,9 @@ Ext.onReady(function(){
 	produk_pointField= new Ext.form.NumberField({
 		id: 'produk_pointField',
 		name: 'produk_pointField',
-		fieldLabel: 'Point',
+		fieldLabel: 'Poin (x)',
 		allowNegatife : false,
-		emptyText: '0',
+		emptyText: '1',
 		allowBlank: true,
 		allowDecimals: false,
 		width: 60,
@@ -1771,9 +1771,9 @@ Ext.onReady(function(){
 	produk_pointSearchField= new Ext.form.NumberField({
 		id: 'produk_pointSearchField',
 		name: 'produk_pointField',
-		fieldLabel: 'Point',
+		fieldLabel: 'Poin (x)',
 		allowNegatife : false,
-		emptyText: '0',
+		emptyText: '1',
 		allowDecimals: false,
 		width: 60,
 		maskRe: /([0-9]+)$/

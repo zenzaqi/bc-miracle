@@ -303,7 +303,8 @@ class M_perawatan extends Model{
 		function perawatan_update($rawat_id ,$rawat_kode ,$rawat_kodelama ,$rawat_nama ,$rawat_group ,$rawat_kategori,$rawat_kontribusi ,$rawat_jenis ,$rawat_keterangan ,$rawat_du ,$rawat_dm ,$rawat_point , $rawat_kredit, $rawat_jumlah_tindakan, $rawat_harga ,$rawat_gudang ,$rawat_aktif ){
 			if ($rawat_aktif=="")
 				$rawat_aktif = "Aktif";
-				
+			if ($rawat_point=="")
+				$rawat_point = 1;
 			$data = array(
 				"rawat_id"=>$rawat_id, 
 //				"rawat_kode"=>$rawat_kode, 
@@ -450,6 +451,8 @@ class M_perawatan extends Model{
 		function perawatan_create($rawat_kode ,$rawat_kodelama ,$rawat_nama ,$rawat_group ,$rawat_kategori, $rawat_kontribusi ,$rawat_jenis ,$rawat_keterangan ,$rawat_du ,$rawat_dm ,$rawat_point , $rawat_kredit, $rawat_jumlah_tindakan, $rawat_harga ,$rawat_gudang ,$rawat_aktif ){
 		if ($rawat_aktif=="")
 			$rawat_aktif = "Aktif";
+		if ($rawat_point=="")
+			$rawat_point = 1;
 			$data = array(
 				"rawat_kode"=>$rawat_kode,
 				"rawat_nama"=>$rawat_nama, 

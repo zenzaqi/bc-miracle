@@ -299,7 +299,7 @@ Ext.onReady(function(){
 		paket_dmField.reset();
 		paket_dmField.setValue(null);
 		paket_pointField.reset();
-		paket_pointField.setValue(null);
+		paket_pointField.setValue(1);
 		paket_hargaField.reset();
 		paket_hargaField.setValue(null);
 		paket_expiredField.reset();
