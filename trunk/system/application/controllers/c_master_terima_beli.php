@@ -35,6 +35,9 @@ class C_master_terima_beli extends Controller {
 		$faktur=(isset($_POST['faktur']) ? @$_POST['faktur'] : @$_GET['faktur']);
 		$opsi="faktur";
 		$data["data_print"]=$this->m_master_terima_beli->get_laporan("","","",$opsi,"",$faktur);
+		$result2 = $this->m_master_terima_beli->get_cabang();
+		$record2 = $result2->row();
+		$data['info_nama'] = $record2->info_nama;
 		$print_view=$this->load->view("main/p_penerimaan_barang.php",$data,TRUE);
 		
 		if(!file_exists("print")){

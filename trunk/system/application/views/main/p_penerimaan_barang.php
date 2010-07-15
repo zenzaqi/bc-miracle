@@ -11,7 +11,7 @@
     <td height="120" valign="top"><table width="100%" border="0" cellspacing="0" cellpadding="0">
       <tr>
         <td width="55%" align="center"><br/><h2>LAPORAN <br/>
-          PENERIMAAN BARANG<br/>"THAMRIN"</h2></p></td>
+          PENERIMAAN BARANG <br><?=$info_nama;?><br/></h2></p></td>
         <td width="45%"><table width="100%" border="0" cellspacing="0" cellpadding="0">
         <?php 
 		foreach($data_print as $print) { 
@@ -45,7 +45,7 @@
     </table></td>
   </tr>
   <tr>
-    <td height="1028" valign="top"><table width="100%" border="1" cellspacing="0" cellpadding="0">
+    <td valign="top"><table width="100%" border="1" cellspacing="0" cellpadding="0">
    
       <tr>
         <td width="4%">&nbsp;</td>

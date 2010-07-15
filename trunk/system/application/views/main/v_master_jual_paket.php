@@ -1977,7 +1977,10 @@ Ext.onReady(function(){
 			dataIndex: 'jpaket_cust_member_no',
 			width: 90,	//185,
 			sortable: true,
-			readOnly: true
+			readOnly: true,
+			renderer: function(value, cell, record){
+				return value.substring(0,6) + '-' + value.substring(6,12) + '-' + value.substring(12);
+			}
 		}, 
 		{
 			header: '<div align="center">' + 'Total (Rp)' + '</div>',
