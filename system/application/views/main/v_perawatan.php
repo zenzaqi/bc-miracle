@@ -343,7 +343,7 @@ Ext.onReady(function(){
 		rawat_dmField.reset();
 		rawat_dmField.setValue(null);
 		rawat_pointField.reset();
-		rawat_pointField.setValue(1);
+		rawat_pointField.setValue(null);
 		rawat_kreditField.reset();
 		rawat_kreditField.setValue(null);
 		//rawat_jumlah_tindakanField.reset();
@@ -1168,7 +1168,7 @@ Ext.onReady(function(){
 		name: 'rawat_pointField',
 		fieldLabel: 'Poin',
 		allowNegatife : false,
-		emptyText: '0',
+		emptyText: '1',
 		allowDecimals: false,
 		width: 60,
 		maskRe: /([0-9]+)$/
