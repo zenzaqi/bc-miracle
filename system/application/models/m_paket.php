@@ -297,6 +297,8 @@ FROM ((`paket` INNER JOIN `produk_group` ON `paket`.`paket_group`=`produk_group`
 	function paket_update($paket_id ,$paket_kode, $paket_kodelama ,$paket_nama ,$paket_group ,$paket_keterangan ,$paket_du ,$paket_dm ,$paket_point ,$paket_harga ,$paket_expired ,$paket_aktif ){
 		if ($paket_aktif=="")
 			$paket_aktif = "Aktif";
+		if ($paket_point=="")
+			$paket_point = 1;
 		$data = array(
 			"paket_id"=>$paket_id, 
 			"paket_nama"=>$paket_nama, 
@@ -374,6 +376,8 @@ FROM ((`paket` INNER JOIN `produk_group` ON `paket`.`paket_group`=`produk_group`
 	function paket_create($paket_kode ,$paket_kodelama ,$paket_nama ,$paket_group ,$paket_keterangan ,$paket_du ,$paket_dm ,$paket_point ,$paket_harga ,$paket_expired ,$paket_aktif ){
 		if ($paket_aktif=="")
 			$paket_aktif = "Aktif";
+		if ($paket_point=="")
+			$paket_point = 1;
 		$data = array(
 			"paket_kodelama"=>$paket_kodelama, 
 			"paket_nama"=>$paket_nama, 

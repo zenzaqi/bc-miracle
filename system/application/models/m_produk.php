@@ -138,6 +138,8 @@ class M_produk extends Model{
 		function produk_update($produk_id ,$produk_kode ,$produk_kodelama ,$produk_group ,$produk_kategori ,$produk_kontribusi, $produk_jenis ,$produk_nama ,$produk_satuan ,$produk_du ,$produk_dm ,$produk_point ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif ){
 			if ($produk_aktif=="")
 				$produk_aktif = "Aktif";
+			if ($produk_point=="")
+				$produk_point=1;
 			$data = array(
 				"produk_kode"=>$produk_kode, 
 				"produk_kodelama"=>$produk_kodelama, 
@@ -223,6 +225,8 @@ class M_produk extends Model{
 			$produk_aktif = "Aktif";
 			if($produk_harga=="")
 				$produk_harga=0;
+			if($produk_point=="")
+				$produk_point=1;
 			$data = array(
 				"produk_kode"=>$produk_kode,
 				"produk_kodelama"=>$produk_kodelama,
