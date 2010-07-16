@@ -102,12 +102,13 @@ class C_member_setup extends Controller {
 		$setmember_transtenggang=trim(@$_POST["setmember_transtenggang"]);
 		$setmember_pointtenggang=trim(@$_POST["setmember_pointtenggang"]);
 		$setmember_rp_perpoint=trim(@$_POST["setmember_rp_perpoint"]);
+		$setmember_point_perrp=trim(@$_POST["setmember_point_perrp"]);
 		//$setmember_author="setmember_author";
 		//$setmember_date_create="setmember_date_create";
 		$setmember_update=@$_SESSION[SESSION_USERID];
 		$setmember_date_update=date(LONG_FORMATDATE);
 		//$setmember_revised="(revised+1)";
-		$result = $this->m_member_setup->member_setup_update($setmember_id, $setmember_transhari, $setmember_pointhari ,$setmember_transbulan, $setmember_pointbulan ,$setmember_periodeaktif ,$setmember_periodetenggang ,$setmember_transtenggang, $setmember_pointtenggang, $setmember_rp_perpoint, $setmember_update, $setmember_date_update);
+		$result = $this->m_member_setup->member_setup_update($setmember_id, $setmember_transhari, $setmember_pointhari ,$setmember_transbulan, $setmember_pointbulan ,$setmember_periodeaktif ,$setmember_periodetenggang ,$setmember_transtenggang, $setmember_pointtenggang, $setmember_rp_perpoint, $setmember_point_perrp, $setmember_update, $setmember_date_update);
 		echo $result;
 	}
 	

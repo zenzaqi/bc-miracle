@@ -2650,9 +2650,9 @@ Ext.onReady(function(){
 	});
 	
 	// START Field Voucher
-	jrawat_voucher_noField= new Ext.form.ComboBox({
+	/*jrawat_voucher_noField= new Ext.form.ComboBox({
 		id: 'jrawat_voucher_noField',
-		fieldLabel: 'No Voucher',
+		fieldLabel: 'Nomor Voucher',
 		store: cbo_voucher_jual_rawatDataStore,
 		mode: 'remote',
 		displayField:'voucher_nomor',
@@ -2675,15 +2675,38 @@ Ext.onReady(function(){
 			jrawat_voucher_cashbackField.setValue(cbo_voucher_jual_rawatDataStore.getAt(j).data.voucher_cashback);
 			load_total_rawat_bayar();
 		}
+	});*/
+	jrawat_voucher_noField= new Ext.form.TextField({
+		id: 'jrawat_voucher_noField',
+		fieldLabel: 'Nomor Voucher',
+		maxLength: 10,
+		anchor: '95%'
 	});
 	
-	jrawat_voucher_cashbackField= new Ext.ux.form.CFTextField({
+	/*jrawat_voucher_cashbackField= new Ext.ux.form.CFTextField({
 		id: 'jrawat_voucher_cashbackField',
 		fieldLabel: 'Nilai Cashback',
 		valueRenderer: 'numberToCurrency',
 		readOnly: true,
 		anchor: '95%',
 		enableKeyEvents: true,
+		maskRe: /([0-9]+)$/
+	});*/
+	jrawat_voucher_cashback_cfField= new Ext.form.TextField({
+		id: 'jrawat_voucher_cashback_cfField',
+		fieldLabel: 'Nilai Cashback',
+		allowNegatife : false,
+		enableKeyEvents: true,
+		itemCls: 'rmoney',
+		anchor: '95%',
+		maskRe: /([0-9]+)$/ 
+	});
+	jrawat_voucher_cashbackField= new Ext.form.NumberField({
+		id: 'jrawat_voucher_cashbackField',
+		enableKeyEvents: true,
+		fieldLabel: 'Nilai Cashback',
+		allowBlank: true,
+		anchor: '95%',
 		maskRe: /([0-9]+)$/
 	});
 	
@@ -2702,16 +2725,16 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [jrawat_voucher_noField,jrawat_voucher_cashbackField] 
+				items: [jrawat_voucher_noField,jrawat_voucher_cashback_cfField] 
 			}
 		]
 	
 	});
 	// END Field Voucher
 	// START Field Voucher-2
-	jrawat_voucher_no2Field= new Ext.form.ComboBox({
+	/*jrawat_voucher_no2Field= new Ext.form.ComboBox({
 		id: 'jrawat_voucher_no2Field',
-		fieldLabel: 'No Voucher',
+		fieldLabel: 'Nomor Voucher',
 		store: cbo_voucher_jual_rawatDataStore,
 		mode: 'remote',
 		displayField:'voucher_nomor',
@@ -2734,15 +2757,38 @@ Ext.onReady(function(){
 			jrawat_voucher_cashback2Field.setValue(cbo_voucher_jual_rawatDataStore.getAt(j).data.voucher_cashback);
 			load_total_rawat_bayar();
 		}
+	});*/
+	jrawat_voucher_no2Field= new Ext.form.TextField({
+		id: 'jrawat_voucher_no2Field',
+		fieldLabel: 'Nomor Voucher',
+		maxLength: 10,
+		anchor: '95%'
 	});
 	
-	jrawat_voucher_cashback2Field= new Ext.ux.form.CFTextField({
+	/*jrawat_voucher_cashback2Field= new Ext.ux.form.CFTextField({
 		id: 'jrawat_voucher_cashback2Field',
 		fieldLabel: 'Nilai Cashback',
 		valueRenderer: 'numberToCurrency',
 		readOnly: true,
 		anchor: '95%',
 		enableKeyEvents: true,
+		maskRe: /([0-9]+)$/
+	});*/
+	jrawat_voucher_cashback2_cfField= new Ext.form.TextField({
+		id: 'jrawat_voucher_cashback2_cfField',
+		fieldLabel: 'Nilai Cashback',
+		allowNegatife : false,
+		enableKeyEvents: true,
+		itemCls: 'rmoney',
+		anchor: '95%',
+		maskRe: /([0-9]+)$/ 
+	});
+	jrawat_voucher_cashback2Field= new Ext.form.NumberField({
+		id: 'jrawat_voucher_cashback2Field',
+		enableKeyEvents: true,
+		fieldLabel: 'Nilai Cashback',
+		allowBlank: true,
+		anchor: '95%',
 		maskRe: /([0-9]+)$/
 	});
 	
@@ -2759,16 +2805,16 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [jrawat_voucher_no2Field,jrawat_voucher_cashback2Field] 
+				items: [jrawat_voucher_no2Field,jrawat_voucher_cashback2_cfField] 
 			}
 		]
 	
 	});
 	// END Field Voucher-2
 	// START Field Voucher-3
-	jrawat_voucher_no3Field= new Ext.form.ComboBox({
+	/*jrawat_voucher_no3Field= new Ext.form.ComboBox({
 		id: 'jrawat_voucher_no3Field',
-		fieldLabel: 'No Voucher',
+		fieldLabel: 'Nomor Voucher',
 		store: cbo_voucher_jual_rawatDataStore,
 		mode: 'remote',
 		displayField:'voucher_nomor',
@@ -2791,15 +2837,38 @@ Ext.onReady(function(){
 			jrawat_voucher_cashback3Field.setValue(cbo_voucher_jual_rawatDataStore.getAt(j).data.voucher_cashback);
 			load_total_rawat_bayar();
 		}
+	});*/
+	jrawat_voucher_no3Field= new Ext.form.TextField({
+		id: 'jrawat_voucher_no3Field',
+		fieldLabel: 'Nomor Voucher',
+		maxLength: 10,
+		anchor: '95%'
 	});
 	
-	jrawat_voucher_cashback3Field= new Ext.ux.form.CFTextField({
+	/*jrawat_voucher_cashback3Field= new Ext.ux.form.CFTextField({
 		id: 'jrawat_voucher_cashback3Field',
 		fieldLabel: 'Nilai Cashback',
 		valueRenderer: 'numberToCurrency',
 		readOnly: true,
 		anchor: '95%',
 		enableKeyEvents: true,
+		maskRe: /([0-9]+)$/
+	});*/
+	jrawat_voucher_cashback3_cfField= new Ext.form.TextField({
+		id: 'jrawat_voucher_cashback3_cfField',
+		fieldLabel: 'Nilai Cashback',
+		allowNegatife : false,
+		enableKeyEvents: true,
+		itemCls: 'rmoney',
+		anchor: '95%',
+		maskRe: /([0-9]+)$/ 
+	});
+	jrawat_voucher_cashback3Field= new Ext.form.NumberField({
+		id: 'jrawat_voucher_cashback3Field',
+		enableKeyEvents: true,
+		fieldLabel: 'Nilai Cashback',
+		allowBlank: true,
+		anchor: '95%',
 		maskRe: /([0-9]+)$/
 	});
 	
@@ -2816,7 +2885,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [jrawat_voucher_no3Field,jrawat_voucher_cashback3Field] 
+				items: [jrawat_voucher_no3Field,jrawat_voucher_cashback3_cfField] 
 			}
 		]
 	
@@ -5536,6 +5605,34 @@ Ext.onReady(function(){
 	jrawat_tunai_nilaiField.on("keyup",load_total_rawat_bayar);
 	jrawat_tunai_nilai2Field.on("keyup",load_total_rawat_bayar);
 	jrawat_tunai_nilai3Field.on("keyup",load_total_rawat_bayar);
+	
+	jrawat_voucher_cashback_cfField.on("keyup",function(){
+		var cf_value = jrawat_voucher_cashback_cfField.getValue();
+		var cf_tonumber = convertToNumber(cf_value);
+		jrawat_voucher_cashbackField.setValue(cf_tonumber);
+		load_total_rawat_bayar();
+		
+		var number_tocf = CurrencyFormatted(cf_value);
+		this.setRawValue(number_tocf);
+	});
+	jrawat_voucher_cashback2_cfField.on("keyup",function(){
+		var cf_value = jrawat_voucher_cashback2_cfField.getValue();
+		var cf_tonumber = convertToNumber(cf_value);
+		jrawat_voucher_cashback2Field.setValue(cf_tonumber);
+		load_total_rawat_bayar();
+		
+		var number_tocf = CurrencyFormatted(cf_value);
+		this.setRawValue(number_tocf);
+	});
+	jrawat_voucher_cashback3_cfField.on("keyup",function(){
+		var cf_value = jrawat_voucher_cashback3_cfField.getValue();
+		var cf_tonumber = convertToNumber(cf_value);
+		jrawat_voucher_cashback3Field.setValue(cf_tonumber);
+		load_total_rawat_bayar();
+		
+		var number_tocf = CurrencyFormatted(cf_value);
+		this.setRawValue(number_tocf);
+	});
 	
 	jrawat_caraField.on("select",update_group_carabayar_jual_rawat);
 	jrawat_cara2Field.on("select",update_group_carabayar2_jual_rawat);

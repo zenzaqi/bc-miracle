@@ -64,7 +64,7 @@ class M_member_setup extends Model{
 		}
 		
 		//function for update record
-		function member_setup_update($setmember_id,$setmember_transhari, $setmember_pointhari ,$setmember_transbulan, $setmember_pointbulan ,$setmember_periodeaktif ,$setmember_periodetenggang ,$setmember_transtenggang, $setmember_pointtenggang, $setmember_rp_perpoint, $setmember_update,$setmember_date_update){
+		function member_setup_update($setmember_id,$setmember_transhari, $setmember_pointhari ,$setmember_transbulan, $setmember_pointbulan ,$setmember_periodeaktif ,$setmember_periodetenggang ,$setmember_transtenggang, $setmember_pointtenggang, $setmember_rp_perpoint, $setmember_point_perrp, $setmember_update,$setmember_date_update){
 			$data = array(
 				"setmember_transhari"=>$setmember_transhari,
 				"setmember_pointhari"=>$setmember_pointhari,
@@ -75,6 +75,7 @@ class M_member_setup extends Model{
 				"setmember_pointtenggang"=>$setmember_pointtenggang,
 				"setmember_transtenggang"=>$setmember_transtenggang, 
 				"setmember_rp_perpoint"=>$setmember_rp_perpoint,
+				"setmember_point_perrp"=>$setmember_point_perrp,
 				"setmember_update"=>$setmember_update, 
 				"setmember_date_update"=>$setmember_date_update 
 			);
