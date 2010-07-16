@@ -432,13 +432,13 @@ class M_master_jual_produk extends Model{
 		}
 		//eof
 		
-		function get_point_per_rupiah(){
-			$query = "SELECT setmember_point_perrp FROM member_setup LIMIT 1";
+		function get_rupiah_per_point(){
+			$query = "SELECT setmember_rp_perpoint FROM member_setup LIMIT 1";
 			$result = $this->db->query($query);
 			if($result->num_rows()){
 				$data=$result->row();
-				$setmember_point_perrp=$data->setmember_point_perrp;
-				return $setmember_point_perrp;
+				$setmember_rp_perpoint=$data->setmember_rp_perpoint;
+				return $setmember_rp_perpoint;
 			}else{
 				return 0;
 			}
@@ -499,45 +499,26 @@ class M_master_jual_produk extends Model{
 			$sql="SELECT member_id FROM member WHERE member_cust='$jproduk_cust' AND (member_valid >= '$date_now')";
 			$rs=$this->db->query($sql);
 			if($rs->num_rows()){
-				$sql="SELECT dproduk_jumlah
-						,dproduk_harga
-						,dproduk_diskon
-						,produk_point
-						,jproduk_diskon
-						,jproduk_cashback
-					FROM detail_jual_produk
-					LEFT JOIN master_jual_produk ON(dproduk_master=jproduk_id)
-					LEFT JOIN produk ON(dproduk_produk=produk_id)
-					WHERE dproduk_master='$dproduk_master'";
+				$sql="SELECT setmember_rp_perpoint FROM member_setup LIMIT 1";
+				$rs=$this->db->query($sql);
+				$record=$rs->row_array();
+				$setmember_rp_perpoint=$record['setmember_rp_perpoint'];
+				
+				$sql="SELECT dproduk_jumlah, dproduk_harga, dproduk_diskon, produk_point, jproduk_diskon, jproduk_cashback FROM detail_jual_produk LEFT JOIN master_jual_produk ON(dproduk_master=jproduk_id) LEFT JOIN produk ON(dproduk_produk=produk_id) WHERE dproduk_master='$dproduk_master'";
 				$rs=$this->db->query($sql);
 				if($rs->num_rows()){
 					$one_record = $rs->row();
 					$jproduk_cashback = $one_record->jproduk_cashback;
 					$jproduk_diskon = $one_record->jproduk_diskon;
-					$jumlah_rupiah_detail = 0;
-					$jumlah_rupiah_total = 0;
+					$jumlah_rupiah = 0;
 					$jumlah_point = 0;
 					foreach($rs->result() as $row){
-						$dproduk_jumlah = $row->dproduk_jumlah;
-						$dproduk_harga = $row->dproduk_harga;
-						$dproduk_diskon = $row->dproduk_diskon;
-						$produk_point = $row->produk_point;
-						$jumlah_rupiah_detail += (($dproduk_jumlah * $dproduk_harga) * ((100 - $dproduk_diskon)/100)) * $produk_point;
+						//$jumlah_point += ($row->dproduk_jumlah) * ($row->produk_point) * (floor(($row->dproduk_harga)/$setmember_rp_perpoint));
+						$jumlah_rupiah += ($row->dproduk_jumlah) * ($row->produk_point) * ($row->dproduk_harga) * ((100 - $row->dproduk_diskon)/100);
 					}
-					if($jproduk_diskon>0){
-						//memprioritaskan diskon_total_persen daripada diskon_total_cashback
-						$jumlah_rupiah_total =  $jumlah_rupiah_detail * ((100 - $jproduk_diskon)/100);
-					}else if($jproduk_diskon<=0 && $jproduk_cashback>0){
-						$jumlah_rupiah_total = $jumlah_rupiah_detail - $jproduk_cashback;
-					}else{
-						$jumlah_rupiah_total = $jumlah_rupiah_detail;
-					}
-					
-					//ambil dari db.member_setup
-					$setmember_point_perrp = $this->get_point_per_rupiah();
-					
-					if($setmember_point_perrp>0){
-						$jumlah_point = floor($jumlah_rupiah_total/$setmember_point_perrp);
+					$jumlah_rupiah -= $jproduk_cashback;
+					if($setmember_rp_perpoint<>0){
+						$jumlah_point = floor($jumlah_rupiah/$setmember_rp_perpoint);
 					}
 					$sql_cust_u = "UPDATE customer SET cust_point = (cust_point + $jumlah_point) WHERE cust_id='$jproduk_cust'";
 					$this->db->query($sql_cust_u);
@@ -562,10 +543,10 @@ class M_master_jual_produk extends Model{
 			$sql="SELECT member_id FROM member WHERE member_cust='$jproduk_cust' AND (member_valid >= '$date_now')";
 			$rs=$this->db->query($sql);
 			if($rs->num_rows()){
-				$sql="SELECT setmember_point_perrp FROM member_setup LIMIT 1";
+				$sql="SELECT setmember_rp_perpoint FROM member_setup LIMIT 1";
 				$rs=$this->db->query($sql);
 				$record=$rs->row_array();
-				$setmember_point_perrp=$record['setmember_point_perrp'];
+				$setmember_rp_perpoint=$record['setmember_rp_perpoint'];
 				
 				$sql="SELECT dproduk_jumlah, dproduk_harga, produk_point, dproduk_diskon, jproduk_diskon, jproduk_cashback FROM detail_jual_produk LEFT JOIN master_jual_produk ON(dproduk_master=jproduk_id) LEFT JOIN produk ON(dproduk_produk=produk_id) WHERE dproduk_master='$dproduk_master'";
 				$rs=$this->db->query($sql);
@@ -576,12 +557,12 @@ class M_master_jual_produk extends Model{
 					$jumlah_rupiah = 0;
 					$jumlah_point = 0;
 					foreach($rs->result() as $row){
-						//$jumlah_point += ($row->dproduk_jumlah) * ($row->produk_point) * (floor(($row->dproduk_harga)/$setmember_point_perrp));
+						//$jumlah_point += ($row->dproduk_jumlah) * ($row->produk_point) * (floor(($row->dproduk_harga)/$setmember_rp_perpoint));
 						$jumlah_rupiah += ($row->dproduk_jumlah) * ($row->produk_point) * ($row->dproduk_harga) * ((100 - $row->dproduk_diskon)/100);
 					}
 					$jumlah_rupiah -= $jproduk_cashback;
-					if($setmember_point_perrp<>0){
-						$jumlah_point = floor($jumlah_rupiah/$setmember_point_perrp);
+					if($setmember_rp_perpoint<>0){
+						$jumlah_point = floor($jumlah_rupiah/$setmember_rp_perpoint);
 					}
 					$sql="UPDATE customer SET cust_point = (cust_point - $jumlah_point) WHERE cust_id='$jproduk_cust'";
 					$this->db->query($sql);
@@ -2352,11 +2333,11 @@ class M_master_jual_produk extends Model{
 			};
 			if($jproduk_tanggal!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " jproduk_date_format(tanggal,'%Y-%m-%d')>= '".$jproduk_tanggal."'";
+				$query.= " jproduk_tanggal>= '".$jproduk_tanggal."'";
 			};
 			if($jproduk_tanggal_akhir!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " jproduk_date_format(tanggal,'%Y-%m-%d')<= '".$jproduk_tanggal_akhir."'";
+				$query.= " jproduk_tanggal<= '".$jproduk_tanggal_akhir."'";
 			};
 /*			if($jproduk_diskon!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";

@@ -350,18 +350,6 @@ class M_master_jual_rawat extends Model{
 		}
 		//eof
 		
-		function get_point_per_rupiah(){
-			$query = "SELECT setmember_point_perrp FROM member_setup LIMIT 1";
-			$result = $this->db->query($query);
-			if($result->num_rows()){
-				$data=$result->row();
-				$setmember_point_perrp=$data->setmember_point_perrp;
-				return $setmember_point_perrp;
-			}else{
-				return 0;
-			}
-		}
-		
 		function member_point_update($jrawat_id){
 			$date_now=date('Y-m-d');
 			$sql="SELECT jrawat_cust FROM master_jual_rawat WHERE jrawat_id='$jrawat_id'";
@@ -372,45 +360,26 @@ class M_master_jual_rawat extends Model{
 			$sql="SELECT member_id FROM member WHERE member_cust='$jrawat_cust' AND (member_valid >= '$date_now')";
 			$rs=$this->db->query($sql);
 			if($rs->num_rows()){
-				$sql="SELECT drawat_jumlah
-						,drawat_harga
-						,rawat_point
-						,drawat_diskon
-						,jrawat_diskon
-						,jrawat_cashback
-					FROM detail_jual_rawat
-					LEFT JOIN master_jual_rawat ON(drawat_master=jrawat_id)
-					LEFT JOIN perawatan ON(drawat_rawat=rawat_id)
-					WHERE drawat_master='$jrawat_id'";
+				$sql="SELECT setmember_rp_perpoint FROM member_setup LIMIT 1";
+				$rs=$this->db->query($sql);
+				$record=$rs->row_array();
+				$setmember_rp_perpoint=$record['setmember_rp_perpoint'];
+				
+				$sql="SELECT drawat_jumlah, drawat_harga, rawat_point, drawat_diskon, jrawat_diskon, jrawat_cashback FROM detail_jual_rawat LEFT JOIN master_jual_rawat ON(drawat_master=jrawat_id) LEFT JOIN perawatan ON(drawat_rawat=rawat_id) WHERE drawat_master='$jrawat_id'";
 				$rs=$this->db->query($sql);
 				if($rs->num_rows()){
 					$one_record = $rs->row();
 					$jrawat_cashback = $one_record->jrawat_cashback;
 					$jrawat_diskon = $one_record->jrawat_diskon;
-					$jumlah_rupiah_detail = 0;
-					$jumlah_rupiah_total = 0;
+					$jumlah_rupiah = 0;
 					$jumlah_point = 0;
 					foreach($rs->result() as $row){
-						$drawat_jumlah = $row->drawat_jumlah;
-						$drawat_harga = $row->drawat_harga;
-						$drawat_diskon = $row->drawat_diskon;
-						$rawat_point = $row->rawat_point;
-						$jumlah_rupiah_detail += (($drawat_jumlah * $drawat_harga) * ((100 - $drawat_diskon)/100)) * $rawat_point;
+						//$jumlah_point += ($row->drawat_jumlah) * ($row->rawat_point) * (floor(($row->drawat_harga)/$setmember_rp_perpoint));
+						$jumlah_rupiah += ($row->drawat_jumlah) * ($row->rawat_point) * ($row->drawat_harga) * ((100 - $row->drawat_diskon)/100);
 					}
-					if($jrawat_diskon>0){
-						//memprioritaskan diskon_total_persen daripada diskon_total_cashback
-						$jumlah_rupiah_total =  $jumlah_rupiah_detail * ((100 - $jrawat_diskon)/100);
-					}else if($jrawat_diskon<=0 && $jrawat_cashback>0){
-						$jumlah_rupiah_total = $jumlah_rupiah_detail - $jrawat_cashback;
-					}else{
-						$jumlah_rupiah_total = $jumlah_rupiah_detail;
-					}
-					
-					//ambil dari db.member_setup
-					$setmember_point_perrp = $this->get_point_per_rupiah();
-					
-					if($setmember_point_perrp>0){
-						$jumlah_point = floor($jumlah_rupiah_total/$setmember_point_perrp);
+					$jumlah_rupiah -= $jrawat_cashback;
+					if($setmember_rp_perpoint<>0){
+						$jumlah_point = floor($jumlah_rupiah/$setmember_rp_perpoint);
 					}
 					$sql="UPDATE customer SET cust_point = (cust_point + $jumlah_point) WHERE cust_id='$jrawat_cust'";
 					$this->db->query($sql);
@@ -435,10 +404,10 @@ class M_master_jual_rawat extends Model{
 			$sql="SELECT member_id FROM member WHERE member_cust='$jrawat_cust' AND (member_valid >= '$date_now')";
 			$rs=$this->db->query($sql);
 			if($rs->num_rows()){
-				$sql="SELECT setmember_point_perrp FROM member_setup LIMIT 1";
+				$sql="SELECT setmember_rp_perpoint FROM member_setup LIMIT 1";
 				$rs=$this->db->query($sql);
 				$record=$rs->row_array();
-				$setmember_point_perrp=$record['setmember_point_perrp'];
+				$setmember_rp_perpoint=$record['setmember_rp_perpoint'];
 				
 				$sql="SELECT drawat_jumlah, drawat_harga, rawat_point, drawat_diskon, jrawat_diskon, jrawat_cashback FROM detail_jual_rawat LEFT JOIN master_jual_rawat ON(drawat_master=jrawat_id) LEFT JOIN rawat ON(drawat_rawat=rawat_id) WHERE drawat_master='$drawat_master'";
 				$rs=$this->db->query($sql);
@@ -449,12 +418,12 @@ class M_master_jual_rawat extends Model{
 					$jumlah_rupiah = 0;
 					$jumlah_point = 0;
 					foreach($rs->result() as $row){
-						//$jumlah_point += ($row->drawat_jumlah) * ($row->rawat_point) * (floor(($row->drawat_harga)/$setmember_point_perrp));
+						//$jumlah_point += ($row->drawat_jumlah) * ($row->rawat_point) * (floor(($row->drawat_harga)/$setmember_rp_perpoint));
 						$jumlah_rupiah += ($row->drawat_jumlah) * ($row->rawat_point) * ($row->drawat_harga) * ((100 - $row->drawat_diskon)/100);
 					}
 					$jumlah_rupiah -= $jrawat_cashback;
-					if($setmember_point_perrp<>0){
-						$jumlah_point = floor($jumlah_rupiah/$setmember_point_perrp);
+					if($setmember_rp_perpoint<>0){
+						$jumlah_point = floor($jumlah_rupiah/$setmember_rp_perpoint);
 					}
 					$sql="UPDATE customer SET cust_point = (cust_point - $jumlah_point) WHERE cust_id='$jrawat_cust'";
 					$this->db->query($sql);
@@ -539,6 +508,7 @@ class M_master_jual_rawat extends Model{
 				$periode_aktif=$rs_record['setmember_periodeaktif'];
 			}
 			
+			$date_now=date('Y-m-d');
 			$sql="SELECT jrawat_cust FROM master_jual_rawat WHERE jrawat_id='$jrawat_id'";
 			$rs=$this->db->query($sql);
 			if($rs->num_rows()){
@@ -593,19 +563,15 @@ class M_master_jual_rawat extends Model{
 						
 						if($cust_total_trans_now >= $min_trans_tenggang){
 							//* Perpanjangan kartu member /
-							$sql = "SELECT membert_id FROM member_temp WHERE membert_cust='$cust_id'";
-							$rs = $this->db->query($sql);
-							if(!($rs->num_rows())){
-								$dti_membert=array(
-								"membert_cust"=>$cust_id,
-								"membert_no"=>$member_no,
-								"membert_register"=>$date_now,
-								"membert_valid"=>$set_member_valid,
-								"membert_jenis"=>'perpanjangan',
-								"membert_status"=>'Daftar'
-								);
-								$this->db->insert('member_temp', $dti_membert);
-							}
+							$dti_membert=array(
+							"membert_cust"=>$cust_id,
+							"membert_no"=>$member_no,
+							"membert_register"=>$date_now,
+							"membert_valid"=>$set_member_valid,
+							"membert_jenis"=>'perpanjangan',
+							"membert_status"=>'Daftar'
+							);
+							$this->db->insert('member_temp', $dti_membert);
 						}else{
 							//* message: kartu member customer ini sementara tidak bisa digunakan, karena sudah masuk masa tenggang /
 							//* deleting customer pada db.member_temp (yang mungkin sebelumnya dimasukkan), dikarenakan ada pembatalan transaksi sehingga $cust_total_trans_now tidak memenuhi syarat /
@@ -623,7 +589,7 @@ class M_master_jual_rawat extends Model{
 						}
 					}
 				}else{
-					//* artinya: customer belum pernah menjadi MEMBER (belum masuk ke db.member). /
+					//* artinya: customer belum pernah menjadi MEMBER. /
 					//* untuk itu: check total_transaksi si customer di hari ini dan bandingkan dengan db.member_setup.setmember_transhari /
 					if($cust_total_trans_now >= $min_trans_member_baru){
 						//* Pendaftaran MEMBER BARU /
@@ -898,8 +864,8 @@ class M_master_jual_rawat extends Model{
                     jrawat_cust,
                     vu_jrawat_pr.cust_no,
                     vu_jrawat_pr.cust_member,
-					/*vu_jrawat_pr.member_no,
-					vu_jrawat_pr.member_valid,*/
+					vu_jrawat_pr.member_no,
+					vu_jrawat_pr.member_valid,
                     jrawat_tanggal,
                     jrawat_diskon,
                     jrawat_cashback,
@@ -2384,8 +2350,8 @@ class M_master_jual_rawat extends Model{
                     jrawat_cust,
                     vu_jrawat_pr.cust_no,
                     vu_jrawat_pr.cust_member,
-					/*vu_jrawat_pr.member_no,
-					vu_jrawat_pr.member_valid,*/
+					vu_jrawat_pr.member_no,
+					vu_jrawat_pr.member_valid,
                     jrawat_tanggal,
                     jrawat_diskon,
                     jrawat_cashback,
