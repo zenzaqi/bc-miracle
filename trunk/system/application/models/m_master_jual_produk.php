@@ -606,6 +606,38 @@ class M_master_jual_produk extends Model{
 			}
 		}
 		
+		function cara_bayar_batal($jproduk_id){
+			//updating db.jual_card ==> pembatalan
+			$sqlu_jcard = "UPDATE jual_card JOIN master_jual_produk ON(jual_card.jcard_ref=master_jual_produk.jproduk_nobukti)
+				SET jual_card.jcard_stat_dok = master_jual_produk.jproduk_stat_dok
+				WHERE master_jual_produk.jproduk_id='$jproduk_id'";
+			$this->db->query($sqlu_jcard);
+			
+			//updating db.jual_cek ==> pembatalan
+			$sqlu_jcek = "UPDATE jual_cek JOIN master_jual_produk ON(jual_cek.jcek_ref=master_jual_produk.jproduk_nobukti)
+				SET jual_cek.jcek_stat_dok = master_jual_produk.jproduk_stat_dok
+				WHERE master_jual_produk.jproduk_id='$jproduk_id'";
+			$this->db->query($sqlu_jcek);
+			
+			//updating db.jual_kwitansi ==> pembatalan
+			$sqlu_jkwitansi = "UPDATE jual_kwitansi JOIN master_jual_produk ON(jual_kwitansi.jkwitansi_ref=master_jual_produk.jproduk_nobukti)
+				SET jual_kwitansi.jkwitansi_stat_dok = master_jual_produk.jproduk_stat_dok
+				WHERE master_jual_produk.jproduk_id='$jproduk_id'";
+			$this->db->query($sqlu_jkwitansi);
+			
+			//updating db.jual_transfer ==> pembatalan
+			$sqlu_jtransfer = "UPDATE jual_transfer JOIN master_jual_produk ON(jual_transfer.jtransfer_ref=master_jual_produk.jproduk_nobukti)
+				SET jual_transfer.jtransfer_stat_dok = master_jual_produk.jproduk_stat_dok
+				WHERE master_jual_produk.jproduk_id='$jproduk_id'";
+			$this->db->query($sqlu_jtransfer);
+			
+			//updating db.jual_tunai ==> pembatalan
+			$sqlu_jtunai = "UPDATE jual_tunai JOIN master_jual_produk ON(jual_tunai.jtunai_ref=master_jual_produk.jproduk_nobukti)
+				SET jual_tunai.jtunai_stat_dok = master_jual_produk.jproduk_stat_dok
+				WHERE master_jual_produk.jproduk_id='$jproduk_id'";
+			$this->db->query($sqlu_jtunai);
+		}
+		
 		function membership_insert($jproduk_id){
 			$date_now=date('Y-m-d');
 			$this->db->where('membert_register <', $date_now);
@@ -2290,17 +2322,11 @@ class M_master_jual_produk extends Model{
                 WHERE jproduk_id=".$jproduk_id."
                     AND jproduk_tanggal='".$date_now."' ";
             $this->db->query($sql);
-			/*$dtu_jproduk=array(
-			"jproduk_stat_dok"=>'Batal'
-			);
-			$this->db->where('jproduk_id', $jproduk_id);
-			$this->db->where('jproduk_tanggal', $date_now);
-			$this->db->update('master_jual_produk', $dtu_jproduk);*/
-            
 			if($this->db->affected_rows()){
 				//* udpating db.customer.cust_point ==> proses mengurangi jumlah poin (dikurangi dengan db.master_jual_produk.jproduk_point yg sudah dimasukkan ketika cetak faktur), karena dilakukan pembatalan /
 				$this->member_point_batal($jproduk_id);
 				$this->membership_insert($jproduk_id);
+				$this->cara_bayar_batal($jproduk_id);
 				return '1';
 			}else{
 				return '0';
