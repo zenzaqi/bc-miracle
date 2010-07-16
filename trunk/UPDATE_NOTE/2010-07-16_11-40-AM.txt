@@ -1,0 +1,11 @@
+> bug
+  - Data rekap penjualan perawatan tidak sama 
+    dengan data penerimaan penjualan
+  - sebab: proses batal di kasir belum mengupdate tabel2 berikut :
+    * jual_card
+    * jual_cek
+    * jual_kredit
+    * jual_kuitansi
+    * jual_transfer
+    * jual_tunai
+  - fix-data: jalankan SQL file 2010-07-16_11-40-AM.sql
