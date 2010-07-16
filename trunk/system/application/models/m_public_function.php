@@ -525,7 +525,8 @@ class M_public_function extends Model{
 		$date=date('y');
 		$len_pattern=strlen($pattern);
 		$len_lpad=$length-$len_pattern;
-		$sql="SELECT LPAD((RIGHT(MAX(SUBSTRING(".$field.",-4)),".$len_lpad.")+1),".$len_lpad.",0) AS max_key FROM ".$table." WHERE ".$field." LIKE '".$date."%'";
+		//$sql="SELECT LPAD((RIGHT(MAX(SUBSTRING(".$field.",-4)),".$len_lpad.")+1),".$len_lpad.",0) AS max_key FROM ".$table." WHERE ".$field." LIKE '".$date."%'";
+		$sql="SELECT LPAD((RIGHT(MAX(SUBSTRING(".$field.",-4)),".$len_lpad.")+1),".$len_lpad.",0) AS max_key FROM ".$table." WHERE SUBSTRING(".$field.",1,6) LIKE '%".$date."'";
 		
 		$query=$this->db->query($sql);
 		if($query->num_rows()){

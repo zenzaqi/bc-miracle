@@ -1,0 +1,7 @@
+# File: m_master_jual_produk.php
+>> function member_point_update:
+	-- Memperbaiki perhitungan poin yang didapatkan ketika terjadi transaksi.
+
+# Alter db.member_setup
+
+# Update vu_piutang_jproduk, vu_piutang_jpaket, vu_piutang_jrawat
