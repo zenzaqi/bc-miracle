@@ -494,13 +494,13 @@ class M_master_jual_paket extends Model{
 		}
 		//eof
 		
-		function get_point_per_rupiah(){
-			$query = "SELECT setmember_point_perrp FROM member_setup LIMIT 1";
+		function get_rupiah_per_point(){
+			$query = "SELECT setmember_rp_perpoint FROM member_setup LIMIT 1";
 			$result = $this->db->query($query);
 			if($result->num_rows()){
 				$data=$result->row();
-				$setmember_point_perrp=$data->setmember_point_perrp;
-				return $setmember_point_perrp;
+				$setmember_rp_perpoint=$data->setmember_rp_perpoint;
+				return $setmember_rp_perpoint;
 			}else{
 				return 0;
 			}
@@ -560,6 +560,11 @@ class M_master_jual_paket extends Model{
 			$sql="SELECT member_id FROM member WHERE member_cust='$jpaket_cust' AND (member_valid >= '$date_now')";
 			$rs=$this->db->query($sql);
 			if($rs->num_rows()){
+				$sql="SELECT setmember_rp_perpoint FROM member_setup LIMIT 1";
+				$rs=$this->db->query($sql);
+				$record=$rs->row_array();
+				$setmember_rp_perpoint=$record['setmember_rp_perpoint'];
+				
 				$sql="SELECT dpaket_jumlah
 						,dpaket_harga
 						,paket_point
@@ -575,30 +580,14 @@ class M_master_jual_paket extends Model{
 					$one_record = $rs->row();
 					$jpaket_cashback = $one_record->jpaket_cashback;
 					$jpaket_diskon = $one_record->jpaket_diskon;
-					$jumlah_rupiah_detail = 0;
-					$jumlah_rupiah_total = 0;
+					$jumlah_rupiah = 0;
 					$jumlah_point = 0;
 					foreach($rs->result() as $row){
-						$dpaket_jumlah = $row->dpaket_jumlah;
-						$dpaket_harga = $row->dpaket_harga;
-						$dpaket_diskon = $row->dpaket_diskon;
-						$paket_point = $row->paket_point;
-						$jumlah_rupiah_detail += (($dpaket_jumlah * $dpaket_harga) * ((100 - $dpaket_diskon)/100)) * $paket_point;
+						$jumlah_rupiah += ($row->dpaket_jumlah) * ($row->paket_point) * ($row->dpaket_harga) * ((100 - $row->dpaket_diskon)/100);
 					}
-					if($jpaket_diskon>0){
-						//memprioritaskan diskon_total_persen daripada diskon_total_cashback
-						$jumlah_rupiah_total =  $jumlah_rupiah_detail * ((100 - $jpaket_diskon)/100);
-					}else if($jpaket_diskon<=0 && $jpaket_cashback>0){
-						$jumlah_rupiah_total = $jumlah_rupiah_detail - $jpaket_cashback;
-					}else{
-						$jumlah_rupiah_total = $jumlah_rupiah_detail;
-					}
-					
-					//ambil dari db.member_setup
-					$setmember_point_perrp = $this->get_point_per_rupiah();
-					
-					if($setmember_point_perrp>0){
-						$jumlah_point = floor($jumlah_rupiah_total/$setmember_point_perrp);
+					$jumlah_rupiah -= $jpaket_cashback;
+					if($setmember_rp_perpoint<>0){
+						$jumlah_point = floor($jumlah_rupiah/$setmember_rp_perpoint);
 					}
 					$sql_cust_u="UPDATE customer SET cust_point = (cust_point + $jumlah_point) WHERE cust_id='$jpaket_cust'";
 					$this->db->query($sql_cust_u);
@@ -623,10 +612,10 @@ class M_master_jual_paket extends Model{
 			$sql="SELECT member_id FROM member WHERE member_cust='$jpaket_cust' AND (member_valid >= '$date_now')";
 			$rs=$this->db->query($sql);
 			if($rs->num_rows()){
-				$sql="SELECT setmember_point_perrp FROM member_setup LIMIT 1";
+				$sql="SELECT setmember_rp_perpoint FROM member_setup LIMIT 1";
 				$rs=$this->db->query($sql);
 				$record=$rs->row_array();
-				$setmember_point_perrp=$record['setmember_point_perrp'];
+				$setmember_rp_perpoint=$record['setmember_rp_perpoint'];
 				
 				$sql="SELECT dpaket_jumlah, dpaket_harga, paket_point, dpaket_diskon, jpaket_diskon, jpaket_cashback FROM detail_jual_paket LEFT JOIN master_jual_paket ON(dpaket_master=jpaket_id) LEFT JOIN paket ON(dpaket_paket=paket_id) WHERE dpaket_master='$dpaket_master'";
 				$rs=$this->db->query($sql);
@@ -637,12 +626,12 @@ class M_master_jual_paket extends Model{
 					$jumlah_rupiah = 0;
 					$jumlah_point = 0;
 					foreach($rs->result() as $row){
-						//$jumlah_point += ($row->dpaket_jumlah) * ($row->paket_point) * (floor(($row->dpaket_harga)/$setmember_point_perrp));
+						//$jumlah_point += ($row->dpaket_jumlah) * ($row->paket_point) * (floor(($row->dpaket_harga)/$setmember_rp_perpoint));
 						$jumlah_rupiah += ($row->dpaket_jumlah) * ($row->paket_point) * ($row->dpaket_harga) * ((100 - $row->dpaket_diskon)/100);
 					}
 					$jumlah_rupiah -= $jpaket_cashback;
-					if($setmember_point_perrp<>0){
-						$jumlah_point = floor($jumlah_rupiah/$setmember_point_perrp);
+					if($setmember_rp_perpoint<>0){
+						$jumlah_point = floor($jumlah_rupiah/$setmember_rp_perpoint);
 					}
 					$sql="UPDATE customer SET cust_point = (cust_point - $jumlah_point) WHERE cust_id='$jpaket_cust'";
 					$this->db->query($sql);
@@ -682,6 +671,7 @@ class M_master_jual_paket extends Model{
 				$periode_aktif=$rs_record['setmember_periodeaktif'];
 			}
 			
+			$date_now=date('Y-m-d');
 			$sql="SELECT jpaket_cust FROM master_jual_paket WHERE jpaket_id='$jpaket_id'";
 			$rs=$this->db->query($sql);
 			if($rs->num_rows()){
@@ -736,19 +726,15 @@ class M_master_jual_paket extends Model{
 						
 						if($cust_total_trans_now >= $min_trans_tenggang){
 							//* Perpanjangan kartu member /
-							$sql = "SELECT membert_id FROM member_temp WHERE membert_cust='$cust_id'";
-							$rs = $this->db->query($sql);
-							if(!($rs->num_rows())){
-								$dti_membert=array(
-								"membert_cust"=>$cust_id,
-								"membert_no"=>$member_no,
-								"membert_register"=>$date_now,
-								"membert_valid"=>$set_member_valid,
-								"membert_jenis"=>'perpanjangan',
-								"membert_status"=>'Daftar'
-								);
-								$this->db->insert('member_temp', $dti_membert);
-							}
+							$dti_membert=array(
+							"membert_cust"=>$cust_id,
+							"membert_no"=>$member_no,
+							"membert_register"=>$date_now,
+							"membert_valid"=>$set_member_valid,
+							"membert_jenis"=>'perpanjangan',
+							"membert_status"=>'Daftar'
+							);
+							$this->db->insert('member_temp', $dti_membert);
 						}else{
 							//* message: kartu member customer ini sementara tidak bisa digunakan, karena sudah masuk masa tenggang /
 							//* deleting customer pada db.member_temp (yang mungkin sebelumnya dimasukkan), dikarenakan ada pembatalan transaksi sehingga $cust_total_trans_now tidak memenuhi syarat /
@@ -766,7 +752,7 @@ class M_master_jual_paket extends Model{
 						}
 					}
 				}else{
-					//* artinya: customer belum pernah menjadi MEMBER (belum masuk ke db.member). /
+					//* artinya: customer belum pernah menjadi MEMBER. /
 					//* untuk itu: check total_transaksi si customer di hari ini dan bandingkan dengan db.member_setup.setmember_transhari /
 					if($cust_total_trans_now >= $min_trans_member_baru){
 						//* Pendaftaran MEMBER BARU /
@@ -2290,6 +2276,7 @@ class M_master_jual_paket extends Model{
 		
 		//function for create new record
 		function master_jual_paket_create($jpaket_nobukti ,$jpaket_cust ,$jpaket_tanggal ,$jpaket_diskon ,$jpaket_stat_dok, $jpaket_cara ,$jpaket_cara2 ,$jpaket_cara3 ,$jpaket_keterangan , $jpaket_cashback, $jpaket_tunai_nilai, $jpaket_tunai_nilai2, $jpaket_tunai_nilai3, $jpaket_voucher_no, $jpaket_voucher_cashback, $jpaket_voucher_no2, $jpaket_voucher_cashback2, $jpaket_voucher_no3, $jpaket_voucher_cashback3, $jpaket_bayar, $jpaket_subtotal, $jpaket_total, $jpaket_hutang, $jpaket_kwitansi_no, $jpaket_kwitansi_nama, $jpaket_kwitansi_nilai, $jpaket_kwitansi_no2, $jpaket_kwitansi_nama2, $jpaket_kwitansi_nilai2, $jpaket_kwitansi_no3, $jpaket_kwitansi_nama3, $jpaket_kwitansi_nilai3, $jpaket_card_nama, $jpaket_card_edc, $jpaket_card_no, $jpaket_card_nilai, $jpaket_card_nama2, $jpaket_card_edc2, $jpaket_card_no2, $jpaket_card_nilai2, $jpaket_card_nama3, $jpaket_card_edc3, $jpaket_card_no3, $jpaket_card_nilai3, $jpaket_cek_nama, $jpaket_cek_no, $jpaket_cek_valid, $jpaket_cek_bank, $jpaket_cek_nilai, $jpaket_cek_nama2, $jpaket_cek_no2, $jpaket_cek_valid2, $jpaket_cek_bank2, $jpaket_cek_nilai2, $jpaket_cek_nama3, $jpaket_cek_no3, $jpaket_cek_valid3, $jpaket_cek_bank3, $jpaket_cek_nilai3, $jpaket_transfer_bank, $jpaket_transfer_nama, $jpaket_transfer_nilai, $jpaket_transfer_bank2, $jpaket_transfer_nama2, $jpaket_transfer_nilai2, $jpaket_transfer_bank3, $jpaket_transfer_nama3, $jpaket_transfer_nilai3){
+			
 			$pattern="PK/".date("ym")."-";
 			$jpaket_nobukti=$this->m_public_function->get_kode_1('master_jual_paket','jpaket_nobukti',$pattern,12);	//sementara, utk input manual
 			if ($jpaket_stat_dok=="")
@@ -2732,12 +2719,9 @@ class M_master_jual_paket extends Model{
 				$this->db->where('jpaket_tanggal', $date_now);
 				$this->db->update('master_jual_paket', $dtu_jpaket);*/
 				
-				if($this->db->affected_rows()>0){
-					//* udpating db.customer.cust_point ==> proses mengurangi jumlah poin (dikurangi dengan db.master_jual_paket.jpaket_point yg sudah dimasukkan ketika cetak faktur), karena dilakukan pembatalan /
-					$this->member_point_batal($jpaket_id);
-					$this->membership_insert($jpaket_id);
+				if($this->db->affected_rows()>0)
 					return '1';
-				}else
+				else
 					return '-1';
 			}
 			
