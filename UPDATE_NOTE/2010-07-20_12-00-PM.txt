@@ -1,0 +1,16 @@
+> bug
+  > laporan penjualan produk, perawatan, paket
+    data kredit/piutang belum masuk
+  > sebab: proses penambahan stat_dok di piutang belum
+           ditambahkan sebagaimana proses stat dok di 
+           proses-proses yang lain
+  > fix data : jalankan query SQL file 2010-07-20_11-58-PM.sql
+               mungkin akan terasa lambat, execute query jgn
+               dari phpmyadmin krn querynya panjang , 
+               execute dari query manager lain misal navicat
+               ato toad mysql manager
+  > fix view : jalankan query SQL file 2010-07-20_12-00-PM.sql
+  
+ 
+
+    
