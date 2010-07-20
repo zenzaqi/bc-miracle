@@ -4819,9 +4819,9 @@ Ext.onReady(function(){
 		// only one record is selected here
 		if(detail_jual_rawatListEditorGrid.selModel.getCount() == 1){
 			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', detail_jual_rawat_delete);
-		} else if(detail_jual_rawatListEditorGrid.selModel.getCount() > 1){
+		} /*else if(detail_jual_rawatListEditorGrid.selModel.getCount() > 1){
 			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', detail_jual_rawat_delete);
-		} else {
+		}*/ else {
 			Ext.MessageBox.show({
 				title: 'Warning',
 				msg: 'You can\'t really delete something you haven\'t selected?',
@@ -4837,12 +4837,14 @@ Ext.onReady(function(){
 	function detail_jual_rawat_delete(btn){
             if(btn=='yes'){
                 if(detail_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('drawat_dtrawat')=='' && detail_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('drawat_id')!==''){
-                    var selections = detail_jual_rawatListEditorGrid.selModel.getSelections();
+					var selections = detail_jual_rawatListEditorGrid.selModel.getSelections();
                     var prez = [];
                     for(i = 0; i< detail_jual_rawatListEditorGrid.selModel.getCount(); i++){
+						var record = selections[i];
                         prez.push(selections[i].json.drawat_id);
                     }
                     var encoded_array = Ext.encode(prez);
+					detail_jual_rawat_DataStore.remove(selections[0]);
                     Ext.Ajax.request({
                         waitMsg: 'Mohon tunggu...',
                         url: 'index.php?c=c_master_jual_rawat&m=get_action', 
@@ -4852,7 +4854,7 @@ Ext.onReady(function(){
                             switch(result){
                                 case 1:  // Success : simply reload
                                     //master_jual_rawat_DataStore.reload();
-                                    detail_jual_rawat_DataStore.remove(selections[0]);
+									load_total_bayar();
                                     break;
                                 default:
                                     Ext.MessageBox.show({
@@ -4882,10 +4884,55 @@ Ext.onReady(function(){
                     for(var i = 0, r; r = s[i]; i++){
                         detail_jual_rawat_DataStore.remove(r);
                     }
-                }else{
+                }else if(detail_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('drawat_dtrawat')!==''
+						 && detail_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('drawat_id')!==''){
+					//sementara detail hasil inputan Tindakan bisa di-delete
+					var selections = detail_jual_rawatListEditorGrid.selModel.getSelections();
+                    var prez = [];
+                    for(i = 0; i< detail_jual_rawatListEditorGrid.selModel.getCount(); i++){
+                        prez.push(selections[i].json.drawat_id);
+                    }
+                    var encoded_array = Ext.encode(prez);
+					detail_jual_rawat_DataStore.remove(selections[0]);
+                    Ext.Ajax.request({
+                        waitMsg: 'Mohon tunggu...',
+                        url: 'index.php?c=c_master_jual_rawat&m=get_action', 
+                        params: { task: "DDELETE", ids:  encoded_array }, 
+                        success: function(response){
+                            var result=eval(response.responseText);
+							switch(result){
+                                case 1:  // Success : simply reload
+                                    //master_jual_rawat_DataStore.reload();
+									load_total_bayar();
+                                    //detail_jual_rawat_DataStore.remove(selections[0]);
+                                    break;
+                                default:
+                                    Ext.MessageBox.show({
+                                        title: 'Warning',
+                                        msg: 'Could not delete the entire selection',
+                                        buttons: Ext.MessageBox.OK,
+                                        animEl: 'save',
+                                        icon: Ext.MessageBox.WARNING
+                                    });
+                                    break;
+                            }
+                        },
+                        failure: function(response){
+                                var result=response.responseText;
+                                Ext.MessageBox.show({
+                                   title: 'Error',
+                                   msg: 'Could not connect to the database. retry later.',
+                                   buttons: Ext.MessageBox.OK,
+                                   animEl: 'database',
+                                   icon: Ext.MessageBox.ERROR
+                                });	
+                        }
+                    });
+				}else{
                     Ext.MessageBox.show({
                         title: 'Warning',
-                        msg: 'Silakan menghubungi bagian Tindakan',
+                        //msg: 'Silakan menghubungi bagian Tindakan', //ini untuk inputan dari Tindakan
+						msg: 'Tidak diketahui kesalahannya', //sementara
                         buttons: Ext.MessageBox.OK,
                         animEl: 'save',
                         icon: Ext.MessageBox.WARNING
