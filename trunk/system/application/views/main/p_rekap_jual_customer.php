@@ -38,7 +38,94 @@
             <th scope='col'>Kredit (Rp)</th>
         </tr>
     </thead>
-	<tfoot>
+	<tbody>
+		<?php $i=0; $j=0; $cust=""; foreach($data_print as $print) { ?>
+			<?php if($cust!==$print->cust_no) { ?>
+           <tr>
+                <td><b><? $j++; echo $j; ?></b></td>
+                <td colspan="12"><b><?php echo $print->cust_nama." (".$print->cust_no.")";?></b></td>
+           </tr>
+           <?php $sub_cashback=0;
+					$sub_total=0;
+					$sub_tunai=0;
+					$sub_cek=0;
+					$sub_transfer=0;
+					$sub_kuitansi=0;
+					$sub_card=0;
+					$sub_kredit=0;
+					$sub_jumlah_barang=0;
+					
+					$total_item=0;
+					$total_diskon=0;
+					$total_diskonp=0;
+					$total_nilai=0;
+					$total_tunai=0;
+					$total_cek=0;
+					$total_transfer=0;
+					$total_kuitansi=0;
+					$total_card=0;
+					$total_kredit=0;
+				
+					$i=0; 
+			?>
+           <?php foreach($data_print as $print_list) {  
+		   			
+					$total_item+=$print_list->jumlah_barang;
+					$total_diskon+=$print_list->cashback;
+					$total_diskonp+=($print_list->diskon*$print_list->total_nilai)/100;
+					$total_nilai+=$print_list->total_nilai;
+					$total_tunai+=$print_list->tunai;
+					$total_cek+=$print_list->cek;
+					$total_transfer+=$print_list->transfer;
+					$total_kuitansi+=$print_list->kuitansi;
+					$total_card+=$print_list->card;
+					$total_kredit+=$print_list->kredit;
+				
+		   ?>
+           <?php if($print_list->cust_no==$print->cust_no){ $i++;
+		   			$sub_cashback+=$print_list->cashback;
+					$sub_jumlah_barang+=$print_list->jumlah_barang;
+					$sub_total+=$print_list->total_nilai;
+					$sub_tunai+=$print_list->tunai;
+					$sub_cek+=$print_list->tunai;
+					$sub_transfer+=$print_list->transfer;
+					$sub_kuitansi+=$print_list->kuitansi;
+					$sub_card+=$print_list->card;
+					$sub_kredit+=$print_list->kredit;
+		   ?>
+            <tr>
+                <td><? echo $i; ?></td>
+               	<td><?php echo $print_list->tanggal; ?></td>
+                <td><?php echo $print_list->no_bukti; ?></td>
+                <td align="right" class="numeric"><?php echo number_format($print_list->diskon,0,",","."); ?></td>
+                <td align="right" class="numeric"><?php echo number_format($print_list->cashback,2,",","."); ?></td>
+                <td align="right" class="numeric"><?php echo number_format($print_list->jumlah_barang,0,",","."); ?></td>
+                <td align="right" class="numeric"><?php echo number_format($print_list->total_nilai,2,",","."); ?></td>
+                <td align="right" class="numeric"><?php echo number_format($print_list->tunai,2,",","."); ?></td>
+                <td align="right" class="numeric"><?php echo number_format($print_list->cek,2,",","."); ?></td>
+                <td align="right" class="numeric"><?php echo number_format($print_list->transfer,2,",","."); ?></td>
+                <td align="right" class="numeric"><?php echo number_format($print_list->kuitansi,2,",","."); ?></td>
+                <td align="right" class="numeric"><?php echo number_format($print_list->card,2,",","."); ?></td>
+                <td align="right" class="numeric"><?php echo number_format($print_list->kredit,2,",","."); ?></td>
+           </tr>
+           <?php } ?>
+           <?php } ?>
+           <tr>
+                <td colspan="4">&nbsp;</td>
+                <td align="right" class="numeric"><b><?php echo number_format($sub_cashback,2,",","."); ?></b></td>
+                <td align="right" class="numeric"><b><?php echo number_format($sub_jumlah_barang,0,",","."); ?></b></td>
+                <td align="right" class="numeric"><b><?php echo number_format($sub_total,2,",","."); ?></b></td>
+                <td align="right" class="numeric"><b><?php echo number_format($sub_tunai,2,",","."); ?></b></td>
+                <td align="right" class="numeric"><b><?php echo number_format($sub_cek,2,",","."); ?></b></td>
+                <td align="right" class="numeric"><b><?php echo number_format($sub_transfer,2,",","."); ?></b></td>
+                <td align="right" class="numeric"><b><?php echo number_format($sub_kuitansi,2,",","."); ?></b></td>
+                <td align="right" class="numeric"><b><?php echo number_format($sub_card,2,",","."); ?></b></td>
+                <td align="right" class="numeric"><b><?php echo number_format($sub_kredit,2,",","."); ?></b></td>
+           </tr>
+           <?php } $cust=$print->cust_no; ?>
+		<?php } ?>
+	</tbody>
+    <tfoot>
     	<tr>
         	<td class="clear">&nbsp;</td>
         	<th scope='row'>Total</th>
@@ -53,6 +140,12 @@
         	<th scope='row' nowrap="nowrap">Total Item</th>
             <td nowrap="nowrap" align="right" class="numeric clear"><?php echo number_format($total_item,0,",","."); ?></td>
             <td colspan='10' class="clear">&nbsp;</td>
+        </tr>
+          <tr>
+        	<td class="clear">&nbsp;</td>
+        	<th scope='row' nowrap="nowrap">Diskon  % - (Rp)</th>
+            <td  nowrap="nowrap" align="right" class="numeric clear"><?php echo number_format($total_diskonp,0,",","."); ?></td>
+             <td colspan='11' class="clear">&nbsp;</td>
         </tr>
         <tr>
         	<td class="clear">&nbsp;</td>
@@ -103,68 +196,6 @@
              <td colspan='10' class="clear" >&nbsp;</td>
         </tr>
 	</tfoot>
-	<tbody>
-		<?php $i=0; $j=0; $cust=""; foreach($data_print as $print) { ?>
-			<?php if($cust!==$print->cust_no) { ?>
-           <tr>
-                <td><b><? $j++; echo $j; ?></b></td>
-                <td colspan="12"><b><?php echo $print->cust_nama." (".$print->cust_no.")";?></b></td>
-           </tr>
-           <?php $sub_cashback=0;
-					$sub_total=0;
-					$sub_tunai=0;
-					$sub_cek=0;
-					$sub_transfer=0;
-					$sub_kuitansi=0;
-					$sub_card=0;
-					$sub_kredit=0;
-					$sub_jumlah_barang=0;
-					$i=0; 
-			?>
-           <?php foreach($data_print as $print_list) {  ?>
-           <?php if($print_list->cust_no==$print->cust_no){ $i++;
-		   			$sub_cashback+=$print_list->cashback;
-					$sub_jumlah_barang+=$print_list->jumlah_barang;
-					$sub_total+=$print_list->total_nilai;
-					$sub_tunai+=$print_list->tunai;
-					$sub_cek+=$print_list->tunai;
-					$sub_transfer+=$print_list->transfer;
-					$sub_kuitansi+=$print_list->kuitansi;
-					$sub_card+=$print_list->card;
-					$sub_kredit+=$print_list->kredit;
-		   ?>
-            <tr>
-                <td><? echo $i; ?></td>
-               	<td><?php echo $print_list->tanggal; ?></td>
-                <td><?php echo $print_list->no_bukti; ?></td>
-                <td align="right" class="numeric"><?php echo number_format($print_list->diskon,0,",","."); ?></td>
-                <td align="right" class="numeric"><?php echo number_format($print_list->cashback,2,",","."); ?></td>
-                <td align="right" class="numeric"><?php echo number_format($print_list->jumlah_barang,0,",","."); ?></td>
-                <td align="right" class="numeric"><?php echo number_format($print_list->total_nilai,2,",","."); ?></td>
-                <td align="right" class="numeric"><?php echo number_format($print_list->tunai,2,",","."); ?></td>
-                <td align="right" class="numeric"><?php echo number_format($print_list->cek,2,",","."); ?></td>
-                <td align="right" class="numeric"><?php echo number_format($print_list->transfer,2,",","."); ?></td>
-                <td align="right" class="numeric"><?php echo number_format($print_list->kuitansi,2,",","."); ?></td>
-                <td align="right" class="numeric"><?php echo number_format($print_list->card,2,",","."); ?></td>
-                <td align="right" class="numeric"><?php echo number_format($print_list->kredit,2,",","."); ?></td>
-           </tr>
-           <?php } ?>
-           <?php } ?>
-           <tr>
-                <td colspan="4">&nbsp;</td>
-                <td align="right" class="numeric"><b><?php echo number_format($sub_cashback,2,",","."); ?></b></td>
-                <td align="right" class="numeric"><b><?php echo number_format($sub_jumlah_barang,0,",","."); ?></b></td>
-                <td align="right" class="numeric"><b><?php echo number_format($sub_total,2,",","."); ?></b></td>
-                <td align="right" class="numeric"><b><?php echo number_format($sub_tunai,2,",","."); ?></b></td>
-                <td align="right" class="numeric"><b><?php echo number_format($sub_cek,2,",","."); ?></b></td>
-                <td align="right" class="numeric"><b><?php echo number_format($sub_transfer,2,",","."); ?></b></td>
-                <td align="right" class="numeric"><b><?php echo number_format($sub_kuitansi,2,",","."); ?></b></td>
-                <td align="right" class="numeric"><b><?php echo number_format($sub_card,2,",","."); ?></b></td>
-                <td align="right" class="numeric"><b><?php echo number_format($sub_kredit,2,",","."); ?></b></td>
-           </tr>
-           <?php } $cust=$print->cust_no; ?>
-		<?php } ?>
-	</tbody>
 </table>
 </body>
 </html>
