@@ -88,37 +88,34 @@ class C_tindakan_nonmedis extends Controller {
 	//
 	
 	//add detail
-	function detail_tindakan_nonmedis_detail_insert(){
+	function detail_tindakan_nonmedis_detail_insert($dtrawat_id
+													,$dtrawat_master
+													,$dtrawat_perawatan
+													,$dtrawat_petugas2
+													,$dtrawat_jam
+													,$dtrawat_status
+													,$dtrawat_keterangan
+													,$dtrawat_cust
+													,$jumlah){
 		//POST variable here
-		$dtrawat_id = $_POST['dtrawat_id']; // Get our array back and translate it :
 		$array_dtrawat_id = json_decode(stripslashes($dtrawat_id));
-		
-		$dtrawat_master=trim(@$_POST["dtrawat_master"]);
-		
-		$dtrawat_perawatan = $_POST['dtrawat_perawatan']; // Get our array back and translate it :
 		$array_dtrawat_perawatan = json_decode(stripslashes($dtrawat_perawatan));
-		
-		$dtrawat_petugas2 = $_POST['dtrawat_petugas2']; // Get our array back and translate it :
 		$array_dtrawat_petugas2 = json_decode(stripslashes($dtrawat_petugas2));
-		
-		$dtrawat_jam = $_POST['dtrawat_jam']; // Get our array back and translate it :
 		$array_dtrawat_jam = json_decode(stripslashes($dtrawat_jam));
-		
-		$dtrawat_jam = $_POST['dtrawat_jam']; // Get our array back and translate it :
 		$array_dtrawat_jam = json_decode(stripslashes($dtrawat_jam));
-		
-		$dtrawat_status = $_POST['dtrawat_status']; // Get our array back and translate it :
 		$array_dtrawat_status = json_decode(stripslashes($dtrawat_status));
-		
-		$dtrawat_keterangan = $_POST['dtrawat_keterangan']; // Get our array back and translate it :
 		$array_dtrawat_keterangan = json_decode(stripslashes($dtrawat_keterangan));
-		
-		$dtrawat_cust=trim(@$_POST["dtrawat_cust"]);
-		
-		$jumlah = $_POST['jumlah']; // Get our array back and translate it :
 		$array_jumlah = json_decode(stripslashes($jumlah));
 		
-		$result=$this->m_tindakan_nonmedis->detail_tindakan_nonmedis_detail_insert($array_dtrawat_id ,$dtrawat_master ,$array_dtrawat_perawatan ,$array_dtrawat_petugas2 ,$array_dtrawat_jam ,$array_dtrawat_status ,$array_dtrawat_keterangan ,$dtrawat_cust ,$array_jumlah);
+		$result=$this->m_tindakan_nonmedis->detail_tindakan_nonmedis_detail_insert($array_dtrawat_id
+																				   ,$dtrawat_master
+																				   ,$array_dtrawat_perawatan
+																				   ,$array_dtrawat_petugas2
+																				   ,$array_dtrawat_jam
+																				   ,$array_dtrawat_status
+																				   ,$array_dtrawat_keterangan
+																				   ,$dtrawat_cust
+																				   ,$array_jumlah);
 		echo $result;
 	}
 	
@@ -126,12 +123,14 @@ class C_tindakan_nonmedis extends Controller {
 	//event handler action
 	function get_action(){
 		$task = $_POST['task'];
+		$mode_edit_case = '';
+		$mode_edit_case = @$_POST['mode_edit'];
 		switch($task){
 			case "LIST":
 				$this->tindakan_list();
 				break;
 			case "UPDATE":
-				$this->tindakan_update();
+				$this->tindakan_update($mode_edit_case);
 				break;
 			case "CREATE":
 				$this->tindakan_create();
@@ -165,30 +164,94 @@ class C_tindakan_nonmedis extends Controller {
 	}
 
 	//function for update record
-	function tindakan_update(){
+	function tindakan_update($mode_edit_case){
 		//POST variable here
-		$trawat_id=trim(@$_POST["trawat_id"]);
-		$trawat_cust=trim(@$_POST["trawat_cust"]);
+		if($mode_edit_case=='update_list'){
+			//Edit InLine
+			$trawat_id=trim(@$_POST["trawat_id"]);
+			$dtrawat_id=trim(@$_POST["dtrawat_id"]);
+			$dtrawat_perawatan=trim(@$_POST["dtrawat_perawatan"]);
+			$dtrawat_terapis=trim(@$_POST["dtrawat_terapis"]);
+			$dtrawat_jam=trim(@$_POST["dtrawat_jam"]);
+			$dtrawat_keterangan=trim(@$_POST["dtrawat_keterangan"]);
+			$dtrawat_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$dtrawat_keterangan);
+			$dtrawat_keterangan=str_replace(",", "\,",$dtrawat_keterangan);
+			$dtrawat_keterangan=str_replace("'", "''",$dtrawat_keterangan);
+			$dtrawat_ambil_paket=trim(@$_POST["dtrawat_ambil_paket"]);
+			$dtrawat_status=trim(@$_POST["dtrawat_status"]);
+			
+			$result = $this->m_tindakan_nonmedis->tindakan_update_list($trawat_id
+																  ,$dtrawat_id
+																  ,$dtrawat_perawatan
+																  ,$dtrawat_terapis
+																  ,$dtrawat_jam
+																  ,$dtrawat_keterangan
+																  ,$dtrawat_ambil_paket
+																  ,$dtrawat_status);
+			echo $result;
+		}else{
+			//Edit Form
+			$trawat_id=trim(@$_POST["trawat_id"]);
+			$trawat_cust=trim(@$_POST["trawat_cust"]);
+			$trawat_keterangan=trim(@$_POST["trawat_keterangan"]);
+			$trawat_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$trawat_keterangan);
+			$trawat_keterangan=str_replace(",", "\,",$trawat_keterangan);
+			$trawat_keterangan=str_replace("'", "''",$trawat_keterangan);
+			
+			//menerima POST Detail List Tindakan Non Medis
+			$dtrawat_nonmedis_id = $_POST['dtrawat_nonmedis_id']; // Get our array back and translate it :
+			$dtrawat_nonmedis_perawatan = $_POST['dtrawat_nonmedis_perawatan']; // Get our array back and translate it :
+			$dtrawat_nonmedis_petugas2 = $_POST['dtrawat_nonmedis_petugas2']; // Get our array back and translate it :
+			$dtrawat_nonmedis_jam = $_POST['dtrawat_nonmedis_jam']; // Get our array back and translate it :
+			$dtrawat_nonmedis_status = $_POST['dtrawat_nonmedis_status']; // Get our array back and translate it :
+			$dtrawat_nonmedis_keterangan = $_POST['dtrawat_nonmedis_keterangan']; // Get our array back and translate it :
+			$nonmedis_jumlah = $_POST['nonmedis_jumlah']; // Get our array back and translate it :
+			
+			$result_master = $this->m_tindakan_nonmedis->tindakan_update($trawat_id ,$trawat_keterangan );
+			
+			if($result_master==1){
+				//Proses Insert Detail List Tindakan Non Medis
+				$result_nonmedis = $this->detail_tindakan_nonmedis_detail_insert($dtrawat_nonmedis_id
+																				,$trawat_id
+																				,$dtrawat_nonmedis_perawatan
+																				,$dtrawat_nonmedis_petugas2
+																				,$dtrawat_nonmedis_jam
+																				,$dtrawat_nonmedis_status
+																				,$dtrawat_nonmedis_keterangan
+																				,$trawat_cust
+																				,$nonmedis_jumlah);
+				
+				$result = $result_master + $result_nonmedis;
+				echo $result;
+			}else{
+				echo 0;
+			}
+			
+		}
+		
+		
+		
+		
+		
+		/*$trawat_cust=trim(@$_POST["trawat_cust"]);
 		$trawat_keterangan=trim(@$_POST["trawat_keterangan"]);
 		$trawat_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$trawat_keterangan);
 		$trawat_keterangan=str_replace(",", "\,",$trawat_keterangan);
 		$trawat_keterangan=str_replace("'", "''",$trawat_keterangan);
-		$dtrawat_status=trim(@$_POST["dtrawat_status"]);
+		
 		$trawat_cust_id=trim(@$_POST["trawat_cust_id"]);
 		$dtrawat_perawatan_id=trim(@$_POST["dtrawat_perawatan_id"]);
-		$dtrawat_perawatan=trim(@$_POST["dtrawat_perawatan"]);
-		$dtrawat_id=trim(@$_POST["dtrawat_id"]);
+		
+		
 		$rawat_harga=trim(@$_POST["rawat_harga"]);
 		$rawat_du=trim(@$_POST["rawat_du"]);
 		$rawat_dm=trim(@$_POST["rawat_dm"]);
 		$cust_member=trim(@$_POST["cust_member"]);
-		$dtrawat_terapis=trim(@$_POST["dtrawat_terapis"]);
+		
 		$dtrawat_terapis_id=trim(@$_POST["dtrawat_terapis_id"]);
-		$dtrawat_keterangan=trim(@$_POST["dtrawat_keterangan"]);
-		$dtrawat_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$dtrawat_keterangan);
-		$dtrawat_keterangan=str_replace(",", "\,",$dtrawat_keterangan);
+		
 		$dtrawat_dapp=trim(@$_POST["dtrawat_dapp"]);
-		$dtrawat_ambil_paket=trim(@$_POST["dtrawat_ambil_paket"]);
+		
 		$dapaket_dpaket=trim(@$_POST["dapaket_dpaket"]);
 		$dapaket_jpaket=trim(@$_POST["dapaket_jpaket"]);
 		$dapaket_paket=trim(@$_POST["dapaket_paket"]);
@@ -196,7 +259,7 @@ class C_tindakan_nonmedis extends Controller {
 		$dtrawat_jumlah=trim(@$_POST["dtrawat_jumlah"]);
 		$mode_edit=trim(@$_POST["mode_edit"]);
 		$result = $this->m_tindakan_nonmedis->tindakan_update($trawat_id ,$trawat_cust ,$trawat_keterangan ,$dtrawat_status ,$trawat_cust_id ,$dtrawat_perawatan_id ,$dtrawat_perawatan ,$dtrawat_id ,$rawat_harga ,$rawat_du ,$rawat_dm ,$cust_member ,$dtrawat_terapis ,$dtrawat_terapis_id ,$dtrawat_keterangan ,$dtrawat_dapp ,$dtrawat_ambil_paket ,$dapaket_dpaket ,$dapaket_jpaket ,$dapaket_paket ,$dapaket_item ,$dtrawat_jumlah ,$mode_edit);
-		echo $result;
+		echo $result;*/
 	}
 	
 	//function for create new record

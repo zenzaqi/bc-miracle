@@ -115,7 +115,7 @@ var tindakan_nonmedis_detail_reader;
 var editor_tindakan_nonmedis_detail;
 
 //declare konstant
-var post2db = '';
+var tnonmedis_post2db = '';
 var msg = '';
 var pageS=15;
 
@@ -132,6 +132,8 @@ var var_perawatan_nonmedis_dstore = true;
 var var_terapis_dstore = true;
 var var_dtindakan_nonmedis_dstore = true;
 
+var dnonmedis_status_inline_beforeedit = '';
+
 /* on ready fuction */
 Ext.onReady(function(){
   	Ext.QuickTips.init();	/* Initiate quick tips icon */
@@ -140,122 +142,161 @@ Ext.onReady(function(){
 	function tindakan_nonmedis_update(oGrid_event){
 		tindakan_nonmedisListEditorGrid.setDisabled(true);
 		var trawat_id_update_pk="";
-		var trawat_cust_update=null;
-		var trawat_keterangan_update=null;
-		var dtrawat_status_update=null;
-		var trawat_cust_id_update=null;
-		var dtrawat_perawatan_id_update=null;
-		var dtrawat_perawatan_update=null;
 		var dtrawat_id_update=null;
-		var perawatan_harga_update=null;
-		var perawatan_du_update=null;
-		var perawatan_dm_update=null;
-		var cust_member_update=null;
-		var dtrawat_keterangan_update=null;
-		var dtrawat_dapp_update="";
+		var dtrawat_perawatan_update=null;
+		var dtrawat_perawatan_id_update=null;
 		var dtrawat_terapis_update=null;
 		var dtrawat_terapis_id_update=null;
+		var dtrawat_jam_update=null;
+		var dtrawat_keterangan_update=null;
 		var dtrawat_ambil_paket_update="";
-		var dapaket_dpaket_update=null;
-		var dapaket_jpaket_update=null;
-		var dapaket_paket_update=null;
-		var dapaket_item_update=null;
-
+		
+		var dtrawat_status_update=null;
+		
 		trawat_id_update_pk = oGrid_event.record.data.trawat_id;
-		if(oGrid_event.record.data.trawat_cust!== null){trawat_cust_update = oGrid_event.record.data.trawat_cust;}
-		if(oGrid_event.record.data.trawat_keterangan!== null){trawat_keterangan_update = oGrid_event.record.data.trawat_keterangan;}
-		dtrawat_status_update = oGrid_event.record.data.dtrawat_status;
-		trawat_cust_id_update = oGrid_event.record.data.trawat_cust_id;
-		dtrawat_perawatan_id_update = oGrid_event.record.data.dtrawat_perawatan_id;
-		dtrawat_perawatan_update = oGrid_event.record.data.dtrawat_perawatan;
 		dtrawat_id_update = oGrid_event.record.data.dtrawat_id;
-		perawatan_harga_update = oGrid_event.record.data.perawatan_harga;
-		perawatan_du_update = oGrid_event.record.data.perawatan_du;
-		perawatan_dm_update = oGrid_event.record.data.perawatan_dm;
-		cust_member_update = oGrid_event.record.data.cust_member;
+		dtrawat_perawatan_update = oGrid_event.record.data.dtrawat_perawatan;
+		dtrawat_perawatan_id_update = oGrid_event.record.data.dtrawat_perawatan_id;
 		dtrawat_terapis_update = oGrid_event.record.data.dtrawat_petugas2;
 		dtrawat_terapis_id_update = oGrid_event.record.data.dtrawat_petugas2_id;
+		if(oGrid_event.record.data.dtrawat_jam!== null){dtrawat_jam_update = oGrid_event.record.data.dtrawat_jam;}
 		if(oGrid_event.record.data.dtrawat_keterangan!== null){dtrawat_keterangan_update = oGrid_event.record.data.dtrawat_keterangan;}
-		dtrawat_dapp_update = oGrid_event.record.data.dtrawat_dapp;
 		dtrawat_ambil_paket_update = oGrid_event.record.data.dtrawat_ambil_paket;
-		dapaket_dpaket_update = oGrid_event.record.data.dapaket_dpaket;
-		dapaket_jpaket_update = oGrid_event.record.data.dapaket_jpaket;
-		dapaket_paket_update = oGrid_event.record.data.dapaket_paket;
-		dapaket_item_update = oGrid_event.record.data.dapaket_item;
-		dtrawat_jumlah_update = oGrid_event.record.data.dtrawat_jumlah;
-
-		Ext.Ajax.request({  
-			waitMsg: 'Please wait...',
-			url: 'index.php?c=c_tindakan_nonmedis&m=get_action',
-			params: {
-				task: "UPDATE",
-				mode_edit: "update_list",
-				trawat_id	: trawat_id_update_pk, 
-				trawat_cust	:trawat_cust_update,  
-				trawat_keterangan	:trawat_keterangan_update,  
-				dtrawat_status	:dtrawat_status_update,
-				trawat_cust_id	:trawat_cust_id_update,
-				dtrawat_perawatan_id	:dtrawat_perawatan_id_update,
-				dtrawat_perawatan	:dtrawat_perawatan_update,
-				dtrawat_id	:dtrawat_id_update,
-				rawat_harga	:perawatan_harga_update,
-				rawat_du	:perawatan_du_update,
-				rawat_dm	:perawatan_dm_update,
-				cust_member	:cust_member_update,
-				dtrawat_terapis	: dtrawat_terapis_update,
-				dtrawat_terapis_id	: dtrawat_terapis_id_update,
-				dtrawat_keterangan	:dtrawat_keterangan_update,
-				dtrawat_dapp	: dtrawat_dapp_update,
-				dtrawat_ambil_paket	: dtrawat_ambil_paket_update,
-				dapaket_dpaket	: dapaket_dpaket_update,
-				dapaket_jpaket	: dapaket_jpaket_update,
-				dapaket_paket	: dapaket_paket_update,
-				dapaket_item	: dapaket_item_update,
-				dtrawat_jumlah	: dtrawat_jumlah_update
-			}, 
-			success: function(response){							
-				var result=eval(response.responseText);
-				switch(result){
-					case -1:
-						tindakan_nonmedis_DataStore.reload();
-						tindakan_nonmedisListEditorGrid.setDisabled(false);
-						Ext.MessageBox.show({
-						   title: 'Warning',
-						   width: 330,
-						   msg: 'Customer dengan perawatan yang dipilih, <br/>\"tidak ada\" dalam paket.',
-						   buttons: Ext.MessageBox.OK,
-						   animEl: 'save',
-						   icon: Ext.MessageBox.WARNING
-						});
-						break;
-					default:
-						tindakan_nonmedis_DataStore.commitChanges();
-						tindakan_nonmedis_DataStore.reload();
-						tindakan_nonmedisListEditorGrid.setDisabled(false);
-						//trawat_nonmedis_perawatanDataStore.reload({params:{query:tindakan_nonmedisListEditorGrid.getSelectionModel().getSelected().get('trawat_id')}});
-						/*Ext.MessageBox.show({
-						   title: 'Warning',
-						   msg: 'Perubahan tidak dapat disimpan.',
-						   buttons: Ext.MessageBox.OK,
-						   animEl: 'save',
-						   icon: Ext.MessageBox.WARNING
-						});*/
-						break;
-				}
-			},
-			failure: function(response){
-				tindakan_nonmedis_DataStore.reload();
-				tindakan_nonmedisListEditorGrid.setDisabled(false);
-				var result=response.responseText;
-				Ext.MessageBox.show({
-				   title: 'Error',
-				   msg: 'Could not connect to the database. retry later.',
-				   buttons: Ext.MessageBox.OK,
-				   animEl: 'database',
-				   icon: Ext.MessageBox.ERROR
-				});	
-			}									    
-		});   
+		
+		dtrawat_status_update = oGrid_event.record.data.dtrawat_status;
+		
+		if(this.dnonmedis_status_inline_beforeedit=='selesai' && dtrawat_status_update=='selesai'){
+			//Editing ketika status = 'selesai' ==> tidak diperbolehkan
+			tindakan_nonmedis_DataStore.reload();
+			tindakan_nonmedisListEditorGrid.setDisabled(false);
+			Ext.MessageBox.show({
+				title: 'Warning',
+				width: 330,
+				msg: 'Status yang sudah "selesai" tidak boleh di-Edit. Ubah status ke selain "selesai" terlebih dahulu, kemudian lakukan editing.',
+				buttons: Ext.MessageBox.OK,
+				animEl: 'save',
+				icon: Ext.MessageBox.WARNING
+			});
+		}else if((this.dnonmedis_status_inline_beforeedit=='selesai' && dtrawat_status_update!=='selesai') || this.dnonmedis_status_inline_beforeedit!=='selesai'){
+			//Perubahan status dari 'selesai' menjadi !='selesai' ATAU status sebelumnya di DB !='selesai'
+			Ext.Ajax.request({  
+				waitMsg: 'Please wait...',
+				url: 'index.php?c=c_tindakan_nonmedis&m=get_action',
+				params: {
+					task: "UPDATE",
+					mode_edit: "update_list",
+					trawat_id	: trawat_id_update_pk,
+					dtrawat_id	:dtrawat_id_update,
+					dtrawat_perawatan	:dtrawat_perawatan_update,
+					dtrawat_perawatan_id	:dtrawat_perawatan_id_update,
+					dtrawat_terapis	: dtrawat_terapis_update,
+					dtrawat_terapis_id	: dtrawat_terapis_id_update,
+					dtrawat_jam	: dtrawat_jam_update,
+					dtrawat_keterangan	:dtrawat_keterangan_update,
+					dtrawat_ambil_paket	: dtrawat_ambil_paket_update,
+					dtrawat_status	:dtrawat_status_update
+				}, 
+				success: function(response){							
+					var result=eval(response.responseText);
+					switch(result){
+						case 1:
+							tindakan_nonmedis_DataStore.reload();
+							tindakan_nonmedisListEditorGrid.setDisabled(false);
+							Ext.MessageBox.show({
+							   title: 'INFO',
+							   width: 330,
+							   msg: 'Update telah sukses dilakukan.',
+							   buttons: Ext.MessageBox.OK,
+							   animEl: 'save',
+							   icon: Ext.MessageBox.INFO
+							});
+							break;
+						case 0:
+							tindakan_nonmedis_DataStore.reload();
+							tindakan_nonmedisListEditorGrid.setDisabled(false);
+							Ext.MessageBox.show({
+							   title: 'INFO',
+							   width: 330,
+							   msg: 'Tidak Ada data yang diupdate.',
+							   buttons: Ext.MessageBox.OK,
+							   animEl: 'save',
+							   icon: Ext.MessageBox.INFO
+							});
+							break;
+						case -1:
+							tindakan_nonmedis_DataStore.reload();
+							tindakan_nonmedisListEditorGrid.setDisabled(false);
+							Ext.MessageBox.show({
+							   title: 'Warning',
+							   width: 330,
+							   msg: 'Customer dengan perawatan yang dipilih, <br/>\"tidak ada\" dalam paket.',
+							   buttons: Ext.MessageBox.OK,
+							   animEl: 'save',
+							   icon: Ext.MessageBox.WARNING
+							});
+							break;
+						case -2:
+							tindakan_nonmedis_DataStore.reload();
+							tindakan_nonmedisListEditorGrid.setDisabled(false);
+							Ext.MessageBox.show({
+							   title: 'Warning',
+							   width: 330,
+							   msg: 'Data yang dipilih Tidak Ditemukan di Database.',
+							   buttons: Ext.MessageBox.OK,
+							   animEl: 'save',
+							   icon: Ext.MessageBox.WARNING
+							});
+							break;
+						case -3:
+							tindakan_nonmedis_DataStore.reload();
+							tindakan_nonmedisListEditorGrid.setDisabled(false);
+							Ext.MessageBox.show({
+							   title: 'Warning',
+							   width: 330,
+							   msg: 'Data yang dipilih Tidak Bisa di-Edit, <br/>karena sudah melalui proses printing Faktur di Kasir.',
+							   buttons: Ext.MessageBox.OK,
+							   animEl: 'save',
+							   icon: Ext.MessageBox.WARNING
+							});
+							break;
+						default:
+							tindakan_nonmedis_DataStore.reload();
+							tindakan_nonmedisListEditorGrid.setDisabled(false);
+							Ext.MessageBox.show({
+							   title: 'Warning',
+							   msg: 'We could\'t not save the tindakan.',
+							   buttons: Ext.MessageBox.OK,
+							   animEl: 'save',
+							   icon: Ext.MessageBox.WARNING
+							});
+							break;
+					}
+				},
+				failure: function(response){
+					tindakan_nonmedis_DataStore.reload();
+					tindakan_nonmedisListEditorGrid.setDisabled(false);
+					var result=response.responseText;
+					Ext.MessageBox.show({
+					   title: 'Error',
+					   msg: 'Could not connect to the database. retry later.',
+					   buttons: Ext.MessageBox.OK,
+					   animEl: 'database',
+					   icon: Ext.MessageBox.ERROR
+					});	
+				}									    
+			});
+		}else{
+			tindakan_nonmedis_DataStore.reload();
+			tindakan_nonmedisListEditorGrid.setDisabled(false);
+			Ext.MessageBox.show({
+				title: 'Error',
+				msg: 'Belum diketahui kesalahannya.',
+				buttons: Ext.MessageBox.OK,
+				animEl: 'database',
+				icon: Ext.MessageBox.ERROR
+			 });	
+		}
+		
 	}
   	/* End of Function */
   
@@ -267,77 +308,209 @@ Ext.onReady(function(){
 				//dtnonmedis_rawat='ada';
 			}
 		}*/
-	
-		if(is_tindakan_nonmedis_form_valid()){	
-		var trawat_id_create=null; 
-		var trawat_cust_create=null; 
-		var trawat_keterangan_create=null; 
-
-		if(trawat_nonmedis_idField.getValue()!== null){trawat_id_create = trawat_nonmedis_idField.getValue();}else{trawat_id_create_pk=get_pk_id();} 
-		if(trawat_nonmedis_custField.getValue()!== null){trawat_cust_create = trawat_nonmedis_custField.getValue();} 
-		if(trawat_nonmedis_keteranganField.getValue()!== null){trawat_keterangan_create = trawat_nonmedis_keteranganField.getValue();} 
-
-		Ext.Ajax.request({  
-			waitMsg: 'Please wait...',
-			url: 'index.php?c=c_tindakan_nonmedis&m=get_action',
-			params: {
-				task: post2db,
-				trawat_id	: trawat_id_create, 
-				trawat_cust	: trawat_cust_create, 
-				trawat_keterangan	: trawat_keterangan_create, 
-			}, 
-			success: function(response){
-				var result=eval(response.responseText);
-				switch(result){
-					case 1:
-						//tindakan_nonmedis_detail_purge();
-						tindakan_nonmedis_detail_insert();
-						//Ext.MessageBox.alert(post2db+' OK','The Tindakan was '+msg+' successfully.');
-						//tindakan_nonmedis_createWindow.hide();
-						break;
-					default:
-						//Ext.MessageBox.hide();
-						tindakan_nonmedis_createWindow.setDisabled(false);
-						Ext.MessageBox.show({
-						   title: 'Warning',
-						   msg: 'We could\'t not '+msg+' the Tindakan.',
-						   buttons: Ext.MessageBox.OK,
-						   animEl: 'save',
-						   icon: Ext.MessageBox.WARNING
-						});
-						break;
-				}        
-			},
-			failure: function(response){
-				//Ext.MessageBox.hide();
-				tindakan_nonmedis_createWindow.setDisabled(false);
-				var result=response.responseText;
-				Ext.MessageBox.show({
-					   title: 'Error',
-					   msg: 'Could not connect to the database. retry later.',
-					   buttons: Ext.MessageBox.OK,
-					   animEl: 'database',
-					   icon: Ext.MessageBox.ERROR
-				});	
-			}                      
-		});
-		} else {
-			//Ext.MessageBox.hide();
-			tindakan_nonmedis_createWindow.setDisabled(false);
-			Ext.MessageBox.show({
-				title: 'Warning',
-				msg: 'Your Form is not valid!.',
-				buttons: Ext.MessageBox.OK,
-				animEl: 'save',
-				icon: Ext.MessageBox.WARNING
-			});
+		
+		//* penampungan data Detail List Tindakan Non Medis /
+		var dtrawat_nonmedis_id=[];
+		var dtrawat_nonmedis_perawatan=[];
+		var dtrawat_nonmedis_petugas2=[];
+		var dtrawat_nonmedis_jam=[];
+		var dtrawat_nonmedis_status=[];
+		var dtrawat_nonmedis_keterangan=[];
+		var nonmedis_jumlah=[];
+		
+		var dcount = tindakan_nonmedis_detail_DataStore.getCount();
+		
+		if(dcount>0){
+			for(i=0; i<dcount;i++){
+				if((/^\d+$/.test(tindakan_nonmedis_detail_DataStore.getAt(i).data.dtrawat_perawatan))
+				   && tindakan_nonmedis_detail_DataStore.getAt(i).data.dtrawat_perawatan!==undefined
+				   && tindakan_nonmedis_detail_DataStore.getAt(i).data.dtrawat_perawatan!==''
+				   && tindakan_nonmedis_detail_DataStore.getAt(i).data.dtrawat_perawatan!==0){
+					
+					if(tindakan_nonmedis_detail_DataStore.getAt(i).data.dtrawat_id==undefined){
+						dtrawat_nonmedis_id.push('');
+					}else{
+						dtrawat_nonmedis_id.push(tindakan_nonmedis_detail_DataStore.getAt(i).data.dtrawat_id);
+					}
+					
+					dtrawat_nonmedis_perawatan.push(tindakan_nonmedis_detail_DataStore.getAt(i).data.dtrawat_perawatan);
+					
+					if(tindakan_nonmedis_detail_DataStore.getAt(i).data.dtrawat_petugas2==undefined){
+						dtrawat_nonmedis_petugas2.push('');
+					}else{
+						dtrawat_nonmedis_petugas2.push(tindakan_nonmedis_detail_DataStore.getAt(i).data.dtrawat_petugas2);
+					}
+					
+					if(tindakan_nonmedis_detail_DataStore.getAt(i).data.dtrawat_jam==undefined){
+						dtrawat_nonmedis_jam.push('');
+					}else{
+						dtrawat_nonmedis_jam.push(tindakan_nonmedis_detail_DataStore.getAt(i).data.dtrawat_jam);
+					}
+					
+					if(tindakan_nonmedis_detail_DataStore.getAt(i).data.dtrawat_status==undefined){
+						dtrawat_nonmedis_status.push('');
+					}else{
+						dtrawat_nonmedis_status.push(tindakan_nonmedis_detail_DataStore.getAt(i).data.dtrawat_status);
+					}
+					
+					if(tindakan_nonmedis_detail_DataStore.getAt(i).data.dtrawat_keterangan==undefined){
+						dtrawat_nonmedis_keterangan.push('');
+					}else{
+						dtrawat_nonmedis_keterangan.push(tindakan_nonmedis_detail_DataStore.getAt(i).data.dtrawat_keterangan);
+					}
+					
+					if(tindakan_nonmedis_detail_DataStore.getAt(i).data.jumlah==undefined || tindakan_nonmedis_detail_DataStore.getAt(i).data.jumlah==0){
+						nonmedis_jumlah.push(1);
+					}else{
+						nonmedis_jumlah.push(tindakan_nonmedis_detail_DataStore.getAt(i).data.jumlah);
+					}
+				}
+			}
 		}
+		
+		if(i==(dcount-1)){
+			trawat_id_create = -1;
+			if(tnonmedis_post2db=='UPDATE'){
+				trawat_id_create = tindakan_nonmedisListEditorGrid.getSelectionModel().getSelected().get('trawat_id');
+			}
+			
+			//tampungan array dari List Detail Tindakan Non Medis
+			var encoded_array_dtrawat_nonmedis_id = Ext.encode(dtrawat_nonmedis_id);
+			var encoded_array_dtrawat_nonmedis_perawatan = Ext.encode(dtrawat_nonmedis_perawatan);
+			var encoded_array_dtrawat_nonmedis_petugas2 = Ext.encode(dtrawat_nonmedis_petugas2);
+			var encoded_array_dtrawat_nonmedis_jam = Ext.encode(dtrawat_nonmedis_jam);
+			var encoded_array_dtrawat_nonmedis_status = Ext.encode(dtrawat_nonmedis_status);
+			var encoded_array_dtrawat_nonmedis_keterangan = Ext.encode(dtrawat_nonmedis_keterangan);
+			var encoded_array_nonmedis_jumlah = Ext.encode(nonmedis_jumlah);
+			
+			if(trawat_id_create>0){
+				var trawat_cust_create=null; 
+				var trawat_keterangan_create=null;
+				
+				if(trawat_nonmedis_custField.getValue()!== null){trawat_cust_create = trawat_nonmedis_custField.getValue();} 
+				if(trawat_nonmedis_keteranganField.getValue()!== null){trawat_keterangan_create = trawat_nonmedis_keteranganField.getValue();}
+				
+				Ext.Ajax.request({  
+					waitMsg: 'Please wait...',
+					url: 'index.php?c=c_tindakan_nonmedis&m=get_action',
+					params: {
+						task: tnonmedis_post2db,
+						mode_edit: 'update_form',
+						trawat_id	: trawat_id_create, 
+						trawat_cust	: trawat_cust_create, 
+						trawat_keterangan	: trawat_keterangan_create,
+						
+						dtrawat_nonmedis_id	: encoded_array_dtrawat_nonmedis_id,
+						dtrawat_nonmedis_perawatan	: encoded_array_dtrawat_nonmedis_perawatan,
+						dtrawat_nonmedis_petugas2	: encoded_array_dtrawat_nonmedis_petugas2,
+						dtrawat_nonmedis_jam	: encoded_array_dtrawat_nonmedis_jam,
+						dtrawat_nonmedis_status	: encoded_array_dtrawat_nonmedis_status,
+						dtrawat_nonmedis_keterangan	: encoded_array_dtrawat_nonmedis_keterangan,
+						nonmedis_jumlah	: encoded_array_nonmedis_jumlah
+					}, 
+					success: function(response){
+						var result=eval(response.responseText);
+						switch(result){
+							case 0:
+								tindakan_nonmedis_createWindow.hide();
+								tindakan_nonmedis_DataStore.reload();
+								tindakan_nonmedis_createWindow.setDisabled(false);
+								Ext.MessageBox.show({
+								   title: 'INFO',
+								   msg: 'Tidak ada data yang diupdate.',
+								   buttons: Ext.MessageBox.OK,
+								   animEl: 'save',
+								   icon: Ext.MessageBox.INFO
+								});
+								break;
+							case 1:
+								tindakan_nonmedis_createWindow.hide();
+								tindakan_nonmedis_DataStore.reload();
+								tindakan_nonmedis_createWindow.setDisabled(false);
+								Ext.MessageBox.show({
+								   title: 'INFO',
+								   msg: 'Data Master Tindakan sukses diupdate.',
+								   buttons: Ext.MessageBox.OK,
+								   animEl: 'save',
+								   icon: Ext.MessageBox.INFO
+								});
+								break;
+							case 2:
+								tindakan_nonmedis_createWindow.hide();
+								tindakan_nonmedis_DataStore.reload();
+								tindakan_nonmedis_createWindow.setDisabled(false);
+								Ext.MessageBox.show({
+								   title: 'INFO',
+								   msg: 'Data Master Tindakan dan Detail Tindakan Non Medis telah sukses diupdate.',
+								   buttons: Ext.MessageBox.OK,
+								   animEl: 'save',
+								   icon: Ext.MessageBox.INFO
+								});
+								break;
+							case 3:
+								tindakan_nonmedis_createWindow.hide();
+								tindakan_nonmedis_DataStore.reload();
+								tindakan_nonmedis_createWindow.setDisabled(false);
+								Ext.MessageBox.show({
+								   title: 'INFO',
+								   msg: 'Data Master Tindakan, Detail Tindakan Medis, dan Detail Tindakan Non Medis telah sukses diupdate.',
+								   buttons: Ext.MessageBox.OK,
+								   animEl: 'save',
+								   icon: Ext.MessageBox.INFO
+								});
+								break;
+							default:
+								tindakan_nonmedis_createWindow.hide();
+								tindakan_nonmedis_DataStore.reload();
+								tindakan_nonmedis_createWindow.setDisabled(false);
+								//Ext.MessageBox.hide();
+								Ext.MessageBox.show({
+								   title: 'Warning',
+								   msg: 'We could\'t not '+msg+' the Tindakan.',
+								   buttons: Ext.MessageBox.OK,
+								   animEl: 'save',
+								   icon: Ext.MessageBox.WARNING
+								});
+								break;
+						}        
+					},
+					failure: function(response){
+						//Ext.MessageBox.hide();
+						tindakan_nonmedis_createWindow.hide();
+						tindakan_nonmedis_DataStore.reload();
+						tindakan_nonmedis_createWindow.setDisabled(false);
+						var result=response.responseText;
+						Ext.MessageBox.show({
+							   title: 'Error',
+							   msg: 'Could not connect to the database. retry later.',
+							   buttons: Ext.MessageBox.OK,
+							   animEl: 'database',
+							   icon: Ext.MessageBox.ERROR
+						});	
+					}                      
+				});
+			}else {
+				//Ext.MessageBox.hide();
+				tindakan_nonmedis_createWindow.hide();
+				tindakan_nonmedis_DataStore.reload();
+				tindakan_nonmedis_createWindow.setDisabled(false);
+				Ext.MessageBox.show({
+					title: 'Warning',
+					msg: 'Your Form is not valid!.',
+					buttons: Ext.MessageBox.OK,
+					animEl: 'save',
+					icon: Ext.MessageBox.WARNING
+				});
+			}
+			
+		}
+		
 	}
  	/* End of Function */
   
   	/* Function for get PK field */
 	function get_pk_id(){
-		if(post2db=='UPDATE')
+		if(tnonmedis_post2db=='UPDATE')
 			return tindakan_nonmedisListEditorGrid.getSelectionModel().getSelected().get('trawat_id');
 		else 
 			return 0;
@@ -374,7 +547,7 @@ Ext.onReady(function(){
 	function display_form_window(){
 		if(!tindakan_nonmedis_createWindow.isVisible()){
 			tindakan_nonmedis_reset_form();
-			post2db='CREATE';
+			tnonmedis_post2db='CREATE';
 			msg='created';
 			tindakan_nonmedis_createWindow.show();
 		} else {
@@ -419,7 +592,7 @@ Ext.onReady(function(){
 			});
 			//cbo_dtrawat_perawatan_nonmedisDataStore.load();
 			tindakan_nonmedis_set_form();
-			post2db='UPDATE';
+			tnonmedis_post2db='UPDATE';
 			msg='updated';
 			tindakan_nonmedis_createWindow.show();
 		} else {
@@ -731,6 +904,7 @@ Ext.onReady(function(){
 					data: [['batal','batal'],['selesai','selesai'],['datang','datang']]
 					}),
 				mode: 'local',
+				editable: false,
                	displayField: 'dtrawat_status_display',
                	valueField: 'dtrawat_status_value',
                	lazyRender:true,
@@ -909,7 +1083,10 @@ Ext.onReady(function(){
 	});
 	tindakan_nonmedisListEditorGrid.render();
 	/* End of DataStore */
-     
+	tindakan_nonmedisListEditorGrid.on('rowdblclick', function(){
+		this.dnonmedis_status_inline_beforeedit = tindakan_nonmedisListEditorGrid.getSelectionModel().getSelected().get('dtrawat_status');
+	});
+	
 	/* Create Context Menu */
 	tindakan_nonmedisContextMenu = new Ext.menu.Menu({
 		id: 'tindakan_nonmedis_ListEditorGridContextMenu',
@@ -1542,7 +1719,7 @@ Ext.onReady(function(){
 	/* Function for retrieve create Window Form */
 	tindakan_nonmedis_createWindow= new Ext.Window({
 		id: 'tindakan_nonmedis_createWindow',
-		title: post2db+'Tindakan Non Medis',
+		title: tnonmedis_post2db+'Tindakan Non Medis',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,
