@@ -494,6 +494,8 @@ Ext.onReady(function(){
 								var result=eval(response.responseText);
 								switch(result){
 									case 0:
+										tindakan_medis_createWindow.hide();
+										tindakan_medisDataStore.reload();
 										tindakan_medis_createWindow.setDisabled(false);
 										Ext.MessageBox.show({
 										   title: 'INFO',
@@ -506,6 +508,8 @@ Ext.onReady(function(){
 									case 1:
 										//tindakan_medisdetail_insert();
 										//tindakan_medis_createWindow.hide();
+										tindakan_medis_createWindow.hide();
+										tindakan_medisDataStore.reload();
 										tindakan_medis_createWindow.setDisabled(false);
 										Ext.MessageBox.show({
 										   title: 'INFO',
@@ -516,6 +520,8 @@ Ext.onReady(function(){
 										});
 										break;
 									case 2:
+										tindakan_medis_createWindow.hide();
+										tindakan_medisDataStore.reload();
 										tindakan_medis_createWindow.setDisabled(false);
 										Ext.MessageBox.show({
 										   title: 'INFO',
@@ -538,6 +544,8 @@ Ext.onReady(function(){
 										});
 										break;
 									default:
+										tindakan_medis_createWindow.hide();
+										tindakan_medisDataStore.reload();
 										tindakan_medis_createWindow.setDisabled(false);
 										//Ext.MessageBox.hide();
 										Ext.MessageBox.show({
@@ -551,6 +559,8 @@ Ext.onReady(function(){
 								}        
 							},
 							failure: function(response){
+								tindakan_medis_createWindow.hide();
+								tindakan_medisDataStore.reload();
 								tindakan_medis_createWindow.setDisabled(false);
 								//Ext.MessageBox.hide();
 								var result=response.responseText;
@@ -565,6 +575,8 @@ Ext.onReady(function(){
 						});
 						
 					}else {
+						tindakan_medis_createWindow.hide();
+						tindakan_medisDataStore.reload();
 						tindakan_medis_createWindow.setDisabled(false);
 						//Ext.MessageBox.hide();
 						Ext.MessageBox.show({
