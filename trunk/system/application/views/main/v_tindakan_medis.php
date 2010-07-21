@@ -1060,6 +1060,7 @@ Ext.onReady(function(){
 					data: [['batal','batal'],['selesai','selesai'],['datang','datang'],['siap','siap']]
 					}),
 				mode: 'local',
+				editable: false,
                	displayField: 'dtrawat_status_display',
                	valueField: 'dtrawat_status_value',
                	lazyRender:true,

@@ -19,7 +19,7 @@ class M_tindakan_nonmedis extends Model{
 	}
 	
 	function global_customer_check_paket($cust_id, $rawat_id){
-		$return_row_punya_paket = 0;
+		//$return_row_punya_paket = 0;
 		//* Mencari kepemilikan paket berdasarkan customer_id /
 		$sql_punya_paket="SELECT (dpaket_jumlah*rpaket_jumlah) AS rpaket_jumlah
 				,dpaket_id
@@ -56,7 +56,7 @@ class M_tindakan_nonmedis extends Model{
 						break;
 					}else{
 						if($i==$punya_paket_rows){
-							return 0;
+							return NULL;
 						}
 					}
 					
@@ -67,12 +67,12 @@ class M_tindakan_nonmedis extends Model{
 			}
 			
 		}else{
-			return 0;
+			return NULL;
 		}
 	}
 	
 	function customer_check_paket($cust_id, $rawat_id){
-		$return_row_punya_paket = 0;
+		//$return_row_punya_paket = 0;
 		//* Mencari kepemilikan paket berdasarkan customer_id /
 		$sql_punya_paket="SELECT (dpaket_jumlah*rpaket_jumlah) AS rpaket_jumlah
 				,dpaket_id
@@ -180,51 +180,110 @@ class M_tindakan_nonmedis extends Model{
 	/* END delete db.master_jual_rawat */
 	
 	/* DELETE db.detail_jual_rawat IF jrawat_id TIDAK ADA di daftar db.detail_jual_rawat.drawat_master */
-	function detail_jual_rawat_delete($dtrawat_id, $dtrawat_dapp){
-		/* ambil nilai $jrawat_id */
-		$sql="SELECT drawat_master FROM detail_jual_rawat WHERE drawat_dtrawat='$dtrawat_id'";
+	function detail_jual_rawat_delete($dtrawat_id){
+		/* 1. Delete db.detail_jual_rawat ==> where drawat_dtrawat=$dtrawat_id
+		** 2. Delete db.detail_pakai_cabin ==> where cabin_dtrawat=$dtrawat_id
+		** 3. Update db.appointment_detail.dapp_locked=0 ==> where dapp_id=db.tindakan_detail.dtrawat_dapp
+		** 4. Update db.detail_jual_paket.dpaket_sisa_paket
+		*/
+		
+		$sql="SELECT drawat_master, dtrawat_dapp
+			FROM detail_jual_rawat
+			LEFT JOIN tindakan_detail ON(drawat_dtrawat=dtrawat_id)
+			WHERE drawat_dtrawat='$dtrawat_id'";
 		$rs=$this->db->query($sql);
 		if($rs->num_rows()){
-			$rs_record=$rs->row_array();
-			$jrawat_id=$rs_record["drawat_master"];
-			$this->db->where('drawat_dtrawat', $dtrawat_id);
-			$this->db->delete('detail_jual_rawat');
-			if($this->db->affected_rows()){
-				$this->master_jual_rawat_delete($jrawat_id);
-				
-				$dtu_dapp=array(
-				"dapp_locked"=>0
-				);
-				$this->db->where('dapp_id', $dtrawat_dapp);
-				$this->db->update('appointment_detail', $dtu_dapp);
-				
-				$this->detail_pakai_cabin_delete($dtrawat_id);
-			}
+			$record=$rs->row_array();
+			$dtrawat_dapp = $record['dtrawat_dapp'];
+			$drawat_master = $record['drawat_master'];
+		}
+		
+		//Delete db.detail_pakai_cabin
+		$this->db->where('cabin_dtrawat', $dtrawat_id);
+		$this->db->delete('detail_pakai_cabin');
+		
+		//Delete db.detail_jual_rawat + db.detail_pakai_cabin
+		$this->db->where('drawat_dtrawat', $dtrawat_id);
+		$this->db->delete('detail_jual_rawat');
+		
+		//UN-Lock db.appointment_detail
+		if($this->db->affected_rows()>0 && $dtrawat_dapp>0){
+			$dtu_dapp=array(
+			"dapp_locked"=>0
+			);
+			$this->db->where('dapp_id', $dtrawat_dapp);
+			$this->db->update('appointment_detail', $dtu_dapp);
+		}
+		
+		$sql_drawat = "SELECT drawat_master FROM detail_jual_rawat WHERE drawat_master='$drawat_master'";
+		$rs_drawat = $this->db->query($sql_drawat);
+		if($rs_drawat->num_rows()<1){
+			//Delete master_jual_rawat ==> karena sudah tidak memiliki detail
+			$sqld_jrawat = "DELETE FROM master_jual_rawat WHERE jrawat_id='$drawat_master'";
+			$this->db->query($sqld_jrawat);
 		}
 	}
 	/* eof detail_jual_rawat_delete */
 	
 	/* INSERT ke db.detail_jual_rawat */
-	function detail_jual_rawat_insert($cust_member, $trawat_cust_id, $dtrawat_id, $dtrawat_perawatan_id, $rawat_harga, $rawat_dm, $rawat_du, $dtrawat_dapp, $dtrawat_jumlah){
+	function detail_jual_rawat_insert($dtrawat_id){
 		/*
 		1. check di master_jual_rawat, apakah customer ini pada hari sekarang sudah masuk ke Kasir
 		2. JIKA customer ini sudah 'ada' di db.master_jual_rawat ==> INSERT ke db.detail_jual_rawat
 		3. JIKA customer ini belum 'ada' di db.master_jual_rawat ==> INSERT ke db.master_jual_rawat AND db.detail_jual_rawat
 		4. Proses insert ke db.detail_jual_rawat ini artinya status di db.tindakan_detail.status adalah ='selesai', sehingga db.appointment_detail harus di-LOCKED
+		5. Karena sudah masuk Kasir, itu artinya Tindakan sudah ='selesai', sehingga standard bahan dari perawatan yg diambil harus dimasukkan ke db.detail_pakai_cabin
 		*/
 		$date_now=date('Y-m-d');
 		
-		if($cust_member!=""){
+		$cust_member = 0;
+		
+		//Mencari Customer_ID
+		$sql = "SELECT trawat_cust, dtrawat_perawatan, dtrawat_jumlah, dtrawat_dapp
+			FROM tindakan_detail
+			LEFT JOIN tindakan ON(dtrawat_master=trawat_id)
+			WHERE dtrawat_id='$dtrawat_id'";
+		$rs = $this->db->query($sql);
+		if($rs->num_rows()){
+			$record = $rs->row_array();
+			$cust_id = $record['trawat_cust'];
+			$dtrawat_perawatan = $record['dtrawat_perawatan'];
+			$dtrawat_jumlah = $record['dtrawat_jumlah'];
+			$dtrawat_dapp = $record['dtrawat_dapp'];
+			
+			//Mencari Customer_Member >< db.member
+			$sql = "SELECT cust_member
+				FROM customer
+				LEFT JOIN member ON(cust_member=member_id)";
+			$rs = $this->db->query($sql);
+			if($rs->num_rows()){
+				$record = $rs->row_array();
+				$cust_member = $record['cust_member'];
+			}
+			
+			//Mencari harga perawatan
+			$sql = "SELECT rawat_harga, rawat_dm, rawat_du
+				FROM perawatan WHERE rawat_id='$dtrawat_perawatan'";
+			$rs = $this->db->query($sql);
+			if($rs->num_rows()){
+				$record = $rs->row_array();
+				$rawat_harga = $record['rawat_harga'];
+				$rawat_dm = $record['rawat_dm'];
+				$rawat_du = $record['rawat_du'];
+			}
+		}
+		
+		if($cust_member!=0){
 			$diskon_jenis="DM";
 			$diskon=$rawat_dm;
-		}elseif($cust_member==""){
+		}elseif($cust_member==0){
 			$diskon_jenis="DU";
 			$diskon=$rawat_du;
 		}
 		
 		$sql="SELECT jrawat_id, jrawat_nobukti
 			FROM master_jual_rawat
-			WHERE jrawat_cust='$trawat_cust_id'
+			WHERE jrawat_cust='$cust_id'
 				AND jrawat_tanggal='$date_now'
 				AND jrawat_stat_dok='Terbuka'";
 		$rs=$this->db->query($sql);
@@ -232,17 +291,14 @@ class M_tindakan_nonmedis extends Model{
 			/* artinya: customer yang dimaksud 'sudah masuk' di db.master_jual_rawat pada hari ini
 			 * maka Hanya INSERT ke db.detail_jual_rawat
 			 */
-			if($dtrawat_jumlah=="" || $dtrawat_jumlah==0){
-				$dtrawat_jumlah=1;
-			}
-			
 			$rs_record=$rs->row_array();
 			$jrawat_id=$rs_record["jrawat_id"];
             $jrawat_nobukti=$rs_record["jrawat_nobukti"];
+			
 			$dti_drawat=array(
 			"drawat_master"=>$jrawat_id,
 			"drawat_dtrawat"=>$dtrawat_id,
-			"drawat_rawat"=>$dtrawat_perawatan_id,
+			"drawat_rawat"=>$dtrawat_perawatan,
 			"drawat_jumlah"=>$dtrawat_jumlah,
 			"drawat_harga"=>$rawat_harga,
 			"drawat_diskon"=>$diskon,
@@ -252,13 +308,19 @@ class M_tindakan_nonmedis extends Model{
 			$this->db->insert('detail_jual_rawat', $dti_drawat);
 			if($this->db->affected_rows()){
 				/* Karena db.tindakan_detail.status sudah 'selesai' ==> db.appointment_detail di-LOCKED */
-				$dtu_dapp=array(
-				"dapp_locked"=>1
-				);
-				$this->db->where('dapp_id', $dtrawat_dapp);
-				$this->db->update('appointment_detail', $dtu_dapp);
+				// jika $dtrawat_dapp==0 ==> berarti bukan inputan dari Appointment, sehingga tidak perlu dilakukan Locked ke Appoinment
+				if($dtrawat_dapp>0){
+					$dtu_dapp=array(
+					"dapp_locked"=>1
+					);
+					$this->db->where('dapp_id', $dtrawat_dapp);
+					$this->db->update('appointment_detail', $dtu_dapp);
+				}
 				
-				$this->detail_pakai_cabin_insert($dtrawat_id, $dtrawat_perawatan_id, $jrawat_nobukti ,$trawat_cust_id);
+				$this->detail_pakai_cabin_insert($dtrawat_id ,$dtrawat_perawatan ,$jrawat_nobukti ,$cust_id);
+				return 1;
+			}else{
+				return 0;
 			}
 		}else{ 
 			/* artinya: di db.master_jual_rawat BELUM ADA */
@@ -267,7 +329,7 @@ class M_tindakan_nonmedis extends Model{
 			$jrawat_nobukti=$this->m_public_function->get_kode_1('master_jual_rawat','jrawat_nobukti',$pattern,12);
 			$data_jrawat=array(
 			"jrawat_nobukti"=>$jrawat_nobukti,
-			"jrawat_cust"=>$trawat_cust_id,
+			"jrawat_cust"=>$cust_id,
 			"jrawat_tanggal"=>$date_now,
 			"jrawat_creator"=>@$_SESSION[SESSION_USERID]
 			);
@@ -276,40 +338,260 @@ class M_tindakan_nonmedis extends Model{
 				/* INSERT to db.detail_jual_rawat */
 				$sql="SELECT jrawat_id
 					FROM master_jual_rawat
-					WHERE jrawat_cust='$trawat_cust_id'
+					WHERE jrawat_cust='$cust_id'
 						AND jrawat_tanggal='$date_now'
 						AND jrawat_stat_dok='Terbuka'";
 				$rs=$this->db->query($sql);
 				if($rs->num_rows()){
 					$rs_record=$rs->row_array();
 					$jrawat_id=$rs_record["jrawat_id"];
+					
+					$dti_drawat=array(
+					"drawat_master"=>$jrawat_id,
+					"drawat_dtrawat"=>$dtrawat_id,
+					"drawat_rawat"=>$dtrawat_perawatan,
+					"drawat_jumlah"=>$dtrawat_jumlah,
+					"drawat_harga"=>$rawat_harga,
+					"drawat_diskon"=>$diskon,
+					"drawat_diskon_jenis"=>$diskon_jenis,
+					"drawat_creator"=>@$_SESSION[SESSION_USERID]
+					);
+					$this->db->insert('detail_jual_rawat', $dti_drawat);
+					if($this->db->affected_rows()){
+						/* Karena db.tindakan_detail.status sudah 'selesai' ==> db.appointment_detail di-LOCKED */
+						// jika $dtrawat_dapp==0 ==> bukan inputan dari Appointment, sehingga tidak perlu update Locked di Appoinment
+						if($dtrawat_dapp>0){
+							$dtu_dapp=array(
+							"dapp_locked"=>1
+							);
+							$this->db->where('dapp_id', $dtrawat_dapp);
+							$this->db->update('appointment_detail', $dtu_dapp);
+						}
+						
+						$this->detail_pakai_cabin_insert($dtrawat_id, $dtrawat_perawatan, $jrawat_nobukti ,$cust_id);
+					}
+					
 				}
 				
-				$dti_drawat=array(
-				"drawat_master"=>$jrawat_id,
-				"drawat_dtrawat"=>$dtrawat_id,
-				"drawat_rawat"=>$dtrawat_perawatan_id,
-				"drawat_jumlah"=>$dtrawat_jumlah,
-				"drawat_harga"=>$rawat_harga,
-				"drawat_diskon"=>$diskon,
-				"drawat_diskon_jenis"=>$diskon_jenis,
-				"drawat_creator"=>@$_SESSION[SESSION_USERID]
-				);
-				$this->db->insert('detail_jual_rawat', $dti_drawat);
-				if($this->db->affected_rows()){
-					/* Karena db.tindakan_detail.status sudah 'selesai' ==> db.appointment_detail di-LOCKED */
-					$dtu_dapp=array(
-					"dapp_locked"=>1
-					);
-					$this->db->where('dapp_id', $dtrawat_dapp);
-					$this->db->update('appointment_detail', $dtu_dapp);
-					
-					$this->detail_pakai_cabin_insert($dtrawat_id, $dtrawat_perawatan_id, $jrawat_nobukti ,$trawat_cust_id);
-				}
 			}
 		}
 	}
 	/* eof detail_jual_rawat_insert */
+	
+	function drawat_from_tnonmedis_list_insert($dtrawat_master){
+		/* Proses INSERT to db.detail_jual_rawat WHERE db.tindakan_detail.dtrawat_id BELUM MASUK ke db.detail_jual_rawat
+		 * db.tindakan_detail di-SELECT WHERE dtrawat_master=$dtrawat_master, kemudian di-INSERT to db.detail_jual_rawat secara Looping
+		*/
+		$date_now = date('Y-m-d');
+		$datetime_now = date('Y-m-d H:i:s');
+		$membership = 'not_member';
+		
+		//Mencari Customer_ID dari filter $dtrawat_master
+		$sql_trawat_cust = "SELECT trawat_cust FROM tindakan WHERE trawat_id='$dtrawat_master'";
+		$rs_trawat_cust = $this->db->query($sql_trawat_cust);
+		if($rs_trawat_cust->num_rows()){
+			$record_trawat_cust = $rs_trawat_cust->row_array();
+			$cust_id = $record_trawat_cust['trawat_cust'];
+			
+			//get_member dari $cust_id
+			$sql_membership = "SELECT * FROM member WHERE member_cust='".$cust_id."' AND member_valid > now() ORDER BY member_id DESC limit 1";
+			$rs_membership = $this->db->query($sql_membership);
+			if($rs_membership->num_rows()){
+				$membership = 'member';
+			}
+		}
+		
+		/* checking db.master_jual_rawat terlebih dahulu, apakah pada hari ini customer ini telah melakukan perawatan yg belum cetak faktur ()
+		 * Jika customer ini sudah masuk Kasir Penjualan Perawatan === db.master_jual_rawat ==> insert to db.detail_jual_rawat
+		 * Jika customer belum masuk Kasir Penjualan Perawatan === db.master_jual_rawat ==> insert to db.master_jual_rawat + db.detail_jual_rawat
+	    */
+		$sql_jrawat="SELECT jrawat_id, jrawat_nobukti
+			FROM master_jual_rawat
+			WHERE jrawat_cust='$cust_id'
+				AND jrawat_tanggal='$date_now'
+				AND jrawat_stat_dok='Terbuka'";
+		$rs_jrawat=$this->db->query($sql_jrawat);
+		if($rs_jrawat->num_rows()){
+			$record_jrawat = $rs_jrawat->row_array();
+			$jrawat_id = $record_jrawat['jrawat_id'];
+			
+			$sql_dtrawat = "SELECT *
+				FROM tindakan_detail
+				WHERE dtrawat_master='".$dtrawat_master."'
+					AND dtrawat_petugas1=0
+					AND dtrawat_petugas2<>0
+					AND dtrawat_status='selesai'";
+			$rs_dtrawat = $this->db->query($sql_dtrawat);
+			if($rs_dtrawat->num_rows()){
+				foreach($rs_dtrawat->result() as $row){
+					$sql = "SELECT drawat_dtrawat FROM detail_jual_rawat WHERE drawat_dtrawat='".$row->dtrawat_id."'";
+					$rs=$this->db->query($sql);
+					if($rs->num_rows()){
+						//Edit detail Tindakan Non Medis
+						if($membership=='member'){
+							//Customer adalah Member
+							$sql_drawat = "UPDATE detail_jual_rawat, tindakan_detail, perawatan
+								SET detail_jual_rawat.drawat_rawat=tindakan_detail.dtrawat_perawatan
+									,detail_jual_rawat.drawat_jumlah=tindakan_detail.dtrawat_jumlah 
+									,detail_jual_rawat.drawat_harga=perawatan.rawat_harga 
+									,detail_jual_rawat.drawat_diskon=perawatan.rawat_dm 
+									,detail_jual_rawat.drawat_update='".@$_SESSION[SESSION_USERID]."' 
+									,detail_jual_rawat.drawat_date_update='".$datetime_now."' 
+									,detail_jual_rawat.drawat_revised=(detail_jual_rawat.drawat_revised+1) 
+								WHERE detail_jual_rawat.drawat_dtrawat=tindakan_detail.dtrawat_id
+									AND tindakan_detail.dtrawat_perawatan=perawatan.rawat_id
+									AND tindakan_detail.dtrawat_id='".$row->dtrawat_id."'";
+						}else{
+							//Customer adalah Bukan Member
+							$sql_drawat = "UPDATE detail_jual_rawat, tindakan_detail, perawatan
+								SET detail_jual_rawat.drawat_rawat=tindakan_detail.dtrawat_perawatan
+									,detail_jual_rawat.drawat_jumlah=tindakan_detail.dtrawat_jumlah 
+									,detail_jual_rawat.drawat_harga=perawatan.rawat_harga 
+									,detail_jual_rawat.drawat_diskon=perawatan.rawat_du 
+									,detail_jual_rawat.drawat_update='".@$_SESSION[SESSION_USERID]."' 
+									,detail_jual_rawat.drawat_date_update='".$datetime_now."' 
+									,detail_jual_rawat.drawat_revised=(detail_jual_rawat.drawat_revised+1) 
+								WHERE detail_jual_rawat.drawat_dtrawat=tindakan_detail.dtrawat_id
+									AND tindakan_detail.dtrawat_perawatan=perawatan.rawat_id
+									AND tindakan_detail.dtrawat_id='".$row->dtrawat_id."'";
+						}
+					}else{
+						//Add Baru
+						if($membership=='member'){
+							//Customer adalah Member
+							$sql_drawat = "INSERT INTO detail_jual_rawat(drawat_master
+									,drawat_dtrawat
+									,drawat_rawat
+									,drawat_jumlah
+									,drawat_harga
+									,drawat_diskon
+									,drawat_diskon_jenis
+									,drawat_creator)
+								SELECT '".$jrawat_id."'
+									,dnonmedis.dtrawat_id
+									,dnonmedis.dtrawat_perawatan
+									,dnonmedis.dtrawat_jumlah
+									,rawat.rawat_harga
+									,rawat.rawat_dm
+									,'DM'
+									,'".@$_SESSION[SESSION_USERID]."'
+								FROM tindakan_detail AS dnonmedis
+								LEFT JOIN perawatan AS rawat ON(dnonmedis.dtrawat_perawatan=rawat.rawat_id)
+								WHERE dnonmedis.dtrawat_id='".$row->dtrawat_id."'";
+						}else{
+							//Customer adalah Bukan Member
+							$sql_drawat = "INSERT INTO detail_jual_rawat(drawat_master
+									,drawat_dtrawat
+									,drawat_rawat
+									,drawat_jumlah
+									,drawat_harga
+									,drawat_diskon
+									,drawat_diskon_jenis
+									,drawat_creator)
+								SELECT '".$jrawat_id."'
+									,dnonmedis.dtrawat_id
+									,dnonmedis.dtrawat_perawatan
+									,dnonmedis.dtrawat_jumlah
+									,rawat.rawat_harga
+									,rawat.rawat_du
+									,'DU'
+									,'".@$_SESSION[SESSION_USERID]."'
+								FROM tindakan_detail AS dnonmedis
+								LEFT JOIN perawatan AS rawat ON(dnonmedis.dtrawat_perawatan=rawat.rawat_id)
+								WHERE dnonmedis.dtrawat_id='".$row->dtrawat_id."'";
+						}
+					}
+				}
+			}
+			
+			$this->db->query($sql_drawat);
+			
+		}else{
+			//ini artinya: customer di tanggal sekarang belum ada di db.master_jual_rawat
+			$pattern="PR/".date("ym")."-";
+			$jrawat_nobukti=$this->m_public_function->get_kode_1('master_jual_rawat','jrawat_nobukti',$pattern,12);
+			$dti_jrawat=array(
+			"jrawat_nobukti"=>$jrawat_nobukti,
+			"jrawat_cust"=>$cust_id,
+			"jrawat_tanggal"=>$date_now,
+			"jrawat_creator"=>@$_SESSION[SESSION_USERID]
+			);
+			$this->db->insert('master_jual_rawat', $dti_jrawat);
+			if($this->db->affected_rows()){
+				//Cari jrawat_id dulu.....
+				$sql_jrawat="SELECT jrawat_id, jrawat_nobukti
+					FROM master_jual_rawat
+					WHERE jrawat_cust='$cust_id'
+						AND jrawat_tanggal='$date_now'
+						AND jrawat_stat_dok='Terbuka'";
+				$rs_jrawat=$this->db->query($sql_jrawat);
+				if($rs_jrawat->num_rows()){
+					$record_jrawat = $rs_jrawat->row_array();
+					$jrawat_id = $record_jrawat['jrawat_id'];
+					//Proses INSERT to db.detail_jual_rawat WHERE db.tindakan_detail.dtrawat_id belum masuk ke db.detail_jual_rawat.drawat_dtrawat
+					if($membership=='member'){
+						$sqli_drawat = "INSERT INTO detail_jual_rawat(drawat_master
+								,drawat_dtrawat
+								,drawat_rawat
+								,drawat_jumlah
+								,drawat_harga
+								,drawat_diskon
+								,drawat_diskon_jenis
+								,drawat_creator)
+							SELECT '".$jrawat_id."'
+								,dnonmedis.dtrawat_id
+								,dnonmedis.dtrawat_perawatan
+								,dnonmedis.dtrawat_jumlah
+								,rawat.rawat_harga
+								,rawat.rawat_dm
+								,'DM'
+								,'".@$_SESSION[SESSION_USERID]."'
+							FROM tindakan_detail AS dnonmedis
+							LEFT JOIN perawatan AS rawat ON(dnonmedis.dtrawat_perawatan=rawat.rawat_id)
+							WHERE dnonmedis.dtrawat_master='$dtrawat_master'
+								AND dnonmedis.dtrawat_petugas1=0
+								AND dnonmedis.dtrawat_petugas2=0
+								AND dnonmedis.dtrawat_status='selesai'
+								AND dnonmedis.dtrawat_id NOT IN (
+									SELECT sub_drawat.drawat_dtrawat
+									FROM detail_jual_rawat AS sub_drawat
+									WHERE sub_drawat.drawat_master='".$jrawat_id."'
+									)";
+					}else{
+						$sqli_drawat = "INSERT INTO detail_jual_rawat(drawat_master
+								,drawat_dtrawat
+								,drawat_rawat
+								,drawat_jumlah
+								,drawat_harga
+								,drawat_diskon
+								,drawat_diskon_jenis
+								,drawat_creator)
+							SELECT '".$jrawat_id."'
+								,dnonmedis.dtrawat_id
+								,dnonmedis.dtrawat_perawatan
+								,dnonmedis.dtrawat_jumlah
+								,rawat.rawat_harga
+								,rawat.rawat_du
+								,'DU'
+								,'".@$_SESSION[SESSION_USERID]."'
+							FROM tindakan_detail AS dnonmedis
+							LEFT JOIN perawatan AS rawat ON(dnonmedis.dtrawat_perawatan=rawat.rawat_id)
+							WHERE dnonmedis.dtrawat_master='$dtrawat_master'
+								AND dnonmedis.dtrawat_petugas1=0
+								AND dnonmedis.dtrawat_petugas2=0
+								AND dnonmedis.dtrawat_status='selesai'
+								AND dnonmedis.dtrawat_id NOT IN (
+									SELECT sub_drawat.drawat_dtrawat
+									FROM detail_jual_rawat AS sub_drawat
+									WHERE sub_drawat.drawat_master='".$jrawat_id."'
+									)";
+					}
+					$this->db->query($sqli_drawat);
+				}
+				
+			}
+		}
+	}
 	
 	/* UPDATE db.detail_jual_rawat */
 	function detail_jual_rawat_update($dtrawat_perawatan, $dtrawat_id, $cust_member){
@@ -368,7 +650,23 @@ class M_tindakan_nonmedis extends Model{
 	}
 	
 	/* INSERT ke db.detail_ambil_paket */
-	function detail_ambil_paket_insert($dapaket_dpaket, $dapaket_jpaket, $dapaket_paket, $dapaket_item, $trawat_cust_id, $dtrawat_id, $dtrawat_dapp, $dtrawat_jumlah){
+	function detail_ambil_paket_insert($dapaket_dpaket, $dapaket_jpaket, $dapaket_paket, $dapaket_item, $trawat_cust_id, $dtrawat_id){
+		/* dari pengambilan paket akan berakibat pada: detail_pakai_cabin, appointment_detail, detail_jual_paket.dpaket_sisa_paket
+		 * # 
+		*/
+		
+		//Mencari dtrawat_dapp ==> untuk meng-UNLOCKED db.appointment_detail
+		$sql = "SELECT dtrawat_dapp, dtrawat_jumlah
+			FROM tindakan_detail
+			LEFT JOIN tindakan ON(dtrawat_master=trawat_id)
+			WHERE dtrawat_id='$dtrawat_id'";
+		$rs = $this->db->query($sql);
+		if($rs->num_rows()){
+			$record = $rs->row_array();
+			$dtrawat_dapp = $record['dtrawat_dapp'];
+			$dtrawat_jumlah = $record['dtrawat_jumlah'];
+		}
+		
 		//* Mengambil db.master_jual_paket.jpaket_nobukti ==> masukkan ke db.detail_pakai_cabin /
 		$datetime_now=date('Y-m-d H:i:s');
 		$jpaket_nobukti = "";
@@ -379,9 +677,6 @@ class M_tindakan_nonmedis extends Model{
 				$jpaket_nobukti = $record['jpaket_nobukti'];
 		}
         
-		if($dtrawat_jumlah=="" || $dtrawat_jumlah==0){
-			$dtrawat_jumlah=1;
-		}
 		$dti_dapaket=array(
 		"dapaket_dpaket"=>$dapaket_dpaket,
 		"dapaket_jpaket"=>$dapaket_jpaket,
@@ -395,30 +690,30 @@ class M_tindakan_nonmedis extends Model{
 		);
 		$this->db->insert('detail_ambil_paket', $dti_dapaket);
 		if($this->db->affected_rows()){
-			/* me-LOCKED db.appointment_detail */
-			$dtu_dapp=array(
-			"dapp_locked"=>1
-			);
-			$this->db->where('dapp_id', $dtrawat_dapp);
-			$this->db->update('appointment_detail', $dtu_dapp);
+			/* me-LOCKED db.appointment_detail ==> jika $dtrawat_dapp>0 */
+			if($dtrawat_dapp>0){
+				$dtu_dapp=array(
+				"dapp_locked"=>1
+				);
+				$this->db->where('dapp_id', $dtrawat_dapp);
+				$this->db->update('appointment_detail', $dtu_dapp);
+			}
 			
 			/* UPDATE db.tindakan_detail.dtrawat_ambil_paket = 'true' */
-			$sql="UPDATE tindakan_detail
+			/*$sql="UPDATE tindakan_detail
 				SET dtrawat_ambil_paket='true'
 					,dtrawat_update='".@$_SESSION[SESSION_USERID]."'
 					,dtrawat_date_update='".$datetime_now."'
 					,dtrawat_revised=dtrawat_revised+1
 				WHERE dtrawat_id='$dtrawat_id'";
-			$this->db->query($sql);
-			/*$dtu_dtrawat=array(
-			"dtrawat_ambil_paket"=>'true'
-			);
-			$this->db->where('dtrawat_id', $dtrawat_id);
-			$this->db->update('tindakan_detail', $dtu_dtrawat);*/
+			$this->db->query($sql);*/
 			
 			$this->total_sisa_paket_update($dapaket_dpaket, $dapaket_jpaket, $dapaket_paket);
 			
 			$this->detail_pakai_cabin_insert($dtrawat_id, $dapaket_item, $jpaket_nobukti ,$trawat_cust_id);
+			return 1;
+		}else{
+			return 0;
 		}
 	}
 	/* eof detail_ambil_paket_insert */
@@ -426,22 +721,12 @@ class M_tindakan_nonmedis extends Model{
 	/* UPDATE db.submaster_apaket_item.sapaket_sisa_item AND db.master_ambil_paket.apaket_sisa_paket */
 	function total_sisa_paket_update($dapaket_dpaket, $dapaket_jpaket, $dapaket_paket){
 		//* UPDATE db.detail_jual_paket.dpaket_sisa_paket ==> sisa paket dari paket yang dibeli akan diupdate akibat dari pengambilan paket /
-		/*$sql_sisa_paket = "UPDATE detail_jual_paket
-			SET dpaket_sisa_paket =
-				(SElECT vu_total_sisa_paket.total_sisa_paket FROM vu_total_sisa_paket WHERE vu_total_sisa_paket.dpaket_id='$dapaket_dpaket')
-			WHERE dpaket_id='$dapaket_dpaket'";*/
-		$sql_sisa_paket="UPDATE detail_jual_paket
-			SET dpaket_sisa_paket=
-				(
-				SELECT ((dpaket_jumlah*paket_jmlisi)-(sum(dapaket_jumlah)))
-				FROM detail_ambil_paket
-				LEFT JOIN paket ON(dapaket_paket=paket_id)
-				WHERE paket_id='$dapaket_paket'
-					AND dapaket_dpaket='$dapaket_dpaket'
-					AND dapaket_jpaket='$dapaket_jpaket'
-					AND dapaket_stat_dok<>'Batal'
-				GROUP BY dapaket_dpaket, dapaket_jpaket, dapaket_paket
-				)
+		$sql_sisa_paket = "UPDATE detail_jual_paket
+			LEFT JOIN paket ON(dpaket_paket=paket_id)
+			LEFT JOIN vu_total_ambil_paket ON(vu_total_ambil_paket.dapaket_dpaket=dpaket_id 
+				AND vu_total_ambil_paket.dapaket_jpaket=detail_jual_paket.dpaket_master
+				AND vu_total_ambil_paket.dapaket_paket=detail_jual_paket.dpaket_paket)
+			SET dpaket_sisa_paket=((dpaket_jumlah*paket_jmlisi)- IF(isnull(vu_total_ambil_paket.total_ambil_paket),0,vu_total_ambil_paket.total_ambil_paket))
 			WHERE detail_jual_paket.dpaket_id='$dapaket_dpaket'
 				AND detail_jual_paket.dpaket_master='$dapaket_jpaket'
 				AND detail_jual_paket.dpaket_paket='$dapaket_paket'";
@@ -459,7 +744,7 @@ class M_tindakan_nonmedis extends Model{
 			FROM perawatan_konsumsi
 			LEFT JOIN produk ON(krawat_produk=produk_id)
 			LEFT JOIN perawatan ON(krawat_master=rawat_id)
-			WHERE krawat_master='$cabin_rawat'";
+			WHERE krawat_master='$cabin_rawat' AND produk_aktif='Aktif'";
 		$rs=$this->db->query($sql);
 		if($rs->num_rows()){
 			foreach($rs->result_array() as $row){
@@ -538,14 +823,47 @@ class M_tindakan_nonmedis extends Model{
 	}
 	
 	/* INSERT ke db.detail_ambil_paket */
-	function detail_ambil_paket_delete($dtrawat_id, $dtrawat_dapp, $dapaket_dpaket, $dapaket_jpaket, $dapaket_paket){
-		/*$sql="SELECT dapaket_master, dapaket_sapaket FROM detail_ambil_paket WHERE dapaket_dtrawat='$dtrawat_id'";
+	function detail_ambil_paket_delete($dtrawat_id){
+		/* 1. Delete db.detail_ambil_paket ==> where dapaket_dtrawat=$dtrawat_id
+		** 2. Delete db.detail_pakai_cabin ==> where cabin_dtrawat=$dtrawat_id
+		** 3. Update db.appointment_detail.dapp_locked=0 ==> where dapp_id=db.tindakan_detail.dtrawat_dapp
+		** 4. Update db.detail_jual_paket.dpaket_sisa_paket
+		*/
+		
+		$sql="SELECT dapaket_dpaket, dtrawat_dapp, dapaket_jpaket, dapaket_paket
+			FROM detail_ambil_paket
+			LEFT JOIN tindakan_detail ON(dapaket_dtrawat=dtrawat_id)
+			WHERE dapaket_dtrawat='$dtrawat_id'";
 		$rs=$this->db->query($sql);
 		if($rs->num_rows()){
-			$rs_record=$rs->row_array();
-			$apaket_id=$rs_record["dapaket_master"];
-			$sapaket_id=$rs_record["dapaket_sapaket"];
-		}*/
+			$record=$rs->row_array();
+			$dpaket_id = $record['dapaket_dpaket'];
+			$dtrawat_dapp = $record['dtrawat_dapp'];
+			$dapaket_dpaket = $record['dapaket_dpaket'];
+			$dapaket_jpaket = $record['dapaket_jpaket'];
+			$dapaket_paket = $record['dapaket_paket'];
+		}
+		
+		//Delete db.detail_pakai_cabin
+		$this->db->where('cabin_dtrawat', $dtrawat_id);
+		$this->db->delete('detail_pakai_cabin');
+		
+		//Delete db.detail_ambil_paket + db.detail_pakai_cabin
+		$this->db->where('dapaket_dtrawat', $dtrawat_id);
+		$this->db->delete('detail_ambil_paket');
+		
+		if($this->db->affected_rows()){
+			/* meng-UNLOCK db.appointment_detail */
+			if($dtrawat_dapp>0){
+				$dtu_dapp=array(
+				"dapp_locked"=>0
+				);
+				$this->db->where('dapp_id', $dtrawat_dapp);
+				$this->db->update('appointment_detail', $dtu_dapp);
+			}
+			
+			$this->total_sisa_paket_update($dapaket_dpaket, $dapaket_jpaket, $dapaket_paket);
+		}
 		
 		$this->db->where('dapaket_dtrawat', $dtrawat_id);
 		$this->db->delete('detail_ambil_paket');
@@ -576,7 +894,15 @@ class M_tindakan_nonmedis extends Model{
 	}
 	//*eof
 	
-	function detail_tindakan_nonmedis_detail_insert($array_dtrawat_id ,$dtrawat_master ,$array_dtrawat_perawatan ,$array_dtrawat_petugas2 ,$array_dtrawat_jam ,$array_dtrawat_status ,$array_dtrawat_keterangan ,$dtrawat_cust ,$array_jumlah){
+	function detail_tindakan_nonmedis_detail_insert($array_dtrawat_id
+													,$dtrawat_master
+													,$array_dtrawat_perawatan
+													,$array_dtrawat_petugas2
+													,$array_dtrawat_jam
+													,$array_dtrawat_status
+													,$array_dtrawat_keterangan
+													,$dtrawat_cust
+													,$array_jumlah){
 		/* hanya INSERT record tindakan_detail-nonmedis yang baru */
 		$date_now=date('Y-m-d');
 		$datetime_now=date('Y-m-d H:i:s');
@@ -593,56 +919,36 @@ class M_tindakan_nonmedis extends Model{
 			$jumlah = $array_jumlah[$i];
 			
 			if(is_numeric($dtrawat_id)){
-				$sql="SELECT dtrawat_id,dtrawat_locked,dtrawat_perawatan,dtrawat_petugas2,dtrawat_jam,dtrawat_keterangan,dtrawat_jumlah FROM tindakan_detail WHERE dtrawat_id='$dtrawat_id'";
-				$rs=$this->db->query($sql);
+				// data sudah ada di db.tindakan_detail ==> mode Edit
+				$sql = "SELECT dtrawat_id FROM tindakan_detail WHERE dtrawat_id='".$dtrawat_id."'";
+				$rs = $this->db->query($sql);
 				if($rs->num_rows()){
-					$rs_record=$rs->row_array();
-					$dtrawat_locked=$rs_record["dtrawat_locked"];
-					$dtrawat_perawatan_awal=$rs_record["dtrawat_perawatan"];
-					$dtrawat_petugas2_awal=$rs_record["dtrawat_petugas2"];
-					$dtrawat_jam_awal=$rs_record["dtrawat_jam"];
-					$dtrawat_keterangan_awal=$rs_record["dtrawat_keterangan"];
-					$dtrawat_jumlah_awal=$rs_record["dtrawat_jumlah"];
-					/*
-					# ini artinya: record detail tindakan sudah ada di db.tindakan_detail, sehingga yg bisa dilakukan adalah EDITING record detail JIKA UNLOCK
-					1. Check $dtrawat_status, JIKA ='selesai' ==> sudah masuk ke Kasir, JIKA !='selesai' ==> belum masuk ke Kasir manapun
-					2. JIKA $dtrawat_status='selesai' ==> check db.tindakan_detail.dtrawat_locked [1/0]
-					3. JIKA db.tindakan_detail.dtrawat_locked=0 ==> BOLEH di-EDIT
-					4. JIKA $dtrawat_status!='selesai' ==> silakan di-EDIT
-					*/
-					if($dtrawat_locked==0 && ($dtrawat_perawatan_awal<>$dtrawat_perawatan || $dtrawat_petugas2_awal<>$dtrawat_petugas2 || $dtrawat_jam_awal<>$dtrawat_jam || $dtrawat_keterangan_awal<>$dtrawat_keterangan || $dtrawat_jumlah_awal<>$jumlah)){
-						/* ini berarti: ada field yg berubah untuk dilakukan editing */
-						$sql="UPDATE tindakan_detail
-							SET dtrawat_perawatan='$dtrawat_perawatan'
-								,dtrawat_petugas2='$dtrawat_petugas2'
-								,dtrawat_jam='$dtrawat_jam'
-								,dtrawat_keterangan='$dtrawat_keterangan'
-								,dtrawat_jumlah='$jumlah'
-								,dtrawat_update='".@$_SESSION[SESSION_USERID]."'
-								,dtrawat_date_update='".$datetime_now."'
-								,dtrawat_revised=dtrawat_revised+1
-							WHERE dtrawat_id='$dtrawat_id'";
-						$this->db->query($sql);
-						/*$dtu_dtrawat=array(
-						"dtrawat_perawatan"=>$dtrawat_perawatan,
-						"dtrawat_petugas2"=>$dtrawat_petugas2,
-						"dtrawat_jam"=>$dtrawat_jam,
-						"dtrawat_keterangan"=>$dtrawat_keterangan,
-						"dtrawat_jumlah"=>$jumlah
-						);
-						$this->db->where('dtrawat_id', $dtrawat_id);
-						$this->db->update('tindakan_detail', $dtu_dtrawat);*/
+					$sql = "UPDATE tindakan_detail
+						SET dtrawat_perawatan='".$dtrawat_perawatan."'
+							,dtrawat_petugas2='$dtrawat_petugas2'
+							,dtrawat_jam='$dtrawat_jam'
+							,dtrawat_keterangan='".$dtrawat_keterangan."'
+							,dtrawat_jumlah='$jumlah'
+							,dtrawat_update='".@$_SESSION[SESSION_USERID]."'
+							,dtrawat_date_update='".$datetime_now."'
+							,dtrawat_revised=(dtrawat_revised+1)
+						WHERE dtrawat_id='".$dtrawat_id."'";
+					$this->db->query($sql);
+					if($this->db->affected_rows()){
 						if($i==$size_array){
-							return '1';
+							$this->drawat_from_tnonmedis_list_insert($dtrawat_master);
+							return 1;
 						}
 					}else{
 						if($i==$size_array){
-							return '1';
+							$this->drawat_from_tnonmedis_list_insert($dtrawat_master);
+							return 1;
 						}
 					}
 				}else{
 					if($i==$size_array){
-						return '1';
+						$this->drawat_from_tnonmedis_list_insert($dtrawat_master);
+						return 1;
 					}
 				}
 				
@@ -658,47 +964,73 @@ class M_tindakan_nonmedis extends Model{
 					$dtrawat_jam=date('H:i:s');
 				}
 				$dti_dtrawat=array(
-				"dtrawat_master"=>$dtrawat_master,
-				"dtrawat_perawatan"=>$dtrawat_perawatan,
-				"dtrawat_petugas2"=>$dtrawat_petugas2,
-				"dtrawat_tglapp"=>$date_now,
-				"dtrawat_jam"=>$dtrawat_jam,
-				"dtrawat_keterangan"=>$dtrawat_keterangan,
-				"dtrawat_jumlah"=>$jumlah,
-				"dtrawat_creator"=>@$_SESSION[SESSION_USERID]
+					"dtrawat_master"=>$dtrawat_master,
+					"dtrawat_perawatan"=>$dtrawat_perawatan,
+					"dtrawat_petugas2"=>$dtrawat_petugas2,
+					"dtrawat_tglapp"=>$date_now,
+					"dtrawat_jam"=>$dtrawat_jam,
+					"dtrawat_keterangan"=>$dtrawat_keterangan,
+					"dtrawat_jumlah"=>$jumlah,
+					"dtrawat_creator"=>@$_SESSION[SESSION_USERID]
 				);
 				$this->db->insert('tindakan_detail', $dti_dtrawat);
 				if($this->db->affected_rows()){
-					$bln_now=date('Y-m');
-					/* meng-Counter db.report_tindakan dari Terapis yang dipilih */
-					$sql="SELECT reportt_jmltindakan FROM report_tindakan WHERE reportt_bln LIKE '$bln_now%' AND reportt_karyawan_id='$dtrawat_petugas2'";
-					$rs=$this->db->query($sql);
-					if($rs->num_rows()){
-						$rs_record=$rs->row_array();
-						$data_reportt=array(
-						"reportt_jmltindakan"=>$rs_record["reportt_jmltindakan"]+1
-						);
-						$this->db->where('reportt_karyawan_id', $dtrawat_petugas2);
-						$this->db->update('report_tindakan', $data_reportt);
-					}else if(!$rs->num_rows()){
-						$data_reportt=array(
-						"reportt_karyawan_id"=>$dtrawat_petugas2,
-						"reportt_bln"=>$date_now,
-						"reportt_jmltindakan"=>1
-						);
-						$this->db->insert('report_tindakan', $data_reportt);
-					}
 					if($i==$size_array){
-						return '1';
+						$this->drawat_from_tnonmedis_list_insert($dtrawat_master);
+						return 1;
 					}
+					
 				}else{
 					if($i==$size_array){
-						return '1';
+						$this->drawat_from_tnonmedis_list_insert($dtrawat_master);
+						return 1;
 					}
 				}
 			}
 		}
 	}
+	
+	function report_tindakan_update($terapis_id_awal, $terapis_id_pengganti){
+		$date_now=date('Y-m-d');
+		$bln_now=date('Y-m');
+		
+		/* KARENA ada per-GANTI-an Dokter, 
+		** maka $dtrawat_terapis_awal(terapis sebelumnya) dilakukan DE-Counter pada db.report_tindakan.reportt_jmltindakan
+		*/
+		$sql="SELECT reportt_jmltindakan FROM report_tindakan WHERE reportt_bln LIKE '$bln_now%' AND reportt_karyawan_id='$terapis_id_awal'";
+		$rs=$this->db->query($sql);
+		if($rs->num_rows()){
+			$rs_record=$rs->row_array();
+			$reportt_jmltindakan=$rs_record["reportt_jmltindakan"];
+			//UPDATE jumlah_tindakan
+			$dtu_reportt=array(
+			"reportt_jmltindakan"=>$reportt_jmltindakan-1
+			);
+			$this->db->where('reportt_karyawan_id', $terapis_id_awal);
+			$this->db->like('reportt_bln', $bln_now, 'after');
+			$this->db->update('report_tindakan', $dtu_reportt);
+		}
+		
+		//UPDATE/INSERT ke db.report_tindakan dari Dokter-Pengganti && $dapp_status=='datang'
+		$sql="SELECT reportt_jmltindakan FROM report_tindakan WHERE reportt_bln LIKE '$bln_now%' AND reportt_karyawan_id='$terapis_id_pengganti'";
+		$rs=$this->db->query($sql);
+		if($rs->num_rows()){
+			$rs_record=$rs->row_array();
+			$dtu_reportt=array(
+			"reportt_jmltindakan"=>$rs_record["reportt_jmltindakan"]+1
+			);
+			$this->db->where('reportt_karyawan_id', $terapis_id_pengganti);
+			$this->db->update('report_tindakan', $dtu_reportt);
+		}else{
+			$dti_reportt=array(
+			"reportt_karyawan_id"=>$terapis_id_pengganti,
+			"reportt_bln"=>$date_now,
+			"reportt_jmltindakan"=>1
+			);
+			$this->db->insert('report_tindakan', $dti_reportt);
+		}
+	}
+	
 	
 		//function for get list record
 		function tindakan_list($filter,$start,$end){
@@ -786,7 +1118,14 @@ class M_tindakan_nonmedis extends Model{
 		}
 		
 		//function for update record
-	function tindakan_update($trawat_id ,$trawat_cust ,$trawat_keterangan ,$dtrawat_status ,$trawat_cust_id ,$dtrawat_perawatan_id ,$dtrawat_perawatan ,$dtrawat_id ,$rawat_harga ,$rawat_du ,$rawat_dm ,$cust_member ,$dtrawat_terapis ,$dtrawat_terapis_id ,$dtrawat_keterangan ,$dtrawat_dapp ,$dtrawat_ambil_paket ,$dapaket_dpaket ,$dapaket_jpaket ,$dapaket_paket ,$dapaket_item ,$dtrawat_jumlah ,$mode_edit){
+	function tindakan_update($trawat_id
+							,$dtrawat_id
+							,$dtrawat_perawatan
+							,$dtrawat_terapis
+							,$dtrawat_jam
+							,$dtrawat_keterangan
+							,$dtrawat_ambil_paket
+							,$dtrawat_status){
 		$datetime_now=date('Y-m-d H:i:s');
 		/* Checking db.tindakan_detail WHERE db.tindakan_detail.dtrawat_id = $dtrawat_id DAN semua Field,
 		 * JIKA ada salah satu Field yang berubah maka akan di-UPDATE
@@ -796,355 +1135,312 @@ class M_tindakan_nonmedis extends Model{
 		);
 		$this->db->where("trawat_id", $trawat_id);
 		$this->db->update("tindakan", $data_tindakan);
+		return '1';
+	}
+	
+	function tindakan_update_list($trawat_id
+								,$dtrawat_id
+								,$dtrawat_perawatan
+								,$dtrawat_terapis
+								,$dtrawat_jam
+								,$dtrawat_keterangan
+								,$dtrawat_ambil_paket
+								,$dtrawat_status){
 		
-		if($mode_edit=="update_list"){
-			$sql_check="SELECT dtrawat_id,dtrawat_perawatan,dtrawat_status,dtrawat_petugas2,dtrawat_keterangan,dtrawat_ambil_paket,dtrawat_locked FROM tindakan_detail WHERE dtrawat_id='$dtrawat_id'";
-			$rs_check=$this->db->query($sql_check);
-			if($rs_check->num_rows()){
-				$rs_check_record=$rs_check->row_array();
-				$dtrawat_locked=$rs_check_record["dtrawat_locked"];
-				$dtrawat_perawatan_awal=$rs_check_record["dtrawat_perawatan"];
-				$dtrawat_terapis_awal=$rs_check_record["dtrawat_petugas2"];
-				$dtrawat_keterangan_awal=$rs_check_record["dtrawat_keterangan"];
-				$dtrawat_status_awal=$rs_check_record["dtrawat_status"];
-				$dtrawat_ambil_paket_awal=$rs_check_record["dtrawat_ambil_paket"];
-				
-				$sql="SELECT rawat_id FROM perawatan WHERE rawat_id='$dtrawat_perawatan'";
-				$rs=$this->db->query($sql);
-				if($rs->num_rows())
-					$dtrawat_perawatan=$dtrawat_perawatan;
-				else 
-					$dtrawat_perawatan=$dtrawat_perawatan_id;
-				
-				$sql="SELECT karyawan_id FROM karyawan WHERE karyawan_id='$dtrawat_terapis'";
-				$rs=$this->db->query($sql);
-				if($rs->num_rows())
-					$dtrawat_terapis=$dtrawat_terapis;
-				else 
-					$dtrawat_terapis=$dtrawat_terapis_id;
-				
-				if($dtrawat_status_awal<>$dtrawat_status && $dtrawat_locked==0){ 
-					/*artinya: Status BErubah && db.tindakan_detail is UNLOCK
-					 * perubahan hanya pada STATUS di mode VIEW.LIST
-					 */ 
-					$date_now=date('Y-m-d');
-					/*$data_tindakan=array(
-					"trawat_keterangan"=>$trawat_keterangan
-					);
-					$this->db->where("trawat_id", $trawat_id);
-					$this->db->update("tindakan", $data_tindakan);*/
-					
-					$data_dtindakan=array(
-					"dtrawat_status"=>$dtrawat_status,
-					);
-					/*$sql="SELECT rawat_id FROM perawatan WHERE rawat_id='$dtrawat_perawatan'";
-					$rs=$this->db->query($sql);
-					if($rs->num_rows())
-						$data_dtindakan["dtrawat_perawatan"]=$dtrawat_perawatan;*/
-					
-					$this->db->where("dtrawat_id", $dtrawat_id);
-					$this->db->update("tindakan_detail", $data_dtindakan);
-					
-					
-					if($dtrawat_status_awal!='selesai' && $dtrawat_status=='selesai' && $dtrawat_ambil_paket=='true'){
-						/* 
-						# status ['!selesai'>>'selesai']: ini artinya bahwa customer dengan perawatan yang terpilih belum masuk ke Kasir manapun dan akan dimasukkan ke Kasir.
-						# kemudian checkbox "ambil paket" = 'true', maka ini berarti Customer dengan perawatan yg terpilih sudah di-check kepemilikan paketnya dan memang benar dia punya paket itu, tp untuk akurasi di-check kembali kepemilikan paketnya sebelum dimasukkan ke Kasir Pengambilan Paket:
-						1. Checking kepemilikan paket => db.vu_tindakan.cust_punya_paket='ada'
-						2. INSERT ke db.detail_ambil_paket
-						3. UPDATE db.tindakan_detail.status = 'selesai' ==> sudah dilakukan sebelum masuk fungsi IF ini
+		$datetime_now = date('Y-m-d H:i:s');
+		$bln_now=date('Y-m');
+		
+		//checking db.tindakan_detail.dtrawat_locked = 0 atau = 1 ==> jika = 0, maka bisa di-Edit; jika = 1, maka tidak bisa di-Edit ?
+		$sql_check_locked = "SELECT dtrawat_locked
+				,dtrawat_perawatan
+				,dtrawat_petugas2
+				,dtrawat_jam
+				,dtrawat_keterangan
+				,dtrawat_ambil_paket
+				,dtrawat_status
+				,trawat_cust
+			FROM tindakan_detail
+			LEFT JOIN tindakan ON(dtrawat_master=trawat_id)
+			WHERE dtrawat_id='$dtrawat_id'";
+		$rs_check_locked = $this->db->query($sql_check_locked);
+		if($rs_check_locked->num_rows()){
+			$record = $rs_check_locked->row_array();
+			$dtrawat_locked = $record['dtrawat_locked'];
+			$dtrawat_perawatan_awal = $record['dtrawat_perawatan'];
+			$dtrawat_terapis_awal = $record['dtrawat_petugas2'];
+			$dtrawat_jam_awal = $record['dtrawat_jam'];
+			$dtrawat_keterangan_awal = $record['dtrawat_keterangan'];
+			$dtrawat_ambil_paket_awal = $record['dtrawat_ambil_paket'];
+			$dtrawat_status_awal = $record['dtrawat_status'];
+			$trawat_cust = $record['trawat_cust'];
+			
+			if($dtrawat_locked==0){
+				//proses Editing
+				//1. Edit dtrawat_status dari ='selesai' menjadi !='selesai'
+				if(($dtrawat_status_awal<>$dtrawat_status) && $dtrawat_status_awal=='selesai' && $dtrawat_status<>'selesai'){
+					if($dtrawat_ambil_paket_awal=='true'){
+						/* $dtrawat_ambil_paket_awal=='true' ==> ini artinya: data sebelumnya sudah masuk ke db.detail_ambil_paket, maka proses editingnya:
+						** 1. Delete di db.detail_ambil_paket + Delete db.detail_pakai_cabin
+						** 2. Update db.tindakan_detail.
 						*/
-						//$sql_backup20100406="SELECT cust_punya_paket FROM vu_tindakan WHERE dtrawat_id='$dtrawat_id' AND cust_punya_paket='ada'";
-						/* BACKUP 2010-04-16
-						$sql="SELECT * FROM vu_total_sisa_item_perawatan WHERE ppaket_cust='$trawat_cust_id' AND vu_total_sisa_item_perawatan.rpaket_perawatan='$dtrawat_perawatan' AND vu_total_sisa_item_perawatan.total_sisa_item>0";
-						$rs=$this->db->query($sql);
-						if($rs->num_rows()){
-							$this->detail_ambil_paket_insert($dapaket_dpaket, $dapaket_jpaket, $dapaket_paket, $dtrawat_perawatan_id, $trawat_cust_id, $dtrawat_id, $dtrawat_dapp);
-							return '1';
-						}*/
-						$sql_check_paket=$this->customer_check_paket($trawat_cust_id, $dtrawat_perawatan_id);
-						if($sql_check_paket){
-							$this->detail_ambil_paket_insert($sql_check_paket->dpaket_id, $sql_check_paket->dpaket_master, $sql_check_paket->dpaket_paket, $dtrawat_perawatan_id, $trawat_cust_id, $dtrawat_id, $dtrawat_dapp, $dtrawat_jumlah);
-							return '1';
-						}
-					}elseif($dtrawat_status_awal!='selesai' && $dtrawat_status=='selesai' && $dtrawat_ambil_paket=='false'){
-						/*
-						# status ['!selesai'>>'selesai']: ini artinya bahwa customer dengan perawatan yang terpilih belum masuk ke Kasir manapun dan akan dimasukkan ke Kasir.
-						# kemudian checkbox "ambil paket" = 'false', maka ini berarti Customer dengan perawatan yg terpilih akan dimasukkan ke Kasir Perawatan:
-						1. INSERT ke db.detail_jual_rawat
-						2. UPDATE db.tindakan_detail.status = 'selesai' ==> sudah dilakukan sebelum masuk fungsi IF ini
-						*/
-						$this->detail_jual_rawat_insert($cust_member, $trawat_cust_id, $dtrawat_id, $dtrawat_perawatan_id, $rawat_harga, $rawat_dm, $rawat_du, $dtrawat_dapp, $dtrawat_jumlah);
-						return '1';
-						
-					}elseif($dtrawat_status_awal=='selesai' && $dtrawat_status!='selesai' && $dtrawat_ambil_paket=='true'){
-						/*
-						# status ['selesai'>>'!selesai']: ini artinya bahwa sebelumnya customer dengan perawatan yang terpilih ini sudah masuk ke Kasir.
-						# kemudian checkbox "ambil paket" = 'true', maka ini berarti masuk ke Kasir Pengambilan Paket:
-						1. DELETE dari db.detail_ambil_paket
-						2. UPDATE db.tindakan_detail.status = '!selesai' ==> sudah dilakukan sebelum fungsi IF ini
-						3. meng-UNLOCK db.appointment_detail.dapp_locked
-						*/
-						$this->detail_ambil_paket_delete($dtrawat_id, $dtrawat_dapp, $dapaket_dpaket, $dapaket_jpaket, $dapaket_paket);
-						return '1';
-					}elseif($dtrawat_status_awal=='selesai' && $dtrawat_status!='selesai' && $dtrawat_ambil_paket=='false'){
-						/*
-						# status ['selesai'>>'!selesai']: ini artinya bahwa sebelumnya customer dengan perawatan yang terpilih ini sudah masuk ke Kasir.
-						# kemudian checkbox "ambil paket" = 'false', maka ini berarti masuk ke Kasir Perawatan:
-						1. DELETE dari detail_jual_paket
-						2. UPDATE db.tindakan_detail.status = '!selesai' ==> sudah dilakukan sebelum fungsi IF ini
-						3. meng-UNLOCK db.appointment_detail.dapp_locked
-						*/
-						$this->detail_jual_rawat_delete($dtrawat_id, $dtrawat_dapp);
-						return '1';
-					}
-					return '1';
-				}elseif($dtrawat_ambil_paket_awal=='false' && $dtrawat_ambil_paket=='true' && $dtrawat_status_awal=='selesai'){
-					/*
-					# status='selesai': ini artinya bahwa customer dengan perawatan yang terpilih sudah masuk ke Kasir Perawatan.
-					# kemudian checkbox "ambil paket" diganti dari [false ke true], maka ini berarti perawatan saat tindakan-perawatan ini akan diambilkan dari Paket yang dimiliki Customer sehingga secara otomatis akan memindahkan dari yg sebelumnya di Kasir Perawatan ke Kasir Pengambilan Paket:
-					1. Checking kepemilikan paket => db.vu_tindakan.cust_punya_paket='ada'
-					2. DELETE dari detail_jual_rawat
-					3. INSERT ke db.detail_ambil_paket
-					4. UPDATE db.tindakan_detail.dtrawat_ambil_paket = 'true'
-					*/
-					//$sql_backup20100406="SELECT cust_punya_paket FROM vu_tindakan WHERE dtrawat_id='$dtrawat_id' AND cust_punya_paket='ada'";
-					/* BACKUP 2010-04-16
-					$sql="SELECT * FROM vu_total_sisa_item_perawatan WHERE ppaket_cust='$trawat_cust_id' AND vu_total_sisa_item_perawatan.rpaket_perawatan='$dtrawat_perawatan' AND vu_total_sisa_item_perawatan.total_sisa_item>0";
-					$rs=$this->db->query($sql);
-					if($rs->num_rows()){
-						$this->detail_jual_rawat_delete($dtrawat_id, $dtrawat_dapp);
-						//* 3. INSERT ke db.detail_ambil_paket /
-						$this->detail_ambil_paket_insert($dapaket_dpaket, $dapaket_jpaket, $dapaket_paket, $dtrawat_perawatan_id, $trawat_cust_id, $dtrawat_id, $dtrawat_dapp);
-						return '1';
-					}else{
-						return '0';
-					}*/
-					$sql_check_paket=$this->customer_check_paket($trawat_cust_id, $dtrawat_perawatan_id);
-					if($sql_check_paket){
-						$this->detail_jual_rawat_delete($dtrawat_id, $dtrawat_dapp);
-						//* 3. INSERT ke db.detail_ambil_paket /
-						//$this->detail_ambil_paket_insert($dapaket_dpaket, $dapaket_jpaket, $dapaket_paket, $dtrawat_perawatan_id, $trawat_cust_id, $dtrawat_id, $dtrawat_dapp);
-						$this->detail_ambil_paket_insert($sql_check_paket->dpaket_id, $sql_check_paket->dpaket_master, $sql_check_paket->dpaket_paket, $dtrawat_perawatan_id, $trawat_cust_id, $dtrawat_id, $dtrawat_dapp, $dtrawat_jumlah);
-						return '1';
-					}else{
-						return '-1';
-					}
-				}elseif($dtrawat_ambil_paket_awal=='false' && $dtrawat_ambil_paket=='true' && $dtrawat_status_awal!='selesai'){
-					/*
-					# status='!selesai': ini artinya bahwa customer dengan perawatan yang terpilih belum masuk ke Kasir manapun.
-					# kemudian checkbox "ambil paket" diganti dari [false ke true], maka ini berarti perawatan saat tindakan-perawatan ini akan diambilkan dari Paket yang dimiliki Customer ketika statusnya nanti berubah ke 'selesai':
-					1. Checking kepemilikan paket => db.vu_tindakan.cust_punya_paket='ada'
-					2. UPDATE db.tindakan_detail.dtrawat_ambil_paket = 'true'
-					*/
-					//$sql_backup20100406="SELECT cust_punya_paket FROM vu_tindakan WHERE dtrawat_id='$dtrawat_id' AND cust_punya_paket='ada'";
-					/* BACKUP 2010-04-16
-					$sql="SELECT * FROM vu_total_sisa_item_perawatan WHERE ppaket_cust='$trawat_cust_id' AND vu_total_sisa_item_perawatan.rpaket_perawatan='$dtrawat_perawatan' AND vu_total_sisa_item_perawatan.total_sisa_item>0";
-					$rs=$this->db->query($sql);
-					if($rs->num_rows()){
-						$dtu_dtrawat=array(
-						"dtrawat_ambil_paket"=>'true'
-						);
-						$this->db->where('dtrawat_id', $dtrawat_id);
-						$this->db->update('tindakan_detail', $dtu_dtrawat);
-						if($this->db->affected_rows()){
-							return '1';
-						}else{
-							return '0';
-						}
-					}else{
-						return '-1';
-					}*/
-					$sql_check_paket=$this->customer_check_paket($trawat_cust_id, $dtrawat_perawatan_id);
-					if($sql_check_paket){
-						$sql="UPDATE tindakan_detail
-							SET dtrawat_ambil_paket='true'
+						$this->detail_ambil_paket_delete($dtrawat_id);
+						$sqlu_dtrawat = "UPDATE tindakan_detail
+							SET dtrawat_status='$dtrawat_status'
 								,dtrawat_update='".@$_SESSION[SESSION_USERID]."'
-								,dtrawat_date_update='".$datetime_now."'
+								,dtrawat_date_update='$datetime_now'
+								,dtrawat_revised=dtrawat_revised+1
+							WHERE dtrawat_id='$dtrawat_id'";
+						$this->db->query($sqlu_dtrawat);
+						return '1';
+					}else if($dtrawat_ambil_paket_awal=='false'){
+						/* $dtrawat_ambil_paket_awal=='true' ==> ini artinya: data sebelumnya sudah masuk ke db.detail_jual_rawat, maka proses editingnya:
+						** 1. Delete di db.detail_jual_rawat + Delete db.detail_pakai_cabin
+						** 2. Update db.tindakan_detail.
+						*/
+						$this->detail_jual_rawat_delete($dtrawat_id);
+						$sqlu_dtrawat = "UPDATE tindakan_detail
+							SET dtrawat_status='$dtrawat_status'
+								,dtrawat_update='".@$_SESSION[SESSION_USERID]."'
+								,dtrawat_date_update='$datetime_now'
+								,dtrawat_revised=dtrawat_revised+1
+							WHERE dtrawat_id='$dtrawat_id'";
+						$this->db->query($sqlu_dtrawat);
+						return '1';
+					}
+					
+				}
+				/* Mulai baris elseif ini $dtrawat_status_awal sudah dipastikan !='selesai' ==>
+				** karena jika masih ='selesai' tidak bisa melakukan editing selain mengganti status
+				** sehingga Update yang dilakukan hanya sebatas di db.tindakan_detail
+				*/
+				else if($dtrawat_status_awal<>'selesai' && $dtrawat_status_awal<>$dtrawat_status && $dtrawat_status<>'selesai'){
+					//Edit status Tindakan dari !='selesai' menjadi !='selesai' yg lain
+					$sqlu_dtrawat = "UPDATE tindakan_detail
+						SET dtrawat_status='$dtrawat_status'
+							,dtrawat_update='".@$_SESSION[SESSION_USERID]."'
+							,dtrawat_date_update='$datetime_now'
+							,dtrawat_revised=dtrawat_revised+1
+						WHERE dtrawat_id='$dtrawat_id'";
+					$this->db->query($sqlu_dtrawat);
+					return '1';
+				}else if($dtrawat_status_awal<>'selesai' && is_numeric($dtrawat_perawatan) && $dtrawat_perawatan_awal<>$dtrawat_perawatan){
+					//Edit perawatan ==> jika is_numeric terpenuhi, ini artinya ada perubahan perawatan
+					if($dtrawat_ambil_paket_awal=='true'){
+						/* Perawatan yg diubah ini harus di check: apakah si Customer memiliki paket u/ perawatan ini atau tidak?
+						** jika tidak punya paket, akan keluar message: "bahwa customer tidak punya paket"
+						** >>> jika tetap akan mengganti perawatan, maka checkbox ambil-paket harus dihilangkan terlebih dahulu
+						** jika punya paket, maka akan update db.tindakan_detail
+						*/
+						//1. checking kepemilikan paket
+						$sql_check_paket=$this->customer_check_paket($trawat_cust, $dtrawat_perawatan);
+						if(sizeof($sql_check_paket)>0){
+							/* artinya: Customer memiliki paket untuk perawatan yang dipilih
+							** UPDATE db.tindakan_detail
+							*/
+							$sql="UPDATE tindakan_detail
+								SET dtrawat_perawatan='$dtrawat_perawatan'
+									,dtrawat_update='".@$_SESSION[SESSION_USERID]."'
+									,dtrawat_date_update='$datetime_now'
+									,dtrawat_revised=dtrawat_revised+1
+								WHERE dtrawat_id='$dtrawat_id'";
+							$this->db->query($sql);
+							if($this->db->affected_rows()){
+								return '1';
+							}else{
+								return '0';
+							}
+							
+						}else{
+							return '-1';
+						}
+						
+					}else{
+						/* 
+						** Mengambil perawatan satuan, maka hanya UPDATE db.tindakan_detail
+						*/
+						$sql="UPDATE tindakan_detail
+							SET dtrawat_perawatan='$dtrawat_perawatan'
+								,dtrawat_update='".@$_SESSION[SESSION_USERID]."'
+								,dtrawat_date_update='$datetime_now'
 								,dtrawat_revised=dtrawat_revised+1
 							WHERE dtrawat_id='$dtrawat_id'";
 						$this->db->query($sql);
-						/*$dtu_dtrawat=array(
-						"dtrawat_ambil_paket"=>'true'
-						);
-						$this->db->where('dtrawat_id', $dtrawat_id);
-						$this->db->update('tindakan_detail', $dtu_dtrawat);*/
 						if($this->db->affected_rows()){
 							return '1';
 						}else{
 							return '0';
 						}
-					}else{
-						return '-1';
 					}
-				}elseif($dtrawat_ambil_paket_awal=='true' && $dtrawat_ambil_paket=='false' && $dtrawat_status_awal=='selesai'){
-					/*
-					# status='selesai' && checkbox "ambil paket" sebelumnya 'true': ini berarti customer dengan perawatan yang terpilih sudah masuk ke Kasir Pengambilan Paket.
-					# kemudian checkbox "ambil paket" diganti dari [true ke false], maka ini berarti Pengambilan Paket di-Batal-kan, dan secara otomatis akan memindahkan dari yg sebelumnya di Kasir Pengambilan Paket ke Kasir Perawatan:
-					1. UPDATE db.tindakan_detail.dtrawat_ambil_paket = 'false'
-					2. DELETE dari db.detail_ambil_paket
-					3. INSERT ke db.detail_jual_rawat
+				}else if($dtrawat_status_awal<>'selesai' && is_numeric($dtrawat_terapis) && $dtrawat_terapis_awal<>$dtrawat_terapis){
+					/* 
+					** Edit Dokter, maka lakukan UPDATE db.tindakan_detail dan db.report_tindakan
 					*/
 					$sql="UPDATE tindakan_detail
-						SET dtrawat_ambil_paket='false'
+						SET dtrawat_petugas2='$dtrawat_terapis'
 							,dtrawat_update='".@$_SESSION[SESSION_USERID]."'
-							,dtrawat_date_update='".$datetime_now."'
+							,dtrawat_date_update='$datetime_now'
 							,dtrawat_revised=dtrawat_revised+1
 						WHERE dtrawat_id='$dtrawat_id'";
 					$this->db->query($sql);
-					/*$dtu_dtrawat=array(
-					"dtrawat_ambil_paket"=>'false'
-					);
-					$this->db->where('dtrawat_id', $dtrawat_id);
-					$this->db->update('tindakan_detail', $dtu_dtrawat);*/
+					if($this->db->affected_rows()){
+						$this->report_tindakan_update($dtrawat_terapis_awal, $dtrawat_terapis);
+						return '1';
+					}else{
+						return '0';
+					}
 					
-					$this->detail_ambil_paket_delete($dtrawat_id, $dtrawat_dapp, $dapaket_dpaket, $dapaket_jpaket, $dapaket_paket);
-					
-					$this->detail_jual_rawat_insert($cust_member, $trawat_cust_id, $dtrawat_id, $dtrawat_perawatan_id, $rawat_harga, $rawat_dm, $rawat_du, $dtrawat_dapp, $dtrawat_jumlah);
-					return '1';
-					
-				}elseif($dtrawat_ambil_paket_awal=='true' && $dtrawat_ambil_paket=='false' && $dtrawat_status_awal!='selesai'){
-					/*
-					# status='!selesai': ini berarti customer dengan perawatan yang terpilih belum masuk ke Kasir manapun.
-					# kemudian checkbox "ambil paket" diganti dari [true ke false], maka:
-					1. UPDATE db.tindakan_detail.dtrawat_ambil_paket = 'false'
+				}else if($dtrawat_status_awal<>'selesai' && $dtrawat_jam_awal<>$dtrawat_jam){
+					/* 
+					** Edit Jam App, maka lakukan UPDATE db.tindakan_detail
 					*/
 					$sql="UPDATE tindakan_detail
-						SET dtrawat_ambil_paket='false'
+						SET dtrawat_jam='$dtrawat_jam'
 							,dtrawat_update='".@$_SESSION[SESSION_USERID]."'
-							,dtrawat_date_update='".$datetime_now."'
+							,dtrawat_date_update='$datetime_now'
 							,dtrawat_revised=dtrawat_revised+1
 						WHERE dtrawat_id='$dtrawat_id'";
 					$this->db->query($sql);
-					/*$dtu_dtrawat=array(
-					"dtrawat_ambil_paket"=>'false'
-					);
-					$this->db->where('dtrawat_id', $dtrawat_id);
-					$this->db->update('tindakan_detail', $dtu_dtrawat);*/
 					if($this->db->affected_rows()){
 						return '1';
 					}else{
 						return '0';
 					}
-					
-				}elseif($dtrawat_perawatan_awal<>$dtrawat_perawatan && $dtrawat_locked==0){
-					if($dtrawat_ambil_paket=='true' && $dtrawat_status=='selesai'){
-						/*
-						# ini berarti tindakan perawatan ini sudah masuk ke Kasir Pengambilan Paket, maka:
-						1. Checking kepemilikan paket ==> db.vu_tindakan.cust_punya_paket='ada'
-						2. JIKA 'ada' ==> UPDATE db.tindakan_detail.dtrawat_perawatan <= [rawat_id pengganti = $dtrawat_perawatan], JIKA 'tidak ada' ==> message
-						3. UPDATE db.detail_ambil_paket <= [rawat_id pengganti = $dtrawat_perawatan]
-						*/
-						//$sql_backup20100406="SELECT cust_punya_paket FROM vu_tindakan WHERE dtrawat_id='$dtrawat_id' AND cust_punya_paket='ada'";
-						$sql="SELECT * FROM vu_total_sisa_item_perawatan WHERE ppaket_cust='$trawat_cust_id' AND vu_total_sisa_item_perawatan.rpaket_perawatan='$dtrawat_perawatan' AND vu_total_sisa_item_perawatan.total_sisa_item>0";
-						$rs=$this->db->query($sql);
-						if($rs->num_rows()){
-							/* UPDATE db.tindakan_detail */
-							$dtu_dtrawat=array(
-							"dtrawat_perawatan"=>$dtrawat_perawatan
-							);
-							$this->db->where('dtrawat_id', $dtrawat_id);
-							$this->db->update('tindakan_detail', $dtu_dtrawat);
-							/* UPDATE db.detail_ambil_paket */
-							$rs_record=$rs->row_array();
-							$dapaket_dpaket_ganti=$rs_record["dapaket_dpaket"];
-							$dapaket_jpaket_ganti=$rs_record["dapaket_jpaket"];
-							$dapaket_paket_ganti=$rs_record["dapaket_paket"];
-							$dtu_dapaket=array(
-							"dapaket_dpaket"=>$dapaket_dpaket_ganti,
-							"dapaket_jpaket"=>$dapaket_jpaket_ganti,
-							"dapaket_paket"=>$dapaket_paket_ganti,
-							"dapaket_item"=>$dtrawat_perawatan
-							);
-							$this->db->where('dapaket_dtrawat', $dtrawat_id);
-							$this->db->update('detail_ambil_paket', $dtu_dapaket);
-							if($this->db->affected_rows()){
-								//* UPDATE sisa_paket dari pengambilan paket yang dibatalkan */
-								$this->total_sisa_paket_update($dapaket_dpaket, $dapaket_jpaket, $dapaket_paket);
-								//* UPDATE sisa_paket dari pengambilan paket penggantinya */
-								$this->total_sisa_paket_update($dapaket_dpaket_ganti, $dapaket_jpaket_ganti, $dapaket_paket_ganti);
-							}
-							return '1';
-						}else{
-							return '0';
-						}
-					}elseif($dtrawat_ambil_paket=='true' && $dtrawat_status!='selesai'){
-						/*
-						# ini artinya tindakan perawatan ini belum masuk ke Kasir manapun:
-						1. UDPATE db.tindakan_detail.dtrawat_perawatan = [rawat_id pengganti]
-						*/
-						$dtu_dtrawat=array(
-						"dtrawat_perawatan"=>$dtrawat_perawatan
-						);
-						$this->db->where('dtrawat_id', $dtrawat_id);
-						$this->db->update('tindakan_detail', $dtu_dtrawat);
-						if($this->db->affected_rows()){
-							return '1';
-						}else{
-							return '0';
-						}
-					}elseif($dtrawat_ambil_paket=='false' && $dtrawat_status=='selesai'){
-						/*
-						# ini artinya: dari status='selesai', perawatan sebelum diganti sudah masuk ke Kasir Perawatan.
-						# untuk itu:
-						1. UPDATE db.tindakan_detail.dtrawat_rawat = [rawat_id pengganti]
-						2. UPDATE Kasir Perawatan WHERE db.detail_jual_rawat.drawat_dtrawat = db.tindakan_detail.dtrawat_id
-						*/
-						$dtu_dtrawat=array(
-						"dtrawat_perawatan"=>$dtrawat_perawatan
-						);
-						$this->db->where('dtrawat_id', $dtrawat_id);
-						$this->db->update('tindakan_detail', $dtu_dtrawat);
-						
-						$this->detail_jual_rawat_update($dtrawat_perawatan, $dtrawat_id, $cust_member);
+				}else if($dtrawat_status_awal<>'selesai' && $dtrawat_keterangan_awal<>$dtrawat_keterangan){
+					/* 
+					** Edit detail keterangan, maka lakukan UPDATE db.tindakan_detail
+					*/
+					$sql="UPDATE tindakan_detail
+						SET dtrawat_keterangan='$dtrawat_keterangan'
+							,dtrawat_update='".@$_SESSION[SESSION_USERID]."'
+							,dtrawat_date_update='$datetime_now'
+							,dtrawat_revised=dtrawat_revised+1
+						WHERE dtrawat_id='$dtrawat_id'";
+					$this->db->query($sql);
+					if($this->db->affected_rows()){
 						return '1';
-					}elseif($dtrawat_ambil_paket=='false' && $dtrawat_status!='selesai'){
-						/*
-						# ini artinya: perawatan ini belum masuk ke Kasir manapun, maka: 
-						1. UPDATE db.tindakan_detail.dtrawat_perawatan saja =[rawat_id pengganti]
+					}else{
+						return '0';
+					}
+				}else if($dtrawat_status_awal<>'selesai' && $dtrawat_ambil_paket_awal<>$dtrawat_ambil_paket){
+					if($dtrawat_ambil_paket_awal=='true' && $dtrawat_ambil_paket=='false'){
+						/* 
+						** Edit checkbox ambil-paket dari 'true' ke 'false', maka lakukan UPDATE db.tindakan_detail
 						*/
-						$dtu_dtrawat=array(
-						"dtrawat_perawatan"=>$dtrawat_perawatan
-						);
-						$this->db->where('dtrawat_id', $dtrawat_id);
-						$this->db->update('tindakan_detail', $dtu_dtrawat);
+						$sql="UPDATE tindakan_detail
+							SET dtrawat_ambil_paket='$dtrawat_ambil_paket'
+								,dtrawat_update='".@$_SESSION[SESSION_USERID]."'
+								,dtrawat_date_update='$datetime_now'
+								,dtrawat_revised=dtrawat_revised+1
+							WHERE dtrawat_id='$dtrawat_id'";
+						$this->db->query($sql);
 						if($this->db->affected_rows()){
 							return '1';
 						}else{
 							return '0';
 						}
+					}else if($dtrawat_ambil_paket_awal=='false' && $dtrawat_ambil_paket=='true'){
+						//1. checking kepemilikan paket, dari $trawat_cust dan $dtrawat_perawatan_awal
+						$sql_check_paket=$this->customer_check_paket($trawat_cust, $dtrawat_perawatan_awal);
+						if(sizeof($sql_check_paket)>0){
+							/* artinya: Customer memiliki paket untuk perawatan yang dipilih
+							** UPDATE db.tindakan_detail
+							*/
+							$sql="UPDATE tindakan_detail
+								SET dtrawat_ambil_paket='$dtrawat_ambil_paket'
+									,dtrawat_update='".@$_SESSION[SESSION_USERID]."'
+									,dtrawat_date_update='$datetime_now'
+									,dtrawat_revised=dtrawat_revised+1
+								WHERE dtrawat_id='$dtrawat_id'";
+							$this->db->query($sql);
+							if($this->db->affected_rows()){
+								return '1';
+							}else{
+								return '0';
+							}
+						}else{
+							return '-1';
+						}
+					}else{
+						return '0';
+					}
+				}else if(($dtrawat_status_awal<>$dtrawat_status) && $dtrawat_status_awal<>'selesai' && $dtrawat_status=='selesai'){
+					/* Perubahan status dari !='selesai' menjadi ='selesai', yg artinya: tindakan sudah 'selesai' dan masuk bagian Kasir
+					 * Proses yg dilakukan:
+					 * # Check $dtrawat_ambil_paket_awal
+					 * >> Jika = 'false' ==> masuk Kasir Penjualan Perawatan
+					 * >> Jika = 'true' ==> masuk Kasir Pengambilan Paket
+					 * # Update tindakan_detail
+					*/
+					if($dtrawat_ambil_paket_awal=='false'){
+						$result_drawat_i = $this->detail_jual_rawat_insert($dtrawat_id);
+						if($result_drawat_i==1){
+							$sql="UPDATE tindakan_detail
+								SET dtrawat_status='$dtrawat_status'
+									,dtrawat_update='".@$_SESSION[SESSION_USERID]."'
+									,dtrawat_date_update='$datetime_now'
+									,dtrawat_revised=dtrawat_revised+1
+								WHERE dtrawat_id='$dtrawat_id'";
+							$this->db->query($sql);
+							if($this->db->affected_rows()){
+								return '1';
+							}else{
+								return '0';
+							}
+						}else{
+							return '0';
+						}
+					}else if($dtrawat_ambil_paket_awal=='true'){
+						/* ditujukan untuk Pengambilan Paket, tapi sebelum dimasukkan ke Pengambilan Paket harus di-check terlebih dahulu
+						 * # Check kepemilikan paket untuk Customer + Perawatan yang dipilih
+						 * >> Jika = Punya ==> masukkan ke Pengambilan Paket
+						 * >> Jika = Tidak Punya ==> keluar message: "Customer Tidak Memiliki paket dengan perawatan yang dipilih.
+						 * 		Silakan menghilangkan centang Ambil-Paket untuk dimasukkan ke Kasir Penjualan Perawatan."
+						*/
+						$sql_check_paket=$this->customer_check_paket($trawat_cust, $dtrawat_perawatan_awal);
+						if(sizeof($sql_check_paket)>0){
+							/* artinya: Customer memiliki paket untuk perawatan yang dipilih
+							** UPDATE db.tindakan_detail + INSERT to db.detail_ambil_paket
+							*/
+							$result_dapaket_i = $this->detail_ambil_paket_insert($sql_check_paket->dpaket_id, $sql_check_paket->dpaket_master, $sql_check_paket->dpaket_paket, $dtrawat_perawatan_awal, $trawat_cust, $dtrawat_id);
+							if($result_dapaket_i==1){
+								$sql="UPDATE tindakan_detail
+									SET dtrawat_status='$dtrawat_status'
+										,dtrawat_update='".@$_SESSION[SESSION_USERID]."'
+										,dtrawat_date_update='$datetime_now'
+										,dtrawat_revised=dtrawat_revised+1
+									WHERE dtrawat_id='$dtrawat_id'";
+								$this->db->query($sql);
+								if($this->db->affected_rows()){
+									return '1';
+								}else{
+									return '0';
+								}
+							}else{
+								return '0';
+							}
+						}else{
+							return '-1';
+						}
+						
+					}else{
+						return '0';
 					}
 					
-					return '1';
-				}elseif($dtrawat_terapis_awal<>$dtrawat_terapis && $dtrawat_locked==0){ /* ada perubahan pada db.tindakan_detail.dtrawat_petugas2 */
-					/* UPDATE db.tindakan_detail  */
-					$data_dtindakan=array(
-					"dtrawat_petugas2"=>$dtrawat_terapis
-					);
-					$this->db->where('dtrawat_id', $dtrawat_id);
-					$this->db->update('tindakan_detail',$data_dtindakan);
-					return '1';
-				}elseif($dtrawat_keterangan_awal<>$dtrawat_keterangan && $dtrawat_locked==0){
-					/* ada perubahan keterangan_detail */
-					/* UPDATE db.tindakan_detail  */
-					$data_dtindakan=array(
-					"dtrawat_keterangan"=>$dtrawat_keterangan
-					);
-					$this->db->where('dtrawat_id', $dtrawat_id);
-					$this->db->update('tindakan_detail',$data_dtindakan);
-					return '1';
-				}elseif($dtrawat_locked==1){
-					return '2';
 				}else{
-					return '1';
+					return '0';
 				}
+				
 			}else{
-				return '0';
+				//data tidak bisa di-Edit, karena sudah melalui proses printing Faktur di Kasir
+				return '-3';
 			}
 		}else{
-			return '1';
+			return '-2';
 		}
+		
 	}
+	
+	
 		
 		//function for create new record
 		function tindakan_create($trawat_cust ,$trawat_keterangan ){

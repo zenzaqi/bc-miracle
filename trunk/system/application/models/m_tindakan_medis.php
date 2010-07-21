@@ -258,7 +258,7 @@ class M_tindakan_medis extends Model{
 		$this->db->delete('detail_jual_rawat');
 		
 		//UN-Lock db.appointment_detail
-		if($this->db->affected_rows()){
+		if($this->db->affected_rows()>0 && $dtrawat_dapp>0){
 			$dtu_dapp=array(
 			"dapp_locked"=>0
 			);
@@ -990,11 +990,13 @@ class M_tindakan_medis extends Model{
 		
 		if($this->db->affected_rows()){
 			/* meng-UNLOCK db.appointment_detail */
-			$dtu_dapp=array(
-			"dapp_locked"=>0
-			);
-			$this->db->where('dapp_id', $dtrawat_dapp);
-			$this->db->update('appointment_detail', $dtu_dapp);
+			if($dtrawat_dapp>0){
+				$dtu_dapp=array(
+				"dapp_locked"=>0
+				);
+				$this->db->where('dapp_id', $dtrawat_dapp);
+				$this->db->update('appointment_detail', $dtu_dapp);
+			}
 			
 			$this->total_sisa_paket_update($dapaket_dpaket, $dapaket_jpaket, $dapaket_paket);
 		}
