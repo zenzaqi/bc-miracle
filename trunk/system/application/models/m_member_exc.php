@@ -45,7 +45,15 @@ class M_member_exc extends Model{
 			//$sql="SELECT member_id FROM member WHERE member_cust='$member_cust'";
 			//* vu_member berisi customer yang berstatus member yang sudah ditambah dengan masa tenggang dr db.member_setup ???? /
 			//$sql = "SELECT member_id, member_no FROM vu_member WHERE member_cust='$member_cust'";
-			$sql = "SELECT member_id, member_no FROM member WHERE member_cust='$member_cust' AND ((member_valid + interval $periode_tenggang day) > date_format(now(), '%Y-%m-%d')) AND member_status='Serah Terima'";
+			
+			//$sql = "SELECT member_id, member_no FROM member WHERE member_cust='$member_cust' AND ((member_valid + interval $periode_tenggang day) > date_format(now(), '%Y-%m-%d')) AND member_status='Serah Terima'";
+			//untuk perpanjangan, tidak perlu melihat (member_valid + interval $periode_tenggang day), yg penting cust sdh pernah jadi member, otomatis lsg perpanjangan
+			$sql = "SELECT member_id, member_no 
+					FROM member 
+					WHERE 
+						member_cust='$member_cust' AND 
+						/*((member_valid + interval $periode_tenggang day) > date_format(now(), '%Y-%m-%d')) AND */
+						member_status='Serah Terima'";
 			$rs=$this->db->query($sql);
 			if($rs->num_rows()){
 				$record = $rs->row_array();

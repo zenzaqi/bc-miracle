@@ -20,22 +20,22 @@
 </head>
 <body onload="window.print();">
 <table summary='Rekap Jual'>
-	<caption>Laporan Rekap Penjualan <?php echo $jenis; ?><br/><?php echo $periode; ?>Group By No. Faktur</caption>
+	<caption>Laporan Rekap Penjualan <?php echo $jenis; ?><br/><?php echo $periode; ?>Group By : No. Faktur</caption>
 	<thead>
     	<tr>
         	<th scope='col'>No</th>
             <th scope='col'>No Faktur</th>           
             <th scope='col'>Tanggal</th>
             <th scope='col'>Customer</th>
-            <th scope='col'>Diskon(%)</th>
-            <th scope='col'>Diskon (Rp)</th>
-            <th scope='col'>Total Item</th>
-            <th scope='col'>Total Nilai (Rp)</th>
+			<th scope='col'>Tot Item</th>
+            <th scope='col'>Disk (%)</th>
+            <th scope='col'>Disk (Rp)</th> 
+            <th scope='col'>Total (Rp)</th>
             <th scope='col'>Tunai (Rp)</th>
             <th scope='col'>Cek/Giro (Rp)</th>
             <th scope='col'>Transfer (Rp)</th>
             <th scope='col'>Kuitansi (Rp)</th>
-            <th scope='col'>Credit Card (Rp)</th>
+            <th scope='col'>Card (Rp)</th>
             <th scope='col'>Kredit (Rp)</th>
         </tr>
     </thead>
@@ -68,19 +68,19 @@
 		?>
 		<tr>
         	<td><? echo $i; ?></td>
-            <td><?php echo $print->no_bukti; ?></td>
+            <td width="10"><?php echo $print->no_bukti; ?></td>
             <td><?php echo $print->tanggal; ?></td>
             <td><?php echo $print->cust_nama." (".$print->cust_no.")"; ?></td>
+			<td align="right" class="numeric"><?php echo number_format($print->jumlah_barang,0,",","."); ?></td>
             <td align="right" class="numeric"><?php echo number_format($print->diskon,0,",","."); ?></td>
-            <td align="right" class="numeric"><?php echo number_format($print->cashback,2,",","."); ?></td>
-            <td align="right" class="numeric"><?php echo number_format($print->jumlah_barang,0,",","."); ?></td>
-            <td align="right" class="numeric"><?php echo number_format($print->total_nilai,2,",","."); ?></td>
-            <td align="right" class="numeric"><?php echo number_format($print->tunai,2,",","."); ?></td>
-            <td align="right" class="numeric"><?php echo number_format($print->cek,2,",","."); ?></td>
-            <td align="right" class="numeric"><?php echo number_format($print->transfer,2,",","."); ?></td>
-            <td align="right" class="numeric"><?php echo number_format($print->kuitansi,2,",","."); ?></td>
-            <td align="right" class="numeric"><?php echo number_format($print->card,2,",","."); ?></td>
-            <td align="right" class="numeric"><?php echo number_format($print->kredit,2,",","."); ?></td>
+            <td align="right" class="numeric"><?php echo number_format($print->cashback,0,",","."); ?></td>
+            <td align="right" class="numeric"><?php echo number_format($print->total_nilai,0,",","."); ?></td>
+            <td align="right" class="numeric"><?php echo number_format($print->tunai,0,",","."); ?></td>
+            <td align="right" class="numeric"><?php echo number_format($print->cek,0,",","."); ?></td>
+            <td align="right" class="numeric"><?php echo number_format($print->transfer,0,",","."); ?></td>
+            <td align="right" class="numeric"><?php echo number_format($print->kuitansi,0,",","."); ?></td>
+            <td align="right" class="numeric"><?php echo number_format($print->card,0,",","."); ?></td>
+            <td align="right" class="numeric"><?php echo number_format($print->kredit,0,",","."); ?></td>
        </tr>
 		<?php } ?>
 	</tbody>
@@ -96,19 +96,19 @@
         </tr>
         <tr>
         	<td class="clear">&nbsp;</td>
-        	<th scope='row' nowrap="nowrap">Total Item</th>
+        	<th scope='row' nowrap="nowrap">Tot Item</th>
             <td nowrap="nowrap" align="right" class="numeric clear"><?php echo number_format($total_item,0,",","."); ?></td>
             <td colspan='11' class="clear">&nbsp;</td>
         </tr>
         <tr>
         	<td class="clear">&nbsp;</td>
-        	<th scope='row' nowrap="nowrap">Diskon  % - (Rp)</th>
+        	<th scope='row' nowrap="nowrap">Disk % - (Rp)</th>
             <td  nowrap="nowrap" align="right" class="numeric clear"><?php echo number_format($total_diskonp,0,",","."); ?></td>
              <td colspan='11' class="clear">&nbsp;</td>
         </tr>
         <tr>
         	<td class="clear">&nbsp;</td>
-        	<th scope='row' nowrap="nowrap">Diskon (Rp)</th>
+        	<th scope='row' nowrap="nowrap">Disk (Rp)</th>
             <td  nowrap="nowrap" align="right" class="numeric clear"><?php echo number_format($total_diskon,0,",","."); ?></td>
              <td colspan='11' class="clear">&nbsp;</td>
         </tr>
@@ -144,7 +144,7 @@
         </tr>
         <tr>
         	<td class="clear">&nbsp;</td>
-        	<th scope='row' nowrap="nowrap">Total Credit Card (Rp)</th>
+        	<th scope='row' nowrap="nowrap">Total Card (Rp)</th>
             <td  nowrap="nowrap" align="right" class="numeric clear"><?php echo number_format($total_card,0,",","."); ?></td>
              <td colspan='11' class="clear" >&nbsp;</td>
         </tr>
