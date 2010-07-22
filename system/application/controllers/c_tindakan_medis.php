@@ -269,8 +269,6 @@ class C_tindakan_medis extends Controller {
 		$trawat_cust=trim(@$_POST["trawat_cust"]);
 		$trawat_keterangan=trim(@$_POST["trawat_keterangan"]);
 		$trawat_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$trawat_keterangan);
-		$trawat_keterangan=str_replace(",", "\,",$trawat_keterangan);
-		$trawat_keterangan=str_replace("'", "''",$trawat_keterangan);
 		$dtrawat_status=trim(@$_POST["dtrawat_status"]);
 		$trawat_cust_id=trim(@$_POST["trawat_cust_id"]);
 		$dtrawat_perawatan_id=trim(@$_POST["dtrawat_perawatan_id"]);
@@ -284,7 +282,6 @@ class C_tindakan_medis extends Controller {
 		$dtrawat_dokter_id=trim(@$_POST["dtrawat_dokter_id"]);
 		$dtrawat_keterangan=trim(@$_POST["dtrawat_keterangan"]);
 		$dtrawat_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$dtrawat_keterangan);
-		$dtrawat_keterangan=str_replace(",", "\,",$dtrawat_keterangan);
 		$dtrawat_dapp=trim(@$_POST["dtrawat_dapp"]);
 		$dtrawat_ambil_paket=trim(@$_POST["dtrawat_ambil_paket"]);
 		$dapaket_dpaket=trim(@$_POST["dapaket_dpaket"]);
@@ -307,7 +304,6 @@ class C_tindakan_medis extends Controller {
 			$dtrawat_jam=trim(@$_POST["dtrawat_jam"]);
 			$dtrawat_keterangan=trim(@$_POST["dtrawat_keterangan"]);
 			$dtrawat_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$dtrawat_keterangan);
-			$dtrawat_keterangan=str_replace(",", "\,",$dtrawat_keterangan);
 			$dtrawat_ambil_paket=trim(@$_POST["dtrawat_ambil_paket"]);
 			$dtrawat_status=trim(@$_POST["dtrawat_status"]);
 			
@@ -327,8 +323,6 @@ class C_tindakan_medis extends Controller {
 			$trawat_cust=trim(@$_POST["trawat_cust"]);
 			$trawat_keterangan=trim(@$_POST["trawat_keterangan"]);
 			$trawat_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$trawat_keterangan);
-			$trawat_keterangan=str_replace(",", "\,",$trawat_keterangan);
-			$trawat_keterangan=str_replace("'", "''",$trawat_keterangan);
 			
 			//menerima POST Detail List Tindakan Medis
 			$dtrawat_medis_id = $_POST['dtrawat_medis_id']; // Get our array back and translate it :
