@@ -555,6 +555,33 @@ class M_public_function extends Model{
 		$len_pattern=strlen($pattern);
 		$len_lpad=$length-$len_pattern;
 		$sql="select concat(left(max(".$field."),".$len_pattern."),LPAD((right(max(".$field."),".$len_lpad.")+1),".$len_lpad.",0)) as max_key from ".$table." where ".$field." like '".$pattern."%'";
+		
+		$query=$this->db->query($sql);
+		if($query->num_rows()){
+			$data=$query->row();
+			$kode=$data->max_key;
+			if(is_null($kode))
+			{
+				$pad="";
+				for($i=1;$i<$len_lpad;$i++)
+					$pad.="0";
+				$kode=$pattern.$pad."1";
+			}
+			return $kode;
+		}else{
+			$pad="";
+			for($i=1;$i<$len_lpad;$i++)
+				$pad.="0";
+			$kode=$pattern.$pad."1";
+			return $kode;
+		}
+	}
+	
+	function get_custno_gen($table,$field,$pattern,$length){
+		$len_pattern=strlen($pattern);
+		$len_lpad=$length-$len_pattern;
+		$sql="select concat(left(max(substring(".$field.",-6)),".$len_pattern."),LPAD((right(max(substring(".$field.",-6)),".$len_lpad.")+1),".$len_lpad.",0)) as max_key from ".$table." where ".$field." like '".$pattern."%'";
+		
 		$query=$this->db->query($sql);
 		if($query->num_rows()){
 			$data=$query->row();

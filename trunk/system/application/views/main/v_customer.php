@@ -2506,7 +2506,7 @@ Ext.onReady(function(){
 		id: 'cust_noField',
 		fieldLabel: 'No Customer <span style="color: #ec0000">*</span>',
 		maxLength: 50,
-		allowBlank: false,
+		allowBlank: true,
 		anchor: '50%'
 	});
 	
