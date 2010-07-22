@@ -48,7 +48,11 @@ class C_master_jual_produk extends Controller {
 			$tgl_awal=$tahun."-".$bulan;
 			$data["periode"]=get_ina_month_name($bulan,'long')." ".$tahun;
 		}else if($periode=="tanggal"){
-			$data["periode"]="Periode ".$tgl_awal." s/d ".$tgl_akhir;
+			$tgl_awal_show = $tgl_awal;
+			$tgl_akhir_show = $tgl_akhir;
+			$tgl_awal_show = date("d-m-Y");
+			$tgl_akhir_show = date("d-m-Y");
+			$data["periode"]="Periode : ".$tgl_awal_show." s/d ".$tgl_akhir_show.", ";
 		}
 		
 		$data["total_item"]=$this->m_master_jual_produk->get_total_item($tgl_awal,$tgl_akhir,$periode,$opsi);
