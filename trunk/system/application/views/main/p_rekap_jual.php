@@ -20,7 +20,7 @@
 </head>
 <body onload="window.print();">
 <table summary='Rekap Jual'>
-	<caption>Laporan Rekap Penjualan <?php echo $jenis; ?><br/><?php echo $periode; ?>Group By : No. Faktur</caption>
+	<caption>Laporan Rekap Penjualan <?php echo $jenis; ?><br/><?php echo $periode; ?><br/>Group By No. Faktur</caption>
 	<thead>
     	<tr>
         	<th scope='col'>No</th>
