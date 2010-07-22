@@ -580,7 +580,7 @@ class M_public_function extends Model{
 	function get_custno_gen($table,$field,$pattern,$length){
 		$len_pattern=strlen($pattern);
 		$len_lpad=$length-$len_pattern;
-		$sql="select concat(left(max(substring(".$field.",-6)),".$len_pattern."),LPAD((right(max(substring(".$field.",-6)),".$len_lpad.")+1),".$len_lpad.",0)) as max_key from ".$table." where ".$field." like '".$pattern."%'";
+		$sql="select concat(left(max(substring(".$field.",-6)),".$len_pattern."),LPAD((right(max(substring(".$field.",-6)),".$len_lpad.")+1),".$len_lpad.",0)) as max_key from ".$table." where ".$field." is not null and ".$field."<>'' and cust_aktif='Aktif'";
 		
 		$query=$this->db->query($sql);
 		if($query->num_rows()){
