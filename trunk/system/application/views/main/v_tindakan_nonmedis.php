@@ -365,144 +365,144 @@ Ext.onReady(function(){
 						nonmedis_jumlah.push(tindakan_nonmedis_detail_DataStore.getAt(i).data.jumlah);
 					}
 				}
-			}
-		}
-		
-		if(i==(dcount-1)){
-			trawat_id_create = -1;
-			if(tnonmedis_post2db=='UPDATE'){
-				trawat_id_create = tindakan_nonmedisListEditorGrid.getSelectionModel().getSelected().get('trawat_id');
-			}
-			
-			//tampungan array dari List Detail Tindakan Non Medis
-			var encoded_array_dtrawat_nonmedis_id = Ext.encode(dtrawat_nonmedis_id);
-			var encoded_array_dtrawat_nonmedis_perawatan = Ext.encode(dtrawat_nonmedis_perawatan);
-			var encoded_array_dtrawat_nonmedis_petugas2 = Ext.encode(dtrawat_nonmedis_petugas2);
-			var encoded_array_dtrawat_nonmedis_jam = Ext.encode(dtrawat_nonmedis_jam);
-			var encoded_array_dtrawat_nonmedis_status = Ext.encode(dtrawat_nonmedis_status);
-			var encoded_array_dtrawat_nonmedis_keterangan = Ext.encode(dtrawat_nonmedis_keterangan);
-			var encoded_array_nonmedis_jumlah = Ext.encode(nonmedis_jumlah);
-			
-			if(trawat_id_create>0){
-				var trawat_cust_create=null; 
-				var trawat_keterangan_create=null;
 				
-				if(trawat_nonmedis_custField.getValue()!== null){trawat_cust_create = trawat_nonmedis_custField.getValue();} 
-				if(trawat_nonmedis_keteranganField.getValue()!== null){trawat_keterangan_create = trawat_nonmedis_keteranganField.getValue();}
-				
-				Ext.Ajax.request({  
-					waitMsg: 'Please wait...',
-					url: 'index.php?c=c_tindakan_nonmedis&m=get_action',
-					params: {
-						task: tnonmedis_post2db,
-						mode_edit: 'update_form',
-						trawat_id	: trawat_id_create, 
-						trawat_cust	: trawat_cust_create, 
-						trawat_keterangan	: trawat_keterangan_create,
+				if(i==(dcount-1)){
+					trawat_id_create = -1;
+					if(tnonmedis_post2db=='UPDATE'){
+						trawat_id_create = tindakan_nonmedisListEditorGrid.getSelectionModel().getSelected().get('trawat_id');
+					}
+					
+					//tampungan array dari List Detail Tindakan Non Medis
+					var encoded_array_dtrawat_nonmedis_id = Ext.encode(dtrawat_nonmedis_id);
+					var encoded_array_dtrawat_nonmedis_perawatan = Ext.encode(dtrawat_nonmedis_perawatan);
+					var encoded_array_dtrawat_nonmedis_petugas2 = Ext.encode(dtrawat_nonmedis_petugas2);
+					var encoded_array_dtrawat_nonmedis_jam = Ext.encode(dtrawat_nonmedis_jam);
+					var encoded_array_dtrawat_nonmedis_status = Ext.encode(dtrawat_nonmedis_status);
+					var encoded_array_dtrawat_nonmedis_keterangan = Ext.encode(dtrawat_nonmedis_keterangan);
+					var encoded_array_nonmedis_jumlah = Ext.encode(nonmedis_jumlah);
+					
+					if(trawat_id_create>0){
+						var trawat_cust_create=null; 
+						var trawat_keterangan_create=null;
 						
-						dtrawat_nonmedis_id	: encoded_array_dtrawat_nonmedis_id,
-						dtrawat_nonmedis_perawatan	: encoded_array_dtrawat_nonmedis_perawatan,
-						dtrawat_nonmedis_petugas2	: encoded_array_dtrawat_nonmedis_petugas2,
-						dtrawat_nonmedis_jam	: encoded_array_dtrawat_nonmedis_jam,
-						dtrawat_nonmedis_status	: encoded_array_dtrawat_nonmedis_status,
-						dtrawat_nonmedis_keterangan	: encoded_array_dtrawat_nonmedis_keterangan,
-						nonmedis_jumlah	: encoded_array_nonmedis_jumlah
-					}, 
-					success: function(response){
-						var result=eval(response.responseText);
-						switch(result){
-							case 0:
-								tindakan_nonmedis_createWindow.hide();
-								tindakan_nonmedis_DataStore.reload();
-								tindakan_nonmedis_createWindow.setDisabled(false);
-								Ext.MessageBox.show({
-								   title: 'INFO',
-								   msg: 'Tidak ada data yang diupdate.',
-								   buttons: Ext.MessageBox.OK,
-								   animEl: 'save',
-								   icon: Ext.MessageBox.INFO
-								});
-								break;
-							case 1:
-								tindakan_nonmedis_createWindow.hide();
-								tindakan_nonmedis_DataStore.reload();
-								tindakan_nonmedis_createWindow.setDisabled(false);
-								Ext.MessageBox.show({
-								   title: 'INFO',
-								   msg: 'Data Master Tindakan sukses diupdate.',
-								   buttons: Ext.MessageBox.OK,
-								   animEl: 'save',
-								   icon: Ext.MessageBox.INFO
-								});
-								break;
-							case 2:
-								tindakan_nonmedis_createWindow.hide();
-								tindakan_nonmedis_DataStore.reload();
-								tindakan_nonmedis_createWindow.setDisabled(false);
-								Ext.MessageBox.show({
-								   title: 'INFO',
-								   msg: 'Data Master Tindakan dan Detail Tindakan Non Medis telah sukses diupdate.',
-								   buttons: Ext.MessageBox.OK,
-								   animEl: 'save',
-								   icon: Ext.MessageBox.INFO
-								});
-								break;
-							case 3:
-								tindakan_nonmedis_createWindow.hide();
-								tindakan_nonmedis_DataStore.reload();
-								tindakan_nonmedis_createWindow.setDisabled(false);
-								Ext.MessageBox.show({
-								   title: 'INFO',
-								   msg: 'Data Master Tindakan, Detail Tindakan Medis, dan Detail Tindakan Non Medis telah sukses diupdate.',
-								   buttons: Ext.MessageBox.OK,
-								   animEl: 'save',
-								   icon: Ext.MessageBox.INFO
-								});
-								break;
-							default:
-								tindakan_nonmedis_createWindow.hide();
-								tindakan_nonmedis_DataStore.reload();
-								tindakan_nonmedis_createWindow.setDisabled(false);
+						if(trawat_nonmedis_custField.getValue()!== null){trawat_cust_create = trawat_nonmedis_custField.getValue();} 
+						if(trawat_nonmedis_keteranganField.getValue()!== null){trawat_keterangan_create = trawat_nonmedis_keteranganField.getValue();}
+						
+						Ext.Ajax.request({  
+							waitMsg: 'Please wait...',
+							url: 'index.php?c=c_tindakan_nonmedis&m=get_action',
+							params: {
+								task: tnonmedis_post2db,
+								mode_edit: 'update_form',
+								trawat_id	: trawat_id_create, 
+								trawat_cust	: trawat_cust_create, 
+								trawat_keterangan	: trawat_keterangan_create,
+								
+								dtrawat_nonmedis_id	: encoded_array_dtrawat_nonmedis_id,
+								dtrawat_nonmedis_perawatan	: encoded_array_dtrawat_nonmedis_perawatan,
+								dtrawat_nonmedis_petugas2	: encoded_array_dtrawat_nonmedis_petugas2,
+								dtrawat_nonmedis_jam	: encoded_array_dtrawat_nonmedis_jam,
+								dtrawat_nonmedis_status	: encoded_array_dtrawat_nonmedis_status,
+								dtrawat_nonmedis_keterangan	: encoded_array_dtrawat_nonmedis_keterangan,
+								nonmedis_jumlah	: encoded_array_nonmedis_jumlah
+							}, 
+							success: function(response){
+								var result=eval(response.responseText);
+								switch(result){
+									case 0:
+										tindakan_nonmedis_createWindow.hide();
+										tindakan_nonmedis_DataStore.reload();
+										tindakan_nonmedis_createWindow.setDisabled(false);
+										Ext.MessageBox.show({
+										   title: 'INFO',
+										   msg: 'Tidak ada data yang diupdate.',
+										   buttons: Ext.MessageBox.OK,
+										   animEl: 'save',
+										   icon: Ext.MessageBox.INFO
+										});
+										break;
+									case 1:
+										tindakan_nonmedis_createWindow.hide();
+										tindakan_nonmedis_DataStore.reload();
+										tindakan_nonmedis_createWindow.setDisabled(false);
+										Ext.MessageBox.show({
+										   title: 'INFO',
+										   msg: 'Data Master Tindakan sukses diupdate.',
+										   buttons: Ext.MessageBox.OK,
+										   animEl: 'save',
+										   icon: Ext.MessageBox.INFO
+										});
+										break;
+									case 2:
+										tindakan_nonmedis_createWindow.hide();
+										tindakan_nonmedis_DataStore.reload();
+										tindakan_nonmedis_createWindow.setDisabled(false);
+										Ext.MessageBox.show({
+										   title: 'INFO',
+										   msg: 'Data Master Tindakan dan Detail Tindakan Non Medis telah sukses diupdate.',
+										   buttons: Ext.MessageBox.OK,
+										   animEl: 'save',
+										   icon: Ext.MessageBox.INFO
+										});
+										break;
+									case 3:
+										tindakan_nonmedis_createWindow.hide();
+										tindakan_nonmedis_DataStore.reload();
+										tindakan_nonmedis_createWindow.setDisabled(false);
+										Ext.MessageBox.show({
+										   title: 'INFO',
+										   msg: 'Data Master Tindakan, Detail Tindakan Medis, dan Detail Tindakan Non Medis telah sukses diupdate.',
+										   buttons: Ext.MessageBox.OK,
+										   animEl: 'save',
+										   icon: Ext.MessageBox.INFO
+										});
+										break;
+									default:
+										tindakan_nonmedis_createWindow.hide();
+										tindakan_nonmedis_DataStore.reload();
+										tindakan_nonmedis_createWindow.setDisabled(false);
+										//Ext.MessageBox.hide();
+										Ext.MessageBox.show({
+										   title: 'Warning',
+										   msg: 'We could\'t not '+msg+' the Tindakan.',
+										   buttons: Ext.MessageBox.OK,
+										   animEl: 'save',
+										   icon: Ext.MessageBox.WARNING
+										});
+										break;
+								}        
+							},
+							failure: function(response){
 								//Ext.MessageBox.hide();
+								tindakan_nonmedis_createWindow.hide();
+								tindakan_nonmedis_DataStore.reload();
+								tindakan_nonmedis_createWindow.setDisabled(false);
+								var result=response.responseText;
 								Ext.MessageBox.show({
-								   title: 'Warning',
-								   msg: 'We could\'t not '+msg+' the Tindakan.',
-								   buttons: Ext.MessageBox.OK,
-								   animEl: 'save',
-								   icon: Ext.MessageBox.WARNING
-								});
-								break;
-						}        
-					},
-					failure: function(response){
+									   title: 'Error',
+									   msg: 'Could not connect to the database. retry later.',
+									   buttons: Ext.MessageBox.OK,
+									   animEl: 'database',
+									   icon: Ext.MessageBox.ERROR
+								});	
+							}                      
+						});
+					}else {
 						//Ext.MessageBox.hide();
 						tindakan_nonmedis_createWindow.hide();
 						tindakan_nonmedis_DataStore.reload();
 						tindakan_nonmedis_createWindow.setDisabled(false);
-						var result=response.responseText;
 						Ext.MessageBox.show({
-							   title: 'Error',
-							   msg: 'Could not connect to the database. retry later.',
-							   buttons: Ext.MessageBox.OK,
-							   animEl: 'database',
-							   icon: Ext.MessageBox.ERROR
-						});	
-					}                      
-				});
-			}else {
-				//Ext.MessageBox.hide();
-				tindakan_nonmedis_createWindow.hide();
-				tindakan_nonmedis_DataStore.reload();
-				tindakan_nonmedis_createWindow.setDisabled(false);
-				Ext.MessageBox.show({
-					title: 'Warning',
-					msg: 'Your Form is not valid!.',
-					buttons: Ext.MessageBox.OK,
-					animEl: 'save',
-					icon: Ext.MessageBox.WARNING
-				});
+							title: 'Warning',
+							msg: 'Your Form is not valid!.',
+							buttons: Ext.MessageBox.OK,
+							animEl: 'save',
+							icon: Ext.MessageBox.WARNING
+						});
+					}
+					
+				}
 			}
-			
 		}
 		
 	}

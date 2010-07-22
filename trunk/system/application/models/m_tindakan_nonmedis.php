@@ -501,10 +501,9 @@ class M_tindakan_nonmedis extends Model{
 								WHERE dnonmedis.dtrawat_id='".$row->dtrawat_id."'";
 						}
 					}
+					$this->db->query($sql_drawat);
 				}
 			}
-			
-			$this->db->query($sql_drawat);
 			
 		}else{
 			//ini artinya: customer di tanggal sekarang belum ada di db.master_jual_rawat
@@ -1118,14 +1117,7 @@ class M_tindakan_nonmedis extends Model{
 		}
 		
 		//function for update record
-	function tindakan_update($trawat_id
-							,$dtrawat_id
-							,$dtrawat_perawatan
-							,$dtrawat_terapis
-							,$dtrawat_jam
-							,$dtrawat_keterangan
-							,$dtrawat_ambil_paket
-							,$dtrawat_status){
+	function tindakan_update($trawat_id ,$trawat_keterangan){
 		$datetime_now=date('Y-m-d H:i:s');
 		/* Checking db.tindakan_detail WHERE db.tindakan_detail.dtrawat_id = $dtrawat_id DAN semua Field,
 		 * JIKA ada salah satu Field yang berubah maka akan di-UPDATE
