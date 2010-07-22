@@ -2022,7 +2022,7 @@ Ext.onReady(function(){
 		  	switch(result){
 		  	case 1:
 				win = window.open('./print/master_terima_faktur.html','master_terima_faktur','height=800,width=600,resizable=1,scrollbars=1, menubar=1');
-				win.print();
+				//win.print();
 				break;
 		  	default:
 				Ext.MessageBox.show({
