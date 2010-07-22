@@ -168,14 +168,14 @@ Ext.onReady(function(){
 		id:'rpt_jpaket_opsiblnField',
 		boxLabel:'Bulan',
 		width:100,
-		name: 'filter_opsi'
+		name: 'filter_opsi',
+		checked: true
 	});
 	
 	rpt_jpaket_opsiallField=new Ext.form.Radio({
 		id:'rpt_jpaket_opsiallField',
 		boxLabel:'Semua',
-		name: 'filter_opsi',
-		checked: true
+		name: 'filter_opsi'
 	});
 	
 	rpt_jpaket_tglawalField= new Ext.form.DateField({
