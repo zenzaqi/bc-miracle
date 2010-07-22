@@ -5,7 +5,7 @@
 <title>Laporan Pesanan Pembelian</title>
 </head>
 
-<body>
+<body onload="window.print();window.close();">
 <table width="700" border="1" cellspacing="0" cellpadding="0">
   <tr>
     <td height="120" valign="top"><table width="100%" border="0" cellspacing="0" cellpadding="0">
