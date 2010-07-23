@@ -1,13 +1,9 @@
 <?
-/* 	These code was generated using phpCIGen v 0.1.b (1/08/2009)
-	#zaqi 		zaqi.smart@gmail.com,http://zenzaqi.blogspot.com, 
-	#CV. Trust Solution, jl. Saronojiwo 19 Surabaya, http://www.ts.co.id
-	
-	+ Module  		: tindakan View
+/* 
+	+ Module  		: report Tindakan View
 	+ Description	: For record view
-	+ Filename 		: v_tindakan.php
- 	+ Author  		: masongbee
- 	+ Created on 27/Oct/2009 14:21:34
+	+ Filename 		: v_report_tindakan.php
+ 	+ Author  		: Fred
 	
 */
 ?>
@@ -108,8 +104,6 @@ var report_tindakanContextMenu;
 //for detail data
 var report_tindakan_detail_DataStore;
 var report_tindakandetailListEditorGrid;
-var report_tindakan_detail_proxy;
-var tindakan_medis_detail_writer;
 
 var today=new Date().format('d-m-Y');
 
@@ -144,7 +138,7 @@ Ext.onReady(function(){
 			url: 'index.php?c=c_report_tindakan&m=get_action', 
 			method: 'POST'
 		}),
-		baseParams:{task: "LIST",start:0,limit:pageS}, // parameter yang di $_POST ke Controller
+		baseParams:{task: "LIST",start:0,limit:pageS, trawat_dokter : 0}, // parameter yang di $_POST ke Controller
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
@@ -195,10 +189,11 @@ Ext.onReady(function(){
 		proxy: new Ext.data.HttpProxy({
 			url: 'index.php?c=c_report_tindakan&m=get_dokter_list', 
 			method: 'POST'
-		}),baseParams: {start: 0, limit: 15 },
+		}),baseParams: {task : "LIST", start: 0, limit: 15 },
 		reader: new Ext.data.JsonReader({
 			root: 'results',
-			totalProperty: 'total'
+			totalProperty: 'total',
+			id : 'karyawan_id'
 		},[
 		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
 			{name: 'karyawan_display', type: 'string', mapping: 'karyawan_nama'},
@@ -217,12 +212,12 @@ Ext.onReady(function(){
   	/* Function for Identify of Window Column Model */
 	report_tindakanColumnModel = new Ext.grid.ColumnModel(
 		[
-		{
+		/*{
 			header: '<div align="center">' + 'Dokter' + '</div>',
 			dataIndex: 'tindakan_dokter',
 			width: 80,
 			sortable: true
-		}, 
+		}, */
 		{
 			header: '<div align="center">' + 'Perawatan' + '</div>',
 			dataIndex: 'tindakan_perawatan',
@@ -254,7 +249,19 @@ Ext.onReady(function(){
 	
 	report_tindakanColumnModel.defaultSortable= true;
 	/* End of Function */
+	
+	
+	var report_tindakan_dokterField=new Ext.form.TextField({
+		id: 'report_tindakan_dokterField',
+		name: 'report_tindakan_dokterField',
+		//dataIndex : 'tindakan_dokter',
+		fieldLabel: '<b>Dokter</b>',
+		width: 100,
+		readOnly: true
+	});
+	
 	 
+
 	sum_kreditColumnModel = new Ext.grid.ColumnModel(
 		[
 		{	
@@ -279,7 +286,7 @@ Ext.onReady(function(){
 		cm: report_tindakanColumnModel, // Nama-nama Columns
 		enableColLock:false,
 		frame: true,
-		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
+		//clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
 	  	width: 800, //940,//1200,	//970,
@@ -291,6 +298,10 @@ Ext.onReady(function(){
 		}),
 		/* Add Control on ToolBar */
 		tbar: [
+		{
+			'text':'Dokter : '
+		},
+		report_tindakan_dokterField,
 		{
 			text: 'Search',
 			tooltip: 'Advanced Search',
@@ -322,7 +333,7 @@ Ext.onReady(function(){
 		cm: sum_kreditColumnModel, // Nama-nama Columns
 		enableColLock:false,
 		frame: true,
-		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
+		//clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
 	  	width: 800, //940,//1200,	//970,
@@ -380,62 +391,6 @@ Ext.onReady(function(){
 		sortInfo:{field: 'dtrawat_id', direction: "ASC"}
 	});
 	/* End of Function */
-
-	cbo_trawat_rawatDataStore = new Ext.data.Store({
-		id: 'cbo_trawat_rawatDataStore',
-		proxy: new Ext.data.HttpProxy({
-			url: 'index.php?c=c_report_tindakan&m=get_tindakan_medis_list', 
-			method: 'POST'
-		}),baseParams: {start: 0, limit: 15 },
-			reader: new Ext.data.JsonReader({
-			root: 'results',
-			totalProperty: 'total',
-			id: 'rawat_id'
-		},[
-			{name: 'trawat_rawat_value', type: 'int', mapping: 'rawat_id'},
-			{name: 'trawat_rawat_harga', type: 'float', mapping: 'rawat_harga'},
-			{name: 'trawat_rawat_kode', type: 'string', mapping: 'rawat_kode'},
-			{name: 'trawat_rawat_group', type: 'string', mapping: 'group_nama'},
-			{name: 'trawat_rawat_kategori', type: 'string', mapping: 'kategori_nama'},
-			{name: 'trawat_rawat_du', type: 'float', mapping: 'rawat_du'},
-			{name: 'trawat_rawat_dm', type: 'float', mapping: 'rawat_dm'},
-			{name: 'trawat_rawat_display', type: 'string', mapping: 'rawat_nama'}
-		]),
-		sortInfo:{field: 'trawat_rawat_display', direction: "ASC"}
-	});
-	var cbo_trawat_rawat_tpl = new Ext.XTemplate(
-        '<tpl for="."><div class="search-item">',
-            '<span>{trawat_rawat_kode}| <b>{trawat_rawat_display}</b>',
-		'</div></tpl>'
-    );
-	
-	var combo_trawat_rawat=new Ext.form.ComboBox({
-			//store: trawat_medis_perawatanDataStore,
-			mode: 'remote',
-			typeAhead: false,
-			displayField: 'perawatan_display',
-			valueField: 'perawatan_value',
-			loadingText: 'Searching...',
-			pageSize:10,
-			hideTrigger:false,
-			//tpl: trawat_rawat_tpl,
-			//applyTo: 'search',
-			itemSelector: 'div.search-item',
-			triggerAction: 'all',
-			lazyRender:true,
-	});
-	
-	var combo_dapp_dokter=new Ext.form.ComboBox({
-			store: cbo_dtindakan_dokterDataStore,
-			mode: 'remote',
-			displayField: 'karyawan_username',
-			valueField: 'karyawan_value',
-			tpl: dokter_tpl,
-			loadingText: 'Searching...',
-			itemSelector: 'div.search-item',
-			triggerAction: 'all',
-			anchor: '95%'
-	});
 	
 	var checkColumn = new Ext.grid.CheckColumn({
 		header: 'Ambil Paket',
@@ -444,170 +399,11 @@ Ext.onReady(function(){
 		width: 75
 	});
 	
-	//declaration of detail coloumn model
-	tindakan_medisdetail_ColumnModel = new Ext.grid.ColumnModel(
-		[
-		{
-			header: '<div align="center">' + 'Status' + '</div>',
-			dataIndex: 'dtrawat_status',
-			width: 80,	//100,
-			sortable: true,
-			editable:false,
-			editor: new Ext.form.ComboBox({
-				typeAhead: true,
-				triggerAction: 'all',
-				store:new Ext.data.SimpleStore({
-					fields:['dtrawat_status_value', 'dtrawat_status_display'],
-					data: [['batal','batal'],['selesai','selesai'],['datang','datang']]
-					}),
-				mode: 'local',
-               	displayField: 'dtrawat_status_display',
-               	valueField: 'dtrawat_status_value',
-               	lazyRender:true,
-               	listClass: 'x-combo-list-small'
-            })
-		},
-	checkColumn]
-	);
-	tindakan_medisdetail_ColumnModel.defaultSortable= true;
-	//eof
-	
-	//declaration of detail list editor grid
-	report_tindakandetailListEditorGrid =  new Ext.grid.EditorGridPanel({
-		id: 'report_tindakandetailListEditorGrid',
-		el: 'fp_report_tindakan_detail',
-		title: 'Detail Tindakan Medis',
-		height: 200,
-		width: 888,
-		autoScroll: true,
-		store: report_tindakan_detail_DataStore, // DataStore
-		colModel: tindakan_medisdetail_ColumnModel, // Nama-nama Columns
-		enableColLock:false,
-		region: 'center',
-        margins: '0 5 5 5',
-		plugins: [checkColumn],
-		frame: true,
-		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
-		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
-		viewConfig: { forceFit:true},
-
-		/* Add Control on ToolBar */
-		tbar: [
-		{
-			text: 'Delete',
-			tooltip: 'Delete detail selected record',
-			iconCls:'icon-delete',
-			disabled: true,
-			handler: tindakan_medisdetail_confirm_delete
-		}
-		]
-	});
-	//eof
-	
-	//function for refresh detail
-	function refresh_tindakan_medisdetail(){
-
-	}
-	//eof
-
-	/* Function for Delete Confirm of detail */
-	function tindakan_medisdetail_confirm_delete(){
-		// only one record is selected here
-		if(report_tindakandetailListEditorGrid.selModel.getCount() == 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', tindakan_medisdetail_delete);
-		} else if(report_tindakandetailListEditorGrid.selModel.getCount() > 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', tindakan_medisdetail_delete);
-		} else {
-			Ext.MessageBox.show({
-				title: 'Warning',
-				msg: 'You can\'t really delete something you haven\'t selected?',
-				buttons: Ext.MessageBox.OK,
-				animEl: 'save',
-				icon: Ext.MessageBox.WARNING
-			});
-		}
-	}
-
-	/* START JUAL DETAIL_NON-MEDIS */
-	/*Detail Declaration */
-		
-	// Function for json reader of detail
-	var dtindakan_jual_nonmedis_reader=new Ext.data.JsonReader({
-		root: 'results',
-		totalProperty: 'total',
-		id: ''
-	},[
-	/* dataIndex => insert intoperawatan_ColumnModel, Mapping => for initiate table column */ 
-			{name: 'dtrawat_id', type: 'int', mapping: 'dtrawat_id'}, 
-			{name: 'dtrawat_master', type: 'int', mapping: 'dtrawat_master'}, 
-			{name: 'dtrawat_perawatan', type: 'int', mapping: 'dtrawat_perawatan'}, 
-			{name: 'dtrawat_petugas1', type: 'int', mapping: 'dtrawat_petugas1'}, 
-			{name: 'dtrawat_petugas2', type: 'int', mapping: 'dtrawat_petugas2'}, 
-			{name: 'dtrawat_jam', type: 'string', mapping: 'dtrawat_jam'}, 
-			{name: 'dtrawat_kategori', type: 'string', mapping: 'dtrawat_kategori'}, 
-			{name: 'dtrawat_status', type: 'string', mapping: 'dtrawat_status'},
-			{name: 'dtrawat_keterangan', type: 'string', mapping: 'dtrawat_keterangan'} 
-	]);
-	//eof
-	
-	//function for json writer of detail
-	var dtindakan_jual_nonmedis_writer = new Ext.data.JsonWriter({
-		encode: true,
-		writeAllFields: false
-	});
-	//eof
-	
-	/* Function for Retrieve DataStore of detail*/
-	dtindakan_jual_nonmedisDataStore = new Ext.data.Store({
-		id: 'dtindakan_jual_nonmedisDataStore',
-		proxy: new Ext.data.HttpProxy({
-			url: 'index.php?c=c_report_tindakan&m=dtindakan_jual_nonmedis_list', 
-			method: 'POST'
-		}),
-		reader: dtindakan_jual_nonmedis_reader,
-		//baseParams:{master_id: report_tindakan_idField.getValue()},
-		sortInfo:{field: 'dtrawat_id', direction: "ASC"}
-	});
-	/* End of Function */
-	
-	//function for editor of detail
-	var editor_dtindakan_jual_nonmedis= new Ext.ux.grid.RowEditor({
-        saveText: 'Update'
-    });
-	//eof
-	
-	var terapis_tpl = new Ext.XTemplate(
-        '<tpl for="."><div class="search-item">',
-            '<span><b>{dtrawat_karyawan_username}</b> | {dtrawat_karyawan_display} | <b>{dtrawat_karyawan_jmltindakan}</b></span>',
-        '</div></tpl>'
-    );
-	
-	//declaration of detail coloumn model
-	tindakan_nonmedis_detailColumnModel = new Ext.grid.ColumnModel(
-		[
-		{
-			header: '<div align="center">' + 'Perawatan' + '</div>',
-			dataIndex: 'dtrawat_perawatan',
-			width: 290,
-			sortable: true
-		},
-
-		{
-			header: '<div align="center">' + 'Detail Keterangan' + '</div>',
-			dataIndex: 'dtrawat_keterangan',
-			width: 200,
-			sortable: true,
-			editor: new Ext.form.TextField({
-				maxLength: 250,
-			})
-		}]
-	);
-	tindakan_nonmedis_detailColumnModel.defaultSortable= true;
-	//eof
 
 	/* Function for action list search */
 	function report_tindakan_search(){
 		// render according to a SQL date format.
+		
 		
 		if(is_report_tindakan_searchform_valid())
 		{
@@ -615,12 +411,27 @@ Ext.onReady(function(){
 		var report_tindakan_tgl_start_search=null;
 		var report_tindakan_tgl_end_search=null;
 		var report_tindakan_dokter_search=null;
+		
+	
+		cbo_dtindakan_dokterDataStore.load({
+		 	callback: function(r,opt,success){
+				if(success==true){
+					var j=cbo_dtindakan_dokterDataStore.findExact('karyawan_username',report_tindakan_dokterSearchField.getValue(),0);
+					if(j>-1){
+						var dokter_record=cbo_dtindakan_dokterDataStore.getAt(j);
+						report_tindakan_dokterField.setValue(dokter_record.data.karyawan_username);
+					}
+				}
+			}
+		});
 
 		if(report_tindakan_idSearchField.getValue()!==null){report_tindakan_id_search=report_tindakan_idSearchField.getValue();}
 		if(Ext.getCmp('report_tindakan_tglStartSearchField').getValue()!==null){report_tindakan_tgl_start_search=Ext.getCmp('report_tindakan_tglStartSearchField').getValue();}
 		if(Ext.getCmp('report_tindakan_tglEndSearchField').getValue()!==null){report_tindakan_tgl_end_search=Ext.getCmp('report_tindakan_tglEndSearchField').getValue();}
 		if(report_tindakan_dokterSearchField.getValue()!==null){report_tindakan_dokter_search=report_tindakan_dokterSearchField.getValue();}
 		// change the store parameters
+		
+		
 		report_tindakanDataStore.baseParams = {
 			task: 'SEARCH',
 			//variable here
@@ -760,6 +571,8 @@ Ext.onReady(function(){
 	function report_tindakan_reset_formSearch(){
 		report_tindakan_idSearchField.reset();
 		report_tindakan_idSearchField.setValue(null);
+		report_tindakan_dokterSearchField.reset();
+		report_tindakan_dokterSearchField.setValue(null);
 		Ext.getCmp('report_tindakan_tglStartSearchField').reset();
 		Ext.getCmp('report_tindakan_tglStartSearchField').setValue(null);
 		Ext.getCmp('report_tindakan_tglEndSearchField').reset();
@@ -794,6 +607,7 @@ Ext.onReady(function(){
 	}
   	/* End Function */
 	
+
 	/* Function for print List Grid */
 	function report_tindakan_print(){
 		var searchquery = "";

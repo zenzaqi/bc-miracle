@@ -48,10 +48,20 @@ class C_master_jual_produk extends Controller {
 			$tgl_awal=$tahun."-".$bulan;
 			$data["periode"]=get_ina_month_name($bulan,'long')." ".$tahun;
 		}else if($periode=="tanggal"){
-			$tgl_awal_show = $tgl_awal;
-			$tgl_akhir_show = $tgl_akhir;
-			$tgl_awal_show = date("d-m-Y");
-			$tgl_akhir_show = date("d-m-Y");
+			$date = substr($tgl_awal,8,2);
+			$month = substr($tgl_awal,5,2);
+			$year = substr($tgl_awal,0,4);
+			$tgl_awal_show = $date.'-'.$month.'-'.$year;
+			
+			$date_akhir = substr($tgl_akhir,8,2);
+			$month_akhir = substr($tgl_akhir,5,2);
+			$year_akhir = substr($tgl_akhir,0,4);
+			$tgl_akhir_show = $date_akhir.'-'.$month_akhir.'-'.$year_akhir;
+			
+			//$tgl_awal_show = $tgl_awal;
+			//$tgl_awal_show = date("d-m-Y", $tgl_awal);
+			//$tgl_akhir_show = $tgl_akhir;
+			//$tgl_akhir_show = date("d-m-Y", $tgl_akhir);
 			$data["periode"]="Periode : ".$tgl_awal_show." s/d ".$tgl_akhir_show.", ";
 		}
 		
