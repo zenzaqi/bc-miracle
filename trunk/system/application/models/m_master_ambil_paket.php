@@ -38,7 +38,7 @@ class M_master_ambil_paket extends Model{
 						karyawan_id,karyawan_nama,karyawan_username
 					FROM karyawan 
 					INNER JOIN jabatan ON(karyawan_jabatan=jabatan_id) 
-					WHERE karyawan_aktif='Aktif' AND (jabatan_nama='Dokter' OR jabatan_nama='Therapist')";
+					WHERE karyawan_aktif='Aktif' AND (jabatan_nama='Dokter' OR jabatan_nama='Therapist' OR jabatan_nama='Staff')";
 			$query = $this->db->query($sql);
 			$nbrows = $query->num_rows();
 			if($nbrows>0){
