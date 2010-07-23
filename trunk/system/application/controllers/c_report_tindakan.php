@@ -1,12 +1,10 @@
 <?php
-/* 	These code was generated using phpCIGen v 0.1.b (21/04/2009)
-	#zaqi 		zaqi.smart@gmail.com,http://zenzaqi.blogspot.com, 
-	
-	+ Module  		: tindakan Controller
+/* 	
+	+ Module  		: Report Tindakan Dokter Controller
 	+ Description	: For record controller process back-end
-	+ Filename 		: C_tindakan_medis.php
- 	+ Author  		: masongbee
- 	+ Created on 27/Oct/2009 14:21:34
+	+ Filename 		: c_report_tindakan.php
+ 	+ Author  		: Fred
+
 	
 */
 
@@ -20,9 +18,6 @@ class C_report_tindakan extends Controller {
 		$this->load->plugin('to_excel');
 	}
 	
-	function punya_paket_checking(){
-		$this->m_report_tindakan->punya_paket_checking();
-	}
 	
 	//set index
 	function index(){
@@ -38,12 +33,6 @@ class C_report_tindakan extends Controller {
 		echo $result;
 	}
 
-	//get master id, note: not done yet
-	function get_master_id(){
-		$result=$this->m_tindakan_medis->get_master_id();
-		echo $result;
-	}
-	//
 
 	//event handler action
 	function get_action(){
@@ -55,7 +44,7 @@ class C_report_tindakan extends Controller {
 			case "LIST2":
 				$this->report_tindakan_list2();
 				break;
-			case "UPDATE":
+			/*case "UPDATE":
 				$this->report_tindakan_update();
 				break;
 			case "CREATE":
@@ -63,7 +52,7 @@ class C_report_tindakan extends Controller {
 				break;
 			case "DELETE":
 				$this->report_tindakan_delete();
-				break;
+				break;*/
 			case "SEARCH":
 				$this->report_tindakan_search();
 				break;
