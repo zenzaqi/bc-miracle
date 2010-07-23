@@ -18,6 +18,21 @@ class M_master_ambil_paket extends Model{
 			parent::Model();
 		}
 		
+	/* UPDATE db.detail_jual_paket.dpaket_sisa_paket */
+	function total_sisa_paket_update($dapaket_dpaket, $dapaket_jpaket, $dapaket_paket){
+		$sql_sisa_paket = "UPDATE detail_jual_paket
+			LEFT JOIN paket ON(dpaket_paket=paket_id)
+			LEFT JOIN vu_total_ambil_paket ON(vu_total_ambil_paket.dapaket_dpaket=dpaket_id 
+				AND vu_total_ambil_paket.dapaket_jpaket=detail_jual_paket.dpaket_master
+				AND vu_total_ambil_paket.dapaket_paket=detail_jual_paket.dpaket_paket)
+			SET dpaket_sisa_paket=((dpaket_jumlah*paket_jmlisi)- IF(isnull(vu_total_ambil_paket.total_ambil_paket),0,vu_total_ambil_paket.total_ambil_paket))
+			WHERE detail_jual_paket.dpaket_id='$dapaket_dpaket'
+				AND detail_jual_paket.dpaket_master='$dapaket_jpaket'
+				AND detail_jual_paket.dpaket_paket='$dapaket_paket'";
+		$this->db->query($sql_sisa_paket);
+		
+	}
+		
 		function get_referal_list(){
 			$sql=  "SELECT 
 						karyawan_id,karyawan_nama,karyawan_username
@@ -505,15 +520,27 @@ class M_master_ambil_paket extends Model{
 		}
 		
 		function ambil_paket_batal($dapaket_id){
-			//Membatalkan satu pengambilan paket /
-			if (sizeof($dapaket_id) == 1){
-				$query = "UPDATE detail_ambil_paket SET dapaket_stat_dok='Batal'
-					WHERE date_format(dapaket_date_create, '%Y-%m-%d')=date_format(now(), '%Y-%m-%d') AND dapaket_id = ".$dapaket_id[0];
-				$this->db->query($query);
-				if($this->db->affected_rows()>0)
-					return '1';
-				else
+			$sql = "SELECT dapaket_dpaket ,dapaket_jpaket ,dapaket_paket FROM detail_ambil_paket WHERE dapaket_id='".$dapaket_id[0]."'";
+			$rs = $this->db->query($sql);
+			if($rs->num_rows()){
+				$record = $rs->row_array();
+				$dapaket_dpaket = $record['dapaket_dpaket'];
+				$dapaket_jpaket = $record['dapaket_jpaket'];
+				$dapaket_paket = $record['dapaket_paket'];
+				
+				//Membatalkan satu pengambilan paket /
+				if (sizeof($dapaket_id) == 1){
+					$query = "UPDATE detail_ambil_paket SET dapaket_stat_dok='Batal'
+						WHERE date_format(dapaket_date_create, '%Y-%m-%d')=date_format(now(), '%Y-%m-%d') AND dapaket_id = ".$dapaket_id[0];
+					$this->db->query($query);
+					if($this->db->affected_rows()>0){
+						$this->total_sisa_paket_update($dapaket_dpaket ,$dapaket_jpaket ,$dapaket_paket);
+						return '1';
+					}else
+						return '0';
+				}else{
 					return '0';
+				}
 			}else{
 				return '0';
 			}
