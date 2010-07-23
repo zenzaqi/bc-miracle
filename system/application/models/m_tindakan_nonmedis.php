@@ -370,9 +370,14 @@ class M_tindakan_nonmedis extends Model{
 						
 						$this->detail_pakai_cabin_insert($dtrawat_id, $dtrawat_perawatan, $jrawat_nobukti ,$cust_id);
 					}
+					return 1;
 					
+				}else{
+					return 0;
 				}
 				
+			}else{
+				return 0;
 			}
 		}
 	}
