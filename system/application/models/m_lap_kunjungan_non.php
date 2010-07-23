@@ -1,14 +1,8 @@
-<? /* 	These code was generated using phpCIGen v 0.1.a (21/04/2009)
-	#zaqi 		zaqi.smart@gmail.com,http://zenzaqi.blogspot.com, 
-    #songbee	mukhlisona@gmail.com
-	#CV. Trust Solution, jl. Saronojiwo 19 Surabaya, http://www.ts.co.id
-	
-	+ Module  		: tindakan Model
+<? /* 
+	+ Module  		: Laporan Kunjungan Non Transaksi Model
 	+ Description	: For record model process back-end
-	+ Filename 		: c_tindakan.php
- 	+ Author  		: masongbee
- 	+ Created on 27/Oct/2009 14:21:34
-	
+	+ Filename 		: c_lap_kunjungan_non.php
+ 	+ Author  		: Fred
 */
 
 class M_lap_kunjungan_non extends Model{
@@ -17,24 +11,9 @@ class M_lap_kunjungan_non extends Model{
 	function M_lap_kunjungan_non() {
 		parent::Model();
 	}
-			
-	//get master id, note : not done yet
-	function get_master_id() {
-		$query = "SELECT max(trawat_id) as master_id from tindakan";
-		$result = $this->db->query($query);
-		if($result->num_rows()){
-			$data=$result->row();
-			$master_id=$data->master_id;
-			return $master_id;
-		}else{
-			return '0';
-		}
-	}
-	//eof
-
 		
-		//function for get list record
-		function lap_kunjungan_non_list($filter,$start,$end){
+	//function for get list record
+	function lap_kunjungan_non_list($filter,$start,$end){
 			$date_now=date('Y-m-d');
 			//$query="select count(distinct jpaket_cust) as jumlah_total
 			//from master_jual_paket";
@@ -118,12 +97,9 @@ where tgl_tindakan = '$date_now'";
 			}
 		}	
 		
-		//function for advanced search record
-		function lap_kunjungan_non_search($lap_kunjungan_id ,$trawat_tglapp_start ,$trawat_tglapp_end, $start,$end){
+	//function for advanced search record
+	function lap_kunjungan_non_search($lap_kunjungan_id ,$trawat_tglapp_start ,$trawat_tglapp_end, $start,$end){
 			//full query
-			//$query="SELECT * FROM vu_tindakan WHERE kategori_nama='Medis'";
-			//$query = "SELECT * FROM vu_tindakan WHERE (kategori_nama='Medis' OR dtrawat_petugas2='0')";
-			//$query ="select k.karyawan_username, p.rawat_nama, count(p.rawat_nama) as Jumlah_rawat, p.rawat_kredit, p.rawat_kredit*count(p.rawat_nama) as Total_kredit from tindakan_detail d left outer join karyawan k on k.karyawan_id=d.dtrawat_petugas1 left outer join perawatan p on p.rawat_id = d.dtrawat_perawatan";
 			$query = "select count(distinct cust), tgl_tindakan from
 (
 	(
@@ -177,8 +153,8 @@ where tgl_tindakan = '$date_now'";
 			}
 		}
 		
-				//function for advanced search record
-		function lap_kunjungan_non_search2($lap_kunjungan_id ,$trawat_tglapp_start ,$trawat_tglapp_end ,$trawat_dokter,$start,$end){
+	//function for advanced search record
+	function lap_kunjungan_non_search2($lap_kunjungan_id ,$trawat_tglapp_start ,$trawat_tglapp_end ,$trawat_dokter,$start,$end){
 			//full query
 			/*$query ="select sum(vu_kredit.total_kredit) as grand_total from(
 select k.karyawan_username, p.rawat_nama, count(p.rawat_nama) as Jumlah_rawat, p.rawat_kredit, p.rawat_kredit*count(p.rawat_nama) as Total_kredit from tindakan_detail d left outer join karyawan k on k.karyawan_id=d.dtrawat_petugas1 left outer join perawatan p on p.rawat_id = d.dtrawat_perawatan";
@@ -232,8 +208,8 @@ $query = "select count(distinct cust) from
 			}
 		}
 
-		//function for print record
-		function lap_kunjungan_non_print($trawat_id ,$trawat_cust ,$trawat_keterangan ,$option,$filter){
+	//function for print record
+	/*function lap_kunjungan_non_print($trawat_id ,$trawat_cust ,$trawat_keterangan ,$option,$filter){
 			//full query
 			$query="select * from tindakan";
 			if($option=='LIST'){
@@ -256,10 +232,10 @@ $query = "select count(distinct cust) from
 				$result = $this->db->query($query);
 			}
 			return $result;
-		}
+		}*/
 		
-		//function  for export to excel
-		function lap_kunjungan_non_export_excel($trawat_id ,$trawat_dokter ,$option,$filter){
+	//function  for export to excel
+	/*function lap_kunjungan_non_export_excel($trawat_id ,$trawat_dokter ,$option,$filter){
 			//full query
 			$query="select k.karyawan_username, p.rawat_nama, count(p.rawat_nama) as Jumlah_rawat, p.rawat_kredit, p.rawat_kredit*count(p.rawat_nama) as Total_kredit from tindakan_detail d left outer join karyawan k on k.karyawan_id=d.dtrawat_petugas1 left outer join perawatan p on p.rawat_id = d.dtrawat_perawatan";
 			
@@ -280,7 +256,7 @@ $query = "select count(distinct cust) from
 				$result = $this->db->query($query);	
 			}
 			return $result;
-		}
+		}*/
 		
 }
 ?>

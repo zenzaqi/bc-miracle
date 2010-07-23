@@ -1,13 +1,9 @@
 <?php
-/* 	These code was generated using phpCIGen v 0.1.b (21/04/2009)
-	#zaqi 		zaqi.smart@gmail.com,http://zenzaqi.blogspot.com, 
-	
-	+ Module  		: tindakan Controller
+/* 
+	+ Module  		: Laporan Kunjungan Non Transaksi Controller
 	+ Description	: For record controller process back-end
-	+ Filename 		: C_tindakan_medis.php
- 	+ Author  		: masongbee
- 	+ Created on 27/Oct/2009 14:21:34
-	
+	+ Filename 		: c_lap_kunjungan_non.php
+ 	+ Author  		: Fred
 */
 
 //class of tindakan
@@ -26,12 +22,6 @@ class C_lap_kunjungan_non extends Controller {
 		$this->load->view('main/v_lap_kunjungan_non');
 	}
 
-	//get master id, note: not done yet
-	function get_master_id(){
-		$result=$this->m_tindakan_medis->get_master_id();
-		echo $result;
-	}
-	//
 
 	//event handler action
 	function get_action(){
@@ -43,7 +33,7 @@ class C_lap_kunjungan_non extends Controller {
 			case "LIST2":
 				$this->lap_totalkunjungan_non_list();
 				break;
-			case "UPDATE":
+			/*case "UPDATE":
 				$this->report_tindakan_update();
 				break;
 			case "CREATE":
@@ -51,7 +41,7 @@ class C_lap_kunjungan_non extends Controller {
 				break;
 			case "DELETE":
 				$this->report_tindakan_delete();
-				break;
+				break;*/
 			case "SEARCH":
 				$this->lap_kunjungan_non_search();
 				break;

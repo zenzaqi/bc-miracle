@@ -1,14 +1,10 @@
 <?
 /* 	These code was generated using phpCIGen v 0.1.b (1/08/2009)
-	#zaqi 		zaqi.smart@gmail.com,http://zenzaqi.blogspot.com, 
-	#CV. Trust Solution, jl. Saronojiwo 19 Surabaya, http://www.ts.co.id
 	
-	+ Module  		: tindakan View
 	+ Description	: For record view
-	+ Filename 		: v_tindakan.php
- 	+ Author  		: masongbee
- 	+ Created on 27/Oct/2009 14:21:34
-	
+	+ Filename 		: v_lap_kunjungan.php
+ 	+ Author  		: Freddy
+
 */
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -236,10 +232,12 @@ Ext.onReady(function(){
 		[
 		{	
 			align : 'Right',
-			header: '<div align="center">' + 'Total' + '</div>',
+			//header: '<div align="center">' + '' + '</div>',
 			dataIndex: '',
+			//hidden : true,
+			disabled : true,
 			width: 100,	//55,
-			sortable: true
+			//sortable: true
 		},
 		{	
 			align : 'Right',
@@ -286,7 +284,7 @@ Ext.onReady(function(){
 		cm: lap_kunjunganColumnModel, // Nama-nama Columns
 		enableColLock:false,
 		frame: true,
-		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
+		//clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
 	  	width: 500, //940,//1200,	//970,
@@ -331,7 +329,7 @@ Ext.onReady(function(){
 		cm: lap_totalkunjungan_nonColumnModel, // Nama-nama Columns
 		enableColLock:false,
 		frame: true,
-		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
+		//clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
 	  	width: 500, //940,//1200,	//970,
