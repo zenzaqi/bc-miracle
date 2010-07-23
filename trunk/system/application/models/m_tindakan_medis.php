@@ -428,6 +428,8 @@ class M_tindakan_medis extends Model{
 					}else{
 						return 0;
 					}
+				}else{
+					return 0;
 				}
 				
 			}else{
