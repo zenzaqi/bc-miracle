@@ -1,13 +1,9 @@
 <?
-/* 	These code was generated using phpCIGen v 0.1.b (1/08/2009)
-	#zaqi 		zaqi.smart@gmail.com,http://zenzaqi.blogspot.com, 
-	#CV. Trust Solution, jl. Saronojiwo 19 Surabaya, http://www.ts.co.id
-	
-	+ Module  		: tindakan View
-	+ Description	: For record view
-	+ Filename 		: v_tindakan.php
- 	+ Author  		: masongbee
- 	+ Created on 27/Oct/2009 14:21:34
+/* 
+	+ Module  		: Laporan Kunjungan Non Transaksi View
+	+ Description	: Melihan Laporan Kunjungan Non-Transaksi
+	+ Filename 		: v_lap_kunjungan_non.php
+ 	+ Author  		: Fred
 	
 */
 ?>
@@ -107,10 +103,7 @@ var lap_kunjungan_nonSearchWindow;
 var lap_kunjungan_nonSelectedRow;
 var lap_kunjungan_nonContextMenu;
 //for detail data
-var lap_kunjungan_non_detail_DataStore;
 var lap_kunjungannondetailListEditorGrid;
-var lap_kunjungan_non_detail_proxy;
-var lap_kunjungan_non_detail_writer;
 
 var today=new Date().format('d-m-Y');
 
@@ -252,11 +245,13 @@ Ext.onReady(function(){
 			text: 'Export Excel',
 			tooltip: 'Export to Excel(.xls) Document',
 			iconCls:'icon-xls',
+			disabled : true,
 			handler: lap_kunjungan_non_export_excel
 		}, '-',{
 			text: 'Print',
 			tooltip: 'Print Document',
 			iconCls:'icon-print',
+			disabled : true,
 			handler: lap_kunjungan_non_print  
 		}
 		]
@@ -291,12 +286,14 @@ Ext.onReady(function(){
 			text: 'Print',
 			tooltip: 'Print Document',
 			iconCls:'icon-print',
+			disabled : true,
 			handler: lap_kunjungan_non_print 
 		},
 		{ 
 			text: 'Export Excel', 
 			tooltip: 'Export to Excel(.xls) Document',
 			iconCls:'icon-xls',
+			disabled : true,
 			handler: lap_kunjungan_non_export_excel 
 		}
 		]
@@ -319,21 +316,6 @@ Ext.onReady(function(){
 	lap_totalkunjungan_nonDataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
 	//lap_kunjungan_nonListEditorGrid.on('afteredit', tindakan_medis_update); // inLine Editing Record
 	
-	/*Detail Declaration */	
-	/* Function for Retrieve DataStore of detail*/
-	lap_kunjungan_non_detail_DataStore = new Ext.data.Store({
-		id: 'lap_kunjungan_non_detail_DataStore',
-		proxy: new Ext.data.HttpProxy({
-			url: 'index.php?c=c_lap_kunjungan_non&m=detail_tindakan_detail_list', 
-			method: 'POST'
-		}),
-		//reader: report_tindakan_detail_reader,
-		//baseParams:{master_id: lap_kunjungan_idField.getValue()},
-		sortInfo:{field: 'dtrawat_id', direction: "ASC"}
-	});
-	/* End of Function */
-
-
 	/* Function for action list search */
 	function lap_kunjungan_non_search(){
 		// render according to a SQL date format.

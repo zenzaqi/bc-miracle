@@ -1,12 +1,10 @@
 <?php
 /* 	These code was generated using phpCIGen v 0.1.b (21/04/2009)
-	#zaqi 		zaqi.smart@gmail.com,http://zenzaqi.blogspot.com, 
 	
-	+ Module  		: tindakan Controller
+	+ Module  		: Laporan Kunjungan Controller
 	+ Description	: For record controller process back-end
-	+ Filename 		: C_tindakan_medis.php
- 	+ Author  		: masongbee
- 	+ Created on 27/Oct/2009 14:21:34
+	+ Filename 		: C_lap_kunjungan.php
+ 	+ Author  		: Freddy
 	
 */
 
@@ -25,14 +23,7 @@ class C_lap_kunjungan extends Controller {
 		$this->load->helper('asset');
 		$this->load->view('main/v_lap_kunjungan');
 	}
-	
 
-	//get master id, note: not done yet
-	function get_master_id(){
-		$result=$this->m_tindakan_medis->get_master_id();
-		echo $result;
-	}
-	//
 
 	//event handler action
 	function get_action(){
@@ -44,7 +35,7 @@ class C_lap_kunjungan extends Controller {
 			case "LIST2":
 				$this->lap_kunjungan_non_list();
 				break;
-			case "UPDATE":
+			/*case "UPDATE":
 				$this->report_tindakan_update();
 				break;
 			case "CREATE":
@@ -52,7 +43,7 @@ class C_lap_kunjungan extends Controller {
 				break;
 			case "DELETE":
 				$this->report_tindakan_delete();
-				break;
+				break;*/
 			case "SEARCH":
 				$this->lap_kunjungan_search();
 				break;
@@ -112,7 +103,7 @@ class C_lap_kunjungan extends Controller {
 		echo $result;
 	}
 
-		function lap_kunjungan_search2(){
+	function lap_kunjungan_search2(){
 		//POST varibale here
 		$lap_kunjungan_id=trim(@$_POST["lap_kunjungan_id"]);
 		if(trim(@$_POST["trawat_tglapp_start"])!="")
