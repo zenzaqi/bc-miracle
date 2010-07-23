@@ -62,7 +62,7 @@ var pageS=15;
 
 /* declare variable here */
 var cust_idField;
-var cust_nolamaField;
+//var cust_nolamaField;
 var cust_noField;
 var cust_memberField;
 var cust_namaField;
@@ -159,7 +159,7 @@ var editor_cust_note;
 	/* Reset form before loading */
 	function customer_reset_form(){
 		cust_noField.reset();
-		cust_nolamaField.reset();
+		//cust_nolamaField.reset();
 		cust_memberField.reset();
 		cust_namaField.reset();
 		cust_panggilanField.reset();
@@ -207,8 +207,8 @@ var editor_cust_note;
 		cust_cpField.reset();
 		cust_cptelpField.reset();
 		
-		cust_noField.setValue(null);
-		cust_nolamaField.setValue(null);
+		cust_noField.setValue('(Auto)');
+		//cust_nolamaField.setValue(null);
 		cust_memberField.setValue(null);
 		cust_namaField.setValue(null);
 		cust_panggilanField.setValue(null);
@@ -291,7 +291,7 @@ var editor_cust_note;
 	/* setValue to EDIT */
 	function customer_set_form(){
 		cust_noField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_no'));
-		cust_nolamaField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_nolama'));
+		//cust_nolamaField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_nolama'));
 		cust_namaField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_nama'));
 		cust_panggilanField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_panggilan'));
 		cust_kelaminField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_kelamin'));
@@ -559,7 +559,7 @@ var editor_cust_note;
 
 		///if(cust_idSearchField.getValue()!==null){cust_id_search=cust_idSearchField.getValue();}
 		if(cust_noSearchField.getValue()!==null){cust_no_search=cust_noSearchField.getValue();}
-		if(cust_nolamaSearchField.getValue()!==null){cust_nolama_search=cust_nolamaSearchField.getValue();}
+		//if(cust_nolamaSearchField.getValue()!==null){cust_nolama_search=cust_nolamaSearchField.getValue();}
 		if(cust_namaSearchField.getValue()!==null){cust_nama_search=cust_namaSearchField.getValue();}
 		if(cust_kelaminSearchField.getValue()!==null){cust_kelamin_search=cust_kelaminSearchField.getValue();}
 		if(cust_alamatSearchField.getValue()!==null){cust_alamat_search=cust_alamatSearchField.getValue();}
@@ -650,7 +650,7 @@ var editor_cust_note;
 
 	function customer_reset_SearchForm(){
 		cust_noSearchField.reset();
-		cust_nolamaSearchField.reset();
+		//cust_nolamaSearchField.reset();
 		cust_namaSearchField.reset();
 		cust_kelaminSearchField.reset();
 		cust_alamatSearchField.reset();
@@ -1193,7 +1193,7 @@ var editor_cust_note;
 		
 		cust_id_create_pk=get_pk_id();
 		if(cust_noField.getValue()!== null){cust_no_create = cust_noField.getValue();}
-		if(cust_nolamaField.getValue()!== null){cust_nolama_create = cust_nolamaField.getValue();}
+		//if(cust_nolamaField.getValue()!== null){cust_nolama_create = cust_nolamaField.getValue();}
 		if(cust_namaField.getValue()!== null){cust_nama_create = cust_namaField.getValue();}
 		if(cust_panggilanField.getValue()!== null){cust_panggilan_create = cust_panggilanField.getValue();}
 		if(cust_kelaminField.getValue()!== null){cust_kelamin_create = cust_kelaminField.getValue();}
@@ -2504,18 +2504,20 @@ Ext.onReady(function(){
 	/* Identify  cust_no Field */
 	cust_noField= new Ext.form.TextField({
 		id: 'cust_noField',
-		fieldLabel: 'No Customer <span style="color: #ec0000">*</span>',
+		fieldLabel: 'No Customer',
 		maxLength: 50,
+		readOnly : true,
+		emptyText : '(Auto)',
 		allowBlank: true,
 		anchor: '50%'
 	});
 	
-	cust_nolamaField= new Ext.form.TextField({
+	/*cust_nolamaField= new Ext.form.TextField({
 		id: 'cust_nolamaField',
 		fieldLabel: 'No Customer (Lama)',
 		maxLength: 50,
 		anchor: '50%'
-	});
+	});*/
 	/* Identify  cust_nama Field */
 	cust_namaField= new Ext.form.TextField({
 		id: 'cust_namaField',
@@ -3146,7 +3148,7 @@ Ext.onReady(function(){
 						columnWidth:0.5,
 						layout: 'form',
 						border:false,
-						items: [cust_nolamaField, cust_noField, cust_memberField, cust_namaField, cust_panggilanField, cust_alamat_group, cust_alamat2_group, cust_kontak_group, contact_personGroup] 
+						items: [cust_noField, cust_memberField, cust_namaField, cust_panggilanField, cust_alamat_group, cust_alamat2_group, cust_kontak_group, contact_personGroup] 
 					}
 					,{
 						columnWidth:0.5,
@@ -3256,12 +3258,13 @@ Ext.onReady(function(){
 		maxLength: 50,
 		anchor: '50%'
 	});
+	/*
 	cust_nolamaSearchField= new Ext.form.TextField({
 		id: 'cust_nolamaSearchField',
 		fieldLabel: 'No Customer (Lama)',
 		maxLength: 50,
 		anchor: '50%'
-	});
+	});*/
 	/* Identify  cust_nama Field */
 	cust_namaSearchField= new Ext.form.TextField({
 		id: 'cust_namaSearchField',
@@ -3721,7 +3724,7 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [cust_nolamaSearchField, cust_noSearchField, cust_memberSearchField, cust_namaSearchField, cust_panggilanSearchField, cust_alamat_groupSearch, cust_alamat2_groupSearch, cust_kontak_groupSearch] 
+				items: [cust_noSearchField, cust_memberSearchField, cust_namaSearchField, cust_panggilanSearchField, cust_alamat_groupSearch, cust_alamat2_groupSearch, cust_kontak_groupSearch] 
 			}
 			,{
 				columnWidth:0.5,
