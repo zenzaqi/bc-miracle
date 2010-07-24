@@ -4756,7 +4756,6 @@ Ext.onReady(function(){
 					var encoded_array_dproduk_diskon = Ext.encode(dproduk_diskon);
 					var encoded_array_dproduk_diskon_jenis = Ext.encode(dproduk_diskon_jenis);
 					var encoded_array_dproduk_sales = Ext.encode(dproduk_sales);
-					
 					Ext.Ajax.request({
 						waitMsg: 'Mohon tunggu...',
 						url: 'index.php?c=c_master_jual_produk&m=detail_detail_jual_produk_insert',
