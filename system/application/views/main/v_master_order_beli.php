@@ -146,13 +146,13 @@ Ext.onReady(function(){
 			success: function(response){							
 				var result=eval(response.responseText);
 				if(result!==0){
-						Ext.MessageBox.alert(post2db+' OK','Data Surat Pesanan berhasil disimpan');
+						Ext.MessageBox.alert(post2db+' OK','Data Order Pembelian berhasil disimpan');
 						master_order_beli_createWindow.hide();
 				}else{
 						Ext.MessageBox.show({
 						   title: 'Warning',
 						   //msg: 'We could\'t not '+msg+' the Master_order_beli.',
-						   msg: 'Data Surat Pesanan tidak bisa disimpan',
+						   msg: 'Data Order Pembelian tidak bisa disimpan',
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'save',
 						   icon: Ext.MessageBox.WARNING
@@ -226,7 +226,7 @@ Ext.onReady(function(){
 				var result=eval(response.responseText);
 				if(result!==0){
 						
-						Ext.MessageBox.alert(post2db+' OK','Data Surat Pesanan berhasil disimpan');
+						Ext.MessageBox.alert(post2db+' OK','Data Order Pembelian berhasil disimpan');
 						order_idField.setValue(result);
 						detail_order_beli_purge(result, opsi)
 						master_order_beli_createWindow.hide();
@@ -234,7 +234,7 @@ Ext.onReady(function(){
 						Ext.MessageBox.show({
 						   title: 'Warning',
 						   //msg: 'We could\'t not '+msg+' the Master_order_beli.',
-						   msg: 'Data Surat Pesanan tidak bisa disimpan',
+						   msg: 'Data Order Pembelian tidak bisa disimpan',
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'save',
 						   icon: Ext.MessageBox.WARNING
@@ -596,7 +596,7 @@ Ext.onReady(function(){
 		},
 		{
 			//header: '<div align="center">' + 'No Order' + '</div>',
-			header: '<div align="center">' + 'No SP' + '</div>',
+			header: '<div align="center">' + 'No OP' + '</div>',
 			dataIndex: 'order_no',
 			width: 80,	//150,
 			sortable: true,
@@ -767,7 +767,7 @@ Ext.onReady(function(){
 	master_order_beliListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'master_order_beliListEditorGrid',
 		el: 'fp_master_order_beli',
-		title: 'Daftar Surat Pesanan',
+		title: 'Daftar Order Pembelian',
 		autoHeight: true,
 		store: master_order_beli_DataStore, // DataStore
 		cm: master_order_beli_ColumnModel, // Nama-nama Columns
@@ -813,7 +813,7 @@ Ext.onReady(function(){
 				},
 				render: function(c){
 				Ext.get(this.id).set({qtitle:'Search By (aktif only)'});
-				Ext.get(this.id).set({qtip:'- No SP<br>- Supplier<br>- Cara bayar'});
+				Ext.get(this.id).set({qtip:'- No OP<br>- Supplier<br>- Cara bayar'});
 				}
 			},
 			width: 120
@@ -906,7 +906,7 @@ Ext.onReady(function(){
 	order_noField= new Ext.form.TextField({
 		id: 'order_noField',
 		//fieldLabel: 'No Order',
-		fieldLabel: 'No SP',
+		fieldLabel: 'No OP',
 		emptyText: '(Auto)',
 		readOnly: true,
 		maxLength: 50,
@@ -1607,7 +1607,7 @@ Ext.onReady(function(){
 	/* Function for retrieve create Window Form */
 	master_order_beli_createWindow= new Ext.Window({
 		id: 'master_order_beli_createWindow',
-		title: post2db+'Surat Pesanan',
+		title: post2db+'Order Pembelian',
 		closable:true,
 		closeAction: 'hide',
 		width: 940,
@@ -1772,7 +1772,7 @@ Ext.onReady(function(){
 	order_noSearchField= new Ext.form.TextField({
 		id: 'order_noSearchField',
 		//fieldLabel: 'No Order',
-		fieldLabel: 'No SP',
+		fieldLabel: 'No OP',
 		maxLength: 50,
 		anchor: '95%'
 	
@@ -1997,7 +1997,7 @@ Ext.onReady(function(){
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
 	master_order_beli_searchWindow = new Ext.Window({
-		title: 'Percarian Surat Pesanan',
+		title: 'Percarian Order Pembelian',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,
