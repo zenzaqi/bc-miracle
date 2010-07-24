@@ -2614,7 +2614,7 @@ class M_master_jual_produk extends Model{
 						if($rs->num_rows()){
 							return $rs->row();
 						}else{
-							return '';
+							return NULL;
 						}
 					}elseif($record->jproduk_cara == 'kwitansi'){
 						$sql="SELECT jproduk_nobukti, jproduk_cara, jkwitansi_nilai AS bayar_nilai FROM master_jual_produk LEFT JOIN jual_kwitansi ON(jkwitansi_ref=jproduk_nobukti) WHERE jproduk_id='$jproduk_id'";
@@ -2622,7 +2622,7 @@ class M_master_jual_produk extends Model{
 						if($rs->num_rows()){
 							return $rs->row();
 						}else{
-							return '';
+							return NULL;
 						}
 					}elseif($record->jproduk_cara == 'card'){
 						$sql="SELECT jproduk_nobukti, jproduk_cara, jcard_nilai AS bayar_nilai FROM master_jual_produk LEFT JOIN jual_card ON(jcard_ref=jproduk_nobukti) WHERE jproduk_id='$jproduk_id'";
@@ -2630,7 +2630,7 @@ class M_master_jual_produk extends Model{
 						if($rs->num_rows()){
 							return $rs->row();
 						}else{
-							return '';
+							return NULL;
 						}
 					}elseif($record->jproduk_cara == 'cek/giro'){
 						$sql="SELECT jproduk_nobukti, jproduk_cara, jcek_nilai AS bayar_nilai FROM master_jual_produk LEFT JOIN jual_cek ON(jcek_ref=jproduk_nobukti) WHERE jproduk_id='$jproduk_id'";
@@ -2638,7 +2638,7 @@ class M_master_jual_produk extends Model{
 						if($rs->num_rows()){
 							return $rs->row();
 						}else{
-							return '';
+							return NULL;
 						}
 					}elseif($record->jproduk_cara == 'transfer'){
 						$sql="SELECT jproduk_nobukti, jproduk_cara, jtransfer_nilai AS bayar_nilai FROM master_jual_produk LEFT JOIN jual_transfer ON(jtransfer_ref=jproduk_nobukti) WHERE jproduk_id='$jproduk_id'";
@@ -2646,7 +2646,7 @@ class M_master_jual_produk extends Model{
 						if($rs->num_rows()){
 							return $rs->row();
 						}else{
-							return '';
+							return NULL;
 						}
 					}elseif($record->jproduk_cara == 'voucher'){
 						$sql="SELECT jproduk_nobukti, jproduk_cara, tvoucher_nilai AS bayar_nilai FROM master_jual_produk LEFT JOIN voucher_terima ON(tvoucher_ref=jproduk_nobukti) WHERE jproduk_id='$jproduk_id'";
@@ -2654,14 +2654,14 @@ class M_master_jual_produk extends Model{
 						if($rs->num_rows()){
 							return $rs->row();
 						}else{
-							return '';
+							return NULL;
 						}
 					}
 				}else{
-					return '';
+					return NULL;
 				}
 			}else{
-				return '';
+				return NULL;
 			}
 		}
 		
@@ -2740,7 +2740,7 @@ class M_master_jual_produk extends Model{
 						if($rs->num_rows()){
 							return $rs->row();
 						}else{
-							return '';
+							return NULL;
 						}
 					}elseif($record->jproduk_cara3 == 'kwitansi'){
 						$sql="SELECT jproduk_nobukti, jproduk_cara3, jkwitansi_nilai AS bayar3_nilai FROM master_jual_produk LEFT JOIN jual_kwitansi ON(jkwitansi_ref=jproduk_nobukti) WHERE jproduk_id='$jproduk_id'";
@@ -2748,7 +2748,7 @@ class M_master_jual_produk extends Model{
 						if($rs->num_rows()){
 							return $rs->row();
 						}else{
-							return '';
+							return NULL;
 						}
 					}elseif($record->jproduk_cara3 == 'card'){
 						$sql="SELECT jproduk_nobukti, jproduk_cara3, jcard_nilai AS bayar3_nilai FROM master_jual_produk LEFT JOIN jual_card ON(jcard_ref=jproduk_nobukti) WHERE jproduk_id='$jproduk_id'";
@@ -2756,7 +2756,7 @@ class M_master_jual_produk extends Model{
 						if($rs->num_rows()){
 							return $rs->row();
 						}else{
-							return '';
+							return NULL;
 						}
 					}elseif($record->jproduk_cara3 == 'cek/giro'){
 						$sql="SELECT jproduk_nobukti, jproduk_cara3, jcek_nilai AS bayar3_nilai FROM master_jual_produk LEFT JOIN jual_cek ON(jcek_ref=jproduk_nobukti) WHERE jproduk_id='$jproduk_id'";
@@ -2764,7 +2764,7 @@ class M_master_jual_produk extends Model{
 						if($rs->num_rows()){
 							return $rs->row();
 						}else{
-							return '';
+							return NULL;
 						}
 					}elseif($record->jproduk_cara3 == 'transfer'){
 						$sql="SELECT jproduk_nobukti, jproduk_cara3, jtransfer_nilai AS bayar3_nilai FROM master_jual_produk LEFT JOIN jual_transfer ON(jtransfer_ref=jproduk_nobukti) WHERE jproduk_id='$jproduk_id'";
@@ -2772,7 +2772,7 @@ class M_master_jual_produk extends Model{
 						if($rs->num_rows()){
 							return $rs->row();
 						}else{
-							return '';
+							return NULL;
 						}
 					}elseif($record->jproduk_cara3 == 'voucher'){
 						$sql="SELECT jproduk_nobukti, jproduk_cara3, tvoucher_nilai AS bayar3_nilai FROM master_jual_produk LEFT JOIN voucher_terima ON(tvoucher_ref=jproduk_nobukti) WHERE jproduk_id='$jproduk_id'";
@@ -2780,14 +2780,14 @@ class M_master_jual_produk extends Model{
 						if($rs->num_rows()){
 							return $rs->row();
 						}else{
-							return '';
+							return NULL;
 						}
 					}
 				}else{
-					return '';
+					return NULL;
 				}
 			}else{
-				return '';
+				return NULL;
 			}
 		}
 		

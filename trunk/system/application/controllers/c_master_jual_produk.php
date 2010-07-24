@@ -762,9 +762,9 @@ class C_master_jual_produk extends Controller {
 		
 		$array_cara_bayar = $this->m_master_jual_produk->get_cara_bayar($jproduk_id);
 		
-		/*$cara_bayar=$this->m_master_jual_produk->cara_bayar($jproduk_id);
+		$cara_bayar=$this->m_master_jual_produk->cara_bayar($jproduk_id);
 		$cara_bayar2=$this->m_master_jual_produk->cara_bayar2($jproduk_id);
-		$cara_bayar3=$this->m_master_jual_produk->cara_bayar3($jproduk_id);*/
+		$cara_bayar3=$this->m_master_jual_produk->cara_bayar3($jproduk_id);
 		
 		$data['jproduk_nobukti']=$rs->jproduk_nobukti;
 		$data['jproduk_tanggal']=date('d-m-Y', strtotime($rs->jproduk_tanggal));
@@ -781,7 +781,31 @@ class C_master_jual_produk extends Controller {
 		//$data['jproduk_totalbiaya']=$rs->jproduk_totalbiaya;
 		$data['detail_jproduk']=$detail_jproduk;
 		
-		if(count($array_cara_bayar)){
+		if($cara_bayar!==NULL){
+			$data['cara_bayar1']=$cara_bayar->jproduk_cara;
+			$data['nilai_bayar1']=$cara_bayar->bayar_nilai;
+		}else{
+			$data['cara_bayar1']="";
+			$data['bayar_nilai1']="";
+		}
+		
+		if($cara_bayar2!==NULL){
+			$data['cara_bayar2']=$cara_bayar2->jproduk_cara2;
+			$data['nilai_bayar2']=$cara_bayar2->bayar2_nilai;
+		}else{
+			$data['cara_bayar2']="";
+			$data['nilai_bayar2']="";
+		}
+		
+		if($cara_bayar3!==NULL){
+			$data['cara_bayar3']=$cara_bayar3->jproduk_cara3;
+			$data['nilai_bayar3']=$cara_bayar3->bayar3_nilai;
+		}else{
+			$data['cara_bayar3']="";
+			$data['nilai_bayar3']="";
+		}
+		
+		/*if(count($array_cara_bayar)){
 			$data['cara_bayar1']='';
 			$data['nilai_bayar1']='';
 			
@@ -811,7 +835,7 @@ class C_master_jual_produk extends Controller {
 				}
 				$i++;
 			}
-		}
+		}*/
 		
 		$viewdata=$this->load->view("main/jproduk_formcetak",$data,TRUE);
 		$file = fopen("jproduk_paper.html",'w');

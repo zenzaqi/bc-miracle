@@ -1151,8 +1151,19 @@ class M_master_jual_paket extends Model{
 							}else if($cetak<>1 && $i==$size_array){
 								return '0';
 							}
-						}else
-							return '-1';
+						}else{
+							//return '-1';
+							if($cetak==1 && $i==$size_array){
+								//* proses cetak /
+								$this->master_jual_paket_status_update($dpaket_master);
+								$this->member_point_update($dpaket_master);
+								$this->membership_insert($dpaket_master);
+								$this->catatan_piutang_update($dpaket_master);
+								return $dpaket_master;
+							}else if($cetak<>1 && $i==$size_array){
+								return '0';
+							}
+						}
 					}
 				}else{
 					//* Adding detail baru /
@@ -1182,7 +1193,17 @@ class M_master_jual_paket extends Model{
 							return '0';
 						}
 					}else
-						return '-1';
+						//return '-1';
+						if($cetak==1 && $i==$size_array){
+							//* proses cetak /
+							$this->master_jual_paket_status_update($dpaket_master);
+							$this->member_point_update($dpaket_master);
+							$this->membership_insert($dpaket_master);
+							$this->catatan_piutang_update($dpaket_master);
+							return $dpaket_master;
+						}else if($cetak<>1 && $i==$size_array){
+							return '0';
+						}
 				}
 				
 			}
@@ -3028,7 +3049,7 @@ class M_master_jual_paket extends Model{
 						if($rs->num_rows()){
 							return $rs->row();
 						}else{
-							return '';
+							return NULL;
 						}
 					}elseif($record->jpaket_cara == 'kwitansi'){
 						$sql="SELECT jpaket_nobukti, jpaket_cara, jkwitansi_nilai AS bayar_nilai FROM master_jual_paket LEFT JOIN jual_kwitansi ON(jkwitansi_ref=jpaket_nobukti) WHERE jpaket_id='$jpaket_id'";
@@ -3036,7 +3057,7 @@ class M_master_jual_paket extends Model{
 						if($rs->num_rows()){
 							return $rs->row();
 						}else{
-							return '';
+							return NULL;
 						}
 					}elseif($record->jpaket_cara == 'card'){
 						$sql="SELECT jpaket_nobukti, jpaket_cara, jcard_nilai AS bayar_nilai FROM master_jual_paket LEFT JOIN jual_card ON(jcard_ref=jpaket_nobukti) WHERE jpaket_id='$jpaket_id'";
@@ -3044,7 +3065,7 @@ class M_master_jual_paket extends Model{
 						if($rs->num_rows()){
 							return $rs->row();
 						}else{
-							return '';
+							return NULL;
 						}
 					}elseif($record->jpaket_cara == 'cek/giro'){
 						$sql="SELECT jpaket_nobukti, jpaket_cara, jcek_nilai AS bayar_nilai FROM master_jual_paket LEFT JOIN jual_cek ON(jcek_ref=jpaket_nobukti) WHERE jpaket_id='$jpaket_id'";
@@ -3052,7 +3073,7 @@ class M_master_jual_paket extends Model{
 						if($rs->num_rows()){
 							return $rs->row();
 						}else{
-							return '';
+							return NULL;
 						}
 					}elseif($record->jpaket_cara == 'transfer'){
 						$sql="SELECT jpaket_nobukti, jpaket_cara, jtransfer_nilai AS bayar_nilai FROM master_jual_paket LEFT JOIN jual_transfer ON(jtransfer_ref=jpaket_nobukti) WHERE jpaket_id='$jpaket_id'";
@@ -3060,7 +3081,7 @@ class M_master_jual_paket extends Model{
 						if($rs->num_rows()){
 							return $rs->row();
 						}else{
-							return '';
+							return NULL;
 						}
 					}elseif($record->jpaket_cara == 'voucher'){
 						$sql="SELECT jpaket_nobukti, jpaket_cara, tvoucher_nilai AS bayar_nilai FROM master_jual_paket LEFT JOIN voucher_terima ON(tvoucher_ref=jpaket_nobukti) WHERE jpaket_id='$jpaket_id'";
@@ -3068,14 +3089,14 @@ class M_master_jual_paket extends Model{
 						if($rs->num_rows()){
 							return $rs->row();
 						}else{
-							return '';
+							return NULL;
 						}
 					}
 				}else{
-					return '';
+					return NULL;
 				}
 			}else{
-				return '';
+				return NULL;
 			}
 		}
 		
@@ -3154,7 +3175,7 @@ class M_master_jual_paket extends Model{
 						if($rs->num_rows()){
 							return $rs->row();
 						}else{
-							return '';
+							return NULL;
 						}
 					}elseif($record->jpaket_cara3 == 'kwitansi'){
 						$sql="SELECT jpaket_nobukti, jpaket_cara3, jkwitansi_nilai AS bayar3_nilai FROM master_jual_paket LEFT JOIN jual_kwitansi ON(jkwitansi_ref=jpaket_nobukti) WHERE jpaket_id='$jpaket_id'";
@@ -3162,7 +3183,7 @@ class M_master_jual_paket extends Model{
 						if($rs->num_rows()){
 							return $rs->row();
 						}else{
-							return '';
+							return NULL;
 						}
 					}elseif($record->jpaket_cara3 == 'card'){
 						$sql="SELECT jpaket_nobukti, jpaket_cara3, jcard_nilai AS bayar3_nilai FROM master_jual_paket LEFT JOIN jual_card ON(jcard_ref=jpaket_nobukti) WHERE jpaket_id='$jpaket_id'";
@@ -3170,7 +3191,7 @@ class M_master_jual_paket extends Model{
 						if($rs->num_rows()){
 							return $rs->row();
 						}else{
-							return '';
+							return NULL;
 						}
 					}elseif($record->jpaket_cara3 == 'cek/giro'){
 						$sql="SELECT jpaket_nobukti, jpaket_cara3, jcek_nilai AS bayar3_nilai FROM master_jual_paket LEFT JOIN jual_cek ON(jcek_ref=jpaket_nobukti) WHERE jpaket_id='$jpaket_id'";
@@ -3178,7 +3199,7 @@ class M_master_jual_paket extends Model{
 						if($rs->num_rows()){
 							return $rs->row();
 						}else{
-							return '';
+							return NULL;
 						}
 					}elseif($record->jpaket_cara3 == 'transfer'){
 						$sql="SELECT jpaket_nobukti, jpaket_cara3, jtransfer_nilai AS bayar3_nilai FROM master_jual_paket LEFT JOIN jual_transfer ON(jtransfer_ref=jpaket_nobukti) WHERE jpaket_id='$jpaket_id'";
@@ -3186,7 +3207,7 @@ class M_master_jual_paket extends Model{
 						if($rs->num_rows()){
 							return $rs->row();
 						}else{
-							return '';
+							return NULL;
 						}
 					}elseif($record->jpaket_cara3 == 'voucher'){
 						$sql="SELECT jpaket_nobukti, jpaket_cara3, tvoucher_nilai AS bayar3_nilai FROM master_jual_paket LEFT JOIN voucher_terima ON(tvoucher_ref=jpaket_nobukti) WHERE jpaket_id='$jpaket_id'";
@@ -3194,14 +3215,14 @@ class M_master_jual_paket extends Model{
 						if($rs->num_rows()){
 							return $rs->row();
 						}else{
-							return '';
+							return NULL;
 						}
 					}
 				}else{
-					return '';
+					return NULL;
 				}
 			}else{
-				return '';
+				return NULL;
 			}
 		}
 		
