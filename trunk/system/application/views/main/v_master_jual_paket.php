@@ -4414,11 +4414,11 @@ Ext.onReady(function(){
 								});
 							}else if(result>0){
 								detail_jual_paket_DataStore.load({params: {master_id:0}});
-								Ext.Ajax.request({
+								/*Ext.Ajax.request({
 									waitMsg: 'Mohon tunggu...',
 									url: 'index.php?c=c_master_jual_paket&m=catatan_piutang_update',
 									params:{dpaket_master	: eval(get_pk_id())}
-								});
+								});*/
 								jpaket_cetak(result);
 								cetak_jpaket=0;
 								jpaket_post2db="CREATE";
