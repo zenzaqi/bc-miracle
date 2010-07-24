@@ -115,7 +115,8 @@ html,body,table,tr,td{
           <td><?php if($cara_bayar2<>''){?><?=$cara_bayar2;?>&nbsp;:&nbsp;<?=rupiah($nilai_bayar2);?><?php }?></td>
           <td>&nbsp;</td>
           <td>&nbsp;</td>
-          <td align="right"><?=rupiah($jumlah_tunai);?></td>
+		  <td>&nbsp;</td>
+          <!--<td align="right"><//?=rupiah($jumlah_tunai);?></td>-->
         </tr>
         <tr>
           <td>&nbsp;</td>
