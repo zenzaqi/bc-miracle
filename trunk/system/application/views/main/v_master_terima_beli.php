@@ -584,7 +584,7 @@ Ext.onReady(function(){
           	})
 		}, 
 		{
-			header: '<div align="center">' + 'No SP' + '</div>',
+			header: '<div align="center">' + 'No OP' + '</div>',
 			dataIndex: 'terima_order',
 			width: 100,	//150,
 			sortable: true,
@@ -745,7 +745,7 @@ Ext.onReady(function(){
 				},
 				render: function(c){
 				Ext.get(this.id).set({qtitle:'Search By (aktif only)'});
-				Ext.get(this.id).set({qtip:'- No SP<br>- No PB<br>- Supplier<br>- No Surat Jalan<br>- Nama Pengirim'});
+				Ext.get(this.id).set({qtip:'- No OP<br>- No PB<br>- Supplier<br>- No Surat Jalan<br>- Nama Pengirim'});
 				}
 			},
 			width: 120
@@ -845,7 +845,7 @@ Ext.onReady(function(){
 	/* Identify  terima_order Field */
 	terima_orderField= new Ext.form.ComboBox({
 		id: 'terima_orderField',
-		fieldLabel: 'No SP',
+		fieldLabel: 'No OP',
 		store: cbo_tbeli_orderbeli_DataSore,
 		displayField:'tbeli_orderbeli_nama',
 		mode : 'remote',
@@ -1850,7 +1850,7 @@ Ext.onReady(function(){
 	/* Identify  terima_order Search Field */
 	terima_orderSearchField= new Ext.form.ComboBox({
 		id: 'terima_orderSearchField',
-		fieldLabel: 'No SP',
+		fieldLabel: 'No OP',
 		store: cbo_tbeli_orderbeli_search_DataSore,
 		displayField:'tbeli_orderbeli_nama',
 		mode : 'remote',

@@ -406,7 +406,7 @@ class M_master_order_beli extends Model{
 				$order_tanggal=$date_now;
 			}
 			//$pattern="OP/".date("ym")."-";
-			$pattern="SP/".date("ym")."-";
+			$pattern="OP/".date("ym")."-";
 			$order_no=$this->m_public_function->get_kode_1('master_order_beli','order_no',$pattern,12);
 			
 			$data = array(
