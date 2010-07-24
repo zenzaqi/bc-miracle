@@ -5029,7 +5029,7 @@ Ext.onReady(function(){
 								Ext.Ajax.request({
 									waitMsg: 'Mohon tunggu...',
 									url: 'index.php?c=c_master_jual_rawat&m=catatan_piutang_update',
-									params:{drawat_master	: eval(jrawat_idField.getValue())}
+									params:{drawat_master	: cetak_jrawat_id}
 								});
 							}
 						},

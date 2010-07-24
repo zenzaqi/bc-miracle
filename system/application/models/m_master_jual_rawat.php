@@ -512,9 +512,9 @@ class M_master_jual_rawat extends Model{
 		}
 		
 		function catatan_piutang_update($jrawat_id){
-			if($jrawat_id=="" || $jrawat_id==NULL || $jrawat_id==0){
+			/*if($jrawat_id=="" || $jrawat_id==NULL || $jrawat_id==0){
 				$jrawat_id=$this->get_master_id();
-			}
+			}*/
 			
 			$sql="SELECT * FROM vu_piutang_jrawat WHERE jrawat_id='$jrawat_id'";
 			$rs=$this->db->query($sql);
@@ -534,14 +534,36 @@ class M_master_jual_rawat extends Model{
 				$sql="SELECT * FROM master_lunas_piutang WHERE lpiutang_faktur='$lpiutang_faktur'";
 				$rs=$this->db->query($sql);
 				if($rs->num_rows()){
+					/* 1. DELETE db.master_lunas_piutang AND db.detail_jual_piutang
+					 * 2. INSERT to db.master_lunas_piutang
+					*/
+					$sql = "DELETE detail_lunas_piutang, master_lunas_piutang
+						FROM master_lunas_piutang
+						LEFT JOIN detail_lunas_piutang ON(dpiutang_master=lpiutang_id)
+						WHERE lpiutang_faktur='".$lpiutang_faktur."'";
+					$this->db->query($sql);
+					if($this->db->affected_rows()){
+						//INSERT to db.master_lunas_piutang
+						$dti_lpiutang=array(
+						"lpiutang_faktur"=>$lpiutang_faktur,
+						"lpiutang_cust"=>$lpiutang_cust,
+						"lpiutang_faktur_tanggal"=>$lpiutang_faktur_tanggal,
+						"lpiutang_total"=>$lpiutang_total,
+						"lpiutang_sisa"=>$lpiutang_total,
+						"lpiutang_jenis_transaksi"=>'jual_rawat',
+						"lpiutang_stat_dok"=>'Terbuka'
+						);
+						$this->db->insert('master_lunas_piutang', $dti_lpiutang);
+					}
+					
 					/* UPDATE db.master_lunas_piutang */
-					$dtu_lpiutang=array(
+					/*$dtu_lpiutang=array(
 					"lpiutang_cust"=>$lpiutang_cust,
 					"lpiutang_total"=>lpiutang_total,
 					"lpiutang_sisa"=>lpiutang_total
 					);
 					$this->db->where('lpiutang_faktur', $lpiutang_faktur);
-					$this->db->update('master_lunas_piutang', $dtu_lpiutang);
+					$this->db->update('master_lunas_piutang', $dtu_lpiutang);*/
 				}else{
 					/* INSERT db.master_lunas_piutang */
 					$dti_lpiutang=array(
@@ -549,11 +571,37 @@ class M_master_jual_rawat extends Model{
 					"lpiutang_cust"=>$lpiutang_cust,
 					"lpiutang_faktur_tanggal"=>$lpiutang_faktur_tanggal,
 					"lpiutang_total"=>$lpiutang_total,
-					"lpiutang_sisa"=>$lpiutang_total
+					"lpiutang_sisa"=>$lpiutang_total,
+					"lpiutang_jenis_transaksi"=>'jual_rawat',
+					"lpiutang_stat_dok"=>'Terbuka'
 					);
 					$this->db->insert('master_lunas_piutang', $dti_lpiutang);
 				}
 			}
+		}
+		
+		function catatan_piutang_batal($jrawat_id){
+			/* 1. Cari jrawat_nobukti
+			 * 2. UPDATE db.master_lunas_piutang.lpiutang_stat_dok = 'Batal'
+			*/
+			$datetime_now = date('Y-m-d H:i:s');
+			
+			$sql = "SELECT jrawat_nobukti FROM master_jual_rawat WHERE jrawat_id='".$jrawat_id."'";
+			$rs = $this->db->query($sql);
+			if($rs->num_rows()){
+				$record = $rs->row_array();
+				$jrawat_nobukti = $record['jrawat_nobukti'];
+				
+				//UPDATE db.master_lunas_piutang.lpiutang_stat_dok = 'Batal'
+				$sqlu = "UPDATE master_lunas_piutang
+					SET lpiutang_stat_dok='Batal'
+						,lpiutang_update='".@$_SESSION[SESSION_USERID]."'
+						,lpiutang_date_update='".$datetime_now."'
+						,lpiutang_revised=(lpiutang_revised+1)
+					WHERE lpiutang_faktur='".$jrawat_nobukti."'";
+				$this->db->query($sqlu);
+			}
+			
 		}
 		
 		function membership_insert($jrawat_id){
@@ -2395,6 +2443,7 @@ class M_master_jual_rawat extends Model{
 				$this->member_point_batal($jrawat_id);
 				$this->membership_insert($jrawat_id);
 				$this->cara_bayar_batal($jrawat_id);
+				$this->catatan_piutang_batal($jrawat_id);
 				return '1';
 			}else{
 				return '0';

@@ -4732,7 +4732,7 @@ Ext.onReady(function(){
 						dproduk_diskon.push(detail_jual_produk_DataStore.getAt(i).data.dproduk_diskon);
 					}
 					
-					if(detail_jual_produk_DataStore.getAt(i).data.dproduk_diskon_jenis){
+					if(detail_jual_produk_DataStore.getAt(i).data.dproduk_diskon_jenis==undefined){
 						dproduk_diskon_jenis.push('');
 					}else{
 						dproduk_diskon_jenis.push(detail_jual_produk_DataStore.getAt(i).data.dproduk_diskon_jenis);
@@ -4793,11 +4793,11 @@ Ext.onReady(function(){
 								});
 							}else if(result>0){
 								detail_jual_produk_DataStore.load({params: {master_id:-1}});
-								Ext.Ajax.request({
+								/*Ext.Ajax.request({
 									waitMsg: 'Mohon tunggu...',
 									url: 'index.php?c=c_master_jual_produk&m=catatan_piutang_update',
 									params:{dproduk_master	: eval(get_jproduk_pk())}
-								});
+								});*/
 								jproduk_cetak(result);
 								cetak_jproduk=0;
 								jproduk_post2db="CREATE";
