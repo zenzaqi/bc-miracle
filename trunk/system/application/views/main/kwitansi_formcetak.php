@@ -82,7 +82,7 @@ html,body,table,tr,td{
                 </tr>
                 <tr>
                   <td><table width="800" border="0" cellspacing="0" cellpadding="0">
-                    <tr><?=$kwitansi_cara;?>
+                    <tr>
                       <?php if($kwitansi_cara=='tunai'){?><td width="10px" style="border:#000000 1px solid"><b>V</b></td><?php }else{?>
 					  <td width="10px" style="border:#000000 1px solid">&nbsp;</td>
 					  <?php }?>
