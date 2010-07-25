@@ -18,7 +18,7 @@ html,body,table,tr,td{
   <tr>
     <td height="90px"><table width="1240px" height="90px" border="0" cellspacing="0" cellpadding="0">
       <tr>
-        <td width="700px" align="center" valign="bottom"><font style="font-family:Geneva, Arial, Helvetica, sans-serif; font-size:32px;"><strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;KWITANSI</strong></font></td>
+        <td width="700px" align="center" valign="bottom"><font style="font-family:Geneva, Arial, Helvetica, sans-serif; font-size:32px;"><strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;KUITANSI</strong></font></td>
         <td width="540px" valign="top"><table width="540px" border="0" cellspacing="0" cellpadding="0">
           <tr>
             <td width="60px" align="right">&nbsp;</td>
@@ -82,24 +82,24 @@ html,body,table,tr,td{
                 </tr>
                 <tr>
                   <td><table width="800" border="0" cellspacing="0" cellpadding="0">
-                    <tr>
-                      <?php if($kwitansi_cara=='tunai'){?><td width="10px" bgcolor="#666666" style="border:#000000 1px solid">&nbsp;</td><?php }else{?>
+                    <tr><?=$kwitansi_cara;?>
+                      <?php if($kwitansi_cara=='tunai'){?><td width="10px" style="border:#000000 1px solid"><b>V</b></td><?php }else{?>
 					  <td width="10px" style="border:#000000 1px solid">&nbsp;</td>
 					  <?php }?>
                       <td width="80px">&nbsp;Tunai</td>
-                      <?php if($kwitansi_cara=='card'){?><td width="10px" bgcolor="#666666" style="border:#000000 1px solid">&nbsp;</td><?php }else{?>
+                      <?php if($kwitansi_cara=='card'){?><td width="10px" style="border:#000000 1px solid"><b>V</b></td><?php }else{?>
 					  <td width="10px" style="border:#000000 1px solid">&nbsp;</td>
 					  <?php }?>
                       <td width="80px">&nbsp;Card</td>
-                      <?php if($kwitansi_cara=='cek/giro'){?><td width="10px" bgcolor="#666666" style="border:#000000 1px solid">&nbsp;</td><?php }else{?>
+                      <?php if($kwitansi_cara=='cek/giro'){?><td width="10px" style="border:#000000 1px solid"><b>V</b></td><?php }else{?>
 					  <td width="10px" style="border:#000000 1px solid">&nbsp;</td>
 					  <?php }?>
                       <td width="110px">&nbsp;Cek/Giro</td>
-                      <?php if($kwitansi_cara=='transfer'){?><td width="10px" bgcolor="#666666" style="border:#000000 1px solid">&nbsp;</td><?php }else{?>
+                      <?php if($kwitansi_cara=='transfer'){?><td width="10px" style="border:#000000 1px solid"><b>V</b></td><?php }else{?>
 					  <td width="10px" style="border:#000000 1px solid">&nbsp;</td>
 					  <?php }?>
                       <td width="110px">&nbsp;Transfer</td>
-					  <?php if($kwitansi_cara=='retur'){?><td width="10px" bgcolor="#666666" style="border:#000000 1px solid">&nbsp;</td><?php }else{?>
+					  <?php if($kwitansi_cara=='retur'){?><td width="10px" style="border:#000000 1px solid"><b>V</b></td><?php }else{?>
 					  <td width="10px" style="border:#000000 1px solid">&nbsp;</td>
 					  <?php }?>
                       <td width="100px">&nbsp;Retur</td>
