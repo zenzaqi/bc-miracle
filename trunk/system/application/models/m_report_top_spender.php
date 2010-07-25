@@ -62,6 +62,11 @@ class M_report_top_spender extends Model{
 		//function for advanced search record
 		function top_spender_search($trawat_id ,$trawat_tglapp_start ,$trawat_tglapp_end ,$top_jenis,$top_jumlah,$start,$end){
 			//full query
+			if ($top_jenis == '')
+				$top_jenis = 'Semua';
+			
+			if ($top_jumlah == '')
+				$top_jumlah = '10';
 			
 			if ($top_jenis == 'Perawatan')
 			{
