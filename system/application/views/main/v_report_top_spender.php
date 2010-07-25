@@ -178,7 +178,7 @@ Ext.onReady(function(){
 			{name: 'cust_no', type: 'string', mapping: 'cust_no'},
 			{name: 'total', type: 'float', mapping: 'total'},
 			{name: 'customer_nama', type: 'string', mapping: 'cust_nama'},
-			{name: 'customer_member', type: 'string', mapping: 'cust_member'},
+			{name: 'customer_member', type: 'string', mapping: 'member_no'},
 		]),
 		sortInfo:{field: 'total', direction: "DESC"}
 	});
@@ -258,7 +258,7 @@ Ext.onReady(function(){
 		/* Add Control on ToolBar */
 		tbar: [
 		{
-			text: 'Search Top Spender',
+			text: 'Adv Search',
 			tooltip: 'Advanced Search',
 			iconCls:'icon-search',
 			handler: display_form_search_window 

@@ -72,17 +72,17 @@ class M_report_top_spender extends Model{
 				if($trawat_id!='')
 				{
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " master_jual_rawat.jrawat_tanggal BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."'";
+					$query.= " master_jual_rawat.jrawat_tanggal BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."' AND master_jual_rawat.jrawat_stat_dok <> 'Batal'";
 				};
 			
 				if($trawat_tglapp_start!='' && $trawat_tglapp_end!='')
 				{
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " master_jual_rawat.jrawat_tanggal BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."'";
+					$query.= " master_jual_rawat.jrawat_tanggal BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."' AND master_jual_rawat.jrawat_stat_dok <> 'Batal'";
 				}else if($trawat_tglapp_start!='' && $trawat_tglapp_end=='')
 				{
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " master_jual_rawat.jrawat_tanggal='".$trawat_tglapp_start."'";
+					$query.= " master_jual_rawat.jrawat_tanggal='".$trawat_tglapp_start."' AND master_jual_rawat.jrawat_stat_dok <> 'Batal'";
 				}
 				$query.=" GROUP BY master_jual_rawat.jrawat_cust ORDER BY SUM(master_jual_rawat.jrawat_bayar) DESC";
 			}
@@ -94,15 +94,15 @@ class M_report_top_spender extends Model{
 			
 				if($trawat_id!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " master_jual_produk.jproduk_tanggal BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."'";
+					$query.= " master_jual_produk.jproduk_tanggal BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."' AND master_jual_produk.jproduk_stat_dok <> 'Batal'";
 				};
 			
 				if($trawat_tglapp_start!='' && $trawat_tglapp_end!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " master_jual_produk.jproduk_tanggal BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."'";
+					$query.= " master_jual_produk.jproduk_tanggal BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."' AND master_jual_produk.jproduk_stat_dok <> 'Batal'";
 				}else if($trawat_tglapp_start!='' && $trawat_tglapp_end==''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " master_jual_produk.jproduk_tanggal='".$trawat_tglapp_start."'";
+					$query.= " master_jual_produk.jproduk_tanggal='".$trawat_tglapp_start."' AND master_jual_produk.jproduk_stat_dok <> 'Batal'";
 				}
 				$query.=" GROUP BY master_jual_produk.jproduk_cust ORDER BY SUM(master_jual_produk.jproduk_bayar) DESC";
 			}
@@ -114,38 +114,38 @@ class M_report_top_spender extends Model{
 			
 				if($trawat_id!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " master_jual_paket.jpaket_tanggal BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."'";
+					$query.= " master_jual_paket.jpaket_tanggal BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."' AND master_jual_paket.jpaket_stat_dok <> 'Batal'";
 				};
 			
 				if($trawat_tglapp_start!='' && $trawat_tglapp_end!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " master_jual_paket.jpaket_tanggal BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."'";
+					$query.= " master_jual_paket.jpaket_tanggal BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."' AND master_jual_paket.jpaket_stat_dok <> 'Batal'";
 				}else if($trawat_tglapp_start!='' && $trawat_tglapp_end==''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " master_jual_paket.jpaket_tanggal='".$trawat_tglapp_start."'";
+					$query.= " master_jual_paket.jpaket_tanggal='".$trawat_tglapp_start."' AND master_jual_paket.jpaket_stat_dok <> 'Batal'";
 				}
 				$query.=" GROUP BY master_jual_paket.jpaket_cust ORDER BY SUM(master_jual_paket.jpaket_bayar) DESC";
 			}
 			else if ($top_jenis == 'Semua')
 			{
-				$query = "SELECT  customer.cust_no,customer.cust_nama,customer.cust_member,SUM(total) as total
+				$query = "SELECT  vu_customer.cust_no,vu_customer.cust_nama,vu_customer.member_no,SUM(total) as total
 					FROM
 					(
 						(	
-							SELECT paket.jpaket_cust AS customer, paket.jpaket_bayar AS total  FROM master_jual_paket AS paket WHERE paket.jpaket_bayar IS NOT NULL AND (paket.jpaket_tanggal BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."') ORDER BY paket.jpaket_bayar DESC 
+							SELECT paket.jpaket_cust AS customer, paket.jpaket_bayar AS total  FROM master_jual_paket AS paket WHERE paket.jpaket_bayar IS NOT NULL AND (paket.jpaket_tanggal BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."') AND paket.jpaket_stat_dok <> 'Batal' ORDER BY paket.jpaket_bayar DESC 
 						) 
 						UNION
 						(
-							SELECT produk.jproduk_cust AS customer, produk.jproduk_bayar AS total  FROM master_jual_produk AS produk WHERE produk.jproduk_bayar IS NOT NULL AND (produk.jproduk_tanggal BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."')  ORDER BY produk.jproduk_bayar DESC
+							SELECT produk.jproduk_cust AS customer, produk.jproduk_bayar AS total  FROM master_jual_produk AS produk WHERE produk.jproduk_bayar IS NOT NULL AND (produk.jproduk_tanggal BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."') AND produk.jproduk_stat_dok <> 'Batal' ORDER BY produk.jproduk_bayar DESC
 						) 
 						UNION	
 						(
-							SELECT rawat.jrawat_cust AS customer, rawat.jrawat_bayar AS total  FROM master_jual_rawat AS rawat WHERE rawat.jrawat_bayar IS NOT NULL AND (rawat.jrawat_tanggal BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."' ) ORDER BY rawat.jrawat_bayar DESC
+							SELECT rawat.jrawat_cust AS customer, rawat.jrawat_bayar AS total  FROM master_jual_rawat AS rawat WHERE rawat.jrawat_bayar IS NOT NULL AND (rawat.jrawat_tanggal BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."') AND rawat.jrawat_stat_dok <> 'Batal' ORDER BY rawat.jrawat_bayar DESC
 						)
 					)AS table_union
-					LEFT OUTER JOIN customer
-					ON customer.cust_id = customer
-					GROUP BY customer.cust_nama
+					LEFT OUTER JOIN vu_customer
+					ON vu_customer.cust_id = customer
+					GROUP BY vu_customer.cust_nama
 					ORDER BY SUM(total) DESC";
 		
 			}
