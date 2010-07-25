@@ -135,10 +135,10 @@ Ext.onReady(function(){
 	
 	// cek valid
 	function is_top_spender_searchForm_valid(){
-		return (Ext.getCmp('top_spender_tglStartSearchField').isValid() && jumlahField.getValue()!=null && jenisField.getValue()!=null);
+		return (Ext.getCmp('top_spender_tglStartSearchField').isValid() );
+		//&& jumlahField.getValue()!=null && jenisField.getValue()!=null);
 	}
   	/* End of Function */
-	
   
   	/* Function for Displaying  create Window Form */
 	function display_form_window(){
@@ -308,7 +308,7 @@ Ext.onReady(function(){
 		}),
 		mode: 'local',
 		editable:false,
-		emptyText: 'Pilih Satu...',
+		emptyText: 'Semua',
 		displayField: 'jenis_display',
 		valueField: 'jenis_value',
 		width: 100,
@@ -318,14 +318,14 @@ Ext.onReady(function(){
 	/* Identify  jumlah Combo*/
 	jumlahField= new Ext.form.ComboBox({
 		id: 'jumlahField',
-		fieldLabel: 'Jumlah',
+		fieldLabel: 'Top Rank',
 		store:new Ext.data.SimpleStore({
 			fields:['jumlah_value', 'jumlah_display'],
 			data:[['5','5'],['10','10'],['15','15'],['20','20'],['25','25'],['30','30'],['35','35'],['40','40'],['45','45'],['50','50']]
 		}),
 		mode: 'local',
 		editable:false,
-		emptyText: 'Pilih Satu...',
+		emptyText: '10',
 		displayField: 'jumlah_display',
 		valueField: 'jumlah_value',
 		width: 50,
@@ -521,6 +521,8 @@ Ext.onReady(function(){
 	function display_form_search_window(){
 		if(!top_spender_searchWindow.isVisible()){
 			top_spender_reset_formSearch();
+			jenisField.setValue('Semua');
+			jumlahField.setValue('10');
 			top_spender_searchWindow.show();
 		} else {
 			top_spender_searchWindow.toFront();
