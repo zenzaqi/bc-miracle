@@ -1040,9 +1040,33 @@ Ext.onReady(function(){
 		detail_jual_produkListEditorGrid.setDisabled(false);
 		jproduk_diskonField.setDisabled(false);
 		jproduk_cashback_cfField.setDisabled(false);
-		
+		jproduk_stat_dokField.setDisabled(false);
 		detail_jual_produkListEditorGrid.djproduk_add.enable();
         detail_jual_produkListEditorGrid.djproduk_delete.enable();
+		
+		jproduk_caraField.setDisabled(false);
+		master_jual_produk_tunaiGroup.setDisabled(false);
+		master_jual_produk_cardGroup.setDisabled(false);
+		master_jual_produk_cekGroup.setDisabled(false);
+		master_jual_produk_kwitansiGroup.setDisabled(false);
+		master_jual_produk_transferGroup.setDisabled(false);
+		master_jual_produk_voucherGroup.setDisabled(false);
+		
+		jproduk_cara2Field.setDisabled(false);
+		master_jual_produk_tunai2Group.setDisabled(false);
+		master_jual_produk_card2Group.setDisabled(false);
+		master_jual_produk_cek2Group.setDisabled(false);
+		master_jual_produk_kwitansi2Group.setDisabled(false);
+		master_jual_produk_transfer2Group.setDisabled(false);
+		master_jual_produk_voucher2Group.setDisabled(false);
+		
+		jproduk_cara3Field.setDisabled(false);
+		master_jual_produk_tunai3Group.setDisabled(false);
+		master_jual_produk_card3Group.setDisabled(false);
+		master_jual_produk_cek3Group.setDisabled(false);
+		master_jual_produk_kwitansi3Group.setDisabled(false);
+		master_jual_produk_transfer3Group.setDisabled(false);
+		master_jual_produk_voucher3Group.setDisabled(false);
 		
 		combo_jual_produk.setDisabled(false);
 		combo_satuan_produk.setDisabled(false);
@@ -1502,9 +1526,33 @@ Ext.onReady(function(){
 			jproduk_custField.setDisabled(true);
 			jproduk_tanggalField.setDisabled(true);
 			jproduk_keteranganField.setDisabled(false);
-			master_cara_bayarTabPanel.setDisabled(false);
+			//master_cara_bayarTabPanel.setDisabled(false);
 			//detail_jual_produkListEditorGrid.djproduk_add.enable(); //fredi
 			//detail_jual_produkListEditorGrid.djproduk_delete.enable(); //fredi
+			jproduk_caraField.setDisabled(false);
+			master_jual_produk_tunaiGroup.setDisabled(false);
+			master_jual_produk_cardGroup.setDisabled(false);
+			master_jual_produk_cekGroup.setDisabled(false);
+			master_jual_produk_kwitansiGroup.setDisabled(false);
+			master_jual_produk_transferGroup.setDisabled(false);
+			master_jual_produk_voucherGroup.setDisabled(false);
+			
+			jproduk_cara2Field.setDisabled(false);
+			master_jual_produk_tunai2Group.setDisabled(false);
+			master_jual_produk_card2Group.setDisabled(false);
+			master_jual_produk_cek2Group.setDisabled(false);
+			master_jual_produk_kwitansi2Group.setDisabled(false);
+			master_jual_produk_transfer2Group.setDisabled(false);
+			master_jual_produk_voucher2Group.setDisabled(false);
+			
+			jproduk_cara3Field.setDisabled(false);
+			master_jual_produk_tunai3Group.setDisabled(false);
+			master_jual_produk_card3Group.setDisabled(false);
+			master_jual_produk_cek3Group.setDisabled(false);
+			master_jual_produk_kwitansi3Group.setDisabled(false);
+			master_jual_produk_transfer3Group.setDisabled(false);
+			master_jual_produk_voucher3Group.setDisabled(false);
+			
 			combo_jual_produk.setDisabled(false);
 			combo_satuan_produk.setDisabled(false);
 			djumlah_beli_produkField.setDisabled(false);
@@ -1524,9 +1572,33 @@ Ext.onReady(function(){
 			jproduk_custField.setDisabled(true);
 			jproduk_tanggalField.setDisabled(true);
 			jproduk_keteranganField.setDisabled(true);
-			master_cara_bayarTabPanel.setDisabled(true);
+			//master_cara_bayarTabPanel.setDisabled(true);
 			//detail_jual_produkListEditorGrid.djproduk_add.disable(); //fredi
 			//detail_jual_produkListEditorGrid.djproduk_delete.disable(); //fredi
+			jproduk_caraField.setDisabled(true);
+			master_jual_produk_tunaiGroup.setDisabled(true);
+			master_jual_produk_cardGroup.setDisabled(true);
+			master_jual_produk_cekGroup.setDisabled(true);
+			master_jual_produk_kwitansiGroup.setDisabled(true);
+			master_jual_produk_transferGroup.setDisabled(true);
+			master_jual_produk_voucherGroup.setDisabled(true);
+			
+			jproduk_cara2Field.setDisabled(true);
+			master_jual_produk_tunai2Group.setDisabled(true);
+			master_jual_produk_card2Group.setDisabled(true);
+			master_jual_produk_cek2Group.setDisabled(true);
+			master_jual_produk_kwitansi2Group.setDisabled(true);
+			master_jual_produk_transfer2Group.setDisabled(true);
+			master_jual_produk_voucher2Group.setDisabled(true);
+			
+			jproduk_cara3Field.setDisabled(true);
+			master_jual_produk_tunai3Group.setDisabled(true);
+			master_jual_produk_card3Group.setDisabled(true);
+			master_jual_produk_cek3Group.setDisabled(true);
+			master_jual_produk_kwitansi3Group.setDisabled(true);
+			master_jual_produk_transfer3Group.setDisabled(true);
+			master_jual_produk_voucher3Group.setDisabled(true);
+			
 			combo_jual_produk.setDisabled(true);
 			combo_satuan_produk.setDisabled(true);
 			djumlah_beli_produkField.setDisabled(true);
@@ -1547,7 +1619,31 @@ Ext.onReady(function(){
 			jproduk_tanggalField.setDisabled(true);
 			jproduk_keteranganField.setDisabled(true);
 			jproduk_stat_dokField.setDisabled(true);
-			master_cara_bayarTabPanel.setDisabled(true);
+			//master_cara_bayarTabPanel.setDisabled(true);
+			jproduk_caraField.setDisabled(true);
+			master_jual_produk_tunaiGroup.setDisabled(true);
+			master_jual_produk_cardGroup.setDisabled(true);
+			master_jual_produk_cekGroup.setDisabled(true);
+			master_jual_produk_kwitansiGroup.setDisabled(true);
+			master_jual_produk_transferGroup.setDisabled(true);
+			master_jual_produk_voucherGroup.setDisabled(true);
+			
+			jproduk_cara2Field.setDisabled(true);
+			master_jual_produk_tunai2Group.setDisabled(true);
+			master_jual_produk_card2Group.setDisabled(true);
+			master_jual_produk_cek2Group.setDisabled(true);
+			master_jual_produk_kwitansi2Group.setDisabled(true);
+			master_jual_produk_transfer2Group.setDisabled(true);
+			master_jual_produk_voucher2Group.setDisabled(true);
+			
+			jproduk_cara3Field.setDisabled(true);
+			master_jual_produk_tunai3Group.setDisabled(true);
+			master_jual_produk_card3Group.setDisabled(true);
+			master_jual_produk_cek3Group.setDisabled(true);
+			master_jual_produk_kwitansi3Group.setDisabled(true);
+			master_jual_produk_transfer3Group.setDisabled(true);
+			master_jual_produk_voucher3Group.setDisabled(true);
+			
 			detail_jual_produkListEditorGrid.djproduk_add.disable();
 			detail_jual_produkListEditorGrid.djproduk_delete.disable();
 			combo_jual_produk.setDisabled(true);

@@ -1015,6 +1015,32 @@ Ext.onReady(function(){
 		jpaket_tanggalField.setDisabled(false);
 		jpaket_keteranganField.setDisabled(false);
 		master_cara_bayarTabPanel.setDisabled(false);
+		jpaket_stat_dokField.setDisabled(false);
+		
+		jpaket_caraField.setDisabled(false);
+		master_jual_paket_tunaiGroup.setDisabled(false);
+		master_jual_paket_cardGroup.setDisabled(false);
+		master_jual_paket_cekGroup.setDisabled(false);
+		master_jual_paket_kwitansiGroup.setDisabled(false);
+		master_jual_paket_transferGroup.setDisabled(false);
+		master_jual_paket_voucherGroup.setDisabled(false);
+		
+		jpaket_cara2Field.setDisabled(false);
+		master_jual_paket_tunai2Group.setDisabled(false);
+		master_jual_paket_card2Group.setDisabled(false);
+		master_jual_paket_cek2Group.setDisabled(false);
+		master_jual_paket_kwitansi2Group.setDisabled(false);
+		master_jual_paket_transfer2Group.setDisabled(false);
+		master_jual_paket_voucher2Group.setDisabled(false);
+		
+		jpaket_cara3Field.setDisabled(false);
+		master_jual_paket_tunai3Group.setDisabled(false);
+		master_jual_paket_card3Group.setDisabled(false);
+		master_jual_paket_cek3Group.setDisabled(false);
+		master_jual_paket_kwitansi3Group.setDisabled(false);
+		master_jual_paket_transfer3Group.setDisabled(false);
+		master_jual_paket_voucher3Group.setDisabled(false);
+			
 		detail_jual_paketListEditorGrid.setDisabled(false);
 		detail_pengguna_paketListEditorGrid.setDisabled(false);
 		jpaket_diskonField.setDisabled(false);
@@ -1431,7 +1457,33 @@ Ext.onReady(function(){
 			jpaket_custField.setDisabled(false);
 			jpaket_tanggalField.setDisabled(false);
 			jpaket_keteranganField.setDisabled(false);
-			master_cara_bayarTabPanel.setDisabled(false);
+			
+			//master_cara_bayarTabPanel.setDisabled(false);
+			
+			jpaket_caraField.setDisabled(false);
+			master_jual_paket_tunaiGroup.setDisabled(false);
+			master_jual_paket_cardGroup.setDisabled(false);
+			master_jual_paket_cekGroup.setDisabled(false);
+			master_jual_paket_kwitansiGroup.setDisabled(false);
+			master_jual_paket_transferGroup.setDisabled(false);
+			master_jual_paket_voucherGroup.setDisabled(false);
+			
+			jpaket_cara2Field.setDisabled(false);
+			master_jual_paket_tunai2Group.setDisabled(false);
+			master_jual_paket_card2Group.setDisabled(false);
+			master_jual_paket_cek2Group.setDisabled(false);
+			master_jual_paket_kwitansi2Group.setDisabled(false);
+			master_jual_paket_transfer2Group.setDisabled(false);
+			master_jual_paket_voucher2Group.setDisabled(false);
+			
+			jpaket_cara3Field.setDisabled(false);
+			master_jual_paket_tunai3Group.setDisabled(false);
+			master_jual_paket_card3Group.setDisabled(false);
+			master_jual_paket_cek3Group.setDisabled(false);
+			master_jual_paket_kwitansi3Group.setDisabled(false);
+			master_jual_paket_transfer3Group.setDisabled(false);
+			master_jual_paket_voucher3Group.setDisabled(false);
+			
 			detail_jual_paketListEditorGrid.djpaket_add.enable();
 			detail_jual_paketListEditorGrid.djpaket_delete.enable();
 			combo_jual_paket.setDisabled(false);
@@ -1452,7 +1504,33 @@ Ext.onReady(function(){
 			jpaket_custField.setDisabled(true);
 			jpaket_tanggalField.setDisabled(true);
 			jpaket_keteranganField.setDisabled(true);
-			master_cara_bayarTabPanel.setDisabled(true);
+			
+			//master_cara_bayarTabPanel.setDisabled(true);
+			
+			jpaket_caraField.setDisabled(true);
+			master_jual_paket_tunaiGroup.setDisabled(true);
+			master_jual_paket_cardGroup.setDisabled(true);
+			master_jual_paket_cekGroup.setDisabled(true);
+			master_jual_paket_kwitansiGroup.setDisabled(true);
+			master_jual_paket_transferGroup.setDisabled(true);
+			master_jual_paket_voucherGroup.setDisabled(true);
+			
+			jpaket_cara2Field.setDisabled(true);
+			master_jual_paket_tunai2Group.setDisabled(true);
+			master_jual_paket_card2Group.setDisabled(true);
+			master_jual_paket_cek2Group.setDisabled(true);
+			master_jual_paket_kwitansi2Group.setDisabled(true);
+			master_jual_paket_transfer2Group.setDisabled(true);
+			master_jual_paket_voucher2Group.setDisabled(true);
+			
+			jpaket_cara3Field.setDisabled(true);
+			master_jual_paket_tunai3Group.setDisabled(true);
+			master_jual_paket_card3Group.setDisabled(true);
+			master_jual_paket_cek3Group.setDisabled(true);
+			master_jual_paket_kwitansi3Group.setDisabled(true);
+			master_jual_paket_transfer3Group.setDisabled(true);
+			master_jual_paket_voucher3Group.setDisabled(true);
+			
 			detail_jual_paketListEditorGrid.djpaket_add.disable();
 			detail_jual_paketListEditorGrid.djpaket_delete.disable();
 			combo_jual_paket.setDisabled(true);
@@ -1474,7 +1552,33 @@ Ext.onReady(function(){
 			jpaket_custField.setDisabled(true);
 			jpaket_tanggalField.setDisabled(true);
 			jpaket_keteranganField.setDisabled(true);
-			master_cara_bayarTabPanel.setDisabled(true);
+			
+			//master_cara_bayarTabPanel.setDisabled(true);
+			
+			jpaket_caraField.setDisabled(true);
+			master_jual_paket_tunaiGroup.setDisabled(true);
+			master_jual_paket_cardGroup.setDisabled(true);
+			master_jual_paket_cekGroup.setDisabled(true);
+			master_jual_paket_kwitansiGroup.setDisabled(true);
+			master_jual_paket_transferGroup.setDisabled(true);
+			master_jual_paket_voucherGroup.setDisabled(true);
+			
+			jpaket_cara2Field.setDisabled(true);
+			master_jual_paket_tunai2Group.setDisabled(true);
+			master_jual_paket_card2Group.setDisabled(true);
+			master_jual_paket_cek2Group.setDisabled(true);
+			master_jual_paket_kwitansi2Group.setDisabled(true);
+			master_jual_paket_transfer2Group.setDisabled(true);
+			master_jual_paket_voucher2Group.setDisabled(true);
+			
+			jpaket_cara3Field.setDisabled(true);
+			master_jual_paket_tunai3Group.setDisabled(true);
+			master_jual_paket_card3Group.setDisabled(true);
+			master_jual_paket_cek3Group.setDisabled(true);
+			master_jual_paket_kwitansi3Group.setDisabled(true);
+			master_jual_paket_transfer3Group.setDisabled(true);
+			master_jual_paket_voucher3Group.setDisabled(true);
+			
 			detail_jual_paketListEditorGrid.djpaket_add.disable();
 			detail_jual_paketListEditorGrid.djpaket_delete.disable();
 			combo_jual_paket.setDisabled(true);
