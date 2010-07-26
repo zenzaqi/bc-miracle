@@ -304,7 +304,7 @@ Ext.onReady(function(){
 		fieldLabel: 'Jenis',
 		store:new Ext.data.SimpleStore({
 			fields:['jenis_value', 'jenis_display'],
-			data:[['Perawatan','Perawatan'],['Produk','Produk'],['Paket','Paket'],['Semua','Semua']]
+			data:[['Perawatan','Perawatan'],['Produk','Produk'],['Paket','Paket'],['Kuitansi','Kuitansi'],['Semua','Semua']]
 		}),
 		mode: 'local',
 		editable:false,
