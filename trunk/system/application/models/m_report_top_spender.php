@@ -70,9 +70,9 @@ class M_report_top_spender extends Model{
 			
 			if ($top_jenis == 'Perawatan')
 			{
-				$query = "SELECT customer.cust_no, customer.cust_nama,customer.cust_member, SUM(master_jual_rawat.jrawat_bayar) as total 
-						FROM master_jual_rawat LEFT OUTER JOIN customer
-						ON master_jual_rawat.jrawat_cust = customer.cust_id";
+				$query = "SELECT vu_customer.cust_no, vu_customer.cust_nama, vu_customer.member_no, SUM(master_jual_rawat.jrawat_bayar) as total 
+						FROM master_jual_rawat LEFT OUTER JOIN vu_customer
+						ON master_jual_rawat.jrawat_cust = vu_customer.cust_id";
 			
 				if($trawat_id!='')
 				{
@@ -93,9 +93,9 @@ class M_report_top_spender extends Model{
 			}
 			else if ($top_jenis == 'Produk')
 			{
-				$query = "SELECT customer.cust_no, customer.cust_nama,customer.cust_member, SUM(master_jual_produk.jproduk_bayar) as total 
-						FROM master_jual_produk LEFT OUTER JOIN customer
-						ON master_jual_produk.jproduk_cust = customer.cust_id";
+				$query = "SELECT vu_customer.cust_no, vu_customer.cust_nama, vu_customer.member_no, SUM(master_jual_produk.jproduk_bayar) as total 
+						FROM master_jual_produk LEFT OUTER JOIN vu_customer
+						ON master_jual_produk.jproduk_cust = vu_customer.cust_id";
 			
 				if($trawat_id!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -113,9 +113,9 @@ class M_report_top_spender extends Model{
 			}
 			else if ($top_jenis == 'Paket')
 			{
-				$query = "SELECT customer.cust_no, customer.cust_nama,customer.cust_member, SUM(master_jual_paket.jpaket_bayar) as total 
-						FROM master_jual_paket LEFT OUTER JOIN customer
-						ON master_jual_paket.jpaket_cust = customer.cust_id";
+				$query = "SELECT vu_customer.cust_no, vu_customer.cust_nama, vu_customer.member_no, SUM(master_jual_paket.jpaket_bayar) as total 
+						FROM master_jual_paket LEFT OUTER JOIN vu_customer
+						ON master_jual_paket.jpaket_cust = vu_customer.cust_id";
 			
 				if($trawat_id!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -130,6 +130,26 @@ class M_report_top_spender extends Model{
 					$query.= " master_jual_paket.jpaket_tanggal='".$trawat_tglapp_start."' AND master_jual_paket.jpaket_stat_dok <> 'Batal'";
 				}
 				$query.=" GROUP BY master_jual_paket.jpaket_cust ORDER BY SUM(master_jual_paket.jpaket_bayar) DESC";
+			}
+			else if ($top_jenis == 'Kuitansi')
+			{
+				$query = "SELECT vu_customer.cust_no, vu_customer.cust_nama, vu_customer.member_no, SUM(cetak_kwitansi.kwitansi_nilai) as total 
+						FROM cetak_kwitansi LEFT OUTER JOIN vu_customer
+						ON cetak_kwitansi.kwitansi_cust = vu_customer.cust_id";
+			
+				if($trawat_id!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cetak_kwitansi.kwitansi_tanggal BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."' AND cetak_kwitansi.kwitansi_status <> 'Batal' AND cetak_kwitansi.kwitansi_cara <> 'Retur' ";
+				};
+			
+				if($trawat_tglapp_start!='' && $trawat_tglapp_end!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cetak_kwitansi.kwitansi_tanggal BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."' AND cetak_kwitansi.kwitansi_status <> 'Batal' AND cetak_kwitansi.kwitansi_cara <> 'Retur'";
+				}else if($trawat_tglapp_start!='' && $trawat_tglapp_end==''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cetak_kwitansi.kwitansi_tanggal ='".$trawat_tglapp_start."' AND cetak_kwitansi.kwitansi_status <> 'Batal' AND cetak_kwitansi.kwitansi_cara <> 'Retur'";
+				}
+				$query.=" GROUP BY cetak_kwitansi.kwitansi_cust ORDER BY SUM(cetak_kwitansi.kwitansi_nilai) DESC";
 			}
 			else if ($top_jenis == 'Semua')
 			{
@@ -146,6 +166,10 @@ class M_report_top_spender extends Model{
 						UNION	
 						(
 							SELECT rawat.jrawat_cust AS customer, rawat.jrawat_bayar AS total  FROM master_jual_rawat AS rawat WHERE rawat.jrawat_bayar IS NOT NULL AND (rawat.jrawat_tanggal BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."') AND rawat.jrawat_stat_dok <> 'Batal' ORDER BY rawat.jrawat_bayar DESC
+						)
+						UNION	
+						(
+							SELECT kwitansi.kwitansi_cust AS customer, kwitansi.kwitansi_nilai AS total  FROM cetak_kwitansi AS kwitansi WHERE kwitansi.kwitansi_nilai IS NOT NULL AND (kwitansi.kwitansi_tanggal BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."') AND kwitansi.kwitansi_status <> 'Batal' AND kwitansi.kwitansi_cara <> 'Retur' ORDER BY kwitansi.kwitansi_nilai DESC
 						)
 					)AS table_union
 					LEFT OUTER JOIN vu_customer
