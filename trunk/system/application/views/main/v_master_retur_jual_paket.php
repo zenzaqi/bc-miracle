@@ -906,7 +906,7 @@ Ext.onReady(function(){
         tpl: retur_jual_paket_tpl,
         //applyTo: 'search',
         itemSelector: 'div.search-item',
-		triggerAction: 'all',
+		triggerAction: 'query',
 		lazyRender:true,
 		//listClass: 'x-combo-list-small',
 		anchor: '95%'
@@ -1164,7 +1164,7 @@ Ext.onReady(function(){
 		el: 'fp_detail_retur_paket_tokwitansi',
 		title: 'Detail Pemakaian Perawatan dalam Paket',
 		height: 250,
-		width: 690,
+		width: 790,
 		autoScroll: true,
 		store: detail_retur_paket_tokwitansiDataStore, // DataStore
 		colModel: detail_retur_paket_tokwitansiColumnModel, // Nama-nama Columns
@@ -1347,7 +1347,7 @@ Ext.onReady(function(){
 		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
-		width: 700,        
+		width: 800,        
 		items: [master_retur_jual_paket_masterGroup,detail_retur_paket_tokwitansiListEditorGrid,kwitansi_tercetakGroup]
 		,
 		buttons: [{
