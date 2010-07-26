@@ -2757,7 +2757,7 @@ class M_master_jual_produk extends Model{
 								return NULL;
 							}
 						}else if($rs->num_rows()==2){
-							$sql="SELECT jproduk_nobukti, jproduk_cara2, jtunai_nilai AS bayar2_nilai FROM master_jual_produk LEFT JOIN jual_tunai ON(jtunai_ref=jproduk_nobukti) WHERE jproduk_id='$jproduk_id' LIMIT ,1";
+							$sql="SELECT jproduk_nobukti, jproduk_cara2, jtunai_nilai AS bayar2_nilai FROM master_jual_produk LEFT JOIN jual_tunai ON(jtunai_ref=jproduk_nobukti) WHERE jproduk_id='$jproduk_id' LIMIT 1,1";
 							$rs=$this->db->query($sql);
 							if($rs->num_rows()){
 								return $rs->row();
