@@ -1,0 +1,1 @@
+CREATE OR REPLACE ALGORITHM=UNDEFINED SQL SECURITY INVOKER VIEW `vu_jpaket_total_pakai` AS select `detail_ambil_paket`.`dapaket_jpaket` AS `dapaket_jpaket`,sum(`perawatan`.`rawat_harga`) AS `jpaket_total_pakai` from (`detail_ambil_paket` left join `perawatan` on((`detail_ambil_paket`.`dapaket_item` = `perawatan`.`rawat_id`))) group by `detail_ambil_paket`.`dapaket_jpaket`;

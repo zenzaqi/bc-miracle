@@ -116,7 +116,7 @@ class M_master_retur_jual_paket extends Model{
 	}
 	
 	function get_jual_paket_list($query,$start,$end){
-		$sql="SELECT master_jual_paket.jpaket_id
+		/*$sql="SELECT master_jual_paket.jpaket_id
 				,jpaket_nobukti
 				,jpaket_tanggal
 				,cust_id
@@ -129,9 +129,27 @@ class M_master_retur_jual_paket extends Model{
 			LEFT JOIN customer ON(jpaket_cust=cust_id)
 			LEFT JOIN vu_jpaket_total_bayar ON(vu_jpaket_total_bayar.jpaket_id=master_jual_paket.jpaket_id)
 			LEFT JOIN vu_jpaket_total_pakai ON(vu_jpaket_total_pakai.jpaket_id=master_jual_paket.jpaket_id)
-			WHERE jpaket_cust=cust_id";
-		if($query<>"")
-			$sql.=" and (jpaket_nobukti like '%".$query."%' or jpaket_tanggal like '%".$query."%' or cust_nama like '%".$query."%' or cust_alamat like '%".$query."%') "; 
+			WHERE jpaket_cust=cust_id";*/
+		$sql = "SELECT jpaket_id
+				,jpaket_nobukti
+				,jpaket_tanggal
+				,cust_id
+				,cust_nama
+				,cust_alamat
+				,jpaket_totalbiaya as jpaket_total_bayar
+				,vu_jpaket_total_pakai.jpaket_total_pakai
+				,(jpaket_totalbiaya - vu_jpaket_total_pakai.jpaket_total_pakai) AS jpaket_total_retur
+			FROM master_jual_paket
+			JOIN vu_jpaket_total_pakai ON(vu_jpaket_total_pakai.dapaket_jpaket=master_jual_paket.jpaket_id)
+			LEFT JOIN customer ON(jpaket_cust=cust_id)
+			WHERE jpaket_id NOT IN (
+				SELECT rpaket_nobuktijual
+				FROM master_retur_jual_paket
+				)";
+		if($query<>""){
+			$sql.=eregi("WHERE",$sql)? " AND ":" WHERE ";
+			$sql.=" (jpaket_nobukti like '%".$query."%' or cust_nama like '%".$query."%' ) "; 
+		}
 		$query = $this->db->query($sql);
 		$nbrows = $query->num_rows();
 		$limit = $sql." LIMIT ".$start.",".$end;			
@@ -202,7 +220,7 @@ class M_master_retur_jual_paket extends Model{
 					,dapaket_dpaket
 				) as vu_total_pakai on(vu_total_pakai.dapaket_dpaket=total_milik.dpaket_id 
 					and vu_total_pakai.dapaket_item=total_milik.rpaket_perawatan)
-			WHERE total_ambil_item>0 AND dapaket_keterangan<>'retur'";
+			WHERE total_ambil_item>0";// AND dapaket_keterangan<>'retur'";
 			
 		$result = $this->db->query($sql);
 		$nbrows = $result->num_rows();
