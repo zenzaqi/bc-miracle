@@ -1,0 +1,5 @@
+- Laporan Pengambilan Paket
+  - link : ?C=c_master_ambil_paket&m=laporan
+  - Opsi : - Rekap [Faktur, Tanggal, Customer, Paket]
+           - Detail [Faktur, Tanggal, Customer, Paket, Perawatan, Pemakai, Referal]
+  
