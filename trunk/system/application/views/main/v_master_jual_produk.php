@@ -2561,7 +2561,7 @@ Ext.onReady(function(){
 		fieldLabel: 'Cara Bayar',
 		store:new Ext.data.SimpleStore({
 			fields:['jproduk_cara_value', 'jproduk_cara_display'],
-			data:[['tunai','Tunai'],['kwitansi','Kwitansi'],['card','Kartu Kredit'],['cek/giro','Cek/Giro'],['transfer','Transfer'],['voucher','Voucher']]
+			data:[['tunai','Tunai'],['kwitansi','Kuitansi'],['card','Kartu Kredit'],['cek/giro','Cek/Giro'],['transfer','Transfer'],['voucher','Voucher']]
 		}),
 		mode: 'local',
 		displayField: 'jproduk_cara_display',
@@ -2577,7 +2577,7 @@ Ext.onReady(function(){
 		fieldLabel: 'Cara Bayar 2',
 		store:new Ext.data.SimpleStore({
 			fields:['jproduk_cara_value', 'jproduk_cara_display'],
-			data:[['tunai','Tunai'],['kwitansi','Kwitansi'],['card','Kartu Kredit'],['cek/giro','Cek/Giro'],['transfer','Transfer'],['voucher','Voucher']]
+			data:[['tunai','Tunai'],['kwitansi','Kuitansi'],['card','Kartu Kredit'],['cek/giro','Cek/Giro'],['transfer','Transfer'],['voucher','Voucher']]
 		}),
 		mode: 'local',
 		displayField: 'jproduk_cara_display',
@@ -2593,7 +2593,7 @@ Ext.onReady(function(){
 		fieldLabel: 'Cara Bayar 3',
 		store:new Ext.data.SimpleStore({
 			fields:['jproduk_cara_value', 'jproduk_cara_display'],
-			data:[['tunai','Tunai'],['kwitansi','Kwitansi'],['card','Kartu Kredit'],['cek/giro','Cek/Giro'],['transfer','Transfer'],['voucher','Voucher']]
+			data:[['tunai','Tunai'],['kwitansi','Kuitansi'],['card','Kartu Kredit'],['cek/giro','Cek/Giro'],['transfer','Transfer'],['voucher','Voucher']]
 		}),
 		mode: 'local',
 		displayField: 'jproduk_cara_display',
@@ -3670,7 +3670,7 @@ Ext.onReady(function(){
 	
 	jproduk_kwitansi_noField= new Ext.form.ComboBox({
 		id: 'jproduk_kwitansi_noField',
-		fieldLabel: 'Nomor Kwitansi',
+		fieldLabel: 'Nomor Kuitansi',
 		store: cbo_kwitansi_jual_produk_DataStore,
 		mode: 'remote',
 		displayField:'ckwitansi_no',
@@ -3733,7 +3733,7 @@ Ext.onReady(function(){
 	
 	jproduk_kwitansi_no2Field= new Ext.form.ComboBox({
 		id: 'jproduk_kwitansi_no2Field',
-		fieldLabel: 'Nomor Kwitansi',
+		fieldLabel: 'Nomor Kuitansi',
 		store: cbo_kwitansi_jual_produk_DataStore,
 		mode: 'remote',
 		displayField:'ckwitansi_no',
@@ -3796,7 +3796,7 @@ Ext.onReady(function(){
 	
 	jproduk_kwitansi_no3Field= new Ext.form.ComboBox({
 		id: 'jproduk_kwitansi_no3Field',
-		fieldLabel: 'Nomor Kwitansi',
+		fieldLabel: 'Nomor Kuitansi',
 		store: cbo_kwitansi_jual_produk_DataStore,
 		mode: 'remote',
 		displayField:'ckwitansi_no',

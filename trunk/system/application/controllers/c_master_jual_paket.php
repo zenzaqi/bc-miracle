@@ -775,7 +775,7 @@ class C_master_jual_paket extends Controller {
 		$data['iklantoday_keterangan']=$rsiklan->iklantoday_keterangan;
 		$data['cust_alamat']=$rs->cust_alamat;
 		$data['jumlah_subtotal']=ubah_rupiah($rs->jumlah_subtotal);
-		$data['jumlah_tunai']=$rs->jtunai_nilai;
+		//$data['jumlah_tunai']=$rs->jtunai_nilai;
 		$data['jpaket_diskon']=$rs->jpaket_diskon;
 		$data['jpaket_cashback']=$rs->jpaket_cashback;
 		//$data['jpaket_creator']=$rs->jpaket_creator;
