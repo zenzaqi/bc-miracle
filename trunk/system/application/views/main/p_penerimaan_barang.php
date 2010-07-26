@@ -5,7 +5,7 @@
 <title>Laporan Pesanan Pembelian</title>
 </head>
 
-<body onload="window.print();window.close();">
+<body onload="window.print();">
 <table width="700" border="1" cellspacing="0" cellpadding="0">
   <tr>
     <td height="120" valign="top"><table width="100%" border="0" cellspacing="0" cellpadding="0">
@@ -18,10 +18,11 @@
 			$no_bukti=$print->no_bukti;
 			$tanggal=$print->tanggal;
 			$supplier_nama=$print->supplier_nama;
+			$surat_jalan=$print->terima_surat_jalan;
 		}
 		?>
           <tr>
-            <td width="24%" align="right"><strong>No.</strong></td>
+            <td width="40%" align="right"><strong>No.</strong></td>
             <td width="4%">&nbsp;</td>
             <td width="72%"><?=$no_bukti; ?></td>
           </tr>
@@ -34,6 +35,11 @@
             <td align="right"><strong>Dari</strong></td>
             <td>&nbsp;</td>
             <td><?=$supplier_nama; ?></td>
+          </tr>
+		  <tr>
+            <td align="right"><strong>Surat Jalan</strong></td>
+            <td>&nbsp;</td>
+            <td><?=$surat_jalan; ?></td>
           </tr>
           <tr>
             <td align="right">&nbsp;</td>
