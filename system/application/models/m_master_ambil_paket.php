@@ -18,6 +18,42 @@ class M_master_ambil_paket extends Model{
 			parent::Model();
 		}
 		
+		function get_laporan($tgl_awal,$tgl_akhir,$periode,$opsi,$group){
+			$order_by="";
+			$group_by="";
+			switch($group){
+				case "Tanggal": $order_by=" ORDER BY tanggal";$group_by=" GROUP BY tanggal";break;
+				case "Customer": $order_by=" ORDER BY cust_id";break;
+				case "No Faktur": $order_by=" ORDER BY no_bukti";break;
+				case "Paket": $order_by=" ORDER BY paket_kode";break;
+				case "Perawatan": $order_by=" ORDER BY rawat_id";break;
+				case "Pemakai": $order_by=" ORDER BY pemakai_nama";break;
+				case "Referal": $order_by=" ORDER BY referal";break;
+				default: $order_by=" ORDER BY no_bukti";break;
+			}
+			
+			if($opsi=='rekap'){
+				if($periode=='all')
+					$sql="SELECT no_bukti,tanggal,paket_nama,paket_kode,cust_id,cust_nama,cust_no,dapaket_paket,dapaket_jumlah as jumlah FROM vu_detail_ambil_paket_rawat WHERE jpaket_stat_dok<>'Batal' ".$order_by;
+				else if($periode=='bulan')
+					$sql="SELECT no_bukti,tanggal,paket_nama,paket_kode,cust_id,cust_nama,cust_no,dapaket_paket,dapaket_jumlah as jumlah FROM vu_detail_ambil_paket_rawat WHERE jpaket_stat_dok<>'Batal' AND  date_format(tanggal, '%Y-%m')='".$tgl_awal."' ".$order_by;
+				else if($periode=='tanggal')
+					$sql="SELECT no_bukti,tanggal,paket_nama,paket_kode,cust_id,cust_nama,cust_no,dapaket_paket,dapaket_jumlah as jumlah FROM vu_trans_ambil_paket WHERE jpaket_stat_dok<>'Batal' AND date_format(tanggal, '%Y-%m-%d')>='".$tgl_awal."' AND date_format(tanggal, '%Y-%m-%d')<='".$tgl_akhir."' ".$order_by;
+			}else if($opsi=='detail'){
+				if($periode=='all')
+					$sql="SELECT * FROM vu_detail_ambil_paket_rawat WHERE jpaket_stat_dok<>'Batal' ".$order_by;
+				else if($periode=='bulan')
+					$sql="SELECT * FROM vu_detail_ambil_paket_rawat WHERE jpaket_stat_dok<>'Batal' AND  date_format(tanggal, '%Y-%m')='".$tgl_awal."' ".$order_by;
+				else if($periode=='tanggal')
+					$sql="SELECT distinct * FROM vu_detail_ambil_paket_rawat WHERE jpaket_stat_dok<>'Batal' AND date_format(tanggal, '%Y-%m-%d')>='".$tgl_awal."' AND date_format(tanggal, '%Y-%m-%d')<='".$tgl_akhir."' ".$order_by;
+			}
+			
+			//echo $sql;
+			
+			$query=$this->db->query($sql);
+			return $query->result();
+		}
+		
 	/* UPDATE db.detail_jual_paket.dpaket_sisa_paket */
 	function total_sisa_paket_update($dapaket_dpaket, $dapaket_jpaket, $dapaket_paket){
 		$sql_sisa_paket = "UPDATE detail_jual_paket
