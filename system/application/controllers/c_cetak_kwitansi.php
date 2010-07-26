@@ -137,6 +137,9 @@ class C_cetak_kwitansi extends Controller {
 			case "UPDATE":
 				$this->cetak_kwitansi_update();
 				break;
+			case "BATAL":
+				$this->cetak_kwitansi_batal();
+				break;
 			case "CREATE":
 				$this->cetak_kwitansi_create();
 				break;
@@ -174,22 +177,52 @@ class C_cetak_kwitansi extends Controller {
 		$kwitansi_id=trim(@$_POST["kwitansi_id"]);
 		$kwitansi_no=trim(@$_POST["kwitansi_no"]);
 		$kwitansi_no=str_replace("/(<\/?)(p)([^>]*>)", "",$kwitansi_no);
-		$kwitansi_no=str_replace(",", "\,",$kwitansi_no);
-		$kwitansi_no=str_replace("'", "''",$kwitansi_no);
 		$kwitansi_cust=trim(@$_POST["kwitansi_cust"]);
 		$kwitansi_tanggal=trim(@$_POST["kwitansi_tanggal"]);
 		$kwitansi_ref=trim(@$_POST["kwitansi_ref"]);
 		$kwitansi_nilai=trim(@$_POST["kwitansi_nilai"]);
 		$kwitansi_keterangan=trim(@$_POST["kwitansi_keterangan"]);
 		$kwitansi_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$kwitansi_keterangan);
-		$kwitansi_keterangan=str_replace(",", "\,",$kwitansi_keterangan);
-		$kwitansi_keterangan=str_replace("'", "''",$kwitansi_keterangan);
 		$kwitansi_status=trim(@$_POST["kwitansi_status"]);
 		$kwitansi_status=str_replace("/(<\/?)(p)([^>]*>)", "",$kwitansi_status);
-		$kwitansi_status=str_replace(",", "\,",$kwitansi_status);
-		$kwitansi_status=str_replace("'", "''",$kwitansi_status);
+		
+		$kwitansi_cara=trim(@$_POST["kwitansi_cara"]);
+		$kwitansi_cara=str_replace("/(<\/?)(p)([^>]*>)", "",$kwitansi_cara);
+		
+		$kwitansi_bayar=trim(@$_POST["kwitansi_bayar"]);
+		
+		$kwitansi_tunai_nilai=trim($_POST["kwitansi_tunai_nilai"]);
+		
+		$kwitansi_card_nama=trim($_POST["kwitansi_card_nama"]);
+		$kwitansi_card_edc=trim($_POST["kwitansi_card_edc"]);
+		$kwitansi_card_no=trim($_POST["kwitansi_card_no"]);
+		$kwitansi_card_nilai=trim($_POST["kwitansi_card_nilai"]);
+		
+		$kwitansi_cek_nama=trim($_POST["kwitansi_cek_nama"]);
+		$kwitansi_cek_no=trim($_POST["kwitansi_cek_no"]);
+		$kwitansi_cek_valid=trim($_POST["kwitansi_cek_valid"]);
+		$kwitansi_cek_bank=trim($_POST["kwitansi_cek_bank"]);
+		$kwitansi_cek_nilai=trim($_POST["kwitansi_cek_nilai"]);
+		
+		$kwitansi_transfer_bank=trim($_POST["kwitansi_transfer_bank"]);
+		$kwitansi_transfer_nama=trim($_POST["kwitansi_transfer_nama"]);
+		$kwitansi_transfer_nilai=trim($_POST["kwitansi_transfer_nilai"]);
+		
+		$cetak = trim($_POST["cetak"]);
+		
 		$kwitansi_update=$_SESSION[SESSION_USERID];
-		$result = $this->m_cetak_kwitansi->cetak_kwitansi_update($kwitansi_id ,$kwitansi_no ,$kwitansi_cust ,$kwitansi_tanggal, $kwitansi_ref ,$kwitansi_nilai ,$kwitansi_keterangan ,$kwitansi_status ,$kwitansi_update );
+		$result = $this->m_cetak_kwitansi->cetak_kwitansi_update($kwitansi_id ,$kwitansi_no ,$kwitansi_cust ,$kwitansi_tanggal, $kwitansi_ref ,$kwitansi_nilai ,$kwitansi_keterangan ,$kwitansi_status ,$kwitansi_cara ,$kwitansi_bayar ,$kwitansi_tunai_nilai ,$kwitansi_card_nama ,$kwitansi_card_edc ,$kwitansi_card_no ,$kwitansi_card_nilai ,$kwitansi_cek_nama ,$kwitansi_cek_no ,$kwitansi_cek_valid ,$kwitansi_cek_bank ,$kwitansi_cek_nilai ,$kwitansi_transfer_bank ,$kwitansi_transfer_nama ,$kwitansi_transfer_nilai ,$kwitansi_update ,$cetak );
+		echo $result;
+	}
+	
+	function cetak_kwitansi_batal(){
+		//POST variable here
+		$kwitansi_id=trim(@$_POST["kwitansi_id"]);
+		$kwitansi_status=trim(@$_POST["kwitansi_status"]);
+		$kwitansi_status=str_replace("/(<\/?)(p)([^>]*>)", "",$kwitansi_status);
+		
+		$kwitansi_update=$_SESSION[SESSION_USERID];
+		$result = $this->m_cetak_kwitansi->cetak_kwitansi_batal($kwitansi_id ,$kwitansi_status ,$kwitansi_update );
 		echo $result;
 	}
 	
@@ -234,9 +267,11 @@ class C_cetak_kwitansi extends Controller {
 		$kwitansi_transfer_nama=trim($_POST["kwitansi_transfer_nama"]);
 		$kwitansi_transfer_nilai=trim($_POST["kwitansi_transfer_nilai"]);
 		
+		$cetak = trim($_POST["cetak"]);
+		
 		$kwitansi_creator=$_SESSION[SESSION_USERID];
 		
-		$result=$this->m_cetak_kwitansi->cetak_kwitansi_create($kwitansi_no ,$kwitansi_cust ,$kwitansi_tanggal, $kwitansi_ref ,$kwitansi_nilai ,$kwitansi_keterangan ,$kwitansi_status ,$kwitansi_cara ,$kwitansi_bayar ,$kwitansi_tunai_nilai ,$kwitansi_card_nama ,$kwitansi_card_edc ,$kwitansi_card_no ,$kwitansi_card_nilai ,$kwitansi_cek_nama ,$kwitansi_cek_no ,$kwitansi_cek_valid ,$kwitansi_cek_bank ,$kwitansi_cek_nilai ,$kwitansi_transfer_bank ,$kwitansi_transfer_nama ,$kwitansi_transfer_nilai ,$kwitansi_creator );
+		$result=$this->m_cetak_kwitansi->cetak_kwitansi_create($kwitansi_no ,$kwitansi_cust ,$kwitansi_tanggal, $kwitansi_ref ,$kwitansi_nilai ,$kwitansi_keterangan ,$kwitansi_status ,$kwitansi_cara ,$kwitansi_bayar ,$kwitansi_tunai_nilai ,$kwitansi_card_nama ,$kwitansi_card_edc ,$kwitansi_card_no ,$kwitansi_card_nilai ,$kwitansi_cek_nama ,$kwitansi_cek_no ,$kwitansi_cek_valid ,$kwitansi_cek_bank ,$kwitansi_cek_nilai ,$kwitansi_transfer_bank ,$kwitansi_transfer_nama ,$kwitansi_transfer_nilai ,$kwitansi_creator ,$cetak );
 		echo $result;
 	}
 
@@ -341,7 +376,6 @@ class C_cetak_kwitansi extends Controller {
 	function print_paper(){
   		//POST varibale here
 		$kwitansi_id=trim(@$_POST["kwitansi_id"]);
-		
 		
 		$result = $this->m_cetak_kwitansi->print_paper($kwitansi_id);
 		$rs=$result->row();
