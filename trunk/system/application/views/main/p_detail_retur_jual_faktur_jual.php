@@ -15,17 +15,17 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Laporan Detail Retur Penjualan <?php echo $periode; ?> Group by No Faktur</title>
+<title>Laporan Detail Retur Penjualan <?php echo $periode; ?> Group by No Faktur Jual</title>
 <link rel='stylesheet' type='text/css' href='../assets/modules/main/css/printstyle.css'/>
 </head>
 <body onload="window.print()">
 <table summary='Detail Retur Jual'>
-	<caption>Laporan Detail Retur Penjualan <br/><?php echo $periode; ?> <br/>Group by No Faktur</caption>
+	<caption>Laporan Detail Retur Penjualan <br/><?php echo $periode; ?> <br/>Group by No Faktur Jual</caption>
 	<thead>
     	<tr>
         	<th scope='col'>No</th>
             <th scope='col'>Tanggal</th>
-            <th scope='col'>No Faktur Jual</th>
+            <th scope='col'>No Faktur</th>
             <th scope='col'>Customer</th>
             <th scope='col'>Produk</th>
             <th scope='col'>Satuan</th>
@@ -48,12 +48,12 @@
 		
 		foreach($data_print as $printlist) { $i++; 
 		
-			if($group!==$printlist->no_bukti){
+			if($group!==$printlist->no_bukti_jual){
 			$j++;
 		?>
         <tr>
         	<td scope='col'><b><?php echo $j; ?></b></td>
-            <td scope='col' colspan="11"><b><?php echo $printlist->no_bukti; ?></b></td>
+            <td scope='col' colspan="11"><b><?php echo $printlist->no_bukti_jual."/".$printlist->tanggal; ?></b></td>
         </tr>
         <?php
 			
@@ -63,7 +63,7 @@
 				$sub_nilai=0;
 				foreach($data_print as $print) { 
 					
-					if($print->no_bukti==$printlist->no_bukti){
+					if($print->no_bukti_jual==$printlist->no_bukti_jual){
 						$i++;
 						$total_item+=$print->jumlah_barang;
 						$total_cashback+=$print->diskon_nilai;
@@ -76,8 +76,8 @@
 		<tr>
         	<td><? echo $i; ?></td>
             <td><?php echo $print->tanggal; ?></td>
-            <td><?php echo $print->no_bukti_jual."/".$print->tanggal_jual; ?></td>
-            <td><?php echo $print->cust_nama." (".$print->cust_no.")"; ?></td>
+             <td><?php echo $print->no_bukti; ?></td>
+             <td><?php echo $print->cust_nama." (".$print->cust_no.")"; ?></td>
             <td><?php echo $print->produk_nama."( ".$print->produk_kode.")"; ?></td>
             <td><?php echo $print->satuan_nama; ?></td>
             <td class="numeric"><?php echo number_format($print->jumlah_barang,0,",","."); ?></td>
@@ -93,14 +93,14 @@
 		<tr>
             <td colspan="6">&nbsp;</td>
             <td align="right" class="numeric"><b><?php echo number_format($sub_item,0,",","."); ?></b></td>
-            <td colspan="2" > &nbsp; </td>
+            <td colspan="2" >&nbsp;  </td>
             <td align="right" class="numeric"><b><?php echo number_format($sub_cashback,0,",","."); ?></b></td>
-            <td> &nbsp; </td>
+            <td>&nbsp;  </td>
             <td align="right" class="numeric"><b><?php echo number_format($sub_nilai,0,",","."); ?></b></td>
          </tr>
         <?
 		}
-		$group=$printlist->no_bukti;
+		$group=$printlist->no_bukti_jual;
 		}
 		
 		

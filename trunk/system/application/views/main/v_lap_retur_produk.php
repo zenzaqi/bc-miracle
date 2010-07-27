@@ -101,6 +101,32 @@ $bulan="";
 Ext.onReady(function(){
   Ext.QuickTips.init();
 
+	var group_master_Store= new Ext.data.SimpleStore({
+			id: 'group_master_Store',
+			fields:['group'],
+			data:[['No Faktur'],['No Faktur Jual'],['Tanggal'],['Customer']]
+	});
+	
+	var group_detail_Store= new Ext.data.SimpleStore({
+			id: 'group_detail_Store',
+			fields:['group'],
+			data:[['No Faktur'],['No Faktur Jual'],['Tanggal'],['Customer'],['Produk']]
+	});
+	
+	var rpt_rproduk_groupField=new Ext.form.ComboBox({
+		id:'rpt_rproduk_groupField',
+		fieldLabel:'Kelompokkan',
+		store: group_master_Store,
+		mode: 'local',
+		displayField: 'group',
+		valueField: 'group',
+		value: 'No Faktur',
+		width: 150,
+		triggerAction: 'all',
+		typeAhead: true,
+		lazyRender: true
+	});
+	
 	rpt_rproduk_bulanField=new Ext.form.ComboBox({
 		id:'rpt_rproduk_bulanField',
 		fieldLabel:' ',
@@ -135,7 +161,8 @@ Ext.onReady(function(){
 		id:'rpt_rproduk_opsitglField',
 		boxLabel:'Tanggal',
 		width:100,
-		name: 'filter_opsi'
+		name: 'filter_opsi',
+		checked: true
 	});
 	
 	rpt_rproduk_opsiblnField=new Ext.form.Radio({
@@ -148,8 +175,7 @@ Ext.onReady(function(){
 	rpt_rproduk_opsiallField=new Ext.form.Radio({
 		id:'rpt_rproduk_opsiallField',
 		boxLabel:'Semua',
-		name: 'filter_opsi',
-		checked: true
+		name: 'filter_opsi'
 	});
 	
 	rpt_rproduk_tglawalField= new Ext.form.DateField({
@@ -196,11 +222,11 @@ Ext.onReady(function(){
 		frame: false,
 		bolder: false,
 		anchor: '98%',
-		items:[{
+		items:[/*{
 				layout: 'column',
 				border: false,
 				items:[rpt_rproduk_opsiallField]
-			},{
+			},*/{
 				layout: 'column',
 				border: false,
 				items:[rpt_rproduk_opsitglField, {
@@ -245,6 +271,14 @@ Ext.onReady(function(){
 		items: [rpt_rproduk_rekapField ,rpt_rproduk_detailField]
 	});
 	
+	var	rpt_rproduk_groupbyField=new Ext.form.FieldSet({
+		id: 'rpt_rproduk_groupbyField',
+		title: 'Group By',
+		border: true,
+		anchor: '98%',
+		items: [rpt_rproduk_groupField]
+	});
+	
 	function is_valid_form(){
 		if(rpt_rproduk_opsitglField.getValue()==true){
 			rpt_rproduk_tglawalField.allowBlank=false;
@@ -269,6 +303,7 @@ Ext.onReady(function(){
 		var rproduk_bulan="";
 		var rproduk_tahun="";
 		var rproduk_periode="";
+		var rproduk_group="";
 		
 		var win;               
 		if(is_valid_form()){
@@ -285,6 +320,7 @@ Ext.onReady(function(){
 			rproduk_periode='all';
 		}
 		
+		if(rpt_rproduk_groupField.getValue()!==""){rproduk_group=rpt_rproduk_groupField.getValue(); }
 		if(rpt_rproduk_rekapField.getValue()==true){rproduk_opsi='rekap';}else{rproduk_opsi='detail';}
 		
 			Ext.Ajax.request({   
@@ -296,15 +332,15 @@ Ext.onReady(function(){
 					opsi		: rproduk_opsi,
 					bulan		: rproduk_bulan,
 					tahun		: rproduk_tahun,
-					periode		: rproduk_periode
-					
+					periode		: rproduk_periode,
+					group		: rproduk_group
 				}, 
 				success: function(response){              
 					var result=eval(response.responseText);
 					switch(result){
 					case 1:
 						win = window.open('./print/report_rproduk.html','report_rproduk','height=400,width=800,resizable=1,scrollbars=1, menubar=1');
-						win.print();
+						//win.print();
 						break;
 					default:
 						Ext.MessageBox.show({
@@ -347,7 +383,7 @@ Ext.onReady(function(){
 		y:0,
 		width: 400, 
 		autoHeight: true,
-		items: [rpt_rproduk_periodeField,rpt_rproduk_opsiField],
+		items: [rpt_rproduk_periodeField,rpt_rproduk_opsiField, rpt_rproduk_groupbyField],
 		monitorValid:true,
 		buttons: [{
 				text: 'Print',
@@ -380,6 +416,39 @@ Ext.onReady(function(){
   	rpt_rprodukWindow.show();
 	
 	//EVENTS
+	/*rpt_rproduk_opsitglField.on("check",function(){
+		if(rpt_rproduk_opsitglField.getValue()==true){
+			rpt_rproduk_tglawalField.allowBlank=false;
+			rpt_rproduk_tglakhirField.allowBlank=false;
+		}else{
+			rpt_rproduk_tglawalField.allowBlank=true;
+			rpt_rproduk_tglakhirField.allowBlank=true;
+		}
+	});
+	*/
+	
+	//EVENTS
+	
+	rpt_rproduk_rekapField.on("check", function(){
+		rpt_rproduk_groupField.setValue('No faktur');
+		if(rpt_rproduk_rekapField.getValue()==true){
+			rpt_rproduk_groupField.bindStore(group_master_Store);
+		}else
+		{
+			rpt_rproduk_groupField.bindStore(group_detail_Store);
+		}
+	});
+	
+	rpt_rproduk_detailField.on("check", function(){
+		rpt_rproduk_groupField.setValue('No Faktur');
+		if(rpt_rproduk_detailField.getValue()==true){
+			rpt_rproduk_groupField.bindStore(group_detail_Store);
+		}else
+		{
+			rpt_rproduk_groupField.bindStore(group_master_Store);
+		}
+	});
+	
 	rpt_rproduk_opsitglField.on("check",function(){
 		if(rpt_rproduk_opsitglField.getValue()==true){
 			rpt_rproduk_tglawalField.allowBlank=false;
@@ -388,6 +457,7 @@ Ext.onReady(function(){
 			rpt_rproduk_tglawalField.allowBlank=true;
 			rpt_rproduk_tglakhirField.allowBlank=true;
 		}
+		
 	});
 	
 });

@@ -40,11 +40,11 @@ class M_master_jual_produk extends Model{
 					$sql="SELECT distinct * FROM vu_trans_produk WHERE jproduk_stat_dok<>'Batal' AND date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."' ".$order_by;
 			}else if($opsi=='detail'){
 				if($periode=='all')
-					$sql="SELECT distinct * FROM vu_detail_jual_produk WHERE jproduk_stat_dok<>'Batal' ".$order_by;
+					$sql="SELECT * FROM vu_detail_jual_produk WHERE jproduk_stat_dok<>'Batal' ".$order_by;
 				else if($periode=='bulan')
-					$sql="SELECT distinct * FROM vu_detail_jual_produk WHERE jproduk_stat_dok<>'Batal' AND date_format(tanggal,'%Y-%m')='".$tgl_awal."' ".$order_by;
+					$sql="SELECT * FROM vu_detail_jual_produk WHERE jproduk_stat_dok<>'Batal' AND date_format(tanggal,'%Y-%m')='".$tgl_awal."' ".$order_by;
 				else if($periode=='tanggal')
-					$sql="SELECT distinct * FROM vu_detail_jual_produk WHERE jproduk_stat_dok<>'Batal' AND date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."' ".$order_by;
+					$sql="SELECT * FROM vu_detail_jual_produk WHERE jproduk_stat_dok<>'Batal' AND date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."' ".$order_by;
 			}
 			//echo $sql;
 			

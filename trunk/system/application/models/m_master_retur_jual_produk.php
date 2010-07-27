@@ -77,22 +77,38 @@ class M_master_retur_jual_produk extends Model{
 		}
 	}
 		
-		function get_laporan($tgl_awal,$tgl_akhir,$periode,$opsi){
+		function get_laporan($tgl_awal,$tgl_akhir,$periode,$opsi,$group){
+			
+			switch($group){
+				case "Tanggal": $order_by=" ORDER BY tanggal";break;
+				case "Customer": $order_by=" ORDER BY cust_nama ASC";break;
+				case "No Faktur": $order_by=" ORDER BY no_bukti";break;
+				case "Produk": $order_by=" ORDER BY produk_kode";break;
+				case "No Faktur Jual": $order_by=" ORDER BY no_bukti_jual";break;
+				default: $order_by=" ORDER BY no_bukti ASC";break;
+			}
+			
 			if($opsi=='rekap'){
 				if($periode=='all')
-					$sql="SELECT * FROM vu_trans_retur_produk";
+					$sql="SELECT distinct * FROM vu_trans_retur_produk WHERE rproduk_stat_dok<>'Batal' ".$order_by;
 				else if($periode=='bulan')
-					$sql="SELECT * FROM vu_trans_retur_produk WHERE tanggal like '".$tgl_awal."%'";
+					$sql="SELECT distinct * FROM vu_trans_retur_produk WHERE date_format(tanggal,'%Y-%m')='".$tgl_awal."' 
+							AND rproduk_stat_dok<>'Batal' ".$order_by;
 				else if($periode=='tanggal')
-					$sql="SELECT * FROM vu_trans_retur_produk WHERE tanggal>='".$tgl_awal."' AND tanggal<='".$tgl_akhir."'";
+					$sql="SELECT distinct * FROM vu_trans_retur_produk WHERE date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' 
+							AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."' AND rproduk_stat_dok<>'Batal' ".$order_by;
 			}else if($opsi=='detail'){
 				if($periode=='all')
-					$sql="SELECT * FROM vu_detail_retur_jual_produk";
+					$sql="SELECT * FROM vu_detail_retur_jual_produk WHERE rproduk_stat_dok<>'Batal' ".$order_by;
 				else if($periode=='bulan')
-					$sql="SELECT * FROM vu_detail_retur_jual_produk WHERE tanggal like '".$tgl_awal."%'";
+					$sql="SELECT * FROM vu_detail_retur_jual_produk WHERE date_format(tanggal,'%Y-%m')='".$tgl_awal."' 
+							AND  rproduk_stat_dok<>'Batal' ".$order_by;
 				else if($periode=='tanggal')
-					$sql="SELECT * FROM vu_detail_retur_jual_produk WHERE tanggal>='".$tgl_awal."' AND tanggal<='".$tgl_akhir."'";
+					$sql="SELECT * FROM vu_detail_retur_jual_produk WHERE date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' 
+							AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."' AND rproduk_stat_dok<>'Batal' ".$order_by;
 			}
+			
+			$this->firephp->log($sql);
 			
 			$query=$this->db->query($sql);
 			return $query->result();

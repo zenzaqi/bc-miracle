@@ -18,7 +18,7 @@ class C_master_retur_jual_produk extends Controller {
 		parent::Controller();
 		$this->load->model('m_master_retur_jual_produk', '', TRUE);
 		session_start();
-		$this->load->plugin('to_excel');
+		
 	}
 	
 	//set index
@@ -55,6 +55,8 @@ class C_master_retur_jual_produk extends Controller {
 		$tahun=(isset($_POST['tahun']) ? @$_POST['tahun'] : @$_GET['tahun']);
 		$opsi=(isset($_POST['opsi']) ? @$_POST['opsi'] : @$_GET['opsi']);
 		$periode=(isset($_POST['periode']) ? @$_POST['periode'] : @$_GET['periode']);
+		$group=(isset($_POST['group']) ? @$_POST['group'] : @$_GET['group']);
+		
 		$data["jenis"]='Retur Produk';
 		if($periode=="all"){
 			$data["periode"]="Semua Periode";
@@ -62,18 +64,43 @@ class C_master_retur_jual_produk extends Controller {
 			$tgl_awal=$tahun."-".$bulan;
 			$data["periode"]=get_ina_month_name($bulan,'long')." ".$tahun;
 		}else if($periode=="tanggal"){
-			$data["periode"]="Periode ".$tgl_awal." s/d ".$tgl_akhir;
+			$date = substr($tgl_awal,8,2);
+			$month = substr($tgl_awal,5,2);
+			$year = substr($tgl_awal,0,4);
+			$tgl_awal_show = $date.'-'.$month.'-'.$year;
+			
+			$date_akhir = substr($tgl_akhir,8,2);
+			$month_akhir = substr($tgl_akhir,5,2);
+			$year_akhir = substr($tgl_akhir,0,4);
+			$tgl_akhir_show = $date_akhir.'-'.$month_akhir.'-'.$year_akhir;
+			
+			//$tgl_awal_show = $tgl_awal;
+			//$tgl_awal_show = date("d-m-Y", $tgl_awal);
+			//$tgl_akhir_show = $tgl_akhir;
+			//$tgl_akhir_show = date("d-m-Y", $tgl_akhir);
+			$data["periode"]="Periode : ".$tgl_awal_show." s/d ".$tgl_akhir_show.", ";
 		}
 		
-		$data["total_item"]=$this->m_master_retur_jual_produk->get_total_item($tgl_awal,$tgl_akhir,$periode,$opsi);
+		/*$data["total_item"]=$this->m_master_retur_jual_produk->get_total_item($tgl_awal,$tgl_akhir,$periode,$opsi);
 		$data["total_diskon"]=$this->m_master_retur_jual_produk->get_total_diskon($tgl_awal,$tgl_akhir,$periode,$opsi);
-		$data["total_nilai"]=$this->m_master_retur_jual_produk->get_total_nilai($tgl_awal,$tgl_akhir,$periode,$opsi);
-		$data["data_print"]=$this->m_master_retur_jual_produk->get_laporan($tgl_awal,$tgl_akhir,$periode,$opsi);
+		$data["total_nilai"]=$this->m_master_retur_jual_produk->get_total_nilai($tgl_awal,$tgl_akhir,$periode,$opsi);*/
+		$data["data_print"]=$this->m_master_retur_jual_produk->get_laporan($tgl_awal,$tgl_akhir,$periode,$opsi,$group);
 			
 		if($opsi=='rekap'){
-			$print_view=$this->load->view("main/p_rekap_retur_jual.php",$data,TRUE);
+			switch($group){
+				case "Tanggal": $print_view=$this->load->view("main/p_rekap_retur_jual_tanggal.php",$data,TRUE);break;
+				case "No Faktur Jual": $print_view=$this->load->view("main/p_rekap_retur_jual_faktur_jual.php",$data,TRUE);break;
+				case "Customer": $print_view=$this->load->view("main/p_rekap_retur_jual_customer.php",$data,TRUE);break;
+				default: $print_view=$this->load->view("main/p_rekap_retur_jual.php",$data,TRUE);break;
+			}
 		}else{
-			$print_view=$this->load->view("main/p_detail_retur_jual.php",$data,TRUE);
+			switch($group){
+				case "Tanggal": $print_view=$this->load->view("main/p_detail_retur_jual_tanggal.php",$data,TRUE);break;
+				case "Customer": $print_view=$this->load->view("main/p_detail_retur_jual_customer.php",$data,TRUE);break;
+				case "Produk": $print_view=$this->load->view("main/p_detail_retur_jual_produk.php",$data,TRUE);break;
+				case "No Faktur Jual": $print_view=$this->load->view("main/p_detail_retur_jual_faktur_jual.php",$data,TRUE);break;
+				default: $print_view=$this->load->view("main/p_detail_retur_jual.php",$data,TRUE);break;
+			}
 		}
 		if(!file_exists("print")){
 			mkdir("print");
@@ -353,6 +380,7 @@ class C_master_retur_jual_produk extends Controller {
 	/* Function to Export Excel document */
 	function master_retur_jual_produk_export_excel(){
 		//POST varibale here
+		$this->load->plugin('to_excel');
 		$rproduk_id=trim(@$_POST["rproduk_id"]);
 		$rproduk_nobukti=trim(@$_POST["rproduk_nobukti"]);
 		$rproduk_nobukti=str_replace("/(<\/?)(p)([^>]*>)", "",$rproduk_nobukti);
