@@ -161,7 +161,8 @@ Ext.onReady(function(){
 		id:'rpt_jrawat_opsitglField',
 		boxLabel:'Tanggal',
 		width:100,
-		name: 'filter_opsi'
+		name: 'filter_opsi',
+		checked: true
 	});
 	
 	rpt_jrawat_opsiblnField=new Ext.form.Radio({
@@ -204,8 +205,7 @@ Ext.onReady(function(){
 	rpt_jrawat_rekapField=new Ext.form.Radio({
 		id: 'rpt_jrawat_rekapField',
 		boxLabel: 'Rekap',
-		name: 'jrawat_opsi',
-		checked: true
+		name: 'jrawat_opsi'
 	});
 	
 	rpt_jrawat_detailField=new Ext.form.Radio({
@@ -222,11 +222,11 @@ Ext.onReady(function(){
 		frame: false,
 		bolder: false,
 		anchor: '98%',
-		items:[{
+		items:[/*{
 				layout: 'column',
 				border: false,
 				items:[rpt_jrawat_opsiallField]
-			},{
+			},*/{
 				layout: 'column',
 				border: false,
 				items:[rpt_jrawat_opsitglField, {

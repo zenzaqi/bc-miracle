@@ -160,15 +160,15 @@ Ext.onReady(function(){
 		id:'rpt_jproduk_opsitglField',
 		boxLabel:'Tanggal',
 		width:100,
-		name: 'filter_opsi'
+		name: 'filter_opsi',
+		checked: true
 	});
 	
 	rpt_jproduk_opsiblnField=new Ext.form.Radio({
 		id:'rpt_jproduk_opsiblnField',
 		boxLabel:'Bulan',
 		width:100,
-		name: 'filter_opsi',
-		checked: true
+		name: 'filter_opsi'
 	});
 	
 	rpt_jproduk_opsiallField=new Ext.form.Radio({
@@ -221,11 +221,11 @@ Ext.onReady(function(){
 		frame: false,
 		bolder: false,
 		anchor: '98%',
-		items:[{
+		items:[/*{
 				layout: 'column',
 				border: false,
 				items:[rpt_jproduk_opsiallField]
-			},{
+			},*/{
 				layout: 'column',
 				border: false,
 				items:[rpt_jproduk_opsitglField, {

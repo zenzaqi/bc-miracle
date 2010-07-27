@@ -1,0 +1,18 @@
+- Update
+  > Laporan Retur Penjualan produk
+     - link : ?C=c_master_retur_jual_produk&m=laporan
+     - Opsi : - Rekap [Faktur, No Faktur Jual, Tanggal, Customer, Paket]
+              - Detail [Faktur, No Faktur Jual, Tanggal, Customer, Produk]
+     - sql update : 2010-07-27_03-10-PM.sql
+
+  > Laporan Penjualan Produk
+     - view opsi all hilang
+     - default select opsi tanggal
+
+  > Laporan Penjualan Produk
+     - view opsi all hilang
+     - default select opsi tanggal
+
+  > Laporan Penjualan Produk
+     - view opsi all hilang
+     - default select opsi tanggal
