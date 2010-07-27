@@ -173,6 +173,7 @@ var jpaket_caraSearchField;
 var jpaket_keteranganSearchField;
 var jpaket_stat_dokSearchField;
 var dt= new Date();
+var dt_ymd = dt.format('Y-m-d');
 
 var cetak_jpaket=0;
 
@@ -713,11 +714,11 @@ Ext.onReady(function(){
 						master_cara_bayarTabPanel.setActiveTab(0);
                         master_jual_paket_reset_allForm();
 					}else{
-                        jpaket_post2db='CREATE';
+                        //jpaket_post2db='CREATE';
 						Ext.MessageBox.show({
 						   title: 'Warning',
 						   width: 400,
-						   msg: 'Dokumen Penjualan Produk tidak bisa dibatalkan, <br/>karena yang boleh dibatalkan adalah Dokumen yang terbit hari ini saja.',
+						   msg: 'Dokumen Penjualan Paket tidak bisa dibatalkan, <br/>karena paket pada Faktur ini sudah pernah diambil.',
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'save',
 						   icon: Ext.MessageBox.WARNING
@@ -1425,7 +1426,19 @@ Ext.onReady(function(){
 		
 		else if(jpaket_stat_dokField.getValue()=='Batal')
 		{
-		Ext.MessageBox.confirm('Confirmation','Anda yakin untuk membatalkan dokumen ini? Pembatalan dokumen tidak bisa dikembalikan lagi', jpaket_status_batal);
+			if(master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_tanggal').format('Y-m-d')==dt_ymd){
+				Ext.MessageBox.confirm('Confirmation','Anda yakin untuk membatalkan dokumen ini? Pembatalan dokumen tidak bisa dikembalikan lagi', jpaket_status_batal);
+			}else{
+				jpaket_stat_dokField.setValue(master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_stat_dok'));
+				Ext.MessageBox.show({
+					title: 'Warning',
+					msg: 'Pembatalan tidak bisa dilakukan, <br/>karena Pembatalan hanya boleh dilakukan pada Faktur yang terbit hari ini.',
+					buttons: Ext.MessageBox.OK,
+					animEl: 'save',
+					minWidth: 400,
+					icon: Ext.MessageBox.WARNING
+				});
+			}
 		}
         
         else if(status_awal =='Tertutup' && jpaket_stat_dokField.getValue()=='Tertutup'){
