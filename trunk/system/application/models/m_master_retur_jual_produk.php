@@ -108,7 +108,7 @@ class M_master_retur_jual_produk extends Model{
 							AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."' AND rproduk_stat_dok<>'Batal' ".$order_by;
 			}
 			
-			$this->firephp->log($sql);
+			//$this->firephp->log($sql);
 			
 			$query=$this->db->query($sql);
 			return $query->result();

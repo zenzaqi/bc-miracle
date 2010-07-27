@@ -18,6 +18,7 @@
 <title>Laporan Penerimaan Kas <?php echo $periode; ?></title>
 <link rel='stylesheet' type='text/css' href='../assets/modules/main/css/printstyle.css'/>
 </head>
+<body onload="window.print();">
 <table summary='Laporan Penerimaan Kas'>
 	<caption>Laporan Penerimaan Kas <br/> <?php echo $periode;  ?></caption>
 	<thead>
@@ -217,6 +218,5 @@
         </tr>
 	</tfoot>
 </table>
-<body>
 </body>
 </html>
