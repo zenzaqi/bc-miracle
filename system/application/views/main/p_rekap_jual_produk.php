@@ -15,12 +15,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Laporan Rekap Penjualan Produk Periode <?php echo $tgl_mulai." s/d ".$tgl_akhir; ?></title>
+<title>Laporan Rekap Penjualan Produk Periode <?php echo $tgl_mulai." s/d ".$tgl_akhir; ?> Group By Produk</title>
 <link rel='stylesheet' type='text/css' href='../assets/modules/main/css/printstyle.css'/>
 </head>
 <body onload="window.print()">
-<table summary='Phonegroup List'>
-	<caption>Laporan Rekap Penjualan Produk Periode <?php echo $tgl_mulai." s/d ".$tgl_akhir; ?></caption>
+<table summary='Rekap Jual'>
+	<caption>Laporan Rekap Penjualan <?php echo $jenis; ?><br/><?php echo $periode; ?> <br/>Group By Produk</caption>
 	<thead>
     	<tr>
         	<th scope='col'>No</th>

@@ -15,7 +15,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Laporan Detail Pengambilan Paket <?php echo $periode; ?></title>
+<title>Laporan Detail Pengambilan Paket <?php echo $periode; ?> Group By Referal</title>
 <link rel='stylesheet' type='text/css' href='../assets/modules/main/css/printstyle.css'/>
 </head>
 <body onload="window.print();">

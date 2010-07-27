@@ -1,0 +1,14 @@
+o Fix Bug
+  - Laporan Pengambilan Paket
+    > query fixed
+    > opsi all [dihilangkan], default check tanggal
+  - Laporan Retur Jual Produk [firephp off]
+  - Laporan Jual Produk
+    > title group fixed
+  - Laporan Jual Perawatan
+    > title group fixed
+  - Laporan Jual Paket
+    > title group fixed
+  - Laporan Penerimaan Kas
+    > opsi all [dihilangkan], default check tanggal
+ 

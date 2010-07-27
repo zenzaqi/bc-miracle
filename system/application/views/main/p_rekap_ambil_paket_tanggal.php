@@ -15,13 +15,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Laporan Rekap Pengambilan Paket <?php echo $periode; ?></title>
+<title>Laporan Rekap Pengambilan Paket <?php echo $periode; ?> Group By Tanggal</title>
 <link rel='stylesheet' type='text/css' href='../assets/modules/main/css/printstyle.css'/>
 </head>
 <body onload="window.print();">
 <table width="731" summary='Rekap Jual'>
 	<caption>
-	Laporan Rekap Pengambilan Paket<br/><?php echo $periode; ?><br/>Group By Customer</caption>
+	Laporan Rekap Pengambilan Paket<br/><?php echo $periode; ?><br/>Group By Tanggal</caption>
 	<thead>
     	<tr>
         	<th width="22" scope='col'>No</th>
