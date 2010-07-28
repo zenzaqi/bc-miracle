@@ -144,14 +144,14 @@ Ext.onReady(function(){
 			header: '<div align="center">Tanggal</div>',
 			dataIndex: 'tanggal_transaksi',
 			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
-			width: 80,
+			width: 70,
 			sortable: true,
 			readOnly: true
 		}, 
 		{
 			header: '<div align="center">No Faktur</div>',
 			dataIndex: 'no_bukti',
-			width: 100,
+			width: 80,
 			sortable: true,
 			readOnly: true
 		}, 
@@ -168,7 +168,7 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">Kode</div>',
 			dataIndex: 'kode_transaksi',
-			width: 80,
+			width: 70,
 			sortable: true,
 			readOnly: true
 		}, 
@@ -209,7 +209,7 @@ Ext.onReady(function(){
 		id: 'history_transaksi_customerField',
 		name: 'history_transaksi_customerField',
 		fieldLabel: '<b>Customer</b>',
-		width: 180,
+		width: 200,
 		readOnly: true
 	});
 	
@@ -217,7 +217,7 @@ Ext.onReady(function(){
 		id: 'history_transaksi_custnoField',
 		name: 'history_transaksi_custnoField',
 		fieldLabel: '<b>Cust No</b>',
-		width : 65,
+		width : 80,
 		readOnly: true
 	});
 	
@@ -257,21 +257,21 @@ Ext.onReady(function(){
 		frame: true,
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 900,
+	  	width: 1220,
 		autoHeight: true,
 		bbar: [
 			new Ext.PagingToolbar({
 			//pageSize: pageS,
 			store: history_transaksi_DataStore,
 			displayInfo: true
-		}),{
-			'text':'Alamat : '
-		},
-		history_transaksi_custalamatField,
-		{
-			'text':'Telp : '
-		},
-		history_transaksi_custtelpField
+		}),//{
+		//	'text':'Alamat : '
+		//},
+		//history_transaksi_custalamatField,
+		//{
+		//	'text':'Telp : '
+		//},
+		//history_transaksi_custtelpField
 		],tbar: [
 		{
 			'text':'Nama Lengkap : '
@@ -283,7 +283,7 @@ Ext.onReady(function(){
 		history_transaksi_custnoField
 		,
 		{
-			text: 'Search',
+			text: 'Adv Search',
 			tooltip: 'Advanced Search',
 			iconCls:'icon-search',
 			handler: display_form_search_window 
@@ -421,7 +421,7 @@ Ext.onReady(function(){
 		emptyText: 'Pilih Salah Satu...',
 		displayField: 'jenis_searching_display',
 		valueField: 'jenis_searching_value',
-		width: 125,
+		width: 150,
 		triggerAction: 'all'	
 	});
 	
