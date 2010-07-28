@@ -15,12 +15,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Laporan Rekap Pesanan Pembelian <?php echo $jenis; ?> <?php echo $periode; ?></title>
+<title>Laporan Rekap Order Pembelian <?php echo $jenis; ?> <?php echo $periode; ?> Order By No. Faktur</title>
 <link rel='stylesheet' type='text/css' href='../assets/modules/main/css/printstyle.css'/>
 </head>
-<body>
-<table summary='Rekap Pesanan Pembelian'>
-	<caption>Laporan Rekap Pesanan Pembelian <br/><?php echo $periode; ?>Group By No. Faktur</caption>
+<body onload="window.print();">
+<table summary='Rekap Order Pembelian'>
+	<caption>Laporan Rekap Order Pembelian <br/><?php echo $periode; ?><br/>Group By No. Faktur</caption>
 	<thead>
     	<tr>
         	<th scope='col'>No</th>
@@ -49,8 +49,9 @@
 				$total_totalnilai=0;
 				$total_uangmuka=0;
 				$total_bayar=0;
+				$total_nilai=0;
 				foreach($data_print as $print) { $i++; 
-					$total_nilai=$print->total_nilai*(100-$print->order_diskon)/100-$print->order_cashback+$print->order_biaya;
+					$total_nilai=($print->total_nilai*(100-$print->order_diskon)/100)-$print->order_cashback+$print->order_biaya;
 					$total_bayar=$total_nilai-$print->order_bayar;
 				?>
 		<tr>

@@ -37,18 +37,20 @@ class M_master_order_beli extends Model{
 			
 			if($opsi=='rekap'){
 				if($periode=='all')
-					$sql="SELECT * FROM vu_trans_order ".$order_by;
+					$sql="SELECT * FROM vu_trans_order WHERE order_status<>'Batal' ".$order_by;
 				else if($periode=='bulan')
-					$sql="SELECT * FROM vu_trans_order WHERE tanggal like '".$tgl_awal."%' ".$order_by;
+					$sql="SELECT * FROM vu_trans_order WHERE order_status<>'Batal' AND date_format(tanggal,'%Y-%m')='".$tgl_awal."' ".$order_by;
 				else if($periode=='tanggal')
-					$sql="SELECT * FROM vu_trans_order WHERE tanggal>='".$tgl_awal."' AND tanggal<='".$tgl_akhir."' ".$order_by;
+					$sql="SELECT * FROM vu_trans_order WHERE order_status<>'Batal' AND date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' 
+							AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."' ".$order_by;
 			}else if($opsi=='detail'){
 				if($periode=='all')
-					$sql="SELECT * FROM vu_detail_order_beli ".$order_by;
+					$sql="SELECT * FROM vu_detail_order_beli order_status<>'Batal' AND  ".$order_by;
 				else if($periode=='bulan')
-					$sql="SELECT * FROM vu_detail_order_beli WHERE tanggal like '".$tgl_awal."%' ".$order_by;
+					$sql="SELECT * FROM vu_detail_order_beli WHERE order_status<>'Batal' AND date_format(tanggal,'%Y-%m')='".$tgl_awal."' ".$order_by;
 				else if($periode=='tanggal')
-					$sql="SELECT * FROM vu_detail_order_beli WHERE tanggal>='".$tgl_awal."' AND tanggal<='".$tgl_akhir."' ".$order_by;
+					$sql="SELECT * FROM vu_detail_order_beli WHERE order_status<>'Batal' AND date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' 
+							AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."' ".$order_by;
 			}else if($opsi=='faktur'){
 				$sql="SELECT * FROM vu_detail_order_beli WHERE dorder_master='".$faktur."'";
 			}

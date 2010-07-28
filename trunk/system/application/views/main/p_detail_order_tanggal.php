@@ -15,12 +15,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Laporan Detail Pesanan Pembelian <?php echo $periode; ?></title>
+<title>Laporan Detail Order Pembelian <?php echo $periode; ?> Group By Tanggal</title>
 <link rel='stylesheet' type='text/css' href='../assets/modules/main/css/printstyle.css'/>
 </head>
-<body>
-<table summary='Detail Pesanan Pembelian'>
-	<caption>Laporan Pesanan Pembelian<br/><?php echo $periode; ?><br/>Group By Tanggal</caption>
+<body onload="window.print();">
+<table summary='Detail Order Pembelian'>
+	<caption>Laporan Order Pembelian<br/><?php echo $periode; ?><br/>Group By Tanggal</caption>
 	<thead>
     	<tr>
         	<th scope='col'>No</th>
