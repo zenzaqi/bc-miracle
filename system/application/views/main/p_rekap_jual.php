@@ -20,7 +20,7 @@
 </head>
 <body onload="window.print();">
 <table summary='Rekap Jual'>
-	<caption>Laporan Rekap Penjualan <?php echo $jenis; ?><br/><?php echo $periode; ?><br/>Group By  No. Faktur</caption>
+	<caption>Laporan Rekap Penjualan <?php echo $jenis; ?><br/><?php echo $periode; ?>Group By  No. Faktur</caption>
 	<thead>
     	<tr>
         	<th scope='col'>No</th>
@@ -32,6 +32,7 @@
             <th scope='col'>Disk (%)</th>
             <th scope='col'>Disk (Rp)</th> 
             <th scope='col'>Total (Rp)</th>
+			<th scope='col'>Total Bayar (Rp)</th>
             <th scope='col'>Tunai (Rp)</th>
             <th scope='col'>Cek/Giro (Rp)</th>
             <th scope='col'>Transfer (Rp)</th>
@@ -46,6 +47,7 @@
 				$total_diskon=0;
 				$total_diskonp=0;
 				$total_nilai=0;
+				$total_bayar=0;
 				$total_tunai=0;
 				$total_cek=0;
 				$total_transfer=0;
@@ -58,6 +60,7 @@
 				$total_diskon+=$print->cashback;
 				$total_diskonp+=($print->diskon*$print->total_nilai)/100;
 				$total_nilai+=$print->total_nilai;
+				$total_bayar+=$print->total_bayar;
 				$total_tunai+=$print->tunai;
 				$total_cek+=$print->cek;
 				$total_transfer+=$print->transfer;
@@ -77,6 +80,7 @@
             <td align="right" class="numeric"><?php echo number_format($print->diskon,0,",","."); ?></td>
             <td align="right" class="numeric"><?php echo number_format($print->cashback,0,",","."); ?></td>
             <td align="right" class="numeric"><?php echo number_format($print->total_nilai,0,",","."); ?></td>
+			<td align="right" class="numeric"><?php echo number_format($print->total_bayar,0,",","."); ?></td>
             <td align="right" class="numeric"><?php echo number_format($print->tunai,0,",","."); ?></td>
             <td align="right" class="numeric"><?php echo number_format($print->cek,0,",","."); ?></td>
             <td align="right" class="numeric"><?php echo number_format($print->transfer,0,",","."); ?></td>
@@ -90,71 +94,39 @@
     	<tr>
         	<td class="clear">&nbsp;</td>
         	<th scope='row'>Jumlah data</th>
-            <td colspan='13'><?php echo count($data_print); ?> data</td>
-        </tr>
-        <tr>
-        	<td class="clear">&nbsp;</td>
-        	<th scope='row' colspan="14">Summary</th>
-        </tr>
-        <tr>
-        	<td class="clear">&nbsp;</td>
-        	<th scope='row' nowrap="nowrap">Tot Item</th>
-            <td nowrap="nowrap" align="right" class="numeric clear"><?php echo number_format($total_item,0,",","."); ?></td>
-            <td colspan='12' class="clear">&nbsp;</td>
-        </tr>
-        <tr>
-        	<td class="clear">&nbsp;</td>
-        	<th scope='row' nowrap="nowrap">Disk % - (Rp)</th>
-            <td  nowrap="nowrap" align="right" class="numeric clear"><?php echo number_format($total_diskonp,0,",","."); ?></td>
-             <td colspan='12' class="clear">&nbsp;</td>
-        </tr>
-        <tr>
-        	<td class="clear">&nbsp;</td>
-        	<th scope='row' nowrap="nowrap">Disk (Rp)</th>
-            <td  nowrap="nowrap" align="right" class="numeric clear"><?php echo number_format($total_diskon,0,",","."); ?></td>
-             <td colspan='12' class="clear">&nbsp;</td>
-        </tr>
-        <tr>
-        	<td class="clear">&nbsp;</td>
-        	<th scope='row' nowrap="nowrap">Total (Rp)</th>
-            <td  nowrap="nowrap" align="right" class="numeric clear"><?php echo number_format($total_nilai,0,",","."); ?></td>
-             <td colspan='12' class="clear" >&nbsp;</td>
-        </tr>
-        <tr>
-        	<td class="clear">&nbsp;</td>
-        	<th scope='row' nowrap="nowrap">Total Tunai (Rp)</th>
-            <td  nowrap="nowrap" align="right" class="numeric clear"><?php echo number_format($total_tunai,0,",","."); ?></td>
-             <td colspan='12' class="clear" >&nbsp;</td>
-        </tr>
-        <tr>
-        	<td class="clear">&nbsp;</td>
-        	<th scope='row' nowrap="nowrap">Total Cek/Giro (Rp)</th>
-            <td  nowrap="nowrap" align="right" class="numeric clear"><?php echo number_format($total_cek,0,",","."); ?></td>
-             <td colspan='12' class="clear" >&nbsp;</td>
-        </tr>
-        <tr>
-        	<td class="clear">&nbsp;</td>
-        	<th scope='row' nowrap="nowrap">Total Transfer (Rp)</th>
-            <td  nowrap="nowrap" align="right" class="numeric clear"><?php echo number_format($total_transfer,0,",","."); ?></td>
-             <td colspan='12' class="clear" >&nbsp;</td>
-        </tr>
-        <tr>
-        	<td class="clear">&nbsp;</td>
-        	<th scope='row' nowrap="nowrap">Total Kuitansi (Rp)</th>
-            <td  nowrap="nowrap" align="right" class="numeric clear"><?php echo number_format($total_kuitansi,0,",","."); ?></td>
-             <td colspan='12' class="clear" >&nbsp;</td>
-        </tr>
-        <tr>
-        	<td class="clear">&nbsp;</td>
-        	<th scope='row' nowrap="nowrap">Total Card (Rp)</th>
-            <td  nowrap="nowrap" align="right" class="numeric clear"><?php echo number_format($total_card,0,",","."); ?></td>
-             <td colspan='12' class="clear" >&nbsp;</td>
-        </tr>
-        <tr>
-        	<td class="clear">&nbsp;</td>
-        	<th scope='row' nowrap="nowrap">Total Kredit (Rp)</th>
-            <td  nowrap="nowrap" align="right" class="numeric clear"><?php echo number_format($total_kredit,0,",","."); ?></td>
-             <td colspan='12' class="clear" >&nbsp;</td>
+			<td><?php echo count($data_print); ?> data</td>
+			<td colspan="2" align="right"><b>Grand TOTAL</td>
+        	<? //<th scope='row' nowrap="nowrap">Tot Item</th> ?>
+            <td align="right" class="numeric"><b><?php echo number_format($total_item,0,",","."); ?></td>
+
+        	<?//<th scope='row' nowrap="nowrap">Disk (Rp)</th> ?>
+            <td align="right" class="numeric"><b><?php echo number_format($total_diskon,0,",","."); ?></td>
+			 
+        	<?//<th scope='row' nowrap="nowrap">Disk % - (Rp)</th>?>
+            <td align="right" class="numeric"><b><?php echo number_format($total_diskonp,0,",","."); ?></td>
+
+        	<?//<th scope='row' nowrap="nowrap">Total (Rp)</th>?>
+            <td align="right" class="numeric"><b><?php echo number_format($total_nilai,0,",","."); ?></td>
+
+            <td align="right" class="numeric"><b><?php echo number_format($total_bayar,0,",","."); ?></td>
+
+        	<?//<th scope='row' nowrap="nowrap">Total Tunai (Rp)</th>?>
+            <td align="right" class="numeric"><b><?php echo number_format($total_tunai,0,",","."); ?></td>
+
+        	<?//<th scope='row' nowrap="nowrap">Total Cek/Giro (Rp)</th>?>
+            <td align="right" class="numeric"><b><?php echo number_format($total_cek,0,",","."); ?></td>
+
+        	<?//<th scope='row' nowrap="nowrap">Total Transfer (Rp)</th>?>
+            <td align="right" class="numeric"><b><?php echo number_format($total_transfer,0,",","."); ?></td>
+
+        	<?//<th scope='row' nowrap="nowrap">Total Kuitansi (Rp)</th>?>
+            <td align="right" class="numeric"><b><?php echo number_format($total_kuitansi,0,",","."); ?></td>
+
+        	<?//<th scope='row' nowrap="nowrap">Total Card (Rp)</th>?>
+            <td align="right" class="numeric"><b><?php echo number_format($total_card,0,",","."); ?></td>
+
+        	<?//<th scope='row' nowrap="nowrap">Total Kredit (Rp)</th>?>
+            <td  align="right" class="numeric"><b><?php echo number_format($total_kredit,0,",","."); ?></td>
         </tr>
 	</tfoot>
 </table>

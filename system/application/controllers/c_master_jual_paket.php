@@ -47,12 +47,13 @@ class C_master_jual_paket extends Controller {
 			$tgl_awal=$tahun."-".$bulan;
 			$data["periode"]=get_ina_month_name($bulan,'long')." ".$tahun;
 		}else if($periode=="tanggal"){
-			$data["periode"]="Periode ".$tgl_awal." s/d ".$tgl_akhir;
+			$data["periode"]="Periode : ".$tgl_awal." s/d ".$tgl_akhir.", ";
 		}
 		
 		$data["total_item"]=$this->m_master_jual_paket->get_total_item($tgl_awal,$tgl_akhir,$periode,$opsi);
 		$data["total_diskon"]=$this->m_master_jual_paket->get_total_diskon($tgl_awal,$tgl_akhir,$periode,$opsi);
 		$data["total_nilai"]=$this->m_master_jual_paket->get_total_nilai($tgl_awal,$tgl_akhir,$periode,$opsi);
+		$data["total_bayar"]=$this->m_master_jual_paket->get_total_bayar($tgl_awal,$tgl_akhir,$periode,$opsi);
 		$data["data_print"]=$this->m_master_jual_paket->get_laporan($tgl_awal,$tgl_akhir,$periode,$opsi,$group);
 			
 		if($opsi=='rekap'){
