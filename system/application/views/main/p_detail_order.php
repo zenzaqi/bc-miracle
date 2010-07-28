@@ -15,12 +15,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Laporan Detail Pesanan Pembelian <?php echo $periode; ?></title>
+<title>Laporan Detail Order Pembelian <?php echo $periode; ?> Group By No. Faktur</title>
 <link rel='stylesheet' type='text/css' href='../assets/modules/main/css/printstyle.css'/>
 </head>
-<body>
+<body onload="window.print();">
 <table summary='Detail Jual'>
-	<caption>Laporan Detail Pesanan Pembelian <br/><?php echo $periode; ?><br/>Group By No. Faktur</caption>
+	<caption>Laporan Detail Order Pembelian <br/><?php echo $periode; ?><br/>Group By No. Faktur</caption>
 	<thead>
     	<tr>
         	<th scope='col'>No</th>
@@ -63,6 +63,12 @@
 					$sub_jumlah_terima+=$print_list->jumlah_terima;
 					$sub_diskon+=$print_list->diskon_nilai;
 					$sub_total+=$print_list->subtotal;
+					
+					$total_item+=$print_list->jumlah_barang;
+					$total_terima+=$print_list->jumlah_terima;
+					$total_diskon+=$print_list->diskon_nilai;
+					$total_nilai+=$print_list->subtotal; 
+			
 		   ?>
             <tr>
                 <td><? echo $i; ?></td>
@@ -88,10 +94,7 @@
            </tr>
            <?php } $faktur=$print->no_bukti; ?>
 		<?php 
-			$total_item+=$sub_jumlah_barang;
-			$total_terima+=$sub_jumlah_terima;
-			$total_diskon+=$sub_diskon;
-			$total_nilai+=$sub_total;
+			
 		
 		} ?>
         

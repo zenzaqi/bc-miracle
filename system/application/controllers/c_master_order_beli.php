@@ -16,9 +16,7 @@ class C_master_order_beli extends Controller {
 	function C_master_order_beli(){
 		parent::Controller();
 		session_start();
-		$this->load->model('m_master_order_beli', '', TRUE);
-        $this->load->plugin('to_excel');
-		
+		$this->load->model('m_master_order_beli', '', TRUE);	
 	}
 	
 	//set index
@@ -78,7 +76,7 @@ class C_master_order_beli extends Controller {
 			$data["periode"]="Periode ".$tgl_awal." s/d ".$tgl_akhir;
 		}
 		
-		$data["data_print"]=$this->m_master_order_beli->get_laporan($tgl_awal,$tgl_akhir,$periode,$opsi,$group,$faktur);
+		$data["data_print"]=$this->m_master_order_beli->get_laporan($tgl_awal,$tgl_akhir,$periode,$opsi,$group,$faktur)->result();
 		if($opsi=='rekap'){
 				
 			switch($group){
@@ -453,6 +451,7 @@ class C_master_order_beli extends Controller {
 
 	/* Function to Export Excel document */
 	function master_order_beli_export_excel(){
+		       $this->load->plugin('to_excel');
 		//POST varibale here
 		$order_id=trim(@$_POST["order_id"]);
 		$order_no=trim(@$_POST["order_no"]);

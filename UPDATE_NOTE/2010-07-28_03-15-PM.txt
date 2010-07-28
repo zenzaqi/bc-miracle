@@ -1,0 +1,6 @@
+o Fix Bug	
+   > Laporan Order Pembelian
+     - link : ?c=c_master_order_beli&m=laporan
+     - Opsi : - Rekap [Faktur, Tanggal, Supplier]
+              - Detail [Faktur, Tanggal, Supplier, Produk]
+     - sql update : 2010-07-28_03-15-PM.sql

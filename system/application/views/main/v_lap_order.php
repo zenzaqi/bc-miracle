@@ -160,7 +160,8 @@ Ext.onReady(function(){
 		id:'rpt_order_opsitglField',
 		boxLabel:'Tanggal',
 		width:100,
-		name: 'filter_opsi'
+		name: 'filter_opsi',
+		checked: true
 	});
 	
 	rpt_order_opsiblnField=new Ext.form.Radio({
@@ -173,8 +174,7 @@ Ext.onReady(function(){
 	rpt_order_opsiallField=new Ext.form.Radio({
 		id:'rpt_order_opsiallField',
 		boxLabel:'Semua',
-		name: 'filter_opsi',
-		checked: true
+		name: 'filter_opsi'
 	});
 	
 	rpt_order_tglawalField= new Ext.form.DateField({
@@ -221,11 +221,11 @@ Ext.onReady(function(){
 		frame: false,
 		bolder: false,
 		anchor: '98%',
-		items:[{
+		items:[/*{
 				layout: 'column',
 				border: false,
 				items:[rpt_order_opsiallField]
-			},{
+			},*/{
 				layout: 'column',
 				border: false,
 				items:[rpt_order_opsitglField, {
@@ -401,7 +401,7 @@ Ext.onReady(function(){
 	
 	/* Form Advanced Search */
 	rpt_orderWindow = new Ext.Window({
-		title: 'Laporan Pesanan Pembelian',
+		title: 'Laporan Order Pembelian',
 		closable:false,
 		closeAction: 'hide',
 		resizable: false,
