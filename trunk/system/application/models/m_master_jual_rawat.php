@@ -123,6 +123,30 @@ class M_master_jual_rawat extends Model{
 				return "";
 		}
 		
+		function get_total_bayar($tgl_awal,$tgl_akhir,$periode,$opsi){
+			if($opsi=='rekap'){
+				if($periode=='all')
+					$sql="SELECT SUM(total_bayar) as total_bayar FROM vu_trans_rawat WHERE jrawat_stat_dok<>'Batal'  ";
+				else if($periode=='bulan')
+					$sql="SELECT SUM(total_bayar) as total_bayar FROM vu_trans_rawat WHERE jrawat_stat_dok<>'Batal'  AND date_format(tanggal, '%Y-%m') like  '".$tgl_awal."%'";
+				else if($periode=='tanggal')
+					$sql="SELECT SUM(total_bayar) as total_bayar FROM vu_trans_rawat WHERE jrawat_stat_dok<>'Batal'  AND date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."'";
+			}else if($opsi=='detail'){
+				if($periode=='all')
+					$sql="SELECT SUM(subtotal) as total_bayar FROM vu_detail_jual_rawat WHERE jrawat_stat_dok<>'Batal'";
+				else if($periode=='bulan')
+					$sql="SELECT SUM(subtotal) as total_bayar FROM vu_detail_jual_rawat WHERE jrawat_stat_dok<>'Batal' AND date_format(tanggal, '%Y-%m') like  '".$tgl_awal."%'";
+				else if($periode=='tanggal')
+					$sql="SELECT SUM(subtotal) as total_bayar FROM vu_detail_jual_rawat WHERE jrawat_stat_dok<>'Batal' AND date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."'";
+			}
+			$query=$this->db->query($sql);
+			if($query->num_rows()){
+				$data=$query->row();
+				return $data->total_bayar;
+			}else
+				return "";
+		}
+		
 		function get_total_cek($tgl_awal,$tgl_akhir,$periode,$opsi){
 			if($opsi=='rekap'){
 				if($periode=='all')

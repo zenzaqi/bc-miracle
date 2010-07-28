@@ -69,6 +69,7 @@ class C_master_jual_produk extends Controller {
 		$data["total_diskon"]=$this->m_master_jual_produk->get_total_diskon($tgl_awal,$tgl_akhir,$periode,$opsi);
 		$data["total_nilai"]=$this->m_master_jual_produk->get_total_nilai($tgl_awal,$tgl_akhir,$periode,$opsi);
 		$data["data_print"]=$this->m_master_jual_produk->get_laporan($tgl_awal,$tgl_akhir,$periode,$opsi,$group);
+		$data["total_bayar"]=$this->m_master_jual_produk->get_total_bayar($tgl_awal,$tgl_akhir,$periode,$opsi);
 		
 		if(!file_exists("print")){
 			mkdir("print");
@@ -76,6 +77,7 @@ class C_master_jual_produk extends Controller {
 		
 		if($opsi=='rekap'){
 			$data["total_tunai"]=$this->m_master_jual_produk->get_total_tunai($tgl_awal,$tgl_akhir,$periode,$opsi);
+			$data["total_bayar"]=$this->m_master_jual_produk->get_total_bayar($tgl_awal,$tgl_akhir,$periode,$opsi);
 			$data["total_cek"]=$this->m_master_jual_produk->get_total_cek($tgl_awal,$tgl_akhir,$periode,$opsi);
 			$data["total_transfer"]=$this->m_master_jual_produk->get_total_transfer($tgl_awal,$tgl_akhir,$periode,$opsi);
 			$data["total_card"]=$this->m_master_jual_produk->get_total_card($tgl_awal,$tgl_akhir,$periode,$opsi);
