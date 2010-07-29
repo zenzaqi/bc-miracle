@@ -18,6 +18,49 @@ class M_cetak_kwitansi extends Model{
 			parent::Model();
 		}
 		
+		function get_laporan($tgl_awal,$tgl_akhir,$periode,$opsi,$group){
+			
+			switch($group){
+				case "Tanggal": $order_by=" ORDER BY tanggal";break;
+				case "Customer": $order_by=" ORDER BY cust_nama ASC";break;
+				case "No Kuitansi": $order_by=" ORDER BY no_bukti";break;
+				case "No Faktur": $order_by=" ORDER BY no_faktur";break;
+				case "Produk": $order_by=" ORDER BY produk_kode";break;
+				default: $order_by=" ORDER BY no_bukti ASC";break;
+			}
+			
+			if($opsi=='rekap'){
+				if($periode=='all')
+					$sql="SELECT distinct * FROM vu_trans_kuitansi WHERE stat_dok<>'Batal' ".$order_by;
+				else if($periode=='bulan')
+					$sql="SELECT distinct * FROM vu_trans_kuitansi WHERE stat_dok<>'Batal' 
+							AND date_format(tanggal,'%Y-%m')='".$tgl_awal."' ".$order_by;
+				else if($periode=='tanggal')
+					$sql="SELECT distinct * FROM vu_trans_kuitansi WHERE stat_dok<>'Batal' 
+							AND date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' 
+							AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."' ".$order_by;
+			}else if($opsi=='detail'){
+				if($periode=='all')
+					$sql="SELECT * FROM vu_detail_kuitansi WHERE stat_dok<>'Batal' 
+							AND jual_stat_dok<>'Batal' 
+							AND pakai_nilai>0 ".$order_by;
+				else if($periode=='bulan')
+					$sql="SELECT * FROM vu_detail_kuitansi WHERE stat_dok<>'Batal'  
+							AND jual_stat_dok<>'Batal' 
+							AND date_format(tanggal,'%Y-%m')='".$tgl_awal."' 
+							AND pakai_nilai>0 ".$order_by;
+				else if($periode=='tanggal')
+					$sql="SELECT * FROM vu_detail_kuitansi WHERE stat_dok<>'Batal'  AND jual_stat_dok<>'Batal' 
+							AND date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."'
+							AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."' 
+							AND pakai_nilai>0".$order_by;
+			}
+			//echo $sql;
+			
+			$query=$this->db->query($sql);
+			return $query->result();
+		}
+		
 		function get_customer_kwitansi_list($query,$start,$end){
 			$sql="SELECT cust_id,cust_no,cust_nama,cust_tgllahir,cust_alamat,cust_telprumah
 			FROM customer where cust_aktif='Aktif'";

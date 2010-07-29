@@ -66,10 +66,8 @@
 			?>
            <tr>
                 <td><b><? $j++; echo $j; ?></b></td>
-                <td colspan="12"><b><?php echo $print->supplier_nama." (".$print->supplier_akun.")";?></b></td>
+                <td colspan="7"><b><?php echo $print->supplier_nama." (".$print->supplier_akun.")";?></b></td>
            </tr>
-           <?php 	
-			?>
            <?php foreach($data_print as $print_list) {  ?>
            <?php if($print_list->supplier_id==$print->supplier_id){ $i++;
 		   
