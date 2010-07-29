@@ -540,19 +540,34 @@ class M_cetak_kwitansi extends Model{
 		function cetak_kwitansi_search($kwitansi_id ,$kwitansi_no ,$kwitansi_cust ,$kwitansi_keterangan ,$kwitansi_status ,$start,$end){
 			//full query
 			//$query="select * from cetak_kwitansi";
-			$query = "SELECT kwitansi_id, kwitansi_no, kwitansi_cust, cust_nama, cust_no, kwitansi_cara, kwitansi_nilai, kwitansi_keterangan, kwitansi_status, kwitansi_creator, kwitansi_date_create, kwitansi_update, kwitansi_date_update, kwitansi_revised, sum(jkwitansi_nilai) AS total_terpakai, IF((kwitansi_nilai-(IF(sum(jkwitansi_nilai),sum(jkwitansi_nilai),0)))=0,kwitansi_nilai,(kwitansi_nilai-(IF(sum(jkwitansi_nilai),sum(jkwitansi_nilai),0)))) AS total_sisa FROM cetak_kwitansi LEFT JOIN jual_kwitansi ON(jkwitansi_master=kwitansi_id) LEFT JOIN customer ON(kwitansi_cust=cust_id)";
+			$query = "SELECT kwitansi_id
+					,kwitansi_no
+					,kwitansi_cust
+					,cust_nama
+					,kwitansi_tanggal
+					,cust_no
+					,kwitansi_cara
+					,kwitansi_nilai
+					,kwitansi_bayar
+					,kwitansi_keterangan
+					,kwitansi_status
+					,kwitansi_creator
+					,date_format(kwitansi_date_create,'%Y-%m-%d') AS kwitansi_date_create
+					,kwitansi_update
+					,kwitansi_date_update
+					,kwitansi_revised
+					,(kwitansi_nilai-IF(sum(jkwitansi_nilai)!='null',sum(jkwitansi_nilai),0)) AS total_sisa
+				FROM cetak_kwitansi
+				LEFT JOIN jual_kwitansi ON(jkwitansi_master=kwitansi_id)
+				LEFT JOIN customer ON(kwitansi_cust=cust_id)";
 			
-			if($kwitansi_id!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " kwitansi_id LIKE '%".$kwitansi_id."%'";
-			};
 			if($kwitansi_no!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " kwitansi_no LIKE '%".$kwitansi_no."%'";
 			};
 			if($kwitansi_cust!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " kwitansi_cust LIKE '%".$kwitansi_cust."%'";
+				$query.= " kwitansi_cust = '".$kwitansi_cust."'";
 			};
 			if($kwitansi_keterangan!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -560,8 +575,10 @@ class M_cetak_kwitansi extends Model{
 			};
 			if($kwitansi_status!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " kwitansi_status LIKE '%".$kwitansi_status."%'";
+				$query.= " kwitansi_status = '".$kwitansi_status."'";
 			};
+			$query .= " GROUP BY kwitansi_id ORDER BY kwitansi_id DESC";
+			
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
 			
