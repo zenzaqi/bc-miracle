@@ -1,0 +1,10 @@
+o Update	
+   > Laporan Kuitansi
+     - link : ?c=c_cetak_kwitansi&m=laporan
+     - Opsi : - Rekap [No Kuitansi, Tanggal, Customer]
+              - Detail [No Kuitansi, Tanggal, Customer, No Faktur]
+     - sql update : 2010-07-29_04-45-PM.sql
+
+o fix bug
+  > Laporan penerimaan kas 
+    - penyesuaian total tunai produk dengan laporan penjualan produk
