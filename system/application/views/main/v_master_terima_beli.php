@@ -740,7 +740,7 @@ Ext.onReady(function(){
 			listeners:{
 				specialkey: function(f,e){
 					if(e.getKey() == e.ENTER){
-						master_order_beli_DataStore.baseParams={task:'LIST',start: 0, limit: pageS};
+						master_terima_beli_DataStore.baseParams={task:'LIST',start: 0, limit: pageS};
 		            }
 				},
 				render: function(c){

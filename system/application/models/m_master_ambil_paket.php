@@ -137,6 +137,7 @@ class M_master_ambil_paket extends Model{
 				$sql.=" (cust_nama like '%".$query."%' ) ";
 			}
 			
+			
 			$result = $this->db->query($sql);
 			$nbrows = $result->num_rows();
 			if($end!=0){
@@ -558,6 +559,8 @@ class M_master_ambil_paket extends Model{
 		function ambil_paket_batal($dapaket_id){
 			$sql = "SELECT dapaket_dpaket ,dapaket_jpaket ,dapaket_paket FROM detail_ambil_paket WHERE dapaket_id='".$dapaket_id[0]."'";
 			$rs = $this->db->query($sql);
+			$date_now = date('Y-m-d');
+			
 			if($rs->num_rows()){
 				$record = $rs->row_array();
 				$dapaket_dpaket = $record['dapaket_dpaket'];
@@ -567,7 +570,7 @@ class M_master_ambil_paket extends Model{
 				//Membatalkan satu pengambilan paket /
 				if (sizeof($dapaket_id) == 1){
 					$query = "UPDATE detail_ambil_paket SET dapaket_stat_dok='Batal'
-						WHERE date_format(dapaket_date_create, '%Y-%m-%d')=date_format(now(), '%Y-%m-%d') AND dapaket_id = ".$dapaket_id[0];
+						WHERE DATE_ADD(date_format(dapaket_date_create, '%Y-%m-%d'),INTERVAL 7 DAY)>date_format(now(), '%Y-%m-%d') AND dapaket_id = ".$dapaket_id[0];
 					$this->db->query($query);
 					if($this->db->affected_rows()>0){
 						$this->total_sisa_paket_update($dapaket_dpaket ,$dapaket_jpaket ,$dapaket_paket);

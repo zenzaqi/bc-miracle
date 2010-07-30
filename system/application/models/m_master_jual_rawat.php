@@ -2460,7 +2460,7 @@ class M_master_jual_rawat extends Model{
                     ,jrawat_date_update='".$datetime_now."'
                     ,jrawat_revised=jrawat_revised+1
                 WHERE jrawat_id=".$jrawat_id."
-                    AND jrawat_tanggal='".$date_now."' ";
+                    AND DATE_ADD(jrawat_tanggal,INTERVAL 7 DAY)>'".$date_now."' ";
             $this->db->query($sql);
 			if($this->db->affected_rows()){
 				//* udpating db.customer.cust_point ==> proses mengurangi jumlah poin (dikurangi dengan db.master_jual_produk.jproduk_point yg sudah dimasukkan ketika cetak faktur), karena dilakukan pembatalan /
