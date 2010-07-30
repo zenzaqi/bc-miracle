@@ -2411,7 +2411,9 @@ class M_master_jual_produk extends Model{
 		}
 		
 		function master_jual_produk_batal($jproduk_id){
-			$date_now = date('Y-m-d');
+			$date = date('Y-m-d');
+			//$lasttime=mktime(date("Y"),date("m"),date("d")+20);
+			//$jproduk = strtotime(date('Y-m-d', strtotime($date)) . " +20 days");
             $datetime_now = date('Y-m-d H:i:s');
             $sql = "UPDATE master_jual_produk
                 SET jproduk_stat_dok='Batal'
@@ -2419,7 +2421,7 @@ class M_master_jual_produk extends Model{
                     ,jproduk_date_update='".$datetime_now."'
                     ,jproduk_revised=jproduk_revised+1
                 WHERE jproduk_id=".$jproduk_id."
-                    AND jproduk_tanggal='".$date_now."' ";
+                    AND  DATE_ADD(jproduk_tanggal,INTERVAL 7 DAY)>'".$date."' ";
             $this->db->query($sql);
 			if($this->db->affected_rows()){
 				//* udpating db.customer.cust_point ==> proses mengurangi jumlah poin (dikurangi dengan db.master_jual_produk.jproduk_point yg sudah dimasukkan ketika cetak faktur), karena dilakukan pembatalan /
