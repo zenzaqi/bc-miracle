@@ -167,6 +167,11 @@ var var_detail_nonmedis_dstore = true;
 var var_dmedis_insert = true;
 var var_dnonmedis_insert = true;
 
+var dapp_status_inline_beforeedit = '';
+var dapp_kategori_inline_beforeedit = '';
+var dapp_dokter_id_inline_beforeedit = '';
+var dapp_terapis_id_inline_beforeedit = '';
+
 Ext.util.Format.comboRenderer = function(combo){
 	return function(value){
 		var record = combo.findRecord(combo.valueField, value);
@@ -181,6 +186,8 @@ Ext.onReady(function(){
   	/* Function for Saving inLine Editing */
 	function appointment_update(oGrid_event){
 		appointmentListEditorGrid.setDisabled(true);
+		var date_now = dt.format('Y-m-d');
+		
 		var app_id_update_pk="";
 		var app_customer_update=null;
 		var dapp_tglreservasi_update_date="";
@@ -204,7 +211,7 @@ Ext.onReady(function(){
 		var dapp_locked_update=0;
 		var dapp_counter_update=true;
 		var dapp_warna_terapis_update="";
-
+		
 		app_id_update_pk = oGrid_event.record.data.app_id;
 		if(oGrid_event.record.data.app_customer!== null){app_customer_update = oGrid_event.record.data.app_customer;}
 	 	if(oGrid_event.record.data.dapp_tglreservasi!== ""){dapp_tglreservasi_update_date =oGrid_event.record.data.dapp_tglreservasi.format('Y-m-d');}
@@ -212,8 +219,8 @@ Ext.onReady(function(){
 		if(oGrid_event.record.data.app_keterangan!== null){app_keterangan_update = oGrid_event.record.data.app_keterangan;}
 		if(oGrid_event.record.data.dapp_id!== ""){dapp_id_update = oGrid_event.record.data.dapp_id;}
 		if(oGrid_event.record.data.dapp_status!== ""){dapp_status_update = oGrid_event.record.data.dapp_status;}
-		if(oGrid_event.record.data.dokter_nama!== ""){dapp_dokter_update = oGrid_event.record.data.dokter_nama;}
-		if(oGrid_event.record.data.terapis_nama!== ""){dapp_terapis_update = oGrid_event.record.data.terapis_nama;}
+		if(oGrid_event.record.data.dokter_username!== ""){dapp_dokter_update = oGrid_event.record.data.dokter_username;}
+		if(oGrid_event.record.data.terapis_username!== ""){dapp_terapis_update = oGrid_event.record.data.terapis_username;}
 		if(oGrid_event.record.data.kategori_nama!== ""){dapp_kategori_nama_update = oGrid_event.record.data.kategori_nama;}
 		dapp_rawat_id_update = oGrid_event.record.data.rawat_id;
 		dapp_dokter_id_update = oGrid_event.record.data.dokter_id;
@@ -228,108 +235,186 @@ Ext.onReady(function(){
 		dapp_locked_update = oGrid_event.record.data.dapp_locked;
 		dapp_counter_update = oGrid_event.record.data.dapp_counter;
 		dapp_warna_terapis_update = oGrid_event.record.data.dapp_warna_terapis;
-
-		Ext.Ajax.request({  
-			waitMsg: 'Mohon tunggu...',
-			url: 'index.php?c=c_appointment&m=get_action',
-			params: {
-				task: "UPDATE",
-				app_id	: app_id_update_pk, 
-				app_customer	:app_customer_update,  
-				dapp_tglreservasi	: dapp_tglreservasi_update_date, 
-				app_cara	:app_cara_update,  
-				app_keterangan	:app_keterangan_update,
-				dapp_id	:dapp_id_update,  
-				dapp_status	:dapp_status_update,
-				dokter_nama	:dapp_dokter_update,
-				terapis_nama	:dapp_terapis_update,
-				kategori_nama :dapp_kategori_nama_update,
-				rawat_id	:dapp_rawat_id_update,
-				dokter_id	:dapp_dokter_id_update,
-				terapis_id	:dapp_terapis_id_update,
-				dapp_jamreservasi	:dapp_jamreservasi_update,
-				cust_id	:app_cust_id_update,
-				dapp_dokter_no	:dapp_dokter_no_update,
-				dapp_terapis_no	:dapp_terapis_no_update,
-				dapp_dokter_ganti	:dapp_dokter_ganti_update,
-				dapp_terapis_ganti	:dapp_terapis_ganti_update,
-				dapp_keterangan	: dapp_keterangan_update,
-				dapp_locked	: dapp_locked_update,
-				dapp_counter : dapp_counter_update,
-				dapp_warna_terapis : dapp_warna_terapis_update
-			}, 
-			success: function(response){							
-				var result=eval(response.responseText);
-				switch(result){
-					case 1:
-						appointment_DataStore.commitChanges();
-						appointment_DataStore.reload({
-							callback: function(opts, success, response){
-								if(success){
-									appointmentListEditorGrid.setDisabled(false);
-								}
-							}
-						});
-						//dapp_dokterDataStore.load();
-						break;
-					case 2:
-						Ext.MessageBox.show({
-						   title: 'Warning',
-						   width: 250,
-						   msg: 'Status tidak bisa diubah karena tindakan sudah selesai',
-						   buttons: Ext.MessageBox.OK,
-						   animEl: 'save',
-						   icon: Ext.MessageBox.WARNING
-						});
-						appointment_DataStore.reload({
-							callback: function(opts, success, response){
-								if(success){
-									appointmentListEditorGrid.setDisabled(false);
-								}
-							}
-						});
-						break;
-					case 3:
-						appointment_DataStore.reload({
-							callback: function(opts, success, response){
-								if(success){
-									appointmentListEditorGrid.setDisabled(false);
-								}
-							}
-						});
-						Ext.MessageBox.show({
-						   title: 'Warning',
-						   width: 250,
-						   msg: 'Tanggal appointment tidak sama dengan hari ini',
-						   buttons: Ext.MessageBox.OK,
-						   animEl: 'save',
-						   icon: Ext.MessageBox.WARNING
-						});
-						break;
-					default:
-						appointmentListEditorGrid.setDisabled(false);
-						Ext.MessageBox.show({
-						   title: 'Warning',
-						   msg: 'Data appointment tidak bisa disimpan',
-						   buttons: Ext.MessageBox.OK,
-						   animEl: 'save',
-						   icon: Ext.MessageBox.WARNING
-						});
-						break;
-				}
-			},
-			failure: function(response){
+		
+		if(dapp_tglreservasi_update_date==date_now){
+			if(this.dapp_status_inline_beforeedit=='datang' && dapp_status_update=='datang'){
+				//Editing ketika status = 'selesai' ==> tidak diperbolehkan
+				appointment_DataStore.reload();
 				appointmentListEditorGrid.setDisabled(false);
-				var result=response.responseText;
 				Ext.MessageBox.show({
-				   title: 'Error',
-				   msg: 'Could not connect to the database. retry later.',
-				   buttons: Ext.MessageBox.OK,
-				   animEl: 'database',
-				   icon: Ext.MessageBox.ERROR
-				});	
-			}									    
-		});   
+					title: 'Warning',
+					width: 330,
+					msg: 'Status yang sudah "datang" tidak boleh di-Edit. Ubah status ke selain "datang" terlebih dahulu, kemudian lakukan editing.',
+					buttons: Ext.MessageBox.OK,
+					animEl: 'save',
+					icon: Ext.MessageBox.WARNING
+				});
+			}/*else if(dapp_status_inline_beforeedit!=='datang' && dapp_status_update!=='datang'
+					 && (dapp_dokter_id_inline_beforeedit<>dapp_dokter_ganti_update && (/^\d+$/.test(dapp_dokter_ganti_update))) ){
+			}*/else if((this.dapp_status_inline_beforeedit=='datang' && dapp_status_update!=='datang')
+					 || (this.dapp_status_inline_beforeedit!=='datang' && dapp_status_update=='datang') ){
+				//Edit LIST: dari status='datang' ==> status!='datang' || dari status!='datang' ==> status='datang'
+				Ext.Ajax.request({  
+					waitMsg: 'Mohon tunggu...',
+					url: 'index.php?c=c_appointment&m=get_action',
+					params: {
+						task: "UPDATE",
+						mode_edit: 'update_list_status',
+						dapp_id	:dapp_id_update,
+						dapp_status	:dapp_status_update
+					}, 
+					success: function(response){							
+						var result=eval(response.responseText);
+						switch(result){
+							case 1:
+								appointment_DataStore.commitChanges();
+								appointment_DataStore.reload({
+									callback: function(opts, success, response){
+										if(success){
+											appointmentListEditorGrid.setDisabled(false);
+										}
+									}
+								});
+								//dapp_dokterDataStore.load();
+								break;
+							default:
+								appointmentListEditorGrid.setDisabled(false);
+								Ext.MessageBox.show({
+								   title: 'Warning',
+								   msg: 'Error:'+result+', Edit List tidak bisa dilakukan.',
+								   buttons: Ext.MessageBox.OK,
+								   animEl: 'save',
+								   icon: Ext.MessageBox.WARNING
+								});
+								break;
+						}
+					},
+					failure: function(response){
+						appointmentListEditorGrid.setDisabled(false);
+						var result=response.responseText;
+						Ext.MessageBox.show({
+						   title: 'Error',
+						   msg: 'Could not connect to the database. retry later.',
+						   buttons: Ext.MessageBox.OK,
+						   animEl: 'database',
+						   icon: Ext.MessageBox.ERROR
+						});	
+					}									    
+				});
+			}else{
+				Ext.Ajax.request({  
+					waitMsg: 'Mohon tunggu...',
+					url: 'index.php?c=c_appointment&m=get_action',
+					params: {
+						task: "UPDATE",
+						mode_edit: 'update_list',
+						dapp_id	: dapp_id_update,  
+						dapp_tglreservasi	: dapp_tglreservasi_update_date,
+						dapp_jamreservasi	: dapp_jamreservasi_update,
+						dokter	: dapp_dokter_update,
+						terapis	: dapp_terapis_update,
+						dapp_keterangan	: dapp_keterangan_update,
+						dapp_status	: dapp_status_update
+					}, 
+					success: function(response){							
+						var result=eval(response.responseText);
+						switch(result){
+							case 1:
+								appointment_DataStore.commitChanges();
+								appointment_DataStore.reload({
+									callback: function(opts, success, response){
+										if(success){
+											appointmentListEditorGrid.setDisabled(false);
+										}
+									}
+								});
+								Ext.MessageBox.show({
+								   title: 'INFO',
+								   width: 250,
+								   msg: 'Update List telah selesai dilakukan',
+								   buttons: Ext.MessageBox.OK,
+								   animEl: 'save',
+								   icon: Ext.MessageBox.INFO
+								});
+								//dapp_dokterDataStore.load();
+								break;
+							case 2:
+								Ext.MessageBox.show({
+								   title: 'Warning',
+								   width: 250,
+								   msg: 'Status tidak bisa diubah karena tindakan sudah selesai',
+								   buttons: Ext.MessageBox.OK,
+								   animEl: 'save',
+								   icon: Ext.MessageBox.WARNING
+								});
+								appointment_DataStore.reload({
+									callback: function(opts, success, response){
+										if(success){
+											appointmentListEditorGrid.setDisabled(false);
+										}
+									}
+								});
+								break;
+							case 3:
+								appointment_DataStore.reload({
+									callback: function(opts, success, response){
+										if(success){
+											appointmentListEditorGrid.setDisabled(false);
+										}
+									}
+								});
+								Ext.MessageBox.show({
+								   title: 'Warning',
+								   width: 250,
+								   msg: 'Tanggal appointment tidak sama dengan hari ini',
+								   buttons: Ext.MessageBox.OK,
+								   animEl: 'save',
+								   icon: Ext.MessageBox.WARNING
+								});
+								break;
+							default:
+								appointment_DataStore.reload({
+									callback: function(opts, success, response){
+										if(success){
+											appointmentListEditorGrid.setDisabled(false);
+										}
+									}
+								});
+								Ext.MessageBox.show({
+								   title: 'Warning',
+								   msg: 'Error: '+result+', Update List tidak bisa dilakukan',
+								   buttons: Ext.MessageBox.OK,
+								   animEl: 'save',
+								   icon: Ext.MessageBox.WARNING
+								});
+								break;
+						}
+					},
+					failure: function(response){
+						appointmentListEditorGrid.setDisabled(false);
+						var result=response.responseText;
+						Ext.MessageBox.show({
+						   title: 'Error',
+						   msg: 'Could not connect to the database. retry later.',
+						   buttons: Ext.MessageBox.OK,
+						   animEl: 'database',
+						   icon: Ext.MessageBox.ERROR
+						});	
+					}									    
+				});
+			}
+		}else{
+			appointment_DataStore.reload();
+			appointmentListEditorGrid.setDisabled(false);
+			Ext.MessageBox.show({
+				title: 'Warning',
+				width: 330,
+				msg: 'Tanggal Reservasi tidak sama dengan Tanggal Hari Ini.',
+				buttons: Ext.MessageBox.OK,
+				animEl: 'save',
+				icon: Ext.MessageBox.WARNING
+			});
+		}
 	}
   	/* End of Function */
   
@@ -531,6 +616,13 @@ Ext.onReady(function(){
 		app_tanggalField.setValue(appointmentListEditorGrid.getSelectionModel().getSelected().get('app_tanggal'));
 		app_caraField.setValue(appointmentListEditorGrid.getSelectionModel().getSelected().get('app_cara'));
 		app_keteranganField.setValue(appointmentListEditorGrid.getSelectionModel().getSelected().get('app_keterangan'));
+		if(app_post2db=='UPDATE'){
+			app_customerField.setDisabled(true);
+			app_tanggalField.setDisabled(true);
+		}else{
+			app_customerField.setDisabled(false);
+			app_tanggalField.setDisabled(false);
+		}
 	}
 	/* End setValue to EDIT*/
   
@@ -589,49 +681,54 @@ Ext.onReady(function(){
 		}
 	}
   	/* End of Function */
- 
-  	/* Function for Delete Confirm */
-	function appointment_confirm_delete(){
-		// only one appointment is selected here
-		if(appointmentListEditorGrid.selModel.getCount() == 1){
-//			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', appointment_detail_delete);
-			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', appointment_detail_delete);
-		} else if(appointmentListEditorGrid.selModel.getCount() > 1){
-//			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', appointment_detail_delete);
-			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', appointment_detail_delete);
-		} else {
-			Ext.MessageBox.show({
-				title: 'Warning',
-//				msg: 'You can\'t really delete something you haven\'t selected?',
-				msg: 'Anda belum memilih data yang akan dihapus',
-				buttons: Ext.MessageBox.OK,
-				animEl: 'save',
-				icon: Ext.MessageBox.WARNING
-			});
-		}
-	}
-  	/* End of Function */
   
 	/* Function for Update Confirm */
 	function appointment_confirm_update(){
+		app_post2db='UPDATE';
         dmedis_record='';
         dnonmedis_record='';
 		/* only one record is selected here */
 		dapp_dokterDataStore.load();
 		dapp_terapisDataStore.load();
 		if(appointmentListEditorGrid.selModel.getCount() == 1) {
-			cbo_dapp_rawat_medisDataStore.load({params:{query:appointmentListEditorGrid.getSelectionModel().getSelected().get('app_id')}});
-			cbo_dapp_rawat_nonmedisDataStore.load({params:{query:appointmentListEditorGrid.getSelectionModel().getSelected().get('app_id')}});
-			
 			medis_orNonMedis=appointmentListEditorGrid.getSelectionModel().getSelected().get('kategori_nama');
 			if(medis_orNonMedis=="Medis")
 				detail_tab_perawatan.setActiveTab(0);
 			if(medis_orNonMedis=="Non Medis")
 				detail_tab_perawatan.setActiveTab(1);
-			appointment_set_form();
+			
+			cbo_dapp_rawat_medisDataStore.load({
+				params:{query:appointmentListEditorGrid.getSelectionModel().getSelected().get('app_id')},
+				callback: function(opts, success, response){
+					if(success){
+						appointment_detail_medisDataStore.load({
+							params : {master_id : eval(get_pk_id()), start:0, limit:pageS},
+							callback: function(opts, success, response){
+								if(success){
+									appointment_set_form();
+								}
+							}
+						});
+					}
+				}
+			});
+			cbo_dapp_rawat_nonmedisDataStore.load({
+				params:{query:appointmentListEditorGrid.getSelectionModel().getSelected().get('app_id')},
+				callback: function(opts, success, response){
+					if(success){
+						appointment_detail_nonmedisDataStore.load({
+							params : {master_id : eval(get_pk_id()), start:0, limit:pageS},
+							callback: function(opts, success, response){
+								if(success){
+									appointment_set_form();
+								}
+							}
+						});
+					}
+				}
+			});
+			
 			app_post2db='UPDATE';
-			appointment_detail_medisDataStore.load({params : {master_id : eval(get_pk_id()), start:0, limit:pageS}});
-			appointment_detail_nonmedisDataStore.load({params : {master_id : eval(get_pk_id()), start:0, limit:pageS}});
 			msg='updated';
 			appointment_createWindow.show();
 		} else {
@@ -644,97 +741,6 @@ Ext.onReady(function(){
 				icon: Ext.MessageBox.WARNING
 			});
 		}
-	}
-  	/* End of Function */
-  
-  	/* Function for Delete Record */
-	function appointment_delete(btn){
-		if(btn=='yes'){
-			var selections = appointmentListEditorGrid.selModel.getSelections();
-			var prez = [];
-			for(i = 0; i< appointmentListEditorGrid.selModel.getCount(); i++){
-				prez.push(selections[i].json.app_id);
-			}
-			var encoded_array = Ext.encode(prez);
-			Ext.Ajax.request({ 
-//				waitMsg: 'Please Wait',
-				waitMsg: 'Mohon tunggu',
-				url: 'index.php?c=c_appointment&m=get_action', 
-				params: { task: "DELETE", ids:  encoded_array }, 
-				success: function(response){
-					var result=eval(response.responseText);
-					switch(result){
-						case 1:  // Success : simply reload
-							appointment_DataStore.reload();
-							break;
-						default:
-							Ext.MessageBox.show({
-								title: 'Warning',
-								msg: 'Could not delete the entire selection',
-								buttons: Ext.MessageBox.OK,
-								animEl: 'save',
-								icon: Ext.MessageBox.WARNING
-							});
-							break;
-					}
-				},
-				failure: function(response){
-					var result=response.responseText;
-					Ext.MessageBox.show({
-					   title: 'Error',
-					   msg: 'Could not connect to the database. retry later.',
-					   buttons: Ext.MessageBox.OK,
-					   animEl: 'database',
-					   icon: Ext.MessageBox.ERROR
-					});	
-				}
-			});
-		}  
-	}
-  	/* End of Function */
-  	
-	/* Function for Delete Record */
-	function appointment_detail_delete(btn){
-		if(btn=='yes'){
-			var selections = appointmentListEditorGrid.selModel.getSelections();
-			var prez = [];
-			for(i = 0; i< appointmentListEditorGrid.selModel.getCount(); i++){
-				prez.push(selections[i].json.dapp_id);
-			}
-			var encoded_array = Ext.encode(prez);
-			Ext.Ajax.request({ 
-				waitMsg: 'Mohon tunggu...',
-				url: 'index.php?c=c_appointment&m=get_action', 
-				params: { task: "DELETE", ids:  encoded_array }, 
-				success: function(response){
-					var result=eval(response.responseText);
-					switch(result){
-						case 1:  // Success : simply reload
-							appointment_DataStore.reload();
-							break;
-						default:
-							Ext.MessageBox.show({
-								title: 'Warning',
-								msg: 'Could not delete the entire selection',
-								buttons: Ext.MessageBox.OK,
-								animEl: 'save',
-								icon: Ext.MessageBox.WARNING
-							});
-							break;
-					}
-				},
-				failure: function(response){
-					var result=response.responseText;
-					Ext.MessageBox.show({
-					   title: 'Error',
-					   msg: 'Could not connect to the database. retry later.',
-					   buttons: Ext.MessageBox.OK,
-					   animEl: 'database',
-					   icon: Ext.MessageBox.ERROR
-					});	
-				}
-			});
-		}  
 	}
   	/* End of Function */
   
@@ -1029,10 +1035,7 @@ Ext.onReady(function(){
 			header: '<div align="center">' + 'Jam Dtg' + '</div>',
 			dataIndex: 'dapp_jamdatang',
 			width: 55,
-			sortable: false,
-			editor: new Ext.form.TextField({
-				maxLength: 10
-          	})
+			sortable: false
 		}, 
 		{
 			header: '<div align="center">' + 'Keterangan' + '</div>',
@@ -1190,12 +1193,6 @@ Ext.onReady(function(){
 			iconCls:'icon-update',
 			disabled:false,
 			handler: appointment_confirm_update   // Confirm before updating
-		}, '-',{
-			text: 'Delete',
-			tooltip: 'Delete selected record',
-			iconCls:'icon-delete',
-			disabled: true,
-			handler: appointment_confirm_delete   // Confirm before deleting
 		}, '-', {
 			text: 'Adv Search',
 			tooltip: 'Pencarian detail',
@@ -1218,7 +1215,7 @@ Ext.onReady(function(){
 				},
 				render: function(c){
 				Ext.get(this.id).set({qtitle:'Search By'});
-				Ext.get(this.id).set({qtip:'- Default Tgl Sekarang<br>- Nama Customer<br>- Cara Appointment<br>- Keterangan'});
+				Ext.get(this.id).set({qtip:'- Default Tgl Sekarang<br>- Nomor Customer<br>- Nama Customer<br>- NickName Dokter<br>- NickName Terapis'});
 				}
 			},
 			width: 120
@@ -1259,32 +1256,17 @@ Ext.onReady(function(){
 			//handler: function(){window.open("system/application/views/main/waitinglist/waitinglist.php")}  
 			handler: function(){window.open("../Add-on/waitinglist/waitinglist.php")}  
 		}
-//		{
-//			text: 'Waiting List',
-//			tooltip: 'Waiting List',
-//			iconCls:'icon-print',
-//			handler: function(){window.open("waitinglist/waitinglist.php")  
-		/*,{
-			xtype: 'combo',
-			id: 'cbo_page',
-			width: 50,
-			store: new Ext.data.SimpleStore({
-				fields:['set_page', 'set_page'],
-				data: [[5,5],[10,10],[15,15],[20,20],[25,25]]
-				}),
-            fieldLabel: 'ComboBox',
-            displayField: 'set_page',
-            valueField: 'set_page', 
-            typeAhead: true,
-            forceSelection: true,
-            mode: 'local',
-            triggerAction: 'all',
-            selectOnFocus: true,
-            editable: true
-		}*/
 		]
 	});
 	appointmentListEditorGrid.render();
+	
+	appointmentListEditorGrid.on('rowdblclick', function(){
+		this.dapp_status_inline_beforeedit = appointmentListEditorGrid.getSelectionModel().getSelected().get('dapp_status');
+		this.dapp_kategori_inline_beforeedit = appointmentListEditorGrid.getSelectionModel().getSelected().get('kategori_nama');
+		this.dapp_dokter_id_inline_beforeedit = appointmentListEditorGrid.getSelectionModel().getSelected().get('dokter_id');
+		this.dapp_terapis_id_inline_beforeedit = appointmentListEditorGrid.getSelectionModel().getSelected().get('terapis_id');
+	});
+	
 	tbar_jenis_rawatField.setValue('Medis');
 	/* End of DataStore */
 	/*Ext.getCmp('cbo_page').on('select', function(){
@@ -1369,13 +1351,6 @@ Ext.onReady(function(){
 			text: 'Edit', tooltip: 'Edit selected record', 
 			iconCls:'icon-update',
 			handler: appointment_editContextMenu 
-		},
-		{ 
-			text: 'Delete', 
-			tooltip: 'Delete selected record', 
-			iconCls:'icon-delete',
-			disabled: true,
-			handler: appointment_confirm_delete 
 		},
 		'-',
 		{ 
@@ -1617,63 +1592,8 @@ Ext.onReady(function(){
             '<span>{dapp_rawat_kode}| <b>{dapp_rawat_display}</b>',
 		'</div></tpl>'
     );
-	/*var rawat_jual_rawat_tpl = new Ext.XTemplate(
-        '<tpl for="."><div class="search-item">',
-            '<span><b>{dapp_rawat_kode}</b>| {dapp_rawat_display}<br/>Group: {dapp_rawat_group}<br/>',
-			'Kategori: {dapp_rawat_kategori}</span>',
-		'</div></tpl>'
-    );*/
-	
-	/*cbo_dapp_dokterDataStore = new Ext.data.Store({
-		id: 'cbo_dapp_dokterDataStore',
-		proxy: new Ext.data.HttpProxy({
-			url: 'index.php?c=c_appointment&m=get_dokter_list', 
-			method: 'POST'
-		}),baseParams: {start: 0, limit: 15 },
-		reader: new Ext.data.JsonReader({
-			root: 'results',
-			totalProperty: 'total'
-		},[
-			{name: 'dokter_display', type: 'string', mapping: 'karyawan_nama'},
-			{name: 'dokter_username', type: 'string', mapping: 'karyawan_username'},
-			{name: 'dokter_value', type: 'int', mapping: 'karyawan_id'},
-			{name: 'dokter_count', type: 'int', mapping: 'dokter_count'}
-		]),
-		sortInfo:{field: 'dokter_display', direction: "ASC"}
-	});
-	var dokter_tpl = new Ext.XTemplate(
-        '<tpl for="."><div class="search-item">',
-            '<span><b>{dokter_username}</b> | {dokter_display} | <b>{dokter_count}</b></span>',
-        '</div></tpl>'
-    );*/
-	
-	/*cbo_dapp_terapisDataStore = new Ext.data.Store({
-		id: 'cbo_dapp_terapisDataStore',
-		proxy: new Ext.data.HttpProxy({
-			url: 'index.php?c=c_appointment&m=get_terapis_list', 
-			method: 'POST'
-		}),baseParams: {start: 0, limit: 15 },
-		reader: new Ext.data.JsonReader({
-			root: 'results',
-			totalProperty: 'total'
-		},[
-		// dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column 
-			{name: 'terapis_display', type: 'string', mapping: 'karyawan_nama'},
-			{name: 'terapis_username', type: 'string', mapping: 'karyawan_username'},
-			{name: 'terapis_value', type: 'int', mapping: 'karyawan_id'},
-			{name: 'terapis_jmltindakan', type: 'int', mapping: 'reportt_jmltindakan'}
-		]),
-		sortInfo:{field: 'terapis_display', direction: "ASC"}
-	});
-	var cbo_terapis_tpl = new Ext.XTemplate(
-        '<tpl for="."><div class="search-item">',
-            '<span><b>{terapis_username}</b> | {terapis_display} | <b>{terapis_jmltindakan}</b></span>',
-        '</div></tpl>'
-    );*/
 	
 	
-	
-		
 	/* START DETAIL-MEDIS Declaration */
 		
 	// Function for json reader of detail
@@ -1770,17 +1690,6 @@ Ext.onReady(function(){
 			triggerAction: 'all',
 			anchor: '95%'
 	});
-	
-/*	var combo_dapp_terapis_medis=new Ext.form.ComboBox({
-			store: cbo_dapp_terapisDataStore,
-			mode: 'remote',
-			displayField: 'terapis_display',
-			valueField: 'terapis_value',
-			loadingText: 'Searching...',
-			triggerAction: 'all',
-			anchor: '95%'
-
-	});*/
 
 	var combo_dapp_jam_medis=new Ext.form.TimeField({
 		format: 'H:i:s',
@@ -1789,22 +1698,12 @@ Ext.onReady(function(){
 		increment: 30,
 		width: 94
 	});
-	/*combo_dapp_jam_medis.on('select', function(){
-		var dapp_medis_record;
-		var j=appointment_detail_medisListEditorGrid.getStore().getCount();
-		for(i=0;i<j;i++){
-			dapp_medis_record=appointment_detail_medisListEditorGrid.getStore().getAt(i);
-			//cbo_dapp_dokterDataStore.load({params: {tgl_app:dapp_medis_record.data.dapp_medis_tglreservasi}});
-			cbo_dapp_dokterDataStore.load({params: {tgl_app:combo_dapp_tgl_medis.getValue()}});
-		}
-	});*/
 
 	var combo_dapp_tgl_medis=new Ext.form.DateField({
 		format: 'd-m-Y'
 	});
 	combo_dapp_tgl_medis.on('select', function(){
 		dapp_dokterDataStore.load({params:{tgl_app:combo_dapp_tgl_medis.getValue().format('Y-m-d')}});
-		//combo_dapp_tgl_medis.setValue(combo_dapp_tgl_medis.getValue().format('Y-m-d'));
 	});
 
 	var combo_dapp_medis_status=new Ext.form.ComboBox({
@@ -1927,7 +1826,6 @@ Ext.onReady(function(){
 			dapp_medis_tglreservasi	:dt.dateFormat('Y-m-d'),		
 			dapp_medis_jamreservasi	:'',		
 			dapp_medis_petugas	:'',		
-//			dapp_medis_petugas2	:'',		
 			dapp_medis_status	:'reservasi'
 		});
 		editor_appointment_detail_medis.stopEditing();
@@ -2096,54 +1994,12 @@ Ext.onReady(function(){
 	}
 	//eof
 	
-	//function for purge detail medis
-	function appointment_detail_purge(){
-		Ext.Ajax.request({
-//			waitMsg: 'Please wait...',
-			waitMsg: 'Mohon tunggu...',
-			url: 'index.php?c=c_appointment&m=detail_appointment_detail_purge',
-			params:{ master_id: eval(app_idField.getValue()) },
-			callback: function(opts, success, response){
-				if(success){
-					appointment_detail_medis_insert();
-					appointment_detail_nonmedis_insert();
-				}
-			}
-		});
-		
-	}
-/*	function appointment_detail_medis_purge(){
-		Ext.Ajax.request({
-			waitMsg: 'Please wait...',
-			url: 'index.php?c=c_appointment&m=detail_appointment_detail_medis_purge',
-			params:{ master_id: eval(app_idField.getValue()) },
-			success: function(response){							
-				var result=eval(response.responseText);
-				appointment_detail_medis_insert();
-			},
-			failure: function(response){
-				var result=response.responseText;
-				Ext.MessageBox.show({
-				   title: 'Error',
-				   msg: 'Could not connect to the database. retry later.',
-				   buttons: Ext.MessageBox.OK,
-				   animEl: 'database',
-				   icon: Ext.MessageBox.ERROR
-				});	
-			}
-		});
-		
-	}*/
-	//eof
-	
 	/* Function for Delete Confirm of detail medis */
 	function appointment_detail_medis_confirm_delete(){
 		// only one record is selected here
 		if(appointment_detail_medisListEditorGrid.selModel.getCount() == 1){
-//			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', appointment_detail_medis_delete);
 			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', appointment_detail_medis_delete);
 		} else if(appointment_detail_medisListEditorGrid.selModel.getCount() > 1){
-//			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', appointment_detail_medis_delete);
 			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', appointment_detail_medis_delete);
 		} else {
 			Ext.MessageBox.show({
@@ -2163,7 +2019,18 @@ Ext.onReady(function(){
 		if(btn=='yes'){
 			var s = appointment_detail_medisListEditorGrid.getSelectionModel().getSelections();
 			for(var i = 0, r; r = s[i]; i++){
-				appointment_detail_medisDataStore.remove(r);
+				if(appointment_detail_medisListEditorGrid.getSelectionModel().getSelected().get('dapp_id')==undefined){
+					appointment_detail_medisDataStore.remove(r);
+				}else{
+					Ext.MessageBox.show({
+						title: 'Warning',
+						width: 250,
+						msg: 'Tidak diperbolehkan menghapus data yang sudah disimpan.',
+						buttons: Ext.MessageBox.OK,
+						animEl: 'save',
+						icon: Ext.MessageBox.WARNING
+					});
+				}
 			}
 		}  
 	}
@@ -2257,16 +2124,6 @@ Ext.onReady(function(){
 
 	});
 	
-/*	var combo_dapp_dokter_nonmedis=new Ext.form.ComboBox({
-			store: cbo_dapp_dokterDataStore,
-			mode: 'remote',
-			displayField: 'dokter_display',
-			valueField: 'dokter_value',
-			loadingText: 'Searching...',
-			triggerAction: 'all',
-			anchor: '95%'
-	});*/
-	
 	var combo_dapp_terapis_nonmedis=new Ext.form.ComboBox({
 			store: dapp_terapisDataStore,
 			mode: 'local',
@@ -2287,15 +2144,6 @@ Ext.onReady(function(){
 		increment: 30,
 		width: 94
 	});
-	/*combo_dapp_jam_nonmedis.on('select', function(){
-		var dapp_nonmedis_record;
-		var j=appointment_detail_nonmedisListEditorGrid.getStore().getCount();
-		for(i=0;i<j;i++){
-			dapp_nonmedis_record=appointment_detail_nonmedisListEditorGrid.getStore().getAt(i);
-			//cbo_dapp_dokterDataStore.load({params: {tgl_app:dapp_medis_record.data.dapp_medis_tglreservasi}});
-			cbo_dapp_terapisDataStore.load({params: {tgl_app:combo_dapp_tgl_nonmedis.getValue()}});
-		}
-	});*/
 
 	var combo_dapp_tgl_nonmedis=new Ext.form.DateField({
 		format: 'd-m-Y'
@@ -2392,8 +2240,6 @@ Ext.onReady(function(){
 	);
 	appointment_detail_nonmedis_ColumnModel.defaultSortable= true;
 	//eof
-	
-	
 	
 	//declaration of detail nonmedis list editor grid Perawatan Medis
 	appointment_detail_nonmedisListEditorGrid =  new Ext.grid.EditorGridPanel({
@@ -2640,30 +2486,6 @@ Ext.onReady(function(){
 	}
 	//eof
 	
-	//function for purge detail nonmedis
-/*	function appointment_detail_nonmedis_purge(){
-		Ext.Ajax.request({
-			waitMsg: 'Please wait...',
-			url: 'index.php?c=c_appointment&m=detail_appointment_detail_nonmedis_purge',
-			params:{ master_id: eval(app_idField.getValue()) },
-			success: function(response){							
-				var result=eval(response.responseText);
-				appointment_detail_nonmedis_insert();
-			},
-			failure: function(response){
-				var result=response.responseText;
-				Ext.MessageBox.show({
-				   title: 'Error',
-				   msg: 'Could not connect to the database. retry later.',
-				   buttons: Ext.MessageBox.OK,
-				   animEl: 'database',
-				   icon: Ext.MessageBox.ERROR
-				});	
-			}
-		});
-	}*/
-	//eof
-	
 	/* Function for Delete Confirm of detail nonmedis */
 	function appointment_detail_nonmedis_confirm_delete(){
 		// only one record is selected here
@@ -2689,7 +2511,19 @@ Ext.onReady(function(){
 		if(btn=='yes'){
 			var s = appointment_detail_nonmedisListEditorGrid.getSelectionModel().getSelections();
 			for(var i = 0, r; r = s[i]; i++){
-				appointment_detail_nonmedisDataStore.remove(r);
+				if(appointment_detail_nonmedisListEditorGrid.getSelectionModel().getSelected().get('dapp_id')==undefined){
+					appointment_detail_nonmedisDataStore.remove(r);
+				}else{
+					Ext.MessageBox.show({
+						title: 'Warning',
+						width: 250,
+						msg: 'Tidak diperbolehkan menghapus data yang sudah disimpan.<br/>Untuk membatalkannya, lakukan edit status di List Appointment.',
+						buttons: Ext.MessageBox.OK,
+						animEl: 'save',
+						icon: Ext.MessageBox.WARNING
+					});
+				}
+				
 			}
 		}  
 	}
@@ -2964,27 +2798,6 @@ Ext.onReady(function(){
 		anchor: '95%'
 	
 	});
-	/* Identify  app_keterangan Search Field */
-	/*app_keteranganSearchField= new Ext.form.TextArea({
-		id: 'app_keteranganSearchField',
-		fieldLabel: 'Keterangan',
-		maxLength: 250,
-		anchor: '95%'
-	
-	});*/
-	/* Identify ap_tglReservasi Searcg Field*/
-	/*app_tgl_startReservasiSearchField= new Ext.form.DateField({
-		fieldLabel: 'Tanggal Reservasi',
-        id: 'app_tgl_startReservasiSearchField',
-        vtype: 'daterange',
-        endDateField: 'app_tgl_endReservasiSearchField' // id of the end date field
-	});
-	app_tgl_endReservasiSearchField= new Ext.form.DateField({
-		fieldLabel:'s/d',
-        id: 'app_tgl_endReservasiSearchField',
-        vtype: 'daterange',
-        endDateField: 'app_tgl_startReservasiSearchField' // id of the end date field
-	});*/
 	/* Identify ap_tglApp Searcg Field*/
 	app_tgl_startAppSearchField= new Ext.form.DateField({
 		fieldLabel: 'Tanggal Appointment',

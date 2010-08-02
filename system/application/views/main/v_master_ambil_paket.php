@@ -1014,10 +1014,16 @@ Ext.onReady(function(){
         autoHeight: true,
 		style: 'margin-top: 10px',
         width: 1220	//940	//800
+		,tbar: [{
+				text: 'Batal',
+				tooltip: 'Membatalkan pengambilan paket',
+				iconCls:'icon-delete',    				// this is defined in our styles.css
+				handler: detail_ambil_paket_batal
+			}]
     });
     history_ambil_paketPanel.render('history_ambil_paket');
 	
-	history_ambil_paketPanel.on('rowdblclick', function(objGrid, rowindex, e){
+	function detail_ambil_paket_batal(){
 		if(history_ambil_paketPanel.selModel.getSelected().get('dapaket_stat_dok')!=='Batal' && history_ambil_paketPanel.selModel.getCount() == 1){
 			Ext.MessageBox.confirm('Batal','Anda yakin mem-Batal-kan pengambilan paket ini?', function(btn){
 				if(btn=='yes'){
@@ -1075,7 +1081,7 @@ Ext.onReady(function(){
 			});
 		}
 		
-	});
+	}
 
 	/* END History Ambil Paket */
 	
