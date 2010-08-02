@@ -303,7 +303,7 @@ Ext.onReady(function(){
 		if(oGrid_event.record.data.kwitansi_status!== null){kwitansi_status_update = oGrid_event.record.data.kwitansi_status;}
 
 		Ext.Ajax.request({  
-			waitMsg: 'Please wait...',
+			waitMsg: 'Mohon tunggu...',
 			url: 'index.php?c=c_cetak_kwitansi&m=get_action',
 			params: {
 				task: "UPDATE",
@@ -602,9 +602,12 @@ Ext.onReady(function(){
 		kwitansi_tanggalField.setDisabled(false);
 		kwitansi_custField.setDisabled(false);
 		kwitansi_nilai_cfField.setDisabled(false);
+		kwitansi_noField.setDisabled(false);
+		kwitansi_cara_bayarTabPanel.setDisabled(false);
 		kwitansi_bayar_tunaiGroup.setDisabled(false);
-		
-		kwitansi_post2db='CREATE';
+		kwitansi_keteranganField.setDisabled(false);
+		kwitansi_statusField.setDisabled(false);
+		cetak_kwitansi_createForm.kwitansi_savePrint.enable();
 		
 	}
  	/* End of Function */
@@ -792,10 +795,102 @@ Ext.onReady(function(){
 				break;
 		}
 		
+		
+		kwitansi_statusField.on("select",function(){
+		var status_awal_kwitansi = cetak_kwitansiListEditorGrid.getSelectionModel().getSelected().get('kwitansi_status');
+		if(status_awal_kwitansi =='Terbuka' && kwitansi_statusField.getValue()=='Tertutup')
+		{
+		Ext.MessageBox.show({
+			msg: 'Dokumen tidak bisa ditutup. Gunakan Save & Print untuk menutup dokumen',
+		   //progressText: 'proses...',
+			buttons: Ext.MessageBox.OK,
+			animEl: 'save',
+			icon: Ext.MessageBox.WARNING
+		   });
+		kwitansi_statusField.setValue('Terbuka');
+		}
+		
+		else if(status_awal_kwitansi =='Tertutup' && kwitansi_statusField.getValue()=='Terbuka')
+		{
+		Ext.MessageBox.show({
+			msg: 'Status yang sudah Tertutup tidak dapat diganti Terbuka',
+			buttons: Ext.MessageBox.OK,
+			animEl: 'save',
+			icon: Ext.MessageBox.WARNING
+		   });
+		kwitansi_statusField.setValue('Tertutup');
+		}
+		
+		else if(status_awal_kwitansi =='Batal' && kwitansi_statusField.getValue()=='Terbuka')
+		{
+		Ext.MessageBox.show({
+			msg: 'Status yang sudah Tertutup tidak dapat diganti Terbuka',
+			buttons: Ext.MessageBox.OK,
+			animEl: 'save',
+			icon: Ext.MessageBox.WARNING
+		   });
+		kwitansi_statusField.setValue('Tertutup');
+		}
+		
+		else if(kwitansi_statusField.getValue()=='Batal')
+		{
+		Ext.MessageBox.confirm('Confirmation','Anda yakin untuk membatalkan dokumen ini? Pembatalan dokumen tidak bisa dikembalikan lagi', kwitansi_status_batal);
+		}
+        
+        else if(status_awal_kwitansi =='Tertutup' && kwitansi_statusField.getValue()=='Tertutup'){
+            cetak_kwitansi_createForm.kwitansi_savePrint.enable();
+        }
+		
+		});		
+	
+		
+	function kwitansi_status_batal(btn){
+			if(btn=='yes')
+			{
+			kwitansi_statusField.setValue('Batal');
+			cetak_kwitansi_createForm.kwitansi_savePrint.disable();
+			}  
+			else
+			kwitansi_statusField.setValue(cetak_kwitansiListEditorGrid.getSelectionModel().getSelected().get('kwitansi_status'));
+		}
+		
 	}
 	/* End setValue to EDIT*/
 	
 	function cetak_kwitansi_set_form_update(){
+		if(kwitansi_post2db=="UPDATE" && cetak_kwitansiListEditorGrid.getSelectionModel().getSelected().get('kwitansi_status')=="Terbuka"){
+			kwitansi_tanggalField.setDisabled(false);
+			kwitansi_custField.setDisabled(false);
+			kwitansi_nilai_cfField.setDisabled(false);
+			kwitansi_cara_bayarTabPanel.setDisabled(false);
+			kwitansi_noField.setDisabled(false);
+			kwitansi_keteranganField.setDisabled(false);
+			kwitansi_statusField.setDisabled(false);
+			cetak_kwitansi_createForm.kwitansi_savePrint.enable();
+		}
+		if(kwitansi_post2db=="UPDATE" && cetak_kwitansiListEditorGrid.getSelectionModel().getSelected().get('kwitansi_status')=="Tertutup"){
+			kwitansi_tanggalField.setDisabled(true);
+			kwitansi_custField.setDisabled(true);
+			kwitansi_nilai_cfField.setDisabled(true);
+			kwitansi_cara_bayarTabPanel.setDisabled(true);
+			kwitansi_noField.setDisabled(true);
+			kwitansi_keteranganField.setDisabled(true);
+			kwitansi_statusField.setDisabled(false);
+			cetak_kwitansi_createForm.kwitansi_savePrint.enable();
+			
+		}
+		if(kwitansi_post2db=="UPDATE" && cetak_kwitansiListEditorGrid.getSelectionModel().getSelected().get('kwitansi_status')=="Batal"){
+			kwitansi_tanggalField.setDisabled(true);
+			kwitansi_custField.setDisabled(true);
+			kwitansi_nilai_cfField.setDisabled(true);
+			kwitansi_cara_bayarTabPanel.setDisabled(true);
+			kwitansi_noField.setDisabled(true);
+			kwitansi_keteranganField.setDisabled(true);
+			kwitansi_statusField.setDisabled(true);
+			cetak_kwitansi_createForm.kwitansi_savePrint.disable();
+		
+		}
+		/*
 		if(kwitansi_post2db=='UPDATE' &&
 		   ((cetak_kwitansiListEditorGrid.getSelectionModel().getSelected().get('kwitansi_status')=='Tertutup') || (cetak_kwitansiListEditorGrid.getSelectionModel().getSelected().get('kwitansi_status')=='Batal'))){
 			kwitansi_tanggalField.setDisabled(true);
@@ -815,7 +910,7 @@ Ext.onReady(function(){
 			kwitansi_nilai_cfField.setDisabled(false);
 			kwitansi_cara_bayarTabPanel.setDisabled(false);
 			kwitansi_post2db='CREATE';
-		}
+		}*/
 	}
   
 	/* Function for Check if the form is valid */
@@ -1302,7 +1397,7 @@ Ext.onReady(function(){
 			disabled: true,
 			handler: cetak_kwitansi_confirm_delete   // Confirm before deleting
 		}, '-', {
-			text: 'Search',
+			text: 'Adv Search',
 			tooltip: 'Advanced Search',
 			iconCls:'icon-search',
 			handler: display_form_search_window 
@@ -1318,7 +1413,7 @@ Ext.onReady(function(){
 				},
 				render: function(c){
 				Ext.get(this.id).set({qtitle:'Search By'});
-				Ext.get(this.id).set({qtip:'- Default Tgl Sekarang<br>- Nama Customer<br>- Cara Appointment<br>- Keterangan'});
+				Ext.get(this.id).set({qtip:'- No Kuitansi<br>- Nama Customer<br>- No Customer<br>- Keterangan'});
 				}
 			},
 			width: 120
@@ -2398,7 +2493,9 @@ Ext.onReady(function(){
 		,
 		buttons: [{
 				text: 'Save and Print',
+				ref: '../kwitansi_savePrint',
 				handler: save_and_print
+				
 			},{
 				text: 'Save and Close',
 				handler: cetak_kwitansi_create
@@ -2406,6 +2503,7 @@ Ext.onReady(function(){
 			,{
 				text: 'Cancel',
 				handler: function(){
+					cetak_kwitansi_reset_form();
 					cetak_kwitansi_createWindow.hide();
 				}
 			}
@@ -2583,8 +2681,23 @@ Ext.onReady(function(){
 	});
     /* End of Function */ 
 	 
+	 
+	 function cetak_kwitansi_reset_search_form(){
+		kwitansi_noSearchField.reset();
+		kwitansi_noSearchField.setValue(null);
+		kwitansi_custSearchField.reset();
+		kwitansi_custSearchField.setValue(null);
+		kwitansi_keteranganSearchField.reset();
+		kwitansi_keteranganSearchField.setValue(null);
+		kwitansi_statusSearchField.reset();
+		kwitansi_statusSearchField.setValue(null);
+	 }
+	 
+	 
+	 
   	/* Function for Displaying  Search Window Form */
 	function display_form_search_window(){
+		cetak_kwitansi_reset_search_form();
 		if(!cetak_kwitansi_searchWindow.isVisible()){
 			cetak_kwitansi_searchWindow.show();
 		} else {

@@ -584,7 +584,7 @@ class M_master_terima_beli extends Model{
 			};
 			if($terima_no!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " terima_no LIKE '%".$terima_no."%'";
+				$query.= " no_bukti LIKE '%".$terima_no."%'";
 			};
 			if($terima_order!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
