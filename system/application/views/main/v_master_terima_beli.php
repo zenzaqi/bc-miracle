@@ -578,10 +578,10 @@ Ext.onReady(function(){
 			header: '<div align="center">' + 'No PB' + '</div>',
 			dataIndex: 'terima_no',
 			width: 100,	//150,
-			sortable: true,
-			editor: new Ext.form.TextField({
+			sortable: true
+			/*editor: new Ext.form.TextField({
 				maxLength: 50
-          	})
+          	})*/
 		}, 
 		{
 			header: '<div align="center">' + 'No OP' + '</div>',

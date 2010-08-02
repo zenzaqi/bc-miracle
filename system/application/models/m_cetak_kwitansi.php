@@ -160,6 +160,7 @@ class M_cetak_kwitansi extends Model{
 					,kwitansi_cust
 					,cust_nama
 					,kwitansi_tanggal
+					,cust_id
 					,cust_no
 					,kwitansi_cara
 					,kwitansi_nilai
@@ -179,7 +180,7 @@ class M_cetak_kwitansi extends Model{
 			// For simple search
 			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (kwitansi_no LIKE '%".addslashes($filter)."%' OR cust_nama LIKE '%".addslashes($filter)."%' OR kwitansi_ref LIKE '%".addslashes($filter)."%' )";
+				$query .= " (kwitansi_no LIKE '%".addslashes($filter)."%' OR cust_nama LIKE '%".addslashes($filter)."%' OR cust_no LIKE '%".addslashes($filter)."%' OR kwitansi_keterangan LIKE '%".addslashes($filter)."%' OR kwitansi_ref LIKE '%".addslashes($filter)."%' )";
 			}
 			$query .= " GROUP BY kwitansi_id ORDER BY kwitansi_id DESC";
 			
@@ -588,6 +589,7 @@ class M_cetak_kwitansi extends Model{
 					,kwitansi_cust
 					,cust_nama
 					,kwitansi_tanggal
+					,cust_id
 					,cust_no
 					,kwitansi_cara
 					,kwitansi_nilai
