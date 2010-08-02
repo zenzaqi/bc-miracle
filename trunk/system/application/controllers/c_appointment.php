@@ -35,14 +35,6 @@ class C_appointment extends Controller {
 		echo $result;
 	}
 	
-	function get_perawatan_list(){
-		$query = isset($_POST['query']) ? $_POST['query'] : "";
-		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
-		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result=$this->m_public_function->get_perawatan_list($query,$start,$end);
-		echo $result;
-	}
-	
 	function get_rawat_medis_list(){
 		$query = isset($_POST['query']) ? $_POST['query'] : "";
 		$query = str_replace(" ", "%",$query);
@@ -61,14 +53,6 @@ class C_appointment extends Controller {
 		echo $result;
 	}
 	
-	/*function get_dokter_list(){
-		//ID dokter pada tabel departemen adalah 8
-		$query = isset($_POST['query']) ? $_POST['query'] : "";
-		$tgl_app = isset($_POST['tgl_app']) ? $_POST['tgl_app'] : "";
-		$result=$this->m_public_function->get_petugas_list($query,$tgl_app,"Dokter");
-		echo $result;
-	}*/
-	
 	function get_dokter_list(){
 		//ID dokter pada tabel departemen adalah 8
 		$query = isset($_POST['query']) ? $_POST['query'] : "";
@@ -77,13 +61,6 @@ class C_appointment extends Controller {
 		echo $result;
 	}
 	
-	/*function get_terapis_list(){
-		//ID dokter pada tabel departemen adalah 9
-		$query = isset($_POST['query']) ? $_POST['query'] : "";
-		$tgl_app = isset($_POST['tgl_app']) ? $_POST['tgl_app'] : "";
-		$result=$this->m_public_function->get_petugas_list($query,$tgl_app,"Therapist");
-		echo $result;
-	}*/
 	function get_terapis_list(){
 		//ID dokter pada tabel departemen adalah 9
 		$query = isset($_POST['query']) ? $_POST['query'] : "";
@@ -113,20 +90,6 @@ class C_appointment extends Controller {
 	}
 	//end of handler
 	
-	//purge all detail
-	function detail_appointment_detail_purge(){
-		$master_id = (integer) (isset($_POST['master_id']) ? $_POST['master_id'] : $_GET['master_id']);
-		$result=$this->m_appointment->detail_appointment_detail_purge($master_id);
-	}
-	//eof
-	
-	//get master id, note: not done yet
-	function get_master_id(){
-		$result=$this->m_appointment->get_master_id();
-		echo $result;
-	}
-	//
-	
 	//add detail
 	function detail_appointment_detail_medis_insert(){
 		//POST variable here
@@ -149,11 +112,6 @@ class C_appointment extends Controller {
 		
 		$dapp_medis_status = $_POST['dapp_medis_status']; // Get our array back and translate it :
 		$array_dapp_medis_status = json_decode(stripslashes($dapp_medis_status));
-		
-		/*$dapp_medis_status=trim(@$_POST["dapp_medis_status"]);
-		$dapp_medis_status=str_replace("/(<\/?)(p)([^>]*>)", "",$dapp_medis_status);
-		$dapp_medis_status=str_replace("\\", "",$dapp_medis_status);
-		$dapp_medis_status=str_replace("'", "''",$dapp_medis_status);*/
 		
 		$dapp_medis_keterangan = $_POST['dapp_medis_keterangan']; // Get our array back and translate it :
 		$array_dapp_medis_keterangan = json_decode(stripslashes($dapp_medis_keterangan));
@@ -194,11 +152,6 @@ class C_appointment extends Controller {
 		
 		$dapp_nonmedis_status = $_POST['dapp_nonmedis_status']; // Get our array back and translate it :
 		$array_dapp_nonmedis_status = json_decode(stripslashes($dapp_nonmedis_status));
-		
-		/*$dapp_nonmedis_status=trim(@$_POST["dapp_nonmedis_status"]);
-		$dapp_nonmedis_status=str_replace("/(<\/?)(p)([^>]*>)", "",$dapp_nonmedis_status);
-		$dapp_nonmedis_status=str_replace("\\", "",$dapp_nonmedis_status);
-		$dapp_nonmedis_status=str_replace("'", "''",$dapp_nonmedis_status);*/
 		
 		$dapp_nonmedis_keterangan = $_POST['dapp_nonmedis_keterangan']; // Get our array back and translate it :
 		$array_dapp_nonmedis_keterangan = json_decode(stripslashes($dapp_nonmedis_keterangan));
@@ -242,19 +195,20 @@ class C_appointment extends Controller {
 	//event handler action
 	function get_action(){
 		$task = $_POST['task'];
+		$mode_edit_case = @$_POST['mode_edit'];
 		switch($task){
 			case "LIST":
 				$this->appointment_list();
 				break;
 			case "UPDATE":
-				$this->appointment_update();
+				$this->appointment_update($mode_edit_case);
 				break;
 			case "CREATE":
 				$this->appointment_create();
 				break;
-			case "DELETE":
+			/*case "DELETE":
 				$this->appointment_delete();
-				break;
+				break;*/
 			case "SEARCH":
 				$this->appointment_search();
 				break;
@@ -282,47 +236,57 @@ class C_appointment extends Controller {
 	}
 
 	//function for update record
-	function appointment_update(){
+	function appointment_update($mode_edit_case){
 		//POST variable here
-		$app_id=trim(@$_POST["app_id"]);
-		$app_customer=trim(@$_POST["app_customer"]);
-		$dapp_tglreservasi=trim(@$_POST["dapp_tglreservasi"]);
-		$app_cara=trim(@$_POST["app_cara"]);
-		$app_cara=str_replace("/(<\/?)(p)([^>]*>)", "",$app_cara);
-		$app_cara=str_replace(",", "\,",$app_cara);
-		$app_cara=str_replace("'", "''",$app_cara);
-		$app_keterangan=trim(@$_POST["app_keterangan"]);
-		$app_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$app_keterangan);
-		$app_keterangan=str_replace(",", "\,",$app_keterangan);
-		$app_keterangan=str_replace("'", "''",$app_keterangan);
-		$dapp_id=trim(@$_POST["dapp_id"]);
-		$dapp_status=trim(@$_POST["dapp_status"]);
-		$dapp_status=str_replace("/(<\/?)(p)([^>]*>)", "",$dapp_status);
-		$dapp_status=str_replace("'", "''",$dapp_status);
-		$dokter_nama=trim(@$_POST["dokter_nama"]);
-		$terapis_nama=trim(@$_POST["terapis_nama"]);
-		$kategori_nama=trim(@$_POST["kategori_nama"]);
-		$rawat_id=trim(@$_POST["rawat_id"]);
-		$dokter_id=trim(@$_POST["dokter_id"]);
-		$terapis_id=trim(@$_POST["terapis_id"]);
-		$dapp_jamreservasi=trim(@$_POST["dapp_jamreservasi"]);
-		$cust_id=trim(@$_POST["cust_id"]);
-		$dapp_dokter_no=trim(@$_POST["dapp_dokter_no"]);
-		$dapp_terapis_no=trim(@$_POST["dapp_terapis_no"]);
-		$dapp_dokter_ganti=trim(@$_POST["dapp_dokter_ganti"]);
-		$dapp_terapis_ganti=trim(@$_POST["dapp_terapis_ganti"]);
-		$dapp_keterangan=trim(@$_POST["dapp_keterangan"]);
-		$dapp_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$dapp_keterangan);
-		$dapp_keterangan=str_replace("'", "''",$dapp_keterangan);
-		$dapp_locked=trim(@$_POST["dapp_locked"]);
-		$dapp_counter=trim(@$_POST["dapp_counter"]);
-		$dapp_warna_terapis=trim(@$_POST["dapp_warna_terapis"]);
-
-		
-		$app_user=$_SESSION[SESSION_USERID];
-		
-		$result = $this->m_appointment->appointment_update($app_id ,$app_customer ,$dapp_tglreservasi ,$app_cara ,$app_keterangan, $dapp_id, $dapp_status, $dokter_nama, $terapis_nama, $kategori_nama, $rawat_id, $dokter_id, $terapis_id, $dapp_jamreservasi, $cust_id, $dapp_dokter_no, $dapp_terapis_no, $dapp_dokter_ganti, $dapp_terapis_ganti, $dapp_keterangan, $dapp_locked, $dapp_counter, $dapp_warna_terapis, $app_user);
-		echo $result;
+		if($mode_edit_case=='update_list'){
+			//UPDATE db.appointment_detail selain status, dan kondisi ini bisa dipastikan status!='datang'
+			$dapp_id=trim(@$_POST["dapp_id"]);
+			$dapp_tglreservasi=trim(@$_POST["dapp_tglreservasi"]);
+			$dapp_jamreservasi=trim(@$_POST["dapp_jamreservasi"]);
+			$dokter=trim(@$_POST["dokter"]);
+			$terapis=trim(@$_POST["terapis"]);
+			$dapp_keterangan=trim(@$_POST["dapp_keterangan"]);
+			$dapp_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$dapp_keterangan);
+			$dapp_status=trim(@$_POST["dapp_status"]);
+			$dapp_status=str_replace("/(<\/?)(p)([^>]*>)", "",$dapp_status);
+			
+			$app_user=$_SESSION[SESSION_USERID];
+			
+			$result = $this->m_appointment->appointment_update_list($dapp_id
+																	,$dapp_tglreservasi
+																	,$dapp_jamreservasi
+																	,$dokter
+																	,$terapis
+																	,$dapp_keterangan
+																	,$dapp_status
+																	,$app_user);
+			echo $result;
+			
+		}else if($mode_edit_case=='update_list_status'){
+			$dapp_id=trim(@$_POST["dapp_id"]);
+			$dapp_status=trim(@$_POST["dapp_status"]);
+			$dapp_status=str_replace("/(<\/?)(p)([^>]*>)", "",$dapp_status);
+			
+			$app_user=$_SESSION[SESSION_USERID];
+			
+			$result = $this->m_appointment->appointment_update_list_status($dapp_id, $dapp_status, $app_user);
+			echo $result;
+			
+		}else{
+			$app_id=trim(@$_POST["app_id"]);
+			$app_cara=trim(@$_POST["app_cara"]);
+			$app_cara=str_replace("/(<\/?)(p)([^>]*>)", "",$app_cara);
+			$app_keterangan=trim(@$_POST["app_keterangan"]);
+			$app_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$app_keterangan);
+			
+			$app_user=$_SESSION[SESSION_USERID];
+			
+			$result = $this->m_appointment->appointment_update($app_id
+															   ,$app_cara
+															   ,$app_keterangan
+															   ,$app_user);
+			echo $result;
+		}
 	}
 	
 	//function for create new record
@@ -358,12 +322,12 @@ class C_appointment extends Controller {
 	}
 
 	//function for delete selected record
-	function appointment_delete(){
+	/*function appointment_delete(){
 		$ids = $_POST['ids']; // Get our array back and translate it :
 		$pkid = json_decode(stripslashes($ids));
 		$result=$this->m_appointment->appointment_delete($pkid);
 		echo $result;
-	}
+	}*/
 
 	//function for advanced search
 	function appointment_search(){

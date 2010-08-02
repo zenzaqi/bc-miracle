@@ -66,6 +66,11 @@ class M_master_ambil_paket extends Model{
 				AND detail_jual_paket.dpaket_master='$dapaket_jpaket'
 				AND detail_jual_paket.dpaket_paket='$dapaket_paket'";
 		$this->db->query($sql_sisa_paket);
+		if($this->db->affected_rows()){
+			return 1;
+		}else{
+			return 0;
+		}
 		
 	}
 		
@@ -361,29 +366,15 @@ class M_master_ambil_paket extends Model{
 							
 							if($this->db->affected_rows()){
 								//* UPDATE db.detail_jual_paket.dpaket_sisa_paket ==> sisa paket dari paket yang dibeli akan diupdate akibat dari pengambilan paket /
-								/*$sql_sisa_paket="UPDATE detail_jual_paket
-									SET dpaket_sisa_paket=(
-										SELECT ((dpaket_jumlah*paket_jmlisi)-(sum(dapaket_jumlah)))
-										FROM detail_ambil_paket
-										LEFT JOIN paket ON(dapaket_paket=paket_id)
-										WHERE paket_id='$dapaket_paket'
-											AND dapaket_dpaket='$dapaket_dpaket'
-											AND dapaket_jpaket='$dapaket_jpaket'
-											AND dapaket_stat_dok<>'Batal'
-										GROUP BY dapaket_dpaket, dapaket_jpaket, dapaket_paket
-									)
-									WHERE detail_jual_paket.dpaket_id='$dapaket_dpaket'
-										AND detail_jual_paket.dpaket_master='$dapaket_jpaket'
-										AND detail_jual_paket.dpaket_paket='$dapaket_paket'";*/
-								/*$sql_sisa_paket = "UPDATE detail_jual_paket
-									SET dpaket_sisa_paket =
-										(SElECT vu_total_sisa_paket.total_sisa_paket FROM vu_total_sisa_paket WHERE vu_total_sisa_paket.dpaket_id='$dapaket_dpaket')
-									WHERE dpaket_id='$dapaket_dpaket'";*/
-								$sql_sisa_paket="UPDATE detail_jual_paket SET dpaket_sisa_paket=(SELECT ((dpaket_jumlah*paket_jmlisi)-(sum(dapaket_jumlah))) FROM detail_ambil_paket LEFT JOIN paket ON(dapaket_paket=paket_id) WHERE paket_id='$dapaket_paket' AND dapaket_dpaket='$dapaket_dpaket' AND dapaket_jpaket='$dapaket_jpaket' AND dapaket_stat_dok<>'Batal' GROUP BY dapaket_dpaket, dapaket_jpaket, dapaket_paket) WHERE detail_jual_paket.dpaket_id='$dapaket_dpaket' AND detail_jual_paket.dpaket_master='$dapaket_jpaket' AND detail_jual_paket.dpaket_paket='$dapaket_paket'";
-								$this->db->query($sql_sisa_paket);
+								$dpaket_sisa_update = $this->total_sisa_paket_update($dapaket_dpaket ,$dapaket_jpaket ,$dapaket_paket);
+								if($dpaket_sisa_update==1){
+									$nilai_return='1';
+									break;
+								}else{
+									$nilai_return='0';
+									break;
+								}
 								
-								$nilai_return='1';
-								break;
 							}else{
 								$nilai_return='0';
 								break;
@@ -414,15 +405,15 @@ class M_master_ambil_paket extends Model{
 						
 						if($this->db->affected_rows()){
 							//* UPDATE db.detail_jual_paket.dpaket_sisa_paket ==> sisa paket dari paket yang dibeli akan diupdate akibat dari pengambilan paket /
-							/*$sql_sisa_paket = "UPDATE detail_jual_paket
-								SET dpaket_sisa_paket =
-									(SElECT vu_total_sisa_paket.total_sisa_paket FROM vu_total_sisa_paket WHERE vu_total_sisa_paket.dpaket_id='$dapaket_dpaket')
-								WHERE dpaket_id='$dapaket_dpaket'";*/
-							$sql_sisa_paket="UPDATE detail_jual_paket SET dpaket_sisa_paket=(SELECT ((dpaket_jumlah*paket_jmlisi)-(sum(dapaket_jumlah))) FROM detail_ambil_paket LEFT JOIN paket ON(dapaket_paket=paket_id) WHERE paket_id='$dapaket_paket' AND dapaket_dpaket='$dapaket_dpaket' AND dapaket_jpaket='$dapaket_jpaket' AND dapaket_stat_dok<>'Batal' GROUP BY dapaket_dpaket, dapaket_jpaket, dapaket_paket) WHERE detail_jual_paket.dpaket_master='$dapaket_jpaket' AND detail_jual_paket.dpaket_paket='$dapaket_paket'";
-							$this->db->query($sql_sisa_paket);
+							$dpaket_sisa_update = $this->total_sisa_paket_update($dapaket_dpaket ,$dapaket_jpaket ,$dapaket_paket);
+							if($dpaket_sisa_update==1){
+								$nilai_return='1';
+								break;
+							}else{
+								$nilai_return='0';
+								break;
+							}
 							
-							$nilai_return='1';
-							break;
 						}else{
 							$nilai_return='0';
 							break;
@@ -573,8 +564,13 @@ class M_master_ambil_paket extends Model{
 						WHERE DATE_ADD(date_format(dapaket_date_create, '%Y-%m-%d'),INTERVAL 7 DAY)>date_format(now(), '%Y-%m-%d') AND dapaket_id = ".$dapaket_id[0];
 					$this->db->query($query);
 					if($this->db->affected_rows()>0){
-						$this->total_sisa_paket_update($dapaket_dpaket ,$dapaket_jpaket ,$dapaket_paket);
-						return '1';
+						$dpaket_sisa_update = $this->total_sisa_paket_update($dapaket_dpaket ,$dapaket_jpaket ,$dapaket_paket);
+						if($dpaket_sisa_update==1){
+							return '1';
+						}else{
+							return '0';
+						}
+						
 					}else
 						return '0';
 				}else{
