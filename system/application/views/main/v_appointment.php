@@ -236,9 +236,8 @@ Ext.onReady(function(){
 		dapp_counter_update = oGrid_event.record.data.dapp_counter;
 		dapp_warna_terapis_update = oGrid_event.record.data.dapp_warna_terapis;
 		
-		if(dapp_tglreservasi_update_date==date_now){
+		if(dapp_locked_update==0){
 			if(this.dapp_status_inline_beforeedit=='datang' && dapp_status_update=='datang'){
-				//Editing ketika status = 'selesai' ==> tidak diperbolehkan
 				appointment_DataStore.reload();
 				appointmentListEditorGrid.setDisabled(false);
 				Ext.MessageBox.show({
@@ -249,159 +248,220 @@ Ext.onReady(function(){
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING
 				});
-			}/*else if(dapp_status_inline_beforeedit!=='datang' && dapp_status_update!=='datang'
-					 && (dapp_dokter_id_inline_beforeedit<>dapp_dokter_ganti_update && (/^\d+$/.test(dapp_dokter_ganti_update))) ){
-			}*/else if((this.dapp_status_inline_beforeedit=='datang' && dapp_status_update!=='datang')
-					 || (this.dapp_status_inline_beforeedit!=='datang' && dapp_status_update=='datang') ){
-				//Edit LIST: dari status='datang' ==> status!='datang' || dari status!='datang' ==> status='datang'
-				Ext.Ajax.request({  
-					waitMsg: 'Mohon tunggu...',
-					url: 'index.php?c=c_appointment&m=get_action',
-					params: {
-						task: "UPDATE",
-						mode_edit: 'update_list_status',
-						dapp_id	:dapp_id_update,
-						dapp_status	:dapp_status_update
-					}, 
-					success: function(response){							
-						var result=eval(response.responseText);
-						switch(result){
-							case 1:
-								appointment_DataStore.commitChanges();
-								appointment_DataStore.reload({
-									callback: function(opts, success, response){
-										if(success){
-											appointmentListEditorGrid.setDisabled(false);
-										}
-									}
-								});
-								//dapp_dokterDataStore.load();
-								break;
-							default:
-								appointmentListEditorGrid.setDisabled(false);
-								Ext.MessageBox.show({
-								   title: 'Warning',
-								   msg: 'Error:'+result+', Edit List tidak bisa dilakukan.',
-								   buttons: Ext.MessageBox.OK,
-								   animEl: 'save',
-								   icon: Ext.MessageBox.WARNING
-								});
-								break;
-						}
-					},
-					failure: function(response){
-						appointmentListEditorGrid.setDisabled(false);
-						var result=response.responseText;
-						Ext.MessageBox.show({
-						   title: 'Error',
-						   msg: 'Could not connect to the database. retry later.',
-						   buttons: Ext.MessageBox.OK,
-						   animEl: 'database',
-						   icon: Ext.MessageBox.ERROR
-						});	
-					}									    
-				});
 			}else{
-				Ext.Ajax.request({  
-					waitMsg: 'Mohon tunggu...',
-					url: 'index.php?c=c_appointment&m=get_action',
-					params: {
-						task: "UPDATE",
-						mode_edit: 'update_list',
-						dapp_id	: dapp_id_update,  
-						dapp_tglreservasi	: dapp_tglreservasi_update_date,
-						dapp_jamreservasi	: dapp_jamreservasi_update,
-						dokter	: dapp_dokter_update,
-						terapis	: dapp_terapis_update,
-						dapp_keterangan	: dapp_keterangan_update,
-						dapp_status	: dapp_status_update
-					}, 
-					success: function(response){							
-						var result=eval(response.responseText);
-						switch(result){
-							case 1:
-								appointment_DataStore.commitChanges();
-								appointment_DataStore.reload({
-									callback: function(opts, success, response){
-										if(success){
-											appointmentListEditorGrid.setDisabled(false);
-										}
-									}
-								});
+				if((this.dapp_status_inline_beforeedit=='datang' && dapp_status_update!=='datang')
+					 || (this.dapp_status_inline_beforeedit!=='datang' && dapp_status_update=='datang')){
+					/* syarat dari perubahan status adalah db.appointment_detail.dapp_tglreservasi harus sama dengan tanggal hari ini
+					 * maka keluar message: 'Untuk mengubah status, Tanggal Reservasi harus sama dengan hari ini.'
+					 * jika status sebelumnya 'datang' dan sudah hari kemarin maka di tindakan boleh dipastikan sudah selesai
+					*/
+					if(dapp_tglreservasi_update_date==date_now){
+						Ext.Ajax.request({
+							waitMsg: 'Mohon tunggu...',
+							url: 'index.php?c=c_appointment&m=get_action',
+							params: {
+								task: "UPDATE",
+								mode_edit: 'update_list_status',
+								dapp_id	:dapp_id_update,
+								dapp_status	:dapp_status_update
+							}, 
+							success: function(response){							
+								var result=eval(response.responseText);
+								switch(result){
+									case 1:
+										appointment_DataStore.commitChanges();
+										appointment_DataStore.reload({
+											callback: function(opts, success, response){
+												if(success){
+													appointmentListEditorGrid.setDisabled(false);
+												}
+											}
+										});
+										//dapp_dokterDataStore.load();
+										break;
+									default:
+										appointmentListEditorGrid.setDisabled(false);
+										Ext.MessageBox.show({
+										   title: 'Warning',
+										   msg: 'Error:'+result+', Edit List tidak bisa dilakukan.',
+										   buttons: Ext.MessageBox.OK,
+										   animEl: 'save',
+										   icon: Ext.MessageBox.WARNING
+										});
+										break;
+								}
+							},
+							failure: function(response){
+								appointmentListEditorGrid.setDisabled(false);
+								var result=response.responseText;
 								Ext.MessageBox.show({
-								   title: 'INFO',
-								   width: 250,
-								   msg: 'Update List telah selesai dilakukan',
+								   title: 'Error',
+								   msg: 'Could not connect to the database. retry later.',
 								   buttons: Ext.MessageBox.OK,
-								   animEl: 'save',
-								   icon: Ext.MessageBox.INFO
-								});
-								//dapp_dokterDataStore.load();
-								break;
-							case 2:
-								Ext.MessageBox.show({
-								   title: 'Warning',
-								   width: 250,
-								   msg: 'Status tidak bisa diubah karena tindakan sudah selesai',
-								   buttons: Ext.MessageBox.OK,
-								   animEl: 'save',
-								   icon: Ext.MessageBox.WARNING
-								});
-								appointment_DataStore.reload({
-									callback: function(opts, success, response){
-										if(success){
-											appointmentListEditorGrid.setDisabled(false);
-										}
-									}
-								});
-								break;
-							case 3:
-								appointment_DataStore.reload({
-									callback: function(opts, success, response){
-										if(success){
-											appointmentListEditorGrid.setDisabled(false);
-										}
-									}
-								});
-								Ext.MessageBox.show({
-								   title: 'Warning',
-								   width: 250,
-								   msg: 'Tanggal appointment tidak sama dengan hari ini',
-								   buttons: Ext.MessageBox.OK,
-								   animEl: 'save',
-								   icon: Ext.MessageBox.WARNING
-								});
-								break;
-							default:
-								appointment_DataStore.reload({
-									callback: function(opts, success, response){
-										if(success){
-											appointmentListEditorGrid.setDisabled(false);
-										}
-									}
-								});
-								Ext.MessageBox.show({
-								   title: 'Warning',
-								   msg: 'Error: '+result+', Update List tidak bisa dilakukan',
-								   buttons: Ext.MessageBox.OK,
-								   animEl: 'save',
-								   icon: Ext.MessageBox.WARNING
-								});
-								break;
-						}
-					},
-					failure: function(response){
+								   animEl: 'database',
+								   icon: Ext.MessageBox.ERROR
+								});	
+							}									    
+						});
+					}else{
+						appointment_DataStore.reload();
 						appointmentListEditorGrid.setDisabled(false);
-						var result=response.responseText;
 						Ext.MessageBox.show({
-						   title: 'Error',
-						   msg: 'Could not connect to the database. retry later.',
-						   buttons: Ext.MessageBox.OK,
-						   animEl: 'database',
-						   icon: Ext.MessageBox.ERROR
-						});	
-					}									    
-				});
+							title: 'Warning',
+							width: 330,
+							msg: 'Tanggal Reservasi tidak sama dengan Tanggal Hari ini.',
+							buttons: Ext.MessageBox.OK,
+							animEl: 'save',
+							icon: Ext.MessageBox.WARNING
+						});
+					}
+					
+				}else if(dapp_tglreservasi_update_date>=date_now && this.dapp_status_inline_beforeedit!=='datang' && dapp_status_update!=='datang'){
+					//perubahan selain status, dimana status di database !='datang'
+					Ext.Ajax.request({
+						waitMsg: 'Mohon tunggu...',
+						url: 'index.php?c=c_appointment&m=get_action',
+						params: {
+							task: "UPDATE",
+							mode_edit: 'update_list',
+							dapp_id	: dapp_id_update,  
+							dapp_tglreservasi	: dapp_tglreservasi_update_date,
+							dapp_jamreservasi	: dapp_jamreservasi_update,
+							dokter	: dapp_dokter_update,
+							terapis	: dapp_terapis_update,
+							dapp_keterangan	: dapp_keterangan_update,
+							dapp_status	: dapp_status_update
+						}, 
+						success: function(response){							
+							var result=eval(response.responseText);
+							switch(result){
+								case 1:
+									appointment_DataStore.commitChanges();
+									appointment_DataStore.reload({
+										callback: function(opts, success, response){
+											if(success){
+												appointmentListEditorGrid.setDisabled(false);
+											}
+										}
+									});
+									Ext.MessageBox.show({
+									   title: 'INFO',
+									   width: 250,
+									   msg: 'Update List telah selesai dilakukan',
+									   buttons: Ext.MessageBox.OK,
+									   animEl: 'save',
+									   icon: Ext.MessageBox.INFO
+									});
+									//dapp_dokterDataStore.load();
+									break;
+								case 2:
+									appointment_DataStore.reload({
+										callback: function(opts, success, response){
+											if(success){
+												appointmentListEditorGrid.setDisabled(false);
+											}
+										}
+									});
+									Ext.MessageBox.show({
+									   title: 'Warning',
+									   width: 250,
+									   msg: 'Status tidak bisa diubah karena tindakan sudah selesai',
+									   buttons: Ext.MessageBox.OK,
+									   animEl: 'save',
+									   icon: Ext.MessageBox.WARNING
+									});
+									break;
+								case 3:
+									appointment_DataStore.reload({
+										callback: function(opts, success, response){
+											if(success){
+												appointmentListEditorGrid.setDisabled(false);
+											}
+										}
+									});
+									Ext.MessageBox.show({
+									   title: 'Warning',
+									   width: 250,
+									   msg: 'Tanggal appointment tidak sama dengan hari ini',
+									   buttons: Ext.MessageBox.OK,
+									   animEl: 'save',
+									   icon: Ext.MessageBox.WARNING
+									});
+									break;
+								case -6:
+									appointment_DataStore.reload({
+										callback: function(opts, success, response){
+											if(success){
+												appointmentListEditorGrid.setDisabled(false);
+											}
+										}
+									});
+									Ext.MessageBox.show({
+									   title: 'Warning',
+									   width: 250,
+									   msg: 'Kolom yang Anda Edit tidak sesuai.',
+									   buttons: Ext.MessageBox.OK,
+									   animEl: 'save',
+									   icon: Ext.MessageBox.WARNING
+									});
+									break;
+								default:
+									appointment_DataStore.reload({
+										callback: function(opts, success, response){
+											if(success){
+												appointmentListEditorGrid.setDisabled(false);
+											}
+										}
+									});
+									Ext.MessageBox.show({
+									   title: 'Warning',
+									   msg: 'Error: '+result+', Update List tidak bisa dilakukan',
+									   buttons: Ext.MessageBox.OK,
+									   animEl: 'save',
+									   icon: Ext.MessageBox.WARNING
+									});
+									break;
+							}
+						},
+						failure: function(response){
+							appointmentListEditorGrid.setDisabled(false);
+							var result=response.responseText;
+							Ext.MessageBox.show({
+							   title: 'Error',
+							   msg: 'Could not connect to the database. retry later.',
+							   buttons: Ext.MessageBox.OK,
+							   animEl: 'database',
+							   icon: Ext.MessageBox.ERROR
+							});	
+						}									    
+					});
+					
+				}else if(dapp_tglreservasi_update_date<date_now){
+					//syarat mengubah data adalah tgl_reservasi tidak boleh di hari kemarin
+					appointment_DataStore.reload();
+					appointmentListEditorGrid.setDisabled(false);
+					Ext.MessageBox.show({
+						title: 'Warning',
+						width: 330,
+						msg: 'Tanggal Reservasi di hari kemarin Tidak Boleh di-Edit.',
+						buttons: Ext.MessageBox.OK,
+						animEl: 'save',
+						icon: Ext.MessageBox.WARNING
+					});
+					
+				}else{
+					//kondisi tidak diketahui
+					appointment_DataStore.reload();
+					appointmentListEditorGrid.setDisabled(false);
+					Ext.MessageBox.show({
+						title: 'Warning',
+						width: 330,
+						msg: 'Kondisi ini belum diketahui.',
+						buttons: Ext.MessageBox.OK,
+						animEl: 'save',
+						icon: Ext.MessageBox.WARNING
+					});
+				}
 			}
 		}else{
 			appointment_DataStore.reload();
@@ -409,12 +469,13 @@ Ext.onReady(function(){
 			Ext.MessageBox.show({
 				title: 'Warning',
 				width: 330,
-				msg: 'Tanggal Reservasi tidak sama dengan Tanggal Hari Ini.',
+				msg: 'Data tidak bisa di-Edit, karena proses di Tindakan sudah selesai.',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
 			});
 		}
+		
 	}
   	/* End of Function */
   
@@ -593,6 +654,9 @@ Ext.onReady(function(){
 		app_caraField.setValue(null);
 		app_keteranganField.reset();
 		app_keteranganField.setValue(null);
+		
+		app_customerField.setDisabled(false);
+		app_tanggalField.setDisabled(false);
 	}
  	/* End of Function */
  	

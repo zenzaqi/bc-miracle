@@ -863,11 +863,11 @@ class M_appointment extends Model{
 	
 	function report_tindakan_update($karyawan_id_awal, $karyawan_id_pengganti){
 		//$karyawan_id_awal ==> decounter
-		$result_awal = $this->decounter_report_tindakan_dokter($karyawan_id_awal);
+		$result_awal = $this->decounter_report_tindakan_karyawan($karyawan_id_awal);
 		
 		if($result_awal==1){
 			//$karyawan_id_pengganti ==> counter
-			$result_pengganti = $this->counter_report_tindakan_dokter($karyawan_id_pengganti);
+			$result_pengganti = $this->counter_report_tindakan_karyawan($karyawan_id_pengganti);
 			if($result_pengganti==1){
 				return '1';
 			}else{
