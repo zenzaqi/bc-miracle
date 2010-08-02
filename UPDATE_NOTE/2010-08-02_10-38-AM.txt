@@ -1,0 +1,11 @@
+o fix bug
+  > Appointment 
+    - Untuk meng-Edit List harus status dalam kondisi !='datang'.
+    - Ketika status di List diubah ke 'datang', maka akan menginputkan otomatis ke Tindakan. Tapi jika diubah dari 'datang' ke !='datang', maka data yang sudah terinput ke Tindakan akan diubah statusnya ='batal' dan tidak di-delete dari Tindakan.
+
+  > Kasir Pengambilan Paket
+    - Menambah button 'Batal' untuk pembatalan pengambilan paket.
+    - Memperbaiki query proses update sisa paket.
+
+o CREATE OR REPLACE 'vu_appointment'
+  - Menambah kolom 'db.appointment_detail.dapp_locked'.
