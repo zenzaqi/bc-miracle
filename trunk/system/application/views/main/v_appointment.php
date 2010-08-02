@@ -277,7 +277,14 @@ Ext.onReady(function(){
 												}
 											}
 										});
-										//dapp_dokterDataStore.load();
+										Ext.MessageBox.show({
+											title: 'INFO',
+											width: 250,
+											msg: 'Update Status telah selesai dilakukan',
+											buttons: Ext.MessageBox.OK,
+											animEl: 'save',
+											icon: Ext.MessageBox.INFO
+										 });
 										break;
 									default:
 										appointmentListEditorGrid.setDisabled(false);
