@@ -18,6 +18,7 @@
 <title>Kartu Member Cetak</title>
 <link rel='stylesheet' type='text/css' href='../assets/modules/main/css/printstyle.css'/>
 </head>
+<body onload="window.print();window.close();">
 <table summary='Inbox List'>
 	<caption>Kartu Member Cetak</caption>
 	<thead><tr><th scope='col'>No</th><th scope='col'>Customer</th><th scope='col'>No Member</th><th scope='col'>Tgl Daftar</th><th scope='col'>Tgl Valid</th><th scope='col'>Jenis</th></tr></thead>
@@ -27,6 +28,7 @@
 		<tr><td><? echo $i; ?></td><td><?php echo $print->member_nama; ?></td><td><?php echo $print->member_no ?></td><td><?php echo $print->member_register; ?></td><td><?php echo $print->member_valid; ?></td><td><?php echo $print->member_jenis; ?></td></tr>
 		<?php } ?>
 	</tbody>
+</table>
 <body>
 </body>
 </html>

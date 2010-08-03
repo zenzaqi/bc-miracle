@@ -222,11 +222,23 @@ class C_member extends Controller {
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$result = $this->m_member->member_print($member_id ,$member_cust ,$member_no ,$member_register ,$member_valid ,$member_nota_ref ,$member_point ,$member_jenis ,$member_status ,$member_tglserahterima ,$option,$filter);
+		$data["data_print"] = $this->m_member->member_print($member_id ,$member_cust ,$member_no ,$member_register ,$member_valid ,$member_nota_ref ,$member_point ,$member_jenis ,$member_status ,$member_tglserahterima ,$option,$filter);
+		$print_view=$this->load->view("main/p_member_cetak.php",$data,TRUE);
+		if(!file_exists("print")){
+			mkdir("print");
+		}
+		$print_file=fopen("print/member_printlist.html","w+");
+		fwrite($print_file, $print_view);
+		echo '1';
+		
+		
+		
+		
+		/*$result = $this->m_member->member_print($member_id ,$member_cust ,$member_no ,$member_register ,$member_valid ,$member_nota_ref ,$member_point ,$member_jenis ,$member_status ,$member_tglserahterima ,$option,$filter);
 		$nbrows=$result->num_rows();
 		$totcolumn=15;
    		/* We now have our array, let's build our HTML file */
-		$file = fopen("memberlist.html",'w');
+		/*$file = fopen("memberlist.html",'w');
 		fwrite($file, "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' /><title>Printing the Member Grid</title><link rel='stylesheet' type='text/css' href='assets/modules/main/css/printstyle.css'/></head>");
 		fwrite($file, "<body><table summary='Member List'><caption>MEMBER</caption><thead><tr><th scope='col'>Member Id</th><th scope='col'>Member Cust</th><th scope='col'>Member No</th><th scope='col'>Member Register</th><th scope='col'>Member Valid</th><th scope='col'>Member Nota Ref</th><th scope='col'>Member Point</th><th scope='col'>Member Jenis</th><th scope='col'>Member Status</th><th scope='col'>Member Tglserahterima</th><th scope='col'>Member Creator</th><th scope='col'>Member Date Create</th><th scope='col'>Member Update</th><th scope='col'>Member Date Update</th><th scope='col'>Member Revised</th></tr></thead><tfoot><tr><th scope='row'>Total</th><td colspan='$totcolumn'>");
 		fwrite($file, $nbrows);
@@ -274,7 +286,7 @@ class C_member extends Controller {
 		}
 		fwrite($file, "</tbody></table></body></html>");	
 		fclose($file);
-		echo '1';        
+		echo '1';*/        
 	}
 	/* End Of Function */
 
