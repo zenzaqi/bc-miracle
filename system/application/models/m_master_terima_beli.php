@@ -37,24 +37,25 @@ class M_master_terima_beli extends Model{
 			
 			if($opsi=='rekap'){
 				if($periode=='all')
-					$sql="SELECT * FROM vu_trans_terima ".$order_by;
+					$sql="SELECT distinct * FROM vu_trans_terima WHERE terima_status<>'Batal' ".$order_by;
 				else if($periode=='bulan')
-					$sql="SELECT * FROM vu_trans_terima WHERE tanggal like '".$tgl_awal."%' ".$order_by;
+					$sql="SELECT distinct * FROM vu_trans_terima WHERE terima_status<>'Batal' AND 
+						  date_format(tanggal,'%Y-%m')='".$tgl_awal."' ".$order_by;
 				else if($periode=='tanggal')
-					$sql="SELECT * FROM vu_trans_terima WHERE tanggal>='".$tgl_awal."' AND tanggal<='".$tgl_akhir."' ".$order_by;
+					$sql="SELECT distinct * FROM vu_trans_terima WHERE terima_status<>'Batal' AND 
+					      date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."' ".$order_by;
 			}else if($opsi=='detail'){
 				if($periode=='all')
-					$sql="SELECT * FROM vu_detail_terima_all ".$order_by;
+					$sql="SELECT * FROM vu_detail_terima_all WHERE terima_status<>'Batal' ".$order_by;
 				else if($periode=='bulan')
-					$sql="SELECT * FROM vu_detail_terima_all WHERE tanggal like '".$tgl_awal."%' ".$order_by;
+					$sql="SELECT * FROM vu_detail_terima_all WHERE terima_status<>'Batal' AND 
+						  date_format(tanggal,'%Y-%m')='".$tgl_awal."' ".$order_by;
 				else if($periode=='tanggal')
-					$sql="SELECT * FROM vu_detail_terima_all WHERE tanggal>='".$tgl_awal."' AND tanggal<='".$tgl_akhir."' ".$order_by;
+					$sql="SELECT * FROM vu_detail_terima_all WHERE terima_status<>'Batal' AND 
+					      date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."' ".$order_by;
 			}else if($opsi=='faktur'){
 				$sql="SELECT * FROM vu_detail_terima_all WHERE master='".$faktur."'";
 			}
-			//echo $sql;
-			$query=$this->db->query($sql);
-			
 			//echo $sql;
 			
 			$query=$this->db->query($sql);
