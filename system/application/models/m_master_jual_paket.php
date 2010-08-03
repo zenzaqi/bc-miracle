@@ -2840,7 +2840,7 @@ class M_master_jual_paket extends Model{
 						,jpaket_date_update='".$datetime_now."'
 						,jpaket_revised=jpaket_revised+1
 					WHERE jpaket_id='".$jpaket_id."'
-						AND DATE_ADD(jpaket_tanggal,INTERVAL 7 DAY)>'".$date_now."' ";
+						AND DATE_ADD(jpaket_tanggal,INTERVAL 33 DAY)>'".$date_now."' ";
 						
 				$this->db->query($sql);
 				if($this->db->affected_rows()>0){
