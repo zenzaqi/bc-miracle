@@ -1,0 +1,10 @@
+o Update	
+   > Laporan Penerimaan Barang
+     - link : ?c=c_master_terima_beli&m=laporan
+     - Opsi : - Rekap [No Kuitansi, Tanggal, Customer]
+              - Detail [No Kuitansi, Tanggal, Customer, No Faktur]
+     - sql update : 2010-08-03_09-20-AM.sql
+
+o fix bug
+  > Laporan Stok Mutasi
+    - sql update : 2010-08-03_09-25-AM.sql

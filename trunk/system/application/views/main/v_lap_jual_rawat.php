@@ -169,8 +169,7 @@ Ext.onReady(function(){
 		id:'rpt_jrawat_opsiblnField',
 		boxLabel:'Bulan',
 		width:100,
-		name: 'filter_opsi',
-		checked: true
+		name: 'filter_opsi'
 	});
 	
 	rpt_jrawat_opsiallField=new Ext.form.Radio({
@@ -205,7 +204,8 @@ Ext.onReady(function(){
 	rpt_jrawat_rekapField=new Ext.form.Radio({
 		id: 'rpt_jrawat_rekapField',
 		boxLabel: 'Rekap',
-		name: 'jrawat_opsi'
+		name: 'jrawat_opsi',
+		checked: true
 	});
 	
 	rpt_jrawat_detailField=new Ext.form.Radio({
