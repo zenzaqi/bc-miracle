@@ -2421,7 +2421,7 @@ class M_master_jual_produk extends Model{
                     ,jproduk_date_update='".$datetime_now."'
                     ,jproduk_revised=jproduk_revised+1
                 WHERE jproduk_id=".$jproduk_id."
-                    AND  DATE_ADD(jproduk_tanggal,INTERVAL 7 DAY)>'".$date."' ";
+                    AND  DATE_ADD(jproduk_tanggal,INTERVAL 33 DAY)>'".$date."' ";
             $this->db->query($sql);
 			if($this->db->affected_rows()){
 				//* udpating db.customer.cust_point ==> proses mengurangi jumlah poin (dikurangi dengan db.master_jual_produk.jproduk_point yg sudah dimasukkan ketika cetak faktur), karena dilakukan pembatalan /
