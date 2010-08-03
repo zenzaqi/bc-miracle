@@ -1500,7 +1500,7 @@ Ext.onReady(function(){
 				case 1:
 					member_DataStore.reload();
 					win = window.open('./print/member_cetak_printlist.html','cetaklist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
-					win.print();
+					//win.print();
 					break;
 				default:
 					Ext.MessageBox.show({
@@ -1620,8 +1620,8 @@ Ext.onReady(function(){
 		  	var result=eval(response.responseText);
 		  	switch(result){
 		  	case 1:
-				win = window.open('./memberlist.html','memberlist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
-				win.print();
+				win = window.open('./print/member_printlist.html','memberlist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
+				//win.print();
 				break;
 		  	default:
 				Ext.MessageBox.show({
