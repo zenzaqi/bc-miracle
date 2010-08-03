@@ -703,11 +703,11 @@ Ext.onReady(function(){
 					if(result==1){
                         jpaket_post2db='CREATE';
 						Ext.MessageBox.show({
-						   title: 'Warning',
+						   title: 'INFO',
 						   msg: 'Dokumen Penjualan Paket telah dibatalkan.',
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'save',
-						   icon: Ext.MessageBox.OK
+						   icon: Ext.MessageBox.INFO
 						});
 						jpaket_caraField.setValue("card");
 						master_jual_paket_cardGroup.setVisible(true);
