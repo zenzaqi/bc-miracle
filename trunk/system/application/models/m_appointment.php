@@ -1360,6 +1360,7 @@ class M_appointment extends Model{
 		 * 2. JIKA = status!='datang' ==> status='datang', maka akan meng-INSERT-kan ke db.tindakan_detail dengan dtrawat_status='datang'
 		*/
 		$datetime_now = date('Y-m-d H:i:s');
+		$date_now = date('Y-m-d');
 		$time_now = date('H:i:s');
 		
 		$sql = "SELECT dapp_id
@@ -1474,6 +1475,7 @@ class M_appointment extends Model{
 						//UPDATE db.appointment_detail.dapp_status='datang', dan dapp_jamdatang=$time_now
 						$sqlu_dapp = "UPDATE appointment_detail
 							SET dapp_status='".$dapp_status."'
+								,dapp_tgldatang='".$date_now."'
 								,dapp_jamdatang='".$time_now."'
 								,dapp_update='".@$_SESSION[SESSION_USERID]."'
 								,dapp_date_update='".$datetime_now."'
