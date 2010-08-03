@@ -923,10 +923,9 @@ class M_tindakan_nonmedis extends Model{
 			$dtrawat_status = $array_dtrawat_status[$i];
 			$dtrawat_keterangan = $array_dtrawat_keterangan[$i];
 			$jumlah = $array_jumlah[$i];
-			
 			if(is_numeric($dtrawat_id)){
 				// data sudah ada di db.tindakan_detail ==> mode Edit
-				$sql = "SELECT dtrawat_id FROM tindakan_detail WHERE dtrawat_id='".$dtrawat_id."'";
+				/*$sql = "SELECT dtrawat_id FROM tindakan_detail WHERE dtrawat_id='".$dtrawat_id."'";
 				$rs = $this->db->query($sql);
 				if($rs->num_rows()){
 					$sql = "UPDATE tindakan_detail
@@ -942,20 +941,20 @@ class M_tindakan_nonmedis extends Model{
 					$this->db->query($sql);
 					if($this->db->affected_rows()){
 						if($i==$size_array){
-							$this->drawat_from_tnonmedis_list_insert($dtrawat_master);
 							return 1;
 						}
 					}else{
 						if($i==$size_array){
-							$this->drawat_from_tnonmedis_list_insert($dtrawat_master);
 							return 1;
 						}
 					}
 				}else{
 					if($i==$size_array){
-						$this->drawat_from_tnonmedis_list_insert($dtrawat_master);
 						return 1;
 					}
+				}*/
+				if($i==$size_array){
+					return 1;
 				}
 				
 			}else{
@@ -969,26 +968,31 @@ class M_tindakan_nonmedis extends Model{
 				if($dtrawat_jam==''){
 					$dtrawat_jam=date('H:i:s');
 				}
-				$dti_dtrawat=array(
-					"dtrawat_master"=>$dtrawat_master,
-					"dtrawat_perawatan"=>$dtrawat_perawatan,
-					"dtrawat_petugas2"=>$dtrawat_petugas2,
-					"dtrawat_tglapp"=>$date_now,
-					"dtrawat_jam"=>$dtrawat_jam,
-					"dtrawat_keterangan"=>$dtrawat_keterangan,
-					"dtrawat_jumlah"=>$jumlah,
-					"dtrawat_creator"=>@$_SESSION[SESSION_USERID]
-				);
-				$this->db->insert('tindakan_detail', $dti_dtrawat);
-				if($this->db->affected_rows()){
-					if($i==$size_array){
-						$this->drawat_from_tnonmedis_list_insert($dtrawat_master);
-						return 1;
+				if(is_numeric($dtrawat_perawatan)){
+					$dti_dtrawat=array(
+						"dtrawat_master"=>$dtrawat_master,
+						"dtrawat_perawatan"=>$dtrawat_perawatan,
+						"dtrawat_petugas2"=>$dtrawat_petugas2,
+						"dtrawat_kategori"=>'Non Medis',
+						"dtrawat_tglapp"=>$date_now,
+						"dtrawat_jam"=>$dtrawat_jam,
+						"dtrawat_keterangan"=>$dtrawat_keterangan,
+						"dtrawat_jumlah"=>$jumlah,
+						"dtrawat_creator"=>@$_SESSION[SESSION_USERID]
+					);
+					$this->db->insert('tindakan_detail', $dti_dtrawat);
+					if($this->db->affected_rows()){
+						if($i==$size_array){
+							return 1;
+						}
+						
+					}else{
+						if($i==$size_array){
+							return 1;
+						}
 					}
-					
 				}else{
 					if($i==$size_array){
-						$this->drawat_from_tnonmedis_list_insert($dtrawat_master);
 						return 1;
 					}
 				}
@@ -1134,7 +1138,7 @@ class M_tindakan_nonmedis extends Model{
 		);
 		$this->db->where("trawat_id", $trawat_id);
 		$this->db->update("tindakan", $data_tindakan);
-		return '1';
+		return 1;
 	}
 	
 	function tindakan_update_list($trawat_id
