@@ -116,7 +116,7 @@ class C_tindakan_nonmedis extends Controller {
 																				   ,$array_dtrawat_keterangan
 																				   ,$dtrawat_cust
 																				   ,$array_jumlah);
-		echo $result;
+		return $result;
 	}
 	
 	
@@ -216,7 +216,6 @@ class C_tindakan_nonmedis extends Controller {
 																				,$dtrawat_nonmedis_keterangan
 																				,$trawat_cust
 																				,$nonmedis_jumlah);
-				
 				$result = $result_master + $result_nonmedis;
 				echo $result;
 			}else{
