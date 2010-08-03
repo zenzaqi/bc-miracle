@@ -231,62 +231,6 @@ class C_member extends Controller {
 		fwrite($print_file, $print_view);
 		echo '1';
 		
-		
-		
-		
-		/*$result = $this->m_member->member_print($member_id ,$member_cust ,$member_no ,$member_register ,$member_valid ,$member_nota_ref ,$member_point ,$member_jenis ,$member_status ,$member_tglserahterima ,$option,$filter);
-		$nbrows=$result->num_rows();
-		$totcolumn=15;
-   		/* We now have our array, let's build our HTML file */
-		/*$file = fopen("memberlist.html",'w');
-		fwrite($file, "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' /><title>Printing the Member Grid</title><link rel='stylesheet' type='text/css' href='assets/modules/main/css/printstyle.css'/></head>");
-		fwrite($file, "<body><table summary='Member List'><caption>MEMBER</caption><thead><tr><th scope='col'>Member Id</th><th scope='col'>Member Cust</th><th scope='col'>Member No</th><th scope='col'>Member Register</th><th scope='col'>Member Valid</th><th scope='col'>Member Nota Ref</th><th scope='col'>Member Point</th><th scope='col'>Member Jenis</th><th scope='col'>Member Status</th><th scope='col'>Member Tglserahterima</th><th scope='col'>Member Creator</th><th scope='col'>Member Date Create</th><th scope='col'>Member Update</th><th scope='col'>Member Date Update</th><th scope='col'>Member Revised</th></tr></thead><tfoot><tr><th scope='row'>Total</th><td colspan='$totcolumn'>");
-		fwrite($file, $nbrows);
-		fwrite($file, " Member</td></tr></tfoot><tbody>");
-		$i=0;
-		if($nbrows>0){
-			foreach($result->result_array() as $data){
-				fwrite($file,'<tr');
-				if($i%1==0){
-					fwrite($file," class='odd'");
-				}
-			
-				fwrite($file, "><th scope='row' id='r97'>");
-				fwrite($file, $data['member_id']);
-				fwrite($file,"</th><td>");
-				fwrite($file, $data['member_cust']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['member_no']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['member_register']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['member_valid']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['member_nota_ref']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['member_point']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['member_jenis']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['member_status']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['member_tglserahterima']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['member_creator']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['member_date_create']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['member_update']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['member_date_update']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['member_revised']);
-				fwrite($file, "</td></tr>");
-			}
-		}
-		fwrite($file, "</tbody></table></body></html>");	
-		fclose($file);
-		echo '1';*/        
 	}
 	/* End Of Function */
 
