@@ -3921,7 +3921,7 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [cust_noSearchField, cust_memberSearchField, cust_no_awalSearchField, cust_no_akhirSearchField, cust_memberSearch2Field, cust_namaSearchField, cust_panggilanSearchField, cust_alamat_groupSearch, cust_alamat2_groupSearch, cust_kontak_groupSearch] 
+				items: [cust_noSearchField, cust_no_awalSearchField, cust_no_akhirSearchField, cust_memberSearchField, cust_memberSearch2Field, cust_namaSearchField, cust_panggilanSearchField, cust_alamat_groupSearch, cust_alamat2_groupSearch, cust_kontak_groupSearch] 
 			}
 			,{
 				columnWidth:0.5,
