@@ -51,6 +51,9 @@ class C_customer extends Controller {
 			case "PRINT":
 				$this->customer_print();
 				break;
+			case "PRINT_LABEL":
+				$this->customer_print_label();
+				break;
 			case "EXCEL":
 				$this->customer_export_excel();
 				break;
@@ -455,6 +458,14 @@ class C_customer extends Controller {
 		$cust_no=trim(@$_POST["cust_no"]);
 		$cust_no=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_no);
 		$cust_no=str_replace("'", '"',$cust_no);
+		
+		$cust_no_awal=trim(@$_POST["cust_no_awal"]);
+		$cust_no_awal=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_no_awal);
+		$cust_no_awal=str_replace("'", '"',$cust_no_awal);
+		
+		$cust_no_akhir=trim(@$_POST["cust_no_akhir"]);
+		$cust_no_akhir=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_no_akhir);
+		$cust_no_akhir=str_replace("'", '"',$cust_no_akhir);
 		$cust_nama=trim(@$_POST["cust_nama"]);
 		$cust_nama=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_nama);
 		$cust_nama=str_replace("'", '"',$cust_nama);
@@ -522,6 +533,9 @@ class C_customer extends Controller {
 		$cust_member=trim(@$_POST["cust_member"]);
 		$cust_member=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_member);
 		$cust_member=str_replace("'", '"',$cust_member);
+		$cust_member2=trim(@$_POST["cust_member2"]);
+		$cust_member2=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_member2);
+		$cust_member2=str_replace("'", '"',$cust_member2);
 		$cust_terdaftar=trim(@$_POST["cust_terdaftar"]);
 		$cust_statusnikah=trim(@$_POST["cust_statusnikah"]);
 		$cust_statusnikah=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_statusnikah);
@@ -548,7 +562,7 @@ class C_customer extends Controller {
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_customer->customer_search($cust_id ,$cust_no ,$cust_nama ,$cust_kelamin ,$cust_alamat ,$cust_alamat2 ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tgllahir ,$cust_hobi ,$cust_referensi ,$cust_keterangan ,$cust_member ,$cust_terdaftar ,$cust_statusnikah , $cust_priority , $cust_jmlanak ,$cust_unit ,$cust_aktif ,$cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$start,$end);
+		$result = $this->m_customer->customer_search($cust_id ,$cust_no ,$cust_no_awal ,$cust_no_akhir ,$cust_nama ,$cust_kelamin ,$cust_alamat ,$cust_alamat2 ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tgllahir ,$cust_hobi ,$cust_referensi ,$cust_keterangan ,$cust_member ,$cust_member2 ,$cust_terdaftar ,$cust_statusnikah , $cust_priority , $cust_jmlanak ,$cust_unit ,$cust_aktif ,$cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$start,$end);
 		echo $result;
 	}
 
@@ -745,6 +759,230 @@ class C_customer extends Controller {
 			}
 		}
 		fwrite($file, "</tbody></table></body></html>");	
+		fclose($file);
+		echo '1';        
+	}
+	/* End Of Function */
+	
+	/*Function of Print Label */
+	function customer_print_label(){
+  		//POST varibale here
+		$cust_id=trim(@$_POST["cust_id"]);
+		$cust_no=trim(@$_POST["cust_no"]);
+		$cust_no=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_no);
+		$cust_no=str_replace("'", '"',$cust_no);
+		
+		$cust_no_awal=trim(@$_POST["cust_no_awal"]);
+		$cust_no_awal=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_no_awal);
+		$cust_no_awal=str_replace("'", '"',$cust_no_awal);
+		
+		$cust_no_akhir=trim(@$_POST["cust_no_akhir"]);
+		$cust_no_akhir=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_no_akhir);
+		$cust_no_akhir=str_replace("'", '"',$cust_no_akhir);
+		$cust_nama=trim(@$_POST["cust_nama"]);
+		$cust_nama=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_nama);
+		$cust_nama=str_replace("'", '"',$cust_nama);
+		$cust_kelamin=trim(@$_POST["cust_kelamin"]);
+		$cust_kelamin=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_kelamin);
+		$cust_kelamin=str_replace("'", '"',$cust_kelamin);
+		$cust_alamat=trim(@$_POST["cust_alamat"]);
+		$cust_alamat=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_alamat);
+		$cust_alamat=str_replace("'", '"',$cust_alamat);
+		$cust_alamat2=trim(@$_POST["cust_alamat2"]);
+		$cust_alamat2=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_alamat2);
+		$cust_alamat2=str_replace("'", '"',$cust_alamat2);
+		$cust_kota=trim(@$_POST["cust_kota"]);
+		$cust_kota=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_kota);
+		$cust_kota=str_replace("'", '"',$cust_kota);
+		$cust_kodepos=trim(@$_POST["cust_kodepos"]);
+		$cust_kodepos=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_kodepos);
+		$cust_kodepos=str_replace("'", '"',$cust_kodepos);
+		$cust_propinsi=trim(@$_POST["cust_propinsi"]);
+		$cust_propinsi=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_propinsi);
+		$cust_propinsi=str_replace("'", '"',$cust_propinsi);
+		$cust_negara=trim(@$_POST["cust_negara"]);
+		$cust_negara=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_negara);
+		$cust_negara=str_replace("'", '"',$cust_negara);
+		$cust_telprumah=trim(@$_POST["cust_telprumah"]);
+		$cust_telprumah=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_telprumah);
+		$cust_telprumah=str_replace("'", '"',$cust_telprumah);
+		$cust_telprumah2=trim(@$_POST["cust_telprumah2"]);
+		$cust_telprumah2=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_telprumah2);
+		$cust_telprumah2=str_replace("'", '"',$cust_telprumah2);
+		$cust_telpkantor=trim(@$_POST["cust_telpkantor"]);
+		$cust_telpkantor=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_telpkantor);
+		$cust_telpkantor=str_replace("'", '"',$cust_telpkantor);
+		$cust_hp=trim(@$_POST["cust_hp"]);
+		$cust_hp=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_hp);
+		$cust_hp=str_replace("'", '"',$cust_hp);
+		$cust_hp2=trim(@$_POST["cust_hp2"]);
+		$cust_hp2=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_hp2);
+		$cust_hp2=str_replace("'", '"',$cust_hp2);
+		$cust_hp3=trim(@$_POST["cust_hp3"]);
+		$cust_hp3=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_hp3);
+		$cust_hp3=str_replace("'", '"',$cust_hp3);
+		$cust_email=trim(@$_POST["cust_email"]);
+		$cust_email=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_email);
+		$cust_email=str_replace("'", '"',$cust_email);
+		$cust_agama=trim(@$_POST["cust_agama"]);
+		$cust_agama=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_agama);
+		$cust_agama=str_replace("'", '"',$cust_agama);
+		$cust_pendidikan=trim(@$_POST["cust_pendidikan"]);
+		$cust_pendidikan=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_pendidikan);
+		$cust_pendidikan=str_replace("'", '"',$cust_pendidikan);
+		$cust_profesi=trim(@$_POST["cust_profesi"]);
+		$cust_profesi=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_profesi);
+		$cust_profesi=str_replace("'", '"',$cust_profesi);
+		$cust_tgllahir=trim(@$_POST["cust_tgllahir"]);
+		$cust_hobi=trim(@$_POST["cust_hobi"]);
+		$cust_hobi=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_hobi);
+		$cust_hobi=str_replace("'", '"',$cust_hobi);
+		$cust_referensi=trim(@$_POST["cust_referensi"]);
+		$cust_referensi=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_referensi);
+		$cust_referensi=str_replace("'", '"',$cust_referensi);
+		$cust_keterangan=trim(@$_POST["cust_keterangan"]);
+		$cust_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_keterangan);
+		$cust_keterangan=str_replace("'", '"',$cust_keterangan);
+		$cust_member=trim(@$_POST["cust_member"]);
+		$cust_member=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_member);
+		$cust_member=str_replace("'", '"',$cust_member);
+		$cust_member2=trim(@$_POST["cust_member2"]);
+		$cust_member2=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_member2);
+		$cust_member2=str_replace("'", '"',$cust_member2);
+		$cust_terdaftar=trim(@$_POST["cust_terdaftar"]);
+		$cust_statusnikah=trim(@$_POST["cust_statusnikah"]);
+		$cust_statusnikah=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_statusnikah);
+		$cust_statusnikah=str_replace("'", '"',$cust_statusnikah);
+		$cust_priority=trim(@$_POST["cust_priority"]);
+		$cust_priority=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_priority);
+		$cust_priority=str_replace("'", '"',$cust_priority);
+		$cust_jmlanak=trim(@$_POST["cust_jmlanak"]);
+		$cust_unit=trim(@$_POST["cust_unit"]);
+		$cust_unit=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_unit);
+		$cust_unit=str_replace("'", '"',$cust_unit);
+		$cust_aktif=trim(@$_POST["cust_aktif"]);
+		$cust_aktif=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_aktif);
+		$cust_aktif=str_replace("'", '"',$cust_aktif);
+		$cust_creator=trim(@$_POST["cust_creator"]);
+		$cust_creator=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_creator);
+		$cust_creator=str_replace("'", '"',$cust_creator);
+		$cust_date_create=trim(@$_POST["cust_date_create"]);
+		$cust_update=trim(@$_POST["cust_update"]);
+		$cust_update=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_update);
+		$cust_update=str_replace("'", '"',$cust_update);
+		$cust_date_update=trim(@$_POST["cust_date_update"]);
+		$cust_revised=trim(@$_POST["cust_revised"]);
+		$option=$_POST['currentlisting'];
+		$filter=$_POST["query"];
+		
+		$result = $this->m_customer->customer_print($cust_id ,$cust_no ,$cust_no_awal ,$cust_no_akhir , $cust_nama ,$cust_kelamin ,$cust_alamat ,$cust_alamat2 ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tgllahir ,$cust_hobi ,$cust_referensi ,$cust_keterangan ,$cust_member ,$cust_member ,$cust_terdaftar ,$cust_statusnikah , $cust_priority , $cust_jmlanak ,$cust_unit ,$cust_aktif ,$cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$option,$filter);
+		$rs=$result->row();
+		$jumlah_result=$result->result();
+		
+		$data['cust_nama']=$rs->cust_nama;
+		$data['cust_alamat']=$rs->cust_alamat;
+		$data['cust_kota']=$rs->cust_kota;
+		$data['cust_kodepos']=$rs->cust_kodepos;
+		$data['jumlah_result']=$jumlah_result;
+		
+		$nbrows=$result->num_rows();
+		$viewdata=$this->load->view("main/p_cetak_label",$data,TRUE);
+		//$totcolumn=36;
+   		/* We now have our array, let's build our HTML file */
+		$file = fopen("customerlist.html",'w');
+		//fwrite($file, "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' /><title>Printing the Customer Grid</title><link rel='stylesheet' type='text/css' href='assets/modules/main/css/printstyle.css'/></head>");
+		//fwrite($file, "<body><table summary='Customer List'><caption>CUSTOMER</caption><thead><tr><th scope='col'>Cust Id</th><th scope='col'>Cust No</th><th scope='col'>Cust Nama</th><th scope='col'>Cust Kelamin</th><th scope='col'>Cust Alamat</th><th scope='col'>Cust Alamat2</th><th scope='col'>Cust Kota</th><th scope='col'>Cust Kodepos</th><th scope='col'>Cust Propinsi</th><th scope='col'>Cust Negara</th><th scope='col'>Cust Telprumah</th><th scope='col'>Cust Telprumah2</th><th scope='col'>Cust Telpkantor</th><th scope='col'>Cust Hp</th><th scope='col'>Cust Hp2</th><th scope='col'>Cust Hp3</th><th scope='col'>Cust Email</th><th scope='col'>Cust Agama</th><th scope='col'>Cust Pendidikan</th><th scope='col'>Cust Profesi</th><th scope='col'>Cust Tgllahir</th><th scope='col'>Cust Hobi</th><th scope='col'>Cust Referensi</th><th scope='col'>Cust Keterangan</th><th scope='col'>Cust Member</th><th scope='col'>Cust Terdaftar</th><th scope='col'>Cust Statusnikah</th><th scope='col'>Cust Priority</th><th scope='col'>Cust Jmlanak</th><th scope='col'>Cust Daftar</th><th scope='col'>Cust Unit</th><th scope='col'>Cust Aktif</th><th scope='col'>Cust Creator</th><th scope='col'>Cust Date Create</th><th scope='col'>Cust Update</th><th scope='col'>Cust Date Update</th><th scope='col'>Cust Revised</th></tr></thead><tfoot><tr><th scope='row'>Total</th><td colspan='$totcolumn'>");
+		//fwrite($file, $nbrows);
+		//fwrite($file, " Customer</td></tr></tfoot><tbody>");
+		//$i=0;
+		/*
+		if($nbrows>0){
+			foreach($result->result_array() as $data){
+				fwrite($file,'<tr');
+				if($i%1==0){
+					fwrite($file," class='odd'");
+				}
+			
+				fwrite($file, "><th scope='row' id='r97'>");
+				fwrite($file, $data['cust_id']);
+				fwrite($file,"</th><td>");
+				fwrite($file, $data['cust_no']);
+			
+				fwrite($file,"<td>");
+				fwrite($file, $data['cust_nama']);
+				fwrite($file,"</td>");
+			
+				fwrite($file, $data['cust_kelamin']);
+				fwrite($file,"</td><td>");
+				fwrite($file, $data['cust_alamat']);
+				fwrite($file,"</td><td>");
+				fwrite($file, $data['cust_alamat2']);
+				fwrite($file,"</td><td>");
+				fwrite($file, $data['cust_kota']);
+				fwrite($file,"</td><td>");
+				fwrite($file, $data['cust_kodepos']);
+				fwrite($file,"</td><td>");
+				fwrite($file, $data['cust_propinsi']);
+				fwrite($file,"</td><td>");
+				fwrite($file, $data['cust_negara']);
+				fwrite($file,"</td><td>");
+				fwrite($file, $data['cust_telprumah']);
+				fwrite($file,"</td><td>");
+				fwrite($file, $data['cust_telprumah2']);
+				fwrite($file,"</td><td>");
+				fwrite($file, $data['cust_telpkantor']);
+				fwrite($file,"</td><td>");
+				fwrite($file, $data['cust_hp']);
+				fwrite($file,"</td><td>");
+				fwrite($file, $data['cust_hp2']);
+				fwrite($file,"</td><td>");
+				fwrite($file, $data['cust_hp3']);
+				fwrite($file,"</td><td>");
+				fwrite($file, $data['cust_email']);
+				fwrite($file,"</td><td>");
+				fwrite($file, $data['cust_agama']);
+				fwrite($file,"</td><td>");
+				fwrite($file, $data['cust_pendidikan']);
+				fwrite($file,"</td><td>");
+				fwrite($file, $data['cust_profesi']);
+				fwrite($file,"</td><td>");
+				fwrite($file, $data['cust_tgllahir']);
+				fwrite($file,"</td><td>");
+				fwrite($file, $data['cust_hobi']);
+				fwrite($file,"</td><td>");
+				fwrite($file, $data['cust_referensi']);
+				fwrite($file,"</td><td>");
+				fwrite($file, $data['cust_keterangan']);
+				fwrite($file,"</td><td>");
+				fwrite($file, $data['cust_member']);
+				fwrite($file,"</td><td>");
+				fwrite($file, $data['cust_terdaftar']);
+				fwrite($file,"</td><td>");
+				fwrite($file, $data['cust_statusnikah']);
+				fwrite($file,"</td><td>");
+				fwrite($file, $data['cust_priority']);
+				fwrite($file,"</td><td>");
+				fwrite($file, $data['cust_jmlanak']);
+				fwrite($file,"</td><td>");
+				fwrite($file, $data['cust_unit']);
+				fwrite($file,"</td><td>");
+				fwrite($file, $data['cust_aktif']);
+				fwrite($file,"</td><td>");
+				fwrite($file, $data['cust_creator']);
+				fwrite($file,"</td><td>");
+				fwrite($file, $data['cust_date_create']);
+				fwrite($file,"</td><td>");
+				fwrite($file, $data['cust_update']);
+				fwrite($file,"</td><td>");
+				fwrite($file, $data['cust_date_update']);
+				fwrite($file,"</td><td>");
+				fwrite($file, $data['cust_revised']);
+				fwrite($file, "</td></tr>");
+			
+			}
+		}
+		*/
+		fwrite($file, $viewdata);
 		fclose($file);
 		echo '1';        
 	}

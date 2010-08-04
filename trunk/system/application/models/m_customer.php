@@ -469,7 +469,7 @@ where cabang.cabang_id = info.info_cabang";
 		}
 		
 		//function for advanced search record
-		function customer_search($cust_id ,$cust_no ,$cust_nama ,$cust_kelamin ,$cust_alamat ,$cust_alamat2 ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tgllahir ,$cust_hobi ,$cust_referensi ,$cust_keterangan ,$cust_member ,$cust_terdaftar ,$cust_statusnikah , $cust_priority , $cust_jmlanak ,$cust_unit ,$cust_aktif ,$cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$start,$end){
+		function customer_search($cust_id ,$cust_no ,$cust_no_awal ,$cust_no_akhir, $cust_nama ,$cust_kelamin ,$cust_alamat ,$cust_alamat2 ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tgllahir ,$cust_hobi ,$cust_referensi ,$cust_keterangan ,$cust_member ,$cust_member2 ,$cust_terdaftar ,$cust_statusnikah , $cust_priority , $cust_jmlanak ,$cust_unit ,$cust_aktif ,$cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$start,$end){
 			if ($cust_aktif=="")
 				$cust_aktif = "Aktif";
 			//full query
@@ -483,6 +483,10 @@ where cabang.cabang_id = info.info_cabang";
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " cust_no LIKE '%".$cust_no."%'";
 			};
+			if($cust_no_awal!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " right(cust_no,6) BETWEEN '".$cust_no_awal."' AND '".$cust_no_akhir."'";
+				};
 			if($cust_nama!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " cust_nama LIKE '%".$cust_nama."%'";
@@ -575,6 +579,26 @@ where cabang.cabang_id = info.info_cabang";
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " cust_member LIKE '%".$cust_member."%'";
 			};
+			if($cust_member2!=''){
+				$date_now = date('Y-m-d');
+				if($cust_member2=='Semua'){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_member <> ''";
+				} 
+				else if($cust_member2=='Aktif'){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " member_valid > '".$date_now."'";
+				}
+				else if($cust_member2=='Tidak Aktif'){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " member_valid < '".$date_now."'";
+				}
+				else if($cust_member2=='Non Member'){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_member = ''";
+				}
+				
+			};
 			if($cust_terdaftar!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " cust_terdaftar LIKE '%".$cust_terdaftar."%'";
@@ -637,7 +661,7 @@ where cabang.cabang_id = info.info_cabang";
 		}
 		
 		//function for print record
-		function customer_print($cust_id ,$cust_no ,$cust_nama ,$cust_kelamin ,$cust_alamat ,$cust_alamat2 ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tgllahir ,$cust_hobi ,$cust_referensi ,$cust_keterangan ,$cust_member ,$cust_terdaftar ,$cust_statusnikah , $cust_priority , $cust_jmlanak ,$cust_unit ,$cust_aktif ,$cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$option,$filter){
+		function customer_print($cust_id ,$cust_no , $cust_no_awal, $cust_no_akhir, $cust_nama ,$cust_kelamin ,$cust_alamat ,$cust_alamat2 ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tgllahir ,$cust_hobi ,$cust_referensi ,$cust_keterangan ,$cust_member ,$cust_member2 , $cust_terdaftar ,$cust_statusnikah , $cust_priority , $cust_jmlanak ,$cust_unit ,$cust_aktif ,$cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$option,$filter){
 			//full query
 			$query="select * from customer";
 			if($option=='LIST'){
@@ -652,6 +676,10 @@ where cabang.cabang_id = info.info_cabang";
 				if($cust_no!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " cust_no LIKE '%".$cust_no."%'";
+				};
+				if($cust_no_awal!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " right(cust_no,6) BETWEEN '".$cust_no_awal."' AND '".$cust_no_akhir."'";
 				};
 				if($cust_nama!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -744,6 +772,25 @@ where cabang.cabang_id = info.info_cabang";
 				if($cust_member!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " cust_member LIKE '%".$cust_member."%'";
+				};
+				if($cust_member2!=''){
+					$date_now = date('Y-m-d');
+					if($cust_member2=='Semua'){
+						$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+						$query.= " cust_member <> ''";
+					} 
+					else if($cust_member2=='Aktif'){
+						$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+						$query.= " member_valid > '".$date_now."'";
+					}
+					else if($cust_member2=='Tidak Aktif'){
+						$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+						$query.= " member_valid < '".$date_now."'";
+					}
+					else if($cust_member2=='Non Member'){
+						$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+						$query.= " cust_member = ''";
+					}	
 				};
 				if($cust_terdaftar!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";

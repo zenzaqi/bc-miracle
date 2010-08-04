@@ -110,6 +110,8 @@ var dt = new Date();
 var cust_idSearchField;
 var cust_nolamaSearchField;
 var cust_noSearchField;
+var cust_no_awalSearchField;
+var cust_no_akhirSearchField;
 var cust_namaSearchField;
 var cust_kelaminSearchField;
 var cust_alamatSearchField;
@@ -139,6 +141,7 @@ var cust_hobiSearchField;
 var cust_referensiSearchField;
 var cust_keteranganSearchField;
 var cust_memberSearchField;
+var cust_memberSearch2Field;
 var cust_terdaftarSearchField;
 var cust_statusnikahSearchField;
 var cust_prioritySearchField;
@@ -559,6 +562,8 @@ var editor_cust_note;
 
 		///if(cust_idSearchField.getValue()!==null){cust_id_search=cust_idSearchField.getValue();}
 		if(cust_noSearchField.getValue()!==null){cust_no_search=cust_noSearchField.getValue();}
+		if(cust_no_awalSearchField.getValue()!==null){cust_no_awal_search=cust_no_awalSearchField.getValue();}
+		if(cust_no_akhirSearchField.getValue()!==null){cust_no_akhir_search=cust_no_akhirSearchField.getValue();}
 		//if(cust_nolamaSearchField.getValue()!==null){cust_nolama_search=cust_nolamaSearchField.getValue();}
 		if(cust_namaSearchField.getValue()!==null){cust_nama_search=cust_namaSearchField.getValue();}
 		if(cust_kelaminSearchField.getValue()!==null){cust_kelamin_search=cust_kelaminSearchField.getValue();}
@@ -583,6 +588,7 @@ var editor_cust_note;
 		if(cust_referensiSearchField.getValue()!==null){cust_referensi_search=cust_referensiSearchField.getValue();}
 		if(cust_keteranganSearchField.getValue()!==null){cust_keterangan_search=cust_keteranganSearchField.getValue();}
 		if(cust_memberSearchField.getValue()!==null){cust_member_search=cust_memberSearchField.getValue();}
+		if(cust_memberSearch2Field.getValue()!==null){cust_member2_search=cust_memberSearch2Field.getValue();}
 		if(cust_terdaftarSearchField.getValue()!==""){cust_terdaftar_search_date=cust_terdaftarSearchField.getValue().format('Y-m-d');}
 		if(cust_statusnikahSearchField.getValue()!==null){cust_statusnikah_search=cust_statusnikahSearchField.getValue();}
 		if(cust_prioritySearchField.getValue()!==null){cust_priority_search=cust_prioritySearchField.getValue();}
@@ -596,7 +602,9 @@ var editor_cust_note;
 			limit: pageS,
 			//variable here
 			//cust_id	:	cust_id_search, 
-			cust_no	:	cust_no_search, 
+			cust_no	:	cust_no_search,
+			cust_no_awal	:	cust_no_awal_search,
+			cust_no_akhir	:	cust_no_akhir_search,
 			cust_nolama	:	cust_nolama_search, 
 			cust_nama	:	cust_nama_search, 
 			cust_kelamin	:	cust_kelamin_search, 
@@ -621,6 +629,7 @@ var editor_cust_note;
 			cust_referensi	:	cust_referensi_search, 
 			cust_keterangan	:	cust_keterangan_search, 
 			cust_member	:	cust_member_search, 
+			cust_member2	:	cust_member2_search, 
 			cust_terdaftar	:	cust_terdaftar_search_date, 
 			cust_statusnikah	:	cust_statusnikah_search,
 			cust_priority	:	cust_priority_search,
@@ -650,6 +659,8 @@ var editor_cust_note;
 
 	function customer_reset_SearchForm(){
 		cust_noSearchField.reset();
+		cust_no_awalSearchField.reset();
+		cust_no_akhirSearchField.reset();
 		//cust_nolamaSearchField.reset();
 		cust_namaSearchField.reset();
 		cust_kelaminSearchField.reset();
@@ -674,6 +685,7 @@ var editor_cust_note;
 		cust_referensiSearchField.reset();
 		cust_keteranganSearchField.reset();
 		cust_memberSearchField.reset();
+		cust_memberSearch2Field.reset();
 		cust_terdaftarSearchField.reset();
 		cust_statusnikahSearchField.reset();
 		cust_prioritySearchField.reset();
@@ -723,6 +735,7 @@ var editor_cust_note;
 		var cust_referensi_print=null;
 		var cust_keterangan_print=null;
 		var cust_member_print=null;
+		var cust_member2_print=null;
 		var cust_terdaftar_print_date="";
 		var cust_statusnikah_print=null;
 		var cust_priority_print=null;
@@ -757,6 +770,7 @@ var editor_cust_note;
 		if(customer_DataStore.baseParams.cust_referensi!==null){cust_referensi_print = customer_DataStore.baseParams.cust_referensi;}
 		if(customer_DataStore.baseParams.cust_keterangan!==null){cust_keterangan_print = customer_DataStore.baseParams.cust_keterangan;}
 		if(customer_DataStore.baseParams.cust_member!==null){cust_member_print = customer_DataStore.baseParams.cust_member;}
+		if(customer_DataStore.baseParams.cust_member2!==null){cust_member2_print = customer_DataStore.baseParams.cust_member2;}
 		if(customer_DataStore.baseParams.cust_terdaftar!==""){cust_terdaftar_print_date = customer_DataStore.baseParams.cust_terdaftar;}
 		if(customer_DataStore.baseParams.cust_statusnikah!==null){cust_statusnikah_print = customer_DataStore.baseParams.cust_statusnikah;}
 		if(customer_DataStore.baseParams.cust_priority!==null){cust_priority_print = customer_DataStore.baseParams.cust_priority;}
@@ -798,6 +812,7 @@ var editor_cust_note;
 			cust_referensi : cust_referensi_print,
 			cust_keterangan : cust_keterangan_print,
 			cust_member : cust_member_print,
+			cust_member2 : cust_member2_print,
 		  	cust_terdaftar : cust_terdaftar_print_date, 
 			cust_statusnikah : cust_statusnikah_print,
 			cust_priority : cust_priority_print,
@@ -837,6 +852,155 @@ var editor_cust_note;
 		});
 	}
 	/* Enf Function */
+	
+	/* Function for print Label */
+	function customer_print_label(){
+		var searchquery = "";
+		var cust_no_print=null;
+		var cust_no_awal_print=null;
+		var cust_no_akhir_print=null;
+		var cust_nolama_print=null;
+		var cust_nama_print=null;
+		var cust_kelamin_print=null;
+		var cust_alamat_print=null;
+		var cust_alamat2_print=null;
+		var cust_kota_print=null;
+		var cust_kodepos_print=null;
+		var cust_propinsi_print=null;
+		var cust_negara_print=null;
+		var cust_telprumah_print=null;
+		var cust_telprumah2_print=null;
+		var cust_telpkantor_print=null;
+		var cust_hp_print=null;
+		var cust_hp2_print=null;
+		var cust_hp3_print=null;
+		var cust_email_print=null;
+		var cust_agama_print=null;
+		var cust_pendidikan_print=null;
+		var cust_profesi_print=null;
+		var cust_tgllahir_print_date="";
+		var cust_hobi_print=null;
+		var cust_referensi_print=null;
+		var cust_keterangan_print=null;
+		var cust_member_print=null;
+		var cust_member2_print=null;
+		var cust_terdaftar_print_date="";
+		var cust_statusnikah_print=null;
+		var cust_priority_print=null;
+		var cust_jmlanak_print=null;
+		var cust_unit_print=null;
+		var cust_aktif_print=null;
+		var win;              
+		
+		if(customer_DataStore.baseParams.query!==null){searchquery = customer_DataStore.baseParams.query;}
+		if(customer_DataStore.baseParams.cust_no!==null){cust_no_print = customer_DataStore.baseParams.cust_no;}
+		if(customer_DataStore.baseParams.cust_no_awal!==null){cust_no_awal_print = customer_DataStore.baseParams.cust_no_awal;}
+		if(customer_DataStore.baseParams.cust_no_akhir!==null){cust_no_akhir_print = customer_DataStore.baseParams.cust_no_akhir;}
+		if(customer_DataStore.baseParams.cust_nolama!==null){cust_nolama_print = customer_DataStore.baseParams.cust_nolama;}
+		if(customer_DataStore.baseParams.cust_nama!==null){cust_nama_print = customer_DataStore.baseParams.cust_nama;}
+		if(customer_DataStore.baseParams.cust_kelamin!==null){cust_kelamin_print = customer_DataStore.baseParams.cust_kelamin;}
+		if(customer_DataStore.baseParams.cust_alamat!==null){cust_alamat_print = customer_DataStore.baseParams.cust_alamat;}
+		if(customer_DataStore.baseParams.cust_alamat2!==null){cust_alamat2_print = customer_DataStore.baseParams.cust_alamat2;}
+		if(customer_DataStore.baseParams.cust_kota!==null){cust_kota_print = customer_DataStore.baseParams.cust_kota;}
+		if(customer_DataStore.baseParams.cust_kodepos!==null){cust_kodepos_print = customer_DataStore.baseParams.cust_kodepos;}
+		if(customer_DataStore.baseParams.cust_propinsi!==null){cust_propinsi_print = customer_DataStore.baseParams.cust_propinsi;}
+		if(customer_DataStore.baseParams.cust_negara!==null){cust_negara_print = customer_DataStore.baseParams.cust_negara;}
+		if(customer_DataStore.baseParams.cust_telprumah!==null){cust_telprumah_print = customer_DataStore.baseParams.cust_telprumah;}
+		if(customer_DataStore.baseParams.cust_telprumah2!==null){cust_telprumah2_print = customer_DataStore.baseParams.cust_telprumah2;}
+		if(customer_DataStore.baseParams.cust_telpkantor!==null){cust_telpkantor_print = customer_DataStore.baseParams.cust_telpkantor;}
+		if(customer_DataStore.baseParams.cust_hp!==null){cust_hp_print = customer_DataStore.baseParams.cust_hp;}
+		if(customer_DataStore.baseParams.cust_hp2!==null){cust_hp2_print = customer_DataStore.baseParams.cust_hp2;}
+		if(customer_DataStore.baseParams.cust_hp3!==null){cust_hp3_print = customer_DataStore.baseParams.cust_hp3;}
+		if(customer_DataStore.baseParams.cust_email!==null){cust_email_print = customer_DataStore.baseParams.cust_email;}
+		if(customer_DataStore.baseParams.cust_agama!==null){cust_agama_print = customer_DataStore.baseParams.cust_agama;}
+		if(customer_DataStore.baseParams.cust_pendidikan!==null){cust_pendidikan_print = customer_DataStore.baseParams.cust_pendidikan;}
+		if(customer_DataStore.baseParams.cust_profesi!==null){cust_profesi_print = customer_DataStore.baseParams.cust_profesi;}
+		if(customer_DataStore.baseParams.cust_tgllahir!==""){cust_tgllahir_print_date = customer_DataStore.baseParams.cust_tgllahir;}
+		if(customer_DataStore.baseParams.cust_hobi!==null){cust_hobi_print = customer_DataStore.baseParams.cust_hobi;}
+		if(customer_DataStore.baseParams.cust_referensi!==null){cust_referensi_print = customer_DataStore.baseParams.cust_referensi;}
+		if(customer_DataStore.baseParams.cust_keterangan!==null){cust_keterangan_print = customer_DataStore.baseParams.cust_keterangan;}
+		if(customer_DataStore.baseParams.cust_member!==null){cust_member_print = customer_DataStore.baseParams.cust_member;}
+		if(customer_DataStore.baseParams.cust_member2!==null){cust_member2_print = customer_DataStore.baseParams.cust_member2;}
+		if(customer_DataStore.baseParams.cust_terdaftar!==""){cust_terdaftar_print_date = customer_DataStore.baseParams.cust_terdaftar;}
+		if(customer_DataStore.baseParams.cust_statusnikah!==null){cust_statusnikah_print = customer_DataStore.baseParams.cust_statusnikah;}
+		if(customer_DataStore.baseParams.cust_priority!==null){cust_priority_print = customer_DataStore.baseParams.cust_priority;}
+		if(customer_DataStore.baseParams.cust_jmlanak!==null){cust_jmlanak_print = customer_DataStore.baseParams.cust_jmlanak;}
+		if(customer_DataStore.baseParams.cust_unit!==null){cust_unit_print = customer_DataStore.baseParams.cust_unit;}
+		if(customer_DataStore.baseParams.cust_aktif!==null){cust_aktif_print = customer_DataStore.baseParams.cust_aktif;}
+
+		Ext.Ajax.request({   
+		waitMsg: 'Silahkan tunggu ...',
+		url: 'index.php?c=c_customer&m=get_action',
+		params: {
+			task: "PRINT_LABEL",
+		  	query: searchquery,                    		// if we are doing a quicksearch, use this
+			//if we are doing advanced search, use this
+			cust_no : cust_no_print,
+			cust_no_awal : cust_no_awal_print,
+			cust_no_akhir : cust_no_akhir_print,
+			cust_nolama : cust_nolama_print,
+			cust_nama : cust_nama_print,
+			cust_kelamin : cust_kelamin_print,
+			cust_alamat : cust_alamat_print,
+			cust_alamat2 : cust_alamat2_print,
+			cust_kota : cust_kota_print,
+			cust_kodepos : cust_kodepos_print,
+			cust_propinsi : cust_propinsi_print,
+			cust_negara : cust_negara_print,
+			cust_telprumah : cust_telprumah_print,
+			cust_telprumah2 : cust_telprumah2_print,
+			cust_telpkantor : cust_telpkantor_print,
+			cust_hp : cust_hp_print,
+			cust_hp2 : cust_hp2_print,
+			cust_hp3 : cust_hp3_print,
+			cust_email : cust_email_print,
+			cust_agama : cust_agama_print,
+			cust_pendidikan : cust_pendidikan_print,
+			cust_profesi : cust_profesi_print,
+		  	cust_tgllahir : cust_tgllahir_print_date, 
+			cust_hobi : cust_hobi_print,
+			cust_referensi : cust_referensi_print,
+			cust_keterangan : cust_keterangan_print,
+			cust_member : cust_member_print,
+			cust_member2 : cust_member2_print,
+		  	cust_terdaftar : cust_terdaftar_print_date, 
+			cust_statusnikah : cust_statusnikah_print,
+			cust_priority : cust_priority_print,
+			cust_jmlanak : cust_jmlanak_print,
+			cust_unit : cust_unit_print,
+			cust_aktif : cust_aktif_print,
+		  	currentlisting: customer_DataStore.baseParams.task // this tells us if we are searching or not
+		}, 
+		success: function(response){              
+		  	var result=eval(response.responseText);
+		  	switch(result){
+		  	case 1:
+				win = window.open('./customerlist.html','customerlist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
+				win.print();
+				break;
+		  	default:
+				Ext.MessageBox.show({
+					title: 'Warning',
+					msg: 'Unable to print the grid!',
+					buttons: Ext.MessageBox.OK,
+					animEl: 'save',
+					icon: Ext.MessageBox.WARNING
+				});
+				break;
+		  	}  
+		},
+		failure: function(response){
+		  	var result=response.responseText;
+			Ext.MessageBox.show({
+			   title: 'Error',
+			   msg: 'Could not connect to the database. retry later.',
+			   buttons: Ext.MessageBox.OK,
+			   animEl: 'database',
+			   icon: Ext.MessageBox.ERROR
+			});		
+		} 	                     
+		});
+	}
 	
 	/* Function for print Export to Excel Grid */
 	function customer_export_excel(){
@@ -2322,6 +2486,12 @@ Ext.onReady(function(){
 			iconCls:'icon-print',
 			disabled: true,
 			handler: customer_print  
+		}, '-',{
+			text: 'Cetak Label',
+			tooltip: 'Menu untuk cetak label',
+			iconCls:'',
+			//handler: tindakan_nonmedis_print  
+			handler: customer_print_label
 		}
 		]
 	});
@@ -3258,6 +3428,18 @@ Ext.onReady(function(){
 		maxLength: 50,
 		anchor: '50%'
 	});
+	cust_no_awalSearchField= new Ext.form.TextField({
+		id: 'cust_no_awalSearchField',
+		fieldLabel: 'No Customer Awal',
+		maxLength: 50,
+		anchor: '50%'
+	});
+	cust_no_akhirSearchField= new Ext.form.TextField({
+		id: 'cust_no_akhirSearchField',
+		fieldLabel: 'No Customer Akhir',
+		maxLength: 50,
+		anchor: '50%'
+	});
 	/*
 	cust_nolamaSearchField= new Ext.form.TextField({
 		id: 'cust_nolamaSearchField',
@@ -3475,6 +3657,21 @@ Ext.onReady(function(){
 		mode: 'local',
 		displayField: 'cust_pendidikan_value_display',
 		valueField: 'cust_pendidikan_value_display',
+		anchor: '50%',
+		triggerAction: 'all'
+	});
+	/* Identify  cust_member2 Field */
+	cust_memberSearch2Field= new Ext.form.ComboBox({
+		id: 'cust_memberSearch2Field',
+		fieldLabel: 'Member',
+		maxLength: 50,
+		store:new Ext.data.SimpleStore({
+			fields:['cust_member2_value_display'],
+			data: [['Semua'],['Aktif'],['Tidak Aktif'],['Non Member']]
+		}),
+		mode: 'local',
+		displayField: 'cust_member2_value_display',
+		valueField: 'cust_member2_value_display',
 		anchor: '50%',
 		triggerAction: 'all'
 	});
@@ -3724,7 +3921,7 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [cust_noSearchField, cust_memberSearchField, cust_namaSearchField, cust_panggilanSearchField, cust_alamat_groupSearch, cust_alamat2_groupSearch, cust_kontak_groupSearch] 
+				items: [cust_noSearchField, cust_memberSearchField, cust_no_awalSearchField, cust_no_akhirSearchField, cust_memberSearch2Field, cust_namaSearchField, cust_panggilanSearchField, cust_alamat_groupSearch, cust_alamat2_groupSearch, cust_kontak_groupSearch] 
 			}
 			,{
 				columnWidth:0.5,
@@ -3750,7 +3947,7 @@ Ext.onReady(function(){
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
 	customer_searchWindow = new Ext.Window({
-		title: 'customer Search',
+		title: 'Customer Search',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,
