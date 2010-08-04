@@ -182,10 +182,11 @@ Ext.onReady(function(){
 		fieldLabel: ' ',
 		format : 'Y-m-d',
 		name: 'rpt_invoice_tglawalField',
-        vtype: 'daterange',
+        //vtype: 'daterange',
 		allowBlank: true,
 		width: 100,
-        endDateField: 'rpt_invoice_tglakhirField'
+        //endDateField: 'rpt_invoice_tglakhirField'
+		value: today
 	});
 	
 	rpt_invoice_tglakhirField= new Ext.form.DateField({
@@ -193,10 +194,10 @@ Ext.onReady(function(){
 		fieldLabel: 's/d',
 		format : 'Y-m-d',
 		name: 'rpt_invoice_tglakhirField',
-        vtype: 'daterange',
+        //vtype: 'daterange',
 		allowBlank: true,
 		width: 100,
-        startDateField: 'rpt_invoice_tglawalField',
+        //startDateField: 'rpt_invoice_tglawalField',
 		value: today
 	});
 	
