@@ -73,7 +73,7 @@ var taskinbox = {
 	run: function(){
 	   inbox_DataStore.load({params:{start:0,limit:pageS}});
 	},
-	interval: 5000
+	interval: 50
 }
 var runinbox = new Ext.util.TaskRunner();
 
@@ -82,7 +82,7 @@ var runinbox = new Ext.util.TaskRunner();
 Ext.onReady(function(){
   	Ext.QuickTips.init();	/* Initiate quick tips icon */
   
-   runinbox.start(taskinbox);
+//   runinbox.start(taskinbox); //ditutup sementara, karena selalu refresh ke hal 1 misalnya kita sudah ke hal 2 dst. 2010-08-04
   
   	/* Function for Saving inLine Editing */
 	function inbox_inline_update(oGrid_event){
@@ -862,7 +862,7 @@ Ext.onReady(function(){
 	}
 	
 	mainPanel.on('remove', function(){
-		runinbox.stop(taskinbox);
+//		runinbox.stop(taskinbox); //ditutup sementara, karena selalu refresh ke hal 1 misalnya kita sudah ke hal 2 dst. 2010-08-04
 	});
 	//mainPanel.remove(mainPanel.getActiveTab().getId());
 	
