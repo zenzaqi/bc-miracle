@@ -411,7 +411,7 @@ Ext.onReady(function(){
 			url: 'index.php?c=c_master_koreksi_stok&m=get_action', 
 			method: 'POST'
 		}),
-		baseParams:{task: "LIST"}, // parameter yang di $_POST ke Controller
+		baseParams:{task: "LIST", start: 0, limit: pageS}, // parameter yang di $_POST ke Controller
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
@@ -441,7 +441,7 @@ Ext.onReady(function(){
 			url: 'index.php?c=c_master_koreksi_stok&m=get_gudang_list', 
 			method: 'POST'
 		}),
-		baseParams:{task: "LIST"}, // parameter yang di $_POST ke Controller
+		baseParams:{task: "LIST", start: 0, limit: pageS}, // parameter yang di $_POST ke Controller
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
@@ -1212,7 +1212,7 @@ Ext.onReady(function(){
 	/* Function for reset search result */
 	function master_koreksi_stok_reset_search(){
 		// reset the store parameters
-		master_koreksi_stok_DataStore.baseParams = { task: 'LIST' };
+		master_koreksi_stok_DataStore.baseParams = { task: 'LIST', start: 0, limit: pageS };
 		// Cause the datastore to do another query : 
 		master_koreksi_stok_DataStore.reload({params: {start: 0, limit: pageS}});
 		master_koreksi_stok_searchWindow.close();

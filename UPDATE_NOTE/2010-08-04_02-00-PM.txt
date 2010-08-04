@@ -1,0 +1,11 @@
+> Bug Fix
+  - Sebab : ada kesalaha coding sebelumnya di proses
+            jual produk, jual rawat dan jual paket
+            sehingga total biaya di master tidak sama
+            dengan total biaya di detail
+  - Fix proses : proses sudah diperbaiki Pak Alif
+  - Fix database : gunakan query 2010-08-04_02-00-PM.sql,
+                   jalankan per blok query, karena proses akan lambat sekali
+                   u/ mengupdate ribuan data
+  
+   PERHATIAN !!! Sebaiknya backup data terlebih dulu !!!

@@ -147,7 +147,7 @@ Ext.onReady(function(){
 				var result=response.responseText;
 				Ext.MessageBox.show({
 				   title: 'Error',
-				   msg: 'Could not connect to the database. retry later.',
+				   msg: 'Koneksi ke database gagal',
 				   buttons: Ext.MessageBox.OK,
 				   animEl: 'database',
 				   icon: Ext.MessageBox.ERROR
@@ -208,7 +208,7 @@ Ext.onReady(function(){
 						default:
 							Ext.MessageBox.show({
 							   title: 'Warning',
-							   msg: 'We could\'t not '+msg+' the Tbl M Akun.',
+							   msg: 'Maaf, data tidak dapat disimpan',
 							   buttons: Ext.MessageBox.OK,
 							   animEl: 'save',
 							   icon: Ext.MessageBox.WARNING
@@ -220,7 +220,7 @@ Ext.onReady(function(){
 					var result=response.responseText;
 					Ext.MessageBox.show({
 						   title: 'Error',
-						   msg: 'Could not connect to the database. retry later.',
+						   msg: 'Koneksi ke database gagal',
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'database',
 						   icon: Ext.MessageBox.ERROR
@@ -231,7 +231,7 @@ Ext.onReady(function(){
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'Your Form is not valid!.',
+				msg: 'Isian anda tidak tepat!.',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -380,7 +380,7 @@ Ext.onReady(function(){
 					var result=response.responseText;
 					Ext.MessageBox.show({
 					   title: 'Error',
-					   msg: 'Could not connect to the database. retry later.',
+					   msg: 'Koneksi ke database gagal',
 					   buttons: Ext.MessageBox.OK,
 					   animEl: 'database',
 					   icon: Ext.MessageBox.ERROR
@@ -557,8 +557,7 @@ Ext.onReady(function(){
 			dataIndex: 'akun_kode',
 			width: 150,
 			sortable: true,
-			editor: new Ext.form.TextField({
-				maxLength: 25			})
+			readOnly: true
 		}, 
 		{
 			header: 'Jenis',
@@ -567,79 +566,47 @@ Ext.onReady(function(){
 			sortable: true,
 			readOnly: true
 		}, 
-		{
+		/*{
 			header: 'Parent',
 			dataIndex: 'akun_parent_nama',
 			width: 250,
 			sortable: true,
 			readOnly: true
-		}, 
+		}, */
 		{
 			header: 'Nama',
 			dataIndex: 'akun_nama',
 			width: 250,
 			sortable: true,
-			editor: new Ext.form.TextField({
-				allowBlank: false,
-				maxLength: 255			})
+			readOnly: true	
 		}, 
 		{
 			header: 'Debet',
 			dataIndex: 'akun_debet',
 			width: 100,
 			sortable: true,
-			editor: new Ext.form.NumberField({
-				allowDecimals: true,
-				allowNegative: false,
-				blankText: '0',
-				maxLength: 22,
-				maskRe: /([0-9]+)$/
-			})
+			readOnly: true
 		}, 
 		{
 			header: 'Kredit',
 			dataIndex: 'akun_kredit',
 			width: 100,
 			sortable: true,
-			editor: new Ext.form.NumberField({
-				allowDecimals: true,
-				allowNegative: false,
-				blankText: '0',
-				maxLength: 22,
-				maskRe: /([0-9]+)$/
-			})
+			readOnly: true
 		}, 
 		{
 			header: 'Saldo',
 			dataIndex: 'akun_saldo',
 			width: 100,
 			sortable: true,
-			editor: new Ext.form.NumberField({
-				allowDecimals: true,
-				allowNegative: false,
-				blankText: '0',
-				maxLength: 22,
-				maskRe: /([0-9]+)$/
-			})
+			readOnly: true
 		}, 
 		{
 			header: 'Aktif',
 			dataIndex: 'akun_aktif',
 			width: 100,
 			sortable: true,
-			editor: new Ext.form.ComboBox({
-				typeAhead: true,
-				triggerAction: 'all',
-				store:new Ext.data.SimpleStore({
-					fields:['akun_aktif_value', 'akun_aktif_display'],
-					data: [['T','Tidak'],['Y','Ya']]
-					}),
-				mode: 'local',
-               	displayField: 'akun_aktif_display',
-               	valueField: 'akun_aktif_value',
-               	lazyRender:true,
-               	listClass: 'x-combo-list-small'
-            })
+			readOnly: true
 		}, 
 		{
 			header: 'Creator',
@@ -689,7 +656,7 @@ Ext.onReady(function(){
 	akunListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'akunListEditorGrid',
 		el: 'fp_akun',
-		title: 'Daftar Akun',
+		title: 'Daftar Kode Akun',
 		autoHeight: true,
 		store: akun_DataStore, // DataStore
 		cm: akun_ColumnModel, // Nama-nama Columns
@@ -821,10 +788,10 @@ Ext.onReady(function(){
 		store:new Ext.data.SimpleStore({
 			fields:['akun_jenis_value', 'akun_jenis_display'],
 			data: [
-					['Aset','Aset'],
-					['Kewajiban','Kewajiban'],
-					['Ekuitas','Ekuitas'],
+					['Aktiva','Aktiva'],
+					['Pasiva','Pasiva'],
 					['Pendapatan','Pendapatan'],
+					['Biaya','Biaya'],
 					['Beban','Beban'],
 					['Lain-lain','Lain-lain']
 				]
@@ -858,7 +825,7 @@ Ext.onReady(function(){
 	/* Identify  akun_nama Field */
 	akun_namaField= new Ext.form.TextField({
 		id: 'akun_namaField',
-		fieldLabel: 'Nama',
+		fieldLabel: 'Nama Akun',
 		maxLength: 255,
 		allowBlank: false,
 		anchor: '95%'
@@ -1035,11 +1002,12 @@ Ext.onReady(function(){
 		store:new Ext.data.SimpleStore({
 			fields:['akun_jenisSearch_value', 'akun_jenisSearch_display'],
 			data: [
-					['Aset','Aset'],
-					['Kewajiban','Kewajiban'],
-					['Ekuitas','Ekuitas'],
+					['Aktiva','Aktiva'],
+					['Pasiva','Pasiva'],
 					['Pendapatan','Pendapatan'],
-					['Beban','Beban']
+					['Beban','Beban'],
+					['Biaya','Biaya'],
+					['Lain-lain','Lain-lain']
 				]
 			}),
 		mode: 'local',
@@ -1278,7 +1246,7 @@ Ext.onReady(function(){
 		  	var result=response.responseText;
 			Ext.MessageBox.show({
 			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
+			   msg: 'Koneksi ke database gagal',
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR
@@ -1352,7 +1320,7 @@ Ext.onReady(function(){
 		  	var result=response.responseText;
 			Ext.MessageBox.show({
 			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
+			   msg: 'Koneksi ke database gagal',
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR
