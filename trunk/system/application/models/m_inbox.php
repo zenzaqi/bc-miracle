@@ -29,6 +29,8 @@ class M_inbox extends Model{
 				$query .= " (inbox_id LIKE '%".addslashes($filter)."%' OR inbox_sender LIKE '%".addslashes($filter)."%' OR inbox_message LIKE '%".addslashes($filter)."%' OR inbox_date LIKE '%".addslashes($filter)."%' OR inbox_creator LIKE '%".addslashes($filter)."%' OR inbox_date_create LIKE '%".addslashes($filter)."%' OR inbox_update LIKE '%".addslashes($filter)."%' OR inbox_date_update LIKE '%".addslashes($filter)."%' OR inbox_revised LIKE '%".addslashes($filter)."%' )";
 			}
 			
+			$query .= " ORDER BY inbox_date DESC ";
+
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
 			$limit = $query." LIMIT ".$start.",".$end;		

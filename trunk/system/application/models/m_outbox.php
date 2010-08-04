@@ -31,7 +31,7 @@ class M_outbox extends Model{
 				$query .= " (outbox_id LIKE '%".addslashes($filter)."%' OR outbox_destination LIKE '%".addslashes($filter)."%' OR outbox_message LIKE '%".addslashes($filter)."%' )";
 			}
 
-			$query .= " ORDER BY outbox_status ASC ";
+			$query .= " ORDER BY outbox_status ASC, outbox_date DESC ";
 			
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();

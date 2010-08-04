@@ -1228,8 +1228,8 @@ Ext.onReady(function(){
 			setDisableAll();
 			draft_membershipField.setDisabled(false);
 			draft_membershipField.allowBlank=false;
-			sms_kelamin_checkField.setDisabled(false);
-			sms_ultah_checkField.setDisabled(false);
+			draft_kelamin_checkField.setDisabled(false);
+			draft_ultah_checkField.setDisabled(false);
 		}
 	});
 	
