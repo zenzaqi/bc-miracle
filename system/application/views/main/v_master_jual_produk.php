@@ -2530,6 +2530,7 @@ Ext.onReady(function(){
 		fieldLabel: 'Diskon (Rp)',
 		allowNegatife : false,
 		enableKeyEvents: true,
+		readOnly : true,
 		itemCls: 'rmoney',
 		width: 120,
 		maskRe: /([0-9]+)$/ 
@@ -2551,6 +2552,7 @@ Ext.onReady(function(){
 		blankText: '0',
 		emptyText: '0',
 		enableKeyEvents: true,
+		readOnly : true,
 		allowDecimals: false,
 		width: 120,
 		maskRe: /([0-9]+)$/
