@@ -983,7 +983,7 @@ class M_public_function extends Model{
 		}
 		
 		//$sql="SELECT * FROM vu_perawatan WHERE kategori_nama='Medis' AND rawat_aktif='Aktif'";//join dr tabel: perawatan,produk_group,kategori2,kategori,jenis,gudang
-		$sql="SELECT rawat_id,rawat_harga,rawat_kode,group_nama,kategori_nama,rawat_du,rawat_dm,rawat_nama FROM perawatan LEFT JOIN produk_group ON(rawat_group=group_id) LEFT JOIN kategori ON(rawat_kategori=kategori_id) WHERE kategori_nama='Medis' AND rawat_aktif='Aktif'";
+		$sql="SELECT rawat_id,rawat_harga,rawat_kode,group_nama,kategori_nama,rawat_du,rawat_dm,rawat_nama FROM perawatan LEFT JOIN produk_group ON(rawat_group=group_id) LEFT JOIN kategori ON(rawat_kategori=kategori_id) WHERE (kategori_nama='Medis' OR kategori_nama='Anti Aging') AND rawat_aktif='Aktif'";
 		if($query<>"" && is_numeric($query)==false){
 			$sql.=" and (rawat_kode like '%".$query."%' or rawat_nama like '%".$query."%')";
 			//$sql.=" and (rawat_kode like '%".$query."%' or rawat_nama like '%".$query."%' or group_nama like '%".$query."%')";
