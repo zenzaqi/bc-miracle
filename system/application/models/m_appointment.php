@@ -488,7 +488,7 @@ class M_appointment extends Model{
 							$this->db->insert('tindakan_detail', $data_dtindakan);
 							if($this->db->affected_rows()){
 								//UPDATE/INSERT ke db.report_tindakan dari Dokter && $app_cara=='datang'
-								$this->counter_report_tindakan_karyawan($dapp_medis_petugas);
+								$this->counter_report_tindakan_karyawan($dapp_medis_petugas, $dapp_medis_tglreservasi);
 								if($i==$size_array){
 									return '1';
 								}
@@ -546,7 +546,7 @@ class M_appointment extends Model{
 								$this->db->insert('tindakan_detail', $data_dtindakan);
 								if($this->db->affected_rows()){
 									//UPDATE/INSERT ke db.report_tindakan dari Dokter && $app_cara=='datang'
-									$this->counter_report_tindakan_karyawan($dapp_medis_petugas);
+									$this->counter_report_tindakan_karyawan($dapp_medis_petugas, $dapp_medis_tglreservasi);
 									if($i==$size_array){
 										return '1';
 									}
@@ -737,7 +737,7 @@ class M_appointment extends Model{
 							$this->db->insert('tindakan_detail', $data_dtindakan);
 							if($this->db->affected_rows()){
 								//UPDATE/INSERT ke db.report_tindakan dari Terapis && $app_cara=='datang'
-								$this->counter_report_tindakan_karyawan($dapp_nonmedis_petugas2);
+								$this->counter_report_tindakan_karyawan($dapp_nonmedis_petugas2, $dapp_nonmedis_tglreservasi);
 								if($i==$size_array){
 									return '1';
 								}
@@ -795,7 +795,7 @@ class M_appointment extends Model{
 								$this->db->insert('tindakan_detail', $data_dtindakan);
 								if($this->db->affected_rows()){
 									//UPDATE/INSERT ke db.report_tindakan dari Terapis && $app_cara=='datang'
-									$this->counter_report_tindakan_karyawan($dapp_nonmedis_petugas2);
+									$this->counter_report_tindakan_karyawan($dapp_nonmedis_petugas2, $dapp_nonmedis_tglreservasi);
 									if($i==$size_array){
 										return '1';
 									}
@@ -1424,7 +1424,7 @@ class M_appointment extends Model{
 							 * $dapp_counter = 'true'/'false' ==> return tetap '1'
 							*/
 							if($kategori_nama=='Medis'){
-								$rs_dokter_decounter = $this->decounter_report_tindakan_karyawan($dokter_id);
+								$rs_dokter_decounter = $this->decounter_report_tindakan_karyawan($dokter_id, $dapp_tglreservasi);
 								if($rs_dokter_decounter==1){
 									return '1';
 								}else{
@@ -1432,7 +1432,7 @@ class M_appointment extends Model{
 								}
 							}else if($kategori_nama=='Non Medis'){
 								if($dapp_counter=='true'){
-									$rs_terapis_decounter = $this->decounter_report_tindakan_karyawan($terapis_id);
+									$rs_terapis_decounter = $this->decounter_report_tindakan_karyawan($terapis_id, $dapp_tglreservasi);
 									if($rs_terapis_decounter==1){
 										return '1';
 									}else{
@@ -1486,7 +1486,7 @@ class M_appointment extends Model{
 							//Counter $dokter_id / $terapis_id
 							if($kategori_nama=='Medis'){
 								//Counter $dokter_id
-								$rs_dokter_counter = $this->counter_report_tindakan_karyawan($dokter_id);
+								$rs_dokter_counter = $this->counter_report_tindakan_karyawan($dokter_id, $dapp_tglreservasi);
 								if($rs_dokter_counter==1){
 									return '1';
 								}else{
@@ -1497,7 +1497,7 @@ class M_appointment extends Model{
 								* $dapp_counter = 'true'/'false' ==> return tetap '1'
 							    */
 								if($dapp_counter=='true'){
-									$rs_terapis_counter = $this->counter_report_tindakan_karyawan($terapis_id);
+									$rs_terapis_counter = $this->counter_report_tindakan_karyawan($terapis_id, $dapp_tglreservasi);
 									if($rs_terapis_counter==1){
 										return '1';
 									}else{
