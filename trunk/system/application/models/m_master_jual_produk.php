@@ -2414,8 +2414,8 @@ class M_master_jual_produk extends Model{
 		function master_jual_produk_batal($jproduk_id){
 			$date = date('Y-m-d');
 			//$lasttime=mktime(date("Y"),date("m"),date("d")+20);
-			$date_temp = strtotime(date('Y-m-d', strtotime($date)) . " +20 days");
-			$tampil=date("Y-m-d", strtotime($date."+1 month");	
+			//$date_temp = strtotime(date('Y-m-d', strtotime($date)) . " +20 days");
+			//$tampil=date("Y-m-d", strtotime($date."+1 month");	
 			//$month_temp = strtotime(date('Y-m-d', strtotime($date)) . " +1 month");
             $datetime_now = date('Y-m-d H:i:s');
             $sql = "UPDATE master_jual_produk
