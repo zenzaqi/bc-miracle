@@ -2000,8 +2000,9 @@ class M_master_jual_produk extends Model{
 		
 		//function for create new record
 		function master_jual_produk_create($jproduk_nobukti ,$jproduk_cust ,$jproduk_tanggal ,$jproduk_stat_dok, $jproduk_diskon ,$jproduk_cara ,$jproduk_cara2 ,$jproduk_cara3 ,$jproduk_keterangan , $jproduk_cashback, $jproduk_tunai_nilai, $jproduk_tunai_nilai2, $jproduk_tunai_nilai3, $jproduk_voucher_no, $jproduk_voucher_cashback, $jproduk_voucher_no2, $jproduk_voucher_cashback2, $jproduk_voucher_no3, $jproduk_voucher_cashback3, $jproduk_bayar, $jproduk_subtotal, $jproduk_total, $jproduk_hutang, $jproduk_kwitansi_no, $jproduk_kwitansi_nama, $jproduk_kwitansi_nilai, $jproduk_kwitansi_no2, $jproduk_kwitansi_nama2, $jproduk_kwitansi_nilai2, $jproduk_kwitansi_no3, $jproduk_kwitansi_nama3, $jproduk_kwitansi_nilai3, $jproduk_card_nama, $jproduk_card_edc, $jproduk_card_no, $jproduk_card_nilai, $jproduk_card_nama2, $jproduk_card_edc2, $jproduk_card_no2, $jproduk_card_nilai2, $jproduk_card_nama3, $jproduk_card_edc3, $jproduk_card_no3, $jproduk_card_nilai3, $jproduk_cek_nama, $jproduk_cek_no, $jproduk_cek_valid, $jproduk_cek_bank, $jproduk_cek_nilai, $jproduk_cek_nama2, $jproduk_cek_no2, $jproduk_cek_valid2, $jproduk_cek_bank2, $jproduk_cek_nilai2, $jproduk_cek_nama3, $jproduk_cek_no3, $jproduk_cek_valid3, $jproduk_cek_bank3, $jproduk_cek_nilai3, $jproduk_transfer_bank, $jproduk_transfer_nama, $jproduk_transfer_nilai, $jproduk_transfer_bank2, $jproduk_transfer_nama2, $jproduk_transfer_nilai2, $jproduk_transfer_bank3, $jproduk_transfer_nama3, $jproduk_transfer_nilai3){
-			
-			$pattern="FT/".date("ym")."-";
+			$jproduk_tanggal_pattern=strtotime($jproduk_tanggal);
+			$pattern="FT/".date("ym",$jproduk_tanggal_pattern)."-";
+			//$pattern="FT/".date("ym")."-";
 			$jproduk_nobukti=$this->m_public_function->get_kode_1('master_jual_produk','jproduk_nobukti',$pattern,12);
 			if ($jproduk_stat_dok=="")
 				$jproduk_stat_dok = "Terbuka";
@@ -2413,7 +2414,9 @@ class M_master_jual_produk extends Model{
 		function master_jual_produk_batal($jproduk_id){
 			$date = date('Y-m-d');
 			//$lasttime=mktime(date("Y"),date("m"),date("d")+20);
-			//$jproduk = strtotime(date('Y-m-d', strtotime($date)) . " +20 days");
+			$date_temp = strtotime(date('Y-m-d', strtotime($date)) . " +20 days");
+			$tampil=date("Y-m-d", strtotime($date."+1 month");	
+			//$month_temp = strtotime(date('Y-m-d', strtotime($date)) . " +1 month");
             $datetime_now = date('Y-m-d H:i:s');
             $sql = "UPDATE master_jual_produk
                 SET jproduk_stat_dok='Batal'
@@ -2438,6 +2441,7 @@ class M_master_jual_produk extends Model{
 		//function for advanced search record
 		function master_jual_produk_search($jproduk_id, $jproduk_nobukti, $jproduk_cust, $jproduk_tanggal, $jproduk_tanggal_akhir, $jproduk_diskon, $jproduk_cara, $jproduk_keterangan, $jproduk_stat_dok, $start, $end){
 			//full query
+			//$date_temp = strtotime(date('Y-m-d', strtotime($date)) . " +20 days");
 			//$query="SELECT jproduk_id, jproduk_nobukti, cust_nama, cust_no, cust_member, member_no, jproduk_cust, jproduk_tanggal, jproduk_diskon, jproduk_cashback, jproduk_cara, jproduk_cara2, jproduk_cara3, jproduk_bayar, jproduk_totalbiaya, jproduk_keterangan, jproduk_creator, jproduk_date_create, jproduk_update, jproduk_date_update, jproduk_revised, jproduk_stat_dok FROM vu_jproduk";
 			$query = "SELECT jproduk_id
 					,jproduk_nobukti
