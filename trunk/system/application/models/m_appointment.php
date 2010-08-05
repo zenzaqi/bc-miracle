@@ -829,7 +829,7 @@ class M_appointment extends Model{
 	}
 	//end of function
 	
-	function counter_report_tindakan_karyawan($karyawan_id){
+	function counter_report_tindakan_karyawan($karyawan_id, $dapp_tglreservasi){
 		/* karyawan === Dokter / Terapis
 		 * UPDATE/INSERT ke db.report_tindakan karena $dapp_status=='datang'
 		 * 1. Check $karyawan_id apakah sudah ada di db.report_tindakan
@@ -837,7 +837,7 @@ class M_appointment extends Model{
 		 * 3. Jika TIDAK ADA ==> INSERT ke db.report_tindakan
 		*/
 		$date_now = date('Y-m-d');
-		$bln_now = date('Y-m');
+		$bln_now = date('Y-m',strtotime($dapp_tglreservasi));
 		
 		$sql="SELECT reportt_jmltindakan
 			FROM report_tindakan
@@ -856,9 +856,9 @@ class M_appointment extends Model{
 			$this->db->where('reportt_karyawan_id', $karyawan_id);
 			$this->db->update('report_tindakan', $data_reportt);
 			if($this->db->affected_rows()){
-				return '1';
+				return 1;
 			}else{
-				return '0';
+				return 0;
 			}
 		}else{
 			//report tindakan baru di bulan ini untuk $karyawan_id
@@ -869,14 +869,14 @@ class M_appointment extends Model{
 			);
 			$this->db->insert('report_tindakan', $data_reportt);
 			if($this->db->affected_rows()){
-				return '1';
+				return 1;
 			}else{
 				return '0';
 			}
 		}
 	}
 	
-	function decounter_report_tindakan_karyawan($karyawan_id){
+	function decounter_report_tindakan_karyawan($karyawan_id, $dapp_tglreservasi){
 		/* karyawan === Dokter / Terapis
 		 * UPDATE/INSERT ke db.report_tindakan karena $dapp_status=='datang'
 		 * 1. Check $dokter_id apakah sudah ada di db.report_tindakan
@@ -884,7 +884,7 @@ class M_appointment extends Model{
 		 * 3. Jika TIDAK ADA ==> INSERT ke db.report_tindakan
 		*/
 		$date_now = date('Y-m-d');
-		$bln_now = date('Y-m');
+		$bln_now = date('Y-m',strtotime($dapp_tglreservasi));
 		
 		$sql = "UPDATE report_tindakan
 			SET reportt_jmltindakan = (reportt_jmltindakan-1)
@@ -892,26 +892,26 @@ class M_appointment extends Model{
 				AND reportt_karyawan_id='".$karyawan_id."'";
 		$this->db->query($sql);
 		if($this->db->affected_rows()){
-			return '1';
+			return 1;
 		}else{
-			return '0';
+			return 1;
 		}
 	}
 	
-	function report_tindakan_update($karyawan_id_awal, $karyawan_id_pengganti){
+	function report_tindakan_update($karyawan_id_awal, $karyawan_id_pengganti, $dapp_tglreservasi){
 		//$karyawan_id_awal ==> decounter
-		$result_awal = $this->decounter_report_tindakan_karyawan($karyawan_id_awal);
+		$result_awal = $this->decounter_report_tindakan_karyawan($karyawan_id_awal, $dapp_tglreservasi);
 		
 		if($result_awal==1){
 			//$karyawan_id_pengganti ==> counter
-			$result_pengganti = $this->counter_report_tindakan_karyawan($karyawan_id_pengganti);
+			$result_pengganti = $this->counter_report_tindakan_karyawan($karyawan_id_pengganti, $dapp_tglreservasi);
 			if($result_pengganti==1){
-				return '1';
+				return 1;
 			}else{
-				return '0';
+				return 0;
 			}
 		}else{
-			return '0';
+			return 0;
 		}
 	}
 	
@@ -1264,7 +1264,7 @@ class M_appointment extends Model{
 				/* ada pergantian dokter
 				 * karena ada perubahan dokter, maka db.report_tindakan juga harus diupdate ==> function report_tindakan_update()
 				*/
-				$result_reportt_update = $this->report_tindakan_update($dokter_awal ,$dokter);
+				$result_reportt_update = $this->report_tindakan_update($dokter_awal ,$dokter ,$dapp_tglreservasi_awal);
 				if($result_reportt_update==1){
 					//UPDATE db.appointment_detail.dapp_petugas
 					$sqlu_dapp = "UPDATE appointment_detail
@@ -1289,7 +1289,7 @@ class M_appointment extends Model{
 				/* ada pergantian terapis
 				 * karena ada perubahan terapis, maka db.report_tindakan juga harus diupdate ==> function report_tindakan_update()
 				*/
-				$result_reportt_update = $this->report_tindakan_update($terapis_awal ,$terapis);
+				$result_reportt_update = $this->report_tindakan_update($terapis_awal ,$terapis ,$dapp_tglreservasi_awal);
 				if($result_reportt_update==1){
 					//UPDATE db.appointment_detail.dapp_petugas
 					$sqlu_dapp = "UPDATE appointment_detail
