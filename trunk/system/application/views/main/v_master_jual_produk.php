@@ -651,7 +651,8 @@ Ext.onReady(function(){
 				url: 'index.php?c=c_master_jual_produk&m=get_action',
 				params: {
 					task: 'BATAL',
-					jproduk_id	: jproduk_idField.getValue()
+					jproduk_id	: jproduk_idField.getValue(),
+					jproduk_tanggal : jproduk_tanggalField.getValue().format('Y-m-d')
 				}, 
 				success: function(response){             
 					var result=eval(response.responseText);

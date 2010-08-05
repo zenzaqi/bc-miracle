@@ -297,7 +297,8 @@ Ext.onReady(function(){
 			url: 'index.php?c=c_master_jual_paket&m=get_action',
 			params: {
 				task: 'BATAL',
-				jpaket_id	: jpaket_idField.getValue()
+				jpaket_id	: jpaket_idField.getValue(),
+				jpaket_tanggal : jpaket_tanggalField.getValue().format('Y-m-d')
 			}, 
 			success: function(response){             
 				var result=eval(response.responseText);

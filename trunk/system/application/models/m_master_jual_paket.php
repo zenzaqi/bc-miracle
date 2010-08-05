@@ -2826,8 +2826,25 @@ class M_master_jual_paket extends Model{
 			
 		}
 		
-		function master_jual_paket_batal($jpaket_id){
-			$date_now = date('Y-m-d');
+		function master_jual_paket_batal($jpaket_id, $jpaket_tanggal){
+			$date = date('Y-m-d');
+			$date_1 = '01';
+			$date_2 = '02';
+			$date_3 = '03';
+			$month = substr($jpaket_tanggal,5,2);
+			$year = substr($jpaket_tanggal,0,4);
+			$begin=mktime(0,0,0,$month,1,$year);
+			$nextmonth=strtotime("+1month",$begin);
+			
+			$month_next = substr(date("Y-m-d",$nextmonth),5,2);
+			$year_next = substr(date("Y-m-d",$nextmonth),0,4);
+			
+			$tanggal_1 = $year_next.'-'.$month_next.'-'.$date_1;
+			$tanggal_2 = $year_next.'-'.$month_next.'-'.$date_2;
+			$tanggal_3 = $year_next.'-'.$month_next.'-'.$date_3;
+			
+			
+			//$date_now = date('Y-m-d');
 			$datetime_now = date('Y-m-d H:i:s');
 			$sql = "SELECT dapaket_id FROM detail_ambil_paket WHERE dapaket_jpaket='$jpaket_id'";
 			$rs = $this->db->query($sql);
@@ -2842,7 +2859,7 @@ class M_master_jual_paket extends Model{
 						,jpaket_date_update='".$datetime_now."'
 						,jpaket_revised=jpaket_revised+1
 					WHERE jpaket_id='".$jpaket_id."'
-						AND DATE_ADD(jpaket_tanggal,INTERVAL 33 DAY)>'".$date_now."' ";
+						 AND ('".$date."'<='".$tanggal_3."' OR  jpaket_tanggal='".$date."')";
 						
 				$this->db->query($sql);
 				if($this->db->affected_rows()>0){

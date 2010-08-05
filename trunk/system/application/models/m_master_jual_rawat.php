@@ -2444,8 +2444,25 @@ class M_master_jual_rawat extends Model{
 				return '0';
 		}
 		
-		function master_jual_rawat_batal($jrawat_nobukti){
-			$date_now = date('Y-m-d');
+		function master_jual_rawat_batal($jrawat_nobukti, $jrawat_tanggal){
+			$date = date('Y-m-d');
+			$date_1 = '01';
+			$date_2 = '02';
+			$date_3 = '03';
+			$month = substr($jrawat_tanggal,5,2);
+			$year = substr($jrawat_tanggal,0,4);
+			$begin=mktime(0,0,0,$month,1,$year);
+			$nextmonth=strtotime("+1month",$begin);
+			
+			$month_next = substr(date("Y-m-d",$nextmonth),5,2);
+			$year_next = substr(date("Y-m-d",$nextmonth),0,4);
+			
+			$tanggal_1 = $year_next.'-'.$month_next.'-'.$date_1;
+			$tanggal_2 = $year_next.'-'.$month_next.'-'.$date_2;
+			$tanggal_3 = $year_next.'-'.$month_next.'-'.$date_3;
+			
+			
+			//$date_now = date('Y-m-d');
 			$datetime_now = date('Y-m-d H:i:s');
 			$jrawat_id = 0;
 			
@@ -2462,7 +2479,7 @@ class M_master_jual_rawat extends Model{
                     ,jrawat_date_update='".$datetime_now."'
                     ,jrawat_revised=jrawat_revised+1
                 WHERE jrawat_id=".$jrawat_id."
-                    AND DATE_ADD(jrawat_tanggal,INTERVAL 7 DAY)>'".$date_now."' ";
+                    AND ('".$date."'<='".$tanggal_3."' OR  jrawat_tanggal='".$date."')";
             $this->db->query($sql);
 			if($this->db->affected_rows()){
 				//* udpating db.customer.cust_point ==> proses mengurangi jumlah poin (dikurangi dengan db.master_jual_produk.jproduk_point yg sudah dimasukkan ketika cetak faktur), karena dilakukan pembatalan /

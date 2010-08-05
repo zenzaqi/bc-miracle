@@ -625,7 +625,8 @@ class C_master_jual_produk extends Controller {
 	
 	function master_jual_produk_batal(){
 		$jproduk_id=trim($_POST["jproduk_id"]);
-		$result=$this->m_master_jual_produk->master_jual_produk_batal($jproduk_id);
+		$jproduk_tanggal=trim(@$_POST["jproduk_tanggal"]);
+		$result=$this->m_master_jual_produk->master_jual_produk_batal($jproduk_id, $jproduk_tanggal);
 		echo $result;
 	}
 

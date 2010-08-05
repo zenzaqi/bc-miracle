@@ -2411,12 +2411,22 @@ class M_master_jual_produk extends Model{
                 return '0';
 		}
 		
-		function master_jual_produk_batal($jproduk_id){
+		function master_jual_produk_batal($jproduk_id, $jproduk_tanggal){
 			$date = date('Y-m-d');
-			//$lasttime=mktime(date("Y"),date("m"),date("d")+20);
-			//$date_temp = strtotime(date('Y-m-d', strtotime($date)) . " +20 days");
-			//$tampil=date("Y-m-d", strtotime($date."+1 month");	
-			//$month_temp = strtotime(date('Y-m-d', strtotime($date)) . " +1 month");
+			$date_1 = '01';
+			$date_2 = '02';
+			$date_3 = '03';
+			$month = substr($jproduk_tanggal,5,2);
+			$year = substr($jproduk_tanggal,0,4);
+			$begin=mktime(0,0,0,$month,1,$year);
+			$nextmonth=strtotime("+1month",$begin);
+			
+			$month_next = substr(date("Y-m-d",$nextmonth),5,2);
+			$year_next = substr(date("Y-m-d",$nextmonth),0,4);
+			
+			$tanggal_1 = $year_next.'-'.$month_next.'-'.$date_1;
+			$tanggal_2 = $year_next.'-'.$month_next.'-'.$date_2;
+			$tanggal_3 = $year_next.'-'.$month_next.'-'.$date_3;
             $datetime_now = date('Y-m-d H:i:s');
             $sql = "UPDATE master_jual_produk
                 SET jproduk_stat_dok='Batal'
@@ -2424,7 +2434,7 @@ class M_master_jual_produk extends Model{
                     ,jproduk_date_update='".$datetime_now."'
                     ,jproduk_revised=jproduk_revised+1
                 WHERE jproduk_id=".$jproduk_id."
-                    AND  DATE_ADD(jproduk_tanggal,INTERVAL 33 DAY)>'".$date."' ";
+                    AND ('".$date."'<='".$tanggal_3."' OR  jproduk_tanggal='".$date."')";
             $this->db->query($sql);
 			if($this->db->affected_rows()){
 				//* udpating db.customer.cust_point ==> proses mengurangi jumlah poin (dikurangi dengan db.master_jual_produk.jproduk_point yg sudah dimasukkan ketika cetak faktur), karena dilakukan pembatalan /
