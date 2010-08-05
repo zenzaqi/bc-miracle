@@ -839,7 +839,8 @@ class M_appointment extends Model{
 		$date_now = date('Y-m-d');
 		$bln_now = date('Y-m',strtotime($dapp_tglreservasi));
 		
-		$sql="SELECT reportt_jmltindakan
+		$sql="SELECT reportt_id
+				,reportt_jmltindakan
 			FROM report_tindakan
 			WHERE reportt_bln LIKE '$bln_now%'
 				AND reportt_karyawan_id='$karyawan_id'";
@@ -849,11 +850,13 @@ class M_appointment extends Model{
 			$rs_record=$rs->row_array();
 			$reportt_jmltindakan = $rs_record['reportt_jmltindakan'];
 			$reportt_jmltindakan_update = $reportt_jmltindakan + 1;
+			$reportt_id = $rs_record['reportt_id'];
 			
 			$data_reportt=array(
 			"reportt_jmltindakan"=>$reportt_jmltindakan_update
 			);
 			$this->db->where('reportt_karyawan_id', $karyawan_id);
+			$this->db->where('reportt_id', $reportt_id);
 			$this->db->update('report_tindakan', $data_reportt);
 			if($this->db->affected_rows()){
 				return 1;
