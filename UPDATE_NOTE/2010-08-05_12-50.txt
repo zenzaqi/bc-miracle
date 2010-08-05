@@ -1,0 +1,5 @@
+update m_public_function.php
+	function get_tindakan_medis_list
+		menambahkan WHERE ... OR kategori_nama='Anti Aging'
+
+tujuan supaya Perawatan Anti Aging bisa keluar di Tindakan Medis
