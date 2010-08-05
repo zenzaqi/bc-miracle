@@ -659,7 +659,8 @@ class C_master_jual_rawat extends Controller {
 	
 	function master_jual_rawat_batal(){
 		$jrawat_nobukti = trim($_POST["jrawat_nobukti"]);
-		$result=$this->m_master_jual_rawat->master_jual_rawat_batal($jrawat_nobukti);
+		$jrawat_tanggal=trim(@$_POST["jrawat_tanggal"]);
+		$result=$this->m_master_jual_rawat->master_jual_rawat_batal($jrawat_nobukti, $jrawat_tanggal);
 		echo $result;
 	}
 

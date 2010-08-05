@@ -605,7 +605,8 @@ class C_master_jual_paket extends Controller {
 	
 	function master_jual_paket_batal(){
 		$jpaket_id=trim($_POST["jpaket_id"]);
-		$result=$this->m_master_jual_paket->master_jual_paket_batal($jpaket_id);
+		$jpaket_tanggal=trim(@$_POST["jpaket_tanggal"]);
+		$result=$this->m_master_jual_paket->master_jual_paket_batal($jpaket_id, $jpaket_tanggal);
 		echo $result;
 	}
 

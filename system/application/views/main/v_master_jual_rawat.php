@@ -743,7 +743,8 @@ Ext.onReady(function(){
 					url: 'index.php?c=c_master_jual_rawat&m=get_action',
 					params: {
 						task: 'BATAL',
-						jrawat_nobukti	: 	jrawat_nobukti_create
+						jrawat_nobukti	: 	jrawat_nobukti_create,
+						jrawat_tanggal : jrawat_tanggalField.getValue().format('Y-m-d')
 					},
 					success: function(response){
 						var result=eval(response.responseText);
@@ -1478,7 +1479,33 @@ Ext.onReady(function(){
                 jrawat_custField.setDisabled(true);
                 jrawat_tanggalField.setDisabled(true);
                 jrawat_keteranganField.setDisabled(false);
-				master_cara_bayarTabPanel.setDisabled(false);
+				
+				//master_cara_bayarTabPanel.setDisabled(false);
+				
+				jrawat_caraField.setDisabled(false);
+				master_jual_rawat_tunaiGroup.setDisabled(false);
+				master_jual_rawat_cardGroup.setDisabled(false);
+				master_jual_rawat_cekGroup.setDisabled(false);
+				master_jual_rawat_kwitansiGroup.setDisabled(false);
+				master_jual_rawat_transferGroup.setDisabled(false);
+				master_jual_rawat_voucherGroup.setDisabled(false);
+				
+				jrawat_cara2Field.setDisabled(false);
+				master_jual_rawat_tunai2Group.setDisabled(false);
+				master_jual_rawat_card2Group.setDisabled(false);
+				master_jual_rawat_cek2Group.setDisabled(false);
+				master_jual_rawat_kwitansi2Group.setDisabled(false);
+				master_jual_rawat_transfer2Group.setDisabled(false);
+				master_jual_rawat_voucher2Group.setDisabled(false);
+				
+				jrawat_cara3Field.setDisabled(false);
+				master_jual_rawat_tunai3Group.setDisabled(false);
+				master_jual_rawat_card3Group.setDisabled(false);
+				master_jual_rawat_cek3Group.setDisabled(false);
+				master_jual_rawat_kwitansi3Group.setDisabled(false);
+				master_jual_rawat_transfer3Group.setDisabled(false);
+				master_jual_rawat_voucher3Group.setDisabled(false);
+				
 				detail_jual_rawatListEditorGrid.djrawat_add.enable();
 				detail_jual_rawatListEditorGrid.djrawat_delete.enable();
 				combo_jual_rawat.setDisabled(false);
@@ -1498,7 +1525,33 @@ Ext.onReady(function(){
                 jrawat_custField.setDisabled(true);
                 jrawat_tanggalField.setDisabled(true);
                 jrawat_keteranganField.setDisabled(true);
-                master_cara_bayarTabPanel.setDisabled(true);
+				
+                //master_cara_bayarTabPanel.setDisabled(true);
+				
+				jrawat_caraField.setDisabled(true);
+				master_jual_rawat_tunaiGroup.setDisabled(true);
+				master_jual_rawat_cardGroup.setDisabled(true);
+				master_jual_rawat_cekGroup.setDisabled(true);
+				master_jual_rawat_kwitansiGroup.setDisabled(true);
+				master_jual_rawat_transferGroup.setDisabled(true);
+				master_jual_rawat_voucherGroup.setDisabled(true);
+				
+				jrawat_cara2Field.setDisabled(true);
+				master_jual_rawat_tunai2Group.setDisabled(true);
+				master_jual_rawat_card2Group.setDisabled(true);
+				master_jual_rawat_cek2Group.setDisabled(true);
+				master_jual_rawat_kwitansi2Group.setDisabled(true);
+				master_jual_rawat_transfer2Group.setDisabled(true);
+				master_jual_rawat_voucher2Group.setDisabled(true);
+				
+				jrawat_cara3Field.setDisabled(true);
+				master_jual_rawat_tunai3Group.setDisabled(true);
+				master_jual_rawat_card3Group.setDisabled(true);
+				master_jual_rawat_cek3Group.setDisabled(true);
+				master_jual_rawat_kwitansi3Group.setDisabled(true);
+				master_jual_rawat_transfer3Group.setDisabled(true);
+				master_jual_rawat_voucher3Group.setDisabled(true);
+				
 				detail_jual_rawatListEditorGrid.djrawat_add.disable();
 				detail_jual_rawatListEditorGrid.djrawat_delete.disable();
 				combo_jual_rawat.setDisabled(true);
@@ -1520,7 +1573,33 @@ Ext.onReady(function(){
 				jrawat_tanggalField.setDisabled(true);
 				jrawat_keteranganField.setDisabled(true);
 				jrawat_stat_dokField.setDisabled(true);
-				master_cara_bayarTabPanel.setDisabled(true);
+				
+				//master_cara_bayarTabPanel.setDisabled(true);
+				
+				jrawat_caraField.setDisabled(true);
+				master_jual_rawat_tunaiGroup.setDisabled(true);
+				master_jual_rawat_cardGroup.setDisabled(true);
+				master_jual_rawat_cekGroup.setDisabled(true);
+				master_jual_rawat_kwitansiGroup.setDisabled(true);
+				master_jual_rawat_transferGroup.setDisabled(true);
+				master_jual_rawat_voucherGroup.setDisabled(true);
+				
+				jrawat_cara2Field.setDisabled(true);
+				master_jual_rawat_tunai2Group.setDisabled(true);
+				master_jual_rawat_card2Group.setDisabled(true);
+				master_jual_rawat_cek2Group.setDisabled(true);
+				master_jual_rawat_kwitansi2Group.setDisabled(true);
+				master_jual_rawat_transfer2Group.setDisabled(true);
+				master_jual_rawat_voucher2Group.setDisabled(true);
+				
+				jrawat_cara3Field.setDisabled(true);
+				master_jual_rawat_tunai3Group.setDisabled(true);
+				master_jual_rawat_card3Group.setDisabled(true);
+				master_jual_rawat_cek3Group.setDisabled(true);
+				master_jual_rawat_kwitansi3Group.setDisabled(true);
+				master_jual_rawat_transfer3Group.setDisabled(true);
+				master_jual_rawat_voucher3Group.setDisabled(true);
+				
 				detail_jual_rawatListEditorGrid.djrawat_add.disable();
 				detail_jual_rawatListEditorGrid.djrawat_delete.disable();
 				combo_jual_rawat.setDisabled(true);
