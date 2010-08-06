@@ -1,0 +1,6 @@
+- Update
+  > Laporan Penerimaan Tagihan (Invoice)
+     - link : ?c=c_master_invoice&m=laporan
+     - Opsi : - Rekap [Faktur, Tanggal, Supplier]
+              - Detail [Faktur, Tanggal, Supplier, Produk]
+     - sql update : 2010-08-06_11-00-AM.sql

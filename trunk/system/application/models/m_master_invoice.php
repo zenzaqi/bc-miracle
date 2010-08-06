@@ -21,27 +21,33 @@ class M_master_invoice extends Model{
 		function get_laporan($tgl_awal,$tgl_akhir,$periode,$opsi,$group){
 			
 			switch($group){
-				case "Tanggal": $order_by=" ORDER BY tanggal";break;
-				case "Supplier": $order_by=" ORDER BY supplier_id";break;
-				case "No Faktur": $order_by=" ORDER BY no_bukti";break;
-				case "Produk": $order_by=" ORDER BY produk_kode";break;
-				default: $order_by=" ORDER BY no_bukti";break;
+				case "Tanggal": $order_by=" ORDER BY tanggal ASC";break;
+				case "Supplier": $order_by=" ORDER BY supplier_id ASC";break;
+				case "No Faktur": $order_by=" ORDER BY no_bukti ASC";break;
+				case "Produk": $order_by=" ORDER BY produk_kode ASC";break;
+				default: $order_by=" ORDER BY no_bukti ASC";break;
 			}
 			
 			if($opsi=='rekap'){
 				if($periode=='all')
-					$sql="SELECT * FROM vu_trans_invoice ".$order_by;
+					$sql="SELECT * FROM vu_trans_invoice WHERE invoice_status<>'Batal' ".$order_by;
 				else if($periode=='bulan')
-					$sql="SELECT * FROM vu_trans_invoice WHERE tanggal like '".$tgl_awal."%' ".$order_by;
+					$sql="SELECT * FROM vu_trans_invoice WHERE invoice_status<>'Batal' AND
+							date_format(tanggal,'%Y-%m')='".$tgl_awal."' ".$order_by;
 				else if($periode=='tanggal')
-					$sql="SELECT * FROM vu_trans_invoice WHERE tanggal>='".$tgl_awal."' AND tanggal<='".$tgl_akhir."' ".$order_by;
+					$sql="SELECT * FROM vu_trans_invoice WHERE invoice_status<>'Batal' AND 
+							date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' AND 
+							date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."' ".$order_by;
 			}else if($opsi=='detail'){
 				if($periode=='all')
-					$sql="SELECT * FROM vu_detail_invoice ".$order_by;
+					$sql="SELECT * FROM vu_detail_invoice invoice_status<>'Batal' ".$order_by;
 				else if($periode=='bulan')
-					$sql="SELECT * FROM vu_detail_invoice WHERE tanggal like '".$tgl_awal."%' ".$order_by;
+					$sql="SELECT * FROM vu_detail_invoice WHERE invoice_status<>'Batal' AND
+							date_format(tanggal,'%Y-%m')='".$tgl_awal."' ".$order_by;
 				else if($periode=='tanggal')
-					$sql="SELECT * FROM vu_detail_invoice WHERE tanggal>='".$tgl_awal."' AND tanggal<='".$tgl_akhir."' ".$order_by;
+					$sql="SELECT * FROM vu_detail_invoice WHERE invoice_status<>'Batal' AND 
+							date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' AND 
+							date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."' ".$order_by;
 			}
 			//echo $sql;
 			$query=$this->db->query($sql);

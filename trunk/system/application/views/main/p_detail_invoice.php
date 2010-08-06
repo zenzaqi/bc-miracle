@@ -15,12 +15,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Laporan Detail Tagihan Pembelian <?php echo $periode; ?></title>
+<title>Laporan Detail Penerimaan Tagihan <?php echo $periode; ?> Group By No. Faktur</title>
 <link rel='stylesheet' type='text/css' href='../assets/modules/main/css/printstyle.css'/>
 </head>
-<body>
+<body onload="window.print();">
 <table summary='Detail Tagihan'>
-	<caption>Laporan Detail Tagihan Pembelian <br/><?php echo $periode; ?><br/>Group By No. Faktur</caption>
+	<caption>Laporan Detail Penerimaan Tagihan <br/><?php echo $periode; ?><br/>Group By No. Faktur</caption>
 	<thead>
     	<tr>
         	<th scope='col'>No</th>
@@ -42,7 +42,7 @@
 					foreach($data_print as $print) { 
 						
 			?>
-			<?php if($faktur!==$print->no_bukti) { ?>
+			<?php if($faktur!==$print->invoice_id) { ?>
            <tr>
                 <td><b><? $j++; echo $j; ?></b></td>
                 <td colspan="9"><b><?php echo "No Faktur: ".$print->no_bukti.", Tanggal : ".$print->tanggal.", Supplier: ".$print->supplier_nama."(".$print->supplier_akun.")";?></b></td>
@@ -55,10 +55,15 @@
 					$i=0; 
 			?>
            <?php foreach($data_print as $print_list) {  ?>
-           <?php if($print_list->no_bukti==$print->no_bukti){ $i++;
+           <?php if($print_list->invoice_id==$print->invoice_id){ $i++;
 		   			$sub_jumlah_barang+=$print_list->jumlah_barang;
 					$sub_diskon+=$print_list->diskon_nilai;
 					$sub_total+=$print_list->subtotal;
+					
+					$total_item+=$print_list->jumlah_barang;
+					$total_diskon+=$print_list->diskon_nilai;
+					$total_nilai+=$print_list->subtotal;
+			
 		   ?>
             <tr>
                 <td><? echo $i; ?></td>
@@ -80,12 +85,9 @@
                 <td align="right" class="numeric"><b><?php echo number_format($sub_diskon,2,",","."); ?></b></td>
                 <td align="right" class="numeric"><b><?php echo number_format($sub_total,2,",","."); ?></b></td>
            </tr>
-           <?php } $faktur=$print->no_bukti; ?>
+           <?php } $faktur=$print->invoice_id; ?>
 		<?php 
-			$total_item+=$sub_jumlah_barang;
-			$total_diskon+=$sub_diskon;
-			$total_nilai+=$sub_total;
-		
+					
 		} ?>
         
 	</tbody>
