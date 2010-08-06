@@ -1643,7 +1643,7 @@ Ext.onReady(function(){
 			handler: tindakan_medisdetail_confirm_delete
 		},'-',
 		//'<span style="color:white;">WARNING: <b>List Detail di bawah ini Tidak Boleh di-Edit, hanya boleh Add Baru.</b></span>'
-		'<span style="color:white;">Warning: <b>User tidak diperkenankan mengubah perawatan dengan status selesai.</b></span>'
+		'<span style="color:white;">Warning: <b>Pada form ini user tidak diperkenankan mengubah perawatan yang sudah selesai.</b></span>'
 		]
 	});
 	//eof
@@ -2048,7 +2048,7 @@ Ext.onReady(function(){
 			handler: dtindakan_jual_nonmedis_confirm_delete
 		},'-',
 		//'<span style="color:white;">WARNING: <b>List Detail di bawah ini Boleh di-Edit hanya untuk status Yang Bukan "selesai".</b></span>'
-		'<span style="color:white;">Warning: <b>User tidak diperkenankan mengubah perawatan dengan status selesai.</b></span>'
+		'<span style="color:white;">Warning: <b>Pada form ini user tidak diperkenankan mengubah perawatan yang sudah selesai.</b></span>'
 		]
 	});
 	//eof
