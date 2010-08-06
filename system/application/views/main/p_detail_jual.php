@@ -8,7 +8,6 @@
 	+ Filename 		: p_detail_jual.php
  	+ Author  		: 
  	+ Created on 01/Feb/2010 14:30:05
-	
 */
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -26,7 +25,7 @@
         	<th scope='col'>No</th>
 			<th scope='col'>Kode</th>
             <th scope='col'>Nama Barang/Jasa</th>
-            <?//<th scope='col'>Satuan</th>?>
+            <? //<th scope='col'>Satuan</th>?>
             <th scope='col'>Jumlah</th>
             <th scope='col'>Harga</th>
             <th scope='col'>Disk (%)</th>
@@ -36,7 +35,69 @@
             <th scope='col'>Total (Rp)</th>
         </tr>
     </thead>
-	<tfoot>
+		<tbody>
+		        
+        <?php $i=0; $j=0; $faktur=""; 
+		
+		$total_item=0;
+		$total_diskon=0;
+		$total_nilai=0;
+		
+		foreach($data_print as $print) { ?>
+			<?php if($faktur!==$print->no_bukti) { ?>
+           <tr>
+                <td><b><? $j++; echo $j; ?></b></td>
+                <td colspan="8"><b><?php echo "No Faktur: ".$print->no_bukti.", Tanggal : ".$print->tanggal.", Customer: ".$print->cust_nama."(".$print->cust_no.")";?></b></td>
+           </tr>
+           <?php $sub_cashback=0;
+					$sub_total=0;
+					$sub_diskon=0;
+					$sub_jumlah_barang=0;
+					$i=0; 
+			?>
+           <?php foreach($data_print as $print_list) {  ?>
+           <?php if($print_list->no_bukti==$print->no_bukti){ 
+		   			
+					$i++;
+		   			$sub_jumlah_barang+=$print_list->jumlah_barang;
+					$sub_diskon+=$print_list->diskon_nilai;
+					$sub_total+=$print_list->subtotal;
+					
+					$total_item+=$print_list->jumlah_barang;
+					$total_diskon+=$print_list->diskon_nilai;
+					$total_nilai+=$print_list->subtotal;
+		
+		   ?>
+            <tr>
+                <td><? echo $i; ?></td>
+                <td><?php echo $print_list->produk_kode; ?></td>
+                <td><?php echo $print_list->produk_nama;?></td>
+				<? //<td> echo $print_list->satuan_nama; </td> ?>
+                <td class="numeric"><?php echo number_format($print_list->jumlah_barang,0,",","."); ?></td>
+                <td class="numeric"><?php echo number_format($print_list->harga_satuan,0,",","."); ?></td>
+                <td class="numeric"><?php echo number_format($print_list->diskon,0,",","."); ?></td>
+                <td class="numeric"><?php echo number_format($print_list->diskon_nilai,0,",","."); ?></td>
+                <td class="numeric"><?php echo $print_list->diskon_jenis; ?></td>
+                <td><?php echo $print_list->sales; ?></td>
+                <td class="numeric"><?php echo number_format($print_list->subtotal,0,",","."); ?></td>
+           </tr>
+           <?php } ?>
+           <?php } ?>
+           <tr>
+                <td colspan="3"><b>Total</td>
+                <td align="right" class="numeric"><b><?php echo number_format($sub_jumlah_barang,0,",","."); ?></b></td>
+                <td align="right" class="numeric">&nbsp;</td>
+                <td align="right" class="numeric">&nbsp;</td>
+                <td align="right" class="numeric"><b><?php echo number_format($sub_diskon,0,",","."); ?></b></td>
+                <td align="right" class="numeric">&nbsp;</td>
+                <td align="right" class="numeric">&nbsp;</td>
+                <td align="right" class="numeric"><b><?php echo number_format($sub_total,0,",","."); ?></b></td>
+           </tr>
+           <?php } $faktur=$print->no_bukti; ?>
+		<?php } ?>
+        
+	</tbody>
+    <tfoot>
     	<tr>
         	<td class="clear">&nbsp;</td>
         	<th scope='row' nowrap="nowrap">Jumlah data</th>
@@ -65,55 +126,6 @@
             <td colspan="7" class="clear">&nbsp;</td>
         </tr>
 	</tfoot>
-		<tbody>
-		        
-        <?php $i=0; $j=0; $faktur=""; foreach($data_print as $print) { ?>
-			<?php if($faktur!==$print->no_bukti) { ?>
-           <tr>
-                <td><b><? $j++; echo $j; ?></b></td>
-                <td colspan="8"><b><?php echo "No Faktur: ".$print->no_bukti.", Tanggal : ".$print->tanggal.", Customer: ".$print->cust_nama."(".$print->cust_no.")";?></b></td>
-           </tr>
-           <?php $sub_cashback=0;
-					$sub_total=0;
-					$sub_diskon=0;
-					$sub_jumlah_barang=0;
-					$i=0; 
-			?>
-           <?php foreach($data_print as $print_list) {  ?>
-           <?php if($print_list->no_bukti==$print->no_bukti){ $i++;
-		   			$sub_jumlah_barang+=$print_list->jumlah_barang;
-					$sub_diskon+=$print_list->diskon_nilai;
-					$sub_total+=$print_list->subtotal;
-		   ?>
-            <tr>
-                <td><? echo $i; ?></td>
-                <td><?php echo $print_list->produk_kode; ?></td>
-                <td><?php echo $print_list->produk_nama;?></td>
-				<?//<td> echo $print_list->satuan_nama; </td> ?>
-                <td class="numeric"><?php echo number_format($print_list->jumlah_barang,0,",","."); ?></td>
-                <td class="numeric"><?php echo number_format($print_list->harga_satuan,0,",","."); ?></td>
-                <td class="numeric"><?php echo number_format($print_list->diskon,0,",","."); ?></td>
-                <td class="numeric"><?php echo number_format($print_list->diskon_nilai,0,",","."); ?></td>
-                <td class="numeric"><?php echo $print_list->diskon_jenis; ?></td>
-                <td><?php echo $print_list->sales; ?></td>
-                <td class="numeric"><?php echo number_format($print_list->subtotal,0,",","."); ?></td>
-           </tr>
-           <?php } ?>
-           <?php } ?>
-           <tr>
-                <td colspan="3"><b>Total</td>
-                <td align="right" class="numeric"><b><?php echo number_format($sub_jumlah_barang,0,",","."); ?></b></td>
-                <td align="right" class="numeric">&nbsp;</td>
-                <td align="right" class="numeric">&nbsp;</td>
-                <td align="right" class="numeric"><b><?php echo number_format($sub_diskon,0,",","."); ?></b></td>
-                <td align="right" class="numeric">&nbsp;</td>
-                <td align="right" class="numeric">&nbsp;</td>
-                <td align="right" class="numeric"><b><?php echo number_format($sub_total,0,",","."); ?></b></td>
-           </tr>
-           <?php } $faktur=$print->no_bukti; ?>
-		<?php } ?>
-        
-	</tbody>
 </table>
 </body>
 </html>

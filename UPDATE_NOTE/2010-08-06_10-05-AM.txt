@@ -1,0 +1,3 @@
+o> Fix Bug
+   - Laporan Detail Penjualan Produk
+   - Update SQL : 2010-08-06_10-05-AM.sql
