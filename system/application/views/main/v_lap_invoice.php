@@ -160,7 +160,8 @@ Ext.onReady(function(){
 		id:'rpt_invoice_opsitglField',
 		boxLabel:'Tanggal',
 		width:100,
-		name: 'filter_opsi'
+		name: 'filter_opsi',
+		checked: true
 	});
 	
 	rpt_invoice_opsiblnField=new Ext.form.Radio({
@@ -173,8 +174,7 @@ Ext.onReady(function(){
 	rpt_invoice_opsiallField=new Ext.form.Radio({
 		id:'rpt_invoice_opsiallField',
 		boxLabel:'Semua',
-		name: 'filter_opsi',
-		checked: true
+		name: 'filter_opsi'
 	});
 	
 	rpt_invoice_tglawalField= new Ext.form.DateField({
@@ -222,11 +222,11 @@ Ext.onReady(function(){
 		frame: false,
 		bolder: false,
 		anchor: '98%',
-		items:[{
+		items:[/*{
 				layout: 'column',
 				border: false,
 				items:[rpt_invoice_opsiallField]
-			},{
+			},*/{
 				layout: 'column',
 				border: false,
 				items:[rpt_invoice_opsitglField, {

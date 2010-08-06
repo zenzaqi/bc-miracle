@@ -15,12 +15,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Laporan Detail Tagihan Pembelian <?php echo $periode; ?></title>
+<title>Laporan Detail Penerimaan Tagihan <?php echo $periode; ?> Group By Produk</title>
 <link rel='stylesheet' type='text/css' href='../assets/modules/main/css/printstyle.css'/>
 </head>
-<body>
+<body onload="window.print();">
 <table summary='Detail Tagihan Pembelian'>
-	<caption>Laporan Detail Tagihan Pembelian <br/><?php echo $periode; ?><br/>Group By Produk</caption>
+	<caption>Laporan Detail Penerimaan Tagihan <br/><?php echo $periode; ?><br/>Group By Produk</caption>
 	<thead>
     	<tr>
         	<th scope='col'>No</th>
