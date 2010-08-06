@@ -353,6 +353,7 @@ Ext.onReady(function(){
 		var dtrawat_nonmedis_perawatan = [];
 		var dtrawat_nonmedis_keterangan = [];
 		var dtrawat_nonmedis_jumlah = [];
+		var dtrawat_nonmedis_status = [];
 		
 		var dcount = 0;
 		//var dcount_medis = tindakan_medis_detail_DataStore.getCount() - 1;
@@ -436,6 +437,12 @@ Ext.onReady(function(){
 						}else{
 							dtrawat_nonmedis_jumlah.push(dtindakan_jual_nonmedisDataStore.getAt(i).data.dtrawat_jumlah);
 						}
+						
+						if(dtindakan_jual_nonmedisDataStore.getAt(i).data.dtrawat_status==undefined){
+							dtrawat_nonmedis_status.push('selesai');
+						}else{
+							dtrawat_nonmedis_status.push(dtindakan_jual_nonmedisDataStore.getAt(i).data.dtrawat_status);
+						}
 					}
 				}
 				
@@ -459,6 +466,7 @@ Ext.onReady(function(){
 					var encoded_array_dtrawat_nonmedis_perawatan = Ext.encode(dtrawat_nonmedis_perawatan);
 					var encoded_array_dtrawat_nonmedis_keterangan = Ext.encode(dtrawat_nonmedis_keterangan);
 					var encoded_array_dtrawat_nonmedis_jumlah = Ext.encode(dtrawat_nonmedis_jumlah);
+					var encoded_array_dtrawat_nonmedis_status = Ext.encode(dtrawat_nonmedis_status);
 					
 					if(trawat_id_create>0){
 						var trawat_cust_create=null; 
@@ -488,7 +496,8 @@ Ext.onReady(function(){
 								dtrawat_nonmedis_id	: encoded_array_dtrawat_nonmedis_id,
 								dtrawat_nonmedis_perawatan	: encoded_array_dtrawat_nonmedis_perawatan,
 								dtrawat_nonmedis_keterangan	: encoded_array_dtrawat_nonmedis_keterangan,
-								dtrawat_nonmedis_jumlah	: encoded_array_dtrawat_nonmedis_jumlah
+								dtrawat_nonmedis_jumlah	: encoded_array_dtrawat_nonmedis_jumlah,
+								dtrawat_nonmedis_status	: encoded_array_dtrawat_nonmedis_status
 							}, 
 							success: function(response){
 								var result=eval(response.responseText);
@@ -1942,7 +1951,7 @@ Ext.onReady(function(){
 			triggerAction: 'all',
 			lazyRender:true,
 			listClass: 'x-combo-list-small',
-			maskRe: /([A-Za-z]+)$/
+			maskRe: /([^0-9]+)$/
 	});
 	
 	var combo_dtindakan_terapis=new Ext.form.ComboBox({

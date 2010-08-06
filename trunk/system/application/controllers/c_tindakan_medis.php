@@ -202,18 +202,21 @@ class C_tindakan_medis extends Controller {
 												   ,$dtrawat_perawatan
 												   ,$dtrawat_keterangan
 												   ,$customer_id
-												   ,$dtrawat_jumlah){
+												   ,$dtrawat_jumlah
+												   ,$dtrawat_status){
 		$array_dtrawat_id = json_decode(stripslashes($dtrawat_id));
 		$array_dtrawat_perawatan = json_decode(stripslashes($dtrawat_perawatan));
 		$array_dtrawat_keterangan = json_decode(stripslashes($dtrawat_keterangan));
 		$array_dtrawat_jumlah = json_decode(stripslashes($dtrawat_jumlah));
+		$array_dtrawat_status = json_decode(stripslashes($dtrawat_status));
 		
 		$result=$this->m_tindakan_medis->detail_dtindakan_jual_nonmedis_insert($array_dtrawat_id
 																			   ,$dtrawat_master
 																			   ,$array_dtrawat_perawatan
 																			   ,$array_dtrawat_keterangan
 																			   ,$customer_id
-																			   ,$array_dtrawat_jumlah);
+																			   ,$array_dtrawat_jumlah
+																			   ,$array_dtrawat_status);
 		return $result;
 	}
 	
@@ -337,6 +340,7 @@ class C_tindakan_medis extends Controller {
 			$dtrawat_nonmedis_perawatan = $_POST['dtrawat_nonmedis_perawatan']; // Get our array back and translate it :
 			$dtrawat_nonmedis_keterangan = $_POST['dtrawat_nonmedis_keterangan']; // Get our array back and translate it :
 			$dtrawat_nonmedis_jumlah = $_POST['dtrawat_nonmedis_jumlah']; // Get our array back and translate it :
+			$dtrawat_nonmedis_status = $_POST['dtrawat_nonmedis_status']; // Get our array back and translate it :
 			
 			
 			$result_master = $this->m_tindakan_medis->tindakan_update($trawat_id ,$trawat_keterangan);
@@ -358,7 +362,8 @@ class C_tindakan_medis extends Controller {
 															 ,$dtrawat_nonmedis_perawatan
 															 ,$dtrawat_nonmedis_keterangan
 															 ,$trawat_cust
-															 ,$dtrawat_nonmedis_jumlah);
+															 ,$dtrawat_nonmedis_jumlah
+															 ,$dtrawat_nonmedis_status);
 				
 				$result = $result_master + $result_medis + $result_nonmedis;
 				echo $result;
