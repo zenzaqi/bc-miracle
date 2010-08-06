@@ -44,10 +44,14 @@
 		$total_nilai=0;
 		
 		foreach($data_print as $print) { ?>
-			<?php if($faktur!==$print->no_bukti) { ?>
-           <tr>
+			<?php if($faktur!==$print->no_bukti) { 
+					if ($print->keterangan == '')
+					{ $print->keterangan = '-'; }
+			?>
+					
+		  <tr>
                 <td><b><? $j++; echo $j; ?></b></td>
-                <td colspan="8"><b><?php echo "No Faktur: ".$print->no_bukti.", Tanggal : ".$print->tanggal.", Customer: ".$print->cust_nama."(".$print->cust_no.")";?></b></td>
+                <td colspan="9"><b><?php echo "".$print->no_bukti.", ".$print->tanggal.", ".$print->cust_nama."(".$print->cust_no."), Ket : ".$print->keterangan."";?></b></td>
            </tr>
            <?php $sub_cashback=0;
 					$sub_total=0;
