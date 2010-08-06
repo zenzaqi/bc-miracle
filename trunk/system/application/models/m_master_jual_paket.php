@@ -21,13 +21,13 @@ class M_master_jual_paket extends Model{
 		function get_laporan($tgl_awal,$tgl_akhir,$periode,$opsi,$group){
 			$order_by="";
 			switch($group){
-				case "Tanggal": $order_by=" ORDER BY tanggal";break;
-				case "Customer": $order_by=" ORDER BY cust_id";break;
-				case "No Faktur": $order_by=" ORDER BY no_bukti";break;
-				case "Paket": $order_by=" ORDER BY produk_kode";break;
-				case "Sales": $order_by=" ORDER BY sales";break;
-				case "Jenis Diskon": $order_by=" ORDER BY diskon_jenis";break;
-				default: $order_by=" ORDER BY no_bukti";break;
+				case "Tanggal": $order_by=" ORDER BY tanggal ASC";break;
+				case "Customer": $order_by=" ORDER BY cust_id ASC";break;
+				case "No Faktur": $order_by=" ORDER BY no_bukti ASC";break;
+				case "Paket": $order_by=" ORDER BY produk_kode ASC";break;
+				case "Sales": $order_by=" ORDER BY sales ASC";break;
+				case "Jenis Diskon": $order_by=" ORDER BY diskon_jenis ASC";break;
+				default: $order_by=" ORDER BY no_bukti ASC";break;
 			}
 			
 			if($opsi=='rekap'){
