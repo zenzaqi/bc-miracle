@@ -299,6 +299,8 @@ FROM ((`paket` INNER JOIN `produk_group` ON `paket`.`paket_group`=`produk_group`
 			$paket_aktif = "Aktif";
 		if ($paket_point=="")
 			$paket_point = 1;
+		if ($paket_expired=="")
+			$paket_expired = 365;
 		$data = array(
 			"paket_id"=>$paket_id, 
 			"paket_nama"=>$paket_nama, 
@@ -378,6 +380,8 @@ FROM ((`paket` INNER JOIN `produk_group` ON `paket`.`paket_group`=`produk_group`
 			$paket_aktif = "Aktif";
 		if ($paket_point=="")
 			$paket_point = 1;
+		if ($paket_expired=="")
+			$paket_expired = 365;
 		$data = array(
 			"paket_kodelama"=>$paket_kodelama, 
 			"paket_nama"=>$paket_nama, 

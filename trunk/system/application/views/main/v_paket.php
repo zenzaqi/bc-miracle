@@ -1014,7 +1014,7 @@ Ext.onReady(function(){
 		name: 'paket_expiredField',
 		fieldLabel: 'Expired (hari) [0=unlimited]',
 		allowNegatife : false,
-		emptyText: '0',
+		emptyText: '365',
 		maxLength: 3,
 		allowDecimals: false,
 		width: 60,
@@ -1244,7 +1244,8 @@ Ext.onReady(function(){
 	paket_isi_perawatan_ColumnModel = new Ext.grid.ColumnModel(
 		[
 		{
-			header: 'Perawatan',
+			align : 'Left',
+			header: '<div align="center">' + 'Perawatan' + '</div>',
 			dataIndex: 'rpaket_perawatan',
 			width: 150,
 			sortable: true,
@@ -1252,7 +1253,8 @@ Ext.onReady(function(){
 			renderer: Ext.util.Format.comboRenderer(combo_paket_rawat)
 		},
 		{
-			header: 'Jumlah',
+			align : 'Right',
+			header: '<div align="center">' + 'Jumlah' + '</div>',
 			dataIndex: 'rpaket_jumlah',
 			width: 150,
 			sortable: true,
@@ -1459,7 +1461,8 @@ Ext.onReady(function(){
 	paket_isi_produk_ColumnModel = new Ext.grid.ColumnModel(
 		[
 		{
-			header: 'produk',
+			align : 'Left',
+			header: '<div align="center">' + 'Produk' + '</div>',
 			dataIndex: 'ipaket_produk',
 			width: 250,
 			sortable: true,
@@ -1467,7 +1470,8 @@ Ext.onReady(function(){
 			renderer: Ext.util.Format.comboRenderer(combo_paket_produk)
 		},
 		{
-			header: 'Satuan',
+			align : 'Left',
+			header: '<div align="center">' + 'Satuan' + '</div>',
 			dataIndex: 'ipaket_satuan',
 			width: 100,
 			sortable: true,
@@ -1478,7 +1482,8 @@ Ext.onReady(function(){
 			}
 		},
 		{
-			header: 'Jumlah',
+			align : 'Right',
+			header: '<div align="center">' + 'Jumlah' + '</div>',
 			dataIndex: 'ipaket_jumlah',
 			width: 100,
 			sortable: true,
