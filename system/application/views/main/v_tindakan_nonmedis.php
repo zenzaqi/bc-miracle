@@ -1479,7 +1479,8 @@ Ext.onReady(function(){
 			iconCls:'icon-delete',
 			disabled: true,
 			handler: tindakan_nonmedis_detail_confirm_delete
-		}
+		},'-',
+		'<span style="color:white;">Warning: <b>Pada form ini user tidak diperkenankan mengubah perawatan yang sudah selesai.</b></span>'
 		]
 	});
 	//eof
