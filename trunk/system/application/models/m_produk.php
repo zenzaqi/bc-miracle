@@ -197,6 +197,9 @@ class M_produk extends Model{
 					$data["produk_kode"]=$produk_kode;
 				}
 			}
+			//log
+			$data['produk_update']=$_SESSION[SESSION_USERID];
+			$data['produk_date_update']=date('Y-m-d H:i:s');
 			
 //			$sql="SELECT kategori_id FROM kategori WHERE kategori_id='".$produk_kategori."'";
 //			$rs=$this->db->query($sql);
@@ -216,6 +219,11 @@ class M_produk extends Model{
 			$this->db->where('produk_id', $produk_id);
 			$this->db->update('produk', $data);
 			
+			//log
+			if($this->db->affected_rows()){
+				$sql="UPDATE produk set produk_revised=(produk_revised+1) WHERE produk_id='".$produk_id."'";
+				$this->db->query($sql);
+			}
 			return '1';
 		}
 		
@@ -245,6 +253,11 @@ class M_produk extends Model{
 				"produk_keterangan"=>$produk_keterangan, 
 				"produk_aktif"=>$produk_aktif 
 			);
+			
+			//log
+			$data['produk_creator']=$_SESSION[SESSION_USERID];
+			$data['produk_date_create']=date('Y-m-d H:i:s');
+			
 			/*$sql="SELECT group_id, group_kode FROM produk_group WHERE group_id='".$produk_group."' ";
 			$rs=$this->db->query($sql);
 			if($rs->num_rows()){
