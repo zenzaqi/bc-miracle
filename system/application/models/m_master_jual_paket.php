@@ -2858,8 +2858,9 @@ class M_master_jual_paket extends Model{
 						,jpaket_update='".@$_SESSION[SESSION_USERID]."'
 						,jpaket_date_update='".$datetime_now."'
 						,jpaket_revised=jpaket_revised+1
-					WHERE jpaket_id='".$jpaket_id."'
-						 AND ('".$date."'<='".$tanggal_3."' OR  jpaket_tanggal='".$date."')";
+					WHERE jpaket_id='".$jpaket_id."' " ;
+						
+						 //AND ('".$date."'<='".$tanggal_3."' OR  jpaket_tanggal='".$date."')";
 						
 				$this->db->query($sql);
 				if($this->db->affected_rows()>0){

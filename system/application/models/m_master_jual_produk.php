@@ -2433,8 +2433,8 @@ class M_master_jual_produk extends Model{
                     ,jproduk_update='".@$_SESSION[SESSION_USERID]."'
                     ,jproduk_date_update='".$datetime_now."'
                     ,jproduk_revised=jproduk_revised+1
-                WHERE jproduk_id=".$jproduk_id."
-                    AND ('".$date."'<='".$tanggal_3."' OR  jproduk_tanggal='".$date."')";
+                WHERE jproduk_id='".$jproduk_id."' " ;
+                    //AND ('".$date."'<='".$tanggal_3."' OR  jproduk_tanggal='".$date."')";
             $this->db->query($sql);
 			if($this->db->affected_rows()){
 				//* udpating db.customer.cust_point ==> proses mengurangi jumlah poin (dikurangi dengan db.master_jual_produk.jproduk_point yg sudah dimasukkan ketika cetak faktur), karena dilakukan pembatalan /

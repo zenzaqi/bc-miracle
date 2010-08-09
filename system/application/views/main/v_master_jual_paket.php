@@ -1427,9 +1427,10 @@ Ext.onReady(function(){
 		
 		else if(jpaket_stat_dokField.getValue()=='Batal')
 		{
-			if(master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_tanggal').format('Y-m-d')==dt_ymd){
+			//if(master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_tanggal').format('Y-m-d')==dt_ymd){
 				Ext.MessageBox.confirm('Confirmation','Anda yakin untuk membatalkan dokumen ini? Pembatalan dokumen tidak bisa dikembalikan lagi', jpaket_status_batal);
-			}else{
+			//}
+			/*else{
 				jpaket_stat_dokField.setValue(master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_stat_dok'));
 				Ext.MessageBox.show({
 					title: 'Warning',
@@ -1439,7 +1440,7 @@ Ext.onReady(function(){
 					minWidth: 400,
 					icon: Ext.MessageBox.WARNING
 				});
-			}
+			}*/
 		}
         
         else if(status_awal =='Tertutup' && jpaket_stat_dokField.getValue()=='Tertutup'){
