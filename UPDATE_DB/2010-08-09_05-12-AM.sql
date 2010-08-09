@@ -10,7 +10,7 @@ AS
           `karyawan`.`karyawan_username` AS `sales`,
           `master_jual_produk`.`jproduk_nobukti` AS `no_bukti`,
           `master_jual_produk`.`jproduk_tanggal` AS `tanggal`,
-		  `master_jual_produk`.`jpaket_keterangan` AS `keterangan`,
+		  `master_jual_produk`.`jproduk_keterangan` AS `keterangan`,
           `customer`.`cust_id` AS `cust_id`,
           `customer`.`cust_no` AS `cust_no`,
           `customer`.`cust_member` AS `cust_member`,
