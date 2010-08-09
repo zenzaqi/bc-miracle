@@ -1,0 +1,3 @@
+update VIEW `vu_detail_jual_produk`, untuk menambahkan field keterangan di Detail Laporan.
+
+Jalankan sql ini (2010-08-09_05-12-AM.txt) dulu sebelum melakukan update VIEW `vu_detail_jual_produk` selanjutnya.
