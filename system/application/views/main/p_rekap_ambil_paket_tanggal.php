@@ -19,16 +19,17 @@
 <link rel='stylesheet' type='text/css' href='../assets/modules/main/css/printstyle.css'/>
 </head>
 <body onload="window.print();">
-<table width="731" summary='Rekap Jual'>
+<table width="1201" summary='Rekap Jual'>
 	<caption>
-	Laporan Rekap Pengambilan Paket<br/><?php echo $periode; ?><br/>Group By Tanggal</caption>
+	Laporan Rekap Pengambilan Paket<br/><?php echo $periode; ?>Group By Tanggal</caption>
 	<thead>
     	<tr>
         	<th width="22" scope='col'>No</th>
-            <th width="100" scope='col'>No Faktur</th>           
-            <th width="250" scope='col'>Customer</th>
-            <th width="250" scope='col'>Nama Paket</th>
-            <th width="70" scope='col'>Jumlah</th>
+            <th width="80" scope='col'>No Faktur</th>           
+            <th width="500" scope='col'>Customer</th>
+            <th width="500" scope='col'>Nama Paket</th>
+            <th width="30" scope='col'>Jumlah</th>
+			<th width="100" scope='col'>Harga Satuan</th>
             <!-- <th width="100" scope='col'>Expired</th> -->
         </tr>
     </thead>
@@ -57,6 +58,7 @@
             <td ><?php echo $print->cust_nama." (".$print->cust_no.")"; ?></td>
             <td nowrap="nowrap"><?php echo $print->paket_nama; ?></td>
             <td><?php echo $print->jumlah; ?></td>
+			<td class="numeric"><?php echo number_format($print->harga_satuan,0,",","."); ?></td>
          <!--    <td><?php //echo $print->dpaket_kadaluarsa; ?></td> -->
        </tr>
 		<?php }

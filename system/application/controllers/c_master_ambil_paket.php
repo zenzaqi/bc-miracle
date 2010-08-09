@@ -47,10 +47,21 @@ class C_master_ambil_paket extends Controller {
 			$tgl_awal=$tahun."-".$bulan;
 			$data["periode"]=get_ina_month_name($bulan,'long')." ".$tahun;
 		}else if($periode=="tanggal"){
-			$tgl_awal_show = $tgl_awal;
-			$tgl_akhir_show = $tgl_akhir;
-			$tgl_awal_show = date("d-m-Y");
-			$tgl_akhir_show = date("d-m-Y");
+			$date = substr($tgl_awal,8,2);
+			$month = substr($tgl_awal,5,2);
+			$year = substr($tgl_awal,0,4);
+			$tgl_awal_show = $date.'-'.$month.'-'.$year;
+			
+			
+			$date = substr($tgl_akhir,8,2);
+			$month = substr($tgl_akhir,5,2);
+			$year = substr($tgl_akhir,0,4);
+			$tgl_akhir_show = $date.'-'.$month.'-'.$year;
+			
+			//$tgl_awal_show = $tgl_awal;
+			//$tgl_akhir_show = $tgl_akhir;
+			//$tgl_awal_show = date("d-m-Y");
+			//$tgl_akhir_show = date("d-m-Y");
 			$data["periode"]="Periode : ".$tgl_awal_show." s/d ".$tgl_akhir_show.", ";
 		}
 		
@@ -80,6 +91,7 @@ class C_master_ambil_paket extends Controller {
 				case "Perawatan": $print_view=$this->load->view("main/p_detail_ambil_paket_rawat.php",$data,TRUE);break;
 				case "Pemakai": $print_view=$this->load->view("main/p_detail_ambil_paket_pemakai.php",$data,TRUE);break;
 				case "Referal": $print_view=$this->load->view("main/p_detail_ambil_paket_referal.php",$data,TRUE);break;
+				case "No Faktur": $print_view=$this->load->view("main/p_detail_ambil_paket.php",$data,TRUE);break;
 				default: $print_view=$this->load->view("main/p_detail_ambil_paket.php",$data,TRUE);break;
 			}
 			$print_file=fopen("print/report_ambil_paket.html","w");

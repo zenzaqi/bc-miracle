@@ -19,19 +19,20 @@
 <link rel='stylesheet' type='text/css' href='../assets/modules/main/css/printstyle.css'/>
 </head>
 <body onload="window.print();">
-<table width="731" summary='Detail Jual'>
+<table width="1201" summary='Detail Jual'>
 	<caption>
-	Laporan Detail Pengambilan Paket<br/><?php echo $periode; ?><br/>Group By Referal</caption>
+	Laporan Detail Pengambilan Paket<br/><?php echo $periode; ?>Group By Referal</caption>
 	<thead>
     	<tr>
         	<th width="22" scope='col'>No</th>
-            <th width="250" scope='col'>Tanggal</th>
+            <th width="80" scope='col'>Tanggal</th>
             <th width="80" scope='col'>No Faktur</th>    
-            <th width="250" scope='col'>Customer</th>       
-            <th width="200" scope='col'>Pemakai</th>
-            <th width="250" scope='col'>Nama Paket</th>
-            <th width="200" scope='col'>Perawatan</th>
-            <th width="70" scope='col'>Jumlah</th>
+            <th width="355" scope='col'>Customer</th>       
+            <th width="310" scope='col'>Pemakai</th>
+            <th width="320" scope='col'>Nama Paket</th>
+            <th width="320" scope='col'>Perawatan</th>
+            <th width="30" scope='col'>Jumlah</th>
+			<th width="100" scope='col'>Harga Satuan</th>
         </tr>
     </thead>
 	<tbody>
@@ -62,6 +63,7 @@
             <td ><?php echo $print->paket_nama; ?></td>
             <td><?php echo $print->rawat_nama; ?></td>
             <td><?php echo $print->dapaket_jumlah; ?></td>
+			<td class="numeric"><?php echo number_format($print->harga_satuan,0,",","."); ?></td>
        </tr>
 		<?php }
 		}
