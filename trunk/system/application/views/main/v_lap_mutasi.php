@@ -103,13 +103,13 @@ Ext.onReady(function(){
 	var group_master_Store= new Ext.data.SimpleStore({
 			id: 'group_master_Store',
 			fields:['group'],
-			data:[['Tanggal'],['Gudang']]
+			data:[['No Bukti'],['Tanggal'],['Gudang Asal'],['Gudang Tujuan']]
 	});
 	
 	var group_detail_Store= new Ext.data.SimpleStore({
 			id: 'group_detail_Store',
 			fields:['group'],
-			data:[['Tanggal'],['Gudang'],['Produk']]
+			data:[['No Bukti'],['Tanggal'],['Gudang Asal'],['Gudang Tujuan'],['Produk']]
 	});
 	
 	var rpt_mutasi_groupField=new Ext.form.ComboBox({
@@ -160,7 +160,8 @@ Ext.onReady(function(){
 		id:'rpt_mutasi_opsitglField',
 		boxLabel:'Tanggal',
 		width:100,
-		name: 'filter_opsi'
+		name: 'filter_opsi',
+		checked: true
 	});
 	
 	rpt_mutasi_opsiblnField=new Ext.form.Radio({
@@ -173,8 +174,7 @@ Ext.onReady(function(){
 	rpt_mutasi_opsiallField=new Ext.form.Radio({
 		id:'rpt_mutasi_opsiallField',
 		boxLabel:'Semua',
-		name: 'filter_opsi',
-		checked: true
+		name: 'filter_opsi'
 	});
 	
 	rpt_mutasi_tglawalField= new Ext.form.DateField({
@@ -182,10 +182,11 @@ Ext.onReady(function(){
 		fieldLabel: ' ',
 		format : 'Y-m-d',
 		name: 'rpt_mutasi_tglawalField',
-        vtype: 'daterange',
+        //vtype: 'daterange',
+		value: today,
 		allowBlank: true,
 		width: 100,
-        endDateField: 'rpt_mutasi_tglakhirField'
+        //endDateField: 'rpt_mutasi_tglakhirField'
 	});
 	
 	rpt_mutasi_tglakhirField= new Ext.form.DateField({
@@ -193,10 +194,10 @@ Ext.onReady(function(){
 		fieldLabel: 's/d',
 		format : 'Y-m-d',
 		name: 'rpt_mutasi_tglakhirField',
-        vtype: 'daterange',
+        //vtype: 'daterange',
 		allowBlank: true,
 		width: 100,
-        startDateField: 'rpt_mutasi_tglawalField',
+        //startDateField: 'rpt_mutasi_tglawalField',
 		value: today
 	});
 	
@@ -221,11 +222,11 @@ Ext.onReady(function(){
 		frame: false,
 		bolder: false,
 		anchor: '98%',
-		items:[{
+		items:[/*{
 				layout: 'column',
 				border: false,
 				items:[rpt_mutasi_opsiallField]
-			},{
+			},*/{
 				layout: 'column',
 				border: false,
 				items:[rpt_mutasi_opsitglField, {
@@ -321,10 +322,17 @@ Ext.onReady(function(){
 		if(rpt_mutasi_groupField.getValue()!==""){mutasi_group=rpt_mutasi_groupField.getValue(); }
 		
 		if(rpt_mutasi_rekapField.getValue()==true){mutasi_opsi='rekap';}else{mutasi_opsi='detail';}
-		
+			
+			Ext.MessageBox.show({
+			   msg: 'Sedang memproses data, mohon tunggu...',
+			   progressText: 'proses...',
+			   width:350,
+			   wait:true
+			});
+			
 			Ext.Ajax.request({   
 				waitMsg: 'Please Wait...',
-				url: 'index.php?c=c_master_jual_produk&m=print_laporan',
+				url: 'index.php?c=c_master_mutasi&m=print_laporan',
 				params: {
 					tgl_awal	: mutasi_tglawal,
 					tgl_akhir	: mutasi_tglakhir,
@@ -339,6 +347,7 @@ Ext.onReady(function(){
 					var result=eval(response.responseText);
 					switch(result){
 					case 1:
+						Ext.MessageBox.hide(); 
 						win = window.open('./print/report_mutasi.html','report_mutasi','height=400,width=800,resizable=1,scrollbars=1, menubar=1');
 						//win.print();
 						break;
@@ -418,7 +427,7 @@ Ext.onReady(function(){
 	//EVENTS
 	
 	rpt_mutasi_rekapField.on("check", function(){
-		rpt_mutasi_groupField.setValue('No faktur');
+		rpt_mutasi_groupField.setValue('No Bukti');
 		if(rpt_mutasi_rekapField.getValue()==true){
 			rpt_mutasi_groupField.bindStore(group_master_Store);
 		}else
@@ -428,7 +437,7 @@ Ext.onReady(function(){
 	});
 	
 	rpt_mutasi_detailField.on("check", function(){
-		rpt_mutasi_groupField.setValue('Tanggal');
+		rpt_mutasi_groupField.setValue('No Bukti');
 		if(rpt_mutasi_detailField.getValue()==true){
 			rpt_mutasi_groupField.bindStore(group_detail_Store);
 		}else

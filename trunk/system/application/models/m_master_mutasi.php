@@ -18,6 +18,45 @@ class M_master_mutasi extends Model{
 			parent::Model();
 		}
 		
+		
+		function get_laporan($tgl_awal,$tgl_akhir,$periode,$opsi,$group){
+			
+			switch($group){
+				case "Tanggal": $order_by=" ORDER BY mutasi_tanggal ASC";break;
+				case "No Bukti": $order_by=" ORDER BY mutasi_no ASC";break;
+				case "Gudang Asal": $order_by=" ORDER BY mutasi_asal ASC";break;
+				case "Gudang Tujuan": $order_by=" ORDER BY mutasi_tujuan ASC";break;
+				case "Produk": $order_by=" ORDER BY produk_id";break;
+				default: $order_by=" ORDER BY mutasi_no ASC";break;
+			}
+			
+			if($opsi=='rekap'){
+				if($periode=='all')
+					$sql="SELECT distinct * FROM  vu_trans_mutasi WHERE mutasi_status<>'Batal' ".$order_by;
+				else if($periode=='bulan')
+					$sql="SELECT distinct * FROM vu_trans_mutasi WHERE mutasi_status<>'Batal' 
+							AND date_format(mutasi_tanggal,'%Y-%m')='".$tgl_awal."' ".$order_by;
+				else if($periode=='tanggal')
+					$sql="SELECT distinct * FROM vu_trans_mutasi WHERE mutasi_status<>'Batal' 
+							AND date_format(mutasi_tanggal,'%Y-%m-%d')>='".$tgl_awal."' 
+							AND date_format(mutasi_tanggal,'%Y-%m-%d')<='".$tgl_akhir."' ".$order_by;
+			}else if($opsi=='detail'){
+				if($periode=='all')
+					$sql="SELECT * FROM vu_detail_mutasi WHERE mutasi_status<>'Batal' ".$order_by;
+				else if($periode=='bulan')
+					$sql="SELECT * FROM vu_detail_mutasi WHERE mutasi_status<>'Batal' 
+							AND date_format(mutasi_tanggal,'%Y-%m')='".$tgl_awal."' ".$order_by;
+				else if($periode=='tanggal')
+					$sql="SELECT * FROM vu_detail_mutasi WHERE mutasi_status<>'Batal' 
+							AND date_format(mutasi_tanggal,'%Y-%m-%d')>='".$tgl_awal."' 
+							AND date_format(mutasi_tanggal,'%Y-%m-%d')<='".$tgl_akhir."' ".$order_by;
+			}
+			$this->firephp->log($sql);
+			
+			$query=$this->db->query($sql);
+			return $query->result();
+		}
+		
 		function get_produk_selected_list($gudang,$selected_id,$query,$start,$end){
 			/*if($gudang==1){
 				$sql="SELECT distinct produk_id,produk_kode,produk_nama,jumlah_stok FROM vu_stok_gudang_besar_saldo";

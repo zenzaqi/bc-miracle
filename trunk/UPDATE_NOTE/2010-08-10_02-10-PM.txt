@@ -1,0 +1,7 @@
+> Bug Fix
+  o Laporan Detail Penjualan/Perawatan/Paket
+    Update SQL : 2010-08-10_02-10-PM.sql
+  o Laporan Mutasi
+    - Rekap  [No Bukti, Tanggal, Gudang Asal, Gudang Tujuan]
+    - Detail [No Bukti, Tanggal, Gudang Asal, Gudang Tujuan, Produk]
+    Update SQL : 2010-8-10_02-15-PM.sql

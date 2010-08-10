@@ -323,6 +323,13 @@ Ext.onReady(function(){
 		
 		if(rpt_invoice_rekapField.getValue()==true){invoice_opsi='rekap';}else{invoice_opsi='detail';}
 		
+			Ext.MessageBox.show({
+			   msg: 'Sedang memproses data, mohon tunggu...',
+			   progressText: 'proses...',
+			   width:350,
+			   wait:true
+			});
+			
 			Ext.Ajax.request({   
 				waitMsg: 'Please Wait...',
 				url: 'index.php?c=c_master_invoice&m=print_laporan',
@@ -340,6 +347,7 @@ Ext.onReady(function(){
 					var result=eval(response.responseText);
 					switch(result){
 					case 1:
+						Ext.MessageBox.hide(); 
 						win = window.open('./print/report_invoice.html','report_invoice','height=400,width=800,resizable=1,scrollbars=1, menubar=1');
 						//win.print();
 						break;

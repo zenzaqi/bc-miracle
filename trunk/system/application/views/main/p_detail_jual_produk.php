@@ -38,39 +38,15 @@
             <th scope='col'>Total (Rp)</th>
         </tr>
     </thead>
-	<tfoot>
-    	<tr>
-        	<td class="clear">&nbsp;</td>
-        	<th scope='row' nowrap="nowrap">Jumlah data</th>
-            <td colspan='10'><?php echo count($data_print); ?> data</td>
-        </tr>
-        <tr>
-        	<td class="clear">&nbsp;</td>
-        	<th scope='row' colspan="11">Summary</th>
-        </tr>
-        <tr>
-        	<td class="clear">&nbsp;</td>
-        	<th scope='row' nowrap="nowrap">Tot Item</th>
-            <td class="numeric clear" nowrap="nowrap"><?php echo number_format($total_item,0,",","."); ?></td>
-            <td colspan="9" class="clear">&nbsp;</td>
-        </tr>
-        <tr>
-        	<td class="clear">&nbsp;</td>
-        	<th scope='row' nowrap="nowrap">Total Disk (Rp)</th>
-            <td class="numeric clear" nowrap="nowrap" ><?php echo number_format($total_diskon,0,",","."); ?></td>
-            <td colspan="9" class="clear">&nbsp;</td>
-        </tr>
-        <tr>
-        	<td class="clear">&nbsp;</td>
-        	<th scope='row' nowrap="nowrap">Total (Rp)</th>
-            <td class="numeric clear" nowrap="nowrap"><?php echo number_format($total_nilai,0,",","."); ?></td>
-            <td colspan="9" class="clear">&nbsp;</td>
-        </tr>
-	</tfoot>
 	<tbody>
 		        
-        <?php $i=0; $j=0; $produk=""; foreach($data_print as $print) { ?>
-			<?php if($produk!==$print->produk_kode) { ?>
+        <?php $i=0; $j=0; $group=""; 
+			$total_item=0;
+			$total_diskon=0;
+			$total_nilai=0;
+			
+			foreach($data_print as $print) { ?>
+			<?php if($group!==$print->produk_id) { ?>
            <tr>
                 <td><b><? $j++; echo $j; ?></b></td>
                 <td colspan="12"><b><?php echo $print->produk_nama."( ".$print->produk_kode.")";?></b></td>
@@ -82,10 +58,14 @@
 					$i=0; 
 			?>
            <?php foreach($data_print as $print_list) {  ?>
-           <?php if($print_list->produk_kode==$print->produk_kode){ $i++;
+           <?php if($print_list->produk_id==$group){ $i++;
 		   			$sub_jumlah_barang+=$print_list->jumlah_barang;
 					$sub_diskon+=$print_list->diskon_nilai;
 					$sub_total+=$print_list->subtotal;
+					
+					$total_item+=$print_list->jumlah_barang;
+					$total_diskon+=$print_list->diskon_nilai;
+					$total_nilai+=$print_list->subtotal;
 		   ?>
             <tr>
                 <td><? echo $i; ?></td>
@@ -114,10 +94,39 @@
                 <td align="right" class="numeric">&nbsp;</td>
                 <td align="right" class="numeric"><b><?php echo number_format($sub_total,0,",","."); ?></b></td>
            </tr>
-           <?php } $produk=$print->produk_kode; ?>
+           <?php } $group=$print->produk_id; ?>
 		<?php } ?>
         
 	</tbody>
+    	<tfoot>
+    	<tr>
+        	<td class="clear">&nbsp;</td>
+        	<th scope='row' nowrap="nowrap">Jumlah data</th>
+            <td colspan='10'><?php echo count($data_print); ?> data</td>
+        </tr>
+        <tr>
+        	<td class="clear">&nbsp;</td>
+        	<th scope='row' colspan="11">Summary</th>
+        </tr>
+        <tr>
+        	<td class="clear">&nbsp;</td>
+        	<th scope='row' nowrap="nowrap">Tot Item</th>
+            <td class="numeric clear" nowrap="nowrap"><?php echo number_format($total_item,0,",","."); ?></td>
+            <td colspan="9" class="clear">&nbsp;</td>
+        </tr>
+        <tr>
+        	<td class="clear">&nbsp;</td>
+        	<th scope='row' nowrap="nowrap">Total Disk (Rp)</th>
+            <td class="numeric clear" nowrap="nowrap" ><?php echo number_format($total_diskon,0,",","."); ?></td>
+            <td colspan="9" class="clear">&nbsp;</td>
+        </tr>
+        <tr>
+        	<td class="clear">&nbsp;</td>
+        	<th scope='row' nowrap="nowrap">Total (Rp)</th>
+            <td class="numeric clear" nowrap="nowrap"><?php echo number_format($total_nilai,0,",","."); ?></td>
+            <td colspan="9" class="clear">&nbsp;</td>
+        </tr>
+	</tfoot>
 </table>
 </body>
 </html>
