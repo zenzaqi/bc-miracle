@@ -54,14 +54,16 @@ class C_master_mutasi extends Controller {
 				
 			switch($group){
 				case "Tanggal": $print_view=$this->load->view("main/p_rekap_mutasi_tanggal.php",$data,TRUE);break;
-				case "Supplier": $print_view=$this->load->view("main/p_rekap_mutasi_supplier.php",$data,TRUE);break;
+				case "Gudang Asal": $print_view=$this->load->view("main/p_rekap_mutasi_asal.php",$data,TRUE);break;
+				case "Gudang Tujuan": $print_view=$this->load->view("main/p_rekap_mutasi_tujuan.php",$data,TRUE);break;
 				default: $print_view=$this->load->view("main/p_rekap_mutasi.php",$data,TRUE);break;
 			}
 			
 		}else{
 			switch($group){
 				case "Tanggal": $print_view=$this->load->view("main/p_detail_mutasi_tanggal.php",$data,TRUE);break;
-				case "Supplier": $print_view=$this->load->view("main/p_detail_mutasi_supplier.php",$data,TRUE);break;
+				case "Gudang Asal": $print_view=$this->load->view("main/p_detail_mutasi_asal.php",$data,TRUE);break;
+				case "Gudang Tujuan": $print_view=$this->load->view("main/p_detail_mutasi_tujuan.php",$data,TRUE);break;
 				case "Produk": $print_view=$this->load->view("main/p_detail_mutasi_produk.php",$data,TRUE);break;
 				default: $print_view=$this->load->view("main/p_detail_mutasi.php",$data,TRUE);break;
 			}
@@ -70,11 +72,8 @@ class C_master_mutasi extends Controller {
 		if(!file_exists("print")){
 			mkdir("print");
 		}
-		if($opsi=='rekap')
-			$print_file=fopen("print/report_mutasi.html","w+");
-		else
-			$print_file=fopen("print/report_mutasi.html","w+");
-			
+
+		$print_file=fopen("print/report_mutasi.html","w+");	
 		fwrite($print_file, $print_view);
 		echo '1'; 
 	}
