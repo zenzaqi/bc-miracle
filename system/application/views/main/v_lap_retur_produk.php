@@ -401,7 +401,7 @@ Ext.onReady(function(){
 	
 	/* Form Advanced Search */
 	rpt_rprodukWindow = new Ext.Window({
-		title: 'Laporan Penjualan Paket',
+		title: 'Laporan Retur Penjualan Produk',
 		closable:false,
 		closeAction: 'hide',
 		resizable: false,
