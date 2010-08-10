@@ -1,0 +1,7 @@
+o Fix Bug
+  - Laporan Produk, ada data yang transaksinya kembar
+    dikarenakan bug lama pada proses Kasir, terjadi sebelum bulan agustus
+    pencatatan pembayaran double, dengan salah satuanya bernilai 0
+    padahal pembayaran dengan nilai 0 sama dengan tidak terjadi pembayaran
+  - Fix: semua pembayaran dengan nilai 0 akan dihapus
+         jalankan SQL : 2010-08-10_10-20-AM.sql
