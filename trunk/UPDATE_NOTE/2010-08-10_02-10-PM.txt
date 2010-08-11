@@ -5,3 +5,4 @@
     - Rekap  [No Bukti, Tanggal, Gudang Asal, Gudang Tujuan]
     - Detail [No Bukti, Tanggal, Gudang Asal, Gudang Tujuan, Produk]
     Update SQL : 2010-8-10_02-15-PM.sql
+  o Link: ?c=c_master_mutasi&m=laporan
