@@ -51,7 +51,7 @@ class M_master_mutasi extends Model{
 							AND date_format(mutasi_tanggal,'%Y-%m-%d')>='".$tgl_awal."' 
 							AND date_format(mutasi_tanggal,'%Y-%m-%d')<='".$tgl_akhir."' ".$order_by;
 			}
-			$this->firephp->log($sql);
+			//$this->firephp->log($sql);
 			
 			$query=$this->db->query($sql);
 			return $query->result();
