@@ -2604,7 +2604,7 @@ Ext.onReady(function(){
         itemSelector: 'div.search-item',
 		triggerAction: 'all',
 		lazyRender:true,
-		allowBlank: false,
+		allowBlank: true,
 		listClass: 'x-combo-list-small',
 		anchor: '95%'
 	});
@@ -2679,7 +2679,18 @@ Ext.onReady(function(){
 		renderTo: 'elwindow_cetak_kwitansi_search',
 		items: cetak_kwitansi_searchForm
 	});
-    /* End of Function */ 
+    /* End of Function */
+	
+	function cetak_kwitansi_reset_SearchForm(){
+		kwitansi_noSearchField.reset();
+		kwitansi_noSearchField.setValue(null);
+		kwitansi_custSearchField.reset();
+		kwitansi_custSearchField.setValue(null);
+		kwitansi_keteranganSearchField.reset();
+		kwitansi_keteranganSearchField.setValue(null);
+		kwitansi_statusSearchField.reset();
+		kwitansi_statusSearchField.setValue(null);
+	}
 	 
 	 
 	 function cetak_kwitansi_reset_search_form(){
@@ -2699,6 +2710,7 @@ Ext.onReady(function(){
 	function display_form_search_window(){
 		cetak_kwitansi_reset_search_form();
 		if(!cetak_kwitansi_searchWindow.isVisible()){
+			cetak_kwitansi_reset_SearchForm();
 			cetak_kwitansi_searchWindow.show();
 		} else {
 			cetak_kwitansi_searchWindow.toFront();
