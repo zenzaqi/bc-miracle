@@ -1,0 +1,11 @@
+ts.trisula@gmail.com
+
+o File yang diupdate:
+  - m_master_jual_paket.php
+  - m_master_jual_produk.php
+  - m_master_jual_rawat.php
+  - v_cetak_kwitansi.php
+
+o Fix Bug
+  - Untuk file Kasir, fix bugnya adalah Memperbaiki Cara Bayar ==> Jika Nilai uangnya tidak diisi maka cara bayar tersebut tidak diinputkan ke dalam database.
+  - Untuk v_cetak_kwitansi, fix bugnya adalah Memperbaiki "Adv Search".
