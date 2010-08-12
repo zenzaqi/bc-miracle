@@ -1,0 +1,1 @@
+- 2010-08-12_12-00.sql --> vu_stok_mutasi ada fieldnya yg salah: "gudang_asala_lokasi" menjadi "gudang_asal_lokasi"
