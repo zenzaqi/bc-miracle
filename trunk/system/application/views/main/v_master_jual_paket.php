@@ -1216,6 +1216,20 @@ Ext.onReady(function(){
 					 	}
 				  });
 				break;
+			case 'voucher' :
+				voucher_jual_paket_DataStore.load({
+						params : { no_faktur: jpaket_nobuktiField.getValue() },
+					  	callback: function(opts, success, response)  {
+							if (success) {
+									if(voucher_jual_paket_DataStore.getCount()){
+										jpaket_voucher_record=voucher_jual_paket_DataStore.getAt(0);
+										jpaket_voucher_noField.setValue(jpaket_voucher_record.data.tvoucher_novoucher);
+										jpaket_voucher_cashback_cfField.setValue(jpaket_voucher_record.data.tvoucher_nilai);
+									}
+							}
+					 	}
+				  });
+				break;
 		}
 
 		switch(jpaket_cara2Field.getValue()){
@@ -1301,6 +1315,20 @@ Ext.onReady(function(){
 					 	}
 				  });
 				break;
+			case 'voucher' :
+				voucher_jual_paket_DataStore.load({
+						params : { no_faktur: jpaket_nobuktiField.getValue() },
+					  	callback: function(opts, success, response)  {
+							if (success) {
+									if(voucher_jual_paket_DataStore.getCount()){
+										jpaket_voucher_record=voucher_jual_paket_DataStore.getAt(0);
+										jpaket_voucher_no2Field.setValue(jpaket_voucher_record.data.tvoucher_novoucher);
+										jpaket_voucher_cashback2_cfField.setValue(jpaket_voucher_record.data.tvoucher_nilai);
+									}
+							}
+					 	}
+				  });
+				break;
 		}
 
 		switch(jpaket_cara3Field.getValue()){
@@ -1381,6 +1409,20 @@ Ext.onReady(function(){
 										jpaket_tunai_record=tunai_jual_paket_DataStore.getAt(0);
 										jpaket_tunai_nilai3Field.setValue(jpaket_tunai_record.data.jtunai_nilai);
 										jpaket_tunai_nilai3_cfField.setValue(CurrencyFormatted(jpaket_tunai_record.data.jtunai_nilai));
+									}
+							}
+					 	}
+				  });
+				break;
+			case 'voucher' :
+				voucher_jual_paket_DataStore.load({
+						params : { no_faktur: jpaket_nobuktiField.getValue() },
+					  	callback: function(opts, success, response)  {
+							if (success) {
+									if(voucher_jual_paket_DataStore.getCount()){
+										jpaket_voucher_record=voucher_jual_paket_DataStore.getAt(0);
+										jpaket_voucher_no3Field.setValue(jpaket_voucher_record.data.tvoucher_novoucher);
+										jpaket_voucher_cashback3_cfField.setValue(jpaket_voucher_record.data.tvoucher_nilai);
 									}
 							}
 					 	}
@@ -2021,6 +2063,27 @@ Ext.onReady(function(){
 		sortInfo:{field: 'jpaket_bank_display', direction: "DESC"}
 		});
 	/* END GET Bank-List.Store */
+	
+	/* GET Voucher-Terima-List.Store */
+	voucher_jual_paket_DataStore = new Ext.data.Store({
+		id: 'voucher_jual_paket_DataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_master_jual_paket&m=get_voucher_by_ref', 
+			method: 'POST'
+		}),
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'tvoucher_id'
+		},[
+		/* dataIndex => insert intomaster_jual_produk_ColumnModel, Mapping => for initiate table column */ 
+			{name: 'tvoucher_id', type: 'int', mapping: 'tvoucher_id'}, 
+			{name: 'tvoucher_novoucher', type: 'string', mapping: 'tvoucher_novoucher'}, 
+			{name: 'tvoucher_nilai', type: 'float', mapping: 'tvoucher_nilai'}
+		]),
+		sortInfo:{field: 'tvoucher_id', direction: "DESC"}
+	});
+	/* End of GET Voucher-Terima-List.Store */
 	
 	cbo_cust_pengguna_paket_DataStore = new Ext.data.Store({
 		id: 'cbo_cust_pengguna_paket_DataStore',

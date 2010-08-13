@@ -1,0 +1,1 @@
+ALTER TABLE `master_jual_paket` CHANGE `jpaket_cara` `jpaket_cara` ENUM( 'tunai', 'kwitansi', 'card', 'cek/giro', 'transfer', 'voucher' ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ;
