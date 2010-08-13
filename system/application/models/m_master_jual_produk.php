@@ -837,15 +837,28 @@ class M_master_jual_produk extends Model{
 		}
 		
 		function stat_dok_tertutup_update($jproduk_id){
+			$date_now = date('Y-m-d');
+			$datetime_now = date('Y-m-d H:i:s');
 			//* status dokumen menjadi tertutup setelah Faktur selesai di-cetak /
-            $datetime_now = date('Y-m-d H:i:s');
-			$sql="UPDATE master_jual_produk
-                SET jproduk_stat_dok='Tertutup'
-                    ,jproduk_update='".@$_SESSION[SESSION_USERID]."'
-                    ,jproduk_date_update='".$datetime_now."'
-                    ,jproduk_revised=jproduk_revised+1
-                WHERE jproduk_id='$jproduk_id'";
-			$this->db->query($sql);
+			$sql = "SELECT jproduk_tanggal FROM master_jual_produk WHERE jproduk_id='".$jproduk_id."'";
+			$rs = $this->db->query($sql);
+			if($rs->num_rows()){
+				$record = $rs->row_array();
+				$jproduk_tanggal = $record['jproduk_tanggal'];
+				if($jproduk_tanggal<>$date_now){
+					$jproduk_date_update = $jproduk_tanggal;
+				}else{
+					$jproduk_date_update = $datetime_now;
+				}
+				
+				$sql="UPDATE master_jual_produk
+					SET jproduk_stat_dok='Tertutup'
+						,jproduk_update='".@$_SESSION[SESSION_USERID]."'
+						,jproduk_date_update='".$jproduk_date_update."'
+						,jproduk_revised=jproduk_revised+1
+					WHERE jproduk_id='$jproduk_id'";
+				$this->db->query($sql);
+			}
 		}
 		
 		//purge all detail from master
@@ -1116,10 +1129,14 @@ class M_master_jual_produk extends Model{
 		
 		//function for update record
 		function master_jual_produk_update($jproduk_id ,$jproduk_nobukti ,$jproduk_cust ,$jproduk_tanggal , $jproduk_stat_dok, $jproduk_diskon ,$jproduk_cara ,$jproduk_cara2 ,$jproduk_cara3 ,$jproduk_keterangan , $jproduk_cashback, $jproduk_tunai_nilai, $jproduk_tunai_nilai2, $jproduk_tunai_nilai3, $jproduk_voucher_no, $jproduk_voucher_cashback, $jproduk_voucher_no2, $jproduk_voucher_cashback2, $jproduk_voucher_no3, $jproduk_voucher_cashback3, $jproduk_bayar, $jproduk_subtotal, $jproduk_total, $jproduk_hutang, $jproduk_kwitansi_no, $jproduk_kwitansi_nama, $jproduk_kwitansi_nilai, $jproduk_kwitansi_no2, $jproduk_kwitansi_nama2, $jproduk_kwitansi_nilai2, $jproduk_kwitansi_no3, $jproduk_kwitansi_nama3, $jproduk_kwitansi_nilai3, $jproduk_card_nama, $jproduk_card_edc, $jproduk_card_no, $jproduk_card_nilai, $jproduk_card_nama2, $jproduk_card_edc2, $jproduk_card_no2, $jproduk_card_nilai2, $jproduk_card_nama3, $jproduk_card_edc3, $jproduk_card_no3, $jproduk_card_nilai3, $jproduk_cek_nama, $jproduk_cek_no, $jproduk_cek_valid, $jproduk_cek_bank, $jproduk_cek_nilai, $jproduk_cek_nama2, $jproduk_cek_no2, $jproduk_cek_valid2, $jproduk_cek_bank2, $jproduk_cek_nilai2, $jproduk_cek_nama3, $jproduk_cek_no3, $jproduk_cek_valid3, $jproduk_cek_bank3, $jproduk_cek_nilai3, $jproduk_transfer_bank, $jproduk_transfer_nama, $jproduk_transfer_nilai, $jproduk_transfer_bank2, $jproduk_transfer_nama2, $jproduk_transfer_nilai2, $jproduk_transfer_bank3, $jproduk_transfer_nama3, $jproduk_transfer_nilai3){
-            $datetime_now=date('Y-m-d H:i:s');
+            $date_now = date('Y-m-d');
+			
+			$datetime_now=date('Y-m-d H:i:s');
 			if ($jproduk_stat_dok=="")
 				$jproduk_stat_dok = "Terbuka";
 			$jproduk_revised=0;
+			
+			$bayar_date_create = $datetime_now;
             
 			$sql="SELECT jproduk_cara, jproduk_cara2, jproduk_cara3, jproduk_date_create, jproduk_revised FROM master_jual_produk WHERE jproduk_id='$jproduk_id'";
 			$rs=$this->db->query($sql);
@@ -1129,7 +1146,7 @@ class M_master_jual_produk extends Model{
 				$jproduk_cara_awal=$rs_record["jproduk_cara"];
 				$jproduk_cara2_awal=$rs_record["jproduk_cara2"];
 				$jproduk_cara3_awal=$rs_record["jproduk_cara3"];
-				$jproduk_date_create=$rs_record["jproduk_date_create"];
+				//$jproduk_date_create=$rs_record["jproduk_date_create"];
 				
 				$sql="delete from jual_tunai where jtunai_ref='".$jproduk_nobukti."'";
 				$this->db->query($sql);
@@ -1161,9 +1178,16 @@ class M_master_jual_produk extends Model{
 				"jproduk_stat_dok"=>$jproduk_stat_dok,
 				"jproduk_keterangan"=>$jproduk_keterangan,
                 "jproduk_update"=>@$_SESSION[SESSION_USERID],
-                "jproduk_date_update"=>$datetime_now,
+                //"jproduk_date_update"=>$datetime_now,
                 "jproduk_revised"=>$jproduk_revised+1
 			);
+			if($jproduk_tanggal<>$date_now){
+				$data["jproduk_date_update"] = $jproduk_tanggal;
+				$bayar_date_create = $jproduk_tanggal;
+			}else{
+				$data["jproduk_date_update"] = $datetime_now;
+				$bayar_date_create = $datetime_now;
+			}
 			if($jproduk_cara2!=null){
 				if(($jproduk_kwitansi_nilai2<>'' && $jproduk_kwitansi_nilai2<>0)
 				   || ($jproduk_card_nilai2<>'' && $jproduk_card_nilai2<>0)
@@ -1219,7 +1243,7 @@ class M_master_jual_produk extends Model{
 							"jkwitansi_nilai"=>$jproduk_kwitansi_nilai,
 							"jkwitansi_ref"=>$jproduk_nobukti,
 							"jkwitansi_transaksi"=>"jual_produk",
-							"jkwitansi_date_create"=>$jproduk_date_create,
+							"jkwitansi_date_create"=>$bayar_date_create,
 							"jkwitansi_stat_dok"=>'Terbuka'
 						);
 						$this->db->insert('jual_kwitansi', $data);
@@ -1234,7 +1258,7 @@ class M_master_jual_produk extends Model{
 							"jcard_nilai"=>$jproduk_card_nilai,
 							"jcard_ref"=>$jproduk_nobukti,
 							"jcard_transaksi"=>"jual_produk",
-							"jcard_date_create"=>$jproduk_date_create,
+							"jcard_date_create"=>$bayar_date_create,
 							"jcard_stat_dok"=>'Terbuka'
 							);
 						$this->db->insert('jual_card', $data);
@@ -1263,7 +1287,7 @@ class M_master_jual_produk extends Model{
 							"jcek_nilai"=>$jproduk_cek_nilai,
 							"jcek_ref"=>$jproduk_nobukti,
 							"jcek_transaksi"=>"jual_produk",
-							"jcek_date_create"=>$jproduk_date_create,
+							"jcek_date_create"=>$bayar_date_create,
 							"jcek_stat_dok"=>'Terbuka'
 							);
 						$this->db->insert('jual_cek', $data);
@@ -1276,7 +1300,7 @@ class M_master_jual_produk extends Model{
 							"jtransfer_nilai"=>$jproduk_transfer_nilai,
 							"jtransfer_ref"=>$jproduk_nobukti,
 							"jtransfer_transaksi"=>"jual_produk",
-							"jtransfer_date_create"=>$jproduk_date_create,
+							"jtransfer_date_create"=>$bayar_date_create,
 							"jtransfer_stat_dok"=>'Terbuka'
 							);
 						$this->db->insert('jual_transfer', $data);
@@ -1287,7 +1311,7 @@ class M_master_jual_produk extends Model{
 							"jtunai_nilai"=>$jproduk_tunai_nilai,
 							"jtunai_ref"=>$jproduk_nobukti,
 							"jtunai_transaksi"=>"jual_produk",
-							"jtunai_date_create"=>$jproduk_date_create,
+							"jtunai_date_create"=>$bayar_date_create,
 							"jtunai_stat_dok"=>'Terbuka'
 							);
 						$this->db->insert('jual_tunai', $data);
@@ -1299,7 +1323,7 @@ class M_master_jual_produk extends Model{
 							"tvoucher_ref"=>$jproduk_nobukti,
 							"tvoucher_nilai"=>$jproduk_voucher_cashback,
 							"tvoucher_transaksi"=>"jual_produk",
-							"tvoucher_date_create"=>$jproduk_date_create,
+							"tvoucher_date_create"=>$bayar_date_create,
 							"tvoucher_stat_dok"=>'Terbuka'
 							);
 						$this->db->insert('voucher_terima', $data);
@@ -1327,7 +1351,7 @@ class M_master_jual_produk extends Model{
 							"jkwitansi_nilai"=>$jproduk_kwitansi_nilai2,
 							"jkwitansi_ref"=>$jproduk_nobukti,
 							"jkwitansi_transaksi"=>"jual_produk",
-							"jkwitansi_date_create"=>$jproduk_date_create,
+							"jkwitansi_date_create"=>$bayar_date_create,
 							"jkwitansi_stat_dok"=>'Terbuka'
 						);
 						$this->db->insert('jual_kwitansi', $data);
@@ -1335,7 +1359,6 @@ class M_master_jual_produk extends Model{
 					
 					}else if($jproduk_cara2=='card'){
 						if($jproduk_card_nilai2<>'' && $jproduk_card_nilai2<>0){
-							$this->firephp->log($jproduk_card_nilai2, 'jproduk_card_nilai2');
 						$data=array(
 							"jcard_nama"=>$jproduk_card_nama2,
 							"jcard_edc"=>$jproduk_card_edc2,
@@ -1343,7 +1366,7 @@ class M_master_jual_produk extends Model{
 							"jcard_nilai"=>$jproduk_card_nilai2,
 							"jcard_ref"=>$jproduk_nobukti,
 							"jcard_transaksi"=>"jual_produk",
-							"jcard_date_create"=>$jproduk_date_create,
+							"jcard_date_create"=>$bayar_date_create,
 							"jcard_stat_dok"=>'Terbuka'
 							);
 						$this->db->insert('jual_card', $data);
@@ -1372,7 +1395,7 @@ class M_master_jual_produk extends Model{
 							"jcek_nilai"=>$jproduk_cek_nilai2,
 							"jcek_ref"=>$jproduk_nobukti,
 							"jcek_transaksi"=>"jual_produk",
-							"jcek_date_create"=>$jproduk_date_create,
+							"jcek_date_create"=>$bayar_date_create,
 							"jcek_stat_dok"=>'Terbuka'
 							);
 						$this->db->insert('jual_cek', $data);
@@ -1385,7 +1408,7 @@ class M_master_jual_produk extends Model{
 							"jtransfer_nilai"=>$jproduk_transfer_nilai2,
 							"jtransfer_ref"=>$jproduk_nobukti,
 							"jtransfer_transaksi"=>"jual_produk",
-							"jtransfer_date_create"=>$jproduk_date_create,
+							"jtransfer_date_create"=>$bayar_date_create,
 							"jtransfer_stat_dok"=>'Terbuka'
 							);
 						$this->db->insert('jual_transfer', $data);
@@ -1396,7 +1419,7 @@ class M_master_jual_produk extends Model{
 							"jtunai_nilai"=>$jproduk_tunai_nilai2,
 							"jtunai_ref"=>$jproduk_nobukti,
 							"jtunai_transaksi"=>"jual_produk",
-							"jtunai_date_create"=>$jproduk_date_create,
+							"jtunai_date_create"=>$bayar_date_create,
 							"jtunai_stat_dok"=>'Terbuka'
 							);
 						$this->db->insert('jual_tunai', $data);
@@ -1408,7 +1431,7 @@ class M_master_jual_produk extends Model{
 							"tvoucher_ref"=>$jproduk_nobukti,
 							"tvoucher_nilai"=>$jproduk_voucher_cashback2,
 							"tvoucher_transaksi"=>"jual_produk",
-							"tvoucher_date_create"=>$jproduk_date_create,
+							"tvoucher_date_create"=>$bayar_date_create,
 							"tvoucher_stat_dok"=>'Terbuka'
 							);
 						$this->db->insert('voucher_terima', $data);
@@ -1436,7 +1459,7 @@ class M_master_jual_produk extends Model{
 							"jkwitansi_nilai"=>$jproduk_kwitansi_nilai3,
 							"jkwitansi_ref"=>$jproduk_nobukti,
 							"jkwitansi_transaksi"=>"jual_produk",
-							"jkwitansi_date_create"=>$jproduk_date_create,
+							"jkwitansi_date_create"=>$bayar_date_create,
 							"jkwitansi_stat_dok"=>'Terbuka'
 						);
 						$this->db->insert('jual_kwitansi', $data);
@@ -1451,7 +1474,7 @@ class M_master_jual_produk extends Model{
 							"jcard_nilai"=>$jproduk_card_nilai3,
 							"jcard_ref"=>$jproduk_nobukti,
 							"jcard_transaksi"=>"jual_produk",
-							"jcard_date_create"=>$jproduk_date_create,
+							"jcard_date_create"=>$bayar_date_create,
 							"jcard_stat_dok"=>'Terbuka'
 							);
 						$this->db->insert('jual_card', $data);
@@ -1480,7 +1503,7 @@ class M_master_jual_produk extends Model{
 							"jcek_nilai"=>$jproduk_cek_nilai3,
 							"jcek_ref"=>$jproduk_nobukti,
 							"jcek_transaksi"=>"jual_produk",
-							"jcek_date_create"=>$jproduk_date_create,
+							"jcek_date_create"=>$bayar_date_create,
 							"jcek_stat_dok"=>'Terbuka'
 							);
 						$this->db->insert('jual_cek', $data);
@@ -1493,7 +1516,7 @@ class M_master_jual_produk extends Model{
 							"jtransfer_nilai"=>$jproduk_transfer_nilai3,
 							"jtransfer_ref"=>$jproduk_nobukti,
 							"jtransfer_transaksi"=>"jual_produk",
-							"jtransfer_date_create"=>$jproduk_date_create,
+							"jtransfer_date_create"=>$bayar_date_create,
 							"jtransfer_stat_dok"=>'Terbuka'
 							);
 						$this->db->insert('jual_transfer', $data);
@@ -1504,7 +1527,7 @@ class M_master_jual_produk extends Model{
 							"jtunai_nilai"=>$jproduk_tunai_nilai3,
 							"jtunai_ref"=>$jproduk_nobukti,
 							"jtunai_transaksi"=>"jual_produk",
-							"jtunai_date_create"=>$jproduk_date_create,
+							"jtunai_date_create"=>$bayar_date_create,
 							"jtunai_stat_dok"=>'Terbuka'
 							);
 						$this->db->insert('jual_tunai', $data);
@@ -1516,7 +1539,7 @@ class M_master_jual_produk extends Model{
 							"tvoucher_ref"=>$jproduk_nobukti,
 							"tvoucher_nilai"=>$jproduk_voucher_cashback3,
 							"tvoucher_transaksi"=>"jual_produk",
-							"tvoucher_date_create"=>$jproduk_date_create,
+							"tvoucher_date_create"=>$bayar_date_create,
 							"tvoucher_stat_dok"=>'Terbuka'
 							);
 						$this->db->insert('voucher_terima', $data);
@@ -1532,6 +1555,8 @@ class M_master_jual_produk extends Model{
 		
 		//function for create new record
 		function master_jual_produk_create($jproduk_nobukti ,$jproduk_cust ,$jproduk_tanggal ,$jproduk_stat_dok, $jproduk_diskon ,$jproduk_cara ,$jproduk_cara2 ,$jproduk_cara3 ,$jproduk_keterangan , $jproduk_cashback, $jproduk_tunai_nilai, $jproduk_tunai_nilai2, $jproduk_tunai_nilai3, $jproduk_voucher_no, $jproduk_voucher_cashback, $jproduk_voucher_no2, $jproduk_voucher_cashback2, $jproduk_voucher_no3, $jproduk_voucher_cashback3, $jproduk_bayar, $jproduk_subtotal, $jproduk_total, $jproduk_hutang, $jproduk_kwitansi_no, $jproduk_kwitansi_nama, $jproduk_kwitansi_nilai, $jproduk_kwitansi_no2, $jproduk_kwitansi_nama2, $jproduk_kwitansi_nilai2, $jproduk_kwitansi_no3, $jproduk_kwitansi_nama3, $jproduk_kwitansi_nilai3, $jproduk_card_nama, $jproduk_card_edc, $jproduk_card_no, $jproduk_card_nilai, $jproduk_card_nama2, $jproduk_card_edc2, $jproduk_card_no2, $jproduk_card_nilai2, $jproduk_card_nama3, $jproduk_card_edc3, $jproduk_card_no3, $jproduk_card_nilai3, $jproduk_cek_nama, $jproduk_cek_no, $jproduk_cek_valid, $jproduk_cek_bank, $jproduk_cek_nilai, $jproduk_cek_nama2, $jproduk_cek_no2, $jproduk_cek_valid2, $jproduk_cek_bank2, $jproduk_cek_nilai2, $jproduk_cek_nama3, $jproduk_cek_no3, $jproduk_cek_valid3, $jproduk_cek_bank3, $jproduk_cek_nilai3, $jproduk_transfer_bank, $jproduk_transfer_nama, $jproduk_transfer_nilai, $jproduk_transfer_bank2, $jproduk_transfer_nama2, $jproduk_transfer_nilai2, $jproduk_transfer_bank3, $jproduk_transfer_nama3, $jproduk_transfer_nilai3){
+			$date_now = date('Y-m-d');
+			
 			$jproduk_tanggal_pattern=strtotime($jproduk_tanggal);
 			$pattern="FT/".date("ym",$jproduk_tanggal_pattern)."-";
 			//$pattern="FT/".date("ym")."-";
@@ -1553,6 +1578,9 @@ class M_master_jual_produk extends Model{
 				"jproduk_keterangan"=>$jproduk_keterangan,
 				"jproduk_creator"=>$_SESSION[SESSION_USERID]
 			);
+			if($jproduk_tanggal<>$date_now){
+				$data["jproduk_date_create"] = $jproduk_tanggal;
+			}
 			if($jproduk_cara2!=null){
 				if(($jproduk_kwitansi_nilai2<>'' && $jproduk_kwitansi_nilai2<>0)
 				   || ($jproduk_card_nilai2<>'' && $jproduk_card_nilai2<>0)
