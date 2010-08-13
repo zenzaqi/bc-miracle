@@ -821,19 +821,40 @@ Ext.onReady(function(){
 	function kwitansi_jual_paket_reset_form(){
 		jpaket_kwitansi_namaField.reset();
 		jpaket_kwitansi_nilaiField.reset();
+		jpaket_kwitansi_nilai_cfField.reset();
 		jpaket_kwitansi_noField.reset();
+		jpaket_kwitansi_sisaField.reset();
+		jpaket_kwitansi_namaField.setValue("");
+		jpaket_kwitansi_nilaiField.setValue(null);
+		jpaket_kwitansi_nilai_cfField.setValue(null);
+		jpaket_kwitansi_noField.setValue("");
+		jpaket_kwitansi_sisaField.setValue(null);
 	}
 	// Reset kwitansi-2 option
 	function kwitansi2_jual_paket_reset_form(){
 		jpaket_kwitansi_nama2Field.reset();
 		jpaket_kwitansi_nilai2Field.reset();
+		jpaket_kwitansi_nilai2_cfField.reset();
 		jpaket_kwitansi_no2Field.reset();
+		jpaket_kwitansi_sisa2Field.reset();
+		jpaket_kwitansi_nama2Field.setValue("");
+		jpaket_kwitansi_nilai2Field.setValue(null);
+		jpaket_kwitansi_nilai2_cfField.setValue(null);
+		jpaket_kwitansi_no2Field.setValue("");
+		jpaket_kwitansi_sisa2Field.setValue(null);
 	}
 	// Reset kwitansi-3 option
 	function kwitansi3_jual_paket_reset_form(){
 		jpaket_kwitansi_nama3Field.reset();
 		jpaket_kwitansi_nilai3Field.reset();
+		jpaket_kwitansi_nilai3_cfField.reset();
 		jpaket_kwitansi_no3Field.reset();
+		jpaket_kwitansi_sisaField.reset();
+		jpaket_kwitansi_nama3Field.setValue("");
+		jpaket_kwitansi_nilai3Field.setValue(null);
+		jpaket_kwitansi_nilai3_cfField.setValue(null);
+		jpaket_kwitansi_no3Field.setValue("");
+		jpaket_kwitansi_sisaField.setValue(null);
 	}
 	
 	// Reset card option
@@ -842,6 +863,12 @@ Ext.onReady(function(){
 		jpaket_card_edcField.reset();
 		jpaket_card_noField.reset();
 		jpaket_card_nilaiField.reset();
+		jpaket_card_nilai_cfField.reset();
+		jpaket_card_namaField.setValue("");
+		jpaket_card_edcField.setValue("");
+		jpaket_card_noField.setValue("");
+		jpaket_card_nilaiField.setValue(null);
+		jpaket_card_nilai_cfField.setValue(null);
 	}
 	// Reset card-2 option
 	function card2_jual_paket_reset_form(){
@@ -849,6 +876,12 @@ Ext.onReady(function(){
 		jpaket_card_edc2Field.reset();
 		jpaket_card_no2Field.reset();
 		jpaket_card_nilai2Field.reset();
+		jpaket_card_nilai2_cfField.reset();
+		jpaket_card_nama2Field.setValue("");
+		jpaket_card_edc2Field.setValue("");
+		jpaket_card_no2Field.setValue("");
+		jpaket_card_nilai2Field.setValue(null);
+		jpaket_card_nilai2_cfField.setValue(null);
 	}
 	// Reset card-3 option
 	function card3_jual_paket_reset_form(){
@@ -856,6 +889,12 @@ Ext.onReady(function(){
 		jpaket_card_edc3Field.reset();
 		jpaket_card_no3Field.reset();
 		jpaket_card_nilai3Field.reset();
+		jpaket_card_nilai3_cfField.reset();
+		jpaket_card_nama3Field.setValue("");
+		jpaket_card_edc3Field.setValue("");
+		jpaket_card_no3Field.setValue("");
+		jpaket_card_nilai3Field.setValue(null);
+		jpaket_card_nilai3_cfField.setValue(null);
 	}
 	
 	// Reset cek option
@@ -865,6 +904,13 @@ Ext.onReady(function(){
 		jpaket_cek_validField.reset();
 		jpaket_cek_bankField.reset();
 		jpaket_cek_nilaiField.reset();
+		jpaket_cek_nilai_cfField.reset();
+		jpaket_cek_namaField.setValue(null);
+		jpaket_cek_noField.setValue("");
+		jpaket_cek_validField.setValue("");
+		jpaket_cek_bankField.setValue("");
+		jpaket_cek_nilaiField.setValue(null);
+		jpaket_cek_nilai_cfField.setValue(null);
 	}
 	// Reset cek-2 option
 	function cek2_jual_paket_reset_form(){
@@ -873,6 +919,13 @@ Ext.onReady(function(){
 		jpaket_cek_valid2Field.reset();
 		jpaket_cek_bank2Field.reset();
 		jpaket_cek_nilai2Field.reset();
+		jpaket_cek_nilai2_cfField.reset();
+		jpaket_cek_nama2Field.setValue(null);
+		jpaket_cek_no2Field.setValue("");
+		jpaket_cek_valid2Field.setValue("");
+		jpaket_cek_bank2Field.setValue("");
+		jpaket_cek_nilai2Field.setValue(null);
+		jpaket_cek_nilai2_cfField.setValue(null);
 	}
 	// Reset cek-3 option
 	function cek3_jual_paket_reset_form(){
@@ -881,6 +934,13 @@ Ext.onReady(function(){
 		jpaket_cek_valid3Field.reset();
 		jpaket_cek_bank3Field.reset();
 		jpaket_cek_nilai3Field.reset();
+		jpaket_cek_nilai3_cfField.reset();
+		jpaket_cek_nama3Field.setValue(null);
+		jpaket_cek_no3Field.setValue("");
+		jpaket_cek_valid3Field.setValue("");
+		jpaket_cek_bank3Field.setValue("");
+		jpaket_cek_nilai3Field.setValue(null);
+		jpaket_cek_nilai3_cfField.setValue(null);
 	}
 	
 	// Reset transfer option
@@ -888,47 +948,83 @@ Ext.onReady(function(){
 		jpaket_transfer_bankField.reset();
 		jpaket_transfer_namaField.reset();
 		jpaket_transfer_nilaiField.reset();
+		jpaket_transfer_nilai_cfField.reset();
+		jpaket_transfer_bankField.setValue("");
+		jpaket_transfer_namaField.setValue(null);
+		jpaket_transfer_nilaiField.setValue(null);
+		jpaket_transfer_nilai_cfField.setValue(null);
 	}
 	// Reset transfer-2 option
 	function transfer2_jual_paket_reset_form(){
 		jpaket_transfer_bank2Field.reset();
 		jpaket_transfer_nama2Field.reset();
 		jpaket_transfer_nilai2Field.reset();
+		jpaket_transfer_nilai2_cfField.reset();
+		jpaket_transfer_bank2Field.setValue("");
+		jpaket_transfer_nama2Field.setValue(null);
+		jpaket_transfer_nilai2Field.setValue(null);
+		jpaket_transfer_nilai2_cfField.setValue(null);
 	}
 	// Reset transfer-3 option
 	function transfer3_jual_paket_reset_form(){
 		jpaket_transfer_bank3Field.reset();
 		jpaket_transfer_nama3Field.reset();
 		jpaket_transfer_nilai3Field.reset();
+		jpaket_transfer_nilai3_cfField.reset();
+		jpaket_transfer_bank3Field.setValue("");
+		jpaket_transfer_nama3Field.setValue(null);
+		jpaket_transfer_nilai3Field.setValue(null);
+		jpaket_transfer_nilai3_cfField.setValue(null);
 	}
 
 	// Reset tunai option
 	function tunai_jual_paket_reset_form(){
 		jpaket_tunai_nilaiField.reset();
+		jpaket_tunai_nilaiField.setValue(null);
+		jpaket_tunai_nilai_cfField.reset();
+		jpaket_tunai_nilai_cfField.setValue(null);
 	}
 	// Reset tunai-2 option
 	function tunai2_jual_paket_reset_form(){
 		jpaket_tunai_nilai2Field.reset();
+		jpaket_tunai_nilai2Field.setValue(null);
+		jpaket_tunai_nilai2_cfField.reset();
+		jpaket_tunai_nilai2_cfField.setValue(null);
 	}
 	// Reset tunai-3 option
 	function tunai3_jual_paket_reset_form(){
 		jpaket_tunai_nilai3Field.reset();
+		jpaket_tunai_nilai3Field.setValue(null);
+		jpaket_tunai_nilai3_cfField.reset();
+		jpaket_tunai_nilai3_cfField.setValue(null);
 	}
 
 	//Reset voucher option
 	function voucher_jual_paket_reset_form(){
 		jpaket_voucher_noField.reset();
 		jpaket_voucher_cashbackField.reset();
+		jpaket_voucher_cashback_cfField.reset();
+		jpaket_voucher_noField.setValue("");
+		jpaket_voucher_cashbackField.setValue(null);
+		jpaket_voucher_cashback_cfField.setValue(null);
 	}
 	//Reset voucher-2 option
 	function voucher2_jual_paket_reset_form(){
 		jpaket_voucher_no2Field.reset();
 		jpaket_voucher_cashback2Field.reset();
+		jpaket_voucher_cashback2_cfField.reset();
+		jpaket_voucher_no2Field.setValue("");
+		jpaket_voucher_cashback2Field.setValue(null);
+		jpaket_voucher_cashback2_cfField.setValue(null);
 	}
 	//Reset voucher-3 option
 	function voucher3_jual_paket_reset_form(){
 		jpaket_voucher_no3Field.reset();
 		jpaket_voucher_cashback3Field.reset();
+		jpaket_voucher_cashback3_cfField.reset();
+		jpaket_voucher_no3Field.setValue("");
+		jpaket_voucher_cashback3Field.setValue(null);
+		jpaket_voucher_cashback3_cfField.setValue(null);
 	}
 	
 	/* Reset form before loading */
@@ -1224,7 +1320,8 @@ Ext.onReady(function(){
 									if(voucher_jual_paket_DataStore.getCount()){
 										jpaket_voucher_record=voucher_jual_paket_DataStore.getAt(0);
 										jpaket_voucher_noField.setValue(jpaket_voucher_record.data.tvoucher_novoucher);
-										jpaket_voucher_cashback_cfField.setValue(jpaket_voucher_record.data.tvoucher_nilai);
+										jpaket_voucher_cashbackField.setValue(jpaket_voucher_record.data.tvoucher_nilai);
+										jpaket_voucher_cashback_cfField.setValue(CurrencyFormatted(jpaket_voucher_record.data.tvoucher_nilai));
 									}
 							}
 					 	}
@@ -1323,7 +1420,8 @@ Ext.onReady(function(){
 									if(voucher_jual_paket_DataStore.getCount()){
 										jpaket_voucher_record=voucher_jual_paket_DataStore.getAt(0);
 										jpaket_voucher_no2Field.setValue(jpaket_voucher_record.data.tvoucher_novoucher);
-										jpaket_voucher_cashback2_cfField.setValue(jpaket_voucher_record.data.tvoucher_nilai);
+										jpaket_voucher_cashback2Field.setValue(jpaket_voucher_record.data.tvoucher_nilai);
+										jpaket_voucher_cashback2_cfField.setValue(CurrencyFormatted(jpaket_voucher_record.data.tvoucher_nilai));
 									}
 							}
 					 	}
@@ -1422,7 +1520,8 @@ Ext.onReady(function(){
 									if(voucher_jual_paket_DataStore.getCount()){
 										jpaket_voucher_record=voucher_jual_paket_DataStore.getAt(0);
 										jpaket_voucher_no3Field.setValue(jpaket_voucher_record.data.tvoucher_novoucher);
-										jpaket_voucher_cashback3_cfField.setValue(jpaket_voucher_record.data.tvoucher_nilai);
+										jpaket_voucher_cashback3Field.setValue(jpaket_voucher_record.data.tvoucher_nilai);
+										jpaket_voucher_cashback3_cfField.setValue(CurrencyFormatted(jpaket_voucher_record.data.tvoucher_nilai));
 									}
 							}
 					 	}

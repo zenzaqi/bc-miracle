@@ -933,22 +933,28 @@ Ext.onReady(function(){
 	function voucher_jual_produk_reset_form(){
 		jproduk_voucher_noField.reset();
 		jproduk_voucher_cashbackField.reset();
+		jproduk_voucher_cashback_cfField.reset();
 		jproduk_voucher_noField.setValue("");
 		jproduk_voucher_cashbackField.setValue(null);
+		jproduk_voucher_cashback_cfField.setValue(null);
 	}
 	//Reset voucher-2 option
 	function voucher2_jual_produk_reset_form(){
 		jproduk_voucher_no2Field.reset();
 		jproduk_voucher_cashback2Field.reset();
+		jproduk_voucher_cashback2_cfField.reset();
 		jproduk_voucher_no2Field.setValue("");
 		jproduk_voucher_cashback2Field.setValue(null);
+		jproduk_voucher_cashback2_cfField.setValue(null);
 	}
 	//Reset voucher-3 option
 	function voucher3_jual_produk_reset_form(){
 		jproduk_voucher_no3Field.reset();
 		jproduk_voucher_cashback3Field.reset();
+		jproduk_voucher_cashback3_cfField.reset();
 		jproduk_voucher_no3Field.setValue("");
 		jproduk_voucher_cashback3Field.setValue(null);
+		jproduk_voucher_cashback3_cfField.setValue(null);
 	}
 	
 	/* Reset form before loading */
