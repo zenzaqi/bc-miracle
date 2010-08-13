@@ -1245,7 +1245,7 @@ Ext.onReady(function(){
 									if(voucher_jual_produk_DataStore.getCount()){
 										jproduk_voucher_record=voucher_jual_produk_DataStore.getAt(0);
 										jproduk_voucher_noField.setValue(jproduk_voucher_record.data.tvoucher_novoucher);
-										jproduk_voucher_cashbackField.setValue(jproduk_voucher_record.data.tvoucher_nilai);
+										jproduk_voucher_cashback_cfField.setValue(jproduk_voucher_record.data.tvoucher_nilai);
 									}
 							}
 					 	}
@@ -1344,7 +1344,7 @@ Ext.onReady(function(){
 									if(voucher_jual_produk_DataStore.getCount()){
 										jproduk_voucher_record=voucher_jual_produk_DataStore.getAt(0);
 										jproduk_voucher_no2Field.setValue(jproduk_voucher_record.data.tvoucher_novoucher);
-										jproduk_voucher_cashback2Field.setValue(jproduk_voucher_record.data.tvoucher_nilai);
+										jproduk_voucher_cashback2_cfField.setValue(jproduk_voucher_record.data.tvoucher_nilai);
 									}
 							}
 					 	}
@@ -1443,7 +1443,7 @@ Ext.onReady(function(){
 									if(voucher_jual_produk_DataStore.getCount()){
 										jproduk_voucher_record=voucher_jual_produk_DataStore.getAt(0);
 										jproduk_voucher_no3Field.setValue(jproduk_voucher_record.data.tvoucher_novoucher);
-										jproduk_voucher_cashback3Field.setValue(jproduk_voucher_record.data.tvoucher_nilai);
+										jproduk_voucher_cashback3_cfField.setValue(jproduk_voucher_record.data.tvoucher_nilai);
 									}
 							}
 					 	}

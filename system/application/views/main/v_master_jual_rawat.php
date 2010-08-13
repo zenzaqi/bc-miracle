@@ -1207,7 +1207,7 @@ Ext.onReady(function(){
 									if(voucher_jual_rawatDataStore.getCount()){
 										jrawat_voucher_record=voucher_jual_rawatDataStore.getAt(0);
 										jrawat_voucher_noField.setValue(jrawat_voucher_record.data.tvoucher_novoucher);
-										jrawat_voucher_cashbackField.setValue(jrawat_voucher_record.data.voucher_cashback);
+										jrawat_voucher_cashback_cfField.setValue(jrawat_voucher_record.data.voucher_cashback);
 									}
 							}
 					 	}
@@ -1306,7 +1306,7 @@ Ext.onReady(function(){
 									if(tunai_jual_rawat_DataStore.getCount()){
 										jrawat_voucher_record=voucher_jual_rawatDataStore.getAt(0);
 										jrawat_voucher_no2Field.setValue(jrawat_tunai_record.data.tvoucher_novoucher);
-										jrawat_voucher_cashback2Field.setValue(jrawat_tunai_record.data.voucher_cashback);
+										jrawat_voucher_cashback2_cfField.setValue(jrawat_tunai_record.data.voucher_cashback);
 									}
 							}
 					 	}
@@ -1405,7 +1405,7 @@ Ext.onReady(function(){
 									if(tunai_jual_rawat_DataStore.getCount()){
 										jrawat_voucher_record=voucher_jual_rawatDataStore.getAt(0);
 										jrawat_voucher_no3Field.setValue(jrawat_tunai_record.data.tvoucher_novoucher);
-										jrawat_voucher_cashback3Field.setValue(jrawat_tunai_record.data.voucher_cashback);
+										jrawat_voucher_cashback3_cfField.setValue(jrawat_tunai_record.data.voucher_cashback);
 									}
 							}
 					 	}
