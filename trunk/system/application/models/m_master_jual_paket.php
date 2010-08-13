@@ -1552,6 +1552,8 @@ class M_master_jual_paket extends Model{
 										  ,$jpaket_transfer_bank3
 										  ,$jpaket_transfer_nama3
 										  ,$jpaket_transfer_nilai3){
+			$date_now = date('Y-m-d');
+			
 			$datetime_now=date('Y-m-d H:i:s');
 			if ($jpaket_stat_dok=="")
 				$jpaket_stat_dok = "Terbuka";
@@ -1565,7 +1567,7 @@ class M_master_jual_paket extends Model{
 				$jpaket_cara_awal=$rs_record["jpaket_cara"];
 				$jpaket_cara2_awal=$rs_record["jpaket_cara2"];
 				$jpaket_cara3_awal=$rs_record["jpaket_cara3"];
-				$jpaket_date_create=$rs_record["jpaket_date_create"];
+				//$jpaket_date_create=$rs_record["jpaket_date_create"];
 				
 				$sql="delete from jual_tunai where jtunai_ref='".$jpaket_nobukti."'";
 				$this->db->query($sql);
@@ -1598,9 +1600,16 @@ class M_master_jual_paket extends Model{
 				"jpaket_keterangan"=>$jpaket_keterangan,
 				"jpaket_stat_dok"=>$jpaket_stat_dok,
 				"jpaket_update"=>@$_SESSION[SESSION_USERID],
-				"jpaket_date_update"=>$datetime_now,
+				//"jpaket_date_update"=>$datetime_now,
 				"jpaket_revised"=>$jpaket_revised+1
 			);
+			if($jpaket_tanggal<>$date_now){
+				$data["jpaket_date_update"] = $jpaket_tanggal;
+				$bayar_date_create = $jpaket_tanggal;
+			}else{
+				$data["jpaket_date_update"] = $datetime_now;
+				$bayar_date_create = $datetime_now;
+			}
 			if($jpaket_cara2!=null){
 				if(($jpaket_kwitansi_nilai2<>'' && $jpaket_kwitansi_nilai2<>0)
 				   || ($jpaket_card_nilai2<>'' && $jpaket_card_nilai2<>0)
@@ -1653,7 +1662,7 @@ class M_master_jual_paket extends Model{
 							"jkwitansi_nilai"=>$jpaket_kwitansi_nilai,
 							"jkwitansi_ref"=>$jpaket_nobukti,
 							"jkwitansi_transaksi"=>"jual_paket",
-							"jkwitansi_date_create"=>$jpaket_date_create,
+							"jkwitansi_date_create"=>$bayar_date_create,
 							"jkwitansi_stat_dok"=>'Terbuka'
 						);
 						$this->db->insert('jual_kwitansi', $data);
@@ -1668,7 +1677,7 @@ class M_master_jual_paket extends Model{
 							"jcard_nilai"=>$jpaket_card_nilai,
 							"jcard_ref"=>$jpaket_nobukti,
 							"jcard_transaksi"=>"jual_paket",
-							"jcard_date_create"=>$jpaket_date_create,
+							"jcard_date_create"=>$bayar_date_create,
 							"jcard_stat_dok"=>'Terbuka'
 							);
 						$this->db->insert('jual_card', $data);
@@ -1697,7 +1706,7 @@ class M_master_jual_paket extends Model{
 							"jcek_nilai"=>$jpaket_cek_nilai,
 							"jcek_ref"=>$jpaket_nobukti,
 							"jcek_transaksi"=>"jual_paket",
-							"jcek_date_create"=>$jpaket_date_create,
+							"jcek_date_create"=>$bayar_date_create,
 							"jcek_stat_dok"=>'Terbuka'
 							);
 						$this->db->insert('jual_cek', $data);
@@ -1711,7 +1720,7 @@ class M_master_jual_paket extends Model{
 							"jtransfer_nilai"=>$jpaket_transfer_nilai,
 							"jtransfer_ref"=>$jpaket_nobukti,
 							"jtransfer_transaksi"=>"jual_paket",
-							"jtransfer_date_create"=>$jpaket_date_create,
+							"jtransfer_date_create"=>$bayar_date_create,
 							"jtransfer_stat_dok"=>'Terbuka'
 							);
 						$this->db->insert('jual_transfer', $data);
@@ -1723,7 +1732,7 @@ class M_master_jual_paket extends Model{
 							"jtunai_nilai"=>$jpaket_tunai_nilai,
 							"jtunai_ref"=>$jpaket_nobukti,
 							"jtunai_transaksi"=>"jual_paket",
-							"jtunai_date_create"=>$jpaket_date_create,
+							"jtunai_date_create"=>$bayar_date_create,
 							"jtunai_stat_dok"=>'Terbuka'
 							);
 						$this->db->insert('jual_tunai', $data);
@@ -1736,7 +1745,7 @@ class M_master_jual_paket extends Model{
 							"tvoucher_ref"=>$jpaket_nobukti,
 							"tvoucher_nilai"=>$jpaket_voucher_cashback,
 							"tvoucher_transaksi"=>"jual_paket",
-							"tvoucher_date_create"=>$jpaket_date_create,
+							"tvoucher_date_create"=>$bayar_date_create,
 							"tvoucher_stat_dok"=>'Terbuka'
 							);
 						$this->db->insert('voucher_terima', $data);
@@ -1764,7 +1773,7 @@ class M_master_jual_paket extends Model{
 							"jkwitansi_nilai"=>$jpaket_kwitansi_nilai2,
 							"jkwitansi_ref"=>$jpaket_nobukti,
 							"jkwitansi_transaksi"=>"jual_paket",
-							"jkwitansi_date_create"=>$jpaket_date_create,
+							"jkwitansi_date_create"=>$bayar_date_create,
 							"jkwitansi_stat_dok"=>'Terbuka'
 						);
 						$this->db->insert('jual_kwitansi', $data);
@@ -1779,7 +1788,7 @@ class M_master_jual_paket extends Model{
 							"jcard_nilai"=>$jpaket_card_nilai2,
 							"jcard_ref"=>$jpaket_nobukti,
 							"jcard_transaksi"=>"jual_paket",
-							"jcard_date_create"=>$jpaket_date_create,
+							"jcard_date_create"=>$bayar_date_create,
 							"jcard_stat_dok"=>'Terbuka'
 							);
 						$this->db->insert('jual_card', $data);
@@ -1808,7 +1817,7 @@ class M_master_jual_paket extends Model{
 							"jcek_nilai"=>$jpaket_cek_nilai2,
 							"jcek_ref"=>$jpaket_nobukti,
 							"jcek_transaksi"=>"jual_paket",
-							"jcek_date_create"=>$jpaket_date_create,
+							"jcek_date_create"=>$bayar_date_create,
 							"jcek_stat_dok"=>'Terbuka'
 							);
 						$this->db->insert('jual_cek', $data);
@@ -1822,7 +1831,7 @@ class M_master_jual_paket extends Model{
 							"jtransfer_nilai"=>$jpaket_transfer_nilai2,
 							"jtransfer_ref"=>$jpaket_nobukti,
 							"jtransfer_transaksi"=>"jual_paket",
-							"jtransfer_date_create"=>$jpaket_date_create,
+							"jtransfer_date_create"=>$bayar_date_create,
 							"jtransfer_stat_dok"=>'Terbuka'
 							);
 						$this->db->insert('jual_transfer', $data);
@@ -1834,7 +1843,7 @@ class M_master_jual_paket extends Model{
 							"jtunai_nilai"=>$jpaket_tunai_nilai2,
 							"jtunai_ref"=>$jpaket_nobukti,
 							"jtunai_transaksi"=>"jual_paket",
-							"jtunai_date_create"=>$jpaket_date_create,
+							"jtunai_date_create"=>$bayar_date_create,
 							"jtunai_stat_dok"=>'Terbuka'
 							);
 						$this->db->insert('jual_tunai', $data);
@@ -1847,7 +1856,7 @@ class M_master_jual_paket extends Model{
 							"tvoucher_ref"=>$jpaket_nobukti,
 							"tvoucher_nilai"=>$jpaket_voucher_cashback2,
 							"tvoucher_transaksi"=>"jual_paket",
-							"tvoucher_date_create"=>$jpaket_date_create,
+							"tvoucher_date_create"=>$bayar_date_create,
 							"tvoucher_stat_dok"=>'Terbuka'
 							);
 						$this->db->insert('voucher_terima', $data);
@@ -1875,7 +1884,7 @@ class M_master_jual_paket extends Model{
 							"jkwitansi_nilai"=>$jpaket_kwitansi_nilai3,
 							"jkwitansi_ref"=>$jpaket_nobukti,
 							"jkwitansi_transaksi"=>"jual_paket",
-							"jkwitansi_date_create"=>$jpaket_date_create,
+							"jkwitansi_date_create"=>$bayar_date_create,
 							"jkwitansi_stat_dok"=>'Terbuka'
 						);
 						$this->db->insert('jual_kwitansi', $data);
@@ -1890,7 +1899,7 @@ class M_master_jual_paket extends Model{
 							"jcard_nilai"=>$jpaket_card_nilai3,
 							"jcard_ref"=>$jpaket_nobukti,
 							"jcard_transaksi"=>"jual_paket",
-							"jcard_date_create"=>$jpaket_date_create,
+							"jcard_date_create"=>$bayar_date_create,
 							"jcard_stat_dok"=>'Terbuka'
 							);
 						$this->db->insert('jual_card', $data);
@@ -1919,7 +1928,7 @@ class M_master_jual_paket extends Model{
 							"jcek_nilai"=>$jpaket_cek_nilai3,
 							"jcek_ref"=>$jpaket_nobukti,
 							"jcek_transaksi"=>"jual_paket",
-							"jcek_date_create"=>$jpaket_date_create,
+							"jcek_date_create"=>$bayar_date_create,
 							"jcek_stat_dok"=>'Terbuka'
 							);
 						$this->db->insert('jual_cek', $data);
@@ -1933,7 +1942,7 @@ class M_master_jual_paket extends Model{
 							"jtransfer_nilai"=>$jpaket_transfer_nilai3,
 							"jtransfer_ref"=>$jpaket_nobukti,
 							"jtransfer_transaksi"=>"jual_paket",
-							"jtransfer_date_create"=>$jpaket_date_create,
+							"jtransfer_date_create"=>$bayar_date_create,
 							"jtransfer_stat_dok"=>'Terbuka'
 							);
 						$this->db->insert('jual_transfer', $data);
@@ -1945,7 +1954,7 @@ class M_master_jual_paket extends Model{
 							"jtunai_nilai"=>$jpaket_tunai_nilai3,
 							"jtunai_ref"=>$jpaket_nobukti,
 							"jtunai_transaksi"=>"jual_paket",
-							"jtunai_date_create"=>$jpaket_date_create,
+							"jtunai_date_create"=>$bayar_date_create,
 							"jtunai_stat_dok"=>'Terbuka'
 							);
 						$this->db->insert('jual_tunai', $data);
@@ -1958,7 +1967,7 @@ class M_master_jual_paket extends Model{
 							"tvoucher_ref"=>$jpaket_nobukti,
 							"tvoucher_nilai"=>$jpaket_voucher_cashback3,
 							"tvoucher_transaksi"=>"jual_paket",
-							"tvoucher_date_create"=>$jpaket_date_create,
+							"tvoucher_date_create"=>$bayar_date_create,
 							"tvoucher_stat_dok"=>'Terbuka'
 							);
 						$this->db->insert('voucher_terima', $data);
@@ -1975,6 +1984,8 @@ class M_master_jual_paket extends Model{
 		
 		//function for create new record
 		function master_jual_paket_create($jpaket_nobukti ,$jpaket_cust ,$jpaket_tanggal ,$jpaket_diskon ,$jpaket_stat_dok, $jpaket_cara ,$jpaket_cara2 ,$jpaket_cara3 ,$jpaket_keterangan , $jpaket_cashback, $jpaket_tunai_nilai, $jpaket_tunai_nilai2, $jpaket_tunai_nilai3, $jpaket_voucher_no, $jpaket_voucher_cashback, $jpaket_voucher_no2, $jpaket_voucher_cashback2, $jpaket_voucher_no3, $jpaket_voucher_cashback3, $jpaket_bayar, $jpaket_subtotal, $jpaket_total, $jpaket_hutang, $jpaket_kwitansi_no, $jpaket_kwitansi_nama, $jpaket_kwitansi_nilai, $jpaket_kwitansi_no2, $jpaket_kwitansi_nama2, $jpaket_kwitansi_nilai2, $jpaket_kwitansi_no3, $jpaket_kwitansi_nama3, $jpaket_kwitansi_nilai3, $jpaket_card_nama, $jpaket_card_edc, $jpaket_card_no, $jpaket_card_nilai, $jpaket_card_nama2, $jpaket_card_edc2, $jpaket_card_no2, $jpaket_card_nilai2, $jpaket_card_nama3, $jpaket_card_edc3, $jpaket_card_no3, $jpaket_card_nilai3, $jpaket_cek_nama, $jpaket_cek_no, $jpaket_cek_valid, $jpaket_cek_bank, $jpaket_cek_nilai, $jpaket_cek_nama2, $jpaket_cek_no2, $jpaket_cek_valid2, $jpaket_cek_bank2, $jpaket_cek_nilai2, $jpaket_cek_nama3, $jpaket_cek_no3, $jpaket_cek_valid3, $jpaket_cek_bank3, $jpaket_cek_nilai3, $jpaket_transfer_bank, $jpaket_transfer_nama, $jpaket_transfer_nilai, $jpaket_transfer_bank2, $jpaket_transfer_nama2, $jpaket_transfer_nilai2, $jpaket_transfer_bank3, $jpaket_transfer_nama3, $jpaket_transfer_nilai3){
+			$date_now = date('Y-m-d');
+			
 			$jpaket_tanggal_pattern=strtotime($jpaket_tanggal);
 			$pattern="PK/".date("ym",$jpaket_tanggal_pattern)."-";
 			//$pattern="PK/".date("ym")."-";
@@ -1995,6 +2006,9 @@ class M_master_jual_paket extends Model{
 				"jpaket_stat_dok"=>$jpaket_stat_dok,
 				"jpaket_creator"=>$_SESSION[SESSION_USERID]
 			);
+			if($jpaket_tanggal<>$date_now){
+				$data["jpaket_date_create"] = $jpaket_tanggal;
+			}
 			if($jpaket_cara2!=null){
 				if(($jpaket_kwitansi_nilai2<>'' && $jpaket_kwitansi_nilai2<>0)
 				   || ($jpaket_card_nilai2<>'' && $jpaket_card_nilai2<>0)
@@ -2663,14 +2677,28 @@ class M_master_jual_paket extends Model{
 		}
 		
 		function master_jual_paket_status_update($jpaket_id){
+			$date_now = date('Y-m-d');
 			$datetime_now=date('Y-m-d H:i:s');
-			$sql="UPDATE master_jual_paket
-				SET jpaket_stat_dok='Tertutup'
-					,jpaket_update='".@$_SESSION[SESSION_USERID]."'
-					,jpaket_date_update='".$datetime_now."'
-					,jpaket_revised=jpaket_revised+1
-				WHERE jpaket_id='$jpaket_id'";
-			$this->db->query($sql);
+			//* status dokumen menjadi tertutup setelah Faktur selesai di-cetak /
+			$sql = "SELECT jpaket_tanggal FROM master_jual_produk WHERE jpaket_id='".$jpaket_id."'";
+			$rs = $this->db->query($sql);
+			if($rs->num_rows()){
+				$record = $rs->row_array();
+				$jpaket_tanggal = $record['jpaket_tanggal'];
+				if($jpaket_tanggal<>$date_now){
+					$jpaket_date_update = $jpaket_tanggal;
+				}else{
+					$jpaket_date_update = $datetime_now;
+				}
+				
+				$sql="UPDATE master_jual_paket
+					SET jpaket_stat_dok='Tertutup'
+						,jpaket_update='".@$_SESSION[SESSION_USERID]."'
+						,jpaket_date_update='".$jpaket_date_update."'
+						,jpaket_revised=jpaket_revised+1
+					WHERE jpaket_id='$jpaket_id'";
+				$this->db->query($sql);
+			}
 		}
 		
 		function print_paper($jpaket_id){
