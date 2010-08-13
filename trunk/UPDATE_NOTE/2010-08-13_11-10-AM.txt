@@ -1,0 +1,9 @@
+ts.trisula@gmail.com
+
+o File yang diupdate:
+  - v_master_jual_produk
+  - v_master_jual_paket
+  - v_master_jual_rawat
+
+o Fix Bug
+  - Memperbaiki Cara Bayar Voucher.
