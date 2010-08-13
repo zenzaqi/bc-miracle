@@ -22,7 +22,7 @@
 			font:normal 11px tahoma, arial, helvetica, sans-serif;
 			padding:3px 10px 3px 10px;
 			border:1px solid #fff;
-			border-bottom:1px solid #eeeeee;
+			border-bottom:1px solid #eeeeee;+
 			white-space:normal;
 			color:#555;
 		}
@@ -546,7 +546,7 @@ Ext.onReady(function(){
 	cabangListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'cabangListEditorGrid',
 		el: 'fp_cabang',
-		title: 'List Of Cabang',
+		title: 'Daftar Cabang',
 		autoHeight: true,
 		store: cabang_DataStore, // DataStore
 		cm: cabang_ColumnModel, // Nama-nama Columns
@@ -971,7 +971,7 @@ Ext.onReady(function(){
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
 	cabang_searchWindow = new Ext.Window({
-		title: 'cabang Search',
+		title: 'Pencarian Cabang',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,

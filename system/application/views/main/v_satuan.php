@@ -459,7 +459,7 @@ Ext.onReady(function(){
 	satuanListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'satuanListEditorGrid',
 		el: 'fp_satuan',
-		title: 'List Of Satuan',
+		title: 'Daftar Satuan',
 		autoHeight: true,
 		store: satuan_DataStore, // DataStore
 		cm: satuan_ColumnModel, // Nama-nama Columns
@@ -793,7 +793,7 @@ Ext.onReady(function(){
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
 	satuan_searchWindow = new Ext.Window({
-		title: 'satuan Search',
+		title: 'Pencarian Satuan',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,

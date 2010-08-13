@@ -737,7 +737,7 @@ Ext.onReady(function(){
 	supplierListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'supplierListEditorGrid',
 		el: 'fp_supplier',
-		title: 'List Of Supplier',
+		title: 'Daftar Supplier',
 		autoHeight: true,
 		store: supplier_DataStore, // DataStore
 		cm: supplier_ColumnModel, // Nama-nama Columns
@@ -1351,7 +1351,7 @@ Ext.onReady(function(){
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
 	supplier_searchWindow = new Ext.Window({
-		title: 'supplier Search',
+		title: 'Pencarian Supplier',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,

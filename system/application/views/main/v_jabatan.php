@@ -462,7 +462,7 @@ Ext.onReady(function(){
 	jabatanListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'jabatanListEditorGrid',
 		el: 'fp_jabatan',
-		title: 'List Of Jabatan',
+		title: 'Daftar Jabatan',
 		autoHeight: true,
 		store: jabatan_DataStore, // DataStore
 		cm: jabatan_ColumnModel, // Nama-nama Columns
@@ -805,7 +805,7 @@ Ext.onReady(function(){
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
 	jabatan_searchWindow = new Ext.Window({
-		title: 'jabatan Search',
+		title: 'Pencarian Jabatan',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,

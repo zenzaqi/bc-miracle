@@ -488,7 +488,7 @@ Ext.onReady(function(){
 	kategoriListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'kategoriListEditorGrid',
 		el: 'fp_kategori',
-		title: 'List Of Jenis',
+		title: 'Daftar Jenis',
 		autoHeight: true,
 		store: kategori_DataStore, // DataStore
 		cm: kategori_ColumnModel, // Nama-nama Columns
@@ -861,7 +861,7 @@ Ext.onReady(function(){
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
 	kategori_searchWindow = new Ext.Window({
-		title: 'kategori Search',
+		title: 'Pencarian Jenis',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,

@@ -1932,7 +1932,7 @@ Ext.onReady(function(){
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
 	paket_searchWindow = new Ext.Window({
-		title: 'paket Search',
+		title: 'Pencarian Paket',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,
