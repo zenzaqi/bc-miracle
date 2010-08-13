@@ -2270,7 +2270,7 @@ Ext.onReady(function(){
 			hidden: true
 		},
 		{
-			header: 'Last Update by',
+			header: 'Last Update on',
 			dataIndex: 'cust_update',
 			width: 150,
 			sortable: true,
@@ -2449,7 +2449,7 @@ Ext.onReady(function(){
 			disabled: true,
 			handler: customer_confirm_delete   // Confirm before deleting
 		}, '-', {
-			text: 'Adv Search',
+			text: 'Search',
 			tooltip: 'Advanced Search',
 			iconCls:'icon-search',
 			handler: display_form_search_window 
@@ -3947,7 +3947,7 @@ Ext.onReady(function(){
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
 	customer_searchWindow = new Ext.Window({
-		title: 'Customer Search',
+		title: 'Pencarian Customer',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,

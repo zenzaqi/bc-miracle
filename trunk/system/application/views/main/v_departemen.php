@@ -461,7 +461,7 @@ Ext.onReady(function(){
 	departemenListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'departemenListEditorGrid',
 		el: 'fp_departemen',
-		title: 'List Of Departemen',
+		title: 'Daftar Departemen',
 		autoHeight: true,
 		store: departemen_DataStore, // DataStore
 		cm: departemen_ColumnModel, // Nama-nama Columns
@@ -803,7 +803,7 @@ Ext.onReady(function(){
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
 	departemen_searchWindow = new Ext.Window({
-		title: 'departemen Search',
+		title: 'Pencarian Departemen',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,

@@ -2146,7 +2146,7 @@ Ext.onReady(function(){
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
 	karyawan_searchWindow = new Ext.Window({
-		title: 'karyawan Search',
+		title: 'Pencarian Karyawan',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,

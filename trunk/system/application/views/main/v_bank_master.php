@@ -461,7 +461,7 @@ Ext.onReady(function(){
 	bank_masterListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'bank_masterListEditorGrid',
 		el: 'fp_bank_master',
-		title: 'List Of Bank_master',
+		title: 'Daftar Bank',
 		autoHeight: true,
 		store: bank_master_DataStore, // DataStore
 		cm: bank_master_ColumnModel, // Nama-nama Columns
@@ -665,7 +665,7 @@ Ext.onReady(function(){
 	/* Function for retrieve create Window Form */
 	bank_master_createWindow= new Ext.Window({
 		id: 'bank_master_createWindow',
-		title: post2db+'Master Bank',
+		title: post2db+' Bank',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,
@@ -802,7 +802,7 @@ Ext.onReady(function(){
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
 	bank_master_searchWindow = new Ext.Window({
-		title: 'bank_master Search',
+		title: 'Pencarian Bank',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,

@@ -693,7 +693,7 @@ Ext.onReady(function(){
 	produk_groupListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'produk_groupListEditorGrid',
 		el: 'fp_produk_group',
-		title: 'List Of Produk_group',
+		title: 'Daftar Group 1',
 		autoHeight: true,
 		store: produk_group_DataStore, // DataStore
 		cm: produk_group_ColumnModel, // Nama-nama Columns
@@ -1039,7 +1039,7 @@ Ext.onReady(function(){
 	/* Function for retrieve create Window Form */
 	produk_group_createWindow= new Ext.Window({
 		id: 'produk_group_createWindow',
-		title: post2db+'Produk_group',
+		title: post2db+' Group 1',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,
@@ -1346,7 +1346,7 @@ Ext.onReady(function(){
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
 	produk_group_searchWindow = new Ext.Window({
-		title: 'produk_group Search',
+		title: 'Pencarian Group 1',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,

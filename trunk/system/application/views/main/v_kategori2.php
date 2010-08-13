@@ -509,7 +509,7 @@ Ext.onReady(function(){
 	kategori2ListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'kategori2ListEditorGrid',
 		el: 'fp_kategori2',
-		title: 'List Of Contribution Category',
+		title: 'Contribution Category',
 		autoHeight: true,
 		store: kategori2_DataStore, // DataStoree
 		cm: kategori2_ColumnModel, // Nama-nama Columns
@@ -880,7 +880,7 @@ Ext.onReady(function(){
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
 	kategori2_searchWindow = new Ext.Window({
-		title: 'kategori2 Search',
+		title: 'Pencarian Contribution Category',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,
