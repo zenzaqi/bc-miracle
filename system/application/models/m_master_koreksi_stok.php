@@ -18,6 +18,41 @@ class M_master_koreksi_stok extends Model{
 			parent::Model();
 		}
 		
+		function get_laporan($tgl_awal,$tgl_akhir,$periode,$opsi,$group,$faktur){
+			
+			switch($group){
+				case "Tanggal": $koreksi_by=" ORDER BY tanggal ASC";break;
+				case "Gudang": $koreksi_by=" ORDER BY gudang_id ASC";break;
+				case "No Bukti": $koreksi_by=" ORDER BY no_bukti ASC";break;
+				case "Produk": $koreksi_by=" ORDER BY produk_id ASC";break;
+				default: $koreksi_by=" ORDER BY no_bukti ASC";break;
+			}
+			
+			if($opsi=='rekap'){
+				if($periode=='all')
+					$sql="SELECT * FROM vu_trans_koreksi WHERE koreksi_status<>'Batal' ".$koreksi_by;
+				else if($periode=='bulan')
+					$sql="SELECT * FROM vu_trans_koreksi WHERE koreksi_status<>'Batal' AND date_format(tanggal,'%Y-%m')='".$tgl_awal."' ".$koreksi_by;
+				else if($periode=='tanggal')
+					$sql="SELECT * FROM vu_trans_koreksi WHERE koreksi_status<>'Batal' AND date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' 
+							AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."' ".$koreksi_by;
+			}else if($opsi=='detail'){
+				if($periode=='all')
+					$sql="SELECT * FROM vu_detail_koreksi koreksi_status<>'Batal' AND  ".$koreksi_by;
+				else if($periode=='bulan')
+					$sql="SELECT * FROM vu_detail_koreksi WHERE koreksi_status<>'Batal' AND date_format(tanggal,'%Y-%m')='".$tgl_awal."' ".$koreksi_by;
+				else if($periode=='tanggal')
+					$sql="SELECT * FROM vu_detail_koreksi WHERE koreksi_status<>'Batal' AND date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' 
+							AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."' ".$koreksi_by;
+			}else if($opsi=='faktur'){
+				$sql="SELECT * FROM vu_detail_koreksi WHERE dkoreksi_master='".$faktur."'";
+			}
+			//echo $sql;
+			$query=$this->db->query($sql);
+			//return $query->result();
+            return $query; //by masongbee
+		}
+		
 		function get_stok_produk_selected($gudang,$produk_id){
 			/*if($gudang==1){
 				$sql="SELECT distinct produk_id,produk_kode,produk_nama,jumlah_stok,satuan_kode,satuan_id, satuan_nama FROM vu_stok_gudang_besar_saldo 

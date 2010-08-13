@@ -44,19 +44,19 @@
 </style>
 <script>
 
-var rpt_orderWindow;
-var rpt_orderForm;
+var rpt_koreksiWindow;
+var rpt_koreksiForm;
 
-var rpt_order_tglawalField;
-var rpt_order_tglakhirField;
-var rpt_order_rekapField;
-var rpt_order_detailField;
-var rpt_order_bulanField;
-var rpt_order_tahunField;
-var rpt_order_opsitglField;
-var rpt_order_opsiblnField;
-var rpt_order_opsiallField;
-var rpt_order_groupField;
+var rpt_koreksi_tglawalField;
+var rpt_koreksi_tglakhirField;
+var rpt_koreksi_rekapField;
+var rpt_koreksi_detailField;
+var rpt_koreksi_bulanField;
+var rpt_koreksi_tahunField;
+var rpt_koreksi_opsitglField;
+var rpt_koreksi_opsiblnField;
+var rpt_koreksi_opsiallField;
+var rpt_koreksi_groupField;
 
 var today=new Date().format('Y-m-d');
 var yesterday=new Date().add(Date.DAY, -1).format('Y-m-d');
@@ -103,31 +103,31 @@ Ext.onReady(function(){
 	var group_master_Store= new Ext.data.SimpleStore({
 			id: 'group_master_Store',
 			fields:['group'],
-			data:[['No Faktur'],['Tanggal'],['Supplier']]
+			data:[['No Bukti'],['Tanggal'],['Gudang']]
 	});
 	
 	var group_detail_Store= new Ext.data.SimpleStore({
 			id: 'group_detail_Store',
 			fields:['group'],
-			data:[['No Faktur'],['Tanggal'],['Supplier'],['Produk']]
+			data:[['No Bukti'],['Tanggal'],['Gudang'],['Produk']]
 	});
 	
-	var rpt_order_groupField=new Ext.form.ComboBox({
-		id:'rpt_order_groupField',
+	var rpt_koreksi_groupField=new Ext.form.ComboBox({
+		id:'rpt_koreksi_groupField',
 		fieldLabel:'Kelompokkan',
 		store: group_master_Store,
 		mode: 'local',
 		displayField: 'group',
 		valueField: 'group',
-		value: 'No Faktur',
+		value: 'No Bukti',
 		width: 100,
 		triggerAction: 'all',
 		typeAhead: true,
 		lazyRender: true
 	});
 	
-	rpt_order_bulanField=new Ext.form.ComboBox({
-		id:'rpt_order_bulanField',
+	rpt_koreksi_bulanField=new Ext.form.ComboBox({
+		id:'rpt_koreksi_bulanField',
 		fieldLabel:' ',
 		store:new Ext.data.SimpleStore({
 			fields:['value', 'display'],
@@ -141,8 +141,8 @@ Ext.onReady(function(){
 		triggerAction: 'all'
 	});
 	
-	rpt_order_tahunField=new Ext.form.ComboBox({
-		id:'rpt_order_tahunField',
+	rpt_koreksi_tahunField=new Ext.form.ComboBox({
+		id:'rpt_koreksi_tahunField',
 		fieldLabel:' ',
 		store:new Ext.data.SimpleStore({
 			fields:['tahun'],
@@ -156,66 +156,66 @@ Ext.onReady(function(){
 		triggerAction: 'all'
 	});
 	
-	rpt_order_opsitglField=new Ext.form.Radio({
-		id:'rpt_order_opsitglField',
+	rpt_koreksi_opsitglField=new Ext.form.Radio({
+		id:'rpt_koreksi_opsitglField',
 		boxLabel:'Tanggal',
 		width:100,
 		name: 'filter_opsi',
 		checked: true
 	});
 	
-	rpt_order_opsiblnField=new Ext.form.Radio({
-		id:'rpt_order_opsiblnField',
+	rpt_koreksi_opsiblnField=new Ext.form.Radio({
+		id:'rpt_koreksi_opsiblnField',
 		boxLabel:'Bulan',
 		width:100,
 		name: 'filter_opsi'
 	});
 	
-	rpt_order_opsiallField=new Ext.form.Radio({
-		id:'rpt_order_opsiallField',
+	rpt_koreksi_opsiallField=new Ext.form.Radio({
+		id:'rpt_koreksi_opsiallField',
 		boxLabel:'Semua',
 		name: 'filter_opsi'
 	});
 	
-	rpt_order_tglawalField= new Ext.form.DateField({
-		id: 'rpt_order_tglawalField',
+	rpt_koreksi_tglawalField= new Ext.form.DateField({
+		id: 'rpt_koreksi_tglawalField',
 		fieldLabel: ' ',
 		format : 'Y-m-d',
-		name: 'rpt_order_tglawalField',
-        //vtype: 'daterange',
+		name: 'rpt_koreksi_tglawalField',
+       // vtype: 'daterange',
 		allowBlank: true,
 		width: 100,
-        //endDateField: 'rpt_order_tglakhirField'
 		value: today
+        //endDateField: 'rpt_koreksi_tglakhirField'
 	});
 	
-	rpt_order_tglakhirField= new Ext.form.DateField({
-		id: 'rpt_order_tglakhirField',
+	rpt_koreksi_tglakhirField= new Ext.form.DateField({
+		id: 'rpt_koreksi_tglakhirField',
 		fieldLabel: 's/d',
 		format : 'Y-m-d',
-		name: 'rpt_order_tglakhirField',
+		name: 'rpt_koreksi_tglakhirField',
         //vtype: 'daterange',
 		allowBlank: true,
 		width: 100,
-        //startDateField: 'rpt_order_tglawalField',
+       // startDateField: 'rpt_koreksi_tglawalField',
 		value: today
 	});
 	
-	rpt_order_rekapField=new Ext.form.Radio({
-		id: 'rpt_order_rekapField',
+	rpt_koreksi_rekapField=new Ext.form.Radio({
+		id: 'rpt_koreksi_rekapField',
 		boxLabel: 'Rekap',
-		name: 'order_opsi',
+		name: 'koreksi_opsi',
 		checked: true
 	});
 	
-	rpt_order_detailField=new Ext.form.Radio({
-		id: 'rpt_order_detailField',
+	rpt_koreksi_detailField=new Ext.form.Radio({
+		id: 'rpt_koreksi_detailField',
 		boxLabel: 'Detail',
-		name: 'order_opsi'
+		name: 'koreksi_opsi'
 	});
 	
-	var rpt_order_periodeField=new Ext.form.FieldSet({
-		id:'rpt_order_periodeField',
+	var rpt_koreksi_periodeField=new Ext.form.FieldSet({
+		id:'rpt_koreksi_periodeField',
 		title : 'Periode',
 		layout: 'form',
 		bodyStyle:'padding: 0px 0px 0',
@@ -225,122 +225,122 @@ Ext.onReady(function(){
 		items:[/*{
 				layout: 'column',
 				border: false,
-				items:[rpt_order_opsiallField]
+				items:[rpt_koreksi_opsiallField]
 			},*/{
 				layout: 'column',
 				border: false,
-				items:[rpt_order_opsitglField, {
+				items:[rpt_koreksi_opsitglField, {
 					   		layout: 'form',
 							border: false,
 							labelWidth: 15,
 							bodyStyle:'padding:3px',
-							items:[rpt_order_tglawalField]
+							items:[rpt_koreksi_tglawalField]
 					   },{
 					   		layout: 'form',
 							border: false,
 							labelWidth: 15,
 							bodyStyle:'padding:3px',
 							labelSeparator: ' ', 
-							items:[rpt_order_tglakhirField]
+							items:[rpt_koreksi_tglakhirField]
 					   }]
 			},{
 				layout: 'column',
 				border: false,
-				items:[rpt_order_opsiblnField,{
+				items:[rpt_koreksi_opsiblnField,{
 					   		layout: 'form',
 							border: false,
 							labelWidth: 15,
 							bodyStyle:'padding:3px',
-							items:[rpt_order_bulanField]
+							items:[rpt_koreksi_bulanField]
 					   },{
 					   		layout: 'form',
 							border: false,
 							labelWidth: 15,
 							bodyStyle:'padding:3px',
 							labelSeparator: ' ', 
-							items:[rpt_order_tahunField]
+							items:[rpt_koreksi_tahunField]
 					   }]
 			}]
 	});
 	
-	var	rpt_order_opsiField=new Ext.form.FieldSet({
-		id: 'rpt_order_opsiField',
+	var	rpt_koreksi_opsiField=new Ext.form.FieldSet({
+		id: 'rpt_koreksi_opsiField',
 		title: 'Opsi',
 		border: true,
 		anchor: '98%',
-		items: [rpt_order_rekapField ,rpt_order_detailField]
+		items: [rpt_koreksi_rekapField ,rpt_koreksi_detailField]
 	});
 	
-	var	rpt_order_groupbyField=new Ext.form.FieldSet({
-		id: 'rpt_order_groupbyField',
+	var	rpt_koreksi_groupbyField=new Ext.form.FieldSet({
+		id: 'rpt_koreksi_groupbyField',
 		title: 'Group By',
 		border: true,
 		anchor: '98%',
-		items: [rpt_order_groupField]
+		items: [rpt_koreksi_groupField]
 	});
 	
 	function is_valid_form(){
-		if(rpt_order_opsitglField.getValue()==true){
-			rpt_order_tglawalField.allowBlank=false;
-			rpt_order_tglakhirField.allowBlank=false;
-			if(rpt_order_tglawalField.isValid() && rpt_order_tglakhirField.isValid())
+		if(rpt_koreksi_opsitglField.getValue()==true){
+			rpt_koreksi_tglawalField.allowBlank=false;
+			rpt_koreksi_tglakhirField.allowBlank=false;
+			if(rpt_koreksi_tglawalField.isValid() && rpt_koreksi_tglakhirField.isValid())
 				return true;
 			else
 				return false;
 		}else{
-			rpt_order_tglawalField.allowBlank=true;
-			rpt_order_tglakhirField.allowBlank=true;
+			rpt_koreksi_tglawalField.allowBlank=true;
+			rpt_koreksi_tglakhirField.allowBlank=true;
 			return true;
 		}
 	}
 	
 	/* Function for print List Grid */
-	function print_rpt_order(){
+	function print_rpt_koreksi(){
 		
-		var order_tglawal="";
-		var order_tglakhir="";
-		var order_opsi="";
-		var order_bulan="";
-		var order_tahun="";
-		var order_periode="";
-		var order_group="";
+		var koreksi_tglawal="";
+		var koreksi_tglakhir="";
+		var koreksi_opsi="";
+		var koreksi_bulan="";
+		var koreksi_tahun="";
+		var koreksi_periode="";
+		var koreksi_group="";
 		
 		var win;               
 		if(is_valid_form()){
 			
-		if(rpt_order_tglawalField.getValue()!==""){order_tglawal = rpt_order_tglawalField.getValue().format('Y-m-d');}
-		if(rpt_order_tglakhirField.getValue()!==""){order_tglakhir = rpt_order_tglakhirField.getValue().format('Y-m-d');}
-		if(rpt_order_bulanField.getValue()!==""){order_bulan=rpt_order_bulanField.getValue(); }
-		if(rpt_order_tahunField.getValue()!==""){order_tahun=rpt_order_tahunField.getValue(); }
-		if(rpt_order_opsitglField.getValue()==true){
-			order_periode='tanggal';
-		}else if(rpt_order_opsiblnField.getValue()==true){
-			order_periode='bulan';
+		if(rpt_koreksi_tglawalField.getValue()!==""){koreksi_tglawal = rpt_koreksi_tglawalField.getValue().format('Y-m-d');}
+		if(rpt_koreksi_tglakhirField.getValue()!==""){koreksi_tglakhir = rpt_koreksi_tglakhirField.getValue().format('Y-m-d');}
+		if(rpt_koreksi_bulanField.getValue()!==""){koreksi_bulan=rpt_koreksi_bulanField.getValue(); }
+		if(rpt_koreksi_tahunField.getValue()!==""){koreksi_tahun=rpt_koreksi_tahunField.getValue(); }
+		if(rpt_koreksi_opsitglField.getValue()==true){
+			koreksi_periode='tanggal';
+		}else if(rpt_koreksi_opsiblnField.getValue()==true){
+			koreksi_periode='bulan';
 		}else{
-			order_periode='all';
+			koreksi_periode='all';
 		}
-		if(rpt_order_groupField.getValue()!==""){order_group=rpt_order_groupField.getValue(); }
+		if(rpt_koreksi_groupField.getValue()!==""){koreksi_group=rpt_koreksi_groupField.getValue(); }
 		
-		if(rpt_order_rekapField.getValue()==true){order_opsi='rekap';}else{order_opsi='detail';}
+		if(rpt_koreksi_rekapField.getValue()==true){koreksi_opsi='rekap';}else{koreksi_opsi='detail';}
 		
 			Ext.Ajax.request({   
 				waitMsg: 'Please Wait...',
-				url: 'index.php?c=c_master_order_beli&m=print_laporan',
+				url: 'index.php?c=c_master_koreksi_stok&m=print_laporan',
 				params: {
-					tgl_awal	: order_tglawal,
-					tgl_akhir	: order_tglakhir,
-					opsi		: order_opsi,
-					bulan		: order_bulan,
-					tahun		: order_tahun,
-					periode		: order_periode,
-					group		: order_group
+					tgl_awal	: koreksi_tglawal,
+					tgl_akhir	: koreksi_tglakhir,
+					opsi		: koreksi_opsi,
+					bulan		: koreksi_bulan,
+					tahun		: koreksi_tahun,
+					periode		: koreksi_periode,
+					group		: koreksi_group
 					
 				}, 
 				success: function(response){              
 					var result=eval(response.responseText);
 					switch(result){
 					case 1:
-						win = window.open('./print/report_order.html','report_order','height=400,width=800,resizable=1,scrollbars=1, menubar=1');
+						win = window.open('./print/report_koreksi.html','report_koreksi','height=400,width=800,resizable=1,scrollbars=1, menubar=1');
 						//win.print();
 						break;
 					default:
@@ -377,23 +377,23 @@ Ext.onReady(function(){
 	}
 	/* Enf Function */
 	
-	rpt_orderForm = new Ext.FormPanel({
+	rpt_koreksiForm = new Ext.FormPanel({
 		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		x:0,
 		y:0,
 		width: 400, 
 		autoHeight: true,
-		items: [rpt_order_periodeField,rpt_order_opsiField, rpt_order_groupbyField],
+		items: [rpt_koreksi_periodeField,rpt_koreksi_opsiField, rpt_koreksi_groupbyField],
 		monitorValid:true,
 		buttons: [{
 				text: 'Print',
 				formBind: true,
-				handler: print_rpt_order
+				handler: print_rpt_koreksi
 			},{
 				text: 'Close',
 				handler: function(){
-					rpt_orderWindow.hide();
+					rpt_koreksiWindow.hide();
 					mainPanel.remove(mainPanel.getActiveTab().getId());
 				}
 		}]
@@ -401,8 +401,8 @@ Ext.onReady(function(){
 	});
 	
 	/* Form Advanced Search */
-	rpt_orderWindow = new Ext.Window({
-		title: 'Laporan Order Pembelian',
+	rpt_koreksiWindow = new Ext.Window({
+		title: 'Laporan Penyesuaian Stok',
 		closable:false,
 		closeAction: 'hide',
 		resizable: false,
@@ -411,40 +411,40 @@ Ext.onReady(function(){
 		x: 0,
 		y: 0,
 		modal: true,
-		renderTo: 'elwindow_rpt_order',
-		items: rpt_orderForm
+		renderTo: 'elwindow_rpt_koreksi',
+		items: rpt_koreksiForm
 	});
-  	rpt_orderWindow.show();
+  	rpt_koreksiWindow.show();
 	
 	//EVENTS
 	
-	rpt_order_rekapField.on("check", function(){
-		rpt_order_groupField.setValue('No Faktur');
-		if(rpt_order_rekapField.getValue()==true){
-			rpt_order_groupField.bindStore(group_master_Store);
+	rpt_koreksi_rekapField.on("check", function(){
+		rpt_koreksi_groupField.setValue('No Bukti');
+		if(rpt_koreksi_rekapField.getValue()==true){
+			rpt_koreksi_groupField.bindStore(group_master_Store);
 		}else
 		{
-			rpt_order_groupField.bindStore(group_detail_Store);
+			rpt_koreksi_groupField.bindStore(group_detail_Store);
 		}
 	});
 	
-	rpt_order_detailField.on("check", function(){
-		rpt_order_groupField.setValue('No Faktur');
-		if(rpt_order_detailField.getValue()==true){
-			rpt_order_groupField.bindStore(group_detail_Store);
+	rpt_koreksi_detailField.on("check", function(){
+		rpt_koreksi_groupField.setValue('No Bukti');
+		if(rpt_koreksi_detailField.getValue()==true){
+			rpt_koreksi_groupField.bindStore(group_detail_Store);
 		}else
 		{
-			rpt_order_groupField.bindStore(group_master_Store);
+			rpt_koreksi_groupField.bindStore(group_master_Store);
 		}
 	});
 	
-	rpt_order_opsitglField.on("check",function(){
-		if(rpt_order_opsitglField.getValue()==true){
-			rpt_order_tglawalField.allowBlank=false;
-			rpt_order_tglakhirField.allowBlank=false;
+	rpt_koreksi_opsitglField.on("check",function(){
+		if(rpt_koreksi_opsitglField.getValue()==true){
+			rpt_koreksi_tglawalField.allowBlank=false;
+			rpt_koreksi_tglakhirField.allowBlank=false;
 		}else{
-			rpt_order_tglawalField.allowBlank=true;
-			rpt_order_tglakhirField.allowBlank=true;
+			rpt_koreksi_tglawalField.allowBlank=true;
+			rpt_koreksi_tglakhirField.allowBlank=true;
 		}
 		
 	});
@@ -455,7 +455,7 @@ Ext.onReady(function(){
 <div>
 	<div class="col">
         <div id="fp_info"></div>
-		<div id="elwindow_rpt_order"></div>
+		<div id="elwindow_rpt_koreksi"></div>
     </div>
 </div>
 </body>
