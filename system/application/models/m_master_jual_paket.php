@@ -2680,7 +2680,7 @@ class M_master_jual_paket extends Model{
 			$date_now = date('Y-m-d');
 			$datetime_now=date('Y-m-d H:i:s');
 			//* status dokumen menjadi tertutup setelah Faktur selesai di-cetak /
-			$sql = "SELECT jpaket_tanggal FROM master_jual_produk WHERE jpaket_id='".$jpaket_id."'";
+			$sql = "SELECT jpaket_tanggal FROM master_jual_paket WHERE jpaket_id='".$jpaket_id."'";
 			$rs = $this->db->query($sql);
 			if($rs->num_rows()){
 				$record = $rs->row_array();
