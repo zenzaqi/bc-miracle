@@ -534,7 +534,7 @@ Ext.onReady(function(){
 			//transfer-3 value
 			if(jrawat_transfer_bank3Field.getValue()!== null){jrawat_transfer_bank3_create = jrawat_transfer_bank3Field.getValue();} 
 			if(jrawat_transfer_nama3Field.getValue()!== null){jrawat_transfer_nama3_create = jrawat_transfer_nama3Field.getValue();}
-			if(jrawat_transfer_nilai3Field.getValue()!== null){jrawat_transfer_nilai3_create = jrawat_transfer_nilai3Field.getValue();} 
+			if(jrawat_transfer_nilai3Field.getValue()!== null){jrawat_transfer_nilai3_create = jrawat_transfer_nilai3Field.getValue();}
 			Ext.Ajax.request({  
 				waitMsg: 'Please wait...',
 				waitMsg: 'Mohon tunggu...',
@@ -906,7 +906,7 @@ Ext.onReady(function(){
 		jrawat_cek_bankField.reset();
 		jrawat_cek_nilaiField.reset();
 		jrawat_cek_nilai_cfField.reset();
-		jrawat_cek_namaField.setValue(null);
+		jrawat_cek_namaField.setValue("");
 		jrawat_cek_noField.setValue("");
 		jrawat_cek_validField.setValue("");
 		jrawat_cek_bankField.setValue("");
@@ -921,7 +921,7 @@ Ext.onReady(function(){
 		jrawat_cek_bank2Field.reset();
 		jrawat_cek_nilai2Field.reset();
 		jrawat_cek_nilai2_cfField.reset();
-		jrawat_cek_nama2Field.setValue(null);
+		jrawat_cek_nama2Field.setValue("");
 		jrawat_cek_no2Field.setValue("");
 		jrawat_cek_valid2Field.setValue("");
 		jrawat_cek_bank2Field.setValue("");
@@ -936,7 +936,7 @@ Ext.onReady(function(){
 		jrawat_cek_bank3Field.reset();
 		jrawat_cek_nilai3Field.reset();
 		jrawat_cek_nilai3_cfField.reset();
-		jrawat_cek_nama3Field.setValue(null);
+		jrawat_cek_nama3Field.setValue("");
 		jrawat_cek_no3Field.setValue("");
 		jrawat_cek_valid3Field.setValue("");
 		jrawat_cek_bank3Field.setValue("");
@@ -951,7 +951,7 @@ Ext.onReady(function(){
 		jrawat_transfer_nilaiField.reset();
 		jrawat_transfer_nilai_cfField.reset();
 		jrawat_transfer_bankField.setValue("");
-		jrawat_transfer_namaField.setValue(null);
+		jrawat_transfer_namaField.setValue("");
 		jrawat_transfer_nilaiField.setValue(null);
 		jrawat_transfer_nilai_cfField.setValue(null);
 	}
@@ -962,7 +962,7 @@ Ext.onReady(function(){
 		jrawat_transfer_nilai2Field.reset();
 		jrawat_transfer_nilai2_cfField.reset();
 		jrawat_transfer_bank2Field.setValue("");
-		jrawat_transfer_nama2Field.setValue(null);
+		jrawat_transfer_nama2Field.setValue("");
 		jrawat_transfer_nilai2Field.setValue(null);
 		jrawat_transfer_nilai2_cfField.setValue(null);
 	}
@@ -973,7 +973,7 @@ Ext.onReady(function(){
 		jrawat_transfer_nilai3Field.reset();
 		jrawat_transfer_nilai3_cfField.reset();
 		jrawat_transfer_bank3Field.setValue("");
-		jrawat_transfer_nama3Field.setValue(null);
+		jrawat_transfer_nama3Field.setValue("");
 		jrawat_transfer_nilai3Field.setValue(null);
 		jrawat_transfer_nilai3_cfField.setValue(null);
 	}
