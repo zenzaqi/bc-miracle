@@ -1,0 +1,1 @@
+ALTER  TABLE  `paket`  ADD  `paket_perpanjangan` INT NOT  NULL DEFAULT  '365' AFTER  `paket_expired` 

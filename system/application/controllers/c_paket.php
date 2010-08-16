@@ -211,11 +211,12 @@ class C_paket extends Controller {
 		$paket_point=trim(@$_POST["paket_point"]);
 		$paket_harga=trim(@$_POST["paket_harga"]);
 		$paket_expired=trim(@$_POST["paket_expired"]);
+		$paket_perpanjangan=trim(@$_POST["paket_perpanjangan"]);
 		$paket_aktif=trim(@$_POST["paket_aktif"]);
 		$paket_aktif=str_replace("/(<\/?)(p)([^>]*>)", "",$paket_aktif);
 		$paket_aktif=str_replace(",", ",",$paket_aktif);
 		$paket_aktif=str_replace("'", '"',$paket_aktif);
-		$result = $this->m_paket->paket_update($paket_id ,$paket_kode ,$paket_kodelama ,$paket_nama ,$paket_group ,$paket_keterangan ,$paket_du ,$paket_dm ,$paket_point ,$paket_harga ,$paket_expired ,$paket_aktif      );
+		$result = $this->m_paket->paket_update($paket_id ,$paket_kode ,$paket_kodelama ,$paket_nama ,$paket_group ,$paket_keterangan ,$paket_du ,$paket_dm ,$paket_point ,$paket_harga ,$paket_expired , $paket_perpanjangan, $paket_aktif      );
 		echo $result;
 	}
 	
@@ -241,10 +242,11 @@ class C_paket extends Controller {
 		$paket_point=trim(@$_POST["paket_point"]);
 		$paket_harga=trim(@$_POST["paket_harga"]);
 		$paket_expired=trim(@$_POST["paket_expired"]);
+		$paket_perpanjangan=trim(@$_POST["paket_perpanjangan"]);
 		$paket_aktif=trim(@$_POST["paket_aktif"]);
 		$paket_aktif=str_replace("/(<\/?)(p)([^>]*>)", "",$paket_aktif);
 		$paket_aktif=str_replace("'", '"',$paket_aktif);
-		$result=$this->m_paket->paket_create($paket_kode ,$paket_kodelama ,$paket_nama ,$paket_group ,$paket_keterangan ,$paket_du ,$paket_dm ,$paket_point ,$paket_harga ,$paket_expired ,$paket_aktif );
+		$result=$this->m_paket->paket_create($paket_kode ,$paket_kodelama ,$paket_nama ,$paket_group ,$paket_keterangan ,$paket_du ,$paket_dm ,$paket_point ,$paket_harga ,$paket_expired , $paket_perpanjangan, $paket_aktif );
 		echo $result;
 	}
 
@@ -278,13 +280,14 @@ class C_paket extends Controller {
 		$paket_point=trim(@$_POST["paket_point"]);
 		$paket_harga=trim(@$_POST["paket_harga"]);
 		$paket_expired=trim(@$_POST["paket_expired"]);
+		$paket_perpanjangan=trim(@$_POST["paket_perpanjangan"]);
 		$paket_aktif=trim(@$_POST["paket_aktif"]);
 		$paket_aktif=str_replace("/(<\/?)(p)([^>]*>)", "",$paket_aktif);
 		$paket_aktif=str_replace("'", '"',$paket_aktif);
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_paket->paket_search($paket_id, $paket_kode, $paket_kodelama, $paket_nama, $paket_group, $paket_keterangan ,$paket_du, $paket_dm, $paket_point, $paket_harga, $paket_expired, $paket_aktif, $start, $end);
+		$result = $this->m_paket->paket_search($paket_id, $paket_kode, $paket_kodelama, $paket_nama, $paket_group, $paket_keterangan ,$paket_du, $paket_dm, $paket_point, $paket_harga, $paket_expired, $paket_perpanjangan, $paket_aktif, $start, $end);
 		echo $result;
 	}
 
@@ -310,13 +313,14 @@ class C_paket extends Controller {
 		$paket_point=trim(@$_POST["paket_point"]);
 		$paket_harga=trim(@$_POST["paket_harga"]);
 		$paket_expired=trim(@$_POST["paket_expired"]);
+		$paket_perpanjangan=trim(@$_POST["paket_perpanjangan"]);
 		$paket_aktif=trim(@$_POST["paket_aktif"]);
 		$paket_aktif=str_replace("/(<\/?)(p)([^>]*>)", "",$paket_aktif);
 		$paket_aktif=str_replace("'", '"',$paket_aktif);
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$result = $this->m_paket->paket_print($paket_id ,$paket_kode ,$paket_kodelama ,$paket_nama ,$paket_group ,$paket_keterangan ,$paket_du ,$paket_dm ,$paket_point ,$paket_harga ,$paket_expired ,$paket_aktif ,$option,$filter);
+		$result = $this->m_paket->paket_print($paket_id ,$paket_kode ,$paket_kodelama ,$paket_nama ,$paket_group ,$paket_keterangan ,$paket_du ,$paket_dm ,$paket_point ,$paket_harga ,$paket_expired , $paket_perpanjangan, $paket_aktif ,$option,$filter);
 		$nbrows=$result->num_rows();
 		$totcolumn=16;
    		/* We now have our array, let's build our HTML file */
@@ -355,6 +359,8 @@ class C_paket extends Controller {
 				fwrite($file, $data['paket_harga']);
 				fwrite($file,"</td><td>");
 				fwrite($file, $data['paket_expired']);
+				fwrite($file,"</td><td>");
+				fwrite($file, $data['paket_perpanjangan']);
 				fwrite($file,"</td><td>");
 				fwrite($file, $data['paket_aktif']);
 				fwrite($file, "</td></tr>");
@@ -398,13 +404,14 @@ class C_paket extends Controller {
 		$paket_point=trim(@$_POST["paket_point"]);
 		$paket_harga=trim(@$_POST["paket_harga"]);
 		$paket_expired=trim(@$_POST["paket_expired"]);
+		$paket_perpanjangan=trim(@$_POST["paket_perpanjangan"]);
 		$paket_aktif=trim(@$_POST["paket_aktif"]);
 		$paket_aktif=str_replace("/(<\/?)(p)([^>]*>)", "",$paket_aktif);
 		$paket_aktif=str_replace("'", '"',$paket_aktif);
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$query = $this->m_paket->paket_export_excel($paket_id ,$paket_kode ,$paket_kodelama ,$paket_nama ,$paket_group ,$paket_keterangan ,$paket_du ,$paket_dm ,$paket_point ,$paket_harga ,$paket_expired ,$paket_aktif ,$option,$filter);
+		$query = $this->m_paket->paket_export_excel($paket_id ,$paket_kode ,$paket_kodelama ,$paket_nama ,$paket_group ,$paket_keterangan ,$paket_du ,$paket_dm ,$paket_point ,$paket_harga ,$paket_expired , $paket_perpanjangan, $paket_aktif ,$option,$filter);
 		
 		to_excel($query,"paket"); 
 		echo '1';
