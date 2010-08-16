@@ -462,7 +462,7 @@ class M_master_ambil_paket extends Model{
 				LEFT JOIN customer ON(jpaket_cust=cust_id) 
 				LEFT JOIN paket ON(dpaket_paket=paket_id) 
 				WHERE dpaket_sisa_paket >= 0
-					AND date_format(dpaket_kadaluarsa,'%Y-%m-%d') >= date_format(now(),'%Y-%m-%d')
+					AND date_add(date_format(dpaket_kadaluarsa,'%Y-%m-%d'), interval 365 day) >= date_format(now(),'%Y-%m-%d')
 					AND jpaket_stat_dok='Tertutup' ";
 
 			// For simple search
