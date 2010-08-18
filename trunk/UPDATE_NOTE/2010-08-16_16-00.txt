@@ -1,0 +1,1 @@
+2010-08-16_16-00.sql --> add field `paket_perpanjangan` yg nantinya akan digunakan sbg masa toleransi pengambilan paket
