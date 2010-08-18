@@ -19,7 +19,7 @@
 </head>
 <body onload="window.print();">
 <table summary='Detail Jual'>
-	<caption>Laporan Detail Penjualan <?php echo $jenis; ?><br/><?php echo $periode; ?>Group By  No. Faktur</caption>
+	<caption>Laporan Detail Penjualan <?php echo $jenis; ?><br/><?php echo $periode; ?> <br/>Group By  No Faktur</caption>
 	<thead>
     	<tr>
         	<th scope='col'>No</th>
