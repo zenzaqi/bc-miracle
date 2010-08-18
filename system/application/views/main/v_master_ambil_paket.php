@@ -692,7 +692,7 @@ Ext.onReady(function(){
 		            }
 				},
 				render: function(c){
-				Ext.get(this.id).set({qtitle:'Search by (khusus belum kadaluarsa):'});
+				Ext.get(this.id).set({qtitle:'Search by (khusus blm kadaluarsa + 1 th perpanjangan):'});
 				Ext.get(this.id).set({qtip:' - No Customer<br> - Nama Customer<br> - Kode Paket<br> - Nama Paket'});
 				}
 			},
