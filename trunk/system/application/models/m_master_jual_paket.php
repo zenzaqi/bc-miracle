@@ -2477,7 +2477,8 @@ class M_master_jual_paket extends Model{
 			
 			//$date_now = date('Y-m-d');
 			$datetime_now = date('Y-m-d H:i:s');
-			$sql = "SELECT dapaket_id FROM detail_ambil_paket WHERE dapaket_jpaket='$jpaket_id'";
+			//$sql = "SELECT dapaket_id FROM detail_ambil_paket WHERE dapaket_jpaket='$jpaket_id'";
+			$sql = "SELECT dapaket_id FROM detail_ambil_paket WHERE dapaket_jpaket='$jpaket_id' AND dapaket_stat_dok<>'Batal'";
 			$rs = $this->db->query($sql);
 			if($rs->num_rows()){
 				//* artinya: Customer sudah pernah mengambil paket pada Faktur ini. Sehingga tidak boleh di-Batal-kan. /
