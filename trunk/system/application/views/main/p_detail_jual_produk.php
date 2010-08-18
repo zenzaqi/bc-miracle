@@ -20,7 +20,7 @@
 </head>
 <body onload="window.print();">
 <table summary='Detail Jual'>
-	<caption>Laporan Detail Penjualan <?php echo $jenis; ?><br/><?php echo $periode; ?>Group By Produk</caption>
+	<caption>Laporan Detail Penjualan <?php echo $jenis; ?><br/><?php echo $periode; ?><br/>Group By Produk</caption>
 	<thead>
     	<tr>
         	<th scope='col'>No</th>
@@ -58,7 +58,7 @@
 					$i=0; 
 			?>
            <?php foreach($data_print as $print_list) {  ?>
-           <?php if($print_list->produk_id==$group){ $i++;
+           <?php if($print_list->produk_id==$print->produk_id){ $i++;
 		   			$sub_jumlah_barang+=$print_list->jumlah_barang;
 					$sub_diskon+=$print_list->diskon_nilai;
 					$sub_total+=$print_list->subtotal;

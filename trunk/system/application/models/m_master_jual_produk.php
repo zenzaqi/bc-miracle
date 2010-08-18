@@ -25,7 +25,7 @@ class M_master_jual_produk extends Model{
 				case "Tanggal": $order_by=" ORDER BY tanggal ASC";break;
 				case "Customer": $order_by=" ORDER BY cust_nama ASC";break;
 				case "No Faktur": $order_by=" ORDER BY no_bukti ASC";break;
-				case "Produk": $order_by=" ORDER BY produk_kode ASC";break;
+				case "Produk": $order_by=" ORDER BY produk_id ASC";break;
 				case "Sales": $order_by=" ORDER BY sales ASC";break;
 				case "Jenis Diskon": $order_by=" ORDER BY diskon_jenis";break;
 				default: $order_by=" ORDER BY no_bukti ASC";break;

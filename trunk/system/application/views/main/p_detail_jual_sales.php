@@ -20,7 +20,7 @@
 </head>
 <body onload="window.print();">
 <table summary='Detail Jual'>
-	<caption>Laporan Detail Penjualan <?php echo $jenis; ?><br/><?php echo $periode; ?>Group By  Sales</caption>
+	<caption>Laporan Detail Penjualan <?php echo $jenis; ?><br/><?php echo $periode; ?><br/>Group By  Sales</caption>
 	<thead>
     	<tr>
         	<th scope='col'>No</th>
@@ -39,38 +39,15 @@
             <th scope='col'>Total (Rp)</th>
         </tr>
     </thead>
-	<tfoot>
-    	<tr>
-        	<td class="clear">&nbsp;</td>
-        	<th scope='row' nowrap="nowrap">Jumlah data</th>
-            <td colspan='11'><?php echo count($data_print); ?> data</td>
-        </tr>
-        <tr>
-        	<td class="clear">&nbsp;</td>
-        	<th scope='row' colspan="12">Summary</th>
-        </tr>
-        <tr>
-        	<td class="clear">&nbsp;</td>
-        	<th scope='row' nowrap="nowrap">Tot Item</th>
-            <td class="numeric clear" nowrap="nowrap"><?php echo number_format($total_item,0,",",","); ?></td>
-            <td colspan="10" class="clear">&nbsp;</td>
-        </tr>
-        <tr>
-        	<td class="clear">&nbsp;</td>
-        	<th scope='row' nowrap="nowrap">Total Disk (Rp)</th>
-            <td class="numeric clear" nowrap="nowrap" ><?php echo number_format($total_diskon,0,",",","); ?></td>
-            <td colspan="10" class="clear">&nbsp;</td>
-        </tr>
-        <tr>
-        	<td class="clear">&nbsp;</td>
-        	<th scope='row' nowrap="nowrap">Total (Rp)</th>
-            <td class="numeric clear" nowrap="nowrap"><?php echo number_format($total_nilai,0,",",","); ?></td>
-            <td colspan="10" class="clear">&nbsp;</td>
-        </tr>
-	</tfoot>
 	<tbody>
 		        
-        <?php $i=0; $j=0; $sales=""; foreach($data_print as $print) { ?>
+        <?php $i=0; $j=0; $sales=""; 
+				$total_item=0;
+				$total_diskon=0;
+				$total_nilai=0;
+		
+		
+				foreach($data_print as $print) { ?>
 			<?php if($sales!==$print->sales) { ?>
            <tr>
                 <td><b><? $j++; echo $j; ?></b></td>
@@ -92,6 +69,10 @@
 		   			$sub_jumlah_barang+=$print_list->jumlah_barang;
 					$sub_diskon+=$print_list->diskon_nilai;
 					$sub_total+=$print_list->subtotal;
+					
+					$total_item+=$print_list->jumlah_barang;
+					$total_diskon+=$print_list->diskon_nilai;
+					$total_nilai+=$print_list->subtotal;
 		   ?>
             <tr>
                 <td><? echo $i; ?></td>
@@ -102,28 +83,57 @@
                 <td><?php echo $print_list->produk_kode; ?></td>
                 <td><?php echo $print_list->produk_nama; ?></td>
                 <?//<td> echo $print_list->satuan_nama; </td>?>
-                <td class="numeric"><?php echo number_format($print_list->jumlah_barang,0,",",","); ?></td>
-                <td class="numeric"><?php echo number_format($print_list->harga_satuan,0,",",","); ?></td>
-                <td class="numeric"><?php echo number_format($print_list->diskon,0,",",","); ?></td>
-                <td class="numeric"><?php echo number_format($print_list->diskon_nilai,0,",",","); ?></td>
+                <td class="numeric"><?php echo number_format($print_list->jumlah_barang,0,",","."); ?></td>
+                <td class="numeric"><?php echo number_format($print_list->harga_satuan,0,",","."); ?></td>
+                <td class="numeric"><?php echo number_format($print_list->diskon,0,",","."); ?></td>
+                <td class="numeric"><?php echo number_format($print_list->diskon_nilai,0,",","."); ?></td>
                 <td class="numeric"><?php echo $print_list->diskon_jenis; ?></td>
-                <td class="numeric"><?php echo number_format($print_list->subtotal,0,",",","); ?></td>
+                <td class="numeric"><?php echo number_format($print_list->subtotal,0,",","."); ?></td>
            </tr>
            <?php } ?>
            <?php } ?>
            <tr>
                 <td colspan="7"><b>Total</td>
-                <td align="right" class="numeric"><b><?php echo number_format($sub_jumlah_barang,0,",",","); ?></b></td>
+                <td align="right" class="numeric"><b><?php echo number_format($sub_jumlah_barang,0,",","."); ?></b></td>
                 <td align="right" class="numeric">&nbsp;</td>
                 <td align="right" class="numeric">&nbsp;</td>
-                <td align="right" class="numeric"><b><?php echo number_format($sub_diskon,0,",",","); ?></b></td>
+                <td align="right" class="numeric"><b><?php echo number_format($sub_diskon,0,",","."); ?></b></td>
                 <td align="right" class="numeric">&nbsp;</td>
-                <td align="right" class="numeric"><b><?php echo number_format($sub_total,0,",",","); ?></b></td>
+                <td align="right" class="numeric"><b><?php echo number_format($sub_total,0,",","."); ?></b></td>
            </tr>
            <?php } $sales=$print->sales; ?>
 		<?php } ?>
         
 	</tbody>
+    <tfoot>
+    	<tr>
+        	<td class="clear">&nbsp;</td>
+        	<th scope='row' nowrap="nowrap">Jumlah data</th>
+            <td colspan='11'><?php echo count($data_print); ?> data</td>
+        </tr>
+        <tr>
+        	<td class="clear">&nbsp;</td>
+        	<th scope='row' colspan="12">Summary</th>
+        </tr>
+        <tr>
+        	<td class="clear">&nbsp;</td>
+        	<th scope='row' nowrap="nowrap">Tot Item</th>
+            <td class="numeric clear" nowrap="nowrap"><?php echo number_format($total_item,0,",","."); ?></td>
+            <td colspan="10" class="clear">&nbsp;</td>
+        </tr>
+        <tr>
+        	<td class="clear">&nbsp;</td>
+        	<th scope='row' nowrap="nowrap">Total Disk (Rp)</th>
+            <td class="numeric clear" nowrap="nowrap" ><?php echo number_format($total_diskon,0,",","."); ?></td>
+            <td colspan="10" class="clear">&nbsp;</td>
+        </tr>
+        <tr>
+        	<td class="clear">&nbsp;</td>
+        	<th scope='row' nowrap="nowrap">Total (Rp)</th>
+            <td class="numeric clear" nowrap="nowrap"><?php echo number_format($total_nilai,0,",","."); ?></td>
+            <td colspan="10" class="clear">&nbsp;</td>
+        </tr>
+	</tfoot>
 </table>
 </body>
 </html>

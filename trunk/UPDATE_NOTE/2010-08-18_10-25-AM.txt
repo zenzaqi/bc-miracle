@@ -1,0 +1,8 @@
+o> Fix Bug
+   o Laporan Detail Penjualan Produk/Perawatan/Paket
+     - data view fixed
+     - sql = 2010-08-18_10-25-AM.sql
+   o Laporan Rekap Penjualan Produk/Perawatan/Paket
+     - data view fixed
+     - tambahan kolom voucher
+     - sql = 2010-08-18_10-30-AM.sql
