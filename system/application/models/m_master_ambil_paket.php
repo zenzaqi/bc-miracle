@@ -561,7 +561,7 @@ class M_master_ambil_paket extends Model{
 				//Membatalkan satu pengambilan paket /
 				if (sizeof($dapaket_id) == 1){
 					$query = "UPDATE detail_ambil_paket SET dapaket_stat_dok='Batal'
-						WHERE DATE_ADD(date_format(dapaket_date_create, '%Y-%m-%d'),INTERVAL 7 DAY)>date_format(now(), '%Y-%m-%d') AND dapaket_id = ".$dapaket_id[0];
+						WHERE DATE_ADD(date_format(dapaket_date_create, '%Y-%m-%d'),INTERVAL 30 DAY)>date_format(now(), '%Y-%m-%d') AND dapaket_id = ".$dapaket_id[0];
 					$this->db->query($query);
 					if($this->db->affected_rows()>0){
 						$dpaket_sisa_update = $this->total_sisa_paket_update($dapaket_dpaket ,$dapaket_jpaket ,$dapaket_paket);
