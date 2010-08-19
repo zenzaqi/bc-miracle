@@ -1,4 +1,4 @@
 > Fix bug
   o Metada log Menu Master Data
   o Fix view produk
-    - sql : 2010-08_12-10-AM.sql
+    - sql : 2010-08_12-15-AM.sql
