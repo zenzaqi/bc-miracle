@@ -512,7 +512,7 @@ Ext.onReady(function(){
 			{name: 'produk_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'produk_date_create'}, 
 			{name: 'produk_update', type: 'string', mapping: 'produk_update'}, 
 			{name: 'produk_date_update', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'produk_date_update'}, 
-			{name: 'poduk_revised', type: 'int', mapping: 'poduk_revised'} 
+			{name: 'produk_revised', type: 'int', mapping: 'produk_revised'} 
 		]),
 		sortInfo:{field: 'produk_id', direction: "DESC"}
 	});
@@ -812,7 +812,7 @@ Ext.onReady(function(){
 			readOnly: true,
 		}, 
 		{
-			header: 'Date Create',
+			header: 'Create on',
 			dataIndex: 'produk_date_create',
 			width: 150,
 			sortable: true,
@@ -820,7 +820,7 @@ Ext.onReady(function(){
 			readOnly: true,
 		}, 
 		{
-			header: 'Update',
+			header: 'Last Update by',
 			dataIndex: 'produk_update',
 			width: 150,
 			sortable: true,
@@ -828,7 +828,7 @@ Ext.onReady(function(){
 			readOnly: true,
 		}, 
 		{
-			header: 'Date Update',
+			header: 'Last Update on',
 			dataIndex: 'produk_date_update',
 			width: 150,
 			sortable: true,
@@ -837,7 +837,7 @@ Ext.onReady(function(){
 		}, 
 		{
 			header: 'Revised',
-			dataIndex: 'poduk_revised',
+			dataIndex: 'produk_revised',
 			width: 150,
 			sortable: true,
 			hidden: true,
@@ -1860,7 +1860,7 @@ Ext.onReady(function(){
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
 	produk_searchWindow = new Ext.Window({
-		title: 'produk Search',
+		title: 'Pencarian produk',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,

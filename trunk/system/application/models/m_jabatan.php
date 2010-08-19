@@ -55,17 +55,18 @@ class M_jabatan extends Model{
 				"jabatan_aktif"=>$jabatan_aktif,			
 //				"jabatan_creator"=>$jabatan_creator,			
 //				"jabatan_date_create"=>$jabatan_date_create,			
-//				"jabatan_update"=>$jabatan_update,			
-//				"jabatan_date_update"=>$jabatan_date_update,			
-//				"jabatan_revised"=>$jabatan_revised			
+				"jabatan_update"=>$_SESSION[SESSION_USERID],			
+				"jabatan_date_update"=>date('Y-m-d H:i:s')
 			);
 			$this->db->where('jabatan_id', $jabatan_id);
 			$this->db->update('jabatan', $data);
 			
-			if($this->db->affected_rows())
-				return '1';
-			else
-				return '0';
+			if($this->db->affected_rows()){
+				$sql="UPDATE jabatan set jabatan_revised=(jabatan_revised+1) WHERE jabatan_id='".$jabatan_id."'";
+				$this->db->query($sql);
+			}
+			return '1';
+
 		}
 		
 		//function for create new record
@@ -77,11 +78,11 @@ class M_jabatan extends Model{
 				"jabatan_nama"=>$jabatan_nama,	
 				"jabatan_keterangan"=>$jabatan_keterangan,	
 				"jabatan_aktif"=>$jabatan_aktif,	
-//				"jabatan_creator"=>$jabatan_creator,	
-//				"jabatan_date_create"=>$jabatan_date_create,	
+				"jabatan_creator"=>$_SESSION[SESSION_USERID],	
+				"jabatan_date_create"=>date('Y-m-d H:i:s'),	
 //				"jabatan_update"=>$jabatan_update,	
 //				"jabatan_date_update"=>$jabatan_date_update,	
-//				"jabatan_revised"=>$jabatan_revised	
+				"jabatan_revised"=>'0'	
 			);
 			$this->db->insert('jabatan', $data); 
 			if($this->db->affected_rows())

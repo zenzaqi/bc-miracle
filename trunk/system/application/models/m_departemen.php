@@ -55,17 +55,17 @@ class M_departemen extends Model{
 				"departemen_aktif"=>$departemen_aktif,			
 //				"departemen_creator"=>$departemen_creator,			
 //				"departemen_date_create"=>$departemen_date_create,			
-//				"departemen_update"=>$departemen_update,			
-//				"departemen_date_update"=>$departemen_date_update,			
-//				"departemen_revised"=>$departemen_revised			
+				"departemen_update"=>$_SESSION[SESSION_USERID],			
+				"departemen_date_update"=>date('Y-m-d H:i:s')			
 			);
 			$this->db->where('departemen_id', $departemen_id);
 			$this->db->update('departemen', $data);
 			
-			if($this->db->affected_rows())
-				return '1';
-			else
-				return '0';
+			if($this->db->affected_rows()){
+				$sql="UPDATE departemen set departemen_revised=(departemen_revised+1) WHERE departemen_id='".$departemen_id."'";
+				$this->db->query($sql);
+			}
+			return '1';
 		}
 		
 		//function for create new record
@@ -77,11 +77,11 @@ class M_departemen extends Model{
 				"departemen_nama"=>$departemen_nama,	
 				"departemen_keterangan"=>$departemen_keterangan,	
 				"departemen_aktif"=>$departemen_aktif,	
-//				"departemen_creator"=>$departemen_creator,	
-//				"departemen_date_create"=>$departemen_date_create,	
+				"departemen_creator"=>$_SESSION[SESSION_USERID],	
+				"departemen_date_create"=>date('Y-m-d H:i:s'),	
 //				"departemen_update"=>$departemen_update,	
 //				"departemen_date_update"=>$departemen_date_update,	
-//				"departemen_revised"=>$departemen_revised	
+				"departemen_revised"=>'0'
 			);
 			$this->db->insert('departemen', $data); 
 			if($this->db->affected_rows())

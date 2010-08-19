@@ -35,7 +35,7 @@ class M_bank extends Model{
 		
 		//function for get list record
 		function bank_list($filter,$start,$end){
-			$query = "SELECT * FROM bank,akun,bank_master WHERE bank_kode=akun_id AND bank_nama=mbank_id";
+			$query = "SELECT * FROM bank,bank_master WHERE  bank_nama=mbank_id";
 			
 			// For simple search
 			if ($filter<>""){
@@ -66,35 +66,31 @@ class M_bank extends Model{
 				$bank_aktif = "Aktif";
 			$data = array(
 				"bank_id"=>$bank_id,	
-				"bank_nama"=>$bank_nama,			
 				"bank_norek"=>$bank_norek,			
 				"bank_atasnama"=>$bank_atasnama,			
 				"bank_saldo"=>$bank_saldo,
 				"bank_keterangan"=>$bank_keterangan,
 				"bank_aktif"=>$bank_aktif,			
-//				"bank_creator"=>$bank_creator,			
-//				"bank_date_create"=>$bank_date_create,			
-//				"bank_update"=>$bank_update,			
-//				"bank_date_update"=>$bank_date_update,			
-//				"bank_revised"=>$bank_revised			
+				"bank_update"=>$_SESSION[SESSION_USERID],			
+				"bank_date_update"=>date('Y-m-d H:i:s')			
 			);
 			
-			$sql="SELECT akun_id FROM akun WHERE akun_id='".$bank_kode."'";
-			$rs=$this->db->query($sql);
-			if($rs->num_rows())
-				$data["bank_kode"]=$bank_kode;
 			
-			$sql="SELECT * FROM bank WHERE bank_kode='".$bank_kode."' AND bank_nama='".$bank_nama."' AND bank_norek='".$bank_norek."' AND bank_atasnama='".$bank_atasnama."' AND bank_saldo='".$bank_saldo."' AND bank_keterangan='".$bank_keterangan."' AND bank_aktif='".$bank_aktif."' AND bank_id='".$bank_id."'";
+			$sql="SELECT mbank_id FROM bank_master WHERE mbank_nama='".$bank_nama."'";
 			$rs=$this->db->query($sql);
-			if($rs->num_rows()){
-				return '2';
-			}else {
-				$this->db->where('bank_id', $bank_id);
-				$this->db->update('bank', $data);
-				if($this->db->affected_rows())
-					return '1';
-				else
-					return '0';
+			if($rs->num_rows()==1){
+				foreach($rs->result() as $ngr){
+					$data['bank_nama']= $ngr->mbank_id;
+				}
+			}
+			else {$data['bank_nama']=$bank_nama;}
+			
+			$this->db->where('bank_id', $bank_id);
+			$this->db->update('bank', $data);
+			if($this->db->affected_rows()){
+				$sql="UPDATE bank set bank_revised=(bank_revised+1) WHERE bank_id='".$bank_id."'";
+				$this->db->query($sql);
+				return '1';
 			}
 			
 		}
@@ -104,19 +100,17 @@ class M_bank extends Model{
 			if ($bank_aktif=="")
 				$bank_aktif = "Aktif";
 			$data = array(
-	
-				"bank_kode"=>$bank_kode,	
 				"bank_nama"=>$bank_nama,	
 				"bank_norek"=>$bank_norek,	
 				"bank_atasnama"=>$bank_atasnama,	
 				"bank_saldo"=>$bank_saldo,	
 				"bank_keterangan"=>$bank_keterangan,	
 				"bank_aktif"=>$bank_aktif,	
-				"bank_creator"=>$bank_creator,	
-				"bank_date_create"=>$bank_date_create,	
+				"bank_creator"=>$_SESSION[SESSION_USERID],	
+				"bank_date_create"=>date('Y-m-d H:i:s'),	
 				"bank_update"=>$bank_update,	
 				"bank_date_update"=>$bank_date_update,	
-				"bank_revised"=>$bank_revised	
+				"bank_revised"=>'0'	
 			);
 			$this->db->insert('bank', $data); 
 			if($this->db->affected_rows())
@@ -357,7 +351,5 @@ class M_bank extends Model{
 			}
 			return $result;
 		}
-		
-
 }
 ?>

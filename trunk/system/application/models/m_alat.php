@@ -53,19 +53,18 @@ class M_alat extends Model{
 				"alat_nama"=>$alat_nama,			
 				"alat_jumlah"=>$alat_jumlah,			
 				"alat_aktif"=>$alat_aktif,			
-				"alat_creator"=>$alat_creator,			
-				"alat_date_create"=>$alat_date_create,			
-				"alat_update"=>$alat_update,			
-				"alat_date_update"=>$alat_date_update,			
-				"alat_revised"=>$alat_revised			
+				"alat_update"=>$_SESSION[SESSION_USERID],			
+				"alat_date_update"=>date('Y-m-d H:i:s')
 			);
 			$this->db->where('alat_id', $alat_id);
 			$this->db->update('alat', $data);
 			
-			if($this->db->affected_rows())
-				return '1';
-			else
-				return '0';
+			if($this->db->affected_rows()){
+				$sql="UPDATE alat set alat_revised=(alat_revised+1) WHERE alat_id='".$alat_id."'";
+				$this->db->query($sql);
+			}
+			return '1';
+
 		}
 		
 		//function for create new record
@@ -77,11 +76,11 @@ class M_alat extends Model{
 				"alat_nama"=>$alat_nama,	
 				"alat_jumlah"=>$alat_jumlah,	
 				"alat_aktif"=>$alat_aktif,	
-				"alat_creator"=>$alat_creator,	
-				"alat_date_create"=>$alat_date_create,	
+				"alat_creator"=>$_SESSION[SESSION_USERID],	
+				"alat_date_create"=>date('Y-m-d H:i:s'),	
 				"alat_update"=>$alat_update,	
-				"alat_date_update"=>$alat_date_update,	
-				"alat_revised"=>$alat_revised	
+				"alat_date_update"=>$alat_date_update,
+				"alat_revised"=>'0'	
 			);
 			$this->db->insert('alat', $data); 
 			if($this->db->affected_rows())

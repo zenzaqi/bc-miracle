@@ -470,7 +470,7 @@ Ext.onReady(function(){
 			readOnly: true,
 		}, 
 		{
-			header: 'Date Create',
+			header: 'Create on',
 			dataIndex: 'kategori2_date_create',
 			width: 150,
 			sortable: true,
@@ -478,7 +478,7 @@ Ext.onReady(function(){
 			readOnly: true,
 		}, 
 		{
-			header: 'Update',
+			header: 'Last Update By',
 			dataIndex: 'kategori2_update',
 			width: 150,
 			sortable: true,
@@ -486,7 +486,7 @@ Ext.onReady(function(){
 			readOnly: true,
 		}, 
 		{
-			header: 'Date Update',
+			header: 'Last Update on',
 			dataIndex: 'kategori2_date_update',
 			width: 150,
 			sortable: true,

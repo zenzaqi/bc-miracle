@@ -59,17 +59,19 @@ class M_cabang extends Model{
 				"cabang_aktif"=>$cabang_aktif,			
 //				"cabang_creator"=>$cabang_creator,			
 //				"cabang_date_create"=>$cabang_date_create,			
-//				"cabang_update"=>$cabang_update,			
-//				"cabang_date_update"=>$cabang_date_update,			
-//				"cabang_revised"=>$cabang_revised			
+				"cabang_update"=>$_SESSION[SESSION_USERID],			
+				"cabang_date_update"=>date('Y-m-d H:i:s')		
+//				"cabang_revised"=>$cabang_revised
 			);
 			$this->db->where('cabang_id', $cabang_id);
 			$this->db->update('cabang', $data);
 			
-			if($this->db->affected_rows())
-				return '1';
-			else
-				return '0';
+			if($this->db->affected_rows()){
+				$sql="UPDATE cabang set cabang_revised=(cabang_revised+1) WHERE cabang_id='".$cabang_id."'";
+				$this->db->query($sql);
+			}
+			return '1';
+
 		}
 		
 		//function for create new record
@@ -85,11 +87,11 @@ class M_cabang extends Model{
 				"cabang_propinsi"=>$cabang_propinsi,	
 				"cabang_keterangan"=>$cabang_keterangan,	
 				"cabang_aktif"=>$cabang_aktif,	
-//				"cabang_creator"=>$cabang_creator,	
-//				"cabang_date_create"=>$cabang_date_create,	
+				"cabang_creator"=>$_SESSION[SESSION_USERID],	
+				"cabang_date_create"=>date('Y-m-d H:i:s'),	
 //				"cabang_update"=>$cabang_update,	
 //				"cabang_date_update"=>$cabang_date_update,	
-//				"cabang_revised"=>$cabang_revised	
+				"cabang_revised"=>'0'	
 			);
 			$this->db->insert('cabang', $data); 
 			if($this->db->affected_rows())

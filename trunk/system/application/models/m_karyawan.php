@@ -159,11 +159,11 @@ class M_karyawan extends Model{
 				"karyawan_tglmasuk"=>$karyawan_tglmasuk,			
 				"karyawan_atasan"=>$karyawan_atasan,			
 				"karyawan_aktif"=>$karyawan_aktif,			
-				"karyawan_creator"=>$karyawan_creator,			
-				"karyawan_date_create"=>$karyawan_date_create,			
-				"karyawan_update"=>$karyawan_update,			
-				"karyawan_date_update"=>$karyawan_date_update,			
-				"karyawan_revised"=>$karyawan_revised			
+				// "karyawan_creator"=>$karyawan_creator,			
+				// "karyawan_date_create"=>$karyawan_date_create,			
+				"karyawan_update"=>$_SESSION[SESSION_USERID],			
+				"karyawan_date_update"=>date('Y-m-d H:i:s')		
+				// "karyawan_revised"=>$karyawan_revised			
 			);
 			
 			$sql="SELECT cabang_id FROM cabang WHERE cabang_id='".$karyawan_cabang."'";
@@ -194,7 +194,10 @@ class M_karyawan extends Model{
 			
 			$this->db->where('karyawan_id', $karyawan_id);
 			$this->db->update('karyawan', $data);
-			//die($this->db->last_query());
+			if($this->db->affected_rows()){
+				$sql="UPDATE karyawan set karyawan_revised=(karyawan_revised+1) WHERE karyawan_id='".$karyawan_id."'";
+				$this->db->query($sql);
+			}
 			return '1';
 		}
 		
@@ -232,11 +235,11 @@ class M_karyawan extends Model{
 				"karyawan_tgl_batas"=>$karyawan_tgl_batas,
 				"karyawan_atasan"=>$karyawan_atasan,	
 				"karyawan_aktif"=>$karyawan_aktif,	
-				"karyawan_creator"=>$karyawan_creator,	
-				"karyawan_date_create"=>$karyawan_date_create,	
+				"karyawan_creator"=>$_SESSION[SESSION_USERID],			
+				"karyawan_date_create"=>date('Y-m-d H:i:s'),		
 				"karyawan_update"=>$karyawan_update,	
 				"karyawan_date_update"=>$karyawan_date_update,	
-				"karyawan_revised"=>$karyawan_revised	
+				"karyawan_revised"=>'0'	
 			);
 			$this->db->insert('karyawan', $data); 
 			if($this->db->affected_rows())

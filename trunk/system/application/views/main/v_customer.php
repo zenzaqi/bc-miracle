@@ -2270,14 +2270,14 @@ Ext.onReady(function(){
 			hidden: true
 		},
 		{
-			header: 'Last Update on',
+			header: 'Last Update by',
 			dataIndex: 'cust_update',
 			width: 150,
 			sortable: true,
 			hidden: true
 		},
 		{
-			header: 'Update Data',
+			header: 'Last Update on',
 			dataIndex: 'cust_date_update',
 			width: 97,
 			sortable: true,

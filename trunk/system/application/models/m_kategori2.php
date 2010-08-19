@@ -52,7 +52,9 @@ class M_kategori2 extends Model{
 				"kategori2_id"=>$kategori2_id, 
 				"kategori2_nama"=>$kategori2_nama, 
 				"kategori2_keterangan"=>$kategori2_keterangan, 
-				"kategori2_aktif"=>$kategori2_aktif 
+				"kategori2_aktif"=>$kategori2_aktif,
+				"kategori2_update"=>$_SESSION[SESSION_USERID],	
+				"kategori2_date_update"=>date('Y-m-d H:i:s')			
 			);
 			$sql="SELECT kategori_id FROM kategori WHERE kategori_id='$kategori2_jenis'";
 			$rs=$this->db->query($sql);
@@ -61,7 +63,12 @@ class M_kategori2 extends Model{
 			$this->db->where('kategori2_id', $kategori2_id);
 			$this->db->update('kategori2', $data);
 			
+			if($this->db->affected_rows()){
+				$sql="UPDATE kategori2 set kategori2_revised=(kategori2_revised+1) WHERE kategori2_id='".$kategori2_id."'";
+				$this->db->query($sql);
+			}
 			return '1';
+			
 		}
 		
 		//function for create new record
@@ -72,7 +79,10 @@ class M_kategori2 extends Model{
 				"kategori2_nama"=>$kategori2_nama, 
 				"kategori2_jenis"=>$kategori2_jenis, 
 				"kategori2_keterangan"=>$kategori2_keterangan, 
-				"kategori2_aktif"=>$kategori2_aktif 
+				"kategori2_aktif"=>$kategori2_aktif, 
+				"kategori2_creator"=>$_SESSION[SESSION_USERID],	
+				"kategori2_date_create"=>date('Y-m-d H:i:s'),
+				"kategori2_revised"=>'0'	
 			);
 			$this->db->insert('kategori2', $data); 
 			if($this->db->affected_rows())

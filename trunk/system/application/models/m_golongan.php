@@ -68,31 +68,32 @@ class M_golongan extends Model{
 				"nama_golongan"=>$nama_golongan,	
 				"grooming_golongan"=>$grooming_golongan,
 				"keterangan_golongan"=>$keterangan_golongan,
-				"golongan_creator"=>$golongan_creator,	
-				"golongan_date_create"=>$golongan_date_create,	
-				"golongan_update"=>$golongan_update,	
-				"golongan_date_update"=>$golongan_date_update,	
-				"golongan_revised"=>$golongan_revised
-		
+				// "golongan_creator"=>$golongan_creator,	
+				// "golongan_date_create"=>$golongan_date_create,	
+				"golongan_update"=>$_SESSION[SESSION_USERID],	
+				"golongan_date_update"=>date('Y-m-d H:i:s')
 			);
 			
 			/*$sql="SELECT akun_id FROM akun WHERE akun_id='".$id_golongan."'";
 			$rs=$this->db->query($sql);
 			if($rs->num_rows())
-				$data["id_golongan"]=$id_golongan;*/
+				$data["id_golongan"]=$id_golongan;
 			
 			$sql="SELECT * FROM golongan WHERE id_golongan='".$id_golongan."' AND nama_golongan='".$nama_golongan."' AND grooming_golongan='".$grooming_golongan."' AND keterangan_golongan='".$keterangan_golongan."'";
 			$rs=$this->db->query($sql);
 			if($rs->num_rows()){
 				return '2';
-			}else {
+			}
+			else {*/
 				$this->db->where('id_golongan', $id_golongan);
 				$this->db->update('golongan', $data);
-				if($this->db->affected_rows())
-					return '1';
-				else
-					return '0';
-			}
+				if($this->db->affected_rows()){
+					$sql="UPDATE golongan set golongan_revised=(golongan_revised+1) WHERE id_golongan='".$id_golongan."'";
+					$this->db->query($sql);
+				}
+				return '1';
+
+			// }
 			
 		}
 		
@@ -105,11 +106,11 @@ class M_golongan extends Model{
 				"nama_golongan"=>$nama_golongan,	
 				"grooming_golongan"=>$grooming_golongan,
 				"keterangan_golongan"=>$keterangan_golongan,
-				"golongan_creator"=>$golongan_creator,	
-				"golongan_date_create"=>$golongan_date_create,	
-				"golongan_update"=>$golongan_update,	
-				"golongan_date_update"=>$golongan_date_update,	
-				"golongan_revised"=>$golongan_revised	
+				"golongan_creator"=>$_SESSION[SESSION_USERID],
+				"golongan_date_create"=>date('Y-m-d H:i:s'),
+				"golongan_update"=>$golongan_update,
+				"golongan_date_update"=>$golongan_date_update,
+				"golongan_revised"=>'0'
 			);
 			$this->db->insert('golongan', $data); 
 			if($this->db->affected_rows())

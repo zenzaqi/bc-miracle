@@ -294,15 +294,13 @@ FROM ((`paket` INNER JOIN `produk_group` ON `paket`.`paket_group`=`produk_group`
 	}
 	
 	//function for update record
-	function paket_update($paket_id ,$paket_kode, $paket_kodelama ,$paket_nama ,$paket_group ,$paket_keterangan ,$paket_du ,$paket_dm ,$paket_point ,$paket_harga ,$paket_expired , $paket_perpanjangan, $paket_aktif ){
+	function paket_update($paket_id ,$paket_kode, $paket_kodelama ,$paket_nama ,$paket_group ,$paket_keterangan ,$paket_du ,$paket_dm ,$paket_point ,$paket_harga ,$paket_expired ,$paket_aktif ){
 		if ($paket_aktif=="")
 			$paket_aktif = "Aktif";
 		if ($paket_point=="")
 			$paket_point = 1;
 		if ($paket_expired=="")
 			$paket_expired = 365;
-		if ($paket_perpanjangan=="")
-			$paket_perpanjangan = 365;
 		$data = array(
 			"paket_id"=>$paket_id, 
 			"paket_nama"=>$paket_nama, 
@@ -313,9 +311,10 @@ FROM ((`paket` INNER JOIN `produk_group` ON `paket`.`paket_group`=`produk_group`
 //				"paket_dm"=>$paket_dm, 
 			"paket_point"=>$paket_point, 
 			"paket_harga"=>$paket_harga, 
-			"paket_expired"=>$paket_expired,
-			"paket_perpanjangan"=>$paket_perpanjangan,
-			"paket_aktif"=>$paket_aktif 
+			"paket_expired"=>$paket_expired, 
+			"paket_aktif"=>$paket_aktif, 
+			"paket_update"=>$_SESSION[SESSION_USERID],			
+			"paket_date_update"=>date('Y-m-d H:i:s')			
 		);
 		$sql="SELECT group_id,group_dupaket,group_dmpaket FROM produk_group WHERE group_id='".$paket_group."'";
 		$rs=$this->db->query($sql);
@@ -374,19 +373,21 @@ FROM ((`paket` INNER JOIN `produk_group` ON `paket`.`paket_group`=`produk_group`
 		$this->db->where('paket_id', $paket_id);
 		$this->db->update('paket', $data);
 		
+		if($this->db->affected_rows()){
+			$sql="UPDATE paket set paket_revised=(paket_revised+1) WHERE paket_id='".$paket_id."'";
+			$this->db->query($sql);
+		}
 		return '1';
 	}
 	
 	//function for create new record
-	function paket_create($paket_kode ,$paket_kodelama ,$paket_nama ,$paket_group ,$paket_keterangan ,$paket_du ,$paket_dm ,$paket_point ,$paket_harga ,$paket_expired , $paket_perpanjangan, $paket_aktif ){
+	function paket_create($paket_kode ,$paket_kodelama ,$paket_nama ,$paket_group ,$paket_keterangan ,$paket_du ,$paket_dm ,$paket_point ,$paket_harga ,$paket_expired ,$paket_aktif ){
 		if ($paket_aktif=="")
 			$paket_aktif = "Aktif";
 		if ($paket_point=="")
 			$paket_point = 1;
 		if ($paket_expired=="")
 			$paket_expired = 365;
-		if ($paket_perpanjangan=="")
-			$paket_perpanjangan = 365;
 		$data = array(
 			"paket_kodelama"=>$paket_kodelama, 
 			"paket_nama"=>$paket_nama, 
@@ -397,8 +398,10 @@ FROM ((`paket` INNER JOIN `produk_group` ON `paket`.`paket_group`=`produk_group`
 			"paket_point"=>$paket_point, 
 			"paket_harga"=>$paket_harga, 
 			"paket_expired"=>$paket_expired, 
-			"paket_perpanjangan"=>$paket_perpanjangan,
-			"paket_aktif"=>$paket_aktif 
+			"paket_aktif"=>$paket_aktif, 
+			"paket_creator"=>$_SESSION[SESSION_USERID],	
+			"paket_date_create"=>date('Y-m-d H:i:s'),	
+			"paket_revised"=>'0'	
 		);
 		$sql="SELECT group_id, group_kode FROM produk_group WHERE group_id='".$paket_group."'";
 		$rs=$this->db->query($sql);
@@ -440,7 +443,7 @@ FROM ((`paket` INNER JOIN `produk_group` ON `paket`.`paket_group`=`produk_group`
 	}
 	
 	//function for advanced search record
-	function paket_search($paket_id, $paket_kode, $paket_kodelama, $paket_nama, $paket_group, $paket_keterangan, $paket_du, $paket_dm, $paket_point, $paket_harga, $paket_expired, $paket_perpanjangan, $paket_aktif, $start, $end){
+	function paket_search($paket_id, $paket_kode, $paket_kodelama, $paket_nama, $paket_group, $paket_keterangan, $paket_du, $paket_dm, $paket_point, $paket_harga, $paket_expired, $paket_aktif, $start, $end){
 		if ($paket_aktif==""){
 			$paket_aktif = "Aktif";
 		}
@@ -491,12 +494,6 @@ FROM ((`paket` INNER JOIN `produk_group` ON `paket`.`paket_group`=`produk_group`
 			$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 			$query.= " paket_expired LIKE '%".$paket_expired."%'";
 		};
-		
-		if($paket_perpanjangan!=''){
-			$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-			$query.= " paket_perpanjangan LIKE '%".$paket_perpanjangan."%'";
-		};
-		
 		if($paket_aktif!=''){
 			$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 			$query.= " paket_aktif = '".$paket_aktif."'";
@@ -519,7 +516,7 @@ FROM ((`paket` INNER JOIN `produk_group` ON `paket`.`paket_group`=`produk_group`
 	}
 	
 	//function for print record
-	function paket_print($paket_id ,$paket_kode ,$paket_nama ,$paket_group ,$paket_keterangan ,$paket_du ,$paket_dm ,$paket_point ,$paket_harga ,$paket_expired , $paket_perpanjangan, $paket_aktif ,$option,$filter){
+	function paket_print($paket_id ,$paket_kode ,$paket_nama ,$paket_group ,$paket_keterangan ,$paket_du ,$paket_dm ,$paket_point ,$paket_harga ,$paket_expired ,$paket_aktif ,$option,$filter){
 		//full query
 		$query="select * from paket";
 		if($option=='LIST'){
@@ -566,10 +563,6 @@ FROM ((`paket` INNER JOIN `produk_group` ON `paket`.`paket_group`=`produk_group`
 			if($paket_expired!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " paket_expired LIKE '%".$paket_expired."%'";
-			};
-			if($paket_perpanjangan!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " paket_perpanjangan LIKE '%".$paket_perpanjangan."%'";
 			};
 			if($paket_aktif!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -581,7 +574,7 @@ FROM ((`paket` INNER JOIN `produk_group` ON `paket`.`paket_group`=`produk_group`
 	}
 	
 	//function  for export to excel
-	function paket_export_excel($paket_id ,$paket_kode ,$paket_nama ,$paket_group ,$paket_keterangan ,$paket_du ,$paket_dm ,$paket_point ,$paket_harga ,$paket_expired , $paket_perpanjangan, $paket_aktif ,$option,$filter){
+	function paket_export_excel($paket_id ,$paket_kode ,$paket_nama ,$paket_group ,$paket_keterangan ,$paket_du ,$paket_dm ,$paket_point ,$paket_harga ,$paket_expired ,$paket_aktif ,$option,$filter){
 		//full query
 		$query="select * from paket";
 		if($option=='LIST'){
@@ -628,10 +621,6 @@ FROM ((`paket` INNER JOIN `produk_group` ON `paket`.`paket_group`=`produk_group`
 			if($paket_expired!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " paket_expired LIKE '%".$paket_expired."%'";
-			};
-			if($paket_perpanjangan!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " paket_perpanjangan LIKE '%".$paket_perpanjangan."%'";
 			};
 			if($paket_aktif!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";

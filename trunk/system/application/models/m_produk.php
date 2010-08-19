@@ -257,6 +257,7 @@ class M_produk extends Model{
 			//log
 			$data['produk_creator']=$_SESSION[SESSION_USERID];
 			$data['produk_date_create']=date('Y-m-d H:i:s');
+			$data['produk_revised']='0';
 			
 			/*$sql="SELECT group_id, group_kode FROM produk_group WHERE group_id='".$produk_group."' ";
 			$rs=$this->db->query($sql);
