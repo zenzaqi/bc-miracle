@@ -405,7 +405,7 @@ Ext.onReady(function(){
 			hidden:true
 		},
 		{
-			header: 'Date Create',
+			header: 'Create on',
 			dataIndex: 'golongan_date_create',
 			width: 150,
 			sortable: true,
@@ -413,14 +413,14 @@ Ext.onReady(function(){
 			hidden:true
 		},
 		{
-			header: 'Update',
+			header: 'Last Update by',
 			dataIndex: 'golongan_update',
 			width: 150,
 			sortable: true,
 			hidden:true
 		},
 		{
-			header: 'Date Update',
+			header: 'Last Update on',
 			dataIndex: 'golongan_date_update',
 			width: 150,
 			sortable: true,
@@ -648,7 +648,7 @@ Ext.onReady(function(){
 	/* Function for retrieve create Window Form */
 	golongan_createWindow= new Ext.Window({
 		id: 'golongan_createWindow',
-		title: post2db+'Bank',
+		title: post2db+'Golongan',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,
@@ -743,7 +743,7 @@ Ext.onReady(function(){
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
 	golongan_searchWindow = new Ext.Window({
-		title: 'bank Search',
+		title: 'Pencarian Golongan',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,

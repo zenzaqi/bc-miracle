@@ -54,19 +54,17 @@ class M_kategori extends Model{
 				"kategori_jenis"=>$kategori_jenis,			
 				"kategori_keterangan"=>$kategori_keterangan,			
 				"kategori_aktif"=>$kategori_aktif,			
-				"kategori_creator"=>$kategori_creator,			
-				"kategori_date_create"=>$kategori_date_create,			
-				"kategori_update"=>$kategori_update,			
-				"kategori_date_update"=>$kategori_date_update,			
-				"kategori_revised"=>$kategori_revised			
+				"kategori_update"=>$_SESSION[SESSION_USERID],			
+				"kategori_date_update"=>date('Y-m-d H:i:s')			
 			);
 			$this->db->where('kategori_id', $kategori_id);
 			$this->db->update('kategori', $data);
 			
-			if($this->db->affected_rows())
-				return '1';
-			else
-				return '0';
+			if($this->db->affected_rows()){
+				$sql="UPDATE kategori set kategori_revised=(kategori_revised+1) WHERE kategori_id='".$kategori_id."'";
+				$this->db->query($sql);
+			}
+			return '1';
 		}
 		
 		//function for create new record
@@ -79,11 +77,11 @@ class M_kategori extends Model{
 				"kategori_jenis"=>$kategori_jenis,	
 				"kategori_keterangan"=>$kategori_keterangan,	
 				"kategori_aktif"=>$kategori_aktif,	
-				"kategori_creator"=>$kategori_creator,	
-				"kategori_date_create"=>$kategori_date_create,	
+				"kategori_creator"=>$_SESSION[SESSION_USERID],	
+				"kategori_date_create"=>date('Y-m-d H:i:s'),	
 				"kategori_update"=>$kategori_update,	
 				"kategori_date_update"=>$kategori_date_update,	
-				"kategori_revised"=>$kategori_revised	
+				"kategori_revised"=>'0'	
 			);
 			$this->db->insert('kategori', $data); 
 			if($this->db->affected_rows())

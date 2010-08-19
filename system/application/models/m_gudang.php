@@ -54,19 +54,18 @@ class M_gudang extends Model{
 				"gudang_lokasi"=>$gudang_lokasi,			
 				"gudang_keterangan"=>$gudang_keterangan,			
 				"gudang_aktif"=>$gudang_aktif,			
-				"gudang_creator"=>$gudang_creator,			
-				"gudang_date_create"=>$gudang_date_create,			
-				"gudang_update"=>$gudang_update,			
-				"gudang_date_update"=>$gudang_date_update,			
-				"gudang_revised"=>$gudang_revised			
+				"gudang_update"=>$_SESSION[SESSION_USERID],			
+				"gudang_date_update"=>date('Y-m-d H:i:s')			
 			);
 			$this->db->where('gudang_id', $gudang_id);
 			$this->db->update('gudang', $data);
 			
-			if($this->db->affected_rows())
-				return '1';
-			else
-				return '0';
+			if($this->db->affected_rows()){
+				$sql="UPDATE gudang set gudang_revised=(gudang_revised+1) WHERE gudang_id='".$gudang_id."'";
+				$this->db->query($sql);
+			}
+			return '1';
+
 		}
 		
 		//function for create new record
@@ -79,11 +78,11 @@ class M_gudang extends Model{
 				"gudang_lokasi"=>$gudang_lokasi,	
 				"gudang_keterangan"=>$gudang_keterangan,	
 				"gudang_aktif"=>$gudang_aktif,	
-				"gudang_creator"=>$gudang_creator,	
-				"gudang_date_create"=>$gudang_date_create,	
+				"gudang_creator"=>$_SESSION[SESSION_USERID],	
+				"gudang_date_create"=>date('Y-m-d H:i:s'),	
 				"gudang_update"=>$gudang_update,	
 				"gudang_date_update"=>$gudang_date_update,	
-				"gudang_revised"=>$gudang_revised	
+				"gudang_revised"=>'0'	
 			);
 			$this->db->insert('gudang', $data); 
 			if($this->db->affected_rows())

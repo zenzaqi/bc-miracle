@@ -53,19 +53,18 @@ class M_satuan extends Model{
 				"satuan_kode"=>$satuan_kode,			
 				"satuan_nama"=>$satuan_nama,			
 				"satuan_aktif"=>$satuan_aktif,			
-				"satuan_creator"=>$satuan_creator,			
-				"satuan_date_create"=>$satuan_date_create,			
-				"satuan_update"=>$satuan_update,			
-				"satuan_date_update"=>$satuan_date_update,			
-				"satuan_revised"=>$satuan_revised			
+				"satuan_update"=>$_SESSION[SESSION_USERID],			
+				"satuan_date_update"=>date('Y-m-d H:i:s')			
 			);
 			$this->db->where('satuan_id', $satuan_id);
 			$this->db->update('satuan', $data);
 			
-			if($this->db->affected_rows())
-				return '1';
-			else
-				return '0';
+			if($this->db->affected_rows()){
+				$sql="UPDATE satuan set satuan_revised=(satuan_revised+1) WHERE satuan_id='".$satuan_id."'";
+				$this->db->query($sql);
+			}
+			return '1';
+
 		}
 		
 		//function for create new record
@@ -77,11 +76,11 @@ class M_satuan extends Model{
 				"satuan_kode"=>$satuan_kode,	
 				"satuan_nama"=>$satuan_nama,	
 				"satuan_aktif"=>$satuan_aktif,	
-				"satuan_creator"=>$satuan_creator,	
-				"satuan_date_create"=>$satuan_date_create,	
+				"satuan_creator"=>$_SESSION[SESSION_USERID],			
+				"satuan_date_create"=>date('Y-m-d H:i:s'),			
 				"satuan_update"=>$satuan_update,	
 				"satuan_date_update"=>$satuan_date_update,	
-				"satuan_revised"=>$satuan_revised	
+				"satuan_revised"=>'0'	
 			);
 			$this->db->insert('satuan', $data); 
 			if($this->db->affected_rows())

@@ -451,7 +451,7 @@ Ext.onReady(function(){
 				return value;
 				},
 			hidden: false
-		},*/
+		},
 		{
 			header: 'Kode Akun',
 			dataIndex: 'bank_kode',
@@ -464,7 +464,7 @@ Ext.onReady(function(){
 				valueField: 'bank_akun_value',
 				triggerAction: 'all'
 			})
-		},
+		}, */
 		{
 			header: 'Nama Bank',
 			dataIndex: 'bank_nama',
@@ -554,7 +554,7 @@ Ext.onReady(function(){
 			hidden:true
 		},
 		{
-			header: 'Date Create',
+			header: 'Create on',
 			dataIndex: 'bank_date_create',
 			width: 150,
 			sortable: true,
@@ -562,14 +562,14 @@ Ext.onReady(function(){
 			hidden:true
 		},
 		{
-			header: 'Update',
+			header: 'Last Update By',
 			dataIndex: 'bank_update',
 			width: 150,
 			sortable: true,
 			hidden:true
 		},
 		{
-			header: 'Date Update',
+			header: 'Last Update on',
 			dataIndex: 'bank_date_update',
 			width: 150,
 			sortable: true,
@@ -815,7 +815,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [bank_kodeField, bank_namaField, bank_norekField, bank_atasnamaField, bank_saldoField, bank_keteranganField, bank_aktifField] 
+				items: [ bank_namaField, bank_norekField, bank_atasnamaField, bank_saldoField, bank_keteranganField, bank_aktifField] 
 			}
 			]
 		}]
@@ -1022,7 +1022,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [bank_kodeSearchField, bank_namaSearchField, bank_norekSearchField, bank_atasnamaSearchField, bank_saldoSearchField, bank_keteranganSearchField, bank_aktifSearchField] 
+				items: [bank_namaSearchField, bank_norekSearchField, bank_atasnamaSearchField, bank_saldoSearchField, bank_keteranganSearchField, bank_aktifSearchField] 
 			}
 			]
 		}]

@@ -320,7 +320,9 @@ class M_perawatan extends Model{
 				"rawat_jumlah_tindakan"=>$rawat_jumlah_tindakan,
 				"rawat_harga"=>$rawat_harga, 
 //				"rawat_gudang"=>$rawat_gudang, 
-				"rawat_aktif"=>$rawat_aktif 
+				"rawat_aktif"=>$rawat_aktif, 
+				"rawat_update"=>$_SESSION[SESSION_USERID],			
+				"rawat_date_update"=>date('Y-m-d H:i:s')			
 			);
 			$sql="SELECT group_id,group_durawat,group_dmrawat,group_kelompok FROM produk_group WHERE group_id='".$rawat_group."'";
 			$rs=$this->db->query($sql);
@@ -444,6 +446,10 @@ class M_perawatan extends Model{
 			$this->db->where('rawat_id', $rawat_id);
 			$this->db->update('perawatan', $data);
 			
+			if($this->db->affected_rows()){
+				$sql="UPDATE perawatan set rawat_revised=(rawat_revised+1) WHERE rawat_id='".$rawat_id."'";
+				$this->db->query($sql);
+			}
 			return '1';
 		}
 		
@@ -468,7 +474,10 @@ class M_perawatan extends Model{
 				"rawat_harga"=>$rawat_harga, 
 				"rawat_gudang"=>$rawat_gudang,
 				"rawat_kontribusi"=>$rawat_kontribusi,
-				"rawat_aktif"=>$rawat_aktif 
+				"rawat_aktif"=>$rawat_aktif,
+				"rawat_creator"=>$_SESSION[SESSION_USERID],	
+				"rawat_date_create"=>date('Y-m-d H:i:s'),	
+				"rawat_revised"=>'0'	
 			);
 			
 			/*$sql="SELECT group_id,group_kode FROM produk_group WHERE group_id='".$rawat_group."' ";

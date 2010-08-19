@@ -880,7 +880,7 @@ Ext.onReady(function(){
 			readOnly: true,
 		}, 
 		{
-			header: 'Date Create',
+			header: 'Create on',
 			dataIndex: 'rawat_date_create',
 			width: 150,
 			sortable: true,
@@ -888,7 +888,7 @@ Ext.onReady(function(){
 			readOnly: true,
 		}, 
 		{
-			header: 'Update',
+			header: 'Last Update by',
 			dataIndex: 'rawat_update',
 			width: 150,
 			sortable: true,
@@ -896,7 +896,7 @@ Ext.onReady(function(){
 			readOnly: true,
 		}, 
 		{
-			header: 'Date Update',
+			header: 'Last Update on',
 			dataIndex: 'rawat_date_update',
 			width: 150,
 			sortable: true,
@@ -2261,7 +2261,7 @@ Ext.onReady(function(){
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
 	perawatan_searchWindow = new Ext.Window({
-		title: 'perawatan Search',
+		title: 'Pencarian Perawatan',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,

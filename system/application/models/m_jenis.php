@@ -54,11 +54,17 @@ class M_jenis extends Model{
 				"jenis_nama"=>$jenis_nama, 
 				"jenis_kelompok"=>$jenis_kelompok, 
 				"jenis_keterangan"=>$jenis_keterangan, 
-				"jenis_aktif"=>$jenis_aktif 
+				"jenis_aktif"=>$jenis_aktif,
+				"jenis_update"=>$_SESSION[SESSION_USERID],			
+				"jenis_date_update"=>date('Y-m-d H:i:s')
 			);
 			$this->db->where('jenis_id', $jenis_id);
 			$this->db->update('jenis', $data);
 			
+			if($this->db->affected_rows()){
+				$sql="UPDATE jenis set jenis_revised=(jenis_revised+1) WHERE jenis_id='".$jenis_id."'";
+				$this->db->query($sql);
+			}
 			return '1';
 		}
 		
@@ -71,7 +77,10 @@ class M_jenis extends Model{
 				"jenis_nama"=>$jenis_nama, 
 				"jenis_kelompok"=>$jenis_kelompok, 
 				"jenis_keterangan"=>$jenis_keterangan, 
-				"jenis_aktif"=>$jenis_aktif 
+				"jenis_aktif"=>$jenis_aktif,
+				"jenis_creator"=>$_SESSION[SESSION_USERID],			
+				"jenis_date_create"=>date('Y-m-d H:i:s'),		
+				"jenis_revised"=>'0'		
 			);
 			$this->db->insert('jenis', $data); 
 			if($this->db->affected_rows())

@@ -476,7 +476,7 @@ Ext.onReady(function(){
 			readOnly: true,
 		}, 
 		{
-			header: 'Date Create',
+			header: 'Create On',
 			dataIndex: 'jenis_date_create',
 			width: 150,
 			sortable: true,
@@ -484,7 +484,7 @@ Ext.onReady(function(){
 			readOnly: true,
 		}, 
 		{
-			header: 'Update',
+			header: 'Last Update by',
 			dataIndex: 'jenis_update',
 			width: 150,
 			sortable: true,
@@ -492,7 +492,7 @@ Ext.onReady(function(){
 			readOnly: true,
 		}, 
 		{
-			header: 'Date Update',
+			header: 'Last Update on',
 			dataIndex: 'jenis_date_update',
 			width: 150,
 			sortable: true,
@@ -515,7 +515,7 @@ Ext.onReady(function(){
 	jenisListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'jenisListEditorGrid',
 		el: 'fp_jenis',
-		title: 'List Of Group 2',
+		title: 'Daftar Group 2',
 		autoHeight: true,
 		store: jenis_DataStore, // DataStore
 		cm: jenis_ColumnModel, // Nama-nama Columns
@@ -903,7 +903,7 @@ Ext.onReady(function(){
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
 	jenis_searchWindow = new Ext.Window({
-		title: 'jenis Search',
+		title: 'Pencarian Group 2',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,

@@ -80,19 +80,21 @@ class M_supplier extends Model{
 				"supplier_cp"=>$supplier_cp,			
 				"supplier_contact_cp"=>$supplier_contact_cp,			
 				"supplier_aktif"=>$supplier_aktif,			
-				"supplier_creator"=>$supplier_creator,			
-				"supplier_date_create"=>$supplier_date_create,			
-				"supplier_update"=>$supplier_update,			
-				"supplier_date_update"=>$supplier_date_update,			
-				"supplier_revised"=>$supplier_revised			
+				// "supplier_creator"=>$supplier_creator,			
+				// "supplier_date_create"=>$supplier_date_create,			
+				"supplier_update"=>$_SESSION[SESSION_USERID],			
+				"supplier_date_update"=>date('Y-m-d H:i:s'),			
+				// "supplier_revised"=>$supplier_revised			
 			);
 			$this->db->where('supplier_id', $supplier_id);
 			$this->db->update('supplier', $data);
 			
-			if($this->db->affected_rows())
-				return '1';
-			else
-				return '0';
+			if($this->db->affected_rows()){
+				$sql="UPDATE supplier set supplier_revised=(supplier_revised+1) WHERE supplier_id='".$supplier_id."'";
+				$this->db->query($sql);
+			}
+			return '1';
+
 		}
 		
 		//function for create new record
@@ -117,11 +119,11 @@ class M_supplier extends Model{
 				"supplier_contact_cp"=>$supplier_contact_cp,	
 				"supplier_keterangan"=>$supplier_keterangan,	
 				"supplier_aktif"=>$supplier_aktif,	
-				"supplier_creator"=>$supplier_creator,	
-				"supplier_date_create"=>$supplier_date_create,	
+				"supplier_creator"=>$_SESSION[SESSION_USERID],	
+				"supplier_date_create"=>date('Y-m-d H:i:s'),	
 				"supplier_update"=>$supplier_update,	
 				"supplier_date_update"=>$supplier_date_update,	
-				"supplier_revised"=>$supplier_revised	
+				"supplier_revised"=>'0'	
 			);
 			$this->db->insert('supplier', $data); 
 			if($this->db->affected_rows())
