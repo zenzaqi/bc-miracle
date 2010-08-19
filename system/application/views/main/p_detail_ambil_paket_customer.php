@@ -28,7 +28,9 @@
             <th width="80" scope='col'>Tanggal</th>
             <th width="80" scope='col'>No Faktur</th>           
             <th width="355" scope='col'>Pemakai</th>
+			<th width="80" scope='col'>Kode Paket</th>
           	<th width="355" scope='col'>Nama Paket</th>
+			<th width="80" scope='col'>Kode Perawatan</th>
             <th width="320" scope='col'>Nama Perawatan</th>
             <th width="30" scope='col'>Jumlah</th>
 			<th width="100" scope='col'>Harga Satuan</th>
@@ -45,10 +47,12 @@
 		
 		if($cust!==$printlist->cust_id){
 		?>
+		<?/*
          <tr>
                 <td><b><? $j++; echo $j; ?></b></td>
-                <td colspan="8"><b><?php echo $printlist->cust_nama." (".$printlist->cust_no.")";?></b></td>
+                <td colspan="10"><b><?php echo $printlist->cust_nama." (".$printlist->cust_no.")";?></b></td>
          </tr>
+		 */?>
         <?
 				$i=0;
 		foreach($data_print as $print) { 
@@ -59,7 +63,9 @@
             <td ><?php echo $print->tanggal; ?></td>
             <td><?php echo $print->no_bukti; ?></td>
             <td ><?php echo $print->pemakai_nama; ?></td>
+			<td ><?php echo $print->paket_kode; ?></td>
             <td ><?php echo $print->paket_nama; ?></td>
+			<td ><?php echo $print->rawat_kode; ?></td>
             <td ><?php echo $print->rawat_nama; ?></td>
             <td><?php echo $print->dapaket_jumlah; ?></td>
 			<td class="numeric"><?php echo number_format($print->harga_satuan,0,",","."); ?></td>
@@ -68,9 +74,11 @@
 		<?php }
 		}
 		?>
+		<?/*
          <tr>
-                <td colspan="9">&nbsp;</td>
+                <td colspan="11">&nbsp;</td>
          </tr>
+		 */?>
         <?
 		}
 		$cust=$printlist->cust_id; 
@@ -81,7 +89,7 @@
     	<tr>
         	<td class="clear">&nbsp;</td>
         	<th scope='row'>Total</th>
-            <td colspan='7'><?php echo count($data_print); ?> data</td>
+            <td colspan='9'><?php echo count($data_print); ?> data</td>
         </tr>
     </tfoot>
 </table>
