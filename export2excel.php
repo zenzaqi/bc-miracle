@@ -1,5 +1,5 @@
 <?php header("Content-type: application/x-msdownload"); 
-header("Content-Disposition: attachment; filename=master_retur_beli.xls"); 
-echo "Tanggal	No Order	No Penerimaan	No Pesanan	Supplier	Jumlah Item	Total Nilai	Keterangan	
-03/17/2010	RB/10/03/0002	LPB/10/03/0001	PP/1003-0001	CV. Jawa Jamu	10	100000
+header("Content-Disposition: attachment; filename=member.xls"); 
+echo "No Cust	Customer	No Member	Tgl Daftar	Tgl Valid	Jenis	Status	Tgl Penyerahan	
+000101	Isaac Irvan F S	1007040101000002	07/04/2010	07/04/2011	baru	Cetak
 ";?>
