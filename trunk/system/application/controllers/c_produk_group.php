@@ -16,6 +16,7 @@ class C_produk_group extends Controller {
 	//constructor
 	function C_produk_group(){
 		parent::Controller();
+		session_start();
 		$this->load->model('m_produk_group', '', TRUE);
 		$this->load->plugin('to_excel');
 	}

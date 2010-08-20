@@ -16,6 +16,7 @@ class C_alat extends Controller {
 	//constructor
 	function C_alat(){
 		parent::Controller();
+		session_start();
 		$this->load->model('m_alat', '', TRUE);
 		$this->load->plugin('to_excel');
 	}

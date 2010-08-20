@@ -16,6 +16,7 @@ class C_golongan extends Controller {
 	//constructor
 	function C_golongan(){
 		parent::Controller();
+		session_start();
 		$this->load->model('m_golongan', '', TRUE);
 		$this->load->plugin('to_excel');
 	}

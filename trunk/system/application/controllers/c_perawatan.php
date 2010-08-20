@@ -16,6 +16,7 @@ class C_perawatan extends Controller {
 	//constructor
 	function C_perawatan(){
 		parent::Controller();
+		session_start();
 		$this->load->model('m_perawatan', '', TRUE);
 		$this->load->plugin('to_excel');
 	}

@@ -422,7 +422,7 @@ Ext.onReady(function(){
 			readOnly: true,
 		}, 
 		{
-			header: 'Date Create',
+			header: 'Create on',
 			dataIndex: 'mbank_date_create',
 			width: 150,
 			sortable: true,
@@ -430,7 +430,7 @@ Ext.onReady(function(){
 			readOnly: true,
 		}, 
 		{
-			header: 'Update',
+			header: 'Last Update by',
 			dataIndex: 'mbank_update',
 			width: 150,
 			sortable: true,
@@ -438,7 +438,7 @@ Ext.onReady(function(){
 			readOnly: true,
 		}, 
 		{
-			header: 'Date Update',
+			header: 'Last Update on',
 			dataIndex: 'mbank_date_update',
 			width: 150,
 			sortable: true,

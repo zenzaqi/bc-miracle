@@ -16,6 +16,7 @@ class C_gudang extends Controller {
 	//constructor
 	function C_gudang(){
 		parent::Controller();
+		session_start();
 		$this->load->model('m_gudang', '', TRUE);
 		$this->load->plugin('to_excel');
 	}

@@ -16,6 +16,7 @@ class C_supplier extends Controller {
 	//constructor
 	function C_supplier(){
 		parent::Controller();
+		session_start();
 		$this->load->model('m_supplier', '', TRUE);
 		$this->load->plugin('to_excel');
 	}

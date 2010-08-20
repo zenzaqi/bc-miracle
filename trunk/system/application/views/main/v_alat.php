@@ -456,7 +456,7 @@ Ext.onReady(function(){
 	alatListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'alatListEditorGrid',
 		el: 'fp_alat',
-		title: 'List Of Alat Medis',
+		title: 'Daftar Peralatan Medis',
 		autoHeight: true,
 		store: alat_DataStore, // DataStore
 		cm: alat_ColumnModel, // Nama-nama Columns
@@ -656,7 +656,7 @@ Ext.onReady(function(){
 	/* Function for retrieve create Window Form */
 	alat_createWindow= new Ext.Window({
 		id: 'alat_createWindow',
-		title: post2db+'Alat',
+		title: post2db+'Alat Medis',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,
@@ -801,7 +801,7 @@ Ext.onReady(function(){
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
 	alat_searchWindow = new Ext.Window({
-		title: 'alat Search',
+		title: 'Pencarian Alat Medis',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,

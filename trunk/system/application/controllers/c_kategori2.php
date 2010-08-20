@@ -16,6 +16,7 @@ class C_kategori2 extends Controller {
 	//constructor
 	function C_kategori2(){
 		parent::Controller();
+		session_start();
 		$this->load->model('m_kategori2', '', TRUE);
 	}
 	

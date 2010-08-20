@@ -52,11 +52,17 @@ class M_bank_master extends Model{
 				"mbank_id"=>$mbank_id, 
 				"mbank_nama"=>$mbank_nama, 
 				"mbank_keterangan"=>$mbank_keterangan, 
-				"mbank_aktif"=>$mbank_aktif 
+				"mbank_aktif"=>$mbank_aktif, 
+				"mbank_update"=>$_SESSION[SESSION_USERID],			
+				"mbank_date_update"=>date('Y-m-d H:i:s'),			
 			);
 			$this->db->where('mbank_id', $mbank_id);
 			$this->db->update('bank_master', $data);
 			
+			if($this->db->affected_rows()){
+				$sql="UPDATE bank_master set mbank_revised=(mbank_revised+1) WHERE mbank_id='".$mbank_id."'";
+				$this->db->query($sql);
+			}
 			return '1';
 		}
 		
@@ -67,7 +73,10 @@ class M_bank_master extends Model{
 			$data = array(
 				"mbank_nama"=>$mbank_nama, 
 				"mbank_keterangan"=>$mbank_keterangan, 
-				"mbank_aktif"=>$mbank_aktif 
+				"mbank_aktif"=>$mbank_aktif,
+				"mbank_creator"=>$_SESSION[SESSION_USERID],	
+				"mbank_date_create"=>date('Y-m-d H:i:s'),	
+				"mbank_revised"=>'0'
 			);
 			$this->db->insert('bank_master', $data); 
 			if($this->db->affected_rows())

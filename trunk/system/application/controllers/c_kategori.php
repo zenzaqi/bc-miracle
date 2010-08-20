@@ -16,6 +16,7 @@ class C_kategori extends Controller {
 	//constructor
 	function C_kategori(){
 		parent::Controller();
+		session_start();
 		$this->load->model('m_kategori', '', TRUE);
 		$this->load->plugin('to_excel');
 	}
