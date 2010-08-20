@@ -29,9 +29,9 @@
             <th scope='col'>No Cust</th>
             <th scope='col'>Customer</th>
 			<th scope='col'>Tot Item</th>
-            <th scope='col'>Total (Rp)</th>
-            <th scope='col'>Disk (%)</th>
-            <th scope='col'>Disk (Rp)</th> 
+            <th scope='col'>Subtotal (Rp)</th>
+            <th scope='col'>Disk + (%)</th>
+            <th scope='col'>Disk + (Rp)</th> 
 
 			<?//<th scope='col'>Total Bayar (Rp)</th>?>
             <th scope='col'>Tunai (Rp)</th>
@@ -40,7 +40,7 @@
             <th scope='col'>Kuitansi (Rp)</th>
             <th scope='col'>Card (Rp)</th>
             <th scope='col'>Voucher (Rp)</th>
-            <th scope='col'>Kredit (Rp)</th>
+            <th scope='col'>Hutang (Rp)</th>
         </tr>
     </thead>
 	<tbody>
@@ -48,6 +48,7 @@
 				$total_item=0;
 				$total_diskon=0;
 				$total_diskonp=0;
+				$total_cashback=0;
 				$total_nilai=0;
 				$total_bayar=0;
 				$total_tunai=0;
@@ -62,6 +63,7 @@
 				$total_item+=$print->jumlah_barang;
 				$total_diskon+=$print->cashback;
 				$total_diskonp+=($print->diskon*$print->total_nilai)/100;
+				$total_cashback+=$print->cashback;
 				$total_nilai+=$print->total_nilai;
 				$total_bayar+=$print->total_bayar;
 				$total_tunai+=$print->tunai;
@@ -109,10 +111,10 @@
             <td align="right" class="numeric"><b><?php echo number_format($total_nilai,0,",",","); ?></td>
 
         	<?//<th scope='row' nowrap="nowrap">Disk (Rp)</th> ?>
-            <td align="right" class="numeric"><b><?php echo number_format($total_diskon,0,",",","); ?></td>
+            <td align="right" class="numeric"><b><?php echo number_format($total_diskonp,0,",",","); ?></td>
 			 
         	<?//<th scope='row' nowrap="nowrap">Disk % - (Rp)</th>?>
-            <td align="right" class="numeric"><b><?php echo number_format($total_diskonp,0,",",","); ?></td>
+            <td align="right" class="numeric"><b><?php echo number_format($total_cashback,0,",",","); ?></td>
 			
 			<?/*<td align="right" class="numeric"><b><?php echo number_format($total_bayar,0,",",","); ?></td>*/?>
 
