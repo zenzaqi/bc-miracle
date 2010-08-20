@@ -339,7 +339,7 @@ class C_produk extends Controller {
 				fwrite($file, "</td></tr>");
 				fwrite($file, $data['produk_date_update']);
 				fwrite($file, "</td></tr>");
-				fwrite($file, $data['poduk_revised']);
+				fwrite($file, $data['produk_revised']);
 				fwrite($file, "</td></tr>");
 			}
 		}

@@ -16,6 +16,7 @@ class C_departemen extends Controller {
 	//constructor
 	function C_departemen(){
 		parent::Controller();
+		session_start();
 		$this->load->model('m_departemen', '', TRUE);
 		$this->load->plugin('to_excel');
 	}

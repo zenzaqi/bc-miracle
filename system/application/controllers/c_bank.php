@@ -16,6 +16,7 @@ class C_bank extends Controller {
 	//constructor
 	function C_bank(){
 		parent::Controller();
+		session_start();
 		$this->load->model('m_bank', '', TRUE);
 		$this->load->plugin('to_excel');
 	}

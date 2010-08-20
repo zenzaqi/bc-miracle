@@ -16,6 +16,7 @@ class C_satuan extends Controller {
 	//constructor
 	function C_satuan(){
 		parent::Controller();
+		session_start();
 		$this->load->model('m_satuan', '', TRUE);
 		$this->load->plugin('to_excel');
 	}

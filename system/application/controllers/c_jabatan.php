@@ -16,6 +16,7 @@ class C_jabatan extends Controller {
 	//constructor
 	function C_jabatan(){
 		parent::Controller();
+		session_start();
 		$this->load->model('m_jabatan', '', TRUE);
 		$this->load->plugin('to_excel');
 	}

@@ -16,6 +16,7 @@ class C_bank_master extends Controller {
 	//constructor
 	function C_bank_master(){
 		parent::Controller();
+		session_start();
 		$this->load->model('m_bank_master', '', TRUE);
 	}
 	

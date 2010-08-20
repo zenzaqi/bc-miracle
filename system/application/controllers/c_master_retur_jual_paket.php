@@ -27,6 +27,58 @@ class C_master_retur_jual_paket extends Controller {
 		$this->load->view('main/v_master_retur_jual_paket');
 	}
 	
+	function laporan(){
+		$this->load->view('main/v_lap_retur_paket');
+	}
+	
+	function print_laporan(){
+		$tgl_awal=(isset($_POST['tgl_awal']) ? @$_POST['tgl_awal'] : @$_GET['tgl_awal']);
+		$tgl_akhir=(isset($_POST['tgl_akhir']) ? @$_POST['tgl_akhir'] : @$_GET['tgl_akhir']);
+		$bulan=(isset($_POST['bulan']) ? @$_POST['bulan'] : @$_GET['bulan']);
+		$tahun=(isset($_POST['tahun']) ? @$_POST['tahun'] : @$_GET['tahun']);
+		$opsi=(isset($_POST['opsi']) ? @$_POST['opsi'] : @$_GET['opsi']);
+		$periode=(isset($_POST['periode']) ? @$_POST['periode'] : @$_GET['periode']);
+		$group=(isset($_POST['group']) ? @$_POST['group'] : @$_GET['group']);
+		
+		$data["jenis"]='Retur Produk';
+		if($periode=="all"){
+			$data["periode"]="Semua Periode";
+		}else if($periode=="bulan"){
+			$tgl_awal=$tahun."-".$bulan;
+			$data["periode"]=get_ina_month_name($bulan,'long')." ".$tahun;
+		}else if($periode=="tanggal"){
+			$date = substr($tgl_awal,8,2);
+			$month = substr($tgl_awal,5,2);
+			$year = substr($tgl_awal,0,4);
+			$tgl_awal_show = $date.'-'.$month.'-'.$year;
+			
+			$date_akhir = substr($tgl_akhir,8,2);
+			$month_akhir = substr($tgl_akhir,5,2);
+			$year_akhir = substr($tgl_akhir,0,4);
+			$tgl_akhir_show = $date_akhir.'-'.$month_akhir.'-'.$year_akhir;
+			$data["periode"]="Periode : ".$tgl_awal_show." s/d ".$tgl_akhir_show.", ";
+		}
+		
+		$data["data_print"]=$this->m_master_retur_jual_paket->get_laporan($tgl_awal,$tgl_akhir,$periode,$opsi,$group);
+
+		switch($group){
+			case "Tanggal": $print_view=$this->load->view("main/p_rekap_retur_jual_tanggal.php",$data,TRUE);break;
+			case "No Faktur Jual": $print_view=$this->load->view("main/p_rekap_retur_jual_faktur_jual.php",$data,TRUE);break;
+			case "Customer": $print_view=$this->load->view("main/p_rekap_retur_jual_customer.php",$data,TRUE);break;
+			default: $print_view=$this->load->view("main/p_rekap_retur_jual.php",$data,TRUE);break;
+		}
+		if(!file_exists("print")){
+			mkdir("print");
+		}
+		if($opsi=='rekap')
+			$print_file=fopen("print/report_rpaket.html","w+");
+		else
+			$print_file=fopen("print/report_rpaket.html","w+");
+			
+		fwrite($print_file, $print_view);
+		echo '1'; 
+	}
+	
 	function get_rawat_list(){
 		$query = isset($_POST['query']) ? $_POST['query'] : "";
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);

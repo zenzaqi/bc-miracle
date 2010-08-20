@@ -16,6 +16,7 @@ class C_jenis extends Controller {
 	//constructor
 	function C_jenis(){
 		parent::Controller();
+		session_start();
 		$this->load->model('m_jenis', '', TRUE);
 		$this->load->plugin('to_excel');
 	}

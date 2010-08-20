@@ -16,6 +16,7 @@ class C_cabang extends Controller {
 	//constructor
 	function C_cabang(){
 		parent::Controller();
+		session_start();
 		$this->load->model('m_cabang', '', TRUE);
 		$this->load->plugin('to_excel');
 	}

@@ -61,24 +61,23 @@ class M_produk_group extends Model{
 				//"group_kelompok"=>$group_kelompok,
 				"group_keterangan"=>$group_keterangan,			
 				"group_aktif"=>$group_aktif,			
-				"group_creator"=>$group_creator,			
-				"group_date_create"=>$group_date_create,			
-				"group_update"=>$group_update,			
-				"group_date_update"=>$group_date_update,			
-				"group_revised"=>$group_revised			
+				// "group_creator"=>$group_creator,			
+				// "group_date_create"=>$group_date_create,			
+				"group_update"=>$_SESSION[SESSION_USERID],			
+				"group_date_update"=>date('Y-m-d H:i:s')			
 			);
 			$sql="SELECT kategori_id FROM kategori WHERE kategori_id='$group_kelompok'";
 			$rs=$this->db->query($sql);
-			if($rs->num_rows())
-				$data["group_kelompok"]=$group_kelompok;
+			if($rs->num_rows())	$data["group_kelompok"]=$group_kelompok;
 			
 			$this->db->where('group_id', $group_id);
 			$this->db->update('produk_group', $data);
 			
-			/*if($this->db->affected_rows())
-				return '1';
-			else
-				return '0';*/
+			//log
+			if($this->db->affected_rows()){
+				$sql="UPDATE produk_group set group_revised=(group_revised+1) WHERE group_id='".$group_id."'";
+				$this->db->query($sql);
+			}
 			return '1';
 		}
 		
@@ -98,12 +97,13 @@ class M_produk_group extends Model{
 				"group_kelompok"=>$group_kelompok,	
 				"group_keterangan"=>$group_keterangan,	
 				"group_aktif"=>$group_aktif,	
-				"group_creator"=>$group_creator,	
-				"group_date_create"=>$group_date_create,	
+				"group_creator"=>$_SESSION[SESSION_USERID],	
+				"group_date_create"=>date('Y-m-d H:i:s'),	
 				"group_update"=>$group_update,	
 				"group_date_update"=>$group_date_update,	
 				"group_revised"=>$group_revised	
 			);
+
 			$this->db->insert('produk_group', $data); 
 			if($this->db->affected_rows())
 				return '1';

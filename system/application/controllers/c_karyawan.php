@@ -16,6 +16,7 @@ class C_karyawan extends Controller {
 	//constructor
 	function C_karyawan(){
 		parent::Controller();
+		session_start();
 		$this->load->model('m_karyawan', '', TRUE);
 		$this->load->plugin('to_excel');
 	}
