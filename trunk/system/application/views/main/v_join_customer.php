@@ -148,7 +148,7 @@ Ext.onReady(function(){
     
 	/* Function for Check if the form is valid */
 	function is_joincustomer_form_valid(){
-		return (true &&  joincustomer_customer_awal_Field.isValid() && joincustomer_customer_tujuan_Field.isValid() && true);
+		return (joincustomer_customer_tujuan_Field.isValid() && true);
 	}
   	/* End of Function */
   
@@ -303,7 +303,7 @@ Ext.onReady(function(){
 	/* End  of Function*/
 	
 	function join_customer_confirm_save(){
-		Ext.MessageBox.confirm('Confirmation','Anda yakin untuk melakukan penggabungan customer ini?', join_customer_button);
+		Ext.MessageBox.confirm('Confirmation','Anda yakin untuk melakukan penggabungan customer ini? Semua transaksi milik customer yang akan digabungkan ke customer tujuan tidak dapat dikembalikan lagi', join_customer_button);
 	}
 	
 	
