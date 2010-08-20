@@ -2592,7 +2592,7 @@ Ext.onReady(function(){
 	/* Identify  jpaket_diskon Field */
 	jpaket_diskonField= new Ext.form.NumberField({
 		id: 'jpaket_diskonField',
-		fieldLabel: 'Diskon (%)',
+		fieldLabel: 'Disk Tambahan (%)',
 		allowNegatife : false,
 		blankText: '0',
 		emptyText: '0',
@@ -2605,7 +2605,7 @@ Ext.onReady(function(){
 	
 	jpaket_cashback_cfField= new Ext.form.TextField({
 		id: 'jpaket_cashback_cfField',
-		fieldLabel: 'Diskon (Rp)',
+		fieldLabel: 'Disk Tambahan (Rp)',
 		allowNegatife : false,
 		enableKeyEvents: true,
 		readOnly : true,
@@ -6477,7 +6477,7 @@ Ext.onReady(function(){
 		el: 'form_paket_addEdit',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
-		width: 940,	//950,
+		width: 1220,	//940,	//950,
 		//plain: true,
 		frame:true,
 		layout: 'fit',
