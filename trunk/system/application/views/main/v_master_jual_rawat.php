@@ -2683,7 +2683,7 @@ Ext.onReady(function(){
 	/* Identify  jrawat_diskon Field */
 	jrawat_diskonField= new Ext.form.NumberField({
 		id: 'jrawat_diskonField',
-		fieldLabel: 'Diskon (%)',
+		fieldLabel: 'Disk Tambahan (%)',
 		allowNegatife : false,
 		blankText: '0',
 		emptyText: '0',
@@ -2696,7 +2696,7 @@ Ext.onReady(function(){
 	
 	jrawat_cashback_cfField= new Ext.form.TextField({
 		id: 'jrawat_cashback_cfField',
-		fieldLabel: 'Diskon (Rp)',
+		fieldLabel: 'Disk Tambahan (Rp)',
 		allowNegatife : false,
 		readOnly : true,
 		enableKeyEvents: true,
