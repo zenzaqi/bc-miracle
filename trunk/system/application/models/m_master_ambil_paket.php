@@ -564,9 +564,7 @@ class M_master_ambil_paket extends Model{
 						WHERE DATE_ADD(date_format(dapaket_date_create, '%Y-%m-%d'),INTERVAL 30 DAY)>date_format(now(), '%Y-%m-%d') AND dapaket_id = ".$dapaket_id[0];
 					$this->db->query($query);
 					if($this->db->affected_rows()>0){
-						$this->firephp->log('affected > 0');
 						$dpaket_sisa_update = $this->total_sisa_paket_update($dapaket_dpaket ,$dapaket_jpaket ,$dapaket_paket);
-						$this->firephp->log($dpaket_sisa_update, 'dpaket_sisa_update');
 						if($dpaket_sisa_update==1){
 							return '1';
 						}else{
