@@ -242,7 +242,8 @@ class M_join_customer extends Model{
 				SET cust_aktif = 'Tidak Aktif',
 					cust_update = '".@$_SESSION[SESSION_USERID]."',
 					cust_date_update = '".$datetime_now."',
-					cust_revised = (cust_revised+1)
+					cust_revised = (cust_revised+1),
+					cust_keterangan = CONCAT(cust_keterangan,'Telah digabungkan ke cust_id'  '".$cust_tujuan_id."')
 				WHERE cust_id ='$cust_asal_id'";
 			$this->db->query($sql_set_cust_tidak_aktif);
 			
