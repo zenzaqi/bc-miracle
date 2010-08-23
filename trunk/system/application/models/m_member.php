@@ -272,15 +272,17 @@ class M_member extends Model{
 		function member_print($member_id ,$member_cust ,$member_no ,$member_register ,$member_valid ,$member_nota_ref ,$member_point ,$member_jenis ,$member_status ,$member_tglserahterima ,$option,$filter){
 			//full query
 			//$query="select * from member";
-			$query = "SELECT member.*,cust_nama as member_nama FROM member,customer WHERE member_cust=cust_id and member_status = 'Daftar' ";
+			$query = "SELECT member.*,cust_nama as member_nama FROM member,customer WHERE member_cust=cust_id and member_status = 'Daftar'";
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 				$query .= " (cust_nama LIKE '%".addslashes($filter)."%' OR cust_no LIKE '%".addslashes($filter)."%' OR member_no LIKE '%".addslashes($filter)."%')";
+				$query .= " ORDER BY member_jenis";
 				$result = $this->db->query($query);
 			} else if($option=='SEARCH'){
 				if($member_id!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " member_id LIKE '%".$member_id."%'";
+					
 				};
 				if($member_cust!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -318,7 +320,7 @@ class M_member extends Model{
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " member_tglserahterima LIKE '%".$member_tglserahterima."%'";
 				};
-				$query .= " order by member_jenis";
+				//$query .= " ORDER BY member_jenis";
 				$result = $this->db->query($query);
 			}
 			return $result->result();
