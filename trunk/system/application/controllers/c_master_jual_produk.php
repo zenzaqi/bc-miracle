@@ -64,26 +64,15 @@ class C_master_jual_produk extends Controller {
 			//$tgl_akhir_show = date("d-m-Y", $tgl_akhir);
 			$data["periode"]="Periode : ".$tgl_awal_show." s/d ".$tgl_akhir_show.", ";
 		}
-		
-		$data["total_item"]=$this->m_master_jual_produk->get_total_item($tgl_awal,$tgl_akhir,$periode,$opsi);
-		$data["total_diskon"]=$this->m_master_jual_produk->get_total_diskon($tgl_awal,$tgl_akhir,$periode,$opsi);
-		$data["total_nilai"]=$this->m_master_jual_produk->get_total_nilai($tgl_awal,$tgl_akhir,$periode,$opsi);
+
 		$data["data_print"]=$this->m_master_jual_produk->get_laporan($tgl_awal,$tgl_akhir,$periode,$opsi,$group);
-		$data["total_bayar"]=$this->m_master_jual_produk->get_total_bayar($tgl_awal,$tgl_akhir,$periode,$opsi);
 		
 		if(!file_exists("print")){
 			mkdir("print");
 		}
 		
 		if($opsi=='rekap'){
-			$data["total_tunai"]=$this->m_master_jual_produk->get_total_tunai($tgl_awal,$tgl_akhir,$periode,$opsi);
-			$data["total_bayar"]=$this->m_master_jual_produk->get_total_bayar($tgl_awal,$tgl_akhir,$periode,$opsi);
-			$data["total_cek"]=$this->m_master_jual_produk->get_total_cek($tgl_awal,$tgl_akhir,$periode,$opsi);
-			$data["total_transfer"]=$this->m_master_jual_produk->get_total_transfer($tgl_awal,$tgl_akhir,$periode,$opsi);
-			$data["total_card"]=$this->m_master_jual_produk->get_total_card($tgl_awal,$tgl_akhir,$periode,$opsi);
-			$data["total_kuitansi"]=$this->m_master_jual_produk->get_total_kuitansi($tgl_awal,$tgl_akhir,$periode,$opsi);
-			$data["total_kredit"]=$this->m_master_jual_produk->get_total_kredit($tgl_awal,$tgl_akhir,$periode,$opsi);	
-			
+		
 			switch($group){
 				case "Tanggal": $print_view=$this->load->view("main/p_rekap_jual_tanggal.php",$data,TRUE);break;
 				case "Customer": $print_view=$this->load->view("main/p_rekap_jual_customer.php",$data,TRUE);break;
@@ -107,16 +96,6 @@ class C_master_jual_produk extends Controller {
 			fclose($print_file);
 			echo '1'; 
 		}
-		/*if(!file_exists("print")){
-			mkdir("print");
-		}*/
-		/*if($opsi=='rekap')
-			$print_file=fopen("print/report_jproduk.html","w+");
-		else
-			$print_file=fopen("print/report_jproduk.html","w+");*/
-			
-		/*fwrite($print_file, $print_view);
-		echo '1'; */
 	}
 	
 	function get_konversi_list(){

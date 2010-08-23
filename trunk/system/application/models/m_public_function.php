@@ -50,7 +50,6 @@ class M_public_function extends Model{
 					FROM 		vu_trans_terima_jual 
 					WHERE 		date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' AND 
 								date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."' AND 
-								no_ref<>'' AND
 								stat_dok<>'Batal' 
 					GROUP BY  	jenis_transaksi 
 					ORDER BY 	jenis_transaksi";
