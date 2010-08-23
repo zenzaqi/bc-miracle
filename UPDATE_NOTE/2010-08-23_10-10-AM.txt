@@ -1,0 +1,11 @@
+> Fix bug
+  o Laporan Penjualan Produk, Perawatan, Produk
+    dan Penerimaan Kas
+  o Sebab : 
+	   - ada transaksi lama yg error di kasir
+             status pembatalan tidak mengacu pada master
+             jualnya
+           - proses pelaporan dengan pembayaran ganda
+             dengan jenis sama belum terhandle
+  o SQL Fix : 2010-08-23_10-10-AM.sql [fix data]
+              2010-08-23_10-15-AM.sql [fix view laporan]
