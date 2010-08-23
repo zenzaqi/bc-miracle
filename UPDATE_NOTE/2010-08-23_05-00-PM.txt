@@ -1,0 +1,5 @@
+> Fix bug
+  o Laporan Penerimaan Kas
+  o Sebab : proses penyimpanan transaksi
+            tidak masuk ke tabel jual2 transaksi
+  o Fix : jalankan SQL berikut : 2010-08-23_05-00-PM.sql
