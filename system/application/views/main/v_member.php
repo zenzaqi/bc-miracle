@@ -782,6 +782,7 @@ Ext.onReady(function(){
 		}, '-',{
 			text: 'Print',
 			tooltip: 'Print Document',
+			disabled : true,
 			iconCls:'icon-print',
 			handler: member_print  
 		}

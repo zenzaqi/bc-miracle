@@ -19,13 +19,15 @@ class M_member extends Model{
 		}
 		
 		function member_cetak(){
+		
+			$query = "SELECT member.*,cust_nama as member_nama FROM member,customer where member_cust=cust_id and member_status='Daftar' ORDER BY member_jenis";
+			$row=$this->db->query($query);
 			
 			//$query = "UPDATE member set member_status='print' where member_status='register'";
 			$query = "UPDATE member set member_status='Cetak', member_tglserahterima=NULL where member_status='Daftar'";
 			$this->db->query($query);
 			//$query = "SELECT member.*,cust_nama as member_nama FROM member,customer where member_cust=cust_id and member_status='print'";
-			$query = "SELECT member.*,cust_nama as member_nama FROM member,customer where member_cust=cust_id and member_status='Cetak'";
-			$row=$this->db->query($query);
+			
 			return $row->result();
 		}
 		

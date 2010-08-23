@@ -34,18 +34,18 @@ class M_master_ambil_paket extends Model{
 			
 			if($opsi=='rekap'){
 				if($periode=='all')
-					$sql="SELECT no_bukti,tanggal,paket_nama,paket_kode,cust_id,cust_nama,cust_no,dapaket_paket,dapaket_jumlah as jumlah, harga_satuan FROM vu_detail_ambil_paket_rawat WHERE jpaket_stat_dok<>'Batal' ".$order_by;
+					$sql="SELECT no_bukti,tanggal,paket_nama,paket_kode,cust_id,cust_nama,cust_no,dapaket_paket,dapaket_jumlah as jumlah, harga_satuan FROM vu_detail_ambil_paket_rawat WHERE jpaket_stat_dok<>'Batal' AND dapaket_stat_dok<>'Batal'".$order_by;
 				else if($periode=='bulan')
-					$sql="SELECT no_bukti,tanggal,paket_nama,paket_kode,cust_id,cust_nama,cust_no,dapaket_paket,dapaket_jumlah as jumlah, harga_satuan FROM vu_detail_ambil_paket_rawat WHERE jpaket_stat_dok<>'Batal' AND  date_format(tanggal, '%Y-%m')='".$tgl_awal."' ".$order_by;
+					$sql="SELECT no_bukti,tanggal,paket_nama,paket_kode,cust_id,cust_nama,cust_no,dapaket_paket,dapaket_jumlah as jumlah, harga_satuan FROM vu_detail_ambil_paket_rawat WHERE jpaket_stat_dok<>'Batal' AND dapaket_stat_dok<>'Batal' AND  date_format(tanggal, '%Y-%m')='".$tgl_awal."' ".$order_by;
 				else if($periode=='tanggal')
-					$sql="SELECT no_bukti,tanggal,paket_nama,paket_kode,cust_id,cust_nama,cust_no,dapaket_paket,dapaket_jumlah as jumlah, harga_satuan FROM vu_detail_ambil_paket_rawat WHERE jpaket_stat_dok<>'Batal' AND date_format(tanggal, '%Y-%m-%d')>='".$tgl_awal."' AND date_format(tanggal, '%Y-%m-%d')<='".$tgl_akhir."' ".$order_by;
+					$sql="SELECT no_bukti,tanggal,paket_nama,paket_kode,cust_id,cust_nama,cust_no,dapaket_paket,dapaket_jumlah as jumlah, harga_satuan FROM vu_detail_ambil_paket_rawat WHERE jpaket_stat_dok<>'Batal' AND dapaket_stat_dok<>'Batal' AND date_format(tanggal, '%Y-%m-%d')>='".$tgl_awal."' AND date_format(tanggal, '%Y-%m-%d')<='".$tgl_akhir."' ".$order_by;
 			}else if($opsi=='detail'){
 				if($periode=='all')
-					$sql="SELECT * FROM vu_detail_ambil_paket_rawat WHERE jpaket_stat_dok<>'Batal' ".$order_by;
+					$sql="SELECT * FROM vu_detail_ambil_paket_rawat WHERE jpaket_stat_dok<>'Batal' AND dapaket_stat_dok<>'Batal' ".$order_by;
 				else if($periode=='bulan')
-					$sql="SELECT * FROM vu_detail_ambil_paket_rawat WHERE jpaket_stat_dok<>'Batal' AND  date_format(tanggal, '%Y-%m')='".$tgl_awal."' ".$order_by;
+					$sql="SELECT * FROM vu_detail_ambil_paket_rawat WHERE jpaket_stat_dok<>'Batal' AND dapaket_stat_dok<>'Batal' AND  date_format(tanggal, '%Y-%m')='".$tgl_awal."' ".$order_by;
 				else if($periode=='tanggal')
-					$sql="SELECT distinct * FROM vu_detail_ambil_paket_rawat WHERE jpaket_stat_dok<>'Batal' AND date_format(tanggal, '%Y-%m-%d')>='".$tgl_awal."' AND date_format(tanggal, '%Y-%m-%d')<='".$tgl_akhir."' ".$order_by;
+					$sql="SELECT distinct * FROM vu_detail_ambil_paket_rawat WHERE jpaket_stat_dok<>'Batal' AND dapaket_stat_dok<>'Batal' AND date_format(tanggal, '%Y-%m-%d')>='".$tgl_awal."' AND date_format(tanggal, '%Y-%m-%d')<='".$tgl_akhir."' ".$order_by;
 			}
 			
 			//echo $sql;
@@ -66,7 +66,7 @@ class M_master_ambil_paket extends Model{
 				AND detail_jual_paket.dpaket_master='$dapaket_jpaket'
 				AND detail_jual_paket.dpaket_paket='$dapaket_paket'";
 		$this->db->query($sql_sisa_paket);
-		if($this->db->affected_rows()>-1){
+		if($this->db->affected_rows()){
 			return 1;
 		}else{
 			return 0;
