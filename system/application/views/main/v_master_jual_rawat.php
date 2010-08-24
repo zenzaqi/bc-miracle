@@ -640,7 +640,6 @@ Ext.onReady(function(){
 						Ext.MessageBox.alert(jrawat_post2db+' OK','Data penjualan perawatan berhasil disimpan');
 						if(jrawat_post2db=="UPDATE"){
 							detail_jual_rawat_update('',jrawat_id_create_pk,customer_id,jrawat_tanggal_create_date);
-							detail_ambil_paket_update();
 						}else if(jrawat_post2db=="CREATE"){
 							//detail_jual_rawat_insert_nocetak();
 							detail_jual_rawat_insert();
@@ -658,12 +657,6 @@ Ext.onReady(function(){
 						});
 					}else if(result>0){
 						//mode 'Save and Print' untuk perawatan non-paket, sekaligus pengambilan paket
-						/*jrawat_cetak();
-						Ext.Ajax.request({
-							waitMsg: 'Mohon tunggu...',
-							url: 'index.php?c=c_master_jual_rawat&m=catatan_piutang_update',
-							params:{drawat_master	: eval(jrawat_idField.getValue())}
-						});*/
 						if(jrawat_post2db=="UPDATE"){
 							detail_jual_rawat_update('cetak',jrawat_id_create_pk,customer_id,jrawat_tanggal_create_date);
 						}else if(jrawat_post2db=="CREATE"){

@@ -49,8 +49,206 @@ class M_master_jual_rawat extends Model{
 			$query=$this->db->query($sql);
 			return $query->result();
 		}
-				
-			
+		
+		function get_total_item($tgl_awal,$tgl_akhir,$periode,$opsi){
+			$sql="";
+			if($opsi=='rekap'){
+				if($periode=='all')
+					$sql="SELECT SUM(jumlah_barang) as total_item FROM vu_trans_rawat WHERE jrawat_stat_dok<>'Batal' ";
+				else if($periode=='bulan')
+					$sql="SELECT SUM(jumlah_barang) as total_item FROM vu_trans_rawat WHERE jrawat_stat_dok<>'Batal'  AND date_format(tanggal, '%Y-%m') like  '".$tgl_awal."%'";
+				else if($periode=='tanggal')
+					$sql="SELECT SUM(jumlah_barang) as total_item FROM vu_trans_rawat WHERE jrawat_stat_dok<>'Batal'  AND date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."'";
+			}else if($opsi=='detail'){
+				if($periode=='all')
+					$sql="SELECT SUM(jumlah_barang) as total_item FROM vu_detail_jual_rawat WHERE jrawat_stat_dok<>'Batal'";
+				else if($periode=='bulan')
+					$sql="SELECT SUM(jumlah_barang) as total_item FROM vu_detail_jual_rawat WHERE jrawat_stat_dok<>'Batal' AND date_format(tanggal, '%Y-%m') like  '".$tgl_awal."%'";
+				else if($periode=='tanggal')
+					$sql="SELECT SUM(jumlah_barang) as total_item FROM vu_detail_jual_rawat WHERE jrawat_stat_dok<>'Batal' AND date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."'";
+			}
+			$query=$this->db->query($sql);
+			if($query->num_rows()){
+				$data=$query->row();
+				return $data->total_item;
+			}else
+				return "";
+		}
+		
+		function get_total_diskon($tgl_awal,$tgl_akhir,$periode,$opsi){
+			if($opsi=='rekap'){
+				if($periode=='all')
+					$sql="SELECT SUM(cashback) as total_diskon FROM vu_trans_rawat WHERE jrawat_stat_dok<>'Batal' ";
+				else if($periode=='bulan')
+					$sql="SELECT SUM(cashback) as total_diskon FROM vu_trans_rawat WHERE jrawat_stat_dok<>'Batal' AND date_format(tanggal, '%Y-%m') like  '".$tgl_awal."%'";
+				else if($periode=='tanggal')
+					$sql="SELECT SUM(cashback) as total_diskon FROM vu_trans_rawat WHERE jrawat_stat_dok<>'Batal'  AND date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."'";
+			}else if($opsi=='detail'){
+				if($periode=='all')
+					$sql="SELECT SUM(diskon_nilai) as total_diskon FROM vu_detail_jual_rawat WHERE jrawat_stat_dok<>'Batal'";
+				else if($periode=='bulan')
+					$sql="SELECT SUM(diskon_nilai) as total_diskon FROM vu_detail_jual_rawat WHERE jrawat_stat_dok<>'Batal' AND date_format(tanggal, '%Y-%m') like  '".$tgl_awal."%'";
+				else if($periode=='tanggal')
+					$sql="SELECT SUM(diskon_nilai) as total_diskon FROM vu_detail_jual_rawat WHERE jrawat_stat_dok<>'Batal' AND date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."'";
+			}
+			$query=$this->db->query($sql);
+			if($query->num_rows()){
+				$data=$query->row();
+				return $data->total_diskon;
+			}else
+				return "";
+		}
+		
+		function get_total_nilai($tgl_awal,$tgl_akhir,$periode,$opsi){
+			if($opsi=='rekap'){
+				if($periode=='all')
+					$sql="SELECT SUM(total_nilai) as total_nilai FROM vu_trans_rawat WHERE jrawat_stat_dok<>'Batal'  ";
+				else if($periode=='bulan')
+					$sql="SELECT SUM(total_nilai) as total_nilai FROM vu_trans_rawat WHERE jrawat_stat_dok<>'Batal'  AND date_format(tanggal, '%Y-%m') like  '".$tgl_awal."%'";
+				else if($periode=='tanggal')
+					$sql="SELECT SUM(total_nilai) as total_nilai FROM vu_trans_rawat WHERE jrawat_stat_dok<>'Batal'  AND date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."'";
+			}else if($opsi=='detail'){
+				if($periode=='all')
+					$sql="SELECT SUM(subtotal) as total_nilai FROM vu_detail_jual_rawat WHERE jrawat_stat_dok<>'Batal'";
+				else if($periode=='bulan')
+					$sql="SELECT SUM(subtotal) as total_nilai FROM vu_detail_jual_rawat WHERE jrawat_stat_dok<>'Batal' AND date_format(tanggal, '%Y-%m') like  '".$tgl_awal."%'";
+				else if($periode=='tanggal')
+					$sql="SELECT SUM(subtotal) as total_nilai FROM vu_detail_jual_rawat WHERE jrawat_stat_dok<>'Batal' AND date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."'";
+			}
+			$query=$this->db->query($sql);
+			if($query->num_rows()){
+				$data=$query->row();
+				return $data->total_nilai;
+			}else
+				return "";
+		}
+		
+		function get_total_bayar($tgl_awal,$tgl_akhir,$periode,$opsi){
+			if($opsi=='rekap'){
+				if($periode=='all')
+					$sql="SELECT SUM(total_bayar) as total_bayar FROM vu_trans_rawat WHERE jrawat_stat_dok<>'Batal'  ";
+				else if($periode=='bulan')
+					$sql="SELECT SUM(total_bayar) as total_bayar FROM vu_trans_rawat WHERE jrawat_stat_dok<>'Batal'  AND date_format(tanggal, '%Y-%m') like  '".$tgl_awal."%'";
+				else if($periode=='tanggal')
+					$sql="SELECT SUM(total_bayar) as total_bayar FROM vu_trans_rawat WHERE jrawat_stat_dok<>'Batal'  AND date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."'";
+			}else if($opsi=='detail'){
+				if($periode=='all')
+					$sql="SELECT SUM(subtotal) as total_bayar FROM vu_detail_jual_rawat WHERE jrawat_stat_dok<>'Batal'";
+				else if($periode=='bulan')
+					$sql="SELECT SUM(subtotal) as total_bayar FROM vu_detail_jual_rawat WHERE jrawat_stat_dok<>'Batal' AND date_format(tanggal, '%Y-%m') like  '".$tgl_awal."%'";
+				else if($periode=='tanggal')
+					$sql="SELECT SUM(subtotal) as total_bayar FROM vu_detail_jual_rawat WHERE jrawat_stat_dok<>'Batal' AND date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."'";
+			}
+			$query=$this->db->query($sql);
+			if($query->num_rows()){
+				$data=$query->row();
+				return $data->total_bayar;
+			}else
+				return "";
+		}
+		
+		function get_total_cek($tgl_awal,$tgl_akhir,$periode,$opsi){
+			if($opsi=='rekap'){
+				if($periode=='all')
+					$sql="SELECT SUM(cek) as total_cek FROM vu_trans_rawat WHERE jrawat_stat_dok<>'Batal'  ";
+				else if($periode=='bulan')
+					$sql="SELECT SUM(cek) as total_cek FROM vu_trans_rawat WHERE jrawat_stat_dok<>'Batal'  AND date_format(tanggal, '%Y-%m') like  '".$tgl_awal."%'";
+				else if($periode=='tanggal')
+					$sql="SELECT SUM(cek) as total_cek FROM vu_trans_rawat WHERE jrawat_stat_dok<>'Batal'  AND date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."'";
+			}
+			$query=$this->db->query($sql);
+			if($query->num_rows()){
+				$data=$query->row();
+				return $data->total_cek;
+			}else
+				return "";
+		}
+		
+		function get_total_tunai($tgl_awal,$tgl_akhir,$periode,$opsi){
+			if($opsi=='rekap'){
+				if($periode=='all')
+					$sql="SELECT SUM(tunai) as total_tunai FROM vu_trans_rawat WHERE jrawat_stat_dok<>'Batal' ";
+				else if($periode=='bulan')
+					$sql="SELECT SUM(tunai) as total_tunai FROM vu_trans_rawat WHERE jrawat_stat_dok<>'Batal'  AND date_format(tanggal, '%Y-%m') like  '".$tgl_awal."%'";
+				else if($periode=='tanggal')
+					$sql="SELECT SUM(tunai) as total_tunai FROM vu_trans_rawat WHERE jrawat_stat_dok<>'Batal'  AND date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."'";
+			}
+			$query=$this->db->query($sql);
+			if($query->num_rows()){
+				$data=$query->row();
+				return $data->total_tunai;
+			}else
+				return "";
+		}
+		
+		function get_total_transfer($tgl_awal,$tgl_akhir,$periode,$opsi){
+			if($opsi=='rekap'){
+				if($periode=='all')
+					$sql="SELECT SUM(transfer) as total_transfer FROM vu_trans_rawat WHERE jrawat_stat_dok<>'Batal' ";
+				else if($periode=='bulan')
+					$sql="SELECT SUM(transfer) as total_transfer FROM vu_trans_rawat WHERE jrawat_stat_dok<>'Batal' AND date_format(tanggal, '%Y-%m') like  '".$tgl_awal."%'";
+				else if($periode=='tanggal')
+					$sql="SELECT SUM(transfer) as total_transfer FROM vu_trans_rawat WHERE jrawat_stat_dok<>'Batal' AND date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."'";
+			}
+			$query=$this->db->query($sql);
+			if($query->num_rows()){
+				$data=$query->row();
+				return $data->total_transfer;
+			}else
+				return "";
+		}
+		
+		function get_total_card($tgl_awal,$tgl_akhir,$periode,$opsi){
+			if($opsi=='rekap'){
+				if($periode=='all')
+					$sql="SELECT SUM(card) as total_card FROM vu_trans_rawat WHERE jrawat_stat_dok<>'Batal' ";
+				else if($periode=='bulan')
+					$sql="SELECT SUM(card) as total_card FROM vu_trans_rawat WHERE jrawat_stat_dok<>'Batal' AND date_format(tanggal, '%Y-%m') like  '".$tgl_awal."%'";
+				else if($periode=='tanggal')
+					$sql="SELECT SUM(card) as total_card FROM vu_trans_rawat WHERE jrawat_stat_dok<>'Batal' AND date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."'";
+			}
+			$query=$this->db->query($sql);
+			if($query->num_rows()){
+				$data=$query->row();
+				return $data->total_card;
+			}else
+				return "";
+		}
+		
+		function get_total_kredit($tgl_awal,$tgl_akhir,$periode,$opsi){
+			if($opsi=='rekap'){
+				if($periode=='all')
+					$sql="SELECT SUM(kredit) as total_kredit FROM vu_trans_rawat WHERE jrawat_stat_dok<>'Batal' ";
+				else if($periode=='bulan')
+					$sql="SELECT SUM(kredit) as total_kredit FROM vu_trans_rawat WHERE jrawat_stat_dok<>'Batal' AND date_format(tanggal, '%Y-%m') like  '".$tgl_awal."%'";
+				else if($periode=='tanggal')
+					$sql="SELECT SUM(kredit) as total_kredit FROM vu_trans_rawat WHERE jrawat_stat_dok<>'Batal' AND date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."'";
+			}
+			$query=$this->db->query($sql);
+			if($query->num_rows()){
+				$data=$query->row();
+				return $data->total_kredit;
+			}else
+				return "";
+		}
+		
+		function get_total_kuitansi($tgl_awal,$tgl_akhir,$periode,$opsi){
+			if($opsi=='rekap'){
+				if($periode=='all')
+					$sql="SELECT SUM(kuitansi) as total_kuitansi FROM vu_trans_rawat WHERE jrawat_stat_dok<>'Batal' ";
+				else if($periode=='bulan')
+					$sql="SELECT SUM(kuitansi) as total_kuitansi FROM vu_trans_rawat WHERE jrawat_stat_dok<>'Batal' AND date_format(tanggal, '%Y-%m') like  '".$tgl_awal."%'";
+				else if($periode=='tanggal')
+					$sql="SELECT SUM(kuitansi) as total_kuitansi FROM vu_trans_rawat WHERE jrawat_stat_dok<>'Batal' AND date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."'";
+			}
+			$query=$this->db->query($sql);
+			if($query->num_rows()){
+				$data=$query->row();
+				return $data->total_kuitansi;
+			}else
+				return "";
+		}
+		
 		//fungsi untuk pengambilan paket
 		//get record list
 		function detail_ambil_paket_list($dpaket_id,$tanggal,$dapaket_cust,$query,$dapaket_stat_dok,$start,$end) {
@@ -752,20 +950,23 @@ class M_master_jual_rawat extends Model{
         }
         
         function detail_ambil_paket_update($dapaket_id ){
-            /*$dtu_dapaket=array(
-			"dapaket_stat_dok"=>'Batal'
-			);
-			
-			$this->db->where('dapaket_id', $dapaket_id);
-			$this->db->update('detail_ambil_paket', $dtu_dapaket);*/
             //* Pengambilan Paket di-Batalkan /
             $dpaket_id = 0;
-            $sql="SELECT dapaket_paket, dapaket_dpaket, paket_jmlisi, sum(dapaket_jumlah) AS total_pakai_paket FROM detail_ambil_paket LEFT JOIN paket ON(dapaket_paket=paket_id) WHERE dapaket_id='$dapaket_id' GROUP BY dapaket_dpaket";
+            $sql="SELECT dapaket_paket
+					,dapaket_dpaket
+					,dapaket_jpaket
+					,paket_jmlisi
+					,sum(dapaket_jumlah) AS total_pakai_paket
+				FROM detail_ambil_paket
+				LEFT JOIN paket ON(dapaket_paket=paket_id)
+				WHERE dapaket_id='$dapaket_id'
+				GROUP BY dapaket_dpaket";
             $rs=$this->db->query($sql);
             if($rs->num_rows()){
                 $record = $rs->row_array();
                 $dpaket_id = $record['dapaket_dpaket'];
-                $paket_id = $record['dapaket_paket'];
+				$dpaket_master = $record['dapaket_jpaket'];
+                $dpaket_paket = $record['dapaket_paket'];
                 $paket_jmlisi = $record['paket_jmlisi'];
             }
             
@@ -773,20 +974,14 @@ class M_master_jual_rawat extends Model{
             $sql="UPDATE detail_ambil_paket SET dapaket_stat_dok='Batal' WHERE dapaket_id='$dapaket_id'";
             $this->db->query($sql);
 			if($this->db->affected_rows()){
-                $sisa_paket = 0;
-                $sql="SELECT
-                        sum(dapaket_jumlah) AS total_pakai_paket
-                    FROM detail_ambil_paket
-                    WHERE dapaket_dpaket='$dpaket_id' AND dapaket_stat_dok<>'Batal'
-                    GROUP BY dapaket_dpaket";
-                $rs = $this->db->query($sql);
-                if($rs->num_rows()){
-                    $record = $rs->row_array();
-                    $sisa_paket = $paket_jmlisi - $record['total_pakai_paket'];
-                }else{
-                    $sisa_paket = $paket_jmlisi;
-                }
-                $sql="UPDATE detail_jual_paket SET dpaket_sisa_paket = $sisa_paket WHERE dpaket_id='$dpaket_id'";
+				$sql = "UPDATE detail_jual_paket, vu_total_sisa_paket
+					SET detail_jual_paket.dpaket_sisa_paket = vu_total_sisa_paket.total_sisa_paket
+					WHERE detail_jual_paket.dpaket_id=vu_total_sisa_paket.dpaket_id
+						AND detail_jual_paket.dpaket_master=vu_total_sisa_paket.dpaket_master
+						AND detail_jual_paket.dpaket_paket=vu_total_sisa_paket.dpaket_paket
+						AND detail_jual_paket.dpaket_id='".$dpaket_id."'
+						AND detail_jual_paket.dpaket_master='".$dpaket_master."'
+						AND detail_jual_paket.dpaket_paket='".$dpaket_paket."'";
                 $this->db->query($sql);
 				return '1';
 			}else
