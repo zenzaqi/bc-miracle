@@ -62,7 +62,7 @@
             <td ><?php echo $print->paket_nama; ?></td>
             <td ><?php echo $print->rawat_nama; ?></td>
             <td><?php echo $print->dapaket_jumlah; ?></td>
-			<td class="numeric"><?php echo number_format($print->harga_satuan,0,",","."); ?></td>
+			<td class="numeric"><?php echo number_format($print->harga_satuan,0,",",","); ?></td>
             <td><?php echo $print->referal; ?></td>
        </tr>
 		<?php }
