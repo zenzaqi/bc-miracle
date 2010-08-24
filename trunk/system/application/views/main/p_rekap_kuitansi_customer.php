@@ -72,9 +72,9 @@
             <td width="10"><?php echo $print_list->no_bukti; ?></td>
             <td><?php echo $print_list->tanggal; ?></td>
 			<td align="right" class="numeric"><?php echo $print->cara_bayar; ?></td>
-            <td align="right" class="numeric"><?php echo number_format($print_list->total_nilai,0,",","."); ?></td>
-            <td align="right" class="numeric"><?php echo number_format($print_list->total_pakai,0,",","."); ?></td>
-            <td align="right" class="numeric"><?php echo number_format($print_list->total_sisa,0,",","."); ?></td>
+            <td align="right" class="numeric"><?php echo number_format($print_list->total_nilai,0,",",","); ?></td>
+            <td align="right" class="numeric"><?php echo number_format($print_list->total_pakai,0,",",","); ?></td>
+            <td align="right" class="numeric"><?php echo number_format($print_list->total_sisa,0,",",","); ?></td>
             <td align="right" class="numeric"><?php echo $print_list->keterangan; ?></td>
       	</tr>
 	   <?php } ?>
@@ -107,19 +107,19 @@
         <tr>
         	<td class="clear">&nbsp;</td>
         	<th scope='row' nowrap="nowrap">Total Nilai (Rp)</th>
-            <td  nowrap="nowrap" align="right" class="numeric clear"><?php echo number_format($total_nilai,0,",","."); ?></td>
+            <td  nowrap="nowrap" align="right" class="numeric clear"><?php echo number_format($total_nilai,0,",",","); ?></td>
              <td colspan='5' class="clear">&nbsp;</td>
         </tr>
         <tr>
         	<td class="clear">&nbsp;</td>
         	<th scope='row' nowrap="nowrap">Total Pakai (Rp)</th>
-            <td  nowrap="nowrap" align="right" class="numeric clear"><?php echo number_format($total_pakai,0,",","."); ?></td>
+            <td  nowrap="nowrap" align="right" class="numeric clear"><?php echo number_format($total_pakai,0,",",","); ?></td>
              <td colspan='5' class="clear">&nbsp;</td>
         </tr>
         <tr>
         	<td class="clear">&nbsp;</td>
         	<th scope='row' nowrap="nowrap">Total Sisa (Rp)</th>
-            <td  nowrap="nowrap" align="right" class="numeric clear"><?php echo number_format($total_sisa,0,",","."); ?></td>
+            <td  nowrap="nowrap" align="right" class="numeric clear"><?php echo number_format($total_sisa,0,",",","); ?></td>
              <td colspan='5' class="clear" >&nbsp;</td>
         </tr>
 	</tfoot>

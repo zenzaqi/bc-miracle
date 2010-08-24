@@ -68,7 +68,7 @@
             <td width="10"><?php echo $print_list->no_faktur; ?></td>
             <td width="10"><?php echo ucwords(str_replace("_"," ",$print_list->jenis_transaksi)); ?></td>
             <td><?php echo $print_list->tanggal; ?></td>
-            <td align="right" class="numeric"><?php echo number_format($print_list->pakai_nilai,0,",","."); ?></td>
+            <td align="right" class="numeric"><?php echo number_format($print_list->pakai_nilai,0,",",","); ?></td>
       	</tr>
 	   <?php } ?>
        <?php } ?>
@@ -97,7 +97,7 @@
         <tr>
         	<td class="clear">&nbsp;</td>
         	<th scope='row' nowrap="nowrap">Total Nilai (Rp)</th>
-            <td  nowrap="nowrap" align="right" class="numeric clear"><?php echo number_format($total_pakai,0,",","."); ?></td>
+            <td  nowrap="nowrap" align="right" class="numeric clear"><?php echo number_format($total_pakai,0,",",","); ?></td>
              <td colspan='5' class="clear">&nbsp;</td>
         </tr>
 	</tfoot>
