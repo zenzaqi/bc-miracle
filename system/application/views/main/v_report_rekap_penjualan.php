@@ -324,14 +324,14 @@ Ext.onReady(function(){
 		fieldLabel: 'Jenis',
 		store:new Ext.data.SimpleStore({
 			fields:['jenis_value', 'jenis_display'],
-			data:[['Perawatan','Perawatan'],['Produk','Produk'],['Paket','Paket']]
+			data:[['Perawatan','Perawatan Satuan'],['Produk','Produk'],['Paket','Paket']]
 		}),
 		mode: 'local',
 		editable:false,
 		emptyText: 'Produk',
 		displayField: 'jenis_display',
 		valueField: 'jenis_value',
-		width: 100,
+		width: 120,
 		triggerAction: 'all'	
 	});
 
