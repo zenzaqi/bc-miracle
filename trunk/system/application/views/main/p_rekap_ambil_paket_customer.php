@@ -58,7 +58,7 @@
             <td><?php echo $print->tanggal; ?></td>
             <td nowrap="nowrap"><?php echo $print->paket_nama; ?></td>
             <td><?php echo $print->jumlah; ?></td>
-			<td class="numeric"><?php echo number_format($print->harga_satuan,0,",","."); ?></td>
+			<td class="numeric"><?php echo number_format($print->harga_satuan,0,",",","); ?></td>
         <!--    <td><?php //echo $print->dpaket_kadaluarsa; ?></td> -->
        </tr>
 		<?php }
