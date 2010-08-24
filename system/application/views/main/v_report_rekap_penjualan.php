@@ -198,7 +198,7 @@ Ext.onReady(function(){
 	
 		}, 
 		{
-			header: '<div align="center">' + 'Nama Produk / Perawatan / Paket' + '</div>',
+			header: '<div align="center">' + 'Nama Produk / Perawatan Satuan / Paket' + '</div>',
 			dataIndex: 'nama',
 			width: 210,//185,	//210,
 			sortable: true,
@@ -206,7 +206,7 @@ Ext.onReady(function(){
 		}, 
 		{
 			align : 'Right',
-			header: '<div align="center">' + 'Total' + '</div>',
+			header: '<div align="center">' + 'Total Item' + '</div>',
 			dataIndex: 'total_jumlah',
 			width: 60,//185,	//210,
 			sortable: true,
@@ -223,7 +223,7 @@ Ext.onReady(function(){
 		},
 		{	
 			align : 'Right',
-			header: '<div align="center">' + 'Total Disk Tembahan (Rp)' + '</div>',
+			header: '<div align="center">' + 'Tot Disk Tmbhn (Rp)' + '</div>',
 			dataIndex: 'diskon_tambahan',
 			renderer: Ext.util.Format.numberRenderer('0,000'),
 			readOnly: true,
@@ -232,7 +232,7 @@ Ext.onReady(function(){
 		},
 		{	
 			align : 'Right',
-			header: '<div align="center">' + 'Grand Total (Rp)' + '</div>',
+			header: '<div align="center">' + 'Total (Rp)' + '</div>',
 			dataIndex: 'grand_total',
 			renderer: Ext.util.Format.numberRenderer('0,000'),
 			readOnly: true,
@@ -488,6 +488,7 @@ Ext.onReady(function(){
 							        vtype: 'daterange',
 									allowBlank: false,
 									format: 'd-m-Y',
+									value : today,
 							        startDateField: 'rekap_penjualan_tglStartSearchField' // id of the end date field
 							    }] 
 						}]},
@@ -655,7 +656,7 @@ Ext.onReady(function(){
 		});
 	}
 	/*End of Function */
-	
+	rekap_penjualan_searchWindow.show();
 });
 	</script>
 <body>
