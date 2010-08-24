@@ -143,7 +143,7 @@ class M_jenis extends Model{
 			};
 			if($jenis_aktif!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " jenis_aktif LIKE '%".$jenis_aktif."%'";
+				$query.= " jenis_aktif = '".$jenis_aktif."'";
 			};
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
