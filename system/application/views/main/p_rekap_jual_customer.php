@@ -73,9 +73,6 @@
 					$i=0; 
 			?>
            <?php foreach($data_print as $print_list) {  
-		   			
-				
-				
 		   ?>
            <?php if($print_list->cust_id==$print->cust_id){ $i++;
 		   			$sub_cashback+=$print_list->cashback;

@@ -18,6 +18,37 @@ class M_master_lunas_piutang extends Model{
 			parent::Model();
 		}
 		
+		function get_laporan($tgl_awal,$tgl_akhir,$periode,$opsi,$group){
+			
+			switch($group){
+				case "Tanggal": $order_by=" ORDER BY tanggal ASC";break;
+				case "Customer": $order_by=" ORDER BY cust_id ASC";break;
+				case "No Faktur": $order_by=" ORDER BY no_bukti ASC";break;
+				default: $order_by=" ORDER BY no_bukti ASC";break;
+			}
+			
+			if($opsi=='rekap'){
+				if($periode=='all')
+					$sql="SELECT * FROM vu_trans_piutang WHERE lpiutang_stat_dok<>'Batal' ".$order_by;
+				else if($periode=='bulan')
+					$sql="SELECT * FROM vu_trans_piutang WHERE lpiutang_stat_dok<>'Batal' AND date_format(tanggal,'%Y-%m')='".$tgl_awal."' ".$order_by;
+				else if($periode=='tanggal')
+					$sql="SELECT * FROM vu_trans_piutang WHERE lpiutang_stat_dok<>'Batal' AND date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."' ".$order_by;
+			}else if($opsi=='detail'){
+				if($periode=='all')
+					$sql="SELECT * FROM vu_detail_piutang WHERE lpiutang_stat_dok<>'Batal' ".$order_by;
+				else if($periode=='bulan')
+					$sql="SELECT * FROM vu_detail_piutang WHERE lpiutang_stat_dok<>'Batal' AND date_format(tanggal,'%Y-%m')='".$tgl_awal."' ".$order_by;
+				else if($periode=='tanggal')
+					$sql="SELECT * FROM vu_detail_piutang WHERE lpiutang_stat_dok<>'Batal' AND date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."' ".$order_by;
+			}
+			//echo $sql;
+			
+			$query=$this->db->query($sql);
+			return $query->result();
+		}
+		
+		
 		function detail_lunas_piutang_list($lpiutang_id){
 			$sql="SELECT dpiutang_id, dpiutang_nobukti, date_format(dpiutang_tanggal,'%Y-%m-%d') AS dpiutang_tanggal, dpiutang_nilai FROM detail_lunas_piutang WHERE dpiutang_master='$lpiutang_id'";
 			$result = $this->db->query($sql);

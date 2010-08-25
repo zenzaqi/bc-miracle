@@ -1,4 +1,29 @@
-/*--- UPDATE FIX PIUTANG ---*/
+/*--- UPDATE FIX TOTAL NILAI---*/
+
+UPDATE master_jual_produk,
+       vu_trans_produk
+   SET jproduk_totalbiaya =
+          (  vu_trans_produk.total_nilai
+           - jproduk_cashback
+           - jproduk_diskon * vu_trans_produk.total_nilai / 100)
+ WHERE master_jual_produk.jproduk_nobukti = vu_trans_produk.no_bukti;
+
+UPDATE master_jual_rawat,
+       vu_trans_rawat
+   SET jrawat_totalbiaya =
+          (  vu_trans_rawat.total_nilai
+           - jrawat_cashback
+           - jrawat_diskon * vu_trans_rawat.total_nilai / 100)
+ WHERE master_jual_rawat.jrawat_nobukti = vu_trans_rawat.no_bukti;
+
+UPDATE master_jual_paket,
+       vu_trans_paket
+   SET jpaket_totalbiaya =
+          (  vu_trans_paket.total_nilai
+           - jpaket_cashback
+           - jpaket_diskon * vu_trans_paket.total_nilai / 100)
+ WHERE master_jual_paket.jpaket_nobukti = vu_trans_paket.no_bukti;
+
 
 UPDATE master_lunas_piutang,
        master_jual_produk
@@ -21,8 +46,8 @@ UPDATE master_lunas_piutang,
 
 /*--- DELETE TRASH PIUTANG ---*/
 
-DELETE FROM master_lunas_piutang WHERE
-lpiutang_total<=0;
+DELETE FROM master_lunas_piutang
+ WHERE lpiutang_total <= 0;
 
 /*---- INSERT FIX PIUTANG ------*/
 
@@ -39,12 +64,14 @@ INSERT INTO master_lunas_piutang(lpiutang_faktur,
           'jual_produk',
           jproduk_stat_dok
      FROM master_jual_produk
-    WHERE jproduk_nobukti NOT IN (SELECT A.lpiutang_faktur
-                                    FROM master_lunas_piutang A)
-  AND (jproduk_totalbiaya - jproduk_bayar) > 0;
- 
+    WHERE jproduk_nobukti NOT IN
+             (SELECT A.lpiutang_faktur
+                FROM master_lunas_piutang A
+               WHERE A.lpiutang_jenis_transaksi = 'jual_produk')
+          AND (jproduk_totalbiaya - jproduk_bayar) > 0;
 
-  INSERT INTO master_lunas_piutang(lpiutang_faktur,
+
+INSERT INTO master_lunas_piutang(lpiutang_faktur,
                                  lpiutang_cust,
                                  lpiutang_faktur_tanggal,
                                  lpiutang_total,
@@ -57,12 +84,14 @@ INSERT INTO master_lunas_piutang(lpiutang_faktur,
           'jual_rawat',
           jrawat_stat_dok
      FROM master_jual_rawat
-    WHERE jrawat_nobukti NOT IN (SELECT A.lpiutang_faktur
-                                    FROM master_lunas_piutang A)
-  AND (jrawat_totalbiaya - jrawat_bayar) > 0;
-  
-  
-  INSERT INTO master_lunas_piutang(lpiutang_faktur,
+    WHERE jrawat_nobukti NOT IN
+             (SELECT A.lpiutang_faktur
+                FROM master_lunas_piutang A
+               WHERE A.lpiutang_jenis_transaksi = 'jual_rawat')
+          AND (jrawat_totalbiaya - jrawat_bayar) > 0;
+
+
+INSERT INTO master_lunas_piutang(lpiutang_faktur,
                                  lpiutang_cust,
                                  lpiutang_faktur_tanggal,
                                  lpiutang_total,
@@ -75,25 +104,8 @@ INSERT INTO master_lunas_piutang(lpiutang_faktur,
           'jual_paket',
           jpaket_stat_dok
      FROM master_jual_paket
-    WHERE jpaket_nobukti NOT IN (SELECT A.lpiutang_faktur
-                                    FROM master_lunas_piutang A)
-  AND (jpaket_totalbiaya - jpaket_bayar) > 0;
-  
-
-/*--- UPDATE FIX TOTAL NILAI---*/
-
-UPDATE master_jual_produk,
-       vu_trans_produk
-   SET jproduk_totalbiaya = vu_trans_produk.total_nilai
- WHERE master_jual_produk.jproduk_nobukti = vu_trans_produk.no_bukti;
- 
- UPDATE master_jual_rawat,
-       vu_trans_rawat
-   SET jrawat_totalbiaya = vu_trans_rawat.total_nilai
- WHERE master_jual_rawat.jrawat_nobukti = vu_trans_rawat.no_bukti;
- 
-  UPDATE master_jual_paket,
-       vu_trans_paket
-   SET jpaket_totalbiaya = vu_trans_paket.total_nilai
- WHERE master_jual_paket.jpaket_nobukti = vu_trans_paket.no_bukti;
-
+    WHERE jpaket_nobukti NOT IN
+             (SELECT A.lpiutang_faktur
+                FROM master_lunas_piutang A
+               WHERE A.lpiutang_jenis_transaksi = 'jual_paket')
+          AND (jpaket_totalbiaya - jpaket_bayar) > 0;
