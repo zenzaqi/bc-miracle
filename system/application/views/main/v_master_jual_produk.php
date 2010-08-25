@@ -179,41 +179,6 @@ var cetak_jproduk=0;
 var looping=0;
 
 
-function jproduk_cetak(master_id){
-	Ext.Ajax.request({   
-		waitMsg: 'Mohon tunggu...',
-		url: 'index.php?c=c_master_jual_produk&m=print_paper',
-		params: { jproduk_id : master_id}, 
-		success: function(response){              
-			var result=eval(response.responseText);
-			switch(result){
-			case 1:
-				win = window.open('./jproduk_paper.html','Cetak Penjualan Produk','height=480,width=1340,resizable=1,scrollbars=0, menubar=0');
-				//win.print();
-				break;
-			default:
-				Ext.MessageBox.show({
-					title: 'Warning',
-					msg: 'Unable to print the grid!',
-					buttons: Ext.MessageBox.OK,
-					animEl: 'save',
-					icon: Ext.MessageBox.WARNING
-				});
-				break;
-			}  
-		},
-		failure: function(response){
-			var result=response.responseText;
-			Ext.MessageBox.show({
-			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
-			   buttons: Ext.MessageBox.OK,
-			   animEl: 'database',
-			   icon: Ext.MessageBox.ERROR
-			});		
-		} 	                     
-	});
-}
 
 
 /* on ready fuction */
@@ -229,6 +194,56 @@ Ext.onReady(function(){
   	}
 	
 	var total_sub_temp=0;
+	
+	function btn_cancel(){
+		master_jual_produk_reset_form();
+		detail_jual_produk_DataStore.load({params: {master_id:-1}});
+		jproduk_caraField.setValue("card");
+		master_jual_produk_cardGroup.setVisible(true);
+		master_cara_bayarTabPanel.setActiveTab(0);
+		jproduk_post2db="CREATE";
+		jproduk_diskonField.setValue(0);
+		jproduk_cashbackField.setValue(0);
+		jproduk_pesanLabel.setText('');
+		jproduk_lunasLabel.setText('');
+	}
+	
+	function jproduk_cetak(master_id){
+		Ext.Ajax.request({   
+			waitMsg: 'Mohon tunggu...',
+			url: 'index.php?c=c_master_jual_produk&m=print_paper',
+			params: { jproduk_id : master_id}, 
+			success: function(response){              
+				var result=eval(response.responseText);
+				switch(result){
+				case 1:
+					win = window.open('./jproduk_paper.html','Cetak Penjualan Produk','height=480,width=1340,resizable=1,scrollbars=0, menubar=0');
+					//win.print();
+					btn_cancel();
+					break;
+				default:
+					Ext.MessageBox.show({
+						title: 'Warning',
+						msg: 'Unable to print the grid!',
+						buttons: Ext.MessageBox.OK,
+						animEl: 'save',
+						icon: Ext.MessageBox.WARNING
+					});
+					break;
+				}  
+			},
+			failure: function(response){
+				var result=response.responseText;
+				Ext.MessageBox.show({
+				   title: 'Error',
+				   msg: 'Could not connect to the database. retry later.',
+				   buttons: Ext.MessageBox.OK,
+				   animEl: 'database',
+				   icon: Ext.MessageBox.ERROR
+				});		
+			} 	                     
+		});
+	}
   
   	/* Function for Saving inLine Editing */
 	function master_jual_produk_update(oGrid_event){
@@ -4897,11 +4912,6 @@ Ext.onReady(function(){
 								});
 							}else if(result>0){
 								detail_jual_produk_DataStore.load({params: {master_id:-1}});
-								/*Ext.Ajax.request({
-									waitMsg: 'Mohon tunggu...',
-									url: 'index.php?c=c_master_jual_produk&m=catatan_piutang_update',
-									params:{dproduk_master	: eval(get_jproduk_pk())}
-								});*/
 								jproduk_cetak(result);
 								cetak_jproduk=0;
 								jproduk_post2db="CREATE";
@@ -4923,99 +4933,6 @@ Ext.onReady(function(){
 			}
 		}
 		
-		
-		
-		
-		/*var count_detail=detail_jual_produk_DataStore.getCount();
-		for(i=0;i<detail_jual_produk_DataStore.getCount();i++){
-			var count_i = i;
-			detail_jual_produk_record=detail_jual_produk_DataStore.getAt(i);
-			if(detail_jual_produk_record.data.dproduk_produk!==null || detail_jual_produk_record.data.dproduk_produk!==""){
-				Ext.Ajax.request({
-					waitMsg: 'Mohon tunggu...',
-					url: 'index.php?c=c_master_jual_produk&m=detail_detail_jual_produk_insert',
-					params:{
-						cetak	: cetak_jproduk,
-						dproduk_id	: detail_jual_produk_record.data.dproduk_id, 
-						dproduk_master	: eval(get_jproduk_pk()),
-						dproduk_produk	: detail_jual_produk_record.data.dproduk_produk,
-						dproduk_karyawan: detail_jual_produk_record.data.dproduk_karyawan,
-						dproduk_satuan	: detail_jual_produk_record.data.dproduk_satuan,
-						dproduk_jumlah	: detail_jual_produk_record.data.dproduk_jumlah, 
-						dproduk_harga	: detail_jual_produk_record.data.dproduk_harga, 
-						dproduk_subtotal_net	: detail_jual_produk_record.data.dproduk_subtotal_net,
-						dproduk_diskon	: detail_jual_produk_record.data.dproduk_diskon,
-						dproduk_diskon_jenis	: detail_jual_produk_record.data.dproduk_diskon_jenis,
-						dproduk_sales			: detail_jual_produk_record.data.dproduk_sales,
-						//konversi_nilai_temp	: detail_jual_produk_record.data.konversi_nilai_temp,
-						count	: count_i,
-						dcount	: count_detail
-					},
-					timeout: 60000,
-					success: function(response){
-						var result=eval(response.responseText);
-						if(result==0){
-							detail_jual_produk_DataStore.load({params: {master_id:-1}});
-							/*Ext.Ajax.request({
-								waitMsg: 'Mohon tunggu...',
-								url: 'index.php?c=c_master_jual_produk&m=catatan_piutang_update',
-								params:{dproduk_master	: eval(get_jproduk_pk())}
-							});*/
-							/*Ext.MessageBox.alert(jproduk_post2db+' OK','Data penjualan produk berhasil disimpan');
-							jproduk_post2db="CREATE";
-						}else if(result==-1){
-							detail_jual_produk_DataStore.load({params: {master_id:-1}});
-							jproduk_post2db="CREATE";
-							Ext.MessageBox.show({
-							   title: 'Warning',
-							   //msg: 'We could\'t not '+msg+' the Master_jual_produk.',
-							   msg: 'Data penjualan produk tidak bisa disimpan',
-							   buttons: Ext.MessageBox.OK,
-							   animEl: 'save',
-							   icon: Ext.MessageBox.WARNING
-							});
-						}else if(result>0){
-							detail_jual_produk_DataStore.load({params: {master_id:-1}});
-							Ext.Ajax.request({
-								waitMsg: 'Mohon tunggu...',
-								url: 'index.php?c=c_master_jual_produk&m=catatan_piutang_update',
-								params:{dproduk_master	: eval(get_jproduk_pk())}
-							});
-							jproduk_cetak(result);
-							cetak_jproduk=0;
-							jproduk_post2db="CREATE";
-						}
-						/*switch(result){
-							case 0:
-								Ext.Ajax.request({
-									waitMsg: 'Mohon tunggu...',
-									url: 'index.php?c=c_master_jual_produk&m=catatan_piutang_update',
-									params:{dproduk_master	: eval(jproduk_idField.getValue())}
-								});
-								Ext.MessageBox.alert(jproduk_post2db+' OK','Data penjualan produk berhasil disimpan');
-								master_jual_produk_createWindow.hide();
-								break;
-							case -1:
-								break;
-							default:
-								jproduk_cetak(result);
-								master_jual_produk_createWindow.hide();
-								break;
-						}*//*
-					},
-					failure: function(response){
-						var result=response.responseText;
-						Ext.MessageBox.show({
-						   title: 'Error',
-						   msg: 'Could not connect to the database. retry later.',
-						   buttons: Ext.MessageBox.OK,
-						   animEl: 'database',
-						   icon: Ext.MessageBox.ERROR
-						});	
-					}		
-				});
-			}
-		}*/
 	}
 	//eof
 	
@@ -6489,18 +6406,7 @@ Ext.onReady(function(){
 			},
 			{
 				text: 'Cancel',
-				handler: function(){
-                    detail_jual_produk_DataStore.load({params: {master_id:-1}});
-                    jproduk_caraField.setValue("card");
-                    master_jual_produk_cardGroup.setVisible(true);
-                    master_cara_bayarTabPanel.setActiveTab(0);
-                    jproduk_post2db="CREATE";
-                    jproduk_diskonField.setValue(0);
-                    jproduk_cashbackField.setValue(0);
-                    jproduk_pesanLabel.setText('');
-                    jproduk_lunasLabel.setText('');
-                    master_jual_produk_reset_form();
-				}
+				handler: btn_cancel
 			}
 		]
 	});
