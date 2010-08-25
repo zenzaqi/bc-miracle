@@ -183,10 +183,11 @@ Ext.onReady(function(){
 		fieldLabel: ' ',
 		format : 'Y-m-d',
 		name: 'rpt_rproduk_tglawalField',
-        vtype: 'daterange',
+        //vtype: 'daterange',
 		allowBlank: true,
 		width: 100,
-        endDateField: 'rpt_rproduk_tglakhirField'
+		value: today
+        //endDateField: 'rpt_rproduk_tglakhirField'
 	});
 	
 	rpt_rproduk_tglakhirField= new Ext.form.DateField({
@@ -194,10 +195,10 @@ Ext.onReady(function(){
 		fieldLabel: 's/d',
 		format : 'Y-m-d',
 		name: 'rpt_rproduk_tglakhirField',
-        vtype: 'daterange',
+       // vtype: 'daterange',
 		allowBlank: true,
 		width: 100,
-        startDateField: 'rpt_rproduk_tglawalField',
+        //startDateField: 'rpt_rproduk_tglawalField',
 		value: today
 	});
 	
