@@ -33,7 +33,8 @@ class M_tindakan_nonmedis extends Model{
 			WHERE ppaket_cust='$cust_id'
 				AND rpaket_perawatan='$rawat_id'
 				AND jpaket_stat_dok<>'Batal'
-				AND dpaket_sisa_paket>0";
+				AND dpaket_sisa_paket>0
+			ORDER BY detail_jual_paket.dpaket_id ASC";
 		
 		$rs_punya_paket=$this->db->query($sql_punya_paket);
 		if($rs_punya_paket->num_rows()){
@@ -88,7 +89,8 @@ class M_tindakan_nonmedis extends Model{
 				AND rpaket_perawatan='$rawat_id'
 				AND jpaket_cust='$cust_id'
 				AND jpaket_stat_dok<>'Batal'
-				AND dpaket_sisa_paket>0";
+				AND dpaket_sisa_paket>0
+			ORDER BY detail_jual_paket.dpaket_id ASC";
 		
 		$rs_punya_paket=$this->db->query($sql_punya_paket);
 		if($rs_punya_paket->num_rows()){
