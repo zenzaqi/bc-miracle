@@ -1,0 +1,8 @@
+ts.trisula
+
+> Fix bug
+  o Perubahan type data di db.detail_jual_paket, sebagai perbaikan dari komplen p.Isaac yg pembelian paket BOTOX jumlah=250 tapi di sisa paketnya tertulis 127 yg seharusnya sisanya=250.
+    SQL : 2010-08-26_10-15-AM.sql
+
+  o Jika satu Customer membeli paket yg sama, maka pengambilan paket diambilkan dari paket yg telah lebih dulu dibeli.
+    File yg diupdate : m_tindakan_medis.php, m_tindakan_nonmedis.php
