@@ -1,0 +1,1 @@
+ALTER TABLE `detail_jual_paket` CHANGE `dpaket_sisa_paket` `dpaket_sisa_paket` SMALLINT( 3 ) NOT NULL DEFAULT '0';
