@@ -110,7 +110,7 @@ Ext.onReady(function(){
 	var group_detail_Store= new Ext.data.SimpleStore({
 			id: 'group_detail_Store',
 			fields:['group'],
-			data:[['No Faktur'],['Tanggal'],['Customer'],['Perawatan'],['Sales'],['Jenis Diskon']]
+			data:[['No Faktur'],['Tanggal'],['Customer'],['Perawatan'],['Referal'],['Jenis Diskon']]
 	});
 	
 	var rpt_jrawat_groupField=new Ext.form.ComboBox({

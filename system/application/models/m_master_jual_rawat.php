@@ -25,7 +25,7 @@ class M_master_jual_rawat extends Model{
 				case "Customer": $order_by=" ORDER BY cust_id ASC";break;
 				case "No Faktur": $order_by=" ORDER BY no_bukti ASC";break;
 				case "Perawatan": $order_by=" ORDER BY produk_id ASC";break;
-				case "Sales": $order_by=" ORDER BY sales ASC";break;
+				case "Referal": $order_by=" ORDER BY sales ASC";break;
 				case "Jenis Diskon": $order_by=" ORDER BY diskon_jenis ASC";break;
 				default: $order_by=" ORDER BY no_bukti ASC";break;
 			}
