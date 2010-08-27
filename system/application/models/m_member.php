@@ -80,7 +80,7 @@ class M_member extends Model{
 		}
 		
 		//function for update record
-		function member_update($member_id ,$member_no ){
+		function member_update($member_id ,$member_no , $member_status){
 			$date_now=date('Y-m-d');
 			$data = array(
 				//"member_id"=>$member_id, 
@@ -91,7 +91,7 @@ class M_member extends Model{
 				//"member_nota_ref"=>$member_nota_ref, 
 				//"member_point"=>$member_point, 
 				//"member_jenis"=>$member_jenis, 
-				//"member_status"=>$member_status//, 
+				"member_status"=>$member_status, 
 				//"member_tglserahterima"=>$member_tglserahterima 
 			);
 			
