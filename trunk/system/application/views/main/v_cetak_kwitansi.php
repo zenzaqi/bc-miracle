@@ -350,143 +350,157 @@ Ext.onReady(function(){
   
   	/* Function for add data, open window create form */
 	function cetak_kwitansi_create(){
-		if(is_cetak_kwitansi_form_valid() && kwitansi_statusField.getValue()!=='Batal'){
-			var kwitansi_id_create_pk=null; 
-			var kwitansi_no_create=null; 
-			var kwitansi_cust_create=null; 
-			var kwitansi_tanggal_create=null;
-			var kwitansi_ref_create=null; 
-			var kwitansi_nilai_create=null; 
-			var kwitansi_keterangan_create=null; 
-			var kwitansi_status_create=null; 
-			var kwitansi_cara_create=null;
-			// Bayar Tunai
-			var kwitansi_tunai_nilai_create=null;
-			// Bayar Card/Kartu Kredit
-			var kwitansi_card_nama_create="";
-			var kwitansi_card_edc_create="";
-			var kwitansi_card_no_create="";
-			var kwitansi_card_nilai_create=null;
-			// Bayar Cek
-			var kwitansi_cek_nama_create=null;
-			var kwitansi_cek_nomor_create="";
-			var kwitansi_cek_valid_create="";
-			var kwitansi_cek_bank_create="";
-			var kwitansi_cek_nilai_create=null;
-			// Bayar Transfer
-			var kwitansi_transfer_bank_create="";
-			var kwitansi_transfer_nama_create=null;
-			var kwitansi_transfer_nilai_create=null;
-			
-			var kwitansi_total_bayar_create=null;
-			var kwitansi_cetak_create;
-	
-			kwitansi_id_create_pk=get_pk_id();
-			if(kwitansi_idField.getValue()!== null){kwitansi_id_create = kwitansi_idField.getValue();}else{kwitansi_id_create_pk=get_pk_id();} 
-			if(kwitansi_noField.getValue()!== null){kwitansi_no_create = kwitansi_noField.getValue();} 
-			if(kwitansi_custField.getValue()!== null){kwitansi_cust_create = kwitansi_custField.getValue();}
-			if(kwitansi_tanggalField.getValue()!== ""){kwitansi_tanggal_create = kwitansi_tanggalField.getValue().format('Y-m-d');}
-			if(kwitansi_refField.getValue()!== null){kwitansi_ref_create = kwitansi_refField.getValue();} 
-			if(kwitansi_nilaiField.getValue()!== null){kwitansi_nilai_create = kwitansi_nilaiField.getValue();} 
-			if(kwitansi_keteranganField.getValue()!== null){kwitansi_keterangan_create = kwitansi_keteranganField.getValue();} 
-			if(kwitansi_statusField.getValue()!== null){kwitansi_status_create = kwitansi_statusField.getValue();} 
-			if(kwitansi_caraField.getValue()!== null){kwitansi_cara_create = kwitansi_caraField.getValue();} 
-			
-			if(kwitansi_tunai_nilaiField.getValue()!== null){kwitansi_tunai_nilai_create = kwitansi_tunai_nilaiField.getValue();}
-			
-			if(kwitansi_card_namaField.getValue()!== ""){kwitansi_card_nama_create = kwitansi_card_namaField.getValue();} 
-			if(kwitansi_card_edcField.getValue()!==""){kwitansi_card_edc_create = kwitansi_card_edcField.getValue();} 
-			if(kwitansi_card_noField.getValue()!==""){kwitansi_card_no_create = kwitansi_card_noField.getValue();}
-			if(kwitansi_card_nilaiField.getValue()!==null){kwitansi_card_nilai_create = kwitansi_card_nilaiField.getValue();} 
-			
-			if(kwitansi_cek_namaField.getValue()!== null){kwitansi_cek_nama_create = kwitansi_cek_namaField.getValue();} 
-			if(kwitansi_cek_noField.getValue()!== ""){kwitansi_cek_nomor_create = kwitansi_cek_noField.getValue();} 
-			if(kwitansi_cek_validField.getValue()!== ""){kwitansi_cek_valid_create = kwitansi_cek_validField.getValue().format('Y-m-d');} 
-			if(kwitansi_cek_bankField.getValue()!== ""){kwitansi_cek_bank_create = kwitansi_cek_bankField.getValue();} 
-			if(kwitansi_cek_nilaiField.getValue()!== null){kwitansi_cek_nilai_create = kwitansi_cek_nilaiField.getValue();} 
-			
-			if(kwitansi_transfer_bankField.getValue()!== ""){kwitansi_transfer_bank_create = kwitansi_transfer_bankField.getValue();} 
-			if(kwitansi_transfer_namaField.getValue()!== null){kwitansi_transfer_nama_create = kwitansi_transfer_namaField.getValue();}
-			if(kwitansi_transfer_nilaiField.getValue()!== null){kwitansi_transfer_nilai_create = kwitansi_transfer_nilaiField.getValue();} 
-			
-			if(kwitansi_total_bayarField.getValue()!== null){kwitansi_total_bayar_create = kwitansi_total_bayarField.getValue();}
-			
-			kwitansi_cetak_create = this.kwitansi_cetak;
-			task_value = kwitansi_post2db;
-			
-			Ext.Ajax.request({  
-				waitMsg: 'Mohon tunggu...',
-				url: 'index.php?c=c_cetak_kwitansi&m=get_action',
-				params: {
-					task: task_value,
-					cetak	: kwitansi_cetak_create,
-					kwitansi_id	: kwitansi_id_create_pk, 
-					kwitansi_no	: kwitansi_no_create, 
-					kwitansi_cust	: kwitansi_cust_create,
-					kwitansi_tanggal: kwitansi_tanggal_create,
-					kwitansi_ref	: kwitansi_ref_create, 
-					kwitansi_nilai	: kwitansi_nilai_create, 
-					kwitansi_keterangan	: kwitansi_keterangan_create, 
-					kwitansi_status	: kwitansi_status_create, 
-					kwitansi_cara		: 	kwitansi_cara_create,
-					kwitansi_bayar	: kwitansi_total_bayar_create,
-					// Bayar Tunai
-					kwitansi_tunai_nilai	:	kwitansi_tunai_nilai_create,
-					// Bayar Card/Kartu Kredit
-					kwitansi_card_nama	: 	kwitansi_card_nama_create,
-					kwitansi_card_edc	:	kwitansi_card_edc_create,
-					kwitansi_card_no		:	kwitansi_card_no_create,
-					kwitansi_card_nilai	:	kwitansi_card_nilai_create,
-					// Bayar Cek/Giro
-					kwitansi_cek_nama	: 	kwitansi_cek_nama_create,
-					kwitansi_cek_no		:	kwitansi_cek_nomor_create,
-					kwitansi_cek_valid	: 	kwitansi_cek_valid_create,
-					kwitansi_cek_bank	:	kwitansi_cek_bank_create,
-					kwitansi_cek_nilai	:	kwitansi_cek_nilai_create,
-					// Bayar Transfer
-					kwitansi_transfer_bank	:	kwitansi_transfer_bank_create,
-					kwitansi_transfer_nama	:	kwitansi_transfer_nama_create,
-					kwitansi_transfer_nilai	:	kwitansi_transfer_nilai_create
-				}, 
-				success: function(response){             
-					var result=eval(response.responseText);
-					switch(result){
-						case 1:
-							//jual_kwitansi_purge()
-							//jual_kwitansi_insert();
-							Ext.MessageBox.alert(kwitansi_post2db+' OK','Data kuitansi berhasil disimpan');
-							cetak_kwitansi_DataStore.reload();
-							cetak_kwitansi_createWindow.hide();
-							break;
-						case 0:
-							//jual_kwitansi_purge()
-							//jual_kwitansi_insert();
-							Ext.MessageBox.alert(kwitansi_post2db+' OK','Data kuitansi berhasil disimpan');
-							cetak_kwitansi_DataStore.reload();
-							cetak_kwitansi_createWindow.hide();
-							break;
-						default:
-							kwitansi_idField.setValue(result);
-							if(result>0){
-								cetak_kwitansi_print_paper(result);
-							}
-							cetak_kwitansi_DataStore.reload();
-							cetak_kwitansi_createWindow.hide();
-							break;
-					}        
-				},
-				failure: function(response){
-					var result=response.responseText;
-					Ext.MessageBox.show({
-						   title: 'Error',
-						   msg: 'Could not connect to the database. retry later.',
-						   buttons: Ext.MessageBox.OK,
-						   animEl: 'database',
-						   icon: Ext.MessageBox.ERROR
-					});	
-				}                      
-			});
+		if(((/^\d+$/.test(kwitansi_custField.getValue()) && kwitansi_post2db=='CREATE') || kwitansi_post2db=='UPDATE') && kwitansi_statusField.getValue()=='Terbuka'){
+			if(kwitansi_status_lunasField.getValue()=='LUNAS'){
+				var kwitansi_id_create_pk=null; 
+				var kwitansi_no_create=null; 
+				var kwitansi_cust_create=null; 
+				var kwitansi_tanggal_create=null;
+				var kwitansi_ref_create=null; 
+				var kwitansi_nilai_create=null; 
+				var kwitansi_keterangan_create=null; 
+				var kwitansi_status_create=null; 
+				var kwitansi_cara_create=null;
+				// Bayar Tunai
+				var kwitansi_tunai_nilai_create=null;
+				// Bayar Card/Kartu Kredit
+				var kwitansi_card_nama_create="";
+				var kwitansi_card_edc_create="";
+				var kwitansi_card_no_create="";
+				var kwitansi_card_nilai_create=null;
+				// Bayar Cek
+				var kwitansi_cek_nama_create=null;
+				var kwitansi_cek_nomor_create="";
+				var kwitansi_cek_valid_create="";
+				var kwitansi_cek_bank_create="";
+				var kwitansi_cek_nilai_create=null;
+				// Bayar Transfer
+				var kwitansi_transfer_bank_create="";
+				var kwitansi_transfer_nama_create=null;
+				var kwitansi_transfer_nilai_create=null;
 				
+				var kwitansi_total_bayar_create=null;
+				var kwitansi_cetak_create;
+		
+				kwitansi_id_create_pk=get_pk_id();
+				if(kwitansi_idField.getValue()!== null){kwitansi_id_create = kwitansi_idField.getValue();}else{kwitansi_id_create_pk=get_pk_id();} 
+				if(kwitansi_noField.getValue()!== null){kwitansi_no_create = kwitansi_noField.getValue();} 
+				if(kwitansi_custField.getValue()!== null){kwitansi_cust_create = kwitansi_custField.getValue();}
+				if(kwitansi_tanggalField.getValue()!== ""){kwitansi_tanggal_create = kwitansi_tanggalField.getValue().format('Y-m-d');}
+				if(kwitansi_refField.getValue()!== null){kwitansi_ref_create = kwitansi_refField.getValue();} 
+				if(kwitansi_nilaiField.getValue()!== null){kwitansi_nilai_create = kwitansi_nilaiField.getValue();} 
+				if(kwitansi_keteranganField.getValue()!== null){kwitansi_keterangan_create = kwitansi_keteranganField.getValue();} 
+				if(kwitansi_statusField.getValue()!== null){kwitansi_status_create = kwitansi_statusField.getValue();} 
+				if(kwitansi_caraField.getValue()!== null){kwitansi_cara_create = kwitansi_caraField.getValue();} 
+				
+				if(kwitansi_tunai_nilaiField.getValue()!== null){kwitansi_tunai_nilai_create = kwitansi_tunai_nilaiField.getValue();}
+				
+				if(kwitansi_card_namaField.getValue()!== ""){kwitansi_card_nama_create = kwitansi_card_namaField.getValue();} 
+				if(kwitansi_card_edcField.getValue()!==""){kwitansi_card_edc_create = kwitansi_card_edcField.getValue();} 
+				if(kwitansi_card_noField.getValue()!==""){kwitansi_card_no_create = kwitansi_card_noField.getValue();}
+				if(kwitansi_card_nilaiField.getValue()!==null){kwitansi_card_nilai_create = kwitansi_card_nilaiField.getValue();} 
+				
+				if(kwitansi_cek_namaField.getValue()!== null){kwitansi_cek_nama_create = kwitansi_cek_namaField.getValue();} 
+				if(kwitansi_cek_noField.getValue()!== ""){kwitansi_cek_nomor_create = kwitansi_cek_noField.getValue();} 
+				if(kwitansi_cek_validField.getValue()!== ""){kwitansi_cek_valid_create = kwitansi_cek_validField.getValue().format('Y-m-d');} 
+				if(kwitansi_cek_bankField.getValue()!== ""){kwitansi_cek_bank_create = kwitansi_cek_bankField.getValue();} 
+				if(kwitansi_cek_nilaiField.getValue()!== null){kwitansi_cek_nilai_create = kwitansi_cek_nilaiField.getValue();} 
+				
+				if(kwitansi_transfer_bankField.getValue()!== ""){kwitansi_transfer_bank_create = kwitansi_transfer_bankField.getValue();} 
+				if(kwitansi_transfer_namaField.getValue()!== null){kwitansi_transfer_nama_create = kwitansi_transfer_namaField.getValue();}
+				if(kwitansi_transfer_nilaiField.getValue()!== null){kwitansi_transfer_nilai_create = kwitansi_transfer_nilaiField.getValue();} 
+				
+				if(kwitansi_total_bayarField.getValue()!== null){kwitansi_total_bayar_create = kwitansi_total_bayarField.getValue();}
+				
+				kwitansi_cetak_create = this.kwitansi_cetak;
+				task_value = kwitansi_post2db;
+				
+				Ext.Ajax.request({  
+					waitMsg: 'Mohon tunggu...',
+					url: 'index.php?c=c_cetak_kwitansi&m=get_action',
+					params: {
+						task: task_value,
+						cetak	: kwitansi_cetak_create,
+						kwitansi_id	: kwitansi_id_create_pk, 
+						kwitansi_no	: kwitansi_no_create, 
+						kwitansi_cust	: kwitansi_cust_create,
+						kwitansi_tanggal: kwitansi_tanggal_create,
+						kwitansi_ref	: kwitansi_ref_create, 
+						kwitansi_nilai	: kwitansi_nilai_create, 
+						kwitansi_keterangan	: kwitansi_keterangan_create, 
+						kwitansi_status	: kwitansi_status_create, 
+						kwitansi_cara		: 	kwitansi_cara_create,
+						kwitansi_bayar	: kwitansi_total_bayar_create,
+						// Bayar Tunai
+						kwitansi_tunai_nilai	:	kwitansi_tunai_nilai_create,
+						// Bayar Card/Kartu Kredit
+						kwitansi_card_nama	: 	kwitansi_card_nama_create,
+						kwitansi_card_edc	:	kwitansi_card_edc_create,
+						kwitansi_card_no		:	kwitansi_card_no_create,
+						kwitansi_card_nilai	:	kwitansi_card_nilai_create,
+						// Bayar Cek/Giro
+						kwitansi_cek_nama	: 	kwitansi_cek_nama_create,
+						kwitansi_cek_no		:	kwitansi_cek_nomor_create,
+						kwitansi_cek_valid	: 	kwitansi_cek_valid_create,
+						kwitansi_cek_bank	:	kwitansi_cek_bank_create,
+						kwitansi_cek_nilai	:	kwitansi_cek_nilai_create,
+						// Bayar Transfer
+						kwitansi_transfer_bank	:	kwitansi_transfer_bank_create,
+						kwitansi_transfer_nama	:	kwitansi_transfer_nama_create,
+						kwitansi_transfer_nilai	:	kwitansi_transfer_nilai_create
+					}, 
+					success: function(response){             
+						var result=eval(response.responseText);
+						switch(result){
+							case 1:
+								//jual_kwitansi_purge()
+								//jual_kwitansi_insert();
+								Ext.MessageBox.alert(kwitansi_post2db+' OK','Data kuitansi berhasil disimpan');
+								cetak_kwitansi_DataStore.reload();
+								cetak_kwitansi_createWindow.hide();
+								break;
+							case 0:
+								//jual_kwitansi_purge()
+								//jual_kwitansi_insert();
+								Ext.MessageBox.alert(kwitansi_post2db+' OK','Data kuitansi berhasil disimpan');
+								cetak_kwitansi_DataStore.reload();
+								cetak_kwitansi_createWindow.hide();
+								break;
+							default:
+								kwitansi_idField.setValue(result);
+								if(result>0){
+									cetak_kwitansi_print_paper(result);
+								}
+								cetak_kwitansi_DataStore.reload();
+								cetak_kwitansi_createWindow.hide();
+								break;
+						}        
+					},
+					failure: function(response){
+						var result=response.responseText;
+						Ext.MessageBox.show({
+							   title: 'Error',
+							   msg: 'Could not connect to the database. retry later.',
+							   buttons: Ext.MessageBox.OK,
+							   animEl: 'database',
+							   icon: Ext.MessageBox.ERROR
+						});	
+					}                      
+				});
+			}else{
+				Ext.MessageBox.show({
+					title: 'Warning',
+					msg: 'Data tidak bisa disimpan, karena pembayaran kuitansi belum Lunas.',
+					buttons: Ext.MessageBox.OK,
+					animEl: 'save',
+					icon: Ext.MessageBox.WARNING
+				});
+			}
+		}else if(kwitansi_post2db=='UPDATE' && kwitansi_statusField.getValue()=='Tertutup'){
+			var kwitansi_id_cetak = get_pk_id();
+			cetak_kwitansi_print_paper(kwitansi_id_cetak);
+			cetak_kwitansi_DataStore.reload();
+			cetak_kwitansi_createWindow.hide();
 		}else if(is_cetak_kwitansi_form_valid() && kwitansi_statusField.getValue()=='Batal'){
 			var kwitansi_id_create_pk=null; 
 			var kwitansi_status_create=null; 
@@ -841,10 +855,9 @@ Ext.onReady(function(){
             cetak_kwitansi_createForm.kwitansi_savePrint.enable();
         }
 		
-		});		
-	
+		});
 		
-	function kwitansi_status_batal(btn){
+		function kwitansi_status_batal(btn){
 			if(btn=='yes')
 			{
 			kwitansi_statusField.setValue('Batal');
@@ -1224,7 +1237,7 @@ Ext.onReady(function(){
 		},
 		{
 			header: '<div align="center">' + 'Tanggal' + '</div>',
-			dataIndex: 'kwitansi_date_create',
+			dataIndex: 'kwitansi_tanggal',
 			width: 80,	//150,
 			sortable: true,
 			renderer: Ext.util.Format.dateRenderer('d-m-Y')

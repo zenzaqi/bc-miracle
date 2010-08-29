@@ -227,41 +227,44 @@ class M_cetak_kwitansi extends Model{
 									   ,$kwitansi_update
 									   ,$cetak ){
 			$datetime_now = date('Y-m-d H:i:s');
-			/*$data = array(
-				"kwitansi_id"=>$kwitansi_id, 
-				"kwitansi_no"=>$kwitansi_no, 
-				//"kwitansi_cust"=>$kwitansi_cust, 
-				"kwitansi_tanggal"=>$kwitansi_tanggal,
-				"kwitansi_ref"=>$kwitansi_ref, 
-				"kwitansi_nilai"=>$kwitansi_nilai, 
-				"kwitansi_keterangan"=>$kwitansi_keterangan, 
-				//"kwitansi_status"=>$kwitansi_status,
-				"kwitansi_update"=>$kwitansi_update,
-				"kwitansi_date_update"=>$datetime_now
-			);
-			$sql="SELECT cust_id FROM customer WHERE cust_id='$kwitansi_cust'";
-			$rs=$this->db->query($sql);
-			if($rs->num_rows())
-				$data["kwitansi_cust"]=$kwitansi_cust;
-			$this->db->where('kwitansi_id', $kwitansi_id);
-			$this->db->update('cetak_kwitansi', $data);*/
+			$time_now = date('H:i:s');
+			$datetime_create = $kwitansi_tanggal.' '.$time_now;
+			$kwitansi_date_create = date('Y-m-d H:i:s', strtotime($datetime_create));
+			$kwitansi_date_update = $kwitansi_date_create;
+			
 			$sql = "SELECT kwitansi_cara FROM cetak_kwitansi WHERE kwitansi_id='".$kwitansi_id."'";
 			$rs = $this->db->query($sql);
 			if($rs->num_rows()){
 				$record = $rs->row_array();
 				$kwitansi_cara_awal = $record['kwitansi_cara'];
 				
-				$sqlu = "UPDATE cetak_kwitansi
-					SET kwitansi_cara='".$kwitansi_cara."'
-						,kwitansi_nilai='".$kwitansi_nilai."'
-						,kwitansi_bayar='".$kwitansi_bayar."'
-						,kwitansi_keterangan='".$kwitansi_keterangan."'
-						,kwitansi_update='".$kwitansi_update."'
-						,kwitansi_revised=(kwitansi_revised+1)
-					WHERE kwitansi_id='".$kwitansi_id."'";
-				if($this->db->affected_rows()){
+				if($cetak==1){
+					$sqlu = "UPDATE cetak_kwitansi
+						SET kwitansi_cara='".$kwitansi_cara."'
+							,kwitansi_nilai='".$kwitansi_nilai."'
+							,kwitansi_bayar='".$kwitansi_bayar."'
+							,kwitansi_status='Tertutup'
+							,kwitansi_keterangan='".$kwitansi_keterangan."'
+							,kwitansi_update='".$kwitansi_update."'
+							,kwitansi_date_update='".$kwitansi_date_update."'
+							,kwitansi_revised=(kwitansi_revised+1)
+						WHERE kwitansi_id='".$kwitansi_id."'";
+					$this->db->query($sqlu);
+				}else{
+					$sqlu = "UPDATE cetak_kwitansi
+						SET kwitansi_cara='".$kwitansi_cara."'
+							,kwitansi_nilai='".$kwitansi_nilai."'
+							,kwitansi_bayar='".$kwitansi_bayar."'
+							,kwitansi_keterangan='".$kwitansi_keterangan."'
+							,kwitansi_update='".$kwitansi_update."'
+							,kwitansi_date_update='".$kwitansi_date_update."'
+							,kwitansi_revised=(kwitansi_revised+1)
+						WHERE kwitansi_id='".$kwitansi_id."'";
+					$this->db->query($sqlu);
+				}
+				if($this->db->affected_rows()>-1){
 					//Delete ALL cara bayar ==> kemudian di-INSERT-kan sesuai dengan update
-					if($kwitansi_cara_awal=='tunai'){
+					/*if($kwitansi_cara_awal=='tunai'){
 						$sql="delete from jual_tunai where jtunai_ref='".$kwitansi_no."'";
 						$this->db->query($sql);
 					}else if($kwitansi_cara_awal=='card'){
@@ -273,68 +276,113 @@ class M_cetak_kwitansi extends Model{
 					}else if($kwitansi_cara_awal=='transfer'){
 						$sql="delete from jual_transfer where jtransfer_ref='".$kwitansi_no."'";
 						$this->db->query($sql);
+					}*/
+					
+					$sql="delete from jual_tunai where jtunai_ref='".$kwitansi_no."'";
+					$this->db->query($sql);
+					if($this->db->affected_rows()>-1){
+						$sql="delete from jual_card where jcard_ref='".$kwitansi_no."'";
+						$this->db->query($sql);
+						if($this->db->affected_rows()>-1){
+							$sql="delete from jual_cek where jcek_ref='".$kwitansi_no."'";
+							$this->db->query($sql);
+							if($this->db->affected_rows()>-1){
+								$sql="delete from jual_transfer where jtransfer_ref='".$kwitansi_no."'";
+								$this->db->query($sql);
+								if($this->db->affected_rows()>-1){
+									if($kwitansi_tunai_nilai<>'' && $kwitansi_tunai_nilai<>0){
+										$result_bayar = $this->cara_bayar_tunai_insert($kwitansi_tunai_nilai
+																					   ,$kwitansi_no
+																					   ,$kwitansi_date_create
+																					   ,$cetak);
+										if($result_bayar==1){
+											if($cetak==1){
+												/*
+												 * return db.cetak_kwitansi.kwitansi_id untuk proses cetak
+												*/
+												return $kwitansi_id;
+											}else{
+												//proses simpan saja tanpa cetak
+												return '1';
+											}
+										}elseif($result_bayar==0){
+											return '0';
+										}
+									}elseif($kwitansi_transfer_nilai<>'' && $kwitansi_transfer_nilai<>0){
+										$result_bayar = $this->cara_bayar_transfer_insert($kwitansi_transfer_bank
+																						  ,$kwitansi_transfer_nama
+																						  ,$kwitansi_transfer_nilai
+																						  ,$kwitansi_no
+																						  ,$kwitansi_date_create
+																						  ,$cetak);
+										if($result_bayar==1){
+											if($cetak==1){
+												/*
+												 * return db.cetak_kwitansi.kwitansi_id untuk proses cetak
+												*/
+												return $kwitansi_id;
+											}else{
+												//proses simpan saja tanpa cetak
+												return '1';
+											}
+										}elseif($result_bayar==0){
+											return '0';
+										}
+									}elseif($kwitansi_card_nilai<>'' && $kwitansi_card_nilai<>0){
+										$result_bayar = $this->cara_bayar_card_insert($kwitansi_card_nama
+																					  ,$kwitansi_card_edc
+																					  ,$kwitansi_card_no
+																					  ,$kwitansi_card_nilai
+																					  ,$kwitansi_no
+																					  ,$kwitansi_date_create
+																					  ,$cetak);
+										if($result_bayar==1){
+											if($cetak==1){
+												/*
+												 * return db.cetak_kwitansi.kwitansi_id untuk proses cetak
+												*/
+												return $kwitansi_id;
+											}else{
+												//proses simpan saja tanpa cetak
+												return '1';
+											}
+										}elseif($result_bayar==0){
+											return '0';
+										}
+									}elseif($kwitansi_cek_nilai<>'' && $kwitansi_cek_nilai<>0){
+										$result_bayar = $this->cara_bayar_cek_insert($kwitansi_cek_nama
+																					 ,$kwitansi_cek_no
+																					 ,$kwitansi_cek_valid
+																					 ,$kwitansi_cek_bank
+																					 ,$kwitansi_cek_nilai
+																					 ,$kwitansi_no
+																					 ,$kwitansi_date_create
+																					 ,$cetak);
+										if($result_bayar==1){
+											if($cetak==1){
+												/*
+												 * return db.cetak_kwitansi.kwitansi_id untuk proses cetak
+												*/
+												return $kwitansi_id;
+											}else{
+												//proses simpan saja tanpa cetak
+												return '1';
+											}
+										}elseif($result_bayar==0){
+											return '0';
+										}
+									}
+									
+								}
+							}
+						}
 					}
-					
-					if($kwitansi_cara=='tunai'){
-						$dti_jtunai = array(
-							"jtunai_nilai"=>$kwitansi_tunai_nilai,
-							"jtunai_ref"=>$kwitansi_no,
-							"jtunai_transaksi"=>"jual_kwitansi",
-							"jtunai_stat_dok"=>'Terbuka'
-						);
-						$this->db->insert('jual_tunai', $dti_jtunai);
-						return '0';
-					
-					}else if($kwitansi_cara=='card'){
-						$dti_jcard = array(
-							"jcard_ref"=>$kwitansi_no,
-							"jcard_nama"=>$kwitansi_card_nama,
-							"jcard_edc"=>$kwitansi_card_edc,
-							"jcard_no"=>$kwitansi_card_no,
-							"jcard_nilai"=>$kwitansi_card_nilai,
-							"jcard_transaksi"=>"jual_kwitansi",
-							"jcard_stat_dok"=>'Terbuka'
-						);
-						$this->db->insert('jual_card', $dti_jcard);
-						return '0';
-					
-					}else if($kwitansi_cara=='cek/giro'){
-						$dti_jcek = array(
-							"jcek_ref"=>$kwitansi_no,
-							"jcek_nama"=>$kwitansi_cek_nama,
-							"jcek_no"=>$kwitansi_cek_no,
-							"jcek_valid"=>$kwitansi_cek_valid,
-							"jcek_bank"=>$kwitansi_cek_bank,
-							"jcek_nilai"=>$kwitansi_cek_nilai,
-							"jcek_transaksi"=>"jual_kwitansi",
-							"jcek_stat_dok"=>'Terbuka'
-						);
-						$this->db->insert('jual_cek', $dti_jcek);
-						return '0';
-					
-					}else if($kwitansi_cara=='transfer'){
-						$dti_jtransfer = array(
-							"jtransfer_ref"=>$kwitansi_no,
-							"jtransfer_bank"=>$kwitansi_transfer_bank,
-							"jtransfer_nama"=>$kwitansi_transfer_nama,
-							"jtransfer_nilai"=>$kwitansi_transfer_nilai,
-							"jtransfer_transaksi"=>"jual_kwitansi",
-							"jtransfer_stat_dok"=>'Terbuka'
-						);
-						$this->db->insert('jual_transfer', $dti_jtransfer);
-						return '0';
-					}
-					
-					//return '0';
-					
-					/*$sql="UPDATE cetak_kwitansi SET kwitansi_revised=(kwitansi_revised+1) WHERE kwitansi_id='$kwitansi_id'";
-					$this->db->query($sql);*/
 				}else{
-					return '-1';
+					return '0';
 				}
 				
 			}else{
-				return '-1';
+				return '0';
 			}
 		}
 		
@@ -404,6 +452,128 @@ class M_cetak_kwitansi extends Model{
 			}
 		}
 		
+		function cara_bayar_tunai_insert($kwitansi_tunai_nilai
+										,$kwitansi_no
+										,$kwitansi_date_create
+										,$cetak){
+			$stat_dok = 'Terbuka';
+			if($cetak==1){
+				$stat_dok = 'Tertutup';
+			}
+			$data=array(
+				"jtunai_nilai"=>$kwitansi_tunai_nilai,
+				"jtunai_ref"=>$kwitansi_no,
+				"jtunai_transaksi"=>"jual_kwitansi",
+				"jtunai_date_create"=>$kwitansi_date_create,
+				"jtunai_stat_dok"=>$stat_dok
+				);
+			$this->db->insert('jual_tunai', $data);
+			if($this->db->affected_rows()){
+				return 1;
+			}else{
+				return 0;
+			}
+		}
+		
+		function cara_bayar_transfer_insert($kwitansi_transfer_bank
+											,$kwitansi_transfer_nama
+											,$kwitansi_transfer_nilai
+											,$kwitansi_no
+											,$kwitansi_date_create
+											,$cetak){
+			$stat_dok = 'Terbuka';
+			if($cetak==1){
+				$stat_dok = 'Tertutup';
+			}
+			$data=array(
+				"jtransfer_bank"=>$kwitansi_transfer_bank,
+				"jtransfer_nama"=>$kwitansi_transfer_nama,
+				"jtransfer_nilai"=>$kwitansi_transfer_nilai,
+				"jtransfer_ref"=>$kwitansi_no,
+				"jtransfer_transaksi"=>"jual_kwitansi",
+				"jtransfer_date_create"=>$kwitansi_date_create,
+				"jtransfer_stat_dok"=>$stat_dok
+				);
+			$this->db->insert('jual_transfer', $data);
+			if($this->db->affected_rows()){
+				return 1;
+			}else{
+				return 0;
+			}
+		}
+		
+		function cara_bayar_card_insert($kwitansi_card_nama
+										,$kwitansi_card_edc
+										,$kwitansi_card_no
+										,$kwitansi_card_nilai
+										,$kwitansi_no
+										,$kwitansi_date_create
+										,$cetak){
+			$stat_dok = 'Terbuka';
+			if($cetak==1){
+				$stat_dok = 'Tertutup';
+			}
+			$data=array(
+				"jcard_nama"=>$kwitansi_card_nama,
+				"jcard_edc"=>$kwitansi_card_edc,
+				"jcard_no"=>$kwitansi_card_no,
+				"jcard_nilai"=>$kwitansi_card_nilai,
+				"jcard_ref"=>$kwitansi_no,
+				"jcard_transaksi"=>"jual_kwitansi",
+				"jcard_date_create"=>$kwitansi_date_create,
+				"jcard_stat_dok"=>$stat_dok
+				);
+			$this->db->insert('jual_card', $data);
+			if($this->db->affected_rows()){
+				return 1;
+			}else{
+				return 0;
+			}
+		}
+		
+		function cara_bayar_cek_insert($kwitansi_cek_nama
+										,$kwitansi_cek_no
+										,$kwitansi_cek_valid
+										,$kwitansi_cek_bank
+										,$kwitansi_cek_nilai
+										,$kwitansi_no
+										,$kwitansi_date_create
+										,$cetak){
+			$stat_dok = 'Terbuka';
+			if($cetak==1){
+				$stat_dok = 'Tertutup';
+			}
+			if($kwitansi_cek_nama=="" || $kwitansi_cek_nama==NULL){
+				if(is_int($kwitansi_cek_nama)){
+					$sql="select cust_nama from customer where cust_id='".$kwitansi_cust."'";
+					$query=$this->db->query($sql);
+					if($query->num_rows()){
+						$data=$query->row();
+						$kwitansi_cek_nama=$data->cust_nama;
+					}
+				}else{
+					$kwitansi_cek_nama=$kwitansi_cust;
+				}
+			}
+			$data=array(
+				"jcek_nama"=>$kwitansi_cek_nama,
+				"jcek_no"=>$kwitansi_cek_no,
+				"jcek_valid"=>$kwitansi_cek_valid,
+				"jcek_bank"=>$kwitansi_cek_bank,
+				"jcek_nilai"=>$kwitansi_cek_nilai,
+				"jcek_ref"=>$kwitansi_no,
+				"jcek_transaksi"=>"jual_kwitansi",
+				"jcek_date_create"=>$kwitansi_date_create,
+				"jcek_stat_dok"=>$stat_dok
+				);
+			$this->db->insert('jual_cek', $data);
+			if($this->db->affected_rows()){
+				return 1;
+			}else{
+				return 0;
+			}
+		}
+		
 		//function for create new record
 		function cetak_kwitansi_create($kwitansi_no
 									   ,$kwitansi_cust
@@ -430,6 +600,9 @@ class M_cetak_kwitansi extends Model{
 									   ,$kwitansi_creator
 									   ,$cetak ){
 			$datetime_now = date('Y-m-d H:i:s');
+			$time_now = date('H:i:s');
+			$datetime_create = $kwitansi_tanggal.' '.$time_now;
+			$kwitansi_date_create = date('Y-m-d H:i:s', strtotime($datetime_create));
 			if($kwitansi_status=="")
 				$kwitansi_status="Terbuka";
 			
@@ -447,8 +620,10 @@ class M_cetak_kwitansi extends Model{
 				//"kwitansi_status"=>$kwitansi_status,
 				"kwitansi_cara"=>$kwitansi_cara,
 				"kwitansi_creator"=>$kwitansi_creator,
-				"kwitansi_date_create"=>$datetime_now
+				"kwitansi_date_create"=>$kwitansi_date_create
 			);
+			if($cetak==1)
+				$data['kwitansi_status'] = 'Tertutup';
 			$this->db->insert('cetak_kwitansi', $data); 
 			if($this->db->affected_rows()){
 				//$id_cetak = $this->db->insert_id();
@@ -460,97 +635,106 @@ class M_cetak_kwitansi extends Model{
 					$kwitansi_id = $record['kwitansi_id'];
 				}
 				
-				if($kwitansi_cara!=null || $kwitansi_cara!=''){
-					if($kwitansi_cara=='card'){
-						
-						$data=array(
-							"jcard_nama"=>$kwitansi_card_nama,
-							"jcard_edc"=>$kwitansi_card_edc,
-							"jcard_no"=>$kwitansi_card_no,
-							"jcard_nilai"=>$kwitansi_card_nilai,
-							"jcard_ref"=>$kwitansi_no,
-							"jcard_transaksi"=>"jual_kwitansi",
-							"jcard_date_create"=>$datetime_now,
-							"jcard_stat_dok"=>'Terbuka',
-							"jcard_creator"=>$kwitansi_creator
-							);
-						$this->db->insert('jual_card', $data); 
-					
-					}else if($kwitansi_cara=='cek/giro'){
-						
-						if($kwitansi_cek_nama=="" || $kwitansi_cek_nama==NULL){
-							if(is_int($kwitansi_cek_nama)){
-								$sql="select cust_nama from customer where cust_id='".$kwitansi_cust."'";
-								$query=$this->db->query($sql);
-								if($query->num_rows()){
-									$data=$query->row();
-									$kwitansi_cek_nama=$data->cust_nama;
+				$sql="delete from jual_tunai where jtunai_ref='".$kwitansi_no."'";
+				$this->db->query($sql);
+				if($this->db->affected_rows()>-1){
+					$sql="delete from jual_card where jcard_ref='".$kwitansi_no."'";
+					$this->db->query($sql);
+					if($this->db->affected_rows()>-1){
+						$sql="delete from jual_cek where jcek_ref='".$kwitansi_no."'";
+						$this->db->query($sql);
+						if($this->db->affected_rows()>-1){
+							$sql="delete from jual_transfer where jtransfer_ref='".$kwitansi_no."'";
+							$this->db->query($sql);
+							if($this->db->affected_rows()>-1){
+								if($kwitansi_tunai_nilai<>'' && $kwitansi_tunai_nilai<>0){
+									$result_bayar = $this->cara_bayar_tunai_insert($kwitansi_tunai_nilai
+																				   ,$kwitansi_no
+																				   ,$kwitansi_date_create
+																				   ,$cetak);
+									if($result_bayar==1){
+										if($cetak==1){
+											/*
+											 * return db.cetak_kwitansi.kwitansi_id untuk proses cetak
+											*/
+											return $kwitansi_id;
+										}else{
+											//proses simpan saja tanpa cetak
+											return '1';
+										}
+									}elseif($result_bayar==0){
+										return '0';
+									}
+								}elseif($kwitansi_transfer_nilai<>'' && $kwitansi_transfer_nilai<>0){
+									$result_bayar = $this->cara_bayar_transfer_insert($kwitansi_transfer_bank
+																					  ,$kwitansi_transfer_nama
+																					  ,$kwitansi_transfer_nilai
+																					  ,$kwitansi_no
+																					  ,$kwitansi_date_create
+																					  ,$cetak);
+									if($result_bayar==1){
+										if($cetak==1){
+											/*
+											 * return db.cetak_kwitansi.kwitansi_id untuk proses cetak
+											*/
+											return $kwitansi_id;
+										}else{
+											//proses simpan saja tanpa cetak
+											return '1';
+										}
+									}elseif($result_bayar==0){
+										return '0';
+									}
+								}elseif($kwitansi_card_nilai<>'' && $kwitansi_card_nilai<>0){
+									$result_bayar = $this->cara_bayar_card_insert($kwitansi_card_nama
+																				  ,$kwitansi_card_edc
+																				  ,$kwitansi_card_no
+																				  ,$kwitansi_card_nilai
+																				  ,$kwitansi_no
+																				  ,$kwitansi_date_create
+																				  ,$cetak);
+									if($result_bayar==1){
+										if($cetak==1){
+											/*
+											 * return db.cetak_kwitansi.kwitansi_id untuk proses cetak
+											*/
+											return $kwitansi_id;
+										}else{
+											//proses simpan saja tanpa cetak
+											return '1';
+										}
+									}elseif($result_bayar==0){
+										return '0';
+									}
+								}elseif($kwitansi_cek_nilai<>'' && $kwitansi_cek_nilai<>0){
+									$result_bayar = $this->cara_bayar_cek_insert($kwitansi_cek_nama
+																				 ,$kwitansi_cek_no
+																				 ,$kwitansi_cek_valid
+																				 ,$kwitansi_cek_bank
+																				 ,$kwitansi_cek_nilai
+																				 ,$kwitansi_no
+																				 ,$kwitansi_date_create
+																				 ,$cetak);
+									if($result_bayar==1){
+										if($cetak==1){
+											/*
+											 * return db.cetak_kwitansi.kwitansi_id untuk proses cetak
+											*/
+											return $kwitansi_id;
+										}else{
+											//proses simpan saja tanpa cetak
+											return '1';
+										}
+									}elseif($result_bayar==0){
+										return '0';
+									}
 								}
-							}else{
-								$kwitansi_cek_nama=$kwitansi_cust;
+								
 							}
 						}
-						$data=array(
-							"jcek_nama"=>$kwitansi_cek_nama,
-							"jcek_no"=>$kwitansi_cek_no,
-							"jcek_valid"=>$kwitansi_cek_valid,
-							"jcek_bank"=>$kwitansi_cek_bank,
-							"jcek_nilai"=>$kwitansi_cek_nilai,
-							"jcek_ref"=>$kwitansi_no,
-							"jcek_transaksi"=>"jual_kwitansi",
-							"jcek_date_create"=>$datetime_now,
-							"jcek_stat_dok"=>'Terbuka',
-							"jcek_creator"=>$kwitansi_creator
-							);
-						$this->db->insert('jual_cek', $data); 
-					}else if($kwitansi_cara=='transfer'){
-						
-						$data=array(
-							"jtransfer_bank"=>$kwitansi_transfer_bank,
-							"jtransfer_nama"=>$kwitansi_transfer_nama,
-							"jtransfer_nilai"=>$kwitansi_transfer_nilai,
-							"jtransfer_ref"=>$kwitansi_no,
-							"jtransfer_transaksi"=>"jual_kwitansi",
-							"jtransfer_date_create"=>$datetime_now,
-							"jtransfer_stat_dok"=>'Terbuka',
-							"jtransfer_creator"=>$kwitansi_creator
-							);
-						$this->db->insert('jual_transfer', $data); 
-					}else if($kwitansi_cara=='tunai'){
-						
-						$data=array(
-							"jtunai_nilai"=>$kwitansi_tunai_nilai,
-							"jtunai_ref"=>$kwitansi_no,
-							"jtunai_transaksi"=>"jual_kwitansi",
-							"jtunai_date_create"=>$datetime_now,
-							"jtunai_stat_dok"=>'Terbuka',
-							"jtunai_creator"=>$kwitansi_creator
-							);
-						$this->db->insert('jual_tunai', $data); 
 					}
 				}
-				if($this->db->affected_rows()){
-					if($cetak==1){
-						/*  1. UPDATE db.cetak_kwitansi 
-						  * 2. return db.cetak_kwitansi.kwitansi_id untuk proses cetak
-						*/
-						/*$sqlu_kwitansi = "UPDATE cetak_kwitansi
-							SET kwitansi_status='Tertutup'
-							WHERE kwitansi_id='".$kwitansi_id."'";
-						$this->db->query($sqlu_kwitansi);
-						if($this->db->affected_rows()){
-							return $kwitansi_id;
-						}else{
-							return $kwitansi_id;
-						}*/
-						return $kwitansi_id;
-						
-					}else{
-						//proses simpan saja tanpa cetak
-						return '1';
-					}
-					
-				}
+				
 			}else
 				return '0';
 		}
