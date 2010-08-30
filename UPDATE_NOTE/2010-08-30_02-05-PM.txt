@@ -1,0 +1,11 @@
+[by zaqi.smart@gmail.com]
+
+o> Update
+   - Laporan Piutang
+     o Opsi Rekap : [Faktur,Tanggal, CUstomer]
+     o Opsi detail (pelunasan) : [Faktur, Tanggal, Customer]
+   - URL : ?c=c_master_lunas_piutang&m=laporan
+   - SQL : 2010-08-30_02-05-PM.sql
+  
+o> Fix data piutang
+   - SQL : 2010-08-30_02-07-PM.sql
