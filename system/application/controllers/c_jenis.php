@@ -180,20 +180,21 @@ class C_jenis extends Controller {
 		$totcolumn=11;
    		/* We now have our array, let's build our HTML file */
 		$file = fopen("jenislist.html",'w');
-		fwrite($file, "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' /><title>Printing the Jenis Grid</title><link rel='stylesheet' type='text/css' href='assets/modules/main/css/printstyle.css'/></head>");
-		fwrite($file, "<body><table summary='Jenis List'><caption>JENIS</caption><thead><tr><th scope='col'>Jenis Id</th><th scope='col'>Jenis Kode</th><th scope='col'>Jenis Nama</th><th scope='col'>Jenis Kelompok</th><th scope='col'>Jenis Keterangan</th><th scope='col'>Jenis Aktif</th><th scope='col'>Jenis Creator</th><th scope='col'>Jenis Date Create</th><th scope='col'>Jenis Update</th><th scope='col'>Jenis Date Update</th><th scope='col'>Jenis Revised</th></tr></thead><tfoot><tr><th scope='row'>Total</th><td colspan='$totcolumn'>");
+		fwrite($file, "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' /><title>PRINTING DAFTAR GROUP 2</title><link rel='stylesheet' type='text/css' href='assets/modules/main/css/printstyle.css'/></head>");
+		fwrite($file, "<body><table summary='Jenis List'><caption>DAFTAR GROUP 2</caption><thead><tr><th scope='col'>No</th><th scope='col'>Kode</th><th scope='col'>Nama</th><th scope='col'>Kelompok</th><th scope='col'>Keterangan</th><th scope='col'>Aktif</th></tr></thead><tfoot><tr><th scope='row'>Total</th><td colspan='$totcolumn'>");
 		fwrite($file, $nbrows);
 		fwrite($file, " Jenis</td></tr></tfoot><tbody>");
 		$i=0;
 		if($nbrows>0){
 			foreach($result->result_array() as $data){
+			$i++;
 				fwrite($file,'<tr');
 				if($i%1==0){
 					fwrite($file," class='odd'");
 				}
 			
 				fwrite($file, "><th scope='row' id='r97'>");
-				fwrite($file, $data['jenis_id']);
+				fwrite($file, $i);
 				fwrite($file,"</th><td>");
 				fwrite($file, $data['jenis_kode']);
 				fwrite($file,"</td><td>");
@@ -205,15 +206,6 @@ class C_jenis extends Controller {
 				fwrite($file,"</td><td>");
 				fwrite($file, $data['jenis_aktif']);
 				fwrite($file, "</td></tr>");
-				fwrite($file, $data['jenis_creator']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['jenis_date_create']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['jenis_update']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['jenis_date_update']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['jenis_revised']);
 				fwrite($file, "</td></tr>");
 			}
 		}

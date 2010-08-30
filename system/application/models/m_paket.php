@@ -516,12 +516,25 @@ FROM ((`paket` INNER JOIN `produk_group` ON `paket`.`paket_group`=`produk_group`
 	}
 	
 	//function for print record
-	function paket_print($paket_id ,$paket_kode ,$paket_nama ,$paket_group ,$paket_keterangan ,$paket_du ,$paket_dm ,$paket_point ,$paket_harga ,$paket_expired ,$paket_aktif ,$option,$filter){
+	function paket_print($paket_id 
+						,$paket_kode 
+						,$paket_kodelama 
+						,$paket_nama 
+						,$paket_group 
+						,$paket_keterangan 
+						,$paket_du 
+						,$paket_dm 
+						,$paket_point 
+						,$paket_harga 
+						,$paket_expired 
+						,$paket_aktif 
+						,$option
+						,$filter){
 		//full query
-		$query="select * from paket";
+		$query="SELECT paket.*, produk_group.group_nama FROM paket Left Join produk_group ON paket.paket_group = produk_group.group_id";
 		if($option=='LIST'){
 			$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-			$query .= " (paket_id LIKE '%".addslashes($filter)."%' OR paket_kode LIKE '%".addslashes($filter)."%' OR paket_nama LIKE '%".addslashes($filter)."%' OR paket_group LIKE '%".addslashes($filter)."%' OR paket_keterangan LIKE '%".addslashes($filter)."%' OR paket_du LIKE '%".addslashes($filter)."%' OR paket_dm LIKE '%".addslashes($filter)."%' OR paket_point LIKE '%".addslashes($filter)."%' OR paket_harga LIKE '%".addslashes($filter)."%' OR paket_expired LIKE '%".addslashes($filter)."%' OR paket_aktif LIKE '%".addslashes($filter)."%' )";
+			$query .= " (paket_id LIKE '%".addslashes($filter)."%' OR paket_kode LIKE '%".addslashes($filter)."%' OR paket_nama LIKE '%".addslashes($filter)."%' OR group_nama LIKE '%".addslashes($filter)."%' OR paket_keterangan LIKE '%".addslashes($filter)."%' OR paket_du LIKE '%".addslashes($filter)."%' OR paket_dm LIKE '%".addslashes($filter)."%' OR paket_point LIKE '%".addslashes($filter)."%' OR paket_harga LIKE '%".addslashes($filter)."%' OR paket_expired LIKE '%".addslashes($filter)."%' OR paket_aktif LIKE '%".addslashes($filter)."%' )";
 			$result = $this->db->query($query);
 		} else if($option=='SEARCH'){
 			if($paket_id!=''){
@@ -538,7 +551,7 @@ FROM ((`paket` INNER JOIN `produk_group` ON `paket`.`paket_group`=`produk_group`
 			};
 			if($paket_group!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " paket_group LIKE '%".$paket_group."%'";
+				$query.= " group_nama LIKE '%".$paket_group."%'";
 			};
 			if($paket_keterangan!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";

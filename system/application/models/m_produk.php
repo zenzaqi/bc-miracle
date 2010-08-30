@@ -419,10 +419,10 @@ class M_produk extends Model{
 		//function for print record
 		function produk_print($produk_id ,$produk_kode ,$produk_kodelama ,$produk_group ,$produk_kategori ,$produk_jenis ,$produk_nama ,$produk_satuan ,$produk_du ,$produk_dm ,$produk_point ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif ,$option,$filter){
 			//full query
-			$query="select * from produk";
+			$query="select * from vu_produk";
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (produk_id LIKE '%".addslashes($filter)."%' OR produk_kode LIKE '%".addslashes($filter)."%' OR produk_kodelama LIKE '%".addslashes($filter)."%' OR produk_group LIKE '%".addslashes($filter)."%' OR produk_kategori LIKE '%".addslashes($filter)."%' OR produk_jenis LIKE '%".addslashes($filter)."%' OR produk_nama LIKE '%".addslashes($filter)."%' OR produk_satuan LIKE '%".addslashes($filter)."%' OR produk_du LIKE '%".addslashes($filter)."%' OR produk_dm LIKE '%".addslashes($filter)."%' OR produk_point LIKE '%".addslashes($filter)."%' OR produk_volume LIKE '%".addslashes($filter)."%' OR produk_harga LIKE '%".addslashes($filter)."%' OR produk_keterangan LIKE '%".addslashes($filter)."%' OR produk_aktif LIKE '%".addslashes($filter)."%' )";
+				$query .= " (produk_id LIKE '%".addslashes($filter)."%' OR produk_kode LIKE '%".addslashes($filter)."%' OR produk_kodelama LIKE '%".addslashes($filter)."%' OR produk_group LIKE '%".addslashes($filter)."%' OR produk_kategori LIKE '%".addslashes($filter)."%' OR produk_jenis LIKE '%".addslashes($filter)."%' OR produk_nama LIKE '%".addslashes($filter)."%' OR produk_satuan LIKE '%".addslashes($filter)."%' OR produk_du LIKE '%".addslashes($filter)."%' OR produk_dm LIKE '%".addslashes($filter)."%' OR produk_point LIKE '%".addslashes($filter)."%' OR produk_volume LIKE '%".addslashes($filter)."%' OR produk_harga LIKE '%".addslashes($filter)."%' OR produk_keterangan LIKE '%".addslashes($filter)."%' )";
 				$result = $this->db->query($query);
 			} else if($option=='SEARCH'){
 				if($produk_id!=''){
@@ -481,10 +481,10 @@ class M_produk extends Model{
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " produk_keterangan LIKE '%".$produk_keterangan."%'";
 				};
-				if($produk_aktif!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " produk_aktif LIKE '%".$produk_aktif."%'";
-				};
+				// if($produk_aktif!=''){
+					// $query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					// $query.= " produk_aktif = 'Aktif'";
+				// };
 				$result = $this->db->query($query);
 			}
 			return $result;

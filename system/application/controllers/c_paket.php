@@ -317,25 +317,39 @@ class C_paket extends Controller {
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$result = $this->m_paket->paket_print($paket_id ,$paket_kode ,$paket_kodelama ,$paket_nama ,$paket_group ,$paket_keterangan ,$paket_du ,$paket_dm ,$paket_point ,$paket_harga ,$paket_expired ,$paket_aktif ,$option,$filter);
+		$result = $this->m_paket->paket_print($paket_id 
+												,$paket_kode 
+												,$paket_kodelama 
+												,$paket_nama 
+												,$paket_group 
+												,$paket_keterangan 
+												,$paket_du 
+												,$paket_dm 
+												,$paket_point 
+												,$paket_harga 
+												,$paket_expired 
+												,$paket_aktif 
+												,$option
+												,$filter);
 		$nbrows=$result->num_rows();
 		$totcolumn=16;
    		/* We now have our array, let's build our HTML file */
 		$file = fopen("paketlist.html",'w');
 		fwrite($file, "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' /><title>Printing the Paket Grid</title><link rel='stylesheet' type='text/css' href='assets/modules/main/css/printstyle.css'/></head>");
-		fwrite($file, "<body><table summary='Paket List'><caption>PAKET</caption><thead><tr><th scope='col'>Paket Id</th><th scope='col'>Paket Kode</th><th scope='col'>Paket Kode Lama</th><th scope='col'>Paket Nama</th><th scope='col'>Paket Group</th><th scope='col'>Paket Keterangan</th><th scope='col'>Paket Du</th><th scope='col'>Paket Dm</th><th scope='col'>Paket Point</th><th scope='col'>Paket Harga</th><th scope='col'>Paket Expired</th><th scope='col'>Paket Aktif</th><th scope='col'>Paket Creator</th><th scope='col'>Paket Date Create</th><th scope='col'>Paket Update</th><th scope='col'>Paket Date Update</th><th scope='col'>Paket Revised</th></tr></thead><tfoot><tr><th scope='row'>Total</th><td colspan='$totcolumn'>");
+		fwrite($file, "<body><table summary='Paket List'><caption>DAFTAR PAKET</caption><thead><tr><th scope='col'>No.</th><th scope='col'>Kode</th><th scope='col'>Kode Lama</th><th scope='col'>Nama</th><th scope='col'>Group</th><th scope='col'>Du</th><th scope='col'>Dm</th><th scope='col'>Point</th><th scope='col'>Harga</th><th scope='col'>Expired</th><th scope='col'>Aktif</th></tr></thead><tfoot><tr><th scope='row'>Total</th><td colspan='$totcolumn'>");
 		fwrite($file, $nbrows);
 		fwrite($file, " Paket</td></tr></tfoot><tbody>");
 		$i=0;
 		if($nbrows>0){
 			foreach($result->result_array() as $data){
+				$i++;
 				fwrite($file,'<tr');
 				if($i%1==0){
 					fwrite($file," class='odd'");
 				}
 			
 				fwrite($file, "><th scope='row' id='r97'>");
-				fwrite($file, $data['paket_id']);
+				fwrite($file, $i);
 				fwrite($file,"</th><td>");
 				fwrite($file, $data['paket_kode']);
 				fwrite($file,"</td><td>");
@@ -343,10 +357,10 @@ class C_paket extends Controller {
 				fwrite($file,"</td><td>");
 				fwrite($file, $data['paket_nama']);
 				fwrite($file,"</td><td>");
-				fwrite($file, $data['paket_group']);
+				fwrite($file, $data['group_nama']);
 				fwrite($file,"</td><td>");
-				fwrite($file, $data['paket_keterangan']);
-				fwrite($file,"</td><td>");
+				// fwrite($file, $data['paket_keterangan']);
+				// fwrite($file,"</td><td>");
 				fwrite($file, $data['paket_du']);
 				fwrite($file,"</td><td>");
 				fwrite($file, $data['paket_dm']);
@@ -359,16 +373,16 @@ class C_paket extends Controller {
 				fwrite($file,"</td><td>");
 				fwrite($file, $data['paket_aktif']);
 				fwrite($file, "</td></tr>");
-				fwrite($file, $data['paket_creator']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['paket_date_create']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['paket_update']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['paket_date_update']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['paket_revised']);
-				fwrite($file, "</td></tr>");
+				// fwrite($file, $data['paket_creator']);
+				// fwrite($file, "</td></tr>");
+				// fwrite($file, $data['paket_date_create']);
+				// fwrite($file, "</td></tr>");
+				// fwrite($file, $data['paket_update']);
+				// fwrite($file, "</td></tr>");
+				// fwrite($file, $data['paket_date_update']);
+				// fwrite($file, "</td></tr>");
+				// fwrite($file, $data['paket_revised']);
+				// fwrite($file, "</td></tr>");
 			}
 		}
 		fwrite($file, "</tbody></table></body></html>");	

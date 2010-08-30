@@ -289,27 +289,28 @@ class C_produk extends Controller {
    		/* We now have our array, let's build our HTML file */
 		$file = fopen("produklist.html",'w');
 		fwrite($file, "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' /><title>Printing the Produk Grid</title><link rel='stylesheet' type='text/css' href='assets/modules/main/css/printstyle.css'/></head>");
-		fwrite($file, "<body><table summary='Produk List'><caption>PRODUK</caption><thead><tr><th scope='col'>Produk Id</th><th scope='col'>Produk Kode</th><th scope='col'>Produk Kode Lama</th><th scope='col'>Produk Group</th><th scope='col'>Produk Kategori</th><th scope='col'>Produk Jenis</th><th scope='col'>Produk Nama</th><th scope='col'>Produk Satuan</th><th scope='col'>Produk Du</th><th scope='col'>Produk Dm</th><th scope='col'>Produk Point</th><th scope='col'>Produk Volume</th><th scope='col'>Produk Harga</th><th scope='col'>Produk Keterangan</th><th scope='col'>Produk Aktif</th><th scope='col'>Produk Creator</th><th scope='col'>Produk Date Create</th><th scope='col'>Produk Update</th><th scope='col'>Produk Date Update</th><th scope='col'>Poduk Revised</th></tr></thead><tfoot><tr><th scope='row'>Total</th><td colspan='$totcolumn'>");
+		fwrite($file, "<body><table summary='Produk List'><caption>DAFTAR PRODUK</caption><thead><tr><th scope='col'>No</th><th scope='col'>Kode</th><th scope='col'>Kode Lama</th><th scope='col'>Group</th><th scope='col'>Kategori</th><th scope='col'>Jenis</th><th scope='col'>Nama</th><th scope='col'>Satuan</th><th scope='col'>DU</th><th scope='col'>DM</th><th scope='col'>Point</th><th scope='col'>Volume</th><th scope='col'>Produk Harga</th><th scope='col'>Keterangan</th><th scope='col'>Aktif</th></tr></thead><tfoot><tr><th scope='row'>Total</th><td colspan='$totcolumn'>");
 		fwrite($file, $nbrows);
 		fwrite($file, " Produk</td></tr></tfoot><tbody>");
 		$i=0;
 		if($nbrows>0){
 			foreach($result->result_array() as $data){
+				$i++;
 				fwrite($file,'<tr');
 				if($i%1==0){
 					fwrite($file," class='odd'");
 				}
 			
 				fwrite($file, "><th scope='row' id='r97'>");
-				fwrite($file, $data['produk_id']);
+				fwrite($file, $i);
 				fwrite($file,"</th><td>");
 				fwrite($file, $data['produk_kode']);
 				fwrite($file,"</td><td>");
 				fwrite($file, $data['produk_kodelama']);
 				fwrite($file,"</td><td>");
-				fwrite($file, $data['produk_group']);
+				fwrite($file, $data['group_nama']);
 				fwrite($file,"</td><td>");
-				fwrite($file, $data['produk_kategori']);
+				fwrite($file, $data['kategori_nama']);
 				fwrite($file,"</td><td>");
 				fwrite($file, $data['produk_jenis']);
 				fwrite($file,"</td><td>");
@@ -331,16 +332,16 @@ class C_produk extends Controller {
 				fwrite($file,"</td><td>");
 				fwrite($file, $data['produk_aktif']);
 				fwrite($file, "</td></tr>");
-				fwrite($file, $data['produk_creator']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['produk_date_create']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['produk_update']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['produk_date_update']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['produk_revised']);
-				fwrite($file, "</td></tr>");
+				// fwrite($file, $data['produk_creator']);
+				// fwrite($file, "</td></tr>");
+				// fwrite($file, $data['produk_date_create']);
+				// fwrite($file, "</td></tr>");
+				// fwrite($file, $data['produk_update']);
+				// fwrite($file, "</td></tr>");
+				// fwrite($file, $data['produk_date_update']);
+				// fwrite($file, "</td></tr>");
+				// fwrite($file, $data['produk_revised']);
+				// fwrite($file, "</td></tr>");
 			}
 		}
 		fwrite($file, "</tbody></table></body></html>");	

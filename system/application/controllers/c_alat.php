@@ -180,36 +180,27 @@ class C_alat extends Controller {
 		$totcolumn=10;
    		/* We now have our array, let's build our HTML file */
 		$file = fopen("alatlist.html",'w');
-		fwrite($file, "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' /><title>Printing the Alat Grid</title><link rel='stylesheet' type='text/css' href='assets/modules/main/css/printstyle.css'/></head>");
-		fwrite($file, "<body><table summary='Alat List'><caption>ALAT</caption><thead><tr><th scope='col'>Alat Id</th><th scope='col'>Alat Nama</th><th scope='col'>Alat Jumlah</th><th scope='col'>Alat Siap</th><th scope='col'>Alat Aktif</th><th scope='col'>Alat Creator</th><th scope='col'>Alat Date Create</th><th scope='col'>Alat Update</th><th scope='col'>Alat Date Update</th><th scope='col'>Alat Revised</th></tr></thead><tfoot><tr><th scope='row'>Total</th><td colspan='$totcolumn'>");
+		fwrite($file, "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' /><title>Printing the Peralatan Medis Grid</title><link rel='stylesheet' type='text/css' href='assets/modules/main/css/printstyle.css'/></head>");
+		fwrite($file, "<body><table summary='Alat List'><caption>DAFTAR PERALATAN MEDIS</caption><thead><tr><th scope='col'>No</th><th scope='col'>Nama</th><th scope='col'>Jumlah</th><th scope='col'>Aktif</th></tr></thead><tfoot><tr><th scope='row'>Total</th><td colspan='$totcolumn'>");
 		fwrite($file, $nbrows);
 		fwrite($file, " Alat</td></tr></tfoot><tbody>");
 		$i=0;
 		if($nbrows>0){
 			foreach($result->result_array() as $data){
+				$i++;
 				fwrite($file,'<tr');
 				if($i%1==0){
 					fwrite($file," class='odd'");
 				}
 			
 				fwrite($file, "><th scope='row' id='r97'>");
-				fwrite($file, $data['alat_id']);
+				fwrite($file, $i);
 				fwrite($file,"</th><td>");
 				fwrite($file, $data['alat_nama']);
 				fwrite($file,"</td><td>");
 				fwrite($file, $data['alat_jumlah']);
 				fwrite($file,"</td><td>");
 				fwrite($file, $data['alat_aktif']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['alat_creator']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['alat_date_create']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['alat_update']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['alat_date_update']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['alat_revised']);
 				fwrite($file, "</td></tr>");
 			}
 		}

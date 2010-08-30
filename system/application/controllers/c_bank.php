@@ -229,24 +229,25 @@ class C_bank extends Controller {
 		$totcolumn=13;
    		/* We now have our array, let's build our HTML file */
 		$file = fopen("banklist.html",'w');
-		fwrite($file, "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' /><title>Printing the Bank Grid</title><link rel='stylesheet' type='text/css' href='assets/modules/main/css/printstyle.css'/></head>");
-		fwrite($file, "<body><table summary='Bank List'><caption>BANK</caption><thead><tr><th scope='col'>Bank Id</th><th scope='col'>Bank Kode</th><th scope='col'>Bank Nama</th><th scope='col'>Bank Norek</th><th scope='col'>Bank Atasnama</th><th scope='col'>Bank Saldo</th><th scope='col'>Bank Keterangan</th><th scope='col'>Bank Aktif</th><th scope='col'>Bank Creator</th><th scope='col'>Bank Date Create</th><th scope='col'>Bank Update</th><th scope='col'>Bank Date Update</th><th scope='col'>Bank Revised</th></tr></thead><tfoot><tr><th scope='row'>Total</th><td colspan='$totcolumn'>");
+		fwrite($file, "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' /><title>Printing the Rekening Grid</title><link rel='stylesheet' type='text/css' href='assets/modules/main/css/printstyle.css'/></head>");
+		fwrite($file, "<body><table summary='Bank List'><caption>DAFTAR REKENING</caption><thead><tr><th scope='col'>No</th><th scope='col'>Kode</th><th scope='col'>Nama</th><th scope='col'>No.Rekening</th><th scope='col'>Atas Nama</th><th scope='col'>Saldo</th><th scope='col'>Keterangan</th><th scope='col'>Aktif</th></tr></thead><tfoot><tr><th scope='row'>Total</th><td colspan='$totcolumn'>");
 		fwrite($file, $nbrows);
 		fwrite($file, " Bank</td></tr></tfoot><tbody>");
 		$i=0;
 		if($nbrows>0){
 			foreach($result->result_array() as $data){
+				$i++;
 				fwrite($file,'<tr');
 				if($i%1==0){
 					fwrite($file," class='odd'");
 				}
 			
 				fwrite($file, "><th scope='row' id='r97'>");
-				fwrite($file, $data['bank_id']);
+				fwrite($file, $i);
 				fwrite($file,"</th><td>");
 				fwrite($file, $data['bank_kode']);
 				fwrite($file,"</td><td>");
-				fwrite($file, $data['bank_nama']);
+				fwrite($file, $data['mbank_nama']);
 				fwrite($file,"</td><td>");
 				fwrite($file, $data['bank_norek']);
 				fwrite($file,"</td><td>");
@@ -257,16 +258,16 @@ class C_bank extends Controller {
 				fwrite($file, $data['bank_keterangan']);
 				fwrite($file,"</td><td>");
 				fwrite($file, $data['bank_aktif']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['bank_creator']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['bank_date_create']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['bank_update']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['bank_date_update']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['bank_revised']);
+				// fwrite($file,"</td><td>");
+				// fwrite($file, $data['bank_creator']);
+				// fwrite($file,"</td><td>");
+				// fwrite($file, $data['bank_date_create']);
+				// fwrite($file,"</td><td>");
+				// fwrite($file, $data['bank_update']);
+				// fwrite($file,"</td><td>");
+				// fwrite($file, $data['bank_date_update']);
+				// fwrite($file,"</td><td>");
+				// fwrite($file, $data['bank_revised']);
 				fwrite($file, "</td></tr>");
 			}
 		}
