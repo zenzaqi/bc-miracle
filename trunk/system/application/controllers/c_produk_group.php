@@ -239,19 +239,20 @@ class C_produk_group extends Controller {
    		/* We now have our array, let's build our HTML file */
 		$file = fopen("produk_grouplist.html",'w');
 		fwrite($file, "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' /><title>Printing the Produk_group Grid</title><link rel='stylesheet' type='text/css' href='assets/modules/main/css/printstyle.css'/></head>");
-		fwrite($file, "<body><table summary='Produk_group List'><caption>PRODUK_GROUP</caption><thead><tr><th scope='col'>Group Id</th><th scope='col'>Group Nama</th><th scope='col'>Group Duproduk</th><th scope='col'>Group Dmproduk</th><th scope='col'>Group Durawat</th><th scope='col'>Group Dmrawat</th><th scope='col'>Group Dupaket</th><th scope='col'>Group Dmpaket</th><th scope='col'>Group Keterangan</th><th scope='col'>Group Aktif</th><th scope='col'>Group Creator</th><th scope='col'>Group Date Create</th><th scope='col'>Group Update</th><th scope='col'>Group Date Update</th><th scope='col'>Group Revised</th></tr></thead><tfoot><tr><th scope='row'>Total</th><td colspan='$totcolumn'>");
+		fwrite($file, "<body><table summary='Produk_group List'><caption>DAFTAR GROUP 1</caption><thead><tr><th scope='col'>No</th><th scope='col'>Nama</th><th scope='col'>DU Produk</th><th scope='col'>DM Produk</th><th scope='col'>DU Rawat</th><th scope='col'>DM Rawat</th><th scope='col'>DU Paket</th><th scope='col'>DM Paket</th><th scope='col'>Keterangan</th><th scope='col'>Group Aktif</th></tr></thead><tfoot><tr><th scope='row'>Total</th><td colspan='$totcolumn'>");
 		fwrite($file, $nbrows);
-		fwrite($file, " Produk_group</td></tr></tfoot><tbody>");
+		fwrite($file, " Produk group</td></tr></tfoot><tbody>");
 		$i=0;
 		if($nbrows>0){
 			foreach($result->result_array() as $data){
+			$i++;
 				fwrite($file,'<tr');
 				if($i%1==0){
 					fwrite($file," class='odd'");
 				}
 			
 				fwrite($file, "><th scope='row' id='r97'>");
-				fwrite($file, $data['group_id']);
+				fwrite($file, $i);
 				fwrite($file,"</th><td>");
 				fwrite($file, $data['group_nama']);
 				fwrite($file,"</td><td>");
@@ -270,16 +271,6 @@ class C_produk_group extends Controller {
 				fwrite($file, $data['group_keterangan']);
 				fwrite($file,"</td><td>");
 				fwrite($file, $data['group_aktif']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['group_creator']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['group_date_create']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['group_update']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['group_date_update']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['group_revised']);
 				fwrite($file, "</td></tr>");
 			}
 		}

@@ -172,20 +172,21 @@ class C_kategori2 extends Controller {
 		$totcolumn=10;
    		/* We now have our array, let's build our HTML file */
 		$file = fopen("kategori2list.html",'w');
-		fwrite($file, "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' /><title>Printing the kategori2 Grid</title><link rel='stylesheet' type='text/css' href='assets/modules/main/css/printstyle.css'/></head>");
-		fwrite($file, "<body><table summary='kategori2 List'><caption>KATEGORI2</caption><thead><tr><th scope='col'>Kategori2 Id</th><th scope='col'>Kategori2 Nama</th><th scope='col'>Kategori2 Jenis</th><th scope='col'>Kategori2 Keterangan</th><th scope='col'>Kategori2 Aktif</th><th scope='col'>Kategori2 Creator</th><th scope='col'>Kategori2 Date Create</th><th scope='col'>Kategori2 Update</th><th scope='col'>Kategori2 Date Update</th><th scope='col'>Kategori2 Revised</th></tr></thead><tfoot><tr><th scope='row'>Total</th><td colspan='$totcolumn'>");
+		fwrite($file, "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' /><title>Printing the Contribution Category Grid</title><link rel='stylesheet' type='text/css' href='assets/modules/main/css/printstyle.css'/></head>");
+		fwrite($file, "<body><table summary='kategori2 List'><caption>CONTRIBUTION CATEGORY</caption><thead><tr><th scope='col'>Id</th><th scope='col'>Nama</th><th scope='col'>Jenis</th><th scope='col'>Keterangan</th><th scope='col'>Aktif</th></tr></thead><tfoot><tr><th scope='row'>Total</th><td colspan='$totcolumn'>");
 		fwrite($file, $nbrows);
 		fwrite($file, " kategori2</td></tr></tfoot><tbody>");
 		$i=0;
 		if($nbrows>0){
 			foreach($result->result_array() as $data){
+				$i++;
 				fwrite($file,'<tr');
 				if($i%1==0){
 					fwrite($file," class='odd'");
 				}
 			
 				fwrite($file, "><th scope='row' id='r97'>");
-				fwrite($file, $data['kategori2_id']);
+				fwrite($file, $i);
 				fwrite($file,"</th><td>");
 				fwrite($file, $data['kategori2_nama']);
 				fwrite($file,"</td><td>");
@@ -194,16 +195,6 @@ class C_kategori2 extends Controller {
 				fwrite($file, $data['kategori2_keterangan']);
 				fwrite($file,"</td><td>");
 				fwrite($file, $data['kategori2_aktif']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['kategori2_creator']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['kategori2_date_create']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['kategori2_update']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['kategori2_date_update']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['kategori2_revised']);
 				fwrite($file, "</td></tr>");
 			}
 		}

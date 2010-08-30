@@ -200,20 +200,21 @@ class C_kategori extends Controller {
 		$totcolumn=10;
    		/* We now have our array, let's build our HTML file */
 		$file = fopen("kategorilist.html",'w');
-		fwrite($file, "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' /><title>Printing the Kategori Grid</title><link rel='stylesheet' type='text/css' href='assets/modules/main/css/printstyle.css'/></head>");
-		fwrite($file, "<body><table summary='Kategori List'><caption>KATEGORI</caption><thead><tr><th scope='col'>Kategori Id</th><th scope='col'>Kategori Nama</th><th scope='col'>Kategori Jenis</th><th scope='col'>Kategori Keterangan</th><th scope='col'>Kategori Aktif</th><th scope='col'>Kategori Creator</th><th scope='col'>Kategori Date Create</th><th scope='col'>Kategori Update</th><th scope='col'>Kategori Date Update</th><th scope='col'>Kategori Revised</th></tr></thead><tfoot><tr><th scope='row'>Total</th><td colspan='$totcolumn'>");
+		fwrite($file, "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' /><title>Printing Daftar Jenis</title><link rel='stylesheet' type='text/css' href='assets/modules/main/css/printstyle.css'/></head>");
+		fwrite($file, "<body><table summary='Kategori List'><caption>DAFTAR JENIS</caption><thead><tr><th scope='col'>Id</th><th scope='col'>Nama</th><th scope='col'>Jenis</th><th scope='col'>Keterangan</th><th scope='col'>Aktif</th></tr></thead><tfoot><tr><th scope='row'>Total</th><td colspan='$totcolumn'>");
 		fwrite($file, $nbrows);
-		fwrite($file, " Kategori</td></tr></tfoot><tbody>");
+		fwrite($file, " Daftar Jenis</td></tr></tfoot><tbody>");
 		$i=0;
 		if($nbrows>0){
 			foreach($result->result_array() as $data){
+			$i++;
 				fwrite($file,'<tr');
 				if($i%1==0){
 					fwrite($file," class='odd'");
 				}
 			
 				fwrite($file, "><th scope='row' id='r97'>");
-				fwrite($file, $data['kategori_id']);
+				fwrite($file, $i);
 				fwrite($file,"</th><td>");
 				fwrite($file, $data['kategori_nama']);
 				fwrite($file,"</td><td>");
@@ -222,16 +223,6 @@ class C_kategori extends Controller {
 				fwrite($file, $data['kategori_keterangan']);
 				fwrite($file,"</td><td>");
 				fwrite($file, $data['kategori_aktif']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['kategori_creator']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['kategori_date_create']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['kategori_update']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['kategori_date_update']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['kategori_revised']);
 				fwrite($file, "</td></tr>");
 			}
 		}

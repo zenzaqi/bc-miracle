@@ -351,19 +351,20 @@ class C_supplier extends Controller {
    		/* We now have our array, let's build our HTML file */
 		$file = fopen("supplierlist.html",'w');
 		fwrite($file, "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' /><title>Printing the Supplier Grid</title><link rel='stylesheet' type='text/css' href='assets/modules/main/css/printstyle.css'/></head>");
-		fwrite($file, "<body><table summary='Supplier List'><caption>SUPPLIER</caption><thead><tr><th scope='col'>Supplier Id</th><th scope='col'>Supplier Kategori</th><th scope='col'>Supplier Group</th><th scope='col'>Supplier Nama</th><th scope='col'>Supplier Alamat</th><th scope='col'>Supplier Kota</th><th scope='col'>Supplier Kodepos</th><th scope='col'>Supplier Propinsi</th><th scope='col'>Supplier Negara</th><th scope='col'>Supplier Notelp</th><th scope='col'>Supplier Notelp2</th><th scope='col'>Supplier Nofax</th><th scope='col'>Supplier Email</th><th scope='col'>Supplier Website</th><th scope='col'>Supplier Cp</th><th scope='col'>Supplier Contact Cp</th><th scope='col'>Supplier Aktif</th><th scope='col'>Supplier Creator</th><th scope='col'>Supplier Date Create</th><th scope='col'>Supplier Update</th><th scope='col'>Supplier Date Update</th><th scope='col'>Supplier Revised</th></tr></thead><tfoot><tr><th scope='row'>Total</th><td colspan='$totcolumn'>");
+		fwrite($file, "<body><table summary='Supplier List'><caption>DAFTAR SUPPLIER</caption><thead><tr><th scope='col'>No</th><th scope='col'>Kategori</th><th scope='col'>Nama</th><th scope='col'>Alamat</th><th scope='col'>Kota</th><th scope='col'>Kode Pos</th><th scope='col'>Propinsi</th><th scope='col'>Negara</th><th scope='col'>No.Telp.</th><th scope='col'>No.Telp.2</th><th scope='col'>No.Fax</th><th scope='col'>Email</th><th scope='col'>Website</th><th scope='col'>Contact Person</th><th scope='col'>Telp. Contact Person</th><th scope='col'>Aktif</th></tr></thead><tfoot><tr><th scope='row'>Total</th><td colspan='$totcolumn'>");
 		fwrite($file, $nbrows);
 		fwrite($file, " Supplier</td></tr></tfoot><tbody>");
 		$i=0;
 		if($nbrows>0){
 			foreach($result->result_array() as $data){
+				$i++;
 				fwrite($file,'<tr');
 				if($i%1==0){
 					fwrite($file," class='odd'");
 				}
 			
 				fwrite($file, "><th scope='row' id='r97'>");
-				fwrite($file, $data['supplier_id']);
+				fwrite($file, $i);
 				fwrite($file,"</th><td>");
 				fwrite($file, $data['supplier_kategori']);
 				fwrite($file,"</td><td>");
@@ -394,16 +395,6 @@ class C_supplier extends Controller {
 				fwrite($file, $data['supplier_contact_cp']);
 				fwrite($file,"</td><td>");
 				fwrite($file, $data['supplier_aktif']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['supplier_creator']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['supplier_date_create']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['supplier_update']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['supplier_date_update']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['supplier_revised']);
 				fwrite($file, "</td></tr>");
 			}
 		}

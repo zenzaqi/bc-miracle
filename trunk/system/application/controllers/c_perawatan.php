@@ -357,25 +357,45 @@ class C_perawatan extends Controller {
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$result = $this->m_perawatan->perawatan_print($rawat_id ,$rawat_kode ,$rawat_kodelama ,$rawat_nama ,$rawat_group ,$rawat_kategori ,$rawat_jenis ,$rawat_keterangan ,$rawat_du ,$rawat_dm ,$rawat_point ,$rawat_kredit, $rawat_jumlah_tindakan, $rawat_harga ,$rawat_gudang ,$rawat_aktif ,$option,$filter);
+		$this->load->database();
+		$result = $this->m_perawatan->perawatan_print($rawat_id 
+													,$rawat_kode 
+													,$rawat_kodelama 
+													,$rawat_nama 
+													,$rawat_group 
+													,$rawat_kategori 
+													,$rawat_jenis 
+													,$rawat_keterangan 
+													,$rawat_du 
+													,$rawat_dm 
+													,$rawat_point 
+													,$rawat_kredit
+													,$rawat_jumlah_tindakan
+													,$rawat_harga 
+													,$rawat_gudang 
+													,$rawat_aktif 
+													,$option
+													,$filter);
+		$this->firephp->log($result, 'result');
 		$nbrows=$result->num_rows();
 		$totcolumn=17;
    		/* We now have our array, let's build our HTML file */
 		$file = fopen("perawatanlist.html",'w');
 		fwrite($file, "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' /><title>Printing the Perawatan Grid</title><link rel='stylesheet' type='text/css' href='assets/modules/main/css/printstyle.css'/></head>");
-		fwrite($file, "<body><table summary='Perawatan List'><caption>PERAWATAN</caption><thead><tr><th scope='col'>Rawat Id</th><th scope='col'>Rawat Kode</th><th scope='col'>Rawat Kode Lama</th><th scope='col'>Rawat Nama</th><th scope='col'>Rawat Group</th><th scope='col'>Rawat Kategori</th><th scope='col'>Rawat Jenis</th><th scope='col'>Rawat Keterangan</th><th scope='col'>Rawat Du</th><th scope='col'>Rawat Dm</th><th scope='col'>Rawat Point</th><th scope='col'>Rawat Harga</th><th scope='col'>Rawat Gudang</th><th scope='col'>Rawat Aktif</th><th scope='col'>Rawat Creator</th><th scope='col'>Rawat Date Create</th><th scope='col'>Rawat Update</th><th scope='col'>Rawat Date Update</th><th scope='col'>Rawat Revised</th></tr></thead><tfoot><tr><th scope='row'>Total</th><td colspan='$totcolumn'>");
+		fwrite($file, "<body><table summary='Perawatan List'><caption>DAFTAR PERAWATAN</caption><thead><tr><th scope='col'>No</th><th scope='col'>Kode</th><th scope='col'>Kode Lama</th><th scope='col'>Nama Perawatan</th><th scope='col'>Group1</th><th scope='col'>Group2</th><th scope='col'>Jenis</th><th scope='col'>DU(%)</th><th scope='col'>DM(%)</th><th scope='col'>Point</th><th scope='col'>Kredit</th><th scope='col'>Harga(Rp)</th><th scope='col'>Gudang</th><th scope='col'>Aktif</th></tr></thead><tfoot><tr><th scope='row'>Total</th><td colspan='$totcolumn'>");
 		fwrite($file, $nbrows);
 		fwrite($file, " Perawatan</td></tr></tfoot><tbody>");
 		$i=0;
 		if($nbrows>0){
 			foreach($result->result_array() as $data){
+				$i++;
 				fwrite($file,'<tr');
 				if($i%1==0){
 					fwrite($file," class='odd'");
 				}
 			
 				fwrite($file, "><th scope='row' id='r97'>");
-				fwrite($file, $data['rawat_id']);
+				fwrite($file, $i);
 				fwrite($file,"</th><td>");
 				fwrite($file, $data['rawat_kode']);
 				fwrite($file,"</td><td>");
@@ -383,13 +403,11 @@ class C_perawatan extends Controller {
 				fwrite($file,"</td><td>");
 				fwrite($file, $data['rawat_nama']);
 				fwrite($file,"</td><td>");
-				fwrite($file, $data['rawat_group']);
+				fwrite($file, $data['group_nama']);
 				fwrite($file,"</td><td>");
-				fwrite($file, $data['rawat_kategori']);
+				fwrite($file, $data['rawat_kontribusi']);
 				fwrite($file,"</td><td>");
-				fwrite($file, $data['rawat_jenis']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['rawat_keterangan']);
+				fwrite($file, $data['kategori_nama']);
 				fwrite($file,"</td><td>");
 				fwrite($file, $data['rawat_du']);
 				fwrite($file,"</td><td>");
@@ -398,25 +416,25 @@ class C_perawatan extends Controller {
 				fwrite($file, $data['rawat_point']);
 				fwrite($file,"</td><td>");
 				fwrite($file, $data['rawat_kredit']);
+				// fwrite($file,"</td><td>");
+				// fwrite($file, $data['rawat_jumlah_tindakan']);
+				fwrite($file,"</td><td style=\"text-align:right\">");
+				fwrite($file, number_format($data['rawat_harga']));
 				fwrite($file,"</td><td>");
-				fwrite($file, $data['rawat_jumlah_tindakan']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['rawat_harga']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['rawat_gudang']);
+				fwrite($file, $data['gudang_nama']);
 				fwrite($file,"</td><td>");
 				fwrite($file, $data['rawat_aktif']);
 				fwrite($file, "</td></tr>");
-				fwrite($file, $data['rawat_creator']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['rawat_date_create']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['rawat_update']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['rawat_date_update']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['rawat_revised']);
-				fwrite($file, "</td></tr>");
+				// fwrite($file, $data['rawat_creator']);
+				// fwrite($file, "</td></tr>");
+				// fwrite($file, $data['rawat_date_create']);
+				// fwrite($file, "</td></tr>");
+				// fwrite($file, $data['rawat_update']);
+				// fwrite($file, "</td></tr>");
+				// fwrite($file, $data['rawat_date_update']);
+				// fwrite($file, "</td></tr>");
+				// fwrite($file, $data['rawat_revised']);
+				// fwrite($file, "</td></tr>");
 			}
 		}
 		fwrite($file, "</tbody></table></body></html>");	

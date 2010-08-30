@@ -636,14 +636,38 @@ class M_perawatan extends Model{
 		}
 		
 		//function for print record
-		function perawatan_print($rawat_id ,$rawat_kode ,$rawat_kodelama ,$rawat_nama ,$rawat_group ,$rawat_kategori ,$rawat_jenis ,$rawat_keterangan ,$rawat_du ,$rawat_dm ,$rawat_point ,$rawat_harga ,$rawat_gudang ,$rawat_aktif ,$option,$filter){
+		function perawatan_print($rawat_id 
+								,$rawat_kode 
+								,$rawat_kodelama 
+								,$rawat_nama 
+								,$rawat_group 
+								,$rawat_kategori 
+								,$rawat_jenis 
+								,$rawat_keterangan 
+								,$rawat_du 
+								,$rawat_dm 
+								,$rawat_point 
+								,$rawat_kredit
+								,$rawat_jumlah_tindakan
+								,$rawat_harga 
+								,$rawat_gudang 
+								,$rawat_aktif 
+								,$option
+								,$filter){
 			//full query
-			$query="select * from perawatan";
+			// $result;
+			// $this->load->database();
+			//$this->firephp->log($option, 'option');
+			$query="select * from vu_perawatan";
 			if($option=='LIST'){
+				//$this->firephp->log('LIST');
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 				$query .= " (rawat_id LIKE '%".addslashes($filter)."%' OR rawat_kode LIKE '%".addslashes($filter)."%' OR rawat_kodelama LIKE '%".addslashes($filter)."%' OR rawat_nama LIKE '%".addslashes($filter)."%' OR rawat_group LIKE '%".addslashes($filter)."%' OR rawat_kategori LIKE '%".addslashes($filter)."%' OR rawat_jenis LIKE '%".addslashes($filter)."%' OR rawat_keterangan LIKE '%".addslashes($filter)."%' OR rawat_du LIKE '%".addslashes($filter)."%' OR rawat_dm LIKE '%".addslashes($filter)."%' OR rawat_point LIKE '%".addslashes($filter)."%' OR rawat_harga LIKE '%".addslashes($filter)."%' OR rawat_gudang LIKE '%".addslashes($filter)."%' OR rawat_aktif LIKE '%".addslashes($filter)."%' )";
 				$result = $this->db->query($query);
+				return $result;
+
 			} else if($option=='SEARCH'){
+				//$this->firephp->log('SEARCH');
 				if($rawat_id!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " rawat_id LIKE '%".$rawat_id."%'";
@@ -701,8 +725,10 @@ class M_perawatan extends Model{
 					$query.= " rawat_aktif LIKE '%".$rawat_aktif."%'";
 				};
 				$result = $this->db->query($query);
+				return $result;
+				
 			}
-			return $result;
+
 		}
 		
 		//function  for export to excel

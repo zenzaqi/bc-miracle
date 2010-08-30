@@ -467,19 +467,20 @@ class C_karyawan extends Controller {
    		/* We now have our array, let's build our HTML file */
 		$file = fopen("karyawanlist.html",'w');
 		fwrite($file, "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' /><title>Printing the Karyawan Grid</title><link rel='stylesheet' type='text/css' href='assets/modules/main/css/printstyle.css'/></head>");
-		fwrite($file, "<body><table summary='Karyawan List'><caption>KARYAWAN</caption><thead><tr><th scope='col'>Karyawan Id</th><th scope='col'>Karyawan No</th><th scope='col'>Karyawan Npwp</th><th scope='col'>Karyawan Username</th><th scope='col'>Karyawan Nama</th><th scope='col'>Karyawan Kelamin</th><th scope='col'>Karyawan Tgllahir</th><th scope='col'>Karyawan Alamat</th><th scope='col'>Karyawan Kota</th><th scope='col'>Karyawan Kodepos</th><th scope='col'>Karyawan Email</th><th scope='col'>Karyawan Email Miracle</th><th scope='col'>Karyawan Keterangan</th><th scope='col'>Karyawan Notelp</th><th scope='col'>Karyawan Notelp2</th><th scope='col'>Karyawan Notelp3</th><th scope='col'>Karyawan Cabang</th><th scope='col'>Karyawan Jabatan</th><th scope='col'>Karyawan Departemen</th><th scope='col'>Karyawan Golongan</th><th scope='col'>Karyawan Tglmasuk</th><th scope='col'>Karyawan Atasan</th><th scope='col'>Karyawan Aktif</th><th scope='col'>Karyawan Creator</th><th scope='col'>Karyawan Date Create</th><th scope='col'>Karyawan Update</th><th scope='col'>Karyawan Date Update</th><th scope='col'>Karyawan Revised</th></tr></thead><tfoot><tr><th scope='row'>Total</th><td colspan='$totcolumn'>");
+		fwrite($file, "<body><table summary='Karyawan List'><caption>DAFTAR KARYAWAN</caption><thead><tr><th scope='col'>No</th><th scope='col'>No</th><th scope='col'>NPWP</th><th scope='col'>Username</th><th scope='col'>Nama</th><th scope='col'>Kelamin</th><th scope='col'>Tgl.lahir</th><th scope='col'>Alamat</th><th scope='col'>Kota</th><th scope='col'>Kodepos</th><th scope='col'>Email</th><th scope='col'>Email Miracle</th><th scope='col'>Keterangan</th><th scope='col'>No.telp</th><th scope='col'>No.telp.2</th><th scope='col'>No.telp.3</th><th scope='col'>Cabang</th><th scope='col'>Jabatan</th><th scope='col'>Departemen</th><th scope='col'>Golongan</th><th scope='col'>Tgl.masuk</th><th scope='col'>Atasan</th><th scope='col'>Aktif</th></tr></thead><tfoot><tr><th scope='row'>Total</th><td colspan='$totcolumn'>");
 		fwrite($file, $nbrows);
 		fwrite($file, " Karyawan</td></tr></tfoot><tbody>");
 		$i=0;
 		if($nbrows>0){
 			foreach($result->result_array() as $data){
+				$i++;
 				fwrite($file,'<tr');
 				if($i%1==0){
 					fwrite($file," class='odd'");
 				}
 			
 				fwrite($file, "><th scope='row' id='r97'>");
-				fwrite($file, $data['karyawan_id']);
+				fwrite($file, $i);
 				fwrite($file,"</th><td>");
 				fwrite($file, $data['karyawan_no']);
 				fwrite($file,"</td><td>");
@@ -524,16 +525,6 @@ class C_karyawan extends Controller {
 				fwrite($file, $data['karyawan_atasan']);
 				fwrite($file,"</td><td>");
 				fwrite($file, $data['karyawan_aktif']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['karyawan_creator']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['karyawan_date_create']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['karyawan_update']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['karyawan_date_update']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['karyawan_revised']);
 				fwrite($file, "</td></tr>");
 			}
 		}
