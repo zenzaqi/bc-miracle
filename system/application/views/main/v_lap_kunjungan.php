@@ -96,8 +96,10 @@ var lap_kunjunganDataStore;
 var lap_totalkunjungan_DataStore;
 var lap_kunjunganColumnModel;
 var lap_totalkunjungan_nonColumnModel;
+var lap_averageColumnModel;
 var lap_kunjunganListEditorGrid;
 var lap_kunjunganListEditorGrid2;
+var lap_kunjungan_averageListEditorGrid;
 var lap_kunjungan_searchForm;
 var lap_kunjungan_searchWindow;
 var lap_kunjunganSelectedRow;
@@ -182,6 +184,32 @@ Ext.onReady(function(){
 		//sortInfo:{field: 'tindakan_dokter', direction: "DESC"}
 	});
 	/* End of Function */
+	
+	/* Function for average  data store */ 
+	lap_average_kunjungan_DataStore = new Ext.data.Store({
+		id: 'lap_average_kunjungan_DataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_lap_kunjungan&m=get_action', 
+			method: 'POST'
+		}),
+		baseParams:{task: "LIST3",start:0,limit:31}, // parameter yang di $_POST ke Controller
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total'
+			
+		},[
+		/* dataIndex => insert intolap_kunjunganColumnModel, Mapping => for initiate table column */ 
+			{name: 'dtrawat_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'dtrawat_date_create'},
+			{name: 'dtrawat_id', type: 'int', mapping: 'dtrawat_id'},
+			{name: 'avg_jum_total', type: 'float', mapping: 'sum(jum_total)/count(distinct tgl_tindakan)'},
+			{name: 'avg_jum_cust_medis', type: 'float', mapping: 'sum(jum_cust_medis)/count(distinct tgl_tindakan)'},
+			{name: 'avg_jum_cust_nonmedis', type: 'float', mapping: 'sum(jum_cust_nonmedis)/count(distinct tgl_tindakan)'},
+			{name: 'avg_jum_cust_produk', type: 'float', mapping: 'sum(jum_cust_produk)/count(distinct tgl_tindakan)'}
+		])
+		//sortInfo:{field: 'tindakan_dokter', direction: "DESC"}
+	});
+	/* End of Function */
+	
 
   	/* Function for Identify of Window Column Model */
 	lap_kunjunganColumnModel = new Ext.grid.ColumnModel(
@@ -232,10 +260,10 @@ Ext.onReady(function(){
 		[
 		{	
 			align : 'Right',
-			//header: '<div align="center">' + '' + '</div>',
+			header: '<div align="center">' + '<span style="font-weight:bold">Grand Total</span>' + '</div>',
 			dataIndex: '',
 			//hidden : true,
-			disabled : true,
+			disabled : false,
 			width: 100,	//55,
 			//sortable: true
 		},
@@ -272,6 +300,55 @@ Ext.onReady(function(){
 		]);
 	
 	lap_totalkunjungan_nonColumnModel.defaultSortable= true;
+	
+	
+	lap_averageColumnModel = new Ext.grid.ColumnModel(
+		[
+		{	
+			align : 'Right',
+			header: '<div align="center">' + '<span style="font-weight:bold">Average</span>' + '</div>',
+			dataIndex: '',
+			//hidden : true,
+			disabled : false,
+			width: 100,	//55,
+			//sortable: true
+		},
+		{	
+			align : 'Right',
+			header: '<div align="center">' + 'Medis' + '</div>',
+			dataIndex: 'avg_jum_cust_medis',
+			width: 80,	//55,
+			sortable: true
+		},
+		{	
+			align : 'Right',
+			header: '<div align="center">' + 'Non Medis' + '</div>',
+			dataIndex: 'avg_jum_cust_nonmedis',
+			width: 80,	//55,
+			sortable: true
+		},
+		
+		{	
+			align : 'Right',
+			header: '<div align="center">' + 'Produk' + '</div>',
+			dataIndex: 'avg_jum_cust_produk',
+			width: 80,	//55,
+			sortable: true
+		},
+		
+		{	
+			align : 'Right',
+			header: '<div align="center">' + 'Average' + '</div>',
+			dataIndex: 'avg_jum_total',
+			width: 80,	//55,
+			sortable: true
+		},
+		]);
+	
+	lap_averageColumnModel.defaultSortable= true;
+	
+	
+	
 	/* End of Function */
 
 	/* Declare DataStore and  show datagrid list */
@@ -332,12 +409,30 @@ Ext.onReady(function(){
 		//clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 500, //940,//1200,	//970,
+	  	width: 500,
 	
 		/* Add Control on ToolBar */
 	
 	});
 	lap_kunjunganListEditorGrid2.render();
+	
+	lap_kunjungan_averageListEditorGrid =  new Ext.grid.EditorGridPanel({
+		id: 'lap_kunjungan_averageListEditorGrid',
+		el: 'fp_lap_kunjungan_average',
+		title: '',
+		autoHeight: true,
+		store: lap_average_kunjungan_DataStore, // DataStore
+		cm: lap_averageColumnModel, // Nama-nama Columns
+		enableColLock:false,
+		frame: true,
+		//clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
+		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
+		viewConfig: { forceFit:true },
+	  	width: 500, 
+
+	});
+	lap_kunjungan_averageListEditorGrid.render();
+	
 	
 	/* Create Context Menu */
 	lap_kunjunganContextMenu = new Ext.menu.Menu({
@@ -373,6 +468,7 @@ Ext.onReady(function(){
 	lap_kunjunganListEditorGrid.addListener('rowcontextmenu', onlap_kunjungan_ListEditGridContextMenu);
 	lap_kunjunganDataStore.load({params: {start: 0, limit: 31}});
 	lap_totalkunjungan_DataStore.load({params: {start: 0, limit: 31}});	// load DataStore
+	lap_average_kunjungan_DataStore.load({params: {start: 0, limit: 31}});	// load DataStore
 	//lap_kunjunganListEditorGrid.on('afteredit', tindakan_medis_update); // inLine Editing Record
 	
 	/*Detail Declaration */	
@@ -421,9 +517,19 @@ Ext.onReady(function(){
 			trawat_tglapp_end	: 	lap_kunjungan_tgl_end_search
 			//trawat_dokter	:	report_tindakan_dokter_search,
 		};
+		lap_average_kunjungan_DataStore.baseParams = {
+			task: 'SEARCH3',
+			//variable here
+			lap_kunjungan_id	:	lap_kunjungan_id_search, 
+			trawat_tglapp_start	: 	lap_kunjungan_tgl_start_search,
+			trawat_tglapp_end	: 	lap_kunjungan_tgl_end_search
+			//trawat_dokter	:	report_tindakan_dokter_search,
+		};
+		
 		// Cause the datastore to do another query : 
 		lap_kunjunganDataStore.reload({params: {start: 0, limit: 31}});
 		lap_totalkunjungan_DataStore.reload({params: {start: 0, limit: 31}});
+		lap_average_kunjungan_DataStore.reload({params: {start: 0, limit: 31}});
 		}
 		else {
 			Ext.MessageBox.show({
@@ -669,6 +775,7 @@ Ext.onReady(function(){
 	<div class="col">
         <div id="fp_lap_kunjungan"></div>
 		 <div id="fp_lap_kunjungan2"></div>
+		 <div id="fp_lap_kunjungan_average"></div>
          <div id="fp_lap_kunjungan_detail"></div>
 		 <div id="fp_dlap_kunjungan"></div>
 		<div id="elwindow_lap_kunjungan_create"></div>
