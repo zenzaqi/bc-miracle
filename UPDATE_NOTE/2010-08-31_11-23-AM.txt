@@ -1,0 +1,7 @@
+[by zaqi.smart@gmail.com]
+
+o> Update
+   - Laporan Tindakan Medis
+     o Opsi : [Tanggal, CUstomer, Dokter, Perawatan, Status]
+   - URL : ?c=c_tindakan_medis&m=laporan
+
