@@ -43,10 +43,6 @@ class M_tindakan_medis extends Model{
 		return $query->result();
 	}
 		
-		
-		
-	
-	
 	function global_customer_check_paket($cust_id, $rawat_id){
 		//$return_row_punya_paket = 0;
 		//* Mencari kepemilikan paket berdasarkan customer_id /

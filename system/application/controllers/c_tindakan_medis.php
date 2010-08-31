@@ -65,7 +65,7 @@ class C_tindakan_medis extends Controller {
 			case "Perawatan": $print_view=$this->load->view("main/p_detail_tmedis_perawatan.php",$data,TRUE);break;
 			case "Dokter": $print_view=$this->load->view("main/p_detail_tmedis_dokter.php",$data,TRUE);break;
 			case "Status": $print_view=$this->load->view("main/p_detail_tmedis_status.php",$data,TRUE);break;
-			default: $print_view=$this->load->view("main/p_detail_temdis_tanggal.php",$data,TRUE);break;
+			default: $print_view=$this->load->view("main/p_detail_tmedis_tanggal.php",$data,TRUE);break;
 		}
 		
 		$print_file=fopen("print/report_tindakan_medis.html","w");

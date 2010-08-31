@@ -18,6 +18,32 @@ class M_tindakan_nonmedis extends Model{
 		parent::Model();
 	}
 	
+	function get_laporan($tgl_awal,$tgl_akhir,$periode,$group){
+			
+		switch($group){
+			case "Tanggal": $order_by=" ORDER BY dtrawat_tglapp ASC";break;
+			case "Customer": $order_by=" ORDER BY trawat_cust ASC";break;
+			case "Perawatan": $order_by=" ORDER BY dtrawat_perawatan ASC";break;
+			case "Terapis": $order_by=" ORDER BY terapis_id ASC";break;
+			case "Status": $order_by=" ORDER BY dtrawat_status ASC";break;
+			default: $order_by=" ORDER BY dtrawat_tglapp ASC";break;
+		}
+			
+		if($periode=='all')
+			$sql="SELECT *,date_format(dtrawat_tglapp,'%Y-%m-%d') as dtrawat_tglapp FROM vu_tindakan WHERE kategori_nama='Non Medis' ".$order_by;
+		else if($periode=='bulan')
+			$sql="SELECT *,date_format(dtrawat_tglapp,'%Y-%m-%d') as dtrawat_tglapp FROM vu_tindakan WHERE kategori_nama='Non Medis' 
+					AND date_format(dtrawat_tglapp,'%Y-%m')='".$tgl_awal."' ".$order_by;
+		else if($periode=='tanggal')
+			$sql="SELECT *,date_format(dtrawat_tglapp,'%Y-%m-%d') as dtrawat_tglapp FROM vu_tindakan WHERE  kategori_nama='Non Medis' 
+					AND date_format(dtrawat_tglapp,'%Y-%m-%d')>='".$tgl_awal."' 
+					AND date_format(dtrawat_tglapp,'%Y-%m-%d')<='".$tgl_akhir."' ".$order_by;
+
+		$query=$this->db->query($sql);
+		return $query->result();
+	}
+	
+	
 	function global_customer_check_paket($cust_id, $rawat_id){
 		//$return_row_punya_paket = 0;
 		//* Mencari kepemilikan paket berdasarkan customer_id /
