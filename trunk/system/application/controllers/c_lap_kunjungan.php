@@ -35,6 +35,9 @@ class C_lap_kunjungan extends Controller {
 			case "LIST2":
 				$this->lap_kunjungan_non_list();
 				break;
+			case "LIST3":
+				$this->lap_average_list();
+				break;
 			/*case "UPDATE":
 				$this->report_tindakan_update();
 				break;
@@ -49,6 +52,9 @@ class C_lap_kunjungan extends Controller {
 				break;
 			case "SEARCH2":
 				$this->lap_kunjungan_search2();
+				break;
+			case "SEARCH3":
+				$this->lap_kunjungan_search3();
 				break;
 			case "PRINT":
 				$this->lap_kunjungan_print();
@@ -81,6 +87,17 @@ class C_lap_kunjungan extends Controller {
 		$result=$this->m_lap_kunjungan->lap_kunjungan_non_list($query,$start,$end);
 		echo $result;
 	}
+	
+	function lap_average_list(){
+		
+		$query = isset($_POST['query']) ? $_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		$result=$this->m_lap_kunjungan->lap_average_list($query,$start,$end);
+		echo $result;
+	}
+	
+	
 
 	//function for advanced search
 	function lap_kunjungan_search(){
@@ -122,6 +139,27 @@ class C_lap_kunjungan extends Controller {
 		$result = $this->m_lap_kunjungan->lap_kunjungan_search2($lap_kunjungan_id ,$trawat_tglapp_start ,$trawat_tglapp_end ,$trawat_dokter ,$start,$end);
 		echo $result;
 	}
+	
+	function lap_kunjungan_search3(){
+		//POST varibale here
+		$lap_kunjungan_id=trim(@$_POST["lap_kunjungan_id"]);
+		if(trim(@$_POST["trawat_tglapp_start"])!="")
+			$trawat_tglapp_start=date('Y-m-d', strtotime(trim(@$_POST["trawat_tglapp_start"])));
+		else
+			$trawat_tglapp_start="";
+		if(trim(@$_POST["trawat_tglapp_end"])!="")
+			$trawat_tglapp_end=date('Y-m-d', strtotime(trim(@$_POST["trawat_tglapp_end"])));
+		else
+			$trawat_tglapp_end="";
+
+		$trawat_dokter=trim(@$_POST["trawat_dokter"]);
+		
+		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		$result = $this->m_lap_kunjungan->lap_kunjungan_search3($lap_kunjungan_id ,$trawat_tglapp_start ,$trawat_tglapp_end ,$trawat_dokter ,$start,$end);
+		echo $result;
+	}
+	
 	
 	function lap_kunjungan_print(){
   		//POST varibale here
