@@ -23,7 +23,7 @@ AS
           `produk`.`produk_date_create` AS `produk_date_create`,
           `produk`.`produk_update` AS `produk_update`,
           `produk`.`produk_date_update` AS `produk_date_update`,
-          `produk`.`produk_revised` AS `poduk_revised`,
+          `produk`.`produk_revised` AS `produk_revised`,
           `produk_group`.`group_id` AS `group_id`,
           `produk_group`.`group_kode` AS `group_kode`,
           `produk_group`.`group_nama` AS `group_nama`,
