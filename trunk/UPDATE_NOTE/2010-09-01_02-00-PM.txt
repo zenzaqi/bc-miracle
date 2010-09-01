@@ -1,0 +1,5 @@
+[by zaqi.smart@gmail.com]
+
+o> fix stok
+   - Jalankan query berikut :
+     o 2010-09-01_02-00-PM.sql
