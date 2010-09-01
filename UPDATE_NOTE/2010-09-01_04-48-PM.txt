@@ -1,0 +1,11 @@
+[by zaqi.smart@gmail.com]
+
+o> fix bug
+   - Mutasi Barang
+     + Add jumlah item detail
+     + efesiensi proses insert detail
+     + metadata log
+     + print faktur
+     + print list
+     + export excel list
+     + advanced search fixed

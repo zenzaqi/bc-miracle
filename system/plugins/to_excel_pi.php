@@ -28,13 +28,15 @@ function to_excel($query, $filename='exceloutput')
 			   $i=0;
                foreach($row as $value) {                                            
                     if ((!isset($value)) OR ($value == "")) {
-                         $value = "\t";
+                         $value = " \t";
                     } else {
                         $value = str_replace('"', '\"', $value);
 
 						if($ftype[$i]=="date")
 							$value=convertDate($value);
-                         $value = '' . strip_tags($value) . '' . "\t";
+                         
+						 $value = '' . strip_tags(html_entity_decode($value)) . '' . "\t";
+						
                     }
                     $line .= $value;
 					$i++;

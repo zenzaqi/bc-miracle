@@ -16,6 +16,7 @@ class C_master_mutasi extends Controller {
 	//constructor
 	function C_master_mutasi(){
 		parent::Controller();
+		session_start();
 		$this->load->model('m_master_mutasi', '', TRUE);
 	}
 	
@@ -28,6 +29,32 @@ class C_master_mutasi extends Controller {
 	
 	function laporan(){
 		$this->load->view('main/v_lap_mutasi');
+	}
+	
+	function print_faktur(){
+		
+		$faktur=(isset($_POST['faktur']) ? @$_POST['faktur'] : @$_GET['faktur']);
+		$opsi="faktur";
+        $result = $this->m_master_mutasi->get_laporan("","","",$opsi,"",$faktur);
+		$info = $this->m_public_function->get_info();
+		$master=$result->row();
+		$data['data_print'] = $result->result();
+		$data['info_nama'] = $info->info_nama;
+		$data['no_bukti'] = $master->mutasi_no;
+        $data['tanggal'] = $master->mutasi_tanggal;
+        $data['gudang_asal_nama'] = $master->gudang_asal_nama;
+		$data['gudang_tujuan_nama'] = $master->gudang_tujuan_nama;
+		$print_view=$this->load->view("main/p_faktur_mutasi.php",$data,TRUE);
+		
+		if(!file_exists("print")){
+			mkdir("print");
+		}
+		
+		$print_file=fopen("print/mutasi_faktur.html","w+");
+		
+		fwrite($print_file, $print_view);
+		echo '1'; 
+		
 	}
 	
 	function print_laporan(){
@@ -49,7 +76,7 @@ class C_master_mutasi extends Controller {
 			$data["periode"]="Periode ".$tgl_awal." s/d ".$tgl_akhir;
 		}
 		
-		$data["data_print"]=$this->m_master_mutasi->get_laporan($tgl_awal,$tgl_akhir,$periode,$opsi,$group);
+		$data["data_print"]=$this->m_master_mutasi->get_laporan($tgl_awal,$tgl_akhir,$periode,$opsi,$group,"");
 		if($opsi=='rekap'){
 				
 			switch($group){
@@ -151,7 +178,15 @@ class C_master_mutasi extends Controller {
 		$dmutasi_produk=trim(@$_POST["dmutasi_produk"]);
 		$dmutasi_satuan=trim(@$_POST["dmutasi_satuan"]);
 		$dmutasi_jumlah=trim(@$_POST["dmutasi_jumlah"]);
-		$result=$this->m_master_mutasi->detail_detail_mutasi_insert($dmutasi_id ,$dmutasi_master ,$dmutasi_produk ,$dmutasi_satuan ,$dmutasi_jumlah );
+		
+		$array_mutasi_id = json_decode(stripslashes($dmutasi_id));
+		$array_mutasi_produk = json_decode(stripslashes($dmutasi_produk));
+		$array_mutasi_satuan = json_decode(stripslashes($dmutasi_satuan));
+		$array_mutasi_jumlah = json_decode(stripslashes($dmutasi_jumlah));
+
+						
+		$result=$this->m_master_mutasi->detail_detail_mutasi_insert($array_mutasi_id ,$dmutasi_master ,$array_mutasi_produk ,
+																	$array_mutasi_satuan ,$array_mutasi_jumlah );
 	}
 	
 	
@@ -254,20 +289,21 @@ class C_master_mutasi extends Controller {
 	function master_mutasi_search(){
 		//POST varibale here
 		$mutasi_id=trim(@$_POST["mutasi_id"]);
+		$mutasi_no=trim(@$_POST["mutasi_no"]);
 		$mutasi_asal=trim(@$_POST["mutasi_asal"]);
 		$mutasi_tujuan=trim(@$_POST["mutasi_tujuan"]);
-		$mutasi_tanggal=trim(@$_POST["mutasi_tanggal"]);
+		$mutasi_tgl_awal=trim(@$_POST["mutasi_tgl_awal"]);
+		$mutasi_tgl_akhir=trim(@$_POST["mutasi_tgl_akhir"]);
 		$mutasi_keterangan=trim(@$_POST["mutasi_keterangan"]);
 		$mutasi_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$mutasi_keterangan);
 		$mutasi_keterangan=str_replace("'", '"',$mutasi_keterangan);
 		
 		$mutasi_status=trim(@$_POST["mutasi_status"]);
-		$mutasi_status=str_replace("/(<\/?)(p)([^>]*>)", "",$mutasi_status);
-		$mutasi_status=str_replace("'", '"',$mutasi_status);
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_master_mutasi->master_mutasi_search($mutasi_id ,$mutasi_asal ,$mutasi_tujuan ,$mutasi_tanggal ,$mutasi_keterangan ,$mutasi_status, $start,$end);
+		$result = $this->m_master_mutasi->master_mutasi_search($mutasi_id ,  $mutasi_no, $mutasi_asal ,$mutasi_tujuan ,$mutasi_tgl_awal, 
+															   $mutasi_tgl_akhir ,$mutasi_keterangan ,$mutasi_status, $start,$end);
 		echo $result;
 	}
 
@@ -275,58 +311,30 @@ class C_master_mutasi extends Controller {
 	function master_mutasi_print(){
   		//POST varibale here
 		$mutasi_id=trim(@$_POST["mutasi_id"]);
+		$mutasi_no=trim(@$_POST["mutasi_no"]);
 		$mutasi_asal=trim(@$_POST["mutasi_asal"]);
 		$mutasi_tujuan=trim(@$_POST["mutasi_tujuan"]);
-		$mutasi_tanggal=trim(@$_POST["mutasi_tanggal"]);
+		$mutasi_tgl_awal=trim(@$_POST["mutasi_tgl_awal"]);
+		$mutasi_tgl_akhir=trim(@$_POST["mutasi_tgl_akhir"]);
 		$mutasi_keterangan=trim(@$_POST["mutasi_keterangan"]);
 		$mutasi_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$mutasi_keterangan);
 		$mutasi_keterangan=str_replace("'", '"',$mutasi_keterangan);
+		$mutasi_status=trim(@$_POST["mutasi_status"]);
+		
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$result = $this->m_master_mutasi->master_mutasi_print($mutasi_id ,$mutasi_asal ,$mutasi_tujuan ,$mutasi_tanggal ,$mutasi_keterangan ,$option,$filter);
-		$nbrows=$result->num_rows();
-		$totcolumn=10;
-   		/* We now have our array, let's build our HTML file */
-		$file = fopen("master_mutasilist.html",'w');
-		fwrite($file, "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' /><title>Printing the Master_mutasi Grid</title><link rel='stylesheet' type='text/css' href='assets/modules/main/css/printstyle.css'/></head>");
-		fwrite($file, "<body><table summary='Master_mutasi List'><caption>MASTER_MUTASI</caption><thead><tr><th scope='col'>Mutasi Id</th><th scope='col'>Mutasi Asal</th><th scope='col'>Mutasi Tujuan</th><th scope='col'>Mutasi Tanggal</th><th scope='col'>Mutasi Keterangan</th><th scope='col'>Mutasi Creator</th><th scope='col'>Mutasi Date Create</th><th scope='col'>Mutasi Update</th><th scope='col'>Mutasi Date Update</th><th scope='col'>Mutasi Revised</th></tr></thead><tfoot><tr><th scope='row'>Total</th><td colspan='$totcolumn'>");
-		fwrite($file, $nbrows);
-		fwrite($file, " Master_mutasi</td></tr></tfoot><tbody>");
-		$i=0;
-		if($nbrows>0){
-			foreach($result->result_array() as $data){
-				fwrite($file,'<tr');
-				if($i%1==0){
-					fwrite($file," class='odd'");
-				}
-			
-				fwrite($file, "><th scope='row' id='r97'>");
-				fwrite($file, $data['mutasi_id']);
-				fwrite($file,"</th><td>");
-				fwrite($file, $data['mutasi_asal']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['mutasi_tujuan']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['mutasi_tanggal']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['mutasi_keterangan']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['mutasi_creator']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['mutasi_date_create']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['mutasi_update']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['mutasi_date_update']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['mutasi_revised']);
-				fwrite($file, "</td></tr>");
-			}
+		$data["data_print"] = $this->m_master_mutasi->master_mutasi_print($mutasi_id ,  $mutasi_no, $mutasi_asal ,$mutasi_tujuan ,$mutasi_tgl_awal, 
+															   $mutasi_tgl_akhir ,$mutasi_keterangan ,$mutasi_status, $option,$filter);
+		
+		$print_view=$this->load->view("main/p_list_mutasi.php",$data,TRUE);
+		if(!file_exists("print")){
+			mkdir("print");
 		}
-		fwrite($file, "</tbody></table></body></html>");	
-		fclose($file);
-		echo '1';        
+
+		$print_file=fopen("print/print_mutasilist.html","w+");	
+		fwrite($print_file, $print_view);
+		echo '1';      
 	}
 	/* End Of Function */
 
@@ -334,18 +342,23 @@ class C_master_mutasi extends Controller {
 	function master_mutasi_export_excel(){
 		//POST varibale here
 		$mutasi_id=trim(@$_POST["mutasi_id"]);
+		$mutasi_no=trim(@$_POST["mutasi_no"]);
 		$mutasi_asal=trim(@$_POST["mutasi_asal"]);
 		$mutasi_tujuan=trim(@$_POST["mutasi_tujuan"]);
-		$mutasi_tanggal=trim(@$_POST["mutasi_tanggal"]);
+		$mutasi_tgl_awal=trim(@$_POST["mutasi_tgl_awal"]);
+		$mutasi_tgl_akhir=trim(@$_POST["mutasi_tgl_akhir"]);
 		$mutasi_keterangan=trim(@$_POST["mutasi_keterangan"]);
 		$mutasi_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$mutasi_keterangan);
 		$mutasi_keterangan=str_replace("'", '"',$mutasi_keterangan);
+		$mutasi_status=trim(@$_POST["mutasi_status"]);
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$query = $this->m_master_mutasi->master_mutasi_export_excel($mutasi_id ,$mutasi_asal ,$mutasi_tujuan ,$mutasi_tanggal ,$mutasi_keterangan ,$option,$filter);
+		$query = $this->m_master_mutasi->master_mutasi_export_excel($mutasi_id ,  $mutasi_no, $mutasi_asal ,$mutasi_tujuan ,$mutasi_tgl_awal, 
+															   		$mutasi_tgl_akhir ,$mutasi_keterangan ,$mutasi_status,$option,$filter);
 		
-		to_excel($query,"master_mutasi"); 
+		$this->load->plugin("to_excel");
+		to_excel($query,"mutasi_list","Mutasi_List.xls"); 
 		echo '1';
 			
 	}
