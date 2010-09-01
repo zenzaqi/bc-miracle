@@ -86,71 +86,19 @@ var mutasi_statusSearchField;
 Ext.onReady(function(){
   	Ext.QuickTips.init();	/* Initiate quick tips icon */
   
-  	/* Function for Saving inLine Editing */
-	function master_mutasi_update(oGrid_event){
-		var mutasi_id_update_pk="";
-		var mutasi_no_update=null;
-		var mutasi_asal_update=null;
-		var mutasi_tujuan_update=null;
-		var mutasi_tanggal_update_date="";
-		var mutasi_keterangan_update=null;
-		var mutasi_status_update=null;
-
-		mutasi_id_update_pk = get_pk_id();
-		if(oGrid_event.record.data.mutasi_no!== null){mutasi_no_update = oGrid_event.record.data.mutasi_no;}
-		if(oGrid_event.record.data.mutasi_asal!== null){mutasi_asal_update = oGrid_event.record.data.mutasi_asal;}
-		if(oGrid_event.record.data.mutasi_tujuan!== null){mutasi_tujuan_update = oGrid_event.record.data.mutasi_tujuan;}
-	 	if(oGrid_event.record.data.mutasi_tanggal!== ""){mutasi_tanggal_update_date =oGrid_event.record.data.mutasi_tanggal.format('Y-m-d');}
-		if(oGrid_event.record.data.mutasi_keterangan!== null){mutasi_keterangan_update = oGrid_event.record.data.mutasi_keterangan;}
-		if(oGrid_event.record.data.mutasi_status!== null){mutasi_status_update = oGrid_event.record.data.mutasi_status;}
-
-		Ext.Ajax.request({  
-			waitMsg: 'Mohon tunggu...',
-			url: 'index.php?c=c_master_mutasi&m=get_action',
-			params: {
-				task					: "UPDATE",
-				mutasi_id				: mutasi_id_update_pk,
-				mutasi_no				: mutasi_no_update,
-				mutasi_asal				:mutasi_asal_update,  
-				mutasi_tujuan			:mutasi_tujuan_update,  
-				mutasi_tanggal			: mutasi_tanggal_update_date, 
-				mutasi_keterangan		:mutasi_keterangan_update,
-				mutasi_status			:mutasi_status_update
-			}, 
-			success: function(response){							
-				var result=eval(response.responseText);
-				if(result!==0){
-						Ext.MessageBox.alert(post2db+' OK','Data mutasi barang berhasil disimpan');
-						master_mutasi_createWindow.hide();
-				}else{
-						Ext.MessageBox.show({
-						   title: 'Warning',
-						   //msg: 'We could\'t not '+msg+' the Master_order_beli.',
-						   msg: 'Data mutasi barang tidak bisa disimpan',
-						   buttons: Ext.MessageBox.OK,
-						   animEl: 'save',
-						   icon: Ext.MessageBox.WARNING
-						});
-				}     
-			},
-			failure: function(response){
-				var result=response.responseText;
-				Ext.MessageBox.show({
-				   title: 'Error',
-				   msg: 'Could not connect to the database. retry later.',
-				   buttons: Ext.MessageBox.OK,
-				   animEl: 'database',
-				   icon: Ext.MessageBox.ERROR
-				});	
-			}									    
-		});   
-	}
-  	/* End of Function */
-  
-  	/* Function for add data, open window create form */
-	function master_mutasi_create(){
+   	/* Function for add data, open window create form */
+	function master_mutasi_create(opsi){
 	
-		if(is_master_mutasi_form_valid()){	
+		if(detail_mutasi_DataStore.getCount()<1){
+			Ext.MessageBox.show({
+				title: 'Warning',
+				msg: 'Data detail harus ada minimal 1 (satu)',
+				buttons: Ext.MessageBox.OK,
+				animEl: 'save',
+				icon: Ext.MessageBox.WARNING
+			});
+		}else if(is_master_mutasi_form_valid()){	
+		
 		var mutasi_id_create_pk=null; 
 		var mutasi_no_create=null;
 		var mutasi_asal_create=null; 
@@ -183,7 +131,7 @@ Ext.onReady(function(){
 			success: function(response){             
 				var result=eval(response.responseText);
 				if(result!==0){
-						detail_mutasi_purge(result);
+						detail_mutasi_insert(result,opsi);
 						Ext.MessageBox.alert(post2db+' OK','Data mutasi barang berhasil disimpan');
 						master_mutasi_createWindow.hide();
 				}else{
@@ -460,7 +408,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'gudang_id'
 		},[
-		/* dataIndex => insert intocustomer_note_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'mutasi_gudang_value', type: 'int', mapping: 'gudang_id'},
 			{name: 'mutasi_gudang_nama', type: 'string', mapping: 'gudang_nama'}
 		]),
@@ -469,25 +416,13 @@ Ext.onReady(function(){
     
   	/* Function for Identify of Window Column Model */
 	master_mutasi_ColumnModel = new Ext.grid.ColumnModel(
-		[{
-			header: '#',
-			readOnly: true,
-			dataIndex: 'mutasi_id',
-			width: 40,
-			renderer: function(value, cell){
-				cell.css = "readonlycell"; // Mengambil Value dari Class di dalam CSS 
-				return value;
-				},
-			hidden: true
-		},
+		[
 		{
 			header: '<div align="center">' + 'No MB' + '</div>',
 			dataIndex: 'mutasi_no',
 			width: 60,	//150,
 			sortable: true,
-			editor: new Ext.form.TextField({
-				maxLength: 50
-          	})
+			readOnly: true
 		}, 
 		
 		{
@@ -496,9 +431,7 @@ Ext.onReady(function(){
 			width: 60,	//150,
 			sortable: true,
 			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
-			editor: new Ext.form.DateField({
-				format: 'd-m-Y'
-			})
+			readOnly: true
 		},
 		{
 			header: '<div align="center">Gudang Asal</div>',
@@ -528,17 +461,14 @@ Ext.onReady(function(){
 			dataIndex: 'mutasi_keterangan',
 			width: 200,	//150,
 			sortable: true,
-			editor: new Ext.form.TextField({
-				maxLength: 500
-          	})
+			readOnly: true
 		}, 
-		
 		{
 			header: '<div align="center">' + 'Stat Dok' + '</div>',
 			dataIndex: 'mutasi_status',
-			width: 60
+			width: 60,
+			readOnly: true
 		}, 
-		
 		{
 			header: 'Creator',
 			dataIndex: 'mutasi_creator',
@@ -669,7 +599,7 @@ Ext.onReady(function(){
 		{ 
 			text: 'Edit', tooltip: 'Edit selected record', 
 			iconCls:'icon-update',
-			handler: master_mutasi_editContextMenu 
+			handler: master_mutasi_confirm_update  
 		},
 		{ 
 			text: 'Delete', 
@@ -708,7 +638,8 @@ Ext.onReady(function(){
 	
 	/* function for editing row via context menu */
 	function master_mutasi_editContextMenu(){
-		master_mutasiListEditorGrid.startEditing(master_mutasi_SelectedRow,1);
+		master_mutasi_confirm_update()
+		//master_mutasiListEditorGrid.startEditing(master_mutasi_SelectedRow,1);
   	}
 	/* End of Function */
   	
@@ -782,15 +713,24 @@ Ext.onReady(function(){
 	});
 	
 	/* Identify  order_bayar Field */
-	mutasi_totaljumlahField= new Ext.form.NumberField({
+	mutasi_totaljumlahField= new Ext.form.TextField({
 		id: 'mutasi_totaljumlahField',
-		fieldLabel: 'Jumlah Total',
-		allowNegatife : false,
+		fieldLabel: 'Jumlah Total Barang',
 		blankText: '0',
-		allowDecimals: true,
+		valueRenderer: 'numberToCurrency',
+		itemCls: 'rmoney',
 		readOnly: true,
-		anchor: '60%',
-		maskRe: /([0-9]+)$/
+		anchor: '75%',
+	});
+	
+	mutasi_itemjumlahField= new Ext.form.TextField({
+		id: 'mutasi_itemjumlahField',
+		fieldLabel: 'Jumlah Jenis Barang',
+		blankText: '0',
+		valueRenderer: 'numberToCurrency',
+		itemCls: 'rmoney',
+		readOnly: true,
+		anchor: '75%',
 	});
 	
 	mutasi_statusField= new Ext.form.ComboBox({
@@ -837,9 +777,20 @@ Ext.onReady(function(){
 		title: '-',
 		autoHeight: true,
 		collapsible: true,
-		layout:'form',
-		anchor: '98%',
-		items: [mutasi_totaljumlahField] 
+		layout:'column',
+		anchor: '100%',
+		labelWidth: 150,
+		items: [{
+					layout: 'form',
+					columnWidth: 0.5,
+					border: false,
+					items:[mutasi_totaljumlahField]
+				},{ 
+					layout: 'form',
+					columnWidth: 0.5,
+					border: false,
+					items:[mutasi_itemjumlahField ]
+				}] 
 	
 	});
 	
@@ -852,7 +803,6 @@ Ext.onReady(function(){
 		totalProperty: 'total',
 		id: 'dmutasi_id'
 	},[
-	/* dataIndex => insert intoperawatan_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'dmutasi_id', type: 'int', mapping: 'dmutasi_id'}, 
 			{name: 'dmutasi_master', type: 'int', mapping: 'dmutasi_master'}, 
 			{name: 'dmutasi_produk', type: 'int', mapping: 'dmutasi_produk'}, 
@@ -905,7 +855,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'produk_id'
 		},[
-		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
 			{name: 'mutasi_produk_id', type: 'int', mapping: 'produk_id'},
 			{name: 'mutasi_produk_kode', type: 'string', mapping: 'produk_kode'},
 			{name: 'mutasi_produk_nama', type: 'string', mapping: 'produk_nama'},
@@ -926,7 +875,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'satuan_id'
 		},[
-		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
 			{name: 'satuan_id', type: 'int', mapping: 'satuan_id'},
 			{name: 'satuan_kode', type: 'string', mapping: 'satuan_kode'},
 			{name: 'satuan_nama', type: 'string', mapping: 'satuan_nama'}
@@ -1029,12 +977,6 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true},
-		/*bbar: new Ext.PagingToolbar({
-			pageSize: pageS,
-			store: detail_mutasi_DataStore,
-			displayInfo: true
-		}),*/
-		/* Add Control on ToolBar */
 		tbar: [
 		{
 			text: 'Add',
@@ -1055,10 +997,10 @@ Ext.onReady(function(){
 	//function of detail add
 	function detail_mutasi_add(){
 		var edit_detail_mutasi= new detail_mutasiListEditorGrid.store.recordType({
-			dmutasi_id		: null,
+			dmutasi_id		: 0,
 			dmutasi_master	: null,		
-			dmutasi_produk	: null,		
-			dmutasi_satuan	:'',		
+			dmutasi_produk	: '',		
+			dmutasi_satuan	: '',		
 			dmutasi_jumlah	: 0		
 		});
 		editor_detail_mutasi.stopEditing();
@@ -1076,25 +1018,55 @@ Ext.onReady(function(){
 	//eof
 	
 	//function for insert detail
-	function detail_mutasi_insert(pkid){
-		for(i=0;i<detail_mutasi_DataStore.getCount();i++){
-			detail_mutasi_record=detail_mutasi_DataStore.getAt(i);
-			Ext.Ajax.request({
-				waitMsg: 'Please wait...',
-				url: 'index.php?c=c_master_mutasi&m=detail_detail_mutasi_insert',
-				params:{
-				dmutasi_master	: pkid, 
-				dmutasi_produk	: detail_mutasi_record.data.dmutasi_produk, 
-				dmutasi_satuan	: detail_mutasi_record.data.dmutasi_satuan, 
-				dmutasi_jumlah	: detail_mutasi_record.data.dmutasi_jumlah 
-				},
-				callback: function(opts, success, response){
-					if(success){
-						master_mutasi_DataStore.load();
-					}
+	function detail_mutasi_insert(pkid, opsi){
+		
+		var dmutasi_id = [];
+        var dmutasi_produk = [];
+        var dmutasi_satuan = [];
+        var dmutasi_jumlah = [];
+
+		if(detail_mutasi_DataStore.getCount()>0){
+			for(i=0; i<detail_mutasi_DataStore.getCount();i++){
+				if((/^\d+$/.test(detail_mutasi_DataStore.getAt(i).data.dmutasi_produk))
+				   && detail_mutasi_DataStore.getAt(i).data.dmutasi_produk!==undefined
+				   && detail_mutasi_DataStore.getAt(i).data.dmutasi_produk!==''
+				   && detail_mutasi_DataStore.getAt(i).data.dmutasi_produk!==0
+				   && detail_mutasi_DataStore.getAt(i).data.dmutasi_satuan!==''
+				   && detail_mutasi_DataStore.getAt(i).data.dmutasi_jumlah>0){
+					
+					dmutasi_id.push(detail_mutasi_DataStore.getAt(i).data.dmutasi_id);
+					dmutasi_produk.push(detail_mutasi_DataStore.getAt(i).data.dmutasi_produk);
+					dmutasi_satuan.push(detail_mutasi_DataStore.getAt(i).data.dmutasi_satuan);
+					dmutasi_jumlah.push(detail_mutasi_DataStore.getAt(i).data.dmutasi_jumlah);
 				}
-			});
+			}
 		}
+		
+		var encoded_array_dmutasi_id = Ext.encode(dmutasi_id);
+		var encoded_array_dmutasi_produk = Ext.encode(dmutasi_produk);
+		var encoded_array_dmutasi_satuan = Ext.encode(dmutasi_satuan);
+		var encoded_array_dmutasi_jumlah = Ext.encode(dmutasi_jumlah);
+
+		Ext.Ajax.request({
+			waitMsg: 'Please wait...',
+			url: 'index.php?c=c_master_mutasi&m=detail_detail_mutasi_insert',
+			params:{
+			dmutasi_id		: encoded_array_dmutasi_id,
+			dmutasi_master	: pkid, 
+			dmutasi_produk	: encoded_array_dmutasi_produk, 
+			dmutasi_satuan	: encoded_array_dmutasi_satuan, 
+			dmutasi_jumlah	: encoded_array_dmutasi_jumlah
+			},
+			callback: function(opts, success, response){
+				if(success){
+						if(opsi=='print'){
+							master_mutasi_print_faktur(pkid);
+						}
+						master_mutasi_DataStore.load();
+				}
+			}
+		});
+
 	}
 	//eof
 	
@@ -1153,9 +1125,14 @@ Ext.onReady(function(){
 		width: 800,	//700,        
 		items: [master_mutasi_masterGroup,detail_mutasiListEditorGrid,master_mutasi_footGroup]
 		,
-		buttons: [{
+		buttons: [
+			{
+				text: 'Save and Print',
+				handler: function() { master_mutasi_create('print'); }
+			},
+			{
 				text: 'Save and Close',
-				handler: master_mutasi_create
+				handler: function() { master_mutasi_create('close'); }
 			}
 			,{
 				text: 'Cancel',
@@ -1191,7 +1168,8 @@ Ext.onReady(function(){
 			var detail_mutasi_record=detail_mutasi_DataStore.getAt(i);
 			jumlah_item=jumlah_item+detail_mutasi_record.data.dmutasi_jumlah;
 		}
-		mutasi_totaljumlahField.setValue(jumlah_item);
+		mutasi_totaljumlahField.setValue(CurrencyFormatted(jumlah_item));
+		mutasi_itemjumlahField.setValue(CurrencyFormatted(detail_mutasi_DataStore.getCount()));
 	}
 	
 		
@@ -1202,7 +1180,8 @@ Ext.onReady(function(){
 		var mutasi_no_search=null;
 		var mutasi_asal_search=null;
 		var mutasi_tujuan_search=null;
-		var mutasi_tanggal_search_date="";
+		var mutasi_tgl_awal_search_date="";
+		var mutasi_tgl_akhir_search_date="";
 		var mutasi_keterangan_search=null;
 		var mutasi_status_search=null;
 
@@ -1210,7 +1189,8 @@ Ext.onReady(function(){
 		if(mutasi_noSearchField.getValue()!==null){mutasi_no_search=mutasi_noSearchField.getValue();}
 		if(mutasi_asalSearchField.getValue()!==null){mutasi_asal_search=mutasi_asalSearchField.getValue();}
 		if(mutasi_tujuanSearchField.getValue()!==null){mutasi_tujuan_search=mutasi_tujuanSearchField.getValue();}
-		if(mutasi_tanggalSearchField.getValue()!==""){mutasi_tanggal_search_date=mutasi_tanggalSearchField.getValue().format('Y-m-d');}
+		if(mutasi_tanggalSearchField.getValue()!==""){mutasi_tgl_awal_search_date=mutasi_tanggalSearchField.getValue().format('Y-m-d');}
+		if(mutasi_tanggal_akhirSearchField.getValue()!==""){mutasi_tgl_akhir_search_date=mutasi_tanggal_akhirSearchField.getValue().format('Y-m-d');}
 		if(mutasi_keteranganSearchField.getValue()!==null){mutasi_keterangan_search=mutasi_keteranganSearchField.getValue();}
 		if(mutasi_statusSearchField.getValue()!==null){mutasi_status_search=mutasi_statusSearchField.getValue();}
 		// change the store parameters
@@ -1221,7 +1201,8 @@ Ext.onReady(function(){
 			mutasi_no			:	mutasi_no_search,
 			mutasi_asal			:	mutasi_asal_search, 
 			mutasi_tujuan		:	mutasi_tujuan_search, 
-			mutasi_tanggal		:	mutasi_tanggal_search_date, 
+			mutasi_tgl_awal		:	mutasi_tgl_awal_search_date, 
+			mutasi_tgl_akhir	:	mutasi_tgl_akhir_search_date, 
 			mutasi_keterangan	:	mutasi_keterangan_search,
 			mutasi_status		:	mutasi_status_search
 		};
@@ -1232,8 +1213,7 @@ Ext.onReady(function(){
 	/* Function for reset search result */
 	function master_mutasi_reset_search(){
 		// reset the store parameters
-		master_mutasi_DataStore.baseParams = { task: 'LIST' };
-		// Cause the datastore to do another query : 
+		master_mutasi_DataStore.baseParams = { task: 'LIST', start: 0, limit: pageS };
 		master_mutasi_DataStore.reload({params: {start: 0, limit: pageS}});
 		master_mutasi_searchWindow.close();
 	};
@@ -1324,17 +1304,6 @@ Ext.onReady(function(){
 		format : 'd-m-Y'
 	});
 
-	
-	mutasi_tanggalSearchFieldSet=new Ext.form.FieldSet({
-		id:'mutasi_tanggalSearchFieldSet',
-		title: 'Opsi Tanggal',
-		layout: 'column',
-		boduStyle: 'padding: 5px;',
-		frame: false,
-		items:[mutasi_tanggalSearchField, mutasi_label_tanggalField, mutasi_tanggal_akhirSearchField]
-	});
-	
-	
 	mutasi_statusSearchField= new Ext.form.ComboBox({
 		id: 'mutasi_statusSearchField',
 		fieldLabel: 'Status',
@@ -1345,7 +1314,7 @@ Ext.onReady(function(){
 		mode: 'local',
 		displayField: 'mutasi_status',
 		valueField: 'value',
-		anchor: '80%',
+		anchor: '60%',
 		triggerAction: 'all'	 
 	});
     
@@ -1354,7 +1323,7 @@ Ext.onReady(function(){
 		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
-		width: 300,        
+		width: 400,        
 		items: [{
 			layout:'column',
 			border:false,
@@ -1363,7 +1332,27 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [mutasi_noSearchField,mutasi_asalSearchField, mutasi_tujuanSearchField, mutasi_tanggalSearchFieldSet, mutasi_keteranganSearchField, mutasi_statusSearchField] 
+				items: [mutasi_noSearchField,mutasi_asalSearchField, mutasi_tujuanSearchField,{
+							layout: 'column',
+							border : false,
+							items:[
+							{
+								layout: 'form',
+								columnWidth: 0.6,
+								border: false,
+								items:[mutasi_tanggalSearchField]
+							},
+							{
+								layout: 'form',
+								columnWidth: 0.4,
+								border: false,
+								labelWidth: 30,
+								items:[mutasi_tanggal_akhirSearchField]
+							}
+							
+							]
+						}
+						, mutasi_keteranganSearchField, mutasi_statusSearchField] 
 			}
 			]
 		}]
@@ -1409,31 +1398,79 @@ Ext.onReady(function(){
 	}
   	/* End Function */
 	
+	function master_mutasi_print_faktur(faktur){
+		
+		Ext.Ajax.request({   
+		waitMsg: 'Please Wait...',
+		url: 'index.php?c=c_master_mutasi&m=print_faktur',
+		params: {
+			faktur	: faktur
+		}, 
+		success: function(response){              
+		  	var result=eval(response.responseText);
+		  	switch(result){
+		  	case 1:
+				win = window.open('./print/mutasi_faktur.html','mutasi_faktur','height=800,width=670,resizable=1,scrollbars=1, menubar=1');
+				break;
+		  	default:
+				Ext.MessageBox.show({
+					title: 'Warning',
+					msg: 'Unable to print the grid!',
+					buttons: Ext.MessageBox.OK,
+					animEl: 'save',
+					icon: Ext.MessageBox.WARNING
+				});
+				break;
+		  	}  
+		},
+		failure: function(response){
+		  	var result=response.responseText;
+			Ext.MessageBox.show({
+			   title: 'Error',
+			   msg: 'Could not connect to the database. retry later.',
+			   buttons: Ext.MessageBox.OK,
+			   animEl: 'database',
+			   icon: Ext.MessageBox.ERROR
+			});		
+		} 	                     
+		});
+		
+	}
+	
 	/* Function for print List Grid */
 	function master_mutasi_print(){
 		var searchquery = "";
 		var mutasi_asal_print=null;
+		var mutasi_no_print=null;
 		var mutasi_tujuan_print=null;
-		var mutasi_tanggal_print_date="";
+		var mutasi_tgl_awal_print_date="";
+		var mutasi_tgl_akhir_print_date="";
 		var mutasi_keterangan_print=null;
+		var mutasi_status=null;
 		var win;              
 		// check if we do have some search data...
 		if(master_mutasi_DataStore.baseParams.query!==null){searchquery = master_mutasi_DataStore.baseParams.query;}
+		if(master_mutasi_DataStore.baseParams.mutasi_no!==null){mutasi_no = master_mutasi_DataStore.baseParams.mutasi_no;}
 		if(master_mutasi_DataStore.baseParams.mutasi_asal!==null){mutasi_asal_print = master_mutasi_DataStore.baseParams.mutasi_asal;}
 		if(master_mutasi_DataStore.baseParams.mutasi_tujuan!==null){mutasi_tujuan_print = master_mutasi_DataStore.baseParams.mutasi_tujuan;}
-		if(master_mutasi_DataStore.baseParams.mutasi_tanggal!==""){mutasi_tanggal_print_date = master_mutasi_DataStore.baseParams.mutasi_tanggal;}
+		if(master_mutasi_DataStore.baseParams.mutasi_tgl_awal!==""){mutasi_tgl_awal_print_date = master_mutasi_DataStore.baseParams.mutasi_tgl_awal;}
+		if(master_mutasi_DataStore.baseParams.mutasi_tgl_akhirl!==""){mutasi_tgl_akhir_print_date = master_mutasi_DataStore.baseParams.mutasi_tgl_awal;}
 		if(master_mutasi_DataStore.baseParams.mutasi_keterangan!==null){mutasi_keterangan_print = master_mutasi_DataStore.baseParams.mutasi_keterangan;}
+		if(master_mutasi_DataStore.baseParams.mutasi_status!==null){mutasi_status_print = master_mutasi_DataStore.baseParams.mutasi_status;}
+		
 
 		Ext.Ajax.request({   
 		waitMsg: 'Please Wait...',
 		url: 'index.php?c=c_master_mutasi&m=get_action',
 		params: {
-			task: "PRINT",
-		  	query: searchquery,                    		// if we are doing a quicksearch, use this
-			//if we are doing advanced search, use this
-			mutasi_asal : mutasi_asal_print,
-			mutasi_tujuan : mutasi_tujuan_print,
-		  	mutasi_tanggal : mutasi_tanggal_print_date, 
+			task			: "PRINT",
+		  	query			: searchquery,                    		
+			mutasi_asal 	: mutasi_asal_print,
+			mutasi_tujuan 	: mutasi_tujuan_print,
+		  	mutasi_tgl_awal	: mutasi_tgl_awal_print_date, 
+			mutasi_tgl_akhir: mutasi_tgl_akhir_print_date, 
+			mutasi_no		: mutasi_no_print, 
+			mutasi_status	: mutasi_status_print, 
 			mutasi_keterangan : mutasi_keterangan_print,
 		  	currentlisting: master_mutasi_DataStore.baseParams.task // this tells us if we are searching or not
 		}, 
@@ -1441,7 +1478,7 @@ Ext.onReady(function(){
 		  	var result=eval(response.responseText);
 		  	switch(result){
 		  	case 1:
-				win = window.open('./master_mutasilist.html','master_mutasilist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
+				win = window.open('./print/print_mutasilist.html','master_mutasilist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
 				win.print();
 				break;
 		  	default:
@@ -1473,29 +1510,37 @@ Ext.onReady(function(){
 	function master_mutasi_export_excel(){
 		var searchquery = "";
 		var mutasi_asal_2excel=null;
+		var mutasi_no_2excel=null;
 		var mutasi_tujuan_2excel=null;
-		var mutasi_tanggal_2excel_date="";
+		var mutasi_tgl_awal_2excel_date="";
+		var mutasi_tgl_akhir_2excel_date="";
+		var mutasi_tgl_status_2excel=null;
 		var mutasi_keterangan_2excel=null;
 		var win;              
 		// check if we do have some search data...
 		if(master_mutasi_DataStore.baseParams.query!==null){searchquery = master_mutasi_DataStore.baseParams.query;}
+		if(master_mutasi_DataStore.baseParams.mutasi_no!==null){mutasi_asal_2excel = master_mutasi_DataStore.baseParams.mutasi_no;}
 		if(master_mutasi_DataStore.baseParams.mutasi_asal!==null){mutasi_asal_2excel = master_mutasi_DataStore.baseParams.mutasi_asal;}
 		if(master_mutasi_DataStore.baseParams.mutasi_tujuan!==null){mutasi_tujuan_2excel = master_mutasi_DataStore.baseParams.mutasi_tujuan;}
-		if(master_mutasi_DataStore.baseParams.mutasi_tanggal!==""){mutasi_tanggal_2excel_date = master_mutasi_DataStore.baseParams.mutasi_tanggal;}
+		if(master_mutasi_DataStore.baseParams.mutasi_tgl_awal!==""){mutasi_tgl_awal_2excel_date = master_mutasi_DataStore.baseParams.mutasi_tgl_awal;}
+		if(master_mutasi_DataStore.baseParams.mutasi_tgl_akhir!==""){mutasi_tgl_akhir_2excel_date = master_mutasi_DataStore.baseParams.mutasi_tgl_akhir;}
+		if(master_mutasi_DataStore.baseParams.mutasi_status!==null){mutasi_status_2excel = master_mutasi_DataStore.baseParams.mutasi_status;}
 		if(master_mutasi_DataStore.baseParams.mutasi_keterangan!==null){mutasi_keterangan_2excel = master_mutasi_DataStore.baseParams.mutasi_keterangan;}
 
 		Ext.Ajax.request({   
 		waitMsg: 'Please Wait...',
 		url: 'index.php?c=c_master_mutasi&m=get_action',
 		params: {
-			task: "EXCEL",
-		  	query: searchquery,                    		// if we are doing a quicksearch, use this
-			//if we are doing advanced search, use this
-			mutasi_asal : mutasi_asal_2excel,
-			mutasi_tujuan : mutasi_tujuan_2excel,
-		  	mutasi_tanggal : mutasi_tanggal_2excel_date, 
-			mutasi_keterangan : mutasi_keterangan_2excel,
-		  	currentlisting: master_mutasi_DataStore.baseParams.task // this tells us if we are searching or not
+			task				: "EXCEL",
+		  	query				: searchquery,
+			mutasi_no	 		: mutasi_no_2excel,
+			mutasi_asal 		: mutasi_asal_2excel,
+			mutasi_tujuan 		: mutasi_tujuan_2excel,
+		  	mutasi_tgl_awal		: mutasi_tgl_awal_2excel_date, 
+			mutasi_tgl_akhir	: mutasi_tgl_akhir_2excel_date, 
+			mutasi_status		: mutasi_status_2excel, 
+			mutasi_keterangan 	: mutasi_keterangan_2excel,
+		  	currentlisting		: master_mutasi_DataStore.baseParams.task // this tells us if we are searching or not
 		},
 		success: function(response){              
 		  	var result=eval(response.responseText);
@@ -1533,7 +1578,6 @@ Ext.onReady(function(){
 	detail_mutasi_DataStore.on("load",detail_mutasi_total);
 	master_mutasiListEditorGrid.addListener('rowcontextmenu', onmaster_mutasi_ListEditGridContextMenu);
 	master_mutasi_DataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
-	master_mutasiListEditorGrid.on('afteredit', master_mutasi_update); // inLine Editing Record
 	
 	mutasi_asalField.on("select",function(){
 		//cbo_mutasi_produkDataStore.setBaseParam('gudang', get_asal_id()); //by masongbee

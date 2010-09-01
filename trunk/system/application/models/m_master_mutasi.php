@@ -19,7 +19,7 @@ class M_master_mutasi extends Model{
 		}
 		
 		
-		function get_laporan($tgl_awal,$tgl_akhir,$periode,$opsi,$group){
+		function get_laporan($tgl_awal,$tgl_akhir,$periode,$opsi,$group,$faktur){
 			
 			switch($group){
 				case "Tanggal": $order_by=" ORDER BY mutasi_tanggal ASC";break;
@@ -50,11 +50,16 @@ class M_master_mutasi extends Model{
 					$sql="SELECT * FROM vu_detail_mutasi WHERE mutasi_status<>'Batal' 
 							AND date_format(mutasi_tanggal,'%Y-%m-%d')>='".$tgl_awal."' 
 							AND date_format(mutasi_tanggal,'%Y-%m-%d')<='".$tgl_akhir."' ".$order_by;
+			}else if($opsi=='faktur'){
+				$sql="SELECT * FROM vu_detail_mutasi WHERE mutasi_id='".$faktur."'";
 			}
-			//$this->firephp->log($sql);
 			
+			//$this->firephp->log($sql);
 			$query=$this->db->query($sql);
-			return $query->result();
+			if($opsi=='faktur')
+				return $query;
+			else
+				return $query->result();
 		}
 		
 		function get_produk_selected_list($gudang,$selected_id,$query,$start,$end){
@@ -289,23 +294,24 @@ class M_master_mutasi extends Model{
 		//*eof
 		
 		//insert detail record
-		function detail_detail_mutasi_insert($dmutasi_id ,$dmutasi_master ,$dmutasi_produk ,$dmutasi_satuan ,$dmutasi_jumlah ){
-			//if master id not capture from view then capture it from max pk from master table
-			if($dmutasi_master=="" || $dmutasi_master==NULL){
-				$dmutasi_master=$this->get_master_id();
-			}
-			
-			$data = array(
-				"dmutasi_master"=>$dmutasi_master, 
-				"dmutasi_produk"=>$dmutasi_produk, 
-				"dmutasi_satuan"=>$dmutasi_satuan, 
-				"dmutasi_jumlah"=>$dmutasi_jumlah 
-			);
-			$this->db->insert('detail_mutasi', $data); 
-			if($this->db->affected_rows())
-				return '1';
-			else
-				return '0';
+		function detail_detail_mutasi_insert($array_dmutasi_id ,$dmutasi_master ,$array_dmutasi_produk 
+											 ,$array_dmutasi_satuan ,$array_dmutasi_jumlah ){
+
+			for($i = 0; $i < sizeof($array_dmutasi_produk); $i++){
+           
+				$data = array(
+					"dmutasi_master"=>$dmutasi_master, 
+					"dmutasi_produk"=>$array_dmutasi_produk[$i], 
+					"dmutasi_satuan"=>$array_dmutasi_satuan[$i], 
+					"dmutasi_jumlah"=>$array_dmutasi_jumlah[$i] 
+				);
+				if($array_dmutasi_id[$i]==0){
+					$this->db->insert('detail_mutasi', $data); 
+				}else{
+					$this->db->where('dmutasi_id', $array_dmutasi_id[$i]);
+					$this->db->update('detail_mutasi', $data);
+				}
+			 }
 
 		}
 		//end of function
@@ -317,7 +323,8 @@ class M_master_mutasi extends Model{
 			// For simple search
 			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (mutasi_no LIKE '%".addslashes($filter)."%' OR gudang_asal_nama LIKE '%".addslashes($filter)."%' OR gudang_tujuan_nama LIKE '%".addslashes($filter)."%' OR mutasi_keterangan LIKE '%".addslashes($filter)."%' )";
+				$query .= " (mutasi_no LIKE '%".addslashes($filter)."%' OR gudang_asal_nama LIKE '%".addslashes($filter)."%' OR 
+							gudang_tujuan_nama LIKE '%".addslashes($filter)."%' OR mutasi_keterangan LIKE '%".addslashes($filter)."%' )";
 			}
 			
 			$query .= " ORDER BY mutasi_no DESC ";
@@ -347,7 +354,9 @@ class M_master_mutasi extends Model{
 //				"mutasi_tujuan"=>$mutasi_tujuan, 
 				"mutasi_tanggal"=>$mutasi_tanggal, 
 				"mutasi_keterangan"=>$mutasi_keterangan,
-				"mutasi_status"=>$mutasi_status
+				"mutasi_status"=>$mutasi_status,
+				"mutasi_update"=>$_SESSION[SESSION_USERID],
+				"mutasi_date_update"=>date('Y-m-d H:i:s')
 			);
 			$sql="SELECT gudang_id FROM gudang WHERE gudang_id='".$mutasi_asal."'";
 			$rs=$this->db->query($sql);
@@ -362,6 +371,12 @@ class M_master_mutasi extends Model{
 			$this->db->where('mutasi_id', $mutasi_id);
 			$this->db->update('master_mutasi', $data);
 			
+			$sql="UPDATE master_mutasi SET mutasi_revised=0 WHERE mutasi_id='".$mutasi_id."' AND mutasi_revised is NULL";
+			$result = $this->db->query($sql);
+			
+			$sql="UPDATE master_mutasi SET mutasi_revised=(mutasi_revised+1) WHERE mutasi_id='".$mutasi_id."'";
+			$result = $this->db->query($sql);
+						
 			return $mutasi_id;
 		}
 		
@@ -376,7 +391,10 @@ class M_master_mutasi extends Model{
 				"mutasi_tujuan"=>$mutasi_tujuan, 
 				"mutasi_tanggal"=>$mutasi_tanggal, 
 				"mutasi_keterangan"=>$mutasi_keterangan,
-				"mutasi_status"=>$mutasi_status
+				"mutasi_status"=>$mutasi_status,
+				"mutasi_creator"=>$_SESSION[SESSION_USERID],
+				"mutasi_date_create"=>date('Y-m-d H:i:s'),
+				"mutasi_revised"=>0
 			);
 			$this->db->insert('master_mutasi', $data); 
 			if($this->db->affected_rows())
@@ -411,25 +429,30 @@ class M_master_mutasi extends Model{
 		}
 		
 		//function for advanced search record
-		function master_mutasi_search($mutasi_id ,$mutasi_asal ,$mutasi_tujuan ,$mutasi_tanggal ,$mutasi_keterangan ,$mutasi_status, $start,$end){
+		function master_mutasi_search($mutasi_id, $mutasi_no,$mutasi_asal ,$mutasi_tujuan ,$mutasi_tgl_awal, $mutasi_tgl_akhir ,
+									  $mutasi_keterangan ,$mutasi_status, $start,$end){
 			//full query
 			$query = "SELECT * FROM vu_trans_mutasi";
 			
-			if($mutasi_id!=''){
+			if($mutasi_no!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " mutasi_id LIKE '%".$mutasi_id."%'";
+				$query.= " mutasi_no LIKE '%".$mutasi_no."%'";
 			};
 			if($mutasi_asal!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " mutasi_asal LIKE '%".$mutasi_asal."%'";
+				$query.= " mutasi_asal='".$mutasi_asal."'";
 			};
 			if($mutasi_tujuan!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " mutasi_tujuan LIKE '%".$mutasi_tujuan."%'";
+				$query.= " mutasi_tujuan='".$mutasi_tujuan."'";
 			};
-			if($mutasi_tanggal!=''){
+			if($mutasi_tgl_awal!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " mutasi_tanggal LIKE '%".$mutasi_tanggal."%'";
+				$query.= " date_format(mutasi_tanggal,'%Y-%m-%d') >='".$mutasi_tgl_awal."'";
+			};
+			if($mutasi_tgl_akhir!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " date_format(mutasi_tanggal,'%Y-%m-%d') <='".$mutasi_tgl_akhir."'";
 			};
 			if($mutasi_keterangan!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -437,11 +460,12 @@ class M_master_mutasi extends Model{
 			};
 			if($mutasi_status!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " mutasi_status LIKE '%".$mutasi_status."%'";
+				$query.= " mutasi_status='".$mutasi_status."'";
 			};
 			
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
+			$this->firephp->log($query);
 			
 			$limit = $query." LIMIT ".$start.",".$end;		
 			$result = $this->db->query($limit);    
@@ -458,72 +482,104 @@ class M_master_mutasi extends Model{
 		}
 		
 		//function for print record
-		function master_mutasi_print($mutasi_id ,$mutasi_asal ,$mutasi_tujuan ,$mutasi_tanggal ,$mutasi_keterangan ,$option,$filter){
+		function master_mutasi_print($mutasi_id, $mutasi_no,$mutasi_asal ,$mutasi_tujuan ,$mutasi_tgl_awal, $mutasi_tgl_akhir ,
+									  $mutasi_keterangan ,$mutasi_status,$option,$filter){
 			//full query
 			$query = "SELECT * FROM vu_trans_mutasi";
 			
 			// For simple search
-			if ($filter<>""){
-				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (mutasi_id LIKE '%".addslashes($filter)."%' OR mutasi_asal LIKE '%".addslashes($filter)."%' OR mutasi_tujuan LIKE '%".addslashes($filter)."%' OR mutasi_tanggal LIKE '%".addslashes($filter)."%' OR mutasi_keterangan LIKE '%".addslashes($filter)."%' )";
+			if($option=='LIST'){
+				if ($filter<>""){
+					$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
+					$query .= " (mutasi_no LIKE '%".addslashes($filter)."%' OR gudang_asal_nama LIKE '%".addslashes($filter)."%' OR 
+								gudang_tujuan_nama LIKE '%".addslashes($filter)."%' OR mutasi_keterangan LIKE '%".addslashes($filter)."%' )";
+					
+				}
 				$result = $this->db->query($query);
 			} else if($option=='SEARCH'){
-				if($mutasi_id!=''){
+				if($mutasi_no!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " mutasi_id LIKE '%".$mutasi_id."%'";
+					$query.= " mutasi_no LIKE '%".$mutasi_no."%'";
 				};
 				if($mutasi_asal!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " mutasi_asal LIKE '%".$mutasi_asal."%'";
+					$query.= " mutasi_asal='".$mutasi_asal."'";
 				};
 				if($mutasi_tujuan!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " mutasi_tujuan LIKE '%".$mutasi_tujuan."%'";
+					$query.= " mutasi_tujuan='".$mutasi_tujuan."'";
 				};
-				if($mutasi_tanggal!=''){
+				if($mutasi_tgl_awal!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " mutasi_tanggal LIKE '%".$mutasi_tanggal."%'";
+					$query.= " date_format(mutasi_tanggal,'%Y-%m-%d') >='".$mutasi_tgl_awal."'";
+				};
+				if($mutasi_tgl_akhir!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " date_format(mutasi_tanggal,'%Y-%m-%d') <='".$mutasi_tgl_akhir."'";
 				};
 				if($mutasi_keterangan!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " mutasi_keterangan LIKE '%".$mutasi_keterangan."%'";
 				};
+				if($mutasi_status!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " mutasi_status='".$mutasi_status."'";
+				};
 				$result = $this->db->query($query);
 			}
-			return $result;
+			return $result->result();
 		}
 		
 		//function  for export to excel
 		function master_mutasi_export_excel($mutasi_id ,$mutasi_asal ,$mutasi_tujuan ,$mutasi_tanggal ,$mutasi_keterangan ,$option,$filter){
 			//full query
-			$query="select * from master_mutasi";
+			$query = "SELECT if(mutasi_no='','-',ifnull(mutasi_no,'-')) as 'No MB',
+						date_format(mutasi_tanggal,'%Y-%m-%d') as Tanggal,
+						if(gudang_asal_nama='','-',ifnull(gudang_asal_nama,'-'))  as 'Gudang Asal',
+						if(gudang_tujuan_nama='','-',ifnull(gudang_tujuan_nama,'-'))  as 'Gudang Tujuan',
+						ifnull(jumlah_barang,0) as 'Jumlah Barang',
+						if(mutasi_keterangan='','-',ifnull(mutasi_keterangan,'-')) as 'Keterangan',
+						mutasi_status as 'Status'
+						FROM vu_trans_mutasi";
 			if($option=='LIST'){
-				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (mutasi_id LIKE '%".addslashes($filter)."%' OR mutasi_asal LIKE '%".addslashes($filter)."%' OR mutasi_tujuan LIKE '%".addslashes($filter)."%' OR mutasi_tanggal LIKE '%".addslashes($filter)."%' OR mutasi_keterangan LIKE '%".addslashes($filter)."%' )";
-				$result = $this->db->query($query);
+				if ($filter<>""){
+					$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
+					$query .= " (mutasi_no LIKE '%".addslashes($filter)."%' OR gudang_asal_nama LIKE '%".addslashes($filter)."%' OR 
+								gudang_tujuan_nama LIKE '%".addslashes($filter)."%' OR mutasi_keterangan LIKE '%".addslashes($filter)."%' )";
+					
+				}
 			} else if($option=='SEARCH'){
-				if($mutasi_id!=''){
+				if($mutasi_no!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " mutasi_id LIKE '%".$mutasi_id."%'";
+					$query.= " mutasi_no LIKE '%".$mutasi_no."%'";
 				};
 				if($mutasi_asal!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " mutasi_asal LIKE '%".$mutasi_asal."%'";
+					$query.= " mutasi_asal='".$mutasi_asal."'";
 				};
 				if($mutasi_tujuan!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " mutasi_tujuan LIKE '%".$mutasi_tujuan."%'";
+					$query.= " mutasi_tujuan='".$mutasi_tujuan."'";
 				};
-				if($mutasi_tanggal!=''){
+				if($mutasi_tgl_awal!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " mutasi_tanggal LIKE '%".$mutasi_tanggal."%'";
+					$query.= " date_format(mutasi_tanggal,'%Y-%m-%d') >='".$mutasi_tgl_awal."'";
+				};
+				if($mutasi_tgl_akhir!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " date_format(mutasi_tanggal,'%Y-%m-%d') <='".$mutasi_tgl_akhir."'";
 				};
 				if($mutasi_keterangan!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " mutasi_keterangan LIKE '%".$mutasi_keterangan."%'";
 				};
-				$result = $this->db->query($query);
+				if($mutasi_status!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " mutasi_status='".$mutasi_status."'";
+				};
+				
 			}
+			$result = $this->db->query($query);
 			return $result;
 		}
 		
