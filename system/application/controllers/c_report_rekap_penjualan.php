@@ -32,6 +32,9 @@ class C_report_rekap_penjualan extends Controller {
 			case "SEARCH":
 				$this->rekap_penjualan_search();
 				break;
+			case "SEARCH2":
+				$this->rekap_penjualan_search2();
+				break;
 			case "PRINT":
 				$this->tindakan_print();
 				break;
@@ -48,7 +51,6 @@ class C_report_rekap_penjualan extends Controller {
 	//function for advanced search
 	function rekap_penjualan_search(){
 		//POST varibale here
-		//$trawat_id=trim(@$_POST["trawat_id"]);
 		if(trim(@$_POST["rekap_penjualan_tglapp_start"])!="")
 			$rekap_penjualan_tglapp_start=date('Y-m-d', strtotime(trim(@$_POST["rekap_penjualan_tglapp_start"])));
 		else
@@ -58,14 +60,36 @@ class C_report_rekap_penjualan extends Controller {
 		else
 			$rekap_penjualan_tglapp_end="";
 
-		//$trawat_dokter=trim(@$_POST["trawat_dokter"]);
 		$rekap_penjualan_jenis=trim(@$_POST["rekap_penjualan_jenis"]);
-		//$top_jumlah=trim(@$_POST["top_jumlah"]);
+		$rekap_penjualan_group=trim(@$_POST["rekap_penjualan_group"]);
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
 		//$result = $this->m_report_top_spender->top_spender_search($trawat_id ,$trawat_tglapp_start ,$trawat_tglapp_end ,$trawat_dokter ,$start,$end);
-		$result = $this->m_report_rekap_penjualan->rekap_penjualan_search($rekap_penjualan_tglapp_start ,$rekap_penjualan_tglapp_end ,$rekap_penjualan_jenis,$start,$end);
+		$result = $this->m_report_rekap_penjualan->rekap_penjualan_search($rekap_penjualan_tglapp_start ,$rekap_penjualan_tglapp_end ,$rekap_penjualan_jenis, $rekap_penjualan_group, $start,$end);
+		echo $result;
+	}
+	
+	//function for advanced search
+	function rekap_penjualan_search2(){
+		//POST varibale here
+		//$trawat_id=trim(@$_POST["trawat_id"]);
+		if(trim(@$_POST["rekap_penjualan_tglapp_start"])!="")
+			$rekap_penjualan_tglapp_start=date('Y-m-d', strtotime(trim(@$_POST["rekap_penjualan_tglapp_start"])));
+		else
+			$rekap_penjualan_tglapp_start="";
+		if(trim(@$_POST["rekap_penjualan_tglapp_end"])!="")
+			$rekap_penjualan_tglapp_end=date('Y-m-d', strtotime(trim(@$_POST["rekap_penjualan_tglapp_end"])));
+		else
+			$rekap_penjualan_tglapp_end="";
+			
+		$rekap_penjualan_jenis=trim(@$_POST["rekap_penjualan_jenis"]);
+		$rekap_penjualan_group=trim(@$_POST["rekap_penjualan_group"]);
+		
+		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		//$result = $this->m_report_top_spender->top_spender_search($trawat_id ,$trawat_tglapp_start ,$trawat_tglapp_end ,$trawat_dokter ,$start,$end);
+		$result = $this->m_report_rekap_penjualan->rekap_penjualan_search2($rekap_penjualan_tglapp_start ,$rekap_penjualan_tglapp_end ,$rekap_penjualan_jenis, $rekap_penjualan_group, $start,$end);
 		echo $result;
 	}
 
