@@ -43,6 +43,17 @@ Ext.namespace('Ext.ux.plugin');
 Ext.ux.plugin.triggerfieldTooltip = function(config){
     Ext.apply(this, config);
 };
+var group_produk_Store= new Ext.data.SimpleStore({
+		id: 'group_produk_Store',
+		fields:['group_value','group_display'],
+		data:[['Semua','Semua']]
+});
+	
+var group_perawatan_Store= new Ext.data.SimpleStore({
+		id: 'group_perawatan_Store',
+		fields:['group_value','group_display'],
+		data:[['Semua','Semua'],[2,'Medis'],[3,'Non Medis'],[16,'Anti Aging'],[4,'Surgery']]
+});
 
 Ext.extend(Ext.ux.plugin.triggerfieldTooltip, Ext.util.Observable,{
     init: function(component){
@@ -92,10 +103,11 @@ Ext.apply(Ext.form.VTypes, {
 });
 /* declare function */		
 var rekap_penjualanDataStore;
-//var sum_kreditDataStore;
+var sum_rekapDataStore;
 var rekap_penjualanColumnModel;
-//var sum_kreditColumnModel;
+var sum_rekapColumnModel;
 var rekap_penjualanListEditorGrid;
+var rekap_penjualanListEditorGrid2;
 var rekap_penjualan_createForm;
 var rekap_penjualan_createWindow;
 var rekap_penjualan_searchForm;
@@ -103,6 +115,7 @@ var rekap_penjualan_searchWindow;
 var rekap_penjualanSelectedRow;
 var rekap_penjualanContextMenu;
 var jenisField;
+var groupField;
 //var jumlahField;
 //for detail data
 
@@ -140,6 +153,8 @@ Ext.onReady(function(){
   
   	/* Function for Displaying  create Window Form */
 	function display_form_window(){
+		jenisField.setValue('Produk');
+		groupField.setValue('Kode');
 		if(!rekap_penjualan_createWindow.isVisible()){
 			//tindakan_medisreset_form();
 			//post2db='CREATE';
@@ -184,6 +199,31 @@ Ext.onReady(function(){
 	});
 	/* End of Function */
 	
+	/* Function for Retrieve DataStore */
+	//isc_datastore
+	sum_rekapDataStore = new Ext.data.Store({
+		id: 'sum_rekapDataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_report_rekap_penjualan&m=get_action', 
+			method: 'POST'
+		}),
+		baseParams:{task: "LIST",start:0,limit:pageS}, // parameter yang di $_POST ke Controller
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: ''
+		},[
+		/* dataIndex => insert into rekap_penjualanColumnModel, Mapping => for initiate table column */ 
+			{name: 'kode', type: 'string', mapping: 'kode'},
+			{name: 'nama', type: 'string', mapping: 'nama'},
+			{name: 'sum_jumlah', type: 'float', mapping: 'total_jumlah'},
+			{name: 'sum_subtotal', type: 'float', mapping: 'subtotal'},
+			{name: 'sum_diskon_tambahan', type: 'float', mapping: 'diskon_tambahan'},
+			{name: 'sum_total', type: 'float', mapping: 'grand_total'},
+		]),
+		sortInfo:{field: 'sum_total', direction: "DESC"}
+	});
+	/* End of Function */
 
   	/* Function for Identify of Window Column Model */
 	//Tampilkan di grid
@@ -239,26 +279,66 @@ Ext.onReady(function(){
 			width: 80,	//55,
 			sortable: true
 		}
-		/*,
-		{	
-			align : 'Right',
-			header: '<div align="center">' + 'Kredit (Satuan)' + '</div>',
-			dataIndex: 'dtrawat_skredit',
-			width: 80,	//55,
-			sortable: false
-		},
-		{	
-			align : 'Right',
-			header: '<div align="center">' + 'Total Kredit' + '</div>',
-			dataIndex: 'dtrawat_jkredit',
-			width: 80,	//55,
-			sortable: false
-		},
-		*/
 	]);
 	
 	rekap_penjualanColumnModel.defaultSortable= true;
 	/* End of Function */
+	
+	sum_rekapColumnModel = new Ext.grid.ColumnModel(
+		[
+		{
+			header: '<div align="center">' + '' + '</div>',
+			dataIndex: '',
+			width: 80,
+			sortable: true,
+			readOnly:true,
+	
+		}, 
+		{
+			header: '<div align="center">' + '' + '</div>',
+			dataIndex: '',
+			width: 210,//185,	//210,
+			sortable: true,
+			readOnly : true,
+		}, 
+		{
+			align : 'Right',
+			header: '<div align="center">' + 'Grand Total Item' + '</div>',
+			dataIndex: 'sum_jumlah',
+			width: 60,//185,	//210,
+			sortable: true,
+			readOnly : true,
+		},
+		{	
+			align : 'Right',
+			header: '<div align="center">' + 'Grand Sub Total (Rp)' + '</div>',
+			dataIndex: 'sum_subtotal',
+			renderer: Ext.util.Format.numberRenderer('0,000'),
+			readOnly: true,
+			width: 80,	//55,
+			sortable: true
+		},
+		{	
+			align : 'Right',
+			header: '<div align="center">' + 'Grand Tot Disk Tmbhn (Rp)' + '</div>',
+			dataIndex: 'sum_diskon_tambahan',
+			renderer: Ext.util.Format.numberRenderer('0,000'),
+			readOnly: true,
+			width: 100,	//55,
+			sortable: true
+		},
+		{	
+			align : 'Right',
+			header: '<div align="center">' + 'Grand Total (Rp)' + '</div>',
+			dataIndex: 'sum_total',
+			renderer: Ext.util.Format.numberRenderer('0,000'),
+			readOnly: true,
+			width: 80,	//55,
+			sortable: true
+		}
+	]);
+	
+	sum_rekapColumnModel.defaultSortable= true;
 	
 	
 	/* Declare DataStore and  show datagrid list */
@@ -287,6 +367,25 @@ Ext.onReady(function(){
 	});
 	rekap_penjualanListEditorGrid.render();
 	/* End of DataStore */
+	
+	rekap_penjualanListEditorGrid2 =  new Ext.grid.EditorGridPanel({
+		id: 'rekap_penjualanListEditorGrid2',
+		el: 'fp_rekap_penjualan2',
+		title: '',
+		autoHeight: true,
+		store: sum_rekapDataStore, // DataStore
+		cm: sum_rekapColumnModel, // Nama-nama Columns
+		enableColLock:false,
+		frame: true,
+		//clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
+		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
+		viewConfig: { forceFit:true },
+	  	width: 970, //940,//1200,	//970,
+	
+		/* Add Control on ToolBar */
+	
+	});
+	rekap_penjualanListEditorGrid2.render();
 	
 
 	/* Create Context Menu */
@@ -324,13 +423,27 @@ Ext.onReady(function(){
 		fieldLabel: 'Jenis',
 		store:new Ext.data.SimpleStore({
 			fields:['jenis_value', 'jenis_display'],
-			data:[['Perawatan','Perawatan Satuan'],['Produk','Produk'],['Paket','Paket']]
+			data:[['Perawatan','Perawatan Satuan'],['Pengambilan_Paket','Pengambilan Paket'],['Produk','Produk'],['Paket','Paket']]
 		}),
 		mode: 'local',
 		editable:false,
 		emptyText: 'Produk',
 		displayField: 'jenis_display',
 		valueField: 'jenis_value',
+		width: 120,
+		triggerAction: 'all'	
+	});
+	
+	/* Identify  jenis Combo*/
+	groupField= new Ext.form.ComboBox({
+		id: 'groupField',
+		fieldLabel: 'Group by',
+		store: group_produk_Store,
+		mode: 'local',
+		editable:false,
+		emptyText: 'Semua',
+		displayField: 'group_display',
+		valueField: 'group_value',
 		width: 120,
 		triggerAction: 'all'	
 	});
@@ -383,32 +496,36 @@ Ext.onReady(function(){
 		var rekap_penjualan_tgl_end_app_search=null;
 		//var trawat_dokter_search=null;
 		var jenisField_search=null;
+		var groupField_search=null;
 		//var jumlahField_search=null;
 
 		//if(trawat_medis_idSearchField.getValue()!==null){trawat_id_search=trawat_medis_idSearchField.getValue();}
 		if(Ext.getCmp('rekap_penjualan_tglStartSearchField').getValue()!==null){rekap_penjualan_tgl_start_app_search=Ext.getCmp('rekap_penjualan_tglStartSearchField').getValue();}
 		if(Ext.getCmp('rekap_penjualan_tglEndSearchField').getValue()!==null){rekap_penjualan_tgl_end_app_search=Ext.getCmp('rekap_penjualan_tglEndSearchField').getValue();}
 		if(jenisField.getValue()!==null){jenisField_search=jenisField.getValue();}
+		if(groupField.getValue()!==null){groupField_search=groupField.getValue();}
 		//if(jumlahField.getValue()!==null){jumlahField_search=jumlahField.getValue();}
 		// change the store parameters
 		rekap_penjualanDataStore.baseParams = {
 			task: 'SEARCH',
 			//variable here
-			/*
-			trawat_id	:	trawat_id_search, 
-			trawat_tglapp_start	: 	trawat_tgl_start_app_search,
-			trawat_tglapp_end	: 	trawat_tgl_end_app_search,
-			trawat_dokter	:	trawat_dokter_search,
-			*/
-			//trawat_id	:	trawat_id_search, 
 			rekap_penjualan_tglapp_start	: 	rekap_penjualan_tgl_start_app_search,
 			rekap_penjualan_tglapp_end		: 	rekap_penjualan_tgl_end_app_search,
 			rekap_penjualan_jenis			:	jenisField_search,
-			//top_jumlah	:	jumlahField_search,
+			rekap_penjualan_group			:	groupField_search,
+		};
+		sum_rekapDataStore.baseParams = {
+			task: 'SEARCH2',
+			//variable here
+			rekap_penjualan_tglapp_start	: 	rekap_penjualan_tgl_start_app_search,
+			rekap_penjualan_tglapp_end		: 	rekap_penjualan_tgl_end_app_search,
+			rekap_penjualan_jenis			:	jenisField_search,
+			rekap_penjualan_group			:	groupField_search,
 		};
 		
 		// Cause the datastore to do another query : 
 		rekap_penjualanDataStore.reload({params: {start: 0, limit: pageS}});
+		sum_rekapDataStore.reload({params: {start: 0, limit: pageS}});
 		
 		}
 		
@@ -443,7 +560,7 @@ Ext.onReady(function(){
 		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
-		width: 640,        
+		width: 400,        
 		items: [{
 			layout:'column',
 			border:false,
@@ -458,7 +575,8 @@ Ext.onReady(function(){
 						border:false,
 						items:[
 				        {
-							columnWidth:0.33,
+							columnWidth:0.55,
+							labelWidth:100,
 							layout: 'form',
 							border:false,
 							defaultType: 'datefield',
@@ -475,9 +593,9 @@ Ext.onReady(function(){
 							    }] 
 						},
 						{
-							columnWidth:0.30,
+							columnWidth:0.40,
 							layout: 'form',
-							labelWidth:20,
+							labelWidth:30,
 							border:false,
 							defaultType: 'datefield',
 							items: [
@@ -492,7 +610,7 @@ Ext.onReady(function(){
 							        startDateField: 'rekap_penjualan_tglStartSearchField' // id of the end date field
 							    }] 
 						}]},
-						jenisField]
+						jenisField, groupField]
 			}
 			]
 		}]
@@ -514,6 +632,8 @@ Ext.onReady(function(){
 	function rekap_penjualan_reset_formSearch(){
 		jenisField.reset();
 		jenisField.setValue(null);
+		groupField.reset();
+		groupField.setValue(null);
 		//jumlahField.reset();
 		//jumlahField.setValue(null);
 		Ext.getCmp('rekap_penjualan_tglStartSearchField').reset();
@@ -544,6 +664,7 @@ Ext.onReady(function(){
 		if(!rekap_penjualan_searchWindow.isVisible()){
 			rekap_penjualan_reset_formSearch();
 			jenisField.setValue('Produk');
+			groupField.setValue('Kode');
 			//jumlahField.setValue('10');
 			rekap_penjualan_searchWindow.show();
 		} else {
@@ -658,11 +779,53 @@ Ext.onReady(function(){
 	/*End of Function */
 	rekap_penjualan_searchWindow.show();
 });
+
+	// EVENTS
+	//jenisField.setValue('Produk');
+	jenisField.on("select", function(){
+		//jenisField.setValue('Produk');
+		jenisField_group=jenisField.getValue();
+		if(jenisField_group=='Perawatan'){
+			groupField.bindStore(group_perawatan_Store);
+		} 
+		else if(jenisField_group=='Produk'){
+			groupField.bindStore(group_produk_Store);
+		}
+		else if(jenisField_group=='Paket'){
+			groupField.bindStore(group_produk_Store);
+		}
+		else if(jenisField_group=='Pengambilan_Paket'){
+			groupField.bindStore(group_perawatan_Store);
+		}
+	});
+	/*
+	rpt_jproduk_detailField.on("check", function(){
+		rpt_jproduk_groupField.setValue('No Faktur');
+		if(rpt_jproduk_detailField.getValue()==true){
+			rpt_jproduk_groupField.bindStore(group_detail_Store);
+		}else
+		{
+			rpt_jproduk_groupField.bindStore(group_master_Store);
+		}
+	});
+	
+	rpt_jproduk_opsitglField.on("check",function(){
+		if(rpt_jproduk_opsitglField.getValue()==true){
+			rpt_jproduk_tglawalField.allowBlank=false;
+			rpt_jproduk_tglakhirField.allowBlank=false;
+		}else{
+			rpt_jproduk_tglawalField.allowBlank=true;
+			rpt_jproduk_tglakhirField.allowBlank=true;
+		}
+		
+	});*/
 	</script>
 <body>
 <div>
 	<div class="col">
+
         <div id="fp_rekap_penjualan"></div>
+		<div id="fp_rekap_penjualan2"></div>
          <div id="fp_top_tindakan_medisdetail"></div>
 		 <div id="fp_top_dtindakan_jual_nonmedis"></div>
 		<div id="elwindow_rekap_penjualan_create"></div>
