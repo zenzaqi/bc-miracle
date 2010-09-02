@@ -186,7 +186,7 @@ class M_report_rekap_penjualan extends Model{
 
 			if ($rekap_penjualan_jenis == 'Perawatan')
 			{
-				$query = "SELECT perawatan.rawat_kode AS kode, perawatan.rawat_nama AS nama, 
+				$query = "SELECT 
 					SUM(detail_jual_rawat.drawat_jumlah) AS total_jumlah,
 					SUM((detail_jual_rawat.drawat_jumlah * detail_jual_rawat.drawat_harga)-((detail_jual_rawat.drawat_jumlah * detail_jual_rawat.drawat_harga)*detail_jual_rawat.drawat_diskon/100)) AS subtotal,
 					SUM((master_jual_rawat.jrawat_diskon * ((detail_jual_rawat.drawat_jumlah * detail_jual_rawat.drawat_harga)-((detail_jual_rawat.drawat_jumlah * detail_jual_rawat.drawat_harga)*detail_jual_rawat.drawat_diskon/100))) /100) AS diskon_tambahan,
@@ -211,7 +211,7 @@ class M_report_rekap_penjualan extends Model{
 			}
 			else if ($rekap_penjualan_jenis == 'Produk')
 			{
-				$query = "SELECT produk.produk_kode AS kode, produk.produk_nama AS nama, 
+				$query = "SELECT 
 						SUM(detail_jual_produk.dproduk_jumlah) AS total_jumlah,
 						SUM((detail_jual_produk.dproduk_jumlah * detail_jual_produk.dproduk_harga)-((detail_jual_produk.dproduk_jumlah * detail_jual_produk.dproduk_harga)*detail_jual_produk.dproduk_diskon/100)) AS subtotal,
 						SUM((master_jual_produk.jproduk_diskon * ((detail_jual_produk.dproduk_jumlah * detail_jual_produk.dproduk_harga)-((detail_jual_produk.dproduk_jumlah * detail_jual_produk.dproduk_harga)*detail_jual_produk.dproduk_diskon/100))) /100) AS diskon_tambahan,
@@ -231,7 +231,7 @@ class M_report_rekap_penjualan extends Model{
 			}
 			else if ($rekap_penjualan_jenis == 'Paket')
 			{
-				$query = "SELECT paket.paket_kode AS kode, paket.paket_nama AS nama, 
+				$query = "SELECT 
 					SUM(detail_jual_paket.dpaket_jumlah) AS total_jumlah,
 					SUM((detail_jual_paket.dpaket_jumlah * detail_jual_paket.dpaket_harga)-((detail_jual_paket.dpaket_jumlah * detail_jual_paket.dpaket_harga)*detail_jual_paket.dpaket_diskon/100)) AS subtotal,
 					SUM((master_jual_paket.jpaket_diskon * ((detail_jual_paket.dpaket_jumlah * detail_jual_paket.dpaket_harga)-((detail_jual_paket.dpaket_jumlah * detail_jual_paket.dpaket_harga)*detail_jual_paket.dpaket_diskon/100))) /100) AS diskon_tambahan,
