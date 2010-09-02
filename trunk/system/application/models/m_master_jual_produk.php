@@ -795,6 +795,7 @@ class M_master_jual_produk extends Model{
 					$this->db->update('detail_jual_produk', $dtu_dproduk);
 					if($this->db->affected_rows()){
 						if($cetak==1 && $i==$size_array){
+							/*proses cetak*/
 							$this->stat_dok_tertutup_update($dproduk_master);
 							$this->member_point_update($dproduk_master);
 							$this->membership_insert($dproduk_master);
@@ -805,6 +806,7 @@ class M_master_jual_produk extends Model{
 						}
 					}else{
 						if($cetak==1 && $i==$size_array){
+							/*proses cetak*/
 							$this->stat_dok_tertutup_update($dproduk_master);
 							$this->member_point_update($dproduk_master);
 							$this->membership_insert($dproduk_master);
@@ -831,15 +833,26 @@ class M_master_jual_produk extends Model{
 					$this->db->insert('detail_jual_produk', $dti_jproduk);
 					if($this->db->affected_rows()){
 						if($cetak==1 && $i==$size_array){
+							/*proses cetak*/
 							$this->stat_dok_tertutup_update($dproduk_master);
 							$this->member_point_update($dproduk_master);
 							$this->membership_insert($dproduk_master);
+							$this->catatan_piutang_update($dproduk_master);
 							return $dproduk_master;
 						}else if($cetak<>1 && $i==$size_array){
 							return '0';
 						}
 					}else{
-						return '-1';
+						if($cetak==1 && $i==$size_array){
+							/*proses cetak*/
+							$this->stat_dok_tertutup_update($dproduk_master);
+							$this->member_point_update($dproduk_master);
+							$this->membership_insert($dproduk_master);
+							$this->catatan_piutang_update($dproduk_master);
+							return $dproduk_master;
+						}else if($cetak<>1 && $i==$size_array){
+							return '0';
+						}
 					}
 				}
 				

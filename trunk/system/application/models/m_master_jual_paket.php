@@ -939,7 +939,7 @@ class M_master_jual_paket extends Model{
 						}else if($cetak<>1 && $i==$size_array){
 							return '0';
 						}
-					}else
+					}else{
 						//return '-1';
 						if($cetak==1 && $i==$size_array){
 							//* proses cetak /
@@ -951,6 +951,7 @@ class M_master_jual_paket extends Model{
 						}else if($cetak<>1 && $i==$size_array){
 							return '0';
 						}
+					}
 				}
 				
 			}
