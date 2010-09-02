@@ -409,6 +409,13 @@ class M_master_jual_paket extends Model{
 						,lpiutang_revised=(lpiutang_revised+1)
 					WHERE lpiutang_faktur='".$jpaket_nobukti."'";
 				$this->db->query($sqlu);
+				if($this->db->affected_rows()>-1){
+					return 1;
+				}else{
+					return 1;
+				}
+			}else{
+				return 1;
 			}
 			
 		}
@@ -527,6 +534,13 @@ class M_master_jual_paket extends Model{
 				$jpaket_cust = $record['jpaket_cust'];
 				$sql="UPDATE customer SET cust_point = (cust_point - $jpaket_point) WHERE cust_id='$jpaket_cust'";
 				$this->db->query($sql);
+				if($this->db->affected_rows()>-1){
+					return 1;
+				}else{
+					return 1;
+				}
+			}else{
+				return 1;
 			}
 		}
 		
@@ -536,30 +550,68 @@ class M_master_jual_paket extends Model{
 				SET jual_card.jcard_stat_dok = master_jual_paket.jpaket_stat_dok
 				WHERE master_jual_paket.jpaket_id='$jpaket_id'";
 			$this->db->query($sqlu_jcard);
+			if($this->db->affected_rows()>-1){
+				//updating db.jual_cek ==> pembatalan
+				$sqlu_jcek = "UPDATE jual_cek JOIN master_jual_paket ON(jual_cek.jcek_ref=master_jual_paket.jpaket_nobukti)
+					SET jual_cek.jcek_stat_dok = master_jual_paket.jpaket_stat_dok
+					WHERE master_jual_paket.jpaket_id='$jpaket_id'";
+				$this->db->query($sqlu_jcek);
+				if($this->db->affected_rows()>-1){
+					//updating db.jual_kwitansi ==> pembatalan
+					$sqlu_jkwitansi = "UPDATE jual_kwitansi JOIN master_jual_paket ON(jual_kwitansi.jkwitansi_ref=master_jual_paket.jpaket_nobukti)
+						SET jual_kwitansi.jkwitansi_stat_dok = master_jual_paket.jpaket_stat_dok
+						WHERE master_jual_paket.jpaket_id='$jpaket_id'";
+					$this->db->query($sqlu_jkwitansi);
+					if($this->db->affected_rows()>-1){
+						$sql = "SELECT jkwitansi_master
+							FROM jual_kwitansi
+							JOIN master_jual_paket ON(jkwitansi_ref=jpaket_nobukti)
+							WHERE jpaket_id='".$jpaket_id."'";
+						$rs = $this->db->query($sql);
+						if($rs->num_rows()){
+							$record = $rs->row_array();
+							$jkwitansi_master = $record['jkwitansi_master'];
+						}
+						//updating sisa kwitansi
+						$sqlu = "UPDATE cetak_kwitansi,
+									(SELECT sum(jkwitansi_nilai) AS total_kwitansi
+										,jkwitansi_master 
+									FROM jual_kwitansi
+									WHERE jkwitansi_master<>0
+										AND jkwitansi_stat_dok<>'Batal'
+										AND jkwitansi_master='".$jkwitansi_master."'
+									GROUP BY jkwitansi_master) AS vu_kw
+								SET kwitansi_sisa=(kwitansi_nilai - vu_kw.total_kwitansi)
+								WHERE vu_kw.jkwitansi_master=kwitansi_id
+									AND kwitansi_id='".$jkwitansi_master."'";
+						$this->db->query($sqlu);
+						
+						//updating db.jual_transfer ==> pembatalan
+						$sqlu_jtransfer = "UPDATE jual_transfer JOIN master_jual_paket ON(jual_transfer.jtransfer_ref=master_jual_paket.jpaket_nobukti)
+							SET jual_transfer.jtransfer_stat_dok = master_jual_paket.jpaket_stat_dok
+							WHERE master_jual_paket.jpaket_id='$jpaket_id'";
+						$this->db->query($sqlu_jtransfer);
+						if($this->db->affected_rows()>-1){
+							//updating db.jual_tunai ==> pembatalan
+							$sqlu_jtunai = "UPDATE jual_tunai JOIN master_jual_paket ON(jual_tunai.jtunai_ref=master_jual_paket.jpaket_nobukti)
+								SET jual_tunai.jtunai_stat_dok = master_jual_paket.jpaket_stat_dok
+								WHERE master_jual_paket.jpaket_id='$jpaket_id'";
+							$this->db->query($sqlu_jtunai);
+							if($this->db->affected_rows()>-1){
+								//updating db.voucher_terima ==> pembatalan
+								$sqlu_tvoucher = "UPDATE voucher_terima JOIN master_jual_paket ON(voucher_terima.tvoucher_ref=master_jual_paket.jpaket_nobukti)
+									SET voucher_terima.tvoucher_stat_dok = master_jual_paket.jpaket_stat_dok
+									WHERE master_jual_paket.jpaket_id='$jpaket_id'";
+								$this->db->query($sqlu_tvoucher);
+								if($this->db->affected_rows()>-1){
+									return 1;
+								}
+							}
+						}
+					}
+				}
+			}
 			
-			//updating db.jual_cek ==> pembatalan
-			$sqlu_jcek = "UPDATE jual_cek JOIN master_jual_paket ON(jual_cek.jcek_ref=master_jual_paket.jpaket_nobukti)
-				SET jual_cek.jcek_stat_dok = master_jual_paket.jpaket_stat_dok
-				WHERE master_jual_paket.jpaket_id='$jpaket_id'";
-			$this->db->query($sqlu_jcek);
-			
-			//updating db.jual_kwitansi ==> pembatalan
-			$sqlu_jkwitansi = "UPDATE jual_kwitansi JOIN master_jual_paket ON(jual_kwitansi.jkwitansi_ref=master_jual_paket.jpaket_nobukti)
-				SET jual_kwitansi.jkwitansi_stat_dok = master_jual_paket.jpaket_stat_dok
-				WHERE master_jual_paket.jpaket_id='$jpaket_id'";
-			$this->db->query($sqlu_jkwitansi);
-			
-			//updating db.jual_transfer ==> pembatalan
-			$sqlu_jtransfer = "UPDATE jual_transfer JOIN master_jual_paket ON(jual_transfer.jtransfer_ref=master_jual_paket.jpaket_nobukti)
-				SET jual_transfer.jtransfer_stat_dok = master_jual_paket.jpaket_stat_dok
-				WHERE master_jual_paket.jpaket_id='$jpaket_id'";
-			$this->db->query($sqlu_jtransfer);
-			
-			//updating db.jual_tunai ==> pembatalan
-			$sqlu_jtunai = "UPDATE jual_tunai JOIN master_jual_paket ON(jual_tunai.jtunai_ref=master_jual_paket.jpaket_nobukti)
-				SET jual_tunai.jtunai_stat_dok = master_jual_paket.jpaket_stat_dok
-				WHERE master_jual_paket.jpaket_id='$jpaket_id'";
-			$this->db->query($sqlu_jtunai);
 		}
 		
 		function membership_insert($jpaket_id){
@@ -643,12 +695,24 @@ class M_master_jual_paket extends Model{
 								"membert_status"=>'Daftar'
 								);
 								$this->db->insert('member_temp', $dti_membert);
+								if($this->db->affected_rows()>-1){
+									return 1;
+								}else{
+									return 1;
+								}
+							}else{
+								return 1;
 							}
 						}else{
 							//* message: kartu member customer ini sementara tidak bisa digunakan, karena sudah masuk masa tenggang /
 							//* deleting customer pada db.member_temp (yang mungkin sebelumnya dimasukkan), dikarenakan ada pembatalan transaksi sehingga $cust_total_trans_now tidak memenuhi syarat /
 							$this->db->where('membert_cust', $cust_id);
 							$this->db->delete('member_temp');
+							if($this->db->affected_rows()>-1){
+								return 1;
+							}else{
+								return 1;
+							}
 						}
 					}else{
 						//* check tanggal member_valid, apakah member_valid > $date_now ? /
@@ -659,6 +723,7 @@ class M_master_jual_paket extends Model{
 						}else{
 							//* message: kartu member customer ini sudah tidak bisa digunakan lagi karena kartu sudah hangus.
 						}
+						return 1;
 					}
 				}else{
 					//* artinya: customer belum pernah menjadi MEMBER (belum masuk ke db.member). /
@@ -678,12 +743,24 @@ class M_master_jual_paket extends Model{
 							"membert_status"=>'Daftar'
 							);
 							$this->db->insert('member_temp', $dti_membert);
+							if($this->db->affected_rows()>-1){
+								return 1;
+							}else{
+								return 1;
+							}
+						}else{
+							return 1;
 						}
 					}else{
 						//* Syarat menjadi MEMBER belum terpenuhi /
 						//* deleting di db.member_temp (jika sebelumnya sudah diinsert), karena melakukan pembatalan transaksi sehingga total transaksi hari ini tidak memenuhi syarat menjadi member /
 						$this->db->where('membert_cust', $cust_id);
 						$this->db->delete('member_temp');
+						if($this->db->affected_rows()>-1){
+							return 1;
+						}else{
+							return 1;
+						}
 					}
 				}
 			}
@@ -697,28 +774,6 @@ class M_master_jual_paket extends Model{
 				$result=$this->db->query($sql);
 			}
 			
-			// You could do some checkups here and return '0' or other error consts.
-			// Make a single query to delete all of the master_jual_pakets at the same time :
-			/*if(sizeof($pkid)<1){
-				return '0';
-			} else if (sizeof($pkid) == 1){
-				$query = "DELETE FROM detail_jual_paket WHERE dpaket_id = ".$pkid[0];
-				$this->db->query($query);
-			} else {
-				$query = "DELETE FROM detail_jual_paket WHERE ";
-				for($i = 0; $i < sizeof($pkid); $i++){
-					$query = $query . "dpaket_id= ".$pkid[$i];
-					if($i<sizeof($pkid)-1){
-						$query = $query . " OR ";
-					}     
-				}
-				$this->db->query($query);
-			}
-			if($this->db->affected_rows()>0)
-				return '1';
-			else
-				return '0';*/
-			
 		}
 		//*eof
 		
@@ -730,138 +785,6 @@ class M_master_jual_paket extends Model{
 			$result=$this->db->query($sql);
 			return '1';
 		}
-		
-		/*function master_ambil_paket_insert($jpaket_id, $paket_id, $paket_jumlah, $jpaket_kadaluarsa){
-			$apaket_faktur="";
-			$apaket_faktur_tanggal="";
-			$cust_no="";
-			$cust_nama="";
-			$paket_nama="";
-			$sql_jpaket="SELECT jpaket_nobukti, jpaket_tanggal, jpaket_cust, cust_no, cust_nama FROM master_jual_paket LEFT JOIN customer ON(jpaket_cust=cust_id) WHERE jpaket_id='$jpaket_id'";
-			$rs_jpaket=$this->db->query($sql_jpaket);
-			if($rs_jpaket->num_rows()){
-				$rs_jpaket_record=$rs_jpaket->row_array();
-				$apaket_faktur=$rs_jpaket_record["jpaket_nobukti"];
-				$apaket_faktur_tanggal=$rs_jpaket_record["jpaket_tanggal"];
-				$apaket_cust=$rs_jpaket_record["jpaket_cust"];
-				$apaket_cust_no=$rs_jpaket_record["cust_no"];
-				$apaket_cust_nama=$rs_jpaket_record["cust_nama"];
-			}
-			$sql_paket="SELECT paket_kode, paket_nama, if(sum(rpaket_jumlah)!='null',sum(rpaket_jumlah),0) as total_isi_rpaket, if(sum(ipaket_jumlah)!='null',sum(ipaket_jumlah),0) as total_isi_ipaket FROM paket LEFT JOIN paket_isi_perawatan ON(rpaket_master=paket_id) LEFT JOIN paket_isi_produk ON(ipaket_master=paket_id) WHERE paket_id='$paket_id' GROUP BY paket_id";
-			$rs_paket=$this->db->query($sql_paket);
-			if($rs_paket->num_rows()){
-				$rs_paket_record=$rs_paket->row_array();
-				$apaket_paket_kode=$rs_paket_record["paket_kode"];
-				$apaket_paket_nama=$rs_paket_record["paket_nama"];
-				//$apaket_sisa_paket=$rs_paket_record["total_isi_rpaket"]+$rs_paket_record["total_isi_ipaket"];
-				$apaket_sisa_paket=$rs_paket_record["total_isi_rpaket"];
-			}
-			
-			//* INSERT ke db.master_ambil_paket 
-			$dti_apaket=array(
-			"apaket_jpaket"=>$jpaket_id,
-			"apaket_faktur"=>$apaket_faktur,
-			"apaket_faktur_tanggal"=>$apaket_faktur_tanggal,
-			"apaket_kadaluarsa"=>$jpaket_kadaluarsa,
-			"apaket_cust"=>$apaket_cust,
-			"apaket_cust_no"=>$apaket_cust_no,
-			"apaket_cust_nama"=>$apaket_cust_nama,
-			"apaket_paket"=>$paket_id,
-			"apaket_paket_kode"=>$apaket_paket_kode,
-			"apaket_paket_nama"=>$apaket_paket_nama,
-			"apaket_paket_jumlah"=>$paket_jumlah,
-			"apaket_sisa_paket"=>$apaket_sisa_paket
-			);
-			$this->db->insert('master_ambil_paket',$dti_apaket);
-			if($this->db->affected_rows()){
-				$sql_apaket="SELECT apaket_id FROM master_ambil_paket WHERE apaket_jpaket='$jpaket_id' AND apaket_paket='$paket_id'";
-				$rs_apaket=$this->db->query($sql_apaket);
-				if($rs_apaket->num_rows()){
-					$rs_apaket_record=$rs_apaket->row_array();
-					$apaket_id=$rs_apaket_record["apaket_id"];
-				}
-				//* INSERT ke submaster_apaket_item (per isi paket) <== db.paket_isi_perawatan 
-				$sql_rpaket="SELECT rpaket_perawatan, rpaket_jumlah, rawat_nama FROM paket_isi_perawatan LEFT JOIN perawatan ON(rpaket_perawatan=rawat_id) WHERE rpaket_master='$paket_id'";
-				$rs_rpaket=$this->db->query($sql_rpaket);
-				$rpaket_num_rows=$rs_rpaket->num_rows();
-				if($rpaket_num_rows>0){
-					foreach($rs_rpaket->result_array() as $row){
-						$sapaket_item=$row['rpaket_perawatan'];
-						$sapaket_item_nama=$row['rawat_nama'];
-						$rpaket_jumlah=$row['rpaket_jumlah'];
-						$dti_sapaket=array(
-						"sapaket_master"=>$apaket_id,
-						"sapaket_item"=>$sapaket_item,
-						"sapaket_item_nama"=>$sapaket_item_nama,
-						"sapaket_jenis_item"=>'perawatan',
-						"sapaket_jmlisi_item"=>$rpaket_jumlah,
-						"sapaket_sisa_item"=>$rpaket_jumlah
-						);
-						$this->db->insert('submaster_apaket_item',$dti_sapaket);
-					}
-				}
-				
-				//* INSERT ke submaster_apaket_item (per isi paket) <== db.paket_isi_perawatan 
-				$sql_ipaket="SELECT ipaket_produk, ipaket_jumlah, produk_nama FROM paket_isi_produk LEFT JOIN produk ON(ipaket_produk=produk_id) WHERE ipaket_master='$paket_id'";
-				$rs_ipaket=$this->db->query($sql_ipaket);
-				$ipaket_num_rows=$rs_ipaket->num_rows();
-				if($ipaket_num_rows>0){
-					foreach($rs_ipaket->result_array() as $row){
-						$sapaket_item=$row['ipaket_produk'];
-						$sapaket_item_nama=$row['produk_nama'];
-						$rpaket_jumlah=$row['ipaket_jumlah'];
-						$dti_sapaket=array(
-						"sapaket_master"=>$apaket_id,
-						"sapaket_item"=>$sapaket_item,
-						"sapaket_item_nama"=>$sapaket_item_nama,
-						"sapaket_jenis_item"=>'produk',
-						"sapaket_jmlisi_item"=>$rpaket_jumlah,
-						"sapaket_sisa_item"=>$rpaket_jumlah
-						);
-						$this->db->insert('submaster_apaket_item',$dti_sapaket);
-					}
-				}
-				
-			}
-		}*/
-		
-		/*function master_ambil_paket_insert($jpaket_id, $dpaket_paket, $dpaket_jumlah, $dpaket_kadaluarsa){
-			//* INSERT ke db.master_ambil_paket (per isi paket) <== db.paket_isi_perawatan /
-			$sql_rpaket="SELECT rpaket_perawatan, rpaket_jumlah FROM paket_isi_perawatan WHERE rpaket_master='$dpaket_paket'";
-			$rs_rpaket=$this->db->query($sql_rpaket);
-			if($rs_rpaket->num_rows()){
-				foreach($rs_rpaket->result_array() as $row){
-					$apaket_item=$row["rpaket_perawatan"];
-					$apaket_sisa_item=$row["rpaket_jumlah"]*$dpaket_jumlah;
-					$dti_rpaket_toapaket=array(
-					"apaket_jpaket"=>$jpaket_id,
-					"apaket_paket"=>$dpaket_paket,
-					"apaket_item"=>$apaket_item,
-					"apaket_jenis_item"=>'perawatan',
-					"apaket_sisa_item"=>$apaket_sisa_item
-					);
-					$this->db->insert('master_ambil_paket', $dti_rpaket_toapaket);
-				}
-			}
-			
-			//* INSERT ke db.master_ambil_paket (per isi paket) <== db.paket_isi_produk /
-			$sql_rpaket="SELECT ipaket_produk, ipaket_jumlah FROM paket_isi_produk WHERE ipaket_master='$dpaket_paket'";
-			$rs_rpaket=$this->db->query($sql_rpaket);
-			if($rs_rpaket->num_rows()){
-				foreach($rs_rpaket->result_array() as $row){
-					$apaket_item=$row["ipaket_produk"];
-					$apaket_sisa_item=$row["ipaket_jumlah"]*$dpaket_jumlah;
-					$dti_ipaket_toapaket=array(
-					"apaket_jpaket"=>$jpaket_id,
-					"apaket_paket"=>$dpaket_paket,
-					"apaket_item"=>$apaket_item,
-					"apaket_jenis_item"=>'produk',
-					"apaket_sisa_item"=>$apaket_sisa_item
-					);
-					$this->db->insert('master_ambil_paket', $dti_ipaket_toapaket);
-				}
-			}
-		}*/
 		
 		//insert detail record
 		function detail_detail_jual_paket_insert($array_dpaket_id ,$dpaket_master ,$array_dpaket_paket, $array_dpaket_karyawan, $array_dpaket_kadaluarsa ,$array_dpaket_jumlah ,$array_dpaket_harga ,$array_dpaket_diskon ,$array_dpaket_diskon_jenis ,$array_dpaket_sales, $cetak){
@@ -1032,183 +955,6 @@ class M_master_jual_paket extends Model{
 				
 			}
 			
-			
-			
-			/*if($dpaket_kadaluarsa=="")
-				$dpaket_kadaluarsa=NULL;
-			
-			$dpaket_sisa_paket=0;
-			$rpaket_jumlah_total=0;
-			$ipaket_jumlah_total=0;
-			
-			//* mendapatkan jumlah_total_perawatan dalam paket /
-			$sql_rpaket="SELECT sum(rpaket_jumlah) AS rpaket_jumlah_total
-				FROM paket_isi_perawatan
-				WHERE rpaket_master='$dpaket_paket'
-				ORDER BY rpaket_master";
-			$rs_rpaket=$this->db->query($sql_rpaket);
-			if($rs_rpaket->num_rows()){
-				$rs_rpaket_record=$rs_rpaket->row_array();
-				$rpaket_jumlah_total=$rs_rpaket_record["rpaket_jumlah_total"];
-			}
-			
-			//* mendapatkan jumlah_total_produk dalam paket /
-			$sql_ipaket="SELECT sum(ipaket_jumlah) AS ipaket_jumlah_total
-				FROM paket_isi_produk
-				WHERE ipaket_master='$dpaket_paket'
-				ORDER BY ipaket_master";
-			$rs_ipaket=$this->db->query($sql_ipaket);
-			if($rs_ipaket->num_rows()){
-				$rs_ipaket_record=$rs_ipaket->row_array();
-				$ipaket_jumlah_total=$rs_ipaket_record["ipaket_jumlah_total"];
-			}
-			
-			//* jumlah total yang masuk ke detail_jual_paket.dpaket_sisa_paket = jumlah paket yang dibeli * (jumlah isi paket) /
-			$dpaket_sisa_paket=$dpaket_jumlah*($rpaket_jumlah_total+$ipaket_jumlah_total);
-			
-			//* checking $dpaket_id ==> apakah is_numeric AND sudah ada di db.detail_jual_paket.dpaket_id ?? /
-			if(is_numeric($dpaket_id)){
-				//* detail ini sudah ada dalam db.detail_jual_paket ==> updating /
-				//* checking lagi, apakah $dpaket_master(identik = db.master_jual_paket.jpaket_id) AND $dpaket_id sudah diambil ataukah belum di db.detail_ambil_paket,
-				//* JIKA sudah pernah diambil ==> maka $dpaket_id ini tidak boleh dilakukan updating atau penghapusan /
-				$sql = "SELECT dapaket_id FROM detail_ambil_paket WHERE dapaket_jpaket='$dpaket_master' AND dapaket_dpaket='$dpaket_id'";
-				$rs = $this->db->query($sql);
-				if($rs->num_rows()){
-					//* artinya: isi paket sudah pernah diambil, sehingga tidak boleh di-edit /
-					if($cetak==1 && ($count==($dcount-1))){
-						$this->member_point_update($dpaket_master);
-						$this->membership_insert($dpaket_master);
-						return $dpaket_master;
-					}else if($cetak!==1 && ($count==($dcount-1))){
-						return '0';
-					}else if($count!==($dcount-1)){
-						return '-3';
-					}
-				}else{
-					//* artinya: isi paket belum pernah diambil, sehingga masih boleh di-edit /
-					$dtu_dpaket = array(
-						//"dpaket_master"=>$dpaket_master, 
-						"dpaket_paket"=>$dpaket_paket,
-						"dpaket_karyawan"=>$dpaket_karyawan,
-						"dpaket_kadaluarsa"=>$dpaket_kadaluarsa, 
-						"dpaket_jumlah"=>$dpaket_jumlah, 
-						"dpaket_harga"=>$dpaket_harga, 
-						"dpaket_diskon"=>$dpaket_diskon,
-						"dpaket_diskon_jenis"=>$dpaket_diskon_jenis,
-						"dpaket_sales"=>$dpaket_sales,
-						"dpaket_sisa_paket"=>$dpaket_sisa_paket
-					);
-					$this->db->where('dpaket_id', $dpaket_id);
-					$this->db->update('detail_jual_paket', $dtu_dpaket); 
-					if($this->db->affected_rows()){
-						if($cetak==1 && ($count==($dcount-1))){
-							$this->member_point_update($dpaket_master);
-							$this->membership_insert($dpaket_master);
-							return $dpaket_master;
-						}else if($cetak!==1 && ($count==($dcount-1))){
-							return '0';
-						}else if($count!==($dcount-1)){
-							return '-3';
-						}
-					}else
-						return '-1';
-				}
-			}else{
-				//* Adding detail baru /
-				$data = array(
-					"dpaket_master"=>$dpaket_master, 
-					"dpaket_paket"=>$dpaket_paket,
-					"dpaket_karyawan"=>$dpaket_karyawan,
-					"dpaket_kadaluarsa"=>$dpaket_kadaluarsa, 
-					"dpaket_jumlah"=>$dpaket_jumlah, 
-					"dpaket_harga"=>$dpaket_harga, 
-					"dpaket_diskon"=>$dpaket_diskon,
-					"dpaket_diskon_jenis"=>$dpaket_diskon_jenis,
-					"dpaket_sales"=>$dpaket_sales,
-					"dpaket_sisa_paket"=>$dpaket_sisa_paket
-				);
-				$this->db->insert('detail_jual_paket', $data); 
-				if($this->db->affected_rows()){
-					if($cetak==1 && ($count==($dcount-1))){
-						$this->member_point_update($dpaket_master);
-						$this->membership_insert($dpaket_master);
-						return $dpaket_master;
-					}else if($cetak!==1 && ($count==($dcount-1))){
-						return '0';
-					}else if($count!==($dcount-1)){
-						return '-3';
-					}
-				}else
-					return '-1';
-			}*/
-			
-			
-			
-			//* checking apakah paket yang dibeli sudah ada dalam db.detail_jual_paket, JIKA sudah ada maka yang dilakukan adalah updating db.detail_jual_paket.dpaket_jumlah /
-			/*$sql="SELECT dpaket_id
-					,dpaket_jumlah
-					,dpaket_sisa_paket
-				FROM detail_jual_paket
-				WHERE dpaket_master='$dpaket_master'
-					AND dpaket_paket='$dpaket_paket'";
-			$rs=$this->db->query($sql);
-			if($rs->num_rows()){
-				//* UPDATE detail_jual_paket untuk menambahkan dpaket_jumlah, ini dikarenakan kasir memasukkan paket yg sama lebih dari satu dalam satu Faktur /
-				$record = $rs->row_array();
-				$dpaket_id = $record['dpaket_id'];
-				$dpaket_jumlah_awal = $record['dpaket_jumlah'];
-				$dpaket_sisa_paket_awal = $record['dpaket_sisa_paket'];
-				$dpaket_jumlah+=$dpaket_jumlah_awal;
-				$dpaket_sisa_paket+=$dpaket_sisa_paket_awal;
-				
-				$dtu_dpaket=array(
-				"dpaket_jumlah"=>$dpaket_jumlah,
-				"dpaket_karyawan"=>$dpaket_karyawan,
-				"dpaket_sisa_paket"=>$dpaket_sisa_paket
-				);
-				$this->db->where('dpaket_id', $dpaket_id);
-				$this->db->update('detail_jual_paket', $dtu_dpaket);
-				if($this->db->affected_rows()){
-					if($cetak==1 && ($count==($dcount-1))){
-						$this->member_point_update($dpaket_master);
-						$this->membership_insert($dpaket_master);
-						return $dpaket_master;
-					}else if($cetak!==1 && ($count==($dcount-1))){
-						return '0';
-					}else if($count!==($dcount-1)){
-						return '-3';
-					}
-				}else
-					return '-1';
-			}else{
-				
-				$data = array(
-					"dpaket_master"=>$dpaket_master, 
-					"dpaket_paket"=>$dpaket_paket,
-					"dpaket_karyawan"=>$dpaket_karyawan,
-					"dpaket_kadaluarsa"=>$dpaket_kadaluarsa, 
-					"dpaket_jumlah"=>$dpaket_jumlah, 
-					"dpaket_harga"=>$dpaket_harga, 
-					"dpaket_diskon"=>$dpaket_diskon,
-					"dpaket_diskon_jenis"=>$dpaket_diskon_jenis,
-					"dpaket_sales"=>$dpaket_sales,
-					"dpaket_sisa_paket"=>$dpaket_sisa_paket
-				);
-				$this->db->insert('detail_jual_paket', $data); 
-				if($this->db->affected_rows()){
-					if($cetak==1 && ($count==($dcount-1))){
-						$this->member_point_update($dpaket_master);
-						$this->membership_insert($dpaket_master);
-						return $dpaket_master;
-					}else if($cetak!==1 && ($count==($dcount-1))){
-						return '0';
-					}else if($count!==($dcount-1)){
-						return '-3';
-					}
-				}else
-					return '-1';
-			}*/
-			
 		}
 		//end of function
 		
@@ -1351,8 +1097,11 @@ class M_master_jual_paket extends Model{
 										  ,$jpaket_transfer_nilai2
 										  ,$jpaket_transfer_bank3
 										  ,$jpaket_transfer_nama3
-										  ,$jpaket_transfer_nilai3){
+										  ,$jpaket_transfer_nilai3
+										  ,$cetak){
 			$date_now = date('Y-m-d');
+			
+			$jenis_transaksi = 'jual_paket';
 			
 			$datetime_now=date('Y-m-d H:i:s');
 			if ($jpaket_stat_dok=="")
@@ -1364,28 +1113,6 @@ class M_master_jual_paket extends Model{
 			if($rs->num_rows()){
 				$rs_record=$rs->row_array();
 				$jpaket_revised=$rs_record["jpaket_revised"];
-				$jpaket_cara_awal=$rs_record["jpaket_cara"];
-				$jpaket_cara2_awal=$rs_record["jpaket_cara2"];
-				$jpaket_cara3_awal=$rs_record["jpaket_cara3"];
-				//$jpaket_date_create=$rs_record["jpaket_date_create"];
-				
-				$sql="delete from jual_tunai where jtunai_ref='".$jpaket_nobukti."'";
-				$this->db->query($sql);
-				
-				$sql="delete from jual_kwitansi where jkwitansi_ref='".$jpaket_nobukti."'";
-				$this->db->query($sql);
-				
-				$sql="delete from jual_card where jcard_ref='".$jpaket_nobukti."'";
-				$this->db->query($sql);
-						
-				$sql="delete from jual_cek where jcek_ref='".$jpaket_nobukti."'";
-				$this->db->query($sql);
-				
-				$sql="delete from jual_transfer where jtransfer_ref='".$jpaket_nobukti."'";
-				$this->db->query($sql);
-				
-				$sql="delete from voucher_terima where tvoucher_ref='".$jpaket_nobukti."'";
-				$this->db->query($sql);
 			}
 			if($jpaket_diskon=="")
 				$jpaket_diskon=0;
@@ -1400,15 +1127,15 @@ class M_master_jual_paket extends Model{
 				"jpaket_keterangan"=>$jpaket_keterangan,
 				"jpaket_stat_dok"=>$jpaket_stat_dok,
 				"jpaket_update"=>@$_SESSION[SESSION_USERID],
-				//"jpaket_date_update"=>$datetime_now,
+				"jpaket_date_update"=>$datetime_now,
 				"jpaket_revised"=>$jpaket_revised+1
 			);
 			if($jpaket_tanggal<>$date_now){
 				$data["jpaket_date_update"] = $jpaket_tanggal;
-				$bayar_date_create = $jpaket_tanggal;
+				//$bayar_date_create = $jpaket_tanggal;
 			}else{
 				$data["jpaket_date_update"] = $datetime_now;
-				$bayar_date_create = $datetime_now;
+				//$bayar_date_create = $datetime_now;
 			}
 			if($jpaket_cara2!=null){
 				if(($jpaket_kwitansi_nilai2<>'' && $jpaket_kwitansi_nilai2<>0)
@@ -1439,338 +1166,186 @@ class M_master_jual_paket extends Model{
 			
 			$this->db->where('jpaket_id', $jpaket_id);
 			$this->db->update('master_jual_paket', $data);
-			if($this->db->affected_rows() || $this->db->affected_rows()==0){
+			if($this->db->affected_rows()>-1){
+				$time_now = date('H:i:s');
+				$bayar_date_create_temp = $jpaket_tanggal.' '.$time_now;
+				$bayar_date_create = date('Y-m-d H:i:s', strtotime($bayar_date_create_temp));
 				
-				if($jpaket_cara!=null || $jpaket_cara!=''){
-					//kwitansi
-					if($jpaket_cara=='kwitansi'){
-						if($jpaket_kwitansi_nama=="" || $jpaket_kwitansi_nama==NULL){
-							if(is_int($jpaket_kwitansi_nama)){
-								$sql="select cust_nama from customer where cust_id='".$jpaket_cust."'";
-								$query=$this->db->query($sql);
-								if($query->num_rows()){
-									$data=$query->row();
-									$jpaket_kwitansi_nama=$data->cust_nama;
+				//delete all transaksi
+				$sql="delete from jual_kwitansi where jkwitansi_ref='".$jpaket_nobukti."'";
+				$this->db->query($sql);
+				if($this->db->affected_rows()>-1){
+					$sql="delete from jual_card where jcard_ref='".$jpaket_nobukti."'";
+					$this->db->query($sql);
+					if($this->db->affected_rows()>-1){
+						$sql="delete from jual_cek where jcek_ref='".$jpaket_nobukti."'";
+						$this->db->query($sql);
+						if($this->db->affected_rows()>-1){
+							$sql="delete from jual_transfer where jtransfer_ref='".$jpaket_nobukti."'";
+							$this->db->query($sql);
+							if($this->db->affected_rows()>-1){
+								$sql="delete from jual_tunai where jtunai_ref='".$jpaket_nobukti."'";
+								$this->db->query($sql);
+								if($this->db->affected_rows()>-1){
+									$sql="delete from voucher_terima where tvoucher_ref='".$jpaket_nobukti."'";
+									$this->db->query($sql);
+									if($this->db->affected_rows()>-1){
+										if($jpaket_cara!=null || $jpaket_cara!=''){
+											if($jpaket_kwitansi_nilai<>'' && $jpaket_kwitansi_nilai<>0){
+												$result_bayar = $this->m_public_function->cara_bayar_kwitansi_insert($jpaket_kwitansi_no
+																								  ,$jpaket_kwitansi_nilai
+																								  ,$jpaket_nobukti
+																								  ,$bayar_date_create
+																								  ,$jenis_transaksi
+																								  ,$cetak);
+												
+											}elseif($jpaket_card_nilai<>'' && $jpaket_card_nilai<>0){
+												$result_bayar = $this->m_public_function->cara_bayar_card_insert($jpaket_card_nama
+																							  ,$jpaket_card_edc
+																							  ,$jpaket_card_no
+																							  ,$jpaket_card_nilai
+																							  ,$jpaket_nobukti
+																							  ,$bayar_date_create
+																							  ,$jenis_transaksi
+																							  ,$cetak);
+											}elseif($jpaket_cek_nilai<>'' && $jpaket_cek_nilai<>0){
+												$result_bayar = $this->m_public_function->cara_bayar_cek_insert($jpaket_cek_nama
+																							 ,$jpaket_cek_no
+																							 ,$jpaket_cek_valid
+																							 ,$jpaket_cek_bank
+																							 ,$jpaket_cek_nilai
+																							 ,$jpaket_nobukti
+																							 ,$bayar_date_create
+																							 ,$jenis_transaksi
+																							 ,$cetak);
+											}elseif($jpaket_transfer_nilai<>'' && $jpaket_transfer_nilai<>0){
+												$result_bayar = $this->m_public_function->cara_bayar_transfer_insert($jpaket_transfer_bank
+																								  ,$jpaket_transfer_nama
+																								  ,$jpaket_transfer_nilai
+																								  ,$jpaket_nobukti
+																								  ,$bayar_date_create
+																								  ,$jenis_transaksi
+																								  ,$cetak);
+											}elseif($jpaket_tunai_nilai<>'' && $jpaket_tunai_nilai<>0){
+												$result_bayar = $this->m_public_function->cara_bayar_tunai_insert($jpaket_tunai_nilai
+																							   ,$jpaket_nobukti
+																							   ,$bayar_date_create
+																							   ,$jenis_transaksi
+																							   ,$cetak);
+											}elseif($jpaket_voucher_cashback<>'' && $jpaket_voucher_cashback<>0){
+												$result_bayar = $this->m_public_function->cara_bayar_voucher_insert($jpaket_voucher_no
+																								 ,$jpaket_nobukti
+																								 ,$jpaket_voucher_cashback
+																								 ,$bayar_date_create
+																								 ,$jenis_transaksi
+																								 ,$cetak);
+											}
+										}
+										if($jpaket_cara2!=null || $jpaket_cara2!=''){
+											if($jpaket_kwitansi_nilai2<>'' && $jpaket_kwitansi_nilai2<>0){
+												$result_bayar2 = $this->m_public_function->cara_bayar_kwitansi_insert($jpaket_kwitansi_no2
+																								  ,$jpaket_kwitansi_nilai2
+																								  ,$jpaket_nobukti
+																								  ,$bayar_date_create
+																								  ,$jenis_transaksi
+																								  ,$cetak);
+												
+											}elseif($jpaket_card_nilai2<>'' && $jpaket_card_nilai2<>0){
+												$result_bayar2 = $this->m_public_function->cara_bayar_card_insert($jpaket_card_nama2
+																							  ,$jpaket_card_edc2
+																							  ,$jpaket_card_no2
+																							  ,$jpaket_card_nilai2
+																							  ,$jpaket_nobukti
+																							  ,$bayar_date_create
+																							  ,$jenis_transaksi
+																							  ,$cetak);
+											}elseif($jpaket_cek_nilai2<>'' && $jpaket_cek_nilai2<>0){
+												$result_bayar2 = $this->m_public_function->cara_bayar_cek_insert($jpaket_cek_nama2
+																							 ,$jpaket_cek_no2
+																							 ,$jpaket_cek_valid2
+																							 ,$jpaket_cek_bank2
+																							 ,$jpaket_cek_nilai2
+																							 ,$jpaket_nobukti
+																							 ,$bayar_date_create
+																							 ,$jenis_transaksi
+																							 ,$cetak);
+											}elseif($jpaket_transfer_nilai2<>'' && $jpaket_transfer_nilai2<>0){
+												$result_bayar2 = $this->m_public_function->cara_bayar_transfer_insert($jpaket_transfer_bank2
+																								  ,$jpaket_transfer_nama2
+																								  ,$jpaket_transfer_nilai2
+																								  ,$jpaket_nobukti
+																								  ,$bayar_date_create
+																								  ,$jenis_transaksi
+																								  ,$cetak);
+											}elseif($jpaket_tunai_nilai2<>'' && $jpaket_tunai_nilai2<>0){
+												$result_bayar2 = $this->m_public_function->cara_bayar_tunai_insert($jpaket_tunai_nilai2
+																							   ,$jpaket_nobukti
+																							   ,$bayar_date_create
+																							   ,$jenis_transaksi
+																							   ,$cetak);
+											}elseif($jpaket_voucher_cashback2<>'' && $jpaket_voucher_cashback2<>0){
+												$result_bayar2 = $this->m_public_function->cara_bayar_voucher_insert($jpaket_voucher_no2
+																								 ,$jpaket_nobukti
+																								 ,$jpaket_voucher_cashback2
+																								 ,$bayar_date_create
+																								 ,$jenis_transaksi
+																								 ,$cetak);
+											}
+										}
+										if($jpaket_cara3!=null || $jpaket_cara3!=''){
+											if($jpaket_kwitansi_nilai3<>'' && $jpaket_kwitansi_nilai3<>0){
+												$result_bayar3 = $this->m_public_function->cara_bayar_kwitansi_insert($jpaket_kwitansi_no3
+																								  ,$jpaket_kwitansi_nilai3
+																								  ,$jpaket_nobukti
+																								  ,$bayar_date_create
+																								  ,$jenis_transaksi
+																								  ,$cetak);
+												
+											}elseif($jpaket_card_nilai3<>'' && $jpaket_card_nilai3<>0){
+												$result_bayar3 = $this->m_public_function->cara_bayar_card_insert($jpaket_card_nama3
+																							  ,$jpaket_card_edc3
+																							  ,$jpaket_card_no3
+																							  ,$jpaket_card_nilai3
+																							  ,$jpaket_nobukti
+																							  ,$bayar_date_create
+																							  ,$jenis_transaksi
+																							  ,$cetak);
+											}elseif($jpaket_cek_nilai3<>'' && $jpaket_cek_nilai3<>0){
+												$result_bayar3 = $this->m_public_function->cara_bayar_cek_insert($jpaket_cek_nama3
+																							 ,$jpaket_cek_no3
+																							 ,$jpaket_cek_valid3
+																							 ,$jpaket_cek_bank3
+																							 ,$jpaket_cek_nilai3
+																							 ,$jpaket_nobukti
+																							 ,$bayar_date_create
+																							 ,$jenis_transaksi
+																							 ,$cetak);
+											}elseif($jpaket_transfer_nilai3<>'' && $jpaket_transfer_nilai3<>0){
+												$result_bayar3 = $this->m_public_function->cara_bayar_transfer_insert($jpaket_transfer_bank3
+																								  ,$jpaket_transfer_nama3
+																								  ,$jpaket_transfer_nilai3
+																								  ,$jpaket_nobukti
+																								  ,$bayar_date_create
+																								  ,$jenis_transaksi
+																								  ,$cetak);
+											}elseif($jpaket_tunai_nilai3<>'' && $jpaket_tunai_nilai3<>0){
+												$result_bayar3 = $this->m_public_function->cara_bayar_tunai_insert($jpaket_tunai_nilai3
+																							   ,$jpaket_nobukti
+																							   ,$bayar_date_create
+																							   ,$jenis_transaksi
+																							   ,$cetak);
+											}elseif($jpaket_voucher_cashback3<>'' && $jpaket_voucher_cashback3<>0){
+												$result_bayar3 = $this->m_public_function->cara_bayar_voucher_insert($jpaket_voucher_no3
+																								 ,$jpaket_nobukti
+																								 ,$jpaket_voucher_cashback3
+																								 ,$bayar_date_create
+																								 ,$jenis_transaksi
+																								 ,$cetak);
+											}
+										}
+									}
 								}
-							}else{
-									$jpaket_kwitansi_nama=$jpaket_cust;
 							}
-						}
-						if($jpaket_kwitansi_nilai<>'' && $jpaket_kwitansi_nilai<>0){
-						$data=array(
-							"jkwitansi_master"=>$jpaket_kwitansi_no,
-							"jkwitansi_nilai"=>$jpaket_kwitansi_nilai,
-							"jkwitansi_ref"=>$jpaket_nobukti,
-							"jkwitansi_transaksi"=>"jual_paket",
-							"jkwitansi_date_create"=>$bayar_date_create,
-							"jkwitansi_stat_dok"=>'Terbuka'
-						);
-						$this->db->insert('jual_kwitansi', $data);
-						}
-					
-					}else if($jpaket_cara=='card'){
-						if($jpaket_card_nilai<>'' && $jpaket_card_nilai<>0){
-						$data=array(
-							"jcard_nama"=>$jpaket_card_nama,
-							"jcard_edc"=>$jpaket_card_edc,
-							"jcard_no"=>$jpaket_card_no,
-							"jcard_nilai"=>$jpaket_card_nilai,
-							"jcard_ref"=>$jpaket_nobukti,
-							"jcard_transaksi"=>"jual_paket",
-							"jcard_date_create"=>$bayar_date_create,
-							"jcard_stat_dok"=>'Terbuka'
-							);
-						$this->db->insert('jual_card', $data);
-						}
-					
-					}else if($jpaket_cara=='cek/giro'){
-						
-						if($jpaket_cek_nama=="" || $jpaket_cek_nama==NULL){
-							if(is_int($jpaket_cek_nama)){
-								$sql="select cust_nama from customer where cust_id='".$jpaket_cust."'";
-								$query=$this->db->query($sql);
-								if($query->num_rows()){
-									$data=$query->row();
-									$jpaket_cek_nama=$data->cust_nama;
-								}
-							}else{
-									$jpaket_cek_nama=$jpaket_cust;
-							}
-						}
-						if($jpaket_cek_nilai<>'' && $jpaket_cek_nilai<>0){
-						$data=array(
-							"jcek_nama"=>$jpaket_cek_nama,
-							"jcek_no"=>$jpaket_cek_no,
-							"jcek_valid"=>$jpaket_cek_valid,
-							"jcek_bank"=>$jpaket_cek_bank,
-							"jcek_nilai"=>$jpaket_cek_nilai,
-							"jcek_ref"=>$jpaket_nobukti,
-							"jcek_transaksi"=>"jual_paket",
-							"jcek_date_create"=>$bayar_date_create,
-							"jcek_stat_dok"=>'Terbuka'
-							);
-						$this->db->insert('jual_cek', $data);
-						}
-						
-					}else if($jpaket_cara=='transfer'){
-						if($jpaket_transfer_nilai<>'' && $jpaket_transfer_nilai<>0){
-						$data=array(
-							"jtransfer_bank"=>$jpaket_transfer_bank,
-							"jtransfer_nama"=>$jpaket_transfer_nama,
-							"jtransfer_nilai"=>$jpaket_transfer_nilai,
-							"jtransfer_ref"=>$jpaket_nobukti,
-							"jtransfer_transaksi"=>"jual_paket",
-							"jtransfer_date_create"=>$bayar_date_create,
-							"jtransfer_stat_dok"=>'Terbuka'
-							);
-						$this->db->insert('jual_transfer', $data);
-						}
-						
-					}else if($jpaket_cara=='tunai'){
-						if($jpaket_tunai_nilai<>'' && $jpaket_tunai_nilai<>0){
-						$data=array(
-							"jtunai_nilai"=>$jpaket_tunai_nilai,
-							"jtunai_ref"=>$jpaket_nobukti,
-							"jtunai_transaksi"=>"jual_paket",
-							"jtunai_date_create"=>$bayar_date_create,
-							"jtunai_stat_dok"=>'Terbuka'
-							);
-						$this->db->insert('jual_tunai', $data);
-						}
-						
-					}else if($jpaket_cara=='voucher'){
-						if($jpaket_voucher_cashback<>'' && $jpaket_voucher_cashback<>0){
-						$data=array(
-							"tvoucher_novoucher"=>$jpaket_voucher_no,
-							"tvoucher_ref"=>$jpaket_nobukti,
-							"tvoucher_nilai"=>$jpaket_voucher_cashback,
-							"tvoucher_transaksi"=>"jual_paket",
-							"tvoucher_date_create"=>$bayar_date_create,
-							"tvoucher_stat_dok"=>'Terbuka'
-							);
-						$this->db->insert('voucher_terima', $data);
-						}
-					}
-				}
-				if($jpaket_cara2!=null || $jpaket_cara2!=''){
-					//kwitansi
-					if($jpaket_cara2=='kwitansi'){
-						if($jpaket_kwitansi_nama2=="" || $jpaket_kwitansi_nama2==NULL){
-							if(is_int($jpaket_kwitansi_nama2)){
-								$sql="select cust_nama from customer where cust_id='".$jpaket_cust."'";
-								$query=$this->db->query($sql);
-								if($query->num_rows()){
-									$data=$query->row();
-									$jpaket_kwitansi_nama2=$data->cust_nama;
-								}
-							}else{
-									$jpaket_kwitansi_nama2=$jpaket_cust;
-							}
-						}
-						if($jpaket_kwitansi_nilai2<>'' && $jpaket_kwitansi_nilai2<>0){
-						$data=array(
-							"jkwitansi_master"=>$jpaket_kwitansi_no2,
-							"jkwitansi_nilai"=>$jpaket_kwitansi_nilai2,
-							"jkwitansi_ref"=>$jpaket_nobukti,
-							"jkwitansi_transaksi"=>"jual_paket",
-							"jkwitansi_date_create"=>$bayar_date_create,
-							"jkwitansi_stat_dok"=>'Terbuka'
-						);
-						$this->db->insert('jual_kwitansi', $data);
-						}
-					
-					}else if($jpaket_cara2=='card'){
-						if($jpaket_card_nilai2<>'' && $jpaket_card_nilai2<>0){
-						$data=array(
-							"jcard_nama"=>$jpaket_card_nama2,
-							"jcard_edc"=>$jpaket_card_edc2,
-							"jcard_no"=>$jpaket_card_no2,
-							"jcard_nilai"=>$jpaket_card_nilai2,
-							"jcard_ref"=>$jpaket_nobukti,
-							"jcard_transaksi"=>"jual_paket",
-							"jcard_date_create"=>$bayar_date_create,
-							"jcard_stat_dok"=>'Terbuka'
-							);
-						$this->db->insert('jual_card', $data);
-						}
-					
-					}else if($jpaket_cara2=='cek/giro'){
-						
-						if($jpaket_cek_nama2=="" || $jpaket_cek_nama2==NULL){
-							if(is_int($jpaket_cek_nama2)){
-								$sql="select cust_nama from customer where cust_id='".$jpaket_cust."'";
-								$query=$this->db->query($sql);
-								if($query->num_rows()){
-									$data=$query->row();
-									$jpaket_cek_nama2=$data->cust_nama;
-								}
-							}else{
-									$jpaket_cek_nama2=$jpaket_cust;
-							}
-						}
-						if($jpaket_cek_nilai2<>'' && $jpaket_cek_nilai2<>0){
-						$data=array(
-							"jcek_nama"=>$jpaket_cek_nama2,
-							"jcek_no"=>$jpaket_cek_no2,
-							"jcek_valid"=>$jpaket_cek_valid2,
-							"jcek_bank"=>$jpaket_cek_bank2,
-							"jcek_nilai"=>$jpaket_cek_nilai2,
-							"jcek_ref"=>$jpaket_nobukti,
-							"jcek_transaksi"=>"jual_paket",
-							"jcek_date_create"=>$bayar_date_create,
-							"jcek_stat_dok"=>'Terbuka'
-							);
-						$this->db->insert('jual_cek', $data);
-						}
-						
-					}else if($jpaket_cara2=='transfer'){
-						if($jpaket_transfer_nilai2<>'' && $jpaket_transfer_nilai2<>0){
-						$data=array(
-							"jtransfer_bank"=>$jpaket_transfer_bank2,
-							"jtransfer_nama"=>$jpaket_transfer_nama2,
-							"jtransfer_nilai"=>$jpaket_transfer_nilai2,
-							"jtransfer_ref"=>$jpaket_nobukti,
-							"jtransfer_transaksi"=>"jual_paket",
-							"jtransfer_date_create"=>$bayar_date_create,
-							"jtransfer_stat_dok"=>'Terbuka'
-							);
-						$this->db->insert('jual_transfer', $data);
-						}
-						
-					}else if($jpaket_cara2=='tunai'){
-						if($jpaket_tunai_nilai2<>'' && $jpaket_tunai_nilai2<>0){
-						$data=array(
-							"jtunai_nilai"=>$jpaket_tunai_nilai2,
-							"jtunai_ref"=>$jpaket_nobukti,
-							"jtunai_transaksi"=>"jual_paket",
-							"jtunai_date_create"=>$bayar_date_create,
-							"jtunai_stat_dok"=>'Terbuka'
-							);
-						$this->db->insert('jual_tunai', $data);
-						}
-						
-					}else if($jpaket_cara2=='voucher'){
-						if($jpaket_voucher_cashback2<>'' && $jpaket_voucher_cashback2<>0){
-						$data=array(
-							"tvoucher_novoucher"=>$jpaket_voucher_no2,
-							"tvoucher_ref"=>$jpaket_nobukti,
-							"tvoucher_nilai"=>$jpaket_voucher_cashback2,
-							"tvoucher_transaksi"=>"jual_paket",
-							"tvoucher_date_create"=>$bayar_date_create,
-							"tvoucher_stat_dok"=>'Terbuka'
-							);
-						$this->db->insert('voucher_terima', $data);
-						}
-					}
-				}
-				if($jpaket_cara3!=null || $jpaket_cara3!=''){
-					//kwitansi
-					if($jpaket_cara3=='kwitansi'){
-						if($jpaket_kwitansi_nama3=="" || $jpaket_kwitansi_nama3==NULL){
-							if(is_int($jpaket_kwitansi_nama3)){
-								$sql="select cust_nama from customer where cust_id='".$jpaket_cust."'";
-								$query=$this->db->query($sql);
-								if($query->num_rows()){
-									$data=$query->row();
-									$jpaket_kwitansi_nama3=$data->cust_nama;
-								}
-							}else{
-									$jpaket_kwitansi_nama3=$jpaket_cust;
-							}
-						}
-						if($jpaket_kwitansi_nilai3<>'' && $jpaket_kwitansi_nilai3<>0){
-						$data=array(
-							"jkwitansi_master"=>$jpaket_kwitansi_no3,
-							"jkwitansi_nilai"=>$jpaket_kwitansi_nilai3,
-							"jkwitansi_ref"=>$jpaket_nobukti,
-							"jkwitansi_transaksi"=>"jual_paket",
-							"jkwitansi_date_create"=>$bayar_date_create,
-							"jkwitansi_stat_dok"=>'Terbuka'
-						);
-						$this->db->insert('jual_kwitansi', $data);
-						}
-					
-					}else if($jpaket_cara3=='card'){
-						if($jpaket_card_nilai3<>'' && $jpaket_card_nilai3<>0){
-						$data=array(
-							"jcard_nama"=>$jpaket_card_nama3,
-							"jcard_edc"=>$jpaket_card_edc3,
-							"jcard_no"=>$jpaket_card_no3,
-							"jcard_nilai"=>$jpaket_card_nilai3,
-							"jcard_ref"=>$jpaket_nobukti,
-							"jcard_transaksi"=>"jual_paket",
-							"jcard_date_create"=>$bayar_date_create,
-							"jcard_stat_dok"=>'Terbuka'
-							);
-						$this->db->insert('jual_card', $data);
-						}
-					
-					}else if($jpaket_cara3=='cek/giro'){
-						
-						if($jpaket_cek_nama3=="" || $jpaket_cek_nama3==NULL){
-							if(is_int($jpaket_cek_nama3)){
-								$sql="select cust_nama from customer where cust_id='".$jpaket_cust."'";
-								$query=$this->db->query($sql);
-								if($query->num_rows()){
-									$data=$query->row();
-									$jpaket_cek_nama3=$data->cust_nama;
-								}
-							}else{
-									$jpaket_cek_nama3=$jpaket_cust;
-							}
-						}
-						if($jpaket_cek_nilai3<>'' && $jpaket_cek_nilai3<>0){
-						$data=array(
-							"jcek_nama"=>$jpaket_cek_nama3,
-							"jcek_no"=>$jpaket_cek_no3,
-							"jcek_valid"=>$jpaket_cek_valid3,
-							"jcek_bank"=>$jpaket_cek_bank3,
-							"jcek_nilai"=>$jpaket_cek_nilai3,
-							"jcek_ref"=>$jpaket_nobukti,
-							"jcek_transaksi"=>"jual_paket",
-							"jcek_date_create"=>$bayar_date_create,
-							"jcek_stat_dok"=>'Terbuka'
-							);
-						$this->db->insert('jual_cek', $data);
-						}
-						
-					}else if($jpaket_cara3=='transfer'){
-						if($jpaket_transfer_nilai3<>'' && $jpaket_transfer_nilai3<>0){
-						$data=array(
-							"jtransfer_bank"=>$jpaket_transfer_bank3,
-							"jtransfer_nama"=>$jpaket_transfer_nama3,
-							"jtransfer_nilai"=>$jpaket_transfer_nilai3,
-							"jtransfer_ref"=>$jpaket_nobukti,
-							"jtransfer_transaksi"=>"jual_paket",
-							"jtransfer_date_create"=>$bayar_date_create,
-							"jtransfer_stat_dok"=>'Terbuka'
-							);
-						$this->db->insert('jual_transfer', $data);
-						}
-						
-					}else if($jpaket_cara3=='tunai'){
-						if($jpaket_tunai_nilai3<>'' && $jpaket_tunai_nilai3<>0){
-						$data=array(
-							"jtunai_nilai"=>$jpaket_tunai_nilai3,
-							"jtunai_ref"=>$jpaket_nobukti,
-							"jtunai_transaksi"=>"jual_paket",
-							"jtunai_date_create"=>$bayar_date_create,
-							"jtunai_stat_dok"=>'Terbuka'
-							);
-						$this->db->insert('jual_tunai', $data);
-						}
-						
-					}else if($jpaket_cara3=='voucher'){
-						if($jpaket_voucher_cashback3<>'' && $jpaket_voucher_cashback3<>0){
-						$data=array(
-							"tvoucher_novoucher"=>$jpaket_voucher_no3,
-							"tvoucher_ref"=>$jpaket_nobukti,
-							"tvoucher_nilai"=>$jpaket_voucher_cashback3,
-							"tvoucher_transaksi"=>"jual_paket",
-							"tvoucher_date_create"=>$bayar_date_create,
-							"tvoucher_stat_dok"=>'Terbuka'
-							);
-						$this->db->insert('voucher_terima', $data);
 						}
 					}
 				}
@@ -1783,8 +1358,10 @@ class M_master_jual_paket extends Model{
 		}
 		
 		//function for create new record
-		function master_jual_paket_create($jpaket_nobukti ,$jpaket_cust ,$jpaket_tanggal ,$jpaket_diskon ,$jpaket_stat_dok, $jpaket_cara ,$jpaket_cara2 ,$jpaket_cara3 ,$jpaket_keterangan , $jpaket_cashback, $jpaket_tunai_nilai, $jpaket_tunai_nilai2, $jpaket_tunai_nilai3, $jpaket_voucher_no, $jpaket_voucher_cashback, $jpaket_voucher_no2, $jpaket_voucher_cashback2, $jpaket_voucher_no3, $jpaket_voucher_cashback3, $jpaket_bayar, $jpaket_subtotal, $jpaket_total, $jpaket_hutang, $jpaket_kwitansi_no, $jpaket_kwitansi_nama, $jpaket_kwitansi_nilai, $jpaket_kwitansi_no2, $jpaket_kwitansi_nama2, $jpaket_kwitansi_nilai2, $jpaket_kwitansi_no3, $jpaket_kwitansi_nama3, $jpaket_kwitansi_nilai3, $jpaket_card_nama, $jpaket_card_edc, $jpaket_card_no, $jpaket_card_nilai, $jpaket_card_nama2, $jpaket_card_edc2, $jpaket_card_no2, $jpaket_card_nilai2, $jpaket_card_nama3, $jpaket_card_edc3, $jpaket_card_no3, $jpaket_card_nilai3, $jpaket_cek_nama, $jpaket_cek_no, $jpaket_cek_valid, $jpaket_cek_bank, $jpaket_cek_nilai, $jpaket_cek_nama2, $jpaket_cek_no2, $jpaket_cek_valid2, $jpaket_cek_bank2, $jpaket_cek_nilai2, $jpaket_cek_nama3, $jpaket_cek_no3, $jpaket_cek_valid3, $jpaket_cek_bank3, $jpaket_cek_nilai3, $jpaket_transfer_bank, $jpaket_transfer_nama, $jpaket_transfer_nilai, $jpaket_transfer_bank2, $jpaket_transfer_nama2, $jpaket_transfer_nilai2, $jpaket_transfer_bank3, $jpaket_transfer_nama3, $jpaket_transfer_nilai3){
+		function master_jual_paket_create($jpaket_nobukti ,$jpaket_cust ,$jpaket_tanggal ,$jpaket_diskon ,$jpaket_stat_dok, $jpaket_cara ,$jpaket_cara2 ,$jpaket_cara3 ,$jpaket_keterangan , $jpaket_cashback, $jpaket_tunai_nilai, $jpaket_tunai_nilai2, $jpaket_tunai_nilai3, $jpaket_voucher_no, $jpaket_voucher_cashback, $jpaket_voucher_no2, $jpaket_voucher_cashback2, $jpaket_voucher_no3, $jpaket_voucher_cashback3, $jpaket_bayar, $jpaket_subtotal, $jpaket_total, $jpaket_hutang, $jpaket_kwitansi_no, $jpaket_kwitansi_nama, $jpaket_kwitansi_nilai, $jpaket_kwitansi_no2, $jpaket_kwitansi_nama2, $jpaket_kwitansi_nilai2, $jpaket_kwitansi_no3, $jpaket_kwitansi_nama3, $jpaket_kwitansi_nilai3, $jpaket_card_nama, $jpaket_card_edc, $jpaket_card_no, $jpaket_card_nilai, $jpaket_card_nama2, $jpaket_card_edc2, $jpaket_card_no2, $jpaket_card_nilai2, $jpaket_card_nama3, $jpaket_card_edc3, $jpaket_card_no3, $jpaket_card_nilai3, $jpaket_cek_nama, $jpaket_cek_no, $jpaket_cek_valid, $jpaket_cek_bank, $jpaket_cek_nilai, $jpaket_cek_nama2, $jpaket_cek_no2, $jpaket_cek_valid2, $jpaket_cek_bank2, $jpaket_cek_nilai2, $jpaket_cek_nama3, $jpaket_cek_no3, $jpaket_cek_valid3, $jpaket_cek_bank3, $jpaket_cek_nilai3, $jpaket_transfer_bank, $jpaket_transfer_nama, $jpaket_transfer_nilai, $jpaket_transfer_bank2, $jpaket_transfer_nama2, $jpaket_transfer_nilai2, $jpaket_transfer_bank3, $jpaket_transfer_nama3, $jpaket_transfer_nilai3, $cetak){
 			$date_now = date('Y-m-d');
+			
+			$jenis_transaksi = 'jual_paket';
 			
 			$jpaket_tanggal_pattern=strtotime($jpaket_tanggal);
 			$pattern="PK/".date("ym",$jpaket_tanggal_pattern)."-";
@@ -1833,362 +1410,185 @@ class M_master_jual_paket extends Model{
 			}
 			$this->db->insert('master_jual_paket', $data); 
 			if($this->db->affected_rows()){
-				//Ambil db.master_jual_paket.jpaket_date_create untuk dimasukkan ke Cara Bayar
-				$sql = "SELECT jpaket_date_create FROM master_jual_paket WHERE jpaket_nobukti='$jpaket_nobukti'";
-				$rs = $this->db->query($sql);
-				if($this->db->affected_rows()){
-					$record = $rs->row_array();
-					$jpaket_date_create = $record['jpaket_date_create'];
-				}
+				$time_now = date('H:i:s');
+				$bayar_date_create_temp = $jpaket_tanggal.' '.$time_now;
+				$bayar_date_create = date('Y-m-d H:i:s', strtotime($bayar_date_create_temp));
 				
-				$sql="delete from jual_tunai where jtunai_ref='".$jpaket_nobukti."'";
-				$this->db->query($sql);
-				
+				//delete all transaksi
 				$sql="delete from jual_kwitansi where jkwitansi_ref='".$jpaket_nobukti."'";
 				$this->db->query($sql);
-				
-				$sql="delete from jual_card where jcard_ref='".$jpaket_nobukti."'";
-				$this->db->query($sql);
-						
-				$sql="delete from jual_cek where jcek_ref='".$jpaket_nobukti."'";
-				$this->db->query($sql);
-				
-				$sql="delete from jual_transfer where jtransfer_ref='".$jpaket_nobukti."'";
-				$this->db->query($sql);
-				
-				$sql="delete from voucher_terima where tvoucher_ref='".$jpaket_nobukti."'";
-				$this->db->query($sql);
-				
-				if($jpaket_cara!=null || $jpaket_cara!=''){
-					//kwitansi
-					if($jpaket_cara=='kwitansi'){
-						if($jpaket_kwitansi_nama=="" || $jpaket_kwitansi_nama==NULL){
-							if(is_int($jpaket_kwitansi_nama)){
-								$sql="select cust_nama from customer where cust_id='".$jpaket_cust."'";
-								$query=$this->db->query($sql);
-								if($query->num_rows()){
-									$data=$query->row();
-									$jpaket_kwitansi_nama=$data->cust_nama;
+				if($this->db->affected_rows()>-1){
+					$sql="delete from jual_card where jcard_ref='".$jpaket_nobukti."'";
+					$this->db->query($sql);
+					if($this->db->affected_rows()>-1){
+						$sql="delete from jual_cek where jcek_ref='".$jpaket_nobukti."'";
+						$this->db->query($sql);
+						if($this->db->affected_rows()>-1){
+							$sql="delete from jual_transfer where jtransfer_ref='".$jpaket_nobukti."'";
+							$this->db->query($sql);
+							if($this->db->affected_rows()>-1){
+								$sql="delete from jual_tunai where jtunai_ref='".$jpaket_nobukti."'";
+								$this->db->query($sql);
+								if($this->db->affected_rows()>-1){
+									$sql="delete from voucher_terima where tvoucher_ref='".$jpaket_nobukti."'";
+									$this->db->query($sql);
+									if($this->db->affected_rows()>-1){
+										if($jpaket_cara!=null || $jpaket_cara!=''){
+											if($jpaket_kwitansi_nilai<>'' && $jpaket_kwitansi_nilai<>0){
+												$result_bayar = $this->m_public_function->cara_bayar_kwitansi_insert($jpaket_kwitansi_no
+																								  ,$jpaket_kwitansi_nilai
+																								  ,$jpaket_nobukti
+																								  ,$bayar_date_create
+																								  ,$jenis_transaksi
+																								  ,$cetak);
+												
+											}elseif($jpaket_card_nilai<>'' && $jpaket_card_nilai<>0){
+												$result_bayar = $this->m_public_function->cara_bayar_card_insert($jpaket_card_nama
+																							  ,$jpaket_card_edc
+																							  ,$jpaket_card_no
+																							  ,$jpaket_card_nilai
+																							  ,$jpaket_nobukti
+																							  ,$bayar_date_create
+																							  ,$jenis_transaksi
+																							  ,$cetak);
+											}elseif($jpaket_cek_nilai<>'' && $jpaket_cek_nilai<>0){
+												$result_bayar = $this->m_public_function->cara_bayar_cek_insert($jpaket_cek_nama
+																							 ,$jpaket_cek_no
+																							 ,$jpaket_cek_valid
+																							 ,$jpaket_cek_bank
+																							 ,$jpaket_cek_nilai
+																							 ,$jpaket_nobukti
+																							 ,$bayar_date_create
+																							 ,$jenis_transaksi
+																							 ,$cetak);
+											}elseif($jpaket_transfer_nilai<>'' && $jpaket_transfer_nilai<>0){
+												$result_bayar = $this->m_public_function->cara_bayar_transfer_insert($jpaket_transfer_bank
+																								  ,$jpaket_transfer_nama
+																								  ,$jpaket_transfer_nilai
+																								  ,$jpaket_nobukti
+																								  ,$bayar_date_create
+																								  ,$jenis_transaksi
+																								  ,$cetak);
+											}elseif($jpaket_tunai_nilai<>'' && $jpaket_tunai_nilai<>0){
+												$result_bayar = $this->m_public_function->cara_bayar_tunai_insert($jpaket_tunai_nilai
+																							   ,$jpaket_nobukti
+																							   ,$bayar_date_create
+																							   ,$jenis_transaksi
+																							   ,$cetak);
+											}elseif($jpaket_voucher_cashback<>'' && $jpaket_voucher_cashback<>0){
+												$result_bayar = $this->m_public_function->cara_bayar_voucher_insert($jpaket_voucher_no
+																								 ,$jpaket_nobukti
+																								 ,$jpaket_voucher_cashback
+																								 ,$bayar_date_create
+																								 ,$jenis_transaksi
+																								 ,$cetak);
+											}
+										}
+										if($jpaket_cara2!=null || $jpaket_cara2!=''){
+											if($jpaket_kwitansi_nilai2<>'' && $jpaket_kwitansi_nilai2<>0){
+												$result_bayar2 = $this->m_public_function->cara_bayar_kwitansi_insert($jpaket_kwitansi_no2
+																								  ,$jpaket_kwitansi_nilai2
+																								  ,$jpaket_nobukti
+																								  ,$bayar_date_create
+																								  ,$jenis_transaksi
+																								  ,$cetak);
+												
+											}elseif($jpaket_card_nilai2<>'' && $jpaket_card_nilai2<>0){
+												$result_bayar2 = $this->m_public_function->cara_bayar_card_insert($jpaket_card_nama2
+																							  ,$jpaket_card_edc2
+																							  ,$jpaket_card_no2
+																							  ,$jpaket_card_nilai2
+																							  ,$jpaket_nobukti
+																							  ,$bayar_date_create
+																							  ,$jenis_transaksi
+																							  ,$cetak);
+											}elseif($jpaket_cek_nilai2<>'' && $jpaket_cek_nilai2<>0){
+												$result_bayar2 = $this->m_public_function->cara_bayar_cek_insert($jpaket_cek_nama2
+																							 ,$jpaket_cek_no2
+																							 ,$jpaket_cek_valid2
+																							 ,$jpaket_cek_bank2
+																							 ,$jpaket_cek_nilai2
+																							 ,$jpaket_nobukti
+																							 ,$bayar_date_create
+																							 ,$jenis_transaksi
+																							 ,$cetak);
+											}elseif($jpaket_transfer_nilai2<>'' && $jpaket_transfer_nilai2<>0){
+												$result_bayar2 = $this->m_public_function->cara_bayar_transfer_insert($jpaket_transfer_bank2
+																								  ,$jpaket_transfer_nama2
+																								  ,$jpaket_transfer_nilai2
+																								  ,$jpaket_nobukti
+																								  ,$bayar_date_create
+																								  ,$jenis_transaksi
+																								  ,$cetak);
+											}elseif($jpaket_tunai_nilai2<>'' && $jpaket_tunai_nilai2<>0){
+												$result_bayar2 = $this->m_public_function->cara_bayar_tunai_insert($jpaket_tunai_nilai2
+																							   ,$jpaket_nobukti
+																							   ,$bayar_date_create
+																							   ,$jenis_transaksi
+																							   ,$cetak);
+											}elseif($jpaket_voucher_cashback2<>'' && $jpaket_voucher_cashback2<>0){
+												$result_bayar2 = $this->m_public_function->cara_bayar_voucher_insert($jpaket_voucher_no2
+																								 ,$jpaket_nobukti
+																								 ,$jpaket_voucher_cashback2
+																								 ,$bayar_date_create
+																								 ,$jenis_transaksi
+																								 ,$cetak);
+											}
+										}
+										if($jpaket_cara3!=null || $jpaket_cara3!=''){
+											if($jpaket_kwitansi_nilai3<>'' && $jpaket_kwitansi_nilai3<>0){
+												$result_bayar3 = $this->m_public_function->cara_bayar_kwitansi_insert($jpaket_kwitansi_no3
+																								  ,$jpaket_kwitansi_nilai3
+																								  ,$jpaket_nobukti
+																								  ,$bayar_date_create
+																								  ,$jenis_transaksi
+																								  ,$cetak);
+												
+											}elseif($jpaket_card_nilai3<>'' && $jpaket_card_nilai3<>0){
+												$result_bayar3 = $this->m_public_function->cara_bayar_card_insert($jpaket_card_nama3
+																							  ,$jpaket_card_edc3
+																							  ,$jpaket_card_no3
+																							  ,$jpaket_card_nilai3
+																							  ,$jpaket_nobukti
+																							  ,$bayar_date_create
+																							  ,$jenis_transaksi
+																							  ,$cetak);
+											}elseif($jpaket_cek_nilai3<>'' && $jpaket_cek_nilai3<>0){
+												$result_bayar3 = $this->m_public_function->cara_bayar_cek_insert($jpaket_cek_nama3
+																							 ,$jpaket_cek_no3
+																							 ,$jpaket_cek_valid3
+																							 ,$jpaket_cek_bank3
+																							 ,$jpaket_cek_nilai3
+																							 ,$jpaket_nobukti
+																							 ,$bayar_date_create
+																							 ,$jenis_transaksi
+																							 ,$cetak);
+											}elseif($jpaket_transfer_nilai3<>'' && $jpaket_transfer_nilai3<>0){
+												$result_bayar3 = $this->m_public_function->cara_bayar_transfer_insert($jpaket_transfer_bank3
+																								  ,$jpaket_transfer_nama3
+																								  ,$jpaket_transfer_nilai3
+																								  ,$jpaket_nobukti
+																								  ,$bayar_date_create
+																								  ,$jenis_transaksi
+																								  ,$cetak);
+											}elseif($jpaket_tunai_nilai3<>'' && $jpaket_tunai_nilai3<>0){
+												$result_bayar3 = $this->m_public_function->cara_bayar_tunai_insert($jpaket_tunai_nilai3
+																							   ,$jpaket_nobukti
+																							   ,$bayar_date_create
+																							   ,$jenis_transaksi
+																							   ,$cetak);
+											}elseif($jpaket_voucher_cashback3<>'' && $jpaket_voucher_cashback3<>0){
+												$result_bayar3 = $this->m_public_function->cara_bayar_voucher_insert($jpaket_voucher_no3
+																								 ,$jpaket_nobukti
+																								 ,$jpaket_voucher_cashback3
+																								 ,$bayar_date_create
+																								 ,$jenis_transaksi
+																								 ,$cetak);
+											}
+										}
+									}
 								}
-							}else{
-									$jpaket_kwitansi_nama=$jpaket_cust;
 							}
-						}
-						if($jpaket_kwitansi_nilai<>'' && $jpaket_kwitansi_nilai<>0){
-						$data=array(
-							"jkwitansi_master"=>$jpaket_kwitansi_no,
-							"jkwitansi_nilai"=>$jpaket_kwitansi_nilai,
-							"jkwitansi_ref"=>$jpaket_nobukti,
-							"jkwitansi_transaksi"=>"jual_paket",
-							"jkwitansi_date_create"=>$jpaket_date_create,
-							"jkwitansi_stat_dok"=>'Terbuka'
-						);
-						$this->db->insert('jual_kwitansi', $data);
-						}
-					
-					}else if($jpaket_cara=='card'){
-						if($jpaket_card_nilai<>'' && $jpaket_card_nilai<>0){
-						$data=array(
-							"jcard_nama"=>$jpaket_card_nama,
-							"jcard_edc"=>$jpaket_card_edc,
-							"jcard_no"=>$jpaket_card_no,
-							"jcard_nilai"=>$jpaket_card_nilai,
-							"jcard_ref"=>$jpaket_nobukti,
-							"jcard_transaksi"=>"jual_paket",
-							"jcard_date_create"=>$jpaket_date_create,
-							"jcard_stat_dok"=>'Terbuka'
-							);
-						$this->db->insert('jual_card', $data);
-						}
-					
-					}else if($jpaket_cara=='cek/giro'){
-						
-						if($jpaket_cek_nama=="" || $jpaket_cek_nama==NULL){
-							if(is_int($jpaket_cek_nama)){
-								$sql="select cust_nama from customer where cust_id='".$jpaket_cust."'";
-								$query=$this->db->query($sql);
-								if($query->num_rows()){
-									$data=$query->row();
-									$jpaket_cek_nama=$data->cust_nama;
-								}
-							}else{
-									$jpaket_cek_nama=$jpaket_cust;
-							}
-						}
-						if($jpaket_cek_nilai<>'' && $jpaket_cek_nilai<>0){
-						$data=array(
-							"jcek_nama"=>$jpaket_cek_nama,
-							"jcek_no"=>$jpaket_cek_no,
-							"jcek_valid"=>$jpaket_cek_valid,
-							"jcek_bank"=>$jpaket_cek_bank,
-							"jcek_nilai"=>$jpaket_cek_nilai,
-							"jcek_ref"=>$jpaket_nobukti,
-							"jcek_transaksi"=>"jual_paket",
-							"jcek_date_create"=>$jpaket_date_create,
-							"jcek_stat_dok"=>'Terbuka'
-							);
-						$this->db->insert('jual_cek', $data);
-						}
-						
-					}else if($jpaket_cara=='transfer'){
-						if($jpaket_transfer_nilai<>'' && $jpaket_transfer_nilai<>0){
-						$data=array(
-							"jtransfer_bank"=>$jpaket_transfer_bank,
-							"jtransfer_nama"=>$jpaket_transfer_nama,
-							"jtransfer_nilai"=>$jpaket_transfer_nilai,
-							"jtransfer_ref"=>$jpaket_nobukti,
-							"jtransfer_transaksi"=>"jual_paket",
-							"jtransfer_date_create"=>$jpaket_date_create,
-							"jtransfer_stat_dok"=>'Terbuka'
-							);
-						$this->db->insert('jual_transfer', $data);
-						}
-						
-					}else if($jpaket_cara=='tunai'){
-						if($jpaket_tunai_nilai<>'' && $jpaket_tunai_nilai<>0){
-						$data=array(
-							"jtunai_nilai"=>$jpaket_tunai_nilai,
-							"jtunai_ref"=>$jpaket_nobukti,
-							"jtunai_transaksi"=>"jual_paket",
-							"jtunai_date_create"=>$jpaket_date_create,
-							"jtunai_stat_dok"=>'Terbuka'
-							);
-						$this->db->insert('jual_tunai', $data);
-						}
-						
-					}else if($jpaket_cara=='voucher'){
-						if($jpaket_voucher_cashback<>'' && $jpaket_voucher_cashback<>0){
-						$data=array(
-							"tvoucher_novoucher"=>$jpaket_voucher_no,
-							"tvoucher_ref"=>$jpaket_nobukti,
-							"tvoucher_nilai"=>$jpaket_voucher_cashback,
-							"tvoucher_transaksi"=>"jual_paket",
-							"tvoucher_date_create"=>$jpaket_date_create,
-							"tvoucher_stat_dok"=>'Terbuka'
-							);
-						$this->db->insert('voucher_terima', $data);
-						}
-					}
-				}
-				if($jpaket_cara2!=null || $jpaket_cara2!=''){
-					//kwitansi
-					if($jpaket_cara2=='kwitansi'){
-						if($jpaket_kwitansi_nama2=="" || $jpaket_kwitansi_nama2==NULL){
-							if(is_int($jpaket_kwitansi_nama2)){
-								$sql="select cust_nama from customer where cust_id='".$jpaket_cust."'";
-								$query=$this->db->query($sql);
-								if($query->num_rows()){
-									$data=$query->row();
-									$jpaket_kwitansi_nama2=$data->cust_nama;
-								}
-							}else{
-									$jpaket_kwitansi_nama2=$jpaket_cust;
-							}
-						}
-						if($jpaket_kwitansi_nilai2<>'' && $jpaket_kwitansi_nilai2<>0){
-						$data=array(
-							"jkwitansi_master"=>$jpaket_kwitansi_no2,
-							"jkwitansi_nilai"=>$jpaket_kwitansi_nilai2,
-							"jkwitansi_ref"=>$jpaket_nobukti,
-							"jkwitansi_transaksi"=>"jual_paket",
-							"jkwitansi_date_create"=>$jpaket_date_create,
-							"jkwitansi_stat_dok"=>'Terbuka'
-						);
-						$this->db->insert('jual_kwitansi', $data);
-						}
-					
-					}else if($jpaket_cara2=='card'){
-						if($jpaket_card_nilai2<>'' && $jpaket_card_nilai2<>0){
-						$data=array(
-							"jcard_nama"=>$jpaket_card_nama2,
-							"jcard_edc"=>$jpaket_card_edc2,
-							"jcard_no"=>$jpaket_card_no2,
-							"jcard_nilai"=>$jpaket_card_nilai2,
-							"jcard_ref"=>$jpaket_nobukti,
-							"jcard_transaksi"=>"jual_paket",
-							"jcard_date_create"=>$jpaket_date_create,
-							"jcard_stat_dok"=>'Terbuka'
-							);
-						$this->db->insert('jual_card', $data);
-						}
-					
-					}else if($jpaket_cara2=='cek/giro'){
-						
-						if($jpaket_cek_nama2=="" || $jpaket_cek_nama2==NULL){
-							if(is_int($jpaket_cek_nama2)){
-								$sql="select cust_nama from customer where cust_id='".$jpaket_cust."'";
-								$query=$this->db->query($sql);
-								if($query->num_rows()){
-									$data=$query->row();
-									$jpaket_cek_nama2=$data->cust_nama;
-								}
-							}else{
-									$jpaket_cek_nama2=$jpaket_cust;
-							}
-						}
-						if($jpaket_cek_nilai2<>'' && $jpaket_cek_nilai2<>0){
-						$data=array(
-							"jcek_nama"=>$jpaket_cek_nama2,
-							"jcek_no"=>$jpaket_cek_no2,
-							"jcek_valid"=>$jpaket_cek_valid2,
-							"jcek_bank"=>$jpaket_cek_bank2,
-							"jcek_nilai"=>$jpaket_cek_nilai2,
-							"jcek_ref"=>$jpaket_nobukti,
-							"jcek_transaksi"=>"jual_paket",
-							"jcek_date_create"=>$jpaket_date_create,
-							"jcek_stat_dok"=>'Terbuka'
-							);
-						$this->db->insert('jual_cek', $data);
-						}
-						
-					}else if($jpaket_cara2=='transfer'){
-						if($jpaket_transfer_nilai2<>'' && $jpaket_transfer_nilai2<>0){
-						$data=array(
-							"jtransfer_bank"=>$jpaket_transfer_bank2,
-							"jtransfer_nama"=>$jpaket_transfer_nama2,
-							"jtransfer_nilai"=>$jpaket_transfer_nilai2,
-							"jtransfer_ref"=>$jpaket_nobukti,
-							"jtransfer_transaksi"=>"jual_paket",
-							"jtransfer_date_create"=>$jpaket_date_create,
-							"jtransfer_stat_dok"=>'Terbuka'
-							);
-						$this->db->insert('jual_transfer', $data);
-						}
-						
-					}else if($jpaket_cara2=='tunai'){
-						if($jpaket_tunai_nilai2<>'' && $jpaket_tunai_nilai2<>0){
-						$data=array(
-							"jtunai_nilai"=>$jpaket_tunai_nilai2,
-							"jtunai_ref"=>$jpaket_nobukti,
-							"jtunai_transaksi"=>"jual_paket",
-							"jtunai_date_create"=>$jpaket_date_create,
-							"jtunai_stat_dok"=>'Terbuka'
-							);
-						$this->db->insert('jual_tunai', $data);
-						}
-						
-					}else if($jpaket_cara2=='voucher'){
-						if($jpaket_voucher_cashback2<>'' && $jpaket_voucher_cashback2<>0){
-						$data=array(
-							"tvoucher_novoucher"=>$jpaket_voucher_no2,
-							"tvoucher_ref"=>$jpaket_nobukti,
-							"tvoucher_nilai"=>$jpaket_voucher_cashback2,
-							"tvoucher_transaksi"=>"jual_paket",
-							"tvoucher_date_create"=>$jpaket_date_create,
-							"tvoucher_stat_dok"=>'Terbuka'
-							);
-						$this->db->insert('voucher_terima', $data);
-						}
-					}
-				}
-				if($jpaket_cara3!=null || $jpaket_cara3!=''){
-					//kwitansi
-					if($jpaket_cara3=='kwitansi'){
-						if($jpaket_kwitansi_nama3=="" || $jpaket_kwitansi_nama3==NULL){
-							if(is_int($jpaket_kwitansi_nama3)){
-								$sql="select cust_nama from customer where cust_id='".$jpaket_cust."'";
-								$query=$this->db->query($sql);
-								if($query->num_rows()){
-									$data=$query->row();
-									$jpaket_kwitansi_nama3=$data->cust_nama;
-								}
-							}else{
-									$jpaket_kwitansi_nama3=$jpaket_cust;
-							}
-						}
-						if($jpaket_kwitansi_nilai3<>'' && $jpaket_kwitansi_nilai3<>0){
-						$data=array(
-							"jkwitansi_master"=>$jpaket_kwitansi_no3,
-							"jkwitansi_nilai"=>$jpaket_kwitansi_nilai3,
-							"jkwitansi_ref"=>$jpaket_nobukti,
-							"jkwitansi_transaksi"=>"jual_paket",
-							"jkwitansi_date_create"=>$jpaket_date_create,
-							"jkwitansi_stat_dok"=>'Terbuka'
-						);
-						$this->db->insert('jual_kwitansi', $data);
-						}
-					
-					}else if($jpaket_cara3=='card'){
-						if($jpaket_card_nilai3<>'' && $jpaket_card_nilai3<>0){
-						$data=array(
-							"jcard_nama"=>$jpaket_card_nama3,
-							"jcard_edc"=>$jpaket_card_edc3,
-							"jcard_no"=>$jpaket_card_no3,
-							"jcard_nilai"=>$jpaket_card_nilai3,
-							"jcard_ref"=>$jpaket_nobukti,
-							"jcard_transaksi"=>"jual_paket",
-							"jcard_date_create"=>$jpaket_date_create,
-							"jcard_stat_dok"=>'Terbuka'
-							);
-						$this->db->insert('jual_card', $data);
-						}
-					
-					}else if($jpaket_cara3=='cek/giro'){
-						
-						if($jpaket_cek_nama3=="" || $jpaket_cek_nama3==NULL){
-							if(is_int($jpaket_cek_nama3)){
-								$sql="select cust_nama from customer where cust_id='".$jpaket_cust."'";
-								$query=$this->db->query($sql);
-								if($query->num_rows()){
-									$data=$query->row();
-									$jpaket_cek_nama3=$data->cust_nama;
-								}
-							}else{
-									$jpaket_cek_nama3=$jpaket_cust;
-							}
-						}
-						if($jpaket_cek_nilai3<>'' && $jpaket_cek_nilai3<>0){
-						$data=array(
-							"jcek_nama"=>$jpaket_cek_nama3,
-							"jcek_no"=>$jpaket_cek_no3,
-							"jcek_valid"=>$jpaket_cek_valid3,
-							"jcek_bank"=>$jpaket_cek_bank3,
-							"jcek_nilai"=>$jpaket_cek_nilai3,
-							"jcek_ref"=>$jpaket_nobukti,
-							"jcek_transaksi"=>"jual_paket",
-							"jcek_date_create"=>$jpaket_date_create,
-							"jcek_stat_dok"=>'Terbuka'
-							);
-						$this->db->insert('jual_cek', $data);
-						}
-						
-					}else if($jpaket_cara3=='transfer'){
-						if($jpaket_transfer_nilai3<>'' && $jpaket_transfer_nilai3<>0){
-						$data=array(
-							"jtransfer_bank"=>$jpaket_transfer_bank3,
-							"jtransfer_nama"=>$jpaket_transfer_nama3,
-							"jtransfer_nilai"=>$jpaket_transfer_nilai3,
-							"jtransfer_ref"=>$jpaket_nobukti,
-							"jtransfer_transaksi"=>"jual_paket",
-							"jtransfer_date_create"=>$jpaket_date_create,
-							"jtransfer_stat_dok"=>'Terbuka'
-							);
-						$this->db->insert('jual_transfer', $data);
-						}
-						
-					}else if($jpaket_cara3=='tunai'){
-						if($jpaket_tunai_nilai3<>'' && $jpaket_tunai_nilai3<>0){
-						$data=array(
-							"jtunai_nilai"=>$jpaket_tunai_nilai3,
-							"jtunai_ref"=>$jpaket_nobukti,
-							"jtunai_transaksi"=>"jual_paket",
-							"jtunai_date_create"=>$jpaket_date_create,
-							"jtunai_stat_dok"=>'Terbuka'
-							);
-						$this->db->insert('jual_tunai', $data);
-						}
-						
-					}else if($jpaket_cara3=='voucher'){
-						if($jpaket_voucher_cashback3<>'' && $jpaket_voucher_cashback3<>0){
-						$data=array(
-							"tvoucher_novoucher"=>$jpaket_voucher_no3,
-							"tvoucher_ref"=>$jpaket_nobukti,
-							"tvoucher_nilai"=>$jpaket_voucher_cashback3,
-							"tvoucher_transaksi"=>"jual_paket",
-							"tvoucher_date_create"=>$jpaket_date_create,
-							"tvoucher_stat_dok"=>'Terbuka'
-							);
-						$this->db->insert('voucher_terima', $data);
 						}
 					}
 				}
@@ -2297,11 +1697,19 @@ class M_master_jual_paket extends Model{
 				$this->db->query($sql);
 				if($this->db->affected_rows()>0){
 					//* udpating db.customer.cust_point ==> proses mengurangi jumlah poin (dikurangi dengan db.master_jual_paket.jpaket_point yg sudah dimasukkan ketika cetak faktur), karena dilakukan pembatalan /
-					$this->member_point_batal($jpaket_id);
-					$this->membership_insert($jpaket_id);
-					$this->cara_bayar_batal($jpaket_id);
-					$this->catatan_piutang_batal($jpaket_id);
-					return '1';
+					$result_point_batal = $this->member_point_batal($jpaket_id);
+					if($result_point_batal==1){
+						$result_membership = $this->membership_insert($jpaket_id);
+						if($result_membership==1){
+							$result_piutang = $this->catatan_piutang_batal($jpaket_id);
+							if($result_piutang==1){
+								$result_cara_bayar = $this->cara_bayar_batal($jpaket_id);
+								if($result_cara_bayar==1){
+									return '1';
+								}
+							}
+						}
+					}
 				}else
 					return '-1';
 			}

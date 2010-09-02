@@ -177,42 +177,6 @@ var dt_ymd = dt.format('Y-m-d');
 
 var cetak_jpaket=0;
 
-function jpaket_cetak(master_id){
-	Ext.Ajax.request({   
-		waitMsg: 'Mohon tunggu...',
-		url: 'index.php?c=c_master_jual_paket&m=print_paper',
-		params: { jpaket_id : master_id}, 
-		success: function(response){              
-			var result=eval(response.responseText);
-			switch(result){
-			case 1:
-				win = window.open('./jpaket_paper.html','Cetak Penjualan Paket','height=480,width=1240,resizable=1,scrollbars=0, menubar=0');
-				//win.print();
-				break;
-			default:
-				Ext.MessageBox.show({
-					title: 'Warning',
-					msg: 'Unable to print the grid!',
-					buttons: Ext.MessageBox.OK,
-					animEl: 'save',
-					icon: Ext.MessageBox.WARNING
-				});
-				break;
-			}  
-		},
-		failure: function(response){
-			var result=response.responseText;
-			Ext.MessageBox.show({
-			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
-			   buttons: Ext.MessageBox.OK,
-			   animEl: 'database',
-			   icon: Ext.MessageBox.ERROR
-			});		
-		} 	                     
-	});
-}
-
 /* on ready fuction */
 Ext.onReady(function(){
   	Ext.QuickTips.init();	/* Initiate quick tips icon */
@@ -224,6 +188,43 @@ Ext.onReady(function(){
   	        return record ? record.get(combo.displayField) : combo.valueNotFoundText;
   	    }
   	}
+	
+	function jpaket_cetak(master_id){
+		Ext.Ajax.request({   
+			waitMsg: 'Mohon tunggu...',
+			url: 'index.php?c=c_master_jual_paket&m=print_paper',
+			params: { jpaket_id : master_id}, 
+			success: function(response){              
+				var result=eval(response.responseText);
+				switch(result){
+				case 1:
+					win = window.open('./jpaket_paper.html','Cetak Penjualan Paket','height=480,width=1240,resizable=1,scrollbars=0, menubar=0');
+					jpaket_btn_cancel();
+					//win.print();
+					break;
+				default:
+					Ext.MessageBox.show({
+						title: 'Warning',
+						msg: 'Unable to print the grid!',
+						buttons: Ext.MessageBox.OK,
+						animEl: 'save',
+						icon: Ext.MessageBox.WARNING
+					});
+					break;
+				}  
+			},
+			failure: function(response){
+				var result=response.responseText;
+				Ext.MessageBox.show({
+				   title: 'Error',
+				   msg: 'Could not connect to the database. retry later.',
+				   buttons: Ext.MessageBox.OK,
+				   animEl: 'database',
+				   icon: Ext.MessageBox.ERROR
+				});		
+			} 	                     
+		});
+	}
   
   	/* Function for Saving inLine Editing */
 	function master_jual_paket_update(oGrid_event){
@@ -400,16 +401,16 @@ Ext.onReady(function(){
 				var jpaket_bayar_create=null;
 				var jpaket_hutang_create=null;
 				//kwitansi
-				var jpaket_kwitansi_nama_create=null;
-				var jpaket_kwitansi_nomor_create=null;
+				var jpaket_kwitansi_nama_create="";
+				var jpaket_kwitansi_nomor_create="";
 				var jpaket_kwitansi_nilai_create=null;
 				//kwitansi-2
-				var jpaket_kwitansi_nama2_create=null;
-				var jpaket_kwitansi_nomor2_create=null;
+				var jpaket_kwitansi_nama2_create="";
+				var jpaket_kwitansi_nomor2_create="";
 				var jpaket_kwitansi_nilai2_create=null;
 				//kwitansi-3
-				var jpaket_kwitansi_nama3_create=null;
-				var jpaket_kwitansi_nomor3_create=null;
+				var jpaket_kwitansi_nama3_create="";
+				var jpaket_kwitansi_nomor3_create="";
 				var jpaket_kwitansi_nilai3_create=null;
 				//card
 				var jpaket_card_nama_create=null;
@@ -427,34 +428,34 @@ Ext.onReady(function(){
 				var jpaket_card_no3_create=null;
 				var jpaket_card_nilai3_create=null;
 				//cek
-				var jpaket_cek_nama_create=null;
-				var jpaket_cek_nomor_create=null;
-				var jpaket_cek_valid_create="";
-				var jpaket_cek_bank_create=null;
+				var jpaket_cek_nama_create='';
+				var jpaket_cek_nomor_create='';
+				var jpaket_cek_valid_create='';
+				var jpaket_cek_bank_create='';
 				var jpaket_cek_nilai_create=null;
 				//cek-2
-				var jpaket_cek_nama2_create=null;
-				var jpaket_cek_nomor2_create=null;
-				var jpaket_cek_valid2_create="";
-				var jpaket_cek_bank2_create=null;
+				var jpaket_cek_nama2_create='';
+				var jpaket_cek_nomor2_create='';
+				var jpaket_cek_valid2_create='';
+				var jpaket_cek_bank2_create='';
 				var jpaket_cek_nilai2_create=null;
 				//cek-3
-				var jpaket_cek_nama3_create=null;
-				var jpaket_cek_nomor3_create=null;
-				var jpaket_cek_valid3_create="";
-				var jpaket_cek_bank3_create=null;
+				var jpaket_cek_nama3_create='';
+				var jpaket_cek_nomor3_create='';
+				var jpaket_cek_valid3_create='';
+				var jpaket_cek_bank3_create='';
 				var jpaket_cek_nilai3_create=null;
 				//transfer
-				var jpaket_transfer_bank_create=null;
-				var jpaket_transfer_nama_create=null;
+				var jpaket_transfer_bank_create='';
+				var jpaket_transfer_nama_create='';
 				var jpaket_transfer_nilai_create=null;
 				//transfer-2
-				var jpaket_transfer_bank2_create=null;
-				var jpaket_transfer_nama2_create=null;
+				var jpaket_transfer_bank2_create='';
+				var jpaket_transfer_nama2_create='';
 				var jpaket_transfer_nilai2_create=null;
 				//transfer-3
-				var jpaket_transfer_bank3_create=null;
-				var jpaket_transfer_nama3_create=null;
+				var jpaket_transfer_bank3_create='';
+				var jpaket_transfer_nama3_create='';
 				var jpaket_transfer_nilai3_create=null;
 				
 				if(jpaket_idField.getValue()!== null){jpaket_id_create_pk = jpaket_idField.getValue();}else{jpaket_id_create_pk=get_pk_id();} 
@@ -490,16 +491,28 @@ Ext.onReady(function(){
 				if(jpaket_totalField.getValue()!== null){jpaket_total_create = jpaket_totalField.getValue();} 
 				if(jpaket_hutangField.getValue()!== null){jpaket_hutang_create = jpaket_hutangField.getValue();} 
 				//kwitansi value
-				if(jpaket_kwitansi_noField.getValue()!== null){jpaket_kwitansi_nomor_create = jpaket_kwitansi_noField.getValue();} 
-				if(jpaket_kwitansi_namaField.getValue()!== null){jpaket_kwitansi_nama_create = jpaket_kwitansi_namaField.getValue();} 
+				if((jpaket_kwitansi_noField.getValue()!=="") && (jpaket_post2db=='CREATE')){
+					jpaket_kwitansi_nomor_create = jpaket_kwitansi_noField.getValue();
+				}else if(jpaket_post2db=='UPDATE'){
+					jpaket_kwitansi_nomor_create = jpaket_kwitansi_idField.getValue();
+				}
+				if(jpaket_kwitansi_namaField.getValue()!==""){jpaket_kwitansi_nama_create = jpaket_kwitansi_namaField.getValue();} 
 				if(jpaket_kwitansi_nilaiField.getValue()!== null){jpaket_kwitansi_nilai_create = jpaket_kwitansi_nilaiField.getValue();} 
 				//kwitansi-2 value
-				if(jpaket_kwitansi_no2Field.getValue()!== null){jpaket_kwitansi_nomor2_create = jpaket_kwitansi_no2Field.getValue();} 
-				if(jpaket_kwitansi_nama2Field.getValue()!== null){jpaket_kwitansi_nama2_create = jpaket_kwitansi_nama2Field.getValue();} 
+				if((jpaket_kwitansi_no2Field.getValue()!=="") && (jpaket_post2db=='CREATE')){
+					jpaket_kwitansi_nomor2_create = jpaket_kwitansi_no2Field.getValue();
+				}else if(jpaket_post2db=='UPDATE'){
+					jpaket_kwitansi_nomor2_create = jpaket_kwitansi_id2Field.getValue();
+				}
+				if(jpaket_kwitansi_nama2Field.getValue()!==""){jpaket_kwitansi_nama2_create = jpaket_kwitansi_nama2Field.getValue();} 
 				if(jpaket_kwitansi_nilai2Field.getValue()!== null){jpaket_kwitansi_nilai2_create = jpaket_kwitansi_nilai2Field.getValue();} 
 				//kwitansi-3 value
-				if(jpaket_kwitansi_no3Field.getValue()!== null){jpaket_kwitansi_nomor3_create = jpaket_kwitansi_no3Field.getValue();} 
-				if(jpaket_kwitansi_nama3Field.getValue()!== null){jpaket_kwitansi_nama3_create = jpaket_kwitansi_nama3Field.getValue();} 
+				if((jpaket_kwitansi_no3Field.getValue()!=="") && (jpaket_post2db=='CREATE')){
+					jpaket_kwitansi_nomor3_create = jpaket_kwitansi_no3Field.getValue();
+				}else if(jpaket_post2db=='UPDATE'){
+					jpaket_kwitansi_nomor3_create = jpaket_kwitansi_id3Field.getValue();
+				}
+				if(jpaket_kwitansi_nama3Field.getValue()!==""){jpaket_kwitansi_nama3_create = jpaket_kwitansi_nama3Field.getValue();} 
 				if(jpaket_kwitansi_nilai3Field.getValue()!== null){jpaket_kwitansi_nilai3_create = jpaket_kwitansi_nilai3Field.getValue();} 
 				//card value
 				if(jpaket_card_namaField.getValue()!== null){jpaket_card_nama_create = jpaket_card_namaField.getValue();} 
@@ -527,7 +540,7 @@ Ext.onReady(function(){
 				if(jpaket_cek_no2Field.getValue()!== null){jpaket_cek_nomor2_create = jpaket_cek_no2Field.getValue();} 
 				if(jpaket_cek_valid2Field.getValue()!== ""){jpaket_cek_valid2_create = jpaket_cek_valid2Field.getValue().format('Y-m-d');} 
 				if(jpaket_cek_bank2Field.getValue()!== null){jpaket_cek_bank2_create = jpaket_cek_bank2Field.getValue();} 
-				if(jpaket_cek_nilai2Field.getValue()!== null){jpaket_cek_nilai2_create = jpaket_cek_nilai2Field.getValue();} 
+				if(jpaket_cek_nilai2Field.getValue()!== null){jpaket_cek_nilai2_create = jpaket_cek_nilai2Field.getValue();}
 				//cek-3 value
 				if(jpaket_cek_nama3Field.getValue()!== null){jpaket_cek_nama3_create = jpaket_cek_nama3Field.getValue();} 
 				if(jpaket_cek_no3Field.getValue()!== null){jpaket_cek_nomor3_create = jpaket_cek_no3Field.getValue();} 
@@ -545,13 +558,16 @@ Ext.onReady(function(){
 				//transfer-3 value
 				if(jpaket_transfer_bank3Field.getValue()!== null){jpaket_transfer_bank3_create = jpaket_transfer_bank3Field.getValue();} 
 				if(jpaket_transfer_nama3Field.getValue()!== null){jpaket_transfer_nama3_create = jpaket_transfer_nama3Field.getValue();}
-				if(jpaket_transfer_nilai3Field.getValue()!== null){jpaket_transfer_nilai3_create = jpaket_transfer_nilai3Field.getValue();} 
+				if(jpaket_transfer_nilai3Field.getValue()!== null){jpaket_transfer_nilai3_create = jpaket_transfer_nilai3Field.getValue();}
+				
+				var jpaket_cetak_value = this.cetak_jpaket;
 				
 				Ext.Ajax.request({  
 					waitMsg: 'Mohon  Tunggu...',
 					url: 'index.php?c=c_master_jual_paket&m=get_action',
 					params: {
 						task: jpaket_post2db,
+						cetak: jpaket_cetak_value,
 						jpaket_id			: 	jpaket_id_create_pk, 
 						jpaket_nobukti		: 	jpaket_nobukti_create, 
 						jpaket_cust		: 	jpaket_cust_create, 
@@ -1224,6 +1240,7 @@ Ext.onReady(function(){
 						  if (success) {
 							if(kwitansi_jual_paket_DataStore.getCount()){
 								jpaket_kwitansi_record=kwitansi_jual_paket_DataStore.getAt(0).data;
+								jpaket_kwitansi_idField.setValue(jpaket_kwitansi_record.kwitansi_id);
 								jpaket_kwitansi_noField.setValue(jpaket_kwitansi_record.kwitansi_no);
 								jpaket_kwitansi_namaField.setValue(jpaket_kwitansi_record.cust_nama);
 								jpaket_kwitansi_nilaiField.setValue(jpaket_kwitansi_record.jkwitansi_nilai);
@@ -1323,6 +1340,7 @@ Ext.onReady(function(){
 						  if (success) {
 							if(kwitansi_jual_paket_DataStore.getCount()){
 								jpaket_kwitansi_record=kwitansi_jual_paket_DataStore.getAt(0).data;
+								jpaket_kwitansi_id2Field.setValue(jpaket_kwitansi_record.kwitansi_id);
 								jpaket_kwitansi_no2Field.setValue(jpaket_kwitansi_record.kwitansi_no);
 								jpaket_kwitansi_nama2Field.setValue(jpaket_kwitansi_record.cust_nama);
 								jpaket_kwitansi_nilai2Field.setValue(jpaket_kwitansi_record.jkwitansi_nilai);
@@ -1423,6 +1441,7 @@ Ext.onReady(function(){
 						  if (success) {
 							if(kwitansi_jual_paket_DataStore.getCount()){
 								jpaket_kwitansi_record=kwitansi_jual_paket_DataStore.getAt(0).data;
+								jpaket_kwitansi_id3Field.setValue(jpaket_kwitansi_record.kwitansi_id);
 								jpaket_kwitansi_no3Field.setValue(jpaket_kwitansi_record.kwitansi_no);
 								jpaket_kwitansi_nama3Field.setValue(jpaket_kwitansi_record.cust_nama);
 								jpaket_kwitansi_nilai3Field.setValue(jpaket_kwitansi_record.jkwitansi_nilai);
@@ -2034,7 +2053,8 @@ Ext.onReady(function(){
 			{name: 'jkwitansi_id', type: 'int', mapping: 'jkwitansi_id'},
 			{name: 'kwitansi_no', type: 'string', mapping: 'kwitansi_no'},
 			{name: 'jkwitansi_nilai', type: 'float', mapping: 'jkwitansi_nilai'},
-			{name: 'cust_nama', type: 'string', mapping: 'cust_nama'}
+			{name: 'cust_nama', type: 'string', mapping: 'cust_nama'},
+			{name: 'kwitansi_id', type: 'int', mapping: 'kwitansi_id'}
 		]),
 		sortInfo:{field: 'jkwitansi_id', direction: "DESC"}
 	});
@@ -3673,6 +3693,7 @@ Ext.onReady(function(){
 		maskRe: /([0-9]+)$/
 	});
 	
+	jpaket_kwitansi_idField= new Ext.form.NumberField();
 	jpaket_kwitansi_noField= new Ext.form.ComboBox({
 		id: 'jpaket_kwitansi_noField',
 		fieldLabel: 'Nomor Kwitansi',
@@ -3744,6 +3765,7 @@ Ext.onReady(function(){
 		maskRe: /([0-9]+)$/
 	});
 	
+	jpaket_kwitansi_id2Field= new Ext.form.NumberField();
 	jpaket_kwitansi_no2Field= new Ext.form.ComboBox({
 		id: 'jpaket_kwitansi_no2Field',
 		fieldLabel: 'Nomor Kwitansi',
@@ -3815,6 +3837,7 @@ Ext.onReady(function(){
 		maskRe: /([0-9]+)$/
 	});
 	
+	jpaket_kwitansi_id3Field= new Ext.form.NumberField();
 	jpaket_kwitansi_no3Field= new Ext.form.ComboBox({
 		id: 'jpaket_kwitansi_no3Field',
 		fieldLabel: 'Nomor Kwitansi',
@@ -4667,11 +4690,11 @@ Ext.onReady(function(){
 						success: function(response){							
 							var result=eval(response.responseText);
 							if(result==0){
-								detail_jual_paket_DataStore.load({params: {master_id:0}});
+								detail_jual_paket_DataStore.load({params: {master_id:-1}});
 								Ext.MessageBox.alert(jpaket_post2db+' OK','Data penjualan paket berhasil disimpan');
 								jpaket_post2db="CREATE";
 							}else if(result==-1){
-								detail_jual_paket_DataStore.load({params: {master_id:0}});
+								detail_jual_paket_DataStore.load({params: {master_id:-1}});
 								jpaket_post2db="CREATE";
 								Ext.MessageBox.show({
 								   title: 'Warning',
@@ -4682,7 +4705,7 @@ Ext.onReady(function(){
 								   icon: Ext.MessageBox.WARNING
 								});
 							}else if(result>0){
-								detail_jual_paket_DataStore.load({params: {master_id:0}});
+								detail_jual_paket_DataStore.load({params: {master_id:-1}});
 								jpaket_cetak(result);
 								cetak_jpaket=0;
 								jpaket_post2db="CREATE";
@@ -4980,7 +5003,7 @@ Ext.onReady(function(){
 					timeout: 60000,
 					success: function(response){							
 						var result=eval(response.responseText);
-						detail_pengguna_paket_DataStore.load({params: {master_id:0}});
+						detail_pengguna_paket_DataStore.load({params: {master_id:-1}});
 						jpaket_post2db="CREATE";
 						Ext.Msg.alert('OK', 'Daftar Pemakai Paket telah ditambahkan.');
 					},
@@ -6404,23 +6427,25 @@ Ext.onReady(function(){
 			},
 			{
 				text: 'Cancel',
-				handler: function(){
-					master_jual_paket_reset_form();
-					detail_jual_paket_DataStore.load({params: {master_id:-1}});
-					jpaket_caraField.setValue("card");
-					master_jual_paket_cardGroup.setVisible(true);
-					detail_pengguna_paket_DataStore.removeAll();
-					master_cara_bayarTabPanel.setActiveTab(0);
-					jpaket_post2db="CREATE";
-					jpaket_diskonField.setValue(0);
-					jpaket_cashbackField.setValue(0);
-					jpaket_pesanLabel.setText('');
-					jpaket_lunasLabel.setText('');
-				}
+				handler: jpaket_btn_cancel
 			}
 		]
 	});
 	/* End  of Function*/
+	
+	function jpaket_btn_cancel(){
+		master_jual_paket_reset_form();
+		detail_jual_paket_DataStore.load({params: {master_id:-1}});
+		jpaket_caraField.setValue("card");
+		master_jual_paket_cardGroup.setVisible(true);
+		detail_pengguna_paket_DataStore.removeAll();
+		master_cara_bayarTabPanel.setActiveTab(0);
+		jpaket_post2db="CREATE";
+		jpaket_diskonField.setValue(0);
+		jpaket_cashbackField.setValue(0);
+		jpaket_pesanLabel.setText('');
+		jpaket_lunasLabel.setText('');
+	}
 	
 	
 	/* Function for retrieve create Window Form */
