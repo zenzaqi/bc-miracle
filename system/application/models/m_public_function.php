@@ -437,6 +437,11 @@ class M_public_function extends Model{
 	function get_member_by_cust($member_cust){
 		//$sql = "SELECT * from member where member_cust='".$member_cust."' and member_status!='tidak aktif' order by member_id desc limit 1";
 		$sql = "SELECT * from member where member_cust='".$member_cust."' and member_valid > now() order by member_id desc limit 1";
+		/*$sql="SELECT member_id, member_membert, member_cust, date_format(member_valid,'%Y-%m-%d') as member_valid, member_no, member_register, member_point, member_jenis, member_nota_ref, member_status, member_tglserahterima,
+				member_creator, member_kodecust, member_update, member_date_update, member_date_create
+			from member where member_cust= '".$member_cust."' and member_valid > now() order by member_id desc limit 1 ";*/
+		
+		
 		$query = $this->db->query($sql);
 		$nbrows = $query->num_rows();
 		if($nbrows>0){
@@ -484,7 +489,7 @@ class M_public_function extends Model{
 	function get_customer_list($query,$start,$end){
 		$sql="SELECT cust_id,cust_no,cust_nama,cust_tgllahir,cust_alamat,cust_telprumah,cust_point FROM customer WHERE cust_aktif='Aktif'";
 		if($query<>""){
-			$sql=$sql." and (cust_no like '%".$query."%' or cust_nama like '%".$query."%' or cust_telprumah like '%".$query."%' or cust_telprumah2 like '%".$query."%' or cust_telpkantor like '%".$query."%' or cust_hp like '%".$query."%' or cust_hp2 like '%".$query."%' or cust_hp3 like '%".$query."%') ";
+			$sql=$sql." and (cust_id = '".$query."' or cust_no like '%".$query."%' or cust_nama like '%".$query."%' or cust_telprumah like '%".$query."%' or cust_telprumah2 like '%".$query."%' or cust_telpkantor like '%".$query."%' or cust_hp like '%".$query."%' or cust_hp2 like '%".$query."%' or cust_hp3 like '%".$query."%') ";
 		}
 		
 		$result = $this->db->query($sql);
@@ -674,6 +679,9 @@ class M_public_function extends Model{
 			return $kode;
 		}
 	}
+	
+
+	
 	
 	function get_resep_kode($table,$field,$pattern,$length){
 		$len_pattern=strlen($pattern);
@@ -1438,6 +1446,40 @@ class M_public_function extends Model{
 			return '({"total":"0", "results":""})';
 		}
 	}
+	
+	function pengecekan_dokumen($tanggal_pengecekan){
+		
+		$date = date('Y-m-d');
+			//$date_1 = '01';
+			//$date_2 = '02';
+			$date_3 = '03';
+			$month = substr($tanggal_pengecekan,5,2);
+			$year = substr($tanggal_pengecekan,0,4);
+			$begin=mktime(0,0,0,$month,1,$year);
+			$nextmonth=strtotime("+1month",$begin);
+			
+			$month_next = substr(date("Y-m-d",$nextmonth),5,2);
+			$year_next = substr(date("Y-m-d",$nextmonth),0,4);
+			
+			//$tanggal_1 = $year_next.'-'.$month_next.'-'.$date_1;
+			//$tanggal_2 = $year_next.'-'.$month_next.'-'.$date_2;
+			$tanggal_3 = $year_next.'-'.$month_next.'-'.$date_3;
+            $datetime_now = date('Y-m-d H:i:s');
+     
+			if ($date <= $tanggal_3 || $tanggal_pengecekan == $date)
+			{
+				return '1';
+			}
+			else
+			{
+				return '0';
+			}
+		
+		}
+	
+	
+	
+	
 	
 	function cara_bayar_tunai_insert($jtunai_nilai
 									,$jtunai_ref
