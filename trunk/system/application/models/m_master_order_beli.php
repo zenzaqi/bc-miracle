@@ -313,7 +313,8 @@ class M_master_order_beli extends Model{
 		}
 		
 		//function for update record
-		function master_order_beli_update($order_id ,$order_no ,$order_supplier ,$order_tanggal ,$order_carabayar ,$order_diskon, $order_cashback ,$order_biaya ,$order_bayar ,$order_keterangan, $order_status, $order_status_acc){
+		function master_order_beli_update($order_id ,$order_no ,$order_supplier ,$order_tanggal ,$order_carabayar ,$order_diskon, $order_cashback ,
+										  $order_biaya ,$order_bayar ,$order_keterangan, $order_status, $order_status_acc){
 			$data = array(
 				"order_id"=>$order_id, 
 				"order_no"=>$order_no, 
