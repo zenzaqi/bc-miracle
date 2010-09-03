@@ -1267,20 +1267,6 @@ Ext.onReady(function(){
 				success:function(response){
 					var result=eval(response.responseText);
 					detail_terima_bonus_insert(pkid, opsi)
-					
-					//cek semua order terpenuhi
-					Ext.Ajax.request({
-						waitMsg: 'Please wait...',
-						url: 'index.php?c=c_master_terima_beli&m=check_all_order_done',
-						params:{
-							master_id : pkid
-						},
-						timeout: 5000,
-						success: function(response){							
-							var result=eval(response.responseText);
-							master_terima_beli_DataStore.reload();
-						}		
-					});
 				},
 				failure: function(response){
 					Ext.MessageBox.hide();
@@ -1604,6 +1590,21 @@ Ext.onReady(function(){
 					if(opsi=='print'){
 						master_terima_beli_cetak_faktur(pkid);
 					}
+					
+					//cek semua order terpenuhi
+					Ext.Ajax.request({
+						waitMsg: 'Please wait...',
+						url: 'index.php?c=c_master_terima_beli&m=check_all_order_done',
+						params:{
+							master_id : pkid
+						},
+						timeout: 5000,
+						success: function(response){							
+							var result=eval(response.responseText);
+							master_terima_beli_DataStore.reload();
+						}		
+					});
+					
 					master_terima_beli_DataStore.reload()
 				},
 				failure: function(response){
@@ -1619,7 +1620,27 @@ Ext.onReady(function(){
 				}
 			});
 					
-       	}
+       	}else{
+			if(opsi=='print'){
+				master_terima_beli_cetak_faktur(pkid);
+			}
+			
+			//cek semua order terpenuhi
+			Ext.Ajax.request({
+				waitMsg: 'Please wait...',
+				url: 'index.php?c=c_master_terima_beli&m=check_all_order_done',
+				params:{
+					master_id : pkid
+				},
+				timeout: 5000,
+				success: function(response){							
+					var result=eval(response.responseText);
+					master_terima_beli_DataStore.reload();
+				}		
+			});
+			
+			master_terima_beli_DataStore.reload()
+		}
 	}
 	//eof
 	
