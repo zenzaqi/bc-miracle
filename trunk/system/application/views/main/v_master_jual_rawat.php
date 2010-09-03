@@ -276,6 +276,55 @@ Ext.onReady(function(){
   	    }
   	}
   
+  
+		/*Function for pengecekan _dokumen */
+	function pengecekan_dokumen(){
+		var jrawat_tanggal_create_date = "";
+	
+		if(jrawat_tanggalField.getValue()!== ""){jrawat_tanggal_create_date = jrawat_tanggalField.getValue().format('Y-m-d');} 
+		Ext.Ajax.request({  
+			waitMsg: 'Please wait...',
+			url: 'index.php?c=c_master_jual_rawat&m=get_action',
+			params: {
+				task: "CEK",
+				tanggal_pengecekan	: jrawat_tanggal_create_date
+		
+			}, 
+			success: function(response){							
+				var result=eval(response.responseText);
+				switch(result){
+					case 1:
+						master_jual_rawat_create();
+						break;
+					default:
+						Ext.MessageBox.show({
+						   title: 'Warning',
+						   msg: 'Data Penjualan Perawatan tidak bisa disimpan, karena telah melebihi batas hari yang diperbolehkan ',
+						   buttons: Ext.MessageBox.OK,
+						   animEl: 'save',
+						   icon: Ext.MessageBox.WARNING
+						});
+						//master_jual_rawat_reset_form();
+						//master_cara_bayarTabPanel.setActiveTab(0);
+						//master_jual_rawat_createWindow.hide();
+						break;
+				}
+			},
+			failure: function(response){
+				var result=response.responseText;
+				Ext.MessageBox.show({
+				   title: 'Error',
+				   msg: 'Could not connect to the database. retry later.',
+				   buttons: Ext.MessageBox.OK,
+				   animEl: 'database',
+				   icon: Ext.MessageBox.ERROR
+				});	
+			}									    
+		});   
+	}
+	
+  
+  
   	/* Function for Saving inLine Editing */
 	function master_jual_rawat_update(oGrid_event){
 		var jrawat_id_update_pk="";
@@ -801,13 +850,13 @@ Ext.onReady(function(){
 	
 	function save_andPrint(){
 		cetak_jrawat=1;
-		master_jual_rawat_create();
+		pengecekan_dokumen();
 	}
   
 	
 	function save_button(){
 		cetak_jrawat=0;
-		master_jual_rawat_create();
+		pengecekan_dokumen();
 	}
   
   
