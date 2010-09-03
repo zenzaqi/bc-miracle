@@ -232,6 +232,52 @@ Ext.onReady(function(){
 		});
 	}
   
+	/*Function for pengecekan _dokumen */
+	function pengecekan_dokumen(){
+		var jproduk_tanggal_create_date = "";
+	
+		if(jproduk_tanggalField.getValue()!== ""){jproduk_tanggal_create_date = jproduk_tanggalField.getValue().format('Y-m-d');} 
+		Ext.Ajax.request({  
+			waitMsg: 'Please wait...',
+			url: 'index.php?c=c_master_jual_produk&m=get_action',
+			params: {
+				task: "CEK",
+				tanggal_pengecekan	: jproduk_tanggal_create_date
+		
+			}, 
+			success: function(response){							
+				var result=eval(response.responseText);
+				switch(result){
+					case 1:
+						master_jual_produk_create();
+						break;
+					default:
+						Ext.MessageBox.show({
+						   title: 'Warning',
+						   msg: 'Data Penjualan Produk tidak bisa disimpan, karena telah melebihi batas hari yang diperbolehkan ',
+						   buttons: Ext.MessageBox.OK,
+						   animEl: 'save',
+						   icon: Ext.MessageBox.WARNING
+						});
+						//jproduk_btn_cancel();
+						break;
+				}
+			},
+			failure: function(response){
+				var result=response.responseText;
+				Ext.MessageBox.show({
+				   title: 'Error',
+				   msg: 'Could not connect to the database. retry later.',
+				   buttons: Ext.MessageBox.OK,
+				   animEl: 'database',
+				   icon: Ext.MessageBox.ERROR
+				});	
+			}									    
+		});   
+	}
+	
+
+  
   	/* Function for Saving inLine Editing */
 	function master_jual_produk_update(oGrid_event){
 		var jproduk_id_update_pk="";
@@ -733,7 +779,7 @@ Ext.onReady(function(){
 	
 	function save_andPrint(){
 		cetak_jproduk=1;
-		master_jual_produk_create();
+		pengecekan_dokumen();
 		jproduk_pesanLabel.setText('');
 		jproduk_lunasLabel.setText('');
 	}
@@ -6454,7 +6500,7 @@ Ext.onReady(function(){
 			},
 			{
 				text: 'Save',
-				handler: master_jual_produk_create
+				handler: pengecekan_dokumen
 			},
 			{
 				text: 'Cancel',

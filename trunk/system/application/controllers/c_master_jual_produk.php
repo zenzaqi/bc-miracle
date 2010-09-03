@@ -309,6 +309,9 @@ class C_master_jual_produk extends Controller {
 			case "CREATE":
 				$this->master_jual_produk_create();
 				break;
+			case "CEK":
+				$this->master_jual_produk_pengecekan();
+				break;	
 			case "DELETE":
 				$this->master_jual_produk_delete();
 				break;
@@ -343,6 +346,15 @@ class C_master_jual_produk extends Controller {
 		echo $result;
 	}
 
+	
+	function master_jual_produk_pengecekan(){
+	
+		$tanggal_pengecekan=trim(@$_POST["tanggal_pengecekan"]);
+	
+		$result=$this->m_public_function->pengecekan_dokumen($tanggal_pengecekan);
+		echo $result;
+	}
+	
 	//function for update record
 	function master_jual_produk_update(){
 		//POST variable here
