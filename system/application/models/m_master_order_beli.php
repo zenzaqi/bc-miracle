@@ -52,12 +52,14 @@ class M_master_order_beli extends Model{
 					$sql="SELECT * FROM vu_detail_order_beli WHERE order_status<>'Batal' AND date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' 
 							AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."' ".$order_by;
 			}else if($opsi=='faktur'){
-				$sql="SELECT * FROM vu_detail_order_beli WHERE dorder_master='".$faktur."'";
+				$sql="SELECT DISTINCT * FROM vu_detail_order_beli WHERE dorder_master='".$faktur."'";
 			}
-			//echo $sql;
+			
 			$query=$this->db->query($sql);
-			//return $query->result();
-            return $query; //by masongbee
+			if($opsi=='faktur')
+				return $query;
+			else
+				return $query->result();
 		}
 		
 		
@@ -257,92 +259,25 @@ class M_master_order_beli extends Model{
                                                  ,$array_dorder_harga
                                                  ,$array_dorder_diskon ){
             
-            if($dorder_master=="" || $dorder_master==NULL){
-                $dorder_master=$this->get_master_id();
-            }
-            
-            $size_array = sizeof($array_dorder_produk) - 1;
-            
-            for($i = 0; $i < sizeof($array_dorder_produk); $i++){
-                $dorder_id = $array_dorder_id[$i];
-                $dorder_produk = $array_dorder_produk[$i];
-                $dorder_satuan = $array_dorder_satuan[$i];
-                $dorder_jumlah = $array_dorder_jumlah[$i];
-                $dorder_harga = $array_dorder_harga[$i];
-                $dorder_diskon = $array_dorder_diskon[$i];
-                
-                //if(is_numeric($dorder_id)){
-                    //artinya: detail ini sudah pernah diinputkan ==> mode Edit
-                //}else{
-                    //artinya: detail ini belum pernah diinputkan ==> mode Add
-                    //sementara meski 'is_numeric($dorder_id)==true' belum difungsikan, karena sebelum fungsi detail_detail_order_beli_insert()
-                    //sudah terjadi fungsi purge(), sehingga semua masih dianggap data detail baru.
-                    $dti_dorder = array(
-                        "dorder_master"=>$dorder_master, 
-                        "dorder_produk"=>$dorder_produk, 
-                        "dorder_satuan"=>$dorder_satuan, 
-                        "dorder_jumlah"=>$dorder_jumlah, 
-                        "dorder_harga"=>$dorder_harga, 
-                        "dorder_diskon"=>$dorder_diskon 
-                    );
-                    
-                    $sql="SELECT dorder_id,dorder_jumlah FROM detail_order_beli 
-                            WHERE dorder_master='".$dorder_master."' 
-                            AND dorder_produk='".$dorder_produk."' 
-                            AND dorder_satuan='".$dorder_satuan."'";
-                    $result=$this->db->query($sql);
-                    if($result->num_rows()){
-                        $row=$result->row();
-                        //$data["dorder_jumlah"]+=$row->dorder_jumlah;
-                        $data["dorder_jumlah"] = $row->dorder_jumlah + $dorder_jumlah;
-                        $this->db->where('dorder_id', $row->dorder_id);
-                        $this->db->update('detail_order_beli', $data);
-                    }else{
-                        $this->db->insert('detail_order_beli', $dti_dorder); 
-                    }
-                    
-                    if($this->db->affected_rows() && ($i==$size_array))
-                        return '1';
-                    elseif(!($this->db->affected_rows()) && ($i==$size_array))
-                        return '0';
-                    
-                //}
-                
-            }
-            
-			//if master id not capture from view then capture it from max pk from master table
-			/*if($dorder_master=="" || $dorder_master==NULL){
-				$dorder_master=$this->get_master_id();
+           
+		   	for($i = 0; $i < sizeof($array_dorder_produk); $i++){
+
+				$data = array(
+					"dorder_master"=>$dorder_master, 
+					"dorder_produk"=>$array_dorder_produk[$i], 
+					"dorder_satuan"=>$array_dorder_satuan[$i], 
+					"dorder_jumlah"=>$array_dorder_jumlah[$i], 
+					"dorder_harga"=>$array_dorder_harga[$i], 
+					"dorder_diskon"=>$array_dorder_diskon[$i] 
+				);
+				
+				if($array_dorder_id[$i]==0){
+					$this->db->insert('detail_order_beli', $data); 
+				}else{
+					$this->db->where('dorder_id', $array_dorder_id[$i]);
+					$this->db->update('detail_order_beli', $data);
+				}
 			}
-			
-			$data = array(
-				"dorder_master"=>$dorder_master, 
-				"dorder_produk"=>$dorder_produk, 
-				"dorder_satuan"=>$dorder_satuan, 
-				"dorder_jumlah"=>$dorder_jumlah, 
-				"dorder_harga"=>$dorder_harga, 
-				"dorder_diskon"=>$dorder_diskon 
-			);
-			
-			$sql="SELECT dorder_id,dorder_jumlah FROM detail_order_beli 
-					WHERE dorder_master='".$dorder_master."' 
-					AND dorder_produk='".$dorder_produk."' 
-					AND dorder_satuan='".$dorder_satuan."'";
-			$result=$this->db->query($sql);
-			if($result->num_rows()){
-				$row=$result->row();
-				$data["dorder_jumlah"]+=$row->dorder_jumlah;
-				$this->db->where('dorder_id', $row->dorder_id);
-				$this->db->update('detail_order_beli', $data);
-			}else{
-				$this->db->insert('detail_order_beli', $data); 
-			}
-			
-			
-			if($this->db->affected_rows())
-				return '1';
-			else
-				return '0';*/ //by masongbee
             
 		}
 		//end of function
@@ -354,7 +289,9 @@ class M_master_order_beli extends Model{
 			// For simple search
 			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (no_bukti LIKE '%".addslashes($filter)."%' OR supplier_nama LIKE '%".addslashes($filter)."%' OR order_carabayar LIKE '%".addslashes($filter)."%' )";
+				$query .= " (no_bukti LIKE '%".addslashes($filter)."%' OR 
+							 supplier_nama LIKE '%".addslashes($filter)."%' OR 
+							 order_carabayar LIKE '%".addslashes($filter)."%' )";
 			}
 			
 			$query.=" ORDER BY order_id DESC";
@@ -382,14 +319,20 @@ class M_master_order_beli extends Model{
 				"order_no"=>$order_no, 
 				"order_tanggal"=>$order_tanggal, 
 				"order_carabayar"=>$order_carabayar, 
-				"order_diskon"=>$order_diskon,
-				"order_cashback"=>$order_cashback,
-				"order_biaya"=>$order_biaya, 
-				"order_bayar"=>$order_bayar, 
 				"order_keterangan"=>$order_keterangan,
 				"order_status"=>$order_status,
-				"order_status_acc"=>$order_status_acc
+				"order_status_acc"=>$order_status_acc,
+				"order_update"=>$_SESSION[SESSION_USERID],
+				"order_date_update"=>date('Y-m-d H:i:s')
 			);
+			
+			if(($_SESSION[SESSION_GROUPID]==9) || ($_SESSION[SESSION_GROUPID]==1)){ 
+				$data["order_diskon"]=$order_diskon;
+				$data["order_cashback"]=$order_cashback;
+				$data["order_biaya"]=$order_biaya; 
+				$data["order_bayar"]=$order_bayar; 
+			}
+			
 			$sql="select supplier_id from supplier where supplier_id='".$order_supplier."'";
 			$query=$this->db->query($sql);
 			if($query->num_rows())
@@ -397,6 +340,12 @@ class M_master_order_beli extends Model{
 				
 			$this->db->where('order_id', $order_id);
 			$this->db->update('master_order_beli', $data);
+			
+			$sql="UPDATE master_order_beli SET order_revised=0 WHERE order_id='".$order_id."' AND order_revised is NULL";
+			$result = $this->db->query($sql);
+			
+			$sql="UPDATE master_order_beli SET order_revised=(order_revised+1) WHERE order_id='".$order_id."'";
+			$result = $this->db->query($sql);
 			
 			return $order_id;
 		}
@@ -416,14 +365,20 @@ class M_master_order_beli extends Model{
 				"order_supplier"=>$order_supplier, 
 				"order_tanggal"=>$order_tanggal, 
 				"order_carabayar"=>$order_carabayar, 
-				"order_diskon"=>$order_diskon,
-				"order_cashback"=>$order_cashback,
-				"order_biaya"=>$order_biaya, 
-				"order_bayar"=>$order_bayar, 
 				"order_keterangan"=>$order_keterangan,
 				"order_status"=>$order_status,
-				"order_status_acc"=>$order_status_acc
+				"order_status_acc"=>$order_status_acc,
+				"order_creator"=>$_SESSION[SESSION_USERID],
+				"order_date_create"=>date('Y-m-d H:i:s'),
+				"order_revised"=>0
 			);
+			
+			if(($_SESSION[SESSION_GROUPID]==9) || ($_SESSION[SESSION_GROUPID]==1)){ 
+				$data["order_diskon"]=$order_diskon;
+				$data["order_cashback"]=$order_cashback;
+				$data["order_biaya"]=$order_biaya; 
+				$data["order_bayar"]=$order_bayar; 
+			}
 			
 			$this->db->insert('master_order_beli', $data); 
 			if($this->db->affected_rows())
@@ -434,8 +389,6 @@ class M_master_order_beli extends Model{
 		
 		//fcuntion for delete record
 		function master_order_beli_delete($pkid){
-			// You could do some checkups here and return '0' or other error consts.
-			// Make a single query to delete all of the master_order_belis at the same time :
 			if(sizeof($pkid)<1){
 				return '0';
 			} else if (sizeof($pkid) == 1){
@@ -458,14 +411,12 @@ class M_master_order_beli extends Model{
 		}
 		
 		//function for advanced search record
-		function master_order_beli_search($order_id ,$order_no ,$order_supplier, $order_tanggal, $order_tanggal_akhir, $order_carabayar, /*$order_diskon,$order_cashback ,$order_biaya ,$order_bayar ,*/ $order_keterangan, $order_status, $start,$end){
+		function master_order_beli_search($order_id,$order_no ,$order_supplier ,$order_tgl_awal, $order_tgl_akhir,
+										   $order_carabayar,$order_keterangan, $order_status, $order_status_acc,
+										   $start,$end){
 			//full query
 			$query = "SELECT * FROM vu_trans_order";
 			
-			if($order_id!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " order_id LIKE '%".$order_id."%'";
-			};
 			if($order_no!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " no_bukti LIKE '%".$order_no."%'";
@@ -474,36 +425,19 @@ class M_master_order_beli extends Model{
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " order_supplier = ".$order_supplier;
 			};
-			if($order_tanggal!='' && $order_tanggal_akhir){
+			if($order_tgl_awal!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " date_format(tanggal,'%Y-%m-%d')>='".$order_tanggal."' 
-							AND date_format(tanggal,'%Y-%m-%d')<='".$order_tanggal_akhir."' ";
+				$query.= " date_format(tanggal,'%Y-%m-%d') >='".$order_tgl_awal."'";
 			};
-/*			if($order_tanggal_akhir!=''){
+			if($order_tgl_akhir!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " tanggal <= '".$order_tanggal_akhir."'";
+				$query.= " date_format(tanggal,'%Y-%m-%d') <='".$order_tgl_akhir."'";
 			};
-*/			if($order_carabayar!=''){
+			if($order_carabayar!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " order_carabayar LIKE '%".$order_carabayar."%'";
 			};
-/*			if($order_diskon!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " order_diskon LIKE '%".$order_diskon."%'";
-			};
-			if($order_cashback!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " order_cashback LIKE '%".$order_cashback."%'";
-			};
-			if($order_biaya!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " order_biaya LIKE '%".$order_biaya."%'";
-			};
-			if($order_bayar!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " order_bayar LIKE '%".$order_bayar."%'";
-			};
-*/			if($order_keterangan!=''){
+			if($order_keterangan!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " order_keterangan LIKE '%".$order_keterangan."%'";
 			};
@@ -511,6 +445,11 @@ class M_master_order_beli extends Model{
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " order_status LIKE '%".$order_status."%'";
 			};
+			if($order_status_acc!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " order_status_acc LIKE '%".$order_status_acc."%'";
+			};
+			
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
 			
@@ -529,112 +468,115 @@ class M_master_order_beli extends Model{
 		}
 		
 		//function for print record
-		function master_order_beli_print($order_id ,$order_no ,$order_supplier ,$order_tanggal ,$order_carabayar ,$order_diskon, $order_cashback ,$order_biaya ,$order_bayar ,$order_keterangan ,$option,$filter){
+		function master_order_beli_print($order_id,$order_no ,$order_supplier ,$order_tgl_awal, 
+											   $order_tgl_akhir,$order_carabayar,$order_keterangan, 
+											   $order_status, $order_status_acc,$option,$filter){
 			//full query
 			$query = "SELECT * FROM vu_trans_order";
 			
 			// For simple search
 			if ($option=="LIST"){
-				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (order_id LIKE '%".addslashes($filter)."%' OR order_no LIKE '%".addslashes($filter)."%' OR order_supplier LIKE '%".addslashes($filter)."%' OR order_tanggal LIKE '%".addslashes($filter)."%' OR order_carabayar LIKE '%".addslashes($filter)."%' OR order_diskon LIKE '%".addslashes($filter)."%'	OR order_cashback LIKE '%".addslashes($filter)."%' OR order_biaya LIKE '%".addslashes($filter)."%' OR order_bayar LIKE '%".addslashes($filter)."%' OR order_keterangan LIKE '%".addslashes($filter)."%' )";
-				$result = $this->db->query($query);
+				if($filter<>""){
+					$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
+					$query .= " (no_bukti LIKE '%".addslashes($filter)."%' OR 
+								 supplier_nama LIKE '%".addslashes($filter)."%' OR 
+								 order_carabayar LIKE '%".addslashes($filter)."%' )";
+				}
+				
 			} else if($option=='SEARCH'){
-				if($order_id!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " order_id LIKE '%".$order_id."%'";
-				};
 				if($order_no!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " order_no LIKE '%".$order_no."%'";
+					$query.= " no_bukti LIKE '%".$order_no."%'";
 				};
 				if($order_supplier!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " order_supplier LIKE '%".$order_supplier."%'";
+					$query.= " order_supplier = ".$order_supplier;
 				};
-				if($order_tanggal!=''){
+				if($order_tgl_awal!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " order_tanggal LIKE '%".$order_tanggal."%'";
+					$query.= " date_format(tanggal,'%Y-%m-%d') >='".$order_tgl_awal."'";
+				};
+				if($order_tgl_akhir!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " date_format(tanggal,'%Y-%m-%d') <='".$order_tgl_akhir."'";
 				};
 				if($order_carabayar!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " order_carabayar LIKE '%".$order_carabayar."%'";
 				};
-				if($order_diskon!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " order_diskon LIKE '%".$order_diskon."%'";
-				};
-				if($order_cashback!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " order_cashback LIKE '%".$order_cashback."%'";
-				};
-				if($order_biaya!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " order_biaya LIKE '%".$order_biaya."%'";
-				};
-				if($order_bayar!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " order_bayar LIKE '%".$order_bayar."%'";
-				};
 				if($order_keterangan!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " order_keterangan LIKE '%".$order_keterangan."%'";
 				};
-				$result = $this->db->query($query);
+				if($order_status!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " order_status LIKE '%".$order_status."%'";
+				};
+				if($order_status_acc!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " order_status_acc LIKE '%".$order_status_acc."%'";
+				};
+				
 			}
-			return $result;
+			//$this->firephp->log($query);
+			
+			$result = $this->db->query($query);
+			
+			return $result->result();
 		}
 		
 		//function  for export to excel
-		function master_order_beli_export_excel($order_id ,$order_no ,$order_supplier ,$order_tanggal ,$order_carabayar ,$order_diskon, $order_cashback ,$order_biaya ,$order_bayar ,$order_keterangan ,$option,$filter){
+		function master_order_beli_export_excel($order_id,$order_no ,$order_supplier ,$order_tgl_awal, 
+											   $order_tgl_akhir,$order_carabayar,$order_keterangan, 
+											   $order_status, $order_status_acc,$option,$filter){
 			//full query
-			$query = "SELECT order_tanggal as Tanggal, order_no as 'No Pesanan', supplier_nama as Supplier, jumlah_barang as 'Jumlah Item',
+			/*$query = "SELECT tanggal as Tanggal, no_bukti as 'No Pesanan', supplier_nama as Supplier, jumlah_barang as 'Jumlah Item',
 						total_nilai as 'Sub Total', order_diskon as 'Diskon (%)', order_cashback as 'Diskon (Rp)', order_biaya as 'Biaya (Rp)',
-						total_nilai+order_biaya-order_cashback-(order_diskon*total_nilai/100) as 'Total Nilai' FROM vu_trans_order";
+						total_nilai+order_biaya-order_cashback-(order_diskon*total_nilai/100) as 'Total Nilai',
+						order_keterangan as 'Keterangan' FROM vu_trans_order";*/
+						
+			$query = "SELECT tanggal as Tanggal, no_bukti as 'No Pesanan', supplier_nama as Supplier, jumlah_barang as 'Jumlah Item',
+						order_carabayar as 'Cara Bayar',
+						order_keterangan as 'Keterangan' FROM vu_trans_order";
 				
 			if ($option=="LIST"){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (order_id LIKE '%".addslashes($filter)."%' OR order_no LIKE '%".addslashes($filter)."%' OR order_supplier LIKE '%".addslashes($filter)."%' OR order_tanggal LIKE '%".addslashes($filter)."%' OR order_carabayar LIKE '%".addslashes($filter)."%' OR order_diskon LIKE '%".addslashes($filter)."%'	OR order_cashback LIKE '%".addslashes($filter)."%' OR order_biaya LIKE '%".addslashes($filter)."%' OR order_bayar LIKE '%".addslashes($filter)."%' OR order_keterangan LIKE '%".addslashes($filter)."%' )";
+				$query .= " (no_bukti LIKE '%".addslashes($filter)."%' OR 
+							 supplier_nama LIKE '%".addslashes($filter)."%' OR 
+							 order_carabayar LIKE '%".addslashes($filter)."%' )";
 				$result = $this->db->query($query);
 			} else if($option=='SEARCH'){
-				if($order_id!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " order_id LIKE '%".$order_id."%'";
-				};
 				if($order_no!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " order_no LIKE '%".$order_no."%'";
+					$query.= " no_bukti LIKE '%".$order_no."%'";
 				};
 				if($order_supplier!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " order_supplier LIKE '%".$order_supplier."%'";
+					$query.= " order_supplier = ".$order_supplier;
 				};
-				if($order_tanggal!=''){
+				if($order_tgl_awal!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " order_tanggal LIKE '%".$order_tanggal."%'";
+					$query.= " date_format(tanggal,'%Y-%m-%d') >='".$order_tgl_awal."'";
+				};
+				if($order_tgl_akhir!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " date_format(tanggal,'%Y-%m-%d') <='".$order_tgl_akhir."'";
 				};
 				if($order_carabayar!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " order_carabayar LIKE '%".$order_carabayar."%'";
 				};
-				if($order_diskon!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " order_diskon LIKE '%".$order_diskon."%'";
-				};
-				if($order_cashback!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " order_cashback LIKE '%".$order_cashback."%'";
-				};
-				if($order_biaya!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " order_biaya LIKE '%".$order_biaya."%'";
-				};
-				if($order_bayar!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " order_bayar LIKE '%".$order_bayar."%'";
-				};
 				if($order_keterangan!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " order_keterangan LIKE '%".$order_keterangan."%'";
+				};
+				if($order_status!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " order_status LIKE '%".$order_status."%'";
+				};
+				if($order_status_acc!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " order_status_acc LIKE '%".$order_status_acc."%'";
 				};
 				$result = $this->db->query($query);
 			}

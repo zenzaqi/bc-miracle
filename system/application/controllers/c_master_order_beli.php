@@ -33,23 +33,21 @@ class C_master_order_beli extends Controller {
 		
 		$faktur=(isset($_POST['faktur']) ? @$_POST['faktur'] : @$_GET['faktur']);
 		$opsi="faktur";
-        //$data['data_print'] = $this->m_master_order_beli->get_laporan("","","",$opsi,"",$faktur); //comment by masongbee
         $result = $this->m_master_order_beli->get_laporan("","","",$opsi,"",$faktur);
-		$result2 = $this->m_master_order_beli->get_cabang();
+		$info = $this->m_public_function->get_info();
+		$master=$result->row();
 		$data['data_print'] = $result->result();
-        $record = $result->row();
-        $record2 = $result2->row();
-		$data['info_nama'] = $record2->info_nama;
-		$data['no_bukti'] = $record->no_bukti;
-        $data['tanggal'] = $record->tanggal;
-        $data['supplier_nama'] = $record->supplier_nama;
-		$print_view=$this->load->view("main/p_pesanan_pembelian.php",$data,TRUE);
+		$data['info_nama'] = $info->info_nama;
+		$data['no_bukti'] = $master->no_bukti;
+        $data['tanggal'] = $master->tanggal;
+        $data['supplier_nama'] = $master->supplier_nama;
+		$print_view=$this->load->view("main/p_faktur_pesanan_pembelian.php",$data,TRUE);
 		
 		if(!file_exists("print")){
 			mkdir("print");
 		}
 		
-		$print_file=fopen("print/master_order_faktur.html","w+");
+		$print_file=fopen("print/order_faktur.html","w+");
 		
 		fwrite($print_file, $print_view);
 		echo '1'; 
@@ -76,7 +74,7 @@ class C_master_order_beli extends Controller {
 			$data["periode"]="Periode ".$tgl_awal." s/d ".$tgl_akhir;
 		}
 		
-		$data["data_print"]=$this->m_master_order_beli->get_laporan($tgl_awal,$tgl_akhir,$periode,$opsi,$group,$faktur)->result();
+		$data["data_print"]=$this->m_master_order_beli->get_laporan($tgl_awal,$tgl_akhir,$periode,$opsi,$group,$faktur);
 		if($opsi=='rekap'){
 				
 			switch($group){
@@ -178,36 +176,21 @@ class C_master_order_beli extends Controller {
 	
 	//add detail
 	function detail_detail_order_beli_insert(){
-        //POST variable here
-		/*$dorder_id=trim(@$_POST["dorder_id"]);
-		$dorder_master=trim(@$_POST["dorder_master"]);
-		$dorder_produk=trim(@$_POST["dorder_produk"]);
-		$dorder_satuan=trim(@$_POST["dorder_satuan"]);
-		$dorder_jumlah=trim(@$_POST["dorder_jumlah"]);
-		$dorder_harga=trim(@$_POST["dorder_harga"]);
-		$dorder_diskon=trim(@$_POST["dorder_diskon"]);
-		$result=$this->m_master_order_beli->detail_detail_order_beli_insert($dorder_id ,$dorder_master ,$dorder_produk ,$dorder_satuan ,$dorder_jumlah ,$dorder_harga ,$dorder_diskon );
-        */ //by masongbee
-        $dorder_id = $_POST['dorder_id']; // Get our array back and translate it :
-		$array_dorder_id = json_decode(stripslashes($dorder_id));
-        
+        $dorder_id = $_POST['dorder_id']; 
         $dorder_master=trim(@$_POST["dorder_master"]);
-        
-        $dorder_produk = $_POST['dorder_produk']; // Get our array back and translate it :
+        $dorder_produk = $_POST['dorder_produk']; 
+		$dorder_satuan = $_POST['dorder_satuan']; 
+		$dorder_jumlah = $_POST['dorder_jumlah'];
+		$dorder_harga = $_POST['dorder_harga']; 
+		$dorder_diskon = $_POST['dorder_diskon']; 
+		
+		$array_dorder_id = json_decode(stripslashes($dorder_id));
 		$array_dorder_produk = json_decode(stripslashes($dorder_produk));
-        
-        $dorder_satuan = $_POST['dorder_satuan']; // Get our array back and translate it :
 		$array_dorder_satuan = json_decode(stripslashes($dorder_satuan));
-        
-        $dorder_jumlah = $_POST['dorder_jumlah']; // Get our array back and translate it :
 		$array_dorder_jumlah = json_decode(stripslashes($dorder_jumlah));
-        
-        $dorder_harga = $_POST['dorder_harga']; // Get our array back and translate it :
 		$array_dorder_harga = json_decode(stripslashes($dorder_harga));
-        
-        $dorder_diskon = $_POST['dorder_diskon']; // Get our array back and translate it :
 		$array_dorder_diskon = json_decode(stripslashes($dorder_diskon));
-        
+		
         $result=$this->m_master_order_beli->detail_detail_order_beli_insert($array_dorder_id
                                                                             ,$dorder_master
                                                                             ,$array_dorder_produk
@@ -218,7 +201,6 @@ class C_master_order_beli extends Controller {
         echo $result;
         
 	}
-	
 	
 	//event handler action
 	function get_action(){
@@ -292,7 +274,9 @@ class C_master_order_beli extends Controller {
 		$order_status_acc=str_replace("/(<\/?)(p)([^>]*>)", "",$order_status_acc);
 		$order_status_acc=str_replace(",", ",",$order_status_acc);
 		$order_status_acc=str_replace("'", '"',$order_status_acc);
-		$result = $this->m_master_order_beli->master_order_beli_update($order_id, $order_no, $order_supplier, $order_tanggal, $order_carabayar, $order_diskon, $order_cashback, $order_biaya, $order_bayar, $order_keterangan, $order_status, $order_status_acc);
+		$result = $this->m_master_order_beli->master_order_beli_update($order_id, $order_no, $order_supplier, $order_tanggal, $order_carabayar, 
+																	   $order_diskon, $order_cashback, $order_biaya, $order_bayar, $order_keterangan,
+																	   $order_status, $order_status_acc);
 		echo $result;
 	}
 	
@@ -321,7 +305,9 @@ class C_master_order_beli extends Controller {
 		$order_status_acc=trim(@$_POST["order_status_acc"]);
 		$order_status_acc=str_replace("/(<\/?)(p)([^>]*>)", "",$order_status_acc);
 		$order_status_acc=str_replace("'", '"',$order_status_acc);
-		$result=$this->m_master_order_beli->master_order_beli_create($order_no, $order_supplier, $order_tanggal, $order_carabayar, $order_diskon, $order_cashback, $order_biaya, $order_bayar, $order_keterangan, $order_status, $order_status_acc);
+		$result=$this->m_master_order_beli->master_order_beli_create($order_no, $order_supplier, $order_tanggal, $order_carabayar, $order_diskon, 
+																	 $order_cashback, $order_biaya, $order_bayar, $order_keterangan, $order_status, 
+																	 $order_status_acc);
 		echo $result;
 	}
 
@@ -336,143 +322,93 @@ class C_master_order_beli extends Controller {
 	//function for advanced search
 	function master_order_beli_search(){
 		//POST varibale here
-		$order_id=trim(@$_POST["order_id"]);
+		$order_id="";
 		$order_no=trim(@$_POST["order_no"]);
 		$order_no=str_replace("/(<\/?)(p)([^>]*>)", "",$order_no);
 		$order_no=str_replace("'", '"',$order_no);
 		$order_supplier=trim(@$_POST["order_supplier"]);
-		$order_tanggal=trim(@$_POST["order_tanggal"]);
-		$order_tanggal_akhir=trim(@$_POST["order_tanggal_akhir"]);
+		$order_tgl_awal=trim(@$_POST["order_tgl_awal"]);
+		$order_tgl_akhir=trim(@$_POST["order_tgl_akhir"]);
 		$order_carabayar=trim(@$_POST["order_carabayar"]);
 		$order_carabayar=str_replace("/(<\/?)(p)([^>]*>)", "",$order_carabayar);
 		$order_carabayar=str_replace("'", '"',$order_carabayar);
-//		$order_diskon=trim(@$_POST["order_diskon"]);
-//		$order_cashback=trim(@$_POST["order_cashback"]);
-//		$order_biaya=trim(@$_POST["order_biaya"]);
-//		$order_bayar=trim(@$_POST["order_bayar"]);
 		$order_keterangan=trim(@$_POST["order_keterangan"]);
 		$order_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$order_keterangan);
 		$order_keterangan=str_replace("'", '"',$order_keterangan);
 		$order_status=trim(@$_POST["order_status"]);
-		$order_status=str_replace("/(<\/?)(p)([^>]*>)", "",$order_status);
-		$order_status=str_replace("'", '"',$order_status);
+		$order_status_acc=trim(@$_POST["order_status_acc"]);
+		
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_master_order_beli->master_order_beli_search($order_id ,$order_no ,$order_supplier ,$order_tanggal, $order_tanggal_akhir, $order_carabayar, /*$order_diskon, $order_cashback ,$order_biaya ,$order_bayar ,*/ $order_keterangan, $order_status, $start,$end);
+		$result = $this->m_master_order_beli->master_order_beli_search($order_id,$order_no ,$order_supplier ,$order_tgl_awal, $order_tgl_akhir,
+																	   $order_carabayar,$order_keterangan, $order_status, $order_status_acc,
+																	   $start,$end);
 		echo $result;
 	}
 
 
 	function master_order_beli_print(){
   		//POST varibale here
-		$order_id=trim(@$_POST["order_id"]);
+		$order_id="";
 		$order_no=trim(@$_POST["order_no"]);
 		$order_no=str_replace("/(<\/?)(p)([^>]*>)", "",$order_no);
 		$order_no=str_replace("'", '"',$order_no);
 		$order_supplier=trim(@$_POST["order_supplier"]);
-		$order_tanggal=trim(@$_POST["order_tanggal"]);
+		$order_tgl_awal=trim(@$_POST["order_tgl_awal"]);
+		$order_tgl_akhir=trim(@$_POST["order_tgl_akhir"]);
 		$order_carabayar=trim(@$_POST["order_carabayar"]);
 		$order_carabayar=str_replace("/(<\/?)(p)([^>]*>)", "",$order_carabayar);
 		$order_carabayar=str_replace("'", '"',$order_carabayar);
-		$order_diskon=trim(@$_POST["order_diskon"]);
-		$order_cashback=trim(@$_POST["order_cashback"]);
-		$order_biaya=trim(@$_POST["order_biaya"]);
-		$order_bayar=trim(@$_POST["order_bayar"]);
 		$order_keterangan=trim(@$_POST["order_keterangan"]);
 		$order_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$order_keterangan);
 		$order_keterangan=str_replace("'", '"',$order_keterangan);
+		$order_status=trim(@$_POST["order_status"]);
+		$order_status_acc=trim(@$_POST["order_status_acc"]);
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$result = $this->m_master_order_beli->master_order_beli_print($order_id ,$order_no ,$order_supplier ,$order_tanggal ,$order_carabayar ,$order_diskon,$order_cashback ,$order_biaya ,$order_bayar ,$order_keterangan ,$option,$filter);
-		$nbrows=$result->num_rows();
-		$totcolumn=11;
-   		/* We now have our array, let's build our HTML file */
-		$file = fopen("master_order_belilist.html",'w');
-		fwrite($file, "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' /><title>Cetak Pesanan Pembelian</title><link rel='stylesheet' type='text/css' href='assets/modules/main/css/printstyle.css'/></head>");
-		fwrite($file, "<body><table summary='Daftar Pesanan Pembelian'><caption>Daftar Pesanan Pembelian</caption>
-			   <thead>
-			   <tr>
-			   		<th scope='col'>Tanggal</th>
-					<th scope='col'>No Pesanan</th>
-					<th scope='col'>Supplier</th>
-					<th scope='col'>Jumlah Item</th>
-					<th scope='col'>Sub Total</th>
-					<th scope='col'>Diskon (%)</th>
-					<th scope='col'>Diskon (Rp)</th>
-					<th scope='col'>Biaya</th>
-					<th scope='col'>Total Nilai</th>
-					<th scope='col'>Uang Muka</th>
-					<th scope='col'>Cara Bayar</th>
-				</tr>
-				</thead>
-				<tfoot><tr><th scope='row'>Total</th><td colspan='$totcolumn'>");
-		fwrite($file, $nbrows);
-		fwrite($file, " Pesanan Pembelian </td></tr></tfoot><tbody>");
-		$i=0;
-		if($nbrows>0){
-			foreach($result->result_array() as $data){
-				fwrite($file,'<tr');
-				if($i%1==0){
-					fwrite($file," class='odd'");
-				}
-			
-				fwrite($file, "><th scope='row' id='r97'>");
-				fwrite($file, $data['order_tanggal']);
-				fwrite($file,"</th><td>");
-				fwrite($file, $data['order_no']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['supplier_nama']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['jumlah_barang']);
-				fwrite($file,"</td><td align='right'  class='numeric'>");
-				fwrite($file, number_format($data['total_nilai']));
-				fwrite($file,"</td><td align='right' class='numeric'>");
-				fwrite($file, $data['order_diskon']);
-				fwrite($file,"</td><td align='right' class='numeric'>");
-				fwrite($file, number_format($data['order_cashback']));
-				fwrite($file,"</td><td align='right' class='numeric'>");
-				fwrite($file, number_format($data['order_biaya']));
-				fwrite($file,"</td><td align='right' class='numeric'>");
-				fwrite($file, number_format($data['total_nilai']+$data['order_biaya']-$data['order_cashback']-($data['order_diskon']*$data['total_nilai']/100)));
-				fwrite($file,"</td><td align='right' class='numeric'>");
-				fwrite($file, number_format($data['order_bayar']));
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['order_carabayar']);
-				fwrite($file, "</td></tr>");
-			}
+		$data["data_print"]  = $this->m_master_order_beli->master_order_beli_print($order_id,$order_no ,$order_supplier ,$order_tgl_awal, 
+																				   $order_tgl_akhir,$order_carabayar,$order_keterangan, 
+																				   $order_status, $order_status_acc,$option,$filter);
+		$print_view=$this->load->view("main/p_list_order.php",$data,TRUE);
+		if(!file_exists("print")){
+			mkdir("print");
 		}
-		fwrite($file, "</tbody></table></body></html>");	
-		fclose($file);
-		echo '1';        
+
+		$print_file=fopen("print/print_order_belilist.html","w+");	
+		fwrite($print_file, $print_view);
+		echo '1';            
 	}
 	/* End Of Function */
 
 	/* Function to Export Excel document */
 	function master_order_beli_export_excel(){
-		       $this->load->plugin('to_excel');
+		       
 		//POST varibale here
-		$order_id=trim(@$_POST["order_id"]);
+		$order_id="";
 		$order_no=trim(@$_POST["order_no"]);
 		$order_no=str_replace("/(<\/?)(p)([^>]*>)", "",$order_no);
 		$order_no=str_replace("'", '"',$order_no);
 		$order_supplier=trim(@$_POST["order_supplier"]);
-		$order_tanggal=trim(@$_POST["order_tanggal"]);
+		$order_tgl_awal=trim(@$_POST["order_tgl_awal"]);
+		$order_tgl_akhir=trim(@$_POST["order_tgl_akhir"]);
 		$order_carabayar=trim(@$_POST["order_carabayar"]);
 		$order_carabayar=str_replace("/(<\/?)(p)([^>]*>)", "",$order_carabayar);
 		$order_carabayar=str_replace("'", '"',$order_carabayar);
-		$order_diskon=trim(@$_POST["order_diskon"]);
-		$order_cashback=trim(@$_POST["order_cashback"]);
-		$order_biaya=trim(@$_POST["order_biaya"]);
-		$order_bayar=trim(@$_POST["order_bayar"]);
 		$order_keterangan=trim(@$_POST["order_keterangan"]);
 		$order_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$order_keterangan);
 		$order_keterangan=str_replace("'", '"',$order_keterangan);
+		$order_status=trim(@$_POST["order_status"]);
+		$order_status_acc=trim(@$_POST["order_status_acc"]);
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$query = $this->m_master_order_beli->master_order_beli_export_excel($order_id ,$order_no ,$order_supplier ,$order_tanggal ,$order_carabayar ,$order_diskon, $order_cashback ,$order_biaya ,$order_bayar ,$order_keterangan ,$option,$filter);
+		$query = $this->m_master_order_beli->master_order_beli_export_excel($order_id,$order_no ,$order_supplier ,$order_tgl_awal, 
+																		   $order_tgl_akhir,$order_carabayar,$order_keterangan, 
+																		   $order_status, $order_status_acc,$option,$filter);
+		
+		$this->load->plugin('to_excel');
 		
 		to_excel($query,"master_order_beli"); 
 		echo '1';
