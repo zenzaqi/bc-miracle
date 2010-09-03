@@ -345,7 +345,7 @@ Ext.onReady(function(){
   
   	/* Function for add data, open window create form */
 	function master_jual_rawat_create(){
-		if(jrawat_bayarField.getValue()>=0 && jrawat_bayarField.getValue()<=jrawat_totalField.getValue()){
+		//if(jrawat_bayarField.getValue()>=0 && jrawat_bayarField.getValue()<=jrawat_totalField.getValue()){
 			if(is_master_jual_rawat_form_valid()
 			   && ((/^\d+$/.test(jrawat_custField.getValue()) && jrawat_post2db=="CREATE") || jrawat_post2db=="UPDATE")
 			   && jrawat_stat_dokField.getValue()=='Terbuka'){
@@ -787,7 +787,7 @@ Ext.onReady(function(){
 					icon: Ext.MessageBox.WARNING
 				});
 			}
-		}else{
+		/*}else{
 			Ext.MessageBox.show({
 				title: 'Warning',
 				msg: 'Maaf, kelebihan jumlah bayar.',
@@ -795,7 +795,7 @@ Ext.onReady(function(){
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
 			});
-		}
+		}*/
 	}
  	/* End of Function */
 	
