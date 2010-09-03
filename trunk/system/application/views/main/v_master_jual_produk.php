@@ -195,19 +195,6 @@ Ext.onReady(function(){
 	
 	var total_sub_temp=0;
 	
-	function btn_cancel(){
-		master_jual_produk_reset_form();
-		detail_jual_produk_DataStore.load({params: {master_id:-1}});
-		jproduk_caraField.setValue("card");
-		master_jual_produk_cardGroup.setVisible(true);
-		master_cara_bayarTabPanel.setActiveTab(0);
-		jproduk_post2db="CREATE";
-		jproduk_diskonField.setValue(0);
-		jproduk_cashbackField.setValue(0);
-		jproduk_pesanLabel.setText('');
-		jproduk_lunasLabel.setText('');
-	}
-	
 	function jproduk_cetak(master_id){
 		Ext.Ajax.request({   
 			waitMsg: 'Mohon tunggu...',
@@ -219,7 +206,7 @@ Ext.onReady(function(){
 				case 1:
 					win = window.open('./jproduk_paper.html','Cetak Penjualan Produk','height=480,width=1340,resizable=1,scrollbars=0, menubar=0');
 					//win.print();
-					btn_cancel();
+					jproduk_btn_cancel();
 					break;
 				default:
 					Ext.MessageBox.show({
@@ -631,11 +618,6 @@ Ext.onReady(function(){
 								}else if(jproduk_post2db=='UPDATE'){
 									detail_jual_produk_insert();
 								}
-								//detail_jual_produk_insert();
-								//Ext.MessageBox.alert(jproduk_post2db+' OK','The Master_jual_produk was '+msg+' successfully.');
-								//Ext.MessageBox.alert(jproduk_post2db+' OK','Data penjualan produk berhasil disimpan');
-								//master_jual_produk_DataStore.reload();
-								//detail_jual_produk_DataStore.load({params: {master_id:-1}});
 								master_jual_produk_createWindow.hide();
 								break;
 							default:
@@ -647,13 +629,9 @@ Ext.onReady(function(){
 								   animEl: 'save',
 								   icon: Ext.MessageBox.WARNING
 								});
+								jproduk_btn_cancel();
 								break;
 						}
-						master_jual_produk_reset_allForm();
-						jproduk_caraField.setValue("card");
-						master_jual_produk_cardGroup.setVisible(true);
-						master_cara_bayarTabPanel.setActiveTab(0);
-						//jproduk_post2db="CREATE";
 					},
 					failure: function(response){
 						var result=response.responseText;
@@ -663,7 +641,8 @@ Ext.onReady(function(){
 							   buttons: Ext.MessageBox.OK,
 							   animEl: 'database',
 							   icon: Ext.MessageBox.ERROR
-						});	
+						});
+						jproduk_btn_cancel();
 					}                      
 				});
 			}else if(jproduk_post2db=='UPDATE' && jproduk_stat_dokField.getValue()=='Tertutup'){
@@ -671,11 +650,7 @@ Ext.onReady(function(){
 					jproduk_cetak(jproduk_id_for_cetak);
 					cetak_jproduk=0;
 				}
-				master_jual_produk_reset_allForm();
-				detail_jual_produk_DataStore.load({params: {master_id: -1}});
-				jproduk_caraField.setValue("card");
-				master_jual_produk_cardGroup.setVisible(true);
-				master_cara_bayarTabPanel.setActiveTab(0);
+				jproduk_btn_cancel();
 			}else if(jproduk_post2db=='UPDATE' && jproduk_stat_dokField.getValue()=='Batal'){
 				Ext.Ajax.request({  
 					waitMsg: 'Mohon  Tunggu...',
@@ -696,10 +671,7 @@ Ext.onReady(function(){
 							   animEl: 'save',
 							   icon: Ext.MessageBox.OK
 							});
-							jproduk_caraField.setValue("card");
-							master_jual_produk_cardGroup.setVisible(true);
-							master_cara_bayarTabPanel.setActiveTab(0);
-							master_jual_produk_reset_allForm();
+							jproduk_btn_cancel();
 						}else{
 							jproduk_post2db='CREATE';
 							Ext.MessageBox.show({
@@ -710,6 +682,7 @@ Ext.onReady(function(){
 							   animEl: 'save',
 							   icon: Ext.MessageBox.WARNING
 							});
+							jproduk_btn_cancel();
 						}
 					},
 					failure: function(response){
@@ -721,14 +694,10 @@ Ext.onReady(function(){
 							   buttons: Ext.MessageBox.OK,
 							   animEl: 'database',
 							   icon: Ext.MessageBox.ERROR
-						});	
+						});
+						jproduk_btn_cancel();
 					}                      
 				});
-				detail_jual_produk_DataStore.load({params: {master_id: -1}});
-				jproduk_caraField.setValue("card");
-				master_jual_produk_cardGroup.setVisible(true);
-				master_cara_bayarTabPanel.setActiveTab(0);
-				master_jual_produk_reset_allForm();
 			}else {
 				if(dproduk_produk_id!="ada"){
 					Ext.MessageBox.show({
@@ -4954,6 +4923,7 @@ Ext.onReady(function(){
 								cetak_jproduk=0;
 								jproduk_post2db="CREATE";
 							}
+							jproduk_btn_cancel();
 						},
 						failure: function(response){
 							var result=response.responseText;
@@ -4963,7 +4933,8 @@ Ext.onReady(function(){
 							   buttons: Ext.MessageBox.OK,
 							   animEl: 'database',
 							   icon: Ext.MessageBox.ERROR
-							});	
+							});
+							jproduk_btn_cancel();
 						}		
 					});
 					
@@ -6484,7 +6455,7 @@ Ext.onReady(function(){
 			},
 			{
 				text: 'Cancel',
-				handler: btn_cancel
+				handler: jproduk_btn_cancel
 			}
 		]
 	});
@@ -6911,6 +6882,19 @@ Ext.onReady(function(){
 		});
 	}
 	/*End of Function */
+	
+	function jproduk_btn_cancel(){
+		master_jual_produk_reset_form();
+		detail_jual_produk_DataStore.load({params: {master_id:-1}});
+		jproduk_caraField.setValue("card");
+		master_jual_produk_cardGroup.setVisible(true);
+		master_cara_bayarTabPanel.setActiveTab(0);
+		jproduk_post2db="CREATE";
+		jproduk_diskonField.setValue(0);
+		jproduk_cashbackField.setValue(0);
+		jproduk_pesanLabel.setText('');
+		jproduk_lunasLabel.setText('');
+	}
 	
 	function pertamax(){
 		jproduk_post2db="CREATE";
