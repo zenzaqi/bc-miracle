@@ -520,20 +520,21 @@ class M_master_jual_produk extends Model{
 						if($rs->num_rows()){
 							$record = $rs->row_array();
 							$jkwitansi_master = $record['jkwitansi_master'];
+							
+							//updating sisa kwitansi
+							$sqlu = "UPDATE cetak_kwitansi,
+										(SELECT sum(jkwitansi_nilai) AS total_kwitansi
+											,jkwitansi_master 
+										FROM jual_kwitansi
+										WHERE jkwitansi_master<>0
+											AND jkwitansi_stat_dok<>'Batal'
+											AND jkwitansi_master='".$jkwitansi_master."'
+										GROUP BY jkwitansi_master) AS vu_kw
+									SET kwitansi_sisa=(kwitansi_nilai - vu_kw.total_kwitansi)
+									WHERE vu_kw.jkwitansi_master=kwitansi_id
+										AND kwitansi_id='".$jkwitansi_master."'";
+							$this->db->query($sqlu);
 						}
-						//updating sisa kwitansi
-						$sqlu = "UPDATE cetak_kwitansi,
-									(SELECT sum(jkwitansi_nilai) AS total_kwitansi
-										,jkwitansi_master 
-									FROM jual_kwitansi
-									WHERE jkwitansi_master<>0
-										AND jkwitansi_stat_dok<>'Batal'
-										AND jkwitansi_master='".$jkwitansi_master."'
-									GROUP BY jkwitansi_master) AS vu_kw
-								SET kwitansi_sisa=(kwitansi_nilai - vu_kw.total_kwitansi)
-								WHERE vu_kw.jkwitansi_master=kwitansi_id
-									AND kwitansi_id='".$jkwitansi_master."'";
-						$this->db->query($sqlu);
 						
 						//updating db.jual_transfer ==> pembatalan
 						$sqlu_jtransfer = "UPDATE jual_transfer JOIN master_jual_produk ON(jual_transfer.jtransfer_ref=master_jual_produk.jproduk_nobukti)
