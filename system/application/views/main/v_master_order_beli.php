@@ -1359,7 +1359,7 @@ Ext.onReady(function(){
 				success:function(response){
 					var result=eval(response.responseText);
 					if(opsi=='print'){
-						master_order_beli_cetak_faktur();
+						master_order_beli_cetak_faktur(pkid);
 					}
 					master_order_beli_DataStore.reload()
 				},
@@ -1377,8 +1377,6 @@ Ext.onReady(function(){
 			});
 					
         }
-        
-		
 	}
 	//eof
 	
@@ -1526,13 +1524,13 @@ Ext.onReady(function(){
 	};
 	/* End of Fuction */
 	
-	function master_order_beli_cetak_faktur(){
+	function master_order_beli_cetak_faktur(pkid){
 		
 		Ext.Ajax.request({   
 		waitMsg: 'Please Wait...',
 		url: 'index.php?c=c_master_order_beli&m=print_faktur',
 		params: {
-			faktur	: order_idField.getValue()
+			faktur	: pkid
 		}, 
 		success: function(response){              
 		  	var result=eval(response.responseText);

@@ -1602,7 +1602,7 @@ Ext.onReady(function(){
 				success:function(response){
 					var result=eval(response.responseText);
 					if(opsi=='print'){
-						master_terima_beli_cetak_faktur();
+						master_terima_beli_cetak_faktur(pkid);
 					}
 					master_terima_beli_DataStore.reload()
 				},
