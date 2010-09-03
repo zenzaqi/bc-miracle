@@ -1398,13 +1398,13 @@ Ext.onReady(function(){
 	}
   	/* End Function */
 	
-	function master_mutasi_print_faktur(faktur){
+	function master_mutasi_print_faktur(pkid){
 		
 		Ext.Ajax.request({   
 		waitMsg: 'Please Wait...',
 		url: 'index.php?c=c_master_mutasi&m=print_faktur',
 		params: {
-			faktur	: faktur
+			faktur	: pkid
 		}, 
 		success: function(response){              
 		  	var result=eval(response.responseText);

@@ -83,7 +83,7 @@ var terima_orderSearchField;
 var terima_supplierSearchField;
 var terima_surat_jalanSearchField;
 var terima_pengirimSearchField;
-var terima_tanggalSearchField;
+var terima_tgl_awalSearchField;
 var terima_keteranganSearchField;
 var terima_statusSearchField;
 
@@ -98,77 +98,21 @@ Ext.util.Format.comboRenderer = function(combo){
 Ext.onReady(function(){
   	Ext.QuickTips.init();	/* Initiate quick tips icon */
   
-  	/* Function for Saving inLine Editing */
-	function master_terima_beli_update(oGrid_event){
-		var terima_id_update_pk="";
-		var terima_no_update=null;
-		var terima_order_update=null;
-		var terima_supplier_update=null;
-		var terima_surat_jalan_update=null;
-		var terima_pengirim_update=null;
-		var terima_tanggal_update_date="";
-		var terima_keterangan_update=null;
-		var terima_status_update=null;
-		
-
-		terima_id_update_pk = oGrid_event.record.data.terima_id;
-		if(oGrid_event.record.data.terima_no!== null){terima_no_update = oGrid_event.record.data.terima_no;}
-		if(oGrid_event.record.data.terima_order!== null){terima_order_update = oGrid_event.record.data.terima_order;}
-		if(oGrid_event.record.data.terima_supplier!== null){terima_supplier_update = oGrid_event.record.data.terima_supplier;}
-		if(oGrid_event.record.data.terima_surat_jalan!== null){terima_surat_jalan_update = oGrid_event.record.data.terima_surat_jalan;}
-		if(oGrid_event.record.data.terima_pengirim!== null){terima_pengirim_update = oGrid_event.record.data.terima_pengirim;}
-	 	if(oGrid_event.record.data.terima_tanggal!== ""){terima_tanggal_update_date =oGrid_event.record.data.terima_tanggal.format('Y-m-d');}
-		if(oGrid_event.record.data.terima_keterangan!== null){terima_keterangan_update = oGrid_event.record.data.terima_keterangan;}
-		if(oGrid_event.record.data.terima_status!== null){terima_status_update = oGrid_event.record.data.terima_status;}
-
-		Ext.Ajax.request({  
-			waitMsg: 'Please wait...',
-			url: 'index.php?c=c_master_terima_beli&m=get_action',
-			params: {
-				task				: "UPDATE",
-				terima_id			: terima_id_update_pk, 
-				terima_no			: terima_no_update,  
-				terima_order		: terima_order_update,  
-				terima_supplier		: terima_supplier_update,  
-				terima_surat_jalan	: terima_surat_jalan_update,  
-				terima_pengirim		: terima_pengirim_update,  
-				terima_tanggal		: terima_tanggal_update_date, 
-				terima_keterangan	: terima_keterangan_update,
-				terima_status		: terima_status_update
-			}, 
-			success: function(response){							
-				var result=eval(response.responseText);
-				if(result!==0){
-						Ext.MessageBox.alert(post2db+' OK','Data penerimaan barang berhasil disimpan');
-						master_terima_beli_createWindow.hide();
-				}else{
-						Ext.MessageBox.show({
-						   title: 'Warning',
-						   msg: 'Data Penerimaan Barang tidak bisa disimpan.',
-						   buttons: Ext.MessageBox.OK,
-						   animEl: 'save',
-						   icon: Ext.MessageBox.WARNING
-						});
-				}      
-			},
-			failure: function(response){
-				var result=response.responseText;
-				Ext.MessageBox.show({
-				   title: 'Error',
-				   msg: 'Could not connect to the database. retry later.',
-				   buttons: Ext.MessageBox.OK,
-				   animEl: 'database',
-				   icon: Ext.MessageBox.ERROR
-				});	
-			}									    
-		});   
-	}
-  	/* End of Function */
-  
   	/* Function for add data, open window create form */
 	function master_terima_beli_create(opsi){
 	
-		if(is_master_terima_beli_form_valid()){	
+		if(detail_terima_beli_DataStore.getCount()<1){
+			
+			Ext.MessageBox.show({
+				title: 'Warning',
+				msg: 'Data detail harus ada minimal 1 (satu)',
+				buttons: Ext.MessageBox.OK,
+				animEl: 'save',
+				icon: Ext.MessageBox.WARNING
+			});
+			
+		}else if(is_master_terima_beli_form_valid()){	
+		
 		var terima_id_create_pk=null; 
 		var terima_no_create=null; 
 		var terima_order_create=null; 
@@ -207,8 +151,7 @@ Ext.onReady(function(){
 			success: function(response){             
 				var result=eval(response.responseText);
 				if(result!==0){
-						terima_idField.setValue(result);
-						detail_terima_beli_purge(result,opsi);
+						detail_terima_beli_insert(result,opsi);
 						Ext.MessageBox.alert(post2db+' OK','Data Penerimaan Barang berhasil disimpan');
 						master_terima_beli_createWindow.hide();
 				}else{
@@ -310,7 +253,13 @@ Ext.onReady(function(){
 			callback: function(r,opt,success){
 				if(success==true){
 					detail_terima_beli_DataStore.setBaseParam('master_id', get_pk_id());
-					detail_terima_beli_DataStore.load();
+					detail_terima_beli_DataStore.load({
+						callback: function(r,opt,success){
+							if(success==true){
+								detail_terima_beli_total();
+							}
+						}
+					});
 				}
 			}
 		});
@@ -321,7 +270,13 @@ Ext.onReady(function(){
 			callback: function(r,opt,success){
 				if(success==true){
 					detail_terima_bonus_DataStore.setBaseParam('master_id', get_pk_id());
-					detail_terima_bonus_DataStore.load();
+					detail_terima_bonus_DataStore.load({
+						callback: function(r,opt,success){
+							if(success==true){
+								detail_terima_beli_total();
+							}
+						}
+					});
 				}
 			}
 		});
@@ -445,7 +400,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'terima_id'
 		},[
-		/* dataIndex => insert intomaster_terima_beli_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'terima_id', type: 'int', mapping: 'terima_id'}, 
 			{name: 'terima_no', type: 'string', mapping: 'no_bukti'}, 
 			{name: 'terima_order_id', type: 'int', mapping: 'terima_order'}, 
@@ -481,7 +435,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'order_id'
 		},[
-		/* dataIndex => insert intocustomer_note_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'tbeli_orderbeli_value', type: 'int', mapping: 'order_id'},
 			{name: 'tbeli_orderbeli_nama', type: 'string', mapping: 'order_no'},
 			{name: 'tbeli_orderbeli_tgl', type: 'date', dateFormat: 'Y-m-d', mapping: 'order_tanggal'},
@@ -504,7 +457,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'order_id'
 		},[
-		/* dataIndex => insert intocustomer_note_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'tbeli_orderbeli_value', type: 'int', mapping: 'order_id'},
 			{name: 'tbeli_orderbeli_nama', type: 'string', mapping: 'order_no'},
 			{name: 'tbeli_orderbeli_tgl', type: 'date', dateFormat: 'Y-m-d', mapping: 'order_tanggal'},
@@ -528,7 +480,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'order_id'
 		},[
-		/* dataIndex => insert intocustomer_note_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'dorder_master', type: 'int', mapping: 'order_id'},
 			{name: 'dterima_produk', type: 'int', mapping: 'dorder_produk'},
 			{name: 'dorder_produk_nama', type: 'string', mapping: 'produk_nama'},
@@ -570,18 +521,14 @@ Ext.onReady(function(){
 			width: 70,	//150,
 			sortable: true,
 			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
-			editor: new Ext.form.DateField({
-				format: 'd-m-Y'
-			})
+			readOnly: true
 		}, 
 		{
 			header: '<div align="center">' + 'No PB' + '</div>',
 			dataIndex: 'terima_no',
 			width: 100,	//150,
-			sortable: true
-			/*editor: new Ext.form.TextField({
-				maxLength: 50
-          	})*/
+			sortable: true,
+			readOnly: true
 		}, 
 		{
 			header: '<div align="center">' + 'No OP' + '</div>',
@@ -622,18 +569,14 @@ Ext.onReady(function(){
 			dataIndex: 'terima_surat_jalan',
 			width: 100,	//150,
 			sortable: true,
-			editor: new Ext.form.TextField({
-				maxLength: 30
-          	})
+			readOnly: true
 		}, 
 		{
 			header: '<div align="center">' + 'Nama Pengirim' + '</div>',
 			dataIndex: 'terima_pengirim',
 			width: 120,	//150,
 			sortable: true,
-			editor: new Ext.form.TextField({
-				maxLength: 30
-          	})
+			readOnly: true
 		}, 
 		{
 			header: '<div align="center">' + 'Keterangan' + '</div>',
@@ -777,7 +720,7 @@ Ext.onReady(function(){
 		{ 
 			text: 'Edit', tooltip: 'Edit selected record', 
 			iconCls:'icon-update',
-			handler: master_terima_beli_editContextMenu 
+			handler: master_terima_beli_confirm_update 
 		},
 		{ 
 			text: 'Delete', 
@@ -908,29 +851,48 @@ Ext.onReady(function(){
 		anchor: '95%'
 	});
 	
-	
+	/* Identify  order_bayar Field */
+	terima_jumlahField= new Ext.form.TextField({
+		id: 'terima_jumlahField',
+		fieldLabel: 'Jumlah Total Barang',
+		valueRenderer: 'numberToCurrency',
+		itemCls: 'rmoney',
+		readOnly: true,
+		anchor: '70%',
+		maskRe: /([0-9]+)$/
+	});
 	
 	/* Identify  order_bayar Field */
-	terima_jumlahField= new Ext.form.NumberField({
-		id: 'terima_jumlahField',
-		fieldLabel: 'Total Item',
-		allowNegatife : false,
-		emptyText: '0',
-		allowDecimals: true,
+	terima_itemField= new Ext.form.TextField({
+		id: 'terima_itemField',
+		fieldLabel: 'Jumlah Jenis Barang',
+		valueRenderer: 'numberToCurrency',
+		itemCls: 'rmoney',
 		readOnly: true,
-		anchor: '50%',
+		anchor: '70%',
 		maskRe: /([0-9]+)$/
 	});
-	bonus_jumlahField= new Ext.form.NumberField({
+	
+	bonus_jumlahField= new Ext.form.TextField({
 		id: 'bonus_jumlahField',
 		fieldLabel: 'Jumlah Total Bonus',
-		allowNegatife : false,
-		emptyText: '0',
-		allowDecimals: true,
+		valueRenderer: 'numberToCurrency',
+		itemCls: 'rmoney',
 		readOnly: true,
-		anchor: '50%',
+		anchor: '70%',
 		maskRe: /([0-9]+)$/
 	});
+	
+	bonus_itemField= new Ext.form.TextField({
+		id: 'bonus_itemField',
+		fieldLabel: 'Jumlah Jenis Bonus',
+		valueRenderer: 'numberToCurrency',
+		itemCls: 'rmoney',
+		readOnly: true,
+		anchor: '70%',
+		maskRe: /([0-9]+)$/
+	});
+	
 	
 	terima_statusField= new Ext.form.ComboBox({
 		id: 'terima_statusField',
@@ -979,17 +941,23 @@ Ext.onReady(function(){
 		autoHeight: true,
 		collapsible: true,
 		layout:'column',
-		labelSeparator : ':',
-		//width: 50,
 		anchor: '100%',
 		items:[
 			{
-				columnWidth:1,
+				columnWidth:0.5,
 				layout: 'form',
 				labelAlign: 'left',
 				border:false,
-				labelWidth: 200,
+				labelWidth: 130,
 				items: [terima_jumlahField] 
+			},
+			{
+				columnWidth:0.5,
+				layout: 'form',
+				labelAlign: 'left',
+				border:false,
+				labelWidth: 130,
+				items: [terima_itemField] 
 			}
 			]
 	
@@ -1000,18 +968,25 @@ Ext.onReady(function(){
 		autoHeight: true,
 		collapsible: true,
 		layout:'column',
-		labelSeparator : ':',
-		//width: 50,
 		anchor: '100%',
 		items:[
 			{
-				columnWidth:1,
+				columnWidth: 0.5,
 				cls: '.x-form-field-wrap',
 				layout: 'form',
 				labelAlign: 'left',
 				border:false,
-				labelWidth: 200,
+				labelWidth: 130,
 				items: [bonus_jumlahField] 
+			},
+			{
+				columnWidth: 0.5,
+				cls: '.x-form-field-wrap',
+				layout: 'form',
+				labelAlign: 'left',
+				border:false,
+				labelWidth: 130,
+				items: [bonus_itemField] 
 			}
 			]
 	
@@ -1026,7 +1001,6 @@ Ext.onReady(function(){
 		totalProperty: 'total',
 		id: ''
 	},[
-	/* dataIndex => insert intoperawatan_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'dterima_id', type: 'int', mapping: 'dterima_id'}, 
 			{name: 'dterima_master', type: 'int', mapping: 'dterima_master'}, 
 			{name: 'dterima_produk', type: 'int', mapping: 'dterima_produk'}, 
@@ -1081,7 +1055,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'produk_id'
 		},[
-		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
 			{name: 'produk_id', type: 'int', mapping: 'produk_id'},
 			{name: 'produk_nama', type: 'string', mapping: 'produk_nama'},
 			{name: 'produk_kode', type: 'string', mapping: 'produk_kode'},
@@ -1127,7 +1100,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'satuan_value'
 		},[
-		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
 			{name: 'satuan_value', type: 'int', mapping: 'satuan_id'},
 			{name: 'satuan_nama', type: 'string', mapping: 'satuan_nama'}
 		]),
@@ -1207,12 +1179,6 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true},
-		/*bbar: new Ext.PagingToolbar({
-			pageSize: pageS,
-			store: detail_terima_beli_DataStore,
-			displayInfo: true
-		}),*/
-		/* Add Control on ToolBar */
 		tbar: [
 		{
 			text: 'Add',
@@ -1233,10 +1199,10 @@ Ext.onReady(function(){
 	//function of detail add
 	function detail_terima_beli_add(){
 		var edit_detail_terima_beli= new detail_terima_beliListEditorGrid.store.recordType({
-			dterima_id	:'',		
+			dterima_id		: 0,		
 			dterima_master	:'',		
-			dterima_produk	:'',		
-			dterima_satuan	:'',		
+			dterima_produk	: 0,		
+			dterima_satuan	: 0,		
 			dterima_jumlah	: 0,
 			dterima_order	: 0
 		});
@@ -1255,25 +1221,69 @@ Ext.onReady(function(){
 	//eof
 	
 	//function for insert detail
-	function detail_terima_beli_insert(pkid){
-		for(i=0;i<detail_terima_beli_DataStore.getCount();i++){
-			detail_terima_beli_record=detail_terima_beli_DataStore.getAt(i);
+	function detail_terima_beli_insert(pkid, opsi){
+		
+		var dterima_id = [];
+        var dterima_produk = [];
+        var dterima_satuan = [];
+        var dterima_jumlah = [];
+       
+        if(detail_terima_beli_DataStore.getCount()>0){
+            for(i=0; i<detail_terima_beli_DataStore.getCount();i++){
+                if((/^\d+$/.test(detail_terima_beli_DataStore.getAt(i).data.dterima_produk))
+				   && detail_terima_beli_DataStore.getAt(i).data.dterima_produk!==undefined
+				   && detail_terima_beli_DataStore.getAt(i).data.dterima_produk!==''
+				   && detail_terima_beli_DataStore.getAt(i).data.dterima_produk!==0
+				   && detail_terima_beli_DataStore.getAt(i).data.dterima_satuan!==0
+				   && detail_terima_beli_DataStore.getAt(i).data.dterima_jumlah>0){
+                    
+					if(detail_terima_beli_DataStore.getAt(i).data.dterima_id==undefined ||
+					   detail_terima_beli_DataStore.getAt(i).data.dterima_id==''){
+						detail_terima_beli_DataStore.getAt(i).data.dterima_id=0;
+					}
+					
+                  	dterima_id.push(detail_terima_beli_DataStore.getAt(i).data.dterima_id);
+					dterima_produk.push(detail_terima_beli_DataStore.getAt(i).data.dterima_produk);
+                   	dterima_satuan.push(detail_terima_beli_DataStore.getAt(i).data.dterima_satuan);
+					dterima_jumlah.push(detail_terima_beli_DataStore.getAt(i).data.dterima_jumlah);
+                }
+            }
+			
+			var encoded_array_dterima_id = Ext.encode(dterima_id);
+			var encoded_array_dterima_produk = Ext.encode(dterima_produk);
+			var encoded_array_dterima_satuan = Ext.encode(dterima_satuan);
+			var encoded_array_dterima_jumlah = Ext.encode(dterima_jumlah);
+				
 			Ext.Ajax.request({
-				waitMsg: 'Please wait...',
+				waitMsg: 'Mohon tunggu...',
 				url: 'index.php?c=c_master_terima_beli&m=detail_detail_terima_beli_insert',
 				params:{
-				dterima_id	: detail_terima_beli_record.data.dterima_id, 
-				dterima_master	: pkid, 
-				dterima_produk	: detail_terima_beli_record.data.dterima_produk, 
-				dterima_satuan	: detail_terima_beli_record.data.dterima_satuan, 
-				dterima_jumlah	: detail_terima_beli_record.data.dterima_jumlah 
-				
+					dterima_id		: encoded_array_dterima_id,
+					dterima_master	: pkid, 
+					dterima_produk	: encoded_array_dterima_produk,
+					dterima_satuan	: encoded_array_dterima_satuan,
+					dterima_jumlah	: encoded_array_dterima_jumlah
 				},
-				timeout: 60000,
-				success: function(response){							
+				success:function(response){
 					var result=eval(response.responseText);
+					detail_terima_bonus_insert(pkid, opsi)
+					
+					//cek semua order terpenuhi
+					Ext.Ajax.request({
+						waitMsg: 'Please wait...',
+						url: 'index.php?c=c_master_terima_beli&m=check_all_order_done',
+						params:{
+							master_id : pkid
+						},
+						timeout: 5000,
+						success: function(response){							
+							var result=eval(response.responseText);
+							master_terima_beli_DataStore.reload();
+						}		
+					});
 				},
 				failure: function(response){
+					Ext.MessageBox.hide();
 					var result=response.responseText;
 					Ext.MessageBox.show({
 					   title: 'Error',
@@ -1282,10 +1292,11 @@ Ext.onReady(function(){
 					   animEl: 'database',
 					   icon: Ext.MessageBox.ERROR
 					});	
-				}		
+				}
 			});
-		}
-		master_terima_beli_DataStore.reload();
+					
+        }
+		
 	}
 	//eof
 	
@@ -1350,9 +1361,8 @@ Ext.onReady(function(){
 	var detail_terima_bonus_reader=new Ext.data.JsonReader({
 		root: 'results',
 		totalProperty: 'total',
-		id: ''
+		id: 'dtbonus_id'
 	},[
-	/* dataIndex => insert intoperawatan_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'dtbonus_id', type: 'int', mapping: 'dtbonus_id'}, 
 			{name: 'dtbonus_master', type: 'int', mapping: 'dtbonus_master'}, 
 			{name: 'dtbonus_produk', type: 'int', mapping: 'dtbonus_produk'},
@@ -1378,7 +1388,6 @@ Ext.onReady(function(){
 		}),
 		reader: detail_terima_bonus_reader,
 		baseParams: {master_id: get_pk_id(), start: 0, limit: pageS},
-		//baseParams:{master_id: terima_idField.getValue()},
 		sortInfo:{field: 'dtbonus_id', direction: "ASC"}
 	});
 	/* End of Function */
@@ -1401,7 +1410,6 @@ Ext.onReady(function(){
 		}
 	}
 	
-	/*=== cbo_produk_detailDataStore ==> mengambil "Detail Produk" dari detailList Modul Order Pembelian ===*/
 	cbo_produk_bonusDataStore = new Ext.data.Store({
 		id: 'cbo_produk_bonusDataStore',
 		proxy: new Ext.data.HttpProxy({
@@ -1513,12 +1521,6 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true},
-		/*bbar: new Ext.PagingToolbar({
-			pageSize: pageS,
-			store: detail_terima_bonus_DataStore,
-			displayInfo: true
-		}),*/
-		/* Add Control on ToolBar */
 		tbar: [
 		{
 			text: 'Add',
@@ -1539,11 +1541,11 @@ Ext.onReady(function(){
 	//function of detail add
 	function detail_terima_bonus_add(){
 		var edit_detail_terima_bonus= new detail_terima_bonusListEditorGrid.store.recordType({
-			dtbonus_id	:'',		
+			dtbonus_id		: 0,		
 			dtbonus_master	:'',		
-			dtbonus_produk	:'',		
-			dtbonus_satuan	:'',		
-			dtbonus_jumlah	:''		
+			dtbonus_produk	: 0,		
+			dtbonus_satuan	: 0,		
+			dtbonus_jumlah	: 0		
 		});
 		editor_detail_terima_bonus.stopEditing();
 		detail_terima_bonus_DataStore.insert(0, edit_detail_terima_bonus);
@@ -1560,25 +1562,52 @@ Ext.onReady(function(){
 	//eof
 	
 	//function for insert detail
-	function detail_terima_bonus_insert(pkid){
-		for(i=0;i<detail_terima_bonus_DataStore.getCount();i++){
-			detail_terima_bonus_record=detail_terima_bonus_DataStore.getAt(i);
+	function detail_terima_bonus_insert(pkid, opsi){
+		var dtbonus_id = [];
+        var dtbonus_produk = [];
+        var dtbonus_satuan = [];
+        var dtbonus_jumlah = [];
+       
+        if(detail_terima_bonus_DataStore.getCount()>0){
+            for(i=0; i<detail_terima_bonus_DataStore.getCount();i++){
+                if((/^\d+$/.test(detail_terima_bonus_DataStore.getAt(i).data.dtbonus_produk))
+				   && detail_terima_bonus_DataStore.getAt(i).data.dtbonus_produk!==undefined
+				   && detail_terima_bonus_DataStore.getAt(i).data.dtbonus_produk!==''
+				   && detail_terima_bonus_DataStore.getAt(i).data.dtbonus_produk!==0
+				   && detail_terima_bonus_DataStore.getAt(i).data.dtbonus_satuan!==0
+				   && detail_terima_bonus_DataStore.getAt(i).data.dtbonus_jumlah>0){
+                    
+                  	dtbonus_id.push(detail_terima_bonus_DataStore.getAt(i).data.dtbonus_id);
+					dtbonus_produk.push(detail_terima_bonus_DataStore.getAt(i).data.dtbonus_produk);
+                   	dtbonus_satuan.push(detail_terima_bonus_DataStore.getAt(i).data.dtbonus_satuan);
+					dtbonus_jumlah.push(detail_terima_bonus_DataStore.getAt(i).data.dtbonus_jumlah);
+                }
+            }
+						
+			var encoded_array_dtbonus_id = Ext.encode(dtbonus_id);
+			var encoded_array_dtbonus_produk = Ext.encode(dtbonus_produk);
+			var encoded_array_dtbonus_satuan = Ext.encode(dtbonus_satuan);
+			var encoded_array_dtbonus_jumlah = Ext.encode(dtbonus_jumlah);
+				
 			Ext.Ajax.request({
-				waitMsg: 'Please wait...',
+				waitMsg: 'Mohon tunggu...',
 				url: 'index.php?c=c_master_terima_beli&m=detail_detail_terima_bonus_insert',
 				params:{
-				dtbonus_id	: detail_terima_bonus_record.data.dtbonus_id, 
-				dtbonus_master	: pkid, 
-				dtbonus_produk	: detail_terima_bonus_record.data.dtbonus_produk, 
-				dtbonus_satuan	: detail_terima_bonus_record.data.dtbonus_satuan, 
-				dtbonus_jumlah	: detail_terima_bonus_record.data.dtbonus_jumlah 
+					dtbonus_id		: encoded_array_dtbonus_id,
+					dtbonus_master	: pkid, 
+					dtbonus_produk	: encoded_array_dtbonus_produk,
+					dtbonus_satuan	: encoded_array_dtbonus_satuan,
+					dtbonus_jumlah	: encoded_array_dtbonus_jumlah
 				},
-				timeout: 5000,
-				success: function(response){							
+				success:function(response){
 					var result=eval(response.responseText);
-					master_terima_beli_DataStore.reload();
+					if(opsi=='print'){
+						master_terima_beli_cetak_faktur();
+					}
+					master_terima_beli_DataStore.reload()
 				},
 				failure: function(response){
+					Ext.MessageBox.hide();
 					var result=response.responseText;
 					Ext.MessageBox.show({
 					   title: 'Error',
@@ -1587,24 +1616,10 @@ Ext.onReady(function(){
 					   animEl: 'database',
 					   icon: Ext.MessageBox.ERROR
 					});	
-				}		
+				}
 			});
-		}
-		//cek semua order terpenuhi
-		Ext.Ajax.request({
-			waitMsg: 'Please wait...',
-			url: 'index.php?c=c_master_terima_beli&m=check_all_order_done',
-			params:{
-				master_id : pkid
-			},
-			timeout: 5000,
-			success: function(response){							
-				var result=eval(response.responseText);
-				master_terima_beli_DataStore.reload();
-			}		
-		});
-		
-		
+					
+       	}
 	}
 	//eof
 	
@@ -1619,7 +1634,7 @@ Ext.onReady(function(){
 				var result=eval(response.responseText);
 				detail_terima_bonus_insert(pkid);
 				if(opsi=='print'){
-					master_terima_beli_cetak_faktur();
+					master_terima_beli_cetak_faktur(pkid);
 				}
 				master_terima_beli_DataStore.reload();
 			},
@@ -1714,7 +1729,7 @@ Ext.onReady(function(){
 				handler: function() { master_terima_beli_create('print'); }
 			},{
 				text: 'Save',
-				handler: function() { master_terima_beli_create(''); }
+				handler: function() { master_terima_beli_create('close'); }
 			}
 			,{
 				text: 'Cancel',
@@ -1744,64 +1759,44 @@ Ext.onReady(function(){
 	});
 	/* End Window */
 	
-	function detail_terima_beli_total(){
-		var jumlah_item=0;
-		for(i=0;i<detail_terima_beli_DataStore.getCount();i++){
-			detail_terima_beli_record=detail_terima_beli_DataStore.getAt(i);
-			jumlah_item=jumlah_item+detail_terima_beli_record.data.dterima_jumlah;
-		}
-		terima_jumlahField.setValue(jumlah_item);
-	}
 	
-	
-	
-	function detail_terima_bonus_total(){
-		var jumlah_item=0;
-		for(i=0;i<detail_terima_bonus_DataStore.getCount();i++){
-			detail_terima_bonus_record=detail_terima_bonus_DataStore.getAt(i);
-			jumlah_item=jumlah_item+detail_terima_bonus_record.data.dtbonus_jumlah;
-		}
-		bonus_jumlahField.setValue(jumlah_item);
-	}
 	
 	
 	/* Function for action list search */
 	function master_terima_beli_list_search(){
 		// render according to a SQL date format.
-		var terima_id_search=null;
 		var terima_no_search=null;
 		var terima_order_search=null;
 		var terima_supplier_search=null;
 		var terima_surat_jalan_search=null;
 		var terima_pengirim_search=null;
-		var terima_tanggal_search_date="";
+		var terima_tgl_awal_search_date="";
+		var terima_tgl_akhir_search_date="";
 		var terima_keterangan_search=null;
 		var terima_status_search=null;
 
-		if(terima_idSearchField.getValue()!==null){terima_id_search=terima_idSearchField.getValue();}
 		if(terima_noSearchField.getValue()!==null){terima_no_search=terima_noSearchField.getValue();}
 		if(terima_orderSearchField.getValue()!==null){terima_order_search=terima_orderSearchField.getValue();}
 		//if(terima_supplierSearchField.getValue()!==null){terima_supplier_search=terima_supplierSearchField.getValue();}
 		if(terima_surat_jalanSearchField.getValue()!==null){terima_surat_jalan_search=terima_surat_jalanSearchField.getValue();}
 		if(terima_pengirimSearchField.getValue()!==null){terima_pengirim_search=terima_pengirimSearchField.getValue();}
-		if(terima_tanggalSearchField.getValue()!==""){terima_tanggal_search_date=terima_tanggalSearchField.getValue().format('Y-m-d');}
+		if(terima_tgl_awalSearchField.getValue()!==""){terima_tgl_awal_search_date=terima_tgl_awalSearchField.getValue().format('Y-m-d');}
+		if(terima_tgl_akhirSearchField.getValue()!==""){terima_tgl_akhir_search_date=terima_tgl_akhirSearchField.getValue().format('Y-m-d');}
 		if(terima_keteranganSearchField.getValue()!==null){terima_keterangan_search=terima_keteranganSearchField.getValue();}
 		if(terima_statusSearchField.getValue()!==null){terima_status_search=terima_statusSearchField.getValue();}
 		// change the store parameters
 		master_terima_beli_DataStore.baseParams = {
-			task: 'SEARCH',
-			//variable here
-			terima_id			: terima_id_search, 
+			task				: 'SEARCH',
 			terima_no			: terima_no_search, 
 			terima_order		: terima_order_search, 
 			//terima_supplier	:	terima_supplier_search, 
 			terima_surat_jalan	: terima_surat_jalan_search, 
 			terima_pengirim		: terima_pengirim_search, 
-			terima_tanggal		: terima_tanggal_search_date, 
+			terima_tgl_awal		: terima_tgl_awal_search_date, 
+			terima_tgl_akhir	: terima_tgl_akhir_search_date, 
 			terima_keterangan	: terima_keterangan_search,
 			terima_status		: terima_status_search
 		};
-		// Cause the datastore to do another query : 
 		master_terima_beli_DataStore.reload({params: {start: 0, limit: pageS}});
 	}
 		
@@ -1809,7 +1804,6 @@ Ext.onReady(function(){
 	function master_terima_beli_reset_search(){
 		// reset the store parameters
 		master_terima_beli_DataStore.baseParams = { task: 'LIST',start:0,limit:15  };
-		// Cause the datastore to do another query : 
 		master_terima_beli_DataStore.load({params: {start: 0, limit: 15}});
 		master_terima_beli_searchWindow.close();
 	};
@@ -1821,7 +1815,7 @@ Ext.onReady(function(){
 		terima_supplierSearchField.reset();
 		terima_surat_jalanSearchField.reset();
 		terima_pengirimSearchField.reset();
-		terima_tanggalSearchField.reset();
+		terima_tgl_awalSearchField.reset();
 		terima_keteranganSearchField.reset();
 		terima_statusSearchField.reset();
 	}
@@ -1857,7 +1851,6 @@ Ext.onReady(function(){
 		valueField: 'tbeli_orderbeli_value',
         typeAhead: false,
         hideTrigger:false,
-		allowBlank: false,
 		tpl: tbeli_orderbeli_tpl,
 		itemSelector: 'div.search-item',
 		triggerAction: 'all',
@@ -1875,7 +1868,6 @@ Ext.onReady(function(){
 		valueField: 'tbeli_orderbeli_value',
         typeAhead: false,
         hideTrigger:false,
-		allowBlank: false,
 		tpl: tbeli_orderbeli_tpl,
 		itemSelector: 'div.search-item',
 		triggerAction: 'all',
@@ -1900,8 +1892,8 @@ Ext.onReady(function(){
 	
 	});
 	/* Identify  terima_tanggal Search Field */
-	terima_tanggalSearchField= new Ext.form.DateField({
-		id: 'terima_tanggalSearchField',
+	terima_tgl_awalSearchField= new Ext.form.DateField({
+		id: 'terima_tgl_awalSearchField',
 		fieldLabel: 'Tanggal',
 		format : 'd-m-Y',
 	
@@ -1914,8 +1906,8 @@ Ext.onReady(function(){
 		anchor: '95%'
 	});
 	
-	terima_tanggal_akhirSearchField= new Ext.form.DateField({
-		id: 'terima_tanggal_akhirSearchField',
+	terima_tgl_akhirSearchField= new Ext.form.DateField({
+		id: 'terima_tgl_akhirSearchField',
 		fieldLabel: 's/d',
 		format : 'd-m-Y'
 	});
@@ -1923,13 +1915,13 @@ Ext.onReady(function(){
 	terima_label_tanggalField= new Ext.form.Label({ html: ' &nbsp; s/d  &nbsp;' });
     
 	
-	terima_tanggalSearchFieldSet=new Ext.form.FieldSet({
-		id:'terima_tanggalSearchFieldSet',
+	terima_tgl_awalSearchFieldSet=new Ext.form.FieldSet({
+		id:'terima_tgl_awalSearchFieldSet',
 		title: 'Opsi Tanggal',
 		layout: 'column',
 		boduStyle: 'padding: 5px;',
 		frame: false,
-		items:[terima_tanggalSearchField, terima_label_tanggalField, terima_tanggal_akhirSearchField]
+		items:[terima_tgl_awalSearchField, terima_label_tanggalField, terima_tgl_akhirSearchField]
 	});
 	
 	terima_statusSearchField= new Ext.form.ComboBox({
@@ -1954,7 +1946,8 @@ Ext.onReady(function(){
 		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
-		width: 300,        
+		width: 400,
+		labelWidth: 100,
 		items: [{
 			layout:'column',
 			border:false,
@@ -1963,7 +1956,26 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [terima_noSearchField, terima_orderSearchField, terima_surat_jalanSearchField, terima_pengirimSearchField, terima_tanggalSearchFieldSet, terima_keteranganSearchField, terima_statusSearchField] 
+				items: [terima_noSearchField, terima_orderSearchField, terima_surat_jalanSearchField, terima_pengirimSearchField,
+						{
+							layout: 'column',
+							border: false,
+							items:[{
+								   		layout: 'form',
+										border: false,
+										columnWidth: 0.6,
+										labelWidth: 100,
+										items:[terima_tgl_awalSearchField]
+								   },
+								   {
+								   		layout: 'form',
+										border: false,
+										columnWidth: 0.4,
+										labelWidth: 20,
+										items:[terima_tgl_akhirSearchField]
+								   }
+							]
+						}, terima_keteranganSearchField, terima_statusSearchField] 
 			}
 			]
 		}]
@@ -2009,19 +2021,19 @@ Ext.onReady(function(){
 	}
   	/* End Function */
 	
-	function master_terima_beli_cetak_faktur(){
+	function master_terima_beli_cetak_faktur(pkid){
 		
 		Ext.Ajax.request({   
 		waitMsg: 'Please Wait...',
 		url: 'index.php?c=c_master_terima_beli&m=print_faktur',
 		params: {
-			faktur	: terima_idField.getValue()
+			faktur	: pkid
 		}, 
 		success: function(response){              
 		  	var result=eval(response.responseText);
 		  	switch(result){
 		  	case 1:
-				win = window.open('./print/master_terima_faktur.html','master_terima_faktur','height=800,width=600,resizable=1,scrollbars=1, menubar=1');
+				win = window.open('./print/terima_faktur.html','master_terima_faktur','height=800,width=600,resizable=1,scrollbars=1, menubar=1');
 				//win.print();
 				break;
 		  	default:
@@ -2057,7 +2069,7 @@ Ext.onReady(function(){
 		var terima_supplier_print=null;
 		var terima_surat_jalan_print=null;
 		var terima_pengirim_print=null;
-		var terima_tanggal_print_date="";
+		var terima_tgl_awal_print_date="";
 		var terima_keterangan_print=null;
 		var win;              
 		// check if we do have some search data...
@@ -2067,7 +2079,8 @@ Ext.onReady(function(){
 		if(master_terima_beli_DataStore.baseParams.terima_supplier!==null){terima_supplier_print = master_terima_beli_DataStore.baseParams.terima_supplier;}
 		if(master_terima_beli_DataStore.baseParams.terima_surat_jalan!==null){terima_surat_jalan_print = master_terima_beli_DataStore.baseParams.terima_surat_jalan;}
 		if(master_terima_beli_DataStore.baseParams.terima_pengirim!==null){terima_pengirim_print = master_terima_beli_DataStore.baseParams.terima_pengirim;}
-		if(master_terima_beli_DataStore.baseParams.terima_tanggal!==""){terima_tanggal_print_date = master_terima_beli_DataStore.baseParams.terima_tanggal;}
+		if(master_terima_beli_DataStore.baseParams.terima_tgl_awal_print!==""){terima_tgl_awal_print_date = master_terima_beli_DataStore.baseParams.terima_tgl_awal_print;}
+		if(master_terima_beli_DataStore.baseParams.terima_tgl_akhir_print!==""){terima_tgl_akhir_print_date = master_terima_beli_DataStore.baseParams.terima_tgl_akhir_print;}
 		if(master_terima_beli_DataStore.baseParams.terima_keterangan!==null){terima_keterangan_print = master_terima_beli_DataStore.baseParams.terima_keterangan;}
 
 		Ext.Ajax.request({   
@@ -2075,14 +2088,14 @@ Ext.onReady(function(){
 		url: 'index.php?c=c_master_terima_beli&m=get_action',
 		params: {
 			task				: "PRINT",
-		  	query				: searchquery,                    		// if we are doing a quicksearch, use this
-			//if we are doing advanced search, use this
+		  	query				: searchquery,
 			terima_no 			: terima_no_print,
 			terima_order 		: terima_order_print,
 			terima_supplier 	: terima_supplier_print,
 			terima_surat_jalan 	: terima_surat_jalan_print,
 			terima_pengirim 	: terima_pengirim_print,
-		  	terima_tanggal 		: terima_tanggal_print_date, 
+		  	terima_tgl_awal		: terima_tgl_awal_print_date, 
+			terima_tgl_akhir	: terima_tgl_akhir_print_date, 
 			terima_keterangan 	: terima_keterangan_print,
 		  	currentlisting		: master_terima_beli_DataStore.baseParams.task // this tells us if we are searching or not
 		}, 
@@ -2090,7 +2103,7 @@ Ext.onReady(function(){
 		  	var result=eval(response.responseText);
 		  	switch(result){
 		  	case 1:
-				win = window.open('./master_terima_belilist.html','master_terima_belilist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
+				win = window.open('./print/print_terima_belilist.html','master_terima_belilist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
 				win.print();
 				break;
 		  	default:
@@ -2126,7 +2139,8 @@ Ext.onReady(function(){
 		var terima_supplier_2excel=null;
 		var terima_surat_jalan_2excel=null;
 		var terima_pengirim_2excel=null;
-		var terima_tanggal_2excel_date="";
+		var terima_tgl_awal_2excel_date="";
+		var terima_tgl_akhir_2excel_date="";
 		var terima_keterangan_2excel=null;
 		var win;              
 		// check if we do have some search data...
@@ -2136,7 +2150,8 @@ Ext.onReady(function(){
 		if(master_terima_beli_DataStore.baseParams.terima_supplier!==null){terima_supplier_2excel = master_terima_beli_DataStore.baseParams.terima_supplier;}
 		if(master_terima_beli_DataStore.baseParams.terima_surat_jalan!==null){terima_surat_jalan_2excel = master_terima_beli_DataStore.baseParams.terima_surat_jalan;}
 		if(master_terima_beli_DataStore.baseParams.terima_pengirim!==null){terima_pengirim_2excel = master_terima_beli_DataStore.baseParams.terima_pengirim;}
-		if(master_terima_beli_DataStore.baseParams.terima_tanggal!==""){terima_tanggal_2excel_date = master_terima_beli_DataStore.baseParams.terima_tanggal;}
+		if(master_terima_beli_DataStore.baseParams.terima_tgl_awal!==""){terima_tgl_awal_2excel_date = master_terima_beli_DataStore.baseParams.terima_tgl_awal;}
+		if(master_terima_beli_DataStore.baseParams.terima_tgl_akhir!==""){terima_tgl_akhir_2excel_date = master_terima_beli_DataStore.baseParams.terima_tgl_akhir;}
 		if(master_terima_beli_DataStore.baseParams.terima_keterangan!==null){terima_keterangan_2excel = master_terima_beli_DataStore.baseParams.terima_keterangan;}
 
 		Ext.Ajax.request({   
@@ -2144,14 +2159,14 @@ Ext.onReady(function(){
 		url: 'index.php?c=c_master_terima_beli&m=get_action',
 		params: {
 			task				: "EXCEL",
-		  	query				: searchquery,                    		// if we are doing a quicksearch, use this
-			//if we are doing advanced search, use this
+		  	query				: searchquery,  
 			terima_no 			: terima_no_2excel,
 			terima_order 		: terima_order_2excel,
 			terima_supplier 	: terima_supplier_2excel,
 			terima_surat_jalan 	: terima_surat_jalan_2excel,
 			terima_pengirim 	: terima_pengirim_2excel,
-		  	terima_tanggal 		: terima_tanggal_2excel_date, 
+		  	terima_tgl_awal		: terima_tgl_awal_2excel_date, 
+			terima_tgl_akhir	: terima_tgl_akhir_2excel_date, 
 			terima_keterangan 	: terima_keterangan_2excel,
 		  	currentlisting		: master_terima_beli_DataStore.baseParams.task // this tells us if we are searching or not
 		},
@@ -2186,13 +2201,32 @@ Ext.onReady(function(){
 	}
 	/*End of Function */
 	
+	function detail_terima_beli_total(){
+		var jumlah_item=0;
+		for(i=0;i<detail_terima_beli_DataStore.getCount();i++){
+			detail_terima_beli_record=detail_terima_beli_DataStore.getAt(i);
+			jumlah_item=jumlah_item+detail_terima_beli_record.data.dterima_jumlah;
+		}
+		terima_jumlahField.setValue(CurrencyFormatted(jumlah_item));
+		terima_itemField.setValue(CurrencyFormatted(detail_terima_beli_DataStore.getCount()));
+	}
+	
+	
+	function detail_terima_bonus_total(){
+		var jumlah_item=0;
+		for(i=0;i<detail_terima_bonus_DataStore.getCount();i++){
+			detail_terima_bonus_record=detail_terima_bonus_DataStore.getAt(i);
+			jumlah_item=jumlah_item+detail_terima_bonus_record.data.dtbonus_jumlah;
+		}
+		bonus_jumlahField.setValue(CurrencyFormatted(jumlah_item));
+		bonus_itemField.setValue(CurrencyFormatted(detail_terima_bonus_DataStore.getCount()));
+	}
+	
 	//EVENTS
 
 	master_terima_beliListEditorGrid.addListener('rowcontextmenu', onmaster_terima_beli_ListEditGridContextMenu);
 	master_terima_beli_DataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
-	master_terima_beliListEditorGrid.on('afteredit', master_terima_beli_update); // inLine Editing Record
 	
-
 	detail_terima_beli_DataStore.on("load",detail_terima_beli_total);
 	detail_terima_bonus_DataStore.on("load",detail_terima_bonus_total);
 	
@@ -2305,6 +2339,7 @@ Ext.onReady(function(){
 										var detail_order_record=tbeli_orderbeli_detail_DataStore.getAt(i);
 										detail_terima_beli_DataStore.insert(i,detail_order_record);
 								}
+								detail_terima_beli_total();
 							}
 						}
 					});

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Surat Mutasi Barang</title>
+<title>Surat Penerimaan Barang</title>
 <link rel='stylesheet' type='text/css' href='../assets/modules/main/css/printstyle_nocolor.css'/>
 </head>
 <body onload="window.print();window.close();">
@@ -10,8 +10,8 @@
   <tr>
     <td height="120" valign="top"><table width="100%" border="0" cellspacing="0" cellpadding="0">
       <tr>
-        <td width="55%" align="center"><center><p><h2>SURAT <br/>
-          MUTASI BARANG<br><?=$info_nama;?><br/></h2></p></center></td>
+        <td width="55%" align="center"><center><br/><h2>SURAT <br/>
+          PENERIMAAN BARANG <br><?=$info_nama;?><br/></h2></p></center></td>
         <td width="45%"><table width="100%" border="0" cellspacing="0" cellpadding="0">
         <!--<//?php 
 		foreach($data_print as $print) { 
@@ -21,24 +21,19 @@
 		}
 		?>--><!-- by masongbee-->
           <tr class="clear">
-            <td width="34%" align="right" class="clear"><strong>No.</strong></td>
-            <td width="4%" class="clear">:&nbsp;</td>
-            <td width="62%" class="clear"><?php echo $no_bukti; ?></td>
+            <td width="31%" align="right" class="clear"><strong>No.</strong></td>
+            <td width="3%" align="right" class="clear">:</td>
+            <td width="66%" class="clear"><?=$no_bukti; ?></td>
           </tr>
-          <tr>
+          <tr class="clear">
             <td align="right" class="clear"><strong>Tanggal</strong></td>
-            <td class="clear">:&nbsp;</td>
-            <td class="clear"><?php echo $tanggal; ?></td>
+            <td align="right" class="clear">:</td>
+            <td class="clear"><?=$tanggal; ?></td>
           </tr>
-          <tr>
-            <td align="right" class="clear"><strong>Dari Gudang</strong></td>
-            <td class="clear">:&nbsp;</td>
-            <td class="clear"><?=$gudang_asal_nama; ?></td>
-          </tr>
-          <tr>
-            <td align="right" class="clear"><strong>Ke Gudang</strong></td>
-            <td class="clear">:&nbsp;</td>
-            <td class="clear"><?=$gudang_tujuan_nama; ?></td>
+          <tr class="clear">
+            <td align="right" class="clear"><strong>Supplier</strong></td>
+            <td align="right" class="clear">:</td>
+            <td class="clear"><?=$supplier_nama; ?></td>
           </tr>
         </table></td>
       </tr>
@@ -48,12 +43,13 @@
     <td valign="top"><table width="100%" border="1" cellspacing="0" cellpadding="0">
    
       <tr>
-        <td width="4%"><strong>No</strong></td>
+        <td width="4%"  style="margin:2px"><strong>No</strong></td>
         <td width="12%"><strong>Kode</strong></td>
         <td width="47%"><strong>Nama Produk</strong></td>
         <td width="12%"><strong>Jumlah</strong></td>
         <td width="13%"><strong>Volume</strong></td>
         <td width="12%"><strong>Satuan</strong></td>
+        <td width="12%"><strong>Keterangan</strong></td>
       </tr>
       <?php 
 	  $i=0;
@@ -64,9 +60,10 @@
       	<td><?php  echo $i; ?></td>
         <td><?php  echo $print->produk_kode; ?></td>
         <td><?php  echo $print->produk_nama; ?></td>
-        <td><?php  echo $print->dmutasi_jumlah; ?></td>
+        <td class="numeric" align="right" ><?php  echo number_format($print->jumlah); ?></td>
         <td><?php  echo $print->produk_volume ?></td>
         <td><?php  echo $print->satuan_nama; ?></td>
+        <td><?php  echo ($print->jenis=='bonus'?'Bonus':''); ?></td>
       </tr>
       <?php } ?>
     </table></td>
@@ -81,11 +78,10 @@
           <tr>
             <td width="50%" align="center" class="clear"><center><p><strong>Accounting</strong></p></center>
               <p>&nbsp;</p>
-              <center>
-                <p>( &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; )</p></center></td>
-            <td width="50%" align="center" class="clear"><center><p><strong>Dibuat Oleh</strong></p></center>
+              <p>( &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;   )</p></td>
+            <td width="50%" align="center"  class="clear"><center><p><strong>Dibuat Oleh</strong></p></center>
               <p>&nbsp;</p>
-              <center><p>( &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; )</p></center></td>
+              <center><p>( &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;)</p></center></td>
           </tr>
         </table></td>
       </tr>

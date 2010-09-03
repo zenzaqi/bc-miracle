@@ -16,6 +16,7 @@ class C_master_terima_beli extends Controller {
 	//constructor
 	function C_master_terima_beli(){
 		parent::Controller();
+		session_start();
 		$this->load->model('m_master_terima_beli', '', TRUE);
 	}
 	
@@ -23,7 +24,7 @@ class C_master_terima_beli extends Controller {
 	function index(){
 		$this->load->helper('asset');
 		$this->load->view('main/v_master_terima_beli');
-		$this->load->plugin('to_excel');
+		
 	}
 	
 	function laporan(){
@@ -32,23 +33,31 @@ class C_master_terima_beli extends Controller {
 	
 	function print_faktur(){
 		
+		
 		$faktur=(isset($_POST['faktur']) ? @$_POST['faktur'] : @$_GET['faktur']);
 		$opsi="faktur";
-		$data["data_print"]=$this->m_master_terima_beli->get_laporan("","","",$opsi,"",$faktur);
-		$result2 = $this->m_master_terima_beli->get_cabang();
-		$record2 = $result2->row();
-		$data['info_nama'] = $record2->info_nama;
-		$print_view=$this->load->view("main/p_penerimaan_barang.php",$data,TRUE);
+	
+		$faktur=(isset($_POST['faktur']) ? @$_POST['faktur'] : @$_GET['faktur']);
+		$opsi="faktur";
+        $result = $this->m_master_terima_beli->get_laporan("","","",$opsi,"",$faktur);
+		$info = $this->m_public_function->get_info();
+		$master=$result->row();
+		$data['data_print'] = $result->result();
+		$data['info_nama'] = $info->info_nama;
+		$data['no_bukti'] = $master->no_bukti;
+        $data['tanggal'] = $master->tanggal;
+        $data['supplier_nama'] = $master->supplier_nama;
+		$print_view=$this->load->view("main/p_faktur_terima_pembelian.php",$data,TRUE);
 		
 		if(!file_exists("print")){
 			mkdir("print");
 		}
 		
-		$print_file=fopen("print/master_terima_faktur.html","w+");
+		$print_file=fopen("print/terima_faktur.html","w+");
 		
 		fwrite($print_file, $print_view);
 		echo '1'; 
-		
+	
 	}
 	
 	function print_laporan(){
@@ -208,12 +217,20 @@ class C_master_terima_beli extends Controller {
 	//add detail
 	function detail_detail_terima_bonus_insert(){
 	//POST variable here
-		$dtbonus_id=trim(@$_POST["dtbonus_id"]);
-		$dtbonus_master=trim(@$_POST["dtbonus_master"]);
-		$dtbonus_produk=trim(@$_POST["dtbonus_produk"]);
-		$dtbonus_satuan=trim(@$_POST["dtbonus_satuan"]);
-		$dtbonus_jumlah=trim(@$_POST["dtbonus_jumlah"]);
-		$result=$this->m_master_terima_beli->detail_detail_terima_bonus_insert($dtbonus_id ,$dtbonus_master ,$dtbonus_produk ,$dtbonus_satuan ,$dtbonus_jumlah );
+		$dtbonus_id = $_POST['dtbonus_id']; 
+        $dtbonus_master=trim(@$_POST["dtbonus_master"]);
+        $dtbonus_produk = $_POST['dtbonus_produk']; 
+		$dtbonus_satuan = $_POST['dtbonus_satuan']; 
+		$dtbonus_jumlah = $_POST['dtbonus_jumlah'];
+
+		
+		$array_dtbonus_id = json_decode(stripslashes($dtbonus_id));
+		$array_dtbonus_produk = json_decode(stripslashes($dtbonus_produk));
+		$array_dtbonus_satuan = json_decode(stripslashes($dtbonus_satuan));
+		$array_dtbonus_jumlah = json_decode(stripslashes($dtbonus_jumlah));
+
+		$result=$this->m_master_terima_beli->detail_detail_terima_bonus_insert($array_dtbonus_id ,$dtbonus_master ,$array_dtbonus_produk ,
+																			   $array_dtbonus_satuan ,$array_dtbonus_jumlah );
 		echo $result;
 	}
 	
@@ -247,12 +264,20 @@ class C_master_terima_beli extends Controller {
 	//add detail
 	function detail_detail_terima_beli_insert(){
 	//POST variable here
-		$dterima_id=trim(@$_POST["dterima_id"]);
-		$dterima_master=trim(@$_POST["dterima_master"]);
-		$dterima_produk=trim(@$_POST["dterima_produk"]);
-		$dterima_satuan=trim(@$_POST["dterima_satuan"]);
-		$dterima_jumlah=trim(@$_POST["dterima_jumlah"]);
-		$result=$this->m_master_terima_beli->detail_detail_terima_beli_insert($dterima_id ,$dterima_master ,$dterima_produk ,$dterima_satuan ,$dterima_jumlah );
+		$dterima_id = $_POST['dterima_id']; 
+        $dterima_master=trim(@$_POST["dterima_master"]);
+        $dterima_produk = $_POST['dterima_produk']; 
+		$dterima_satuan = $_POST['dterima_satuan']; 
+		$dterima_jumlah = $_POST['dterima_jumlah'];
+
+		
+		$array_dterima_id = json_decode(stripslashes($dterima_id));
+		$array_dterima_produk = json_decode(stripslashes($dterima_produk));
+		$array_dterima_satuan = json_decode(stripslashes($dterima_satuan));
+		$array_dterima_jumlah = json_decode(stripslashes($dterima_jumlah));
+		
+		$result=$this->m_master_terima_beli->detail_detail_terima_beli_insert($array_dterima_id ,$dterima_master ,$array_dterima_produk ,
+																			  $array_dterima_satuan ,$array_dterima_jumlah );
 		echo $result;
 	}
 	
@@ -309,28 +334,23 @@ class C_master_terima_beli extends Controller {
 		$terima_id=trim(@$_POST["terima_id"]);
 		$terima_no=trim(@$_POST["terima_no"]);
 		$terima_no=str_replace("/(<\/?)(p)([^>]*>)", "",$terima_no);
-		$terima_no=str_replace(",", ",",$terima_no);
 		$terima_no=str_replace("'", '"',$terima_no);
 		$terima_order=trim(@$_POST["terima_order"]);
 		$terima_supplier=trim(@$_POST["terima_supplier"]);
 		$terima_surat_jalan=trim(@$_POST["terima_surat_jalan"]);
 		$terima_surat_jalan=str_replace("/(<\/?)(p)([^>]*>)", "",$terima_surat_jalan);
-		$terima_surat_jalan=str_replace(",", ",",$terima_surat_jalan);
 		$terima_surat_jalan=str_replace("'", '"',$terima_surat_jalan);
 		$terima_pengirim=trim(@$_POST["terima_pengirim"]);
 		$terima_pengirim=str_replace("/(<\/?)(p)([^>]*>)", "",$terima_pengirim);
-		$terima_pengirim=str_replace(",", ",",$terima_pengirim);
 		$terima_pengirim=str_replace("'", '"',$terima_pengirim);
 		$terima_tanggal=trim(@$_POST["terima_tanggal"]);
 		$terima_keterangan=trim(@$_POST["terima_keterangan"]);
 		$terima_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$terima_keterangan);
-		$terima_keterangan=str_replace(",", ",",$terima_keterangan);
 		$terima_keterangan=str_replace("'", '"',$terima_keterangan);
 		$terima_status=trim(@$_POST["terima_status"]);
-		$terima_status=str_replace("/(<\/?)(p)([^>]*>)", "",$terima_status);
-		$terima_status=str_replace(",", ",",$terima_status);
-		$terima_status=str_replace("'", '"',$terima_status);
-		$result = $this->m_master_terima_beli->master_terima_beli_update($terima_id ,$terima_no ,$terima_order ,$terima_supplier ,$terima_surat_jalan ,$terima_pengirim ,$terima_tanggal ,$terima_keterangan, $terima_status  );
+		$result = $this->m_master_terima_beli->master_terima_beli_update($terima_id ,$terima_no ,$terima_order ,$terima_supplier ,
+																		 $terima_surat_jalan ,$terima_pengirim ,$terima_tanggal ,
+																		 $terima_keterangan, $terima_status  );
 		echo $result;
 	}
 	
@@ -354,10 +374,9 @@ class C_master_terima_beli extends Controller {
 		$terima_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$terima_keterangan);
 		$terima_keterangan=str_replace("'", '"',$terima_keterangan);
 		$terima_status=trim(@$_POST["terima_status"]);
-		$terima_status=str_replace("/(<\/?)(p)([^>]*>)", "",$terima_status);
-		$terima_status=str_replace("'", '"',$terima_status);
 		
-		$result=$this->m_master_terima_beli->master_terima_beli_create($terima_no ,$terima_order ,$terima_supplier ,$terima_surat_jalan ,$terima_pengirim ,$terima_tanggal ,$terima_keterangan, $terima_status);
+		$result=$this->m_master_terima_beli->master_terima_beli_create($terima_no ,$terima_order ,$terima_supplier ,$terima_surat_jalan ,
+																	   $terima_pengirim ,$terima_tanggal ,$terima_keterangan, $terima_status);
 		echo $result;
 	}
 
@@ -384,17 +403,18 @@ class C_master_terima_beli extends Controller {
 		$terima_pengirim=trim(@$_POST["terima_pengirim"]);
 		$terima_pengirim=str_replace("/(<\/?)(p)([^>]*>)", "",$terima_pengirim);
 		$terima_pengirim=str_replace("'", '"',$terima_pengirim);
-		$terima_tanggal=trim(@$_POST["terima_tanggal"]);
+		$terima_tgl_awal=trim(@$_POST["terima_tgl_awal"]);
+		$terima_tgl_akhir=trim(@$_POST["terima_tgl_akhir"]);
 		$terima_keterangan=trim(@$_POST["terima_keterangan"]);
 		$terima_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$terima_keterangan);
 		$terima_keterangan=str_replace("'", '"',$terima_keterangan);
 		$terima_status=trim(@$_POST["terima_status"]);
-		$terima_status=str_replace("/(<\/?)(p)([^>]*>)", "",$terima_status);
-		$terima_status=str_replace("'", '"',$terima_status);
 		
 		$start = (integer) (isset($_POST['start']) ? @$_POST['start'] : @$_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? @$_POST['limit'] : @$_GET['limit']);
-		$result = $this->m_master_terima_beli->master_terima_beli_search($terima_id ,$terima_no ,$terima_order ,$terima_supplier ,$terima_surat_jalan ,$terima_pengirim ,$terima_tanggal ,$terima_keterangan ,$terima_status, $start,$end);
+		$result = $this->m_master_terima_beli->master_terima_beli_search($terima_id ,$terima_no ,$terima_order ,$terima_supplier ,
+																		 $terima_surat_jalan ,$terima_pengirim ,$terima_tgl_awal, 
+																		 $terima_tgl_akhir ,$terima_keterangan ,$terima_status, $start,$end);
 		echo $result;
 	}
 
@@ -413,63 +433,27 @@ class C_master_terima_beli extends Controller {
 		$terima_pengirim=trim(@$_POST["terima_pengirim"]);
 		$terima_pengirim=str_replace("/(<\/?)(p)([^>]*>)", "",$terima_pengirim);
 		$terima_pengirim=str_replace("'", '"',$terima_pengirim);
-		$terima_tanggal=trim(@$_POST["terima_tanggal"]);
+		$terima_tgl_awal=trim(@$_POST["terima_tgl_awal"]);
+		$terima_tgl_akhir=trim(@$_POST["terima_tgl_akhir"]);
 		$terima_keterangan=trim(@$_POST["terima_keterangan"]);
 		$terima_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$terima_keterangan);
 		$terima_keterangan=str_replace("'", '"',$terima_keterangan);
+		$terima_status=trim(@$_POST["terima_status"]);
 		$option=@$_POST['currentlisting'];
 		$filter=@$_POST["query"];
 		
-		$result = $this->m_master_terima_beli->master_terima_beli_print($terima_id ,$terima_no ,$terima_order ,$terima_supplier ,$terima_surat_jalan ,$terima_pengirim ,$terima_tanggal ,$terima_keterangan ,$option,$filter);
-		$nbrows=$result->num_rows();
-		$totcolumn=7;
-   		/* We now have our array, let's build our HTML file */
-		$file = fopen("master_terima_belilist.html",'w');
-		fwrite($file, "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' /><title>Cetak Daftar Penerimaan Barang</title><link rel='stylesheet' type='text/css' href='assets/modules/main/css/printstyle.css'/></head>");
-		fwrite($file, "<body><table summary='Daftar Penerimaan Barang'><caption>Daftar Penerimaan Barang</caption>
-			   <thead><tr>
-			   		<th scope='col'>Tanggal</th>
-					<th scope='col'>No Penerimaan</th>
-					<th scope='col'>No Pesanan</th>
-					<th scope='col'>Supplier</th>
-					<th scope='col'>Jumlah Item</th>
-					<th scope='col'>Jumlah Item Bonus</th>
-					<th scope='col'>No Surat Jalan</th>
-					<th scope='col'>Pengirim</th>
-				</tr></thead>
-				<tfoot><tr><th scope='row'>Total</th><td colspan='$totcolumn'>");
-		fwrite($file, $nbrows);
-		fwrite($file, " Penerimaan Barang</td></tr></tfoot><tbody>");
-		$i=0;
-		if($nbrows>0){
-			foreach($result->result_array() as $data){
-				fwrite($file,'<tr');
-				if($i%1==0){
-					fwrite($file," class='odd'");
-				}
-			
-				fwrite($file, "><th scope='row' id='r97'>");
-				fwrite($file, $data['tanggal']);
-				fwrite($file,"</th><td>");
-				fwrite($file, $data['no_bukti']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['order_no']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['supplier_nama']);
-				fwrite($file,"</td><td class='numeric'>");
-				fwrite($file, $data['jumlah_barang']);
-				fwrite($file,"</td><td class='numeric'>");
-				fwrite($file, $data['jumlah_barang_bonus']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['terima_surat_jalan']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['terima_pengirim']);
-				fwrite($file, "</td></tr>");
-			}
+		$data["data_print"]  = $this->m_master_terima_beli->master_terima_beli_print($terima_id ,$terima_no ,$terima_order ,$terima_supplier ,
+																		$terima_surat_jalan ,$terima_pengirim ,$terima_tgl_awal, 
+																		$terima_tgl_akhir ,$terima_keterangan ,$option,$filter);
+		$print_view=$this->load->view("main/p_list_terima.php",$data,TRUE);
+		if(!file_exists("print")){
+			mkdir("print");
 		}
-		fwrite($file, "</tbody></table></body></html>");	
-		fclose($file);
-		echo '1';        
+
+		$print_file=fopen("print/print_terima_belilist.html","w+");	
+		fwrite($print_file, $print_view);
+		echo '1';            
+		
 	}
 	/* End Of Function */
 
@@ -488,15 +472,20 @@ class C_master_terima_beli extends Controller {
 		$terima_pengirim=trim(@$_POST["terima_pengirim"]);
 		$terima_pengirim=str_replace("/(<\/?)(p)([^>]*>)", "",$terima_pengirim);
 		$terima_pengirim=str_replace("'", '"',$terima_pengirim);
-		$terima_tanggal=trim(@$_POST["terima_tanggal"]);
+		$terima_tgl_awal=trim(@$_POST["terima_tgl_awal"]);
+		$terima_tgl_akhir=trim(@$_POST["terima_tgl_akhir"]);
 		$terima_keterangan=trim(@$_POST["terima_keterangan"]);
 		$terima_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$terima_keterangan);
 		$terima_keterangan=str_replace("'", '"',$terima_keterangan);
+		$terima_status=trim(@$_POST["terima_status"]);
 		$option=@$_POST['currentlisting'];
 		$filter=@$_POST["query"];
 		
-		$query = $this->m_master_terima_beli->master_terima_beli_export_excel($terima_id ,$terima_no ,$terima_order ,$terima_supplier ,$terima_surat_jalan ,$terima_pengirim ,$terima_tanggal ,$terima_keterangan ,$option,$filter);
+		$query = $this->m_master_terima_beli->master_terima_beli_export_excel($terima_id ,$terima_no ,$terima_order ,$terima_supplier ,
+																			  $terima_surat_jalan ,$terima_pengirim ,$terima_tgl_awal ,
+																			  $terima_tgl_akhir, $terima_keterangan ,$option,$filter);
 		
+		$this->load->plugin('to_excel');
 		to_excel($query,"master_terima_beli"); 
 		echo '1';
 			
