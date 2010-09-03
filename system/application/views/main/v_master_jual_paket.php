@@ -253,7 +253,7 @@ Ext.onReady(function(){
 						   animEl: 'save',
 						   icon: Ext.MessageBox.WARNING
 						});
-						//jpaket_btn_cancel();
+						jpaket_btn_cancel();
 						break;
 				}
 			},
