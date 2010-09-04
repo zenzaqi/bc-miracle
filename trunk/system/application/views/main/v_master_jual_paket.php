@@ -825,6 +825,7 @@ Ext.onReady(function(){
 	
 	function save_andPrint(){
 		cetak_jpaket=1;
+		master_jual_paket_create();
 		//pengecekan_dokumen();
 		jpaket_pesanLabel.setText('');
 		jpaket_lunasLabel.setText('');
