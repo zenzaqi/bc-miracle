@@ -253,7 +253,7 @@ Ext.onReady(function(){
 						   animEl: 'save',
 						   icon: Ext.MessageBox.WARNING
 						});
-						jpaket_btn_cancel();
+						//jpaket_btn_cancel();
 						break;
 				}
 			},
@@ -825,7 +825,7 @@ Ext.onReady(function(){
 	
 	function save_andPrint(){
 		cetak_jpaket=1;
-		pengecekan_dokumen();
+		//pengecekan_dokumen();
 		jpaket_pesanLabel.setText('');
 		jpaket_lunasLabel.setText('');
 	}
@@ -6461,7 +6461,7 @@ Ext.onReady(function(){
 			},
 			{
 				text: 'Save',
-				handler: pengecekan_dokumen
+				handler: master_jual_paket_create
 			},
 			{
 				text: 'Cancel',
