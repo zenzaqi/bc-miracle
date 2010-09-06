@@ -221,6 +221,9 @@ class C_master_ambil_paket extends Controller {
 			case "CREATE":
 				$this->ambil_paket_create();
 				break;
+			case "CEK":
+				$this->ambil_paket_pengecekan();
+				break;
 			case "DELETE":
 				$this->ambil_paket_delete();
 				break;
@@ -252,6 +255,19 @@ class C_master_ambil_paket extends Controller {
 		echo $result;
 	}
 
+	
+	function ambil_paket_pengecekan(){
+	
+		$tanggal_pengecekan=trim(@$_POST["tgl_ambil"]);
+		//$dapaket_id = $_POST['dapaket_id']; // Get our array back and translate it :
+		$tanggal_pengecekan = json_decode(stripslashes($tanggal_pengecekan));
+	
+		$result=$this->m_master_ambil_paket->pengecekan_dokumen($tanggal_pengecekan);
+		echo $result;
+	}
+	
+	
+	
 	//function for update record
 	function ambil_paket_update(){
 		//POST variable here
