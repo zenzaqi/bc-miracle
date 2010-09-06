@@ -35,6 +35,11 @@
             <td align="right" class="clear">:</td>
             <td class="clear"><?=$supplier_nama; ?></td>
           </tr>
+           <tr class="clear">
+            <td align="right" class="clear"><strong>Surat Jalan</strong></td>
+            <td align="right" class="clear">:</td>
+            <td class="clear"><?=$no_surat_jalan; ?></td>
+          </tr>
         </table></td>
       </tr>
     </table></td>
