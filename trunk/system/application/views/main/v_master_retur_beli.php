@@ -77,7 +77,7 @@ var rbeli_keteranganField;
 var rbeli_idSearchField;
 var rbeli_terimaSearchField;
 var rbeli_supplierSearchField;
-var rbeli_tanggalSearchField;
+var rbeli_tgl_awalSearchField;
 var rbeli_keteranganSearchField;
 var rbeli_statusSearchField;
 
@@ -85,73 +85,22 @@ var rbeli_statusSearchField;
 Ext.onReady(function(){
   	Ext.QuickTips.init();	/* Initiate quick tips icon */
   
-  	/* Function for Saving inLine Editing */
-	function master_retur_beli_update(oGrid_event){
-		var rbeli_id_update_pk="";
-		var rbeli_nobukti_update="";
-		var rbeli_terima_update=null;
-		var rbeli_supplier_update=null;
-		var rbeli_tanggal_update_date="";
-		var rbeli_keterangan_update=null;
-		var rbeli_status_update=null;
-
-		rbeli_id_update_pk = oGrid_event.record.data.rbeli_id;
-		if(oGrid_event.record.data.rbeli_nobukti!=""){rbeli_nobukti_update = oGrid_event.record.data.rbeli_nobukti;}
-		if(oGrid_event.record.data.rbeli_terima!=null){rbeli_terima_update = oGrid_event.record.data.rbeli_terima;}
-		if(oGrid_event.record.data.rbeli_supplier!=null){rbeli_supplier_update = oGrid_event.record.data.rbeli_supplier;}
-	 	if(oGrid_event.record.data.rbeli_tanggal!=""){rbeli_tanggal_update_date =oGrid_event.record.data.rbeli_tanggal.format('Y-m-d');}
-		if(oGrid_event.record.data.rbeli_keterangan!== null){rbeli_keterangan_update = oGrid_event.record.data.rbeli_keterangan;}
-		if(oGrid_event.record.data.rbeli_status!== null){rbeli_status_update = oGrid_event.record.data.rbeli_status;}
-
-		Ext.Ajax.request({  
-			waitMsg: 'Please wait...',
-			url: 'index.php?c=c_master_retur_beli&m=get_action',
-			params: {
-				task: "UPDATE",
-				rbeli_id			: rbeli_id_update_pk, 
-				rbeli_nobukti		: rbeli_nobukti_update,
-				rbeli_terima		: rbeli_terima_update,  
-				rbeli_supplier		: rbeli_supplier_update,  
-				rbeli_tanggal		: rbeli_tanggal_update_date, 
-				rbeli_keterangan	: rbeli_keterangan_update,
-				rbeli_status		: rbeli_status_update
-			}, 
-			success: function(response){							
-				var result=eval(response.responseText);
-				if(result!==0){
-						Ext.MessageBox.alert(post2db+' OK','Data retur pembelian berhasil disimpan.');
-						master_retur_beli_DataStore.reload();
-						master_retur_beli_createWindow.hide();
-				}else{
-						Ext.MessageBox.show({
-						   title: 'Warning',
-						   //msg: 'We could\'t not '+msg+' the Master_retur_beli.',
-						   msg: 'Data retur pembelian tidak bisa disimpan !',
-						   buttons: Ext.MessageBox.OK,
-						   animEl: 'save',
-						   icon: Ext.MessageBox.WARNING
-						});
-				}   
-			},
-			failure: function(response){
-				var result=response.responseText;
-				Ext.MessageBox.show({
-				   title: 'Error',
-				   //msg: 'Could not connect to the database. retry later.',
-				   msg: 'Koneksi ke database gagal, cobalah di lain waktu',
-				   buttons: Ext.MessageBox.OK,
-				   animEl: 'database',
-				   icon: Ext.MessageBox.ERROR
-				});	
-			}									    
-		});   
-	}
-  	/* End of Function */
   
   	/* Function for add data, open window create form */
-	function master_retur_beli_create(){
-	
-		if(is_master_retur_beli_form_valid()){	
+	function master_retur_beli_create(opsi){
+		
+		if(detail_retur_beli_DataStore.getCount()<1){
+			
+			Ext.MessageBox.show({
+				title: 'Warning',
+				msg: 'Data detail harus ada minimal 1 (satu)',
+				buttons: Ext.MessageBox.OK,
+				animEl: 'save',
+				icon: Ext.MessageBox.WARNING
+			});
+			
+		}else if(is_master_retur_beli_form_valid()){	
+
 		var rbeli_id_create_pk=null; 
 		var rbeli_nobukti_create="";
 		var rbeli_terima_create=null; 
@@ -184,7 +133,7 @@ Ext.onReady(function(){
 			success: function(response){             
 				var result=eval(response.responseText);
 				if(result!==0){
-						detail_retur_beli_purge()
+						detail_retur_beli_insert(result,opsi)
 						Ext.MessageBox.alert(post2db+' OK','Data Retur Pembelian berhasil disimpan.');
 						master_retur_beli_createWindow.hide();
 				}else{
@@ -249,14 +198,14 @@ Ext.onReady(function(){
 		rbeli_statusField.reset();
 		rbeli_statusField.setValue('Terbuka');
 		cbo_satuan_DataStore.setBaseParam('task','detail');
-		cbo_satuan_DataStore.setBaseParam('master_id',get_pk_id());
+		cbo_satuan_DataStore.setBaseParam('master_id',-1);
 		cbo_satuan_DataStore.load();
-		cbo_produk_DataStore.setBaseParam('master_id',get_pk_id());
+		cbo_produk_DataStore.setBaseParam('master_id',-1);
 		cbo_produk_DataStore.setBaseParam('task','detail');
 		cbo_produk_DataStore.load({
 			callback: function(r,opt,success){
 				if(success==true){
-					detail_retur_beli_DataStore.setBaseParam('master_id',get_pk_id());
+					detail_retur_beli_DataStore.setBaseParam('master_id',-1);
 					detail_retur_beli_DataStore.load();
 				}
 			}
@@ -411,7 +360,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'rbeli_id'
 		},[
-		/* dataIndex => insert intomaster_retur_beli_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'rbeli_id', type: 'int', mapping: 'rbeli_id'}, 
 			{name: 'rbeli_nobukti', type: 'string', mapping: 'no_bukti'}, 
 			{name: 'rbeli_terima_id', type: 'int', mapping: 'rbeli_terima'}, 
@@ -446,7 +394,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'terima_id'
 		},[
-		/* dataIndex => insert intocustomer_note_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'terima_id', type: 'int', mapping: 'invoice_noterima'},
 			{name: 'terima_no', type: 'string', mapping: 'terima_no'},
 			{name: 'terima_tanggal', type: 'date', dateFormat: 'Y-m-d', mapping: 'tanggal'},
@@ -484,18 +431,14 @@ Ext.onReady(function(){
 			width: 70,	//100,
 			sortable: true,
 			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
-			editor: new Ext.form.DateField({
-				format: 'd-m-Y'
-			})
+			readOnly: true
 		},
 		{
 			header: '<div align="center">No Retur</div>',
 			dataIndex: 'rbeli_nobukti',
 			width: 80,
 			sortable: true,
-			editor: new Ext.form.TextField({
-				maxLength: 500
-          	})
+			readOnly: true
 		},
 		{
 			header: '<div align="center">No PB</div>',
@@ -505,7 +448,7 @@ Ext.onReady(function(){
 			readOnly: true
 		}, 
 		{
-			header: '<div align="center">No SP</div>',
+			header: '<div align="center">No OP</div>',
 			dataIndex: 'rbeli_order',
 			width: 80,
 			sortable: true,
@@ -541,9 +484,7 @@ Ext.onReady(function(){
 			dataIndex: 'rbeli_keterangan',
 			width: 150,
 			sortable: true,
-			editor: new Ext.form.TextField({
-				maxLength: 500
-          	})
+			readOnly: true
 		}, 
 		{
 			header: '<div align="center">' + 'Stat Dok' + '</div>',
@@ -613,7 +554,6 @@ Ext.onReady(function(){
 			store: master_retur_beli_DataStore,
 			displayInfo: true
 		}),
-		/* Add Control on ToolBar */
 		tbar: [
 		{
 			text: 'Add',
@@ -640,6 +580,17 @@ Ext.onReady(function(){
 			new Ext.app.SearchField({
 			store: master_retur_beli_DataStore,
 			params: {start: 0, limit: pageS},
+			listeners:{
+				specialkey: function(f,e){
+					if(e.getKey() == e.ENTER){
+						master_retur_beli_DataStore.baseParams={task:'LIST',start: 0, limit: pageS};
+		            }
+				},
+				render: function(c){
+				Ext.get(this.id).set({qtitle:'Search By (aktif only)'});
+				Ext.get(this.id).set({qtip:'- No Retur<br>- No OP<br>- No PB<br>- Supplier<br>'});
+				}
+			},
 			width: 120
 		}),'-',{
 			text: 'Refresh',
@@ -669,7 +620,7 @@ Ext.onReady(function(){
 		{ 
 			text: 'Edit', tooltip: 'Edit selected record', 
 			iconCls:'icon-update',
-			handler: master_retur_beli_editContextMenu 
+			handler: master_retur_beli_confirm_update 
 		},
 		{ 
 			text: 'Delete', 
@@ -800,22 +751,32 @@ Ext.onReady(function(){
 	});
 	
 	
-	rbeli_totaljumlahField= new Ext.form.NumberField({
+	rbeli_totaljumlahField= new Ext.form.TextField({
 		id: 'rbeli_totaljumlahField',
-		fieldLabel: 'Total Jumlah',
-		allowNegatife : false,
-		blankText: '0',
-		allowDecimals: true,
+		fieldLabel: 'Total Jumlah Barang',
+		valueRenderer: 'numberToCurrency',
+		itemCls: 'rmoney',
 		readOnly: true,
 		anchor: '95%',
 		maskRe: /([0-9]+)$/
 	});
-	rbeli_totalhargaField= new Ext.form.NumberField({
+	
+	rbeli_totalitemField= new Ext.form.TextField({
+		id: 'rbeli_totalitemField',
+		fieldLabel: 'Total Jenis Barang',
+		valueRenderer: 'numberToCurrency',
+		itemCls: 'rmoney',
+		readOnly: true,
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
+	});
+	
+	
+	rbeli_totalhargaField= new Ext.form.TextField({
 		id: 'rbeli_totalhargaField',
 		fieldLabel: 'Total Harga (Rp)',
-		allowNegatife : false,
-		blankText: '0',
-		allowDecimals: true,
+		valueRenderer: 'numberToCurrency',
+		itemCls: 'rmoney',
 		readOnly: true,
 		anchor: '95%',
 		maskRe: /([0-9]+)$/
@@ -855,14 +816,14 @@ Ext.onReady(function(){
 		autoHeight: true,
 		collapsible: true,
 		layout:'column',
-		labelSeparator : ':',
+		labelWidth: 150,
 		items:[
 			{
 				columnWidth:0.5,
 				layout: 'form',
 				labelAlign: 'left',
 				border:false,
-				items: [rbeli_totaljumlahField] 
+				items: [rbeli_totaljumlahField,rbeli_totalitemField] 
 			}
 			,{
 				columnWidth:0.5,
@@ -884,7 +845,6 @@ Ext.onReady(function(){
 		totalProperty: 'total',
 		id: 'drbeli_id'
 	},[
-	/* dataIndex => insert intoperawatan_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'drbeli_id', type: 'int', mapping: 'drbeli_id'}, 
 			{name: 'drbeli_master', type: 'int', mapping: 'drbeli_master'}, 
 			{name: 'drbeli_produk', type: 'int', mapping: 'drbeli_produk'}, 
@@ -947,7 +907,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'produk_id'
 		},[
-		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
 			{name: 'produk_id', type: 'int', mapping: 'produk_id'},
 			{name: 'produk_nama', type: 'string', mapping: 'produk_nama'},
 			{name: 'produk_kode', type: 'string', mapping: 'produk_kode'},
@@ -972,7 +931,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'satuan_id'
 		},[
-		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
 			{name: 'satuan_id', type: 'int', mapping: 'satuan_id'},
 			{name: 'satuan_nama', type: 'string', mapping: 'satuan_nama'}
 		]),
@@ -990,7 +948,6 @@ Ext.onReady(function(){
 			root: 'results',
 			totalProperty: 'total'
 		},[
-		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
 			{name: 'dorder_harga_value', type: 'int', mapping: 'dorder_harga'}
 		])
 	});
@@ -1004,21 +961,20 @@ Ext.onReady(function(){
 	
 	
 	var combo_detail_produk=new Ext.form.ComboBox({
-			store: cbo_produk_DataStore,
-			mode: 'remote',
-			typeAhead: false,
-			displayField: 'produk_nama',
-			valueField: 'produk_id',
-			triggerAction: 'all',
-			lazyRender: false,
-			pageSize: pageS,
-			enableKeyEvents: true,
-			tpl: retur_produk_detail_tpl,
-			itemSelector: 'div.search-item',
-			triggerAction: 'all',
-			listClass: 'x-combo-list-small',
-			anchor: '95%'
-
+		store: cbo_produk_DataStore,
+		mode: 'remote',
+		typeAhead: false,
+		displayField: 'produk_nama',
+		valueField: 'produk_id',
+		triggerAction: 'all',
+		lazyRender: false,
+		pageSize: pageS,
+		enableKeyEvents: true,
+		tpl: retur_produk_detail_tpl,
+		itemSelector: 'div.search-item',
+		triggerAction: 'all',
+		listClass: 'x-combo-list-small',
+		anchor: '95%'
 	});
 	
 	var combo_detail_satuan=new Ext.form.ComboBox({
@@ -1174,12 +1130,6 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true},
-		bbar: new Ext.PagingToolbar({
-			pageSize: pageS,
-			store: detail_retur_beli_DataStore,
-			displayInfo: true
-		}),
-		/* Add Control on ToolBar */
 		tbar: [
 		{
 			text: 'Add',
@@ -1200,10 +1150,10 @@ Ext.onReady(function(){
 	//function of detail add
 	function detail_retur_beli_add(){
 		var edit_detail_retur_beli= new detail_retur_beliListEditorGrid.store.recordType({
-			drbeli_id	:'',		
+			drbeli_id		:0,		
 			drbeli_master	:'',		
-			drbeli_produk	:'',		
-			drbeli_satuan	:'',		
+			drbeli_produk	:0,		
+			drbeli_satuan	:0,		
 			drbeli_jumlah	:0,		
 			drbeli_harga	:0,
 			drbeli_diskon	:0	
@@ -1223,24 +1173,80 @@ Ext.onReady(function(){
 	//eof
 	
 	//function for insert detail
-	function detail_retur_beli_insert(pkid){
-		for(i=0;i<detail_retur_beli_DataStore.getCount();i++){
-			detail_retur_beli_record=detail_retur_beli_DataStore.getAt(i);
+	function detail_retur_beli_insert(pkid,opsi){
+		
+		var drbeli_id = [];
+        var drbeli_produk = [];
+        var drbeli_satuan = [];
+        var drbeli_jumlah = [];
+        var drbeli_harga = [];
+        var drbeli_diskon = [];
+        
+        var dcount = detail_retur_beli_DataStore.getCount() - 1;
+        
+        if(detail_retur_beli_DataStore.getCount()>0){
+            for(i=0; i<detail_retur_beli_DataStore.getCount();i++){
+                if((/^\d+$/.test(detail_retur_beli_DataStore.getAt(i).data.drbeli_produk))
+				   && detail_retur_beli_DataStore.getAt(i).data.drbeli_produk!==undefined
+				   && detail_retur_beli_DataStore.getAt(i).data.drbeli_produk!==''
+				   && detail_retur_beli_DataStore.getAt(i).data.drbeli_produk!==0
+				   && detail_retur_beli_DataStore.getAt(i).data.drbeli_satuan!==0
+				   && detail_retur_beli_DataStore.getAt(i).data.drbeli_jumlah>0){
+                    
+					if(detail_retur_beli_DataStore.getAt(i).data.drbeli_id==undefined ||
+					   detail_retur_beli_DataStore.getAt(i).data.drbeli_id==''){
+						detail_retur_beli_DataStore.getAt(i).data.drbeli_id=0;
+					}
+					
+                  	drbeli_id.push(detail_retur_beli_DataStore.getAt(i).data.drbeli_id);
+					drbeli_produk.push(detail_retur_beli_DataStore.getAt(i).data.drbeli_produk);
+                   	drbeli_satuan.push(detail_retur_beli_DataStore.getAt(i).data.drbeli_satuan);
+					drbeli_jumlah.push(detail_retur_beli_DataStore.getAt(i).data.drbeli_jumlah);
+					drbeli_harga.push(detail_retur_beli_DataStore.getAt(i).data.drbeli_harga);
+					drbeli_diskon.push(detail_retur_beli_DataStore.getAt(i).data.drbeli_diskon);
+                }
+            }
+			
+			var encoded_array_drbeli_id = Ext.encode(drbeli_id);
+			var encoded_array_drbeli_produk = Ext.encode(drbeli_produk);
+			var encoded_array_drbeli_satuan = Ext.encode(drbeli_satuan);
+			var encoded_array_drbeli_jumlah = Ext.encode(drbeli_jumlah);
+			var encoded_array_drbeli_harga = Ext.encode(drbeli_harga);
+			var encoded_array_drbeli_diskon = Ext.encode(drbeli_diskon);
+				
 			Ext.Ajax.request({
-				waitMsg: 'Please wait...',
+				waitMsg: 'Mohon tunggu...',
 				url: 'index.php?c=c_master_retur_beli&m=detail_detail_retur_beli_insert',
 				params:{
-				drbeli_id		: detail_retur_beli_record.data.drbeli_id, 
-				drbeli_master	: pkid, 
-				drbeli_produk	: detail_retur_beli_record.data.drbeli_produk, 
-				drbeli_satuan	: detail_retur_beli_record.data.drbeli_satuan, 
-				drbeli_jumlah	: detail_retur_beli_record.data.drbeli_jumlah, 
-				drbeli_harga	: detail_retur_beli_record.data.drbeli_harga,
-				drbeli_diskon	: detail_retur_beli_record.data.drbeli_diskon 
+					drbeli_id		: encoded_array_drbeli_id,
+					drbeli_master	: pkid, 
+					drbeli_produk	: encoded_array_drbeli_produk,
+					drbeli_satuan	: encoded_array_drbeli_satuan,
+					drbeli_jumlah	: encoded_array_drbeli_jumlah,
+					drbeli_harga	: encoded_array_drbeli_harga,
+					drbeli_diskon	: encoded_array_drbeli_diskon
+				},
+				success:function(response){
+					var result=eval(response.responseText);
+					if(opsi=='print'){
+						master_retur_beli_cetak_faktur(pkid);
+					}
+					master_retur_beli_DataStore.reload()
+				},
+				failure: function(response){
+					Ext.MessageBox.hide();
+					var result=response.responseText;
+					Ext.MessageBox.show({
+					   title: 'Error',
+					   msg: 'Could not connect to the database. retry later.',
+					   buttons: Ext.MessageBox.OK,
+					   animEl: 'database',
+					   icon: Ext.MessageBox.ERROR
+					});	
 				}
 			});
-		}
-		master_retur_beli_DataStore.reload();
+					
+        }
 	}
 	//eof
 	
@@ -1296,9 +1302,14 @@ Ext.onReady(function(){
 		width: 932,	//815,        
 		items: [master_retur_beli_masterGroup,detail_retur_beliListEditorGrid,master_retur_beli_footGroup]
 		,
-		buttons: [{
-				text: 'Save and Close',
-				handler: master_retur_beli_create
+		buttons: [
+			{
+				text: 'Save and Print',
+				handler: function(){ master_retur_beli_create('print'); }
+			},
+			{
+				text: 'Save',
+				handler: function () { master_retur_beli_create('close'); }
 			}
 			,{
 				text: 'Cancel',
@@ -1332,30 +1343,29 @@ Ext.onReady(function(){
 	/* Function for action list search */
 	function master_retur_beli_list_search(){
 		// render according to a SQL date format.
-		var rbeli_id_search=null;
 		var rbeli_nobukti_search=null;
 		var rbeli_terima_search=null;
 		var rbeli_supplier_search=null;
-		var rbeli_tanggal_search_date="";
+		var rbeli_tgl_awal_search_date="";
+		var rbeli_tgl_akhir_search_date="";
 		var rbeli_keterangan_search=null;
 		var rbeli_status_search=null;
 
-		if(rbeli_idSearchField.getValue()!==null){rbeli_id_search=rbeli_idSearchField.getValue();}
 		if(rbeli_nobuktiSearchField.getValue()!==null){rbeli_nobukti_search=rbeli_nobuktiSearchField.getValue();}
 		if(rbeli_terimaSearchField.getValue()!==null){rbeli_terima_search=rbeli_terimaSearchField.getValue();}
 		if(rbeli_supplierSearchField.getValue()!==null){rbeli_supplier_search=rbeli_supplierSearchField.getValue();}
-		if(rbeli_tanggalSearchField.getValue()!==""){rbeli_tanggal_search_date=rbeli_tanggalSearchField.getValue().format('Y-m-d');}
+		if(rbeli_tgl_awalSearchField.getValue()!==""){rbeli_tgl_awal_search_date=rbeli_tgl_awalSearchField.getValue().format('Y-m-d');}
+		if(rbeli_tgl_akhirSearchField.getValue()!==""){rbeli_tgl_akhir_search_date=rbeli_tgl_akhirSearchField.getValue().format('Y-m-d');}
 		if(rbeli_keteranganSearchField.getValue()!==null){rbeli_keterangan_search=rbeli_keteranganSearchField.getValue();}
 		if(rbeli_statusSearchField.getValue()!==null){rbeli_status_search=rbeli_statusSearchField.getValue();}
 		// change the store parameters
 		master_retur_beli_DataStore.baseParams = {
 			task				: 'SEARCH',
-			//variable here
-			rbeli_id			:	rbeli_id_search, 
 			rbeli_nobukti		:	rbeli_nobukti_search, 
 			rbeli_terima		:	rbeli_terima_search, 
 			rbeli_supplier		:	rbeli_supplier_search, 
-			rbeli_tanggal		:	rbeli_tanggal_search_date, 
+			rbeli_tgl_awal		:	rbeli_tgl_awal_search_date, 
+			rbeli_tgl_akhir		:	rbeli_tgl_akhir_search_date, 
 			rbeli_keterangan	:	rbeli_keterangan_search,
 			rbeli_status		:	rbeli_status_search
 		};
@@ -1365,9 +1375,7 @@ Ext.onReady(function(){
 		
 	/* Function for reset search result */
 	function master_retur_beli_reset_search(){
-		// reset the store parameters
-		master_retur_beli_DataStore.baseParams = { task: 'LIST' };
-		// Cause the datastore to do another query : 
+		master_retur_beli_DataStore.baseParams = { task: 'LIST', start: 0, limit: pageS };
 		master_retur_beli_DataStore.reload({params: {start: 0, limit: pageS}});
 		master_retur_beli_searchWindow.close();
 	};
@@ -1377,7 +1385,8 @@ Ext.onReady(function(){
 		rbeli_nobuktiSearchField.reset();
 		rbeli_terimaSearchField.reset();
 		rbeli_supplierSearchField.reset();
-		rbeli_tanggalSearchField.reset();
+		rbeli_tgl_awalSearchField.reset();
+		rbeli_tgl_akhirSearchField.reset();
 		rbeli_keteranganSearchField.reset();
 		rbeli_statusSearchField.reset();
 	}
@@ -1396,7 +1405,7 @@ Ext.onReady(function(){
 	
 	});
 	rbeli_nobuktiSearchField= new Ext.form.TextField({
-		id: 'rbeli_terimaSearchField',
+		id: 'rbeli_nobuktiSearchField',
 		fieldLabel: 'No Retur',
 		maxLength: 100,
 		anchor: '95%'
@@ -1428,15 +1437,21 @@ Ext.onReady(function(){
 		allowDecimals: false,
 		anchor: '95%',
 		maskRe: /([0-9]+)$/
-	
 	});
 	/* Identify  rbeli_tanggal Search Field */
-	rbeli_tanggalSearchField= new Ext.form.DateField({
-		id: 'rbeli_tanggalSearchField',
+	rbeli_tgl_awalSearchField= new Ext.form.DateField({
+		id: 'rbeli_tgl_awalSearchField',
 		fieldLabel: 'Tanggal',
 		format : 'd-m-Y'
-	
 	});
+	
+	rbeli_tgl_akhirSearchField= new Ext.form.DateField({
+		id: 'rbeli_tgl_akhirSearchField',
+		fieldLabel: 's/d',
+		labelSeparator: ' ',
+		format : 'd-m-Y'
+	});
+	
 	/* Identify  rbeli_keterangan Search Field */
 	rbeli_keteranganSearchField= new Ext.form.TextField({
 		id: 'rbeli_keteranganSearchField',
@@ -1444,27 +1459,8 @@ Ext.onReady(function(){
 		maxLength: 500,
 		anchor: '95%'
 	});
-    
-	
-	rbeli_tanggal_akhirSearchField= new Ext.form.DateField({
-		id: 'rbeli_tanggal_akhirSearchField',
-		fieldLabel: 's/d',
-		format : 'd-m-Y'
-	});
-	
-	rbeli_label_tanggalField= new Ext.form.Label({ html: ' &nbsp; s/d  &nbsp;' });
-    
-	
-	rbeli_tanggalSearchFieldSet=new Ext.form.FieldSet({
-		id:'rbeli_tanggalSearchFieldSet',
-		title: 'Opsi Tanggal',
-		layout: 'column',
-		boduStyle: 'padding: 5px;',
-		frame: false,
-		items:[rbeli_tanggalSearchField, rbeli_label_tanggalField, rbeli_tanggal_akhirSearchField]
-	});
-	
-	
+
+		
 	rbeli_statusSearchField= new Ext.form.ComboBox({
 		id: 'rbeli_statusSearchField',
 		fieldLabel: 'Status',
@@ -1475,7 +1471,7 @@ Ext.onReady(function(){
 		mode: 'local',
 		displayField: 'rbeli_status',
 		valueField: 'value',
-		anchor: '80%',
+		anchor: '70%',
 		triggerAction: 'all'	 
 	
 	});
@@ -1485,7 +1481,8 @@ Ext.onReady(function(){
 		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
-		width: 450,        
+		width: 450,  
+		labelWidth: 150,
 		items: [{
 			layout:'column',
 			border:false,
@@ -1494,7 +1491,26 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [rbeli_nobuktiSearchField, rbeli_terimaSearchField, rbeli_tanggalSearchFieldSet, rbeli_keteranganSearchField, rbeli_statusSearchField] 
+				items: [rbeli_nobuktiSearchField, rbeli_terimaSearchField,
+						{
+							layout: 'column',
+							border: false,
+							items:[
+								   {
+									   layout: 'form',
+									   border: false,
+									   columnWidth: 0.6,
+									   items:[rbeli_tgl_awalSearchField]
+								   },
+								    {
+									   layout: 'form',
+									   border: false,
+									   columnWidth: 0.4,
+									   labelWidth: 15,
+									   items:[rbeli_tgl_akhirSearchField]
+								   }
+							]
+						}, rbeli_keteranganSearchField, rbeli_statusSearchField] 
 			}
 			]
 		}]
@@ -1540,13 +1556,53 @@ Ext.onReady(function(){
 	}
   	/* End Function */
 	
+	function master_retur_beli_cetak_faktur(pkid){
+		
+		Ext.Ajax.request({   
+		waitMsg: 'Please Wait...',
+		url: 'index.php?c=c_master_retur_beli&m=print_faktur',
+		params: {
+			faktur	: pkid
+		}, 
+		success: function(response){              
+		  	var result=eval(response.responseText);
+		  	switch(result){
+		  	case 1:
+				win = window.open('./print/retur_faktur.html','order_faktur','height=800,width=670,resizable=1,scrollbars=1, menubar=1');
+				break;
+		  	default:
+				Ext.MessageBox.show({
+					title: 'Warning',
+					msg: 'Unable to print the grid!',
+					buttons: Ext.MessageBox.OK,
+					animEl: 'save',
+					icon: Ext.MessageBox.WARNING
+				});
+				break;
+		  	}  
+		},
+		failure: function(response){
+		  	var result=response.responseText;
+			Ext.MessageBox.show({
+			   title: 'Error',
+			   msg: 'Could not connect to the database. retry later.',
+			   buttons: Ext.MessageBox.OK,
+			   animEl: 'database',
+			   icon: Ext.MessageBox.ERROR
+			});		
+		} 	                     
+		});
+		
+	}
+	
 	/* Function for print List Grid */
 	function master_retur_beli_print(){
 		var searchquery = "";
 		var rbeli_nobukti_print=null;
 		var rbeli_terima_print=null;
 		var rbeli_supplier_print=null;
-		var rbeli_tanggal_print_date="";
+		var rbeli_tgl_awal_print_date="";
+		var rbeli_tgl_akhir_print_date="";
 		var rbeli_keterangan_print=null;
 		var win;              
 		// check if we do have some search data...
@@ -1554,28 +1610,29 @@ Ext.onReady(function(){
 		if(master_retur_beli_DataStore.baseParams.rbeli_nobukti!==null){rbeli_nobukti_print = master_retur_beli_DataStore.baseParams.rbeli_nobukti;}
 		if(master_retur_beli_DataStore.baseParams.rbeli_terima!==null){rbeli_terima_print = master_retur_beli_DataStore.baseParams.rbeli_terima;}
 		if(master_retur_beli_DataStore.baseParams.rbeli_supplier!==null){rbeli_supplier_print = master_retur_beli_DataStore.baseParams.rbeli_supplier;}
-		if(master_retur_beli_DataStore.baseParams.rbeli_tanggal!==""){rbeli_tanggal_print_date = master_retur_beli_DataStore.baseParams.rbeli_tanggal;}
+		if(master_retur_beli_DataStore.baseParams.rbeli_tgl_awal!==""){rbeli_tgl_awal_print_date = master_retur_beli_DataStore.baseParams.rbeli_tgl_awal;}
+		if(master_retur_beli_DataStore.baseParams.rbeli_tgl_akhir!==""){rbeli_tgl_akhir_print_date = master_retur_beli_DataStore.baseParams.rbeli_tgl_akhir;}
 		if(master_retur_beli_DataStore.baseParams.rbeli_keterangan!==null){rbeli_keterangan_print = master_retur_beli_DataStore.baseParams.rbeli_keterangan;}
 
 		Ext.Ajax.request({   
 		waitMsg: 'Please Wait...',
 		url: 'index.php?c=c_master_retur_beli&m=get_action',
 		params: {
-			task: "PRINT",
-		  	query: searchquery,                    		// if we are doing a quicksearch, use this
-			//if we are doing advanced search, use this
-			rbeli_nobukti : rbeli_nobukti_print,
-			rbeli_terima : rbeli_terima_print,
-			rbeli_supplier : rbeli_supplier_print,
-		  	rbeli_tanggal : rbeli_tanggal_print_date, 
-			rbeli_keterangan : rbeli_keterangan_print,
-		  	currentlisting: master_retur_beli_DataStore.baseParams.task // this tells us if we are searching or not
+			task			: "PRINT",
+		  	query			: searchquery,                    		
+			rbeli_nobukti 	: rbeli_nobukti_print,
+			rbeli_terima 	: rbeli_terima_print,
+			rbeli_supplier 	: rbeli_supplier_print,
+		  	rbeli_tgl_awal 	: rbeli_tgl_awal_print_date, 
+			rbeli_tgl_akhir	: rbeli_tgl_akhir_print_date, 
+			rbeli_keterangan: rbeli_keterangan_print,
+		  	currentlisting	: master_retur_beli_DataStore.baseParams.task // this tells us if we are searching or not
 		}, 
 		success: function(response){              
 		  	var result=eval(response.responseText);
 		  	switch(result){
 		  	case 1:
-				win = window.open('./master_retur_belilist.html','master_retur_belilist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
+				win = window.open('./print/print_retur_belilist.html','master_retur_belilist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
 				win.print();
 				break;
 		  	default:
@@ -1609,7 +1666,8 @@ Ext.onReady(function(){
 		var rbeli_nobukti_2excel=null;
 		var rbeli_terima_2excel=null;
 		var rbeli_supplier_2excel=null;
-		var rbeli_tanggal_2excel_date="";
+		var rbeli_tgl_awal_2excel_date="";
+		var rbeli_tgl_akhir_2excel_date="";
 		var rbeli_keterangan_2excel=null;
 		var win;              
 		// check if we do have some search data...
@@ -1617,7 +1675,8 @@ Ext.onReady(function(){
 		if(master_retur_beli_DataStore.baseParams.rbeli_nobukti!==null){rbeli_nobukti_2excel = master_retur_beli_DataStore.baseParams.rbeli_nobukti;}
 		if(master_retur_beli_DataStore.baseParams.rbeli_terima!==null){rbeli_terima_2excel = master_retur_beli_DataStore.baseParams.rbeli_terima;}
 		if(master_retur_beli_DataStore.baseParams.rbeli_supplier!==null){rbeli_supplier_2excel = master_retur_beli_DataStore.baseParams.rbeli_supplier;}
-		if(master_retur_beli_DataStore.baseParams.rbeli_tanggal!==""){rbeli_tanggal_2excel_date = master_retur_beli_DataStore.baseParams.rbeli_tanggal;}
+		if(master_retur_beli_DataStore.baseParams.rbeli_tgl_awal!==""){rbeli_tgl_awal_2excel_date = master_retur_beli_DataStore.baseParams.rbeli_tgl_awal;}
+		if(master_retur_beli_DataStore.baseParams.rbeli_tgl_akhir!==""){rbeli_tgl_akhir_2excel_date = master_retur_beli_DataStore.baseParams.rbeli_tgl_akhir;}
 		if(master_retur_beli_DataStore.baseParams.rbeli_keterangan!==null){rbeli_keterangan_2excel = master_retur_beli_DataStore.baseParams.rbeli_keterangan;}
 
 		Ext.Ajax.request({   
@@ -1625,12 +1684,12 @@ Ext.onReady(function(){
 		url: 'index.php?c=c_master_retur_beli&m=get_action',
 		params: {
 			task				: "EXCEL",
-		  	query				: searchquery,                    		// if we are doing a quicksearch, use this
-			//if we are doing advanced search, use this
+		  	query				: searchquery,                    		
 			rbeli_nobukti 		: rbeli_nobukti_2excel,
 			rbeli_terima 		: rbeli_terima_2excel,
 			rbeli_supplier 		: rbeli_supplier_2excel,
-		  	rbeli_tanggal		: rbeli_tanggal_2excel_date, 
+		  	rbeli_tgl_awal		: rbeli_tgl_awal_2excel_date, 
+			rbeli_tgl_akhir		: rbeli_tgl_akhir_2excel_date, 
 			rbeli_keterangan 	: rbeli_keterangan_2excel,
 		  	currentlisting		: master_retur_beli_DataStore.baseParams.task // this tells us if we are searching or not
 		},
@@ -1673,8 +1732,9 @@ Ext.onReady(function(){
 			jumlah_item=jumlah_item+detail_retur_beli_record.data.drbeli_jumlah;
 			total_harga=total_harga+detail_retur_beli_record.data.drbeli_harga*jumlah_item*(100-detail_retur_beli_record.data.drbeli_diskon)/100;
 		}
-		rbeli_totaljumlahField.setValue(jumlah_item);
-		rbeli_totalhargaField.setValue(total_harga);
+		rbeli_totaljumlahField.setValue(CurrencyFormatted(jumlah_item));
+		rbeli_totalitemField.setValue(CurrencyFormatted(detail_retur_beli_DataStore.getCount()));
+		rbeli_totalhargaField.setValue(CurrencyFormatted(total_harga));
 	}
 	
 	//EVENTS
@@ -1682,7 +1742,7 @@ Ext.onReady(function(){
 
 	master_retur_beliListEditorGrid.addListener('rowcontextmenu', onmaster_retur_beli_ListEditGridContextMenu);
 	master_retur_beli_DataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
-	master_retur_beliListEditorGrid.on('afteredit', master_retur_beli_update); // inLine Editing Record
+
 	detail_retur_beli_DataStore.on('update', function(){
 		detail_retur_beli_DataStore.commitChanges();
 		detail_retur_beli_total();
@@ -1710,7 +1770,7 @@ Ext.onReady(function(){
 	detail_retur_beli_DataStore.on("load",detail_retur_beli_total);
 	
 	rbeli_terimaField.on('select', function(){
-		var j=cbo_rbeli_terimabeli_DataSore.find('terima_id',rbeli_terimaField.getValue());
+		var j=cbo_rbeli_terimabeli_DataSore.findExact('terima_id',rbeli_terimaField.getValue());
 		cbo_produk_DataStore.setBaseParam('task','list');
 		cbo_produk_DataStore.load({params: {terima_id: rbeli_terimaField.getValue()}});
 		var detail_data=detail_retur_beli_DataStore.getAt(j);
@@ -1718,7 +1778,6 @@ Ext.onReady(function(){
 			rbeli_supplierField.setValue(cbo_rbeli_terimabeli_DataSore.getAt(j).data.terima_supplier);
 			rbeli_terima_orderField.setValue(cbo_rbeli_terimabeli_DataSore.getAt(j).data.terima_order);
 			rbeli_terima_idField.setValue(cbo_rbeli_terimabeli_DataSore.getAt(j).data.terima_id);
-			
 		}
 	});
 	
