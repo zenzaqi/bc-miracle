@@ -73,7 +73,6 @@ class C_report_rekap_penjualan extends Controller {
 	//function for advanced search
 	function rekap_penjualan_search2(){
 		//POST varibale here
-		//$trawat_id=trim(@$_POST["trawat_id"]);
 		if(trim(@$_POST["rekap_penjualan_tglapp_start"])!="")
 			$rekap_penjualan_tglapp_start=date('Y-m-d', strtotime(trim(@$_POST["rekap_penjualan_tglapp_start"])));
 		else
@@ -96,51 +95,46 @@ class C_report_rekap_penjualan extends Controller {
 
 	function tindakan_print(){
   		//POST varibale here
-		$trawat_id=trim(@$_POST["trawat_id"]);
-		$trawat_cust=trim(@$_POST["trawat_cust"]);
-		$trawat_keterangan=trim(@$_POST["trawat_keterangan"]);
-		$trawat_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$trawat_keterangan);
-		$trawat_keterangan=str_replace("'", "''",$trawat_keterangan);
-		$option=$_POST['currentlisting'];
-		$filter=$_POST["query"];
 		
-		$result = $this->m_tindakan_medis->tindakan_print($trawat_id ,$trawat_cust ,$trawat_keterangan ,$option,$filter);
-		$nbrows=$result->num_rows();
-		$totcolumn=8;
-   		/* We now have our array, let's build our HTML file */
-		$file = fopen("tindakanlist.html",'w');
-		fwrite($file, "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' /><title>Printing the Tindakan Grid</title><link rel='stylesheet' type='text/css' href='assets/modules/main/css/printstyle.css'/></head>");
-		fwrite($file, "<body><table summary='Tindakan List'><caption>TINDAKAN</caption><thead><tr><th scope='col'>Trawat Id</th><th scope='col'>Trawat Cust</th><th scope='col'>Trawat Keterangan</th><th scope='col'>Trawat Creator</th><th scope='col'>Trawat Date Create</th><th scope='col'>Trawat Update</th><th scope='col'>Trawat Date Update</th><th scope='col'>Trawat Revised</th></tr></thead><tfoot><tr><th scope='row'>Total</th><td colspan='$totcolumn'>");
-		fwrite($file, $nbrows);
-		fwrite($file, " Tindakan</td></tr></tfoot><tbody>");
-		$i=0;
-		if($nbrows>0){
-			foreach($result->result_array() as $data){
-				fwrite($file,'<tr');
-				if($i%1==0){
-					fwrite($file," class='odd'");
-				}
+		if(trim(@$_POST["rekap_penjualan_tglapp_start"])!="")
+			$rekap_penjualan_tglapp_start=date('Y-m-d', strtotime(trim(@$_POST["rekap_penjualan_tglapp_start"])));
+		else
+			$rekap_penjualan_tglapp_start="";
+		if(trim(@$_POST["rekap_penjualan_tglapp_end"])!="")
+			$rekap_penjualan_tglapp_end=date('Y-m-d', strtotime(trim(@$_POST["rekap_penjualan_tglapp_end"])));
+		else
+			$rekap_penjualan_tglapp_end="";
 			
-				fwrite($file, "><th scope='row' id='r97'>");
-				fwrite($file, $data['trawat_id']);
-				fwrite($file,"</th><td>");
-				fwrite($file, $data['trawat_cust']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['trawat_keterangan']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['trawat_creator']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['trawat_date_create']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['trawat_update']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['trawat_date_update']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['trawat_revised']);
-				fwrite($file, "</td></tr>");
-			}
-		}
-		fwrite($file, "</tbody></table></body></html>");	
+		$rekap_penjualan_jenis=trim(@$_POST["rekap_penjualan_jenis"]);
+		$rekap_penjualan_group=trim(@$_POST["rekap_penjualan_group"]);
+		
+		//$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
+		//$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		/*
+		$rekap_penjualan_tglapp_start=trim(@$_POST["rekap_penjualan_tglapp_start"]);
+		$rekap_penjualan_tglapp_end=trim(@$_POST["rekap_penjualan_tglapp_end"]);
+		$rekap_penjualan_jenis=trim(@$_POST["rekap_penjualan_jenis"]);
+		$rekap_penjualan_group=trim(@$_POST["rekap_penjualan_group"]);
+		*/
+		
+		
+		$result = $this->m_report_rekap_penjualan->tindakan_print($rekap_penjualan_tglapp_start ,$rekap_penjualan_tglapp_end ,$rekap_penjualan_jenis, $rekap_penjualan_group);		
+		$rs=$result->row();
+		$jumlah_result=$result->result();
+		
+		$data['kode']=$rs->kode;
+		$data['nama']=$rs->nama;
+		$data['total_jumlah']=$rs->total_jumlah;
+		$data['subtotal']=$rs->subtotal;
+		$data['diskon_tambahan']=$rs->diskon_tambahan;
+		$data['grand_total']=$rs->grand_total;
+		$data['jumlah_result']=$jumlah_result;
+		
+		//$nbrows=$result->num_rows();
+		$viewdata=$this->load->view("main/p_report_rekap",$data,TRUE);
+
+		$file = fopen("print/report_rekap.html",'w');
+		fwrite($file, $viewdata);	
 		fclose($file);
 		echo '1';        
 	}

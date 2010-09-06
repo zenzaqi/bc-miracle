@@ -46,13 +46,15 @@ Ext.ux.plugin.triggerfieldTooltip = function(config){
 var group_produk_Store= new Ext.data.SimpleStore({
 		id: 'group_produk_Store',
 		fields:['group_value','group_display'],
-		data:[['Semua','Semua']]
+		data:[['Semua','Semua']],
+		emptyText: 'Semua'
 });
 	
 var group_perawatan_Store= new Ext.data.SimpleStore({
 		id: 'group_perawatan_Store',
 		fields:['group_value','group_display'],
-		data:[['Semua','Semua'],[2,'Medis'],[3,'Non Medis'],[16,'Anti Aging'],[4,'Surgery']]
+		data:[['Semua','Semua'],[2,'Medis'],[3,'Non Medis'],[16,'Anti Aging'],[4,'Surgery']],
+		emptyText: 'Semua'
 });
 
 Ext.extend(Ext.ux.plugin.triggerfieldTooltip, Ext.util.Observable,{
@@ -154,7 +156,7 @@ Ext.onReady(function(){
   	/* Function for Displaying  create Window Form */
 	function display_form_window(){
 		jenisField.setValue('Produk');
-		groupField.setValue('Kode');
+		//groupField.setValue('Kode');
 		if(!rekap_penjualan_createWindow.isVisible()){
 			//tindakan_medisreset_form();
 			//post2db='CREATE';
@@ -362,6 +364,11 @@ Ext.onReady(function(){
 			tooltip: 'Advanced Search',
 			iconCls:'icon-search',
 			handler: display_form_search_window 
+		}, '-',{
+			text: 'Print',
+			tooltip: 'Print Document',
+			iconCls:'icon-print',
+			handler: produk_print  
 		}
 		]
 	});
@@ -441,7 +448,6 @@ Ext.onReady(function(){
 		store: group_produk_Store,
 		mode: 'local',
 		editable:false,
-		emptyText: 'Semua',
 		displayField: 'group_display',
 		valueField: 'group_value',
 		width: 120,
@@ -491,20 +497,15 @@ Ext.onReady(function(){
 		// KIRIM
 		if(is_rekap_penjualan_searchForm_valid())
 		{
-		//var trawat_id_search=null;
 		var rekap_penjualan_tgl_start_app_search=null;
 		var rekap_penjualan_tgl_end_app_search=null;
-		//var trawat_dokter_search=null;
 		var jenisField_search=null;
 		var groupField_search=null;
-		//var jumlahField_search=null;
 
-		//if(trawat_medis_idSearchField.getValue()!==null){trawat_id_search=trawat_medis_idSearchField.getValue();}
 		if(Ext.getCmp('rekap_penjualan_tglStartSearchField').getValue()!==null){rekap_penjualan_tgl_start_app_search=Ext.getCmp('rekap_penjualan_tglStartSearchField').getValue();}
 		if(Ext.getCmp('rekap_penjualan_tglEndSearchField').getValue()!==null){rekap_penjualan_tgl_end_app_search=Ext.getCmp('rekap_penjualan_tglEndSearchField').getValue();}
 		if(jenisField.getValue()!==null){jenisField_search=jenisField.getValue();}
 		if(groupField.getValue()!==null){groupField_search=groupField.getValue();}
-		//if(jumlahField.getValue()!==null){jumlahField_search=jumlahField.getValue();}
 		// change the store parameters
 		rekap_penjualanDataStore.baseParams = {
 			task: 'SEARCH',
@@ -662,9 +663,9 @@ Ext.onReady(function(){
   	/* Function for Displaying  Search Window Form */
 	function display_form_search_window(){
 		if(!rekap_penjualan_searchWindow.isVisible()){
-			rekap_penjualan_reset_formSearch();
-			jenisField.setValue('Produk');
-			groupField.setValue('Kode');
+			//rekap_penjualan_reset_formSearch();
+			//jenisField.setValue('Produk');
+			//groupField.setValue('Kode');
 			//jumlahField.setValue('10');
 			rekap_penjualan_searchWindow.show();
 		} else {
@@ -699,7 +700,7 @@ Ext.onReady(function(){
 		  	var result=eval(response.responseText);
 		  	switch(result){
 		  	case 1:
-				win = window.open('./tindakanlist.html','tindakanlist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
+				win = window.open('./print/report_rekap.html','report_rekap','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
 				win.print();
 				break;
 		  	default:
@@ -724,6 +725,76 @@ Ext.onReady(function(){
 			});		
 		} 	                     
 		});
+	}
+	/* Enf Function */
+	
+	/* Function for print List Grid */
+	function produk_print(){
+	// KIRIM
+		if(is_rekap_penjualan_searchForm_valid())
+		{
+			var rekap_penjualan_tglapp_start_print=null;
+			var rekap_penjualan_tglapp_end_print=null;
+			var jenisField_print=null;
+			var groupField_print=null;
+			
+			if(rekap_penjualanDataStore.baseParams.rekap_penjualan_tglapp_start!==null){rekap_penjualan_tglapp_start_print = rekap_penjualanDataStore.baseParams.rekap_penjualan_tglapp_start;}
+			if(rekap_penjualanDataStore.baseParams.rekap_penjualan_tglapp_end!==null){rekap_penjualan_tglapp_end_print = rekap_penjualanDataStore.baseParams.rekap_penjualan_tglapp_end;}
+			if(rekap_penjualanDataStore.baseParams.rekap_penjualan_jenis!==null){jenisField_print = rekap_penjualanDataStore.baseParams.rekap_penjualan_jenis;}
+			if(rekap_penjualanDataStore.baseParams.rekap_penjualan_group!==null){groupField_print = rekap_penjualanDataStore.baseParams.rekap_penjualan_group;}
+			
+			/*
+			if(Ext.getCmp('rekap_penjualan_tglStartSearchField').getValue()!==null){rekap_penjualan_tgl_start_app_search=Ext.getCmp('rekap_penjualan_tglStartSearchField').getValue();}
+			if(Ext.getCmp('rekap_penjualan_tglEndSearchField').getValue()!==null){rekap_penjualan_tgl_end_app_search=Ext.getCmp('rekap_penjualan_tglEndSearchField').getValue();}
+			if(jenisField.getValue()!==null){jenisField_search=jenisField.getValue();}
+			if(groupField.getValue()!==null){groupField_search=groupField.getValue();}
+			// change the store parameters
+			*/
+			// Cause the datastore to do another query : 
+			//rekap_penjualanDataStore.reload({params: {start: 0, limit: pageS}});
+			//sum_rekapDataStore.reload({params: {start: 0, limit: pageS}});
+
+			Ext.Ajax.request({   
+			waitMsg: 'Please Wait...',
+			url: 'index.php?c=c_report_rekap_penjualan&m=get_action',
+			params: {
+				task: "PRINT",
+				rekap_penjualan_tglapp_start	: 	rekap_penjualan_tglapp_start_print,
+				rekap_penjualan_tglapp_end		: 	rekap_penjualan_tglapp_end_print,
+				rekap_penjualan_jenis			:	jenisField_print,
+				rekap_penjualan_group			:	groupField_print
+				//currentlisting					: 	rekap_penjualanDataStore.baseParams.task
+			}, 
+			success: function(response){              
+				var result=eval(response.responseText);
+				switch(result){
+				case 1:
+					win = window.open('./print/report_rekap.html','report_rekap','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
+					win.print();
+					break;
+				default:
+					Ext.MessageBox.show({
+						title: 'Warning',
+						msg: 'Unable to print the grid!',
+						buttons: Ext.MessageBox.OK,
+						animEl: 'save',
+						icon: Ext.MessageBox.WARNING
+					});
+					break;
+				}  
+			},
+			failure: function(response){
+				var result=response.responseText;
+				Ext.MessageBox.show({
+				   title: 'Error',
+				   msg: 'Could not connect to the database. retry later.',
+				   buttons: Ext.MessageBox.OK,
+				   animEl: 'database',
+				   icon: Ext.MessageBox.ERROR
+				});		
+			} 	                     
+			});
+		}
 	}
 	/* Enf Function */
 	
