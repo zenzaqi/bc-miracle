@@ -3228,7 +3228,7 @@ Ext.onReady(function(){
 	});
 	
 	cust_alamat_group = new Ext.form.FieldSet({
-		title: 'Alamat',
+		title: 'Alamat Tinggal',
 		autoHeight: true,
 		defaultType: 'textfield',
 		anchor: '95%',
@@ -3236,7 +3236,7 @@ Ext.onReady(function(){
 	});
 	
 	cust_alamat2_group = new Ext.form.FieldSet({
-		title: 'Alamat Lain',
+		title: 'Alamat KTP',
 		autoHeight: true,
 		defaultType: 'textfield',
 		anchor: '95%',
@@ -3873,7 +3873,7 @@ Ext.onReady(function(){
 	});
 	
 	cust_alamat2_groupSearch = new Ext.form.FieldSet({
-		title: 'Alamat Lain',
+		title: 'Alamat KTP',
 		autoHeight: true,
 		defaultType: 'textfield',
 		anchor: '95%',

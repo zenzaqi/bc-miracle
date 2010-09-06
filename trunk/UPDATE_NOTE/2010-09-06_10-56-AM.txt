@@ -1,0 +1,12 @@
+[by freddy@miracle-clinic.com]
+
+> pada v_master_jual_rawat, v_master_jual_paket_, v_master_jual_produk dan v_master_ambil_paket telah ditambahkan function baru, namanya pengecekan_dokumen(). Function ini bertujuan utk melakukan pengecekan terlebih dahulu sebelum melakukan Create,Update dan Batal.
+Faktor2 yg menjadi pengecekan : Hanya boleh create / edit / batal pada bulan yang bersangkutan dan 3 hari pada bulan berikutnya.
+Contoh : sekarang tanggal 5 september 2010 maka tidak bisa mengedit/membatalkan faktur pada tgl dibawah 31 agustus 2010.. hanya bisa mengedit/membatalkan faktur tanggal 1 september 2010 - 3 oktober 2010..
+
+
+> pada c_master_jual_rawat , c_master_jual_paket dan c_master_jual_produk, telah ditambahkan function Task : CEK pada get_action()
+
+> pada m_public_function telah ditambahkan function pengecekan_dokumen()
+
+> pada m_master_ambil_paket telah ditambahkan function pengecekan_dokumen()

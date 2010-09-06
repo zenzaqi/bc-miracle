@@ -94,6 +94,76 @@ Ext.onReady(function(){
 		}
 	}
   
+  
+	/*Function for pengecekan _dokumen */
+	function pengecekan_dokumen(){
+
+	
+		//var recordMaster = ambil_paketListEditorGrid.getSelectionModel().getSelected();
+		//dapaket_tgl_ambilField.setValue(recordMaster.get("tgl_ambil"));
+		//detail_ambil_paketStore.load({params : {tgl_ambil : recordMaster.get("tgl_ambil")}});
+		
+		
+		var selections = history_ambil_paketPanel.selModel.getSelections();
+		var tgl_ambil = [];
+		for(i = 0; i< history_ambil_paketPanel.selModel.getCount(); i++){
+		tgl_ambil.push(selections[i].json.tgl_ambil);
+		}
+		var encoded_array_tgl_ambil = Ext.encode(tgl_ambil);
+		
+		
+		//var selections = history_ambil_paketPanel.selModel.getSelections();
+		//var tgl_ambil_create_date = "";
+		//var tgl_ambil = [];
+		//if(oGrid_event.record.data.tgl_ambil!== ""){tgl_ambil_create_date =oGrid_event.record.data.tgl_ambil.format('Y-m-d');}
+		//detail_ambil_paketStore.load({params:{tgl_ambil:ambil_paketListEditorGrid.getSelectionModel().getSelected().get('tgl_ambil')}});
+		//var tgl_ambil_create_date = ambil_paketListEditorGrid.getSelectionModel().getSelected().get('tgl_ambil');
+		//tgl_ambil.push(selections[0].json.tgl_ambil);
+		//var encoded_tgl_ambil_create_date = Ext.encode(tgl_ambil);
+		//tgl_ambil_create_date = oGrid_event.record.data.tgl_ambil;
+		//if(detail_ambil_paketStore.baseParams.tgl_ambil!==""){tgl_ambil_create_date = detail_ambil_paketStore.baseParams.tgl_ambil;}
+		Ext.Ajax.request({  
+			waitMsg: 'Please wait...',
+			url: 'index.php?c=c_master_ambil_paket&m=get_action',
+			params: {
+				task: "CEK",
+				tgl_ambil	: encoded_array_tgl_ambil
+				//currentlisting: detail_ambil_paketStore.baseParams.task
+		
+			}, 
+			success: function(response){							
+				var result=eval(response.responseText);
+				switch(result){
+					case 1:
+						detail_ambil_paket_batal();
+						break;
+					default:
+						Ext.MessageBox.show({
+						   title: 'Warning',
+						   msg: 'Pengambilan Paket tidak bisa dibatalkan, karena telah melebihi batas hari yang diperbolehkan ',
+						   buttons: Ext.MessageBox.OK,
+						   animEl: 'save',
+						   icon: Ext.MessageBox.WARNING
+						});
+						//jproduk_btn_cancel();
+						break;
+				}
+			},
+			failure: function(response){
+				var result=response.responseText;
+				Ext.MessageBox.show({
+				   title: 'Error',
+				   msg: 'Could not connect to the database. retry later.',
+				   buttons: Ext.MessageBox.OK,
+				   animEl: 'database',
+				   icon: Ext.MessageBox.ERROR
+				});	
+			}									    
+		});   
+	}
+  
+  
+  
   	/* Function for Saving inLine Editing */
 	function ambil_paket_update(oGrid_event){
 		var ambil_paket_id_update_pk="";
@@ -721,8 +791,10 @@ Ext.onReady(function(){
 	ambil_paketListEditorGrid.on('rowclick', function (ambil_paketListEditorGrid, rowIndex, eventObj) {
         var recordMaster = ambil_paketListEditorGrid.getSelectionModel().getSelected();
 		dapaket_dpaket_idField.setValue(recordMaster.get("dpaket_id"));
+		dapaket_tgl_ambilField.setValue(recordMaster.get("tgl_ambil"));
         //detail_ambil_paketStore.load({params : {dpaket_master : recordMaster.get("dpaket_master"), dpaket_paket : recordMaster.get("dpaket_paket")}});
-		detail_ambil_paketStore.load({params : {dapaket_dpaket : recordMaster.get("dpaket_id")}});
+		detail_ambil_paketStore.load({params : {dapaket_dpaket : recordMaster.get("dpaket_id"), tgl_ambil : recordMaster.get("tgl_ambil")
+		}});
 		//ambil_paket_DataStore.reload();
     });
      
@@ -781,6 +853,7 @@ Ext.onReady(function(){
 	ambil_paketListEditorGrid.on('afteredit', ambil_paket_update); // inLine Editing Record
 	
 	dapaket_dpaket_idField= new Ext.form.NumberField();
+	dapaket_tgl_ambilField= new Ext.form.DateField();
 	
 	apaket_idField= new Ext.form.NumberField({
 		id: 'apaket_idField',
@@ -1018,7 +1091,7 @@ Ext.onReady(function(){
 				text: 'Batal',
 				tooltip: 'Membatalkan pengambilan paket',
 				iconCls:'icon-delete',    				// this is defined in our styles.css
-				handler: detail_ambil_paket_batal
+				handler: pengecekan_dokumen
 			}]
     });
     history_ambil_paketPanel.render('history_ambil_paket');
