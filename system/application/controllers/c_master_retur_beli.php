@@ -16,8 +16,9 @@ class C_master_retur_beli extends Controller {
 	//constructor
 	function C_master_retur_beli(){
 		parent::Controller();
+		session_start();
 		$this->load->model('m_master_retur_beli', '', TRUE);
-		$this->load->plugin('to_excel');
+		
 		
 	}
 	
@@ -28,6 +29,33 @@ class C_master_retur_beli extends Controller {
 	
 	function laporan(){
 		$this->load->view('main/v_lap_retur_beli');
+	}
+	
+	function print_faktur(){
+		
+		$faktur=(isset($_POST['faktur']) ? @$_POST['faktur'] : @$_GET['faktur']);
+		$opsi="faktur";
+        $result = $this->m_master_retur_beli->get_laporan("","","",$opsi,"",$faktur);
+		$info = $this->m_public_function->get_info();
+		$master=$result->row();
+		$data['data_print'] = $result->result();
+		$data['info_nama'] = $info->info_nama;
+		$data['no_bukti'] = $master->no_bukti;
+		$data['no_order'] = $master->no_order;
+		$data['no_terima'] = $master->no_terima;
+        $data['tanggal'] = $master->tanggal;
+        $data['supplier_nama'] = $master->supplier_nama;
+		$print_view=$this->load->view("main/p_faktur_retur.php",$data,TRUE);
+		
+		if(!file_exists("print")){
+			mkdir("print");
+		}
+		
+		$print_file=fopen("print/retur_faktur.html","w+");
+		
+		fwrite($print_file, $print_view);
+		echo '1'; 
+		
 	}
 	
 	function print_laporan(){
@@ -49,7 +77,7 @@ class C_master_retur_beli extends Controller {
 			$data["periode"]="Periode ".$tgl_awal." s/d ".$tgl_akhir;
 		}
 		
-		$data["data_print"]=$this->m_master_retur_beli->get_laporan($tgl_awal,$tgl_akhir,$periode,$opsi,$group);
+		$data["data_print"]=$this->m_master_retur_beli->get_laporan($tgl_awal,$tgl_akhir,$periode,$opsi,$group,"");
 		if($opsi=='rekap'){
 				
 			switch($group){
@@ -171,14 +199,24 @@ class C_master_retur_beli extends Controller {
 	//add detail
 	function detail_detail_retur_beli_insert(){
 	//POST variable here
-		$drbeli_id=trim(@$_POST["drbeli_id"]);
-		$drbeli_master=trim(@$_POST["drbeli_master"]);
-		$drbeli_produk=trim(@$_POST["drbeli_produk"]);
-		$drbeli_satuan=trim(@$_POST["drbeli_satuan"]);
-		$drbeli_jumlah=trim(@$_POST["drbeli_jumlah"]);
-		$drbeli_harga=trim(@$_POST["drbeli_harga"]);
-		$drbeli_diskon=trim(@$_POST["drbeli_diskon"]);
-		$result=$this->m_master_retur_beli->detail_detail_retur_beli_insert($drbeli_id ,$drbeli_master ,$drbeli_produk ,$drbeli_satuan ,$drbeli_jumlah ,$drbeli_harga, $drbeli_diskon );
+		$drbeli_id = $_POST['drbeli_id']; 
+        $drbeli_master=trim(@$_POST["drbeli_master"]);
+        $drbeli_produk = $_POST['drbeli_produk']; 
+		$drbeli_satuan = $_POST['drbeli_satuan']; 
+		$drbeli_jumlah = $_POST['drbeli_jumlah'];
+		$drbeli_harga = $_POST['drbeli_harga']; 
+		$drbeli_diskon = $_POST['drbeli_diskon']; 
+		
+		$array_drbeli_id = json_decode(stripslashes($drbeli_id));
+		$array_drbeli_produk = json_decode(stripslashes($drbeli_produk));
+		$array_drbeli_satuan = json_decode(stripslashes($drbeli_satuan));
+		$array_drbeli_jumlah = json_decode(stripslashes($drbeli_jumlah));
+		$array_drbeli_harga = json_decode(stripslashes($drbeli_harga));
+		$array_drbeli_diskon = json_decode(stripslashes($drbeli_diskon));
+		
+		$result=$this->m_master_retur_beli->detail_detail_retur_beli_insert($array_drbeli_id ,$drbeli_master ,$array_drbeli_produk ,
+																			$array_drbeli_satuan ,$array_drbeli_jumlah ,$array_drbeli_harga, 
+																			$array_drbeli_diskon );
 	}
 	
 	
@@ -237,10 +275,9 @@ class C_master_retur_beli extends Controller {
 		$rbeli_keterangan=str_replace("'", '"',$rbeli_keterangan);
 		
 		$rbeli_status=trim(@$_POST["rbeli_status"]);
-		$rbeli_status=str_replace("/(<\/?)(p)([^>]*>)", "",$rbeli_status);
-		$rbeli_status=str_replace(",", ",",$rbeli_status);
-		$rbeli_status=str_replace("'", '"',$rbeli_status);
-		$result = $this->m_master_retur_beli->master_retur_beli_update($rbeli_id ,$rbeli_nobukti ,$rbeli_terima ,$rbeli_supplier ,$rbeli_tanggal ,$rbeli_keterangan, $rbeli_status );
+
+		$result = $this->m_master_retur_beli->master_retur_beli_update($rbeli_id ,$rbeli_nobukti ,$rbeli_terima ,$rbeli_supplier ,$rbeli_tanggal ,
+																	   $rbeli_keterangan, $rbeli_status );
 		echo $result;
 	}
 	
@@ -257,9 +294,9 @@ class C_master_retur_beli extends Controller {
 		$rbeli_keterangan=str_replace("'", '"',$rbeli_keterangan);
 		
 		$rbeli_status=trim(@$_POST["rbeli_status"]);
-		$rbeli_status=str_replace("/(<\/?)(p)([^>]*>)", "",$rbeli_status);
-		$rbeli_status=str_replace("'", '"',$rbeli_status);
-		$result=$this->m_master_retur_beli->master_retur_beli_create($rbeli_nobukti ,$rbeli_terima ,$rbeli_supplier ,$rbeli_tanggal ,$rbeli_keterangan, $rbeli_status);
+
+		$result=$this->m_master_retur_beli->master_retur_beli_create($rbeli_nobukti ,$rbeli_terima ,$rbeli_supplier ,$rbeli_tanggal ,
+																	 $rbeli_keterangan, $rbeli_status);
 		echo $result;
 	}
 
@@ -274,109 +311,80 @@ class C_master_retur_beli extends Controller {
 	//function for advanced search
 	function master_retur_beli_search(){
 		//POST varibale here
-		$rbeli_id=trim(@$_POST["rbeli_id"]);
+		$rbeli_id="";
 		$rbeli_nobukti=trim(@$_POST["rbeli_nobukti"]);
 		$rbeli_terima=trim(@$_POST["rbeli_terima"]);
 		$rbeli_supplier=trim(@$_POST["rbeli_supplier"]);
-		$rbeli_tanggal=trim(@$_POST["rbeli_tanggal"]);
+		$rbeli_tgl_awal=trim(@$_POST["rbeli_tgl_awal"]);
+		$rbeli_tgl_akhir=trim(@$_POST["rbeli_tgl_akhir"]);
 		$rbeli_keterangan=trim(@$_POST["rbeli_keterangan"]);
 		$rbeli_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$rbeli_keterangan);
 		$rbeli_keterangan=str_replace("'", '"',$rbeli_keterangan);
 		
 		$rbeli_status=trim(@$_POST["rbeli_status"]);
-		$rbeli_status=str_replace("/(<\/?)(p)([^>]*>)", "",$rbeli_status);
-		$rbeli_status=str_replace("'", '"',$rbeli_status);
+
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_master_retur_beli->master_retur_beli_search($rbeli_id ,$rbeli_nobukti ,$rbeli_terima ,$rbeli_supplier ,$rbeli_tanggal ,$rbeli_keterangan ,$rbeli_status, $start,$end);
+		$result = $this->m_master_retur_beli->master_retur_beli_search($rbeli_id ,$rbeli_nobukti ,$rbeli_terima ,$rbeli_supplier ,$rbeli_tgl_awal ,
+																	   $rbeli_tgl_akhir, $rbeli_keterangan, $rbeli_status ,$rbeli_status, $start,
+																	   $end);
 		echo $result;
 	}
 
 
 	function master_retur_beli_print(){
   		//POST varibale here
-		$rbeli_id=trim(@$_POST["rbeli_id"]);
+		$rbeli_id="";
 		$rbeli_nobukti=trim(@$_POST["rbeli_nobukti"]);
 		$rbeli_terima=trim(@$_POST["rbeli_terima"]);
 		$rbeli_supplier=trim(@$_POST["rbeli_supplier"]);
-		$rbeli_tanggal=trim(@$_POST["rbeli_tanggal"]);
+		$rbeli_tgl_awal=trim(@$_POST["rbeli_tgl_awal"]);
+		$rbeli_tgl_akhir=trim(@$_POST["rbeli_tgl_akhir"]);
 		$rbeli_keterangan=trim(@$_POST["rbeli_keterangan"]);
 		$rbeli_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$rbeli_keterangan);
 		$rbeli_keterangan=str_replace("'", '"',$rbeli_keterangan);
+		
+		$rbeli_status=trim(@$_POST["rbeli_status"]);
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$result = $this->m_master_retur_beli->master_retur_beli_print($rbeli_id ,$rbeli_nobukti ,$rbeli_terima ,$rbeli_supplier ,$rbeli_tanggal ,$rbeli_keterangan ,$option,$filter);
-		$nbrows=$result->num_rows();
-		$totcolumn=7;
-   		/* We now have our array, let's build our HTML file */
-		$file = fopen("master_retur_belilist.html",'w');
-		fwrite($file, "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' /><title>Cetak Daftar Retur Pembelian</title><link rel='stylesheet' type='text/css' href='assets/modules/main/css/printstyle.css'/></head>");
-		fwrite($file, "<body><table summary='Daftar Retur Pembelian'><caption>Daftar Retur Pembelian</caption>
-			   <thead><tr>
-			   		<th scope='col'>Tanggal</th>
-					<th scope='col'>No. Retur</th>
-					<th scope='col'>No. Penerimaan</th>
-					<th scope='col'>No. Pesanan</th>
-					<th scope='col'>Supplier</th>
-					<th scope='col'>Jumlah Item</th>
-					<th scope='col'>Total Nilai</th>
-					<th scope='col'>Keterangan</th>
-				</tr></thead>
-					<tfoot><tr><th scope='row'>Total</th><td colspan='$totcolumn'>");
-		fwrite($file, $nbrows);
-		fwrite($file, " Retur Pembelian</td></tr></tfoot><tbody>");
-		$i=0;
-		if($nbrows>0){
-			foreach($result->result_array() as $data){
-				fwrite($file,'<tr');
-				if($i%1==0){
-					fwrite($file," class='odd'");
-				}
-			
-				fwrite($file, "><th scope='row' id='r97'>");
-				fwrite($file, $data['tanggal']);
-				fwrite($file,"</th><td>");
-				fwrite($file, $data['no_bukti']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['no_terima']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['no_order']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['supplier_nama']);
-				fwrite($file,"</td><td class='numeric'>");
-				fwrite($file, number_format($data['jumlah_barang']));
-				fwrite($file, "</td><td class='numeric'>");
-				fwrite($file, number_format($data['total_nilai']));
-				fwrite($file, "</td><td>");
-				fwrite($file, $data['rbeli_keterangan']);
-				fwrite($file, "</td></tr>");
-			}
+		$data["data_print"] = $this->m_master_retur_beli->master_retur_beli_print($rbeli_id ,$rbeli_nobukti ,$rbeli_terima ,$rbeli_supplier ,
+																				  $rbeli_tgl_awal, $rbeli_tgl_akhir, $rbeli_keterangan, 
+																				  $rbeli_status ,$rbeli_status, $option,$filter);
+		$print_view=$this->load->view("main/p_list_retur_beli.php",$data,TRUE);
+		if(!file_exists("print")){
+			mkdir("print");
 		}
-		fwrite($file, "</tbody></table></body></html>");	
-		fclose($file);
-		echo '1';        
+
+		$print_file=fopen("print/print_retur_belilist.html","w+");	
+		fwrite($print_file, $print_view);
+		echo '1';          
 	}
 	/* End Of Function */
 
 	/* Function to Export Excel document */
 	function master_retur_beli_export_excel(){
 		//POST varibale here
-		//$rbeli_id=trim(@$_POST["rbeli_id"]);
-		$rbeli_id=NULL;
+		$rbeli_id="";
 		$rbeli_nobukti=trim(@$_POST["rbeli_nobukti"]);
 		$rbeli_terima=trim(@$_POST["rbeli_terima"]);
 		$rbeli_supplier=trim(@$_POST["rbeli_supplier"]);
-		$rbeli_tanggal=trim(@$_POST["rbeli_tanggal"]);
+		$rbeli_tgl_awal=trim(@$_POST["rbeli_tgl_awal"]);
+		$rbeli_tgl_akhir=trim(@$_POST["rbeli_tgl_akhir"]);
 		$rbeli_keterangan=trim(@$_POST["rbeli_keterangan"]);
 		$rbeli_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$rbeli_keterangan);
 		$rbeli_keterangan=str_replace("'", '"',$rbeli_keterangan);
+		
+		$rbeli_status=trim(@$_POST["rbeli_status"]);
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$query = $this->m_master_retur_beli->master_retur_beli_export_excel($rbeli_id ,$rbeli_nobukti ,$rbeli_terima ,$rbeli_supplier ,$rbeli_tanggal ,$rbeli_keterangan ,$option,$filter);
+		$query = $this->m_master_retur_beli->master_retur_beli_export_excel($rbeli_id ,$rbeli_nobukti ,$rbeli_terima ,$rbeli_supplier ,
+																			$rbeli_tgl_awal,$rbeli_tgl_akhir, $rbeli_keterangan, $rbeli_status ,
+																			$rbeli_status, $option,$filter);
 		
+		$this->load->plugin('to_excel');
 		to_excel($query,"master_retur_beli"); 
 		echo '1';
 			

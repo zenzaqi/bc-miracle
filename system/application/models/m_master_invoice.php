@@ -18,7 +18,7 @@ class M_master_invoice extends Model{
 			parent::Model();
 		}
 		
-		function get_laporan($tgl_awal,$tgl_akhir,$periode,$opsi,$group){
+		function get_laporan($tgl_awal,$tgl_akhir,$periode,$opsi,$group, $faktur){
 			
 			switch($group){
 				case "Tanggal": $order_by=" ORDER BY tanggal ASC";break;
@@ -48,10 +48,18 @@ class M_master_invoice extends Model{
 					$sql="SELECT * FROM vu_detail_invoice WHERE invoice_status<>'Batal' AND 
 							date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' AND 
 							date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."' ".$order_by;
+			}else if($opsi=='faktur'){
+				$sql="SELECT DISTINCT * FROM vu_detail_invoice WHERE invoice_id='".$faktur."'";
 			}
-			//echo $sql;
+			
+			//$this->firephp->log($sql);
+			
 			$query=$this->db->query($sql);
-			return $query->result();
+			
+			if($opsi=='faktur')
+				return $query;
+			else
+				return $query->result();
 		}
 		
 		function get_invoice_order($terima_id){
@@ -206,26 +214,30 @@ class M_master_invoice extends Model{
 		//*eof
 		
 		//insert detail record
-		function detail_detail_invoice_insert($dinvoice_id ,$dinvoice_master ,$dinvoice_produk ,$dinvoice_satuan ,$dinvoice_jumlah ,$dinvoice_harga ,$dinvoice_diskon ){
-			//if master id not capture from view then capture it from max pk from master table
-			if($dinvoice_master=="" || $dinvoice_master==NULL){
-				$dinvoice_master=$this->get_master_id();
-			}
-			
-			$data = array(
-				"dinvoice_master"=>$dinvoice_master, 
-				"dinvoice_produk"=>$dinvoice_produk, 
-				"dinvoice_satuan"=>$dinvoice_satuan, 
-				"dinvoice_jumlah"=>$dinvoice_jumlah, 
-				"dinvoice_harga"=>$dinvoice_harga, 
-				"dinvoice_diskon"=>$dinvoice_diskon 
-			);
-			$this->db->insert('detail_invoice', $data); 
-			if($this->db->affected_rows())
-				return '1';
-			else
-				return '0';
+		function detail_detail_invoice_insert($array_dinvoice_id ,$dinvoice_master ,$array_dinvoice_produk ,
+											  $array_dinvoice_satuan ,$array_dinvoice_jumlah ,$array_dinvoice_harga ,
+											  $array_dinvoice_diskon ){
+				
+			for($i = 0; $i < sizeof($array_dinvoice_produk); $i++){
 
+				$data = array(
+					"dinvoice_master"=>$dinvoice_master, 
+					"dinvoice_produk"=>$array_dinvoice_produk[$i], 
+					"dinvoice_satuan"=>$array_dinvoice_satuan[$i], 
+					"dinvoice_jumlah"=>$array_dinvoice_jumlah[$i], 
+					"dinvoice_harga"=>$array_dinvoice_harga[$i], 
+					"dinvoice_diskon"=>$array_dinvoice_diskon[$i] 
+				);
+				
+				if($array_dinvoice_id[$i]==0){
+					$this->db->insert('detail_invoice', $data); 
+				}else{
+					$this->db->where('dinvoice_id', $array_dinvoice_id[$i]);
+					$this->db->update('detail_invoice', $data);
+				}
+			}
+
+			return '1';
 		}
 		//end of function
 		
@@ -236,7 +248,12 @@ class M_master_invoice extends Model{
 			// For simple search
 			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (invoice_id LIKE '%".addslashes($filter)."%' OR no_bukti LIKE '%".addslashes($filter)."%' OR invoice_supplier LIKE '%".addslashes($filter)."%' OR invoice_noterima LIKE '%".addslashes($filter)."%' OR tanggal LIKE '%".addslashes($filter)."%' OR invoice_jatuhtempo LIKE '%".addslashes($filter)."%' OR invoice_penagih LIKE '%".addslashes($filter)."%' )";
+				$query .= " ( no_bukti LIKE '%".addslashes($filter)."%' OR 
+							  no_bukti_auto LIKE '%".addslashes($filter)."%' OR 
+							  terima_no LIKE '%".addslashes($filter)."%' OR 
+							  invoice_supplier LIKE '%".addslashes($filter)."%' OR 
+							  invoice_noterima LIKE '%".addslashes($filter)."%' OR 
+							  invoice_penagih LIKE '%".addslashes($filter)."%' )";
 			}
 			
 			$result = $this->db->query($query);
@@ -256,7 +273,9 @@ class M_master_invoice extends Model{
 		}
 		
 		//function for update record
-		function master_invoice_update($invoice_id ,$invoice_no ,$invoice_no_auto, $invoice_supplier ,$invoice_noterima ,$invoice_tanggal ,$invoice_diskon, $invoice_cashback, $invoice_uangmuka, $invoice_biaya,$invoice_jatuhtempo ,$invoice_penagih, $invoice_keterangan, $invoice_status ){
+		function master_invoice_update($invoice_id ,$invoice_no ,$invoice_no_auto, $invoice_supplier ,$invoice_noterima ,$invoice_tanggal ,
+									   $invoice_diskon, $invoice_cashback, $invoice_uangmuka, $invoice_biaya,$invoice_jatuhtempo ,$invoice_penagih,
+									   $invoice_keterangan, $invoice_status ){
 			$data = array(
 				"invoice_id"=>$invoice_id, 
 				"invoice_no"=>$invoice_no, 
@@ -269,7 +288,9 @@ class M_master_invoice extends Model{
 				"invoice_jatuhtempo"=>$invoice_jatuhtempo, 
 				"invoice_penagih"=>$invoice_penagih,
 				"invoice_keterangan"=>$invoice_keterangan,
-				"invoice_status"=>$invoice_status
+				"invoice_status"=>$invoice_status,
+				"invoice_update"=>$_SESSION[SESSION_USERID],
+				"invoice_date_update"=>date('Y-m-d H:i:s')
 			);
 			$sql="SELECT terima_supplier,terima_id FROM master_terima_beli WHERE terima_id='".$invoice_noterima."'";
 			$rs=$this->db->query($sql);
@@ -281,11 +302,19 @@ class M_master_invoice extends Model{
 			$this->db->where('invoice_id', $invoice_id);
 			$this->db->update('master_invoice', $data);
 			
+			$sql="UPDATE master_invoice SET invoice_revised=0 WHERE invoice_id='".$invoice_id."' AND invoice_revised is NULL";
+			$result = $this->db->query($sql);
+			
+			$sql="UPDATE master_invoice SET invoice_revised=(invoice_revised+1) WHERE invoice_id='".$invoice_id."'";
+			$result = $this->db->query($sql);
+			
 			return $invoice_id;
 		}
 		
 		//function for create new record
-		function master_invoice_create($invoice_no ,$invoice_no_auto, $invoice_supplier ,$invoice_noterima ,$invoice_tanggal ,$invoice_diskon, $invoice_cashback, $invoice_uangmuka, $invoice_biaya, $invoice_jatuhtempo ,$invoice_penagih, $invoice_keterangan, $invoice_status){
+		function master_invoice_create($invoice_no ,$invoice_no_auto, $invoice_supplier ,$invoice_noterima ,$invoice_tanggal ,$invoice_diskon,
+									   $invoice_cashback, $invoice_uangmuka, $invoice_biaya, $invoice_jatuhtempo ,$invoice_penagih, 
+									   $invoice_keterangan, $invoice_status){
 			/*$pattern="INV/".date("y/m")."/";
 			$invoice_no=$this->m_public_function->get_kode_1('master_invoice','invoice_no',$pattern,14);
 	*/		
@@ -305,8 +334,10 @@ class M_master_invoice extends Model{
 				"invoice_jatuhtempo"=>$invoice_jatuhtempo, 
 				"invoice_penagih"=>$invoice_penagih,
 				"invoice_keterangan"=>$invoice_keterangan,
-				"invoice_status"=>$invoice_status
-				
+				"invoice_status"=>$invoice_status,
+				"invoice_creator"=>$_SESSION[SESSION_USERID],
+				"invoice_date_create"=>date('Y-m-d H:i:s'),
+				"invoice_revised"=>0				
 			);
 			$this->db->insert('master_invoice', $data); 
 			if($this->db->affected_rows())
@@ -341,14 +372,13 @@ class M_master_invoice extends Model{
 		}
 		
 		//function for advanced search record
-		function master_invoice_search($invoice_id ,$invoice_no ,$invoice_no_auto, $invoice_supplier ,$invoice_noterima ,$invoice_tanggal ,$invoice_diskon, $invoice_cashback, $invoice_uangmuka, $invoice_biaya,$invoice_jatuhtempo ,$invoice_penagih , $invoice_keterangan, $invoice_status, $start,$end){
+		function master_invoice_search($invoice_id ,$invoice_no ,$invoice_no_auto, $invoice_supplier ,$invoice_noterima ,
+									  $invoice_tgl_awal, $invoice_tgl_akhir ,$invoice_nilai,$invoice_jatuhtempo ,$invoice_penagih, 
+									  $invoice_keterangan, $invoice_status, $start,$end){
 			//full query
 			$query="SELECT * FROM vu_trans_invoice";
 			
-			if($invoice_id!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " invoice_id LIKE '%".$invoice_id."%'";
-			};
+			
 			if($invoice_no!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " no_bukti LIKE '%".$invoice_no."%'";
@@ -366,18 +396,27 @@ class M_master_invoice extends Model{
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " invoice_noterima LIKE '%".$invoice_noterima."%'";
 			};
-			if($invoice_tanggal!=''){
+			if($invoice_tgl_awal!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " tanggal LIKE '%".$invoice_tanggal."%'";
+				$query.= " date_format(tanggal,'%Y-%m-%d') >='".$invoice_tgl_awal."'";
+			};
+			if($invoice_tgl_akhir!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " date_format(tanggal,'%Y-%m-%d') >='".$invoice_tgl_akhir."'";
 			};
 			if($invoice_jatuhtempo!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " invoice_jatuhtempo LIKE '%".$invoice_jatuhtempo."%'";
+				$query.= " date_format(invoice_jatuhtempo,'%Y-%m-%d')='".$invoice_jatuhtempo."'";
 			};
 			if($invoice_penagih!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " invoice_penagih LIKE '%".$invoice_penagih."%'";
 			};
+			
+			/*if($invoice_nilai!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " total_nilai LIKE '%".$invoice_nilai."%'";
+			};*/
 			
 			if($invoice_keterangan!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -386,7 +425,7 @@ class M_master_invoice extends Model{
 			
 			if($invoice_status!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " invoice_status LIKE '%".$invoice_status."%'";
+				$query.= " invoice_status='".$invoice_status."'";
 			};
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
@@ -406,21 +445,30 @@ class M_master_invoice extends Model{
 		}
 		
 		//function for print record
-		function master_invoice_print($invoice_id ,$invoice_no ,$invoice_supplier ,$invoice_noterima ,$invoice_tanggal ,$invoice_diskon, $invoice_cashback, $invoice_uangmuka, $invoice_biaya, $invoice_jatuhtempo ,$invoice_penagih ,$option,$filter){
+		function master_invoice_print($invoice_id ,$invoice_no ,$invoice_no_auto, $invoice_supplier ,$invoice_noterima ,$invoice_tgl_awal, 
+									   $invoice_tgl_akhir ,$invoice_nilai, $invoice_jatuhtempo ,$invoice_penagih , $invoice_keterangan,
+									   $invoice_status, $option,$filter){
 			//full query
 			$query="SELECT * FROM vu_trans_invoice";
 			if($option=='LIST'){
-				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (invoice_id LIKE '%".addslashes($filter)."%' OR no_bukti LIKE '%".addslashes($filter)."%' OR invoice_supplier LIKE '%".addslashes($filter)."%' OR invoice_noterima LIKE '%".addslashes($filter)."%' OR tanggal LIKE '%".addslashes($filter)."%' OR invoice_jatuhtempo LIKE '%".addslashes($filter)."%' OR invoice_penagih LIKE '%".addslashes($filter)."%' )";
-				$result = $this->db->query($query);
+				if ($filter<>""){
+					$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
+					$query .= " ( no_bukti LIKE '%".addslashes($filter)."%' OR 
+								  no_bukti_auto LIKE '%".addslashes($filter)."%' OR 
+								  terima_no LIKE '%".addslashes($filter)."%' OR 
+								  invoice_supplier LIKE '%".addslashes($filter)."%' OR 
+								  invoice_noterima LIKE '%".addslashes($filter)."%' OR 
+								  invoice_penagih LIKE '%".addslashes($filter)."%' )";
+				}
 			} else if($option=='SEARCH'){
-				if($invoice_id!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " invoice_id LIKE '%".$invoice_id."%'";
-				};
 				if($invoice_no!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " no_bukti LIKE '%".$invoice_no."%'";
+				};
+				
+				if($invoice_no_auto!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " no_bukti_auto LIKE '%".$invoice_no_auto."%'";
 				};
 				if($invoice_supplier!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -430,43 +478,74 @@ class M_master_invoice extends Model{
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " invoice_noterima LIKE '%".$invoice_noterima."%'";
 				};
-				if($invoice_tanggal!=''){
+				if($invoice_tgl_awal!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " tanggal LIKE '%".$invoice_tanggal."%'";
+					$query.= " date_format(tanggal,'%Y-%m-%d') >='".$invoice_tgl_awal."'";
+				};
+				if($invoice_tgl_akhir!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " date_format(tanggal,'%Y-%m-%d') >='".$invoice_tgl_akhir."'";
 				};
 				if($invoice_jatuhtempo!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " invoice_jatuhtempo LIKE '%".$invoice_jatuhtempo."%'";
+					$query.= " date_format(invoice_jatuhtempo,'%Y-%m-%d')='".$invoice_jatuhtempo."'";
 				};
 				if($invoice_penagih!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " invoice_penagih LIKE '%".$invoice_penagih."%'";
 				};
-				$result = $this->db->query($query);
+				
+				/*if($invoice_nilai!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " total_nilai LIKE '%".$invoice_nilai."%'";
+				};*/
+			
+				if($invoice_keterangan!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " invoice_keterangan LIKE '%".$invoice_keterangan."%'";
+				};
+				
+				if($invoice_status!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " invoice_status='".$invoice_status."'";
+				};
+				
 			}
-			return $result;
+			$result = $this->db->query($query);
+			return $result->result();
 		}
 		
 		//function  for export to excel
-		function master_invoice_export_excel($invoice_id ,$invoice_no ,$invoice_supplier ,$invoice_noterima ,$invoice_tanggal,$invoice_diskon, $invoice_cashback, $invoice_uangmuka, $invoice_biaya, $invoice_jatuhtempo ,$invoice_penagih ,$option,$filter){
+		function master_invoice_export_excel($invoice_id ,$invoice_no ,$invoice_no_auto, $invoice_supplier ,$invoice_noterima ,$invoice_tgl_awal, 
+											   $invoice_tgl_akhir ,$invoice_nilai, $invoice_jatuhtempo ,$invoice_penagih , $invoice_keterangan,
+											   $invoice_status,$option,$filter){
 			//full query
-			$query="SELECT tanggal as Tanggal, no_bukti as 'No Tagihan', terima_no as 'No Penerimaan', supplier_nama as 'Supplier'
+			$query="SELECT tanggal as Tanggal, no_bukti_auto as 'No PT',  no_bukti as 'No Tagihan', terima_no as 'No PB', supplier_nama as 'Supplier'
 					,jumlah_barang as 'Jumlah Item', total_nilai as 'Sub Total', invoice_diskon as 'Diskon (%)', invoice_cashback
 					as 'Diskon (Rp)', invoice_biaya 'Biaya', total_nilai+invoice_biaya-invoice_cashback-(total_nilai*invoice_diskon/100) as
-					'Total Nilai', invoice_uangmuka as 'Uang Muka',  total_nilai+invoice_biaya-invoice_cashback-(total_nilai*invoice_diskon/100)-invoice_uangmuka as 'Sisa tagihan', invoice_jatuhtempo as 'Jatuh Tempo' 
+					'Total Nilai', invoice_uangmuka as 'Uang Muka',  
+					total_nilai+invoice_biaya-invoice_cashback-(total_nilai*invoice_diskon/100)-invoice_uangmuka as 'Sisa tagihan', 
+					invoice_jatuhtempo as 'Jatuh Tempo' 
 					FROM vu_trans_invoice";
 			if($option=='LIST'){
-				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (invoice_id LIKE '%".addslashes($filter)."%' OR no_bukti LIKE '%".addslashes($filter)."%' OR invoice_supplier LIKE '%".addslashes($filter)."%' OR invoice_noterima LIKE '%".addslashes($filter)."%' OR tanggal LIKE '%".addslashes($filter)."%' OR invoice_jatuhtempo LIKE '%".addslashes($filter)."%' OR invoice_penagih LIKE '%".addslashes($filter)."%' )";
-				$result = $this->db->query($query);
+				if ($filter<>""){
+					$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
+					$query .= " ( no_bukti LIKE '%".addslashes($filter)."%' OR 
+								  no_bukti_auto LIKE '%".addslashes($filter)."%' OR 
+								  terima_no LIKE '%".addslashes($filter)."%' OR 
+								  invoice_supplier LIKE '%".addslashes($filter)."%' OR 
+								  invoice_noterima LIKE '%".addslashes($filter)."%' OR 
+								  invoice_penagih LIKE '%".addslashes($filter)."%' )";
+				}
 			} else if($option=='SEARCH'){
-				if($invoice_id!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " invoice_id LIKE '%".$invoice_id."%'";
-				};
 				if($invoice_no!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " no_bukti LIKE '%".$invoice_no."%'";
+				};
+				
+				if($invoice_no_auto!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " no_bukti_auto LIKE '%".$invoice_no_auto."%'";
 				};
 				if($invoice_supplier!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -476,20 +555,40 @@ class M_master_invoice extends Model{
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " invoice_noterima LIKE '%".$invoice_noterima."%'";
 				};
-				if($invoice_tanggal!=''){
+				if($invoice_tgl_awal!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " tanggal LIKE '%".$invoice_tanggal."%'";
+					$query.= " date_format(tanggal,'%Y-%m-%d') >='".$invoice_tgl_awal."'";
+				};
+				if($invoice_tgl_akhir!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " date_format(tanggal,'%Y-%m-%d') >='".$invoice_tgl_akhir."'";
 				};
 				if($invoice_jatuhtempo!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " invoice_jatuhtempo LIKE '%".$invoice_jatuhtempo."%'";
+					$query.= " date_format(invoice_jatuhtempo,'%Y-%m-%d')='".$invoice_jatuhtempo."'";
 				};
 				if($invoice_penagih!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " invoice_penagih LIKE '%".$invoice_penagih."%'";
 				};
-				$result = $this->db->query($query);
+				
+				/*if($invoice_nilai!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " total_nilai LIKE '%".$invoice_nilai."%'";
+				};*/
+				
+				if($invoice_keterangan!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " invoice_keterangan LIKE '%".$invoice_keterangan."%'";
+				};
+				
+				if($invoice_status!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " invoice_status='".$invoice_status."'";
+				};
+				
 			}
+			$result = $this->db->query($query);
 			return $result;
 		}
 		
