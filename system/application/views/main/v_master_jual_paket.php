@@ -409,7 +409,7 @@ Ext.onReady(function(){
 			jpaket_id_for_cetak = jpaket_idField.getValue();
 		}
 		
-		//if((jpaket_bayarField.getValue()>=0) && (jpaket_bayarField.getValue()<=jpaket_totalField.getValue())){
+		if((jpaket_bayarField.getValue()>=0) && (jpaket_bayarField.getValue()<=jpaket_totalField.getValue())){
 			if(is_master_jual_paket_form_valid() && dpaket_paket_id=="ada"
 			   && ((/^\d+$/.test(jpaket_custField.getValue()) && jpaket_post2db=="CREATE") || jpaket_post2db=="UPDATE")
 			   && jpaket_stat_dokField.getValue()=='Terbuka'){
@@ -811,7 +811,7 @@ Ext.onReady(function(){
 					});
 				}
 			}
-		/*}else{
+		}else{
 			Ext.MessageBox.show({
 				title: 'Warning',
 				msg: 'Maaf, kelebihan jumlah bayar.',
@@ -819,7 +819,7 @@ Ext.onReady(function(){
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
 			});
-		}*/
+		}
 	}
  	/* End of Function */
 	
