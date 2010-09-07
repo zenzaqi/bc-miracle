@@ -47,10 +47,12 @@ class M_master_koreksi_stok extends Model{
 			}else if($opsi=='faktur'){
 				$sql="SELECT * FROM vu_detail_koreksi WHERE dkoreksi_master='".$faktur."'";
 			}
-			//echo $sql;
 			$query=$this->db->query($sql);
-			//return $query->result();
-            return $query; //by masongbee
+			
+			if($opsi=='faktur')
+				return $query;
+			else
+				return $query->result();
 		}
 		
 		function get_stok_produk_selected($gudang,$produk_id){
@@ -320,26 +322,31 @@ class M_master_koreksi_stok extends Model{
 		//*eof
 		
 		//insert detail record
-		function detail_detail_koreksi_stok_insert($dkoreksi_id ,$dkoreksi_master ,$dkoreksi_produk ,$dkoreksi_satuan ,$dkoreksi_jmlawal ,$dkoreksi_jmlkoreksi ,$dkoreksi_jmlsaldo ,$dkoreksi_ket ){
-			//if master id not capture from view then capture it from max pk from master table
-			if($dkoreksi_master=="" || $dkoreksi_master==NULL){
-				$dkoreksi_master=$this->get_master_id();
-			}
+		function detail_detail_koreksi_stok_insert($array_dkoreksi_id ,$dkoreksi_master ,$array_dkoreksi_produk ,$array_dkoreksi_satuan ,
+												   $array_dkoreksi_jmlawal ,$array_dkoreksi_jmlkoreksi ,$array_dkoreksi_jmlsaldo ,
+												   $array_dkoreksi_ket ){
 			
-			$data = array(
-				"dkoreksi_master"=>$dkoreksi_master, 
-				"dkoreksi_produk"=>$dkoreksi_produk, 
-				"dkoreksi_satuan"=>$dkoreksi_satuan, 
-				"dkoreksi_jmlawal"=>$dkoreksi_jmlawal, 
-				"dkoreksi_jmlkoreksi"=>$dkoreksi_jmlkoreksi, 
-				"dkoreksi_jmlsaldo"=>$dkoreksi_jmlsaldo, 
-				"dkoreksi_ket"=>$dkoreksi_ket 
-			);
-			$this->db->insert('detail_koreksi_stok', $data); 
-			if($this->db->affected_rows())
-				return '1';
-			else
-				return '0';
+			for($i = 0; $i < sizeof($array_dkoreksi_produk); $i++){
+
+				$data = array(
+					"dkoreksi_master"=>$dkoreksi_master, 
+					"dkoreksi_produk"=>$array_dkoreksi_produk[$i], 
+					"dkoreksi_satuan"=>$array_dkoreksi_satuan[$i], 
+					"dkoreksi_jmlawal"=>$array_dkoreksi_jmlawal[$i], 
+					"dkoreksi_jmlkoreksi"=>$array_dkoreksi_jmlkoreksi[$i], 
+					"dkoreksi_jmlsaldo"=>$array_dkoreksi_jmlsaldo[$i],
+					"dkoreksi_ket"=>$array_dkoreksi_ket[$i]
+				);
+				
+				if($array_dkoreksi_id[$i]==0){
+					$this->db->insert('detail_koreksi_stok', $data); 
+				}else{
+					$this->db->where('dkoreksi_id', $array_dkoreksi_id[$i]);
+					$this->db->update('detail_koreksi_stok', $data);
+				}
+			}
+
+			return '1';
 
 		}
 		//end of function
@@ -351,10 +358,8 @@ class M_master_koreksi_stok extends Model{
 			// For simple search
 			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (koreksi_id LIKE '%".addslashes($filter)."%' OR 
-							koreksi_no LIKE '%".addslashes($filter)."%' OR 
-							koreksi_gudang LIKE '%".addslashes($filter)."%' OR 
-							date_format(koreksi_tanggal, '%Y-%m') like  '%".addslashes($filter)."%' OR 
+				$query .= " (koreksi_no LIKE '%".addslashes($filter)."%' OR 
+							gudang_nama LIKE '%".addslashes($filter)."%' OR 
 							koreksi_keterangan LIKE '%".addslashes($filter)."%' )";
 			}
 			
@@ -382,7 +387,9 @@ class M_master_koreksi_stok extends Model{
 //				"koreksi_gudang"=>$koreksi_gudang, 
 				"koreksi_tanggal"=>$koreksi_tanggal, 
 				"koreksi_keterangan"=>$koreksi_keterangan,
-				"koreksi_status"=>$koreksi_status
+				"koreksi_status"=>$koreksi_status,
+				"koreksi_update"=>$_SESSION[SESSION_USERID],
+				"koreksi_date_update"=>date('Y-m-d H:i:s')
 			);
 			$sql="SELECT gudang_id FROM gudang WHERE gudang_id='".$koreksi_gudang."'";
 			$rs=$this->db->query($sql);
@@ -391,6 +398,12 @@ class M_master_koreksi_stok extends Model{
 			
 			$this->db->where('koreksi_id', $koreksi_id);
 			$this->db->update('master_koreksi_stok', $data);
+			
+			$sql="UPDATE master_koreksi_stok SET koreksi_revised=0 WHERE koreksi_id='".$koreksi_id."' AND koreksi_revised is NULL";
+			$result = $this->db->query($sql);
+			
+			$sql="UPDATE master_koreksi_stok SET koreksi_revised=(koreksi_revised+1) WHERE koreksi_id='".$koreksi_id."'";
+			$result = $this->db->query($sql);
 			
 			return $koreksi_id;
 		}
@@ -405,7 +418,10 @@ class M_master_koreksi_stok extends Model{
 				"koreksi_gudang"=>$koreksi_gudang, 
 				"koreksi_tanggal"=>$koreksi_tanggal, 
 				"koreksi_keterangan"=>$koreksi_keterangan,
-				"koreksi_status"=>$koreksi_status
+				"koreksi_status"=>$koreksi_status,
+				"koreksi_creator"=>$_SESSION[SESSION_USERID],
+				"koreksi_date_create"=>date('Y-m-d H:i:s'),
+				"koreksi_revised"=>0
 			);
 			$this->db->insert('master_koreksi_stok', $data); 
 			if($this->db->affected_rows())
@@ -443,7 +459,8 @@ class M_master_koreksi_stok extends Model{
 		}
 		
 		//function for advanced search record
-		function master_koreksi_stok_search($koreksi_id , $koreksi_no, $koreksi_gudang ,$koreksi_tanggal ,$koreksi_keterangan, $koreksi_status, $start,$end){
+		function master_koreksi_stok_search($koreksi_id , $koreksi_no, $koreksi_gudang ,$koreksi_tgl_awal, $koreksi_tgl_akhir ,$koreksi_keterangan,
+											$koreksi_status, $start,$end){
 			//full query
 			$query="SELECT distinct * FROM master_koreksi_stok,gudang WHERE koreksi_gudang=gudang_id";
 			
@@ -456,9 +473,13 @@ class M_master_koreksi_stok extends Model{
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " koreksi_gudang LIKE '%".$koreksi_gudang."%'";
 			};
-			if($koreksi_tanggal!=''){
+			if($koreksi_tgl_awal!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " date_format(koreksi_tanggal, '%Y-%m') like  '%".$koreksi_tanggal."%'";
+				$query.= " date_format(koreksi_tanggal, '%Y-%m-%d') >='".$koreksi_tgl_awal."'";
+			};
+			if($koreksi_tgl_akhir!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " date_format(koreksi_tanggal, '%Y-%m-%d') <='".$koreksi_tgl_akhir."'";
 			};
 			if($koreksi_keterangan!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -487,65 +508,95 @@ class M_master_koreksi_stok extends Model{
 		}
 		
 		//function for print record
-		function master_koreksi_stok_print($koreksi_id ,$koreksi_gudang ,$koreksi_tanggal ,$koreksi_keterangan ,$option,$filter){
+		function master_koreksi_stok_print($koreksi_id , $koreksi_no, $koreksi_gudang ,$koreksi_tgl_awal, $koreksi_tgl_akhir ,$koreksi_keterangan,
+											$koreksi_status ,$option,$filter){
 			//full query
 			$query = "SELECT distinct * FROM master_koreksi_stok,gudang WHERE koreksi_gudang=gudang_id";
 			
 			if($option=='LIST'){
-				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (koreksi_id LIKE '%".addslashes($filter)."%' OR 
-							koreksi_no LIKE '%".addslashes($filter)."%' OR 
-							koreksi_gudang LIKE '%".addslashes($filter)."%' OR 
-							date_format(koreksi_tanggal, '%Y-%m') like  '%".addslashes($filter)."%' OR 
-							koreksi_keterangan LIKE '%".addslashes($filter)."%' )";
-				$result = $this->db->query($query);
+				if ($filter<>""){
+					$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
+					$query .= " (koreksi_no LIKE '%".addslashes($filter)."%' OR 
+								gudang_nama LIKE '%".addslashes($filter)."%' OR 
+								koreksi_keterangan LIKE '%".addslashes($filter)."%' )";
+				}
 			} else if($option=='SEARCH'){
+				
+				if($koreksi_no!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " koreksi_no LIKE '%".$koreksi_no."%'";
+				};
 				
 				if($koreksi_gudang!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " koreksi_gudang LIKE '%".$koreksi_gudang."%'";
 				};
-				if($koreksi_tanggal!=''){
+				if($koreksi_tgl_awal!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " date_format(koreksi_tanggal, '%Y-%m') like  '%".$koreksi_tanggal."%'";
+					$query.= " date_format(koreksi_tanggal, '%Y-%m-%d') >='".$koreksi_tgl_awal."'";
+				};
+				if($koreksi_tgl_akhir!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " date_format(koreksi_tanggal, '%Y-%m-%d') <='".$koreksi_tgl_akhir."'";
 				};
 				if($koreksi_keterangan!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " koreksi_keterangan LIKE '%".$koreksi_keterangan."%'";
 				};
-				$result = $this->db->query($query);
+				if($koreksi_status!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " koreksi_status LIKE '%".$koreksi_status."%'";
+				};
+				
 			}
-			return $result;
+			
+			$result = $this->db->query($query);
+			return $result->result();
 		}
 		
 		//function  for export to excel
-		function master_koreksi_stok_export_excel($koreksi_id ,$koreksi_gudang ,$koreksi_tanggal ,$koreksi_keterangan ,$option,$filter){
+		function master_koreksi_stok_export_excel($koreksi_id , $koreksi_no, $koreksi_gudang ,$koreksi_tgl_awal, $koreksi_tgl_akhir ,
+												  $koreksi_keterangan, $koreksi_status ,$option,$filter){
 			//full query
-			$query = "SELECT distinct * FROM master_koreksi_stok,gudang WHERE koreksi_gudang=gudang_id";
+			$query = "SELECT  koreksi_tanggal as Tanggal, koreksi_no as 'No PS', gudang_nama as Gudang, koreksi_keterangan as Keterangan, 
+								koreksi_status as Status
+								FROM master_koreksi_stok,gudang WHERE koreksi_gudang=gudang_id";
 			if($option=='LIST'){
-				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (koreksi_id LIKE '%".addslashes($filter)."%' OR 
-							koreksi_no LIKE '%".addslashes($filter)."%' OR 
-							koreksi_gudang LIKE '%".addslashes($filter)."%' OR 
-							date_format(koreksi_tanggal, '%Y-%m') like  '%".addslashes($filter)."%' OR 
-							koreksi_keterangan LIKE '%".addslashes($filter)."%' )";
-				$result = $this->db->query($query);
+				if ($filter<>""){
+					$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
+					$query .= " (koreksi_no LIKE '%".addslashes($filter)."%' OR 
+								gudang_nama LIKE '%".addslashes($filter)."%' OR 
+								koreksi_keterangan LIKE '%".addslashes($filter)."%' )";
+				}
 			} else if($option=='SEARCH'){
+				if($koreksi_no!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " koreksi_no LIKE '%".$koreksi_no."%'";
+				};
 				
 				if($koreksi_gudang!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " koreksi_gudang LIKE '%".$koreksi_gudang."%'";
 				};
-				if($koreksi_tanggal!=''){
+				if($koreksi_tgl_awal!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " date_format(koreksi_tanggal, '%Y-%m') like  '%".$koreksi_tanggal."%'";
+					$query.= " date_format(koreksi_tanggal, '%Y-%m-%d') >='".$koreksi_tgl_awal."'";
+				};
+				if($koreksi_tgl_akhir!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " date_format(koreksi_tanggal, '%Y-%m-%d') <='".$koreksi_tgl_akhir."'";
 				};
 				if($koreksi_keterangan!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " koreksi_keterangan LIKE '%".$koreksi_keterangan."%'";
 				};
-				$result = $this->db->query($query);
+				if($koreksi_status!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " koreksi_status LIKE '%".$koreksi_status."%'";
+				};
 			}
+			
+			$result = $this->db->query($query);
 			return $result;
 		}
 		

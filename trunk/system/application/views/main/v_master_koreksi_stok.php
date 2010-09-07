@@ -77,7 +77,7 @@ var koreksi_keteranganField;
 var koreksi_idSearchField;
 var koreksi_noSearchField;
 var koreksi_gudangSearchField;
-var koreksi_tanggalSearchField;
+var koreksi_tgl_awalSearchField;
 var koreksi_keteranganSearchField;
 var koreksi_statusSearchField;
 
@@ -85,78 +85,32 @@ var koreksi_statusSearchField;
 Ext.onReady(function(){
   	Ext.QuickTips.init();	/* Initiate quick tips icon */
   
-  	/* Function for Saving inLine Editing */
-	function master_koreksi_stok_update(oGrid_event){
-		var koreksi_id_update_pk="";
-		var koreksi_no_update=null;
-		var koreksi_gudang_update=null;
-		var koreksi_tanggal_update_date="";
-		var koreksi_keterangan_update=null;
-		var koreksi_status_update=null;
-
-		koreksi_id_update_pk = get_pk_id();
-		if(oGrid_event.record.data.koreksi_no!== null){koreksi_no_update = oGrid_event.record.data.koreksi_no;}
-		if(oGrid_event.record.data.koreksi_gudang!== null){koreksi_gudang_update = oGrid_event.record.data.koreksi_gudang;}
-	 	if(oGrid_event.record.data.koreksi_tanggal!== ""){koreksi_tanggal_update_date =oGrid_event.record.data.koreksi_tanggal.format('Y-m-d');}
-		if(oGrid_event.record.data.koreksi_keterangan!== null){koreksi_keterangan_update = oGrid_event.record.data.koreksi_keterangan;}
-		if(oGrid_event.record.data.koreksi_status!== null){koreksi_status_update = oGrid_event.record.data.koreksi_status;}
-			
-		Ext.Ajax.request({  
-			waitMsg: 'Please wait...',
-			url: 'index.php?c=c_master_koreksi_stok&m=get_action',
-			params: {
-				task				: "UPDATE",
-				koreksi_id			: koreksi_id_update_pk, 
-				koreksi_no			: koreksi_no_update,
-				koreksi_gudang		: koreksi_gudang_update,  
-				koreksi_tanggal		: koreksi_tanggal_update_date, 
-				koreksi_keterangan	: koreksi_keterangan_update,
-				koreksi_status		: koreksi_status_update
-			}, 
-			success: function(response){							
-				var result=eval(response.responseText);
-				if(result!==0){
-						Ext.MessageBox.alert(post2db+' OK','Data koreksi stok berhasil disimpan');
-				}else{
-						Ext.MessageBox.show({
-						   title: 'Warning',
-						   //msg: 'We could\'t not '+msg+' the Master_order_beli.',
-						   msg: 'Data koreksi stok  tidak bisa disimpan',
-						   buttons: Ext.MessageBox.OK,
-						   animEl: 'save',
-						   icon: Ext.MessageBox.WARNING
-						});
-				}     
-			},
-			failure: function(response){
-				var result=response.responseText;
-				Ext.MessageBox.show({
-				   title: 'Error',
-				   msg: 'Could not connect to the database. retry later.',
-				   buttons: Ext.MessageBox.OK,
-				   animEl: 'database',
-				   icon: Ext.MessageBox.ERROR
-				});	
-			}									    
-		});   
-	}
-  	/* End of Function */
-  
   	/* Function for add data, open window create form */
-	function master_koreksi_stok_create(){
-	
-		if(is_master_koreksi_stok_form_valid()){	
+	function master_koreksi_stok_create(opsi){
+		
+		if(detail_koreksi_stok_DataStore.getCount()<1){
+			
+			Ext.MessageBox.show({
+				title: 'Warning',
+				msg: 'Data detail harus ada minimal 1 (satu)',
+				buttons: Ext.MessageBox.OK,
+				animEl: 'save',
+				icon: Ext.MessageBox.WARNING
+			});
+			
+		}else if(is_master_koreksi_stok_form_valid()){	
+		
 		var koreksi_id_create_pk=null; 
 		var koreksi_no_create_pk=null;
 		var koreksi_gudang_create=null; 
-		var koreksi_tanggal_create_date=""; 
+		var koreksi_tgl_awal_create_date=""; 
 		var koreksi_keterangan_create=null;
 		var koreksi_status_create=null;
 
 		koreksi_id_create_pk=get_pk_id();
 		if(koreksi_noField.getValue()!== null){koreksi_no_create = koreksi_noField.getValue();} 
 		if(koreksi_gudangField.getValue()!== null){koreksi_gudang_create = koreksi_gudangField.getValue();} 
-		if(koreksi_tanggalField.getValue()!== ""){koreksi_tanggal_create_date = koreksi_tanggalField.getValue().format('Y-m-d');} 
+		if(koreksi_tanggalField.getValue()!== ""){koreksi_tgl_awal_create_date = koreksi_tanggalField.getValue().format('Y-m-d');} 
 		if(koreksi_keteranganField.getValue()!== null){koreksi_keterangan_create = koreksi_keteranganField.getValue();}
 		if(koreksi_statusField.getValue()!== null){koreksi_status_create = koreksi_statusField.getValue();} 
 
@@ -168,14 +122,14 @@ Ext.onReady(function(){
 				koreksi_id			: koreksi_id_create_pk, 
 				koreksi_no			: koreksi_no_create,
 				koreksi_gudang		: koreksi_gudang_create, 
-				koreksi_tanggal		: koreksi_tanggal_create_date, 
+				koreksi_tanggal		: koreksi_tgl_awal_create_date, 
 				koreksi_keterangan	: koreksi_keterangan_create,
 				koreksi_status		: koreksi_status_create
 			}, 
 			success: function(response){             
 				var result=eval(response.responseText);
 				if(result!==0){
-						detail_koreksi_stok_purge(result);
+						detail_koreksi_stok_insert(result,opsi);
 						Ext.MessageBox.alert(post2db+' OK','Data koreksi stok berhasil disimpan');
 						master_koreksi_stok_createWindow.hide();
 				}else{
@@ -246,10 +200,10 @@ Ext.onReady(function(){
 //		detail_koreksi_stok_DataStore.removeAll();				
 		
 		cbo_stok_satuanDataStore.setBaseParam('task','detail');
-		cbo_stok_satuanDataStore.setBaseParam('master_id',get_pk_id());
+		cbo_stok_satuanDataStore.setBaseParam('master_id',-1);
 		cbo_stok_satuanDataStore.load();
 		
-		cbo_stok_produkDataStore.setBaseParam('master_id',get_pk_id());
+		cbo_stok_produkDataStore.setBaseParam('master_id',-1);
 		cbo_stok_produkDataStore.setBaseParam('task','detail');
 		cbo_stok_produkDataStore.setBaseParam('gudang',0);
 		cbo_stok_produkDataStore.load();
@@ -417,7 +371,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'koreksi_id'
 		},[
-		/* dataIndex => insert intomaster_koreksi_stok_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'koreksi_id', type: 'int', mapping: 'koreksi_id'}, 
 			{name: 'koreksi_no', type: 'string', mapping: 'koreksi_no'},
 			{name: 'koreksi_gudang', type: 'string', mapping: 'gudang_nama'},
@@ -447,7 +400,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'gudang_id'
 		},[
-		/* dataIndex => insert intocustomer_note_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'gudang_id', type: 'int', mapping: 'gudang_id'},
 			{name: 'gudang_nama', type: 'string', mapping: 'gudang_nama'}
 		]),
@@ -471,35 +423,36 @@ Ext.onReady(function(){
 			dataIndex: 'koreksi_tanggal',
 			width: 70,	//100,
 			sortable: true,
-			renderer: Ext.util.Format.dateRenderer('d-m-Y')
+			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
+			readOnly: true
 		},
-		
 		{
 			header: '<div align="center">' + 'No PS' + '</div>',
 			dataIndex: 'koreksi_no',
 			width: 100,	//150,
-			sortable: true
+			sortable: true,
+			readOnly: true
 		}, 		
 		{
 			header: '<div align="center">Gudang</div>',
 			dataIndex: 'koreksi_gudang',
 			width: 150,
-			sortable: true
+			sortable: true,
+			readOnly: true
 		}, 
 		{
 			header: '<div align="center">Keterangan</div>',
 			dataIndex: 'koreksi_keterangan',
 			width: 200,
 			sortable: true,
-			editor: new Ext.form.TextArea({
-				maxLength: 500
-          	})
+			readOnly: true
 		}, 
 		
 		{
 			header: '<div align="center">' + 'Stat Dok' + '</div>',
 			dataIndex: 'koreksi_status',
-			width: 60
+			width: 60,
+			readOnly: true
 		}, 
 		
 		{
@@ -566,7 +519,6 @@ Ext.onReady(function(){
 			store: master_koreksi_stok_DataStore,
 			displayInfo: true
 		}),
-		/* Add Control on ToolBar */
 		tbar: [
 		{
 			text: 'Add',
@@ -593,6 +545,17 @@ Ext.onReady(function(){
 			new Ext.app.SearchField({
 			store: master_koreksi_stok_DataStore,
 			params: {start: 0, limit: pageS},
+			listeners:{
+				specialkey: function(f,e){
+					if(e.getKey() == e.ENTER){
+						master_retur_beli_DataStore.baseParams={task:'LIST',start: 0, limit: pageS};
+		            }
+				},
+				render: function(c){
+				Ext.get(this.id).set({qtitle:'Search By (aktif only)'});
+				Ext.get(this.id).set({qtip:'- No PS<br>- Gudang<br>- Keterangan<br>'});
+				}
+			},
 			width: 120
 		}),'-',{
 			text: 'Refresh',
@@ -622,7 +585,7 @@ Ext.onReady(function(){
 		{ 
 			text: 'Edit', tooltip: 'Edit selected record', 
 			iconCls:'icon-update',
-			handler: master_koreksi_stok_editContextMenu 
+			handler: master_koreksi_stok_confirm_update 
 		},
 		{ 
 			text: 'Delete', 
@@ -667,8 +630,7 @@ Ext.onReady(function(){
   	
 	master_koreksi_stokListEditorGrid.addListener('rowcontextmenu', onmaster_koreksi_stok_ListEditGridContextMenu);
 	master_koreksi_stok_DataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
-	master_koreksi_stokListEditorGrid.on('afteredit', master_koreksi_stok_update); // inLine Editing Record
-	
+
 	/* Identify  koreksi_id Field */
 	koreksi_idField= new Ext.form.NumberField({
 		id: 'koreksi_idField',
@@ -773,7 +735,6 @@ Ext.onReady(function(){
 		totalProperty: 'total',
 		id: 'dkoreksi_id'
 	},[
-	/* dataIndex => insert intoperawatan_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'dkoreksi_id', type: 'int', mapping: 'dkoreksi_id'}, 
 			{name: 'dkoreksi_master', type: 'int', mapping: 'dkoreksi_master'}, 
 			{name: 'dkoreksi_produk', type: 'int', mapping: 'dkoreksi_produk'}, 
@@ -830,7 +791,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'produk_id'
 		},[
-		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
 			{name: 'produk_id', type: 'int', mapping: 'produk_id'},
 			{name: 'produk_nama', type: 'string', mapping: 'produk_nama'},
 			{name: 'produk_kode', type: 'string', mapping: 'produk_kode'},
@@ -853,7 +813,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'produk_id'
 		},[
-		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
 			{name: 'produk_id', type: 'int', mapping: 'produk_id'},
 			{name: 'produk_nama', type: 'string', mapping: 'produk_nama'},
 			{name: 'produk_kode', type: 'string', mapping: 'produk_kode'},
@@ -874,7 +833,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'satuan_id'
 		},[
-		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
 			{name: 'satuan_id', type: 'int', mapping: 'satuan_id'},
 			{name: 'satuan_nama', type: 'string', mapping: 'satuan_nama'},
 			{name: 'satuan_kode', type: 'string', mapping: 'satuan_kode'},
@@ -1024,7 +982,6 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true},
-		/*bbar: detail_koreksi_pagingToolbar,*/
 		tbar: [
 		{
 			text: 'Add',
@@ -1046,9 +1003,9 @@ Ext.onReady(function(){
 	//function of detail add
 	function detail_koreksi_stok_add(){
 		var edit_detail_koreksi_stok= new detail_koreksi_stokListEditorGrid.store.recordType({
-			dkoreksi_id			: null,		
+			dkoreksi_id			: 0,		
 			dkoreksi_master		: null,		
-			dkoreksi_produk		: null,		
+			dkoreksi_produk		: 0,		
 			dkoreksi_satuan		: 0,		
 			dkoreksi_jmlawal	: 0,		
 			dkoreksi_jmlkoreksi	: 0,		
@@ -1070,26 +1027,85 @@ Ext.onReady(function(){
 	//eof
 	
 	//function for insert detail
-	function detail_koreksi_stok_insert(pkid){
-		for(i=0;i<detail_koreksi_stok_DataStore.getCount();i++){
-			detail_koreksi_stok_record=detail_koreksi_stok_DataStore.getAt(i);
+	function detail_koreksi_stok_insert(pkid, opsi){
+		
+		var dkoreksi_id = [];
+        var dkoreksi_produk = [];
+        var dkoreksi_satuan = [];
+        var dkoreksi_jmlawal = [];
+		var dkoreksi_jmlkoreksi = [];
+		var dkoreksi_jmlsaldo = [];
+        var dkoreksi_ket=[];
+		
+        if(detail_koreksi_stok_DataStore.getCount()>0){
+            for(i=0; i<detail_koreksi_stok_DataStore.getCount();i++){
+                if((/^\d+$/.test(detail_koreksi_stok_DataStore.getAt(i).data.dkoreksi_produk))
+				   && detail_koreksi_stok_DataStore.getAt(i).data.dkoreksi_produk!==undefined
+				   && detail_koreksi_stok_DataStore.getAt(i).data.dkoreksi_produk!==''
+				   && detail_koreksi_stok_DataStore.getAt(i).data.dkoreksi_produk!==0
+				   && detail_koreksi_stok_DataStore.getAt(i).data.dkoreksi_satuan!==0
+				   && detail_koreksi_stok_DataStore.getAt(i).data.dkoreksi_jmlkoreksi!==0){
+                    
+					if(detail_koreksi_stok_DataStore.getAt(i).data.dkoreksi_id==undefined ||
+					   detail_koreksi_stok_DataStore.getAt(i).data.dkoreksi_id==''){
+						detail_koreksi_stok_DataStore.getAt(i).data.dkoreksi_id=0;
+					}
+					
+                  	dkoreksi_id.push(detail_koreksi_stok_DataStore.getAt(i).data.dkoreksi_id);
+					dkoreksi_produk.push(detail_koreksi_stok_DataStore.getAt(i).data.dkoreksi_produk);
+                   	dkoreksi_satuan.push(detail_koreksi_stok_DataStore.getAt(i).data.dkoreksi_satuan);
+					dkoreksi_jmlawal.push(detail_koreksi_stok_DataStore.getAt(i).data.dkoreksi_jmlawal);
+					dkoreksi_jmlkoreksi.push(detail_koreksi_stok_DataStore.getAt(i).data.dkoreksi_jmlkoreksi);
+					dkoreksi_jmlsaldo.push(detail_koreksi_stok_DataStore.getAt(i).data.dkoreksi_jmlsaldo);
+					dkoreksi_ket.push(detail_koreksi_stok_DataStore.getAt(i).data.dkoreksi_ket);
+					
+                }
+            }
+			
+			var encoded_array_dkoreksi_id = Ext.encode(dkoreksi_id);
+			var encoded_array_dkoreksi_produk = Ext.encode(dkoreksi_produk);
+			var encoded_array_dkoreksi_satuan = Ext.encode(dkoreksi_satuan);
+			var encoded_array_dkoreksi_jmlawal = Ext.encode(dkoreksi_jmlawal);
+			var encoded_array_dkoreksi_jmlkoreksi = Ext.encode(dkoreksi_jmlkoreksi);
+			var encoded_array_dkoreksi_jmlsaldo = Ext.encode(dkoreksi_jmlsaldo);
+			var encoded_array_dkoreksi_ket = Ext.encode(dkoreksi_ket);
+			
+				
 			Ext.Ajax.request({
-				waitMsg: 'Please wait...',
+				waitMsg: 'Mohon tunggu...',
 				url: 'index.php?c=c_master_koreksi_stok&m=detail_detail_koreksi_stok_insert',
 				params:{
-				dkoreksi_id			: detail_koreksi_stok_record.data.dkoreksi_id, 
-				dkoreksi_master		: pkid, 
-				dkoreksi_produk		: detail_koreksi_stok_record.data.dkoreksi_produk, 
-				dkoreksi_satuan		: detail_koreksi_stok_record.data.dkoreksi_satuan, 
-				dkoreksi_jmlawal	: detail_koreksi_stok_record.data.dkoreksi_jmlawal, 
-				dkoreksi_jmlkoreksi	: detail_koreksi_stok_record.data.dkoreksi_jmlkoreksi, 
-				dkoreksi_jmlsaldo	: detail_koreksi_stok_record.data.dkoreksi_jmlsaldo, 
-				dkoreksi_ket		: detail_koreksi_stok_record.data.dkoreksi_ket 
-				
+					dkoreksi_id			: encoded_array_dkoreksi_id,
+					dkoreksi_master		: pkid, 
+					dkoreksi_produk		: encoded_array_dkoreksi_produk,
+					dkoreksi_satuan		: encoded_array_dkoreksi_satuan,
+					dkoreksi_jmlawal	: encoded_array_dkoreksi_jmlawal,
+					dkoreksi_jmlkoreksi	: encoded_array_dkoreksi_jmlkoreksi,
+					dkoreksi_jmlsaldo	: encoded_array_dkoreksi_jmlsaldo,
+					dkoreksi_ket		: encoded_array_dkoreksi_ket
+				},
+				success:function(response){
+					var result=eval(response.responseText);
+					if(opsi=='print'){
+						master_koreksi_stok_cetak_faktur(pkid);
+						master_koreksi_stok_DataStore.reload();
+					}
+				},
+				failure: function(response){
+					Ext.MessageBox.hide();
+					var result=response.responseText;
+					Ext.MessageBox.show({
+					   title: 'Error',
+					   msg: 'Could not connect to the database. retry later.',
+					   buttons: Ext.MessageBox.OK,
+					   animEl: 'database',
+					   icon: Ext.MessageBox.ERROR
+					});	
 				}
 			});
-		}
-		master_koreksi_stok_DataStore.reload();	
+					
+        }
+		
 	}
 	//eof
 	
@@ -1146,9 +1162,14 @@ Ext.onReady(function(){
 		monitorValid: true,
 		width: 800,        
 		items: [master_koreksi_stok_masterGroup,detail_koreksi_stokListEditorGrid],
-		buttons: [{
-				text: 'Save and Close',
-				handler: master_koreksi_stok_create
+		buttons: [
+			{
+				text: 'Save and Print',
+				handler: function(){ master_koreksi_stok_create('print'); }
+			},
+			{
+				text: 'Save',
+				handler: function(){ master_koreksi_stok_create('close'); }
 			}
 			,{
 				text: 'Cancel',
@@ -1184,24 +1205,24 @@ Ext.onReady(function(){
 		var koreksi_id_search=null;
 		var koreksi_no_search=null;
 		var koreksi_gudang_search=null;
-		var koreksi_tanggal_search_date="";
+		var koreksi_tgl_awal_search_date="";
+		var koreksi_tgl_akhir_search_date="";
 		var koreksi_keterangan_search=null;
 		var koreksi_status_search=null;
 
-		if(koreksi_idSearchField.getValue()!==null){koreksi_id_search=koreksi_idSearchField.getValue();}
 		if(koreksi_noSearchField.getValue()!==null){koreksi_no_search=koreksi_noSearchField.getValue();}
 		if(koreksi_gudangSearchField.getValue()!==null){koreksi_gudang_search=koreksi_gudangSearchField.getValue();}
-		if(koreksi_tanggalSearchField.getValue()!==""){koreksi_tanggal_search_date=koreksi_tanggalSearchField.getValue().format('Y-m-d');}
+		if(koreksi_tgl_awalSearchField.getValue()!==""){koreksi_tgl_awal_search_date=koreksi_tgl_awalSearchField.getValue().format('Y-m-d');}
+		if(koreksi_tgl_akhirSearchField.getValue()!==""){koreksi_tgl_akhir_search_date=koreksi_tgl_akhirSearchField.getValue().format('Y-m-d');}
 		if(koreksi_keteranganSearchField.getValue()!==null){koreksi_keterangan_search=koreksi_keteranganSearchField.getValue();}
 		if(koreksi_statusSearchField.getValue()!==null){koreksi_status_search=koreksi_statusSearchField.getValue();}
 		// change the store parameters
 		master_koreksi_stok_DataStore.baseParams = {
 			task				: 'SEARCH',
-			//variable here
-			koreksi_id			: koreksi_id_search, 
 			koreksi_no			: koreksi_no_search,
 			koreksi_gudang		: koreksi_gudang_search, 
-			koreksi_tanggal		: koreksi_tanggal_search_date, 
+			koreksi_tgl_awal	: koreksi_tgl_awal_search_date, 
+			koreksi_tgl_akhir	: koreksi_tgl_akhir_search_date, 
 			koreksi_keterangan	: koreksi_keterangan_search,
 			koreksi_status		: koreksi_status_search
 		};
@@ -1213,7 +1234,6 @@ Ext.onReady(function(){
 	function master_koreksi_stok_reset_search(){
 		// reset the store parameters
 		master_koreksi_stok_DataStore.baseParams = { task: 'LIST', start: 0, limit: pageS };
-		// Cause the datastore to do another query : 
 		master_koreksi_stok_DataStore.reload({params: {start: 0, limit: pageS}});
 		master_koreksi_stok_searchWindow.close();
 	};
@@ -1222,7 +1242,8 @@ Ext.onReady(function(){
 	function master_koreksi_stok_reset_SearchForm(){
 		koreksi_noSearchField.reset();
 		koreksi_gudangSearchField.reset();
-		koreksi_tanggalSearchField.reset();
+		koreksi_tgl_awalSearchField.reset();
+		koreksi_tgl_akhirSearchField.reset();
 		koreksi_keteranganSearchField.reset();
 		koreksi_statusSearchField.reset();
 	}
@@ -1267,19 +1288,26 @@ Ext.onReady(function(){
 	});
 	
 	/* Identify  koreksi_tanggal Search Field */
-	koreksi_tanggalSearchField= new Ext.form.DateField({
-		id: 'koreksi_tanggalSearchField',
+	koreksi_tgl_awalSearchField= new Ext.form.DateField({
+		id: 'koreksi_tgl_awalSearchField',
 		fieldLabel: 'Tanggal',
 		format : 'Y-m-d'
 	
 	});
+	
+	koreksi_tgl_akhirSearchField= new Ext.form.DateField({
+		id: 'koreksi_tgl_akhirSearchField',
+		fieldLabel: 's/d',
+		format : 'Y-m-d',
+		labelSeparator: ' '
+	});
+	
 	/* Identify  koreksi_keterangan Search Field */
 	koreksi_keteranganSearchField= new Ext.form.TextArea({
 		id: 'koreksi_keteranganSearchField',
 		fieldLabel: 'Keterangan',
 		maxLength: 500,
 		anchor: '95%'
-	
 	});
 	
 	koreksi_statusSearchField= new Ext.form.ComboBox({
@@ -1292,27 +1320,10 @@ Ext.onReady(function(){
 		mode: 'local',
 		displayField: 'koreksi_status',
 		valueField: 'value',
-		anchor: '80%',
+		anchor: '70%',
 		triggerAction: 'all'	 
 	});
 	
-	koreksi_tanggal_akhirSearchField= new Ext.form.DateField({
-		id: 'terima_tanggal_akhirSearchField',
-		fieldLabel: 's/d',
-		format : 'd-m-Y'
-	});
-
-	koreksi_label_tanggalField= new Ext.form.Label({ html: ' &nbsp; s/d  &nbsp;' });
-	
-	
-	koreksi_tanggalSearchFieldSet=new Ext.form.FieldSet({
-		id:'koreksi_tanggalSearchFieldSet',
-		title: 'Opsi Tanggal',
-		layout: 'column',
-		boduStyle: 'padding: 5px;',
-		frame: false,
-		items:[koreksi_tanggalSearchField, koreksi_label_tanggalField, koreksi_tanggal_akhirSearchField]
-	});
 	
 	koreksi_statusSearchField= new Ext.form.ComboBox({
 		id: 'koreksi_statusSearchField',
@@ -1336,7 +1347,7 @@ Ext.onReady(function(){
 		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
-		width: 300,        
+		width: 400,        
 		items: [{
 			layout:'column',
 			border:false,
@@ -1345,7 +1356,26 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [koreksi_noSearchField, koreksi_gudangSearchField, koreksi_tanggalSearchFieldSet, koreksi_keteranganSearchField, koreksi_statusSearchField] 
+				items: [koreksi_noSearchField, koreksi_gudangSearchField, 
+						{
+							layout: 'column',
+							border: false,
+							items:[{
+								   		layout: 'form',
+										border: false,
+										columnWidth: 0.6,
+										labelWidth: 100,
+										items:[koreksi_tgl_awalSearchField]
+								   },
+								   {
+								   		layout: 'form',
+										border: false,
+										columnWidth: 0.4,
+										labelWidth: 20,
+										items:[koreksi_tgl_akhirSearchField]
+								   }
+							]
+						}, koreksi_keteranganSearchField, koreksi_statusSearchField] 
 			}
 			]
 		}]
@@ -1391,35 +1421,78 @@ Ext.onReady(function(){
 	}
   	/* End Function */
 	
+	function master_koreksi_stok_cetak_faktur(pkid){
+		
+		Ext.Ajax.request({   
+		waitMsg: 'Please Wait...',
+		url: 'index.php?c=c_master_koreksi_stok&m=print_faktur',
+		params: {
+			faktur	: pkid
+		}, 
+		success: function(response){              
+		  	var result=eval(response.responseText);
+		  	switch(result){
+		  	case 1:
+				win = window.open('./print/koreksi_faktur.html','master_terima_faktur','height=800,width=600,resizable=1,scrollbars=1, menubar=1');
+				//win.print();
+				break;
+		  	default:
+				Ext.MessageBox.show({
+					title: 'Warning',
+					msg: 'Unable to print the grid!',
+					buttons: Ext.MessageBox.OK,
+					animEl: 'save',
+					icon: Ext.MessageBox.WARNING
+				});
+				break;
+		  	}  
+		},
+		failure: function(response){
+		  	var result=response.responseText;
+			Ext.MessageBox.show({
+			   title: 'Error',
+			   msg: 'Could not connect to the database. retry later.',
+			   buttons: Ext.MessageBox.OK,
+			   animEl: 'database',
+			   icon: Ext.MessageBox.ERROR
+			});		
+		} 	                     
+		});
+		
+	}
+	
 	/* Function for print List Grid */
 	function master_koreksi_stok_print(){
 		var searchquery = "";
 		var koreksi_gudang_print=null;
-		var koreksi_tanggal_print_date="";
+		var koreksi_tgl_awal_print_date="";
+		var koreksi_tgl_akhir_print_date="";
 		var koreksi_keterangan_print=null;
 		var win;              
 		// check if we do have some search data...
 		if(master_koreksi_stok_DataStore.baseParams.query!==null){searchquery = master_koreksi_stok_DataStore.baseParams.query;}
 		if(master_koreksi_stok_DataStore.baseParams.koreksi_gudang!==null){koreksi_gudang_print = master_koreksi_stok_DataStore.baseParams.koreksi_gudang;}
-		if(master_koreksi_stok_DataStore.baseParams.koreksi_tanggal!==""){koreksi_tanggal_print_date = master_koreksi_stok_DataStore.baseParams.koreksi_tanggal;}
+		if(master_koreksi_stok_DataStore.baseParams.koreksi_tgl_awal!==""){koreksi_tgl_awal_print_date = master_koreksi_stok_DataStore.baseParams.koreksi_tgl_awal;}
+		if(master_koreksi_stok_DataStore.baseParams.koreksi_tgl_akhir!==""){koreksi_tgl_akhir_print_date = master_koreksi_stok_DataStore.baseParams.koreksi_tgl_akhir;}
 		if(master_koreksi_stok_DataStore.baseParams.koreksi_keterangan!==null){koreksi_keterangan_print = master_koreksi_stok_DataStore.baseParams.koreksi_keterangan;}
 
 		Ext.Ajax.request({   
 		waitMsg: 'Please Wait...',
 		url: 'index.php?c=c_master_koreksi_stok&m=get_action',
 		params: {
-			task			: "PRINT",
-		  	query			: searchquery,                    		
-			koreksi_gudang 	: koreksi_gudang_print,
-		  	koreksi_tanggal : koreksi_tanggal_print_date, 
-			koreksi_keterangan : koreksi_keterangan_print,
-		  	currentlisting: master_koreksi_stok_DataStore.baseParams.task // this tells us if we are searching or not
+			task				: "PRINT",
+		  	query				: searchquery,                    		
+			koreksi_gudang 		: koreksi_gudang_print,
+		  	koreksi_tgl_awal 	: koreksi_tgl_awal_print_date, 
+			koreksi_tgl_akhir 	: koreksi_tgl_akhir_print_date, 
+			koreksi_keterangan 	: koreksi_keterangan_print,
+		  	currentlisting	: master_koreksi_stok_DataStore.baseParams.task // this tells us if we are searching or not
 		}, 
 		success: function(response){              
 		  	var result=eval(response.responseText);
 		  	switch(result){
 		  	case 1:
-				win = window.open('./master_koreksi_stoklist.html','master_koreksi_stoklist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
+				win = window.open('./print/print_koreksi_stoklist.html','master_koreksi_stoklist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
 				win.print();
 				break;
 		  	default:
@@ -1451,13 +1524,15 @@ Ext.onReady(function(){
 	function master_koreksi_stok_export_excel(){
 		var searchquery = "";
 		var koreksi_gudang_2excel=null;
-		var koreksi_tanggal_2excel_date="";
+		var koreksi_tgl_awal_2excel_date="";
+		var koreksi_tgl_akhir_2excel_date="";
 		var koreksi_keterangan_2excel=null;
 		var win;              
 		// check if we do have some search data...
 		if(master_koreksi_stok_DataStore.baseParams.query!==null){searchquery = master_koreksi_stok_DataStore.baseParams.query;}
 		if(master_koreksi_stok_DataStore.baseParams.koreksi_gudang!==null){koreksi_gudang_2excel = master_koreksi_stok_DataStore.baseParams.koreksi_gudang;}
-		if(master_koreksi_stok_DataStore.baseParams.koreksi_tanggal!==""){koreksi_tanggal_2excel_date = master_koreksi_stok_DataStore.baseParams.koreksi_tanggal;}
+		if(master_koreksi_stok_DataStore.baseParams.koreksi_tgl_awal!==""){koreksi_tgl_awal_2excel_date = master_koreksi_stok_DataStore.baseParams.koreksi_tgl_awal;}
+		if(master_koreksi_stok_DataStore.baseParams.koreksi_tgl_akhir!==""){koreksi_tgl_awal_2excel_date = master_koreksi_stok_DataStore.baseParams.koreksi_tgl_akhir;}
 		if(master_koreksi_stok_DataStore.baseParams.koreksi_keterangan!==null){koreksi_keterangan_2excel = master_koreksi_stok_DataStore.baseParams.koreksi_keterangan;}
 
 		Ext.Ajax.request({   
@@ -1467,7 +1542,8 @@ Ext.onReady(function(){
 			task				: "EXCEL",
 		  	query				: searchquery,                    		
 			koreksi_gudang 		: koreksi_gudang_2excel,
-		  	koreksi_tanggal 	: koreksi_tanggal_2excel_date, 
+		  	koreksi_tgl_awal 	: koreksi_tgl_awal_2excel_date, 
+			koreksi_tgl_akhir 	: koreksi_tgl_akhir_2excel_date, 
 			koreksi_keterangan 	: koreksi_keterangan_2excel,
 		  	currentlisting		: master_koreksi_stok_DataStore.baseParams.task // this tells us if we are searching or not
 		},

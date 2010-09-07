@@ -16,6 +16,7 @@ class C_master_koreksi_stok extends Controller {
 	//constructor
 	function C_master_koreksi_stok(){
 		parent::Controller();
+		session_start();
 		$this->load->model('m_master_koreksi_stok', '', TRUE);
 	}
 	
@@ -23,6 +24,35 @@ class C_master_koreksi_stok extends Controller {
 	function index(){
 		$this->load->helper('asset');
 		$this->load->view('main/v_master_koreksi_stok');
+	}
+	
+	function print_faktur(){
+		
+		
+		$faktur=(isset($_POST['faktur']) ? @$_POST['faktur'] : @$_GET['faktur']);
+		$opsi="faktur";
+	
+		$faktur=(isset($_POST['faktur']) ? @$_POST['faktur'] : @$_GET['faktur']);
+		$opsi="faktur";
+        $result = $this->m_master_koreksi_stok->get_laporan("","","",$opsi,"",$faktur);
+		$info = $this->m_public_function->get_info();
+		$master=$result->row();
+		$data['data_print'] = $result->result();
+		$data['info_nama'] = $info->info_nama;
+		$data['no_bukti'] = $master->no_bukti;
+        $data['tanggal'] = $master->tanggal;
+        $data['gudang_nama'] = $master->gudang_nama;
+		$print_view=$this->load->view("main/p_faktur_koreksi.php",$data,TRUE);
+		
+		if(!file_exists("print")){
+			mkdir("print");
+		}
+		
+		$print_file=fopen("print/koreksi_faktur.html","w+");
+		
+		fwrite($print_file, $print_view);
+		echo '1'; 
+	
 	}
 	
 	function laporan(){
@@ -49,7 +79,7 @@ class C_master_koreksi_stok extends Controller {
 			$data["periode"]="Periode ".$tgl_awal." s/d ".$tgl_akhir;
 		}
 		
-		$data["data_print"]=$this->m_master_koreksi_stok->get_laporan($tgl_awal,$tgl_akhir,$periode,$opsi,$group,$faktur)->result();
+		$data["data_print"]=$this->m_master_koreksi_stok->get_laporan($tgl_awal,$tgl_akhir,$periode,$opsi,$group,$faktur);
 		if($opsi=='rekap'){
 				
 			switch($group){
@@ -155,18 +185,28 @@ class C_master_koreksi_stok extends Controller {
 	//add detail
 	function detail_detail_koreksi_stok_insert(){
 	//POST variable here
-		$dkoreksi_id=trim(@$_POST["dkoreksi_id"]);
-		$dkoreksi_master=trim(@$_POST["dkoreksi_master"]);
-		$dkoreksi_produk=trim(@$_POST["dkoreksi_produk"]);
-		$dkoreksi_satuan=trim(@$_POST["dkoreksi_satuan"]);
-		$dkoreksi_jmlawal=trim(@$_POST["dkoreksi_jmlawal"]);
-		$dkoreksi_jmlkoreksi=trim(@$_POST["dkoreksi_jmlkoreksi"]);
-		$dkoreksi_jmlsaldo=trim(@$_POST["dkoreksi_jmlsaldo"]);
-		$dkoreksi_ket=trim(@$_POST["dkoreksi_ket"]);
-		$dkoreksi_ket=str_replace("/(<\/?)(p)([^>]*>)", "",$dkoreksi_ket);
-		$dkoreksi_ket=str_replace("\\", "",$dkoreksi_ket);
-		$dkoreksi_ket=str_replace("'", '"',$dkoreksi_ket);
-		$result=$this->m_master_koreksi_stok->detail_detail_koreksi_stok_insert($dkoreksi_id ,$dkoreksi_master ,$dkoreksi_produk ,$dkoreksi_satuan ,$dkoreksi_jmlawal ,$dkoreksi_jmlkoreksi ,$dkoreksi_jmlsaldo ,$dkoreksi_ket );
+		$dkoreksi_id = $_POST['dkoreksi_id']; 
+        $dkoreksi_master=trim(@$_POST["dkoreksi_master"]);
+        $dkoreksi_produk = $_POST['dkoreksi_produk']; 
+		$dkoreksi_satuan = $_POST['dkoreksi_satuan']; 
+		$dkoreksi_jmlawal = $_POST['dkoreksi_jmlawal'];
+		$dkoreksi_jmlkoreksi = $_POST['dkoreksi_jmlkoreksi'];
+		$dkoreksi_jmlsaldo = $_POST['dkoreksi_jmlsaldo'];
+		$dkoreksi_ket= $_POST['dkoreksi_ket'];
+	
+		$array_dkoreksi_id = json_decode(stripslashes($dkoreksi_id));
+		$array_dkoreksi_produk = json_decode(stripslashes($dkoreksi_produk));
+		$array_dkoreksi_satuan = json_decode(stripslashes($dkoreksi_satuan));
+		$array_dkoreksi_jmlawal = json_decode(stripslashes($dkoreksi_jmlawal));
+		$array_dkoreksi_jmlkoreksi = json_decode(stripslashes($dkoreksi_jmlkoreksi));
+		$array_dkoreksi_jmlsaldo = json_decode(stripslashes($dkoreksi_jmlsaldo));
+		$array_dkoreksi_ket = json_decode(stripslashes($dkoreksi_ket));
+		
+		
+		$result=$this->m_master_koreksi_stok->detail_detail_koreksi_stok_insert($array_dkoreksi_id ,$dkoreksi_master ,$array_dkoreksi_produk ,
+																				$array_dkoreksi_satuan ,$array_dkoreksi_jmlawal ,
+																				$array_dkoreksi_jmlkoreksi ,$array_dkoreksi_jmlsaldo ,
+																				$array_dkoreksi_ket );
 		echo $result;
 	}
 	
@@ -227,10 +267,9 @@ class C_master_koreksi_stok extends Controller {
 		$koreksi_keterangan=str_replace(",", ",",$koreksi_keterangan);
 		$koreksi_keterangan=str_replace("'", '"',$koreksi_keterangan);
 		$koreksi_status=trim(@$_POST["koreksi_status"]);
-		$koreksi_status=str_replace("/(<\/?)(p)([^>]*>)", "",$koreksi_status);
-		$koreksi_status=str_replace(",", ",",$koreksi_status);
-		$koreksi_status=str_replace("'", '"',$koreksi_status);
-		$result = $this->m_master_koreksi_stok->master_koreksi_stok_update($koreksi_id , $koreksi_no, $koreksi_gudang ,$koreksi_tanggal ,$koreksi_keterangan, $koreksi_status);
+
+		$result = $this->m_master_koreksi_stok->master_koreksi_stok_update($koreksi_id , $koreksi_no, $koreksi_gudang ,$koreksi_tanggal ,
+																		   $koreksi_keterangan, $koreksi_status);
 		echo $result;
 	}
 	
@@ -247,9 +286,9 @@ class C_master_koreksi_stok extends Controller {
 		$koreksi_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$koreksi_keterangan);
 		$koreksi_keterangan=str_replace("'", '"',$koreksi_keterangan);
 		$koreksi_status=trim(@$_POST["koreksi_status"]);
-		$koreksi_status=str_replace("/(<\/?)(p)([^>]*>)", "",$koreksi_status);
-		$koreksi_status=str_replace("'", '"',$koreksi_status);
-		$result=$this->m_master_koreksi_stok->master_koreksi_stok_create($koreksi_no, $koreksi_gudang ,$koreksi_tanggal ,$koreksi_keterangan, $koreksi_status);
+
+		$result=$this->m_master_koreksi_stok->master_koreksi_stok_create($koreksi_no, $koreksi_gudang ,$koreksi_tanggal ,$koreksi_keterangan, 
+																		 $koreksi_status);
 		echo $result;
 	}
 
@@ -264,94 +303,79 @@ class C_master_koreksi_stok extends Controller {
 	//function for advanced search
 	function master_koreksi_stok_search(){
 		//POST varibale here
-		$koreksi_id=trim(@$_POST["koreksi_id"]);
+		$koreksi_id="";
 		$koreksi_no=trim(@$_POST["koreksi_no"]);
 		$koreksi_no=str_replace("/(<\/?)(p)([^>]*>)", "",$koreksi_no);
 		$koreksi_no=str_replace("'", '"',$koreksi_no);
 		$koreksi_gudang=trim(@$_POST["koreksi_gudang"]);
-		$koreksi_tanggal=trim(@$_POST["koreksi_tanggal"]);
+		$koreksi_tgl_awal=trim(@$_POST["koreksi_tgl_awal"]);
+		$koreksi_tgl_akhir=trim(@$_POST["koreksi_tgl_akhir"]);
 		$koreksi_keterangan=trim(@$_POST["koreksi_keterangan"]);
 		$koreksi_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$koreksi_keterangan);
 		$koreksi_keterangan=str_replace("'", '"',$koreksi_keterangan);
 		$koreksi_status=trim(@$_POST["koreksi_status"]);
-		$koreksi_status=str_replace("/(<\/?)(p)([^>]*>)", "",$koreksi_status);
-		$koreksi_status=str_replace("'", '"',$koreksi_status);
+
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_master_koreksi_stok->master_koreksi_stok_search($koreksi_id , $koreksi_no, $koreksi_gudang ,$koreksi_tanggal ,$koreksi_keterangan, $koreksi_status, $start,$end);
+		$result = $this->m_master_koreksi_stok->master_koreksi_stok_search($koreksi_id , $koreksi_no, $koreksi_gudang ,$koreksi_tgl_awal ,
+																		   $koreksi_tgl_akhir, $koreksi_keterangan, $koreksi_status, $start,$end);
 		echo $result;
 	}
 
 
 	function master_koreksi_stok_print(){
   		//POST varibale here
-		$koreksi_id=trim(@$_POST["koreksi_id"]);
+		$koreksi_id="";
+		$koreksi_no=trim(@$_POST["koreksi_no"]);
+		$koreksi_no=str_replace("/(<\/?)(p)([^>]*>)", "",$koreksi_no);
+		$koreksi_no=str_replace("'", '"',$koreksi_no);
 		$koreksi_gudang=trim(@$_POST["koreksi_gudang"]);
-		$koreksi_tanggal=trim(@$_POST["koreksi_tanggal"]);
+		$koreksi_tgl_awal=trim(@$_POST["koreksi_tgl_awal"]);
+		$koreksi_tgl_akhir=trim(@$_POST["koreksi_tgl_akhir"]);
 		$koreksi_keterangan=trim(@$_POST["koreksi_keterangan"]);
 		$koreksi_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$koreksi_keterangan);
 		$koreksi_keterangan=str_replace("'", '"',$koreksi_keterangan);
+		$koreksi_status=trim(@$_POST["koreksi_status"]);
+		
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$result = $this->m_master_koreksi_stok->master_koreksi_stok_print($koreksi_id ,$koreksi_gudang ,$koreksi_tanggal ,$koreksi_keterangan ,$option,$filter);
-		$nbrows=$result->num_rows();
-		$totcolumn=9;
-   		/* We now have our array, let's build our HTML file */
-		$file = fopen("master_koreksi_stoklist.html",'w');
-		fwrite($file, "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' /><title>Printing the Master_koreksi_stok Grid</title><link rel='stylesheet' type='text/css' href='assets/modules/main/css/printstyle.css'/></head>");
-		fwrite($file, "<body><table summary='Master_koreksi_stok List'><caption>MASTER_KOREKSI_STOK</caption><thead><tr><th scope='col'>Koreksi Id</th><th scope='col'>Koreksi Gudang</th><th scope='col'>Koreksi Tanggal</th><th scope='col'>Koreksi Keterangan</th><th scope='col'>Koreksi Creator</th><th scope='col'>Koreksi Date Create</th><th scope='col'>Koreksi Update</th><th scope='col'>Koreksi Date Update</th><th scope='col'>Koreksi Revised</th></tr></thead><tfoot><tr><th scope='row'>Total</th><td colspan='$totcolumn'>");
-		fwrite($file, $nbrows);
-		fwrite($file, " Master_koreksi_stok</td></tr></tfoot><tbody>");
-		$i=0;
-		if($nbrows>0){
-			foreach($result->result_array() as $data){
-				fwrite($file,'<tr');
-				if($i%1==0){
-					fwrite($file," class='odd'");
-				}
-			
-				fwrite($file, "><th scope='row' id='r97'>");
-				fwrite($file, $data['koreksi_id']);
-				fwrite($file,"</th><td>");
-				fwrite($file, $data['koreksi_gudang']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['koreksi_tanggal']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['koreksi_keterangan']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['koreksi_creator']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['koreksi_date_create']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['koreksi_update']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['koreksi_date_update']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['koreksi_revised']);
-				fwrite($file, "</td></tr>");
-			}
+		$data["data_print"] = $this->m_master_koreksi_stok->master_koreksi_stok_print($koreksi_id , $koreksi_no, $koreksi_gudang ,$koreksi_tgl_awal ,
+																		  				 $koreksi_tgl_akhir, $koreksi_keterangan, $koreksi_status, 
+																						 $option, $filter);
+		$print_view=$this->load->view("main/p_list_koreksi.php",$data,TRUE);
+		if(!file_exists("print")){
+			mkdir("print");
 		}
-		fwrite($file, "</tbody></table></body></html>");	
-		fclose($file);
-		echo '1';        
+
+		$print_file=fopen("print/print_koreksi_stoklist.html","w+");	
+		fwrite($print_file, $print_view);
+		echo '1';  
 	}
 	/* End Of Function */
 
 	/* Function to Export Excel document */
 	function master_koreksi_stok_export_excel(){
 		//POST varibale here
-		$koreksi_id=trim(@$_POST["koreksi_id"]);
+		$koreksi_id="";
+		$koreksi_no=trim(@$_POST["koreksi_no"]);
+		$koreksi_no=str_replace("/(<\/?)(p)([^>]*>)", "",$koreksi_no);
+		$koreksi_no=str_replace("'", '"',$koreksi_no);
 		$koreksi_gudang=trim(@$_POST["koreksi_gudang"]);
-		$koreksi_tanggal=trim(@$_POST["koreksi_tanggal"]);
+		$koreksi_tgl_awal=trim(@$_POST["koreksi_tgl_awal"]);
+		$koreksi_tgl_akhir=trim(@$_POST["koreksi_tgl_akhir"]);
 		$koreksi_keterangan=trim(@$_POST["koreksi_keterangan"]);
 		$koreksi_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$koreksi_keterangan);
 		$koreksi_keterangan=str_replace("'", '"',$koreksi_keterangan);
+		$koreksi_status=trim(@$_POST["koreksi_status"]);
+		
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$query = $this->m_master_koreksi_stok->master_koreksi_stok_export_excel($koreksi_id ,$koreksi_gudang ,$koreksi_tanggal ,$koreksi_keterangan ,$option,$filter);
+		$query = $this->m_master_koreksi_stok->master_koreksi_stok_export_excel($koreksi_id , $koreksi_no, $koreksi_gudang ,$koreksi_tgl_awal ,
+																		  		$koreksi_tgl_akhir, $koreksi_keterangan, $koreksi_status,$option,
+																				$filter);
 		
 		$this->load->plugin('to_excel');		
 		to_excel($query,"master_koreksi_stok"); 
