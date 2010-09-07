@@ -548,7 +548,7 @@ Ext.onReady(function(){
 			listeners:{
 				specialkey: function(f,e){
 					if(e.getKey() == e.ENTER){
-						master_retur_beli_DataStore.baseParams={task:'LIST',start: 0, limit: pageS};
+						master_koreksi_stok_DataStore.baseParams={task:'LIST',start: 0, limit: pageS};
 		            }
 				},
 				render: function(c){
