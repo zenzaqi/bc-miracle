@@ -885,7 +885,7 @@ Ext.onReady(function(){
 			disabled:true,
 			handler: produk_confirm_delete   // Confirm before deleting
 		}, '-', {
-			text: 'Search',
+			text: 'Adv Search',
 			tooltip: 'Advanced Search',
 			iconCls:'icon-search',
 			handler: display_form_search_window 
@@ -900,8 +900,8 @@ Ext.onReady(function(){
 		            }
 				},
 				render: function(c){
-				Ext.get(this.id).set({qtitle:'Search By (aktif only)'});
-				Ext.get(this.id).set({qtip:'- Kode Baru<br>- Nama<br>- Group 1<br>- Group 2<br>- Jenis'});
+				Ext.get(this.id).set({qtitle:'Simple search:'});
+				Ext.get(this.id).set({qtip:'- (Aktif only)<br>- Kode Baru<br>- Nama<br>- Group 1<br>- Group 2<br>- Jenis'});
 				}
 			},
 			width: 120

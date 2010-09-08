@@ -2449,7 +2449,7 @@ Ext.onReady(function(){
 			disabled: true,
 			handler: customer_confirm_delete   // Confirm before deleting
 		}, '-', {
-			text: 'Search',
+			text: 'Adv Search',
 			tooltip: 'Advanced Search',
 			iconCls:'icon-search',
 			handler: display_form_search_window 
@@ -2465,7 +2465,7 @@ Ext.onReady(function(){
 				},
 				render: function(c){
 				Ext.get(this.id).set({qtitle:'Simple search:'});
-				Ext.get(this.id).set({qtip:'- No Cust<br>- Nama Customer<br>- No Telp dan HP<br>- No Member'});
+				Ext.get(this.id).set({qtip:'- (Aktif only)<br>- No Cust<br>- Nama Customer<br>- No Telp dan HP<br>- No Member'});
 				}
 			},
 			width: 120
