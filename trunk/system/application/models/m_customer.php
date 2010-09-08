@@ -470,7 +470,7 @@ where cabang.cabang_id = info.info_cabang";
 		}
 		
 		//function for advanced search record
-		function customer_search($cust_id ,$cust_no ,$cust_no_awal ,$cust_no_akhir, $cust_nama ,$cust_kelamin ,$cust_alamat ,$cust_alamat2 ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tgllahir ,$cust_hobi ,$cust_referensi ,$cust_keterangan ,$cust_member ,$cust_member2 ,$cust_terdaftar ,$cust_statusnikah , $cust_priority , $cust_jmlanak ,$cust_unit ,$cust_aktif ,$cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$start,$end){
+		function customer_search($cust_id ,$cust_no ,$cust_no_awal ,$cust_no_akhir, $cust_nama ,$cust_kelamin ,$cust_alamat ,$cust_alamat2 ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tgllahir ,$cust_hobi ,$cust_referensi ,$cust_keterangan ,$cust_member ,$cust_member2 ,$cust_terdaftar ,$cust_statusnikah , $cust_priority , $cust_jmlanak ,$cust_unit ,$cust_aktif , $sortby, $cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$start,$end){
 			if ($cust_aktif=="")
 				$cust_aktif = "Aktif";
 			//full query
@@ -623,6 +623,30 @@ where cabang.cabang_id = info.info_cabang";
 			if($cust_aktif!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " cust_aktif LIKE '%".$cust_aktif."%'";
+			};
+			if($sortby=='Nama'){
+				$query.=eregi("WHERE",$query)?" ":" WHERE ";
+				$query.= " ORDER BY cust_nama";
+			};
+			if($sortby=='No Cust'){
+				$query.=eregi("WHERE",$query)?" ":" WHERE ";
+				$query.= " ORDER BY cust_no";
+			};
+			if($sortby=='Alamat'){
+				$query.=eregi("WHERE",$query)?" ":" WHERE ";
+				$query.= " ORDER BY cust_alamat";
+			};
+			if($sortby=='Tgl Lahir'){
+				$query.=eregi("WHERE",$query)?" ":" WHERE ";
+				$query.= " ORDER BY cust_tgllahir";
+			};
+			if($sortby=='Telp Rmh'){
+				$query.=eregi("WHERE",$query)?" ":" WHERE ";
+				$query.= " ORDER BY cust_telprumah";
+			};
+			if($sortby=='Handphone'){
+				$query.=eregi("WHERE",$query)?" ":" WHERE ";
+				$query.= " ORDER BY cust_hp";
 			};
 			if($cust_creator!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
