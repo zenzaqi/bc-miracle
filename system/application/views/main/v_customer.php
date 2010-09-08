@@ -1693,7 +1693,7 @@ Ext.onReady(function(){
 			{name: 'cust_fb2', type: 'int', mapping: 'cust_fb2'},
 			{name: 'cust_tweeter2', type: 'int', mapping: 'cust_tweeter2'}
 		]),
-		sortInfo:{field: 'cust_id', direction: "ASC"}
+		//sortInfo:{field: 'cust_id', direction: "ASC"}
 	});
 	/* End of Function */
     
@@ -2827,7 +2827,7 @@ Ext.onReady(function(){
 	/* Identify  cust_telprumah Field */
 	cust_telprumahField= new Ext.form.TextField({
 		id: 'cust_telprumahField',
-		fieldLabel: 'Telp. Rumah',
+		fieldLabel: 'Telp Rumah',
 		maxLength: 30,
 		anchor: '95%',
 		maskRe: /([0-9]+)$/
@@ -2853,7 +2853,7 @@ Ext.onReady(function(){
 	/* Identify  cust_hp Field */
 	cust_hpField= new Ext.form.TextField({
 		id: 'cust_hpField',
-		fieldLabel: 'No. Ponsel',
+		fieldLabel: 'No Ponsel',
 		maxLength: 25,
 		anchor: '95%',
 		maskRe: /([0-9]+)$/
@@ -3570,7 +3570,7 @@ Ext.onReady(function(){
 	/* Identify  cust_telprumah Field */
 	cust_telprumahSearchField= new Ext.form.TextField({
 		id: 'cust_telprumahSearchField',
-		fieldLabel: 'Telp. Rumah',
+		fieldLabel: 'Telp Rumah',
 		maxLength: 30,
 		anchor: '95%',
 		maskRe: /([0-9]+)$/
@@ -3596,7 +3596,7 @@ Ext.onReady(function(){
 	/* Identify  cust_hp Field */
 	cust_hpSearchField= new Ext.form.TextField({
 		id: 'cust_hpSearchField',
-		fieldLabel: 'No. Ponsel',
+		fieldLabel: 'No Ponsel',
 		maxLength: 25,
 		anchor: '95%',
 		maskRe: /([0-9]+)$/
@@ -3872,10 +3872,10 @@ Ext.onReady(function(){
 	/* Identify  sort_by Field */
 	sortby_SearchField= new Ext.form.ComboBox({
 		id: 'sortby_SearchField',
-		fieldLabel: 'Sort By',
+		fieldLabel: 'Urutkan',
 		store:new Ext.data.SimpleStore({
 			fields:['sortby_value', 'sortby_display'],
-			data:[['No Cust','No Cust'],['Nama','Nama'],['Alamat','Alamat'],['Tgl Lahir','Tgl Lahir'],['Telp Rmh','Telp Rmh'],['Handphone','Handphone']]
+			data:[['No Cust','No Cust'],['Nama','Nama'],['Alamat','Alamat'],['Tgl Lahir','Tgl Lahir'],['Telp Rmh','Telp Rumah'],['Handphone','No Ponsel']]
 		}),
 		mode: 'local',
 		displayField: 'sortby_display',
