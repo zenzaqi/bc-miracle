@@ -175,14 +175,19 @@ class M_master_jual_paket extends Model{
 			}
 		}
 		
-		function detail_pengguna_paket_insert($ppaket_id, $ppaket_master, $ppaket_cust){
+		function detail_pengguna_paket_insert($array_ppaket_id, $ppaket_master, $array_ppaket_cust){
+			$datetime_now = date('Y-m-d H:i:s');
 			//if master id not capture from view then capture it from max pk from master table
 			if($ppaket_master=="" || $ppaket_master==NULL || $ppaket_master==0){
 				$ppaket_master=$this->get_master_id();
 			}
 			
-			if($ppaket_id==''){
-				//* Adding Pemakai Paket /
+			$size_array = sizeof($array_ppaket_id) - 1;
+			
+			for($i = 0; $i < sizeof($array_ppaket_id); $i++){
+				$ppaket_id = $array_ppaket_id[$i];
+				$ppaket_cust = $array_ppaket_cust[$i];
+				
 				$dti_ppaket = array(
 				"ppaket_master"=>$ppaket_master, 
 				"ppaket_cust"=>$ppaket_cust
@@ -196,19 +201,10 @@ class M_master_jual_paket extends Model{
 						return '1';
 					}else
 						return '0';
-				}
-			}/*elseif(is_numeric($ppaket_id)==true){
-				//* Editing Pemakai Paket /
-				$dtu_ppaket = array(
-				"ppaket_cust"=>$ppaket_cust
-				);
-				$this->db->where('ppaket_id', $ppaket_id);
-				$this->db->update('pengguna_paket', $dtu_ppaket);
-				if($this->db->affected_rows()){
-					return '1';
-				}else
+				}else{
 					return '0';
-			}*/
+				}
+			}
 			
 		}
 		

@@ -89,10 +89,15 @@ class C_master_jual_paket extends Controller {
 	}
 	
 	function detail_pengguna_paket_insert(){
-		$ppaket_id=trim(@$_POST["ppaket_id"]);
+		$ppaket_id = $_POST['ppaket_id']; // Get our array back and translate it :
+		$array_ppaket_id = json_decode(stripslashes($ppaket_id));
+		
 		$ppaket_master=trim(@$_POST["ppaket_master"]);
-		$ppaket_cust=trim(@$_POST["ppaket_cust"]);
-		$result=$this->m_master_jual_paket->detail_pengguna_paket_insert($ppaket_id, $ppaket_master, $ppaket_cust);
+		
+		$ppaket_cust = $_POST['ppaket_cust']; // Get our array back and translate it :
+		$array_ppaket_cust = json_decode(stripslashes($ppaket_cust));
+		
+		$result=$this->m_master_jual_paket->detail_pengguna_paket_insert($array_ppaket_id, $ppaket_master, $array_ppaket_cust);
 		echo $result;
 	}
 	

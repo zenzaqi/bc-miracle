@@ -709,7 +709,7 @@ Ext.onReady(function(){
 						switch(result){
 							case 1:
 								detail_jual_paket_insert();
-								//detail_pengguna_paket_insert();
+								detail_pengguna_paket_insert();
 								master_jual_paket_createWindow.hide();
 								break;
 							default:
@@ -4722,11 +4722,10 @@ Ext.onReady(function(){
 							if(result==0){
 								detail_jual_paket_DataStore.load({params: {master_id:-1}});
 								Ext.MessageBox.alert(jpaket_post2db+' OK','Data penjualan paket berhasil disimpan');
-								jpaket_post2db="CREATE";
 								jpaket_btn_cancel();
-							}else if(result==-1){
+							}/*else if(result==-1){
 								detail_jual_paket_DataStore.load({params: {master_id:-1}});
-								jpaket_post2db="CREATE";
+								//jpaket_post2db="CREATE";
 								Ext.MessageBox.show({
 								   title: 'Warning',
 								   //msg: 'We could\'t not '+msg+' the Master_jual_produk.',
@@ -4736,11 +4735,14 @@ Ext.onReady(function(){
 								   icon: Ext.MessageBox.WARNING
 								});
 								jpaket_btn_cancel();
-							}else if(result>0){
+							}*/else if(result>0){
 								detail_jual_paket_DataStore.load({params: {master_id:-1}});
 								jpaket_cetak(result);
 								cetak_jpaket=0;
-								jpaket_post2db="CREATE";
+								//detail_pengguna_paket_insert();
+							}else{
+								detail_jual_paket_DataStore.load({params: {master_id:-1}});
+								jpaket_btn_cancel();
 							}
 						},
 						failure: function(response){
@@ -4752,6 +4754,7 @@ Ext.onReady(function(){
 							   animEl: 'database',
 							   icon: Ext.MessageBox.ERROR
 							});
+							detail_jual_paket_DataStore.load({params: {master_id:-1}});
 							jpaket_btn_cancel();
 						}
 					});
@@ -5002,9 +5005,8 @@ Ext.onReady(function(){
 	//function of detail add
 	function detail_pengguna_paket_add(){
 		var edit_detail_pengguna_paket= new detail_pengguna_paketListEditorGrid.store.recordType({
-			dpaket_id	:'',		
-			dpaket_master	:'',		
-			dpaket_paket	:null
+			ppaket_id	:0,
+			ppaket_cust	:''
 		});
 		editor_detail_pengguna_paket.stopEditing();
 		detail_pengguna_paket_DataStore.insert(0, edit_detail_pengguna_paket);
@@ -5022,25 +5024,51 @@ Ext.onReady(function(){
 	
 	//function for insert detail
 	function detail_pengguna_paket_insert(){
+		var ppaket_id=[];
+		var ppaket_cust=[];
+		
+		var dcount = detail_pengguna_paket_DataStore.getCount() - 1;
+		
 		if(detail_pengguna_paket_DataStore.getCount()>0){
-			for(i=0;i<detail_pengguna_paket_DataStore.getCount();i++){
-				detail_pengguna_paket_record=detail_pengguna_paket_DataStore.getAt(i);
-				if(detail_pengguna_paket_record.data.ppaket_cust!==null&&detail_pengguna_paket_record.data.ppaket_cust!==""){
+			for(i=0; i<detail_pengguna_paket_DataStore.getCount();i++){
+				if(detail_pengguna_paket_DataStore.getAt(i).data.ppaket_id==0){
+					ppaket_id.push(detail_pengguna_paket_DataStore.getAt(i).data.ppaket_id);
+					
+					if(detail_pengguna_paket_DataStore.getAt(i).data.ppaket_cust==undefined){
+						ppaket_cust.push('');
+					}else{
+						ppaket_cust.push(detail_pengguna_paket_DataStore.getAt(i).data.ppaket_cust);
+					}
+					
+				}
+				
+				if(i==dcount){
+					var encoded_array_ppaket_id = Ext.encode(ppaket_id);
+					var encoded_array_ppaket_cust = Ext.encode(ppaket_cust);
+					
 					Ext.Ajax.request({
 						waitMsg: 'Mohon  Tunggu...',
 						url: 'index.php?c=c_master_jual_paket&m=detail_pengguna_paket_insert',
 						params:{
-							ppaket_id	: detail_pengguna_paket_record.data.ppaket_id,
+							ppaket_id	: encoded_array_ppaket_id,
 							ppaket_master	: eval(get_pk_id()), 
-							ppaket_cust	: detail_pengguna_paket_record.data.ppaket_cust
+							ppaket_cust	: encoded_array_ppaket_cust
 						},
 						timeout: 60000,
 						success: function(response){							
 							var result=eval(response.responseText);
-							detail_pengguna_paket_DataStore.load({params: {master_id:-1}});
+							if(result==1){
+								detail_pengguna_paket_DataStore.load({params: {master_id:-1}});
+								Ext.Msg.alert('OK', 'Daftar Pemakai Paket telah ditambahkan.');
+								jpaket_btn_cancel();
+							}else{
+								detail_pengguna_paket_DataStore.load({params: {master_id:-1}});
+								jpaket_btn_cancel();
+							}
+							/*detail_pengguna_paket_DataStore.load({params: {master_id:-1}});
 							jpaket_post2db="CREATE";
 							Ext.Msg.alert('OK', 'Daftar Pemakai Paket telah ditambahkan.');
-							jpaket_btn_cancel();
+							jpaket_btn_cancel();*/
 						},
 						failure: function(response){
 							var result=response.responseText;
@@ -5051,14 +5079,18 @@ Ext.onReady(function(){
 							   animEl: 'database',
 							   icon: Ext.MessageBox.ERROR
 							});
+							detail_pengguna_paket_DataStore.load({params: {master_id:-1}});
 							jpaket_btn_cancel();
 						}		
 					});
+					
 				}
 			}
 		}else{
+			detail_pengguna_paket_DataStore.load({params: {master_id:-1}});
 			jpaket_btn_cancel();
 		}
+		
 	}
 	//eof
 	
@@ -6465,12 +6497,18 @@ Ext.onReady(function(){
 				handler: master_jual_paket_create
 			},
 			{
+				id: 'jpaket_cancelBtn',
 				text: 'Cancel',
 				handler: jpaket_btn_cancel
 			}
 		]
 	});
 	/* End  of Function*/
+	
+	Ext.getCmp('jpaket_cancelBtn').on('click', function(){
+		detail_jual_paket_DataStore.load({params: {master_id:-1}});
+		detail_pengguna_paket_DataStore.load({params: {master_id:-1}});
+	});
 	
 	/* Function for retrieve create Window Form */
 	master_jual_paket_createWindow= new Ext.Window({
@@ -6878,10 +6916,10 @@ Ext.onReady(function(){
 	
 	function jpaket_btn_cancel(){
 		master_jual_paket_reset_form();
-		detail_jual_paket_DataStore.load({params: {master_id:-1}});
+		//detail_jual_paket_DataStore.load({params: {master_id:-1}});
 		jpaket_caraField.setValue("card");
 		master_jual_paket_cardGroup.setVisible(true);
-		detail_pengguna_paket_DataStore.load({params: {master_id:-1}});
+		//detail_pengguna_paket_DataStore.load({params: {master_id:-1}});
 		master_cara_bayarTabPanel.setActiveTab(0);
 		jpaket_post2db="CREATE";
 		jpaket_diskonField.setValue(0);
