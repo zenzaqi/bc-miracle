@@ -289,40 +289,40 @@ Ext.onReady(function(){
 		},[
 		/* dataIndex => insert intomember_setup_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'setcrm_id', type: 'int', mapping: 'setcrm_id'}, 
-			{name: 'setcrm_frequency_bulan1', type: 'int', mapping: 'setcrm_frequency_bulan1'}, 
-			{name: 'setcrm_frequency_bulan2', type: 'int', mapping: 'setcrm_frequency_bulan2'}, 
-			{name: 'setcrm_frequency_value_morethan', type: 'int', mapping: 'setcrm_frequency_value_morethan'},
-			{name: 'setcrm_frequency_value_equal', type: 'int', mapping: 'setcrm_frequency_value_equal'}, 
-			{name: 'setcrm_frequency_value_lessthan', type: 'int', mapping: 'setcrm_frequency_value_lessthan'}, 
-			{name: 'setcrm_recency_bulan', type: 'int', mapping: 'setcrm_recency_bulan'}, 
-			{name: 'setcrm_recency_value_morethan', type: 'int', mapping: 'setcrm_recency_value_morethan'},
-			{name: 'setcrm_recency_value_equal', type: 'int', mapping: 'setcrm_recency_value_equal'},
-			{name: 'setcrm_recency_value_lessthan', type: 'int', mapping: 'setcrm_recency_value_lessthan'},
-			{name: 'setcrm_spending_value_morethan', type: 'int', mapping: 'setcrm_spending_value_morethan'},
-			{name: 'setcrm_spending_value_equal', type: 'int', mapping: 'setcrm_spending_value_equal'},
-			{name: 'setcrm_spending_value_lessthan', type: 'int', mapping: 'setcrm_spending_value_lessthan'}, 
-			{name: 'setcrm_highmargin_treatment', type: 'int', mapping: 'setcrm_highmargin_treatment'},
-			{name: 'setcrm_highmargin_month', type: 'int', mapping: 'setcrm_highmargin_month'},
-			{name: 'setcrm_highmargin_value_morethan', type: 'int', mapping: 'setcrm_highmargin_value_morethan'},
-			{name: 'setcrm_highmargin_value_equal', type: 'int', mapping: 'setcrm_highmargin_value_equal'},
-			{name: 'setcrm_highmargin_value_lessthan', type: 'int', mapping: 'setcrm_highmargin_value_lessthan'},
-			{name: 'setcrm_referal_person', type: 'int', mapping: 'setcrm_referal_person'}, 
-			{name: 'setcrm_referal_month', type: 'int', mapping: 'setcrm_referal_month'}, 
-			{name: 'setcrm_referal_morethan', type: 'int', mapping: 'setcrm_referal_morethan'},
-			{name: 'setcrm_referal_equal', type: 'int', mapping: 'setcrm_referal_equal'}, 
-			{name: 'setcrm_referal_lessthan', type: 'int', mapping: 'setcrm_referal_lessthan'}, 
-			{name: 'setcrm_kerewelan_high', type: 'int', mapping: 'setcrm_kerewelan_high'}, 
-			{name: 'setcrm_kerewelan_normal', type: 'int', mapping: 'setcrm_kerewelan_normal'},
-			{name: 'setcrm_kerewelan_low', type: 'int', mapping: 'setcrm_kerewelan_low'},
-			{name: 'setcrm_disiplin_high', type: 'int', mapping: 'setcrm_disiplin_high'},
-			{name: 'setcrm_disiplin_normal', type: 'int', mapping: 'setcrm_disiplin_normal'},
-			{name: 'setcrm_disiplin_low', type: 'int', mapping: 'setcrm_disiplin_low'}, 
-			{name: 'setcrm_treatment_month', type: 'int', mapping: 'setcrm_treatment_month'}, 
-			{name: 'setcrm_treatment_nonmedis', type: 'int', mapping: 'setcrm_treatment_nonmedis'},
-			{name: 'setcrm_treatment_medis', type: 'int', mapping: 'setcrm_treatment_medis'}, 
-			{name: 'setcrm_treatment_morethan', type: 'int', mapping: 'setcrm_treatment_morethan'}, 
-			{name: 'setcrm_treatment_equal', type: 'int', mapping: 'setcrm_treatment_equal'}, 
-			{name: 'setcrm_treatment_lessthan', type: 'int', mapping: 'setcrm_treatment_lessthan'},
+			{name: 'setcrm_frequency_bulan1', type: 'float', mapping: 'setcrm_frequency_bulan1'}, 
+			{name: 'setcrm_frequency_bulan2', type: 'float', mapping: 'setcrm_frequency_bulan2'}, 
+			{name: 'setcrm_frequency_value_morethan', type: 'float', mapping: 'setcrm_frequency_value_morethan'},
+			{name: 'setcrm_frequency_value_equal', type: 'float', mapping: 'setcrm_frequency_value_equal'}, 
+			{name: 'setcrm_frequency_value_lessthan', type: 'float', mapping: 'setcrm_frequency_value_lessthan'}, 
+			{name: 'setcrm_recency_bulan', type: 'float', mapping: 'setcrm_recency_bulan'}, 
+			{name: 'setcrm_recency_value_morethan', type: 'float', mapping: 'setcrm_recency_value_morethan'},
+			{name: 'setcrm_recency_value_equal', type: 'float', mapping: 'setcrm_recency_value_equal'},
+			{name: 'setcrm_recency_value_lessthan', type: 'float', mapping: 'setcrm_recency_value_lessthan'},
+			{name: 'setcrm_spending_value_morethan', type: 'float', mapping: 'setcrm_spending_value_morethan'},
+			{name: 'setcrm_spending_value_equal', type: 'float', mapping: 'setcrm_spending_value_equal'},
+			{name: 'setcrm_spending_value_lessthan', type: 'float', mapping: 'setcrm_spending_value_lessthan'}, 
+			{name: 'setcrm_highmargin_treatment', type: 'float', mapping: 'setcrm_highmargin_treatment'},
+			{name: 'setcrm_highmargin_month', type: 'float', mapping: 'setcrm_highmargin_month'},
+			{name: 'setcrm_highmargin_value_morethan', type: 'float', mapping: 'setcrm_highmargin_value_morethan'},
+			{name: 'setcrm_highmargin_value_equal', type: 'float', mapping: 'setcrm_highmargin_value_equal'},
+			{name: 'setcrm_highmargin_value_lessthan', type: 'float', mapping: 'setcrm_highmargin_value_lessthan'},
+			{name: 'setcrm_referal_person', type: 'float', mapping: 'setcrm_referal_person'}, 
+			{name: 'setcrm_referal_month', type: 'float', mapping: 'setcrm_referal_month'}, 
+			{name: 'setcrm_referal_morethan', type: 'float', mapping: 'setcrm_referal_morethan'},
+			{name: 'setcrm_referal_equal', type: 'float', mapping: 'setcrm_referal_equal'}, 
+			{name: 'setcrm_referal_lessthan', type: 'float', mapping: 'setcrm_referal_lessthan'}, 
+			{name: 'setcrm_kerewelan_high', type: 'float', mapping: 'setcrm_kerewelan_high'}, 
+			{name: 'setcrm_kerewelan_normal', type: 'float', mapping: 'setcrm_kerewelan_normal'},
+			{name: 'setcrm_kerewelan_low', type: 'float', mapping: 'setcrm_kerewelan_low'},
+			{name: 'setcrm_disiplin_high', type: 'float', mapping: 'setcrm_disiplin_high'},
+			{name: 'setcrm_disiplin_normal', type: 'float', mapping: 'setcrm_disiplin_normal'},
+			{name: 'setcrm_disiplin_low', type: 'float', mapping: 'setcrm_disiplin_low'}, 
+			{name: 'setcrm_treatment_month', type: 'float', mapping: 'setcrm_treatment_month'}, 
+			{name: 'setcrm_treatment_nonmedis', type: 'float', mapping: 'setcrm_treatment_nonmedis'},
+			{name: 'setcrm_treatment_medis', type: 'float', mapping: 'setcrm_treatment_medis'}, 
+			{name: 'setcrm_treatment_morethan', type: 'float', mapping: 'setcrm_treatment_morethan'}, 
+			{name: 'setcrm_treatment_equal', type: 'float', mapping: 'setcrm_treatment_equal'}, 
+			{name: 'setcrm_treatment_lessthan', type: 'float', mapping: 'setcrm_treatment_lessthan'},
 			{name: 'setcrm_author', type: 'string', mapping: 'setcrm_author'}, 
 			{name: 'setcrm_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'setcrm_date_create'}, 
 			{name: 'setcrm_update', type: 'string', mapping: 'setcrm_update'}, 
@@ -706,12 +706,12 @@ Ext.onReady(function(){
 	set_crm_highmargin_label_divideField=new Ext.form.Label({ html: '/ &nbsp;'});
 	set_crm_referaldate_label_divideField=new Ext.form.Label({ html: '&nbsp; / &nbsp;'});
 	
-	set_crm_frequency_label_monthField=new Ext.form.Label({ html: 'month'});
-	set_crm_recency_label_monthField=new Ext.form.Label({ html: 'month'});
-	set_crm_highmargin_label_monthField=new Ext.form.Label({ html: 'month'});
-	set_crm_referaldate_label_personField=new Ext.form.Label({ html: 'org'});
-	set_crm_referaldate_label_monthField=new Ext.form.Label({ html: 'month'});
-	set_crm_jenistreatment_label_monthField=new Ext.form.Label({ html: 'month <br> <br>'});
+	set_crm_frequency_label_monthField=new Ext.form.Label({ html: '&nbsp; month'});
+	set_crm_recency_label_monthField=new Ext.form.Label({ html: '&nbsp; month'});
+	set_crm_highmargin_label_monthField=new Ext.form.Label({ html: '&nbsp; month'});
+	set_crm_referaldate_label_personField=new Ext.form.Label({ html: '&nbsp; cust'});
+	set_crm_referaldate_label_monthField=new Ext.form.Label({ html: '&nbsp; month'});
+	set_crm_jenistreatment_label_monthField=new Ext.form.Label({ html: '&nbsp; month <br> <br>'});
 	
 	set_crm_frequency_label_valueField=new Ext.form.Label({ html: '<br>Value : &nbsp; '});
 	set_crm_recency_label_valueField=new Ext.form.Label({ html: '<br>Value : &nbsp; '});
@@ -723,8 +723,8 @@ Ext.onReady(function(){
 	set_crm_jenistreatment_label_valueField=new Ext.form.Label({ html: '<br>Value : &nbsp; '});
 	
 	
-	set_crm_jenistreatment_label_nonmedisField=new Ext.form.Label({ html: 'Non Medis &nbsp; &nbsp; &nbsp; &nbsp;'});
-	set_crm_jenistreatment_label_medisField=new Ext.form.Label({ html: 'Medis'});
+	set_crm_jenistreatment_label_nonmedisField=new Ext.form.Label({ html: '&nbsp; Non Medis &nbsp; &nbsp; &nbsp; &nbsp;'});
+	set_crm_jenistreatment_label_medisField=new Ext.form.Label({ html: '&nbsp; Medis'});
 	
 	set_crm_frequency_setField=new Ext.form.FieldSet({
 		id:'set_crm_frequency_setField',
@@ -841,7 +841,7 @@ Ext.onReady(function(){
 	
 	set_crm_referaldate_setField=new Ext.form.FieldSet({
 		id:'set_crm_referaldate_setField',
-		title: 'Referal Date',
+		title: 'Referal Rate',
 		layout: 'form',
 		frame: false,
 		boduStyle: 'padding: 5px;',
@@ -965,40 +965,40 @@ Ext.onReady(function(){
 		},[
 		/* dataIndex => insert intomember_setup_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'setcrm_id', type: 'int', mapping: 'setcrm_id'}, 
-			{name: 'setcrm_frequency_bulan1', type: 'int', mapping: 'setcrm_frequency_bulan1'}, 
-			{name: 'setcrm_frequency_bulan2', type: 'int', mapping: 'setcrm_frequency_bulan2'}, 
-			{name: 'setcrm_frequency_value_morethan', type: 'int', mapping: 'setcrm_frequency_value_morethan'},
-			{name: 'setcrm_frequency_value_equal', type: 'int', mapping: 'setcrm_frequency_value_equal'}, 
-			{name: 'setcrm_frequency_value_lessthan', type: 'int', mapping: 'setcrm_frequency_value_lessthan'}, 
-			{name: 'setcrm_recency_bulan', type: 'int', mapping: 'setcrm_recency_bulan'}, 
-			{name: 'setcrm_recency_value_morethan', type: 'int', mapping: 'setcrm_recency_value_morethan'},
-			{name: 'setcrm_recency_value_equal', type: 'int', mapping: 'setcrm_recency_value_equal'},
-			{name: 'setcrm_recency_value_lessthan', type: 'int', mapping: 'setcrm_recency_value_lessthan'},
-			{name: 'setcrm_spending_value_morethan', type: 'int', mapping: 'setcrm_spending_value_morethan'},
-			{name: 'setcrm_spending_value_equal', type: 'int', mapping: 'setcrm_spending_value_equal'},
-			{name: 'setcrm_spending_value_lessthan', type: 'int', mapping: 'setcrm_spending_value_lessthan'}, 
-			{name: 'setcrm_highmargin_treatment', type: 'int', mapping: 'setcrm_highmargin_treatment'},
-			{name: 'setcrm_highmargin_month', type: 'int', mapping: 'setcrm_highmargin_month'},
-			{name: 'setcrm_highmargin_value_morethan', type: 'int', mapping: 'setcrm_highmargin_value_morethan'},
-			{name: 'setcrm_highmargin_value_equal', type: 'int', mapping: 'setcrm_highmargin_value_equal'},
-			{name: 'setcrm_highmargin_value_lessthan', type: 'int', mapping: 'setcrm_highmargin_value_lessthan'},
-			{name: 'setcrm_referal_person', type: 'int', mapping: 'setcrm_referal_person'}, 
-			{name: 'setcrm_referal_month', type: 'int', mapping: 'setcrm_referal_month'}, 
-			{name: 'setcrm_referal_morethan', type: 'int', mapping: 'setcrm_referal_morethan'},
-			{name: 'setcrm_referal_equal', type: 'int', mapping: 'setcrm_referal_equal'}, 
-			{name: 'setcrm_referal_lessthan', type: 'int', mapping: 'setcrm_referal_lessthan'}, 
-			{name: 'setcrm_kerewelan_high', type: 'int', mapping: 'setcrm_kerewelan_high'}, 
-			{name: 'setcrm_kerewelan_normal', type: 'int', mapping: 'setcrm_kerewelan_normal'},
-			{name: 'setcrm_kerewelan_low', type: 'int', mapping: 'setcrm_kerewelan_low'},
-			{name: 'setcrm_disiplin_high', type: 'int', mapping: 'setcrm_disiplin_high'},
-			{name: 'setcrm_disiplin_normal', type: 'int', mapping: 'setcrm_disiplin_normal'},
-			{name: 'setcrm_disiplin_low', type: 'int', mapping: 'setcrm_disiplin_low'}, 
-			{name: 'setcrm_treatment_month', type: 'int', mapping: 'setcrm_treatment_month'}, 
-			{name: 'setcrm_treatment_nonmedis', type: 'int', mapping: 'setcrm_treatment_nonmedis'},
-			{name: 'setcrm_treatment_medis', type: 'int', mapping: 'setcrm_treatment_medis'}, 
-			{name: 'setcrm_treatment_morethan', type: 'int', mapping: 'setcrm_treatment_morethan'}, 
-			{name: 'setcrm_treatment_equal', type: 'int', mapping: 'setcrm_treatment_equal'}, 
-			{name: 'setcrm_treatment_lessthan', type: 'int', mapping: 'setcrm_treatment_lessthan'},
+			{name: 'setcrm_frequency_bulan1', type: 'float', mapping: 'setcrm_frequency_bulan1'}, 
+			{name: 'setcrm_frequency_bulan2', type: 'float', mapping: 'setcrm_frequency_bulan2'}, 
+			{name: 'setcrm_frequency_value_morethan', type: 'float', mapping: 'setcrm_frequency_value_morethan'},
+			{name: 'setcrm_frequency_value_equal', type: 'float', mapping: 'setcrm_frequency_value_equal'}, 
+			{name: 'setcrm_frequency_value_lessthan', type: 'float', mapping: 'setcrm_frequency_value_lessthan'}, 
+			{name: 'setcrm_recency_bulan', type: 'float', mapping: 'setcrm_recency_bulan'}, 
+			{name: 'setcrm_recency_value_morethan', type: 'float', mapping: 'setcrm_recency_value_morethan'},
+			{name: 'setcrm_recency_value_equal', type: 'float', mapping: 'setcrm_recency_value_equal'},
+			{name: 'setcrm_recency_value_lessthan', type: 'float', mapping: 'setcrm_recency_value_lessthan'},
+			{name: 'setcrm_spending_value_morethan', type: 'float', mapping: 'setcrm_spending_value_morethan'},
+			{name: 'setcrm_spending_value_equal', type: 'float', mapping: 'setcrm_spending_value_equal'},
+			{name: 'setcrm_spending_value_lessthan', type: 'float', mapping: 'setcrm_spending_value_lessthan'}, 
+			{name: 'setcrm_highmargin_treatment', type: 'float', mapping: 'setcrm_highmargin_treatment'},
+			{name: 'setcrm_highmargin_month', type: 'float', mapping: 'setcrm_highmargin_month'},
+			{name: 'setcrm_highmargin_value_morethan', type: 'float', mapping: 'setcrm_highmargin_value_morethan'},
+			{name: 'setcrm_highmargin_value_equal', type: 'float', mapping: 'setcrm_highmargin_value_equal'},
+			{name: 'setcrm_highmargin_value_lessthan', type: 'float', mapping: 'setcrm_highmargin_value_lessthan'},
+			{name: 'setcrm_referal_person', type: 'float', mapping: 'setcrm_referal_person'}, 
+			{name: 'setcrm_referal_month', type: 'float', mapping: 'setcrm_referal_month'}, 
+			{name: 'setcrm_referal_morethan', type: 'float', mapping: 'setcrm_referal_morethan'},
+			{name: 'setcrm_referal_equal', type: 'float', mapping: 'setcrm_referal_equal'}, 
+			{name: 'setcrm_referal_lessthan', type: 'float', mapping: 'setcrm_referal_lessthan'}, 
+			{name: 'setcrm_kerewelan_high', type: 'float', mapping: 'setcrm_kerewelan_high'}, 
+			{name: 'setcrm_kerewelan_normal', type: 'float', mapping: 'setcrm_kerewelan_normal'},
+			{name: 'setcrm_kerewelan_low', type: 'float', mapping: 'setcrm_kerewelan_low'},
+			{name: 'setcrm_disiplin_high', type: 'float', mapping: 'setcrm_disiplin_high'},
+			{name: 'setcrm_disiplin_normal', type: 'float', mapping: 'setcrm_disiplin_normal'},
+			{name: 'setcrm_disiplin_low', type: 'float', mapping: 'setcrm_disiplin_low'}, 
+			{name: 'setcrm_treatment_month', type: 'float', mapping: 'setcrm_treatment_month'}, 
+			{name: 'setcrm_treatment_nonmedis', type: 'float', mapping: 'setcrm_treatment_nonmedis'},
+			{name: 'setcrm_treatment_medis', type: 'float', mapping: 'setcrm_treatment_medis'}, 
+			{name: 'setcrm_treatment_morethan', type: 'float', mapping: 'setcrm_treatment_morethan'}, 
+			{name: 'setcrm_treatment_equal', type: 'float', mapping: 'setcrm_treatment_equal'}, 
+			{name: 'setcrm_treatment_lessthan', type: 'float', mapping: 'setcrm_treatment_lessthan'},
 			{name: 'setcrm_author', type: 'string', mapping: 'setcrm_author'}, 
 			{name: 'setcrm_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'setcrm_date_create'}, 
 			{name: 'setcrm_update', type: 'string', mapping: 'setcrm_update'}, 
