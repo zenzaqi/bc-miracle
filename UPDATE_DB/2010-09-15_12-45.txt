@@ -1,5 +1,19 @@
 /* SQL untuk keperluan CRM Setup*/
 
+CREATE TABLE IF NOT EXISTS `join_customer` (
+  `join_id` int(11) NOT NULL,
+  `join_tanggal` date NOT NULL,
+  `join_cust_asal` int(11) DEFAULT NULL,
+  `join_cust_tujuan` int(11) DEFAULT NULL,
+  `join_keterangan` varchar(250) DEFAULT NULL,
+  `join_author` varchar(50) DEFAULT NULL,
+  `join_date_create` datetime NOT NULL,
+  `join_update` varchar(50) NOT NULL,
+  `join_date_update` datetime NOT NULL,
+  `join_revised` int(11) NOT NULL,
+  PRIMARY KEY (`join_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
 ALTER TABLE `crm_setup` CHANGE `setcrm_id` `setcrm_id` INT(11) NOT NULL AUTO_INCREMENT, CHANGE `setcrm_frequency_bulan1` `setcrm_frequency_bulan1` FLOAT(11) NULL DEFAULT NULL, CHANGE `setcrm_frequency_bulan2` `setcrm_frequency_bulan2` FLOAT(11) NULL DEFAULT NULL, CHANGE `setcrm_frequency_value_morethan` `setcrm_frequency_value_morethan` FLOAT(11) NULL DEFAULT NULL, CHANGE `setcrm_frequency_value_equal` `setcrm_frequency_value_equal` FLOAT(11) NULL DEFAULT NULL, CHANGE `setcrm_frequency_value_lessthan` `setcrm_frequency_value_lessthan` FLOAT(11) NULL DEFAULT NULL, CHANGE `setcrm_recency_bulan` `setcrm_recency_bulan` FLOAT(11) NULL DEFAULT NULL, CHANGE `setcrm_recency_value_morethan` `setcrm_recency_value_morethan` FLOAT(11) NULL DEFAULT NULL, CHANGE `setcrm_recency_value_equal` `setcrm_recency_value_equal` FLOAT(11) NULL DEFAULT NULL, CHANGE `setcrm_recency_value_lessthan` `setcrm_recency_value_lessthan` FLOAT(11) NULL DEFAULT NULL, CHANGE `setcrm_spending_value_morethan` `setcrm_spending_value_morethan` FLOAT(11) NULL DEFAULT NULL, CHANGE `setcrm_spending_value_equal` `setcrm_spending_value_equal` FLOAT(11) NULL DEFAULT NULL, CHANGE `setcrm_spending_value_lessthan` `setcrm_spending_value_lessthan` FLOAT(11) NULL DEFAULT NULL,CHANGE `setcrm_highmargin_treatment` `setcrm_highmargin_treatment` FLOAT(11) NULL DEFAULT NULL, CHANGE `setcrm_highmargin_month` `setcrm_highmargin_month` FLOAT(11) NULL DEFAULT NULL, CHANGE `setcrm_highmargin_value_morethan` `setcrm_highmargin_value_morethan` FLOAT(11) NULL DEFAULT NULL, CHANGE `setcrm_highmargin_value_equal` `setcrm_highmargin_value_equal` FLOAT(11) NULL DEFAULT NULL, CHANGE `setcrm_highmargin_value_lessthan` `setcrm_highmargin_value_lessthan` FLOAT(11) NULL DEFAULT NULL, CHANGE `setcrm_referal_person` `setcrm_referal_person` FLOAT(11) NULL DEFAULT NULL, CHANGE `setcrm_referal_month` `setcrm_referal_month` FLOAT(11) NULL DEFAULT NULL, CHANGE `setcrm_referal_morethan` `setcrm_referal_morethan` FLOAT(11) NULL DEFAULT NULL, CHANGE `setcrm_referal_equal` `setcrm_referal_equal` FLOAT(11) NULL DEFAULT NULL, CHANGE `setcrm_referal_lessthan` `setcrm_referal_lessthan` FLOAT(11) NULL DEFAULT NULL,  CHANGE `setcrm_kerewelan_high` `setcrm_kerewelan_high` FLOAT(11) NULL DEFAULT NULL, CHANGE `setcrm_kerewelan_normal` `setcrm_kerewelan_normal` FLOAT(11) NULL DEFAULT NULL, CHANGE `setcrm_kerewelan_low` `setcrm_kerewelan_low` FLOAT(11) NULL DEFAULT NULL, CHANGE `setcrm_disiplin_high` `setcrm_disiplin_high` FLOAT(11) NULL DEFAULT NULL, CHANGE `setcrm_disiplin_normal` `setcrm_disiplin_normal` FLOAT(11) NULL DEFAULT NULL,  CHANGE `setcrm_disiplin_low` `setcrm_disiplin_low` FLOAT(11) NULL DEFAULT NULL, CHANGE `setcrm_treatment_month` `setcrm_treatment_month` FLOAT(11) NULL DEFAULT NULL, CHANGE `setcrm_treatment_nonmedis` `setcrm_treatment_nonmedis` FLOAT(11) NULL DEFAULT NULL, 
 CHANGE `setcrm_treatment_medis` `setcrm_treatment_medis` FLOAT(11) NULL DEFAULT NULL, CHANGE `setcrm_treatment_morethan` `setcrm_treatment_morethan` FLOAT(11) NULL DEFAULT NULL, CHANGE `setcrm_treatment_equal` `setcrm_treatment_equal` FLOAT(11) NULL DEFAULT NULL, CHANGE `setcrm_treatment_lessthan` `setcrm_treatment_lessthan` FLOAT(11) NULL DEFAULT NULL
 
