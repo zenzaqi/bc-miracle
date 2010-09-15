@@ -14,12 +14,56 @@ class M_join_customer extends Model{
 		}
 		
 
+		//function for get list record
+		function join_customer_list($filter,$start,$end){
+		
+			$query = "SELECT join_id, join_tanggal, c1.cust_nama as cust_nama_asal , c2.cust_nama as cust_nama_tujuan,  join_keterangan 
+						FROM join_customer
+						left join customer c1 on (c1.cust_id = join_customer.join_cust_asal)
+						left join customer c2 on (c2.cust_id = join_customer.join_cust_tujuan)";
+			
+			// For simple search
+			if ($filter<>""){
+				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
+				$query .= " (bank_kode LIKE '%".addslashes($filter)."%' OR bank_nama LIKE '%".addslashes($filter)."%' OR bank_norek LIKE '%".addslashes($filter)."%' OR bank_atasnama LIKE '%".addslashes($filter)."%' )";
+			}
+			
+			
+			$result = $this->db->query($query);
+			$nbrows = $result->num_rows();
+			$limit = $query." LIMIT ".$start.",".$end;		
+			$result = $this->db->query($limit);  
+			
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+		
 		
 		//function for update record
-		function join_customer_update($cust_asal_id, $cust_tujuan_id){
+		function join_customer_create($join_id, $cust_asal_id, $cust_tujuan_id, $join_tanggal, $join_keterangan, $join_creator, $join_date_create){
 			
 			$datetime_now=date('Y-m-d H:i:s');
 		
+		
+			$data = array(
+	
+				"join_id"=>$join_id,	
+				"join_cust_asal"=>$cust_asal_id,	
+				"join_cust_tujuan"=>$cust_tujuan_id,
+				"join_tanggal"=>$join_tanggal,
+				"join_keterangan"=>$join_keterangan,
+				"join_author"=>$_SESSION[SESSION_USERID],
+				"join_date_create"=>date('Y-m-d H:i:s')
+			);
+			$this->db->insert('join_customer', $data); 
+			
 			$sql_joincust_1 = "UPDATE appointment
 				SET app_customer ='$cust_tujuan_id',
 					app_update = '".@$_SESSION[SESSION_USERID]."',
@@ -243,11 +287,17 @@ class M_join_customer extends Model{
 					cust_update = '".@$_SESSION[SESSION_USERID]."',
 					cust_date_update = '".$datetime_now."',
 					cust_revised = (cust_revised+1),
-					cust_keterangan = CONCAT(cust_keterangan,'Telah digabungkan ke cust_id'  '".$cust_tujuan_id."')
+					cust_keterangan = CONCAT(cust_keterangan,'Telah digabungkan ke cust_id '  '".$cust_tujuan_id."')
 				WHERE cust_id ='$cust_asal_id'";
 			$this->db->query($sql_set_cust_tidak_aktif);
 			
-			return '1';
+			if($this->db->affected_rows())
+				return '1';
+			else
+				return '0';
+			
+			
+			//return '1';
 		}
 		
 		
