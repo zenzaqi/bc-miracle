@@ -37,8 +37,11 @@ class C_join_customer extends Controller {
 	function get_action(){
 		$task = $_POST['task'];
 		switch($task){
-			case "UPDATE":
-				$this->join_customer_update();
+			case "LIST":
+				$this->join_customer_list();
+				break;
+			case "CREATE":
+				$this->join_customer_create();
 				break;
 			default:
 				echo "{failure:true}";
@@ -46,21 +49,40 @@ class C_join_customer extends Controller {
 		}
 	}
 	
-	
+	//function fot list record
+	function join_customer_list(){
+		
+		$query = isset($_POST['query']) ? $_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+
+		$result=$this->m_join_customer->join_customer_list($query,$start,$end);
+		echo $result;
+	}
 	
 	//function for update record
-	function join_customer_update(){
+	function join_customer_create(){
 		//POST variable here
-		//$iklantoday_id=trim(@$_POST["iklantoday_id"]);
+		$join_id=trim(@$_POST["join_id"]);
+		$join_id=str_replace("/(<\/?)(p)([^>]*>)", "",$join_id);
+		$join_id=str_replace("'", '"',$join_id);
 		$cust_asal_id=trim(@$_POST["cust_asal_id"]);
 		$cust_tujuan_id=trim(@$_POST["cust_tujuan_id"]);
-		//$iklantoday_tanggal=trim(@$_POST["iklantoday_tanggal"]);
-		//$iklantoday_keterangan=trim(@$_POST["iklantoday_keterangan"]);
+		$join_tanggal=trim(@$_POST["join_tanggal"]);
+		$join_keterangan=trim(@$_POST["join_keterangan"]);
+		$join_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$join_keterangan);
+		$join_keterangan=str_replace("'", '"',$join_keterangan);
+		$join_creator=trim(@$_POST["join_creator"]);
+		$join_creator=str_replace("/(<\/?)(p)([^>]*>)", "",$join_creator);
+		$join_creator=str_replace("'", '"',$join_creator);
+		$join_date_create=trim(@$_POST["join_date_create"]);
+		$join_update=trim(@$_POST["join_update"]);
+		$join_update=str_replace("/(<\/?)(p)([^>]*>)", "",$join_update);
+		$join_update=str_replace("'", '"',$join_update);
+		$join_date_update=trim(@$_POST["join_date_update"]);
+		$join_revised=trim(@$_POST["join_revised"]);
 
-		//$iklantoday_update=@$_SESSION[SESSION_USERID];
-		//$iklantoday_date_update=date(LONG_FORMATDATE);
-
-		$result = $this->m_join_customer->join_customer_update($cust_asal_id, $cust_tujuan_id);
+		$result = $this->m_join_customer->join_customer_create($join_id, $cust_asal_id, $cust_tujuan_id, $join_tanggal, $join_keterangan, $join_creator, $join_date_create);
 		echo $result;
 	}
 
