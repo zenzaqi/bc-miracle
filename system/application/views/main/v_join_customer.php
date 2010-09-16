@@ -371,9 +371,9 @@ Ext.onReady(function(){
 		}),
 		tbar: [
 		{
-			text: 'Adv Search',
-			tooltip: 'Advanced Search',
-			iconCls:'icon-search',
+			text: 'Add',
+			tooltip: 'Add new record',
+			iconCls:'icon-adds',
 			handler: display_form_search_window 
 		},'-', /*{
 			text: 'Refresh',
