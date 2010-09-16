@@ -2483,13 +2483,11 @@ Ext.onReady(function(){
 			text: 'Export Excel',
 			tooltip: 'Export to Excel(.xls) Document',
 			iconCls:'icon-xls',
-			disabled: true,
 			handler: customer_export_excel
 		}, '-',{
 			text: 'Print',
 			tooltip: 'Print Document',
 			iconCls:'icon-print',
-			disabled: true,
 			handler: customer_print  
 		}, '-',{
 			text: 'Cetak Label',
@@ -3233,7 +3231,7 @@ Ext.onReady(function(){
 	});
 	
 	cust_alamat_group = new Ext.form.FieldSet({
-		title: 'Alamat Tinggal',
+		title: 'Alamat',
 		autoHeight: true,
 		defaultType: 'textfield',
 		anchor: '95%',
@@ -3241,7 +3239,7 @@ Ext.onReady(function(){
 	});
 	
 	cust_alamat2_group = new Ext.form.FieldSet({
-		title: 'Alamat KTP',
+		title: 'Alamat Lain',
 		autoHeight: true,
 		defaultType: 'textfield',
 		anchor: '95%',
@@ -3894,7 +3892,7 @@ Ext.onReady(function(){
 	});
 	
 	cust_alamat2_groupSearch = new Ext.form.FieldSet({
-		title: 'Alamat KTP',
+		title: 'Alamat Lain',
 		autoHeight: true,
 		defaultType: 'textfield',
 		anchor: '95%',

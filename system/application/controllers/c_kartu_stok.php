@@ -49,7 +49,7 @@ class C_kartu_stok extends Controller {
 	}
 	
 	//function fot list record
-	function kartu_stok_list(){
+	function kartu_stok_search(){
 		
 		$query = isset($_POST['query']) ? @$_POST['query'] : @$_GET['query'];
 		$start = (integer) (isset($_POST['start']) ? @$_POST['start'] : @$_GET['start']);
@@ -80,20 +80,21 @@ class C_kartu_stok extends Controller {
 	
 	
 	function kartu_stok_print(){
-  		//POST varibale here
-		$produk_id=trim(@$_POST["produk_id"]);
-		$produk_nama=trim(@$_POST["produk_nama"]);
-		$produk_nama=str_replace("/(<\/?)(p)([^>]*>)", "",$produk_nama);
-		$produk_nama=str_replace("'", "'",$produk_nama);
-		$satuan_id=trim(@$_POST["satuan_id"]);
-		$satuan_nama=trim(@$_POST["satuan_nama"]);
-		$satuan_nama=str_replace("/(<\/?)(p)([^>]*>)", "",$satuan_nama);
-		$satuan_nama=str_replace("'", "'",$satuan_nama);
-		$stok_saldo=trim(@$_POST["stok_saldo"]);
+		
+  		$produk_id = (integer) (isset($_POST['produk_id']) ? @$_POST['produk_id'] : @$_GET['produk_id']);
+		$tanggal_start =(isset($_POST['tanggal_start']) ? @$_POST['tanggal_start'] : @$_GET['tanggal_start']);
+		$tanggal_end = (isset($_POST['tanggal_end']) ? @$_POST['tanggal_end'] : @$_GET['tanggal_end']);
+		$opsi_satuan = (isset($_POST['opsi_satuan']) ? @$_POST['opsi_satuan'] : @$_GET['opsi_satuan']);
+		$gudang = (isset($_POST['gudang']) ? @$_POST['gudang'] : @$_GET['gudang']);
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$data["data_print"] = $this->m_kartu_stok->kartu_stok_print($produk_id ,$produk_nama ,$satuan_id ,$satuan_nama ,$stok_saldo ,$option,$filter);
+		$data["data_print"] = $this->m_kartu_stok->kartu_stok_print($gudang, $produk_id, $opsi_satuan, $tanggal_start,$tanggal_end,$option,$filter);
+		$data["gudang_nama"] = $this->m_public_function->get_gudang_nama($gudang);
+		$data["produk_nama"] = $this->m_public_function->get_produk_nama($produk_id);
+		$data["periode"]= $tanggal_start." s/d ".$tanggal_end;
+		$data["saldo_awal"] = $this->m_kartu_stok->kartu_stok_awal_print($gudang, $produk_id, $opsi_satuan, $tanggal_start,$tanggal_end,$option,$filter);
+		
 		$print_view=$this->load->view("main/p_kartu_stok.php",$data,TRUE);
 		if(!file_exists("print")){
 			mkdir("print");

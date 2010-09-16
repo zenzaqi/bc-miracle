@@ -197,7 +197,14 @@ class M_kategori2 extends Model{
 		//function  for export to excel
 		function kategori2_export_excel($kategori2_id ,$kategori2_nama ,$kategori2_jenis ,$kategori2_keterangan ,$kategori2_aktif ,$option,$filter){
 			//full query
-			$query="select * from kategori2";
+			$query="SELECT
+						`kategori2`.`kategori2_nama` AS `nama`,
+						`kategori`.`kategori_nama` AS `jenis`,
+						`kategori2`.`kategori2_keterangan` AS `keterangan`,
+						`kategori2`.`kategori2_aktif` AS `aktif`			
+					FROM `kategori2`
+					Inner Join `kategori` ON `kategori2`.`kategori2_jenis` = `kategori`.`kategori_id`
+					WHERE kategori2_jenis=kategori_id";
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 				$query .= " (kategori2_id LIKE '%".addslashes($filter)."%' OR kategori2_nama LIKE '%".addslashes($filter)."%' OR kategori2_jenis LIKE '%".addslashes($filter)."%' OR kategori2_keterangan LIKE '%".addslashes($filter)."%' OR kategori2_aktif LIKE '%".addslashes($filter)."%' )";

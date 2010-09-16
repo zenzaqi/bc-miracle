@@ -177,7 +177,7 @@ class M_satuan extends Model{
 		//function for print record
 		function satuan_print($satuan_id ,$satuan_kode ,$satuan_nama ,$satuan_aktif ,$satuan_creator ,$satuan_date_create ,$satuan_update ,$satuan_date_update ,$satuan_revised ,$option,$filter){
 			//full query
-			$query="select * from satuan";
+			$query="select * from satuan ";
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 				$query .= " (satuan_id LIKE '%".addslashes($filter)."%' OR satuan_kode LIKE '%".addslashes($filter)."%' OR satuan_nama LIKE '%".addslashes($filter)."%' OR satuan_aktif LIKE '%".addslashes($filter)."%' OR satuan_creator LIKE '%".addslashes($filter)."%' OR satuan_date_create LIKE '%".addslashes($filter)."%' OR satuan_update LIKE '%".addslashes($filter)."%' OR satuan_date_update LIKE '%".addslashes($filter)."%' OR satuan_revised LIKE '%".addslashes($filter)."%' )";
@@ -227,10 +227,15 @@ class M_satuan extends Model{
 		//function  for export to excel
 		function satuan_export_excel($satuan_id ,$satuan_kode ,$satuan_nama ,$satuan_aktif ,$satuan_creator ,$satuan_date_create ,$satuan_update ,$satuan_date_update ,$satuan_revised ,$option,$filter){
 			//full query
-			$query="select * from satuan";
+			$query="SELECT 	satuan_kode AS kode,
+							satuan_nama AS nama,
+							satuan_aktif AS aktif
+							
+					from 	satuan ";
+					
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (satuan_id LIKE '%".addslashes($filter)."%' OR satuan_kode LIKE '%".addslashes($filter)."%' OR satuan_nama LIKE '%".addslashes($filter)."%' OR satuan_aktif LIKE '%".addslashes($filter)."%' OR satuan_creator LIKE '%".addslashes($filter)."%' OR satuan_date_create LIKE '%".addslashes($filter)."%' OR satuan_update LIKE '%".addslashes($filter)."%' OR satuan_date_update LIKE '%".addslashes($filter)."%' OR satuan_revised LIKE '%".addslashes($filter)."%' )";
+				$query .= " (satuan_id LIKE '%".addslashes($filter)."%' OR satuan_kode LIKE '%".addslashes($filter)."%' OR satuan_nama LIKE '%".addslashes($filter)."%' OR satuan_aktif LIKE '%".addslashes($filter)."%' )";
 				$result = $this->db->query($query);
 			} else if($option=='SEARCH'){
 				if($satuan_id!=''){
@@ -249,7 +254,7 @@ class M_satuan extends Model{
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " satuan_aktif LIKE '%".$satuan_aktif."%'";
 				};
-				if($satuan_creator!=''){
+/* 				if($satuan_creator!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " satuan_creator LIKE '%".$satuan_creator."%'";
 				};
@@ -269,7 +274,7 @@ class M_satuan extends Model{
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " satuan_revised LIKE '%".$satuan_revised."%'";
 				};
-				$result = $this->db->query($query);
+ */				$result = $this->db->query($query);
 			}
 			return $result;
 		}

@@ -239,7 +239,7 @@ class C_jenis extends Controller {
 		
 		$query = $this->m_jenis->jenis_export_excel($jenis_id ,$jenis_kode ,$jenis_nama ,$jenis_kelompok ,$jenis_keterangan ,$jenis_aktif ,$option,$filter);
 		
-		to_excel($query,"jenis"); 
+		to_excel($query,"group_2"); 
 		echo '1';
 			
 	}

@@ -18,7 +18,6 @@ class C_paket extends Controller {
 		parent::Controller();
 		session_start();
 		$this->load->model('m_paket', '', TRUE);
-		$this->load->plugin('to_excel');
 	}
 	
 	//set index
@@ -421,6 +420,7 @@ class C_paket extends Controller {
 		
 		$query = $this->m_paket->paket_export_excel($paket_id ,$paket_kode ,$paket_kodelama ,$paket_nama ,$paket_group ,$paket_keterangan ,$paket_du ,$paket_dm ,$paket_point ,$paket_harga ,$paket_expired ,$paket_aktif ,$option,$filter);
 		
+		$this->load->plugin('to_excel');
 		to_excel($query,"paket"); 
 		echo '1';
 			

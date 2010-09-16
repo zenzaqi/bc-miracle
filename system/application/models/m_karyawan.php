@@ -545,8 +545,21 @@ class M_karyawan extends Model{
 		
 		//function  for export to excel
 		function karyawan_export_excel($karyawan_id ,$karyawan_no ,$karyawan_npwp ,$karyawan_username ,$karyawan_nama ,$karyawan_kelamin ,$karyawan_tgllahir ,$karyawan_alamat ,$karyawan_kota ,$karyawan_kodepos ,$karyawan_email ,$karyawan_emiracle ,$karyawan_keterangan ,$karyawan_notelp ,$karyawan_notelp2 ,$karyawan_notelp3, $karyawan_notelp4 ,$karyawan_cabang ,$karyawan_jabatan ,$karyawan_departemen ,$karyawan_idgolongan ,$karyawan_tglmasuk ,$karyawan_atasan ,$karyawan_aktif ,$karyawan_creator ,$karyawan_date_create ,$karyawan_update ,$karyawan_date_update ,$karyawan_revised ,$option,$filter){
-			//full query
-			$query="select * from karyawan";
+			//full query if(produk_kodelama='','-',ifnull(produk_kodelama,'-'))
+			$query="select if(karyawan_no='','-',ifnull(karyawan_no,'-')) AS NIK,
+							if(karyawan_username='','-',ifnull(karyawan_username,'-')) AS Nickname,
+							if(karyawan_nama='','-',ifnull(karyawan_nama,'-')) AS nama_lengkap,
+							if(karyawan_kelamin='','-',ifnull(karyawan_kelamin,'-')) AS 'L/P',
+							if(karyawan_marriage='','-',ifnull(karyawan_marriage,'-')) as menikah,
+							if(karyawan_tgllahir='','-',ifnull(karyawan_tgllahir,'-')) AS tgl_lahir,
+							if(karyawan_tmplahir='','-',ifnull(karyawan_tmplahir,'-')) AS tempat_lahir,
+							if(karyawan_alamat='','-',ifnull(karyawan_alamat,'-')) AS alamat,
+							if(karyawan_kota='','-',ifnull(karyawan_kota,'-')) AS kota,
+							if(karyawan_notelp='','-',ifnull(karyawan_notelp,'-')) AS no_telp_rmh,
+							if(karyawan_notelp2='','-',ifnull(karyawan_notelp2,'-')) AS ponsel_1,
+							if(karyawan_departemen='','-',ifnull(karyawan_departemen,'-')) AS departemen,
+							if(karyawan_aktif='','-',ifnull(karyawan_aktif,'-')) AS aktif
+					from karyawan";
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 				$query .= " (karyawan_id LIKE '%".addslashes($filter)."%' OR karyawan_no LIKE '%".addslashes($filter)."%' OR karyawan_npwp LIKE '%".addslashes($filter)."%' OR karyawan_username LIKE '%".addslashes($filter)."%' OR karyawan_nama LIKE '%".addslashes($filter)."%' OR karyawan_kelamin LIKE '%".addslashes($filter)."%' OR karyawan_tgllahir LIKE '%".addslashes($filter)."%' OR karyawan_alamat LIKE '%".addslashes($filter)."%' OR karyawan_kota LIKE '%".addslashes($filter)."%' OR karyawan_kodepos LIKE '%".addslashes($filter)."%' OR karyawan_email LIKE '%".addslashes($filter)."%' OR karyawan_emiracle LIKE '%".addslashes($filter)."%' OR karyawan_keterangan LIKE '%".addslashes($filter)."%' OR karyawan_notelp LIKE '%".addslashes($filter)."%' OR karyawan_notelp2 LIKE '%".addslashes($filter)."%' OR karyawan_notelp3 LIKE '%".addslashes($filter)."%' OR karyawan_notelp4 LIKE '%".addslashes($filter)."%' OR karyawan_cabang LIKE '%".addslashes($filter)."%' OR karyawan_jabatan LIKE '%".addslashes($filter)."%' OR karyawan_departemen LIKE '%".addslashes($filter)."%' OR karyawan_idgolongan LIKE '%".addslashes($filter)."%' OR karyawan_tglmasuk LIKE '%".addslashes($filter)."%' OR karyawan_atasan LIKE '%".addslashes($filter)."%' OR karyawan_aktif LIKE '%".addslashes($filter)."%' OR karyawan_creator LIKE '%".addslashes($filter)."%' OR karyawan_date_create LIKE '%".addslashes($filter)."%' OR karyawan_update LIKE '%".addslashes($filter)."%' OR karyawan_date_update LIKE '%".addslashes($filter)."%' OR karyawan_revised LIKE '%".addslashes($filter)."%' )";

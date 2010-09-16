@@ -230,7 +230,14 @@ class M_cabang extends Model{
 		//function  for export to excel
 		function cabang_export_excel($cabang_id ,$cabang_nama ,$cabang_alamat ,$cabang_kota ,$cabang_kodepos ,$cabang_propinsi ,$cabang_keterangan ,$cabang_aktif ,$option,$filter){
 			//full query
-			$query="select * from cabang";
+			$query="select cabang_nama AS nama,
+							cabang_alamat AS alamat,
+							cabang_kota AS kota,
+							cabang_kodepos AS kodepos,
+							cabang_propinsi AS propinsi,
+							cabang_keterangan AS keterangan,
+							cabang_aktif AS aktif
+					from cabang";
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 				$query .= " (cabang_id LIKE '%".addslashes($filter)."%' OR cabang_nama LIKE '%".addslashes($filter)."%' OR cabang_alamat LIKE '%".addslashes($filter)."%' OR cabang_kota LIKE '%".addslashes($filter)."%' OR cabang_kodepos LIKE '%".addslashes($filter)."%' OR cabang_propinsi LIKE '%".addslashes($filter)."%' OR cabang_keterangan LIKE '%".addslashes($filter)."%' OR cabang_aktif LIKE '%".addslashes($filter)."%' )";

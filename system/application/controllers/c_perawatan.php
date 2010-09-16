@@ -18,7 +18,6 @@ class C_perawatan extends Controller {
 		parent::Controller();
 		session_start();
 		$this->load->model('m_perawatan', '', TRUE);
-		$this->load->plugin('to_excel');
 	}
 	
 	//set index
@@ -475,8 +474,28 @@ class C_perawatan extends Controller {
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$query = $this->m_perawatan->perawatan_export_excel($rawat_id ,$rawat_kode ,$rawat_kodelama ,$rawat_nama ,$rawat_group ,$rawat_kategori ,$rawat_jenis ,$rawat_keterangan ,$rawat_du ,$rawat_dm ,$rawat_point ,$rawat_kredit, $rawat_jumlah_tindakan, $rawat_harga ,$rawat_gudang ,$rawat_aktif ,$option,$filter);
+		$query = $this->m_perawatan->perawatan_export_excel(
+								$rawat_id ,
+								$rawat_kode ,
+								$rawat_kodelama ,
+								$rawat_nama ,
+								$rawat_group ,
+								$rawat_kategori ,
+								$rawat_jenis ,
+								$rawat_keterangan ,
+								$rawat_du ,
+								$rawat_dm ,
+								$rawat_point ,
+								$rawat_kredit, 
+								$rawat_jumlah_tindakan, 
+								$rawat_harga ,
+								$rawat_gudang ,
+								$rawat_aktif ,
+								$option,
+								$filter
+							);
 		
+		$this->load->plugin('to_excel');
 		to_excel($query,"perawatan"); 
 		echo '1';
 			

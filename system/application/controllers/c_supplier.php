@@ -18,7 +18,6 @@ class C_supplier extends Controller {
 		parent::Controller();
 		session_start();
 		$this->load->model('m_supplier', '', TRUE);
-		$this->load->plugin('to_excel');
 	}
 	
 	//set index
@@ -466,7 +465,8 @@ class C_supplier extends Controller {
 		$filter=$_POST["query"];
 		
 		$query = $this->m_supplier->supplier_export_excel($supplier_id ,$supplier_kategori ,$supplier_nama ,$supplier_alamat ,$supplier_kota ,$supplier_kodepos ,$supplier_propinsi ,$supplier_negara ,$supplier_notelp ,$supplier_notelp2 ,$supplier_nofax ,$supplier_email ,$supplier_website ,$supplier_cp ,$supplier_contact_cp ,$supplier_aktif ,$supplier_creator ,$supplier_date_create ,$supplier_update ,$supplier_date_update ,$supplier_revised ,$option,$filter);
-		
+
+		$this->load->plugin('to_excel');
 		to_excel($query,"supplier"); 
 		echo '1';
 			

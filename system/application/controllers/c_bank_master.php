@@ -22,7 +22,6 @@ class C_bank_master extends Controller {
 	
 	//set index
 	function index(){
-		$this->load->plugin('to_excel');
 		$this->load->helper('asset');
 		$this->load->view('main/v_bank_master');
 	}
@@ -211,6 +210,7 @@ class C_bank_master extends Controller {
 		$filter=$_POST["query"];
 		
 		$query = $this->m_bank_master->bank_master_export_excel($mbank_id ,$mbank_nama ,$mbank_keterangan ,$mbank_aktif ,$option,$filter);
+		$this->load->plugin('to_excel');
 		
 		to_excel($query,"bank_master"); 
 		echo '1';
