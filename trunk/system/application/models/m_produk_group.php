@@ -231,7 +231,7 @@ class M_produk_group extends Model{
 		//function for print record
 		function produk_group_print($group_id, $group_kode ,$group_nama ,$group_duproduk ,$group_dmproduk ,$group_durawat ,$group_dmrawat ,$group_dupaket ,$group_dmpaket ,$group_keterangan ,$group_aktif ,$group_creator ,$group_date_create ,$group_update ,$group_date_update ,$group_revised ,$option,$filter){
 			//full query
-			$query="select * from produk_group";
+			$query="select * from produk_group ";
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 				$query .= " (group_id LIKE '%".addslashes($filter)."%' OR group_kode LIKE '%".addslashes($filter)."%' OR group_nama LIKE '%".addslashes($filter)."%' OR group_duproduk LIKE '%".addslashes($filter)."%' OR group_dmproduk LIKE '%".addslashes($filter)."%' OR group_durawat LIKE '%".addslashes($filter)."%' OR group_dmrawat LIKE '%".addslashes($filter)."%' OR group_dupaket LIKE '%".addslashes($filter)."%' OR group_dmpaket LIKE '%".addslashes($filter)."%' OR group_keterangan LIKE '%".addslashes($filter)."%' OR group_aktif LIKE '%".addslashes($filter)."%' OR group_creator LIKE '%".addslashes($filter)."%' OR group_date_create LIKE '%".addslashes($filter)."%' OR group_update LIKE '%".addslashes($filter)."%' OR group_date_update LIKE '%".addslashes($filter)."%' OR group_revised LIKE '%".addslashes($filter)."%' )";
@@ -309,7 +309,20 @@ class M_produk_group extends Model{
 		//function  for export to excel
 		function produk_group_export_excel($group_id, $group_kode ,$group_nama ,$group_duproduk ,$group_dmproduk ,$group_durawat ,$group_dmrawat ,$group_dupaket ,$group_dmpaket ,$group_keterangan ,$group_aktif ,$group_creator ,$group_date_create ,$group_update ,$group_date_update ,$group_revised ,$option,$filter){
 			//full query
-			$query="select * from produk_group";
+			$query="select 
+					group_kode AS kode,
+					group_nama as nama,
+					group_duproduk as dU_produk,
+					group_dmproduk as dM_produk,
+					group_durawat as dU_rawat,
+					group_dmrawat as dM_rawat,
+					group_dupaket as dU_paket,
+					group_dmpaket as dM_paket,
+					group_kelompok as kelompok,
+					group_keterangan as keterangan,
+					group_aktif as aktif
+					from produk_group ";
+					
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 				$query .= " (group_id LIKE '%".addslashes($filter)."%' OR group_kode LIKE '%".addslashes($filter)."%' OR group_nama LIKE '%".addslashes($filter)."%' OR group_duproduk LIKE '%".addslashes($filter)."%' OR group_dmproduk LIKE '%".addslashes($filter)."%' OR group_durawat LIKE '%".addslashes($filter)."%' OR group_dmrawat LIKE '%".addslashes($filter)."%' OR group_dupaket LIKE '%".addslashes($filter)."%' OR group_dmpaket LIKE '%".addslashes($filter)."%' OR group_keterangan LIKE '%".addslashes($filter)."%' OR group_aktif LIKE '%".addslashes($filter)."%' OR group_creator LIKE '%".addslashes($filter)."%' OR group_date_create LIKE '%".addslashes($filter)."%' OR group_update LIKE '%".addslashes($filter)."%' OR group_date_update LIKE '%".addslashes($filter)."%' OR group_revised LIKE '%".addslashes($filter)."%' )";

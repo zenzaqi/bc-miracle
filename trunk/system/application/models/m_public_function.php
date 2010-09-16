@@ -6,6 +6,49 @@ class M_public_function extends Model{
 		parent::Model();
 	}
 	
+	function get_gudang_nama($gudang_id){
+		$sql="SELECT gudang_nama FROM gudang WHERE gudang_id='".$gudang_id."'";
+		$query = $this->db->query($sql);
+		if($query->num_rows())
+		{
+			$row=$query->row();
+			return $row->gudang_nama;
+		}else
+			return 0;
+	}
+	
+	function get_produk_nama($produk_id){
+		$sql="SELECT produk_nama FROM produk WHERE produk_id='".$produk_id."'";
+		$query = $this->db->query($sql);
+		if($query->num_rows())
+		{
+			$row=$query->row();
+			return $row->produk_nama;
+		}else
+			return 0;
+	}
+	
+	function get_satuan_nama($satuan_id){
+		$sql="SELECT satuan_nama FROM satuan WHERE satuan_id='".$satuan_id."'";
+		$query = $this->db->query($sql);
+		if($query->num_rows())
+		{
+			$row=$query->row();
+			return $row->satuan_nama;
+		}else
+			return 0;
+	}
+	
+	function get_perawatan_nama($satuan_id){
+		$sql="SELECT rawat_nama FROM rawat WHERE rawat_id='".$rawat_id."'";
+		$query = $this->db->query($sql);
+		if($query->num_rows())
+		{
+			$row=$query->row();
+			return $row->rawat_nama;
+		}else
+			return 0;
+	}
 	
 	function get_laporan_terima_kas($tgl_awal,$tgl_akhir,$periode,$opsi){
 			$sql="";

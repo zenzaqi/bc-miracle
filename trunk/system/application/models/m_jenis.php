@@ -203,7 +203,13 @@ class M_jenis extends Model{
 		//function  for export to excel
 		function jenis_export_excel($jenis_id ,$jenis_kode ,$jenis_nama ,$jenis_kelompok ,$jenis_keterangan ,$jenis_aktif ,$option,$filter){
 			//full query
-			$query="select * from jenis";
+			$query="SELECT
+					jenis_kode AS kode,
+					jenis_nama AS nama,
+					jenis_kelompok AS kelompok,
+					jenis_keterangan AS keterangan,
+					jenis_aktif AS aktif
+					from jenis";
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 				$query .= " (jenis_id LIKE '%".addslashes($filter)."%' OR jenis_kode LIKE '%".addslashes($filter)."%' OR jenis_nama LIKE '%".addslashes($filter)."%' OR jenis_kelompok LIKE '%".addslashes($filter)."%' OR jenis_keterangan LIKE '%".addslashes($filter)."%' OR jenis_aktif LIKE '%".addslashes($filter)."%' )";

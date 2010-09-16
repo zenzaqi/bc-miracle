@@ -732,9 +732,43 @@ class M_perawatan extends Model{
 		}
 		
 		//function  for export to excel
-		function perawatan_export_excel($rawat_id ,$rawat_kode ,$rawat_kodelama ,$rawat_nama ,$rawat_group ,$rawat_kategori ,$rawat_jenis ,$rawat_keterangan ,$rawat_du ,$rawat_dm ,$rawat_point ,$rawat_harga ,$rawat_gudang ,$rawat_aktif ,$option,$filter){
+		function perawatan_export_excel(
+			$rawat_id,
+			$rawat_kode,
+			$rawat_kodelama,
+			$rawat_nama,
+			$rawat_group,
+			$rawat_kategori,
+			$rawat_jenis,
+			$rawat_keterangan,
+			$rawat_du,
+			$rawat_dm,
+			$rawat_point,
+			$rawat_kredit, 
+			$rawat_jumlah_tindakan, 
+			$rawat_harga,
+			$rawat_gudang,
+			$rawat_aktif,
+			$option,
+			$filter
+		){
 			//full query
-			$query="select * from perawatan";
+			$query="SELECT
+						if(rawat_kodelama='','-',ifnull(rawat_kodelama,'-')) AS kode_lama,
+						ifnull(rawat_kode,'-') AS kode_baru,
+						ifnull(rawat_nama,'-') AS nama_perawatan,
+						ifnull(group_nama,'-') AS group_1,
+						ifnull(jenis_nama,'-') AS group_2,
+						ifnull(kategori_nama,'-') AS jenis,
+						ifnull(rawat_du,'-') AS 'DU(%)',
+						ifnull(rawat_dm,'-') AS 'DM(%)',
+						ifnull(rawat_point,'-') AS point,
+						ifnull(rawat_kredit,'-') AS kredit,
+						ifnull(rawat_harga,'-') AS 'harga(Rp)',
+						ifnull(gudang_nama,'-') AS gudang,
+						rawat_aktif AS aktif
+					from vu_perawatan";
+					
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 				$query .= " (rawat_id LIKE '%".addslashes($filter)."%' OR rawat_kode LIKE '%".addslashes($filter)."%' OR rawat_kodelama LIKE '%".addslashes($filter)."%' OR rawat_nama LIKE '%".addslashes($filter)."%' OR rawat_group LIKE '%".addslashes($filter)."%' OR rawat_kategori LIKE '%".addslashes($filter)."%' OR rawat_jenis LIKE '%".addslashes($filter)."%' OR rawat_keterangan LIKE '%".addslashes($filter)."%' OR rawat_du LIKE '%".addslashes($filter)."%' OR rawat_dm LIKE '%".addslashes($filter)."%' OR rawat_point LIKE '%".addslashes($filter)."%' OR rawat_harga LIKE '%".addslashes($filter)."%' OR rawat_gudang LIKE '%".addslashes($filter)."%' OR rawat_aktif LIKE '%".addslashes($filter)."%' )";

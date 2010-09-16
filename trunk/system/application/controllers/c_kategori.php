@@ -262,7 +262,7 @@ class C_kategori extends Controller {
 		
 		$query = $this->m_kategori->kategori_export_excel($kategori_id ,$kategori_nama ,$kategori_jenis ,$kategori_keterangan ,$kategori_aktif ,$kategori_creator ,$kategori_date_create ,$kategori_update ,$kategori_date_update ,$kategori_revised ,$option,$filter);
 		
-		to_excel($query,"kategori"); 
+		to_excel($query,"jenis"); 
 		echo '1';
 			
 	}

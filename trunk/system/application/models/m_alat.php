@@ -227,7 +227,12 @@ class M_alat extends Model{
 		//function  for export to excel
 		function alat_export_excel($alat_id ,$alat_nama ,$alat_jumlah ,$alat_aktif ,$alat_creator ,$alat_date_create ,$alat_update ,$alat_date_update ,$alat_revised ,$option,$filter){
 			//full query
-			$query="select * from alat";
+			$query="select 	alat_nama AS nama,
+							alat_jumlah AS jumlah,
+							alat_aktif AS aktif
+
+					from 	alat";
+
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 				$query .= " (alat_id LIKE '%".addslashes($filter)."%' OR alat_nama LIKE '%".addslashes($filter)."%' OR alat_jumlah LIKE '%".addslashes($filter)."%' OR alat_aktif LIKE '%".addslashes($filter)."%' OR alat_creator LIKE '%".addslashes($filter)."%' OR alat_date_create LIKE '%".addslashes($filter)."%' OR alat_update LIKE '%".addslashes($filter)."%' OR alat_date_update LIKE '%".addslashes($filter)."%' OR alat_revised LIKE '%".addslashes($filter)."%' )";

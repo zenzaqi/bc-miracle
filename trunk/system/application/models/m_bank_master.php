@@ -183,7 +183,11 @@ class M_bank_master extends Model{
 		//function  for export to excel
 		function bank_master_export_excel($mbank_id ,$mbank_nama ,$mbank_keterangan ,$mbank_aktif ,$option,$filter){
 			//full query
-			$query="select * from bank_master";
+			$query="SELECT
+						`bank_master`.`mbank_nama` AS `nama`,
+						`bank_master`.`mbank_keterangan` AS `keterangan`,
+						`bank_master`.`mbank_aktif` AS `aktif`
+					from bank_master";
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 				$query .= " (mbank_id LIKE '%".addslashes($filter)."%' OR mbank_nama LIKE '%".addslashes($filter)."%' OR mbank_keterangan LIKE '%".addslashes($filter)."%' OR mbank_aktif LIKE '%".addslashes($filter)."%' )";

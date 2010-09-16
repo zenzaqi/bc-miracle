@@ -1530,7 +1530,6 @@ Ext.onReady(function(){
 			supplier_cp : supplier_cp_2excel,
 			supplier_contact_cp : supplier_contact_cp_2excel,
 			supplier_aktif : supplier_aktif_2excel,
-			supplier_creator : supplier_creator_2excel,
 		  	currentlisting: supplier_DataStore.baseParams.task // this tells us if we are searching or not
 		},
 		success: function(response){              

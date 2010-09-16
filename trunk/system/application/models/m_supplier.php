@@ -366,7 +366,16 @@ class M_supplier extends Model{
 		//function  for export to excel
 		function supplier_export_excel($supplier_id ,$supplier_kategori ,$supplier_nama ,$supplier_alamat ,$supplier_kota ,$supplier_kodepos ,$supplier_propinsi ,$supplier_negara ,$supplier_notelp ,$supplier_notelp2 ,$supplier_nofax ,$supplier_email ,$supplier_website ,$supplier_cp ,$supplier_contact_cp ,$supplier_aktif ,$supplier_creator ,$supplier_date_create ,$supplier_update ,$supplier_date_update ,$supplier_revised ,$option,$filter){
 			//full query
-			$query="select * from supplier";
+			$query="select 
+						if(supplier_kategori='','-',ifnull(supplier_kategori,'-')) AS kategori,
+						ifnull(supplier_nama,'-') AS nama,
+						ifnull(supplier_alamat,'-') AS alamat,
+						ifnull(supplier_kota,'-') AS kota,
+						ifnull(supplier_notelp,'-') AS no_tlp,
+						ifnull(supplier_cp,'-') AS contact_person,
+						ifnull(supplier_contact_cp,'-') AS tlp_cp,
+						supplier_aktif AS status
+					from supplier";
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 				$query .= " (supplier_id LIKE '%".addslashes($filter)."%' OR supplier_kategori LIKE '%".addslashes($filter)."%' OR supplier_nama LIKE '%".addslashes($filter)."%' OR supplier_alamat LIKE '%".addslashes($filter)."%' OR supplier_kota LIKE '%".addslashes($filter)."%' OR supplier_kodepos LIKE '%".addslashes($filter)."%' OR supplier_propinsi LIKE '%".addslashes($filter)."%' OR supplier_negara LIKE '%".addslashes($filter)."%' OR supplier_notelp LIKE '%".addslashes($filter)."%' OR supplier_notelp2 LIKE '%".addslashes($filter)."%' OR supplier_nofax LIKE '%".addslashes($filter)."%' OR supplier_email LIKE '%".addslashes($filter)."%' OR supplier_website LIKE '%".addslashes($filter)."%' OR supplier_cp LIKE '%".addslashes($filter)."%' OR supplier_contact_cp LIKE '%".addslashes($filter)."%' OR supplier_aktif LIKE '%".addslashes($filter)."%' OR supplier_creator LIKE '%".addslashes($filter)."%' OR supplier_date_create LIKE '%".addslashes($filter)."%' OR supplier_update LIKE '%".addslashes($filter)."%' OR supplier_date_update LIKE '%".addslashes($filter)."%' OR supplier_revised LIKE '%".addslashes($filter)."%' )";

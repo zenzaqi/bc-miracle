@@ -22,7 +22,6 @@ class C_kategori2 extends Controller {
 	
 	//set index
 	function index(){
-		$this->load->plugin('to_excel');
 		$this->load->helper('asset');
 		$this->load->view('main/v_kategori2');
 	}
@@ -225,7 +224,8 @@ class C_kategori2 extends Controller {
 		
 		$query = $this->m_kategori2->kategori2_export_excel($kategori2_id ,$kategori2_nama ,$kategori2_jenis ,$kategori2_keterangan ,$kategori2_aktif ,$option,$filter);
 		
-		to_excel($query,"kategori2"); 
+		$this->load->plugin('to_excel');
+		to_excel($query,"contribution_category"); 
 		echo '1';
 			
 	}

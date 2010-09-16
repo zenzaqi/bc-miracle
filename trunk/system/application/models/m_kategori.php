@@ -236,7 +236,14 @@ class M_kategori extends Model{
 		//function  for export to excel
 		function kategori_export_excel($kategori_id ,$kategori_nama ,$kategori_jenis ,$kategori_keterangan ,$kategori_aktif ,$kategori_creator ,$kategori_date_create ,$kategori_update ,$kategori_date_update ,$kategori_revised ,$option,$filter){
 			//full query
-			$query="select * from kategori";
+			$query="SELECT
+					kategori_nama AS nama,
+					kategori_jenis AS jenis,
+					kategori_akun AS akun,
+					kategori_keterangan AS keterangan,
+					kategori_aktif AS aktif
+					from kategori
+					";
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 				$query .= " (kategori_id LIKE '%".addslashes($filter)."%' OR kategori_nama LIKE '%".addslashes($filter)."%' OR kategori_jenis LIKE '%".addslashes($filter)."%' OR kategori_keterangan LIKE '%".addslashes($filter)."%' OR kategori_aktif LIKE '%".addslashes($filter)."%' OR kategori_creator LIKE '%".addslashes($filter)."%' OR kategori_date_create LIKE '%".addslashes($filter)."%' OR kategori_update LIKE '%".addslashes($filter)."%' OR kategori_date_update LIKE '%".addslashes($filter)."%' OR kategori_revised LIKE '%".addslashes($filter)."%' )";

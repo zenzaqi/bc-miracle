@@ -188,7 +188,10 @@ class M_departemen extends Model{
 		//function  for export to excel
 		function departemen_export_excel($departemen_id ,$departemen_nama ,$departemen_keterangan ,$departemen_aktif ,$option,$filter){
 			//full query
-			$query="select * from departemen";
+			$query="select departemen_nama AS nama,
+							departemen_keterangan AS keterangan,
+							departemen_aktif AS aktif
+					from departemen";
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 				$query .= " (departemen_id LIKE '%".addslashes($filter)."%' OR departemen_nama LIKE '%".addslashes($filter)."%' OR departemen_keterangan LIKE '%".addslashes($filter)."%' OR departemen_aktif LIKE '%".addslashes($filter)."%' )";

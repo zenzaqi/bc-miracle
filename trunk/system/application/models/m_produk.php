@@ -493,7 +493,22 @@ class M_produk extends Model{
 		//function  for export to excel
 		function produk_export_excel($produk_id ,$produk_kode ,$produk_kodelama ,$produk_group ,$produk_kategori ,$produk_jenis ,$produk_nama ,$produk_satuan ,$produk_du ,$produk_dm ,$produk_point ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif ,$option,$filter){
 			//full query
-			$query="select * from produk";
+			$query="SELECT	if(produk_kodelama='','-',ifnull(produk_kodelama,'-')) AS kode_lama,
+							ifnull(produk_kode,'-') AS kode_baru,
+							ifnull(produk_nama,'-') AS nama,
+							ifnull(group_nama,'-') AS group_1,
+							ifnull(jenis_nama,'-') AS group_2,
+							ifnull(kategori_nama,'-') AS jenis,
+							ifnull(satuan_kode,'-') AS satuan,
+							ifnull(produk_du,'-') AS 'DU (%)',
+							ifnull(produk_dm,'-') AS 'DM (%)',
+							ifnull(produk_point,'-') AS point,
+							ifnull(produk_volume,'-') AS vol,
+							ifnull(produk_harga,'-') AS harga,
+							produk_aktif AS aktif
+
+					from 	vu_produk ";
+					
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 				$query .= " (produk_id LIKE '%".addslashes($filter)."%' OR produk_kode LIKE '%".addslashes($filter)."%' OR produk_kodelama LIKE '%".addslashes($filter)."%' OR produk_group LIKE '%".addslashes($filter)."%' OR produk_kategori LIKE '%".addslashes($filter)."%' OR produk_jenis LIKE '%".addslashes($filter)."%' OR produk_nama LIKE '%".addslashes($filter)."%' OR produk_satuan LIKE '%".addslashes($filter)."%' OR produk_du LIKE '%".addslashes($filter)."%' OR produk_dm LIKE '%".addslashes($filter)."%' OR produk_point LIKE '%".addslashes($filter)."%' OR produk_volume LIKE '%".addslashes($filter)."%' OR produk_harga LIKE '%".addslashes($filter)."%' OR produk_keterangan LIKE '%".addslashes($filter)."%' OR produk_aktif LIKE '%".addslashes($filter)."%' )";
@@ -555,10 +570,10 @@ class M_produk extends Model{
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " produk_keterangan LIKE '%".$produk_keterangan."%'";
 				};
-				if($produk_aktif!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " produk_aktif LIKE '%".$produk_aktif."%'";
-				};
+				// if($produk_aktif!=''){
+					// $query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					// $query.= " produk_aktif LIKE '%".$produk_aktif."%'";
+				// };
 				$result = $this->db->query($query);
 			}
 			return $result;

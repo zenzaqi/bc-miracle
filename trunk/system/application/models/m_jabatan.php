@@ -189,7 +189,10 @@ class M_jabatan extends Model{
 		//function  for export to excel
 		function jabatan_export_excel($jabatan_id ,$jabatan_nama ,$jabatan_keterangan ,$jabatan_aktif ,$option,$filter){
 			//full query
-			$query="select * from jabatan";
+			$query="select jabatan_nama AS nama,
+							jabatan_keterangan AS keterangan,
+							jabatan_aktif AS aktif
+					from jabatan";
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 				$query .= " (jabatan_id LIKE '%".addslashes($filter)."%' OR jabatan_nama LIKE '%".addslashes($filter)."%' OR jabatan_keterangan LIKE '%".addslashes($filter)."%' OR jabatan_aktif LIKE '%".addslashes($filter)."%' )";

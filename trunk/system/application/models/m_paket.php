@@ -587,9 +587,22 @@ FROM ((`paket` INNER JOIN `produk_group` ON `paket`.`paket_group`=`produk_group`
 	}
 	
 	//function  for export to excel
-	function paket_export_excel($paket_id ,$paket_kode ,$paket_nama ,$paket_group ,$paket_keterangan ,$paket_du ,$paket_dm ,$paket_point ,$paket_harga ,$paket_expired ,$paket_aktif ,$option,$filter){
+	function paket_export_excel($paket_id ,$paket_kode ,$paket_kodelama ,$paket_nama ,$paket_group ,$paket_keterangan ,$paket_du ,$paket_dm ,$paket_point ,$paket_harga ,$paket_expired ,$paket_aktif ,$option,$filter){
 		//full query
-		$query="select * from paket";
+		$query="SELECT
+					if(paket_kodelama='','-',ifnull(paket_kodelama,'-')) AS kode_lama,
+					ifnull(paket_kode,'-') AS kode_baru,
+					ifnull(paket_nama,'-') AS nama,
+					ifnull(produk_group.group_nama,'-') AS group_1,
+					ifnull(paket_du,'-') AS 'DU(%)',
+					ifnull(paket_dm,'-') AS 'DM(%)',
+					ifnull(paket_point,'-') AS point,
+					ifnull(paket_harga,'-') AS 'Harga(Rp)',
+					ifnull(paket_expired,'-') AS 'Exp.(hari)',
+					paket_aktif AS status
+				FROM paket
+				Inner Join produk_group ON paket_group = produk_group.group_id";
+				
 		if($option=='LIST'){
 			$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 			$query .= " (paket_id LIKE '%".addslashes($filter)."%' OR paket_kode LIKE '%".addslashes($filter)."%' OR paket_nama LIKE '%".addslashes($filter)."%' OR paket_group LIKE '%".addslashes($filter)."%' OR paket_keterangan LIKE '%".addslashes($filter)."%' OR paket_du LIKE '%".addslashes($filter)."%' OR paket_dm LIKE '%".addslashes($filter)."%' OR paket_point LIKE '%".addslashes($filter)."%' OR paket_harga LIKE '%".addslashes($filter)."%' OR paket_expired LIKE '%".addslashes($filter)."%' OR paket_aktif LIKE '%".addslashes($filter)."%' )";
