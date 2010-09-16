@@ -541,7 +541,7 @@ Ext.onReady(function(){
 	
 	/* setValue to EDIT */
 	function draft_reset_form(){
-		
+		draft_number_radioField.reset();
 	}
 	
 	
@@ -1140,6 +1140,7 @@ Ext.onReady(function(){
 			,{
 				text: 'Cancel',
 				handler: function(){
+					draft_reset_form();
 					draft_saveWindow.hide();
 				}
 			}
