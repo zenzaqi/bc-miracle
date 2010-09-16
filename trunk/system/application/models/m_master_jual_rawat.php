@@ -396,7 +396,25 @@ class M_master_jual_rawat extends Model{
 			$sql="SELECT member_id FROM member WHERE member_cust='$jrawat_cust' AND (member_valid >= '$date_now')";
 			$rs=$this->db->query($sql);
 			if($rs->num_rows()){
-				$sql="SELECT drawat_jumlah
+				//UPDATE db.master_jual_rawat.jrawat_point
+				$sqlu = "UPDATE master_jual_rawat, vu_jrawat_total_point
+					SET master_jual_rawat.jrawat_point = vu_jrawat_total_point.jrawat_total_point
+					WHERE master_jual_rawat.jrawat_id='".$jrawat_id."'
+						AND master_jual_rawat.jrawat_id=vu_jrawat_total_point.jrawat_id";
+				$this->db->query($sqlu);
+				if($this->db->affected_rows()>-1){
+					//UPDATE db.customer.cust_point <== ditambahkan dari db.master_jual_rawat.jrawat_point
+					$sqlu = "UPDATE customer
+						SET customer.cust_point=(customer.cust_point + (
+							SELECT master_jual_rawat.jrawat_point FROM master_jual_rawat WHERE master_jual_rawat.jrawat_id='".$jrawat_id."'
+							))
+						WHERE customer.cust_id='".$jrawat_cust."'";
+					$this->db->query($sqlu);
+					if($this->db->affected_rows()>-1){
+						return 1;
+					}
+				}
+				/*$sql="SELECT drawat_jumlah
 						,drawat_harga
 						,rawat_point
 						,drawat_diskon
@@ -451,7 +469,7 @@ class M_master_jual_rawat extends Model{
 					}
 				}else{
 					return 1;
-				}
+				}*/
 			}else{
 				return 1;
 			}
