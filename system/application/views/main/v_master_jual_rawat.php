@@ -1339,8 +1339,8 @@ Ext.onReady(function(){
 									if(voucher_jual_rawatDataStore.getCount()){
 										jrawat_voucher_record=voucher_jual_rawatDataStore.getAt(0);
 										jrawat_voucher_noField.setValue(jrawat_voucher_record.data.tvoucher_novoucher);
-										jrawat_voucher_cashbackField.setValue(jrawat_voucher_record.data.voucher_cashback);
-										jrawat_voucher_cashback_cfField.setValue(CurrencyFormatted(jrawat_voucher_record.data.voucher_cashback));
+										jrawat_voucher_cashbackField.setValue(jrawat_voucher_record.data.tvoucher_nilai);
+										jrawat_voucher_cashback_cfField.setValue(CurrencyFormatted(jrawat_voucher_record.data.tvoucher_nilai));
 									}
 							}
 					 	}
@@ -1436,11 +1436,11 @@ Ext.onReady(function(){
 						params : { no_faktur: jrawat_nobuktiField.getValue() },
 					  	callback: function(opts, success, response)  {
 							if (success) {
-									if(tunai_jual_rawat_DataStore.getCount()){
+									if(voucher_jual_rawatDataStore.getCount()){
 										jrawat_voucher_record=voucher_jual_rawatDataStore.getAt(0);
-										jrawat_voucher_no2Field.setValue(jrawat_tunai_record.data.tvoucher_novoucher);
-										jrawat_voucher_cashback2Field.setValue(jrawat_tunai_record.data.voucher_cashback);
-										jrawat_voucher_cashback2_cfField.setValue(CurrencyFormatted(jrawat_tunai_record.data.voucher_cashback));
+										jrawat_voucher_no2Field.setValue(jrawat_voucher_record.data.tvoucher_novoucher);
+										jrawat_voucher_cashback2Field.setValue(jrawat_voucher_record.data.tvoucher_nilai);
+										jrawat_voucher_cashback2_cfField.setValue(CurrencyFormatted(jrawat_voucher_record.data.tvoucher_nilai));
 									}
 							}
 					 	}
@@ -1536,11 +1536,11 @@ Ext.onReady(function(){
 						params : { no_faktur: jrawat_nobuktiField.getValue() },
 					  	callback: function(opts, success, response)  {
 							if (success) {
-									if(tunai_jual_rawat_DataStore.getCount()){
+									if(voucher_jual_rawatDataStore.getCount()){
 										jrawat_voucher_record=voucher_jual_rawatDataStore.getAt(0);
-										jrawat_voucher_no3Field.setValue(jrawat_tunai_record.data.tvoucher_novoucher);
-										jrawat_voucher_cashback3Field.setValue(jrawat_tunai_record.data.voucher_cashback);
-										jrawat_voucher_cashback3_cfField.setValue(CurrencyFormatted(jrawat_tunai_record.data.voucher_cashback));
+										jrawat_voucher_no3Field.setValue(jrawat_voucher_record.data.tvoucher_novoucher);
+										jrawat_voucher_cashback3Field.setValue(jrawat_voucher_record.data.tvoucher_nilai);
+										jrawat_voucher_cashback3_cfField.setValue(CurrencyFormatted(jrawat_voucher_record.data.tvoucher_nilai));
 									}
 							}
 					 	}
@@ -2042,7 +2042,7 @@ Ext.onReady(function(){
 		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
 			{name: 'tvoucher_id', type: 'int', mapping: 'tvoucher_id'},
 			{name: 'tvoucher_novoucher', type: 'string', mapping: 'tvoucher_novoucher'},
-			{name: 'voucher_cashback', type: 'float', mapping: 'voucher_cashback'}
+			{name: 'tvoucher_nilai', type: 'float', mapping: 'tvoucher_nilai'}
 		]),
 		sortInfo:{field: 'tvoucher_novoucher', direction: "ASC"}
 	});
@@ -2697,6 +2697,7 @@ Ext.onReady(function(){
 		mode: 'remote',
 		displayField:'cust_nama',
 		valueField: 'cust_id',
+		forceSelection: true,
         typeAhead: false,
         loadingText: 'Searching...',
         pageSize:10,

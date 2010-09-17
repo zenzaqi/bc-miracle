@@ -2588,6 +2588,7 @@ Ext.onReady(function(){
 		mode: 'remote',
 		displayField:'cust_nama',
 		valueField: 'cust_id',
+		forceSelection: true,
         typeAhead: false,
         loadingText: 'Searching...',
         pageSize:10,

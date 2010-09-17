@@ -1,0 +1,1 @@
+ALTER TABLE `detail_ambil_paket` ADD `dapaket_tgl_ambil` DATE NOT NULL AFTER `dapaket_keterangan` ;

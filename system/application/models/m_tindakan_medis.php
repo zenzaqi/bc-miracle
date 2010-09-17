@@ -1273,7 +1273,11 @@ class M_tindakan_medis extends Model{
 			}else{
 				// data sudah ada di db.tindakan_detail ==> mode Edit
 				if($dtrawat_status=='selesai'){
-					return 1;
+					//return 1;
+					if($i==$size_array){
+						$this->drawat_from_tmedis_nonmedis_list_insert($dtrawat_master);
+						return 1;
+					}
 				}else{
 					$sql = "UPDATE tindakan_detail
 						SET dtrawat_keterangan='".$dtrawat_keterangan."'
@@ -1283,7 +1287,7 @@ class M_tindakan_medis extends Model{
 							,dtrawat_revised=(dtrawat_revised+1)
 						WHERE dtrawat_id='".$dtrawat_id."'";
 					$this->db->query($sql);
-					if($this->db->affected_rows()){
+					if($this->db->affected_rows()>-1){
 						if($i==$size_array){
 							$this->drawat_from_tmedis_nonmedis_list_insert($dtrawat_master);
 							return 1;
