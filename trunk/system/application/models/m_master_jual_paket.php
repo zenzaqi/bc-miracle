@@ -416,9 +416,9 @@ class M_master_jual_paket extends Model{
 			
 		}
 		
-		function member_point_update($dpaket_master){
+		function member_point_update($jpaket_id){
 			$date_now=date('Y-m-d');
-			$sql="SELECT jpaket_cust FROM master_jual_paket WHERE jpaket_id='$dpaket_master'";
+			$sql="SELECT jpaket_cust FROM master_jual_paket WHERE jpaket_id='$jpaket_id'";
 			$rs=$this->db->query($sql);
 			$record=$rs->row_array();
 			$jpaket_cust=$record['jpaket_cust'];
@@ -426,7 +426,22 @@ class M_master_jual_paket extends Model{
 			$sql="SELECT member_id FROM member WHERE member_cust='$jpaket_cust' AND (member_valid >= '$date_now')";
 			$rs=$this->db->query($sql);
 			if($rs->num_rows()){
-				$sql="SELECT dpaket_jumlah
+				//UPDATE db.master_jual_paket.jpaket_point
+				$sqlu = "UPDATE master_jual_paket, vu_jpaket_total_point
+					SET master_jual_paket.jpaket_point = vu_jpaket_total_point.jpaket_total_point
+					WHERE master_jual_paket.jpaket_id='".$jpaket_id."'
+						AND master_jual_paket.jpaket_id=vu_jpaket_total_point.jpaket_id";
+				$this->db->query($sqlu);
+				if($this->db->affected_rows()>-1){
+					//UPDATE db.customer.cust_point <== ditambahkan dari db.master_jual_paket.jpaket_point
+					$sqlu = "UPDATE customer
+						SET customer.cust_point=(customer.cust_point + (
+							SELECT master_jual_paket.jpaket_point FROM master_jual_paket WHERE master_jual_paket.jpaket_id='".$jpaket_id."'
+							))
+						WHERE customer.cust_id='".$jpaket_cust."'";
+					$this->db->query($sqlu);
+				}
+				/*$sql="SELECT dpaket_jumlah
 						,dpaket_harga
 						,paket_point
 						,dpaket_diskon
@@ -435,7 +450,7 @@ class M_master_jual_paket extends Model{
 					FROM detail_jual_paket
 					LEFT JOIN master_jual_paket ON(dpaket_master=jpaket_id)
 					LEFT JOIN paket ON(dpaket_paket=paket_id)
-					WHERE dpaket_master='$dpaket_master'";
+					WHERE dpaket_master='$jpaket_id'";
 				$rs=$this->db->query($sql);
 				if($rs->num_rows()){
 					$one_record = $rs->row();
@@ -472,9 +487,9 @@ class M_master_jual_paket extends Model{
 					$dtu_jpaket=array(
 					"jpaket_point"=>$jumlah_point
 					);
-					$this->db->where('jpaket_id', $dpaket_master);
+					$this->db->where('jpaket_id', $jpaket_id);
 					$this->db->update('master_jual_paket', $dtu_jpaket);
-				}
+				}*/
 			}
 		}
 		

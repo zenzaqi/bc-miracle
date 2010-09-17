@@ -369,9 +369,9 @@ class M_master_jual_produk extends Model{
 			
 		}
 		
-		function member_point_update($dproduk_master){
+		function member_point_update($jproduk_id){
 			$date_now=date('Y-m-d');
-			$sql="SELECT jproduk_cust FROM master_jual_produk WHERE jproduk_id='$dproduk_master'";
+			$sql="SELECT jproduk_cust FROM master_jual_produk WHERE jproduk_id='$jproduk_id'";
 			$rs=$this->db->query($sql);
 			$record=$rs->row_array();
 			$jproduk_cust=$record['jproduk_cust'];
@@ -379,7 +379,22 @@ class M_master_jual_produk extends Model{
 			$sql="SELECT member_id FROM member WHERE member_cust='$jproduk_cust' AND (member_valid >= '$date_now')";
 			$rs=$this->db->query($sql);
 			if($rs->num_rows()){
-				$sql="SELECT dproduk_jumlah
+				//UPDATE db.master_jual_produk.jproduk_point
+				$sqlu = "UPDATE master_jual_produk, vu_jproduk_total_point
+					SET master_jual_produk.jproduk_point = vu_jproduk_total_point.jproduk_total_point
+					WHERE master_jual_produk.jproduk_id='".$jproduk_id."'
+						AND master_jual_produk.jproduk_id=vu_jproduk_total_point.jproduk_id";
+				$this->db->query($sqlu);
+				if($this->db->affected_rows()>-1){
+					//UPDATE db.customer.cust_point <== ditambahkan dari db.master_jual_produk.jproduk_point
+					$sqlu = "UPDATE customer
+						SET customer.cust_point=(customer.cust_point + (
+							SELECT master_jual_produk.jproduk_point FROM master_jual_produk WHERE master_jual_produk.jproduk_id='".$jproduk_id."'
+							))
+						WHERE customer.cust_id='".$jproduk_cust."'";
+					$this->db->query($sqlu);
+				}
+				/*$sql="SELECT dproduk_jumlah
 						,dproduk_harga
 						,dproduk_diskon
 						,produk_point
@@ -388,7 +403,7 @@ class M_master_jual_produk extends Model{
 					FROM detail_jual_produk
 					LEFT JOIN master_jual_produk ON(dproduk_master=jproduk_id)
 					LEFT JOIN produk ON(dproduk_produk=produk_id)
-					WHERE dproduk_master='$dproduk_master'";
+					WHERE dproduk_master='$jproduk_id'";
 				$rs=$this->db->query($sql);
 				if($rs->num_rows()){
 					$one_record = $rs->row();
@@ -425,9 +440,9 @@ class M_master_jual_produk extends Model{
 					$dtu_jproduk=array(
 					"jproduk_point"=>$jumlah_point
 					);
-					$this->db->where('jproduk_id', $dproduk_master);
+					$this->db->where('jproduk_id', $jproduk_id);
 					$this->db->update('master_jual_produk', $dtu_jproduk);
-				}
+				}*/
 			}
 		}
 		
