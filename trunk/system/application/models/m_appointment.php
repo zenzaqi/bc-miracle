@@ -1412,7 +1412,7 @@ class M_appointment extends Model{
 							,dtrawat_revised=(dtrawat_revised+1)
 						WHERE dtrawat_dapp='".$dapp_id."'";
 					$this->db->query($sqlu_dtrawat);
-					if($this->db->affected_rows()){
+					if($this->db->affected_rows()>-1){
 						//UPDATE db.appointment_detail.dapp_status!='datang'
 						$sqlu_dapp = "UPDATE appointment_detail
 							SET dapp_status='".$dapp_status."'
@@ -1422,7 +1422,7 @@ class M_appointment extends Model{
 								,dapp_revised=(dapp_revised+1)
 							WHERE dapp_id='".$dapp_id."'";
 						$this->db->query($sqlu_dapp);
-						if($this->db->affected_rows()){
+						if($this->db->affected_rows()>-1){
 							/* DeCounter $dokter_id / $terapis_id
 							 * $dapp_counter = 'true'/'false' ==> return tetap '1'
 							*/
