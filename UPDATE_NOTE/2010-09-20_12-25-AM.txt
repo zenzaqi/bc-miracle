@@ -1,0 +1,5 @@
+o> Fix update
+   - Perbaikan laporan Stok mutasi
+     + print laporan
+   - Perbaikan laporan kartu stok
+     + print laporan
