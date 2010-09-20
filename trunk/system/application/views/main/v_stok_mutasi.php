@@ -128,7 +128,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'group_id'
 		},[
-		/* dataIndex => insert intohpp_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'group_id', type: 'int', mapping: 'group_id'}, 
 			{name: 'group_kode', type: 'string', mapping: 'group_kode'}, 
 			{name: 'group_nama', type: 'string', mapping: 'group_nama'}
@@ -149,7 +148,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'produk_id'
 		},[
-		/* dataIndex => insert intohpp_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'produk_id', type: 'int', mapping: 'produk_id'}, 
 			{name: 'produk_kode', type: 'string', mapping: 'produk_kode'}, 
 			{name: 'produk_jenis', type: 'string', mapping: 'produk_jenis'}, 
@@ -299,12 +297,12 @@ Ext.onReady(function(){
 			tooltip: 'Refresh datagrid',
 			handler: stok_mutasi_reset_search,
 			iconCls:'icon-refresh'
-		},'-',{
+		}/*,'-',{
 			text: 'Export Excel',
 			tooltip: 'Export to Excel(.xls) Document',
 			iconCls:'icon-xls',
 			handler: stok_mutasi_export_excel
-		}, '-',{
+		}*/, '-',{
 			text: 'Print',
 			tooltip: 'Print Document',
 			iconCls:'icon-print',
@@ -361,7 +359,7 @@ Ext.onReady(function(){
 		if(stok_mutasi_gudangSearchField.getValue()!==null){ gudang_search=stok_mutasi_gudangSearchField.getValue()}
 		// change the store parameters
 		stok_mutasi_DataStore.baseParams = {
-			task			: 	'LIST',
+			task			: 	'SEARCH',
 			produk_id		:	produk_nama_search, 
 			group1_id		:	group1_search,
 			tanggal_start	:	tanggal_start_search, 
@@ -391,8 +389,7 @@ Ext.onReady(function(){
 	/* Function for reset search result */
 	function stok_mutasi_reset_search(){
 		// reset the store parameters
-		stok_mutasi_DataStore.baseParams = { task: 'LIST' };
-		// Cause the datastore to do another query : 
+		stok_mutasi_DataStore.baseParams = { task: 'LIST', start: 0, limit: pageS };
 		stok_mutasi_DataStore.reload({params: {start: 0, limit: pageS}});
 		stok_mutasi_searchWindow.close();
 	};
@@ -469,7 +466,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'gudang_id'
 		},[
-		/* dataIndex => insert intocustomer_note_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'mutasi_gudang_value', type: 'int', mapping: 'gudang_id'},
 			{name: 'mutasi_gudang_nama', type: 'string', mapping: 'gudang_nama'}
 		]),
@@ -675,40 +671,57 @@ Ext.onReady(function(){
 	/* Function for print List Grid */
 	function stok_mutasi_print(){
 		var searchquery = "";
-		var produk_id_print=null;
-		var produk_nama_print=null;
-		var satuan_id_print=null;
-		var satuan_nama_print=null;
-		var stok_saldo_print=null;
+		var produk_id_print='';
+		var group1_id_print='';
+		var tanggal_start_print=null;
+		var tanggal_end_print=null;
+		var opsi_satuan_print=null;
+		var opsi_produk_print=null;
+		var gudang_print=null;
 		var win;              
-		// check if we do have some search data...
+
 		if(stok_mutasi_DataStore.baseParams.query!==null){searchquery = stok_mutasi_DataStore.baseParams.query;}
+		
 		if(stok_mutasi_DataStore.baseParams.produk_id!==null){produk_id_print = stok_mutasi_DataStore.baseParams.produk_id;}
-		if(stok_mutasi_DataStore.baseParams.produk_nama!==null){produk_nama_print = stok_mutasi_DataStore.baseParams.produk_nama;}
-		if(stok_mutasi_DataStore.baseParams.satuan_id!==null){satuan_id_print = stok_mutasi_DataStore.baseParams.satuan_id;}
-		if(stok_mutasi_DataStore.baseParams.satuan_nama!==null){satuan_nama_print = stok_mutasi_DataStore.baseParams.satuan_nama;}
-		if(stok_mutasi_DataStore.baseParams.stok_saldo!==null){stok_saldo_print = stok_mutasi_DataStore.baseParams.stok_saldo;}
+		if(stok_mutasi_DataStore.baseParams.group1_id!==null){group1_id_print = stok_mutasi_DataStore.baseParams.group1_id;}
+		if(stok_mutasi_DataStore.baseParams.tanggal_start!==null){tanggal_start_print = stok_mutasi_DataStore.baseParams.tanggal_start;}
+		if(stok_mutasi_DataStore.baseParams.tanggal_end!==null){tanggal_end_print = stok_mutasi_DataStore.baseParams.tanggal_end;}
+		if(stok_mutasi_DataStore.baseParams.opsi_satuan!==null){opsi_satuan_print = stok_mutasi_DataStore.baseParams.opsi_satuan;}
+		if(stok_mutasi_DataStore.baseParams.opsi_produk!==null){opsi_produk_print = stok_mutasi_DataStore.baseParams.opsi_produk;}
+		if(stok_mutasi_DataStore.baseParams.gudang!==null){gudang_print = stok_mutasi_DataStore.baseParams.gudang;}
+		
+		
+		Ext.MessageBox.show({
+		   msg: 'Sedang memproses data, mohon tunggu...',
+		   progressText: 'proses...',
+		   width:350,
+		   wait:true
+		});
 		
 		Ext.Ajax.request({   
 		waitMsg: 'Please Wait...',
 		url: 'index.php?c=c_stok_mutasi&m=get_action',
+		timeout: 3600000,
 		params: {
-			task: "PRINT",
-		  	query: searchquery,                    		// if we are doing a quicksearch, use this
-			//if we are doing advanced search, use this
-			produk_id : produk_id_print,
-			produk_nama : produk_nama_print,
-			satuan_id : satuan_id_print,
-			satuan_nama : satuan_nama_print,
-			stok_saldo : stok_saldo_print,
-		  	currentlisting: stok_mutasi_DataStore.baseParams.task // this tells us if we are searching or not
+			task			: "PRINT",
+		  	query			: searchquery,                    		
+			produk_id		: produk_id_print, 
+			group1_id		: group1_id_print,
+			tanggal_start	: tanggal_start_print, 
+			tanggal_end		: tanggal_end_print,
+			opsi_satuan		: opsi_satuan_print,
+			gudang			: gudang_print,
+			opsi_produk		: opsi_produk_print,
+		  	currentlisting	: stok_mutasi_DataStore.baseParams.task 
 		}, 
 		success: function(response){              
 		  	var result=eval(response.responseText);
 		  	switch(result){
 		  	case 1:
+				Ext.MessageBox.hide();
+				
 				win = window.open('./print/stok_mutasi_printlist.html','stok_mutasilist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
-				win.print();
+
 				break;
 		  	default:
 				Ext.MessageBox.show({

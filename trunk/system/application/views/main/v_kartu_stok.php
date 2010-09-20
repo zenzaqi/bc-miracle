@@ -99,7 +99,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'stok_tanggal'
 		},[
-		/* dataIndex => insert intohpp_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'stok_tanggal', type: 'date', dateFormat: 'Y-m-d', mapping: 'tanggal'}, 
 			{name: 'stok_nobukti', type: 'string', mapping: 'no_bukti'}, 
 			{name: 'stok_keterangan', type: 'string', mapping: 'keterangan'}, 
@@ -125,7 +124,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'stok_awal'
 		},[
-		/* dataIndex => insert intohpp_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'stok_awal', type: 'float', mapping: 'stok_awal'}
 		]),
 		sortInfo:{field: 'stok_awal', direction: "ASC"}
@@ -145,7 +143,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'produk_id'
 		},[
-		/* dataIndex => insert intohpp_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'produk_id', type: 'int', mapping: 'produk_id'}, 
 			{name: 'produk_kode', type: 'string', mapping: 'produk_kode'}, 
 			{name: 'produk_jenis', type: 'string', mapping: 'produk_jenis'}, 
@@ -351,12 +348,12 @@ Ext.onReady(function(){
 			tooltip: 'Refresh datagrid',
 			handler: kartu_stok_reset_search,
 			iconCls:'icon-refresh'
-		},'-',{
+		}/*,'-',{
 			text: 'Export Excel',
 			tooltip: 'Export to Excel(.xls) Document',
 			iconCls:'icon-xls',
 			handler: kartu_stok_export_excel
-		}, '-',{
+		}*/, '-',{
 			text: 'Print',
 			tooltip: 'Print Document',
 			iconCls:'icon-print',
@@ -410,7 +407,7 @@ Ext.onReady(function(){
 		});
 		
 		kartu_stok_DataStore.baseParams = {
-			task			: 'LIST',
+			task			: 	'SEARCH',
 			produk_id		:	produk_nama_search, 
 			tanggal_start	:	tanggal_start_search, 
 			tanggal_end		:	tanggal_end_search,
@@ -710,7 +707,10 @@ Ext.onReady(function(){
 		kartu_stok_produk_allField.setValue(true);
 		kartu_stok_produk_namaSearchField.reset();
 		kartu_stok_produk_namaSearchField.setValue(null);
-		
+		kartu_stok_tanggal_startSearchField.reset();
+		kartu_stok_tanggal_startSearchField.setValue(null);
+		kartu_stok_tanggal_endSearchField.reset();
+		kartu_stok_tanggal_endSearchField.setValue(null);
 	}
 	
   	/* Function for Displaying  Search Window Form */
@@ -729,39 +729,48 @@ Ext.onReady(function(){
 	function kartu_stok_print(){
 		var searchquery = "";
 		var produk_id_print=null;
-		var produk_nama_print=null;
-		var satuan_id_print=null;
-		var satuan_nama_print=null;
-		var stok_saldo_print=null;
-		var win;              
+		var tanggal_start_print=null;
+		var tanggal_end_print=null;
+		var opsi_satuan_print=null;
+		var gudang_print=null;
+		var win;            
+		
+		
+		Ext.MessageBox.show({
+		   msg: 'Sedang memproses data, mohon tunggu...',
+		   progressText: 'proses...',
+		   width:350,
+		   wait:true
+		});
+		
 		// check if we do have some search data...
 		if(kartu_stok_DataStore.baseParams.query!==null){searchquery = kartu_stok_DataStore.baseParams.query;}
 		if(kartu_stok_DataStore.baseParams.produk_id!==null){produk_id_print = kartu_stok_DataStore.baseParams.produk_id;}
-		if(kartu_stok_DataStore.baseParams.produk_nama!==null){produk_nama_print = kartu_stok_DataStore.baseParams.produk_nama;}
-		if(kartu_stok_DataStore.baseParams.satuan_id!==null){satuan_id_print = kartu_stok_DataStore.baseParams.satuan_id;}
-		if(kartu_stok_DataStore.baseParams.satuan_nama!==null){satuan_nama_print = kartu_stok_DataStore.baseParams.satuan_nama;}
-		if(kartu_stok_DataStore.baseParams.stok_saldo!==null){stok_saldo_print = kartu_stok_DataStore.baseParams.stok_saldo;}
+		if(kartu_stok_DataStore.baseParams.tanggal_start!==null){tanggal_start_print = kartu_stok_DataStore.baseParams.tanggal_start;}
+		if(kartu_stok_DataStore.baseParams.tanggal_end!==null){tanggal_end_print = kartu_stok_DataStore.baseParams.tanggal_end;}
+		if(kartu_stok_DataStore.baseParams.opsi_satuan!==null){opsi_satuan_print = kartu_stok_DataStore.baseParams.opsi_satuan;}
+		if(kartu_stok_DataStore.baseParams.gudang!==null){gudang_print = kartu_stok_DataStore.baseParams.gudang;}
 		
 		Ext.Ajax.request({   
 		waitMsg: 'Please Wait...',
 		url: 'index.php?c=c_kartu_stok&m=get_action',
+		timeout: 3600000,
 		params: {
-			task: "PRINT",
-		  	query: searchquery,                    		// if we are doing a quicksearch, use this
-			//if we are doing advanced search, use this
-			produk_id : produk_id_print,
-			produk_nama : produk_nama_print,
-			satuan_id : satuan_id_print,
-			satuan_nama : satuan_nama_print,
-			stok_saldo : stok_saldo_print,
-		  	currentlisting: kartu_stok_DataStore.baseParams.task // this tells us if we are searching or not
+			task			: "PRINT",
+		  	query			: searchquery,                    		
+			produk_id 		: produk_id_print,
+			tanggal_start 	: tanggal_start_print,
+			tanggal_end 	: tanggal_end_print,
+			opsi_satuan 	: opsi_satuan_print,
+			gudang 			: gudang_print,
+		  	currentlisting	: kartu_stok_DataStore.baseParams.task // this tells us if we are searching or not
 		}, 
 		success: function(response){              
 		  	var result=eval(response.responseText);
 		  	switch(result){
 		  	case 1:
+				Ext.MessageBox.hide();
 				win = window.open('./print/kartu_stok_printlist.html','kartu_stoklist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
-				win.print();
 				break;
 		  	default:
 				Ext.MessageBox.show({

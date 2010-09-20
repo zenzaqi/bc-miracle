@@ -323,21 +323,11 @@ Ext.onReady(function(){
 			tooltip: 'Advanced Search',
 			iconCls:'icon-search',
 			handler: display_form_search_window 
-		}/*, '-', 
-			new Ext.app.SearchField({
-			store: vu_stok_all_saldo_DataStore,
-			params: {start: 0, limit: pageS},
-			width: 120
-		})*/,'-',{
+		},'-',{
 			text: 'Refresh',
 			tooltip: 'Refresh datagrid',
 			handler: vu_stok_all_saldo_reset_search,
 			iconCls:'icon-refresh'
-		},'-',{
-			text: 'Export Excel',
-			tooltip: 'Export to Excel(.xls) Document',
-			iconCls:'icon-xls',
-			handler: vu_stok_all_saldo_export_excel
 		}, '-',{
 			text: 'Print',
 			tooltip: 'Print Document',
@@ -356,19 +346,13 @@ Ext.onReady(function(){
 		{ 
 			text: 'View', tooltip: 'View selected record', 
 			iconCls:'icon-update',
-			handler: vu_stok_all_saldo_editContextMenu 
+			handler: vu_stok_all_saldo_confirm_update 
 		},
 		{ 
 			text: 'Print',
 			tooltip: 'Print Document',
 			iconCls:'icon-print',
 			handler: vu_stok_all_saldo_print 
-		},
-		{ 
-			text: 'Export Excel', 
-			tooltip: 'Export to Excel(.xls) Document',
-			iconCls:'icon-xls',
-			handler: vu_stok_all_saldo_export_excel 
 		}
 		]
 	}); 
@@ -511,7 +495,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'produk_id'
 		},[
-		/* dataIndex => insert intohpp_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'produk_id', type: 'int', mapping: 'produk_id'}, 
 			{name: 'produk_kode', type: 'string', mapping: 'produk_kode'}, 
 			{name: 'produk_jenis', type: 'string', mapping: 'produk_jenis'}, 
@@ -676,8 +659,7 @@ Ext.onReady(function(){
 
 		// change the store parameters
 		vu_stok_all_saldo_DataStore.baseParams = {
-			task: 'LIST',
-			//variable here
+			task			: 'SEARCH',
 			produk_id		:	produk_nama_search, 
 			tanggal_start	:	tanggal_start_search, 
 			tanggal_end		:	tanggal_end_search,
@@ -705,8 +687,7 @@ Ext.onReady(function(){
 	/* Function for reset search result */
 	function vu_stok_all_saldo_reset_search(){
 		// reset the store parameters
-		vu_stok_all_saldo_DataStore.baseParams = { task: 'LIST' };
-		// Cause the datastore to do another query : 
+		vu_stok_all_saldo_DataStore.baseParams = { task: 'LIST', start:0 , limit: pageS };
 		vu_stok_all_saldo_DataStore.reload({params: {start: 0, limit: pageS}});
 		vu_stok_all_saldo_searchWindow.close();
 	};
@@ -899,39 +880,45 @@ Ext.onReady(function(){
 	function vu_stok_all_saldo_print(){
 		var searchquery = "";
 		var produk_id_print=null;
-		var produk_nama_print=null;
-		var satuan_id_print=null;
-		var satuan_nama_print=null;
-		var stok_saldo_print=null;
+		var tanggal_start_print=null;
+		var tanggal_end_print=null;
+		var opsi_satuan=null;
 		var win;              
+			
 		// check if we do have some search data...
 		if(vu_stok_all_saldo_DataStore.baseParams.query!==null){searchquery = vu_stok_all_saldo_DataStore.baseParams.query;}
 		if(vu_stok_all_saldo_DataStore.baseParams.produk_id!==null){produk_id_print = vu_stok_all_saldo_DataStore.baseParams.produk_id;}
-		if(vu_stok_all_saldo_DataStore.baseParams.produk_nama!==null){produk_nama_print = vu_stok_all_saldo_DataStore.baseParams.produk_nama;}
-		if(vu_stok_all_saldo_DataStore.baseParams.satuan_id!==null){satuan_id_print = vu_stok_all_saldo_DataStore.baseParams.satuan_id;}
-		if(vu_stok_all_saldo_DataStore.baseParams.satuan_nama!==null){satuan_nama_print = vu_stok_all_saldo_DataStore.baseParams.satuan_nama;}
-		if(vu_stok_all_saldo_DataStore.baseParams.stok_saldo!==null){stok_saldo_print = vu_stok_all_saldo_DataStore.baseParams.stok_saldo;}
+		if(vu_stok_all_saldo_DataStore.baseParams.tanggal_start!==null){tanggal_start_print = vu_stok_all_saldo_DataStore.baseParams.tanggal_start;}
+		if(vu_stok_all_saldo_DataStore.baseParams.tanggal_end!==null){tanggal_end_print = vu_stok_all_saldo_DataStore.baseParams.tanggal_end;}
+		if(vu_stok_all_saldo_DataStore.baseParams.opsi_satuan!==null){opsi_satuan_print = vu_stok_all_saldo_DataStore.baseParams.opsi_satuan;}
+		
+		Ext.MessageBox.show({
+		   msg: 'Sedang memproses data, silakan tunggu...',
+		   progressText: 'proses...',
+		   width:350,
+		   wait:true
+		});
 		
 		Ext.Ajax.request({   
 		waitMsg: 'Please Wait...',
+		timeout: 3600000,
 		url: 'index.php?c=c_vu_stok_all_saldo&m=get_action',
 		params: {
-			task: "PRINT",
-		  	query: searchquery,                    		// if we are doing a quicksearch, use this
-			//if we are doing advanced search, use this
-			produk_id : produk_id_print,
-			produk_nama : produk_nama_print,
-			satuan_id : satuan_id_print,
-			satuan_nama : satuan_nama_print,
-			stok_saldo : stok_saldo_print,
-		  	currentlisting: vu_stok_all_saldo_DataStore.baseParams.task // this tells us if we are searching or not
+			task			: "PRINT",
+		  	query			: searchquery,                    		
+			produk_id		: produk_nama_print, 
+			tanggal_start	: tanggal_start_print, 
+			tanggal_end		: tanggal_end_print,
+			opsi_satuan		: opsi_satuan_print,
+		  	currentlisting	: vu_stok_all_saldo_DataStore.baseParams.task // this tells us if we are searching or not
 		}, 
 		success: function(response){              
 		  	var result=eval(response.responseText);
 		  	switch(result){
 		  	case 1:
-				win = window.open('./print/vu_stok_all_saldo_printlist.html','vu_stok_all_saldolist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
-				win.print();
+				Ext.MessageBox.hide();
+				win = window.open('./print/stok_akhir_printlist.html','stok_akhir_printlist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
+
 				break;
 		  	default:
 				Ext.MessageBox.show({
