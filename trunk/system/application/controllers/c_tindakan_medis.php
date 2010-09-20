@@ -18,7 +18,7 @@ class C_tindakan_medis extends Controller {
 		parent::Controller();
 		$this->load->model('m_tindakan_medis', '', TRUE);
 		session_start();
-		$this->load->plugin('to_excel');
+		//$this->load->plugin('to_excel');
 	}
 	
 	function laporan(){
