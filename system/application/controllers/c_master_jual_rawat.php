@@ -304,6 +304,8 @@ class C_master_jual_rawat extends Controller {
 		$drawat_diskon_jenis = $_POST['drawat_diskon_jenis']; // Get our array back and translate it :
 		$array_drawat_diskon_jenis = json_decode(stripslashes($drawat_diskon_jenis));
 		
+		$cetak=trim(@$_POST["cetak"]);
+		
 		$result=$this->m_master_jual_rawat->detail_jual_rawat_update($array_drawat_id
 																	 ,$drawat_master
 																	 ,$array_drawat_dtrawat
@@ -311,7 +313,9 @@ class C_master_jual_rawat extends Controller {
 																	 ,$array_drawat_jumlah
 																	 ,$array_drawat_harga
 																	 ,$array_drawat_diskon
-																	 ,$array_drawat_diskon_jenis);
+																	 ,$array_drawat_diskon_jenis
+																	 ,$cetak);
+		echo $result;
 	}
 	
 	//for detail pengambilan paket

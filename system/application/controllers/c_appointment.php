@@ -247,6 +247,7 @@ class C_appointment extends Controller {
 			$terapis=trim(@$_POST["terapis"]);
 			$dapp_keterangan=trim(@$_POST["dapp_keterangan"]);
 			$dapp_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$dapp_keterangan);
+			$dapp_keterangan=str_replace("'", "&#39",$dapp_keterangan);
 			$dapp_status=trim(@$_POST["dapp_status"]);
 			$dapp_status=str_replace("/(<\/?)(p)([^>]*>)", "",$dapp_status);
 			

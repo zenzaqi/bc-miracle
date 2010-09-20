@@ -824,7 +824,7 @@ class M_tindakan_medis extends Model{
 		}
 		
 		//* Mengambil db.master_jual_paket.jpaket_nobukti ==> masukkan ke db.detail_pakai_cabin /
-		$datetime_now = date('Y-m-d H:i:s');
+		$date_now = date('Y-m-d');
 		$jpaket_nobukti = "";
 		$sql="SELECT jpaket_nobukti FROM master_jual_paket WHERE jpaket_id='$dapaket_jpaket'";
 		$rs=$this->db->query($sql);
@@ -842,6 +842,7 @@ class M_tindakan_medis extends Model{
 		"dapaket_jumlah"=>1,
 		"dapaket_cust"=>$trawat_cust_id,
 		"dapaket_dtrawat"=>$dtrawat_id,
+		"dapaket_tgl_ambil"=>$date_now,
 		"dapaket_creator"=>@$_SESSION[SESSION_USERID]
 		);
 		$this->db->insert('detail_ambil_paket', $dti_dapaket);
@@ -854,15 +855,6 @@ class M_tindakan_medis extends Model{
 				$this->db->where('dapp_id', $dtrawat_dapp);
 				$this->db->update('appointment_detail', $dtu_dapp);
 			}
-			
-			/* UPDATE db.tindakan_detail.dtrawat_ambil_paket = 'true' */
-			/*$sql="UPDATE tindakan_detail
-				SET dtrawat_ambil_paket='true'
-					,dtrawat_update='".@$_SESSION[SESSION_USERID]."'
-					,dtrawat_date_update='".$datetime_now."'
-					,dtrawat_revised=dtrawat_revised+1
-				WHERE dtrawat_id='$dtrawat_id'";
-			$this->db->query($sql);*/
 			
 			$this->total_sisa_paket_update($dapaket_dpaket, $dapaket_jpaket, $dapaket_paket);
 			
