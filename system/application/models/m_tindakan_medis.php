@@ -22,23 +22,28 @@ class M_tindakan_medis extends Model{
 			
 		switch($group){
 			case "Tanggal": $order_by=" ORDER BY dtrawat_tglapp ASC";break;
-			case "Customer": $order_by=" ORDER BY trawat_cust ASC";break;
-			case "Perawatan": $order_by=" ORDER BY dtrawat_perawatan ASC";break;
-			case "Dokter": $order_by=" ORDER BY dokter_id ASC";break;
-			case "Status": $order_by=" ORDER BY dtrawat_status ASC";break;
+			case "Customer": $order_by=" ORDER BY trawat_cust,dtrawat_tglapp ASC";break;
+			case "Perawatan": $order_by=" ORDER BY dtrawat_perawatan,dtrawat_tglapp ASC";break;
+			case "Dokter": $order_by=" ORDER BY dokter_id,dtrawat_tglapp ASC";break;
+			case "Status": $order_by=" ORDER BY dtrawat_status,dtrawat_tglapp ASC";break;
 			default: $order_by=" ORDER BY dtrawat_tglapp ASC";break;
 		}
 			
 		if($periode=='all')
-			$sql="SELECT *,date_format(dtrawat_tglapp,'%Y-%m-%d') as dtrawat_tglapp FROM vu_tindakan WHERE kategori_nama='Medis' ".$order_by;
+			$sql="SELECT *,date_format(dtrawat_tglapp,'%Y-%m-%d') as dtrawat_tglapp FROM vu_tindakan 
+					WHERE kategori_nama='Medis' OR (kategori_nama='Non Medis' AND terapis_id is NULL AND dokter_id is NULL) ".$order_by;
 		else if($periode=='bulan')
-			$sql="SELECT *,date_format(dtrawat_tglapp,'%Y-%m-%d') as dtrawat_tglapp FROM vu_tindakan WHERE kategori_nama='Medis' 
+			$sql="SELECT *,date_format(dtrawat_tglapp,'%Y-%m-%d') as dtrawat_tglapp FROM vu_tindakan 
+					WHERE (kategori_nama='Medis'  OR (kategori_nama='Non Medis' AND terapis_id is NULL AND dokter_id is NULL))
 					AND date_format(dtrawat_tglapp,'%Y-%m')='".$tgl_awal."' ".$order_by;
 		else if($periode=='tanggal')
-			$sql="SELECT *,date_format(dtrawat_tglapp,'%Y-%m-%d') as dtrawat_tglapp FROM vu_tindakan WHERE  kategori_nama='Medis' 
+			$sql="SELECT *,date_format(dtrawat_tglapp,'%Y-%m-%d') as dtrawat_tglapp FROM vu_tindakan 
+					WHERE  (kategori_nama='Medis' OR (kategori_nama='Non Medis' AND terapis_id is NULL AND dokter_id is NULL)) 
 					AND date_format(dtrawat_tglapp,'%Y-%m-%d')>='".$tgl_awal."' 
 					AND date_format(dtrawat_tglapp,'%Y-%m-%d')<='".$tgl_akhir."' ".$order_by;
-
+		
+		//$this->firephp->log($sql);
+		
 		$query=$this->db->query($sql);
 		return $query->result();
 	}
