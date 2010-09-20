@@ -951,7 +951,7 @@ class M_appointment extends Model{
 			$record_trawat = $rs_trawat->row_array();
 			$dtrawat_master = $record_trawat['trawat_id'];
 			
-			if($kategori_nama=='Medis'){
+			if($kategori_nama=='Medis' || $kategori_nama=='Surgery'){
 				$dti_dtrawat = array(
 					"dtrawat_master"=>$dtrawat_master,
 					"dtrawat_dapp"=>$dapp_id,
@@ -1016,7 +1016,7 @@ class M_appointment extends Model{
 					$record = $rs->row_array();
 					$dtrawat_master = $record['trawat_id'];
 					//INSERT to db.tindakan_detail
-					if($kategori_nama=='Medis'){
+					if($kategori_nama=='Medis' || $kategori_nama == 'Surgery'){
 						$dti_dtrawat = array(
 							"dtrawat_master"=>$dtrawat_master,
 							"dtrawat_dapp"=>$dapp_id,
@@ -1076,7 +1076,7 @@ class M_appointment extends Model{
 		
 		if($jenis_rawat=="Medis" && $filter==''){
 			$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-			$query .=" kategori_nama='Medis'";
+			$query .=" (kategori_nama='Medis' OR kategori_nama = 'Surgery')";
 			if($tgl_app!=""){
 				$tgl_app=date('Y-m-d', strtotime($tgl_app));
 				$query .=" AND dapp_tglreservasi='$tgl_app'";
@@ -1118,13 +1118,13 @@ class M_appointment extends Model{
 			}
 			$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 			//search customer,perawatan,dokter,therapist
-			$query .= " (dokter_id = '".addslashes($filter)."') AND kategori_nama='Medis'";
+			$query .= " (dokter_id = '".addslashes($filter)."') AND (kategori_nama='Medis' OR kategori_nama = 'Surgery')";
 		}
 		
 		// For Pilihan Tanggal Appointment di tbar dengan pilihan dokter kosong
 		if($filter=="" && is_numeric($filter)==false && $tgl_app!="" && $jenis_rawat=="Medis"){
 			$dt=date('Y-m-d', strtotime($tgl_app));
-			$query="SELECT * FROM vu_appointment WHERE kategori_nama='Medis' AND dapp_tglreservasi = '$dt'";
+			$query="SELECT * FROM vu_appointment WHERE (kategori_nama='Medis' OR kategori_nama ='Surgery') AND dapp_tglreservasi = '$dt'";
 		}
 		
 		/*  For simple search
@@ -1263,7 +1263,7 @@ class M_appointment extends Model{
 					return '-8';
 				}
 				
-			}else if($kategori_nama=='Medis' && is_numeric($dokter)==true && $dokter_awal<>$dokter){
+			}else if(($kategori_nama=='Medis' || $kategori_nama =='Surgery') && is_numeric($dokter)==true && $dokter_awal<>$dokter){
 				/* ada pergantian dokter
 				 * karena ada perubahan dokter, maka db.report_tindakan juga harus diupdate ==> function report_tindakan_update()
 				*/
@@ -1426,7 +1426,7 @@ class M_appointment extends Model{
 							/* DeCounter $dokter_id / $terapis_id
 							 * $dapp_counter = 'true'/'false' ==> return tetap '1'
 							*/
-							if($kategori_nama=='Medis'){
+							if($kategori_nama=='Medis' || $kategori_nama == 'Surgery'){
 								$rs_dokter_decounter = $this->decounter_report_tindakan_karyawan($dokter_id, $dapp_tglreservasi);
 								if($rs_dokter_decounter==1){
 									return '1';
@@ -1487,7 +1487,7 @@ class M_appointment extends Model{
 						$this->db->query($sqlu_dapp);
 						if($this->db->affected_rows()){
 							//Counter $dokter_id / $terapis_id
-							if($kategori_nama=='Medis'){
+							if($kategori_nama=='Medis' || $kategori_nama == 'Surgery'){
 								//Counter $dokter_id
 								$rs_dokter_counter = $this->counter_report_tindakan_karyawan($dokter_id, $dapp_tglreservasi);
 								if($rs_dokter_counter==1){
