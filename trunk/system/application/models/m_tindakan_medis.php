@@ -31,14 +31,14 @@ class M_tindakan_medis extends Model{
 			
 		if($periode=='all')
 			$sql="SELECT *,date_format(dtrawat_tglapp,'%Y-%m-%d') as dtrawat_tglapp FROM vu_tindakan 
-					WHERE kategori_nama='Medis' OR (kategori_nama='Non Medis' AND terapis_id is NULL AND dokter_id is NULL) ".$order_by;
+					WHERE (kategori_nama='Medis' OR kategori_nama ='Surgery') OR (kategori_nama='Non Medis' AND terapis_id is NULL AND dokter_id is NULL) ".$order_by;
 		else if($periode=='bulan')
 			$sql="SELECT *,date_format(dtrawat_tglapp,'%Y-%m-%d') as dtrawat_tglapp FROM vu_tindakan 
-					WHERE (kategori_nama='Medis'  OR (kategori_nama='Non Medis' AND terapis_id is NULL AND dokter_id is NULL))
+					WHERE ((kategori_nama='Medis' OR kategori_nama ='Surgery') OR (kategori_nama='Non Medis' AND terapis_id is NULL AND dokter_id is NULL))
 					AND date_format(dtrawat_tglapp,'%Y-%m')='".$tgl_awal."' ".$order_by;
 		else if($periode=='tanggal')
 			$sql="SELECT *,date_format(dtrawat_tglapp,'%Y-%m-%d') as dtrawat_tglapp FROM vu_tindakan 
-					WHERE  (kategori_nama='Medis' OR (kategori_nama='Non Medis' AND terapis_id is NULL AND dokter_id is NULL)) 
+					WHERE  ((kategori_nama='Medis' OR kategori_nama ='Surgery') OR (kategori_nama='Non Medis' AND terapis_id is NULL AND dokter_id is NULL)) 
 					AND date_format(dtrawat_tglapp,'%Y-%m-%d')>='".$tgl_awal."' 
 					AND date_format(dtrawat_tglapp,'%Y-%m-%d')<='".$tgl_akhir."' ".$order_by;
 		
@@ -221,7 +221,7 @@ class M_tindakan_medis extends Model{
                 INNER JOIN perawatan ON(dtrawat_perawatan=rawat_id)
                 INNER JOIN karyawan ON(dtrawat_petugas1=karyawan_id)
                 LEFT JOIN kategori ON(rawat_kategori=kategori_id)
-                WHERE dtrawat_master='".$master_id."' AND kategori_nama='Medis'";
+                WHERE dtrawat_master='".$master_id."' AND (kategori_nama='Medis' OR kategori_nama ='Surgery')";
 		$result = $this->db->query($query);
 		$nbrows = $result->num_rows();
 		$limit = $query." LIMIT ".$start.",".$end;			
@@ -1034,7 +1034,7 @@ class M_tindakan_medis extends Model{
 	
 	//purge all detail from master
 	function detail_tindakan_medis_detail_purge($master_id){
-		$sql="DELETE tindakan_detail FROM tindakan_detail INNER JOIN perawatan ON dtrawat_perawatan=rawat_id LEFT JOIN kategori ON rawat_kategori=kategori_id WHERE kategori_nama='Medis' AND dtrawat_master='".$master_id."'";
+		$sql="DELETE tindakan_detail FROM tindakan_detail INNER JOIN perawatan ON dtrawat_perawatan=rawat_id LEFT JOIN kategori ON rawat_kategori=kategori_id WHERE (kategori_nama='Medis' OR kategori_nama ='Surgery') AND dtrawat_master='".$master_id."'";
 		$result=$this->db->query($sql);
 	}
 	//*eof
@@ -1369,7 +1369,7 @@ class M_tindakan_medis extends Model{
 		$date_now=date('Y-m-d');
 		//$query = "SELECT * FROM vu_tindakan WHERE kategori_nama='Medis' AND dtrawat_tglapp='$date_now'"; //TAMPILAN MEDIS SAJA
 		//$query = "SELECT medis.* FROM vu_tindakan medis WHERE (medis.kategori_nama='Medis' OR medis.dtrawat_master IN(SELECT nonmedis.dtrawat_master FROM vu_tindakan nonmedis WHERE nonmedis.kategori_nama='Non Medis' AND date_format(dtrawat_tglapp,'%Y-%m-%d') = date_format('$date_now','%Y-%m-%d') AND nonmedis.dtrawat_dapp='0')) AND date_format(dtrawat_tglapp,'%Y-%m-%d') = date_format('$date_now','%Y-%m-%d')";
-		$query = "SELECT * FROM vu_tindakan WHERE date_format(dtrawat_tglapp,'%Y-%m-%d') = date_format('$date_now','%Y-%m-%d') AND (kategori_nama='Medis' OR dtrawat_petugas2='0')";
+		$query = "SELECT * FROM vu_tindakan WHERE date_format(dtrawat_tglapp,'%Y-%m-%d') = date_format('$date_now','%Y-%m-%d') AND (kategori_nama='Medis' OR dtrawat_petugas2='0' OR kategori_nama ='Surgery')";
 		
 		// For simple search
 		if ($filter<>""){
@@ -1380,7 +1380,7 @@ class M_tindakan_medis extends Model{
 		
 		//$query2 = "SELECT * FROM vu_tindakan WHERE kategori_nama='Medis' AND dtrawat_tglapp='$date_now'"; //TAMPILAN MEDIS SAJA
 		//$query2 = "SELECT medis.* FROM vu_tindakan medis WHERE (medis.kategori_nama='Medis' OR medis.dtrawat_master IN(SELECT nonmedis.dtrawat_master FROM vu_tindakan nonmedis WHERE nonmedis.kategori_nama='Non Medis' AND date_format(dtrawat_tglapp,'%Y-%m-%d') = date_format('$date_now','%Y-%m-%d') AND nonmedis.dtrawat_dapp='0')) AND date_format(dtrawat_tglapp,'%Y-%m-%d') = date_format('$date_now','%Y-%m-%d')";
-		$query2 = "SELECT * FROM vu_tindakan WHERE date_format(dtrawat_tglapp,'%Y-%m-%d') = date_format('$date_now','%Y-%m-%d') AND (kategori_nama='Medis' OR dtrawat_petugas2='0')";
+		$query2 = "SELECT * FROM vu_tindakan WHERE date_format(dtrawat_tglapp,'%Y-%m-%d') = date_format('$date_now','%Y-%m-%d') AND (kategori_nama='Medis' OR dtrawat_petugas2='0' OR kategori_nama ='Surgery')";
 		
 		// For simple search
 		if ($filter<>""){
@@ -1391,7 +1391,7 @@ class M_tindakan_medis extends Model{
 		
 		//$query3 = "SELECT * FROM vu_tindakan WHERE kategori_nama='Medis' AND dtrawat_tglapp='$date_now'"; //TAMPILAN MEDIS SAJA
 		//$query3 = "SELECT medis.* FROM vu_tindakan medis WHERE (medis.kategori_nama='Medis' OR medis.dtrawat_master IN(SELECT nonmedis.dtrawat_master FROM vu_tindakan nonmedis WHERE nonmedis.kategori_nama='Non Medis' AND date_format(dtrawat_tglapp,'%Y-%m-%d') = date_format('$date_now','%Y-%m-%d') AND nonmedis.dtrawat_dapp='0')) AND date_format(dtrawat_tglapp,'%Y-%m-%d') = date_format('$date_now','%Y-%m-%d')";
-		$query3 = "SELECT * FROM vu_tindakan WHERE date_format(dtrawat_tglapp,'%Y-%m-%d') = date_format('$date_now','%Y-%m-%d') AND (kategori_nama='Medis' OR dtrawat_petugas2='0')";
+		$query3 = "SELECT * FROM vu_tindakan WHERE date_format(dtrawat_tglapp,'%Y-%m-%d') = date_format('$date_now','%Y-%m-%d') AND (kategori_nama='Medis' OR dtrawat_petugas2='0' OR kategori_nama ='Surgery')";
 		
 		// For simple search
 		if ($filter<>""){
@@ -1402,7 +1402,7 @@ class M_tindakan_medis extends Model{
 		
 		//$query4 = "SELECT * FROM vu_tindakan WHERE kategori_nama='Medis' AND dtrawat_tglapp='$date_now'"; //TAMPILAN MEDIS SAJA
 		//$query4 = "SELECT medis.* FROM vu_tindakan medis WHERE (medis.kategori_nama='Medis' OR medis.dtrawat_master IN(SELECT nonmedis.dtrawat_master FROM vu_tindakan nonmedis WHERE nonmedis.kategori_nama='Non Medis' AND date_format(dtrawat_tglapp,'%Y-%m-%d') = date_format('$date_now','%Y-%m-%d') AND nonmedis.dtrawat_dapp='0')) AND date_format(dtrawat_tglapp,'%Y-%m-%d') = date_format('$date_now','%Y-%m-%d')";
-		$query4 = "SELECT * FROM vu_tindakan WHERE date_format(dtrawat_tglapp,'%Y-%m-%d') = date_format('$date_now','%Y-%m-%d') AND (kategori_nama='Medis' OR dtrawat_petugas2='0')";
+		$query4 = "SELECT * FROM vu_tindakan WHERE date_format(dtrawat_tglapp,'%Y-%m-%d') = date_format('$date_now','%Y-%m-%d') AND (kategori_nama='Medis' OR dtrawat_petugas2='0' OR kategori_nama ='Surgery')";
 		
 		// For simple search
 		if ($filter<>""){
@@ -1816,7 +1816,7 @@ class M_tindakan_medis extends Model{
 			//$query="SELECT * FROM vu_tindakan WHERE kategori_nama='Medis'";
 			//$query = "SELECT * FROM vu_tindakan WHERE (kategori_nama='Medis' OR dtrawat_petugas2='0')";
 			//$query = "SELECT vu_tindakan_test.*, IF((vu_cust_punya_paket_test.sapaket_id AND vu_cust_punya_paket_test.sapaket_sisa_item<>0),'ada','tidak_ada') AS cust_punya_paket, vu_cust_punya_paket_test.* FROM vu_tindakan_test LEFT JOIN vu_cust_punya_paket_test ON(vu_cust_punya_paket_test.ppaket_cust=vu_tindakan_test.trawat_cust AND vu_cust_punya_paket_test.sapaket_item=vu_tindakan_test.dtrawat_perawatan AND vu_cust_punya_paket_test.sapaket_jenis_item='perawatan' AND vu_cust_punya_paket_test.sapaket_sisa_item>0) WHERE (vu_tindakan_test.kategori_nama='Medis' OR vu_tindakan_test.dtrawat_petugas2='0')";
-			$query = "SELECT * FROM vu_tindakan WHERE (kategori_nama='Medis')";
+			$query = "SELECT * FROM vu_tindakan WHERE (kategori_nama='Medis' OR kategori_nama ='Surgery')";
 			
 			if($trawat_id!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";

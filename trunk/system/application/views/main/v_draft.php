@@ -141,6 +141,7 @@ Ext.onReady(function(){
 
   	/* Function for Displaying  create Window Form */
 	function display_form_window(){
+		draft_reset_form();
 		if(!draft_saveWindow.isVisible()){
 			post2db='CREATE';
 			msg='created';
@@ -542,6 +543,10 @@ Ext.onReady(function(){
 	/* setValue to EDIT */
 	function draft_reset_form(){
 		draft_number_radioField.reset();
+		draft_kelamin_checkField.reset();
+		draft_ultah_checkField.reset();
+		draft_member_radioField.reset();
+		
 	}
 	
 	
