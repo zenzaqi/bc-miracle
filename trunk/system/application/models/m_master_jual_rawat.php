@@ -973,7 +973,8 @@ class M_master_jual_rawat extends Model{
 										  ,$array_drawat_jumlah
 										  ,$array_drawat_harga
 										  ,$array_drawat_diskon
-										  ,$array_drawat_diskon_jenis){
+										  ,$array_drawat_diskon_jenis
+										  ,$cetak){
 			
 			$size_array = sizeof($array_drawat_rawat) - 1;
 			
@@ -1018,17 +1019,13 @@ class M_master_jual_rawat extends Model{
 					$this->db->update('detail_jual_rawat', $dtu_drawat);
 				}
 				
-				if($i==$size_array){
-					return "{success:true}";
+				if($i==$size_array && $cetak==1){
+					$this->catatan_piutang_update($drawat_master);
+					return 1;
+				}elseif($i==$size_array && $cetak==0){
+					return 0;
 				}
-				
-				/*if($this->db->affected_rows() && ($i==$size_array)){
-					return "{success:true}";
-				}elseif(!($this->db->affected_rows()) && ($i==$size_array)){
-					return "{failure:true}";
-				}*/
 			}
-			
 		}
         
         function detail_jual_rawat_delete($drawat_id){
@@ -2156,6 +2153,20 @@ class M_master_jual_rawat extends Model{
 			$this->db->update('detail_ambil_paket', $dtu_dapaket);
 		}
 		
+		function tindakan_detail_locked($dtrawat_id){
+			$datetime_now = date('Y-m-d H:i:s');
+			$sqlu = "UPDATE tindakan_detail
+				SET dtrawat_locked=1
+					,dtrawat_update='".$_SESSION[SESSION_USERID]."'
+					,dtrawat_date_update='".$datetime_now."'
+					,dtrawat_revised=(dtrawat_revised+1)
+				WHERE dtrawat_id='".$dtrawat_id."'";
+			$this->db->query($sqlu);
+			if($this->db->affected_rows()>-1){
+				return 1;
+			}
+		}
+		
 		function print_paper($jrawat_id){
 			$sql="SELECT jrawat_tanggal
 					,cust_no
@@ -2233,11 +2244,29 @@ class M_master_jual_rawat extends Model{
 		}
 		
 		function print_paper_apaket_bycust($dapaket_cust, $dapaket_date_create){
-			$sql = "SELECT dapaket_id, jpaket_nobukti, paket_nama, rawat_nama, dapaket_jumlah, cust_no, cust_nama, cust_alamat, dapaket_date_create FROM detail_ambil_paket LEFT JOIN master_jual_paket ON(dapaket_jpaket=jpaket_id) LEFT JOIN paket ON(dapaket_paket=paket_id) LEFT JOIN customer ON(dapaket_cust=cust_id) LEFT JOIN perawatan ON(dapaket_item=rawat_id) WHERE dapaket_cust='$dapaket_cust' AND date_format(dapaket_date_create,'%Y-%m-%d')='$dapaket_date_create' AND dapaket_stat_dok='Terbuka'";
+			$sql = "SELECT dapaket_id
+					,jpaket_nobukti
+					,paket_nama
+					,rawat_nama
+					,dapaket_jumlah
+					,cust_no
+					,cust_nama
+					,cust_alamat
+					,dapaket_date_create
+					,dapaket_dtrawat
+				FROM detail_ambil_paket
+				LEFT JOIN master_jual_paket ON(dapaket_jpaket=jpaket_id)
+				LEFT JOIN paket ON(dapaket_paket=paket_id)
+				LEFT JOIN customer ON(dapaket_cust=cust_id)
+				LEFT JOIN perawatan ON(dapaket_item=rawat_id)
+				WHERE dapaket_cust='$dapaket_cust'
+					AND date_format(dapaket_date_create,'%Y-%m-%d')='$dapaket_date_create'
+					AND dapaket_stat_dok='Terbuka'";
 			
 			$result = $this->db->query($sql);
 			foreach($result->result() as $row){
 				$this->detail_ambil_paket_status_update($row->dapaket_id);
+				$this->tindakan_detail_locked($row->dapaket_dtrawat);
 			}
 			return $result;
 		}

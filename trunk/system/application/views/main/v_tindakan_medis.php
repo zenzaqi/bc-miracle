@@ -185,7 +185,7 @@ Ext.onReady(function(){
 		dapaket_paket_update = oGrid_event.record.data.dapaket_paket;
 		dapaket_item_update = oGrid_event.record.data.dapaket_item;*/
 		
-		if(this.dmedis_status_inline_beforeedit=='selesai' && dtrawat_status_update=='selesai'){
+		if(dmedis_status_inline_beforeedit=='selesai' && dtrawat_status_update=='selesai'){
 			//Editing ketika status = 'selesai' ==> tidak diperbolehkan
 			tindakan_medisDataStore.reload();
 			tindakanListEditorGrid.setDisabled(false);
@@ -197,7 +197,7 @@ Ext.onReady(function(){
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
 			});
-		}else if((this.dmedis_status_inline_beforeedit=='selesai' && dtrawat_status_update!=='selesai') || this.dmedis_status_inline_beforeedit!=='selesai'){
+		}else if((dmedis_status_inline_beforeedit=='selesai' && dtrawat_status_update!=='selesai') || dmedis_status_inline_beforeedit!=='selesai'){
 			//Perubahan status dari 'selesai' menjadi !='selesai' ATAU status sebelumnya di DB !='selesai'
 			Ext.Ajax.request({  
 				waitMsg: 'Mohon tunggu...',
@@ -1256,7 +1256,7 @@ Ext.onReady(function(){
 	tindakanListEditorGrid.render();
 	/* End of DataStore */
 	tindakanListEditorGrid.on('rowdblclick', function(){
-		this.dmedis_status_inline_beforeedit = tindakanListEditorGrid.getSelectionModel().getSelected().get('dtrawat_status');
+		dmedis_status_inline_beforeedit = tindakanListEditorGrid.getSelectionModel().getSelected().get('dtrawat_status');
 	});
      
 	/* Create Context Menu */
