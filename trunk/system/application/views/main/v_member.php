@@ -77,7 +77,8 @@ var member_nota_refField;
 var member_pointField;
 var member_jenisField;
 var member_statusField;
-var member_tglserahterimaField;
+var member_tglcetakField;
+//var member_tglserahterimaField;
 var member_idSearchField;
 var member_custSearchField;
 var member_noSearchField;
@@ -89,8 +90,10 @@ var member_nota_refSearchField;
 var member_pointSearchField;
 var member_jenisSearchField;
 var member_statusSearchField;
-var member_tglserahterimaSearchField;
-var member_tglserahterima_endSearchField;
+var member_tglcetakSearchField;
+var member_tglcetak_endSearchField;
+//var member_tglserahterimaSearchField;
+//var member_tglserahterima_endSearchField;
 
 /* on ready fuction */
 Ext.onReady(function(){
@@ -192,7 +195,7 @@ Ext.onReady(function(){
 		if(member_pointField.getValue()!== null){member_point_create = member_pointField.getValue();} 
 		if(member_jenisField.getValue()!== null){member_jenis_create = member_jenisField.getValue();} 
 		if(member_statusField.getValue()!== null){member_status_create = member_statusField.getValue();} 
-		if(member_tglserahterimaField.getValue()!== ""){member_tglserahterima_create_date = member_tglserahterimaField.getValue().format('Y-m-d');} 
+		//if(member_tglserahterimaField.getValue()!== ""){member_tglserahterima_create_date = member_tglserahterimaField.getValue().format('Y-m-d');} 
 
 		Ext.Ajax.request({  
 			waitMsg: 'Please wait...',
@@ -208,7 +211,7 @@ Ext.onReady(function(){
 				member_point	: member_point_create, 
 				member_jenis	: member_jenis_create, 
 				member_status	: member_status_create, 
-				member_tglserahterima	: member_tglserahterima_create_date, 
+				member_tglserahterima	: member_tglserahterima_create_date 
 			}, 
 			success: function(response){             
 				var result=eval(response.responseText);
@@ -338,8 +341,8 @@ Ext.onReady(function(){
 		member_jenisField.setValue(null);
 		member_statusField.reset();
 		member_statusField.setValue(null);
-		member_tglserahterimaField.reset();
-		member_tglserahterimaField.setValue(null);
+		//member_tglserahterimaField.reset();
+		//member_tglserahterimaField.setValue(null);
 	}
  	/* End of Function */
   
@@ -354,7 +357,7 @@ Ext.onReady(function(){
 		member_pointField.setValue(memberListEditorGrid.getSelectionModel().getSelected().get('member_point'));
 		member_jenisField.setValue(memberListEditorGrid.getSelectionModel().getSelected().get('member_jenis'));
 		member_statusField.setValue(memberListEditorGrid.getSelectionModel().getSelected().get('member_status'));
-		member_tglserahterimaField.setValue(memberListEditorGrid.getSelectionModel().getSelected().get('member_tglserahterima'));
+		//member_tglserahterimaField.setValue(memberListEditorGrid.getSelectionModel().getSelected().get('member_tglserahterima'));
 	}
 	/* End setValue to EDIT*/
   
@@ -485,7 +488,8 @@ Ext.onReady(function(){
 			{name: 'member_point', type: 'int', mapping: 'member_point'}, 
 			{name: 'member_jenis', type: 'string', mapping: 'member_jenis'}, 
 			{name: 'member_status', type: 'string', mapping: 'member_status'}, 
-			{name: 'member_tglserahterima', type: 'date', dateFormat: 'Y-m-d', mapping: 'member_tglserahterima'}, 
+			{name: 'member_tglcetak', type: 'date', dateFormat: 'Y-m-d', mapping: 'member_tglcetak'}, 
+			//{name: 'member_tglserahterima', type: 'date', dateFormat: 'Y-m-d', mapping: 'member_tglserahterima'}, 
 			{name: 'member_creator', type: 'string', mapping: 'member_creator'}, 
 			{name: 'member_date_create', type: 'date', dateFormat: 'Y-m-d', mapping: 'member_date_create'}, 
 			{name: 'member_update', type: 'string', mapping: 'member_update'}, 
@@ -634,7 +638,8 @@ Ext.onReady(function(){
 				store:new Ext.data.SimpleStore({
 					fields:['member_status_value', 'member_status_display'],
 					//data: [['tidak aktif','tidak aktif'],['print','print'],['aktif','aktif'],['register','register']]
-					data: [['Daftar', 'Daftar'], ['Cetak', 'Cetak'], ['Serah Terima', 'Serah Terima']]
+					//data: [['Daftar', 'Daftar'], ['Cetak', 'Cetak'], ['Serah Terima', 'Serah Terima']]
+					data: [['Daftar', 'Daftar'], ['Cetak', 'Cetak']]
 					}),
 				mode: 'local',
                	displayField: 'member_status_display',
@@ -644,6 +649,16 @@ Ext.onReady(function(){
             })
 		}, 
 		{
+			header: '<div align="center">Tgl Cetak</div>',
+			dataIndex: 'member_tglcetak',
+			width: 70,
+			sortable: true,
+			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
+			editor: new Ext.form.DateField({
+				format: 'd-m-Y'
+			})
+		}, 
+/*		{
 			header: '<div align="center">Tgl Penyerahan</div>',
 			dataIndex: 'member_tglserahterima',
 			width: 70,
@@ -653,7 +668,7 @@ Ext.onReady(function(){
 				format: 'd-m-Y'
 			})
 		}, 
-		{
+*/		{
 			header: 'Creator',
 			dataIndex: 'member_creator',
 			width: 150,
@@ -729,26 +744,25 @@ Ext.onReady(function(){
 			tooltip: 'Edit selected record',
 			iconCls:'icon-update',
 			handler: member_confirm_update   // Confirm before updating
-		},'-',*/{
-			text: 'Cetak Kartu Semua',
-			//tooltip: 'Aktifkan Member yang teregister dan set status masa pencetakan',
-			tooltip: 'Cetak kartu member',
-			iconCls:'icon-aktivasi ',
-			handler: member_cetak_kartu
-		},'-',{
+		},'-',*/
+		
+/*		'-',{
 			//text: 'Aktivasi',
 			text: 'Serah Terima',
 			//tooltip: 'Aktifkan Kartu Member yang statusnya cetak menjadi aktif',
 			tooltip: 'Menyerahkan kartu member yang sudah tercetak',
 			iconCls:'icon-valid',
 			handler: member_aktivasi
-		}, '-',{
+		}, 
+		'-',{
 			text: 'Delete',
 			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
 			disabled: true,
 			handler: member_confirm_delete   // Confirm before deleting
-		}, '-', {
+		}, 
+*/
+		{
 			text: 'Adv Search',
 			tooltip: 'Advanced Search',
 			iconCls:'icon-search',
@@ -779,10 +793,21 @@ Ext.onReady(function(){
 			tooltip: 'Export to Excel(.xls) Document',
 			iconCls:'icon-xls',
 			handler: member_export_excel
-		}, '-',{
+		},
+		'-', 
+		{
+			text: 'Print: Status Daftar',
+			//tooltip: 'Aktifkan Member yang teregister dan set status masa pencetakan',
+			tooltip: 'Cetak khusus yang masih berstatus Daftar',
+			iconCls:'icon-print',
+			//iconCls:'icon-aktivasi ',
+			handler: member_cetak_kartu
+		},
+		'-',
+		{
 			text: 'Print',
 			tooltip: 'Print Document',
-			disabled : true,
+			//disabled : true,
 			iconCls:'icon-print',
 			handler: member_print  
 		}
@@ -795,12 +820,12 @@ Ext.onReady(function(){
 	member_ContextMenu = new Ext.menu.Menu({
 		id: 'member_ListEditorGridContextMenu',
 		items: [
-		{ 
+/*		{ 
 			text: 'Serah Terima', tooltip: 'Penyerahan Member Card ke Customer', 
 			iconCls:'icon-update',
 			handler: member_aktivasi 
 		},
-		{ 
+*/		{ 
 			text: 'Delete', 
 			tooltip: 'Delete selected record', 
 			iconCls:'icon-delete',
@@ -929,7 +954,8 @@ Ext.onReady(function(){
 		store:new Ext.data.SimpleStore({
 			fields:['member_status_value', 'member_status_display'],
 			//data:[['tidak aktif','tidak aktif'],['print','print'],['aktif','aktif'],['register','register']]
-			data: [['Daftar', 'Daftar'], ['Cetak', 'Cetak'], ['Serah Terima', 'Serah Terima']]
+			//data: [['Daftar', 'Daftar'], ['Cetak', 'Cetak'], ['Serah Terima', 'Serah Terima']]
+			data: [['Daftar', 'Daftar'], ['Cetak', 'Cetak']]
 		}),
 		mode: 'local',
 		displayField: 'member_status_display',
@@ -937,13 +963,20 @@ Ext.onReady(function(){
 		anchor: '95%',
 		triggerAction: 'all'	
 	});
+
+	member_tglcetakField= new Ext.form.DateField({
+		id: 'member_tglcetakField',
+		fieldLabel: 'Tanggal Cetak',
+		format : 'Y-m-d'
+	});
+	
 	/* Identify  member_tglserahterima Field */
-	member_tglserahterimaField= new Ext.form.DateField({
+/*	member_tglserahterimaField= new Ext.form.DateField({
 		id: 'member_tglserahterimaField',
 		fieldLabel: 'Tanggal Penyerahan',
 		format : 'Y-m-d'
 	});
-	
+*/
 	/* Identify  member_add_customer Field */
 	member_add_custField= new Ext.form.ComboBox({
 		id: 'member_add_custField',
@@ -1001,7 +1034,8 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [ member_pointField, member_jenisField, member_statusField, member_tglserahterimaField,member_idField] 
+				items: [member_pointField, member_jenisField, member_statusField, //member_tglserahterimaField,
+						member_idField] 
 			}
 			],
 		buttons: [{
@@ -1098,8 +1132,10 @@ Ext.onReady(function(){
 		var member_point_search=null;
 		var member_jenis_search=null;
 		var member_status_search=null;
-		var member_tglserahterima_search_date="";
-		var member_tglserahterima_end_search_date="";
+		var member_tglcetak_search_date="";
+		var member_tglcetak_end_search_date="";
+		//var member_tglserahterima_search_date="";
+		//var member_tglserahterima_end_search_date="";
 
 		if(member_idSearchField.getValue()!==null){member_id_search=member_idSearchField.getValue();}
 		if(member_custSearchField.getValue()!==null){member_cust_search=member_custSearchField.getValue();}
@@ -1112,8 +1148,10 @@ Ext.onReady(function(){
 		if(member_pointSearchField.getValue()!==null){member_point_search=member_pointSearchField.getValue();}
 		if(member_jenisSearchField.getValue()!==null){member_jenis_search=member_jenisSearchField.getValue();}
 		if(member_statusSearchField.getValue()!==null){member_status_search=member_statusSearchField.getValue();}
-		if(member_tglserahterimaSearchField.getValue()!==""){member_tglserahterima_search_date=member_tglserahterimaSearchField.getValue().format('Y-m-d');}
-		if(member_tglserahterima_endSearchField.getValue()!==""){member_tglserahterima_end_search_date=member_tglserahterima_endSearchField.getValue().format('Y-m-d');}
+		if(member_tglcetakSearchField.getValue()!==""){member_tglcetak_search_date=member_tglcetakSearchField.getValue().format('Y-m-d');}
+		if(member_tglcetak_endSearchField.getValue()!==""){member_tglcetak_end_search_date=member_tglcetak_endSearchField.getValue().format('Y-m-d');}
+		//if(member_tglserahterimaSearchField.getValue()!==""){member_tglserahterima_search_date=member_tglserahterimaSearchField.getValue().format('Y-m-d');}
+		//if(member_tglserahterima_endSearchField.getValue()!==""){member_tglserahterima_end_search_date=member_tglserahterima_endSearchField.getValue().format('Y-m-d');}
 		// change the store parameters
 		member_DataStore.baseParams = {
 			task: 'SEARCH',
@@ -1129,8 +1167,10 @@ Ext.onReady(function(){
 			member_point	:	member_point_search, 
 			member_jenis	:	member_jenis_search, 
 			member_status	:	member_status_search, 
-			member_tglserahterima	:	member_tglserahterima_search_date, 
-			member_tglserahterima_end	:	member_tglserahterima_end_search_date,
+			member_tglcetak	:	member_tglcetak_search_date, 
+			member_tglcetak_end	:	member_tglcetak_end_search_date,
+			//member_tglserahterima	:	member_tglserahterima_search_date, 
+			//member_tglserahterima_end	:	member_tglserahterima_end_search_date,
 		};
 		// Cause the datastore to do another query : 
 		member_DataStore.reload({params: {start: 0, limit: pageS}});
@@ -1157,8 +1197,10 @@ Ext.onReady(function(){
 		member_pointSearchField.reset();
 		member_jenisSearchField.reset();
 		member_statusSearchField.reset();
-		member_tglserahterimaSearchField.reset();
-		member_tglserahterima_endSearchField.reset();
+		member_tglcetakSearchField.reset();
+		member_tglcetak_endSearchField.reset();
+		//member_tglserahterimaSearchField.reset();
+		//member_tglserahterima_endSearchField.reset();
 	}
 
 	
@@ -1277,7 +1319,8 @@ Ext.onReady(function(){
 		store:new Ext.data.SimpleStore({
 			fields:['value', 'member_status'],
 		//	data:[['tidak aktif','Tidak aktif'],['print','Print'],['aktif','Aktif'],['register','Register']]
-			data: [['Daftar', 'Daftar'], ['Cetak', 'Cetak'], ['Serah Terima', 'Serah Terima']]
+			//data: [['Daftar', 'Daftar'], ['Cetak', 'Cetak'], ['Serah Terima', 'Serah Terima']]
+			data: [['Daftar', 'Daftar'], ['Cetak', 'Cetak']]
 		}),
 		mode: 'local',
 		displayField: 'member_status',
@@ -1286,8 +1329,20 @@ Ext.onReady(function(){
 		triggerAction: 'all'	 
 	
 	});
+
+	member_tglcetakSearchField= new Ext.form.DateField({
+		id: 'member_tglcetakSearchField',
+		fieldLabel: 'Tgl Cetak',
+		format : 'd-m-Y'
+	});
+	member_tglcetak_endSearchField= new Ext.form.DateField({
+		id: 'member_tglcetak_endSearchField',
+		fieldLabel: 's/d',
+		format : 'd-m-Y'	
+	});
+
 	/* Identify  member_tglserahterima Search Field */
-	member_tglserahterimaSearchField= new Ext.form.DateField({
+/*	member_tglserahterimaSearchField= new Ext.form.DateField({
 		id: 'member_tglserahterimaSearchField',
 		fieldLabel: 'Tgl Penyerahan',
 		format : 'Y-m-d'
@@ -1297,6 +1352,7 @@ Ext.onReady(function(){
 		fieldLabel: 's/d',
 		format : 'd-m-Y'	
 	});
+*/	
 	/* Function for retrieve search Form Panel */
 	member_searchForm = new Ext.FormPanel({
 		labelAlign: 'left',
@@ -1364,6 +1420,26 @@ Ext.onReady(function(){
 								layout: 'form',
 								border:false,
 								defaultType: 'datefield',
+								items: [member_tglcetakSearchField] 
+							},
+							{
+								columnWidth:0.30,
+								layout: 'form',
+								labelWidth:30,
+								border:false,
+								defaultType: 'datefield',
+								items: [member_tglcetak_endSearchField] 
+							}]
+						}
+/*						{
+							layout:'column',
+							border:false,
+							items:[
+					        {
+								columnWidth:0.45,
+								layout: 'form',
+								border:false,
+								defaultType: 'datefield',
 								items: [member_tglserahterimaSearchField] 
 							},
 							{
@@ -1375,6 +1451,7 @@ Ext.onReady(function(){
 								items: [member_tglserahterima_endSearchField] 
 							}]
 						}
+*/						
 //						member_registerSearchField, 
 //						member_validSearchField, 
 //						member_nota_refSearchField
@@ -1531,8 +1608,8 @@ Ext.onReady(function(){
 	/* Function for print List Grid */
 	function member_cetak_kartu(){
 		Ext.Msg.show({
-		  	title:'Cetak Kartu Semua',
-		   	msg: 'Anda yakin untuk mencetak semua kartu yang berstatus Daftar?',
+		  	title:'Cetak: Status Daftar',
+		   	msg: 'Anda yakin untuk mencetak semua kartu yang masih berstatus Daftar?',
 		   	buttons: Ext.Msg.YESNO,
 		   	fn: cetak_kartu_confirm,
 		   	animEl: 'elId',
@@ -1585,7 +1662,9 @@ Ext.onReady(function(){
 		var member_point_print=null;
 		var member_jenis_print=null;
 		var member_status_print=null;
-		var member_tglserahterima_print_date="";
+		var member_tglcetak_print_date="";
+		var member_tglcetak_end_print_date="";
+		//var member_tglserahterima_print_date="";
 		var win;              
 		// check if we do have some search data...
 		if(member_DataStore.baseParams.query!==null){searchquery = member_DataStore.baseParams.query;}
@@ -1597,7 +1676,9 @@ Ext.onReady(function(){
 		if(member_DataStore.baseParams.member_point!==null){member_point_print = member_DataStore.baseParams.member_point;}
 		if(member_DataStore.baseParams.member_jenis!==null){member_jenis_print = member_DataStore.baseParams.member_jenis;}
 		if(member_DataStore.baseParams.member_status!==null){member_status_print = member_DataStore.baseParams.member_status;}
-		if(member_DataStore.baseParams.member_tglserahterima!==""){member_tglserahterima_print_date = member_DataStore.baseParams.member_tglserahterima;}
+		if(member_DataStore.baseParams.member_tglcetak!==""){member_tglcetak_print_date = member_DataStore.baseParams.member_tglcetak;}
+		if(member_DataStore.baseParams.member_tglcetak_end!==""){member_tglcetak_end_print_date = member_DataStore.baseParams.member_tglcetak_end;}
+		//if(member_DataStore.baseParams.member_tglserahterima!==""){member_tglserahterima_print_date = member_DataStore.baseParams.member_tglserahterima;}
 
 		Ext.Ajax.request({   
 		waitMsg: 'Mohon tunggu...',
@@ -1614,7 +1695,9 @@ Ext.onReady(function(){
 			member_point : member_point_print,
 			member_jenis : member_jenis_print,
 			member_status : member_status_print,
-		  	member_tglserahterima : member_tglserahterima_print_date, 
+		  	member_tglcetak : member_tglcetak_print_date, 
+		  	member_tglcetak_end : member_tglcetak_end_print_date, 
+		  	//member_tglserahterima : member_tglserahterima_print_date, 
 		  	currentlisting: member_DataStore.baseParams.task // this tells us if we are searching or not
 		}, 
 		success: function(response){              
@@ -1660,7 +1743,9 @@ Ext.onReady(function(){
 		var member_point_2excel=null;
 		var member_jenis_2excel=null;
 		var member_status_2excel=null;
-		var member_tglserahterima_2excel_date="";
+		var member_tglcetak_2excel_date="";
+		var member_tglcetak_end_2excel_date="";
+		//var member_tglserahterima_2excel_date="";
 		var win;              
 		// check if we do have some search data...
 		if(member_DataStore.baseParams.query!==null){searchquery = member_DataStore.baseParams.query;}
@@ -1672,7 +1757,9 @@ Ext.onReady(function(){
 		if(member_DataStore.baseParams.member_point!==null){member_point_2excel = member_DataStore.baseParams.member_point;}
 		if(member_DataStore.baseParams.member_jenis!==null){member_jenis_2excel = member_DataStore.baseParams.member_jenis;}
 		if(member_DataStore.baseParams.member_status!==null){member_status_2excel = member_DataStore.baseParams.member_status;}
-		if(member_DataStore.baseParams.member_tglserahterima!==""){member_tglserahterima_2excel_date = member_DataStore.baseParams.member_tglserahterima;}
+		if(member_DataStore.baseParams.member_tglcetak!==""){member_tglcetak_2excel_date = member_DataStore.baseParams.member_tglcetak;}
+		if(member_DataStore.baseParams.member_tglcetak_end!==""){member_tglcetak_end_2excel_date = member_DataStore.baseParams.member_tglcetak_end;}
+		//if(member_DataStore.baseParams.member_tglserahterima!==""){member_tglserahterima_2excel_date = member_DataStore.baseParams.member_tglserahterima;}
 
 		Ext.Ajax.request({   
 		waitMsg: 'Please Wait...',
@@ -1689,7 +1776,9 @@ Ext.onReady(function(){
 			member_point : member_point_2excel,
 			member_jenis : member_jenis_2excel,
 			member_status : member_status_2excel,
-		  	member_tglserahterima : member_tglserahterima_2excel_date, 
+		  	member_tglcetak : member_tglcetak_2excel_date, 
+		  	member_tglcetak_end : member_tglcetak_end_2excel_date, 
+		  	//member_tglserahterima : member_tglserahterima_2excel_date, 
 		  	currentlisting: member_DataStore.baseParams.task // this tells us if we are searching or not
 		},
 		success: function(response){              

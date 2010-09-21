@@ -24,7 +24,12 @@ class M_member extends Model{
 			$row=$this->db->query($query);
 			
 			//$query = "UPDATE member set member_status='print' where member_status='register'";
-			$query = "UPDATE member set member_status='Cetak', member_tglserahterima=NULL where member_status='Daftar'";
+			//$query = "UPDATE member set member_status='Cetak', member_tglserahterima=NULL where member_status='Daftar'";
+			$date_now=date('Y-m-d');
+			$query =   "UPDATE member set 
+							member_status='Cetak', 
+							member_tglcetak='$date_now'
+						where member_status='Daftar'"; // by hendri, 2010-09-21, utk mencatat tanggal Cetak 
 			$this->db->query($query);
 			//$query = "SELECT member.*,cust_nama as member_nama FROM member,customer where member_cust=cust_id and member_status='print'";
 			
@@ -60,7 +65,8 @@ class M_member extends Model{
 			} 
 			else {
 //				$query .= "where member_cust=cust_id and member_status <> 'Serah Terima'";
-				$query .= " WHERE member_status <> 'Serah Terima'";
+				//$query .= " WHERE member_status <> 'Serah Terima'";
+				$query .= " WHERE member_status = 'Daftar'";
 			}
 			
 			$result = $this->db->query($query);
@@ -193,7 +199,7 @@ class M_member extends Model{
 		}
 		
 		//function for advanced search record
-		function member_search($member_id ,$member_cust ,$member_no ,$member_register, $member_register_end, $member_valid, $member_valid_end, $member_point ,$member_jenis ,$member_status ,$member_tglserahterima, $member_tglserahterima_end, $start,$end){
+		function member_search($member_id ,$member_cust ,$member_no ,$member_register, $member_register_end, $member_valid, $member_valid_end, $member_point ,$member_jenis ,$member_status, $member_tglcetak, $member_tglcetak_end, /*$member_tglserahterima, $member_tglserahterima_end,*/ $start,$end){
 			//full query
 /*			$query="SELECT 
 						member.*,
@@ -244,7 +250,15 @@ class M_member extends Model{
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " member_status = '".$member_status."'";
 			};
-			if($member_tglserahterima!=''){
+			if($member_tglcetak!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " member_tglcetak >= '".$member_tglcetak."'";
+			};
+			if($member_tglcetak_end!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " member_tglcetak <= '".$member_tglcetak_end."'";
+			};
+/*			if($member_tglserahterima!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " member_tglserahterima >= '".$member_tglserahterima."'";
 			};
@@ -252,7 +266,7 @@ class M_member extends Model{
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " member_tglserahterima <= '".$member_tglserahterima_end."'";
 			};
-			
+*/			
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
 			
@@ -271,10 +285,10 @@ class M_member extends Model{
 		}
 		
 		//function for print record
-		function member_print($member_id ,$member_cust ,$member_no ,$member_register ,$member_valid ,$member_nota_ref ,$member_point ,$member_jenis ,$member_status ,$member_tglserahterima ,$option,$filter){
+		function member_print($member_id ,$member_cust ,$member_no ,$member_register ,$member_valid ,$member_nota_ref ,$member_point ,$member_jenis ,$member_status, $member_tglcetak, $member_tglcetak_end, /*$member_tglserahterima,*/ $option,$filter){
 			//full query
 			//$query="select * from member";
-			$query = "SELECT member.*,cust_nama as member_nama FROM member,customer WHERE member_cust=cust_id and member_status = 'Daftar'";
+			$query = "SELECT member.*,cust_nama as member_nama FROM member,customer WHERE member_cust=cust_id and (member_status = 'Daftar' or member_status = 'Cetak')";
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 				$query .= " (cust_nama LIKE '%".addslashes($filter)."%' OR cust_no LIKE '%".addslashes($filter)."%' OR member_no LIKE '%".addslashes($filter)."%')";
@@ -318,18 +332,26 @@ class M_member extends Model{
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " member_status LIKE '%".$member_status."%'";
 				};
-				if($member_tglserahterima!=''){
+				if($member_tglcetak!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " member_tglcetak >= '".$member_tglcetak."'";
+				};
+				if($member_tglcetak_end!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " member_tglcetak <= '".$member_tglcetak_end."'";
+				};
+/*				if($member_tglserahterima!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " member_tglserahterima LIKE '%".$member_tglserahterima."%'";
 				};
-				//$query .= " ORDER BY member_jenis";
+*/				//$query .= " ORDER BY member_jenis";
 				$result = $this->db->query($query);
 			}
 			return $result->result();
 		}
 		
 		//function  for export to excel
-		function member_export_excel($member_id ,$member_cust ,$member_no ,$member_register ,$member_valid ,$member_nota_ref ,$member_point ,$member_jenis ,$member_status ,$member_tglserahterima ,$option,$filter){
+		function member_export_excel($member_id ,$member_cust ,$member_no ,$member_register ,$member_valid ,$member_nota_ref ,$member_point ,$member_jenis ,$member_status, $member_tglcetak, $member_tglcetak_end, /*$member_tglserahterima ,*/ $option,$filter){
 			//full query
 			$query="SELECT cust_no AS no_cust,
 					cust_nama AS customer,
@@ -342,10 +364,10 @@ class M_member extends Model{
 					member_tglserahterima AS tgl_penyerahan
 				FROM member
 				LEFT JOIN customer ON(member_cust=cust_id)
-				WHERE member_status='Cetak'";
+				WHERE (member_status='Cetak' or member_status='Daftar') ";
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (member_id LIKE '%".addslashes($filter)."%' OR member_cust LIKE '%".addslashes($filter)."%' OR member_no LIKE '%".addslashes($filter)."%' OR member_register LIKE '%".addslashes($filter)."%' OR member_valid LIKE '%".addslashes($filter)."%' OR member_nota_ref LIKE '%".addslashes($filter)."%' OR member_point LIKE '%".addslashes($filter)."%' OR member_jenis LIKE '%".addslashes($filter)."%' OR member_status LIKE '%".addslashes($filter)."%' OR member_tglserahterima LIKE '%".addslashes($filter)."%' )";
+				$query .= " (member_id LIKE '%".addslashes($filter)."%' OR member_cust LIKE '%".addslashes($filter)."%' OR member_no LIKE '%".addslashes($filter)."%' OR member_register LIKE '%".addslashes($filter)."%' OR member_valid LIKE '%".addslashes($filter)."%' OR member_nota_ref LIKE '%".addslashes($filter)."%' OR member_point LIKE '%".addslashes($filter)."%' OR member_jenis LIKE '%".addslashes($filter)."%' OR member_status LIKE '%".addslashes($filter)."%' OR member_tglcetak LIKE '%".addslashes($filter)."%' )";
 				$result = $this->db->query($query);
 			} else if($option=='SEARCH'){
 				if($member_id!=''){
@@ -384,11 +406,20 @@ class M_member extends Model{
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " member_status LIKE '%".$member_status."%'";
 				};
-				if($member_tglserahterima!=''){
+				if($member_tglcetak!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " member_tglcetak >= '".$member_tglcetak."'";
+				};
+				if($member_tglcetak_end!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " member_tglcetak <= '".$member_tglcetak_end."'";
+				};
+				
+/*				if($member_tglserahterima!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " member_tglserahterima LIKE '%".$member_tglserahterima."%'";
 				};
-				$result = $this->db->query($query);
+*/				$result = $this->db->query($query);
 			}
 			return $result;
 		}
