@@ -1,0 +1,6 @@
+perubahan di Aktivasi Member:
+
+- Status "Serah Terima" ditiadakan, untuk menyederhanakan alur.
+- default yg ditampilkan di List adalah yg statusnya Daftar
+
+Perbaikan: Export Excel & Print
