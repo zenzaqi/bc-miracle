@@ -591,7 +591,7 @@ Ext.onReady(function(){
 		{ 
 			text: 'Edit', tooltip: 'Edit selected record', 
 			iconCls:'icon-update',
-			handler: kategori2_editContextMenu 
+			handler: kategori2_confirm_update
 		},
 		{ 
 			text: 'Delete', 

@@ -543,7 +543,7 @@ Ext.onReady(function(){
 		{ 
 			text: 'Edit', tooltip: 'Edit selected record', 
 			iconCls:'icon-update',
-			handler: bank_master_editContextMenu 
+			handler: bank_master_confirm_update 
 		},
 		{ 
 			text: 'Delete', 
