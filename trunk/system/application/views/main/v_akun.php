@@ -726,7 +726,7 @@ Ext.onReady(function(){
 		{ 
 			text: 'Edit', tooltip: 'Edit selected record', 
 			iconCls:'icon-update',
-			handler: akun_editContextMenu 
+			handler: akun_confirm_update 
 		},
 		{ 
 			text: 'Delete', 
