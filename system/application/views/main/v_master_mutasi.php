@@ -374,7 +374,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'mutasi_id'
 		},[
-		/* dataIndex => insert intomaster_mutasi_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'mutasi_id', type: 'int', mapping: 'mutasi_id'}, 
 			{name: 'mutasi_no', type: 'string', mapping: 'mutasi_no'}, 
 			{name: 'mutasi_asal', type: 'string', mapping: 'gudang_asal_nama'}, 
@@ -922,6 +921,14 @@ Ext.onReady(function(){
 	//declaration of detail coloumn model
 	detail_mutasi_ColumnModel = new Ext.grid.ColumnModel(
 		[
+		 {
+			header: '<div align="center">ID</div>',
+			dataIndex: 'dmutasi_id',
+			width: 80,
+			sortable: true,
+			readOnly: true,
+			hidden: true
+		},
 		{
 			header: '<div align="center">Produk</div>',
 			dataIndex: 'dmutasi_produk',
@@ -1108,9 +1115,11 @@ Ext.onReady(function(){
 			var s = detail_mutasiListEditorGrid.getSelectionModel().getSelections();
 			for(var i = 0, r; r = s[i]; i++){
 				detail_mutasi_DataStore.remove(r);
+				detail_mutasi_DataStore.commitChanges();
+				detail_mutasi_total();
 			}
 		} 
-		detail_mutasi_DataStore.commitChanges();
+		
 	}
 	//eof
 	

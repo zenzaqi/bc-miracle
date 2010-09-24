@@ -305,8 +305,10 @@ class M_master_terima_beli extends Model{
 		
 		//function for detail
 		//get record list
+
 		function detail_detail_terima_bonus_list($master_id,$query,$start,$end) {
-			$query = "SELECT * FROM vu_detail_terima_bonus where dtbonus_master='".$master_id."'";
+			$query = "SELECT dtbonus_id,dtbonus_master,dtbonus_produk,produk_nama,dtbonus_satuan,dtbonus_jumlah
+						FROM vu_detail_terima_bonus where dtbonus_master='".$master_id."'";
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
 /*			$limit = $query." LIMIT ".$start.",".$end;			
@@ -336,6 +338,7 @@ class M_master_terima_beli extends Model{
 		function detail_detail_terima_bonus_insert($array_dtbonus_id ,$dtbonus_master ,$array_dtbonus_produk ,
 												   $array_dtbonus_satuan ,$array_dtbonus_jumlah ){
 			 
+			 $query="";
 			 for($i = 0; $i < sizeof($array_dtbonus_produk); $i++){
 
 				$data = array(
@@ -348,9 +351,19 @@ class M_master_terima_beli extends Model{
 				if($array_dtbonus_id[$i]==0){
 					$this->db->insert('detail_terima_bonus', $data); 
 				}else{
+					$query = $query.$array_dtbonus_id[$i];
+					if($i<sizeof($array_dtbonus_id)-1){
+						$query = $query . ",";
+					} 
 					$this->db->where('dtbonus_id', $array_dtbonus_id[$i]);
 					$this->db->update('detail_terima_bonus', $data);
 				}
+			}
+			
+			if($query<>""){
+				$sql="DELETE FROM detail_terima_bonus WHERE  dtbonus_master='".$dtbonus_master."' AND
+						dtbonus_id NOT IN (".$query.")";
+				$this->db->query($sql);
 			}
 			
 			return '1';
@@ -360,8 +373,10 @@ class M_master_terima_beli extends Model{
 		
 		//function for detail
 		//get record list
+			
 		function detail_detail_terima_beli_list($master_id,$query,$start,$end) {
-			$query = "SELECT  distinct * FROM vu_detail_terima_produk where dterima_master='".$master_id."'";
+			$query = "SELECT  distinct dterima_id,dterima_master,dterima_produk,produk_nama,dterima_satuan,dterima_jumlah
+						 FROM vu_detail_terima_produk where dterima_master='".$master_id."'";
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
 			//echo $query;
@@ -447,6 +462,7 @@ class M_master_terima_beli extends Model{
 		function detail_detail_terima_beli_insert($array_dterima_id ,$dterima_master ,$array_dterima_produk ,$array_dterima_satuan ,
 												  $array_dterima_jumlah ){
 			 
+			 $query="";
 			 for($i = 0; $i < sizeof($array_dterima_produk); $i++){
 
 				$data = array(
@@ -459,9 +475,19 @@ class M_master_terima_beli extends Model{
 				if($array_dterima_id[$i]==0){
 					$this->db->insert('detail_terima_beli', $data); 
 				}else{
+					$query = $query.$array_dterima_id[$i];
+					if($i<sizeof($array_dterima_id)-1){
+						$query = $query . ",";
+					} 
+					
 					$this->db->where('dterima_id', $array_dterima_id[$i]);
 					$this->db->update('detail_terima_beli', $data);
 				}
+			}
+			if($query<>""){
+				$sql="DELETE FROM detail_terima_beli WHERE  dterima_master='".$dterima_master."' AND
+						dterima_id NOT IN (".$query.")";
+				$this->db->query($sql);
 			}
 			
 			return '1';

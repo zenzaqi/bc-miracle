@@ -209,7 +209,8 @@ class M_master_order_beli extends Model{
 		//function for detail
 		//get record list
 		function detail_detail_order_beli_list($master_id,$query,$start,$end) {
-			$query = "SELECT distinct * FROM vu_detail_order_beli where dorder_master='".$master_id."'";
+			$query = "SELECT distinct dorder_id,dorder_master,dorder_produk,produk_nama,jumlah_terima,dorder_satuan,jumlah_barang,harga_satuan,
+						diskon FROM vu_detail_order_beli where dorder_master='".$master_id."'";
 
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
@@ -259,7 +260,7 @@ class M_master_order_beli extends Model{
                                                  ,$array_dorder_harga
                                                  ,$array_dorder_diskon ){
             
-           
+            $query="";
 		   	for($i = 0; $i < sizeof($array_dorder_produk); $i++){
 
 				$data = array(
@@ -271,13 +272,26 @@ class M_master_order_beli extends Model{
 					"dorder_diskon"=>$array_dorder_diskon[$i] 
 				);
 				
+								
 				if($array_dorder_id[$i]==0){
 					$this->db->insert('detail_order_beli', $data); 
 				}else{
+					$query = $query.$array_dorder_id[$i];
+					if($i<sizeof($array_dorder_id)-1){
+						$query = $query . ",";
+					} 
 					$this->db->where('dorder_id', $array_dorder_id[$i]);
 					$this->db->update('detail_order_beli', $data);
 				}
 			}
+			
+			if($query<>""){
+				$sql="DELETE FROM detail_order_beli WHERE  dorder_master='".$dorder_master."' AND
+						dorder_id NOT IN (".$query.")";
+				$this->db->query($sql);
+			}
+			
+			return '1';
             
 		}
 		//end of function

@@ -1,0 +1,9 @@
+[by zaqi.smart@gmail.com]
+o Fix Bug
+  - Perbaikan detail Pesanan Pembelian
+  - Perbaikan detail Penerimaan Barang
+  - Perbaikan detail Penerimaan Tagihan
+  - Perbaikan detail Retur Barang
+  - Perbaikan detail Mutasi Barang
+  - Perbaikan detail Penyesuaian Stok
+  - SQL u fix PP: 2010-09-24_11-00-AM.sql

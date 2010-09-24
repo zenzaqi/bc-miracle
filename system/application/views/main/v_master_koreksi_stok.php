@@ -908,6 +908,14 @@ Ext.onReady(function(){
 	//declaration of detail coloumn model
 	detail_koreksi_stok_ColumnModel = new Ext.grid.ColumnModel(
 		[
+		 {
+			header: '<div align="center">ID</div>',
+			dataIndex: 'dkoreksi_id',
+			width: 80,	//350,
+			sortable: true,
+			readOnly: true,
+			hidden: true
+		},
 		{
 			header: '<div align="center">Produk</div>',
 			dataIndex: 'dkoreksi_produk',
@@ -1148,6 +1156,7 @@ Ext.onReady(function(){
 			var s = detail_koreksi_stokListEditorGrid.getSelectionModel().getSelections();
 			for(var i = 0, r; r = s[i]; i++){
 				detail_koreksi_stok_DataStore.remove(r);
+				detail_koreksi_stok_DataStore.commitChanges();
 			}
 		}  
 	}

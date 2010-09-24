@@ -1196,7 +1196,14 @@ Ext.onReady(function(){
 	
 	//declaration of detail coloumn model
 	detail_invoice_ColumnModel = new Ext.grid.ColumnModel(
-		[
+		[{
+			header: '<div align="center">ID</div>',
+			dataIndex: 'dinvoice_id',
+			width: 80,
+			sortable: true,
+			hidden: true,
+			readOnly: true
+		},
 		{
 			header: '<div align="center">Produk</div>',
 			dataIndex: 'dinvoice_produk',
