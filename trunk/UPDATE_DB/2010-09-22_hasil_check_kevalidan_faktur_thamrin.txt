@@ -1,0 +1,266 @@
+==== HASIL CHECKING KASIR PERAWATANAN ====
+
+[1]. PR/1007-0091 : SEHARUSNYA muncul Hutang sebesar 50rb saja, tapi karena suatu sebab jrawat_bayar=0 sehingga Hutang yang masuk adalah total transaksi(jrawat_totalbiaya). 
+NB: Koding sudah ada perubahan, tapi perlu pengecheckan lagi untuk memastikan kesempurnaan koding.
+SOLUSI: 
+# pertama jalankan query berikut:
+/* Query untuk memvalidkan total_bayar */
+UPDATE master_jual_rawat,
+       vu_jrawat_compare_bayar_temp
+   SET master_jual_rawat.jrawat_bayar =
+          vu_jrawat_compare_bayar_temp.total_cara_bayar
+ WHERE master_jual_rawat.jrawat_nobukti =
+          vu_jrawat_compare_bayar_temp.jrawat_nobukti
+       AND master_jual_rawat.jrawat_nobukti = 'PR/1007-0091'
+       AND vu_jrawat_compare_bayar_temp.jrawat_nobukti = 'PR/1007-0091';
+
+# kedua jalankan query berikut:
+/* Query untuk memvalidkan total_piutang */
+UPDATE master_lunas_piutang,
+       vu_piutang_jrawat
+   SET master_lunas_piutang.lpiutang_total = vu_piutang_jrawat.piutang_total
+ WHERE master_lunas_piutang.lpiutang_faktur =
+          vu_piutang_jrawat.jrawat_nobukti
+       AND master_lunas_piutang.lpiutang_total <>
+              vu_piutang_jrawat.piutang_total;
+
+
+
+[2]. PR/1007-0146 : Kasus sama dengan No.[1]
+SOLUSI: 
+# pertama jalankan query berikut:
+/* Query untuk memvalidkan total_bayar */
+UPDATE master_jual_rawat,
+       vu_jrawat_compare_bayar_temp
+   SET master_jual_rawat.jrawat_bayar =
+          vu_jrawat_compare_bayar_temp.total_cara_bayar
+ WHERE master_jual_rawat.jrawat_nobukti =
+          vu_jrawat_compare_bayar_temp.jrawat_nobukti
+       AND master_jual_rawat.jrawat_nobukti = 'PR/1007-0146'
+       AND vu_jrawat_compare_bayar_temp.jrawat_nobukti = 'PR/1007-0146';
+
+# kedua jalankan query berikut:
+/* Query untuk memvalidkan total_piutang */
+UPDATE master_lunas_piutang,
+       vu_piutang_jrawat
+   SET master_lunas_piutang.lpiutang_total = vu_piutang_jrawat.piutang_total
+ WHERE master_lunas_piutang.lpiutang_faktur =
+          vu_piutang_jrawat.jrawat_nobukti
+       AND master_lunas_piutang.lpiutang_total <>
+              vu_piutang_jrawat.piutang_total;
+
+
+
+[3]. PR/1007-0635 : LUNAS (tunai & kwitansi-nomor KW/1005-035), tidak valid-nya adalah No.Kwitansi ini tidak ada di database db.cetak_kwitansi.
+
+
+
+[4]. PR/1007-1092 : LUNAS (No.Voucher=203479 sebesar 100rb; dan Card sebesar 510rb), yang tidak valid adalah Nilai-Voucher di db.voucher_terima.tvoucher_nilai = 0 sehingga dilihat di 'vu_jrawat_compare_bayar_temp' antara TOTAL_BAYAR yang telah dibayarkan oleh customer tidak sama dengan TOTAL_CARA_BAYAR yang masuk di cara pembayaran. 
+SOLUSI:
+# jalankan Query berikut:
+/* Update Nilai voucher */
+UPDATE voucher_terima
+   SET tvoucher_nilai = 100000
+ WHERE tvoucher_ref = 'PR/1007-1092';
+
+
+
+[5]. PR/1008-0533 : TIDAK JELAS, Cara Bayar yang terlihat ada 3 Cara menggunakan Kuitansi. Jika dilihat di database hanya terdapat 2 Kuitansi dengan Total_Cara_Bayar = 8.511.250, sedangkan di Jrawat_Bayar = 11.061.250. Analisa yang paling mungkin memang benar Faktur ini dibayar dengan 3 Cara Bayar Kuitansi, tapi ada satu Kuitansi yang hilang dari database (ini memang pernah terjadi, dan sudah diperbaiki). Dan Kalau dilihat di Program, 3 Cara Bayar Kuitansi-nya bernilai sama semua (karena memang belum bisa menghandle 2/lebih cara bayar yang sama, tapi u/ Print Faktur sudah bisa dihandle). Faktur ini masuk Piutang dengan nilai yang sudah benar.
+
+
+
+[6]. PR/1008-0556 : LUNAS (Tunai & Voucher = Rp.100.000,-), kasus yang terjadi adalah hilangnya Voucher di dalam database db.voucher_terima
+SOLUSI:
+# menambahkan db.voucher_terima dengan No.Faktur yang bersangkutan senilai Rp.100.000,-, jika diketahui No.Voucher yang telah diterima maka di db.voucher_terima juga diisikan No.Voucher yang diketahui (ganti tanda '-' di dalam query dengan No.Voucher).
+/* INSERT voucher yang diterima ke db.voucher_terima */
+INSERT INTO voucher_terima (
+  tvoucher_ref
+  ,tvoucher_transaksi
+  ,tvoucher_novoucher
+  ,tvoucher_nilai
+  ,tvoucher_stat_dok
+  ,tvoucher_date_create
+)
+SELECT master_jual_rawat.jrawat_nobukti
+  ,'jual_rawat'
+  ,'-'
+  ,100000
+  ,'Tertutup'
+  ,master_jual_rawat.jrawat_date_create
+FROM master_jual_rawat
+WHERE master_jual_rawat.jrawat_nobukti='PR/1008-0556';
+
+
+
+[7]. PR/1008-0572 : LUNAS (Card & Voucher = Rp.400.000,-), kasus sama dengan No.[6]
+SOLUSI:
+# menambahkan db.voucher_terima dengan No.Faktur yang bersangkutan senilai Rp.400.000,-, jika diketahui No.Voucher yang telah diterima maka di db.voucher_terima juga diisikan No.Voucher yang diketahui (ganti tanda '-' di dalam query dengan No.Voucher).
+/* INSERT voucher yang diterima ke db.voucher_terima */
+INSERT INTO voucher_terima (
+  tvoucher_ref
+  ,tvoucher_transaksi
+  ,tvoucher_novoucher
+  ,tvoucher_nilai
+  ,tvoucher_stat_dok
+  ,tvoucher_date_create
+)
+SELECT master_jual_rawat.jrawat_nobukti
+  ,'jual_rawat'
+  ,'-'
+  ,400000
+  ,'Tertutup'
+  ,master_jual_rawat.jrawat_date_create
+FROM master_jual_rawat
+WHERE master_jual_rawat.jrawat_nobukti='PR/1008-0572';
+
+
+
+[8]. PR/1008-0736 : LUNAS (Card & Voucher = Rp.200.000,-), kasus sama dengan No.[6]
+SOLUSI:
+# menambahkan db.voucher_terima dengan No.Faktur yang bersangkutan senilai Rp.200.000,-, jika diketahui No.Voucher yang telah diterima maka di db.voucher_terima juga diisikan No.Voucher yang diketahui (ganti tanda '-' di dalam query dengan No.Voucher).
+/* INSERT voucher yang diterima ke db.voucher_terima */
+INSERT INTO voucher_terima (
+  tvoucher_ref
+  ,tvoucher_transaksi
+  ,tvoucher_novoucher
+  ,tvoucher_nilai
+  ,tvoucher_stat_dok
+  ,tvoucher_date_create
+)
+SELECT master_jual_rawat.jrawat_nobukti
+  ,'jual_rawat'
+  ,'-'
+  ,200000
+  ,'Tertutup'
+  ,master_jual_rawat.jrawat_date_create
+FROM master_jual_rawat
+WHERE master_jual_rawat.jrawat_nobukti='PR/1008-0736';
+
+
+
+[9]. PR/1008-1157 : LUNAS (Tunai & Voucher = Rp.300.000,-), kasus sama dengan No.[6]
+SOLUSI:
+# menambahkan db.voucher_terima dengan No.Faktur yang bersangkutan senilai Rp.300.000,-, jika diketahui No.Voucher yang telah diterima maka di db.voucher_terima juga diisikan No.Voucher yang diketahui (ganti tanda '-' di dalam query dengan No.Voucher).
+/* INSERT voucher yang diterima ke db.voucher_terima */
+INSERT INTO voucher_terima (
+  tvoucher_ref
+  ,tvoucher_transaksi
+  ,tvoucher_novoucher
+  ,tvoucher_nilai
+  ,tvoucher_stat_dok
+  ,tvoucher_date_create
+)
+SELECT master_jual_rawat.jrawat_nobukti
+  ,'jual_rawat'
+  ,'-'
+  ,300000
+  ,'Tertutup'
+  ,master_jual_rawat.jrawat_date_create
+FROM master_jual_rawat
+WHERE master_jual_rawat.jrawat_nobukti='PR/1008-1157';
+
+
+
+[10]. PR/1008-1545 : LUNAS (Tunai & Voucher = Rp.50.000,-), kasus sama dengan No.[6]
+SOLUSI:
+# menambahkan db.voucher_terima dengan No.Faktur yang bersangkutan senilai Rp.50.000,-, jika diketahui No.Voucher yang telah diterima maka di db.voucher_terima juga diisikan No.Voucher yang diketahui (ganti tanda '-' di dalam query dengan No.Voucher).
+/* INSERT voucher yang diterima ke db.voucher_terima */
+INSERT INTO voucher_terima (
+  tvoucher_ref
+  ,tvoucher_transaksi
+  ,tvoucher_novoucher
+  ,tvoucher_nilai
+  ,tvoucher_stat_dok
+  ,tvoucher_date_create
+)
+SELECT master_jual_rawat.jrawat_nobukti
+  ,'jual_rawat'
+  ,'-'
+  ,50000
+  ,'Tertutup'
+  ,master_jual_rawat.jrawat_date_create
+FROM master_jual_rawat
+WHERE master_jual_rawat.jrawat_nobukti='PR/1008-1545';
+
+
+
+[11]. PR/1008-1568 : LUNAS (Card & Voucher = Rp.500.000,-), kasus sama dengan No.[6]
+SOLUSI:
+# menambahkan db.voucher_terima dengan No.Faktur yang bersangkutan senilai Rp.500.000,-, jika diketahui No.Voucher yang telah diterima maka di db.voucher_terima juga diisikan No.Voucher yang diketahui (ganti tanda '-' di dalam query dengan No.Voucher).
+/* INSERT voucher yang diterima ke db.voucher_terima */
+INSERT INTO voucher_terima (
+  tvoucher_ref
+  ,tvoucher_transaksi
+  ,tvoucher_novoucher
+  ,tvoucher_nilai
+  ,tvoucher_stat_dok
+  ,tvoucher_date_create
+)
+SELECT master_jual_rawat.jrawat_nobukti
+  ,'jual_rawat'
+  ,'-'
+  ,500000
+  ,'Tertutup'
+  ,master_jual_rawat.jrawat_date_create
+FROM master_jual_rawat
+WHERE master_jual_rawat.jrawat_nobukti='PR/1008-1568';
+
+
+
+[12]. PR/1008-1659 : LUNAS (Voucher & Kuitansi), kasusnya adalah Faktur ini tidak ada di cara bayar Kuitansi tapi di Keterangannya ada pengambilan di Kuitansi='KW/1003-014'. Sedangkan di database tabel Kuitansi(db.cetak_kwitansi) tidak ada db.cetak_kwitansi.kwitansi_no='KW/1003-014'.
+
+
+
+[13]. PR/1009-0062 : LUNAS (Card), kasus yang terjadi adalah terdapat 2 cara bayar Card yang seharusnya hanya 1 cara bayar saja sudah melunasi total transaksi.
+SOLUSI:
+# pertama jalankan Query berikut:
+/* Menghapus salah satu cara bayar Card */
+DELETE FROM jual_card
+ WHERE jcard_id = 14876;
+
+# kedua jalankan Query berikut:
+/* meng-NULL-kan status cara bayar ke-2 di dalam database db.master_jual_rawat.jrawat_cara2 */
+UPDATE master_jual_rawat
+   SET jrawat_cara2 = NULL
+ WHERE jrawat_nobukti = 'PR/1009-0062';
+
+
+
+[14]. PR/1009-0153 : SEHARUSNYA terjadi Hutang sebesar Rp.115.500,-. Terdapat 2 Cara Bayar yaitu Tunai & Voucher, sedangkan Voucher hilang di database persis seperti kasus di No.[6]. 
+SOLUSI:
+Untuk mengsinkronkan/insert ke dalam tabel Piutang yang seharusnya terjadi hutang adalah dengan menjalankan Query berikut:
+/* START: Insert into db.master_lunas_piutang */
+INSERT INTO master_lunas_piutang (
+	lpiutang_faktur
+	,lpiutang_cust
+	,lpiutang_faktur_tanggal
+	,lpiutang_status
+	,lpiutang_total
+	,lpiutang_sisa
+	,lpiutang_jenis_transaksi
+	,lpiutang_stat_dok
+	)
+SELECT exp_piutang.jrawat_nobukti
+	,exp_piutang.jrawat_cust
+	,exp_piutang.jrawat_tanggal
+	,exp_piutang.piutang_status
+	,exp_piutang.total_piutang
+	,exp_piutang.sisa_piutang
+	,exp_piutang.jenis_transaksi
+	,exp_piutang.jrawat_stat_dok
+FROM (
+	select jrawat.jrawat_nobukti as jrawat_nobukti
+		,jrawat.jrawat_cust as jrawat_cust
+		,jrawat.jrawat_tanggal as jrawat_tanggal
+		,'piutang' as piutang_status
+		,vu_piutang_jrawat.piutang_total as total_piutang
+		,vu_piutang_jrawat.piutang_total as sisa_piutang
+		,'jual_rawat' as jenis_transaksi
+		,'Terbuka' as jrawat_stat_dok
+	from vu_piutang_jrawat, master_jual_rawat as jrawat
+	where vu_piutang_jrawat.jrawat_nobukti not in (
+		select lpiutang_faktur from master_lunas_piutang
+		)
+		and vu_piutang_jrawat.jrawat_nobukti=jrawat.jrawat_nobukti
+) as exp_piutang
+/* END: Insert into db.master_lunas_piutang */
