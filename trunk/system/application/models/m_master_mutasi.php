@@ -254,7 +254,9 @@ class M_master_mutasi extends Model{
 		//function for detail
 		//get record list
 		function detail_detail_mutasi_list($master_id,$query,$start,$end) {
-			$query = "SELECT * FROM detail_mutasi where dmutasi_master='".$master_id."' ORDER by dmutasi_id DESC";
+			
+			$query = "SELECT dmutasi_id,dmutasi_master,dmutasi_produk,dmutasi_satuan,dmutasi_jumlah
+						FROM detail_mutasi where dmutasi_master='".$master_id."' ORDER by dmutasi_id DESC";
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
 /*			$limit = $query." LIMIT ".$start.",".$end;			
@@ -297,6 +299,7 @@ class M_master_mutasi extends Model{
 		function detail_detail_mutasi_insert($array_dmutasi_id ,$dmutasi_master ,$array_dmutasi_produk 
 											 ,$array_dmutasi_satuan ,$array_dmutasi_jumlah ){
 
+			$query="";
 			for($i = 0; $i < sizeof($array_dmutasi_produk); $i++){
            
 				$data = array(
@@ -308,11 +311,23 @@ class M_master_mutasi extends Model{
 				if($array_dmutasi_id[$i]==0){
 					$this->db->insert('detail_mutasi', $data); 
 				}else{
+					$query = $query.$array_dmutasi_id[$i];
+					if($i<sizeof($array_dmutasi_id)-1){
+						$query = $query . ",";
+					} 
+					
 					$this->db->where('dmutasi_id', $array_dmutasi_id[$i]);
 					$this->db->update('detail_mutasi', $data);
 				}
 			 }
-
+				
+			 if($query<>""){
+				$sql="DELETE FROM detail_mutasi WHERE  dmutasi_master='".$dmutasi_master."' AND
+						dmutasi_id NOT IN (".$query.")";
+				$this->db->query($sql);
+			}
+			
+			return '1';
 		}
 		//end of function
 		

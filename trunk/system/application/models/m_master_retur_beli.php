@@ -284,12 +284,14 @@ class M_master_retur_beli extends Model{
 		//function for detail
 		//get record list
 		function detail_detail_retur_beli_list($master_id,$query,$start,$end) {
-			$query = "SELECT * FROM detail_retur_beli where drbeli_master='".$master_id."'";
+
+		$query = "SELECT drbeli_id,drbeli_master,drbeli_produk,drbeli_satuan,drbeli_jumlah,drbeli_harga,drbeli_diskon
+						FROM detail_retur_beli where drbeli_master='".$master_id."'";
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
-			if($end<=0) $end=15;
+/*			if($end<=0) $end=15;
 			$limit = $query." LIMIT ".$start.",".$end;			
-			$result = $this->db->query($limit);  
+			$result = $this->db->query($limit);  */
 			
 			if($nbrows>0){
 				foreach($result->result() as $row){
@@ -328,6 +330,7 @@ class M_master_retur_beli extends Model{
 		function detail_detail_retur_beli_insert($array_drbeli_id ,$drbeli_master ,$array_drbeli_produk ,$array_drbeli_satuan ,$array_drbeli_jumlah ,
 												 $array_drbeli_harga, $array_drbeli_diskon ){
 			
+			$query="";
 			for($i = 0; $i < sizeof($array_drbeli_produk); $i++){
 
 				$data = array(
@@ -342,10 +345,23 @@ class M_master_retur_beli extends Model{
 				if($array_drbeli_id[$i]==0){
 					$this->db->insert('detail_retur_beli', $data); 
 				}else{
+					$query = $query.$array_dterima_id[$i];
+					if($i<sizeof($array_dterima_id)-1){
+						$query = $query . ",";
+					} 
+					
 					$this->db->where('drbeli_id', $array_drbeli_id[$i]);
 					$this->db->update('detail_retur_beli', $data);
 				}
 			}
+			
+			if($query<>""){
+				$sql="DELETE FROM detail_retur_beli WHERE  drbeli_master='".$drbeli_master."' AND
+						drbeli_id NOT IN (".$query.")";
+				$this->db->query($sql);
+			}
+			
+			return '1';
 
 		}
 		//end of function

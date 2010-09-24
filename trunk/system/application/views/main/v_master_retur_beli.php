@@ -415,14 +415,14 @@ Ext.onReady(function(){
   	/* Function for Identify of Window Column Model */
 	master_retur_beli_ColumnModel = new Ext.grid.ColumnModel(
 		[{
-			header: '#',
-			readOnly: true,
+			header: 'ID',
 			dataIndex: 'rbeli_id',
 			width: 40,
 			renderer: function(value, cell){
 				cell.css = "readonlycell"; // Mengambil Value dari Class di dalam CSS 
 				return value;
 				},
+			readOnly: true,
 			hidden: true
 		},
 		{
@@ -1048,7 +1048,14 @@ Ext.onReady(function(){
 	
 	//declaration of detail coloumn model
 	detail_retur_beli_ColumnModel = new Ext.grid.ColumnModel(
-		[
+		[{
+			header: '<div align="center">ID</div>',
+			dataIndex: 'drbeli_id',
+			width: 80,
+			sortable: true,
+			readOnly: true,
+			hidden: true
+		},
 		{
 			header: '<div align="center">Produk</div>',
 			dataIndex: 'drbeli_produk',
@@ -1289,6 +1296,8 @@ Ext.onReady(function(){
 			var s = detail_retur_beliListEditorGrid.getSelectionModel().getSelections();
 			for(var i = 0, r; r = s[i]; i++){
 				detail_retur_beli_DataStore.remove(r);
+				detail_retur_beli_DataStore.commitChanges();
+				detail_retur_beli_total();
 			}
 		}  
 	}

@@ -217,7 +217,7 @@ class M_master_invoice extends Model{
 		function detail_detail_invoice_insert($array_dinvoice_id ,$dinvoice_master ,$array_dinvoice_produk ,
 											  $array_dinvoice_satuan ,$array_dinvoice_jumlah ,$array_dinvoice_harga ,
 											  $array_dinvoice_diskon ){
-				
+			$query="";
 			for($i = 0; $i < sizeof($array_dinvoice_produk); $i++){
 
 				$data = array(
@@ -232,11 +232,22 @@ class M_master_invoice extends Model{
 				if($array_dinvoice_id[$i]==0){
 					$this->db->insert('detail_invoice', $data); 
 				}else{
+					$query = $query.$array_dterima_id[$i];
+					if($i<sizeof($array_dterima_id)-1){
+						$query = $query . ",";
+					} 
+					
 					$this->db->where('dinvoice_id', $array_dinvoice_id[$i]);
 					$this->db->update('detail_invoice', $data);
 				}
 			}
-
+			
+			if($query<>""){
+				$sql="DELETE FROM detail_invoice WHERE  dinvoice_master='".$dinvoice_master."' AND
+						dinvoice_id NOT IN (".$query.")";
+				$this->db->query($sql);
+			}
+			
 			return '1';
 		}
 		//end of function

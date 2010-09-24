@@ -1170,7 +1170,13 @@ Ext.onReady(function(){
 	
 	//declaration of detail coloumn model
 	detail_order_beli_ColumnModel = new Ext.grid.ColumnModel(
-		[
+		[ {
+			header: '<div align="center">' + 'ID' + '</div>',
+			dataIndex: 'dorder_id',
+			width: 30,	//250,
+			sortable: true,
+			hidden: true
+		},
 		 {
 			header: '<div align="center">' + 'Produk' + '</div>',
 			dataIndex: 'dorder_produk',
@@ -1423,10 +1429,13 @@ Ext.onReady(function(){
 		if(btn=='yes'){
 			var s = detail_order_beliListEditorGrid.getSelectionModel().getSelections();
 			for(var i = 0, r; r = s[i]; i++){
+				//s[i].dorder_id=0;
 				detail_order_beli_DataStore.remove(r);
+				detail_order_beli_DataStore.commitChanges();
+				detail_order_beli_total();
 			}
 		} 
-		detail_order_beli_DataStore.commitChanges();
+		
 	}
 	//eof
 	

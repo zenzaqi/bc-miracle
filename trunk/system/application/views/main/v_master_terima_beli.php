@@ -1119,7 +1119,14 @@ Ext.onReady(function(){
 	
 	//declaration of detail coloumn model
 	detail_terima_beli_ColumnModel = new Ext.grid.ColumnModel(
-		[
+		[{
+			header: '<div align="center">ID</div>',
+			dataIndex: 'dterima_id',
+			width: 80,
+			sortable: true,
+			hidden: true,
+			readOnly: true
+		},
 		{
 			header: '<div align="center">Nama Produk</div>',
 			dataIndex: 'dterima_produk',
@@ -1337,6 +1344,8 @@ Ext.onReady(function(){
 			var s = detail_terima_beliListEditorGrid.getSelectionModel().getSelections();
 			for(var i = 0, r; r = s[i]; i++){
 				detail_terima_beli_DataStore.remove(r);
+				detail_terima_beli_DataStore.commitChanges();
+				detail_terima_beli_total();
 			}
 		}  
 	}
@@ -1453,7 +1462,14 @@ Ext.onReady(function(){
 	
 	//declaration of detail coloumn model
 	detail_terima_bonus_ColumnModel = new Ext.grid.ColumnModel(
-		[
+		[{
+			header: '<div align="center">ID</div>',
+			dataIndex: 'dtbonus_id',
+			width: 80,
+			sortable: true,
+			hidden: true,
+			readOnly: true
+		},
 		{
 			header: '<div align="center">Nama Produk</div>',
 			dataIndex: 'dtbonus_produk',
@@ -1698,6 +1714,8 @@ Ext.onReady(function(){
 			var s = detail_terima_bonusListEditorGrid.getSelectionModel().getSelections();
 			for(var i = 0, r; r = s[i]; i++){
 				detail_terima_bonus_DataStore.remove(r);
+				detail_terima_bonus_DataStore.commitChanges();
+				detail_terima_bonus_total();
 			}
 		}  
 	}

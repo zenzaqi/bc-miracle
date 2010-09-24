@@ -282,7 +282,10 @@ class M_master_koreksi_stok extends Model{
 		//function for detail
 		//get record list
 		function detail_detail_koreksi_stok_list($master_id,$query,$start,$end) {
-			$query = "SELECT * FROM detail_koreksi_stok WHERE dkoreksi_master='".$master_id."' AND dkoreksi_produk<>0 ORDER by dkoreksi_produk ASC";
+							
+			$query = "SELECT dkoreksi_id,dkoreksi_master,dkoreksi_produk,dkoreksi_satuan,dkoreksi_jmlawal,dkoreksi_jmlkoreksi,dkoreksi_jmlsaldo,
+						dkoreksi_ket FROM detail_koreksi_stok 
+						WHERE dkoreksi_master='".$master_id."' AND dkoreksi_produk<>0 ORDER by dkoreksi_produk ASC";
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
 /*			$limit = $query." LIMIT ".$start.",".$end;			
@@ -326,6 +329,7 @@ class M_master_koreksi_stok extends Model{
 												   $array_dkoreksi_jmlawal ,$array_dkoreksi_jmlkoreksi ,$array_dkoreksi_jmlsaldo ,
 												   $array_dkoreksi_ket ){
 			
+			$query="";
 			for($i = 0; $i < sizeof($array_dkoreksi_produk); $i++){
 
 				$data = array(
@@ -341,11 +345,22 @@ class M_master_koreksi_stok extends Model{
 				if($array_dkoreksi_id[$i]==0){
 					$this->db->insert('detail_koreksi_stok', $data); 
 				}else{
+					$query = $query.$array_dkoreksi_id[$i];
+					if($i<sizeof($array_dkoreksi_id)-1){
+						$query = $query . ",";
+					} 
+					
 					$this->db->where('dkoreksi_id', $array_dkoreksi_id[$i]);
 					$this->db->update('detail_koreksi_stok', $data);
 				}
 			}
-
+			
+			if($query<>""){
+				$sql="DELETE FROM detail_koreksi_stok WHERE  dkoreksi_master='".$dkoreksi_master."' AND
+						dkoreksi_id NOT IN (".$query.")";
+				$this->db->query($sql);
+			}
+			
 			return '1';
 
 		}
