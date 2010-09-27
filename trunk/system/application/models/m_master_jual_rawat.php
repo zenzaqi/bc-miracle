@@ -1391,6 +1391,7 @@ class M_master_jual_rawat extends Model{
 													$result_bayar2 = $this->m_public_function->cara_bayar_tunai_insert($jrawat_tunai_nilai2
 																								   ,$jrawat_nobukti
 																								   ,$bayar_date_create
+																								   ,$jenis_transaksi
 																								   ,$cetak);
 												}elseif($jrawat_voucher_cashback2<>'' && $jrawat_voucher_cashback2<>0){
 													$result_bayar2 = $this->m_public_function->cara_bayar_voucher_insert($jrawat_voucher_no2
@@ -1667,6 +1668,7 @@ class M_master_jual_rawat extends Model{
 												$result_bayar2 = $this->m_public_function->cara_bayar_tunai_insert($jrawat_tunai_nilai2
 																							   ,$jrawat_nobukti
 																							   ,$bayar_date_create
+																							   ,$jenis_transaksi
 																							   ,$cetak);
 											}elseif($jrawat_voucher_cashback2<>'' && $jrawat_voucher_cashback2<>0){
 												$result_bayar2 = $this->m_public_function->cara_bayar_voucher_insert($jrawat_voucher_no2
