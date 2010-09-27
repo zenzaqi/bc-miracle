@@ -1606,8 +1606,7 @@ class M_public_function extends Model{
 		}
 	}
 	
-	function cara_bayar_cek_insert($jcek_cust
-								    ,$jcek_nama
+	function cara_bayar_cek_insert($jcek_nama
 									,$jcek_no
 									,$jcek_valid
 									,$jcek_bank
@@ -1619,18 +1618,6 @@ class M_public_function extends Model{
 		$stat_dok = 'Terbuka';
 		if($cetak==1){
 			$stat_dok = 'Tertutup';
-		}
-		if($jcek_nama=="" || $jcek_nama==NULL){
-			if(is_int($jcek_nama)){
-				$sql="select cust_nama from customer where cust_id='".$jcek_cust."'";
-				$query=$this->db->query($sql);
-				if($query->num_rows()){
-					$data=$query->row();
-					$jcek_nama=$data->cust_nama;
-				}
-			}else{
-				$jcek_nama=$kwitansi_cust;
-			}
 		}
 		$data=array(
 			"jcek_nama"=>$jcek_nama,

@@ -1395,6 +1395,7 @@ class M_master_jual_produk extends Model{
 												$result_bayar2 = $this->m_public_function->cara_bayar_tunai_insert($jproduk_tunai_nilai2
 																							   ,$jproduk_nobukti
 																							   ,$bayar_date_create
+																							   ,$jenis_transaksi
 																							   ,$cetak);
 											}elseif($jproduk_voucher_cashback2<>'' && $jproduk_voucher_cashback2<>0){
 												$result_bayar2 = $this->m_public_function->cara_bayar_voucher_insert($jproduk_voucher_no2

@@ -4262,7 +4262,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [jrawat_kwitansi_no3Field,jrawat_kwitansi_nama3Field,jrawat_kwitansi_sisa2Field,jrawat_kwitansi_nilai3_cfField] 
+				items: [jrawat_kwitansi_no3Field,jrawat_kwitansi_nama3Field,jrawat_kwitansi_sisa3Field,jrawat_kwitansi_nilai3_cfField] 
 			}
 		]
 	
