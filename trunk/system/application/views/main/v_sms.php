@@ -239,7 +239,7 @@ Ext.onReady(function(){
 	var sms_destnumField=new Ext.form.TextArea({
 		id: 'sms_destnumField',
 		fieldLabel: 'Nomer (pisahkan dengan koma [,])',
-		maxLength: 250,
+		maxLength: 1000,
 		maskRe: /^\+|,|([0-9]+)$/,
 		width: 300
 	});
