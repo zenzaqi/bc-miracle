@@ -948,21 +948,21 @@ class M_tindakan_nonmedis extends Model{
 			$jumlah = $array_jumlah[$i];
 			if(is_numeric($dtrawat_id)){
 				// data sudah ada di db.tindakan_detail ==> mode Edit
-				/*$sql = "SELECT dtrawat_id FROM tindakan_detail WHERE dtrawat_id='".$dtrawat_id."'";
+				$sql = "SELECT dtrawat_id FROM tindakan_detail WHERE dtrawat_id='".$dtrawat_id."'";
 				$rs = $this->db->query($sql);
 				if($rs->num_rows()){
 					$sql = "UPDATE tindakan_detail
 						SET dtrawat_perawatan='".$dtrawat_perawatan."'
-							,dtrawat_petugas2='$dtrawat_petugas2'
-							,dtrawat_jam='$dtrawat_jam'
+							,dtrawat_petugas2='".$dtrawat_petugas2."'
+							,dtrawat_jam='".$dtrawat_jam."'
 							,dtrawat_keterangan='".$dtrawat_keterangan."'
-							,dtrawat_jumlah='$jumlah'
+							,dtrawat_jumlah='".$jumlah."'
 							,dtrawat_update='".@$_SESSION[SESSION_USERID]."'
 							,dtrawat_date_update='".$datetime_now."'
 							,dtrawat_revised=(dtrawat_revised+1)
 						WHERE dtrawat_id='".$dtrawat_id."'";
 					$this->db->query($sql);
-					if($this->db->affected_rows()){
+					if($this->db->affected_rows()>-1){
 						if($i==$size_array){
 							return 1;
 						}
@@ -975,10 +975,10 @@ class M_tindakan_nonmedis extends Model{
 					if($i==$size_array){
 						return 1;
 					}
-				}*/
-				if($i==$size_array){
-					return 1;
 				}
+				/*if($i==$size_array){
+					return 1;
+				}*/
 				
 			}else{
 				//* data baru /
