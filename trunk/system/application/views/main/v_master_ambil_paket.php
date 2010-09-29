@@ -996,6 +996,7 @@ Ext.onReady(function(){
 			{name: 'cust_nama', type: 'string', mapping: 'cust_nama'},
 			{name: 'tgl_ambil', type: 'date', dateFormat: 'Y-m-d', mapping: 'tgl_ambil'},
 			{name: 'referal', type: 'string', mapping: 'referal'},
+			{name: 'keterangan', type: 'string', mapping: 'dapaket_keterangan'},
 			{name: 'dapaket_stat_dok', type: 'string', mapping: 'dapaket_stat_dok'}
 		]),
 		sortInfo:{field: 'cust_nama', direction: "ASC"}//,
@@ -1064,6 +1065,10 @@ Ext.onReady(function(){
 		},{
 			header: '<div align="center">' + 'Referal' + '</div>',
 			dataIndex: 'referal',
+			width: 140
+		},{
+			header: '<div align="center">' + 'Keterangan' + '</div>',
+			dataIndex: 'keterangan',
 			width: 140
 		},{
 			header: '<div align="center">' + 'Stat Dok' + '</div>',
@@ -1170,7 +1175,8 @@ Ext.onReady(function(){
 	/* dataIndex => insert intoperawatan_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'rpaket_id', type: 'int', mapping: 'rpaket_id'}, 
 			{name: 'rpaket_perawatan', type: 'int', mapping: 'rpaket_perawatan'}, 
-			{name: 'rpaket_jumlah', type: 'int', mapping: 'rpaket_jumlah'}
+			{name: 'rpaket_jumlah', type: 'int', mapping: 'rpaket_jumlah'},
+			{name: 'keterangan', type: 'int', mapping: 'dapaket_keterangan'}
 	]);
 	//eof
 	
@@ -1346,6 +1352,16 @@ Ext.onReady(function(){
 			sortable: true,
 			editor: combo_referal,
 			renderer: Ext.util.Format.comboRenderer(combo_referal)
+		},
+		{
+			header: '<div align="center">' + 'Keterangan' + '</div>',
+			dataIndex: 'keterangan',
+			width: 120,	//230,
+			sortable: true,
+			editor: new Ext.form.TextField({
+				maxLength: 250,
+			})
+
 		}]
 	);
 	ambil_paket_isi_perawatan_ColumnModel.defaultSortable= true;
@@ -1401,6 +1417,7 @@ Ext.onReady(function(){
 			rpaket_perawatan: '',		
 			rpaket_jumlah	: 1,		
 			rpaket_cust		: '',
+			keterangfan 	: '',
 			referal			: ''
 		});
 		editor_ambil_paket_isi_perawatan.stopEditing();
@@ -1441,6 +1458,7 @@ Ext.onReady(function(){
 				dapaket_cust	: ambil_paket_isi_perawatan_record.data.rpaket_cust,
 				tgl_ambil		: ambil_paket_isi_perawatan_record.data.tgl_ambil.format('Y-m-d'),
 				dapaket_referal	: ambil_paket_isi_perawatan_record.data.referal,
+				keterangan		: ambil_paket_isi_perawatan_record.data.keterangan,
 				count	: count_i,
 				dcount	: count_detail
 				
