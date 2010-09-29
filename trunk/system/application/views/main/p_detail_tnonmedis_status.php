@@ -28,6 +28,7 @@
 			<th scope='col'>No Cust</th>
             <th scope='col'>Customer</th>
 			<th scope='col'>Perawatan</th>
+			<th scope='col'>Jml</th>
             <th scope='col'>Terapis</th>
             <th scope='col'>Jam App</th>
             <th scope='col'>Keterangan</th>
@@ -58,6 +59,7 @@
                 <td><?php echo $print_list->dtrawat_tglapp; ?></td>
                 <td><?php echo $print_list->cust_nama; ?></td>
 				<td><?php echo $print_list->rawat_nama; ?></td>
+				<td><?php echo $print_list->dtrawat_jumlah; ?></td>
                 <td><?php echo $print_list->terapis_nama; ?></td>
                 <td><?php echo $print_list->dtrawat_jam; ?></td>
                 <td><?php echo $print_list->dtrawat_keterangan; ?></td>

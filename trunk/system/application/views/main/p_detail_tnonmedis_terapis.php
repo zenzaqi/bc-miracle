@@ -15,12 +15,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Laporan Tindakan Medis <?php echo $periode; ?> Group By Terapis</title>
+<title>Laporan Tindakan Non Medis <?php echo $periode; ?> Group By Terapis</title>
 <link rel='stylesheet' type='text/css' href='../assets/modules/main/css/printstyle.css'/>
 </head>
 <body onload="window.print();">
 <table summary='Detail Jual'>
-	<caption>Laporan Tindakan Medis <br/><?php echo $periode; ?><br/>Group By Terapis</caption>
+	<caption>Laporan Tindakan Non Medis <br/><?php echo $periode; ?><br/>Group By Terapis</caption>
 	<thead>
     	<tr>
         	<th scope='col'>No</th>
@@ -28,6 +28,7 @@
 			<th scope='col'>No Cust</th>
             <th scope='col'>Customer</th>
 			<th scope='col'>Perawatan</th>
+			<th scope='col'>Jml</th>
             <th scope='col'>Status</th>
             <th scope='col'>Jam App</th>
             <th scope='col'>Keterangan</th>
@@ -58,6 +59,7 @@
                 <td><?php echo $print_list->dtrawat_tglapp; ?></td>
                 <td><?php echo $print_list->cust_nama; ?></td>
 				<td><?php echo $print_list->rawat_nama; ?></td>
+				<td><?php echo $print_list->dtrawat_jumlah; ?></td>
                 <td><?php echo $print_list->dtrawat_status; ?></td>
                 <td><?php echo $print_list->dtrawat_jam; ?></td>
                 <td><?php echo $print_list->dtrawat_keterangan; ?></td>
