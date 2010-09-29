@@ -26,6 +26,7 @@
         	<th scope='col'>No</th>
 			<th scope='col'>Tanggal</th>
             <th scope='col'>Perawatan</th>
+			<th scope='col'>Jml</th>
 			<th scope='col'>Terapis</th>
             <th scope='col'>Status</th>
             <th scope='col'>Jam App</th>
@@ -55,6 +56,7 @@
                 <td><? echo $i; ?></td>
                 <td><?php echo $print_list->dtrawat_tglapp; ?></td>
                 <td><?php echo $print_list->rawat_nama; ?></td>
+				<td><?php echo $print_list->dtrawat_jumlah; ?></td>
 				<td><?php echo $print_list->terapis_nama; ?></td>
                 <td><?php echo $print_list->dtrawat_status; ?></td>
                 <td><?php echo $print_list->dtrawat_jam; ?></td>

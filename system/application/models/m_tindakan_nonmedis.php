@@ -30,14 +30,14 @@ class M_tindakan_nonmedis extends Model{
 		}
 			
 		if($periode=='all')
-			$sql="SELECT *,date_format(dtrawat_tglapp,'%Y-%m-%d') as dtrawat_tglapp FROM vu_tindakan 
+			$sql="SELECT *,date_format(dtrawat_tglapp,'%Y-%m-%d') as dtrawat_tglapp, dtrawat_jumlah FROM vu_tindakan 
 					WHERE kategori_nama='Non Medis' AND terapis_id is NOT NULL".$order_by;
 		else if($periode=='bulan')
-			$sql="SELECT *,date_format(dtrawat_tglapp,'%Y-%m-%d') as dtrawat_tglapp FROM vu_tindakan 
+			$sql="SELECT *,date_format(dtrawat_tglapp,'%Y-%m-%d') as dtrawat_tglapp, dtrawat_jumlah FROM vu_tindakan 
 					WHERE kategori_nama='Non Medis' AND terapis_id is NOT NULL
 					AND date_format(dtrawat_tglapp,'%Y-%m')='".$tgl_awal."' ".$order_by;
 		else if($periode=='tanggal')
-			$sql="SELECT *,date_format(dtrawat_tglapp,'%Y-%m-%d') as dtrawat_tglapp FROM vu_tindakan 
+			$sql="SELECT *,date_format(dtrawat_tglapp,'%Y-%m-%d') as dtrawat_tglapp, dtrawat_jumlah FROM vu_tindakan 
 					WHERE  kategori_nama='Non Medis' AND terapis_id is NOT NULL
 					AND date_format(dtrawat_tglapp,'%Y-%m-%d')>='".$tgl_awal."' 
 					AND date_format(dtrawat_tglapp,'%Y-%m-%d')<='".$tgl_akhir."' ".$order_by;
