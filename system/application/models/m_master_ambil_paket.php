@@ -236,6 +236,7 @@ class M_master_ambil_paket extends Model{
 					,rawat_nama
 					,dapaket_jumlah
 					,cust_nama
+					,dapaket_keterangan
 					,IF((isnull(terapis.karyawan_username) AND isnull(dokter.karyawan_username)),referal.karyawan_username,IF((dtrawat_petugas1=0),IF((dtrawat_petugas2=0),NULL,terapis.karyawan_username),dokter.karyawan_username)) AS referal
 					,dapaket_stat_dok
 				FROM detail_ambil_paket
@@ -348,7 +349,7 @@ class M_master_ambil_paket extends Model{
 		
 		
 		//insert detail record
-		function detail_ambil_paket_isi_perawatan_insert($dapaket_dpaket, $dapaket_jpaket, $dapaket_paket, $dapaket_item, $dapaket_jumlah, $dapaket_cust, $tgl_ambil, $dapaket_referal, $count, $dcount){
+		function detail_ambil_paket_isi_perawatan_insert($dapaket_dpaket, $dapaket_jpaket, $dapaket_paket, $dapaket_item, $dapaket_jumlah, $dapaket_cust, $tgl_ambil, $keterangan, $dapaket_referal, $count, $dcount){
 			$nilai_return='0';
 			//* Check apakah sisa_item dari $dapaket_item tsb masih memiliki sisa ? /
 			$sql_punya_paket="SELECT (dpaket_jumlah*rpaket_jumlah) AS rpaket_jumlah, dpaket_id, dpaket_master, dpaket_paket, dpaket_sisa_paket FROM paket_isi_perawatan LEFT JOIN detail_jual_paket ON(rpaket_master=dpaket_paket) LEFT JOIN master_jual_paket ON(dpaket_master=jpaket_id) WHERE dpaket_id='$dapaket_dpaket' AND rpaket_perawatan='$dapaket_item'";
@@ -376,7 +377,8 @@ class M_master_ambil_paket extends Model{
 							"dapaket_cust"=>$dapaket_cust,
 							"dapaket_creator"=>@$_SESSION[SESSION_USERID],
 							"dapaket_tgl_ambil"=>$tgl_ambil,
-							"dapaket_referal"=>$dapaket_referal
+							"dapaket_referal"=>$dapaket_referal,
+							"dapaket_keterangan"=>$keterangan
 							);
 							$this->db->insert('detail_ambil_paket', $dti_dapaket);
 							
@@ -415,7 +417,8 @@ class M_master_ambil_paket extends Model{
 						"dapaket_cust"=>$dapaket_cust,
 						"dapaket_creator"=>@$_SESSION[SESSION_USERID],
 						"dapaket_tgl_ambil"=>$tgl_ambil,
-						"dapaket_referal"=>$dapaket_referal
+						"dapaket_referal"=>$dapaket_referal,
+						"dapaket_keterangan"=>$keterangan
 						);
 						$this->db->insert('detail_ambil_paket', $dti_dapaket);
 						
