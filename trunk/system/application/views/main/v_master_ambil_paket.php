@@ -872,7 +872,7 @@ Ext.onReady(function(){
 	/* Identify  apaket_cust_no Field */
 	apaket_cust_noField= new Ext.form.TextField({
 		id: 'apaket_cust_noField',
-		fieldLabel: 'No. Customer',
+		fieldLabel: 'No Customer',
 		readOnly: true,
 		anchor: '95%'
 	});
@@ -886,7 +886,7 @@ Ext.onReady(function(){
 	/* Identify  apaket_faktur Field */
 	apaket_fakturField= new Ext.form.TextField({
 		id: 'apaket_fakturField',
-		fieldLabel: 'No. Faktur',
+		fieldLabel: 'No Faktur',
 		readOnly: true,
 		anchor: '95%'
 	});
@@ -1375,7 +1375,7 @@ Ext.onReady(function(){
 		el: 'fp_ambil_paket_isi_perawatan',
 		title: 'Ambil Paket Perawatan',
 		height: 250,
-		width: 710,
+		width: 1220, //710,
 		autoScroll: true,
 		store: ambil_paket_isi_perawatan_DataStore, // DataStore
 		colModel: ambil_paket_isi_perawatan_ColumnModel, // Nama-nama Columns
@@ -1779,7 +1779,7 @@ Ext.onReady(function(){
 		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
-		width: 700,        
+		width: 1220,	//700,        
 		items: [ambil_paket_fakturGroup,ambil_paket_infoPaketGroup,detail_tab_isi]
 		,
 		buttons: [{
