@@ -24,8 +24,8 @@ class M_produk extends Model{
 			$query = "SELECT * FROM satuan_konversi where konversi_produk='".$master_id."'";
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
-			$limit = $query." LIMIT ".$start.",".$end;			
-			$result = $this->db->query($limit);  
+/*			$limit = $query." LIMIT ".$start.",".$end;			
+			$result = $this->db->query($limit);*/  
 			
 			if($nbrows>0){
 				foreach($result->result() as $row){
@@ -76,9 +76,10 @@ class M_produk extends Model{
 		//*eof
 		
 		//insert detail record
-		function detail_satuan_konversi_insert($konversi_id ,$konversi_produk ,$konversi_satuan ,$konversi_nilai ,$konversi_default){
+		function detail_satuan_konversi_insert($array_konversi_id ,$konversi_produk ,$array_konversi_satuan ,$array_konversi_nilai ,
+											   $array_konversi_default){
 			//if master id not capture from view then capture it from max pk from master table
-			if($konversi_produk=="" || $konversi_produk==NULL){
+			/*if($konversi_produk=="" || $konversi_produk==NULL){
 				$konversi_produk=$this->get_master_id();
 			}
 			
@@ -92,7 +93,44 @@ class M_produk extends Model{
 			if($this->db->affected_rows())
 				return '1';
 			else
-				return '0';
+				return '0';*/
+				
+			 $query="";
+		   	for($i = 0; $i < sizeof($array_konversi_satuan); $i++){
+
+				$data = array(
+					"konversi_produk"=>$konversi_produk, 
+					"konversi_satuan"=>$array_konversi_satuan[$i], 
+					"konversi_nilai"=>$array_konversi_nilai[$i], 
+					"konversi_default"=>$array_konversi_default[$i]
+				);
+				
+								
+				if($array_konversi_id[$i]==0){
+					$this->db->insert('satuan_konversi', $data); 
+					
+					$query = $query.$this->db->insert_id();
+					if($i<sizeof($array_konversi_id)-1){
+						$query = $query . ",";
+					} 
+					
+				}else{
+					$query = $query.$array_konversi_id[$i];
+					if($i<sizeof($array_konversi_id)-1){
+						$query = $query . ",";
+					} 
+					$this->db->where('konversi_id', $array_konversi_id[$i]);
+					$this->db->update('satuan_konversi', $data);
+				}
+			}
+			
+			if($query<>""){
+				$sql="DELETE FROM satuan_konversi WHERE  konversi_produk='".$konversi_produk."' AND
+						konversi_id NOT IN (".$query.")";
+				$this->db->query($sql);
+			}
+			
+			return '1';
 
 		}
 		//end of function
@@ -135,7 +173,7 @@ class M_produk extends Model{
 		}
 		
 		//function for update record
-		function produk_update($produk_id ,$produk_kode ,$produk_kodelama ,$produk_group ,$produk_kategori ,$produk_kontribusi, $produk_jenis ,$produk_nama ,$produk_satuan ,$produk_du ,$produk_dm ,$produk_point ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif ){
+		function produk_update($produk_id ,$produk_kode ,$produk_kodelama ,$produk_group ,$produk_kategori ,$produk_kontribusi, $produk_jenis ,$produk_nama ,$produk_satuan ,$produk_du ,$produk_dm ,$produk_point ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_saldo_awal ,$produk_nilai_saldo_awal ,$produk_aktif ){
 			if ($produk_aktif=="")
 				$produk_aktif = "Aktif";
 			if ($produk_point=="")
@@ -150,6 +188,8 @@ class M_produk extends Model{
 				"produk_du"=>$produk_du,
 				"produk_dm"=>$produk_dm,
 				"produk_keterangan"=>$produk_keterangan, 
+				"produk_saldo_awal"=>$produk_saldo_awal, 
+				"produk_nilai_saldo_awal"=>$produk_nilai_saldo_awal, 
 				"produk_aktif"=>$produk_aktif 
 			);
 			
@@ -224,11 +264,11 @@ class M_produk extends Model{
 				$sql="UPDATE produk set produk_revised=(produk_revised+1) WHERE produk_id='".$produk_id."'";
 				$this->db->query($sql);
 			}
-			return '1';
+			return $produk_id;
 		}
 		
 		//function for create new record
-		function produk_create($produk_kode ,$produk_kodelama ,$produk_group ,$produk_kategori ,$produk_kontribusi ,$produk_jenis ,$produk_nama ,$produk_satuan ,$produk_du ,$produk_dm ,$produk_point ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif ){
+		function produk_create($produk_kode ,$produk_kodelama ,$produk_group ,$produk_kategori ,$produk_kontribusi ,$produk_jenis ,$produk_nama ,$produk_satuan ,$produk_du ,$produk_dm ,$produk_point ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_saldo_awal ,$produk_nilai_saldo_awal ,$produk_aktif ){
 		if ($produk_aktif=="")
 			$produk_aktif = "Aktif";
 			if($produk_harga=="")
@@ -251,6 +291,8 @@ class M_produk extends Model{
 				"produk_harga"=>$produk_harga, 
 				"produk_jenis"=>$produk_jenis,
 				"produk_keterangan"=>$produk_keterangan, 
+				"produk_saldo_awal"=>$produk_saldo_awal, 
+				"produk_nilai_saldo_awal"=>$produk_nilai_saldo_awal, 
 				"produk_aktif"=>$produk_aktif 
 			);
 			
@@ -298,7 +340,7 @@ class M_produk extends Model{
 				
 			$this->db->insert('produk', $data); 
 			if($this->db->affected_rows())
-				return '1';
+				return $this->db->insert_id();
 			else
 				return '0';
 		}

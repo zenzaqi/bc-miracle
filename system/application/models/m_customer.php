@@ -108,8 +108,8 @@ where cabang.cabang_id = info.info_cabang";
 			
 			$result = $this->db->query($sql);
 			$nbrows = $result->num_rows();
-			$limit = $sql." LIMIT ".$start.",".$end;		
-			$result = $this->db->query($limit);  
+/*			$limit = $sql." LIMIT ".$start.",".$end;		
+			$result = $this->db->query($limit); */ 
 			
 			if($nbrows>0){
 				foreach($result->result() as $row){
@@ -127,9 +127,9 @@ where cabang.cabang_id = info.info_cabang";
 			
 			$result = $this->db->query($sql);
 			$nbrows = $result->num_rows();
-			$limit = $sql." LIMIT ".$start.",".$end;		
+/*			$limit = $sql." LIMIT ".$start.",".$end;		
 			$result = $this->db->query($limit);  
-			
+			*/
 			if($nbrows>0){
 				foreach($result->result() as $row){
 					$arr[] = $row;

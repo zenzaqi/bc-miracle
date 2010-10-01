@@ -344,6 +344,12 @@ class M_master_retur_beli extends Model{
 				
 				if($array_drbeli_id[$i]==0){
 					$this->db->insert('detail_retur_beli', $data); 
+					
+					$query = $query.$this->db->insert_id();
+					if($i<sizeof($array_drbeli_id)-1){
+						$query = $query . ",";
+					}
+					
 				}else{
 					$query = $query.$array_dterima_id[$i];
 					if($i<sizeof($array_dterima_id)-1){

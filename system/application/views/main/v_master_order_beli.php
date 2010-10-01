@@ -264,15 +264,15 @@ Ext.onReady(function(){
 		order_carabayarField.setValue(master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_carabayar'));
 		
 		<?php if(($_SESSION[SESSION_GROUPID]==9) || ($_SESSION[SESSION_GROUPID]==1)){ ?>
-		order_diskonField.setValue(master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_diskon'));
-		order_cashbackField.setValue(master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_cashback'));
+		order_diskonField.setValue(CurrencyFormatted(master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_diskon')));
+		order_cashbackField.setValue(CurrencyFormatted(master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_cashback')));
 		
 		order_biayaField.setValue(CurrencyFormatted(master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_biaya')));
 		order_bayarField.setValue(CurrencyFormatted(master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_bayar')));
-		order_keteranganField.setValue(CurrencyFormatted(master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_keterangan')));
+		order_keteranganField.setValue(master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_keterangan'));
 		<?php } ?>
-		order_statusField.setValue(CurrencyFormatted(master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_status')));
-		order_status_accField.setValue(CurrencyFormatted(master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_status_acc')));
+		order_statusField.setValue(master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_status'));
+		order_status_accField.setValue(master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_status_acc'));
 		
 		cbo_order_satuanDataStore.setBaseParam('task','detail');
 		cbo_order_satuanDataStore.setBaseParam('master_id',get_pk_id());
