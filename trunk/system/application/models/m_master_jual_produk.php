@@ -813,7 +813,7 @@ class M_master_jual_produk extends Model{
 						if($cetak==1 && $i==$size_array){
 							/*proses cetak*/
 							$this->stat_dok_tertutup_update($dproduk_master);
-							$this->member_point_update($dproduk_master);
+							//$this->member_point_update($dproduk_master);
 							$this->membership_insert($dproduk_master);
 							$this->catatan_piutang_update($dproduk_master);
 							return $dproduk_master;
@@ -824,7 +824,7 @@ class M_master_jual_produk extends Model{
 						if($cetak==1 && $i==$size_array){
 							/*proses cetak*/
 							$this->stat_dok_tertutup_update($dproduk_master);
-							$this->member_point_update($dproduk_master);
+							//$this->member_point_update($dproduk_master);
 							$this->membership_insert($dproduk_master);
 							$this->catatan_piutang_update($dproduk_master);
 							return $dproduk_master;
@@ -851,7 +851,7 @@ class M_master_jual_produk extends Model{
 						if($cetak==1 && $i==$size_array){
 							/*proses cetak*/
 							$this->stat_dok_tertutup_update($dproduk_master);
-							$this->member_point_update($dproduk_master);
+							//$this->member_point_update($dproduk_master);
 							$this->membership_insert($dproduk_master);
 							$this->catatan_piutang_update($dproduk_master);
 							return $dproduk_master;
@@ -862,7 +862,7 @@ class M_master_jual_produk extends Model{
 						if($cetak==1 && $i==$size_array){
 							/*proses cetak*/
 							$this->stat_dok_tertutup_update($dproduk_master);
-							$this->member_point_update($dproduk_master);
+							//$this->member_point_update($dproduk_master);
 							$this->membership_insert($dproduk_master);
 							$this->catatan_piutang_update($dproduk_master);
 							return $dproduk_master;
@@ -1532,7 +1532,8 @@ class M_master_jual_produk extends Model{
             $this->db->query($sql);
 			if($this->db->affected_rows()){
 				//* udpating db.customer.cust_point ==> proses mengurangi jumlah poin (dikurangi dengan db.master_jual_produk.jproduk_point yg sudah dimasukkan ketika cetak faktur), karena dilakukan pembatalan /
-				$result_point_batal = $this->member_point_batal($jproduk_id);
+				//$result_point_batal = $this->member_point_batal($jproduk_id);
+				$result_point_batal = 1;
 				if($result_point_batal==1){
 					$result_membership = $this->membership_insert($jproduk_id);
 					if($result_membership==1){
