@@ -349,7 +349,14 @@ class M_master_terima_beli extends Model{
 				);
 				
 				if($array_dtbonus_id[$i]==0){
+					
 					$this->db->insert('detail_terima_bonus', $data); 
+					
+					$query = $query.$this->db->insert_id();
+					if($i<sizeof($array_dtbonus_id)-1){
+						$query = $query . ",";
+					}
+					
 				}else{
 					$query = $query.$array_dtbonus_id[$i];
 					if($i<sizeof($array_dtbonus_id)-1){
@@ -474,6 +481,12 @@ class M_master_terima_beli extends Model{
 				
 				if($array_dterima_id[$i]==0){
 					$this->db->insert('detail_terima_beli', $data); 
+					
+					$query = $query.$this->db->insert_id();
+					if($i<sizeof($array_dterima_id)-1){
+						$query = $query . ",";
+					}
+					
 				}else{
 					$query = $query.$array_dterima_id[$i];
 					if($i<sizeof($array_dterima_id)-1){

@@ -1468,9 +1468,9 @@ var editor_cust_note;
 					var result=eval(response.responseText);
 					switch(result){
 						case 1:
-							if(post2db=="UPDATE"){
+							/*if(post2db=="UPDATE"){
 								cust_note_purge();
-							}
+							}*/
 							customer_DataStore.reload();
 							customer_createWindow.hide();
 //							Ext.MessageBox.alert(post2db+' OK','The Customer was '+msg+' successfully.');
@@ -2523,12 +2523,13 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 900,
-		bbar: new Ext.PagingToolbar({
-			pageSize: pageS,
-			store: cust_member_DataStore,
-			displayInfo: true
-		})
+	  	width: 900
+		// ,
+		// bbar: new Ext.PagingToolbar({
+			// pageSize: pageS,
+			// store: cust_member_DataStore,
+			// displayInfo: true
+		// })
 	});
 	
 	cust_noteListEditorGrid =  new Ext.grid.EditorGridPanel({
@@ -2544,24 +2545,25 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 900,
-		bbar: new Ext.PagingToolbar({
-			pageSize: pageS,
-			store: cust_note_DataStore,
-			displayInfo: true
-		}),tbar: [
-		{
-			text: 'Add',
-			tooltip: 'Add new record',
-			iconCls:'icon-adds',    				// this is defined in our styles.css
-			handler: cust_note_add
-		}, '-',{
-			text: 'Delete',
-			tooltip: 'Delete selected record',
-			disabled : true,
-			iconCls:'icon-delete',
-			handler: cust_note_confirm_delete
-		}]
+	  	width: 900
+		// ,
+		// bbar: new Ext.PagingToolbar({
+			// pageSize: pageS,
+			// store: cust_note_DataStore,
+			// displayInfo: true
+		// }),tbar: [
+		// {
+			// text: 'Add',
+			// tooltip: 'Add new record',
+			// iconCls:'icon-adds',    				// this is defined in our styles.css
+			// handler: cust_note_add
+		// }, '-',{
+			// text: 'Delete',
+			// tooltip: 'Delete selected record',
+			// disabled : true,
+			// iconCls:'icon-delete',
+			// handler: cust_note_confirm_delete
+		// }]
 	});
 	
 	//cust_memberListEditorGrid.render();

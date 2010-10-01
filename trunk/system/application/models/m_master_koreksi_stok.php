@@ -344,6 +344,12 @@ class M_master_koreksi_stok extends Model{
 				
 				if($array_dkoreksi_id[$i]==0){
 					$this->db->insert('detail_koreksi_stok', $data); 
+					
+					$query = $query.$this->db->insert_id();
+					if($i<sizeof($array_dkoreksi_id)-1){
+						$query = $query . ",";
+					}
+					
 				}else{
 					$query = $query.$array_dkoreksi_id[$i];
 					if($i<sizeof($array_dkoreksi_id)-1){

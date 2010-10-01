@@ -109,18 +109,18 @@ class C_customer extends Controller {
 	}
 	
 	function cust_note_purge(){
-		$master_id = isset($_POST['master_id']) ? $_POST['master_id'] : "";
+		/*$master_id = isset($_POST['master_id']) ? $_POST['master_id'] : "";
 		$result=$this->m_customer->cust_note_purge($master_id);
-		echo $result;
+		echo $result;*/
 	}
 	
 	function cust_note_insert(){
-		$note_cust = isset($_POST['note_cust']) ? $_POST['note_cust'] : "";
+		/*$note_cust = isset($_POST['note_cust']) ? $_POST['note_cust'] : "";
 		$note_detail=trim(@$_POST["note_detail"]);
 		$note_detail=str_replace("/(<\/?)(p)([^>]*>)", "",$note_detail);
 		$note_detail=str_replace("'",'"',$note_detail);
 		$result=$this->m_customer->cust_note_insert($note_cust, $note_detail);
-		echo $result;
+		echo $result;*/
 	}
 	
 	//function fot list record

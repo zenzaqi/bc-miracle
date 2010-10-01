@@ -5,34 +5,8 @@ Ext.ux.form.CFTextField = Ext.extend(Ext.form.TextField,{
     valueRenderer: null,
     initComponent: function(config) {
         Ext.ux.form.CFTextField.superclass.initComponent.apply(this, arguments);
-        //this.on('blur', this);
-		//this.on('keyup', this._keyup);
     },
-    /*onRender: function(){
-        Ext.ux.form.CFTextField.superclass.onRender.apply(this, arguments);
-        this.hiddenEl = this.el.insertSibling({
-            tag: 'input', type: 'hidden', name: this.hiddenName
-        });
-    },*/
-    
-    /*setHidden: function(v){
-        var regEx = new RegExp(/\s?[a-z]?/gi); 
-        var myValue = Ext.ux.form.CFTextField.superclass.getValue.call(this);
-            
-            if(myValue.match(/\s?h/gi)){
-                myValue = myValue.replace(regEx, '');
-                myValue = myValue*60;
-            }
-            else if(myValue.match(/\s?k/gi)){
-                myValue = myValue.replace(regEx, '');
-                myValue = myValue*1000;
-            }
-            else if(myValue.match(regEx)){
-                myValue = myValue.replace(regEx, '');
-            }
-            
-        this.hiddenEl.dom.value = myValue;
-    },*/
+	
     setValue: function(v){
         switch(this.valueRenderer){
             case 'numberToCurrency': v = this.currencyFormat(v); break;
@@ -40,6 +14,7 @@ Ext.ux.form.CFTextField = Ext.extend(Ext.form.TextField,{
         }
         Ext.ux.form.CFTextField.superclass.setValue.apply(this, [v]); 
     },
+	
     getValue: function(){
 		//return this.value;
 		if(this.value==""){
@@ -52,14 +27,7 @@ Ext.ux.form.CFTextField = Ext.extend(Ext.form.TextField,{
 			return to_number;
 		}
     },
-    /*getName: function() {
-        return this.hiddenName;
-    },*/
 	
-	/*_keyup: function() {
-		console.log("thisss_value = "+this.oldvalue);
-	},*/
-    
     currencyFormat: function(v) {
 		//-- allows clearing of field value (so that $0.00 only shows if you explicitly entered zero for a value).
 		if (v == null||v == ''||isNaN(v)) {
@@ -90,8 +58,6 @@ function CurrencyFormatted(number){
 	if (isNaN(str)) {
 		return "";
 	}else{
-		//var str = new String(number);
-		//str = str.replace(",","");
 		var result = "";
 		var len = str.length;           
 		for(var i=len-1;i>=0;i--)
@@ -109,7 +75,7 @@ function convertToNumber(str){
 	if(isNaN(str)) {
 		return "";
 	}else{
-		var tonumber = new parseFloat(str);
+		var tonumber = parseFloat(str);
 		return tonumber;
 	}
 }

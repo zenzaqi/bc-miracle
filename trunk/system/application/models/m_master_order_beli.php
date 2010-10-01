@@ -275,6 +275,12 @@ class M_master_order_beli extends Model{
 								
 				if($array_dorder_id[$i]==0){
 					$this->db->insert('detail_order_beli', $data); 
+					
+					$query = $query.$this->db->insert_id();
+					if($i<sizeof($array_dorder_id)-1){
+						$query = $query . ",";
+					} 
+					
 				}else{
 					$query = $query.$array_dorder_id[$i];
 					if($i<sizeof($array_dorder_id)-1){

@@ -231,6 +231,12 @@ class M_master_invoice extends Model{
 				
 				if($array_dinvoice_id[$i]==0){
 					$this->db->insert('detail_invoice', $data); 
+					
+					$query = $query.$this->db->insert_id();
+					if($i<sizeof($array_dinvoice_id)-1){
+						$query = $query . ",";
+					}
+					
 				}else{
 					$query = $query.$array_dterima_id[$i];
 					if($i<sizeof($array_dterima_id)-1){

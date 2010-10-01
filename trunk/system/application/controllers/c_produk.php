@@ -92,7 +92,15 @@ class C_produk extends Controller {
 		$konversi_satuan=trim(@$_POST["konversi_satuan"]);
 		$konversi_nilai=trim(@$_POST["konversi_nilai"]);
 		$konversi_default=trim(@$_POST["konversi_default"]);
-		$result=$this->m_produk->detail_satuan_konversi_insert($konversi_id ,$konversi_produk ,$konversi_satuan ,$konversi_nilai ,$konversi_default);
+		
+		$array_konversi_id = json_decode(stripslashes($konversi_id));
+		$array_konversi_satuan = json_decode(stripslashes($konversi_satuan));
+		$array_konversi_nilai = json_decode(stripslashes($konversi_nilai));
+		$array_konversi_default = json_decode(stripslashes($konversi_default));
+
+		$result=$this->m_produk->detail_satuan_konversi_insert($array_konversi_id ,$konversi_produk ,$array_konversi_satuan ,
+															   $array_konversi_nilai ,$array_konversi_default);
+		
 		echo $result;
 	}
 	
@@ -167,11 +175,13 @@ class C_produk extends Controller {
 		$produk_keterangan=trim(@$_POST["produk_keterangan"]);
 		$produk_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$produk_keterangan);
 		$produk_keterangan=str_replace("'", '"',$produk_keterangan);
+		$produk_saldo_awal=trim(@$_POST["produk_saldo_awal"]);
+		$produk_nilai_saldo_awal=trim(@$_POST["produk_nilai_saldo_awal"]);
 		$produk_aktif=trim(@$_POST["produk_aktif"]);
 		$produk_aktif=str_replace("/(<\/?)(p)([^>]*>)", "",$produk_aktif);
 		$produk_aktif=str_replace(",", ",",$produk_aktif);
 		$produk_aktif=str_replace("'", '"',$produk_aktif);
-		$result = $this->m_produk->produk_update($produk_id ,$produk_kode ,$produk_kodelama ,$produk_group ,$produk_kategori ,$produk_kontribusi ,$produk_jenis ,$produk_nama ,$produk_satuan ,$produk_du ,$produk_dm ,$produk_point ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif      );
+		$result = $this->m_produk->produk_update($produk_id ,$produk_kode ,$produk_kodelama ,$produk_group ,$produk_kategori ,$produk_kontribusi ,$produk_jenis ,$produk_nama ,$produk_satuan ,$produk_du ,$produk_dm ,$produk_point ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_saldo_awal,$produk_nilai_saldo_awal ,$produk_aktif      );
 		echo $result;
 	}
 	
@@ -201,10 +211,12 @@ class C_produk extends Controller {
 		$produk_keterangan=trim(@$_POST["produk_keterangan"]);
 		$produk_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$produk_keterangan);
 		$produk_keterangan=str_replace("'", '"',$produk_keterangan);
+		$produk_saldo_awal=trim(@$_POST["produk_saldo_awal"]);
+		$produk_nilai_saldo_awal=trim(@$_POST["produk_nilai_saldo_awal"]);
 		$produk_aktif=trim(@$_POST["produk_aktif"]);
 		$produk_aktif=str_replace("/(<\/?)(p)([^>]*>)", "",$produk_aktif);
 		$produk_aktif=str_replace("'", '"',$produk_aktif);
-		$result=$this->m_produk->produk_create($produk_kode, $produk_kodelama ,$produk_group ,$produk_kategori ,$produk_kontribusi ,$produk_jenis ,$produk_nama ,$produk_satuan ,$produk_du ,$produk_dm ,$produk_point ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif );
+		$result=$this->m_produk->produk_create($produk_kode, $produk_kodelama ,$produk_group ,$produk_kategori ,$produk_kontribusi ,$produk_jenis ,$produk_nama ,$produk_satuan ,$produk_du ,$produk_dm ,$produk_point ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_saldo_awal,$produk_nilai_saldo_awal ,$produk_aktif );
 		echo $result;
 	}
 
