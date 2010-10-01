@@ -1475,7 +1475,8 @@ class M_master_jual_rawat extends Model{
 						}
 						$result_jrawat = $this->master_jual_rawat_status_update($jrawat_id);
 						if($result_jrawat==1){
-							$result_point = $this->member_point_update($jrawat_id);
+							//$result_point = $this->member_point_update($jrawat_id);
+							$result_point = 1;
 							if($result_point==1){
 								$result_membership = $this->membership_insert($jrawat_id);
 								if($result_membership==1){
@@ -1751,7 +1752,7 @@ class M_master_jual_rawat extends Model{
 				}*/
 				if($cetak==1){
 					$this->master_jual_rawat_status_update($jrawat_id);
-					$this->member_point_update($jrawat_id);
+					//$this->member_point_update($jrawat_id);
 					$this->membership_insert($jrawat_id);
 					return $jrawat_id;
 				}else{
@@ -1826,7 +1827,8 @@ class M_master_jual_rawat extends Model{
             $this->db->query($sql);
 			if($this->db->affected_rows()){
 				//* udpating db.customer.cust_point ==> proses mengurangi jumlah poin (dikurangi dengan db.master_jual_produk.jproduk_point yg sudah dimasukkan ketika cetak faktur), karena dilakukan pembatalan /
-				$result_point_batal = $this->member_point_batal($jrawat_id);
+				//$result_point_batal = $this->member_point_batal($jrawat_id);
+				$result_point_batal = 1;
 				if($result_point_batal==1){
 					$result_membership = $this->membership_insert($jrawat_id);
 					if($result_membership==1){
