@@ -345,7 +345,7 @@ class M_master_jual_paket extends Model{
 				* JIKA 'ada' ==> Lakukan UPDATE db.master_lunas_piutang
 				* JIKA 'tidak ada' ==> Lakukan INSERT db.master_lunas_piutang
 				*/
-				$sql="SELECT * FROM master_lunas_piutang WHERE lpiutang_faktur='$lpiutang_faktur'";
+				$sql="SELECT lpiutang_id FROM master_lunas_piutang WHERE lpiutang_faktur='$lpiutang_faktur'";
 				$rs=$this->db->query($sql);
 				if($rs->num_rows()){
 					/* 1. DELETE db.master_lunas_piutang AND db.detail_jual_piutang
@@ -356,7 +356,7 @@ class M_master_jual_paket extends Model{
 						LEFT JOIN detail_lunas_piutang ON(dpiutang_master=lpiutang_id)
 						WHERE lpiutang_faktur='".$lpiutang_faktur."'";
 					$this->db->query($sql);
-					if($this->db->affected_rows()){
+					if($this->db->affected_rows()>-1){
 						//INSERT to db.master_lunas_piutang
 						$dti_lpiutang=array(
 						"lpiutang_faktur"=>$lpiutang_faktur,
@@ -368,6 +368,9 @@ class M_master_jual_paket extends Model{
 						"lpiutang_stat_dok"=>'Terbuka'
 						);
 						$this->db->insert('master_lunas_piutang', $dti_lpiutang);
+						if($this->db->affected_rows()){
+							return 1;
+						}
 					}
 				}else{
 					/* INSERT db.master_lunas_piutang */
@@ -381,7 +384,12 @@ class M_master_jual_paket extends Model{
 					"lpiutang_stat_dok"=>'Terbuka'
 					);
 					$this->db->insert('master_lunas_piutang', $dti_lpiutang);
+					if($this->db->affected_rows()){
+						return 1;
+					}
 				}
+			}else{
+				return 1;
 			}
 		}
 		
@@ -418,14 +426,29 @@ class M_master_jual_paket extends Model{
 		
 		function member_point_update($jpaket_id){
 			$date_now=date('Y-m-d');
-			$sql="SELECT jpaket_cust FROM master_jual_paket WHERE jpaket_id='$jpaket_id'";
+			/*$sql="SELECT jpaket_cust FROM master_jual_paket WHERE jpaket_id='$jpaket_id'";
 			$rs=$this->db->query($sql);
 			$record=$rs->row_array();
-			$jpaket_cust=$record['jpaket_cust'];
+			$jpaket_cust=$record['jpaket_cust'];*/
 			
-			$sql="SELECT member_id FROM member WHERE member_cust='$jpaket_cust' AND (member_valid >= '$date_now')";
+			$sql = "SELECT member_id
+				FROM member
+					JOIN master_jual_paket ON(member.member_cust=master_jual_paket.jpaket_cust)
+				WHERE master_jual_paket.jpaket_id='".$jpaket_id."'
+					AND member.member_valid >= master_jual_paket.jpaket_tanggal";
 			$rs=$this->db->query($sql);
 			if($rs->num_rows()){
+				$sqlu = "UPDATE master_jual_paket, customer, vu_jpaket_total_point
+					SET jpaket_point=vu_jpaket_total_point.jpaket_total_point
+						,customer.cust_point=(customer.cust_point + vu_jpaket_total_point.jpaket_total_point)
+					WHERE master_jual_paket.jpaket_id='".$jpaket_id."'
+						AND customer.cust_id=master_jual_paket.jpaket_cust
+						AND vu_jpaket_total_point.jpaket_id=master_jual_paket.jpaket_id";
+				$this->db->query($sqlu);
+				if($this->db->affected_rows()>-1){
+					return 1;
+				}
+				/*
 				//UPDATE db.master_jual_paket.jpaket_point
 				$sqlu = "UPDATE master_jual_paket, vu_jpaket_total_point
 					SET master_jual_paket.jpaket_point = vu_jpaket_total_point.jpaket_total_point
@@ -440,56 +463,9 @@ class M_master_jual_paket extends Model{
 							))
 						WHERE customer.cust_id='".$jpaket_cust."'";
 					$this->db->query($sqlu);
-				}
-				/*$sql="SELECT dpaket_jumlah
-						,dpaket_harga
-						,paket_point
-						,dpaket_diskon
-						,jpaket_diskon
-						,jpaket_cashback
-					FROM detail_jual_paket
-					LEFT JOIN master_jual_paket ON(dpaket_master=jpaket_id)
-					LEFT JOIN paket ON(dpaket_paket=paket_id)
-					WHERE dpaket_master='$jpaket_id'";
-				$rs=$this->db->query($sql);
-				if($rs->num_rows()){
-					$one_record = $rs->row();
-					$jpaket_cashback = $one_record->jpaket_cashback;
-					$jpaket_diskon = $one_record->jpaket_diskon;
-					$jumlah_rupiah_detail = 0;
-					$jumlah_rupiah_total = 0;
-					$jumlah_point = 0;
-					foreach($rs->result() as $row){
-						$dpaket_jumlah = $row->dpaket_jumlah;
-						$dpaket_harga = $row->dpaket_harga;
-						$dpaket_diskon = $row->dpaket_diskon;
-						$paket_point = $row->paket_point;
-						$jumlah_rupiah_detail += (($dpaket_jumlah * $dpaket_harga) * ((100 - $dpaket_diskon)/100)) * $paket_point;
-					}
-					if($jpaket_diskon>0){
-						//memprioritaskan diskon_total_persen daripada diskon_total_cashback
-						$jumlah_rupiah_total =  $jumlah_rupiah_detail * ((100 - $jpaket_diskon)/100);
-					}else if($jpaket_diskon<=0 && $jpaket_cashback>0){
-						$jumlah_rupiah_total = $jumlah_rupiah_detail - $jpaket_cashback;
-					}else{
-						$jumlah_rupiah_total = $jumlah_rupiah_detail;
-					}
-					
-					//ambil dari db.member_setup
-					$setmember_point_perrp = $this->get_point_per_rupiah();
-					
-					if($setmember_point_perrp>0){
-						$jumlah_point = floor($jumlah_rupiah_total/$setmember_point_perrp);
-					}
-					$sql_cust_u="UPDATE customer SET cust_point = (cust_point + $jumlah_point) WHERE cust_id='$jpaket_cust'";
-					$this->db->query($sql_cust_u);
-					
-					$dtu_jpaket=array(
-					"jpaket_point"=>$jumlah_point
-					);
-					$this->db->where('jpaket_id', $jpaket_id);
-					$this->db->update('master_jual_paket', $dtu_jpaket);
 				}*/
+			}else{
+				return 1;
 			}
 		}
 		
@@ -537,20 +513,12 @@ class M_master_jual_paket extends Model{
 		}
 		
 		function member_point_batal($jpaket_id){
-			$sql = "SELECT jpaket_point, jpaket_cust FROM master_jual_paket WHERE jpaket_id='$jpaket_id'";
-			$rs = $this->db->query($sql);
-			if($rs->num_rows()){
-				$record = $rs->row_array();
-				$jpaket_point = $record['jpaket_point'];
-				$jpaket_cust = $record['jpaket_cust'];
-				$sql="UPDATE customer SET cust_point = (cust_point - $jpaket_point) WHERE cust_id='$jpaket_cust'";
-				$this->db->query($sql);
-				if($this->db->affected_rows()>-1){
-					return 1;
-				}else{
-					return 1;
-				}
-			}else{
+			$sqlu = "UPDATE customer, master_jual_paket
+				SET customer.cust_point = (customer.cust_point - jpaket_point)
+				WHERE master_jual_paket.jpaket_id='".$jpaket_id."'
+					AND customer.cust_id=master_jual_paket.jpaket_cust";
+			$this->db->query($sqlu);
+			if($this->db->affected_rows()>-1){
 				return 1;
 			}
 		}
@@ -631,49 +599,85 @@ class M_master_jual_paket extends Model{
 			$this->db->where('membert_register <', $date_now);
 			$this->db->delete('member_temp');
 			
-			$sql="SELECT setmember_transhari, setmember_periodeaktif, setmember_periodetenggang, setmember_transtenggang FROM member_setup LIMIT 1";
+			$sql="SELECT setmember_transhari
+					,setmember_periodeaktif
+					,setmember_periodetenggang
+					,setmember_transtenggang
+					,setmember_pointhari
+				FROM member_setup LIMIT 1";
 			$rs=$this->db->query($sql);
 			if($rs->num_rows()){
 				$rs_record=$rs->row_array();
 				$min_trans_member_baru=$rs_record['setmember_transhari'];
 				$periode_tenggang=$rs_record['setmember_periodetenggang'];
 				$min_trans_tenggang=$rs_record['setmember_transtenggang'];
+				$setmember_pointhari=$rs_record['setmember_pointhari'];
 				$periode_aktif=$rs_record['setmember_periodeaktif'];
 			}
 			
-			$sql="SELECT jpaket_cust FROM master_jual_paket WHERE jpaket_id='$jpaket_id'";
+			$sql="SELECT jpaket_cust
+					,jpaket_tanggal
+				FROM master_jual_paket
+				WHERE jpaket_id='$jpaket_id'";
 			$rs=$this->db->query($sql);
 			if($rs->num_rows()){
 				$rs_record=$rs->row_array();
 				$cust_id = $rs_record['jpaket_cust'];
+				$tanggal_transaksi = $rs_record['jpaket_tanggal'];
 				
 				$jproduk_total_trans=0;
+				$jproduk_total_point=0;
 				$jpaket_total_trans=0;
+				$jpaket_total_point=0;
 				$jrawat_total_trans=0;
+				$jrawat_total_point=0;
 				$cust_total_trans_now=0;
+				$cust_total_point=0;
 				
-				$trans_jproduk = "SELECT sum(jproduk_totalbiaya) AS jproduk_total_trans FROM master_jual_produk WHERE jproduk_cust='$cust_id' AND jproduk_tanggal='$date_now' AND jproduk_stat_dok='Tertutup' GROUP BY jproduk_cust";
+				$trans_jproduk = "SELECT sum(jproduk_totalbiaya) AS jproduk_total_trans
+						,sum(jproduk_point) AS jproduk_total_point
+					FROM master_jual_produk
+					WHERE jproduk_cust='$cust_id'
+						AND jproduk_tanggal='$date_now'
+						AND jproduk_stat_dok='Tertutup'
+					GROUP BY jproduk_cust";
 				$rs_trans_jproduk=$this->db->query($trans_jproduk);
 				if($rs_trans_jproduk->num_rows()){
 					$rs_trans_jproduk_record=$rs_trans_jproduk->row_array();
 					$jproduk_total_trans=$rs_trans_jproduk_record['jproduk_total_trans'];
+					$jproduk_total_point=$rs_trans_jproduk_record['jproduk_total_point'];
 				}
 				
-				$trans_jpaket = "SELECT sum(jpaket_totalbiaya) AS jpaket_total_trans FROM master_jual_paket WHERE jpaket_cust='$cust_id' AND jpaket_tanggal='$date_now' AND jpaket_stat_dok='Tertutup' GROUP BY jpaket_cust";
+				$trans_jpaket = "SELECT sum(jpaket_totalbiaya) AS jpaket_total_trans
+						,sum(jpaket_point) AS jpaket_total_point
+					FROM master_jual_paket
+					WHERE jpaket_cust='$cust_id'
+						AND jpaket_tanggal='$date_now'
+						AND jpaket_stat_dok='Tertutup'
+					GROUP BY jpaket_cust";
 				$rs_trans_jpaket=$this->db->query($trans_jpaket);
 				if($rs_trans_jpaket->num_rows()){
 					$rs_trans_jpaket_record=$rs_trans_jpaket->row_array();
 					$jpaket_total_trans=$rs_trans_jpaket_record['jpaket_total_trans'];
+					$jpaket_total_point=$rs_trans_jpaket_record['jpaket_total_point'];
 				}
 				
-				$trans_jrawat = "SELECT sum(jrawat_totalbiaya) AS jrawat_total_trans FROM master_jual_rawat WHERE jrawat_cust='$cust_id' AND jrawat_tanggal='$date_now' AND jrawat_stat_dok='Tertutup' GROUP BY jrawat_cust";
+				$trans_jrawat = "SELECT sum(jrawat_totalbiaya) AS jrawat_total_trans
+						,sum(jrawat_point) AS jrawat_total_point
+					FROM master_jual_rawat
+					WHERE jrawat_cust='$cust_id'
+						AND jrawat_tanggal='$date_now'
+						AND jrawat_stat_dok='Tertutup'
+					GROUP BY jrawat_cust";
 				$rs_trans_jrawat=$this->db->query($trans_jrawat);
 				if($rs_trans_jrawat->num_rows()){
 					$rs_trans_jrawat_record=$rs_trans_jrawat->row_array();
 					$jrawat_total_trans=$rs_trans_jrawat_record['jrawat_total_trans'];
+					$jrawat_total_point=$rs_trans_jrawat_record['jrawat_total_point'];
 				}
 				
 				$cust_total_trans_now = $jproduk_total_trans + $jpaket_total_trans + $jrawat_total_trans;
+				$cust_total_point = $jproduk_total_point + $jpaket_total_point + $jrawat_total_point;
 				
 				$sql="SELECT member_cust, member_valid, member_no FROM member WHERE member_cust='$cust_id'";
 				$rs=$this->db->query($sql);
@@ -687,11 +691,11 @@ class M_master_jual_paket extends Model{
 					
 					$akhir_tenggang=date('Y-m-d', strtotime("$member_valid +$periode_tenggang days"));
 					
-					if(($member_valid < $date_now) && ($member_valid < $akhir_tenggang)){
+					if(($member_valid < $tanggal_transaksi) && ($member_valid < $akhir_tenggang)){
 						//* kartu member masuk masa tenggang /
 						//* untuk itu: check total_transaksi si customer di hari ini /
 						
-						$set_member_valid = date('Y-m-d', strtotime("$date_now +$periode_aktif days"));
+						$set_member_valid = date('Y-m-d', strtotime("$tanggal_transaksi +$periode_aktif days"));
 						
 						if($cust_total_trans_now >= $min_trans_tenggang){
 							//* Perpanjangan kartu member /
@@ -701,7 +705,7 @@ class M_master_jual_paket extends Model{
 								$dti_membert=array(
 								"membert_cust"=>$cust_id,
 								"membert_no"=>$member_no,
-								"membert_register"=>$date_now,
+								"membert_register"=>$tanggal_transaksi,
 								"membert_valid"=>$set_member_valid,
 								"membert_jenis"=>'perpanjangan',
 								"membert_status"=>'Daftar'
@@ -727,10 +731,10 @@ class M_master_jual_paket extends Model{
 							}
 						}
 					}else{
-						//* check tanggal member_valid, apakah member_valid > $date_now ? /
+						//* check tanggal member_valid, apakah member_valid > $tanggal_transaksi ? /
 						//* JIKA 'YA': kartu member customer ini masih Aktif ==> NO ACTION/
 						//* JIKA 'TIDAK': kartu member sudah hangus ==> message: kartu member customer ini sudah tidak bisa digunakan lagi karena kartu sudah hangus.
-						if($member_valid > $date_now){
+						if($member_valid > $tanggal_transaksi){
 							//* NO ACTION /
 						}else{
 							//* message: kartu member customer ini sudah tidak bisa digunakan lagi karena kartu sudah hangus.
@@ -742,14 +746,14 @@ class M_master_jual_paket extends Model{
 					//* untuk itu: check total_transaksi si customer di hari ini dan bandingkan dengan db.member_setup.setmember_transhari /
 					if($cust_total_trans_now >= $min_trans_member_baru){
 						//* Pendaftaran MEMBER BARU /
-						$set_member_valid = date('Y-m-d', strtotime("$date_now +$periode_aktif days"));
+						$set_member_valid = date('Y-m-d', strtotime("$tanggal_transaksi +$periode_aktif days"));
 						
 						$sql = "SELECT membert_id FROM member_temp WHERE membert_cust='$cust_id'";
 						$rs = $this->db->query($sql);
 						if(!($rs->num_rows())){
 							$dti_membert=array(
 							"membert_cust"=>$cust_id,
-							"membert_register"=>$date_now,
+							"membert_register"=>$tanggal_transaksi,
 							"membert_valid"=>$set_member_valid,
 							"membert_jenis"=>'baru',
 							"membert_status"=>'Daftar'
@@ -870,7 +874,7 @@ class M_master_jual_paket extends Model{
 					$rs = $this->db->query($sql);
 					if($rs->num_rows()){
 						//* artinya: isi paket sudah pernah diambil, sehingga tidak boleh di-edit ==> tidak ada action /
-						if($cetak==1 && $i==$size_array){
+						/*if($cetak==1 && $i==$size_array){
 							//* proses cetak /
 							$this->master_jual_paket_status_update($dpaket_master);
 							$this->member_point_update($dpaket_master);
@@ -879,7 +883,7 @@ class M_master_jual_paket extends Model{
 							return $dpaket_master;
 						}else if($cetak<>1 && $i==$size_array){
 							return '0';
-						}
+						}*/
 					}else{
 						//* artinya: isi paket belum pernah diambil, sehingga masih boleh di-edit /
 						$dtu_dpaket = array(
@@ -899,7 +903,7 @@ class M_master_jual_paket extends Model{
 						);
 						$this->db->where('dpaket_id', $dpaket_id);
 						$this->db->update('detail_jual_paket', $dtu_dpaket); 
-						if($this->db->affected_rows()){
+						/*if($this->db->affected_rows()){
 							if($cetak==1 && $i==$size_array){
 								//* proses cetak /
 								$this->master_jual_paket_status_update($dpaket_master);
@@ -922,7 +926,7 @@ class M_master_jual_paket extends Model{
 							}else if($cetak<>1 && $i==$size_array){
 								return '0';
 							}
-						}
+						}*/
 					}
 				}else{
 					//* Adding detail baru /
@@ -940,7 +944,7 @@ class M_master_jual_paket extends Model{
 						"dpaket_creator"=>@$_SESSION[SESSION_USERID]
 					);
 					$this->db->insert('detail_jual_paket', $data); 
-					if($this->db->affected_rows()){
+					/*if($this->db->affected_rows()){
 						if($cetak==1 && $i==$size_array){
 							//* proses cetak /
 							$this->master_jual_paket_status_update($dpaket_master);
@@ -963,7 +967,33 @@ class M_master_jual_paket extends Model{
 						}else if($cetak<>1 && $i==$size_array){
 							return '0';
 						}
+					}*/
+				}
+				if($cetak==1 && $i==$size_array){
+					//* proses cetak /
+					$rs_stat_dok = $this->master_jual_paket_status_update($dpaket_master);
+					if($rs_stat_dok==1){
+						$rs_point_update = $this->member_point_update($dpaket_master);
+						if($rs_point_update==1){
+							$rs_membership = $this->membership_insert($dpaket_master);
+							if($rs_membership==1){
+								$rs_piutang_update = $this->catatan_piutang_update($dpaket_master);
+								if($rs_piutang_update==1){
+									return $dpaket_master;
+								}else{
+									return $dpaket_master;
+								}
+							}else{
+								return $dpaket_master;
+							}
+						}else{
+							return $dpaket_master;
+						}
+					}else{
+						return $dpaket_master;
 					}
+				}else if($cetak<>1 && $i==$size_array){
+					return '0';
 				}
 				
 			}
@@ -1920,6 +1950,13 @@ class M_master_jual_paket extends Model{
 						,jpaket_revised=jpaket_revised+1
 					WHERE jpaket_id='$jpaket_id'";
 				$this->db->query($sql);
+				if($this->db->affected_rows()>-1){
+					return 1;
+				}else{
+					return 1;
+				}
+			}else{
+				return 1;
 			}
 		}
 		
