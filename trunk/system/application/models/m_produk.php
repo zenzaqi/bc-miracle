@@ -24,8 +24,8 @@ class M_produk extends Model{
 			$query = "SELECT * FROM satuan_konversi where konversi_produk='".$master_id."'";
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
-/*			$limit = $query." LIMIT ".$start.",".$end;			
-			$result = $this->db->query($limit);*/  
+			$limit = $query." LIMIT ".$start.",".$end;			
+			$result = $this->db->query($limit);  
 			
 			if($nbrows>0){
 				foreach($result->result() as $row){
@@ -38,6 +38,29 @@ class M_produk extends Model{
 			}
 		}
 		//end of function
+		
+		//function for detail
+		//get record list
+		function detail_produk_racikan_list($master_id,$query,$start,$end) {
+			$query = "SELECT * FROM produk_racikan where pracikan_master='".$master_id."'";
+			$query.=" ORDER BY pracikan_produk ASC";
+			$result = $this->db->query($query);
+			$nbrows = $result->num_rows();
+			$limit = $query." LIMIT ".$start.",".$end;			
+			$result = $this->db->query($limit);  
+			
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+		//end of function
+		
 		
 		function get_kontribusi_produk_list(){
 		$sql="SELECT kategori2_id,kategori2_nama FROM kategori2 where kategori2_jenis='produk' and kategori2_aktif='Aktif'";
@@ -67,6 +90,55 @@ class M_produk extends Model{
 		}
 		//eof
 		
+		
+		function get_produk_list($query,$start,$end){
+			$rs_rows=0;
+			if(is_numeric($query)==true){
+				$sql_dproduk="SELECT pracikan_produk FROM perawatan_konsumsi WHERE pracikan_master='$query'";
+				$rs=$this->db->query($sql_dproduk);
+				$rs_rows=$rs->num_rows();
+			}
+			
+			//$sql="select * from vu_produk WHERE produk_aktif='Aktif'";
+			$sql="select * from vu_produk WHERE produk_aktif='Aktif'";
+			if($query<>"" && is_numeric($query)==false){
+				$sql.=eregi("WHERE",$sql)? " AND ":" WHERE ";
+				$sql.=" (produk_kode like '%".$query."%' or produk_nama like '%".$query."%' or satuan_nama like '%".$query."%' or kategori_nama like '%".$query."%' or group_nama like '%".$query."%' or produk_kodelama like '%".$query."%') ";
+			}else{
+				if($rs_rows){
+					$filter="";
+					$sql.=eregi("AND",$sql)? " OR ":" AND ";
+					foreach($rs->result() as $row_dproduk){
+						
+						$filter.="OR produk_id='".$row_dproduk->pracikan_produk."' ";
+					}
+					$sql=$sql."(".substr($filter,2,strlen($filter)).")";
+				}
+			}
+			$sql.=" ORDER BY produk_id ASC";
+			/*if($query<>"")
+				$sql.=" WHERE (produk_kode like '%".$query."%' or produk_nama like '%".$query."%' or satuan_nama like '%".$query."%'
+							 or kategori_nama like '%".$query."%' or group_nama like '%".$query."%') ";*/
+			//echo $sql;
+			
+			$result = $this->db->query($sql);
+			$nbrows = $result->num_rows();
+			if($end!=0){
+				$limit = $sql." LIMIT ".$start.",".$end;			
+				$result = $this->db->query($limit);
+			}
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+		
+		
 		//purge all detail from master
 		function detail_satuan_konversi_purge($master_id){
 			$sql="DELETE from satuan_konversi where konversi_produk='".$master_id."'";
@@ -75,11 +147,19 @@ class M_produk extends Model{
 		}
 		//*eof
 		
+		//purge all detail from master
+		function detail_produk_racikan_purge($master_id){
+			$sql="DELETE from produk_racikan where pracikan_master='".$master_id."'";
+			$result=$this->db->query($sql);
+			return '1';
+		}
+		//*eof
+		
+		
 		//insert detail record
-		function detail_satuan_konversi_insert($array_konversi_id ,$konversi_produk ,$array_konversi_satuan ,$array_konversi_nilai ,
-											   $array_konversi_default){
+		function detail_satuan_konversi_insert($konversi_id ,$konversi_produk ,$konversi_satuan ,$konversi_nilai ,$konversi_default){
 			//if master id not capture from view then capture it from max pk from master table
-			/*if($konversi_produk=="" || $konversi_produk==NULL){
+			if($konversi_produk=="" || $konversi_produk==NULL){
 				$konversi_produk=$this->get_master_id();
 			}
 			
@@ -93,47 +173,33 @@ class M_produk extends Model{
 			if($this->db->affected_rows())
 				return '1';
 			else
-				return '0';*/
-				
-			 $query="";
-		   	for($i = 0; $i < sizeof($array_konversi_satuan); $i++){
-
-				$data = array(
-					"konversi_produk"=>$konversi_produk, 
-					"konversi_satuan"=>$array_konversi_satuan[$i], 
-					"konversi_nilai"=>$array_konversi_nilai[$i], 
-					"konversi_default"=>$array_konversi_default[$i]
-				);
-				
-								
-				if($array_konversi_id[$i]==0){
-					$this->db->insert('satuan_konversi', $data); 
-					
-					$query = $query.$this->db->insert_id();
-					if($i<sizeof($array_konversi_id)-1){
-						$query = $query . ",";
-					} 
-					
-				}else{
-					$query = $query.$array_konversi_id[$i];
-					if($i<sizeof($array_konversi_id)-1){
-						$query = $query . ",";
-					} 
-					$this->db->where('konversi_id', $array_konversi_id[$i]);
-					$this->db->update('satuan_konversi', $data);
-				}
-			}
-			
-			if($query<>""){
-				$sql="DELETE FROM satuan_konversi WHERE  konversi_produk='".$konversi_produk."' AND
-						konversi_id NOT IN (".$query.")";
-				$this->db->query($sql);
-			}
-			
-			return '1';
+				return '0';
 
 		}
 		//end of function
+		
+		//insert detail record
+		function detail_produk_racikan_insert($pracikan_id ,$pracikan_master ,$pracikan_produk ,$pracikan_satuan ,$pracikan_jumlah ){
+			//if master id not capture from view then capture it from max pk from master table
+			if($pracikan_master=="" || $pracikan_master==NULL){
+				$pracikan_master=$this->get_master_id();
+			}
+			
+			$data = array(
+				"pracikan_master"=>$pracikan_master, 
+				"pracikan_produk"=>$pracikan_produk, 
+				"pracikan_satuan"=>$pracikan_satuan, 
+				"pracikan_jumlah"=>$pracikan_jumlah 
+			);
+			$this->db->insert('produk_racikan', $data); 
+			if($this->db->affected_rows())
+				return '1';
+			else
+				return '0';
+
+		}
+		//end of function
+		
 		
 		/*function get_kode($pattern_g,$pattern_j){
 			$result=$this->m_public_function->get_kode_2("produk","produk_kode",$pattern_g,$pattern_j,6);
@@ -173,7 +239,7 @@ class M_produk extends Model{
 		}
 		
 		//function for update record
-		function produk_update($produk_id ,$produk_kode ,$produk_kodelama ,$produk_group ,$produk_kategori ,$produk_kontribusi, $produk_jenis ,$produk_nama ,$produk_satuan ,$produk_du ,$produk_dm ,$produk_point ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_saldo_awal ,$produk_nilai_saldo_awal ,$produk_aktif ){
+		function produk_update($produk_id ,$produk_kode ,$produk_kodelama ,$produk_group ,$produk_kategori ,$produk_kontribusi, $produk_jenis ,$produk_nama ,$produk_satuan ,$produk_du ,$produk_dm ,$produk_point ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif ){
 			if ($produk_aktif=="")
 				$produk_aktif = "Aktif";
 			if ($produk_point=="")
@@ -188,10 +254,13 @@ class M_produk extends Model{
 				"produk_du"=>$produk_du,
 				"produk_dm"=>$produk_dm,
 				"produk_keterangan"=>$produk_keterangan, 
-				"produk_saldo_awal"=>$produk_saldo_awal, 
-				"produk_nilai_saldo_awal"=>$produk_nilai_saldo_awal, 
 				"produk_aktif"=>$produk_aktif 
 			);
+			
+			if($produk_racikan=='true')
+				$data["produk_racikan"]=1;
+			if($produk_racikan=='false')
+				$data["produk_racikan"]=0;
 			
 			$sql_produk_awal = "SELECT produk_group, produk_jenis FROM produk WHERE produk_id='$produk_id'";
 			$rs_produk_awal = $this->db->query($sql_produk_awal);
@@ -264,11 +333,11 @@ class M_produk extends Model{
 				$sql="UPDATE produk set produk_revised=(produk_revised+1) WHERE produk_id='".$produk_id."'";
 				$this->db->query($sql);
 			}
-			return $produk_id;
+			return '1';
 		}
 		
 		//function for create new record
-		function produk_create($produk_kode ,$produk_kodelama ,$produk_group ,$produk_kategori ,$produk_kontribusi ,$produk_jenis ,$produk_nama ,$produk_satuan ,$produk_du ,$produk_dm ,$produk_point ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_saldo_awal ,$produk_nilai_saldo_awal ,$produk_aktif ){
+		function produk_create($produk_kode ,$produk_kodelama ,$produk_group ,$produk_kategori , $produk_racikan, $produk_kontribusi ,$produk_jenis ,$produk_nama ,$produk_satuan ,$produk_du ,$produk_dm ,$produk_point ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif ){
 		if ($produk_aktif=="")
 			$produk_aktif = "Aktif";
 			if($produk_harga=="")
@@ -291,10 +360,14 @@ class M_produk extends Model{
 				"produk_harga"=>$produk_harga, 
 				"produk_jenis"=>$produk_jenis,
 				"produk_keterangan"=>$produk_keterangan, 
-				"produk_saldo_awal"=>$produk_saldo_awal, 
-				"produk_nilai_saldo_awal"=>$produk_nilai_saldo_awal, 
 				"produk_aktif"=>$produk_aktif 
 			);
+			
+			if($produk_racikan=='true')
+				$data["produk_racikan"]=1;
+			if($produk_racikan=='false')
+				$data["produk_racikan"]=0;
+			
 			
 			//log
 			$data['produk_creator']=$_SESSION[SESSION_USERID];
@@ -340,7 +413,7 @@ class M_produk extends Model{
 				
 			$this->db->insert('produk', $data); 
 			if($this->db->affected_rows())
-				return $this->db->insert_id();
+				return '1';
 			else
 				return '0';
 		}

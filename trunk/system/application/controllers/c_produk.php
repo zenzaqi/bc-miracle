@@ -57,6 +57,27 @@ class C_produk extends Controller {
 		echo $result;
 	}
 	
+	function get_produk_list(){
+		$query = isset($_POST['query']) ? $_POST['query'] : $_GET['query'];
+		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		$result=$this->m_produk->get_produk_list($query, $start, $end);
+		echo $result;
+	}
+	
+	
+	//list detail handler action
+	function  detail_produk_racikan_list(){
+		$query = isset($_POST['query']) ? $_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		$master_id = (integer) (isset($_POST['master_id']) ? $_POST['master_id'] : $_GET['master_id']);
+		$result=$this->m_produk->detail_produk_racikan_list($master_id,$query,$start,$end);
+		echo $result;
+	}
+	//end of handler
+	
+	
 	//for detail action
 	//list detail handler action
 	function  detail_satuan_konversi_list(){
@@ -77,6 +98,14 @@ class C_produk extends Controller {
 	}
 	//eof
 	
+	//purge all detail
+	function detail_produk_racikan_purge(){
+		$master_id = (integer) (isset($_POST['master_id']) ? $_POST['master_id'] : $_GET['master_id']);
+		$result=$this->m_produk->detail_produk_racikan_purge($master_id);
+		echo $result;
+	}
+	//eof
+	
 	//get master id, note: not done yet
 	function get_master_id(){
 		$result=$this->m_produk->get_master_id();
@@ -92,17 +121,22 @@ class C_produk extends Controller {
 		$konversi_satuan=trim(@$_POST["konversi_satuan"]);
 		$konversi_nilai=trim(@$_POST["konversi_nilai"]);
 		$konversi_default=trim(@$_POST["konversi_default"]);
-		
-		$array_konversi_id = json_decode(stripslashes($konversi_id));
-		$array_konversi_satuan = json_decode(stripslashes($konversi_satuan));
-		$array_konversi_nilai = json_decode(stripslashes($konversi_nilai));
-		$array_konversi_default = json_decode(stripslashes($konversi_default));
-
-		$result=$this->m_produk->detail_satuan_konversi_insert($array_konversi_id ,$konversi_produk ,$array_konversi_satuan ,
-															   $array_konversi_nilai ,$array_konversi_default);
-		
+		$result=$this->m_produk->detail_satuan_konversi_insert($konversi_id ,$konversi_produk ,$konversi_satuan ,$konversi_nilai ,$konversi_default);
 		echo $result;
 	}
+	
+	//add detail
+	function detail_produk_racikan_insert(){
+	//POST variable here
+		$pracikan_id=trim(@$_POST["pracikan_id"]);
+		$pracikan_master=trim(@$_POST["pracikan_master"]);
+		$pracikan_produk=trim(@$_POST["pracikan_produk"]);
+		$pracikan_satuan=trim(@$_POST["pracikan_satuan"]);
+		$pracikan_jumlah=trim(@$_POST["pracikan_jumlah"]);
+		$result=$this->m_produk->detail_produk_racikan_insert($pracikan_id ,$pracikan_master ,$pracikan_produk ,$pracikan_satuan ,$pracikan_jumlah );
+		echo $result;
+	}
+	
 	
 	
 	//event handler action
@@ -160,6 +194,7 @@ class C_produk extends Controller {
 		$produk_kodelama=str_replace("'", "''",$produk_kodelama);
 		$produk_group=trim(@$_POST["produk_group"]);
 		$produk_kategori=trim(@$_POST["produk_kategori"]);
+		$produk_racikan=trim(@$_POST["produk_racikan"]);
 		$produk_kontribusi=trim(@$_POST["produk_kontribusi"]);
 		$produk_jenis=trim(@$_POST["produk_jenis"]);
 		$produk_nama=trim(@$_POST["produk_nama"]);
@@ -175,13 +210,11 @@ class C_produk extends Controller {
 		$produk_keterangan=trim(@$_POST["produk_keterangan"]);
 		$produk_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$produk_keterangan);
 		$produk_keterangan=str_replace("'", '"',$produk_keterangan);
-		$produk_saldo_awal=trim(@$_POST["produk_saldo_awal"]);
-		$produk_nilai_saldo_awal=trim(@$_POST["produk_nilai_saldo_awal"]);
 		$produk_aktif=trim(@$_POST["produk_aktif"]);
 		$produk_aktif=str_replace("/(<\/?)(p)([^>]*>)", "",$produk_aktif);
 		$produk_aktif=str_replace(",", ",",$produk_aktif);
 		$produk_aktif=str_replace("'", '"',$produk_aktif);
-		$result = $this->m_produk->produk_update($produk_id ,$produk_kode ,$produk_kodelama ,$produk_group ,$produk_kategori ,$produk_kontribusi ,$produk_jenis ,$produk_nama ,$produk_satuan ,$produk_du ,$produk_dm ,$produk_point ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_saldo_awal,$produk_nilai_saldo_awal ,$produk_aktif      );
+		$result = $this->m_produk->produk_update($produk_id ,$produk_kode ,$produk_kodelama ,$produk_group ,$produk_kategori , $produk_racikan, $produk_kontribusi ,$produk_jenis ,$produk_nama ,$produk_satuan ,$produk_du ,$produk_dm ,$produk_point ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif      );
 		echo $result;
 	}
 	
@@ -197,6 +230,7 @@ class C_produk extends Controller {
 		$produk_kodelama=str_replace("'", "''",$produk_kodelama);
 		$produk_group=trim(@$_POST["produk_group"]);
 		$produk_kategori=trim(@$_POST["produk_kategori"]);
+		$produk_racikan=trim(@$_POST["produk_racikan"]);
 		$produk_kontribusi=trim(@$_POST["produk_kontribusi"]);
 		$produk_jenis=trim(@$_POST["produk_jenis"]);
 		$produk_nama=trim(@$_POST["produk_nama"]);
@@ -211,12 +245,10 @@ class C_produk extends Controller {
 		$produk_keterangan=trim(@$_POST["produk_keterangan"]);
 		$produk_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$produk_keterangan);
 		$produk_keterangan=str_replace("'", '"',$produk_keterangan);
-		$produk_saldo_awal=trim(@$_POST["produk_saldo_awal"]);
-		$produk_nilai_saldo_awal=trim(@$_POST["produk_nilai_saldo_awal"]);
 		$produk_aktif=trim(@$_POST["produk_aktif"]);
 		$produk_aktif=str_replace("/(<\/?)(p)([^>]*>)", "",$produk_aktif);
 		$produk_aktif=str_replace("'", '"',$produk_aktif);
-		$result=$this->m_produk->produk_create($produk_kode, $produk_kodelama ,$produk_group ,$produk_kategori ,$produk_kontribusi ,$produk_jenis ,$produk_nama ,$produk_satuan ,$produk_du ,$produk_dm ,$produk_point ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_saldo_awal,$produk_nilai_saldo_awal ,$produk_aktif );
+		$result=$this->m_produk->produk_create($produk_kode, $produk_kodelama ,$produk_group ,$produk_kategori ,$produk_racikan, $produk_kontribusi ,$produk_jenis ,$produk_nama ,$produk_satuan ,$produk_du ,$produk_dm ,$produk_point ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif );
 		echo $result;
 	}
 
