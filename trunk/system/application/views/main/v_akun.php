@@ -85,78 +85,7 @@ var akun_aktifSearchField;
 Ext.onReady(function(){
   	Ext.QuickTips.init();	/* Initiate quick tips icon */
   
-  	/* Function for Saving inLine Editing */
-	function akun_inline_update(oGrid_event){
-		var akun_id_update_pk="";
-		var akun_kode_update=null;
-		var akun_jenis_update=null;
-		var akun_parent_update=null;
-		var akun_level_update=null;
-		var akun_nama_update=null;
-		var akun_debet_update=null;
-		var akun_kredit_update=null;
-		var akun_saldo_update=null;
-		var akun_aktif_update=null;
-
-		akun_id_update_pk = oGrid_event.record.data.akun_id;
-		if(oGrid_event.record.data.akun_kode!== null){akun_kode_update = oGrid_event.record.data.akun_kode;}
-		if(oGrid_event.record.data.akun_jenis!== null){akun_jenis_update = oGrid_event.record.data.akun_jenis;}
-		if(oGrid_event.record.data.akun_parent!== null){akun_parent_update = oGrid_event.record.data.akun_parent;}
-		if(oGrid_event.record.data.akun_level!== null){akun_level_update = oGrid_event.record.data.akun_level;}
-		if(oGrid_event.record.data.akun_nama!== null){akun_nama_update = oGrid_event.record.data.akun_nama;}
-		if(oGrid_event.record.data.akun_debet!== null){akun_debet_update = oGrid_event.record.data.akun_debet;}
-		if(oGrid_event.record.data.akun_kredit!== null){akun_kredit_update = oGrid_event.record.data.akun_kredit;}
-		if(oGrid_event.record.data.akun_saldo!== null){akun_saldo_update = oGrid_event.record.data.akun_saldo;}
-		if(oGrid_event.record.data.akun_aktif!== null){akun_aktif_update = oGrid_event.record.data.akun_aktif;}
-
-		Ext.Ajax.request({  
-			waitMsg: 'Please wait...',
-			url: 'index.php?c=c_akun&m=get_action',
-			params: {
-				akun_id		: akun_id_update_pk, 
-				akun_kode	: akun_kode_update,
-				akun_jenis	: akun_jenis_update,
-				akun_parent	: akun_parent_update,
-				akun_level	: akun_level_update,
-				akun_nama	: akun_nama_update,
-				akun_debet	: akun_debet_update,
-				akun_kredit	: akun_kredit_update,
-				akun_saldo	: akun_saldo_update,
-				akun_aktif	: akun_aktif_update,
-				task		: "UPDATE"
-			}, 
-			success: function(response){							
-				var result=eval(response.responseText);
-				switch(result){
-					case 1:
-						akun_DataStore.commitChanges();
-						akun_DataStore.reload();
-						break;
-					default:
-						Ext.MessageBox.show({
-						   title: 'Warning',
-						   msg: 'Tidak dapat menyimpan Data Akun.',
-						   buttons: Ext.MessageBox.OK,
-						   animEl: 'save',
-						   icon: Ext.MessageBox.WARNING
-						});
-						break;
-				}
-			},
-			failure: function(response){
-				var result=response.responseText;
-				Ext.MessageBox.show({
-				   title: 'Error',
-				   msg: 'Koneksi ke database gagal',
-				   buttons: Ext.MessageBox.OK,
-				   animEl: 'database',
-				   icon: Ext.MessageBox.ERROR
-				});	
-			}									    
-		});   
-	}
-  	/* End of Function */
-  
+    
   	/* Function for add and edit data form, open window form */
 	function akun_save(){
 	
@@ -176,6 +105,7 @@ Ext.onReady(function(){
 			if(akun_kodeField.getValue()!== null){akun_kode_field = akun_kodeField.getValue();} 
 			if(akun_jenisField.getValue()!== null){akun_jenis_field = akun_jenisField.getValue();} 
 			if(akun_parentField.getValue()!== null){akun_parent_field = akun_parentField.getValue();} 
+			//if(akun_levelField.getValue()!== null){akun_level_field = akun_levelField.getValue();} 
 			if(akun_namaField.getValue()!== null){akun_nama_field = akun_namaField.getValue();} 
 			if(akun_debetField.getValue()!== null){akun_debet_field = akun_debetField.getValue();} 
 			if(akun_kreditField.getValue()!== null){akun_kredit_field = akun_kreditField.getValue();} 
@@ -190,25 +120,26 @@ Ext.onReady(function(){
 					akun_kode	: akun_kode_field, 
 					akun_jenis	: akun_jenis_field, 
 					akun_parent	: akun_parent_field, 
+					//akun_level	: akun_level_field, 
 					akun_nama	: akun_nama_field, 
 					akun_debet	: akun_debet_field, 
 					akun_kredit	: akun_kredit_field, 
 					akun_saldo	: akun_saldo_field, 
 					akun_aktif	: akun_aktif_field, 
-					task		: post2db
+					task: post2db
 				}, 
 				success: function(response){             
 					var result=eval(response.responseText);
 					switch(result){
 						case 1:
-							Ext.MessageBox.alert(post2db+' OK','Data Akun sukses disimpan.');
+							Ext.MessageBox.alert(post2db+' OK','Data Kode Rekening sukses disimpan.');
 							akun_DataStore.reload();
 							akun_saveWindow.hide();
 							break;
 						default:
 							Ext.MessageBox.show({
 							   title: 'Warning',
-							   msg: 'Maaf, data tidak dapat disimpan',
+							   msg: 'Data Kode Rekening gagal disimpan !.',
 							   buttons: Ext.MessageBox.OK,
 							   animEl: 'save',
 							   icon: Ext.MessageBox.WARNING
@@ -220,7 +151,7 @@ Ext.onReady(function(){
 					var result=response.responseText;
 					Ext.MessageBox.show({
 						   title: 'Error',
-						   msg: 'Koneksi ke database gagal',
+						   msg: 'Tidak bisa terhubung dengan database, cobalah lain waktu.',
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'database',
 						   icon: Ext.MessageBox.ERROR
@@ -231,7 +162,7 @@ Ext.onReady(function(){
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'Isian anda tidak tepat!.',
+				msg: 'Maaf, data yang di kirim tidak valid.',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -254,19 +185,19 @@ Ext.onReady(function(){
 		akun_kodeField.reset();
 		akun_kodeField.setValue(null);
 		akun_jenisField.reset();
-		akun_jenisField.setValue(null);
+		akun_jenisField.setValue('Neraca');
 		akun_parentField.reset();
 		akun_parentField.setValue(null);
-/*		akun_levelField.reset();
-		akun_levelField.setValue(null);*/
+		//akun_levelField.reset();
+		//akun_levelField.setValue(null);
 		akun_namaField.reset();
 		akun_namaField.setValue(null);
 		akun_debetField.reset();
-		akun_debetField.setValue(null);
+		akun_debetField.setValue(0);
 		akun_kreditField.reset();
-		akun_kreditField.setValue(null);
+		akun_kreditField.setValue(0);
 		akun_saldoField.reset();
-		akun_saldoField.setValue(null);
+		akun_saldoField.setValue('Debet');
 		akun_aktifField.reset();
 		akun_aktifField.setValue('Y');
 	}
@@ -277,18 +208,20 @@ Ext.onReady(function(){
 		akun_kodeField.setValue(akunListEditorGrid.getSelectionModel().getSelected().get('akun_kode'));
 		akun_jenisField.setValue(akunListEditorGrid.getSelectionModel().getSelected().get('akun_jenis'));
 		akun_parentField.setValue(akunListEditorGrid.getSelectionModel().getSelected().get('akun_parent'));
-/*		akun_levelField.setValue(akunListEditorGrid.getSelectionModel().getSelected().get('akun_level'));*/
+		//akun_levelField.setValue(akunListEditorGrid.getSelectionModel().getSelected().get('akun_level'));
 		akun_namaField.setValue(akunListEditorGrid.getSelectionModel().getSelected().get('akun_nama'));
 		akun_debetField.setValue(akunListEditorGrid.getSelectionModel().getSelected().get('akun_debet'));
 		akun_kreditField.setValue(akunListEditorGrid.getSelectionModel().getSelected().get('akun_kredit'));
 		akun_saldoField.setValue(akunListEditorGrid.getSelectionModel().getSelected().get('akun_saldo'));
 		akun_aktifField.setValue(akunListEditorGrid.getSelectionModel().getSelected().get('akun_aktif'));
+		akun_parentField.setValue(akunListEditorGrid.getSelectionModel().getSelected().get('akun_parent_nama'));
+		akun_parent_kodeField.setValue(akunListEditorGrid.getSelectionModel().getSelected().get('akun_parent_kode'));
 	}
 	/* End setValue to EDIT*/
   
 	/* Function for Check if the form is valid */
 	function is_akun_form_valid(){
-		return (akun_namaField.isValid());
+		return (  akun_kodeField.isValid() && akun_namaField.isValid()  );
 	}
   	/* End of Function */
   
@@ -298,7 +231,6 @@ Ext.onReady(function(){
 			post2db='CREATE';
 			msg='created';
 			akun_reset_form();
-			akun_kodeField.setDisabled(false);
 			akun_saveWindow.show();
 		} else {
 			akun_saveWindow.toFront();
@@ -310,13 +242,13 @@ Ext.onReady(function(){
 	function akun_confirm_delete(){
 		// only one akun is selected here
 		if(akunListEditorGrid.selModel.getCount() == 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', akun_delete);
+			Ext.MessageBox.confirm('Perhatian !','Apakah anda benar-benar akan menghapus data ini?', akun_delete);
 		} else if(akunListEditorGrid.selModel.getCount() > 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', akun_delete);
+			Ext.MessageBox.confirm('Perhatian !','Apakah anda benar-benar akan menghapus data ini?', akun_delete);
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really delete something you haven\'t selected?',
+				msg: 'Pilih data untuk melakukan delete',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -332,14 +264,14 @@ Ext.onReady(function(){
 			post2db='UPDATE';
 			msg='updated';
 			akun_set_form();
-			akun_kodeField.setDisabled(true);
 			akun_saveWindow.show();
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really update something you haven\'t selected?',
+				msg: 'Pilih data untuk melakukan update',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
+				width: 300,
 				icon: Ext.MessageBox.WARNING
 			});
 		}
@@ -367,8 +299,8 @@ Ext.onReady(function(){
 							break;
 						default:
 							Ext.MessageBox.show({
-								title: 'Warning',
-								msg: 'Could not delete the entire selection',
+								title: 'Perhatian',
+								msg: 'Data belum dipilih !',
 								buttons: Ext.MessageBox.OK,
 								animEl: 'save',
 								icon: Ext.MessageBox.WARNING
@@ -380,7 +312,7 @@ Ext.onReady(function(){
 					var result=response.responseText;
 					Ext.MessageBox.show({
 					   title: 'Error',
-					   msg: 'Koneksi ke database gagal',
+					   msg: 'Tidak bisa terhubung dengan database, cobalah lain waktu.',
 					   buttons: Ext.MessageBox.OK,
 					   animEl: 'database',
 					   icon: Ext.MessageBox.ERROR
@@ -404,17 +336,18 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'akun_id'
 		},[
-		/* dataIndex => insert intoakun_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'akun_id', type: 'int', mapping: 'akun_id'}, 
 			{name: 'akun_kode', type: 'string', mapping: 'akun_kode'}, 
 			{name: 'akun_jenis', type: 'string', mapping: 'akun_jenis'}, 
 			{name: 'akun_parent', type: 'int', mapping: 'akun_parent'}, 
-			{name: 'akun_parent_nama', type: 'string', mapping: 'parent_nama'}, 
 			{name: 'akun_level', type: 'int', mapping: 'akun_level'}, 
-			{name: 'akun_nama', type: 'string', mapping: 'akun_nama'}, 
+			{name: 'akun_nama', type: 'string', mapping: 'akun_nama'},
+			{name: 'akun_parent_id', type: 'int', mapping: 'akun_parent_id'}, 
+			{name: 'akun_parent_kode', type: 'string', mapping: 'akun_parent_kode'}, 
+			{name: 'akun_parent_nama', type: 'string', mapping: 'akun_parent_nama'}, 
 			{name: 'akun_debet', type: 'float', mapping: 'akun_debet'}, 
 			{name: 'akun_kredit', type: 'float', mapping: 'akun_kredit'}, 
-			{name: 'akun_saldo', type: 'float', mapping: 'akun_saldo'}, 
+			{name: 'akun_saldo', type: 'string', mapping: 'akun_saldo'}, 
 			{name: 'akun_aktif', type: 'string', mapping: 'akun_aktif'}, 
 			{name: 'akun_creator', type: 'string', mapping: 'akun_creator'}, 
 			{name: 'akun_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'akun_date_create'}, 
@@ -422,14 +355,14 @@ Ext.onReady(function(){
 			{name: 'akun_date_update', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'akun_date_update'}, 
 			{name: 'akun_revised', type: 'int', mapping: 'akun_revised'} 
 		]),
-		sortInfo:{field: 'akun_id', direction: "DESC"}
+		sortInfo:{field: 'akun_id', direction: "ASC"}
 	});
 	/* End of Function */
- 
- 	akun_comboDataStore = new Ext.data.Store({
-		id: 'akun_comboDataStore',
+
+	combo_akun_DataStore = new Ext.data.Store({
+		id: 'combo_akun_DataStore',
 		proxy: new Ext.data.HttpProxy({
-			url: 'index.php?c=c_akun&m=get_action', 
+			url: 'index.php?c=c_akun&m=get_akun_list', 
 			method: 'POST'
 		}),
 		baseParams:{task: "LIST", start:0, limit: pageS}, // parameter yang di $_POST ke Controller
@@ -438,38 +371,29 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'akun_id'
 		},[
-		/* dataIndex => insert intoakun_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'akun_id', type: 'int', mapping: 'akun_id'}, 
 			{name: 'akun_kode', type: 'string', mapping: 'akun_kode'}, 
 			{name: 'akun_jenis', type: 'string', mapping: 'akun_jenis'}, 
 			{name: 'akun_parent', type: 'int', mapping: 'akun_parent'}, 
-			{name: 'akun_parent_nama', type: 'string', mapping: 'parent_nama'}, 
-			{name: 'akun_parent_jenis', type: 'string', mapping: 'parent_jenis'}, 
 			{name: 'akun_level', type: 'int', mapping: 'akun_level'}, 
 			{name: 'akun_nama', type: 'string', mapping: 'akun_nama'}, 
 			{name: 'akun_debet', type: 'float', mapping: 'akun_debet'}, 
 			{name: 'akun_kredit', type: 'float', mapping: 'akun_kredit'}, 
-			{name: 'akun_saldo', type: 'float', mapping: 'akun_saldo'}, 
-			{name: 'akun_aktif', type: 'string', mapping: 'akun_aktif'}, 
-			{name: 'akun_creator', type: 'string', mapping: 'akun_creator'}, 
-			{name: 'akun_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'akun_date_create'}, 
-			{name: 'akun_update', type: 'string', mapping: 'akun_update'}, 
-			{name: 'akun_date_update', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'akun_date_update'}, 
-			{name: 'akun_revised', type: 'int', mapping: 'akun_revised'} 
+			{name: 'akun_saldo', type: 'string', mapping: 'akun_saldo'}
 		]),
 		sortInfo:{field: 'akun_id', direction: "DESC"}
 	});
 	
 	//function combo render
-	Ext.util.Format.comboRenderer = function(combo){
+	Ext.util.Format.comboRenderer = function(combo){		
 		return function(value){
 			var record = combo.findRecord(combo.valueField, value);
 			return record ? record.get(combo.displayField) : combo.valueNotFoundText;
 		}
 	}
 	
-	var combo_akun=new Ext.form.ComboBox({
-		store: akun_comboDataStore,
+	var lst_akun_DataStore=new Ext.form.ComboBox({
+		store: combo_akun_DataStore,
 		mode: 'remote',
 		displayField: 'akun_nama',
 		valueField: 'akun_id',
@@ -484,74 +408,9 @@ Ext.onReady(function(){
 	});
 	//eof
      
-/*	var tree = new Ext.ux.tree.ColumnTree({
-        width: 550,
-        height: 300,
-        rootVisible:false,
-        autoScroll:true,
-        title: 'Example Tasks',
-        renderTo: 'fp_akun_tree',
-          columns:[{
-            header:'Task',
-            width:330,
-            dataIndex:'task'
-        },{
-            header:'Duration',
-            width:100,
-            dataIndex:'duration'
-        },{
-            header:'Assigned To',
-            width:100,
-            dataIndex:'user'
-        }],
-        loader: new Ext.tree.TreeLoader({
-            dataUrl:'<? //=base_url();?>assets/column-data.json',
-            uiProviders:{
-                'col': Ext.ux.tree.ColumnNodeUI
-            }
-        }),
-        root: new Ext.tree.AsyncTreeNode({
-            text:'task'
-        })
-    });*/
-	
-	/*var Tree = Ext.tree;
-
-    var tree = new Tree.TreePanel({
-        useArrows: true,
-        autoScroll: true,
-        animate: true,
-        enableDD: true,
-        containerScroll: true,
-        border: false,
-        dataUrl: 'index.php?c=c_akun&m=get_action',
-        root: {
-            nodeType: 'async',
-            text: 'Ext JS',
-            draggable: false,
-            id: 'src'
-        }
-    });*/
-
-    // render the tree
-/*    tree.render('fp_akun_tree');
-    tree.getRootNode().expand();*/
-
-
-	
   	/* Function for Identify of Window Column Model */
 	akun_ColumnModel = new Ext.grid.ColumnModel(
-		[{
-			header: '#',
-			readOnly: true,
-			dataIndex: 'akun_id',
-			width: 40,
-			renderer: function(value, cell){
-				cell.css = "readonlycell"; // Mengambil Value dari Class di dalam CSS 
-				return value;
-				},
-			hidden: false
-		},
+		[
 		{
 			header: 'Kode',
 			dataIndex: 'akun_kode',
@@ -560,53 +419,40 @@ Ext.onReady(function(){
 			readOnly: true
 		}, 
 		{
+			header: 'Nama Rekening',
+			dataIndex: 'akun_nama',
+			width: 300,
+			sortable: true,
+			readOnly: true,
+			renderer: function(v, params, record){
+					var indent="";
+					for(i=0;i<record.data.akun_level;i++){
+						indent+="-";
+					}
+					var result=indent+" "+record.data.akun_nama;
+                    return '<span>' + result+ '</span>';
+            }
+		}, 
+		{
+			header: 'Saldo',
+			dataIndex: 'akun_saldo',
+			width: 150,
+			sortable: true,
+			readOnly: true
+		},
+		{
 			header: 'Jenis',
 			dataIndex: 'akun_jenis',
 			width: 150,
 			sortable: true,
 			readOnly: true
 		}, 
-		/*{
-			header: 'Parent',
-			dataIndex: 'akun_parent_nama',
-			width: 250,
-			sortable: true,
-			readOnly: true
-		}, */
-		{
-			header: 'Nama',
-			dataIndex: 'akun_nama',
-			width: 250,
-			sortable: true,
-			readOnly: true	
-		}, 
-		{
-			header: 'Debet',
-			dataIndex: 'akun_debet',
-			width: 100,
-			sortable: true,
-			readOnly: true
-		}, 
-		{
-			header: 'Kredit',
-			dataIndex: 'akun_kredit',
-			width: 100,
-			sortable: true,
-			readOnly: true
-		}, 
-		{
-			header: 'Saldo',
-			dataIndex: 'akun_saldo',
-			width: 100,
-			sortable: true,
-			readOnly: true
-		}, 
 		{
 			header: 'Aktif',
 			dataIndex: 'akun_aktif',
-			width: 100,
+			width: 60,
 			sortable: true,
-			readOnly: true
+			readonly: true
 		}, 
 		{
 			header: 'Creator',
@@ -641,7 +487,7 @@ Ext.onReady(function(){
 			readOnly: true
 		}, 
 		{
-			header: 'Akun Revised',
+			header: 'Revised',
 			dataIndex: 'akun_revised',
 			width: 150,
 			sortable: true,
@@ -656,7 +502,7 @@ Ext.onReady(function(){
 	akunListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'akunListEditorGrid',
 		el: 'fp_akun',
-		title: 'Daftar Kode Akun',
+		title: 'Daftar Kode Rekening',
 		autoHeight: true,
 		store: akun_DataStore, // DataStore
 		cm: akun_ColumnModel, // Nama-nama Columns
@@ -726,7 +572,7 @@ Ext.onReady(function(){
 		{ 
 			text: 'Edit', tooltip: 'Edit selected record', 
 			iconCls:'icon-update',
-			handler: akun_confirm_update 
+			handler: akun_editContextMenu 
 		},
 		{ 
 			text: 'Delete', 
@@ -770,45 +616,45 @@ Ext.onReady(function(){
 	/* End of Function */
   	
 	akunListEditorGrid.addListener('rowcontextmenu', onakun_ListEditGridContextMenu);
-	akun_DataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
-	akunListEditorGrid.on('afteredit', akun_inline_update); // inLine Editing Record
+	akun_DataStore.load({params: {start: 0, limit: pageS}});	
 	
 	/* Identify  akun_kode Field */
 	akun_kodeField= new Ext.form.TextField({
 		id: 'akun_kodeField',
-		fieldLabel: 'Kode *',
+		fieldLabel: 'Kode Rekening',
 		maxLength: 25,
-		anchor: '95%',
+		anchor: '70%',
 		allowBlank: false
 	});
 	/* Identify  akun_jenis Field */
 	akun_jenisField= new Ext.form.ComboBox({
 		id: 'akun_jenisField',
-		fieldLabel: 'Jenis *',
+		fieldLabel: 'Jenis',
 		store:new Ext.data.SimpleStore({
 			fields:['akun_jenis_value', 'akun_jenis_display'],
 			data: [
-					['Aktiva','Aktiva'],
-					['Pasiva','Pasiva'],
-					['Pendapatan','Pendapatan'],
-					['Biaya','Biaya'],
-					['Beban','Beban'],
-					['Lain-lain','Lain-lain']
+					['Neraca','Neraca'],
+					['R/L','R/L']
 				]
 			}),
 		mode: 'local',
 		displayField: 'akun_jenis_display',
 		valueField: 'akun_jenis_value',
-		anchor: '80%',
-		triggerAction: 'all',
-		allowBlank: false
+		anchor: '50%',
+		allowBlank: false,
+		triggerAction: 'all'
 	});
-
+	// akun_jenisField= new Ext.form.TextField({
+		// id: 'akun_jenisField',
+		// fieldLabel: 'Jenis',
+		// maxLength: 255,
+		// anchor: '95%'
+	// });
 	/* Identify  akun_parent Field */
 	akun_parentField= new Ext.form.ComboBox({
 		id: 'akun_parentField',
-		fieldLabel: 'Parent',
-		store: akun_DataStore,
+		fieldLabel: 'Induk',
+		store: combo_akun_DataStore,
 		mode: 'remote',
 		displayField: 'akun_nama',
 		valueField: 'akun_id',
@@ -821,11 +667,36 @@ Ext.onReady(function(){
 		anchor: '95%',
 		hideTrigger: false
 	});
-
+	
+	akun_parent_kodeField= new Ext.form.TextField({
+		id: 'akun_parent_kodeField',
+		fieldLabel: 'Kode Induk',
+		readOnly: true
+	});
+	
+	// akun_parentField= new Ext.form.NumberField({
+		// id: 'akun_parentField',
+		// fieldLabel: 'Parent',
+		// allowNegatife : false,
+		// blankText: '0',
+		// allowDecimals: false,
+				// anchor: '95%',
+		// maskRe: /([0-9]+)$/
+	// });
+	/* Identify  akun_level Field */
+	akun_levelField= new Ext.form.NumberField({
+		id: 'akun_levelField',
+		fieldLabel: 'Level',
+		allowNegatife : false,
+		blankText: '0',
+		allowDecimals: false,
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
+	});
 	/* Identify  akun_nama Field */
 	akun_namaField= new Ext.form.TextField({
 		id: 'akun_namaField',
-		fieldLabel: 'Nama Akun',
+		fieldLabel: 'Nama Rekening',
 		maxLength: 255,
 		allowBlank: false,
 		anchor: '95%'
@@ -851,14 +722,22 @@ Ext.onReady(function(){
 		maskRe: /([0-9]+)$/
 	});
 	/* Identify  akun_saldo Field */
-	akun_saldoField= new Ext.form.NumberField({
+	akun_saldoField= new Ext.form.ComboBox({
 		id: 'akun_saldoField',
 		fieldLabel: 'Saldo',
-		allowNegatife : false,
-		blankText: '0',
-		allowDecimals: true,
-		anchor: '95%',
-		maskRe: /([0-9]+)$/
+		store:new Ext.data.SimpleStore({
+			fields:['akun_saldo_value', 'akun_saldo_display'],
+			data: [
+					['Debet','Debet'],
+					['Kredit','Kredit']
+				]
+			}),
+		mode: 'local',
+		displayField: 'akun_saldo_display',
+		valueField: 'akun_saldo_value',
+		anchor: '50%',
+		allowBlank: false,
+		triggerAction: 'all'
 	});
 	/* Identify  akun_aktif Field */
 	akun_aktifField= new Ext.form.ComboBox({
@@ -871,7 +750,7 @@ Ext.onReady(function(){
 		mode: 'local',
 		displayField: 'akun_aktif_display',
 		valueField: 'akun_aktif_value',
-		anchor: '70%',
+		anchor: '50%',
 		triggerAction: 'all'	
 	});
 
@@ -887,7 +766,8 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [akun_kodeField, akun_parentField, akun_jenisField, akun_namaField, akun_debetField, akun_kreditField, akun_saldoField, akun_aktifField] 
+				items: [akun_kodeField, akun_parentField, akun_parent_kodeField, akun_namaField, akun_jenisField, 
+						akun_debetField, akun_kreditField, akun_saldoField, akun_aktifField] 
 			}
 			],
 		buttons: [{
@@ -907,10 +787,10 @@ Ext.onReady(function(){
 	/* Function for retrieve create Window Form */
 	akun_saveWindow= new Ext.Window({
 		id: 'akun_saveWindow',
-		title: post2db+' Kode Akun',
+		title: post2db+' Kode Rekening',
 		closable:true,
 		closeAction: 'hide',
-		autoWidth: true,
+		width: 420, 
 		autoHeight: true,
 		x:0,
 		y:0,
@@ -959,7 +839,7 @@ Ext.onReady(function(){
 			akun_debet	:	akun_debet_search, 
 			akun_kredit	:	akun_kredit_search, 
 			akun_saldo	:	akun_saldo_search, 
-			akun_aktif	:	akun_aktif_search, 
+			akun_aktif	:	akun_aktif_search
 		};
 		// Cause the datastore to do another query : 
 		akun_DataStore.reload({params: {start: 0, limit: pageS}});
@@ -968,8 +848,7 @@ Ext.onReady(function(){
 	/* Function for reset search result */
 	function akun_reset_search(){
 		// reset the store parameters
-		akun_DataStore.baseParams = { task: 'LIST' };
-		// Cause the datastore to do another query : 
+		akun_DataStore.baseParams = { task: 'LIST', start:0, limit:pageS };
 		akun_DataStore.reload({params: {start: 0, limit: pageS}});
 		akun_searchWindow.close();
 	};
@@ -1002,18 +881,14 @@ Ext.onReady(function(){
 		store:new Ext.data.SimpleStore({
 			fields:['akun_jenisSearch_value', 'akun_jenisSearch_display'],
 			data: [
-					['Aktiva','Aktiva'],
-					['Pasiva','Pasiva'],
-					['Pendapatan','Pendapatan'],
-					['Beban','Beban'],
-					['Biaya','Biaya'],
-					['Lain-lain','Lain-lain']
+					['Neraca','Neraca'],
+					['R/L','R/L']
 				]
 			}),
 		mode: 'local',
 		displayField: 'akun_jenisSearch_display',
 		valueField: 'akun_jenisSearch_value',
-		anchor: '80%',
+		anchor: '50%',
 		triggerAction: 'all'	 
 	
 	});
@@ -1030,7 +905,7 @@ Ext.onReady(function(){
 	akun_parentSearchField= new Ext.form.ComboBox({
 		id: 'akun_parentSearchField',
 		fieldLabel: 'Parent',
-		store: akun_DataStore,
+		store: combo_akun_DataStore,
 		mode: 'remote',
 		displayField: 'akun_nama',
 		valueField: 'akun_id',
@@ -1040,20 +915,11 @@ Ext.onReady(function(){
 		triggerAction: 'all',
 		lazyRender:true,
 		listClass: 'x-combo-list-small',
-		anchor: '80%'
-		,hideTrigger: false
+		anchor: '95%',
+		hideTrigger: false
 	});
 
-	// akun_parentSearchField= new Ext.form.NumberField({
-		// id: 'akun_parentSearchField',
-		// fieldLabel: 'Parent',
-		// allowNegatife : false,
-		// blankText: '0',
-		// allowDecimals: false,
-		// anchor: '95%',
-		// maskRe: /([0-9]+)$/
 	
-	// });
 	/* Identify  akun_level Search Field */
 	akun_levelSearchField= new Ext.form.NumberField({
 		id: 'akun_levelSearchField',
@@ -1068,7 +934,7 @@ Ext.onReady(function(){
 	/* Identify  akun_nama Search Field */
 	akun_namaSearchField= new Ext.form.TextField({
 		id: 'akun_namaSearchField',
-		fieldLabel: 'Nama',
+		fieldLabel: 'Nama Rekening',
 		maxLength: 255,
 		anchor: '95%'
 	
@@ -1096,14 +962,22 @@ Ext.onReady(function(){
 	
 	});
 	/* Identify  akun_saldo Search Field */
-	akun_saldoSearchField= new Ext.form.NumberField({
+	akun_saldoSearchField= new Ext.form.ComboBox({
 		id: 'akun_saldoSearchField',
 		fieldLabel: 'Saldo',
-		allowNegatife : false,
-		blankText: '0',
-		allowDecimals: true,
-		anchor: '95%',
-		maskRe: /([0-9]+)$/
+		fieldLabel: 'Jenis',
+		store:new Ext.data.SimpleStore({
+			fields:['akun_saldoSearch_value', 'akun_saldoSearch_display'],
+			data: [
+					['Neraca','Neraca'],
+					['R/L','R/L']
+				]
+			}),
+		mode: 'local',
+		displayField: 'akun_saldoSearch_display',
+		valueField: 'akun_saldoSearch_value',
+		anchor: '50%',
+		triggerAction: 'all'
 	
 	});
 	/* Identify  akun_aktif Search Field */
@@ -1117,7 +991,7 @@ Ext.onReady(function(){
 		mode: 'local',
 		displayField: 'akun_aktif',
 		valueField: 'value',
-		anchor: '70%',
+		anchor: '50%',
 		triggerAction: 'all'	 
 	
 	});
@@ -1127,7 +1001,7 @@ Ext.onReady(function(){
 		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
-		width: 300,        
+		width: 400,        
 		items: [{
 			layout:'column',
 			border:false,
@@ -1136,7 +1010,8 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [akun_kodeSearchField, akun_jenisSearchField, akun_parentSearchField, akun_namaSearchField, akun_debetSearchField, akun_kreditSearchField, akun_saldoSearchField, akun_aktifSearchField] 
+				items: [akun_kodeSearchField, akun_jenisSearchField, akun_parentSearchField, akun_levelSearchField, 
+						akun_namaSearchField, akun_debetSearchField, akun_kreditSearchField, akun_saldoSearchField, akun_aktifSearchField] 
 			}
 			]
 		}]
@@ -1156,10 +1031,10 @@ Ext.onReady(function(){
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
 	akun_searchWindow = new Ext.Window({
-		title: 'Pencarian Akun',
+		title: 'Pencarian Kode Rekening',
 		closable:true,
 		closeAction: 'hide',
-		autoWidth: true,
+		width: 420, 
 		autoHeight: true,
 		plain:true,
 		layout: 'fit',
@@ -1229,7 +1104,7 @@ Ext.onReady(function(){
 		  	switch(result){
 		  	case 1:
 				win = window.open('./print/akun_printlist.html','akunlist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
-				win.print();
+				//win.print();
 				break;
 		  	default:
 				Ext.MessageBox.show({
@@ -1246,7 +1121,7 @@ Ext.onReady(function(){
 		  	var result=response.responseText;
 			Ext.MessageBox.show({
 			   title: 'Error',
-			   msg: 'Koneksi ke database gagal',
+			   msg: 'Koneksi database gagal.',
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR
@@ -1320,7 +1195,7 @@ Ext.onReady(function(){
 		  	var result=response.responseText;
 			Ext.MessageBox.show({
 			   title: 'Error',
-			   msg: 'Koneksi ke database gagal',
+			   msg: 'Koneksi database gagal.',
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR
@@ -1329,16 +1204,16 @@ Ext.onReady(function(){
 		});
 	}
 	/*End of Function */
-	//EVENTS
 	
 	akun_parentField.on("select",function(){
-		akun_comboDataStore.reload({params:{start:0}});
-		var j= akun_comboDataStore.findExact('akun_id',akun_parentField.getValue(),0);
-		if(j>=0){
-			var record_akun=akun_comboDataStore.getAt(j);
-			akun_jenisField.setValue(record_akun.data.akun_parent_jenis);
+		var j=combo_akun_DataStore.findExact('akun_id',akun_parentField.getValue());
+		if(j>-1){
+			var parent_record=combo_akun_DataStore.getAt(j);
+			akun_parent_kodeField.setValue(parent_record.data.akun_kode);
+			akun_jenisField.setValue(parent_record.data.akun_jenis);
+			akun_saldoField.setValue(parent_record.data.akun_saldo);
+			console.log(parent_record.data.akun_jenis);
 		}
-		
 	});
 });
 	</script>
@@ -1346,7 +1221,6 @@ Ext.onReady(function(){
 <div>
 	<div class="col">
         <div id="fp_akun"></div>
-         <div id="fp_akun_tree"></div>
 		<div id="elwindow_akun_save"></div>
         <div id="elwindow_akun_search"></div>
     </div>
