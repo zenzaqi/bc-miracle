@@ -67,21 +67,26 @@ class C_akun extends Controller {
 		echo $result;
 	}
 	
+	
+	function get_akun_list(){
+		
+		$query = isset($_POST['query']) ? @$_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? @$_POST['start'] : @$_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? @$_POST['limit'] : @$_GET['limit']);
+		$result=$this->m_akun->get_akun_list($query,$start,$end);
+		echo $result;
+	}
+	
 	//function for create new record
 	function akun_create(){
 		//POST varible here
 		//auto increment, don't accept anything from form values
 		$akun_kode=trim(@$_POST["akun_kode"]);
 		$akun_kode=str_replace("/(<\/?)(p)([^>]*>)", "",$akun_kode);
-		$akun_kode=str_replace("'", "''",$akun_kode);
 		$akun_jenis=trim(@$_POST["akun_jenis"]);
-		$akun_jenis=str_replace("/(<\/?)(p)([^>]*>)", "",$akun_jenis);
-		$akun_jenis=str_replace("'", "''",$akun_jenis);
 		$akun_parent=trim(@$_POST["akun_parent"]);
-		$akun_level=trim(@$_POST["akun_level"]);
 		$akun_nama=trim(@$_POST["akun_nama"]);
 		$akun_nama=str_replace("/(<\/?)(p)([^>]*>)", "",$akun_nama);
-		$akun_nama=str_replace("'", "''",$akun_nama);
 		$akun_debet=trim(@$_POST["akun_debet"]);
 		$akun_kredit=trim(@$_POST["akun_kredit"]);
 		$akun_saldo=trim(@$_POST["akun_saldo"]);
@@ -90,6 +95,7 @@ class C_akun extends Controller {
 		$akun_aktif=str_replace("'", "''",$akun_aktif);
 		$akun_creator=@$_SESSION[SESSION_USERID];
 		$akun_date_create=date(LONG_FORMATDATE);
+		$akun_level="";
 		//$akun_update=NULL;
 		//$akun_date_update=NULL;
 		//$akun_revised=0;
@@ -219,6 +225,7 @@ class C_akun extends Controller {
 
 	/* Function to Export Excel document */
 	function akun_export_excel(){
+	$this->load->plugin('to_excel');
 		//POST varibale here
 		$akun_id=trim(@$_POST["akun_id"]);
 		$akun_kode=trim(@$_POST["akun_kode"]);
@@ -251,7 +258,7 @@ class C_akun extends Controller {
 		$filter=$_POST["query"];
 		
 		$query = $this->m_akun->akun_export_excel($akun_id ,$akun_kode ,$akun_jenis ,$akun_parent ,$akun_level ,$akun_nama ,$akun_debet ,$akun_kredit ,$akun_saldo ,$akun_aktif ,$akun_creator ,$akun_date_create ,$akun_update ,$akun_date_update ,$akun_revised ,$option,$filter);
-		
+		//echo $query;
 		to_excel($query,"akun"); 
 		echo '1';
 			
