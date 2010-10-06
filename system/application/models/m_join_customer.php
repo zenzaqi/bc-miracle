@@ -13,6 +13,44 @@ class M_join_customer extends Model{
 			parent::Model();
 		}
 		
+		
+	function get_customer_list2($query,$start,$end){
+		$sql="SELECT cust_id,cust_no,cust_nama,cust_tgllahir,cust_alamat,cust_telprumah,cust_point FROM customer WHERE cust_aktif='Aktif'";
+		if($query<>""){
+			$sql=$sql." and (cust_id = '".$query."' or cust_no like '%".$query."%' or cust_alamat like '%".$query."%' or cust_nama like '%".$query."%' or cust_telprumah like '%".$query."%' or cust_telprumah2 like '%".$query."%' or cust_telpkantor like '%".$query."%' or cust_hp like '%".$query."%' or cust_hp2 like '%".$query."%' or cust_hp3 like '%".$query."%') ";
+		}
+		
+		$result = $this->db->query($sql);
+		$nbrows = $result->num_rows();
+		$limit = $sql." LIMIT ".$start.",".$end;			
+		$result = $this->db->query($limit);  
+		if($nbrows>0){
+			foreach($result->result() as $row){
+				$arr[] = $row;
+			}
+			$jsonresult = json_encode($arr);
+			return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+		} else {
+			return '({"total":"0", "results":""})';
+		}
+	}
+		
+	function set_cust_point($cust_id){
+		$sql = "SELECT cust_point from customer where cust_id='".$cust_id."' and cust_aktif!='Tidak Aktif' order by cust_id desc limit 1";
+		$query = $this->db->query($sql);
+		$nbrows = $query->num_rows();
+		if($nbrows>0){
+			foreach($query->result() as $row){
+				$arr[] = $row;
+			}
+			$jsonresult = json_encode($arr);
+			return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+		} else {
+			return '({"total":"0", "results":""})';
+		}
+	}
+		
+		
 
 		//function for get list record
 		function join_customer_list($filter,$start,$end){
@@ -47,7 +85,7 @@ class M_join_customer extends Model{
 		
 		
 		//function for update record
-		function join_customer_create($join_id, $cust_asal_id, $cust_tujuan_id, $join_tanggal, $join_keterangan, $join_creator, $join_date_create){
+		function join_customer_create($join_id, $cust_asal_id, $cust_tujuan_id, $cust_point, $join_tanggal, $join_keterangan, $join_creator, $join_date_create){
 			
 			$datetime_now=date('Y-m-d H:i:s');
 		
@@ -281,6 +319,11 @@ class M_join_customer extends Model{
 					wl_revised = (wl_revised+1)
 				WHERE cust_id ='$cust_asal_id'";
 			$this->db->query($sql_joincust_28);
+			
+			$sql_joincust_29 = "UPDATE customer
+				SET cust_point = (cust_point + '$cust_point')
+				WHERE cust_id ='$cust_tujuan_id'";
+			$this->db->query($sql_joincust_29);
 			
 			$sql_set_cust_tidak_aktif = "UPDATE customer
 				SET cust_aktif = 'Tidak Aktif',

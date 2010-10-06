@@ -26,6 +26,20 @@ class C_join_customer extends Controller {
 		echo $result;
 	}
 	
+	function get_customer_list2(){
+		$query = isset($_POST['query']) ? $_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		$result=$this->m_join_customer->get_customer_list2($query,$start,$end);
+		echo $result;
+	}
+	
+	function set_cust_point(){
+		$cust_id = (integer) (isset($_POST['cust_id']) ? $_POST['cust_id'] : $_GET['cust_id']);
+		$result=$this->m_join_customer->set_cust_point($cust_id);
+		echo $result;
+	}
+	
 	
 	//set index
 	function index(){
@@ -68,6 +82,7 @@ class C_join_customer extends Controller {
 		$join_id=str_replace("'", '"',$join_id);
 		$cust_asal_id=trim(@$_POST["cust_asal_id"]);
 		$cust_tujuan_id=trim(@$_POST["cust_tujuan_id"]);
+		$cust_point=trim(@$_POST["cust_point"]);
 		$join_tanggal=trim(@$_POST["join_tanggal"]);
 		$join_keterangan=trim(@$_POST["join_keterangan"]);
 		$join_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$join_keterangan);
@@ -82,7 +97,7 @@ class C_join_customer extends Controller {
 		$join_date_update=trim(@$_POST["join_date_update"]);
 		$join_revised=trim(@$_POST["join_revised"]);
 
-		$result = $this->m_join_customer->join_customer_create($join_id, $cust_asal_id, $cust_tujuan_id, $join_tanggal, $join_keterangan, $join_creator, $join_date_create);
+		$result = $this->m_join_customer->join_customer_create($join_id, $cust_asal_id, $cust_tujuan_id, $cust_point, $join_tanggal, $join_keterangan, $join_creator, $join_date_create);
 		echo $result;
 	}
 
