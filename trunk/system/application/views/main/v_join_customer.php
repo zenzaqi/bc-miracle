@@ -48,6 +48,7 @@ var joincustomer_saveWindow;
 var joincustomer_idField;
 var joincustomer_customer_tujuan_Field;
 var joincustomer_customer_awal_Field;
+var joincustomer_pointField;
 var joincustomer_tanggalField;
 var joincustomer_keteranganField;
 
@@ -101,11 +102,13 @@ Ext.onReady(function(){
 			var joincustomer_id_create_pk=null;
 			var cust_asal_id_field = null;
 			var cust_tujuan_id_field = null;
+			var cust_point_field = null;
 			var joincustomer_tanggal_create="";
 			var joincustomer_keterangan_create=null;
 			
 			if(joincustomer_idField.getValue()!== null){joincustomer_id_create_pk = joincustomer_idField.getValue();}
 			if(joincustomer_customer_tujuan_Field.getValue()!==null){cust_tujuan_id_field=joincustomer_customer_tujuan_Field.getValue();}
+			if(joincustomer_pointField.getValue()!==null){cust_point_field=joincustomer_pointField.getValue();}
 			if(joincustomer_customer_awal_Field.getValue()!==null){cust_asal_id_field=joincustomer_customer_awal_Field.getValue();}
 			if(joincustomer_keteranganField.getValue()!== null){joincustomer_keterangan_create = joincustomer_keteranganField.getValue();}
 			if(joincustomer_tanggalField.getValue()!== ""){joincustomer_tanggal_create = joincustomer_tanggalField.getValue().format('Y-m-d');}				
@@ -119,6 +122,7 @@ Ext.onReady(function(){
 					join_id	: joincustomer_id_create_pk,		
 					cust_asal_id	: cust_asal_id_field,
 					cust_tujuan_id	: cust_tujuan_id_field,
+					cust_point		: cust_point_field,
 					join_tanggal	: joincustomer_tanggal_create,					
 					join_keterangan	: joincustomer_keterangan_create
 				}, 
@@ -165,6 +169,25 @@ Ext.onReady(function(){
 	}
  	/* End of Function */
     
+	function load_set_cust_point(){
+		if(joincustomer_customer_awal_Field.getValue()!=''){
+			set_cust_point_DataStore.load({
+					params : { cust_id : joincustomer_customer_awal_Field.getValue() },
+					callback: function(opts, success, response)  {
+						 if (success) {
+							if(set_cust_point_DataStore.getCount()){
+								auto_cust_point=set_cust_point_DataStore.getAt(0).data;
+								joincustomer_pointField.setValue(auto_cust_point.cust_point);
+							}
+						}
+					}
+			}); 
+		}
+	}
+	
+	
+	
+	
 	/* Function for get PK field */
 	function get_pk_id(){
 		if(post2db=='CREATE')
@@ -276,6 +299,7 @@ Ext.onReady(function(){
 			{name: 'cust_nama', type: 'string', mapping: 'cust_nama'},
 			{name: 'cust_tgllahir', type: 'date', dateFormat: 'Y-m-d', mapping: 'cust_tgllahir'},
 			{name: 'cust_alamat', type: 'string', mapping: 'cust_alamat'},
+			{name: 'cust_point', type: 'int', mapping: 'cust_point'},
 			{name: 'cust_telprumah', type: 'string', mapping: 'cust_telprumah'}
 		]),
 		sortInfo:{field: 'cust_no', direction: "ASC"}
@@ -287,6 +311,24 @@ Ext.onReady(function(){
             'Alamat: {cust_alamat}&nbsp;&nbsp;&nbsp;[Telp. {cust_telprumah}]',
         '</div></tpl>'
     );
+	
+	/* Identify datastore utk ngeset cust_point */
+	set_cust_point_DataStore = new Ext.data.Store({
+		id: 'set_cust_point_DataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_join_customer&m=set_cust_point', 
+			method: 'POST'
+		}),
+			reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: ''
+		},[
+			{name: 'cust_point', type: 'int', mapping: 'cust_point'}
+		]),
+		sortInfo:{field: 'cust_point', direction: "ASC"}
+	});
+	
 	
 
 	join_customer_DataStore = new Ext.data.Store({
@@ -458,6 +500,21 @@ Ext.onReady(function(){
 		anchor: '90%'
 	});
 	
+	joincustomer_pointField= new Ext.form.NumberField({
+		id: 'joincustomer_pointField',
+		//store: cbo_joincustomer_customerDataStore2,
+		//valueField: 'cust_point',
+		allowNegatife : false,
+		blankText: '0',
+		allowBlank: false,
+		allowDecimals: false,
+		hidden: true,
+		readOnly: true,
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
+	});
+	
+	
 	joincustomer_tanggalField= new Ext.form.DateField({
 		id: 'joincustomer_tanggalField',
 		fieldLabel: 'Tanggal',
@@ -487,7 +544,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [joincustomer_idField,joincustomer_tanggalField, joincustomer_customer_awal_Field, joincustomer_customer_tujuan_Field, joincustomer_keteranganField, joincustomer_infoketeranganField] 
+				items: [joincustomer_idField,joincustomer_tanggalField, joincustomer_customer_awal_Field, joincustomer_customer_tujuan_Field, joincustomer_pointField, joincustomer_keteranganField, joincustomer_infoketeranganField] 
 			}
 			],
 		buttons: [{
@@ -524,6 +581,17 @@ Ext.onReady(function(){
 	/* End Window */
 	
 	//joincustomer_saveWindow.show();
+	
+	joincustomer_customer_awal_Field.on("select",function(){
+		load_set_cust_point();
+		j=set_cust_point_DataStore.find('cust_id', joincustomer_customer_awal_Field.getValue());
+		if(j>-1)
+			joincustomer_pointField.setValue(set_cust_point_DataStore.getAt(j).cust_point);
+		else
+			joincustomer_pointField.setValue("");
+	
+	});
+	
 	
 });
 	</script>
