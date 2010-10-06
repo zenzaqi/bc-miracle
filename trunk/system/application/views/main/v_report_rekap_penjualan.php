@@ -430,14 +430,14 @@ Ext.onReady(function(){
 		fieldLabel: 'Jenis',
 		store:new Ext.data.SimpleStore({
 			fields:['jenis_value', 'jenis_display'],
-			data:[['Perawatan','Perawatan Satuan'],['Pengambilan_Paket','Pengambilan Paket'],['Produk','Produk'],['Paket','Paket']]
+			data:[['Perawatan','Penjualan Perawatan Satuan'],['Pengambilan_Paket','Pengambilan Paket'],['Produk','Penjualan Produk'],['Paket','Penjualan Paket']]
 		}),
 		mode: 'local',
 		editable:false,
 		emptyText: 'Produk',
 		displayField: 'jenis_display',
 		valueField: 'jenis_value',
-		width: 120,
+		width: 200,
 		triggerAction: 'all'	
 	});
 	
