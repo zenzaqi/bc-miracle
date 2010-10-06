@@ -1,0 +1,9 @@
+[zaqi.smart@gmail.com]
+- fix update
+  o Persediaan [fix all detail error]
+  o Produk
+    - add field saldo awal
+    - add field nilai saldo awal
+    - currency formatted
+  o SQL UPDATE 2010-10-06_10-40-AM.sql
+- update data master akun
