@@ -15,7 +15,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Daftar Kode Rekening</title>
+<title>Daftar Kode Akun</title>
 <link rel='stylesheet' type='text/css' href='../assets/modules/main/css/printstyle.css'/>
 </head>
 <body onload="window.print();">
@@ -25,7 +25,7 @@
     	<td colspan="8" nowrap="nowrap">
         	<div style="float:left; margin-left:10px; margin-top:5px;" > 
              <img src="../assets/images/pmmp_logo2.png" width="40%" height="40%" align="left" style="margin-right:5px" /> 
-             <center><b><h1>Kode Rekening</h1></b></center>
+             <center><b><h1>Kode Akun</h1></b></center>
             </div>
         </td>
         </tr>
