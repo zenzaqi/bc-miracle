@@ -132,14 +132,14 @@ Ext.onReady(function(){
 					var result=eval(response.responseText);
 					switch(result){
 						case 1:
-							Ext.MessageBox.alert(post2db+' OK','Data Kode Rekening sukses disimpan.');
+							Ext.MessageBox.alert(post2db+' OK','Data Kode Akun sukses disimpan.');
 							akun_DataStore.reload();
 							akun_saveWindow.hide();
 							break;
 						default:
 							Ext.MessageBox.show({
 							   title: 'Warning',
-							   msg: 'Data Kode Rekening gagal disimpan !.',
+							   msg: 'Data Kode Akun gagal disimpan !.',
 							   buttons: Ext.MessageBox.OK,
 							   animEl: 'save',
 							   icon: Ext.MessageBox.WARNING
@@ -419,7 +419,7 @@ Ext.onReady(function(){
 			readOnly: true
 		}, 
 		{
-			header: 'Nama Rekening',
+			header: 'Nama Akun',
 			dataIndex: 'akun_nama',
 			width: 300,
 			sortable: true,
@@ -502,7 +502,7 @@ Ext.onReady(function(){
 	akunListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'akunListEditorGrid',
 		el: 'fp_akun',
-		title: 'Daftar Kode Rekening',
+		title: 'Daftar Kode Akun',
 		autoHeight: true,
 		store: akun_DataStore, // DataStore
 		cm: akun_ColumnModel, // Nama-nama Columns
@@ -621,7 +621,7 @@ Ext.onReady(function(){
 	/* Identify  akun_kode Field */
 	akun_kodeField= new Ext.form.TextField({
 		id: 'akun_kodeField',
-		fieldLabel: 'Kode Rekening',
+		fieldLabel: 'Kode Akun',
 		maxLength: 25,
 		anchor: '70%',
 		allowBlank: false
@@ -696,7 +696,7 @@ Ext.onReady(function(){
 	/* Identify  akun_nama Field */
 	akun_namaField= new Ext.form.TextField({
 		id: 'akun_namaField',
-		fieldLabel: 'Nama Rekening',
+		fieldLabel: 'Nama Akun',
 		maxLength: 255,
 		allowBlank: false,
 		anchor: '95%'
@@ -787,7 +787,7 @@ Ext.onReady(function(){
 	/* Function for retrieve create Window Form */
 	akun_saveWindow= new Ext.Window({
 		id: 'akun_saveWindow',
-		title: post2db+' Kode Rekening',
+		title: post2db+' Kode Akun',
 		closable:true,
 		closeAction: 'hide',
 		width: 420, 
@@ -934,7 +934,7 @@ Ext.onReady(function(){
 	/* Identify  akun_nama Search Field */
 	akun_namaSearchField= new Ext.form.TextField({
 		id: 'akun_namaSearchField',
-		fieldLabel: 'Nama Rekening',
+		fieldLabel: 'Nama Akun',
 		maxLength: 255,
 		anchor: '95%'
 	
@@ -1031,7 +1031,7 @@ Ext.onReady(function(){
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
 	akun_searchWindow = new Ext.Window({
-		title: 'Pencarian Kode Rekening',
+		title: 'Pencarian Kode Akun',
 		closable:true,
 		closeAction: 'hide',
 		width: 420, 

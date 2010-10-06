@@ -56,7 +56,7 @@ class M_phonegroup extends Model{
 			}
 			else{
 				if($isms_opsi=="semua"){
-					$sql="select cust_id, cust_hp from customer WHERE cust_hp<>'' AND cust_hp is not null";
+					$sql="select cust_id, cust_hp from customer WHERE CONVERT(cust_hp, SIGNED INTEGER)>0";
 					$query=$this->db->query($sql);
 					foreach($query->result() as $row){
 						$sql="insert into outbox(
@@ -192,7 +192,7 @@ class M_phonegroup extends Model{
 					
 					//$sql="select cust_hp from vu_member_cust WHERE cust_hp<>'' AND cust_hp is not null";
 					$sql=  "select cust_hp, cust_id from vu_customer
-							WHERE cust_hp<>'' AND cust_hp is not null";
+							WHERE CONVERT(cust_hp, SIGNED INTEGER)>0";
 							
 					if($membership=="Expired"){
 						$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
@@ -262,7 +262,8 @@ class M_phonegroup extends Model{
 		}
 		
 		function get_available($query,$start,$end){
-			$sql="select concat(cust_nama,' (',cust_no,')') as cust_nama, cust_no,cust_hp from customer where cust_hp not in(select phonegrouped_number from phonegrouped) and cust_hp<>''";
+			$sql="select concat(cust_nama,' (',cust_no,')') as cust_nama, cust_no,cust_hp from customer 
+					where cust_hp not in(select phonegrouped_number from phonegrouped) and CONVERT(cust_hp, SIGNED INTEGER)>0";
 			if($query!==""){
 				$sql.=" and cust_nama like '%".$query."%' or cust_hp like '%".$query."%'";
 			}
@@ -285,7 +286,8 @@ class M_phonegroup extends Model{
 		
 		function get_cust_available($umur, $agama, $kota, $propinsi, $pendidikan, $kelamin, $profesi, $hobi, $stsnikah, $priority, $unit, $aktif, $no, $nama, $query,$start,$end){
 			
-			$sql="select concat(cust_nama,' (',cust_no,')') as cust_nama, cust_no,cust_hp from vu_customer where cust_hp not in(select phonegrouped_number from phonegrouped) and cust_hp<>''";
+			$sql="select concat(cust_nama,' (',cust_no,')') as cust_nama, cust_no,cust_hp from vu_customer 
+					where cust_hp not in(select phonegrouped_number from phonegrouped) and CONVERT(cust_hp, SIGNED INTEGER)>0";
 			
 			if($umur!=""){
 				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
@@ -363,7 +365,8 @@ class M_phonegroup extends Model{
 		}
 		
 		function get_phonegrouped($id,$query,$start,$end){
-			$sql="select concat(cust_nama,' (',cust_no,')') as cust_nama, cust_no,cust_hp from customer where cust_hp in(select phonegrouped_number from phonegrouped where phonegrouped_group='".$id."')";
+			$sql="select concat(cust_nama,' (',cust_no,')') as cust_nama, cust_no,cust_hp from customer 
+			where cust_hp in(select phonegrouped_number from phonegrouped where phonegrouped_group='".$id."')";
 			if($query!==""){
 				$sql.=" and cust_nama like '%".$query."%' or cust_hp like '%".$query."%'";
 			}
@@ -418,7 +421,8 @@ class M_phonegroup extends Model{
 			// For simple search
 			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (phonegroup_id LIKE '%".addslashes($filter)."%' OR phonegroup_nama LIKE '%".addslashes($filter)."%' OR phonegroup_detail LIKE '%".addslashes($filter)."%' OR phonegroup_creator LIKE '%".addslashes($filter)."%' OR phonegroup_date_create LIKE '%".addslashes($filter)."%' OR phonegroup_update LIKE '%".addslashes($filter)."%' OR phonegroup_date_update LIKE '%".addslashes($filter)."%' OR phonegroup_revised LIKE '%".addslashes($filter)."%' )";
+				$query .= " (phonegroup_nama LIKE '%".addslashes($filter)."%' OR 
+							 phonegroup_detail LIKE '%".addslashes($filter)."%')";
 			}
 			
 			$result = $this->db->query($query);
@@ -522,14 +526,12 @@ class M_phonegroup extends Model{
 		}
 		
 		//function for advanced search record
-		function phonegroup_search($phonegroup_id ,$phonegroup_nama ,$phonegroup_detail ,$phonegroup_creator ,$phonegroup_date_create ,$phonegroup_update ,$phonegroup_date_update ,$phonegroup_revised ,$start,$end){
+		function phonegroup_search($phonegroup_id ,$phonegroup_nama ,$phonegroup_detail ,$phonegroup_creator ,$phonegroup_date_create ,
+								   $phonegroup_update ,$phonegroup_date_update ,$phonegroup_revised ,$start,$end){
 			//full query
 			$query="select * from phonegroup";
 			
-			if($phonegroup_id!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " phonegroup_id LIKE '%".$phonegroup_id."%'";
-			};
+			
 			if($phonegroup_nama!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " phonegroup_nama LIKE '%".$phonegroup_nama."%'";
@@ -538,26 +540,8 @@ class M_phonegroup extends Model{
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " phonegroup_detail LIKE '%".$phonegroup_detail."%'";
 			};
-			if($phonegroup_creator!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " phonegroup_creator LIKE '%".$phonegroup_creator."%'";
-			};
-			if($phonegroup_date_create!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " phonegroup_date_create LIKE '%".$phonegroup_date_create."%'";
-			};
-			if($phonegroup_update!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " phonegroup_update LIKE '%".$phonegroup_update."%'";
-			};
-			if($phonegroup_date_update!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " phonegroup_date_update LIKE '%".$phonegroup_date_update."%'";
-			};
-			if($phonegroup_revised!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " phonegroup_revised LIKE '%".$phonegroup_revised."%'";
-			};
+			
+			
 			
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
@@ -576,18 +560,17 @@ class M_phonegroup extends Model{
 		}
 		
 		//function for print record
-		function phonegroup_print($phonegroup_id ,$phonegroup_nama ,$phonegroup_detail ,$phonegroup_creator ,$phonegroup_date_create ,$phonegroup_update ,$phonegroup_date_update ,$phonegroup_revised ,$option,$filter){
+		function phonegroup_print($phonegroup_id ,$phonegroup_nama ,$phonegroup_detail ,$phonegroup_creator ,$phonegroup_date_create ,
+								  $phonegroup_update ,$phonegroup_date_update ,$phonegroup_revised ,$option,$filter){
 			//full query
 			$sql="select * from phonegroup";
 			if($option=='LIST'){
 				$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
-				$sql .= " (phonegroup_id LIKE '%".addslashes($filter)."%' OR phonegroup_nama LIKE '%".addslashes($filter)."%' OR phonegroup_detail LIKE '%".addslashes($filter)."%' OR phonegroup_creator LIKE '%".addslashes($filter)."%' OR phonegroup_date_create LIKE '%".addslashes($filter)."%' OR phonegroup_update LIKE '%".addslashes($filter)."%' OR phonegroup_date_update LIKE '%".addslashes($filter)."%' OR phonegroup_revised LIKE '%".addslashes($filter)."%' )";
+				$sql .= " (phonegroup_nama LIKE '%".addslashes($filter)."%' OR 
+						   phonegroup_detail LIKE '%".addslashes($filter)."%' )";
 				$query = $this->db->query($sql);
 			} else if($option=='SEARCH'){
-				if($phonegroup_id!=''){
-					$sql.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$sql.= " phonegroup_id LIKE '%".$phonegroup_id."%'";
-				};
+				
 				if($phonegroup_nama!=''){
 					$sql.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$sql.= " phonegroup_nama LIKE '%".$phonegroup_nama."%'";
@@ -596,44 +579,24 @@ class M_phonegroup extends Model{
 					$sql.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$sql.= " phonegroup_detail LIKE '%".$phonegroup_detail."%'";
 				};
-				if($phonegroup_creator!=''){
-					$sql.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$sql.= " phonegroup_creator LIKE '%".$phonegroup_creator."%'";
-				};
-				if($phonegroup_date_create!=''){
-					$sql.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$sql.= " phonegroup_date_create LIKE '%".$phonegroup_date_create."%'";
-				};
-				if($phonegroup_update!=''){
-					$sql.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$sql.= " phonegroup_update LIKE '%".$phonegroup_update."%'";
-				};
-				if($phonegroup_date_update!=''){
-					$sql.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$sql.= " phonegroup_date_update LIKE '%".$phonegroup_date_update."%'";
-				};
-				if($phonegroup_revised!=''){
-					$sql.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$sql.= " phonegroup_revised LIKE '%".$phonegroup_revised."%'";
-				};
+				
 				$query = $this->db->query($sql);
 			}
 			return $query->result();
 		}
 		
 		//function  for export to excel
-		function phonegroup_export_excel($phonegroup_id ,$phonegroup_nama ,$phonegroup_detail ,$phonegroup_creator ,$phonegroup_date_create ,$phonegroup_update ,$phonegroup_date_update ,$phonegroup_revised ,$option,$filter){
+		function phonegroup_export_excel($phonegroup_id ,$phonegroup_nama ,$phonegroup_detail ,$phonegroup_creator ,$phonegroup_date_create ,
+										 $phonegroup_update ,$phonegroup_date_update ,$phonegroup_revised ,$option,$filter){
 			//full query
 			$sql="select * from phonegroup";
 			if($option=='LIST'){
 				$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
-				$sql .= " (phonegroup_id LIKE '%".addslashes($filter)."%' OR phonegroup_nama LIKE '%".addslashes($filter)."%' OR phonegroup_detail LIKE '%".addslashes($filter)."%' OR phonegroup_creator LIKE '%".addslashes($filter)."%' OR phonegroup_date_create LIKE '%".addslashes($filter)."%' OR phonegroup_update LIKE '%".addslashes($filter)."%' OR phonegroup_date_update LIKE '%".addslashes($filter)."%' OR phonegroup_revised LIKE '%".addslashes($filter)."%' )";
+				$sql .= " (phonegroup_nama LIKE '%".addslashes($filter)."%' OR 
+						   phonegroup_detail LIKE '%".addslashes($filter)."%' )";
 				$query = $this->db->query($sql);
 			} else if($option=='SEARCH'){
-				if($phonegroup_id!=''){
-					$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
-					$sql.= " phonegroup_id LIKE '%".$phonegroup_id."%'";
-				};
+				
 				if($phonegroup_nama!=''){
 					$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
 					$sql.= " phonegroup_nama LIKE '%".$phonegroup_nama."%'";
@@ -642,26 +605,7 @@ class M_phonegroup extends Model{
 					$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
 					$sql.= " phonegroup_detail LIKE '%".$phonegroup_detail."%'";
 				};
-				if($phonegroup_creator!=''){
-					$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
-					$sql.= " phonegroup_creator LIKE '%".$phonegroup_creator."%'";
-				};
-				if($phonegroup_date_create!=''){
-					$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
-					$sql.= " phonegroup_date_create LIKE '%".$phonegroup_date_create."%'";
-				};
-				if($phonegroup_update!=''){
-					$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
-					$sql.= " phonegroup_update LIKE '%".$phonegroup_update."%'";
-				};
-				if($phonegroup_date_update!=''){
-					$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
-					$sql.= " phonegroup_date_update LIKE '%".$phonegroup_date_update."%'";
-				};
-				if($phonegroup_revised!=''){
-					$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
-					$sql.= " phonegroup_revised LIKE '%".$phonegroup_revised."%'";
-				};
+				
 				$query = $this->db->query($sql);
 			}
 			return $query;

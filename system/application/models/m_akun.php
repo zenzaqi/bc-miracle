@@ -148,7 +148,7 @@ class M_akun extends Model{
 			
 			$this->db->where('akun_id', $akun_id);
 			$this->db->update('akun', $data);
-			$sql="UPDATE akun set akun_revised=(akun_revised+1),akun_aktif='T' where akun_id='".$akun_id."'";
+			/*$sql="UPDATE akun set akun_revised=(akun_revised+1),akun_aktif='T' where akun_id='".$akun_id."'";
 			$this->db->query($sql);
 			
 			$sql="SELECT akun_parent_kode,akun_level FROM akun WHERE akun_id='".$akun_id."'";
@@ -159,7 +159,7 @@ class M_akun extends Model{
 				$data["akun_level"]=$row->akun_level;
 			}
 			
-			$this->db->insert('akun', $data);
+			$this->db->insert('akun', $data);*/
 			
 			return '1';
 		}
