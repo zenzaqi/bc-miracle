@@ -115,6 +115,9 @@ var tindakan_medis_detail_reader;
 var editor_tindakan_medis_detail;
 
 //declare konstant
+
+var today=new Date().format('d-m-Y');
+
 var tmedis_post2db = '';
 var msg = '';
 var pageS=15;
@@ -2468,10 +2471,11 @@ Ext.onReady(function(){
 							defaultType: 'datefield',
 							items: [
 							    {
-									fieldLabel: 'Tanggal Appointment',
+									fieldLabel: 'Tgl App',
 							        name: 'trawat_medis_tglStartAppSearchField',
 							        id: 'trawat_medis_tglStartAppSearchField',
 							        vtype: 'daterange',
+							        format: 'd-m-Y',
 							        endDateField: 'trawat_medis_tglEndAppSearchField' // id of the end date field
 							    }] 
 						},
@@ -2487,6 +2491,8 @@ Ext.onReady(function(){
 							        name: 'trawat_medis_tglEndAppSearchField',
 							        id: 'trawat_medis_tglEndAppSearchField',
 							        vtype: 'daterange',
+							        format: 'd-m-Y',
+							        value : today,
 							        startDateField: 'trawat_medis_tglStartAppSearchField' // id of the end date field
 							    }] 
 						}]},
@@ -2522,12 +2528,12 @@ Ext.onReady(function(){
 		Ext.getCmp('trawat_medis_tglStartAppSearchField').reset();
 		Ext.getCmp('trawat_medis_tglStartAppSearchField').setValue(null);
 		Ext.getCmp('trawat_medis_tglEndAppSearchField').reset();
-		Ext.getCmp('trawat_medis_tglEndAppSearchField').setValue(null);
+		Ext.getCmp('trawat_medis_tglEndAppSearchField').setValue(today);
 	}
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
 	tindakan_medis_searchWindow = new Ext.Window({
-		title: 'tindakan Search',
+		title: 'Pencarian Tindakan Medis',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,
