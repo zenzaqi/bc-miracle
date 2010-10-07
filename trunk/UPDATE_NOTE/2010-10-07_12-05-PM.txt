@@ -1,0 +1,6 @@
+[by zaqi.samrt@gmail.com]
+- New Update
+  o Mapping Kode akun
+    - dgunakan u/ mapping kode2 akun di jurnal
+    - link: ?c=c_akun_map
+    - SQL : 2010-10-07_12-05-PM.sql
