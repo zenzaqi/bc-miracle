@@ -1033,6 +1033,7 @@ Ext.onReady(function(){
 				tpl: trawat_rawat_tpl,
 				itemSelector: 'div.search-item',
 				loadingText: 'Searching...',
+				pageSize:15,
 				triggerAction: 'all',
 				anchor: '95%'
 			})
@@ -1951,6 +1952,7 @@ Ext.onReady(function(){
 			valueField: 'perawatan_value',
 			tpl: rawat_dtjnonmedis_tpl,
 			loadingText: 'Searching...',
+			pageSize:15,
 			hideTrigger:false,
 			itemSelector: 'div.search-item',
 			triggerAction: 'all',
