@@ -209,7 +209,9 @@ class C_member extends Controller {
 		$member_no=str_replace("/(<\/?)(p)([^>]*>)", "",$member_no);
 		$member_no=str_replace("'", '"',$member_no);
 		$member_register=trim(@$_POST["member_register"]);
+		$member_register_end=trim(@$_POST["member_register_end"]);
 		$member_valid=trim(@$_POST["member_valid"]);
+		$member_valid_end=trim(@$_POST["member_valid_end"]);
 		$member_nota_ref=trim(@$_POST["member_nota_ref"]);
 		$member_nota_ref=str_replace("/(<\/?)(p)([^>]*>)", "",$member_nota_ref);
 		$member_nota_ref=str_replace("'", '"',$member_nota_ref);
@@ -226,7 +228,21 @@ class C_member extends Controller {
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$data["data_print"] = $this->m_member->member_print($member_id ,$member_cust ,$member_no ,$member_register ,$member_valid ,$member_nota_ref ,$member_point ,$member_jenis ,$member_status, $member_tglcetak, $member_tglcetak_end, /*$member_tglserahterima,*/ $option,$filter);
+		$data["data_print"] = $this->m_member->member_print($member_id
+															,$member_cust
+															,$member_no
+															,$member_register
+															,$member_register_end
+															,$member_valid
+															,$member_valid_end
+															,$member_nota_ref
+															,$member_point
+															,$member_jenis
+															,$member_status
+															,$member_tglcetak
+															,$member_tglcetak_end
+															, /*$member_tglserahterima,*/ $option
+															,$filter);
 		$print_view=$this->load->view("main/p_member_cetak.php",$data,TRUE);
 		if(!file_exists("print")){
 			mkdir("print");
@@ -247,7 +263,9 @@ class C_member extends Controller {
 		$member_no=str_replace("/(<\/?)(p)([^>]*>)", "",$member_no);
 		$member_no=str_replace("'", '"',$member_no);
 		$member_register=trim(@$_POST["member_register"]);
+		$member_register_end=trim(@$_POST["member_register_end"]);
 		$member_valid=trim(@$_POST["member_valid"]);
+		$member_valid_end=trim(@$_POST["member_valid_end"]);
 		$member_nota_ref=trim(@$_POST["member_nota_ref"]);
 		$member_nota_ref=str_replace("/(<\/?)(p)([^>]*>)", "",$member_nota_ref);
 		$member_nota_ref=str_replace("'", '"',$member_nota_ref);
@@ -264,7 +282,21 @@ class C_member extends Controller {
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$query = $this->m_member->member_export_excel($member_id ,$member_cust ,$member_no ,$member_register ,$member_valid ,$member_nota_ref ,$member_point ,$member_jenis ,$member_status, $member_tglcetak, $member_tglcetak_end, /*$member_tglserahterima,*/ $option,$filter);
+		$query = $this->m_member->member_export_excel($member_id
+													  ,$member_cust
+													  ,$member_no
+													  ,$member_register
+													  ,$member_register_end
+													  ,$member_valid
+													  ,$member_valid_end
+													  ,$member_nota_ref
+													  ,$member_point
+													  ,$member_jenis
+													  ,$member_status
+													  ,$member_tglcetak
+													  ,$member_tglcetak_end
+													  ,/*$member_tglserahterima,*/ $option
+													  ,$filter);
 		
 		to_excel($query,"member"); 
 		echo '1';

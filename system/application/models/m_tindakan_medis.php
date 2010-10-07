@@ -1062,50 +1062,21 @@ class M_tindakan_medis extends Model{
 			$dtrawat_keterangan = $array_dtrawat_keterangan[$i];
 			
 			if(is_numeric($dtrawat_id)){
-				/*$sql="SELECT dtrawat_id,dtrawat_locked,dtrawat_perawatan,dtrawat_petugas1,dtrawat_jam,dtrawat_keterangan FROM tindakan_detail WHERE dtrawat_id='$dtrawat_id'";
-				$rs=$this->db->query($sql);
-				if($rs->num_rows()){
-					$rs_record=$rs->row_array();
-					$dtrawat_locked=$rs_record["dtrawat_locked"];
-					$dtrawat_perawatan_awal=$rs_record["dtrawat_perawatan"];
-					$dtrawat_petugas1_awal=$rs_record["dtrawat_petugas1"];
-					$dtrawat_jam_awal=$rs_record["dtrawat_jam"];
-					$dtrawat_keterangan_awal=$rs_record["dtrawat_keterangan"];
-					/*
-					# ini artinya: record detail tindakan sudah ada di db.tindakan_detail, sehingga yg bisa dilakukan adalah EDITING record detail JIKA UNLOCK
-					1. Check $dtrawat_status, JIKA ='selesai' ==> sudah masuk ke Kasir, JIKA !='selesai' ==> belum masuk ke Kasir manapun
-					2. JIKA $dtrawat_status='selesai' ==> check db.tindakan_detail.dtrawat_locked [1/0]
-					3. JIKA db.tindakan_detail.dtrawat_locked=0 ==> BOLEH di-EDIT
-					4. JIKA $dtrawat_status!='selesai' ==> silakan di-EDIT
-					*/
-					/*if($dtrawat_locked==0 && ($dtrawat_perawatan_awal<>$dtrawat_perawatan || $dtrawat_petugas1_awal<>$dtrawat_petugas1 || $dtrawat_jam_awal<>$dtrawat_jamreservasi || $dtrawat_keterangan_awal<>$dtrawat_keterangan)){
-						//* ini berarti: ada field yg berubah untuk dilakukan editing /
-						$sql="UPDATE tindakan_detail
-							SET dtrawat_perawatan=".$dtrawat_perawatan."
-								,dtrawat_petugas1=".$dtrawat_petugas1."
-								,dtrawat_jam='$dtrawat_jamreservasi'
-								,dtrawat_keterangan='$dtrawat_keterangan'
-								,dtrawat_update='".@$_SESSION[SESSION_USERID]."'
-								,dtrawat_date_update='$datetime_now'
-								,dtrawat_revised=dtrawat_revised+1
-							WHERE dtrawat_id='$dtrawat_id'";
-						$this->db->query($sql);
-						if($i==$size_array){
-							return '1';
-						}
-					}else{
-						if($i==$size_array){
-							return '1';
-						}
-					}
-				}else{
+				// Data sudah masuk di db.tindakan_detail, sehingga yang diperbolehkan adalah Editing dengan syarat $dtrawat_status="datang"
+				$sqlu = "UPDATE tindakan_detail
+					SET dtrawat_perawatan='".$dtrawat_perawatan."'
+						,dtrawat_petugas1='".$dtrawat_petugas1."'
+						,dtrawat_jam='".$dtrawat_jamreservasi."'
+						,dtrawat_keterangan='".$dtrawat_keterangan."'
+					WHERE dtrawat_id='".$dtrawat_id."'
+						AND dtrawat_status<>'selesai'";
+				$this->db->query($sqlu);
+				if($this->db->affected_rows()>-1){
 					if($i==$size_array){
-						return '1';
+						return 1;
 					}
-				}*/
-				if($i==$size_array){
-					return 1;
 				}
+				
 			}else{
 				//* data baru /
 				if($dtrawat_petugas1==''){
@@ -1818,25 +1789,25 @@ class M_tindakan_medis extends Model{
 			//$query = "SELECT vu_tindakan_test.*, IF((vu_cust_punya_paket_test.sapaket_id AND vu_cust_punya_paket_test.sapaket_sisa_item<>0),'ada','tidak_ada') AS cust_punya_paket, vu_cust_punya_paket_test.* FROM vu_tindakan_test LEFT JOIN vu_cust_punya_paket_test ON(vu_cust_punya_paket_test.ppaket_cust=vu_tindakan_test.trawat_cust AND vu_cust_punya_paket_test.sapaket_item=vu_tindakan_test.dtrawat_perawatan AND vu_cust_punya_paket_test.sapaket_jenis_item='perawatan' AND vu_cust_punya_paket_test.sapaket_sisa_item>0) WHERE (vu_tindakan_test.kategori_nama='Medis' OR vu_tindakan_test.dtrawat_petugas2='0')";
 			$query = "SELECT * FROM vu_tindakan WHERE (kategori_nama='Medis' OR kategori_nama ='Surgery')";
 			
-			if($trawat_id!=''){
+			/*if($trawat_id!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " trawat_id LIKE '%".$trawat_id."%'";
-			};
+				$query.= " vu_tindakan.trawat_id LIKE '%".$trawat_id."%'";
+			};*/
 			if($trawat_cust!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " trawat_cust LIKE '%".$trawat_cust."%'";
+				$query.= " vu_tindakan.trawat_cust = '".$trawat_cust."'";
 			};
 			if($trawat_rawat!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " dtrawat_perawatan LIKE '%".$trawat_rawat."%'";
+				$query.= " vu_tindakan.dtrawat_perawatan = '".$trawat_rawat."'";
 			};
 			if($trawat_dokter!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " dtrawat_petugas1 LIKE '%".$trawat_dokter."%'";
+				$query.= " vu_tindakan.dtrawat_petugas1 = '".$trawat_dokter."'";
 			};
 			if($trawat_status!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " dtrawat_status LIKE '%".$trawat_status."%'";
+				$query.= " vu_tindakan.dtrawat_status = '".$trawat_status."'";
 			};
 			if($trawat_tglapp_start!='' && $trawat_tglapp_end!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";

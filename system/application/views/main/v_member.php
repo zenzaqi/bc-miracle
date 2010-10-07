@@ -1168,7 +1168,7 @@ Ext.onReady(function(){
 			member_jenis	:	member_jenis_search, 
 			member_status	:	member_status_search, 
 			member_tglcetak	:	member_tglcetak_search_date, 
-			member_tglcetak_end	:	member_tglcetak_end_search_date,
+			member_tglcetak_end	:	member_tglcetak_end_search_date
 			//member_tglserahterima	:	member_tglserahterima_search_date, 
 			//member_tglserahterima_end	:	member_tglserahterima_end_search_date,
 		};
@@ -1340,132 +1340,71 @@ Ext.onReady(function(){
 		fieldLabel: 's/d',
 		format : 'd-m-Y'	
 	});
-
-	/* Identify  member_tglserahterima Search Field */
-/*	member_tglserahterimaSearchField= new Ext.form.DateField({
-		id: 'member_tglserahterimaSearchField',
-		fieldLabel: 'Tgl Penyerahan',
-		format : 'Y-m-d'
-	});
-	member_tglserahterima_endSearchField= new Ext.form.DateField({
-		id: 'member_tglserahterima_endSearchField',
-		fieldLabel: 's/d',
-		format : 'd-m-Y'	
-	});
-*/	
-	/* Function for retrieve search Form Panel */
+	
+	/* Search Form*/
 	member_searchForm = new Ext.FormPanel({
 		labelAlign: 'left',
+		labelWidth: 100,
 		bodyStyle:'padding:5px',
 		autoHeight:true,
-		width: 600,        
-		items: [{
-			layout:'column',
-			border:false,
-			items:[
+		width: 400,
+		layout: 'form',
+		items: [member_custSearchField, 
+			member_noSearchField,
+			member_jenisSearchField,
+			member_statusSearchField,
 			{
-				columnWidth:1,
-				layout: 'form',
+				layout:'column',
 				border:false,
-				items: [member_custSearchField, 
-						member_noSearchField, 
-						{
-							layout:'column',
-							border:false,
-							items:[
-					        {
-								columnWidth:0.45,
-								layout: 'form',
-								border:false,
-								defaultType: 'datefield',
-								items: [member_registerSearchField] 
-							},
-							{
-								columnWidth:0.30,
-								layout: 'form',
-								labelWidth:30,
-								border:false,
-								defaultType: 'datefield',
-								items: [member_register_endSearchField] 
-							}]
-						},
-						{
-							layout:'column',
-							border:false,
-							items:[
-					        {
-								columnWidth:0.45,
-								layout: 'form',
-								border:false,
-								defaultType: 'datefield',
-								items: [member_validSearchField] 
-							},
-							{
-								columnWidth:0.30,
-								layout: 'form',
-								labelWidth:30,
-								border:false,
-								defaultType: 'datefield',
-								items: [member_valid_endSearchField] 
-							}]
-						},
-						member_jenisSearchField,
-						member_statusSearchField,
-						{
-							layout:'column',
-							border:false,
-							items:[
-					        {
-								columnWidth:0.45,
-								layout: 'form',
-								border:false,
-								defaultType: 'datefield',
-								items: [member_tglcetakSearchField] 
-							},
-							{
-								columnWidth:0.30,
-								layout: 'form',
-								labelWidth:30,
-								border:false,
-								defaultType: 'datefield',
-								items: [member_tglcetak_endSearchField] 
-							}]
-						}
-/*						{
-							layout:'column',
-							border:false,
-							items:[
-					        {
-								columnWidth:0.45,
-								layout: 'form',
-								border:false,
-								defaultType: 'datefield',
-								items: [member_tglserahterimaSearchField] 
-							},
-							{
-								columnWidth:0.30,
-								layout: 'form',
-								labelWidth:30,
-								border:false,
-								defaultType: 'datefield',
-								items: [member_tglserahterima_endSearchField] 
-							}]
-						}
-*/						
-//						member_registerSearchField, 
-//						member_validSearchField, 
-//						member_nota_refSearchField
-						] 
-			}
-/*			,
+				items:[
+					{
+						layout: 'form',
+						border: false,
+						items:[member_registerSearchField]
+					},{
+						 layout: 'form',
+						 border: false,
+						 labelWidth: 15,
+						 bodyStyle:'padding-left:3px',
+						 labelSeparator: ' ', 
+						 items:[member_register_endSearchField]
+					}]
+			},
 			{
-				columnWidth:0.5,
-				layout: 'form',
+				layout:'column',
 				border:false,
-				items: [member_jenisSearchField, member_statusSearchField, member_tglserahterimaSearchField] 
+				items:[
+					{
+						layout: 'form',
+						border: false,
+						items:[member_validSearchField]
+					},{
+						 layout: 'form',
+						 border: false,
+						 labelWidth: 15,
+						 bodyStyle:'padding-left:3px',
+						 labelSeparator: ' ', 
+						 items:[member_valid_endSearchField]
+					}]
+			},
+			{
+				layout:'column',
+				border:false,
+				items:[
+					{
+						layout: 'form',
+						border: false,
+						items:[member_tglcetakSearchField]
+					},{
+						 layout: 'form',
+						 border: false,
+						 labelWidth: 15,
+						 bodyStyle:'padding-left:3px',
+						 labelSeparator: ' ', 
+						 items:[member_tglcetak_endSearchField]
+					}]
 			}
-*/			]
-		}]
+		]
 		,
 		buttons: [{
 				text: 'Search',
@@ -1478,7 +1417,7 @@ Ext.onReady(function(){
 			}
 		]
 	});
-    /* End of Function */ 
+	/* End Search Form */
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
 	member_searchWindow = new Ext.Window({
@@ -1657,7 +1596,9 @@ Ext.onReady(function(){
 		var member_cust_print=null;
 		var member_no_print=null;
 		var member_register_print_date="";
+		var member_register_end_print_date="";
 		var member_valid_print_date="";
+		var member_valid_end_print_date="";
 		var member_nota_ref_print=null;
 		var member_point_print=null;
 		var member_jenis_print=null;
@@ -1671,7 +1612,9 @@ Ext.onReady(function(){
 		if(member_DataStore.baseParams.member_cust!==null){member_cust_print = member_DataStore.baseParams.member_cust;}
 		if(member_DataStore.baseParams.member_no!==null){member_no_print = member_DataStore.baseParams.member_no;}
 		if(member_DataStore.baseParams.member_register!==""){member_register_print_date = member_DataStore.baseParams.member_register;}
+		if(member_DataStore.baseParams.member_register_end!==""){member_register_end_print_date = member_DataStore.baseParams.member_register_end;}
 		if(member_DataStore.baseParams.member_valid!==""){member_valid_print_date = member_DataStore.baseParams.member_valid;}
+		if(member_DataStore.baseParams.member_valid_end!==""){member_valid_end_print_date = member_DataStore.baseParams.member_valid_end;}
 		if(member_DataStore.baseParams.member_nota_ref!==null){member_nota_ref_print = member_DataStore.baseParams.member_nota_ref;}
 		if(member_DataStore.baseParams.member_point!==null){member_point_print = member_DataStore.baseParams.member_point;}
 		if(member_DataStore.baseParams.member_jenis!==null){member_jenis_print = member_DataStore.baseParams.member_jenis;}
@@ -1689,8 +1632,10 @@ Ext.onReady(function(){
 			//if we are doing advanced search, use this
 			member_cust : member_cust_print,
 			member_no : member_no_print,
-		  	member_register : member_register_print_date, 
-		  	member_valid : member_valid_print_date, 
+		  	member_register : member_register_print_date,
+			member_register_end : member_register_end_print_date, 
+		  	member_valid : member_valid_print_date,
+			member_valid_end : member_valid_end_print_date, 
 			member_nota_ref : member_nota_ref_print,
 			member_point : member_point_print,
 			member_jenis : member_jenis_print,
@@ -1738,7 +1683,9 @@ Ext.onReady(function(){
 		var member_cust_2excel=null;
 		var member_no_2excel=null;
 		var member_register_2excel_date="";
+		var member_register_end_2excel_date="";
 		var member_valid_2excel_date="";
+		var member_valid_end_2excel_date="";
 		var member_nota_ref_2excel=null;
 		var member_point_2excel=null;
 		var member_jenis_2excel=null;
@@ -1752,7 +1699,9 @@ Ext.onReady(function(){
 		if(member_DataStore.baseParams.member_cust!==null){member_cust_2excel = member_DataStore.baseParams.member_cust;}
 		if(member_DataStore.baseParams.member_no!==null){member_no_2excel = member_DataStore.baseParams.member_no;}
 		if(member_DataStore.baseParams.member_register!==""){member_register_2excel_date = member_DataStore.baseParams.member_register;}
+		if(member_DataStore.baseParams.member_register_end!==""){member_register_end_2excel_date = member_DataStore.baseParams.member_register_end;}
 		if(member_DataStore.baseParams.member_valid!==""){member_valid_2excel_date = member_DataStore.baseParams.member_valid;}
+		if(member_DataStore.baseParams.member_valid_end!==""){member_valid_end_2excel_date = member_DataStore.baseParams.member_valid_end;}
 		if(member_DataStore.baseParams.member_nota_ref!==null){member_nota_ref_2excel = member_DataStore.baseParams.member_nota_ref;}
 		if(member_DataStore.baseParams.member_point!==null){member_point_2excel = member_DataStore.baseParams.member_point;}
 		if(member_DataStore.baseParams.member_jenis!==null){member_jenis_2excel = member_DataStore.baseParams.member_jenis;}
@@ -1770,8 +1719,10 @@ Ext.onReady(function(){
 			//if we are doing advanced search, use this
 			member_cust : member_cust_2excel,
 			member_no : member_no_2excel,
-		  	member_register : member_register_2excel_date, 
-		  	member_valid : member_valid_2excel_date, 
+		  	member_register : member_register_2excel_date,
+			member_register_end : member_register_end_2excel_date, 
+		  	member_valid : member_valid_2excel_date,
+			member_valid_end : member_valid_end_2excel_date, 
 			member_nota_ref : member_nota_ref_2excel,
 			member_point : member_point_2excel,
 			member_jenis : member_jenis_2excel,
