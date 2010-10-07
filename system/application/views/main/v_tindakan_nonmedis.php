@@ -115,6 +115,8 @@ var tindakan_nonmedis_detail_reader;
 var editor_tindakan_nonmedis_detail;
 
 //declare konstant
+var today=new Date().format('d-m-Y');
+
 var tnonmedis_post2db = '';
 var msg = '';
 var pageS=15;
@@ -1037,7 +1039,7 @@ Ext.onReady(function(){
 			disabled:true,
 			handler: tindakan_nonmedis_confirm_delete   // Confirm before deleting
 		}, '-', {
-			text: 'Search',
+			text: 'Adv Search',
 			tooltip: 'Advanced Search',
 			iconCls:'icon-search',
 			handler: display_form_search_window 
@@ -1900,21 +1902,22 @@ Ext.onReady(function(){
 						border:false,
 						items:[
 				        {
-							columnWidth:0.38,
+							columnWidth:0.40,
 							layout: 'form',
 							border:false,
 							defaultType: 'datefield',
 							items: [
 							    {
-									fieldLabel: 'Tanggal Appointment',
+									fieldLabel: 'Tgl App',
 							        name: 'trawat_nonmedis_tglStartAppSearchField',
 							        id: 'trawat_nonmedis_tglStartAppSearchField',
 							        vtype: 'daterange',
+									format: 'd-m-Y',
 							        endDateField: 'trawat_nonmedis_tglEndAppSearchField' // id of the end date field
 							    }] 
 						},
 						{
-							columnWidth:0.55,
+							columnWidth:0.40,
 							layout: 'form',
 							labelWidth:20,
 							border:false,
@@ -1925,6 +1928,8 @@ Ext.onReady(function(){
 							        name: 'trawat_nonmedis_tglEndAppSearchField',
 							        id: 'trawat_nonmedis_tglEndAppSearchField',
 							        vtype: 'daterange',
+							        format: 'd-m-Y',
+									value : today,
 							        startDateField: 'trawat_nonmedis_tglStartAppSearchField' // id of the end date field
 							    }] 
 						}]},
@@ -1957,12 +1962,12 @@ Ext.onReady(function(){
 		Ext.getCmp('trawat_nonmedis_tglStartAppSearchField').reset();
 		Ext.getCmp('trawat_nonmedis_tglStartAppSearchField').setValue(null);
 		Ext.getCmp('trawat_nonmedis_tglEndAppSearchField').reset();
-		Ext.getCmp('trawat_nonmedis_tglEndAppSearchField').setValue(null);
+		Ext.getCmp('trawat_nonmedis_tglEndAppSearchField').setValue(today);
 	}
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
 	tindakan_nonmedis_searchWindow = new Ext.Window({
-		title: 'tindakan_nonmedis Search',
+		title: 'Pencarian Tindakan Non Medis',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,
