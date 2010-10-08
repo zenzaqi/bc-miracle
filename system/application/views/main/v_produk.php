@@ -442,6 +442,7 @@ Ext.onReady(function(){
 		if(produkListEditorGrid.selModel.getCount() == 1) {
 			produk_set_form();
 			post2db='UPDATE';
+			cbo_produk_racik_satuanDataStore.load();
 			satuan_konversi_DataStore.load({
 			params: {master_id: get_pk_id(), start:0, limit:15},
 			callback : function(opts, success, response){
@@ -653,6 +654,30 @@ Ext.onReady(function(){
 		sortInfo:{field: 'produk_satuan_display', direction: "ASC"}
 	});
     
+	cbo_produk_racik_satuanDataStore = new Ext.data.Store({
+		id: 'cbo_produk_racik_satuanDataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_produk&m=get_satuan_by_produk_racik_list', 
+			method: 'POST'
+		}),baseParams: {start: 0, limit: 15 },
+			reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'satuan_id'
+		},[
+			{name: 'djproduk_satuan_value', type: 'int', mapping: 'satuan_id'},
+			{name: 'djproduk_satuan_nama', type: 'string', mapping: 'satuan_nama'},
+			{name: 'djproduk_satuan_nilai', type: 'float', mapping: 'konversi_nilai'},
+			{name: 'djproduk_satuan_display', type: 'string', mapping: 'satuan_kode'},
+			{name: 'djproduk_satuan_default', type: 'string', mapping: 'konversi_default'},
+			{name: 'djproduk_satuan_harga', type: 'float', mapping: 'produk_harga'}
+		]),
+		sortInfo:{field: 'djproduk_satuan_default', direction: "DESC"}
+	});
+	
+	
+	
+	
   	/* Function for Identify of Window Column Model */
 	produk_ColumnModel = new Ext.grid.ColumnModel(
 		[/*{
@@ -1084,6 +1109,16 @@ Ext.onReady(function(){
 		}
 	});
 	
+	var combo_satuan_produk_racik=new Ext.form.ComboBox({
+		store: cbo_produk_racik_satuanDataStore,
+		mode:'local',
+		typeAhead: true,
+		displayField: 'djproduk_satuan_display',
+		valueField: 'djproduk_satuan_value',
+		triggerAction: 'all',
+		anchor: '95%'
+	});
+	
 	
 	/* Identify  produk_kategori Field */
 	produk_kontribusiField= new Ext.form.ComboBox({
@@ -1468,14 +1503,14 @@ Ext.onReady(function(){
 			dataIndex: 'pracikan_satuan',
 			width: 60,
 			sortable: true,
-			/*editor: combo_dproduk_satuan,
-			renderer: Ext.util.Format.comboRenderer(combo_dproduk_satuan)*/
-			readOnly: true,
+			editor: combo_satuan_produk_racik,
+			renderer: Ext.util.Format.comboRenderer(combo_satuan_produk_racik)
+			/*readOnly: true,
 			renderer: function(v, params, record){
 				j=cbo_rawat_produkDataStore.findExact('rawat_produk_value',record.data.pracikan_produk,0);
 				if(j>-1)
 					return cbo_rawat_produkDataStore.getAt(j).data.rawat_produk_satuan;
-			}
+			}*/
 		},
 		{
 			header: '<div align="center">Jumlah</div>',
@@ -2389,6 +2424,68 @@ Ext.onReady(function(){
 		});
 	}
 	/*End of Function */
+	
+	
+	dproduk_idField=new Ext.form.NumberField();
+	
+	combo_rawat_produk.on('select',function(){
+		var j=cbo_rawat_produkDataStore.findExact('rawat_produk_value',combo_rawat_produk.getValue(),0);
+		if(cbo_rawat_produkDataStore.getCount()){
+            //Untuk me-lock screen sementara, menunggu data selesai di-load ==> setelah selesai di-load, hide Ext.MessageBox.show() di bawah ini
+            //master_jual_produk_createForm.setDisabled(true);
+            
+            dproduk_idField.setValue(cbo_rawat_produkDataStore.getAt(j).data.rawat_produk_value);
+			//dharga_defaultField.setValue(cbo_rawat_produkDataStore.getAt(j).data.dproduk_produk_harga);
+			//var djumlah_diskon = 0;
+			
+			
+			cbo_produk_racik_satuanDataStore.load({
+				params: {produk_id:dproduk_idField.getValue()},
+				callback: function(opts, success, response){
+					if(success){
+                       // djumlah_beli_produkField.setValue(1);
+                        var nilai_default=0;
+                        var st=cbo_produk_racik_satuanDataStore.findExact('djproduk_satuan_default','true',0);
+                        if(cbo_produk_racik_satuanDataStore.getCount()>=0){
+                            nilai_default=cbo_produk_racik_satuanDataStore.getAt(st).data.djproduk_satuan_nilai;
+                            if(nilai_default===1){
+                                //temp_konv_nilai.setValue(nilai_default);
+                                //dharga_konversiField.setValue(nilai_default*dharga_defaultField.getValue());
+                               // dsub_totalField.setValue(djumlah_beli_produkField.getValue()*(nilai_default*dharga_defaultField.getValue()));
+                               // dsub_total_netField.setValue(((100-djumlah_diskon)/100)*djumlah_beli_produkField.getValue()*(nilai_default*dharga_defaultField.getValue()));
+                               // master_jual_produk_createForm.setDisabled(false);
+                            }else if(nilai_default!==1){
+                                //temp_konv_nilai.setValue(nilai_default*(1/nilai_default));
+                               // dharga_konversiField.setValue((nilai_default*(1/nilai_default))*dharga_defaultField.getValue());
+                               // dsub_totalField.setValue(djumlah_beli_produkField.getValue()*((nilai_default*(1/nilai_default))*dharga_defaultField.getValue()));
+                                //dsub_total_netField.setValue(((100-djumlah_diskon)/100)*djumlah_beli_produkField.getValue()*((nilai_default*(1/nilai_default))*dharga_defaultField.getValue()));
+                               // master_jual_produk_createForm.setDisabled(false);
+                            }else{
+                                //master_jual_produk_createForm.setDisabled(false);
+                            }
+                            combo_satuan_produk_racik.setValue(cbo_produk_racik_satuanDataStore.getAt(st).data.djproduk_satuan_value);
+                        }else{
+                            //master_jual_produk_createForm.setDisabled(false);
+                        }
+					}else{
+                        //master_jual_produk_createForm.setDisabled(false);
+                    }
+				}
+			});
+			
+		}
+	});
+	
+	
+	
+	
+	
+	combo_satuan_produk_racik.on('focus', function(){
+		cbo_produk_racik_satuanDataStore.setBaseParam('produk_id',combo_rawat_produk.getValue());
+		cbo_produk_racik_satuanDataStore.load();
+	});
+	
+	
 	
 });
 	--></script>

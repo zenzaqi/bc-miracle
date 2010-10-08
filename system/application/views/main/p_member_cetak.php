@@ -18,7 +18,7 @@
 <title>Kartu Member Cetak</title>
 <link rel='stylesheet' type='text/css' href='../assets/modules/main/css/printstyle.css'/>
 </head>
-<body onload="window.print();window.close();">
+<body onload="window.print();">
 <table summary='Inbox List'>
 	<caption>Kartu Member Cetak</caption>
 	<thead><tr><th scope='col'>No</th><th scope='col'>Customer</th><th scope='col'>No Member</th><th scope='col'>Tgl Daftar</th><th scope='col'>Tgl Valid</th><th scope='col'>Jenis</th></tr></thead>

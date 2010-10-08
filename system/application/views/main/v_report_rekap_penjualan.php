@@ -434,7 +434,7 @@ Ext.onReady(function(){
 		}),
 		mode: 'local',
 		editable:false,
-		emptyText: 'Produk',
+		emptyText: 'Penjualan Produk',
 		displayField: 'jenis_display',
 		valueField: 'jenis_value',
 		width: 200,
