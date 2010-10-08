@@ -13,7 +13,7 @@ html,body,table,tr,td{
 }
 </style>
 </head>
-<body onload="window.print();window.close()">
+<body onload="window.print();">
 <table width="350px" border="0px" cellpadding="0px" cellspacing="0px">
 	<tr>
 		<td height="100px" colspan="2">
@@ -35,44 +35,57 @@ html,body,table,tr,td{
 	</tr>
 	<tr>
 	  <td height="430px" valign="top" colspan="2">
-	  <table border="0" cellspacing="0" cellpadding="0">
+	  <table border="1" cellspacing="0" cellpadding="0">
 	  	<?php 
+		if ($detail_resepdokter != '')
+		{
 		$i=0;
 		?>
-		<tr><td colspan="3">
-		<?
-		//print "<b><font size=medium> R/ </font></b>";
-		?></td></tr>
-		<tr><td align="center"><b>Nama</td><td align="center"><b>Satuan</td><td align="center"><b>Jumlah</td></tr>
+		<tr>
+			<td colspan="3">
+			<?
+			//print "<b><font size=medium> R/ </font></b>";
+			?></td>
+		</tr>
+		<tr>
+			<td align="center"></td><td align="center"></td><td align="center"></td>
+		</tr>
 		<?foreach($detail_resepdokter as $list => $row) { $i+=1;?>
         <tr>
-          <td height="20px" width="250px">&nbsp;<?=$i;?>.&nbsp; <?=$row->produk_nama;?></td>
-		  <td height="20px" width="60px"><?=$row->satuan_nama;?></td>
+          <td height="20px" width="250px"> <?=$row->produk_nama;?></td>
 		  <td height="20px" width="40px" align="right"><?=$row->dresepl_jumlah;?></td>
+		  <td height="20px" width="60px"><?=$row->satuan_nama;?></td>
         </tr>
 		<?php }?>
 		<tr>
 			<td colspan="3">
-				<hr>
+			<br>
 			</td>
 		</tr>
 		
 		<?php
+		}else
+			print ("ngga masuk");
 		$i=0;
 		?>
 		<tr><td colspan="3">
 		<?
 		print "<b><font size=medium> R/ </font></b>";
 		?></td></tr>
-		<tr><td align="center"><b>Nama</td><td align="center"><b>Satuan</td><td align="center"><b>Jumlah</td></tr>
+		<tr><td align="center"></td><td align="center"></td><td align="center"></td></tr>
 		<?
 		foreach($detail_resepdokter_tambahan as $list => $row) { $i+=1;?>
         <tr>
-			<td height="20px" width="250x"> &nbsp;<?=$i;?>.&nbsp; <?=$row->dresept_tambahan;?></td>
-			<td height="20px" width="60px"><?=$row->dresept_satuan;?></td>
+			<td height="20px" width="250x"> <?=$row->dresept_tambahan;?></td>
 			<td height="20px" width="40px" align="right"><?=$row->dresept_jumlah;?></td>
+			<td height="20px" width="60px"><?=$row->dresept_satuan;?></td>
 		</tr>
 		<?php }?>
+		
+	
+		
+		
+		
       </table>
 	  </td>
   </tr>

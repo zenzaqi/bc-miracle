@@ -71,12 +71,44 @@ class C_resep_dokter extends Controller {
 	}
 	
 	function get_produk_list(){
+	
+		/*$query = isset($_POST['query']) ? $_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		$paket_id = isset($_POST['paket_id']) ? @$_POST['paket_id'] : @$_GET['paket_id'];
+		$result = $this->m_resep_dokter->get_produk_list($query,$start,$end);
+		echo $result;*/
+	
+		$query = isset($_POST['query']) ? @$_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? @$_POST['start'] : @$_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? @$_POST['limit'] : @$_GET['limit']);
+		$master_id = (integer) (isset($_POST['master_id']) ? @$_POST['master_id'] : @$_GET['master_id']);
+		$task = isset($_POST['task']) ? @$_POST['task'] : @$_GET['task'];
+		$selected_id = isset($_POST['selected_id']) ? @$_POST['selected_id'] : @$_GET['selected_id'];
+		$produk_id = isset($_POST['produk_id']) ? @$_POST['produk_id'] : @$_GET['produk_id'];
+		if($task=='detail')
+			$result=$this->m_resep_dokter->get_produk_detail_list($master_id,$query,$start,$end);
+		elseif($task=='list')
+			$result=$this->m_resep_dokter->get_produk_list($query,$start,$end);
+		elseif($task=='selected')
+			$result=$this->m_resep_dokter->get_produk_selected_list($master_id, $selected_id,$query,$start,$end);
+		elseif($task=='racikan')
+			$result=$this->m_resep_dokter->get_produk_racikan_list_by_produk_id($produk_id,$query,$start,$end);
+		echo $result;
+	
+	
+	}
+	
+	function get_produk_racikan_list(){
 		$query = isset($_POST['query']) ? $_POST['query'] : "";
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_resep_dokter->get_produk_list($query,$start,$end);
+		$produk_id = isset($_POST['produk_id']) ? @$_POST['produk_id'] : @$_GET['produk_id'];
+		$result = $this->m_resep_dokter->get_produk_racikan_list($query,$start,$end);
 		echo $result;
 	}
+	
+	
 	
 	function get_paket_list(){
 		$query = isset($_POST['query']) ? $_POST['query'] : "";
@@ -87,18 +119,10 @@ class C_resep_dokter extends Controller {
 	}
 	
 	
-	function get_satuan_list(){
-		$task = isset($_POST['task']) ? @$_POST['task'] : @$_GET['task'];
-		$selected_id = isset($_POST['selected_id']) ? @$_POST['selected_id'] : @$_GET['selected_id'];
-		$master_id = (integer) (isset($_POST['master_id']) ? @$_POST['master_id'] : @$_GET['master_id']);
-		
-		if($task=='detail')
-			$result=$this->m_resep_dokter->get_satuan_detail_list($master_id);
-		elseif($task=='produk')
-			$result=$this->m_resep_dokter->get_satuan_produk_list($selected_id);
-		elseif($task=='selected')
-			$result=$this->m_resep_dokter->get_satuan_selected_list($selected_id);
-			
+	function get_satuan_bydrl_list(){
+		$query = (integer) (isset($_POST['query']) ? $_POST['query'] : 0);
+		$produk_id = (integer) (isset($_POST['produk_id']) ? $_POST['produk_id'] : 0);
+		$result = $this->m_resep_dokter->get_satuan_bydrl_list($query,$produk_id);
 		echo $result;
 	}
 	
@@ -112,6 +136,17 @@ class C_resep_dokter extends Controller {
 		$result=$this->m_resep_dokter->detail_resepdokter_lepasan_list($master_id,$query,$start,$end);
 		echo $result;
 	}
+	
+	
+	function master_kombinasi_list(){
+		$query = isset($_POST['query']) ? $_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		$master_id = (integer) (isset($_POST['master_id']) ? $_POST['master_id'] : $_GET['master_id']);
+		$result=$this->m_resep_dokter->master_kombinasi_list($master_id,$query,$start,$end);
+		echo $result;
+	}
+	
 	
 	function detail_resepdokter_kombinasi_list(){
 		$query = isset($_POST['query']) ? $_POST['query'] : "";
@@ -147,16 +182,40 @@ class C_resep_dokter extends Controller {
 		echo $result;
 	}
 	
-	function resepdokter_detail_kombinasi_insert(){
-		$dresepk_id=trim(@$_POST["dresepk_id"]);
-		$dresepk_master=trim(@$_POST["dresepk_master"]);
-		$dresepk_paket=trim(@$_POST["dresepk_paket"]);
-		//$dresepl_tambahan=trim(@$_POST["dresepl_tambahan"]);
+	
+	
+	function resepdokter_master_kombinasi_insert(){
+		$rkombinasi_id=trim(@$_POST["rkombinasi_id"]);
+		$rkombinasi_master=trim(@$_POST["rkombinasi_master"]);
+		$rkombinasi_produk=trim(@$_POST["rkombinasi_produk"]);
 		$cetak=trim(@$_POST['cetak']);
 		$count=trim(@$_POST['count']);
 		$dcount=trim(@$_POST['dcount']);
 
-		$result=$this->m_resep_dokter->resepdokter_detail_kombinasi_insert($dresepk_id ,$dresepk_master ,$dresepk_paket, $cetak, $count, $dcount);
+		$result=$this->m_resep_dokter->resepdokter_master_kombinasi_insert($rkombinasi_id ,$rkombinasi_master ,$rkombinasi_produk, $cetak, $count, $dcount);
+		echo $result;
+	}
+	
+	
+	
+	function resepdokter_detail_kombinasi_insert(){
+		$dresepk_id=trim(@$_POST["dresepk_id"]);
+		$dresepk_master=trim(@$_POST["dresepk_master"]);
+		$dresepk_resepmaster=trim(@$_POST["dresepk_resepmaster"]);
+		$dresepk_produk=trim(@$_POST["dresepk_produk"]);
+		$dresepk_satuan=trim(@$_POST["dresepk_satuan"]);
+		$dresepk_jumlah=trim(@$_POST["dresepk_jumlah"]);
+		$cetak=trim(@$_POST['cetak']);
+		$count=trim(@$_POST['count']);
+		$dcount=trim(@$_POST['dcount']);
+		
+		$array_dresepk_id = json_decode(stripslashes($dresepk_id));
+		$array_dresepk_produk = json_decode(stripslashes($dresepk_produk));
+		$array_dresepk_satuan = json_decode(stripslashes($dresepk_satuan));
+		$array_dresepk_jumlah = json_decode(stripslashes($dresepk_jumlah));
+		
+
+		$result=$this->m_resep_dokter->resepdokter_detail_kombinasi_insert($array_dresepk_id ,$dresepk_master , $dresepk_resepmaster, $array_dresepk_produk, $array_dresepk_satuan, $array_dresepk_jumlah, $cetak, $count, $dcount);
 		echo $result;
 	}
 	
@@ -184,6 +243,12 @@ class C_resep_dokter extends Controller {
 		$result=$this->m_resep_dokter->detail_resepdokter_lepasan_purge($master_id);
 	}
 	
+	function master_resepdokter_kombinasi_purge(){
+		$master_id = (integer) (isset($_POST['master_id']) ? $_POST['master_id'] : $_GET['master_id']);
+		$result=$this->m_resep_dokter->master_resepdokter_kombinasi_purge($master_id);
+	}
+	
+	
 	function detail_resepdokter_kombinasi_purge(){
 		$master_id = (integer) (isset($_POST['master_id']) ? $_POST['master_id'] : $_GET['master_id']);
 		$result=$this->m_resep_dokter->detail_resepdokter_kombinasi_purge($master_id);
@@ -193,6 +258,13 @@ class C_resep_dokter extends Controller {
 		$master_id = (integer) (isset($_POST['master_id']) ? $_POST['master_id'] : $_GET['master_id']);
 		$result=$this->m_resep_dokter->detail_resepdokter_tambahan_purge($master_id);
 	}
+	
+	function get_detail_racikan_by_produk_id(){
+		$id_racikan = isset($_POST['id_racikan']) ? @$_POST['id_racikan'] : "";
+		$result=$this->m_resep_dokter->get_detail_racikan_by_produk_id($id_racikan);
+		echo $result;
+	}
+	
 	
 	
 	//event handler action
@@ -374,33 +446,56 @@ class C_resep_dokter extends Controller {
 
 		$result = $this->m_resep_dokter->print_paper($resep_id);
 		$result2 = $this->m_resep_dokter->print_paper2($resep_id);
+		$result_racikan = $this->m_resep_dokter->print_paper_racikan($resep_id);
+		$result_data = $this->m_resep_dokter->print_paper_data($resep_id);
 		
-		$iklan = $this->m_resep_dokter->iklan();
-		$rs=$result->row();
-		$rs2=$result2->row();
-		$rsiklan=$iklan->row();
-		
+		//$iklan = $this->m_resep_dokter->iklan();
+		$rs_data = $result_data->row();
+		if ($result->row() != null)
+			$rs=$result->row();
+		if ($result2->row() != null)
+			$rs2=$result2->row();
+		if ($result_racikan->row() != null)
+			$rs_racikan = $result_racikan->row();
+
+		//$rsiklan=$iklan->row();
+
 		$detail_resepdokter=$result->result();
 		$detail_resepdokter_tambahan=$result2->result();
+		$detail_resepdokter_racikan=$result_racikan->result();
+		$detail_resepdokter_data=$result_data->result();
 		
-		$data['karyawan_nama']=$rs->karyawan_nama;
-		$data['karyawan_sip']=$rs->karyawan_sip;
-		$data['cust_no']=$rs->cust_no;
-		$data['cust_nama']=$rs->cust_nama;
-		$data['cust_alamat']=$rs->cust_alamat;
-		$data['iklantoday_keterangan']=$rsiklan->iklantoday_keterangan;
-		$data['resep_tanggal']=date("d-m-Y",strtotime($rs->resep_tanggal));
-		$data['resep_no']=$rs->resep_no;
-		$data['produk_nama']=$rs->produk_nama;
-		$data['satuan_nama']=$rs->satuan_nama;
-		$data['dresepl_jumlah']=$rs->dresepl_jumlah;
+		$data['karyawan_nama']=$rs_data->karyawan_nama;
+		$data['karyawan_sip']=$rs_data->karyawan_sip;
+		$data['cust_no']=$rs_data->cust_no;
+		$data['cust_nama']=$rs_data->cust_nama;
+		$data['cust_alamat']=$rs_data->cust_alamat;
+		$data['resep_tanggal']=date("d-m-Y",strtotime($rs_data->resep_tanggal));
+		$data['resep_no']=$rs_data->resep_no;
 		
-		$data['dresept_tambahan']=$rs2->dresept_tambahan;
-		$data['dresept_satuan']=$rs2->dresept_satuan;
-		$data['dresept_jumlah']=$rs2->dresept_jumlah;
+		if ($result->row() != null) {
+			$data['produk_nama']=$rs->produk_nama;
+			$data['satuan_nama']=$rs->satuan_nama;
+			$data['dresepl_jumlah']=$rs->dresepl_jumlah;
+		}
 		
+		if ($result2->row() != null) {
+			$data['dresept_tambahan']=$rs2->dresept_tambahan;
+			$data['dresept_satuan']=$rs2->dresept_satuan;
+			$data['dresept_jumlah']=$rs2->dresept_jumlah;
+		}
+		
+		if ($result_racikan->row() != null) {
+			$data['produk_racikan']=$rs_racikan->produk_racikan;
+			$data['satuan_racikan']=$rs_racikan->satuan_racikan;
+			$data['jumlah_racikan']=$rs_racikan->jumlah_racikan;
+		}
+		
+
 		$data['detail_resepdokter']=$detail_resepdokter;
 		$data['detail_resepdokter_tambahan']=$detail_resepdokter_tambahan;
+		$data['detail_resepdokter_racikan']=$detail_resepdokter_racikan;
+		$data['detail_resepdokter_data']=$detail_resepdokter_data;
 		$viewdata=$this->load->view("main/resepdokter_formcetak",$data,TRUE);
 		
 		$file = fopen("resepdokter_paper.html",'w');
