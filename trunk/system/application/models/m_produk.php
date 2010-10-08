@@ -90,6 +90,30 @@ class M_produk extends Model{
 		}
 		//eof
 		
+	function get_satuan_by_produk_racik_list($djproduk_id,$produk_id){
+		if($djproduk_id<>0)
+			$sql="SELECT satuan_id,satuan_nama,konversi_nilai,satuan_kode,konversi_default,produk_harga FROM satuan LEFT JOIN satuan_konversi ON(konversi_satuan=satuan_id) LEFT JOIN produk ON(konversi_produk=produk_id) LEFT JOIN produk_racikan ON(pracikan_produk=produk_id) WHERE produk_id='$djproduk_id'";
+		
+		if($produk_id<>0)
+			$sql="SELECT satuan_id,satuan_nama,konversi_nilai,satuan_kode,konversi_default,produk_harga FROM satuan LEFT JOIN satuan_konversi ON(konversi_satuan=satuan_id) LEFT JOIN produk ON(konversi_produk=produk_id) WHERE produk_id='$produk_id'";
+			
+		if($djproduk_id==0 && $produk_id==0)
+			$sql="SELECT satuan_id,satuan_nama,konversi_nilai,satuan_kode,konversi_default,produk_harga FROM produk,satuan_konversi,satuan WHERE produk_id=konversi_produk AND konversi_satuan=satuan_id";
+		//$sql="SELECT satuan_id,satuan_nama,satuan_kode FROM satuan";
+		$query = $this->db->query($sql);
+		$nbrows = $query->num_rows();
+		if($nbrows>0){
+			foreach($query->result() as $row){
+				$arr[] = $row;
+			}
+			$jsonresult = json_encode($arr);
+			return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+		} else {
+			return '({"total":"0", "results":""})';
+		}
+	}
+		
+		
 		
 		function get_produk_list($query,$start,$end){
 			$rs_rows=0;
