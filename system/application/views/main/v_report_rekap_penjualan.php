@@ -189,15 +189,20 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: ''
 		},[
-		/* dataIndex => insert into rekap_penjualanColumnModel, Mapping => for initiate table column */ 
+		/* dataIndex => insert into rekap_penjualanColumnModel, Mapping => for initiate table column */
+			{name: 'id', type: 'int', mapping: 'produk_id'},		
 			{name: 'kode', type: 'string', mapping: 'kode'},
 			{name: 'nama', type: 'string', mapping: 'nama'},
 			{name: 'total_jumlah', type: 'float', mapping: 'total_jumlah'},
 			{name: 'subtotal', type: 'float', mapping: 'subtotal'},
 			{name: 'diskon_tambahan', type: 'float', mapping: 'diskon_tambahan'},
 			{name: 'grand_total', type: 'float', mapping: 'grand_total'},
+			{name: 'jum_retur', type: 'float', mapping: 'jum_retur'},
+			{name: 'tot_retur', type: 'float', mapping: 'tot_retur'},
+			{name: 'tot_jum_item', type: 'float', mapping: 'tot_jum_item'},
+			{name: 'tot_net', type: 'float', mapping: 'tot_net'},
 		]),
-		sortInfo:{field: 'grand_total', direction: "DESC"}
+		sortInfo:{field: 'tot_net', direction: "DESC"}
 	});
 	/* End of Function */
 	
@@ -222,6 +227,10 @@ Ext.onReady(function(){
 			{name: 'sum_subtotal', type: 'float', mapping: 'subtotal'},
 			{name: 'sum_diskon_tambahan', type: 'float', mapping: 'diskon_tambahan'},
 			{name: 'sum_total', type: 'float', mapping: 'grand_total'},
+			{name: 'sum_jum_retur', type: 'float', mapping: 'jum_retur'},
+			{name: 'sum_tot_retur', type: 'float', mapping: 'tot_retur'},
+			{name: 'sum_tot_jum_item', type: 'float', mapping: 'tot_jum_item'},
+			{name: 'sum_tot_net', type: 'float', mapping: 'tot_net'},
 		]),
 		sortInfo:{field: 'sum_total', direction: "DESC"}
 	});
@@ -231,6 +240,15 @@ Ext.onReady(function(){
 	//Tampilkan di grid
 	rekap_penjualanColumnModel = new Ext.grid.ColumnModel(
 		[
+		{
+			align : 'Right',
+			header: '<div align="center">' + 'ID' + '</div>',
+			dataIndex: 'id',
+			width: 60,//185,	//210,
+			sortable: true,
+			hidden : true,
+			readOnly : true,
+		},
 		{
 			header: '<div align="center">' + 'Kode' + '</div>',
 			dataIndex: 'kode',
@@ -274,8 +292,44 @@ Ext.onReady(function(){
 		},
 		{	
 			align : 'Right',
-			header: '<div align="center">' + 'Total (Rp)' + '</div>',
+			header: '<div align="center">' + 'Total' + '</div>',
 			dataIndex: 'grand_total',
+			renderer: Ext.util.Format.numberRenderer('0,000'),
+			readOnly: true,
+			width: 80,	//55,
+			sortable: true
+		},
+		{	
+			align : 'Right',
+			header: '<div align="center">' + 'Tot Jum Retur' + '</div>',
+			dataIndex: 'jum_retur',
+			renderer: Ext.util.Format.numberRenderer('0,000'),
+			readOnly: true,
+			width: 80,	//55,
+			sortable: true
+		},
+		{	
+			align : 'Right',
+			header: '<div align="center">' + 'Tot Retur (Rp)' + '</div>',
+			dataIndex: 'tot_retur',
+			renderer: Ext.util.Format.numberRenderer('0,000'),
+			readOnly: true,
+			width: 80,	//55,
+			sortable: true
+		},
+		{	
+			align : 'Right',
+			header: '<div align="center">' + 'Tot Jum Item' + '</div>',
+			dataIndex: 'tot_jum_item',
+			renderer: Ext.util.Format.numberRenderer('0,000'),
+			readOnly: true,
+			width: 80,	//55,
+			sortable: true
+		},
+		{	
+			align : 'Right',
+			header: '<div align="center">' + 'Tot Net (Rp)' + '</div>',
+			dataIndex: 'tot_net',
 			renderer: Ext.util.Format.numberRenderer('0,000'),
 			readOnly: true,
 			width: 80,	//55,
@@ -337,6 +391,42 @@ Ext.onReady(function(){
 			readOnly: true,
 			width: 80,	//55,
 			sortable: true
+		},
+		{	
+			align : 'Right',
+			header: '<div align="center">' + 'Tot Jum Retur' + '</div>',
+			dataIndex: 'sum_jum_retur',
+			renderer: Ext.util.Format.numberRenderer('0,000'),
+			readOnly: true,
+			width: 80,	//55,
+			sortable: true
+		},
+		{	
+			align : 'Right',
+			header: '<div align="center">' + 'Tot Retur (Rp)' + '</div>',
+			dataIndex: 'sum_tot_retur',
+			renderer: Ext.util.Format.numberRenderer('0,000'),
+			readOnly: true,
+			width: 80,	//55,
+			sortable: true
+		},
+		{	
+			align : 'Right',
+			header: '<div align="center">' + 'Tot Jum Item' + '</div>',
+			dataIndex: 'sum_tot_jum_item',
+			renderer: Ext.util.Format.numberRenderer('0,000'),
+			readOnly: true,
+			width: 80,	//55,
+			sortable: true
+		},
+		{	
+			align : 'Right',
+			header: '<div align="center">' + 'Tot Net (Rp)' + '</div>',
+			dataIndex: 'sum_tot_net',
+			renderer: Ext.util.Format.numberRenderer('0,000'),
+			readOnly: true,
+			width: 80,	//55,
+			sortable: true
 		}
 	]);
 	
@@ -356,7 +446,7 @@ Ext.onReady(function(){
 		//clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 970, //940,//1200,	//970,
+	  	width: 1200, //940,//1200,	//970,
 		/* Add Control on ToolBar */
 		tbar: [
 		{
@@ -387,7 +477,7 @@ Ext.onReady(function(){
 		//clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 970, //940,//1200,	//970,
+	  	width: 1200, //940,//1200,	//970,
 	
 		/* Add Control on ToolBar */
 	
@@ -515,6 +605,7 @@ Ext.onReady(function(){
 			rekap_penjualan_jenis			:	jenisField_search,
 			rekap_penjualan_group			:	groupField_search,
 		};
+		
 		sum_rekapDataStore.baseParams = {
 			task: 'SEARCH2',
 			//variable here
