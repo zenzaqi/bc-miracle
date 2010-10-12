@@ -215,7 +215,7 @@ class C_resep_dokter extends Controller {
 		$array_dresepk_jumlah = json_decode(stripslashes($dresepk_jumlah));
 		
 
-		$result=$this->m_resep_dokter->resepdokter_detail_kombinasi_insert($array_dresepk_id ,$dresepk_master , $dresepk_resepmaster, $array_dresepk_produk, $array_dresepk_satuan, $array_dresepk_jumlah, $cetak, $count, $dcount);
+		$result=$this->m_resep_dokter->resepdokter_detail_kombinasi_insert($dresepk_id ,$dresepk_master , $dresepk_resepmaster, $dresepk_produk, $dresepk_satuan, $dresepk_jumlah, $cetak, $count, $dcount);
 		echo $result;
 	}
 	
@@ -283,6 +283,9 @@ class C_resep_dokter extends Controller {
 			case "DELETE":
 				$this->resep_dokter_delete();
 				break;
+			case "DELETE_KOMBINASI":
+				$this->master_kombinasi_delete();
+				break;	
 			case "SEARCH":
 				$this->resep_dokter_search();
 				break;
@@ -345,6 +348,20 @@ class C_resep_dokter extends Controller {
 		$result=$this->m_resep_dokter->resep_dokter_delete($pkid);
 		echo $result;
 	}
+	
+	//function for delete master dan detail kombinasi on selected record
+	function master_kombinasi_delete(){
+		
+		$rkombinasi_produk = $_POST['rkombinasi_produk'];
+		$pkid_rmaster_kombinasi = json_decode(stripslashes($rkombinasi_produk));
+		
+		$ids_kombinasi = $_POST['ids_kombinasi']; // Get our array back and translate it :
+		$pkid_kombinasi = json_decode(stripslashes($ids_kombinasi));
+		$result=$this->m_resep_dokter->master_kombinasi_delete($pkid_kombinasi, $pkid_rmaster_kombinasi);
+		echo $result;
+	}
+	
+	
 
 	//function for advanced search
 	function resep_dokter_search(){
