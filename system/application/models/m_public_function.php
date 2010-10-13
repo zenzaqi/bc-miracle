@@ -996,7 +996,7 @@ class M_public_function extends Model{
 			$rs_rows=$rs->num_rows();
 		}
 		
-		$sql="SELECT * FROM vu_perawatan WHERE (kategori_nama='Medis' OR kategori_nama='Surgery') AND rawat_aktif='Aktif'";//join dr tabel: perawatan,produk_group,kategori2,kategori,jenis,gudang
+		$sql="SELECT * FROM vu_perawatan WHERE (kategori_nama='Medis' OR kategori_nama='Surgery' OR kategori_nama='Anti Aging') AND rawat_aktif='Aktif'";//join dr tabel: perawatan,produk_group,kategori2,kategori,jenis,gudang
 		if($query<>"" && is_numeric($query)==false){
 			$sql.=" and (rawat_kode like '%".$query."%' or rawat_nama like '%".$query."%')";
 			//$sql.=" and (rawat_kode like '%".$query."%' or rawat_nama like '%".$query."%' or group_nama like '%".$query."%')";
