@@ -267,8 +267,7 @@ class M_report_rekap_penjualan extends Model{
 						LEFT JOIN master_jual_produk ON detail_jual_produk.dproduk_master = master_jual_produk.jproduk_id
 						LEFT JOIN produk ON detail_jual_produk.dproduk_produk = produk.produk_id";
 				*/
-				$query = "SELECT produk.produk_id AS produk_id, produk.produk_kode AS kode, produk.produk_nama AS nama, 
-	SUM(detail_jual_produk.dproduk_jumlah) AS total_jumlah,
+				$query = "SELECT SUM(detail_jual_produk.dproduk_jumlah) AS total_jumlah,
 
 	SUM((detail_jual_produk.dproduk_jumlah * detail_jual_produk.dproduk_harga)-((detail_jual_produk.dproduk_jumlah * detail_jual_produk.dproduk_harga)*detail_jual_produk.dproduk_diskon/100)) AS subtotal,
 
@@ -334,8 +333,7 @@ class M_report_rekap_penjualan extends Model{
 			}
 			else if ($rekap_penjualan_jenis == 'Pengambilan_Paket')
 			{
-					$query = "select `perawatan`.`rawat_kode` AS kode,`perawatan`.`rawat_nama` AS nama,
-					SUM(`detail_ambil_paket`.`dapaket_jumlah`) AS total_jumlah,
+					$query = "select SUM(`detail_ambil_paket`.`dapaket_jumlah`) AS total_jumlah,
 					SUM(`detail_ambil_paket`.`dapaket_jumlah` * ((((((`detail_jual_paket`.`dpaket_harga` * (100 - `detail_jual_paket`.`dpaket_diskon`)) / 100) * `detail_jual_paket`.`dpaket_jumlah`) - (((`master_jual_paket`.`jpaket_diskon` * ((`detail_jual_paket`.`dpaket_harga` * (100 - `detail_jual_paket`.`dpaket_diskon`)) / 100)) * `detail_jual_paket`.`dpaket_jumlah`) / 100)) / `detail_jual_paket`.`dpaket_jumlah`) / `vu_jumlah_isi_paket`.`isi_paket`)) AS subtotal,
 
 					SUM((((((`master_jual_paket`.`jpaket_diskon` * ((`detail_jual_paket`.`dpaket_harga` * (100 - `detail_jual_paket`.`dpaket_diskon`)) / 100)) * `detail_jual_paket`.`dpaket_jumlah`) / 100)) / `detail_jual_paket`.`dpaket_jumlah`) / `vu_jumlah_isi_paket`.`isi_paket`) AS diskon_tambahan,
@@ -345,7 +343,6 @@ class M_report_rekap_penjualan extends Model{
 
 					SUM(`detail_ambil_paket`.`dapaket_jumlah` * ((((((`detail_jual_paket`.`dpaket_harga` * (100 - `detail_jual_paket`.`dpaket_diskon`)) / 100) * `detail_jual_paket`.`dpaket_jumlah`) - (((`master_jual_paket`.`jpaket_diskon` * ((`detail_jual_paket`.`dpaket_harga` * (100 - `detail_jual_paket`.`dpaket_diskon`)) / 100)) * `detail_jual_paket`.`dpaket_jumlah`) / 100)) / `detail_jual_paket`.`dpaket_jumlah`) / `vu_jumlah_isi_paket`.`isi_paket`) -
 (((((`master_jual_paket`.`jpaket_diskon` * ((`detail_jual_paket`.`dpaket_harga` * (100 - `detail_jual_paket`.`dpaket_diskon`)) / 100)) * `detail_jual_paket`.`dpaket_jumlah`) / 100)) / `detail_jual_paket`.`dpaket_jumlah`) / `vu_jumlah_isi_paket`.`isi_paket`) AS tot_net
-
 					
 					  from ((((((`detail_ambil_paket` 
 					join `master_jual_paket` on((`master_jual_paket`.`jpaket_id` = `detail_ambil_paket`.`dapaket_jpaket`))) 
