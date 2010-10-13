@@ -350,7 +350,7 @@ Ext.onReady(function(){
 		triggerAction: 'all',
 		store: new Ext.data.SimpleStore({
 			fields:['membership'],
-			data:[['Semua'],['Aktif'],['Non Aktif'],['Expired']]
+			data:[['Semua'],['Aktif'],['Non Aktif'],['Expired'], ['Non Member']]
 		}),
 		mode: 'local',
 		width: 80,

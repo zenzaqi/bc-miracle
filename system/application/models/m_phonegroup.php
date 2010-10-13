@@ -212,6 +212,10 @@ class M_phonegroup extends Model{
 						$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
 						$sql .=" date_format(member_valid,'%Y-%m-%d') <'".date('Y-m-d')."'";
 					}
+					else if($membership=="Non Member"){
+						$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
+						$sql .=" member_no is NULL ";
+					}
 					else if($membership=="Semua"){
 						$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
 						$sql .=" member_no is not NULL ";
