@@ -22,10 +22,35 @@ class C_kasbank_masuk extends Controller {
 	
 	//set index
 	function index(){
-		$this->load->plugin('to_excel');
 		$this->load->view('main/v_kasbank_masuk');
 	}
 	
+	
+	function kasbank_reopen(){
+		$kasbank_id=isset($_POST['kasbank_id']) ? @$_POST['kasbank_id'] : "";
+		$result=$this->m_kasbank->kasbank_reopen($kasbank_id);
+		echo $result;
+	}
+		
+	function get_akun_kasbank(){
+		$query = isset($_POST['query']) ? @$_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? @$_POST['start'] : @$_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? @$_POST['limit'] : @$_GET['limit']);
+		$result=$this->m_kasbank->get_akun_kasbank($query,$start,$end);
+		echo $result;
+	}
+	
+	function get_detail_akun(){
+		$query = isset($_POST['query']) ? @$_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? @$_POST['start'] : @$_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? @$_POST['limit'] : @$_GET['limit']);
+		$task = isset($_POST['task']) ? @$_POST['task'] : "";
+		$master_id = isset($_POST['master_id']) ? @$_POST['master_id'] : "";
+		$selected_id = isset($_POST['selected_id']) ? @$_POST['selected_id'] : "";
+		
+		$result=$this->m_kasbank->get_detail_akun($task,$master_id,$selected_id,$query,$start,$end);
+		echo $result;
+	}
 	//for detail action
 	//list detail handler action
 	function  detail_kasbank_masuk_detail_list(){
@@ -38,12 +63,6 @@ class C_kasbank_masuk extends Controller {
 	}
 	//end of handler
 	
-	//purge all detail
-	function detail_kasbank_masuk_detail_purge(){
-		$master_id = (integer) (isset($_POST['master_id']) ? @$_POST['master_id'] : @$_GET['master_id']);
-		$result=$this->m_kasbank->detail_kasbank_detail_purge($master_id);
-	}
-	//eof
 	
 	//get master id, note: not done yet
 	function get_master_id(){
@@ -60,11 +79,18 @@ class C_kasbank_masuk extends Controller {
 		$dkasbank_masuk_akun=trim(@$_POST["dkasbank_masuk_akun"]);
 		$dkasbank_masuk_detail=trim(@$_POST["dkasbank_masuk_detail"]);
 		$dkasbank_masuk_detail=str_replace("/(<\/?)(p)([^>]*>)", "",$dkasbank_masuk_detail);
-		$dkasbank_masuk_detail=str_replace("'", "''",$dkasbank_masuk_detail);
-		$dkasbank_masuk_debet=trim(@$_POST["dkasbank_masuk_debet"]);
+		$dkasbank_masuk_debet=0;
 		$dkasbank_masuk_kredit=trim(@$_POST["dkasbank_masuk_kredit"]);
-		$master_id = (integer) (isset($_POST['master_id']) ? @$_POST['master_id'] : @$_GET['master_id']);
-		$result=$this->m_kasbank->detail_kasbank_detail_insert($master_id,$dkasbank_masuk_id ,$dkasbank_masuk_master ,$dkasbank_masuk_akun ,$dkasbank_masuk_detail ,$dkasbank_masuk_debet ,$dkasbank_masuk_kredit );
+
+		
+		$dkasbank_masuk_id = json_decode(stripslashes($dkasbank_masuk_id));
+		$dkasbank_masuk_akun = json_decode(stripslashes($dkasbank_masuk_akun));
+		$dkasbank_masuk_detail = json_decode(stripslashes($dkasbank_masuk_detail));
+		$dkasbank_masuk_kredit = json_decode(stripslashes($dkasbank_masuk_kredit));
+		
+		$result=$this->m_kasbank->detail_kasbank_detail_insert($dkasbank_masuk_id ,$dkasbank_masuk_master ,
+															   $dkasbank_masuk_akun ,$dkasbank_masuk_detail ,$dkasbank_masuk_debet ,
+															   $dkasbank_masuk_kredit );
 	}
 	
 	
@@ -116,30 +142,25 @@ class C_kasbank_masuk extends Controller {
 		$kasbank_masuk_tanggal=trim(@$_POST["kasbank_masuk_tanggal"]);
 		$kasbank_masuk_nobukti=trim(@$_POST["kasbank_masuk_nobukti"]);
 		$kasbank_masuk_nobukti=str_replace("/(<\/?)(p)([^>]*>)", "",$kasbank_masuk_nobukti);
-		$kasbank_masuk_nobukti=str_replace("'", "''",$kasbank_masuk_nobukti);
 		$kasbank_masuk_akun=trim(@$_POST["kasbank_masuk_akun"]);
 		$kasbank_masuk_terimauntuk=trim(@$_POST["kasbank_masuk_terimauntuk"]);
 		$kasbank_masuk_terimauntuk=str_replace("/(<\/?)(p)([^>]*>)", "",$kasbank_masuk_terimauntuk);
-		$kasbank_masuk_terimauntuk=str_replace("'", "''",$kasbank_masuk_terimauntuk);
-		$kasbank_masuk_jenis=trim(@$_POST["kasbank_masuk_jenis"]);
-		$kasbank_masuk_jenis=str_replace("/(<\/?)(p)([^>]*>)", "",$kasbank_masuk_jenis);
-		$kasbank_masuk_jenis=str_replace("'", "''",$kasbank_masuk_jenis);
+		$kasbank_masuk_jenis='masuk';
 		$kasbank_masuk_noref=trim(@$_POST["kasbank_masuk_noref"]);
 		$kasbank_masuk_noref=str_replace("/(<\/?)(p)([^>]*>)", "",$kasbank_masuk_noref);
-		$kasbank_masuk_noref=str_replace("'", "''",$kasbank_masuk_noref);
 		$kasbank_masuk_keterangan=trim(@$_POST["kasbank_masuk_keterangan"]);
 		$kasbank_masuk_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$kasbank_masuk_keterangan);
-		$kasbank_masuk_keterangan=str_replace("'", "''",$kasbank_masuk_keterangan);
 		$kasbank_masuk_author=@$_SESSION[SESSION_USERID];
 		$kasbank_masuk_date_create=date(LONG_FORMATDATE);
 		//$kasbank_masuk_update=NULL;
 		//$kasbank_masuk_date_update=NULL;
-		$kasbank_masuk_post=trim(@$_POST["kasbank_masuk_post"]);
-		$kasbank_masuk_post=str_replace("/(<\/?)(p)([^>]*>)", "",$kasbank_masuk_post);
-		$kasbank_masuk_post=str_replace("'", "''",$kasbank_masuk_post);
-		$kasbank_masuk_date_post=trim(@$_POST["kasbank_masuk_date_post"]);
+		$kasbank_masuk_post=NULL;
+		$kasbank_masuk_date_post=NULL;
 		//$kasbank_masuk_revised=0;
-		$result=$this->m_kasbank->kasbank_create($kasbank_masuk_tanggal ,$kasbank_masuk_nobukti ,$kasbank_masuk_akun ,$kasbank_masuk_terimauntuk ,$kasbank_masuk_jenis ,$kasbank_masuk_noref ,$kasbank_masuk_keterangan ,$kasbank_masuk_author ,$kasbank_masuk_date_create ,$kasbank_masuk_post, $kasbank_masuk_date_post );
+		$result=$this->m_kasbank->kasbank_create($kasbank_masuk_tanggal ,$kasbank_masuk_nobukti ,$kasbank_masuk_akun ,
+															 $kasbank_masuk_terimauntuk ,$kasbank_masuk_jenis ,$kasbank_masuk_noref ,
+															 $kasbank_masuk_keterangan ,$kasbank_masuk_author ,$kasbank_masuk_date_create ,
+															 $kasbank_masuk_post, $kasbank_masuk_date_post);
 		echo $result;
 	}
 	
@@ -151,30 +172,26 @@ class C_kasbank_masuk extends Controller {
 		$kasbank_masuk_tanggal=trim(@$_POST["kasbank_masuk_tanggal"]);
 		$kasbank_masuk_nobukti=trim(@$_POST["kasbank_masuk_nobukti"]);
 		$kasbank_masuk_nobukti=str_replace("/(<\/?)(p)([^>]*>)", "",$kasbank_masuk_nobukti);
-		$kasbank_masuk_nobukti=str_replace("'", "''",$kasbank_masuk_nobukti);
 		$kasbank_masuk_akun=trim(@$_POST["kasbank_masuk_akun"]);
 		$kasbank_masuk_terimauntuk=trim(@$_POST["kasbank_masuk_terimauntuk"]);
 		$kasbank_masuk_terimauntuk=str_replace("/(<\/?)(p)([^>]*>)", "",$kasbank_masuk_terimauntuk);
-		$kasbank_masuk_terimauntuk=str_replace("'", "''",$kasbank_masuk_terimauntuk);
-		$kasbank_masuk_jenis=trim(@$_POST["kasbank_masuk_jenis"]);
-		$kasbank_masuk_jenis=str_replace("/(<\/?)(p)([^>]*>)", "",$kasbank_masuk_jenis);
-		$kasbank_masuk_jenis=str_replace("'", "''",$kasbank_masuk_jenis);
+		$kasbank_masuk_jenis='masuk';
 		$kasbank_masuk_noref=trim(@$_POST["kasbank_masuk_noref"]);
 		$kasbank_masuk_noref=str_replace("/(<\/?)(p)([^>]*>)", "",$kasbank_masuk_noref);
-		$kasbank_masuk_noref=str_replace("'", "''",$kasbank_masuk_noref);
 		$kasbank_masuk_keterangan=trim(@$_POST["kasbank_masuk_keterangan"]);
 		$kasbank_masuk_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$kasbank_masuk_keterangan);
-		$kasbank_masuk_keterangan=str_replace("'", "''",$kasbank_masuk_keterangan);
 		//$kasbank_masuk_author="kasbank_masuk_author";
 		//$kasbank_masuk_date_create="kasbank_masuk_date_create";
 		$kasbank_masuk_update=@$_SESSION[SESSION_USERID];
 		$kasbank_masuk_date_update=date(LONG_FORMATDATE);
-		$kasbank_masuk_post=trim(@$_POST["kasbank_masuk_post"]);
-		$kasbank_masuk_post=str_replace("/(<\/?)(p)([^>]*>)", "",$kasbank_masuk_post);
-		$kasbank_masuk_post=str_replace("'", "''",$kasbank_masuk_post);
-		$kasbank_masuk_date_post=trim(@$_POST["kasbank_masuk_date_post"]);
+		$kasbank_masuk_post=NULL;
+		$kasbank_masuk_date_post=NULL;
 		//$kasbank_masuk_revised="(revised+1)";
-		$result = $this->m_kasbank->kasbank_update($kasbank_masuk_id,$kasbank_masuk_tanggal,$kasbank_masuk_nobukti,$kasbank_masuk_akun,$kasbank_masuk_terimauntuk,$kasbank_masuk_jenis,$kasbank_masuk_noref,$kasbank_masuk_keterangan,$kasbank_masuk_update,$kasbank_masuk_date_update,$kasbank_masuk_post,$kasbank_masuk_date_post);
+		
+		$result = $this->m_kasbank->kasbank_update($kasbank_masuk_id,$kasbank_masuk_tanggal,$kasbank_masuk_nobukti,$kasbank_masuk_akun,
+															   $kasbank_masuk_terimauntuk,$kasbank_masuk_jenis,$kasbank_masuk_noref,
+															   $kasbank_masuk_keterangan,$kasbank_masuk_update,$kasbank_masuk_date_update,
+															   $kasbank_masuk_post,$kasbank_masuk_date_post);
 		echo $result;
 	}
 	
@@ -193,37 +210,29 @@ class C_kasbank_masuk extends Controller {
 		$kasbank_masuk_tanggal=trim(@$_POST["kasbank_masuk_tanggal"]);
 		$kasbank_masuk_nobukti=trim(@$_POST["kasbank_masuk_nobukti"]);
 		$kasbank_masuk_nobukti=str_replace("/(<\/?)(p)([^>]*>)", "",$kasbank_masuk_nobukti);
-		$kasbank_masuk_nobukti=str_replace("'", "''",$kasbank_masuk_nobukti);
 		$kasbank_masuk_akun=trim(@$_POST["kasbank_masuk_akun"]);
 		$kasbank_masuk_terimauntuk=trim(@$_POST["kasbank_masuk_terimauntuk"]);
 		$kasbank_masuk_terimauntuk=str_replace("/(<\/?)(p)([^>]*>)", "",$kasbank_masuk_terimauntuk);
-		$kasbank_masuk_terimauntuk=str_replace("'", "''",$kasbank_masuk_terimauntuk);
-		$kasbank_masuk_jenis=trim(@$_POST["kasbank_masuk_jenis"]);
-		$kasbank_masuk_jenis=str_replace("/(<\/?)(p)([^>]*>)", "",$kasbank_masuk_jenis);
-		$kasbank_masuk_jenis=str_replace("'", "''",$kasbank_masuk_jenis);
+		$kasbank_masuk_jenis='masuk';
 		$kasbank_masuk_noref=trim(@$_POST["kasbank_masuk_noref"]);
 		$kasbank_masuk_noref=str_replace("/(<\/?)(p)([^>]*>)", "",$kasbank_masuk_noref);
-		$kasbank_masuk_noref=str_replace("'", "''",$kasbank_masuk_noref);
 		$kasbank_masuk_keterangan=trim(@$_POST["kasbank_masuk_keterangan"]);
 		$kasbank_masuk_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$kasbank_masuk_keterangan);
-		$kasbank_masuk_keterangan=str_replace("'", "''",$kasbank_masuk_keterangan);
-		$kasbank_masuk_author=trim(@$_POST["kasbank_masuk_author"]);
-		$kasbank_masuk_author=str_replace("/(<\/?)(p)([^>]*>)", "",$kasbank_masuk_author);
-		$kasbank_masuk_author=str_replace("'", "''",$kasbank_masuk_author);
-		$kasbank_masuk_date_create=trim(@$_POST["kasbank_masuk_date_create"]);
-		$kasbank_masuk_update=trim(@$_POST["kasbank_masuk_update"]);
-		$kasbank_masuk_update=str_replace("/(<\/?)(p)([^>]*>)", "",$kasbank_masuk_update);
-		$kasbank_masuk_update=str_replace("'", "''",$kasbank_masuk_update);
-		$kasbank_masuk_date_update=trim(@$_POST["kasbank_masuk_date_update"]);
-		$kasbank_masuk_post=trim(@$_POST["kasbank_masuk_post"]);
-		$kasbank_masuk_post=str_replace("/(<\/?)(p)([^>]*>)", "",$kasbank_masuk_post);
-		$kasbank_masuk_post=str_replace("'", "''",$kasbank_masuk_post);
-		$kasbank_masuk_date_post=trim(@$_POST["kasbank_masuk_date_post"]);
-		$kasbank_masuk_revised=trim(@$_POST["kasbank_masuk_revised"]);
+		$kasbank_masuk_author=NULL;
+		$kasbank_masuk_date_create=NULL;
+		$kasbank_masuk_update=NULL;
+		$kasbank_masuk_date_update=NULL;
+		$kasbank_masuk_post=NULL;
+		$kasbank_masuk_date_post=NULL;
+		$kasbank_masuk_revised=NULL;
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_kasbank->kasbank_search($kasbank_masuk_id ,$kasbank_masuk_tanggal ,$kasbank_masuk_nobukti ,$kasbank_masuk_akun ,$kasbank_masuk_terimauntuk ,$kasbank_masuk_jenis ,$kasbank_masuk_noref ,$kasbank_masuk_keterangan ,$kasbank_masuk_author ,$kasbank_masuk_date_create ,$kasbank_masuk_update ,$kasbank_masuk_date_update ,$kasbank_masuk_post ,$kasbank_masuk_date_post ,$kasbank_masuk_revised ,$start,$end);
+		$result = $this->m_kasbank->kasbank_search($kasbank_masuk_id ,$kasbank_masuk_tanggal ,$kasbank_masuk_nobukti ,
+															   $kasbank_masuk_akun ,$kasbank_masuk_terimauntuk ,$kasbank_masuk_jenis ,
+															   $kasbank_masuk_noref ,$kasbank_masuk_keterangan ,$kasbank_masuk_author ,
+															   $kasbank_masuk_date_create ,$kasbank_masuk_update ,$kasbank_masuk_date_update ,
+															   $kasbank_masuk_post ,$kasbank_masuk_date_post ,$kasbank_masuk_revised ,$start,$end);
 		echo $result;
 	}
 
@@ -234,38 +243,31 @@ class C_kasbank_masuk extends Controller {
 		$kasbank_masuk_tanggal=trim(@$_POST["kasbank_masuk_tanggal"]);
 		$kasbank_masuk_nobukti=trim(@$_POST["kasbank_masuk_nobukti"]);
 		$kasbank_masuk_nobukti=str_replace("/(<\/?)(p)([^>]*>)", "",$kasbank_masuk_nobukti);
-		$kasbank_masuk_nobukti=str_replace("'", "'",$kasbank_masuk_nobukti);
 		$kasbank_masuk_akun=trim(@$_POST["kasbank_masuk_akun"]);
 		$kasbank_masuk_terimauntuk=trim(@$_POST["kasbank_masuk_terimauntuk"]);
 		$kasbank_masuk_terimauntuk=str_replace("/(<\/?)(p)([^>]*>)", "",$kasbank_masuk_terimauntuk);
-		$kasbank_masuk_terimauntuk=str_replace("'", "'",$kasbank_masuk_terimauntuk);
-		$kasbank_masuk_jenis=trim(@$_POST["kasbank_masuk_jenis"]);
-		$kasbank_masuk_jenis=str_replace("/(<\/?)(p)([^>]*>)", "",$kasbank_masuk_jenis);
-		$kasbank_masuk_jenis=str_replace("'", "'",$kasbank_masuk_jenis);
+		$kasbank_masuk_jenis= "masuk";
 		$kasbank_masuk_noref=trim(@$_POST["kasbank_masuk_noref"]);
 		$kasbank_masuk_noref=str_replace("/(<\/?)(p)([^>]*>)", "",$kasbank_masuk_noref);
-		$kasbank_masuk_noref=str_replace("'", "'",$kasbank_masuk_noref);
 		$kasbank_masuk_keterangan=trim(@$_POST["kasbank_masuk_keterangan"]);
 		$kasbank_masuk_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$kasbank_masuk_keterangan);
-		$kasbank_masuk_keterangan=str_replace("'", "'",$kasbank_masuk_keterangan);
-		$kasbank_masuk_author=trim(@$_POST["kasbank_masuk_author"]);
-		$kasbank_masuk_author=str_replace("/(<\/?)(p)([^>]*>)", "",$kasbank_masuk_author);
-		$kasbank_masuk_author=str_replace("'", "'",$kasbank_masuk_author);
-		$kasbank_masuk_date_create=trim(@$_POST["kasbank_masuk_date_create"]);
-		$kasbank_masuk_update=trim(@$_POST["kasbank_masuk_update"]);
-		$kasbank_masuk_update=str_replace("/(<\/?)(p)([^>]*>)", "",$kasbank_masuk_update);
-		$kasbank_masuk_update=str_replace("'", "'",$kasbank_masuk_update);
-		$kasbank_masuk_date_update=trim(@$_POST["kasbank_masuk_date_update"]);
-		$kasbank_masuk_post=trim(@$_POST["kasbank_masuk_post"]);
-		$kasbank_masuk_post=str_replace("/(<\/?)(p)([^>]*>)", "",$kasbank_masuk_post);
-		$kasbank_masuk_post=str_replace("'", "'",$kasbank_masuk_post);
-		$kasbank_masuk_date_post=trim(@$_POST["kasbank_masuk_date_post"]);
-		$kasbank_masuk_revised=trim(@$_POST["kasbank_masuk_revised"]);
+		$kasbank_masuk_author=NULL;
+		$kasbank_masuk_date_create=NULL;
+		$kasbank_masuk_update=NULL;
+		$kasbank_masuk_date_update=NULL;
+		$kasbank_masuk_post=NULL;
+		$kasbank_masuk_date_post=NULL;
+		$kasbank_masuk_revised=NULL;
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$data["data_print"] = $this->m_kasbank->kasbank_print($kasbank_masuk_id ,$kasbank_masuk_tanggal ,$kasbank_masuk_nobukti ,$kasbank_masuk_akun ,$kasbank_masuk_terimauntuk ,$kasbank_masuk_jenis ,$kasbank_masuk_noref ,$kasbank_masuk_keterangan ,$kasbank_masuk_author ,$kasbank_masuk_date_create ,$kasbank_masuk_update ,$kasbank_masuk_date_update ,$kasbank_masuk_post ,$kasbank_masuk_date_post ,$kasbank_masuk_revised ,$option,$filter);
-		$print_view=$this->load->view("main/p_kasbank.php",$data,TRUE);
+		$data["data_print"] = $this->m_kasbank->kasbank_print($kasbank_masuk_id ,$kasbank_masuk_tanggal ,$kasbank_masuk_nobukti ,
+																		  $kasbank_masuk_akun ,$kasbank_masuk_terimauntuk ,$kasbank_masuk_jenis ,
+																		  $kasbank_masuk_noref ,$kasbank_masuk_keterangan ,$kasbank_masuk_author ,
+																		  $kasbank_masuk_date_create ,$kasbank_masuk_update ,$kasbank_masuk_date_update
+																		  ,$kasbank_masuk_post ,$kasbank_masuk_date_post ,$kasbank_masuk_revised ,
+																		  $option,$filter);
+		$print_view=$this->load->view("main/p_kasbank_masuk.php",$data,TRUE);
 		if(!file_exists("print")){
 			mkdir("print");
 		}
@@ -277,42 +279,36 @@ class C_kasbank_masuk extends Controller {
 
 	/* Function to Export Excel document */
 	function kasbank_masuk_export_excel(){
+		$this->load->plugin('to_excel');
 		//POST varibale here
 		$kasbank_masuk_id=trim(@$_POST["kasbank_masuk_id"]);
 		$kasbank_masuk_tanggal=trim(@$_POST["kasbank_masuk_tanggal"]);
 		$kasbank_masuk_nobukti=trim(@$_POST["kasbank_masuk_nobukti"]);
 		$kasbank_masuk_nobukti=str_replace("/(<\/?)(p)([^>]*>)", "",$kasbank_masuk_nobukti);
-		$kasbank_masuk_nobukti=str_replace("'", "\'",$kasbank_masuk_nobukti);
 		$kasbank_masuk_akun=trim(@$_POST["kasbank_masuk_akun"]);
 		$kasbank_masuk_terimauntuk=trim(@$_POST["kasbank_masuk_terimauntuk"]);
 		$kasbank_masuk_terimauntuk=str_replace("/(<\/?)(p)([^>]*>)", "",$kasbank_masuk_terimauntuk);
-		$kasbank_masuk_terimauntuk=str_replace("'", "\'",$kasbank_masuk_terimauntuk);
-		$kasbank_masuk_jenis=trim(@$_POST["kasbank_masuk_jenis"]);
-		$kasbank_masuk_jenis=str_replace("/(<\/?)(p)([^>]*>)", "",$kasbank_masuk_jenis);
-		$kasbank_masuk_jenis=str_replace("'", "\'",$kasbank_masuk_jenis);
+		$kasbank_masuk_jenis='masuk';
 		$kasbank_masuk_noref=trim(@$_POST["kasbank_masuk_noref"]);
 		$kasbank_masuk_noref=str_replace("/(<\/?)(p)([^>]*>)", "",$kasbank_masuk_noref);
-		$kasbank_masuk_noref=str_replace("'", "\'",$kasbank_masuk_noref);
 		$kasbank_masuk_keterangan=trim(@$_POST["kasbank_masuk_keterangan"]);
 		$kasbank_masuk_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$kasbank_masuk_keterangan);
-		$kasbank_masuk_keterangan=str_replace("'", "\'",$kasbank_masuk_keterangan);
-		$kasbank_masuk_author=trim(@$_POST["kasbank_masuk_author"]);
-		$kasbank_masuk_author=str_replace("/(<\/?)(p)([^>]*>)", "",$kasbank_masuk_author);
-		$kasbank_masuk_author=str_replace("'", "\'",$kasbank_masuk_author);
-		$kasbank_masuk_date_create=trim(@$_POST["kasbank_masuk_date_create"]);
-		$kasbank_masuk_update=trim(@$_POST["kasbank_masuk_update"]);
-		$kasbank_masuk_update=str_replace("/(<\/?)(p)([^>]*>)", "",$kasbank_masuk_update);
-		$kasbank_masuk_update=str_replace("'", "\'",$kasbank_masuk_update);
-		$kasbank_masuk_date_update=trim(@$_POST["kasbank_masuk_date_update"]);
-		$kasbank_masuk_post=trim(@$_POST["kasbank_masuk_post"]);
-		$kasbank_masuk_post=str_replace("/(<\/?)(p)([^>]*>)", "",$kasbank_masuk_post);
-		$kasbank_masuk_post=str_replace("'", "\'",$kasbank_masuk_post);
-		$kasbank_masuk_date_post=trim(@$_POST["kasbank_masuk_date_post"]);
-		$kasbank_masuk_revised=trim(@$_POST["kasbank_masuk_revised"]);
+		$kasbank_masuk_author=NULL;
+		$kasbank_masuk_date_create=NULL;
+		$kasbank_masuk_update=NULL;
+		$kasbank_masuk_date_update=NULL;
+		$kasbank_masuk_post=NULL;
+		$kasbank_masuk_date_post=NULL;
+		$kasbank_masuk_revised=NULL;
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$query = $this->m_kasbank->kasbank_export_excel($kasbank_masuk_id ,$kasbank_masuk_tanggal ,$kasbank_masuk_nobukti ,$kasbank_masuk_akun ,$kasbank_masuk_terimauntuk ,$kasbank_masuk_jenis ,$kasbank_masuk_noref ,$kasbank_masuk_keterangan ,$kasbank_masuk_author ,$kasbank_masuk_date_create ,$kasbank_masuk_update ,$kasbank_masuk_date_update ,$kasbank_masuk_post ,$kasbank_masuk_date_post ,$kasbank_masuk_revised ,$option,$filter);
+		$query = $this->m_kasbank->kasbank_export_excel($kasbank_masuk_id ,$kasbank_masuk_tanggal ,$kasbank_masuk_nobukti ,
+																	$kasbank_masuk_akun ,$kasbank_masuk_terimauntuk ,$kasbank_masuk_jenis ,
+																	$kasbank_masuk_noref ,$kasbank_masuk_keterangan ,$kasbank_masuk_author ,
+																	$kasbank_masuk_date_create ,$kasbank_masuk_update ,$kasbank_masuk_date_update ,
+																	$kasbank_masuk_post ,$kasbank_masuk_date_post ,$kasbank_masuk_revised ,$option,
+																	$filter);
 		
 		to_excel($query,"kasbank"); 
 		echo '1';

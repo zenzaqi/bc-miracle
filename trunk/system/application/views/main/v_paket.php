@@ -1291,11 +1291,11 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true},
-		bbar: new Ext.PagingToolbar({
-			pageSize: pageS,
-			store: paket_isi_perawatan_DataStore,
-			displayInfo: true
-		}),
+		// bbar: new Ext.PagingToolbar({
+			// pageSize: pageS,
+			// store: paket_isi_perawatan_DataStore,
+			// displayInfo: true
+		// }),
 		/* Add Control on ToolBar */
 		tbar: [
 		{
@@ -1518,11 +1518,11 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true},
-		bbar: new Ext.PagingToolbar({
-			pageSize: pageS,
-			store: paket_isi_produk_DataStore,
-			displayInfo: true
-		}),
+		// bbar: new Ext.PagingToolbar({
+			// pageSize: pageS,
+			// store: paket_isi_produk_DataStore,
+			// displayInfo: true
+		// }),
 		/* Add Control on ToolBar */
 		tbar: [
 		{

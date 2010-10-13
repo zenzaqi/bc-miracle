@@ -27,5 +27,25 @@ class M_security extends Model{
 		
 		}
 	}
+	
+	function get_access_group_by_kode($form_kode){
+		
+		if($_SESSION[SESSION_USERID]=='Super Admin'){
+			return 'RCUD';
+		}else{
+			
+		$sql="select perm_priv from vu_s_permissions where perm_group='".$_SESSION[SESSION_GROUPID]."' and  menu_kode='".$form_kode."'";
+		$query=$this->db->query($sql);
+		if ($query->num_rows() > 0)
+		{
+			$row = $query->row();
+			return $row->perm_priv;
+		}else
+			return "";
+		
+		}
+		$this->firephp->log($sql);
+	}
+	
 }
 ?>

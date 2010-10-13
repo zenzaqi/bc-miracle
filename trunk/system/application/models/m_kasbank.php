@@ -6,40 +6,144 @@
 	+ Module  		: kasbank Model
 	+ Description	: For record model process back-end
 	+ Filename 		: c_kasbank.php
- 	+ Author  		: Zainal, Anam
+ 	+ Author  		: Zainal
  	+ Created on 12/Mar/2010 10:45:40
 	
 */
 
-class M_kasbank extends Model{
+class M_Kasbank extends Model{
 		
 		//constructor
-		function M_kasbank() {
+		function M_Kasbank() {
 			parent::Model();
+		}
+		
+		function kasbank_reopen($kasbank_id){
+			$sqlupdate="UPDATE kasbank SET kasbank_post='T' WHERE kasbank_id='".$kasbank_id."'";
+			$result = $this->db->query($sqlupdate);
+			if($result){
+				$sqlselect="SELECT kasbank_nobukti FROM kasbank WHERE kasbank_id='".$kasbank_id."'";
+				$result = $this->db->query($sqlselect);
+				if($result->num_rows()){
+						$rowbank=$result->row();
+						$sqldelete="DELETE FROM buku_besar WHERE buku_ref='".$rowbank->kasbank_nobukti."'";
+						$result = $this->db->query($sqldelete);	
+						if($result){
+							return '1';
+						}else
+							return '0';
+				}else{
+					return '0';
+				}
+			}else{
+				return '0';
+			}
+		}
+		
+		
+		function get_detail_akun($task,$master_id,$selected_id,$filter,$start,$end){
+			$sql = "SELECT A.* from akun A,akun_map M
+					WHERE A.akun_kode not in (
+					SELECT B.akun_parent_kode FROM akun B WHERE B.akun_parent_kode is NOT NULL)";
+			if($task=='detail'){
+				$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
+				$sql .=" A.akun_id IN (SELECT dkasbank_akun FROM kasbank_detail WHERE dkasbank_master='".$master_id."')";
+				
+				$result = $this->db->query($sql);
+				$nbrows = $result->num_rows();
+			
+				if($nbrows>0){
+					foreach($result->result() as $row){
+						$arr[] = $row;
+					}
+					$jsonresult = json_encode($arr);
+					return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+				} else {
+					return '({"total":"0", "results":""})';
+				}
+			
+			}else if($task=='selected'){
+				if($selected_id!=="")
+				{
+					$selected_id=substr($selected_id,0,strlen($selected_id)-1);
+					$sql.=(eregi("WHERE",$sql)?" AND ":" WHERE ")." A.akun_id IN(".$selected_id.")";
+				}
+				
+				$result = $this->db->query($sql);
+				$nbrows = $result->num_rows();
+				
+				if($nbrows>0){
+					foreach($result->result() as $row){
+						$arr[] = $row;
+					}
+					$jsonresult = json_encode($arr);
+					return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+				} else {
+					return '({"total":"0", "results":""})';
+				}
+			
+			}else{
+
+				if ($filter<>""){
+						$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
+						$sql .= " (A.akun_kode LIKE '%".addslashes($filter)."%' OR 
+								   A.akun_nama LIKE '%".addslashes($filter)."%' OR 
+								   A.akun_jenis LIKE '%".addslashes($filter)."%')";
+				}
+				
+				$result = $this->db->query($sql);
+				$nbrows = $result->num_rows();
+				$limit = $sql." LIMIT ".$start.",".$end;			
+				$result = $this->db->query($limit);  
+				
+				if($nbrows>0){
+					foreach($result->result() as $row){
+						$arr[] = $row;
+					}
+					$jsonresult = json_encode($arr);
+					return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+				} else {
+					return '({"total":"0", "results":""})';
+				}
+			}
+			
+			
+		}
+		
+		function get_akun_kasbank($filter,$start,$limit){
+			
+			$sql="select A.* from akun A,akun_map M
+				WHERE A.akun_kode not in (
+				SELECT B.akun_parent_kode FROM akun B WHERE B.akun_parent_kode is NOT NULL)
+				AND A.akun_kode LIKE concat('%', M.map_akun_kode,'%')";
+			if($filter!==""){
+				$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
+				$sql .=" (A,akun_kode like '%".$filter."%' OR  A.akun_nama like '%".$filter."%')";
+			}
+			$sql.=" ORDER By A.akun_kode ASC ";
+			$result = $this->db->query($sql);
+			$nbrows = $result->num_rows();
+			$limit = $sql." LIMIT ".$start.",".$limit;			
+			$result = $this->db->query($limit);  
+			
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+			
 		}
 		
 		//function for detail
 		//get record list
 		function detail_kasbank_detail_list($master_id,$query,$start,$end) {
 			$query = "SELECT * FROM kasbank_detail where dkasbank_master='".$master_id."'";
-			// $query = "SELECT
-						// *
-					// FROM
-						// `kasbank_detail` 
-						// `kasbank_detail` 
-					// Left Join `tbl_m_akun` ON `kasbank_detail`.`dkasbank_akun` = `tbl_m_akun`.`akun_id`
-					// WHERE
-						// dkasbank_master = '".$master_id."'";
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
-			if($start!==0){
-				$limit=str_replace("SELECT","SELECT TOP $end ",$query)." WHERE dkasbank_master NOT IN (SELECT TOP $start dkasbank_akun FROM dkasbank_master)";
-			}else{
-				$limit=$query;
-			}
-			// $limit = $query." LIMIT ".$start.",".$end;			
-			$result = $this->db->query($limit);  
-			
 			if($nbrows>0){
 				foreach($result->result() as $row){
 					$arr[] = $row;
@@ -66,49 +170,71 @@ class M_kasbank extends Model{
 		}
 		//eof
 		
-		//purge all detail from master
-		function detail_kasbank_detail_purge($master_id){
-			$sql="DELETE from kasbank_detail where dkasbank_master='".$master_id."'";
-			$result=$this->db->query($sql);
-		}
-		//*eof
 		
 		//insert detail record
-		function detail_kasbank_detail_insert($master_id,$dkasbank_id ,$dkasbank_master ,$dkasbank_akun ,$dkasbank_detail ,$dkasbank_debet ,$dkasbank_kredit ){
-			//if master id not capture from view then capture it from max pk from master table
-			if($dkasbank_master=="" || $dkasbank_master==NULL){
-				$dkasbank_master=$this->get_master_id();
+		function detail_kasbank_detail_insert($dkasbank_id ,$dkasbank_master ,$dkasbank_akun ,$dkasbank_detail ,$dkasbank_debet ,$dkasbank_kredit ){
+				
+			$query="";
+		   	for($i = 0; $i < sizeof($dkasbank_akun); $i++){
+
+				$data = array(
+					"dkasbank_master"=>$dkasbank_master, 
+					"dkasbank_akun"=>$dkasbank_akun[$i], 
+					"dkasbank_detail"=>$dkasbank_detail[$i], 
+					"dkasbank_debet"=>$dkasbank_debet[$i], 
+					"dkasbank_kredit"=>$dkasbank_kredit[$i] 
+				);
+				
+								
+				if($dkasbank_id[$i]==0){
+					$this->db->insert('kasbank_detail', $data); 
+					
+					$query = $query.$this->db->insert_id();
+					if($i<sizeof($dkasbank_id)-1){
+						$query = $query . ",";
+					} 
+					
+				}else{
+					$query = $query.$dkasbank_id[$i];
+					if($i<sizeof($dkasbank_id)-1){
+						$query = $query . ",";
+					} 
+					$this->db->where('dorder_id', $dkasbank_id[$i]);
+					$this->db->update('kasbank_detail', $data);
+				}
 			}
 			
-			$data = array(
-				"dkasbank_master"=>$dkasbank_master, 
-				"dkasbank_akun"=>$dkasbank_akun, 
-				"dkasbank_detail"=>$dkasbank_detail, 
-				"dkasbank_debet"=>$dkasbank_debet, 
-				"dkasbank_kredit"=>$dkasbank_kredit 
-			);
-			$this->db->insert('kasbank_detail', $data); 
-			if($this->db->affected_rows())
-				return '1';
-			else
-				return '0';
+			if($query<>""){
+				$sql="DELETE FROM kasbank_detail WHERE  dkasbank_master='".$dkasbank_master."' AND
+						dkasbank_id NOT IN (".$query.")";
+				$this->db->query($sql);
+			}
+			
+			return '1';
 
 		}
 		//end of function
 		
 		//function for get list record
 		function kasbank_list($filter,$start,$end,$where_jenis){
-			$where = "WHERE `kasbank`.`kasbank_jenis` = '".$where_jenis."'";
-			$query = "SELECT * FROM kasbank Left Join `tbl_m_akun` ON `kasbank`.`kasbank_akun` = `tbl_m_akun`.`akun_id` ".$where;
+			/*$where = "WHERE `kasbank`.`kasbank_jenis` = '".$where_jenis."'";*/
+			$query = "SELECT * FROM vu_kasbank WHERE kasbank_jenis='".$where_jenis."'";
 
 			// For simple search
 			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (kasbank_id LIKE '%".addslashes($filter)."%' OR kasbank_tanggal LIKE '%".addslashes($filter)."%' OR kasbank_nobukti LIKE '%".addslashes($filter)."%' OR kasbank_akun LIKE '%".addslashes($filter)."%' OR kasbank_terimauntuk LIKE '%".addslashes($filter)."%' OR kasbank_jenis LIKE '%".addslashes($filter)."%' OR kasbank_noref LIKE '%".addslashes($filter)."%' OR kasbank_keterangan LIKE '%".addslashes($filter)."%' OR kasbank_author LIKE '%".addslashes($filter)."%' OR kasbank_date_create LIKE '%".addslashes($filter)."%' OR kasbank_update LIKE '%".addslashes($filter)."%' OR kasbank_date_update LIKE '%".addslashes($filter)."%' OR kasbank_post LIKE '%".addslashes($filter)."%' OR kasbank_date_post LIKE '%".addslashes($filter)."%' OR kasbank_revised LIKE '%".addslashes($filter)."%' )";
+				$query .= " (kasbank_tanggal LIKE '%".addslashes($filter)."%' OR 
+							 kasbank_nobukti LIKE '%".addslashes($filter)."%' OR 
+							 kasbank_terimauntuk LIKE '%".addslashes($filter)."%' OR 
+							 kasbank_noref LIKE '%".addslashes($filter)."%' OR 
+							 akun_nama LIKE '%".addslashes($filter)."%' OR
+							 akun_kode LIKE '%".addslashes($filter)."%' OR
+							 kasbank_keterangan LIKE '%".addslashes($filter)."%' )";
 			}
 			
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
+			if($end=="") $end=15;
 			$limit = $query." LIMIT ".$start.",".$end;		
 			$result = $this->db->query($limit);  
 			
@@ -124,7 +250,10 @@ class M_kasbank extends Model{
 		}
 		
 		//function for create new record
-		function kasbank_create($kasbank_tanggal ,$kasbank_nobukti ,$kasbank_akun ,$kasbank_terimauntuk ,$kasbank_jenis ,$kasbank_noref ,$kasbank_keterangan ,$kasbank_author ,$kasbank_date_create ,$kasbank_post, $kasbank_date_post ){
+		function kasbank_create($kasbank_tanggal ,$kasbank_nobukti ,$kasbank_akun ,
+									  $kasbank_terimauntuk ,$kasbank_jenis ,$kasbank_noref ,
+									  $kasbank_keterangan ,$kasbank_author ,$kasbank_date_create ,
+									  $kasbank_post, $kasbank_date_post ){
 			$data = array(
 				"kasbank_tanggal"=>$kasbank_tanggal, 
 				"kasbank_nobukti"=>$kasbank_nobukti, 
@@ -133,50 +262,63 @@ class M_kasbank extends Model{
 				"kasbank_jenis"=>$kasbank_jenis, 
 				"kasbank_noref"=>$kasbank_noref, 
 				"kasbank_keterangan"=>$kasbank_keterangan, 
-				"kasbank_author"=>$kasbank_author, 
-				"kasbank_date_create"=>$kasbank_date_create, 
-				"kasbank_post"=>$kasbank_post, 
-				"kasbank_date_post"=>$kasbank_date_post 
+				"kasbank_author"=>$kasbank_author,
+				"kasbank_date_create"=>$kasbank_date_create
 			);
-			$this->db->insert('kasbank', $data); 
-			if($this->db->affected_rows())
-				return $this->db->insert_id();
-			else
-				return '0';
+			
+			
+			
+			$sql="SELECT kasbank_nobukti FROM kasbank WHERE kasbank_nobukti='".$kasbank_nobukti."'";
+			$rs=$this->db->query($sql);
+			if($rs->num_rows()){
+				return 'ER:No Jurnal sudah digunakan !';
+			}else{
+				$this->db->insert('kasbank', $data); 
+				if($this->db->affected_rows())
+					return 'OK:'.$this->db->insert_id();
+				else
+					return 'ER:Gagal disimpan digunakan !';
+			}
+			
+				
 		}
 		
 		//function for update record
-		function kasbank_update($kasbank_id,$kasbank_tanggal,$kasbank_nobukti,$kasbank_akun,$kasbank_terimauntuk,$kasbank_jenis,$kasbank_noref,$kasbank_keterangan,$kasbank_update,$kasbank_date_update,$kasbank_post,$kasbank_date_post){
+		function kasbank_update($kasbank_id,$kasbank_tanggal,$kasbank_nobukti,$kasbank_akun,$kasbank_terimauntuk,
+									  $kasbank_jenis,$kasbank_noref,$kasbank_keterangan,$kasbank_update,$kasbank_date_update,
+									  $kasbank_post,$kasbank_date_post){
 			$data = array(
 				"kasbank_tanggal"=>$kasbank_tanggal, 
 				"kasbank_nobukti"=>$kasbank_nobukti, 
-				//"kasbank_akun"=>$kasbank_akun, 
 				"kasbank_terimauntuk"=>$kasbank_terimauntuk, 
 				"kasbank_jenis"=>$kasbank_jenis, 
 				"kasbank_noref"=>$kasbank_noref, 
 				"kasbank_keterangan"=>$kasbank_keterangan, 
 				"kasbank_update"=>$kasbank_update, 
-				"kasbank_date_update"=>$kasbank_date_update, 
-				"kasbank_post"=>$kasbank_post, 
-				"kasbank_date_post"=>$kasbank_date_post 
+				"kasbank_date_update"=>$kasbank_date_update
 			);
 			
-			$sql="SELECT akun_id FROM tbl_m_akun where akun_nama='".$kasbank_akun."'";
+						
+			$sql="SELECT akun_id FROM akun where akun_id='".$kasbank_akun."'";
 			$rsA=$this->db->query($sql);
-			if($rsA->result() != NULL){
-				foreach($rsA->result() as $akun){
-					$data['kasbank_akun']=$akun->akun_id;
-				}
-			}else{
-			$data['kasbank_akun']=$kasbank_akun;
+			if($rsA->num_rows()){
+				$data["kasbank_akun"]=$kasbank_akun;
 			}
 			
-			
-			$this->db->where('kasbank_id', $kasbank_id);
-			$this->db->update('kasbank', $data);
-			$sql="UPDATE kasbank set kasbank_revised=(kasbank_revised+1) where kasbank_id='".$kasbank_id."'";
-			$this->db->query($sql);
-			return $kasbank_id;
+			$sql="SELECT kasbank_nobukti FROM kasbank WHERE kasbank_nobukti='".$kasbank_nobukti."' AND kasbank_id<>'".$kasbank_id."'";
+			$rs=$this->db->query($sql);
+			if($rs->num_rows()){
+				return 'ER:No Jurnal sudah digunakan !';
+			}else{
+				$this->db->where('kasbank_id', $kasbank_id);
+				$this->db->update('kasbank', $data);
+				if($this->db->affected_rows()){
+					$sql="UPDATE kasbank set kasbank_revised=(kasbank_revised+1) where kasbank_id='".$kasbank_id."'";
+					$this->db->query($sql);
+					return 'OK:'.$kasbank_id;
+				}else
+					return 'ER:Gagal disimpan!';
+			}
 		}
 		
 		//fcuntion for delete record
@@ -205,14 +347,12 @@ class M_kasbank extends Model{
 		}
 		
 		//function for advanced search record
-		function kasbank_search($kasbank_id ,$kasbank_tanggal ,$kasbank_nobukti ,$kasbank_akun ,$kasbank_terimauntuk ,$kasbank_jenis ,$kasbank_noref ,$kasbank_keterangan ,$kasbank_author ,$kasbank_date_create ,$kasbank_update ,$kasbank_date_update ,$kasbank_post ,$kasbank_date_post ,$kasbank_revised ,$start,$end){
+		function kasbank_search($kasbank_id ,$kasbank_tanggal ,$kasbank_nobukti ,$kasbank_akun ,$kasbank_terimauntuk ,
+									  $kasbank_jenis ,$kasbank_noref ,$kasbank_keterangan ,$kasbank_author ,$kasbank_date_create ,
+									  $kasbank_update ,$kasbank_date_update ,$kasbank_post ,$kasbank_date_post ,$kasbank_revised ,$start,$end){
 			//full query
-			$query="select * from kasbank";
+			$query = "SELECT * FROM vu_t_kasbank WHERE kasbank_jenis='".$kasbank_jenis."'";
 			
-			if($kasbank_id!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " kasbank_id LIKE '%".$kasbank_id."%'";
-			};
 			if($kasbank_tanggal!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " kasbank_tanggal LIKE '%".$kasbank_tanggal."%'";
@@ -229,10 +369,7 @@ class M_kasbank extends Model{
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " kasbank_terimauntuk LIKE '%".$kasbank_terimauntuk."%'";
 			};
-			if($kasbank_jenis!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " kasbank_jenis LIKE '%".$kasbank_jenis."%'";
-			};
+
 			if($kasbank_noref!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " kasbank_noref LIKE '%".$kasbank_noref."%'";
@@ -241,35 +378,7 @@ class M_kasbank extends Model{
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " kasbank_keterangan LIKE '%".$kasbank_keterangan."%'";
 			};
-			if($kasbank_author!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " kasbank_author LIKE '%".$kasbank_author."%'";
-			};
-			if($kasbank_date_create!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " kasbank_date_create LIKE '%".$kasbank_date_create."%'";
-			};
-			if($kasbank_update!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " kasbank_update LIKE '%".$kasbank_update."%'";
-			};
-			if($kasbank_date_update!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " kasbank_date_update LIKE '%".$kasbank_date_update."%'";
-			};
-			if($kasbank_post!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " kasbank_post LIKE '%".$kasbank_post."%'";
-			};
-			if($kasbank_date_post!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " kasbank_date_post LIKE '%".$kasbank_date_post."%'";
-			};
-			if($kasbank_revised!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " kasbank_revised LIKE '%".$kasbank_revised."%'";
-			};
-			
+						
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
 			$limit = $query." LIMIT ".$start.",".$end;		
@@ -287,18 +396,24 @@ class M_kasbank extends Model{
 		}
 		
 		//function for print record
-		function kasbank_print($kasbank_id ,$kasbank_tanggal ,$kasbank_nobukti ,$kasbank_akun ,$kasbank_terimauntuk ,$kasbank_jenis ,$kasbank_noref ,$kasbank_keterangan ,$kasbank_author ,$kasbank_date_create ,$kasbank_update ,$kasbank_date_update ,$kasbank_post ,$kasbank_date_post ,$kasbank_revised ,$option,$filter){
+		function kasbank_print($kasbank_id ,$kasbank_tanggal ,$kasbank_nobukti ,$kasbank_akun ,$kasbank_terimauntuk ,
+									 $kasbank_jenis ,$kasbank_noref ,$kasbank_keterangan ,$kasbank_author ,$kasbank_date_create ,$kasbank_update ,
+									 $kasbank_date_update ,$kasbank_post ,$kasbank_date_post ,$kasbank_revised ,$option,$filter){
 			//full query
-			$sql="select * from kasbank";
+			$sql = "SELECT * FROM vu_t_kasbank WHERE kasbank_jenis='".$kasbank_jenis."'";
+			
 			if($option=='LIST'){
 				$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
-				$sql .= " (kasbank_id LIKE '%".addslashes($filter)."%' OR kasbank_tanggal LIKE '%".addslashes($filter)."%' OR kasbank_nobukti LIKE '%".addslashes($filter)."%' OR kasbank_akun LIKE '%".addslashes($filter)."%' OR kasbank_terimauntuk LIKE '%".addslashes($filter)."%' OR kasbank_jenis LIKE '%".addslashes($filter)."%' OR kasbank_noref LIKE '%".addslashes($filter)."%' OR kasbank_keterangan LIKE '%".addslashes($filter)."%' OR kasbank_author LIKE '%".addslashes($filter)."%' OR kasbank_date_create LIKE '%".addslashes($filter)."%' OR kasbank_update LIKE '%".addslashes($filter)."%' OR kasbank_date_update LIKE '%".addslashes($filter)."%' OR kasbank_post LIKE '%".addslashes($filter)."%' OR kasbank_date_post LIKE '%".addslashes($filter)."%' OR kasbank_revised LIKE '%".addslashes($filter)."%' )";
+				$sql .= " (kasbank_tanggal LIKE '%".addslashes($filter)."%' OR 
+						   kasbank_nobukti LIKE '%".addslashes($filter)."%' OR 
+						   akun_kode LIKE '%".addslashes($filter)."%' OR 
+						   kasbank_terimauntuk LIKE '%".addslashes($filter)."%' OR 
+						   akun_nama LIKE '%".addslashes($filter)."%' OR 
+						   kasbank_noref LIKE '%".addslashes($filter)."%' OR 
+						   kasbank_keterangan LIKE '%".addslashes($filter)."%' )";
 				$query = $this->db->query($sql);
 			} else if($option=='SEARCH'){
-				if($kasbank_id!=''){
-					$sql.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$sql.= " kasbank_id LIKE '%".$kasbank_id."%'";
-				};
+
 				if($kasbank_tanggal!=''){
 					$sql.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$sql.= " kasbank_tanggal LIKE '%".$kasbank_tanggal."%'";
@@ -315,10 +430,6 @@ class M_kasbank extends Model{
 					$sql.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$sql.= " kasbank_terimauntuk LIKE '%".$kasbank_terimauntuk."%'";
 				};
-				if($kasbank_jenis!=''){
-					$sql.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$sql.= " kasbank_jenis LIKE '%".$kasbank_jenis."%'";
-				};
 				if($kasbank_noref!=''){
 					$sql.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$sql.= " kasbank_noref LIKE '%".$kasbank_noref."%'";
@@ -327,7 +438,7 @@ class M_kasbank extends Model{
 					$sql.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$sql.= " kasbank_keterangan LIKE '%".$kasbank_keterangan."%'";
 				};
-				if($kasbank_author!=''){
+				/*if($kasbank_author!=''){
 					$sql.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$sql.= " kasbank_author LIKE '%".$kasbank_author."%'";
 				};
@@ -354,25 +465,30 @@ class M_kasbank extends Model{
 				if($kasbank_revised!=''){
 					$sql.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$sql.= " kasbank_revised LIKE '%".$kasbank_revised."%'";
-				};
+				};*/
 				$query = $this->db->query($sql);
 			}
 			return $query->result();
 		}
 		
 		//function  for export to excel
-		function kasbank_export_excel($kasbank_id ,$kasbank_tanggal ,$kasbank_nobukti ,$kasbank_akun ,$kasbank_terimauntuk ,$kasbank_jenis ,$kasbank_noref ,$kasbank_keterangan ,$kasbank_author ,$kasbank_date_create ,$kasbank_update ,$kasbank_date_update ,$kasbank_post ,$kasbank_date_post ,$kasbank_revised ,$option,$filter){
+		function kasbank_export_excel($kasbank_id ,$kasbank_tanggal ,$kasbank_nobukti ,$kasbank_akun ,$kasbank_terimauntuk ,$kasbank_jenis ,
+											$kasbank_noref ,$kasbank_keterangan ,$kasbank_author ,$kasbank_date_create ,$kasbank_update ,
+											$kasbank_date_update ,$kasbank_post ,$kasbank_date_post ,$kasbank_revised ,$option,$filter){
 			//full query
-			$sql="select * from kasbank";
+			$sql  = "SELECT * FROM vu_t_kasbank WHERE kasbank_jenis='".$kasbank_jenis."'";
+			
 			if($option=='LIST'){
-				$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
-				$sql .= " (kasbank_id LIKE '%".addslashes($filter)."%' OR kasbank_tanggal LIKE '%".addslashes($filter)."%' OR kasbank_nobukti LIKE '%".addslashes($filter)."%' OR kasbank_akun LIKE '%".addslashes($filter)."%' OR kasbank_terimauntuk LIKE '%".addslashes($filter)."%' OR kasbank_jenis LIKE '%".addslashes($filter)."%' OR kasbank_noref LIKE '%".addslashes($filter)."%' OR kasbank_keterangan LIKE '%".addslashes($filter)."%' OR kasbank_author LIKE '%".addslashes($filter)."%' OR kasbank_date_create LIKE '%".addslashes($filter)."%' OR kasbank_update LIKE '%".addslashes($filter)."%' OR kasbank_date_update LIKE '%".addslashes($filter)."%' OR kasbank_post LIKE '%".addslashes($filter)."%' OR kasbank_date_post LIKE '%".addslashes($filter)."%' OR kasbank_revised LIKE '%".addslashes($filter)."%' )";
+				$sql .= " (kasbank_tanggal LIKE '%".addslashes($filter)."%' OR 
+						   kasbank_nobukti LIKE '%".addslashes($filter)."%' OR 
+						   akun_kode LIKE '%".addslashes($filter)."%' OR 
+						   kasbank_terimauntuk LIKE '%".addslashes($filter)."%' OR 
+						   akun_nama LIKE '%".addslashes($filter)."%' OR 
+						   kasbank_noref LIKE '%".addslashes($filter)."%' OR 
+						   kasbank_keterangan LIKE '%".addslashes($filter)."%' )";
 				$query = $this->db->query($sql);
 			} else if($option=='SEARCH'){
-				if($kasbank_id!=''){
-					$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
-					$sql.= " kasbank_id LIKE '%".$kasbank_id."%'";
-				};
+
 				if($kasbank_tanggal!=''){
 					$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
 					$sql.= " kasbank_tanggal LIKE '%".$kasbank_tanggal."%'";
@@ -389,10 +505,6 @@ class M_kasbank extends Model{
 					$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
 					$sql.= " kasbank_terimauntuk LIKE '%".$kasbank_terimauntuk."%'";
 				};
-				if($kasbank_jenis!=''){
-					$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
-					$sql.= " kasbank_jenis LIKE '%".$kasbank_jenis."%'";
-				};
 				if($kasbank_noref!=''){
 					$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
 					$sql.= " kasbank_noref LIKE '%".$kasbank_noref."%'";
@@ -401,7 +513,7 @@ class M_kasbank extends Model{
 					$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
 					$sql.= " kasbank_keterangan LIKE '%".$kasbank_keterangan."%'";
 				};
-				if($kasbank_author!=''){
+				/*if($kasbank_author!=''){
 					$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
 					$sql.= " kasbank_author LIKE '%".$kasbank_author."%'";
 				};
@@ -428,7 +540,7 @@ class M_kasbank extends Model{
 				if($kasbank_revised!=''){
 					$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
 					$sql.= " kasbank_revised LIKE '%".$kasbank_revised."%'";
-				};
+				};*/
 				$query = $this->db->query($sql);
 			}
 			return $query;

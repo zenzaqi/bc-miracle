@@ -1,0 +1,14 @@
+[by zaqi.smart@gmail.com]
+- New Update
+  o Jurnal Kas/Bank Masuk
+    + SQL : 2010-10-13_10-48-AM.sql
+    + URL : ?c=c_kasbank_masuk
+    + Keterangan :
+      - Bold hitam pada no jurnal brarti blom terpsoting,
+        boleh diubah dan dihapus
+      - Bold merah pada no jurnal brarti sudah terposting,
+        tidak boleh diubah dan dihapus, kecuali sudah direopen
+        dalam bulan yang sama
+  o Perawatan
+    + Standar bahan, menggunakan satuan terkecil
+ 
