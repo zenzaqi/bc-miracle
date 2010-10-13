@@ -232,7 +232,7 @@ Ext.onReady(function(){
 			{name: 'sum_tot_jum_item', type: 'float', mapping: 'tot_jum_item'},
 			{name: 'sum_tot_net', type: 'float', mapping: 'tot_net'},
 		]),
-		sortInfo:{field: 'sum_total', direction: "DESC"}
+		sortInfo:{field: 'sum_tot_net', direction: "DESC"}
 	});
 	/* End of Function */
 
@@ -359,7 +359,7 @@ Ext.onReady(function(){
 		}, 
 		{
 			align : 'Right',
-			header: '<div align="center">' + 'Grand Total Item' + '</div>',
+			header: '<div align="center">' + 'Total Item' + '</div>',
 			dataIndex: 'sum_jumlah',
 			width: 60,//185,	//210,
 			sortable: true,
@@ -367,7 +367,7 @@ Ext.onReady(function(){
 		},
 		{	
 			align : 'Right',
-			header: '<div align="center">' + 'Grand Sub Total (Rp)' + '</div>',
+			header: '<div align="center">' + 'Sub Total (Rp)' + '</div>',
 			dataIndex: 'sum_subtotal',
 			renderer: Ext.util.Format.numberRenderer('0,000'),
 			readOnly: true,
@@ -376,7 +376,7 @@ Ext.onReady(function(){
 		},
 		{	
 			align : 'Right',
-			header: '<div align="center">' + 'Grand Tot Disk Tmbhn (Rp)' + '</div>',
+			header: '<div align="center">' + 'Tot Disk Tmbhn (Rp)' + '</div>',
 			dataIndex: 'sum_diskon_tambahan',
 			renderer: Ext.util.Format.numberRenderer('0,000'),
 			readOnly: true,
@@ -385,7 +385,7 @@ Ext.onReady(function(){
 		},
 		{	
 			align : 'Right',
-			header: '<div align="center">' + 'Grand Total (Rp)' + '</div>',
+			header: '<div align="center">' + 'Total (Rp)' + '</div>',
 			dataIndex: 'sum_total',
 			renderer: Ext.util.Format.numberRenderer('0,000'),
 			readOnly: true,
