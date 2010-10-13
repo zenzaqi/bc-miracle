@@ -145,24 +145,54 @@ class C_perawatan extends Controller {
 	//add detail
 	function detail_perawatan_konsumsi_insert(){
 	//POST variable here
-		$krawat_id=trim(@$_POST["krawat_id"]);
+		/*$krawat_id=trim(@$_POST["krawat_id"]);
 		$krawat_master=trim(@$_POST["krawat_master"]);
 		$krawat_produk=trim(@$_POST["krawat_produk"]);
 		$krawat_satuan=trim(@$_POST["krawat_satuan"]);
 		$krawat_jumlah=trim(@$_POST["krawat_jumlah"]);
 		$result=$this->m_perawatan->detail_perawatan_konsumsi_insert($krawat_id ,$krawat_master ,$krawat_produk ,$krawat_satuan ,$krawat_jumlah );
+		echo $result;*/
+		
+		$krawat_id=trim(@$_POST["krawat_id"]);
+		$krawat_master=trim(@$_POST["krawat_master"]);
+		$krawat_satuan=trim(@$_POST["krawat_satuan"]);
+		$krawat_produk=trim(@$_POST["krawat_produk"]);
+		$krawat_jumlah=trim(@$_POST["krawat_jumlah"]);
+		
+		$array_krawat_id = json_decode(stripslashes($krawat_id));
+		$array_krawat_satuan = json_decode(stripslashes($krawat_satuan));
+		$array_krawat_jumlah = json_decode(stripslashes($krawat_jumlah));
+		$array_krawat_produk = json_decode(stripslashes($krawat_produk));
+
+		$result=$this->m_perawatan->detail_perawatan_konsumsi_insert($array_krawat_id ,$krawat_master ,$array_krawat_produk ,
+																	 $array_krawat_satuan ,$array_krawat_jumlah );
 		echo $result;
+		
 	}
 	
 	//add detail
 	function detail_perawatan_alat_insert(){
 	//POST variable here
-		$arawat_id=trim(@$_POST["arawat_id"]);
+		/*$arawat_id=trim(@$_POST["arawat_id"]);
 		$arawat_master=trim(@$_POST["arawat_master"]);
 		$arawat_alat=trim(@$_POST["arawat_alat"]);
 		$arawat_jumlah=trim(@$_POST["arawat_jumlah"]);
 		$result=$this->m_perawatan->detail_perawatan_alat_insert($arawat_id ,$arawat_master ,$arawat_alat,$arawat_jumlah );
+		echo $result;*/
+		
+		$arawat_id=trim(@$_POST["arawat_id"]);
+		$arawat_master=trim(@$_POST["arawat_master"]);
+		$arawat_alat=trim(@$_POST["arawat_alat"]);
+		$arawat_jumlah=trim(@$_POST["arawat_jumlah"]);
+		
+		$array_arawat_id = json_decode(stripslashes($arawat_id));
+		$array_arawat_jumlah = json_decode(stripslashes($arawat_jumlah));
+		$array_arawat_alat = json_decode(stripslashes($arawat_alat));
+
+		$result=$this->m_perawatan->detail_perawatan_alat_insert($array_arawat_id ,$arawat_master ,$array_arawat_alat ,
+																 $array_arawat_jumlah );
 		echo $result;
+		
 	}
 	
 	//event handler action

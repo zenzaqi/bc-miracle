@@ -264,7 +264,7 @@ Ext.onReady(function(){
 				rawat_aktif	: rawat_aktif_create, 
 			}, 
 			success: function(response){             
-				var result=eval(response.responseText);
+				/*var result=eval(response.responseText);
 				switch(result){
 					case 1:
 						perawatan_konsumsi_purge();
@@ -282,7 +282,24 @@ Ext.onReady(function(){
 						   icon: Ext.MessageBox.WARNING
 						});
 						break;
-				}        
+				}*/ 
+				
+				var result=eval(response.responseText);
+				if(result!==0){
+						
+						Ext.MessageBox.alert(post2db+' OK','Data perawatan berhasil disimpan');
+						perawatan_konsumsi_insert(result);
+						perawatan_createWindow.hide();
+				}else{
+						Ext.MessageBox.show({
+						   title: 'Warning',
+						   //msg: 'We could\'t not '+msg+' the Master_order_beli.',
+						   msg: 'Data perawatan tidak bisa disimpan !',
+						   buttons: Ext.MessageBox.OK,
+						   animEl: 'save',
+						   icon: Ext.MessageBox.WARNING
+						});
+				}
 			},
 			failure: function(response){
 				var result=response.responseText;
@@ -1417,7 +1434,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'alat_id'
 		},[
-		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
 			{name: 'alat_value', type: 'int', mapping: 'alat_id'},
 			{name: 'alat_display', type: 'string', mapping: 'alat_nama'},
 			{name: 'alat_jumlah', type: 'int', mapping: 'alat_jumlah'}
@@ -1444,7 +1460,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'satuan_value'
 		},[
-		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
 			{name: 'satuan_value', type: 'int', mapping: 'satuan_id'},
 			{name: 'satuan_nama', type: 'string', mapping: 'satuan_nama'}
 		]),
@@ -1504,7 +1519,14 @@ Ext.onReady(function(){
 	
 	//declaration of detail coloumn model
 	perawatan_konsumsi_ColumnModel = new Ext.grid.ColumnModel(
-		[
+		[{
+			header: '<div align="center">ID</div>',
+			dataIndex: 'krawat_id',
+			width: 80,
+			sortable: true,
+			hidden: true,
+			readOnly: true
+		},
 		{
 			header: '<div align="center">Produk</div>',
 			dataIndex: 'krawat_produk',
@@ -1549,7 +1571,14 @@ Ext.onReady(function(){
 	
 	//declaration of detail coloumn model
 	perawatan_alat_ColumnModel = new Ext.grid.ColumnModel(
-		[
+		[{
+			header: 'ID',
+			dataIndex: 'arawat_id',
+			width: 80,
+			sortable: true,
+			hidden: true,
+			readOnly: true
+		},
 		{
 			header: 'Nama Alat',
 			dataIndex: 'arawat_alat',
@@ -1594,11 +1623,11 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true},
-		bbar: new Ext.PagingToolbar({
-			pageSize: pageS,
-			store: perawatan_konsumsi_DataStore,
-			displayInfo: true
-		}),
+		// bbar: new Ext.PagingToolbar({
+			// pageSize: pageS,
+			// store: perawatan_konsumsi_DataStore,
+			// displayInfo: true
+		// }),
 		/* Add Control on ToolBar */
 		tbar: [
 		{
@@ -1620,7 +1649,7 @@ Ext.onReady(function(){
 	perawatan_alatListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'perawatan_alatListEditorGrid',
 		el: 'fp_perawatan_alat',
-		title: 'Detail perawatan_alat',
+		title: 'Detail Standar Alat',
 		height: 350,
 		width: 690,
 		autoScroll: true,
@@ -1634,11 +1663,11 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true},
-		bbar: new Ext.PagingToolbar({
-			pageSize: pageS,
-			store: perawatan_alat_DataStore,
-			displayInfo: true
-		}),
+		// bbar: new Ext.PagingToolbar({
+			// pageSize: pageS,
+			// store: perawatan_alat_DataStore,
+			// displayInfo: true
+		// }),
 		/* Add Control on ToolBar */
 		tbar: [
 		{
@@ -1660,8 +1689,8 @@ Ext.onReady(function(){
 	//function of detail add
 	function perawatan_konsumsi_add(){
 		var edit_perawatan_konsumsi= new perawatan_konsumsiListEditorGrid.store.recordType({
-			krawat_id	:'',		
-			krawat_master	:'',		
+			krawat_id		: 0,		
+			krawat_master	: 0,		
 			krawat_produk	:'',		
 			krawat_satuan	:'',		
 			krawat_jumlah	:''		
@@ -1676,9 +1705,9 @@ Ext.onReady(function(){
 	//function of detail add
 	function perawatan_alat_add(){
 		var edit_perawatan_alat= new perawatan_alatListEditorGrid.store.recordType({
-			arawat_id	:'',		
-			arawat_master	:'',		
-			arawat_alat	:'',		
+			arawat_id		:0,		
+			arawat_master	:0,		
+			arawat_alat		:'',		
 			arawat_jumlah	:''		
 		});
 		editor_perawatan_alat.stopEditing();
@@ -1696,8 +1725,8 @@ Ext.onReady(function(){
 	//eof
 	
 	//function for insert detail
-	function perawatan_konsumsi_insert(){
-		for(i=0;i<perawatan_konsumsi_DataStore.getCount();i++){
+	function perawatan_konsumsi_insert(pkid){
+		/*for(i=0;i<perawatan_konsumsi_DataStore.getCount();i++){
 			perawatan_konsumsi_record=perawatan_konsumsi_DataStore.getAt(i);
 			if(perawatan_konsumsi_record.data.krawat_produk!=="" && perawatan_konsumsi_record.data.krawat_produk!==null){
 				Ext.Ajax.request({
@@ -1713,13 +1742,68 @@ Ext.onReady(function(){
 					}
 				});
 			}
-		}
+		}*/
+		
+		var krawat_id = [];
+		var krawat_produk = [];
+        var krawat_satuan = [];
+        var krawat_jumlah = [];
+       
+        if(perawatan_konsumsi_DataStore.getCount()>0){
+            for(i=0; i<perawatan_konsumsi_DataStore.getCount();i++){
+                if((/^\d+$/.test(perawatan_konsumsi_DataStore.getAt(i).data.krawat_produk))
+				   && perawatan_konsumsi_DataStore.getAt(i).data.krawat_produk!==undefined
+				   && perawatan_konsumsi_DataStore.getAt(i).data.krawat_produk!==''
+				   && perawatan_konsumsi_DataStore.getAt(i).data.krawat_produk!==0
+				   && perawatan_konsumsi_DataStore.getAt(i).data.krawat_jumlah>0){
+                    
+                  	krawat_id.push(perawatan_konsumsi_DataStore.getAt(i).data.krawat_id);
+					krawat_satuan.push(perawatan_konsumsi_DataStore.getAt(i).data.krawat_satuan);
+					krawat_jumlah.push(perawatan_konsumsi_DataStore.getAt(i).data.krawat_jumlah);
+					krawat_produk.push(perawatan_konsumsi_DataStore.getAt(i).data.krawat_produk);
+                }
+            }
+			
+			var encoded_array_krawat_id = Ext.encode(krawat_id);
+			var encoded_array_krawat_satuan = Ext.encode(krawat_satuan);
+			var encoded_array_krawat_jumlah = Ext.encode(krawat_jumlah);
+			var encoded_array_krawat_produk = Ext.encode(krawat_produk);
+				
+			Ext.Ajax.request({
+				waitMsg: 'Mohon tunggu...',
+				url: 'index.php?c=c_perawatan&m=detail_perawatan_konsumsi_insert',
+				params:{
+					krawat_id			: encoded_array_krawat_id,
+					krawat_master		: pkid,
+					krawat_produk		: encoded_array_krawat_produk,
+					krawat_satuan		: encoded_array_krawat_satuan,
+					krawat_jumlah		: encoded_array_krawat_jumlah
+				},
+				success:function(response){
+					//perawatan_DataStore.reload();
+					perawatan_alat_insert(pkid);
+					
+				},
+				failure: function(response){
+					Ext.MessageBox.hide();
+					var result=response.responseText;
+					Ext.MessageBox.show({
+					   title: 'Error',
+					   msg: 'Could not connect to the database. retry later.',
+					   buttons: Ext.MessageBox.OK,
+					   animEl: 'database',
+					   icon: Ext.MessageBox.ERROR
+					});	
+				}
+			});
+					
+        }
 	}
 	//eof
 	
 	//function for insert detail
-	function perawatan_alat_insert(){
-		for(i=0;i<perawatan_alat_DataStore.getCount();i++){
+	function perawatan_alat_insert(pkid){
+		/*for(i=0;i<perawatan_alat_DataStore.getCount();i++){
 			perawatan_alat_record=perawatan_alat_DataStore.getAt(i);
 			if(perawatan_konsumsi_record.data.arawat_alat!=="" && perawatan_konsumsi_record.data.arawat_alat!==null){
 				Ext.Ajax.request({
@@ -1733,7 +1817,56 @@ Ext.onReady(function(){
 					}
 				});
 			}
-		}
+		}*/
+		
+		var arawat_id = [];
+		var arawat_alat = [];
+        var arawat_jumlah = [];
+       
+        if(perawatan_alat_DataStore.getCount()>0){
+            for(i=0; i<perawatan_alat_DataStore.getCount();i++){
+                if((/^\d+$/.test(perawatan_alat_DataStore.getAt(i).data.arawat_alat))
+				   && perawatan_alat_DataStore.getAt(i).data.arawat_alat!==undefined
+				   && perawatan_alat_DataStore.getAt(i).data.arawat_alat!==''
+				   && perawatan_alat_DataStore.getAt(i).data.arawat_alat!==0
+				   && perawatan_alat_DataStore.getAt(i).data.arawat_jumlah>0){
+                    
+                  	arawat_id.push(perawatan_alat_DataStore.getAt(i).data.arawat_id);
+					arawat_jumlah.push(perawatan_alat_DataStore.getAt(i).data.arawat_jumlah);
+					arawat_alat.push(perawatan_alat_DataStore.getAt(i).data.arawat_alat);
+                }
+            }
+			
+			var encoded_array_arawat_id = Ext.encode(arawat_id);
+			var encoded_array_arawat_jumlah = Ext.encode(arawat_jumlah);
+			var encoded_array_arawat_alat = Ext.encode(arawat_alat);
+				
+			Ext.Ajax.request({
+				waitMsg: 'Mohon tunggu...',
+				url: 'index.php?c=c_perawatan&m=detail_perawatan_alat_insert',
+				params:{
+					arawat_id			: encoded_array_arawat_id,
+					arawat_master		: pkid,
+					arawat_alat			: encoded_array_arawat_alat,
+					arawat_jumlah		: encoded_array_arawat_jumlah
+				},
+				success:function(response){
+					perawatan_DataStore.reload();
+				},
+				failure: function(response){
+					Ext.MessageBox.hide();
+					var result=response.responseText;
+					Ext.MessageBox.show({
+					   title: 'Error',
+					   msg: 'Could not connect to the database. retry later.',
+					   buttons: Ext.MessageBox.OK,
+					   animEl: 'database',
+					   icon: Ext.MessageBox.ERROR
+					});	
+				}
+			});
+					
+        }
 	}
 	//eof
 	

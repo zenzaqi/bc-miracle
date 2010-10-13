@@ -2357,7 +2357,7 @@ Ext.onReady(function(){
 	});
 	
 	terima_orderField.on("select",function(){
-		var j=cbo_tbeli_orderbeli_DataSore.find('tbeli_orderbeli_value',terima_orderField.getValue());
+		var j=cbo_tbeli_orderbeli_DataSore.findExact('tbeli_orderbeli_value',terima_orderField.getValue());
 		
 		if(cbo_tbeli_orderbeli_DataSore.getCount()){
 			terima_supplierField.setValue(cbo_tbeli_orderbeli_DataSore.getAt(j).data.tbeli_orderbeli_supplier);

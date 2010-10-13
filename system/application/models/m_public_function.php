@@ -1734,6 +1734,14 @@ class M_public_function extends Model{
 		}
 	}
 	
+	function get_akun_master_kasbank(){
+		$sql="select A.* from akun A,akun_map M
+				WHERE A.akun_kode not in (
+				SELECT B.akun_parent_kode FROM akun B WHERE B.akun_parent_kode is NOT NULL)
+				AND A.akun_kode LIKE concat('%', M.map_akun_kode,'%')";
+				
+	}
+	
 }
 
 ?>

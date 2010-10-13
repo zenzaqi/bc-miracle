@@ -92,7 +92,7 @@ class M_perawatan extends Model{
 			}
 			
 			//$sql="select * from vu_produk WHERE produk_aktif='Aktif'";
-			$sql="select * from vu_produk WHERE produk_aktif='Aktif'";
+			$sql="select * from vu_produk_satuan_terkecil WHERE produk_aktif='Aktif'";
 			if($query<>"" && is_numeric($query)==false){
 				$sql.=eregi("WHERE",$sql)? " AND ":" WHERE ";
 				$sql.=" (produk_kode like '%".$query."%' or produk_nama like '%".$query."%' or satuan_nama like '%".$query."%' or kategori_nama like '%".$query."%' or group_nama like '%".$query."%' or produk_kodelama like '%".$query."%') ";
@@ -137,9 +137,9 @@ class M_perawatan extends Model{
 			$query.=" ORDER BY krawat_produk ASC";
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
-			$limit = $query." LIMIT ".$start.",".$end;			
-			$result = $this->db->query($limit);  
-			
+/*			$limit = $query." LIMIT ".$start.",".$end;			
+			$result = $this->db->query($limit);  */
+			//$this->firephp->log($query);
 			if($nbrows>0){
 				foreach($result->result() as $row){
 					$arr[] = $row;
@@ -157,8 +157,8 @@ class M_perawatan extends Model{
 			$query = "SELECT * FROM perawatan_alat where arawat_master='".$master_id."'";
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
-			$limit = $query." LIMIT ".$start.",".$end;			
-			$result = $this->db->query($limit);  
+			/*$limit = $query." LIMIT ".$start.",".$end;			
+			$result = $this->db->query($limit);  */
 			
 			if($nbrows>0){
 				foreach($result->result() as $row){
@@ -203,9 +203,10 @@ class M_perawatan extends Model{
 		//*eof
 		
 		//insert detail record
-		function detail_perawatan_konsumsi_insert($krawat_id ,$krawat_master ,$krawat_produk ,$krawat_satuan ,$krawat_jumlah ){
+		function detail_perawatan_konsumsi_insert($array_krawat_id ,$krawat_master ,$array_krawat_produk ,$array_krawat_satuan ,
+												  $array_krawat_jumlah ){
 			//if master id not capture from view then capture it from max pk from master table
-			if($krawat_master=="" || $krawat_master==NULL){
+			/*if($krawat_master=="" || $krawat_master==NULL){
 				$krawat_master=$this->get_master_id();
 			}
 			
@@ -219,15 +220,53 @@ class M_perawatan extends Model{
 			if($this->db->affected_rows())
 				return '1';
 			else
-				return '0';
+				return '0';*/
+				
+			$query="";
+		   	for($i = 0; $i < sizeof($array_krawat_id); $i++){
+
+				$data = array(
+					"krawat_master"=>$krawat_master, 
+					"krawat_produk"=>$array_krawat_produk[$i], 
+					"krawat_satuan"=>$array_krawat_satuan[$i], 
+					"krawat_jumlah"=>$array_krawat_jumlah[$i]
+				);
+				
+								
+				if($array_krawat_id[$i]==0){
+					$this->db->insert('perawatan_konsumsi', $data); 
+					
+					$query = $query.$this->db->insert_id();
+					if($i<sizeof($array_krawat_id)-1){
+						$query = $query . ",";
+					} 
+					
+				}else{
+					$query = $query.$array_krawat_id[$i];
+					if($i<sizeof($array_krawat_id)-1){
+						$query = $query . ",";
+					} 
+					$this->db->where('krawat_id', $array_krawat_id[$i]);
+					$this->db->update('perawatan_konsumsi', $data);
+				}
+			}
+			
+			if($query<>""){
+				$sql="DELETE FROM perawatan_konsumsi WHERE  krawat_master='".$krawat_master."' AND
+						krawat_id NOT IN (".$query.")";
+				$this->db->query($sql);
+			}
+			
+			return '1';
+
 
 		}
 		//end of function
 		
 		//insert detail record
-		function detail_perawatan_alat_insert($arawat_id ,$arawat_master ,$arawat_alat ,$arawat_jumlah ){
+		function detail_perawatan_alat_insert($array_arawat_id ,$arawat_master ,$array_arawat_alat ,$array_arawat_jumlah ){
 			//if master id not capture from view then capture it from max pk from master table
-			if($arawat_master=="" || $arawat_master==NULL){
+			/*if($arawat_master=="" || $arawat_master==NULL){
 				$arawat_master=$this->get_master_id();
 			}
 			
@@ -240,7 +279,41 @@ class M_perawatan extends Model{
 			if($this->db->affected_rows())
 				return '1';
 			else
-				return '0';
+				return '0';*/
+			
+			$query="";
+		   	for($i = 0; $i < sizeof($array_arawat_id); $i++){
+
+				$data = array(
+					"arawat_master"=>$arawat_master, 
+					"arawat_alat"=>$array_arawat_alat[$i], 
+					"arawat_jumlah"=>$array_arawat_jumlah[$i]
+				);
+				
+								
+				if($array_arawat_id[$i]==0){
+					$this->db->insert('perawatan_alat', $data); 
+					
+					$query = $query.$this->db->insert_id();
+					if($i<sizeof($array_arawat_id)-1){
+						$query = $query . ",";
+					} 
+					
+				}else{
+					$query = $query.$array_arawat_id[$i];
+					if($i<sizeof($array_arawat_id)-1){
+						$query = $query . ",";
+					} 
+					$this->db->where('arawat_id', $array_arawat_id[$i]);
+					$this->db->update('perawatan_alat', $data);
+				}
+			}
+			
+			if($query<>""){
+				$sql="DELETE FROM perawatan_alat WHERE  arawat_master='".$arawat_master."' AND
+						arawat_id NOT IN (".$query.")";
+				$this->db->query($sql);
+			}
 
 		}
 		//end of function
@@ -450,7 +523,7 @@ class M_perawatan extends Model{
 				$sql="UPDATE perawatan set rawat_revised=(rawat_revised+1) WHERE rawat_id='".$rawat_id."'";
 				$this->db->query($sql);
 			}
-			return '1';
+			return $rawat_id;
 		}
 		
 		//function for create new record
@@ -523,7 +596,7 @@ class M_perawatan extends Model{
 				
 			$this->db->insert('perawatan', $data); 
 			if($this->db->affected_rows())
-				return '1';
+				return $this->db->insert_id();
 			else
 				return '0';
 		}

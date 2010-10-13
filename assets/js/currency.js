@@ -56,7 +56,7 @@ function CurrencyFormatted(number){
 	var str = new String(number);
 	str = str.replace(/,/g,"");
 	if (isNaN(str)) {
-		return "";
+		return "0";
 	}else{
 		var result = "";
 		var len = str.length;           

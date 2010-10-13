@@ -65,8 +65,9 @@ var editor_kasbank_masuk_detail;
 //declare konstant
 var post2db = '';
 var msg = '';
-var pageS=15;
-
+var pageS=16;
+var today=new Date().format('Y-m-d');
+var thismonth=new Date().format('Y-m');
 /* declare variable here for Field*/
 var kasbank_masuk_idField;
 var kasbank_masuk_tanggalField;
@@ -90,162 +91,100 @@ var kasbank_masuk_keteranganSearchField;
 var kasbank_masuk_authorSearchField;
 var kasbank_masuk_postSearchField;
 var kasbank_masuk_date_postSearchField;
-var total_debet;
-var total_masuk_kredit;
+var total_kasbank_masuk_debet;
+var total_kasbank_masuk_kredit;
 var jenis_kasbank = "masuk";
 /* on ready fuction */
 Ext.onReady(function(){
   	Ext.QuickTips.init();	/* Initiate quick tips icon */
-  
-  /* Function for Saving inLine Editing */
-	function kasbank_masuk_inline_update(oGrid_event){
-		var kasbank_masuk_id_update_pk="";
-		var kasbank_masuk_tanggal_update_date="";
-		var kasbank_masuk_nobukti_update=null;
-		var kasbank_masuk_akun_update=null;
-		var kasbank_masuk_terimauntuk_update=null;
-		var kasbank_masuk_jenis_update=null;
-		var kasbank_masuk_noref_update=null;
-		var kasbank_masuk_keterangan_update=null;
-		var kasbank_masuk_post_update=null;
-		var kasbank_masuk_date_post_update_date="";
-
-		kasbank_masuk_id_update_pk = oGrid_event.record.data.kasbank_masuk_id;
-	 	if(oGrid_event.record.data.kasbank_masuk_tanggal!== ""){kasbank_masuk_tanggal_update_date =oGrid_event.record.data.kasbank_masuk_tanggal.format('Y-m-d');}
-		if(oGrid_event.record.data.kasbank_masuk_nobukti!== null){kasbank_masuk_nobukti_update = oGrid_event.record.data.kasbank_masuk_nobukti;}
-		if(oGrid_event.record.data.kasbank_masuk_akun!== null){kasbank_masuk_akun_update = oGrid_event.record.data.kasbank_masuk_akun;}
-		if(oGrid_event.record.data.kasbank_masuk_terimauntuk!== null){kasbank_masuk_terimauntuk_update = oGrid_event.record.data.kasbank_masuk_terimauntuk;}
-		if(oGrid_event.record.data.kasbank_masuk_jenis!== null){kasbank_masuk_jenis_update = oGrid_event.record.data.kasbank_masuk_jenis;}
-		if(oGrid_event.record.data.kasbank_masuk_noref!== null){kasbank_masuk_noref_update = oGrid_event.record.data.kasbank_masuk_noref;}
-		if(oGrid_event.record.data.kasbank_masuk_keterangan!== null){kasbank_masuk_keterangan_update = oGrid_event.record.data.kasbank_masuk_keterangan;}
-		if(oGrid_event.record.data.kasbank_masuk_post!== null){kasbank_masuk_post_update = oGrid_event.record.data.kasbank_masuk_post;}
-	 	if(oGrid_event.record.data.kasbank_masuk_date_post!== ""){kasbank_masuk_date_post_update_date =oGrid_event.record.data.kasbank_masuk_date_post.format('Y-m-d');}
-
-		Ext.Ajax.request({  
-			waitMsg: 'Please wait...',
-			url: 'index.php?c=c_kasbank_masuk&m=get_action',
-			params: {
-				kasbank_masuk_id	: kasbank_masuk_id_update_pk, 
-				kasbank_masuk_tanggal	: kasbank_masuk_tanggal_update_date, 
-				kasbank_masuk_nobukti	:kasbank_masuk_nobukti_update,
-				kasbank_masuk_akun	:kasbank_masuk_akun_update,
-				kasbank_masuk_terimauntuk	:kasbank_masuk_terimauntuk_update,
-				//kasbank_masuk_jenis	:kasbank_masuk_jenis_update,
-				kasbank_masuk_jenis	: jenis_kasbank,
-				kasbank_masuk_noref	:kasbank_masuk_noref_update,
-				kasbank_masuk_keterangan	:kasbank_masuk_keterangan_update,
-				kasbank_masuk_post	:kasbank_masuk_post_update,
-				kasbank_masuk_date_post	: kasbank_masuk_date_post_update_date, 
-				task: "UPDATE"
-			}, 
-			success: function(response){             
-				var result=eval(response.responseText);
-				if(result!==0){
-						kasbank_masuk_detail_purge(result);
-						Ext.MessageBox.alert(post2db+' OK','The Kasbank was '+post2db+' successfully.');
-						kasbank_masuk_DataStore.reload();
-						kasbank_masuk_saveWindow.hide();
-				}else{
-						Ext.MessageBox.show({
-						   title: 'Warning',
-						   msg: 'We could\'t not '+msg+' the Tbl T Kasbank.',
-						   buttons: Ext.MessageBox.OK,
-						   animEl: 'save',
-						   icon: Ext.MessageBox.WARNING
-						});
-					}        
-			},
-			failure: function(response){
-				var result=response.responseText;
-				Ext.MessageBox.show({
-					   title: 'Error',
-					   msg: 'Could not connect to the database. retry later.',
-					   buttons: Ext.MessageBox.OK,
-					   animEl: 'database',
-					   icon: Ext.MessageBox.ERROR
-				});	
-			}  									    
-		});   
-	}
-  	/* End of Function */
-  
+   
   	/* Function for add and edit data form, open window form */
 	function kasbank_masuk_save(){
 	
 		if(is_kasbank_masuk_form_valid()){	
-			var kasbank_masuk_id_field_pk=null; 
-			var kasbank_masuk_tanggal_field_date=""; 
-			var kasbank_masuk_nobukti_field=null; 
-			var kasbank_masuk_akun_field=null; 
-			var kasbank_masuk_terimauntuk_field=null; 
-			var kasbank_masuk_jenis_field=null; 
-			var kasbank_masuk_noref_field=null; 
-			var kasbank_masuk_keterangan_field=null; 
-			var kasbank_masuk_post_field=null; 
-			var kasbank_masuk_date_post_field_date=""; 
 			
+			if(kasbank_masuk_detail_DataStore.getCount()<1){
 			
+				Ext.MessageBox.show({
+					title: 'Warning',
+					msg: 'Maaf, data transaksi tidak boleh kosong.',
+					buttons: Ext.MessageBox.OK,
+					animEl: 'save',
+					icon: Ext.MessageBox.WARNING
+				});
+				
+			}else{
+				var kasbank_masuk_id_field_pk=null; 
+				var kasbank_masuk_tanggal_field_date=""; 
+				var kasbank_masuk_nobukti_field=null; 
+				var kasbank_masuk_akun_field=null; 
+				var kasbank_masuk_terimauntuk_field=null; 
+				var kasbank_masuk_jenis_field=null; 
+				var kasbank_masuk_noref_field=null; 
+				var kasbank_masuk_keterangan_field=null; 
+				var kasbank_masuk_post_field=null; 
+				var kasbank_masuk_date_post_field_date=""; 
 
-			kasbank_masuk_id_field_pk=get_pk_id();
-			if(kasbank_masuk_tanggalField.getValue()!== ""){kasbank_masuk_tanggal_field_date = kasbank_masuk_tanggalField.getValue().format('Y-m-d');} 
-			if(kasbank_masuk_nobuktiField.getValue()!== null){kasbank_masuk_nobukti_field = kasbank_masuk_nobuktiField.getValue();} 
-			if(kasbank_masuk_akunField.getValue()!== null){kasbank_masuk_akun_field = kasbank_masuk_akunField.getValue();} 
-			if(kasbank_masuk_terimauntukField.getValue()!== null){kasbank_masuk_terimauntuk_field = kasbank_masuk_terimauntukField.getValue();} 
-			if(kasbank_masuk_jenisField.getValue()!== null){kasbank_masuk_jenis_field = 'masuk';} 
-			if(kasbank_masuk_norefField.getValue()!== null){kasbank_masuk_noref_field = kasbank_masuk_norefField.getValue();} 
-			if(kasbank_masuk_keteranganField.getValue()!== null){kasbank_masuk_keterangan_field = kasbank_masuk_keteranganField.getValue();} 
-			//if(kasbank_masuk_postField.getValue()!== null){kasbank_masuk_post_field = kasbank_masuk_postField.getValue();} 
-			//if(kasbank_masuk_date_postField.getValue()!== ""){kasbank_masuk_date_post_field_date = kasbank_masuk_date_postField.getValue().format('Y-m-d');} 
-
-			Ext.Ajax.request({  
-				waitMsg: 'Please wait...',
-				url: 'index.php?c=c_kasbank_masuk&m=get_action',
-				params: {
-					kasbank_masuk_id			: kasbank_masuk_id_field_pk, 
-					kasbank_masuk_tanggal		: kasbank_masuk_tanggal_field_date, 
-					kasbank_masuk_nobukti		: kasbank_masuk_nobukti_field, 
-					kasbank_masuk_akun		: kasbank_masuk_akun_field, 
-					kasbank_masuk_terimauntuk	: kasbank_masuk_terimauntuk_field, 
-					kasbank_masuk_jenis		: kasbank_masuk_jenis_field, 
-					kasbank_masuk_noref		: kasbank_masuk_noref_field, 
-					kasbank_masuk_keterangan	: kasbank_masuk_keterangan_field, 
-					kasbank_masuk_post		: kasbank_masuk_post_field, 
-					kasbank_masuk_date_post	: kasbank_masuk_date_post_field_date, 
-					task				: post2db
-				}, 
-				success: function(response){             
-					var result=eval(response.responseText);
-					if(result!==0){
-							kasbank_masuk_detail_purge(result);
-							Ext.MessageBox.alert(post2db+' OK','The Tbl T Kasbank was '+post2db+' successfully.');
-							kasbank_masuk_DataStore.reload();
-							kasbank_masuk_saveWindow.hide();
-					}else{
-							Ext.MessageBox.show({
-							   title: 'Warning',
-							   msg: 'We could\'t not '+msg+' the Tbl T Kasbank.',
+				kasbank_masuk_id_field_pk=get_pk_id();
+				if(kasbank_masuk_tanggalField.getValue()!== ""){kasbank_masuk_tanggal_field_date = kasbank_masuk_tanggalField.getValue().format('Y-m-d');} 		
+				if(kasbank_masuk_nobuktiField.getValue()!== null){kasbank_masuk_nobukti_field = kasbank_masuk_nobuktiField.getValue();} 
+				if(kasbank_masuk_akunField.getValue()!== null){kasbank_masuk_akun_field = kasbank_masuk_akunField.getValue();} 
+				if(kasbank_masuk_terimauntukField.getValue()!== null){kasbank_masuk_terimauntuk_field = kasbank_masuk_terimauntukField.getValue();} 
+				if(kasbank_masuk_jenisField.getValue()!== null){kasbank_masuk_jenis_field = 'masuk';} 
+				if(kasbank_masuk_norefField.getValue()!== null){kasbank_masuk_noref_field = kasbank_masuk_norefField.getValue();} 
+				if(kasbank_masuk_keteranganField.getValue()!== null){kasbank_masuk_keterangan_field = kasbank_masuk_keteranganField.getValue();} 
+	
+	
+				Ext.Ajax.request({  
+					waitMsg: 'Please wait...',
+					url: 'index.php?c=c_kasbank_masuk&m=get_action',
+					params: {
+						kasbank_masuk_id			: kasbank_masuk_id_field_pk, 
+						kasbank_masuk_tanggal		: kasbank_masuk_tanggal_field_date, 
+						kasbank_masuk_nobukti		: kasbank_masuk_nobukti_field, 
+						kasbank_masuk_akun			: kasbank_masuk_akun_field, 
+						kasbank_masuk_terimauntuk	: kasbank_masuk_terimauntuk_field, 
+						kasbank_masuk_jenis			: kasbank_masuk_jenis_field, 
+						kasbank_masuk_noref			: kasbank_masuk_noref_field, 
+						kasbank_masuk_keterangan	: kasbank_masuk_keterangan_field, 
+						kasbank_masuk_post			: kasbank_masuk_post_field, 
+						kasbank_masuk_date_post		: kasbank_masuk_date_post_field_date, 
+						task						: post2db
+					}, 
+					success: function(response){             
+						var result=response.responseText;
+						var rsp_kode=result.substring(0,2);
+						var rsp_msg=result.replace(rsp_kode+':','');
+						if(rsp_kode=='OK'){
+								kasbank_masuk_detail_insert(eval(rsp_msg));
+								Ext.MessageBox.alert(post2db+' OK','Jurnal Kas/Bank sukses disimpan.');
+								kasbank_masuk_saveWindow.hide();
+						}else{
+								Ext.MessageBox.show({
+								   title: 'Warning',
+								   msg: rsp_msg,
+								   buttons: Ext.MessageBox.OK,
+								   animEl: 'save',
+								   icon: Ext.MessageBox.WARNING
+								});
+							}         
+					},
+					failure: function(response){
+						var result=response.responseText;
+						Ext.MessageBox.show({
+							   title: 'Error',
+							   msg: 'Koneksi database gagal.',
 							   buttons: Ext.MessageBox.OK,
-							   animEl: 'save',
-							   icon: Ext.MessageBox.WARNING
-							});
-						}        
-				},
-				failure: function(response){
-					var result=response.responseText;
-					Ext.MessageBox.show({
-						   title: 'Error',
-						   msg: 'Could not connect to the database. retry later.',
-						   buttons: Ext.MessageBox.OK,
-						   animEl: 'database',
-						   icon: Ext.MessageBox.ERROR
-					});	
-				}                      
-			});
-			
+							   animEl: 'database',
+							   icon: Ext.MessageBox.ERROR
+						});	
+					}                      
+				});
+			}
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'Your Form is not valid!.',
+				msg: 'Maaf, data yang di kirim tidak valid.',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -266,29 +205,26 @@ Ext.onReady(function(){
 	/* Reset form before loading */
 	function kasbank_masuk_reset_form(){
 		kasbank_masuk_tanggalField.reset();
-		kasbank_masuk_tanggalField.setValue(null);
+		kasbank_masuk_tanggalField.setValue(today);
 		kasbank_masuk_nobuktiField.reset();
 		kasbank_masuk_nobuktiField.setValue(null);
 		kasbank_masuk_akunField.reset();
 		kasbank_masuk_akunField.setValue(null);
 		kasbank_masuk_terimauntukField.reset();
 		kasbank_masuk_terimauntukField.setValue(null);
-		//kasbank_masuk_jenisField.reset();
-		//kasbank_masuk_jenisField.setValue(null);
 		kasbank_masuk_norefField.reset();
 		kasbank_masuk_norefField.setValue(null);
 		kasbank_masuk_keteranganField.reset();
 		kasbank_masuk_keteranganField.setValue(null);
-		//kasbank_masuk_postField.reset();
-		//kasbank_masuk_postField.setValue(null);
-		//kasbank_masuk_date_postField.reset();
-		//kasbank_masuk_date_postField.setValue(null);
-		jumlah_total_debet=null;
+		kasbank_masuk_kodeakunField.reset();
+		kasbank_masuk_kodeakunField.setValue(null);
 		
-		jumlah_total_masuk_kredit=null;
-		
-		kasbank_masuk_detail_DataStore.setBaseParam('master_id',null);
+		kasbank_masuk_detail_DataStore.setBaseParam('master_id',-1);
 		kasbank_masuk_detail_DataStore.load();
+		cbo_akun_dkasbank_masukDataStore.setBaseParam('task','all');
+		cbo_akun_dkasbank_masukDataStore.load();
+		total_kasbank_masuk_kredit.setValue(0);
+		kasbank_masuk_button.setVisible(true);
 	}
  	/* End of Function */
   
@@ -298,31 +234,55 @@ Ext.onReady(function(){
 		kasbank_masuk_tanggalField.setValue(kasbankMasukListEditorGrid.getSelectionModel().getSelected().get('kasbank_masuk_tanggal'));
 		kasbank_masuk_nobuktiField.setValue(kasbankMasukListEditorGrid.getSelectionModel().getSelected().get('kasbank_masuk_nobukti'));
 		kasbank_masuk_akunField.setValue(kasbankMasukListEditorGrid.getSelectionModel().getSelected().get('kasbank_masuk_akun'));
+		kasbank_masuk_kodeakunField.setValue(kasbankMasukListEditorGrid.getSelectionModel().getSelected().get('kasbank_masuk_kode'));
 		kasbank_masuk_terimauntukField.setValue(kasbankMasukListEditorGrid.getSelectionModel().getSelected().get('kasbank_masuk_terimauntuk'));
-		kasbank_masuk_jenisField.setValue(kasbankMasukListEditorGrid.getSelectionModel().getSelected().get('kasbank_masuk_jenis'));
+		//kasbank_masuk_jenisField.setValue(kasbankMasukListEditorGrid.getSelectionModel().getSelected().get('kasbank_masuk_jenis'));
 		kasbank_masuk_norefField.setValue(kasbankMasukListEditorGrid.getSelectionModel().getSelected().get('kasbank_masuk_noref'));
 		kasbank_masuk_keteranganField.setValue(kasbankMasukListEditorGrid.getSelectionModel().getSelected().get('kasbank_masuk_keterangan'));
-		//kasbank_masuk_postField.setValue(kasbankMasukListEditorGrid.getSelectionModel().getSelected().get('kasbank_masuk_post'));
-		//kasbank_masuk_date_postField.setValue(kasbankMasukListEditorGrid.getSelectionModel().getSelected().get('kasbank_masuk_date_post'));
-		kasbank_masuk_detail_DataStore.setBaseParam('master_id',get_pk_id());
-		kasbank_masuk_detail_DataStore.load();
 		
+		cbo_akun_dkasbank_masuk_renderDataStore.setBaseParam('task','detail');
+		cbo_akun_dkasbank_masuk_renderDataStore.setBaseParam('master_id',get_pk_id());
+		cbo_akun_dkasbank_masuk_renderDataStore.load({
+			callback: function(r,opt,success){
+				if(success==true){
+					kasbank_masuk_detail_DataStore.setBaseParam('master_id',get_pk_id());
+					kasbank_masuk_detail_DataStore.load({
+						callback: function(r,opt,success){
+							if(success==true){
+								get_total_masuk_debet_kredit();
+								
+							}
+						}
+					});
+					
+				}
+			}
+		});
 		
+		if(kasbankMasukListEditorGrid.getSelectionModel().getSelected().get('kasbank_masuk_post')=='Y'){
+			kasbank_masuk_button.setVisible(false);
+			//kasbank_masuk_masterGroup.setDisabled(true);
+		}else{
+			kasbank_masuk_button.setVisible(true);
+			//kasbank_masuk_masterGroup.setDisabled(false);
+		}
 	}
 	/* End setValue to EDIT*/
   
 	/* Function for Check if the form is valid */
 	function is_kasbank_masuk_form_valid(){
-		return (true);
+		return (kasbank_masuk_tanggalField.isValid() && 
+				kasbank_masuk_akunField.isValid());
 	}
   	/* End of Function */
   
   	/* Function for Displaying  create Window Form */
 	function display_form_window(){
 		if(!kasbank_masuk_saveWindow.isVisible()){
-			kasbank_masuk_reset_form();
 			post2db='CREATE';
 			msg='created';
+			
+			kasbank_masuk_reset_form();
 			kasbank_masuk_saveWindow.show();
 		} else {
 			kasbank_masuk_saveWindow.toFront();
@@ -332,15 +292,44 @@ Ext.onReady(function(){
  
   	/* Function for Delete Confirm */
 	function kasbank_masuk_confirm_delete(){
-		// only one kasbank is selected here
+		
 		if(kasbankMasukListEditorGrid.selModel.getCount() == 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', kasbank_masuk_delete);
+			if(kasbankMasukListEditorGrid.getSelectionModel().getSelected().get('kasbank_masuk_post')=='Y'){
+				Ext.MessageBox.show({
+					title: 'Warning',
+					msg: 'Jurnal yang sudah terposting tidak dapat dihapus',
+					buttons: Ext.MessageBox.OK,
+					animEl: 'save',
+					width: 300,
+					icon: Ext.MessageBox.WARNING
+				});
+			}else{
+				Ext.MessageBox.confirm('Perhatian !','Apakah anda benar-benar akan menghapus data ini?', kasbank_masuk_delete);
+			}
+
 		} else if(kasbankMasukListEditorGrid.selModel.getCount() > 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', kasbank_masuk_delete);
+			var selections = kasbankMasukListEditorGrid.selModel.getSelections();
+			var count_post=0;
+			for(i = 0; i< kasbankMasukListEditorGrid.selModel.getCount(); i++){
+				if(selections[i].json.kasbank_post=='Y') count_post++;
+			}
+			//console.log('count'+count_post);
+			if(count_post>0){
+				Ext.MessageBox.show({
+					title: 'Warning',
+					msg: 'Jurnal yang sudah terposting tidak dapat dihapus',
+					buttons: Ext.MessageBox.OK,
+					animEl: 'save',
+					width: 300,
+					icon: Ext.MessageBox.WARNING
+				});
+			}else{
+				Ext.MessageBox.confirm('Perhatian !','Apakah anda benar-benar akan menghapus data ini?', kasbank_masuk_delete);
+			}
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really delete something you haven\'t selected?',
+				msg: 'Pilih data untuk melakukan delete',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -350,6 +339,65 @@ Ext.onReady(function(){
   	/* End of Function */
   
 	/* Function for Update Confirm */
+	function kasbank_masuk_confirm_reopen(){
+		/* only one record is selected here */
+		if(kasbankMasukListEditorGrid.selModel.getCount() == 1) {
+				var id="";
+				var tanggal=null;
+				
+			if(kasbankMasukListEditorGrid.getSelectionModel().getSelected().get('kasbank_masuk_post')=='Y' && kasbankMasukListEditorGrid.getSelectionModel().getSelected().get('kasbank_masuk_tanggal').format('Y-m')==thismonth){
+				
+				id = kasbankMasukListEditorGrid.getSelectionModel().getSelected().get('kasbank_masuk_id');
+				
+				Ext.Ajax.request({
+					waitMsg: 'Please wait...',
+					url: 'index.php?c=c_kasbank_masuk&m=kasbank_reopen',
+					params:{
+						kasbank_id : id
+					},
+					success:function(response){
+						Ext.MessageBox.show({
+							title: 'Warning',
+							msg: 'Pembukaan posting Data Sukses',
+							buttons: Ext.MessageBox.OK,
+							animEl: 'save',
+							icon: Ext.MessageBox.OK
+						});
+						kasbank_masuk_DataStore.reload();
+					},
+					failure:function(response){
+						Ext.MessageBox.show({
+							title: 'Warning',
+							msg: 'Pembukaan Posting gagal',
+							buttons: Ext.MessageBox.OK,
+							animEl: 'save',
+							icon: Ext.MessageBox.WARING
+						});
+					}
+				});
+				
+			}else{
+				Ext.MessageBox.show({
+					title: 'Warning',
+					msg: 'Hanya data yang sudah terposting pada bulan berjalan yang dapat dibuka',
+					buttons: Ext.MessageBox.OK,
+					animEl: 'save',
+					icon: Ext.MessageBox.WARNING
+				});
+			}
+		} else {
+			Ext.MessageBox.show({
+				title: 'Warning',
+				msg: 'Pilih data untuk melakukan pembukaan posting',
+				buttons: Ext.MessageBox.OK,
+				animEl: 'save',
+				icon: Ext.MessageBox.WARNING
+			});
+		}
+	}
+  	/* End of Function */
+  
+  	/* Function for Reopen Confirm */
 	function kasbank_masuk_confirm_update(){
 		/* only one record is selected here */
 		if(kasbankMasukListEditorGrid.selModel.getCount() == 1) {
@@ -362,7 +410,7 @@ Ext.onReady(function(){
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really update something you haven\'t selected?',
+				msg: 'Pilih data untuk melakukan update',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -370,14 +418,14 @@ Ext.onReady(function(){
 		}
 	}
   	/* End of Function */
-  
+	
   	/* Function for Delete Record */
 	function kasbank_masuk_delete(btn){
 		if(btn=='yes'){
 			var selections = kasbankMasukListEditorGrid.selModel.getSelections();
 			var prez = [];
 			for(i = 0; i< kasbankMasukListEditorGrid.selModel.getCount(); i++){
-				prez.push(selections[i].json.kasbank_masuk_id);
+				prez.push(selections[i].json.kasbank_id);
 			}
 			var encoded_array = Ext.encode(prez);
 			Ext.Ajax.request({ 
@@ -405,7 +453,7 @@ Ext.onReady(function(){
 					var result=response.responseText;
 					Ext.MessageBox.show({
 					   title: 'Error',
-					   msg: 'Could not connect to the database. retry later.',
+					   msg: 'Koneksi database gagal.',
 					   buttons: Ext.MessageBox.OK,
 					   animEl: 'database',
 					   icon: Ext.MessageBox.ERROR
@@ -423,13 +471,12 @@ Ext.onReady(function(){
 			url: 'index.php?c=c_kasbank_masuk&m=get_action', 
 			method: 'POST'
 		}),
-		baseParams:{task: "LIST"}, // parameter yang di $_POST ke Controller
+		baseParams:{task: "LIST", start: 0, limit: pageS}, // parameter yang di $_POST ke Controller
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
 			id: 'kasbank_masuk_id'
 		},[
-		/* dataIndex => insert intokasbank_masuk_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'kasbank_masuk_id', type: 'int', mapping: 'kasbank_id'}, 
 			{name: 'kasbank_masuk_tanggal', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'kasbank_tanggal'}, 
 			{name: 'kasbank_masuk_nobukti', type: 'string', mapping: 'kasbank_nobukti'}, 
@@ -437,146 +484,163 @@ Ext.onReady(function(){
 			{name: 'kasbank_masuk_kode', type: 'string', mapping: 'akun_kode'}, 
 			{name: 'kasbank_masuk_terimauntuk', type: 'string', mapping: 'kasbank_terimauntuk'}, 
 			{name: 'kasbank_masuk_jenis', type: 'string', mapping: 'kasbank_jenis'}, 
+			{name: 'kasbank_masuk_debet', type: 'float', mapping: 'kasbank_debet'}, 
+			{name: 'kasbank_masuk_kredit', type: 'float', mapping: 'kasbank_kredit'}, 
 			{name: 'kasbank_masuk_noref', type: 'string', mapping: 'kasbank_noref'}, 
 			{name: 'kasbank_masuk_keterangan', type: 'string', mapping: 'kasbank_keterangan'}, 
 			{name: 'kasbank_masuk_author', type: 'string', mapping: 'kasbank_author'}, 
 			{name: 'kasbank_masuk_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'kasbank_date_create'}, 
 			{name: 'kasbank_masuk_update', type: 'string', mapping: 'kasbank_update'}, 
 			{name: 'kasbank_masuk_date_update', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'kasbank_date_update'}, 
-			{name: 'kasbank_masuk_post', type: 'string', mapping: 'kasbank_masuk_post'}, 
+			{name: 'kasbank_masuk_post', type: 'string', mapping: 'kasbank_post'}, 
 			{name: 'kasbank_masuk_date_post', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'kasbank_date_post'}, 
 			{name: 'kasbank_masuk_revised', type: 'int', mapping: 'kasbank_mrevised'} 
 		]),
-		sortInfo:{field: 'kasbank_masuk_id', direction: "DESC"}
+		sortInfo:{field: 'kasbank_masuk_tanggal', direction: "DESC"}
 	});
 	/* End of Function */
 	
+
 	/* Function for Retrieve DataStore */
-	tbl_m_akun_DataStore = new Ext.data.Store({
-		id: 'tbl_m_akun_DataStore',
+	cbo_akun_DataStore = new Ext.data.Store({
+		id: 'cbo_akun_DataStore',
 		proxy: new Ext.data.HttpProxy({
-			url: 'index.php?c=c_tbl_m_akun&m=get_action', 
+			url: 'index.php?c=c_kasbank_masuk&m=get_akun_kasbank', 
 			method: 'POST'
 		}),
-		baseParams:{task: "LIST"}, // parameter yang di $_POST ke Controller
+		baseParams:{start: 0, limit:pageS}, // parameter yang di $_POST ke Controller
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
 			id: 'akun_id'
 		},[
-		/* dataIndex => insert intotbl_m_akun_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'akun_id', type: 'int', mapping: 'akun_id'}, 
 			{name: 'akun_kode', type: 'string', mapping: 'akun_kode'}, 
 			{name: 'akun_jenis', type: 'string', mapping: 'akun_jenis'}, 
 			{name: 'akun_parent', type: 'int', mapping: 'akun_parent'}, 
 			{name: 'akun_level', type: 'int', mapping: 'akun_level'}, 
-			{name: 'akun_nama', type: 'string', mapping: 'akun_nama'}, 
-			{name: 'akun_debet', type: 'float', mapping: 'akun_debet'}, 
-			{name: 'akun_kredit', type: 'float', mapping: 'akun_kredit'}, 
-			{name: 'akun_saldo', type: 'float', mapping: 'akun_saldo'}, 
-			{name: 'akun_aktif', type: 'string', mapping: 'akun_aktif'}, 
-			{name: 'akun_creator', type: 'string', mapping: 'akun_creator'}, 
-			{name: 'akun_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'akun_date_create'}, 
-			{name: 'akun_update', type: 'string', mapping: 'akun_update'}, 
-			{name: 'akun_date_update', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'akun_date_update'}, 
-			{name: 'akun_revised', type: 'int', mapping: 'akun_revised'} 
+			{name: 'akun_nama', type: 'string', mapping: 'akun_nama'} 
+		]),
+		sortInfo:{field: 'akun_kode', direction: "ASC"}
+	});
+	/* End of Function */
+    
+	
+	/* Function for Retrieve DataStore */
+	cbo_akun_dkasbank_masuk_renderDataStore = new Ext.data.Store({
+		id: 'cbo_akun_dkasbank_masuk_renderDataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_kasbank_masuk&m=get_detail_akun', 
+			method: 'POST'
+		}),
+		baseParams:{task: 'detail', start: 0, limit:pageS}, // parameter yang di $_POST ke Controller
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'akun_id'
+		},[
+			{name: 'akun_id', type: 'int', mapping: 'akun_id'}, 
+			{name: 'akun_kode', type: 'string', mapping: 'akun_kode'}, 
+			{name: 'akun_jenis', type: 'string', mapping: 'akun_jenis'}, 
+			{name: 'akun_parent', type: 'int', mapping: 'akun_parent'}, 
+			{name: 'akun_level', type: 'int', mapping: 'akun_level'}, 
+			{name: 'akun_nama', type: 'string', mapping: 'akun_nama'}
+		]),
+		sortInfo:{field: 'akun_kode', direction: "ASC"}
+	});
+	/* End of Function */
+	
+	/* Function for Retrieve DataStore */
+	cbo_akun_dkasbank_masukDataStore = new Ext.data.Store({
+		id: 'cbo_akun_dkasbank_masukDataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_kasbank_masuk&m=get_detail_akun', 
+			method: 'POST'
+		}),
+		baseParams:{start: 0, limit: pageS}, // parameter yang di $_POST ke Controller
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'akun_id'
+		},[
+			{name: 'akun_id', type: 'int', mapping: 'akun_id'}, 
+			{name: 'akun_kode', type: 'string', mapping: 'akun_kode'}, 
+			{name: 'akun_jenis', type: 'string', mapping: 'akun_jenis'}, 
+			{name: 'akun_parent', type: 'int', mapping: 'akun_parent'}, 
+			{name: 'akun_level', type: 'int', mapping: 'akun_level'}, 
+			{name: 'akun_nama', type: 'string', mapping: 'akun_nama'}
 		]),
 		sortInfo:{field: 'akun_id', direction: "DESC"}
 	});
 	/* End of Function */
-    
+	
   	/* Function for Identify of Window Column Model */
 	kasbank_masuk_ColumnModel = new Ext.grid.ColumnModel(
-		[{
-			header: '#',
-			readOnly: true,
-			dataIndex: 'kasbank_masuk_id',
-			width: 40,
-			renderer: function(value, cell){
-				cell.css = "readonlycell"; // Mengambil Value dari Class di dalam CSS 
-				return value;
-				},
-			hidden: false
-		},
+		[
 		{
 			header: 'Tanggal',
 			dataIndex: 'kasbank_masuk_tanggal',
-			width: 150,
+			width: 130,
 			sortable: true,
 			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
-			editor: new Ext.form.DateField({
-				format: 'Y-m-d'
-			}),
 			readOnly: true
 		}, 
 		{
-			header: 'No Bukti',
+			header: 'No Jurnal',
 			dataIndex: 'kasbank_masuk_nobukti',
 			width: 150,
 			sortable: true,
-			readOnly: true
+			readOnly: true,
+			renderer: function(v, params, record){
+				var kasbank_no="";
+				if(record.data.kasbank_masuk_post=='Y')
+					kasbank_no='<b><font color=RED>'+record.data.kasbank_masuk_nobukti+'</font></b>';
+				else
+					kasbank_no='<b>'+record.data.kasbank_masuk_nobukti+'</b>';
+					
+                return '<span>' + kasbank_no+ '</span>';
+            }
 		}, 
 		{
 			header: 'Nama Akun',
 			dataIndex: 'kasbank_masuk_akun',
-			width: 250,
+			width: 350,
 			sortable: true,
-			readOnly: true,
-			editor: new Ext.form.ComboBox({
-					id: 'cb_kasbank_masuk_akun',
-					store: tbl_m_akun_DataStore,
-					mode: 'remote',
-					displayField: 'akun_nama',
-					valueField: 'akun_id',
-					loadingText: 'Searching...',
-					typeAhead: true,
-					pageSize: pageS,
-					triggerAction: 'all',
-					lazyRender:true,
-					listClass: 'x-combo-list-small',
-					anchor: '80%',
-					hideTrigger: false
-		    	})
+			readOnly: true
 		}, 	
-		{	header: 'Kode Akun',
+		{	header: 'Kode',
 			dataIndex: 'kasbank_masuk_kode',
 			width: 100,
 			readOnly: true
 		},
 		{
-			header: 'Terima',
+			header: 'Terima Dari',
 			dataIndex: 'kasbank_masuk_terimauntuk',
 			width: 150,
 			sortable: true,
-			editor: new Ext.form.TextField({
-				maxLength: 250			})
-		}, 
-		// {
-			// header: 'Jenis',
-			// dataIndex: 'kasbank_masuk_jenis',
-			// width: 150,
-			// sortable: true,
-			// readOnly: true,
-		// }, 
-		{
-			header: 'No. Ref',
-			dataIndex: 'kasbank_masuk_noref',
-			width: 150,
-			sortable: true,
-			editor: new Ext.form.TextField({
-				maxLength: 50			})
+			readOnly: true,
+			hidden : true
 		}, 
 		{
 			header: 'Keterangan',
 			dataIndex: 'kasbank_masuk_keterangan',
-			width: 150,
+			width: 250,
 			sortable: true,
-			editor: new Ext.form.TextField({
-				maxLength: 250			}),
-			hidden: true,
+			readOnly: true
 		}, 
+		 {
+			 header: 'Debet (Rp)',
+			 width: 150,
+			 align: 'right',
+			 renderer: function(v, params, record){
+				var nilai_rupiah=record.data.kasbank_masuk_debet;
+				return '<span>'+Ext.util.Format.number(nilai_rupiah,'0,000')+'</span>';
+             },
+			 sortable: true,
+			 readOnly: true
+		 }, 
 		{
-			header: 'Author',
+			header: 'Creator',
 			dataIndex: 'kasbank_masuk_author',
 			width: 150,
 			sortable: true,
@@ -639,7 +703,7 @@ Ext.onReady(function(){
 	kasbankMasukListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'kasbankMasukListEditorGrid',
 		el: 'fp_kasbank_masuk',
-		title: 'Kas/Bank Masuk',
+		title: 'Jurnal Kas/Bank Masuk',
 		autoHeight: true,
 		store: kasbank_masuk_DataStore, // DataStore
 		cm: kasbank_masuk_ColumnModel, // Nama-nama Columns
@@ -648,13 +712,12 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 800,
+	  	width: 1024,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: kasbank_masuk_DataStore,
 			displayInfo: true
 		}),
-		/* Add Control on ToolBar */
 		tbar: [
 		{
 			text: 'Add',
@@ -686,17 +749,16 @@ Ext.onReady(function(){
 			tooltip: 'Refresh datagrid',
 			handler: kasbank_masuk_reset_search,
 			iconCls:'icon-refresh'
-		},'-',{
-			text: 'Export Excel',
-			tooltip: 'Export to Excel(.xls) Document',
-			iconCls:'icon-xls',
-			handler: kasbank_masuk_export_excel
-		}, '-',{
-			text: 'Print',
-			tooltip: 'Print Document',
-			iconCls:'icon-print',
-			handler: kasbank_masuk_print  
 		}
+		<?php if(ereg('R',$this->m_security->get_access_group_by_kode('MENU_POSTING'))){ ?>
+		,'-',
+		{
+			text: 'Buka Posting',
+			tooltip: 'Buka Posting',
+			iconCls:'icon-reopen',
+			handler: kasbank_masuk_confirm_reopen   // Confirm before updating
+		}
+		<?php } ?>
 		]
 	});
 	kasbankMasukListEditorGrid.render();
@@ -716,20 +778,16 @@ Ext.onReady(function(){
 			tooltip: 'Delete selected record', 
 			iconCls:'icon-delete',
 			handler: kasbank_masuk_confirm_delete 
-		},
-		'-',
-		{ 
-			text: 'Print',
-			tooltip: 'Print Document',
-			iconCls:'icon-print',
-			handler: kasbank_masuk_print 
-		},
-		{ 
-			text: 'Export Excel', 
-			tooltip: 'Export to Excel(.xls) Document',
-			iconCls:'icon-xls',
-			handler: kasbank_masuk_export_excel 
 		}
+		<?php if(ereg('R',$this->m_security->get_access_group_by_kode('MENU_POSTING'))){ ?>
+		,'-',
+		{
+			text: 'Buka Posting',
+			tooltip: 'Buka Posting',
+			iconCls:'icon-reopen',
+			handler: kasbank_masuk_confirm_reopen   // Confirm before updating
+		}
+		<?php } ?>
 		]
 	}); 
 	/* End of Declaration */
@@ -747,22 +805,12 @@ Ext.onReady(function(){
 	
 	/* function for editing row via context menu */
 	function kasbank_masuk_editContextMenu(){
-		//kasbankMasukListEditorGrid.startEditing(kasbank_masuk_SelectedRow,1);
 		kasbank_masuk_confirm_update();
   	}
 	/* End of Function */
   	
 	kasbankMasukListEditorGrid.addListener('rowcontextmenu', onkasbank_masuk_ListEditGridContextMenu);
 	kasbank_masuk_DataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
-	kasbankMasukListEditorGrid.on('afteredit', kasbank_masuk_inline_update); // inLine Editing Record
-	
-	// function select data store
-	// kasbank_masuk_akunField.on('select', function(){
-		// var index=tbl_m_akun_DataStore.findExact('akun_id',kasbank_masuk_akunField.getValue(),0);
-		// if(index>-1){
-			// kasbank_masuk_kodeakunField.setValue(tbl_m_akun_DataStore.getAt(index).data.akun_kode);
-		// }
-	// });
 	
 	
 	/* Identify  kasbank_masuk_tanggal Field */
@@ -770,20 +818,24 @@ Ext.onReady(function(){
 		id: 'kasbank_masuk_tanggalField',
 		fieldLabel: 'Tanggal',
 		format : 'Y-m-d',
-		anchor: '95%'
+		anchor: '95%',
+		allowBlank: false
 	});
 	/* Identify  kasbank_masuk_nobukti Field */
 	kasbank_masuk_nobuktiField= new Ext.form.TextField({
 		id: 'kasbank_masuk_nobuktiField',
-		fieldLabel: 'No Bukti',
+		fieldLabel: 'No Jurnal',
 		maxLength: 50,
-		anchor: '95%'
+		anchor: '95%',
+		allowBlank: false
 	});
+	
+	
 	/* Identify  kasbank_masuk_akun Field */
 	kasbank_masuk_akunField= new Ext.form.ComboBox({
 		id: 'kasbank_masuk_akunField',
 		fieldLabel: 'Nama Akun',
-		store: tbl_m_akun_DataStore,
+		store: cbo_akun_DataStore,
 		mode: 'remote',
 		displayField: 'akun_nama',
 		valueField: 'akun_id',
@@ -794,22 +846,25 @@ Ext.onReady(function(){
 		lazyRender:true,
 		listClass: 'x-combo-list-small',
 		anchor: '95%',
-		hideTrigger: false
+		hideTrigger: false,
+		allowBlank: false
 	
 	});
-
+	
+	
+	
 	/* Identify  kasbank_masuk_kodeakun Field */
 	kasbank_masuk_kodeakunField= new Ext.form.TextField({
 		id: 'kasbank_masuk_kodeakunField',
-		fieldLabel: 'Kode akun',
+		fieldLabel: 'Kode Akun',
 		maxLength: 250,
-		anchor: '95%',
+		anchor: '50%',
 		readOnly: true
 	});
 	/* Identify  kasbank_masuk_terimauntuk Field */
 	kasbank_masuk_terimauntukField= new Ext.form.TextField({
 		id: 'kasbank_masuk_terimauntukField',
-		fieldLabel: 'Terima',
+		fieldLabel: 'Terima Dari',
 		maxLength: 250,
 		anchor: '95%'
 	});
@@ -838,29 +893,7 @@ Ext.onReady(function(){
 		maxLength: 250,
 		anchor: '95%'
 	});
-	/* Identify  kasbank_masuk_post Field */
-	// kasbank_masuk_postField= new Ext.form.ComboBox({
-		// id: 'kasbank_masuk_postField',
-		// hidden: true,
-		// fieldLabel: 'Post',
-		// store:new Ext.data.SimpleStore({
-			// fields:['kasbank_masuk_post_value', 'kasbank_masuk_post_display'],
-			// data:[['T','T'],['Y','Y']]
-		// }),
-		// mode: 'local',
-		// displayField: 'kasbank_masuk_post_display',
-		// valueField: 'kasbank_masuk_post_value',
-		// anchor: '95%',
-		// triggerAction: 'all'	
-	// });
-	// /* Identify  kasbank_masuk_date_post Field */
-	// kasbank_masuk_date_postField= new Ext.form.DateField({
-		// id: 'kasbank_masuk_date_postField',
-		// fieldLabel: 'Date Post',
-		// hidden: true,
-		// format : 'Y-m-d'
-	// });
-	
+
   	/*Fieldset Master*/
 	kasbank_masuk_masterGroup = new Ext.form.FieldSet({
 		title: 'Master ',
@@ -872,7 +905,7 @@ Ext.onReady(function(){
 				columnWidth:0.35,
 				layout: 'form',
 				border:false,
-				items: [kasbank_masuk_tanggalField, kasbank_masuk_nobuktiField,  kasbank_masuk_jenisField,  kasbank_masuk_norefField ] 
+				items: [kasbank_masuk_tanggalField, kasbank_masuk_nobuktiField,  kasbank_masuk_jenisField,  kasbank_masuk_norefField] 
 			},{
 				columnWidth:0.65,
 				layout: 'form',
@@ -889,9 +922,8 @@ Ext.onReady(function(){
 	var kasbank_masuk_detail_reader=new Ext.data.JsonReader({
 		root: 'results',
 		totalProperty: 'total',
-		id: ''
+		id: 'dkasbank_masuk_id'
 	},[
-	/* dataIndex => insert intoperawatan_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'dkasbank_masuk_id', type: 'int', mapping: 'dkasbank_id'}, 
 			{name: 'dkasbank_masuk_master', type: 'int', mapping: 'dkasbank_master'}, 
 			{name: 'dkasbank_masuk_akun', type: 'int', mapping: 'dkasbank_akun'}, 
@@ -929,7 +961,6 @@ Ext.onReady(function(){
 	
 	//function combo render
 	Ext.util.Format.comboRenderer = function(combo){
-		tbl_m_akun_DataStore.load();
 		return function(value){
 			var record = combo.findRecord(combo.valueField, value);
 			return record ? record.get(combo.displayField) : combo.valueNotFoundText;
@@ -938,40 +969,84 @@ Ext.onReady(function(){
 	
 
 	// variable combo akun
-	var combo_akun=new Ext.form.ComboBox({
-			store: tbl_m_akun_DataStore,
-			mode: 'remote',
-			displayField: 'akun_nama',
-			valueField: 'akun_id',
-			loadingText: 'Searching...',
-			typeAhead: true,
-			pageSize: pageS,
-			triggerAction: 'all',
-			lazyRender:true,
-			listClass: 'x-combo-list-small',
-			anchor: '80%',
-			hideTrigger: false
+	var combo_akun_kasbank_detail_masuk_render=new Ext.form.ComboBox({
+		id: 'combo_akun_kasbank_detail_masuk',
+		store: cbo_akun_dkasbank_masuk_renderDataStore,
+		mode: 'remote',
+		displayField: 'akun_nama',
+		valueField: 'akun_id',
+		loadingText: 'Searching...',
+		typeAhead: false,
+		pageSize: pageS,
+		triggerAction: 'all',
+		lazyRender:true,
+		listClass: 'x-combo-list-small',
+		anchor: '95%',
+		hideTrigger: true
 	});
 	//eof
 	
+	var combo_akun_kasbank_detail_masuk=new Ext.form.ComboBox({
+		id: 'combo_akun_kasbank_detail_masuk',
+		store: cbo_akun_dkasbank_masukDataStore,
+		mode: 'remote',
+		displayField: 'akun_nama',
+		valueField: 'akun_id',
+		loadingText: 'Searching...',
+		typeAhead: false,
+		pageSize: pageS,
+		triggerAction: 'all',
+		lazyRender: false,
+		listClass: 'x-combo-list-small',
+		anchor: '95%',
+		hideTrigger: false
+	});
 	
+	var combo_akun_kasbank_detail_masuk_kode=new Ext.form.ComboBox({
+		store: cbo_akun_dkasbank_masuk_renderDataStore,
+		mode: 'remote',
+		displayField: 'akun_kode',
+		valueField: 'akun_id',
+		loadingText: 'Searching...',
+		typeAhead: true,
+		pageSize: pageS,
+		triggerAction: 'all',
+		lazyRender:true,
+		listClass: 'x-combo-list-small',
+		anchor: '80%',
+		allowBlank: false,
+		hideTrigger: false
+	});
+	
+	var kode_aku_kasbank_detail_masuk=new Ext.form.TextField({
+			readOnly: true
+		});
 	//declaration of detail coloumn model
 	kasbank_masuk_detail_ColumnModel = new Ext.grid.ColumnModel(
 		[
-		
-		{
-			header: 'Akun',
-			dataIndex: 'dkasbank_masuk_akun',
-			width: 295,
+		 {
+			header: 'ID',
+			dataIndex: 'dkasbank_masuk_id',
+			width: 350,
 			sortable: false,
-			editor: combo_akun,
-			renderer: Ext.util.Format.comboRenderer(combo_akun)
+			readOnly: true,
+			hidden: true
+		},
+		{
+			header: 'Nama Akun',
+			dataIndex: 'dkasbank_masuk_akun',
+			width: 350,
+			sortable: false,
+			editor: combo_akun_kasbank_detail_masuk,
+			renderer: Ext.util.Format.comboRenderer(combo_akun_kasbank_detail_masuk_render)
 		}, 
 		{
-			header: 'Kode Akun',
+			header: 'Kode',
 			dataIndex: 'dkasbank_masuk_akun',
 			width: 100,
-			readOnly: true
+			readOnly: true,
+			//editor: kode_aku_kasbank_detail_masuk,
+			renderer: Ext.util.Format.comboRenderer(combo_akun_kasbank_detail_masuk_kode)
 		},
 
 		{
@@ -982,17 +1057,19 @@ Ext.onReady(function(){
 				maxLength: 250			
 			})
 		}, 
-		{
+		/*{
 			header: 'Debet (Rp)',
 			dataIndex: 'dkasbank_masuk_debet',
 			width: 150,
 			readOnly: true
 
-		}, 
+		}, */
 		{
 			header: 'Kredit (Rp)',
 			dataIndex: 'dkasbank_masuk_kredit',
 			width: 150,
+			renderer: Ext.util.Format.numberRenderer('0,000'),
+			align: 'right',
 			editor: new Ext.form.NumberField({
 				allowDecimals: true,
 				allowNegative: false,
@@ -1000,7 +1077,8 @@ Ext.onReady(function(){
 				maxLength: 22,
 				maskRe: /([0-9]+)$/
 			})
-		}]
+		}
+		]
 	);
 	kasbank_masuk_detail_ColumnModel.defaultSortable= true;
 	//eof
@@ -1009,7 +1087,7 @@ Ext.onReady(function(){
 	kasbank_masuk_detailListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'kasbank_masuk_detailListEditorGrid',
 		el: 'fp_kasbank_masuk_detail',
-		title: 'Detail',
+		title: 'Detail Jurnal Masuk [Kredit]',
 		height: 250,
 		width: 690,
 		autoScroll: true,
@@ -1023,12 +1101,6 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true},
-		bbar: new Ext.PagingToolbar({
-			pageSize: pageS,
-			store: kasbank_masuk_detail_DataStore,
-			displayInfo: true
-		}),
-		/* Add Control on ToolBar */
 		tbar: [
 		{
 			text: 'Add',
@@ -1049,10 +1121,10 @@ Ext.onReady(function(){
 	//function of detail add
 	function kasbank_masuk_detail_add(){
 		var edit_kasbank_masuk_detail= new kasbank_masuk_detailListEditorGrid.store.recordType({
-			dkasbank_masuk_id	:'',		
-			dkasbank_masuk_akun	:'',		
+			dkasbank_masuk_id		:0,		
+			dkasbank_masuk_akun		:'',		
 			dkasbank_masuk_detail	:'',		
-			dkasbank_masuk_debet	: '',		
+			dkasbank_masuk_debet	: 0,		
 			dkasbank_masuk_kredit	: 0		
 		});
 		editor_kasbank_masuk_detail.stopEditing();
@@ -1064,54 +1136,78 @@ Ext.onReady(function(){
 	
 	//function for refresh detail
 	function refresh_kasbank_masuk_detail(){
-		
 		kasbank_masuk_detail_DataStore.commitChanges();
 		kasbank_masuk_detailListEditorGrid.getView().refresh();
 	}
 	//eof
 	
-	//function for insert detail
 	function kasbank_masuk_detail_insert(pkid){
-		for(i=0;i<kasbank_masuk_detail_DataStore.getCount();i++){
-			kasbank_masuk_detail_record=kasbank_masuk_detail_DataStore.getAt(i);
+        var dkasbank_masuk_id = [];
+        var dkasbank_masuk_akun = [];
+        var dkasbank_masuk_detail = [];
+        var dkasbank_masuk_kredit = [];
+        
+        var dcount = kasbank_masuk_detail_DataStore.getCount() - 1;
+        
+        if(kasbank_masuk_detail_DataStore.getCount()>0){
+            for(i=0; i<kasbank_masuk_detail_DataStore.getCount();i++){
+                if((/^\d+$/.test(kasbank_masuk_detail_DataStore.getAt(i).data.dkasbank_masuk_akun))
+				   && kasbank_masuk_detail_DataStore.getAt(i).data.dkasbank_masuk_akun!==undefined
+				   && kasbank_masuk_detail_DataStore.getAt(i).data.dkasbank_masuk_akun!==''
+				   && kasbank_masuk_detail_DataStore.getAt(i).data.dkasbank_masuk_akun!==0
+				   && kasbank_masuk_detail_DataStore.getAt(i).data.dkasbank_masuk_kredit!==0
+				   && kasbank_masuk_detail_DataStore.getAt(i).data.dkasbank_masuk_kredit>0){
+                    
+                  	dkasbank_masuk_id.push(kasbank_masuk_detail_DataStore.getAt(i).data.dkasbank_masuk_id);
+					dkasbank_masuk_akun.push(kasbank_masuk_detail_DataStore.getAt(i).data.dkasbank_masuk_akun);
+                   	dkasbank_masuk_detail.push(kasbank_masuk_detail_DataStore.getAt(i).data.dkasbank_masuk_detail);
+					dkasbank_masuk_kredit.push(kasbank_masuk_detail_DataStore.getAt(i).data.dkasbank_masuk_kredit);
+                }
+            }
+			
+			var encoded_array_dkasbank_masuk_id = Ext.encode(dkasbank_masuk_id);
+			var encoded_array_dkasbank_masuk_akun = Ext.encode(dkasbank_masuk_akun);
+			var encoded_array_dkasbank_masuk_detail = Ext.encode(dkasbank_masuk_detail);
+			var encoded_array_dkasbank_masuk_kredit = Ext.encode(dkasbank_masuk_kredit);
+				
 			Ext.Ajax.request({
-				waitMsg: 'Please wait...',
+				waitMsg: 'Mohon tunggu...',
 				url: 'index.php?c=c_kasbank_masuk&m=detail_kasbank_masuk_detail_insert',
 				params:{
-				dkasbank_masuk_id	: kasbank_masuk_detail_record.data.dkasbank_masuk_id, 
-				dkasbank_masuk_master	: eval(pkid), 
-				dkasbank_masuk_akun	: kasbank_masuk_detail_record.data.dkasbank_masuk_akun, 
-				dkasbank_masuk_detail	: kasbank_masuk_detail_record.data.dkasbank_masuk_detail, 
-				dkasbank_masuk_debet	: kasbank_masuk_detail_record.data.dkasbank_masuk_debet, 
-				dkasbank_masuk_kredit	: kasbank_masuk_detail_record.data.dkasbank_masuk_kredit 
-				
+					dkasbank_masuk_id		: encoded_array_dkasbank_masuk_id,
+					dkasbank_masuk_master	: pkid, 
+					dkasbank_masuk_akun		: encoded_array_dkasbank_masuk_akun,
+					dkasbank_masuk_detail	: encoded_array_dkasbank_masuk_detail,
+					dkasbank_masuk_kredit	: encoded_array_dkasbank_masuk_kredit
+				},
+				success:function(response){
+					kasbank_masuk_DataStore.reload()
+				},
+				failure: function(response){
+					Ext.MessageBox.hide();
+					var result=response.responseText;
+					Ext.MessageBox.show({
+					   title: 'Error',
+					   msg: 'Could not connect to the database. retry later.',
+					   buttons: Ext.MessageBox.OK,
+					   animEl: 'database',
+					   icon: Ext.MessageBox.ERROR
+					});	
 				}
 			});
-		}
-		kasbank_masuk_DataStore.reload();
+					
+        }
 	}
-	//eof
 	
-	//function for purge detail
-	function kasbank_masuk_detail_purge(pkid){
-		Ext.Ajax.request({
-			waitMsg: 'Please wait...',
-			url: 'index.php?c=c_kasbank_masuk&m=detail_kasbank_masuk_detail_purge',
-			params:{ master_id: pkid },
-			success:function(response){
-				kasbank_masuk_detail_insert(pkid);
-			}
-		});
-	}
-	//eof
+	
 	
 	/* Function for Delete Confirm of detail */
 	function kasbank_masuk_detail_confirm_delete(){
 		// only one record is selected here
 		if(kasbank_masuk_detailListEditorGrid.selModel.getCount() == 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', kasbank_masuk_detail_delete);
+			Ext.MessageBox.confirm('Perhatian !','Apakah anda benar-benar akan menghapus data ini?', kasbank_masuk_detail_delete);
 		} else if(kasbank_masuk_detailListEditorGrid.selModel.getCount() > 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', kasbank_masuk_detail_delete);
+			Ext.MessageBox.confirm('Perhatian !','Apakah anda benar-benar akan menghapus data ini?', kasbank_masuk_detail_delete);
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
@@ -1136,51 +1232,44 @@ Ext.onReady(function(){
 	//eof
 	
 	//event on update of detail data store
-	kasbank_masuk_detail_DataStore.on('update', refresh_kasbank_masuk_detail);
 
-	/* Identify  total_debet Field */
-	total_debet= new Ext.form.NumberField({
-		id: 'total_debet',
-		fieldLabel: 'Total Debet',
-		allowDecimals: true,
-		allowNegative: false,
-		readOnly: true,
-		blankText: '0',
-		maxLength: 22,
-		maskRe: /([0-9]+)$/
-	});
-	total_masuk_kredit= new Ext.form.NumberField({
-		id: 'total_masuk_kredit',
+
+
+	total_kasbank_masuk_kredit= new Ext.form.TextField({
+		id: 'total_kasbank_masuk_kredit',
 		fieldLabel: 'Total Kredit',
-		allowDecimals: true,
-		allowNegative: false,
 		readOnly: true,
 		blankText: '0',
-		maxLength: 22,
+		valueRenderer: 'numberToCurrency',
+		itemCls: 'rmoney',
 		maskRe: /([0-9]+)$/
 	});
+	
+	
+	
   	/*Fieldset Total Jumlah*/
-	jumlah_total = new Ext.form.FieldSet({
+	jumlah_total_kasbank_masuk = new Ext.form.FieldSet({
 		title: 'Total Jumlah ',
 		autoHeight: true,
 		collapsible: true,
 		layout:'column',
 		items:[
 			{
-				columnWidth:0.5,
+				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [total_debet ] 
-			},{
-				columnWidth:0.5,
-				layout: 'form',
-				border:false,
-				items: [total_masuk_kredit ] 
+				items: [total_kasbank_masuk_kredit] 
 			}
 			]
 	
 	});
 	
+	
+	kasbank_masuk_button=new Ext.Button({
+		text: 'Save and Close',
+		visible: true,
+		handler: kasbank_masuk_save
+	});
 	
 	/* Function for retrieve create Window Panel*/ 
 	kasbank_masuk_saveForm = new Ext.FormPanel({
@@ -1188,12 +1277,8 @@ Ext.onReady(function(){
 		bodyStyle:'padding:5px',
 		autoHeight:true,
 		width: 700,        
-		items: [kasbank_masuk_masterGroup,kasbank_masuk_detailListEditorGrid,jumlah_total]
-		,
-		buttons: [{
-				text: 'Save and Close',
-				handler: kasbank_masuk_save
-			}
+		items: [kasbank_masuk_masterGroup,kasbank_masuk_detailListEditorGrid,jumlah_total_kasbank_masuk],
+		buttons: [kasbank_masuk_button
 			,{
 				text: 'Cancel',
 				handler: function(){
@@ -1207,10 +1292,10 @@ Ext.onReady(function(){
 	/* Function for retrieve create Window Form */
 	kasbank_masuk_saveWindow= new Ext.Window({
 		id: 'kasbank_masuk_saveWindow',
-		title: post2db+' Kas/Bank Masuk',
+		title: post2db+' Jurnal Kas/Bank Masuk',
 		closable:true,
 		closeAction: 'hide',
-		autoWidth: true,
+		width: 720,
 		autoHeight: true,
 		x:0,
 		y:0,
@@ -1225,41 +1310,30 @@ Ext.onReady(function(){
 	/* Function for action list search */
 	function kasbank_masuk_list_search(){
 		// render according to a SQL date format.
-		var kasbank_masuk_id_search=null;
 		var kasbank_masuk_tanggal_search_date="";
 		var kasbank_masuk_nobukti_search=null;
 		var kasbank_masuk_akun_search=null;
 		var kasbank_masuk_terimauntuk_search=null;
-		var kasbank_masuk_jenis_search=null;
 		var kasbank_masuk_noref_search=null;
 		var kasbank_masuk_keterangan_search=null;
-		var kasbank_masuk_post_search=null;
-		var kasbank_masuk_date_post_search_date="";
 
-		if(kasbank_masuk_idSearchField.getValue()!==null){kasbank_masuk_id_search=kasbank_masuk_idSearchField.getValue();}
 		if(kasbank_masuk_tanggalSearchField.getValue()!==""){kasbank_masuk_tanggal_search_date=kasbank_masuk_tanggalSearchField.getValue().format('Y-m-d');}
 		if(kasbank_masuk_nobuktiSearchField.getValue()!==null){kasbank_masuk_nobukti_search=kasbank_masuk_nobuktiSearchField.getValue();}
 		if(kasbank_masuk_akunSearchField.getValue()!==null){kasbank_masuk_akun_search=kasbank_masuk_akunSearchField.getValue();}
 		if(kasbank_masuk_terimauntukSearchField.getValue()!==null){kasbank_masuk_terimauntuk_search=kasbank_masuk_terimauntukSearchField.getValue();}
-		if(kasbank_masuk_jenisSearchField.getValue()!==null){kasbank_masuk_jenis_search=kasbank_masuk_jenisSearchField.getValue();}
 		if(kasbank_masuk_norefSearchField.getValue()!==null){kasbank_masuk_noref_search=kasbank_masuk_norefSearchField.getValue();}
 		if(kasbank_masuk_keteranganSearchField.getValue()!==null){kasbank_masuk_keterangan_search=kasbank_masuk_keteranganSearchField.getValue();}
-		if(kasbank_masuk_postSearchField.getValue()!==null){kasbank_masuk_post_search=kasbank_masuk_postSearchField.getValue();}
-		if(kasbank_masuk_date_postSearchField.getValue()!==""){kasbank_masuk_date_post_search_date=kasbank_masuk_date_postSearchField.getValue().format('Y-m-d');}
+
 		// change the store parameters
 		kasbank_masuk_DataStore.baseParams = {
 			task: 'SEARCH',
 			//variable here
-			kasbank_masuk_id			:	kasbank_masuk_id_search, 
 			kasbank_masuk_tanggal		:	kasbank_masuk_tanggal_search_date, 
 			kasbank_masuk_nobukti		:	kasbank_masuk_nobukti_search, 
-			kasbank_masuk_akun		:	kasbank_masuk_akun_search, 
+			kasbank_masuk_akun			:	kasbank_masuk_akun_search, 
 			kasbank_masuk_terimauntuk	:	kasbank_masuk_terimauntuk_search, 
-			kasbank_masuk_jenis		:	kasbank_masuk_jenis_search, 
-			kasbank_masuk_noref		:	kasbank_masuk_noref_search, 
-			kasbank_masuk_keterangan	:	kasbank_masuk_keterangan_search, 
-			kasbank_masuk_post		:	kasbank_masuk_post_search, 
-			kasbank_masuk_date_post	:	kasbank_masuk_date_post_search_date
+			kasbank_masuk_noref			:	kasbank_masuk_noref_search, 
+			kasbank_masuk_keterangan	:	kasbank_masuk_keterangan_search
 		};
 		// Cause the datastore to do another query : 
 		kasbank_masuk_DataStore.reload({params: {start: 0, limit: pageS}});
@@ -1268,25 +1342,12 @@ Ext.onReady(function(){
 	/* Function for reset search result */
 	function kasbank_masuk_reset_search(){
 		// reset the store parameters
-		kasbank_masuk_DataStore.baseParams = { task: 'LIST' };
-		// Cause the datastore to do another query : 
+		kasbank_masuk_DataStore.baseParams = { task: 'LIST', start:0, limit:pageS };
 		kasbank_masuk_DataStore.reload({params: {start: 0, limit: pageS}});
 		kasbank_masuk_searchWindow.close();
 	};
 	/* End of Fuction */
 	
-	/* Field for search */
-	/* Identify  kasbank_masuk_id Search Field */
-	kasbank_masuk_idSearchField= new Ext.form.NumberField({
-		id: 'kasbank_masuk_idSearchField',
-		fieldLabel: 'Id',
-		allowNegatife : false,
-		blankText: '0',
-		allowDecimals: false,
-		anchor: '95%',
-		maskRe: /([0-9]+)$/
-	
-	});
 	/* Identify  kasbank_masuk_tanggal Search Field */
 	kasbank_masuk_tanggalSearchField= new Ext.form.DateField({
 		id: 'kasbank_masuk_tanggalSearchField',
@@ -1306,7 +1367,7 @@ Ext.onReady(function(){
 	kasbank_masuk_akunSearchField= new Ext.form.ComboBox({
 		id: 'kasbank_masuk_akunSearchField',
 		fieldLabel: 'Akun',
-		store: tbl_m_akun_DataStore,
+		store: cbo_akun_DataStore,
 		mode: 'remote',
 		displayField: 'akun_nama',
 		valueField: 'akun_id',
@@ -1320,40 +1381,16 @@ Ext.onReady(function(){
 		hideTrigger: false
 	
 	});
-	
-	// kasbank_masuk_akunSearchField= new Ext.form.NumberField({
-		// id: 'kasbank_masuk_akunSearchField',
-		// fieldLabel: 'Kasbank Akun',
-		// allowNegatife : false,
-		// blankText: '0',
-		// allowDecimals: false,
-		// anchor: '95%',
-		// maskRe: /([0-9]+)$/
-	
-	// });
+		
 	/* Identify  kasbank_masuk_terimauntuk Search Field */
 	kasbank_masuk_terimauntukSearchField= new Ext.form.TextField({
 		id: 'kasbank_masuk_terimauntukSearchField',
-		fieldLabel: 'Terima Untuk',
+		fieldLabel: 'Terima dari',
 		maxLength: 250,
 		anchor: '95%'
 	
 	});
-	/* Identify  kasbank_masuk_jenis Search Field */
-	kasbank_masuk_jenisSearchField= new Ext.form.ComboBox({
-		id: 'kasbank_masuk_jenisSearchField',
-		fieldLabel: 'Jenis',
-		store:new Ext.data.SimpleStore({
-			fields:['value', 'kasbank_masuk_jenis'],
-			data:[['keluar','keluar'],['masuk','masuk']]
-		}),
-		mode: 'local',
-		displayField: 'kasbank_masuk_jenis',
-		valueField: 'value',
-		anchor: '50%',
-		triggerAction: 'all'	 
 	
-	});
 	/* Identify  kasbank_masuk_noref Search Field */
 	kasbank_masuk_norefSearchField= new Ext.form.TextField({
 		id: 'kasbank_masuk_norefSearchField',
@@ -1370,28 +1407,8 @@ Ext.onReady(function(){
 		anchor: '95%'
 	
 	});
-	/* Identify  kasbank_masuk_post Search Field */
-	kasbank_masuk_postSearchField= new Ext.form.ComboBox({
-		id: 'kasbank_masuk_postSearchField',
-		fieldLabel: 'Post',
-		store:new Ext.data.SimpleStore({
-			fields:['value', 'kasbank_masuk_post'],
-			data:[['T','T'],['Y','Y']]
-		}),
-		mode: 'local',
-		displayField: 'kasbank_masuk_post',
-		valueField: 'value',
-		anchor: '95%',
-		triggerAction: 'all'	 
 	
-	});
-	/* Identify  kasbank_masuk_date_post Search Field */
-	kasbank_masuk_date_postSearchField= new Ext.form.DateField({
-		id: 'kasbank_masuk_date_postSearchField',
-		fieldLabel: 'Date Post',
-		format : 'Y-m-d',
 	
-	});
     
 	/* Function for retrieve search Form Panel */
 	kasbank_masuk_searchForm = new Ext.FormPanel({
@@ -1407,7 +1424,8 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [kasbank_masuk_tanggalSearchField, kasbank_masuk_nobuktiSearchField, kasbank_masuk_akunSearchField, kasbank_masuk_terimauntukSearchField, kasbank_masuk_jenisSearchField, kasbank_masuk_norefSearchField, kasbank_masuk_keteranganSearchField, ] 
+				items: [kasbank_masuk_tanggalSearchField, kasbank_masuk_nobuktiSearchField, kasbank_masuk_akunSearchField, 
+						kasbank_masuk_terimauntukSearchField,  kasbank_masuk_norefSearchField, kasbank_masuk_keteranganSearchField] 
 			}
 			]
 		}]
@@ -1427,10 +1445,10 @@ Ext.onReady(function(){
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
 	kasbank_masuk_searchWindow = new Ext.Window({
-		title: 'Kas/Bank Search',
+		title: 'Pencarian Kas/Bank',
 		closable:true,
 		closeAction: 'hide',
-		autoWidth: true,
+		width: 420,  
 		autoHeight: true,
 		plain:true,
 		layout: 'fit',
@@ -1452,172 +1470,60 @@ Ext.onReady(function(){
 	}
   	/* End Function */
 	
-	/* Function for print List Grid */
-	function kasbank_masuk_print(){
-		var searchquery = "";
-		var kasbank_masuk_tanggal_print_date="";
-		var kasbank_masuk_nobukti_print=null;
-		var kasbank_masuk_akun_print=null;
-		var kasbank_masuk_terimauntuk_print=null;
-		var kasbank_masuk_jenis_print=null;
-		var kasbank_masuk_noref_print=null;
-		var kasbank_masuk_keterangan_print=null;
-		var kasbank_masuk_post_print=null;
-		var kasbank_masuk_date_post_print_date="";
-		var win;              
-		// check if we do have some search data...
-		if(kasbank_masuk_DataStore.baseParams.query!==null){searchquery = kasbank_masuk_DataStore.baseParams.query;}
-		if(kasbank_masuk_DataStore.baseParams.kasbank_masuk_tanggal!==""){kasbank_masuk_tanggal_print_date = kasbank_masuk_DataStore.baseParams.kasbank_masuk_tanggal;}
-		if(kasbank_masuk_DataStore.baseParams.kasbank_masuk_nobukti!==null){kasbank_masuk_nobukti_print = kasbank_masuk_DataStore.baseParams.kasbank_masuk_nobukti;}
-		if(kasbank_masuk_DataStore.baseParams.kasbank_masuk_akun!==null){kasbank_masuk_akun_print = kasbank_masuk_DataStore.baseParams.kasbank_masuk_akun;}
-		if(kasbank_masuk_DataStore.baseParams.kasbank_masuk_terimauntuk!==null){kasbank_masuk_terimauntuk_print = kasbank_masuk_DataStore.baseParams.kasbank_masuk_terimauntuk;}
-		if(kasbank_masuk_DataStore.baseParams.kasbank_masuk_jenis!==null){kasbank_masuk_jenis_print = kasbank_masuk_DataStore.baseParams.kasbank_masuk_jenis;}
-		if(kasbank_masuk_DataStore.baseParams.kasbank_masuk_noref!==null){kasbank_masuk_noref_print = kasbank_masuk_DataStore.baseParams.kasbank_masuk_noref;}
-		if(kasbank_masuk_DataStore.baseParams.kasbank_masuk_keterangan!==null){kasbank_masuk_keterangan_print = kasbank_masuk_DataStore.baseParams.kasbank_masuk_keterangan;}
-		if(kasbank_masuk_DataStore.baseParams.kasbank_masuk_post!==null){kasbank_masuk_post_print = kasbank_masuk_DataStore.baseParams.kasbank_masuk_post;}
-		if(kasbank_masuk_DataStore.baseParams.kasbank_masuk_date_post!==""){kasbank_masuk_date_post_print_date = kasbank_masuk_DataStore.baseParams.kasbank_masuk_date_post;}
-
-		Ext.Ajax.request({   
-		waitMsg: 'Please Wait...',
-		url: 'index.php?c=c_kasbank_masuk&m=get_action',
-		params: {
-			task: "PRINT",
-		  	query: searchquery,                    		// if we are doing a quicksearch, use this
-			//if we are doing advanced search, use this
-		  	kasbank_masuk_tanggal : kasbank_masuk_tanggal_print_date, 
-			kasbank_masuk_nobukti : kasbank_masuk_nobukti_print,
-			kasbank_masuk_akun : kasbank_masuk_akun_print,
-			kasbank_masuk_terimauntuk : kasbank_masuk_terimauntuk_print,
-			kasbank_masuk_jenis : kasbank_masuk_jenis_print,
-			kasbank_masuk_noref : kasbank_masuk_noref_print,
-			kasbank_masuk_keterangan : kasbank_masuk_keterangan_print,
-			kasbank_masuk_post : kasbank_masuk_post_print,
-		  	kasbank_masuk_date_post : kasbank_masuk_date_post_print_date, 
-		  	currentlisting: kasbank_masuk_DataStore.baseParams.task // this tells us if we are searching or not
-		}, 
-		success: function(response){              
-		  	var result=eval(response.responseText);
-		  	switch(result){
-		  	case 1:
-				win = window.open('./print/kasbank_masuk_printlist.html','kasbanklist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
-				win.print();
-				break;
-		  	default:
-				Ext.MessageBox.show({
-					title: 'Warning',
-					msg: 'Unable to print the grid!',
-					buttons: Ext.MessageBox.OK,
-					animEl: 'save',
-					icon: Ext.MessageBox.WARNING
-				});
-				break;
-		  	}  
-		},
-		failure: function(response){
-		  	var result=response.responseText;
-			Ext.MessageBox.show({
-			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
-			   buttons: Ext.MessageBox.OK,
-			   animEl: 'database',
-			   icon: Ext.MessageBox.ERROR
-			});		
-		} 	                     
-		});
-	}
-	/* Enf Function */
-	
-	/* Function for print Export to Excel Grid */
-	function kasbank_masuk_export_excel(){
-		var searchquery = "";
-		var kasbank_masuk_tanggal_2excel_date="";
-		var kasbank_masuk_nobukti_2excel=null;
-		var kasbank_masuk_akun_2excel=null;
-		var kasbank_masuk_terimauntuk_2excel=null;
-		var kasbank_masuk_jenis_2excel=null;
-		var kasbank_masuk_noref_2excel=null;
-		var kasbank_masuk_keterangan_2excel=null;
-		var kasbank_masuk_post_2excel=null;
-		var kasbank_masuk_date_post_2excel_date="";
-		var win;              
-		// check if we do have some search data...
-		if(kasbank_masuk_DataStore.baseParams.query!==null){searchquery = kasbank_masuk_DataStore.baseParams.query;}
-		if(kasbank_masuk_DataStore.baseParams.kasbank_masuk_tanggal!==""){kasbank_masuk_tanggal_2excel_date = kasbank_masuk_DataStore.baseParams.kasbank_masuk_tanggal;}
-		if(kasbank_masuk_DataStore.baseParams.kasbank_masuk_nobukti!==null){kasbank_masuk_nobukti_2excel = kasbank_masuk_DataStore.baseParams.kasbank_masuk_nobukti;}
-		if(kasbank_masuk_DataStore.baseParams.kasbank_masuk_akun!==null){kasbank_masuk_akun_2excel = kasbank_masuk_DataStore.baseParams.kasbank_masuk_akun;}
-		if(kasbank_masuk_DataStore.baseParams.kasbank_masuk_terimauntuk!==null){kasbank_masuk_terimauntuk_2excel = kasbank_masuk_DataStore.baseParams.kasbank_masuk_terimauntuk;}
-		if(kasbank_masuk_DataStore.baseParams.kasbank_masuk_jenis!==null){kasbank_masuk_jenis_2excel = kasbank_masuk_DataStore.baseParams.kasbank_masuk_jenis;}
-		if(kasbank_masuk_DataStore.baseParams.kasbank_masuk_noref!==null){kasbank_masuk_noref_2excel = kasbank_masuk_DataStore.baseParams.kasbank_masuk_noref;}
-		if(kasbank_masuk_DataStore.baseParams.kasbank_masuk_keterangan!==null){kasbank_masuk_keterangan_2excel = kasbank_masuk_DataStore.baseParams.kasbank_masuk_keterangan;}
-		if(kasbank_masuk_DataStore.baseParams.kasbank_masuk_post!==null){kasbank_masuk_post_2excel = kasbank_masuk_DataStore.baseParams.kasbank_masuk_post;}
-		if(kasbank_masuk_DataStore.baseParams.kasbank_masuk_date_post!==""){kasbank_masuk_date_post_2excel_date = kasbank_masuk_DataStore.baseParams.kasbank_masuk_date_post;}
-
-		Ext.Ajax.request({   
-		waitMsg: 'Please Wait...',
-		url: 'index.php?c=c_kasbank_masuk&m=get_action',
-		params: {
-			task: "EXCEL",
-		  	query: searchquery,                    		// if we are doing a quicksearch, use this
-			//if we are doing advanced search, use this
-		  	kasbank_masuk_tanggal : kasbank_masuk_tanggal_2excel_date, 
-			kasbank_masuk_nobukti : kasbank_masuk_nobukti_2excel,
-			kasbank_masuk_akun : kasbank_masuk_akun_2excel,
-			kasbank_masuk_terimauntuk : kasbank_masuk_terimauntuk_2excel,
-			kasbank_masuk_jenis : kasbank_masuk_jenis_2excel,
-			kasbank_masuk_noref : kasbank_masuk_noref_2excel,
-			kasbank_masuk_keterangan : kasbank_masuk_keterangan_2excel,
-			kasbank_masuk_post : kasbank_masuk_post_2excel,
-		  	kasbank_masuk_date_post : kasbank_masuk_date_post_2excel_date, 
-		  	currentlisting: kasbank_masuk_DataStore.baseParams.task // this tells us if we are searching or not
-		},
-		success: function(response){              
-		  	var result=eval(response.responseText);
-		  	switch(result){
-		  	case 1:
-				win = window.location=('./export2excel.php');
-				break;
-		  	default:
-				Ext.MessageBox.show({
-					title: 'Warning',
-					msg: 'Unable to convert excel the grid!',
-					buttons: Ext.MessageBox.OK,
-					animEl: 'save',
-					icon: Ext.MessageBox.WARNING
-				});
-				break;
-		  	}  
-		},
-		failure: function(response){
-		  	var result=response.responseText;
-			Ext.MessageBox.show({
-			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
-			   buttons: Ext.MessageBox.OK,
-			   animEl: 'database',
-			   icon: Ext.MessageBox.ERROR
-			});    
-		} 	                     
-		});
-	}
-	
 	function get_total_masuk_debet_kredit(){
-		var jumlah_total_debet=0;
-		var jumlah_total_masuk_kredit=0;
+		var jumlah_total_kasbank_masuk_kredit=0;
 		for(i=0;i<kasbank_masuk_detail_DataStore.getCount();i++){
 			record_data=kasbank_masuk_detail_DataStore.getAt(i);
-			jumlah_total_debet+=record_data.data.dkasbank_masuk_debet;
-			jumlah_total_masuk_kredit+=record_data.data.dkasbank_masuk_kredit;
+			//jumlah_total_kasbank_masuk_kasbank_masuk_debet+=record_data.data.dkasbank_masuk_debet;
+			jumlah_total_kasbank_masuk_kredit+=record_data.data.dkasbank_masuk_kredit;
 		}
-		total_debet.setValue(jumlah_total_debet);
-		total_masuk_kredit.setValue(jumlah_total_masuk_kredit);
+		//total_kasbank_masuk_debet.setValue(jumlah_total_kasbank_masuk_kasbank_masuk_debet);
+		total_kasbank_masuk_kredit.setValue(CurrencyFormatted(jumlah_total_kasbank_masuk_kredit));
 	}
+	
 	
 	kasbank_masuk_detail_DataStore.on("update",function(){
 		kasbank_masuk_detail_DataStore.commitChanges();
+		
+		var query_selected="";									   
+		cbo_akun_dkasbank_masukDataStore.lastQuery=null;
+		for(i=0;i<kasbank_masuk_detail_DataStore.getCount();i++){
+			detail_record=kasbank_masuk_detail_DataStore.getAt(i);
+			query_selected=query_selected+detail_record.data.dkasbank_masuk_akun+",";
+		}
+		cbo_akun_dkasbank_masuk_renderDataStore.setBaseParam('task','selected');
+		cbo_akun_dkasbank_masuk_renderDataStore.setBaseParam('master_id',get_pk_id());
+		cbo_akun_dkasbank_masuk_renderDataStore.setBaseParam('selected_id',query_selected);
+		cbo_akun_dkasbank_masuk_renderDataStore.load({
+			callback: function(r,opt,success){
+				if(success==true){
+					kasbank_masuk_detailListEditorGrid.getView().refresh();
+				}
+			}
+		});
+		
 		get_total_masuk_debet_kredit();
+		
 	});
 	/*End of Function */
 	
+	combo_akun_kasbank_detail_masuk.on("focus",function(){
+		cbo_akun_dkasbank_masukDataStore.setBaseParam('task','all');
+		cbo_akun_dkasbank_masukDataStore.load({params:{start:0, limit: pageS}});
+	});
+	
+	kasbank_masuk_akunField.on('select',function(){
+		var j=cbo_akun_DataStore.findExact('akun_id',kasbank_masuk_akunField.getValue());
+		if(j>-1){
+			var thismonth=new Date().format('y-m');
+			var record_akun=cbo_akun_DataStore.getAt(j);
+			var kode=kasbank_masuk_kodeakunField.getValue().substring(0,3);
+			kasbank_masuk_kodeakunField.setValue(record_akun.data.akun_kode);
+		}
+	});
+	
+	
+
 });
 	</script>
 <body>
