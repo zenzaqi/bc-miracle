@@ -329,7 +329,7 @@ class M_report_rekap_penjualan extends Model{
 			{
 					$query = "select 
 					SUM(detail_ambil_paket.dapaket_jumlah) AS total_jumlah,
-					SUM(((((`detail_jual_paket`.`dpaket_harga` * (100 - `detail_jual_paket`.`dpaket_diskon`)) / 100) * `detail_jual_paket`.`dpaket_jumlah`)/ `detail_jual_paket`.`dpaket_jumlah`) / `vu_jumlah_isi_paket`.`isi_paket`) AS subtotal,
+					SUM(detail_ambil_paket.dapaket_jumlah*(((((`detail_jual_paket`.`dpaket_harga` * (100 - `detail_jual_paket`.`dpaket_diskon`)) / 100) * `detail_jual_paket`.`dpaket_jumlah`)/ `detail_jual_paket`.`dpaket_jumlah`) / `vu_jumlah_isi_paket`.`isi_paket`)) AS subtotal,
 					SUM((((((`master_jual_paket`.`jpaket_diskon` * ((`detail_jual_paket`.`dpaket_harga` * (100 - `detail_jual_paket`.`dpaket_diskon`)) / 100)) * `detail_jual_paket`.`dpaket_jumlah`) / 100)) / `detail_jual_paket`.`dpaket_jumlah`) / `vu_jumlah_isi_paket`.`isi_paket`) AS diskon_tambahan,
 					SUM((((((`detail_jual_paket`.`dpaket_harga` * (100 - `detail_jual_paket`.`dpaket_diskon`)) / 100) * `detail_jual_paket`.`dpaket_jumlah`) - (((`master_jual_paket`.`jpaket_diskon` * ((`detail_jual_paket`.`dpaket_harga` * (100 - `detail_jual_paket`.`dpaket_diskon`)) / 100)) * `detail_jual_paket`.`dpaket_jumlah`) / 100)) / `detail_jual_paket`.`dpaket_jumlah`) / `vu_jumlah_isi_paket`.`isi_paket`) AS grand_total
 					  from ((((((`detail_ambil_paket` 
