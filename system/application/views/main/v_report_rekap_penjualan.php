@@ -258,7 +258,7 @@ Ext.onReady(function(){
 	
 		}, 
 		{
-			header: '<div align="center">' + 'Nama Produk / Perawatan Satuan / Paket' + '</div>',
+			header: '<div align="center">' + 'Nama Produk / Perawatan / Paket' + '</div>',
 			dataIndex: 'nama',
 			width: 210,//185,	//210,
 			sortable: true,
@@ -266,7 +266,7 @@ Ext.onReady(function(){
 		}, 
 		{
 			align : 'Right',
-			header: '<div align="center">' + 'Total Item' + '</div>',
+			header: '<div align="center">' + 'Tot Item' + '</div>',
 			dataIndex: 'total_jumlah',
 			width: 60,//185,	//210,
 			sortable: true,
@@ -274,7 +274,7 @@ Ext.onReady(function(){
 		},
 		{	
 			align : 'Right',
-			header: '<div align="center">' + 'Sub Total (Rp)' + '</div>',
+			header: '<div align="center">' + 'Sub Tot (Rp)' + '</div>',
 			dataIndex: 'subtotal',
 			renderer: Ext.util.Format.numberRenderer('0,000'),
 			readOnly: true,
@@ -283,16 +283,16 @@ Ext.onReady(function(){
 		},
 		{	
 			align : 'Right',
-			header: '<div align="center">' + 'Tot Disk Tmbhn (Rp)' + '</div>',
+			header: '<div align="center">' + 'Disk Tmbhn (Rp)' + '</div>',
 			dataIndex: 'diskon_tambahan',
 			renderer: Ext.util.Format.numberRenderer('0,000'),
 			readOnly: true,
-			width: 100,	//55,
+			width: 80,	//55,
 			sortable: true
 		},
 		{	
 			align : 'Right',
-			header: '<div align="center">' + 'Total' + '</div>',
+			header: '<div align="center">' + 'Tot (Rp)' + '</div>',
 			dataIndex: 'grand_total',
 			renderer: Ext.util.Format.numberRenderer('0,000'),
 			readOnly: true,
@@ -301,16 +301,16 @@ Ext.onReady(function(){
 		},
 		{	
 			align : 'Right',
-			header: '<div align="center">' + 'Tot Jum Retur' + '</div>',
+			header: '<div align="center">' + 'Item Retur' + '</div>',
 			dataIndex: 'jum_retur',
 			renderer: Ext.util.Format.numberRenderer('0,000'),
 			readOnly: true,
-			width: 80,	//55,
+			width: 60,	//55,
 			sortable: true
 		},
 		{	
 			align : 'Right',
-			header: '<div align="center">' + 'Tot Retur (Rp)' + '</div>',
+			header: '<div align="center">' + 'Retur (Rp)' + '</div>',
 			dataIndex: 'tot_retur',
 			renderer: Ext.util.Format.numberRenderer('0,000'),
 			readOnly: true,
@@ -319,11 +319,11 @@ Ext.onReady(function(){
 		},
 		{	
 			align : 'Right',
-			header: '<div align="center">' + 'Tot Jum Item' + '</div>',
+			header: '<div align="center">' + 'Tot Item Net' + '</div>',
 			dataIndex: 'tot_jum_item',
 			renderer: Ext.util.Format.numberRenderer('0,000'),
 			readOnly: true,
-			width: 80,	//55,
+			width: 60,	//55,
 			sortable: true
 		},
 		{	
@@ -359,7 +359,7 @@ Ext.onReady(function(){
 		}, 
 		{
 			align : 'Right',
-			header: '<div align="center">' + 'Total Item' + '</div>',
+			header: '<div align="center">' + 'Tot Item' + '</div>',
 			dataIndex: 'sum_jumlah',
 			width: 60,//185,	//210,
 			sortable: true,
@@ -367,7 +367,7 @@ Ext.onReady(function(){
 		},
 		{	
 			align : 'Right',
-			header: '<div align="center">' + 'Sub Total (Rp)' + '</div>',
+			header: '<div align="center">' + 'Sub Tot (Rp)' + '</div>',
 			dataIndex: 'sum_subtotal',
 			renderer: Ext.util.Format.numberRenderer('0,000'),
 			readOnly: true,
@@ -376,16 +376,16 @@ Ext.onReady(function(){
 		},
 		{	
 			align : 'Right',
-			header: '<div align="center">' + 'Tot Disk Tmbhn (Rp)' + '</div>',
+			header: '<div align="center">' + 'Disk Tmbhn (Rp)' + '</div>',
 			dataIndex: 'sum_diskon_tambahan',
 			renderer: Ext.util.Format.numberRenderer('0,000'),
 			readOnly: true,
-			width: 100,	//55,
+			width: 80,	//55,
 			sortable: true
 		},
 		{	
 			align : 'Right',
-			header: '<div align="center">' + 'Total (Rp)' + '</div>',
+			header: '<div align="center">' + 'Tot (Rp)' + '</div>',
 			dataIndex: 'sum_total',
 			renderer: Ext.util.Format.numberRenderer('0,000'),
 			readOnly: true,
@@ -394,16 +394,16 @@ Ext.onReady(function(){
 		},
 		{	
 			align : 'Right',
-			header: '<div align="center">' + 'Tot Jum Retur' + '</div>',
+			header: '<div align="center">' + 'Item Retur' + '</div>',
 			dataIndex: 'sum_jum_retur',
 			renderer: Ext.util.Format.numberRenderer('0,000'),
 			readOnly: true,
-			width: 80,	//55,
+			width: 60,	//55,
 			sortable: true
 		},
 		{	
 			align : 'Right',
-			header: '<div align="center">' + 'Tot Retur (Rp)' + '</div>',
+			header: '<div align="center">' + 'Retur (Rp)' + '</div>',
 			dataIndex: 'sum_tot_retur',
 			renderer: Ext.util.Format.numberRenderer('0,000'),
 			readOnly: true,
@@ -412,11 +412,11 @@ Ext.onReady(function(){
 		},
 		{	
 			align : 'Right',
-			header: '<div align="center">' + 'Tot Jum Item' + '</div>',
+			header: '<div align="center">' + 'Tot Item Net' + '</div>',
 			dataIndex: 'sum_tot_jum_item',
 			renderer: Ext.util.Format.numberRenderer('0,000'),
 			readOnly: true,
-			width: 80,	//55,
+			width: 60,	//55,
 			sortable: true
 		},
 		{	
