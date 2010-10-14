@@ -4768,20 +4768,6 @@ Ext.onReady(function(){
 	}
 	//eof
 	
-	//function for purge detail
-	function detail_jual_paket_purge(){
-		Ext.Ajax.request({
-			waitMsg: 'Mohon  Tunggu...',
-			url: 'index.php?c=c_master_jual_paket&m=detail_detail_jual_paket_purge',
-			params:{ master_id: eval(jpaket_idField.getValue()) },
-			callback: function(opts, success, response){
-				if(success)
-					detail_jual_paket_insert();
-			}
-		});
-	}
-	//eof
-	
 	/* Function for Delete Confirm of detail */
 	function detail_jual_paket_confirm_delete(){
 		// only one record is selected here

@@ -4995,21 +4995,6 @@ Ext.onReady(function(){
 	}
 	//eof
 	
-	//function for purge detail
-	function detail_jual_produk_purge(){
-		Ext.Ajax.request({
-			waitMsg: 'Mohon tunggu...',
-			url: 'index.php?c=c_master_jual_produk&m=detail_detail_jual_produk_purge',
-			params:{ master_id: eval(jproduk_idField.getValue()) },
-			callback: function(opts, success, response){
-				if(success){
-					detail_jual_produk_insert();
-				}
-			}
-		});
-	}
-	//eof
-	
 	/* Function for Delete Confirm of detail */
 	function detail_jual_produk_confirm_delete(){
 		// only one record is selected here

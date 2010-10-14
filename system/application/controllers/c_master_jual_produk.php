@@ -234,13 +234,6 @@ class C_master_jual_produk extends Controller {
 	}
 	//end of handler
 	
-	//purge all detail
-	function detail_detail_jual_produk_purge(){
-		$master_id = (integer) (isset($_POST['master_id']) ? $_POST['master_id'] : $_GET['master_id']);
-		$result=$this->m_master_jual_produk->detail_detail_jual_produk_purge($master_id);
-	}
-	//eof
-	
 	//get master id, note: not done yet
 	function get_master_id(){
 		$result=$this->m_master_jual_produk->get_master_id();
