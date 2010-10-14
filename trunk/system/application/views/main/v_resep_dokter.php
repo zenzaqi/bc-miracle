@@ -238,7 +238,6 @@ Ext.onReady(function(){
 	
 		if(is_resepdokterform_valid()){	
 		var resep_id_create=null; 
-		//var card_id_create=null;
 		var resep_cust_create=null;
 		var resep_tanggal_create="";
 		var resep_dokter_create=null;
@@ -645,11 +644,12 @@ Ext.onReady(function(){
 			{name: 'pracikan_master', type: 'int', mapping: 'produk_id'}, 
 			{name: 'pracikan_produk', type: 'int', mapping: 'pracikan_produk'}, 
 			{name: 'pracikan_satuan', type: 'int', mapping: 'pracikan_satuan'}, 
-			{name: 'pracikan_jumlah', type: 'float', mapping: 'pracikan_jumlah'}
+			{name: 'pracikan_jumlah', type: 'float', mapping: 'pracikan_jumlah'},
+			{name: 'produk_keterangan_resep', type: 'string', mapping: 'produk_keterangan_resep'},
+			{name: 'produk_id', type: 'string', mapping: 'produk_id'}
 		]),
 		sortInfo:{field: 'dresepk_produk', direction: "ASC"}
 	});
-	
 	
 	/* Combo box ambil data satuan */
 	cbo_resep_satuan_DataStore = new Ext.data.Store({
@@ -808,8 +808,6 @@ Ext.onReady(function(){
 	resep_dokterListEditorGrid.render();
 	/* End of DataStore */
 
-
-	 
 	/* Create Context Menu */
 	resep_dokterContextMenu = new Ext.menu.Menu({
 		id: 'resep_dokterListEditorGridContextMenu',
@@ -836,6 +834,7 @@ Ext.onReady(function(){
 			text: 'Export Excel', 
 			tooltip: 'Export to Excel(.xls) Document',
 			iconCls:'icon-xls',
+			disabled : true,
 			handler: resepdokter_export_excel 
 		}
 		]
@@ -944,7 +943,6 @@ Ext.onReady(function(){
 		readOnly: true,
 	});
 	
-	
 	resep_paket_idField= new Ext.form.NumberField({
 		id: 'resep_paket_idField',
 		allowNegatife : false,
@@ -953,6 +951,14 @@ Ext.onReady(function(){
 		hidden: true,
 		anchor: '95%',
 		maskRe: /([0-9]+)$/
+	});
+	
+	resep_keterangan_racikanField= new Ext.form.TextArea({
+		id: 'resep_keterangan_racikanField',
+		//fieldLabel: 'Keterangan',
+		maxLength: 500,
+		disabled : true,
+		anchor: '95%'
 	});
 	
 
@@ -1012,12 +1018,12 @@ Ext.onReady(function(){
 	});
 	//eof
 	
+	//store for detail resep lepasan
 	var detail_resepdokter_lepasan_reader=new Ext.data.JsonReader({
 		root: 'results',
 		totalProperty: 'total',
 		id: ''
 	},[
-	/* dataIndex => insert intopeprodukan_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'dresepl_id', type: 'int', mapping: 'dresepl_id'}, 
 			{name: 'dresepl_master', type: 'int', mapping: 'dresepl_master'}, 
 			{name: 'dresepl_produk', type: 'int', mapping: 'dresepl_produk'},
@@ -1033,19 +1039,19 @@ Ext.onReady(function(){
 		totalProperty: 'total',
 		id: 'rkombinasi_id'
 	},[
-	/* dataIndex => insert intopeprodukan_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'rkombinasi_id', type: 'int', mapping: 'rkombinasi_id'}, 
 			{name: 'rkombinasi_master', type: 'int', mapping: 'rkombinasi_master'}, 
-			{name: 'rkombinasi_produk', type: 'int', mapping: 'rkombinasi_produk'}
+			{name: 'rkombinasi_produk', type: 'int', mapping: 'rkombinasi_produk'},
+			{name: 'rkombinasi_keterangan', type: 'string', mapping: 'rkombinasi_keterangan'}
 	]);
 	//eof
 	
+	//store for detail resep kombinasi
 	var detail_resepdokter_kombinasi_reader=new Ext.data.JsonReader({
 		root: 'results',
 		totalProperty: 'total',
 		id: 'dresepk_id'
 	},[
-	/* dataIndex => insert intopeprodukan_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'dresepk_id', type: 'int', mapping: 'dresepk_id'}, 
 			{name: 'dresepk_master', type: 'int', mapping: 'dresepk_master'}, 
 			{name: 'dresepk_resepmaster', type: 'int', mapping: 'dresepk_resepmaster'},
@@ -1063,12 +1069,12 @@ Ext.onReady(function(){
 	});
 	//eof
 	
+	//store for detail resep tambahan
 	var detail_resepdokter_tambahan_reader=new Ext.data.JsonReader({
 		root: 'results',
 		totalProperty: 'total',
 		id: ''
 	},[
-	/* dataIndex => insert intopeprodukan_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'dresept_id', type: 'int', mapping: 'dresept_id'}, 
 			{name: 'dresept_master', type: 'int', mapping: 'dresept_master'}, 
 			{name: 'dresept_tambahan', type: 'string', mapping: 'dresept_tambahan'},
@@ -1137,7 +1143,8 @@ Ext.onReady(function(){
 			{name: 'produk_id', type: 'int', mapping: 'produk_id'},
 			{name: 'produk_nama', type: 'string', mapping: 'produk_nama'},
 			{name: 'produk_kode', type: 'string', mapping: 'produk_kode'},
-			{name: 'produk_kategori_nama', type: 'string', mapping: 'kategori_nama'}
+			{name: 'produk_kategori_nama', type: 'string', mapping: 'kategori_nama'},
+			{name: 'produk_keterangan_resep', type: 'string', mapping: 'produk_keterangan_resep'}
 		]),
 		sortInfo:{field: 'produk_nama', direction: "ASC"}
 	});
@@ -1208,7 +1215,6 @@ Ext.onReady(function(){
 		//baseParams:{master_id: resep_idField.getValue()},
 		sortInfo:{field: 'rkombinasi_id', direction: "ASC"}
 	});
-	
 	
 	
 	/* Function for Datastore of detail kombinasi*/
@@ -1322,57 +1328,40 @@ Ext.onReady(function(){
 		anchor: '95%',
 		maskRe: /([0-9]+)$/
 	});
-	/*
-	history_detail_resep_kombinasiColumnModel = new Ext.grid.ColumnModel(
-		[
-		{
-			header: '<div align="center">' + 'Nama Detail Resep' + '</div>',
-			dataIndex: '',
-			width: 210,
-			editor: new Ext.form.TextArea({
-				maxLength: 250
-          	})
-			//editor: combo_produk_terima,
-			//renderer: Ext.util.Format.comboRenderer(combo_produk_terima)
-		}
-		]
-		
-    );
-    history_detail_resep_kombinasiColumnModel.defaultSortable= true;*/
-	/*	
-	history_detail_resep_kombinasiListGrid =  new Ext.grid.GridPanel({
-		id: 'history_detail_resep_kombinasiListGrid',
-		el: 'fp_history_detail_resep_kombinasi',
-		height: 400,
-		width: 400,
-		autoScroll: true,
-		//store: , // DataStore
-		colModel: history_detail_resep_kombinasiColumnModel, // Nama-nama Columns
-		enableColLock:false,
-		region: 'center',
-        margins: '0 5 5 5',
-		//plugins: [editor_detail_reseptambahan],
-		frame: true,
-		//clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
-		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
-		viewConfig: { forceFit:true},
-		tbar: [
-		{
-			text: 'Add',
-			tooltip: 'Add new detail record',
-			iconCls:'icon-adds'  				// this is defined in our styles.css
-			//handler: resepdokter_detail_tambahan_add
-		}, '-',{
-			text: 'Delete',
-			tooltip: 'Delete detail selected record',
-			iconCls:'icon-delete'
-			//handler: resepdokter_detail_kombinasi_confirm_delete
-		}
-		]
-	});*/
 		
 	resep_dokter_detail_kombinasiColumnModel = new Ext.grid.ColumnModel(
 		[
+		{
+			header: '<div align="center">' + 'Bahan Racikan' + '</div>',
+			dataIndex: 'produk_keterangan_resep',
+			width: 200,
+			height : 50,
+			disabled : true,
+			editor : resep_keterangan_racikanField
+		},
+		/*
+		{
+			header: 'ID Master Racikan',
+			readOnly: true,
+			dataIndex: 'dresepk_resepmaster',
+			width: 80,	//40,
+			renderer: function(value, cell){
+				cell.css = "readonlycell"; // Mengambil Value dari Class di dalam CSS 
+				return value;
+				},
+			hidden: true
+		},
+		{
+			header: 'ID Produk Racikan',
+			readOnly: true,
+			dataIndex: 'dresepk_master',
+			width: 80,	//40,
+			renderer: function(value, cell){
+				cell.css = "readonlycell"; // Mengambil Value dari Class di dalam CSS 
+				return value;
+				},
+			hidden: true
+		},
 		{
 			align : 'Left',
 			header: '<div align="center">' + 'Produk Racikan' + '</div>',
@@ -1401,7 +1390,7 @@ Ext.onReady(function(){
 			width: 80,
 			sortable: true,
 			//editor: dresepl_jumlahField
-		}
+		}*/
 		
 		]
 	);
@@ -1411,13 +1400,14 @@ Ext.onReady(function(){
 	detail_resep_kombinasiListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'detail_resep_kombinasiListEditorGrid',
 		el: 'fp_detail_resep_dokter',
-		title: 'Detail Resep Kombinasi',
+		title: 'Detail Bahan Racikan',
 		height: 200,
 		width: 800,
 		autoScroll: true,
 		store: resep_dokter_detail_kombinasiDataStore, // DataStore
 		colModel: resep_dokter_detail_kombinasiColumnModel, // Nama-nama Columns
 		enableColLock:false,
+		disabled : false,
 		region: 'center',
         margins: '0 5 5 5',
 		//plugins: [editor_detail_resepkombinasi],
@@ -1425,27 +1415,6 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true}
-		/*bbar: new Ext.PagingToolbar({
-			pageSize: pageS,
-			store: resep_dokter_detailDataStore,
-			displayInfo: true
-		}),
-		/* Add Control on ToolBar */
-		/*tbar: [
-		{
-			text: 'Add',
-			tooltip: 'Add new detail record',
-			disabled : true,
-			iconCls:'icon-adds',  			// this is defined in our styles.css
-			//handler: resepdokter_detail_kombinasi_add
-		}, '-',{
-			text: 'Delete',
-			tooltip: 'Delete detail selected record',
-			iconCls:'icon-delete',
-			disabled : true
-			//handler: resepdokter_detail_kombinasi_confirm_delete
-		}
-		]*/
 	});
 	//eof
 	
@@ -1468,13 +1437,7 @@ Ext.onReady(function(){
 			sortable: false,
 			editor: combo_resep_detail_satuan,
 			renderer: Ext.util.Format.comboRenderer(combo_resep_detail_satuan)
-			
-			/*renderer: function(v, params, record){
-				j=cbo_resepdokter_produkDataStore.findExact('dproduk_produk_value',record.data.dresepl_produk,0);
-				if(j>-1)
-					return cbo_resepdokter_produkDataStore.getAt(j).data.dproduk_produk_satuan;
-			}*/
-		},
+			},
 		{
 			header: '<div align="center">Jumlah</div>',
 			align: 'right',
@@ -1497,6 +1460,7 @@ Ext.onReady(function(){
 		store: resep_dokter_detail_lepasanDataStore, // DataStore
 		colModel: resep_dokter_detail_lepasanColumnModel, // Nama-nama Columns
 		enableColLock:false,
+		disabled : true,
 		region: 'center',
         margins: '0 5 5 5',
 		plugins: [editor_detail_reseplepasan],
@@ -1532,7 +1496,6 @@ Ext.onReady(function(){
 			dataIndex: 'dresept_tambahan',
 			width: 200,
 			sortable: true,
-			//allowBlank : false,
 			editor: new Ext.form.TextField({
 				maxLength: 250,
           	})
@@ -1600,26 +1563,55 @@ Ext.onReady(function(){
 	master_resep_kombinasiColumnModel = new Ext.grid.ColumnModel(
 		[
 		{
+			header: 'ID',
+			readOnly: true,
+			dataIndex: 'rkombinasi_id',
+			width: 30,	//40,
+			renderer: function(value, cell){
+				cell.css = "readonlycell"; // Mengambil Value dari Class di dalam CSS 
+				return value;
+				},
+			hidden: true
+		},
+		{
+			header: 'Master_ID Resep Dokter',
+			readOnly: true,
+			dataIndex: 'rkombinasi_master',
+			width: 30,	//40,
+			renderer: function(value, cell){
+				cell.css = "readonlycell"; // Mengambil Value dari Class di dalam CSS 
+				return value;
+				},
+			hidden: true
+		},
+		{
 			align : 'Left',
-			header: '<div align="center">' + 'Master Resep Kombinasi' + '</div>',
+			header: '<div align="center">' + 'Resep Racikan' + '</div>',
 			dataIndex: 'rkombinasi_produk',
 			width: 200, //250
 			sortable: true,
 			allowBlank: false,
-			//editor: combo_resepdokter_detailproduk,
 			editor : combo_resep,
 			renderer: Ext.util.Format.comboRenderer(combo_resep)
-		}
+		},
+		{
+			header: '<div align="center">' + 'Bahan Racikan' + '</div>',
+			dataIndex: 'rkombinasi_keterangan',
+			width: 200,
+			height : 50,
+			disabled : true,
+			//hidden : true,
+			editor : resep_keterangan_racikanField
+		},
 		]
 	);
 	master_resep_kombinasiColumnModel.defaultSortable= true;
 	//eof
 	
-	
 	master_resep_kombinasiListGrid =  new Ext.grid.EditorGridPanel({
 		id: 'master_resep_kombinasiListGrid',
 		el: 'fp_master_resep_kombinasi',
-		title: 'Master Resep Kombinasi',
+		title: 'Master Resep Racikan',
 		height: 200,	//250,
 		width: 450, //940,	//938,
 		autoScroll: true,
@@ -1648,8 +1640,6 @@ Ext.onReady(function(){
 		]
 	});
 	
-	
-	
 
 	// function for resepdokter detail lepasan add
 	function resepdokter_detail_lepasan_add(){
@@ -1673,7 +1663,8 @@ Ext.onReady(function(){
 		var edit_master_kombinasi_resepdokter= new master_resep_kombinasiListGrid.store.recordType({
 			rkombinasi_id	:'',		
 			rkombinasi_master	:'',		
-			rkombinasi_produk	:''
+			rkombinasi_produk	:'',
+			rkombinasi_keterangan :''
 		});
 		editor_detail_resepkombinasi.stopEditing();
 		resep_dokter_master_kombinasiDataStore.insert(0, edit_master_kombinasi_resepdokter);
@@ -1681,7 +1672,6 @@ Ext.onReady(function(){
 		master_resep_kombinasiListGrid.getSelectionModel().selectRow(0);
 		editor_detail_resepkombinasi.startEditing(0);
 	}
-	
 	
 	// function for resepdokter detail kombinasi add
 	/*function resepdokter_detail_kombinasi_add(){
@@ -1696,25 +1686,7 @@ Ext.onReady(function(){
 		master_resep_kombinasiListGrid.getSelectionModel().selectRow(0);
 		editor_detail_resepkombinasi.startEditing(0);
 	}*/
-	
-	/*function resepdokter_detail_kombinasi_add(){
-		var edit_detail_kombinasi_resepdokter= new detail_resep_kombinasiListEditorGrid.store.recordType({
-			dterima_id		: 0,		
-			dterima_master	:'',		
-			dterima_produk	: 0,		
-			dterima_satuan	: 0,		
-			dterima_jumlah	: 0,
-			dterima_order	: 0
-		});
-		editor_detail_terima_beli.stopEditing();
-		detail_terima_beli_DataStore.insert(0, edit_detail_kombinasi_resepdokter);
-		detail_resep_kombinasiListEditorGrid.getView().refresh();
-		detail_resep_kombinasiListEditorGrid.getSelectionModel().selectRow(0);
-		editor_detail_terima_beli.startEditing(0);
-	}*/
-	
-	
-	
+
 	// function for resepdokter detail tambahan  add
 	function resepdokter_detail_tambahan_add(){
 		var edit_detail_tambahan_resepdokter= new detail_resep_tambahanListEditorGrid.store.recordType({
@@ -1745,7 +1717,6 @@ Ext.onReady(function(){
 	}
 	//eof
 	
-	
 	//function for refresh detail kombinasi
 	function refresh_detail_kombinasi_resepdokter(){
 		resep_dokter_detail_kombinasiDataStore.commitChanges();
@@ -1765,9 +1736,7 @@ Ext.onReady(function(){
 		for(i=0;i<resep_dokter_detail_lepasanDataStore.getCount();i++){
 			var count_i = i;
 			produk_detail_record=resep_dokter_detail_lepasanDataStore.getAt(i);
-			
 			if(produk_detail_record.data.dresepl_produk!==null&&produk_detail_record.data.dresepl_produk.dresepl_produk!==""){
-				//console.log('sembarang'+produk_detail_record.data.dresepl_satuan);
 				Ext.Ajax.request({
 					waitMsg: 'Mohon tunggu...',
 					url: 'index.php?c=c_resep_dokter&m=resepdokter_detail_lepasan_insert',
@@ -1775,7 +1744,6 @@ Ext.onReady(function(){
 						cetak	: cetak_resepdokter,
 					dresepl_id	: produk_detail_record.data.dresepl_id, 
 					dresepl_master	: eval(get_pk_id()), 
-					//dresep_master	: eval(resep_idField.getValue()), 
 					dresepl_produk	: produk_detail_record.data.dresepl_produk,
 					dresepl_satuan	: produk_detail_record.data.dresepl_satuan,
 					dresepl_jumlah	: produk_detail_record.data.dresepl_jumlah,
@@ -1843,6 +1811,7 @@ Ext.onReady(function(){
 					rkombinasi_id	: kombinasi_master_record.data.rkombinasi_id, 
 					rkombinasi_master	: eval(get_pk_id()), 
 					rkombinasi_produk	: kombinasi_master_record.data.rkombinasi_produk,
+					rkombinasi_keterangan : kombinasi_master_record.data.rkombinasi_keterangan,
 					count	: count_kombinasi_i,
 					dcount	: count_master_kombinasi
 					},			
@@ -1909,7 +1878,6 @@ Ext.onReady(function(){
 				  // && resep_dokter_detail_kombinasiDataStore.getAt(i).data.dresepk_satuan!==0
 				  // && resep_dokter_detail_kombinasiDataStore.getAt(i).data.dresepk_jumlah>0)
 				   //{
-                    
 					//if(resep_dokter_detail_kombinasiDataStore.getAt(i).data.dresepk_id==undefined ||
 					   //resep_dokter_detail_kombinasiDataStore.getAt(i).data.dresepk_id==''){
 						//resep_dokter_detail_kombinasiDataStore.getAt(i).data.dresepk_id=0;
@@ -1920,13 +1888,11 @@ Ext.onReady(function(){
                    	dresepk_satuan.push(resep_dokter_detail_kombinasiDataStore.getAt(i).data.dresepk_satuan);
 					dresepk_jumlah.push(resep_dokter_detail_kombinasiDataStore.getAt(i).data.dresepk_jumlah);
                 //}
-            }
-			
+            }	
 			var encoded_array_dresepk_id = Ext.encode(dresepk_id);
 			var encoded_array_dresepk_produk = Ext.encode(dresepk_produk);
 			var encoded_array_dresepk_satuan = Ext.encode(dresepk_satuan);
-			var encoded_array_dresepk_jumlah = Ext.encode(dresepk_jumlah);
-				
+			var encoded_array_dresepk_jumlah = Ext.encode(dresepk_jumlah);	
 			Ext.Ajax.request({
 				waitMsg: 'Mohon tunggu...',
 				url: 'index.php?c=c_resep_dokter&m=resepdokter_detail_kombinasi_insert',
@@ -1954,13 +1920,9 @@ Ext.onReady(function(){
 					   icon: Ext.MessageBox.ERROR
 					});	
 				}
-			});
-					
+			});		
         //}
-		
 	}*/
-	
-	
 	
 	function resepdokter_detail_kombinasi_insert(){
 		var count_detail_kombinasi=resep_dokter_detail_kombinasiDataStore.getCount();
@@ -2367,9 +2329,7 @@ Ext.onReady(function(){
 			resep_nocustField.setValue("");
 	});
 	
-	
-	
-	
+
 	var detail_tab_resepdokter = new Ext.TabPanel({
 		plain:true,
 		activeTab: 0,
@@ -2802,7 +2762,7 @@ Ext.onReady(function(){
 		
 		if(cbo_resepdokter_racikanDataStore.getCount()){
 			resep_paket_idField.setValue(cbo_resepdokter_racikanDataStore.getAt(f).data.produk_id);
-	
+			resep_keterangan_racikanField.setValue(cbo_resepdokter_racikanDataStore.getAt(f).data.produk_keterangan_resep);
 		}
 		get_resep_kombinasi_detail_DataStore.load({
 			params : {id_racikan : combo_resep.getValue()},

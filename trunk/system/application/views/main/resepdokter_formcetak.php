@@ -19,6 +19,9 @@ html,body,table,tr,td{
 		<td height="100px" colspan="2">
 			<table height="70px" border="0" cellspacing="0" cellpadding="0">
 			  <tr>
+			  <br>
+			  <br>
+			  <br>
 				<td valign="bottom"><div align="center">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <?=$karyawan_nama;?></div></td>
 			  </tr>
@@ -26,19 +29,18 @@ html,body,table,tr,td{
 		</td>
 	</tr>
   	<tr>
-	  <td align="left" width="200px" valign="top" ><?=$karyawan_sip;?></td> 
-		<td height="50px" valign="top" align="right"><?=$resep_tanggal;?></td>	
+	  <td align="left" width="200px" valign="top" ><br><?=$karyawan_sip;?></td> 
+		<td height="50px" valign="top" align="right"><br><?=$resep_tanggal;?></td>	
 	</tr>
 	<tr>
-		<td height="50" colspan="2">
-		</td>
+
 	</tr>
 	<tr>
 	  <td height="430px" valign="top" colspan="2">
-	  <table border="1" cellspacing="0" cellpadding="0">
+	  <table border="0" cellspacing="0" cellpadding="0">
 	  	<?php 
-		if ($detail_resepdokter != '')
-		{
+		//if ($detail_resepdokter != '')
+		//{
 		$i=0;
 		?>
 		<tr>
@@ -54,7 +56,7 @@ html,body,table,tr,td{
         <tr>
           <td height="20px" width="250px"> <?=$row->produk_nama;?></td>
 		  <td height="20px" width="40px" align="right"><?=$row->dresepl_jumlah;?></td>
-		  <td height="20px" width="60px"><?=$row->satuan_nama;?></td>
+		  <td height="20px" width="60px"align="left"><?=$row->satuan_nama;?></td>
         </tr>
 		<?php }?>
 		<tr>
@@ -64,28 +66,45 @@ html,body,table,tr,td{
 		</tr>
 		
 		<?php
-		}else
-			print ("ngga masuk");
+		//}else
+			//print ("Error! Call IT Department..");
 		$i=0;
 		?>
 		<tr><td colspan="3">
+		
 		<?
-		print "<b><font size=medium> R/ </font></b>";
+		//print "<b><font size=medium> R/ </font></b>";
 		?></td></tr>
 		<tr><td align="center"></td><td align="center"></td><td align="center"></td></tr>
 		<?
 		foreach($detail_resepdokter_tambahan as $list => $row) { $i+=1;?>
         <tr>
 			<td height="20px" width="250x"> <?=$row->dresept_tambahan;?></td>
-			<td height="20px" width="40px" align="right"><?=$row->dresept_jumlah;?></td>
-			<td height="20px" width="60px"><?=$row->dresept_satuan;?></td>
+			<td height="20px" width="40px"align="right"><?=$row->dresept_jumlah;?></td>
+			<td height="20px" width="60px" align="left"><?=$row->dresept_satuan;?></td>
 		</tr>
-		<?php }?>
-		
-	
-		
+		<?php }
+		?>
 		
 		
+		
+		<?php
+		
+		$i=0;
+		?>
+		<tr><td colspan="3">
+		<?
+		//print "<b><font size=medium> R/ </font></b>";
+		?></td></tr>
+		<tr><td align="center"></td><td align="center"></td><td align="center"></td></tr>
+		<?
+		foreach($detail_resepdokter_racikan as $list => $row) { $i+=1;?>
+        <tr>
+			<td height="20px" width="250x"> <?=$row->rkombinasi_keterangan;?></td>
+		</tr>
+		<?php }
+		?>
+
       </table>
 	  </td>
   </tr>
@@ -110,6 +129,7 @@ html,body,table,tr,td{
         </tr>
         <tr>
           <td>&nbsp;</td>
+		  <br>
           <td><?=$cust_alamat;?></td>
           <td>&nbsp;</td>
         </tr>

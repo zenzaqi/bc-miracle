@@ -326,10 +326,8 @@ class M_resep_dokter extends Model{
 		/*$sql="SELECT dorder_produk,produk_nama,jumlah_order, jumlah_order-sum(dterima_jumlah) as jumlah_sisa, dorder-satuan
 				FROM vu_detail_terima_order WHERE dorder_master='".$orderid."'
 				GROUP BY dorder_produk";*/
-		$sql="SELECT pracikan_master as dresepk_master, pracikan_produk as dresepk_produk, satuan.satuan_nama as dresepk_satuan, pracikan_jumlah as dresepk_jumlah 
-		FROM produk_racikan 
-		left join satuan on (satuan.satuan_id = produk_racikan.pracikan_satuan)
-		where pracikan_master ='".$id_racikan."'";
+		$sql="select * from produk
+		where produk_id ='".$id_racikan."'";
 				
 		$query = $this->db->query($sql);
 		$nbrows = $query->num_rows();
@@ -539,7 +537,7 @@ class M_resep_dokter extends Model{
 		
 		
 	
-	function resepdokter_master_kombinasi_insert($rkombinasi_id ,$rkombinasi_master ,$rkombinasi_produk, $cetak, $count, $dcount){
+	function resepdokter_master_kombinasi_insert($rkombinasi_id ,$rkombinasi_master ,$rkombinasi_produk, $rkombinasi_keterangan, $cetak, $count, $dcount){
 			//if master id not capture from view then capture it from max pk from master table
 			$date_now=date('d-m-Y');
 			if($rkombinasi_master=="" || $rkombinasi_master==NULL || $rkombinasi_master==0){
@@ -556,6 +554,7 @@ class M_resep_dokter extends Model{
 					"rkombinasi_id"=>$rkombinasi_id,
 					"rkombinasi_master"=>$rkombinasi_master, 
 					"rkombinasi_produk"=>$rkombinasi_produk,
+					"rkombinasi_keterangan"=>$rkombinasi_keterangan,
 				);
 				$this->db->insert('master_resep_kombinasi', $data); 
 				if($this->db->affected_rows()){
@@ -1228,7 +1227,11 @@ left join karyawan on (karyawan.karyawan_id = resep_dokter.resep_dokterid)";
 		
 		function print_paper_racikan($resep_id){
 			//$sql="SELECT resep_tanggal, cust_no, cust_nama, produk_nama, resep_no, karyawan_nama, karyawan_sip FROM detail_jual_produk LEFT JOIN master_jual_produk ON(dresep_master=resep_id) LEFT JOIN customer ON(resep_custid=cust_id) LEFT JOIN produk ON(dresep_produk=produk_id) WHERE dresep_master='$resep_id'";
-			$sql_racikan="SELECT	
+			$sql_racikan = "select rkombinasi_keterangan as rkombinasi_keterangan from
+								master_resep_kombinasi
+								where rkombinasi_master = '$resep_id'";
+			
+			/*$sql_racikan="SELECT	
 							produk.produk_nama as produk_racikan, 
 							detail_resep_dokter_kombinasi.dresepk_jumlah as jumlah_racikan, detail_resep_dokter_kombinasi.dresepk_satuan as satuan_racikan
 					FROM detail_resep_dokter_kombinasi
@@ -1238,7 +1241,7 @@ left join karyawan on (karyawan.karyawan_id = resep_dokter.resep_dokterid)";
 						LEFT JOIN produk ON(dresepk_produk=produk_id)
 						LEFT JOIN satuan ON (dresepk_satuan =satuan_nama)
 						LEFT JOIN master_resep_kombinasi ON (dresepk_resepmaster = rkombinasi_master)
-							WHERE dresepk_resepmaster = '$resep_id'";
+							WHERE dresepk_resepmaster = '$resep_id'";*/
 
 			$result_racikan = $this->db->query($sql_racikan);
 			
