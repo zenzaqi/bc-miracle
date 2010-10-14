@@ -858,7 +858,7 @@ class M_appointment extends Model{
 			$this->db->where('reportt_karyawan_id', $karyawan_id);
 			$this->db->where('reportt_id', $reportt_id);
 			$this->db->update('report_tindakan', $data_reportt);
-			if($this->db->affected_rows()){
+			if($this->db->affected_rows()>-1){
 				return 1;
 			}else{
 				return 0;
