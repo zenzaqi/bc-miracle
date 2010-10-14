@@ -1,0 +1,3 @@
+[by zaqi.smart@gmail.com]
+- update SQL u/ fix view Produk satuan Terkecil
+  file : 2010-10-14_09-30-AM.sql
