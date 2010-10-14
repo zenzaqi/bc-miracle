@@ -79,9 +79,9 @@ html,body,table,tr,td{
 		<?
 		foreach($detail_resepdokter_tambahan as $list => $row) { $i+=1;?>
         <tr>
-			<td height="20px" width="250x"> <?=$row->dresept_tambahan;?></td>
-			<td height="20px" width="40px"align="right"><?=$row->dresept_jumlah;?></td>
-			<td height="20px" width="60px" align="left"><?=$row->dresept_satuan;?></td>
+			<td height="20px" width="100x"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?=$row->dresept_tambahan;?></td>
+			<td height="20px" width="30px"align="right"><?=$row->dresept_jumlah;?>&nbsp;</td>
+			<td height="20px" width="40px" align="left"><?=$row->dresept_satuan;?></td>
 		</tr>
 		<?php }
 		?>
