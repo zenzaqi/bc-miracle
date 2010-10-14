@@ -188,11 +188,12 @@ class C_resep_dokter extends Controller {
 		$rkombinasi_id=trim(@$_POST["rkombinasi_id"]);
 		$rkombinasi_master=trim(@$_POST["rkombinasi_master"]);
 		$rkombinasi_produk=trim(@$_POST["rkombinasi_produk"]);
+		$rkombinasi_keterangan=trim(@$_POST["rkombinasi_keterangan"]);
 		$cetak=trim(@$_POST['cetak']);
 		$count=trim(@$_POST['count']);
 		$dcount=trim(@$_POST['dcount']);
 
-		$result=$this->m_resep_dokter->resepdokter_master_kombinasi_insert($rkombinasi_id ,$rkombinasi_master ,$rkombinasi_produk, $cetak, $count, $dcount);
+		$result=$this->m_resep_dokter->resepdokter_master_kombinasi_insert($rkombinasi_id ,$rkombinasi_master ,$rkombinasi_produk, $rkombinasi_keterangan, $cetak, $count, $dcount);
 		echo $result;
 	}
 	
@@ -503,9 +504,7 @@ class C_resep_dokter extends Controller {
 		}
 		
 		if ($result_racikan->row() != null) {
-			$data['produk_racikan']=$rs_racikan->produk_racikan;
-			$data['satuan_racikan']=$rs_racikan->satuan_racikan;
-			$data['jumlah_racikan']=$rs_racikan->jumlah_racikan;
+			$data['rkombinasi_keterangan']=$rs_racikan->rkombinasi_keterangan;
 		}
 		
 
