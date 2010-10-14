@@ -426,90 +426,25 @@ class M_master_jual_paket extends Model{
 		
 		function member_point_update($jpaket_id){
 			$date_now=date('Y-m-d');
-			/*$sql="SELECT jpaket_cust FROM master_jual_paket WHERE jpaket_id='$jpaket_id'";
-			$rs=$this->db->query($sql);
-			$record=$rs->row_array();
-			$jpaket_cust=$record['jpaket_cust'];*/
 			
-			$sql = "SELECT member_id
-				FROM member
-					JOIN master_jual_paket ON(member.member_cust=master_jual_paket.jpaket_cust)
-				WHERE master_jual_paket.jpaket_id='".$jpaket_id."'
-					AND member.member_valid >= master_jual_paket.jpaket_tanggal";
-			$rs=$this->db->query($sql);
-			if($rs->num_rows()){
-				$sqlu = "UPDATE master_jual_paket, customer, vu_jpaket_total_point
-					SET jpaket_point=vu_jpaket_total_point.jpaket_total_point
-						,customer.cust_point=(customer.cust_point + vu_jpaket_total_point.jpaket_total_point)
-					WHERE master_jual_paket.jpaket_id='".$jpaket_id."'
-						AND customer.cust_id=master_jual_paket.jpaket_cust
-						AND vu_jpaket_total_point.jpaket_id=master_jual_paket.jpaket_id";
-				$this->db->query($sqlu);
+			$sqlu = "UPDATE master_jual_paket, vu_jpaket_total_point
+				SET master_jual_paket.jpaket_point = vu_jpaket_total_point.jpaket_total_point
+				WHERE master_jual_paket.jpaket_id = vu_jpaket_total_point.jpaket_id
+					AND vu_jpaket_total_point.jpaket_id='".$jpaket_id."'";
+			$this->db->query($sqlu);
+			if($this->db->affected_rows()){
+				$sqlu_cust = "UPDATE customer, vu_jpaket_total_point
+					SET customer.cust_point = (customer.cust_point + vu_jpaket_total_point.jpaket_total_point)
+					WHERE customer.cust_id = vu_jpaket_total_point.jpaket_cust
+						AND vu_jpaket_total_point.jpaket_id='".$jpaket_id."'";
+				$this->db->query($sqlu_cust);
 				if($this->db->affected_rows()>-1){
-					return 1;
-				}
-				/*
-				//UPDATE db.master_jual_paket.jpaket_point
-				$sqlu = "UPDATE master_jual_paket, vu_jpaket_total_point
-					SET master_jual_paket.jpaket_point = vu_jpaket_total_point.jpaket_total_point
-					WHERE master_jual_paket.jpaket_id='".$jpaket_id."'
-						AND master_jual_paket.jpaket_id=vu_jpaket_total_point.jpaket_id";
-				$this->db->query($sqlu);
-				if($this->db->affected_rows()>-1){
-					//UPDATE db.customer.cust_point <== ditambahkan dari db.master_jual_paket.jpaket_point
-					$sqlu = "UPDATE customer
-						SET customer.cust_point=(customer.cust_point + (
-							SELECT master_jual_paket.jpaket_point FROM master_jual_paket WHERE master_jual_paket.jpaket_id='".$jpaket_id."'
-							))
-						WHERE customer.cust_id='".$jpaket_cust."'";
-					$this->db->query($sqlu);
-				}*/
-			}else{
-				return 1;
-			}
-		}
-		
-		function member_point_delete($dpaket_master){
-			$date_now=date('Y-m-d');
-			
-			$sql="SELECT jpaket_cust FROM master_jual_paket WHERE jpaket_id='$dpaket_master'";
-			$rs=$this->db->query($sql);
-			$record=$rs->row_array();
-			$jpaket_cust=$record['jpaket_cust'];
-			
-			$sql="SELECT member_id FROM member WHERE member_cust='$jpaket_cust' AND (member_valid >= '$date_now')";
-			$rs=$this->db->query($sql);
-			if($rs->num_rows()){
-				$sql="SELECT setmember_point_perrp FROM member_setup LIMIT 1";
-				$rs=$this->db->query($sql);
-				$record=$rs->row_array();
-				$setmember_point_perrp=$record['setmember_point_perrp'];
-				
-				$sql="SELECT dpaket_jumlah, dpaket_harga, paket_point, dpaket_diskon, jpaket_diskon, jpaket_cashback FROM detail_jual_paket LEFT JOIN master_jual_paket ON(dpaket_master=jpaket_id) LEFT JOIN paket ON(dpaket_paket=paket_id) WHERE dpaket_master='$dpaket_master'";
-				$rs=$this->db->query($sql);
-				if($rs->num_rows()){
-					$one_record = $rs->row();
-					$jpaket_cashback = $one_record->jpaket_cashback;
-					$jpaket_diskon = $one_record->jpaket_diskon;
-					$jumlah_rupiah = 0;
-					$jumlah_point = 0;
-					foreach($rs->result() as $row){
-						//$jumlah_point += ($row->dpaket_jumlah) * ($row->paket_point) * (floor(($row->dpaket_harga)/$setmember_point_perrp));
-						$jumlah_rupiah += ($row->dpaket_jumlah) * ($row->paket_point) * ($row->dpaket_harga) * ((100 - $row->dpaket_diskon)/100);
-					}
-					$jumlah_rupiah -= $jpaket_cashback;
-					if($setmember_point_perrp<>0){
-						$jumlah_point = floor($jumlah_rupiah/$setmember_point_perrp);
-					}
-					$sql="UPDATE customer SET cust_point = (cust_point - $jumlah_point) WHERE cust_id='$jpaket_cust'";
-					$this->db->query($sql);
-					return 1;
-				}else{
 					return 1;
 				}
 			}else{
 				return 1;
 			}
+			
 		}
 		
 		function member_point_batal($jpaket_id){
@@ -782,17 +717,6 @@ class M_master_jual_paket extends Model{
 			}
 		}
 		
-		//purge all detail from master
-		function detail_detail_jual_paket_purge($master_id){
-			$result_point_delete = $this->member_point_delete($master_id);
-			if($result_point_delete==1){
-				$sql="DELETE FROM detail_jual_paket WHERE dpaket_master='".$master_id."'";
-				$result=$this->db->query($sql);
-			}
-			
-		}
-		//*eof
-		
 		function detail_pengguna_paket_purge($master_id){
 			$sql="DELETE pengguna_paket
 				FROM pengguna_paket LEFT JOIN master_jual_paket ON(ppaket_master=jpaket_id)
@@ -857,20 +781,25 @@ class M_master_jual_paket extends Model{
 				$dpaket_sisa_paket=$dpaket_jumlah*($rpaket_jumlah_total+$ipaket_jumlah_total);
 				
 				//* checking $dpaket_id ==> apakah is_numeric AND sudah ada di db.detail_jual_paket.dpaket_id ?? /
-				$sql = "SELECT dpaket_id FROM detail_jual_paket WHERE dpaket_id='".$dpaket_id."'";
+				$sql = "SELECT dpaket_id
+						,dpaket_revised
+						,paket_point
+					FROM detail_jual_paket
+						JOIN paket ON(dpaket_paket=paket_id)
+					WHERE dpaket_id='".$dpaket_id."'";
 				$rs = $this->db->query($sql);
 				if($rs->num_rows()){
-					$dpaket_revised=0;
-					$sql = "SELECT dpaket_revised FROM detail_jual_paket WHERE dpaket_id=".$dpaket_id;
-					$rs = $this->db->query($sql);
-					if($rs->num_rows()){
-						$record = $rs->row_array();
-						$dpaket_revised = $record['dpaket_revised'];
-					}
+					$record = $rs->row_array();
+					$dpaket_revised = $record['dpaket_revised'];
+					$paket_point = $record['paket_point'];
+					
 					//* detail ini sudah ada dalam db.detail_jual_paket ==> updating /
 					//* checking lagi, apakah $dpaket_master(identik = db.master_jual_paket.jpaket_id) AND $dpaket_id sudah diambil ataukah belum di db.detail_ambil_paket,
 					//* JIKA sudah pernah diambil ==> maka $dpaket_id ini tidak boleh dilakukan updating atau penghapusan /
-					$sql = "SELECT dapaket_id FROM detail_ambil_paket WHERE dapaket_jpaket='$dpaket_master' AND dapaket_dpaket='$dpaket_id'";
+					$sql = "SELECT dapaket_id
+						FROM detail_ambil_paket
+						WHERE dapaket_jpaket='$dpaket_master'
+							AND dapaket_dpaket='$dpaket_id'";
 					$rs = $this->db->query($sql);
 					if($rs->num_rows()){
 						//* artinya: isi paket sudah pernah diambil, sehingga tidak boleh di-edit ==> tidak ada action /
@@ -889,6 +818,7 @@ class M_master_jual_paket extends Model{
 						$dtu_dpaket = array(
 							//"dpaket_master"=>$dpaket_master, 
 							"dpaket_paket"=>$dpaket_paket,
+							"dpaket_set_point"=>$paket_point,
 							"dpaket_karyawan"=>$dpaket_karyawan,
 							"dpaket_kadaluarsa"=>$dpaket_kadaluarsa, 
 							"dpaket_jumlah"=>$dpaket_jumlah, 
@@ -929,10 +859,15 @@ class M_master_jual_paket extends Model{
 						}*/
 					}
 				}else{
+					$sql_paket = "SELECT paket_point FROM paket WHERE paket_id='".$dpaket_paket."'";
+					$rs_paket = $this->db->query($sql_paket);
+					$record_paket = $rs_paket->row_array();
+					$paket_point = $record_paket['paket_point'];
 					//* Adding detail baru /
 					$data = array(
 						"dpaket_master"=>$dpaket_master, 
 						"dpaket_paket"=>$dpaket_paket,
+						"dpaket_set_point"=>$paket_point,
 						"dpaket_karyawan"=>$dpaket_karyawan,
 						"dpaket_kadaluarsa"=>$dpaket_kadaluarsa, 
 						"dpaket_jumlah"=>$dpaket_jumlah, 
@@ -981,16 +916,16 @@ class M_master_jual_paket extends Model{
 								if($rs_piutang_update==1){
 									return $dpaket_master;
 								}else{
-									return $dpaket_master;
+									return '0';
 								}
 							}else{
-								return $dpaket_master;
+								return '0';
 							}
 						}else{
-							return $dpaket_master;
+							return '0';
 						}
 					}else{
-						return $dpaket_master;
+						return '0';
 					}
 				}else if($cetak<>1 && $i==$size_array){
 					return '0';

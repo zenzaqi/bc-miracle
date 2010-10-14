@@ -4787,7 +4787,6 @@ Ext.onReady(function(){
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:false},
 		bbar: new Ext.PagingToolbar({
-			pageSize: pageS,
 			store: detail_jual_rawat_DataStore,
 			displayInfo: true
 		}),
