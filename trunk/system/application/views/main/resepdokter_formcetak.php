@@ -79,7 +79,7 @@ html,body,table,tr,td{
 		<?
 		foreach($detail_resepdokter_tambahan as $list => $row) { $i+=1;?>
         <tr>
-			<td height="20px" width="100x"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?=$row->dresept_tambahan;?></td>
+			<td height="20px" width="150x"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?=$row->dresept_tambahan;?></td>
 			<td height="20px" width="30px"align="right"><?=$row->dresept_jumlah;?>&nbsp;</td>
 			<td height="20px" width="40px" align="left"><?=$row->dresept_satuan;?></td>
 		</tr>
@@ -100,7 +100,7 @@ html,body,table,tr,td{
 		<?
 		foreach($detail_resepdokter_racikan as $list => $row) { $i+=1;?>
         <tr>
-			<td height="20px" width="250x"> <?=$row->rkombinasi_keterangan;?></td>
+			<td height="20px" width="300x"> <?=$row->rkombinasi_keterangan;?></td>
 		</tr>
 		<?php }
 		?>
@@ -111,6 +111,11 @@ html,body,table,tr,td{
   <tr>
   </tr>
 </table>
+<br>
+<br>
+<br>
+<br>
+
 <table width="350"border="0" cellspacing="0" cellpadding="0">
         <tr>
           <td width="20px">&nbsp;</td>
