@@ -28,7 +28,7 @@
             <th scope='col'>No Faktur</th> 
             <th scope='col'>Jenis Transaksi</th>          
             <th scope='col'>Tanggal</th>
-			<th scope='col'>Nilai (Rp)</th>
+			<th scope='col'>Nilai Pemakaian (Rp)</th>
         </tr>
     </thead>
 	<tbody>
@@ -54,7 +54,7 @@
 			?>
            <tr>
                 <td><b><? $j++; echo $j; ?></b></td>
-                <td colspan="5"><b><?php echo $print->no_bukti;?></b></td>
+                <td colspan="5"><b><?php echo $print->no_bukti.", Nilai : ".number_format($print->total_nilai);?></b></td>
            </tr>
           <?php foreach($data_print as $print_list) {  ?>
           <?php if($print_list->no_bukti==$print->no_bukti){ $i++;

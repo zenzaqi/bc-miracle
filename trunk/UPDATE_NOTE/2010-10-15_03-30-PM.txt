@@ -1,0 +1,15 @@
+[by zaqi.smart@gmail.com]
+# Fix update
+  o Modul AKuntansi
+    - u/ Jurnal Kas/Bank Masuk, Jurnal Kas/Bank Keluar, Jurnal Umum,
+      Lap Jurnal Harian, Buku Besar dan Posting
+    - Keterangan
+      + Masukkan kode Akuntansi di Master
+      + Masukkan Map Kode Akun
+      + Isi Jurnal
+      + Lihat Lap Jurnal Harian
+      + Posting
+      + Lihat di Buku Besar
+
+  o Laporan Cetak Kwitansi [Detail]
+

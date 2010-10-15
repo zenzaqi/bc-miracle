@@ -28,7 +28,7 @@
             <th scope='col'>Tanggal</th> 
             <th scope='col'>Jenis Transaksi</th>          
             <th scope='col'>Customer</th>
-			<th scope='col'>Nilai (Rp)</th>
+			<th scope='col'>Nilai Pemakaian (Rp)</th>
         </tr>
     </thead>
 	<tbody>
