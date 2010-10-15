@@ -753,8 +753,9 @@ Ext.onReady(function(){
 				//if(master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_nobukti')==''){
 				if(jrawat_nobuktiField.getValue()==''){
 					//proses cetak pengambilan paket saja
-					
-					apaket_cetak(cetak_customer_id ,cetak_tanggal);
+					if(cetak_jrawat==1){
+						apaket_cetak(cetak_customer_id ,cetak_tanggal);
+					}
 					
 					master_jual_rawat_DataStore.reload();
 					detail_jual_rawat_DataStore.load({params: {master_id:0}});
@@ -763,8 +764,9 @@ Ext.onReady(function(){
 					master_cara_bayarTabPanel.setActiveTab(0);
 				}else{
 					//proses cetak untuk perawatan satuan atau plus pengambilan paket
-					
-					jrawat_cetak(cetak_jrawat_id ,cetak_customer_id ,cetak_tanggal);
+					if(cetak_jrawat==1){
+						jrawat_cetak(cetak_jrawat_id ,cetak_customer_id ,cetak_tanggal);
+					}
 					
 					master_jual_rawat_DataStore.reload();
 					detail_jual_rawat_DataStore.load({params: {master_id:0}});
