@@ -304,11 +304,11 @@ class M_master_jual_rawat extends Model{
 				,drawat_master
 				,drawat_rawat
 				,drawat_jumlah
-				,perawatan.rawat_harga as drawat_harga
+				,drawat_harga
 				,drawat_diskon
 				,drawat_sales
 				,drawat_diskon_jenis
-				,perawatan.rawat_harga*drawat_jumlah as drawat_subtotal
+				,drawat_harga*drawat_jumlah as drawat_subtotal
 				,drawat_harga*drawat_jumlah*(100-drawat_diskon)/100 as drawat_subtotal_net
 				,dtrawat_keterangan
 				,IF((dtrawat_petugas1=0),IF((dtrawat_petugas2=0),NULL,terapis.karyawan_username),dokter.karyawan_username) AS referal
@@ -2095,7 +2095,7 @@ class M_master_jual_rawat extends Model{
 		return $result;
 	}
 	
-	function get_rawat_list($query){
+	function get_rawat_list($query,$start,$end,$aktif){
 		$rs_rows=0;
 		if(is_numeric($query)==true){
 			$sql_drawat="SELECT distinct(drawat_rawat) FROM detail_jual_rawat WHERE drawat_master='$query'";
@@ -2103,14 +2103,40 @@ class M_master_jual_rawat extends Model{
 			$rs_rows=$rs->num_rows();
 		}
 		
-		$sql="SELECT rawat_id,rawat_harga,rawat_kode,group_nama,kategori_nama,rawat_du,rawat_dm,rawat_nama FROM perawatan LEFT JOIN produk_group ON(rawat_group=group_id) LEFT JOIN kategori ON(rawat_kategori=kategori_id) WHERE rawat_aktif='Aktif'";//join dr tabel: perawatan,produk_group,kategori2,kategori,jenis,gudang
+		if($aktif=='yes'){
+			$sql="SELECT rawat_id
+					,rawat_harga
+					,rawat_kode
+					,group_nama
+					,kategori_nama
+					,rawat_du
+					,rawat_dm
+					,rawat_nama
+				FROM perawatan
+					LEFT JOIN produk_group ON(rawat_group=group_id)
+					LEFT JOIN kategori ON(rawat_kategori=kategori_id)
+				WHERE rawat_aktif='Aktif'";//join dr tabel: perawatan,produk_group,kategori2,kategori,jenis,gudang
+		}else{
+			$sql="SELECT rawat_id
+				,rawat_harga
+				,rawat_kode
+				,group_nama
+				,kategori_nama
+				,rawat_du
+				,rawat_dm
+				,rawat_nama
+			FROM perawatan
+				LEFT JOIN produk_group ON(rawat_group=group_id)
+				LEFT JOIN kategori ON(rawat_kategori=kategori_id)";
+		}
+		
 		if($query<>"" && is_numeric($query)==false){
 			$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
 			$sql.=" (rawat_kode like '%".$query."%' or rawat_nama like '%".$query."%' or kategori_nama like '%".$query."%') ";
 		}else{
 			if($rs_rows){
 				$filter="";
-				$sql.=eregi("AND",$query)? " OR ":" AND ";
+				$sql.=eregi("WHERE",$query)? " AND ":" WHERE ";
 				foreach($rs->result() as $row_drawat){
 					
 					$filter.="OR rawat_id='".$row_drawat->drawat_rawat."' ";

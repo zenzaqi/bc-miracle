@@ -77,7 +77,7 @@ class M_master_jual_produk extends Model{
 		
 		
 		
-	function get_produk_list($query,$start,$end){
+	function get_produk_list($query,$start,$end,$aktif){
 		$rs_rows=0;
 		if(is_numeric($query)==true){
 			$sql_dproduk="SELECT dproduk_produk FROM detail_jual_produk WHERE dproduk_master='$query'";
@@ -85,14 +85,19 @@ class M_master_jual_produk extends Model{
 			$rs_rows=$rs->num_rows();
 		}
 		
-		$sql="select * from vu_produk WHERE produk_aktif='Aktif'";
+		if($aktif=='yes'){
+			$sql="select * from vu_produk WHERE produk_aktif='Aktif'";
+		}else{
+			$sql="select * from vu_produk";
+		}
+		
 		if($query<>"" && is_numeric($query)==false){
 			$sql.=eregi("WHERE",$sql)? " AND ":" WHERE ";
 			$sql.=" (produk_kode like '%".$query."%' or produk_nama like '%".$query."%' ) ";
 		}else{
 			if($rs_rows){
 				$filter="";
-				$sql.=eregi("AND",$sql)? " OR ":" AND ";
+				$sql.=eregi("WHERE",$sql)? " AND ":" WHERE ";
 				foreach($rs->result() as $row_dproduk){
 					
 					$filter.="OR produk_id='".$row_dproduk->dproduk_produk."' ";
@@ -208,7 +213,7 @@ class M_master_jual_produk extends Model{
 		function detail_detail_jual_produk_list($master_id,$query,$start,$end) {
 			//$query="SELECT *,konversi_nilai FROM detail_jual_produk LEFT JOIN satuan_konversi ON(dproduk_produk=konversi_produk AND dproduk_satuan=konversi_satuan) WHERE dproduk_master='".$master_id."'";
 			
-			$query = "SELECT detail_jual_produk.*,master_jual_produk.jproduk_bayar,master_jual_produk.jproduk_diskon,dproduk_harga*dproduk_jumlah as dproduk_subtotal,dproduk_harga*dproduk_jumlah*((100-dproduk_diskon)/100) as dproduk_subtotal_net, produk_point, produk_harga AS produk_harga_default FROM detail_jual_produk LEFT JOIN satuan_konversi ON(dproduk_produk=konversi_produk AND dproduk_satuan=konversi_satuan) LEFT JOIN master_jual_produk ON(dproduk_master=jproduk_id) LEFT JOIN produk ON(dproduk_produk=produk_id) WHERE dproduk_master='".$master_id."'";
+			$query = "SELECT detail_jual_produk.*,master_jual_produk.jproduk_bayar,master_jual_produk.jproduk_diskon,dproduk_harga*dproduk_jumlah as dproduk_subtotal,dproduk_harga*dproduk_jumlah*((100-dproduk_diskon)/100) as dproduk_subtotal_net, produk_point, dproduk_harga AS produk_harga_default FROM detail_jual_produk LEFT JOIN satuan_konversi ON(dproduk_produk=konversi_produk AND dproduk_satuan=konversi_satuan) LEFT JOIN master_jual_produk ON(dproduk_master=jproduk_id) LEFT JOIN produk ON(dproduk_produk=produk_id) WHERE dproduk_master='".$master_id."'";
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
 			$limit = $query." LIMIT ".$start.",".$end;			

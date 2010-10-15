@@ -1802,7 +1802,8 @@ Ext.onReady(function(){
 		if(master_jual_produkListEditorGrid.selModel.getCount() == 1) {
 			cbo_dproduk_produkDataStore.load({
 				params: {
-					query: master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_id')
+					query: master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_id'),
+					aktif: 'yesno'
 				},
 				callback: function(opts, success, response){
 					cbo_dproduk_satuanDataStore.setBaseParam('produk_id', 0);
@@ -4224,7 +4225,7 @@ Ext.onReady(function(){
 		proxy: new Ext.data.HttpProxy({
 			url: 'index.php?c=c_master_jual_produk&m=get_produk_list', 
 			method: 'POST'
-		}),baseParams: {start: 0, limit: 15 },
+		}),baseParams: {aktif: 'yes', start: 0, limit: 15 },
 			reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
