@@ -43,19 +43,20 @@ class M_cetak_kwitansi extends Model{
 				if($periode=='all')
 					$sql="SELECT * FROM vu_detail_kuitansi WHERE stat_dok<>'Batal' 
 							AND jual_stat_dok<>'Batal' 
-							AND pakai_nilai>0 ".$order_by;
+							 ".$order_by;
 				else if($periode=='bulan')
 					$sql="SELECT * FROM vu_detail_kuitansi WHERE stat_dok<>'Batal'  
 							AND jual_stat_dok<>'Batal' 
 							AND date_format(tanggal,'%Y-%m')='".$tgl_awal."' 
-							AND pakai_nilai>0 ".$order_by;
+							".$order_by;
 				else if($periode=='tanggal')
 					$sql="SELECT * FROM vu_detail_kuitansi WHERE stat_dok<>'Batal'  AND jual_stat_dok<>'Batal' 
 							AND date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."'
 							AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."' 
-							AND pakai_nilai>0".$order_by;
+							".$order_by;
 			}
 			//echo $sql;
+			//$this->firephp->log($sql);
 			
 			$query=$this->db->query($sql);
 			return $query->result();

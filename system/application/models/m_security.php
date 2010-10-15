@@ -34,7 +34,7 @@ class M_security extends Model{
 			return 'RCUD';
 		}else{
 			
-		$sql="select perm_priv from vu_s_permissions where perm_group='".$_SESSION[SESSION_GROUPID]."' and  menu_kode='".$form_kode."'";
+		$sql="select perm_priv from vu_permissions where perm_group='".$_SESSION[SESSION_GROUPID]."' and  menu_kode='".$form_kode."'";
 		$query=$this->db->query($sql);
 		if ($query->num_rows() > 0)
 		{
