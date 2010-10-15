@@ -1858,7 +1858,10 @@ Ext.onReady(function(){
 			
 			if(master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('keterangan_paket')!=="paket"){
 				cbo_drawat_rawatDataStore.load({
-					params: {query:master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_id')},
+					params: {
+						query:master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_id'),
+						aktif: 'yesno'
+					},
 					callback:function(opts, success, response){
 						if(success){
 							detail_jual_rawat_DataStore.load({
@@ -2316,7 +2319,7 @@ Ext.onReady(function(){
 		proxy: new Ext.data.HttpProxy({
 			url: 'index.php?c=c_master_jual_rawat&m=get_rawat_list', 
 			method: 'POST'
-		}),baseParams: {start: 0, limit: 15 },
+		}),baseParams: {aktif: 'yes', start: 0, limit: 15 },
 			reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',

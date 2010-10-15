@@ -1865,7 +1865,10 @@ Ext.onReady(function(){
 			master_cara_bayarTabPanel.setActiveTab(0);
 			jpaket_post2db='UPDATE';
 			cbo_dpaket_paketDataStore.load({
-				params:{query:master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_id')},
+				params:{
+					query:master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_id'),
+					aktif: 'yesno'
+				},
 				callback: function(opts, success, response){
 					if(success){
 						detail_jual_paket_DataStore.load({
@@ -4219,7 +4222,7 @@ Ext.onReady(function(){
 		proxy: new Ext.data.HttpProxy({
 			url: 'index.php?c=c_master_jual_paket&m=get_paket_list', 
 			method: 'POST'
-		}),baseParams: {start: 0, limit: 15 },
+		}),baseParams: {aktif: 'yes', start: 0, limit: 15 },
 			reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',

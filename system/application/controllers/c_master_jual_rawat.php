@@ -97,7 +97,8 @@ class C_master_jual_rawat extends Controller {
 		$query = isset($_POST['query']) ? $_POST['query'] : "";
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_master_jual_rawat->get_rawat_list($query,$start,$end);
+		$aktif = trim(@$_POST["aktif"]);
+		$result = $this->m_master_jual_rawat->get_rawat_list($query,$start,$end,$aktif);
 		echo $result;
 	}
 	

@@ -208,7 +208,7 @@ class M_master_jual_paket extends Model{
 			
 		}
 		
-		function get_paket_list($query,$start,$end){
+		function get_paket_list($query,$start,$end,$aktif){
 			$rs_rows=0;
 			if(is_numeric($query)==true){
 				$sql_paket="SELECT distinct(dpaket_paket) FROM detail_jual_paket WHERE dpaket_master='$query'";
@@ -217,18 +217,24 @@ class M_master_jual_paket extends Model{
 			}
 			
 //			$sql="SELECT paket_id, paket_harga, paket_kode, group_nama, kategori_nama, paket_du, paket_dm, paket_nama, paket_expired FROM paket INNER JOIN produk_group ON paket.paket_group=produk_group.group_id INNER JOIN kategori ON produk_group.group_kelompok=kategori.kategori_id WHERE kategori.kategori_jenis='paket' AND paket_aktif='Aktif'";
-			$sql=  "SELECT 
+			if($aktif=='yes'){
+				$sql=  "SELECT 
 						paket_id, paket_harga, paket_kode, paket_du, paket_dm, paket_nama, paket_expired 
 					FROM paket 
 					WHERE paket_aktif='Aktif'";
-
+			}else{
+				$sql=  "SELECT 
+						paket_id, paket_harga, paket_kode, paket_du, paket_dm, paket_nama, paket_expired 
+					FROM paket ";
+			}
+			
 			if($query<>"" && is_numeric($query)==false){
 				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
 				$sql.=" (paket_kode LIKE '%".addslashes($query)."%' OR paket_nama LIKE '%".addslashes($query)."%' ) ";
 			}else{
 				if($rs_rows){
 					$filter="";
-					$sql.=eregi("AND",$query)? " OR ":" AND ";
+					$sql.=eregi("WHERE",$query)? " AND ":" WHERE ";
 					foreach($rs->result() as $row_paket){
 						
 						$filter.="OR paket_id='".$row_paket->dpaket_paket."' ";
