@@ -199,7 +199,7 @@ class M_Kasbank extends Model{
 					if($i<sizeof($dkasbank_id)-1){
 						$query = $query . ",";
 					} 
-					$this->db->where('dorder_id', $dkasbank_id[$i]);
+					$this->db->where('dkasbank_id', $dkasbank_id[$i]);
 					$this->db->update('kasbank_detail', $data);
 				}
 			}
@@ -238,6 +238,7 @@ class M_Kasbank extends Model{
 			$limit = $query." LIMIT ".$start.",".$end;		
 			$result = $this->db->query($limit);  
 			
+			$this->firephp->log($limit);
 			if($nbrows>0){
 				foreach($result->result() as $row){
 					$arr[] = $row;

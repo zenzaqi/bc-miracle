@@ -22,8 +22,33 @@ class C_kasbank_keluar extends Controller {
 	
 	//set index
 	function index(){
-		$this->load->plugin('to_excel');
 		$this->load->view('main/v_kasbank_keluar');
+	}
+	
+	function kasbank_reopen(){
+		$kasbank_id=isset($_POST['kasbank_id']) ? @$_POST['kasbank_id'] : "";
+		$result=$this->m_kasbank->kasbank_reopen($kasbank_id);
+		echo $result;
+	}
+		
+	function get_akun_kasbank(){
+		$query = isset($_POST['query']) ? @$_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? @$_POST['start'] : @$_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? @$_POST['limit'] : @$_GET['limit']);
+		$result=$this->m_kasbank->get_akun_kasbank($query,$start,$end);
+		echo $result;
+	}
+	
+	function get_detail_akun(){
+		$query = isset($_POST['query']) ? @$_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? @$_POST['start'] : @$_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? @$_POST['limit'] : @$_GET['limit']);
+		$task = isset($_POST['task']) ? @$_POST['task'] : "";
+		$master_id = isset($_POST['master_id']) ? @$_POST['master_id'] : "";
+		$selected_id = isset($_POST['selected_id']) ? @$_POST['selected_id'] : "";
+		
+		$result=$this->m_kasbank->get_detail_akun($task,$master_id,$selected_id,$query,$start,$end);
+		echo $result;
 	}
 	
 	//for detail action
@@ -63,8 +88,16 @@ class C_kasbank_keluar extends Controller {
 		$dkasbank_keluar_detail=str_replace("'", "''",$dkasbank_keluar_detail);
 		$dkasbank_keluar_debet=trim(@$_POST["dkasbank_keluar_debet"]);
 		$dkasbank_keluar_kredit=trim(@$_POST["dkasbank_keluar_kredit"]);
-		$master_id = (integer) (isset($_POST['master_id']) ? @$_POST['master_id'] : @$_GET['master_id']);
-		$result=$this->m_kasbank->detail_kasbank_detail_insert($master_id,$dkasbank_keluar_id ,$dkasbank_keluar_master ,$dkasbank_keluar_akun ,$dkasbank_keluar_detail ,$dkasbank_keluar_debet ,$dkasbank_keluar_kredit );
+		
+		$dkasbank_keluar_id = json_decode(stripslashes($dkasbank_keluar_id));
+		$dkasbank_keluar_akun = json_decode(stripslashes($dkasbank_keluar_akun));
+		$dkasbank_keluar_detail = json_decode(stripslashes($dkasbank_keluar_detail));
+		$dkasbank_keluar_debet = json_decode(stripslashes($dkasbank_keluar_debet));
+		
+		$result=$this->m_kasbank->detail_kasbank_detail_insert($dkasbank_keluar_id ,$dkasbank_keluar_master ,$dkasbank_keluar_akun ,
+															   $dkasbank_keluar_detail ,$dkasbank_keluar_debet ,$dkasbank_keluar_kredit );
+		
+		echo $result;
 	}
 	
 	
@@ -116,20 +149,14 @@ class C_kasbank_keluar extends Controller {
 		$kasbank_keluar_tanggal=trim(@$_POST["kasbank_keluar_tanggal"]);
 		$kasbank_keluar_nobukti=trim(@$_POST["kasbank_keluar_nobukti"]);
 		$kasbank_keluar_nobukti=str_replace("/(<\/?)(p)([^>]*>)", "",$kasbank_keluar_nobukti);
-		$kasbank_keluar_nobukti=str_replace("'", "''",$kasbank_keluar_nobukti);
 		$kasbank_keluar_akun=trim(@$_POST["kasbank_keluar_akun"]);
 		$kasbank_keluar_terimauntuk=trim(@$_POST["kasbank_keluar_terimauntuk"]);
 		$kasbank_keluar_terimauntuk=str_replace("/(<\/?)(p)([^>]*>)", "",$kasbank_keluar_terimauntuk);
-		$kasbank_keluar_terimauntuk=str_replace("'", "''",$kasbank_keluar_terimauntuk);
-		$kasbank_keluar_jenis=trim(@$_POST["kasbank_keluar_jenis"]);
-		$kasbank_keluar_jenis=str_replace("/(<\/?)(p)([^>]*>)", "",$kasbank_keluar_jenis);
-		$kasbank_keluar_jenis=str_replace("'", "''",$kasbank_keluar_jenis);
+		$kasbank_keluar_jenis="keluar";
 		$kasbank_keluar_noref=trim(@$_POST["kasbank_keluar_noref"]);
 		$kasbank_keluar_noref=str_replace("/(<\/?)(p)([^>]*>)", "",$kasbank_keluar_noref);
-		$kasbank_keluar_noref=str_replace("'", "''",$kasbank_keluar_noref);
 		$kasbank_keluar_keterangan=trim(@$_POST["kasbank_keluar_keterangan"]);
 		$kasbank_keluar_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$kasbank_keluar_keterangan);
-		$kasbank_keluar_keterangan=str_replace("'", "''",$kasbank_keluar_keterangan);
 		$kasbank_keluar_author=@$_SESSION[SESSION_USERID];
 		$kasbank_keluar_date_create=date(LONG_FORMATDATE);
 		//$kasbank_keluar_update=NULL;
@@ -139,7 +166,10 @@ class C_kasbank_keluar extends Controller {
 		$kasbank_keluar_post=str_replace("'", "''",$kasbank_keluar_post);
 		$kasbank_keluar_date_post=trim(@$_POST["kasbank_keluar_date_post"]);
 		//$kasbank_keluar_revised=0;
-		$result=$this->m_kasbank->kasbank_create($kasbank_keluar_tanggal ,$kasbank_keluar_nobukti ,$kasbank_keluar_akun ,$kasbank_keluar_terimauntuk ,$kasbank_keluar_jenis ,$kasbank_keluar_noref ,$kasbank_keluar_keterangan ,$kasbank_keluar_author ,$kasbank_keluar_date_create ,$kasbank_keluar_post, $kasbank_keluar_date_post );
+		$result=$this->m_kasbank->kasbank_create($kasbank_keluar_tanggal ,$kasbank_keluar_nobukti ,$kasbank_keluar_akun ,
+												 $kasbank_keluar_terimauntuk ,$kasbank_keluar_jenis ,$kasbank_keluar_noref ,
+												 $kasbank_keluar_keterangan ,$kasbank_keluar_author ,$kasbank_keluar_date_create ,
+												 $kasbank_keluar_post, $kasbank_keluar_date_post );
 		echo $result;
 	}
 	
@@ -151,30 +181,26 @@ class C_kasbank_keluar extends Controller {
 		$kasbank_keluar_tanggal=trim(@$_POST["kasbank_keluar_tanggal"]);
 		$kasbank_keluar_nobukti=trim(@$_POST["kasbank_keluar_nobukti"]);
 		$kasbank_keluar_nobukti=str_replace("/(<\/?)(p)([^>]*>)", "",$kasbank_keluar_nobukti);
-		$kasbank_keluar_nobukti=str_replace("'", "''",$kasbank_keluar_nobukti);
 		$kasbank_keluar_akun=trim(@$_POST["kasbank_keluar_akun"]);
 		$kasbank_keluar_terimauntuk=trim(@$_POST["kasbank_keluar_terimauntuk"]);
 		$kasbank_keluar_terimauntuk=str_replace("/(<\/?)(p)([^>]*>)", "",$kasbank_keluar_terimauntuk);
-		$kasbank_keluar_terimauntuk=str_replace("'", "''",$kasbank_keluar_terimauntuk);
-		$kasbank_keluar_jenis=trim(@$_POST["kasbank_keluar_jenis"]);
-		$kasbank_keluar_jenis=str_replace("/(<\/?)(p)([^>]*>)", "",$kasbank_keluar_jenis);
-		$kasbank_keluar_jenis=str_replace("'", "''",$kasbank_keluar_jenis);
+		$kasbank_keluar_jenis="keluar";
 		$kasbank_keluar_noref=trim(@$_POST["kasbank_keluar_noref"]);
 		$kasbank_keluar_noref=str_replace("/(<\/?)(p)([^>]*>)", "",$kasbank_keluar_noref);
-		$kasbank_keluar_noref=str_replace("'", "''",$kasbank_keluar_noref);
 		$kasbank_keluar_keterangan=trim(@$_POST["kasbank_keluar_keterangan"]);
 		$kasbank_keluar_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$kasbank_keluar_keterangan);
-		$kasbank_keluar_keterangan=str_replace("'", "''",$kasbank_keluar_keterangan);
 		//$kasbank_keluar_author="kasbank_keluar_author";
 		//$kasbank_keluar_date_create="kasbank_keluar_date_create";
 		$kasbank_keluar_update=@$_SESSION[SESSION_USERID];
 		$kasbank_keluar_date_update=date(LONG_FORMATDATE);
 		$kasbank_keluar_post=trim(@$_POST["kasbank_keluar_post"]);
 		$kasbank_keluar_post=str_replace("/(<\/?)(p)([^>]*>)", "",$kasbank_keluar_post);
-		$kasbank_keluar_post=str_replace("'", "''",$kasbank_keluar_post);
 		$kasbank_keluar_date_post=trim(@$_POST["kasbank_keluar_date_post"]);
 		//$kasbank_keluar_revised="(revised+1)";
-		$result = $this->m_kasbank->kasbank_update($kasbank_keluar_id,$kasbank_keluar_tanggal,$kasbank_keluar_nobukti,$kasbank_keluar_akun,$kasbank_keluar_terimauntuk,$kasbank_keluar_jenis,$kasbank_keluar_noref,$kasbank_keluar_keterangan,$kasbank_keluar_update,$kasbank_keluar_date_update,$kasbank_keluar_post,$kasbank_keluar_date_post);
+		$result = $this->m_kasbank->kasbank_update($kasbank_keluar_id,$kasbank_keluar_tanggal,$kasbank_keluar_nobukti,$kasbank_keluar_akun,
+												   $kasbank_keluar_terimauntuk,$kasbank_keluar_jenis,$kasbank_keluar_noref,
+												   $kasbank_keluar_keterangan,$kasbank_keluar_update,$kasbank_keluar_date_update,
+												   $kasbank_keluar_post,$kasbank_keluar_date_post);
 		echo $result;
 	}
 	
@@ -193,37 +219,32 @@ class C_kasbank_keluar extends Controller {
 		$kasbank_keluar_tanggal=trim(@$_POST["kasbank_keluar_tanggal"]);
 		$kasbank_keluar_nobukti=trim(@$_POST["kasbank_keluar_nobukti"]);
 		$kasbank_keluar_nobukti=str_replace("/(<\/?)(p)([^>]*>)", "",$kasbank_keluar_nobukti);
-		$kasbank_keluar_nobukti=str_replace("'", "''",$kasbank_keluar_nobukti);
 		$kasbank_keluar_akun=trim(@$_POST["kasbank_keluar_akun"]);
 		$kasbank_keluar_terimauntuk=trim(@$_POST["kasbank_keluar_terimauntuk"]);
 		$kasbank_keluar_terimauntuk=str_replace("/(<\/?)(p)([^>]*>)", "",$kasbank_keluar_terimauntuk);
-		$kasbank_keluar_terimauntuk=str_replace("'", "''",$kasbank_keluar_terimauntuk);
-		$kasbank_keluar_jenis=trim(@$_POST["kasbank_keluar_jenis"]);
-		$kasbank_keluar_jenis=str_replace("/(<\/?)(p)([^>]*>)", "",$kasbank_keluar_jenis);
-		$kasbank_keluar_jenis=str_replace("'", "''",$kasbank_keluar_jenis);
+		$kasbank_keluar_jenis="keluar";
 		$kasbank_keluar_noref=trim(@$_POST["kasbank_keluar_noref"]);
 		$kasbank_keluar_noref=str_replace("/(<\/?)(p)([^>]*>)", "",$kasbank_keluar_noref);
-		$kasbank_keluar_noref=str_replace("'", "''",$kasbank_keluar_noref);
 		$kasbank_keluar_keterangan=trim(@$_POST["kasbank_keluar_keterangan"]);
 		$kasbank_keluar_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$kasbank_keluar_keterangan);
-		$kasbank_keluar_keterangan=str_replace("'", "''",$kasbank_keluar_keterangan);
 		$kasbank_keluar_author=trim(@$_POST["kasbank_keluar_author"]);
 		$kasbank_keluar_author=str_replace("/(<\/?)(p)([^>]*>)", "",$kasbank_keluar_author);
-		$kasbank_keluar_author=str_replace("'", "''",$kasbank_keluar_author);
 		$kasbank_keluar_date_create=trim(@$_POST["kasbank_keluar_date_create"]);
 		$kasbank_keluar_update=trim(@$_POST["kasbank_keluar_update"]);
 		$kasbank_keluar_update=str_replace("/(<\/?)(p)([^>]*>)", "",$kasbank_keluar_update);
-		$kasbank_keluar_update=str_replace("'", "''",$kasbank_keluar_update);
 		$kasbank_keluar_date_update=trim(@$_POST["kasbank_keluar_date_update"]);
 		$kasbank_keluar_post=trim(@$_POST["kasbank_keluar_post"]);
 		$kasbank_keluar_post=str_replace("/(<\/?)(p)([^>]*>)", "",$kasbank_keluar_post);
-		$kasbank_keluar_post=str_replace("'", "''",$kasbank_keluar_post);
 		$kasbank_keluar_date_post=trim(@$_POST["kasbank_keluar_date_post"]);
 		$kasbank_keluar_revised=trim(@$_POST["kasbank_keluar_revised"]);
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_kasbank->kasbank_search($kasbank_keluar_id ,$kasbank_keluar_tanggal ,$kasbank_keluar_nobukti ,$kasbank_keluar_akun ,$kasbank_keluar_terimauntuk ,$kasbank_keluar_jenis ,$kasbank_keluar_noref ,$kasbank_keluar_keterangan ,$kasbank_keluar_author ,$kasbank_keluar_date_create ,$kasbank_keluar_update ,$kasbank_keluar_date_update ,$kasbank_keluar_post ,$kasbank_keluar_date_post ,$kasbank_keluar_revised ,$start,$end);
+		$result = $this->m_kasbank->kasbank_search($kasbank_keluar_id ,$kasbank_keluar_tanggal ,$kasbank_keluar_nobukti ,$kasbank_keluar_akun ,
+												   $kasbank_keluar_terimauntuk ,$kasbank_keluar_jenis ,$kasbank_keluar_noref ,
+												   $kasbank_keluar_keterangan ,$kasbank_keluar_author ,$kasbank_keluar_date_create ,
+												   $kasbank_keluar_update ,$kasbank_keluar_date_update ,$kasbank_keluar_post ,
+												   $kasbank_keluar_date_post ,$kasbank_keluar_revised ,$start,$end);
 		echo $result;
 	}
 
@@ -234,37 +255,32 @@ class C_kasbank_keluar extends Controller {
 		$kasbank_keluar_tanggal=trim(@$_POST["kasbank_keluar_tanggal"]);
 		$kasbank_keluar_nobukti=trim(@$_POST["kasbank_keluar_nobukti"]);
 		$kasbank_keluar_nobukti=str_replace("/(<\/?)(p)([^>]*>)", "",$kasbank_keluar_nobukti);
-		$kasbank_keluar_nobukti=str_replace("'", "'",$kasbank_keluar_nobukti);
 		$kasbank_keluar_akun=trim(@$_POST["kasbank_keluar_akun"]);
 		$kasbank_keluar_terimauntuk=trim(@$_POST["kasbank_keluar_terimauntuk"]);
 		$kasbank_keluar_terimauntuk=str_replace("/(<\/?)(p)([^>]*>)", "",$kasbank_keluar_terimauntuk);
-		$kasbank_keluar_terimauntuk=str_replace("'", "'",$kasbank_keluar_terimauntuk);
-		$kasbank_keluar_jenis=trim(@$_POST["kasbank_keluar_jenis"]);
-		$kasbank_keluar_jenis=str_replace("/(<\/?)(p)([^>]*>)", "",$kasbank_keluar_jenis);
-		$kasbank_keluar_jenis=str_replace("'", "'",$kasbank_keluar_jenis);
+		$kasbank_keluar_jenis="keluar";
 		$kasbank_keluar_noref=trim(@$_POST["kasbank_keluar_noref"]);
 		$kasbank_keluar_noref=str_replace("/(<\/?)(p)([^>]*>)", "",$kasbank_keluar_noref);
-		$kasbank_keluar_noref=str_replace("'", "'",$kasbank_keluar_noref);
 		$kasbank_keluar_keterangan=trim(@$_POST["kasbank_keluar_keterangan"]);
 		$kasbank_keluar_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$kasbank_keluar_keterangan);
-		$kasbank_keluar_keterangan=str_replace("'", "'",$kasbank_keluar_keterangan);
 		$kasbank_keluar_author=trim(@$_POST["kasbank_keluar_author"]);
 		$kasbank_keluar_author=str_replace("/(<\/?)(p)([^>]*>)", "",$kasbank_keluar_author);
-		$kasbank_keluar_author=str_replace("'", "'",$kasbank_keluar_author);
 		$kasbank_keluar_date_create=trim(@$_POST["kasbank_keluar_date_create"]);
 		$kasbank_keluar_update=trim(@$_POST["kasbank_keluar_update"]);
 		$kasbank_keluar_update=str_replace("/(<\/?)(p)([^>]*>)", "",$kasbank_keluar_update);
-		$kasbank_keluar_update=str_replace("'", "'",$kasbank_keluar_update);
 		$kasbank_keluar_date_update=trim(@$_POST["kasbank_keluar_date_update"]);
 		$kasbank_keluar_post=trim(@$_POST["kasbank_keluar_post"]);
 		$kasbank_keluar_post=str_replace("/(<\/?)(p)([^>]*>)", "",$kasbank_keluar_post);
-		$kasbank_keluar_post=str_replace("'", "'",$kasbank_keluar_post);
 		$kasbank_keluar_date_post=trim(@$_POST["kasbank_keluar_date_post"]);
 		$kasbank_keluar_revised=trim(@$_POST["kasbank_keluar_revised"]);
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$data["data_print"] = $this->m_kasbank->kasbank_print($kasbank_keluar_id ,$kasbank_keluar_tanggal ,$kasbank_keluar_nobukti ,$kasbank_keluar_akun ,$kasbank_keluar_terimauntuk ,$kasbank_keluar_jenis ,$kasbank_keluar_noref ,$kasbank_keluar_keterangan ,$kasbank_keluar_author ,$kasbank_keluar_date_create ,$kasbank_keluar_update ,$kasbank_keluar_date_update ,$kasbank_keluar_post ,$kasbank_keluar_date_post ,$kasbank_keluar_revised ,$option,$filter);
+		$data["data_print"] = $this->m_kasbank->kasbank_print($kasbank_keluar_id ,$kasbank_keluar_tanggal ,$kasbank_keluar_nobukti ,
+															  $kasbank_keluar_akun ,$kasbank_keluar_terimauntuk ,$kasbank_keluar_jenis ,
+															  $kasbank_keluar_noref ,$kasbank_keluar_keterangan ,$kasbank_keluar_author ,
+															  $kasbank_keluar_date_create ,$kasbank_keluar_update ,$kasbank_keluar_date_update ,
+															  $kasbank_keluar_post ,$kasbank_keluar_date_post ,$kasbank_keluar_revised ,$option,$filter);
 		$print_view=$this->load->view("main/p_kasbank.php",$data,TRUE);
 		if(!file_exists("print")){
 			mkdir("print");
@@ -282,37 +298,32 @@ class C_kasbank_keluar extends Controller {
 		$kasbank_keluar_tanggal=trim(@$_POST["kasbank_keluar_tanggal"]);
 		$kasbank_keluar_nobukti=trim(@$_POST["kasbank_keluar_nobukti"]);
 		$kasbank_keluar_nobukti=str_replace("/(<\/?)(p)([^>]*>)", "",$kasbank_keluar_nobukti);
-		$kasbank_keluar_nobukti=str_replace("'", "\'",$kasbank_keluar_nobukti);
 		$kasbank_keluar_akun=trim(@$_POST["kasbank_keluar_akun"]);
 		$kasbank_keluar_terimauntuk=trim(@$_POST["kasbank_keluar_terimauntuk"]);
 		$kasbank_keluar_terimauntuk=str_replace("/(<\/?)(p)([^>]*>)", "",$kasbank_keluar_terimauntuk);
-		$kasbank_keluar_terimauntuk=str_replace("'", "\'",$kasbank_keluar_terimauntuk);
-		$kasbank_keluar_jenis=trim(@$_POST["kasbank_keluar_jenis"]);
-		$kasbank_keluar_jenis=str_replace("/(<\/?)(p)([^>]*>)", "",$kasbank_keluar_jenis);
-		$kasbank_keluar_jenis=str_replace("'", "\'",$kasbank_keluar_jenis);
+		$kasbank_keluar_jenis="keluar";
 		$kasbank_keluar_noref=trim(@$_POST["kasbank_keluar_noref"]);
 		$kasbank_keluar_noref=str_replace("/(<\/?)(p)([^>]*>)", "",$kasbank_keluar_noref);
-		$kasbank_keluar_noref=str_replace("'", "\'",$kasbank_keluar_noref);
 		$kasbank_keluar_keterangan=trim(@$_POST["kasbank_keluar_keterangan"]);
 		$kasbank_keluar_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$kasbank_keluar_keterangan);
-		$kasbank_keluar_keterangan=str_replace("'", "\'",$kasbank_keluar_keterangan);
 		$kasbank_keluar_author=trim(@$_POST["kasbank_keluar_author"]);
 		$kasbank_keluar_author=str_replace("/(<\/?)(p)([^>]*>)", "",$kasbank_keluar_author);
-		$kasbank_keluar_author=str_replace("'", "\'",$kasbank_keluar_author);
 		$kasbank_keluar_date_create=trim(@$_POST["kasbank_keluar_date_create"]);
 		$kasbank_keluar_update=trim(@$_POST["kasbank_keluar_update"]);
 		$kasbank_keluar_update=str_replace("/(<\/?)(p)([^>]*>)", "",$kasbank_keluar_update);
-		$kasbank_keluar_update=str_replace("'", "\'",$kasbank_keluar_update);
 		$kasbank_keluar_date_update=trim(@$_POST["kasbank_keluar_date_update"]);
 		$kasbank_keluar_post=trim(@$_POST["kasbank_keluar_post"]);
 		$kasbank_keluar_post=str_replace("/(<\/?)(p)([^>]*>)", "",$kasbank_keluar_post);
-		$kasbank_keluar_post=str_replace("'", "\'",$kasbank_keluar_post);
 		$kasbank_keluar_date_post=trim(@$_POST["kasbank_keluar_date_post"]);
 		$kasbank_keluar_revised=trim(@$_POST["kasbank_keluar_revised"]);
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$query = $this->m_kasbank->kasbank_export_excel($kasbank_keluar_id ,$kasbank_keluar_tanggal ,$kasbank_keluar_nobukti ,$kasbank_keluar_akun ,$kasbank_keluar_terimauntuk ,$kasbank_keluar_jenis ,$kasbank_keluar_noref ,$kasbank_keluar_keterangan ,$kasbank_keluar_author ,$kasbank_keluar_date_create ,$kasbank_keluar_update ,$kasbank_keluar_date_update ,$kasbank_keluar_post ,$kasbank_keluar_date_post ,$kasbank_keluar_revised ,$option,$filter);
+		$query = $this->m_kasbank->kasbank_export_excel($kasbank_keluar_id ,$kasbank_keluar_tanggal ,$kasbank_keluar_nobukti ,$kasbank_keluar_akun ,
+														$kasbank_keluar_terimauntuk ,$kasbank_keluar_jenis ,$kasbank_keluar_noref ,
+														$kasbank_keluar_keterangan ,$kasbank_keluar_author ,$kasbank_keluar_date_create ,
+														$kasbank_keluar_update ,$kasbank_keluar_date_update ,$kasbank_keluar_post ,
+														$kasbank_keluar_date_post ,$kasbank_keluar_revised ,$option,$filter);
 		
 		to_excel($query,"kasbank"); 
 		echo '1';

@@ -1,0 +1,18 @@
+[by zaqi.smart@gmail.com]
+- New Update
+  o Jurnal Kas/Bank Keluar
+    link: ?c=c_kasbank_keluar
+
+  o Jurnal Umum
+    link: ?c=c_jurnal
+
+  o Posting
+    link: ?c=c_posting
+
+  o Laporan Jurnal Harian
+    link: ?c=c_jurnal_harian
+
+  o Laporan Buku Besar
+    link: ?c=c_buku_besar
+   
+  SQL : 2010-10-15_10-00-AM.sql

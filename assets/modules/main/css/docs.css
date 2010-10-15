@@ -293,6 +293,9 @@ a:hover {
 .icon-view {
     background-image: url(../../../images/buttons/details.png) !important;
 }
+.icon-reopen {
+    background-image: url(../../../images/buttons/transfer.png) !important;
+}
 .icon-update {
     background-image: url(../../../images/buttons/update.png) !important;
 }
