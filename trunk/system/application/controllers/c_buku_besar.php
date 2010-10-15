@@ -5,8 +5,8 @@
 	+ Module  		: buku_besar Controller
 	+ Description	: For record controller process back-end
 	+ Filename 		: C_buku_besar.php
- 	+ Author  		: 
- 	+ Created on 21/Aug/2009 06:51:08
+ 	+ creator 		: 
+ 	+ Created on 27/May/2010 16:40:49
 	
 */
 
@@ -16,13 +16,13 @@ class C_buku_besar extends Controller {
 	//constructor
 	function C_buku_besar(){
 		parent::Controller();
+		session_start();
 		$this->load->model('m_buku_besar', '', TRUE);
-		$this->load->plugin('to_excel');
 	}
 	
 	//set index
 	function index(){
-		$this->load->helper('asset');
+		$this->load->plugin('to_excel');
 		$this->load->view('main/v_buku_besar');
 	}
 	
@@ -32,6 +32,12 @@ class C_buku_besar extends Controller {
 		switch($task){
 			case "LIST":
 				$this->buku_besar_list();
+				break;
+			case "UPDATE":
+				$this->buku_besar_update();
+				break;
+			case "CREATE":
+				$this->buku_besar_create();
 				break;
 			case "DELETE":
 				$this->buku_besar_delete();
@@ -54,28 +60,81 @@ class C_buku_besar extends Controller {
 	//function fot list record
 	function buku_besar_list(){
 		
-		$query = isset($_POST['query']) ? $_POST['query'] : "";
-		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
-		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		$query = isset($_POST['query']) ? @$_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? @$_POST['start'] : @$_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? @$_POST['limit'] : @$_GET['limit']);
 		$result=$this->m_buku_besar->buku_besar_list($query,$start,$end);
 		echo $result;
 	}
-
 	
+	function get_akun_list(){
+		
+		$query = isset($_POST['query']) ? @$_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? @$_POST['start'] : @$_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? @$_POST['limit'] : @$_GET['limit']);
+		$result=$this->m_buku_besar->get_akun_list($query,$start,$end);
+		echo $result;
+	}
+	
+	//function for create new record
+	function buku_besar_create(){
+		//POST varible here
+		//auto increment, don't accept anything from form values
+		$buku_tanggal=trim(@$_POST["buku_tanggal"]);
+		$buku_ref=trim(@$_POST["buku_ref"]);
+		$buku_ref=str_replace("/(<\/?)(p)([^>]*>)", "",$buku_ref);
+		$buku_ref=str_replace("'", "''",$buku_ref);
+		$buku_akun=trim(@$_POST["buku_akun"]);
+		$buku_debet=trim(@$_POST["buku_debet"]);
+		$buku_kredit=trim(@$_POST["buku_kredit"]);
+		$buku_author=@$_SESSION[SESSION_USERID];
+		$buku_date_create=date(LONG_FORMATDATE);
+		//$buku_update=NULL;
+		//$buku_date_update=NULL;
+		//$buku_revised=0;
+		$result=$this->m_buku_besar->buku_besar_create($buku_tanggal ,$buku_ref ,$buku_akun ,$buku_debet ,$buku_kredit ,$buku_author ,$buku_date_create );
+		echo $result;
+	}
+	
+	
+	//function for update record
+	function buku_besar_update(){
+		//POST variable here
+		$buku_id=trim(@$_POST["buku_id"]);
+		$buku_tanggal=trim(@$_POST["buku_tanggal"]);
+		$buku_ref=trim(@$_POST["buku_ref"]);
+		$buku_ref=str_replace("/(<\/?)(p)([^>]*>)", "",$buku_ref);
+		$buku_ref=str_replace("'", "''",$buku_ref);
+		$buku_akun=trim(@$_POST["buku_akun"]);
+		$buku_debet=trim(@$_POST["buku_debet"]);
+		$buku_kredit=trim(@$_POST["buku_kredit"]);
+		//$buku_author="buku_author";
+		//$buku_date_create="buku_date_create";
+		$buku_update=@$_SESSION[SESSION_USERID];
+		$buku_date_update=date(LONG_FORMATDATE);
+		//$buku_revised="(revised+1)";
+		$result = $this->m_buku_besar->buku_besar_update($buku_id,$buku_tanggal,$buku_ref,$buku_akun,$buku_debet,$buku_kredit,$buku_update,$buku_date_update);
+		echo $result;
+	}
+	
+	//function for delete selected record
+	function buku_besar_delete(){
+		$ids = @$_POST['ids']; // Get our array back and translate it :
+		$pkid = json_decode(stripslashes($ids));
+		$result=$this->m_buku_besar->buku_besar_delete($pkid);
+		echo $result;
+	}
+
 	//function for advanced search
 	function buku_besar_search(){
 		//POST varibale here
-		$buku_periode=trim(@$_POST["buku_periode"]);
-		$buku_tglawal=trim(@$_POST["buku_tglawal"]);
-		$buku_tglakhir=trim(@$_POST["buku_tglakhir"]);
-		$buku_bulan=trim(@$_POST["buku_bulan"]);
-		$buku_tahun=trim(@$_POST["buku_tahun"]);
+		$buku_id=trim(@$_POST["buku_id"]);
+		$buku_tanggal=trim(@$_POST["buku_tanggal"]);
+		$buku_tanggalEnd=trim(@$_POST["buku_tanggalEnd"]);
 		$buku_akun=trim(@$_POST["buku_akun"]);
-		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		
-		$result = $this->m_buku_besar->buku_besar_search($buku_periode, $buku_tglawal, $buku_tglakhir, $buku_bulan, $buku_tahun, $buku_akun, $start,$end);
+		$result = $this->m_buku_besar->buku_besar_search($buku_akun, $buku_tanggal ,$buku_tanggalEnd ,$start,$end);
 		echo $result;
 	}
 
@@ -84,36 +143,61 @@ class C_buku_besar extends Controller {
   		//POST varibale here
 		$buku_id=trim(@$_POST["buku_id"]);
 		$buku_tanggal=trim(@$_POST["buku_tanggal"]);
+		$buku_tanggalEnd=trim(@$_POST["buku_tanggalEnd"]);
 		$buku_akun=trim(@$_POST["buku_akun"]);
-		$buku_debet=trim(@$_POST["buku_debet"]);
-		$buku_kredit=trim(@$_POST["buku_kredit"]);
-		$buku_saldo_debet=trim(@$_POST["buku_saldo_debet"]);
-		$buku_saldo_kredit=trim(@$_POST["buku_saldo_kredit"]);
-		$option=$_POST['currentlisting'];
-		$filter=$_POST["query"];
+		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
 		
+		$data["periode"]="";
+		if($buku_tanggal!=="")
+			$data["periode"].="Tanggal ".$buku_tanggal;
 		
+		if($buku_tanggalEnd!=="")
+			$data["periode"].=" s/d ".$buku_tanggalEnd;
+			
+		$data["data_print"] = $this->m_buku_besar->buku_besar_print($buku_akun, $buku_tanggal, $buku_tanggalEnd ,$start,$end );
+		
+		$print_view=$this->load->view("main/p_buku_besar.php",$data,TRUE);
+		if(!file_exists("print")){
+			mkdir("print");
+		}
+		$print_file=fopen("print/buku_besar_printlist.html","w+");
+		fwrite($print_file, $print_view);
 		echo '1';        
 	}
 	/* End Of Function */
 
 	/* Function to Export Excel document */
 	function buku_besar_export_excel(){
+		//$this->load->plugin('to_excel');
 		//POST varibale here
+		/*$buku_id=trim(@$_POST["buku_id"]);
+		$buku_tanggal=trim(@$_POST["buku_tanggal"]);
+		$buku_tanggalEnd=trim(@$_POST["buku_tanggalEnd"]);
+		$buku_akun=trim(@$_POST["buku_akun"]);
+		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		
+		$query = $this->m_buku_besar->buku_besar_export_excel($buku_akun, $buku_tanggal, $buku_tanggalEnd ,$start,$end );
+			
+		to_excel($query,"buku_besar"); 
+		echo '1';*/
 		$buku_id=trim(@$_POST["buku_id"]);
 		$buku_tanggal=trim(@$_POST["buku_tanggal"]);
+		$buku_tanggalEnd=trim(@$_POST["buku_tanggalEnd"]);
 		$buku_akun=trim(@$_POST["buku_akun"]);
-		$buku_debet=trim(@$_POST["buku_debet"]);
-		$buku_kredit=trim(@$_POST["buku_kredit"]);
-		$buku_saldo_debet=trim(@$_POST["buku_saldo_debet"]);
-		$buku_saldo_kredit=trim(@$_POST["buku_saldo_kredit"]);
-		$option=$_POST['currentlisting'];
-		$filter=$_POST["query"];
+		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
 		
-		$query = $this->m_buku_besar->buku_besar_export_excel($buku_id ,$buku_tanggal ,$buku_akun ,$buku_debet ,$buku_kredit ,$buku_saldo_debet ,$buku_saldo_kredit ,$option,$filter);
-		
-		to_excel($query,"buku_besar"); 
-		echo '1';
+		$data["data_print"] = $this->m_buku_besar->buku_besar_print($buku_akun, $buku_tanggal, $buku_tanggalEnd ,$start,$end );
+		$data["type"]="excel";
+		$print_view=$this->load->view("main/p_buku_besar.php",$data,TRUE);
+		if(!file_exists("print")){
+			mkdir("print");
+		}
+		$print_file=fopen("print/buku_besar_printlist.xls","w+");
+		fwrite($print_file, $print_view);
+		echo '1'; 
 			
 	}
 	
@@ -143,12 +227,12 @@ class C_buku_besar extends Controller {
 		return $data;
 	}
 	
-	// Encodes a YYYY-MM-DD into a MM-DD-YYYY string
-	function codeDate ($date) {
-	  $tab = explode ("-", $date);
-	  $r = $tab[1]."/".$tab[2]."/".$tab[0];
-	  return $r;
+	function convertDate ($date) {
+		  $tab = explode ("-", $date);
+		  $r = $tab[1]."/".$tab[2]."/".$tab[0];
+		  return $r;
 	}
+	
 	
 }
 ?>

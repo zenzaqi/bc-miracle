@@ -65,8 +65,9 @@ var editor_kasbank_keluar_detail;
 //declare konstant
 var post2db = '';
 var msg = '';
-var pageS=15;
-
+var pageS=16;
+var today=new Date().format('Y-m-d');
+var thismonth=new Date().format('Y-m');
 /* declare variable here for Field*/
 var kasbank_keluar_idField;
 var kasbank_keluar_tanggalField;
@@ -90,160 +91,99 @@ var kasbank_keluar_keteranganSearchField;
 var kasbank_keluar_authorSearchField;
 var kasbank_keluar_postSearchField;
 var kasbank_keluar_date_postSearchField;
-var total_debet;
-var total_keluar_kredit;
+var total_kasbank_keluar_debet;
+var total_kasbank_keluar_kredit;
 var jenis_kasbank = "keluar";
 /* on ready fuction */
 Ext.onReady(function(){
-  	Ext.QuickTips.init();	/* Initiate quick tips icon */
-  
-  /* Function for Saving inLine Editing */
-	function kasbank_keluar_inline_update(oGrid_event){
-		var kasbank_keluar_id_update_pk="";
-		var kasbank_keluar_tanggal_update_date="";
-		var kasbank_keluar_nobukti_update=null;
-		var kasbank_keluar_akun_update=null;
-		var kasbank_keluar_terimauntuk_update=null;
-		var kasbank_keluar_jenis_update=null;
-		var kasbank_keluar_noref_update=null;
-		var kasbank_keluar_keterangan_update=null;
-		var kasbank_keluar_post_update=null;
-		var kasbank_keluar_date_post_update_date="";
-
-		kasbank_keluar_id_update_pk = oGrid_event.record.data.kasbank_keluar_id;
-	 	if(oGrid_event.record.data.kasbank_keluar_tanggal!== ""){kasbank_keluar_tanggal_update_date =oGrid_event.record.data.kasbank_keluar_tanggal.format('Y-m-d');}
-		if(oGrid_event.record.data.kasbank_keluar_nobukti!== null){kasbank_keluar_nobukti_update = oGrid_event.record.data.kasbank_keluar_nobukti;}
-		if(oGrid_event.record.data.kasbank_keluar_akun!== null){kasbank_keluar_akun_update = oGrid_event.record.data.kasbank_keluar_akun;}
-		if(oGrid_event.record.data.kasbank_keluar_terimauntuk!== null){kasbank_keluar_terimauntuk_update = oGrid_event.record.data.kasbank_keluar_terimauntuk;}
-		if(oGrid_event.record.data.kasbank_keluar_jenis!== null){kasbank_keluar_jenis_update = oGrid_event.record.data.kasbank_keluar_jenis;}
-		if(oGrid_event.record.data.kasbank_keluar_noref!== null){kasbank_keluar_noref_update = oGrid_event.record.data.kasbank_keluar_noref;}
-		if(oGrid_event.record.data.kasbank_keluar_keterangan!== null){kasbank_keluar_keterangan_update = oGrid_event.record.data.kasbank_keluar_keterangan;}
-		if(oGrid_event.record.data.kasbank_keluar_post!== null){kasbank_keluar_post_update = oGrid_event.record.data.kasbank_keluar_post;}
-	 	if(oGrid_event.record.data.kasbank_keluar_date_post!== ""){kasbank_keluar_date_post_update_date =oGrid_event.record.data.kasbank_keluar_date_post.format('Y-m-d');}
-
-		Ext.Ajax.request({  
-			waitMsg: 'Please wait...',
-			url: 'index.php?c=c_kasbank_keluar&m=get_action',
-			params: {
-				kasbank_keluar_id	: kasbank_keluar_id_update_pk, 
-				kasbank_keluar_tanggal	: kasbank_keluar_tanggal_update_date, 
-				kasbank_keluar_nobukti	:kasbank_keluar_nobukti_update,
-				kasbank_keluar_akun	:kasbank_keluar_akun_update,
-				kasbank_keluar_terimauntuk	:kasbank_keluar_terimauntuk_update,
-				//kasbank_keluar_jenis	:kasbank_keluar_jenis_update,
-				kasbank_keluar_jenis	: jenis_kasbank,
-				kasbank_keluar_noref	:kasbank_keluar_noref_update,
-				kasbank_keluar_keterangan	:kasbank_keluar_keterangan_update,
-				kasbank_keluar_post	:kasbank_keluar_post_update,
-				kasbank_keluar_date_post	: kasbank_keluar_date_post_update_date, 
-				task: "UPDATE"
-			}, 
-			success: function(response){             
-				var result=eval(response.responseText);
-				if(result!==0){
-						kasbank_keluar_detail_purge(result);
-						Ext.MessageBox.alert(post2db+' OK','The Kasbank was '+post2db+' successfully.');
-						kasbank_keluar_DataStore.reload();
-						kasbank_keluar_saveWindow.hide();
-				}else{
-						Ext.MessageBox.show({
-						   title: 'Warning',
-						   msg: 'We could\'t not '+msg+' the Tbl T Kasbank.',
-						   buttons: Ext.MessageBox.OK,
-						   animEl: 'save',
-						   icon: Ext.MessageBox.WARNING
-						});
-					}        
-			},
-			failure: function(response){
-				var result=response.responseText;
-				Ext.MessageBox.show({
-					   title: 'Error',
-					   msg: 'Could not connect to the database. retry later.',
-					   buttons: Ext.MessageBox.OK,
-					   animEl: 'database',
-					   icon: Ext.MessageBox.ERROR
-				});	
-			}  									    
-		});   
-	}
-  	/* End of Function */
-  
+  	Ext.QuickTips.init();	
   	/* Function for add and edit data form, open window form */
 	function kasbank_keluar_save(){
 	
-		if(is_kasbank_keluar_form_valid()){	
-			var kasbank_keluar_id_field_pk=null; 
-			var kasbank_keluar_tanggal_field_date=""; 
-			var kasbank_keluar_nobukti_field=null; 
-			var kasbank_keluar_akun_field=null; 
-			var kasbank_keluar_terimauntuk_field=null; 
-			var kasbank_keluar_jenis_field=null; 
-			var kasbank_keluar_noref_field=null; 
-			var kasbank_keluar_keterangan_field=null; 
-			var kasbank_keluar_post_field=null; 
-			var kasbank_keluar_date_post_field_date=""; 
-
-			kasbank_keluar_id_field_pk=get_pk_id();
-			if(kasbank_keluar_tanggalField.getValue()!== ""){kasbank_keluar_tanggal_field_date = kasbank_keluar_tanggalField.getValue().format('Y-m-d');} 
-			if(kasbank_keluar_nobuktiField.getValue()!== null){kasbank_keluar_nobukti_field = kasbank_keluar_nobuktiField.getValue();} 
-			if(kasbank_keluar_akunField.getValue()!== null){kasbank_keluar_akun_field = kasbank_keluar_akunField.getValue();} 
-			if(kasbank_keluar_terimauntukField.getValue()!== null){kasbank_keluar_terimauntuk_field = kasbank_keluar_terimauntukField.getValue();} 
-			if(kasbank_keluar_jenisField.getValue()!== null){kasbank_keluar_jenis_field = 'keluar';} 
-			if(kasbank_keluar_norefField.getValue()!== null){kasbank_keluar_noref_field = kasbank_keluar_norefField.getValue();} 
-			if(kasbank_keluar_keteranganField.getValue()!== null){kasbank_keluar_keterangan_field = kasbank_keluar_keteranganField.getValue();} 
-			//if(kasbank_keluar_postField.getValue()!== null){kasbank_keluar_post_field = kasbank_keluar_postField.getValue();} 
-			//if(kasbank_keluar_date_postField.getValue()!== ""){kasbank_keluar_date_post_field_date = kasbank_keluar_date_postField.getValue().format('Y-m-d');} 
-
-			Ext.Ajax.request({  
-				waitMsg: 'Please wait...',
-				url: 'index.php?c=c_kasbank_keluar&m=get_action',
-				params: {
-					kasbank_keluar_id			: kasbank_keluar_id_field_pk, 
-					kasbank_keluar_tanggal		: kasbank_keluar_tanggal_field_date, 
-					kasbank_keluar_nobukti		: kasbank_keluar_nobukti_field, 
-					kasbank_keluar_akun		: kasbank_keluar_akun_field, 
-					kasbank_keluar_terimauntuk	: kasbank_keluar_terimauntuk_field, 
-					kasbank_keluar_jenis		: kasbank_keluar_jenis_field, 
-					kasbank_keluar_noref		: kasbank_keluar_noref_field, 
-					kasbank_keluar_keterangan	: kasbank_keluar_keterangan_field, 
-					kasbank_keluar_post		: kasbank_keluar_post_field, 
-					kasbank_keluar_date_post	: kasbank_keluar_date_post_field_date, 
-					task				: post2db
-				}, 
-				success: function(response){             
-					var result=eval(response.responseText);
-					if(result!==0){
-							kasbank_keluar_detail_purge(result);
-							Ext.MessageBox.alert(post2db+' OK','The Tbl T Kasbank was '+post2db+' successfully.');
-							kasbank_keluar_DataStore.reload();
-							kasbank_keluar_saveWindow.hide();
-					}else{
-							Ext.MessageBox.show({
-							   title: 'Warning',
-							   msg: 'We could\'t not '+msg+' the Tbl T Kasbank.',
-							   buttons: Ext.MessageBox.OK,
-							   animEl: 'save',
-							   icon: Ext.MessageBox.WARNING
-							});
-						}        
-				},
-				failure: function(response){
-					var result=response.responseText;
-					Ext.MessageBox.show({
-						   title: 'Error',
-						   msg: 'Could not connect to the database. retry later.',
-						   buttons: Ext.MessageBox.OK,
-						   animEl: 'database',
-						   icon: Ext.MessageBox.ERROR
-					});	
-				}                      
-			});
+		if(is_kasbank_keluar_form_valid()){
 			
+			if(kasbank_keluar_detail_DataStore.getCount()<1){
+			
+				Ext.MessageBox.show({
+					title: 'Warning',
+					msg: 'Maaf, data transaksi tidak boleh kosong.',
+					buttons: Ext.MessageBox.OK,
+					animEl: 'save',
+					icon: Ext.MessageBox.WARNING
+				});
+				
+			}else{
+				
+				var kasbank_keluar_id_field_pk=null; 
+				var kasbank_keluar_tanggal_field_date=""; 
+				var kasbank_keluar_nobukti_field=null; 
+				var kasbank_keluar_akun_field=null; 
+				var kasbank_keluar_terimauntuk_field=null; 
+				var kasbank_keluar_jenis_field=null; 
+				var kasbank_keluar_noref_field=null; 
+				var kasbank_keluar_keterangan_field=null; 
+				var kasbank_keluar_post_field=null; 
+				var kasbank_keluar_date_post_field_date=""; 
+				
+				kasbank_keluar_id_field_pk=get_pk_id();
+				if(kasbank_keluar_tanggalField.getValue()!== ""){kasbank_keluar_tanggal_field_date = kasbank_keluar_tanggalField.getValue().format('Y-m-d');} 
+				if(kasbank_keluar_nobuktiField.getValue()!== null){kasbank_keluar_nobukti_field = kasbank_keluar_nobuktiField.getValue();} 
+				if(kasbank_keluar_akunField.getValue()!== null){kasbank_keluar_akun_field = kasbank_keluar_akunField.getValue();} 
+				if(kasbank_keluar_terimauntukField.getValue()!== null){kasbank_keluar_terimauntuk_field = kasbank_keluar_terimauntukField.getValue();} 
+				if(kasbank_keluar_jenisField.getValue()!== null){kasbank_keluar_jenis_field = 'keluar';} 
+				if(kasbank_keluar_norefField.getValue()!== null){kasbank_keluar_noref_field = kasbank_keluar_norefField.getValue();} 
+				if(kasbank_keluar_keteranganField.getValue()!== null){kasbank_keluar_keterangan_field = kasbank_keluar_keteranganField.getValue();}  
+				
+				Ext.Ajax.request({  
+					waitMsg: 'Please wait...',
+					url: 'index.php?c=c_kasbank_keluar&m=get_action',
+					params: {
+						kasbank_keluar_id			: kasbank_keluar_id_field_pk, 
+						kasbank_keluar_tanggal		: kasbank_keluar_tanggal_field_date, 
+						kasbank_keluar_nobukti		: kasbank_keluar_nobukti_field, 
+						kasbank_keluar_akun			: kasbank_keluar_akun_field,
+						kasbank_keluar_terimauntuk	: kasbank_keluar_terimauntuk_field, 
+						kasbank_keluar_jenis		: kasbank_keluar_jenis_field, 
+						kasbank_keluar_noref		: kasbank_keluar_noref_field, 
+						kasbank_keluar_keterangan	: kasbank_keluar_keterangan_field, 
+						kasbank_keluar_post			: kasbank_keluar_post_field, 
+						kasbank_keluar_date_post	: kasbank_keluar_date_post_field_date, 
+						task						: post2db
+					}, 
+					success: function(response){             
+						var result=response.responseText;
+						var rsp_kode=result.substring(0,2);
+						var rsp_msg=result.replace(rsp_kode+':','');
+						if(rsp_kode=='OK'){
+								kasbank_keluar_detail_insert(eval(rsp_msg));
+								Ext.MessageBox.alert(post2db+' OK','Jurnal Kas/Bank sukses disimpan.');
+								kasbank_keluar_saveWindow.hide();
+						}else{
+								Ext.MessageBox.show({
+								   title: 'Warning',
+								   msg: rsp_msg,
+								   buttons: Ext.MessageBox.OK,
+								   animEl: 'save',
+								   icon: Ext.MessageBox.WARNING
+								});
+							}         
+					},
+					failure: function(response){
+						var result=response.responseText;
+						Ext.MessageBox.show({
+							   title: 'Error',
+							   msg: 'Koneksi database gagal.',
+							   buttons: Ext.MessageBox.OK,
+							   animEl: 'database',
+							   icon: Ext.MessageBox.ERROR
+						});	
+					}                      
+				});
+			}
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'Your Form is not valid!.',
+				msg: 'Maaf, data yang di kirim tidak valid.',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -264,29 +204,27 @@ Ext.onReady(function(){
 	/* Reset form before loading */
 	function kasbank_keluar_reset_form(){
 		kasbank_keluar_tanggalField.reset();
-		kasbank_keluar_tanggalField.setValue(null);
+		kasbank_keluar_tanggalField.setValue(today);
 		kasbank_keluar_nobuktiField.reset();
 		kasbank_keluar_nobuktiField.setValue(null);
 		kasbank_keluar_akunField.reset();
 		kasbank_keluar_akunField.setValue(null);
 		kasbank_keluar_terimauntukField.reset();
 		kasbank_keluar_terimauntukField.setValue(null);
-		//kasbank_keluar_jenisField.reset();
-		//kasbank_keluar_jenisField.setValue(null);
 		kasbank_keluar_norefField.reset();
 		kasbank_keluar_norefField.setValue(null);
 		kasbank_keluar_keteranganField.reset();
 		kasbank_keluar_keteranganField.setValue(null);
-		//kasbank_keluar_postField.reset();
-		//kasbank_keluar_postField.setValue(null);
-		//kasbank_keluar_date_postField.reset();
-		//kasbank_keluar_date_postField.setValue(null);
-		jumlah_total_debet=null;
+		kasbank_keluar_kodeakunField.reset();
+		kasbank_keluar_kodeakunField.setValue(null);
 		
-		jumlah_total_keluar_kredit=null;
-		
-		kasbank_keluar_detail_DataStore.setBaseParam('master_id',null);
+		kasbank_keluar_detail_DataStore.setBaseParam('master_id',-1);
 		kasbank_keluar_detail_DataStore.load();
+		cbo_akun_dkasbank_keluarDataStore.setBaseParam('task','all');
+		cbo_akun_dkasbank_keluarDataStore.load();
+		total_kasbank_keluar_debet.setValue(0);
+		kasbank_keluar_button.setVisible(true);
+		
 	}
  	/* End of Function */
   
@@ -296,31 +234,55 @@ Ext.onReady(function(){
 		kasbank_keluar_tanggalField.setValue(kasbankKeluarListEditorGrid.getSelectionModel().getSelected().get('kasbank_keluar_tanggal'));
 		kasbank_keluar_nobuktiField.setValue(kasbankKeluarListEditorGrid.getSelectionModel().getSelected().get('kasbank_keluar_nobukti'));
 		kasbank_keluar_akunField.setValue(kasbankKeluarListEditorGrid.getSelectionModel().getSelected().get('kasbank_keluar_akun'));
+		kasbank_keluar_kodeakunField.setValue(kasbankKeluarListEditorGrid.getSelectionModel().getSelected().get('kasbank_keluar_kode'));
 		kasbank_keluar_terimauntukField.setValue(kasbankKeluarListEditorGrid.getSelectionModel().getSelected().get('kasbank_keluar_terimauntuk'));
 		kasbank_keluar_jenisField.setValue(kasbankKeluarListEditorGrid.getSelectionModel().getSelected().get('kasbank_keluar_jenis'));
 		kasbank_keluar_norefField.setValue(kasbankKeluarListEditorGrid.getSelectionModel().getSelected().get('kasbank_keluar_noref'));
 		kasbank_keluar_keteranganField.setValue(kasbankKeluarListEditorGrid.getSelectionModel().getSelected().get('kasbank_keluar_keterangan'));
-		//kasbank_keluar_postField.setValue(kasbankKeluarListEditorGrid.getSelectionModel().getSelected().get('kasbank_keluar_post'));
-		//kasbank_keluar_date_postField.setValue(kasbankKeluarListEditorGrid.getSelectionModel().getSelected().get('kasbank_keluar_date_post'));
-		kasbank_keluar_detail_DataStore.setBaseParam('master_id',get_pk_id());
-		kasbank_keluar_detail_DataStore.load();
 		
+		cbo_akun_dkasbank_keluar_renderDataStore.setBaseParam('task','detail');
+		cbo_akun_dkasbank_keluar_renderDataStore.setBaseParam('master_id',get_pk_id());
+		cbo_akun_dkasbank_keluar_renderDataStore.load({
+			callback: function(r,opt,success){
+				if(success==true){
+					kasbank_keluar_detail_DataStore.setBaseParam('master_id',get_pk_id());
+					kasbank_keluar_detail_DataStore.load({
+						callback: function(r,opt,success){
+							if(success==true){
+								get_total_keluar_debet_kredit();
+							}
+						}
+					});
+					
+				}
+			}
+		});
+		
+		if(kasbankKeluarListEditorGrid.getSelectionModel().getSelected().get('kasbank_keluar_post')=='Y'){
+			kasbank_keluar_button.setVisible(false);
+		}else{
+			kasbank_keluar_button.setVisible(true);
+		}
 		
 	}
 	/* End setValue to EDIT*/
   
 	/* Function for Check if the form is valid */
 	function is_kasbank_keluar_form_valid(){
-		return (true);
+		return (kasbank_keluar_tanggalField.isValid() && 
+				kasbank_keluar_akunField.isValid() && 
+				kasbank_keluar_nobuktiField.isValid() );
 	}
   	/* End of Function */
   
   	/* Function for Displaying  create Window Form */
 	function display_form_window(){
 		if(!kasbank_keluar_saveWindow.isVisible()){
-			kasbank_keluar_reset_form();
+			
 			post2db='CREATE';
 			msg='created';
+			kasbank_keluar_reset_form();
+			
 			kasbank_keluar_saveWindow.show();
 		} else {
 			kasbank_keluar_saveWindow.toFront();
@@ -330,15 +292,42 @@ Ext.onReady(function(){
  
   	/* Function for Delete Confirm */
 	function kasbank_keluar_confirm_delete(){
-		// only one kasbank is selected here
 		if(kasbankKeluarListEditorGrid.selModel.getCount() == 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', kasbank_keluar_delete);
+			if(kasbankKeluarListEditorGrid.getSelectionModel().getSelected().get('kasbank_keluar_post')=='Y'){
+				Ext.MessageBox.show({
+					title: 'Warning',
+					msg: 'Jurnal yang sudah terposting tidak dapat dihapus',
+					buttons: Ext.MessageBox.OK,
+					animEl: 'save',
+					width: 300,
+					icon: Ext.MessageBox.WARNING
+				});
+			}else{
+				Ext.MessageBox.confirm('Perhatian !','Apakah anda benar-benar akan menghapus data ini?', kasbank_keluar_delete);
+			}
+
 		} else if(kasbankKeluarListEditorGrid.selModel.getCount() > 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', kasbank_keluar_delete);
+			var selections = kasbankKeluarListEditorGrid.selModel.getSelections();
+			var count_post=0;
+			for(i = 0; i< kasbankKeluarListEditorGrid.selModel.getCount(); i++){
+				if(selections[i].json.kasbank_post=='Y') count_post++;
+			}
+			if(count_post>0){
+				Ext.MessageBox.show({
+					title: 'Warning',
+					msg: 'Jurnal yang sudah terposting tidak dapat dihapus',
+					buttons: Ext.MessageBox.OK,
+					animEl: 'save',
+					width: 300,
+					icon: Ext.MessageBox.WARNING
+				});
+			}else{
+				Ext.MessageBox.confirm('Perhatian !','Apakah anda benar-benar akan menghapus data ini?', kasbank_keluar_delete);
+			}
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really delete something you haven\'t selected?',
+				msg: 'Pilih data untuk melakukan delete',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -347,20 +336,79 @@ Ext.onReady(function(){
 	}
   	/* End of Function */
   
+  	function kasbank_keluar_confirm_reopen(){
+		/* only one record is selected here */
+		if(kasbankKeluarListEditorGrid.selModel.getCount() == 1) {
+				var id="";
+				var tanggal=null;
+				
+			if(kasbankKeluarListEditorGrid.getSelectionModel().getSelected().get('kasbank_keluar_post')=='Y' && kasbankKeluarListEditorGrid.getSelectionModel().getSelected().get('kasbank_keluar_tanggal').format('Y-m')==thismonth){
+				
+				id = kasbankKeluarListEditorGrid.getSelectionModel().getSelected().get('kasbank_keluar_id');
+				
+				Ext.Ajax.request({
+					waitMsg: 'Please wait...',
+					url: 'index.php?c=c_kasbank_keluar&m=kasbank_reopen',
+					params:{
+						kasbank_id : id
+					},
+					success:function(response){
+						Ext.MessageBox.show({
+							title: 'Warning',
+							msg: 'Pembukaan posting Data Sukses',
+							buttons: Ext.MessageBox.OK,
+							animEl: 'save',
+							icon: Ext.MessageBox.OK
+						});
+						kasbank_keluar_DataStore.reload();
+					},
+					failure:function(response){
+						Ext.MessageBox.show({
+							title: 'Warning',
+							msg: 'Pembukaan Posting gagal',
+							buttons: Ext.MessageBox.OK,
+							animEl: 'save',
+							icon: Ext.MessageBox.WARING
+						});
+					}
+				});
+				
+			}else{
+				Ext.MessageBox.show({
+					title: 'Warning',
+					msg: 'Hanya data yang sudah terposting pada bulan berjalan yang dapat dibuka',
+					buttons: Ext.MessageBox.OK,
+					animEl: 'save',
+					icon: Ext.MessageBox.WARNING
+				});
+			}
+		} else {
+			Ext.MessageBox.show({
+				title: 'Warning',
+				msg: 'Pilih data untuk melakukan pembukaan posting',
+				buttons: Ext.MessageBox.OK,
+				animEl: 'save',
+				icon: Ext.MessageBox.WARNING
+			});
+		}
+	}
+  	/* End of Function */
+	
 	/* Function for Update Confirm */
 	function kasbank_keluar_confirm_update(){
 		/* only one record is selected here */
 		if(kasbankKeluarListEditorGrid.selModel.getCount() == 1) {
 			
 			post2db='UPDATE';
-			kasbank_keluar_set_form();
 			msg='updated';
 			
+			kasbank_keluar_set_form();
+						
 			kasbank_keluar_saveWindow.show();
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really update something you haven\'t selected?',
+				msg: 'Pilih data untuk melakukan update',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -375,7 +423,7 @@ Ext.onReady(function(){
 			var selections = kasbankKeluarListEditorGrid.selModel.getSelections();
 			var prez = [];
 			for(i = 0; i< kasbankKeluarListEditorGrid.selModel.getCount(); i++){
-				prez.push(selections[i].json.kasbank_keluar_id);
+				prez.push(selections[i].json.kasbank_id);
 			}
 			var encoded_array = Ext.encode(prez);
 			Ext.Ajax.request({ 
@@ -403,7 +451,7 @@ Ext.onReady(function(){
 					var result=response.responseText;
 					Ext.MessageBox.show({
 					   title: 'Error',
-					   msg: 'Could not connect to the database. retry later.',
+					   msg: 'Koneksi database gagal.',
 					   buttons: Ext.MessageBox.OK,
 					   animEl: 'database',
 					   icon: Ext.MessageBox.ERROR
@@ -421,175 +469,170 @@ Ext.onReady(function(){
 			url: 'index.php?c=c_kasbank_keluar&m=get_action', 
 			method: 'POST'
 		}),
-		baseParams:{task: "LIST"}, // parameter yang di $_POST ke Controller
+		baseParams:{task: "LIST", start:0, limit: pageS}, // parameter yang di $_POST ke Controller
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
 			id: 'kasbank_keluar_id'
 		},[
-		/* dataIndex => insert intokasbank_keluar_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'kasbank_keluar_id', type: 'int', mapping: 'kasbank_id'}, 
 			{name: 'kasbank_keluar_tanggal', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'kasbank_tanggal'}, 
 			{name: 'kasbank_keluar_nobukti', type: 'string', mapping: 'kasbank_nobukti'}, 
 			{name: 'kasbank_keluar_akun', type: 'string', mapping: 'akun_nama'}, 
-			{name: 'kasbank_keluar_kode', type: 'string', mapping: 'akun_kode'}, 
+			{name: 'kasbank_keluar_kode', type: 'string', mapping: 'akun_kode'},
 			{name: 'kasbank_keluar_terimauntuk', type: 'string', mapping: 'kasbank_terimauntuk'}, 
 			{name: 'kasbank_keluar_jenis', type: 'string', mapping: 'kasbank_jenis'}, 
 			{name: 'kasbank_keluar_noref', type: 'string', mapping: 'kasbank_noref'}, 
+			{name: 'kasbank_keluar_kredit', type: 'float', mapping: 'kasbank_kredit'},
+			{name: 'kasbank_keluar_debet', type: 'float', mapping: 'kasbank_debet'}, 
 			{name: 'kasbank_keluar_keterangan', type: 'string', mapping: 'kasbank_keterangan'}, 
 			{name: 'kasbank_keluar_author', type: 'string', mapping: 'kasbank_author'}, 
 			{name: 'kasbank_keluar_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'kasbank_date_create'}, 
 			{name: 'kasbank_keluar_update', type: 'string', mapping: 'kasbank_update'}, 
 			{name: 'kasbank_keluar_date_update', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'kasbank_date_update'}, 
-			{name: 'kasbank_keluar_post', type: 'string', mapping: 'kasbank_keluar_post'}, 
+			{name: 'kasbank_keluar_post', type: 'string', mapping: 'kasbank_post'}, 
 			{name: 'kasbank_keluar_date_post', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'kasbank_date_post'}, 
 			{name: 'kasbank_keluar_revised', type: 'int', mapping: 'kasbank_mrevised'} 
 		]),
-		sortInfo:{field: 'kasbank_keluar_id', direction: "DESC"}
+		sortInfo:{field: 'kasbank_keluar_tanggal', direction: "DESC"}
 	});
 	/* End of Function */
 	
+		
+	
 	/* Function for Retrieve DataStore */
-	tbl_m_akun_DataStore = new Ext.data.Store({
-		id: 'tbl_m_akun_DataStore',
+	cbo_akun_DataStore= new Ext.data.Store({
+		id: 'cbo_akun_DataStore',
 		proxy: new Ext.data.HttpProxy({
-			url: 'index.php?c=c_tbl_m_akun&m=get_action', 
+			url: 'index.php?c=c_kasbank_keluar&m=get_akun_kasbank', 
 			method: 'POST'
 		}),
-		baseParams:{task: "LIST"}, // parameter yang di $_POST ke Controller
+		baseParams:{task: "LIST", start: 0, limit: pageS}, // parameter yang di $_POST ke Controller
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
 			id: 'akun_id'
 		},[
-		/* dataIndex => insert intotbl_m_akun_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'akun_id', type: 'int', mapping: 'akun_id'}, 
 			{name: 'akun_kode', type: 'string', mapping: 'akun_kode'}, 
 			{name: 'akun_jenis', type: 'string', mapping: 'akun_jenis'}, 
 			{name: 'akun_parent', type: 'int', mapping: 'akun_parent'}, 
 			{name: 'akun_level', type: 'int', mapping: 'akun_level'}, 
-			{name: 'akun_nama', type: 'string', mapping: 'akun_nama'}, 
-			{name: 'akun_debet', type: 'float', mapping: 'akun_debet'}, 
-			{name: 'akun_kredit', type: 'float', mapping: 'akun_kredit'}, 
-			{name: 'akun_saldo', type: 'float', mapping: 'akun_saldo'}, 
-			{name: 'akun_aktif', type: 'string', mapping: 'akun_aktif'}, 
-			{name: 'akun_creator', type: 'string', mapping: 'akun_creator'}, 
-			{name: 'akun_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'akun_date_create'}, 
-			{name: 'akun_update', type: 'string', mapping: 'akun_update'}, 
-			{name: 'akun_date_update', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'akun_date_update'}, 
-			{name: 'akun_revised', type: 'int', mapping: 'akun_revised'} 
+			{name: 'akun_nama', type: 'string', mapping: 'akun_nama'}
 		]),
 		sortInfo:{field: 'akun_id', direction: "DESC"}
 	});
 	/* End of Function */
     
+	/* Function for Retrieve DataStore */
+	cbo_akun_dkasbank_keluarDataStore = new Ext.data.Store({
+		id: 'cbo_akun_dkasbank_keluarDataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_kasbank_keluar&m=get_detail_akun', 
+			method: 'POST'
+		}),
+		baseParams:{start: 0, limit:pageS}, // parameter yang di $_POST ke Controller
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'akun_id'
+		},[
+			{name: 'akun_id', type: 'int', mapping: 'akun_id'}, 
+			{name: 'akun_kode', type: 'string', mapping: 'akun_kode'}, 
+			{name: 'akun_jenis', type: 'string', mapping: 'akun_jenis'}, 
+			{name: 'akun_parent', type: 'int', mapping: 'akun_parent'}, 
+			{name: 'akun_level', type: 'int', mapping: 'akun_level'}, 
+			{name: 'akun_nama', type: 'string', mapping: 'akun_nama'}
+		]),
+		sortInfo:{field: 'akun_id', direction: "DESC"}
+	});
+	
+	cbo_akun_dkasbank_keluar_renderDataStore = new Ext.data.Store({
+		id: 'cbo_akun_dkasbank_keluar_renderDataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_kasbank_keluar&m=get_detail_akun', 
+			method: 'POST'
+		}),
+		baseParams:{start: 0, limit:pageS}, // parameter yang di $_POST ke Controller
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'akun_id'
+		},[
+			{name: 'akun_id', type: 'int', mapping: 'akun_id'}, 
+			{name: 'akun_kode', type: 'string', mapping: 'akun_kode'}, 
+			{name: 'akun_jenis', type: 'string', mapping: 'akun_jenis'}, 
+			{name: 'akun_parent', type: 'int', mapping: 'akun_parent'}, 
+			{name: 'akun_level', type: 'int', mapping: 'akun_level'}, 
+			{name: 'akun_nama', type: 'string', mapping: 'akun_nama'}
+		]),
+		sortInfo:{field: 'akun_id', direction: "DESC"}
+	});
+	/* End of Function */
+	
   	/* Function for Identify of Window Column Model */
 	kasbank_keluar_ColumnModel = new Ext.grid.ColumnModel(
-		[{
-			header: '#',
-			readOnly: true,
-			dataIndex: 'kasbank_keluar_id',
-			width: 40,
-			renderer: function(value, cell){
-				cell.css = "readonlycell"; // Mengambil Value dari Class di dalam CSS 
-				return value;
-				},
-			hidden: false
-		},
+		[
 		{
 			header: 'Tanggal',
 			dataIndex: 'kasbank_keluar_tanggal',
-			width: 150,
+			width: 130,
 			sortable: true,
 			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
-			editor: new Ext.form.DateField({
-				format: 'Y-m-d'
-			}),
 			readOnly: true
 		}, 
 		{
-			header: 'No Bukti',
+			header: 'No Jurnal',
 			dataIndex: 'kasbank_keluar_nobukti',
 			width: 150,
 			sortable: true,
-			readOnly: true
-		}, 
-		// {
-			// header: 'Akun',
-			// dataIndex: 'kasbank_keluar_akun',
-			// width: 150,
-			// sortable: true,
-			// readOnly: true
-		// }, 
-		{
-			header: 'Nama Akun',
-			dataIndex: 'kasbank_keluar_akun',
-			width: 250,
-			sortable: true,
 			readOnly: true,
-			editor: new Ext.form.ComboBox({
-					id: 'cb_kasbank_keluar_akun',
-					store: tbl_m_akun_DataStore,
-					mode: 'remote',
-					displayField: 'akun_nama',
-					valueField: 'akun_id',
-					loadingText: 'Searching...',
-					typeAhead: true,
-					pageSize: pageS,
-					triggerAction: 'all',
-					lazyRender:true,
-					listClass: 'x-combo-list-small',
-					anchor: '80%',
-					hideTrigger: false
-		    	})
+			renderer: function(v, params, record){
+				var kasbank_no="";
+				if(record.data.kasbank_keluar_post=='Y')
+					kasbank_no='<b><font color=RED>'+record.data.kasbank_keluar_nobukti+'</font></b>';
+				else
+					kasbank_no='<b>'+record.data.kasbank_keluar_nobukti+'</b>';
+					
+                return '<span>' + kasbank_no+ '</span>';
+            }
+		}, 
+		{
+			header: 'Nama Rekening',
+			dataIndex: 'kasbank_keluar_akun',
+			width: 350,
+			sortable: true,
+			readOnly: true
 		}, 	
-		{	header: 'Kode Akun',
+		{	header: 'Kode',
 			dataIndex: 'kasbank_keluar_kode',
 			width: 100,
 			readOnly: true
 		},
-		
 		{
-			header: 'Untuk',
+			header: 'Terima Dari',
 			dataIndex: 'kasbank_keluar_terimauntuk',
 			width: 150,
 			sortable: true,
-			editor: new Ext.form.TextField({
-				maxLength: 250			})
-		}, 
-		// {
-			// header: 'Jenis',
-			// dataIndex: 'kasbank_keluar_jenis',
-			// width: 150,
-			// sortable: true,
-			// readOnly: true,
-		// }, 
-		{
-			header: 'No. Ref',
-			dataIndex: 'kasbank_keluar_noref',
-			width: 150,
-			sortable: true,
-			editor: new Ext.form.TextField({
-				maxLength: 50			})
-		}, 
-		{
-			header: 'Keterangan',
-			dataIndex: 'kasbank_keluar_keterangan',
-			width: 150,
-			sortable: true,
-			editor: new Ext.form.TextField({
-				maxLength: 250
-			}),
-			hidden: true,
-		}, 
-		{
-			header: 'Author',
-			dataIndex: 'kasbank_keluar_author',
-			width: 150,
-			sortable: true,
 			readOnly: true,
-			hidden: true
+			hidden : true
 		}, 
+		{
+			 header: 'Keterangan',
+			 dataIndex: 'kasbank_keluar_keterangan',
+			 width: 250,
+			 sortable: true,
+			 readOnly: true
+		 },
+		 {
+			 header: 'Kredit (Rp)',
+			 dataIndex: 'kasbank_keluar_kredit',
+			 width: 150,
+			 align: 'right',
+			 renderer: Ext.util.Format.numberRenderer('0,000'),
+			 sortable: true,
+			 readOnly: true
+		 },
 		{
 			header: 'Create on',
 			dataIndex: 'kasbank_keluar_date_create',
@@ -655,13 +698,12 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 800,
+	  	width: 1024,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: kasbank_keluar_DataStore,
 			displayInfo: true
 		}),
-		/* Add Control on ToolBar */
 		tbar: [
 		{
 			text: 'Add',
@@ -693,17 +735,15 @@ Ext.onReady(function(){
 			tooltip: 'Refresh datagrid',
 			handler: kasbank_keluar_reset_search,
 			iconCls:'icon-refresh'
-		},'-',{
-			text: 'Export Excel',
-			tooltip: 'Export to Excel(.xls) Document',
-			iconCls:'icon-xls',
-			handler: kasbank_keluar_export_excel
-		}, '-',{
-			text: 'Print',
-			tooltip: 'Print Document',
-			iconCls:'icon-print',
-			handler: kasbank_keluar_print  
+		}<?php if(ereg('R',$this->m_security->get_access_group_by_kode('MENU_POSTING'))){ ?>
+		,'-',
+		{
+			text: 'Buka Posting',
+			tooltip: 'Buka Posting',
+			iconCls:'icon-reopen',
+			handler: kasbank_keluar_confirm_reopen   // Confirm before updating
 		}
+		<?php } ?>
 		]
 	});
 	kasbankKeluarListEditorGrid.render();
@@ -723,20 +763,16 @@ Ext.onReady(function(){
 			tooltip: 'Delete selected record', 
 			iconCls:'icon-delete',
 			handler: kasbank_keluar_confirm_delete 
-		},
-		'-',
-		{ 
-			text: 'Print',
-			tooltip: 'Print Document',
-			iconCls:'icon-print',
-			handler: kasbank_keluar_print 
-		},
-		{ 
-			text: 'Export Excel', 
-			tooltip: 'Export to Excel(.xls) Document',
-			iconCls:'icon-xls',
-			handler: kasbank_keluar_export_excel 
 		}
+		<?php if(ereg('R',$this->m_security->get_access_group_by_kode('MENU_POSTING'))){ ?>
+		,'-',
+		{
+			text: 'Buka Posting',
+			tooltip: 'Buka Posting',
+			iconCls:'icon-reopen',
+			handler: kasbank_keluar_confirm_reopen   // Confirm before updating
+		}
+		<?php } ?>
 		]
 	}); 
 	/* End of Declaration */
@@ -754,34 +790,35 @@ Ext.onReady(function(){
 	
 	/* function for editing row via context menu */
 	function kasbank_keluar_editContextMenu(){
-		//kasbankKeluarListEditorGrid.startEditing(kasbank_keluar_SelectedRow,1);
 		kasbank_keluar_confirm_update();
   	}
 	/* End of Function */
   	
 	kasbankKeluarListEditorGrid.addListener('rowcontextmenu', onkasbank_keluar_ListEditGridContextMenu);
-	kasbank_keluar_DataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
-	kasbankKeluarListEditorGrid.on('afteredit', kasbank_keluar_inline_update); // inLine Editing Record
+	kasbank_keluar_DataStore.load({params: {task: "LIST", start: 0, limit: pageS}});	// load DataStore
 	
 	/* Identify  kasbank_keluar_tanggal Field */
 	kasbank_keluar_tanggalField= new Ext.form.DateField({
 		id: 'kasbank_keluar_tanggalField',
 		fieldLabel: 'Tanggal',
 		format : 'Y-m-d',
-		anchor: '95%'
+		anchor: '95%',
+		allowBlank: false
 	});
+	
 	/* Identify  kasbank_keluar_nobukti Field */
 	kasbank_keluar_nobuktiField= new Ext.form.TextField({
 		id: 'kasbank_keluar_nobuktiField',
-		fieldLabel: 'No Bukti',
+		fieldLabel: 'No Jurnal',
 		maxLength: 50,
+		allowBlank: false,
 		anchor: '95%'
 	});
 	/* Identify  kasbank_keluar_akun Field */
 	kasbank_keluar_akunField= new Ext.form.ComboBox({
 		id: 'kasbank_keluar_akunField',
 		fieldLabel: 'Akun',
-		store: tbl_m_akun_DataStore,
+		store: cbo_akun_DataStore,
 		mode: 'remote',
 		displayField: 'akun_nama',
 		valueField: 'akun_id',
@@ -792,19 +829,20 @@ Ext.onReady(function(){
 		lazyRender:true,
 		listClass: 'x-combo-list-small',
 		anchor: '95%',
-		hideTrigger: false
-	
+		hideTrigger: false,
+		allowBlank: false
+		
 	});
 
-	// kasbank_keluar_akunField= new Ext.form.NumberField({
-		// id: 'kasbank_keluar_akunField',
-		// fieldLabel: 'Akun',
-		// allowNegatife : false,
-		// blankText: '0',
-		// allowDecimals: false,
-				// anchor: '95%',
-		// maskRe: /([0-9]+)$/
-	// });
+	kasbank_keluar_kodeakunField= new Ext.form.TextField({
+		id: 'kasbank_keluar_kodeakunField',
+		fieldLabel: 'Kode Rekening',
+		maxLength: 250,
+		anchor: '50%',
+		readOnly: true
+	});
+	
+
 	/* Identify  kasbank_keluar_terimauntuk Field */
 	kasbank_keluar_terimauntukField= new Ext.form.TextField({
 		id: 'kasbank_keluar_terimauntukField',
@@ -837,29 +875,7 @@ Ext.onReady(function(){
 		maxLength: 250,
 		anchor: '95%'
 	});
-	/* Identify  kasbank_keluar_post Field */
-	// kasbank_keluar_postField= new Ext.form.ComboBox({
-		// id: 'kasbank_keluar_postField',
-		// hidden: true,
-		// fieldLabel: 'Post',
-		// store:new Ext.data.SimpleStore({
-			// fields:['kasbank_keluar_post_value', 'kasbank_keluar_post_display'],
-			// data:[['T','T'],['Y','Y']]
-		// }),
-		// mode: 'local',
-		// displayField: 'kasbank_keluar_post_display',
-		// valueField: 'kasbank_keluar_post_value',
-		// anchor: '95%',
-		// triggerAction: 'all'	
-	// });
-	// /* Identify  kasbank_keluar_date_post Field */
-	// kasbank_keluar_date_postField= new Ext.form.DateField({
-		// id: 'kasbank_keluar_date_postField',
-		// fieldLabel: 'Date Post',
-		// hidden: true,
-		// format : 'Y-m-d'
-	// });
-	
+
   	/*Fieldset Master*/
 	kasbank_keluar_masterGroup = new Ext.form.FieldSet({
 		title: 'Master ',
@@ -871,12 +887,12 @@ Ext.onReady(function(){
 				columnWidth:0.35,
 				layout: 'form',
 				border:false,
-				items: [kasbank_keluar_tanggalField, kasbank_keluar_nobuktiField,  kasbank_keluar_jenisField,  kasbank_keluar_norefField ] 
+				items: [kasbank_keluar_tanggalField, kasbank_keluar_nobuktiField,  kasbank_keluar_jenisField,  kasbank_keluar_norefField] 
 			},{
 				columnWidth:0.65,
 				layout: 'form',
 				border:false,
-				items: [kasbank_keluar_akunField, kasbank_keluar_terimauntukField, kasbank_keluar_keteranganField] 
+				items: [kasbank_keluar_akunField, kasbank_keluar_kodeakunField, kasbank_keluar_terimauntukField, kasbank_keluar_keteranganField] 
 			}
 			]
 	
@@ -890,7 +906,6 @@ Ext.onReady(function(){
 		totalProperty: 'total',
 		id: ''
 	},[
-	/* dataIndex => insert intoperawatan_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'dkasbank_keluar_id', type: 'int', mapping: 'dkasbank_id'}, 
 			{name: 'dkasbank_keluar_master', type: 'int', mapping: 'dkasbank_master'}, 
 			{name: 'dkasbank_keluar_akun', type: 'int', mapping: 'dkasbank_akun'}, 
@@ -928,47 +943,84 @@ Ext.onReady(function(){
 	
 	//function combo render
 	Ext.util.Format.comboRenderer = function(combo){
-		tbl_m_akun_DataStore.load();
+		//cbo_akun_DataStore.load();
 		return function(value){
 			var record = combo.findRecord(combo.valueField, value);
 			return record ? record.get(combo.displayField) : combo.valueNotFoundText;
 		}
 	}
+	// variable combo akun
+	var combo_akun_kasbank_detail_keluar_render=new Ext.form.ComboBox({
+		store: cbo_akun_dkasbank_keluar_renderDataStore,
+		mode: 'remote',
+		displayField: 'akun_nama',
+		valueField: 'akun_id',
+		loadingText: 'Searching...',
+		typeAhead: true,
+		pageSize: pageS,
+		triggerAction: 'all',
+		lazyRender:true,
+		listClass: 'x-combo-list-small',
+		anchor: '80%',
+		hideTrigger: true
+	});
 	
-	var combo_akun=new Ext.form.ComboBox({
-			store: tbl_m_akun_DataStore,
-			mode: 'remote',
-			displayField: 'akun_nama',
-			valueField: 'akun_id',
-			loadingText: 'Searching...',
-			typeAhead: true,
-			pageSize: pageS,
-			triggerAction: 'all',
-			lazyRender:true,
-			listClass: 'x-combo-list-small',
-			anchor: '80%',
-			hideTrigger: false
+	var combo_akun_kasbank_detail_keluar=new Ext.form.ComboBox({
+		store: cbo_akun_dkasbank_keluarDataStore,
+		mode: 'remote',
+		displayField: 'akun_nama',
+		valueField: 'akun_id',
+		loadingText: 'Searching...',
+		typeAhead: true,
+		pageSize: pageS,
+		triggerAction: 'all',
+		lazyRender: false,
+		listClass: 'x-combo-list-small',
+		anchor: '80%',
+		hideTrigger: false
 	});
 	//eof
 	
+	var combo_akun_kasbank_detail_keluar_kode=new Ext.form.ComboBox({
+		store: cbo_akun_dkasbank_keluar_renderDataStore,
+		mode: 'remote',
+		displayField: 'akun_kode',
+		valueField: 'akun_id',
+		loadingText: 'Searching...',
+		typeAhead: true,
+		pageSize: pageS,
+		triggerAction: 'all',
+		lazyRender: false,
+		listClass: 'x-combo-list-small',
+		anchor: '80%',
+		allowBlank: false,
+		hideTrigger: false
+	});
 	
 	//declaration of detail coloumn model
 	kasbank_keluar_detail_ColumnModel = new Ext.grid.ColumnModel(
-		[
-		
-		{
-			header: 'Akun',
-			dataIndex: 'dkasbank_keluar_akun',
-			width: 295,
+		[{
+			header: 'ID',
+			dataIndex: 'dkasbank_keluar_id',
+			width: 350,
 			sortable: false,
-			editor: combo_akun,
-			renderer: Ext.util.Format.comboRenderer(combo_akun)
+			readOnly: true,
+			hidden: true
+		},
+		{
+			header: 'Nama Rekening',
+			dataIndex: 'dkasbank_keluar_akun',
+			width: 350,
+			sortable: false,
+			editor: combo_akun_kasbank_detail_keluar,
+			renderer: Ext.util.Format.comboRenderer(combo_akun_kasbank_detail_keluar_render)
 		}, 
 		{
-			header: 'Kode Akun',
+			header: 'Kode',
 			dataIndex: 'dkasbank_keluar_akun',
 			width: 100,
-			readOnly: true
+			readOnly: true,
+			renderer: Ext.util.Format.comboRenderer(combo_akun_kasbank_detail_keluar_kode)
 		},
 
 		{
@@ -983,6 +1035,8 @@ Ext.onReady(function(){
 			header: 'Debet (Rp)',
 			dataIndex: 'dkasbank_keluar_debet',
 			width: 150,
+			renderer: Ext.util.Format.numberRenderer('0,000'),
+			align: 'right',
 			editor: new Ext.form.NumberField({
 				allowDecimals: true,
 				allowNegative: false,
@@ -990,14 +1044,7 @@ Ext.onReady(function(){
 				maxLength: 22,
 				maskRe: /([0-9]+)$/
 			})
-
-		}, 
-		{
-			header: 'Kredit (Rp)',
-			dataIndex: 'dkasbank_keluar_kredit',
-			width: 150,
-			readOnly: true,
-		}]
+		} ]
 	);
 	kasbank_keluar_detail_ColumnModel.defaultSortable= true;
 	//eof
@@ -1025,7 +1072,6 @@ Ext.onReady(function(){
 			store: kasbank_keluar_detail_DataStore,
 			displayInfo: true
 		}),
-		/* Add Control on ToolBar */
 		tbar: [
 		{
 			text: 'Add',
@@ -1069,46 +1115,72 @@ Ext.onReady(function(){
 	
 	//function for insert detail
 	function kasbank_keluar_detail_insert(pkid){
-		for(i=0;i<kasbank_keluar_detail_DataStore.getCount();i++){
-			kasbank_keluar_detail_record=kasbank_keluar_detail_DataStore.getAt(i);
+		var dkasbank_keluar_id = [];
+        var dkasbank_keluar_akun = [];
+        var dkasbank_keluar_detail = [];
+        var dkasbank_keluar_debet = [];
+        
+        var dcount = kasbank_keluar_detail_DataStore.getCount() - 1;
+        
+        if(kasbank_keluar_detail_DataStore.getCount()>0){
+            for(i=0; i<kasbank_keluar_detail_DataStore.getCount();i++){
+                if((/^\d+$/.test(kasbank_keluar_detail_DataStore.getAt(i).data.dkasbank_keluar_akun))
+				   && kasbank_keluar_detail_DataStore.getAt(i).data.dkasbank_keluar_akun!==undefined
+				   && kasbank_keluar_detail_DataStore.getAt(i).data.dkasbank_keluar_akun!==''
+				   && kasbank_keluar_detail_DataStore.getAt(i).data.dkasbank_keluar_akun!==0
+				   && kasbank_keluar_detail_DataStore.getAt(i).data.dkasbank_keluar_debet!==0
+				   && kasbank_keluar_detail_DataStore.getAt(i).data.dkasbank_keluar_debet>0){
+                    
+                  	dkasbank_keluar_id.push(kasbank_keluar_detail_DataStore.getAt(i).data.dkasbank_keluar_id);
+					dkasbank_keluar_akun.push(kasbank_keluar_detail_DataStore.getAt(i).data.dkasbank_keluar_akun);
+                   	dkasbank_keluar_detail.push(kasbank_keluar_detail_DataStore.getAt(i).data.dkasbank_keluar_detail);
+					dkasbank_keluar_debet.push(kasbank_keluar_detail_DataStore.getAt(i).data.dkasbank_keluar_debet);
+                }
+            }
+			
+			var encoded_array_dkasbank_keluar_id = Ext.encode(dkasbank_keluar_id);
+			var encoded_array_dkasbank_keluar_akun = Ext.encode(dkasbank_keluar_akun);
+			var encoded_array_dkasbank_keluar_detail = Ext.encode(dkasbank_keluar_detail);
+			var encoded_array_dkasbank_keluar_debet = Ext.encode(dkasbank_keluar_debet);
+				
 			Ext.Ajax.request({
-				waitMsg: 'Please wait...',
+				waitMsg: 'Mohon tunggu...',
 				url: 'index.php?c=c_kasbank_keluar&m=detail_kasbank_keluar_detail_insert',
 				params:{
-				dkasbank_keluar_id	: kasbank_keluar_detail_record.data.dkasbank_keluar_id, 
-				dkasbank_keluar_master	: eval(pkid), 
-				dkasbank_keluar_akun	: kasbank_keluar_detail_record.data.dkasbank_keluar_akun, 
-				dkasbank_keluar_detail	: kasbank_keluar_detail_record.data.dkasbank_keluar_detail, 
-				dkasbank_keluar_debet	: kasbank_keluar_detail_record.data.dkasbank_keluar_debet, 
-				dkasbank_keluar_kredit	: kasbank_keluar_detail_record.data.dkasbank_keluar_kredit 
-				
+					dkasbank_keluar_id		: encoded_array_dkasbank_keluar_id,
+					dkasbank_keluar_master	: pkid, 
+					dkasbank_keluar_akun	: encoded_array_dkasbank_keluar_akun,
+					dkasbank_keluar_detail	: encoded_array_dkasbank_keluar_detail,
+					dkasbank_keluar_debet	: encoded_array_dkasbank_keluar_debet
+				},
+				success:function(response){
+					kasbank_keluar_DataStore.reload()
+				},
+				failure: function(response){
+					Ext.MessageBox.hide();
+					var result=response.responseText;
+					Ext.MessageBox.show({
+					   title: 'Error',
+					   msg: 'Could not connect to the database. retry later.',
+					   buttons: Ext.MessageBox.OK,
+					   animEl: 'database',
+					   icon: Ext.MessageBox.ERROR
+					});	
 				}
 			});
-		}
-		kasbank_keluar_DataStore.reload();
+					
+        }
 	}
 	//eof
 	
-	//function for purge detail
-	function kasbank_keluar_detail_purge(pkid){
-		Ext.Ajax.request({
-			waitMsg: 'Please wait...',
-			url: 'index.php?c=c_kasbank_keluar&m=detail_kasbank_keluar_detail_purge',
-			params:{ master_id: pkid },
-			success:function(response){
-				kasbank_keluar_detail_insert(pkid);
-			}
-		});
-	}
-	//eof
 	
 	/* Function for Delete Confirm of detail */
 	function kasbank_keluar_detail_confirm_delete(){
 		// only one record is selected here
 		if(kasbank_keluar_detailListEditorGrid.selModel.getCount() == 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', kasbank_keluar_detail_delete);
+			Ext.MessageBox.confirm('Perhatian !','Apakah anda benar-benar akan menghapus data ini?', kasbank_keluar_detail_delete);
 		} else if(kasbank_keluar_detailListEditorGrid.selModel.getCount() > 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', kasbank_keluar_detail_delete);
+			Ext.MessageBox.confirm('Perhatian !','Apakah anda benar-benar akan menghapus data ini?', kasbank_keluar_detail_delete);
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
@@ -1133,51 +1205,51 @@ Ext.onReady(function(){
 	//eof
 	
 	//event on update of detail data store
-	kasbank_keluar_detail_DataStore.on('update', refresh_kasbank_keluar_detail);
+	//kasbank_keluar_detail_DataStore.on('update', refresh_kasbank_keluar_detail);
 
-	/* Identify  total_debet Field */
-	total_debet= new Ext.form.NumberField({
-		id: 'total_debet',
+	/* Identify  total_kasbank_keluar_debet Field */
+	total_kasbank_keluar_debet= new Ext.form.TextField({
+		id: 'total_kasbank_keluar_debet',
 		fieldLabel: 'Total Debet',
-		allowDecimals: true,
-		allowNegative: false,
 		readOnly: true,
 		blankText: '0',
-		maxLength: 22,
+		valueRenderer: 'numberToCurrency',
+		itemCls: 'rmoney',
 		maskRe: /([0-9]+)$/
 	});
-	total_keluar_kredit= new Ext.form.NumberField({
-		id: 'total_keluar_kredit',
+	
+	total_kasbank_keluar_kredit= new Ext.form.TextField({
+		id: 'total_kasbank_keluar_kredit',
 		fieldLabel: 'Total Kredit',
-		allowDecimals: true,
-		allowNegative: false,
 		readOnly: true,
 		blankText: '0',
-		maxLength: 22,
+		valueRenderer: 'numberToCurrency',
+		itemCls: 'rmoney',
 		maskRe: /([0-9]+)$/
 	});
+	
+	
   	/*Fieldset Total Jumlah*/
-	jumlah_total = new Ext.form.FieldSet({
+	jumlah_total_kasbank_keluar = new Ext.form.FieldSet({
 		title: 'Total Jumlah ',
 		autoHeight: true,
 		collapsible: true,
 		layout:'column',
 		items:[
 			{
-				columnWidth:0.5,
+				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [total_debet ] 
-			},{
-				columnWidth:0.5,
-				layout: 'form',
-				border:false,
-				items: [total_keluar_kredit ] 
+				items: [total_kasbank_keluar_debet ] 
 			}
 			]
 	
 	});
 	
+	kasbank_keluar_button=new Ext.Button({
+		text: 'Save and Close',
+		handler: kasbank_keluar_save
+	});
 	
 	/* Function for retrieve create Window Panel*/ 
 	kasbank_keluar_saveForm = new Ext.FormPanel({
@@ -1185,12 +1257,8 @@ Ext.onReady(function(){
 		bodyStyle:'padding:5px',
 		autoHeight:true,
 		width: 700,        
-		items: [kasbank_keluar_masterGroup,kasbank_keluar_detailListEditorGrid,jumlah_total]
-		,
-		buttons: [{
-				text: 'Save and Close',
-				handler: kasbank_keluar_save
-			}
+		items: [kasbank_keluar_masterGroup,kasbank_keluar_detailListEditorGrid,jumlah_total_kasbank_keluar],
+		buttons: [kasbank_keluar_button
 			,{
 				text: 'Cancel',
 				handler: function(){
@@ -1207,7 +1275,7 @@ Ext.onReady(function(){
 		title: post2db+' Kas/Bank Keluar',
 		closable:true,
 		closeAction: 'hide',
-		autoWidth: true,
+		width: 720, 
 		autoHeight: true,
 		x:0,
 		y:0,
@@ -1222,7 +1290,6 @@ Ext.onReady(function(){
 	/* Function for action list search */
 	function kasbank_keluar_list_search(){
 		// render according to a SQL date format.
-		var kasbank_keluar_id_search=null;
 		var kasbank_keluar_tanggal_search_date="";
 		var kasbank_keluar_nobukti_search=null;
 		var kasbank_keluar_akun_search=null;
@@ -1233,12 +1300,11 @@ Ext.onReady(function(){
 		var kasbank_keluar_post_search=null;
 		var kasbank_keluar_date_post_search_date="";
 
-		if(kasbank_keluar_idSearchField.getValue()!==null){kasbank_keluar_id_search=kasbank_keluar_idSearchField.getValue();}
 		if(kasbank_keluar_tanggalSearchField.getValue()!==""){kasbank_keluar_tanggal_search_date=kasbank_keluar_tanggalSearchField.getValue().format('Y-m-d');}
 		if(kasbank_keluar_nobuktiSearchField.getValue()!==null){kasbank_keluar_nobukti_search=kasbank_keluar_nobuktiSearchField.getValue();}
 		if(kasbank_keluar_akunSearchField.getValue()!==null){kasbank_keluar_akun_search=kasbank_keluar_akunSearchField.getValue();}
 		if(kasbank_keluar_terimauntukSearchField.getValue()!==null){kasbank_keluar_terimauntuk_search=kasbank_keluar_terimauntukSearchField.getValue();}
-		if(kasbank_keluar_jenisSearchField.getValue()!==null){kasbank_keluar_jenis_search=kasbank_keluar_jenisSearchField.getValue();}
+		//if(kasbank_keluar_jenisSearchField.getValue()!==null){kasbank_keluar_jenis_search=kasbank_keluar_jenisSearchField.getValue();}
 		if(kasbank_keluar_norefSearchField.getValue()!==null){kasbank_keluar_noref_search=kasbank_keluar_norefSearchField.getValue();}
 		if(kasbank_keluar_keteranganSearchField.getValue()!==null){kasbank_keluar_keterangan_search=kasbank_keluar_keteranganSearchField.getValue();}
 		if(kasbank_keluar_postSearchField.getValue()!==null){kasbank_keluar_post_search=kasbank_keluar_postSearchField.getValue();}
@@ -1247,15 +1313,14 @@ Ext.onReady(function(){
 		kasbank_keluar_DataStore.baseParams = {
 			task: 'SEARCH',
 			//variable here
-			kasbank_keluar_id			:	kasbank_keluar_id_search, 
 			kasbank_keluar_tanggal		:	kasbank_keluar_tanggal_search_date, 
 			kasbank_keluar_nobukti		:	kasbank_keluar_nobukti_search, 
-			kasbank_keluar_akun		:	kasbank_keluar_akun_search, 
+			kasbank_keluar_akun			:	kasbank_keluar_akun_search, 
 			kasbank_keluar_terimauntuk	:	kasbank_keluar_terimauntuk_search, 
-			kasbank_keluar_jenis		:	kasbank_keluar_jenis_search, 
+			//kasbank_keluar_jenis		:	kasbank_keluar_jenis_search, 
 			kasbank_keluar_noref		:	kasbank_keluar_noref_search, 
 			kasbank_keluar_keterangan	:	kasbank_keluar_keterangan_search, 
-			kasbank_keluar_post		:	kasbank_keluar_post_search, 
+			kasbank_keluar_post			:	kasbank_keluar_post_search, 
 			kasbank_keluar_date_post	:	kasbank_keluar_date_post_search_date
 		};
 		// Cause the datastore to do another query : 
@@ -1265,25 +1330,13 @@ Ext.onReady(function(){
 	/* Function for reset search result */
 	function kasbank_keluar_reset_search(){
 		// reset the store parameters
-		kasbank_keluar_DataStore.baseParams = { task: 'LIST' };
-		// Cause the datastore to do another query : 
+		kasbank_keluar_DataStore.baseParams = { task: 'LIST', start:0, limit:pageS };
 		kasbank_keluar_DataStore.reload({params: {start: 0, limit: pageS}});
 		kasbank_keluar_searchWindow.close();
 	};
 	/* End of Fuction */
 	
-	/* Field for search */
-	/* Identify  kasbank_keluar_id Search Field */
-	kasbank_keluar_idSearchField= new Ext.form.NumberField({
-		id: 'kasbank_keluar_idSearchField',
-		fieldLabel: 'Id',
-		allowNegatife : false,
-		blankText: '0',
-		allowDecimals: false,
-		anchor: '95%',
-		maskRe: /([0-9]+)$/
-	
-	});
+
 	/* Identify  kasbank_keluar_tanggal Search Field */
 	kasbank_keluar_tanggalSearchField= new Ext.form.DateField({
 		id: 'kasbank_keluar_tanggalSearchField',
@@ -1294,7 +1347,7 @@ Ext.onReady(function(){
 	/* Identify  kasbank_keluar_nobukti Search Field */
 	kasbank_keluar_nobuktiSearchField= new Ext.form.TextField({
 		id: 'kasbank_keluar_nobuktiSearchField',
-		fieldLabel: 'Nobukti',
+		fieldLabel: 'No Bukti',
 		maxLength: 50,
 		anchor: '50%'
 	
@@ -1303,7 +1356,7 @@ Ext.onReady(function(){
 	kasbank_keluar_akunSearchField= new Ext.form.ComboBox({
 		id: 'kasbank_keluar_akunSearchField',
 		fieldLabel: 'Akun',
-		store: tbl_m_akun_DataStore,
+		store: cbo_akun_DataStore,
 		mode: 'remote',
 		displayField: 'akun_nama',
 		valueField: 'akun_id',
@@ -1317,21 +1370,11 @@ Ext.onReady(function(){
 		hideTrigger: false
 	
 	});
-	
-	// kasbank_keluar_akunSearchField= new Ext.form.NumberField({
-		// id: 'kasbank_keluar_akunSearchField',
-		// fieldLabel: 'Kasbank Akun',
-		// allowNegatife : false,
-		// blankText: '0',
-		// allowDecimals: false,
-		// anchor: '95%',
-		// maskRe: /([0-9]+)$/
-	
-	// });
+
 	/* Identify  kasbank_keluar_terimauntuk Search Field */
 	kasbank_keluar_terimauntukSearchField= new Ext.form.TextField({
 		id: 'kasbank_keluar_terimauntukSearchField',
-		fieldLabel: 'Terima Untuk',
+		fieldLabel: 'Untuk',
 		maxLength: 250,
 		anchor: '95%'
 	
@@ -1342,7 +1385,7 @@ Ext.onReady(function(){
 		fieldLabel: 'Jenis',
 		store:new Ext.data.SimpleStore({
 			fields:['value', 'kasbank_keluar_jenis'],
-			data:[['keluar','keluar'],['masuk','masuk']]
+			data:[['keluar','keluar'],['keluar','keluar']]
 		}),
 		mode: 'local',
 		displayField: 'kasbank_keluar_jenis',
@@ -1386,7 +1429,7 @@ Ext.onReady(function(){
 	kasbank_keluar_date_postSearchField= new Ext.form.DateField({
 		id: 'kasbank_keluar_date_postSearchField',
 		fieldLabel: 'Date Post',
-		format : 'Y-m-d',
+		format : 'Y-m-d'
 	
 	});
     
@@ -1404,7 +1447,8 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [kasbank_keluar_tanggalSearchField, kasbank_keluar_nobuktiSearchField, kasbank_keluar_akunSearchField, kasbank_keluar_terimauntukSearchField, kasbank_keluar_jenisSearchField, kasbank_keluar_norefSearchField, kasbank_keluar_keteranganSearchField, ] 
+				items: [kasbank_keluar_tanggalSearchField, kasbank_keluar_nobuktiSearchField, kasbank_keluar_akunSearchField, 
+						kasbank_keluar_terimauntukSearchField, kasbank_keluar_norefSearchField, kasbank_keluar_keteranganSearchField ] 
 			}
 			]
 		}]
@@ -1424,10 +1468,10 @@ Ext.onReady(function(){
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
 	kasbank_keluar_searchWindow = new Ext.Window({
-		title: 'Kas/Bank Search',
+		title: 'Pencariam Kas/Bank Keluar',
 		closable:true,
 		closeAction: 'hide',
-		autoWidth: true,
+		width: 4200, 
 		autoHeight: true,
 		plain:true,
 		layout: 'fit',
@@ -1448,171 +1492,55 @@ Ext.onReady(function(){
 		}
 	}
   	/* End Function */
-	
-	/* Function for print List Grid */
-	function kasbank_keluar_print(){
-		var searchquery = "";
-		var kasbank_keluar_tanggal_print_date="";
-		var kasbank_keluar_nobukti_print=null;
-		var kasbank_keluar_akun_print=null;
-		var kasbank_keluar_terimauntuk_print=null;
-		var kasbank_keluar_jenis_print=null;
-		var kasbank_keluar_noref_print=null;
-		var kasbank_keluar_keterangan_print=null;
-		var kasbank_keluar_post_print=null;
-		var kasbank_keluar_date_post_print_date="";
-		var win;              
-		// check if we do have some search data...
-		if(kasbank_keluar_DataStore.baseParams.query!==null){searchquery = kasbank_keluar_DataStore.baseParams.query;}
-		if(kasbank_keluar_DataStore.baseParams.kasbank_keluar_tanggal!==""){kasbank_keluar_tanggal_print_date = kasbank_keluar_DataStore.baseParams.kasbank_keluar_tanggal;}
-		if(kasbank_keluar_DataStore.baseParams.kasbank_keluar_nobukti!==null){kasbank_keluar_nobukti_print = kasbank_keluar_DataStore.baseParams.kasbank_keluar_nobukti;}
-		if(kasbank_keluar_DataStore.baseParams.kasbank_keluar_akun!==null){kasbank_keluar_akun_print = kasbank_keluar_DataStore.baseParams.kasbank_keluar_akun;}
-		if(kasbank_keluar_DataStore.baseParams.kasbank_keluar_terimauntuk!==null){kasbank_keluar_terimauntuk_print = kasbank_keluar_DataStore.baseParams.kasbank_keluar_terimauntuk;}
-		if(kasbank_keluar_DataStore.baseParams.kasbank_keluar_jenis!==null){kasbank_keluar_jenis_print = kasbank_keluar_DataStore.baseParams.kasbank_keluar_jenis;}
-		if(kasbank_keluar_DataStore.baseParams.kasbank_keluar_noref!==null){kasbank_keluar_noref_print = kasbank_keluar_DataStore.baseParams.kasbank_keluar_noref;}
-		if(kasbank_keluar_DataStore.baseParams.kasbank_keluar_keterangan!==null){kasbank_keluar_keterangan_print = kasbank_keluar_DataStore.baseParams.kasbank_keluar_keterangan;}
-		if(kasbank_keluar_DataStore.baseParams.kasbank_keluar_post!==null){kasbank_keluar_post_print = kasbank_keluar_DataStore.baseParams.kasbank_keluar_post;}
-		if(kasbank_keluar_DataStore.baseParams.kasbank_keluar_date_post!==""){kasbank_keluar_date_post_print_date = kasbank_keluar_DataStore.baseParams.kasbank_keluar_date_post;}
-
-		Ext.Ajax.request({   
-		waitMsg: 'Please Wait...',
-		url: 'index.php?c=c_kasbank_keluar&m=get_action',
-		params: {
-			task: "PRINT",
-		  	query: searchquery,                    		// if we are doing a quicksearch, use this
-			//if we are doing advanced search, use this
-		  	kasbank_keluar_tanggal : kasbank_keluar_tanggal_print_date, 
-			kasbank_keluar_nobukti : kasbank_keluar_nobukti_print,
-			kasbank_keluar_akun : kasbank_keluar_akun_print,
-			kasbank_keluar_terimauntuk : kasbank_keluar_terimauntuk_print,
-			kasbank_keluar_jenis : kasbank_keluar_jenis_print,
-			kasbank_keluar_noref : kasbank_keluar_noref_print,
-			kasbank_keluar_keterangan : kasbank_keluar_keterangan_print,
-			kasbank_keluar_post : kasbank_keluar_post_print,
-		  	kasbank_keluar_date_post : kasbank_keluar_date_post_print_date, 
-		  	currentlisting: kasbank_keluar_DataStore.baseParams.task // this tells us if we are searching or not
-		}, 
-		success: function(response){              
-		  	var result=eval(response.responseText);
-		  	switch(result){
-		  	case 1:
-				win = window.open('./print/kasbank_keluar_printlist.html','kasbanklist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
-				win.print();
-				break;
-		  	default:
-				Ext.MessageBox.show({
-					title: 'Warning',
-					msg: 'Unable to print the grid!',
-					buttons: Ext.MessageBox.OK,
-					animEl: 'save',
-					icon: Ext.MessageBox.WARNING
-				});
-				break;
-		  	}  
-		},
-		failure: function(response){
-		  	var result=response.responseText;
-			Ext.MessageBox.show({
-			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
-			   buttons: Ext.MessageBox.OK,
-			   animEl: 'database',
-			   icon: Ext.MessageBox.ERROR
-			});		
-		} 	                     
-		});
-	}
-	/* Enf Function */
-	
-	/* Function for print Export to Excel Grid */
-	function kasbank_keluar_export_excel(){
-		var searchquery = "";
-		var kasbank_keluar_tanggal_2excel_date="";
-		var kasbank_keluar_nobukti_2excel=null;
-		var kasbank_keluar_akun_2excel=null;
-		var kasbank_keluar_terimauntuk_2excel=null;
-		var kasbank_keluar_jenis_2excel=null;
-		var kasbank_keluar_noref_2excel=null;
-		var kasbank_keluar_keterangan_2excel=null;
-		var kasbank_keluar_post_2excel=null;
-		var kasbank_keluar_date_post_2excel_date="";
-		var win;              
-		// check if we do have some search data...
-		if(kasbank_keluar_DataStore.baseParams.query!==null){searchquery = kasbank_keluar_DataStore.baseParams.query;}
-		if(kasbank_keluar_DataStore.baseParams.kasbank_keluar_tanggal!==""){kasbank_keluar_tanggal_2excel_date = kasbank_keluar_DataStore.baseParams.kasbank_keluar_tanggal;}
-		if(kasbank_keluar_DataStore.baseParams.kasbank_keluar_nobukti!==null){kasbank_keluar_nobukti_2excel = kasbank_keluar_DataStore.baseParams.kasbank_keluar_nobukti;}
-		if(kasbank_keluar_DataStore.baseParams.kasbank_keluar_akun!==null){kasbank_keluar_akun_2excel = kasbank_keluar_DataStore.baseParams.kasbank_keluar_akun;}
-		if(kasbank_keluar_DataStore.baseParams.kasbank_keluar_terimauntuk!==null){kasbank_keluar_terimauntuk_2excel = kasbank_keluar_DataStore.baseParams.kasbank_keluar_terimauntuk;}
-		if(kasbank_keluar_DataStore.baseParams.kasbank_keluar_jenis!==null){kasbank_keluar_jenis_2excel = kasbank_keluar_DataStore.baseParams.kasbank_keluar_jenis;}
-		if(kasbank_keluar_DataStore.baseParams.kasbank_keluar_noref!==null){kasbank_keluar_noref_2excel = kasbank_keluar_DataStore.baseParams.kasbank_keluar_noref;}
-		if(kasbank_keluar_DataStore.baseParams.kasbank_keluar_keterangan!==null){kasbank_keluar_keterangan_2excel = kasbank_keluar_DataStore.baseParams.kasbank_keluar_keterangan;}
-		if(kasbank_keluar_DataStore.baseParams.kasbank_keluar_post!==null){kasbank_keluar_post_2excel = kasbank_keluar_DataStore.baseParams.kasbank_keluar_post;}
-		if(kasbank_keluar_DataStore.baseParams.kasbank_keluar_date_post!==""){kasbank_keluar_date_post_2excel_date = kasbank_keluar_DataStore.baseParams.kasbank_keluar_date_post;}
-
-		Ext.Ajax.request({   
-		waitMsg: 'Please Wait...',
-		url: 'index.php?c=c_kasbank_keluar&m=get_action',
-		params: {
-			task: "EXCEL",
-		  	query: searchquery,                    		// if we are doing a quicksearch, use this
-			//if we are doing advanced search, use this
-		  	kasbank_keluar_tanggal : kasbank_keluar_tanggal_2excel_date, 
-			kasbank_keluar_nobukti : kasbank_keluar_nobukti_2excel,
-			kasbank_keluar_akun : kasbank_keluar_akun_2excel,
-			kasbank_keluar_terimauntuk : kasbank_keluar_terimauntuk_2excel,
-			kasbank_keluar_jenis : kasbank_keluar_jenis_2excel,
-			kasbank_keluar_noref : kasbank_keluar_noref_2excel,
-			kasbank_keluar_keterangan : kasbank_keluar_keterangan_2excel,
-			kasbank_keluar_post : kasbank_keluar_post_2excel,
-		  	kasbank_keluar_date_post : kasbank_keluar_date_post_2excel_date, 
-		  	currentlisting: kasbank_keluar_DataStore.baseParams.task // this tells us if we are searching or not
-		},
-		success: function(response){              
-		  	var result=eval(response.responseText);
-		  	switch(result){
-		  	case 1:
-				win = window.location=('./export2excel.php');
-				break;
-		  	default:
-				Ext.MessageBox.show({
-					title: 'Warning',
-					msg: 'Unable to convert excel the grid!',
-					buttons: Ext.MessageBox.OK,
-					animEl: 'save',
-					icon: Ext.MessageBox.WARNING
-				});
-				break;
-		  	}  
-		},
-		failure: function(response){
-		  	var result=response.responseText;
-			Ext.MessageBox.show({
-			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
-			   buttons: Ext.MessageBox.OK,
-			   animEl: 'database',
-			   icon: Ext.MessageBox.ERROR
-			});    
-		} 	                     
-		});
-	}
-	
+		
 	function get_total_keluar_debet_kredit(){
-		var jumlah_total_debet=0;
-		var jumlah_total_keluar_kredit=0;
+		var jumlah_total_kasbank_keluar_debet=0;
 		for(i=0;i<kasbank_keluar_detail_DataStore.getCount();i++){
 			record_data=kasbank_keluar_detail_DataStore.getAt(i);
-			jumlah_total_debet+=record_data.data.dkasbank_keluar_debet;
-			jumlah_total_keluar_kredit+=record_data.data.dkasbank_keluar_kredit;
+			jumlah_total_kasbank_keluar_debet+=record_data.data.dkasbank_keluar_debet;
+			//jumlah_total_kasbank_keluar_kasbank_keluar_kredit+=record_data.data.dkasbank_keluar_kredit;
 		}
-		total_debet.setValue(jumlah_total_debet);
-		total_keluar_kredit.setValue(jumlah_total_keluar_kredit);
+		total_kasbank_keluar_debet.setValue(CurrencyFormatted(jumlah_total_kasbank_keluar_debet));
 	}
 	
 	kasbank_keluar_detail_DataStore.on("update",function(){
 		kasbank_keluar_detail_DataStore.commitChanges();
+		
+		var query_selected="";									   
+		cbo_akun_dkasbank_keluarDataStore.lastQuery=null;
+		for(i=0;i<kasbank_keluar_detail_DataStore.getCount();i++){
+			detail_record=kasbank_keluar_detail_DataStore.getAt(i);
+			query_selected=query_selected+detail_record.data.dkasbank_keluar_akun+",";
+		}
+		cbo_akun_dkasbank_keluar_renderDataStore.setBaseParam('task','selected');
+		cbo_akun_dkasbank_keluar_renderDataStore.setBaseParam('master_id',get_pk_id());
+		cbo_akun_dkasbank_keluar_renderDataStore.setBaseParam('selected_id',query_selected);
+		cbo_akun_dkasbank_keluar_renderDataStore.load({
+			callback: function(r,opt,success){
+				if(success==true){
+					kasbank_keluar_detailListEditorGrid.getView().refresh();
+				}
+			}
+		});
+		
 		get_total_keluar_debet_kredit();
+		
 	});
+	/*End of Function */
+	
+	combo_akun_kasbank_detail_keluar.on("focus",function(){
+		cbo_akun_dkasbank_keluarDataStore.setBaseParam('task','all');
+		cbo_akun_dkasbank_keluarDataStore.load({params:{start:0, limit: pageS}});	
+	});
+	
+	kasbank_keluar_akunField.on('select',function(){
+		var j=cbo_akun_DataStore.findExact('akun_id',kasbank_keluar_akunField.getValue());
+		if(j>-1){
+			var record_akun=cbo_akun_DataStore.getAt(j);
+			kasbank_keluar_kodeakunField.setValue(record_akun.data.akun_kode);
+		}
+	});
+	
 	/*End of Function */
 	
 });

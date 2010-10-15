@@ -58,6 +58,7 @@ var rpt_posting_opsiblnField;
 var rpt_posting_opsiallField;
 var rpt_posting_groupField;
 
+var firstday=(new Date().format('Y-m'))+'-01';
 var today=new Date().format('Y-m-d');
 var yesterday=new Date().add(Date.DAY, -1).format('Y-m-d');
 var thismonth=new Date().format('m');
@@ -183,10 +184,11 @@ Ext.onReady(function(){
 		fieldLabel: ' ',
 		format : 'Y-m-d',
 		name: 'rpt_posting_tglawalField',
-        vtype: 'daterange',
+        //vtype: 'daterange',
 		allowBlank: true,
 		width: 100,
-        endDateField: 'rpt_posting_tglakhirField'
+		value: firstday
+        //endDateField: 'rpt_posting_tglakhirField'
 	});
 	
 	rpt_posting_tglakhirField= new Ext.form.DateField({
@@ -194,10 +196,10 @@ Ext.onReady(function(){
 		fieldLabel: 's/d',
 		format : 'Y-m-d',
 		name: 'rpt_posting_tglakhirField',
-        vtype: 'daterange',
+        //vtype: 'daterange',
 		allowBlank: true,
 		width: 100,
-        startDateField: 'rpt_posting_tglawalField',
+        //startDateField: 'rpt_posting_tglawalField',
 		value: today
 	});
 	
@@ -352,7 +354,7 @@ Ext.onReady(function(){
 					var result=response.responseText;
 					Ext.MessageBox.show({
 					   title: 'Error',
-					   msg: 'Could not connect to the database. retry later.',
+					   msg: 'Koneksi database gagal.',
 					   buttons: Ext.MessageBox.OK,
 					   animEl: 'database',
 					   icon: Ext.MessageBox.ERROR
@@ -401,6 +403,8 @@ Ext.onReady(function(){
 		closeAction: 'hide',
 		resizable: false,
 		plain:true,
+		width: 420, 
+		autoHeight: true,
 		layout: 'fit',
 		x: 0,
 		y: 0,
@@ -410,38 +414,6 @@ Ext.onReady(function(){
 	});
   	rpt_postingWindow.show();
 	
-	//EVENTS
-	
-	/*rpt_posting_rekapField.on("check", function(){
-		rpt_posting_groupField.setValue('No faktur');
-		if(rpt_posting_rekapField.getValue()==true){
-			rpt_posting_groupField.bindStore(group_master_Store);
-		}else
-		{
-			rpt_posting_groupField.bindStore(group_detail_Store);
-		}
-	});
-	
-	rpt_posting_detailField.on("check", function(){
-		rpt_posting_groupField.setValue('No Faktur');
-		if(rpt_posting_detailField.getValue()==true){
-			rpt_posting_groupField.bindStore(group_detail_Store);
-		}else
-		{
-			rpt_posting_groupField.bindStore(group_master_Store);
-		}
-	});*/
-	
-	/*rpt_posting_opsitglField.on("check",function(){
-		if(rpt_posting_opsitglField.getValue()==true){
-			rpt_posting_tglawalField.allowBlank=false;
-			rpt_posting_tglakhirField.allowBlank=false;
-		}else{
-			rpt_posting_tglawalField.allowBlank=true;
-			rpt_posting_tglakhirField.allowBlank=true;
-		}
-		
-	});*/
 	
 });
 	</script>
