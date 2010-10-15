@@ -479,7 +479,7 @@ class M_public_function extends Model{
 		
 	function get_member_by_cust($member_cust){
 		//$sql = "SELECT * from member where member_cust='".$member_cust."' and member_status!='tidak aktif' order by member_id desc limit 1";
-		$sql = "SELECT * from member where member_cust='".$member_cust."' and member_valid > now() order by member_id desc limit 1";
+		$sql = "SELECT * from member where member_cust='".$member_cust."'";
 		/*$sql="SELECT member_id, member_membert, member_cust, date_format(member_valid,'%Y-%m-%d') as member_valid, member_no, member_register, member_point, member_jenis, member_nota_ref, member_status, member_tglserahterima,
 				member_creator, member_kodecust, member_update, member_date_update, member_date_create
 			from member where member_cust= '".$member_cust."' and member_valid > now() order by member_id desc limit 1 ";*/
