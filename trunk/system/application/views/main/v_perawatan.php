@@ -286,7 +286,7 @@ Ext.onReady(function(){
 				
 				var result=eval(response.responseText);
 				if(result!==0){
-						
+						perawatanListEditorGrid.getStore().reload();
 						Ext.MessageBox.alert(post2db+' OK','Data perawatan berhasil disimpan');
 						perawatan_konsumsi_insert(result);
 						perawatan_createWindow.hide();

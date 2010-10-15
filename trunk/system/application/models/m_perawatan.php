@@ -470,7 +470,7 @@ class M_perawatan extends Model{
 			}*/
 			
 			if(is_numeric($rawat_group) || is_numeric($rawat_jenis)){
-				$sql_g="SELECT group_id,group_kode FROM produk_group WHERE group_id='".$rawat_group."'";
+				/*$sql_g="SELECT group_id,group_kode FROM produk_group WHERE group_id='".$rawat_group."'";
 				$rs_g=$this->db->query($sql_g);
 				if($rs_g->num_rows()){
 					$rs_sql_g=$rs_g->row();
@@ -498,7 +498,7 @@ class M_perawatan extends Model{
 						$rs_sql_j=$rs_j->row();
 						$jenis_kode=$rs_sql_j->jenis_kode;
 					}
-				}
+				}*/
 				$pattern=$group_kode.$jenis_kode;
 				$rawat_kode=$this->get_kode($pattern);
 				if($rawat_kode!=="" && strlen($rawat_kode)==6){
