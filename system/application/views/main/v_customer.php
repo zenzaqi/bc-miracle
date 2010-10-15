@@ -3501,8 +3501,8 @@ Ext.onReady(function(){
 		id: 'cust_kodeposSearchField',
 		fieldLabel: 'Kode Pos',
 		maxLength: 5,
-		anchor: '50%',
-		maskRe: /([0-9]+)$/
+		anchor: '50%'
+		//maskRe: /([0-9]+)$/
 	});
 	/* Identify  cust_propinsi Field */
 	cust_propinsiSearchField= new Ext.form.ComboBox({
@@ -3544,8 +3544,8 @@ Ext.onReady(function(){
 		id: 'cust_kodepos2SearchField',
 		fieldLabel: 'Kode Pos',
 		maxLength: 5,
-		anchor: '50%',
-		maskRe: /([0-9]+)$/
+		anchor: '50%'
+		//maskRe: /([0-9]+)$/
 	});
 	/* Identify  cust_propinsi Field */
 	cust_propinsi2SearchField= new Ext.form.ComboBox({
@@ -3572,8 +3572,8 @@ Ext.onReady(function(){
 		id: 'cust_telprumahSearchField',
 		fieldLabel: 'Telp Rumah',
 		maxLength: 30,
-		anchor: '95%',
-		maskRe: /([0-9]+)$/
+		anchor: '95%'
+		//maskRe: /([0-9]+)$/
 	});
 	/* Identify  cust_telprumah2 Field */
 	cust_telprumah2SearchField= new Ext.form.TextField({
@@ -3581,8 +3581,8 @@ Ext.onReady(function(){
 		//fieldLabel: 'Telp. Rumah 2',
 		hideLabel:true,
 		maxLength: 30,
-		anchor: '95%',
-		maskRe: /([0-9]+)$/
+		anchor: '95%'
+		//maskRe: /([0-9]+)$/
 	});
 	/* Identify  cust_telpkantor Field */
 	cust_telpkantorSearchField= new Ext.form.TextField({
@@ -3590,16 +3590,16 @@ Ext.onReady(function(){
 		//fieldLabel: 'Telp. Kantor',
 		hideLabel:true,
 		maxLength: 100,
-		anchor: '95%',
-		maskRe: /([0-9]+)$/
+		anchor: '95%'
+		//maskRe: /([0-9]+)$/
 	});
 	/* Identify  cust_hp Field */
 	cust_hpSearchField= new Ext.form.TextField({
 		id: 'cust_hpSearchField',
 		fieldLabel: 'No Ponsel',
 		maxLength: 25,
-		anchor: '95%',
-		maskRe: /([0-9]+)$/
+		anchor: '95%'
+		//maskRe: /([0-9]+)$/
 	});
 	/* Identify  cust_hp2 Field */
 	cust_hp2SearchField= new Ext.form.TextField({
@@ -3607,8 +3607,8 @@ Ext.onReady(function(){
 		//fieldLabel: 'No. Ponsel 2',
 		hideLabel:true,
 		maxLength: 25,
-		anchor: '95%',
-		maskRe: /([0-9]+)$/
+		anchor: '95%'
+		//maskRe: /([0-9]+)$/
 	});
 	/* Identify  cust_hp3 Field */
 	cust_hp3SearchField= new Ext.form.TextField({
@@ -3616,8 +3616,8 @@ Ext.onReady(function(){
 		//fieldLabel: 'No. Ponsel 3',
 		hideLabel:true,
 		maxLength: 25,
-		anchor: '95%',
-		maskRe: /([0-9]+)$/
+		anchor: '95%'
+		//maskRe: /([0-9]+)$/
 	});
 	/* Identify  cust_email Field */
 	cust_emailSearchField= new Ext.form.TextField({
@@ -3837,8 +3837,8 @@ Ext.onReady(function(){
 		blankText: '0',
 		maxLength: 2,
 		allowDecimals: false,
-		anchor: '50%',
-		maskRe: /([0-9]+)$/
+		anchor: '50%'
+		//maskRe: /([0-9]+)$/
 	});
 	/* Identify  cust_daftar Field */
 
