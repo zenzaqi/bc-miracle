@@ -28,7 +28,6 @@
     	<tr>
         	<td colspan="8" nowrap="nowrap">
                <div style="float:left; margin-left:10px; margin-top:5px;" > 
-                 <img src="../assets/images/pmmp_logo2.png" width="40%" height="40%" align="left" style="margin-right:5px" /> 
                  <center><b><h1>Laporan Buku Besar &amp; Buku Pembantu</h1></b></center>
                 </div>
             </td>

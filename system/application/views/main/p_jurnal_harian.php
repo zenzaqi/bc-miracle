@@ -26,7 +26,6 @@
     	<tr>
         	<td colspan="7" nowrap="nowrap">
                <div style="float:left; margin-left:10px; margin-top:5px;" > 
-                 <img src="../assets/images/pmmp_logo2.png" width="40%" height="40%" align="left" style="margin-right:5px" /> 
                  <center><b><h1>Laporan Jurnal Harian</h1></b></center>
                 </div>
             </td>

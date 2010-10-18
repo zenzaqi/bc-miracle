@@ -1,0 +1,10 @@
+[by zaqi.smart@gmail.com]
+o> Fix update
+   - Setup Periode Akun
+     Setting u/ menentukan periode akuntansi
+     terdapat tahun periode, tgl awal periode dan tgl akhir periode
+     url: c=c_akun_setup
+     SQL: 2010-10-18_03-30-PM.sql
+   
+   - Laporan Rugi/Laba
+     url: c=c_labarugi

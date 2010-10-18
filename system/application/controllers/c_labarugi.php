@@ -80,38 +80,46 @@ class C_labarugi extends Controller {
 
 	function labarugi_print(){
   		//POST varibale here
-		$labarugi_id=trim(@$_POST["labarugi_id"]);
-		$labarugi_tanggal=trim(@$_POST["labarugi_tanggal"]);
+		$labarugi_periode=trim(@$_POST["labarugi_periode"]);
+		$labarugi_tglawal=trim(@$_POST["labarugi_tglawal"]);
+		$labarugi_tglakhir=trim(@$_POST["labarugi_tglakhir"]);
+		$labarugi_bulan=trim(@$_POST["labarugi_bulan"]);
+		$labarugi_tahun=trim(@$_POST["labarugi_tahun"]);
 		$labarugi_akun=trim(@$_POST["labarugi_akun"]);
-		$labarugi_debet=trim(@$_POST["labarugi_debet"]);
-		$labarugi_kredit=trim(@$_POST["labarugi_kredit"]);
-		$labarugi_saldo_debet=trim(@$_POST["labarugi_saldo_debet"]);
-		$labarugi_saldo_kredit=trim(@$_POST["labarugi_saldo_kredit"]);
-		$option=$_POST['currentlisting'];
-		$filter=$_POST["query"];
 		
-		
-		echo '1';        
+		//$data["footer"]=$this->m_labarugi->labarugi_footer();
+		$data["data_print"] = $this->m_labarugi->labarugi_print($labarugi_periode, $labarugi_tglawal, $labarugi_tglakhir, $labarugi_bulan, $labarugi_tahun, $labarugi_akun, 0,30);
+		//echo $data["data_print"];
+		$print_view=$this->load->view("main/p_labarugi.php",$data,TRUE);
+		if(!file_exists("print")){
+			mkdir("print");
+		}
+		$print_file=fopen("print/lap_labarugi.html","w+");
+		fwrite($print_file, $print_view);
+		echo '1';         
 	}
 	/* End Of Function */
 
 	/* Function to Export Excel document */
 	function labarugi_export_excel(){
 		//POST varibale here
-		$labarugi_id=trim(@$_POST["labarugi_id"]);
-		$labarugi_tanggal=trim(@$_POST["labarugi_tanggal"]);
+		$labarugi_periode=trim(@$_POST["labarugi_periode"]);
+		$labarugi_tglawal=trim(@$_POST["labarugi_tglawal"]);
+		$labarugi_tglakhir=trim(@$_POST["labarugi_tglakhir"]);
+		$labarugi_bulan=trim(@$_POST["labarugi_bulan"]);
+		$labarugi_tahun=trim(@$_POST["labarugi_tahun"]);
 		$labarugi_akun=trim(@$_POST["labarugi_akun"]);
-		$labarugi_debet=trim(@$_POST["labarugi_debet"]);
-		$labarugi_kredit=trim(@$_POST["labarugi_kredit"]);
-		$labarugi_saldo_debet=trim(@$_POST["labarugi_saldo_debet"]);
-		$labarugi_saldo_kredit=trim(@$_POST["labarugi_saldo_kredit"]);
-		$option=$_POST['currentlisting'];
-		$filter=$_POST["query"];
 		
-		$query = $this->m_labarugi->labarugi_export_excel($labarugi_id ,$labarugi_tanggal ,$labarugi_akun ,$labarugi_debet ,$labarugi_kredit ,$labarugi_saldo_debet ,$labarugi_saldo_kredit ,$option,$filter);
-		
-		to_excel($query,"labarugi"); 
-		echo '1';
+		//$data["footer"]=$this->m_labarugi->labarugi_footer();
+		$data["data_print"] = $this->m_labarugi->labarugi_print($labarugi_periode, $labarugi_tglawal, $labarugi_tglakhir, $labarugi_bulan, $labarugi_tahun, $labarugi_akun, 0,30);
+		$data["type"]="excel";
+		$print_view=$this->load->view("main/p_labarugi.php",$data,TRUE);
+		if(!file_exists("print")){
+			mkdir("print");
+		}
+		$print_file=fopen("print/lap_labarugi.xls","w+");
+		fwrite($print_file, $print_view);
+		echo '1';    
 			
 	}
 	
