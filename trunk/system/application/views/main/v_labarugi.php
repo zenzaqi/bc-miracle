@@ -121,14 +121,11 @@ $bulan="";
 Ext.onReady(function(){
   	Ext.QuickTips.init();	/* Initiate quick tips icon */
   
-  	var labarugi_saldoField=new Ext.form.NumberField({
-		fieldLabel: 'Saldo Laba Rugi',
-		allowNegatife : false,
-		blankText: '0',
-		allowDecimals: false,
-		width: 150,
-		readOnly: true,
-		maskRe: /([0-9]+)$/
+  	var labarugi_saldoField=new Ext.form.TextField({
+		fieldLabel: 'Saldo Harga Pokok Penjualan',
+		readOnly: false,
+		valueRenderer: 'numberToCurrency',
+		itemCls: 'rmoney'
 	});
 	
 	/* Function for Retrieve DataStore */
@@ -138,21 +135,20 @@ Ext.onReady(function(){
 			url: 'index.php?c=c_labarugi&m=get_action', 
 			method: 'POST'
 		}),
-		groupField:'labarugi_jenis',
+		groupField:'labarugi_jenis_id',
 		baseParams:{task: "LIST", start: 0, limit: pageS}, // parameter yang di $_POST ke Controller
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
 			id: 'labarugi_akun'
 		},[
-			{name: 'labarugi_jenis', type: 'string', mapping: 'labarugi_jenis'}, 
+			{name: 'labarugi_jenis', type: 'string', mapping: 'labarugi_jenis'},
+			{name: 'labarugi_jenis_id', type: 'string', mapping: 'labarugi_jenis_id'},
 			{name: 'labarugi_akun', type: 'int', mapping: 'labarugi_akun'}, 
 			{name: 'labarugi_akun_kode', type: 'string', mapping: 'labarugi_akun_kode'}, 
 			{name: 'labarugi_akun_nama', type: 'string', mapping: 'labarugi_akun_nama'}, 
-			{name: 'labarugi_debet', type: 'float', mapping: 'labarugi_debet'}, 
-			{name: 'labarugi_kredit', type: 'float', mapping: 'labarugi_kredit'}, 
-			{name: 'labarugi_saldo_debet', type: 'float', mapping: 'labarugi_debet_sebelum'}, 
-			{name: 'labarugi_saldo_kredit', type: 'float', mapping: 'labarugi_kredit_sebelum'}
+			{name: 'labarugi_saldo', type: 'float', mapping: 'labarugi_saldo'}, 
+			{name: 'labarugi_saldo_periode', type: 'float', mapping: 'labarugi_saldo_periode'}, 
 		]),
 		sortInfo:{field: 'labarugi_akun_kode', direction: "ASC"}
 	});
@@ -164,10 +160,14 @@ Ext.onReady(function(){
 	labarugi_ColumnModel = new Ext.grid.ColumnModel(
 		[{
 			header: 'Jenis',
-			dataIndex: 'labarugi_jenis',
+			dataIndex: 'labarugi_jenis_id',
 			width: 100,
 			sortable: false,
-			readOnly: true
+			readOnly: true,
+			renderer: function(v, params, record){
+					var title=record.data.labarugi_jenis;
+                    return '<span>' + title+ '</span>';
+            }
 		},
 		{
 			header: 'Kode',
@@ -182,27 +182,39 @@ Ext.onReady(function(){
 			width: 250,
 			sortable: true,
 			readOnly: true
-		}, 
+		},
 		{
-			header: 'Debet',
-			dataIndex: 'labarugi_debet',
+			header: 'Bulan ini',
+			dataIndex: 'labarugi_saldo_periode',
 			width: 150,
 			align :'right',
 			sortable: true,
 			readOnly: true,
 			summaryType: 'sum',
 			renderer: Ext.util.Format.numberRenderer('0,000')
-		}, 
+		},
 		{
-			header: 'Kredit',
-			dataIndex: 'labarugi_kredit',
+			header: 'S/d Bulan ini',
+			dataIndex: 'labarugi_saldo',
+			width: 150,
+			align :'right',
+			sortable: true,
+			readOnly: true,
+			summaryType: 'sum',
+			renderer: Ext.util.Format.numberRenderer('0,000')
+		}/*,
+		{
+			header: 'Saldo',
 			width: 150,
 			sortable: true,
 			align :'right',
 			summaryType: 'sum',
-			renderer: Ext.util.Format.numberRenderer('0,000'),
+			renderer: function(v, params, record){
+					subtotal=Ext.util.Format.number((record.data.labarugi_saldo_periode+record.data.labarugi_saldo),"0,000");
+                    return '<span>' + subtotal+ '</span>';
+            },
 			readOnly: true
-		}	
+		}*/
 		]);
 	
 	labarugi_ColumnModel.defaultSortable= true;
@@ -212,7 +224,7 @@ Ext.onReady(function(){
 	labarugiListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'labarugiListEditorGrid',
 		el: 'fp_labarugi',
-		title: 'Laporan Laba/Rugi',
+		title: 'Laporan Rugi/Laba',
 		autoHeight: true,
 		store: labarugi_DataStore, // DataStore
 		cm: labarugi_ColumnModel, // Nama-nama Columns
@@ -233,10 +245,10 @@ Ext.onReady(function(){
 			pageSize: pageS,
 			store: labarugi_DataStore,
 			displayInfo: true
-		}), {
-			'text':'Saldo Laba Rugi'
+		})/*, {
+			'text':'Saldo Harga Pokok Penjualan'
 		},
-		labarugi_saldoField],
+		labarugi_saldoField*/],
 		plugins: summary,
 		tbar: [
 		{
@@ -339,7 +351,7 @@ Ext.onReady(function(){
 			
 		}
 		saldo=kredit-debet;
-		labarugi_saldoField.setValue(saldo);
+		labarugi_saldoField.setValue(CurrencyFormatted(saldo));
 	}
 	
 	/* Function for action list search */
@@ -364,10 +376,10 @@ Ext.onReady(function(){
 				labarugi_periode_search='all';
 			}
 			
-			if(labarugi_tglawal_searchField.getValue()!==""){order_tglawal_search = labarugi_tglawal_searchField.getValue().format('Y-m-d');}
-			if(labarugi_tglakhir_searchField.getValue()!==""){order_tglakhir_search = labarugi_tglakhir_searchField.getValue().format('Y-m-d');}
-			if(labarugi_bulan_searchField.getValue()!==""){order_bulan_search=labarugi_bulan_searchField.getValue(); }
-			if(labarugi_tahun_searchField.getValue()!==""){order_tahun_search=labarugi_tahun_searchField.getValue(); }
+			if(labarugi_tglawal_searchField.getValue()!==""){labarugi_tglawal_search = labarugi_tglawal_searchField.getValue().format('Y-m-d');}
+			if(labarugi_tglakhir_searchField.getValue()!==""){labarugi_tglakhir_search = labarugi_tglakhir_searchField.getValue().format('Y-m-d');}
+			if(labarugi_bulan_searchField.getValue()!==""){labarugi_bulan_search=labarugi_bulan_searchField.getValue(); }
+			if(labarugi_tahun_searchField.getValue()!==""){labarugi_tahun_search=labarugi_tahun_searchField.getValue(); }
 			
 			// change the store parameters
 			labarugi_DataStore.baseParams = {
@@ -393,7 +405,7 @@ Ext.onReady(function(){
 	/* Function for reset search result */
 	function labarugi_reset_search(){
 		// reset the store parameters
-		labarugi_DataStore.baseParams = { task: 'LIST' };
+		labarugi_DataStore.baseParams = { task: 'LIST', start:0, limit:pageS };
 		labarugi_searchWindow.close();
 	};
 	/* End of Fuction */
@@ -461,10 +473,11 @@ Ext.onReady(function(){
 		fieldLabel: ' ',
 		format : 'Y-m-d',
 		name: 'labarugi_tglawal_searchField',
-        vtype: 'daterange',
+        //vtype: 'daterange',
 		allowBlank: true,
 		width: 100,
-        endDateField: 'labarugi_tglakhir_searchField'
+		value: today
+        //endDateField: 'labarugi_tglakhir_searchField'
 	});
 	
 	labarugi_tglakhir_searchField= new Ext.form.DateField({
@@ -472,10 +485,10 @@ Ext.onReady(function(){
 		fieldLabel: 's/d',
 		format : 'Y-m-d',
 		name: 'labarugi_tglakhirField',
-        vtype: 'daterange',
+       // vtype: 'daterange',
 		allowBlank: true,
 		width: 100,
-        startDateField: 'labarugi_tglawal_searchField',
+        //startDateField: 'labarugi_tglawal_searchField',
 		value: today
 	});
 	
@@ -496,6 +509,7 @@ Ext.onReady(function(){
 			},{
 				layout: 'column',
 				border: false,
+				hidden: true,
 				items:[labarugi_opsitgl_searchField, {
 					   		layout: 'form',
 							border: false,
@@ -554,10 +568,10 @@ Ext.onReady(function(){
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
 	labarugi_searchWindow = new Ext.Window({
-		title: 'Buku Besar',
+		title: 'Laporan Rugi/Laba',
 		closable:true,
 		closeAction: 'hide',
-		autoWidth: true,
+		width: 420, 
 		autoHeight: true,
 		plain:true,
 		layout: 'fit',
@@ -620,7 +634,6 @@ Ext.onReady(function(){
 		  	switch(result){
 		  	case 1:
 				win = window.open('./print/lap_labarugi.html','labarugilist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
-				win.print();
 				break;
 		  	default:
 				Ext.MessageBox.show({
@@ -637,7 +650,7 @@ Ext.onReady(function(){
 		  	var result=response.responseText;
 			Ext.MessageBox.show({
 			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
+			   msg: 'Koneksi database gagal.',
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR
@@ -649,14 +662,13 @@ Ext.onReady(function(){
 	
 	/* Function for print Export to Excel Grid */
 	function labarugi_export_excel(){
-		var searchquery = "";
-		var win;              
 		var labarugi_tglawal_search="";
 		var labarugi_tglakhir_search="";
 		var labarugi_opsi_search="";
 		var labarugi_bulan_search="";
 		var labarugi_tahun_search="";
 		var labarugi_periode_search="";
+		var labarugi_akun_search=null;
 		
 		if(labarugi_opsitgl_searchField.getValue()==true){
 			labarugi_periode_search='tanggal';
@@ -670,30 +682,29 @@ Ext.onReady(function(){
 		if(labarugi_tglakhir_searchField.getValue()!==""){order_tglakhir_search = labarugi_tglakhir_searchField.getValue().format('Y-m-d');}
 		if(labarugi_bulan_searchField.getValue()!==""){order_bulan_search=labarugi_bulan_searchField.getValue(); }
 		if(labarugi_tahun_searchField.getValue()!==""){order_tahun_search=labarugi_tahun_searchField.getValue(); }
+		
 	
-
 		Ext.Ajax.request({   
 		waitMsg: 'Please Wait...',
 		url: 'index.php?c=c_labarugi&m=get_action',
 		params: {
-			task: "EXCEL",
-		  	query: searchquery,                    		
-		  	labarugi_tglawal	:	labarugi_tglawal_search,
+			task: "EXCEL",                 		
+			labarugi_periode	:	labarugi_periode_search,
+			labarugi_tglawal	:	labarugi_tglawal_search,
 			labarugi_tglakhir	:	labarugi_tglakhir_search, 
 			labarugi_bulan		: 	labarugi_bulan_search,
-			labarugi_tahun		:	labarugi_tahun_search,
-		  	currentlisting: labarugi_DataStore.baseParams.task 
-		},
+			labarugi_tahun		:	labarugi_tahun_search
+		}, 
 		success: function(response){              
 		  	var result=eval(response.responseText);
 		  	switch(result){
 		  	case 1:
-				win = window.location=('./export2excel.php');
+				win = window.open('./print/lap_labarugi.xls','labarugilist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
 				break;
 		  	default:
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Unable to convert excel the grid!',
+					msg: 'Unable to print the grid!',
 					buttons: Ext.MessageBox.OK,
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING
@@ -705,7 +716,7 @@ Ext.onReady(function(){
 		  	var result=response.responseText;
 			Ext.MessageBox.show({
 			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
+			   msg: 'Koneksi database gagal.',
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR

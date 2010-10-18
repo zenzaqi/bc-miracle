@@ -18,120 +18,105 @@ class M_labarugi extends Model{
 			parent::Model();
 		}
 	
-		//function for get list record
-		function labarugi_list($filter,$start,$end){
-			$query = "SELECT * FROM labarugi";
-			
-			// For simple search
-			if ($filter<>""){
-				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (buku_id LIKE '%".addslashes($filter)."%' OR buku_tanggal LIKE '%".addslashes($filter)."%' OR buku_akun LIKE '%".addslashes($filter)."%' OR buku_debet LIKE '%".addslashes($filter)."%' OR buku_kredit LIKE '%".addslashes($filter)."%' OR buku_saldo_debet LIKE '%".addslashes($filter)."%' OR buku_saldo_kredit LIKE '%".addslashes($filter)."%' )";
-			}
-			
-			$result = $this->db->query($query);
-			$nbrows = $result->num_rows();
-			$limit = $query." LIMIT ".$start.",".$end;		
-			$result = $this->db->query($limit);  
-			
-			if($nbrows>0){
-				foreach($result->result() as $row){
-					$arr[] = $row;
-				}
-				$jsonresult = json_encode($arr);
-				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
-			} else {
-				return '({"total":"0", "results":""})';
-			}
-		}
-		
-		
-	
-		
+
 		//function for advanced search record
-		function labarugi_search($buku_periode, $buku_tglawal, $buku_tglakhir, $buku_bulan, $buku_tahun, $buku_akun, $start,$end){
+		function labarugi_search($buku_periode, $buku_tglawal, $buku_tglakhir, $buku_bulan, $buku_tahun, $buku_akun, $start,$end){		
 			
-			if($buku_periode=="all"){
-				$sql="SELECT buku_akun,akun_kode,akun_nama,sum(buku_debet) as debet,sum(buku_kredit) as kredit
-					FROM	buku_besar,akun
-					WHERE  	buku_akun=akun_id AND
-							buku_akun like '".$buku_akun."%' AND
-							(akun_jenis='Pendapatan' OR akun_jenis='Beban')
-					GROUP BY buku_akun,akun_kode,akun_nama
-					ORDER BY buku_akun ASC";
-			}else if($buku_periode=="tanggal"){
-				
-				$sql="SELECT buku_tanggal,buku_akun,akun_kode,akun_nama,sum(buku_debet) as debet,sum(buku_kredit) as kredit
-					FROM	buku_besar,akun
-					WHERE  	buku_akun=akun_id AND
-							date_format(buku_tanggal,'%Y-%m-%d')>='".$buku_tglawal."' AND
-							date_format(buku_tanggal,'%Y-%m-%d')<='".$buku_tglakhir."' AND
-							buku_akun like '".$buku_akun."%' AND
-							(akun_jenis='Pendapatan' OR akun_jenis='Beban')						
-					GROUP BY buku_akun,akun_kode,akun_nama
-					ORDER BY buku_akun ASC";
+			
+			//AKUN LEVEL 1
+			$sql="SELECT	A.akun_id,A.akun_saldo,A.akun_kode,A.akun_jenis,A.akun_nama,A.akun_level,B.akun_id as akun_parent_id, 
+							B.akun_nama as akun_parent 
+					FROM 	akun A, akun B
+					WHERE 	A.akun_level=2  
+							AND A.	akun_parent_kode=B.akun_kode
+							AND A.akun_jenis='R/L'
+							AND B.akun_level=1
+					ORDER by A.akun_kode ASC";
 					
-			}else if($buku_periode=="bulan"){
-				
-					
-					$sql="SELECT buku_tanggal,buku_akun,akun_kode,akun_nama,sum(buku_debet) as debet,sum(buku_kredit) as kredit
-					FROM	buku_besar,akun
-					WHERE  	buku_akun=akun_id AND
-							date_format(buku_tanggal,'%Y-%m')>='".$buku_tahun."-".$buku_bulan."' AND
-							buku_akun like '".$buku_akun."%' AND
-							(akun_jenis='Pendapatan' OR akun_jenis='Beban')
-					GROUP BY buku_akun,akun_kode,akun_nama
-					ORDER BY buku_akun ASC";
-			}
-			
-			
-			
-			$result = $this->db->query($sql);
-			$nbrows = $result->num_rows();
-			$limit = $sql." LIMIT ".$start.",".$end;		
-			$result = $this->db->query($limit);  
+			$master=$this->db->query($sql);
+			$nbrows=$master->num_rows();
+
 			$saldo=0;
 			$i=0;
-			foreach($result->result() as $row){
-				$sql_sebelum="";
-				if($buku_periode=="tanggal"){
-					$sql_sebelum="SELECT sum(buku_debet) as debet,sum(buku_kredit) as kredit
-					FROM	buku_besar,akun
-					WHERE  	buku_akun=akun_id AND
-							date_format(buku_tanggal,'%Y-%m-%d')<='".$buku_tglawal."' 
-							buku_akun like '".$buku_akun."%' AND
-							(akun_jenis='Pendapatan' OR akun_jenis='Beban') AND
-							buku_akun='".$row->buku_akun."' 
-					ORDER BY buku_akun ASC";
-				}else if($buku_periode=="bulan"){
-					$sql_sebelum="SELECT sum(buku_debet) as debet,sum(buku_kredit) as kredit
-					FROM	buku_besar,akun
-					WHERE  	buku_akun=akun_id AND
-							date_format(buku_tanggal,'%Y-%m')<='".$buku_tahun."-".$buku_bulan."'
-							buku_akun like '".$buku_akun."%' AND
-							(akun_jenis='Pendapatan' OR akun_jenis='Beban') AND
-							buku_akun='".$row->buku_akun."' 
-					ORDER BY buku_akun ASC";
+			foreach($master->result() as $row){
+				
+				//s/d bulan ini
+				$sql="SELECT A.akun_kode,sum(B.buku_debet) as debet,sum(B.buku_kredit) as kredit
+						FROM	buku_besar B, akun A
+						WHERE B.buku_akun=A.akun_id
+						AND replace(A.akun_kode,'.','') like  '".str_replace(".","",$row->akun_kode)."%' ";
+				if($buku_periode=="bulan"){
+					$sql.="	AND date_format(buku_tanggal,'%Y-%m')<='".$buku_tahun."-".$buku_bulan."'";
 				}
-				if($sql_sebelum!==""){			
-					$query_sebelum=$this->db->query($sql_sebelum);
-					if($query_sebelum->num_rows()){
-						$data_sebelum=$query_sebelum->row();
-						$data[$i]["labarugi_debet_sebelum"]=$row->debet;
-						$data[$i]["labarugi_kredit_sebelum"]=$row->kredit;
+				$sql.="GROUP BY A.akun_kode";
+				$sql.="	ORDER BY A.akun_kode ASC";
+				
+				//$this->firephp->log($sql);;
+				
+				//GET SALDO BEFORE
+				$data[$i]["labarugi_saldo"]=0;
+				
+				$sqlsaldo="SELECT 	A.akun_kode,sum(A.akun_debet) as debet,sum(A.akun_debet) as kredit, A.akun_saldo
+						FROM	akun A
+						WHERE   replace(A.akun_kode,'.','') like  '".str_replace(".","",$row->akun_kode)."%'";
+				$sqlsaldo.="GROUP BY A.akun_kode";
+				$sqlsaldo.="	ORDER BY A.akun_kode ASC";
+				
+				$rssaldo=$this->db->query($sqlsaldo);
+				if($rssaldo->num_rows()){
+					$rowsaldo=$rssaldo->row();
+					if($rowsaldo->akun_saldo=='Debet'){
+						$data[$i]["labarugi_saldo"]= ($rowsaldo->debet-$rowsaldo->kredit);
 					}else{
-						$data[$i]["labarugi_debet_sebelum"]=0;
-						$data[$i]["labarugi_kredit_sebelum"]=0;
+						$data[$i]["labarugi_saldo"]= ($rowsaldo->debet-$rowsaldo->kredit);
+					}
+				}
+				//----->
+					
+				$isi=$this->db->query($sql);
+				if($isi->num_rows()){
+					$rowisi=$isi->row();
+					$data[$i]["labarugi_akun"]=$row->akun_id;
+					$data[$i]["labarugi_jenis"]=$row->akun_parent;
+					$data[$i]["labarugi_jenis_id"]=$row->akun_parent_id;
+					$data[$i]["labarugi_akun_kode"]=$row->akun_kode;
+					$data[$i]["labarugi_akun_nama"]=$row->akun_nama;
+	
+					if($row->akun_saldo=='Debet'){
+						$data[$i]["labarugi_saldo"]+= ($rowisi->debet-$rowisi->kredit);
+					}else{
+						$data[$i]["labarugi_saldo"]+= ($rowisi->kredit-$rowisi->debet);	
 					}
 				}else{
-						$data[$i]["labarugi_debet_sebelum"]=0;
-						$data[$i]["labarugi_kredit_sebelum"]=0;
+					$data[$i]["labarugi_akun"]=$row->akun_id;
+					$data[$i]["labarugi_jenis"]=$row->akun_parent;
+					$data[$i]["labarugi_jenis_id"]=$row->akun_parent_id;
+					$data[$i]["labarugi_akun_kode"]=$row->akun_kode;
+					$data[$i]["labarugi_akun_nama"]=$row->akun_nama;
+					$data[$i]["labarugi_saldo"]=0;
 				}
-					
-				$data[$i]["labarugi_akun"]=$row->buku_akun;
-				$data[$i]["labarugi_akun_kode"]=$row->akun_kode;
-				$data[$i]["labarugi_akun_nama"]=$row->akun_nama;
-				$data[$i]["labarugi_debet"]=$row->debet;
-				$data[$i]["labarugi_kredit"]=$row->kredit;
+				
+				//bulan ini
+				$sql="SELECT A.akun_kode,sum(B.buku_debet) as debet,sum(B.buku_kredit) as kredit
+						FROM	buku_besar B, akun A
+						WHERE B.buku_akun=A.akun_id
+						AND replace(A.akun_kode,'.','') like  '".str_replace(".","",$row->akun_kode)."%' ";
+				if($buku_periode=="bulan"){
+					$sql.="	AND date_format(buku_tanggal,'%Y-%m')='".$buku_tahun."-".$buku_bulan."'";
+				}
+				$sql.="GROUP BY A.akun_kode";
+				$sql.="	ORDER BY A.akun_kode ASC";
+						
+				$isi=$this->db->query($sql);
+				if($isi->num_rows()){
+					$rowisi=$isi->row();
+					if($row->akun_saldo=='Debet')
+						$data[$i]["labarugi_saldo_periode"]= ($rowisi->debet-$rowisi->kredit);
+					else
+						$data[$i]["labarugi_saldo_periode"]= ($rowisi->kredit-$rowisi->debet);	
+				}else{
+					$data[$i]["labarugi_saldo_periode"]=0;
+				}
 				
 				$i++;
 			}
@@ -144,46 +129,120 @@ class M_labarugi extends Model{
 			}
 		}
 		
-		//function for print record
-		function labarugi_print($buku_id ,$buku_tanggal ,$buku_akun ,$buku_debet ,$buku_kredit ,$buku_saldo_debet ,$buku_saldo_kredit ,$option,$filter){
-			//full query
-			$query="select * from labarugi";
-			if($option=='LIST'){
-				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (buku_id LIKE '%".addslashes($filter)."%' OR buku_tanggal LIKE '%".addslashes($filter)."%' OR buku_akun LIKE '%".addslashes($filter)."%' OR buku_debet LIKE '%".addslashes($filter)."%' OR buku_kredit LIKE '%".addslashes($filter)."%' OR buku_saldo_debet LIKE '%".addslashes($filter)."%' OR buku_saldo_kredit LIKE '%".addslashes($filter)."%' )";
-				$result = $this->db->query($query);
-			} else if($option=='SEARCH'){
-				if($buku_id!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " buku_id LIKE '%".$buku_id."%'";
-				};
-				if($buku_tanggal!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " buku_tanggal LIKE '%".$buku_tanggal."%'";
-				};
-				if($buku_akun!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " buku_akun LIKE '%".$buku_akun."%'";
-				};
-				if($buku_debet!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " buku_debet LIKE '%".$buku_debet."%'";
-				};
-				if($buku_kredit!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " buku_kredit LIKE '%".$buku_kredit."%'";
-				};
-				if($buku_saldo_debet!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " buku_saldo_debet LIKE '%".$buku_saldo_debet."%'";
-				};
-				if($buku_saldo_kredit!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " buku_saldo_kredit LIKE '%".$buku_saldo_kredit."%'";
-				};
-				$result = $this->db->query($query);
+		/*function labarugi_footer(){
+			$sql="SELECT * FROM tbl_s_rl_setting";
+			$isi=$this->db->query($sql);
+			return $isi->result();
+		}*/
+		
+		
+		function labarugi_print($buku_periode, $buku_tglawal, $buku_tglakhir, $buku_bulan, $buku_tahun, $buku_akun, $start,$end){
+			
+			//AKUN LEVEL 1
+			$sql="SELECT A.akun_id,A.akun_saldo,A.akun_kode,A.akun_jenis,A.akun_nama,A.akun_level,B.akun_id as akun_parent_id, B.akun_nama as akun_parent 
+					FROM akun A, akun B
+					WHERE A.akun_level=2  
+					AND A.akun_parent_kode=B.akun_kode
+					AND A.akun_jenis='R/L'
+					AND B.akun_level=1
+					ORDER by A.akun_kode ASC";
+					
+			$master=$this->db->query($sql);
+			$nbrows=$master->num_rows();
+
+			$saldo=0;
+			$i=0;
+
+			$saldo=0;
+			$i=0;
+			foreach($master->result() as $row){
+										
+					//s/d bulan ini
+				$sql="SELECT A.akun_kode,sum(B.buku_debet) as debet,sum(B.buku_kredit) as kredit
+						FROM	buku_besar B, akun A
+						WHERE B.buku_akun=A.akun_id
+						AND replace(A.akun_kode,'.','') like  '".str_replace(".","",$row->akun_kode)."%' ";
+				if($buku_periode=="bulan"){
+					$sql.="	AND date_format(buku_tanggal,'%Y-%m')<='".$buku_tahun."-".$buku_bulan."'";
+				}
+				$sql.="GROUP BY A.akun_kode";
+				$sql.="	ORDER BY A.akun_kode ASC";
+				
+				//GET SALDO BEFORE
+				$data[$i]["labarugi_saldo"]=0;
+				
+				$sqlsaldo="SELECT 	A.akun_kode,sum(A.akun_debet) as debet,sum(A.akun_debet) as kredit, A.akun_saldo
+						FROM	akun A
+						WHERE   replace(A.akun_kode,'.','') like  '".str_replace(".","",$row->akun_kode)."%'";
+				$sqlsaldo.="GROUP BY A.akun_kode";
+				$sqlsaldo.="	ORDER BY A.akun_kode ASC";
+				
+				$rssaldo=$this->db->query($sqlsaldo);
+				if($rssaldo->num_rows()){
+					$rowsaldo=$rssaldo->row();
+					if($rowsaldo->akun_saldo=='Debet'){
+						$data[$i]["labarugi_saldo"]= ($rowsaldo->debet-$rowsaldo->kredit);
+					}else{
+						$data[$i]["labarugi_saldo"]= ($rowsaldo->debet-$rowsaldo->kredit);
+					}
+				}
+				//----->
+				
+				$isi=$this->db->query($sql);
+				if($isi->num_rows()){
+					$rowisi=$isi->row();
+					$data[$i]["labarugi_akun"]=$row->akun_id;
+					$data[$i]["labarugi_jenis"]=$row->akun_parent;
+					$data[$i]["labarugi_jenis_id"]=$row->akun_parent_id;
+					$data[$i]["labarugi_akun_kode"]=$row->akun_kode;
+					$data[$i]["labarugi_akun_nama"]=$row->akun_nama;
+					
+					if($row->akun_saldo=='Debet'){
+						$data[$i]["labarugi_saldo"]= ($rowisi->debet-$rowisi->kredit);
+					}else{
+						$data[$i]["labarugi_saldo"]= ($rowisi->kredit-$rowisi->debet);	
+					}
+				}else{
+					$data[$i]["labarugi_akun"]=$row->akun_id;
+					$data[$i]["labarugi_jenis"]=$row->akun_parent;
+					$data[$i]["labarugi_jenis_id"]=$row->akun_parent_id;
+					$data[$i]["labarugi_akun_kode"]=$row->akun_kode;
+					$data[$i]["labarugi_akun_nama"]=$row->akun_nama;
+					$data[$i]["labarugi_saldo"]=0;
+				}
+				
+				//bulan ini
+				$sql="SELECT A.akun_kode,sum(B.buku_debet) as debet,sum(B.buku_kredit) as kredit
+						FROM	buku_besar B, akun A
+						WHERE B.buku_akun=A.akun_id
+						AND replace(A.akun_kode,'.','') like  '".str_replace(".","",$row->akun_kode)."%' ";
+				if($buku_periode=="bulan"){
+					$sql.="	AND date_format(buku_tanggal,'%Y-%m')='".$buku_tahun."-".$buku_bulan."'";
+				}
+				$sql.="GROUP BY A.akun_kode";
+				$sql.="	ORDER BY A.akun_kode ASC";
+						
+				$isi=$this->db->query($sql);
+				if($isi->num_rows()){
+					$rowisi=$isi->row();
+					if($row->akun_saldo=='Debet')
+						$data[$i]["labarugi_saldo_periode"]= ($rowisi->debet-$rowisi->kredit);
+					else
+						$data[$i]["labarugi_saldo_periode"]= ($rowisi->kredit-$rowisi->debet);	
+				}else{
+					$data[$i]["labarugi_saldo_periode"]=0;
+				}
+				
+					
+				$i++;
 			}
-			return $result;
+			
+			if($master->num_rows()>0){
+				$this->firephp->log("masuk");
+				return $data;
+			}else{
+				return 0;
+			}
 		}
 		
 		//function  for export to excel
