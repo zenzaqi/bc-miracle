@@ -707,7 +707,7 @@ Ext.onReady(function(){
 						}else if(result>0){
 							//mode 'Save and Print' untuk perawatan non-paket, sekaligus pengambilan paket
 							if(jrawat_post2db=="UPDATE"){
-								detail_jual_rawat_update(1,jrawat_id_create_pk,customer_id,jrawat_tanggal_create_date);
+								detail_jual_rawat_update(cetak_jrawat,jrawat_id_create_pk,customer_id,jrawat_tanggal_create_date);
 							}else if(jrawat_post2db=="CREATE"){
 								//gak pernah ke dalam fungsi ini, karena ketika jrawat_post2db='CREATE' pasti harus menekan tombol 'Save' terlebih dahulu,
 								//untuk digabungkan dengan pengambilan paket jika ada
@@ -2523,7 +2523,6 @@ Ext.onReady(function(){
 	master_jual_rawatListEditorGrid =  new Ext.grid.GridPanel({
 		id: 'master_jual_rawatListEditorGrid',
 		el: 'fp_master_jual_rawat',
-//		title: 'List Of Master_jual_rawat',
 		title: 'Daftar Penjualan Perawatan',
 		autoHeight: true,
 		store: master_jual_rawat_DataStore, // DataStore
@@ -2536,7 +2535,7 @@ Ext.onReady(function(){
 		viewConfig: { forceFit:true },
 	  	width: 1220,	//940,
 		bbar: new Ext.PagingToolbar({
-			pageSize: pageS,
+			pageSize: 1000,
 			store: master_jual_rawat_DataStore,
 			displayInfo: true
 		}),
@@ -4646,7 +4645,21 @@ Ext.onReady(function(){
             anchor: '50%',
             triggerAction: 'all',
             lazyRenderer: true
-        })
+        });
+		drawat_jenis_diskonField.on('select', function(){
+			var j=cbo_drawat_rawatDataStore.findExact('drawat_rawat_value',combo_jual_rawat.getValue(),0);
+			var drawat_diskon = 0;
+			if(drawat_jenis_diskonField.getValue()=='DU'){
+				drawat_diskon = cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_du;
+				drawat_diskonField.setValue(cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_du);
+			}else if(drawat_jenis_diskonField.getValue()=='DM'){
+				drawat_diskon = cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_dm;
+				drawat_diskonField.setValue(cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_dm);
+			}else{
+				drawat_diskonField.setValue(0);
+			}
+			drawat_subtotal_netField.setValue(((100-drawat_diskon)/100) * (1*cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_harga));
+		});
         
         var drawat_subtotal_netField= new Ext.form.NumberField({
             allowDecimals: false,
@@ -6439,6 +6452,19 @@ Ext.onReady(function(){
 		});
 	}
 	/*End of Function */
+	
+	function jrawat_btn_cancel(){
+		master_jual_produk_reset_form();
+		detail_jual_produk_DataStore.load({params: {master_id:-1}});
+		jproduk_caraField.setValue("card");
+		master_jual_produk_cardGroup.setVisible(true);
+		master_cara_bayarTabPanel.setActiveTab(0);
+		jproduk_post2db="CREATE";
+		jproduk_diskonField.setValue(0);
+		jproduk_cashbackField.setValue(0);
+		jproduk_pesanLabel.setText('');
+		jproduk_lunasLabel.setText('');
+	}
 	
 	/*function pertamax(){
 		jrawat_post2db="CREATE";
