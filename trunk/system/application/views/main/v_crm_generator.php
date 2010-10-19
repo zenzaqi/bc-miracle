@@ -432,7 +432,7 @@ Ext.onReady(function(){
 		frame: true,
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 910,
+	  	width: 1220,
 		autoHeight: true,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
