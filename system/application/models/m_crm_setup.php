@@ -43,7 +43,7 @@ class M_crm_setup extends Model{
 		
 		//function for create new record
 		function crm_setup_create($setcrm_frequency_bulan1, $setcrm_frequency_bulan2, $setcrm_frequency_value_morethan, $setcrm_frequency_value_equal, $setcrm_frequency_value_lessthan,
-													$setcrm_recency_bulan, $setcrm_recency_value_morethan, $setcrm_recency_value_equal, $setcrm_recency_value_lessthan,
+													$setcrm_recency_days, $setcrm_recency_value_morethan, $setcrm_recency_value_equal, $setcrm_recency_value_lessthan,
 													$setcrm_spending_value_morethan, $setcrm_spending_value_equal, $setcrm_spending_value_lessthan,
 													$setcrm_highmargin_treatment, $setcrm_highmargin_month, $setcrm_highmargin_value_morethan, $setcrm_highmargin_value_equal, $setcrm_highmargin_value_lessthan,
 													$setcrm_referal_person, $setcrm_referal_month, $setcrm_referal_morethan, $setcrm_referal_equal, $setcrm_referal_lessthan,
@@ -59,7 +59,7 @@ class M_crm_setup extends Model{
 				"setcrm_frequency_value_equal"=>$setcrm_frequency_value_equal, 
 				"setcrm_frequency_value_lessthan"=>$setcrm_frequency_value_lessthan, 
 				
-				"setcrm_recency_bulan"=>$setcrm_recency_bulan, 
+				"setcrm_recency_days"=>$setcrm_recency_days, 
 				"setcrm_recency_value_morethan"=>$setcrm_recency_value_morethan, 
 				"setcrm_recency_value_equal"=>$setcrm_recency_value_equal, 
 				"setcrm_recency_value_lessthan"=>$setcrm_recency_value_lessthan, 
@@ -108,7 +108,7 @@ class M_crm_setup extends Model{
 		//function for update record
 		function crm_setup_update($setcrm_id,
 								$setcrm_frequency_bulan1, $setcrm_frequency_bulan2, $setcrm_frequency_value_morethan, $setcrm_frequency_value_equal, $setcrm_frequency_value_lessthan,
-								$setcrm_recency_bulan, $setcrm_recency_value_morethan, $setcrm_recency_value_equal, $setcrm_recency_value_lessthan,
+								$setcrm_recency_days, $setcrm_recency_value_morethan, $setcrm_recency_value_equal, $setcrm_recency_value_lessthan,
 								$setcrm_spending_value_morethan, $setcrm_spending_value_equal, $setcrm_spending_value_lessthan,
 								$setcrm_highmargin_treatment, $setcrm_highmargin_month, $setcrm_highmargin_value_morethan, $setcrm_highmargin_value_equal, $setcrm_highmargin_value_lessthan,
 								$setcrm_referal_person, $setcrm_referal_month, $setcrm_referal_morethan, $setcrm_referal_equal, $setcrm_referal_lessthan,
@@ -124,7 +124,7 @@ class M_crm_setup extends Model{
 				"setcrm_frequency_value_equal"=>$setcrm_frequency_value_equal, 
 				"setcrm_frequency_value_lessthan"=>$setcrm_frequency_value_lessthan, 
 				
-				"setcrm_recency_bulan"=>$setcrm_recency_bulan, 
+				"setcrm_recency_days"=>$setcrm_recency_days, 
 				"setcrm_recency_value_morethan"=>$setcrm_recency_value_morethan, 
 				"setcrm_recency_value_equal"=>$setcrm_recency_value_equal, 
 				"setcrm_recency_value_lessthan"=>$setcrm_recency_value_lessthan, 
