@@ -424,7 +424,7 @@ Ext.onReady(function(){
 	crm_generatorListEditorGrid = new Ext.grid.EditorGridPanel({
 		id: 'crm_generatorListEditorGrid',
 		el: 'fp_vu_crm_generator',
-		title: 'CRM Generator',
+		title: 'CRM Value Generator',
 		autoHeight: true,
 		store: crm_generator_DataStore, // DataStore
 		cm: crm_generator_ColumnModel, // Nama-nama Columns
