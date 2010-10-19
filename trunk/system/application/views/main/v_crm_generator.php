@@ -595,7 +595,7 @@ Ext.onReady(function(){
 	/* Function for retrieve create Window Form */
 	crm_generator_saveWindow= new Ext.Window({
 		id: 'crm_generator_saveWindow',
-		title:'Penggabungan Customer',
+		title:'Add Customer',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,
