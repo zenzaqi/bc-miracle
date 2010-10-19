@@ -87,7 +87,7 @@ class M_crm_generator extends Model{
 		function crm_generator_create($query, $crmvalue_id, $crmvalue_cust, $crmvalue_date, $crmvalue_frequency, $crmvalue_recency, $crmvalue_spending, $crmvalue_highmargin, $crmvalue_referal, $crmvalue_kerewelan, $crmvalue_disiplin, $crmvalue_treatment, $crmvalue_author){
 			$datetime_now=date('Y-m-d H:i:s');
 			
-			$sql_parameter_recency = "select max(setcrm_id) as setcrm_id, setcrm_recency_bulan, setcrm_recency_value_morethan, setcrm_recency_value_equal, setcrm_recency_value_lessthan from crm_setup";
+			$sql_parameter_recency = "select max(setcrm_id) as setcrm_id, setcrm_recency_bulan, setcrm_recency_value_morethan, setcrm_recency_value_lessthan from crm_setup";
 			$query_parameter_recency = $this->db->query($sql_parameter_recency);
 			$data_parameter_recency=$query_parameter_recency->row();
 			$day_recency=$data_parameter_recency->setcrm_recency_bulan;
