@@ -61,7 +61,7 @@ var setcrm_frequency_lessthan_Field;
 
 var setcrm_recency_monthField;
 var setcrm_recency_morethan_Field;
-var setcrm_recency_equal_Field;
+//var setcrm_recency_equal_Field;
 var setcrm_recency_lessthan_Field;
 
 var setcrm_spending_morethan_Field;
@@ -153,7 +153,7 @@ Ext.onReady(function(){
 			
 			if(setcrm_recency_monthField.getValue()!== null){setcrm_recency_month_field = setcrm_recency_monthField.getValue();} 
 			if(setcrm_recency_morethan_Field.getValue()!== null){setcrm_recency_morethan_field_save = setcrm_recency_morethan_Field.getValue();}
-			if(setcrm_recency_equal_Field.getValue()!== null){setcrm_recency_equal_field_save = setcrm_recency_equal_Field.getValue();}			
+			//if(setcrm_recency_equal_Field.getValue()!== null){setcrm_recency_equal_field_save = setcrm_recency_equal_Field.getValue();}			
 			if(setcrm_recency_lessthan_Field.getValue()!== null){setcrm_recency_lessthan_field_save = setcrm_recency_lessthan_Field.getValue();}
 			
 			if(setcrm_spending_morethan_Field.getValue()!== null){setcrm_spending_morethan_field_save = setcrm_spending_morethan_Field.getValue();} 
@@ -199,7 +199,7 @@ Ext.onReady(function(){
 					setcrm_frequency_value_lessthan		: setcrm_frequency_lessthan_field_save,
 					setcrm_recency_days				: setcrm_recency_month_field,
 					setcrm_recency_value_morethan		: setcrm_recency_morethan_field_save,
-					setcrm_recency_value_equal			: setcrm_recency_equal_field_save,
+					//setcrm_recency_value_equal			: setcrm_recency_equal_field_save,
 					setcrm_recency_value_lessthan		: setcrm_recency_lessthan_field_save,
 					setcrm_spending_value_morethan		: setcrm_spending_morethan_field_save,
 					setcrm_spending_value_equal			: setcrm_spending_equal_field_save,
@@ -296,7 +296,7 @@ Ext.onReady(function(){
 			{name: 'setcrm_frequency_value_lessthan', type: 'float', mapping: 'setcrm_frequency_value_lessthan'}, 
 			{name: 'setcrm_recency_days', type: 'float', mapping: 'setcrm_recency_days'}, 
 			{name: 'setcrm_recency_value_morethan', type: 'float', mapping: 'setcrm_recency_value_morethan'},
-			{name: 'setcrm_recency_value_equal', type: 'float', mapping: 'setcrm_recency_value_equal'},
+			//{name: 'setcrm_recency_value_equal', type: 'float', mapping: 'setcrm_recency_value_equal'},
 			{name: 'setcrm_recency_value_lessthan', type: 'float', mapping: 'setcrm_recency_value_lessthan'},
 			{name: 'setcrm_spending_value_morethan', type: 'float', mapping: 'setcrm_spending_value_morethan'},
 			{name: 'setcrm_spending_value_equal', type: 'float', mapping: 'setcrm_spending_value_equal'},
@@ -408,7 +408,7 @@ Ext.onReady(function(){
 		anchor: '65%',
 		maskRe: /([0-9]+)$/
 	});
-	
+	/*
 	setcrm_recency_equal_Field= new Ext.form.NumberField({
 		id: 'setcrm_recency_equal_Field',
 		name: 'setcrm_recency_value_equal',
@@ -419,7 +419,7 @@ Ext.onReady(function(){
 		anchor: '65%',
 		maskRe: /([0-9]+)$/
 	});
-	
+	*/
 	setcrm_recency_lessthan_Field= new Ext.form.NumberField({
 		id: 'setcrm_recency_lessthan_Field',
 		name: 'setcrm_recency_value_lessthan',
@@ -770,11 +770,6 @@ Ext.onReady(function(){
 				   layout	: 'form',
 				   border: false,
 				   items	: [set_crm_recency_label_valueField , setcrm_recency_morethan_Field]
-			   },
-			   {
-				   layout	: 'form',
-				   border: false,
-				   items	: [setcrm_recency_equal_Field]
 			   },
 			   {
 				   layout	: 'form',

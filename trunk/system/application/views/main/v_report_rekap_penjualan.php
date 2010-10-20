@@ -853,8 +853,8 @@ Ext.onReady(function(){
 				rekap_penjualan_tglapp_start	: 	rekap_penjualan_tglapp_start_print,
 				rekap_penjualan_tglapp_end		: 	rekap_penjualan_tglapp_end_print,
 				rekap_penjualan_jenis			:	jenisField_print,
-				rekap_penjualan_group			:	groupField_print
-				//currentlisting					: 	rekap_penjualanDataStore.baseParams.task
+				rekap_penjualan_group			:	groupField_print,
+				currentlisting					: 	rekap_penjualanDataStore.baseParams.task
 			}, 
 			success: function(response){              
 				var result=eval(response.responseText);

@@ -26,10 +26,14 @@
 			<th scope='col'>No</th>
         	<th scope='col'>Kode</th>
             <th scope='col'>Nama</th>           
-            <th scope='col'>Total Jumlah</th>
+            <th scope='col'>Total Item</th>
             <th scope='col'>Sub Total</th>
             <th scope='col'>Diskon Tambahan</th>
-			<th scope='col'>Grand Total</th>
+            <th scope='col'>Total (Rp)</th>
+            <th scope='col'>Item Retur</th>
+            <th scope='col'>Retur (Rp)</th>
+            <th scope='col'>Tot Item Net</th>
+			<th scope='col'>Tot Net (Rp)</th>
         </tr>
     </thead>
 	<tbody>
@@ -40,23 +44,20 @@
 				$subtotal=0;
 				$diskon_tambahan=0;
 				$grand_total=0;
+				$jum_retur=0;
+				$tot_retur=0;
+				$tot_jum_item=0;
+				$tot_net=0;
 				
 		foreach($jumlah_result as $print) { 
 				$total_jumlah+=$print->total_jumlah;
 				$subtotal+=$print->subtotal;
-				//$total_diskonp+=($print->diskon*$print->total_nilai)/100;
 				$diskon_tambahan+=$print->diskon_tambahan;
 				$grand_total+=$print->grand_total;
-				/*
-				$total_bayar+=$print->total_bayar;
-				$total_tunai+=$print->tunai;
-				$total_cek+=$print->cek;
-				$total_transfer+=$print->transfer;
-				$total_kuitansi+=$print->kuitansi;
-				$total_card+=$print->card;
-				$total_voucher+=$print->voucher;
-				$total_kredit+=$print->kredit;
-				*/
+				$jum_retur+=$print->jum_retur;
+				$tot_retur+=$print->tot_retur;
+				$tot_jum_item+=$print->tot_jum_item;
+				$tot_net+=$print->tot_net;
 				$i++; 
 		
 		?>
@@ -68,6 +69,10 @@
 			<td align="right" class="numeric"><?php echo number_format($print->subtotal,0,",",","); ?></td>
             <td align="right" class="numeric"><?php echo number_format($print->diskon_tambahan,0,",",","); ?></td>
             <td align="right" class="numeric"><?php echo number_format($print->grand_total,0,",",","); ?></td>
+            <td align="right" class="numeric"><?php echo number_format($print->jum_retur,0,",",","); ?></td>
+            <td align="right" class="numeric"><?php echo number_format($print->tot_retur,0,",",","); ?></td>
+            <td align="right" class="numeric"><?php echo number_format($print->tot_jum_item,0,",",","); ?></td>
+            <td align="right" class="numeric"><?php echo number_format($print->tot_net,0,",",","); ?></td>
        </tr>
 		<?php } ?>
 	</tbody>
@@ -81,6 +86,10 @@
             <td align="right" class="numeric"><b><?php echo number_format($subtotal,0,",",","); ?></td>
             <td align="right" class="numeric"><b><?php echo number_format($diskon_tambahan,0,",",","); ?></td>
             <td align="right" class="numeric"><b><?php echo number_format($grand_total,0,",",","); ?></td>
+            <td align="right" class="numeric"><b><?php echo number_format($jum_retur,0,",",","); ?></td>
+            <td align="right" class="numeric"><b><?php echo number_format($tot_retur,0,",",","); ?></td>
+            <td align="right" class="numeric"><b><?php echo number_format($tot_jum_item,0,",",","); ?></td>
+            <td align="right" class="numeric"><b><?php echo number_format($tot_net,0,",",","); ?></td>
         </tr>
 	</tfoot>
 </table>

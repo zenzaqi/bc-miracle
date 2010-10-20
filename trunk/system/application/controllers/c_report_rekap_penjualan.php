@@ -128,6 +128,10 @@ class C_report_rekap_penjualan extends Controller {
 		$data['subtotal']=$rs->subtotal;
 		$data['diskon_tambahan']=$rs->diskon_tambahan;
 		$data['grand_total']=$rs->grand_total;
+		$data['jum_retur']=$rs->jum_retur;
+		$data['tot_retur']=$rs->tot_retur;
+		$data['tot_jum_item']=$rs->tot_jum_item;
+		$data['tot_net']=$rs->tot_net;
 		$data['jumlah_result']=$jumlah_result;
 		
 		//$nbrows=$result->num_rows();

@@ -72,16 +72,34 @@ class M_crm_generator extends Model{
 			$datetime_now=date('Y-m-d H:i:s');
 			
 			//untuk menghitung Recency
-			$sql_parameter_recency = "select max(setcrm_id) as setcrm_id, setcrm_recency_days, setcrm_recency_value_morethan, setcrm_recency_value_lessthan from crm_setup";
+			$sql_parameter_recency = 
+			   "select max(setcrm_id) as setcrm_id, setcrm_recency_days, setcrm_recency_value_morethan, setcrm_recency_value_lessthan 
+				from crm_setup";
 			$query_parameter_recency		= $this->db->query($sql_parameter_recency);
 			$data_parameter_recency 		= $query_parameter_recency->row();
 			$day_recency 					= $data_parameter_recency->setcrm_recency_days;
 			$setcrm_recency_value_lessthan 	= $data_parameter_recency->setcrm_recency_value_lessthan;
 			$setcrm_recency_value_morethan 	= $data_parameter_recency->setcrm_recency_value_morethan;
 	
-			$sql_value_recency = "select dapaket_id 
+			$sql_value_recency = 
+			   "select dapaket_id as id
 				from detail_ambil_paket d
-					where date_add(d.dapaket_tgl_ambil, interval '$day_recency' day) > now() and dapaket_cust = '$crmvalue_cust'";
+				where date_add(d.dapaket_tgl_ambil, interval '$day_recency' day) > now() and dapaket_cust = '$crmvalue_cust'
+				
+				union
+				
+				select d2.drawat_id as id
+				from detail_jual_rawat d2
+				left join master_jual_rawat m2 on m2.jrawat_id = d2.drawat_master
+				where date_add(m2.jrawat_tanggal, interval '$day_recency' day) > now() and m2.jrawat_cust = '$crmvalue_cust'
+
+				union
+				
+				select d3.dproduk_id as id
+				from detail_jual_produk d3
+				left join master_jual_produk m3 on m3.jproduk_id = d3.dproduk_master
+				where date_add(m3.jproduk_tanggal, interval '$day_recency' day) > now() and m3.jproduk_cust = '$crmvalue_cust'
+				";
 			$query = $this->db->query($sql_value_recency);
 			$recency_row = $query->num_rows();
 			
