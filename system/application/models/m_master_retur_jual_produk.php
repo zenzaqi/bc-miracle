@@ -427,43 +427,54 @@ class M_master_retur_jual_produk extends Model{
 		
 		//function for create new record
 		function master_retur_jual_produk_create($rproduk_nobukti ,$rproduk_nobuktijual ,$rproduk_cust ,$rproduk_tanggal ,$rproduk_keterangan , $rproduk_stat_dok, $rproduk_kwitansi_nilai ,$rproduk_kwitansi_keterangan){
-//			$pattern="RFT/".date("ym")."-";
-			$pattern="RJ/".date("ym")."-";
-			$rproduk_nobukti=$this->m_public_function->get_kode_1('master_retur_jual_produk','rproduk_nobukti',$pattern,12);
-			
-			$data = array(
-				"rproduk_nobukti"=>$rproduk_nobukti, 
-				"rproduk_nobuktijual"=>$rproduk_nobuktijual, 
-				"rproduk_cust"=>$rproduk_cust, 
-				"rproduk_tanggal"=>$rproduk_tanggal, 
-				"rproduk_keterangan"=>$rproduk_keterangan,
-				//"rproduk_stat_dok"=>$rproduk_stat_dok
-				"rproduk_stat_dok"=>'Tertutup',
-				"rproduk_creator"=>@$_SESSION[SESSION_USERID]
-			);
-			$this->db->insert('master_retur_jual_produk', $data); 
+			$sql = "SELECT rproduk_id
+				FROM master_retur_jual_produk
+				WHERE rproduk_nobuktijual='".$rproduk_nobuktijual."'";
+			$this->db->query($sql);
 			if($this->db->affected_rows()){
-				$pattern="KU/".date('ym')."-";
-				$kwitansi_no=$this->m_public_function->get_kode_1("cetak_kwitansi","kwitansi_no",$pattern,12);
-				$dti_kwitansi=array(
-				"kwitansi_no"=>$kwitansi_no, 
-				"kwitansi_cust"=>$rproduk_cust, 
-				"kwitansi_ref"=>$rproduk_nobukti, 
-				"kwitansi_cara"=>'retur', 
-				"kwitansi_nilai"=>$rproduk_kwitansi_nilai, 
-				"kwitansi_keterangan"=>$rproduk_kwitansi_keterangan, 
-				"kwitansi_status"=>'Terbuka',
-				"kwitansi_creator"=>@$_SESSION[SESSION_USERID]
-				);
-				$this->db->insert('cetak_kwitansi', $dti_kwitansi);
-				if($this->db->affected_rows()){
-					return $rproduk_nobukti;
-				}else{
-					return '1';
-				}
+				return '-1';
+			}else{
+	//			$pattern="RFT/".date("ym")."-";
+				$pattern="RJ/".date("ym")."-";
+				$rproduk_nobukti=$this->m_public_function->get_kode_1('master_retur_jual_produk','rproduk_nobukti',$pattern,12);
 				
-			}else
-				return '0';
+				$data = array(
+					"rproduk_nobukti"=>$rproduk_nobukti, 
+					"rproduk_nobuktijual"=>$rproduk_nobuktijual, 
+					"rproduk_cust"=>$rproduk_cust, 
+					"rproduk_tanggal"=>$rproduk_tanggal, 
+					"rproduk_keterangan"=>$rproduk_keterangan,
+					//"rproduk_stat_dok"=>$rproduk_stat_dok
+					"rproduk_stat_dok"=>'Tertutup',
+					"rproduk_creator"=>@$_SESSION[SESSION_USERID]
+				);
+				$this->db->insert('master_retur_jual_produk', $data); 
+				if($this->db->affected_rows()){
+					$pattern="KU/".date('ym')."-";
+					$kwitansi_no=$this->m_public_function->get_kode_1("cetak_kwitansi","kwitansi_no",$pattern,12);
+					$dti_kwitansi=array(
+					"kwitansi_tanggal"=>$rproduk_tanggal,
+					"kwitansi_no"=>$kwitansi_no,
+					"kwitansi_cust"=>$rproduk_cust,
+					"kwitansi_ref"=>$rproduk_nobukti,
+					"kwitansi_cara"=>'retur',
+					"kwitansi_bayar"=>$rproduk_kwitansi_nilai,
+					"kwitansi_nilai"=>$rproduk_kwitansi_nilai,
+					"kwitansi_sisa"=>$rproduk_kwitansi_nilai,
+					"kwitansi_keterangan"=>$rproduk_kwitansi_keterangan, 
+					"kwitansi_status"=>'Terbuka',
+					"kwitansi_creator"=>@$_SESSION[SESSION_USERID]
+					);
+					$this->db->insert('cetak_kwitansi', $dti_kwitansi);
+					if($this->db->affected_rows()){
+						return $rproduk_nobukti;
+					}else{
+						return '1';
+					}
+					
+				}else
+					return '0';
+			}
 		}
 		
 		//fcuntion for delete record

@@ -236,10 +236,18 @@ Ext.onReady(function(){
 				success: function(response){             
 					//var result=eval(response.responseText);
 					var result=response.responseText;
-					if(result=='0' || result=='1'){
+					if(result==0 || result==1){
 						Ext.MessageBox.show({
 						   title: 'Warning',
-						   msg: 'Data retur penjualan produk tidak bisa disimpan',
+						   msg: 'Data retur penjualan produk tidak bisa disimpan.',
+						   buttons: Ext.MessageBox.OK,
+						   animEl: 'save',
+						   icon: Ext.MessageBox.WARNING
+						});
+					}else if(result==-1){
+						Ext.MessageBox.show({
+						   title: 'Warning',
+						   msg: 'No.Faktur ini sudah pernah di-Retur.',
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'save',
 						   icon: Ext.MessageBox.WARNING
@@ -898,7 +906,7 @@ Ext.onReady(function(){
 		{ 
 			text: 'Edit', tooltip: 'Edit selected record', 
 			iconCls:'icon-update',
-			handler: master_retur_jual_produk_editContextMenu 
+			handler: master_retur_jual_produk_confirm_update
 		},
 		{ 
 			text: 'Delete', 
