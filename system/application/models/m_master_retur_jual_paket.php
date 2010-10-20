@@ -515,7 +515,7 @@ class M_master_retur_jual_paket extends Model{
 						,'perawatan'
 						,'".$drpaket_jumlah_diretur."'
 						,'".$drpaket_cust."'
-						,'retur'
+						,'RETUR'
 						,'".$drpaket_tanggal."'
 						,'Tertutup'
 						)";
