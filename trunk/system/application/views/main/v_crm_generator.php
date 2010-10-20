@@ -328,6 +328,7 @@ Ext.onReady(function(){
 		/* dataIndex => insert intohpp_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'crmvalue_id', type: 'int', mapping: 'crmvalue_id'},
 			{name: 'crmvalue_date', type: 'date',dateFormat: 'Y-m-d H:i:s', mapping: 'crmvalue_date'},
+			{name: 'crmvalue_cust_no', type: 'string', mapping: 'crmvalue_cust_no'},
 			{name: 'crmvalue_cust', type: 'string', mapping: 'crmvalue_cust'},
 			{name: 'crmvalue_frequency', type: 'float', mapping: 'crmvalue_frequency'},
 			{name: 'crmvalue_recency', type: 'float', mapping: 'crmvalue_recency'},
@@ -336,7 +337,9 @@ Ext.onReady(function(){
 			{name: 'crmvalue_referal', type: 'float', mapping: 'crmvalue_referal'},
 			{name: 'crmvalue_kerewelan', type: 'float', mapping: 'crmvalue_kerewelan'},
 			{name: 'crmvalue_disiplin', type: 'float', mapping: 'crmvalue_disiplin'},
-			{name: 'crmvalue_treatment', type: 'float', mapping: 'crmvalue_treatment'}
+			{name: 'crmvalue_treatment', type: 'float', mapping: 'crmvalue_treatment'},
+			{name: 'crmvalue_total', type: 'float', mapping: 'crmvalue_total'},
+			{name: 'crmvalue_priority', type: 'string', mapping: 'crmvalue_priority'}
 		]),
 		sortInfo:{field: 'crmvalue_id', direction: "ASC"}
 	});
@@ -348,74 +351,91 @@ Ext.onReady(function(){
 			header: '<div align="center">Tanggal</div>',
 			dataIndex: 'crmvalue_date',
 			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
-			width: 70,
-			sortable: true
-			
+			width: 80,
+			sortable: true	
+		}, 
+		{
+			header: '<div align="center">No Cust</div>',
+			dataIndex: 'crmvalue_cust_no',
+			width: 80,
+			sortable: true		
 		}, 
 		{
 			header: '<div align="center">Customer</div>',
 			dataIndex: 'crmvalue_cust',
 			width: 200,
-			sortable: true
-		
+			sortable: true		
 		}, 
 		{
 			header: '<div align="center">Frequency</div>',
+			align: 'right',
 			dataIndex: 'crmvalue_frequency',
 			width: 80,
-			sortable: true
-		
-		}, 
-		
+			sortable: true		
+		}, 		
 		{
 			header: '<div align="center">Recency</div>',
+			align: 'right',
 			dataIndex: 'crmvalue_recency',
 			width: 80,
 			sortable: true
-		},
-		
+		},		
 		{
 			header: '<div align="center">Spending</div>',
+			align: 'right',
 			dataIndex: 'crmvalue_spending',
 			width: 80,
 			sortable: true
-		}, 
-		
+		}, 		
 		{
 			header: '<div align="center">High Margin</div>',
+			align: 'right',
 			dataIndex: 'crmvalue_highmargin',
 			width: 80,
 			sortable: true
-		}, 
-		
+		}, 		
 		{
 			header: '<div align="center">Referal Rate</div>',
+			align: 'right',
 			dataIndex: 'crmvalue_referal',
 			width: 80,
 			sortable: true
-		}, 
-		
+		}, 		
 		{
 			header: '<div align="center">Kerewelan</div>',
+			align: 'right',
 			dataIndex: 'crmvalue_kerewelan',
 			width: 80,
 			sortable: true
-		}, 
-		
+		}, 		
 		{
 			header: '<div align="center">Disiplin</div>',
+			align: 'right',
 			dataIndex: 'crmvalue_disiplin',
 			width: 80,
 			sortable: true
-		}, 
-		
+		}, 	
 		{
 			header: '<div align="center">Treatment</div>',
+			align: 'right',
 			dataIndex: 'crmvalue_treatment',
 			width: 80,
 			sortable: true
-		}
-		
+		},
+		{
+			header: '<div align="center">Total</div>',
+			align: 'right',
+			dataIndex: 'crmvalue_total',
+			width: 80,
+			sortable: true
+		},
+		{
+			header: '<div align="center">Priority</div>',
+			dataIndex: 'crmvalue_priority',
+			width: 80,
+			sortable: true		
+		}, 
+				
 		]
 	);
 	crm_generator_ColumnModel.defaultSortable= true;
