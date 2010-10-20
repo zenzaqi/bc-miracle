@@ -102,7 +102,7 @@ class M_master_retur_jual_paket extends Model{
 					,(((detail_jual_paket.dpaket_jumlah * detail_jual_paket.dpaket_harga) * ((100 - detail_jual_paket.dpaket_diskon) / 100))
 						- (ifnull(vu_dapaket_group_dpaket.total_ambil_dpaket,0) * (detail_jual_paket.dpaket_harga / paket.paket_jmlisi))) AS rupiah_retur
 					,ifnull(vu_dapaket_group_dpaket.total_ambil_dpaket,0) AS total_ambil_paket
-					,(paket.paket_jmlisi - ifnull(vu_dapaket_group_dpaket.total_ambil_dpaket,0)) AS total_sisa_paket
+					,((detail_jual_paket.dpaket_jumlah * paket.paket_jmlisi) - ifnull(vu_dapaket_group_dpaket.total_ambil_dpaket,0)) AS total_sisa_paket
 					,(detail_jual_paket.dpaket_harga / paket.paket_jmlisi) AS harga_per_satu
 				FROM ((detail_jual_paket
 					JOIN paket ON ((detail_jual_paket.dpaket_paket = paket.paket_id)))
@@ -120,7 +120,7 @@ class M_master_retur_jual_paket extends Model{
 					,(((detail_jual_paket.dpaket_jumlah * detail_jual_paket.dpaket_harga) * ((100 - detail_jual_paket.dpaket_diskon) / 100))
 						- (ifnull(vu_dapaket_group_dpaket.total_ambil_dpaket,0) * (detail_jual_paket.dpaket_harga / paket.paket_jmlisi))) AS rupiah_retur
 					,ifnull(vu_dapaket_group_dpaket.total_ambil_dpaket,0) AS total_ambil_paket
-					,(paket.paket_jmlisi - ifnull(vu_dapaket_group_dpaket.total_ambil_dpaket,0)) AS total_sisa_paket
+					,((detail_jual_paket.dpaket_jumlah * paket.paket_jmlisi) - ifnull(vu_dapaket_group_dpaket.total_ambil_dpaket,0)) AS total_sisa_paket
 					,(detail_jual_paket.dpaket_harga / paket.paket_jmlisi) AS harga_per_satu
 				FROM ((detail_jual_paket
 					JOIN paket ON ((detail_jual_paket.dpaket_paket = paket.paket_id)))
@@ -818,7 +818,27 @@ class M_master_retur_jual_paket extends Model{
 	//function for advanced search record
 	function master_retur_jual_paket_search($rpaket_id ,$rpaket_nobukti ,$rpaket_nobuktijual ,$rpaket_cust ,$rpaket_tanggal , $rpaket_tanggal_akhir, $rpaket_keterangan ,$rpaket_stat_dok, $start,$end){
 		//full query
-		$query="select * from master_retur_jual_paket";
+		$query="SELECT rpaket_id
+				,rpaket_nobukti
+				,jpaket_id
+				,jpaket_nobukti
+				,cust_no
+				,cust_nama
+				,cust_id
+				,rpaket_tanggal
+				,rpaket_keterangan
+				,kwitansi_nilai
+				,rpaket_stat_dok
+				,rpaket_creator
+				,rpaket_date_create
+				,rpaket_update
+				,rpaket_date_update
+				,rpaket_revised
+				,jpaket_bayar
+			FROM master_retur_jual_paket
+			LEFT JOIN customer ON(master_retur_jual_paket.rpaket_cust = customer.cust_id)
+			LEFT JOIN master_jual_paket ON(master_retur_jual_paket.rpaket_nobuktijual = master_jual_paket.jpaket_id)
+			LEFT JOIN cetak_kwitansi ON(cetak_kwitansi.kwitansi_ref = master_retur_jual_paket.rpaket_nobukti)";
 		
 		if($rpaket_id!=''){
 			$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -834,7 +854,7 @@ class M_master_retur_jual_paket extends Model{
 		};
 		if($rpaket_cust!=''){
 			$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-			$query.= " rpaket_cust LIKE '%".$rpaket_cust."%'";
+			$query.= " rpaket_cust = '".$rpaket_cust."'";
 		};
 		if($rpaket_tanggal!='' && $rpaket_tanggal_akhir!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -851,7 +871,7 @@ class M_master_retur_jual_paket extends Model{
 		
 		if($rpaket_stat_dok!=''){
 			$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-			$query.= " rpaket_stat_dok LIKE '%".$rpaket_stat_dok."%'";
+			$query.= " rpaket_stat_dok = '".$rpaket_stat_dok."'";
 		};
 		$result = $this->db->query($query);
 		$nbrows = $result->num_rows();
@@ -873,7 +893,18 @@ class M_master_retur_jual_paket extends Model{
 	//function for print record
 	function master_retur_jual_paket_print($rpaket_id ,$rpaket_nobukti ,$rpaket_nobuktijual ,$rpaket_cust ,$rpaket_tanggal ,$rpaket_keterangan ,$option,$filter){
 		//full query
-		$query="select * from master_retur_jual_paket";
+		$query="SELECT rpaket_tanggal
+				,rpaket_nobukti
+				,jpaket_nobukti
+				,cust_no
+				,cust_nama
+				,kwitansi_nilai
+				,rpaket_keterangan
+				,rpaket_stat_dok
+			FROM master_retur_jual_paket
+			LEFT JOIN customer ON(master_retur_jual_paket.rpaket_cust = customer.cust_id)
+			LEFT JOIN master_jual_paket ON(master_retur_jual_paket.rpaket_nobuktijual = master_jual_paket.jpaket_id)
+			LEFT JOIN cetak_kwitansi ON(cetak_kwitansi.kwitansi_ref = master_retur_jual_paket.rpaket_nobukti)";
 		if($option=='LIST'){
 			$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 			$query .= " (rpaket_id LIKE '%".addslashes($filter)."%' OR rpaket_nobukti LIKE '%".addslashes($filter)."%' OR rpaket_nobuktijual LIKE '%".addslashes($filter)."%' OR rpaket_cust LIKE '%".addslashes($filter)."%' OR rpaket_tanggal LIKE '%".addslashes($filter)."%' OR rpaket_keterangan LIKE '%".addslashes($filter)."%' )";
@@ -911,7 +942,18 @@ class M_master_retur_jual_paket extends Model{
 	//function  for export to excel
 	function master_retur_jual_paket_export_excel($rpaket_id ,$rpaket_nobukti ,$rpaket_nobuktijual ,$rpaket_cust ,$rpaket_tanggal ,$rpaket_keterangan ,$option,$filter){
 		//full query
-		$query="select * from master_retur_jual_paket";
+		$query="SELECT rpaket_tanggal AS tanggal
+				,rpaket_nobukti AS no_faktur
+				,jpaket_nobukti AS no_faktur_jual
+				,cust_no AS no_cust
+				,cust_nama AS customer
+				,kwitansi_nilai AS nilai_kuitansi
+				,rpaket_keterangan AS keterangan
+				,rpaket_stat_dok AS stat_dok
+			FROM master_retur_jual_paket
+			LEFT JOIN customer ON(master_retur_jual_paket.rpaket_cust = customer.cust_id)
+			LEFT JOIN master_jual_paket ON(master_retur_jual_paket.rpaket_nobuktijual = master_jual_paket.jpaket_id)
+			LEFT JOIN cetak_kwitansi ON(cetak_kwitansi.kwitansi_ref = master_retur_jual_paket.rpaket_nobukti)";
 		if($option=='LIST'){
 			$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 			$query .= " (rpaket_id LIKE '%".addslashes($filter)."%' OR rpaket_nobukti LIKE '%".addslashes($filter)."%' OR rpaket_nobuktijual LIKE '%".addslashes($filter)."%' OR rpaket_cust LIKE '%".addslashes($filter)."%' OR rpaket_tanggal LIKE '%".addslashes($filter)."%' OR rpaket_keterangan LIKE '%".addslashes($filter)."%' )";
