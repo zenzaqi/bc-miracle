@@ -18,37 +18,115 @@ class M_master_retur_jual_paket extends Model{
 		parent::Model();
 	}
 	
-	function get_rawat_list($query,$start,$end){
+	/*function get_rawat_list($query,$start,$end){
 		$rs_rows=0;
 		if(is_numeric($query)==true){
-			$sql_dproduk="SELECT dpaket_paket FROM detail_jual_paket WHERE dpaket_master='$query'";
-			$rs=$this->db->query($sql_dproduk);
+			$sql_dpaket="SELECT dpaket_paket FROM detail_jual_paket WHERE dpaket_master='$query'";
+			echo $sql_dpaket;
+			$rs=$this->db->query($sql_dpaket);
 			$rs_rows=$rs->num_rows();
-		}/*elseif(is_string($query)==true){
-			$sql_dproduk="SELECT dpaket_master FROM detail_jual_paket LEFT JOIN master_jual_paket ON(dpaket_master=jproduk_id) WHERE jpaket_nobukti='$query'";
-			$rs=$this->db->query($sql_dproduk);
-			if($rs->num_rows()){
-				$rs_record=$rs->row_array();
-				$query=$rs_record["dpaket_master"];
-			}
-		}*/
+		}
 		
-		$sql="SELECT rawat_id, rawat_nama, rawat_kode, ((dpaket_harga*((100-dpaket_diskon)/100))*((100-jpaket_diskon)/100)) AS rawat_harga FROM paket_isi_perawatan LEFT JOIN paket ON(rpaket_master=paket_id) LEFT JOIN detail_jual_paket ON(dpaket_paket=paket_id) LEFT JOIN master_jual_paket ON(dpaket_master=jpaket_id) LEFT JOIN perawatan ON(rpaket_perawatan=rawat_id) WHERE jpaket_id='$query'";
-		/*if($query<>"" && is_numeric($query)==false){
-			$sql.=eregi("WHERE",$sql)? " AND ":" WHERE ";
-			$sql.=" (produk_kode like '%".$query."%' or produk_nama like '%".$query."%' or satuan_nama like '%".$query."%' or kategori_nama like '%".$query."%' or group_nama like '%".$query."%') ";
-		}else{*/
-			if($rs_rows){
-				$filter="";
-				$sql.=eregi("AND",$sql)? " OR ":" AND ";
-				foreach($rs->result() as $row_dpaket){
-					
-					$filter.="OR dpaket_paket='".$row_dpaket->dpaket_paket."' ";
-				}
-				$sql=$sql."(".substr($filter,2,strlen($filter)).")";
-			}
-		/*}*/
+		$sql="SELECT rawat_id
+				,rawat_nama
+				,rawat_kode
+				,((dpaket_harga*((100-dpaket_diskon)/100))*((100-jpaket_diskon)/100)) AS rawat_harga
+			FROM paket_isi_perawatan
+			LEFT JOIN paket ON(rpaket_master=paket_id)
+			LEFT JOIN detail_jual_paket ON(dpaket_paket=paket_id)
+			LEFT JOIN master_jual_paket ON(dpaket_master=jpaket_id)
+			LEFT JOIN perawatan ON(rpaket_perawatan=rawat_id)
+			WHERE jpaket_id='$query'";
 		
+		if($rs_rows){
+			$filter="";
+			$sql.=eregi("AND",$sql)? " OR ":" AND ";
+			foreach($rs->result() as $row_dpaket){
+				
+				$filter.="OR dpaket_paket='".$row_dpaket->dpaket_paket."' ";
+			}
+			$sql=$sql."(".substr($filter,2,strlen($filter)).")";
+		}
+		
+		$result = $this->db->query($sql);
+		$nbrows = $result->num_rows();
+		if($end!=0){
+			$limit = $sql." LIMIT ".$start.",".$end;			
+			$result = $this->db->query($limit);
+		}
+		if($nbrows>0){
+			foreach($result->result() as $row){
+				$arr[] = $row;
+			}
+			$jsonresult = json_encode($arr);
+			return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+		} else {
+			return '({"total":"0", "results":""})';
+		}
+	}*/
+	
+	function get_rawat_list($query,$start,$end){
+		$sql="SELECT rawat_id
+				,rawat_nama
+				,rawat_kode
+				,((dpaket_harga*((100-dpaket_diskon)/100))*((100-jpaket_diskon)/100)) AS rawat_harga
+			FROM paket_isi_perawatan
+				LEFT JOIN paket ON(rpaket_master=paket_id)
+				LEFT JOIN detail_jual_paket ON(dpaket_paket=paket_id)
+				LEFT JOIN master_jual_paket ON(dpaket_master=jpaket_id)
+				LEFT JOIN perawatan ON(rpaket_perawatan=rawat_id)
+			WHERE jpaket_id='$query'";
+			
+		$result = $this->db->query($sql);
+		$nbrows = $result->num_rows();
+		if($end!=0){
+			$limit = $sql." LIMIT ".$start.",".$end;
+			$result = $this->db->query($limit);
+		}
+		if($nbrows>0){
+			foreach($result->result() as $row){
+				$arr[] = $row;
+			}
+			$jsonresult = json_encode($arr);
+			return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+		} else {
+			return '({"total":"0", "results":""})';
+		}
+	}
+	
+	function get_dpaket_byjpaket_list($mode,$jpaket_id,$start,$end){
+		if($mode=='create'){
+			$sql = "SELECT detail_jual_paket.dpaket_id AS dpaket_id
+					,detail_jual_paket.dpaket_paket AS dpaket_paket
+					,paket.paket_nama AS paket_nama
+					,(((detail_jual_paket.dpaket_jumlah * detail_jual_paket.dpaket_harga) * ((100 - detail_jual_paket.dpaket_diskon) / 100))
+						- (ifnull(vu_dapaket_group_dpaket.total_ambil_dpaket,0) * (detail_jual_paket.dpaket_harga / paket.paket_jmlisi))) AS rupiah_retur
+					,ifnull(vu_dapaket_group_dpaket.total_ambil_dpaket,0) AS total_ambil_paket
+					,(paket.paket_jmlisi - ifnull(vu_dapaket_group_dpaket.total_ambil_dpaket,0)) AS total_sisa_paket
+					,(detail_jual_paket.dpaket_harga / paket.paket_jmlisi) AS harga_per_satu
+				FROM ((detail_jual_paket
+					JOIN paket ON ((detail_jual_paket.dpaket_paket = paket.paket_id)))
+					LEFT JOIN vu_dapaket_group_dpaket ON(vu_dapaket_group_dpaket.dapaket_dpaket = detail_jual_paket.dpaket_id))
+				WHERE detail_jual_paket.dpaket_master='".$jpaket_id."'
+					AND detail_jual_paket.dpaket_id NOT IN
+						(SELECT detail_retur_paket_rawat.drpaket_dpaket
+						FROM detail_retur_paket_rawat
+							JOIN master_retur_jual_paket ON (drpaket_master = rpaket_id)
+						WHERE master_retur_jual_paket.rpaket_stat_dok <> 'Batal')";
+		}else{
+			$sql = "SELECT detail_jual_paket.dpaket_id AS dpaket_id
+					,detail_jual_paket.dpaket_paket AS dpaket_paket
+					,paket.paket_nama AS paket_nama
+					,(((detail_jual_paket.dpaket_jumlah * detail_jual_paket.dpaket_harga) * ((100 - detail_jual_paket.dpaket_diskon) / 100))
+						- (ifnull(vu_dapaket_group_dpaket.total_ambil_dpaket,0) * (detail_jual_paket.dpaket_harga / paket.paket_jmlisi))) AS rupiah_retur
+					,ifnull(vu_dapaket_group_dpaket.total_ambil_dpaket,0) AS total_ambil_paket
+					,(paket.paket_jmlisi - ifnull(vu_dapaket_group_dpaket.total_ambil_dpaket,0)) AS total_sisa_paket
+					,(detail_jual_paket.dpaket_harga / paket.paket_jmlisi) AS harga_per_satu
+				FROM ((detail_jual_paket
+					JOIN paket ON ((detail_jual_paket.dpaket_paket = paket.paket_id)))
+					LEFT JOIN vu_dapaket_group_dpaket ON(vu_dapaket_group_dpaket.dapaket_dpaket = detail_jual_paket.dpaket_id))
+				WHERE detail_jual_paket.dpaket_master='".$jpaket_id."'";
+		}
 		$result = $this->db->query($sql);
 		$nbrows = $result->num_rows();
 		if($end!=0){
@@ -130,25 +208,28 @@ class M_master_retur_jual_paket extends Model{
 			LEFT JOIN vu_jpaket_total_bayar ON(vu_jpaket_total_bayar.jpaket_id=master_jual_paket.jpaket_id)
 			LEFT JOIN vu_jpaket_total_pakai ON(vu_jpaket_total_pakai.jpaket_id=master_jual_paket.jpaket_id)
 			WHERE jpaket_cust=cust_id";*/
-		$sql = "SELECT jpaket_id
-				,jpaket_nobukti
-				,jpaket_tanggal
-				,cust_id
-				,cust_nama
-				,cust_alamat
-				,jpaket_totalbiaya as jpaket_total_bayar
-				,vu_jpaket_total_pakai.jpaket_total_pakai
-				,(jpaket_totalbiaya - vu_jpaket_total_pakai.jpaket_total_pakai) AS jpaket_total_retur
-			FROM master_jual_paket
-			JOIN vu_jpaket_total_pakai ON(vu_jpaket_total_pakai.dapaket_jpaket=master_jual_paket.jpaket_id)
-			LEFT JOIN customer ON(jpaket_cust=cust_id)
-			WHERE jpaket_id NOT IN (
-				SELECT rpaket_nobuktijual
-				FROM master_retur_jual_paket
+		$sql = "SELECT master_jual_paket.jpaket_id
+				,master_jual_paket.jpaket_nobukti
+				,master_jual_paket.jpaket_cust
+				,customer.cust_nama
+				,detail_jual_paket.dpaket_paket
+				,detail_jual_paket.dpaket_sisa_paket
+			FROM detail_jual_paket
+				JOIN master_jual_paket
+					ON (dpaket_master = jpaket_id)
+				JOIN customer
+					ON (master_jual_paket.jpaket_cust = customer.cust_id)
+			WHERE detail_jual_paket.dpaket_sisa_paket > 0
+				AND master_jual_paket.jpaket_stat_dok='Tertutup'
+				AND detail_jual_paket.dpaket_id NOT IN (
+					SELECT detail_retur_paket_rawat.drpaket_dpaket
+					FROM detail_retur_paket_rawat
+						JOIN master_retur_jual_paket ON(drpaket_master = rpaket_id)
+					WHERE master_retur_jual_paket.rpaket_stat_dok <> 'Batal'
 				)";
 		if($query<>""){
 			$sql.=eregi("WHERE",$sql)? " AND ":" WHERE ";
-			$sql.=" (jpaket_nobukti like '%".$query."%' or cust_nama like '%".$query."%' ) "; 
+			$sql.=" (master_jual_paket.jpaket_nobukti like '%".$query."%' or customer.cust_nama like '%".$query."%' ) "; 
 		}
 		$query = $this->db->query($sql);
 		$nbrows = $query->num_rows();
@@ -167,29 +248,8 @@ class M_master_retur_jual_paket extends Model{
 	
 	/* START Detail Retur tokwitansi */
 	//get record list
-	function detail_retur_paket_tokwitansi_list($master_id,$query,$start,$end) {
+	function drpaket_list($master_id,$query) {
 		/* Menampilkan detail paket yang terpakai dari No.Faktur Jual yang terpilih + harga asli dari isi paket*/
-		//$query = "SELECT * FROM (SELECT apaket_jpaket, sapaket_master, sapaket_item, sapaket_item_nama, (sapaket_jmlisi_item-sapaket_sisa_item) As jumlah_terpakai, rawat_harga FROM submaster_apaket_item LEFT JOIN perawatan ON(sapaket_item=rawat_id) LEFT JOIN master_ambil_paket ON(sapaket_master=apaket_id)) AS vu_retur_paket WHERE vu_retur_paket.apaket_jpaket='".$master_id."' AND vu_retur_paket.jumlah_terpakai!='0'";
-		/*$sql="SELECT vu_total_sisa_item_perawatan.dpaket_master
-				,vu_total_sisa_item_perawatan.rpaket_perawatan
-				,rawat_nama
-				,vu_total_sisa_item_perawatan.total_sisa_item
-				,IF(vu_total_sisa_item_perawatan.total_ambil_item!='null',vu_total_sisa_item_perawatan.total_ambil_item,0) AS total_ambil_item
-				,perawatan.rawat_harga
-			FROM vu_total_sisa_item_perawatan
-			LEFT JOIN perawatan ON(vu_total_sisa_item_perawatan.rpaket_perawatan=perawatan.rawat_id )
-			WHERE vu_total_sisa_item_perawatan.dpaket_master='$master_id'
-				AND (vu_total_sisa_item_perawatan.total_ambil_item!='null' OR vu_total_sisa_item_perawatan.total_ambil_item!=0)";*/
-		/*$sql="SELECT vu_total_sisa_item_perawatan.dpaket_master
-				,vu_total_sisa_item_perawatan.rpaket_perawatan
-				,rawat_nama
-				,vu_total_sisa_item_perawatan.total_sisa_item
-				,IF(vu_total_sisa_item_perawatan.total_ambil_item!='null',vu_total_sisa_item_perawatan.total_ambil_item,0) AS total_ambil_item
-				,perawatan.rawat_harga
-			FROM vu_total_sisa_item_perawatan
-			LEFT JOIN perawatan ON(vu_total_sisa_item_perawatan.rpaket_perawatan=perawatan.rawat_id )
-			WHERE vu_total_sisa_item_perawatan.dpaket_master='$master_id'
-				AND vu_total_sisa_item_perawatan.total_sisa_item>0";*/
 		$sql = "SELECT * 
 			FROM 
 				(
@@ -220,12 +280,10 @@ class M_master_retur_jual_paket extends Model{
 					,dapaket_dpaket
 				) as vu_total_pakai on(vu_total_pakai.dapaket_dpaket=total_milik.dpaket_id 
 					and vu_total_pakai.dapaket_item=total_milik.rpaket_perawatan)
-			WHERE total_ambil_item>0";// AND dapaket_keterangan<>'retur'";
+			WHERE total_ambil_item>0";
 			
 		$result = $this->db->query($sql);
 		$nbrows = $result->num_rows();
-		$limit = $sql." LIMIT ".$start.",".$end;
-		$result = $this->db->query($limit);  
 		
 		if($nbrows>0){
 			foreach($result->result() as $row){
@@ -238,6 +296,52 @@ class M_master_retur_jual_paket extends Model{
 		}
 	}
 	//end of function
+	
+	function drpaket_tokwitansi_list($rpaket_id){
+		/* Menampilkan detail paket yang telah di-Retur dari No.Faktur Jual yang terpilih */
+		/*$sql = "SELECT detail_jual_paket.dpaket_id AS dpaket_id
+				,paket.paket_nama AS paket_nama
+				,(((detail_jual_paket.dpaket_jumlah * detail_jual_paket.dpaket_harga) * ((100 - detail_jual_paket.dpaket_diskon) / 100))
+					- (ifnull(sum(detail_ambil_paket.dapaket_jumlah), 0) * (detail_jual_paket.dpaket_harga / paket.paket_jmlisi)))
+					AS rupiah_retur
+				,ifnull(sum(detail_ambil_paket.dapaket_jumlah), 0) AS total_ambil_paket
+				,(paket.paket_jmlisi - ifnull(sum(detail_ambil_paket.dapaket_jumlah), 0)) AS total_sisa_paket
+				,(detail_jual_paket.dpaket_harga / paket.paket_jmlisi) AS harga_per_satu
+		   FROM detail_retur_paket_rawat
+				JOIN master_retur_jual_paket ON(detail_retur_paket_rawat.drpaket_master = master_retur_jual_paket.rpaket_id)
+				JOIN detail_jual_paket ON(detail_jual_paket.dpaket_id = detail_retur_paket_rawat.drpaket_dpaket)
+				JOIN paket ON(detail_jual_paket.dpaket_paket = paket.paket_id)
+				LEFT JOIN detail_ambil_paket ON((detail_jual_paket.dpaket_id = detail_ambil_paket.dapaket_dpaket)
+					AND (detail_ambil_paket.dapaket_stat_dok <> 'Batal'))
+			WHERE master_retur_jual_paket.rpaket_nobuktijual = '".$jpaket_id."'
+			GROUP BY detail_ambil_paket.dapaket_dpaket";*/
+		$sql = "SELECT detail_retur_paket_rawat.drpaket_id
+				,detail_retur_paket_rawat.drpaket_dpaket
+				,detail_retur_paket_rawat.drpaket_paket
+				,paket.paket_nama AS paket_nama
+				,detail_retur_paket_rawat.drpaket_rupiah_retur
+				,detail_retur_paket_rawat.drpaket_jumlah_terambil
+				,detail_retur_paket_rawat.drpaket_jumlah_diretur
+				,detail_retur_paket_rawat.drpaket_harga_satu
+		   FROM detail_retur_paket_rawat
+				JOIN master_retur_jual_paket ON(detail_retur_paket_rawat.drpaket_master = master_retur_jual_paket.rpaket_id)
+				JOIN paket ON(detail_retur_paket_rawat.drpaket_paket = paket.paket_id)
+			WHERE master_retur_jual_paket.rpaket_id = '".$rpaket_id."'";
+			
+		$result = $this->db->query($sql);
+		$nbrows = $result->num_rows();
+		
+		if($nbrows>0){
+			foreach($result->result() as $row){
+				$arr[] = $row;
+			}
+			$jsonresult = json_encode($arr);
+			return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+		} else {
+			return '({"total":"0", "results":""})';
+		}
+	}
+	
 	//purge all detail from master
 	function detail_retur_paket_tokwitansi_purge($master_id){
 		$sql="DELETE from detail_retur_paket_rawat where drpaket_master='".$master_id."'";
@@ -268,7 +372,7 @@ class M_master_retur_jual_paket extends Model{
 	//end of function
 	
 	//insert detail record
-	function detail_retur_paket_tokwitansi_insert($drpaket_master ){
+	/*function detail_retur_paket_tokwitansi_insert($drpaket_master ){
 		//if master id not capture from view then capture it from max pk from master table
 		if($drpaket_master=="" || $drpaket_master==NULL){
 			$drpaket_master=$this->get_master_id();
@@ -345,8 +449,166 @@ class M_master_retur_jual_paket extends Model{
 			return '0';
 		}
 		
-	}
+	}*/
 	//end of function
+	
+	function detail_retur_paket_tokwitansi_insert($array_drpaket_id
+												,$drpaket_master
+												,$drpaket_jpaket
+												,$drpaket_cust
+												,$array_drpaket_dpaket
+												,$array_drpaket_paket
+												,$array_drpaket_jumlah_terambil
+												,$array_drpaket_harga_satu
+												,$array_drpaket_jumlah_diretur
+												,$array_drpaket_rupiah_retur
+												,$drpaket_tanggal){
+		//if master id not capture from view then capture it from max pk from master table
+		if($drpaket_master=="" || $drpaket_master==NULL || $drpaket_master==0){
+			$drpaket_master=$this->get_master_id();
+		}
+		
+		//INSERT to db.detail_retur_paket_rawat
+		$size_array = sizeof($array_drpaket_dpaket) - 1;
+		
+		for($i = 0; $i < sizeof($array_drpaket_dpaket); $i++){
+			$drpaket_id = $array_drpaket_id[$i];
+			$drpaket_dpaket = $array_drpaket_dpaket[$i];
+			$drpaket_paket = $array_drpaket_paket[$i];
+			$drpaket_jumlah_terambil = $array_drpaket_jumlah_terambil[$i];
+			$drpaket_harga_satu = $array_drpaket_harga_satu[$i];
+			$drpaket_jumlah_diretur = $array_drpaket_jumlah_diretur[$i];
+			$drpaket_rupiah_retur = $array_drpaket_rupiah_retur[$i];
+			
+			if($drpaket_id==0){
+				//INSERT BARU to db.detail_retur_paket_rawat
+				$dti_drpaket = array(
+					"drpaket_master"=>$drpaket_master,
+					"drpaket_jpaket"=>$drpaket_jpaket,
+					"drpaket_dpaket"=>$drpaket_dpaket,
+					"drpaket_paket"=>$drpaket_paket,
+					"drpaket_jumlah_diretur"=>$drpaket_jumlah_diretur,
+					"drpaket_jumlah_terambil"=>$drpaket_jumlah_terambil,
+					"drpaket_harga_satu"=>$drpaket_harga_satu,
+					"drpaket_rupiah_retur"=>$drpaket_rupiah_retur
+				);
+				$this->db->insert('detail_retur_paket_rawat', $dti_drpaket);
+				
+				//* mencatat juga ke db.detail_ambil_paket dengan status 'retur' /
+				$sqli = "INSERT INTO detail_ambil_paket (dapaket_dpaket
+						,dapaket_jpaket
+						,dapaket_paket
+						,dapaket_item
+						,dapaket_jenis_item
+						,dapaket_jumlah
+						,dapaket_cust
+						,dapaket_keterangan
+						,dapaket_tgl_ambil
+						,dapaket_stat_dok)
+					VALUES ('".$drpaket_dpaket."'
+						,'".$drpaket_jpaket."'
+						,'".$drpaket_paket."'
+						,(SELECT rpaket_perawatan
+							FROM paket_isi_perawatan
+							WHERE rpaket_master='".$drpaket_paket."'
+								AND rpaket_jumlah>0 LIMIT 1)
+						,'perawatan'
+						,'".$drpaket_jumlah_diretur."'
+						,'".$drpaket_cust."'
+						,'retur'
+						,'".$drpaket_tanggal."'
+						,'Tertutup'
+						)";
+				$this->db->query($sqli);
+				if($this->db->affected_rows()){
+					$sqlu = "UPDATE detail_jual_paket
+						SET dpaket_sisa_paket=0
+						WHERE dpaket_id='".$drpaket_dpaket."'";
+					$this->db->query($sqlu);
+				}
+				if($i==$size_array){
+					return 1;
+				}
+			}else{
+				if($i==$size_array){
+					return 1;
+				}
+			}
+		}
+		
+		
+		//* ambil db.master_retur_jual_paket.rpaket_nobuktijual (identik = db.master_jual_paket.jpaket_id) /
+		/*$sql = "SELECT rpaket_nobuktijual, rpaket_cust FROM master_retur_jual_paket WHERE rpaket_id='$drpaket_master'";
+		$rs = $this->db->query($sql);
+		if($rs->num_rows()){
+			$record = $rs->row_array();
+			$drpaket_jpaket = $record['rpaket_nobuktijual'];
+			$rpaket_cust = $record['rpaket_cust'];
+		}
+		
+		//* ambil sisa perawatan yang belum diambil di Paket yang dimiliki Customer /
+		$sql = "SELECT *, (total_milik.total_isi_item - if((vu_total_pakai.total_ambil_item<>'null'),vu_total_pakai.total_ambil_item,0)) AS sisa 
+			FROM 
+				(
+				SELECT dpaket_id 
+					,dpaket_master
+					,dpaket_paket
+					,dpaket_jumlah
+					,rpaket_perawatan
+					,rawat_nama
+					,rawat_harga
+					,rpaket_jumlah
+					,(dpaket_jumlah*rpaket_jumlah) AS total_isi_item
+				FROM (detail_jual_paket
+				INNER JOIN paket_isi_perawatan ON(rpaket_master=dpaket_paket))
+				LEFT JOIN perawatan ON(rpaket_perawatan=rawat_id)
+				WHERE dpaket_master='$drpaket_jpaket'
+				) AS total_milik
+			LEFT JOIN 
+				(
+				SELECT dapaket_dpaket 
+					,dapaket_paket 
+					,dapaket_item 
+					,sum(dapaket_jumlah) AS total_ambil_item 
+				FROM detail_ambil_paket 
+				WHERE dapaket_jpaket='$drpaket_jpaket'
+				GROUP BY dapaket_item
+					,dapaket_dpaket
+				) as vu_total_pakai on(vu_total_pakai.dapaket_dpaket=total_milik.dpaket_id 
+					and vu_total_pakai.dapaket_item=total_milik.rpaket_perawatan)
+			WHERE (total_milik.total_isi_item - if((vu_total_pakai.total_ambil_item<>'null'),vu_total_pakai.total_ambil_item,0)) > 0";
+		$rs = $this->db->query($sql);
+		if($rs->num_rows()){
+			foreach($rs->result() as $row){
+				$dti_drpaket = array(
+					"drpaket_master"=>$drpaket_master,
+					"drpaket_jpaket"=>$row->dpaket_master,
+					"drpaket_dpaket"=>$row->dpaket_id,
+					"drpaket_rawat"=>$row->rpaket_perawatan,
+					"drpaket_jumlah"=>$row->sisa
+				);
+				$this->db->insert('detail_retur_paket_rawat', $dti_drpaket);
+				
+				//* mencatat juga ke db.detail_ambil_paket dengan status 'retur' /
+				$dti_dapaket = array(
+				"dapaket_dpaket"=>$row->dpaket_id,
+				"dapaket_jpaket"=>$row->dpaket_master,
+				"dapaket_paket"=>$row->dpaket_paket,
+				"dapaket_item"=>$row->rpaket_perawatan,
+				"dapaket_jenis_item"=>'perawatan',
+				"dapaket_jumlah"=>$row->sisa,
+				"dapaket_cust"=>$rpaket_cust,
+				"dapaket_keterangan"=>'retur'
+				);
+				$this->db->insert('detail_ambil_paket', $dti_dapaket);
+				
+			}
+			return '1';
+		}else{
+			return '0';
+		}*/
+		
+	}
 	/* END Detail Retur tokwitansi */
 	
 	/* START Detail Retur torawat */
@@ -507,12 +769,15 @@ class M_master_retur_jual_paket extends Model{
 			$kwitansi_no=$this->m_public_function->get_kode_1("cetak_kwitansi","kwitansi_no",$pattern,12);
 			$dti_kwitansi=array(
 			"kwitansi_no"=>$kwitansi_no, 
-			"kwitansi_cust"=>$rpaket_cust, 
+			"kwitansi_cust"=>$rpaket_cust,
+			"kwitansi_tanggal"=>$rpaket_tanggal,
 			"kwitansi_ref"=>$rpaket_nobukti, 
-			"kwitansi_cara"=>'retur', 
-			"kwitansi_nilai"=>$rpaket_kwitansi_nilai, 
+			"kwitansi_cara"=>'retur',
+			"kwitansi_bayar"=>$rpaket_kwitansi_nilai,
+			"kwitansi_nilai"=>$rpaket_kwitansi_nilai,
+			"kwitansi_sisa"=>$rpaket_kwitansi_nilai,
 			"kwitansi_keterangan"=>$rpaket_kwitansi_keterangan, 
-			"kwitansi_status"=>'Terbuka',
+			"kwitansi_status"=>'Tertutup',
 			"kwitansi_creator"=>@$_SESSION[SESSION_USERID]
 			);
 			$this->db->insert('cetak_kwitansi', $dti_kwitansi);
@@ -681,8 +946,78 @@ class M_master_retur_jual_paket extends Model{
 		return $result;
 	}
 	
+	function master_retur_jual_paket_batal($rpaket_id){
+		/*
+		 * db.master_retur_jual_paket.rpaket_id == di-Batalkan, maka tabel yang lain juga dibatalkan yaitu:
+		 * 1. db.detail_jual_paket.dpaket_sisa_paket <== dikembalikan sebelum di-Retur
+		 * 2. db.detail_ambil_paket <== di-Batalkan
+		 * 3. db.cetak_kwitansi <== di-Batalkan
+		*/
+		$datetime_now = date('Y-m-d H:i:s');
+		
+		$sql = "SELECT drpaket_dpaket
+				,rpaket_nobukti
+				,drpaket_jumlah_diretur
+			FROM detail_retur_paket_rawat
+				JOIN master_retur_jual_paket ON(drpaket_master=rpaket_id)
+			WHERE rpaket_id='".$rpaket_id."'";
+		$rs = $this->db->query($sql);
+		if($rs->num_rows()){
+			$record = $rs->row_array();
+			$rpaket_nobukti = $record['rpaket_nobukti'];
+			
+			$sqlu_rpaket = "UPDATE master_retur_jual_paket
+				SET rpaket_stat_dok='Batal'
+					,rpaket_update='".@$_SESSION[SESSION_USERID]."'
+					,rpaket_date_update='".$datetime_now."'
+					,rpaket_revised=(rpaket_revised+1)
+				WHERE rpaket_id='".$rpaket_id."'";
+			$this->db->query($sqlu_rpaket);
+			
+			$sqlu_kwitansi = "UPDATE cetak_kwitansi, detail_ambil_paket
+				SET kwitansi_status='Batal'
+					,kwitansi_update='".@$_SESSION[SESSION_USERID]."'
+					,kwitansi_date_update='".$datetime_now."'
+					,kwitansi_revised=(kwitansi_revised+1)
+				WHERE kwitansi_ref='".$rpaket_nobukti."'";
+			$this->db->query($sqlu_kwitansi);
+			
+			foreach($rs->result() as $row){
+				$sqlu_dapaket = "UPDATE detail_ambil_paket
+					SET dapaket_stat_dok='Batal'
+						,dapaket_update='".@$_SESSION[SESSION_USERID]."'
+						,dapaket_date_update='".$datetime_now."'
+						,dapaket_revised=(dapaket_revised+1)
+					WHERE dapaket_dpaket='".$row->drpaket_dpaket."'
+						AND dapaket_keterangan='retur'";
+				$this->db->query($sqlu_dapaket);
+				
+				$sqlu_dpaket = "UPDATE detail_jual_paket
+					SET dpaket_sisa_paket=(dpaket_sisa_paket+".$row->drpaket_jumlah_diretur.")
+					WHERE dpaket_id='".$row->drpaket_dpaket."'";
+				$this->db->query($sqlu_dpaket);
+			}
+			if($this->db->affected_rows()>-1){
+				return 1;
+			}
+		}else{
+			return 0;
+		}
+		
+	}
+	
 	function print_paper($kwitansi_ref){
-		$sql="SELECT kwitansi_id,kwitansi_no,kwitansi_date_create,cust_no,cust_nama,kwitansi_nilai,kwitansi_keterangan,kwitansi_cara FROM cetak_kwitansi,customer WHERE kwitansi_cust=cust_id AND kwitansi_ref='".$kwitansi_ref."'";
+		$sql="SELECT kwitansi_id
+				,kwitansi_no
+				,kwitansi_date_create
+				,cust_no
+				,cust_nama
+				,kwitansi_nilai
+				,kwitansi_keterangan
+				,kwitansi_cara
+			FROM cetak_kwitansi,customer
+			WHERE kwitansi_cust=cust_id
+				AND kwitansi_ref='".$kwitansi_ref."'";
 		$result = $this->db->query($sql);
 		return $result;
 	}
