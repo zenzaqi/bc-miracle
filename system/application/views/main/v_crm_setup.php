@@ -59,7 +59,7 @@ var setcrm_frequency_morethan_Field;
 var setcrm_frequency_equal_Field;
 var setcrm_frequency_lessthan_Field;
 
-var setcrm_recency_monthField;
+var setcrm_recency_daysField;
 var setcrm_recency_morethan_Field;
 //var setcrm_recency_equal_Field;
 var setcrm_recency_lessthan_Field;
@@ -151,7 +151,7 @@ Ext.onReady(function(){
 			if(setcrm_frequency_equal_Field.getValue()!== null){setcrm_frequency_equal_field_save = setcrm_frequency_equal_Field.getValue();}
 			if(setcrm_frequency_lessthan_Field.getValue()!== null){setcrm_frequency_lessthan_field_save = setcrm_frequency_lessthan_Field.getValue();}
 			
-			if(setcrm_recency_monthField.getValue()!== null){setcrm_recency_month_field = setcrm_recency_monthField.getValue();} 
+			if(setcrm_recency_daysField.getValue()!== null){setcrm_recency_month_field = setcrm_recency_daysField.getValue();} 
 			if(setcrm_recency_morethan_Field.getValue()!== null){setcrm_recency_morethan_field_save = setcrm_recency_morethan_Field.getValue();}
 			//if(setcrm_recency_equal_Field.getValue()!== null){setcrm_recency_equal_field_save = setcrm_recency_equal_Field.getValue();}			
 			if(setcrm_recency_lessthan_Field.getValue()!== null){setcrm_recency_lessthan_field_save = setcrm_recency_lessthan_Field.getValue();}
@@ -192,8 +192,8 @@ Ext.onReady(function(){
 				url: 'index.php?c=c_crm_setup&m=get_action',
 				params: {
 					setcrm_id							: setcrm_id_field_pk, 
-					setcrm_frequency_bulan1				: setcrm_frequency_year_field,
-					setcrm_frequency_bulan2				: setcrm_frequency_month_field,
+					setcrm_frequency_count				: setcrm_frequency_year_field,
+					setcrm_frequency_days				: setcrm_frequency_month_field,
 					setcrm_frequency_value_morethan		: setcrm_frequency_morethan_field_save, 
 					setcrm_frequency_value_equal		: setcrm_frequency_equal_field_save,
 					setcrm_frequency_value_lessthan		: setcrm_frequency_lessthan_field_save,
@@ -205,12 +205,12 @@ Ext.onReady(function(){
 					setcrm_spending_value_equal			: setcrm_spending_equal_field_save,
 					setcrm_spending_value_lessthan		: setcrm_spending_lessthan_field_save,
 					setcrm_highmargin_treatment			: setcrm_highmargin_treatment1Field_save,
-					setcrm_highmargin_month				: setcrm_highmargin_treatment2Field_save,
+					setcrm_highmargin_days				: setcrm_highmargin_treatment2Field_save,
 					setcrm_highmargin_value_morethan	: setcrm_highmargin_morethan_Field_save,
 					setcrm_highmargin_value_equal		: setcrm_highmargin_equal_Field_save,
 					setcrm_highmargin_value_lessthan	: setcrm_highmargin_lessthan_Field_save,
 					setcrm_referal_person				: setcrm_referaldate_personField_save,
-					setcrm_referal_month				: setcrm_referaldate_monthField_save,
+					setcrm_referal_days				: setcrm_referaldate_monthField_save,
 					setcrm_referal_morethan				: setcrm_referaldate_morethan_Field_save,
 					setcrm_referal_equal				: setcrm_referaldate_equal_Field_save,
 					setcrm_referal_lessthan				: setcrm_referaldate_lessthan_Field_save,
@@ -220,7 +220,7 @@ Ext.onReady(function(){
 					setcrm_disiplin_high				: setcrm_disiplin_high_Field_save,
 					setcrm_disiplin_normal				: setcrm_disiplin_normal_Field_save,
 					setcrm_disiplin_low					: setcrm_disiplin_low_Field_save,
-					setcrm_treatment_month				: setcrm_jenistreatment_monthField_save,
+					setcrm_treatment_days				: setcrm_jenistreatment_monthField_save,
 					setcrm_treatment_nonmedis			: setcrm_jenistreatment_nonmedisField_save,
 					setcrm_treatment_medis				: setcrm_jenistreatment_medisField_save,
 					setcrm_treatment_morethan			: setcrm_jenistreatment_morethan_Field_save,
@@ -289,8 +289,8 @@ Ext.onReady(function(){
 		},[
 		/* dataIndex => insert intomember_setup_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'setcrm_id', type: 'int', mapping: 'setcrm_id'}, 
-			{name: 'setcrm_frequency_bulan1', type: 'float', mapping: 'setcrm_frequency_bulan1'}, 
-			{name: 'setcrm_frequency_bulan2', type: 'float', mapping: 'setcrm_frequency_bulan2'}, 
+			{name: 'setcrm_frequency_count', type: 'float', mapping: 'setcrm_frequency_count'}, 
+			{name: 'setcrm_frequency_days', type: 'float', mapping: 'setcrm_frequency_days'}, 
 			{name: 'setcrm_frequency_value_morethan', type: 'float', mapping: 'setcrm_frequency_value_morethan'},
 			{name: 'setcrm_frequency_value_equal', type: 'float', mapping: 'setcrm_frequency_value_equal'}, 
 			{name: 'setcrm_frequency_value_lessthan', type: 'float', mapping: 'setcrm_frequency_value_lessthan'}, 
@@ -302,12 +302,12 @@ Ext.onReady(function(){
 			{name: 'setcrm_spending_value_equal', type: 'float', mapping: 'setcrm_spending_value_equal'},
 			{name: 'setcrm_spending_value_lessthan', type: 'float', mapping: 'setcrm_spending_value_lessthan'}, 
 			{name: 'setcrm_highmargin_treatment', type: 'float', mapping: 'setcrm_highmargin_treatment'},
-			{name: 'setcrm_highmargin_month', type: 'float', mapping: 'setcrm_highmargin_month'},
+			{name: 'setcrm_highmargin_days', type: 'float', mapping: 'setcrm_highmargin_days'},
 			{name: 'setcrm_highmargin_value_morethan', type: 'float', mapping: 'setcrm_highmargin_value_morethan'},
 			{name: 'setcrm_highmargin_value_equal', type: 'float', mapping: 'setcrm_highmargin_value_equal'},
 			{name: 'setcrm_highmargin_value_lessthan', type: 'float', mapping: 'setcrm_highmargin_value_lessthan'},
 			{name: 'setcrm_referal_person', type: 'float', mapping: 'setcrm_referal_person'}, 
-			{name: 'setcrm_referal_month', type: 'float', mapping: 'setcrm_referal_month'}, 
+			{name: 'setcrm_referal_days', type: 'float', mapping: 'setcrm_referal_days'}, 
 			{name: 'setcrm_referal_morethan', type: 'float', mapping: 'setcrm_referal_morethan'},
 			{name: 'setcrm_referal_equal', type: 'float', mapping: 'setcrm_referal_equal'}, 
 			{name: 'setcrm_referal_lessthan', type: 'float', mapping: 'setcrm_referal_lessthan'}, 
@@ -317,7 +317,7 @@ Ext.onReady(function(){
 			{name: 'setcrm_disiplin_high', type: 'float', mapping: 'setcrm_disiplin_high'},
 			{name: 'setcrm_disiplin_normal', type: 'float', mapping: 'setcrm_disiplin_normal'},
 			{name: 'setcrm_disiplin_low', type: 'float', mapping: 'setcrm_disiplin_low'}, 
-			{name: 'setcrm_treatment_month', type: 'float', mapping: 'setcrm_treatment_month'}, 
+			{name: 'setcrm_treatment_days', type: 'float', mapping: 'setcrm_treatment_days'}, 
 			{name: 'setcrm_treatment_nonmedis', type: 'float', mapping: 'setcrm_treatment_nonmedis'},
 			{name: 'setcrm_treatment_medis', type: 'float', mapping: 'setcrm_treatment_medis'}, 
 			{name: 'setcrm_treatment_morethan', type: 'float', mapping: 'setcrm_treatment_morethan'}, 
@@ -336,7 +336,7 @@ Ext.onReady(function(){
   	
 	setcrm_frequency_yearField=new Ext.form.NumberField({
 		id: 'setcrm_frequency_yearField',
-		name : 'setcrm_frequency_bulan1',
+		name : 'setcrm_frequency_count',
 		anchor : '25%',
 		allowDecimals : true,
 		allowNegative : false,
@@ -346,7 +346,7 @@ Ext.onReady(function(){
     
 	setcrm_frequency_monthField=new Ext.form.NumberField({
 		id: 'setcrm_frequency_monthField',
-		name : 'setcrm_frequency_bulan2',
+		name : 'setcrm_frequency_days',
 		anchor : '25%',
 		width : 50,
 		allowDecimals : true,
@@ -388,8 +388,8 @@ Ext.onReady(function(){
 		maskRe: /([0-9]+)$/
 	});
 	
-	setcrm_recency_monthField=new Ext.form.NumberField({
-		id: 'setcrm_recency_monthField',
+	setcrm_recency_daysField=new Ext.form.NumberField({
+		id: 'setcrm_recency_daysField',
 		name : 'setcrm_recency_days',
 		anchor : '25%',
 		width : 50,
@@ -476,7 +476,7 @@ Ext.onReady(function(){
 	
 	setcrm_highmargin_treatment2Field=new Ext.form.NumberField({
 		id: 'setcrm_highmargin_treatment2Field',
-		name : 'setcrm_highmargin_month',
+		name : 'setcrm_highmargin_days',
 		anchor : '25%',
 		allowDecimals : true,
 		allowNegative : false,
@@ -529,7 +529,7 @@ Ext.onReady(function(){
 	
 	setcrm_referaldate_monthField=new Ext.form.NumberField({
 		id: 'setcrm_referaldate_monthField',
-		name : 'setcrm_referal_month',
+		name : 'setcrm_referal_days',
 		anchor : '25%',
 		width : 50,
 		allowDecimals : true,
@@ -638,7 +638,7 @@ Ext.onReady(function(){
 	
 	setcrm_jenistreatment_monthField=new Ext.form.NumberField({
 		id: 'setcrm_jenistreatment_monthField',
-		name : 'setcrm_treatment_month',
+		name : 'setcrm_treatment_days',
 		anchor : '25%',
 		width : 50,
 		allowDecimals : true,
@@ -706,12 +706,12 @@ Ext.onReady(function(){
 	set_crm_highmargin_label_divideField=new Ext.form.Label({ html: '/ &nbsp;'});
 	set_crm_referaldate_label_divideField=new Ext.form.Label({ html: '&nbsp; / &nbsp;'});
 	
-	set_crm_frequency_label_monthField=new Ext.form.Label({ html: '&nbsp; month'});
-	set_crm_recency_label_monthField=new Ext.form.Label({ html: '&nbsp; month'});
-	set_crm_highmargin_label_monthField=new Ext.form.Label({ html: '&nbsp; month'});
+	set_crm_frequency_label_monthField=new Ext.form.Label({ html: '&nbsp; days'});
+	set_crm_recency_label_daysField=new Ext.form.Label({ html: '&nbsp; days'});
+	set_crm_highmargin_label_monthField=new Ext.form.Label({ html: '&nbsp; days'});
 	set_crm_referaldate_label_personField=new Ext.form.Label({ html: '&nbsp; cust'});
-	set_crm_referaldate_label_monthField=new Ext.form.Label({ html: '&nbsp; month'});
-	set_crm_jenistreatment_label_monthField=new Ext.form.Label({ html: '&nbsp; month <br> <br>'});
+	set_crm_referaldate_label_monthField=new Ext.form.Label({ html: '&nbsp; days'});
+	set_crm_jenistreatment_label_monthField=new Ext.form.Label({ html: '&nbsp; days <br> <br>'});
 	
 	set_crm_frequency_label_valueField=new Ext.form.Label({ html: '<br>Value : &nbsp; '});
 	set_crm_recency_label_valueField=new Ext.form.Label({ html: '<br>Value : &nbsp; '});
@@ -764,7 +764,7 @@ Ext.onReady(function(){
 		items:[{
 			   		layout	: 'column',
 					border: false,
-					items	: [setcrm_recency_monthField,set_crm_recency_label_monthField]
+					items	: [setcrm_recency_daysField,set_crm_recency_label_daysField]
 			   },
 			   {
 				   layout	: 'form',
@@ -960,8 +960,8 @@ Ext.onReady(function(){
 		},[
 		/* dataIndex => insert intomember_setup_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'setcrm_id', type: 'int', mapping: 'setcrm_id'}, 
-			{name: 'setcrm_frequency_bulan1', type: 'float', mapping: 'setcrm_frequency_bulan1'}, 
-			{name: 'setcrm_frequency_bulan2', type: 'float', mapping: 'setcrm_frequency_bulan2'}, 
+			{name: 'setcrm_frequency_count', type: 'float', mapping: 'setcrm_frequency_count'}, 
+			{name: 'setcrm_frequency_days', type: 'float', mapping: 'setcrm_frequency_days'}, 
 			{name: 'setcrm_frequency_value_morethan', type: 'float', mapping: 'setcrm_frequency_value_morethan'},
 			{name: 'setcrm_frequency_value_equal', type: 'float', mapping: 'setcrm_frequency_value_equal'}, 
 			{name: 'setcrm_frequency_value_lessthan', type: 'float', mapping: 'setcrm_frequency_value_lessthan'}, 
@@ -973,12 +973,12 @@ Ext.onReady(function(){
 			{name: 'setcrm_spending_value_equal', type: 'float', mapping: 'setcrm_spending_value_equal'},
 			{name: 'setcrm_spending_value_lessthan', type: 'float', mapping: 'setcrm_spending_value_lessthan'}, 
 			{name: 'setcrm_highmargin_treatment', type: 'float', mapping: 'setcrm_highmargin_treatment'},
-			{name: 'setcrm_highmargin_month', type: 'float', mapping: 'setcrm_highmargin_month'},
+			{name: 'setcrm_highmargin_days', type: 'float', mapping: 'setcrm_highmargin_days'},
 			{name: 'setcrm_highmargin_value_morethan', type: 'float', mapping: 'setcrm_highmargin_value_morethan'},
 			{name: 'setcrm_highmargin_value_equal', type: 'float', mapping: 'setcrm_highmargin_value_equal'},
 			{name: 'setcrm_highmargin_value_lessthan', type: 'float', mapping: 'setcrm_highmargin_value_lessthan'},
 			{name: 'setcrm_referal_person', type: 'float', mapping: 'setcrm_referal_person'}, 
-			{name: 'setcrm_referal_month', type: 'float', mapping: 'setcrm_referal_month'}, 
+			{name: 'setcrm_referal_days', type: 'float', mapping: 'setcrm_referal_days'}, 
 			{name: 'setcrm_referal_morethan', type: 'float', mapping: 'setcrm_referal_morethan'},
 			{name: 'setcrm_referal_equal', type: 'float', mapping: 'setcrm_referal_equal'}, 
 			{name: 'setcrm_referal_lessthan', type: 'float', mapping: 'setcrm_referal_lessthan'}, 
@@ -988,7 +988,7 @@ Ext.onReady(function(){
 			{name: 'setcrm_disiplin_high', type: 'float', mapping: 'setcrm_disiplin_high'},
 			{name: 'setcrm_disiplin_normal', type: 'float', mapping: 'setcrm_disiplin_normal'},
 			{name: 'setcrm_disiplin_low', type: 'float', mapping: 'setcrm_disiplin_low'}, 
-			{name: 'setcrm_treatment_month', type: 'float', mapping: 'setcrm_treatment_month'}, 
+			{name: 'setcrm_treatment_days', type: 'float', mapping: 'setcrm_treatment_days'}, 
 			{name: 'setcrm_treatment_nonmedis', type: 'float', mapping: 'setcrm_treatment_nonmedis'},
 			{name: 'setcrm_treatment_medis', type: 'float', mapping: 'setcrm_treatment_medis'}, 
 			{name: 'setcrm_treatment_morethan', type: 'float', mapping: 'setcrm_treatment_morethan'}, 

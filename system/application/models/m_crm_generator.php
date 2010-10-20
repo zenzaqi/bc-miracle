@@ -39,9 +39,15 @@ class M_crm_generator extends Model{
 		//function for get list record
 		function crm_generator_list($filter,$start,$end){
 		
-			$query = "SELECT crmvalue_id, crmvalue_date, c1.cust_nama as crmvalue_cust , crmvalue_frequency, crmvalue_recency, crmvalue_spending, crmvalue_highmargin, crmvalue_referal, crmvalue_kerewelan, crmvalue_disiplin, crmvalue_treatment 
-						FROM crm_value
-						left join customer c1 on (c1.cust_id = crm_value.crmvalue_cust)";
+			$query = 
+			   "SELECT 
+					crmvalue_id, crmvalue_date, c1.cust_nama as crmvalue_cust, c1.cust_no as crmvalue_cust_no ,crmvalue_frequency, crmvalue_recency, 
+					crmvalue_spending, crmvalue_highmargin, crmvalue_referal, crmvalue_kerewelan, crmvalue_disiplin, crmvalue_treatment,
+					(crmvalue_frequency + crmvalue_recency + crmvalue_spending + crmvalue_highmargin + crmvalue_referal + crmvalue_kerewelan +
+					crmvalue_disiplin + crmvalue_treatment) as crmvalue_total,
+					crmvalue_priority
+				FROM crm_value
+				left join customer c1 on (c1.cust_id = crm_value.crmvalue_cust)";
 			
 			// For simple search
 			if ($filter<>""){

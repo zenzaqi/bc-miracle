@@ -58,8 +58,8 @@ class C_crm_setup extends Controller {
 	function crm_setup_create(){
 		//POST varible here
 		//auto increment, don't accept anything from form values
-		$setcrm_frequency_bulan1=trim(@$_POST["setcrm_frequency_bulan1"]);
-		$setcrm_frequency_bulan2=trim(@$_POST["setcrm_frequency_bulan2"]);
+		$setcrm_frequency_count=trim(@$_POST["setcrm_frequency_count"]);
+		$setcrm_frequency_days=trim(@$_POST["setcrm_frequency_days"]);
 		$setcrm_frequency_value_morethan=trim(@$_POST["setcrm_frequency_value_morethan"]);
 		$setcrm_frequency_value_equal=trim(@$_POST["setcrm_frequency_value_equal"]);
 		$setcrm_frequency_value_lessthan=trim(@$_POST["setcrm_frequency_value_lessthan"]);
@@ -74,13 +74,13 @@ class C_crm_setup extends Controller {
 		$setcrm_spending_value_lessthan=trim(@$_POST["setcrm_spending_value_lessthan"]);
 		
 		$setcrm_highmargin_treatment=trim(@$_POST["setcrm_highmargin_treatment"]);
-		$setcrm_highmargin_month=trim(@$_POST["setcrm_highmargin_month"]);
+		$setcrm_highmargin_days=trim(@$_POST["setcrm_highmargin_days"]);
 		$setcrm_highmargin_value_morethan=trim(@$_POST["setcrm_highmargin_value_morethan"]);
 		$setcrm_highmargin_value_equal=trim(@$_POST["setcrm_highmargin_value_equal"]);
 		$setcrm_highmargin_value_lessthan=trim(@$_POST["setcrm_highmargin_value_lessthan"]);
 		
 		$setcrm_referal_person=trim(@$_POST["setcrm_referal_person"]);
-		$setcrm_referal_month=trim(@$_POST["setcrm_referal_month"]);
+		$setcrm_referal_days=trim(@$_POST["setcrm_referal_days"]);
 		$setcrm_referal_morethan=trim(@$_POST["setcrm_referal_morethan"]);
 		$setcrm_referal_equal=trim(@$_POST["setcrm_referal_equal"]);
 		$setcrm_referal_lessthan=trim(@$_POST["setcrm_referal_lessthan"]);
@@ -93,7 +93,7 @@ class C_crm_setup extends Controller {
 		$setcrm_disiplin_normal=trim(@$_POST["setcrm_disiplin_normal"]);
 		$setcrm_disiplin_low=trim(@$_POST["setcrm_disiplin_low"]);
 		
-		$setcrm_treatment_month=trim(@$_POST["setcrm_treatment_month"]);
+		$setcrm_treatment_days=trim(@$_POST["setcrm_treatment_days"]);
 		$setcrm_treatment_nonmedis=trim(@$_POST["setcrm_treatment_nonmedis"]);
 		$setcrm_treatment_medis=trim(@$_POST["setcrm_treatment_medis"]);
 		$setcrm_treatment_morethan=trim(@$_POST["setcrm_treatment_morethan"]);
@@ -103,14 +103,14 @@ class C_crm_setup extends Controller {
 		$setcrm_author=@$_SESSION[SESSION_USERID];
 		$setcrm_date_create=date(LONG_FORMATDATE);
 		
-		$result=$this->m_crm_setup->crm_setup_create($setcrm_frequency_bulan1, $setcrm_frequency_bulan2, $setcrm_frequency_value_morethan, $setcrm_frequency_value_equal, $setcrm_frequency_value_lessthan,
+		$result=$this->m_crm_setup->crm_setup_create($setcrm_frequency_count, $setcrm_frequency_days, $setcrm_frequency_value_morethan, $setcrm_frequency_value_equal, $setcrm_frequency_value_lessthan,
 													$setcrm_recency_days, $setcrm_recency_value_morethan, $setcrm_recency_value_lessthan,
 													$setcrm_spending_value_morethan, $setcrm_spending_value_equal, $setcrm_spending_value_lessthan,
-													$setcrm_highmargin_treatment, $setcrm_highmargin_month, $setcrm_highmargin_value_morethan, $setcrm_highmargin_value_equal, $setcrm_highmargin_value_lessthan,
-													$setcrm_referal_person, $setcrm_referal_month, $setcrm_referal_morethan, $setcrm_referal_equal, $setcrm_referal_lessthan,
+													$setcrm_highmargin_treatment, $setcrm_highmargin_days, $setcrm_highmargin_value_morethan, $setcrm_highmargin_value_equal, $setcrm_highmargin_value_lessthan,
+													$setcrm_referal_person, $setcrm_referal_days, $setcrm_referal_morethan, $setcrm_referal_equal, $setcrm_referal_lessthan,
 													$setcrm_kerewelan_high, $setcrm_kerewelan_normal, $setcrm_kerewelan_low,
 													$setcrm_disiplin_high, $setcrm_disiplin_normal, $setcrm_disiplin_low,
-													$setcrm_treatment_month, $setcrm_treatment_nonmedis, $setcrm_treatment_medis, $setcrm_treatment_morethan, $setcrm_treatment_equal, $setcrm_treatment_lessthan,
+													$setcrm_treatment_days, $setcrm_treatment_nonmedis, $setcrm_treatment_medis, $setcrm_treatment_morethan, $setcrm_treatment_equal, $setcrm_treatment_lessthan,
 													$setcrm_author, $setcrm_date_create);
 		echo $result;
 	}
@@ -121,8 +121,8 @@ class C_crm_setup extends Controller {
 		//POST variable here
 		$setcrm_id=trim(@$_POST["setcrm_id"]);
 		
-		$setcrm_frequency_bulan1=trim(@$_POST["setcrm_frequency_bulan1"]);
-		$setcrm_frequency_bulan2=trim(@$_POST["setcrm_frequency_bulan2"]);
+		$setcrm_frequency_count=trim(@$_POST["setcrm_frequency_count"]);
+		$setcrm_frequency_days=trim(@$_POST["setcrm_frequency_days"]);
 		$setcrm_frequency_value_morethan=trim(@$_POST["setcrm_frequency_value_morethan"]);
 		$setcrm_frequency_value_equal=trim(@$_POST["setcrm_frequency_value_equal"]);
 		$setcrm_frequency_value_lessthan=trim(@$_POST["setcrm_frequency_value_lessthan"]);
@@ -137,13 +137,13 @@ class C_crm_setup extends Controller {
 		$setcrm_spending_value_lessthan=trim(@$_POST["setcrm_spending_value_lessthan"]);
 		
 		$setcrm_highmargin_treatment=trim(@$_POST["setcrm_highmargin_treatment"]);
-		$setcrm_highmargin_month=trim(@$_POST["setcrm_highmargin_month"]);
+		$setcrm_highmargin_days=trim(@$_POST["setcrm_highmargin_days"]);
 		$setcrm_highmargin_value_morethan=trim(@$_POST["setcrm_highmargin_value_morethan"]);
 		$setcrm_highmargin_value_equal=trim(@$_POST["setcrm_highmargin_value_equal"]);
 		$setcrm_highmargin_value_lessthan=trim(@$_POST["setcrm_highmargin_value_lessthan"]);
 		
 		$setcrm_referal_person=trim(@$_POST["setcrm_referal_person"]);
-		$setcrm_referal_month=trim(@$_POST["setcrm_referal_month"]);
+		$setcrm_referal_days=trim(@$_POST["setcrm_referal_days"]);
 		$setcrm_referal_morethan=trim(@$_POST["setcrm_referal_morethan"]);
 		$setcrm_referal_equal=trim(@$_POST["setcrm_referal_equal"]);
 		$setcrm_referal_lessthan=trim(@$_POST["setcrm_referal_lessthan"]);
@@ -156,7 +156,7 @@ class C_crm_setup extends Controller {
 		$setcrm_disiplin_normal=trim(@$_POST["setcrm_disiplin_normal"]);
 		$setcrm_disiplin_low=trim(@$_POST["setcrm_disiplin_low"]);
 		
-		$setcrm_treatment_month=trim(@$_POST["setcrm_treatment_month"]);
+		$setcrm_treatment_days=trim(@$_POST["setcrm_treatment_days"]);
 		$setcrm_treatment_nonmedis=trim(@$_POST["setcrm_treatment_nonmedis"]);
 		$setcrm_treatment_medis=trim(@$_POST["setcrm_treatment_medis"]);
 		$setcrm_treatment_morethan=trim(@$_POST["setcrm_treatment_morethan"]);
@@ -166,14 +166,14 @@ class C_crm_setup extends Controller {
 		$setcrm_update=@$_SESSION[SESSION_USERID];
 		$setcrm_date_update=date(LONG_FORMATDATE);
 		$result = $this->m_crm_setup->crm_setup_update($setcrm_id,
-													$setcrm_frequency_bulan1, $setcrm_frequency_bulan2, $setcrm_frequency_value_morethan, $setcrm_frequency_value_equal, $setcrm_frequency_value_lessthan,
+													$setcrm_frequency_count, $setcrm_frequency_days, $setcrm_frequency_value_morethan, $setcrm_frequency_value_equal, $setcrm_frequency_value_lessthan,
 													$setcrm_recency_days, $setcrm_recency_value_morethan, $setcrm_recency_value_lessthan,
 													$setcrm_spending_value_morethan, $setcrm_spending_value_equal, $setcrm_spending_value_lessthan,
-													$setcrm_highmargin_treatment, $setcrm_highmargin_month, $setcrm_highmargin_value_morethan, $setcrm_highmargin_value_equal, $setcrm_highmargin_value_lessthan,
-													$setcrm_referal_person, $setcrm_referal_month, $setcrm_referal_morethan, $setcrm_referal_equal, $setcrm_referal_lessthan,
+													$setcrm_highmargin_treatment, $setcrm_highmargin_days, $setcrm_highmargin_value_morethan, $setcrm_highmargin_value_equal, $setcrm_highmargin_value_lessthan,
+													$setcrm_referal_person, $setcrm_referal_days, $setcrm_referal_morethan, $setcrm_referal_equal, $setcrm_referal_lessthan,
 													$setcrm_kerewelan_high, $setcrm_kerewelan_normal, $setcrm_kerewelan_low,
 													$setcrm_disiplin_high, $setcrm_disiplin_normal, $setcrm_disiplin_low,
-													$setcrm_treatment_month, $setcrm_treatment_nonmedis, $setcrm_treatment_medis, $setcrm_treatment_morethan, $setcrm_treatment_equal, $setcrm_treatment_lessthan,
+													$setcrm_treatment_days, $setcrm_treatment_nonmedis, $setcrm_treatment_medis, $setcrm_treatment_morethan, $setcrm_treatment_equal, $setcrm_treatment_lessthan,
 													$setcrm_update, $setcrm_date_update);
 		echo $result;
 	}
