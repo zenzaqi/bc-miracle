@@ -1,0 +1,4 @@
+[by zaqi.smart@gmail.com]
+- Update fix vu_customer
+  mungkin berhubungan dengan member card
+  file: 2010-10-20_03-00-PM.sql
