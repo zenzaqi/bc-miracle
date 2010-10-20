@@ -1005,6 +1005,7 @@ Ext.onReady(function(){
 		fieldLabel: 'No. Faktur',
 		maxLength: 100,
 		readOnly: true,
+		emptyText: '(Auto)',
 		anchor: '95%'
 	});
 	/* Identify  rpaket_nobuktijual Field */
