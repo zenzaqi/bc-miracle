@@ -1105,56 +1105,66 @@ Ext.onReady(function(){
 		if(history_ambil_paketPanel.selModel.getSelected().get('dapaket_stat_dok')!=='Batal' && history_ambil_paketPanel.selModel.getCount() == 1){
 			Ext.MessageBox.confirm('Batal','Anda yakin mem-Batal-kan pengambilan paket ini?', function(btn){
 				if(btn=='yes'){
-					var selections = history_ambil_paketPanel.selModel.getSelections();
-					var dapaket_id = [];
-					for(i = 0; i< history_ambil_paketPanel.selModel.getCount(); i++){
-						dapaket_id.push(selections[i].json.dapaket_id);
-					}
-					var encoded_array_dapaket_id = Ext.encode(dapaket_id);
-					
-					Ext.Ajax.request({
-						waitMsg: 'Mohon tunggu...',
-						url: 'index.php?c=c_master_ambil_paket&m=get_action', 
-						params: {
-							task: "BATAL",
-							dapaket_id: encoded_array_dapaket_id
-						},
-						success: function(response){
-							var result=eval(response.responseText);
-							switch(result){
-								case 1:  // Success : simply reload
-									Ext.MessageBox.show({
-										title: 'OK',
-										msg: 'Pengambilan Paket telah dibatalkan.',
-										buttons: Ext.MessageBox.OK,
-										animEl: 'save',
-										icon: Ext.MessageBox.OK
-									});
-									ambil_paket_DataStore.reload();
-									detail_ambil_paketStore.load({params: {dapaket_dpaket: dapaket_dpaket_idField.getValue()}});
-									break;
-								default:
-									Ext.MessageBox.show({
-										title: 'Warning',
-										msg: 'Pengambilan Paket tidak bisa dibatalkan.',
-										buttons: Ext.MessageBox.OK,
-										animEl: 'save',
-										icon: Ext.MessageBox.WARNING
-									});
-									break;
-							}
-						},
-						failure: function(response){
-							var result=response.responseText;
-							Ext.MessageBox.show({
-							   title: 'Error',
-							   msg: 'Could not connect to the database. retry later.',
-							   buttons: Ext.MessageBox.OK,
-							   animEl: 'database',
-							   icon: Ext.MessageBox.ERROR
-							});	
+					if(history_ambil_paketPanel.selModel.getSelected().get('keterangan')=='retur'){
+						Ext.MessageBox.show({
+							title: 'WARNING',
+							msg: 'Pengambilan Paket yang telah di-Retur tidak dapat dibatalkan di Kasir Pengambilan Paket.',
+							buttons: Ext.MessageBox.OK,
+							animEl: 'save',
+							icon: Ext.MessageBox.WARNING
+						});
+					}else{
+						var selections = history_ambil_paketPanel.selModel.getSelections();
+						var dapaket_id = [];
+						for(i = 0; i< history_ambil_paketPanel.selModel.getCount(); i++){
+							dapaket_id.push(selections[i].json.dapaket_id);
 						}
-					});
+						var encoded_array_dapaket_id = Ext.encode(dapaket_id);
+						
+						Ext.Ajax.request({
+							waitMsg: 'Mohon tunggu...',
+							url: 'index.php?c=c_master_ambil_paket&m=get_action', 
+							params: {
+								task: "BATAL",
+								dapaket_id: encoded_array_dapaket_id
+							},
+							success: function(response){
+								var result=eval(response.responseText);
+								switch(result){
+									case 1:  // Success : simply reload
+										Ext.MessageBox.show({
+											title: 'OK',
+											msg: 'Pengambilan Paket telah dibatalkan.',
+											buttons: Ext.MessageBox.OK,
+											animEl: 'save',
+											icon: Ext.MessageBox.OK
+										});
+										ambil_paket_DataStore.reload();
+										detail_ambil_paketStore.load({params: {dapaket_dpaket: dapaket_dpaket_idField.getValue()}});
+										break;
+									default:
+										Ext.MessageBox.show({
+											title: 'Warning',
+											msg: 'Pengambilan Paket tidak bisa dibatalkan.',
+											buttons: Ext.MessageBox.OK,
+											animEl: 'save',
+											icon: Ext.MessageBox.WARNING
+										});
+										break;
+								}
+							},
+							failure: function(response){
+								var result=response.responseText;
+								Ext.MessageBox.show({
+								   title: 'Error',
+								   msg: 'Could not connect to the database. retry later.',
+								   buttons: Ext.MessageBox.OK,
+								   animEl: 'database',
+								   icon: Ext.MessageBox.ERROR
+								});	
+							}
+						});
+					}
 				}
 			});
 		}

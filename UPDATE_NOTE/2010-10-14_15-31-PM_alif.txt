@@ -1,0 +1,13 @@
+UPDATE:
+
+1. SINKRONISASI POIN antara db.customer dengan db.master_jual_produk, db.master_jual_paket, db.master_jual_rawat
+
+File Query:
+   >> 2010-10-14_SINK-POIN_JPRODUK_rev.sql
+   >> 2010-10-14_SINK-POIN_JPAKET_rev.sql
+   >> 2010-10-14_SINK-POIN_JRAWAT_rev.sql
+NB: di dalam ketiga file Query di atas sudah dijelaskan Langkah-langkah untuk sinkronisasi POIN, dan JANGAN menjalankan Query lebih dari 1x.
+
+2. Perhitungan POIN sudah diubah ke Rumus yang BENAR, dan Coding dari 3 Kasir: Kasir Produk, Kasir Paket, dan Kasir Perawatan sudah di-update.
+Perhitungan POIN yang benar adalah:
+(( [jumlah_item] * [harga_per_item] * [diskon_per_item] ) / [konversi_per_satu_poin])

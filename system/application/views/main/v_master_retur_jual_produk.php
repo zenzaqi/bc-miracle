@@ -85,6 +85,8 @@ var rproduk_tanggal_akhirSearchField;
 var rproduk_keteranganSearchField;
 var rproduk_stat_dokSearchField;
 
+var rproduk_cetak_kuitansi = 0;
+
 var dt= new Date();
 
 function retur_jproduk_cetak(kwitansi_ref){
@@ -272,7 +274,9 @@ Ext.onReady(function(){
 				}                      
 			});
 		}else if(rproduk_post2db=='UPDATE' && rproduk_stat_dokField.getValue()=='Tertutup'){
-			retur_jproduk_cetak(rproduk_nobuktiField.getValue());
+			if(rproduk_cetak_kuitansi==1){
+				retur_jproduk_cetak(rproduk_nobuktiField.getValue());
+			}
 			master_retur_jual_produk_DataStore.reload();
 			master_retur_jual_produk_createWindow.hide();
 		}else if(rproduk_post2db=='UPDATE' && rproduk_stat_dokField.getValue()=='Batal'){
@@ -369,6 +373,11 @@ Ext.onReady(function(){
 			rproduk_kwitansi_keteranganField.setDisabled(false);
 		}
 		detail_retur_jual_produk_DataStore.load({params: {master_id:0, start:0, limit:pageS}});
+		
+		master_retur_jual_produk_createForm.save_btn.disable();
+		master_retur_jual_produk_createForm.cetak_kuitansi_btn.enable();
+		
+		cbo_drproduk_produkDataStore.load({params: {query: -1}});
 	}
  	/* End of Function */
   
@@ -395,6 +404,13 @@ Ext.onReady(function(){
 			detail_retur_jual_produkListEditorGrid.setDisabled(false);
 			rproduk_keteranganField.setDisabled(false);
 			rproduk_kwitansi_keteranganField.setDisabled(false);
+		}
+		
+		master_retur_jual_produk_createForm.save_btn.enable();
+		if((master_retur_jual_produkListEditorGrid.getSelectionModel().getSelected().get('rproduk_stat_dok')!=='Terbuka')){
+			master_retur_jual_produk_createForm.cetak_kuitansi_btn.disable();
+		}else{
+			master_retur_jual_produk_createForm.cetak_kuitansi_btn.enable();
 		}
 		
 		rproduk_stat_dokField.on("select",function(){
@@ -1057,8 +1073,9 @@ Ext.onReady(function(){
 		mode: 'local',
 		displayField: 'rproduk_stat_dok_display',
 		valueField: 'rproduk_stat_dok_value',
-		anchor: '80%',
+		width: 98,
 		allowBlank: false,
+		editable: false,
 		triggerAction: 'all'	
 	});
 	
@@ -1550,9 +1567,14 @@ Ext.onReady(function(){
 		items: [master_retur_jual_produk_masterGroup,detail_retur_jual_produkListEditorGrid, kwitansi_tercetakGroup]
 		,
 		buttons: [{
-				//text: 'Cetak Kuitansi',
-				text: 'Save and Close',
-				handler: master_retur_jual_produk_create
+				text: 'Cetak Kuitansi',
+				ref: '../cetak_kuitansi_btn',
+				handler: rproduk_save_and_cetak
+			},
+			{
+				text: 'Save',
+				ref: '../save_btn',
+				handler: rproduk_save
 			}
 			,{
 				text: 'Cancel',
@@ -1581,6 +1603,16 @@ Ext.onReady(function(){
 		items: master_retur_jual_produk_createForm
 	});
 	/* End Window */
+	
+	function rproduk_save_and_cetak(){
+		rproduk_cetak_kuitansi = 1;
+		master_retur_jual_produk_create();
+	}
+	
+	function rproduk_save(){
+		rproduk_cetak_kuitansi = 0;
+		master_retur_jual_produk_create();
+	}
 	
 	/* Function for action list search */
 	function master_retur_jual_produk_list_search(){

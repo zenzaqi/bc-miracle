@@ -87,6 +87,15 @@ class C_master_retur_jual_paket extends Controller {
 		echo $result;
 	}
 	
+	function get_dpaket_byjpaket_list(){
+		$jpaket_id = isset($_POST['jpaket_id']) ? $_POST['jpaket_id'] : "";
+		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		$mode=trim(@$_POST["mode"]);
+		$result = $this->m_master_retur_jual_paket->get_dpaket_byjpaket_list($mode,$jpaket_id,$start,$end);
+		echo $result;
+	}
+	
 	function get_retur_rawat_list(){
 		$query = isset($_POST['query']) ? $_POST['query'] : "";
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
@@ -114,15 +123,19 @@ class C_master_retur_jual_paket extends Controller {
 	
 	/* START Detail Retur tokwitansi */
 	//list detail handler action
-	function  detail_retur_paket_tokwitansi_list(){
+	function  drpaket_list(){
 		$query = isset($_POST['query']) ? $_POST['query'] : "";
-		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
-		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
 		$master_id = (integer) (isset($_POST['master_id']) ? $_POST['master_id'] : $_GET['master_id']);
-		$result=$this->m_master_retur_jual_paket->detail_retur_paket_tokwitansi_list($master_id,$query,$start,$end);
+		$result=$this->m_master_retur_jual_paket->drpaket_list($master_id,$query);
 		echo $result;
 	}
 	//end of handler
+	
+	function drpaket_tokwitansi_list(){
+		$rpaket_id = (integer) (isset($_POST['master_id']) ? $_POST['master_id'] : $_GET['master_id']);
+		$result=$this->m_master_retur_jual_paket->drpaket_tokwitansi_list($rpaket_id);
+		echo $result;
+	}
 	
 	//purge all detail
 	function detail_retur_paket_tokwitansi_purge(){
@@ -138,9 +151,49 @@ class C_master_retur_jual_paket extends Controller {
 		$drpaket_rawat=trim(@$_POST["drpaket_rawat"]);
 		$drpaket_jumlah=trim(@$_POST["drpaket_jumlah"]);
 		$drpaket_harga=trim(@$_POST["drpaket_harga"]);*/
-		$drpaket_master=trim(@$_POST["drpaket_master"]);
+		//$drpaket_master=trim(@$_POST["drpaket_master"]);
 		//$result=$this->m_master_retur_jual_paket->detail_retur_paket_tokwitansi_insert($drpaket_id ,$drpaket_master ,$drpaket_rawat ,$drpaket_jumlah ,$drpaket_harga );
-		$result=$this->m_master_retur_jual_paket->detail_retur_paket_tokwitansi_insert($drpaket_master );
+		$drpaket_id = $_POST['drpaket_id']; // Get our array back and translate it :
+		$array_drpaket_id = json_decode(stripslashes($drpaket_id));
+		
+		$drpaket_master = trim(@$_POST["drpaket_master"]);
+		
+		$drpaket_jpaket = trim(@$_POST["drpaket_jpaket"]);
+		
+		$drpaket_cust = trim(@$_POST["drpaket_cust"]);
+		
+		$drpaket_dpaket = $_POST['drpaket_dpaket']; // Get our array back and translate it :
+		$array_drpaket_dpaket = json_decode(stripslashes($drpaket_dpaket));
+		
+		$drpaket_paket = $_POST['drpaket_paket']; // Get our array back and translate it :
+		$array_drpaket_paket = json_decode(stripslashes($drpaket_paket));
+		
+		$drpaket_jumlah_terambil = $_POST['drpaket_jumlah_terambil']; // Get our array back and translate it :
+		$array_drpaket_jumlah_terambil = json_decode(stripslashes($drpaket_jumlah_terambil));
+		
+		$drpaket_harga_satu = $_POST['drpaket_harga_satu']; // Get our array back and translate it :
+		$array_drpaket_harga_satu = json_decode(stripslashes($drpaket_harga_satu));
+		
+		$drpaket_jumlah_diretur = $_POST['drpaket_jumlah_diretur']; // Get our array back and translate it :
+		$array_drpaket_jumlah_diretur = json_decode(stripslashes($drpaket_jumlah_diretur));
+		
+		$drpaket_rupiah_retur = $_POST['drpaket_rupiah_retur']; // Get our array back and translate it :
+		$array_drpaket_rupiah_retur = json_decode(stripslashes($drpaket_rupiah_retur));
+		
+		$drpaket_tanggal = trim(@$_POST["drpaket_tanggal"]);
+		
+		$result=$this->m_master_retur_jual_paket->detail_retur_paket_tokwitansi_insert($array_drpaket_id
+																					   ,$drpaket_master
+																					   ,$drpaket_jpaket
+																					   ,$drpaket_cust
+																					   ,$array_drpaket_dpaket
+																					   ,$array_drpaket_paket
+																					   ,$array_drpaket_jumlah_terambil
+																					   ,$array_drpaket_harga_satu
+																					   ,$array_drpaket_jumlah_diretur
+																					   ,$array_drpaket_rupiah_retur
+																					   ,$drpaket_tanggal);
+		echo $result;
 	}
 	/* END Detail Retur tokwitansi*/
 	
@@ -175,6 +228,9 @@ class C_master_retur_jual_paket extends Controller {
 				break;
 			case "EXCEL":
 				$this->master_retur_jual_paket_export_excel();
+				break;
+			case "BATAL":
+				$this->master_retur_jual_paket_batal();
 				break;
 			default:
 				echo "{failure:true}";
@@ -372,6 +428,12 @@ class C_master_retur_jual_paket extends Controller {
 		to_excel($query,"master_retur_jual_paket"); 
 		echo '1';
 			
+	}
+	
+	function master_retur_jual_paket_batal(){
+		$rpaket_id=trim($_POST["rpaket_id"]);
+		$result=$this->m_master_retur_jual_paket->master_retur_jual_paket_batal($rpaket_id);
+		echo $result;
 	}
 	
 	function print_paper(){
