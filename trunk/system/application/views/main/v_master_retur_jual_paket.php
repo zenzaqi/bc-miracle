@@ -1002,7 +1002,7 @@ Ext.onReady(function(){
 	/* Identify  rpaket_nobukti Field */
 	rpaket_nobuktiField= new Ext.form.TextField({
 		id: 'rpaket_nobuktiField',
-		fieldLabel: 'No Faktur',
+		fieldLabel: 'No. Faktur',
 		maxLength: 100,
 		readOnly: true,
 		anchor: '95%'
@@ -1010,7 +1010,7 @@ Ext.onReady(function(){
 	/* Identify  rpaket_nobuktijual Field */
 	rpaket_nobuktijualField= new Ext.form.ComboBox({
 		id: 'rpaket_nobuktijualField',
-		fieldLabel: 'No Faktur Jual',
+		fieldLabel: 'No. Faktur Jual',
 		store: cbo_retur_paket_DataStore,
 		mode: 'remote',
 		displayField:'retur_paket_display',
@@ -1784,7 +1784,7 @@ Ext.onReady(function(){
 	/* Identify  rpaket_nobukti Search Field */
 	rpaket_nobuktiSearchField= new Ext.form.TextField({
 		id: 'rpaket_nobuktiSearchField',
-		fieldLabel: 'Rpaket Nobukti',
+		fieldLabel: 'No. Faktur',
 		maxLength: 100,
 		anchor: '95%'
 	
@@ -1792,7 +1792,7 @@ Ext.onReady(function(){
 	/* Identify  rpaket_nobuktijual Search Field */
 	rpaket_nobuktijualSearchField= new Ext.form.TextField({
 		id: 'rpaket_nobuktijualSearchField',
-		fieldLabel: 'Rpaket Nobuktijual',
+		fieldLabel: 'No. Faktur Jual',
 		maxLength: 100,
 		anchor: '95%'
 	
@@ -1803,7 +1803,7 @@ Ext.onReady(function(){
 		store: cbo_rpaket_customerDataStore,
 		mode: 'remote',
 		displayField:'cust_nama',
-		valueField: 'cust_nama',
+		valueField: 'cust_id',
         typeAhead: false,
         loadingText: 'Searching...',
         pageSize:10,
@@ -1828,7 +1828,7 @@ Ext.onReady(function(){
 	/* Identify  rpaket_keterangan Search Field */
 	rpaket_keteranganSearchField= new Ext.form.TextField({
 		id: 'rpaket_keteranganSearchField',
-		fieldLabel: 'Rpaket Keterangan',
+		fieldLabel: 'Keterangan',
 		maxLength: 250,
 		anchor: '95%'
 	});
@@ -1863,7 +1863,7 @@ Ext.onReady(function(){
 		mode: 'local',
 		displayField: 'rpaket_stat_dok',
 		valueField: 'value',
-		anchor: '80%',
+		width: 98,
 		triggerAction: 'all'	 
 	
 	});
@@ -1872,9 +1872,10 @@ Ext.onReady(function(){
 	/* Function for retrieve search Form Panel */
 	master_retur_jual_paket_searchForm = new Ext.FormPanel({
 		labelAlign: 'left',
+		labelWidth: 100,
 		bodyStyle:'padding:5px',
 		autoHeight:true,
-		width: 300,        
+		width: 400,        
 		items: [{
 			layout:'column',
 			border:false,
