@@ -121,14 +121,11 @@ $bulan="";
 Ext.onReady(function(){
   	Ext.QuickTips.init();	/* Initiate quick tips icon */
   
-  	var neraca_saldoField=new Ext.form.NumberField({
+  	var neraca_saldoField=new Ext.form.TextField({
 		fieldLabel: 'Saldo Laba Rugi',
-		allowNegatife : false,
-		blankText: '0',
-		allowDecimals: false,
-		width: 150,
-		readOnly: true,
-		maskRe: /([0-9]+)$/
+		readOnly: false,
+		valueRenderer: 'numberToCurrency',
+		itemCls: 'rmoney'
 	});
 	
 	Ext.ux.grid.GroupSummary.Calculations['totalSaldo'] = function(v, record, field){
@@ -143,19 +140,20 @@ Ext.onReady(function(){
 			method: 'POST'
 		}),
 		groupField:'neraca_parent_id',
-		baseParams:{task: "LIST"}, // parameter yang di $_POST ke Controller
+		baseParams:{task: "LIST", start:0, limit: pageS}, // parameter yang di $_POST ke Controller
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
-			id: 'akun_kode'
+			id: 'neraca_akun_kode'
 		},[
-			{name: 'neraca_parent', type: 'string', mapping: 'akun_parent'}, 
-			{name: 'neraca_parent_id', type: 'int', mapping: 'akun_parent_id'}, 
-			{name: 'neraca_akun_kode', type: 'string', mapping: 'akun_kode'}, 
-			{name: 'neraca_akun_id', type: 'int', mapping: 'akun_id'}, 
-			{name: 'neraca_akun_nama', type: 'string', mapping: 'akun_nama'}, 
-			{name: 'neraca_debet', type: 'float', mapping: 'debet'}, 
-			{name: 'neraca_kredit', type: 'float', mapping: 'kredit'}
+			{name: 'neraca_parent', type: 'string', mapping: 'neraca_jenis'}, 
+			{name: 'neraca_parent_id', type: 'int', mapping: 'neraca_jenis_id'}, 
+			{name: 'neraca_akun_kode', type: 'string', mapping: 'neraca_akun_kode'}, 
+			{name: 'neraca_akun_nama', type: 'string', mapping: 'neraca_akun_nama'}, 
+			{name: 'neraca_debet', type: 'float', mapping: 'neraca_debet'}, 
+			{name: 'neraca_kredit', type: 'float', mapping: 'neraca_kredit'},
+			{name: 'neraca_saldo', type: 'float', mapping: 'neraca_saldo'},
+			{name: 'neraca_saldo_periode', type: 'float', mapping: 'neraca_saldo_periode'}
 		]),
 		sortInfo:{field: 'neraca_akun_kode', direction: "ASC"}
 	});
@@ -166,9 +164,9 @@ Ext.onReady(function(){
 	neraca_ColumnModel = new Ext.grid.ColumnModel(
 		[
 		{
-			header: 'Neraca',
+			header: '',
 			dataIndex: 'neraca_parent_id',
-			width: 100,
+			width: 50,
 			sortable: false,
 			readOnly: true,
 			renderer: function(v, params, record){
@@ -178,20 +176,20 @@ Ext.onReady(function(){
 		{
 			header: 'Kode',
 			dataIndex: 'neraca_akun_kode',
-			width: 100,
+			width: 80,
 			sortable: false,
 			readOnly: true
 		}, 
 		{
-			header: 'Akun',
+			header: 'Nama Akun',
 			dataIndex: 'neraca_akun_nama',
 			width: 250,
 			sortable: false,
 			readOnly: true
 		}, 
 		{
-			header: 'Debet',
-			dataIndex: 'neraca_debet',
+			header: 'Bulan ini',
+			dataIndex: 'neraca_saldo_periode',
 			width: 150,
 			align: 'right',
 			renderer: Ext.util.Format.numberRenderer('0,000'),
@@ -200,8 +198,8 @@ Ext.onReady(function(){
 			summaryType: 'sum'
 		}, 
 		{
-			header: 'Kredit',
-			dataIndex: 'neraca_kredit',
+			header: 's/d Bulan ini',
+			dataIndex: 'neraca_saldo',
 			width: 150,
 			sortable: false,
 			renderer: Ext.util.Format.numberRenderer('0,000'),
@@ -367,7 +365,7 @@ Ext.onReady(function(){
 	/* Function for reset search result */
 	function neraca_reset_search(){
 		// reset the store parameters
-		neraca_DataStore.baseParams = { task: 'LIST' };
+		neraca_DataStore.baseParams = { task: 'LIST', start:0, limit:pageS };
 		neraca_searchWindow.close();
 	};
 	/* End of Fuction */
@@ -383,7 +381,8 @@ Ext.onReady(function(){
 		fieldLabel:' ',
 		store:new Ext.data.SimpleStore({
 			fields:['value', 'display'],
-			data:[['01','Januari'],['02','Pebruari'],['03','Maret'],['04','April'],['05','Mei'],['06','Juni'],['07','Juli'],['08','Agustus'],['09','September'],['10','Oktober'],['11','Nopember'],['12','Desember']]
+			data:[['01','Januari'],['02','Pebruari'],['03','Maret'],['04','April'],['05','Mei'],['06','Juni'],
+				['07','Juli'],['08','Agustus'],['09','September'],['10','Oktober'],['11','Nopember'],['12','Desember']]
 		}),
 		mode: 'local',
 		displayField: 'display',
@@ -520,10 +519,10 @@ Ext.onReady(function(){
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
 	neraca_searchWindow = new Ext.Window({
-		title: 'Buku Besar',
+		title: 'Laporan Neraca',
 		closable:true,
 		closeAction: 'hide',
-		autoWidth: true,
+		width: 420, 
 		autoHeight: true,
 		plain:true,
 		layout: 'fit',
@@ -600,7 +599,7 @@ Ext.onReady(function(){
 		  	var result=response.responseText;
 			Ext.MessageBox.show({
 			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
+			   msg: 'Koneksi database gagal.',
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR
@@ -613,13 +612,13 @@ Ext.onReady(function(){
 	/* Function for print Export to Excel Grid */
 	function neraca_export_excel(){
 		var searchquery = "";
-		var win;              
 		var neraca_tglawal_search="";
 		var neraca_tglakhir_search="";
 		var neraca_opsi_search="";
 		var neraca_bulan_search="";
 		var neraca_tahun_search="";
 		var neraca_periode_search="";
+		var neraca_akun_search=null;
 		
 		if(neraca_opsitgl_searchField.getValue()==true){
 			neraca_periode_search='tanggal';
@@ -629,34 +628,31 @@ Ext.onReady(function(){
 			neraca_periode_search='all';
 		}
 		
-		if(neraca_tglawal_searchField.getValue()!==""){order_tglawal_search = neraca_tglawal_searchField.getValue().format('Y-m-d');}
 		if(neraca_tglakhir_searchField.getValue()!==""){order_tglakhir_search = neraca_tglakhir_searchField.getValue().format('Y-m-d');}
 		if(neraca_bulan_searchField.getValue()!==""){order_bulan_search=neraca_bulan_searchField.getValue(); }
 		if(neraca_tahun_searchField.getValue()!==""){order_tahun_search=neraca_tahun_searchField.getValue(); }
-	
+		
 
 		Ext.Ajax.request({   
 		waitMsg: 'Please Wait...',
 		url: 'index.php?c=c_neraca&m=get_action',
 		params: {
 			task: "EXCEL",
-		  	query: searchquery,                    		
-		  	neraca_tglawal	:	neraca_tglawal_search,
-			neraca_tglakhir	:	neraca_tglakhir_search, 
+		  	neraca_periode		:	neraca_periode_search,
+			neraca_tglakhir		:	neraca_tglakhir_search, 
 			neraca_bulan		: 	neraca_bulan_search,
-			neraca_tahun		:	neraca_tahun_search,
-		  	currentlisting: neraca_DataStore.baseParams.task 
-		},
+			neraca_tahun		:	neraca_tahun_search
+		}, 
 		success: function(response){              
 		  	var result=eval(response.responseText);
 		  	switch(result){
 		  	case 1:
-				win = window.location=('./export2excel.php');
+				win = window.open('./print/lap_neraca.xls','neracalist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
 				break;
 		  	default:
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Unable to convert excel the grid!',
+					msg: 'Unable to print the grid!',
 					buttons: Ext.MessageBox.OK,
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING
@@ -668,7 +664,7 @@ Ext.onReady(function(){
 		  	var result=response.responseText;
 			Ext.MessageBox.show({
 			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
+			   msg: 'Koneksi database gagal.',
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR

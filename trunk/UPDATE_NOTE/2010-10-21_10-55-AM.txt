@@ -1,0 +1,11 @@
+[by zaqi.smart@gmail.com]
+- fix update
+  o Buku besar, SQL : 2010-10-21_10-55.sql
+
+- new update
+  o Tutup Buku
+    + u/ Menutup pembukuan akhir tahun
+    + URL : ?c=c_tutup
+  
+  o Laporan Neraca
+    + URL : ?c=c_neraca

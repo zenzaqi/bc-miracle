@@ -44,19 +44,19 @@
 </style>
 <script>
 
-var rpt_postingWindow;
-var rpt_postingForm;
+var rpt_tutupWindow;
+var rpt_tutupForm;
 
-var rpt_posting_tglawalField;
-var rpt_posting_tglakhirField;
-var rpt_posting_rekapField;
-var rpt_posting_detailField;
-var rpt_posting_bulanField;
-var rpt_posting_tahunField;
-var rpt_posting_opsitglField;
-var rpt_posting_opsiblnField;
-var rpt_posting_opsiallField;
-var rpt_posting_groupField;
+var rpt_tutup_tglawalField;
+var rpt_tutup_tglakhirField;
+var rpt_tutup_rekapField;
+var rpt_tutup_detailField;
+var rpt_tutup_bulanField;
+var rpt_tutup_tahunField;
+var rpt_tutup_opsitglField;
+var rpt_tutup_opsiblnField;
+var rpt_tutup_opsiallField;
+var rpt_tutup_groupField;
 
 var firstday=(new Date().format('Y-m'))+'-01';
 var today=new Date().format('Y-m-d');
@@ -113,8 +113,8 @@ Ext.onReady(function(){
 			data:[['No Faktur'],['Tanggal'],['Customer'],['Produk'],['Sales'],['Jenis Diskon']]
 	});
 	
-	var rpt_posting_groupField=new Ext.form.ComboBox({
-		id:'rpt_posting_groupField',
+	var rpt_tutup_groupField=new Ext.form.ComboBox({
+		id:'rpt_tutup_groupField',
 		fieldLabel:'Kelompokkan',
 		store: group_master_Store,
 		mode: 'local',
@@ -127,8 +127,8 @@ Ext.onReady(function(){
 		lazyRender: true
 	});
 	
-	rpt_posting_bulanField=new Ext.form.ComboBox({
-		id:'rpt_posting_bulanField',
+	rpt_tutup_bulanField=new Ext.form.ComboBox({
+		id:'rpt_tutup_bulanField',
 		fieldLabel:' ',
 		store:new Ext.data.SimpleStore({
 			fields:['value', 'display'],
@@ -142,8 +142,8 @@ Ext.onReady(function(){
 		triggerAction: 'all'
 	});
 	
-	rpt_posting_tahunField=new Ext.form.ComboBox({
-		id:'rpt_posting_tahunField',
+	rpt_tutup_tahunField=new Ext.form.ComboBox({
+		id:'rpt_tutup_tahunField',
 		fieldLabel:' ',
 		store:new Ext.data.SimpleStore({
 			fields:['tahun'],
@@ -157,67 +157,67 @@ Ext.onReady(function(){
 		triggerAction: 'all'
 	});
 	
-	rpt_posting_opsitglField=new Ext.form.Radio({
-		id:'rpt_posting_opsitglField',
+	rpt_tutup_opsitglField=new Ext.form.Radio({
+		id:'rpt_tutup_opsitglField',
 		boxLabel:'Tanggal',
 		width:100,
 		name: 'filter_opsi'
 	});
 	
-	rpt_posting_opsiblnField=new Ext.form.Radio({
-		id:'rpt_posting_opsiblnField',
+	rpt_tutup_opsiblnField=new Ext.form.Radio({
+		id:'rpt_tutup_opsiblnField',
 		boxLabel:'Bulan',
 		width:100,
 		name: 'filter_opsi',
 		checked: true
 	});
 	
-	rpt_posting_opsiallField=new Ext.form.Radio({
-		id:'rpt_posting_opsiallField',
+	rpt_tutup_opsiallField=new Ext.form.Radio({
+		id:'rpt_tutup_opsiallField',
 		boxLabel:'Semua',
 		name: 'filter_opsi',
 		checked: true
 	});
 	
-	rpt_posting_tglawalField= new Ext.form.DateField({
-		id: 'rpt_posting_tglawalField',
+	rpt_tutup_tglawalField= new Ext.form.DateField({
+		id: 'rpt_tutup_tglawalField',
 		fieldLabel: ' ',
 		format : 'Y-m-d',
-		name: 'rpt_posting_tglawalField',
+		name: 'rpt_tutup_tglawalField',
         //vtype: 'daterange',
 		allowBlank: true,
 		width: 100,
 		value: firstday
-        //endDateField: 'rpt_posting_tglakhirField'
+        //endDateField: 'rpt_tutup_tglakhirField'
 	});
 	
-	rpt_posting_tglakhirField= new Ext.form.DateField({
-		id: 'rpt_posting_tglakhirField',
+	rpt_tutup_tglakhirField= new Ext.form.DateField({
+		id: 'rpt_tutup_tglakhirField',
 		fieldLabel: 's/d',
 		format : 'Y-m-d',
-		name: 'rpt_posting_tglakhirField',
+		name: 'rpt_tutup_tglakhirField',
         //vtype: 'daterange',
 		allowBlank: true,
 		width: 100,
-        //startDateField: 'rpt_posting_tglawalField',
+        //startDateField: 'rpt_tutup_tglawalField',
 		value: today
 	});
 	
-	rpt_posting_rekapField=new Ext.form.Radio({
-		id: 'rpt_posting_rekapField',
+	rpt_tutup_rekapField=new Ext.form.Radio({
+		id: 'rpt_tutup_rekapField',
 		boxLabel: 'Rekap',
-		name: 'posting_opsi',
+		name: 'tutup_opsi',
 		checked: true
 	});
 	
-	rpt_posting_detailField=new Ext.form.Radio({
-		id: 'rpt_posting_detailField',
+	rpt_tutup_detailField=new Ext.form.Radio({
+		id: 'rpt_tutup_detailField',
 		boxLabel: 'Detail',
-		name: 'posting_opsi'
+		name: 'tutup_opsi'
 	});
 	
-	var rpt_posting_periodeField=new Ext.form.FieldSet({
-		id:'rpt_posting_periodeField',
+	var rpt_tutup_periodeField=new Ext.form.FieldSet({
+		id:'rpt_tutup_periodeField',
 		title : 'Periode',
 		layout: 'form',
 		bodyStyle:'padding: 0px 0px 0',
@@ -227,117 +227,118 @@ Ext.onReady(function(){
 		items:[{
 				layout: 'column',
 				border: false,
-				items:[rpt_posting_opsitglField, {
+				items:[rpt_tutup_opsitglField, {
 					   		layout: 'form',
 							border: false,
 							labelWidth: 15,
 							bodyStyle:'padding:3px',
-							items:[rpt_posting_tglawalField]
+							items:[rpt_tutup_tglawalField]
 					   },{
 					   		layout: 'form',
 							border: false,
 							labelWidth: 15,
 							bodyStyle:'padding:3px',
 							labelSeparator: ' ', 
-							items:[rpt_posting_tglakhirField]
+							items:[rpt_tutup_tglakhirField]
 					   }]
 			},{
 				layout: 'column',
 				border: false,
-				items:[rpt_posting_opsiblnField,{
+				items:[rpt_tutup_opsiblnField,{
 					   		layout: 'form',
 							border: false,
 							labelWidth: 15,
 							bodyStyle:'padding:3px',
-							items:[rpt_posting_bulanField]
+							items:[rpt_tutup_bulanField]
 					   },{
 					   		layout: 'form',
 							border: false,
 							labelWidth: 15,
 							bodyStyle:'padding:3px',
 							labelSeparator: ' ', 
-							items:[rpt_posting_tahunField]
+							items:[rpt_tutup_tahunField]
 					   }]
 			}]
 	});
 	
-	var	rpt_posting_opsiField=new Ext.form.FieldSet({
-		id: 'rpt_posting_opsiField',
+	var	rpt_tutup_opsiField=new Ext.form.FieldSet({
+		id: 'rpt_tutup_opsiField',
 		title: 'Opsi',
 		border: true,
 		anchor: '98%',
-		items: [rpt_posting_rekapField ,rpt_posting_detailField]
+		items: [rpt_tutup_rekapField ,rpt_tutup_detailField]
 	});
 	
-	var	rpt_posting_groupbyField=new Ext.form.FieldSet({
-		id: 'rpt_posting_groupbyField',
+	var	rpt_tutup_groupbyField=new Ext.form.FieldSet({
+		id: 'rpt_tutup_groupbyField',
 		title: 'Group By',
 		border: true,
 		anchor: '98%',
-		items: [rpt_posting_groupField]
+		items: [rpt_tutup_groupField]
 	});
 	
 	function is_valid_form(){
-		if(rpt_posting_opsitglField.getValue()==true){
-			rpt_posting_tglawalField.allowBlank=false;
-			rpt_posting_tglakhirField.allowBlank=false;
-			if(rpt_posting_tglawalField.isValid() && rpt_posting_tglakhirField.isValid())
+		if(rpt_tutup_opsitglField.getValue()==true){
+			rpt_tutup_tglawalField.allowBlank=false;
+			rpt_tutup_tglakhirField.allowBlank=false;
+			if(rpt_tutup_tglawalField.isValid() && rpt_tutup_tglakhirField.isValid())
 				return true;
 			else
 				return false;
 		}else{
-			rpt_posting_tglawalField.allowBlank=true;
-			rpt_posting_tglakhirField.allowBlank=true;
+			rpt_tutup_tglawalField.allowBlank=true;
+			rpt_tutup_tglakhirField.allowBlank=true;
 			return true;
 		}
 	}
 	
 	/* Function for print List Grid */
-	function proses_posting(){
+	function proses_tutup(btn){
 		
-		var posting_tglawal="";
-		var posting_tglakhir="";
-		var posting_opsi="";
-		var posting_bulan="";
-		var posting_tahun="";
-		var posting_periode="";
-		var posting_group="";
+		var tutup_tglawal="";
+		var tutup_tglakhir="";
+		var tutup_opsi="";
+		var tutup_bulan="";
+		var tutup_tahun="";
+		var tutup_periode="";
+		var tutup_group="";
 		
 		var win;               
-		if(is_valid_form()){
-			
-		if(rpt_posting_tglawalField.getValue()!==""){posting_tglawal = rpt_posting_tglawalField.getValue().format('Y-m-d');}
-		if(rpt_posting_tglakhirField.getValue()!==""){posting_tglakhir = rpt_posting_tglakhirField.getValue().format('Y-m-d');}
-		if(rpt_posting_bulanField.getValue()!==""){posting_bulan=rpt_posting_bulanField.getValue(); }
-		if(rpt_posting_tahunField.getValue()!==""){posting_tahun=rpt_posting_tahunField.getValue(); }
-		if(rpt_posting_opsitglField.getValue()==true){
-			posting_periode='tanggal';
-		}else if(rpt_posting_opsiblnField.getValue()==true){
-			posting_periode='bulan';
+		//if(is_valid_form()){
+		if(btn=='yes'){
+	/*	if(rpt_tutup_tglawalField.getValue()!==""){tutup_tglawal = rpt_tutup_tglawalField.getValue().format('Y-m-d');}
+		if(rpt_tutup_tglakhirField.getValue()!==""){tutup_tglakhir = rpt_tutup_tglakhirField.getValue().format('Y-m-d');}
+		if(rpt_tutup_bulanField.getValue()!==""){tutup_bulan=rpt_tutup_bulanField.getValue(); }
+		if(rpt_tutup_tahunField.getValue()!==""){tutup_tahun=rpt_tutup_tahunField.getValue(); }
+		if(rpt_tutup_opsitglField.getValue()==true){
+			tutup_periode='tanggal';
+		}else if(rpt_tutup_opsiblnField.getValue()==true){
+			tutup_periode='bulan';
 		}else{
-			posting_periode='all';
+			tutup_periode='all';
 		}
-		if(rpt_posting_groupField.getValue()!==""){posting_group=rpt_posting_groupField.getValue(); }
+		if(rpt_tutup_groupField.getValue()!==""){tutup_group=rpt_tutup_groupField.getValue(); }
+		*/
+		//if(rpt_tutup_rekapField.getValue()==true){tutup_opsi='rekap';}else{tutup_opsi='detail';}
 		
-		//if(rpt_posting_rekapField.getValue()==true){posting_opsi='rekap';}else{posting_opsi='detail';}
 		
 			Ext.Ajax.request({   
 				waitMsg: 'Please Wait...',
 				url: 'index.php?c=c_tutup&m=tutup_transaksi',
-				params: {
-					tgl_awal	: posting_tglawal,
-					tgl_akhir	: posting_tglakhir,
-					/*opsi		: posting_opsi,*/
-					bulan		: posting_bulan,
-					tahun		: posting_tahun,
-					periode		: posting_periode
+				/*params: {
+					tgl_awal	: tutup_tglawal,
+					tgl_akhir	: tutup_tglakhir,
+					/*opsi		: tutup_opsi,
+					bulan		: tutup_bulan,
+					tahun		: tutup_tahun,
+					periode		: tutup_periode
 					
-				}, 
+				}, */
 				success: function(response){              
 					var result=eval(response.responseText);
 					switch(result){
 					case 1:
-						Ext.MessageBox.alert(' OK','Posting transaksi berhasil !');
+						Ext.MessageBox.alert(' OK','Tutup Buku Tahun berhasil !');
 						break;
 					default:
 						Ext.MessageBox.show({
@@ -361,7 +362,7 @@ Ext.onReady(function(){
 					});		
 				} 	                     
 			});
-		}else{
+		/*}else{
 			Ext.MessageBox.show({
 			   title: 'Warning',
 			   msg: 'Not valid form.',
@@ -369,27 +370,31 @@ Ext.onReady(function(){
 			   animEl: 'database',
 			   icon: Ext.MessageBox.WARNING
 			});	
+		}*/
 		}
 	}
 	/* Enf Function */
 	
-	rpt_postingForm = new Ext.FormPanel({
+	rpt_tutupForm = new Ext.FormPanel({
 		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		x:0,
 		y:0,
 		width: 400, 
 		autoHeight: true,
-		items: [rpt_posting_periodeField],
-		monitorValid:true,
+		items: [{ xtype:'label', html: 'Tutup Buku, <br> Penutupan Buku Akuntansi di akhir periode <br/> Semua transaksi akan diarsip dan disaldo di Master Akun'}],
+		//monitorValid:true,
 		buttons: [{
-				text: 'Posting',
-				formBind: true,
-				handler: proses_posting
+				text: 'Tutup Sekarang',
+				//formBind: true,
+				handler: function(){
+					Ext.MessageBox.confirm('Konfirmasi','Apakah Anda yakin akan melakukan tutup buku S?',proses_tutup);
+					
+				}
 			},{
 				text: 'Close',
 				handler: function(){
-					rpt_postingWindow.hide();
+					rpt_tutupWindow.hide();
 					mainPanel.remove(mainPanel.getActiveTab().getId());
 				}
 		}]
@@ -397,8 +402,8 @@ Ext.onReady(function(){
 	});
 	
 	/* Form Advanced Search */
-	rpt_postingWindow = new Ext.Window({
-		title: 'Posting Transaksi',
+	rpt_tutupWindow = new Ext.Window({
+		title: 'Tutup Buku',
 		closable:false,
 		closeAction: 'hide',
 		resizable: false,
@@ -409,10 +414,10 @@ Ext.onReady(function(){
 		x: 0,
 		y: 0,
 		modal: true,
-		renderTo: 'elwindow_rpt_posting',
-		items: rpt_postingForm
+		renderTo: 'elwindow_rpt_tutup',
+		items: rpt_tutupForm
 	});
-  	rpt_postingWindow.show();
+  	rpt_tutupWindow.show();
 	
 	
 });
@@ -421,7 +426,7 @@ Ext.onReady(function(){
 <div>
 	<div class="col">
         <div id="fp_info"></div>
-		<div id="elwindow_rpt_posting"></div>
+		<div id="elwindow_rpt_tutup"></div>
     </div>
 </div>
 </body>
