@@ -153,6 +153,8 @@ Ext.onReady(function(){
 			//{name: 'dtrawat_edit', type: 'string', mapping: 'Jumlah_rawat'},
 			{name: 'jum_total', type: 'int', mapping: 'sum(jum_total)'},
 			{name: 'jum_cust_medis', type: 'int', mapping: 'sum(jum_cust_medis)'},
+			{name: 'jum_cust_surgery', type: 'int', mapping: 'sum(jum_cust_surgery)'},
+			{name: 'jum_cust_antiaging', type: 'int', mapping: 'sum(jum_cust_antiaging)'},
 			{name: 'jum_cust_nonmedis', type: 'int', mapping: 'sum(jum_cust_nonmedis)'},
 			{name: 'jum_cust_produk', type: 'int', mapping: 'sum(jum_cust_produk)'}
 		])
@@ -178,6 +180,8 @@ Ext.onReady(function(){
 			{name: 'dtrawat_id', type: 'int', mapping: 'dtrawat_id'},
 			{name: 'jum_total', type: 'int', mapping: 'sum(jum_total)'},
 			{name: 'jum_cust_medis', type: 'int', mapping: 'sum(jum_cust_medis)'},
+			{name: 'jum_cust_surgery', type: 'int', mapping: 'sum(jum_cust_surgery)'},
+			{name: 'jum_cust_antiaging', type: 'int', mapping: 'sum(jum_cust_antiaging)'},
 			{name: 'jum_cust_nonmedis', type: 'int', mapping: 'sum(jum_cust_nonmedis)'},
 			{name: 'jum_cust_produk', type: 'int', mapping: 'sum(jum_cust_produk)'}
 		])
@@ -203,6 +207,8 @@ Ext.onReady(function(){
 			{name: 'dtrawat_id', type: 'int', mapping: 'dtrawat_id'},
 			{name: 'avg_jum_total', type: 'float', mapping: 'sum(jum_total)/count(distinct tgl_tindakan)'},
 			{name: 'avg_jum_cust_medis', type: 'float', mapping: 'sum(jum_cust_medis)/count(distinct tgl_tindakan)'},
+			{name: 'avg_jum_cust_surgery', type: 'float', mapping: 'sum(jum_cust_surgery)/count(distinct tgl_tindakan)'},
+			{name: 'avg_jum_cust_antiaging', type: 'float', mapping: 'sum(jum_cust_antiaging)/count(distinct tgl_tindakan)'},
 			{name: 'avg_jum_cust_nonmedis', type: 'float', mapping: 'sum(jum_cust_nonmedis)/count(distinct tgl_tindakan)'},
 			{name: 'avg_jum_cust_produk', type: 'float', mapping: 'sum(jum_cust_produk)/count(distinct tgl_tindakan)'}
 		])
@@ -226,6 +232,20 @@ Ext.onReady(function(){
 			align : 'Right',
 			header: '<div align="center">' + 'Medis' + '</div>',
 			dataIndex: 'jum_cust_medis',
+			width: 80,	//55,
+			sortable: true
+		},
+		{	
+			align : 'Right',
+			header: '<div align="center">' + 'Surgery' + '</div>',
+			dataIndex: 'jum_cust_surgery',
+			width: 80,	//55,
+			sortable: true
+		},
+		{	
+			align : 'Right',
+			header: '<div align="center">' + 'Anti Aging' + '</div>',
+			dataIndex: 'jum_cust_antiaging',
 			width: 80,	//55,
 			sortable: true
 		},
@@ -276,6 +296,20 @@ Ext.onReady(function(){
 		},
 		{	
 			align : 'Right',
+			header: '<div align="center">' + 'Surgery' + '</div>',
+			dataIndex: 'jum_cust_surgery',
+			width: 80,	//55,
+			sortable: true
+		},
+		{	
+			align : 'Right',
+			header: '<div align="center">' + 'Anti Aging' + '</div>',
+			dataIndex: 'jum_cust_antiaging',
+			width: 80,	//55,
+			sortable: true
+		},
+		{	
+			align : 'Right',
 			header: '<div align="center">' + 'Non Medis' + '</div>',
 			dataIndex: 'jum_cust_nonmedis',
 			width: 80,	//55,
@@ -317,6 +351,20 @@ Ext.onReady(function(){
 			align : 'Right',
 			header: '<div align="center">' + 'Medis' + '</div>',
 			dataIndex: 'avg_jum_cust_medis',
+			width: 80,	//55,
+			sortable: true
+		},
+		{	
+			align : 'Right',
+			header: '<div align="center">' + 'Surgery' + '</div>',
+			dataIndex: 'avg_jum_cust_surgery',
+			width: 80,	//55,
+			sortable: true
+		},
+		{	
+			align : 'Right',
+			header: '<div align="center">' + 'Anti Aging' + '</div>',
+			dataIndex: 'avg_jum_cust_antiaging',
 			width: 80,	//55,
 			sortable: true
 		},

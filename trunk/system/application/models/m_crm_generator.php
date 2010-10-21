@@ -77,50 +77,88 @@ class M_crm_generator extends Model{
 		function crm_generator_create($query, $crmvalue_id, $crmvalue_cust, $crmvalue_date, $crmvalue_frequency, $crmvalue_recency, $crmvalue_spending, $crmvalue_highmargin, $crmvalue_referal, $crmvalue_kerewelan, $crmvalue_disiplin, $crmvalue_treatment, $crmvalue_author){
 			$datetime_now=date('Y-m-d H:i:s');
 			
-			//untuk menghitung Recency
-			$sql_parameter_recency = 
-			   "select max(setcrm_id) as setcrm_id, setcrm_recency_days, setcrm_recency_value_morethan, setcrm_recency_value_lessthan 
-				from crm_setup";
-			$query_parameter_recency		= $this->db->query($sql_parameter_recency);
-			$data_parameter_recency 		= $query_parameter_recency->row();
-			$day_recency 					= $data_parameter_recency->setcrm_recency_days;
-			$setcrm_recency_value_lessthan 	= $data_parameter_recency->setcrm_recency_value_lessthan;
-			$setcrm_recency_value_morethan 	= $data_parameter_recency->setcrm_recency_value_morethan;
+			//untuk mendapatkan parameter di crm_setup
+			$sql_parameter = 
+			   "select max(setcrm_id) as setcrm_id, 
+					c.setcrm_recency_days, c.setcrm_recency_value_morethan, c.setcrm_recency_value_lessthan, 
+					c.setcrm_referal_person, c.setcrm_referal_days, c.setcrm_referal_morethan, c.setcrm_referal_equal, c.setcrm_referal_lessthan
+				from crm_setup c";
+			
+			$query_parameter				= $this->db->query($sql_parameter);
+			$data_parameter 				= $query_parameter->row();
+			
+			$setcrm_recency_days 			= $data_parameter->setcrm_recency_days;
+			$setcrm_recency_value_lessthan 	= $data_parameter->setcrm_recency_value_lessthan;
+			$setcrm_recency_value_morethan 	= $data_parameter->setcrm_recency_value_morethan;
+			
+			$setcrm_referal_person			= $data_parameter->setcrm_referal_person;
+			$setcrm_referal_days			= $data_parameter->setcrm_referal_days;
+			$setcrm_referal_morethan		= $data_parameter->setcrm_referal_morethan;
+			$setcrm_referal_equal			= $data_parameter->setcrm_referal_equal;
+			$setcrm_referal_lessthan		= $data_parameter->setcrm_referal_lessthan;
+			
 	
+			//untuk menghitung Recency
+			
 			$sql_value_recency = 
 			   "select dapaket_id as id
 				from detail_ambil_paket d
-				where date_add(d.dapaket_tgl_ambil, interval '$day_recency' day) > now() and dapaket_cust = '$crmvalue_cust'
+				where date_add(d.dapaket_tgl_ambil, interval '$setcrm_recency_days' day) >= now() and dapaket_cust = '$crmvalue_cust'
 				
 				union
 				
 				select d2.drawat_id as id
 				from detail_jual_rawat d2
 				left join master_jual_rawat m2 on m2.jrawat_id = d2.drawat_master
-				where date_add(m2.jrawat_tanggal, interval '$day_recency' day) > now() and m2.jrawat_cust = '$crmvalue_cust'
+				where date_add(m2.jrawat_tanggal, interval '$setcrm_recency_days' day) >= now() and m2.jrawat_cust = '$crmvalue_cust'
 
 				union
 				
 				select d3.dproduk_id as id
 				from detail_jual_produk d3
 				left join master_jual_produk m3 on m3.jproduk_id = d3.dproduk_master
-				where date_add(m3.jproduk_tanggal, interval '$day_recency' day) > now() and m3.jproduk_cust = '$crmvalue_cust'
+				where date_add(m3.jproduk_tanggal, interval '$setcrm_recency_days' day) >= now() and m3.jproduk_cust = '$crmvalue_cust'
 				";
-			$query = $this->db->query($sql_value_recency);
-			$recency_row = $query->num_rows();
+			$query_recency	= $this->db->query($sql_value_recency);
+			$recency_row 	= $query_recency->num_rows();
 			
 			if($recency_row==0){
-				$recency = $setcrm_recency_value_lessthan;
+				$crmvalue_recency = $setcrm_recency_value_lessthan;
 			}
 			else if($recency_row>=1){
-				$recency = $setcrm_recency_value_morethan;
+				$crmvalue_recency = $setcrm_recency_value_morethan;
 			}
 			
+			
+			//untuk menghitung referal rate
+			
+			$sql_value_referal = 
+			   "select count(c.cust_id) as jum_referal
+			    from customer c
+				where date_add(c.cust_terdaftar, interval $setcrm_referal_days day) >= now() and c.cust_referensi = '$crmvalue_cust'
+				";
+			$query_referal	= $this->db->query($sql_value_referal);
+			$data_referal	= $query_referal->row();
+			$jum_referal	= $data_referal->jum_referal;
+			
+			
+			if ($jum_referal > $setcrm_referal_person) {
+				$crmvalue_referal = $setcrm_referal_morethan;
+			}
+			else if ($jum_referal == $setcrm_referal_person) {
+				$crmvalue_referal = $setcrm_referal_equal;
+			}
+			else if ($jum_referal < $setcrm_referal_person) {
+				$crmvalue_referal = $setcrm_referal_lessthan;
+			}
+			
+				
 			$data=array(
-				"crmvalue_recency" => $recency,
-				"crmvalue_cust"=>$crmvalue_cust,	
-				"crmvalue_date"=>$crmvalue_date,
-				"crmvalue_author"=>$_SESSION[SESSION_USERID]
+				"crmvalue_recency"	=> $crmvalue_recency,
+				"crmvalue_referal"	=> $crmvalue_referal,
+				"crmvalue_cust"		=> $crmvalue_cust,	
+				"crmvalue_date"		=> $crmvalue_date,
+				"crmvalue_author"	=> $_SESSION[SESSION_USERID]
 			);
 			$this->db->insert('crm_value',$data);
 			

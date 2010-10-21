@@ -16,55 +16,213 @@ class M_lap_kunjungan extends Model{
 			$date_now=date('Y-m-d');
 			$query="select date_format(tgl_tindakan, '%Y-%m-%d') as tgl_tindakan,
 sum(jum_cust_medis),
+sum(jum_cust_surgery),
+sum(jum_cust_antiaging),
 sum(jum_cust_nonmedis),
 sum(jum_cust_produk), 
 sum(jum_total)
 from
 (
 	(
+		/* MEDIS */
 		select 
-			count(distinct tindakan.trawat_cust) as jum_cust_medis,
-			0 as jum_cust_nonmedis,
-			0 as jum_cust_produk,
-			0 as jum_total,
-			tindakan_detail.dtrawat_tglapp as tgl_tindakan
-		from tindakan_detail
-		left join tindakan on (tindakan.trawat_id=tindakan_detail.dtrawat_master)
-		left join perawatan on (tindakan_detail.dtrawat_perawatan=perawatan.rawat_id)
-		where perawatan.rawat_kategori = 2 and tindakan_detail.dtrawat_status='selesai' and perawatan.rawat_harga <> 0 and tindakan_detail.dtrawat_tglapp = '$date_now'
+			count(distinct temp_jum_cust_medis) as jum_cust_medis,
+			jum_cust_surgery,
+			jum_cust_antiaging,
+			jum_cust_nonmedis,
+			jum_cust_produk,
+			jum_total,
+			tgl_tindakan
+			from
+			((
+				select 
+					master_jual_rawat.jrawat_cust as temp_jum_cust_medis,
+					0 as jum_cust_surgery,
+					0 as jum_cust_antiaging,
+					0 as jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					0 as jum_total,
+					master_jual_rawat.jrawat_tanggal as tgl_tindakan
+					from detail_jual_rawat
+					left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
+					left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
+					where perawatan.rawat_kategori = 2 and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal = '$date_now'
+			)
+			union
+			(
+				select 
+					detail_ambil_paket.dapaket_cust as temp_jum_cust_medis,
+					0 as jum_cust_surgery,
+					0 as jum_cust_antiaging,
+					0 as jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					0 as jum_total,
+					detail_ambil_paket.dapaket_tgl_ambil as tgl_tindakan
+				from detail_ambil_paket
+				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
+				where perawatan.rawat_kategori = 2 and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil = '$date_now'
+			)) as table_sum_medis
 		group by tgl_tindakan
 	)
+	
+	/* SURGERY */
+	union
+	(
+		select 
+			jum_cust_medis,
+			count(distinct temp_jum_cust_surgery) as jum_cust_surgery,
+			jum_cust_antiaging,
+			jum_cust_nonmedis,
+			jum_cust_produk,
+			jum_total,
+			tgl_tindakan
+			from
+			((
+				select 
+					0 as jum_cust_medis,
+					master_jual_rawat.jrawat_cust as temp_jum_cust_surgery,
+					0 as jum_cust_antiaging,
+					0 as jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					0 as jum_total,
+					master_jual_rawat.jrawat_tanggal as tgl_tindakan
+				from detail_jual_rawat
+				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
+				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
+				where perawatan.rawat_kategori = 4 and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal  = '$date_now'
+
+			)
+			union
+			(
+				select 
+					0 as jum_cust_medis,
+					detail_ambil_paket.dapaket_cust as temp_jum_cust_surgery,
+					0 as jum_cust_antiaging,
+					0 as jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					0 as jum_total,
+					detail_ambil_paket.dapaket_tgl_ambil as tgl_tindakan
+				from detail_ambil_paket
+				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
+				where perawatan.rawat_kategori = 4 and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil = '$date_now'
+			)) as table_sum_surgery
+		group by tgl_tindakan
+
+	)
+
+	/* ANTI AGING */
+	union
+	(
+		select 
+			jum_cust_medis,
+			jum_cust_surgery,
+			count(distinct temp_jum_cust_antiaging) as jum_cust_antiaging,
+			jum_cust_nonmedis,
+			jum_cust_produk,
+			jum_total,
+			tgl_tindakan
+			from
+			((
+				select 
+					0 as jum_cust_medis,
+					0 as jum_cust_surgery,
+					master_jual_rawat.jrawat_cust as temp_jum_cust_antiaging,
+					0 as jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					0 as jum_total,
+					master_jual_rawat.jrawat_tanggal as tgl_tindakan
+				from detail_jual_rawat
+				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
+				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
+				where perawatan.rawat_kategori = 16 and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal  = '$date_now'
+
+			)
+			union
+			(
+				select 
+					0 as jum_cust_medis,
+					0 as jum_cust_surgery,
+					detail_ambil_paket.dapaket_cust as temp_jum_cust_antiaging,
+					0 as jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					0 as jum_total,
+					detail_ambil_paket.dapaket_tgl_ambil as tgl_tindakan
+				from detail_ambil_paket
+				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
+				where perawatan.rawat_kategori = 16 and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil = '$date_now'
+			)) as table_sum_antiaging
+		group by tgl_tindakan
+
+	)
+
+	
+	/*  NON-MEDIS */
+	union
+	(
+		select 
+			jum_cust_medis,
+			jum_cust_surgery,
+			jum_cust_antiaging,
+			count(distinct temp_jum_cust_nonmedis) as jum_cust_nonmedis,
+			jum_cust_produk,
+			jum_total,
+			tgl_tindakan
+			from
+			((
+				select 
+					0 as jum_cust_medis,
+					0 as jum_cust_surgery,
+					0 as jum_cust_antiaging,
+					master_jual_rawat.jrawat_cust as temp_jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					0 as jum_total,
+					master_jual_rawat.jrawat_tanggal as tgl_tindakan
+				from detail_jual_rawat
+				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
+				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
+				where perawatan.rawat_kategori = 3 and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal  = '$date_now'
+
+			)
+			union
+			(
+				select 
+					0 as jum_cust_medis,
+					0 as jum_cust_surgery,
+					0 as jum_cust_antiaging,
+					detail_ambil_paket.dapaket_cust as temp_jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					0 as jum_total,
+					detail_ambil_paket.dapaket_tgl_ambil as tgl_tindakan
+				from detail_ambil_paket
+				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
+				where perawatan.rawat_kategori = 3 and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil = '$date_now'
+			)) as table_sum_nonmedis
+		group by tgl_tindakan
+	)
+
+	/* PRODUK*/
 	union
 	(
 		select 
 			0 as jum_cust_medis,
-			count(distinct tindakan.trawat_cust) as jum_cust_nonmedis,
-			0 as jum_cust_produk,
-			0 as jum_total,
-			tindakan_detail.dtrawat_tglapp as tgl_tindakan
-		from tindakan_detail
-		left join tindakan on (tindakan.trawat_id=tindakan_detail.dtrawat_master)
-		left join perawatan on (tindakan_detail.dtrawat_perawatan=perawatan.rawat_id)
-		where perawatan.rawat_kategori = 3 and tindakan_detail.dtrawat_status='selesai' and perawatan.rawat_harga <> 0 and tindakan_detail.dtrawat_tglapp = '$date_now'
-		group by tgl_tindakan
-	)
-	union
-	(
-		select 
-			0 as jum_cust_medis,
+			0 as jum_cust_surgery,
+			0 as jum_cust_antiaging,
 			0 as jum_cust_nonmedis,
 			count(distinct master_jual_produk.jproduk_cust) as jum_cust_produk,
 			0 as jum_total,
 			master_jual_produk.jproduk_tanggal as tgl_tindakan
 		from master_jual_produk
-		where master_jual_produk.jproduk_stat_dok <> 'Batal' and master_jual_produk.jproduk_tanggal = '$date_now'
+		where master_jual_produk.jproduk_stat_dok <> 'Batal' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal = '$date_now' 
 		group by tgl_tindakan
 	)
+
+	/* TOTAL*/
 	union
 	(
-		
 		select 
 			jum_cust_medis,
+			jum_cust_surgery,
+			jum_cust_antiaging,
 			jum_cust_nonmedis,
 			jum_cust_produk,
 			count(distinct cust) as jum_total,
@@ -73,30 +231,34 @@ from
 			((	
 				select 
 					0 as jum_cust_medis,
+					0 as jum_cust_surgery,
+					0 as jum_cust_antiaging,
 					0 as jum_cust_nonmedis,
 					0 as jum_cust_produk,
-					tindakan.trawat_cust as cust,
-					tindakan_detail.dtrawat_tglapp as tgl_tindakan
-				from tindakan_detail
-				left join tindakan on (tindakan.trawat_id=tindakan_detail.dtrawat_master)
-				left join perawatan on (tindakan_detail.dtrawat_perawatan=perawatan.rawat_id)
-				where tindakan_detail.dtrawat_status = 'selesai'
-				and perawatan.rawat_harga <> 0 and (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3)
+					master_jual_rawat.jrawat_cust as cust,
+					master_jual_rawat.jrawat_tanggal as tgl_tindakan
+				from detail_jual_rawat
+				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
+				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
+				where master_jual_rawat.jrawat_stat_dok <> 'Batal'
+				and master_jual_rawat.jrawat_bayar <> 0 and (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and master_jual_rawat.jrawat_tanggal = '$date_now'
 			)
 			union
 			(
 				select 
 					0 as jum_cust_medis,
+					0 as jum_cust_surgery,
+					0 as jum_cust_antiaging,
 					0 as jum_cust_nonmedis,
 					0 as jum_cust_produk,
 					master_jual_produk.jproduk_cust as cust,
 					master_jual_produk.jproduk_tanggal as tgl_tindakan
 				from master_jual_produk
-				where master_jual_produk.jproduk_stat_dok <> 'Batal'
+				where master_jual_produk.jproduk_stat_dok <> 'Batal' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal = '$date_now'
 			))as table_union2
-		where tgl_tindakan = '$date_now'
 		group by tgl_tindakan
 	)
+
 ) as table_union
 group by tgl_tindakan";
 			
@@ -120,55 +282,213 @@ group by tgl_tindakan";
 			$date_now=date('Y-m-d');
 			$query="select
 sum(jum_cust_medis),
+sum(jum_cust_surgery),
+sum(jum_cust_antiaging),
 sum(jum_cust_nonmedis),
 sum(jum_cust_produk), 
 sum(jum_total)
 from
 (
 	(
+		/* MEDIS */
 		select 
-			count(distinct tindakan.trawat_cust) as jum_cust_medis,
-			0 as jum_cust_nonmedis,
-			0 as jum_cust_produk,
-			0 as jum_total,
-			tindakan_detail.dtrawat_tglapp as tgl_tindakan
-		from tindakan_detail
-		left join tindakan on (tindakan.trawat_id=tindakan_detail.dtrawat_master)
-		left join perawatan on (tindakan_detail.dtrawat_perawatan=perawatan.rawat_id)
-		where perawatan.rawat_kategori = 2 and tindakan_detail.dtrawat_status='selesai' and perawatan.rawat_harga <> 0 and tindakan_detail.dtrawat_tglapp = '$date_now'
+			count(distinct temp_jum_cust_medis) as jum_cust_medis,
+			jum_cust_surgery,
+			jum_cust_antiaging,
+			jum_cust_nonmedis,
+			jum_cust_produk,
+			jum_total,
+			tgl_tindakan
+			from
+			((
+				select 
+					master_jual_rawat.jrawat_cust as temp_jum_cust_medis,
+					0 as jum_cust_surgery,
+					0 as jum_cust_antiaging,
+					0 as jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					0 as jum_total,
+					master_jual_rawat.jrawat_tanggal as tgl_tindakan
+					from detail_jual_rawat
+					left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
+					left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
+					where perawatan.rawat_kategori = 2 and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal = '$date_now'
+			)
+			union
+			(
+				select 
+					detail_ambil_paket.dapaket_cust as temp_jum_cust_medis,
+					0 as jum_cust_surgery,
+					0 as jum_cust_antiaging,
+					0 as jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					0 as jum_total,
+					detail_ambil_paket.dapaket_tgl_ambil as tgl_tindakan
+				from detail_ambil_paket
+				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
+				where perawatan.rawat_kategori = 2 and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil = '$date_now'
+			)) as table_sum_medis
 		group by tgl_tindakan
 	)
+	
+	/* SURGERY */
+	union
+	(
+		select 
+			jum_cust_medis,
+			count(distinct temp_jum_cust_surgery) as jum_cust_surgery,
+			jum_cust_antiaging,
+			jum_cust_nonmedis,
+			jum_cust_produk,
+			jum_total,
+			tgl_tindakan
+			from
+			((
+				select 
+					0 as jum_cust_medis,
+					master_jual_rawat.jrawat_cust as temp_jum_cust_surgery,
+					0 as jum_cust_antiaging,
+					0 as jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					0 as jum_total,
+					master_jual_rawat.jrawat_tanggal as tgl_tindakan
+				from detail_jual_rawat
+				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
+				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
+				where perawatan.rawat_kategori = 4 and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal  = '$date_now'
+
+			)
+			union
+			(
+				select 
+					0 as jum_cust_medis,
+					detail_ambil_paket.dapaket_cust as temp_jum_cust_surgery,
+					0 as jum_cust_antiaging,
+					0 as jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					0 as jum_total,
+					detail_ambil_paket.dapaket_tgl_ambil as tgl_tindakan
+				from detail_ambil_paket
+				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
+				where perawatan.rawat_kategori = 4 and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil = '$date_now'
+			)) as table_sum_surgery
+		group by tgl_tindakan
+
+	)
+
+	/* ANTI AGING */
+	union
+	(
+		select 
+			jum_cust_medis,
+			jum_cust_surgery,
+			count(distinct temp_jum_cust_antiaging) as jum_cust_antiaging,
+			jum_cust_nonmedis,
+			jum_cust_produk,
+			jum_total,
+			tgl_tindakan
+			from
+			((
+				select 
+					0 as jum_cust_medis,
+					0 as jum_cust_surgery,
+					master_jual_rawat.jrawat_cust as temp_jum_cust_antiaging,
+					0 as jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					0 as jum_total,
+					master_jual_rawat.jrawat_tanggal as tgl_tindakan
+				from detail_jual_rawat
+				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
+				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
+				where perawatan.rawat_kategori = 16 and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal  = '$date_now'
+
+			)
+			union
+			(
+				select 
+					0 as jum_cust_medis,
+					0 as jum_cust_surgery,
+					detail_ambil_paket.dapaket_cust as temp_jum_cust_antiaging,
+					0 as jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					0 as jum_total,
+					detail_ambil_paket.dapaket_tgl_ambil as tgl_tindakan
+				from detail_ambil_paket
+				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
+				where perawatan.rawat_kategori = 16 and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil = '$date_now'
+			)) as table_sum_antiaging
+		group by tgl_tindakan
+
+	)
+
+	
+	/*  NON-MEDIS */
+	union
+	(
+		select 
+			jum_cust_medis,
+			jum_cust_surgery,
+			jum_cust_antiaging,
+			count(distinct temp_jum_cust_nonmedis) as jum_cust_nonmedis,
+			jum_cust_produk,
+			jum_total,
+			tgl_tindakan
+			from
+			((
+				select 
+					0 as jum_cust_medis,
+					0 as jum_cust_surgery,
+					0 as jum_cust_antiaging,
+					master_jual_rawat.jrawat_cust as temp_jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					0 as jum_total,
+					master_jual_rawat.jrawat_tanggal as tgl_tindakan
+				from detail_jual_rawat
+				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
+				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
+				where perawatan.rawat_kategori = 3 and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal  = '$date_now'
+
+			)
+			union
+			(
+				select 
+					0 as jum_cust_medis,
+					0 as jum_cust_surgery,
+					0 as jum_cust_antiaging,
+					detail_ambil_paket.dapaket_cust as temp_jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					0 as jum_total,
+					detail_ambil_paket.dapaket_tgl_ambil as tgl_tindakan
+				from detail_ambil_paket
+				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
+				where perawatan.rawat_kategori = 3 and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil = '$date_now'
+			)) as table_sum_nonmedis
+		group by tgl_tindakan
+	)
+
+	/* PRODUK*/
 	union
 	(
 		select 
 			0 as jum_cust_medis,
-			count(distinct tindakan.trawat_cust) as jum_cust_nonmedis,
-			0 as jum_cust_produk,
-			0 as jum_total,
-			tindakan_detail.dtrawat_tglapp as tgl_tindakan
-		from tindakan_detail
-		left join tindakan on (tindakan.trawat_id=tindakan_detail.dtrawat_master)
-		left join perawatan on (tindakan_detail.dtrawat_perawatan=perawatan.rawat_id)
-		where perawatan.rawat_kategori = 3 and tindakan_detail.dtrawat_status='selesai' and perawatan.rawat_harga <> 0 and tindakan_detail.dtrawat_tglapp = '$date_now'
-		group by tgl_tindakan
-	)
-	union
-	(
-		select 
-			0 as jum_cust_medis,
+			0 as jum_cust_surgery,
+			0 as jum_cust_antiaging,
 			0 as jum_cust_nonmedis,
 			count(distinct master_jual_produk.jproduk_cust) as jum_cust_produk,
 			0 as jum_total,
 			master_jual_produk.jproduk_tanggal as tgl_tindakan
 		from master_jual_produk
-		where master_jual_produk.jproduk_stat_dok <> 'Batal' and master_jual_produk.jproduk_tanggal = '$date_now'
+		where master_jual_produk.jproduk_stat_dok <> 'Batal' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal = '$date_now'
 		group by tgl_tindakan
 	)
+
+	/* TOTAL*/
 	union
 	(
-		
 		select 
 			jum_cust_medis,
+			jum_cust_surgery,
+			jum_cust_antiaging,
 			jum_cust_nonmedis,
 			jum_cust_produk,
 			count(distinct cust) as jum_total,
@@ -177,30 +497,34 @@ from
 			((	
 				select 
 					0 as jum_cust_medis,
+					0 as jum_cust_surgery,
+					0 as jum_cust_antiaging,
 					0 as jum_cust_nonmedis,
 					0 as jum_cust_produk,
-					tindakan.trawat_cust as cust,
-					tindakan_detail.dtrawat_tglapp as tgl_tindakan
-				from tindakan_detail
-				left join tindakan on (tindakan.trawat_id=tindakan_detail.dtrawat_master)
-				left join perawatan on (tindakan_detail.dtrawat_perawatan=perawatan.rawat_id)
-				where tindakan_detail.dtrawat_status = 'selesai'
-				and perawatan.rawat_harga <> 0 and (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3)
+					master_jual_rawat.jrawat_cust as cust,
+					master_jual_rawat.jrawat_tanggal as tgl_tindakan
+				from detail_jual_rawat
+				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
+				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
+				where master_jual_rawat.jrawat_stat_dok <> 'Batal'
+				and master_jual_rawat.jrawat_bayar <> 0 and (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and master_jual_rawat.jrawat_tanggal = '$date_now'
 			)
 			union
 			(
 				select 
 					0 as jum_cust_medis,
+					0 as jum_cust_surgery,
+					0 as jum_cust_antiaging,
 					0 as jum_cust_nonmedis,
 					0 as jum_cust_produk,
 					master_jual_produk.jproduk_cust as cust,
 					master_jual_produk.jproduk_tanggal as tgl_tindakan
 				from master_jual_produk
-				where master_jual_produk.jproduk_stat_dok <> 'Batal'
+				where master_jual_produk.jproduk_stat_dok <> 'Batal' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal = '$date_now'
 			))as table_union2
-		where tgl_tindakan = '$date_now'
 		group by tgl_tindakan
 	)
+
 ) as table_union";
 			
 			$result = $this->db->query($query);
@@ -221,57 +545,216 @@ from
 		
 	function lap_average_list($filter,$start,$end){
 			$date_now=date('Y-m-d');
-			$query="select
+			$query="
+select
 sum(jum_cust_medis)/count(distinct tgl_tindakan),
+sum(jum_cust_surgery)/count(distinct tgl_tindakan),
+sum(jum_cust_antiaging)/count(distinct tgl_tindakan),
 sum(jum_cust_nonmedis)/count(distinct tgl_tindakan),
-sum(jum_cust_produk)/count(distinct tgl_tindakan), 
+sum(jum_cust_produk)/count(distinct tgl_tindakan),
 sum(jum_total)/count(distinct tgl_tindakan)
 from
 (
 	(
+		/* MEDIS */
 		select 
-			count(distinct tindakan.trawat_cust) as jum_cust_medis,
-			0 as jum_cust_nonmedis,
-			0 as jum_cust_produk,
-			0 as jum_total,
-			tindakan_detail.dtrawat_tglapp as tgl_tindakan
-		from tindakan_detail
-		left join tindakan on (tindakan.trawat_id=tindakan_detail.dtrawat_master)
-		left join perawatan on (tindakan_detail.dtrawat_perawatan=perawatan.rawat_id)
-		where perawatan.rawat_kategori = 2 and tindakan_detail.dtrawat_status='selesai' and perawatan.rawat_harga <> 0 and tindakan_detail.dtrawat_tglapp = '$date_now'
+			count(distinct temp_jum_cust_medis) as jum_cust_medis,
+			jum_cust_surgery,
+			jum_cust_antiaging,
+			jum_cust_nonmedis,
+			jum_cust_produk,
+			jum_total,
+			tgl_tindakan
+			from
+			((
+				select 
+					master_jual_rawat.jrawat_cust as temp_jum_cust_medis,
+					0 as jum_cust_surgery,
+					0 as jum_cust_antiaging,
+					0 as jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					0 as jum_total,
+					master_jual_rawat.jrawat_tanggal as tgl_tindakan
+					from detail_jual_rawat
+					left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
+					left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
+					where perawatan.rawat_kategori = 2 and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal = '$date_now'
+			)
+			union
+			(
+				select 
+					detail_ambil_paket.dapaket_cust as temp_jum_cust_medis,
+					0 as jum_cust_surgery,
+					0 as jum_cust_antiaging,
+					0 as jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					0 as jum_total,
+					detail_ambil_paket.dapaket_tgl_ambil as tgl_tindakan
+				from detail_ambil_paket
+				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
+				where perawatan.rawat_kategori = 2 and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil = '$date_now'
+			)) as table_sum_medis
 		group by tgl_tindakan
 	)
+	
+	/* SURGERY */
+	union
+	(
+		select 
+			jum_cust_medis,
+			count(distinct temp_jum_cust_surgery) as jum_cust_surgery,
+			jum_cust_antiaging,
+			jum_cust_nonmedis,
+			jum_cust_produk,
+			jum_total,
+			tgl_tindakan
+			from
+			((
+				select 
+					0 as jum_cust_medis,
+					master_jual_rawat.jrawat_cust as temp_jum_cust_surgery,
+					0 as jum_cust_antiaging,
+					0 as jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					0 as jum_total,
+					master_jual_rawat.jrawat_tanggal as tgl_tindakan
+				from detail_jual_rawat
+				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
+				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
+				where perawatan.rawat_kategori = 4 and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal  = '$date_now'
+
+			)
+			union
+			(
+				select 
+					0 as jum_cust_medis,
+					detail_ambil_paket.dapaket_cust as temp_jum_cust_surgery,
+					0 as jum_cust_antiaging,
+					0 as jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					0 as jum_total,
+					detail_ambil_paket.dapaket_tgl_ambil as tgl_tindakan
+				from detail_ambil_paket
+				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
+				where perawatan.rawat_kategori = 4 and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil = '$date_now'
+			)) as table_sum_surgery
+		group by tgl_tindakan
+
+	)
+
+	/* ANTI AGING */
+	union
+	(
+		select 
+			jum_cust_medis,
+			jum_cust_surgery,
+			count(distinct temp_jum_cust_antiaging) as jum_cust_antiaging,
+			jum_cust_nonmedis,
+			jum_cust_produk,
+			jum_total,
+			tgl_tindakan
+			from
+			((
+				select 
+					0 as jum_cust_medis,
+					0 as jum_cust_surgery,
+					master_jual_rawat.jrawat_cust as temp_jum_cust_antiaging,
+					0 as jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					0 as jum_total,
+					master_jual_rawat.jrawat_tanggal as tgl_tindakan
+				from detail_jual_rawat
+				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
+				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
+				where perawatan.rawat_kategori = 16 and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal  = '$date_now'
+
+			)
+			union
+			(
+				select 
+					0 as jum_cust_medis,
+					0 as jum_cust_surgery,
+					detail_ambil_paket.dapaket_cust as temp_jum_cust_antiaging,
+					0 as jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					0 as jum_total,
+					detail_ambil_paket.dapaket_tgl_ambil as tgl_tindakan
+				from detail_ambil_paket
+				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
+				where perawatan.rawat_kategori = 16 and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil = '$date_now'
+			)) as table_sum_antiaging
+		group by tgl_tindakan
+
+	)
+
+	
+	/*  NON-MEDIS */
+	union
+	(
+		select 
+			jum_cust_medis,
+			jum_cust_surgery,
+			jum_cust_antiaging,
+			count(distinct temp_jum_cust_nonmedis) as jum_cust_nonmedis,
+			jum_cust_produk,
+			jum_total,
+			tgl_tindakan
+			from
+			((
+				select 
+					0 as jum_cust_medis,
+					0 as jum_cust_surgery,
+					0 as jum_cust_antiaging,
+					master_jual_rawat.jrawat_cust as temp_jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					0 as jum_total,
+					master_jual_rawat.jrawat_tanggal as tgl_tindakan
+				from detail_jual_rawat
+				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
+				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
+				where perawatan.rawat_kategori = 3 and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal  = '$date_now'
+
+			)
+			union
+			(
+				select 
+					0 as jum_cust_medis,
+					0 as jum_cust_surgery,
+					0 as jum_cust_antiaging,
+					detail_ambil_paket.dapaket_cust as temp_jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					0 as jum_total,
+					detail_ambil_paket.dapaket_tgl_ambil as tgl_tindakan
+				from detail_ambil_paket
+				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
+				where perawatan.rawat_kategori = 3 and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil = '$date_now'
+			)) as table_sum_nonmedis
+		group by tgl_tindakan
+	)
+
+	/* PRODUK*/
 	union
 	(
 		select 
 			0 as jum_cust_medis,
-			count(distinct tindakan.trawat_cust) as jum_cust_nonmedis,
-			0 as jum_cust_produk,
-			0 as jum_total,
-			tindakan_detail.dtrawat_tglapp as tgl_tindakan
-		from tindakan_detail
-		left join tindakan on (tindakan.trawat_id=tindakan_detail.dtrawat_master)
-		left join perawatan on (tindakan_detail.dtrawat_perawatan=perawatan.rawat_id)
-		where perawatan.rawat_kategori = 3 and tindakan_detail.dtrawat_status='selesai' and perawatan.rawat_harga <> 0 and tindakan_detail.dtrawat_tglapp = '$date_now'
-		group by tgl_tindakan
-	)
-	union
-	(
-		select 
-			0 as jum_cust_medis,
+			0 as jum_cust_surgery,
+			0 as jum_cust_antiaging,
 			0 as jum_cust_nonmedis,
 			count(distinct master_jual_produk.jproduk_cust) as jum_cust_produk,
 			0 as jum_total,
 			master_jual_produk.jproduk_tanggal as tgl_tindakan
 		from master_jual_produk
-		where master_jual_produk.jproduk_stat_dok <> 'Batal' and master_jual_produk.jproduk_tanggal = '$date_now'
+		where master_jual_produk.jproduk_stat_dok <> 'Batal' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal = '$date_now'
 		group by tgl_tindakan
 	)
+
+	/* TOTAL*/
 	union
 	(
-		
 		select 
 			jum_cust_medis,
+			jum_cust_surgery,
+			jum_cust_antiaging,
 			jum_cust_nonmedis,
 			jum_cust_produk,
 			count(distinct cust) as jum_total,
@@ -280,30 +763,34 @@ from
 			((	
 				select 
 					0 as jum_cust_medis,
+					0 as jum_cust_surgery,
+					0 as jum_cust_antiaging,
 					0 as jum_cust_nonmedis,
 					0 as jum_cust_produk,
-					tindakan.trawat_cust as cust,
-					tindakan_detail.dtrawat_tglapp as tgl_tindakan
-				from tindakan_detail
-				left join tindakan on (tindakan.trawat_id=tindakan_detail.dtrawat_master)
-				left join perawatan on (tindakan_detail.dtrawat_perawatan=perawatan.rawat_id)
-				where tindakan_detail.dtrawat_status = 'selesai'
-				and perawatan.rawat_harga <> 0 and (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3)
+					master_jual_rawat.jrawat_cust as cust,
+					master_jual_rawat.jrawat_tanggal as tgl_tindakan
+				from detail_jual_rawat
+				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
+				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
+				where master_jual_rawat.jrawat_stat_dok <> 'Batal'
+				and master_jual_rawat.jrawat_bayar <> 0 and (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and master_jual_rawat.jrawat_tanggal = '$date_now'
 			)
 			union
 			(
 				select 
 					0 as jum_cust_medis,
+					0 as jum_cust_surgery,
+					0 as jum_cust_antiaging,
 					0 as jum_cust_nonmedis,
 					0 as jum_cust_produk,
 					master_jual_produk.jproduk_cust as cust,
 					master_jual_produk.jproduk_tanggal as tgl_tindakan
 				from master_jual_produk
-				where master_jual_produk.jproduk_stat_dok <> 'Batal'
+				where master_jual_produk.jproduk_stat_dok <> 'Batal' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal = '$date_now'
 			))as table_union2
-		where tgl_tindakan = '$date_now'
 		group by tgl_tindakan
 	)
+
 ) as table_union";
 			
 			$result = $this->db->query($query);
@@ -330,55 +817,213 @@ from
 			if($trawat_tglapp_start!='' && $trawat_tglapp_end!=''){
 			$query = "select date_format(tgl_tindakan, '%Y-%m-%d') as tgl_tindakan,
 sum(jum_cust_medis),
+sum(jum_cust_surgery),
+sum(jum_cust_antiaging),
 sum(jum_cust_nonmedis),
 sum(jum_cust_produk), 
 sum(jum_total)
 from
 (
 	(
+		/* MEDIS */
 		select 
-			count(distinct tindakan.trawat_cust) as jum_cust_medis,
-			0 as jum_cust_nonmedis,
-			0 as jum_cust_produk,
-			0 as jum_total,
-			tindakan_detail.dtrawat_tglapp as tgl_tindakan
-		from tindakan_detail
-		left join tindakan on (tindakan.trawat_id=tindakan_detail.dtrawat_master)
-		left join perawatan on (tindakan_detail.dtrawat_perawatan=perawatan.rawat_id)
-		where perawatan.rawat_kategori = 2 and tindakan_detail.dtrawat_status='selesai' and perawatan.rawat_harga <> 0 and tindakan_detail.dtrawat_tglapp between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'
+			count(distinct temp_jum_cust_medis) as jum_cust_medis,
+			jum_cust_surgery,
+			jum_cust_antiaging,
+			jum_cust_nonmedis,
+			jum_cust_produk,
+			jum_total,
+			tgl_tindakan
+			from
+			((
+				select 
+					master_jual_rawat.jrawat_cust as temp_jum_cust_medis,
+					0 as jum_cust_surgery,
+					0 as jum_cust_antiaging,
+					0 as jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					0 as jum_total,
+					master_jual_rawat.jrawat_tanggal as tgl_tindakan
+					from detail_jual_rawat
+					left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
+					left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
+					where perawatan.rawat_kategori = 2 and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'
+			)
+			union
+			(
+				select 
+					detail_ambil_paket.dapaket_cust as temp_jum_cust_medis,
+					0 as jum_cust_surgery,
+					0 as jum_cust_antiaging,
+					0 as jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					0 as jum_total,
+					detail_ambil_paket.dapaket_tgl_ambil as tgl_tindakan
+				from detail_ambil_paket
+				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
+				where perawatan.rawat_kategori = 2 and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'
+			)) as table_sum_medis
 		group by tgl_tindakan
 	)
+	
+	/* SURGERY */
+	union
+	(
+		select 
+			jum_cust_medis,
+			count(distinct temp_jum_cust_surgery) as jum_cust_surgery,
+			jum_cust_antiaging,
+			jum_cust_nonmedis,
+			jum_cust_produk,
+			jum_total,
+			tgl_tindakan
+			from
+			((
+				select 
+					0 as jum_cust_medis,
+					master_jual_rawat.jrawat_cust as temp_jum_cust_surgery,
+					0 as jum_cust_antiaging,
+					0 as jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					0 as jum_total,
+					master_jual_rawat.jrawat_tanggal as tgl_tindakan
+				from detail_jual_rawat
+				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
+				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
+				where perawatan.rawat_kategori = 4 and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'
+
+			)
+			union
+			(
+				select 
+					0 as jum_cust_medis,
+					detail_ambil_paket.dapaket_cust as temp_jum_cust_surgery,
+					0 as jum_cust_antiaging,
+					0 as jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					0 as jum_total,
+					detail_ambil_paket.dapaket_tgl_ambil as tgl_tindakan
+				from detail_ambil_paket
+				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
+				where perawatan.rawat_kategori = 4 and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'
+			)) as table_sum_surgery
+		group by tgl_tindakan
+
+	)
+
+	/* ANTI AGING */
+	union
+	(
+		select 
+			jum_cust_medis,
+			jum_cust_surgery,
+			count(distinct temp_jum_cust_antiaging) as jum_cust_antiaging,
+			jum_cust_nonmedis,
+			jum_cust_produk,
+			jum_total,
+			tgl_tindakan
+			from
+			((
+				select 
+					0 as jum_cust_medis,
+					0 as jum_cust_surgery,
+					master_jual_rawat.jrawat_cust as temp_jum_cust_antiaging,
+					0 as jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					0 as jum_total,
+					master_jual_rawat.jrawat_tanggal as tgl_tindakan
+				from detail_jual_rawat
+				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
+				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
+				where perawatan.rawat_kategori = 16 and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'
+
+			)
+			union
+			(
+				select 
+					0 as jum_cust_medis,
+					0 as jum_cust_surgery,
+					detail_ambil_paket.dapaket_cust as temp_jum_cust_antiaging,
+					0 as jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					0 as jum_total,
+					detail_ambil_paket.dapaket_tgl_ambil as tgl_tindakan
+				from detail_ambil_paket
+				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
+				where perawatan.rawat_kategori = 16 and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'
+			)) as table_sum_antiaging
+		group by tgl_tindakan
+
+	)
+
+	
+	/*  NON-MEDIS */
+	union
+	(
+		select 
+			jum_cust_medis,
+			jum_cust_surgery,
+			jum_cust_antiaging,
+			count(distinct temp_jum_cust_nonmedis) as jum_cust_nonmedis,
+			jum_cust_produk,
+			jum_total,
+			tgl_tindakan
+			from
+			((
+				select 
+					0 as jum_cust_medis,
+					0 as jum_cust_surgery,
+					0 as jum_cust_antiaging,
+					master_jual_rawat.jrawat_cust as temp_jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					0 as jum_total,
+					master_jual_rawat.jrawat_tanggal as tgl_tindakan
+				from detail_jual_rawat
+				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
+				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
+				where perawatan.rawat_kategori = 3 and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'
+
+			)
+			union
+			(
+				select 
+					0 as jum_cust_medis,
+					0 as jum_cust_surgery,
+					0 as jum_cust_antiaging,
+					detail_ambil_paket.dapaket_cust as temp_jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					0 as jum_total,
+					detail_ambil_paket.dapaket_tgl_ambil as tgl_tindakan
+				from detail_ambil_paket
+				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
+				where perawatan.rawat_kategori = 3 and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'
+			)) as table_sum_nonmedis
+		group by tgl_tindakan
+	)
+
+	/* PRODUK*/
 	union
 	(
 		select 
 			0 as jum_cust_medis,
-			count(distinct tindakan.trawat_cust) as jum_cust_nonmedis,
-			0 as jum_cust_produk,
-			0 as jum_total,
-			tindakan_detail.dtrawat_tglapp as tgl_tindakan
-		from tindakan_detail
-		left join tindakan on (tindakan.trawat_id=tindakan_detail.dtrawat_master)
-		left join perawatan on (tindakan_detail.dtrawat_perawatan=perawatan.rawat_id)
-		where perawatan.rawat_kategori = 3 and tindakan_detail.dtrawat_status='selesai' and perawatan.rawat_harga <> 0 and tindakan_detail.dtrawat_tglapp between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'
-		group by tgl_tindakan
-	)
-	union
-	(
-		select 
-			0 as jum_cust_medis,
+			0 as jum_cust_surgery,
+			0 as jum_cust_antiaging,
 			0 as jum_cust_nonmedis,
 			count(distinct master_jual_produk.jproduk_cust) as jum_cust_produk,
 			0 as jum_total,
 			master_jual_produk.jproduk_tanggal as tgl_tindakan
 		from master_jual_produk
-		where master_jual_produk.jproduk_stat_dok <> 'Batal' and master_jual_produk.jproduk_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'
+		where master_jual_produk.jproduk_stat_dok <> 'Batal' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'
 		group by tgl_tindakan
 	)
+
+	/* TOTAL*/
 	union
 	(
-		
 		select 
 			jum_cust_medis,
+			jum_cust_surgery,
+			jum_cust_antiaging,
 			jum_cust_nonmedis,
 			jum_cust_produk,
 			count(distinct cust) as jum_total,
@@ -387,30 +1032,34 @@ from
 			((	
 				select 
 					0 as jum_cust_medis,
+					0 as jum_cust_surgery,
+					0 as jum_cust_antiaging,
 					0 as jum_cust_nonmedis,
 					0 as jum_cust_produk,
-					tindakan.trawat_cust as cust,
-					tindakan_detail.dtrawat_tglapp as tgl_tindakan
-				from tindakan_detail
-				left join tindakan on (tindakan.trawat_id=tindakan_detail.dtrawat_master)
-				left join perawatan on (tindakan_detail.dtrawat_perawatan=perawatan.rawat_id)
-				where tindakan_detail.dtrawat_status = 'selesai'
-				and perawatan.rawat_harga <> 0 and (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3)
+					master_jual_rawat.jrawat_cust as cust,
+					master_jual_rawat.jrawat_tanggal as tgl_tindakan
+				from detail_jual_rawat
+				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
+				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
+				where master_jual_rawat.jrawat_stat_dok <> 'Batal'
+				and master_jual_rawat.jrawat_bayar <> 0 and (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'
 			)
 			union
 			(
 				select 
 					0 as jum_cust_medis,
+					0 as jum_cust_surgery,
+					0 as jum_cust_antiaging,
 					0 as jum_cust_nonmedis,
 					0 as jum_cust_produk,
 					master_jual_produk.jproduk_cust as cust,
 					master_jual_produk.jproduk_tanggal as tgl_tindakan
 				from master_jual_produk
-				where master_jual_produk.jproduk_stat_dok <> 'Batal'
+				where master_jual_produk.jproduk_stat_dok <> 'Batal' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'
 			))as table_union2
-		where tgl_tindakan between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'
 		group by tgl_tindakan
 	)
+
 ) as table_union";
 
 }
@@ -418,55 +1067,213 @@ from
 				
 		$query = "select date_format(tgl_tindakan, '%Y-%m-%d') as tgl_tindakan,
 sum(jum_cust_medis),
+sum(jum_cust_surgery),
+sum(jum_cust_antiaging),
 sum(jum_cust_nonmedis),
 sum(jum_cust_produk), 
 sum(jum_total)
 from
 (
 	(
+		/* MEDIS */
 		select 
-			count(distinct tindakan.trawat_cust) as jum_cust_medis,
-			0 as jum_cust_nonmedis,
-			0 as jum_cust_produk,
-			0 as jum_total,
-			tindakan_detail.dtrawat_tglapp as tgl_tindakan
-		from tindakan_detail
-		left join tindakan on (tindakan.trawat_id=tindakan_detail.dtrawat_master)
-		left join perawatan on (tindakan_detail.dtrawat_perawatan=perawatan.rawat_id)
-		where perawatan.rawat_kategori = 2 and tindakan_detail.dtrawat_status='selesai' and perawatan.rawat_harga <> 0 and tindakan_detail.dtrawat_tglapp = '".$trawat_tglapp_start."'
+			count(distinct temp_jum_cust_medis) as jum_cust_medis,
+			jum_cust_surgery,
+			jum_cust_antiaging,
+			jum_cust_nonmedis,
+			jum_cust_produk,
+			jum_total,
+			tgl_tindakan
+			from
+			((
+				select 
+					master_jual_rawat.jrawat_cust as temp_jum_cust_medis,
+					0 as jum_cust_surgery,
+					0 as jum_cust_antiaging,
+					0 as jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					0 as jum_total,
+					master_jual_rawat.jrawat_tanggal as tgl_tindakan
+					from detail_jual_rawat
+					left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
+					left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
+					where perawatan.rawat_kategori = 2 and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal = '".$trawat_tglapp_start."'
+			)
+			union
+			(
+				select 
+					detail_ambil_paket.dapaket_cust as temp_jum_cust_medis,
+					0 as jum_cust_surgery,
+					0 as jum_cust_antiaging,
+					0 as jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					0 as jum_total,
+					detail_ambil_paket.dapaket_tgl_ambil as tgl_tindakan
+				from detail_ambil_paket
+				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
+				where perawatan.rawat_kategori = 2 and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil = '".$trawat_tglapp_start."'
+			)) as table_sum_medis
 		group by tgl_tindakan
 	)
+	
+	/* SURGERY */
+	union
+	(
+		select 
+			jum_cust_medis,
+			count(distinct temp_jum_cust_surgery) as jum_cust_surgery,
+			jum_cust_antiaging,
+			jum_cust_nonmedis,
+			jum_cust_produk,
+			jum_total,
+			tgl_tindakan
+			from
+			((
+				select 
+					0 as jum_cust_medis,
+					master_jual_rawat.jrawat_cust as temp_jum_cust_surgery,
+					0 as jum_cust_antiaging,
+					0 as jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					0 as jum_total,
+					master_jual_rawat.jrawat_tanggal as tgl_tindakan
+				from detail_jual_rawat
+				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
+				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
+				where perawatan.rawat_kategori = 4 and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal = '".$trawat_tglapp_start."'
+
+			)
+			union
+			(
+				select 
+					0 as jum_cust_medis,
+					detail_ambil_paket.dapaket_cust as temp_jum_cust_surgery,
+					0 as jum_cust_antiaging,
+					0 as jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					0 as jum_total,
+					detail_ambil_paket.dapaket_tgl_ambil as tgl_tindakan
+				from detail_ambil_paket
+				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
+				where perawatan.rawat_kategori = 4 and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil = '".$trawat_tglapp_start."'
+			)) as table_sum_surgery
+		group by tgl_tindakan
+
+	)
+
+	/* ANTI AGING */
+	union
+	(
+		select 
+			jum_cust_medis,
+			jum_cust_surgery,
+			count(distinct temp_jum_cust_antiaging) as jum_cust_antiaging,
+			jum_cust_nonmedis,
+			jum_cust_produk,
+			jum_total,
+			tgl_tindakan
+			from
+			((
+				select 
+					0 as jum_cust_medis,
+					0 as jum_cust_surgery,
+					master_jual_rawat.jrawat_cust as temp_jum_cust_antiaging,
+					0 as jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					0 as jum_total,
+					master_jual_rawat.jrawat_tanggal as tgl_tindakan
+				from detail_jual_rawat
+				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
+				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
+				where perawatan.rawat_kategori = 16 and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal = '".$trawat_tglapp_start."'
+
+			)
+			union
+			(
+				select 
+					0 as jum_cust_medis,
+					0 as jum_cust_surgery,
+					detail_ambil_paket.dapaket_cust as temp_jum_cust_antiaging,
+					0 as jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					0 as jum_total,
+					detail_ambil_paket.dapaket_tgl_ambil as tgl_tindakan
+				from detail_ambil_paket
+				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
+				where perawatan.rawat_kategori = 16 and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil = '".$trawat_tglapp_start."'
+			)) as table_sum_antiaging
+		group by tgl_tindakan
+
+	)
+
+	
+	/*  NON-MEDIS */
+	union
+	(
+		select 
+			jum_cust_medis,
+			jum_cust_surgery,
+			jum_cust_antiaging,
+			count(distinct temp_jum_cust_nonmedis) as jum_cust_nonmedis,
+			jum_cust_produk,
+			jum_total,
+			tgl_tindakan
+			from
+			((
+				select 
+					0 as jum_cust_medis,
+					0 as jum_cust_surgery,
+					0 as jum_cust_antiaging,
+					master_jual_rawat.jrawat_cust as temp_jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					0 as jum_total,
+					master_jual_rawat.jrawat_tanggal as tgl_tindakan
+				from detail_jual_rawat
+				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
+				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
+				where perawatan.rawat_kategori = 3 and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal = '".$trawat_tglapp_start."'
+
+			)
+			union
+			(
+				select 
+					0 as jum_cust_medis,
+					0 as jum_cust_surgery,
+					0 as jum_cust_antiaging,
+					detail_ambil_paket.dapaket_cust as temp_jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					0 as jum_total,
+					detail_ambil_paket.dapaket_tgl_ambil as tgl_tindakan
+				from detail_ambil_paket
+				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
+				where perawatan.rawat_kategori = 3 and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil = '".$trawat_tglapp_start."'
+			)) as table_sum_nonmedis
+		group by tgl_tindakan
+	)
+
+	/* PRODUK*/
 	union
 	(
 		select 
 			0 as jum_cust_medis,
-			count(distinct tindakan.trawat_cust) as jum_cust_nonmedis,
-			0 as jum_cust_produk,
-			0 as jum_total,
-			tindakan_detail.dtrawat_tglapp as tgl_tindakan
-		from tindakan_detail
-		left join tindakan on (tindakan.trawat_id=tindakan_detail.dtrawat_master)
-		left join perawatan on (tindakan_detail.dtrawat_perawatan=perawatan.rawat_id)
-		where perawatan.rawat_kategori = 3 and tindakan_detail.dtrawat_status='selesai' and perawatan.rawat_harga <> 0 and tindakan_detail.dtrawat_tglapp = '".$trawat_tglapp_start."'
-		group by tgl_tindakan
-	)
-	union
-	(
-		select 
-			0 as jum_cust_medis,
+			0 as jum_cust_surgery,
+			0 as jum_cust_antiaging,
 			0 as jum_cust_nonmedis,
 			count(distinct master_jual_produk.jproduk_cust) as jum_cust_produk,
 			0 as jum_total,
 			master_jual_produk.jproduk_tanggal as tgl_tindakan
 		from master_jual_produk
-		where master_jual_produk.jproduk_stat_dok <> 'Batal' and master_jual_produk.jproduk_tanggal = '".$trawat_tglapp_start."'
+		where master_jual_produk.jproduk_stat_dok <> 'Batal' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal = '".$trawat_tglapp_start."'
 		group by tgl_tindakan
 	)
+
+	/* TOTAL*/
 	union
 	(
-		
 		select 
 			jum_cust_medis,
+			jum_cust_surgery,
+			jum_cust_antiaging,
 			jum_cust_nonmedis,
 			jum_cust_produk,
 			count(distinct cust) as jum_total,
@@ -475,28 +1282,31 @@ from
 			((	
 				select 
 					0 as jum_cust_medis,
+					0 as jum_cust_surgery,
+					0 as jum_cust_antiaging,
 					0 as jum_cust_nonmedis,
 					0 as jum_cust_produk,
-					tindakan.trawat_cust as cust,
-					tindakan_detail.dtrawat_tglapp as tgl_tindakan
-				from tindakan_detail
-				left join tindakan on (tindakan.trawat_id=tindakan_detail.dtrawat_master)
-				left join perawatan on (tindakan_detail.dtrawat_perawatan=perawatan.rawat_id)
-				where tindakan_detail.dtrawat_status = 'selesai'
-				and perawatan.rawat_harga <> 0 and (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3)
+					master_jual_rawat.jrawat_cust as cust,
+					master_jual_rawat.jrawat_tanggal as tgl_tindakan
+				from detail_jual_rawat
+				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
+				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
+				where master_jual_rawat.jrawat_stat_dok <> 'Batal'
+				and master_jual_rawat.jrawat_bayar <> 0 and (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and master_jual_rawat.jrawat_tanggal = '".$trawat_tglapp_start."'
 			)
 			union
 			(
 				select 
 					0 as jum_cust_medis,
+					0 as jum_cust_surgery,
+					0 as jum_cust_antiaging,
 					0 as jum_cust_nonmedis,
 					0 as jum_cust_produk,
 					master_jual_produk.jproduk_cust as cust,
 					master_jual_produk.jproduk_tanggal as tgl_tindakan
 				from master_jual_produk
-				where master_jual_produk.jproduk_stat_dok <> 'Batal'
+				where master_jual_produk.jproduk_stat_dok <> 'Batal' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal = '".$trawat_tglapp_start."'
 			))as table_union2
-		where tgl_tindakan = '".$trawat_tglapp_start."'
 		group by tgl_tindakan
 	)
 ) as table_union";
@@ -526,55 +1336,213 @@ from
 	
 			$query = "select
 sum(jum_cust_medis),
+sum(jum_cust_surgery),
+sum(jum_cust_antiaging),
 sum(jum_cust_nonmedis),
 sum(jum_cust_produk), 
 sum(jum_total)
 from
 (
 	(
+		/* MEDIS */
 		select 
-			count(distinct tindakan.trawat_cust) as jum_cust_medis,
-			0 as jum_cust_nonmedis,
-			0 as jum_cust_produk,
-			0 as jum_total,
-			tindakan_detail.dtrawat_tglapp as tgl_tindakan
-		from tindakan_detail
-		left join tindakan on (tindakan.trawat_id=tindakan_detail.dtrawat_master)
-		left join perawatan on (tindakan_detail.dtrawat_perawatan=perawatan.rawat_id)
-		where perawatan.rawat_kategori = 2 and tindakan_detail.dtrawat_status='selesai' and perawatan.rawat_harga <> 0 and tindakan_detail.dtrawat_tglapp between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'
+			count(distinct temp_jum_cust_medis) as jum_cust_medis,
+			jum_cust_surgery,
+			jum_cust_antiaging,
+			jum_cust_nonmedis,
+			jum_cust_produk,
+			jum_total,
+			tgl_tindakan
+			from
+			((
+				select 
+					master_jual_rawat.jrawat_cust as temp_jum_cust_medis,
+					0 as jum_cust_surgery,
+					0 as jum_cust_antiaging,
+					0 as jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					0 as jum_total,
+					master_jual_rawat.jrawat_tanggal as tgl_tindakan
+					from detail_jual_rawat
+					left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
+					left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
+					where perawatan.rawat_kategori = 2 and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'
+			)
+			union
+			(
+				select 
+					detail_ambil_paket.dapaket_cust as temp_jum_cust_medis,
+					0 as jum_cust_surgery,
+					0 as jum_cust_antiaging,
+					0 as jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					0 as jum_total,
+					detail_ambil_paket.dapaket_tgl_ambil as tgl_tindakan
+				from detail_ambil_paket
+				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
+				where perawatan.rawat_kategori = 2 and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'
+			)) as table_sum_medis
 		group by tgl_tindakan
 	)
+	
+	/* SURGERY */
+	union
+	(
+		select 
+			jum_cust_medis,
+			count(distinct temp_jum_cust_surgery) as jum_cust_surgery,
+			jum_cust_antiaging,
+			jum_cust_nonmedis,
+			jum_cust_produk,
+			jum_total,
+			tgl_tindakan
+			from
+			((
+				select 
+					0 as jum_cust_medis,
+					master_jual_rawat.jrawat_cust as temp_jum_cust_surgery,
+					0 as jum_cust_antiaging,
+					0 as jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					0 as jum_total,
+					master_jual_rawat.jrawat_tanggal as tgl_tindakan
+				from detail_jual_rawat
+				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
+				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
+				where perawatan.rawat_kategori = 4 and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'
+
+			)
+			union
+			(
+				select 
+					0 as jum_cust_medis,
+					detail_ambil_paket.dapaket_cust as temp_jum_cust_surgery,
+					0 as jum_cust_antiaging,
+					0 as jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					0 as jum_total,
+					detail_ambil_paket.dapaket_tgl_ambil as tgl_tindakan
+				from detail_ambil_paket
+				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
+				where perawatan.rawat_kategori = 4 and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'
+			)) as table_sum_surgery
+		group by tgl_tindakan
+
+	)
+
+	/* ANTI AGING */
+	union
+	(
+		select 
+			jum_cust_medis,
+			jum_cust_surgery,
+			count(distinct temp_jum_cust_antiaging) as jum_cust_antiaging,
+			jum_cust_nonmedis,
+			jum_cust_produk,
+			jum_total,
+			tgl_tindakan
+			from
+			((
+				select 
+					0 as jum_cust_medis,
+					0 as jum_cust_surgery,
+					master_jual_rawat.jrawat_cust as temp_jum_cust_antiaging,
+					0 as jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					0 as jum_total,
+					master_jual_rawat.jrawat_tanggal as tgl_tindakan
+				from detail_jual_rawat
+				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
+				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
+				where perawatan.rawat_kategori = 16 and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'
+
+			)
+			union
+			(
+				select 
+					0 as jum_cust_medis,
+					0 as jum_cust_surgery,
+					detail_ambil_paket.dapaket_cust as temp_jum_cust_antiaging,
+					0 as jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					0 as jum_total,
+					detail_ambil_paket.dapaket_tgl_ambil as tgl_tindakan
+				from detail_ambil_paket
+				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
+				where perawatan.rawat_kategori = 16 and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'
+			)) as table_sum_antiaging
+		group by tgl_tindakan
+
+	)
+
+	
+	/*  NON-MEDIS */
+	union
+	(
+		select 
+			jum_cust_medis,
+			jum_cust_surgery,
+			jum_cust_antiaging,
+			count(distinct temp_jum_cust_nonmedis) as jum_cust_nonmedis,
+			jum_cust_produk,
+			jum_total,
+			tgl_tindakan
+			from
+			((
+				select 
+					0 as jum_cust_medis,
+					0 as jum_cust_surgery,
+					0 as jum_cust_antiaging,
+					master_jual_rawat.jrawat_cust as temp_jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					0 as jum_total,
+					master_jual_rawat.jrawat_tanggal as tgl_tindakan
+				from detail_jual_rawat
+				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
+				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
+				where perawatan.rawat_kategori = 3 and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'
+
+			)
+			union
+			(
+				select 
+					0 as jum_cust_medis,
+					0 as jum_cust_surgery,
+					0 as jum_cust_antiaging,
+					detail_ambil_paket.dapaket_cust as temp_jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					0 as jum_total,
+					detail_ambil_paket.dapaket_tgl_ambil as tgl_tindakan
+				from detail_ambil_paket
+				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
+				where perawatan.rawat_kategori = 3 and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'
+			)) as table_sum_nonmedis
+		group by tgl_tindakan
+	)
+
+	/* PRODUK*/
 	union
 	(
 		select 
 			0 as jum_cust_medis,
-			count(distinct tindakan.trawat_cust) as jum_cust_nonmedis,
-			0 as jum_cust_produk,
-			0 as jum_total,
-			tindakan_detail.dtrawat_tglapp as tgl_tindakan
-		from tindakan_detail
-		left join tindakan on (tindakan.trawat_id=tindakan_detail.dtrawat_master)
-		left join perawatan on (tindakan_detail.dtrawat_perawatan=perawatan.rawat_id)
-		where perawatan.rawat_kategori = 3 and tindakan_detail.dtrawat_status='selesai' and perawatan.rawat_harga <> 0 and tindakan_detail.dtrawat_tglapp between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'
-		group by tgl_tindakan
-	)
-	union
-	(
-		select 
-			0 as jum_cust_medis,
+			0 as jum_cust_surgery,
+			0 as jum_cust_antiaging,
 			0 as jum_cust_nonmedis,
 			count(distinct master_jual_produk.jproduk_cust) as jum_cust_produk,
 			0 as jum_total,
 			master_jual_produk.jproduk_tanggal as tgl_tindakan
 		from master_jual_produk
-		where master_jual_produk.jproduk_stat_dok <> 'Batal' and master_jual_produk.jproduk_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'
+		where master_jual_produk.jproduk_stat_dok <> 'Batal' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'
 		group by tgl_tindakan
 	)
+
+	/* TOTAL*/
 	union
 	(
-		
 		select 
 			jum_cust_medis,
+			jum_cust_surgery,
+			jum_cust_antiaging,
 			jum_cust_nonmedis,
 			jum_cust_produk,
 			count(distinct cust) as jum_total,
@@ -583,90 +1551,249 @@ from
 			((	
 				select 
 					0 as jum_cust_medis,
+					0 as jum_cust_surgery,
+					0 as jum_cust_antiaging,
 					0 as jum_cust_nonmedis,
 					0 as jum_cust_produk,
-					tindakan.trawat_cust as cust,
-					tindakan_detail.dtrawat_tglapp as tgl_tindakan
-				from tindakan_detail
-				left join tindakan on (tindakan.trawat_id=tindakan_detail.dtrawat_master)
-				left join perawatan on (tindakan_detail.dtrawat_perawatan=perawatan.rawat_id)
-				where tindakan_detail.dtrawat_status = 'selesai'
-				and perawatan.rawat_harga <> 0 and (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3)
+					master_jual_rawat.jrawat_cust as cust,
+					master_jual_rawat.jrawat_tanggal as tgl_tindakan
+				from detail_jual_rawat
+				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
+				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
+				where master_jual_rawat.jrawat_stat_dok <> 'Batal'
+				and master_jual_rawat.jrawat_bayar <> 0 and (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'
 			)
 			union
 			(
 				select 
 					0 as jum_cust_medis,
+					0 as jum_cust_surgery,
+					0 as jum_cust_antiaging,
 					0 as jum_cust_nonmedis,
 					0 as jum_cust_produk,
 					master_jual_produk.jproduk_cust as cust,
 					master_jual_produk.jproduk_tanggal as tgl_tindakan
 				from master_jual_produk
-				where master_jual_produk.jproduk_stat_dok <> 'Batal'
+				where master_jual_produk.jproduk_stat_dok <> 'Batal' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'
 			))as table_union2
-		where tgl_tindakan between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'
 		group by tgl_tindakan
 	)
+
 ) as table_union";
 
 }
-			/*if($trawat_tglapp_start!='' && $trawat_tglapp_end!=''){
-				$query.=eregi("WHERE",$query)?" WHERE ":" WHERE ";
-				$query.= " table_union.tgl_tindakan BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."'";
-			}*/
+	
 			else if($trawat_tglapp_start!='' && $trawat_tglapp_end==''){
 				
 			$query = "select date_format(tgl_tindakan, '%Y-%m-%d') as tgl_tindakan,
 sum(jum_cust_medis),
+sum(jum_cust_surgery),
+sum(jum_cust_antiaging),
 sum(jum_cust_nonmedis),
 sum(jum_cust_produk), 
 sum(jum_total)
 from
 (
 	(
+		/* MEDIS */
 		select 
-			count(distinct tindakan.trawat_cust) as jum_cust_medis,
-			0 as jum_cust_nonmedis,
-			0 as jum_cust_produk,
-			0 as jum_total,
-			tindakan_detail.dtrawat_tglapp as tgl_tindakan
-		from tindakan_detail
-		left join tindakan on (tindakan.trawat_id=tindakan_detail.dtrawat_master)
-		left join perawatan on (tindakan_detail.dtrawat_perawatan=perawatan.rawat_id)
-		where perawatan.rawat_kategori = 2 and tindakan_detail.dtrawat_status='selesai' and perawatan.rawat_harga <> 0 and tindakan_detail.dtrawat_tglapp = '".$trawat_tglapp_start."'
+			count(distinct temp_jum_cust_medis) as jum_cust_medis,
+			jum_cust_surgery,
+			jum_cust_antiaging,
+			jum_cust_nonmedis,
+			jum_cust_produk,
+			jum_total,
+			tgl_tindakan
+			from
+			((
+				select 
+					master_jual_rawat.jrawat_cust as temp_jum_cust_medis,
+					0 as jum_cust_surgery,
+					0 as jum_cust_antiaging,
+					0 as jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					0 as jum_total,
+					master_jual_rawat.jrawat_tanggal as tgl_tindakan
+					from detail_jual_rawat
+					left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
+					left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
+					where perawatan.rawat_kategori = 2 and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal = '".$trawat_tglapp_start."'
+			)
+			union
+			(
+				select 
+					detail_ambil_paket.dapaket_cust as temp_jum_cust_medis,
+					0 as jum_cust_surgery,
+					0 as jum_cust_antiaging,
+					0 as jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					0 as jum_total,
+					detail_ambil_paket.dapaket_tgl_ambil as tgl_tindakan
+				from detail_ambil_paket
+				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
+				where perawatan.rawat_kategori = 2 and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil = '".$trawat_tglapp_start."'
+			)) as table_sum_medis
 		group by tgl_tindakan
 	)
+	
+	/* SURGERY */
+	union
+	(
+		select 
+			jum_cust_medis,
+			count(distinct temp_jum_cust_surgery) as jum_cust_surgery,
+			jum_cust_antiaging,
+			jum_cust_nonmedis,
+			jum_cust_produk,
+			jum_total,
+			tgl_tindakan
+			from
+			((
+				select 
+					0 as jum_cust_medis,
+					master_jual_rawat.jrawat_cust as temp_jum_cust_surgery,
+					0 as jum_cust_antiaging,
+					0 as jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					0 as jum_total,
+					master_jual_rawat.jrawat_tanggal as tgl_tindakan
+				from detail_jual_rawat
+				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
+				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
+				where perawatan.rawat_kategori = 4 and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal = '".$trawat_tglapp_start."'
+
+			)
+			union
+			(
+				select 
+					0 as jum_cust_medis,
+					detail_ambil_paket.dapaket_cust as temp_jum_cust_surgery,
+					0 as jum_cust_antiaging,
+					0 as jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					0 as jum_total,
+					detail_ambil_paket.dapaket_tgl_ambil as tgl_tindakan
+				from detail_ambil_paket
+				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
+				where perawatan.rawat_kategori = 4 and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil = '".$trawat_tglapp_start."'
+			)) as table_sum_surgery
+		group by tgl_tindakan
+
+	)
+
+	/* ANTI AGING */
+	union
+	(
+		select 
+			jum_cust_medis,
+			jum_cust_surgery,
+			count(distinct temp_jum_cust_antiaging) as jum_cust_antiaging,
+			jum_cust_nonmedis,
+			jum_cust_produk,
+			jum_total,
+			tgl_tindakan
+			from
+			((
+				select 
+					0 as jum_cust_medis,
+					0 as jum_cust_surgery,
+					master_jual_rawat.jrawat_cust as temp_jum_cust_antiaging,
+					0 as jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					0 as jum_total,
+					master_jual_rawat.jrawat_tanggal as tgl_tindakan
+				from detail_jual_rawat
+				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
+				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
+				where perawatan.rawat_kategori = 16 and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal = '".$trawat_tglapp_start."'
+
+			)
+			union
+			(
+				select 
+					0 as jum_cust_medis,
+					0 as jum_cust_surgery,
+					detail_ambil_paket.dapaket_cust as temp_jum_cust_antiaging,
+					0 as jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					0 as jum_total,
+					detail_ambil_paket.dapaket_tgl_ambil as tgl_tindakan
+				from detail_ambil_paket
+				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
+				where perawatan.rawat_kategori = 16 and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil = '".$trawat_tglapp_start."'
+			)) as table_sum_antiaging
+		group by tgl_tindakan
+
+	)
+
+	
+	/*  NON-MEDIS */
+	union
+	(
+		select 
+			jum_cust_medis,
+			jum_cust_surgery,
+			jum_cust_antiaging,
+			count(distinct temp_jum_cust_nonmedis) as jum_cust_nonmedis,
+			jum_cust_produk,
+			jum_total,
+			tgl_tindakan
+			from
+			((
+				select 
+					0 as jum_cust_medis,
+					0 as jum_cust_surgery,
+					0 as jum_cust_antiaging,
+					master_jual_rawat.jrawat_cust as temp_jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					0 as jum_total,
+					master_jual_rawat.jrawat_tanggal as tgl_tindakan
+				from detail_jual_rawat
+				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
+				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
+				where perawatan.rawat_kategori = 3 and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal = '".$trawat_tglapp_start."'
+
+			)
+			union
+			(
+				select 
+					0 as jum_cust_medis,
+					0 as jum_cust_surgery,
+					0 as jum_cust_antiaging,
+					detail_ambil_paket.dapaket_cust as temp_jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					0 as jum_total,
+					detail_ambil_paket.dapaket_tgl_ambil as tgl_tindakan
+				from detail_ambil_paket
+				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
+				where perawatan.rawat_kategori = 3 and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil = '".$trawat_tglapp_start."'
+			)) as table_sum_nonmedis
+		group by tgl_tindakan
+	)
+
+	/* PRODUK*/
 	union
 	(
 		select 
 			0 as jum_cust_medis,
-			count(distinct tindakan.trawat_cust) as jum_cust_nonmedis,
-			0 as jum_cust_produk,
-			0 as jum_total,
-			tindakan_detail.dtrawat_tglapp as tgl_tindakan
-		from tindakan_detail
-		left join tindakan on (tindakan.trawat_id=tindakan_detail.dtrawat_master)
-		left join perawatan on (tindakan_detail.dtrawat_perawatan=perawatan.rawat_id)
-		where perawatan.rawat_kategori = 3 and tindakan_detail.dtrawat_status='selesai' and perawatan.rawat_harga <> 0 and tindakan_detail.dtrawat_tglapp = '".$trawat_tglapp_start."'
-		group by tgl_tindakan
-	)
-	union
-	(
-		select 
-			0 as jum_cust_medis,
+			0 as jum_cust_surgery,
+			0 as jum_cust_antiaging,
 			0 as jum_cust_nonmedis,
 			count(distinct master_jual_produk.jproduk_cust) as jum_cust_produk,
 			0 as jum_total,
 			master_jual_produk.jproduk_tanggal as tgl_tindakan
 		from master_jual_produk
-		where master_jual_produk.jproduk_stat_dok <> 'Batal' and master_jual_produk.jproduk_tanggal = '".$trawat_tglapp_start."'
+		where master_jual_produk.jproduk_stat_dok <> 'Batal' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal = '".$trawat_tglapp_start."'
 		group by tgl_tindakan
 	)
+
+	/* TOTAL*/
 	union
 	(
-		
 		select 
 			jum_cust_medis,
+			jum_cust_surgery,
+			jum_cust_antiaging,
 			jum_cust_nonmedis,
 			jum_cust_produk,
 			count(distinct cust) as jum_total,
@@ -675,28 +1802,31 @@ from
 			((	
 				select 
 					0 as jum_cust_medis,
+					0 as jum_cust_surgery,
+					0 as jum_cust_antiaging,
 					0 as jum_cust_nonmedis,
 					0 as jum_cust_produk,
-					tindakan.trawat_cust as cust,
-					tindakan_detail.dtrawat_tglapp as tgl_tindakan
-				from tindakan_detail
-				left join tindakan on (tindakan.trawat_id=tindakan_detail.dtrawat_master)
-				left join perawatan on (tindakan_detail.dtrawat_perawatan=perawatan.rawat_id)
-				where tindakan_detail.dtrawat_status = 'selesai'
-				and perawatan.rawat_harga <> 0 and (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3)
+					master_jual_rawat.jrawat_cust as cust,
+					master_jual_rawat.jrawat_tanggal as tgl_tindakan
+				from detail_jual_rawat
+				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
+				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
+				where master_jual_rawat.jrawat_stat_dok <> 'Batal'
+				and master_jual_rawat.jrawat_bayar <> 0 and (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and master_jual_rawat.jrawat_tanggal = '".$trawat_tglapp_start."'
 			)
 			union
 			(
 				select 
 					0 as jum_cust_medis,
+					0 as jum_cust_surgery,
+					0 as jum_cust_antiaging,
 					0 as jum_cust_nonmedis,
 					0 as jum_cust_produk,
 					master_jual_produk.jproduk_cust as cust,
 					master_jual_produk.jproduk_tanggal as tgl_tindakan
 				from master_jual_produk
-				where master_jual_produk.jproduk_stat_dok <> 'Batal'
+				where master_jual_produk.jproduk_stat_dok <> 'Batal' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal = '".$trawat_tglapp_start."'
 			))as table_union2
-		where tgl_tindakan = '".$trawat_tglapp_start."'
 		group by tgl_tindakan
 	)
 ) as table_union";
@@ -727,55 +1857,213 @@ from
 	
 			$query = "select
 sum(jum_cust_medis)/count(distinct tgl_tindakan),
+sum(jum_cust_surgery)/count(distinct tgl_tindakan),
+sum(jum_cust_antiaging)/count(distinct tgl_tindakan),
 sum(jum_cust_nonmedis)/count(distinct tgl_tindakan),
 sum(jum_cust_produk)/count(distinct tgl_tindakan), 
 sum(jum_total)/count(distinct tgl_tindakan)
 from
 (
 	(
+		/* MEDIS */
 		select 
-			count(distinct tindakan.trawat_cust) as jum_cust_medis,
-			0 as jum_cust_nonmedis,
-			0 as jum_cust_produk,
-			0 as jum_total,
-			tindakan_detail.dtrawat_tglapp as tgl_tindakan
-		from tindakan_detail
-		left join tindakan on (tindakan.trawat_id=tindakan_detail.dtrawat_master)
-		left join perawatan on (tindakan_detail.dtrawat_perawatan=perawatan.rawat_id)
-		where perawatan.rawat_kategori = 2 and tindakan_detail.dtrawat_status='selesai' and perawatan.rawat_harga <> 0 and tindakan_detail.dtrawat_tglapp between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'
+			count(distinct temp_jum_cust_medis) as jum_cust_medis,
+			jum_cust_surgery,
+			jum_cust_antiaging,
+			jum_cust_nonmedis,
+			jum_cust_produk,
+			jum_total,
+			tgl_tindakan
+			from
+			((
+				select 
+					master_jual_rawat.jrawat_cust as temp_jum_cust_medis,
+					0 as jum_cust_surgery,
+					0 as jum_cust_antiaging,
+					0 as jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					0 as jum_total,
+					master_jual_rawat.jrawat_tanggal as tgl_tindakan
+					from detail_jual_rawat
+					left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
+					left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
+					where perawatan.rawat_kategori = 2 and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'
+			)
+			union
+			(
+				select 
+					detail_ambil_paket.dapaket_cust as temp_jum_cust_medis,
+					0 as jum_cust_surgery,
+					0 as jum_cust_antiaging,
+					0 as jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					0 as jum_total,
+					detail_ambil_paket.dapaket_tgl_ambil as tgl_tindakan
+				from detail_ambil_paket
+				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
+				where perawatan.rawat_kategori = 2 and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'
+			)) as table_sum_medis
 		group by tgl_tindakan
 	)
+	
+	/* SURGERY */
+	union
+	(
+		select 
+			jum_cust_medis,
+			count(distinct temp_jum_cust_surgery) as jum_cust_surgery,
+			jum_cust_antiaging,
+			jum_cust_nonmedis,
+			jum_cust_produk,
+			jum_total,
+			tgl_tindakan
+			from
+			((
+				select 
+					0 as jum_cust_medis,
+					master_jual_rawat.jrawat_cust as temp_jum_cust_surgery,
+					0 as jum_cust_antiaging,
+					0 as jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					0 as jum_total,
+					master_jual_rawat.jrawat_tanggal as tgl_tindakan
+				from detail_jual_rawat
+				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
+				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
+				where perawatan.rawat_kategori = 4 and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'
+
+			)
+			union
+			(
+				select 
+					0 as jum_cust_medis,
+					detail_ambil_paket.dapaket_cust as temp_jum_cust_surgery,
+					0 as jum_cust_antiaging,
+					0 as jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					0 as jum_total,
+					detail_ambil_paket.dapaket_tgl_ambil as tgl_tindakan
+				from detail_ambil_paket
+				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
+				where perawatan.rawat_kategori = 4 and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'
+			)) as table_sum_surgery
+		group by tgl_tindakan
+
+	)
+
+	/* ANTI AGING */
+	union
+	(
+		select 
+			jum_cust_medis,
+			jum_cust_surgery,
+			count(distinct temp_jum_cust_antiaging) as jum_cust_antiaging,
+			jum_cust_nonmedis,
+			jum_cust_produk,
+			jum_total,
+			tgl_tindakan
+			from
+			((
+				select 
+					0 as jum_cust_medis,
+					0 as jum_cust_surgery,
+					master_jual_rawat.jrawat_cust as temp_jum_cust_antiaging,
+					0 as jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					0 as jum_total,
+					master_jual_rawat.jrawat_tanggal as tgl_tindakan
+				from detail_jual_rawat
+				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
+				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
+				where perawatan.rawat_kategori = 16 and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'
+
+			)
+			union
+			(
+				select 
+					0 as jum_cust_medis,
+					0 as jum_cust_surgery,
+					detail_ambil_paket.dapaket_cust as temp_jum_cust_antiaging,
+					0 as jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					0 as jum_total,
+					detail_ambil_paket.dapaket_tgl_ambil as tgl_tindakan
+				from detail_ambil_paket
+				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
+				where perawatan.rawat_kategori = 16 and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'
+			)) as table_sum_antiaging
+		group by tgl_tindakan
+
+	)
+
+	
+	/*  NON-MEDIS */
+	union
+	(
+		select 
+			jum_cust_medis,
+			jum_cust_surgery,
+			jum_cust_antiaging,
+			count(distinct temp_jum_cust_nonmedis) as jum_cust_nonmedis,
+			jum_cust_produk,
+			jum_total,
+			tgl_tindakan
+			from
+			((
+				select 
+					0 as jum_cust_medis,
+					0 as jum_cust_surgery,
+					0 as jum_cust_antiaging,
+					master_jual_rawat.jrawat_cust as temp_jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					0 as jum_total,
+					master_jual_rawat.jrawat_tanggal as tgl_tindakan
+				from detail_jual_rawat
+				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
+				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
+				where perawatan.rawat_kategori = 3 and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'
+
+			)
+			union
+			(
+				select 
+					0 as jum_cust_medis,
+					0 as jum_cust_surgery,
+					0 as jum_cust_antiaging,
+					detail_ambil_paket.dapaket_cust as temp_jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					0 as jum_total,
+					detail_ambil_paket.dapaket_tgl_ambil as tgl_tindakan
+				from detail_ambil_paket
+				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
+				where perawatan.rawat_kategori = 3 and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'
+			)) as table_sum_nonmedis
+		group by tgl_tindakan
+	)
+
+	/* PRODUK*/
 	union
 	(
 		select 
 			0 as jum_cust_medis,
-			count(distinct tindakan.trawat_cust) as jum_cust_nonmedis,
-			0 as jum_cust_produk,
-			0 as jum_total,
-			tindakan_detail.dtrawat_tglapp as tgl_tindakan
-		from tindakan_detail
-		left join tindakan on (tindakan.trawat_id=tindakan_detail.dtrawat_master)
-		left join perawatan on (tindakan_detail.dtrawat_perawatan=perawatan.rawat_id)
-		where perawatan.rawat_kategori = 3 and tindakan_detail.dtrawat_status='selesai' and perawatan.rawat_harga <> 0 and tindakan_detail.dtrawat_tglapp between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'
-		group by tgl_tindakan
-	)
-	union
-	(
-		select 
-			0 as jum_cust_medis,
+			0 as jum_cust_surgery,
+			0 as jum_cust_antiaging,
 			0 as jum_cust_nonmedis,
 			count(distinct master_jual_produk.jproduk_cust) as jum_cust_produk,
 			0 as jum_total,
 			master_jual_produk.jproduk_tanggal as tgl_tindakan
 		from master_jual_produk
-		where master_jual_produk.jproduk_stat_dok <> 'Batal' and master_jual_produk.jproduk_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'
+		where master_jual_produk.jproduk_stat_dok <> 'Batal' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'
 		group by tgl_tindakan
 	)
+
+	/* TOTAL*/
 	union
 	(
-		
 		select 
 			jum_cust_medis,
+			jum_cust_surgery,
+			jum_cust_antiaging,
 			jum_cust_nonmedis,
 			jum_cust_produk,
 			count(distinct cust) as jum_total,
@@ -784,90 +2072,249 @@ from
 			((	
 				select 
 					0 as jum_cust_medis,
+					0 as jum_cust_surgery,
+					0 as jum_cust_antiaging,
 					0 as jum_cust_nonmedis,
 					0 as jum_cust_produk,
-					tindakan.trawat_cust as cust,
-					tindakan_detail.dtrawat_tglapp as tgl_tindakan
-				from tindakan_detail
-				left join tindakan on (tindakan.trawat_id=tindakan_detail.dtrawat_master)
-				left join perawatan on (tindakan_detail.dtrawat_perawatan=perawatan.rawat_id)
-				where tindakan_detail.dtrawat_status = 'selesai'
-				and perawatan.rawat_harga <> 0 and (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3)
+					master_jual_rawat.jrawat_cust as cust,
+					master_jual_rawat.jrawat_tanggal as tgl_tindakan
+				from detail_jual_rawat
+				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
+				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
+				where master_jual_rawat.jrawat_stat_dok <> 'Batal'
+				and master_jual_rawat.jrawat_bayar <> 0 and (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'
 			)
 			union
 			(
 				select 
 					0 as jum_cust_medis,
+					0 as jum_cust_surgery,
+					0 as jum_cust_antiaging,
 					0 as jum_cust_nonmedis,
 					0 as jum_cust_produk,
 					master_jual_produk.jproduk_cust as cust,
 					master_jual_produk.jproduk_tanggal as tgl_tindakan
 				from master_jual_produk
-				where master_jual_produk.jproduk_stat_dok <> 'Batal'
+				where master_jual_produk.jproduk_stat_dok <> 'Batal' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'
 			))as table_union2
-		where tgl_tindakan between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'
 		group by tgl_tindakan
 	)
+
 ) as table_union";
 
 }
-			/*if($trawat_tglapp_start!='' && $trawat_tglapp_end!=''){
-				$query.=eregi("WHERE",$query)?" WHERE ":" WHERE ";
-				$query.= " table_union.tgl_tindakan BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."'";
-			}*/
+	
 			else if($trawat_tglapp_start!='' && $trawat_tglapp_end==''){
 				
 			$query = "select date_format(tgl_tindakan, '%Y-%m-%d') as tgl_tindakan,
 sum(jum_cust_medis)/count(distinct tgl_tindakan),
+sum(jum_cust_surgery)/count(distinct tgl_tindakan),
+sum(jum_cust_antiaging)/count(distinct tgl_tindakan),
 sum(jum_cust_nonmedis)/count(distinct tgl_tindakan),
 sum(jum_cust_produk)/count(distinct tgl_tindakan), 
 sum(jum_total)/count(distinct tgl_tindakan)
 from
 (
 	(
+		/* MEDIS */
 		select 
-			count(distinct tindakan.trawat_cust) as jum_cust_medis,
-			0 as jum_cust_nonmedis,
-			0 as jum_cust_produk,
-			0 as jum_total,
-			tindakan_detail.dtrawat_tglapp as tgl_tindakan
-		from tindakan_detail
-		left join tindakan on (tindakan.trawat_id=tindakan_detail.dtrawat_master)
-		left join perawatan on (tindakan_detail.dtrawat_perawatan=perawatan.rawat_id)
-		where perawatan.rawat_kategori = 2 and tindakan_detail.dtrawat_status='selesai' and perawatan.rawat_harga <> 0 and tindakan_detail.dtrawat_tglapp = '".$trawat_tglapp_start."'
+			count(distinct temp_jum_cust_medis) as jum_cust_medis,
+			jum_cust_surgery,
+			jum_cust_antiaging,
+			jum_cust_nonmedis,
+			jum_cust_produk,
+			jum_total,
+			tgl_tindakan
+			from
+			((
+				select 
+					master_jual_rawat.jrawat_cust as temp_jum_cust_medis,
+					0 as jum_cust_surgery,
+					0 as jum_cust_antiaging,
+					0 as jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					0 as jum_total,
+					master_jual_rawat.jrawat_tanggal as tgl_tindakan
+					from detail_jual_rawat
+					left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
+					left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
+					where perawatan.rawat_kategori = 2 and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal = '".$trawat_tglapp_start."'
+			)
+			union
+			(
+				select 
+					detail_ambil_paket.dapaket_cust as temp_jum_cust_medis,
+					0 as jum_cust_surgery,
+					0 as jum_cust_antiaging,
+					0 as jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					0 as jum_total,
+					detail_ambil_paket.dapaket_tgl_ambil as tgl_tindakan
+				from detail_ambil_paket
+				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
+				where perawatan.rawat_kategori = 2 and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil = '".$trawat_tglapp_start."'
+			)) as table_sum_medis
 		group by tgl_tindakan
 	)
+	
+	/* SURGERY */
+	union
+	(
+		select 
+			jum_cust_medis,
+			count(distinct temp_jum_cust_surgery) as jum_cust_surgery,
+			jum_cust_antiaging,
+			jum_cust_nonmedis,
+			jum_cust_produk,
+			jum_total,
+			tgl_tindakan
+			from
+			((
+				select 
+					0 as jum_cust_medis,
+					master_jual_rawat.jrawat_cust as temp_jum_cust_surgery,
+					0 as jum_cust_antiaging,
+					0 as jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					0 as jum_total,
+					master_jual_rawat.jrawat_tanggal as tgl_tindakan
+				from detail_jual_rawat
+				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
+				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
+				where perawatan.rawat_kategori = 4 and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal = '".$trawat_tglapp_start."'
+
+			)
+			union
+			(
+				select 
+					0 as jum_cust_medis,
+					detail_ambil_paket.dapaket_cust as temp_jum_cust_surgery,
+					0 as jum_cust_antiaging,
+					0 as jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					0 as jum_total,
+					detail_ambil_paket.dapaket_tgl_ambil as tgl_tindakan
+				from detail_ambil_paket
+				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
+				where perawatan.rawat_kategori = 4 and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil = '".$trawat_tglapp_start."'
+			)) as table_sum_surgery
+		group by tgl_tindakan
+
+	)
+
+	/* ANTI AGING */
+	union
+	(
+		select 
+			jum_cust_medis,
+			jum_cust_surgery,
+			count(distinct temp_jum_cust_antiaging) as jum_cust_antiaging,
+			jum_cust_nonmedis,
+			jum_cust_produk,
+			jum_total,
+			tgl_tindakan
+			from
+			((
+				select 
+					0 as jum_cust_medis,
+					0 as jum_cust_surgery,
+					master_jual_rawat.jrawat_cust as temp_jum_cust_antiaging,
+					0 as jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					0 as jum_total,
+					master_jual_rawat.jrawat_tanggal as tgl_tindakan
+				from detail_jual_rawat
+				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
+				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
+				where perawatan.rawat_kategori = 16 and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal = '".$trawat_tglapp_start."'
+
+			)
+			union
+			(
+				select 
+					0 as jum_cust_medis,
+					0 as jum_cust_surgery,
+					detail_ambil_paket.dapaket_cust as temp_jum_cust_antiaging,
+					0 as jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					0 as jum_total,
+					detail_ambil_paket.dapaket_tgl_ambil as tgl_tindakan
+				from detail_ambil_paket
+				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
+				where perawatan.rawat_kategori = 16 and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil = '".$trawat_tglapp_start."'
+			)) as table_sum_antiaging
+		group by tgl_tindakan
+
+	)
+
+	
+	/*  NON-MEDIS */
+	union
+	(
+		select 
+			jum_cust_medis,
+			jum_cust_surgery,
+			jum_cust_antiaging,
+			count(distinct temp_jum_cust_nonmedis) as jum_cust_nonmedis,
+			jum_cust_produk,
+			jum_total,
+			tgl_tindakan
+			from
+			((
+				select 
+					0 as jum_cust_medis,
+					0 as jum_cust_surgery,
+					0 as jum_cust_antiaging,
+					master_jual_rawat.jrawat_cust as temp_jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					0 as jum_total,
+					master_jual_rawat.jrawat_tanggal as tgl_tindakan
+				from detail_jual_rawat
+				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
+				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
+				where perawatan.rawat_kategori = 3 and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal = '".$trawat_tglapp_start."'
+
+			)
+			union
+			(
+				select 
+					0 as jum_cust_medis,
+					0 as jum_cust_surgery,
+					0 as jum_cust_antiaging,
+					detail_ambil_paket.dapaket_cust as temp_jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					0 as jum_total,
+					detail_ambil_paket.dapaket_tgl_ambil as tgl_tindakan
+				from detail_ambil_paket
+				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
+				where perawatan.rawat_kategori = 3 and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil = '".$trawat_tglapp_start."'
+			)) as table_sum_nonmedis
+		group by tgl_tindakan
+	)
+
+	/* PRODUK*/
 	union
 	(
 		select 
 			0 as jum_cust_medis,
-			count(distinct tindakan.trawat_cust) as jum_cust_nonmedis,
-			0 as jum_cust_produk,
-			0 as jum_total,
-			tindakan_detail.dtrawat_tglapp as tgl_tindakan
-		from tindakan_detail
-		left join tindakan on (tindakan.trawat_id=tindakan_detail.dtrawat_master)
-		left join perawatan on (tindakan_detail.dtrawat_perawatan=perawatan.rawat_id)
-		where perawatan.rawat_kategori = 3 and tindakan_detail.dtrawat_status='selesai' and perawatan.rawat_harga <> 0 and tindakan_detail.dtrawat_tglapp = '".$trawat_tglapp_start."'
-		group by tgl_tindakan
-	)
-	union
-	(
-		select 
-			0 as jum_cust_medis,
+			0 as jum_cust_surgery,
+			0 as jum_cust_antiaging,
 			0 as jum_cust_nonmedis,
 			count(distinct master_jual_produk.jproduk_cust) as jum_cust_produk,
 			0 as jum_total,
 			master_jual_produk.jproduk_tanggal as tgl_tindakan
 		from master_jual_produk
-		where master_jual_produk.jproduk_stat_dok <> 'Batal' and master_jual_produk.jproduk_tanggal = '".$trawat_tglapp_start."'
+		where master_jual_produk.jproduk_stat_dok <> 'Batal' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal = '".$trawat_tglapp_start."'
 		group by tgl_tindakan
 	)
+
+	/* TOTAL*/
 	union
 	(
-		
 		select 
 			jum_cust_medis,
+			jum_cust_surgery,
+			jum_cust_antiaging,
 			jum_cust_nonmedis,
 			jum_cust_produk,
 			count(distinct cust) as jum_total,
@@ -876,28 +2323,31 @@ from
 			((	
 				select 
 					0 as jum_cust_medis,
+					0 as jum_cust_surgery,
+					0 as jum_cust_antiaging,
 					0 as jum_cust_nonmedis,
 					0 as jum_cust_produk,
-					tindakan.trawat_cust as cust,
-					tindakan_detail.dtrawat_tglapp as tgl_tindakan
-				from tindakan_detail
-				left join tindakan on (tindakan.trawat_id=tindakan_detail.dtrawat_master)
-				left join perawatan on (tindakan_detail.dtrawat_perawatan=perawatan.rawat_id)
-				where tindakan_detail.dtrawat_status = 'selesai'
-				and perawatan.rawat_harga <> 0 and (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3)
+					master_jual_rawat.jrawat_cust as cust,
+					master_jual_rawat.jrawat_tanggal as tgl_tindakan
+				from detail_jual_rawat
+				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
+				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
+				where master_jual_rawat.jrawat_stat_dok <> 'Batal'
+				and master_jual_rawat.jrawat_bayar <> 0 and (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and master_jual_rawat.jrawat_tanggal = '".$trawat_tglapp_start."'
 			)
 			union
 			(
 				select 
 					0 as jum_cust_medis,
+					0 as jum_cust_surgery,
+					0 as jum_cust_antiaging,
 					0 as jum_cust_nonmedis,
 					0 as jum_cust_produk,
 					master_jual_produk.jproduk_cust as cust,
 					master_jual_produk.jproduk_tanggal as tgl_tindakan
 				from master_jual_produk
-				where master_jual_produk.jproduk_stat_dok <> 'Batal'
+				where master_jual_produk.jproduk_stat_dok <> 'Batal' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal = '".$trawat_tglapp_start."'
 			))as table_union2
-		where tgl_tindakan = '".$trawat_tglapp_start."'
 		group by tgl_tindakan
 	)
 ) as table_union";
