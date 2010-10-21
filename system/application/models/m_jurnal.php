@@ -130,7 +130,7 @@ class M_jurnal extends Model{
 		
 		//function for get list record
 		function jurnal_list($filter,$start,$end){
-			$query = "SELECT * FROM vu_jurnal ";
+			$query = "SELECT * FROM vu_jurnal WHERE jurnal_arsip='T'";
 
 			// For simple search
 			if ($filter<>""){

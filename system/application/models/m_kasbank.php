@@ -218,7 +218,7 @@ class M_Kasbank extends Model{
 		//function for get list record
 		function kasbank_list($filter,$start,$end,$where_jenis){
 			/*$where = "WHERE `kasbank`.`kasbank_jenis` = '".$where_jenis."'";*/
-			$query = "SELECT * FROM vu_kasbank WHERE kasbank_jenis='".$where_jenis."'";
+			$query = "SELECT * FROM vu_kasbank WHERE kasbank_jenis='".$where_jenis."' AND kasbank_arsip='T'";
 
 			// For simple search
 			if ($filter<>""){

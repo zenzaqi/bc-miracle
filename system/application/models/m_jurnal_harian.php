@@ -42,7 +42,8 @@ class M_jurnal_harian extends Model{
 				
 		//function for get list record
 		function jurnal_harian_list($filter,$start,$end){
-			$query = "SELECT vu_jurnal_harian.*,date_format(tanggal,'%Y-%m-%d') as tanggal FROM vu_jurnal_harian ";
+			$query = "SELECT vu_jurnal_harian.*,date_format(tanggal,'%Y-%m-%d') as tanggal FROM vu_jurnal_harian 
+						WHERE jurnal_arsip='T'";
 
 			// For simple search
 			if ($filter<>""){

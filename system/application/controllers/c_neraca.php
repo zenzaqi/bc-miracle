@@ -31,6 +31,9 @@ class C_neraca extends Controller {
 	function get_action(){
 		$task = isset($_POST['task']) ? @$_POST['task'] : @$_GET['task'];
 		switch($task){
+			case "LIST":
+				$this->neraca_list();
+				break;
 			case "SEARCH":
 				$this->neraca_search();
 				break;
@@ -46,6 +49,16 @@ class C_neraca extends Controller {
 		}
 	}
 	
+	//function fot list record
+	function neraca_list(){
+		
+		$query = isset($_POST['query']) ? $_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		$result=$this->m_neraca->neraca_list($query,$start,$end);
+		echo $result;
+	}
+
 	
 	//function for advanced search
 	function neraca_search(){
@@ -91,22 +104,27 @@ class C_neraca extends Controller {
 
 	/* Function to Export Excel document */
 	function neraca_export_excel(){
-	$this->load->plugin('to_excel');
-		//POST varibale here
-		$neraca_id=trim(@$_POST["neraca_id"]);
-		$neraca_tanggal=trim(@$_POST["neraca_tanggal"]);
+	//POST varibale here
+		$neraca_periode=trim(@$_POST["neraca_periode"]);
+		$neraca_tglawal=trim(@$_POST["neraca_tglawal"]);
+		$neraca_tglakhir=trim(@$_POST["neraca_tglakhir"]);
+		$neraca_bulan=trim(@$_POST["neraca_bulan"]);
+		$neraca_tahun=trim(@$_POST["neraca_tahun"]);
 		$neraca_akun=trim(@$_POST["neraca_akun"]);
-		$neraca_debet=trim(@$_POST["neraca_debet"]);
-		$neraca_kredit=trim(@$_POST["neraca_kredit"]);
-		$neraca_saldo_debet=trim(@$_POST["neraca_saldo_debet"]);
-		$neraca_saldo_kredit=trim(@$_POST["neraca_saldo_kredit"]);
-		$option=$_POST['currentlisting'];
-		$filter=$_POST["query"];
 		
-		$query = $this->m_neraca->neraca_export_excel($neraca_id ,$neraca_tanggal ,$neraca_akun ,$neraca_debet ,$neraca_kredit ,$neraca_saldo_debet ,$neraca_saldo_kredit ,$option,$filter);
+		$start = 0;
+		$end = 0;
 		
-		to_excel($query,"neraca"); 
-		echo '1';
+		$data["data_print"]= $this->m_neraca->neraca_print($neraca_periode, $neraca_tglawal, $neraca_tglakhir, $neraca_bulan, $neraca_tahun, $neraca_akun, $start,$end);
+		$data["type"]="excel";
+		$print_view=$this->load->view("main/p_neraca.php",$data,TRUE);
+		if(!file_exists("print")){
+			mkdir("print");
+		}
+		$print_file=fopen("print/lap_neraca.xls","w+");
+		fwrite($print_file, $print_view);
+		
+		echo '1';  
 			
 	}
 	

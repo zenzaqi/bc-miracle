@@ -11,6 +11,7 @@
 	
 */
 ?>
+<? if(@$type!=="excel") { ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -18,70 +19,106 @@
 <title>Laporan Neraca</title>
 <link rel='stylesheet' type='text/css' href='../assets/modules/main/css/printstyle.css'/>
 </head>
-<table summary='Laporan Laba/Rugi'>
-	<caption>Laporan Neraca</caption>
-    <tbody>
-   
+<body onload="window.print();">
+<? } ?>
+<table summary='Laporan Neraca'>
+	<thead>
+    	<tr>
+            <td colspan="4" nowrap="nowrap">
+            <div style="float:left; margin-left:10px; margin-top:5px;" > 
+                 <img src="../assets/images/pmmp_logo2.png" width="40%" height="40%" align="left" style="margin-right:5px" /> 
+                 <center><b><h1>Laporan Neraca</h1></b></center>
+            </div>
+            </td>
+        </tr>
+    </thead>
+	<tbody>
 		<?php 
-		$total_debet=0;
-		$total_kredit=0;
+		$saldo=0;
 		$i=0; 
 		$j=0;
-		$akun_jenis="";
-		foreach($data_print as $print) { 
+		$kode_akun="";
+		$ap="";
+		$f="";
+		$k=0;
+		
+		$saldo_periode=0;
+		$saldo=0;
+		
+		foreach($data_print as $apprint) {
+			if($ap!==$apprint["neraca_jenis"] ){
+					
+				if($apprint["neraca_level"]==1 && $ap!==$apprint["neraca_jenis"]){
+					$ap=$apprint["neraca_jenis"];
+		?>
+        <tr>
+            <td>&nbsp;</td>
+            <td colspan="12"><b><?php echo $apprint["neraca_jenis"];?></b></td>
+        </tr>
+        <?
+				}
+				
+		$saldo_periode=0;
+		$saldo=0;
+		
+		foreach($data_print as $print) {
+		if($apprint["neraca_jenis"]==$print["neraca_jenis"]){ 
+		
+		if($kode_akun!==$print["neraca_jenis"] &&  $print["neraca_level"]>1){
+			$j++;
 			
-			if($akun_jenis!==$print["akun_jenis"]){
-				$j++;
 		?>
-         <tr>
-            <td colspan="4"><b><?php echo $j.". ".$print["akun_jenis"]; ?></b>
-            </td>
+        <tr>
+            <td><b><? echo $j; ?></b></td>
+            <td colspan="12"><b><?php echo $print["neraca_jenis"];?></b></td>
         </tr>
-        <?php
-			$sub_debet=0;
-			$sub_kredit=0;
-			$parent=0;
-			$akun_parent=0;
-		?>
-        <?php foreach($data_print as $printlist) { ?>
-      		
-        <?php if($print["akun_jenis"]==$printlist["akun_jenis"]) { 
-				$i++;	
+        <?
+			
+			foreach($data_print as $print_list) {  
+				if($print_list["neraca_jenis"]==$print["neraca_jenis"] && $print["neraca_level"]>1){ 
+					$i++;
+					$k++;
+					$saldo_periode+=$print_list["neraca_saldo_periode"];
+					$saldo+=$print_list["neraca_saldo"];
+						
+				?>
+				<tr>
+					<td>&nbsp;</td>
+					<td><?php echo $print_list["neraca_akun_nama"]; ?></td>
+					<td align="right" class="numeric"><?php echo number_format($print_list["neraca_saldo_periode"]); ?></td>
+					<td align="right" class="numeric"><?php echo number_format($print_list["neraca_saldo"]); ?></td>
+				</tr>
+				<?php		
+					
+				}
+		
+           	}
+			
+ 			
 			?>
-        <?php if($print["akun_jenis"]=="Aset" && $akun_parent!==$printlist["akun_parent_id"]) { ?>
-        <tr>
-            <td>&nbsp;</td><td colspan="3"><b><?php echo $printlist["akun_parent"]; ?></b>
-            </td>
-        </tr>
-        <?php } 
-			$akun_parent=$printlist["akun_parent_id"];
-		?>
-		<tr>
-		<td><? echo "-"; ?></td>
-		<td><?php echo $printlist["akun_nama"]; ?></td>
-		<td align="right" class="numeric"><?php echo number_format($printlist["debet"]); ?></td>
-		<td align="right" class="numeric"><?php echo number_format($printlist["kredit"]); ?></td>
-		</tr>
-		<?php 
-			$sub_debet+=$printlist["debet"];
-			$sub_kredit+=$printlist["kredit"];
+             <tr>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td align="right" class="numeric"><b><?php echo number_format($saldo_periode);?></b></td>
+                <td align="right" class="numeric"><b><?php echo number_format($saldo);?></b></td>
+            </tr>
+            <?	
 		}
-		?>
-		<?php } ?>
-        <tr>
-		<td>&nbsp;</td>
-		<td>&nbsp;</td>
-		<td align="right" class="numeric"><?php echo number_format($sub_debet); ?></td>
-		<td align="right" class="numeric"><?php echo number_format($sub_kredit); ?></td>
-		</tr>
-        <? }
-		$akun_jenis=$print["akun_jenis"];
-		$i=0;
-		?>
-        <? } ?>
-	</tbody>
+				    $kode_akun=$print["neraca_jenis"];
+		
+					
+		 }
+		
+		}
 
-	
-<body>
+		}
+		 
+		 
+	}
+	?>
+	</tbody>
+</table>
+<? if(@$type!=="excel") { ?>
 </body>
 </html>
+<? } ?>

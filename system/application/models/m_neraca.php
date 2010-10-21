@@ -18,213 +18,161 @@ class M_neraca extends Model{
 			parent::Model();
 		}
 	
+				
+		
+	
 		
 		//function for advanced search record
 		function neraca_search($buku_periode, $buku_tglawal, $buku_tglakhir, $buku_bulan, $buku_tahun, $buku_akun, $start,$end){
 			
-			if($buku_periode=="all"){
-				
-				$sql="SELECT A.akun_id,A.akun_kode,A.akun_jenis,A.akun_nama,A.akun_level,B.akun_id as akun_parent_id, B.akun_nama as akun_parent 
-						FROM akun A, akun B 
-						WHERE A.akun_level=3  AND A.akun_parent=B.akun_kode  AND B.akun_level=2 ORDER by B.akun_kode,A.akun_kode ASC";
-				$master=$this->db->query($sql);
-				$nbrows=$master->num_rows();
-
-				$i=0;
-				foreach($master->result() as $row){
-										
-					$sql="SELECT substr(A.akun_kode,1,3) as akun,sum(buku_debet) as debet,sum(buku_kredit) as kredit
-							FROM	buku_besar, akun A
-							WHERE  buku_akun=A.akun_id AND
-							substr(A.akun_kode,1,4) = substr('".$row->akun_kode."',1,4) 
-							GROUP BY substr(A.akun_kode,1,2)";
+			//AKUN LEVEL 1
+			$sql="SELECT A.akun_id,A.akun_saldo,A.akun_kode,A.akun_jenis,A.akun_nama,A.akun_level,B.akun_id as akun_parent_id, B.akun_nama as akun_parent 
+					FROM akun A, akun B
+					WHERE A.akun_level=2  
+					AND A.akun_parent_kode=B.akun_kode
+					AND A.akun_jenis='Neraca'
+					AND B.akun_level=1
+					ORDER by A.akun_kode ASC";
 					
-					$isi=$this->db->query($sql);
-					if($isi->num_rows()){
-						$rowisi=$isi->row();
-						$data[$i]['akun_parent_id']=$row->akun_parent_id;
-						$data[$i]['akun_parent']=$row->akun_parent;
-						$data[$i]['akun_id']=$row->akun_id;
-						$data[$i]['akun_kode']=$row->akun_kode;
-						$data[$i]['akun_nama']=$row->akun_nama;
-						/*$data[$i]['debet']=$rowisi->debet;
-						$data[$i]['kredit']=$rowisi->kredit;*/
-						switch($row->akun_jenis){
-							case 'Aset' : 
-									$data[$i]['debet']=$rowisi->debet-$rowisi->kredit;
-									$data[$i]['kredit']=0;
-									break;
-							case 'Kewajiban' : 
-									$data[$i]['kredit']=$rowisi->kredit-$rowisi->debet;
-									$data[$i]['debet']=0;
-									break;
-							case 'Ekuitas' : 
-									$data[$i]['kredit']=$rowisi->kredit-$rowisi->debet;
-									$data[$i]['debet']=0;
-									break;
-							case 'Pendapatan' : 
-									$data[$i]['kredit']=$rowisi->kredit-$rowisi->debet;
-									$data[$i]['debet']=0;
-									break;
-							case 'Beban' : 
-									$data[$i]['debet']=$rowisi->debet-$rowisi->kredit;
-									$data[$i]['kredit']=0;
-									break;
-							default : 
-									$data[$i]['debet']=$rowisi->debet;
-									$data[$i]['kredit']=$rowisi->kredit;
-									break;
-						}
+			$master=$this->db->query($sql);
+			$nbrows=$master->num_rows();
+
+			$saldo=0;
+			$i=0;
+			foreach($master->result() as $row){
+										
+					//s/d bulan ini
+				$sql="SELECT A.akun_kode,sum(B.buku_debet) as debet,sum(B.buku_kredit) as kredit
+						FROM	buku_besar B, akun A
+						WHERE B.buku_akun=A.akun_id
+						AND replace(A.akun_kode,'.','') like  '".str_replace(".","",$row->akun_kode)."%' ";
+				if($buku_periode=="bulan"){
+					$sql.="	AND date_format(buku_tanggal,'%Y-%m')<='".$buku_tahun."-".$buku_bulan."'";
+				}
+				//$sql.="GROUP BY A.akun_kode";
+				$sql.="	ORDER BY A.akun_kode ASC";
+				
+				//GET SALDO BEFORE
+				$data[$i]["neraca_saldo"]=0;
+				
+				$sqlsaldo="SELECT 	A.akun_kode,sum(A.akun_debet) as debet,sum(A.akun_debet) as kredit, A.akun_saldo
+						FROM	akun A
+						WHERE   replace(A.akun_kode,'.','') like  '".str_replace(".","",$row->akun_kode)."%'";
+				
+				$rssaldo=$this->db->query($sqlsaldo);
+				if($rssaldo->num_rows()){
+					$rowsaldo=$rssaldo->row();
+					if($rowsaldo->akun_saldo=='Debet'){
+						$data[$i]["neraca_saldo"]= ($rowsaldo->debet-$rowsaldo->kredit);
 					}else{
-						$data[$i]['akun_parent_id']=$row->akun_parent_id;
-						$data[$i]['akun_parent']=$row->akun_parent;
-						$data[$i]['akun_id']=$row->akun_id;
-						$data[$i]['akun_kode']=$row->akun_kode;
-						$data[$i]['akun_nama']=$row->akun_nama;
-						$data[$i]['debet']=0;
-						$data[$i]['kredit']=0;
+						$data[$i]["neraca_saldo"]= ($rowsaldo->debet-$rowsaldo->kredit);
 					}
-					$i++;
+				}
+				//----->
+				
+				$isi=$this->db->query($sql);
+				if($isi->num_rows()){
+					$rowisi=$isi->row();
+					$data[$i]["neraca_akun"]=$row->akun_id;
+					$data[$i]["neraca_level"]=$row->akun_level;
+					$data[$i]["neraca_jenis"]=$row->akun_parent;
+					$data[$i]["neraca_jenis_id"]=$row->akun_parent_id;
+					$data[$i]["neraca_akun_kode"]=$row->akun_kode;
+					$data[$i]["neraca_akun_nama"]=$row->akun_nama;
+					
+					if($row->akun_saldo=='Debet'){
+						$data[$i]["neraca_saldo"]= ($rowisi->debet-$rowisi->kredit);
+					}else{
+						$data[$i]["neraca_saldo"]= ($rowisi->kredit-$rowisi->debet);	
+					}
+				}else{
+					$data[$i]["neraca_akun"]=$row->akun_id;
+					$data[$i]["neraca_level"]=$row->akun_level;
+					$data[$i]["neraca_jenis"]=$row->akun_parent;
+					$data[$i]["neraca_jenis_id"]=$row->akun_parent_id;
+					$data[$i]["neraca_akun_kode"]=$row->akun_kode;
+					$data[$i]["neraca_akun_nama"]=$row->akun_nama;
+					$data[$i]["neraca_saldo"]=0;
 				}
 				
-			}else if($buku_periode=="tanggal"){
-				
-				
-				$sql="SELECT A.akun_id,A.akun_kode,A.akun_jenis,A.akun_nama,A.akun_level,B.akun_id as akun_parent_id, B.akun_nama as akun_parent 
-						FROM akun A, akun B 
-						WHERE A.akun_level=3  AND A.akun_parent=B.akun_kode  AND B.akun_level=2 ORDER by B.akun_kode,A.akun_kode ASC";
-				$master=$this->db->query($sql);
-				$nbrows=$master->num_rows();
-
-				$i=0;
-				foreach($master->result() as $row){
-										
-					$sql="SELECT substr(A.akun_kode,1,3) as akun,sum(buku_debet) as debet,sum(buku_kredit) as kredit
-							FROM	buku_besar, akun A
-							WHERE  buku_akun=A.akun_id AND
-							substr(A.akun_kode,1,5) = substr('".$row->akun_kode."',1,5) 
-							AND date_format(buku_tanggal,'%Y-%m-%d')<='".$buku_tglakhir."'
-							GROUP BY substr(A.akun_kode,1,3)";
-					
-					$isi=$this->db->query($sql);
-					if($isi->num_rows()){
-						$rowisi=$isi->row();
-						$data[$i]['akun_parent_id']=$row->akun_parent_id;
-						$data[$i]['akun_parent']=$row->akun_parent;
-						$data[$i]['akun_id']=$row->akun_id;
-						$data[$i]['akun_kode']=$row->akun_kode;
-						$data[$i]['akun_nama']=$row->akun_nama;
-						/*$data[$i]['debet']=$rowisi->debet;
-						$data[$i]['kredit']=$rowisi->kredit;*/
-						switch($row->akun_jenis){
-							case 'Aset' : 
-									$data[$i]['debet']=$rowisi->debet-$rowisi->kredit;
-									$data[$i]['kredit']=0;
-									break;
-							case 'Kewajiban' : 
-									$data[$i]['kredit']=$rowisi->kredit-$rowisi->debet;
-									$data[$i]['debet']=0;
-									break;
-							case 'Ekuitas' : 
-									$data[$i]['kredit']=$rowisi->kredit-$rowisi->debet;
-									$data[$i]['debet']=0;
-									break;
-							case 'Pendapatan' : 
-									$data[$i]['kredit']=$rowisi->kredit-$rowisi->debet;
-									$data[$i]['debet']=0;
-									break;
-							case 'Beban' : 
-									$data[$i]['debet']=$rowisi->debet-$rowisi->kredit;
-									$data[$i]['kredit']=0;
-									break;
-							default : 
-									$data[$i]['debet']=$rowisi->debet;
-									$data[$i]['kredit']=$rowisi->kredit;
-									break;
-						}
-					}else{
-						$data[$i]['akun_parent_id']=$row->akun_parent_id;
-						$data[$i]['akun_parent']=$row->akun_parent;
-						$data[$i]['akun_id']=$row->akun_id;
-						$data[$i]['akun_kode']=$row->akun_kode;
-						$data[$i]['akun_nama']=$row->akun_nama;
-						$data[$i]['debet']=0;
-						$data[$i]['kredit']=0;
-					}
-					$i++;
+				//bulan ini
+				$sql="SELECT A.akun_kode,sum(B.buku_debet) as debet,sum(B.buku_kredit) as kredit
+						FROM	buku_besar B, akun A
+						WHERE B.buku_akun=A.akun_id
+						AND replace(A.akun_kode,'.','') like  '".str_replace(".","",$row->akun_kode)."%' ";
+				if($buku_periode=="bulan"){
+					$sql.="	AND date_format(buku_tanggal,'%Y-%m')='".$buku_tahun."-".$buku_bulan."'";
 				}
-				
-			}else if($buku_periode=="bulan"){
-				
-					
-				$sql="SELECT A.akun_id,A.akun_kode,A.akun_jenis,A.akun_nama,A.akun_level,B.akun_id as akun_parent_id, B.akun_nama as akun_parent 
-					FROM akun A, akun B 
-					WHERE A.akun_level=2  AND A.akun_parent=B.akun_id  AND B.akun_level=1 ORDER by B.akun_kode,A.akun_kode ASC";
-				$master=$this->db->query($sql);
-				$nbrows=$master->num_rows();
-
-				$i=0;
-				foreach($master->result() as $row){
-										
-					$sql="SELECT substr(A.akun_kode,1,3) as akun,sum(buku_debet) as debet,sum(buku_kredit) as kredit
-							FROM	buku_besar, akun A
-							WHERE  buku_akun=A.akun_id AND
-							substr(A.akun_kode,1,5) = substr('".$row->akun_kode."',1,5) 
-							AND date_format(buku_tanggal,'%Y-%m')<='".$buku_tahun."-".$buku_bulan."' 
-							GROUP BY substr(A.akun_kode,1,3)";
-					
-					$isi=$this->db->query($sql);
-					if($isi->num_rows()){
-						$rowisi=$isi->row();
-						$data[$i]['akun_parent_id']=$row->akun_parent_id;
-						$data[$i]['akun_parent']=$row->akun_parent;
-						$data[$i]['akun_id']=$row->akun_id;
-						$data[$i]['akun_kode']=$row->akun_kode;
-						$data[$i]['akun_nama']=$row->akun_nama;
-						/*$data[$i]['debet']=$rowisi->debet;
-						$data[$i]['kredit']=$rowisi->kredit;*/
-						switch($row->akun_jenis){
-							case 'Aset' : 
-									$data[$i]['debet']=$rowisi->debet-$rowisi->kredit;
-									$data[$i]['kredit']=0;
-									break;
-							case 'Kewajiban' : 
-									$data[$i]['kredit']=$rowisi->kredit-$rowisi->debet;
-									$data[$i]['debet']=0;
-									break;
-							case 'Ekuitas' : 
-									$data[$i]['kredit']=$rowisi->kredit-$rowisi->debet;
-									$data[$i]['debet']=0;
-									break;
-							case 'Pendapatan' : 
-									$data[$i]['kredit']=$rowisi->kredit-$rowisi->debet;
-									$data[$i]['debet']=0;
-									break;
-							case 'Beban' : 
-									$data[$i]['debet']=$rowisi->debet-$rowisi->kredit;
-									$data[$i]['kredit']=0;
-									break;
-							default : 
-									$data[$i]['debet']=$rowisi->debet;
-									$data[$i]['kredit']=$rowisi->kredit;
-									break;
-						}
-					}else{
-						$data[$i]['akun_parent_id']=$row->akun_parent_id;
-						$data[$i]['akun_parent']=$row->akun_parent;
-						$data[$i]['akun_id']=$row->akun_id;
-						$data[$i]['akun_kode']=$row->akun_kode;
-						$data[$i]['akun_nama']=$row->akun_nama;
-						$data[$i]['debet']=0;
-						$data[$i]['kredit']=0;
-					}
-					$i++;
+				//$sql.="GROUP BY A.akun_kode";
+				$sql.="	ORDER BY A.akun_kode ASC";
+						
+				$isi=$this->db->query($sql);
+				if($isi->num_rows()){
+					$rowisi=$isi->row();
+					if($row->akun_saldo=='Debet')
+						$data[$i]["neraca_saldo_periode"]= ($rowisi->debet-$rowisi->kredit);
+					else
+						$data[$i]["neraca_saldo_periode"]= ($rowisi->kredit-$rowisi->debet);	
+				}else{
+					$data[$i]["neraca_saldo_periode"]=0;
 				}
 				
 					
+				$i++;
 			}
 			
-		
+			//LAPORAN LABA RUGI
+
+			$data[$i]["neraca_akun"]=999999999;
+			$data[$i]["neraca_jenis"]='RUGI/LABA ';
+			$data[$i]["neraca_level"]=1;
+			$data[$i]["neraca_jenis_id"]=99999999;
+			$data[$i]["neraca_akun_kode"]="999.99999";
+			$data[$i]["neraca_akun_nama"]="LABA/RUGI ";
+				
+			$sql="SELECT A.akun_kode,sum(B.buku_debet) as debet,sum(B.buku_kredit) as kredit
+					FROM	buku_besar B, akun A
+					WHERE B.buku_akun=A.akun_id
+					AND A.akun_jenis='R/L'
+					GROUP BY A.akun_kode";
+			$rlisi=$this->db->query($sql);
+			if($rlisi->num_rows()){
+				foreach($rlisi->result() as $rowisi){
+					if($row->akun_saldo=='Debet'){
+						$saldo+= ($rowisi->debet-$rowisi->kredit);
+					}else{
+						$saldo+= ($rowisi->kredit-$rowisi->debet);	
+					}
+				}
+			}else{
+				$saldo=0;
+			}
+			
+			$data[$i]["neraca_saldo"]=$saldo;
+			
+			//bulan ini
+			$saldo=0;
+			$sql="SELECT A.akun_kode,sum(B.buku_debet) as debet,sum(B.buku_kredit) as kredit
+					FROM	buku_besar B, akun A
+					WHERE B.buku_akun=A.akun_id
+					AND A.akun_jenis='R/L'";
+			if($buku_periode=="bulan"){
+				$sql.="	AND date_format(B.buku_tanggal,'%Y-%m')='".$buku_tahun."-".$buku_bulan."'";
+			}
+			$sql.=" GROUP BY A.akun_kode";
+			if($rlisi->num_rows()){
+				foreach($rlisi->result() as $rowisi){
+					if($row->akun_saldo=='Debet'){
+						$saldo+= ($rowisi->debet-$rowisi->kredit);
+					}else{
+						$saldo+= ($rowisi->kredit-$rowisi->debet);	
+					}
+				}
+			}else{
+				$saldo=0;
+			}
+			$data[$i]["neraca_saldo_periode"]=$saldo;
+			
 			if($nbrows>0){
 				$jsonresult = json_encode($data);
 				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
@@ -236,224 +184,157 @@ class M_neraca extends Model{
 		//function for print record
 		function neraca_print($buku_periode, $buku_tglawal, $buku_tglakhir, $buku_bulan, $buku_tahun, $buku_akun, $start,$end){
 			
-			if($buku_periode=="all"){
-				
-				$sql="SELECT A.akun_id,A.akun_kode,A.akun_jenis,A.akun_nama,A.akun_level,B.akun_id as akun_parent_id, B.akun_nama as akun_parent 
-						FROM akun A, akun B 
-						WHERE A.akun_level=2  AND A.akun_parent=B.akun_id  AND B.akun_level=1 ORDER by B.akun_kode,A.akun_kode ASC";
-				$master=$this->db->query($sql);
-				$nbrows=$master->num_rows();
-
-				$i=0;
-				foreach($master->result() as $row){
-										
-					$sql="SELECT substr(A.akun_kode,1,3) as akun,sum(buku_debet) as debet,sum(buku_kredit) as kredit
-							FROM	buku_besar, akun A
-							WHERE  buku_akun=A.akun_id AND
-							substr(A.akun_kode,1,5) = substr('".$row->akun_kode."',1,5) 
-							GROUP BY substr(A.akun_kode,1,3)";
+			//AKUN LEVEL 1
+			$sql="SELECT A.akun_id,A.akun_saldo,A.akun_kode,A.akun_jenis,A.akun_nama,A.akun_level,B.akun_id as akun_parent_id, B.akun_nama as akun_parent 
+					FROM akun A, akun B
+					WHERE A.akun_level<=2  
+					AND A.akun_parent_kode=B.akun_kode
+					AND A.akun_jenis='Neraca'
+					AND B.akun_level<=1
+					ORDER by A.akun_kode ASC";
 					
-					$isi=$this->db->query($sql);
-					if($isi->num_rows()){
-						$rowisi=$isi->row();
-						$data[$i]['akun_parent_id']=$row->akun_parent_id;
-						$data[$i]['akun_parent']=$row->akun_parent;
-						$data[$i]['akun_id']=$row->akun_id;
-						$data[$i]['akun_kode']=$row->akun_kode;
-						$data[$i]['akun_jenis']=$row->akun_jenis;
-						$data[$i]['akun_nama']=$row->akun_nama;
-						$data[$i]['akun_level']=$row->akun_level;
-						/*$data[$i]['debet']=$rowisi->debet;
-						$data[$i]['kredit']=$rowisi->kredit;*/
-						switch($row->akun_jenis){
-							case 'Aset' : 
-									$data[$i]['debet']=$rowisi->debet-$rowisi->kredit;
-									$data[$i]['kredit']=0;
-									break;
-							case 'Kewajiban' : 
-									$data[$i]['kredit']=$rowisi->kredit-$rowisi->debet;
-									$data[$i]['debet']=0;
-									break;
-							case 'Ekuitas' : 
-									$data[$i]['kredit']=$rowisi->kredit-$rowisi->debet;
-									$data[$i]['debet']=0;
-									break;
-							case 'Pendapatan' : 
-									$data[$i]['kredit']=$rowisi->kredit-$rowisi->debet;
-									$data[$i]['debet']=0;
-									break;
-							case 'Beban' : 
-									$data[$i]['debet']=$rowisi->debet-$rowisi->kredit;
-									$data[$i]['kredit']=0;
-									break;
-							default : 
-									$data[$i]['debet']=$rowisi->debet;
-									$data[$i]['kredit']=$rowisi->kredit;
-									break;
-						}
+			$master=$this->db->query($sql);
+			$nbrows=$master->num_rows();
+
+			$saldo=0;
+			$i=0;
+			foreach($master->result() as $row){
+										
+					//s/d bulan ini
+				$sql="SELECT A.akun_kode,sum(B.buku_debet) as debet,sum(B.buku_kredit) as kredit
+						FROM	buku_besar B, akun A
+						WHERE B.buku_akun=A.akun_id
+						AND replace(A.akun_kode,'.','') like  '".str_replace(".","",$row->akun_kode)."%' ";
+				if($buku_periode=="bulan"){
+					$sql.="	AND date_format(buku_tanggal,'%Y-%m')<='".$buku_tahun."-".$buku_bulan."'";
+				}
+				//$sql.="GROUP BY A.akun_kode";
+				$sql.="	ORDER BY A.akun_kode ASC";
+				
+				//GET SALDO BEFORE
+				$data[$i]["neraca_saldo"]=0;
+				
+				$sqlsaldo="SELECT 	A.akun_kode,sum(A.akun_debet) as debet,sum(A.akun_debet) as kredit, A.akun_saldo
+						FROM	akun A
+						WHERE   replace(A.akun_kode,'.','') like  '".str_replace(".","",$row->akun_kode)."%'";
+				
+				$rssaldo=$this->db->query($sqlsaldo);
+				if($rssaldo->num_rows()){
+					$rowsaldo=$rssaldo->row();
+					if($rowsaldo->akun_saldo=='Debet'){
+						$data[$i]["neraca_saldo"]= ($rowsaldo->debet-$rowsaldo->kredit);
 					}else{
-						$data[$i]['akun_parent_id']=$row->akun_parent_id;
-						$data[$i]['akun_parent']=$row->akun_parent;
-						$data[$i]['akun_jenis']=$row->akun_jenis;
-						$data[$i]['akun_id']=$row->akun_id;
-						$data[$i]['akun_kode']=$row->akun_kode;
-						$data[$i]['akun_nama']=$row->akun_nama;
-						$data[$i]['akun_level']=$row->akun_level;
-						$data[$i]['debet']=0;
-						$data[$i]['kredit']=0;
+						$data[$i]["neraca_saldo"]= ($rowsaldo->debet-$rowsaldo->kredit);
 					}
-					$i++;
+				}
+				//----->
+				
+				$isi=$this->db->query($sql);
+				if($isi->num_rows()){
+					$rowisi=$isi->row();
+					$data[$i]["neraca_akun"]=$row->akun_id;
+					$data[$i]["neraca_jenis"]=$row->akun_parent;
+					$data[$i]["neraca_level"]=$row->akun_level;
+					$data[$i]["neraca_jenis_id"]=$row->akun_parent_id;
+					$data[$i]["neraca_akun_kode"]=$row->akun_kode;
+					$data[$i]["neraca_akun_nama"]=$row->akun_nama;
+					
+					if($row->akun_saldo=='Debet'){
+						$data[$i]["neraca_saldo"]= ($rowisi->debet-$rowisi->kredit);
+					}else{
+						$data[$i]["neraca_saldo"]= ($rowisi->kredit-$rowisi->debet);	
+					}
+				}else{
+					$data[$i]["neraca_akun"]=$row->akun_id;
+					$data[$i]["neraca_jenis"]=$row->akun_parent;
+					$data[$i]["neraca_level"]=$row->akun_level;
+					$data[$i]["neraca_jenis_id"]=$row->akun_parent_id;
+					$data[$i]["neraca_akun_kode"]=$row->akun_kode;
+					$data[$i]["neraca_akun_nama"]=$row->akun_nama;
+					$data[$i]["neraca_saldo"]=0;
 				}
 				
-			}else if($buku_periode=="tanggal"){
-				
-				
-				$sql="SELECT A.akun_id,A.akun_kode,A.akun_jenis,A.akun_nama,A.akun_level,B.akun_id as akun_parent_id, B.akun_nama as akun_parent 
-						FROM akun A, akun B 
-						WHERE A.akun_level=2  AND A.akun_parent=B.akun_id  AND B.akun_level=1 ORDER by B.akun_kode,A.akun_kode ASC";
-				$master=$this->db->query($sql);
-				$nbrows=$master->num_rows();
-
-				$i=0;
-				foreach($master->result() as $row){
-										
-					$sql="SELECT substr(A.akun_kode,1,3) as akun,sum(buku_debet) as debet,sum(buku_kredit) as kredit
-							FROM	buku_besar, akun A
-							WHERE  buku_akun=A.akun_id AND
-							substr(A.akun_kode,1,5) = substr('".$row->akun_kode."',1,5) 
-							AND date_format(buku_tanggal,'%Y-%m-%d')<='".$buku_tglakhir."'
-							GROUP BY substr(A.akun_kode,1,3)";
-					
-					$isi=$this->db->query($sql);
-					if($isi->num_rows()){
-						$rowisi=$isi->row();
-						$data[$i]['akun_parent_id']=$row->akun_parent_id;
-						$data[$i]['akun_parent']=$row->akun_parent;
-						$data[$i]['akun_jenis']=$row->akun_jenis;
-						$data[$i]['akun_id']=$row->akun_id;
-						$data[$i]['akun_kode']=$row->akun_kode;
-						$data[$i]['akun_nama']=$row->akun_nama;
-						$data[$i]['akun_level']=$row->akun_level;
-						/*$data[$i]['debet']=$rowisi->debet;
-						$data[$i]['kredit']=$rowisi->kredit;*/
-						switch($row->akun_jenis){
-							case 'Aset' : 
-									$data[$i]['debet']=$rowisi->debet-$rowisi->kredit;
-									$data[$i]['kredit']=0;
-									break;
-							case 'Kewajiban' : 
-									$data[$i]['kredit']=$rowisi->kredit-$rowisi->debet;
-									$data[$i]['debet']=0;
-									break;
-							case 'Ekuitas' : 
-									$data[$i]['kredit']=$rowisi->kredit-$rowisi->debet;
-									$data[$i]['debet']=0;
-									break;
-							case 'Pendapatan' : 
-									$data[$i]['kredit']=$rowisi->kredit-$rowisi->debet;
-									$data[$i]['debet']=0;
-									break;
-							case 'Beban' : 
-									$data[$i]['debet']=$rowisi->debet-$rowisi->kredit;
-									$data[$i]['kredit']=0;
-									break;
-							default : 
-									$data[$i]['debet']=$rowisi->debet;
-									$data[$i]['kredit']=$rowisi->kredit;
-									break;
-						}
-					}else{
-						$data[$i]['akun_parent_id']=$row->akun_parent_id;
-						$data[$i]['akun_parent']=$row->akun_parent;
-						$data[$i]['akun_jenis']=$row->akun_jenis;
-						$data[$i]['akun_id']=$row->akun_id;
-						$data[$i]['akun_kode']=$row->akun_kode;
-						$data[$i]['akun_nama']=$row->akun_nama;
-						$data[$i]['akun_level']=$row->akun_level;
-						$data[$i]['debet']=0;
-						$data[$i]['kredit']=0;
-					}
-					$i++;
+				//bulan ini
+				$sql="SELECT A.akun_kode,sum(B.buku_debet) as debet,sum(B.buku_kredit) as kredit
+						FROM	buku_besar B, akun A
+						WHERE B.buku_akun=A.akun_id
+						AND replace(A.akun_kode,'.','') like  '".str_replace(".","",$row->akun_kode)."%' ";
+				if($buku_periode=="bulan"){
+					$sql.="	AND date_format(buku_tanggal,'%Y-%m')='".$buku_tahun."-".$buku_bulan."'";
 				}
-				
-			}else if($buku_periode=="bulan"){
-				
-					
-				$sql="SELECT A.akun_id,A.akun_kode,A.akun_jenis,A.akun_nama,A.akun_level,B.akun_id as akun_parent_id, B.akun_nama as akun_parent 
-					FROM akun A, akun B 
-					WHERE A.akun_level=2  AND A.akun_parent=B.akun_id  AND B.akun_level=1 ORDER by B.akun_kode,A.akun_kode ASC";
-				$master=$this->db->query($sql);
-				$nbrows=$master->num_rows();
-
-				$i=0;
-				foreach($master->result() as $row){
-										
-					$sql="SELECT substr(A.akun_kode,1,3) as akun,sum(buku_debet) as debet,sum(buku_kredit) as kredit
-							FROM	buku_besar, akun A
-							WHERE  buku_akun=A.akun_id AND
-							substr(A.akun_kode,1,5) = substr('".$row->akun_kode."',1,5) 
-							AND date_format(buku_tanggal,'%Y-%m')<='".$buku_tahun."-".$buku_bulan."' 
-							GROUP BY substr(A.akun_kode,1,3)";
-					
-					$isi=$this->db->query($sql);
-					if($isi->num_rows()){
-						$rowisi=$isi->row();
-						$data[$i]['akun_parent_id']=$row->akun_parent_id;
-						$data[$i]['akun_parent']=$row->akun_parent;
-						$data[$i]['akun_jenis']=$row->akun_jenis;
-						$data[$i]['akun_id']=$row->akun_id;
-						$data[$i]['akun_kode']=$row->akun_kode;
-						$data[$i]['akun_nama']=$row->akun_nama;
-						$data[$i]['akun_level']=$row->akun_level;
-						/*$data[$i]['debet']=$rowisi->debet;
-						$data[$i]['kredit']=$rowisi->kredit;*/
-						switch($row->akun_jenis){
-							case 'Aset' : 
-									$data[$i]['debet']=$rowisi->debet-$rowisi->kredit;
-									$data[$i]['kredit']=0;
-									break;
-							case 'Kewajiban' : 
-									$data[$i]['kredit']=$rowisi->kredit-$rowisi->debet;
-									$data[$i]['debet']=0;
-									break;
-							case 'Ekuitas' : 
-									$data[$i]['kredit']=$rowisi->kredit-$rowisi->debet;
-									$data[$i]['debet']=0;
-									break;
-							case 'Pendapatan' : 
-									$data[$i]['kredit']=$rowisi->kredit-$rowisi->debet;
-									$data[$i]['debet']=0;
-									break;
-							case 'Beban' : 
-									$data[$i]['debet']=$rowisi->debet-$rowisi->kredit;
-									$data[$i]['kredit']=0;
-									break;
-							default : 
-									$data[$i]['debet']=$rowisi->debet;
-									$data[$i]['kredit']=$rowisi->kredit;
-									break;
-						}
-					}else{
-						$data[$i]['akun_parent_id']=$row->akun_parent_id;
-						$data[$i]['akun_parent']=$row->akun_parent;
-						$data[$i]['akun_jenis']=$row->akun_jenis;
-						$data[$i]['akun_id']=$row->akun_id;
-						$data[$i]['akun_kode']=$row->akun_kode;
-						$data[$i]['akun_nama']=$row->akun_nama;
-						$data[$i]['akun_level']=$row->akun_level;
-						$data[$i]['debet']=0;
-						$data[$i]['kredit']=0;
-					}
-					$i++;
+				//$sql.="GROUP BY A.akun_kode";
+				$sql.="	ORDER BY A.akun_kode ASC";
+						
+				$isi=$this->db->query($sql);
+				if($isi->num_rows()){
+					$rowisi=$isi->row();
+					if($row->akun_saldo=='Debet')
+						$data[$i]["neraca_saldo_periode"]= ($rowisi->debet-$rowisi->kredit);
+					else
+						$data[$i]["neraca_saldo_periode"]= ($rowisi->kredit-$rowisi->debet);	
+				}else{
+					$data[$i]["neraca_saldo_periode"]=0;
 				}
 				
 					
+				$i++;
 			}
 			
-		
-			if($nbrows>0){
+			//LAPORAN LABA RUGI
+
+			$data[$i]["neraca_akun"]=999999999;
+			$data[$i]["neraca_jenis"]='RUGI/LABA ';
+			$data[$i]["neraca_level"]=2;
+			$data[$i]["neraca_jenis_id"]=99999999;
+			$data[$i]["neraca_akun_kode"]="999.99999";
+			$data[$i]["neraca_akun_nama"]="LABA/RUGI ";
+				
+			$sql="SELECT A.akun_kode,sum(B.buku_debet) as debet,sum(B.buku_kredit) as kredit
+					FROM	buku_besar B, akun A
+					WHERE B.buku_akun=A.akun_id
+					AND A.akun_jenis='R/L'
+					GROUP BY A.akun_kode";
+			$rlisi=$this->db->query($sql);
+			if($rlisi->num_rows()){
+				foreach($rlisi->result() as $rowisi){
+					if($row->akun_saldo=='Debet'){
+						$saldo+= ($rowisi->debet-$rowisi->kredit);
+					}else{
+						$saldo+= ($rowisi->kredit-$rowisi->debet);	
+					}
+				}
+			}else{
+				$saldo=0;
+			}
+			
+			$data[$i]["neraca_saldo"]=$saldo;
+			
+			//bulan ini
+			$saldo=0;
+			$sql="SELECT A.akun_kode,sum(B.buku_debet) as debet,sum(B.buku_kredit) as kredit
+					FROM	buku_besar B, akun A
+					WHERE B.buku_akun=A.akun_id
+					AND A.akun_jenis='R/L'";
+			if($buku_periode=="bulan"){
+				$sql.="	AND date_format(B.buku_tanggal,'%Y-%m')='".$buku_tahun."-".$buku_bulan."'";
+			}
+			$sql.=" GROUP BY A.akun_kode";
+			if($rlisi->num_rows()){
+				foreach($rlisi->result() as $rowisi){
+					if($row->akun_saldo=='Debet'){
+						$saldo+= ($rowisi->debet-$rowisi->kredit);
+					}else{
+						$saldo+= ($rowisi->kredit-$rowisi->debet);	
+					}
+				}
+			}else{
+				$saldo=0;
+			}
+			$data[$i]["neraca_saldo_periode"]=$saldo;
+			
+			if($master->num_rows()>0){
 				return $data;
-			} else {
+			}else{
 				return 0;
 			}
 		}
