@@ -323,7 +323,7 @@ var editor_cust_note;
 		cust_tmptlahirField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_tmptlahir'));
 		cust_tgllahirField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_tgllahir'));
 		cust_hobiField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_hobi'));
-		cust_referensiField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_referensi'));
+		cust_referensiField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_nama_ref'));
 		cust_referensilainField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_referensilain'));
 		cust_keteranganField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_keterangan'));
 		cust_terdaftarField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_terdaftar'));
@@ -620,18 +620,18 @@ var editor_cust_note;
 			cust_telprumah	:	cust_telprumah_search, 
 			cust_telprumah2	:	cust_telprumah2_search, 
 			cust_telpkantor	:	cust_telpkantor_search, 
-			cust_hp	:	cust_hp_search, 
-			cust_hp2	:	cust_hp2_search, 
-			cust_hp3	:	cust_hp3_search, 
-			cust_email	:	cust_email_search, 
-			cust_agama	:	cust_agama_search, 
+			cust_hp			:	cust_hp_search, 
+			cust_hp2		:	cust_hp2_search, 
+			cust_hp3		:	cust_hp3_search, 
+			cust_email		:	cust_email_search, 
+			cust_agama		:	cust_agama_search, 
 			cust_pendidikan	:	cust_pendidikan_search, 
 			cust_profesi	:	cust_profesi_search, 
 			cust_tgllahir	:	cust_tgllahir_search_date, 
-			cust_hobi	:	cust_hobi_search, 
+			cust_hobi		:	cust_hobi_search, 
 			cust_referensi	:	cust_referensi_search, 
 			cust_keterangan	:	cust_keterangan_search, 
-			cust_member	:	cust_member_search, 
+			cust_member		:	cust_member_search, 
 			cust_member2	:	cust_member2_search, 
 			cust_terdaftar	:	cust_terdaftar_search_date, 
 			cust_statusnikah	:	cust_statusnikah_search,
@@ -1668,7 +1668,7 @@ Ext.onReady(function(){
 			{name: 'cust_tmptlahir', type: 'string', mapping: 'cust_tmptlahir'},
 			{name: 'cust_tgllahir', type: 'date', dateFormat: 'Y-m-d', mapping: 'cust_tgllahir'},
 			{name: 'cust_hobi', type: 'string', mapping: 'cust_hobi'},
-			{name: 'cust_referensi', type: 'int', mapping: 'cust_nama_ref'},
+			{name: 'cust_nama_ref', type: 'string', mapping: 'cust_nama_ref'},
 			{name: 'cust_referensilain', type: 'string', mapping: 'cust_referensilain'},
 			{name: 'cust_keterangan', type: 'string', mapping: 'cust_keterangan'},
 			//{name: 'cust_member', type: 'string', mapping: 'cust_member'},

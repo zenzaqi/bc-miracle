@@ -55,9 +55,9 @@ class M_customer extends Model{
 		
 		function get_cabang_list(){
 		$sql="SELECT cabang_id,cabang_nama
-FROM cabang 
-LEFT JOIN info on (info.info_cabang = cabang.cabang_id)
-where cabang.cabang_id = info.info_cabang";
+				FROM cabang 
+				LEFT JOIN info on (info.info_cabang = cabang.cabang_id)
+				where cabang.cabang_id = info.info_cabang";
 		$query = $this->db->query($sql);
 		$nbrows = $query->num_rows();
 		if($nbrows>0){
@@ -282,7 +282,6 @@ where cabang.cabang_id = info.info_cabang";
 				"cust_tmptlahir"=>$cust_tmptlahir,
 				"cust_tgllahir"=>$cust_tgllahir,			
 				"cust_hobi"=>$cust_hobi,			
-				"cust_referensi"=>$cust_referensi,			
 				"cust_referensilain"=>$cust_referensilain,			
 				"cust_keterangan"=>$cust_keterangan,			
 				"cust_terdaftar"=>$cust_terdaftar,			
@@ -317,7 +316,12 @@ where cabang.cabang_id = info.info_cabang";
 			$result=$this->db->query($sql);
 			if($result->num_rows())
 				$data["cust_unit"]=$cust_unit;
-				
+			
+			$sql="SELECT cust_id FROM customer WHERE cust_id='".$cust_referensi."'";
+			$result=$this->db->query($sql);
+			if($result->num_rows())
+				$data["cust_referensi"]=$cust_referensi;
+			
 			$this->db->where('cust_id', $cust_id);
 			$this->db->update('customer', $data);
 			$sql="UPDATE customer SET cust_revised=(cust_revised+1) WHERE cust_id='$cust_id'";
