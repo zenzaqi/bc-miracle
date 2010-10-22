@@ -54,7 +54,7 @@ var crm_generator_tanggalField;
 
 
 //declare konstant
-var post2db = 'CREATE';
+var post2db_crm_generator = 'CREATE';
 var msg = '';
 var pageS=15;
 
@@ -118,7 +118,7 @@ Ext.onReady(function(){
 				url: 'index.php?c=c_crm_generator&m=get_action',
 				params: {
 	
-					task: post2db,
+					task: post2db_crm_generator,
 					crmvalue_id	: crm_generator_id_create_pk,		
 					crmvalue_cust	: crm_generator_cust_field,
 					//cust_tujuan_id	: cust_tujuan_id_field,
@@ -130,7 +130,7 @@ Ext.onReady(function(){
 					var result=eval(response.responseText);
 					switch(result){
 						case 1:
-							Ext.MessageBox.alert(post2db+' OK','Generate nilai CRM berhasil dilakukan.');
+							Ext.MessageBox.alert(post2db_crm_generator+' OK','Generate nilai CRM berhasil dilakukan.');
 							crm_generator_DataStore.reload();
 							crm_generator_saveWindow.hide();
 							break;
@@ -173,7 +173,7 @@ Ext.onReady(function(){
 	
 	/* Function for get PK field */
 	function get_pk_id(){
-		if(post2db=='CREATE')
+		if(post2db_crm_generator=='CREATE')
 			return crm_generatorListEditorGrid.getSelectionModel().getSelected().get('crmvalue_id');
 		else 
 			return 0;
@@ -257,7 +257,7 @@ Ext.onReady(function(){
 		sortInfo:{field: 'cust_no', direction: "ASC"}
 	});
 	//Template yang akan tampil di ComboBox
-	var joincustomer_customer_tpl = new Ext.XTemplate(
+	var crm_generator_customer_tpl = new Ext.XTemplate(
         '<tpl for="."><div class="search-item">',
             '<span><b>{cust_no} : {cust_nama}</b> | Tgl-Lahir:{cust_tgllahir:date("M j, Y")}<br /></span>',
             'Alamat: {cust_alamat}&nbsp;&nbsp;&nbsp;[Telp. {cust_telprumah}]',
@@ -288,7 +288,7 @@ Ext.onReady(function(){
 		sortInfo:{field: 'cust_no', direction: "ASC"}
 	});
 	//Template yang akan tampil di ComboBox
-	var joincustomer_customer_tpl2 = new Ext.XTemplate(
+	var crm_generator_customer_tpl2 = new Ext.XTemplate(
         '<tpl for="."><div class="search-item">',
             '<span><b>{cust_no} : {cust_nama}</b> | Tgl-Lahir:{cust_tgllahir:date("M j, Y")}<br /></span>',
             'Alamat: {cust_alamat}&nbsp;&nbsp;&nbsp;[Telp. {cust_telprumah}]',
@@ -478,10 +478,10 @@ Ext.onReady(function(){
 	function oncrm_generator_ListEditGridContextMenu(grid, rowIndex, e) {
 		e.stopEvent();
 		var coords = e.getXY();
-		joincustomer_ContextMenu.rowRecord = grid.store.getAt(rowIndex);
+		crm_generator_ContextMenu.rowRecord = grid.store.getAt(rowIndex);
 		grid.selModel.selectRow(rowIndex);
 		crm_generator_SelectedRow=rowIndex;
-		joincustomer_ContextMenu.showAt([coords[0], coords[1]]);
+		crm_generator_ContextMenu.showAt([coords[0], coords[1]]);
   	}
   	/* End of Function */
 	
@@ -518,7 +518,7 @@ Ext.onReady(function(){
         loadingText: 'Searching...',
         pageSize:10,
         hideTrigger:false,
-        tpl: joincustomer_customer_tpl,
+        tpl: crm_generator_customer_tpl,
         itemSelector: 'div.search-item',
 		triggerAction: 'all',
 		lazyRender:true,
@@ -538,7 +538,7 @@ Ext.onReady(function(){
         loadingText: 'Searching...',
         pageSize:10,
         hideTrigger:false,
-        tpl: joincustomer_customer_tpl2,
+        tpl: crm_generator_customer_tpl2,
         itemSelector: 'div.search-item',
 		triggerAction: 'all',
 		lazyRender:true,

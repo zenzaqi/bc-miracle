@@ -412,7 +412,7 @@ Ext.onReady(function(){
 		//clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 500, //940,//1200,	//970,
+	  	width: 600, //940,//1200,	//970,
 		bbar: new Ext.PagingToolbar({
 			//pageSize: pageS,
 			disabled:true,
@@ -457,7 +457,7 @@ Ext.onReady(function(){
 		//clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 500,
+	  	width: 600,
 	
 		/* Add Control on ToolBar */
 	
@@ -476,7 +476,7 @@ Ext.onReady(function(){
 		//clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 500, 
+	  	width: 600, 
 
 	});
 	lap_kunjungan_averageListEditorGrid.render();

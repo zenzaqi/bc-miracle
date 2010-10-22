@@ -84,6 +84,7 @@ var jpaket_caraField;
 var jpaket_cara2Field;
 var jpaket_cara3Field;
 var jpaket_keteranganField;
+var jpaket_ket_diskField;
 //tunai
 var jpaket_tunai_nilaiField;
 //tunai-2
@@ -243,7 +244,19 @@ Ext.onReady(function(){
 				var result=eval(response.responseText);
 				switch(result){
 					case 1:
-						master_jual_paket_create();
+						if (jpaket_diskonField.getValue()!=0 && jpaket_cashback_cfField.getValue()!=0){
+							Ext.MessageBox.show({
+							title: 'Warning',
+							msg: 'Diskon tambahan dan Voucher hanya bisa diisi salah satu',
+							buttons: Ext.MessageBox.OK,
+							animEl: 'save',
+							icon: Ext.MessageBox.WARNING
+						});
+						} 
+						else
+						{
+							master_jual_paket_create();
+						}
 						break;
 					default:
 						Ext.MessageBox.show({
@@ -422,6 +435,7 @@ Ext.onReady(function(){
 				var jpaket_cara2_create=null; 
 				var jpaket_cara3_create=null; 
 				var jpaket_keterangan_create=null;
+				var jpaket_ket_disk_create=null;
 				var jpaket_statdok_create=null;
 				//tunai
 				var jpaket_tunai_nilai_create=null;
@@ -512,6 +526,7 @@ Ext.onReady(function(){
 				if(jpaket_cara2Field.getValue()!== null){jpaket_cara2_create = jpaket_cara2Field.getValue();} 
 				if(jpaket_cara3Field.getValue()!== null){jpaket_cara3_create = jpaket_cara3Field.getValue();} 
 				if(jpaket_keteranganField.getValue()!== null){jpaket_keterangan_create = jpaket_keteranganField.getValue();}
+				if(jpaket_ket_diskField.getValue()!== null){jpaket_ket_disk_create = jpaket_ket_diskField.getValue();}
 				if(jpaket_stat_dokField.getValue()!== null){jpaket_statdok_create = jpaket_stat_dokField.getValue();} 
 				//tunai
 				if(jpaket_tunai_nilaiField.getValue()!== null){jpaket_tunai_nilai_create = jpaket_tunai_nilaiField.getValue();}
@@ -622,6 +637,7 @@ Ext.onReady(function(){
 						jpaket_cara2		: 	jpaket_cara2_create, 
 						jpaket_cara3		: 	jpaket_cara3_create, 
 						jpaket_keterangan	: 	jpaket_keterangan_create,
+						jpaket_ket_disk		: 	jpaket_ket_disk_create,
 						jpaket_stat_dok		:	jpaket_statdok_create,
 						jpaket_cashback	: 	jpaket_cashback_create,
 						//tunai
@@ -825,10 +841,15 @@ Ext.onReady(function(){
 	
 	function save_andPrint(){
 		cetak_jpaket=1;
-		master_jual_paket_create();
-		//pengecekan_dokumen();
+		//master_jual_paket_create();
+		pengecekan_dokumen();
 		jpaket_pesanLabel.setText('');
 		jpaket_lunasLabel.setText('');
+	}
+	
+	function save_paket(){
+		cetak_jpaket=0;
+		pengecekan_dokumen();
 	}
   
   	/* Function for get PK field */
@@ -1088,6 +1109,9 @@ Ext.onReady(function(){
 		jpaket_keteranganField.reset();
 		jpaket_keteranganField.setValue(null);
 		
+		jpaket_ket_diskField.reset();
+		jpaket_ket_diskField.setValue(null);
+		
 		jpaket_stat_dokField.reset();
 		jpaket_stat_dokField.setValue('Terbuka');
 		
@@ -1144,6 +1168,7 @@ Ext.onReady(function(){
 		jpaket_custField.setDisabled(false);
 		jpaket_tanggalField.setDisabled(false);
 		jpaket_keteranganField.setDisabled(false);
+		jpaket_ket_diskField.setDisabled(false);
 		master_cara_bayarTabPanel.setDisabled(false);
 		jpaket_stat_dokField.setDisabled(false);
 		
@@ -1234,6 +1259,7 @@ Ext.onReady(function(){
 		jpaket_bayarField.setValue(master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_bayar'));
 
 		jpaket_keteranganField.setValue(master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_keterangan'));
+		jpaket_ket_diskField.setValue(master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_ket_disk'));
 		jpaket_stat_dokField.setValue(master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_stat_dok'));
 		
 		for(i=0;i<detail_jual_paket_DataStore.getCount();i++){
@@ -1648,6 +1674,7 @@ Ext.onReady(function(){
 			jpaket_custField.setDisabled(false);
 			jpaket_tanggalField.setDisabled(false);
 			jpaket_keteranganField.setDisabled(false);
+			jpaket_ket_diskField.setDisabled(false);
 			
 			//master_cara_bayarTabPanel.setDisabled(false);
 			
@@ -1695,6 +1722,7 @@ Ext.onReady(function(){
 			jpaket_custField.setDisabled(true);
 			jpaket_tanggalField.setDisabled(true);
 			jpaket_keteranganField.setDisabled(true);
+			jpaket_ket_diskField.setDisabled(true);
 			
 			//master_cara_bayarTabPanel.setDisabled(true);
 			
@@ -1743,6 +1771,7 @@ Ext.onReady(function(){
 			jpaket_custField.setDisabled(true);
 			jpaket_tanggalField.setDisabled(true);
 			jpaket_keteranganField.setDisabled(true);
+			jpaket_ket_diskField.setDisabled(true);
 			
 			//master_cara_bayarTabPanel.setDisabled(true);
 			
@@ -1982,6 +2011,7 @@ Ext.onReady(function(){
 			{name: 'jpaket_total', type: 'float', mapping: 'jpaket_totalbiaya'}, 	//additional by hendri
 			{name: 'jpaket_bayar', type: 'float', mapping: 'jpaket_bayar'}, 
 			{name: 'jpaket_keterangan', type: 'string', mapping: 'jpaket_keterangan'},
+			{name: 'jpaket_ket_disk', type: 'string', mapping: 'jpaket_ket_disk'},	//additional by isaac
 			{name: 'jpaket_stat_dok', type: 'string', mapping: 'jpaket_stat_dok'}, 			
 			{name: 'jpaket_creator', type: 'string', mapping: 'jpaket_creator'}, 
 			{name: 'jpaket_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'jpaket_date_create'}, 
@@ -2335,6 +2365,16 @@ Ext.onReady(function(){
 				maxLength: 250
           	})
 		}, 
+		{
+			header: '<div align="center">' + 'No Voucher' + '</div>',
+			dataIndex: 'jpaket_ket_disk',
+			width: 130,
+			hidden: true,
+			sortable: true,
+			editor: new Ext.form.TextField({
+				maxLength: 250
+          	})
+		},
 		
 		{
 			header: '<div align="center">' + 'Stat Dok' + '</div>',
@@ -2638,17 +2678,17 @@ Ext.onReady(function(){
 		emptyText: '0',
 		allowDecimals: false,
 		enableKeyEvents: true,
-		width: 100,
+		width: 120,
 		maxLength: 2,
 		maskRe: /([0-9]+)$/
 	});
 	
 	jpaket_cashback_cfField= new Ext.form.TextField({
 		id: 'jpaket_cashback_cfField',
-		fieldLabel: 'Disk Tambahan (Rp)',
+		fieldLabel: 'Voucher',
 		allowNegatife : false,
 		enableKeyEvents: true,
-		readOnly : true,
+		readOnly : false,
 		itemCls: 'rmoney',
 		width: 120,
 		maskRe: /([0-9]+)$/
@@ -2672,7 +2712,8 @@ Ext.onReady(function(){
 		fieldLabel: 'Cara Bayar',
 		store:new Ext.data.SimpleStore({
 			fields:['jpaket_cara_value', 'jpaket_cara_display'],
-			data:[['tunai','Tunai'],['kwitansi','Kwitansi'],['card','Kartu Kredit'],['cek/giro','Cek/Giro'],['transfer','Transfer'],['voucher','Voucher']]
+			data:[['tunai','Tunai'],['kwitansi','Kwitansi'],['card','Kartu Kredit'],['cek/giro','Cek/Giro'],['transfer','Transfer']]
+			//['voucher','Voucher']]
 		}),
 		mode: 'local',
 		displayField: 'jpaket_cara_display',
@@ -2688,7 +2729,8 @@ Ext.onReady(function(){
 		fieldLabel: 'Cara Bayar 2',
 		store:new Ext.data.SimpleStore({
 			fields:['jpaket_cara_value', 'jpaket_cara_display'],
-			data:[['tunai','Tunai'],['kwitansi','Kwitansi'],['card','Kartu Kredit'],['cek/giro','Cek/Giro'],['transfer','Transfer'],['voucher','Voucher']]
+			data:[['tunai','Tunai'],['kwitansi','Kwitansi'],['card','Kartu Kredit'],['cek/giro','Cek/Giro'],['transfer','Transfer']]
+			//,['voucher','Voucher']]
 		}),
 		mode: 'local',
 		displayField: 'jpaket_cara_display',
@@ -2704,7 +2746,8 @@ Ext.onReady(function(){
 		fieldLabel: 'Cara Bayar 3',
 		store:new Ext.data.SimpleStore({
 			fields:['jpaket_cara_value', 'jpaket_cara_display'],
-			data:[['tunai','Tunai'],['kwitansi','Kwitansi'],['card','Kartu Kredit'],['cek/giro','Cek/Giro'],['transfer','Transfer'],['voucher','Voucher']]
+			data:[['tunai','Tunai'],['kwitansi','Kwitansi'],['card','Kartu Kredit'],['cek/giro','Cek/Giro'],['transfer','Transfer']]
+			//,['voucher','Voucher']]
 		}),
 		mode: 'local',
 		displayField: 'jpaket_cara_display',
@@ -2740,6 +2783,13 @@ Ext.onReady(function(){
 		fieldLabel: 'Keterangan',
 		maxLength: 250,
 		anchor: '95%'
+	});
+	
+	jpaket_ket_diskField= new Ext.form.TextField({
+		id: 'jpaket_ket_diskField',
+		fieldLabel: 'No Voucher',
+		maxLength: 250,
+		width: 120,
 	});
 	
 	// START Field Voucher
@@ -4119,7 +4169,7 @@ Ext.onReady(function(){
 				baseCls: 'x-plain',
 				border:false,
 				labelAlign: 'left',
-				items: [jpaket_jumlahField, jpaket_subTotalField, jpaket_diskonField, jpaket_cashback_cfField, {xtype: 'spacer',height:10},jpaket_totalField, jpaket_bayarField,jpaket_hutangField ,jpaket_pesanLabel ,jpaket_lunasLabel] 
+				items: [jpaket_jumlahField, jpaket_subTotalField, jpaket_diskonField, jpaket_cashback_cfField, jpaket_ket_diskField, {xtype: 'spacer',height:10},jpaket_totalField, jpaket_bayarField,jpaket_hutangField ,jpaket_pesanLabel ,jpaket_lunasLabel] 
 			}
 			]
 	
@@ -6484,7 +6534,7 @@ Ext.onReady(function(){
 			},
 			{
 				text: 'Save',
-				handler: master_jual_paket_create
+				handler: save_paket
 			},
 			{
 				id: 'jpaket_cancelBtn',
@@ -6651,7 +6701,8 @@ Ext.onReady(function(){
 		fieldLabel: 'Cara Bayar',
 		store:new Ext.data.SimpleStore({
 			fields:['value', 'jpaket_cara'],
-			data:[['tunai','Tunai'],['kwitansi','Kwitansi'],['card','Kartu Kredit'],['cek/giro','Cek/Giro'],['transfer','Transfer'],['voucher','Voucher']]
+			data:[['tunai','Tunai'],['kwitansi','Kwitansi'],['card','Kartu Kredit'],['cek/giro','Cek/Giro'],['transfer','Transfer']]
+			//,['voucher','Voucher']]
 		}),
 		mode: 'local',
 		displayField: 'jpaket_cara',
