@@ -62,7 +62,8 @@ html,body,table,tr,td{
 		$i=0;
 		$total=0;
 		$subtotal=0;
-		$total_diskon=0;
+		$total_diskon_tamb=0;
+		$total_voucher=0;
 		foreach($detail_jpaket as $list => $row) { $i+=1;?>
         <tr>
           <td width="490px">&nbsp;<?=$i;?>.&nbsp;<?=$row->paket_nama;?></td>
@@ -75,7 +76,8 @@ html,body,table,tr,td{
 			$subtotal+=(($row->dpaket_jumlah)*($row->jumlah_subtotal));
 		}
 		$total=($subtotal*((100-$jpaket_diskon)/100)-$jpaket_cashback);
-		$total_diskon=($subtotal*($jpaket_diskon/100));
+		$total_diskon_tamb=($subtotal*($jpaket_diskon/100));
+		$total_voucher= $jpaket_cashback;		
 		?>
       </table>
 	  </td>
@@ -108,7 +110,10 @@ html,body,table,tr,td{
           <td><?php if($cara_bayar1<>''){?><?=$cara_bayar1;?>&nbsp;:&nbsp;<?=rupiah($nilai_bayar1);?><?php }?></td>
           <td>&nbsp;</td>
           <td>&nbsp;</td>
-          <td align="right"><?=rupiah($total_diskon);?></td>
+          <td align="right">
+			<?php if($total_voucher<>0){?><?=rupiah($total_voucher);?><?php }?>
+			<?php if($total_diskon_tamb<>0){?><?=rupiah($total_diskon_tamb);?><?php }?>
+		  </td>
         </tr>
         <tr>
           <td>&nbsp;</td>

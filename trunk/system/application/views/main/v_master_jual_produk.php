@@ -80,6 +80,7 @@ var jproduk_custField;
 var jproduk_tanggalField;
 //var jproduk_member_validField;
 var jproduk_diskonField;
+var jproduk_ket_diskField;
 var jproduk_bayarField;
 var jproduk_caraField;
 var jproduk_cara2Field;
@@ -249,7 +250,19 @@ Ext.onReady(function(){
 				var result=eval(response.responseText);
 				switch(result){
 					case 1:
-						master_jual_produk_create();
+						if (jproduk_diskonField.getValue()!=0 && jproduk_cashback_cfField.getValue()!=0){
+							Ext.MessageBox.show({
+							title: 'Warning',
+							msg: 'Diskon tambahan dan Voucher hanya bisa diisi salah satu',
+							buttons: Ext.MessageBox.OK,
+							animEl: 'save',
+							icon: Ext.MessageBox.WARNING
+						});
+						} 
+						else
+						{
+							master_jual_produk_create();
+						}
 						break;
 					default:
 						Ext.MessageBox.show({
@@ -375,6 +388,7 @@ Ext.onReady(function(){
 				var jproduk_cara3_create=null; 
 				var jproduk_statdok_create=null;
 				var jproduk_keterangan_create=null; 
+				var jproduk_ket_disk_create=null; 
 				//tunai
 				var jproduk_tunai_nilai_create=null;
 				//tunai-2
@@ -464,7 +478,8 @@ Ext.onReady(function(){
 				if(jproduk_cara2Field.getValue()!== null){jproduk_cara2_create = jproduk_cara2Field.getValue();} 
 				if(jproduk_cara3Field.getValue()!== null){jproduk_cara3_create = jproduk_cara3Field.getValue();} 
 				if(jproduk_stat_dokField.getValue()!== null){jproduk_statdok_create = jproduk_stat_dokField.getValue();} 
-				if(jproduk_keteranganField.getValue()!== null){jproduk_keterangan_create = jproduk_keteranganField.getValue();} 
+				if(jproduk_keteranganField.getValue()!== null){jproduk_keterangan_create = jproduk_keteranganField.getValue();}
+				if(jproduk_ket_diskField.getValue()!== null){jproduk_ket_disk_create = jproduk_ket_diskField.getValue();} 				
 				//tunai
 				if(jproduk_tunai_nilaiField.getValue()!== null){jproduk_tunai_nilai_create = jproduk_tunai_nilaiField.getValue();}
 				//tunai-2
@@ -575,6 +590,7 @@ Ext.onReady(function(){
 						jproduk_cara3		: 	jproduk_cara3_create, 
 						jproduk_stat_dok	:	jproduk_statdok_create,
 						jproduk_keterangan	: 	jproduk_keterangan_create, 
+						jproduk_ket_disk	: 	jproduk_ket_disk_create, 
 						jproduk_cashback	: 	jproduk_cashback_create,
 						//tunai
 						jproduk_tunai_nilai	:	jproduk_tunai_nilai_create,
@@ -1042,6 +1058,9 @@ Ext.onReady(function(){
 		jproduk_cashback_cfField.reset();
 		jproduk_cashback_cfField.setValue(null);
 		
+		jproduk_ket_diskField.reset();
+		jproduk_ket_diskField.setValue(null);
+		
 		jproduk_keteranganField.reset();
 		jproduk_keteranganField.setValue(null);
 
@@ -1102,6 +1121,7 @@ Ext.onReady(function(){
 		detail_jual_produkListEditorGrid.setDisabled(false);
 		jproduk_diskonField.setDisabled(false);
 		jproduk_cashback_cfField.setDisabled(false);
+		jproduk_ket_diskField.setDisabled(false);
 		jproduk_stat_dokField.setDisabled(false);
 		detail_jual_produkListEditorGrid.djproduk_add.enable();
         detail_jual_produkListEditorGrid.djproduk_delete.enable();
@@ -1181,6 +1201,7 @@ Ext.onReady(function(){
 		jproduk_cara3Field.setValue(master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_cara3'));
 		jproduk_diskonField.setValue(master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_diskon'));
 		jproduk_cashbackField.setValue(master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_cashback'));
+		jproduk_ket_diskField.setValue(master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_ket_disk'));
 		jproduk_cashback_cfField.setValue(CurrencyFormatted(master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_cashback')));
 		jproduk_bayarField.setValue(master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_bayar'));
 		
@@ -1635,7 +1656,25 @@ Ext.onReady(function(){
             //detail_jual_produkListEditorGrid.setDisabled(false);
             jproduk_diskonField.setDisabled(false);
             jproduk_cashback_cfField.setDisabled(false);
+			jproduk_ket_diskField.setDisabled(false);
             jproduk_stat_dokField.setDisabled(false);
+			//jproduk_persenRadio.setDisabled(false);
+			//jproduk_rupiahRadio.setDisabled(false);
+			/*
+			if (jproduk_diskonField.getValue != 0){
+				jproduk_persenRadio.setValue(true);
+				jproduk_rupiahRadio.setValue(false);
+	            jproduk_cashback_cfField.setDisabled(true);
+	            jproduk_diskonField.setDisabled(false);
+			} else if (jproduk_cashback_cfField.getValue != 0){
+				jproduk_persenRadio.setValue(false);
+				jproduk_rupiahRadio.setValue(true);
+	            jproduk_cashback_cfField.setDisabled(false);
+	            jproduk_diskonField.setDisabled(true);
+			}
+			*/
+			
+			
 		}
 		if(jproduk_post2db=="UPDATE" && master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_stat_dok')=="Tertutup"){
 			jproduk_custField.setDisabled(true);
@@ -1681,7 +1720,10 @@ Ext.onReady(function(){
 			//detail_jual_produkListEditorGrid.setDisabled(true);
 			jproduk_diskonField.setDisabled(true);
 			jproduk_cashback_cfField.setDisabled(true);
+			jproduk_ket_diskField.setDisabled(true);
 			jproduk_stat_dokField.setDisabled(false);
+			//jproduk_persenRadio.setDisabled(true);
+			//jproduk_rupiahRadio.setDisabled(true);
 		}
 		if(jproduk_post2db=="UPDATE" && master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_stat_dok')=="Batal"){
 			jproduk_custField.setDisabled(true);
@@ -1728,6 +1770,7 @@ Ext.onReady(function(){
 			//detail_jual_produkListEditorGrid.setDisabled(true);
 			jproduk_diskonField.setDisabled(true);
 			jproduk_cashback_cfField.setDisabled(true);
+			jproduk_ket_diskField.setDisabled(true);
 			master_jual_produk_createForm.jproduk_savePrint.disable();
 		}
 	}
@@ -1937,6 +1980,7 @@ Ext.onReady(function(){
 			{name: 'jproduk_bayar', type: 'float', mapping: 'jproduk_bayar'}, 
 			{name: 'jproduk_total', type: 'float', mapping: 'jproduk_totalbiaya'}, 
 			{name: 'jproduk_keterangan', type: 'string', mapping: 'jproduk_keterangan'},
+			{name: 'jproduk_ket_disk', type: 'string', mapping: 'jproduk_ket_disk'},
 			{name: 'jproduk_stat_dok', type: 'string', mapping: 'jproduk_stat_dok'}, 			
 			{name: 'jproduk_creator', type: 'string', mapping: 'jproduk_creator'}, 
 			{name: 'jproduk_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'jproduk_date_create'}, 
@@ -2597,12 +2641,43 @@ Ext.onReady(function(){
 		maskRe: /([0-9]+)$/
 	});
 	
+	jproduk_ket_diskField= new Ext.form.TextField({
+		id: 'jproduk_ket_disk',
+		fieldLabel: 'No Voucher',
+		//allowNegatife : false,
+		//blankText: '0',
+		//emptyText: '0',
+		//allowDecimals: false,
+		//enableKeyEvents: true,
+		width: 120,
+		//maxLength: 2,
+		//maskRe: /([0-9]+)$/
+	});
+	/*
+	var jproduk_persenRadio=new Ext.form.Radio({
+		id:'jproduk_persenRadio',
+		name:'diskonField',
+		width: 100,
+		boxLabel: 'Disk Tambahan (%)',
+		//checked: true,
+		value: 'selected'
+	});
+	
+	var jproduk_rupiahRadio=new Ext.form.Radio({
+		id:'jproduk_rupiahRadio',
+		name:'diskonField',
+		width: 100,
+		boxLabel: 'Voucher',
+		checked: true,
+		value: 'selected'
+	});
+	*/
 	jproduk_cashback_cfField= new Ext.form.TextField({
 		id: 'jproduk_cashback_cfField',
-		fieldLabel: 'Disk Tambahan (Rp)',
+		fieldLabel: 'Voucher (Rp)',
 		allowNegatife : false,
 		enableKeyEvents: true,
-		readOnly : true,
+		//readOnly : true,
 		itemCls: 'rmoney',
 		width: 120,
 		maskRe: /([0-9]+)$/ 
@@ -2636,7 +2711,8 @@ Ext.onReady(function(){
 		fieldLabel: 'Cara Bayar',
 		store:new Ext.data.SimpleStore({
 			fields:['jproduk_cara_value', 'jproduk_cara_display'],
-			data:[['tunai','Tunai'],['kwitansi','Kuitansi'],['card','Kartu Kredit'],['cek/giro','Cek/Giro'],['transfer','Transfer'],['voucher','Voucher']]
+			data:[['tunai','Tunai'],['kwitansi','Kuitansi'],['card','Kartu Kredit'],['cek/giro','Cek/Giro'],['transfer','Transfer']]
+			//,['voucher','Voucher']]
 		}),
 		mode: 'local',
 		displayField: 'jproduk_cara_display',
@@ -2652,7 +2728,8 @@ Ext.onReady(function(){
 		fieldLabel: 'Cara Bayar 2',
 		store:new Ext.data.SimpleStore({
 			fields:['jproduk_cara_value', 'jproduk_cara_display'],
-			data:[['tunai','Tunai'],['kwitansi','Kuitansi'],['card','Kartu Kredit'],['cek/giro','Cek/Giro'],['transfer','Transfer'],['voucher','Voucher']]
+			data:[['tunai','Tunai'],['kwitansi','Kuitansi'],['card','Kartu Kredit'],['cek/giro','Cek/Giro'],['transfer','Transfer']]
+			//,['voucher','Voucher']]
 		}),
 		mode: 'local',
 		displayField: 'jproduk_cara_display',
@@ -2668,7 +2745,8 @@ Ext.onReady(function(){
 		fieldLabel: 'Cara Bayar 3',
 		store:new Ext.data.SimpleStore({
 			fields:['jproduk_cara_value', 'jproduk_cara_display'],
-			data:[['tunai','Tunai'],['kwitansi','Kuitansi'],['card','Kartu Kredit'],['cek/giro','Cek/Giro'],['transfer','Transfer'],['voucher','Voucher']]
+			data:[['tunai','Tunai'],['kwitansi','Kuitansi'],['card','Kartu Kredit'],['cek/giro','Cek/Giro'],['transfer','Transfer']]
+			//,['voucher','Voucher']]
 		}),
 		mode: 'local',
 		displayField: 'jproduk_cara_display',
@@ -4123,7 +4201,8 @@ Ext.onReady(function(){
 				baseCls: 'x-plain',
 				border:false,
 				labelAlign: 'left',
-				items: [jproduk_jumlahField, jproduk_subTotalField, jproduk_diskonField, jproduk_cashback_cfField, {xtype: 'spacer',height:10},jproduk_totalField, jproduk_bayarField,jproduk_hutangField, jproduk_pesanLabel, jproduk_lunasLabel] 
+				items: [jproduk_jumlahField, jproduk_subTotalField,jproduk_diskonField,jproduk_cashback_cfField,
+			  jproduk_ket_diskField, {xtype: 'spacer',height:10},jproduk_totalField, jproduk_bayarField,jproduk_hutangField, jproduk_pesanLabel, jproduk_lunasLabel] 
 			}
 			]
 	
@@ -4404,7 +4483,7 @@ Ext.onReady(function(){
 		if(cbo_dproduk_produkDataStore.getCount()){
             //Untuk me-lock screen sementara, menunggu data selesai di-load ==> setelah selesai di-load, hide Ext.MessageBox.show() di bawah ini
             master_jual_produk_createForm.setDisabled(true);
-            
+			
             dproduk_idField.setValue(cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_value);
 			dharga_defaultField.setValue(cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_harga);
 			var djumlah_diskon = 0;
@@ -4424,7 +4503,8 @@ Ext.onReady(function(){
 				callback: function(opts, success, response){
 					if(success){
                         djumlah_beli_produkField.setValue(1);
-                        var nilai_default=0;
+						
+						var nilai_default=0;
                         var st=cbo_dproduk_satuanDataStore.findExact('djproduk_satuan_default','true',0);
                         if(cbo_dproduk_satuanDataStore.getCount()>=0){
                             nilai_default=cbo_dproduk_satuanDataStore.getAt(st).data.djproduk_satuan_nilai;
@@ -4434,25 +4514,29 @@ Ext.onReady(function(){
                                 dsub_totalField.setValue(djumlah_beli_produkField.getValue()*(nilai_default*dharga_defaultField.getValue()));
                                 dsub_total_netField.setValue(((100-djumlah_diskon)/100)*djumlah_beli_produkField.getValue()*(nilai_default*dharga_defaultField.getValue()));
                                 master_jual_produk_createForm.setDisabled(false);
+
                             }else if(nilai_default!==1){
                                 //temp_konv_nilai.setValue(nilai_default*(1/nilai_default));
                                 dharga_konversiField.setValue((nilai_default*(1/nilai_default))*dharga_defaultField.getValue());
                                 dsub_totalField.setValue(djumlah_beli_produkField.getValue()*((nilai_default*(1/nilai_default))*dharga_defaultField.getValue()));
                                 dsub_total_netField.setValue(((100-djumlah_diskon)/100)*djumlah_beli_produkField.getValue()*((nilai_default*(1/nilai_default))*dharga_defaultField.getValue()));
                                 master_jual_produk_createForm.setDisabled(false);
+
                             }else{
                                 master_jual_produk_createForm.setDisabled(false);
+
                             }
                             combo_satuan_produk.setValue(cbo_dproduk_satuanDataStore.getAt(st).data.djproduk_satuan_value);
                         }else{
                             master_jual_produk_createForm.setDisabled(false);
+
                         }
 					}else{
                         master_jual_produk_createForm.setDisabled(false);
+
                     }
 				}
-			});
-			
+			});	
 		}
 	});
 
@@ -6468,7 +6552,6 @@ Ext.onReady(function(){
 		autoHeight:true,
 		width: 	1220,	//940,
 		frame: true,
-		layout: 'fit',
 		items: [master_jual_produk_masterGroup,detail_jual_produkListEditorGrid,master_jual_produk_bayarGroup]
 		,
 		buttons: [
@@ -6663,7 +6746,8 @@ Ext.onReady(function(){
 		fieldLabel: 'Cara Bayar',
 		store:new Ext.data.SimpleStore({
 			fields:['value', 'jproduk_cara'],
-			data:[['tunai','Tunai'],['kwitansi','Kwitansi'],['card','Kartu Kredit'],['cek/giro','Cek/Giro'],['transfer','Transfer'],['voucher','Voucher']]
+			data:[['tunai','Tunai'],['kwitansi','Kwitansi'],['card','Kartu Kredit'],['cek/giro','Cek/Giro'],['transfer','Transfer']]
+			//,['voucher','Voucher']]
 		}),
 		mode: 'local',
 		displayField: 'jproduk_cara',
@@ -6918,7 +7002,6 @@ Ext.onReady(function(){
 		});
 	}
 	/*End of Function */
-	
 	function jproduk_btn_cancel(){
 		master_jual_produk_reset_form();
 		detail_jual_produk_DataStore.load({params: {master_id:-1}});
@@ -6928,10 +7011,43 @@ Ext.onReady(function(){
 		jproduk_post2db="CREATE";
 		jproduk_diskonField.setValue(0);
 		jproduk_cashbackField.setValue(0);
+		//jproduk_diskonField.setDisabled(true);
+		jproduk_diskonField.allowBlank=true;
+		//jproduk_rupiahRadio.setValue(true);
+		//jproduk_persenRadio.setValue(false);
 		jproduk_pesanLabel.setText('');
 		jproduk_lunasLabel.setText('');
+		//jproduk_persenRadio.setDisabled(false);
+		//jproduk_rupiahRadio.setDisabled(false);
 	}
 	
+	/*
+	jproduk_persenRadio.on("check",function(){
+	 	if(jproduk_persenRadio.getValue()==true){
+			//setDisableAll();
+			jproduk_cashback_cfField.setDisabled(true);
+			jproduk_cashback_cfField.allowBlank=true;
+			jproduk_ket_diskField.setDisabled(true);
+			jproduk_cashback_cfField.setValue(0);
+			
+			jproduk_diskonField.setDisabled(false);
+			jproduk_diskonField.allowBlank=false;
+	 	}
+	});
+	
+	jproduk_rupiahRadio.on("check",function(){
+	 	if(jproduk_rupiahRadio.getValue()==true){
+			//setDisableAll();
+			jproduk_cashback_cfField.setDisabled(false);
+			jproduk_cashback_cfField.allowBlank=false;
+			jproduk_ket_diskField.setDisabled(false);
+			
+			jproduk_diskonField.setDisabled(true);
+			jproduk_diskonField.allowBlank=true;
+			jproduk_diskonField.setValue(0);
+	 	}
+	});
+	*/
 	function pertamax(){
 		jproduk_post2db="CREATE";
 		jproduk_stat_dokField.setValue('Terbuka');
@@ -6941,8 +7057,10 @@ Ext.onReady(function(){
 		master_jual_produk_createForm.render();
 		jproduk_caraField.setValue('card');
 		master_jual_produk_cardGroup.setVisible(true);
-		jproduk_diskonField.setValue(0);
 		jproduk_cashbackField.setValue(0);
+		jproduk_diskonField.setValue(0);
+		//jproduk_diskonField.setDisabled(true);
+		jproduk_diskonField.allowBlank=true;
 	}
 	pertamax();
 	
