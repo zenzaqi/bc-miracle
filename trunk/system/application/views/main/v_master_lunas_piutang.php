@@ -500,12 +500,8 @@ Ext.onReady(function(){
 			{name: 'lpiutang_total', type: 'float', mapping: 'lpiutang_total'}, 
 			{name: 'lpiutang_sisa', type: 'float', mapping: 'lpiutang_sisa'}, 
 			{name: 'lpiutang_keterangan', type: 'string', mapping: 'lpiutang_keterangan'}, 
-			{name: 'lpiutang_status', type: 'string', mapping: 'lpiutang_status'}, 
-			{name: 'lpiutang_creator', type: 'string', mapping: 'lpiutang_creator'}, 
-			{name: 'lpiutang_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'lpiutang_date_create'}, 
-			{name: 'lpiutang_update', type: 'string', mapping: 'lpiutang_update'}, 
-			{name: 'lpiutang_date_update', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'lpiutang_date_update'}, 
-			{name: 'lpiutang_revised', type: 'int', mapping: 'lpiutang_revised'} 
+			{name: 'lpiutang_status', type: 'string', mapping: 'lpiutang_status'},
+			{name: 'lpiutang_stat_dok', type: 'string', mapping: 'lpiutang_stat_dok'}
 		]),
 		sortInfo:{field: 'lpiutang_id', direction: "DESC"},
 		groupField: 'cust_nama'
@@ -599,99 +595,59 @@ Ext.onReady(function(){
 				cell.css = "readonlycell"; // Mengambil Value dari Class di dalam CSS 
 				return value;
 				},
-			hidden: false
+			hidden: true
 		},
 		{
 			header: 'No.Faktur Jual',
 			dataIndex: 'lpiutang_faktur',
-			width: 150,
-			sortable: true,
-			editor: new Ext.form.TextField({
-				maxLength: 50
-          	})
+			width: 100,
+			sortable: false
 		}, 
 		{
 			header: 'Tanggal',
 			dataIndex: 'lpiutang_faktur_tanggal',
-			width: 150,
-			sortable: true,
+			width: 90,
+			sortable: false,
 			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
 		}, 
 		{
 			header: 'Customer',
 			dataIndex: 'cust_nama',
 			width: 210,
-			sortable: true,
+			sortable: false,
 			hidden: true
 		}, 
 		{
 			header: 'Total Piutang',
 			dataIndex: 'lpiutang_total',
-			width: 150,
-			sortable: true,
+			width: 110,
+			sortable: false,
 			renderer: Ext.util.Format.numberRenderer('0,000')
 		}, 
 		{
 			header: 'Sisa Piutang',
 			dataIndex: 'lpiutang_sisa',
-			width: 150,
-			sortable: true,
+			width: 110,
+			sortable: false,
 			renderer: Ext.util.Format.numberRenderer('0,000')
 		}, 
 		{
 			header: 'Keterangan',
 			dataIndex: 'lpiutang_keterangan',
-			width: 150,
-			sortable: true,
-			editor: new Ext.form.TextField({
-				maxLength: 150
-          	})
+			width: 180,
+			sortable: false
 		}, 
 		{
 			header: 'Status',
 			dataIndex: 'lpiutang_status',
-			width: 150,
-			sortable: true
+			width: 70,
+			sortable: false
 		}, 
 		{
-			header: 'Creator',
-			dataIndex: 'lpiutang_creator',
-			width: 150,
-			sortable: true,
-			hidden: true,
-			readOnly: true,
-		}, 
-		{
-			header: 'Date Create',
-			dataIndex: 'lpiutang_date_create',
-			width: 150,
-			sortable: true,
-			hidden: true,
-			readOnly: true,
-		}, 
-		{
-			header: 'Update',
-			dataIndex: 'lpiutang_update',
-			width: 150,
-			sortable: true,
-			hidden: true,
-			readOnly: true,
-		}, 
-		{
-			header: 'Date Update',
-			dataIndex: 'lpiutang_date_update',
-			width: 150,
-			sortable: true,
-			hidden: true,
-			readOnly: true,
-		}, 
-		{
-			header: 'Revised',
-			dataIndex: 'lpiutang_revised',
-			width: 150,
-			sortable: true,
-			hidden: true,
-			readOnly: true,
+			header: 'Stat Dok',
+			dataIndex: 'lpiutang_stat_dok',
+			width: 90,
+			sortable: false
 		}	]);
 	
 	master_lunas_piutang_ColumnModel.defaultSortable= true;
@@ -701,7 +657,7 @@ Ext.onReady(function(){
 	master_lunas_piutangListEditorGrid =  new Ext.grid.GridPanel({
 		id: 'master_lunas_piutangListEditorGrid',
 		el: 'fp_master_lunas_piutang',
-		title: 'List Of Master_lunas_piutang',
+		title: 'Daftar Pelunasan Piutang',
 		autoHeight: true,
 		store: master_lunas_piutang_DataStore, // DataStore
 		cm: master_lunas_piutang_ColumnModel, // Nama-nama Columns
@@ -740,14 +696,25 @@ Ext.onReady(function(){
 			disabled: true,
 			handler: master_lunas_piutang_confirm_delete   // Confirm before deleting
 		}, '-', {
-			text: 'Search',
+			text: 'Adv Search',
 			tooltip: 'Advanced Search',
 			iconCls:'icon-search',
 			handler: display_form_search_window 
 		}, '-', 
 			new Ext.app.SearchField({
 			store: master_lunas_piutang_DataStore,
-			params: {start: 0, limit: pageS},
+			params: {task: 'LIST',start: 0, limit: pageS},
+			listeners:{
+				specialkey: function(f,e){
+					if(e.getKey() == e.ENTER){
+						master_lunas_piutang_DataStore.baseParams={task:'LIST',start: 0, limit: pageS};
+		            }
+				},
+				render: function(c){
+				Ext.get(this.id).set({qtitle:'Search By'});
+				Ext.get(this.id).set({qtip:'- No. Faktur Jual<br>- Nama Customer'});
+				}
+			},
 			width: 120
 		}),'-',{
 			text: 'Refresh',

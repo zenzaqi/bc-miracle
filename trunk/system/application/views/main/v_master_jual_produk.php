@@ -2512,7 +2512,8 @@ Ext.onReady(function(){
 	
 	/* function for editing row via context menu */
 	function master_jual_produk_editContextMenu(){
-		master_jual_produkListEditorGrid.startEditing(master_jual_produk_SelectedRow,1);
+		//master_jual_produkListEditorGrid.startEditing(master_jual_produk_SelectedRow,1);
+		master_jual_produk_confirm_update();
   	}
 	/* End of Function */
   	

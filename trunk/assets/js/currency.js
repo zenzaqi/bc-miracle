@@ -25,6 +25,8 @@ Ext.ux.form.CFTextField = Ext.extend(Ext.form.TextField,{
 			var to_number = this.convertToNumber(this.value);
 			//return this.value;
 			return to_number;
+		}else{
+			return 0;
 		}
     },
 	

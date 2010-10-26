@@ -291,12 +291,23 @@ class M_master_lunas_piutang extends Model{
 		
 		//function for get list record
 		function master_lunas_piutang_list($filter,$start,$end){
-			$query = "SELECT * FROM master_lunas_piutang LEFT JOIN customer ON(lpiutang_cust=cust_id)";
+			$query = "SELECT master_lunas_piutang.lpiutang_id
+					,master_lunas_piutang.lpiutang_faktur
+					,master_lunas_piutang.lpiutang_cust
+					,master_lunas_piutang.lpiutang_faktur_tanggal
+					,master_lunas_piutang.lpiutang_total
+					,master_lunas_piutang.lpiutang_sisa
+					,master_lunas_piutang.lpiutang_keterangan
+					,master_lunas_piutang.lpiutang_status
+					,master_lunas_piutang.lpiutang_stat_dok
+					,customer.cust_nama
+				FROM master_lunas_piutang
+					LEFT JOIN customer ON(lpiutang_cust=cust_id)";
 			
 			// For simple search
 			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (lpiutang_id LIKE '%".addslashes($filter)."%' OR lpiutang_faktur LIKE '%".addslashes($filter)."%' OR lpiutang_cust LIKE '%".addslashes($filter)."%' OR lpiutang_faktur_tanggal LIKE '%".addslashes($filter)."%' OR lpiutang_keterangan LIKE '%".addslashes($filter)."%' )";
+				$query .= " (lpiutang_faktur LIKE '%".addslashes($filter)."%' OR cust_nama LIKE '%".addslashes($filter)."%' )";
 			}
 			
 			$result = $this->db->query($query);
@@ -386,7 +397,18 @@ class M_master_lunas_piutang extends Model{
 		//function for advanced search record
 		function master_lunas_piutang_search($lpiutang_id ,$lpiutang_faktur ,$lpiutang_cust ,$lpiutang_faktur_tanggal ,$lpiutang_keterangan ,$start,$end){
 			//full query
-			$query="select * from master_lunas_piutang";
+			$query="SELECT master_lunas_piutang.lpiutang_id
+					,master_lunas_piutang.lpiutang_faktur
+					,master_lunas_piutang.lpiutang_cust
+					,master_lunas_piutang.lpiutang_faktur_tanggal
+					,master_lunas_piutang.lpiutang_total
+					,master_lunas_piutang.lpiutang_sisa
+					,master_lunas_piutang.lpiutang_keterangan
+					,master_lunas_piutang.lpiutang_status
+					,master_lunas_piutang.lpiutang_stat_dok
+					,customer.cust_nama
+				FROM master_lunas_piutang
+					LEFT JOIN customer ON(lpiutang_cust=cust_id)";
 			
 			if($lpiutang_id!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";

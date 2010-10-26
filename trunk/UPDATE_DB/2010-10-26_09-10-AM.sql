@@ -1,0 +1,1 @@
+ALTER TABLE `master_jual_rawat` CHANGE `jrawat_totalbiaya` `jrawat_totalbiaya` DOUBLE NOT NULL DEFAULT '0';

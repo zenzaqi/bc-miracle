@@ -101,23 +101,6 @@ class C_master_jual_rawat extends Controller {
 		$result = $this->m_master_jual_rawat->get_rawat_list($query,$start,$end,$aktif);
 		echo $result;
 	}
-	
-	/*function get_rawat_list(){
-		$query = isset($_POST['query']) ? $_POST['query'] : "";
-		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
-		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_master_jual_rawat->get_rawat_list($query,$start,$end);
-		echo $result;
-	}*/
-	
-	/*function get_cbo_rawat_list(){
-		$query = isset($_POST['query']) ? $_POST['query'] : "";
-		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
-		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_public_function->get_cbo_rawat_list($query,$start,$end);
-		echo $result;
-	}*/
-	
 		
 	function get_harga_rawat(){
 		$rawat_id = (integer) (isset($_POST['rawat_id']) ? $_POST['rawat_id'] : $_GET['rawat_id']);
@@ -218,59 +201,7 @@ class C_master_jual_rawat extends Controller {
 		echo $result;
 	}
 	
-	//add detail
-	function detail_detail_jual_rawat_insert(){
-		//POST variable here
-		/*$drawat_id=trim(@$_POST["drawat_id"]);
-		$drawat_master=trim(@$_POST["drawat_master"]);
-		$drawat_rawat=trim(@$_POST["drawat_rawat"]);
-		$drawat_jumlah=trim(@$_POST["drawat_jumlah"]);
-		$drawat_harga=trim(@$_POST["drawat_harga"]);
-		$drawat_diskon=trim(@$_POST["drawat_diskon"]);
-		$drawat_diskon_jenis=trim(@$_POST["drawat_diskon_jenis"]);
-		$drawat_sales=trim(@$_POST["drawat_sales"]);
-		$drawat_sales=str_replace("/(<\/?)(p)([^>]*>)", "",$drawat_sales);
-		$drawat_sales=str_replace("\\", "",$drawat_sales);
-		$drawat_sales=str_replace("'", '"',$drawat_sales);
-		$jrawat_id=trim(@$_POST["jrawat_id"]);
-		$result=$this->m_master_jual_rawat->detail_detail_jual_rawat_insert($drawat_id ,$drawat_master ,$drawat_rawat ,$drawat_jumlah ,$drawat_harga ,$drawat_diskon ,$drawat_diskon_jenis ,$drawat_sales ,$jrawat_id);*/
-		$drawat_id = $_POST['drawat_id']; // Get our array back and translate it :
-		$array_drawat_id = json_decode(stripslashes($drawat_id));
-		
-		$drawat_master=trim(@$_POST["drawat_master"]);
-		
-		$drawat_rawat = $_POST['drawat_rawat']; // Get our array back and translate it :
-		$array_drawat_rawat = json_decode(stripslashes($drawat_rawat));
-		
-		$drawat_jumlah = $_POST['drawat_jumlah']; // Get our array back and translate it :
-		$array_drawat_jumlah = json_decode(stripslashes($drawat_jumlah));
-		
-		$drawat_harga = $_POST['drawat_harga']; // Get our array back and translate it :
-		$array_drawat_harga = json_decode(stripslashes($drawat_harga));
-		
-		$drawat_diskon = $_POST['drawat_diskon']; // Get our array back and translate it :
-		$array_drawat_diskon = json_decode(stripslashes($drawat_diskon));
-		
-		$drawat_diskon_jenis = $_POST['drawat_diskon_jenis']; // Get our array back and translate it :
-		$array_drawat_diskon_jenis = json_decode(stripslashes($drawat_diskon_jenis));
-		
-		$drawat_sales = $_POST['drawat_sales']; // Get our array back and translate it :
-		$array_drawat_sales = json_decode(stripslashes($drawat_sales));
-		
-		$jrawat_id=trim(@$_POST["jrawat_id"]);
-		
-		$result=$this->m_master_jual_rawat->detail_detail_jual_rawat_insert($array_drawat_id
-																			,$drawat_master
-																			,$array_drawat_rawat
-																			,$array_drawat_jumlah
-																			,$array_drawat_harga
-																			,$array_drawat_diskon
-																			,$array_drawat_diskon_jenis
-																			,$array_drawat_sales
-																			,$jrawat_id);
-	}
-	
-	function detail_jual_rawat_update(){
+	function detail_jual_rawat_cu(){
 	//POST variable here
 		/*$drawat_id=trim(@$_POST["drawat_id"]);
         $drawat_master=trim(@$_POST["drawat_master"]);
@@ -281,7 +212,7 @@ class C_master_jual_rawat extends Controller {
         $drawat_diskon=trim(@$_POST["drawat_diskon"]);
         $drawat_diskon_jenis=trim(@$_POST["drawat_diskon_jenis"]);
         
-		$result=$this->m_master_jual_rawat->detail_jual_rawat_update($drawat_id ,$drawat_master ,$drawat_dtrawat ,$drawat_rawat ,$drawat_jumlah ,$drawat_harga ,$drawat_diskon ,$drawat_diskon_jenis);*/
+		$result=$this->m_master_jual_rawat->detail_jual_rawat_cu($drawat_id ,$drawat_master ,$drawat_dtrawat ,$drawat_rawat ,$drawat_jumlah ,$drawat_harga ,$drawat_diskon ,$drawat_diskon_jenis);*/
 		$drawat_id = $_POST['drawat_id']; // Get our array back and translate it :
 		$array_drawat_id = json_decode(stripslashes($drawat_id));
 		
@@ -307,7 +238,7 @@ class C_master_jual_rawat extends Controller {
 		
 		$cetak=trim(@$_POST["cetak"]);
 		
-		$result=$this->m_master_jual_rawat->detail_jual_rawat_update($array_drawat_id
+		$result=$this->m_master_jual_rawat->detail_jual_rawat_cu($array_drawat_id
 																	 ,$drawat_master
 																	 ,$array_drawat_dtrawat
 																	 ,$array_drawat_rawat
@@ -358,9 +289,6 @@ class C_master_jual_rawat extends Controller {
 				break;
 			case "CEK":
 				$this->master_jual_rawat_pengecekan();
-				break;
-			case "DELETE":
-				$this->master_jual_rawat_delete();
 				break;
 			case "SEARCH":
 				$this->master_jual_rawat_search();
@@ -525,8 +453,9 @@ class C_master_jual_rawat extends Controller {
 		
 		$cetak_jrawat=trim($_POST["cetak_jrawat"]);
 		
+		$drawat_count=trim($_POST["drawat_count"]);
 		
-		$result = $this->m_master_jual_rawat->master_jual_rawat_update($jrawat_id ,$jrawat_nobukti ,$jrawat_cust ,$jrawat_tanggal ,$jrawat_stat_dok, $jrawat_diskon ,$jrawat_cara ,$jrawat_cara2 ,$jrawat_cara3 ,$jrawat_keterangan , $jrawat_cashback, $jrawat_tunai_nilai, $jrawat_tunai_nilai2, $jrawat_tunai_nilai3, $jrawat_voucher_no, $jrawat_voucher_cashback, $jrawat_voucher_no2, $jrawat_voucher_cashback2, $jrawat_voucher_no3, $jrawat_voucher_cashback3, $jrawat_total, $jrawat_bayar, $jrawat_subtotal, $jrawat_hutang, $jrawat_kwitansi_no, $jrawat_kwitansi_nama, $jrawat_kwitansi_nilai, $jrawat_kwitansi_no2, $jrawat_kwitansi_nama2, $jrawat_kwitansi_nilai2, $jrawat_kwitansi_no3, $jrawat_kwitansi_nama3, $jrawat_kwitansi_nilai3, $jrawat_card_nama, $jrawat_card_edc, $jrawat_card_no, $jrawat_card_nilai, $jrawat_card_nama2, $jrawat_card_edc2, $jrawat_card_no2, $jrawat_card_nilai2, $jrawat_card_nama3, $jrawat_card_edc3, $jrawat_card_no3, $jrawat_card_nilai3, $jrawat_cek_nama, $jrawat_cek_no, $jrawat_cek_valid, $jrawat_cek_bank, $jrawat_cek_nilai, $jrawat_cek_nama2, $jrawat_cek_no2, $jrawat_cek_valid2, $jrawat_cek_bank2, $jrawat_cek_nilai2, $jrawat_cek_nama3, $jrawat_cek_no3, $jrawat_cek_valid3, $jrawat_cek_bank3, $jrawat_cek_nilai3, $jrawat_transfer_bank, $jrawat_transfer_nama, $jrawat_transfer_nilai, $jrawat_transfer_bank2, $jrawat_transfer_nama2, $jrawat_transfer_nilai2, $jrawat_transfer_bank3, $jrawat_transfer_nama3, $jrawat_transfer_nilai3 ,$cetak_jrawat, $jrawat_ket_disk);
+		$result = $this->m_master_jual_rawat->master_jual_rawat_update($jrawat_id ,$jrawat_nobukti ,$jrawat_cust ,$jrawat_tanggal ,$jrawat_stat_dok, $jrawat_diskon ,$jrawat_cara ,$jrawat_cara2 ,$jrawat_cara3 ,$jrawat_keterangan , $jrawat_cashback, $jrawat_tunai_nilai, $jrawat_tunai_nilai2, $jrawat_tunai_nilai3, $jrawat_voucher_no, $jrawat_voucher_cashback, $jrawat_voucher_no2, $jrawat_voucher_cashback2, $jrawat_voucher_no3, $jrawat_voucher_cashback3, $jrawat_total, $jrawat_bayar, $jrawat_subtotal, $jrawat_hutang, $jrawat_kwitansi_no, $jrawat_kwitansi_nama, $jrawat_kwitansi_nilai, $jrawat_kwitansi_no2, $jrawat_kwitansi_nama2, $jrawat_kwitansi_nilai2, $jrawat_kwitansi_no3, $jrawat_kwitansi_nama3, $jrawat_kwitansi_nilai3, $jrawat_card_nama, $jrawat_card_edc, $jrawat_card_no, $jrawat_card_nilai, $jrawat_card_nama2, $jrawat_card_edc2, $jrawat_card_no2, $jrawat_card_nilai2, $jrawat_card_nama3, $jrawat_card_edc3, $jrawat_card_no3, $jrawat_card_nilai3, $jrawat_cek_nama, $jrawat_cek_no, $jrawat_cek_valid, $jrawat_cek_bank, $jrawat_cek_nilai, $jrawat_cek_nama2, $jrawat_cek_no2, $jrawat_cek_valid2, $jrawat_cek_bank2, $jrawat_cek_nilai2, $jrawat_cek_nama3, $jrawat_cek_no3, $jrawat_cek_valid3, $jrawat_cek_bank3, $jrawat_cek_nilai3, $jrawat_transfer_bank, $jrawat_transfer_nama, $jrawat_transfer_nilai, $jrawat_transfer_bank2, $jrawat_transfer_nama2, $jrawat_transfer_nilai2, $jrawat_transfer_bank3, $jrawat_transfer_nama3, $jrawat_transfer_nilai3 ,$cetak_jrawat, $jrawat_ket_disk, $drawat_count);
 		echo $result;
 	}
 	
@@ -582,11 +511,10 @@ class C_master_jual_rawat extends Controller {
 		$jrawat_voucher_no3=trim($_POST["jrawat_voucher_no3"]);
 		$jrawat_voucher_cashback3=trim($_POST["jrawat_voucher_cashback3"]);
 		//bayar
+		$jrawat_total=trim($_POST["jrawat_total"]);
 		$jrawat_bayar=trim($_POST["jrawat_bayar"]);
 		$jrawat_subtotal=trim($_POST["jrawat_subtotal"]);
 		$jrawat_hutang=trim($_POST["jrawat_hutang"]);
-		//if($jrawat_cara=='tunai')
-			//$jrawat_bayar=$jrawat_subtotal;
 		//card
 		$jrawat_card_nama=trim($_POST["jrawat_card_nama"]);
 		$jrawat_card_edc=trim($_POST["jrawat_card_edc"]);
@@ -653,22 +581,18 @@ class C_master_jual_rawat extends Controller {
 		
 		$cetak_jrawat=trim($_POST["cetak_jrawat"]);
 				
-		$result=$this->m_master_jual_rawat->master_jual_rawat_create($jrawat_cust ,$jrawat_tanggal ,$jrawat_diskon ,$jrawat_cara ,$jrawat_stat_dok, $jrawat_cara2 ,$jrawat_cara3 ,$jrawat_keterangan , $jrawat_cashback, $jrawat_tunai_nilai, $jrawat_tunai_nilai2, $jrawat_tunai_nilai3, $jrawat_voucher_no, $jrawat_voucher_cashback, $jrawat_voucher_no2, $jrawat_voucher_cashback2, $jrawat_voucher_no3, $jrawat_voucher_cashback3, $jrawat_bayar, $jrawat_subtotal, $jrawat_hutang, $jrawat_kwitansi_no, $jrawat_kwitansi_nama, $jrawat_kwitansi_nilai, $jrawat_kwitansi_no2, $jrawat_kwitansi_nama2, $jrawat_kwitansi_nilai2, $jrawat_kwitansi_no3, $jrawat_kwitansi_nama3, $jrawat_kwitansi_nilai3, $jrawat_card_nama, $jrawat_card_edc, $jrawat_card_no, $jrawat_card_nilai, $jrawat_card_nama2, $jrawat_card_edc2, $jrawat_card_no2, $jrawat_card_nilai2, $jrawat_card_nama3, $jrawat_card_edc3, $jrawat_card_no3, $jrawat_card_nilai3, $jrawat_cek_nama, $jrawat_cek_no, $jrawat_cek_valid, $jrawat_cek_bank, $jrawat_cek_nilai, $jrawat_cek_nama2, $jrawat_cek_no2, $jrawat_cek_valid2, $jrawat_cek_bank2, $jrawat_cek_nilai2, $jrawat_cek_nama3, $jrawat_cek_no3, $jrawat_cek_valid3, $jrawat_cek_bank3, $jrawat_cek_nilai3, $jrawat_transfer_bank, $jrawat_transfer_nama, $jrawat_transfer_nilai, $jrawat_transfer_bank2, $jrawat_transfer_nama2, $jrawat_transfer_nilai2, $jrawat_transfer_bank3, $jrawat_transfer_nama3, $jrawat_transfer_nilai3, $cetak_jrawat, $jrawat_ket_disk);
-		echo $result;
-	}
-
-	//function for delete selected record
-	function master_jual_rawat_delete(){
-		$ids = $_POST['ids']; // Get our array back and translate it :
-		$pkid = json_decode(stripslashes($ids));
-		$result=$this->m_master_jual_rawat->master_jual_rawat_delete($pkid);
+		$result=$this->m_master_jual_rawat->master_jual_rawat_create($jrawat_cust ,$jrawat_tanggal ,$jrawat_diskon ,$jrawat_cara ,$jrawat_stat_dok, $jrawat_cara2 ,$jrawat_cara3 ,$jrawat_keterangan , $jrawat_cashback, $jrawat_tunai_nilai, $jrawat_tunai_nilai2, $jrawat_tunai_nilai3, $jrawat_voucher_no, $jrawat_voucher_cashback, $jrawat_voucher_no2, $jrawat_voucher_cashback2, $jrawat_voucher_no3, $jrawat_voucher_cashback3, $jrawat_total, $jrawat_bayar, $jrawat_subtotal, $jrawat_hutang, $jrawat_kwitansi_no, $jrawat_kwitansi_nama, $jrawat_kwitansi_nilai, $jrawat_kwitansi_no2, $jrawat_kwitansi_nama2, $jrawat_kwitansi_nilai2, $jrawat_kwitansi_no3, $jrawat_kwitansi_nama3, $jrawat_kwitansi_nilai3, $jrawat_card_nama, $jrawat_card_edc, $jrawat_card_no, $jrawat_card_nilai, $jrawat_card_nama2, $jrawat_card_edc2, $jrawat_card_no2, $jrawat_card_nilai2, $jrawat_card_nama3, $jrawat_card_edc3, $jrawat_card_no3, $jrawat_card_nilai3, $jrawat_cek_nama, $jrawat_cek_no, $jrawat_cek_valid, $jrawat_cek_bank, $jrawat_cek_nilai, $jrawat_cek_nama2, $jrawat_cek_no2, $jrawat_cek_valid2, $jrawat_cek_bank2, $jrawat_cek_nilai2, $jrawat_cek_nama3, $jrawat_cek_no3, $jrawat_cek_valid3, $jrawat_cek_bank3, $jrawat_cek_nilai3, $jrawat_transfer_bank, $jrawat_transfer_nama, $jrawat_transfer_nilai, $jrawat_transfer_bank2, $jrawat_transfer_nama2, $jrawat_transfer_nilai2, $jrawat_transfer_bank3, $jrawat_transfer_nama3, $jrawat_transfer_nilai3, $cetak_jrawat, $jrawat_ket_disk);
 		echo $result;
 	}
     
     function detail_jual_rawat_delete(){
         $ids = $_POST['ids'];
         $drawat_id = json_decode(stripslashes($ids));
-        $result=$this->m_master_jual_rawat->detail_jual_rawat_delete($drawat_id);
+		
+		$drawat_master = $_POST['drawat_master'];
+        $array_drawat_master = json_decode(stripslashes($drawat_master));
+		
+        $result=$this->m_master_jual_rawat->detail_jual_rawat_delete($drawat_id ,$array_drawat_master);
 		echo $result;
     }
 	
