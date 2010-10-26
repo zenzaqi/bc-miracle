@@ -291,7 +291,7 @@ class M_member extends Model{
 							  ,$filter){
 			//full query
 			//$query="select * from member";
-			$query = "SELECT member.*,cust_nama as member_nama FROM member,customer WHERE member_cust=cust_id and (member_status = 'Daftar' or member_status = 'Cetak')";
+			$query = "SELECT member.*,cust_nama as member_nama, customer.cust_no FROM member,customer WHERE member_cust=cust_id and (member_status = 'Daftar' or member_status = 'Cetak')";
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 				$query .= " member_status = 'Daftar' AND (cust_nama LIKE '%".addslashes($filter)."%' OR cust_no LIKE '%".addslashes($filter)."%' OR member_no LIKE '%".addslashes($filter)."%')";

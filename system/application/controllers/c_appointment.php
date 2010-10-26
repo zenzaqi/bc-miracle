@@ -333,15 +333,11 @@ class C_appointment extends Controller {
 	//function for advanced search
 	function appointment_search(){
 		//POST varibale here
-		$app_id=trim(@$_POST["app_id"]);
 		$app_customer=trim(@$_POST["app_customer"]);
 		$app_cara=trim(@$_POST["app_cara"]);
 		$app_cara=str_replace("/(<\/?)(p)([^>]*>)", "",$app_cara);
 		$app_cara=str_replace("'", "''",$app_cara);
-		//$app_keterangan=trim(@$_POST["app_keterangan"]);
-		//$app_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$app_keterangan);
-		//$app_keterangan=str_replace("'", "''",$app_keterangan);
-		$app_kategori=trim(@$_POST["app_kategori"]);
+		$jenis_rawat=trim(@$_POST["jenis_rawat"]);
 		$app_dokter=trim(@$_POST["app_dokter"]);
 		$app_terapis=trim(@$_POST["app_terapis"]);
 		$app_rawat_medis=trim(@$_POST["app_rawat_medis"]);
@@ -365,92 +361,116 @@ class C_appointment extends Controller {
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_appointment->appointment_search($app_id ,$app_customer ,$app_cara ,$app_kategori, $app_dokter, $app_terapis, $app_rawat_medis, $app_rawat_nonmedis, $app_tgl_start_reservasi, $app_tgl_end_reservasi, $app_tgl_start_app, $app_tgl_end_app, $start,$end);
+		$result = $this->m_appointment->appointment_search($app_customer ,$app_cara ,$jenis_rawat, $app_dokter, $app_terapis, $app_rawat_medis, $app_rawat_nonmedis, $app_tgl_start_reservasi, $app_tgl_end_reservasi, $app_tgl_start_app, $app_tgl_end_app, $start,$end);
 		echo $result;
 	}
 
 
 	function appointment_print(){
   		//POST varibale here
-		$app_id=trim(@$_POST["app_id"]);
 		$app_customer=trim(@$_POST["app_customer"]);
-		$app_tanggal=trim(@$_POST["app_tanggal"]);
 		$app_cara=trim(@$_POST["app_cara"]);
 		$app_cara=str_replace("/(<\/?)(p)([^>]*>)", "",$app_cara);
 		$app_cara=str_replace("'", "''",$app_cara);
-		$app_keterangan=trim(@$_POST["app_keterangan"]);
-		$app_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$app_keterangan);
-		$app_keterangan=str_replace("'", "''",$app_keterangan);
+		$jenis_rawat=trim(@$_POST["jenis_rawat"]);
+		$app_dokter=trim(@$_POST["app_dokter"]);
+		$app_terapis=trim(@$_POST["app_terapis"]);
+		$app_rawat_medis=trim(@$_POST["app_rawat_medis"]);
+		$app_rawat_nonmedis=trim(@$_POST["app_rawat_nonmedis"]);
+		if(trim(@$_POST["app_tgl_start_reservasi"])!="")
+			$app_tgl_start_reservasi=date('Y-m-d', strtotime(trim(@$_POST["app_tgl_start_reservasi"])));
+		else
+			$app_tgl_start_reservasi="";
+		if(trim(@$_POST["app_tgl_end_reservasi"])!="")
+			$app_tgl_end_reservasi=date('Y-m-d', strtotime(trim(@$_POST["app_tgl_end_reservasi"])));
+		else
+			$app_tgl_end_reservasi="";
+		if(trim(@$_POST["app_tgl_start_app"])!="")
+			$app_tgl_start_app=date('Y-m-d', strtotime(trim(@$_POST["app_tgl_start_app"])));
+		else
+			$app_tgl_start_app="";
+		if(trim(@$_POST["app_tgl_end_app"])!="")
+			$app_tgl_end_app=date('Y-m-d', strtotime(trim(@$_POST["app_tgl_end_app"])));
+		else
+			$app_tgl_end_app="";
+		
+		$tgl_app=trim(@$_POST["tgl_app"]);
+		
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$result = $this->m_appointment->appointment_print($app_id ,$app_customer ,$app_tanggal ,$app_cara ,$app_keterangan ,$option,$filter);
-		$nbrows=$result->num_rows();
-		$totcolumn=10;
-   		/* We now have our array, let's build our HTML file */
-		$file = fopen("appointmentlist.html",'w');
-		fwrite($file, "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' /><title>Printing the Appointment Grid</title><link rel='stylesheet' type='text/css' href='assets/modules/main/css/printstyle.css'/></head>");
-		fwrite($file, "<body><table summary='Appointment List'><caption>APPOINTMENT</caption><thead><tr><th scope='col'>App Id</th><th scope='col'>App Customer</th><th scope='col'>App Tanggal</th><th scope='col'>App Cara</th><th scope='col'>App Keterangan</th><th scope='col'>App Creator</th><th scope='col'>App Date Create</th><th scope='col'>App Update</th><th scope='col'>App Date Update</th><th scope='col'>App Revised</th></tr></thead><tfoot><tr><th scope='row'>Total</th><td colspan='$totcolumn'>");
-		fwrite($file, $nbrows);
-		fwrite($file, " Appointment</td></tr></tfoot><tbody>");
-		$i=0;
-		if($nbrows>0){
-			foreach($result->result_array() as $data){
-				fwrite($file,'<tr');
-				if($i%1==0){
-					fwrite($file," class='odd'");
-				}
-			
-				fwrite($file, "><th scope='row' id='r97'>");
-				fwrite($file, $data['app_id']);
-				fwrite($file,"</th><td>");
-				fwrite($file, $data['app_customer']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['app_tanggal']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['app_cara']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['app_keterangan']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['app_creator']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['app_date_create']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['app_update']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['app_date_update']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['app_revised']);
-				fwrite($file, "</td></tr>");
-			}
+		$data["data_print"] = $this->m_appointment->appointment_print($app_customer
+																	,$app_cara
+																	,$jenis_rawat
+																	,$app_dokter
+																	,$app_terapis
+																	,$app_tgl_start_reservasi
+																	,$app_tgl_end_reservasi
+																	,$app_tgl_start_app
+																	,$app_tgl_end_app
+																	,$app_rawat_medis
+																	,$app_rawat_nonmedis
+																	,$tgl_app
+																	,$option
+																	,$filter);
+		$print_view=$this->load->view("main/p_appointment.php",$data,TRUE);
+		if(!file_exists("print")){
+			mkdir("print");
 		}
-		fwrite($file, "</tbody></table></body></html>");	
-		fclose($file);
-		echo '1';        
+		$print_file=fopen("print/appointmentlist.html","w+");
+		fwrite($print_file, $print_view);
+		echo '1';
 	}
 	/* End Of Function */
 
 	/* Function to Export Excel document */
 	function appointment_export_excel(){
 		//POST varibale here
-		$app_id=trim(@$_POST["app_id"]);
 		$app_customer=trim(@$_POST["app_customer"]);
 		$app_cara=trim(@$_POST["app_cara"]);
 		$app_cara=str_replace("/(<\/?)(p)([^>]*>)", "",$app_cara);
 		$app_cara=str_replace("'", "''",$app_cara);
-		$app_kategori=trim(@$_POST["app_kategori"]);
+		$jenis_rawat=trim(@$_POST["jenis_rawat"]);
 		$app_dokter=trim(@$_POST["app_dokter"]);
 		$app_terapis=trim(@$_POST["app_terapis"]);
-		$app_tgl_start_reservasi=trim(@$_POST["app_tgl_start_reservasi"]);
-		$app_tgl_end_reservasi=trim(@$_POST["app_tgl_end_reservasi"]);
-		$app_tgl_start_app=trim(@$_POST["app_tgl_start_app"]);
-		$app_tgl_end_app=trim(@$_POST["app_tgl_end_app"]);
 		$app_rawat_medis=trim(@$_POST["app_rawat_medis"]);
 		$app_rawat_nonmedis=trim(@$_POST["app_rawat_nonmedis"]);
+		if(trim(@$_POST["app_tgl_start_reservasi"])!="")
+			$app_tgl_start_reservasi=date('Y-m-d', strtotime(trim(@$_POST["app_tgl_start_reservasi"])));
+		else
+			$app_tgl_start_reservasi="";
+		if(trim(@$_POST["app_tgl_end_reservasi"])!="")
+			$app_tgl_end_reservasi=date('Y-m-d', strtotime(trim(@$_POST["app_tgl_end_reservasi"])));
+		else
+			$app_tgl_end_reservasi="";
+		if(trim(@$_POST["app_tgl_start_app"])!="")
+			$app_tgl_start_app=date('Y-m-d', strtotime(trim(@$_POST["app_tgl_start_app"])));
+		else
+			$app_tgl_start_app="";
+		if(trim(@$_POST["app_tgl_end_app"])!="")
+			$app_tgl_end_app=date('Y-m-d', strtotime(trim(@$_POST["app_tgl_end_app"])));
+		else
+			$app_tgl_end_app="";
+		
+		$tgl_app=trim(@$_POST["tgl_app"]);
+		
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$query = $this->m_appointment->appointment_export_excel($app_id ,$app_customer ,$app_cara ,$app_kategori ,$app_dokter ,$app_terapis ,$app_tgl_start_reservasi ,$app_tgl_end_reservasi ,$app_tgl_start_app ,$app_tgl_end_app ,$app_rawat_medis ,$app_rawat_nonmedis ,$option,$filter);
+		$query = $this->m_appointment->appointment_export_excel($app_customer
+																,$app_cara
+																,$jenis_rawat
+																,$app_dokter
+																,$app_terapis
+																,$app_tgl_start_reservasi
+																,$app_tgl_end_reservasi
+																,$app_tgl_start_app
+																,$app_tgl_end_app
+																,$app_rawat_medis
+																,$app_rawat_nonmedis
+																,$tgl_app
+																,$option
+																,$filter);
 		
 		to_excel($query,"appointment"); 
 		echo '1';
