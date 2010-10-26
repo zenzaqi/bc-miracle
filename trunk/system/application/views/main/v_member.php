@@ -1649,7 +1649,7 @@ Ext.onReady(function(){
 		  	var result=eval(response.responseText);
 		  	switch(result){
 		  	case 1:
-				win = window.open('./print/member_printlist.html','memberlist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
+				win = window.open('./print/member_printlist.html','memberlist','height=400,width=800,resizable=1,scrollbars=1, menubar=1');
 				//win.print();
 				break;
 		  	default:

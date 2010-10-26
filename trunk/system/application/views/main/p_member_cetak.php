@@ -21,11 +21,11 @@
 <body onload="window.print();">
 <table summary='Inbox List'>
 	<caption>Kartu Member Cetak</caption>
-	<thead><tr><th scope='col'>No</th><th scope='col'>Customer</th><th scope='col'>No Member</th><th scope='col'>Tgl Daftar</th><th scope='col'>Tgl Valid</th><th scope='col'>Jenis</th></tr></thead>
-	<tfoot><tr><th scope='row'>Total</th><td colspan='5'><?php echo count($data_print); ?></td></tr></tfoot>
+	<thead><tr><th scope='col'>No</th><th scope='col'>No. Customer</th><th scope='col'>Customer</th><th scope='col'>No. Member</th><th scope='col'>Tgl Daftar</th><th scope='col'>Tgl Valid</th><th scope='col'>Jenis</th><th scope='col'>Status</th><th scope='col'>Tgl Cetak</th></tr></thead>
+	<tfoot><tr><th scope='row'>Total</th><td colspan='8'><?php echo count($data_print); ?></td></tr></tfoot>
 	<tbody>
 		<?php $i=0; foreach($data_print as $print) { $i++; ?>
-		<tr><td><? echo $i; ?></td><td><?php echo $print->member_nama; ?></td><td><?php echo $print->member_no ?></td><td><?php echo $print->member_register; ?></td><td><?php echo $print->member_valid; ?></td><td><?php echo $print->member_jenis; ?></td></tr>
+		<tr><td><? echo $i; ?></td><td><?php echo $print->cust_no; ?></td><td><?php echo $print->member_nama; ?></td><td><?php echo $print->member_no ?></td><td><?php echo $print->member_register; ?></td><td><?php echo $print->member_valid; ?></td><td><?php echo $print->member_jenis; ?></td><td><?php echo $print->member_status; ?></td><td><?php echo $print->member_tglcetak; ?></td></tr>
 		<?php } ?>
 	</tbody>
 </table>

@@ -1728,7 +1728,7 @@ class M_appointment extends Model{
 	*/
 	
 	//function for advanced search record
-	function appointment_search($app_id ,$app_customer ,$app_cara ,$app_kategori ,$app_dokter ,$app_terapis , $app_rawat_medis, $app_rawat_nonmedis, $app_tgl_start_reservasi, $app_tgl_end_reservasi, $app_tgl_start_app, $app_tgl_end_app, $start,$end){
+	function appointment_search($app_customer ,$app_cara ,$jenis_rawat ,$app_dokter ,$app_terapis , $app_rawat_medis, $app_rawat_nonmedis, $app_tgl_start_reservasi, $app_tgl_end_reservasi, $app_tgl_start_app, $app_tgl_end_app, $start,$end){
 		//full query
 		//$query="select * from appointment";
 		/*$query="SELECT app_id,app_customer,cust_nama,karyawan_dokter.karyawan_nama as dokter_nama,karyawan_terapis.karyawan_nama as terapis_nama,rawat_id,rawat_nama,kategori_nama,dapp_id,dapp_status,dapp_tglreservasi,dapp_jamdatang,app_tanggal,app_cara,app_keterangan,dapp_jamreservasi,app_creator,app_date_create,app_update,app_date_update,app_revised 
@@ -1740,10 +1740,6 @@ left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawa
 		$dt_six=date('Y-m-d',mktime(0,0,0,date("m"),date("d")+6,date("Y")));
 		$query="SELECT * FROM vu_appointment";
 		
-		if($app_id!=''){
-			$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-			$query.= " app_id LIKE '%".$app_id."%'";
-		};
 		if($app_customer!=''){
 			$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 			$query.= " app_customer='".$app_customer."'";
@@ -1766,9 +1762,9 @@ left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawa
 			$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 			$query.= " app_cara LIKE '%".$app_cara."%'";
 		};
-		if($app_kategori!=''){
+		if($jenis_rawat!=''){
 			$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-			$query.= " kategori_nama='".$app_kategori."'";
+			$query.= " kategori_nama='".$jenis_rawat."'";
 		};
 		if($app_dokter!=''){
 			$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -1809,87 +1805,263 @@ left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawa
 	}
 	
 	//function for print record
-	function appointment_print($app_id ,$app_customer ,$app_tanggal ,$app_cara ,$app_keterangan ,$option,$filter){
-		//full query
-		$query="select * from appointment";
-		if($option=='LIST'){
-			$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-			$query .= " (app_id LIKE '%".addslashes($filter)."%' OR app_customer LIKE '%".addslashes($filter)."%' OR app_tanggal LIKE '%".addslashes($filter)."%' OR app_cara LIKE '%".addslashes($filter)."%' OR app_keterangan LIKE '%".addslashes($filter)."%' )";
-			$result = $this->db->query($query);
-		} else if($option=='SEARCH'){
-			if($app_id!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " app_id LIKE '%".$app_id."%'";
-			};
-			if($app_customer!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " app_customer LIKE '%".$app_customer."%'";
-			};
-			if($app_tanggal!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " app_tanggal LIKE '%".$app_tanggal."%'";
-			};
-			if($app_cara!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " app_cara LIKE '%".$app_cara."%'";
-			};
-			if($app_keterangan!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " app_keterangan LIKE '%".$app_keterangan."%'";
-			};
-			$result = $this->db->query($query);
-		}
-		return $result;
-	}
-	
-	//function  for export to excel
-	function appointment_export_excel($app_id ,$app_customer ,$app_cara ,$app_kategori ,$app_dokter ,$app_terapis ,$app_tgl_start_reservasi ,$app_tgl_end_reservasi ,$app_tgl_start_app ,$app_tgl_end_app ,$app_rawat_medis ,$app_rawat_nonmedis ,$option,$filter){
-		
+	function appointment_print($app_customer
+								,$app_cara
+								,$jenis_rawat
+								,$app_dokter
+								,$app_terapis
+								,$app_tgl_start_reservasi
+								,$app_tgl_end_reservasi
+								,$app_tgl_start_app
+								,$app_tgl_end_app
+								,$app_rawat_medis
+								,$app_rawat_nonmedis
+								,$tgl_app
+								,$option
+								,$filter){
 		//full query
 		if($option=='LIST'){
-			//$query = "SELECT * FROM appointment";
+			if($jenis_rawat==""){
+				$jenis_rawat="Medis";
+			}
 			$dt=date('Y-m-d');
-			$query="SELECT dapp_tglreservasi as tanggal_appointment,dapp_jamreservasi as jam_appointment,rawat_nama as perawatan,cust_no as no_customer,cust_nama as customer,karyawan_dokter.karyawan_username as dokter_nikcname,karyawan_terapis.karyawan_username as terapis_nickname,dapp_status as status,dapp_jamdatang as jam_datang,dapp_keterangan as keterangan_detail
-FROM (((appointment inner join appointment_detail on appointment.app_id=appointment_detail.dapp_master inner join perawatan on appointment_detail.dapp_perawatan=perawatan.rawat_id 
-inner join customer on appointment.app_customer=customer.cust_id inner join kategori on perawatan.rawat_kategori=kategori.kategori_id) 
-left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawan_dokter.karyawan_id) left join karyawan as karyawan_terapis on appointment_detail.dapp_petugas2=karyawan_terapis.karyawan_id)
-WHERE dapp_tglreservasi >= '$dt'";
+			$dt_six=date('Y-m-d',mktime(0,0,0,date("m"),date("d")+6,date("Y")));
+			$query="SELECT * FROM vu_appointment";
 			
-			// For simple search
-			if ($filter<>"" && is_numeric($filter)==false){
-				$query="SELECT dapp_tglreservasi as tanggal_appointment,dapp_jamreservasi as jam_appointment,rawat_nama as perawatan,cust_no as no_customer,cust_nama as customer,karyawan_dokter.karyawan_username as dokter_nikcname,karyawan_terapis.karyawan_username as terapis_nickname,dapp_status as status,dapp_jamdatang as jam_datang,dapp_keterangan as keterangan_detail
-FROM (((appointment inner join appointment_detail on appointment.app_id=appointment_detail.dapp_master inner join perawatan on appointment_detail.dapp_perawatan=perawatan.rawat_id 
-inner join customer on appointment.app_customer=customer.cust_id inner join kategori on perawatan.rawat_kategori=kategori.kategori_id) 
-left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawan_dokter.karyawan_id) left join karyawan as karyawan_terapis on appointment_detail.dapp_petugas2=karyawan_terapis.karyawan_id)";
+			if($jenis_rawat=="Medis" && $filter==''){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				//search customer,perawatan,dokter,therapist
-				$query .= " (cust_nama LIKE '%".addslashes($filter)."%' OR rawat_nama LIKE '%".addslashes($filter)."%' OR karyawan_dokter.karyawan_username LIKE '%".addslashes($filter)."%' OR karyawan_terapis.karyawan_username LIKE '%".addslashes($filter)."%')";
+				$query .=" (kategori_nama='Medis' OR kategori_nama = 'Surgery' OR kategori_nama = 'Anti Aging')";
+				if($tgl_app!=""){
+					$tgl_app=date('Y-m-d', strtotime($tgl_app));
+					$query .=" AND dapp_tglreservasi='$tgl_app'";
+				}else{
+					$query .=" AND dapp_tglreservasi >= '$dt'";
+				}
+				// For simple search
+				if ($filter<>"" && is_numeric($filter)==false){
+					$query="SELECT * FROM vu_appointment ";
+					$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
+					//search customer,perawatan,dokter,therapist
+					$query .= " (cust_nama LIKE '%".addslashes($filter)."%' OR rawat_nama LIKE '%".addslashes($filter)."%' OR dokter_username LIKE '%".addslashes($filter)."%' OR terapis_username LIKE '%".addslashes($filter)."%')";
+				}
+			}elseif($jenis_rawat=="Non Medis" && $filter==''){
+				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
+				$query .=" kategori_nama='Non Medis'";
+				if($tgl_app!=""){
+					$tgl_app=date('Y-m-d', strtotime($tgl_app));
+					$query .=" AND dapp_tglreservasi='$tgl_app'";
+				}else{
+					$query .=" AND dapp_tglreservasi >= '$dt'";
+				}
+				// For simple search
+				if ($filter<>"" && is_numeric($filter)==false){
+					$query="SELECT * FROM vu_appointment ";
+					$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
+					//search customer,perawatan,dokter,therapist
+					$query .= " (cust_nama LIKE '%".addslashes($filter)."%' OR rawat_nama LIKE '%".addslashes($filter)."%' OR dokter_username LIKE '%".addslashes($filter)."%' OR terapis_username LIKE '%".addslashes($filter)."%')";
+				}
 			}
 			
 			// For Pilihan Dokter pada tbar
 			if ($filter<>"" && is_numeric($filter)==true){
-				$query="SELECT dapp_tglreservasi as tanggal_appointment,dapp_jamreservasi as jam_appointment,rawat_nama as perawatan,cust_no as no_customer,cust_nama as customer,karyawan_dokter.karyawan_username as dokter_nikcname,karyawan_terapis.karyawan_username as terapis_nickname,dapp_status as status,dapp_jamdatang as jam_datang,dapp_keterangan as keterangan_detail
-FROM (((appointment inner join appointment_detail on appointment.app_id=appointment_detail.dapp_master inner join perawatan on appointment_detail.dapp_perawatan=perawatan.rawat_id 
-inner join customer on appointment.app_customer=customer.cust_id inner join kategori on perawatan.rawat_kategori=kategori.kategori_id) 
-left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawan_dokter.karyawan_id) left join karyawan as karyawan_terapis on appointment_detail.dapp_petugas2=karyawan_terapis.karyawan_id) WHERE dapp_tglreservasi >= '$dt'";
+				if($tgl_app!=""){
+					$dt=date('Y-m-d', strtotime($tgl_app));
+					$query="SELECT * FROM vu_appointment WHERE dapp_tglreservasi = '$dt'";
+				}else{
+					$query="SELECT * FROM vu_appointment WHERE dapp_tglreservasi >= '$dt'";
+				}
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 				//search customer,perawatan,dokter,therapist
-				$query .= " (karyawan_dokter.karyawan_id = '".addslashes($filter)."')";
+				$query .= " (dokter_id = '".addslashes($filter)."') AND (kategori_nama='Medis' OR kategori_nama = 'Surgery' OR kategori_nama = 'Anti Aging')";
 			}
+			
+			// For Pilihan Tanggal Appointment di tbar dengan pilihan dokter kosong
+			if($filter=="" && is_numeric($filter)==false && $tgl_app!="" && $jenis_rawat=="Medis"){
+				$dt=date('Y-m-d', strtotime($tgl_app));
+				$query="SELECT * FROM vu_appointment WHERE (kategori_nama='Medis' OR kategori_nama ='Surgery' OR kategori_nama = 'Anti Aging') AND dapp_tglreservasi = '$dt'";
+			}
+			
+			/*  For simple search
+			 *  Simple Search ==> untuk mencari data di hari ini saja
+			*/
+			if($filter<>'' && is_numeric($filter)==false){
+				$query="SELECT * FROM vu_appointment WHERE dapp_tglreservasi='".$dt."'";
+				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
+				//search customer,perawatan,dokter,therapist
+				$query .= " (cust_no LIKE '%".addslashes($filter)."%' OR cust_nama LIKE '%".addslashes($filter)."%' OR dokter_username LIKE '%".addslashes($filter)."%' OR terapis_username LIKE '%".addslashes($filter)."%')";
+			}
+			
+			$query.=" ORDER BY dapp_tglreservasi ASC, dapp_jamreservasi ASC";
+			$result = $this->db->query($query);
+		} else if($option=='SEARCH'){
+			$dt=date('Y-m-d');
+			$dt_six=date('Y-m-d',mktime(0,0,0,date("m"),date("d")+6,date("Y")));
+			$query="SELECT * FROM vu_appointment";
+			
+			if($app_customer!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " app_customer='".$app_customer."'";
+			};
+			if($app_tgl_start_reservasi!='' && $app_tgl_end_reservasi!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " app_tanggal BETWEEN '".$app_tgl_start_reservasi."' AND '".$app_tgl_end_reservasi."'";
+			}else if($app_tgl_start_reservasi!='' && $app_tgl_end_reservasi==''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " app_tanggal='".$app_tgl_start_reservasi."'";
+			}
+			if($app_tgl_start_app!='' && $app_tgl_end_app!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " dapp_tglreservasi BETWEEN '".$app_tgl_start_app."' AND '".$app_tgl_end_app."'";
+			}else if($app_tgl_start_app!='' && $app_tgl_end_app==''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " dapp_tglreservasi='".$app_tgl_start_app."'";
+			}
+			if($app_cara!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " app_cara LIKE '%".$app_cara."%'";
+			};
+			if($app_kategori!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " kategori_nama='".$app_kategori."'";
+			};
+			if($app_dokter!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " karyawan_dokter.karyawan_id='".$app_dokter."'";
+			};
+			if($app_terapis!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " karyawan_terapis.karyawan_id='".$app_terapis."'";
+			};
+			if($app_rawat_medis!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " rawat_id = '".$app_rawat_medis."'";
+			};
+			if($app_rawat_nonmedis!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " rawat_id = '".$app_rawat_nonmedis."'";
+			};
+			
+			$result = $this->db->query($query);
+		}
+		return $result->result();
+	}
+	
+	//function  for export to excel
+	function appointment_export_excel($app_customer
+										,$app_cara
+										,$jenis_rawat
+										,$app_dokter
+										,$app_terapis
+										,$app_tgl_start_reservasi
+										,$app_tgl_end_reservasi
+										,$app_tgl_start_app
+										,$app_tgl_end_app
+										,$app_rawat_medis
+										,$app_rawat_nonmedis
+										,$tgl_app
+										,$option
+										,$filter){
+		
+		//full query
+		if($option=='LIST'){
+			if($jenis_rawat==""){
+				$jenis_rawat="Medis";
+			}
+			$dt=date('Y-m-d');
+			$dt_six=date('Y-m-d',mktime(0,0,0,date("m"),date("d")+6,date("Y")));
+			$query="SELECT dapp_tglreservasi AS tgl_app
+					,dapp_jamreservasi AS jam_app
+					,rawat_nama AS perawatan
+					,cust_no AS no_cust
+					,cust_nama AS customer
+					,dokter_username AS dokter
+					,terapis_username AS terapis
+					,dapp_status AS status
+					,dapp_jamdatang AS jam_dtg
+					,dapp_keterangan AS keterangan
+				FROM vu_appointment";
+			
+			if($jenis_rawat=="Medis" && $filter==''){
+				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
+				$query .=" (kategori_nama='Medis' OR kategori_nama = 'Surgery' OR kategori_nama = 'Anti Aging')";
+				if($tgl_app!=""){
+					$tgl_app=date('Y-m-d', strtotime($tgl_app));
+					$query .=" AND dapp_tglreservasi='$tgl_app'";
+				}else{
+					$query .=" AND dapp_tglreservasi >= '$dt'";
+				}
+				// For simple search
+				if ($filter<>"" && is_numeric($filter)==false){
+					$query="SELECT * FROM vu_appointment ";
+					$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
+					//search customer,perawatan,dokter,therapist
+					$query .= " (cust_nama LIKE '%".addslashes($filter)."%' OR rawat_nama LIKE '%".addslashes($filter)."%' OR dokter_username LIKE '%".addslashes($filter)."%' OR terapis_username LIKE '%".addslashes($filter)."%')";
+				}
+			}elseif($jenis_rawat=="Non Medis" && $filter==''){
+				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
+				$query .=" kategori_nama='Non Medis'";
+				if($tgl_app!=""){
+					$tgl_app=date('Y-m-d', strtotime($tgl_app));
+					$query .=" AND dapp_tglreservasi='$tgl_app'";
+				}else{
+					$query .=" AND dapp_tglreservasi >= '$dt'";
+				}
+				// For simple search
+				if ($filter<>"" && is_numeric($filter)==false){
+					$query="SELECT * FROM vu_appointment ";
+					$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
+					//search customer,perawatan,dokter,therapist
+					$query .= " (cust_nama LIKE '%".addslashes($filter)."%' OR rawat_nama LIKE '%".addslashes($filter)."%' OR dokter_username LIKE '%".addslashes($filter)."%' OR terapis_username LIKE '%".addslashes($filter)."%')";
+				}
+			}
+			
+			// For Pilihan Dokter pada tbar
+			if ($filter<>"" && is_numeric($filter)==true){
+				if($tgl_app!=""){
+					$dt=date('Y-m-d', strtotime($tgl_app));
+					$query="SELECT * FROM vu_appointment WHERE dapp_tglreservasi = '$dt'";
+				}else{
+					$query="SELECT * FROM vu_appointment WHERE dapp_tglreservasi >= '$dt'";
+				}
+				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
+				//search customer,perawatan,dokter,therapist
+				$query .= " (dokter_id = '".addslashes($filter)."') AND (kategori_nama='Medis' OR kategori_nama = 'Surgery' OR kategori_nama = 'Anti Aging')";
+			}
+			
+			// For Pilihan Tanggal Appointment di tbar dengan pilihan dokter kosong
+			if($filter=="" && is_numeric($filter)==false && $tgl_app!="" && $jenis_rawat=="Medis"){
+				$dt=date('Y-m-d', strtotime($tgl_app));
+				$query="SELECT * FROM vu_appointment WHERE (kategori_nama='Medis' OR kategori_nama ='Surgery' OR kategori_nama = 'Anti Aging') AND dapp_tglreservasi = '$dt'";
+			}
+			
+			/*  For simple search
+			 *  Simple Search ==> untuk mencari data di hari ini saja
+			*/
+			if($filter<>'' && is_numeric($filter)==false){
+				$query="SELECT * FROM vu_appointment WHERE dapp_tglreservasi='".$dt."'";
+				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
+				//search customer,perawatan,dokter,therapist
+				$query .= " (cust_no LIKE '%".addslashes($filter)."%' OR cust_nama LIKE '%".addslashes($filter)."%' OR dokter_username LIKE '%".addslashes($filter)."%' OR terapis_username LIKE '%".addslashes($filter)."%')";
+			}
+			
 			$query.=" ORDER BY dapp_tglreservasi ASC, dapp_jamreservasi ASC";
 			$result = $this->db->query($query);
 			
 		} else if($option=='SEARCH'){
 			$dt=date('Y-m-d');
-			$query="SELECT dapp_tglreservasi as tanggal_appointment,dapp_jamreservasi as jam_appointment,rawat_nama as perawatan,cust_no as no_customer,cust_nama as customer,karyawan_dokter.karyawan_username as dokter_nikcname,karyawan_terapis.karyawan_username as terapis_nickname,dapp_status as status,dapp_jamdatang as jam_datang,dapp_keterangan as keterangan_detail
-FROM (((appointment inner join appointment_detail on appointment.app_id=appointment_detail.dapp_master inner join perawatan on appointment_detail.dapp_perawatan=perawatan.rawat_id 
-inner join customer on appointment.app_customer=customer.cust_id inner join kategori on perawatan.rawat_kategori=kategori.kategori_id) 
-left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawan_dokter.karyawan_id) left join karyawan as karyawan_terapis on appointment_detail.dapp_petugas2=karyawan_terapis.karyawan_id)";
+			$dt_six=date('Y-m-d',mktime(0,0,0,date("m"),date("d")+6,date("Y")));
+			$query="SELECT dapp_tglreservasi AS tgl_app
+					,dapp_jamreservasi AS jam_app
+					,rawat_nama AS perawatan
+					,cust_no AS no_cust
+					,cust_nama AS customer
+					,dokter_username AS dokter
+					,terapis_username AS terapis
+					,dapp_status AS status
+					,dapp_jamdatang AS jam_dtg
+					,dapp_keterangan AS keterangan
+				FROM vu_appointment";
 			
-			if($app_id!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " app_id LIKE '%".$app_id."%'";
-			};
 			if($app_customer!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " app_customer='".$app_customer."'";

@@ -1391,26 +1391,24 @@ Ext.onReady(function(){
 	});
 	
 	tbar_dokter_tglField.on('select',function(){
-		//if(Ext.getCmp('cbo_dokter').getValue()!==""){
-			appointment_DataStore.setBaseParam('query',Ext.getCmp('cbo_dokter').getValue());
-			appointment_DataStore.load({params: {
-				task: 'LIST',
-				start: 0,
-				limit: pageS,
-				query: Ext.getCmp('cbo_dokter').getValue(),
-				jenis_rawat: tbar_jenis_rawatField.getValue(),
-				tgl_app: tbar_dokter_tglField.getValue()
-			}});
-		//}
-	});
-	
-	tbar_nonmedis_tglField.on('select',function(){
+		appointment_DataStore.setBaseParam('query',Ext.getCmp('cbo_dokter').getValue());
+		appointment_DataStore.setBaseParam('jenis_rawat',tbar_jenis_rawatField.getValue());
+		appointment_DataStore.setBaseParam('tgl_app',tbar_dokter_tglField.getValue());
 		appointment_DataStore.load({params: {
 			task: 'LIST',
 			start: 0,
-			limit: pageS,
-			jenis_rawat: tbar_jenis_rawatField.getValue(),
-			tgl_app: tbar_nonmedis_tglField.getValue()
+			limit: pageS
+		}});
+	});
+	
+	tbar_nonmedis_tglField.on('select',function(){
+		appointment_DataStore.setBaseParam('query','');
+		appointment_DataStore.setBaseParam('jenis_rawat',tbar_jenis_rawatField.getValue());
+		appointment_DataStore.setBaseParam('tgl_app',tbar_nonmedis_tglField.getValue());
+		appointment_DataStore.load({params: {
+			task: 'LIST',
+			start: 0,
+			limit: pageS
 		}});
 	});
      
@@ -2667,7 +2665,6 @@ Ext.onReady(function(){
 	/* Function for action list search */
 	function appointment_list_search(){
 		// render according to a SQL date format.
-		var app_id_search=null;
 		var app_customer_search=null;
 		var app_tanggal_search_date="";
 		var app_cara_search=null;
@@ -2681,8 +2678,7 @@ Ext.onReady(function(){
 		var app_tgl_end_app_search=null;
 		var app_rawat_medis_search=null;
 		var app_rawat_nonmedis_search=null;
-
-		if(app_idSearchField.getValue()!==null){app_id_search=app_idSearchField.getValue();}
+		
 		if(app_customerSearchField.getValue()!==null){app_customer_search=app_customerSearchField.getValue();}
 		if(app_caraSearchField.getValue()!==null){app_cara_search=app_caraSearchField.getValue();}
 		//if(app_keteranganSearchField.getValue()!==null){app_keterangan_search=app_keteranganSearchField.getValue();}
@@ -2701,19 +2697,18 @@ Ext.onReady(function(){
 			start: 0,
 			limit: pageS,
 			//variable here
-			app_id	:	app_id_search, 
-			app_customer	:	app_customer_search, 
+			app_customer	:	app_customer_search,
+			app_rawat_medis	: app_rawat_medis_search,
+			app_rawat_nonmedis	: app_rawat_nonmedis_search,
 			app_cara	:	app_cara_search, 
-			//app_keterangan	:	app_keterangan_search,
-			app_kategori	:	app_kategori_search, 
+			jenis_rawat	:	app_kategori_search,
 			app_dokter	:	app_dokter_search,
 			app_terapis	:	app_terapis_search,
 			app_tgl_start_reservasi	: app_tgl_start_reservasi_search,
 			app_tgl_end_reservasi	: app_tgl_end_reservasi_search,
 			app_tgl_start_app	: app_tgl_start_app_search,
-			app_tgl_end_app	: app_tgl_end_app_search,
-			app_rawat_medis	: app_rawat_medis_search,
-			app_rawat_nonmedis	: app_rawat_nonmedis_search
+			app_tgl_end_app	: app_tgl_end_app_search
+			
 		};
 		// Cause the datastore to do another query : 
 		appointment_DataStore.reload({params: {start: 0, limit: pageS}});
@@ -3024,17 +3019,33 @@ Ext.onReady(function(){
 	/* Function for print List Grid */
 	function appointment_print(){
 		var searchquery = "";
+		// render according to a SQL date format.
 		var app_customer_print=null;
 		var app_tanggal_print_date="";
 		var app_cara_print=null;
-		var app_keterangan_print=null;
+		var app_kategori_print=null;
+		var app_dokter_print=null;
+		var app_terapis_print=null;
+		var app_tgl_start_reservasi_print=null;
+		var app_tgl_end_reservasi_print=null;
+		var app_tgl_start_app_print=null;
+		var app_tgl_end_app_print=null;
+		var app_rawat_medis_print=null;
+		var app_rawat_nonmedis_print=null;
 		var win;              
 		// check if we do have some search data...
 		if(appointment_DataStore.baseParams.query!==null){searchquery = appointment_DataStore.baseParams.query;}
 		if(appointment_DataStore.baseParams.app_customer!==null){app_customer_print = appointment_DataStore.baseParams.app_customer;}
-		if(appointment_DataStore.baseParams.app_tanggal!==""){app_tanggal_print_date = appointment_DataStore.baseParams.app_tanggal;}
 		if(appointment_DataStore.baseParams.app_cara!==null){app_cara_print = appointment_DataStore.baseParams.app_cara;}
-		if(appointment_DataStore.baseParams.app_keterangan!==null){app_keterangan_print = appointment_DataStore.baseParams.app_keterangan;}
+		if(appointment_DataStore.baseParams.jenis_rawat!==null){app_kategori_print = appointment_DataStore.baseParams.jenis_rawat;}
+		if(appointment_DataStore.baseParams.app_dokter!==null){app_dokter_print = appointment_DataStore.baseParams.app_dokter;}
+		if(appointment_DataStore.baseParams.app_terapis!==null){app_terapis_print = appointment_DataStore.baseParams.app_terapis;}
+		if(appointment_DataStore.baseParams.app_rawat_medis!==null){app_rawat_medis_print = appointment_DataStore.baseParams.app_rawat_medis;}
+		if(appointment_DataStore.baseParams.app_rawat_nonmedis!==null){app_rawat_nonmedis_print = appointment_DataStore.baseParams.app_rawat_nonmedis;}
+		if(appointment_DataStore.baseParams.app_tgl_start_reservasi!=""){app_tgl_start_reservasi_print = appointment_DataStore.baseParams.app_tgl_start_reservasi;}
+		if(appointment_DataStore.baseParams.app_tgl_end_reservasi!==""){app_tgl_end_reservasi_print = appointment_DataStore.baseParams.app_tgl_end_reservasi;}
+		if(appointment_DataStore.baseParams.app_tgl_start_app!==""){app_tgl_start_app_print = appointment_DataStore.baseParams.app_tgl_start_app;}
+		if(appointment_DataStore.baseParams.app_tgl_end_app!==""){app_tgl_end_app_print = appointment_DataStore.baseParams.app_tgl_end_app;}
 
 		Ext.Ajax.request({   
 		waitMsg: 'Please Wait...',
@@ -3042,19 +3053,26 @@ Ext.onReady(function(){
 		params: {
 			task: "PRINT",
 		  	query: searchquery,                    		// if we are doing a quicksearch, use this
-			//if we are doing advanced search, use this
-			app_customer : app_customer_print,
-		  	app_tanggal : app_tanggal_print_date, 
-			app_cara : app_cara_print,
-			app_keterangan : app_keterangan_print,
+			app_customer	:	app_customer_print,
+			app_rawat_medis	: app_rawat_medis_print,
+			app_rawat_nonmedis	: app_rawat_nonmedis_print,
+			app_cara	:	app_cara_print,
+			jenis_rawat	:	app_kategori_print,
+			app_dokter	:	app_dokter_print,
+			app_terapis	:	app_terapis_print,
+			app_tgl_start_reservasi	: app_tgl_start_reservasi_print,
+			app_tgl_end_reservasi	: app_tgl_end_reservasi_print,
+			app_tgl_start_app	: app_tgl_start_app_print,
+			app_tgl_end_app	: app_tgl_end_app_print,
+			tgl_app		: appointment_DataStore.baseParams.tgl_app,
 		  	currentlisting: appointment_DataStore.baseParams.task // this tells us if we are searching or not
 		}, 
 		success: function(response){              
 		  	var result=eval(response.responseText);
 		  	switch(result){
 		  	case 1:
-				win = window.open('./appointmentlist.html','appointmentlist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
-				win.print();
+				win = window.open('./print/appointmentlist.html','appointmentlist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
+				//win.print();
 				break;
 		  	default:
 				Ext.MessageBox.show({
@@ -3085,31 +3103,32 @@ Ext.onReady(function(){
 	function appointment_export_excel(){
 		var searchquery = "";
 		var app_customer_2excel=null;
+		var app_tanggal_2excel_date="";
 		var app_cara_2excel=null;
 		var app_kategori_2excel=null;
 		var app_dokter_2excel=null;
 		var app_terapis_2excel=null;
-		var app_rawat_medis_2excel=null;
-		var app_rawat_nonmedis_2excel=null;
 		var app_tgl_start_reservasi_2excel=null;
 		var app_tgl_end_reservasi_2excel=null;
 		var app_tgl_start_app_2excel=null;
 		var app_tgl_end_app_2excel=null;
+		var app_rawat_medis_2excel=null;
+		var app_rawat_nonmedis_2excel=null;
 		var win;              
 		// check if we do have some search data...
 		if(appointment_DataStore.baseParams.query!==null){searchquery = appointment_DataStore.baseParams.query;}
 		if(appointment_DataStore.baseParams.app_customer!==null){app_customer_2excel = appointment_DataStore.baseParams.app_customer;}
 		if(appointment_DataStore.baseParams.app_cara!==null){app_cara_2excel = appointment_DataStore.baseParams.app_cara;}
-		if(appointment_DataStore.baseParams.app_kategori!==null){app_kategori_2excel = appointment_DataStore.baseParams.app_kategori;}
+		if(appointment_DataStore.baseParams.jenis_rawat!==null){app_kategori_2excel = appointment_DataStore.baseParams.jenis_rawat;}
 		if(appointment_DataStore.baseParams.app_dokter!==null){app_dokter_2excel = appointment_DataStore.baseParams.app_dokter;}
 		if(appointment_DataStore.baseParams.app_terapis!==null){app_terapis_2excel = appointment_DataStore.baseParams.app_terapis;}
-		if(appointment_DataStore.baseParams.app_tgl_start_reservasi!==null){app_tgl_start_reservasi_2excel = appointment_DataStore.baseParams.app_tgl_start_reservasi;}
-		if(appointment_DataStore.baseParams.app_tgl_end_reservasi!==null){app_tgl_end_reservasi_2excel = appointment_DataStore.baseParams.app_tgl_end_reservasi;}
-		if(appointment_DataStore.baseParams.app_tgl_start_app!==null){app_tgl_start_app_2excel = appointment_DataStore.baseParams.app_tgl_start_app;}
-		if(appointment_DataStore.baseParams.app_tgl_end_app!==null){app_tgl_end_app_2excel = appointment_DataStore.baseParams.app_tgl_end_app;}
 		if(appointment_DataStore.baseParams.app_rawat_medis!==null){app_rawat_medis_2excel = appointment_DataStore.baseParams.app_rawat_medis;}
 		if(appointment_DataStore.baseParams.app_rawat_nonmedis!==null){app_rawat_nonmedis_2excel = appointment_DataStore.baseParams.app_rawat_nonmedis;}
-
+		if(appointment_DataStore.baseParams.app_tgl_start_reservasi!=""){app_tgl_start_reservasi_2excel = appointment_DataStore.baseParams.app_tgl_start_reservasi;}
+		if(appointment_DataStore.baseParams.app_tgl_end_reservasi!==""){app_tgl_end_reservasi_2excel = appointment_DataStore.baseParams.app_tgl_end_reservasi;}
+		if(appointment_DataStore.baseParams.app_tgl_start_app!==""){app_tgl_start_app_2excel = appointment_DataStore.baseParams.app_tgl_start_app;}
+		if(appointment_DataStore.baseParams.app_tgl_end_app!==""){app_tgl_end_app_2excel = appointment_DataStore.baseParams.app_tgl_end_app;}
+		
 		Ext.Ajax.request({   
 		waitMsg: 'Please Wait...',
 		url: 'index.php?c=c_appointment&m=get_action',
@@ -3117,17 +3136,18 @@ Ext.onReady(function(){
 			task: "EXCEL",
 		  	query: searchquery,                    		// if we are doing a quicksearch, use this
 			//if we are doing advanced search, use this
-			app_customer : app_customer_2excel,
-			app_cara : app_cara_2excel,
-			app_kategori	: app_cara_2excel,
-			app_dokter	: app_dokter_2excel,
-			app_terapis	: app_terapis_2excel,
+			app_customer	:	app_customer_2excel,
+			app_rawat_medis	: app_rawat_medis_2excel,
+			app_rawat_nonmedis	: app_rawat_nonmedis_2excel,
+			app_cara	:	app_cara_2excel,
+			jenis_rawat	:	app_kategori_2excel,
+			app_dokter	:	app_dokter_2excel,
+			app_terapis	:	app_terapis_2excel,
 			app_tgl_start_reservasi	: app_tgl_start_reservasi_2excel,
 			app_tgl_end_reservasi	: app_tgl_end_reservasi_2excel,
 			app_tgl_start_app	: app_tgl_start_app_2excel,
 			app_tgl_end_app	: app_tgl_end_app_2excel,
-			app_rawat_medis	: app_rawat_medis_2excel,
-			app_rawat_nonmedis	: app_rawat_nonmedis_2excel,
+			tgl_app		: appointment_DataStore.baseParams.tgl_app,
 		  	currentlisting: appointment_DataStore.baseParams.task // this tells us if we are searching or not
 		},
 		success: function(response){              
