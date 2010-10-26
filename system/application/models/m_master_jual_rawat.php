@@ -254,15 +254,6 @@ class M_master_jual_rawat extends Model{
 	function detail_ambil_paket_list($dpaket_id,$tanggal,$dapaket_cust,$query,$dapaket_stat_dok,$start,$end) {
 		$date_now=date('Y-m-d');
 		/* ambil history pengambilan paket dari $master_id===customer_id untuk transaksi hari ini */
-		//2010-05-06 ==> $query = "SELECT jpaket_nobukti, paket_nama, rawat_nama, dapaket_jumlah, cust_nama FROM detail_ambil_paket LEFT JOIN master_jual_paket ON(dapaket_jpaket=jpaket_id) LEFT JOIN paket ON(dapaket_paket=paket_id) LEFT JOIN customer ON(dapaket_cust=cust_id) LEFT JOIN perawatan ON(dapaket_item=rawat_id) WHERE dapaket_cust='$master_id' AND date_format(dapaket_date_create,'%Y-%m-%d')='$tanggal'";
-		/*2010-06-23 ==> if($dpaket_id=="" || $dpaket_id==0){
-			//* Transaksi Perawatan satuan sekaligus pengambilan paket per customer/
-			$query = "SELECT dapaket_id, jpaket_nobukti, paket_nama, rawat_nama, dapaket_jumlah, cust_nama FROM detail_ambil_paket LEFT JOIN master_jual_paket ON(dapaket_jpaket=jpaket_id) LEFT JOIN paket ON(dapaket_paket=paket_id) LEFT JOIN customer ON(dapaket_cust=cust_id) LEFT JOIN perawatan ON(dapaket_item=rawat_id) WHERE date_format(dapaket_date_create,'%Y-%m-%d')='$tanggal' AND dapaket_cust='$dapaket_cust' AND dapaket_stat_dok='Terbuka'";
-		}else if($dpaket_id>0){
-			//* Transaksi Perawatan hanya pengambilan paket per customer /
-			//$query = "SELECT dapaket_id, jpaket_nobukti, paket_nama, rawat_nama, dapaket_jumlah, cust_nama FROM detail_ambil_paket LEFT JOIN master_jual_paket ON(dapaket_jpaket=jpaket_id) LEFT JOIN paket ON(dapaket_paket=paket_id) LEFT JOIN customer ON(dapaket_cust=cust_id) LEFT JOIN perawatan ON(dapaket_item=rawat_id) WHERE dapaket_dpaket='$dpaket_id' AND date_format(dapaket_date_create,'%Y-%m-%d')='$tanggal' AND dapaket_stat_dok='Terbuka' AND dapaket_cust='$dapaket_cust'";
-			$query = "SELECT dapaket_id, jpaket_nobukti, paket_nama, rawat_nama, dapaket_jumlah, cust_nama FROM detail_ambil_paket LEFT JOIN master_jual_paket ON(dapaket_jpaket=jpaket_id) LEFT JOIN paket ON(dapaket_paket=paket_id) LEFT JOIN customer ON(dapaket_cust=cust_id) LEFT JOIN perawatan ON(dapaket_item=rawat_id) WHERE date_format(dapaket_date_create,'%Y-%m-%d')='$tanggal' AND dapaket_cust='$dapaket_cust' AND dapaket_stat_dok='Terbuka' AND dapaket_cust='$dapaket_cust'";
-		}*/
 		$query = "SELECT dapaket_id
 				,jpaket_nobukti
 				,paket_nama
@@ -534,10 +525,6 @@ class M_master_jual_rawat extends Model{
 	}
 	
 	function catatan_piutang_update($jrawat_id){
-		/*if($jrawat_id=="" || $jrawat_id==NULL || $jrawat_id==0){
-			$jrawat_id=$this->get_master_id();
-		}*/
-		
 		$sql="SELECT * FROM vu_piutang_jrawat WHERE jrawat_id='$jrawat_id'";
 		$rs=$this->db->query($sql);
 		if($rs->num_rows()){
@@ -553,7 +540,7 @@ class M_master_jual_rawat extends Model{
 			* JIKA 'ada' ==> Lakukan UPDATE db.master_lunas_piutang
 			* JIKA 'tidak ada' ==> Lakukan INSERT db.master_lunas_piutang
 			*/
-			$sql="SELECT * FROM master_lunas_piutang WHERE lpiutang_faktur='$lpiutang_faktur'";
+			$sql="SELECT * FROM master_lunas_piutang WHERE lpiutang_faktur='".$lpiutang_faktur."'";
 			$rs=$this->db->query($sql);
 			if($rs->num_rows()){
 				/* 1. DELETE db.master_lunas_piutang AND db.detail_jual_piutang
@@ -833,102 +820,7 @@ class M_master_jual_rawat extends Model{
 	}
 	//*eof
 	
-	//insert detail record
-	function detail_detail_jual_rawat_insert($array_drawat_id
-											 ,$drawat_master
-											 ,$array_drawat_rawat
-											 ,$array_drawat_jumlah
-											 ,$array_drawat_harga
-											 ,$array_drawat_diskon
-											 ,$array_drawat_diskon_jenis
-											 ,$array_drawat_sales
-											 ,$jrawat_id){
-		
-		//if master id not capture from view then capture it from max pk from master table
-		if($drawat_master=="" || $drawat_master==NULL || $drawat_master==0){
-			$drawat_master=$this->get_master_id();
-		}else{
-			$drawat_master=$jrawat_id;
-		}
-		
-		$size_array = sizeof($array_drawat_rawat) - 1;
-		
-		for($i = 0; $i < sizeof($array_drawat_rawat); $i++){
-			$drawat_id = $array_drawat_id[$i];
-			$drawat_rawat = $array_drawat_rawat[$i];
-			$drawat_jumlah = $array_drawat_jumlah[$i];
-			$drawat_harga = $array_drawat_harga[$i];
-			$drawat_diskon = $array_drawat_diskon[$i];
-			$drawat_diskon_jenis = $array_drawat_diskon_jenis[$i];
-			$drawat_sales = $array_drawat_sales[$i];
-			
-			if(is_numeric($drawat_id)){
-				//data detail sudah masuk database ==> mode Edit
-				$dtu_drawat = array(
-					//"drawat_master"=>$drawat_master, 
-					"drawat_rawat"=>$drawat_rawat, 
-					"drawat_jumlah"=>$drawat_jumlah, 
-					"drawat_harga"=>$drawat_harga, 
-					"drawat_diskon"=>$drawat_diskon,
-					"drawat_diskon_jenis"=>$drawat_diskon_jenis,
-					"drawat_sales"=>$drawat_sales 
-				);
-				$this->db->where('drawat_id', $drawat_id);
-				$this->db->update('detail_jual_rawat', $dtu_drawat);
-			}else{
-				//data detail baru ==> mode Add
-				$dti_drawat = array(
-					"drawat_master"=>$drawat_master, 
-					"drawat_rawat"=>$drawat_rawat, 
-					"drawat_jumlah"=>$drawat_jumlah, 
-					"drawat_harga"=>$drawat_harga, 
-					"drawat_diskon"=>$drawat_diskon,
-					"drawat_diskon_jenis"=>$drawat_diskon_jenis,
-					"drawat_sales"=>$drawat_sales 
-				);
-				$this->db->insert('detail_jual_rawat', $dti_drawat);
-			}
-			
-			if($i==$size_array){
-				return "{success:true}";
-			}
-			
-			/*$sql="SELECT drawat_id FROM detail_jual_rawat WHERE drawat_id='$drawat_id'";
-			$rs=$this->db->query($sql);
-			if($rs->num_rows()){
-				$data = array(
-					//"drawat_master"=>$drawat_master, 
-					"drawat_rawat"=>$drawat_rawat, 
-					"drawat_jumlah"=>$drawat_jumlah, 
-					"drawat_harga"=>$drawat_harga, 
-					"drawat_diskon"=>$drawat_diskon,
-					"drawat_diskon_jenis"=>$drawat_diskon_jenis,
-					"drawat_sales"=>$drawat_sales 
-				);
-				$this->db->where('drawat_id', $drawat_id);
-				$this->db->update('detail_jual_rawat', $data);
-			}else{
-				$data = array(
-					"drawat_master"=>$drawat_master, 
-					"drawat_rawat"=>$drawat_rawat, 
-					"drawat_jumlah"=>$drawat_jumlah, 
-					"drawat_harga"=>$drawat_harga, 
-					"drawat_diskon"=>$drawat_diskon,
-					"drawat_diskon_jenis"=>$drawat_diskon_jenis,
-					"drawat_sales"=>$drawat_sales 
-				);
-				$this->db->insert('detail_jual_rawat', $data);
-			} 
-			if($this->db->affected_rows()){
-				return '1';
-			}else
-				return '0';*/
-			
-		}
-	}
-	//end of function
-	
-	function detail_jual_rawat_update($array_drawat_id
+	function detail_jual_rawat_cu($array_drawat_id
 									  ,$drawat_master
 									  ,$array_drawat_dtrawat
 									  ,$array_drawat_rawat
@@ -937,88 +829,195 @@ class M_master_jual_rawat extends Model{
 									  ,$array_drawat_diskon
 									  ,$array_drawat_diskon_jenis
 									  ,$cetak){
+		if($drawat_master=="" || $drawat_master==NULL || $drawat_master==0){
+			$drawat_master=$this->get_master_id();
+		}
 		
-		$size_array = sizeof($array_drawat_rawat) - 1;
-		
-		for($i = 0; $i < sizeof($array_drawat_rawat); $i++){
-			$drawat_id = $array_drawat_id[$i];
-			$drawat_dtrawat = $array_drawat_dtrawat[$i];
-			$drawat_rawat = $array_drawat_rawat[$i];
-			$drawat_jumlah = $array_drawat_jumlah[$i];
-			$drawat_harga = $array_drawat_harga[$i];
-			$drawat_diskon = $array_drawat_diskon[$i];
-			$drawat_diskon_jenis = $array_drawat_diskon_jenis[$i];
+		$sql = "SELECT jrawat_id
+			FROM master_jual_rawat
+			WHERE jrawat_id='".$drawat_master."'
+				AND jrawat_stat_dok='Terbuka'";
+		$this->db->query($sql);
+		if($this->db->affected_rows()){
+			$size_array = sizeof($array_drawat_rawat) - 1;
 			
-			if($drawat_id==''){
-				//* Insert to db.detail_jual_rawat WHERE detail yang ditambahkan adalah data baru /
-				$dti_drawat=array(
-				"drawat_master"=>$drawat_master,
-				"drawat_rawat"=>$drawat_rawat,
-				"drawat_jumlah"=>$drawat_jumlah,
-				"drawat_harga"=>$drawat_harga,
-				"drawat_diskon"=>$drawat_diskon,
-				"drawat_diskon_jenis"=>$drawat_diskon_jenis
-				);
-				$this->db->insert('detail_jual_rawat', $dti_drawat);
-			}elseif(is_numeric($drawat_id) && $drawat_dtrawat==''){
-				//* Update to db.detail_jual_rawat WHERE detail yang ditambahkan dari Kasir Perawatan bukan dari Tindakan /
-				$dtu_drawat=array(
-				"drawat_rawat"=>$drawat_rawat,
-				"drawat_jumlah"=>$drawat_jumlah,
-				"drawat_harga"=>$drawat_harga,
-				"drawat_diskon"=>$drawat_diskon,
-				"drawat_diskon_jenis"=>$drawat_diskon_jenis
-				);
-				$this->db->where('drawat_id', $drawat_id);
-				$this->db->update('detail_jual_rawat', $dtu_drawat);
-			}elseif(is_numeric($drawat_id) && $drawat_dtrawat>0){
-				//* Update to db.detail_jual_rawat WHERE data detail adalah dari Tindakan /
-				$dtu_drawat=array(
-				"drawat_diskon"=>$drawat_diskon,
-				"drawat_diskon_jenis"=>$drawat_diskon_jenis
-				);
-				$this->db->where('drawat_id', $drawat_id);
-				$this->db->update('detail_jual_rawat', $dtu_drawat);
-			}
-			
-			if($i==$size_array && $cetak==1){
-				//LOCKED db.tindakan_detail
-				$sql="SELECT drawat_dtrawat
-					FROM detail_jual_rawat
-					WHERE drawat_master='".$drawat_master."'
-						AND drawat_dtrawat > 0";
-				$rs=$this->db->query($sql);
-				if($rs->num_rows()){
-					$sql="UPDATE tindakan_detail SET dtrawat_locked=1 ";
-					foreach($rs->result() as $row_drawat){
-						$sql.=eregi("WHERE",$sql)?" OR ":" WHERE ";
-						$sql.="dtrawat_id='".$row_drawat->drawat_dtrawat."' ";
-					}
-					$this->db->query($sql);
+			for($i = 0; $i < sizeof($array_drawat_rawat); $i++){
+				$drawat_id = $array_drawat_id[$i];
+				$drawat_dtrawat = $array_drawat_dtrawat[$i];
+				$drawat_rawat = $array_drawat_rawat[$i];
+				$drawat_jumlah = $array_drawat_jumlah[$i];
+				$drawat_harga = $array_drawat_harga[$i];
+				$drawat_diskon = $array_drawat_diskon[$i];
+				$drawat_diskon_jenis = $array_drawat_diskon_jenis[$i];
+				
+				if($drawat_id==0){
+					//* Insert to db.detail_jual_rawat WHERE detail yang ditambahkan adalah data baru /
+					$dti_drawat=array(
+					"drawat_master"=>$drawat_master,
+					"drawat_rawat"=>$drawat_rawat,
+					"drawat_jumlah"=>$drawat_jumlah,
+					"drawat_harga"=>$drawat_harga,
+					"drawat_diskon"=>$drawat_diskon,
+					"drawat_diskon_jenis"=>$drawat_diskon_jenis
+					);
+					$this->db->insert('detail_jual_rawat', $dti_drawat);
+				}elseif(($drawat_id>0) && ($drawat_dtrawat==0)){
+					//* Update to db.detail_jual_rawat WHERE detail yang ditambahkan dari Kasir Perawatan bukan dari Tindakan /
+					$dtu_drawat=array(
+					"drawat_rawat"=>$drawat_rawat,
+					"drawat_jumlah"=>$drawat_jumlah,
+					"drawat_harga"=>$drawat_harga,
+					"drawat_diskon"=>$drawat_diskon,
+					"drawat_diskon_jenis"=>$drawat_diskon_jenis
+					);
+					$this->db->where('drawat_id', $drawat_id);
+					$this->db->update('detail_jual_rawat', $dtu_drawat);
+				}elseif(($drawat_id>0) && ($drawat_dtrawat>0)){
+					//* Update to db.detail_jual_rawat WHERE data detail adalah dari Tindakan /
+					$dtu_drawat=array(
+					"drawat_diskon"=>$drawat_diskon,
+					"drawat_diskon_jenis"=>$drawat_diskon_jenis
+					);
+					$this->db->where('drawat_id', $drawat_id);
+					$this->db->update('detail_jual_rawat', $dtu_drawat);
+				}else{
+					/* Belum diketahui */
 				}
 				
-				$result_jrawat = $this->master_jual_rawat_status_update($drawat_master);
-				if($result_jrawat==1){
-					$result_point = $this->member_point_update($drawat_master);
-					if($result_point==1){
-						$result_membership = $this->membership_insert($drawat_master);
-						if($result_membership==1){
-							$result_piutang = $this->catatan_piutang_update($drawat_master);
-							if($result_piutang==1){
-								return 1;
+				if($i==$size_array && $cetak==1){
+					//LOCKED db.tindakan_detail
+					$sql="SELECT drawat_dtrawat
+						FROM detail_jual_rawat
+						WHERE drawat_master='".$drawat_master."'
+							AND drawat_dtrawat > 0";
+					$rs=$this->db->query($sql);
+					if($rs->num_rows()){
+						$sql="UPDATE tindakan_detail SET dtrawat_locked=1 ";
+						foreach($rs->result() as $row_drawat){
+							$sql.=eregi("WHERE",$sql)?" OR ":" WHERE ";
+							$sql.="dtrawat_id='".$row_drawat->drawat_dtrawat."' ";
+						}
+						$this->db->query($sql);
+					}
+					
+					$result_jrawat = $this->master_jual_rawat_tertutup($drawat_master);
+					if($result_jrawat==1){
+						$result_point = $this->member_point_update($drawat_master);
+						if($result_point==1){
+							$result_membership = $this->membership_insert($drawat_master);
+							if($result_membership==1){
+								$result_piutang = $this->catatan_piutang_update($drawat_master);
+								if($result_piutang==1){
+									return $drawat_master;
+								}
 							}
 						}
 					}
+					
+				}elseif($i==$size_array && $cetak==0){
+					return 0;
 				}
 				
-			}elseif($i==$size_array && $cetak==0){
+			}
+		}else{
+			if($cetak==1){
+				return $drawat_master;
+			}else{
 				return 0;
 			}
-			
 		}
 	}
 	
-	function detail_jual_rawat_delete($drawat_id){
+	//fcuntion for delete record
+	function master_jual_rawat_delete($jrawat_id){
+		/*
+		 * DELETE db.master_jual_rawat akibatnya adalah
+		 * 1. Harus men-DELETE juga Cara Bayar-nya
+		 * NB: Tidak men-delete db.master_lunas_piutang <== karena db.master_lunas_piutang ter-Create saat terjadi Print Faktur (status_dokumen = 'Tertutup'), dan
+		 * proses delete hanya terjadi di DETAIL Penjualan Perawatan. Jika status_dokumen = 'Tertutup', maka tombol 'delete' di-disable,
+		 * sehingga proses delete tidak pernah terjadi.
+		*/
+		$sql = "SELECT jrawat_nobukti,jrawat_cara,jrawat_cara2,jrawat_cara3 FROM master_jual_rawat WHERE jrawat_id='".$jrawat_id."'";
+		$rs = $this->db->query($sql);
+		if($rs->num_rows()){
+			$record = $rs->row_array();
+			$jrawat_nobukti = $record['jrawat_nobukti'];
+			$jrawat_cara = $record['jrawat_cara'];
+			$jrawat_cara2 = $record['jrawat_cara2'];
+			$jrawat_cara3 = $record['jrawat_cara3'];
+			
+			if($jrawat_cara=='tunai'){
+				$sqld = "DELETE FROM jual_tunai WHERE jtunai_ref='".$jrawat_nobukti."'";
+				$this->db->query($sqld);
+			}elseif($jrawat_cara=='kwitansi'){
+				$sqld = "DELETE FROM jual_kwitansi WHERE jkwitansi_ref='".$jrawat_nobukti."'";
+				$this->db->query($sqld);
+			}elseif($jrawat_cara=='card'){
+				$sqld = "DELETE FROM jual_card WHERE jcard_ref='".$jrawat_nobukti."'";
+				$this->db->query($sqld);
+			}elseif($jrawat_cara=='cek/giro'){
+				$sqld = "DELETE FROM jual_cek WHERE jcek_ref='".$jrawat_nobukti."'";
+				$this->db->query($sqld);
+			}elseif($jrawat_cara=='transfer'){
+				$sqld = "DELETE FROM jual_transfer WHERE jtransfer_ref='".$jrawat_nobukti."'";
+				$this->db->query($sqld);
+			}elseif($jrawat_cara=='voucher'){
+				$sqld = "DELETE FROM voucher_terima WHERE tvoucher_ref='".$jrawat_nobukti."'";
+				$this->db->query($sqld);
+			}
+			
+			if($jrawat_cara2=='tunai'){
+				$sqld = "DELETE FROM jual_tunai WHERE jtunai_ref='".$jrawat_nobukti."'";
+				$this->db->query($sqld);
+			}elseif($jrawat_cara2=='kwitansi'){
+				$sqld = "DELETE FROM jual_kwitansi WHERE jkwitansi_ref='".$jrawat_nobukti."'";
+				$this->db->query($sqld);
+			}elseif($jrawat_cara2=='card'){
+				$sqld = "DELETE FROM jual_card WHERE jcard_ref='".$jrawat_nobukti."'";
+				$this->db->query($sqld);
+			}elseif($jrawat_cara2=='cek/giro'){
+				$sqld = "DELETE FROM jual_cek WHERE jcek_ref='".$jrawat_nobukti."'";
+				$this->db->query($sqld);
+			}elseif($jrawat_cara2=='transfer'){
+				$sqld = "DELETE FROM jual_transfer WHERE jtransfer_ref='".$jrawat_nobukti."'";
+				$this->db->query($sqld);
+			}elseif($jrawat_cara2=='voucher'){
+				$sqld = "DELETE FROM voucher_terima WHERE tvoucher_ref='".$jrawat_nobukti."'";
+				$this->db->query($sqld);
+			}
+			
+			if($jrawat_cara3=='tunai'){
+				$sqld = "DELETE FROM jual_tunai WHERE jtunai_ref='".$jrawat_nobukti."'";
+				$this->db->query($sqld);
+			}elseif($jrawat_cara3=='kwitansi'){
+				$sqld = "DELETE FROM jual_kwitansi WHERE jkwitansi_ref='".$jrawat_nobukti."'";
+				$this->db->query($sqld);
+			}elseif($jrawat_cara3=='card'){
+				$sqld = "DELETE FROM jual_card WHERE jcard_ref='".$jrawat_nobukti."'";
+				$this->db->query($sqld);
+			}elseif($jrawat_cara3=='cek/giro'){
+				$sqld = "DELETE FROM jual_cek WHERE jcek_ref='".$jrawat_nobukti."'";
+				$this->db->query($sqld);
+			}elseif($jrawat_cara3=='transfer'){
+				$sqld = "DELETE FROM jual_transfer WHERE jtransfer_ref='".$jrawat_nobukti."'";
+				$this->db->query($sqld);
+			}elseif($jrawat_cara3=='voucher'){
+				$sqld = "DELETE FROM voucher_terima WHERE tvoucher_ref='".$jrawat_nobukti."'";
+				$this->db->query($sqld);
+			}
+			
+			$sqld = "DELETE FROM master_jual_rawat WHERE jrawat_id='".$jrawat_id."'";
+			$this->db->query($sqld);
+			if($this->db->affected_rows()>-1){
+				return 1;
+			}
+			
+		}else{
+			return 1;
+		}
+	}
+	
+	function detail_jual_rawat_delete($drawat_id ,$array_drawat_master){
 		// You could do some checkups here and return '0' or other error consts.
 		// Make a single query to delete all of the master_jual_rawats at the same time :
 		if(sizeof($drawat_id)<1){
@@ -1026,20 +1025,27 @@ class M_master_jual_rawat extends Model{
 		} else if (sizeof($drawat_id) == 1){
 			$query = "DELETE FROM detail_jual_rawat WHERE drawat_id = ".$drawat_id[0];
 			$this->db->query($query);
-		} else {
-			$query = "DELETE FROM master_jual_rawat WHERE ";
-			for($i = 0; $i < sizeof($pkid); $i++){
-				$query = $query . "jrawat_id= ".$pkid[$i];
-				if($i<sizeof($pkid)-1){
-					$query = $query . " OR ";
-				}     
+			if($this->db->affected_rows()){
+				/*
+				 * CHECK db.detail_jual_rawat.drawat_master WHERE $array_drawat_master[0]
+				 * ==> JIKA $array_drawat_master[0] TIDAK ADA di db.detail_jual_rawat, maka DELETE di db.master_jual_rawat
+				*/
+				$sql = "SELECT drawat_master FROM detail_jual_rawat WHERE drawat_master='".$array_drawat_master[0]."'";
+				$this->db->query($sql);
+				if($this->db->affected_rows()<1){
+					$rs_jrawat_d = $this->master_jual_rawat_delete($array_drawat_master[0]);
+					if($rs_jrawat_d==1){
+						return '1';
+					}
+				}else{
+					return '1';
+				}
+			}else{
+				return '0';
 			}
-			$this->db->query($query);
-		}
-		if($this->db->affected_rows()>0)
-			return '1';
-		else
+		} else {
 			return '0';
+		}
 	}
 	
 	function detail_ambil_paket_update($dapaket_id ){
@@ -1198,7 +1204,7 @@ class M_master_jual_rawat extends Model{
 	}
 	
 	//function for update record
-	function master_jual_rawat_update($jrawat_id ,$jrawat_nobukti ,$jrawat_cust ,$jrawat_tanggal ,$jrawat_stat_dok, $jrawat_diskon ,$jrawat_cara ,$jrawat_cara2 ,$jrawat_cara3 ,$jrawat_keterangan , $jrawat_cashback, $jrawat_tunai_nilai, $jrawat_tunai_nilai2, $jrawat_tunai_nilai3, $jrawat_voucher_no, $jrawat_voucher_cashback, $jrawat_voucher_no2, $jrawat_voucher_cashback2, $jrawat_voucher_no3, $jrawat_voucher_cashback3, $jrawat_total, $jrawat_bayar, $jrawat_subtotal, $jrawat_hutang, $jrawat_kwitansi_no, $jrawat_kwitansi_nama, $jrawat_kwitansi_nilai, $jrawat_kwitansi_no2, $jrawat_kwitansi_nama2, $jrawat_kwitansi_nilai2, $jrawat_kwitansi_no3, $jrawat_kwitansi_nama3, $jrawat_kwitansi_nilai3, $jrawat_card_nama, $jrawat_card_edc, $jrawat_card_no, $jrawat_card_nilai, $jrawat_card_nama2, $jrawat_card_edc2, $jrawat_card_no2, $jrawat_card_nilai2, $jrawat_card_nama3, $jrawat_card_edc3, $jrawat_card_no3, $jrawat_card_nilai3, $jrawat_cek_nama, $jrawat_cek_no, $jrawat_cek_valid, $jrawat_cek_bank, $jrawat_cek_nilai, $jrawat_cek_nama2, $jrawat_cek_no2, $jrawat_cek_valid2, $jrawat_cek_bank2, $jrawat_cek_nilai2, $jrawat_cek_nama3, $jrawat_cek_no3, $jrawat_cek_valid3, $jrawat_cek_bank3, $jrawat_cek_nilai3, $jrawat_transfer_bank, $jrawat_transfer_nama, $jrawat_transfer_nilai, $jrawat_transfer_bank2, $jrawat_transfer_nama2, $jrawat_transfer_nilai2, $jrawat_transfer_bank3, $jrawat_transfer_nama3, $jrawat_transfer_nilai3 ,$cetak, $jrawat_ket_disk){
+	function master_jual_rawat_update($jrawat_id ,$jrawat_nobukti ,$jrawat_cust ,$jrawat_tanggal ,$jrawat_stat_dok, $jrawat_diskon ,$jrawat_cara ,$jrawat_cara2 ,$jrawat_cara3 ,$jrawat_keterangan , $jrawat_cashback, $jrawat_tunai_nilai, $jrawat_tunai_nilai2, $jrawat_tunai_nilai3, $jrawat_voucher_no, $jrawat_voucher_cashback, $jrawat_voucher_no2, $jrawat_voucher_cashback2, $jrawat_voucher_no3, $jrawat_voucher_cashback3, $jrawat_total, $jrawat_bayar, $jrawat_subtotal, $jrawat_hutang, $jrawat_kwitansi_no, $jrawat_kwitansi_nama, $jrawat_kwitansi_nilai, $jrawat_kwitansi_no2, $jrawat_kwitansi_nama2, $jrawat_kwitansi_nilai2, $jrawat_kwitansi_no3, $jrawat_kwitansi_nama3, $jrawat_kwitansi_nilai3, $jrawat_card_nama, $jrawat_card_edc, $jrawat_card_no, $jrawat_card_nilai, $jrawat_card_nama2, $jrawat_card_edc2, $jrawat_card_no2, $jrawat_card_nilai2, $jrawat_card_nama3, $jrawat_card_edc3, $jrawat_card_no3, $jrawat_card_nilai3, $jrawat_cek_nama, $jrawat_cek_no, $jrawat_cek_valid, $jrawat_cek_bank, $jrawat_cek_nilai, $jrawat_cek_nama2, $jrawat_cek_no2, $jrawat_cek_valid2, $jrawat_cek_bank2, $jrawat_cek_nilai2, $jrawat_cek_nama3, $jrawat_cek_no3, $jrawat_cek_valid3, $jrawat_cek_bank3, $jrawat_cek_nilai3, $jrawat_transfer_bank, $jrawat_transfer_nama, $jrawat_transfer_nilai, $jrawat_transfer_bank2, $jrawat_transfer_nama2, $jrawat_transfer_nilai2, $jrawat_transfer_bank3, $jrawat_transfer_nama3, $jrawat_transfer_nilai3 ,$cetak, $jrawat_ket_disk, $drawat_count){
 		$date_now = date('Y-m-d');
 		
 		$jenis_transaksi = 'jual_rawat';
@@ -1452,48 +1458,37 @@ class M_master_jual_rawat extends Model{
 					}
 				}
 				
-				return $jrawat_id;
-				
-				/*if($cetak==1){
-					//locking record di tindakan
-					$sql="SELECT drawat_dtrawat FROM detail_jual_rawat WHERE drawat_master='$jrawat_id'";
-					$rs=$this->db->query($sql);
-					if($rs->num_rows()){
-						$sql="UPDATE tindakan_detail SET dtrawat_locked=1 ";
-						foreach($rs->result() as $row_drawat){
-							$sql.=eregi("WHERE",$sql)?" OR ":" WHERE ";
-							$sql.="dtrawat_id='".$row_drawat->drawat_dtrawat."' ";
-						}
-						$this->db->query($sql);
-					}
-					$result_jrawat = $this->master_jual_rawat_status_update($jrawat_id);
-					if($result_jrawat==1){
-						$result_point = $this->member_point_update($jrawat_id);
-						if($result_point==1){
-							$result_membership = $this->membership_insert($jrawat_id);
-							if($result_membership==1){
-								return $jrawat_id;
-							}
-						}
-					}
-					
+				if($cetak==1){
+					return $jrawat_id;
 				}else{
 					return '0';
-				}*/
+				}
 				
-			}else{
-				return '-1';
 			}
 			
-		}elseif((substr($jrawat_nobukti,0,2)=='') && $cetak==1){
-			return '-3';
-		}elseif((substr($jrawat_nobukti,0,2)=='PK') && $cetak<>1 && $jrawat_stat_dok=='Batal'){
-			return '-4';
+		}elseif($jrawat_nobukti=='' && $drawat_count==0){
+			if($cetak==1){
+				return '-3';
+			}else{
+				return '-5';
+			}
+		}elseif($jrawat_nobukti=='' && $drawat_count>0){
+			/*
+			 * 1. CREATE db.master_jual_rawat ==> karena LIST yang di-Edit belum memiliki Master di db.master_jual_rawat
+			*/
+			$rs_master = $this->master_jual_rawat_create($jrawat_cust ,$jrawat_tanggal ,$jrawat_diskon ,$jrawat_cara ,$jrawat_stat_dok, $jrawat_cara2 ,$jrawat_cara3 ,$jrawat_keterangan , $jrawat_cashback, $jrawat_tunai_nilai, $jrawat_tunai_nilai2, $jrawat_tunai_nilai3, $jrawat_voucher_no, $jrawat_voucher_cashback, $jrawat_voucher_no2, $jrawat_voucher_cashback2, $jrawat_voucher_no3, $jrawat_voucher_cashback3, $jrawat_total, $jrawat_bayar, $jrawat_subtotal, $jrawat_hutang, $jrawat_kwitansi_no, $jrawat_kwitansi_nama, $jrawat_kwitansi_nilai, $jrawat_kwitansi_no2, $jrawat_kwitansi_nama2, $jrawat_kwitansi_nilai2, $jrawat_kwitansi_no3, $jrawat_kwitansi_nama3, $jrawat_kwitansi_nilai3, $jrawat_card_nama, $jrawat_card_edc, $jrawat_card_no, $jrawat_card_nilai, $jrawat_card_nama2, $jrawat_card_edc2, $jrawat_card_no2, $jrawat_card_nilai2, $jrawat_card_nama3, $jrawat_card_edc3, $jrawat_card_no3, $jrawat_card_nilai3, $jrawat_cek_nama, $jrawat_cek_no, $jrawat_cek_valid, $jrawat_cek_bank, $jrawat_cek_nilai, $jrawat_cek_nama2, $jrawat_cek_no2, $jrawat_cek_valid2, $jrawat_cek_bank2, $jrawat_cek_nilai2, $jrawat_cek_nama3, $jrawat_cek_no3, $jrawat_cek_valid3, $jrawat_cek_bank3, $jrawat_cek_nilai3, $jrawat_transfer_bank, $jrawat_transfer_nama, $jrawat_transfer_nilai, $jrawat_transfer_bank2, $jrawat_transfer_nama2, $jrawat_transfer_nilai2, $jrawat_transfer_bank3, $jrawat_transfer_nama3, $jrawat_transfer_nilai3, $cetak, $jrawat_ket_disk);
+			if($rs_master=='0'){
+				return '-2';
+			}else{
+				return '-5';
+			}
+		}else{
+			return '-6';
 		}
 	}
 	
 	//function for create new record
-	function master_jual_rawat_create($jrawat_cust ,$jrawat_tanggal ,$jrawat_diskon ,$jrawat_cara ,$jrawat_stat_dok, $jrawat_cara2 ,$jrawat_cara3 ,$jrawat_keterangan , $jrawat_cashback, $jrawat_tunai_nilai, $jrawat_tunai_nilai2, $jrawat_tunai_nilai3, $jrawat_voucher_no, $jrawat_voucher_cashback, $jrawat_voucher_no2, $jrawat_voucher_cashback2, $jrawat_voucher_no3, $jrawat_voucher_cashback3, $jrawat_bayar, $jrawat_subtotal, $jrawat_hutang, $jrawat_kwitansi_no, $jrawat_kwitansi_nama, $jrawat_kwitansi_nilai, $jrawat_kwitansi_no2, $jrawat_kwitansi_nama2, $jrawat_kwitansi_nilai2, $jrawat_kwitansi_no3, $jrawat_kwitansi_nama3, $jrawat_kwitansi_nilai3, $jrawat_card_nama, $jrawat_card_edc, $jrawat_card_no, $jrawat_card_nilai, $jrawat_card_nama2, $jrawat_card_edc2, $jrawat_card_no2, $jrawat_card_nilai2, $jrawat_card_nama3, $jrawat_card_edc3, $jrawat_card_no3, $jrawat_card_nilai3, $jrawat_cek_nama, $jrawat_cek_no, $jrawat_cek_valid, $jrawat_cek_bank, $jrawat_cek_nilai, $jrawat_cek_nama2, $jrawat_cek_no2, $jrawat_cek_valid2, $jrawat_cek_bank2, $jrawat_cek_nilai2, $jrawat_cek_nama3, $jrawat_cek_no3, $jrawat_cek_valid3, $jrawat_cek_bank3, $jrawat_cek_nilai3, $jrawat_transfer_bank, $jrawat_transfer_nama, $jrawat_transfer_nilai, $jrawat_transfer_bank2, $jrawat_transfer_nama2, $jrawat_transfer_nilai2, $jrawat_transfer_bank3, $jrawat_transfer_nama3, $jrawat_transfer_nilai3, $cetak, $jrawat_ket_disk){
+	function master_jual_rawat_create($jrawat_cust ,$jrawat_tanggal ,$jrawat_diskon ,$jrawat_cara ,$jrawat_stat_dok, $jrawat_cara2 ,$jrawat_cara3 ,$jrawat_keterangan , $jrawat_cashback, $jrawat_tunai_nilai, $jrawat_tunai_nilai2, $jrawat_tunai_nilai3, $jrawat_voucher_no, $jrawat_voucher_cashback, $jrawat_voucher_no2, $jrawat_voucher_cashback2, $jrawat_voucher_no3, $jrawat_voucher_cashback3, $jrawat_total, $jrawat_bayar, $jrawat_subtotal, $jrawat_hutang, $jrawat_kwitansi_no, $jrawat_kwitansi_nama, $jrawat_kwitansi_nilai, $jrawat_kwitansi_no2, $jrawat_kwitansi_nama2, $jrawat_kwitansi_nilai2, $jrawat_kwitansi_no3, $jrawat_kwitansi_nama3, $jrawat_kwitansi_nilai3, $jrawat_card_nama, $jrawat_card_edc, $jrawat_card_no, $jrawat_card_nilai, $jrawat_card_nama2, $jrawat_card_edc2, $jrawat_card_no2, $jrawat_card_nilai2, $jrawat_card_nama3, $jrawat_card_edc3, $jrawat_card_no3, $jrawat_card_nilai3, $jrawat_cek_nama, $jrawat_cek_no, $jrawat_cek_valid, $jrawat_cek_bank, $jrawat_cek_nilai, $jrawat_cek_nama2, $jrawat_cek_no2, $jrawat_cek_valid2, $jrawat_cek_bank2, $jrawat_cek_nilai2, $jrawat_cek_nama3, $jrawat_cek_no3, $jrawat_cek_valid3, $jrawat_cek_bank3, $jrawat_cek_nilai3, $jrawat_transfer_bank, $jrawat_transfer_nama, $jrawat_transfer_nilai, $jrawat_transfer_bank2, $jrawat_transfer_nama2, $jrawat_transfer_nilai2, $jrawat_transfer_bank3, $jrawat_transfer_nama3, $jrawat_transfer_nilai3, $cetak, $jrawat_ket_disk){
 		$date_now = date('Y-m-d');
 		
 		$jenis_transaksi = 'jual_rawat';
@@ -1512,6 +1507,7 @@ class M_master_jual_rawat extends Model{
 			"jrawat_tanggal"=>$jrawat_tanggal, 
 			"jrawat_diskon"=>$jrawat_diskon, 
 			"jrawat_cashback"=>$jrawat_cashback,
+			"jrawat_totalbiaya"=>$jrawat_total,
 			"jrawat_bayar"=>$jrawat_bayar,
 			"jrawat_cara"=>$jrawat_cara,
 			"jrawat_keterangan"=>$jrawat_keterangan,
@@ -1735,31 +1731,6 @@ class M_master_jual_rawat extends Model{
 		}
 		else
 			return '-1';
-	}
-	
-	//fcuntion for delete record
-	function master_jual_rawat_delete($pkid){
-		// You could do some checkups here and return '0' or other error consts.
-		// Make a single query to delete all of the master_jual_rawats at the same time :
-		if(sizeof($pkid)<1){
-			return '0';
-		} else if (sizeof($pkid) == 1){
-			$query = "DELETE FROM master_jual_rawat WHERE jrawat_id = ".$pkid[0];
-			$this->db->query($query);
-		} else {
-			$query = "DELETE FROM master_jual_rawat WHERE ";
-			for($i = 0; $i < sizeof($pkid); $i++){
-				$query = $query . "jrawat_id= ".$pkid[$i];
-				if($i<sizeof($pkid)-1){
-					$query = $query . " OR ";
-				}     
-			}
-			$this->db->query($query);
-		}
-		if($this->db->affected_rows()>0)
-			return '1';
-		else
-			return '0';
 	}
 	
 	function master_jual_rawat_batal($jrawat_nobukti, $jrawat_tanggal){
@@ -1995,22 +1966,6 @@ class M_master_jual_rawat extends Model{
 			return '({"total":"0", "results":""})';
 		}
 		
-		
-		/*$result = $this->db->query($query);
-		$nbrows = $result->num_rows();
-		
-		$limit = $query." LIMIT ".$start.",".$end;		
-		$result = $this->db->query($limit);    
-		
-		if($nbrows>0){
-			foreach($result->result() as $row){
-				$arr[] = $row;
-			}
-			$jsonresult = json_encode($arr);
-			return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
-		} else {
-			return '({"total":"0", "results":""})';
-		}*/
 	}
 	
 	//function for print record
@@ -2151,6 +2106,10 @@ class M_master_jual_rawat extends Model{
 		
 		$result = $this->db->query($sql);
 		$nbrows = $result->num_rows();
+		if($end!=0){
+			$limit = $sql." LIMIT ".$start.",".$end;			
+			$result = $this->db->query($limit);
+		}
 		if($nbrows>0){
 			foreach($result->result() as $row){
 				$arr[] = $row;
@@ -2162,11 +2121,11 @@ class M_master_jual_rawat extends Model{
 		}
 	}
 	
-	function master_jual_rawat_status_update($jrawat_id){
+	function master_jual_rawat_tertutup($jrawat_id){
 		$date_now = date('Y-m-d');
 		$datetime_now = date('Y-m-d H:i:s');
 		//* status dokumen menjadi tertutup setelah Faktur selesai di-cetak /
-		$sql = "SELECT jrawat_tanggal FROM master_jual_rawat WHERE jrawat_id='".$jrawat_id."'";
+		$sql = "SELECT jrawat_tanggal FROM master_jual_rawat WHERE jrawat_id='".$jrawat_id."' AND jrawat_stat_dok='Terbuka'";
 		$rs = $this->db->query($sql);
 		if($rs->num_rows()){
 			$record = $rs->row_array();
@@ -2237,33 +2196,11 @@ class M_master_jual_rawat extends Model{
 			LEFT JOIN perawatan ON(drawat_rawat=rawat_id)
 			WHERE jrawat_id='$jrawat_id'";
 		$result = $this->db->query($sql);
-		//$this->master_jual_rawat_status_update($jrawat_id);
+		//$this->master_jual_rawat_tertutup($jrawat_id);
 		return $result;
 	}
 	
 	function print_paper_apaket($dapaket_cust ,$dapaket_date_create){
-		/*$sql = "SELECT dapaket_id
-				,jpaket_nobukti
-				,paket_nama
-				,rawat_nama
-				,dapaket_jumlah
-				,jpaket_customer.cust_nama AS jpaket_cust_nama
-				,jpaket_customer.cust_no AS jpaket_cust_no
-				,jpaket_customer.cust_alamat AS jpaket_cust_alamat
-				,dapaket_customer.cust_no AS dapaket_cust_no
-				,dapaket_customer.cust_nama AS dapaket_cust_nama
-				,dapaket_customer.cust_alamat AS dapaket_cust_alamat
-				,dapaket_date_create
-			FROM detail_ambil_paket
-			LEFT JOIN master_jual_paket ON(dapaket_jpaket=jpaket_id)
-			LEFT JOIN paket ON(dapaket_paket=paket_id)
-			LEFT JOIN customer AS dapaket_customer ON(dapaket_cust=dapaket_customer.cust_id)
-			LEFT JOIN perawatan ON(dapaket_item=rawat_id)
-			LEFT JOIN customer AS jpaket_customer ON(jpaket_cust=jpaket_customer.cust_id)
-			WHERE dapaket_jpaket='$dapaket_jpaket'
-				AND dapaket_dpaket='$dapaket_dpaket'
-				AND date_format(dapaket_date_create,'%Y-%m-%d')='$dapaket_date_create'";*/
-		
 		$sql = "SELECT dapaket_id
 				,jpaket_nobukti
 				,paket_nama
