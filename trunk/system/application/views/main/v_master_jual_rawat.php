@@ -727,16 +727,13 @@ Ext.onReady(function(){
 								//mode 'Save'
 								Ext.MessageBox.alert(jrawat_post2db+' OK','Data penjualan perawatan berhasil disimpan');
 								detail_jual_rawat_cu(0,jrawat_id_create_pk,jrawat_cust_create,jrawat_tanggal_create_date);
-								master_jual_rawat_DataStore.reload();
 								master_jual_rawat_createWindow.hide();
 							}else if(result>0){
 								//mode 'Save and Print' untuk perawatan non-paket, sekaligus pengambilan paket
 								detail_jual_rawat_cu(1,jrawat_id_create_pk,jrawat_cust_create,jrawat_tanggal_create_date);
-								master_jual_rawat_DataStore.reload();
 								master_jual_rawat_createWindow.hide();
 							}else if(result==-2){
 								detail_jual_rawat_cu(cetak_jrawat,0,jrawat_cust_create,jrawat_tanggal_create_date);
-								master_jual_rawat_DataStore.reload();
 								master_jual_rawat_createWindow.hide();
 							}else if(result==-3){
 								//mode 'Save and Print' untuk perawatan paket saja
@@ -5039,12 +5036,15 @@ Ext.onReady(function(){
 								var result=eval(response.responseText);
 								if(result>0){
 									jrawat_cetak(result,customer_id,tanggal);
+									master_jual_rawat_DataStore.reload();
 									detail_jual_rawat_DataStore.load({params: {master_id:-1}});
 								}else{
+									master_jual_rawat_DataStore.reload();
 									detail_jual_rawat_DataStore.load({params: {master_id:-1}});
 								}
 								
 							}else{
+								master_jual_rawat_DataStore.reload();
 								detail_jual_rawat_DataStore.load({params: {master_id:-1}});
 							}
 						},
