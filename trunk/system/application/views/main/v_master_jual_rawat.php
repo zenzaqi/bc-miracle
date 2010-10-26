@@ -2711,7 +2711,7 @@ Ext.onReady(function(){
 		allowDecimals: false,
 		enableKeyEvents: true,
 		width: 120,
-		maxLength: 2,
+		maxLength: 3,
 		maskRe: /([0-9]+)$/
 	});
 	
