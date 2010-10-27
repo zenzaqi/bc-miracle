@@ -638,12 +638,10 @@ class C_master_jual_rawat extends Controller {
 
 	function master_jual_rawat_print(){
   		//POST varibale here
-		$jrawat_id=trim(@$_POST["jrawat_id"]);
 		$jrawat_nobukti=trim(@$_POST["jrawat_nobukti"]);
 		$jrawat_nobukti=str_replace("/(<\/?)(p)([^>]*>)", "",$jrawat_nobukti);
 		$jrawat_nobukti=str_replace("'", '"',$jrawat_nobukti);
 		$jrawat_cust=trim(@$_POST["jrawat_cust"]);
-		$jrawat_tanggal=trim(@$_POST["jrawat_tanggal"]);
 		$jrawat_diskon=trim(@$_POST["jrawat_diskon"]);
 		$jrawat_cashback=trim(@$_POST["jrawat_cashback"]);
 		$jrawat_voucher=trim(@$_POST["jrawat_voucher"]);
@@ -656,74 +654,46 @@ class C_master_jual_rawat extends Controller {
 		$jrawat_keterangan=trim(@$_POST["jrawat_keterangan"]);
 		$jrawat_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$jrawat_keterangan);
 		$jrawat_keterangan=str_replace("'", '"',$jrawat_keterangan);
+		$jrawat_stat_dok=trim(@$_POST["jrawat_stat_dok"]);
+		$jrawat_stat_dok=str_replace("/(<\/?)(p)([^>]*>)", "",$jrawat_stat_dok);
+		$jrawat_stat_dok=str_replace("'", '"',$jrawat_stat_dok);
+		
+		$jrawat_tgl_start=trim(@$_POST["jrawat_tgl_start"]);
+		$jrawat_tgl_end=trim(@$_POST["jrawat_tgl_end"]);
+		
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$result = $this->m_master_jual_rawat->master_jual_rawat_print($jrawat_id ,$jrawat_nobukti ,$jrawat_cust ,$jrawat_tanggal ,$jrawat_diskon ,$jrawat_cashback ,$jrawat_voucher ,$jrawat_cara ,$jrawat_bayar ,$jrawat_keterangan ,$option,$filter);
-		$nbrows=$result->num_rows();
-		$totcolumn=15;
-   		/* We now have our array, let's build our HTML file */
-		$file = fopen("master_jual_rawatlist.html",'w');
-		fwrite($file, "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' /><title>Printing the Master_jual_rawat Grid</title><link rel='stylesheet' type='text/css' href='assets/modules/main/css/printstyle.css'/></head>");
-		fwrite($file, "<body><table summary='Master_jual_rawat List'><caption>MASTER_JUAL_RAWAT</caption><thead><tr><th scope='col'>Jrawat Id</th><th scope='col'>Jrawat Nobukti</th><th scope='col'>Jrawat Cust</th><th scope='col'>Jrawat Tanggal</th><th scope='col'>Jrawat Diskon</th><th scope='col'>Jrawat Cashback</th><th scope='col'>Jrawat Voucher</th><th scope='col'>Jrawat Cara</th><th scope='col'>Jrawat Bayar</th><th scope='col'>Jrawat Keterangan</th><th scope='col'>Jrawat Creator</th><th scope='col'>Jrawat Date Create</th><th scope='col'>Jrawat Update</th><th scope='col'>Jrawat Date Update</th><th scope='col'>Jrawat Revised</th></tr></thead><tfoot><tr><th scope='row'>Total</th><td colspan='$totcolumn'>");
-		fwrite($file, $nbrows);
-		fwrite($file, " Master_jual_rawat</td></tr></tfoot><tbody>");
-		$i=0;
-		if($nbrows>0){
-			foreach($result->result_array() as $data){
-				fwrite($file,'<tr');
-				if($i%1==0){
-					fwrite($file," class='odd'");
-				}
-			
-				fwrite($file, "><th scope='row' id='r97'>");
-				fwrite($file, $data['jrawat_id']);
-				fwrite($file,"</th><td>");
-				fwrite($file, $data['jrawat_nobukti']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['jrawat_cust']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['jrawat_tanggal']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['jrawat_diskon']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['jrawat_cashback']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['jrawat_voucher']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['jrawat_cara']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['jrawat_bayar']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['jrawat_keterangan']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['jrawat_creator']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['jrawat_date_create']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['jrawat_update']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['jrawat_date_update']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['jrawat_revised']);
-				fwrite($file, "</td></tr>");
-			}
+		$data["data_print"] = $this->m_master_jual_rawat->master_jual_rawat_print($jrawat_nobukti
+																				,$jrawat_cust
+																				,$jrawat_diskon
+																				,$jrawat_stat_dok
+																				,$jrawat_cashback
+																				,$jrawat_voucher
+																				,$jrawat_cara
+																				,$jrawat_bayar
+																				,$jrawat_keterangan
+																				,$jrawat_tgl_start
+																				,$jrawat_tgl_end
+																				,$option
+																				,$filter);
+		$print_view=$this->load->view("main/p_master_jual_rawat.php",$data,TRUE);
+		if(!file_exists("print")){
+			mkdir("print");
 		}
-		fwrite($file, "</tbody></table></body></html>");	
-		fclose($file);
-		echo '1';        
+		$print_file=fopen("print/master_jual_rawatlist.html","w+");
+		fwrite($print_file, $print_view);
+		echo '1';
 	}
 	/* End Of Function */
 
 	/* Function to Export Excel document */
 	function master_jual_rawat_export_excel(){
 		//POST varibale here
-		$jrawat_id=trim(@$_POST["jrawat_id"]);
 		$jrawat_nobukti=trim(@$_POST["jrawat_nobukti"]);
 		$jrawat_nobukti=str_replace("/(<\/?)(p)([^>]*>)", "",$jrawat_nobukti);
 		$jrawat_nobukti=str_replace("'", '"',$jrawat_nobukti);
 		$jrawat_cust=trim(@$_POST["jrawat_cust"]);
-		$jrawat_tanggal=trim(@$_POST["jrawat_tanggal"]);
 		$jrawat_diskon=trim(@$_POST["jrawat_diskon"]);
 		$jrawat_cashback=trim(@$_POST["jrawat_cashback"]);
 		$jrawat_voucher=trim(@$_POST["jrawat_voucher"]);
@@ -736,10 +706,29 @@ class C_master_jual_rawat extends Controller {
 		$jrawat_keterangan=trim(@$_POST["jrawat_keterangan"]);
 		$jrawat_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$jrawat_keterangan);
 		$jrawat_keterangan=str_replace("'", '"',$jrawat_keterangan);
+		$jrawat_stat_dok=trim(@$_POST["jrawat_stat_dok"]);
+		$jrawat_stat_dok=str_replace("/(<\/?)(p)([^>]*>)", "",$jrawat_stat_dok);
+		$jrawat_stat_dok=str_replace("'", '"',$jrawat_stat_dok);
+		
+		$jrawat_tgl_start=trim(@$_POST["jrawat_tgl_start"]);
+		$jrawat_tgl_end=trim(@$_POST["jrawat_tgl_end"]);
+		
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$query = $this->m_master_jual_rawat->master_jual_rawat_export_excel($jrawat_id ,$jrawat_nobukti ,$jrawat_cust ,$jrawat_tanggal ,$jrawat_diskon ,$jrawat_cashback ,$jrawat_voucher ,$jrawat_cara ,$jrawat_bayar ,$jrawat_keterangan ,$option,$filter);
+		$query = $this->m_master_jual_rawat->master_jual_rawat_export_excel($jrawat_nobukti
+																			,$jrawat_cust
+																			,$jrawat_diskon
+																			,$jrawat_stat_dok
+																			,$jrawat_cashback
+																			,$jrawat_voucher
+																			,$jrawat_cara
+																			,$jrawat_bayar
+																			,$jrawat_keterangan
+																			,$jrawat_tgl_start
+																			,$jrawat_tgl_end
+																			,$option
+																			,$filter);
 		
 		to_excel($query,"master_jual_rawat"); 
 		echo '1';
