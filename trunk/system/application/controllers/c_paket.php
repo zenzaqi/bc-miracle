@@ -201,6 +201,7 @@ class C_paket extends Controller {
 		$paket_nama=str_replace("/(<\/?)(p)([^>]*>)", "",$paket_nama);
 		$paket_nama=str_replace(",", ",",$paket_nama);
 		$paket_nama=str_replace("'", '"',$paket_nama);
+		$paket_standart_tetap=trim(@$_POST["paket_standart_tetap"]);
 		$paket_group=trim(@$_POST["paket_group"]);
 		$paket_keterangan=trim(@$_POST["paket_keterangan"]);
 		$paket_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$paket_keterangan);
@@ -215,7 +216,7 @@ class C_paket extends Controller {
 		$paket_aktif=str_replace("/(<\/?)(p)([^>]*>)", "",$paket_aktif);
 		$paket_aktif=str_replace(",", ",",$paket_aktif);
 		$paket_aktif=str_replace("'", '"',$paket_aktif);
-		$result = $this->m_paket->paket_update($paket_id ,$paket_kode ,$paket_kodelama ,$paket_nama ,$paket_group ,$paket_keterangan ,$paket_du ,$paket_dm ,$paket_point ,$paket_harga ,$paket_expired ,$paket_aktif      );
+		$result = $this->m_paket->paket_update($paket_id ,$paket_kode ,$paket_kodelama ,$paket_nama ,$paket_standart_tetap, $paket_group ,$paket_keterangan ,$paket_du ,$paket_dm ,$paket_point ,$paket_harga ,$paket_expired ,$paket_aktif      );
 		echo $result;
 	}
 	
@@ -232,6 +233,7 @@ class C_paket extends Controller {
 		$paket_nama=trim(@$_POST["paket_nama"]);
 		$paket_nama=str_replace("/(<\/?)(p)([^>]*>)", "",$paket_nama);
 		$paket_nama=str_replace("'", '"',$paket_nama);
+		$paket_standart_tetap=trim(@$_POST["paket_standart_tetap"]);
 		$paket_group=trim(@$_POST["paket_group"]);
 		$paket_keterangan=trim(@$_POST["paket_keterangan"]);
 		$paket_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$paket_keterangan);
@@ -244,7 +246,7 @@ class C_paket extends Controller {
 		$paket_aktif=trim(@$_POST["paket_aktif"]);
 		$paket_aktif=str_replace("/(<\/?)(p)([^>]*>)", "",$paket_aktif);
 		$paket_aktif=str_replace("'", '"',$paket_aktif);
-		$result=$this->m_paket->paket_create($paket_kode ,$paket_kodelama ,$paket_nama ,$paket_group ,$paket_keterangan ,$paket_du ,$paket_dm ,$paket_point ,$paket_harga ,$paket_expired ,$paket_aktif );
+		$result=$this->m_paket->paket_create($paket_kode ,$paket_kodelama ,$paket_nama , $paket_standart_tetap, $paket_group ,$paket_keterangan ,$paket_du ,$paket_dm ,$paket_point ,$paket_harga ,$paket_expired ,$paket_aktif );
 		echo $result;
 	}
 

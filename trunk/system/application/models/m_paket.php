@@ -198,7 +198,10 @@ class M_paket extends Model{
 	//DETAIL PRODUK FUNCTION
 	//get record list
 	function detail_paket_isi_produk_list($master_id,$query,$start,$end) {
-		$query = "SELECT * FROM paket_isi_produk,produk,satuan where ipaket_produk=produk_id and ipaket_master='".$master_id."' and satuan_id=ipaket_satuan";
+		$query = "SELECT paket_isi_produk.*, produk.*, satuan.* FROM paket_isi_produk
+		left join produk on (produk.produk_id = paket_isi_produk.ipaket_produk)
+		left join satuan on (satuan.satuan_id = paket_isi_produk.ipaket_satuan)
+		where paket_isi_produk.ipaket_produk=produk.produk_id and paket_isi_produk.ipaket_master='".$master_id."' and satuan.satuan_id=paket_isi_produk.ipaket_satuan";
 		$result = $this->db->query($query);
 		$nbrows = $result->num_rows();
 		$limit = $query." LIMIT ".$start.",".$end;			
@@ -294,13 +297,15 @@ FROM ((`paket` INNER JOIN `produk_group` ON `paket`.`paket_group`=`produk_group`
 	}
 	
 	//function for update record
-	function paket_update($paket_id ,$paket_kode, $paket_kodelama ,$paket_nama ,$paket_group ,$paket_keterangan ,$paket_du ,$paket_dm ,$paket_point ,$paket_harga ,$paket_expired ,$paket_aktif ){
+	function paket_update($paket_id ,$paket_kode, $paket_kodelama ,$paket_nama , $paket_standart_tetap, $paket_group ,$paket_keterangan ,$paket_du ,$paket_dm ,$paket_point ,$paket_harga ,$paket_expired ,$paket_aktif ){
 		if ($paket_aktif=="")
 			$paket_aktif = "Aktif";
 		if ($paket_point=="")
 			$paket_point = 1;
 		if ($paket_expired=="")
 			$paket_expired = 365;
+			
+			
 		$data = array(
 			"paket_id"=>$paket_id, 
 			"paket_nama"=>$paket_nama, 
@@ -316,6 +321,14 @@ FROM ((`paket` INNER JOIN `produk_group` ON `paket`.`paket_group`=`produk_group`
 			"paket_update"=>$_SESSION[SESSION_USERID],			
 			"paket_date_update"=>date('Y-m-d H:i:s')			
 		);
+		
+		if($paket_standart_tetap=='true')
+			$data["paket_standart_tetap"]=1;
+		if($paket_standart_tetap=='false')
+			$data["paket_standart_tetap"]=0;	
+		
+		
+		
 		$sql="SELECT group_id,group_dupaket,group_dmpaket FROM produk_group WHERE group_id='".$paket_group."'";
 		$rs=$this->db->query($sql);
 		if($rs->num_rows()){
@@ -381,7 +394,7 @@ FROM ((`paket` INNER JOIN `produk_group` ON `paket`.`paket_group`=`produk_group`
 	}
 	
 	//function for create new record
-	function paket_create($paket_kode ,$paket_kodelama ,$paket_nama ,$paket_group ,$paket_keterangan ,$paket_du ,$paket_dm ,$paket_point ,$paket_harga ,$paket_expired ,$paket_aktif ){
+	function paket_create($paket_kode ,$paket_kodelama ,$paket_nama , $paket_standart_tetap, $paket_group ,$paket_keterangan ,$paket_du ,$paket_dm ,$paket_point ,$paket_harga ,$paket_expired ,$paket_aktif ){
 		if ($paket_aktif=="")
 			$paket_aktif = "Aktif";
 		if ($paket_point=="")
@@ -403,6 +416,12 @@ FROM ((`paket` INNER JOIN `produk_group` ON `paket`.`paket_group`=`produk_group`
 			"paket_date_create"=>date('Y-m-d H:i:s'),	
 			"paket_revised"=>'0'	
 		);
+		
+		if($paket_standart_tetap=='true')
+			$data["paket_standart_tetap"]=1;
+		if($paket_standart_tetap=='false')
+			$data["paket_standart_tetap"]=0;	
+		
 		$sql="SELECT group_id, group_kode FROM produk_group WHERE group_id='".$paket_group."'";
 		$rs=$this->db->query($sql);
 		if($rs->num_rows()){
