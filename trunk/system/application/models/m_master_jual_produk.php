@@ -1518,7 +1518,7 @@ class M_master_jual_produk extends Model{
 		}
 		
 		//function for advanced search record
-		function master_jual_produk_search($jproduk_id, $jproduk_nobukti, $jproduk_cust, $jproduk_tanggal, $jproduk_tanggal_akhir, $jproduk_diskon, $jproduk_cara, $jproduk_keterangan, $jproduk_stat_dok, $start, $end){
+		function master_jual_produk_search($jproduk_nobukti, $jproduk_cust, $jproduk_tanggal, $jproduk_tanggal_akhir, $jproduk_diskon, $jproduk_cara, $jproduk_keterangan, $jproduk_stat_dok, $start, $end){
 			//full query
 			//$date_temp = strtotime(date('Y-m-d', strtotime($date)) . " +20 days");
 			//$query="SELECT jproduk_id, jproduk_nobukti, cust_nama, cust_no, cust_member, member_no, jproduk_cust, jproduk_tanggal, jproduk_diskon, jproduk_cashback, jproduk_cara, jproduk_cara2, jproduk_cara3, jproduk_bayar, jproduk_totalbiaya, jproduk_keterangan, jproduk_creator, jproduk_date_create, jproduk_update, jproduk_date_update, jproduk_revised, jproduk_stat_dok FROM vu_jproduk";
@@ -1549,10 +1549,6 @@ class M_master_jual_produk extends Model{
 				FROM vu_jproduk
 				LEFT JOIN vu_jproduk_totalbiaya ON(vu_jproduk_totalbiaya.dproduk_master=vu_jproduk.jproduk_id)";
 			
-			if($jproduk_id!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " jproduk_id LIKE '%".$jproduk_id."%'";
-			};
 			if($jproduk_nobukti!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " jproduk_nobukti LIKE '%".$jproduk_nobukti."%'";
@@ -1603,33 +1599,48 @@ class M_master_jual_produk extends Model{
 		}
 		
 		//function for print record
-		function master_jual_produk_print($jproduk_id ,$jproduk_nobukti ,$jproduk_cust ,$jproduk_tanggal ,$jproduk_diskon ,$jproduk_cara ,$jproduk_keterangan ,$option,$filter){
+		function master_jual_produk_print($jproduk_nobukti
+										,$jproduk_cust
+										,$jproduk_tanggal
+										,$jproduk_tanggal_akhir
+										,$jproduk_diskon
+										,$jproduk_cara
+										,$jproduk_keterangan
+										,$jproduk_stat_dok
+										,$option
+										,$filter){
 			//full query
-			$query="select * from master_jual_produk";
+			$query="SELECT jproduk_tanggal
+					,jproduk_nobukti
+					,cust_no
+					,cust_nama
+					,INSERT(INSERT(member_no,7,0,'-'),14,0,'-') AS no_member
+					,vu_jproduk.jproduk_totalbiaya AS jproduk_totalbiaya
+					,jproduk_bayar
+					,jproduk_keterangan
+					,jproduk_stat_dok
+				FROM vu_jproduk
+				LEFT JOIN vu_jproduk_totalbiaya ON(vu_jproduk_totalbiaya.dproduk_master=vu_jproduk.jproduk_id)";
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (jproduk_id LIKE '%".addslashes($filter)."%' OR jproduk_nobukti LIKE '%".addslashes($filter)."%' OR jproduk_cust LIKE '%".addslashes($filter)."%' OR jproduk_tanggal like  '%".addslashes($filter)."%' OR jproduk_diskon LIKE '%".addslashes($filter)."%' OR jproduk_cara LIKE '%".addslashes($filter)."%' OR jproduk_keterangan LIKE '%".addslashes($filter)."%' )";
+				$query .= " (jproduk_nobukti LIKE '%".addslashes($filter)."%' OR cust_nama LIKE '%".addslashes($filter)."%' OR cust_no LIKE '%".addslashes($filter)."%' )";
 				$result = $this->db->query($query);
 			} else if($option=='SEARCH'){
-				if($jproduk_id!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " jproduk_id LIKE '%".$jproduk_id."%'";
-				};
 				if($jproduk_nobukti!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " jproduk_nobukti LIKE '%".$jproduk_nobukti."%'";
 				};
 				if($jproduk_cust!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " jproduk_cust LIKE '%".$jproduk_cust."%'";
+					$query.= " jproduk_cust = '".$jproduk_cust."'";
 				};
 				if($jproduk_tanggal!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " jproduk_tanggal = '".$jproduk_tanggal."'";
+					$query.= " jproduk_tanggal>= '".$jproduk_tanggal."'";
 				};
-				if($jproduk_diskon!=''){
+				if($jproduk_tanggal_akhir!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " jproduk_diskon LIKE '%".$jproduk_diskon."%'";
+					$query.= " jproduk_tanggal<= '".$jproduk_tanggal_akhir."'";
 				};
 				if($jproduk_cara!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -1638,40 +1649,59 @@ class M_master_jual_produk extends Model{
 				if($jproduk_keterangan!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " jproduk_keterangan LIKE '%".$jproduk_keterangan."%'";
+				};
+				if($jproduk_stat_dok!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " jproduk_stat_dok LIKE '%".$jproduk_stat_dok."%'";
 				};
 				$result = $this->db->query($query);
 			}
-			return $result;
+			return $result->result();
 		}
 		
 		//function  for export to excel
-		function master_jual_produk_export_excel($jproduk_id ,$jproduk_nobukti ,$jproduk_cust ,$jproduk_tanggal ,$jproduk_diskon ,$jproduk_cara ,$jproduk_keterangan ,$option,$filter){
+		function master_jual_produk_export_excel($jproduk_nobukti
+												,$jproduk_cust
+												,$jproduk_tanggal
+												,$jproduk_tanggal_akhir
+												,$jproduk_diskon
+												,$jproduk_cara
+												,$jproduk_keterangan
+												,$jproduk_stat_dok
+												,$option
+												,$filter){
 			//full query
-			$query="select * from master_jual_produk";
+			$query="SELECT jproduk_tanggal AS tanggal
+					,jproduk_nobukti AS no_faktur
+					,cust_no AS no_cust
+					,cust_nama AS customer
+					,INSERT(INSERT(member_no,7,0,'-'),14,0,'-') AS no_member
+					,vu_jproduk.jproduk_totalbiaya AS 'Total (Rp)'
+					,jproduk_bayar AS 'Total Bayar (Rp)'
+					,jproduk_keterangan AS keterangan
+					,jproduk_stat_dok AS stat_dok
+				FROM vu_jproduk
+				LEFT JOIN vu_jproduk_totalbiaya ON(vu_jproduk_totalbiaya.dproduk_master=vu_jproduk.jproduk_id)";
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (jproduk_id LIKE '%".addslashes($filter)."%' OR jproduk_nobukti LIKE '%".addslashes($filter)."%' OR jproduk_cust LIKE '%".addslashes($filter)."%' OR jproduk_tanggal like  '%".addslashes($filter)."%' OR jproduk_diskon LIKE '%".addslashes($filter)."%' OR jproduk_cara LIKE '%".addslashes($filter)."%' OR jproduk_keterangan LIKE '%".addslashes($filter)."%' )";
+				$query .= " (jproduk_nobukti LIKE '%".addslashes($filter)."%' OR cust_nama LIKE '%".addslashes($filter)."%' OR cust_no LIKE '%".addslashes($filter)."%' )";
 				$result = $this->db->query($query);
 			} else if($option=='SEARCH'){
-				if($jproduk_id!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " jproduk_id LIKE '%".$jproduk_id."%'";
-				};
 				if($jproduk_nobukti!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " jproduk_nobukti LIKE '%".$jproduk_nobukti."%'";
 				};
 				if($jproduk_cust!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " jproduk_cust LIKE '%".$jproduk_cust."%'";
+					$query.= " jproduk_cust = '".$jproduk_cust."'";
 				};
 				if($jproduk_tanggal!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " jproduk_tanggal = '".$jproduk_tanggal."'";
+					$query.= " jproduk_tanggal>= '".$jproduk_tanggal."'";
 				};
-				if($jproduk_diskon!=''){
+				if($jproduk_tanggal_akhir!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " jproduk_diskon LIKE '%".$jproduk_diskon."%'";
+					$query.= " jproduk_tanggal<= '".$jproduk_tanggal_akhir."'";
 				};
 				if($jproduk_cara!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -1680,6 +1710,10 @@ class M_master_jual_produk extends Model{
 				if($jproduk_keterangan!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " jproduk_keterangan LIKE '%".$jproduk_keterangan."%'";
+				};
+				if($jproduk_stat_dok!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " jproduk_stat_dok LIKE '%".$jproduk_stat_dok."%'";
 				};
 				$result = $this->db->query($query);
 			}

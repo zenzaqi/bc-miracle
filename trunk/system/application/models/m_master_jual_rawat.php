@@ -1800,7 +1800,7 @@ class M_master_jual_rawat extends Model{
 	}
 	
 	//function for advanced search record
-	function master_jual_rawat_search($jrawat_id ,$jrawat_nobukti ,$jrawat_cust ,$jrawat_diskon , $jrawat_stat_dok, $jrawat_cashback ,$jrawat_voucher ,$jrawat_cara ,$jrawat_bayar ,$jrawat_keterangan ,$jrawat_tgl_start ,$jrawat_tgl_end ,$start,$end){
+	function master_jual_rawat_search($jrawat_nobukti ,$jrawat_cust ,$jrawat_diskon , $jrawat_stat_dok, $jrawat_cashback ,$jrawat_voucher ,$jrawat_cara ,$jrawat_bayar ,$jrawat_keterangan ,$jrawat_tgl_start ,$jrawat_tgl_end ,$start,$end){
 		//pencarian perawatan satuan di db.detail_jual_rawat
 		$query = "SELECT
 				jrawat_id,
@@ -1832,10 +1832,6 @@ class M_master_jual_rawat extends Model{
 			FROM vu_jrawat_pr
 			LEFT JOIN vu_jrawat_totalbiaya ON(vu_jrawat_totalbiaya.drawat_master=vu_jrawat_pr.jrawat_id)";
 			
-		if($jrawat_id!=''){
-			$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-			$query.= " jrawat_id LIKE '%".$jrawat_id."%'";
-		};
 		if($jrawat_nobukti!=''){
 			$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 			$query.= " jrawat_nobukti LIKE '%".$jrawat_nobukti."%'";

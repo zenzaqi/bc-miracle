@@ -2304,7 +2304,6 @@ Ext.onReady(function(){
 	/* Function for action list search */
 	function tindakan_medislist_search(){
 		// render according to a SQL date format.
-		var trawat_id_search=null;
 		var trawat_cust_search=null;
 		//var trawat_keterangan_search=null;
 		var trawat_tgl_start_app_search=null;
@@ -2313,7 +2312,6 @@ Ext.onReady(function(){
 		var trawat_dokter_search=null;
 		var trawat_status_search=null;
 
-		if(trawat_medis_idSearchField.getValue()!==null){trawat_id_search=trawat_medis_idSearchField.getValue();}
 		if(trawat_medis_custSearchField.getValue()!==null){trawat_cust_search=trawat_medis_custSearchField.getValue();}
 		//if(trawat_medis_keteranganSearchField.getValue()!==null){trawat_keterangan_search=trawat_medis_keteranganSearchField.getValue();}
 		if(Ext.getCmp('trawat_medis_tglStartAppSearchField').getValue()!==null){trawat_tgl_start_app_search=Ext.getCmp('trawat_medis_tglStartAppSearchField').getValue();}
@@ -2325,7 +2323,6 @@ Ext.onReady(function(){
 		tindakan_medisDataStore.baseParams = {
 			task: 'SEARCH',
 			//variable here
-			trawat_id	:	trawat_id_search, 
 			trawat_cust	:	trawat_cust_search, 
 			//trawat_keterangan	:	trawat_keterangan_search, 
 			trawat_tglapp_start	: 	trawat_tgl_start_app_search,
@@ -2565,13 +2562,21 @@ Ext.onReady(function(){
 	function tindakan_medisprint(){
 		var searchquery = "";
 		var trawat_cust_print=null;
-		var trawat_keterangan_print=null;
+		var trawat_tgl_start_app_print=null;
+		var trawat_tgl_end_app_print=null;
+		var trawat_rawat_print=null;
+		var trawat_dokter_print=null;
+		var trawat_status_print=null;
 		var win;              
 		// check if we do have some search data...
 		if(tindakan_medisDataStore.baseParams.query!==null){searchquery = tindakan_medisDataStore.baseParams.query;}
 		if(tindakan_medisDataStore.baseParams.trawat_cust!==null){trawat_cust_print = tindakan_medisDataStore.baseParams.trawat_cust;}
-		if(tindakan_medisDataStore.baseParams.trawat_keterangan!==null){trawat_keterangan_print = tindakan_medisDataStore.baseParams.trawat_keterangan;}
-
+		if(tindakan_medisDataStore.baseParams.trawat_tglapp_start!==null){trawat_tgl_start_app_print = tindakan_medisDataStore.baseParams.trawat_tglapp_start;}
+		if(tindakan_medisDataStore.baseParams.trawat_tglapp_end!==null){trawat_tgl_end_app_print = tindakan_medisDataStore.baseParams.trawat_tglapp_end;}
+		if(tindakan_medisDataStore.baseParams.trawat_rawat!==null){trawat_rawat_print = tindakan_medisDataStore.baseParams.trawat_rawat;}
+		if(tindakan_medisDataStore.baseParams.trawat_dokter!==null){trawat_dokter_print = tindakan_medisDataStore.baseParams.trawat_dokter;}
+		if(tindakan_medisDataStore.baseParams.trawat_status!==null){trawat_status_print = tindakan_medisDataStore.baseParams.trawat_status;}
+		
 		Ext.Ajax.request({   
 		waitMsg: 'Please Wait...',
 		url: 'index.php?c=c_tindakan_medis&m=get_action',
@@ -2579,16 +2584,20 @@ Ext.onReady(function(){
 			task: "PRINT",
 		  	query: searchquery,                    		// if we are doing a quicksearch, use this
 			//if we are doing advanced search, use this
-			trawat_cust : trawat_cust_print,
-			trawat_keterangan : trawat_keterangan_print,
+			trawat_cust	:	trawat_cust_print, 
+			trawat_tglapp_start	: 	trawat_tgl_start_app_print,
+			trawat_tglapp_end	: 	trawat_tgl_end_app_print,
+			trawat_rawat	:	trawat_rawat_print,
+			trawat_dokter	:	trawat_dokter_print,
+			trawat_status	:	trawat_status_print,
 		  	currentlisting: tindakan_medisDataStore.baseParams.task // this tells us if we are searching or not
 		}, 
 		success: function(response){              
 		  	var result=eval(response.responseText);
 		  	switch(result){
 		  	case 1:
-				win = window.open('./tindakanlist.html','tindakanlist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
-				win.print();
+				win = window.open('./print/tindakan_medislist.html','tindakanlist','height=400,width=800,resizable=1,scrollbars=1, menubar=1');
+				//win.print();
 				break;
 		  	default:
 				Ext.MessageBox.show({
@@ -2619,13 +2628,21 @@ Ext.onReady(function(){
 	function tindakan_medisexport_excel(){
 		var searchquery = "";
 		var trawat_cust_2excel=null;
-		var trawat_keterangan_2excel=null;
+		var trawat_tgl_start_app_2excel=null;
+		var trawat_tgl_end_app_2excel=null;
+		var trawat_rawat_2excel=null;
+		var trawat_dokter_2excel=null;
+		var trawat_status_2excel=null;
 		var win;              
 		// check if we do have some search data...
 		if(tindakan_medisDataStore.baseParams.query!==null){searchquery = tindakan_medisDataStore.baseParams.query;}
 		if(tindakan_medisDataStore.baseParams.trawat_cust!==null){trawat_cust_2excel = tindakan_medisDataStore.baseParams.trawat_cust;}
-		if(tindakan_medisDataStore.baseParams.trawat_keterangan!==null){trawat_keterangan_2excel = tindakan_medisDataStore.baseParams.trawat_keterangan;}
-
+		if(tindakan_medisDataStore.baseParams.trawat_tglapp_start!==null){trawat_tgl_start_app_2excel = tindakan_medisDataStore.baseParams.trawat_tglapp_start;}
+		if(tindakan_medisDataStore.baseParams.trawat_tglapp_end!==null){trawat_tgl_end_app_2excel = tindakan_medisDataStore.baseParams.trawat_tglapp_end;}
+		if(tindakan_medisDataStore.baseParams.trawat_rawat!==null){trawat_rawat_2excel = tindakan_medisDataStore.baseParams.trawat_rawat;}
+		if(tindakan_medisDataStore.baseParams.trawat_dokter!==null){trawat_dokter_2excel = tindakan_medisDataStore.baseParams.trawat_dokter;}
+		if(tindakan_medisDataStore.baseParams.trawat_status!==null){trawat_status_2excel = tindakan_medisDataStore.baseParams.trawat_status;}
+		
 		Ext.Ajax.request({   
 		waitMsg: 'Please Wait...',
 		url: 'index.php?c=c_tindakan_medis&m=get_action',
@@ -2633,8 +2650,12 @@ Ext.onReady(function(){
 			task: "EXCEL",
 		  	query: searchquery,                    		// if we are doing a quicksearch, use this
 			//if we are doing advanced search, use this
-			trawat_cust : trawat_cust_2excel,
-			trawat_keterangan : trawat_keterangan_2excel,
+			trawat_cust	:	trawat_cust_2excel, 
+			trawat_tglapp_start	: 	trawat_tgl_start_app_2excel,
+			trawat_tglapp_end	: 	trawat_tgl_end_app_2excel,
+			trawat_rawat	:	trawat_rawat_2excel,
+			trawat_dokter	:	trawat_dokter_2excel,
+			trawat_status	:	trawat_status_2excel,
 		  	currentlisting: tindakan_medisDataStore.baseParams.task // this tells us if we are searching or not
 		},
 		success: function(response){              

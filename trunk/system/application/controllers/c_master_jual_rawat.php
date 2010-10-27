@@ -606,7 +606,6 @@ class C_master_jual_rawat extends Controller {
 	//function for advanced search
 	function master_jual_rawat_search(){
 		//POST varibale here
-		$jrawat_id=trim(@$_POST["jrawat_id"]);
 		$jrawat_nobukti=trim(@$_POST["jrawat_nobukti"]);
 		$jrawat_nobukti=str_replace("/(<\/?)(p)([^>]*>)", "",$jrawat_nobukti);
 		$jrawat_nobukti=str_replace("'", '"',$jrawat_nobukti);
@@ -632,7 +631,7 @@ class C_master_jual_rawat extends Controller {
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_master_jual_rawat->master_jual_rawat_search($jrawat_id ,$jrawat_nobukti ,$jrawat_cust ,$jrawat_diskon , $jrawat_stat_dok, $jrawat_cashback ,$jrawat_voucher ,$jrawat_cara ,$jrawat_bayar ,$jrawat_keterangan ,$jrawat_tgl_start ,$jrawat_tgl_end ,$start,$end);
+		$result = $this->m_master_jual_rawat->master_jual_rawat_search($jrawat_nobukti ,$jrawat_cust ,$jrawat_diskon , $jrawat_stat_dok, $jrawat_cashback ,$jrawat_voucher ,$jrawat_cara ,$jrawat_bayar ,$jrawat_keterangan ,$jrawat_tgl_start ,$jrawat_tgl_end ,$start,$end);
 		echo $result;
 	}
 

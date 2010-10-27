@@ -1782,7 +1782,7 @@ class M_tindakan_medis extends Model{
 		}
 		
 		//function for advanced search record
-		function tindakan_search($trawat_id ,$trawat_cust ,$trawat_tglapp_start ,$trawat_tglapp_end ,$trawat_rawat ,$trawat_dokter ,$trawat_status ,$start,$end){
+		function tindakan_search($trawat_cust ,$trawat_tglapp_start ,$trawat_tglapp_end ,$trawat_rawat ,$trawat_dokter ,$trawat_status ,$start,$end){
 			//full query
 			//$query="SELECT * FROM vu_tindakan WHERE kategori_nama='Medis'";
 			//$query = "SELECT * FROM vu_tindakan WHERE (kategori_nama='Medis' OR dtrawat_petugas2='0')";
@@ -1841,52 +1841,92 @@ class M_tindakan_medis extends Model{
 		}
 		
 		//function for print record
-		function tindakan_print($trawat_id ,$trawat_cust ,$trawat_keterangan ,$option,$filter){
+		function tindakan_print($trawat_cust ,$trawat_tglapp_start ,$trawat_tglapp_end ,$trawat_rawat ,$trawat_dokter ,$trawat_status ,$option,$filter){
 			//full query
-			$query="select * from tindakan";
+			$query="SELECT cust_no
+					,cust_nama
+					,rawat_nama
+					,dokter_username
+					,dtrawat_jam
+					,dtrawat_status
+					,dtrawat_keterangan
+					,dtrawat_ambil_paket
+				FROM vu_tindakan
+				WHERE (kategori_nama='Medis' OR kategori_nama ='Surgery')";
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (trawat_id LIKE '%".addslashes($filter)."%' OR trawat_cust LIKE '%".addslashes($filter)."%' OR trawat_keterangan LIKE '%".addslashes($filter)."%' )";
+				$query .= " (cust_nama LIKE '%".addslashes($filter)."%' OR rawat_nama LIKE '%".addslashes($filter)."%' OR dokter_username LIKE '%".addslashes($filter)."%' OR dokter_nama LIKE '%".addslashes($filter)."%' OR dtrawat_status LIKE '%".addslashes($filter)."%')";
 				$result = $this->db->query($query);
 			} else if($option=='SEARCH'){
-				if($trawat_id!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " trawat_id LIKE '%".$trawat_id."%'";
-				};
 				if($trawat_cust!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " trawat_cust LIKE '%".$trawat_cust."%'";
+					$query.= " vu_tindakan.trawat_cust = '".$trawat_cust."'";
 				};
-				if($trawat_keterangan!=''){
+				if($trawat_rawat!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " trawat_keterangan LIKE '%".$trawat_keterangan."%'";
+					$query.= " vu_tindakan.dtrawat_perawatan = '".$trawat_rawat."'";
 				};
+				if($trawat_dokter!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " vu_tindakan.dtrawat_petugas1 = '".$trawat_dokter."'";
+				};
+				if($trawat_status!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " vu_tindakan.dtrawat_status = '".$trawat_status."'";
+				};
+				if($trawat_tglapp_start!='' && $trawat_tglapp_end!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " vu_tindakan.dtrawat_tglapp BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."'";
+				}else if($trawat_tglapp_start!='' && $trawat_tglapp_end==''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " vu_tindakan.dtrawat_tglapp='".$trawat_tglapp_start."'";
+				}
 				$result = $this->db->query($query);
 			}
-			return $result;
+			return $result->result();
 		}
 		
 		//function  for export to excel
-		function tindakan_export_excel($trawat_id ,$trawat_cust ,$trawat_keterangan ,$option,$filter){
+		function tindakan_export_excel($trawat_cust ,$trawat_tglapp_start ,$trawat_tglapp_end ,$trawat_rawat ,$trawat_dokter ,$trawat_status ,$option,$filter){
 			//full query
-			$query="select * from tindakan";
+			$query = "SELECT cust_no AS no_cust
+					,cust_nama AS customer
+					,rawat_nama AS perawatan
+					,dokter_username AS dokter
+					,dtrawat_jam AS jam_app
+					,dtrawat_status AS status
+					,dtrawat_keterangan AS detail_keterangan
+					,dtrawat_ambil_paket AS ambil_paket
+				FROM vu_tindakan
+				WHERE (kategori_nama='Medis' OR kategori_nama ='Surgery')";
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (trawat_id LIKE '%".addslashes($filter)."%' OR trawat_cust LIKE '%".addslashes($filter)."%' OR trawat_keterangan LIKE '%".addslashes($filter)."%' )";
+				$query .= " (cust_nama LIKE '%".addslashes($filter)."%' OR rawat_nama LIKE '%".addslashes($filter)."%' OR dokter_username LIKE '%".addslashes($filter)."%' OR dokter_nama LIKE '%".addslashes($filter)."%' OR dtrawat_status LIKE '%".addslashes($filter)."%')";
 				$result = $this->db->query($query);
 			} else if($option=='SEARCH'){
-				if($trawat_id!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " trawat_id LIKE '%".$trawat_id."%'";
-				};
 				if($trawat_cust!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " trawat_cust LIKE '%".$trawat_cust."%'";
+					$query.= " vu_tindakan.trawat_cust = '".$trawat_cust."'";
 				};
-				if($trawat_keterangan!=''){
+				if($trawat_rawat!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " trawat_keterangan LIKE '%".$trawat_keterangan."%'";
+					$query.= " vu_tindakan.dtrawat_perawatan = '".$trawat_rawat."'";
 				};
+				if($trawat_dokter!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " vu_tindakan.dtrawat_petugas1 = '".$trawat_dokter."'";
+				};
+				if($trawat_status!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " vu_tindakan.dtrawat_status = '".$trawat_status."'";
+				};
+				if($trawat_tglapp_start!='' && $trawat_tglapp_end!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " vu_tindakan.dtrawat_tglapp BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."'";
+				}else if($trawat_tglapp_start!='' && $trawat_tglapp_end==''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " vu_tindakan.dtrawat_tglapp='".$trawat_tglapp_start."'";
+				}
 				$result = $this->db->query($query);
 			}
 			return $result;
