@@ -72,6 +72,7 @@ var paket_idField;
 var paket_kodeField;
 var paket_kodelamaField;
 var paket_namaField;
+var paket_standart_tetapField;
 var paket_groupField;
 var paket_kategoriField;
 var paket_kategoritxtField;
@@ -81,6 +82,7 @@ var paket_dmField;
 var paket_pointField;
 var paket_hargaField;
 var paket_expiredField;
+var paket_perpanjanganField;
 var paket_aktifField;
 var paket_idSearchField;
 var paket_kodeSearchField;
@@ -112,6 +114,7 @@ Ext.onReady(function(){
 		var paket_point_update=null;
 		var paket_harga_update=null;
 		var paket_expired_update=null;
+		var paket_perpanjangan_update=null;
 		var paket_aktif_update=null;
 
 		paket_id_update_pk = oGrid_event.record.data.paket_id;
@@ -125,6 +128,7 @@ Ext.onReady(function(){
 		if(oGrid_event.record.data.paket_point!== null){paket_point_update = oGrid_event.record.data.paket_point;}
 		if(oGrid_event.record.data.paket_harga!== null){paket_harga_update = oGrid_event.record.data.paket_harga;}
 		if(oGrid_event.record.data.paket_expired!== null){paket_expired_update = oGrid_event.record.data.paket_expired;}
+		if(oGrid_event.record.data.paket_perpanjangan!== null){paket_perpanjangan_update = oGrid_event.record.data.paket_perpanjangan;}
 		if(oGrid_event.record.data.paket_aktif!== null){paket_aktif_update = oGrid_event.record.data.paket_aktif;}
 
 		Ext.Ajax.request({  
@@ -142,7 +146,8 @@ Ext.onReady(function(){
 				paket_dm	:paket_dm_update,  
 				paket_point	:paket_point_update,  
 				paket_harga	:paket_harga_update,  
-				paket_expired	:paket_expired_update,  
+				paket_expired	:paket_expired_update, 
+				paket_perpanjangan : paket_perpanjangan_update,
 				paket_aktif	:paket_aktif_update,  
 			}, 
 			success: function(response){							
@@ -192,6 +197,7 @@ Ext.onReady(function(){
 		var paket_point_create=null; 
 		var paket_harga_create=null; 
 		var paket_expired_create=null; 
+		var paket_perpanjangan_create=null;
 		var paket_aktif_create=null; 
 
 		if(paket_idField.getValue()!== null){paket_id_create_pk = paket_idField.getValue();}else{paket_id_create_pk=get_pk_id();} 
@@ -204,7 +210,8 @@ Ext.onReady(function(){
 		if(paket_dmField.getValue()!== null){paket_dm_create = paket_dmField.getValue();} 
 		if(paket_pointField.getValue()!== null){paket_point_create = paket_pointField.getValue();} 
 		if(paket_hargaField.getValue()!== null){paket_harga_create = paket_hargaField.getValue();} 
-		if(paket_expiredField.getValue()!== null){paket_expired_create = paket_expiredField.getValue();} 
+		if(paket_expiredField.getValue()!== null){paket_expired_create = paket_expiredField.getValue();}
+		if(paket_perpanjanganField.getValue()!== null){paket_perpanjangan_create = paket_perpanjanganField.getValue();} 
 		if(paket_aktifField.getValue()!== null){paket_aktif_create = paket_aktifField.getValue();} 
 
 		Ext.Ajax.request({  
@@ -215,7 +222,8 @@ Ext.onReady(function(){
 				paket_id	: paket_id_create_pk, 
 				paket_kode	: paket_kode_create, 
 				paket_kodelama	: paket_kodelama_create, 
-				paket_nama	: paket_nama_create, 
+				paket_nama	: paket_nama_create,
+				paket_standart_tetap : paket_standart_tetapField.getValue(),
 				paket_group	: paket_group_create, 
 				paket_keterangan	: paket_keterangan_create, 
 				paket_du	: paket_du_create, 
@@ -223,6 +231,7 @@ Ext.onReady(function(){
 				paket_point	: paket_point_create, 
 				paket_harga	: paket_harga_create, 
 				paket_expired	: paket_expired_create, 
+				paket_perpanjangan : paket_perpanjangan_create,
 				paket_aktif	: paket_aktif_create, 
 			}, 
 			success: function(response){             
@@ -290,6 +299,8 @@ Ext.onReady(function(){
 		paket_kodelamaField.setValue(null);
 		paket_namaField.reset();
 		paket_namaField.setValue(null);
+		paket_standart_tetapField.reset();
+		paket_standart_tetapField.setValue(null);
 		paket_groupField.reset();
 		paket_groupField.setValue(null);
 		paket_keteranganField.reset();
@@ -304,6 +315,8 @@ Ext.onReady(function(){
 		paket_hargaField.setValue(null);
 		paket_expiredField.reset();
 		paket_expiredField.setValue(null);
+		paket_perpanjanganField.reset();
+		paket_perpanjanganField.setValue(null);
 		paket_aktifField.reset();
 		paket_aktifField.setValue(null);
 		paket_kategoritxtField.reset();
@@ -317,6 +330,7 @@ Ext.onReady(function(){
 		paket_kodeField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('paket_kode'));
 		paket_kodelamaField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('paket_kodelama'));
 		paket_namaField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('paket_nama'));
+		paket_standart_tetapField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('paket_standart_tetap'));
 		paket_groupField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('paket_group'));
 		paket_keteranganField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('paket_keterangan'));
 		paket_duField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('paket_du'));
@@ -324,6 +338,7 @@ Ext.onReady(function(){
 		paket_pointField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('paket_point'));
 		paket_hargaField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('paket_harga'));
 		paket_expiredField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('paket_expired'));
+		paket_perpanjanganField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('paket_perpanjangan'));
 		paket_aktifField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif'));
 		paket_kategoriField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('kategori_id'));
 		paket_kategoritxtField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('kategori_nama'));
@@ -463,7 +478,8 @@ Ext.onReady(function(){
 			{name: 'paket_dm', type: 'int', mapping: 'paket_dm'}, 
 			{name: 'paket_point', type: 'int', mapping: 'paket_point'}, 
 			{name: 'paket_harga', type: 'float', mapping: 'paket_harga'}, 
-			{name: 'paket_expired', type: 'int', mapping: 'paket_expired'}, 
+			{name: 'paket_expired', type: 'int', mapping: 'paket_expired'},
+			{name: 'paket_perpanjangan', type: 'int', mapping: 'paket_perpanjangan'},
 			{name: 'paket_aktif', type: 'string', mapping: 'paket_aktif'}, 
 			{name: 'kategori_nama', type: 'string', mapping: 'kategori_nama'}, 
 			{name: 'kategori_id', type: 'int', mapping: 'kategori_id'}, 
@@ -925,6 +941,14 @@ Ext.onReady(function(){
 		allowBlank: false,
 		anchor: '95%'
 	});
+	
+	/* Identify Paket standart Tetap*/
+	paket_standart_tetapField=new Ext.form.Checkbox({
+		id : 'paket_standart_tetapField',
+		boxLabel: 'Paket Standart Tetap?',
+		name: 'paket_standart_tetap'
+	});
+	
 	/* Identify  paket_group Field */
 	paket_groupField= new Ext.form.ComboBox({
 		id: 'paket_groupField',
@@ -1012,7 +1036,7 @@ Ext.onReady(function(){
 	paket_expiredField= new Ext.form.NumberField({
 		id: 'paket_expiredField',
 		name: 'paket_expiredField',
-		fieldLabel: 'Expired (hari) [0=unlimited]',
+		fieldLabel: 'Kadaluarsa (hari) [0=unlimited]',
 		allowNegatife : false,
 		emptyText: '365',
 		maxLength: 3,
@@ -1020,6 +1044,20 @@ Ext.onReady(function(){
 		width: 60,
 		maskRe: /([0-9]+)$/
 	});
+	
+	/* Identify  paket_perpanjangan Field */
+	paket_perpanjanganField= new Ext.form.NumberField({
+		id: 'paket_perpanjanganField',
+		name: 'paket_perpanjanganField',
+		fieldLabel: 'Perpanjangan (hari)',
+		allowNegatife : false,
+		emptyText: '365',
+		maxLength: 3,
+		allowDecimals: false,
+		width: 60,
+		maskRe: /([0-9]+)$/
+	});
+	
 	/* Identify  paket_aktif Field */
 	paket_aktifField= new Ext.form.ComboBox({
 		id: 'paket_aktifField',
@@ -1060,13 +1098,13 @@ Ext.onReady(function(){
 				columnWidth: 0.5,
 				layout: 'form',
 				border:false,
-				items: [paket_kodelamaField, paket_kodeField, paket_namaField, paket_groupField, paket_hargaField, paket_duField, paket_dmField] 
+				items: [paket_kodelamaField, paket_kodeField, paket_namaField, paket_standart_tetapField, paket_groupField, paket_hargaField, paket_duField, paket_dmField] 
 			}
 			,{
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [paket_expiredField, paket_pointField, paket_keteranganField, paket_aktifField,paket_idField] 
+				items: [paket_expiredField, paket_perpanjanganField, paket_pointField, paket_keteranganField, paket_aktifField,paket_idField] 
 			}
 			]
 	
@@ -1120,7 +1158,7 @@ Ext.onReady(function(){
 		}
     });
 	//eof
-	
+	/*
 	cbo_produk_listDataStore = new Ext.data.Store({
 	id: 'cbo_produk_listDataStore',
 	proxy: new Ext.data.HttpProxy({
@@ -1132,7 +1170,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'produk_id'
 		},[
-		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
 			{name: 'produk_id', type: 'int', mapping: 'produk_id'},
 			{name: 'produk_kode', type: 'string', mapping: 'produk_kode'},
 			{name: 'produk_satuan', type: 'string', mapping: 'satuan_kode'},
@@ -1141,7 +1178,37 @@ Ext.onReady(function(){
 			{name: 'produk_nama', type: 'string', mapping: 'produk_nama'}
 		]),
 	sortInfo:{field: 'produk_nama', direction: "ASC"}
+	});*/
+	
+	cbo_produk_listDataStore = new Ext.data.Store({
+		id: 'cbo_produk_listDataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_paket&m=get_produk_list', 
+			method: 'POST'
+		}),baseParams: {start: 0, limit: 15 },
+			reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'produk_id'
+		},[
+			{name: 'dproduk_produk_value', type: 'int', mapping: 'produk_id'},
+			{name: 'dproduk_produk_harga', type: 'float', mapping: 'produk_harga'},
+			{name: 'dproduk_produk_kode', type: 'string', mapping: 'produk_kode'},
+			{name: 'dproduk_produk_satuan', type: 'string', mapping: 'satuan_kode'},
+			{name: 'dproduk_produk_group', type: 'string', mapping: 'group_nama'},
+			{name: 'dproduk_produk_kategori', type: 'string', mapping: 'kategori_nama'},
+			{name: 'dproduk_produk_du', type: 'float', mapping: 'produk_du'},
+			{name: 'dproduk_produk_dm', type: 'float', mapping: 'produk_dm'},
+			{name: 'dproduk_produk_display', type: 'string', mapping: 'produk_nama'}
+		]),
+		sortInfo:{field: 'dproduk_produk_display', direction: "ASC"}
 	});
+
+	
+	
+	
+	
+	
 	
 	cbo_rawat_listDataStore = new Ext.data.Store({
 		id: 'cbo_rawat_listDataStore',
@@ -1165,7 +1232,7 @@ Ext.onReady(function(){
 	
 	var paket_produk_tpl = new Ext.XTemplate(
         '<tpl for="."><div class="search-item">',
-            '<span>{produk_kode}| <b>{produk_nama}</b></span>',
+            '<span>{dproduk_produk_kode}| <b>{dproduk_produk_display}</b></span>',
 		'</div></tpl>'
     );
 	
@@ -1188,8 +1255,8 @@ Ext.onReady(function(){
 			store: cbo_produk_listDataStore,
 			mode: 'remote',
 			typeAhead: true,
-			displayField: 'produk_nama',
-			valueField: 'produk_id',
+			displayField: 'dproduk_produk_display',
+			valueField: 'dproduk_produk_value',
 			typeAhead: false,
 			loadingText: 'Searching...',
 			pageSize:pageS,
@@ -1399,14 +1466,15 @@ Ext.onReady(function(){
 	var paket_isi_produk_reader=new Ext.data.JsonReader({
 		root: 'results',
 		totalProperty: 'total',
-		id: 'ipaket_id'
+		id: ''
 	},[
 	/* dataIndex => insert intoproduk_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'ipaket_id', type: 'int', mapping: 'ipaket_id'}, 
 			{name: 'ipaket_master', type: 'int', mapping: 'ipaket_master'}, 
 			{name: 'ipaket_produk', type: 'int', mapping: 'ipaket_produk'},
 			{name: 'ipaket_satuan', type: 'string', mapping: 'satuan_kode'}, 
-			{name: 'ipaket_jumlah', type: 'int', mapping: 'ipaket_jumlah'} 
+			{name: 'produk_nama', type: 'string', mapping: 'produk_nama'}, 
+			{name: 'ipaket_jumlah', type: 'float', mapping: 'ipaket_jumlah'} 
 	]);
 	//eof
 	
@@ -1425,7 +1493,7 @@ Ext.onReady(function(){
 			method: 'POST'
 		}),
 		reader: paket_isi_produk_reader,
-		baseParams:{master_id: get_pk_id(), start:0, limit: pageS},
+		baseParams:{start:0, limit: pageS},
 		sortInfo:{field: 'ipaket_id', direction: "ASC"}
 	});
 	/* End of Function */
@@ -1465,7 +1533,8 @@ Ext.onReady(function(){
 			header: '<div align="center">' + 'Produk' + '</div>',
 			dataIndex: 'ipaket_produk',
 			width: 250,
-			sortable: true,
+			sortable: false,
+			allowBlank : false,
 			editor: combo_paket_produk,
 			renderer: Ext.util.Format.comboRenderer(combo_paket_produk)
 		},
@@ -1488,11 +1557,11 @@ Ext.onReady(function(){
 			width: 100,
 			sortable: true,
 			editor: new Ext.form.NumberField({
-				allowDecimals: false,
+				allowDecimals: true,
 				allowNegative: false,
-				blankText: '1',
-				maxLength: 3,
-				maskRe: /([0-9]+)$/
+				//blankText: '1',
+				maxLength: 3
+				//maskRe: /([0-9]+)$/
 			})
 		}]
 	);
@@ -1867,7 +1936,7 @@ Ext.onReady(function(){
 	/* Identify  paket_expired Field */
 	paket_expiredSearchField= new Ext.form.NumberField({
 		id: 'paket_expiredSearchField',
-		fieldLabel: 'Expired (hari) [0=unlimited]',
+		fieldLabel: 'Kadaluarsa (hari) [0=unlimited]',
 		allowNegatife : false,
 		emptyText: '0',
 		maxLength: 3,
