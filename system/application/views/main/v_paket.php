@@ -472,6 +472,7 @@ Ext.onReady(function(){
 			{name: 'paket_kode', type: 'string', mapping: 'paket_kode'}, 
 			{name: 'paket_kodelama', type: 'string', mapping: 'paket_kodelama'}, 
 			{name: 'paket_nama', type: 'string', mapping: 'paket_nama'}, 
+			{name: 'paket_standart_tetap', type: 'int', mapping: 'paket_standart_tetap'}, 
 			{name: 'paket_group', type: 'string', mapping: 'group_nama'}, 
 			{name: 'paket_keterangan', type: 'string', mapping: 'paket_keterangan'}, 
 			{name: 'paket_du', type: 'int', mapping: 'paket_du'}, 
