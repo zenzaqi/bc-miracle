@@ -5848,7 +5848,6 @@ Ext.onReady(function(){
 	/* Function for action list search */
 	function master_jual_rawat_list_search(){
 		// render according to a SQL date format.
-		var jrawat_id_search=null;
 		var jrawat_nobukti_search=null;
 		var jrawat_cust_search=null;
 		var jrawat_diskon_search=null;
@@ -5858,7 +5857,6 @@ Ext.onReady(function(){
 		var jrawat_tgl_start_search="";
 		var jrawat_tgl_end_search="";
 
-		if(jrawat_idSearchField.getValue()!==null){jrawat_id_search=jrawat_idSearchField.getValue();}
 		if(jrawat_nobuktiSearchField.getValue()!==null){jrawat_nobukti_search=jrawat_nobuktiSearchField.getValue();}
 		if(jrawat_custSearchField.getValue()!==null){jrawat_cust_search=jrawat_custSearchField.getValue();}
 		if(jrawat_diskonSearchField.getValue()!==null){jrawat_diskon_search=jrawat_diskonSearchField.getValue();}
@@ -5873,7 +5871,6 @@ Ext.onReady(function(){
 			start: 0,
 			limit: pageS,
 			//variable here
-			jrawat_id	:	jrawat_id_search, 
 			jrawat_nobukti	:	jrawat_nobukti_search, 
 			jrawat_cust	:	jrawat_cust_search, 
 			jrawat_diskon	:	jrawat_diskon_search, 

@@ -18,7 +18,7 @@ class C_tindakan_medis extends Controller {
 		parent::Controller();
 		$this->load->model('m_tindakan_medis', '', TRUE);
 		session_start();
-		//$this->load->plugin('to_excel');
+		$this->load->plugin('to_excel');
 	}
 	
 	function laporan(){
@@ -450,7 +450,6 @@ class C_tindakan_medis extends Controller {
 	//function for advanced search
 	function tindakan_search(){
 		//POST varibale here
-		$trawat_id=trim(@$_POST["trawat_id"]);
 		$trawat_cust=trim(@$_POST["trawat_cust"]);
 		/*$trawat_keterangan=trim(@$_POST["trawat_keterangan"]);
 		$trawat_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$trawat_keterangan);
@@ -469,77 +468,60 @@ class C_tindakan_medis extends Controller {
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_tindakan_medis->tindakan_search($trawat_id ,$trawat_cust ,$trawat_tglapp_start ,$trawat_tglapp_end ,$trawat_rawat ,$trawat_dokter ,$trawat_status ,$start,$end);
+		$result = $this->m_tindakan_medis->tindakan_search($trawat_cust ,$trawat_tglapp_start ,$trawat_tglapp_end ,$trawat_rawat ,$trawat_dokter ,$trawat_status ,$start,$end);
 		echo $result;
 	}
 
 
 	function tindakan_print(){
   		//POST varibale here
-		$trawat_id=trim(@$_POST["trawat_id"]);
 		$trawat_cust=trim(@$_POST["trawat_cust"]);
-		$trawat_keterangan=trim(@$_POST["trawat_keterangan"]);
-		$trawat_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$trawat_keterangan);
-		$trawat_keterangan=str_replace("'", "''",$trawat_keterangan);
+		if(trim(@$_POST["trawat_tglapp_start"])!="")
+			$trawat_tglapp_start=date('Y-m-d', strtotime(trim(@$_POST["trawat_tglapp_start"])));
+		else
+			$trawat_tglapp_start="";
+		if(trim(@$_POST["trawat_tglapp_end"])!="")
+			$trawat_tglapp_end=date('Y-m-d', strtotime(trim(@$_POST["trawat_tglapp_end"])));
+		else
+			$trawat_tglapp_end="";
+		$trawat_rawat=trim(@$_POST["trawat_rawat"]);
+		$trawat_dokter=trim(@$_POST["trawat_dokter"]);
+		$trawat_status=trim(@$_POST["trawat_status"]);
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$result = $this->m_tindakan_medis->tindakan_print($trawat_id ,$trawat_cust ,$trawat_keterangan ,$option,$filter);
-		$nbrows=$result->num_rows();
-		$totcolumn=8;
-   		/* We now have our array, let's build our HTML file */
-		$file = fopen("tindakanlist.html",'w');
-		fwrite($file, "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' /><title>Printing the Tindakan Grid</title><link rel='stylesheet' type='text/css' href='assets/modules/main/css/printstyle.css'/></head>");
-		fwrite($file, "<body><table summary='Tindakan List'><caption>TINDAKAN</caption><thead><tr><th scope='col'>Trawat Id</th><th scope='col'>Trawat Cust</th><th scope='col'>Trawat Keterangan</th><th scope='col'>Trawat Creator</th><th scope='col'>Trawat Date Create</th><th scope='col'>Trawat Update</th><th scope='col'>Trawat Date Update</th><th scope='col'>Trawat Revised</th></tr></thead><tfoot><tr><th scope='row'>Total</th><td colspan='$totcolumn'>");
-		fwrite($file, $nbrows);
-		fwrite($file, " Tindakan</td></tr></tfoot><tbody>");
-		$i=0;
-		if($nbrows>0){
-			foreach($result->result_array() as $data){
-				fwrite($file,'<tr');
-				if($i%1==0){
-					fwrite($file," class='odd'");
-				}
-			
-				fwrite($file, "><th scope='row' id='r97'>");
-				fwrite($file, $data['trawat_id']);
-				fwrite($file,"</th><td>");
-				fwrite($file, $data['trawat_cust']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['trawat_keterangan']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['trawat_creator']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['trawat_date_create']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['trawat_update']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['trawat_date_update']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['trawat_revised']);
-				fwrite($file, "</td></tr>");
-			}
+		$data["data_print"] = $this->m_tindakan_medis->tindakan_print($trawat_cust ,$trawat_tglapp_start ,$trawat_tglapp_end ,$trawat_rawat ,$trawat_dokter ,$trawat_status ,$option,$filter);
+		$print_view=$this->load->view("main/p_tindakan_medis.php",$data,TRUE);
+		if(!file_exists("print")){
+			mkdir("print");
 		}
-		fwrite($file, "</tbody></table></body></html>");	
-		fclose($file);
-		echo '1';        
+		$print_file=fopen("print/tindakan_medislist.html","w+");
+		fwrite($print_file, $print_view);
+		echo '1';
 	}
 	/* End Of Function */
 
 	/* Function to Export Excel document */
 	function tindakan_export_excel(){
 		//POST varibale here
-		$trawat_id=trim(@$_POST["trawat_id"]);
 		$trawat_cust=trim(@$_POST["trawat_cust"]);
-		$trawat_keterangan=trim(@$_POST["trawat_keterangan"]);
-		$trawat_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$trawat_keterangan);
-		$trawat_keterangan=str_replace("'", "''",$trawat_keterangan);
+		if(trim(@$_POST["trawat_tglapp_start"])!="")
+			$trawat_tglapp_start=date('Y-m-d', strtotime(trim(@$_POST["trawat_tglapp_start"])));
+		else
+			$trawat_tglapp_start="";
+		if(trim(@$_POST["trawat_tglapp_end"])!="")
+			$trawat_tglapp_end=date('Y-m-d', strtotime(trim(@$_POST["trawat_tglapp_end"])));
+		else
+			$trawat_tglapp_end="";
+		$trawat_rawat=trim(@$_POST["trawat_rawat"]);
+		$trawat_dokter=trim(@$_POST["trawat_dokter"]);
+		$trawat_status=trim(@$_POST["trawat_status"]);
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$query = $this->m_tindakan_medis->tindakan_export_excel($trawat_id ,$trawat_cust ,$trawat_keterangan ,$option,$filter);
+		$query = $this->m_tindakan_medis->tindakan_export_excel($trawat_cust ,$trawat_tglapp_start ,$trawat_tglapp_end ,$trawat_rawat ,$trawat_dokter ,$trawat_status ,$option,$filter);
 		
-		to_excel($query,"tindakan"); 
+		to_excel($query,"tindakan_medis"); 
 		echo '1';
 			
 	}

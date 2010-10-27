@@ -630,7 +630,6 @@ class C_master_jual_produk extends Controller {
 	//function for advanced search
 	function master_jual_produk_search(){
 		//POST varibale here
-		$jproduk_id=trim(@$_POST["jproduk_id"]);
 		$jproduk_nobukti=trim(@$_POST["jproduk_nobukti"]);
 		$jproduk_nobukti=str_replace("/(<\/?)(p)([^>]*>)", "",$jproduk_nobukti);
 		$jproduk_nobukti=str_replace("'", '"',$jproduk_nobukti);
@@ -650,19 +649,19 @@ class C_master_jual_produk extends Controller {
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_master_jual_produk->master_jual_produk_search($jproduk_id, $jproduk_nobukti, $jproduk_cust, $jproduk_tanggal, $jproduk_tanggal_akhir, $jproduk_diskon, $jproduk_cara, $jproduk_keterangan, $jproduk_stat_dok, $start, $end);
+		$result = $this->m_master_jual_produk->master_jual_produk_search($jproduk_nobukti, $jproduk_cust, $jproduk_tanggal, $jproduk_tanggal_akhir, $jproduk_diskon, $jproduk_cara, $jproduk_keterangan, $jproduk_stat_dok, $start, $end);
 		echo $result;
 	}
 
 
 	function master_jual_produk_print(){
   		//POST varibale here
-		$jproduk_id=trim(@$_POST["jproduk_id"]);
 		$jproduk_nobukti=trim(@$_POST["jproduk_nobukti"]);
 		$jproduk_nobukti=str_replace("/(<\/?)(p)([^>]*>)", "",$jproduk_nobukti);
 		$jproduk_nobukti=str_replace("'", '"',$jproduk_nobukti);
 		$jproduk_cust=trim(@$_POST["jproduk_cust"]);
 		$jproduk_tanggal=trim(@$_POST["jproduk_tanggal"]);
+		$jproduk_tanggal_akhir=trim(@$_POST["jproduk_tanggal_akhir"]);
 		$jproduk_diskon=trim(@$_POST["jproduk_diskon"]);
 		$jproduk_cara=trim(@$_POST["jproduk_cara"]);
 		$jproduk_cara=str_replace("/(<\/?)(p)([^>]*>)", "",$jproduk_cara);
@@ -670,68 +669,41 @@ class C_master_jual_produk extends Controller {
 		$jproduk_keterangan=trim(@$_POST["jproduk_keterangan"]);
 		$jproduk_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$jproduk_keterangan);
 		$jproduk_keterangan=str_replace("'", '"',$jproduk_keterangan);
+		$jproduk_stat_dok=trim(@$_POST["jproduk_stat_dok"]);
+		$jproduk_stat_dok=str_replace("/(<\/?)(p)([^>]*>)", "",$jproduk_stat_dok);
+		$jproduk_stat_dok=str_replace("'", '"',$jproduk_stat_dok);
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$result = $this->m_master_jual_produk->master_jual_produk_print($jproduk_id ,$jproduk_nobukti ,$jproduk_cust ,$jproduk_tanggal ,$jproduk_diskon ,$jproduk_cara ,$jproduk_keterangan ,$option,$filter);
-		$nbrows=$result->num_rows();
-		$totcolumn=12;
-   		/* We now have our array, let's build our HTML file */
-		$file = fopen("master_jual_produklist.html",'w');
-		fwrite($file, "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' /><title>Printing the Master_jual_produk Grid</title><link rel='stylesheet' type='text/css' href='assets/modules/main/css/printstyle.css'/></head>");
-		fwrite($file, "<body><table summary='Master_jual_produk List'><caption>MASTER_JUAL_PRODUK</caption><thead><tr><th scope='col'>Jproduk Id</th><th scope='col'>Jproduk Nobukti</th><th scope='col'>Jproduk Cust</th><th scope='col'>Jproduk Tanggal</th><th scope='col'>Jproduk Diskon</th><th scope='col'>Jproduk Cara</th><th scope='col'>Jproduk Keterangan</th><th scope='col'>Jproduk Creator</th><th scope='col'>Jproduk Date Create</th><th scope='col'>Jproduk Update</th><th scope='col'>Jproduk Date Update</th><th scope='col'>Jproduk Revised</th></tr></thead><tfoot><tr><th scope='row'>Total</th><td colspan='$totcolumn'>");
-		fwrite($file, $nbrows);
-		fwrite($file, " Master_jual_produk</td></tr></tfoot><tbody>");
-		$i=0;
-		if($nbrows>0){
-			foreach($result->result_array() as $data){
-				fwrite($file,'<tr');
-				if($i%1==0){
-					fwrite($file," class='odd'");
-				}
-			
-				fwrite($file, "><th scope='row' id='r97'>");
-				fwrite($file, $data['jproduk_id']);
-				fwrite($file,"</th><td>");
-				fwrite($file, $data['jproduk_nobukti']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['jproduk_cust']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['jproduk_tanggal']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['jproduk_diskon']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['jproduk_cara']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['jproduk_keterangan']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['jproduk_creator']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['jproduk_date_create']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['jproduk_update']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['jproduk_date_update']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['jproduk_revised']);
-				fwrite($file, "</td></tr>");
-			}
+		$data["data_print"] = $this->m_master_jual_produk->master_jual_produk_print($jproduk_nobukti
+																					,$jproduk_cust
+																					,$jproduk_tanggal
+																					,$jproduk_tanggal_akhir
+																					,$jproduk_diskon
+																					,$jproduk_cara
+																					,$jproduk_keterangan
+																					,$jproduk_stat_dok
+																					,$option
+																					,$filter);
+		$print_view=$this->load->view("main/p_master_jual_produk.php",$data,TRUE);
+		if(!file_exists("print")){
+			mkdir("print");
 		}
-		fwrite($file, "</tbody></table></body></html>");	
-		fclose($file);
-		echo '1';        
+		$print_file=fopen("print/master_jual_produklist.html","w+");
+		fwrite($print_file, $print_view);
+		echo '1';
 	}
 	/* End Of Function */
 
 	/* Function to Export Excel document */
 	function master_jual_produk_export_excel(){
 		//POST varibale here
-		$jproduk_id=trim(@$_POST["jproduk_id"]);
 		$jproduk_nobukti=trim(@$_POST["jproduk_nobukti"]);
 		$jproduk_nobukti=str_replace("/(<\/?)(p)([^>]*>)", "",$jproduk_nobukti);
 		$jproduk_nobukti=str_replace("'", '"',$jproduk_nobukti);
 		$jproduk_cust=trim(@$_POST["jproduk_cust"]);
 		$jproduk_tanggal=trim(@$_POST["jproduk_tanggal"]);
+		$jproduk_tanggal_akhir=trim(@$_POST["jproduk_tanggal_akhir"]);
 		$jproduk_diskon=trim(@$_POST["jproduk_diskon"]);
 		$jproduk_cara=trim(@$_POST["jproduk_cara"]);
 		$jproduk_cara=str_replace("/(<\/?)(p)([^>]*>)", "",$jproduk_cara);
@@ -739,10 +711,22 @@ class C_master_jual_produk extends Controller {
 		$jproduk_keterangan=trim(@$_POST["jproduk_keterangan"]);
 		$jproduk_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$jproduk_keterangan);
 		$jproduk_keterangan=str_replace("'", '"',$jproduk_keterangan);
+		$jproduk_stat_dok=trim(@$_POST["jproduk_stat_dok"]);
+		$jproduk_stat_dok=str_replace("/(<\/?)(p)([^>]*>)", "",$jproduk_stat_dok);
+		$jproduk_stat_dok=str_replace("'", '"',$jproduk_stat_dok);
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$query = $this->m_master_jual_produk->master_jual_produk_export_excel($jproduk_id ,$jproduk_nobukti ,$jproduk_cust ,$jproduk_tanggal ,$jproduk_diskon ,$jproduk_cara ,$jproduk_keterangan ,$option,$filter);
+		$query = $this->m_master_jual_produk->master_jual_produk_export_excel($jproduk_nobukti
+																			  ,$jproduk_cust
+																			  ,$jproduk_tanggal
+																			  ,$jproduk_tanggal_akhir
+																			  ,$jproduk_diskon
+																			  ,$jproduk_cara
+																			  ,$jproduk_keterangan
+																			  ,$jproduk_stat_dok
+																			  ,$option
+																			  ,$filter);
 		
 		to_excel($query,"master_jual_produk"); 
 		echo '1';
