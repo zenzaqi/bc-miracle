@@ -1984,8 +1984,7 @@ Ext.onReady(function(){
 		baseParams:{task: "LIST", start:0, limit:pageS}, // parameter yang di $_POST ke Controller
 		reader: new Ext.data.JsonReader({
 			root: 'results',
-			totalProperty: 'total',
-			id: 'jrawat_cust_iddjhhghjgj'
+			totalProperty: 'total'
 		},[
 		/* dataIndex => insert intomaster_jual_rawat_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'jrawat_id', type: 'int', mapping: 'jrawat_id'}, 
@@ -6105,19 +6104,23 @@ Ext.onReady(function(){
 		var searchquery = "";
 		var jrawat_nobukti_print=null;
 		var jrawat_cust_print=null;
-		var jrawat_tanggal_print_date="";
 		var jrawat_diskon_print=null;
 		var jrawat_cara_print=null;
 		var jrawat_keterangan_print=null;
+		var jrawat_stat_dok_print=null;
+		var jrawat_tgl_start_print="";
+		var jrawat_tgl_end_print="";
 		var win;              
 		// check if we do have some search data...
 		if(master_jual_rawat_DataStore.baseParams.query!==null){searchquery = master_jual_rawat_DataStore.baseParams.query;}
 		if(master_jual_rawat_DataStore.baseParams.jrawat_nobukti!==null){jrawat_nobukti_print = master_jual_rawat_DataStore.baseParams.jrawat_nobukti;}
 		if(master_jual_rawat_DataStore.baseParams.jrawat_cust!==null){jrawat_cust_print = master_jual_rawat_DataStore.baseParams.jrawat_cust;}
-		if(master_jual_rawat_DataStore.baseParams.jrawat_tanggal!==""){jrawat_tanggal_print_date = master_jual_rawat_DataStore.baseParams.jrawat_tanggal;}
 		if(master_jual_rawat_DataStore.baseParams.jrawat_diskon!==null){jrawat_diskon_print = master_jual_rawat_DataStore.baseParams.jrawat_diskon;}
 		if(master_jual_rawat_DataStore.baseParams.jrawat_cara!==null){jrawat_cara_print = master_jual_rawat_DataStore.baseParams.jrawat_cara;}
 		if(master_jual_rawat_DataStore.baseParams.jrawat_keterangan!==null){jrawat_keterangan_print = master_jual_rawat_DataStore.baseParams.jrawat_keterangan;}
+		if(master_jual_rawat_DataStore.baseParams.jrawat_stat_dok!==null){jrawat_stat_dok_print = master_jual_rawat_DataStore.baseParams.jrawat_stat_dok;}
+		if(master_jual_rawat_DataStore.baseParams.jrawat_tgl_start!==""){jrawat_tgl_start_print = master_jual_rawat_DataStore.baseParams.jrawat_tgl_start;}
+		if(master_jual_rawat_DataStore.baseParams.jrawat_tgl_end!==""){jrawat_tgl_end_print = master_jual_rawat_DataStore.baseParams.jrawat_tgl_end;}
 
 		Ext.Ajax.request({   
 		waitMsg: 'Please Wait...',
@@ -6126,20 +6129,21 @@ Ext.onReady(function(){
 			task: "PRINT",
 		  	query: searchquery,                    		// if we are doing a quicksearch, use this
 			//if we are doing advanced search, use this
-			jrawat_nobukti : jrawat_nobukti_print,
-			jrawat_cust : jrawat_cust_print,
-		  	jrawat_tanggal : jrawat_tanggal_print_date, 
-			jrawat_diskon : jrawat_diskon_print,
-			jrawat_cara : jrawat_cara_print,
-			jrawat_keterangan : jrawat_keterangan_print,
+			jrawat_nobukti	:	jrawat_nobukti_print,
+			jrawat_cust	:	jrawat_cust_print,
+			jrawat_diskon	:	jrawat_diskon_print,
+			jrawat_cara	:	jrawat_cara_print,
+			jrawat_keterangan	:	jrawat_keterangan_print,
+			jrawat_stat_dok		:	jrawat_stat_dok_print,
+			jrawat_tgl_start	: 	jrawat_tgl_start_print,
+			jrawat_tgl_end	: 	jrawat_tgl_end_print,
 		  	currentlisting: master_jual_rawat_DataStore.baseParams.task // this tells us if we are searching or not
 		}, 
 		success: function(response){              
 		  	var result=eval(response.responseText);
 		  	switch(result){
 		  	case 1:
-				win = window.open('./master_jual_rawatlist.html','master_jual_rawatlist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
-				win.print();
+				win = window.open('./print/master_jual_rawatlist.html','master_jual_rawatlist','height=400,width=1100,resizable=1,scrollbars=1, menubar=1');
 				break;
 		  	default:
 				Ext.MessageBox.show({
@@ -6171,33 +6175,39 @@ Ext.onReady(function(){
 		var searchquery = "";
 		var jrawat_nobukti_2excel=null;
 		var jrawat_cust_2excel=null;
-		var jrawat_tanggal_2excel_date="";
 		var jrawat_diskon_2excel=null;
 		var jrawat_cara_2excel=null;
 		var jrawat_keterangan_2excel=null;
+		var jrawat_stat_dok_2excel=null;
+		var jrawat_tgl_start_2excel="";
+		var jrawat_tgl_end_2excel="";
 		var win;              
-		// check if we do have some search data...
+		// check if we do have some 2excel data...
 		if(master_jual_rawat_DataStore.baseParams.query!==null){searchquery = master_jual_rawat_DataStore.baseParams.query;}
 		if(master_jual_rawat_DataStore.baseParams.jrawat_nobukti!==null){jrawat_nobukti_2excel = master_jual_rawat_DataStore.baseParams.jrawat_nobukti;}
 		if(master_jual_rawat_DataStore.baseParams.jrawat_cust!==null){jrawat_cust_2excel = master_jual_rawat_DataStore.baseParams.jrawat_cust;}
-		if(master_jual_rawat_DataStore.baseParams.jrawat_tanggal!==""){jrawat_tanggal_2excel_date = master_jual_rawat_DataStore.baseParams.jrawat_tanggal;}
 		if(master_jual_rawat_DataStore.baseParams.jrawat_diskon!==null){jrawat_diskon_2excel = master_jual_rawat_DataStore.baseParams.jrawat_diskon;}
 		if(master_jual_rawat_DataStore.baseParams.jrawat_cara!==null){jrawat_cara_2excel = master_jual_rawat_DataStore.baseParams.jrawat_cara;}
 		if(master_jual_rawat_DataStore.baseParams.jrawat_keterangan!==null){jrawat_keterangan_2excel = master_jual_rawat_DataStore.baseParams.jrawat_keterangan;}
-
+		if(master_jual_rawat_DataStore.baseParams.jrawat_stat_dok!==null){jrawat_stat_dok_2excel = master_jual_rawat_DataStore.baseParams.jrawat_stat_dok;}
+		if(master_jual_rawat_DataStore.baseParams.jrawat_tgl_start!==""){jrawat_tgl_start_2excel = master_jual_rawat_DataStore.baseParams.jrawat_tgl_start;}
+		if(master_jual_rawat_DataStore.baseParams.jrawat_tgl_end!==""){jrawat_tgl_end_2excel = master_jual_rawat_DataStore.baseParams.jrawat_tgl_end;}
+		
 		Ext.Ajax.request({   
 		waitMsg: 'Please Wait...',
 		url: 'index.php?c=c_master_jual_rawat&m=get_action',
 		params: {
 			task: "EXCEL",
-		  	query: searchquery,                    		// if we are doing a quicksearch, use this
-			//if we are doing advanced search, use this
-			jrawat_nobukti : jrawat_nobukti_2excel,
-			jrawat_cust : jrawat_cust_2excel,
-		  	jrawat_tanggal : jrawat_tanggal_2excel_date, 
-			jrawat_diskon : jrawat_diskon_2excel,
-			jrawat_cara : jrawat_cara_2excel,
-			jrawat_keterangan : jrawat_keterangan_2excel,
+		  	query: searchquery,                    		// if we are doing a quick2excel, use this
+			//if we are doing advanced 2excel, use this
+			jrawat_nobukti	:	jrawat_nobukti_2excel, 
+			jrawat_cust	:	jrawat_cust_2excel, 
+			jrawat_diskon	:	jrawat_diskon_2excel, 
+			jrawat_cara	:	jrawat_cara_2excel, 
+			jrawat_keterangan	:	jrawat_keterangan_2excel,
+			jrawat_stat_dok		:	jrawat_stat_dok_2excel,
+			jrawat_tgl_start	: 	jrawat_tgl_start_2excel,
+			jrawat_tgl_end	: 	jrawat_tgl_end_2excel,
 		  	currentlisting: master_jual_rawat_DataStore.baseParams.task // this tells us if we are searching or not
 		},
 		success: function(response){              
