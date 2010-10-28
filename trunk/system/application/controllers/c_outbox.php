@@ -33,6 +33,15 @@ class C_outbox extends Controller {
 			case "LIST":
 				$this->outbox_list();
 				break;
+			case "STATUS_SENT":
+				$this->outbox_status_sent();
+				break;
+			case "STATUS_UNSENT":
+				$this->outbox_status_unsent();
+				break;
+			case "STATUS_FAILED":
+				$this->outbox_status_failed();
+				break;
 			case "UPDATE":
 				$this->outbox_update();
 				break;
@@ -69,6 +78,37 @@ class C_outbox extends Controller {
 		$result=$this->m_outbox->outbox_list($query,$start,$end);
 		echo $result;
 	}
+	
+	//function fot list record
+	function outbox_status_sent(){
+		
+		$query = isset($_POST['query']) ? @$_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? @$_POST['start'] : @$_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? @$_POST['limit'] : @$_GET['limit']);
+		$result=$this->m_outbox->outbox_status_sent($query,$start,$end);
+		echo $result;
+	}
+	
+	//function fot list record
+	function outbox_status_unsent(){
+		
+		$query = isset($_POST['query']) ? @$_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? @$_POST['start'] : @$_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? @$_POST['limit'] : @$_GET['limit']);
+		$result=$this->m_outbox->outbox_status_unsent($query,$start,$end);
+		echo $result;
+	}
+	
+	//function fot list record
+	function outbox_status_failed(){
+		
+		$query = isset($_POST['query']) ? @$_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? @$_POST['start'] : @$_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? @$_POST['limit'] : @$_GET['limit']);
+		$result=$this->m_outbox->outbox_status_failed($query,$start,$end);
+		echo $result;
+	}
+	
 	
 	//function for create new record
 	function outbox_create(){
