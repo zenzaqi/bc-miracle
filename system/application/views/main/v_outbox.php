@@ -368,7 +368,36 @@ Ext.onReady(function(){
 
   	/* End of Function */
   
-	/* Function for Retrieve DataStore */
+  /* Identify status unsent*/
+	outbox_status_unsentField=new Ext.form.TextField({
+		id: 'outbox_status_unsentField',
+		name: 'outbox_status_unsentField',
+		fieldLabel: '<b>Unsent</b>',
+		width: 60,
+		readOnly: true
+	});
+	
+	/* Identify status sent*/
+	outbox_status_sentField=new Ext.form.TextField({
+		id: 'outbox_status_sentField',
+		//name: 'outbox_status_sentField',
+		fieldLabel: '<b>Sent</b>',
+		width: 60,
+		readOnly: true
+	});
+	
+	/* Identify status failed*/
+	outbox_status_failedField=new Ext.form.TextField({
+		id: 'outbox_status_failedField',
+		name: 'outbox_status_failedField',
+		fieldLabel: '<b>Failed</b>',
+		width: 60,
+		readOnly: true
+	});
+  
+  
+
+/* Function for Retrieve DataStore */
 	outbox_DataStore = new Ext.data.Store({
 		id: 'outbox_DataStore',
 		proxy: new Ext.data.HttpProxy({
@@ -397,8 +426,64 @@ Ext.onReady(function(){
 		]),
 //		sortInfo:{field: 'outbox_id', direction: "DESC"}
 	});
-	/* End of Function */
-    
+	
+	/* Function for Retrieve DataStore */
+	outbox_status_sentDataStore = new Ext.data.Store({
+		id: 'outbox_status_sentDataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_outbox&m=get_action', 
+			method: 'POST'
+		}),
+		baseParams:{task: "STATUS_SENT", start:0, limit:pageS}, // parameter yang di $_POST ke Controller
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: ''
+		},[
+		/* dataIndex => insert intooutbox_ColumnModel, Mapping => for initiate table column */ 
+			//{name: 'outbox_id', type: 'int', mapping: 'outbox_id'}, 
+			{name: 'status_sent', type: 'int', mapping: 'status_sent'}
+		])
+	});
+	
+	
+	/* Function for Retrieve DataStore */
+	outbox_status_unsentDataStore = new Ext.data.Store({
+		id: 'outbox_status_unsentDataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_outbox&m=get_action', 
+			method: 'POST'
+		}),
+		baseParams:{task: "STATUS_UNSENT", start:0, limit:pageS}, // parameter yang di $_POST ke Controller
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: ''
+		},[
+		/* dataIndex => insert intooutbox_ColumnModel, Mapping => for initiate table column */ 
+			{name: 'status_unsent', type: 'int', mapping: 'status_unsent'}
+		])
+	});
+	
+	
+	/* Function for Retrieve DataStore */
+	outbox_status_failedDataStore = new Ext.data.Store({
+		id: 'outbox_status_failedDataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_outbox&m=get_action', 
+			method: 'POST'
+		}),
+		baseParams:{task: "STATUS_FAILED", start:0, limit:pageS}, // parameter yang di $_POST ke Controller
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: ''
+		},[
+		/* dataIndex => insert intooutbox_ColumnModel, Mapping => for initiate table column */ 
+			{name: 'status_failed', type: 'int', mapping: 'status_failed'}
+		])
+	});
+	
   	/* Function for Identify of Window Column Model */
 	outbox_ColumnModel = new Ext.grid.ColumnModel(
 		[{
@@ -555,7 +640,20 @@ Ext.onReady(function(){
 			tooltip: 'Print Document',
 			iconCls:'icon-print',
 			handler: outbox_print  
-		}
+		},
+		'','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',
+		{
+			'text':'Unsent : '
+		},
+		outbox_status_unsentField,
+		{
+			'text':'Sent : '
+		},
+		outbox_status_sentField,
+		{
+			'text':'Failed : '
+		},
+		outbox_status_failedField		
 		]
 	});
 	outboxListEditorGrid.render();
@@ -608,6 +706,36 @@ Ext.onReady(function(){
   	
 	outboxListEditorGrid.addListener('rowcontextmenu', onoutbox_ListEditGridContextMenu);
 	outbox_DataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
+	outbox_status_sentDataStore.load({
+		params : {start: 0, limit: pageS},
+			callback: function(opts, success, response){
+				if (success) {
+						auto_status_sent =outbox_status_sentDataStore.getAt(0).data;
+						outbox_status_sentField.setValue(auto_status_sent.status_sent);
+				}
+			}
+	});
+	
+	outbox_status_unsentDataStore.load({
+		params : {start: 0, limit: pageS},
+			callback: function(opts, success, response){
+				if (success) {
+						auto_status_unsent =outbox_status_unsentDataStore.getAt(0).data;
+						outbox_status_unsentField.setValue(auto_status_unsent.status_unsent);
+				}
+			}
+	});
+	
+	outbox_status_failedDataStore.load({
+		params : {start: 0, limit: pageS},
+			callback: function(opts, success, response){
+				if (success) {
+						auto_status_failed =outbox_status_failedDataStore.getAt(0).data;
+						outbox_status_failedField.setValue(auto_status_failed.status_failed);
+				}
+			}
+	});
+					
 	outboxListEditorGrid.on('afteredit', outbox_inline_update); // inLine Editing Record
 	
 	/* Identify  outbox_destination Field */
@@ -631,8 +759,9 @@ Ext.onReady(function(){
 		fieldLabel: 'Date',
 		format : 'Y-m-d'
 	});
-
 	
+	
+
 	/* Function for retrieve create Window Panel*/ 
 	outbox_saveForm = new Ext.FormPanel({
 		labelAlign: 'top',

@@ -346,6 +346,7 @@ Ext.onReady(function(){
 		},[
 		/* dataIndex => insert intocustomer_note_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'note_id', type: 'int', mapping: 'note_id'},
+			{name: 'no_customer', type: 'string', mapping: 'cust_no'},
 			{name: 'note_customer', type: 'string', mapping: 'cust_nama'},
 			{name: 'note_tanggal', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'note_tanggal'},
 			{name: 'note_detail', type: 'string', mapping: 'note_detail'},
@@ -396,7 +397,22 @@ Ext.onReady(function(){
 				cell.css = "readonlycell"; // Mengambil Value dari Class di dalam CSS 
 				return value;
 				},
-			hidden: false
+			hidden: true
+		},
+		{
+			header: 'Tanggal dan Jam',
+			dataIndex: 'note_tanggal',
+			width: 80,
+			sortable: true,
+			renderer: Ext.util.Format.dateRenderer('Y-m-d H:i:s'),
+			readOnly: true
+		},
+		{
+			header: 'No Cust',
+			dataIndex: 'no_customer',
+			width: 60,
+			sortable: true,
+			readOnly: true
 		},
 		{
 			header: 'Customer',
@@ -406,17 +422,9 @@ Ext.onReady(function(){
 			readOnly: true
 		},
 		{
-			header: 'Tanggal',
-			dataIndex: 'note_tanggal',
-			width: 100,
-			sortable: true,
-			renderer: Ext.util.Format.dateRenderer('Y-m-d H:i:s'),
-			readOnly: true
-		},
-		{
 			header: 'Detail Catatan',
 			dataIndex: 'note_detail',
-			width: 150,
+			width: 300,
 			sortable: true,
 			editor: new Ext.form.TextArea({
 				maxLength: 250
@@ -472,7 +480,7 @@ Ext.onReady(function(){
 	customer_noteListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'customer_noteListEditorGrid',
 		el: 'fp_customer_note',
-		title: 'List Of Customer Note',
+		title: 'Daftar Catatan Customer',
 		autoHeight: true,
 		store: customer_note_DataStore, // DataStore
 		cm: customer_note_ColumnModel, // Nama-nama Columns
@@ -481,7 +489,7 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 700,
+	  	width: 1220,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: customer_note_DataStore,
@@ -496,16 +504,18 @@ Ext.onReady(function(){
 			handler: display_form_window
 		}, '-',{
 			text: 'Edit',
+			disabled: true,
 			tooltip: 'Edit selected record',
 			iconCls:'icon-update',
 			handler: customer_note_confirm_update   // Confirm before updating
 		}, '-',{
 			text: 'Delete',
+			disabled: true,
 			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
 			handler: customer_note_confirm_delete   // Confirm before deleting
 		}, '-', {
-			text: 'Search',
+			text: 'Adv Search',
 			tooltip: 'Advanced Search',
 			iconCls:'icon-search',
 			handler: display_form_search_window 
@@ -540,12 +550,12 @@ Ext.onReady(function(){
 		id: 'customer_note_ListEditorGridContextMenu',
 		items: [
 		{ 
-			text: 'Edit', tooltip: 'Edit selected record', 
+			text: 'Edit', disabled: true, tooltip: 'Edit selected record', 
 			iconCls:'icon-update',
 			handler: customer_note_confirm_update 
 		},
 		{ 
-			text: 'Delete', 
+			text: 'Delete', disabled: true, 
 			tooltip: 'Delete selected record', 
 			iconCls:'icon-delete',
 			handler: customer_note_confirm_delete 

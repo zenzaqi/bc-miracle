@@ -230,8 +230,10 @@ Ext.onReady(function(){
   
 	/*Function for pengecekan _dokumen */
 	function pengecekan_dokumen(){
+		
+		
 		var jpaket_tanggal_create_date = "";
-	
+			
 		if(jpaket_tanggalField.getValue()!== ""){jpaket_tanggal_create_date = jpaket_tanggalField.getValue().format('Y-m-d');} 
 		Ext.Ajax.request({  
 			waitMsg: 'Please wait...',
@@ -5098,12 +5100,12 @@ Ext.onReady(function(){
 						success: function(response){							
 							var result=eval(response.responseText);
 							if(result==1){
-								detail_pengguna_paket_DataStore.load({params: {master_id:-1}});
+								//detail_pengguna_paket_DataStore.load({params: {master_id:-1}});
 								Ext.Msg.alert('OK', 'Daftar Pemakai Paket telah ditambahkan.');
-								jpaket_btn_cancel();
+								//jpaket_btn_cancel();
 							}else{
-								detail_pengguna_paket_DataStore.load({params: {master_id:-1}});
-								jpaket_btn_cancel();
+								//detail_pengguna_paket_DataStore.load({params: {master_id:-1}});
+								//jpaket_btn_cancel();
 							}
 							/*detail_pengguna_paket_DataStore.load({params: {master_id:-1}});
 							jpaket_post2db="CREATE";
@@ -5119,16 +5121,16 @@ Ext.onReady(function(){
 							   animEl: 'database',
 							   icon: Ext.MessageBox.ERROR
 							});
-							detail_pengguna_paket_DataStore.load({params: {master_id:-1}});
-							jpaket_btn_cancel();
+							//detail_pengguna_paket_DataStore.load({params: {master_id:-1}});
+							//jpaket_btn_cancel();
 						}		
 					});
 					
 				}
 			}
 		}else{
-			detail_pengguna_paket_DataStore.load({params: {master_id:-1}});
-			jpaket_btn_cancel();
+			//detail_pengguna_paket_DataStore.load({params: {master_id:-1}});
+			//jpaket_btn_cancel();
 		}
 		
 	}
@@ -6528,6 +6530,15 @@ Ext.onReady(function(){
 				width: 560
 			},
 			{
+				id: 'jpaket_save_pemakai',
+				text: 'Save Pemakai',
+				handler: detail_pengguna_paket_insert
+			},
+			{
+				xtype:'spacer',
+				width: 50
+			},
+			{
 				text: 'Save and Print',
 				ref: '../jpaketSavePrintButton',
 				handler: save_andPrint
@@ -6541,6 +6552,7 @@ Ext.onReady(function(){
 				text: 'Cancel',
 				handler: jpaket_btn_cancel
 			}
+			
 		]
 	});
 	/* End  of Function*/
