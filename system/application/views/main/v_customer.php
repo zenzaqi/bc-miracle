@@ -1779,7 +1779,7 @@ Ext.onReady(function(){
 		/* dataIndex => insert intocustomer_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'note_id', type: 'int', mapping: 'note_id'},
 			{name: 'note_customer', type: 'int', mapping: 'note_customer'},
-			{name: 'note_tanggal', type: 'string', mapping: 'note_tanggal'},
+			{name: 'note_tanggal', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'note_tanggal'},
 			{name: 'note_detail', type: 'string', mapping: 'note_detail'}
 		]),
 		sortInfo:{field: 'note_id', direction: "DESC"}
@@ -2392,13 +2392,14 @@ Ext.onReady(function(){
 				cell.css = "readonlycell"; // Mengambil Value dari Class di dalam CSS 
 				return value;
 				},
-			hidden: false
+			hidden: true
 		},
 		{
 			header: '<div align="center">' + 'Tanggal dan Jam' + '</div>',
 			dataIndex: 'note_tanggal',
-			width: 70,
 			sortable: true,
+			width: 40,
+			renderer: Ext.util.Format.dateRenderer('d-m-Y H:i:s'),
 			readOnly: true
 		},
 		{
@@ -2406,9 +2407,10 @@ Ext.onReady(function(){
 			dataIndex: 'note_detail',
 			width: 250,
 			sortable: true,
-			editor: new Ext.form.TextArea({
-				maxLength: 500
-			})
+			readonly: true,
+			//editor: new Ext.form.TextArea({
+			//	maxLength: 500
+			//})
 		}		
 		]
 	);
