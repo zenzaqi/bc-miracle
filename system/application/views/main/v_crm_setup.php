@@ -64,6 +64,7 @@ var setcrm_recency_morethan_Field;
 //var setcrm_recency_equal_Field;
 var setcrm_recency_lessthan_Field;
 
+var setcrm_spending_daysField;
 var setcrm_spending_morethan_Field;
 var setcrm_spending_equal_Field;
 var setcrm_spending_lessthan_Field;
@@ -114,6 +115,7 @@ Ext.onReady(function(){
 			var setcrm_recency_equal_field_save=null;
 			var setcrm_recency_lessthan_field_save=null;
 			
+			var setcrm_spending_day_field=null;
 			var setcrm_spending_morethan_field_save=null;
 			var setcrm_spending_equal_field_save=null;
 			var setcrm_spending_lessthan_field_save=null;
@@ -156,6 +158,7 @@ Ext.onReady(function(){
 			//if(setcrm_recency_equal_Field.getValue()!== null){setcrm_recency_equal_field_save = setcrm_recency_equal_Field.getValue();}			
 			if(setcrm_recency_lessthan_Field.getValue()!== null){setcrm_recency_lessthan_field_save = setcrm_recency_lessthan_Field.getValue();}
 			
+			if(setcrm_spending_daysField.getValue()!== null){setcrm_spending_day_field = setcrm_spending_daysField.getValue();} 
 			if(setcrm_spending_morethan_Field.getValue()!== null){setcrm_spending_morethan_field_save = setcrm_spending_morethan_Field.getValue();} 
 			if(setcrm_spending_equal_Field.getValue()!== null){setcrm_spending_equal_field_save = setcrm_spending_equal_Field.getValue();}
 			if(setcrm_spending_lessthan_Field.getValue()!== null){setcrm_spending_lessthan_field_save = setcrm_spending_lessthan_Field.getValue();}
@@ -201,6 +204,7 @@ Ext.onReady(function(){
 					setcrm_recency_value_morethan		: setcrm_recency_morethan_field_save,
 					//setcrm_recency_value_equal			: setcrm_recency_equal_field_save,
 					setcrm_recency_value_lessthan		: setcrm_recency_lessthan_field_save,
+					setcrm_spending_days				: setcrm_spending_day_field,
 					setcrm_spending_value_morethan		: setcrm_spending_morethan_field_save,
 					setcrm_spending_value_equal			: setcrm_spending_equal_field_save,
 					setcrm_spending_value_lessthan		: setcrm_spending_lessthan_field_save,
@@ -298,6 +302,7 @@ Ext.onReady(function(){
 			{name: 'setcrm_recency_value_morethan', type: 'float', mapping: 'setcrm_recency_value_morethan'},
 			//{name: 'setcrm_recency_value_equal', type: 'float', mapping: 'setcrm_recency_value_equal'},
 			{name: 'setcrm_recency_value_lessthan', type: 'float', mapping: 'setcrm_recency_value_lessthan'},
+			{name: 'setcrm_spending_days', type: 'float', mapping: 'setcrm_spending_days'}, 
 			{name: 'setcrm_spending_value_morethan', type: 'float', mapping: 'setcrm_spending_value_morethan'},
 			{name: 'setcrm_spending_value_equal', type: 'float', mapping: 'setcrm_spending_value_equal'},
 			{name: 'setcrm_spending_value_lessthan', type: 'float', mapping: 'setcrm_spending_value_lessthan'}, 
@@ -430,6 +435,18 @@ Ext.onReady(function(){
 		anchor: '65%',
 		maskRe: /([0-9]+)$/
 	});
+	
+	setcrm_spending_daysField=new Ext.form.NumberField({
+		id: 'setcrm_spending_daysField',
+		name : 'setcrm_spending_days',
+		anchor : '25%',
+		width : 50,
+		allowDecimals : true,
+		allowNegative : false,
+		maxLength : 11
+	});
+	
+	
 	
 	setcrm_spending_morethan_Field= new Ext.form.NumberField({
 		id: 'setcrm_spending_morethan_Field',
@@ -708,6 +725,7 @@ Ext.onReady(function(){
 	
 	set_crm_frequency_label_monthField=new Ext.form.Label({ html: '&nbsp; days'});
 	set_crm_recency_label_daysField=new Ext.form.Label({ html: '&nbsp; days'});
+	set_crm_spending_label_daysField=new Ext.form.Label({ html: '&nbsp; days'});
 	set_crm_highmargin_label_monthField=new Ext.form.Label({ html: '&nbsp; days'});
 	set_crm_referaldate_label_personField=new Ext.form.Label({ html: '&nbsp; cust'});
 	set_crm_referaldate_label_monthField=new Ext.form.Label({ html: '&nbsp; days'});
@@ -786,7 +804,12 @@ Ext.onReady(function(){
 		layout: 'form',
 		frame: false,
 		boduStyle: 'padding: 5px;',
-		items:[{
+		items:[	{
+					layout : 'column',
+					border : false,
+					items : [setcrm_spending_daysField, set_crm_spending_label_daysField]
+				},
+				{
 				   layout	: 'form',
 				   border: false,
 				   items	: [set_crm_spending_label_valueField ,setcrm_spending_morethan_Field]

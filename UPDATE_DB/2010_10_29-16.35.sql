@@ -1,0 +1,1 @@
+ALTER TABLE  `crm_setup` ADD  `setcrm_spending_days` FLOAT NOT NULL AFTER  `setcrm_recency_value_lessthan`;
