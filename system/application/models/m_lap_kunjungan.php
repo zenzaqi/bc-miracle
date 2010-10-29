@@ -255,7 +255,23 @@ from
 					master_jual_produk.jproduk_tanggal as tgl_tindakan
 				from master_jual_produk
 				where master_jual_produk.jproduk_stat_dok <> 'Batal' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal = '$date_now'
-			))as table_union2
+			)
+			
+			union
+			(
+			select 
+					0 as jum_cust_medis,
+					0 as jum_cust_surgery,
+					0 as jum_cust_antiaging,
+					0 as jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					detail_ambil_paket.dapaket_cust as cust,
+					detail_ambil_paket.dapaket_tgl_ambil as tgl_tindakan
+				from detail_ambil_paket
+				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
+				where (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil = '$date_now'
+			)	
+		)as table_union2
 		group by tgl_tindakan
 	)
 
@@ -521,7 +537,24 @@ from
 					master_jual_produk.jproduk_tanggal as tgl_tindakan
 				from master_jual_produk
 				where master_jual_produk.jproduk_stat_dok <> 'Batal' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal = '$date_now'
-			))as table_union2
+			)
+			
+			union
+			(
+			select 
+					0 as jum_cust_medis,
+					0 as jum_cust_surgery,
+					0 as jum_cust_antiaging,
+					0 as jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					detail_ambil_paket.dapaket_cust as cust,
+					detail_ambil_paket.dapaket_tgl_ambil as tgl_tindakan
+				from detail_ambil_paket
+				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
+				where (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil = '$date_now'
+			)
+			
+			)as table_union2
 		group by tgl_tindakan
 	)
 
@@ -787,7 +820,24 @@ from
 					master_jual_produk.jproduk_tanggal as tgl_tindakan
 				from master_jual_produk
 				where master_jual_produk.jproduk_stat_dok <> 'Batal' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal = '$date_now'
-			))as table_union2
+			)
+			
+			union
+			(
+			select 
+					0 as jum_cust_medis,
+					0 as jum_cust_surgery,
+					0 as jum_cust_antiaging,
+					0 as jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					detail_ambil_paket.dapaket_cust as cust,
+					detail_ambil_paket.dapaket_tgl_ambil as tgl_tindakan
+				from detail_ambil_paket
+				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
+				where (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil = '$date_now'
+			)
+			
+			)as table_union2
 		group by tgl_tindakan
 	)
 
@@ -1056,7 +1106,24 @@ from
 					master_jual_produk.jproduk_tanggal as tgl_tindakan
 				from master_jual_produk
 				where master_jual_produk.jproduk_stat_dok <> 'Batal' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'
-			))as table_union2
+			)
+			
+			union
+			(
+			select 
+					0 as jum_cust_medis,
+					0 as jum_cust_surgery,
+					0 as jum_cust_antiaging,
+					0 as jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					detail_ambil_paket.dapaket_cust as cust,
+					detail_ambil_paket.dapaket_tgl_ambil as tgl_tindakan
+				from detail_ambil_paket
+				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
+				where (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'
+			)
+			
+			)as table_union2
 		group by tgl_tindakan
 	)
 
@@ -1306,7 +1373,24 @@ from
 					master_jual_produk.jproduk_tanggal as tgl_tindakan
 				from master_jual_produk
 				where master_jual_produk.jproduk_stat_dok <> 'Batal' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal = '".$trawat_tglapp_start."'
-			))as table_union2
+			)
+			
+			union
+			(
+			select 
+					0 as jum_cust_medis,
+					0 as jum_cust_surgery,
+					0 as jum_cust_antiaging,
+					0 as jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					detail_ambil_paket.dapaket_cust as cust,
+					detail_ambil_paket.dapaket_tgl_ambil as tgl_tindakan
+				from detail_ambil_paket
+				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
+				where (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil = '".$trawat_tglapp_start."'
+			)
+			
+			)as table_union2
 		group by tgl_tindakan
 	)
 ) as table_union";
@@ -1575,7 +1659,23 @@ from
 					master_jual_produk.jproduk_tanggal as tgl_tindakan
 				from master_jual_produk
 				where master_jual_produk.jproduk_stat_dok <> 'Batal' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'
-			))as table_union2
+			)
+			
+			union
+			(
+			select 
+					0 as jum_cust_medis,
+					0 as jum_cust_surgery,
+					0 as jum_cust_antiaging,
+					0 as jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					detail_ambil_paket.dapaket_cust as cust,
+					detail_ambil_paket.dapaket_tgl_ambil as tgl_tindakan
+				from detail_ambil_paket
+				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
+				where (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'
+			)
+			)as table_union2
 		group by tgl_tindakan
 	)
 
@@ -1826,7 +1926,24 @@ from
 					master_jual_produk.jproduk_tanggal as tgl_tindakan
 				from master_jual_produk
 				where master_jual_produk.jproduk_stat_dok <> 'Batal' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal = '".$trawat_tglapp_start."'
-			))as table_union2
+			)
+			
+			union
+			(
+			select 
+					0 as jum_cust_medis,
+					0 as jum_cust_surgery,
+					0 as jum_cust_antiaging,
+					0 as jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					detail_ambil_paket.dapaket_cust as cust,
+					detail_ambil_paket.dapaket_tgl_ambil as tgl_tindakan
+				from detail_ambil_paket
+				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
+				where (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil = '".$trawat_tglapp_start."'
+			)
+			
+			)as table_union2
 		group by tgl_tindakan
 	)
 ) as table_union";
@@ -2096,7 +2213,23 @@ from
 					master_jual_produk.jproduk_tanggal as tgl_tindakan
 				from master_jual_produk
 				where master_jual_produk.jproduk_stat_dok <> 'Batal' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'
-			))as table_union2
+			)
+			
+			union
+			(
+			select 
+					0 as jum_cust_medis,
+					0 as jum_cust_surgery,
+					0 as jum_cust_antiaging,
+					0 as jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					detail_ambil_paket.dapaket_cust as cust,
+					detail_ambil_paket.dapaket_tgl_ambil as tgl_tindakan
+				from detail_ambil_paket
+				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
+				where (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'
+			)
+			)as table_union2
 		group by tgl_tindakan
 	)
 
@@ -2347,7 +2480,24 @@ from
 					master_jual_produk.jproduk_tanggal as tgl_tindakan
 				from master_jual_produk
 				where master_jual_produk.jproduk_stat_dok <> 'Batal' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal = '".$trawat_tglapp_start."'
-			))as table_union2
+			)
+			
+			union
+			(
+			select 
+					0 as jum_cust_medis,
+					0 as jum_cust_surgery,
+					0 as jum_cust_antiaging,
+					0 as jum_cust_nonmedis,
+					0 as jum_cust_produk,
+					detail_ambil_paket.dapaket_cust as cust,
+					detail_ambil_paket.dapaket_tgl_ambil as tgl_tindakan
+				from detail_ambil_paket
+				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
+				where (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil = '".$trawat_tglapp_start."'
+			)
+			
+			)as table_union2
 		group by tgl_tindakan
 	)
 ) as table_union";
