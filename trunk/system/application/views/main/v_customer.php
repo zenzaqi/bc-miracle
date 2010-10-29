@@ -105,6 +105,7 @@ var cust_priorityField;
 var cust_jmlanakField;
 var cust_unitField;
 var cust_aktifField;
+var cust_fretfulnessField;
 var dt = new Date();
 
 var cust_idSearchField;
@@ -208,6 +209,7 @@ var editor_cust_note;
 		cust_jmlanakField.reset();
 		cust_unitField.reset();
 		cust_aktifField.reset();
+		cust_fretfulnessField.reset();
 		cust_cpField.reset();
 		cust_cptelpField.reset();
 		
@@ -257,6 +259,7 @@ var editor_cust_note;
 		cust_jmlanakField.setValue(null);
 		cust_unitField.setValue(null);
 		cust_aktifField.setValue(null);
+		cust_aktifField.setValue('Medium');
 		cust_cpField.setValue(null);
 		cust_cptelpField.setValue(null);
 		
@@ -332,6 +335,7 @@ var editor_cust_note;
 		cust_jmlanakField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_jmlanak'));
 		cust_unitField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_unit'));
 		cust_aktifField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_aktif'));
+		cust_fretfulnessField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_fretfulness'));
 		cust_cpField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_cp'));
 		cust_cptelpField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_cptelp'));
 		cust_fbField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_fb'));
@@ -1356,6 +1360,7 @@ var editor_cust_note;
 		var cust_jmlanak_create=null;
 		var cust_unit_create=null;
 		var cust_aktif_create=null;
+		var cust_fretfulness_create=null;
 		var cust_kelamin_create=null;
 		var cust_cp_create=null;
 		var cust_cptelp_create=null;
@@ -1406,6 +1411,7 @@ var editor_cust_note;
 		if(cust_jmlanakField.getValue()!== null){cust_jmlanak_create = cust_jmlanakField.getValue();}
 		if(cust_unitField.getValue()!== null){cust_unit_create = cust_unitField.getValue();}
 		if(cust_aktifField.getValue()!== null){cust_aktif_create = cust_aktifField.getValue();}
+		if(cust_fretfulnessField.getValue()!== null){cust_fretfulness_create = cust_fretfulnessField.getValue();}
 		if(cust_cpField.getValue()!== null){cust_cp_create = cust_cpField.getValue();}
 		if(cust_cptelpField.getValue()!== null){cust_cptelp_create = cust_cptelpField.getValue();}
 
@@ -1461,6 +1467,7 @@ var editor_cust_note;
 					cust_jmlanak	: cust_jmlanak_create,	
 					cust_unit	: cust_unit_create,	
 					cust_aktif	: cust_aktif_create,
+					cust_fretfulness : cust_fretfulness_create,
 					cust_cp	: cust_cp_create,
 					cust_cptelp	: cust_cptelp_create
 				}, 
@@ -1681,6 +1688,7 @@ Ext.onReady(function(){
 			{name: 'cust_jmlanak', type: 'int', mapping: 'cust_jmlanak'},
 			{name: 'cust_unit', type: 'string', mapping: 'cabang_nama'},
 			{name: 'cust_aktif', type: 'string', mapping: 'cust_aktif'},
+			{name: 'cust_fretfulness', type: 'string', mapping: 'cust_fretfulness'},
 			{name: 'cust_creator', type: 'string', mapping: 'cust_creator'},
 			{name: 'cust_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'cust_date_create'},
 			{name: 'cust_update', type: 'string', mapping: 'cust_update'},
@@ -3202,6 +3210,25 @@ Ext.onReady(function(){
 		triggerAction: 'all'	
 	});
 	
+	/* Identify  cust_fretfulness Field */
+	cust_fretfulnessField= new Ext.form.ComboBox({
+		id: 'cust_fretfulnessField',
+		fieldLabel: 'Fretfulness',
+		store:new Ext.data.SimpleStore({
+			fields:['cust_fretfulness_value', 'cust_fretfulness_display'],
+			data:[['High','High'],['Medium','Medium'],['Low','Low']]
+		}),
+		mode: 'local',
+		editable: false,
+		//allowBlank: false,
+		displayField: 'cust_fretfulness_display',
+		valueField: 'cust_fretfulness_value',
+		anchor: '30%',
+		triggerAction: 'all'	
+	});
+	
+	
+	
 	cust_fbField=new Ext.form.Checkbox({
 		boxLabel: 'facebook',
 		name: 'email_fb'
@@ -3233,6 +3260,10 @@ Ext.onReady(function(){
 			}
 		}
 	});
+	
+	
+	
+	
 	
 	cust_alamat_group = new Ext.form.FieldSet({
 		title: 'Alamat',
@@ -3355,8 +3386,33 @@ Ext.onReady(function(){
 				anchor: '95%',
 //				title: 'History Catatan',
 				title: 'Catatan Customer',
-				items: cust_noteListEditorGrid
+				items: [
+					{
+						columnWidth:0.5,
+						layout: 'form',
+						border:false,
+						items: [cust_fretfulnessField] 
+					}, 
+					cust_noteListEditorGrid]
 			}
+			
+		
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
 		]
 	});
 	
