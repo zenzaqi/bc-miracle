@@ -1,0 +1,3 @@
+--> menambahkan field fretfulness di master customer
+--> update resep dokter
+--> 2010-10-29_14-00.sql, 2010-10-27_09-45.sql
