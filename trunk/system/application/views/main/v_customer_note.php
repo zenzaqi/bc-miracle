@@ -400,29 +400,29 @@ Ext.onReady(function(){
 			hidden: true
 		},
 		{
-			header: 'Tanggal dan Jam',
+			header: '<div align="center">' + 'Tanggal dan Jam' + '</div>',
 			dataIndex: 'note_tanggal',
 			width: 80,
 			sortable: true,
-			renderer: Ext.util.Format.dateRenderer('Y-m-d H:i:s'),
+			renderer: Ext.util.Format.dateRenderer('d-m-Y H:i:s'),
 			readOnly: true
 		},
 		{
-			header: 'No Cust',
+			header: '<div align="center">' + 'No Cust' + '</div>',
 			dataIndex: 'no_customer',
 			width: 60,
 			sortable: true,
 			readOnly: true
 		},
 		{
-			header: 'Customer',
+			header: '<div align="center">' + 'Customer' + '</div>',
 			dataIndex: 'note_customer',
 			width: 150,
 			sortable: true,
 			readOnly: true
 		},
 		{
-			header: 'Detail Catatan',
+			header: '<div align="center">' + 'Detail Catatan' + '</div>',
 			dataIndex: 'note_detail',
 			width: 300,
 			sortable: true,
@@ -632,9 +632,9 @@ Ext.onReady(function(){
 	note_tanggalField= new Ext.form.DateField({
 		id: 'note_tanggalField',
 		fieldLabel: 'Tanggal dan Jam',
-		format : 'Y-m-d H:i:s',
-		emptyText: dt.format('Y-m-d H:i:s'),
-		blankText: dt.format('Y-m-d H:i:s'),
+		format : 'd-m-Y H:i:s',
+		emptyText: dt.format('d-m-Y H:i:s'),
+		blankText: dt.format('d-m-Y H:i:s'),
 		allowBlank: true,
 		readOnly: true,
 		hideTrigger: true,

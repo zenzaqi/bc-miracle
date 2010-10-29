@@ -601,6 +601,7 @@ Ext.onReady(function(){
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: outbox_DataStore,
+			//handler : load_status_all(),
 			displayInfo: true
 		}),
 		/* Add Control on ToolBar */
@@ -706,6 +707,7 @@ Ext.onReady(function(){
   	
 	outboxListEditorGrid.addListener('rowcontextmenu', onoutbox_ListEditGridContextMenu);
 	outbox_DataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
+	//load_status_all();
 	outbox_status_sentDataStore.load({
 		params : {start: 0, limit: pageS},
 			callback: function(opts, success, response){
@@ -839,6 +841,36 @@ Ext.onReady(function(){
 		outbox_DataStore.baseParams = { task: 'LIST' };
 		// Cause the datastore to do another query : 
 		outbox_DataStore.reload({params: {start: 0, limit: pageS}});
+		outbox_status_sentDataStore.load({
+		params : {start: 0, limit: pageS},
+			callback: function(opts, success, response){
+				if (success) {
+						auto_status_sent =outbox_status_sentDataStore.getAt(0).data;
+						outbox_status_sentField.setValue(auto_status_sent.status_sent);
+				}
+			}
+	});
+	
+	outbox_status_unsentDataStore.load({
+		params : {start: 0, limit: pageS},
+			callback: function(opts, success, response){
+				if (success) {
+						auto_status_unsent =outbox_status_unsentDataStore.getAt(0).data;
+						outbox_status_unsentField.setValue(auto_status_unsent.status_unsent);
+				}
+			}
+	});
+	
+	outbox_status_failedDataStore.load({
+		params : {start: 0, limit: pageS},
+			callback: function(opts, success, response){
+				if (success) {
+						auto_status_failed =outbox_status_failedDataStore.getAt(0).data;
+						outbox_status_failedField.setValue(auto_status_failed.status_failed);
+				}
+			}
+	});
+		
 		outbox_searchWindow.close();
 	};
 	/* End of Fuction */
@@ -1050,6 +1082,44 @@ Ext.onReady(function(){
 		});
 	}
 	/*End of Function */
+	
+
+	
+	/*
+	function load_status_all(){
+	outbox_DataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
+	outbox_status_sentDataStore.load({
+		params : {start: 0, limit: pageS},
+			callback: function(opts, success, response){
+				if (success) {
+						auto_status_sent =outbox_status_sentDataStore.getAt(0).data;
+						outbox_status_sentField.setValue(auto_status_sent.status_sent);
+				}
+			}
+	});
+	
+	outbox_status_unsentDataStore.load({
+		params : {start: 0, limit: pageS},
+			callback: function(opts, success, response){
+				if (success) {
+						auto_status_unsent =outbox_status_unsentDataStore.getAt(0).data;
+						outbox_status_unsentField.setValue(auto_status_unsent.status_unsent);
+				}
+			}
+	});
+	
+	outbox_status_failedDataStore.load({
+		params : {start: 0, limit: pageS},
+			callback: function(opts, success, response){
+				if (success) {
+						auto_status_failed =outbox_status_failedDataStore.getAt(0).data;
+						outbox_status_failedField.setValue(auto_status_failed.status_failed);
+				}
+			}
+	});
+	
+	}*/
+	
 	
 });
 	</script>
