@@ -3,7 +3,7 @@
 	+ Module  		: Resep Dokter View
 	+ Description	: For record view
 	+ Filename 		: v_resep_dokter.php
- 	+ Author  		: Freddy
+ 	+ Author  		: Fred
 	
 */
 ?>
@@ -129,8 +129,10 @@ var dt = new Date();
 /* declare variable here for Field*/
 var resep_idField;
 var resep_noField;
+var resep_nofakturField;
 var resep_dokterField;
 var resep_custField;
+var resep_cust_manualField;
 var resep_paket_idField;
 var resepdokter_idSearchField;
 var resepdokter_custSearchField;
@@ -182,6 +184,7 @@ Ext.onReady(function(){
 		var trawat_id_update_pk="";
 		var resep_id_update_pk="";
 		var resepdokter_cust_update=null;
+		var resep_cust_manual_update=null;
 		var resep_dokterid_update=null;
 		var resep_customer_update=null;
 		var resep_tanggal_update="";
@@ -190,6 +193,7 @@ Ext.onReady(function(){
 
 		resep_id_update_pk = oGrid_event.record.data.resep_id;
 		if(oGrid_event.record.data.resep_custid!== null){resepdokter_cust_update = oGrid_event.record.data.resep_custid;}
+		if(oGrid_event.record.data.resep_cust_manual!== null){resep_cust_manual_update = oGrid_event.record.data.resep_cust_manual;}
 		if(oGrid_event.record.data.resep_dokterid!== null){resep_dokterid_update = oGrid_event.record.data.resep_dokterid;}
 		if(oGrid_event.record.data.resep_customer!== null){resep_customer_update = oGrid_event.record.data.resep_customer;}
 		if(oGrid_event.record.data.resep_tanggal!== ""){resep_tanggal_update =oGrid_event.record.data.resep_tanggal.format('Y-m-d');}
@@ -203,7 +207,8 @@ Ext.onReady(function(){
 				task: "UPDATE",
 				mode_edit: "update_list",
 				resep_id		: resep_id_update_pk,
-				resep_custid	:resepdokter_cust_update,  
+				resep_custid	:resepdokter_cust_update, 
+				resep_cust_manual : resep_cust_manual_update,
 				resep_dokterid :resep_dokterid_update,
 				resep_customer:resep_customer_update,
 				resep_tanggal: resep_tanggal_update,
@@ -239,15 +244,19 @@ Ext.onReady(function(){
 		if(is_resepdokterform_valid()){	
 		var resep_id_create=null; 
 		var resep_cust_create=null;
+		var resep_cust_manual_create=null;
 		var resep_tanggal_create="";
 		var resep_dokter_create=null;
 		var resep_no_create=null;
+		var resep_nofaktur_create=null;
 
 		if(resep_idField.getValue()!== null){resep_id_create = resep_idField.getValue();}else{resep_id_create=get_pk_id();} 
 		if(resep_dokterField.getValue()!== null){resep_dokter_create = resep_dokterField.getValue();}
 		if(resep_custField.getValue()!== null){resep_cust_create = resep_custField.getValue();}
+		if(resep_cust_manualField.getValue()!==null){resep_cust_manual_create = resep_cust_manualField.getValue();}
 		if(resep_tanggalField.getValue()!== ""){resep_tanggal_create = resep_tanggalField.getValue().format('Y-m-d');}
-		if(resep_noField.getValue()!== null){resep_no_create = resep_noField.getValue();} 
+		if(resep_noField.getValue()!== null){resep_no_create = resep_noField.getValue();}
+		if(resep_nofakturField.getValue()!== null){resep_nofaktur_create = resep_nofakturField.getValue();}
 
 		Ext.Ajax.request({  
 			waitMsg: 'Please wait...',
@@ -256,9 +265,11 @@ Ext.onReady(function(){
 				task: post2db,
 				resep_id	: resep_id_create, 
 				resep_custid	: resep_cust_create,
+				resep_cust_manual : resep_cust_manual_create,
 				resep_tanggal	: resep_tanggal_create,
 				resep_dokterid : resep_dokter_create,
-				resep_no	: resep_no_create
+				resep_no	: resep_no_create,
+				resep_nofaktur : resep_nofaktur_create
 			}, 
 			success: function(response){             
 				var result=eval(response.responseText);
@@ -329,11 +340,15 @@ Ext.onReady(function(){
 		resep_dokterField.setValue(null);
 		resep_noField.reset();
 		resep_noField.setValue('No Resep Auto');
+		resep_nofakturField.reset();
+		resep_nofakturField.setValue(null);
 		resep_tanggalField.setValue(dt.format('Y-m-d'));
 		resep_nocustField.reset();
 		resep_nocustField.setValue(null);
 		resep_custField.reset();
 		resep_custField.setValue(null);
+		resep_cust_manualField.reset();
+		resep_cust_manualField.setValue(null);
 		resep_sipField.reset();
 		resep_sipField.setValue(null);
 		cbo_resepdokter_produkDataStore.load();
@@ -346,10 +361,12 @@ Ext.onReady(function(){
 		resep_idField.setValue(resep_dokterListEditorGrid.getSelectionModel().getSelected().get('resep_id'));
 		resep_dokterField.setValue(resep_dokterListEditorGrid.getSelectionModel().getSelected().get('resep_namadokter'));
 		resep_custField.setValue(resep_dokterListEditorGrid.getSelectionModel().getSelected().get('resep_namacust'));
+		resep_cust_manualField.setValue(resep_dokterListEditorGrid.getSelectionModel().getSelected().get('resep_cust_manual'));
 		resep_tanggalField.setValue(resep_dokterListEditorGrid.getSelectionModel().getSelected().get('resep_tanggal'));
 		resep_nocustField.setValue(resep_dokterListEditorGrid.getSelectionModel().getSelected().get('resep_cust_no'));
 		resep_sipField.setValue(resep_dokterListEditorGrid.getSelectionModel().getSelected().get('resep_sip'));
 		resep_noField.setValue(resep_dokterListEditorGrid.getSelectionModel().getSelected().get('resep_no'));
+		resep_nofakturField.setValue(resep_dokterListEditorGrid.getSelectionModel().getSelected().get('resep_nofaktur'));
 		//cbo_resep_satuan_DataStore.setBaseParam('task','detail');
 		//cbo_resep_satuan_DataStore.setBaseParam('master_id',get_pk_id());
 		//cbo_resep_satuan_DataStore.load();
@@ -390,7 +407,7 @@ Ext.onReady(function(){
 	
 	/* Function for Check if the form is valid */
 	function is_resepdokterform_valid(){
-		return (true &&  resep_dokterField.isValid() && resep_custField.isValid() &&  true &&  true &&  true &&  true &&  true  );
+		return (true && resep_dokterField.isValid() && resep_custField.isValid() && true );
 	}
   	/* End of Function */
   
@@ -547,6 +564,7 @@ Ext.onReady(function(){
 			{name: 'resep_namacust', type: 'string', mapping: 'cust_nama'}, 
 			{name: 'resep_cust_no', type: 'string', mapping: 'cust_no'},
 			{name: 'resep_no', type: 'string', mapping: 'resep_no'},
+			{name: 'resep_nofaktur', type: 'string', mapping: 'resep_nofaktur'},
 			{name: 'resep_id', type: 'int', mapping: 'resep_id'},
 			{name: 'resep_namadokter', type: 'string', mapping: 'karyawan_username'},
 			{name: 'resep_sip', type: 'string', mapping: 'karyawan_sip'},
@@ -693,6 +711,12 @@ Ext.onReady(function(){
 			sortable: true	
 		}, 	
 		{
+			header: '<div align="center">' + 'No Faktur' + '</div>',
+			dataIndex: 'resep_nofaktur',
+			width: 60,	//210,
+			sortable: true	
+		}, 	
+		{
 			header: '<div align="center">' + 'Dokter' + '</div>',
 			dataIndex: 'resep_namadokter',
 			width: 60,
@@ -767,6 +791,7 @@ Ext.onReady(function(){
 			text: 'Delete',
 			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
+			disabled : true,
 			handler: resepdokter_confirm_delete   // Confirm before deleting
 		}, '-', 
 			new Ext.app.SearchField({
@@ -821,6 +846,7 @@ Ext.onReady(function(){
 			text: 'Delete', 
 			tooltip: 'Delete selected record', 
 			iconCls:'icon-delete',
+			disabled : true,
 			handler: resepdokter_confirm_delete 
 		},
 		'-',
@@ -876,6 +902,7 @@ Ext.onReady(function(){
 		maskRe: /([0-9]+)$/
 	});
 	
+	/* Identify Nomer Resep*/
 	resep_noField= new Ext.form.TextField({
 		id: 'resep_noField',
 		fieldLabel: 'No Resep',
@@ -883,6 +910,16 @@ Ext.onReady(function(){
 		maxLength: 50,
 		readOnly : true
 	});
+	
+	/* Identify Nomer Faktur utk Resep*/
+	resep_nofakturField= new Ext.form.TextField({
+		id: 'resep_nofakturField',
+		fieldLabel: 'No Faktur',
+		//emptyText: '(No Resep Auto)',
+		maxLength: 50
+		//readOnly : true
+	});
+	
 	
 	resep_dokterField= new Ext.form.ComboBox({
 		//id: 'resep_dokterField',
@@ -916,6 +953,17 @@ Ext.onReady(function(){
 		fieldLabel: 'Tanggal',
 		format : 'd-m-Y'
 	});
+	
+	/* Identify  resep_cust_manual Field */
+	resep_cust_manualField= new Ext.form.TextField({
+		id: 'resep_cust_manualField',
+		fieldLabel: 'Customer',
+		maxLength: 100,
+		//emptyText: 'Surabaya',
+		//allowBlank: true,
+		anchor: '95%'
+	});
+	
 	
 	resep_custField= new Ext.form.ComboBox({
 		fieldLabel: 'Customer',
@@ -973,7 +1021,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [resep_tanggalField, resep_noField, resep_dokterField, resep_sipField, resep_custField,resep_nocustField, resep_idField] 
+				items: [resep_tanggalField, resep_noField, resep_nofakturField, resep_dokterField, resep_sipField, resep_custField,resep_nocustField, resep_idField] 
 			}
 			]
 	});
