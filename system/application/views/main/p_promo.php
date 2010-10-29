@@ -15,16 +15,17 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Daftar Kode Akun</title>
+<title>Daftar Promo</title>
 <link rel='stylesheet' type='text/css' href='../assets/modules/main/css/printstyle.css'/>
 </head>
 <body onload="window.print();">
-<table summary='Daftar Akun'>
+<table summary='Daftar Promo'>
     <thead>
     	<tr>
     	<td colspan="8" nowrap="nowrap">
         	<div style="float:left; margin-left:10px; margin-top:5px;" > 
-             <center><b><h1>Kode Akun</h1></b></center>
+             <center><b>
+             <h1>Promo</h1></b></center>
             </div>
         </td>
         </tr>
@@ -32,26 +33,22 @@
 	<thead>
     	<tr>
         	<th scope='col'>No</th>
-            <th scope='col'>Kode</th>
-            <th scope='col'>Nama</th>
-            <th scope='col'>Debet</th>
-            <th scope='col'>Kredit</th>
-            <th scope='col'>Saldo</th>
-            <th scope='col'>Jenis</th>
-            <th scope='col'>Aktif</th>
+            <th scope='col'>Acara</th>
+            <th scope='col'>Tempat</th>
+            <th scope='col'>Tanggal Mulai</th>
+            <th scope='col'>Tanggal Selesai</th>
+            <th scope='col'>Keterangan</th>
         </tr>
     </thead>
 	<tbody>
 		<?php $i=0; foreach($data_print as $print) { $i++; ?>
 		<tr>
         	<td><? echo $i; ?></td>
-            <td><?php echo $print->akun_kode; ?></td>
-            <td><?php echo str_repeat("-",$print->akun_level)." ".$print->akun_nama; ?></td>
-            <td><?php echo $print->akun_debet; ?></td>
-            <td><?php echo $print->akun_kredit; ?></td>
-            <td><?php echo $print->akun_saldo; ?></td>
-            <td><?php echo $print->akun_jenis; ?></td>
-            <td><?php echo $print->akun_aktif=='Y'?'Ya':'Tidak'; ?></td>
+            <td><?php echo $print->promo_acara; ?></td>
+            <td><?php echo $print->promo_tempat; ?></td>
+            <td><?php echo $print->promo_tglmulai; ?></td>
+            <td><?php echo $print->promo_tglselesai; ?></td>
+            <td><?php echo $print->promo_keterangan; ?></td>
         </tr>
 		<?php } ?>
 	</tbody>

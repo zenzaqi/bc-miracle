@@ -1,0 +1,6 @@
+[by zaqi.smart@gmail.com]
+- fix update
+  o promo
+    - SQL : 2010-10-29_04-32-PM.sql
+  o Voucher ganti dengan menu History Penukaran Voucher
+  o Voucher Promo, dihapus 

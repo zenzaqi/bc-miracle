@@ -156,19 +156,6 @@ class M_Kasbank extends Model{
 		}
 		//end of function
 		
-		//get master id, note : not done yet
-		function get_master_id() {
-			$query = "SELECT max(kasbank_id) as master_id from kasbank";
-			$result = $this->db->query($query);
-			if($result->num_rows()){
-				$data=$result->row();
-				$master_id=$data->master_id;
-				return $master_id;
-			}else{
-				return '0';
-			}
-		}
-		//eof
 		
 		
 		//insert detail record
