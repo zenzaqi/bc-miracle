@@ -22,7 +22,6 @@ class C_promo extends Controller {
 	
 	//set index
 	function index(){
-		$this->load->plugin('to_excel');
 		$this->load->helper('asset');
 		$this->load->view('main/v_promo');
 	}
@@ -104,6 +103,10 @@ class C_promo extends Controller {
 		$ipromo_id=trim(@$_POST["ipromo_id"]);
 		$ipromo_master=trim(@$_POST["ipromo_master"]);
 		$ipromo_produk=trim(@$_POST["ipromo_produk"]);
+		
+		$ipromo_id = json_decode(stripslashes($ipromo_id));
+		$ipromo_produk = json_decode(stripslashes($ipromo_produk));
+		
 		$result=$this->m_promo->detail_promo_produk_insert($ipromo_id,$ipromo_master ,$ipromo_produk );
 	}
 	
@@ -112,6 +115,10 @@ class C_promo extends Controller {
 		$rpromo_id=trim(@$_POST["rpromo_id"]);
 		$rpromo_master=trim(@$_POST["rpromo_master"]);
 		$rpromo_perawatan=trim(@$_POST["rpromo_perawatan"]);
+		
+		$rpromo_id = json_decode(stripslashes($rpromo_id));
+		$rpromo_perawatan = json_decode(stripslashes($rpromo_perawatan));
+		
 		$result=$this->m_promo->detail_promo_perawatan_insert($rpromo_id,$rpromo_master ,$rpromo_perawatan );
 	}
 	
@@ -163,59 +170,44 @@ class C_promo extends Controller {
 		$promo_id=trim(@$_POST["promo_id"]);
 		$promo_acara=trim(@$_POST["promo_acara"]);
 		$promo_acara=str_replace("/(<\/?)(p)([^>]*>)", "",$promo_acara);
-		$promo_acara=str_replace(",", ",",$promo_acara);
-		$promo_acara=str_replace("'", '"',$promo_acara);
 		$promo_tempat=trim(@$_POST["promo_tempat"]);
 		$promo_tempat=str_replace("/(<\/?)(p)([^>]*>)", "",$promo_tempat);
-		$promo_tempat=str_replace(",", ",",$promo_tempat);
-		$promo_tempat=str_replace("'", '"',$promo_tempat);
 		$promo_keterangan=trim(@$_POST["promo_keterangan"]);
 		$promo_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$promo_keterangan);
-		$promo_keterangan=str_replace(",", ",",$promo_keterangan);
-		$promo_keterangan=str_replace("'", '"',$promo_keterangan);
 		$promo_tglmulai=trim(@$_POST["promo_tglmulai"]);
 		$promo_tglselesai=trim(@$_POST["promo_tglselesai"]);
-		$promo_cashback=trim(@$_POST["promo_cashback"]);
-		$promo_mincash=trim(@$_POST["promo_mincash"]);
 		$promo_diskon=trim(@$_POST["promo_diskon"]);
 		$promo_allproduk=trim(@$_POST["promo_allproduk"]);
-		$promo_allproduk=str_replace("/(<\/?)(p)([^>]*>)", "",$promo_allproduk);
-		$promo_allproduk=str_replace(",", ",",$promo_allproduk);
-		$promo_allproduk=str_replace("'", '"',$promo_allproduk);
 		$promo_allrawat=trim(@$_POST["promo_allrawat"]);
-		$promo_allrawat=str_replace("/(<\/?)(p)([^>]*>)", "",$promo_allrawat);
-		$promo_allrawat=str_replace(",", ",",$promo_allrawat);
-		$promo_allrawat=str_replace("'", '"',$promo_allrawat);
-		$result = $this->m_promo->promo_update($promo_id ,$promo_acara ,$promo_tempat, $promo_keterangan ,$promo_tglmulai ,$promo_tglselesai ,$promo_cashback ,$promo_mincash ,$promo_diskon ,$promo_allproduk ,$promo_allrawat      );
+		
+		$promo_allproduk=($promo_allproduk=='true'?'Y':'T');
+		$promo_allrawat=($promo_allrawat=='true'?'Y':'T');
+		
+		$result = $this->m_promo->promo_update($promo_id ,$promo_acara ,$promo_tempat, $promo_keterangan ,$promo_tglmulai ,
+											   $promo_tglselesai ,$promo_diskon ,$promo_allproduk ,$promo_allrawat      );
 		echo $result;
 	}
 	
 	//function for create new record
 	function promo_create(){
 		//POST varible here
-		$promo_id=trim(@$_POST["promo_id"]);
 		$promo_acara=trim(@$_POST["promo_acara"]);
 		$promo_acara=str_replace("/(<\/?)(p)([^>]*>)", "",$promo_acara);
-		$promo_acara=str_replace("'", '"',$promo_acara);
 		$promo_tempat=trim(@$_POST["promo_tempat"]);
 		$promo_tempat=str_replace("/(<\/?)(p)([^>]*>)", "",$promo_tempat);
-		$promo_tempat=str_replace("'", '"',$promo_tempat);
 		$promo_keterangan=trim(@$_POST["promo_keterangan"]);
 		$promo_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$promo_keterangan);
-		$promo_keterangan=str_replace(",", ",",$promo_keterangan);
-		$promo_keterangan=str_replace("'", '"',$promo_keterangan);
 		$promo_tglmulai=trim(@$_POST["promo_tglmulai"]);
 		$promo_tglselesai=trim(@$_POST["promo_tglselesai"]);
-		$promo_cashback=trim(@$_POST["promo_cashback"]);
-		$promo_mincash=trim(@$_POST["promo_mincash"]);
 		$promo_diskon=trim(@$_POST["promo_diskon"]);
 		$promo_allproduk=trim(@$_POST["promo_allproduk"]);
-		$promo_allproduk=str_replace("/(<\/?)(p)([^>]*>)", "",$promo_allproduk);
-		$promo_allproduk=str_replace("'", '"',$promo_allproduk);
 		$promo_allrawat=trim(@$_POST["promo_allrawat"]);
-		$promo_allrawat=str_replace("/(<\/?)(p)([^>]*>)", "",$promo_allrawat);
-		$promo_allrawat=str_replace("'", '"',$promo_allrawat);
-		$result=$this->m_promo->promo_create($promo_id ,$promo_acara ,$promo_tempat, $promo_keterangan ,$promo_tglmulai ,$promo_tglselesai ,$promo_cashback ,$promo_mincash ,$promo_diskon ,$promo_allproduk ,$promo_allrawat );
+		
+		$promo_allproduk=($promo_allproduk=='true'?'Y':'T');
+		$promo_allrawat=($promo_allrawat=='true'?'Y':'T');
+		
+		$result=$this->m_promo->promo_create($promo_acara ,$promo_tempat, $promo_keterangan ,$promo_tglmulai ,
+											 $promo_tglselesai ,$promo_diskon ,$promo_allproduk ,$promo_allrawat );
 		echo $result;
 	}
 
@@ -230,149 +222,74 @@ class C_promo extends Controller {
 	//function for advanced search
 	function promo_search(){
 		//POST varibale here
-		$promo_id=trim(@$_POST["promo_id"]);
 		$promo_acara=trim(@$_POST["promo_acara"]);
 		$promo_acara=str_replace("/(<\/?)(p)([^>]*>)", "",$promo_acara);
-		$promo_acara=str_replace("'", '"',$promo_acara);
 		$promo_tempat=trim(@$_POST["promo_tempat"]);
 		$promo_tempat=str_replace("/(<\/?)(p)([^>]*>)", "",$promo_tempat);
-		$promo_tempat=str_replace("'", '"',$promo_tempat);
 		$promo_keterangan=trim(@$_POST["promo_keterangan"]);
 		$promo_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$promo_keterangan);
-		$promo_keterangan=str_replace(",", ",",$promo_keterangan);
-		$promo_keterangan=str_replace("'", '"',$promo_keterangan);
 		$promo_tglmulai=trim(@$_POST["promo_tglmulai"]);
 		$promo_tglselesai=trim(@$_POST["promo_tglselesai"]);
-		$promo_cashback=trim(@$_POST["promo_cashback"]);
-		$promo_mincash=trim(@$_POST["promo_mincash"]);
 		$promo_diskon=trim(@$_POST["promo_diskon"]);
-		$promo_allproduk=trim(@$_POST["promo_allproduk"]);
-		$promo_allproduk=str_replace("/(<\/?)(p)([^>]*>)", "",$promo_allproduk);
-		$promo_allproduk=str_replace("'", '"',$promo_allproduk);
-		$promo_allrawat=trim(@$_POST["promo_allrawat"]);
-		$promo_allrawat=str_replace("/(<\/?)(p)([^>]*>)", "",$promo_allrawat);
-		$promo_allrawat=str_replace("'", '"',$promo_allrawat);
+
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_promo->promo_search($promo_id ,$promo_acara ,$promo_tempat, $promo_keterangan ,$promo_tglmulai ,$promo_tglselesai ,$promo_cashback ,$promo_mincash ,$promo_diskon ,$promo_allproduk ,$promo_allrawat ,$start,$end);
+		$result = $this->m_promo->promo_search($promo_acara ,$promo_tempat, $promo_keterangan ,$promo_tglmulai ,
+											   $promo_tglselesai ,$promo_diskon,$start,$end);
 		echo $result;
 	}
 
 
 	function promo_print(){
   		//POST varibale here
-		$promo_id=trim(@$_POST["promo_id"]);
 		$promo_acara=trim(@$_POST["promo_acara"]);
 		$promo_acara=str_replace("/(<\/?)(p)([^>]*>)", "",$promo_acara);
-		$promo_acara=str_replace("'", '"',$promo_acara);
 		$promo_tempat=trim(@$_POST["promo_tempat"]);
 		$promo_tempat=str_replace("/(<\/?)(p)([^>]*>)", "",$promo_tempat);
-		$promo_tempat=str_replace("'", '"',$promo_tempat);
 		$promo_keterangan=trim(@$_POST["promo_keterangan"]);
 		$promo_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$promo_keterangan);
-		$promo_keterangan=str_replace(",", ",",$promo_keterangan);
-		$promo_keterangan=str_replace("'", '"',$promo_keterangan);
 		$promo_tglmulai=trim(@$_POST["promo_tglmulai"]);
 		$promo_tglselesai=trim(@$_POST["promo_tglselesai"]);
-		$promo_cashback=trim(@$_POST["promo_cashback"]);
-		$promo_mincash=trim(@$_POST["promo_mincash"]);
 		$promo_diskon=trim(@$_POST["promo_diskon"]);
-		$promo_allproduk=trim(@$_POST["promo_allproduk"]);
-		$promo_allproduk=str_replace("/(<\/?)(p)([^>]*>)", "",$promo_allproduk);
-		$promo_allproduk=str_replace("'", '"',$promo_allproduk);
-		$promo_allrawat=trim(@$_POST["promo_allrawat"]);
-		$promo_allrawat=str_replace("/(<\/?)(p)([^>]*>)", "",$promo_allrawat);
-		$promo_allrawat=str_replace("'", '"',$promo_allrawat);
+
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$result = $this->m_promo->promo_print($promo_id ,$promo_acara ,$promo_tempat, $promo_keterangan ,$promo_tglmulai ,$promo_tglselesai ,$promo_cashback ,$promo_mincash ,$promo_diskon ,$promo_allproduk ,$promo_allrawat ,$option,$filter);
-		$nbrows=$result->num_rows();
-		$totcolumn=15;
-   		/* We now have our array, let's build our HTML file */
-		$file = fopen("promolist.html",'w');
-		fwrite($file, "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' /><title>Printing the Promo Grid</title><link rel='stylesheet' type='text/css' href='assets/modules/main/css/printstyle.css'/></head>");
-		fwrite($file, "<body><table summary='Promo List'><caption>PROMO</caption><thead><tr><th scope='col'>Promo Id</th><th scope='col'>Promo Acara</th><th scope='col'>Promo Tempat</th><th scope='col'>Promo Tglmulai</th><th scope='col'>Promo Tglselesai</th><th scope='col'>Promo Cashback</th><th scope='col'>Promo Mincash</th><th scope='col'>Promo Diskon</th><th scope='col'>Promo Allproduk</th><th scope='col'>Promo Allrawat</th><th scope='col'>Promo Creator</th><th scope='col'>Promo Date Create</th><th scope='col'>Promo Update</th><th scope='col'>Promo Date Update</th><th scope='col'>Promo Revised</th></tr></thead><tfoot><tr><th scope='row'>Total</th><td colspan='$totcolumn'>");
-		fwrite($file, $nbrows);
-		fwrite($file, " Promo</td></tr></tfoot><tbody>");
-		$i=0;
-		if($nbrows>0){
-			foreach($result->result_array() as $data){
-				fwrite($file,'<tr');
-				if($i%1==0){
-					fwrite($file," class='odd'");
-				}
-			
-				fwrite($file, "><th scope='row' id='r97'>");
-				fwrite($file, $data['promo_id']);
-				fwrite($file,"</th><td>");
-				fwrite($file, $data['promo_acara']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['promo_tempat']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['promo_tglmulai']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['promo_tglselesai']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['promo_cashback']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['promo_mincash']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['promo_diskon']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['promo_allproduk']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['promo_allrawat']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['promo_creator']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['promo_date_create']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['promo_update']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['promo_date_update']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['promo_revised']);
-				fwrite($file, "</td></tr>");
-			}
+		$data["data_print"]  = $this->m_promo->promo_print($promo_acara ,$promo_tempat, $promo_keterangan ,$promo_tglmulai ,
+											   $promo_tglselesai ,$promo_diskon,$option,$filter);
+   		
+		$print_view=$this->load->view("main/p_promo.php",$data,TRUE);
+		if(!file_exists("print")){
+			mkdir("print");
 		}
-		fwrite($file, "</tbody></table></body></html>");	
-		fclose($file);
-		echo '1';        
+
+		$print_file=fopen("print/print_promolist.html","w+");	
+		fwrite($print_file, $print_view);
+		echo '1';       
 	}
 	/* End Of Function */
 
 	/* Function to Export Excel document */
 	function promo_export_excel(){
 		//POST varibale here
-		$promo_id=trim(@$_POST["promo_id"]);
 		$promo_acara=trim(@$_POST["promo_acara"]);
 		$promo_acara=str_replace("/(<\/?)(p)([^>]*>)", "",$promo_acara);
-		$promo_acara=str_replace("'", '"',$promo_acara);
 		$promo_tempat=trim(@$_POST["promo_tempat"]);
 		$promo_tempat=str_replace("/(<\/?)(p)([^>]*>)", "",$promo_tempat);
-		$promo_tempat=str_replace("'", '"',$promo_tempat);
 		$promo_keterangan=trim(@$_POST["promo_keterangan"]);
 		$promo_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$promo_keterangan);
-		$promo_keterangan=str_replace(",", ",",$promo_keterangan);
-		$promo_keterangan=str_replace("'", '"',$promo_keterangan);
 		$promo_tglmulai=trim(@$_POST["promo_tglmulai"]);
 		$promo_tglselesai=trim(@$_POST["promo_tglselesai"]);
-		$promo_cashback=trim(@$_POST["promo_cashback"]);
-		$promo_mincash=trim(@$_POST["promo_mincash"]);
 		$promo_diskon=trim(@$_POST["promo_diskon"]);
-		$promo_allproduk=trim(@$_POST["promo_allproduk"]);
-		$promo_allproduk=str_replace("/(<\/?)(p)([^>]*>)", "",$promo_allproduk);
-		$promo_allproduk=str_replace("'", '"',$promo_allproduk);
-		$promo_allrawat=trim(@$_POST["promo_allrawat"]);
-		$promo_allrawat=str_replace("/(<\/?)(p)([^>]*>)", "",$promo_allrawat);
-		$promo_allrawat=str_replace("'", '"',$promo_allrawat);
+
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$query = $this->m_promo->promo_export_excel($promo_id ,$promo_acara ,$promo_tempat, $promo_keterangan ,$promo_tglmulai ,$promo_tglselesai ,$promo_cashback ,$promo_mincash ,$promo_diskon ,$promo_allproduk ,$promo_allrawat ,$option,$filter);
+		$query = $this->m_promo->promo_export_excel($promo_acara ,$promo_tempat, $promo_keterangan ,$promo_tglmulai ,
+													$promo_tglselesai ,$promo_diskon ,$option,$filter);
 		
+		$this->load->plugin('to_excel');
 		to_excel($query,"promo"); 
 		echo '1';
 			

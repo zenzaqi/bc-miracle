@@ -74,100 +74,23 @@ var promo_tempatField;
 var promo_keteranganField;
 var promo_tglmulaiField;
 var promo_tglselesaiField;
-var promo_cashbackField;
-var promo_mincashField;
 var promo_diskonField;
 var promo_allprodukField;
 var promo_allrawatField;
+
 var promo_idSearchField;
 var promo_acaraSearchField;
 var promo_tempatSearchField;
 var promo_keteranganSearchField;
 var promo_tglmulaiSearchField;
 var promo_tglselesaiSearchField;
-var promo_cashbackSearchField;
-var promo_mincashSearchField;
 var promo_diskonSearchField;
-var promo_allprodukSearchField;
-var promo_allrawatSearchField;
 
 /* on ready fuction */
 Ext.onReady(function(){
   	Ext.QuickTips.init();	/* Initiate quick tips icon */
   
-  	/* Function for Saving inLine Editing */
-	function promo_update(oGrid_event){
-		var promo_id_update_pk="";
-		var promo_acara_update=null;
-		var promo_tempat_update=null;
-		var promo_tglmulai_update_date="";
-		var promo_tglselesai_update_date="";
-		var promo_cashback_update=null;
-		var promo_mincash_update=null;
-		var promo_diskon_update=null;
-		var promo_allproduk_update=null;
-		var promo_allrawat_update=null;
-
-		promo_id_update_pk = oGrid_event.record.data.promo_id;
-		if(oGrid_event.record.data.promo_acara!== null){promo_acara_update = oGrid_event.record.data.promo_acara;}
-		if(oGrid_event.record.data.promo_tempat!== null){promo_tempat_update = oGrid_event.record.data.promo_tempat;}
-	 	if(oGrid_event.record.data.promo_tglmulai!== ""){promo_tglmulai_update_date =oGrid_event.record.data.promo_tglmulai.format('Y-m-d');}
-	 	if(oGrid_event.record.data.promo_tglselesai!== ""){promo_tglselesai_update_date =oGrid_event.record.data.promo_tglselesai.format('Y-m-d');}
-		if(oGrid_event.record.data.promo_cashback!== null){promo_cashback_update = oGrid_event.record.data.promo_cashback;}
-		if(oGrid_event.record.data.promo_mincash!== null){promo_mincash_update = oGrid_event.record.data.promo_mincash;}
-		if(oGrid_event.record.data.promo_diskon!== null){promo_diskon_update = oGrid_event.record.data.promo_diskon;}
-		if(oGrid_event.record.data.promo_allproduk!== null){promo_allproduk_update = oGrid_event.record.data.promo_allproduk;}
-		if(oGrid_event.record.data.promo_allrawat!== null){promo_allrawat_update = oGrid_event.record.data.promo_allrawat;}
-
-		Ext.Ajax.request({  
-			waitMsg: 'Please wait...',
-			url: 'index.php?c=c_promo&m=get_action',
-			params: {
-				task: "UPDATE",
-				promo_id		: promo_id_update_pk, 
-				promo_acara		:promo_acara_update,  
-				promo_tempat	:promo_tempat_update,  
-				promo_tglmulai	: promo_tglmulai_update_date, 
-				promo_tglselesai	: promo_tglselesai_update_date, 
-				promo_cashback	:promo_cashback_update,  
-				promo_mincash	:promo_mincash_update,  
-				promo_diskon	:promo_diskon_update,  
-				promo_allproduk	:promo_allproduk_update,  
-				promo_allrawat	:promo_allrawat_update,  
-			}, 
-			success: function(response){							
-				var result=eval(response.responseText);
-				switch(result){
-					case 1:
-						promo_DataStore.commitChanges();
-						promo_DataStore.reload();
-						break;
-					default:
-						Ext.MessageBox.show({
-						   title: 'Warning',
-						   msg: 'We could\'t not save the promo.',
-						   buttons: Ext.MessageBox.OK,
-						   animEl: 'save',
-						   icon: Ext.MessageBox.WARNING
-						});
-						break;
-				}
-			},
-			failure: function(response){
-				var result=response.responseText;
-				Ext.MessageBox.show({
-				   title: 'Error',
-				   msg: 'Could not connect to the database. retry later.',
-				   buttons: Ext.MessageBox.OK,
-				   animEl: 'database',
-				   icon: Ext.MessageBox.ERROR
-				});	
-			}									    
-		});   
-	}
-  	/* End of Function */
-  
-  	/* Function for add data, open window create form */
+ 	/* Function for add data, open window create form */
 	function promo_create(){
 	
 		if(is_promo_form_valid()){	
@@ -177,8 +100,6 @@ Ext.onReady(function(){
 		var promo_keterangan_create=null;
 		var promo_tglmulai_create_date=""; 
 		var promo_tglselesai_create_date=""; 
-		var promo_cashback_create=null; 
-		var promo_mincash_create=null; 
 		var promo_diskon_create=null; 
 		var promo_allproduk_create=null; 
 		var promo_allrawat_create=null; 
@@ -189,8 +110,6 @@ Ext.onReady(function(){
 		if(promo_keteranganField.getValue()!== null){promo_keterangan_create = promo_keteranganField.getValue();} 
 		if(promo_tglmulaiField.getValue()!== ""){promo_tglmulai_create_date = promo_tglmulaiField.getValue().format('Y-m-d');} 
 		if(promo_tglselesaiField.getValue()!== ""){promo_tglselesai_create_date = promo_tglselesaiField.getValue().format('Y-m-d');} 
-		if(promo_cashbackField.getValue()!== null){promo_cashback_create = promo_cashbackField.getValue();} 
-		if(promo_mincashField.getValue()!== null){promo_mincash_create = promo_mincashField.getValue();} 
 		if(promo_diskonField.getValue()!== null){promo_diskon_create = promo_diskonField.getValue();} 
 		if(promo_allprodukField.getValue()!== null){promo_allproduk_create = promo_allprodukField.getValue();} 
 		if(promo_allrawatField.getValue()!== null){promo_allrawat_create = promo_allrawatField.getValue();} 
@@ -206,32 +125,27 @@ Ext.onReady(function(){
 				promo_keterangan	: promo_keterangan_create, 
 				promo_tglmulai	: promo_tglmulai_create_date, 
 				promo_tglselesai	: promo_tglselesai_create_date, 
-				promo_cashback	: promo_cashback_create, 
-				promo_mincash	: promo_mincash_create, 
 				promo_diskon	: promo_diskon_create, 
 				promo_allproduk	: promo_allproduk_create, 
-				promo_allrawat	: promo_allrawat_create, 
+				promo_allrawat	: promo_allrawat_create
 			}, 
 			success: function(response){             
 				var result=eval(response.responseText);
-				switch(result){
-					case 1:
-						Ext.MessageBox.alert(post2db+' OK','The Promo was '+msg+' successfully.');
-						promo_DataStore.reload();
+				if(result!==0){
+						
+						Ext.MessageBox.alert(post2db+' OK','Data Promo berhasil disimpan');
+						promo_produk_insert(result)
 						promo_createWindow.hide();
-						promo_produk_purge();
-						promo_perawatan_purge();
-						break;
-					default:
+				}else{
 						Ext.MessageBox.show({
 						   title: 'Warning',
-						   msg: 'We could\'t not '+msg+' the Promo.',
+						   //msg: 'We could\'t not '+msg+' the Master_order_beli.',
+						   msg: 'Data Promo tidak bisa disimpan',
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'save',
 						   icon: Ext.MessageBox.WARNING
 						});
-						break;
-				}        
+				}
 			},
 			failure: function(response){
 				var result=response.responseText;
@@ -279,16 +193,18 @@ Ext.onReady(function(){
 		promo_tglmulaiField.setValue(null);
 		promo_tglselesaiField.reset();
 		promo_tglselesaiField.setValue(null);
-		//promo_cashbackField.reset();
-		promo_cashbackField.setValue(0);
-		//promo_mincashField.reset();
-		promo_mincashField.setValue(0);
-		//promo_diskonField.reset();
+		promo_diskonField.reset();
 		promo_diskonField.setValue(0);
-		//promo_allprodukField.reset();
+		promo_allprodukField.reset();
 		promo_allprodukField.setValue(false);
-		//promo_allrawatField.reset();
+		promo_allrawatField.reset();
 		promo_allrawatField.setValue(false);
+		
+		promo_produk_DataStore.setBaseParam('master_id',-1);
+		promo_perawatan_DataStore.setBaseParam('master_id',-1);
+		promo_produk_DataStore.load();
+		promo_perawatan_DataStore.load();
+		
 	}
  	/* End of Function */
   
@@ -300,11 +216,10 @@ Ext.onReady(function(){
 		promo_keteranganField.setValue(promoListEditorGrid.getSelectionModel().getSelected().get('promo_keterangan'));
 		promo_tglmulaiField.setValue(promoListEditorGrid.getSelectionModel().getSelected().get('promo_tglmulai'));
 		promo_tglselesaiField.setValue(promoListEditorGrid.getSelectionModel().getSelected().get('promo_tglselesai'));
-		promo_cashbackField.setValue(promoListEditorGrid.getSelectionModel().getSelected().get('promo_cashback'));
-		promo_mincashField.setValue(promoListEditorGrid.getSelectionModel().getSelected().get('promo_mincash'));
 		promo_diskonField.setValue(promoListEditorGrid.getSelectionModel().getSelected().get('promo_diskon'));
 		promo_allprodukField.setValue(promoListEditorGrid.getSelectionModel().getSelected().get('promo_allproduk'));
 		promo_allrawatField.setValue(promoListEditorGrid.getSelectionModel().getSelected().get('promo_allrawat'));
+		
 		if(promoListEditorGrid.getSelectionModel().getSelected().get('promo_allproduk')=='Y'){
 			promo_allprodukField.setValue(true);
 			promo_produkListEditorGrid.setDisabled(true);
@@ -320,6 +235,11 @@ Ext.onReady(function(){
 			promo_allrawatField.setValue(false);
 			promo_perawatanListEditorGrid.setDisabled(false);
 		}
+		
+		promo_produk_DataStore.setBaseParam('master_id',get_pk_id());
+		promo_perawatan_DataStore.setBaseParam('master_id',get_pk_id());
+		promo_produk_DataStore.load();
+		promo_perawatan_DataStore.load();
 	}
 	/* End setValue to EDIT*/
   
@@ -332,9 +252,10 @@ Ext.onReady(function(){
   	/* Function for Displaying  create Window Form */
 	function display_form_window(){
 		if(!promo_createWindow.isVisible()){
-			promo_reset_form();
+			
 			post2db='CREATE';
 			msg='created';
+			promo_reset_form();
 			promo_createWindow.show();
 		} else {
 			promo_createWindow.toFront();
@@ -365,13 +286,10 @@ Ext.onReady(function(){
 	function promo_confirm_update(){
 		/* only one record is selected here */
 		if(promoListEditorGrid.selModel.getCount() == 1) {
-			promo_set_form();
+			
 			post2db='UPDATE';
 			msg='updated';
-			promo_produk_DataStore.setBaseParam('master_id',get_pk_id());
-			promo_perawatan_DataStore.setBaseParam('master_id',get_pk_id());
-			promo_produk_DataStore.load();
-			promo_perawatan_DataStore.load();
+			promo_set_form();
 			promo_createWindow.show();
 		} else {
 			Ext.MessageBox.show({
@@ -406,7 +324,7 @@ Ext.onReady(function(){
 							break;
 						default:
 							Ext.MessageBox.show({
-								title: 'Warning',
+								title: 'Perhatian',
 								msg: 'Could not delete the entire selection',
 								buttons: Ext.MessageBox.OK,
 								animEl: 'save',
@@ -443,15 +361,12 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'promo_id'
 		},[
-		/* dataIndex => insert intopromo_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'promo_id', type: 'int', mapping: 'promo_id'}, 
 			{name: 'promo_acara', type: 'string', mapping: 'promo_acara'}, 
 			{name: 'promo_tempat', type: 'string', mapping: 'promo_tempat'}, 
 			{name: 'promo_keterangan', type: 'string', mapping: 'promo_keterangan'}, 
 			{name: 'promo_tglmulai', type: 'date', dateFormat: 'Y-m-d', mapping: 'promo_tglmulai'}, 
 			{name: 'promo_tglselesai', type: 'date', dateFormat: 'Y-m-d', mapping: 'promo_tglselesai'}, 
-			{name: 'promo_cashback', type: 'float', mapping: 'promo_cashback'}, 
-			{name: 'promo_mincash', type: 'float', mapping: 'promo_mincash'}, 
 			{name: 'promo_diskon', type: 'float', mapping: 'promo_diskon'}, 
 			{name: 'promo_allproduk', type: 'string', mapping: 'promo_allproduk'}, 
 			{name: 'promo_allrawat', type: 'string', mapping: 'promo_allrawat'}, 
@@ -483,19 +398,14 @@ Ext.onReady(function(){
 			dataIndex: 'promo_acara',
 			width: 260,
 			sortable: true,
-			editor: new Ext.form.TextField({
-				maxLength: 250,
-				allowBlank: false
-          	})
+			readOnly: true
 		}, 
 		{
 			header: '<div align="center">' + 'Tempat' + '</div>',
 			dataIndex: 'promo_tempat',
 			width: 200,
 			sortable: true,
-			editor: new Ext.form.TextField({
-				maxLength: 250
-          	})
+			readOnly: true
 		}, 
 		{
 			header: '<div align="center">' + 'Tgl Mulai' + '</div>',
@@ -503,9 +413,7 @@ Ext.onReady(function(){
 			width: 70,
 			sortable: true,
 			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
-			editor: new Ext.form.DateField({
-				format: 'd-m-Y'
-			})
+			readOnly: true
 		}, 
 		{
 			header: '<div align="center">' + 'Tgl Selesai' + '</div>',
@@ -513,39 +421,16 @@ Ext.onReady(function(){
 			width: 70,
 			sortable: true,
 			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
-			editor: new Ext.form.DateField({
-				format: 'd-m-Y'
-			})
+			readOnly: true
 		},
 		{
-			header: '<div align="center">' + 'Cashback (Rp)' + '</div>',
-			dataIndex: 'promo_cashback',
+			header: '<div align="center">' + 'Diskon (%)' + '</div>',
+			dataIndex: 'promo_diskon',
 			align: 'right',
 			width: 100,
 			sortable: true,
 			renderer: Ext.util.Format.numberRenderer('0,000'),
-			editor: new Ext.form.NumberField({
-				allowDecimals: true,
-				allowNegative: false,
-				blankText: '0',
-				maxLength: 22,
-				maskRe: /([0-9]+)$/
-			})
-		}, 
-		{
-			header: '<div align="center">' + 'Min Transaksi (Rp)' + '</div>',
-			dataIndex: 'promo_mincash',
-			align: 'right',
-			width: 100,
-			sortable: true,
-			renderer: Ext.util.Format.numberRenderer('0,000'),
-			editor: new Ext.form.NumberField({
-				allowDecimals: true,
-				allowNegative: false,
-				blankText: '0',
-				maxLength: 22,
-				maskRe: /([0-9]+)$/
-			})
+			readOnly: true
 		}, 
 		{
 			header: 'Creator',
@@ -553,7 +438,7 @@ Ext.onReady(function(){
 			width: 150,
 			sortable: true,
 			hidden: true,
-			readOnly: true,
+			readOnly: true
 		}, 
 		{
 			header: 'Create on',
@@ -561,7 +446,7 @@ Ext.onReady(function(){
 			width: 150,
 			sortable: true,
 			hidden: true,
-			readOnly: true,
+			readOnly: true
 		}, 
 		{
 			header: 'Last Update by',
@@ -569,7 +454,7 @@ Ext.onReady(function(){
 			width: 150,
 			sortable: true,
 			hidden: true,
-			readOnly: true,
+			readOnly: true
 		}, 
 		{
 			header: 'Last Update on',
@@ -577,7 +462,7 @@ Ext.onReady(function(){
 			width: 150,
 			sortable: true,
 			hidden: true,
-			readOnly: true,
+			readOnly: true
 		}, 
 		{
 			header: 'Revised',
@@ -585,7 +470,7 @@ Ext.onReady(function(){
 			width: 150,
 			sortable: true,
 			hidden: true,
-			readOnly: true,
+			readOnly: true
 		}	]);
 	
 	promo_ColumnModel.defaultSortable= true;
@@ -610,7 +495,6 @@ Ext.onReady(function(){
 			store: promo_DataStore,
 			displayInfo: true
 		}),
-		/* Add Control on ToolBar */
 		tbar: [
 		{
 			text: 'Add',
@@ -637,6 +521,17 @@ Ext.onReady(function(){
 			new Ext.app.SearchField({
 			store: promo_DataStore,
 			params: {start: 0, limit: pageS},
+			listeners:{
+				specialkey: function(f,e){
+					if(e.getKey() == e.ENTER){
+						promo_DataStore.baseParams={task:'LIST',start: 0, limit: pageS};
+		            }
+				},
+				render: function(c){
+				Ext.get(this.id).set({qtitle:'Search By (aktif only)'});
+				Ext.get(this.id).set({qtip:'- Acara<br>- Tempat<br>- Keterangan'});
+				}
+			},
 			width: 120
 		}),'-',{
 			text: 'Refresh',
@@ -711,7 +606,6 @@ Ext.onReady(function(){
   	
 	promoListEditorGrid.addListener('rowcontextmenu', onpromo_ListEditGridContextMenu);
 	promo_DataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
-	promoListEditorGrid.on('afteredit', promo_update); // inLine Editing Record
 	
 	/* Identify  promo_id Field */
 	promo_idField= new Ext.form.NumberField({
@@ -752,35 +646,17 @@ Ext.onReady(function(){
 	/* Identify  promo_tglmulai Field */
 	promo_tglmulaiField= new Ext.form.DateField({
 		id: 'promo_tglmulaiField',
-		fieldLabel: 'Tgl Mulai',
+		fieldLabel: 'Tanggal',
 		format : 'Y-m-d',
+		anchor: '90%'
 	});
 	/* Identify  promo_tglselesai Field */
 	promo_tglselesaiField= new Ext.form.DateField({
 		id: 'promo_tglselesaiField',
-		fieldLabel: 'Tgl Selesai',
-		format : 'Y-m-d',
+		fieldLabel: 's/d',
+		anchor: '90%'
 	});
-	/* Identify  promo_cashback Field */
-	promo_cashbackField= new Ext.form.NumberField({
-		id: 'promo_cashbackField',
-		fieldLabel: 'Cashback (Rp)',
-		allowNegatife : false,
-		blankText: '0',
-		allowDecimals: true,
-		anchor: '90%',
-		maskRe: /([0-9]+)$/
-	});
-	/* Identify  promo_mincash Field */
-	promo_mincashField= new Ext.form.NumberField({
-		id: 'promo_mincashField',
-		fieldLabel: 'Minimal Transaksi (Rp)',
-		allowNegatife : false,
-		blankText: '0',
-		allowDecimals: true,
-		anchor: '90%',
-		maskRe: /([0-9]+)$/
-	});
+
 	/* Identify  promo_diskon Field */
 	promo_diskonField= new Ext.form.NumberField({
 		id: 'promo_diskonField',
@@ -795,14 +671,14 @@ Ext.onReady(function(){
 	/* Identify  promo_allproduk Field */
 	promo_allprodukField= new Ext.form.Checkbox({
 		id: 'promo_allprodukField',
-		fieldLabel: 'Berlaku untuk semua produk ?',
+		fieldLabel: 'Berlaku u/ semua Produk ?',
 		anchor: '90%',
 		triggerAction: 'all'	
 	});
 	/* Identify  promo_allrawat Field */
 	promo_allrawatField= new Ext.form.Checkbox({
 		id: 'promo_allrawatField',
-		fieldLabel: 'Berlaku untuk semua perawatan ?',
+		fieldLabel: 'Berlaku u/ semua Perawatan ?',
 		anchor: '90%',
 		triggerAction: 'all'	
 	});
@@ -817,14 +693,40 @@ Ext.onReady(function(){
 				columnWidth:0.6,
 				layout: 'form',
 				border:false,
-				items: [promo_acaraField, promo_tempatField, promo_keteranganField, promo_tglmulaiField, promo_tglselesaiField] 
+				items: [promo_acaraField, promo_tempatField, 
+						{
+						layout:'column',
+						border:false,
+						anchor:'90%',
+						items:[
+							{
+								columnWidth:0.6,
+								layout: 'form',
+								border:false,
+								defaultType: 'datefield',
+								items: [						
+									promo_tglmulaiField
+								]
+							},
+							{
+								columnWidth:0.4,
+								layout: 'form',
+								border:false,
+								labelWidth:30,
+								defaultType: 'datefield',
+								items: [						
+									promo_tglselesaiField
+								]
+							}						
+							]
+						}, promo_keteranganField] 
 			},
 			{
 				columnWidth:0.4,
 				layout: 'form',
 				labelWidth: 180,
 				border:false,
-				items: [promo_cashbackField, promo_mincashField, promo_diskonField, promo_allprodukField, promo_allrawatField,promo_idField] 
+				items: [promo_diskonField, promo_allprodukField, promo_allrawatField,promo_idField] 
 			}
 			]
 	
@@ -840,7 +742,6 @@ Ext.onReady(function(){
 		totalProperty: 'total',
 		id: 'rpromo_id'
 	},[
-	/* dataIndex => insert intoperawatan_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'rpromo_id', type: 'int', mapping: 'rpromo_id'}, 
 			{name: 'rpromo_master', type: 'int', mapping: 'rpromo_master'}, 
 			{name: 'rpromo_perawatan', type: 'int', mapping: 'rpromo_perawatan'}
@@ -889,7 +790,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'produk_id'
 		},[
-		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
 			{name: 'produk_id', type: 'int', mapping: 'produk_id'},
 			{name: 'produk_kode', type: 'string', mapping: 'produk_kode'},
 			{name: 'produk_group', type: 'string', mapping: 'group_nama'},
@@ -1007,7 +907,7 @@ Ext.onReady(function(){
 				cell.css = "readonlycell"; // Mengambil Value dari Class di dalam CSS 
 				return value;
 				},
-			hidden: false
+			hidden: true
 		},
 		{
 			header: 'Perawatan',
@@ -1028,7 +928,7 @@ Ext.onReady(function(){
 	promo_perawatanListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'promo_perawatanListEditorGrid',
 		el: 'fp_promo_perawatan',
-		title: 'Detail Paket Isi Perawatan',
+		title: 'Perawatan',
 		height: 250,
 		width: 690,
 		autoScroll: true,
@@ -1042,12 +942,6 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true},
-		bbar: new Ext.PagingToolbar({
-			pageSize: pageS,
-			store: promo_perawatan_DataStore,
-			displayInfo: true
-		}),
-		/* Add Control on ToolBar */
 		tbar: [
 		{
 			text: 'Add',
@@ -1068,48 +962,61 @@ Ext.onReady(function(){
 	
 	
 	//function for insert detail
-	function promo_perawatan_insert(){
-		for(i=0;i<promo_perawatan_DataStore.getCount();i++){
-			promo_perawatan_record=promo_perawatan_DataStore.getAt(i);
-			if(promo_perawatan_record.rpromo_perawatan!=="" && promo_perawatan_record.rpromo_perawatan!==null){
-				Ext.Ajax.request({
-					waitMsg: 'Please wait...',
-					url: 'index.php?c=c_promo&m=detail_promo_perawatan_insert',
-					params:{
-					rpromo_id	: promo_perawatan_record.data.rpromo_id, 
-					rpromo_master	: get_pk_id(), 
-					rpromo_perawatan	: promo_perawatan_record.data.rpromo_perawatan
-					}	
-				});
-			}
-		}
+	function promo_perawatan_insert(pkid){
+				
+		var rpromo_id = [];
+        var rpromo_perawatan = [];
+       
+        if(promo_perawatan_DataStore.getCount()>0){
+            for(i=0; i<promo_perawatan_DataStore.getCount();i++){
+                if((/^\d+$/.test(promo_perawatan_DataStore.getAt(i).data.rpromo_perawatan))
+				   && promo_perawatan_DataStore.getAt(i).data.rpromo_perawatan!==undefined
+				   && promo_perawatan_DataStore.getAt(i).data.rpromo_perawatan!==''
+				   && promo_perawatan_DataStore.getAt(i).data.rpromo_perawatan!==0){
+                    
+					if(promo_perawatan_DataStore.getAt(i).data.rpromo_id==undefined ||
+					   promo_perawatan_DataStore.getAt(i).data.rpromo_id==''){
+						promo_perawatan_DataStore.getAt(i).data.rpromo_id=0;
+					}
+					
+                  	rpromo_id.push(promo_perawatan_DataStore.getAt(i).data.rpromo_id);
+					rpromo_perawatan.push(promo_perawatan_DataStore.getAt(i).data.rpromo_perawatan);
+                }
+            }
+			
+			var encoded_array_rpromo_id = Ext.encode(rpromo_id);
+			var encoded_array_rpromo_perawatan = Ext.encode(rpromo_perawatan);
+				
+			Ext.Ajax.request({
+				waitMsg: 'Mohon tunggu...',
+				url: 'index.php?c=c_promo&m=detail_promo_perawatan_insert',
+				params:{
+					rpromo_id		: encoded_array_rpromo_id,
+					rpromo_master	: pkid, 
+					rpromo_perawatan	: encoded_array_rpromo_perawatan
+				},
+				success:function(response){
+					var result=eval(response.responseText);
+					promo_DataStore.reload();
+				},
+				failure: function(response){
+					Ext.MessageBox.hide();
+					var result=response.responseText;
+					Ext.MessageBox.show({
+					   title: 'Error',
+					   msg: 'Could not connect to the database. retry later.',
+					   buttons: Ext.MessageBox.OK,
+					   animEl: 'database',
+					   icon: Ext.MessageBox.ERROR
+					});	
+				}
+			});
+					
+        }
+		
 	}
 	//eof
 	
-	//function for purge detail
-	function promo_perawatan_purge(){
-		Ext.Ajax.request({
-			waitMsg: 'Please wait...',
-			url: 'index.php?c=c_promo&m=detail_promo_perawatan_purge',
-			params:{ master_id: get_pk_id() },
-			timeout: 5000,
-			success: function(response){							
-				var result=eval(response.responseText);
-				promo_perawatan_insert();
-			},
-			failure: function(response){
-				var result=response.responseText;
-				Ext.MessageBox.show({
-				   title: 'Error',
-				   msg: 'Could not connect to the database. retry later.',
-				   buttons: Ext.MessageBox.OK,
-				   animEl: 'database',
-				   icon: Ext.MessageBox.ERROR
-				});	
-			}	
-		});
-	}
-	//eof
 	
 	/* Function for Delete Confirm of detail */
 	function promo_perawatan_confirm_delete(){
@@ -1151,7 +1058,6 @@ Ext.onReady(function(){
 		totalProperty: 'total',
 		id: 'ipromo_id'
 	},[
-	/* dataIndex => insert intoproduk_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'ipromo_id', type: 'int', mapping: 'ipromo_id'}, 
 			{name: 'ipromo_master', type: 'int', mapping: 'ipromo_master'}, 
 			{name: 'ipromo_produk', type: 'int', mapping: 'ipromo_produk'}
@@ -1215,10 +1121,10 @@ Ext.onReady(function(){
 				cell.css = "readonlycell"; // Mengambil Value dari Class di dalam CSS 
 				return value;
 				},
-			hidden: false
+			hidden: true
 		},
 		{
-			header: 'produk',
+			header: 'Produk',
 			dataIndex: 'ipromo_produk',
 			width: 250,
 			sortable: true,
@@ -1234,7 +1140,7 @@ Ext.onReady(function(){
 	promo_produkListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'promo_produkListEditorGrid',
 		el: 'fp_promo_produk',
-		title: 'Detail Paket Isi produk',
+		title: 'Produk',
 		height: 250,
 		width: 690,
 		autoScroll: true,
@@ -1248,12 +1154,6 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true},
-		bbar: new Ext.PagingToolbar({
-			pageSize: pageS,
-			store: promo_produk_DataStore,
-			displayInfo: true
-		}),
-		/* Add Control on ToolBar */
 		tbar: [
 		{
 			text: 'Add',
@@ -1269,49 +1169,60 @@ Ext.onReady(function(){
 		]
 	});
 	//eof
-	
 		
-
-	//function for purge detail
-	function promo_produk_purge(){
-		Ext.Ajax.request({
-			waitMsg: 'Please wait...',
-			url: 'index.php?c=c_promo&m=detail_promo_produk_purge',
-			params:{ master_id: get_pk_id() },
-			timeout: 5000,
-			success: function(response){							
-				var result=eval(response.responseText);
-				promo_produk_insert();
-			},
-			failure: function(response){
-				var result=response.responseText;
-				Ext.MessageBox.show({
-				   title: 'Error',
-				   msg: 'Could not connect to the database. retry later.',
-				   buttons: Ext.MessageBox.OK,
-				   animEl: 'database',
-				   icon: Ext.MessageBox.ERROR
-				});	
-			}
-		});
-	}
-	//eof
-	
 	//function for insert detail
-	function promo_produk_insert(){
-		for(i=0;i<promo_produk_DataStore.getCount();i++){
-			promo_produk_record=promo_produk_DataStore.getAt(i);
-			if(promo_produk_record.data.ipromo_produk!=="" && promo_produk_record.data.ipromo_produk!==null){
-				Ext.Ajax.request({
-					waitMsg: 'Please wait...',
-					url: 'index.php?c=c_promo&m=detail_promo_produk_insert',
-					params:{
-					ipromo_master	: get_pk_id(), 
-					ipromo_produk	: promo_produk_record.data.ipromo_produk
-					}		
-				});
-			}
-		}
+	function promo_produk_insert(pkid){
+				
+		var ipromo_id = [];
+        var ipromo_produk = [];
+       
+        if(promo_produk_DataStore.getCount()>0){
+            for(i=0; i<promo_produk_DataStore.getCount();i++){
+                if((/^\d+$/.test(promo_produk_DataStore.getAt(i).data.ipromo_produk))
+				   && promo_produk_DataStore.getAt(i).data.ipromo_produk!==undefined
+				   && promo_produk_DataStore.getAt(i).data.ipromo_produk!==''
+				   && promo_produk_DataStore.getAt(i).data.ipromo_produk!==0){
+                    
+					if(promo_produk_DataStore.getAt(i).data.ipromo_id==undefined ||
+					   promo_produk_DataStore.getAt(i).data.ipromo_id==''){
+						promo_produk_DataStore.getAt(i).data.ipromo_id=0;
+					}
+					
+                  	ipromo_id.push(promo_produk_DataStore.getAt(i).data.ipromo_id);
+					ipromo_produk.push(promo_produk_DataStore.getAt(i).data.ipromo_produk);
+                }
+            }
+			
+			var encoded_array_ipromo_id = Ext.encode(ipromo_id);
+			var encoded_array_ipromo_produk = Ext.encode(ipromo_produk);
+				
+			Ext.Ajax.request({
+				waitMsg: 'Mohon tunggu...',
+				url: 'index.php?c=c_promo&m=detail_promo_produk_insert',
+				params:{
+					ipromo_id		: encoded_array_ipromo_id,
+					ipromo_master	: pkid, 
+					ipromo_produk	: encoded_array_ipromo_produk
+				},
+				success:function(response){
+					var result=eval(response.responseText);
+					promo_perawatan_insert(pkid)
+				},
+				failure: function(response){
+					Ext.MessageBox.hide();
+					var result=response.responseText;
+					Ext.MessageBox.show({
+					   title: 'Error',
+					   msg: 'Could not connect to the database. retry later.',
+					   buttons: Ext.MessageBox.OK,
+					   animEl: 'database',
+					   icon: Ext.MessageBox.ERROR
+					});	
+				}
+			});
+					
+        }
+		
 	}
 	//eof
 	
@@ -1399,41 +1310,25 @@ Ext.onReady(function(){
 	/* Function for action list search */
 	function promo_list_search(){
 		// render according to a SQL date format.
-		var promo_id_search=null;
 		var promo_acara_search=null;
 		var promo_tempat_search=null;
 		var promo_tglmulai_search_date="";
 		var promo_tglselesai_search_date="";
-		var promo_cashback_search=null;
-		var promo_mincash_search=null;
 		var promo_diskon_search=null;
-		var promo_allproduk_search=null;
-		var promo_allrawat_search=null;
 
-		if(promo_idSearchField.getValue()!==null){promo_id_search=promo_idSearchField.getValue();}
 		if(promo_acaraSearchField.getValue()!==null){promo_acara_search=promo_acaraSearchField.getValue();}
 		if(promo_tempatSearchField.getValue()!==null){promo_tempat_search=promo_tempatSearchField.getValue();}
 		if(promo_tglmulaiSearchField.getValue()!==""){promo_tglmulai_search_date=promo_tglmulaiSearchField.getValue().format('Y-m-d');}
 		if(promo_tglselesaiSearchField.getValue()!==""){promo_tglselesai_search_date=promo_tglselesaiSearchField.getValue().format('Y-m-d');}
-		if(promo_cashbackSearchField.getValue()!==null){promo_cashback_search=promo_cashbackSearchField.getValue();}
-		if(promo_mincashSearchField.getValue()!==null){promo_mincash_search=promo_mincashSearchField.getValue();}
 		if(promo_diskonSearchField.getValue()!==null){promo_diskon_search=promo_diskonSearchField.getValue();}
-		if(promo_allprodukSearchField.getValue()!==null){promo_allproduk_search=promo_allprodukSearchField.getValue();}
-		if(promo_allrawatSearchField.getValue()!==null){promo_allrawat_search=promo_allrawatSearchField.getValue();}
 		// change the store parameters
 		promo_DataStore.baseParams = {
 			task: 'SEARCH',
-			//variable here
-			promo_id	:	promo_id_search, 
-			promo_acara	:	promo_acara_search, 
+			promo_acara		:	promo_acara_search, 
 			promo_tempat	:	promo_tempat_search, 
 			promo_tglmulai	:	promo_tglmulai_search_date, 
 			promo_tglselesai	:	promo_tglselesai_search_date, 
-			promo_cashback	:	promo_cashback_search, 
-			promo_mincash	:	promo_mincash_search, 
-			promo_diskon	:	promo_diskon_search, 
-			promo_allproduk	:	promo_allproduk_search, 
-			promo_allrawat	:	promo_allrawat_search, 
+			promo_diskon	:	promo_diskon_search
 		};
 		// Cause the datastore to do another query : 
 		promo_DataStore.reload({params: {start: 0, limit: pageS}});
@@ -1442,8 +1337,7 @@ Ext.onReady(function(){
 	/* Function for reset search result */
 	function promo_reset_search(){
 		// reset the store parameters
-		promo_DataStore.baseParams = { task: 'LIST' };
-		// Cause the datastore to do another query : 
+		promo_DataStore.baseParams = { task: 'LIST', start: 0, limit: pageS};
 		promo_DataStore.reload({params: {start: 0, limit: pageS}});
 		promo_searchWindow.close();
 	};
@@ -1454,30 +1348,14 @@ Ext.onReady(function(){
 		promo_tempatSearchField.reset();
 		promo_tglmulaiSearchField.reset();
 		promo_tglselesaiSearchField.reset();
-		promo_cashbackSearchField.reset();
-		promo_mincashSearchField.reset();
 		promo_diskonSearchField.reset();
-		promo_allprodukSearchField.reset();
-		promo_allrawatSearchField.reset();
 	}
 
 	
-	/* Field for search */
-	/* Identify  promo_id Search Field */
-	promo_idSearchField= new Ext.form.NumberField({
-		id: 'promo_idSearchField',
-		fieldLabel: 'Promo Id',
-		allowNegatife : false,
-		blankText: '0',
-		allowDecimals: false,
-		anchor: '95%',
-		maskRe: /([0-9]+)$/
-	
-	});
 	/* Identify  promo_acara Search Field */
 	promo_acaraSearchField= new Ext.form.TextField({
 		id: 'promo_acaraSearchField',
-		fieldLabel: 'Promo Acara',
+		fieldLabel: 'Nama Acara',
 		maxLength: 250,
 		anchor: '95%'
 	
@@ -1485,7 +1363,7 @@ Ext.onReady(function(){
 	/* Identify  promo_tempat Search Field */
 	promo_tempatSearchField= new Ext.form.TextField({
 		id: 'promo_tempatSearchField',
-		fieldLabel: 'Promo Tempat',
+		fieldLabel: 'Tempat',
 		maxLength: 250,
 		anchor: '95%'
 	
@@ -1493,87 +1371,37 @@ Ext.onReady(function(){
 	/* Identify  promo_tglmulai Search Field */
 	promo_tglmulaiSearchField= new Ext.form.DateField({
 		id: 'promo_tglmulaiSearchField',
-		fieldLabel: 'Promo Tglmulai',
-		format : 'Y-m-d',
+		fieldLabel: 'Tanggal mulai',
+		format : 'Y-m-d'
 	
 	});
 	/* Identify  promo_tglselesai Search Field */
 	promo_tglselesaiSearchField= new Ext.form.DateField({
 		id: 'promo_tglselesaiSearchField',
-		fieldLabel: 'Promo Tglselesai',
-		format : 'Y-m-d',
+		fieldLabel: 'Tanggal selesai',
+		format : 'Y-m-d'
 	
 	});
-	/* Identify  promo_cashback Search Field */
-	promo_cashbackSearchField= new Ext.form.NumberField({
-		id: 'promo_cashbackSearchField',
-		fieldLabel: 'Promo Cashback',
-		allowNegatife : false,
-		blankText: '0',
-		allowDecimals: true,
-		anchor: '95%',
-		maskRe: /([0-9]+)$/
 	
-	});
-	/* Identify  promo_mincash Search Field */
-	promo_mincashSearchField= new Ext.form.NumberField({
-		id: 'promo_mincashSearchField',
-		fieldLabel: 'Promo Mincash',
-		allowNegatife : false,
-		blankText: '0',
-		allowDecimals: true,
-		anchor: '95%',
-		maskRe: /([0-9]+)$/
-	
-	});
 	/* Identify  promo_diskon Search Field */
 	promo_diskonSearchField= new Ext.form.NumberField({
 		id: 'promo_diskonSearchField',
-		fieldLabel: 'Promo Diskon',
+		fieldLabel: 'Diskon (%)',
 		allowNegatife : false,
 		blankText: '0',
 		allowDecimals: true,
-		anchor: '95%',
+		anchor: '40%',
+		maxLength: 2,
 		maskRe: /([0-9]+)$/
 	
 	});
-	/* Identify  promo_allproduk Search Field */
-	promo_allprodukSearchField= new Ext.form.ComboBox({
-		id: 'promo_allprodukSearchField',
-		fieldLabel: 'Promo Allproduk',
-		store:new Ext.data.SimpleStore({
-			fields:['value', 'promo_allproduk'],
-			data:[['T','T'],['Y','Y']]
-		}),
-		mode: 'local',
-		displayField: 'promo_allproduk',
-		valueField: 'value',
-		anchor: '95%',
-		triggerAction: 'all'	 
-	
-	});
-	/* Identify  promo_allrawat Search Field */
-	promo_allrawatSearchField= new Ext.form.ComboBox({
-		id: 'promo_allrawatSearchField',
-		fieldLabel: 'Promo Allrawat',
-		store:new Ext.data.SimpleStore({
-			fields:['value', 'promo_allrawat'],
-			data:[['T','T'],['Y','Y']]
-		}),
-		mode: 'local',
-		displayField: 'promo_allrawat',
-		valueField: 'value',
-		anchor: '95%',
-		triggerAction: 'all'	 
-	
-	});
-    
+	    
 	/* Function for retrieve search Form Panel */
 	promo_searchForm = new Ext.FormPanel({
-		labelAlign: 'top',
+		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
-		width: 300,        
+		width: 450,        
 		items: [{
 			layout:'column',
 			border:false,
@@ -1582,7 +1410,8 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [promo_idSearchField, promo_acaraSearchField, promo_tempatSearchField, promo_tglmulaiSearchField, promo_tglselesaiSearchField, promo_cashbackSearchField, promo_mincashSearchField, promo_diskonSearchField, promo_allprodukSearchField, promo_allrawatSearchField] 
+				items: [promo_acaraSearchField, promo_tempatSearchField, promo_tglmulaiSearchField, 
+						promo_tglselesaiSearchField,  promo_diskonSearchField] 
 			}
 			]
 		}]
@@ -1602,7 +1431,7 @@ Ext.onReady(function(){
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
 	promo_searchWindow = new Ext.Window({
-		title: 'promo Search',
+		title: 'Pencarian Promo',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,
@@ -1631,54 +1460,40 @@ Ext.onReady(function(){
 	/* Function for print List Grid */
 	function promo_print(){
 		var searchquery = "";
-		var promo_id_print=null;
+
 		var promo_acara_print=null;
 		var promo_tempat_print=null;
 		var promo_tglmulai_print_date="";
 		var promo_tglselesai_print_date="";
-		var promo_cashback_print=null;
-		var promo_mincash_print=null;
 		var promo_diskon_print=null;
-		var promo_allproduk_print=null;
-		var promo_allrawat_print=null;
 		var win;              
 		// check if we do have some search data...
 		if(promo_DataStore.baseParams.query!==null){searchquery = promo_DataStore.baseParams.query;}
-		if(promo_DataStore.baseParams.promo_id!==null){promo_id_print = promo_DataStore.baseParams.promo_id;}
 		if(promo_DataStore.baseParams.promo_acara!==null){promo_acara_print = promo_DataStore.baseParams.promo_acara;}
 		if(promo_DataStore.baseParams.promo_tempat!==null){promo_tempat_print = promo_DataStore.baseParams.promo_tempat;}
 		if(promo_DataStore.baseParams.promo_tglmulai!==""){promo_tglmulai_print_date = promo_DataStore.baseParams.promo_tglmulai;}
 		if(promo_DataStore.baseParams.promo_tglselesai!==""){promo_tglselesai_print_date = promo_DataStore.baseParams.promo_tglselesai;}
-		if(promo_DataStore.baseParams.promo_cashback!==null){promo_cashback_print = promo_DataStore.baseParams.promo_cashback;}
-		if(promo_DataStore.baseParams.promo_mincash!==null){promo_mincash_print = promo_DataStore.baseParams.promo_mincash;}
 		if(promo_DataStore.baseParams.promo_diskon!==null){promo_diskon_print = promo_DataStore.baseParams.promo_diskon;}
-		if(promo_DataStore.baseParams.promo_allproduk!==null){promo_allproduk_print = promo_DataStore.baseParams.promo_allproduk;}
-		if(promo_DataStore.baseParams.promo_allrawat!==null){promo_allrawat_print = promo_DataStore.baseParams.promo_allrawat;}
+		
 
 		Ext.Ajax.request({   
 		waitMsg: 'Please Wait...',
 		url: 'index.php?c=c_promo&m=get_action',
 		params: {
 			task: "PRINT",
-		  	query: searchquery,                    		// if we are doing a quicksearch, use this
-			//if we are doing advanced search, use this
-			promo_id : promo_id_print,
+		  	query: searchquery,                    		
 			promo_acara : promo_acara_print,
 			promo_tempat : promo_tempat_print,
 		  	promo_tglmulai : promo_tglmulai_print_date, 
 		  	promo_tglselesai : promo_tglselesai_print_date, 
-			promo_cashback : promo_cashback_print,
-			promo_mincash : promo_mincash_print,
 			promo_diskon : promo_diskon_print,
-			promo_allproduk : promo_allproduk_print,
-			promo_allrawat : promo_allrawat_print,
 		  	currentlisting: promo_DataStore.baseParams.task // this tells us if we are searching or not
 		}, 
 		success: function(response){              
 		  	var result=eval(response.responseText);
 		  	switch(result){
 		  	case 1:
-				win = window.open('./promolist.html','promolist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
+				win = window.open('./print/print_promolist.html','promolist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
 				win.print();
 				break;
 		  	default:
@@ -1709,47 +1524,32 @@ Ext.onReady(function(){
 	/* Function for print Export to Excel Grid */
 	function promo_export_excel(){
 		var searchquery = "";
-		var promo_id_2excel=null;
 		var promo_acara_2excel=null;
 		var promo_tempat_2excel=null;
 		var promo_tglmulai_2excel_date="";
 		var promo_tglselesai_2excel_date="";
-		var promo_cashback_2excel=null;
-		var promo_mincash_2excel=null;
 		var promo_diskon_2excel=null;
-		var promo_allproduk_2excel=null;
-		var promo_allrawat_2excel=null;
 		var win;              
 		// check if we do have some search data...
 		if(promo_DataStore.baseParams.query!==null){searchquery = promo_DataStore.baseParams.query;}
-		if(promo_DataStore.baseParams.promo_id!==null){promo_id_2excel = promo_DataStore.baseParams.promo_id;}
 		if(promo_DataStore.baseParams.promo_acara!==null){promo_acara_2excel = promo_DataStore.baseParams.promo_acara;}
 		if(promo_DataStore.baseParams.promo_tempat!==null){promo_tempat_2excel = promo_DataStore.baseParams.promo_tempat;}
 		if(promo_DataStore.baseParams.promo_tglmulai!==""){promo_tglmulai_2excel_date = promo_DataStore.baseParams.promo_tglmulai;}
 		if(promo_DataStore.baseParams.promo_tglselesai!==""){promo_tglselesai_2excel_date = promo_DataStore.baseParams.promo_tglselesai;}
-		if(promo_DataStore.baseParams.promo_cashback!==null){promo_cashback_2excel = promo_DataStore.baseParams.promo_cashback;}
-		if(promo_DataStore.baseParams.promo_mincash!==null){promo_mincash_2excel = promo_DataStore.baseParams.promo_mincash;}
 		if(promo_DataStore.baseParams.promo_diskon!==null){promo_diskon_2excel = promo_DataStore.baseParams.promo_diskon;}
-		if(promo_DataStore.baseParams.promo_allproduk!==null){promo_allproduk_2excel = promo_DataStore.baseParams.promo_allproduk;}
-		if(promo_DataStore.baseParams.promo_allrawat!==null){promo_allrawat_2excel = promo_DataStore.baseParams.promo_allrawat;}
+		
 
 		Ext.Ajax.request({   
 		waitMsg: 'Please Wait...',
 		url: 'index.php?c=c_promo&m=get_action',
 		params: {
 			task: "EXCEL",
-		  	query: searchquery,                    		// if we are doing a quicksearch, use this
-			//if we are doing advanced search, use this
-			promo_id : promo_id_2excel,
+		  	query: searchquery,                    		
 			promo_acara : promo_acara_2excel,
 			promo_tempat : promo_tempat_2excel,
 		  	promo_tglmulai : promo_tglmulai_2excel_date, 
 		  	promo_tglselesai : promo_tglselesai_2excel_date, 
-			promo_cashback : promo_cashback_2excel,
-			promo_mincash : promo_mincash_2excel,
 			promo_diskon : promo_diskon_2excel,
-			promo_allproduk : promo_allproduk_2excel,
-			promo_allrawat : promo_allrawat_2excel,
 		  	currentlisting: promo_DataStore.baseParams.task // this tells us if we are searching or not
 		},
 		success: function(response){              
@@ -1783,8 +1583,8 @@ Ext.onReady(function(){
 	}
 	/*End of Function */
 	
-	promo_produkListEditorGrid.setDisabled(true);
-	promo_perawatanListEditorGrid.setDisabled(true);
+	promo_produkListEditorGrid.setDisabled(false);
+	promo_perawatanListEditorGrid.setDisabled(false);
 	
 	promo_allprodukField.on("check",function(){
 		if(promo_allprodukField.getValue()==true)
