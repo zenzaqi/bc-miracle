@@ -789,7 +789,7 @@ class M_cetak_kwitansi extends Model{
 		}
 		
 		//function for advanced search record
-		function cetak_kwitansi_search($kwitansi_id ,$kwitansi_no ,$kwitansi_cust ,$kwitansi_keterangan ,$kwitansi_status ,$start,$end){
+		function cetak_kwitansi_search($kwitansi_no ,$kwitansi_cust ,$kwitansi_keterangan ,$kwitansi_status ,$start,$end){
 			//full query
 			//$query="select * from cetak_kwitansi";
 			$query = "SELECT kwitansi_id
@@ -850,33 +850,43 @@ class M_cetak_kwitansi extends Model{
 		}
 		
 		//function for print record
-		function cetak_kwitansi_print($kwitansi_id ,$kwitansi_no ,$kwitansi_cust ,$kwitansi_ref ,$kwitansi_nilai ,$kwitansi_keterangan ,$kwitansi_status ,$option,$filter){
+		function cetak_kwitansi_print($kwitansi_no ,$kwitansi_cust ,$kwitansi_keterangan ,$kwitansi_status ,$option,$filter){
 			//full query
-			$query="select * from cetak_kwitansi";
 			if($option=='LIST'){
+				$query = "SELECT kwitansi_tanggal
+						,kwitansi_no
+						,cust_no
+						,cust_nama
+						,kwitansi_nilai
+						,kwitansi_sisa
+						,replace(kwitansi_keterangan,'\n',' ') AS keterangan
+						,kwitansi_status
+					FROM cetak_kwitansi
+					LEFT JOIN customer ON(kwitansi_cust=cust_id)";
+					
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (kwitansi_id LIKE '%".addslashes($filter)."%' OR kwitansi_no LIKE '%".addslashes($filter)."%' OR kwitansi_cust LIKE '%".addslashes($filter)."%' OR kwitansi_ref LIKE '%".addslashes($filter)."%' OR kwitansi_nilai LIKE '%".addslashes($filter)."%' OR kwitansi_keterangan LIKE '%".addslashes($filter)."%' OR kwitansi_status LIKE '%".addslashes($filter)."%' )";
+				$query .= " (kwitansi_no LIKE '%".addslashes($filter)."%' OR cust_nama LIKE '%".addslashes($filter)."%' OR cust_no LIKE '%".addslashes($filter)."%' OR kwitansi_keterangan LIKE '%".addslashes($filter)."%' OR kwitansi_ref LIKE '%".addslashes($filter)."%')";
 				$result = $this->db->query($query);
 			} else if($option=='SEARCH'){
-				if($kwitansi_id!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " kwitansi_id LIKE '%".$kwitansi_id."%'";
-				};
+				$query = "SELECT kwitansi_tanggal AS tanggal
+						,kwitansi_no AS no_kuitansi
+						,cust_no AS no_cust
+						,cust_nama AS customer
+						,kwitansi_nilai AS 'Nilai (Rp)'
+						,kwitansi_sisa AS 'Sisa (Rp)'
+						,kwitansi_keterangan AS keterangan
+						,kwitansi_status AS status
+					FROM cetak_kwitansi
+					LEFT JOIN jual_kwitansi ON(jkwitansi_master=kwitansi_id)
+					LEFT JOIN customer ON(kwitansi_cust=cust_id)";
+					
 				if($kwitansi_no!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " kwitansi_no LIKE '%".$kwitansi_no."%'";
 				};
 				if($kwitansi_cust!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " kwitansi_cust LIKE '%".$kwitansi_cust."%'";
-				};
-				if($kwitansi_ref!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " kwitansi_ref LIKE '%".$kwitansi_ref."%'";
-				};
-				if($kwitansi_nilai!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " kwitansi_nilai LIKE '%".$kwitansi_nilai."%'";
+					$query.= " kwitansi_cust = '".$kwitansi_cust."'";
 				};
 				if($kwitansi_keterangan!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -884,41 +894,52 @@ class M_cetak_kwitansi extends Model{
 				};
 				if($kwitansi_status!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " kwitansi_status LIKE '%".$kwitansi_status."%'";
+					$query.= " kwitansi_status = '".$kwitansi_status."'";
 				};
 				$result = $this->db->query($query);
 			}
-			return $result;
+			return $result->result();
 		}
 		
 		//function  for export to excel
-		function cetak_kwitansi_export_excel($kwitansi_id ,$kwitansi_no ,$kwitansi_cust ,$kwitansi_ref ,$kwitansi_nilai ,$kwitansi_keterangan ,$kwitansi_status ,$option,$filter){
+		function cetak_kwitansi_export_excel($kwitansi_no ,$kwitansi_cust ,$kwitansi_keterangan ,$kwitansi_status ,$option,$filter){
 			//full query
-			$query="select * from cetak_kwitansi";
+			
 			if($option=='LIST'){
+				$query = "SELECT kwitansi_tanggal AS tanggal
+						,kwitansi_no AS no_kuitansi
+						,cust_no AS no_cust
+						,cust_nama AS customer
+						,kwitansi_nilai AS 'Nilai (Rp)'
+						,kwitansi_sisa AS 'Sisa (Rp)'
+						,replace(kwitansi_keterangan,'\n',' ') AS keterangan
+						,kwitansi_status AS status
+					FROM cetak_kwitansi
+					LEFT JOIN customer ON(kwitansi_cust=cust_id)";
+					
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (kwitansi_id LIKE '%".addslashes($filter)."%' OR kwitansi_no LIKE '%".addslashes($filter)."%' OR kwitansi_cust LIKE '%".addslashes($filter)."%' OR kwitansi_ref LIKE '%".addslashes($filter)."%' OR kwitansi_nilai LIKE '%".addslashes($filter)."%' OR kwitansi_keterangan LIKE '%".addslashes($filter)."%' OR kwitansi_status LIKE '%".addslashes($filter)."%' )";
+				$query .= " (kwitansi_no LIKE '%".addslashes($filter)."%' OR cust_nama LIKE '%".addslashes($filter)."%' OR cust_no LIKE '%".addslashes($filter)."%' OR kwitansi_keterangan LIKE '%".addslashes($filter)."%' OR kwitansi_ref LIKE '%".addslashes($filter)."%')";
 				$result = $this->db->query($query);
 			} else if($option=='SEARCH'){
-				if($kwitansi_id!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " kwitansi_id LIKE '%".$kwitansi_id."%'";
-				};
+				$query = "SELECT kwitansi_tanggal AS tanggal
+						,kwitansi_no AS no_kuitansi
+						,cust_no AS no_cust
+						,cust_nama AS customer
+						,kwitansi_nilai AS 'Nilai (Rp)'
+						,kwitansi_sisa AS 'Sisa (Rp)'
+						,kwitansi_keterangan AS keterangan
+						,kwitansi_status AS status
+					FROM cetak_kwitansi
+					LEFT JOIN jual_kwitansi ON(jkwitansi_master=kwitansi_id)
+					LEFT JOIN customer ON(kwitansi_cust=cust_id)";
+					
 				if($kwitansi_no!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " kwitansi_no LIKE '%".$kwitansi_no."%'";
 				};
 				if($kwitansi_cust!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " kwitansi_cust LIKE '%".$kwitansi_cust."%'";
-				};
-				if($kwitansi_ref!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " kwitansi_ref LIKE '%".$kwitansi_ref."%'";
-				};
-				if($kwitansi_nilai!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " kwitansi_nilai LIKE '%".$kwitansi_nilai."%'";
+					$query.= " kwitansi_cust = '".$kwitansi_cust."'";
 				};
 				if($kwitansi_keterangan!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -926,7 +947,7 @@ class M_cetak_kwitansi extends Model{
 				};
 				if($kwitansi_status!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " kwitansi_status LIKE '%".$kwitansi_status."%'";
+					$query.= " kwitansi_status = '".$kwitansi_status."'";
 				};
 				$result = $this->db->query($query);
 			}

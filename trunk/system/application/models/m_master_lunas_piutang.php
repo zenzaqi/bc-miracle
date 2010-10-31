@@ -191,6 +191,9 @@ class M_master_lunas_piutang extends Model{
 			//$pattern="LP/".date("ym")."-";
 			//$dpiutang_nobukti=$this->m_public_function->get_kode_1('detail_lunas_piutang','dpiutang_nobukti',$pattern,12);
 			//$dpiutang_nobukti=$this->get_nofaktur_lunas_piutang();
+			$bayar_date_create = date('Y-m-d H:i:s');
+			$jenis_transaksi = 'jual_lunas';
+			$cetak = 1;
 			
 			if($dpiutang_nilai>0 && $dpiutang_nilai<>''){
 				$data = array(
@@ -203,59 +206,76 @@ class M_master_lunas_piutang extends Model{
 				if($this->db->affected_rows()){
 					$this->sisa_piutang_update($dpiutang_master);
 					
-					if($dpiutang_cara!=null || $dpiutang_cara!=''){
-						if($dpiutang_cara=='card'){
-							
-							$data=array(
-								"jcard_nama"=>$dpiutang_card_nama,
-								"jcard_edc"=>$dpiutang_card_edc,
-								"jcard_no"=>$dpiutang_card_no,
-								"jcard_nilai"=>$dpiutang_nilai,
-								"jcard_ref"=>$dpiutang_nobukti
-								);
-							$this->db->insert('jual_card', $data); 
-						
-						}else if($dpiutang_cara=='cek/giro'){
-							
-							/*if($dpiutang_cek_nama=="" || $dpiutang_cek_nama==NULL){
-								if(is_int($dpiutang_cek_nama)){
-									$sql="select cust_nama from customer where cust_id='".$dpiutang_cust."'";
-									$query=$this->db->query($sql);
-									if($query->num_rows()){
-										$data=$query->row();
-										$dpiutang_cek_nama=$data->cust_nama;
+					$sql="delete from jual_kwitansi where jkwitansi_ref='".$jrawat_nobukti."'";
+					$this->db->query($sql);
+					if($this->db->affected_rows()>-1){
+						$sql="delete from jual_card where jcard_ref='".$jrawat_nobukti."'";
+						$this->db->query($sql);
+						if($this->db->affected_rows()>-1){
+							$sql="delete from jual_cek where jcek_ref='".$jrawat_nobukti."'";
+							$this->db->query($sql);
+							if($this->db->affected_rows()>-1){
+								$sql="delete from jual_transfer where jtransfer_ref='".$jrawat_nobukti."'";
+								$this->db->query($sql);
+								if($this->db->affected_rows()>-1){
+									$sql="delete from jual_tunai where jtunai_ref='".$jrawat_nobukti."'";
+									$this->db->query($sql);
+									if($this->db->affected_rows()>-1){
+										$sql="delete from voucher_terima where tvoucher_ref='".$jrawat_nobukti."'";
+										$this->db->query($sql);
+										if($this->db->affected_rows()>-1){
+											if($dpiutang_cara!=null || $dpiutang_cara!=''){
+												/*if($jrawat_kwitansi_nilai<>'' && $jrawat_kwitansi_nilai<>0){
+													$result_bayar = $this->m_public_function->cara_bayar_kwitansi_insert($jrawat_kwitansi_no
+																									  ,$jrawat_kwitansi_nilai
+																									  ,$jrawat_nobukti
+																									  ,$bayar_date_create
+																									  ,$jenis_transaksi
+																									  ,$cetak);
+													
+												}else*/if($dpiutang_card_nilai<>'' && $dpiutang_card_nilai<>0){
+													$result_bayar = $this->m_public_function->cara_bayar_card_insert($dpiutang_card_nama
+																								  ,$dpiutang_card_edc
+																								  ,$dpiutang_card_no
+																								  ,$dpiutang_nilai
+																								  ,$dpiutang_nobukti
+																								  ,$bayar_date_create
+																								  ,$jenis_transaksi
+																								  ,$cetak);
+												}elseif($dpiutang_cek_nilai<>'' && $dpiutang_cek_nilai<>0){
+													$result_bayar = $this->m_public_function->cara_bayar_cek_insert($dpiutang_cek_nama
+																								 ,$dpiutang_cek_no
+																								 ,$dpiutang_cek_valid
+																								 ,$dpiutang_cek_bank
+																								 ,$dpiutang_nilai
+																								 ,$dpiutang_nobukti
+																								 ,$bayar_date_create
+																								 ,$jenis_transaksi
+																								 ,$cetak);
+												}elseif($dpiutang_transfer_nilai<>'' && $dpiutang_transfer_nilai<>0){
+													$result_bayar = $this->m_public_function->cara_bayar_transfer_insert($dpiutang_transfer_bank
+																									  ,$dpiutang_transfer_nama
+																									  ,$dpiutang_nilai
+																									  ,$dpiutang_nobukti
+																									  ,$bayar_date_create
+																									  ,$jenis_transaksi
+																									  ,$cetak);
+												}elseif($dpiutang_tunai_nilai<>'' && $dpiutang_tunai_nilai<>0){
+													$result_bayar = $this->m_public_function->cara_bayar_tunai_insert($dpiutang_nilai
+																								   ,$dpiutang_nobukti
+																								   ,$bayar_date_create
+																								   ,$jenis_transaksi
+																								   ,$cetak);
+												}
+												
+											}
+										}
 									}
-								}else{
-										$dpiutang_cek_nama=$dpiutang_cust;
 								}
-							}*/
-							$data=array(
-								"jcek_nama"=>$dpiutang_cek_nama,
-								"jcek_no"=>$dpiutang_cek_no,
-								"jcek_valid"=>$dpiutang_cek_valid,
-								"jcek_bank"=>$dpiutang_cek_bank,
-								"jcek_nilai"=>$dpiutang_nilai,
-								"jcek_ref"=>$dpiutang_nobukti
-								);
-							$this->db->insert('jual_cek', $data); 
-						}else if($dpiutang_cara=='transfer'){
-							
-							$data=array(
-								"jtransfer_bank"=>$dpiutang_transfer_bank,
-								"jtransfer_nama"=>$dpiutang_transfer_nama,
-								"jtransfer_nilai"=>$dpiutang_nilai,
-								"jtransfer_ref"=>$dpiutang_nobukti
-								);
-							$this->db->insert('jual_transfer', $data); 
-						}else if($dpiutang_cara=='tunai'){
-							
-							$data=array(
-								"jtunai_nilai"=>$dpiutang_nilai,
-								"jtunai_ref"=>$dpiutang_nobukti
-								);
-							$this->db->insert('jual_tunai', $data); 
+							}
 						}
 					}
+					
 					if($count==($dcount-1)){
 						return '1';
 					}else{

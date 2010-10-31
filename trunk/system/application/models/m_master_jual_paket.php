@@ -1705,7 +1705,7 @@ class M_master_jual_paket extends Model{
 		}
 		
 		//function for advanced search record
-		function master_jual_paket_search($jpaket_id ,$jpaket_nobukti ,$jpaket_cust ,$jpaket_tanggal, $jpaket_tanggal_akhir, $jpaket_diskon ,$jpaket_cashback ,$jpaket_voucher ,$jpaket_cara ,$jpaket_bayar , $jpaket_keterangan, $jpaket_stat_dok, $start, $end){
+		function master_jual_paket_search($jpaket_nobukti ,$jpaket_cust ,$jpaket_tanggal, $jpaket_tanggal_akhir, $jpaket_diskon ,$jpaket_cashback ,$jpaket_voucher ,$jpaket_cara ,$jpaket_bayar , $jpaket_keterangan, $jpaket_stat_dok, $start, $end){
 			//full query
 			/*$query="SELECT * FROM master_jual_paket,customer,member
 					WHERE jpaket_cust=cust_id and member_id = cust_member";*/
@@ -1734,10 +1734,6 @@ class M_master_jual_paket extends Model{
 				FROM vu_jpaket
 				LEFT JOIN vu_jpaket_totalbiaya ON(vu_jpaket_totalbiaya.dpaket_master=vu_jpaket.jpaket_id)";
 			
-			if($jpaket_id!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " jpaket_id LIKE '%".$jpaket_id."%'";
-			};
 			if($jpaket_nobukti!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " jpaket_nobukti LIKE '%".$jpaket_nobukti."%'";
@@ -1788,30 +1784,52 @@ class M_master_jual_paket extends Model{
 		}
 		
 		//function for print record
-		function master_jual_paket_print($jpaket_id ,$jpaket_nobukti ,$jpaket_cust ,$jpaket_tanggal ,$jpaket_diskon ,$jpaket_cara ,$jpaket_keterangan ,$option,$filter){
+		function master_jual_paket_print($jpaket_nobukti
+										,$jpaket_cust
+										,$jpaket_tanggal
+										,$jpaket_tanggal_akhir
+										,$jpaket_diskon
+										,$jpaket_cashback
+										,$jpaket_voucher
+										,$jpaket_cara
+										,$jpaket_bayar
+										,$jpaket_keterangan
+										,$jpaket_stat_dok
+										,$option
+										,$filter){
 			//full query
-			$query="select * from master_jual_paket";
+			$query = "SELECT vu_jpaket.jpaket_tanggal
+					,vu_jpaket.jpaket_nobukti
+					,vu_jpaket.cust_no
+					,vu_jpaket.cust_nama
+					,INSERT(INSERT(vu_jpaket.member_no,7,0,'-'),14,0,'-') AS no_member
+					,vu_jpaket.jpaket_totalbiaya
+					,vu_jpaket.jpaket_bayar
+					,vu_jpaket.jpaket_keterangan
+					,vu_jpaket.jpaket_stat_dok
+				FROM vu_jpaket
+				LEFT JOIN vu_jpaket_totalbiaya ON(vu_jpaket_totalbiaya.dpaket_master=vu_jpaket.jpaket_id)";
+				
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (jpaket_id LIKE '%".addslashes($filter)."%' OR jpaket_nobukti LIKE '%".addslashes($filter)."%' OR jpaket_cust LIKE '%".addslashes($filter)."%' OR jpaket_tanggal LIKE '%".addslashes($filter)."%' OR jpaket_diskon LIKE '%".addslashes($filter)."%' OR jpaket_cara LIKE '%".addslashes($filter)."%' OR jpaket_keterangan LIKE '%".addslashes($filter)."%' )";
-				echo "q1 = ".$query;
+				$query .= " (jpaket_nobukti LIKE '%".addslashes($filter)."%' OR cust_nama LIKE '%".addslashes($filter)."%' OR cust_no LIKE '%".addslashes($filter)."%')";
 				$result = $this->db->query($query);
 			} else if($option=='SEARCH'){
-				if($jpaket_id!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " jpaket_id LIKE '%".$jpaket_id."%'";
-				};
 				if($jpaket_nobukti!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " jpaket_nobukti LIKE '%".$jpaket_nobukti."%'";
 				};
 				if($jpaket_cust!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " jpaket_cust LIKE '%".$jpaket_cust."%'";
+					$query.= " jpaket_cust = '".$jpaket_cust."'";
 				};
 				if($jpaket_tanggal!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " jpaket_tanggal LIKE '%".$jpaket_tanggal."%'";
+					$query.= " jpaket_tanggal>= '".$jpaket_tanggal."'";
+				};
+				if($jpaket_tanggal_akhir!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " jpaket_tanggal<= '".$jpaket_tanggal_akhir."'";
 				};
 				if($jpaket_diskon!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -1825,36 +1843,62 @@ class M_master_jual_paket extends Model{
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " jpaket_keterangan LIKE '%".$jpaket_keterangan."%'";
 				};
-				echo "q2 = ".$query;
+				if($jpaket_stat_dok!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " jpaket_stat_dok LIKE '%".$jpaket_stat_dok."%'";
+				};
 				$result = $this->db->query($query);
 			}
-			return $result;
+			return $result->result();
 		}
 		
 		//function  for export to excel
-		function master_jual_paket_export_excel($jpaket_id ,$jpaket_nobukti ,$jpaket_cust ,$jpaket_tanggal ,$jpaket_diskon ,$jpaket_cara ,$jpaket_keterangan ,$option,$filter){
+		function master_jual_paket_export_excel($jpaket_nobukti
+												,$jpaket_cust
+												,$jpaket_tanggal
+												,$jpaket_tanggal_akhir
+												,$jpaket_diskon
+												,$jpaket_cashback
+												,$jpaket_voucher
+												,$jpaket_cara
+												,$jpaket_bayar
+												,$jpaket_keterangan
+												,$jpaket_stat_dok
+												,$option
+												,$filter){
 			//full query
-			$query="select * from master_jual_paket";
+			$query = "SELECT vu_jpaket.jpaket_tanggal AS tanggal
+					,vu_jpaket.jpaket_nobukti AS no_faktur
+					,vu_jpaket.cust_no AS no_cust
+					,vu_jpaket.cust_nama AS customer
+					,INSERT(INSERT(vu_jpaket.member_no,7,0,'-'),14,0,'-') AS no_member
+					,vu_jpaket.jpaket_totalbiaya AS 'Total (Rp)'
+					,vu_jpaket.jpaket_bayar AS 'Total Bayar (Rp)'
+					,vu_jpaket.jpaket_keterangan AS keterangan
+					,vu_jpaket.jpaket_stat_dok AS stat_dok
+				FROM vu_jpaket
+				LEFT JOIN vu_jpaket_totalbiaya ON(vu_jpaket_totalbiaya.dpaket_master=vu_jpaket.jpaket_id)";
+				
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (jpaket_id LIKE '%".addslashes($filter)."%' OR jpaket_nobukti LIKE '%".addslashes($filter)."%' OR jpaket_cust LIKE '%".addslashes($filter)."%' OR jpaket_tanggal LIKE '%".addslashes($filter)."%' OR jpaket_diskon LIKE '%".addslashes($filter)."%' OR jpaket_cara LIKE '%".addslashes($filter)."%' OR jpaket_keterangan LIKE '%".addslashes($filter)."%' )";
+				$query .= " (jpaket_nobukti LIKE '%".addslashes($filter)."%' OR cust_nama LIKE '%".addslashes($filter)."%' OR cust_no LIKE '%".addslashes($filter)."%')";
 				$result = $this->db->query($query);
 			} else if($option=='SEARCH'){
-				if($jpaket_id!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " jpaket_id LIKE '%".$jpaket_id."%'";
-				};
 				if($jpaket_nobukti!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " jpaket_nobukti LIKE '%".$jpaket_nobukti."%'";
 				};
 				if($jpaket_cust!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " jpaket_cust LIKE '%".$jpaket_cust."%'";
+					$query.= " jpaket_cust = '".$jpaket_cust."'";
 				};
 				if($jpaket_tanggal!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " jpaket_tanggal LIKE '%".$jpaket_tanggal."%'";
+					$query.= " jpaket_tanggal>= '".$jpaket_tanggal."'";
+				};
+				if($jpaket_tanggal_akhir!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " jpaket_tanggal<= '".$jpaket_tanggal_akhir."'";
 				};
 				if($jpaket_diskon!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -1867,6 +1911,10 @@ class M_master_jual_paket extends Model{
 				if($jpaket_keterangan!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " jpaket_keterangan LIKE '%".$jpaket_keterangan."%'";
+				};
+				if($jpaket_stat_dok!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " jpaket_stat_dok LIKE '%".$jpaket_stat_dok."%'";
 				};
 				$result = $this->db->query($query);
 			}

@@ -1617,7 +1617,6 @@ Ext.onReady(function(){
 	/* Function for action list search */
 	function master_retur_jual_produk_list_search(){
 		// render according to a SQL date format.
-		var rproduk_id_search=null;
 		var rproduk_nobukti_search=null;
 		var rproduk_nobuktijual_search=null;
 		var rproduk_cust_search=null;
@@ -1626,7 +1625,6 @@ Ext.onReady(function(){
 		var rproduk_keterangan_search=null;
 		var rproduk_stat_dok_search=null;
 
-		if(rproduk_idSearchField.getValue()!==null){rproduk_id_search=rproduk_idSearchField.getValue();}
 		if(rproduk_nobuktiSearchField.getValue()!==null){rproduk_nobukti_search=rproduk_nobuktiSearchField.getValue();}
 		if(rproduk_nobuktijualSearchField.getValue()!==null){rproduk_nobuktijual_search=rproduk_nobuktijualSearchField.getValue();}
 		if(rproduk_custSearchField.getValue()!==null){rproduk_cust_search=rproduk_custSearchField.getValue();}
@@ -1638,14 +1636,13 @@ Ext.onReady(function(){
 		master_retur_jual_produk_DataStore.baseParams = {
 			task: 'SEARCH',
 			//variable here
-			rproduk_id	:	rproduk_id_search, 
 			rproduk_nobukti	:	rproduk_nobukti_search, 
 			rproduk_nobuktijual	:	rproduk_nobuktijual_search, 
 			rproduk_cust	:	rproduk_cust_search, 
 			rproduk_tanggal	:	rproduk_tanggal_search_date, 
 			rproduk_tanggal_akhir : rproduk_tanggal_akhir_search_date,
 			rproduk_keterangan	:	rproduk_keterangan_search,
-			rproduk_stat_dok		:	rproduk_stat_dok_search,
+			rproduk_stat_dok		:	rproduk_stat_dok_search
 		};
 		// Cause the datastore to do another query : 
 		master_retur_jual_produk_DataStore.reload({params: {start: 0, limit: pageS}});
@@ -1840,7 +1837,9 @@ Ext.onReady(function(){
 		var rproduk_nobuktijual_print=null;
 		var rproduk_cust_print=null;
 		var rproduk_tanggal_print_date="";
+		var rproduk_tanggal_akhir_print_date="";
 		var rproduk_keterangan_print=null;
+		var rproduk_stat_dok_print=null;
 		var win;              
 		// check if we do have some search data...
 		if(master_retur_jual_produk_DataStore.baseParams.query!==null){searchquery = master_retur_jual_produk_DataStore.baseParams.query;}
@@ -1848,7 +1847,9 @@ Ext.onReady(function(){
 		if(master_retur_jual_produk_DataStore.baseParams.rproduk_nobuktijual!==null){rproduk_nobuktijual_print = master_retur_jual_produk_DataStore.baseParams.rproduk_nobuktijual;}
 		if(master_retur_jual_produk_DataStore.baseParams.rproduk_cust!==null){rproduk_cust_print = master_retur_jual_produk_DataStore.baseParams.rproduk_cust;}
 		if(master_retur_jual_produk_DataStore.baseParams.rproduk_tanggal!==""){rproduk_tanggal_print_date = master_retur_jual_produk_DataStore.baseParams.rproduk_tanggal;}
+		if(master_retur_jual_produk_DataStore.baseParams.rproduk_tanggal_akhir!==""){rproduk_tanggal_akhir_print_date = master_retur_jual_produk_DataStore.baseParams.rproduk_tanggal_akhir;}
 		if(master_retur_jual_produk_DataStore.baseParams.rproduk_keterangan!==null){rproduk_keterangan_print = master_retur_jual_produk_DataStore.baseParams.rproduk_keterangan;}
+		if(master_retur_jual_produk_DataStore.baseParams.rproduk_stat_dok!==null){rproduk_stat_dok_print = master_retur_jual_produk_DataStore.baseParams.rproduk_stat_dok;}
 
 		Ext.Ajax.request({   
 		waitMsg: 'Mohon  Tunggu...',
@@ -1857,19 +1858,20 @@ Ext.onReady(function(){
 			task: "PRINT",
 		  	query: searchquery,                    		// if we are doing a quicksearch, use this
 			//if we are doing advanced search, use this
-			rproduk_nobukti : rproduk_nobukti_print,
-			rproduk_nobuktijual : rproduk_nobuktijual_print,
-			rproduk_cust : rproduk_cust_print,
-		  	rproduk_tanggal : rproduk_tanggal_print_date, 
-			rproduk_keterangan : rproduk_keterangan_print,
+			rproduk_nobukti	:	rproduk_nobukti_print, 
+			rproduk_nobuktijual	:	rproduk_nobuktijual_print, 
+			rproduk_cust	:	rproduk_cust_print, 
+			rproduk_tanggal	:	rproduk_tanggal_print_date, 
+			rproduk_tanggal_akhir : rproduk_tanggal_akhir_print_date,
+			rproduk_keterangan	:	rproduk_keterangan_print,
+			rproduk_stat_dok	:	rproduk_stat_dok_print,
 		  	currentlisting: master_retur_jual_produk_DataStore.baseParams.task // this tells us if we are searching or not
 		}, 
 		success: function(response){              
 		  	var result=eval(response.responseText);
 		  	switch(result){
 		  	case 1:
-				win = window.open('./master_retur_jual_produklist.html','master_retur_jual_produklist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
-				win.print();
+				win = window.open('./print/master_retur_jual_produklist.html','master_retur_jual_produklist','height=400,width=900,resizable=1,scrollbars=1, menubar=1');
 				break;
 		  	default:
 				Ext.MessageBox.show({
@@ -1903,28 +1905,34 @@ Ext.onReady(function(){
 		var rproduk_nobuktijual_2excel=null;
 		var rproduk_cust_2excel=null;
 		var rproduk_tanggal_2excel_date="";
+		var rproduk_tanggal_akhir_2excel_date="";
 		var rproduk_keterangan_2excel=null;
+		var rproduk_stat_dok_2excel=null;
 		var win;              
-		// check if we do have some search data...
+		// check if we do have some 2excel data...
 		if(master_retur_jual_produk_DataStore.baseParams.query!==null){searchquery = master_retur_jual_produk_DataStore.baseParams.query;}
 		if(master_retur_jual_produk_DataStore.baseParams.rproduk_nobukti!==null){rproduk_nobukti_2excel = master_retur_jual_produk_DataStore.baseParams.rproduk_nobukti;}
 		if(master_retur_jual_produk_DataStore.baseParams.rproduk_nobuktijual!==null){rproduk_nobuktijual_2excel = master_retur_jual_produk_DataStore.baseParams.rproduk_nobuktijual;}
 		if(master_retur_jual_produk_DataStore.baseParams.rproduk_cust!==null){rproduk_cust_2excel = master_retur_jual_produk_DataStore.baseParams.rproduk_cust;}
 		if(master_retur_jual_produk_DataStore.baseParams.rproduk_tanggal!==""){rproduk_tanggal_2excel_date = master_retur_jual_produk_DataStore.baseParams.rproduk_tanggal;}
+		if(master_retur_jual_produk_DataStore.baseParams.rproduk_tanggal_akhir!==""){rproduk_tanggal_akhir_2excel_date = master_retur_jual_produk_DataStore.baseParams.rproduk_tanggal_akhir;}
 		if(master_retur_jual_produk_DataStore.baseParams.rproduk_keterangan!==null){rproduk_keterangan_2excel = master_retur_jual_produk_DataStore.baseParams.rproduk_keterangan;}
-
+		if(master_retur_jual_produk_DataStore.baseParams.rproduk_stat_dok!==null){rproduk_stat_dok_2excel = master_retur_jual_produk_DataStore.baseParams.rproduk_stat_dok;}
+		
 		Ext.Ajax.request({   
 		waitMsg: 'Mohon  Tunggu...',
 		url: 'index.php?c=c_master_retur_jual_produk&m=get_action',
 		params: {
 			task: "EXCEL",
-		  	query: searchquery,                    		// if we are doing a quicksearch, use this
-			//if we are doing advanced search, use this
-			rproduk_nobukti : rproduk_nobukti_2excel,
-			rproduk_nobuktijual : rproduk_nobuktijual_2excel,
-			rproduk_cust : rproduk_cust_2excel,
-		  	rproduk_tanggal : rproduk_tanggal_2excel_date, 
-			rproduk_keterangan : rproduk_keterangan_2excel,
+		  	query: searchquery,                    		// if we are doing a quick2excel, use this
+			//if we are doing advanced 2excel, use this
+			rproduk_nobukti	:	rproduk_nobukti_2excel, 
+			rproduk_nobuktijual	:	rproduk_nobuktijual_2excel, 
+			rproduk_cust	:	rproduk_cust_2excel, 
+			rproduk_tanggal	:	rproduk_tanggal_2excel_date, 
+			rproduk_tanggal_akhir : rproduk_tanggal_akhir_2excel_date,
+			rproduk_keterangan	:	rproduk_keterangan_2excel,
+			rproduk_stat_dok	:	rproduk_stat_dok_2excel,
 		  	currentlisting: master_retur_jual_produk_DataStore.baseParams.task // this tells us if we are searching or not
 		},
 		success: function(response){              

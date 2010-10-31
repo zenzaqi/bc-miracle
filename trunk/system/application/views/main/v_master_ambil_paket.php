@@ -2089,15 +2089,25 @@ Ext.onReady(function(){
 	/* Function for print List Grid */
 	function ambil_paket_print(){
 		var searchquery = "";
-		var ambil_paket_kode_print=null;
-		var ambil_paket_nama_print=null;
-		var ambil_paket_expired_print=null;
+		var apaket_faktur_print=null;
+		var apaket_cust_print=null;
+		var apaket_paket_print=null;
+		var apaket_kadaluarsa_print=null;
+		var apaket_kadaluarsa_akhir_print=null;
+		var apakaet_sisa_print=null;
+		var apaket_tgl_faktur_print=null;
+		var apaket_tgl_faktur_akhir_print=null;
 		var win;              
 		// check if we do have some search data...
 		if(ambil_paket_DataStore.baseParams.query!==null){searchquery = ambil_paket_DataStore.baseParams.query;}
-		if(ambil_paket_DataStore.baseParams.ambil_paket_kode!==null){ambil_paket_kode_print = ambil_paket_DataStore.baseParams.ambil_paket_kode;}
-		if(ambil_paket_DataStore.baseParams.ambil_paket_nama!==null){ambil_paket_nama_print = ambil_paket_DataStore.baseParams.ambil_paket_nama;}
-		if(ambil_paket_DataStore.baseParams.ambil_paket_expired!==null){ambil_paket_expired_print = ambil_paket_DataStore.baseParams.ambil_paket_expired;}
+		if(ambil_paket_DataStore.baseParams.apaket_faktur!==null){apaket_faktur_print = ambil_paket_DataStore.baseParams.apaket_faktur;}
+		if(ambil_paket_DataStore.baseParams.apaket_cust!==null){apaket_cust_print = ambil_paket_DataStore.baseParams.apaket_cust;}
+		if(ambil_paket_DataStore.baseParams.apaket_paket!==null){apaket_paket_print = ambil_paket_DataStore.baseParams.apaket_paket;}
+		if(ambil_paket_DataStore.baseParams.apaket_sisa!==null){apaket_sisa_print = ambil_paket_DataStore.baseParams.apaket_sisa;}
+		if(ambil_paket_DataStore.baseParams.apaket_kadaluarsa!==""){apaket_kadaluarsa_print = ambil_paket_DataStore.baseParams.apaket_kadaluarsa;}
+		if(ambil_paket_DataStore.baseParams.apaket_kadaluarsa_akhir!==""){apaket_kadaluarsa_akhir_print = ambil_paket_DataStore.baseParams.apaket_kadaluarsa_akhir;}
+		if(ambil_paket_DataStore.baseParams.apaket_tgl_faktur!==""){apaket_tgl_faktur_print = ambil_paket_DataStore.baseParams.apaket_tgl_faktur;}
+		if(ambil_paket_DataStore.baseParams.apaket_tgl_faktur_akhir!==""){apaket_tgl_faktur_akhir_print = ambil_paket_DataStore.baseParams.apaket_tgl_faktur_akhir;}
 
 		Ext.Ajax.request({   
 		waitMsg: 'Mohon tunggu...',
@@ -2106,17 +2116,21 @@ Ext.onReady(function(){
 			task: "PRINT",
 		  	query: searchquery,                    		// if we are doing a quicksearch, use this
 			//if we are doing advanced search, use this
-			ambil_paket_kode : ambil_paket_kode_print,
-			ambil_paket_nama : ambil_paket_nama_print,
-			ambil_paket_expired : ambil_paket_expired_print,
+			apaket_faktur			:	apaket_faktur_print, 
+			apaket_cust				:	apaket_cust_print, 
+			apaket_paket			:	apaket_paket_print, 
+			apaket_kadaluarsa		:	apaket_kadaluarsa_print,
+			apaket_kadaluarsa_akhir	:	apaket_kadaluarsa_akhir_print,
+			apaket_tgl_faktur		:	apaket_tgl_faktur_print,
+			apaket_tgl_faktur_akhir	:	apaket_tgl_faktur_akhir_print,
+			apaket_sisa				:	apaket_sisa_print,
 		  	currentlisting: ambil_paket_DataStore.baseParams.task // this tells us if we are searching or not
 		}, 
 		success: function(response){              
 		  	var result=eval(response.responseText);
 		  	switch(result){
 		  	case 1:
-				win = window.open('./ambil_paketlist.html','ambil_paketlist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
-				win.print();
+				win = window.open('./print/ambil_paketlist.html','ambil_paketlist','height=400,width=900,resizable=1,scrollbars=1, menubar=1');
 				break;
 		  	default:
 				Ext.MessageBox.show({
@@ -2146,26 +2160,41 @@ Ext.onReady(function(){
 	/* Function for print Export to Excel Grid */
 	function ambil_paket_export_excel(){
 		var searchquery = "";
-		var ambil_paket_kode_2excel=null;
-		var ambil_paket_nama_2excel=null;
-		var ambil_paket_expired_2excel=null;
+		var apaket_faktur_2excel=null;
+		var apaket_cust_2excel=null;
+		var apaket_paket_2excel=null;
+		var apaket_kadaluarsa_2excel=null;
+		var apaket_kadaluarsa_akhir_2excel=null;
+		var apakaet_sisa_2excel=null;
+		var apaket_tgl_faktur_2excel=null;
+		var apaket_tgl_faktur_akhir_2excel=null;
 		var win;              
-		// check if we do have some search data...
+		// check if we do have some 2excel data...
 		if(ambil_paket_DataStore.baseParams.query!==null){searchquery = ambil_paket_DataStore.baseParams.query;}
-		if(ambil_paket_DataStore.baseParams.ambil_paket_kode!==null){ambil_paket_kode_2excel = ambil_paket_DataStore.baseParams.ambil_paket_kode;}
-		if(ambil_paket_DataStore.baseParams.ambil_paket_nama!==null){ambil_paket_nama_2excel = ambil_paket_DataStore.baseParams.ambil_paket_nama;}
-		if(ambil_paket_DataStore.baseParams.ambil_paket_expired!==null){ambil_paket_expired_2excel = ambil_paket_DataStore.baseParams.ambil_paket_expired;}
+		if(ambil_paket_DataStore.baseParams.apaket_faktur!==null){apaket_faktur_2excel = ambil_paket_DataStore.baseParams.apaket_faktur;}
+		if(ambil_paket_DataStore.baseParams.apaket_cust!==null){apaket_cust_2excel = ambil_paket_DataStore.baseParams.apaket_cust;}
+		if(ambil_paket_DataStore.baseParams.apaket_paket!==null){apaket_paket_2excel = ambil_paket_DataStore.baseParams.apaket_paket;}
+		if(ambil_paket_DataStore.baseParams.apaket_sisa!==null){apaket_sisa_2excel = ambil_paket_DataStore.baseParams.apaket_sisa;}
+		if(ambil_paket_DataStore.baseParams.apaket_kadaluarsa!==""){apaket_kadaluarsa_2excel = ambil_paket_DataStore.baseParams.apaket_kadaluarsa;}
+		if(ambil_paket_DataStore.baseParams.apaket_kadaluarsa_akhir!==""){apaket_kadaluarsa_akhir_2excel = ambil_paket_DataStore.baseParams.apaket_kadaluarsa_akhir;}
+		if(ambil_paket_DataStore.baseParams.apaket_tgl_faktur!==""){apaket_tgl_faktur_2excel = ambil_paket_DataStore.baseParams.apaket_tgl_faktur;}
+		if(ambil_paket_DataStore.baseParams.apaket_tgl_faktur_akhir!==""){apaket_tgl_faktur_akhir_2excel = ambil_paket_DataStore.baseParams.apaket_tgl_faktur_akhir;}
 
 		Ext.Ajax.request({   
 		waitMsg: 'Please Wait...',
 		url: 'index.php?c=c_master_ambil_paket&m=get_action',
 		params: {
 			task: "EXCEL",
-		  	query: searchquery,                    		// if we are doing a quicksearch, use this
-			//if we are doing advanced search, use this
-			ambil_paket_kode : ambil_paket_kode_2excel,
-			ambil_paket_nama : ambil_paket_nama_2excel,
-			ambil_paket_expired : ambil_paket_expired_2excel,
+		  	query: searchquery,                    		// if we are doing a quick2excel, use this
+			//if we are doing advanced 2excel, use this
+			apaket_faktur			:	apaket_faktur_2excel, 
+			apaket_cust				:	apaket_cust_2excel, 
+			apaket_paket			:	apaket_paket_2excel, 
+			apaket_kadaluarsa		:	apaket_kadaluarsa_2excel,
+			apaket_kadaluarsa_akhir	:	apaket_kadaluarsa_akhir_2excel,
+			apaket_tgl_faktur		:	apaket_tgl_faktur_2excel,
+			apaket_tgl_faktur_akhir	:	apaket_tgl_faktur_akhir_2excel,
+			apaket_sisa				:	apaket_sisa_2excel,
 		  	currentlisting: ambil_paket_DataStore.baseParams.task // this tells us if we are searching or not
 		},
 		success: function(response){              

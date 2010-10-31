@@ -624,7 +624,6 @@ class C_master_jual_paket extends Controller {
 	//function for advanced search
 	function master_jual_paket_search(){
 		//POST varibale here
-		$jpaket_id=trim(@$_POST["jpaket_id"]);
 		$jpaket_nobukti=trim(@$_POST["jpaket_nobukti"]);
 		$jpaket_nobukti=str_replace("/(<\/?)(p)([^>]*>)", "",$jpaket_nobukti);
 		$jpaket_nobukti=str_replace("'", '"',$jpaket_nobukti);
@@ -649,19 +648,19 @@ class C_master_jual_paket extends Controller {
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_master_jual_paket->master_jual_paket_search($jpaket_id ,$jpaket_nobukti ,$jpaket_cust ,$jpaket_tanggal, $jpaket_tanggal_akhir, $jpaket_diskon ,$jpaket_cashback ,$jpaket_voucher ,$jpaket_cara ,$jpaket_bayar , $jpaket_keterangan, $jpaket_stat_dok, $start, $end);
+		$result = $this->m_master_jual_paket->master_jual_paket_search($jpaket_nobukti ,$jpaket_cust ,$jpaket_tanggal, $jpaket_tanggal_akhir, $jpaket_diskon ,$jpaket_cashback ,$jpaket_voucher ,$jpaket_cara ,$jpaket_bayar , $jpaket_keterangan, $jpaket_stat_dok, $start, $end);
 		echo $result;
 	}
 
 
 	function master_jual_paket_print(){
   		//POST varibale here
-		$jpaket_id=trim(@$_POST["jpaket_id"]);
 		$jpaket_nobukti=trim(@$_POST["jpaket_nobukti"]);
 		$jpaket_nobukti=str_replace("/(<\/?)(p)([^>]*>)", "",$jpaket_nobukti);
 		$jpaket_nobukti=str_replace("'", '"',$jpaket_nobukti);
 		$jpaket_cust=trim(@$_POST["jpaket_cust"]);
 		$jpaket_tanggal=trim(@$_POST["jpaket_tanggal"]);
+		$jpaket_tanggal_akhir=trim(@$_POST["jpaket_tanggal_akhir"]);
 		$jpaket_diskon=trim(@$_POST["jpaket_diskon"]);
 		$jpaket_cashback=trim(@$_POST["jpaket_cashback"]);
 		$jpaket_voucher=trim(@$_POST["jpaket_voucher"]);
@@ -674,74 +673,44 @@ class C_master_jual_paket extends Controller {
 		$jpaket_keterangan=trim(@$_POST["jpaket_keterangan"]);
 		$jpaket_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$jpaket_keterangan);
 		$jpaket_keterangan=str_replace("'", '"',$jpaket_keterangan);
+		$jpaket_stat_dok=trim(@$_POST["jpaket_stat_dok"]);
+		$jpaket_stat_dok=str_replace("/(<\/?)(p)([^>]*>)", "",$jpaket_stat_dok);
+		$jpaket_stat_dok=str_replace("'", '"',$jpaket_stat_dok);
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$result = $this->m_master_jual_paket->master_jual_paket_print($jpaket_id ,$jpaket_nobukti ,$jpaket_cust ,$jpaket_tanggal ,$jpaket_diskon ,$jpaket_cashback ,$jpaket_voucher ,$jpaket_cara ,$jpaket_bayar ,$jpaket_keterangan ,$option,$filter);
-		$nbrows=$result->num_rows();
-		$totcolumn=15;
-   		/* We now have our array, let's build our HTML file */
-		$file = fopen("master_jual_paketlist.html",'w');
-		fwrite($file, "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' /><title>Printing the Master_jual_paket Grid</title><link rel='stylesheet' type='text/css' href='assets/modules/main/css/printstyle.css'/></head>");
-		fwrite($file, "<body><table summary='Master_jual_paket List'><caption>MASTER_JUAL_paket</caption><thead><tr><th scope='col'>Jpaket Id</th><th scope='col'>Jpaket Nobukti</th><th scope='col'>Jpaket Cust</th><th scope='col'>Jpaket Tanggal</th><th scope='col'>Jpaket Diskon</th><th scope='col'>Jpaket Cashback</th><th scope='col'>Jpaket Voucher</th><th scope='col'>Jpaket Cara</th><th scope='col'>Jpaket Bayar</th><th scope='col'>Jpaket Keterangan</th><th scope='col'>Jpaket Creator</th><th scope='col'>Jpaket Date Create</th><th scope='col'>Jpaket Update</th><th scope='col'>Jpaket Date Update</th><th scope='col'>Jpaket Revised</th></tr></thead><tfoot><tr><th scope='row'>Total</th><td colspan='$totcolumn'>");
-		fwrite($file, $nbrows);
-		fwrite($file, " Master_jual_paket</td></tr></tfoot><tbody>");
-		$i=0;
-		if($nbrows>0){
-			foreach($result->result_array() as $data){
-				fwrite($file,'<tr');
-				if($i%1==0){
-					fwrite($file," class='odd'");
-				}
-			
-				fwrite($file, "><th scope='row' id='r97'>");
-				fwrite($file, $data['jpaket_id']);
-				fwrite($file,"</th><td>");
-				fwrite($file, $data['jpaket_nobukti']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['jpaket_cust']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['jpaket_tanggal']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['jpaket_diskon']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['jpaket_cashback']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['jpaket_voucher']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['jpaket_cara']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['jpaket_bayar']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['jpaket_keterangan']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['jpaket_creator']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['jpaket_date_create']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['jpaket_update']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['jpaket_date_update']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['jpaket_revised']);
-				fwrite($file, "</td></tr>");
-			}
+		$data["data_print"] = $this->m_master_jual_paket->master_jual_paket_print($jpaket_nobukti
+																				,$jpaket_cust
+																				,$jpaket_tanggal
+																				,$jpaket_tanggal_akhir
+																				,$jpaket_diskon
+																				,$jpaket_cashback
+																				,$jpaket_voucher
+																				,$jpaket_cara
+																				,$jpaket_bayar
+																				,$jpaket_keterangan
+																				,$jpaket_stat_dok
+																				,$option
+																				,$filter);
+		$print_view=$this->load->view("main/p_master_jual_paket.php",$data,TRUE);
+		if(!file_exists("print")){
+			mkdir("print");
 		}
-		fwrite($file, "</tbody></table></body></html>");	
-		fclose($file);
-		echo '1';        
+		$print_file=fopen("print/master_jual_paketlist.html","w+");
+		fwrite($print_file, $print_view);
+		echo '1';
 	}
 	/* End Of Function */
 
 	/* Function to Export Excel document */
 	function master_jual_paket_export_excel(){
 		//POST varibale here
-		$jpaket_id=trim(@$_POST["jpaket_id"]);
 		$jpaket_nobukti=trim(@$_POST["jpaket_nobukti"]);
 		$jpaket_nobukti=str_replace("/(<\/?)(p)([^>]*>)", "",$jpaket_nobukti);
 		$jpaket_nobukti=str_replace("'", '"',$jpaket_nobukti);
 		$jpaket_cust=trim(@$_POST["jpaket_cust"]);
 		$jpaket_tanggal=trim(@$_POST["jpaket_tanggal"]);
+		$jpaket_tanggal_akhir=trim(@$_POST["jpaket_tanggal_akhir"]);
 		$jpaket_diskon=trim(@$_POST["jpaket_diskon"]);
 		$jpaket_cashback=trim(@$_POST["jpaket_cashback"]);
 		$jpaket_voucher=trim(@$_POST["jpaket_voucher"]);
@@ -754,10 +723,26 @@ class C_master_jual_paket extends Controller {
 		$jpaket_keterangan=trim(@$_POST["jpaket_keterangan"]);
 		$jpaket_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$jpaket_keterangan);
 		$jpaket_keterangan=str_replace("'", '"',$jpaket_keterangan);
+		$jpaket_stat_dok=trim(@$_POST["jpaket_stat_dok"]);
+		$jpaket_stat_dok=str_replace("/(<\/?)(p)([^>]*>)", "",$jpaket_stat_dok);
+		$jpaket_stat_dok=str_replace("'", '"',$jpaket_stat_dok);
+		
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$query = $this->m_master_jual_paket->master_jual_paket_export_excel($jpaket_id ,$jpaket_nobukti ,$jpaket_cust ,$jpaket_tanggal ,$jpaket_diskon ,$jpaket_cashback ,$jpaket_voucher ,$jpaket_cara ,$jpaket_bayar ,$jpaket_keterangan ,$option,$filter);
+		$query = $this->m_master_jual_paket->master_jual_paket_export_excel($jpaket_nobukti
+																			,$jpaket_cust
+																			,$jpaket_tanggal
+																			,$jpaket_tanggal_akhir
+																			,$jpaket_diskon
+																			,$jpaket_cashback
+																			,$jpaket_voucher
+																			,$jpaket_cara
+																			,$jpaket_bayar
+																			,$jpaket_keterangan
+																			,$jpaket_stat_dok
+																			,$option
+																			,$filter);
 		
 		to_excel($query,"master_jual_paket"); 
 		echo '1';

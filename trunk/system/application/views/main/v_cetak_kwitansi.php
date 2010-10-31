@@ -2545,13 +2545,11 @@ Ext.onReady(function(){
 	/* Function for action list search */
 	function cetak_kwitansi_list_search(){
 		// render according to a SQL date format.
-		var kwitansi_id_search=null;
 		var kwitansi_no_search=null;
 		var kwitansi_cust_search=null;
 		var kwitansi_keterangan_search=null;
 		var kwitansi_status_search=null;
 
-		if(kwitansi_idSearchField.getValue()!==null){kwitansi_id_search=kwitansi_idSearchField.getValue();}
 		if(kwitansi_noSearchField.getValue()!==null){kwitansi_no_search=kwitansi_noSearchField.getValue();}
 		if(kwitansi_custSearchField.getValue()!==null){kwitansi_cust_search=kwitansi_custSearchField.getValue();}
 		if(kwitansi_keteranganSearchField.getValue()!==null){kwitansi_keterangan_search=kwitansi_keteranganSearchField.getValue();}
@@ -2560,11 +2558,10 @@ Ext.onReady(function(){
 		cetak_kwitansi_DataStore.baseParams = {
 			task: 'SEARCH',
 			//variable here
-			kwitansi_id	:	kwitansi_id_search, 
 			kwitansi_no	:	kwitansi_no_search, 
 			kwitansi_cust	:	kwitansi_cust_search, 
 			kwitansi_keterangan	:	kwitansi_keterangan_search, 
-			kwitansi_status	:	kwitansi_status_search, 
+			kwitansi_status	:	kwitansi_status_search
 		};
 		// Cause the datastore to do another query : 
 		cetak_kwitansi_DataStore.reload({params: {start: 0, limit: pageS}});
@@ -2595,7 +2592,7 @@ Ext.onReady(function(){
 	/* Identify  kwitansi_no Search Field */
 	kwitansi_noSearchField= new Ext.form.TextField({
 		id: 'kwitansi_noSearchField',
-		fieldLabel: 'Kwitansi No',
+		fieldLabel: 'No Kuitansi',
 		maxLength: 20,
 		anchor: '95%'
 	
@@ -2624,7 +2621,7 @@ Ext.onReady(function(){
 	/* Identify  kwitansi_keterangan Search Field */
 	kwitansi_keteranganSearchField= new Ext.form.TextArea({
 		id: 'kwitansi_keteranganSearchField',
-		fieldLabel: 'Kwitansi Keterangan',
+		fieldLabel: 'Keterangan',
 		maxLength: 500,
 		anchor: '95%'
 	
@@ -2632,7 +2629,7 @@ Ext.onReady(function(){
 	/* Identify  kwitansi_status Search Field */
 	kwitansi_statusSearchField= new Ext.form.ComboBox({
 		id: 'kwitansi_statusSearchField',
-		fieldLabel: 'Kwitansi Status',
+		fieldLabel: 'Status',
 		store:new Ext.data.SimpleStore({
 			fields:['value', 'kwitansi_status'],
 			data:[['Terbuka','Terbuka'],['Tertutup','Tertutup'],['Batal','Batal']]
@@ -2640,17 +2637,18 @@ Ext.onReady(function(){
 		mode: 'local',
 		displayField: 'kwitansi_status',
 		valueField: 'value',
-		anchor: '95%',
-		triggerAction: 'all'	 
+		width: 100,
+		triggerAction: 'all'
 	
 	});
     
 	/* Function for retrieve search Form Panel */
 	cetak_kwitansi_searchForm = new Ext.FormPanel({
 		labelAlign: 'left',
+		labelWidth: 100,
 		bodyStyle:'padding:5px',
 		autoHeight:true,
-		width: 300,        
+		width: 400,
 		items: [{
 			layout:'column',
 			border:false,
@@ -2736,8 +2734,6 @@ Ext.onReady(function(){
 		var searchquery = "";
 		var kwitansi_no_print=null;
 		var kwitansi_cust_print=null;
-		var kwitansi_ref_print=null;
-		var kwitansi_nilai_print=null;
 		var kwitansi_keterangan_print=null;
 		var kwitansi_status_print=null;
 		var win;              
@@ -2745,8 +2741,6 @@ Ext.onReady(function(){
 		if(cetak_kwitansi_DataStore.baseParams.query!==null){searchquery = cetak_kwitansi_DataStore.baseParams.query;}
 		if(cetak_kwitansi_DataStore.baseParams.kwitansi_no!==null){kwitansi_no_print = cetak_kwitansi_DataStore.baseParams.kwitansi_no;}
 		if(cetak_kwitansi_DataStore.baseParams.kwitansi_cust!==null){kwitansi_cust_print = cetak_kwitansi_DataStore.baseParams.kwitansi_cust;}
-		if(cetak_kwitansi_DataStore.baseParams.kwitansi_ref!==null){kwitansi_ref_print = cetak_kwitansi_DataStore.baseParams.kwitansi_ref;}
-		if(cetak_kwitansi_DataStore.baseParams.kwitansi_nilai!==null){kwitansi_nilai_print = cetak_kwitansi_DataStore.baseParams.kwitansi_nilai;}
 		if(cetak_kwitansi_DataStore.baseParams.kwitansi_keterangan!==null){kwitansi_keterangan_print = cetak_kwitansi_DataStore.baseParams.kwitansi_keterangan;}
 		if(cetak_kwitansi_DataStore.baseParams.kwitansi_status!==null){kwitansi_status_print = cetak_kwitansi_DataStore.baseParams.kwitansi_status;}
 
@@ -2757,20 +2751,17 @@ Ext.onReady(function(){
 			task: "PRINT",
 		  	query: searchquery,                    		// if we are doing a quicksearch, use this
 			//if we are doing advanced search, use this
-			kwitansi_no : kwitansi_no_print,
-			kwitansi_cust : kwitansi_cust_print,
-			kwitansi_ref : kwitansi_ref_print,
-			kwitansi_nilai : kwitansi_nilai_print,
-			kwitansi_keterangan : kwitansi_keterangan_print,
-			kwitansi_status : kwitansi_status_print,
+			kwitansi_no	:	kwitansi_no_print, 
+			kwitansi_cust	:	kwitansi_cust_print, 
+			kwitansi_keterangan	:	kwitansi_keterangan_print, 
+			kwitansi_status	:	kwitansi_status_print,
 		  	currentlisting: cetak_kwitansi_DataStore.baseParams.task // this tells us if we are searching or not
 		}, 
 		success: function(response){              
 		  	var result=eval(response.responseText);
 		  	switch(result){
 		  	case 1:
-				win = window.open('./cetak_kwitansilist.html','cetak_kwitansilist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
-				win.print();
+				win = window.open('./print/cetak_kwitansilist.html','cetak_kwitansilist','height=400,width=800,resizable=1,scrollbars=1, menubar=1');
 				break;
 		  	default:
 				Ext.MessageBox.show({
@@ -2802,33 +2793,27 @@ Ext.onReady(function(){
 		var searchquery = "";
 		var kwitansi_no_2excel=null;
 		var kwitansi_cust_2excel=null;
-		var kwitansi_ref_2excel=null;
-		var kwitansi_nilai_2excel=null;
 		var kwitansi_keterangan_2excel=null;
 		var kwitansi_status_2excel=null;
-		var win;              
-		// check if we do have some search data...
+		var win;
+		// check if we do have some 2excel data...
 		if(cetak_kwitansi_DataStore.baseParams.query!==null){searchquery = cetak_kwitansi_DataStore.baseParams.query;}
 		if(cetak_kwitansi_DataStore.baseParams.kwitansi_no!==null){kwitansi_no_2excel = cetak_kwitansi_DataStore.baseParams.kwitansi_no;}
 		if(cetak_kwitansi_DataStore.baseParams.kwitansi_cust!==null){kwitansi_cust_2excel = cetak_kwitansi_DataStore.baseParams.kwitansi_cust;}
-		if(cetak_kwitansi_DataStore.baseParams.kwitansi_ref!==null){kwitansi_ref_2excel = cetak_kwitansi_DataStore.baseParams.kwitansi_ref;}
-		if(cetak_kwitansi_DataStore.baseParams.kwitansi_nilai!==null){kwitansi_nilai_2excel = cetak_kwitansi_DataStore.baseParams.kwitansi_nilai;}
 		if(cetak_kwitansi_DataStore.baseParams.kwitansi_keterangan!==null){kwitansi_keterangan_2excel = cetak_kwitansi_DataStore.baseParams.kwitansi_keterangan;}
 		if(cetak_kwitansi_DataStore.baseParams.kwitansi_status!==null){kwitansi_status_2excel = cetak_kwitansi_DataStore.baseParams.kwitansi_status;}
-
+		
 		Ext.Ajax.request({   
 		waitMsg: 'Please Wait...',
 		url: 'index.php?c=c_cetak_kwitansi&m=get_action',
 		params: {
 			task: "EXCEL",
-		  	query: searchquery,                    		// if we are doing a quicksearch, use this
-			//if we are doing advanced search, use this
-			kwitansi_no : kwitansi_no_2excel,
-			kwitansi_cust : kwitansi_cust_2excel,
-			kwitansi_ref : kwitansi_ref_2excel,
-			kwitansi_nilai : kwitansi_nilai_2excel,
-			kwitansi_keterangan : kwitansi_keterangan_2excel,
-			kwitansi_status : kwitansi_status_2excel,
+		  	query: searchquery,                    		// if we are doing a quick2excel, use this
+			//if we are doing advanced 2excel, use this
+			kwitansi_no	:	kwitansi_no_2excel, 
+			kwitansi_cust	:	kwitansi_cust_2excel, 
+			kwitansi_keterangan	:	kwitansi_keterangan_2excel, 
+			kwitansi_status	:	kwitansi_status_2excel,
 		  	currentlisting: cetak_kwitansi_DataStore.baseParams.task // this tells us if we are searching or not
 		},
 		success: function(response){              

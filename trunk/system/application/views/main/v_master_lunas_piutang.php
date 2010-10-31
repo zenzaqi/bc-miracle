@@ -337,6 +337,8 @@ Ext.onReady(function(){
 		lpiutang_keteranganField.setValue(null);
 		piutang_caraField.reset();
 		piutang_caraField.setValue(null);
+		piutang_total_bayarField.reset();
+		piutang_total_bayarField.setValue(null);
 		
 		piutang_bayar_tunai_reset_form();
 		piutang_bayar_card_reset_form();
@@ -424,7 +426,7 @@ Ext.onReady(function(){
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really update something you haven\'t selected?',
+				msg: 'Anda belum memilih data yang akan diedit',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING

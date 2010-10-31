@@ -315,7 +315,6 @@ class C_master_retur_jual_paket extends Controller {
 	//function for advanced search
 	function master_retur_jual_paket_search(){
 		//POST varibale here
-		$rpaket_id=trim(@$_POST["rpaket_id"]);
 		$rpaket_nobukti=trim(@$_POST["rpaket_nobukti"]);
 		$rpaket_nobukti=str_replace("/(<\/?)(p)([^>]*>)", "",$rpaket_nobukti);
 		$rpaket_nobukti=str_replace("'", '"',$rpaket_nobukti);
@@ -328,21 +327,19 @@ class C_master_retur_jual_paket extends Controller {
 		$rpaket_keterangan=trim(@$_POST["rpaket_keterangan"]);
 		$rpaket_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$rpaket_keterangan);
 		$rpaket_keterangan=str_replace("'", '"',$rpaket_keterangan);
-		
 		$rpaket_stat_dok=trim(@$_POST["rpaket_stat_dok"]);
 		$rpaket_stat_dok=str_replace("/(<\/?)(p)([^>]*>)", "",$rpaket_stat_dok);
 		$rpaket_stat_dok=str_replace("'", '"',$rpaket_stat_dok);
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_master_retur_jual_paket->master_retur_jual_paket_search($rpaket_id ,$rpaket_nobukti ,$rpaket_nobuktijual ,$rpaket_cust ,$rpaket_tanggal ,$rpaket_tanggal_akhir, $rpaket_keterangan ,$rpaket_stat_dok, $start,$end);
+		$result = $this->m_master_retur_jual_paket->master_retur_jual_paket_search($rpaket_nobukti ,$rpaket_nobuktijual ,$rpaket_cust ,$rpaket_tanggal ,$rpaket_tanggal_akhir, $rpaket_keterangan ,$rpaket_stat_dok, $start,$end);
 		echo $result;
 	}
 
 
 	function master_retur_jual_paket_print(){
   		//POST varibale here
-		$rpaket_id=trim(@$_POST["rpaket_id"]);
 		$rpaket_nobukti=trim(@$_POST["rpaket_nobukti"]);
 		$rpaket_nobukti=str_replace("/(<\/?)(p)([^>]*>)", "",$rpaket_nobukti);
 		$rpaket_nobukti=str_replace("'", '"',$rpaket_nobukti);
@@ -351,64 +348,39 @@ class C_master_retur_jual_paket extends Controller {
 		$rpaket_nobuktijual=str_replace("'", '"',$rpaket_nobuktijual);
 		$rpaket_cust=trim(@$_POST["rpaket_cust"]);
 		$rpaket_tanggal=trim(@$_POST["rpaket_tanggal"]);
+		$rpaket_tanggal_akhir=trim(@$_POST["rpaket_tanggal_akhir"]);
 		$rpaket_keterangan=trim(@$_POST["rpaket_keterangan"]);
 		$rpaket_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$rpaket_keterangan);
 		$rpaket_keterangan=str_replace("'", '"',$rpaket_keterangan);
+		$rpaket_stat_dok=trim(@$_POST["rpaket_stat_dok"]);
+		$rpaket_stat_dok=str_replace("/(<\/?)(p)([^>]*>)", "",$rpaket_stat_dok);
+		$rpaket_stat_dok=str_replace("'", '"',$rpaket_stat_dok);
+		
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$result = $this->m_master_retur_jual_paket->master_retur_jual_paket_print($rpaket_id ,$rpaket_nobukti ,$rpaket_nobuktijual ,$rpaket_cust ,$rpaket_tanggal ,$rpaket_keterangan ,$option,$filter);
-		$nbrows=$result->num_rows();
-		$totcolumn=11;
-   		/* We now have our array, let's build our HTML file */
-		$file = fopen("master_retur_jual_paketlist.html",'w');
-		fwrite($file, "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' /><title>Printing the Master_retur_jual_paket Grid</title><link rel='stylesheet' type='text/css' href='assets/modules/main/css/printstyle.css'/></head>");
-		fwrite($file, "<body><table summary='Master_retur_jual_paket List'><caption>MASTER_RETUR_JUAL_PAKET</caption><thead><tr><th scope='col'>Rpaket Id</th><th scope='col'>Rpaket Nobukti</th><th scope='col'>Rpaket Nobuktijual</th><th scope='col'>Rpaket Cust</th><th scope='col'>Rpaket Tanggal</th><th scope='col'>Rpaket Keterangan</th><th scope='col'>Rpaket Creator</th><th scope='col'>Rpaket Date Create</th><th scope='col'>Rpaket Update</th><th scope='col'>Rpaket Date Update</th><th scope='col'>Rpaket Revised</th></tr></thead><tfoot><tr><th scope='row'>Total</th><td colspan='$totcolumn'>");
-		fwrite($file, $nbrows);
-		fwrite($file, " Master_retur_jual_paket</td></tr></tfoot><tbody>");
-		$i=0;
-		if($nbrows>0){
-			foreach($result->result_array() as $data){
-				fwrite($file,'<tr');
-				if($i%1==0){
-					fwrite($file," class='odd'");
-				}
-			
-				fwrite($file, "><th scope='row' id='r97'>");
-				fwrite($file, $data['rpaket_id']);
-				fwrite($file,"</th><td>");
-				fwrite($file, $data['rpaket_nobukti']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['rpaket_nobuktijual']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['rpaket_cust']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['rpaket_tanggal']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['rpaket_keterangan']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['rpaket_creator']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['rpaket_date_create']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['rpaket_update']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['rpaket_date_update']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['rpaket_revised']);
-				fwrite($file, "</td></tr>");
-			}
+		$data["data_print"] = $this->m_master_retur_jual_paket->master_retur_jual_paket_print($rpaket_nobukti
+																							,$rpaket_nobuktijual
+																							,$rpaket_cust
+																							,$rpaket_tanggal
+																							,$rpaket_tanggal_akhir
+																							,$rpaket_keterangan
+																							,$rpaket_stat_dok
+																							,$option
+																							,$filter);
+		$print_view=$this->load->view("main/p_master_retur_jual_paket.php",$data,TRUE);
+		if(!file_exists("print")){
+			mkdir("print");
 		}
-		fwrite($file, "</tbody></table></body></html>");	
-		fclose($file);
-		echo '1';        
+		$print_file=fopen("print/master_retur_jual_paketlist.html","w+");
+		fwrite($print_file, $print_view);
+		echo '1';
 	}
 	/* End Of Function */
 
 	/* Function to Export Excel document */
 	function master_retur_jual_paket_export_excel(){
 		//POST varibale here
-		$rpaket_id=trim(@$_POST["rpaket_id"]);
 		$rpaket_nobukti=trim(@$_POST["rpaket_nobukti"]);
 		$rpaket_nobukti=str_replace("/(<\/?)(p)([^>]*>)", "",$rpaket_nobukti);
 		$rpaket_nobukti=str_replace("'", '"',$rpaket_nobukti);
@@ -417,13 +389,26 @@ class C_master_retur_jual_paket extends Controller {
 		$rpaket_nobuktijual=str_replace("'", '"',$rpaket_nobuktijual);
 		$rpaket_cust=trim(@$_POST["rpaket_cust"]);
 		$rpaket_tanggal=trim(@$_POST["rpaket_tanggal"]);
+		$rpaket_tanggal_akhir=trim(@$_POST["rpaket_tanggal_akhir"]);
 		$rpaket_keterangan=trim(@$_POST["rpaket_keterangan"]);
 		$rpaket_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$rpaket_keterangan);
 		$rpaket_keterangan=str_replace("'", '"',$rpaket_keterangan);
+		$rpaket_stat_dok=trim(@$_POST["rpaket_stat_dok"]);
+		$rpaket_stat_dok=str_replace("/(<\/?)(p)([^>]*>)", "",$rpaket_stat_dok);
+		$rpaket_stat_dok=str_replace("'", '"',$rpaket_stat_dok);
+		
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$query = $this->m_master_retur_jual_paket->master_retur_jual_paket_export_excel($rpaket_id ,$rpaket_nobukti ,$rpaket_nobuktijual ,$rpaket_cust ,$rpaket_tanggal ,$rpaket_keterangan ,$option,$filter);
+		$query = $this->m_master_retur_jual_paket->master_retur_jual_paket_export_excel($rpaket_nobukti
+																						,$rpaket_nobuktijual
+																						,$rpaket_cust
+																						,$rpaket_tanggal
+																						,$rpaket_tanggal_akhir
+																						,$rpaket_keterangan
+																						,$rpaket_stat_dok
+																						,$option
+																						,$filter);
 		
 		to_excel($query,"master_retur_jual_paket"); 
 		echo '1';

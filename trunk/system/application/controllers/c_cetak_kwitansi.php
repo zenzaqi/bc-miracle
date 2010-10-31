@@ -347,7 +347,6 @@ class C_cetak_kwitansi extends Controller {
 	//function for advanced search
 	function cetak_kwitansi_search(){
 		//POST varibale here
-		$kwitansi_id=trim(@$_POST["kwitansi_id"]);
 		$kwitansi_no=trim(@$_POST["kwitansi_no"]);
 		$kwitansi_no=str_replace("/(<\/?)(p)([^>]*>)", "",$kwitansi_no);
 		$kwitansi_no=str_replace("'", "''",$kwitansi_no);
@@ -361,76 +360,35 @@ class C_cetak_kwitansi extends Controller {
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_cetak_kwitansi->cetak_kwitansi_search($kwitansi_id ,$kwitansi_no ,$kwitansi_cust ,$kwitansi_keterangan ,$kwitansi_status ,$start,$end);
+		$result = $this->m_cetak_kwitansi->cetak_kwitansi_search($kwitansi_no ,$kwitansi_cust ,$kwitansi_keterangan ,$kwitansi_status ,$start,$end);
 		echo $result;
 	}
 
 
 	function cetak_kwitansi_print(){
   		//POST varibale here
-		$kwitansi_id=trim(@$_POST["kwitansi_id"]);
 		$kwitansi_no=trim(@$_POST["kwitansi_no"]);
 		$kwitansi_no=str_replace("/(<\/?)(p)([^>]*>)", "",$kwitansi_no);
 		$kwitansi_no=str_replace("'", "''",$kwitansi_no);
 		$kwitansi_cust=trim(@$_POST["kwitansi_cust"]);
-		$kwitansi_ref=trim(@$_POST["kwitansi_ref"]);
-		$kwitansi_nilai=trim(@$_POST["kwitansi_nilai"]);
 		$kwitansi_keterangan=trim(@$_POST["kwitansi_keterangan"]);
 		$kwitansi_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$kwitansi_keterangan);
 		$kwitansi_keterangan=str_replace("'", "''",$kwitansi_keterangan);
 		$kwitansi_status=trim(@$_POST["kwitansi_status"]);
 		$kwitansi_status=str_replace("/(<\/?)(p)([^>]*>)", "",$kwitansi_status);
 		$kwitansi_status=str_replace("'", "''",$kwitansi_status);
+		
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$result = $this->m_cetak_kwitansi->cetak_kwitansi_print($kwitansi_id ,$kwitansi_no ,$kwitansi_cust ,$kwitansi_ref ,$kwitansi_nilai ,$kwitansi_keterangan ,$kwitansi_status ,$option,$filter);
-		$nbrows=$result->num_rows();
-		$totcolumn=12;
-   		/* We now have our array, let's build our HTML file */
-		$file = fopen("cetak_kwitansilist.html",'w');
-		fwrite($file, "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' /><title>Printing the Cetak_kwitansi Grid</title><link rel='stylesheet' type='text/css' href='assets/modules/main/css/printstyle.css'/></head>");
-		fwrite($file, "<body><table summary='Cetak_kwitansi List'><caption>CETAK_KWITANSI</caption><thead><tr><th scope='col'>Kwitansi Id</th><th scope='col'>Kwitansi No</th><th scope='col'>Kwitansi Cust</th><th scope='col'>Kwitansi Ref</th><th scope='col'>Kwitansi Nilai</th><th scope='col'>Kwitansi Keterangan</th><th scope='col'>Kwitansi Status</th><th scope='col'>Kwitansi Creator</th><th scope='col'>Kwitansi Date Create</th><th scope='col'>Kwitansi Update</th><th scope='col'>Kwitansi Date Update</th><th scope='col'>Kwitansi Revised</th></tr></thead><tfoot><tr><th scope='row'>Total</th><td colspan='$totcolumn'>");
-		fwrite($file, $nbrows);
-		fwrite($file, " Cetak_kwitansi</td></tr></tfoot><tbody>");
-		$i=0;
-		if($nbrows>0){
-			foreach($result->result_array() as $data){
-				fwrite($file,'<tr');
-				if($i%1==0){
-					fwrite($file," class='odd'");
-				}
-			
-				fwrite($file, "><th scope='row' id='r97'>");
-				fwrite($file, $data['kwitansi_id']);
-				fwrite($file,"</th><td>");
-				fwrite($file, $data['kwitansi_no']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['kwitansi_cust']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['kwitansi_ref']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['kwitansi_nilai']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['kwitansi_keterangan']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['kwitansi_status']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['kwitansi_creator']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['kwitansi_date_create']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['kwitansi_update']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['kwitansi_date_update']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['kwitansi_revised']);
-				fwrite($file, "</td></tr>");
-			}
+		$data["data_print"] = $this->m_cetak_kwitansi->cetak_kwitansi_print($kwitansi_no ,$kwitansi_cust ,$kwitansi_keterangan ,$kwitansi_status ,$option,$filter);
+		$print_view=$this->load->view("main/p_cetak_kwitansi.php",$data,TRUE);
+		if(!file_exists("print")){
+			mkdir("print");
 		}
-		fwrite($file, "</tbody></table></body></html>");	
-		fclose($file);
-		echo '1';        
+		$print_file=fopen("print/cetak_kwitansilist.html","w+");
+		fwrite($print_file, $print_view);
+		echo '1';
 	}
 	/* End Of Function */
 	
@@ -460,23 +418,21 @@ class C_cetak_kwitansi extends Controller {
 	/* Function to Export Excel document */
 	function cetak_kwitansi_export_excel(){
 		//POST varibale here
-		$kwitansi_id=trim(@$_POST["kwitansi_id"]);
 		$kwitansi_no=trim(@$_POST["kwitansi_no"]);
 		$kwitansi_no=str_replace("/(<\/?)(p)([^>]*>)", "",$kwitansi_no);
 		$kwitansi_no=str_replace("'", "''",$kwitansi_no);
 		$kwitansi_cust=trim(@$_POST["kwitansi_cust"]);
-		$kwitansi_ref=trim(@$_POST["kwitansi_ref"]);
-		$kwitansi_nilai=trim(@$_POST["kwitansi_nilai"]);
 		$kwitansi_keterangan=trim(@$_POST["kwitansi_keterangan"]);
 		$kwitansi_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$kwitansi_keterangan);
 		$kwitansi_keterangan=str_replace("'", "''",$kwitansi_keterangan);
 		$kwitansi_status=trim(@$_POST["kwitansi_status"]);
 		$kwitansi_status=str_replace("/(<\/?)(p)([^>]*>)", "",$kwitansi_status);
 		$kwitansi_status=str_replace("'", "''",$kwitansi_status);
+		
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$query = $this->m_cetak_kwitansi->cetak_kwitansi_export_excel($kwitansi_id ,$kwitansi_no ,$kwitansi_cust ,$kwitansi_ref ,$kwitansi_nilai ,$kwitansi_keterangan ,$kwitansi_status ,$option,$filter);
+		$query = $this->m_cetak_kwitansi->cetak_kwitansi_export_excel($kwitansi_no ,$kwitansi_cust ,$kwitansi_keterangan ,$kwitansi_status ,$option,$filter);
 		
 		to_excel($query,"cetak_kwitansi"); 
 		echo '1';

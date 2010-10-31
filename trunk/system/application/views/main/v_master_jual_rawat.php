@@ -1884,8 +1884,31 @@ Ext.onReady(function(){
 		master_jual_rawat_reset_form();
 		/* only one record is selected here */
 		if(master_jual_rawatListEditorGrid.selModel.getCount() == 1) {
-			///////cbo_drawat_rawatDataStore.load({params: {query:master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_id')}});
-			//cbo_perawatanDataStore.load({params: {query:master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_id')}});
+			/*var get_cust_id = master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_cust');
+			var get_jrawat_tanggal = master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_tanggal');
+			Ext.Ajax.request({
+				waitMsg: 'Please wait...',
+				url: 'index.php?c=c_master_jual_rawat&m=jrawat_trawat_customer_locked_temp',
+				params:{
+					cust_id: get_cust_id,
+					jrawat_tanggal: get_jrawat_tanggal
+				},
+				callback: function(opts, success, response){
+					
+				},
+				failure: function(response){
+					var result=response.responseText;
+					Ext.MessageBox.show({
+					   title: 'Error',
+					   msg: 'Could not connect to the database. retry later.',
+					   buttons: Ext.MessageBox.OK,
+					   animEl: 'database',
+					   icon: Ext.MessageBox.ERROR
+					});	
+				}
+			});
+			*/
+			
 			cbo_kwitansi_jual_rawat_DataStore.load();
 			master_cara_bayarTabPanel.setActiveTab(0);
 			jrawat_post2db='UPDATE';
@@ -4582,6 +4605,7 @@ Ext.onReady(function(){
             lazyRenderer: true
         });
 		drawat_jenis_diskonField.on('select', function(){
+			var djumlah_beli_rawat = drawat_jumlahField.getValue();
 			var j=cbo_drawat_rawatDataStore.findExact('drawat_rawat_value',combo_jual_rawat.getValue(),0);
 			var drawat_diskon = 0;
 			if(drawat_jenis_diskonField.getValue()=='DU'){
@@ -4593,7 +4617,7 @@ Ext.onReady(function(){
 			}else{
 				drawat_diskonField.setValue(0);
 			}
-			drawat_subtotal_netField.setValue(((100-drawat_diskon)/100) * (1*cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_harga));
+			drawat_subtotal_netField.setValue(((100-drawat_diskon)/100) * (djumlah_beli_rawat*cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_harga));
 		});
         
         var drawat_subtotal_netField= new Ext.form.NumberField({

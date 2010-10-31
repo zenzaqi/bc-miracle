@@ -524,7 +524,7 @@ class M_master_retur_jual_produk extends Model{
 		}
 		
 		//function for advanced search record
-		function master_retur_jual_produk_search($rproduk_id ,$rproduk_nobukti ,$rproduk_nobuktijual ,$rproduk_cust ,$rproduk_tanggal , $rproduk_tanggal_akhir, $rproduk_keterangan , $rproduk_stat_dok, $start,$end){
+		function master_retur_jual_produk_search($rproduk_nobukti ,$rproduk_nobuktijual ,$rproduk_cust ,$rproduk_tanggal , $rproduk_tanggal_akhir, $rproduk_keterangan , $rproduk_stat_dok, $start,$end){
 			//full query
 			$query="SELECT
 							rproduk_id, rproduk_nobukti, jproduk_nobukti, cust_no, cust_nama, cust_id, 
@@ -535,10 +535,6 @@ class M_master_retur_jual_produk extends Model{
 						LEFT JOIN master_jual_produk mp ON(m.rproduk_nobuktijual=mp.jproduk_id) 
 						LEFT JOIN cetak_kwitansi ck ON(ck.kwitansi_ref=m.rproduk_nobukti)";
 			
-			if($rproduk_id!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " rproduk_id LIKE '%".$rproduk_id."%'";
-			};
 			if($rproduk_nobukti!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " rproduk_nobukti LIKE '%".$rproduk_nobukti."%'";
@@ -586,75 +582,123 @@ class M_master_retur_jual_produk extends Model{
 		}
 		
 		//function for print record
-		function master_retur_jual_produk_print($rproduk_id ,$rproduk_nobukti ,$rproduk_nobuktijual ,$rproduk_cust ,$rproduk_tanggal ,$rproduk_keterangan ,$option,$filter){
+		function master_retur_jual_produk_print($rproduk_nobukti
+												,$rproduk_nobuktijual
+												,$rproduk_cust
+												,$rproduk_tanggal
+												,$rproduk_tanggal_akhir
+												,$rproduk_keterangan
+												,$rproduk_stat_dok
+												,$option
+												,$filter){
 			//full query
-			$query="select * from master_retur_jual_produk";
+			$query =   "SELECT rproduk_tanggal AS tanggal
+					,rproduk_nobukti AS no_faktur
+					,jproduk_nobukti AS no_faktur_jual
+					,cust_no AS no_cust
+					,cust_nama AS customer
+					,kwitansi_nilai
+					,rproduk_keterangan AS keterangan
+					,rproduk_stat_dok AS stat_dok
+				FROM master_retur_jual_produk m
+				LEFT JOIN customer c ON(m.rproduk_cust=c.cust_id) 
+				LEFT JOIN master_jual_produk mp ON(m.rproduk_nobuktijual=mp.jproduk_id) 
+				LEFT JOIN cetak_kwitansi ck ON(ck.kwitansi_ref=m.rproduk_nobukti)";
+				
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (rproduk_id LIKE '%".addslashes($filter)."%' OR rproduk_nobukti LIKE '%".addslashes($filter)."%' OR rproduk_nobuktijual LIKE '%".addslashes($filter)."%' OR rproduk_cust LIKE '%".addslashes($filter)."%' OR rproduk_tanggal LIKE '%".addslashes($filter)."%' OR rproduk_keterangan LIKE '%".addslashes($filter)."%' )";
+				$query .= " (rproduk_nobukti LIKE '%".addslashes($filter)."%' OR jproduk_nobukti LIKE '%".addslashes($filter)."%' OR cust_nama LIKE '%".addslashes($filter)."%' OR cust_no LIKE '%".addslashes($filter)."%' )";
 				$result = $this->db->query($query);
 			} else if($option=='SEARCH'){
-				if($rproduk_id!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " rproduk_id LIKE '%".$rproduk_id."%'";
-				};
 				if($rproduk_nobukti!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " rproduk_nobukti LIKE '%".$rproduk_nobukti."%'";
 				};
 				if($rproduk_nobuktijual!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " rproduk_nobuktijual LIKE '%".$rproduk_nobuktijual."%'";
+					$query.= " jproduk_nobukti LIKE '%".$rproduk_nobuktijual."%'";
 				};
 				if($rproduk_cust!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " rproduk_cust LIKE '%".$rproduk_cust."%'";
+					$query.= " cust_nama LIKE '%".$rproduk_cust."%'";
 				};
-				if($rproduk_tanggal!=''){
+				if($rproduk_tanggal!='' && $rproduk_tanggal_akhir!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " rproduk_tanggal LIKE '%".$rproduk_tanggal."%'";
-				};
+					$query.= " rproduk_tanggal BETWEEN '".$rproduk_tanggal."' AND '".$rproduk_tanggal_akhir."'";
+				}
+				else if($rproduk_tanggal!='' && $rproduk_tanggal_akhir==''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " rproduk_tanggal='".$rproduk_tanggal."'";
+				}
 				if($rproduk_keterangan!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " rproduk_keterangan LIKE '%".$rproduk_keterangan."%'";
+				};
+				if($rproduk_stat_dok!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " rproduk_stat_dok LIKE '%".$rproduk_stat_dok."%'";
 				};
 				$result = $this->db->query($query);
 			}
-			return $result;
+			return $result->result();
 		}
 		
 		//function  for export to excel
-		function master_retur_jual_produk_export_excel($rproduk_id ,$rproduk_nobukti ,$rproduk_nobuktijual ,$rproduk_cust ,$rproduk_tanggal ,$rproduk_keterangan ,$option,$filter){
+		function master_retur_jual_produk_export_excel($rproduk_nobukti
+														,$rproduk_nobuktijual
+														,$rproduk_cust
+														,$rproduk_tanggal
+														,$rproduk_tanggal_akhir
+														,$rproduk_keterangan
+														,$rproduk_stat_dok
+														,$option
+														,$filter){
 			//full query
-			$query="select * from master_retur_jual_produk";
+			$query =   "SELECT rproduk_tanggal AS tanggal
+					,rproduk_nobukti AS no_faktur
+					,jproduk_nobukti AS no_faktur_jual
+					,cust_no AS no_cust
+					,cust_nama AS customer
+					,kwitansi_nilai AS 'Nilai Kuitansi (Rp)'
+					,rproduk_keterangan AS keterangan
+					,rproduk_stat_dok AS stat_dok
+				FROM master_retur_jual_produk m
+				LEFT JOIN customer c ON(m.rproduk_cust=c.cust_id) 
+				LEFT JOIN master_jual_produk mp ON(m.rproduk_nobuktijual=mp.jproduk_id) 
+				LEFT JOIN cetak_kwitansi ck ON(ck.kwitansi_ref=m.rproduk_nobukti)";
+				
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (rproduk_id LIKE '%".addslashes($filter)."%' OR rproduk_nobukti LIKE '%".addslashes($filter)."%' OR rproduk_nobuktijual LIKE '%".addslashes($filter)."%' OR rproduk_cust LIKE '%".addslashes($filter)."%' OR rproduk_tanggal LIKE '%".addslashes($filter)."%' OR rproduk_keterangan LIKE '%".addslashes($filter)."%' )";
+				$query .= " (rproduk_nobukti LIKE '%".addslashes($filter)."%' OR jproduk_nobukti LIKE '%".addslashes($filter)."%' OR cust_nama LIKE '%".addslashes($filter)."%' OR cust_no LIKE '%".addslashes($filter)."%' )";
 				$result = $this->db->query($query);
 			} else if($option=='SEARCH'){
-				if($rproduk_id!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " rproduk_id LIKE '%".$rproduk_id."%'";
-				};
 				if($rproduk_nobukti!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " rproduk_nobukti LIKE '%".$rproduk_nobukti."%'";
 				};
 				if($rproduk_nobuktijual!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " rproduk_nobuktijual LIKE '%".$rproduk_nobuktijual."%'";
+					$query.= " jproduk_nobukti LIKE '%".$rproduk_nobuktijual."%'";
 				};
 				if($rproduk_cust!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " rproduk_cust LIKE '%".$rproduk_cust."%'";
+					$query.= " cust_nama LIKE '%".$rproduk_cust."%'";
 				};
-				if($rproduk_tanggal!=''){
+				if($rproduk_tanggal!='' && $rproduk_tanggal_akhir!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " rproduk_tanggal LIKE '%".$rproduk_tanggal."%'";
-				};
+					$query.= " rproduk_tanggal BETWEEN '".$rproduk_tanggal."' AND '".$rproduk_tanggal_akhir."'";
+				}
+				else if($rproduk_tanggal!='' && $rproduk_tanggal_akhir==''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " rproduk_tanggal='".$rproduk_tanggal."'";
+				}
 				if($rproduk_keterangan!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " rproduk_keterangan LIKE '%".$rproduk_keterangan."%'";
+				};
+				if($rproduk_stat_dok!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " rproduk_stat_dok LIKE '%".$rproduk_stat_dok."%'";
 				};
 				$result = $this->db->query($query);
 			}
