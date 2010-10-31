@@ -4466,6 +4466,26 @@ Ext.onReady(function(){
 		triggerAction: 'all',
 		lazyRenderer: true
 	});
+	dpaket_jenisdiskonField.on('select', function(){
+		var djumlah_beli_paket = dpaket_jumlahField.getValue();
+		var j=cbo_dpaket_paketDataStore.findExact('dpaket_paket_value',combo_jual_paket.getValue(),0);
+		var dpaket_jenis_diskon = 0;
+		if(dpaket_jenisdiskonField.getValue()=='DU'){
+			dpaket_jenis_diskon = cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_du;
+			dpaket_jumlahdiskonField.setValue(cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_du);
+		}else if(dpaket_jenisdiskonField.getValue()=='DM'){
+			dpaket_jenis_diskon = cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_dm;
+			dpaket_jumlahdiskonField.setValue(cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_dm);
+		}else if(dpaket_jenisdiskonField.getValue()=='Bonus'){
+			dpaket_jenis_diskon = 100;
+			dpaket_jumlahdiskonField.setValue(100);
+			//dsub_total_netField.setValue(0); //Artinya customer digratiskan dari membayar
+		}else{
+			dpaket_jumlahdiskonField.setValue(0);
+		}
+		dpaket_subtotalnetField.setValue(((100-dpaket_jenis_diskon)/100) * (djumlah_beli_paket*cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_harga));
+		
+	});
 	
 	var dpaket_jumlahdiskonField= new Ext.form.NumberField({
 		allowDecimals: false,
@@ -6585,7 +6605,6 @@ Ext.onReady(function(){
 	/* Function for action list search */
 	function master_jual_paket_list_search(){
 		// render according to a SQL date format.
-		var jpaket_id_search=null;
 		var jpaket_nobukti_search=null;
 		var jpaket_cust_search=null;
 		var jpaket_tanggal_search_date="";
@@ -6595,7 +6614,6 @@ Ext.onReady(function(){
 		var jpaket_keterangan_search=null;
 		var jpaket_stat_dok_search=null;
 
-		if(jpaket_idSearchField.getValue()!==null){jpaket_id_search=jpaket_idSearchField.getValue();}
 		if(jpaket_nobuktiSearchField.getValue()!==null){jpaket_nobukti_search=jpaket_nobuktiSearchField.getValue();}
 		if(jpaket_custSearchField.getValue()!==null){jpaket_cust_search=jpaket_custSearchField.getValue();}
 		if(jpaket_tanggalSearchField.getValue()!==""){jpaket_tanggal_search_date=jpaket_tanggalSearchField.getValue().format('Y-m-d');}
@@ -6608,15 +6626,14 @@ Ext.onReady(function(){
 		master_jual_paket_DataStore.baseParams = {
 			task: 'SEARCH',
 			//variable here
-			jpaket_id	:	jpaket_id_search, 
-			jpaket_nobukti	:	jpaket_nobukti_search, 
-			jpaket_cust	:	jpaket_cust_search, 
-			jpaket_tanggal	:	jpaket_tanggal_search_date, 
-			jpaket_tanggal_akhir	:	jpaket_tanggal_akhir_search_date, 
-			jpaket_diskon	:	jpaket_diskon_search, 
-			jpaket_cara	:	jpaket_cara_search, 
-			jpaket_keterangan	:	jpaket_keterangan_search, 
-			jpaket_stat_dok	:	jpaket_stat_dok_search, 
+			jpaket_nobukti	:	jpaket_nobukti_search,
+			jpaket_cust	:	jpaket_cust_search,
+			jpaket_tanggal	:	jpaket_tanggal_search_date,
+			jpaket_tanggal_akhir	:	jpaket_tanggal_akhir_search_date,
+			jpaket_diskon	:	jpaket_diskon_search,
+			jpaket_cara	:	jpaket_cara_search,
+			jpaket_keterangan	:	jpaket_keterangan_search,
+			jpaket_stat_dok	:	jpaket_stat_dok_search,
 		};
 		// Cause the datastore to do another query : 
 		master_jual_paket_DataStore.reload({params: {start: 0, limit: pageS}});
@@ -6842,18 +6859,22 @@ Ext.onReady(function(){
 		var jpaket_nobukti_print=null;
 		var jpaket_cust_print=null;
 		var jpaket_tanggal_print_date="";
+		var jpaket_tanggal_akhir_print_date="";
 		var jpaket_diskon_print=null;
 		var jpaket_cara_print=null;
 		var jpaket_keterangan_print=null;
+		var jpaket_stat_dok_print=null;
 		var win;              
 		// check if we do have some search data...
 		if(master_jual_paket_DataStore.baseParams.query!==null){searchquery = master_jual_paket_DataStore.baseParams.query;}
 		if(master_jual_paket_DataStore.baseParams.jpaket_nobukti!==null){jpaket_nobukti_print = master_jual_paket_DataStore.baseParams.jpaket_nobukti;}
 		if(master_jual_paket_DataStore.baseParams.jpaket_cust!==null){jpaket_cust_print = master_jual_paket_DataStore.baseParams.jpaket_cust;}
 		if(master_jual_paket_DataStore.baseParams.jpaket_tanggal!==""){jpaket_tanggal_print_date = master_jual_paket_DataStore.baseParams.jpaket_tanggal;}
+		if(master_jual_paket_DataStore.baseParams.jpaket_tanggal_akhir!==""){jpaket_tanggal_akhir_print_date = master_jual_paket_DataStore.baseParams.jpaket_tanggal_akhir;}
 		if(master_jual_paket_DataStore.baseParams.jpaket_diskon!==null){jpaket_diskon_print = master_jual_paket_DataStore.baseParams.jpaket_diskon;}
 		if(master_jual_paket_DataStore.baseParams.jpaket_cara!==null){jpaket_cara_print = master_jual_paket_DataStore.baseParams.jpaket_cara;}
 		if(master_jual_paket_DataStore.baseParams.jpaket_keterangan!==null){jpaket_keterangan_print = master_jual_paket_DataStore.baseParams.jpaket_keterangan;}
+		if(master_jual_paket_DataStore.baseParams.jpaket_stat_dok!==null){jpaket_stat_dok_print = master_jual_paket_DataStore.baseParams.jpaket_stat_dok;}
 
 		Ext.Ajax.request({   
 		waitMsg: 'Mohon  Tunggu...',
@@ -6862,20 +6883,21 @@ Ext.onReady(function(){
 			task: "PRINT",
 		  	query: searchquery,                    		// if we are doing a quicksearch, use this
 			//if we are doing advanced search, use this
-			jpaket_nobukti : jpaket_nobukti_print,
-			jpaket_cust : jpaket_cust_print,
-		  	jpaket_tanggal : jpaket_tanggal_print_date, 
-			jpaket_diskon : jpaket_diskon_print,
-			jpaket_cara : jpaket_cara_print,
-			jpaket_keterangan : jpaket_keterangan_print,
+			jpaket_nobukti	:	jpaket_nobukti_print,
+			jpaket_cust	:	jpaket_cust_print,
+			jpaket_tanggal	:	jpaket_tanggal_print_date,
+			jpaket_tanggal_akhir	:	jpaket_tanggal_akhir_print_date,
+			jpaket_diskon	:	jpaket_diskon_print,
+			jpaket_cara	:	jpaket_cara_print,
+			jpaket_keterangan	:	jpaket_keterangan_print,
+			jpaket_stat_dok	:	jpaket_stat_dok_print,
 		  	currentlisting: master_jual_paket_DataStore.baseParams.task // this tells us if we are searching or not
 		}, 
 		success: function(response){              
 		  	var result=eval(response.responseText);
 		  	switch(result){
 		  	case 1:
-				win = window.open('./master_jual_paketlist.html','master_jual_paketlist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
-				win.print();
+				win = window.open('./print/master_jual_paketlist.html','master_jual_paketlist','height=400,width=900,resizable=1,scrollbars=1, menubar=1');
 				break;
 		  	default:
 				Ext.MessageBox.show({
@@ -6908,32 +6930,38 @@ Ext.onReady(function(){
 		var jpaket_nobukti_2excel=null;
 		var jpaket_cust_2excel=null;
 		var jpaket_tanggal_2excel_date="";
+		var jpaket_tanggal_akhir_2excel_date="";
 		var jpaket_diskon_2excel=null;
 		var jpaket_cara_2excel=null;
 		var jpaket_keterangan_2excel=null;
+		var jpaket_stat_dok_2excel=null;
 		var win;              
-		// check if we do have some search data...
+		// check if we do have some 2excel data...
 		if(master_jual_paket_DataStore.baseParams.query!==null){searchquery = master_jual_paket_DataStore.baseParams.query;}
 		if(master_jual_paket_DataStore.baseParams.jpaket_nobukti!==null){jpaket_nobukti_2excel = master_jual_paket_DataStore.baseParams.jpaket_nobukti;}
 		if(master_jual_paket_DataStore.baseParams.jpaket_cust!==null){jpaket_cust_2excel = master_jual_paket_DataStore.baseParams.jpaket_cust;}
 		if(master_jual_paket_DataStore.baseParams.jpaket_tanggal!==""){jpaket_tanggal_2excel_date = master_jual_paket_DataStore.baseParams.jpaket_tanggal;}
+		if(master_jual_paket_DataStore.baseParams.jpaket_tanggal_akhir!==""){jpaket_tanggal_akhir_2excel_date = master_jual_paket_DataStore.baseParams.jpaket_tanggal_akhir;}
 		if(master_jual_paket_DataStore.baseParams.jpaket_diskon!==null){jpaket_diskon_2excel = master_jual_paket_DataStore.baseParams.jpaket_diskon;}
 		if(master_jual_paket_DataStore.baseParams.jpaket_cara!==null){jpaket_cara_2excel = master_jual_paket_DataStore.baseParams.jpaket_cara;}
 		if(master_jual_paket_DataStore.baseParams.jpaket_keterangan!==null){jpaket_keterangan_2excel = master_jual_paket_DataStore.baseParams.jpaket_keterangan;}
+		if(master_jual_paket_DataStore.baseParams.jpaket_stat_dok!==null){jpaket_stat_dok_2excel = master_jual_paket_DataStore.baseParams.jpaket_stat_dok;}
 
 		Ext.Ajax.request({   
 		waitMsg: 'Mohon  Tunggu...',
 		url: 'index.php?c=c_master_jual_paket&m=get_action',
 		params: {
 			task: "EXCEL",
-		  	query: searchquery,                    		// if we are doing a quicksearch, use this
-			//if we are doing advanced search, use this
-			jpaket_nobukti : jpaket_nobukti_2excel,
-			jpaket_cust : jpaket_cust_2excel,
-		  	jpaket_tanggal : jpaket_tanggal_2excel_date, 
-			jpaket_diskon : jpaket_diskon_2excel,
-			jpaket_cara : jpaket_cara_2excel,
-			jpaket_keterangan : jpaket_keterangan_2excel,
+		  	query: searchquery,                    		// if we are doing a quick2excel, use this
+			//if we are doing advanced 2excel, use this
+			jpaket_nobukti	:	jpaket_nobukti_2excel,
+			jpaket_cust	:	jpaket_cust_2excel,
+			jpaket_tanggal	:	jpaket_tanggal_2excel_date,
+			jpaket_tanggal_akhir	:	jpaket_tanggal_akhir_2excel_date,
+			jpaket_diskon	:	jpaket_diskon_2excel,
+			jpaket_cara	:	jpaket_cara_2excel,
+			jpaket_keterangan	:	jpaket_keterangan_2excel,
+			jpaket_stat_dok	:	jpaket_stat_dok_2excel,
 		  	currentlisting: master_jual_paket_DataStore.baseParams.task // this tells us if we are searching or not
 		},
 		success: function(response){              

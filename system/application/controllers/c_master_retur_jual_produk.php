@@ -287,7 +287,6 @@ class C_master_retur_jual_produk extends Controller {
 	//function for advanced search
 	function master_retur_jual_produk_search(){
 		//POST varibale here
-		$rproduk_id=trim(@$_POST["rproduk_id"]);
 		$rproduk_nobukti=trim(@$_POST["rproduk_nobukti"]);
 		$rproduk_nobukti=str_replace("/(<\/?)(p)([^>]*>)", "",$rproduk_nobukti);
 		$rproduk_nobukti=str_replace("'", '"',$rproduk_nobukti);
@@ -307,14 +306,13 @@ class C_master_retur_jual_produk extends Controller {
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_master_retur_jual_produk->master_retur_jual_produk_search($rproduk_id ,$rproduk_nobukti ,$rproduk_nobuktijual ,$rproduk_cust ,$rproduk_tanggal, $rproduk_tanggal_akhir, $rproduk_keterangan , $rproduk_stat_dok, $start,$end);
+		$result = $this->m_master_retur_jual_produk->master_retur_jual_produk_search($rproduk_nobukti ,$rproduk_nobuktijual ,$rproduk_cust ,$rproduk_tanggal, $rproduk_tanggal_akhir, $rproduk_keterangan , $rproduk_stat_dok, $start,$end);
 		echo $result;
 	}
 
 
 	function master_retur_jual_produk_print(){
   		//POST varibale here
-		$rproduk_id=trim(@$_POST["rproduk_id"]);
 		$rproduk_nobukti=trim(@$_POST["rproduk_nobukti"]);
 		$rproduk_nobukti=str_replace("/(<\/?)(p)([^>]*>)", "",$rproduk_nobukti);
 		$rproduk_nobukti=str_replace("'", '"',$rproduk_nobukti);
@@ -323,57 +321,33 @@ class C_master_retur_jual_produk extends Controller {
 		$rproduk_nobuktijual=str_replace("'", '"',$rproduk_nobuktijual);
 		$rproduk_cust=trim(@$_POST["rproduk_cust"]);
 		$rproduk_tanggal=trim(@$_POST["rproduk_tanggal"]);
+		$rproduk_tanggal_akhir=trim(@$_POST["rproduk_tanggal_akhir"]);
 		$rproduk_keterangan=trim(@$_POST["rproduk_keterangan"]);
 		$rproduk_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$rproduk_keterangan);
 		$rproduk_keterangan=str_replace("'", '"',$rproduk_keterangan);
+		$rproduk_stat_dok=trim(@$_POST["rproduk_stat_dok"]);
+		$rproduk_stat_dok=str_replace("/(<\/?)(p)([^>]*>)", "",$rproduk_stat_dok);
+		$rproduk_stat_dok=str_replace("'", '"',$rproduk_stat_dok);
+		
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$result = $this->m_master_retur_jual_produk->master_retur_jual_produk_print($rproduk_id ,$rproduk_nobukti ,$rproduk_nobuktijual ,$rproduk_cust ,$rproduk_tanggal ,$rproduk_keterangan ,$option,$filter);
-		$nbrows=$result->num_rows();
-		$totcolumn=11;
-   		/* We now have our array, let's build our HTML file */
-		$file = fopen("master_retur_jual_produklist.html",'w');
-		fwrite($file, "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' /><title>Printing the Master_retur_jual_produk Grid</title><link rel='stylesheet' type='text/css' href='assets/modules/main/css/printstyle.css'/></head>");
-		fwrite($file, "<body><table summary='Master_retur_jual_produk List'><caption>MASTER_RETUR_JUAL_PRODUK</caption><thead><tr><th scope='col'>Rproduk Id</th><th scope='col'>Rproduk Nobukti</th><th scope='col'>Rproduk Nobuktijual</th><th scope='col'>Rproduk Cust</th><th scope='col'>Rproduk Tanggal</th><th scope='col'>Rproduk Keterangan</th><th scope='col'>Rproduk Creator</th><th scope='col'>Rproduk Date Create</th><th scope='col'>Rproduk Update</th><th scope='col'>Rproduk Date Update</th><th scope='col'>Rproduk Revised</th></tr></thead><tfoot><tr><th scope='row'>Total</th><td colspan='$totcolumn'>");
-		fwrite($file, $nbrows);
-		fwrite($file, " Master_retur_jual_produk</td></tr></tfoot><tbody>");
-		$i=0;
-		if($nbrows>0){
-			foreach($result->result_array() as $data){
-				fwrite($file,'<tr');
-				if($i%1==0){
-					fwrite($file," class='odd'");
-				}
-			
-				fwrite($file, "><th scope='row' id='r97'>");
-				fwrite($file, $data['rproduk_id']);
-				fwrite($file,"</th><td>");
-				fwrite($file, $data['rproduk_nobukti']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['rproduk_nobuktijual']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['rproduk_cust']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['rproduk_tanggal']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['rproduk_keterangan']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['rproduk_creator']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['rproduk_date_create']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['rproduk_update']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['rproduk_date_update']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['rproduk_revised']);
-				fwrite($file, "</td></tr>");
-			}
+		$data["data_print"] = $this->m_master_retur_jual_produk->master_retur_jual_produk_print($rproduk_nobukti
+																								,$rproduk_nobuktijual
+																								,$rproduk_cust
+																								,$rproduk_tanggal
+																								,$rproduk_tanggal_akhir
+																								,$rproduk_keterangan
+																								,$rproduk_stat_dok
+																								,$option
+																								,$filter);
+		$print_view=$this->load->view("main/p_master_retur_jual_produk.php",$data,TRUE);
+		if(!file_exists("print")){
+			mkdir("print");
 		}
-		fwrite($file, "</tbody></table></body></html>");	
-		fclose($file);
-		echo '1';        
+		$print_file=fopen("print/master_retur_jual_produklist.html","w+");
+		fwrite($print_file, $print_view);
+		echo '1';
 	}
 	/* End Of Function */
 
@@ -381,7 +355,6 @@ class C_master_retur_jual_produk extends Controller {
 	function master_retur_jual_produk_export_excel(){
 		//POST varibale here
 		$this->load->plugin('to_excel');
-		$rproduk_id=trim(@$_POST["rproduk_id"]);
 		$rproduk_nobukti=trim(@$_POST["rproduk_nobukti"]);
 		$rproduk_nobukti=str_replace("/(<\/?)(p)([^>]*>)", "",$rproduk_nobukti);
 		$rproduk_nobukti=str_replace("'", '"',$rproduk_nobukti);
@@ -390,15 +363,28 @@ class C_master_retur_jual_produk extends Controller {
 		$rproduk_nobuktijual=str_replace("'", '"',$rproduk_nobuktijual);
 		$rproduk_cust=trim(@$_POST["rproduk_cust"]);
 		$rproduk_tanggal=trim(@$_POST["rproduk_tanggal"]);
+		$rproduk_tanggal_akhir=trim(@$_POST["rproduk_tanggal_akhir"]);
 		$rproduk_keterangan=trim(@$_POST["rproduk_keterangan"]);
 		$rproduk_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$rproduk_keterangan);
 		$rproduk_keterangan=str_replace("'", '"',$rproduk_keterangan);
+		$rproduk_stat_dok=trim(@$_POST["rproduk_stat_dok"]);
+		$rproduk_stat_dok=str_replace("/(<\/?)(p)([^>]*>)", "",$rproduk_stat_dok);
+		$rproduk_stat_dok=str_replace("'", '"',$rproduk_stat_dok);
+		
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$query = $this->m_master_retur_jual_produk->master_retur_jual_produk_export_excel($rproduk_id ,$rproduk_nobukti ,$rproduk_nobuktijual ,$rproduk_cust ,$rproduk_tanggal ,$rproduk_keterangan ,$option,$filter);
+		$query = $this->m_master_retur_jual_produk->master_retur_jual_produk_export_excel($rproduk_nobukti
+																						  ,$rproduk_nobuktijual
+																						  ,$rproduk_cust
+																						  ,$rproduk_tanggal
+																						  ,$rproduk_tanggal_akhir
+																						  ,$rproduk_keterangan
+																						  ,$rproduk_stat_dok
+																						  ,$option
+																						  ,$filter);
 		
-		to_excel($query,"master_retur_jual_produk"); 
+		to_excel($query,"master_retur_jual_produk");
 		echo '1';
 			
 	}

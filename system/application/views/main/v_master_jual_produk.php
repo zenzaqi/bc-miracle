@@ -4613,12 +4613,24 @@ Ext.onReady(function(){
 		lazyRenderer: true
 	});
 	djenis_diskonField.on('select', function(){
-		if(djenis_diskonField.getValue()=='Bonus'){
-				djumlah_diskonField.setValue(100);
-				dsub_total_netField.setValue(0); //Artinya customer digratiskan dari membayar
-		}else if(djenis_diskonField.getValue()=='Promo'){
-				//* Mengambil Diskon Promo dari table db.promo /
+		var djumlah_beli_produk = djumlah_beli_produkField.getValue();
+		var j=cbo_dproduk_produkDataStore.findExact('dproduk_produk_value',combo_jual_produk.getValue(),0);
+		var djenis_diskon = 0;
+		if(djenis_diskonField.getValue()=='DU'){
+			djenis_diskon = cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_du;
+			djumlah_diskonField.setValue(cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_du);
+		}else if(djenis_diskonField.getValue()=='DM'){
+			djenis_diskon = cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_dm;
+			djumlah_diskonField.setValue(cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_dm);
+		}else if(djenis_diskonField.getValue()=='Bonus'){
+			djenis_diskon = 100;
+			djumlah_diskonField.setValue(100);
+			//dsub_total_netField.setValue(0); //Artinya customer digratiskan dari membayar
+		}else{
+			djumlah_diskonField.setValue(0);
 		}
+		dsub_total_netField.setValue(((100-djenis_diskon)/100) * (djumlah_beli_produk*cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_harga));
+		
 	});
 	
 	var djumlah_diskonField = new Ext.form.NumberField({
