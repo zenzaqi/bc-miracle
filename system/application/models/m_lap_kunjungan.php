@@ -14,6 +14,8 @@ class M_lap_kunjungan extends Model{
 	//function for get list record
 	function lap_kunjungan_list($filter,$start,$end){
 			$date_now=date('Y-m-d');
+			
+			//jika ada penggantian di query ini, sesuaikan juga query di m_crm_generator, bagian Frequency
 			$query="select date_format(tgl_tindakan, '%Y-%m-%d') as tgl_tindakan,
 sum(jum_cust_medis),
 sum(jum_cust_surgery),
