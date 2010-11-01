@@ -1956,7 +1956,7 @@ class M_master_jual_rawat extends Model{
 				$query.=" AND vu_jrawat_pk.dapaket_stat_dok = '".$jrawat_stat_dok."'";
 			}
 		};
-		echo $query;
+		
 		$result = $this->db->query($query);
 		$nbrows = $result->num_rows();
 		
