@@ -80,12 +80,20 @@ class M_crm_generator extends Model{
 			//untuk mendapatkan parameter di crm_setup
 			$sql_parameter = 
 			   "select max(setcrm_id) as setcrm_id, 
+					c.setcrm_frequency_count, c.setcrm_frequency_days, 
+					c.setcrm_frequency_value_morethan, c.setcrm_frequency_value_equal, c.setcrm_frequency_value_lessthan,
 					c.setcrm_recency_days, c.setcrm_recency_value_morethan, c.setcrm_recency_value_lessthan, 
 					c.setcrm_referal_person, c.setcrm_referal_days, c.setcrm_referal_morethan, c.setcrm_referal_equal, c.setcrm_referal_lessthan
 				from crm_setup c";
 			
 			$query_parameter				= $this->db->query($sql_parameter);
 			$data_parameter 				= $query_parameter->row();
+			
+			$setcrm_frequency_count			= $data_parameter->setcrm_frequency_count;
+			$setcrm_frequency_days 			= $data_parameter->setcrm_frequency_days;
+			$setcrm_frequency_value_lessthan= $data_parameter->setcrm_frequency_value_lessthan;
+			$setcrm_frequency_value_equal 	= $data_parameter->setcrm_frequency_value_equal;
+			$setcrm_frequency_value_morethan= $data_parameter->setcrm_frequency_value_morethan;
 			
 			$setcrm_recency_days 			= $data_parameter->setcrm_recency_days;
 			$setcrm_recency_value_lessthan 	= $data_parameter->setcrm_recency_value_lessthan;
@@ -98,7 +106,53 @@ class M_crm_generator extends Model{
 			$setcrm_referal_lessthan		= $data_parameter->setcrm_referal_lessthan;
 			
 	
-			//untuk menghitung Recency
+			//untuk menghitung Frequency:
+			//selalu sesuaikan query dengan query di m_lap_kunjungan.php
+			
+			$sql_value_freq =
+			   "select 
+				sum(cust) as jum_total
+				from
+					(
+					select 
+						count(m.jrawat_cust) as cust
+					from detail_jual_rawat
+					left join master_jual_rawat m on (detail_jual_rawat.drawat_master = m.jrawat_id)
+					left join perawatan p on (detail_jual_rawat.drawat_rawat=p.rawat_id)
+					where 
+						m.jrawat_stat_dok <> 'Batal' and 
+						m.jrawat_bayar <> 0 and 
+						(p.rawat_kategori = 2 or p.rawat_kategori = 3 or p.rawat_kategori = 4 or p.rawat_kategori = 16) and 
+						date_add(m.jrawat_tanggal, interval '$setcrm_frequency_days' day) >= now() and m.jrawat_cust = '$crmvalue_cust'
+					group by m.jrawat_tanggal
+					
+					union
+					
+					select 
+						count(m.jproduk_cust) as cust
+					from master_jual_produk m
+					where 
+						m.jproduk_stat_dok <> 'Batal' and m.jproduk_bayar <> 0 and
+						date_add(m.jproduk_tanggal, interval '$setcrm_frequency_days' day) >= now() and m.jproduk_cust = '$crmvalue_cust'
+					group by m.jproduk_tanggal
+					
+					union
+			
+					select 
+						count(d.dapaket_cust) as cust
+					from detail_ambil_paket d
+					left join perawatan p on (d.dapaket_item = p.rawat_id)
+					where 
+						(p.rawat_kategori = 2 or p.rawat_kategori = 3 or p.rawat_kategori = 4 or p.rawat_kategori = 16) and	d.dapaket_stat_dok <> 'Batal' and
+						date_add(d.dapaket_tgl_ambil, interval '$setcrm_frequency_days' day) >= now() and d.dapaket_cust = '$crmvalue_cust'
+					group by d.dapaket_tgl_ambil
+					)
+					as table_union2
+			   ";
+			$query_frequency	= $this->db->query($sql_value_frequency);
+			
+			
+			//untuk menghitung Recency:
 			
 			$sql_value_recency = 
 			   "select dapaket_id as id
@@ -130,7 +184,7 @@ class M_crm_generator extends Model{
 			}
 			
 			
-			//untuk menghitung referal rate
+			//untuk menghitung referal rate:
 			
 			$sql_value_referal = 
 			   "select count(c.cust_id) as jum_referal
