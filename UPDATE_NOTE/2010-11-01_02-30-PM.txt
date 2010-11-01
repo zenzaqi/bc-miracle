@@ -1,0 +1,6 @@
+[by zaqi.smart@gmail.com]
+- fix update
+  o history penukaran point
+    - fix record cust no
+    - fix record penambahan point
+    - SQL: 2010-11-01_02-30-PM.sql
