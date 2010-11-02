@@ -1,0 +1,16 @@
+[by zaqi.smart@gmail.com]
+- New Update
+  o History Poin Faktur
+    - Menyimpan history perolehan poin per faktur
+    - update SQL : 2010-11-02_12-40-AM.sql
+    - link : ?c=c_point_faktur
+  
+  o Laporan Retur Paket
+    - Opsi Rekap [No faktur, No Faktur Jual, Tanggal, Customer]
+    - Opsi Detail [No Faktur, No Faktur Jual, Tanggal, Customer, Paket]
+    - update SQL : 2010-11-02_12-38-AM.sql
+    - link : ?c=c_retur_jual_paket&m=laporan
+
+  o History Poin Voucher
+    - cetak fix
+    

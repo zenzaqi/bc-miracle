@@ -603,7 +603,7 @@ Ext.onReady(function(){
 		  	var result=eval(response.responseText);
 		  	switch(result){
 		  	case 1:
-				win = window.open('./print/voucher_pointlist.html','voucherlist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
+				win = window.open('./print/print_voucherlist.html','voucherlist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
 				win.print();
 				break;
 		  	default:

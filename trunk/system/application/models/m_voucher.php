@@ -161,14 +161,15 @@ class M_voucher extends Model{
 				};
 			}
 			$result = $this->db->query($query);
-			return $result;
+			return $result->result();
 		}
 		
 		//function  for export to excel
 		function voucher_export_excel($voucher_no ,$voucher_nama , $voucher_cust, $voucher_point ,$voucher_kadaluarsa ,$voucher_cashback ,
 									  $option,$filter){
 			//full query
-			$query="select * from voucher";
+			$query="SELECT ifnull(voucher_no,'-') as 'No Voucher', voucher_point as Poin, voucher_cashback as 'Nilai (Rp)',
+					voucher_kadaluarsa as Kadaluarsa, ifnull(voucher_cust,'-') as 'No Customer', voucher_nama as 'Jenis Transaksi' FROM voucher";
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 				$query .= " (voucher_no LIKE '%".addslashes($filter)."%' OR 
