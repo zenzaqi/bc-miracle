@@ -18,7 +18,7 @@ class C_master_retur_jual_paket extends Controller {
 		parent::Controller();
 		$this->load->model('m_master_retur_jual_paket', '', TRUE);
 		session_start();
-		$this->load->plugin('to_excel');
+		
 	}
 	
 	//set index
@@ -61,12 +61,30 @@ class C_master_retur_jual_paket extends Controller {
 		
 		$data["data_print"]=$this->m_master_retur_jual_paket->get_laporan($tgl_awal,$tgl_akhir,$periode,$opsi,$group);
 
-		switch($group){
+		/*switch($group){
 			case "Tanggal": $print_view=$this->load->view("main/p_rekap_retur_jual_tanggal.php",$data,TRUE);break;
 			case "No Faktur Jual": $print_view=$this->load->view("main/p_rekap_retur_jual_faktur_jual.php",$data,TRUE);break;
 			case "Customer": $print_view=$this->load->view("main/p_rekap_retur_jual_customer.php",$data,TRUE);break;
 			default: $print_view=$this->load->view("main/p_rekap_retur_jual.php",$data,TRUE);break;
+		}*/
+		
+		if($opsi=='rekap'){
+			switch($group){
+				case "Tanggal": $print_view=$this->load->view("main/p_rekap_retur_paket_tanggal.php",$data,TRUE);break;
+				case "No Faktur Jual": $print_view=$this->load->view("main/p_rekap_retur_paket_faktur_jual.php",$data,TRUE);break;
+				case "Customer": $print_view=$this->load->view("main/p_rekap_retur_paket_customer.php",$data,TRUE);break;
+				default: $print_view=$this->load->view("main/p_rekap_retur_paket.php",$data,TRUE);break;
+			}
+		}else{
+			switch($group){
+				case "Tanggal": $print_view=$this->load->view("main/p_detail_retur_paket_tanggal.php",$data,TRUE);break;
+				case "Customer": $print_view=$this->load->view("main/p_detail_retur_paket_customer.php",$data,TRUE);break;
+				case "Paket": $print_view=$this->load->view("main/p_detail_retur_paket_paket.php",$data,TRUE);break;
+				case "No Faktur Jual": $print_view=$this->load->view("main/p_detail_retur_paket_faktur_jual.php",$data,TRUE);break;
+				default: $print_view=$this->load->view("main/p_detail_retur_paket.php",$data,TRUE);break;
+			}
 		}
+		
 		if(!file_exists("print")){
 			mkdir("print");
 		}
@@ -409,7 +427,7 @@ class C_master_retur_jual_paket extends Controller {
 																						,$rpaket_stat_dok
 																						,$option
 																						,$filter);
-		
+		$this->load->plugin('to_excel');
 		to_excel($query,"master_retur_jual_paket"); 
 		echo '1';
 			

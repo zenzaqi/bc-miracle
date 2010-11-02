@@ -18,6 +18,43 @@ class M_master_retur_jual_paket extends Model{
 		parent::Model();
 	}
 	
+	function get_laporan($tgl_awal,$tgl_akhir,$periode,$opsi,$group){
+			
+		switch($group){
+			case "Tanggal": $order_by=" ORDER BY tanggal ASC";break;
+			case "Customer": $order_by=" ORDER BY cust_nama ASC";break;
+			case "No Faktur": $order_by=" ORDER BY no_bukti ASC";break;
+			case "Paket": $order_by=" ORDER BY paket_kode ASC";break;
+			case "No Faktur Jual": $order_by=" ORDER BY no_bukti_jual ASC";break;
+			default: $order_by=" ORDER BY no_bukti ASC";break;
+		}
+		
+		if($opsi=='rekap'){
+			if($periode=='all')
+				$sql="SELECT distinct * FROM vu_trans_retur_paket WHERE rpaket_stat_dok<>'Batal' ".$order_by;
+			else if($periode=='bulan')
+				$sql="SELECT distinct * FROM vu_trans_retur_paket WHERE date_format(tanggal,'%Y-%m')='".$tgl_awal."' 
+						AND rpaket_stat_dok<>'Batal' ".$order_by;
+			else if($periode=='tanggal')
+				$sql="SELECT distinct * FROM vu_trans_retur_paket WHERE date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' 
+						AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."' AND rpaket_stat_dok<>'Batal' ".$order_by;
+		}else if($opsi=='detail'){
+			if($periode=='all')
+				$sql="SELECT * FROM vu_detail_retur_paket_rawat WHERE rpaket_stat_dok<>'Batal' ".$order_by;
+			else if($periode=='bulan')
+				$sql="SELECT * FROM vu_detail_retur_paket_rawat WHERE date_format(tanggal,'%Y-%m')='".$tgl_awal."' 
+						AND  rpaket_stat_dok<>'Batal' ".$order_by;
+			else if($periode=='tanggal')
+				$sql="SELECT * FROM vu_detail_retur_paket_rawat WHERE date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' 
+						AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."' AND rpaket_stat_dok<>'Batal' ".$order_by;
+		}
+		
+		//$this->firephp->log($sql);
+		
+		$query=$this->db->query($sql);
+		return $query->result();
+	}
+		
 	/*function get_rawat_list($query,$start,$end){
 		$rs_rows=0;
 		if(is_numeric($query)==true){

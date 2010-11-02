@@ -107,10 +107,16 @@ class C_voucher extends Controller {
 		$option=@$_POST['currentlisting'];
 		$filter=@$_POST["query"];
 		
-		$result = $this->m_voucher->voucher_print($voucher_no,$voucher_nama , $voucher_cust, $voucher_point ,$voucher_kadaluarsa ,$voucher_cashback ,
-												  $option,$filter);
+		$data["data_print"] = $this->m_voucher->voucher_print($voucher_no,$voucher_nama , $voucher_cust, $voucher_point ,$voucher_kadaluarsa ,
+															  $voucher_cashback , $option,$filter);
 
-		fclose($file);
+		$print_view=$this->load->view("main/p_voucher.php",$data,TRUE);
+		if(!file_exists("print")){
+			mkdir("print");
+		}
+
+		$print_file=fopen("print/print_voucherlist.html","w+");	
+		fwrite($print_file, $print_view);
 		echo '1';        
 	}
 	/* End Of Function */

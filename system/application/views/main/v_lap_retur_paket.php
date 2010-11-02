@@ -15,48 +15,48 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	<style type="text/css">
+        p { width:650px; }
+		.search-item {
+			font:normal 11px tahoma, arial, helvetica, sans-serif;
+			padding:3px 10px 3px 10px;
+			border:1px solid #fff;
+			border-bottom:1px solid #eeeeee;
+			white-space:normal;
+			color:#555;
+		}
+		.search-item h3 {
+			display:block;
+			font:inherit;
+			font-weight:bold;
+			color:#222;
+		}
+		
+		.search-item h3 span {
+			float: right;
+			font-weight:normal;
+			margin:0 0 5px 5px;
+			width:100px;
+			display:block;
+			clear:none;
+		}
+    </style>
 </head>
-<style type="text/css">
-	p { width:650px; }
-	.search-item {
-		font:normal 11px tahoma, arial, helvetica, sans-serif;
-		padding:3px 10px 3px 10px;
-		border:1px solid #fff;
-		border-bottom:1px solid #eeeeee;
-		white-space:normal;
-		color:#555;
-	}
-	.search-item h3 {
-		display:block;
-		font:inherit;
-		font-weight:bold;
-		color:#222;
-	}
-	
-	.search-item h3 span {
-		float: right;
-		font-weight:normal;
-		margin:0 0 5px 5px;
-		width:100px;
-		display:block;
-		clear:none;
-	}
-</style>
 <script>
 
-var rpt_returbeliWindow;
-var rpt_returbeliForm;
+var rpt_rpaketukWindow;
+var rpt_rpaketForm;
 
-var rpt_returbeli_tglawalField;
-var rpt_returbeli_tglakhirField;
-var rpt_returbeli_rekapField;
-var rpt_returbeli_detailField;
-var rpt_returbeli_bulanField;
-var rpt_returbeli_tahunField;
-var rpt_returbeli_opsitglField;
-var rpt_returbeli_opsiblnField;
-var rpt_returbeli_opsiallField;
-var rpt_returbeli_groupField;
+/* declare variable here */
+var rpt_rpaket_tglawalField;
+var rpt_rpaket_tglakhirField;
+var rpt_rpaket_rekapField;
+var rpt_rpaket_detailField;
+var rpt_rpaket_bulanField;
+var rpt_rpaket_tahunField;
+var rpt_rpaket_opsitglField;
+var rpt_rpaket_opsiblnField;
+var rpt_rpaket_opsiallField;
 
 var today=new Date().format('Y-m-d');
 var yesterday=new Date().add(Date.DAY, -1).format('Y-m-d');
@@ -96,6 +96,7 @@ for($i=(date('Y')-4);$i<=date('Y');$i++){
 $tahun=substr($tahun,0,strlen($tahun)-1);
 $tahun.="]";
 $bulan="";
+
 ?>
 Ext.onReady(function(){
   Ext.QuickTips.init();
@@ -103,31 +104,31 @@ Ext.onReady(function(){
 	var group_master_Store= new Ext.data.SimpleStore({
 			id: 'group_master_Store',
 			fields:['group'],
-			data:[['No Faktur'],['Tanggal'],['Supplier']]
+			data:[['No Faktur'],['No Faktur Jual'],['Tanggal'],['Customer']]
 	});
 	
 	var group_detail_Store= new Ext.data.SimpleStore({
 			id: 'group_detail_Store',
 			fields:['group'],
-			data:[['No Faktur'],['Tanggal'],['Supplier'],['Produk']]
+			data:[['No Faktur'],['No Faktur Jual'],['Tanggal'],['Customer'],['Paket']]
 	});
 	
-	var rpt_returbeli_groupField=new Ext.form.ComboBox({
-		id:'rpt_returbeli_groupField',
+	var rpt_rpaket_groupField=new Ext.form.ComboBox({
+		id:'rpt_rpaket_groupField',
 		fieldLabel:'Kelompokkan',
 		store: group_master_Store,
 		mode: 'local',
 		displayField: 'group',
 		valueField: 'group',
 		value: 'No Faktur',
-		width: 100,
+		width: 150,
 		triggerAction: 'all',
 		typeAhead: true,
 		lazyRender: true
 	});
 	
-	rpt_returbeli_bulanField=new Ext.form.ComboBox({
-		id:'rpt_returbeli_bulanField',
+	rpt_rpaket_bulanField=new Ext.form.ComboBox({
+		id:'rpt_rpaket_bulanField',
 		fieldLabel:' ',
 		store:new Ext.data.SimpleStore({
 			fields:['value', 'display'],
@@ -141,8 +142,8 @@ Ext.onReady(function(){
 		triggerAction: 'all'
 	});
 	
-	rpt_returbeli_tahunField=new Ext.form.ComboBox({
-		id:'rpt_returbeli_tahunField',
+	rpt_rpaket_tahunField=new Ext.form.ComboBox({
+		id:'rpt_rpaket_tahunField',
 		fieldLabel:' ',
 		store:new Ext.data.SimpleStore({
 			fields:['tahun'],
@@ -156,186 +157,190 @@ Ext.onReady(function(){
 		triggerAction: 'all'
 	});
 	
-	rpt_returbeli_opsitglField=new Ext.form.Radio({
-		id:'rpt_returbeli_opsitglField',
+	rpt_rpaket_opsitglField=new Ext.form.Radio({
+		id:'rpt_rpaket_opsitglField',
 		boxLabel:'Tanggal',
 		width:100,
-		name: 'filter_opsi'
+		name: 'filter_opsi',
+		checked: true
 	});
 	
-	rpt_returbeli_opsiblnField=new Ext.form.Radio({
-		id:'rpt_returbeli_opsiblnField',
+	rpt_rpaket_opsiblnField=new Ext.form.Radio({
+		id:'rpt_rpaket_opsiblnField',
 		boxLabel:'Bulan',
 		width:100,
 		name: 'filter_opsi'
 	});
 	
-	rpt_returbeli_opsiallField=new Ext.form.Radio({
-		id:'rpt_returbeli_opsiallField',
+	rpt_rpaket_opsiallField=new Ext.form.Radio({
+		id:'rpt_rpaket_opsiallField',
 		boxLabel:'Semua',
-		name: 'filter_opsi',
-		checked: true
+		name: 'filter_opsi'
 	});
 	
-	rpt_returbeli_tglawalField= new Ext.form.DateField({
-		id: 'rpt_returbeli_tglawalField',
+	rpt_rpaket_tglawalField= new Ext.form.DateField({
+		id: 'rpt_rpaket_tglawalField',
 		fieldLabel: ' ',
 		format : 'Y-m-d',
-		name: 'rpt_returbeli_tglawalField',
-        vtype: 'daterange',
+		name: 'rpt_rpaket_tglawalField',
+        //vtype: 'daterange',
 		allowBlank: true,
 		width: 100,
-        endDateField: 'rpt_returbeli_tglakhirField'
+		value: today
+        //endDateField: 'rpt_rpaket_tglakhirField'
 	});
 	
-	rpt_returbeli_tglakhirField= new Ext.form.DateField({
-		id: 'rpt_returbeli_tglakhirField',
+	rpt_rpaket_tglakhirField= new Ext.form.DateField({
+		id: 'rpt_rpaket_tglakhirField',
 		fieldLabel: 's/d',
 		format : 'Y-m-d',
-		name: 'rpt_returbeli_tglakhirField',
-        vtype: 'daterange',
+		name: 'rpt_rpaket_tglakhirField',
+        //vtype: 'daterange',
 		allowBlank: true,
 		width: 100,
-        startDateField: 'rpt_returbeli_tglawalField',
+        //startDateField: 'rpt_rpaket_tglawalField',
 		value: today
 	});
 	
-	rpt_returbeli_rekapField=new Ext.form.Radio({
-		id: 'rpt_returbeli_rekapField',
+	rpt_rpaket_rekapField=new Ext.form.Radio({
+		id: 'rpt_rpaket_rekapField',
 		boxLabel: 'Rekap',
-		name: 'returbeli_opsi',
+		name: 'rpaket_opsi',
 		checked: true
 	});
 	
-	rpt_returbeli_detailField=new Ext.form.Radio({
-		id: 'rpt_returbeli_detailField',
+	rpt_rpaket_detailField=new Ext.form.Radio({
+		id: 'rpt_rpaket_detailField',
 		boxLabel: 'Detail',
-		name: 'returbeli_opsi'
+		name: 'rpaket_opsi'
 	});
 	
-	var rpt_returbeli_periodeField=new Ext.form.FieldSet({
-		id:'rpt_returbeli_periodeField',
+	var rpt_rpaket_periodeField=new Ext.form.FieldSet({
+		id:'rpt_rpaket_periodeField',
 		title : 'Periode',
 		layout: 'form',
 		bodyStyle:'padding: 0px 0px 0',
 		frame: false,
 		bolder: false,
 		anchor: '98%',
-		items:[{
+		items:[/*{
 				layout: 'column',
 				border: false,
-				items:[rpt_returbeli_opsitglField, {
+				items:[rpt_rpaket_opsiallField]
+			},*/{
+				layout: 'column',
+				border: false,
+				items:[rpt_rpaket_opsitglField, {
 					   		layout: 'form',
 							border: false,
 							labelWidth: 15,
 							bodyStyle:'padding:3px',
-							items:[rpt_returbeli_tglawalField]
+							items:[rpt_rpaket_tglawalField]
 					   },{
 					   		layout: 'form',
 							border: false,
 							labelWidth: 15,
 							bodyStyle:'padding:3px',
 							labelSeparator: ' ', 
-							items:[rpt_returbeli_tglakhirField]
+							items:[rpt_rpaket_tglakhirField]
 					   }]
 			},{
 				layout: 'column',
 				border: false,
-				items:[rpt_returbeli_opsiblnField,{
+				items:[rpt_rpaket_opsiblnField,{
 					   		layout: 'form',
 							border: false,
 							labelWidth: 15,
 							bodyStyle:'padding:3px',
-							items:[rpt_returbeli_bulanField]
+							items:[rpt_rpaket_bulanField]
 					   },{
 					   		layout: 'form',
 							border: false,
 							labelWidth: 15,
 							bodyStyle:'padding:3px',
 							labelSeparator: ' ', 
-							items:[rpt_returbeli_tahunField]
+							items:[rpt_rpaket_tahunField]
 					   }]
 			}]
 	});
 	
-	var	rpt_returbeli_opsiField=new Ext.form.FieldSet({
-		id: 'rpt_returbeli_opsiField',
+	var	rpt_rpaket_opsiField=new Ext.form.FieldSet({
+		id: 'rpt_rpaket_opsiField',
 		title: 'Opsi',
 		border: true,
 		anchor: '98%',
-		items: [rpt_returbeli_rekapField ,rpt_returbeli_detailField]
+		items: [rpt_rpaket_rekapField ,rpt_rpaket_detailField]
 	});
 	
-	var	rpt_returbeli_groupbyField=new Ext.form.FieldSet({
-		id: 'rpt_returbeli_groupbyField',
+	var	rpt_rpaket_groupbyField=new Ext.form.FieldSet({
+		id: 'rpt_rpaket_groupbyField',
 		title: 'Group By',
 		border: true,
 		anchor: '98%',
-		items: [rpt_returbeli_groupField]
+		items: [rpt_rpaket_groupField]
 	});
 	
 	function is_valid_form(){
-		if(rpt_returbeli_opsitglField.getValue()==true){
-			rpt_returbeli_tglawalField.allowBlank=false;
-			rpt_returbeli_tglakhirField.allowBlank=false;
-			if(rpt_returbeli_tglawalField.isValid() && rpt_returbeli_tglakhirField.isValid())
+		if(rpt_rpaket_opsitglField.getValue()==true){
+			rpt_rpaket_tglawalField.allowBlank=false;
+			rpt_rpaket_tglakhirField.allowBlank=false;
+			if(rpt_rpaket_tglawalField.isValid() && rpt_rpaket_tglakhirField.isValid())
 				return true;
 			else
 				return false;
 		}else{
-			rpt_returbeli_tglawalField.allowBlank=true;
-			rpt_returbeli_tglakhirField.allowBlank=true;
+			rpt_rpaket_tglawalField.allowBlank=true;
+			rpt_rpaket_tglakhirField.allowBlank=true;
 			return true;
 		}
 	}
 	
 	/* Function for print List Grid */
-	function print_rpt_returbeli(){
+	function print_rpt_rpaket(){
 		
-		var returbeli_tglawal="";
-		var returbeli_tglakhir="";
+		var rpaket_tglawal="";
+		var rpaket_tglakhir="";
 		var jrpdouk_opsi="";
-		var returbeli_bulan="";
-		var returbeli_tahun="";
-		var returbeli_periode="";
-		var returbeli_group="";
+		var rpaket_bulan="";
+		var rpaket_tahun="";
+		var rpaket_periode="";
+		var rpaket_group="";
 		
 		var win;               
 		if(is_valid_form()){
 			
-		if(rpt_returbeli_tglawalField.getValue()!==""){returbeli_tglawal = rpt_returbeli_tglawalField.getValue().format('Y-m-d');}
-		if(rpt_returbeli_tglakhirField.getValue()!==""){returbeli_tglakhir = rpt_returbeli_tglakhirField.getValue().format('Y-m-d');}
-		if(rpt_returbeli_bulanField.getValue()!==""){returbeli_bulan=rpt_returbeli_bulanField.getValue(); }
-		if(rpt_returbeli_tahunField.getValue()!==""){returbeli_tahun=rpt_returbeli_tahunField.getValue(); }
-		if(rpt_returbeli_opsitglField.getValue()==true){
-			returbeli_periode='tanggal';
-		}else if(rpt_returbeli_opsiblnField.getValue()==true){
-			returbeli_periode='bulan';
+		if(rpt_rpaket_tglawalField.getValue()!==""){rpaket_tglawal = rpt_rpaket_tglawalField.getValue().format('Y-m-d');}
+		if(rpt_rpaket_tglakhirField.getValue()!==""){rpaket_tglakhir = rpt_rpaket_tglakhirField.getValue().format('Y-m-d');}
+		if(rpt_rpaket_bulanField.getValue()!==""){rpaket_bulan=rpt_rpaket_bulanField.getValue(); }
+		if(rpt_rpaket_tahunField.getValue()!==""){rpaket_tahun=rpt_rpaket_tahunField.getValue(); }
+		if(rpt_rpaket_opsitglField.getValue()==true){
+			rpaket_periode='tanggal';
+		}else if(rpt_rpaket_opsiblnField.getValue()==true){
+			rpaket_periode='bulan';
 		}else{
-			returbeli_periode='all';
+			rpaket_periode='all';
 		}
-		if(rpt_returbeli_groupField.getValue()!==""){returbeli_group=rpt_returbeli_groupField.getValue(); }
 		
-		if(rpt_returbeli_rekapField.getValue()==true){returbeli_opsi='rekap';}else{returbeli_opsi='detail';}
+		if(rpt_rpaket_groupField.getValue()!==""){rpaket_group=rpt_rpaket_groupField.getValue(); }
+		if(rpt_rpaket_rekapField.getValue()==true){rpaket_opsi='rekap';}else{rpaket_opsi='detail';}
 		
 			Ext.Ajax.request({   
 				waitMsg: 'Please Wait...',
-				url: 'index.php?c=c_master_retur_beli&m=print_laporan',
+				url: 'index.php?c=c_master_retur_jual_paket&m=print_laporan',
 				params: {
-					tgl_awal	: returbeli_tglawal,
-					tgl_akhir	: returbeli_tglakhir,
-					opsi		: returbeli_opsi,
-					bulan		: returbeli_bulan,
-					tahun		: returbeli_tahun,
-					periode		: returbeli_periode,
-					group		: returbeli_group
-					
+					tgl_awal	: rpaket_tglawal,
+					tgl_akhir	: rpaket_tglakhir,
+					opsi		: rpaket_opsi,
+					bulan		: rpaket_bulan,
+					tahun		: rpaket_tahun,
+					periode		: rpaket_periode,
+					group		: rpaket_group
 				}, 
 				success: function(response){              
 					var result=eval(response.responseText);
 					switch(result){
 					case 1:
-						win = window.open('./print/report_retur_beli.html','report_returbeli','height=400,width=800,resizable=1,scrollbars=1, menubar=1');
+						win = window.open('./print/report_rpaket.html','report_retur_paket','height=400,width=800,resizable=1,scrollbars=1, menubar=1');
 						//win.print();
 						break;
 					default:
@@ -372,23 +377,23 @@ Ext.onReady(function(){
 	}
 	/* Enf Function */
 	
-	rpt_returbeliForm = new Ext.FormPanel({
+	rpt_jrpdukForm = new Ext.FormPanel({
 		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		x:0,
 		y:0,
 		width: 400, 
 		autoHeight: true,
-		items: [rpt_returbeli_periodeField,rpt_returbeli_opsiField, rpt_returbeli_groupbyField],
+		items: [rpt_rpaket_periodeField,rpt_rpaket_opsiField,rpt_rpaket_groupbyField],
 		monitorValid:true,
 		buttons: [{
 				text: 'Print',
 				formBind: true,
-				handler: print_rpt_returbeli
+				handler: print_rpt_rpaket
 			},{
 				text: 'Close',
 				handler: function(){
-					rpt_returbeliWindow.hide();
+					rpt_rpaketWindow.hide();
 					mainPanel.remove(mainPanel.getActiveTab().getId());
 				}
 		}]
@@ -396,8 +401,8 @@ Ext.onReady(function(){
 	});
 	
 	/* Form Advanced Search */
-	rpt_returbeliWindow = new Ext.Window({
-		title: 'Laporan Retur Pembelian',
+	rpt_rpaketWindow = new Ext.Window({
+		title: 'Laporan Retur Penjualan Paket',
 		closable:false,
 		closeAction: 'hide',
 		resizable: false,
@@ -406,40 +411,52 @@ Ext.onReady(function(){
 		x: 0,
 		y: 0,
 		modal: true,
-		renderTo: 'elwindow_rpt_returbeli',
-		items: rpt_returbeliForm
+		renderTo: 'elwindow_rpt_rpaket',
+		items: rpt_jrpdukForm
 	});
-  	rpt_returbeliWindow.show();
+  	rpt_rpaketWindow.show();
+	
+	//EVENTS
+	/*rpt_rpaket_opsitglField.on("check",function(){
+		if(rpt_rpaket_opsitglField.getValue()==true){
+			rpt_rpaket_tglawalField.allowBlank=false;
+			rpt_rpaket_tglakhirField.allowBlank=false;
+		}else{
+			rpt_rpaket_tglawalField.allowBlank=true;
+			rpt_rpaket_tglakhirField.allowBlank=true;
+		}
+	});
+	*/
 	
 	//EVENTS
 	
-	rpt_returbeli_rekapField.on("check", function(){
-		rpt_returbeli_groupField.setValue('No faktur');
-		if(rpt_returbeli_rekapField.getValue()==true){
-			rpt_returbeli_groupField.bindStore(group_master_Store);
+	rpt_rpaket_rekapField.on("check", function(){
+		rpt_rpaket_groupField.setValue('No faktur');
+		if(rpt_rpaket_rekapField.getValue()==true){
+			rpt_rpaket_groupField.bindStore(group_master_Store);
 		}else
 		{
-			rpt_returbeli_groupField.bindStore(group_detail_Store);
+			rpt_rpaket_groupField.bindStore(group_detail_Store);
 		}
 	});
 	
-	rpt_returbeli_detailField.on("check", function(){
-		rpt_returbeli_groupField.setValue('No Faktur');
-		if(rpt_returbeli_detailField.getValue()==true){
-			rpt_returbeli_groupField.bindStore(group_detail_Store);
+	rpt_rpaket_detailField.on("check", function(){
+		rpt_rpaket_groupField.setValue('No Faktur');
+		if(rpt_rpaket_detailField.getValue()==true){
+			rpt_rpaket_groupField.bindStore(group_detail_Store);
 		}else
 		{
-			rpt_returbeli_groupField.bindStore(group_master_Store);
+			rpt_rpaket_groupField.bindStore(group_master_Store);
 		}
 	});
 	
-	rpt_returbeli_opsitglField.on("check",function(){
-		if(rpt_returbeli_opsitglField.getValue()==true){
-			rpt_returbeli_tglawalField.allowBlank=false;
-			rpt_returbeli_tglakhirField.allowBlank=false;
+	rpt_rpaket_opsitglField.on("check",function(){
+		if(rpt_rpaket_opsitglField.getValue()==true){
+			rpt_rpaket_tglawalField.allowBlank=false;
+			rpt_rpaket_tglakhirField.allowBlank=false;
 		}else{
-			rpt_returbeli_tglawalField.allowBlank=true;
-			rpt_returbeli_tglakhirField.allowBlank=true;
+			rpt_rpaket_tglawalField.allowBlank=true;
+			rpt_rpaket_tglakhirField.allowBlank=true;
 		}
 		
 	});
@@ -450,7 +467,7 @@ Ext.onReady(function(){
 <div>
 	<div class="col">
         <div id="fp_info"></div>
-		<div id="elwindow_rpt_returbeli"></div>
+		<div id="elwindow_rpt_rpaket"></div>
     </div>
 </div>
 </body>
