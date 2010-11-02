@@ -83,6 +83,7 @@ class M_crm_generator extends Model{
 					c.setcrm_frequency_count, c.setcrm_frequency_days, 
 					c.setcrm_frequency_value_morethan, c.setcrm_frequency_value_equal, c.setcrm_frequency_value_lessthan,
 					c.setcrm_recency_days, c.setcrm_recency_value_morethan, c.setcrm_recency_value_lessthan, 
+					c.setcrm_spending_days, c.setcrm_spending_value_lessthan, c.setcrm_spending_value_equal, c.setcrm_spending_value_morethan,
 					c.setcrm_referal_person, c.setcrm_referal_days, c.setcrm_referal_morethan, c.setcrm_referal_equal, c.setcrm_referal_lessthan
 				from crm_setup c";
 			
@@ -204,9 +205,9 @@ class M_crm_generator extends Model{
 			
 			//UNTUK MENGHITUNG SPENDING:
 			
-			//menghitung Total Spending (selalu sesuaikan dg m_report_rekap_penjualan)
+			//menghitung Total Spending Rata2 / All(selalu sesuaikan dg m_report_rekap_penjualan)
 			//Spending Produk:
-			$sql_spending_produk = 
+			$sql_spending_produk_all = 
 			   "SELECT 
 					(SUM((d.dproduk_jumlah * d.dproduk_harga)-((d.dproduk_jumlah * d.dproduk_harga)*d.dproduk_diskon/100)) - 
 					SUM((m.jproduk_diskon *((d.dproduk_jumlah * d.dproduk_harga)-((d.dproduk_jumlah * d.dproduk_harga)*d.dproduk_diskon/100))) /100)) -
@@ -220,10 +221,14 @@ class M_crm_generator extends Model{
 				FROM detail_jual_produk d
 				LEFT JOIN master_jual_produk m ON d.dproduk_master = m.jproduk_id
 				WHERE
-					date_add(m.jproduk_tanggal, interval '$setcrm_spending_days' day) >= now() AND m.jproduk_stat_dok <> 'Batal'"
+					date_add(m.jproduk_tanggal, interval '$setcrm_spending_days' day) >= now() AND m.jproduk_stat_dok <> 'Batal'";
+			
+			$query_spending_produk_all	= $this->db->query($sql_spending_produk_all);
+			$data_spending_produk_all	= $query_spending_produk_all->row();
+			$jum_spending_produk_all	= $data_spending_produk_all->tot_net;
 			
 			//Spending Perawatan:
-			$sql_spending_perawatan = 
+			$sql_spending_perawatan_all = 
 			   "SELECT 
 					(SUM((d.drawat_jumlah * d.drawat_harga)-((d.drawat_jumlah * d.drawat_harga)*d.drawat_diskon/100)) - 
 						SUM((M.jrawat_diskon *((d.drawat_jumlah * d.drawat_harga)-((d.drawat_jumlah * d.drawat_harga)*d.drawat_diskon/100))) /100)) AS grand_total
@@ -232,10 +237,14 @@ class M_crm_generator extends Model{
 				LEFT JOIN perawatan ON d.drawat_rawat = perawatan.rawat_id
 				LEFT JOIN kategori ON perawatan.rawat_kategori = kategori.kategori_id
 				WHERE
-					date_add(m.jrawat_tanggal, interval '$setcrm_spending_days' day) >= now() AND m.jrawat_stat_dok <> 'Batal';"
+					date_add(m.jrawat_tanggal, interval '$setcrm_spending_days' day) >= now() AND m.jrawat_stat_dok <> 'Batal'";
+			
+			$query_spending_perawatan_all	= $this->db->query($sql_spending_perawatan_all);
+			$data_spending_perawatan_all	= $query_spending_perawatan_all->row();
+			$jum_spending_perawatan_all		= $data_spending_perawatan_all->tot_net;
 			
 			//Spending Pengambilan Paket:
-			 $sql_spending_apaket =
+			 $sql_spending_apaket_all =
 			   "select 
 					SUM(d.dapaket_jumlah * 
 						(((((dj.dpaket_harga * (100 - dj.dpaket_diskon) / 100) * dj.dpaket_jumlah) - 
@@ -246,13 +255,64 @@ class M_crm_generator extends Model{
 				left join vu_jumlah_isi_paket v on d.dapaket_paket = v.paket_id
 				left join detail_jual_paket dj on d.dapaket_dpaket = dj.dpaket_id
 				WHERE
-					date_add(m.jpaket_tanggal, interval '$setcrm_spending_days' day) >= now() AND m.jpaket_stat_dok <> 'Batal';"
+					date_add(m.jpaket_tanggal, interval '$setcrm_spending_days' day) >= now() AND m.jpaket_stat_dok <> 'Batal'";
+			
+			$query_spending_apaket_all	= $this->db->query($sql_spending_apaket_all);
+			$data_spending_apaket_all	= $query_spending_apaket_all->row();
+			$jum_spending_apaket_all	= $data_spending_apaket_all->tot_net;
 			
 			//Total Spending (Produk + Perawatan + Pengambilan Paket):
+			$tot_spending_all	= $jum_spending_produk_all + $jum_spending_perawatan_all + $jum_spending_apaket_all;
 			
 			//menghitung Total Kunjungan
+			//selalu sesuaikan query dengan query di m_lap_kunjungan.php
+			$sql_value_frequency_all =
+			   "select 
+				sum(cust) as jum_total
+				from
+					(
+					select 
+						count(m.jrawat_cust) as cust
+					from detail_jual_rawat
+					left join master_jual_rawat m on (detail_jual_rawat.drawat_master = m.jrawat_id)
+					left join perawatan p on (detail_jual_rawat.drawat_rawat=p.rawat_id)
+					where 
+						m.jrawat_stat_dok <> 'Batal' and 
+						m.jrawat_bayar <> 0 and 
+						(p.rawat_kategori = 2 or p.rawat_kategori = 3 or p.rawat_kategori = 4 or p.rawat_kategori = 16) and 
+						date_add(m.jrawat_tanggal, interval '$setcrm_frequency_days' day) >= now()
+					group by m.jrawat_tanggal
+					
+					union
+					
+					select 
+						count(m.jproduk_cust) as cust
+					from master_jual_produk m
+					where 
+						m.jproduk_stat_dok <> 'Batal' and m.jproduk_bayar <> 0 and
+						date_add(m.jproduk_tanggal, interval '$setcrm_frequency_days' day) >= now()
+					group by m.jproduk_tanggal
+					
+					union
 			
+					select 
+						count(d.dapaket_cust) as cust
+					from detail_ambil_paket d
+					left join perawatan p on (d.dapaket_item = p.rawat_id)
+					where 
+						(p.rawat_kategori = 2 or p.rawat_kategori = 3 or p.rawat_kategori = 4 or p.rawat_kategori = 16) and	d.dapaket_stat_dok <> 'Batal' and
+						date_add(d.dapaket_tgl_ambil, interval '$setcrm_frequency_days' day) >= now()
+					group by d.dapaket_tgl_ambil
+					)
+					as table_union2
+			   ";
+			   
+			$query_frequency_all	= $this->db->query($sql_value_frequency_all);
+			$data_frequency_all		= $query_frequency_all->row();
+			$jum_total_all			= $data_frequency_all->jum_total;
 			
+
+
 			//UNTUK MENGHITUNG REFERAL RATE:
 			
 			$sql_value_referal = 
