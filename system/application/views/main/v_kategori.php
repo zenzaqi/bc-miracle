@@ -575,6 +575,7 @@ Ext.onReady(function(){
 		{ 
 			text: 'Delete', 
 			tooltip: 'Delete selected record', 
+			disabled: true,
 			iconCls:'icon-delete',
 			handler: kategori_confirm_delete 
 		},
