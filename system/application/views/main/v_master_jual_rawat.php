@@ -749,6 +749,16 @@ Ext.onReady(function(){
 								detail_jual_rawat_DataStore.load({params: {master_id:-1}});
 								master_jual_rawat_DataStore.reload();
 								master_jual_rawat_createWindow.hide();
+							}else if(result==-7){
+								master_jual_rawat_createForm.savePrintButton.disable();
+								master_jual_rawat_createForm.save_btn.disable();
+								Ext.MessageBox.show({
+								   title: 'Warning',
+								   msg: 'Detail Perawatan lepas tidak cocok dengan database. Silakan klik tombol Cancel terlebih dahulu, kemudian buka kembali data ini.',
+								   buttons: Ext.MessageBox.OK,
+								   animEl: 'save',
+								   icon: Ext.MessageBox.WARNING
+								});
 							}else{
 								Ext.MessageBox.show({
 								   title: 'Warning',
@@ -759,8 +769,8 @@ Ext.onReady(function(){
 								});
 								master_jual_rawat_createWindow.hide();
 							}
-							master_jual_rawat_reset_allForm();
-							master_cara_bayarTabPanel.setActiveTab(0);
+							//master_jual_rawat_reset_allForm();
+							//master_cara_bayarTabPanel.setActiveTab(0);
 						}else{
 							master_jual_rawat_DataStore.reload();
 							master_jual_rawat_createWindow.hide();
@@ -1219,6 +1229,7 @@ Ext.onReady(function(){
 		detail_jual_rawatListEditorGrid.djrawat_add.enable();
         detail_jual_rawatListEditorGrid.djrawat_delete.enable();
 		master_jual_rawat_createForm.savePrintButton.enable();
+		master_jual_rawat_createForm.save_btn.enable();
 		
 		combo_jual_rawat.setDisabled(false);
 		drawat_jumlahField.setDisabled(false);
@@ -5052,7 +5063,9 @@ Ext.onReady(function(){
 							drawat_jumlah: encoded_array_drawat_jumlah,
 							drawat_harga: encoded_array_drawat_harga,
 							drawat_diskon: encoded_array_drawat_diskon,
-							drawat_diskon_jenis: encoded_array_drawat_diskon_jenis
+							drawat_diskon_jenis: encoded_array_drawat_diskon_jenis,
+							cust_id: customer_id,
+							tanggal_transaksi: tanggal
 						},
 						callback: function(opts, success, response){
 							if(success){
@@ -5827,6 +5840,7 @@ Ext.onReady(function(){
 			{
 				text: 'Save',
 				//id : 'save_button',
+				ref: '../save_btn',
 				handler: save_button
 			},
 			{

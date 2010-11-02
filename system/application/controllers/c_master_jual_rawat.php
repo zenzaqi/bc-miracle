@@ -202,17 +202,7 @@ class C_master_jual_rawat extends Controller {
 	}
 	
 	function detail_jual_rawat_cu(){
-	//POST variable here
-		/*$drawat_id=trim(@$_POST["drawat_id"]);
-        $drawat_master=trim(@$_POST["drawat_master"]);
-        $drawat_dtrawat=trim(@$_POST["drawat_dtrawat"]);
-        $drawat_rawat=trim(@$_POST["drawat_rawat"]);
-        $drawat_jumlah=trim(@$_POST["drawat_jumlah"]);
-        $drawat_harga=trim(@$_POST["drawat_harga"]);
-        $drawat_diskon=trim(@$_POST["drawat_diskon"]);
-        $drawat_diskon_jenis=trim(@$_POST["drawat_diskon_jenis"]);
-        
-		$result=$this->m_master_jual_rawat->detail_jual_rawat_cu($drawat_id ,$drawat_master ,$drawat_dtrawat ,$drawat_rawat ,$drawat_jumlah ,$drawat_harga ,$drawat_diskon ,$drawat_diskon_jenis);*/
+		//POST variable here
 		$drawat_id = $_POST['drawat_id']; // Get our array back and translate it :
 		$array_drawat_id = json_decode(stripslashes($drawat_id));
 		
@@ -238,6 +228,9 @@ class C_master_jual_rawat extends Controller {
 		
 		$cetak=trim(@$_POST["cetak"]);
 		
+		$cust_id = trim(@$_POST["cust_id"]);
+		$tanggal_transaksi = trim(@$_POST["tanggal_transaksi"]);
+		
 		$result=$this->m_master_jual_rawat->detail_jual_rawat_cu($array_drawat_id
 																	 ,$drawat_master
 																	 ,$array_drawat_dtrawat
@@ -246,7 +239,9 @@ class C_master_jual_rawat extends Controller {
 																	 ,$array_drawat_harga
 																	 ,$array_drawat_diskon
 																	 ,$array_drawat_diskon_jenis
-																	 ,$cetak);
+																	 ,$cetak
+																	 ,$cust_id
+																	 ,$tanggal_transaksi);
 		echo $result;
 	}
 	

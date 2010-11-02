@@ -828,9 +828,24 @@ class M_master_jual_rawat extends Model{
 									  ,$array_drawat_harga
 									  ,$array_drawat_diskon
 									  ,$array_drawat_diskon_jenis
-									  ,$cetak){
-		if($drawat_master=="" || $drawat_master==NULL || $drawat_master==0){
+									  ,$cetak
+									  ,$cust_id
+									  ,$tanggal_transaksi){
+		/*if($drawat_master=="" || $drawat_master==NULL || $drawat_master==0){
 			$drawat_master=$this->get_master_id();
+		}*/
+		if($drawat_master=="" || $drawat_master==NULL || $drawat_master==0){
+			$sql = "SELECT jrawat_id
+				FROM master_jual_rawat
+				WHERE jrawat_cust='".$cust_id."'
+					AND jrawat_tanggal='".$tanggal_transaksi."'
+					AND jrawat_stat_dok='Terbuka'";
+			$rs = $this->db->query($sql);
+			if($rs->num_rows()){
+				$record = $rs->row_array();
+				$drawat_master = $record['jrawat_id'];
+			}
+			
 		}
 		
 		$sql = "SELECT jrawat_id
@@ -1206,6 +1221,7 @@ class M_master_jual_rawat extends Model{
 	//function for update record
 	function master_jual_rawat_update($jrawat_id ,$jrawat_nobukti ,$jrawat_cust ,$jrawat_tanggal ,$jrawat_stat_dok, $jrawat_diskon ,$jrawat_cara ,$jrawat_cara2 ,$jrawat_cara3 ,$jrawat_keterangan , $jrawat_cashback, $jrawat_tunai_nilai, $jrawat_tunai_nilai2, $jrawat_tunai_nilai3, $jrawat_voucher_no, $jrawat_voucher_cashback, $jrawat_voucher_no2, $jrawat_voucher_cashback2, $jrawat_voucher_no3, $jrawat_voucher_cashback3, $jrawat_total, $jrawat_bayar, $jrawat_subtotal, $jrawat_hutang, $jrawat_kwitansi_no, $jrawat_kwitansi_nama, $jrawat_kwitansi_nilai, $jrawat_kwitansi_no2, $jrawat_kwitansi_nama2, $jrawat_kwitansi_nilai2, $jrawat_kwitansi_no3, $jrawat_kwitansi_nama3, $jrawat_kwitansi_nilai3, $jrawat_card_nama, $jrawat_card_edc, $jrawat_card_no, $jrawat_card_nilai, $jrawat_card_nama2, $jrawat_card_edc2, $jrawat_card_no2, $jrawat_card_nilai2, $jrawat_card_nama3, $jrawat_card_edc3, $jrawat_card_no3, $jrawat_card_nilai3, $jrawat_cek_nama, $jrawat_cek_no, $jrawat_cek_valid, $jrawat_cek_bank, $jrawat_cek_nilai, $jrawat_cek_nama2, $jrawat_cek_no2, $jrawat_cek_valid2, $jrawat_cek_bank2, $jrawat_cek_nilai2, $jrawat_cek_nama3, $jrawat_cek_no3, $jrawat_cek_valid3, $jrawat_cek_bank3, $jrawat_cek_nilai3, $jrawat_transfer_bank, $jrawat_transfer_nama, $jrawat_transfer_nilai, $jrawat_transfer_bank2, $jrawat_transfer_nama2, $jrawat_transfer_nilai2, $jrawat_transfer_bank3, $jrawat_transfer_nama3, $jrawat_transfer_nilai3 ,$cetak, $jrawat_ket_disk, $drawat_count){
 		$date_now = date('Y-m-d');
+		$datetime_now = date('Y-m-d H:i:s');
 		
 		$jenis_transaksi = 'jual_rawat';
 		
@@ -1214,7 +1230,43 @@ class M_master_jual_rawat extends Model{
 			$jrawat_stat_dok = "Terbuka";
 		$jrawat_revised=0;
 		
-		if(substr($jrawat_nobukti,0,2)=='PR'){
+		$sql = "SELECT drawat_id
+			FROM detail_jual_rawat
+				JOIN master_jual_rawat ON(drawat_master=jrawat_id)
+			WHERE jrawat_cust='".$jrawat_cust."'
+				AND jrawat_tanggal='".$jrawat_tanggal."'
+				AND jrawat_stat_dok='Terbuka'";
+		$rs = $this->db->query($sql);
+		$rs_rows = $rs->num_rows();
+		
+		if((substr($jrawat_nobukti,0,2)=='PR') && ($rs_rows<>$drawat_count)){
+			return '-7';
+		}elseif((substr($jrawat_nobukti,0,2)=='PR') && ($rs_rows==$drawat_count)){
+			/*
+			 * $jrawat_id ==> milik dari db.master_jual_rawat
+			 * 1. Checking db.detail_jual_rawat apakah == $drawat_count
+			 * ==> JIKA sama, maka lanjutkan ke kondisi berikutnya(No.2)
+			 * ==> JIKA tidak sama, maka kirim('return') "WARNING" bahwa "ada ketidaksamaan detail dengan database, maka dari itu silakan klik Tombol 'Save' atau 'Cancel' kemudian dibuka lagi."
+			 * 2. Check apakah $cetak==1
+			 * ==> JIKA sama, maka update status_dokumen dari db.master_jual_rawat terlebih dahulu untuk mengunci Faktur ini agar Tidak Ada detail dari Tindakan yang bisa masuk.
+			 * ==> JIKA tidak sama, maka langsung dilanjutkan ke proses selanjutnya
+			*/
+			if($cetak==1){
+				/* UPDATE db.master_jual_rawat.jrawat_stat_dok = 'Tertutup' */
+				if($jrawat_tanggal<>$date_now){
+					$jrawat_date_update = $jrawat_tanggal;
+				}else{
+					$jrawat_date_update = $datetime_now;
+				}
+				$sqlu = "UPDATE master_jual_rawat
+					SET jrawat_stat_dok='Tertutup'
+						,jrawat_update='".@$_SESSION[SESSION_USERID]."'
+						,jrawat_date_update='".$jrawat_date_update."'
+						,jrawat_revised=jrawat_revised+1
+					WHERE jrawat_id='$jrawat_id'";
+				$this->db->query($sqlu);
+			}
+			
 			$sql="SELECT jrawat_cara, jrawat_cara2, jrawat_cara3, jrawat_date_create, jrawat_revised FROM master_jual_rawat WHERE jrawat_id='$jrawat_id'";
 			$rs=$this->db->query($sql);
 			if($rs->num_rows()){
@@ -1466,15 +1518,25 @@ class M_master_jual_rawat extends Model{
 				
 			}
 			
-		}elseif($jrawat_nobukti=='' && $drawat_count==0){
+		}elseif($rs_rows>0 && $jrawat_nobukti=='' && $drawat_count==0){
+			/*
+			 * Ada penambahan detail perawatan lepas dari Tindakan ketika Kasir akan memproses Pengambilan Paket saja.
+			 * maka kirim Warning: Klik tombol 'Cancel' terlebih dahulu karena mendadak ada penambahan detail dari Tindakan
+			*/
+			return '-7';
+		}elseif($rs_rows<1 && $jrawat_nobukti=='' && $drawat_count==0){
 			if($cetak==1){
 				return '-3';
 			}else{
 				return '-5';
 			}
-		}elseif($jrawat_nobukti=='' && $drawat_count>0){
+		}elseif($rs_rows>0 && $jrawat_nobukti=='' && $drawat_count>0){
+			/* Klik tombol 'Cancel' terlebih dahulu karena mendadak ada penambahan detail dari Tindakan */
+			return '-7';
+		}elseif($rs_rows<1 && $jrawat_nobukti=='' && $drawat_count>0){
 			/*
-			 * 1. CREATE db.master_jual_rawat ==> karena LIST yang di-Edit belum memiliki Master di db.master_jual_rawat
+			 * Tidak ada detail perawatan lepas di database, tetapi ada penambahan detail perawatan lepas di Form Pengambilan Paket saja.
+			 * maka create master_jual_rawat_create() untuk meng-create No.Faktur
 			*/
 			$rs_master = $this->master_jual_rawat_create($jrawat_cust ,$jrawat_tanggal ,$jrawat_diskon ,$jrawat_cara ,$jrawat_stat_dok, $jrawat_cara2 ,$jrawat_cara3 ,$jrawat_keterangan , $jrawat_cashback, $jrawat_tunai_nilai, $jrawat_tunai_nilai2, $jrawat_tunai_nilai3, $jrawat_voucher_no, $jrawat_voucher_cashback, $jrawat_voucher_no2, $jrawat_voucher_cashback2, $jrawat_voucher_no3, $jrawat_voucher_cashback3, $jrawat_total, $jrawat_bayar, $jrawat_subtotal, $jrawat_hutang, $jrawat_kwitansi_no, $jrawat_kwitansi_nama, $jrawat_kwitansi_nilai, $jrawat_kwitansi_no2, $jrawat_kwitansi_nama2, $jrawat_kwitansi_nilai2, $jrawat_kwitansi_no3, $jrawat_kwitansi_nama3, $jrawat_kwitansi_nilai3, $jrawat_card_nama, $jrawat_card_edc, $jrawat_card_no, $jrawat_card_nilai, $jrawat_card_nama2, $jrawat_card_edc2, $jrawat_card_no2, $jrawat_card_nilai2, $jrawat_card_nama3, $jrawat_card_edc3, $jrawat_card_no3, $jrawat_card_nilai3, $jrawat_cek_nama, $jrawat_cek_no, $jrawat_cek_valid, $jrawat_cek_bank, $jrawat_cek_nilai, $jrawat_cek_nama2, $jrawat_cek_no2, $jrawat_cek_valid2, $jrawat_cek_bank2, $jrawat_cek_nilai2, $jrawat_cek_nama3, $jrawat_cek_no3, $jrawat_cek_valid3, $jrawat_cek_bank3, $jrawat_cek_nilai3, $jrawat_transfer_bank, $jrawat_transfer_nama, $jrawat_transfer_nilai, $jrawat_transfer_bank2, $jrawat_transfer_nama2, $jrawat_transfer_nilai2, $jrawat_transfer_bank3, $jrawat_transfer_nama3, $jrawat_transfer_nilai3, $cetak, $jrawat_ket_disk);
 			if($rs_master=='0'){
@@ -1482,6 +1544,7 @@ class M_master_jual_rawat extends Model{
 			}else{
 				return '-5';
 			}
+			
 		}else{
 			return '-6';
 		}
@@ -2508,11 +2571,26 @@ class M_master_jual_rawat extends Model{
 	}
 	
 	function detail_ambil_paket_status_update($dapaket_id){
-		$dtu_dapaket=array(
-		"dapaket_stat_dok"=>'Tertutup'
-		);
-		$this->db->where('dapaket_id', $dapaket_id);
-		$this->db->update('detail_ambil_paket', $dtu_dapaket);
+		$sql = "SELECT dapaket_dtrawat FROM detail_ambil_paket WHERE dapaket_id='".$dapaket_id."'";
+		$rs = $this->db->query($sql);
+		if($rs->num_rows()){
+			$record = $rs->row_array();
+			$dapaket_dtrawat = $record['dapaket_dtrawat'];
+			/* db.detail_ambil_paket.dapaket_stat_dok = 'Tertutup' */
+			$dtu_dapaket=array(
+			"dapaket_stat_dok"=>'Tertutup'
+			);
+			$this->db->where('dapaket_id', $dapaket_id);
+			$this->db->update('detail_ambil_paket', $dtu_dapaket);
+			
+			/* me-Lock db.tindakan_detail agar tidak bisa di-edit */
+			$dtu_dtrawat = array(
+				"dtrawat_locked"=>1
+			);
+			$this->db->where('dtrawat_id', $dapaket_dtrawat);
+			$this->db->update('tindakan_detail', $dtu_dtrawat);
+		}
+		
 	}
 	
 	function tindakan_detail_locked($dtrawat_id){
