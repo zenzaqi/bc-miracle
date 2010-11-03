@@ -15,7 +15,6 @@ class M_lap_kunjungan extends Model{
 	function lap_kunjungan_list($filter,$start,$end){
 			$date_now=date('Y-m-d');
 			
-			//jika ada penggantian di query ini, sesuaikan juga query di m_crm_generator, bagian FREQUENCY, SPENDING
 			$query="select date_format(tgl_tindakan, '%Y-%m-%d') as tgl_tindakan,
 sum(jum_cust_medis),
 sum(jum_cust_surgery),
@@ -1418,6 +1417,8 @@ from
 	//function for advanced search record
 	function lap_kunjungan_search2($lap_kunjungan_id ,$trawat_tglapp_start ,$trawat_tglapp_end ,$trawat_dokter,$start,$end){
 			//full query
+			
+		//jika ada penggantian di query ini, sesuaikan juga query di m_crm_generator, bagian FREQUENCY, SPENDING	
 		if($trawat_tglapp_start!='' && $trawat_tglapp_end!=''){
 	
 			$query = "select

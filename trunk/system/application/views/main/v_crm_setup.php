@@ -992,6 +992,7 @@ Ext.onReady(function(){
 			{name: 'setcrm_recency_value_morethan', type: 'float', mapping: 'setcrm_recency_value_morethan'},
 			{name: 'setcrm_recency_value_equal', type: 'float', mapping: 'setcrm_recency_value_equal'},
 			{name: 'setcrm_recency_value_lessthan', type: 'float', mapping: 'setcrm_recency_value_lessthan'},
+			{name: 'setcrm_spending_days', type: 'float', mapping: 'setcrm_spending_days'}, 
 			{name: 'setcrm_spending_value_morethan', type: 'float', mapping: 'setcrm_spending_value_morethan'},
 			{name: 'setcrm_spending_value_equal', type: 'float', mapping: 'setcrm_spending_value_equal'},
 			{name: 'setcrm_spending_value_lessthan', type: 'float', mapping: 'setcrm_spending_value_lessthan'}, 
