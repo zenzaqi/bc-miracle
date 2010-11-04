@@ -291,16 +291,25 @@ class M_member extends Model{
 							  ,$filter){
 			//full query
 			//$query="select * from member";
-			$query = "SELECT member.*,cust_nama as member_nama, customer.cust_no FROM member,customer WHERE member_cust=cust_id and (member_status = 'Daftar' or member_status = 'Cetak')";
+			$query = "SELECT cust_no
+					,cust_nama
+					,INSERT(INSERT(member_no,7,0,'-'),14,0,'-') AS member_no
+					,member_register
+					,member_valid
+					,member_jenis
+					,member_status
+					,member_tglcetak
+				FROM member
+				LEFT JOIN customer on customer.cust_id = member.member_cust";
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " member_status = 'Daftar' AND (cust_nama LIKE '%".addslashes($filter)."%' OR cust_no LIKE '%".addslashes($filter)."%' OR member_no LIKE '%".addslashes($filter)."%')";
+				$query .= " (cust_nama LIKE '%".addslashes($filter)."%' OR cust_no LIKE '%".addslashes($filter)."%' OR member_no LIKE '%".addslashes($filter)."%')";
 				$query .= " ORDER BY member_jenis";
 				$result = $this->db->query($query);
 			} else if($option=='SEARCH'){
 				if($member_cust!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " m.member_cust = ".$member_cust;
+					$query.= " member.member_cust = ".$member_cust;
 				};
 				if($member_no!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -371,7 +380,7 @@ class M_member extends Model{
 					,member_valid AS tgl_valid
 					,member_jenis AS jenis
 					,member_status AS status
-					,member_tglserahterima AS tgl_penyerahan
+					,member_tglcetak AS tgl_cetak
 				FROM member m
 				LEFT JOIN customer c on c.cust_id = m.member_cust";
 			
