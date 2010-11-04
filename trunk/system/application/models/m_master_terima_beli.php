@@ -699,7 +699,7 @@ class M_master_terima_beli extends Model{
 		
 		//function for print record
 		function master_terima_beli_print($terima_id ,$terima_no ,$terima_order ,$terima_supplier ,$terima_surat_jalan ,$terima_pengirim ,
-										  $terima_tgl_awal, $terima_tgl_akhir ,$terima_keterangan ,$option,$filter){
+										  $terima_tgl_awal, $terima_tgl_akhir ,$terima_keterangan ,$terima_status, $option,$filter){
 			//full query
 			$query="SELECT *  FROM vu_trans_terima";
 			if($option=='LIST'){
@@ -760,7 +760,7 @@ class M_master_terima_beli extends Model{
 		
 		//function  for export to excel
 		function master_terima_beli_export_excel($terima_id ,$terima_no ,$terima_order ,$terima_supplier ,$terima_surat_jalan ,$terima_pengirim ,
-												 $terima_tgl_awal, $terima_tgl_akhir ,$terima_keterangan ,$option,$filter){
+												 $terima_tgl_awal, $terima_tgl_akhir ,$terima_keterangan , $terima_status, $option,$filter){
 			//full query
 			$query="SELECT tanggal as 'Tanggal', no_bukti as 'No Penerimaan', order_no as 'No Pesanan', supplier_nama as Supplier
 					,jumlah_barang as 'Jumlah Item', jumlah_barang_bonus as 'Jumlah Item Bonus', terima_surat_jalan as 'No Surat Jalan',

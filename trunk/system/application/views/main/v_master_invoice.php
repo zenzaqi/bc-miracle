@@ -2005,6 +2005,9 @@ Ext.onReady(function(){
 		get_total_invoice();
 	});
 	
+	invoice_biayaField.on('focus',function(){ invoice_biayaField.setValue(convertToNumber(invoice_biayaField.getValue())) });
+	invoice_biayaField.on('blur',function(){ invoice_biayaField.setValue(CurrencyFormatted(invoice_biayaField.getValue())) });
+	
 	invoice_noterimaField.on('select', function(){
 		
 		invoice_orderDataStore.setBaseParam('terima_id',invoice_noterimaField.getValue());

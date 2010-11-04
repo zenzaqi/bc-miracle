@@ -40,11 +40,13 @@ class C_master_retur_beli extends Controller {
 		$master=$result->row();
 		$data['data_print'] = $result->result();
 		$data['info_nama'] = $info->info_nama;
+		
 		$data['no_bukti'] = $master->no_bukti;
 		$data['no_order'] = $master->no_order;
 		$data['no_terima'] = $master->no_terima;
         $data['tanggal'] = $master->tanggal;
         $data['supplier_nama'] = $master->supplier_nama;
+		
 		$print_view=$this->load->view("main/p_faktur_retur.php",$data,TRUE);
 		
 		if(!file_exists("print")){
@@ -182,19 +184,6 @@ class C_master_retur_beli extends Controller {
 	}
 	//end of handler
 	
-	//purge all detail
-	function detail_detail_retur_beli_purge(){
-		$master_id = (integer) (isset($_POST['master_id']) ? $_POST['master_id'] : $_GET['master_id']);
-		$result=$this->m_master_retur_beli->detail_detail_retur_beli_purge($master_id);
-	}
-	//eof
-	
-	//get master id, note: not done yet
-	function get_master_id(){
-		$result=$this->m_master_retur_beli->get_master_id();
-		echo $result;
-	}
-	//
 	
 	//add detail
 	function detail_detail_retur_beli_insert(){

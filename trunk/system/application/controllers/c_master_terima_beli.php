@@ -445,7 +445,7 @@ class C_master_terima_beli extends Controller {
 		
 		$data["data_print"]  = $this->m_master_terima_beli->master_terima_beli_print($terima_id ,$terima_no ,$terima_order ,$terima_supplier ,
 																		$terima_surat_jalan ,$terima_pengirim ,$terima_tgl_awal, 
-																		$terima_tgl_akhir ,$terima_keterangan ,$option,$filter);
+																		$terima_tgl_akhir ,$terima_keterangan , $terima_status, $option,$filter);
 		$print_view=$this->load->view("main/p_list_terima.php",$data,TRUE);
 		if(!file_exists("print")){
 			mkdir("print");
@@ -484,7 +484,7 @@ class C_master_terima_beli extends Controller {
 		
 		$query = $this->m_master_terima_beli->master_terima_beli_export_excel($terima_id ,$terima_no ,$terima_order ,$terima_supplier ,
 																			  $terima_surat_jalan ,$terima_pengirim ,$terima_tgl_awal ,
-																			  $terima_tgl_akhir, $terima_keterangan ,$option,$filter);
+																			  $terima_tgl_akhir, $terima_keterangan ,$terima_status,$option,$filter);
 		
 		$this->load->plugin('to_excel');
 		to_excel($query,"master_terima_beli"); 
