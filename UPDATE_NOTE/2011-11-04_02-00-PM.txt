@@ -1,0 +1,14 @@
+[by zaqi.smart@gmail.com]
+- Fix bug
+  o Penerimaan Pembelian
+    - Advanced Search, Print, Export Excel, Print faktur
+  o Retur Pembelian
+    - Print Faktur
+  o Penerimaan tagihan
+    - Print faktur
+  o Mutasi Barang
+    - Advanced Search, Print, Export Excel, Print faktur
+  o Koreksi Stok
+    - Print
+  
+  o SQL UPDATE : 2011-11-04_02-00-PM.sql

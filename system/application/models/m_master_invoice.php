@@ -238,8 +238,8 @@ class M_master_invoice extends Model{
 					}
 					
 				}else{
-					$query = $query.$array_dterima_id[$i];
-					if($i<sizeof($array_dterima_id)-1){
+					$query = $query.$array_dinvoice_id[$i];
+					if($i<sizeof($array_dinvoice_id)-1){
 						$query = $query . ",";
 					} 
 					

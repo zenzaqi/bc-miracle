@@ -486,7 +486,7 @@ class M_master_mutasi extends Model{
 			
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
-			$this->firephp->log($query);
+			//$this->firephp->log($query);
 			
 			$limit = $query." LIMIT ".$start.",".$end;		
 			$result = $this->db->query($limit);    

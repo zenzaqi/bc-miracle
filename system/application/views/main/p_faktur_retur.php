@@ -15,7 +15,7 @@
         <td width="45%"><table width="100%" border="0" cellspacing="0" cellpadding="0">
        
           <tr class="clear">
-            <td width="31%" align="right" class="clear"><strong>No.</strong></td>
+            <td width="31%" align="right" class="clear"><strong>No. Retur</strong></td>
             <td width="3%" align="right" class="clear">:</td>
             <td width="66%" class="clear"><?=$no_bukti; ?></td>
           </tr>

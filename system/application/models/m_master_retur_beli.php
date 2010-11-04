@@ -351,8 +351,8 @@ class M_master_retur_beli extends Model{
 					}
 					
 				}else{
-					$query = $query.$array_dterima_id[$i];
-					if($i<sizeof($array_dterima_id)-1){
+					$query = $query.$array_drbeli_id[$i];
+					if($i<sizeof($array_drbeli_id)-1){
 						$query = $query . ",";
 					} 
 					

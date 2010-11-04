@@ -1463,7 +1463,7 @@ Ext.onReady(function(){
 		if(master_mutasi_DataStore.baseParams.mutasi_asal!==null){mutasi_asal_print = master_mutasi_DataStore.baseParams.mutasi_asal;}
 		if(master_mutasi_DataStore.baseParams.mutasi_tujuan!==null){mutasi_tujuan_print = master_mutasi_DataStore.baseParams.mutasi_tujuan;}
 		if(master_mutasi_DataStore.baseParams.mutasi_tgl_awal!==""){mutasi_tgl_awal_print_date = master_mutasi_DataStore.baseParams.mutasi_tgl_awal;}
-		if(master_mutasi_DataStore.baseParams.mutasi_tgl_akhirl!==""){mutasi_tgl_akhir_print_date = master_mutasi_DataStore.baseParams.mutasi_tgl_awal;}
+		if(master_mutasi_DataStore.baseParams.mutasi_tgl_akhir!==""){mutasi_tgl_akhir_print_date = master_mutasi_DataStore.baseParams.mutasi_tgl_akhir;}
 		if(master_mutasi_DataStore.baseParams.mutasi_keterangan!==null){mutasi_keterangan_print = master_mutasi_DataStore.baseParams.mutasi_keterangan;}
 		if(master_mutasi_DataStore.baseParams.mutasi_status!==null){mutasi_status_print = master_mutasi_DataStore.baseParams.mutasi_status;}
 		
