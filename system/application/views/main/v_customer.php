@@ -150,6 +150,7 @@ var cust_jmlanakSearchField;
 var cust_unitSearchField;
 var cust_aktifSearchField;
 var sortby_SearchField;
+var fretfulness_SearchField;
 
 var editor_cust_note;
 /* Function for get PK field */
@@ -564,6 +565,7 @@ var editor_cust_note;
 		var cust_unit_search=null;
 		var cust_aktif_search=null;
 		var sortby_search=null;
+		var fretfulness_search=null;
 
 
 		///if(cust_idSearchField.getValue()!==null){cust_id_search=cust_idSearchField.getValue();}
@@ -602,6 +604,7 @@ var editor_cust_note;
 		if(cust_unitSearchField.getValue()!==null){cust_unit_search=cust_unitSearchField.getValue();}
 		if(cust_aktifSearchField.getValue()!==null){cust_aktif_search=cust_aktifSearchField.getValue();}
 		if(sortby_SearchField.getValue()!==null){sortby_search=sortby_SearchField.getValue();}
+		if(fretfulness_SearchField.getValue()!==null){fretfulness_search=fretfulness_SearchField.getValue();}
 		// change the store parameters
 		customer_DataStore.baseParams = {
 			task: 'SEARCH',
@@ -643,7 +646,8 @@ var editor_cust_note;
 			cust_jmlanak	:	cust_jmlanak_search, 
 			cust_unit	:	cust_unit_search, 
 			cust_aktif	:	cust_aktif_search,
-			sortby		:	sortby_search
+			sortby		:	sortby_search,
+			cust_fretfulness : fretfulness_search
 		};
 		// Cause the datastore to do another query : 
 		customer_DataStore.load({params: {start: 0, limit: pageS}});
@@ -701,6 +705,7 @@ var editor_cust_note;
 		cust_unitSearchField.reset();
 		cust_aktifSearchField.reset();
 		sortby_SearchField.reset();
+		fretfulness_SearchField.reset();
 	}
 
 	
@@ -709,6 +714,7 @@ var editor_cust_note;
 		if(!customer_searchWindow.isVisible()){
 			customer_reset_SearchForm();
 			cust_aktifSearchField.setValue('Aktif');
+			fretfulness_SearchField.setValue('Undefined');
 			customer_searchWindow.show();
 		} else {
 			customer_searchWindow.toFront();
@@ -3943,6 +3949,24 @@ Ext.onReady(function(){
 		triggerAction: 'all'	
 	});
 	
+	/* Identify  Fretfulness_search Field */
+	fretfulness_SearchField= new Ext.form.ComboBox({
+		id: 'fretfulness_SearchField',
+		fieldLabel: 'Fretfulness',
+		store:new Ext.data.SimpleStore({
+			fields:['fretfulness_value', 'fretfulness_display'],
+			data:[['High','High'],['Medium','Medium'],['Low','Low'],['Undefined','Undefined']]
+		}),
+		mode: 'local',
+		displayField: 'fretfulness_display',
+		valueField: 'fretfulness_value',
+		emptyText: 'Undefined',
+		anchor: '50%',
+		triggerAction: 'all'	
+	});
+	
+	
+	
 	cust_alamat_groupSearch = new Ext.form.FieldSet({
 		title: 'Alamat',
 		autoHeight: true,
@@ -4006,7 +4030,7 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [cust_emailSearchField,cust_email2SearchField,cust_kelaminSearchField, cust_tgllahirSearchField, cust_agamaSearchField, cust_pendidikanSearchField,  cust_profesiSearchField, cust_profesitxtSearchField, cust_hobiSearchField, cust_hobitxtSearchField, cust_referensiSearchField, cust_referensilainSearchField,cust_referensilaintxtSearchField, cust_keteranganSearchField, cust_statusnikahSearchField, cust_prioritySearchField, cust_jmlanakSearchField, cust_terdaftarSearchField, cust_unitSearchField, cust_aktifSearchField,sortby_SearchField] 
+				items: [cust_emailSearchField,cust_email2SearchField,cust_kelaminSearchField, cust_tgllahirSearchField, cust_agamaSearchField, cust_pendidikanSearchField,  cust_profesiSearchField, cust_profesitxtSearchField, cust_hobiSearchField, cust_hobitxtSearchField, cust_referensiSearchField, cust_referensilainSearchField,cust_referensilaintxtSearchField, cust_keteranganSearchField, cust_statusnikahSearchField, cust_prioritySearchField, cust_jmlanakSearchField, cust_terdaftarSearchField, cust_unitSearchField, fretfulness_SearchField, cust_aktifSearchField,sortby_SearchField] 
 			}
 			]
 		}]

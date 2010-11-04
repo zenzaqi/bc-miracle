@@ -104,8 +104,8 @@ var top_spender_searchForm;
 var top_spender_searchWindow;
 var top_spenderSelectedRow;
 var top_spenderContextMenu;
-var jenisField;
-var jumlahField;
+var jenis_top_Field;
+var jumlah_top_Field;
 //for detail data
 
 
@@ -136,7 +136,7 @@ Ext.onReady(function(){
 	// cek valid
 	function is_top_spender_searchForm_valid(){
 		return (Ext.getCmp('top_spender_tglStartSearchField').isValid() );
-		//&& jumlahField.getValue()!=null && jenisField.getValue()!=null);
+		//&& jumlah_top_Field.getValue()!=null && jenis_top_Field.getValue()!=null);
 	}
   	/* End of Function */
   
@@ -299,8 +299,8 @@ Ext.onReady(function(){
 	
 	
 	/* Identify  jenis Combo*/
-	jenisField= new Ext.form.ComboBox({
-		id: 'jenisField',
+	jenis_top_Field= new Ext.form.ComboBox({
+		id: 'jenis_top_Field',
 		fieldLabel: 'Jenis',
 		store:new Ext.data.SimpleStore({
 			fields:['jenis_value', 'jenis_display'],
@@ -316,8 +316,8 @@ Ext.onReady(function(){
 	});
 
 	/* Identify  jumlah Combo*/
-	jumlahField= new Ext.form.ComboBox({
-		id: 'jumlahField',
+	jumlah_top_Field= new Ext.form.ComboBox({
+		id: 'jumlah_top_Field',
 		fieldLabel: 'Top Rank',
 		store:new Ext.data.SimpleStore({
 			fields:['jumlah_value', 'jumlah_display'],
@@ -361,14 +361,14 @@ Ext.onReady(function(){
 		var trawat_tgl_start_app_search=null;
 		var trawat_tgl_end_app_search=null;
 		var trawat_dokter_search=null;
-		var jenisField_search=null;
-		var jumlahField_search=null;
+		var jenis_top_Field_search=null;
+		var jumlah_top_Field_search=null;
 
 		//if(trawat_medis_idSearchField.getValue()!==null){trawat_id_search=trawat_medis_idSearchField.getValue();}
 		if(Ext.getCmp('top_spender_tglStartSearchField').getValue()!==null){trawat_tgl_start_app_search=Ext.getCmp('top_spender_tglStartSearchField').getValue();}
 		if(Ext.getCmp('top_spender_tglEndSearchField').getValue()!==null){trawat_tgl_end_app_search=Ext.getCmp('top_spender_tglEndSearchField').getValue();}
-		if(jenisField.getValue()!==null){jenisField_search=jenisField.getValue();}
-		if(jumlahField.getValue()!==null){jumlahField_search=jumlahField.getValue();}
+		if(jenis_top_Field.getValue()!==null){jenis_top_Field_search=jenis_top_Field.getValue();}
+		if(jumlah_top_Field.getValue()!==null){jumlah_top_Field_search=jumlah_top_Field.getValue();}
 		// change the store parameters
 		top_spenderDataStore.baseParams = {
 			task: 'SEARCH',
@@ -382,8 +382,8 @@ Ext.onReady(function(){
 			//trawat_id	:	trawat_id_search, 
 			trawat_tglapp_start	: 	trawat_tgl_start_app_search,
 			trawat_tglapp_end	: 	trawat_tgl_end_app_search,
-			top_jenis	:	jenisField_search,
-			top_jumlah	:	jumlahField_search,
+			top_jenis	:	jenis_top_Field_search,
+			top_jumlah	:	jumlah_top_Field_search,
 		};
 		
 		// Cause the datastore to do another query : 
@@ -470,7 +470,7 @@ Ext.onReady(function(){
 							        startDateField: 'top_spender_tglStartSearchField' // id of the end date field
 							    }] 
 						}]},
-						jenisField, jumlahField]
+						jenis_top_Field, jumlah_top_Field]
 			}
 			]
 		}]
@@ -490,10 +490,10 @@ Ext.onReady(function(){
     /* End of Function */ 
     
 	function top_spender_reset_formSearch(){
-		jenisField.reset();
-		jenisField.setValue(null);
-		jumlahField.reset();
-		jumlahField.setValue(null);
+		jenis_top_Field.reset();
+		jenis_top_Field.setValue(null);
+		jumlah_top_Field.reset();
+		jumlah_top_Field.setValue(null);
 		Ext.getCmp('top_spender_tglStartSearchField').reset();
 		Ext.getCmp('top_spender_tglStartSearchField').setValue(null);
 		Ext.getCmp('top_spender_tglEndSearchField').reset();
@@ -521,8 +521,8 @@ Ext.onReady(function(){
 	function display_form_search_window(){
 		if(!top_spender_searchWindow.isVisible()){
 			top_spender_reset_formSearch();
-			jenisField.setValue('Semua');
-			jumlahField.setValue('10');
+			jenis_top_Field.setValue('Semua');
+			jumlah_top_Field.setValue('10');
 			top_spender_searchWindow.show();
 		} else {
 			top_spender_searchWindow.toFront();

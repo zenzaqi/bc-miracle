@@ -476,9 +476,11 @@ class M_customer extends Model{
 		}
 		
 		//function for advanced search record
-		function customer_search($cust_id ,$cust_no ,$cust_no_awal ,$cust_no_akhir, $cust_nama ,$cust_kelamin ,$cust_alamat ,$cust_alamat2 ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tgllahir ,$cust_hobi ,$cust_referensi ,$cust_keterangan ,$cust_member ,$cust_member2 ,$cust_terdaftar ,$cust_statusnikah , $cust_priority , $cust_jmlanak ,$cust_unit ,$cust_aktif , $sortby, $cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$start,$end){
+		function customer_search($cust_id ,$cust_no ,$cust_no_awal ,$cust_no_akhir, $cust_nama ,$cust_kelamin ,$cust_alamat ,$cust_alamat2 ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tgllahir ,$cust_hobi ,$cust_referensi ,$cust_keterangan ,$cust_member ,$cust_member2 ,$cust_terdaftar ,$cust_statusnikah , $cust_priority , $cust_jmlanak ,$cust_unit ,$cust_aktif , $sortby, $cust_fretfulness, $cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$start,$end){
 			if ($cust_aktif=="")
 				$cust_aktif = "Aktif";
+			if ($cust_fretfulness=="")
+				$cust_fretfulness = "Undefined";
 			//full query
 			$query="SELECT * FROM vu_customer";
 			
@@ -629,6 +631,10 @@ class M_customer extends Model{
 			if($cust_aktif!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " cust_aktif LIKE '%".$cust_aktif."%'";
+			};
+			if($cust_fretfulness!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " cust_fretfulness LIKE '%".$cust_fretfulness."%'";
 			};
 			if($sortby=='Nama'){
 				$query.=eregi("WHERE",$query)?" ":" WHERE ";
