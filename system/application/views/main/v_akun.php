@@ -199,7 +199,7 @@ Ext.onReady(function(){
 		akun_saldoField.reset();
 		akun_saldoField.setValue('Debet');
 		akun_aktifField.reset();
-		akun_aktifField.setValue('Y');
+		akun_aktifField.setValue('Aktif');
 	}
  	/* End of Function */
   
@@ -517,7 +517,6 @@ Ext.onReady(function(){
 			store: akun_DataStore,
 			displayInfo: true
 		}),
-		/* Add Control on ToolBar */
 		tbar: [
 		{
 			text: 'Add',
@@ -745,7 +744,7 @@ Ext.onReady(function(){
 		fieldLabel: 'Aktif',
 		store:new Ext.data.SimpleStore({
 			fields:['akun_aktif_value', 'akun_aktif_display'],
-			data:[['T','Tidak'],['Y','Ya']]
+			data:[['Tidak Aktif','Tidak Aktif'],['Aktif','Aktif']]
 		}),
 		mode: 'local',
 		displayField: 'akun_aktif_display',
@@ -986,7 +985,7 @@ Ext.onReady(function(){
 		fieldLabel: 'Aktif',
 		store:new Ext.data.SimpleStore({
 			fields:['value', 'akun_aktif'],
-			data:[['T','Tidak'],['Y','Ya']]
+			data:[['Tidak Aktif','Tidak Aktif'],['Aktif','Aktif']]
 		}),
 		mode: 'local',
 		displayField: 'akun_aktif',

@@ -719,7 +719,9 @@ Ext.onReady(function(){
 	
 	setDisableAll();
 	sms_destnumField.setDisabled(false);
-		
+
+	sms_detailField.on('keyup',function(){});
+	
 	sms_membershipField.on("select",function(){
 		if(sms_membershipField.getValue()=='Expired'){
 			sms_member_expField.setDisabled(false);

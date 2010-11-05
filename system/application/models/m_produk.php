@@ -63,7 +63,7 @@ class M_produk extends Model{
 		
 		
 		function get_kontribusi_produk_list(){
-		$sql="SELECT kategori2_id,kategori2_nama FROM kategori2 where kategori2_jenis='produk' and kategori2_aktif='Aktif'";
+		$sql="SELECT kategori2_id,kategori2_nama FROM kategori2 WHERE  kategori2_aktif='Aktif'";
 		$query = $this->db->query($sql);
 		$nbrows = $query->num_rows();
 			if($nbrows>0){

@@ -20,18 +20,15 @@ class M_akun extends Model{
 		
 		//function for get list record
 		function akun_list($filter,$start,$end){
-			$query = "SELECT test.* 
-						FROM  (SELECT A.*,B.akun_id as akun_parent_id, B.akun_kode as akun_parent_kode2, B.akun_nama as akun_parent_nama
-							FROM akun A 
-						  	LEFT JOIN akun B ON (A.akun_parent_kode=B.akun_kode OR A.akun_parent=B.akun_id)) as test
-						WHERE test.akun_aktif='Y'  ";
+			$query = "SELECT * FROM akun ";
 
 			// For simple search
 			if ($filter<>"" && $query !=""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (test.akun_kode LIKE '%".addslashes($filter)."%' OR 
-							 test.akun_jenis LIKE '%".addslashes($filter)."%' OR
-							 test.akun_nama LIKE '%".addslashes($filter)."%')";
+				$query .= " (akun_kode LIKE '%".addslashes($filter)."%' OR 
+							 akun_jenis LIKE '%".addslashes($filter)."%' OR
+							 akun_nama LIKE '%".addslashes($filter)."%' OR 
+							 akun_saldo LIKE '%".addslashes($filter)."%' )";
 				$limit = $query;
 			}
 			$result = $this->db->query($query);
@@ -80,7 +77,8 @@ class M_akun extends Model{
 		}
 		
 		//function for create new record
-		function akun_create($akun_kode ,$akun_jenis ,$akun_parent ,$akun_level ,$akun_nama ,$akun_debet ,$akun_kredit ,$akun_saldo ,$akun_aktif ,$akun_creator ,$akun_date_create ){
+		function akun_create($akun_kode ,$akun_jenis ,$akun_parent ,$akun_level ,$akun_nama ,$akun_debet ,$akun_kredit ,$akun_saldo ,$akun_aktif ,
+							 $akun_creator ,$akun_date_create ){
 			$data = array(
 				"akun_kode"=>$akun_kode, 
 				"akun_jenis"=>$akun_jenis, 
@@ -115,7 +113,8 @@ class M_akun extends Model{
 		}
 
 		//function for update record
-		function akun_update($akun_id,$akun_kode,$akun_jenis,$akun_parent,$akun_level,$akun_nama,$akun_debet,$akun_kredit,$akun_saldo,$akun_aktif,$akun_update,$akun_date_update){
+		function akun_update($akun_id,$akun_kode,$akun_jenis,$akun_parent,$akun_level,$akun_nama,$akun_debet,$akun_kredit,$akun_saldo,$akun_aktif,
+							 $akun_update,$akun_date_update){
 			$data = array(
 				"akun_kode"=>$akun_kode, 
 				"akun_jenis"=>$akun_jenis, 
@@ -148,9 +147,9 @@ class M_akun extends Model{
 			
 			$this->db->where('akun_id', $akun_id);
 			$this->db->update('akun', $data);
-			/*$sql="UPDATE akun set akun_revised=(akun_revised+1),akun_aktif='T' where akun_id='".$akun_id."'";
+			$sql="UPDATE akun set akun_revised=(akun_revised+1) where akun_id='".$akun_id."'";
 			$this->db->query($sql);
-			
+			/*
 			$sql="SELECT akun_parent_kode,akun_level FROM akun WHERE akun_id='".$akun_id."'";
 			$result=$this->db->query($sql);
 			if($result->num_rows()){
@@ -191,37 +190,34 @@ class M_akun extends Model{
 		}
 		
 		//function for advanced search record
-		function akun_search($akun_id ,$akun_kode ,$akun_jenis ,$akun_parent ,$akun_level ,$akun_nama ,$akun_debet ,$akun_kredit ,$akun_saldo ,$akun_aktif ,$akun_creator ,$akun_date_create ,$akun_update ,$akun_date_update ,$akun_revised ,$start,$end){
+		function akun_search($akun_id ,$akun_kode ,$akun_jenis ,$akun_parent ,$akun_level ,$akun_nama ,$akun_debet ,$akun_kredit ,$akun_saldo ,
+							 $akun_aktif ,$akun_creator ,$akun_date_create ,$akun_update ,$akun_date_update ,$akun_revised ,$start,$end){
 			//full query
-			$query = "SELECT test.* 
-						FROM  (SELECT A.*,B.akun_id as akun_parent_id, B.akun_kode as akun_parent_kode2, B.akun_nama as akun_parent_nama
-							FROM akun A 
-						  	LEFT JOIN akun B ON (A.akun_parent_kode=B.akun_kode OR A.akun_parent=B.akun_id)) as test
-						WHERE test.akun_aktif='Y'  ";
+			$query = "SELECT * FROM akun ";
 			
 			if($akun_kode!=''){
 				$query.=" AND ";
-				$query.= " test.akun_kode LIKE '%".$akun_kode."%'";
+				$query.= " akun_kode LIKE '%".$akun_kode."%'";
 			};
 			if($akun_jenis!=''){
 				$query.=" AND ";
-				$query.= " test.akun_jenis = '".$akun_jenis."'";
+				$query.= " akun_jenis = '".$akun_jenis."'";
 			};
 			if($akun_parent!=''){
 				$query.=" AND ";
-				$query.= " test.akun_parent = '".$akun_parent."'";
+				$query.= " akun_parent = '".$akun_parent."'";
 			};
 			if($akun_level!=''){
 				$query.=" AND ";
-				$query.= " test.akun_level = '".$akun_level."'";
+				$query.= " akun_level = '".$akun_level."'";
 			};
 			if($akun_nama!=''){
 				$query.=" AND ";
-				$query.= " test.akun_nama LIKE '%".$akun_nama."%'";
+				$query.= " akun_nama LIKE '%".$akun_nama."%'";
 			};
 			if($akun_saldo!=''){
 				$query.=" AND ";
-				$query.= " test.akun_saldo LIKE '%".$akun_saldo."%'";
+				$query.= " akun_saldo LIKE '%".$akun_saldo."%'";
 			};
 			
 			//$this->firephp->log($query);
@@ -243,94 +239,90 @@ class M_akun extends Model{
 		}
 		
 		//function for print record
-		function akun_print($akun_id ,$akun_kode ,$akun_jenis ,$akun_parent ,$akun_level ,$akun_nama ,$akun_debet ,$akun_kredit ,$akun_saldo ,$akun_aktif ,$akun_creator ,$akun_date_create ,$akun_update ,$akun_date_update ,$akun_revised ,$option,$filter){
+		function akun_print($akun_id ,$akun_kode ,$akun_jenis ,$akun_parent ,$akun_level ,$akun_nama ,$akun_debet ,$akun_kredit ,$akun_saldo ,
+							$akun_aktif ,$akun_creator ,$akun_date_create ,$akun_update ,$akun_date_update ,$akun_revised ,$option,$filter){
 			//full query
-			$query = "SELECT test.* 
-						FROM  (SELECT A.*,B.akun_id as akun_parent_id, B.akun_kode as akun_parent_kode2, B.akun_nama as akun_parent_nama
-							FROM akun A 
-						  	LEFT JOIN akun B ON (A.akun_parent_kode=B.akun_kode OR A.akun_parent=B.akun_id)) as test
-						WHERE test.akun_aktif='Y'  ";
+			$sql = "SELECT * FROM akun ";
 						
 			if($option=='LIST'){
 				$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
-				$sql .= " (test.akun_kode LIKE '%".addslashes($filter)."%' OR 
-						   test.akun_jenis LIKE '%".addslashes($filter)."%' OR test.akun_parent LIKE '%".addslashes($filter)."%' OR 
-						   test.akun_level LIKE '%".addslashes($filter)."%' OR test.akun_nama LIKE '%".addslashes($filter)."%' )";																																																																					
-				$query = $this->db->query($sql);
+				$sql .= " (akun_kode LIKE '%".addslashes($filter)."%' OR 
+						   akun_jenis LIKE '%".addslashes($filter)."%' OR 
+						   akun_nama LIKE '%".addslashes($filter)."%' OR 
+						   akun_saldo LIKE '%".addslashes($filter)."%' )";																																																																					
+
 			} else if($option=='SEARCH'){
 				if($akun_kode!=''){
 					$query.=" AND ";
-					$query.= " test.akun_kode LIKE '%".$akun_kode."%'";
+					$query.= " akun_kode LIKE '%".$akun_kode."%'";
 				};
 				if($akun_jenis!=''){
 					$query.=" AND ";
-					$query.= " test.akun_jenis = '".$akun_jenis."'";
+					$query.= " akun_jenis = '".$akun_jenis."'";
 				};
 				if($akun_parent!=''){
 					$query.=" AND ";
-					$query.= " test.akun_parent = '".$akun_parent."'";
+					$query.= " akun_parent = '".$akun_parent."'";
 				};
 				if($akun_level!=''){
 					$query.=" AND ";
-					$query.= " test.akun_level = '".$akun_level."'";
+					$query.= " akun_level = '".$akun_level."'";
 				};
 				if($akun_nama!=''){
 					$query.=" AND ";
-					$query.= " test.akun_nama LIKE '%".$akun_nama."%'";
+					$query.= " akun_nama LIKE '%".$akun_nama."%'";
 				};
 				if($akun_saldo!=''){
 					$query.=" AND ";
-					$query.= " test.akun_saldo LIKE '%".$akun_saldo."%'";
+					$query.= " akun_saldo LIKE '%".$akun_saldo."%'";
 				};
-					
-				$query = $this->db->query($sql);
 			}
+			$this->firephp->log($sql);
+			$query = $this->db->query($sql);
 			return $query->result();
 		}
 		
 		//function  for export to excel
-		function akun_export_excel($akun_id ,$akun_kode ,$akun_jenis ,$akun_parent ,$akun_level ,$akun_nama ,$akun_debet ,$akun_kredit ,$akun_saldo ,$akun_aktif ,$akun_creator ,$akun_date_create ,$akun_update ,$akun_date_update ,$akun_revised ,$option,$filter){
+		function akun_export_excel($akun_id ,$akun_kode ,$akun_jenis ,$akun_parent ,$akun_level ,$akun_nama ,$akun_debet ,$akun_kredit ,$akun_saldo ,
+								   $akun_aktif ,$akun_creator ,$akun_date_create ,$akun_update ,$akun_date_update ,$akun_revised ,$option,$filter){
 			//full query
-			$query = "SELECT test.* 
-						FROM  (SELECT A.*,B.akun_id as akun_parent_id, B.akun_kode as akun_parent_kode2, B.akun_nama as akun_parent_nama
-							FROM akun A 
-						  	LEFT JOIN akun B ON (A.akun_parent_kode=B.akun_kode OR A.akun_parent=B.akun_id)) as test
-						WHERE test.akun_aktif='Y'  ";
+			$sql = "SELECT akun_kode as Kode, akun_nama as 'Nama Akun', akun_debet as Debet, akun_kredit as Kredit, 
+							akun_saldo as Saldo, akun_jenis as Jenis, akun_aktif as Aktif FROM akun";
 						
 			if($option=='LIST'){
 					$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
-				$sql .= " (test.akun_kode LIKE '%".addslashes($filter)."%' OR 
-						   test.akun_jenis LIKE '%".addslashes($filter)."%' OR test.akun_parent LIKE '%".addslashes($filter)."%' OR 
-						   test.akun_level LIKE '%".addslashes($filter)."%' OR test.akun_nama LIKE '%".addslashes($filter)."%' )";	
-				$query = $this->db->query($sql);
+					$sql .= " (akun_kode LIKE '%".addslashes($filter)."%' OR 
+						   		akun_jenis LIKE '%".addslashes($filter)."%' OR  
+								akun_nama LIKE '%".addslashes($filter)."%' OR 
+							     akun_saldo LIKE '%".addslashes($filter)."%'  )";	
 			} else if($option=='SEARCH'){
 				if($akun_kode!=''){
 					$query.=" AND ";
-					$query.= " test.akun_kode LIKE '%".$akun_kode."%'";
+					$query.= " akun_kode LIKE '%".$akun_kode."%'";
 				};
 				if($akun_jenis!=''){
 					$query.=" AND ";
-					$query.= " test.akun_jenis = '".$akun_jenis."'";
+					$query.= " akun_jenis = '".$akun_jenis."'";
 				};
 				if($akun_parent!=''){
 					$query.=" AND ";
-					$query.= " test.akun_parent ='".$akun_parent."'";
+					$query.= " akun_parent ='".$akun_parent."'";
 				};
 				if($akun_level!=''){
 					$query.=" AND ";
-					$query.= " test.akun_level = '".$akun_level."'";
+					$query.= " akun_level = '".$akun_level."'";
 				};
 				if($akun_nama!=''){
 					$query.=" AND ";
-					$query.= " test.akun_nama LIKE '%".$akun_nama."%'";
+					$query.= " akun_nama LIKE '%".$akun_nama."%'";
 				};
 				if($akun_saldo!=''){
 					$query.=" AND ";
-					$query.= " test.akun_saldo LIKE '%".$akun_saldo."%'";
+					$query.= " akun_saldo LIKE '%".$akun_saldo."%'";
 				};
-				
-				$query = $this->db->query($sql);
+
 			}
+			$query = $this->db->query($sql);
 			return $query;
 		}
 		

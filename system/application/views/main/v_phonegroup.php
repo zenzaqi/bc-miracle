@@ -139,10 +139,10 @@ Ext.onReady(function(){
 				waitMsg: 'Please wait...',
 				url: 'index.php?c=c_phonegroup&m=get_action',
 				params: {
-					phonegroup_id	: phonegroup_id_field_pk, 
-					phonegroup_nama	: phonegroup_nama_field, 
+					phonegroup_id		: phonegroup_id_field_pk, 
+					phonegroup_nama		: phonegroup_nama_field, 
 					phonegroup_detail	: phonegroup_detail_field,
-					phonegroup_data : phonegroup_saveForm.getForm().findField('itemselector').getValue(),
+					phonegroup_data 	: phonegroup_saveForm.getForm().findField('itemselector').getValue(),
 					task: post2db
 				}, 
 				success: function(response){             
@@ -329,7 +329,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'phonegroup_id'
 		},[
-		/* dataIndex => insert intophonegroup_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'phonegroup_id', type: 'int', mapping: 'phonegroup_id'}, 
 			{name: 'phonegroup_nama', type: 'string', mapping: 'phonegroup_nama'}, 
 			{name: 'phonegroup_detail', type: 'string', mapping: 'phonegroup_detail'}, 
@@ -565,9 +564,9 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'phonenumber_number'
 		},[
-		/* dataIndex => insert intophonegroup_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'phonenumber_number', type: 'string', mapping: 'cust_hp'}, 
-			{name: 'phonenumber_nama', type: 'string', mapping: 'cust_nama'}
+			{name: 'phonenumber_nama', type: 'string', mapping: 'cust_nama'},
+			{name: 'phonenumber_id', type: 'int', mapping: 'cust_id'},
 		]),
 		sortInfo:{field: 'phonenumber_nama', direction: "ASC"}
 	});
@@ -587,10 +586,10 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'phonenumber_number'
 		},[
-		/* dataIndex => insert intophonegroup_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'phonenumber_nama', type: 'string', mapping: 'cust_nama'}, 
 			{name: 'phonenumber_number', type: 'string', mapping: 'cust_hp'},
-			{name: 'phonenumber_no', type: 'string', mapping: 'cust_no'}
+			{name: 'phonenumber_no', type: 'string', mapping: 'cust_no'},
+			{name: 'phonenumber_id', type: 'int', mapping: 'cust_id'}
 		]),
 		sortInfo:{field: 'phonenumber_nama', direction: "ASC"}
 	});
@@ -630,7 +629,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'cust_profesi'
 		},[
-		/* dataIndex => insert intocustomer_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'cust_profesi_display', type: 'string', mapping: 'cust_profesi'}
 		]),
 		sortInfo:{field: 'cust_profesi_display', direction: "ASC"}
@@ -649,7 +647,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'cust_hobi'
 		},[
-		/* dataIndex => insert intocustomer_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'cust_hobi_display', type: 'string', mapping: 'cust_hobi'}
 		]),
 		sortInfo:{field: 'cust_hobi_display', direction: "ASC"}
@@ -668,7 +665,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'cabang_id'
 		},[
-		/* dataIndex => insert intocustomer_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'cust_cabang_value', type: 'int', mapping: 'cabang_id'},
 			{name: 'cust_cabang_display', type: 'string', mapping: 'cabang_nama'}
 		]),
@@ -689,7 +685,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'propinsi_nama'
 		},[
-		/* dataIndex => insert intocustomer_note_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'propinsi_nama', type: 'string', mapping: 'propinsi_nama'},
 		]),
 		sortInfo:{field: 'propinsi_nama', direction: "ASC"}
@@ -938,6 +933,8 @@ Ext.onReady(function(){
 		pgcust_priority_SearchField.reset();
 		pgcust_unit_SearchField.reset();
 		pgcust_aktif_SearchField.reset();
+		phonenumber_DataStore.reset();
+		phonegrouped_DataStore.reset();
 	}
 	
 	function phonegroup_cust_list_search(){
@@ -973,6 +970,7 @@ Ext.onReady(function(){
 		
 		phonenumber_DataStore.baseParams = {
 			task			: 	'search',
+			group_id		:   get_pk_id(),
 			umur			:	cust_umur_search, 
 			agama			:	cust_agama_search, 
 			kota			:	cust_kota_search,
@@ -1006,12 +1004,14 @@ Ext.onReady(function(){
 			   	layout: 'form',
 				columnWidth: 0.5,
 				border: false,
-				items: [pgcust_no_SearchField, pgcust_nama_SearchField, pgcust_umur_SearchField, pgcust_agama_SearchField, pgcust_kota_SearchField, pgcust_propinsi_SearchField, pgcust_kelamin_SearchField, pgcust_pendidikan_SearchField  ]			   			   
+				items: [pgcust_no_SearchField, pgcust_nama_SearchField, pgcust_umur_SearchField, pgcust_agama_SearchField, pgcust_kota_SearchField,
+						pgcust_propinsi_SearchField, pgcust_kelamin_SearchField, pgcust_pendidikan_SearchField  ]			   			   
 			 },{
 				layout: 'form',
 				columnWidth: 0.5,
 				border: false,
-				items: [pgcust_profesi_SearchField, pgcust_hobi_SearchField, pgcust_stsnikah_SearchField, pgcust_priority_SearchField, pgcust_unit_SearchField, pgcust_aktif_SearchField ]	
+				items: [pgcust_profesi_SearchField, pgcust_hobi_SearchField, pgcust_stsnikah_SearchField, pgcust_priority_SearchField, 
+						pgcust_unit_SearchField, pgcust_aktif_SearchField ]	
 				   
 			}
 		],
@@ -1082,7 +1082,7 @@ Ext.onReady(function(){
 							height: 200,
 							store: phonenumber_DataStore,
 							displayField: 'phonenumber_nama',
-							valueField: 'phonenumber_number',
+							valueField: 'phonenumber_id',
 							tpl: cust_tpl,
 							tbar:[new Ext.PagingToolbar({
 								pageSize: 15,
@@ -1100,7 +1100,7 @@ Ext.onReady(function(){
 							height: 200,
 							store: phonegrouped_DataStore,
 							displayField: 'phonenumber_nama',
-							valueField: 'phonenumber_number',
+							valueField: 'phonenumber_id',
 							tbar:[new Ext.PagingToolbar({
 								pageSize: 15,
 								store: phonegrouped_DataStore,

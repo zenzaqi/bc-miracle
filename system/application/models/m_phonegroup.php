@@ -20,7 +20,7 @@ class M_phonegroup extends Model{
 		
 		function sms_save($isms_dest,$isms_isi,$isms_opsi,$isms_task, $isms_jnsklm, $isms_ultah){
 			$sql="";
-/*			if($isms_task=='draft'){
+			/*if($isms_task=='draft'){
 				$sql="insert into draft(
 						draft_jenis,
 						draft_destination,
@@ -37,8 +37,7 @@ class M_phonegroup extends Model{
 						'".date('Y/m/d H:i:s')."')";
 				$this->db->query($sql);
 				//echo $sql;
-			}
-*/			
+			}	*/	
 			//yg disimpan cukup message & tanggalnya aja. by hendri 2010-06-16
 			if($isms_task=='draft'){
 				$sql="insert into draft(
@@ -100,18 +99,23 @@ class M_phonegroup extends Model{
 						$sql="";
 					}
 				}elseif($isms_opsi=="group"){
-					$sql="select phonegrouped_number from phonegrouped where phonegrouped_group='".$isms_dest."'";
+					$sql="SELECT cust_hp,cust_id from customer WHERE cust_id IN(
+						  		SELECT phonegrouped_cust FROM phonegrouped 
+								    WHERE phonegrouped_group='".$isms_dest."')
+						 		AND CONVERT(cust_hp, SIGNED INTEGER)>0";
 					$query=$this->db->query($sql);
 					foreach($query->result() as $row){
 						$sql_sms="insert into outbox(
 								outbox_destination,
+								outbox_cust,
 								outbox_message,
 								outbox_date,
 								outbox_status,
 								outbox_creator,
 								outbox_date_create)
 							values(
-								'".$row->phonegrouped_number."',
+								'".$row->cust_hp."',
+								'".$row->cust_id."',
 								'".$isms_isi."',
 								'".date('Y/m/d H:i:s')."',
 								'unsent',
@@ -266,8 +270,13 @@ class M_phonegroup extends Model{
 		}
 		
 		function get_available($query,$start,$end){
-			$sql="select concat(cust_nama,' (',cust_no,')') as cust_nama, cust_no,cust_hp from customer 
-					where cust_hp not in(select phonegrouped_number from phonegrouped) and CONVERT(cust_hp, SIGNED INTEGER)>0";
+
+			$sql="SELECT concat(cust_nama,' (',cust_no,')') AS cust_nama, cust_no, cust_hp, cust_id
+				  FROM    customer
+					  WHERE  cust_id NOT IN (SELECT phonegrouped_cust FROM phonegrouped) 
+						  AND CONVERT(cust_hp, SIGNED INTEGER) > 0";
+						  
+	   
 			if($query!==""){
 				$sql.=" and cust_nama like '%".$query."%' or cust_hp like '%".$query."%'";
 			}
@@ -288,10 +297,20 @@ class M_phonegroup extends Model{
 			
 		}
 		
-		function get_cust_available($umur, $agama, $kota, $propinsi, $pendidikan, $kelamin, $profesi, $hobi, $stsnikah, $priority, $unit, $aktif, $no, $nama, $query,$start,$end){
+		function get_cust_available($umur, $agama, $kota, $propinsi, $pendidikan, $kelamin, $profesi, $hobi, 
+									$stsnikah, $priority, $unit, $aktif, $no, $nama, $group_id, $query,$start,$end){
 			
-			$sql="select concat(cust_nama,' (',cust_no,')') as cust_nama, cust_no,cust_hp from vu_customer 
-					where cust_hp not in(select phonegrouped_number from phonegrouped) and CONVERT(cust_hp, SIGNED INTEGER)>0";
+			$sql="SELECT concat(cust_nama,' (',cust_no,')') AS cust_nama, cust_no, cust_hp, cust_id
+				  FROM    customer";
+
+			if($group_id!=="" && $group_id>0){
+				$sql.=" WHERE  cust_id NOT IN (SELECT phonegrouped_cust FROM phonegrouped WHERE phonegrouped_group='".$group_id."')"; 
+			}
+			
+			$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+			$sql.="	CONVERT(cust_hp, SIGNED INTEGER) > 0";
+			
+			
 			
 			if($umur!=""){
 				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
@@ -351,6 +370,8 @@ class M_phonegroup extends Model{
 				$sql.=" cust_hp like '%".$query."%'";
 			}
 			
+			$this->firephp->log($sql);
+			
 			$result = $this->db->query($sql);
 			$nbrows = $result->num_rows();
 			$limit = $sql." LIMIT ".$start.",".$end;		
@@ -369,10 +390,11 @@ class M_phonegroup extends Model{
 		}
 		
 		function get_phonegrouped($id,$query,$start,$end){
-			$sql="select concat(cust_nama,' (',cust_no,')') as cust_nama, cust_no,cust_hp from customer 
-			where cust_hp in(select phonegrouped_number from phonegrouped where phonegrouped_group='".$id."')";
+			
+			$sql="SELECT concat(cust_nama,' (',cust_no,')') as cust_nama, cust_no,cust_hp, cust_id FROM customer, phonegrouped
+					WHERE cust_id=phonegrouped_cust AND phonegrouped_group='".$id."'";
 			if($query!==""){
-				$sql.=" and cust_nama like '%".$query."%' or cust_hp like '%".$query."%'";
+				$sql.=" AND cust_nama like '%".$query."%' or cust_hp like '%".$query."%'";
 			}
 			$result = $this->db->query($sql);
 			$nbrows = $result->num_rows();
@@ -393,9 +415,7 @@ class M_phonegroup extends Model{
 		//function for get list record
 		function get_phonegroup_list($filter,$start,$end){
 			$query = "SELECT * FROM vu_phonegroup";
-			
-			// For simple search
-			// For simple search
+
 			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 				$query .= " (phonegroup_nama LIKE '%".addslashes($filter)."%' OR phonegroup_jumlah)";
@@ -457,12 +477,12 @@ class M_phonegroup extends Model{
 			if($this->db->affected_rows()){
 				if($phonegroup_data!=""){
 					$phonegrouped_group=$this->db->insert_id();
-					$phonegrouped_number=split(",",$phonegroup_data);
-					if(count($phonegrouped_number)>0){
+					$phonegrouped_cust=split(",",$phonegroup_data);
+					if(count($phonegrouped_cust)>0){
 						$sql="delete from phonegrouped where phonegrouped_group='".$phonegrouped_group."'";
 						$this->db->query($sql);
-						foreach($phonegrouped_number as $pnumber=>$value){
-							$sql="insert into phonegrouped(phonegrouped_group,phonegrouped_number)
+						foreach($phonegrouped_cust as $pnumber=>$value){
+							$sql="insert into phonegrouped(phonegrouped_group,phonegrouped_cust)
 									values('".$phonegrouped_group."','".$value."')";
 							$this->db->query($sql);
 							$sql="";
@@ -491,10 +511,10 @@ class M_phonegroup extends Model{
 			$this->db->query($sql);
 				
 			if($phonegroup_data!=""){
-				$phonegrouped_number=split(",",$phonegroup_data);
-				if(count($phonegrouped_number)>0){
-					foreach($phonegrouped_number as $pnumber=>$value){
-						$sql="insert into phonegrouped(phonegrouped_group,phonegrouped_number)
+				$phonegrouped_cust=split(",",$phonegroup_data);
+				if(count($phonegrouped_cust)>0){
+					foreach($phonegrouped_cust as $pnumber=>$value){
+						$sql="insert into phonegrouped(phonegrouped_group,phonegrouped_cust)
 								values('".$phonegrouped_group."','".$value."')";
 						$this->db->query($sql);
 						$sql="";

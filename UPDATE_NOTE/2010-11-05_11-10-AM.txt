@@ -1,0 +1,15 @@
+[by zaqi.smart@gmail.com]
+- Fix bug
+  o Produk
+    - Combo contribution category fix
+  o Phonegroup
+    - Grouped by cust_id
+    - SQL: 2010-11-05_11-10-AM.sql
+  o Group 1
+    - Update diskon diberlakukan juga u/ Produk, Perawatan, dan Paket
+  o New SMS
+    - Create SMS u/ group disesuikan dengan perubahan
+      Phonegroup
+  o Akun
+    - Print & Export Excel
+    - Perbaikan kolom aktif
