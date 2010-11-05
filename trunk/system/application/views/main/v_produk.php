@@ -607,7 +607,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'kategori2_id'
 		},[
-		/* dataIndex => insert intocustomer_note_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'produk_kontribusi_value', type: 'int', mapping: 'kategori2_id'},
 			{name: 'produk_kontribusi_display', type: 'string', mapping: 'kategori2_nama'}
 		]),
@@ -707,11 +706,8 @@ Ext.onReady(function(){
 			dataIndex: 'produk_kode',
 			width: 120,	//150,
 			sortable: true,
-			editable: false,
-			editor: new Ext.form.TextField({
-				allowBlank: false,
-				maxLength: 20
-          	})
+			editable: false
+			readOnly: true
 		}, 
 		{
 			header: '<div align="center">' + 'Nama' + '</div>',
@@ -1080,7 +1076,7 @@ Ext.onReady(function(){
 		allowBlank: false,
 		displayField: 'produk_group_display',
 		valueField: 'produk_group_value',
-		width: 120,
+		anchor: '95%',
 		triggerAction: 'all'
 	});
 	/* Identify  produk_kategori Field */
@@ -1142,7 +1138,7 @@ Ext.onReady(function(){
 		allowBlank: false,
 		displayField: 'produk_jenis_display',
 		valueField: 'produk_jenis_value',
-		width: 120,
+		anchor: '95%',
 		triggerAction: 'all'
 	});
 	/* Identify  produk_nama Field */
@@ -2055,7 +2051,7 @@ Ext.onReady(function(){
 		mode: 'remote',
 		displayField: 'produk_group_display',
 		valueField: 'produk_group_value',
-		width: 120,
+		anchor: '95%',
 		triggerAction: 'all'
 	});
 	/* Identify  produk_kategori Field */
@@ -2084,7 +2080,7 @@ Ext.onReady(function(){
 		mode: 'remote',
 		displayField: 'produk_jenis_display',
 		valueField: 'produk_jenis_value',
-		width: 120,
+		anchor: '95%',
 		triggerAction: 'all'
 	});
 	/* Identify  produk_nama Field */

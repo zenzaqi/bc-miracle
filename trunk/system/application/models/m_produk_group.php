@@ -45,7 +45,9 @@ class M_produk_group extends Model{
 		}
 		
 		//function for update record
-		function produk_group_update($group_id ,$group_kode, $group_nama ,$group_duproduk ,$group_dmproduk ,$group_durawat ,$group_dmrawat ,$group_dupaket ,$group_dmpaket ,$group_kelompok ,$group_keterangan ,$group_aktif ,$group_creator ,$group_date_create ,$group_update ,$group_date_update ,$group_revised ){
+		function produk_group_update($group_id ,$group_kode, $group_nama ,$group_duproduk ,$group_dmproduk ,$group_durawat ,$group_dmrawat ,
+									 $group_dupaket ,$group_dmpaket ,$group_kelompok ,$group_keterangan ,$group_aktif ,$group_creator ,
+									 $group_date_create ,$group_update ,$group_date_update ,$group_revised, $group_opsi ){
 		if ($group_aktif=="")
 			$group_aktif = "Aktif";
 			$data = array(
@@ -78,11 +80,27 @@ class M_produk_group extends Model{
 				$sql="UPDATE produk_group set group_revised=(group_revised+1) WHERE group_id='".$group_id."'";
 				$this->db->query($sql);
 			}
+			
+			if($group_opsi=='yes'){
+				//UPDATE PRODUK
+				$sql="UPDATE produk SET produk_du='".$group_duproduk."', produk_dm='".$group_dmproduk."' WHERE produk_group='".$group_id."'";
+				$this->db->query($sql);
+				//UPDATE PERAWATAN
+				$sql="UPDATE perawatan SET rawat_du='".$group_durawat."', rawat_dm='".$group_dmrawat."' WHERE rawat_group='".$group_id."'";
+				$this->db->query($sql);
+				//UPDATE PAKET
+				$sql="UPDATE paket SET paket_du='".$group_dupaket."', paket_dm='".$group_dmpaket."' WHERE paket_group='".$group_id."'";
+				$this->db->query($sql);
+				
+			}
+			
 			return '1';
 		}
 		
 		//function for create new record
-		function produk_group_create($group_kode, $group_nama ,$group_duproduk ,$group_dmproduk ,$group_durawat ,$group_dmrawat ,$group_dupaket ,$group_dmpaket ,$group_kelompok ,$group_keterangan ,$group_aktif ,$group_creator ,$group_date_create ,$group_update ,$group_date_update ,$group_revised ){
+		function produk_group_create($group_kode, $group_nama ,$group_duproduk ,$group_dmproduk ,$group_durawat ,$group_dmrawat ,$group_dupaket ,
+									 $group_dmpaket ,$group_kelompok ,$group_keterangan ,$group_aktif ,$group_creator ,$group_date_create ,
+									 $group_update ,$group_date_update ,$group_revised, $group_opsi ){
 		if ($group_aktif=="")
 			$group_aktif = "Aktif";
 			$data = array(

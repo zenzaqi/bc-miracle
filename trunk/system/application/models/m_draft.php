@@ -151,7 +151,7 @@ class M_draft extends Model{
 			);
 			
 			if($idraft_opsi=="group"){
-				$sql="select phonegorup_id from phonegroup where phonegroup_id='".$idraft_dest."'";
+				$sql="select phonegroup_id from phonegroup where phonegroup_id='".$idraft_dest."'";
 				$query=$this->db->query($sql);
 				if($query->num_rows())
 					$data["draft_destination"]=$idraft_dest;

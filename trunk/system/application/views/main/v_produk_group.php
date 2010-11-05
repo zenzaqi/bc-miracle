@@ -168,7 +168,7 @@ Ext.onReady(function(){
   	/* End of Function */
   
   	/* Function for add data, open window create form */
-	function produk_group_create(){
+	function produk_group_create(btn){
 		if(is_produk_group_form_valid()){
 		
 		var group_id_create_pk=null;
@@ -184,7 +184,6 @@ Ext.onReady(function(){
 		var group_keterangan_create=null;
 		var group_aktif_create=null;
 
-
 		group_id_create_pk=get_pk_id();
 		if(group_kodeField.getValue()!== null){group_kode_create = group_kodeField.getValue();}
 		if(group_namaField.getValue()!== null){group_nama_create = group_namaField.getValue();}
@@ -197,16 +196,15 @@ Ext.onReady(function(){
 		if(group_kelompokField.getValue()!== null){group_kelompok_create = group_kelompokField.getValue();}
 		if(group_keteranganField.getValue()!== null){group_keterangan_create = group_keteranganField.getValue();}
 		if(group_aktifField.getValue()!== null){group_aktif_create = group_aktifField.getValue();}
-
-
+		
 			Ext.Ajax.request({  
 				waitMsg: 'Please wait...',
 				url: 'index.php?c=c_produk_group&m=get_action',
 				params: {
-					task: post2db,
-					group_id	: group_id_create_pk,
-					group_kode	: group_kode_create,
-					group_nama	: group_nama_create,	
+					task			: post2db,
+					group_id		: group_id_create_pk,
+					group_kode		: group_kode_create,
+					group_nama		: group_nama_create,	
 					group_duproduk	: group_duproduk_create,	
 					group_dmproduk	: group_dmproduk_create,	
 					group_durawat	: group_durawat_create,	
@@ -215,20 +213,21 @@ Ext.onReady(function(){
 					group_dmpaket	: group_dmpaket_create,
 					group_kelompok	: group_kelompok_create,	
 					group_keterangan	: group_keterangan_create,	
-					group_aktif	: group_aktif_create
+					group_aktif	: group_aktif_create,
+					group_opsi	: btn
 				}, 
 				success: function(response){             
 					var result=eval(response.responseText);
 					switch(result){
 						case 1:
-							Ext.MessageBox.alert(post2db+' OK','The Produk_group was '+msg+' successfully.');
+							Ext.MessageBox.alert(post2db+' OK','Data Group 1 berhasil disimpan.');
 							produk_group_DataStore.reload();
 							produk_group_createWindow.hide();
 							break;
 						default:
 							Ext.MessageBox.show({
 							   title: 'Warning',
-							   msg: 'We could\'t not '+msg+' the Produk_group.',
+							   msg: 'Data Group 1 gagal disimpan !',
 							   buttons: Ext.MessageBox.OK,
 							   animEl: 'save',
 							   icon: Ext.MessageBox.WARNING
@@ -239,18 +238,18 @@ Ext.onReady(function(){
 				failure: function(response){
 					var result=response.responseText;
 					Ext.MessageBox.show({
-								   title: 'Error',
-								   msg: 'Could not connect to the database. retry later.',
-								   buttons: Ext.MessageBox.OK,
-								   animEl: 'database',
-								   icon: Ext.MessageBox.ERROR
+						   title: 'Error',
+						   msg: 'Tidak bisa terhubung dengan database !',
+						   buttons: Ext.MessageBox.OK,
+						   animEl: 'database',
+						   icon: Ext.MessageBox.ERROR
 					});	
 				}                      
 			});
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'Your Form is not valid!.',
+				msg: 'Isian belum sempurna!.',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -427,7 +426,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'group_id'
 		},[
-		/* dataIndex => insert intoproduk_group_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'group_id', type: 'int', mapping: 'group_id'},
 			{name: 'group_kode', type: 'string', mapping: 'group_kode'},
 			{name: 'group_nama', type: 'string', mapping: 'group_nama'},
@@ -462,7 +460,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'kategori_id'
 		},[
-		/* dataIndex => insert intocustomer_note_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'cbo_jenis_id', type: 'int', mapping: 'kategori_id'},
 			{name: 'cbo_jenis_nama', type: 'string', mapping: 'kategori_nama'},
 			{name: 'cbo_jenis_kelompok', type: 'string', mapping: 'kategori_jenis'}
@@ -488,18 +485,14 @@ Ext.onReady(function(){
 			dataIndex: 'group_nama',
 			width: 250,
 			sortable: true,
-			editor: new Ext.form.TextField({
-				maxLength: 250
-          	})
+			readOnly: true
 		},
 		{
 			header: 'Kode',
 			dataIndex: 'group_kode',
 			width: 150,
 			sortable: true,
-			editor: new Ext.form.TextField({
-				maxLength: 250
-          	})
+			readOnly: true
 		},
 		{
 			header: 'DU Produk',
@@ -509,13 +502,7 @@ Ext.onReady(function(){
 			renderer: function(val){
 				return '<span>' + val + ' %</span>';
 			},
-			editor: new Ext.form.NumberField({
-				allowDecimals: false,
-				allowNegative: false,
-				blankText: '0',
-				maxLength: 11,
-				maskRe: /([0-9]+)$/
-			})
+			readOnly: true
 		},
 		{
 			header: 'DM Produk',
@@ -525,13 +512,7 @@ Ext.onReady(function(){
 			renderer: function(val){
 				return '<span>' + val + ' %</span>';
 			},
-			editor: new Ext.form.NumberField({
-				allowDecimals: false,
-				allowNegative: false,
-				blankText: '0',
-				maxLength: 11,
-				maskRe: /([0-9]+)$/
-			})
+			readOnly: true
 		},
 		{
 			header: 'DU Perawatan',
@@ -541,13 +522,7 @@ Ext.onReady(function(){
 			renderer: function(val){
 				return '<span>' + val + ' %</span>';
 			},
-			editor: new Ext.form.NumberField({
-				allowDecimals: false,
-				allowNegative: false,
-				blankText: '0',
-				maxLength: 11,
-				maskRe: /([0-9]+)$/
-			})
+			readOnly: true
 		},
 		{
 			header: 'DM Perawatan',
@@ -557,13 +532,7 @@ Ext.onReady(function(){
 			renderer: function(val){
 				return '<span>' + val + ' %</span>';
 			},
-			editor: new Ext.form.NumberField({
-				allowDecimals: false,
-				allowNegative: false,
-				blankText: '0',
-				maxLength: 11,
-				maskRe: /([0-9]+)$/
-			})
+			readOnly: true
 		},
 		{
 			header: 'DU Paket',
@@ -573,13 +542,7 @@ Ext.onReady(function(){
 			renderer: function(val){
 				return '<span>' + val + ' %</span>';
 			},
-			editor: new Ext.form.NumberField({
-				allowDecimals: false,
-				allowNegative: false,
-				blankText: '0',
-				maxLength: 11,
-				maskRe: /([0-9]+)$/
-			})
+			readOnly: true
 		},
 		{
 			header: 'DM Paket',
@@ -589,13 +552,7 @@ Ext.onReady(function(){
 			renderer: function(val){
 				return '<span>' + val + ' %</span>';
 			},
-			editor: new Ext.form.NumberField({
-				allowDecimals: false,
-				allowNegative: false,
-				blankText: '0',
-				maxLength: 11,
-				maskRe: /([0-9]+)$/
-			})
+			readOnly: true
 		},
 		{
 			header: 'Jenis',
@@ -1024,7 +981,9 @@ Ext.onReady(function(){
 		,
 		buttons: [{
 				text: 'Save and Close',
-				handler: produk_group_create
+				handler: function() {
+					Ext.MessageBox.confirm('Konfirmasi','Apakah Anda yakin semua diskon pada Group ini diberlakukan pada semua Produk/Perawatan/Paket ?', produk_group_create);
+				}
 			}
 			,{
 				text: 'Cancel',

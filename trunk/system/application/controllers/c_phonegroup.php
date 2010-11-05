@@ -89,9 +89,11 @@ class C_phonegroup extends Controller {
 		$aktif = isset($_POST['aktif']) ? @$_POST['aktif'] : @$_GET['aktif'];
 		$no = isset($_POST['no']) ? @$_POST['no'] : @$_GET['no'];
 		$nama = isset($_POST['nama']) ? @$_POST['nama'] : @$_GET['nama'];
-																  
+		$group_id = isset($_POST['group_id']) ? @$_POST['group_id'] : @$_GET['group_id'];
+		
 		if($task=='search')
-			$result=$this->m_phonegroup->get_cust_available($umur, $agama, $kota, $propinsi, $pendidikan, $kelamin, $profesi, $hobi, $stsnikah, $priority, $unit, $aktif, $no, $nama, $query,$start,$end);
+			$result=$this->m_phonegroup->get_cust_available($umur, $agama, $kota, $propinsi, $pendidikan, $kelamin, $profesi, $hobi, $stsnikah, 
+															$priority, $unit, $aktif, $no, $nama, $group_id, $query,$start,$end);
 		else
 			$result=$this->m_phonegroup->get_available($query,$start,$end);
 		echo $result;

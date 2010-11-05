@@ -101,16 +101,18 @@ class C_produk_group extends Controller {
 		$group_aktif=trim(@$_POST["group_aktif"]);
 		$group_aktif=str_replace("/(<\/?)(p)([^>]*>)", "",$group_aktif);
 		$group_aktif=str_replace("'", '"',$group_aktif);
-		$group_creator=trim(@$_POST["group_creator"]);
-		$group_creator=str_replace("/(<\/?)(p)([^>]*>)", "",$group_creator);
-		$group_creator=str_replace("'", '"',$group_creator);
-		$group_date_create=trim(@$_POST["group_date_create"]);
-		$group_update=trim(@$_POST["group_update"]);
-		$group_update=str_replace("/(<\/?)(p)([^>]*>)", "",$group_update);
-		$group_update=str_replace("'", '"',$group_update);
-		$group_date_update=trim(@$_POST["group_date_update"]);
-		$group_revised=trim(@$_POST["group_revised"]);
-		$result = $this->m_produk_group->produk_group_update($group_id , $group_kode, $group_nama ,$group_duproduk ,$group_dmproduk ,$group_durawat ,$group_dmrawat ,$group_dupaket ,$group_dmpaket ,$group_kelompok ,$group_keterangan ,$group_aktif ,$group_creator ,$group_date_create ,$group_update ,$group_date_update ,$group_revised );
+		$group_creator="";
+		$group_date_create="";
+		$group_update="";
+		$group_date_update="";
+		$group_revised="";
+		$group_opsi=@$_POST["group_opsi"];
+		
+		
+		$result = $this->m_produk_group->produk_group_update($group_id , $group_kode, $group_nama ,$group_duproduk ,$group_dmproduk ,$group_durawat,
+															 $group_dmrawat ,$group_dupaket ,$group_dmpaket ,$group_kelompok ,$group_keterangan ,
+															 $group_aktif ,$group_creator ,$group_date_create ,$group_update ,$group_date_update ,
+															 $group_revised, $group_opsi );
 		echo $result;
 	}
 	
@@ -137,18 +139,17 @@ class C_produk_group extends Controller {
 		$group_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$group_keterangan);
 		$group_keterangan=str_replace("'", '"',$group_keterangan);
 		$group_aktif=trim(@$_POST["group_aktif"]);
-		$group_aktif=str_replace("/(<\/?)(p)([^>]*>)", "",$group_aktif);
-		$group_aktif=str_replace("'", '"',$group_aktif);
-		$group_creator=trim(@$_POST["group_creator"]);
-		$group_creator=str_replace("/(<\/?)(p)([^>]*>)", "",$group_creator);
-		$group_creator=str_replace("'", '"',$group_creator);
-		$group_date_create=trim(@$_POST["group_date_create"]);
-		$group_update=trim(@$_POST["group_update"]);
-		$group_update=str_replace("/(<\/?)(p)([^>]*>)", "",$group_update);
-		$group_update=str_replace("'", '"',$group_update);
-		$group_date_update=trim(@$_POST["group_date_update"]);
-		$group_revised=trim(@$_POST["group_revised"]);
-		$result=$this->m_produk_group->produk_group_create($group_kode, $group_nama ,$group_duproduk ,$group_dmproduk ,$group_durawat ,$group_dmrawat ,$group_dupaket ,$group_dmpaket ,$group_kelompok ,$group_keterangan ,$group_aktif ,$group_creator ,$group_date_create ,$group_update ,$group_date_update ,$group_revised );
+		$group_creator="";
+		$group_date_create="";
+		$group_update="";
+		$group_date_update="";
+		$group_revised="";
+		$group_opsi=@$_POST["group_opsi"];
+		
+		$result=$this->m_produk_group->produk_group_create($group_kode, $group_nama ,$group_duproduk ,$group_dmproduk ,$group_durawat ,
+														   $group_dmrawat ,$group_dupaket ,$group_dmpaket ,$group_kelompok ,$group_keterangan ,
+														   $group_aktif ,$group_creator ,$group_date_create ,$group_update ,$group_date_update ,
+														   $group_revised, $group_opsi );
 		echo $result;
 	}
 
