@@ -84,7 +84,8 @@ class M_crm_generator extends Model{
 					c.setcrm_frequency_value_morethan, c.setcrm_frequency_value_equal, c.setcrm_frequency_value_lessthan,
 					c.setcrm_recency_days, c.setcrm_recency_value_morethan, c.setcrm_recency_value_lessthan, 
 					c.setcrm_spending_days, c.setcrm_spending_value_lessthan, c.setcrm_spending_value_equal, c.setcrm_spending_value_morethan,
-					c.setcrm_referal_person, c.setcrm_referal_days, c.setcrm_referal_morethan, c.setcrm_referal_equal, c.setcrm_referal_lessthan
+					c.setcrm_referal_person, c.setcrm_referal_days, c.setcrm_referal_morethan, c.setcrm_referal_equal, c.setcrm_referal_lessthan,
+					c.setcrm_kerewelan_high, c.setcrm_kerewelan_normal, c.setcrm_kerewelan_low
 				from crm_setup c";
 			
 			$query_parameter				= $this->db->query($sql_parameter);
@@ -110,6 +111,10 @@ class M_crm_generator extends Model{
 			$setcrm_referal_morethan		= $data_parameter->setcrm_referal_morethan;
 			$setcrm_referal_equal			= $data_parameter->setcrm_referal_equal;
 			$setcrm_referal_lessthan		= $data_parameter->setcrm_referal_lessthan;
+			
+			$setcrm_kerewelan_high			= $data_parameter->setcrm_kerewelan_high;
+			$setcrm_kerewelan_normal		= $data_parameter->setcrm_kerewelan_normal;
+			$setcrm_kerewelan_low			= $data_parameter->setcrm_kerewelan_low;
 			
 	
 			//UNTUK MENGHITUNG FREQUENCY:
@@ -470,6 +475,7 @@ class M_crm_generator extends Model{
 				$crmvalue_spending = $setcrm_spending_value_lessthan;
 			}
 			
+			
 			//UNTUK MENGHITUNG REFERAL RATE:
 			
 			$sql_value_referal = 
@@ -492,7 +498,46 @@ class M_crm_generator extends Model{
 				$crmvalue_referal = $setcrm_referal_lessthan;
 			}
 			
+			
+			//UNTUK MENGHITUNG FRETFULNESSS
+			
+			$sql_value_fretfulness = 
+			   "SELECT cust_fretfulness FROM customer WHERE cust_id = '$crmvalue_cust'";
+			$query_fretfulness	= $this->db->query($sql_value_fretfulness);
+			$data_fretfulness	= $query_fretfulness->row();
+			$cust_fretfulness	= $data_fretfulness->cust_fretfulness;
+			
+			if ($cust_fretfulness == 'High') {
+				$crmvalue_fretfulness = $setcrm_kerewelan_high;
+			}
+			else if (($cust_fretfulness == 'Medium') or ($cust_fretfulness == 'Undefined')) {
+				$crmvalue_fretfulness = $setcrm_kerewelan_normal;
+			}
+			else if ($cust_fretfulness == 'Low') {
+				$crmvalue_fretfulness = $setcrm_kerewelan_low;
+			}
 				
+			
+			//UNTUK MENENTUKAN PRIORITY
+			$crmvalue_total 	= $crmvalue_frequency + $crmvalue_recency + $crmvalue_spending + $crmvalue_referal + $crmvalue_fretfulness;
+			if ($crmvalue_total > ){
+				$crmvalue_priority = 'Core';
+			}
+			else if (($crmvalue_total <= ) and ($crmvalue_total >=)){
+				$crmvalue_priority = 'Medium';
+			}
+			else if ($crmvalue_total < ){
+				$crmvalue_priority = 'Low';
+			}
+			
+			//UPDATE PRIORITY KE CUSTOMER
+			$sql_cust_priority = 
+			   "UPDATE customer
+				SET cust_priority = '$crmvalue_priority'
+				WHERE cust_id = '$crmvalue_cust'";
+			$query_cust_priority	= $this->db->query($sql_cust_priority);
+			
+			
 			$data=array(
 				"crmvalue_frequency"			=> $crmvalue_frequency,
 				"crmvalue_recency"				=> $crmvalue_recency,
@@ -500,6 +545,9 @@ class M_crm_generator extends Model{
 				"crmvalue_spending_real_rp"		=> $tot_spending_cust,	
 				"crmvalue_spending_real_kunj"	=> $tot_kunjungan_cust,				
 				"crmvalue_referal"				=> $crmvalue_referal,
+				"crmvalue_kerewelan"			=> $crmvalue_fretfulness,
+				"crmvalue_kerewelan_real"		=> $cust_fretfulness,
+				"crmvalue_total"				=> $crmvalue_total,
 				"crmvalue_cust"					=> $crmvalue_cust,	
 				"crmvalue_date"					=> $crmvalue_date,
 				"crmvalue_author"				=> $_SESSION[SESSION_USERID]

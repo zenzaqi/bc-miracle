@@ -402,7 +402,7 @@ Ext.onReady(function(){
 			sortable: true
 		}, 		
 		{
-			header: '<div align="center">Kerewelan</div>',
+			header: '<div align="center">Fretfulness</div>',
 			align: 'right',
 			dataIndex: 'crmvalue_kerewelan',
 			width: 80,
