@@ -365,11 +365,13 @@ Ext.onReady(function(){
 		rpaket_idField.setValue(null);
 		rpaket_nobuktiField.reset();
 		rpaket_nobuktiField.setValue(null);
+		rpaket_nobuktiField.setValue('(Auto)');
 		rpaket_nobuktijualField.reset();
 		rpaket_nobuktijualField.setValue(null);
 		rpaket_nobuktijualField.setDisabled(false);
 		rpaket_custField.reset();
 		rpaket_custField.setValue(null);
+		rpaket_custField.setValue('(Auto)');
 		rpaket_tanggalField.reset();
 		rpaket_tanggalField.setValue(null);
 		rpaket_tanggalField.setValue(dt.format('d-m-Y'));
@@ -441,8 +443,6 @@ Ext.onReady(function(){
   	/* Function for Displaying  create Window Form */
 	function display_form_window(){
 		if(!master_retur_jual_paket_createWindow.isVisible()){
-			//drpaketListDataStore.setBaseParam('master_id',0);
-			//drpaketListDataStore.load();
 			master_retur_jual_paket_reset_form();
 			rpaket_post2db='CREATE';
 			msg='created';

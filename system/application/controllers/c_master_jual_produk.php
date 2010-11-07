@@ -149,19 +149,6 @@ class C_master_jual_produk extends Controller {
 		echo $result;
 	}
 	
-	/*function get_satuan_byproduk_list(){
-		$jproduk_id = (integer) (isset($_POST['jproduk_id']) ? $_POST['jproduk_id'] : 0);
-		$produk_id = (integer) (isset($_POST['produk_id']) ? $_POST['produk_id'] : 0);
-		$result = $this->m_master_jual_produk->get_satuan_byproduk_list($jproduk_id, $produk_id);
-		echo $result;
-	}*/
-	
-	function get_harga_produk(){
-		$produk_id = (integer) (isset($_POST['produk_id']) ? $_POST['produk_id'] : $_GET['produk_id']);
-		$result = $this->m_public_function->get_harga_produk($produk_id);
-		echo $result;
-	}
-	
 	function get_kwitansi_by_ref(){
 		$ref_id = (isset($_POST['no_faktur']) ? $_POST['no_faktur'] : $_GET['no_faktur']);
 		$result = $this->m_public_function->get_kwitansi_by_ref($ref_id);
