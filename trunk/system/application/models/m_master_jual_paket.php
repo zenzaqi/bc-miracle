@@ -124,10 +124,17 @@ class M_master_jual_paket extends Model{
 				$rs_rows=$rs->num_rows();
 			}
 			
-			$sql="SELECT cust_id,cust_no,cust_nama,cust_tgllahir,cust_alamat,cust_telprumah FROM customer WHERE cust_aktif='Aktif'";
+			$sql="SELECT cust_id
+					,cust_no
+					,cust_nama
+					,cust_tgllahir
+					,cust_alamat
+					,cust_telprumah
+				FROM vu_customer
+				WHERE cust_aktif='Aktif'";
 			if($query<>"" && is_numeric($query)==false){
 				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
-				$sql.=" (cust_nama like '%".$query."%' OR cust_no like '%".$query."%' ) ";
+				$sql.=" (cust_nama like '%".$query."%' OR cust_no like '%".$query."%' OR member_no like '%".$query."%' ) ";
 			}else{
 				if($rs_rows){
 					$filter="";
@@ -197,12 +204,9 @@ class M_master_jual_paket extends Model{
 				if(!$rs->num_rows()){
 					//* Customer ini belum masuk ke dalam Daftar Pemakai Paket dari Faktur ppaket_master /
 					$this->db->insert('pengguna_paket', $dti_ppaket); 
-					if($this->db->affected_rows()){
-						return '1';
-					}else
-						return '0';
-				}else{
-					return '0';
+				}
+				if($i==$size_array){
+					return '1';
 				}
 			}
 			
@@ -721,15 +725,6 @@ class M_master_jual_paket extends Model{
 					}
 				}
 			}
-		}
-		
-		function detail_pengguna_paket_purge($master_id){
-			$sql="DELETE pengguna_paket
-				FROM pengguna_paket LEFT JOIN master_jual_paket ON(ppaket_master=jpaket_id)
-				WHERE ppaket_master='".$master_id."'
-					AND ppaket_cust<>jpaket_cust";
-			$result=$this->db->query($sql);
-			return '1';
 		}
 		
 		//insert detail record
@@ -1595,31 +1590,6 @@ class M_master_jual_paket extends Model{
 				
 				return '1';
 			}
-			else
-				return '0';
-		}
-		
-		//fcuntion for delete record
-		function master_jual_paket_delete($pkid){
-			// You could do some checkups here and return '0' or other error consts.
-			// Make a single query to delete all of the master_jual_pakets at the same time :
-			if(sizeof($pkid)<1){
-				return '0';
-			} else if (sizeof($pkid) == 1){
-				$query = "DELETE FROM master_jual_paket WHERE jpaket_id = ".$pkid[0];
-				$this->db->query($query);
-			} else {
-				$query = "DELETE FROM master_jual_paket WHERE ";
-				for($i = 0; $i < sizeof($pkid); $i++){
-					$query = $query . "jpaket_id= ".$pkid[$i];
-					if($i<sizeof($pkid)-1){
-						$query = $query . " OR ";
-					}     
-				}
-				$this->db->query($query);
-			}
-			if($this->db->affected_rows()>0)
-				return '1';
 			else
 				return '0';
 		}

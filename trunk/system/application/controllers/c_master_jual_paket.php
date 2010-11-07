@@ -145,13 +145,6 @@ class C_master_jual_paket extends Controller {
 		echo $result;
 	}
 	
-		
-	function get_harga_paket(){
-		$paket_id = (integer) (isset($_POST['paket_id']) ? $_POST['paket_id'] : $_GET['paket_id']);
-		$result = $this->m_public_function->get_harga_paket($paket_id);
-		echo $result;
-	}
-	
 	function get_kwitansi_by_ref(){
 		$ref_id = (isset($_POST['no_faktur']) ? $_POST['no_faktur'] : $_GET['no_faktur']);
 		$result = $this->m_public_function->get_kwitansi_by_ref($ref_id);
@@ -222,17 +215,6 @@ class C_master_jual_paket extends Controller {
 	}
 	//end of handler
 	
-	function detail_pengguna_paket_purge(){
-		$master_id = (integer) (isset($_POST['master_id']) ? $_POST['master_id'] : $_GET['master_id']);
-		$result=$this->m_master_jual_paket->detail_pengguna_paket_purge($master_id);
-		
-		/*$ids = $_POST['ids']; // Get our array back and translate it :
-		$pkid = json_decode(stripslashes($ids));
-		$result=$this->m_master_jual_paket->detail_detail_jual_paket_purge($pkid);
-		echo $result;*/
-		
-	}
-	
 	//get master id, note: not done yet
 	function get_master_id(){
 		$result=$this->m_master_jual_paket->get_master_id();
@@ -300,9 +282,6 @@ class C_master_jual_paket extends Controller {
 				break;
 			case "CEK":
 				$this->master_jual_paket_pengecekan();
-				break;
-			case "DELETE":
-				$this->master_jual_paket_delete();
 				break;
 			case "SEARCH":
 				$this->master_jual_paket_search();
@@ -597,14 +576,6 @@ class C_master_jual_paket extends Controller {
 		$jpaket_transfer_nilai3=trim($_POST["jpaket_transfer_nilai3"]);
 				
 		$result=$this->m_master_jual_paket->master_jual_paket_create($jpaket_nobukti ,$jpaket_cust ,$jpaket_tanggal ,$jpaket_diskon ,$jpaket_stat_dok, $jpaket_cara ,$jpaket_cara2 ,$jpaket_cara3 ,$jpaket_keterangan , $jpaket_cashback, $jpaket_tunai_nilai, $jpaket_tunai_nilai2, $jpaket_tunai_nilai3, $jpaket_voucher_no, $jpaket_voucher_cashback, $jpaket_voucher_no2, $jpaket_voucher_cashback2, $jpaket_voucher_no3, $jpaket_voucher_cashback3, $jpaket_bayar, $jpaket_subtotal, $jpaket_total, $jpaket_hutang, $jpaket_kwitansi_no, $jpaket_kwitansi_nama, $jpaket_kwitansi_nilai, $jpaket_kwitansi_no2, $jpaket_kwitansi_nama2, $jpaket_kwitansi_nilai2, $jpaket_kwitansi_no3, $jpaket_kwitansi_nama3, $jpaket_kwitansi_nilai3, $jpaket_card_nama, $jpaket_card_edc, $jpaket_card_no, $jpaket_card_nilai, $jpaket_card_nama2, $jpaket_card_edc2, $jpaket_card_no2, $jpaket_card_nilai2, $jpaket_card_nama3, $jpaket_card_edc3, $jpaket_card_no3, $jpaket_card_nilai3, $jpaket_cek_nama, $jpaket_cek_no, $jpaket_cek_valid, $jpaket_cek_bank, $jpaket_cek_nilai, $jpaket_cek_nama2, $jpaket_cek_no2, $jpaket_cek_valid2, $jpaket_cek_bank2, $jpaket_cek_nilai2, $jpaket_cek_nama3, $jpaket_cek_no3, $jpaket_cek_valid3, $jpaket_cek_bank3, $jpaket_cek_nilai3, $jpaket_transfer_bank, $jpaket_transfer_nama, $jpaket_transfer_nilai, $jpaket_transfer_bank2, $jpaket_transfer_nama2, $jpaket_transfer_nilai2, $jpaket_transfer_bank3, $jpaket_transfer_nama3, $jpaket_transfer_nilai3, $cetak, $jpaket_ket_disk);
-		echo $result;
-	}
-
-	//function for delete selected record
-	function master_jual_paket_delete(){
-		$ids = $_POST['ids']; // Get our array back and translate it :
-		$pkid = json_decode(stripslashes($ids));
-		$result=$this->m_master_jual_paket->master_jual_paket_delete($pkid);
 		echo $result;
 	}
 	
