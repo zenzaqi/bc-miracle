@@ -187,7 +187,7 @@ class M_master_lunas_piutang extends Model{
 		}
 		
 		//insert record bayar
-		function form_bayar_piutang_insert($dpiutang_master ,$dpiutang_nilai ,$dpiutang_cara ,$dpiutang_tunai_nilai ,$dpiutang_card_nama ,$dpiutang_card_edc ,$dpiutang_card_no ,$dpiutang_card_nilai ,$dpiutang_cek_nama ,$dpiutang_cek_no ,$dpiutang_cek_valid ,$dpiutang_cek_bank ,$dpiutang_cek_nilai ,$dpiutang_transfer_bank ,$dpiutang_transfer_nama ,$dpiutang_transfer_nilai ,$dpiutang_nobukti, $count, $dcount){
+		function form_bayar_piutang_insert($array_dpiutang_master ,$array_dpiutang_nilai ,$dpiutang_cara ,$dpiutang_card_nama ,$dpiutang_card_edc ,$dpiutang_card_no ,$dpiutang_cek_nama ,$dpiutang_cek_no ,$dpiutang_cek_valid ,$dpiutang_cek_bank ,$dpiutang_transfer_bank ,$dpiutang_transfer_nama ,$dpiutang_nobukti){
 			//$pattern="LP/".date("ym")."-";
 			//$dpiutang_nobukti=$this->m_public_function->get_kode_1('detail_lunas_piutang','dpiutang_nobukti',$pattern,12);
 			//$dpiutang_nobukti=$this->get_nofaktur_lunas_piutang();
@@ -195,7 +195,12 @@ class M_master_lunas_piutang extends Model{
 			$jenis_transaksi = 'jual_lunas';
 			$cetak = 1;
 			
-			if($dpiutang_nilai>0 && $dpiutang_nilai<>''){
+			$size_array = sizeof($array_dpiutang_nilai) - 1;
+			
+			for($i = 0; $i < sizeof($array_dpiutang_nilai); $i++){
+				$dpiutang_master = $array_dpiutang_master[$i];
+				$dpiutang_nilai = $array_dpiutang_nilai[$i];
+				
 				$data = array(
 				"dpiutang_master"=>$dpiutang_master, 
 				"dpiutang_nobukti"=>$dpiutang_nobukti, 
@@ -206,69 +211,65 @@ class M_master_lunas_piutang extends Model{
 				if($this->db->affected_rows()){
 					$this->sisa_piutang_update($dpiutang_master);
 					
-					$sql="delete from jual_kwitansi where jkwitansi_ref='".$jrawat_nobukti."'";
+					$sql="delete from jual_kwitansi where jkwitansi_ref='".$dpiutang_nobukti."'";
 					$this->db->query($sql);
 					if($this->db->affected_rows()>-1){
-						$sql="delete from jual_card where jcard_ref='".$jrawat_nobukti."'";
+						$sql="delete from jual_card where jcard_ref='".$dpiutang_nobukti."'";
 						$this->db->query($sql);
 						if($this->db->affected_rows()>-1){
-							$sql="delete from jual_cek where jcek_ref='".$jrawat_nobukti."'";
+							$sql="delete from jual_cek where jcek_ref='".$dpiutang_nobukti."'";
 							$this->db->query($sql);
 							if($this->db->affected_rows()>-1){
-								$sql="delete from jual_transfer where jtransfer_ref='".$jrawat_nobukti."'";
+								$sql="delete from jual_transfer where jtransfer_ref='".$dpiutang_nobukti."'";
 								$this->db->query($sql);
 								if($this->db->affected_rows()>-1){
-									$sql="delete from jual_tunai where jtunai_ref='".$jrawat_nobukti."'";
+									$sql="delete from jual_tunai where jtunai_ref='".$dpiutang_nobukti."'";
 									$this->db->query($sql);
 									if($this->db->affected_rows()>-1){
-										$sql="delete from voucher_terima where tvoucher_ref='".$jrawat_nobukti."'";
-										$this->db->query($sql);
-										if($this->db->affected_rows()>-1){
-											if($dpiutang_cara!=null || $dpiutang_cara!=''){
-												/*if($jrawat_kwitansi_nilai<>'' && $jrawat_kwitansi_nilai<>0){
-													$result_bayar = $this->m_public_function->cara_bayar_kwitansi_insert($jrawat_kwitansi_no
-																									  ,$jrawat_kwitansi_nilai
-																									  ,$jrawat_nobukti
-																									  ,$bayar_date_create
-																									  ,$jenis_transaksi
-																									  ,$cetak);
-													
-												}else*/if($dpiutang_card_nilai<>'' && $dpiutang_card_nilai<>0){
-													$result_bayar = $this->m_public_function->cara_bayar_card_insert($dpiutang_card_nama
-																								  ,$dpiutang_card_edc
-																								  ,$dpiutang_card_no
+										if($dpiutang_cara!=null || $dpiutang_cara!=''){
+											/*if($dpiutang_kwitansi_nilai<>'' && $dpiutang_kwitansi_nilai<>0){
+												$result_bayar = $this->m_public_function->cara_bayar_kwitansi_insert($dpiutang_kwitansi_no
+																								  ,$dpiutang_kwitansi_nilai
+																								  ,$dpiutang_nobukti
+																								  ,$bayar_date_create
+																								  ,$jenis_transaksi
+																								  ,$cetak);
+												
+											}else*/if($dpiutang_cara=='card'){
+												$result_bayar = $this->m_public_function->cara_bayar_card_insert($dpiutang_card_nama
+																							  ,$dpiutang_card_edc
+																							  ,$dpiutang_card_no
+																							  ,$dpiutang_nilai
+																							  ,$dpiutang_nobukti
+																							  ,$bayar_date_create
+																							  ,$jenis_transaksi
+																							  ,$cetak);
+											}elseif($dpiutang_cara=='cek/giro'){
+												$result_bayar = $this->m_public_function->cara_bayar_cek_insert($dpiutang_cek_nama
+																							 ,$dpiutang_cek_no
+																							 ,$dpiutang_cek_valid
+																							 ,$dpiutang_cek_bank
+																							 ,$dpiutang_nilai
+																							 ,$dpiutang_nobukti
+																							 ,$bayar_date_create
+																							 ,$jenis_transaksi
+																							 ,$cetak);
+											}elseif($dpiutang_cara=='transfer'){
+												$result_bayar = $this->m_public_function->cara_bayar_transfer_insert($dpiutang_transfer_bank
+																								  ,$dpiutang_transfer_nama
 																								  ,$dpiutang_nilai
 																								  ,$dpiutang_nobukti
 																								  ,$bayar_date_create
 																								  ,$jenis_transaksi
 																								  ,$cetak);
-												}elseif($dpiutang_cek_nilai<>'' && $dpiutang_cek_nilai<>0){
-													$result_bayar = $this->m_public_function->cara_bayar_cek_insert($dpiutang_cek_nama
-																								 ,$dpiutang_cek_no
-																								 ,$dpiutang_cek_valid
-																								 ,$dpiutang_cek_bank
-																								 ,$dpiutang_nilai
-																								 ,$dpiutang_nobukti
-																								 ,$bayar_date_create
-																								 ,$jenis_transaksi
-																								 ,$cetak);
-												}elseif($dpiutang_transfer_nilai<>'' && $dpiutang_transfer_nilai<>0){
-													$result_bayar = $this->m_public_function->cara_bayar_transfer_insert($dpiutang_transfer_bank
-																									  ,$dpiutang_transfer_nama
-																									  ,$dpiutang_nilai
-																									  ,$dpiutang_nobukti
-																									  ,$bayar_date_create
-																									  ,$jenis_transaksi
-																									  ,$cetak);
-												}elseif($dpiutang_tunai_nilai<>'' && $dpiutang_tunai_nilai<>0){
-													$result_bayar = $this->m_public_function->cara_bayar_tunai_insert($dpiutang_nilai
-																								   ,$dpiutang_nobukti
-																								   ,$bayar_date_create
-																								   ,$jenis_transaksi
-																								   ,$cetak);
-												}
-												
+											}elseif($dpiutang_cara=='tunai'){
+												$result_bayar = $this->m_public_function->cara_bayar_tunai_insert($dpiutang_nilai
+																							   ,$dpiutang_nobukti
+																							   ,$bayar_date_create
+																							   ,$jenis_transaksi
+																							   ,$cetak);
 											}
+											
 										}
 									}
 								}
@@ -276,36 +277,16 @@ class M_master_lunas_piutang extends Model{
 						}
 					}
 					
-					if($count==($dcount-1)){
+					if($i==$size_array){
 						return '1';
-					}else{
-						return '0';
 					}
-				}else
-					return '-1';
-			}
-
-		}
-		//end of function
-		
-		//insert detail record
-		function detail_detail_lunas_piutang_insert($dpiutang_id ,$dpiutang_master ,$dpiutang_nohutang ,$dpiutang_nilai ){
-			//if master id not capture from view then capture it from max pk from master table
-			if($dpiutang_master=="" || $dpiutang_master==NULL){
-				$dpiutang_master=$this->get_master_id();
+				}else{
+					if($i==$size_array){
+						return '-1';
+					}
+				}
 			}
 			
-			$data = array(
-				"dpiutang_master"=>$dpiutang_master, 
-				"dpiutang_nohutang"=>$dpiutang_nohutang, 
-				"dpiutang_nilai"=>$dpiutang_nilai 
-			);
-			$this->db->insert('detail_lunas_piutang', $data); 
-			if($this->db->affected_rows())
-				return '1';
-			else
-				return '0';
-
 		}
 		//end of function
 		
@@ -327,8 +308,9 @@ class M_master_lunas_piutang extends Model{
 			// For simple search
 			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (lpiutang_faktur LIKE '%".addslashes($filter)."%' OR cust_nama LIKE '%".addslashes($filter)."%' )";
+				$query .= " (lpiutang_faktur LIKE '%".addslashes($filter)."%' OR cust_nama LIKE '%".addslashes($filter)."%' OR cust_no LIKE '%".addslashes($filter)."%' )";
 			}
+			$query .= " ORDER BY customer.cust_nama";
 			
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
@@ -415,7 +397,7 @@ class M_master_lunas_piutang extends Model{
 		}
 		
 		//function for advanced search record
-		function master_lunas_piutang_search($lpiutang_id ,$lpiutang_faktur ,$lpiutang_cust ,$lpiutang_faktur_tanggal ,$lpiutang_keterangan ,$start,$end){
+		function master_lunas_piutang_search($lpiutang_faktur_jual, $lpiutang_cust ,$lpiutang_faktur_tgl_start ,$lpiutang_faktur_tgl_akhir ,$lpiutang_status ,$lpiutang_stat_dok ,$start,$end){
 			//full query
 			$query="SELECT master_lunas_piutang.lpiutang_id
 					,master_lunas_piutang.lpiutang_faktur
@@ -430,25 +412,29 @@ class M_master_lunas_piutang extends Model{
 				FROM master_lunas_piutang
 					LEFT JOIN customer ON(lpiutang_cust=cust_id)";
 			
-			if($lpiutang_id!=''){
+			if($lpiutang_faktur_jual!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " lpiutang_id LIKE '%".$lpiutang_id."%'";
-			};
-			if($lpiutang_faktur!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " lpiutang_faktur LIKE '%".$lpiutang_faktur."%'";
+				$query.= " lpiutang_faktur LIKE '%".$lpiutang_faktur_jual."%'";
 			};
 			if($lpiutang_cust!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " lpiutang_cust LIKE '%".$lpiutang_cust."%'";
+				$query.= " lpiutang_cust = '".$lpiutang_cust."'";
 			};
-			if($lpiutang_faktur_tanggal!=''){
+			if($lpiutang_faktur_tgl_start<>'' && $lpiutang_faktur_tgl_akhir==''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " lpiutang_faktur_tanggal LIKE '%".$lpiutang_faktur_tanggal."%'";
+				$query.= " lpiutang_faktur_tanggal = '".$lpiutang_faktur_tgl_start."'";
 			};
-			if($lpiutang_keterangan!=''){
+			if($lpiutang_faktur_tgl_start<>'' && $lpiutang_faktur_tgl_akhir<>''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " lpiutang_keterangan LIKE '%".$lpiutang_keterangan."%'";
+				$query.= " lpiutang_faktur_tanggal BETWEEN '".$lpiutang_faktur_tgl_start."' AND '".$lpiutang_faktur_tgl_akhir."'";
+			};
+			if($lpiutang_status!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " lpiutang_status LIKE '%".$lpiutang_status."%'";
+			};
+			if($lpiutang_stat_dok!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " lpiutang_stat_dok LIKE '%".$lpiutang_stat_dok."%'";
 			};
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
