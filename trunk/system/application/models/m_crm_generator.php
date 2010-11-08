@@ -520,6 +520,7 @@ class M_crm_generator extends Model{
 			
 			//UNTUK MENENTUKAN PRIORITY
 			$crmvalue_total 	= $crmvalue_frequency + $crmvalue_recency + $crmvalue_spending + $crmvalue_referal + $crmvalue_fretfulness;
+			
 			if ($crmvalue_total > ){
 				$crmvalue_priority = 'Core';
 			}
@@ -540,11 +541,14 @@ class M_crm_generator extends Model{
 			
 			$data=array(
 				"crmvalue_frequency"			=> $crmvalue_frequency,
+				"crmvalue_frequency_real"		=> $tot_kunjungan_cust_by_freq,
 				"crmvalue_recency"				=> $crmvalue_recency,
+				"crmvalue_recency_real"			=> $recency_row,
 				"crmvalue_spending"				=> $crmvalue_spending,	
 				"crmvalue_spending_real_rp"		=> $tot_spending_cust,	
 				"crmvalue_spending_real_kunj"	=> $tot_kunjungan_cust,				
 				"crmvalue_referal"				=> $crmvalue_referal,
+				"crmvalue_referal_real"			=> $jum_referal,
 				"crmvalue_kerewelan"			=> $crmvalue_fretfulness,
 				"crmvalue_kerewelan_real"		=> $cust_fretfulness,
 				"crmvalue_total"				=> $crmvalue_total,

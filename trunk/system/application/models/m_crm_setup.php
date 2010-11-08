@@ -48,8 +48,9 @@ class M_crm_setup extends Model{
 													$setcrm_highmargin_treatment, $setcrm_highmargin_days, $setcrm_highmargin_value_morethan, $setcrm_highmargin_value_equal, $setcrm_highmargin_value_lessthan,
 													$setcrm_referal_person, $setcrm_referal_days, $setcrm_referal_morethan, $setcrm_referal_equal, $setcrm_referal_lessthan,
 													$setcrm_kerewelan_high, $setcrm_kerewelan_normal, $setcrm_kerewelan_low,
-													$setcrm_disiplin_high, $setcrm_disiplin_normal, $setcrm_disiplin_low,
+													$setcrm_disiplin_days, $setcrm_disiplin_persentase_pembatalan, $setcrm_disiplin_persentase_telat, $setcrm_disiplin_menit_telat, $setcrm_disiplin_batal_value_morethan, $setcrm_disiplin_batal_value_lessthan, $setcrm_disiplin_telat_value_morethan, $setcrm_disiplin_telat_value_lessthan,
 													$setcrm_treatment_days, $setcrm_treatment_nonmedis, $setcrm_treatment_medis, $setcrm_treatment_morethan, $setcrm_treatment_equal, $setcrm_treatment_lessthan,
+													$setcrm_result_nilai_atas, $setcrm_result_nilai_bawah,
 													$setcrm_author, $setcrm_date_create){
 			$data = array(
 			
@@ -85,9 +86,14 @@ class M_crm_setup extends Model{
 				"setcrm_kerewelan_normal"=>$setcrm_kerewelan_normal, 
 				"setcrm_kerewelan_low"=>$setcrm_kerewelan_low, 
 				
-				"setcrm_disiplin_high"=>$setcrm_disiplin_high, 
-				"setcrm_disiplin_normal"=>$setcrm_disiplin_normal, 
-				"setcrm_disiplin_low"=>$setcrm_disiplin_low, 
+				"setcrm_disiplin_days"=>$setcrm_disiplin_days, 
+				"setcrm_disiplin_persentase_pembatalan"=>$setcrm_disiplin_persentase_pembatalan, 
+				"setcrm_disiplin_persentase_telat"=>$setcrm_disiplin_persentase_telat, 
+				"setcrm_disiplin_menit_telat"=>$setcrm_disiplin_menit_telat, 
+				"setcrm_disiplin_batal_value_morethan"=>$setcrm_disiplin_batal_value_morethan, 
+				"setcrm_disiplin_batal_value_lessthan"=>$setcrm_disiplin_batal_value_lessthan, 
+				"setcrm_disiplin_telat_value_morethan"=>$setcrm_disiplin_telat_value_morethan, 
+				"setcrm_disiplin_telat_value_lessthan"=>$setcrm_disiplin_telat_value_lessthan, 
 				
 				"setcrm_treatment_days"=>$setcrm_treatment_days, 
 				"setcrm_treatment_nonmedis"=>$setcrm_treatment_nonmedis, 
@@ -95,6 +101,9 @@ class M_crm_setup extends Model{
 				"setcrm_treatment_morethan"=>$setcrm_treatment_morethan, 
 				"setcrm_treatment_equal"=>$setcrm_treatment_equal, 
 				"setcrm_treatment_lessthan"=>$setcrm_treatment_lessthan, 
+				
+				"setcrm_result_nilai_atas"=>$setcrm_result_nilai_atas,
+				"setcrm_result_nilai_bawah"=>$setcrm_result_nilai_bawah,
 				
 				"setcrm_author"=>$setcrm_author, 
 				"setcrm_date_create"=>$setcrm_date_create 
@@ -114,8 +123,9 @@ class M_crm_setup extends Model{
 								$setcrm_highmargin_treatment, $setcrm_highmargin_days, $setcrm_highmargin_value_morethan, $setcrm_highmargin_value_equal, $setcrm_highmargin_value_lessthan,
 								$setcrm_referal_person, $setcrm_referal_days, $setcrm_referal_morethan, $setcrm_referal_equal, $setcrm_referal_lessthan,
 								$setcrm_kerewelan_high, $setcrm_kerewelan_normal, $setcrm_kerewelan_low,
-								$setcrm_disiplin_high, $setcrm_disiplin_normal, $setcrm_disiplin_low,
+								$setcrm_disiplin_days, $setcrm_disiplin_persentase_pembatalan, $setcrm_disiplin_persentase_telat, $setcrm_disiplin_menit_telat, $setcrm_disiplin_batal_value_morethan, $setcrm_disiplin_batal_value_lessthan, $setcrm_disiplin_telat_value_morethan, $setcrm_disiplin_telat_value_lessthan,
 								$setcrm_treatment_days, $setcrm_treatment_nonmedis, $setcrm_treatment_medis, $setcrm_treatment_morethan, $setcrm_treatment_equal, $setcrm_treatment_lessthan,
+								$setcrm_result_nilai_atas, $setcrm_result_nilai_bawah,
 								$setcrm_update, $setcrm_date_update){
 			$data = array(
 			
@@ -151,9 +161,14 @@ class M_crm_setup extends Model{
 				"setcrm_kerewelan_normal"=>$setcrm_kerewelan_normal, 
 				"setcrm_kerewelan_low"=>$setcrm_kerewelan_low, 
 				
-				"setcrm_disiplin_high"=>$setcrm_disiplin_high, 
-				"setcrm_disiplin_normal"=>$setcrm_disiplin_normal, 
-				"setcrm_disiplin_low"=>$setcrm_disiplin_low, 
+				"setcrm_disiplin_days"=>$setcrm_disiplin_days, 
+				"setcrm_disiplin_persentase_pembatalan"=>$setcrm_disiplin_persentase_pembatalan, 
+				"setcrm_disiplin_persentase_telat"=>$setcrm_disiplin_persentase_telat, 
+				"setcrm_disiplin_menit_telat"=>$setcrm_disiplin_menit_telat, 
+				"setcrm_disiplin_batal_value_morethan"=>$setcrm_disiplin_batal_value_morethan, 
+				"setcrm_disiplin_batal_value_lessthan"=>$setcrm_disiplin_batal_value_lessthan, 
+				"setcrm_disiplin_telat_value_morethan"=>$setcrm_disiplin_telat_value_morethan, 
+				"setcrm_disiplin_telat_value_lessthan"=>$setcrm_disiplin_telat_value_lessthan, 
 				
 				"setcrm_treatment_days"=>$setcrm_treatment_days, 
 				"setcrm_treatment_nonmedis"=>$setcrm_treatment_nonmedis, 
@@ -161,6 +176,9 @@ class M_crm_setup extends Model{
 				"setcrm_treatment_morethan"=>$setcrm_treatment_morethan, 
 				"setcrm_treatment_equal"=>$setcrm_treatment_equal, 
 				"setcrm_treatment_lessthan"=>$setcrm_treatment_lessthan, 
+				
+				"setcrm_result_nilai_atas"=>$setcrm_result_nilai_atas,
+				"setcrm_result_nilai_bawah"=>$setcrm_result_nilai_bawah,
 				
 				"setcrm_update"=>$setcrm_update, 
 				"setcrm_date_update"=>$setcrm_date_update 

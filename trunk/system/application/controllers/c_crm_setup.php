@@ -90,9 +90,14 @@ class C_crm_setup extends Controller {
 		$setcrm_kerewelan_normal=trim(@$_POST["setcrm_kerewelan_normal"]);
 		$setcrm_kerewelan_low=trim(@$_POST["setcrm_kerewelan_low"]);
 		
-		$setcrm_disiplin_high=trim(@$_POST["setcrm_disiplin_high"]);
-		$setcrm_disiplin_normal=trim(@$_POST["setcrm_disiplin_normal"]);
-		$setcrm_disiplin_low=trim(@$_POST["setcrm_disiplin_low"]);
+		$setcrm_disiplin_days=trim(@$_POST["setcrm_disiplin_days"]);
+		$setcrm_disiplin_persentase_pembatalan=trim(@$_POST["setcrm_disiplin_persentase_pembatalan"]);
+		$setcrm_disiplin_persentase_telat=trim(@$_POST["setcrm_disiplin_persentase_telat"]);
+		$setcrm_disiplin_menit_telat=trim(@$_POST["setcrm_disiplin_menit_telat"]);
+		$setcrm_disiplin_batal_value_morethan=trim(@$_POST["setcrm_disiplin_batal_value_morethan"]);
+		$setcrm_disiplin_batal_value_lessthan=trim(@$_POST["setcrm_disiplin_batal_value_lessthan"]);
+		$setcrm_disiplin_telat_value_morethan=trim(@$_POST["setcrm_disiplin_telat_value_morethan"]);
+		$setcrm_disiplin_telat_value_lessthan=trim(@$_POST["setcrm_disiplin_telat_value_lessthan"]);
 		
 		$setcrm_treatment_days=trim(@$_POST["setcrm_treatment_days"]);
 		$setcrm_treatment_nonmedis=trim(@$_POST["setcrm_treatment_nonmedis"]);
@@ -100,6 +105,9 @@ class C_crm_setup extends Controller {
 		$setcrm_treatment_morethan=trim(@$_POST["setcrm_treatment_morethan"]);
 		$setcrm_treatment_equal=trim(@$_POST["setcrm_treatment_equal"]);
 		$setcrm_treatment_lessthan=trim(@$_POST["setcrm_treatment_lessthan"]);
+		
+		$setcrm_result_nilai_atas=trim(@$_POST["setcrm_result_nilai_atas"]);
+		$setcrm_result_nilai_bawah=trim(@$_POST["setcrm_result_nilai_bawah"]);
 		
 		$setcrm_author=@$_SESSION[SESSION_USERID];
 		$setcrm_date_create=date(LONG_FORMATDATE);
@@ -110,8 +118,9 @@ class C_crm_setup extends Controller {
 													$setcrm_highmargin_treatment, $setcrm_highmargin_days, $setcrm_highmargin_value_morethan, $setcrm_highmargin_value_equal, $setcrm_highmargin_value_lessthan,
 													$setcrm_referal_person, $setcrm_referal_days, $setcrm_referal_morethan, $setcrm_referal_equal, $setcrm_referal_lessthan,
 													$setcrm_kerewelan_high, $setcrm_kerewelan_normal, $setcrm_kerewelan_low,
-													$setcrm_disiplin_high, $setcrm_disiplin_normal, $setcrm_disiplin_low,
+													$setcrm_disiplin_days, $setcrm_disiplin_persentase_pembatalan, $setcrm_disiplin_persentase_telat, $setcrm_disiplin_menit_telat, $setcrm_disiplin_batal_value_morethan, $setcrm_disiplin_batal_value_lessthan, $setcrm_disiplin_telat_value_morethan, $setcrm_disiplin_telat_value_lessthan,
 													$setcrm_treatment_days, $setcrm_treatment_nonmedis, $setcrm_treatment_medis, $setcrm_treatment_morethan, $setcrm_treatment_equal, $setcrm_treatment_lessthan,
+													$setcrm_result_nilai_atas, $setcrm_result_nilai_bawah,
 													$setcrm_author, $setcrm_date_create);
 		echo $result;
 	}
@@ -154,9 +163,14 @@ class C_crm_setup extends Controller {
 		$setcrm_kerewelan_normal=trim(@$_POST["setcrm_kerewelan_normal"]);
 		$setcrm_kerewelan_low=trim(@$_POST["setcrm_kerewelan_low"]);
 		
-		$setcrm_disiplin_high=trim(@$_POST["setcrm_disiplin_high"]);
-		$setcrm_disiplin_normal=trim(@$_POST["setcrm_disiplin_normal"]);
-		$setcrm_disiplin_low=trim(@$_POST["setcrm_disiplin_low"]);
+		$setcrm_disiplin_days=trim(@$_POST["setcrm_disiplin_days"]);
+		$setcrm_disiplin_persentase_pembatalan=trim(@$_POST["setcrm_disiplin_persentase_pembatalan"]);
+		$setcrm_disiplin_persentase_telat=trim(@$_POST["setcrm_disiplin_persentase_telat"]);
+		$setcrm_disiplin_menit_telat=trim(@$_POST["setcrm_disiplin_menit_telat"]);
+		$setcrm_disiplin_batal_value_morethan=trim(@$_POST["setcrm_disiplin_batal_value_morethan"]);
+		$setcrm_disiplin_batal_value_lessthan=trim(@$_POST["setcrm_disiplin_batal_value_lessthan"]);
+		$setcrm_disiplin_telat_value_morethan=trim(@$_POST["setcrm_disiplin_telat_value_morethan"]);
+		$setcrm_disiplin_telat_value_lessthan=trim(@$_POST["setcrm_disiplin_telat_value_lessthan"]);
 		
 		$setcrm_treatment_days=trim(@$_POST["setcrm_treatment_days"]);
 		$setcrm_treatment_nonmedis=trim(@$_POST["setcrm_treatment_nonmedis"]);
@@ -165,6 +179,9 @@ class C_crm_setup extends Controller {
 		$setcrm_treatment_equal=trim(@$_POST["setcrm_treatment_equal"]);
 		$setcrm_treatment_lessthan=trim(@$_POST["setcrm_treatment_lessthan"]);
 
+		$setcrm_result_nilai_atas=trim(@$_POST["setcrm_result_nilai_atas"]);
+		$setcrm_result_nilai_bawah=trim(@$_POST["setcrm_result_nilai_bawah"]);
+		
 		$setcrm_update=@$_SESSION[SESSION_USERID];
 		$setcrm_date_update=date(LONG_FORMATDATE);
 		$result = $this->m_crm_setup->crm_setup_update($setcrm_id,
@@ -174,8 +191,9 @@ class C_crm_setup extends Controller {
 													$setcrm_highmargin_treatment, $setcrm_highmargin_days, $setcrm_highmargin_value_morethan, $setcrm_highmargin_value_equal, $setcrm_highmargin_value_lessthan,
 													$setcrm_referal_person, $setcrm_referal_days, $setcrm_referal_morethan, $setcrm_referal_equal, $setcrm_referal_lessthan,
 													$setcrm_kerewelan_high, $setcrm_kerewelan_normal, $setcrm_kerewelan_low,
-													$setcrm_disiplin_high, $setcrm_disiplin_normal, $setcrm_disiplin_low,
+													$setcrm_disiplin_days, $setcrm_disiplin_persentase_pembatalan, $setcrm_disiplin_persentase_telat, $setcrm_disiplin_menit_telat, $setcrm_disiplin_batal_value_morethan, $setcrm_disiplin_batal_value_lessthan, $setcrm_disiplin_telat_value_morethan, $setcrm_disiplin_telat_value_lessthan,
 													$setcrm_treatment_days, $setcrm_treatment_nonmedis, $setcrm_treatment_medis, $setcrm_treatment_morethan, $setcrm_treatment_equal, $setcrm_treatment_lessthan,
+													$setcrm_result_nilai_atas, $setcrm_result_nilai_bawah,
 													$setcrm_update, $setcrm_date_update);
 		echo $result;
 	}
