@@ -990,7 +990,7 @@ Ext.onReady(function(){
 	// Custom rendering Template
     var retur_jual_produk_tpl = new Ext.XTemplate(
         '<tpl for="."><div class="search-item">',
-            '<span><b>{retur_produk_display}</b> | Tgl-Retur:{retur_produk_tanggal:date("M j, Y")}<br /></span>',
+            '<span><b>{retur_produk_display}</b> | Tgl Faktur:{retur_produk_tanggal:date("j M Y")}<br /></span>',
             'Customer: {retur_produk_nama_customer}&nbsp;&nbsp;&nbsp;[Alamat: {retur_produk_alamat}]',
         '</div></tpl>'
     );

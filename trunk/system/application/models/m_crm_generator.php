@@ -42,9 +42,9 @@ class M_crm_generator extends Model{
 			$query = 
 			   "SELECT 
 					crmvalue_id, crmvalue_date, c1.cust_nama as crmvalue_cust, c1.cust_no as crmvalue_cust_no ,crmvalue_frequency, crmvalue_recency, 
-					crmvalue_spending, crmvalue_highmargin, crmvalue_referal, crmvalue_kerewelan, crmvalue_disiplin, crmvalue_treatment,
+					crmvalue_spending, crmvalue_highmargin, crmvalue_referal, crmvalue_kerewelan, crmvalue_disiplin_batal, crmvalue_disiplin_telat, crmvalue_treatment,
 					(crmvalue_frequency + crmvalue_recency + crmvalue_spending + crmvalue_highmargin + crmvalue_referal + crmvalue_kerewelan +
-					crmvalue_disiplin + crmvalue_treatment) as crmvalue_total,
+					crmvalue_disiplin_batal + crmvalue_disiplin_telat + crmvalue_treatment) as crmvalue_total,
 					crmvalue_priority
 				FROM crm_value
 				left join customer c1 on (c1.cust_id = crm_value.crmvalue_cust)";
@@ -85,7 +85,11 @@ class M_crm_generator extends Model{
 					c.setcrm_recency_days, c.setcrm_recency_value_morethan, c.setcrm_recency_value_lessthan, 
 					c.setcrm_spending_days, c.setcrm_spending_value_lessthan, c.setcrm_spending_value_equal, c.setcrm_spending_value_morethan,
 					c.setcrm_referal_person, c.setcrm_referal_days, c.setcrm_referal_morethan, c.setcrm_referal_equal, c.setcrm_referal_lessthan,
-					c.setcrm_kerewelan_high, c.setcrm_kerewelan_normal, c.setcrm_kerewelan_low
+					c.setcrm_kerewelan_high, c.setcrm_kerewelan_normal, c.setcrm_kerewelan_low,
+					c.setcrm_result_nilai_atas, c.setcrm_result_nilai_bawah,
+					c.setcrm_disiplin_days, c.setcrm_disiplin_persentase_pembatalan, 
+					c.setcrm_disiplin_batal_value_morethan, c.setcrm_disiplin_batal_value_lessthan,
+					c.setcrm_disiplin_persentase_telat, c.setcrm_disiplin_menit_telat, c.setcrm_disiplin_telat_value_morethan, c.setcrm_disiplin_telat_value_lessthan
 				from crm_setup c";
 			
 			$query_parameter				= $this->db->query($sql_parameter);
@@ -115,6 +119,18 @@ class M_crm_generator extends Model{
 			$setcrm_kerewelan_high			= $data_parameter->setcrm_kerewelan_high;
 			$setcrm_kerewelan_normal		= $data_parameter->setcrm_kerewelan_normal;
 			$setcrm_kerewelan_low			= $data_parameter->setcrm_kerewelan_low;
+			
+			$setcrm_disiplin_days					= $data_parameter->setcrm_disiplin_days;
+			$setcrm_disiplin_persentase_pembatalan	= $data_parameter->setcrm_disiplin_persentase_pembatalan;
+			$setcrm_disiplin_batal_value_morethan	= $data_parameter->setcrm_disiplin_batal_value_morethan;
+			$setcrm_disiplin_batal_value_lessthan	= $data_parameter->setcrm_disiplin_batal_value_lessthan;
+			$setcrm_disiplin_persentase_telat		= $data_parameter->setcrm_disiplin_persentase_telat;
+			$setcrm_disiplin_menit_telat			= $data_parameter->setcrm_disiplin_menit_telat;
+			$setcrm_disiplin_telat_value_morethan	= $data_parameter->setcrm_disiplin_telat_value_morethan;
+			$setcrm_disiplin_telat_value_lessthan	= $data_parameter->setcrm_disiplin_telat_value_lessthan;
+			
+			$setcrm_result_nilai_atas		= $data_parameter->setcrm_result_nilai_atas;
+			$setcrm_result_nilai_bawah		= $data_parameter->setcrm_result_nilai_bawah;
 			
 	
 			//UNTUK MENGHITUNG FREQUENCY:
@@ -481,7 +497,7 @@ class M_crm_generator extends Model{
 			$sql_value_referal = 
 			   "select count(c.cust_id) as jum_referal
 			    from customer c
-				where date_add(c.cust_terdaftar, interval $setcrm_referal_days day) >= date_format(now(), '%Y-%m-%d') and c.cust_referensi = '$crmvalue_cust'
+				where date_add(c.cust_terdaftar, interval '$setcrm_referal_days' day) >= date_format(now(), '%Y-%m-%d') and c.cust_referensi = '$crmvalue_cust'
 				";
 			$query_referal	= $this->db->query($sql_value_referal);
 			$data_referal	= $query_referal->row();
@@ -518,16 +534,80 @@ class M_crm_generator extends Model{
 			}
 				
 			
+			//UNTUK MENGHITUNG DISIPLIN: BATAL
+			
+			$sql_value_app_batal = 
+			   "SELECT count(d.dapp_id) as total_app_batal
+				FROM appointment_detail d
+				LEFT JOIN appointment a on a.app_id = d.dapp_master
+				WHERE 
+					d.dapp_status = 'batal' AND 
+					date_add(a.app_tanggal, interval '$setcrm_disiplin_days' day) >= date_format(now(), '%Y-%m-%d') AND a.app_customer = '$crmvalue_cust'";
+			$query_app_batal 	= $this->db->query($sql_value_app_batal);
+			$data_app_batal		= $query_app_batal->row();
+			$total_app_batal	= $data_app_batal->total_app_batal;
+
+			$sql_value_app_all = 
+			   "SELECT count(d.dapp_id) as total_app_all
+				FROM appointment_detail d
+				LEFT JOIN appointment a on a.app_id = d.dapp_master
+				WHERE 
+					date_add(a.app_tanggal, interval '$setcrm_disiplin_days' day) >= date_format(now(), '%Y-%m-%d') AND a.app_customer = '$crmvalue_cust'";
+			$query_app_all 		= $this->db->query($sql_value_app_all);
+			$data_app_all		= $query_app_all->row();
+			$total_app_all		= $data_app_all->total_app_all;
+			
+			if (($total_app_batal / $total_app_all) >= ($setcrm_disiplin_persentase_pembatalan / 100)) {
+				$crmvalue_disiplin_batal = $setcrm_disiplin_batal_value_morethan;
+			}
+			else {
+				$crmvalue_disiplin_batal = $setcrm_disiplin_batal_value_lessthan;
+			}
+			
+			
+			//UNTUK MENGHITUNG DISIPLIN: TELAT
+			
+			$sql_value_app_dtg_telat = 
+			   "SELECT count(d.dapp_id) as total_app_dtg_telat
+				FROM appointment_detail d
+				LEFT JOIN appointment a on a.app_id = d.dapp_master
+				WHERE 
+					d.dapp_status = 'datang' AND time_to_sec(timediff(d.dapp_jamdatang, d.dapp_jamreservasi)) > ($setcrm_disiplin_menit_telat * 60) AND
+					date_add(a.app_tanggal, interval '$setcrm_disiplin_days' day) >= date_format(now(), '%Y-%m-%d') AND a.app_customer = '$crmvalue_cust'";
+			$query_app_dtg_telat 	= $this->db->query($sql_value_app_dtg_telat);
+			$data_app_dtg_telat		= $query_app_dtg_telat->row();
+			$total_app_dtg_telat	= $data_app_dtg_telat->total_app_dtg_telat;
+
+			$sql_value_app_dtg_all = 
+			   "SELECT count(d.dapp_id) as total_app_dtg_all
+				FROM appointment_detail d
+				LEFT JOIN appointment a on a.app_id = d.dapp_master
+				WHERE 
+					d.dapp_status = 'datang' AND
+					date_add(a.app_tanggal, interval '$setcrm_disiplin_days' day) >= date_format(now(), '%Y-%m-%d') AND a.app_customer = '$crmvalue_cust'";
+			$query_app_dtg_all 		= $this->db->query($sql_value_app_dtg_all);
+			$data_app_dtg_all		= $query_app_dtg_all->row();
+			$total_app_dtg_all		= $data_app_dtg_all->total_app_dtg_all;
+			
+			if (($total_app_dtg_telat / $total_app_dtg_all) >= ($setcrm_disiplin_persentase_telat / 100)) {
+				$crmvalue_disiplin_telat = $setcrm_disiplin_telat_value_morethan;
+			}
+			else {
+				$crmvalue_disiplin_telat = $setcrm_disiplin_telat_value_lessthan;
+			}
+			
+
+			
 			//UNTUK MENENTUKAN PRIORITY
 			$crmvalue_total 	= $crmvalue_frequency + $crmvalue_recency + $crmvalue_spending + $crmvalue_referal + $crmvalue_fretfulness;
 			
-			if ($crmvalue_total > ){
+			if ($crmvalue_total > $setcrm_result_nilai_atas){
 				$crmvalue_priority = 'Core';
 			}
-			else if (($crmvalue_total <= ) and ($crmvalue_total >=)){
+			else if (($crmvalue_total <= $setcrm_result_nilai_atas) and ($crmvalue_total >= $setcrm_result_nilai_bawah)){
 				$crmvalue_priority = 'Medium';
 			}
-			else if ($crmvalue_total < ){
+			else if ($crmvalue_total < $setcrm_result_nilai_bawah){
 				$crmvalue_priority = 'Low';
 			}
 			
@@ -551,6 +631,11 @@ class M_crm_generator extends Model{
 				"crmvalue_referal_real"			=> $jum_referal,
 				"crmvalue_kerewelan"			=> $crmvalue_fretfulness,
 				"crmvalue_kerewelan_real"		=> $cust_fretfulness,
+				"crmvalue_disiplin_batal"		=> $crmvalue_disiplin_batal,
+				"crmvalue_disiplin_batal_real"	=> ($total_app_batal / $total_app_all),
+				"crmvalue_disiplin_telat"		=> $crmvalue_disiplin_telat,
+				"crmvalue_disiplin_telat_real"	=> ($total_app_dtg_telat / $total_app_dtg_all),
+				"crmvalue_priority"				=> $crmvalue_priority,
 				"crmvalue_total"				=> $crmvalue_total,
 				"crmvalue_cust"					=> $crmvalue_cust,	
 				"crmvalue_date"					=> $crmvalue_date,

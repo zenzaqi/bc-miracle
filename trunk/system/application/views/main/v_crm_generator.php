@@ -336,7 +336,8 @@ Ext.onReady(function(){
 			{name: 'crmvalue_highmargin', type: 'float', mapping: 'crmvalue_highmargin'},
 			{name: 'crmvalue_referal', type: 'float', mapping: 'crmvalue_referal'},
 			{name: 'crmvalue_kerewelan', type: 'float', mapping: 'crmvalue_kerewelan'},
-			{name: 'crmvalue_disiplin', type: 'float', mapping: 'crmvalue_disiplin'},
+			{name: 'crmvalue_disiplin_batal', type: 'float', mapping: 'crmvalue_disiplin_batal'},
+			{name: 'crmvalue_disiplin_telat', type: 'float', mapping: 'crmvalue_disiplin_telat'},
 			{name: 'crmvalue_treatment', type: 'float', mapping: 'crmvalue_treatment'},
 			{name: 'crmvalue_total', type: 'float', mapping: 'crmvalue_total'},
 			{name: 'crmvalue_priority', type: 'string', mapping: 'crmvalue_priority'}
@@ -409,9 +410,16 @@ Ext.onReady(function(){
 			sortable: true
 		}, 		
 		{
-			header: '<div align="center">Disiplin</div>',
+			header: '<div align="center">Disiplin I</div>',
 			align: 'right',
-			dataIndex: 'crmvalue_disiplin',
+			dataIndex: 'crmvalue_disiplin_batal',
+			width: 80,
+			sortable: true
+		}, 	
+		{
+			header: '<div align="center">Disiplin II</div>',
+			align: 'right',
+			dataIndex: 'crmvalue_disiplin_telat',
 			width: 80,
 			sortable: true
 		}, 	
