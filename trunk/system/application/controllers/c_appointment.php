@@ -18,7 +18,7 @@ class C_appointment extends Controller {
 		parent::Controller();
 		session_start();
 		$this->load->model('m_appointment', '', TRUE);
-		$this->load->plugin('to_excel');
+		
 	}
 	
 	//set index
@@ -471,7 +471,7 @@ class C_appointment extends Controller {
 																,$tgl_app
 																,$option
 																,$filter);
-		
+		$this->load->plugin('to_excel');
 		to_excel($query,"appointment"); 
 		echo '1';
 			

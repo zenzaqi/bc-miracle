@@ -828,7 +828,6 @@ Ext.onReady(function(){
 			totalProperty: 'total'//,
 			//id: 'app_id'
 		},[
-		/* dataIndex => insert intoappointment_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'app_id', type: 'int', mapping: 'app_id'}, 
 			{name: 'cust_id', type: 'int', mapping: 'cust_id'},
 			{name: 'cust_nama', type: 'string', mapping: 'cust_nama'},
@@ -881,7 +880,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'cust_id'
 		},[
-		/* dataIndex => insert intocustomer_note_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'cust_id', type: 'int', mapping: 'cust_id'},
 			{name: 'cust_no', type: 'string', mapping: 'cust_no'},
 			{name: 'cust_nama', type: 'string', mapping: 'cust_nama'},
@@ -977,22 +975,28 @@ Ext.onReady(function(){
 			width: 70,
 			sortable: false,
 			hidden: false,
-			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
+			renderer: Ext.util.Format.dateRenderer('d-m-Y')
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_APP'))){ ?>
+			,
 			editor: new Ext.form.DateField({
 				format: 'd-m-Y'
 			})
+			<?php } ?>
 		}, 
 		{
 			header: '<div align="center">' + 'Jam App' + '</div>',
 			dataIndex: 'dapp_jamreservasi',
 			width: 55,	//60,
-			defaultSortable: false,
+			defaultSortable: false
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_APP'))){ ?>
+			,
 			editor: new Ext.form.TimeField({
 				format: 'H:i:s',
 				minValue: '7:00',
 				maxValue: '21:00',
 				increment: 30
 			})
+			<?php } ?>
 		}, 
 		{
 			header: '<div align="center">' + 'Perawatan' + '</div>',
@@ -1029,7 +1033,9 @@ Ext.onReady(function(){
 			header: 'Dokter',
 			dataIndex: 'dokter_username',
 			width: 80,
-			sortable: false,
+			sortable: false
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_APP'))){ ?>
+			,
 			editor: new Ext.form.ComboBox({
 				store: dapp_dokterDataStore,
 				mode: 'remote',
@@ -1041,13 +1047,15 @@ Ext.onReady(function(){
 				triggerAction: 'all',
 				anchor: '95%'
 			})
+			<?php } ?>
 		}, 
 		{
 			header: '<div align="center">' + 'Therapist' + '</div>',
 			dataIndex: 'terapis_username',
 			width: 80,
-			sortable: false,
-				editor: new Ext.form.ComboBox({
+			sortable: false
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_APP'))){ ?>
+			,editor: new Ext.form.ComboBox({
 				store: dapp_terapisDataStore,
 				mode: 'remote',
 				tpl: dapp_terapis_tpl,
@@ -1057,7 +1065,9 @@ Ext.onReady(function(){
 				itemSelector: 'div.search-item',
 				triggerAction: 'all',
 				anchor: '95%'
-			}),
+			})
+			<?php } ?>
+			,
 			renderer: function(value, cell, record){
 				cell.css = "readonlycell";
 				if(record.data.dapp_warna_terapis=="true"){
@@ -1076,15 +1086,16 @@ Ext.onReady(function(){
 			width: 70,
 			hidden: true,
 			sortable: false,
-			editor: new Ext.form.TextField({
-				maxLength: 250
-          	})
+			readOnly: true
 		}, 
 		{
 			header: '<div align="center">' + 'Status' + '</div>',
 			dataIndex: 'dapp_status',
 			width: 80,
 			sortable: false,
+            renderer: ch_status
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_APP'))){ ?>
+			,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
 				triggerAction: 'all',
@@ -1097,8 +1108,8 @@ Ext.onReady(function(){
                	valueField: 'dapp_status_value',
                	lazyRender:true,
                	listClass: 'x-combo-list-small'
-            }),
-            renderer: ch_status
+            })
+			<?php } ?>
 		}, 
 		{
 			header: '<div align="center">' + 'Jam Dtg' + '</div>',
@@ -1110,13 +1121,16 @@ Ext.onReady(function(){
 			header: '<div align="center">' + 'Keterangan' + '</div>',
 			dataIndex: 'dapp_keterangan',
 			width: 220,
-			sortable: false,
+			sortable: false
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_APP'))){ ?>
+			,
 			editor: new Ext.form.TextField({
 				maxLength: 100
           	})
+			<?php } ?>
 		}, 
 		{
-			header: 'App Creator',
+			header: 'Creator',
 			dataIndex: 'app_creator',
 			width: 150,
 			sortable: true,
@@ -1124,36 +1138,36 @@ Ext.onReady(function(){
 			readOnly: true,
 		}, 
 		{
-			header: 'App Date Create',
+			header: 'Create on',
 			dataIndex: 'app_date_create',
 			width: 150,
 			sortable: true,
 			hidden: true,
-			readOnly: true,
+			readOnly: true
 		}, 
 		{
-			header: 'App Update',
+			header: 'Last Update by',
 			dataIndex: 'app_update',
 			width: 150,
 			sortable: true,
 			hidden: true,
-			readOnly: true,
+			readOnly: true
 		}, 
 		{
-			header: 'App Date Update',
+			header: 'Last Update on',
 			dataIndex: 'app_date_update',
 			width: 150,
 			sortable: true,
 			hidden: true,
-			readOnly: true,
+			readOnly: true
 		}, 
 		{
-			header: 'App Revised',
+			header: 'Revised',
 			dataIndex: 'app_revised',
 			width: 150,
 			sortable: true,
 			hidden: true,
-			readOnly: true,
+			readOnly: true
 		},
 		{
 			header: 'Kode Warna',
@@ -1161,7 +1175,7 @@ Ext.onReady(function(){
 			width: 50,
 			sortable: true,
 			hidden: true,
-			readOnly: true,
+			readOnly: true
 		}	]);
 	
 	appointment_ColumnModel.defaultSortable= true;
@@ -1249,20 +1263,25 @@ Ext.onReady(function(){
 			store: appointment_DataStore,
 			displayInfo: true
 		}),
-		/* Add Control on ToolBar */
 		tbar: [
+		<?php if(eregi('C',$this->m_security->get_access_group_by_kode('MENU_APP'))){ ?>
 		{
 			text: 'Add',
 			tooltip: 'Add new record',
 			iconCls:'icon-adds',    				// this is defined in our styles.css
 			handler: display_form_window
-		}, '-',{
+		}, '-',
+		<?php } ?>
+		<?php if(eregi('U|R',$this->m_security->get_access_group_by_kode('MENU_APP'))){ ?>
+		{
 			text: 'Edit',
 			tooltip: 'Edit selected record',
 			iconCls:'icon-update',
 			disabled:false,
 			handler: appointment_confirm_update   // Confirm before updating
-		}, '-', {
+		}, '-',
+		<?php } ?>
+		{
 			text: 'Adv Search',
 			tooltip: 'Pencarian detail',
 			iconCls:'icon-search',
@@ -1312,7 +1331,7 @@ Ext.onReady(function(){
 			valueField: 'dokter_value',
 			loadingText: 'Searching...',
 			itemSelector: 'div.search-item',
-			triggerAction: 'all',
+			triggerAction: 'all'
 		}, '-',{
 			text: 'Print',
 			tooltip: 'Print Document',
@@ -1414,11 +1433,13 @@ Ext.onReady(function(){
 	appointment_ContextMenu = new Ext.menu.Menu({
 		id: 'appointment_ListEditorGridContextMenu',
 		items: [
+		<?php if(eregi('U|R',$this->m_security->get_access_group_by_kode('MENU_APP'))){ ?>
 		{ 
 			text: 'Edit', tooltip: 'Edit selected record', 
 			iconCls:'icon-update',
 			handler: appointment_editContextMenu 
 		},
+		<?php } ?>
 		'-',
 		{ 
 			text: 'Print',
@@ -1525,7 +1546,7 @@ Ext.onReady(function(){
 		name:'app_cara',
 		displayField: 'app_cara_display',
 		valueField: 'app_cara_value',
-		width: 94,
+		width: 100,
 		triggerAction: 'all'	
 	});
 	/* Identify  app_keterangan Field */
@@ -1662,14 +1683,11 @@ Ext.onReady(function(){
 	
 	
 	/* START DETAIL-MEDIS Declaration */
-		
-	// Function for json reader of detail
 	var appointment_detail_medis_reader=new Ext.data.JsonReader({
 		root: 'results',
 		totalProperty: 'total',
 		id: ''
 	},[
-	/* dataIndex => insert intoperawatan_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'dapp_medis_id', type: 'int', mapping: 'dapp_id'}, 
 			{name: 'dapp_medis_master', type: 'int', mapping: 'dapp_master'}, 
 			{name: 'dapp_medis_perawatan', type: 'int', mapping: 'dapp_perawatan'}, 
@@ -1860,12 +1878,14 @@ Ext.onReady(function(){
 		frame: true,
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
-		viewConfig: { forceFit:true},
-		bbar: new Ext.PagingToolbar({
+		viewConfig: { forceFit:true}
+		<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_APP'))){ ?>
+		,
+		/*bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: appointment_detail_medisDataStore,
 			displayInfo: true
-		}),
+		}),*/
 		/* Add Control on ToolBar */
 		tbar: [
 		{
@@ -1880,6 +1900,7 @@ Ext.onReady(function(){
 			handler: appointment_detail_medis_confirm_delete
 		}
 		]
+		<?php } ?>
 	});
 	//eof
 	
@@ -2116,7 +2137,6 @@ Ext.onReady(function(){
 		totalProperty: 'total',
 		id: ''
 	},[
-	/* dataIndex => insert intoperawatan_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'dapp_nonmedis_id', type: 'int', mapping: 'dapp_id'}, 
 			{name: 'dapp_nonmedis_master', type: 'int', mapping: 'dapp_master'}, 
 			{name: 'dapp_nonmedis_perawatan', type: 'int', mapping: 'dapp_perawatan'}, 
@@ -2169,8 +2189,6 @@ Ext.onReady(function(){
     });
 	//eof
 	
-	
-	
 	var combo_dapp_rawat_nonmedis=new Ext.form.ComboBox({
 			store: cbo_dapp_rawat_nonmedisDataStore,
 			mode: 'remote',
@@ -2188,7 +2206,6 @@ Ext.onReady(function(){
 			listClass: 'x-combo-list-small',
 			anchor: '95%',
             maskRe: /([^0-9]+)$/
-
 	});
 	
 	var combo_dapp_terapis_nonmedis=new Ext.form.ComboBox({
@@ -2201,7 +2218,6 @@ Ext.onReady(function(){
 			itemSelector: 'div.search-item',
 			triggerAction: 'all',
 			anchor: '95%'
-
 	});
 
 	var combo_dapp_jam_nonmedis=new Ext.form.TimeField({
@@ -2326,13 +2342,14 @@ Ext.onReady(function(){
 		frame: true,
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
-		viewConfig: { forceFit:true},
-		bbar: new Ext.PagingToolbar({
+		viewConfig: { forceFit:true}
+		<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_APP'))){ ?>
+		,
+		/*bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: appointment_detail_nonmedisDataStore,
 			displayInfo: true
-		}),
-		/* Add Control on ToolBar */
+		}),*/
 		tbar: [
 		{
 			text: 'Add',
@@ -2346,6 +2363,7 @@ Ext.onReady(function(){
 			handler: appointment_detail_nonmedis_confirm_delete
 		}
 		]
+		<?php } ?>
 	});
 	//eof
 
@@ -2563,8 +2581,8 @@ Ext.onReady(function(){
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-//				msg: 'Tidak ada yang dipilih untuk dihapus',
-				msg: 'Anda belum memilih data yang akan dihapus',
+				msg: 'Tidak ada yang dipilih untuk dihapus',
+//				msg: 'Anda belum memilih data yang akan dihapus',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -2613,14 +2631,17 @@ Ext.onReady(function(){
 		bodyStyle:'padding:5px',
 		autoHeight:true,
 		width: 950,        
-		items: [appointment_masterGroup,appointment_custBaruGroup,detail_tab_perawatan]
-		,
-		buttons: [{
+		items: [appointment_masterGroup,appointment_custBaruGroup,detail_tab_perawatan],
+		buttons: [
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_APP'))){ ?>
+			{
 				id: 'app_saveClose',
 				text: 'Save and Close',
 				handler: appointment_create
 			}
-			,{
+			,
+			<?php } ?>
+			{
 				text: 'Cancel',
 				handler: function(){
 					appointment_createWindow.hide();
@@ -2629,6 +2650,7 @@ Ext.onReady(function(){
 		]
 	});
 	/* End  of Function*/
+	<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_APP'))){ ?>
 	Ext.getCmp('app_saveClose').on('click', function(){
 		/*Ext.MessageBox.show({
            title: 'Please wait',
@@ -2641,6 +2663,7 @@ Ext.onReady(function(){
        });*/
 		appointment_createWindow.setDisabled(true);
 	});
+	<?php } ?>
 	
 	/* Function for retrieve create Window Form */
 	appointment_createWindow= new Ext.Window({
@@ -2771,7 +2794,7 @@ Ext.onReady(function(){
 		mode: 'local',
 		displayField: 'app_cara',
 		valueField: 'value',
-		anchor: '95%',
+		width: 100,
 		triggerAction: 'all'	 
 	
 	});
@@ -2787,7 +2810,7 @@ Ext.onReady(function(){
 		mode: 'local',
 		displayField: 'dokter_nama',
 		valueField: 'value',
-		anchor: '95%',
+		width: 100,
 		triggerAction: 'all'	 
 	
 	});
@@ -2965,7 +2988,7 @@ Ext.onReady(function(){
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
 	appointment_searchWindow = new Ext.Window({
-		title: 'appointment Search',
+		title: 'Pencarian Appointment',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,
