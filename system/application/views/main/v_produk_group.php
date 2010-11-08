@@ -62,6 +62,7 @@ var pageS=15;
 var group_idField;
 var group_kodeField;
 var group_namaField;
+var group_treatment_utamaField;
 var group_duprodukField;
 var group_dmprodukField;
 var group_durawatField;
@@ -205,7 +206,8 @@ Ext.onReady(function(){
 					task			: post2db,
 					group_id		: group_id_create_pk,
 					group_kode		: group_kode_create,
-					group_nama		: group_nama_create,	
+					group_nama		: group_nama_create,
+					group_treatment_utama	: group_treatment_utamaField.getValue(),
 					group_duproduk	: group_duproduk_create,	
 					group_dmproduk	: group_dmproduk_create,	
 					group_durawat	: group_durawat_create,	
@@ -274,6 +276,8 @@ Ext.onReady(function(){
 		group_kodeField.setValue(null);
 		group_namaField.reset();
 		group_namaField.setValue(null);
+		group_treatment_utamaField.reset();
+		group_treatment_utamaField.setValue(null);
 		group_duprodukField.reset();
 		group_duprodukField.setValue(null);
 		group_dmprodukField.reset();
@@ -299,6 +303,7 @@ Ext.onReady(function(){
 	function produk_group_set_form(){
 		group_kodeField.setValue(produk_groupListEditorGrid.getSelectionModel().getSelected().get('group_kode'));
 		group_namaField.setValue(produk_groupListEditorGrid.getSelectionModel().getSelected().get('group_nama'));
+		group_treatment_utamaField.setValue(produk_groupListEditorGrid.getSelectionModel().getSelected().get('group_treatment_utama'));
 		group_duprodukField.setValue(produk_groupListEditorGrid.getSelectionModel().getSelected().get('group_duproduk'));
 		group_dmprodukField.setValue(produk_groupListEditorGrid.getSelectionModel().getSelected().get('group_dmproduk'));
 		group_durawatField.setValue(produk_groupListEditorGrid.getSelectionModel().getSelected().get('group_durawat'));
@@ -430,6 +435,7 @@ Ext.onReady(function(){
 			{name: 'group_id', type: 'int', mapping: 'group_id'},
 			{name: 'group_kode', type: 'string', mapping: 'group_kode'},
 			{name: 'group_nama', type: 'string', mapping: 'group_nama'},
+			{name: 'group_treatment_utama', type: 'int', mapping: 'group_treatment_utama'},
 			{name: 'group_duproduk', type: 'int', mapping: 'group_duproduk'},
 			{name: 'group_dmproduk', type: 'int', mapping: 'group_dmproduk'},
 			{name: 'group_durawat', type: 'int', mapping: 'group_durawat'},
@@ -817,6 +823,14 @@ Ext.onReady(function(){
 		maxLength: 250,
 		anchor: '95%'
 	});
+	
+	
+	group_treatment_utamaField=new Ext.form.Checkbox({
+		id : 'group_treatment_utamaField',
+		boxLabel: 'Treatment Utama?',
+		name: 'group_treatment_utama'
+	});
+	
 	/* Identify  group_duproduk Field */
 	group_duprodukField= new Ext.form.NumberField({
 		id: 'group_duprodukField',
@@ -976,7 +990,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [group_kodeField,group_namaField, 
+				items: [group_kodeField,group_namaField, group_treatment_utamaField,
 						{
 							layout:'column',
 							border:false,

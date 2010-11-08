@@ -82,6 +82,7 @@ class C_produk_group extends Controller {
 		$group_nama=str_replace("/(<\/?)(p)([^>]*>)", "",$group_nama);
 		$group_nama=str_replace("\\", "",$group_nama);
 		$group_nama=str_replace("'", '"',$group_nama);
+		$group_treatment_utama=trim(@$_POST["group_treatment_utama"]);
 		$group_kode=trim(@$_POST["group_kode"]);
 		$group_kode=str_replace("/(<\/?)(p)([^>]*>)", "",$group_kode);
 		$group_kode=str_replace("\\", "",$group_kode);
@@ -109,7 +110,7 @@ class C_produk_group extends Controller {
 		$group_opsi=@$_POST["group_opsi"];
 		
 		
-		$result = $this->m_produk_group->produk_group_update($group_id , $group_kode, $group_nama ,$group_duproduk ,$group_dmproduk ,$group_durawat,
+		$result = $this->m_produk_group->produk_group_update($group_id , $group_kode, $group_nama , $group_treatment_utama, $group_duproduk ,$group_dmproduk ,$group_durawat,
 															 $group_dmrawat ,$group_dupaket ,$group_dmpaket ,$group_kelompok ,$group_keterangan ,
 															 $group_aktif ,$group_creator ,$group_date_create ,$group_update ,$group_date_update ,
 															 $group_revised, $group_opsi );
@@ -126,6 +127,7 @@ class C_produk_group extends Controller {
 		$group_nama=trim(@$_POST["group_nama"]);
 		$group_nama=str_replace("/(<\/?)(p)([^>]*>)", "",$group_nama);
 		$group_nama=str_replace("'", '"',$group_nama);
+		$group_treatment_utama=trim(@$_POST["group_treatment_utama"]);
 		$group_duproduk=trim(@$_POST["group_duproduk"]);
 		$group_dmproduk=trim(@$_POST["group_dmproduk"]);
 		$group_durawat=trim(@$_POST["group_durawat"]);
@@ -146,7 +148,7 @@ class C_produk_group extends Controller {
 		$group_revised="";
 		$group_opsi=@$_POST["group_opsi"];
 		
-		$result=$this->m_produk_group->produk_group_create($group_kode, $group_nama ,$group_duproduk ,$group_dmproduk ,$group_durawat ,
+		$result=$this->m_produk_group->produk_group_create($group_kode, $group_nama , $group_treatment_utama, $group_duproduk ,$group_dmproduk ,$group_durawat ,
 														   $group_dmrawat ,$group_dupaket ,$group_dmpaket ,$group_kelompok ,$group_keterangan ,
 														   $group_aktif ,$group_creator ,$group_date_create ,$group_update ,$group_date_update ,
 														   $group_revised, $group_opsi );

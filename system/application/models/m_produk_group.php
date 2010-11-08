@@ -45,7 +45,7 @@ class M_produk_group extends Model{
 		}
 		
 		//function for update record
-		function produk_group_update($group_id ,$group_kode, $group_nama ,$group_duproduk ,$group_dmproduk ,$group_durawat ,$group_dmrawat ,
+		function produk_group_update($group_id ,$group_kode, $group_nama , $group_treatment_utama, $group_duproduk ,$group_dmproduk ,$group_durawat ,$group_dmrawat ,
 									 $group_dupaket ,$group_dmpaket ,$group_kelompok ,$group_keterangan ,$group_aktif ,$group_creator ,
 									 $group_date_create ,$group_update ,$group_date_update ,$group_revised, $group_opsi ){
 		if ($group_aktif=="")
@@ -68,6 +68,12 @@ class M_produk_group extends Model{
 				"group_update"=>$_SESSION[SESSION_USERID],			
 				"group_date_update"=>date('Y-m-d H:i:s')			
 			);
+			
+			if($group_treatment_utama=='true')
+				$data["group_treatment_utama"]=1;
+			if($group_treatment_utama=='false')
+				$data["group_treatment_utama"]=0;
+			
 			$sql="SELECT kategori_id FROM kategori WHERE kategori_id='$group_kelompok'";
 			$rs=$this->db->query($sql);
 			if($rs->num_rows())	$data["group_kelompok"]=$group_kelompok;
@@ -98,7 +104,7 @@ class M_produk_group extends Model{
 		}
 		
 		//function for create new record
-		function produk_group_create($group_kode, $group_nama ,$group_duproduk ,$group_dmproduk ,$group_durawat ,$group_dmrawat ,$group_dupaket ,
+		function produk_group_create($group_kode, $group_nama , $group_treatment_utama, $group_duproduk ,$group_dmproduk ,$group_durawat ,$group_dmrawat ,$group_dupaket ,
 									 $group_dmpaket ,$group_kelompok ,$group_keterangan ,$group_aktif ,$group_creator ,$group_date_create ,
 									 $group_update ,$group_date_update ,$group_revised, $group_opsi ){
 		if ($group_aktif=="")
@@ -121,7 +127,12 @@ class M_produk_group extends Model{
 				"group_date_update"=>$group_date_update,	
 				"group_revised"=>$group_revised	
 			);
-
+			
+			if($group_treatment_utama=='true')
+				$data["group_treatment_utama"]=1;
+			if($group_treatment_utama=='false')
+				$data["group_treatment_utama"]=0;
+			
 			$this->db->insert('produk_group', $data); 
 			if($this->db->affected_rows())
 				return '1';

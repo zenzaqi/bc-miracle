@@ -731,7 +731,7 @@ Ext.onReady(function(){
 	setcrm_disiplin_batal_value_morethan_Field= new Ext.form.NumberField({
 		id: 'setcrm_disiplin_batal_value_morethan_Field',
 		name: 'setcrm_disiplin_batal_value_morethan',
-		fieldLabel: '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-weight:bold"> > </span>',
+		fieldLabel: '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-weight:bold"> >= </span>',
 		allowNegatife : false,
 		blankText: '15',
 		allowDecimals: true,
@@ -789,7 +789,7 @@ Ext.onReady(function(){
 	setcrm_disiplin_telat_value_lessthan_Field= new Ext.form.NumberField({
 		id: 'setcrm_disiplin_telat_value_lessthan_Field',
 		name: 'setcrm_disiplin_telat_value_lessthan',
-		fieldLabel: '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-weight:bold"> <= </span>',
+		fieldLabel: '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-weight:bold"> < </span>',
 		allowNegatife : false,
 		blankText: '15',
 		allowDecimals: true,
