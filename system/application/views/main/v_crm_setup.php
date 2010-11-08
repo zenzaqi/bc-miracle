@@ -88,6 +88,14 @@ var setcrm_kerewelan_low_Field;
 var setcrm_disiplin_high_Field;
 var setcrm_disiplin_normal_Field;
 var setcrm_disiplin_low_Field;
+var setcrm_disiplin_daysField;
+var setcrm_disiplin_persentase_pembatalan_Field;
+var setcrm_disiplin_batal_value_morethan_Field;
+var setcrm_disiplin_batal_value_lessthan_Field;
+var setcrm_disiplin_menit_telat_Field;
+var setcrm_disiplin_persentase_telat_Field;
+var setcrm_disiplin_telat_value_morethan_Field;
+var setcrm_disiplin_telat_value_lessthan_Field;
 
 var setcrm_jenistreatment_monthField;
 var setcrm_jenistreatment_nonmedisField;
@@ -96,6 +104,7 @@ var setcrm_jenistreatment_morethan_Field;
 var setcrm_jenistreatment_equal_Field;
 var setcrm_jenistreatment_lessthan_Field;
 
+var set_crm_result_nilai_atas_Field;
 /* on ready fuction */
 Ext.onReady(function(){
   	Ext.QuickTips.init();	/* Initiate quick tips icon */
@@ -136,9 +145,17 @@ Ext.onReady(function(){
 			var setcrm_kerewelan_normal_Field_save=null;
 			var setcrm_kerewelan_low_Field_save=null;
 			
-			var setcrm_disiplin_high_Field_save=null;
-			var setcrm_disiplin_normal_Field_save=null;
-			var setcrm_disiplin_low_Field_save=null;
+			//var setcrm_disiplin_high_Field_save=null;
+			//var setcrm_disiplin_normal_Field_save=null;
+			//var setcrm_disiplin_low_Field_save=null;
+			var setcrm_disiplin_daysField_save=null;
+			var setcrm_disiplin_persentase_pembatalan_Field_save=null;
+			var setcrm_disiplin_batal_value_morethan_Field_save=null;
+			var setcrm_disiplin_batal_value_lessthan_Field_save=null;
+			var setcrm_disiplin_menit_telat_Field_save=null;
+			var setcrm_disiplin_persentase_telat_Field_save=null;
+			var setcrm_disiplin_telat_value_morethan_Field_save=null;
+			var setcrm_disiplin_telat_value_lessthan_Field_save=null;
 			
 			var setcrm_jenistreatment_monthField_save=null;
 			var setcrm_jenistreatment_nonmedisField_save=null;
@@ -146,6 +163,10 @@ Ext.onReady(function(){
 			var setcrm_jenistreatment_morethan_Field_save=null;
 			var setcrm_jenistreatment_equal_Field_save=null;
 			var setcrm_jenistreatment_lessthan_Field_save=null;
+			
+			var setcrm_result_nilai_atas_Field_save=null;
+			var setcrm_result_nilai_bawah_Field_save=null;
+			
 
 			if(setcrm_frequency_yearField.getValue()!== null){setcrm_frequency_year_field = setcrm_frequency_yearField.getValue();}
 			if(setcrm_frequency_monthField.getValue()!== null){setcrm_frequency_month_field = setcrm_frequency_monthField.getValue();}
@@ -179,16 +200,29 @@ Ext.onReady(function(){
 			if(setcrm_kerewelan_normal_Field.getValue()!== null){setcrm_kerewelan_normal_Field_save = setcrm_kerewelan_normal_Field.getValue();}
 			if(setcrm_kerewelan_low_Field.getValue()!== null){setcrm_kerewelan_low_Field_save = setcrm_kerewelan_low_Field.getValue();}
 		
-			if(setcrm_disiplin_high_Field.getValue()!== null){setcrm_disiplin_high_Field_save = setcrm_disiplin_high_Field.getValue();} 
-			if(setcrm_disiplin_normal_Field.getValue()!== null){setcrm_disiplin_normal_Field_save = setcrm_disiplin_normal_Field.getValue();}
-			if(setcrm_disiplin_low_Field.getValue()!== null){setcrm_disiplin_low_Field_save = setcrm_disiplin_low_Field.getValue();}
+			//if(setcrm_disiplin_high_Field.getValue()!== null){setcrm_disiplin_high_Field_save = setcrm_disiplin_high_Field.getValue();} 
+			//if(setcrm_disiplin_normal_Field.getValue()!== null){setcrm_disiplin_normal_Field_save = setcrm_disiplin_normal_Field.getValue();}
+			//if(setcrm_disiplin_low_Field.getValue()!== null){setcrm_disiplin_low_Field_save = setcrm_disiplin_low_Field.getValue();}
+			if(setcrm_disiplin_daysField.getValue()!== null){setcrm_disiplin_daysField_save = setcrm_disiplin_daysField.getValue();}
+			if(setcrm_disiplin_persentase_pembatalan_Field.getValue()!== null){setcrm_disiplin_persentase_pembatalan_Field_save = setcrm_disiplin_persentase_pembatalan_Field.getValue();}
+			if(setcrm_disiplin_batal_value_morethan_Field.getValue()!== null){setcrm_disiplin_batal_value_morethan_Field_save = setcrm_disiplin_batal_value_morethan_Field.getValue();}
+			if(setcrm_disiplin_batal_value_lessthan_Field.getValue()!== null){setcrm_disiplin_batal_value_lessthan_Field_save = setcrm_disiplin_batal_value_lessthan_Field.getValue();}
+			if(setcrm_disiplin_menit_telat_Field.getValue()!== null){setcrm_disiplin_menit_telat_Field_save = setcrm_disiplin_menit_telat_Field.getValue();}
+			if(setcrm_disiplin_persentase_telat_Field.getValue()!== null){setcrm_disiplin_persentase_telat_Field_save = setcrm_disiplin_persentase_telat_Field.getValue();}
+			if(setcrm_disiplin_telat_value_morethan_Field.getValue()!== null){setcrm_disiplin_telat_value_morethan_Field_save = setcrm_disiplin_telat_value_morethan_Field.getValue();}
+			if(setcrm_disiplin_telat_value_lessthan_Field.getValue()!== null){setcrm_disiplin_telat_value_lessthan_Field_save = setcrm_disiplin_telat_value_lessthan_Field.getValue();}
 			
+
 			if(setcrm_jenistreatment_monthField.getValue()!== null){setcrm_jenistreatment_monthField_save = setcrm_jenistreatment_monthField.getValue();} 
 			if(setcrm_jenistreatment_nonmedisField.getValue()!== null){setcrm_jenistreatment_nonmedisField_save = setcrm_jenistreatment_nonmedisField.getValue();}
 			if(setcrm_jenistreatment_medisField.getValue()!== null){setcrm_jenistreatment_medisField_save = setcrm_jenistreatment_medisField.getValue();}
 			if(setcrm_jenistreatment_morethan_Field.getValue()!== null){setcrm_jenistreatment_morethan_Field_save = setcrm_jenistreatment_morethan_Field.getValue();} 
 			if(setcrm_jenistreatment_equal_Field.getValue()!== null){setcrm_jenistreatment_equal_Field_save = setcrm_jenistreatment_equal_Field.getValue();}
 			if(setcrm_jenistreatment_lessthan_Field.getValue()!== null){setcrm_jenistreatment_lessthan_Field_save = setcrm_jenistreatment_lessthan_Field.getValue();}
+			
+			if(setcrm_result_nilai_atas_Field.getValue()!== null){setcrm_result_nilai_atas_Field_save = setcrm_result_nilai_atas_Field.getValue();}
+			if(setcrm_result_nilai_bawah_Field.getValue()!== null){setcrm_result_nilai_bawah_Field_save = setcrm_result_nilai_bawah_Field.getValue();} 
+			
 			
 			Ext.Ajax.request({  
 				waitMsg: 'Please wait...',
@@ -200,7 +234,7 @@ Ext.onReady(function(){
 					setcrm_frequency_value_morethan		: setcrm_frequency_morethan_field_save, 
 					setcrm_frequency_value_equal		: setcrm_frequency_equal_field_save,
 					setcrm_frequency_value_lessthan		: setcrm_frequency_lessthan_field_save,
-					setcrm_recency_days				: setcrm_recency_month_field,
+					setcrm_recency_days					: setcrm_recency_month_field,
 					setcrm_recency_value_morethan		: setcrm_recency_morethan_field_save,
 					//setcrm_recency_value_equal			: setcrm_recency_equal_field_save,
 					setcrm_recency_value_lessthan		: setcrm_recency_lessthan_field_save,
@@ -214,22 +248,32 @@ Ext.onReady(function(){
 					setcrm_highmargin_value_equal		: setcrm_highmargin_equal_Field_save,
 					setcrm_highmargin_value_lessthan	: setcrm_highmargin_lessthan_Field_save,
 					setcrm_referal_person				: setcrm_referaldate_personField_save,
-					setcrm_referal_days				: setcrm_referaldate_monthField_save,
+					setcrm_referal_days					: setcrm_referaldate_monthField_save,
 					setcrm_referal_morethan				: setcrm_referaldate_morethan_Field_save,
 					setcrm_referal_equal				: setcrm_referaldate_equal_Field_save,
 					setcrm_referal_lessthan				: setcrm_referaldate_lessthan_Field_save,
 					setcrm_kerewelan_high				: setcrm_kerewelan_high_Field_save,
 					setcrm_kerewelan_normal				: setcrm_kerewelan_normal_Field_save,
 					setcrm_kerewelan_low				: setcrm_kerewelan_low_Field_save,
-					setcrm_disiplin_high				: setcrm_disiplin_high_Field_save,
-					setcrm_disiplin_normal				: setcrm_disiplin_normal_Field_save,
-					setcrm_disiplin_low					: setcrm_disiplin_low_Field_save,
+					//setcrm_disiplin_high				: setcrm_disiplin_high_Field_save,
+					//setcrm_disiplin_normal				: setcrm_disiplin_normal_Field_save,
+					//setcrm_disiplin_low					: setcrm_disiplin_low_Field_save,
+					setcrm_disiplin_days				: setcrm_disiplin_daysField_save,
+					setcrm_disiplin_persentase_pembatalan : setcrm_disiplin_persentase_pembatalan_Field_save,
+					setcrm_disiplin_batal_value_morethan: setcrm_disiplin_batal_value_morethan_Field_save,
+					setcrm_disiplin_batal_value_lessthan: setcrm_disiplin_batal_value_lessthan_Field_save,
+					setcrm_disiplin_menit_telat			: setcrm_disiplin_menit_telat_Field_save,
+					setcrm_disiplin_persentase_telat	: setcrm_disiplin_persentase_telat_Field_save,
+					setcrm_disiplin_telat_value_morethan: setcrm_disiplin_telat_value_morethan_Field_save,
+					setcrm_disiplin_telat_value_lessthan: setcrm_disiplin_telat_value_lessthan_Field_save,
 					setcrm_treatment_days				: setcrm_jenistreatment_monthField_save,
 					setcrm_treatment_nonmedis			: setcrm_jenistreatment_nonmedisField_save,
 					setcrm_treatment_medis				: setcrm_jenistreatment_medisField_save,
 					setcrm_treatment_morethan			: setcrm_jenistreatment_morethan_Field_save,
 					setcrm_treatment_equal				: setcrm_jenistreatment_equal_Field_save,
-					setcrm_treatment_lessthan			: setcrm_jenistreatment_lessthan_Field_save,					
+					setcrm_treatment_lessthan			: setcrm_jenistreatment_lessthan_Field_save,
+					setcrm_result_nilai_atas			: setcrm_result_nilai_atas_Field_save,
+					setcrm_result_nilai_bawah			: setcrm_result_nilai_bawah_Field_save,
 					task						: post2db
 				}, 
 				success: function(response){             
@@ -319,15 +363,22 @@ Ext.onReady(function(){
 			{name: 'setcrm_kerewelan_high', type: 'float', mapping: 'setcrm_kerewelan_high'}, 
 			{name: 'setcrm_kerewelan_normal', type: 'float', mapping: 'setcrm_kerewelan_normal'},
 			{name: 'setcrm_kerewelan_low', type: 'float', mapping: 'setcrm_kerewelan_low'},
-			{name: 'setcrm_disiplin_high', type: 'float', mapping: 'setcrm_disiplin_high'},
-			{name: 'setcrm_disiplin_normal', type: 'float', mapping: 'setcrm_disiplin_normal'},
-			{name: 'setcrm_disiplin_low', type: 'float', mapping: 'setcrm_disiplin_low'}, 
+			{name: 'setcrm_disiplin_days', type: 'float', mapping: 'setcrm_disiplin_days'},
+			{name: 'setcrm_disiplin_persentase_pembatalan', type: 'float', mapping: 'setcrm_disiplin_persentase_pembatalan'},
+			{name: 'setcrm_disiplin_persentase_telat', type: 'float', mapping: 'setcrm_disiplin_persentase_telat'}, 
+			{name: 'setcrm_disiplin_menit_telat', type: 'float', mapping: 'setcrm_disiplin_menit_telat'},
+			{name: 'setcrm_disiplin_batal_value_morethan', type: 'float', mapping: 'setcrm_disiplin_batal_value_morethan'},
+			{name: 'setcrm_disiplin_batal_value_lessthan', type: 'float', mapping: 'setcrm_disiplin_batal_value_lessthan'},
+			{name: 'setcrm_disiplin_telat_value_morethan', type: 'float', mapping: 'setcrm_disiplin_telat_value_morethan'},
+			{name: 'setcrm_disiplin_telat_value_lessthan', type: 'float', mapping: 'setcrm_disiplin_telat_value_lessthan'},
 			{name: 'setcrm_treatment_days', type: 'float', mapping: 'setcrm_treatment_days'}, 
 			{name: 'setcrm_treatment_nonmedis', type: 'float', mapping: 'setcrm_treatment_nonmedis'},
 			{name: 'setcrm_treatment_medis', type: 'float', mapping: 'setcrm_treatment_medis'}, 
 			{name: 'setcrm_treatment_morethan', type: 'float', mapping: 'setcrm_treatment_morethan'}, 
 			{name: 'setcrm_treatment_equal', type: 'float', mapping: 'setcrm_treatment_equal'}, 
 			{name: 'setcrm_treatment_lessthan', type: 'float', mapping: 'setcrm_treatment_lessthan'},
+			{name: 'setcrm_result_nilai_atas', type: 'float', mapping: 'setcrm_result_nilai_atas'},
+			{name: 'setcrm_result_nilai_bawah', type: 'float', mapping: 'setcrm_result_nilai_bawah'},
 			{name: 'setcrm_author', type: 'string', mapping: 'setcrm_author'}, 
 			{name: 'setcrm_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'setcrm_date_create'}, 
 			{name: 'setcrm_update', type: 'string', mapping: 'setcrm_update'}, 
@@ -620,6 +671,8 @@ Ext.onReady(function(){
 		maskRe: /([0-9]+)$/
 	});
 	
+	
+	/*
 	setcrm_disiplin_high_Field= new Ext.form.NumberField({
 		id: 'setcrm_disiplin_high_Field',
 		name: 'setcrm_disiplin_high',
@@ -651,7 +704,99 @@ Ext.onReady(function(){
 		allowDecimals: true,
 		anchor: '65%',
 		maskRe: /([0-9]+)$/
+	});*/
+	
+	setcrm_disiplin_daysField=new Ext.form.NumberField({
+		id: 'setcrm_disiplin_daysField',
+		name : 'setcrm_disiplin_days',
+		anchor : '25%',
+		width : 50,
+		allowDecimals : true,
+		allowNegative : false,
+		maxLength : 11
 	});
+	
+	setcrm_disiplin_persentase_pembatalan_Field= new Ext.form.NumberField({
+		id: 'setcrm_disiplin_persentase_pembatalan_Field',
+		name: 'setcrm_disiplin_persentase_pembatalan',
+		//fieldLabel: '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-weight:bold"> Pembatalan </span>',
+		allowNegatife : false,
+		//blankText: '15',
+		allowDecimals: true,
+		anchor: '15%',
+		width : 30,
+		maxLength : 11		
+	});
+	
+	setcrm_disiplin_batal_value_morethan_Field= new Ext.form.NumberField({
+		id: 'setcrm_disiplin_batal_value_morethan_Field',
+		name: 'setcrm_disiplin_batal_value_morethan',
+		fieldLabel: '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-weight:bold"> > </span>',
+		allowNegatife : false,
+		blankText: '15',
+		allowDecimals: true,
+		anchor: '65%',
+		maskRe: /([0-9]+)$/
+	});
+	
+	setcrm_disiplin_batal_value_lessthan_Field= new Ext.form.NumberField({
+		id: 'setcrm_disiplin_batal_value_lessthan_Field',
+		name: 'setcrm_disiplin_batal_value_lessthan',
+		fieldLabel: '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-weight:bold"> < </span>',
+		allowNegatife : false,
+		blankText: '15',
+		allowDecimals: true,
+		anchor: '65%',
+		maskRe: /([0-9]+)$/
+	});
+	
+	setcrm_disiplin_persentase_telat_Field= new Ext.form.NumberField({
+		id: 'setcrm_disiplin_persentase_telat_Field',
+		name: 'setcrm_disiplin_persentase_telat',
+		//fieldLabel: '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-weight:bold"> Telat </span>',
+		allowNegatife : false,
+		//blankText: '15',
+		allowDecimals: true,
+		anchor: '15%',
+		width : 30,
+		maxLength : 11		
+	});
+	
+	setcrm_disiplin_menit_telat_Field= new Ext.form.NumberField({
+		id: 'setcrm_disiplin_menit_telat_Field',
+		name: 'setcrm_disiplin_menit_telat',
+		//fieldLabel: '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-weight:bold"> Telat </span>',
+		allowNegatife : false,
+		//blankText: '15',
+		allowDecimals: true,
+		anchor: '20%',
+		width : 40,
+		maxLength : 11		
+	});
+	
+	
+	setcrm_disiplin_telat_value_morethan_Field= new Ext.form.NumberField({
+		id: 'setcrm_disiplin_telat_value_morethan_Field',
+		name: 'setcrm_disiplin_telat_value_morethan',
+		fieldLabel: '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-weight:bold"> >= </span>',
+		allowNegatife : false,
+		blankText: '15',
+		allowDecimals: true,
+		anchor: '65%',
+		maskRe: /([0-9]+)$/
+	});
+	
+	setcrm_disiplin_telat_value_lessthan_Field= new Ext.form.NumberField({
+		id: 'setcrm_disiplin_telat_value_lessthan_Field',
+		name: 'setcrm_disiplin_telat_value_lessthan',
+		fieldLabel: '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-weight:bold"> <= </span>',
+		allowNegatife : false,
+		blankText: '15',
+		allowDecimals: true,
+		anchor: '65%',
+		maskRe: /([0-9]+)$/
+	});
+	
 	
 	setcrm_jenistreatment_monthField=new Ext.form.NumberField({
 		id: 'setcrm_jenistreatment_monthField',
@@ -717,11 +862,36 @@ Ext.onReady(function(){
 	});
 	
 	
+	setcrm_result_nilai_atas_Field= new Ext.form.NumberField({		
+		id: 'setcrm_result_nilai_atas_Field',
+		name : 'setcrm_result_nilai_atas',
+		anchor : '65%',
+		width : 50,
+		allowDecimals : true,
+		allowNegative : false,
+		maxLength : 11
+
+	});
+	
+	setcrm_result_nilai_bawah_Field= new Ext.form.NumberField({		
+		id: 'setcrm_result_nilai_bawah_Field',
+		name : 'setcrm_result_nilai_bawah',
+		anchor : '65%',
+		width : 50,
+		allowDecimals : true,
+		allowNegative : false,
+		maxLength : 11
+
+	});
+	
 	set_crm_frequency_label_divideField=new Ext.form.Label({ html: '&nbsp; / &nbsp;'});
 	set_crm_highmargin_treatment1_label_divideField=new Ext.form.Label({ html: 'Treatment &nbsp;'});
 	set_crm_highmargin_treatment2_label_divideField=new Ext.form.Label({ html: '&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Treatment &nbsp;'});
 	set_crm_highmargin_label_divideField=new Ext.form.Label({ html: '/ &nbsp;'});
 	set_crm_referaldate_label_divideField=new Ext.form.Label({ html: '&nbsp; / &nbsp;'});
+	set_crm_disiplin_label_pembatalanField=new Ext.form.Label({ html: '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>Pembatalan<b> &nbsp;'});
+	set_crm_disiplin_label_telatField=new Ext.form.Label({ html: '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>Keterlambatan<b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'});
+	set_crm_disiplin_label_telat_menitField=new Ext.form.Label({ html: '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>Batas Keterlambatan<b> &nbsp;'});
 	
 	set_crm_frequency_label_monthField=new Ext.form.Label({ html: '&nbsp; days'});
 	set_crm_recency_label_daysField=new Ext.form.Label({ html: '&nbsp; days'});
@@ -729,6 +899,7 @@ Ext.onReady(function(){
 	set_crm_highmargin_label_monthField=new Ext.form.Label({ html: '&nbsp; days'});
 	set_crm_referaldate_label_personField=new Ext.form.Label({ html: '&nbsp; cust'});
 	set_crm_referaldate_label_monthField=new Ext.form.Label({ html: '&nbsp; days'});
+	set_crm_disiplin_label_daysField=new Ext.form.Label({ html: '&nbsp; days <br> <br> <br>'});
 	set_crm_jenistreatment_label_monthField=new Ext.form.Label({ html: '&nbsp; days <br> <br>'});
 	
 	set_crm_frequency_label_valueField=new Ext.form.Label({ html: '<br>Value : &nbsp; '});
@@ -737,9 +908,20 @@ Ext.onReady(function(){
 	set_crm_highmargin_label_valueField=new Ext.form.Label({ html: '<br>Value : &nbsp; '});
 	set_crm_referaldate_label_valueField=new Ext.form.Label({ html: '<br>Value : &nbsp; '});
 	set_crm_kerewelan_label_valueField=new Ext.form.Label({ html: '<br>Value : &nbsp; '});
-	set_crm_disiplin_label_valueField=new Ext.form.Label({ html: '<br>Value : &nbsp; '});
+	set_crm_disiplin_label_value_batalField=new Ext.form.Label({ html: 'Value : &nbsp; '});
+	set_crm_disiplin_label_value_telatField=new Ext.form.Label({ html: 'Value : &nbsp; '});
+	set_crm_result_label_valueField=new Ext.form.Label({ html: '<br>Value : &nbsp; '});
 	set_crm_jenistreatment_label_valueField=new Ext.form.Label({ html: '<br>Value : &nbsp; '});
 	
+	set_crm_disiplin_label_persentase_batalField=new Ext.form.Label({ html: '%'});
+	set_crm_disiplin_label_persentase_telatField=new Ext.form.Label({ html: '%'});
+	set_crm_disiplin_label_menit_telatField=new Ext.form.Label({ html: 'menit<br> <br>'});
+	
+	set_crm_disiplin_batasField=new Ext.form.Label({ html: '<br> --------------------------------------------------------------------------------------------------------------------<br><br>'});
+	
+	set_crm_result_label_coreField=new Ext.form.Label({ html: '&nbsp; Core > &nbsp;'});
+	set_crm_result_label_mediumField=new Ext.form.Label({ html: '&nbsp; >= Medium >= &nbsp;'});
+	set_crm_result_label_lowField=new Ext.form.Label({ html: '&nbsp; > Low &nbsp;'});
 	
 	set_crm_jenistreatment_label_nonmedisField=new Ext.form.Label({ html: '&nbsp; Non Medis &nbsp; &nbsp; &nbsp; &nbsp;'});
 	set_crm_jenistreatment_label_medisField=new Ext.form.Label({ html: '&nbsp; Medis'});
@@ -787,7 +969,7 @@ Ext.onReady(function(){
 			   {
 				   layout	: 'form',
 				   border: false,
-				   items	: [set_crm_recency_label_valueField , setcrm_recency_morethan_Field]
+				   items	: [set_crm_recency_label_valueField,setcrm_recency_morethan_Field]
 			   },
 			   {
 				   layout	: 'form',
@@ -919,19 +1101,44 @@ Ext.onReady(function(){
 		frame: false,
 		boduStyle: 'padding: 5px;',
 		items:[{
-				   layout	: 'form',
+				   layout	: 'column',
 				   border: false,
-				   items	: [set_crm_disiplin_label_valueField ,setcrm_disiplin_high_Field]
+				   items	: [setcrm_disiplin_daysField, set_crm_disiplin_label_daysField]
+			   },
+			   {
+				   layout	: 'column',
+				   border: false,
+				   items	: [set_crm_disiplin_label_pembatalanField, setcrm_disiplin_persentase_pembatalan_Field,set_crm_disiplin_label_persentase_batalField]
 			   },
 			   {
 				   layout	: 'form',
 				   border: false,
-				   items	: [setcrm_disiplin_normal_Field]
+				   items	: [set_crm_disiplin_label_value_batalField, setcrm_disiplin_batal_value_morethan_Field]
 			   },
 			   {
 				   layout	: 'form',
 				   border: false,
-				   items	: [setcrm_disiplin_low_Field]
+				   items	: [setcrm_disiplin_batal_value_lessthan_Field,set_crm_disiplin_batasField]
+			   },
+			   {
+				   layout	: 'column',
+				   border: false,
+				   items	: [set_crm_disiplin_label_telat_menitField, setcrm_disiplin_menit_telat_Field, set_crm_disiplin_label_menit_telatField]
+			   },
+			   {
+				   layout	: 'column',
+				   border: false,
+				   items	: [set_crm_disiplin_label_telatField, setcrm_disiplin_persentase_telat_Field,set_crm_disiplin_label_persentase_telatField]
+			   },
+			   {
+				   layout	: 'form',
+				   border: false,
+				   items	: [set_crm_disiplin_label_value_telatField, setcrm_disiplin_telat_value_morethan_Field]
+			   },
+			   {
+				   layout	: 'form',
+				   border: false,
+				   items	: [setcrm_disiplin_telat_value_lessthan_Field]
 			   },
 			
 		]
@@ -971,6 +1178,33 @@ Ext.onReady(function(){
 		]
 	});
 	
+	set_crm_result_setField=new Ext.form.FieldSet({
+		id:'set_crm_result_setField',
+		title: 'Result',
+		layout: 'form',
+		frame: false,
+		boduStyle: 'padding: 5px;',
+		items:[{
+				   layout	: 'column',
+				   border: false,
+				   items	: [set_crm_result_label_coreField, setcrm_result_nilai_atas_Field, set_crm_result_label_mediumField, setcrm_result_nilai_bawah_Field, set_crm_result_label_lowField]
+			   }
+			   /*,
+			   {
+				   layout	: 'form',
+				   border: false,
+				   items	: [setcrm_disiplin_normal_Field]
+			   },
+			   {
+				   layout	: 'form',
+				   border: false,
+				   items	: [setcrm_disiplin_low_Field]
+			   },*/
+			
+		]
+	});
+	
+	
 	
 	/* Function for retrieve create Window Panel*/ 
 	crm_setup_saveForm = new Ext.FormPanel({
@@ -1009,15 +1243,22 @@ Ext.onReady(function(){
 			{name: 'setcrm_kerewelan_high', type: 'float', mapping: 'setcrm_kerewelan_high'}, 
 			{name: 'setcrm_kerewelan_normal', type: 'float', mapping: 'setcrm_kerewelan_normal'},
 			{name: 'setcrm_kerewelan_low', type: 'float', mapping: 'setcrm_kerewelan_low'},
-			{name: 'setcrm_disiplin_high', type: 'float', mapping: 'setcrm_disiplin_high'},
-			{name: 'setcrm_disiplin_normal', type: 'float', mapping: 'setcrm_disiplin_normal'},
-			{name: 'setcrm_disiplin_low', type: 'float', mapping: 'setcrm_disiplin_low'}, 
+			{name: 'setcrm_disiplin_days', type: 'float', mapping: 'setcrm_disiplin_days'},
+			{name: 'setcrm_disiplin_persentase_pembatalan', type: 'float', mapping: 'setcrm_disiplin_persentase_pembatalan'},
+			{name: 'setcrm_disiplin_persentase_telat', type: 'float', mapping: 'setcrm_disiplin_persentase_telat'}, 
+			{name: 'setcrm_disiplin_menit_telat', type: 'float', mapping: 'setcrm_disiplin_menit_telat'},
+			{name: 'setcrm_disiplin_batal_value_morethan', type: 'float', mapping: 'setcrm_disiplin_batal_value_morethan'},
+			{name: 'setcrm_disiplin_batal_value_lessthan', type: 'float', mapping: 'setcrm_disiplin_batal_value_lessthan'},
+			{name: 'setcrm_disiplin_telat_value_morethan', type: 'float', mapping: 'setcrm_disiplin_telat_value_morethan'},
+			{name: 'setcrm_disiplin_telat_value_lessthan', type: 'float', mapping: 'setcrm_disiplin_telat_value_lessthan'},
 			{name: 'setcrm_treatment_days', type: 'float', mapping: 'setcrm_treatment_days'}, 
 			{name: 'setcrm_treatment_nonmedis', type: 'float', mapping: 'setcrm_treatment_nonmedis'},
 			{name: 'setcrm_treatment_medis', type: 'float', mapping: 'setcrm_treatment_medis'}, 
 			{name: 'setcrm_treatment_morethan', type: 'float', mapping: 'setcrm_treatment_morethan'}, 
 			{name: 'setcrm_treatment_equal', type: 'float', mapping: 'setcrm_treatment_equal'}, 
 			{name: 'setcrm_treatment_lessthan', type: 'float', mapping: 'setcrm_treatment_lessthan'},
+			{name: 'setcrm_result_nilai_atas', type: 'float', mapping: 'setcrm_result_nilai_atas'},
+			{name: 'setcrm_result_nilai_bawah', type: 'float', mapping: 'setcrm_result_nilai_bawah'},
 			{name: 'setcrm_author', type: 'string', mapping: 'setcrm_author'}, 
 			{name: 'setcrm_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'setcrm_date_create'}, 
 			{name: 'setcrm_update', type: 'string', mapping: 'setcrm_update'}, 
@@ -1035,7 +1276,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [set_crm_frequency_setField,set_crm_recency_setField,set_crm_spending_setField,set_crm_highmargin_setField,set_crm_referaldate_setField,set_crm_kerewelan_setField,set_crm_disiplin_setField,set_crm_jenis_treatment_setField] 
+				items: [set_crm_frequency_setField,set_crm_recency_setField,set_crm_spending_setField,set_crm_highmargin_setField,set_crm_referaldate_setField,set_crm_kerewelan_setField,set_crm_disiplin_setField,set_crm_jenis_treatment_setField, set_crm_result_setField] 
 			}
 			],
 		buttons: [{
