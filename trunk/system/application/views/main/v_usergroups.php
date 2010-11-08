@@ -675,7 +675,7 @@ Ext.onReady(function(){
 					return '';
 				else{
 				   params.css += ' x-grid3-check-col-td'; 
-            		return '<div class="x-grid3-check-col'+(v?'-on':'')+' x-grid3-cc-'+record.data.perm_read+'">&#160;</div>';
+            		return '<div class="x-grid3-check-col'+(v?'-on':'')+' x-grid3-cc-'+this.id+'">&#160;</div>';
 				}
 			}
 	});
@@ -690,7 +690,7 @@ Ext.onReady(function(){
 					return '';
 				else{
 				   params.css = ' x-grid3-check-col-td'; 
-            		return '<div class="x-grid3-check-col'+(v?'-on':'')+' x-grid3-cc-'+record.data.perm_create+'">&#160;</div>';
+            		return '<div class="x-grid3-check-col'+(v?'-on':'')+' x-grid3-cc-'+this.id+'">&#160;</div>';
 				}
 			}
 	});
@@ -705,7 +705,7 @@ Ext.onReady(function(){
 					return '';
 				else{
 				   params.css = ' x-grid3-check-col-td'; 
-            		return '<div class="x-grid3-check-col'+(v?'-on':'')+' x-grid3-cc-'+record.data.perm_update+'">&#160;</div>';
+            		return '<div class="x-grid3-check-col'+(v?'-on':'')+' x-grid3-cc-'+this.id+'">&#160;</div>';
 				}
 			}
 	});
@@ -720,7 +720,7 @@ Ext.onReady(function(){
 					return '';
 				else{
 				   	params.css = ' x-grid3-check-col-td'; 
-            		return '<div class="x-grid3-check-col'+(v?'-on':'')+' x-grid3-cc-'+record.data.perm_delete+'">&#160;</div>';
+            		return '<div class="x-grid3-check-col'+(v?'-on':'')+' x-grid3-cc-'+this.id+'">&#160;</div>';
 				}
 			}
 	});
