@@ -613,7 +613,7 @@ class M_phonegroup extends Model{
 		function phonegroup_export_excel($phonegroup_id ,$phonegroup_nama ,$phonegroup_detail ,$phonegroup_creator ,$phonegroup_date_create ,
 										 $phonegroup_update ,$phonegroup_date_update ,$phonegroup_revised ,$option,$filter){
 			//full query
-			$sql="select * from phonegroup";
+			$sql="select phonegroup_nama as Nama, phonegroup_detail as Keterangan from phonegroup";
 			if($option=='LIST'){
 				$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
 				$sql .= " (phonegroup_nama LIKE '%".addslashes($filter)."%' OR 

@@ -16,12 +16,13 @@ class C_phonegroup extends Controller {
 	//constructor
 	function C_phonegroup(){
 		parent::Controller();
+		session_start();
 		$this->load->model('m_phonegroup', '', TRUE);
 	}
 	
 	//set index
 	function index(){
-		$this->load->plugin('to_excel');
+		
 		$this->load->helper('asset');
 		$this->load->view('main/v_phonegroup');
 	}
@@ -135,7 +136,8 @@ class C_phonegroup extends Controller {
 		//$phonegroup_date_update=NULL;
 		//$phonegroup_revised=0;
 		$phonegroup_data=@$_POST["phonegroup_data"];
-		$result=$this->m_phonegroup->phonegroup_create($phonegroup_nama ,$phonegroup_detail ,$phonegroup_creator ,$phonegroup_date_create,$phonegroup_data );
+		$result=$this->m_phonegroup->phonegroup_create($phonegroup_nama ,$phonegroup_detail ,$phonegroup_creator ,$phonegroup_date_create,
+													   $phonegroup_data );
 		echo $result;
 	}
 	
@@ -156,7 +158,8 @@ class C_phonegroup extends Controller {
 		$phonegroup_date_update=date('Y/m/d');
 		//$phonegroup_revised="(revised+1)";
 		$phonegroup_data=@$_POST["phonegroup_data"];
-		$result = $this->m_phonegroup->phonegroup_update($phonegroup_id,$phonegroup_nama,$phonegroup_detail,$phonegroup_update,$phonegroup_date_update,$phonegroup_data);
+		$result = $this->m_phonegroup->phonegroup_update($phonegroup_id,$phonegroup_nama,$phonegroup_detail,$phonegroup_update,
+														 $phonegroup_date_update,$phonegroup_data);
 		echo $result;
 	}
 	
@@ -190,7 +193,9 @@ class C_phonegroup extends Controller {
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_phonegroup->phonegroup_search($phonegroup_id ,$phonegroup_nama ,$phonegroup_detail ,$phonegroup_creator ,$phonegroup_date_create ,$phonegroup_update ,$phonegroup_date_update ,$phonegroup_revised ,$start,$end);
+		$result = $this->m_phonegroup->phonegroup_search($phonegroup_id ,$phonegroup_nama ,$phonegroup_detail ,$phonegroup_creator ,
+														 $phonegroup_date_create ,$phonegroup_update ,$phonegroup_date_update ,$phonegroup_revised ,
+														 $start,$end);
 		echo $result;
 	}
 
@@ -216,7 +221,8 @@ class C_phonegroup extends Controller {
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$data["data_print"] = $this->m_phonegroup->phonegroup_print($phonegroup_id ,$phonegroup_nama ,$phonegroup_detail ,$phonegroup_creator ,$phonegroup_date_create ,$phonegroup_update ,$phonegroup_date_update ,$phonegroup_revised ,$option,$filter);
+		$data["data_print"] = $this->m_phonegroup->phonegroup_print($phonegroup_id ,$phonegroup_nama ,$phonegroup_detail ,$phonegroup_creator ,
+																	$phonegroup_date_create ,$phonegroup_update ,$phonegroup_date_update ,$phonegroup_revised ,$option,$filter);
 		$print_view=$this->load->view("main/p_phonegroup.php",$data,TRUE);
 		if(!file_exists("print")){
 			mkdir("print");
@@ -249,8 +255,11 @@ class C_phonegroup extends Controller {
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$query = $this->m_phonegroup->phonegroup_export_excel($phonegroup_id ,$phonegroup_nama ,$phonegroup_detail ,$phonegroup_creator ,$phonegroup_date_create ,$phonegroup_update ,$phonegroup_date_update ,$phonegroup_revised ,$option,$filter);
+		$query = $this->m_phonegroup->phonegroup_export_excel($phonegroup_id ,$phonegroup_nama ,$phonegroup_detail ,$phonegroup_creator ,
+															  $phonegroup_date_create ,$phonegroup_update ,$phonegroup_date_update 
+															  ,$phonegroup_revised ,$option,$filter);
 		
+		$this->load->plugin('to_excel');
 		to_excel($query,"phonegroup"); 
 		echo '1';
 			

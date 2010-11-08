@@ -90,33 +90,34 @@ Ext.onReady(function(){
   
   	/* Function for Saving inLine Editing */
 	function produk_group_update(oGrid_event){
-	var group_id_update_pk="";
-	var group_nama_update=null;
-	var group_kode_update=null;
-	var group_duproduk_update=null;
-	var group_dmproduk_update=null;
-	var group_durawat_update=null;
-	var group_dmrawat_update=null;
-	var group_dupaket_update=null;
-	var group_dmpaket_update=null;
-	var group_kelompok_update=null;
-	var group_keterangan_update=null;
-	var group_aktif_update=null;
+		var group_id_update_pk="";
+		var group_nama_update=null;
+		var group_kode_update=null;
+		var group_duproduk_update=null;
+		var group_dmproduk_update=null;
+		var group_durawat_update=null;
+		var group_dmrawat_update=null;
+		var group_dupaket_update=null;
+		var group_dmpaket_update=null;
+		var group_kelompok_update=null;
+		var group_keterangan_update=null;
+		var group_aktif_update=null;
+	
+	
+		group_id_update_pk = oGrid_event.record.data.group_id;
+		if(oGrid_event.record.data.group_nama!== null){group_nama_update = oGrid_event.record.data.group_nama;}
+		if(oGrid_event.record.data.group_kode!== null){group_kode_update = oGrid_event.record.data.group_kode;}
+		if(oGrid_event.record.data.group_duproduk!== null){group_duproduk_update = oGrid_event.record.data.group_duproduk;}
+		if(oGrid_event.record.data.group_dmproduk!== null){group_dmproduk_update = oGrid_event.record.data.group_dmproduk;}
+		if(oGrid_event.record.data.group_durawat!== null){group_durawat_update = oGrid_event.record.data.group_durawat;}
+		if(oGrid_event.record.data.group_dmrawat!== null){group_dmrawat_update = oGrid_event.record.data.group_dmrawat;}
+		if(oGrid_event.record.data.group_dupaket!== null){group_dupaket_update = oGrid_event.record.data.group_dupaket;}
+		if(oGrid_event.record.data.group_dmpaket!== null){group_dmpaket_update = oGrid_event.record.data.group_dmpaket;}
+		if(oGrid_event.record.data.group_kelompok!== null){group_kelompok_update = oGrid_event.record.data.group_kelompok;}
+		if(oGrid_event.record.data.group_keterangan!== null){group_keterangan_update = oGrid_event.record.data.group_keterangan;}
+		if(oGrid_event.record.data.group_aktif!== null){group_aktif_update = oGrid_event.record.data.group_aktif;}
 
-
-	group_id_update_pk = oGrid_event.record.data.group_id;
-	if(oGrid_event.record.data.group_nama!== null){group_nama_update = oGrid_event.record.data.group_nama;}
-	if(oGrid_event.record.data.group_kode!== null){group_kode_update = oGrid_event.record.data.group_kode;}
-	if(oGrid_event.record.data.group_duproduk!== null){group_duproduk_update = oGrid_event.record.data.group_duproduk;}
-	if(oGrid_event.record.data.group_dmproduk!== null){group_dmproduk_update = oGrid_event.record.data.group_dmproduk;}
-	if(oGrid_event.record.data.group_durawat!== null){group_durawat_update = oGrid_event.record.data.group_durawat;}
-	if(oGrid_event.record.data.group_dmrawat!== null){group_dmrawat_update = oGrid_event.record.data.group_dmrawat;}
-	if(oGrid_event.record.data.group_dupaket!== null){group_dupaket_update = oGrid_event.record.data.group_dupaket;}
-	if(oGrid_event.record.data.group_dmpaket!== null){group_dmpaket_update = oGrid_event.record.data.group_dmpaket;}
-	if(oGrid_event.record.data.group_kelompok!== null){group_kelompok_update = oGrid_event.record.data.group_kelompok;}
-	if(oGrid_event.record.data.group_keterangan!== null){group_keterangan_update = oGrid_event.record.data.group_keterangan;}
-	if(oGrid_event.record.data.group_aktif!== null){group_aktif_update = oGrid_event.record.data.group_aktif;}
-
+			
 		Ext.Ajax.request({  
 			waitMsg: 'Please wait...',
 			url: 'index.php?c=c_produk_group&m=get_action',
@@ -145,7 +146,7 @@ Ext.onReady(function(){
 					default:
 						Ext.MessageBox.show({
 							   title: 'Warning',
-							   msg: 'We could\'t not save the produk_group.',
+							   msg: 'Data Group1 tidak bisa disimpan !.',
 							   buttons: Ext.MessageBox.OK,
 							   animEl: 'save',
 							   icon: Ext.MessageBox.WARNING
@@ -156,11 +157,11 @@ Ext.onReady(function(){
 			failure: function(response){
 				var result=response.responseText;
 				Ext.MessageBox.show({
-							   title: 'Error',
-							   msg: 'Could not connect to the database. retry later.',
-							   buttons: Ext.MessageBox.OK,
-							   animEl: 'database',
-							   icon: Ext.MessageBox.ERROR
+				   title: 'Error',
+				   msg: 'Tidak bisa terhubung dengan database server',
+				   buttons: Ext.MessageBox.OK,
+				   animEl: 'database',
+				   icon: Ext.MessageBox.ERROR
 				});	
 			}									    
 		});   
@@ -227,7 +228,7 @@ Ext.onReady(function(){
 						default:
 							Ext.MessageBox.show({
 							   title: 'Warning',
-							   msg: 'Data Group 1 gagal disimpan !',
+							   msg: 'Data Group 1 tidak bisa disimpan !',
 							   buttons: Ext.MessageBox.OK,
 							   animEl: 'save',
 							   icon: Ext.MessageBox.WARNING
@@ -333,13 +334,13 @@ Ext.onReady(function(){
 	function produk_group_confirm_delete(){
 		// only one produk_group is selected here
 		if(produk_groupListEditorGrid.selModel.getCount() == 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', produk_group_delete);
+			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data berikut ?', produk_group_delete);
 		} else if(produk_groupListEditorGrid.selModel.getCount() > 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', produk_group_delete);
+			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data-data berikut?', produk_group_delete);
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really delete something you haven\'t selected?',
+				msg: 'Tidak ada data yang dipilih untuk dihapus',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -359,7 +360,7 @@ Ext.onReady(function(){
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really update something you haven\'t selected?',
+				msg: 'Tidak ada data yang dipilih untuk diedit',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -390,7 +391,7 @@ Ext.onReady(function(){
 						default:
 							Ext.MessageBox.show({
 								title: 'Warning',
-								msg: 'Could not delete the entire selection',
+								msg: 'Tidak bisa menghapus data yang dipilih',
 								buttons: Ext.MessageBox.OK,
 								animEl: 'save',
 								icon: Ext.MessageBox.WARNING
@@ -402,7 +403,7 @@ Ext.onReady(function(){
 					var result=response.responseText;
 					Ext.MessageBox.show({
 					   title: 'Error',
-					   msg: 'Could not connect to the database. retry later.',
+					   msg: 'Tidak bisa terhubung dengan database server.',
 					   buttons: Ext.MessageBox.OK,
 					   animEl: 'database',
 					   icon: Ext.MessageBox.ERROR
@@ -558,7 +559,9 @@ Ext.onReady(function(){
 			header: 'Jenis',
 			dataIndex: 'group_kelompok',
 			width: 150,
-			sortable: true,
+			sortable: true
+			<? if(eregi('u',$this->m_security->get_access_group_by_kode('MENU_GROUP1'))){ ?>
+			,
 			editor: new Ext.form.ComboBox({
 				store: cbo_group_jenisDataStore,
 				mode: 'remote',
@@ -576,21 +579,27 @@ Ext.onReady(function(){
 				listClass: 'x-combo-list-small',
 				anchor: '95%'
 			})
+			<? }?>
 		},
 		{
 			header: 'Keterangan',
 			dataIndex: 'group_keterangan',
 			width: 150,
-			sortable: true,
+			sortable: true
+			<? if(eregi('u',$this->m_security->get_access_group_by_kode('MENU_GROUP1'))){ ?>
+			,
 			editor: new Ext.form.TextField({
 				maxLength: 250
           	})
+			<? } ?>
 		},
 		{
 			header: 'Status',
 			dataIndex: 'group_aktif',
 			width: 150,
-			sortable: true,
+			sortable: true
+			<? if(eregi('u',$this->m_security->get_access_group_by_kode('MENU_GROUP1'))){ ?>
+			,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
 				triggerAction: 'all',
@@ -604,6 +613,7 @@ Ext.onReady(function(){
                	lazyRender:true,
                	listClass: 'x-combo-list-small'
             })
+			<? } ?>
 		},
 		{
 			header: 'Creator',
@@ -667,24 +677,32 @@ Ext.onReady(function(){
 		}),
 		/* Add Control on ToolBar */
 		tbar: [
+		<? if(eregi('C',$this->m_security->get_access_group_by_kode('MENU_GROUP1'))){ ?>
 		{
 			text: 'Add',
 			tooltip: 'Add new record',
 			iconCls:'icon-adds',    				// this is defined in our styles.css
 			handler: display_form_window
-		}, '-',{
+		}, '-',
+		<? } ?>
+		<? if(eregi('U|R',$this->m_security->get_access_group_by_kode('MENU_GROUP1'))){ ?>
+		{
 			text: 'Edit',
 			tooltip: 'Edit selected record',
 			iconCls:'icon-update',
 			handler: produk_group_confirm_update   // Confirm before updating
-		}, '-',{
+		}, '-',
+		<? } ?>
+		<? if(eregi('D',$this->m_security->get_access_group_by_kode('MENU_GROUP1'))){ ?>
+		{
 			text: 'Delete',
 			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
-			disabled:true,
 			handler: produk_group_confirm_delete   // Confirm before deleting
-		}, '-', {
-			text: 'Search',
+		}, '-', 
+		<? } ?>
+		{
+			text: 'Adv Search',
 			tooltip: 'Advanced Search',
 			iconCls:'icon-search',
 			handler: display_form_search_window 
@@ -729,17 +747,21 @@ Ext.onReady(function(){
 	produk_group_ContextMenu = new Ext.menu.Menu({
 		id: 'produk_group_ListEditorGridContextMenu',
 		items: [
+		<? if(eregi('U|R',$this->m_security->get_access_group_by_kode('MENU_GROUP1'))){ ?>
 		{ 
 			text: 'Edit', tooltip: 'Edit selected record', 
 			iconCls:'icon-update',
 			handler: produk_group_confirm_update 
 		},
+		<? } ?>
+		<? if(eregi('D',$this->m_security->get_access_group_by_kode('MENU_GROUP1'))){ ?>
 		{ 
 			text: 'Delete', 
 			tooltip: 'Delete selected record', 
 			iconCls:'icon-delete',
 			handler: produk_group_confirm_delete 
 		},
+		<? } ?>
 		'-',
 		{ 
 			text: 'Print',
@@ -979,13 +1001,17 @@ Ext.onReady(function(){
 			]
 		}]
 		,
-		buttons: [{
+		buttons: [
+			<? if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_GROUP1'))){ ?>
+			{
 				text: 'Save and Close',
 				handler: function() {
-					Ext.MessageBox.confirm('Konfirmasi','Apakah Anda yakin semua diskon pada Group ini diberlakukan pada semua Produk/Perawatan/Paket ?', produk_group_create);
+					Ext.MessageBox.confirm('Konfirmasi','Apakah Anda yakin semua diskon pada Group ini akan diberlakukan pada semua Produk/Perawatan/Paket ?', produk_group_create);
 				}
 			}
-			,{
+			,
+			<? } ?>
+			{
 				text: 'Cancel',
 				handler: function(){
 					produk_group_createWindow.hide();
@@ -1363,8 +1389,7 @@ Ext.onReady(function(){
 		url: 'index.php?c=c_produk_group&m=get_action',
 		params: {
 			task: "PRINT",
-		  	query: searchquery,                    		// if we are doing a quicksearch, use this
-			//if we are doing advanced search, use this
+		  	query: searchquery,                    		
 			group_kode : group_kode_print,
 			group_nama : group_nama_print,
 			group_duproduk : group_duproduk_print,
@@ -1382,12 +1407,11 @@ Ext.onReady(function(){
 		  	switch(result){
 		  	case 1:
 				win = window.open('./produk_grouplist.html','produk_grouplist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
-				win.print();
 				break;
 		  	default:
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Unable to print the grid!',
+					msg: 'Tidak bisa mencetak data',
 					buttons: Ext.MessageBox.OK,
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING
@@ -1399,7 +1423,7 @@ Ext.onReady(function(){
 		  	var result=response.responseText;
 			Ext.MessageBox.show({
 			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
+			   msg: 'Tidak bisa terhubung dengan database server',
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR
@@ -1464,7 +1488,7 @@ Ext.onReady(function(){
 		  	default:
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Unable to convert excel the grid!',
+					msg: 'Tidak bisa meng-export data ke dalam format excel',
 					buttons: Ext.MessageBox.OK,
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING
@@ -1476,7 +1500,7 @@ Ext.onReady(function(){
 		  	var result=response.responseText;
 			Ext.MessageBox.show({
 			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
+			   msg: 'Tidak bisa terhubung dengan database server',
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR

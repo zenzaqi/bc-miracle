@@ -209,58 +209,6 @@ Ext.onReady(function(){
 				layout: 'form',
 				border:false,
 				items: [info_namaField, info_alamatField, info_id_cabangField,
-				/*{
-					xtype: 'textfield',
-					readOnly: true,
-					id: 'info_namaField',
-					fieldLabel: 'Nama',
-					name: 'cabang_nama',
-					maxLength: 150,
-					allowBlank: false,
-					anchor: '95%'
-				},
-				{
-					xtype: 'textfield',
-					readOnly: true,
-					id: 'info_alamatField',
-					fieldLabel: 'Alamat',
-					name: 'info_alamat',
-					maxLength: 250,
-					allowBlank: false,
-					anchor: '95%'
-				},			
-				{
-					xtype: 'textfield',
-					//id: 'info_notelpField',
-					fieldLabel: 'No.Telp',
-					name: 'info_notelp',
-					maxLength: 50,
-					anchor: '95%'
-				},
-				{
-					xtype: 'textfield',
-					id: 'info_nofaxField',
-					fieldLabel: 'No.Fax',
-					name: 'info_nofax',
-					maxLength: 50,
-					anchor: '95%'
-				},
-				{
-					xtype: 'textfield',
-					id: 'info_emailField',
-					fieldLabel: 'Email',
-					name: 'info_email',
-					maxLength: 65,
-					anchor: '95%'
-				},
-				{
-					xtype: 'textfield',
-					id: 'info_websiteField',
-					fieldLabel: 'Website',
-					name: 'info_website',
-					maxLength: 65,
-					anchor: '95%'
-				},*/
 				{
 					xtype: 'textfield',
 					id: 'info_sloganField',
@@ -273,7 +221,9 @@ Ext.onReady(function(){
 				]
 			}]
 		}],
-		buttons: [{
+		buttons: [
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_INFO'))){ ?>
+			{
 				text: 'Save and Close',
 				handler: function(){
 					if(info_createForm.getForm().isValid()){
@@ -293,24 +243,26 @@ Ext.onReady(function(){
 							failure: function(){
 								//var result=response.responseText;
 								Ext.MessageBox.show({
-											   title: 'Error',
-											   msg: 'Could not connect to the database. retry later. Error: ',
-											   buttons: Ext.MessageBox.OK,
-											   animEl: 'database',
-											   icon: Ext.MessageBox.ERROR
+									   title: 'Error',
+									   msg: 'Tidak bisa terhubung dengan database server Error: ',
+									   buttons: Ext.MessageBox.OK,
+									   animEl: 'database',
+									   icon: Ext.MessageBox.ERROR
 								});	
 							}        
 						});
 					}
 				}
-			},{
+			},
+			<?php } ?>
+			{
 				text: 'Cancel',
 				handler: function(){
-				// because of the global vars, we can only instantiate one window... so let's just hide it.
-				info_createWindow.hide();
-				mainPanel.remove(mainPanel.getActiveTab().getId());
+					info_createWindow.hide();
+					mainPanel.remove(mainPanel.getActiveTab().getId());
+				}
 			}
-		}]
+		]
 	});
 	/* End Function*/
 	
@@ -339,9 +291,6 @@ Ext.onReady(function(){
 		renderTo: 'elwindow_info_create',
 		items: info_createForm
 	});
-	/* End Window ADD Data Baru */
-	/* End Function Advanced Search */
-	//info_idField.getEl().up('.x-form-item').setDisplayed(false);
 	
 	info_createForm.getForm().load();
   	info_createWindow.show();

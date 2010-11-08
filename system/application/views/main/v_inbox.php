@@ -84,185 +84,17 @@ Ext.onReady(function(){
   
 //   runinbox.start(taskinbox); //ditutup sementara, karena selalu refresh ke hal 1 misalnya kita sudah ke hal 2 dst. 2010-08-04
   
-  	/* Function for Saving inLine Editing */
-	function inbox_inline_update(oGrid_event){
-		var inbox_id_update_pk="";
-		var inbox_sender_update=null;
-		var inbox_message_update=null;
-		var inbox_date_update_date="";
-
-		inbox_id_update_pk = oGrid_event.record.data.inbox_id;
-		if(oGrid_event.record.data.inbox_sender!== null){inbox_sender_update = oGrid_event.record.data.inbox_sender;}
-		if(oGrid_event.record.data.inbox_message!== null){inbox_message_update = oGrid_event.record.data.inbox_message;}
-	 	if(oGrid_event.record.data.inbox_date!== ""){inbox_date_update_date =oGrid_event.record.data.inbox_date.format('Y-m-d');}
-
-		Ext.Ajax.request({  
-			waitMsg: 'Please wait...',
-			url: 'index.php?c=c_inbox&m=get_action',
-			params: {
-				inbox_id	: inbox_id_update_pk, 
-				inbox_sender	:inbox_sender_update,
-				inbox_message	:inbox_message_update,
-				inbox_date	: inbox_date_update_date, 
-				task: "UPDATE"
-			}, 
-			success: function(response){							
-				var result=eval(response.responseText);
-				switch(result){
-					case 1:
-						inbox_DataStore.commitChanges();
-						inbox_DataStore.reload();
-						break;
-					default:
-						Ext.MessageBox.show({
-						   title: 'Warning',
-						   msg: 'We could\'t not save the Inbox.',
-						   buttons: Ext.MessageBox.OK,
-						   animEl: 'save',
-						   icon: Ext.MessageBox.WARNING
-						});
-						break;
-				}
-			},
-			failure: function(response){
-				var result=response.responseText;
-				Ext.MessageBox.show({
-				   title: 'Error',
-				   msg: 'Could not connect to the database. retry later.',
-				   buttons: Ext.MessageBox.OK,
-				   animEl: 'database',
-				   icon: Ext.MessageBox.ERROR
-				});	
-			}									    
-		});   
-	}
-  	/* End of Function */
-  
-  	/* Function for add and edit data form, open window form */
-	function inbox_save(){
-	
-		if(is_inbox_form_valid()){	
-			var inbox_id_field_pk=null; 
-			var inbox_sender_field=null; 
-			var inbox_message_field=null; 
-			var inbox_date_field_date=""; 
-
-			inbox_id_field_pk=get_pk_id();
-			if(inbox_senderField.getValue()!== null){inbox_sender_field = inbox_senderField.getValue();} 
-			if(inbox_messageField.getValue()!== null){inbox_message_field = inbox_messageField.getValue();} 
-			if(inbox_dateField.getValue()!== ""){inbox_date_field_date = inbox_dateField.getValue().format('Y-m-d');} 
-
-			Ext.Ajax.request({  
-				waitMsg: 'Please wait...',
-				url: 'index.php?c=c_inbox&m=get_action',
-				params: {
-					inbox_id	: inbox_id_field_pk, 
-					inbox_sender	: inbox_sender_field, 
-					inbox_message	: inbox_message_field, 
-					inbox_date	: inbox_date_field_date, 
-					task: post2db
-				}, 
-				success: function(response){             
-					var result=eval(response.responseText);
-					switch(result){
-						case 1:
-							Ext.MessageBox.alert(post2db+' OK','The Inbox was '+post2db+' successfully.');
-							inbox_DataStore.reload();
-							inbox_saveWindow.hide();
-							break;
-						default:
-							Ext.MessageBox.show({
-							   title: 'Warning',
-							   msg: 'We could\'t not '+msg+' the Inbox.',
-							   buttons: Ext.MessageBox.OK,
-							   animEl: 'save',
-							   icon: Ext.MessageBox.WARNING
-							});
-							break;
-					}        
-				},
-				failure: function(response){
-					var result=response.responseText;
-					Ext.MessageBox.show({
-						   title: 'Error',
-						   msg: 'Could not connect to the database. retry later.',
-						   buttons: Ext.MessageBox.OK,
-						   animEl: 'database',
-						   icon: Ext.MessageBox.ERROR
-					});	
-				}                      
-			});
-			
-		} else {
-			Ext.MessageBox.show({
-				title: 'Warning',
-				msg: 'Your Form is not valid!.',
-				buttons: Ext.MessageBox.OK,
-				animEl: 'save',
-				icon: Ext.MessageBox.WARNING
-			});
-		}
-	}
- 	/* End of Function */
-  
-  	/* Function for get PK field */
-	function get_pk_id(){
-		if(post2db=='UPDATE')
-			return inboxListEditorGrid.getSelectionModel().getSelected().get('inbox_id');
-		else 
-			return 0;
-	}
-	/* End of Function  */
-	
-	/* Reset form before loading */
-	function inbox_reset_form(){
-		inbox_senderField.reset();
-		inbox_senderField.setValue(null);
-		inbox_messageField.reset();
-		inbox_messageField.setValue(null);
-		inbox_dateField.reset();
-		inbox_dateField.setValue(null);
-	}
- 	/* End of Function */
-  
-	/* setValue to EDIT */
-	function inbox_set_form(){
-		inbox_senderField.setValue(inboxListEditorGrid.getSelectionModel().getSelected().get('inbox_sender'));
-		inbox_messageField.setValue(inboxListEditorGrid.getSelectionModel().getSelected().get('inbox_message'));
-		inbox_dateField.setValue(inboxListEditorGrid.getSelectionModel().getSelected().get('inbox_date'));
-	}
-	/* End setValue to EDIT*/
-  
-	/* Function for Check if the form is valid */
-	function is_inbox_form_valid(){
-		return (true);
-	}
-  	/* End of Function */
-  
-  	/* Function for Displaying  create Window Form */
-	function display_form_window(){
-		if(!inbox_saveWindow.isVisible()){
-			inbox_reset_form();
-			post2db='CREATE';
-			msg='created';
-			inbox_saveWindow.show();
-		} else {
-			inbox_saveWindow.toFront();
-		}
-	}
-  	/* End of Function */
- 
   	/* Function for Delete Confirm */
 	function inbox_confirm_delete(){
 		// only one inbox is selected here
 		if(inboxListEditorGrid.selModel.getCount() == 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', inbox_delete);
+			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data berikut?', inbox_delete);
 		} else if(inboxListEditorGrid.selModel.getCount() > 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', inbox_delete);
+			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data-data berikut?', inbox_delete);
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really delete something you haven\'t selected?',
+				msg: 'Tidak ada yang dipilih untuk dihapus',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -271,26 +103,7 @@ Ext.onReady(function(){
 	}
   	/* End of Function */
   
-	/* Function for Update Confirm */
-	function inbox_confirm_update(){
-		/* only one record is selected here */
-		if(inboxListEditorGrid.selModel.getCount() == 1) {
-			inbox_set_form();
-			post2db='UPDATE';
-			msg='updated';
-			inbox_saveWindow.show();
-		} else {
-			Ext.MessageBox.show({
-				title: 'Warning',
-				msg: 'You can\'t really update something you haven\'t selected?',
-				buttons: Ext.MessageBox.OK,
-				animEl: 'save',
-				icon: Ext.MessageBox.WARNING
-			});
-		}
-	}
-  	/* End of Function */
-  
+	  
   	/* Function for Delete Record */
 	function inbox_delete(btn){
 		if(btn=='yes'){
@@ -313,7 +126,7 @@ Ext.onReady(function(){
 						default:
 							Ext.MessageBox.show({
 								title: 'Warning',
-								msg: 'Could not delete the entire selection',
+								msg: 'Tidak bisa menghapus data yang diplih',
 								buttons: Ext.MessageBox.OK,
 								animEl: 'save',
 								icon: Ext.MessageBox.WARNING
@@ -325,7 +138,7 @@ Ext.onReady(function(){
 					var result=response.responseText;
 					Ext.MessageBox.show({
 					   title: 'Error',
-					   msg: 'Could not connect to the database. retry later.',
+					   msg: 'Tidak bisa terhubung dengan database server',
 					   buttons: Ext.MessageBox.OK,
 					   animEl: 'database',
 					   icon: Ext.MessageBox.ERROR
@@ -349,7 +162,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'inbox_id'
 		},[
-		/* dataIndex => insert intoinbox_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'inbox_id', type: 'int', mapping: 'inbox_id'}, 
 			{name: 'inbox_sender', type: 'string', mapping: 'inbox_sender'}, 
 			{name: 'inbox_message', type: 'string', mapping: 'inbox_message'}, 
@@ -464,13 +276,15 @@ Ext.onReady(function(){
 		}),
 		/* Add Control on ToolBar */
 		tbar: [
+		<?php if(eregi('D',$this->m_security->get_access_group_by_kode('MENU_INBOX'))){ ?>
 		{
 			text: 'Delete',
 			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
-			disabled: true,
 			handler: inbox_confirm_delete   // Confirm before deleting
-		}, '-', {
+		}, '-', 
+		<?php } ?>
+		{
 			text: 'Adv Search',
 			tooltip: 'Advanced Search',
 			iconCls:'icon-search',
@@ -505,6 +319,7 @@ Ext.onReady(function(){
 	inbox_ContextMenu = new Ext.menu.Menu({
 		id: 'inbox_ListEditorGridContextMenu',
 		items: [
+		<?php if(eregi('D',$this->m_security->get_access_group_by_kode('MENU_INBOX'))){ ?>
 		{ 
 			text: 'Delete', 
 			tooltip: 'Delete selected record', 
@@ -512,6 +327,7 @@ Ext.onReady(function(){
 			disabled: true,
 			handler: inbox_confirm_delete 
 		},
+		<?php } ?>
 		'-',
 		{ 
 			text: 'Print',
@@ -549,76 +365,7 @@ Ext.onReady(function(){
   	
 	inboxListEditorGrid.addListener('rowcontextmenu', oninbox_ListEditGridContextMenu);
 	inbox_DataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
-	inboxListEditorGrid.on('afteredit', inbox_inline_update); // inLine Editing Record
-	
-	/* Identify  inbox_sender Field */
-	inbox_senderField= new Ext.form.TextField({
-		id: 'inbox_senderField',
-		fieldLabel: 'Sender',
-		maxLength: 25,
-		anchor: '95%'
-	});
-	/* Identify  inbox_message Field */
-	inbox_messageField= new Ext.form.TextArea({
-		id: 'inbox_messageField',
-		fieldLabel: 'Message',
-		height: 60,
-		grow: false,
-		anchor: '95%'
-	});
-	/* Identify  inbox_date Field */
-	inbox_dateField= new Ext.form.DateField({
-		id: 'inbox_dateField',
-		fieldLabel: 'Date',
-		format : 'Y-m-d'
-	});
-
-	/* Function for retrieve create Window Panel*/ 
-	inbox_saveForm = new Ext.FormPanel({
-		labelAlign: 'top',
-		bodyStyle:'padding:5px',
-		autoHeight:true,
-		width: 300,        
-		items:[
-			{
-				columnWidth:1,
-				layout: 'form',
-				border:false,
-				items: [inbox_senderField, inbox_messageField, inbox_dateField] 
-			}
-			],
-		buttons: [{
-				text: 'Save and Close',
-				handler: inbox_save
-			}
-			,{
-				text: 'Cancel',
-				handler: function(){
-					inbox_saveWindow.hide();
-				}
-			}
-		]
-	});
-	/* End  of Function*/
-	
-	/* Function for retrieve create Window Form */
-	inbox_saveWindow= new Ext.Window({
-		id: 'inbox_saveWindow',
-		title: post2db+'Inbox',
-		closable:true,
-		closeAction: 'hide',
-		autoWidth: true,
-		autoHeight: true,
-		x:0,
-		y:0,
-		plain:true,
-		layout: 'fit',
-		modal: true,
-		renderTo: 'elwindow_inbox_save',
-		items: inbox_saveForm
-	});
-	/* End Window */
-	
+		
 	/* Function for action list search */
 	function inbox_list_search(){
 		// render according to a SQL date format.
@@ -634,7 +381,6 @@ Ext.onReady(function(){
 		// change the store parameters
 		inbox_DataStore.baseParams = {
 			task: 'SEARCH',
-			//variable here
 			inbox_id	:	inbox_id_search, 
 			inbox_sender	:	inbox_sender_search, 
 			inbox_message	:	inbox_message_search, 
@@ -647,7 +393,7 @@ Ext.onReady(function(){
 	/* Function for reset search result */
 	function inbox_reset_search(){
 		// reset the store parameters
-		inbox_DataStore.baseParams = { task: 'LIST' };
+		inbox_DataStore.baseParams = { task: 'LIST', start: 0, limit: pageS };
 		// Cause the datastore to do another query : 
 		inbox_DataStore.reload({params: {start: 0, limit: pageS}});
 		inbox_searchWindow.close();
@@ -692,7 +438,7 @@ Ext.onReady(function(){
     
 	/* Function for retrieve search Form Panel */
 	inbox_searchForm = new Ext.FormPanel({
-		labelAlign: 'top',
+		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
 		width: 300,        
@@ -724,7 +470,7 @@ Ext.onReady(function(){
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
 	inbox_searchWindow = new Ext.Window({
-		title: 'inbox Search',
+		title: 'Pencarian Inbox SMS',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,
@@ -767,8 +513,7 @@ Ext.onReady(function(){
 		url: 'index.php?c=c_inbox&m=get_action',
 		params: {
 			task: "PRINT",
-		  	query: searchquery,                    		// if we are doing a quicksearch, use this
-			//if we are doing advanced search, use this
+		  	query: searchquery,                    		
 			inbox_sender : inbox_sender_print,
 			inbox_message : inbox_message_print,
 		  	inbox_date : inbox_date_print_date, 
@@ -779,12 +524,12 @@ Ext.onReady(function(){
 		  	switch(result){
 		  	case 1:
 				win = window.open('./print/inbox_printlist.html','inboxlist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
-				win.print();
+				
 				break;
 		  	default:
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Unable to print the grid!',
+					msg: 'Tidak bisa mencetak data!',
 					buttons: Ext.MessageBox.OK,
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING
@@ -796,7 +541,7 @@ Ext.onReady(function(){
 		  	var result=response.responseText;
 			Ext.MessageBox.show({
 			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
+			   msg: 'Tidak bisa terhubung dengan database server',
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR
@@ -824,8 +569,7 @@ Ext.onReady(function(){
 		url: 'index.php?c=c_inbox&m=get_action',
 		params: {
 			task: "EXCEL",
-		  	query: searchquery,                    		// if we are doing a quicksearch, use this
-			//if we are doing advanced search, use this
+		  	query: searchquery,                    		
 			inbox_sender : inbox_sender_2excel,
 			inbox_message : inbox_message_2excel,
 		  	inbox_date : inbox_date_2excel_date, 
@@ -840,7 +584,7 @@ Ext.onReady(function(){
 		  	default:
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Unable to convert excel the grid!',
+					msg: 'Tidak bisa meng-export data ke dalam format excel!',
 					buttons: Ext.MessageBox.OK,
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING
@@ -852,7 +596,7 @@ Ext.onReady(function(){
 		  	var result=response.responseText;
 			Ext.MessageBox.show({
 			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
+			   msg: 'Tidak bisa terhubung dengan database server',
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR

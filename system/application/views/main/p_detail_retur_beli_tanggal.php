@@ -18,7 +18,7 @@
 <title>Laporan Detail Retur Barang <?php echo $periode; ?></title>
 <link rel='stylesheet' type='text/css' href='../assets/modules/main/css/printstyle.css'/>
 </head>
-<body>
+<body onload='window.print()'>
 <table summary='Detail Pesanan Pembelian'>
 	<caption>Laporan Retur Barang<br/><?php echo $periode; ?><br/>Group By Tanggal</caption>
 	<thead>

@@ -16,9 +16,10 @@ class C_tindakan_medis extends Controller {
 	//constructor
 	function C_tindakan_medis(){
 		parent::Controller();
-		$this->load->model('m_tindakan_medis', '', TRUE);
 		session_start();
-		$this->load->plugin('to_excel');
+		$this->load->model('m_tindakan_medis', '', TRUE);
+		
+		
 	}
 	
 	function laporan(){
@@ -521,6 +522,7 @@ class C_tindakan_medis extends Controller {
 		
 		$query = $this->m_tindakan_medis->tindakan_export_excel($trawat_cust ,$trawat_tglapp_start ,$trawat_tglapp_end ,$trawat_rawat ,$trawat_dokter ,$trawat_status ,$option,$filter);
 		
+		$this->load->plugin('to_excel');
 		to_excel($query,"tindakan_medis"); 
 		echo '1';
 			

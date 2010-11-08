@@ -23,7 +23,6 @@ class C_draft extends Controller {
 	
 	//set index
 	function index(){
-		$this->load->plugin('to_excel');
 		$this->load->helper('asset');
 		$this->load->view('main/v_draft');
 	}
@@ -164,7 +163,9 @@ class C_draft extends Controller {
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_draft->draft_search($draft_id ,$draft_destnama, $draft_jenis,$draft_message ,$draft_date ,$draft_creator ,$draft_date_create ,$draft_update ,$draft_date_update ,$draft_revised ,$start,$end);
+		
+		$result = $this->m_draft->draft_search($draft_id ,$draft_destnama, $draft_jenis,$draft_message ,$draft_date ,$draft_creator ,
+											   $draft_date_create ,$draft_update ,$draft_date_update ,$draft_revised ,$start,$end);
 		echo $result;
 	}
 
@@ -194,7 +195,8 @@ class C_draft extends Controller {
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$data["data_print"] = $this->m_draft->draft_print($draft_id ,$draft_destnama, $draft_jenis ,$draft_message ,$draft_date ,$draft_creator ,$draft_date_create ,$draft_update ,$draft_date_update ,$draft_revised ,$option,$filter);
+		$data["data_print"] = $this->m_draft->draft_print($draft_id ,$draft_destnama, $draft_jenis ,$draft_message ,$draft_date ,$draft_creator ,
+														  $draft_date_create ,$draft_update ,$draft_date_update ,$draft_revised ,$option,$filter);
 		$print_view=$this->load->view("main/p_draft.php",$data,TRUE);
 		if(!file_exists("print")){
 			mkdir("print");
@@ -231,8 +233,10 @@ class C_draft extends Controller {
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$query = $this->m_draft->draft_export_excel($draft_id ,$draft_destnama, $draft_jenis ,$draft_message ,$draft_date ,$draft_creator ,$draft_date_create ,$draft_update ,$draft_date_update ,$draft_revised ,$option,$filter);
+		$query = $this->m_draft->draft_export_excel($draft_id ,$draft_destnama, $draft_jenis ,$draft_message ,$draft_date ,$draft_creator ,
+													$draft_date_create ,$draft_update ,$draft_date_update ,$draft_revised ,$option,$filter);
 		
+		$this->load->plugin('to_excel');
 		to_excel($query,"draft"); 
 		echo '1';
 			

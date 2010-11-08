@@ -113,7 +113,7 @@ Ext.onReady(function(){
 					default:
 						Ext.MessageBox.show({
 						   title: 'Warning',
-						   msg: 'We could\'t not save the bank_master.',
+						   msg: 'Data Bank tidak bisa disimpan.',
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'save',
 						   icon: Ext.MessageBox.WARNING
@@ -125,7 +125,7 @@ Ext.onReady(function(){
 				var result=response.responseText;
 				Ext.MessageBox.show({
 				   title: 'Error',
-				   msg: 'Could not connect to the database. retry later.',
+				   msg: 'Tidak bisa terhubung dengan database server',
 				   buttons: Ext.MessageBox.OK,
 				   animEl: 'database',
 				   icon: Ext.MessageBox.ERROR
@@ -163,14 +163,14 @@ Ext.onReady(function(){
 				var result=eval(response.responseText);
 				switch(result){
 					case 1:
-						Ext.MessageBox.alert(post2db+' OK','The Bank_master was '+msg+' successfully.');
+						Ext.MessageBox.alert(post2db+' OK','Data Bank berhasil disimpan.');
 						bank_master_DataStore.reload();
 						bank_master_createWindow.hide();
 						break;
 					default:
 						Ext.MessageBox.show({
 						   title: 'Warning',
-						   msg: 'We could\'t not '+msg+' the Bank_master.',
+						   msg: 'Data Bank tidak bisa disimpan !.',
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'save',
 						   icon: Ext.MessageBox.WARNING
@@ -182,7 +182,7 @@ Ext.onReady(function(){
 				var result=response.responseText;
 				Ext.MessageBox.show({
 					   title: 'Error',
-					   msg: 'Could not connect to the database. retry later.',
+					   msg: 'Tidak bisa terhubung dengan database server',
 					   buttons: Ext.MessageBox.OK,
 					   animEl: 'database',
 					   icon: Ext.MessageBox.ERROR
@@ -192,7 +192,7 @@ Ext.onReady(function(){
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'Your Form is not valid!.',
+				msg: 'Isian belum sempurna!.',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -219,7 +219,7 @@ Ext.onReady(function(){
 		mbank_keteranganField.reset();
 		mbank_keteranganField.setValue(null);
 		mbank_aktifField.reset();
-		mbank_aktifField.setValue(null);
+		mbank_aktifField.setValue('Aktif');
 	}
  	/* End of Function */
   
@@ -241,9 +241,11 @@ Ext.onReady(function(){
   	/* Function for Displaying  create Window Form */
 	function display_form_window(){
 		if(!bank_master_createWindow.isVisible()){
-			bank_master_reset_form();
+			
 			post2db='CREATE';
 			msg='created';
+			bank_master_reset_form();
+			
 			bank_master_createWindow.show();
 		} else {
 			bank_master_createWindow.toFront();
@@ -255,13 +257,13 @@ Ext.onReady(function(){
 	function bank_master_confirm_delete(){
 		// only one bank_master is selected here
 		if(bank_masterListEditorGrid.selModel.getCount() == 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', bank_master_delete);
+			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data berikut?', bank_master_delete);
 		} else if(bank_masterListEditorGrid.selModel.getCount() > 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', bank_master_delete);
+			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data-data berikut?', bank_master_delete);
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really delete something you haven\'t selected?',
+				msg: 'Tidak ada yang dipilih untuk dihapus',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -274,14 +276,16 @@ Ext.onReady(function(){
 	function bank_master_confirm_update(){
 		/* only one record is selected here */
 		if(bank_masterListEditorGrid.selModel.getCount() == 1) {
-			bank_master_set_form();
+			
 			post2db='UPDATE';
 			msg='updated';
+			bank_master_set_form();
+			
 			bank_master_createWindow.show();
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really update something you haven\'t selected?',
+				msg: 'Tidak ada data yang dipilih untuk diedit',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -312,7 +316,7 @@ Ext.onReady(function(){
 						default:
 							Ext.MessageBox.show({
 								title: 'Warning',
-								msg: 'Could not delete the entire selection',
+								msg: 'Tidak bisa menghapus data yang diplih',
 								buttons: Ext.MessageBox.OK,
 								animEl: 'save',
 								icon: Ext.MessageBox.WARNING
@@ -324,7 +328,7 @@ Ext.onReady(function(){
 					var result=response.responseText;
 					Ext.MessageBox.show({
 					   title: 'Error',
-					   msg: 'Could not connect to the database. retry later.',
+					   msg: 'Tidak bisa terhubung dengan database server',
 					   buttons: Ext.MessageBox.OK,
 					   animEl: 'database',
 					   icon: Ext.MessageBox.ERROR
@@ -348,7 +352,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'mbank_id'
 		},[
-		/* dataIndex => insert intobank_master_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'mbank_id', type: 'int', mapping: 'mbank_id'}, 
 			{name: 'mbank_nama', type: 'string', mapping: 'mbank_nama'}, 
 			{name: 'mbank_keterangan', type: 'string', mapping: 'mbank_keterangan'}, 
@@ -365,7 +368,7 @@ Ext.onReady(function(){
     
   	/* Function for Identify of Window Column Model */
 	bank_master_ColumnModel = new Ext.grid.ColumnModel(
-		[/*{
+		[{
 			header: '#',
 			readOnly: true,
 			dataIndex: 'mbank_id',
@@ -374,31 +377,39 @@ Ext.onReady(function(){
 				cell.css = "readonlycell"; // Mengambil Value dari Class di dalam CSS 
 				return value;
 				},
-			hidden: false
-		},*/
+			hidden: true
+		},
 		{
 			header: 'Nama',
 			dataIndex: 'mbank_nama',
 			width: 150,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_BANK'))){ ?>
+			,
 			editor: new Ext.form.TextField({
 				maxLength: 50
           	})
+			<?php } ?>
 		}, 
 		{
 			header: 'Keterangan',
 			dataIndex: 'mbank_keterangan',
 			width: 150,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_BANK'))){ ?>
+			,
 			editor: new Ext.form.TextField({
 				maxLength: 250
           	})
+			<?php } ?>
 		}, 
 		{
 			header: 'Status',
 			dataIndex: 'mbank_aktif',
 			width: 150,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_BANK'))){ ?>
+			,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
 				triggerAction: 'all',
@@ -412,6 +423,7 @@ Ext.onReady(function(){
                	lazyRender:true,
                	listClass: 'x-combo-list-small'
             })
+			<?php } ?>
 		}, 
 		{
 			header: 'Creator',
@@ -419,7 +431,7 @@ Ext.onReady(function(){
 			width: 150,
 			sortable: true,
 			hidden: true,
-			readOnly: true,
+			readOnly: true
 		}, 
 		{
 			header: 'Create on',
@@ -427,7 +439,7 @@ Ext.onReady(function(){
 			width: 150,
 			sortable: true,
 			hidden: true,
-			readOnly: true,
+			readOnly: true
 		}, 
 		{
 			header: 'Last Update by',
@@ -435,7 +447,7 @@ Ext.onReady(function(){
 			width: 150,
 			sortable: true,
 			hidden: true,
-			readOnly: true,
+			readOnly: true
 		}, 
 		{
 			header: 'Last Update on',
@@ -443,7 +455,7 @@ Ext.onReady(function(){
 			width: 150,
 			sortable: true,
 			hidden: true,
-			readOnly: true,
+			readOnly: true
 		}, 
 		{
 			header: 'Revised',
@@ -451,7 +463,7 @@ Ext.onReady(function(){
 			width: 150,
 			sortable: true,
 			hidden: true,
-			readOnly: true,
+			readOnly: true
 		}	]);
 	
 	bank_master_ColumnModel.defaultSortable= true;
@@ -476,26 +488,34 @@ Ext.onReady(function(){
 			store: bank_master_DataStore,
 			displayInfo: true
 		}),
-		/* Add Control on ToolBar */
 		tbar: [
+		<?php if(eregi('C',$this->m_security->get_access_group_by_kode('MENU_BANK'))){ ?>
 		{
 			text: 'Add',
 			tooltip: 'Add new record',
 			iconCls:'icon-adds',    				// this is defined in our styles.css
 			handler: display_form_window
-		}, '-',{
+		}, '-',
+		<?php } ?>
+		<?php if(eregi('U|R',$this->m_security->get_access_group_by_kode('MENU_BANK'))){ ?>
+		{
 			text: 'Edit',
 			tooltip: 'Edit selected record',
 			iconCls:'icon-update',
 			handler: bank_master_confirm_update   // Confirm before updating
-		}, '-',{
+		}, '-',
+		<?php } ?>
+		<?php if(eregi('D',$this->m_security->get_access_group_by_kode('MENU_BANK'))){ ?>
+		{
 			text: 'Delete',
 			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
 			disabled:true,
 			handler: bank_master_confirm_delete   // Confirm before deleting
-		}, '-', {
-			text: 'Search',
+		}, '-', 
+		<?php } ?>
+		{
+			text: 'Adv Search',
 			tooltip: 'Advanced Search',
 			iconCls:'icon-search',
 			handler: display_form_search_window 
@@ -540,17 +560,21 @@ Ext.onReady(function(){
 	bank_master_ContextMenu = new Ext.menu.Menu({
 		id: 'bank_master_ListEditorGridContextMenu',
 		items: [
+		<?php if(eregi('U|R',$this->m_security->get_access_group_by_kode('MENU_BANK'))){ ?>
 		{ 
 			text: 'Edit', tooltip: 'Edit selected record', 
 			iconCls:'icon-update',
 			handler: bank_master_confirm_update 
 		},
+		<?php } ?>
+		<?php if(eregi('D',$this->m_security->get_access_group_by_kode('MENU_BANK'))){ ?>
 		{ 
 			text: 'Delete', 
 			tooltip: 'Delete selected record', 
 			iconCls:'icon-delete',
 			handler: bank_master_confirm_delete 
 		},
+		<?php } ?>
 		'-',
 		{ 
 			text: 'Print',
@@ -648,11 +672,15 @@ Ext.onReady(function(){
 				items: [mbank_namaField, mbank_keteranganField, mbank_aktifField, mbank_idField] 
 			}
 			],
-		buttons: [{
+		buttons: [
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_BANK'))){ ?>
+			{
 				text: 'Save and Close',
 				handler: bank_master_create
 			}
-			,{
+			,
+			<?php } ?>
+			{
 				text: 'Cancel',
 				handler: function(){
 					bank_master_createWindow.hide();
@@ -703,15 +731,13 @@ Ext.onReady(function(){
 			mbank_keterangan	:	mbank_keterangan_search, 
 			mbank_aktif	:	mbank_aktif_search, 
 		};
-		// Cause the datastore to do another query : 
 		bank_master_DataStore.reload({params: {start: 0, limit: pageS}});
 	}
 		
 	/* Function for reset search result */
 	function bank_master_reset_search(){
 		// reset the store parameters
-		bank_master_DataStore.baseParams = { task: 'LIST' };
-		// Cause the datastore to do another query : 
+		bank_master_DataStore.baseParams = { task: 'LIST', start: 0, limit: pageS };
 		bank_master_DataStore.reload({params: {start: 0, limit: pageS}});
 		bank_master_searchWindow.close();
 	};
@@ -846,8 +872,7 @@ Ext.onReady(function(){
 		url: 'index.php?c=c_bank_master&m=get_action',
 		params: {
 			task: "PRINT",
-		  	query: searchquery,                    		// if we are doing a quicksearch, use this
-			//if we are doing advanced search, use this
+		  	query: searchquery,                    		
 			mbank_nama : mbank_nama_print,
 			mbank_keterangan : mbank_keterangan_print,
 			mbank_aktif : mbank_aktif_print,
@@ -858,12 +883,12 @@ Ext.onReady(function(){
 		  	switch(result){
 		  	case 1:
 				win = window.open('./bank_masterlist.html','bank_masterlist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
-				win.print();
+				
 				break;
 		  	default:
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Unable to print the grid!',
+					msg: 'Tidak bisa mencetak data!',
 					buttons: Ext.MessageBox.OK,
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING
@@ -875,7 +900,7 @@ Ext.onReady(function(){
 		  	var result=response.responseText;
 			Ext.MessageBox.show({
 			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
+			   msg: 'Tidak bisa terhubung dengan database server',
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR
@@ -903,8 +928,7 @@ Ext.onReady(function(){
 		url: 'index.php?c=c_bank_master&m=get_action',
 		params: {
 			task: "EXCEL",
-		  	query: searchquery,                    		// if we are doing a quicksearch, use this
-			//if we are doing advanced search, use this
+		  	query: searchquery,                    		
 			mbank_nama : mbank_nama_2excel,
 			mbank_keterangan : mbank_keterangan_2excel,
 			mbank_aktif : mbank_aktif_2excel,
@@ -919,7 +943,7 @@ Ext.onReady(function(){
 		  	default:
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Unable to convert excel the grid!',
+					msg: 'Tidak bisa meng-export data ke dalam format excel!',
 					buttons: Ext.MessageBox.OK,
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING
@@ -931,7 +955,7 @@ Ext.onReady(function(){
 		  	var result=response.responseText;
 			Ext.MessageBox.show({
 			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
+			   msg: 'Tidak bisa terhubung dengan database server',
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR

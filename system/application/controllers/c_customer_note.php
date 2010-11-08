@@ -16,8 +16,9 @@ class C_customer_note extends Controller {
 	//constructor
 	function C_customer_note(){
 		parent::Controller();
+		session_start();
 		$this->load->model('m_customer_note', '', TRUE);
-		$this->load->plugin('to_excel');
+		
 	}
 	
 	//set index
@@ -179,13 +180,24 @@ class C_customer_note extends Controller {
 		
 		$result = $this->m_customer_note->customer_note_print($note_id ,$note_customer ,$note_tanggal ,$note_detail ,$note_creator ,$note_date_create ,$note_update ,$note_date_update ,$note_revised ,$option,$filter);
 		$nbrows=$result->num_rows();
-		$totcolumn=9;
+		$totcolumn=3;
    		/* We now have our array, let's build our HTML file */
 		$file = fopen("customer_notelist.html",'w');
 		fwrite($file, "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' /><title>Printing the Customer_note Grid</title><link rel='stylesheet' type='text/css' href='assets/modules/main/css/printstyle.css'/></head>");
-		fwrite($file, "<body><table summary='Customer_note List'><caption>CUSTOMER_NOTE</caption><thead><tr><th scope='col'>Note Id</th><th scope='col'>Note Customer</th><th scope='col'>Note Tanggal</th><th scope='col'>Note Detail</th><th scope='col'>Note Creator</th><th scope='col'>Note Date Create</th><th scope='col'>Note Update</th><th scope='col'>Note Date Update</th><th scope='col'>Note Revised</th></tr></thead><tfoot><tr><th scope='row'>Total</th><td colspan='$totcolumn'>");
+		fwrite($file, "<body onload='window.print()'>
+			   		<table summary='Customer_note List'>
+					<caption>CUSTOMER_NOTE</caption>
+					<thead>
+						<tr>
+							<th scope='col'>Tanggal dan Jam</th>
+							<th scope='col'>No Cust</th>
+							<th scope='col'>Customer</th>
+							<th scope='col'>Detail Catatan</th>
+						</tr>
+					</thead>
+					<tfoot><tr><th scope='row'>Total</th><td colspan='$totcolumn'>");
 		fwrite($file, $nbrows);
-		fwrite($file, " Customer_note</td></tr></tfoot><tbody>");
+		fwrite($file, " Total</td></tr></tfoot><tbody>");
 		$i=0;
 		if($nbrows>0){
 			foreach($result->result_array() as $data){
@@ -194,24 +206,15 @@ class C_customer_note extends Controller {
 					fwrite($file," class='odd'");
 				}
 			
-				fwrite($file, "><th scope='row' id='r97'>");
-				fwrite($file, $data['note_id']);
-				fwrite($file,"</th><td>");
-				fwrite($file, $data['note_customer']);
-				fwrite($file,"</td><td>");
+				fwrite($file, ">");
+				fwrite($file,"<td>");
 				fwrite($file, $data['note_tanggal']);
 				fwrite($file,"</td><td>");
+				fwrite($file, $data['cust_no']);
+				fwrite($file,"</td><td>");
+				fwrite($file, $data['cust_nama']);
+				fwrite($file,"</td><td>");
 				fwrite($file, $data['note_detail']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['note_creator']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['note_date_create']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['note_update']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['note_date_update']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['note_revised']);
 				fwrite($file, "</td></tr>");
 			}
 		}
@@ -243,7 +246,7 @@ class C_customer_note extends Controller {
 		$filter=$_POST["query"];
 		
 		$query = $this->m_customer_note->customer_note_export_excel($note_id ,$note_customer ,$note_tanggal ,$note_detail ,$note_creator ,$note_date_create ,$note_update ,$note_date_update ,$note_revised ,$option,$filter);
-		
+		$this->load->plugin('to_excel');
 		to_excel($query,"customer_note"); 
 		echo '1';
 			

@@ -16,9 +16,9 @@ class C_master_retur_jual_produk extends Controller {
 	//constructor
 	function C_master_retur_jual_produk(){
 		parent::Controller();
-		$this->load->model('m_master_retur_jual_produk', '', TRUE);
 		session_start();
-		
+		$this->load->model('m_master_retur_jual_produk', '', TRUE);
+
 	}
 	
 	//set index

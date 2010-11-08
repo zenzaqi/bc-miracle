@@ -27,6 +27,6 @@
 		<tr><td><? echo $i; ?></td><td><?php echo $print->map_id; ?></td><td><?php echo $print->map_kategori; ?></td><td><?php echo $print->map_nama; ?></td><td><?php echo $print->map_akun; ?></td><td><?php echo $print->map_akun_kode; ?></td><td><?php echo $print->map_aktif; ?></td><td><?php echo $print->map_author; ?></td><td><?php echo $print->map_date_create; ?></td><td><?php echo $print->map_update; ?></td><td><?php echo $print->map_date_update; ?></td><td><?php echo $print->map_revised; ?></td></tr>
 		<?php } ?>
 	</tbody>
-<body>
+<body onload='window.print()'>
 </body>
 </html>

@@ -812,7 +812,7 @@ Ext.onReady(function(){
 		  	switch(result){
 		  	case 1:
 				win = window.open('./banklist.html','banklist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
-				win.print();
+				
 				break;
 		  	default:
 				Ext.MessageBox.show({

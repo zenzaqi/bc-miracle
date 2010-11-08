@@ -16,8 +16,8 @@ class C_users extends Controller {
 	//constructor
 	function C_users(){
 		parent::Controller();
+		session_start();
 		$this->load->model('m_users', '', TRUE);
-		$this->load->plugin('to_excel');
 	}
 	
 	function get_usergroups_list(){
@@ -181,36 +181,49 @@ class C_users extends Controller {
 		
 		$result = $this->m_users->users_print($user_id ,$user_name ,$user_karyawan ,$user_log ,$user_groups ,$user_aktif ,$option,$filter);
 		$nbrows=$result->num_rows();
-		$totcolumn=7;
+		$totcolumn=4;
    		/* We now have our array, let's build our HTML file */
 		$file = fopen("userslist.html",'w');
 		fwrite($file, "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' /><title>Printing the Users Grid</title><link rel='stylesheet' type='text/css' href='assets/modules/main/css/printstyle.css'/></head>");
-		fwrite($file, "<body><table summary='Users List'><caption>USERS</caption><thead><tr><th scope='col'>User Id</th><th scope='col'>User Name</th><th scope='col'>User Passwd</th><th scope='col'>User Karyawan</th><th scope='col'>User Log</th><th scope='col'>User Groups</th><th scope='col'>User Aktif</th></tr></thead><tfoot><tr><th scope='row'>Total</th><td colspan='$totcolumn'>");
+		fwrite($file, "<body onload='window.print()'>
+					   <table summary='Users List'>
+					   <caption>Daftar User</caption>
+					   	<thead>
+							<tr>
+								<th scope='col'>No</th>
+								<th scope='col'>Username</th>
+								<th scope='col'>Nama Karyawan</th>
+								<th scope='col'>Group</th>
+								<th scope='col'>Aktif</th>
+							</tr>
+						</thead>
+						<tfoot>
+							<tr>
+								<th scope='row'>Total</th>
+								<td colspan='$totcolumn'>");
 		fwrite($file, $nbrows);
-		fwrite($file, " Users</td></tr></tfoot><tbody>");
+		fwrite($file, " User</td></tr></tfoot><tbody>");
 		$i=0;
 		if($nbrows>0){
 			foreach($result->result_array() as $data){
+				$i++;
 				fwrite($file,'<tr');
 				if($i%1==0){
 					fwrite($file," class='odd'");
 				}
-			
-				fwrite($file, "><th scope='row' id='r97'>");
-				fwrite($file, $data['user_id']);
-				fwrite($file,"</th><td>");
+				
+				fwrite($file, "><td>");
+				fwrite($file, $i);
+				fwrite($file, "</td><td>");
 				fwrite($file, $data['user_name']);
 				fwrite($file,"</td><td>");
-				fwrite($file, $data['user_passwd']);
+				fwrite($file, $data['karyawan_nama']);
 				fwrite($file,"</td><td>");
-				fwrite($file, $data['user_karyawan']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['user_log']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['user_groups']);
+				fwrite($file, $data['group_name']);
 				fwrite($file,"</td><td>");
 				fwrite($file, $data['user_aktif']);
 				fwrite($file, "</td></tr>");
+				
 			}
 		}
 		fwrite($file, "</tbody></table></body></html>");	
@@ -236,7 +249,7 @@ class C_users extends Controller {
 		$filter=$_POST["query"];
 		
 		$query = $this->m_users->users_export_excel($user_id ,$user_name ,$user_karyawan ,$user_log ,$user_groups ,$user_aktif ,$option,$filter);
-		
+		$this->load->plugin('to_excel');
 		to_excel($query,"users"); 
 		echo '1';
 			

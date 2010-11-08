@@ -18,24 +18,32 @@ class M_usergroups extends Model{
 			parent::Model();
 		}
 		
-		function permission_purge($group){
-			$sql="DELETE FROM permissions where perm_group='".$group."'";
-			$query=$this->db->query($sql);
-			return '1';
-		}
-		
+				
 		function permission_save($group,$menu,$priveleges){
-			$sql="INSERT INTO permissions(perm_group,perm_menu,perm_priv) 
-					VALUES('".$group."','".$menu."','".$priveleges."')";
+			
+			$sql="DELETE FROM permissions WHERE perm_group='".$group."'";
 			$query=$this->db->query($sql);
 			
-			$sql="INSERT INTO permissions(perm_group,perm_menu,perm_priv) 
-					SELECT  '".$group."',menu_parent,'R' FROM menus WHERE menu_id='".$menu."'
-					ON DUPLICATE KEY 
-					UPDATE perm_group='".$group."'";
-			$query=$this->db->query($sql);
+			for($i = 0; $i < sizeof($menu); $i++){
+
+				$data = array(
+					"perm_group"=>$group, 
+					"perm_menu"=>$menu[$i], 
+					"perm_priv"=>$priveleges[$i]
+				);
+				
+				$this->db->insert('permissions', $data); 
+				
+				$sql="INSERT INTO permissions(perm_group,perm_menu,perm_priv) 
+						SELECT  '".$group."',menu_parent,'R' FROM menus WHERE menu_id='".$menu[$i]."'
+						ON DUPLICATE KEY 
+						UPDATE perm_group='".$group."'";
+				$query=$this->db->query($sql);
+
+			}
 			
 			return '1';
+			
 		}
 		
 		//function for get list record
@@ -85,7 +93,8 @@ class M_usergroups extends Model{
 			// For simple search
 			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (group_id LIKE '%".addslashes($filter)."%' OR group_name LIKE '%".addslashes($filter)."%' OR group_desc LIKE '%".addslashes($filter)."%' OR group_active LIKE '%".addslashes($filter)."%' )";
+				$query .= " (group_name LIKE '%".addslashes($filter)."%' OR 
+							 group_desc LIKE '%".addslashes($filter)."%' )";
 			}
 			
 			$result = $this->db->query($query);
@@ -163,10 +172,7 @@ class M_usergroups extends Model{
 			//full query
 			$query="select * from usergroups";
 			
-			if($group_id!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " group_id LIKE '%".$group_id."%'";
-			};
+
 			if($group_name!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " group_name LIKE '%".$group_name."%'";
@@ -202,13 +208,11 @@ class M_usergroups extends Model{
 			$query="select * from usergroups";
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (group_id LIKE '%".addslashes($filter)."%' OR group_name LIKE '%".addslashes($filter)."%' OR group_desc LIKE '%".addslashes($filter)."%' OR group_active LIKE '%".addslashes($filter)."%' )";
-				$result = $this->db->query($query);
+				$query .= " ( group_name LIKE '%".addslashes($filter)."%' OR 
+							  group_desc LIKE '%".addslashes($filter)."%'  )";
+				
 			} else if($option=='SEARCH'){
-				if($group_id!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " group_id LIKE '%".$group_id."%'";
-				};
+				
 				if($group_name!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " group_name LIKE '%".$group_name."%'";
@@ -221,24 +225,22 @@ class M_usergroups extends Model{
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " group_active LIKE '%".$group_active."%'";
 				};
-				$result = $this->db->query($query);
 			}
+			$result = $this->db->query($query);
 			return $result;
 		}
 		
 		//function  for export to excel
 		function usergroups_export_excel($group_id ,$group_name ,$group_desc ,$group_active ,$option,$filter){
 			//full query
-			$query="select * from usergroups";
+			$query="SELECT group_name as 'Nama Group', group_desc as Keterangan, group_active as 'Aktif' from usergroups";
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (group_id LIKE '%".addslashes($filter)."%' OR group_name LIKE '%".addslashes($filter)."%' OR group_desc LIKE '%".addslashes($filter)."%' OR group_active LIKE '%".addslashes($filter)."%' )";
-				$result = $this->db->query($query);
+				$query .= " ( group_name LIKE '%".addslashes($filter)."%' OR 
+							  group_desc LIKE '%".addslashes($filter)."%'  )";
+				
 			} else if($option=='SEARCH'){
-				if($group_id!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " group_id LIKE '%".$group_id."%'";
-				};
+				
 				if($group_name!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " group_name LIKE '%".$group_name."%'";
@@ -251,8 +253,8 @@ class M_usergroups extends Model{
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " group_active LIKE '%".$group_active."%'";
 				};
-				$result = $this->db->query($query);
 			}
+			$result = $this->db->query($query);
 			return $result;
 		}
 		

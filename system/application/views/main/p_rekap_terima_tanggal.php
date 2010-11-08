@@ -18,7 +18,7 @@
 <title>Laporan Rekap Penerimaan Barang <?php echo $periode; ?></title>
 <link rel='stylesheet' type='text/css' href='../assets/modules/main/css/printstyle.css'/>
 </head>
-<body>
+<body onload='window.print()'>
 <table summary='Laporan Rekap Penerimaan Barang'>
 	<caption>Laporan Rekap Penerimaan Barang<br/><?php echo $periode; ?><br/>Group By No. Tanggal</caption>
 	<thead>

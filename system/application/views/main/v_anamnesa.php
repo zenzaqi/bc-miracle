@@ -146,7 +146,7 @@ Ext.onReady(function(){
 				anam_efekobatalergi	:anam_efekobatalergi_update,  
 				anam_hamil	:anam_hamil_update,  
 				anam_kb	:anam_kb_update,  
-				anam_harapan	:anam_harapan_update,  
+				anam_harapan	:anam_harapan_update  
 			}, 
 			success: function(response){							
 				var result=eval(response.responseText);
@@ -158,7 +158,7 @@ Ext.onReady(function(){
 					default:
 						Ext.MessageBox.show({
 						   title: 'Warning',
-						   msg: 'We could\'t not save the anamnesa.',
+						   msg: 'Data Anamnesa tidak bisa disimpan.',
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'save',
 						   icon: Ext.MessageBox.WARNING
@@ -170,7 +170,7 @@ Ext.onReady(function(){
 				var result=response.responseText;
 				Ext.MessageBox.show({
 				   title: 'Error',
-				   msg: 'Could not connect to the database. retry later.',
+				   msg: 'Tidak bisa terhubung dengan database server',
 				   buttons: Ext.MessageBox.OK,
 				   animEl: 'database',
 				   icon: Ext.MessageBox.ERROR
@@ -229,34 +229,31 @@ Ext.onReady(function(){
 				anam_efekobatalergi	: anam_efekobatalergi_create, 
 				anam_hamil	: anam_hamil_create, 
 				anam_kb	: anam_kb_create, 
-				anam_harapan	: anam_harapan_create, 
+				anam_harapan	: anam_harapan_create
 			}, 
 			success: function(response){             
+								
 				var result=eval(response.responseText);
-				switch(result){
-					case 1:
-						anamnesa_problem_purge()
-						anamnesa_problem_insert();
-						Ext.MessageBox.alert(post2db+' OK','The Anamnesa was '+msg+' successfully.');
-						anamnesa_DataStore.reload();
+				if(result!==0){
+						anamnesa_problem_insert(result)
+						Ext.MessageBox.alert(post2db+' OK','Data Anamnesa berhasil disimpan');
 						anamnesa_createWindow.hide();
-						break;
-					default:
+				}else{
 						Ext.MessageBox.show({
 						   title: 'Warning',
-						   msg: 'We could\'t not '+msg+' the Anamnesa.',
+						   msg: 'Data Anamnesa tidak bisa disimpan',
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'save',
 						   icon: Ext.MessageBox.WARNING
 						});
-						break;
-				}        
+				} 
+				
 			},
 			failure: function(response){
 				var result=response.responseText;
 				Ext.MessageBox.show({
 					   title: 'Error',
-					   msg: 'Could not connect to the database. retry later.',
+					   msg: 'Tidak bisa terhubung dengan database server',
 					   buttons: Ext.MessageBox.OK,
 					   animEl: 'database',
 					   icon: Ext.MessageBox.ERROR
@@ -266,7 +263,7 @@ Ext.onReady(function(){
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'Your Form is not valid!.',
+				msg: 'Isian belum sempurna!.',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -312,15 +309,16 @@ Ext.onReady(function(){
 		anam_kbField.setValue(null);
 		anam_harapanField.reset();
 		anam_harapanField.setValue(null);
+		anamnesa_problem_DataStore.load({params : {master_id : -1}});
 	}
  	/* End of Function */
   
 	/* setValue to EDIT */
 	function anamnesa_set_form(){
 		anam_idField.setValue(anamnesaListEditorGrid.getSelectionModel().getSelected().get('anam_id'));
-		anam_custField.setValue(anamnesaListEditorGrid.getSelectionModel().getSelected().get('anam_cust'));
+		anam_custField.setValue(anamnesaListEditorGrid.getSelectionModel().getSelected().get('anam_cust_nama'));
 		anam_tanggalField.setValue(anamnesaListEditorGrid.getSelectionModel().getSelected().get('anam_tanggal'));
-		anam_petugasField.setValue(anamnesaListEditorGrid.getSelectionModel().getSelected().get('anam_petugas'));
+		anam_petugasField.setValue(anamnesaListEditorGrid.getSelectionModel().getSelected().get('anam_petugas_nama'));
 		anam_pengobatanField.setValue(anamnesaListEditorGrid.getSelectionModel().getSelected().get('anam_pengobatan'));
 		anam_perawatanField.setValue(anamnesaListEditorGrid.getSelectionModel().getSelected().get('anam_perawatan'));
 		anam_terapiField.setValue(anamnesaListEditorGrid.getSelectionModel().getSelected().get('anam_terapi'));
@@ -330,21 +328,25 @@ Ext.onReady(function(){
 		anam_hamilField.setValue(anamnesaListEditorGrid.getSelectionModel().getSelected().get('anam_hamil'));
 		anam_kbField.setValue(anamnesaListEditorGrid.getSelectionModel().getSelected().get('anam_kb'));
 		anam_harapanField.setValue(anamnesaListEditorGrid.getSelectionModel().getSelected().get('anam_harapan'));
+		anamnesa_problem_DataStore.load({params : {master_id : get_pk_id() }});
 	}
 	/* End setValue to EDIT*/
   
 	/* Function for Check if the form is valid */
 	function is_anamnesa_form_valid(){
-		return (true &&  anam_custField.isValid() && anam_tanggalField.isValid() && true &&  true &&  true &&  true &&  true &&  true &&  true &&  true &&  true &&  true &&  true &&  true &&  true &&  true &&  true  );
+		return (anam_custField.isValid() && 
+				anam_tanggalField.isValid() );
 	}
   	/* End of Function */
   
   	/* Function for Displaying  create Window Form */
 	function display_form_window(){
 		if(!anamnesa_createWindow.isVisible()){
-			anamnesa_reset_form();
+			
 			post2db='CREATE';
 			msg='created';
+			anamnesa_reset_form();
+			
 			anamnesa_createWindow.show();
 		} else {
 			anamnesa_createWindow.toFront();
@@ -356,13 +358,13 @@ Ext.onReady(function(){
 	function anamnesa_confirm_delete(){
 		// only one anamnesa is selected here
 		if(anamnesaListEditorGrid.selModel.getCount() == 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', anamnesa_delete);
+			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data berikut?', anamnesa_delete);
 		} else if(anamnesaListEditorGrid.selModel.getCount() > 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', anamnesa_delete);
+			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data-data berikut?', anamnesa_delete);
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really delete something you haven\'t selected?',
+				msg: 'Tidak ada yang dipilih untuk dihapus',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -375,15 +377,16 @@ Ext.onReady(function(){
 	function anamnesa_confirm_update(){
 		/* only one record is selected here */
 		if(anamnesaListEditorGrid.selModel.getCount() == 1) {
-			anamnesa_set_form();
+			
 			post2db='UPDATE';
-			anamnesa_problem_DataStore.load({params : {master_id : eval(get_pk_id()), start:0, limit:pageS}});
 			msg='updated';
+			anamnesa_set_form();
+			
 			anamnesa_createWindow.show();
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really update something you haven\'t selected?',
+				msg: 'Tidak ada data yang dipilih untuk diedit',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -414,7 +417,7 @@ Ext.onReady(function(){
 						default:
 							Ext.MessageBox.show({
 								title: 'Warning',
-								msg: 'Could not delete the entire selection',
+								msg: 'Tidak bisa menghapus data yang diplih',
 								buttons: Ext.MessageBox.OK,
 								animEl: 'save',
 								icon: Ext.MessageBox.WARNING
@@ -426,7 +429,7 @@ Ext.onReady(function(){
 					var result=response.responseText;
 					Ext.MessageBox.show({
 					   title: 'Error',
-					   msg: 'Could not connect to the database. retry later.',
+					   msg: 'Tidak bisa terhubung dengan database server',
 					   buttons: Ext.MessageBox.OK,
 					   animEl: 'database',
 					   icon: Ext.MessageBox.ERROR
@@ -444,17 +447,18 @@ Ext.onReady(function(){
 			url: 'index.php?c=c_anamnesa&m=get_action', 
 			method: 'POST'
 		}),
-		baseParams:{task: "LIST"}, // parameter yang di $_POST ke Controller
+		baseParams:{task: "LIST", start:0, limit: pageS},
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
 			id: 'anam_id'
 		},[
-		/* dataIndex => insert intoanamnesa_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'anam_id', type: 'int', mapping: 'anam_id'}, 
 			{name: 'anam_cust', type: 'int', mapping: 'anam_cust'}, 
+			{name: 'anam_cust_nama', type: 'string', mapping: 'cust_nama'}, 
 			{name: 'anam_tanggal', type: 'date', dateFormat: 'Y-m-d', mapping: 'anam_tanggal'}, 
 			{name: 'anam_petugas', type: 'int', mapping: 'anam_petugas'}, 
+			{name: 'anam_petugas_nama', type: 'string', mapping: 'karyawan_nama'}, 
 			{name: 'anam_pengobatan', type: 'string', mapping: 'anam_pengobatan'}, 
 			{name: 'anam_perawatan', type: 'string', mapping: 'anam_perawatan'}, 
 			{name: 'anam_terapi', type: 'string', mapping: 'anam_terapi'}, 
@@ -485,69 +489,68 @@ Ext.onReady(function(){
 				cell.css = "readonlycell"; // Mengambil Value dari Class di dalam CSS 
 				return value;
 				},
-			hidden: false
+			hidden: true
 		},
 		{
 			header: 'Customer',
-			dataIndex: 'anam_cust',
+			dataIndex: 'anam_cust_nama',
 			width: 150,
 			sortable: true,
-			editor: new Ext.form.NumberField({
-				allowBlank: false,
-				allowDecimals: false,
-				allowNegative: false,
-				blankText: '0',
-				maxLength: 11,
-				maskRe: /([0-9]+)$/
-			})
+			readOnly: true
 		}, 
 		{
 			header: 'Tanggal',
 			dataIndex: 'anam_tanggal',
 			width: 150,
 			sortable: true,
-			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
+			renderer: Ext.util.Format.dateRenderer('Y-m-d')
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_ANAMNESA'))){ ?>
+			,
 			editor: new Ext.form.DateField({
 				allowBlank: false,
 				format: 'Y-m-d'
 			})
+			<?php } ?>
 		}, 
 		{
 			header: 'Petugas',
-			dataIndex: 'anam_petugas',
+			dataIndex: 'anam_petugas_nama',
 			width: 150,
 			sortable: true,
-			editor: new Ext.form.NumberField({
-				allowDecimals: false,
-				allowNegative: false,
-				blankText: '0',
-				maxLength: 11,
-				maskRe: /([0-9]+)$/
-			})
+			readOnly: true
 		}, 
 		{
 			header: 'Alergi',
 			dataIndex: 'anam_alergi',
 			width: 150,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_ANAMNESA'))){ ?>
+			,
 			editor: new Ext.form.TextField({
 				maxLength: 500
           	})
+			<?php } ?>
 		}, 
 		{
-			header: 'Alergi Obat',
+			header: 'Alergi thd Obat',
 			dataIndex: 'anam_obatalergi',
 			width: 150,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('C',$this->m_security->get_access_group_by_kode('MENU_ANAMNESA'))){ ?>
+			,
 			editor: new Ext.form.TextField({
 				maxLength: 500
           	})
+			<?php } ?>
 		}, 
 		{
-			header: 'Hamil',
+			header: 'Hamil ?',
 			dataIndex: 'anam_hamil',
 			width: 150,
 			sortable: true,
+			hidden: true
+			<?php if(eregi('C',$this->m_security->get_access_group_by_kode('MENU_ANAMNESA'))){ ?>
+			,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
 				triggerAction: 'all',
@@ -561,6 +564,7 @@ Ext.onReady(function(){
                	lazyRender:true,
                	listClass: 'x-combo-list-small'
             })
+			<?php } ?>
 		}, 
 		{
 			header: 'Creator',
@@ -568,7 +572,7 @@ Ext.onReady(function(){
 			width: 150,
 			sortable: true,
 			hidden: true,
-			readOnly: true,
+			readOnly: true
 		}, 
 		{
 			header: 'Create on',
@@ -610,7 +614,7 @@ Ext.onReady(function(){
 	anamnesaListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'anamnesaListEditorGrid',
 		el: 'fp_anamnesa',
-		title: 'List Of Anamnesa',
+		title: 'Daftar Anamnesa',
 		autoHeight: true,
 		store: anamnesa_DataStore, // DataStore
 		cm: anamnesa_ColumnModel, // Nama-nama Columns
@@ -625,25 +629,33 @@ Ext.onReady(function(){
 			store: anamnesa_DataStore,
 			displayInfo: true
 		}),
-		/* Add Control on ToolBar */
 		tbar: [
+		<?php if(eregi('C',$this->m_security->get_access_group_by_kode('MENU_ANAMNESA'))){ ?>
 		{
 			text: 'Add',
 			tooltip: 'Add new record',
 			iconCls:'icon-adds',    				// this is defined in our styles.css
 			handler: display_form_window
-		}, '-',{
+		}, '-',
+		<?php } ?>
+		<?php if(eregi('U|R',$this->m_security->get_access_group_by_kode('MENU_ANAMNESA'))){ ?>
+		{
 			text: 'Edit',
 			tooltip: 'Edit selected record',
 			iconCls:'icon-update',
 			handler: anamnesa_confirm_update   // Confirm before updating
-		}, '-',{
+		}, '-',
+		<?php } ?>
+		<?php if(eregi('D',$this->m_security->get_access_group_by_kode('MENU_ANAMNESA'))){ ?>
+		{
 			text: 'Delete',
 			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
 			handler: anamnesa_confirm_delete   // Confirm before deleting
-		}, '-', {
-			text: 'Search',
+		}, '-',
+		<?php } ?>
+		{
+			text: 'Adv Search',
 			tooltip: 'Advanced Search',
 			iconCls:'icon-search',
 			handler: display_form_search_window 
@@ -677,17 +689,21 @@ Ext.onReady(function(){
 	anamnesa_ContextMenu = new Ext.menu.Menu({
 		id: 'anamnesa_ListEditorGridContextMenu',
 		items: [
+		<?php if(eregi('U|R',$this->m_security->get_access_group_by_kode('MENU_ANAMNESA'))){ ?>
 		{ 
 			text: 'Edit', tooltip: 'Edit selected record', 
 			iconCls:'icon-update',
 			handler: anamnesa_editContextMenu 
 		},
+		<?php } ?>
+		<?php if(eregi('D',$this->m_security->get_access_group_by_kode('MENU_ANAMNESA'))){ ?>
 		{ 
 			text: 'Delete', 
 			tooltip: 'Delete selected record', 
 			iconCls:'icon-delete',
 			handler: anamnesa_confirm_delete 
 		},
+		<?php } ?>
 		'-',
 		{ 
 			text: 'Print',
@@ -726,6 +742,61 @@ Ext.onReady(function(){
 	anamnesa_DataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
 	anamnesaListEditorGrid.on('afteredit', anamnesa_update); // inLine Editing Record
 	
+	cust_anam_DataStore = new Ext.data.Store({
+		id: 'cust_anam_DataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_customer&m=get_action',
+			method: 'POST'
+		}),
+		baseParams:{task: "LIST", start:0, limit: pageS},
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'cust_id'
+		},[
+			{name: 'cust_id', type: 'int', mapping: 'cust_id'},
+			{name: 'cust_no', type: 'string', mapping: 'cust_no'},
+			{name: 'cust_nama', type: 'string', mapping: 'cust_nama'},
+			{name: 'cust_tgllahir', type: 'date', dateFormat: 'Y-m-d', mapping: 'cust_tgllahir'},
+			{name: 'cust_alamat', type: 'string', mapping: 'cust_alamat'},
+			{name: 'cust_telprumah', type: 'string', mapping: 'cust_telprumah'}
+		]),
+		sortInfo:{field: 'cust_no', direction: "ASC"}
+	});
+	
+	petugas_DataStore = new Ext.data.Store({
+		id: 'petugas_DataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_anamnesa&m=get_petugas',
+			method: 'POST'
+		}),
+		baseParams:{task: "LIST", start:0, limit: pageS},
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'petugas_id'
+		},[
+			{name: 'petugas_id', type: 'int', mapping: 'karyawan_id'},
+			{name: 'petugas_nama', type: 'string', mapping: 'karyawan_nama'},
+			{name: 'petugas_jabatan', type: 'string', mapping: 'jabatan_nama'}
+		]),
+		sortInfo:{field: 'petugas_nama', direction: "ASC"}
+	});
+	
+	var customer_tpl = new Ext.XTemplate(
+        '<tpl for="."><div class="search-item">',
+            '<span><b>{cust_no} : {cust_nama}</b><br /></span>',
+            '{cust_alamat} | {cust_telprumah}',
+        '</div></tpl>'
+    );
+	
+	var petugas_tpl = new Ext.XTemplate(
+        '<tpl for="."><div class="search-item">',
+            '<span><b>{petugas_nama}</b><br /></span>',
+            '{petugas_jabatan}',
+        '</div></tpl>'
+    );
+	
 	/* Identify  anam_id Field */
 	anam_idField= new Ext.form.NumberField({
 		id: 'anam_idField',
@@ -733,38 +804,63 @@ Ext.onReady(function(){
 		blankText: '0',
 		allowBlank: false,
 		allowDecimals: false,
-				hidden: true,
+		hidden: true,
 		readOnly: true,
 		anchor: '95%',
 		maskRe: /([0-9]+)$/
 	});
+	
+	
+	
 	/* Identify  anam_cust Field */
-	anam_custField= new Ext.form.NumberField({
+	anam_custField= new Ext.form.ComboBox({
 		id: 'anam_custField',
 		fieldLabel: 'Customer',
-		allowNegatife : false,
-		blankText: '0',
-		allowBlank: false,
-		allowDecimals: false,
-				anchor: '95%',
-		maskRe: /([0-9]+)$/
+		store: cust_anam_DataStore,
+		mode: 'remote',
+		displayField:'cust_nama',
+		valueField: 'cust_id',
+        typeAhead: false,
+        loadingText: 'Searching...',
+        pageSize:10,
+        hideTrigger:false,
+        tpl: customer_tpl,
+        //applyTo: 'search',
+        itemSelector: 'div.search-item',
+		triggerAction: 'all',
+		lazyRender:true,
+		listClass: 'x-combo-list-small',
+		anchor: '95%',
+		allowBlank: false
 	});
+	
 	/* Identify  anam_tanggal Field */
 	anam_tanggalField= new Ext.form.DateField({
 		id: 'anam_tanggalField',
 		fieldLabel: 'Tanggal',
 		format : 'Y-m-d',
-		allowBlank: false,
+		allowBlank: false
 	});
 	/* Identify  anam_petugas Field */
-	anam_petugasField= new Ext.form.NumberField({
+	anam_petugasField= new Ext.form.ComboBox({
 		id: 'anam_petugasField',
 		fieldLabel: 'Petugas',
-		allowNegatife : false,
-		blankText: '0',
-		allowDecimals: false,
-				anchor: '95%',
-		maskRe: /([0-9]+)$/
+		store: petugas_DataStore,
+		mode: 'remote',
+		displayField:'petugas_nama',
+		valueField: 'petugas_id',
+        typeAhead: false,
+        loadingText: 'Searching...',
+        pageSize:10,
+        hideTrigger:false,
+        tpl: petugas_tpl,
+        //applyTo: 'search',
+        itemSelector: 'div.search-item',
+		triggerAction: 'all',
+		lazyRender:true,
+		listClass: 'x-combo-list-small',
+		anchor: '95%',
+		allowBlank: false
 	});
 	/* Identify  anam_pengobatan Field */
 	anam_pengobatanField= new Ext.form.TextArea({
@@ -811,7 +907,7 @@ Ext.onReady(function(){
 	/* Identify  anam_hamil Field */
 	anam_hamilField= new Ext.form.ComboBox({
 		id: 'anam_hamilField',
-		fieldLabel: 'Anam Hamil',
+		fieldLabel: 'Hamil ?',
 		store:new Ext.data.SimpleStore({
 			fields:['anam_hamil_value', 'anam_hamil_display'],
 			data:[['Y','Y'],['T','T']]
@@ -819,7 +915,8 @@ Ext.onReady(function(){
 		mode: 'local',
 		displayField: 'anam_hamil_display',
 		valueField: 'anam_hamil_value',
-		anchor: '95%',
+		//anchor: '95%',
+		width: 60,
 		triggerAction: 'all'	
 	});
 	/* Identify  anam_kb Field */
@@ -838,7 +935,6 @@ Ext.onReady(function(){
 	});
   	/*Fieldset Master*/
 	anamnesa_masterGroup = new Ext.form.FieldSet({
-		title: 'Master',
 		autoHeight: true,
 		collapsible: true,
 		layout:'column',
@@ -847,13 +943,13 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [anam_custField, anam_tanggalField, anam_petugasField, anam_pengobatanField, anam_perawatanField, anam_terapiField] 
+				items: [anam_tanggalField, anam_petugasField, anam_custField, anam_hamilField, anam_pengobatanField, anam_perawatanField, anam_terapiField] 
 			}
 			,{
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [anam_alergiField, anam_obatalergiField, anam_efekobatalergiField, anam_hamilField,anam_kbField, anam_harapanField,anam_idField] 
+				items: [anam_alergiField, anam_obatalergiField, anam_efekobatalergiField, anam_kbField, anam_harapanField,anam_idField] 
 			}
 			]
 	
@@ -868,13 +964,12 @@ Ext.onReady(function(){
 		totalProperty: 'total',
 		id: ''
 	},[
-	/* dataIndex => insert intoperawatan_ColumnModel, Mapping => for initiate table column */ 
-			{name: 'panam_id', type: 'int', mapping: 'panam_id'}, 
-			{name: 'panam_master', type: 'int', mapping: 'panam_master'}, 
-			{name: 'panam_problem', type: 'string', mapping: 'panam_problem'}, 
-			{name: 'panam_lamaproblem', type: 'string', mapping: 'panam_lamaproblem'}, 
-			{name: 'panam_aksiproblem', type: 'string', mapping: 'panam_aksiproblem'}, 
-			{name: 'panam_aksiket', type: 'string', mapping: 'panam_aksiket'} 
+		{name: 'panam_id', type: 'int', mapping: 'panam_id'}, 
+		{name: 'panam_master', type: 'int', mapping: 'panam_master'}, 
+		{name: 'panam_problem', type: 'string', mapping: 'panam_problem'}, 
+		{name: 'panam_lamaproblem', type: 'string', mapping: 'panam_lamaproblem'}, 
+		{name: 'panam_aksiproblem', type: 'string', mapping: 'panam_aksiproblem'}, 
+		{name: 'panam_aksiket', type: 'string', mapping: 'panam_aksiket'} 
 	]);
 	//eof
 	
@@ -893,7 +988,7 @@ Ext.onReady(function(){
 			method: 'POST'
 		}),
 		reader: anamnesa_problem_reader,
-		baseParams:{master_id: anam_idField.getValue()},
+		baseParams:{start: 0, limit: pageS},
 		sortInfo:{field: 'panam_id', direction: "ASC"}
 	});
 	/* End of Function */
@@ -908,7 +1003,7 @@ Ext.onReady(function(){
 	anamnesa_problem_ColumnModel = new Ext.grid.ColumnModel(
 		[
 		{
-			header: 'Panam Problem',
+			header: 'Problem',
 			dataIndex: 'panam_problem',
 			width: 150,
 			sortable: true,
@@ -918,7 +1013,7 @@ Ext.onReady(function(){
           	})
 		},
 		{
-			header: 'Panam Lamaproblem',
+			header: 'Lama Problem',
 			dataIndex: 'panam_lamaproblem',
 			width: 150,
 			sortable: true,
@@ -927,7 +1022,7 @@ Ext.onReady(function(){
           	})
 		},
 		{
-			header: 'Panam Aksiproblem',
+			header: 'Aksi Problem',
 			dataIndex: 'panam_aksiproblem',
 			width: 150,
 			sortable: true,
@@ -936,7 +1031,7 @@ Ext.onReady(function(){
           	})
 		},
 		{
-			header: 'Panam Aksiket',
+			header: 'Keterangan',
 			dataIndex: 'panam_aksiket',
 			width: 150,
 			sortable: true,
@@ -954,7 +1049,7 @@ Ext.onReady(function(){
 	anamnesa_problemListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'anamnesa_problemListEditorGrid',
 		el: 'fp_anamnesa_problem',
-		title: 'Detail anamnesa_problem',
+		title: 'Detail Problem',
 		height: 250,
 		width: 690,
 		autoScroll: true,
@@ -972,8 +1067,9 @@ Ext.onReady(function(){
 			pageSize: pageS,
 			store: anamnesa_problem_DataStore,
 			displayInfo: true
-		}),
-		/* Add Control on ToolBar */
+		})
+		<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_ANAMNESA'))){ ?>
+		,
 		tbar: [
 		{
 			text: 'Add',
@@ -987,6 +1083,7 @@ Ext.onReady(function(){
 			handler: anamnesa_problem_confirm_delete
 		}
 		]
+		<?php } ?>
 	});
 	//eof
 	
@@ -1016,8 +1113,8 @@ Ext.onReady(function(){
 	//eof
 	
 	//function for insert detail
-	function anamnesa_problem_insert(){
-		for(i=0;i<anamnesa_problem_DataStore.getCount();i++){
+	function anamnesa_problem_insert(pkid){
+		/*for(i=0;i<anamnesa_problem_DataStore.getCount();i++){
 			anamnesa_problem_record=anamnesa_problem_DataStore.getAt(i);
 			Ext.Ajax.request({
 				waitMsg: 'Please wait...',
@@ -1032,31 +1129,78 @@ Ext.onReady(function(){
 				
 				}
 			});
-		}
+		}*/
+		
+		var panam_id = [];
+        var panam_problem = [];
+        var panam_lamaproblem = [];
+        var panam_aksiproblem = [];
+        var panam_aksiket = [];
+		
+        
+        if(anamnesa_problem_DataStore.getCount()>0){
+            for(i=0; i<anamnesa_problem_DataStore.getCount();i++){
+                if(anamnesa_problem_DataStore.getAt(i).data.panam_problem!==""
+				   && anamnesa_problem_DataStore.getAt(i).data.panam_lamaproblem!==""){
+                    
+                  	panam_id.push(anamnesa_problem_DataStore.getAt(i).data.panam_id);
+					panam_problem.push(anamnesa_problem_DataStore.getAt(i).data.panam_problem);
+                   	panam_lamaproblem.push(anamnesa_problem_DataStore.getAt(i).data.panam_lamaproblem);
+					panam_aksiproblem.push(anamnesa_problem_DataStore.getAt(i).data.panam_aksiproblem);
+					panam_aksiket.push(anamnesa_problem_DataStore.getAt(i).data.panam_aksiket);
+                }
+            }
+			
+			var encoded_array_panam_id = Ext.encode(panam_id);
+			var encoded_array_panam_problem = Ext.encode(panam_problem);
+			var encoded_array_panam_lamaproblem = Ext.encode(panam_lamaproblem);
+			var encoded_array_panam_aksiproblem = Ext.encode(panam_aksiproblem);
+			var encoded_array_panam_aksiket = Ext.encode(panam_aksiket);
+				
+			Ext.Ajax.request({
+				waitMsg: 'Mohon tunggu...',
+				url: 'index.php?c=c_anamnesa&m=detail_anamnesa_problem_insert',
+				params:{
+					panam_id		: encoded_array_panam_id,
+					panam_master	: pkid, 
+					panam_problem	: encoded_array_panam_problem,
+					panam_lamaproblem	: encoded_array_panam_lamaproblem,
+					panam_aksiproblem	: encoded_array_panam_aksiproblem,
+					panam_aksiket	: encoded_array_panam_aksiket
+				},
+				success:function(response){
+					anamnesa_DataStore.reload()
+				},
+				failure: function(response){
+					Ext.MessageBox.hide();
+					var result=response.responseText;
+					Ext.MessageBox.show({
+					   title: 'Error',
+					   msg: 'Tidak bisa terhubung dengan database server',
+					   buttons: Ext.MessageBox.OK,
+					   animEl: 'database',
+					   icon: Ext.MessageBox.ERROR
+					});	
+				}
+			});
+					
+        }
+		
 	}
 	//eof
 	
-	//function for purge detail
-	function anamnesa_problem_purge(){
-		Ext.Ajax.request({
-			waitMsg: 'Please wait...',
-			url: 'index.php?c=c_anamnesa&m=detail_anamnesa_problem_purge',
-			params:{ master_id: eval(anam_idField.getValue()) }
-		});
-	}
-	//eof
 	
 	/* Function for Delete Confirm of detail */
 	function anamnesa_problem_confirm_delete(){
 		// only one record is selected here
 		if(anamnesa_problemListEditorGrid.selModel.getCount() == 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', anamnesa_problem_delete);
+			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data berikut?', anamnesa_problem_delete);
 		} else if(anamnesa_problemListEditorGrid.selModel.getCount() > 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', anamnesa_problem_delete);
+			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data-data berikut?', anamnesa_problem_delete);
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really delete something you haven\'t selected?',
+				msg: 'Tidak ada yang dipilih untuk dihapus',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -1081,17 +1225,20 @@ Ext.onReady(function(){
 	
 	/* Function for retrieve create Window Panel*/ 
 	anamnesa_createForm = new Ext.FormPanel({
-		labelAlign: 'top',
+		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
 		width: 700,        
-		items: [anamnesa_masterGroup,anamnesa_problemListEditorGrid]
-		,
-		buttons: [{
+		items: [anamnesa_masterGroup,anamnesa_problemListEditorGrid],
+		buttons: [
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_ANAMNESA'))){ ?>
+			{
 				text: 'Save and Close',
 				handler: anamnesa_create
 			}
-			,{
+			,
+			<?php } ?>
+			{
 				text: 'Cancel',
 				handler: function(){
 					anamnesa_createWindow.hide();
@@ -1152,7 +1299,6 @@ Ext.onReady(function(){
 		// change the store parameters
 		anamnesa_DataStore.baseParams = {
 			task: 'SEARCH',
-			//variable here
 			anam_id	:	anam_id_search, 
 			anam_cust	:	anam_cust_search, 
 			anam_tanggal	:	anam_tanggal_search_date, 
@@ -1165,7 +1311,7 @@ Ext.onReady(function(){
 			anam_efekobatalergi	:	anam_efekobatalergi_search, 
 			anam_hamil	:	anam_hamil_search, 
 			anam_kb	:	anam_kb_search, 
-			anam_harapan	:	anam_harapan_search, 
+			anam_harapan	:	anam_harapan_search
 		};
 		// Cause the datastore to do another query : 
 		anamnesa_DataStore.reload({params: {start: 0, limit: pageS}});
@@ -1174,8 +1320,7 @@ Ext.onReady(function(){
 	/* Function for reset search result */
 	function anamnesa_reset_search(){
 		// reset the store parameters
-		anamnesa_DataStore.baseParams = { task: 'LIST' };
-		// Cause the datastore to do another query : 
+		anamnesa_DataStore.baseParams = { task: 'LIST', start: 0, limit: pageS };
 		anamnesa_DataStore.reload({params: {start: 0, limit: pageS}});
 		anamnesa_searchWindow.close();
 	};
@@ -1194,38 +1339,57 @@ Ext.onReady(function(){
 	
 	});
 	/* Identify  anam_cust Search Field */
-	anam_custSearchField= new Ext.form.NumberField({
+	anam_custSearchField= new Ext.form.ComboBox({
 		id: 'anam_custSearchField',
-		fieldLabel: 'Anam Cust',
-		allowNegatife : false,
-		blankText: '0',
-		allowDecimals: false,
-		anchor: '95%',
-		maskRe: /([0-9]+)$/
+		store: cust_anam_DataStore,
+		mode: 'remote',
+		displayField:'cust_nama',
+		valueField: 'cust_id',
+        typeAhead: false,
+        loadingText: 'Searching...',
+        pageSize:10,
+        hideTrigger:false,
+        tpl: customer_tpl,
+        //applyTo: 'search',
+        itemSelector: 'div.search-item',
+		triggerAction: 'all',
+		lazyRender:true,
+		listClass: 'x-combo-list-small',
+		anchor: '95%'
 	
 	});
 	/* Identify  anam_tanggal Search Field */
 	anam_tanggalSearchField= new Ext.form.DateField({
 		id: 'anam_tanggalSearchField',
-		fieldLabel: 'Anam Tanggal',
-		format : 'Y-m-d',
+		fieldLabel: 'Tanggal',
+		format : 'Y-m-d'
 	
 	});
 	/* Identify  anam_petugas Search Field */
-	anam_petugasSearchField= new Ext.form.NumberField({
+	anam_petugasSearchField= new Ext.form.ComboBox({
 		id: 'anam_petugasSearchField',
-		fieldLabel: 'Anam Petugas',
-		allowNegatife : false,
-		blankText: '0',
-		allowDecimals: false,
-		anchor: '95%',
-		maskRe: /([0-9]+)$/
+		fieldLabel: 'Petugas',
+		store: petugas_DataStore,
+		mode: 'remote',
+		displayField:'petugas_nama',
+		valueField: 'petugas_id',
+        typeAhead: false,
+        loadingText: 'Searching...',
+        pageSize:10,
+        hideTrigger:false,
+        tpl: petugas_tpl,
+        //applyTo: 'search',
+        itemSelector: 'div.search-item',
+		triggerAction: 'all',
+		lazyRender:true,
+		listClass: 'x-combo-list-small',
+		anchor: '95%'
 	
 	});
 	/* Identify  anam_pengobatan Search Field */
 	anam_pengobatanSearchField= new Ext.form.TextField({
 		id: 'anam_pengobatanSearchField',
-		fieldLabel: 'Anam Pengobatan',
+		fieldLabel: 'Pengobatan',
 		maxLength: 500,
 		anchor: '95%'
 	
@@ -1233,7 +1397,7 @@ Ext.onReady(function(){
 	/* Identify  anam_perawatan Search Field */
 	anam_perawatanSearchField= new Ext.form.TextField({
 		id: 'anam_perawatanSearchField',
-		fieldLabel: 'Anam Perawatan',
+		fieldLabel: 'Perawatan',
 		maxLength: 500,
 		anchor: '95%'
 	
@@ -1241,7 +1405,7 @@ Ext.onReady(function(){
 	/* Identify  anam_terapi Search Field */
 	anam_terapiSearchField= new Ext.form.TextField({
 		id: 'anam_terapiSearchField',
-		fieldLabel: 'Anam Terapi',
+		fieldLabel: 'Terapi',
 		maxLength: 500,
 		anchor: '95%'
 	
@@ -1249,7 +1413,7 @@ Ext.onReady(function(){
 	/* Identify  anam_alergi Search Field */
 	anam_alergiSearchField= new Ext.form.TextField({
 		id: 'anam_alergiSearchField',
-		fieldLabel: 'Anam Alergi',
+		fieldLabel: 'Alergi',
 		maxLength: 500,
 		anchor: '95%'
 	
@@ -1257,7 +1421,7 @@ Ext.onReady(function(){
 	/* Identify  anam_obatalergi Search Field */
 	anam_obatalergiSearchField= new Ext.form.TextField({
 		id: 'anam_obatalergiSearchField',
-		fieldLabel: 'Anam Obatalergi',
+		fieldLabel: 'Alergi terhadap Obat',
 		maxLength: 500,
 		anchor: '95%'
 	
@@ -1265,7 +1429,7 @@ Ext.onReady(function(){
 	/* Identify  anam_efekobatalergi Search Field */
 	anam_efekobatalergiSearchField= new Ext.form.TextField({
 		id: 'anam_efekobatalergiSearchField',
-		fieldLabel: 'Anam Efekobatalergi',
+		fieldLabel: 'Efek Alergi',
 		maxLength: 500,
 		anchor: '95%'
 	
@@ -1273,7 +1437,7 @@ Ext.onReady(function(){
 	/* Identify  anam_hamil Search Field */
 	anam_hamilSearchField= new Ext.form.ComboBox({
 		id: 'anam_hamilSearchField',
-		fieldLabel: 'Anam Hamil',
+		fieldLabel: 'Hamil',
 		store:new Ext.data.SimpleStore({
 			fields:['value', 'anam_hamil'],
 			data:[['Y','Y'],['T','T']]
@@ -1281,14 +1445,15 @@ Ext.onReady(function(){
 		mode: 'local',
 		displayField: 'anam_hamil',
 		valueField: 'value',
-		anchor: '95%',
+		//anchor: '95%',
+		width: 60,
 		triggerAction: 'all'	 
 	
 	});
 	/* Identify  anam_kb Search Field */
 	anam_kbSearchField= new Ext.form.TextField({
 		id: 'anam_kbSearchField',
-		fieldLabel: 'Anam Kb',
+		fieldLabel: 'KB yang digunakan',
 		maxLength: 500,
 		anchor: '95%'
 	
@@ -1296,7 +1461,7 @@ Ext.onReady(function(){
 	/* Identify  anam_harapan Search Field */
 	anam_harapanSearchField= new Ext.form.TextField({
 		id: 'anam_harapanSearchField',
-		fieldLabel: 'Anam Harapan',
+		fieldLabel: 'Harapan',
 		maxLength: 500,
 		anchor: '95%'
 	
@@ -1304,7 +1469,7 @@ Ext.onReady(function(){
     
 	/* Function for retrieve search Form Panel */
 	anamnesa_searchForm = new Ext.FormPanel({
-		labelAlign: 'top',
+		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
 		width: 600,        
@@ -1316,14 +1481,16 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [anam_custSearchField, anam_tanggalSearchField, anam_petugasSearchField, anam_pengobatanSearchField, anam_perawatanSearchField, anam_terapiSearchField, anam_alergiSearchField, anam_obatalergiSearchField, anam_efekobatalergiSearchField, anam_hamilSearchField] 
+				items: [anam_tanggalSearchField, anam_petugasSearchField, anam_custSearchField, anam_hamilSearchField, anam_pengobatanSearchField,
+						anam_perawatanSearchField, anam_terapiSearchField] 
 			}
  
 			,{
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [anam_kbSearchField, anam_harapanSearchField] 
+				items: [anam_alergiSearchField, anam_obatalergiSearchField, anam_efekobatalergiSearchField, 
+						anam_kbSearchField, anam_harapanSearchField] 
 			}
 			]
 		}]
@@ -1343,7 +1510,7 @@ Ext.onReady(function(){
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
 	anamnesa_searchWindow = new Ext.Window({
-		title: 'anamnesa Search',
+		title: 'Pencarian Anamnesa',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,
@@ -1404,8 +1571,7 @@ Ext.onReady(function(){
 		url: 'index.php?c=c_anamnesa&m=get_action',
 		params: {
 			task: "PRINT",
-		  	query: searchquery,                    		// if we are doing a quicksearch, use this
-			//if we are doing advanced search, use this
+		  	query: searchquery,                    		
 			anam_cust : anam_cust_print,
 		  	anam_tanggal : anam_tanggal_print_date, 
 			anam_petugas : anam_petugas_print,
@@ -1425,12 +1591,12 @@ Ext.onReady(function(){
 		  	switch(result){
 		  	case 1:
 				win = window.open('./anamnesalist.html','anamnesalist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
-				win.print();
+				
 				break;
 		  	default:
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Unable to print the grid!',
+					msg: 'Tidak bisa mencetak data!',
 					buttons: Ext.MessageBox.OK,
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING
@@ -1442,7 +1608,7 @@ Ext.onReady(function(){
 		  	var result=response.responseText;
 			Ext.MessageBox.show({
 			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
+			   msg: 'Tidak bisa terhubung dengan database server',
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR
@@ -1488,8 +1654,7 @@ Ext.onReady(function(){
 		url: 'index.php?c=c_anamnesa&m=get_action',
 		params: {
 			task: "EXCEL",
-		  	query: searchquery,                    		// if we are doing a quicksearch, use this
-			//if we are doing advanced search, use this
+		  	query: searchquery,                    		
 			anam_cust : anam_cust_2excel,
 		  	anam_tanggal : anam_tanggal_2excel_date, 
 			anam_petugas : anam_petugas_2excel,
@@ -1513,7 +1678,7 @@ Ext.onReady(function(){
 		  	default:
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Unable to convert excel the grid!',
+					msg: 'Tidak bisa meng-export data ke dalam format excel!',
 					buttons: Ext.MessageBox.OK,
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING
@@ -1525,7 +1690,7 @@ Ext.onReady(function(){
 		  	var result=response.responseText;
 			Ext.MessageBox.show({
 			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
+			   msg: 'Tidak bisa terhubung dengan database server',
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR

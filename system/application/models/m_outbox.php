@@ -28,7 +28,9 @@ class M_outbox extends Model{
 			
 			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (outbox_id LIKE '%".addslashes($filter)."%' OR outbox_destination LIKE '%".addslashes($filter)."%' OR outbox_message LIKE '%".addslashes($filter)."%' )";
+				$query .= " (outbox_destination LIKE '%".addslashes($filter)."%' OR 
+							 outbox_message LIKE '%".addslashes($filter)."%' OR 
+							 outbox_status LIKE '%".addslashes($filter)."%')";
 			}
 
 			$query .= " ORDER BY outbox_status ASC, outbox_date DESC ";
@@ -58,15 +60,15 @@ class M_outbox extends Model{
 			
 			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (outbox_id LIKE '%".addslashes($filter)."%' OR outbox_destination LIKE '%".addslashes($filter)."%' OR outbox_message LIKE '%".addslashes($filter)."%' )";
+				$query .= " (outbox_destination LIKE '%".addslashes($filter)."%' OR outbox_message LIKE '%".addslashes($filter)."%' )";
 			}
 
-			$query .= "";
+			//$query .= "";
 			
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
-			$limit = $query." LIMIT ".$start.",".$end;		
-			$result = $this->db->query($limit);  
+/*			$limit = $query." LIMIT ".$start.",".$end;		
+			$result = $this->db->query($limit);  */
 			
 			if($nbrows>0){
 				foreach($result->result() as $row){
@@ -88,15 +90,15 @@ class M_outbox extends Model{
 			
 			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (outbox_id LIKE '%".addslashes($filter)."%' OR outbox_destination LIKE '%".addslashes($filter)."%' OR outbox_message LIKE '%".addslashes($filter)."%' )";
+				$query .= " (outbox_destination LIKE '%".addslashes($filter)."%' OR outbox_message LIKE '%".addslashes($filter)."%' )";
 			}
 
-			$query .= "";
+			//$query .= "";
 			
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
-			$limit = $query." LIMIT ".$start.",".$end;		
-			$result = $this->db->query($limit);  
+/*			$limit = $query." LIMIT ".$start.",".$end;		
+			$result = $this->db->query($limit); */ 
 			
 			if($nbrows>0){
 				foreach($result->result() as $row){
@@ -118,15 +120,15 @@ class M_outbox extends Model{
 			
 			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (outbox_id LIKE '%".addslashes($filter)."%' OR outbox_destination LIKE '%".addslashes($filter)."%' OR outbox_message LIKE '%".addslashes($filter)."%' )";
+				$query .= " (outbox_destination LIKE '%".addslashes($filter)."%' OR outbox_message LIKE '%".addslashes($filter)."%' )";
 			}
 
-			$query .= "";
+			//$query .= "";
 			
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
-			$limit = $query." LIMIT ".$start.",".$end;		
-			$result = $this->db->query($limit);  
+/*			$limit = $query." LIMIT ".$start.",".$end;		
+			$result = $this->db->query($limit); */ 
 			
 			if($nbrows>0){
 				foreach($result->result() as $row){
@@ -139,42 +141,6 @@ class M_outbox extends Model{
 			}
 		}
 		
-		
-		
-		
-		//function for create new record
-		function outbox_create($outbox_destination ,$outbox_message ,$outbox_date ,$outbox_creator ,$outbox_date_create ){
-			$data = array(
-				"outbox_destination"=>$outbox_destination, 
-				"outbox_message"=>$outbox_message, 
-				"outbox_date"=>$outbox_date, 
-				"outbox_creator"=>$outbox_creator, 
-				"outbox_date_create"=>$outbox_date_create 
-			);
-			$this->db->insert('outbox', $data); 
-			if($this->db->affected_rows())
-				return '1';
-			else
-				return '0';
-		}
-		
-		//function for update record
-		function outbox_update($outbox_id,$outbox_destination,$outbox_message,$outbox_date,$outbox_creator,$outbox_update,$outbox_date_update){
-			$data = array(
-				"outbox_destination"=>$outbox_destination, 
-				"outbox_message"=>$outbox_message, 
-				"outbox_date"=>$outbox_date, 
-				"outbox_creator"=>$outbox_creator, 
-				"outbox_update"=>$outbox_update, 
-				"outbox_date_update"=>$outbox_date_update 
-			);
-			
-			$this->db->where('outbox_id', $outbox_id);
-			$this->db->update('outbox', $data);
-			$sql="UPDATE outbox set outbox_revised=(outbox_revised+1) where outbox_id='".$outbox_id."'";
-			$this->db->query($sql);
-			return '1';
-		}
 		
 		//fcuntion for delete record
 		function outbox_delete($pkid){
@@ -215,14 +181,16 @@ class M_outbox extends Model{
 		}
 		
 		//function for advanced search record
-		function outbox_search($outbox_id ,$outbox_destination ,$outbox_message ,$outbox_date ,$outbox_creator ,$outbox_date_create ,$outbox_update ,$outbox_date_update ,$outbox_revised ,$start,$end){
+		function outbox_search($outbox_id ,$outbox_destination ,$outbox_message ,$outbox_date, $outbox_status ,$outbox_creator ,$outbox_date_create, 
+							   $outbox_update , $outbox_date_update ,$outbox_revised ,$start,$end){
 			//full query
-			$query="select * from outbox";
+			$query =   "SELECT 
+							o.*, 
+							c.cust_no, c.cust_nama 
+						FROM outbox o
+						LEFT JOIN customer c on c.cust_id = o.outbox_cust ";
 			
-			if($outbox_id!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " outbox_id LIKE '%".$outbox_id."%'";
-			};
+			
 			if($outbox_destination!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " outbox_destination LIKE '%".$outbox_destination."%'";
@@ -231,15 +199,16 @@ class M_outbox extends Model{
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " outbox_message LIKE '%".$outbox_message."%'";
 			};
+			
 			if($outbox_date!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " outbox_date LIKE '%".$outbox_date."%'";
 			};
-			if($outbox_creator!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " outbox_creator LIKE '%".$outbox_creator."%'";
-			};
 			
+			if($outbox_status!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " outbox_status ='".$outbox_status."'";
+			};
 			
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
@@ -258,102 +227,80 @@ class M_outbox extends Model{
 		}
 		
 		//function for print record
-		function outbox_print($outbox_id ,$outbox_destination ,$outbox_message ,$outbox_date ,$outbox_creator ,$outbox_date_create ,$outbox_update ,$outbox_date_update ,$outbox_revised ,$option,$filter){
+		function outbox_print($outbox_id ,$outbox_destination ,$outbox_message ,$outbox_date , $outbox_status, 
+							  $outbox_creator ,$outbox_date_create ,$outbox_update ,
+							  $outbox_date_update ,$outbox_revised ,$option,$filter){
 			//full query
-			$sql="select * from outbox";
+			$query =   "SELECT 
+							o.*, 
+							c.cust_no, c.cust_nama 
+						FROM outbox o
+						LEFT JOIN customer c on c.cust_id = o.outbox_cust ";
+			
 			if($option=='LIST'){
-				$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
-				$sql .= " (outbox_id LIKE '%".addslashes($filter)."%' OR outbox_destination LIKE '%".addslashes($filter)."%' OR outbox_message LIKE '%".addslashes($filter)."%' OR outbox_date LIKE '%".addslashes($filter)."%' OR outbox_creator LIKE '%".addslashes($filter)."%' OR outbox_date_create LIKE '%".addslashes($filter)."%' OR outbox_update LIKE '%".addslashes($filter)."%' OR outbox_date_update LIKE '%".addslashes($filter)."%' OR outbox_revised LIKE '%".addslashes($filter)."%' )";
-				$query = $this->db->query($sql);
+				$query .=eregi("WHERE",$sql)? " AND ":" WHERE ";
+				$query .= " (outbox_destination LIKE '%".addslashes($filter)."%' OR 
+							 outbox_message LIKE '%".addslashes($filter)."%' OR
+							 outbox_status ='".addslashes($filter)."' )";
 			} else if($option=='SEARCH'){
-				if($outbox_id!=''){
-					$sql.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$sql.= " outbox_id LIKE '%".$outbox_id."%'";
-				};
 				if($outbox_destination!=''){
-					$sql.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$sql.= " outbox_destination LIKE '%".$outbox_destination."%'";
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " outbox_destination LIKE '%".$outbox_destination."%'";
 				};
 				if($outbox_message!=''){
-					$sql.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$sql.= " outbox_message LIKE '%".$outbox_message."%'";
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " outbox_message LIKE '%".$outbox_message."%'";
 				};
 				if($outbox_date!=''){
-					$sql.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$sql.= " outbox_date LIKE '%".$outbox_date."%'";
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " outbox_date LIKE '%".$outbox_date."%'";
 				};
-				if($outbox_creator!=''){
-					$sql.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$sql.= " outbox_creator LIKE '%".$outbox_creator."%'";
+				
+				if($outbox_status!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " outbox_status ='".$outbox_status."'";
 				};
-				if($outbox_date_create!=''){
-					$sql.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$sql.= " outbox_date_create LIKE '%".$outbox_date_create."%'";
-				};
-				if($outbox_update!=''){
-					$sql.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$sql.= " outbox_update LIKE '%".$outbox_update."%'";
-				};
-				if($outbox_date_update!=''){
-					$sql.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$sql.= " outbox_date_update LIKE '%".$outbox_date_update."%'";
-				};
-				if($outbox_revised!=''){
-					$sql.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$sql.= " outbox_revised LIKE '%".$outbox_revised."%'";
-				};
-				$query = $this->db->query($sql);
 			}
+			$query = $this->db->query($query);
+			
 			return $query->result();
 		}
 		
 		//function  for export to excel
-		function outbox_export_excel($outbox_id ,$outbox_destination ,$outbox_message ,$outbox_date ,$outbox_creator ,$outbox_date_create ,$outbox_update ,$outbox_date_update ,$outbox_revised ,$option,$filter){
+		function outbox_export_excel($outbox_id ,$outbox_destination ,$outbox_message ,$outbox_date , $outbox_status, 
+									 $outbox_creator ,$outbox_date_create ,
+									 $outbox_update ,$outbox_date_update ,$outbox_revised ,$option,$filter){
 			//full query
-			$sql="select * from outbox";
+			$query =   "SELECT outbox_date as 'Tanggal Kirim', outbox_message as 'Isi Pesan', cust_no as 'No Cust', cust_nama as 'Customer',
+								outbox_destination as 'No HP', outbox_status as Status								
+						FROM outbox o
+						LEFT JOIN customer c on c.cust_id = o.outbox_cust ";
+			
 			if($option=='LIST'){
-				$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
-				$sql .= " (outbox_id LIKE '%".addslashes($filter)."%' OR outbox_destination LIKE '%".addslashes($filter)."%' OR outbox_message LIKE '%".addslashes($filter)."%' OR outbox_date LIKE '%".addslashes($filter)."%' OR outbox_creator LIKE '%".addslashes($filter)."%' OR outbox_date_create LIKE '%".addslashes($filter)."%' OR outbox_update LIKE '%".addslashes($filter)."%' OR outbox_date_update LIKE '%".addslashes($filter)."%' OR outbox_revised LIKE '%".addslashes($filter)."%' )";
-				$query = $this->db->query($sql);
+				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
+				$query .= " (outbox_destination LIKE '%".addslashes($filter)."%' OR 
+							 outbox_message LIKE '%".addslashes($filter)."%' OR
+							 outbox_status ='".addslashes($filter)."' )";
 			} else if($option=='SEARCH'){
-				if($outbox_id!=''){
-					$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
-					$sql.= " outbox_id LIKE '%".$outbox_id."%'";
-				};
 				if($outbox_destination!=''){
-					$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
-					$sql.= " outbox_destination LIKE '%".$outbox_destination."%'";
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " outbox_destination LIKE '%".$outbox_destination."%'";
 				};
 				if($outbox_message!=''){
-					$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
-					$sql.= " outbox_message LIKE '%".$outbox_message."%'";
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " outbox_message LIKE '%".$outbox_message."%'";
 				};
 				if($outbox_date!=''){
-					$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
-					$sql.= " outbox_date LIKE '%".$outbox_date."%'";
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " outbox_date LIKE '%".$outbox_date."%'";
 				};
-				if($outbox_creator!=''){
-					$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
-					$sql.= " outbox_creator LIKE '%".$outbox_creator."%'";
+				
+				if($outbox_status!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " outbox_status ='".$outbox_status."'";
 				};
-				if($outbox_date_create!=''){
-					$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
-					$sql.= " outbox_date_create LIKE '%".$outbox_date_create."%'";
-				};
-				if($outbox_update!=''){
-					$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
-					$sql.= " outbox_update LIKE '%".$outbox_update."%'";
-				};
-				if($outbox_date_update!=''){
-					$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
-					$sql.= " outbox_date_update LIKE '%".$outbox_date_update."%'";
-				};
-				if($outbox_revised!=''){
-					$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
-					$sql.= " outbox_revised LIKE '%".$outbox_revised."%'";
-				};
-				$query = $this->db->query($sql);
 			}
+			$query = $this->db->query($query);
 			return $query;
 		}
 		

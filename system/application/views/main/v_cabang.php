@@ -125,7 +125,7 @@ Ext.onReady(function(){
 					default:
 						Ext.MessageBox.show({
 							   title: 'Warning',
-							   msg: 'We could\'t not save the cabang.',
+							   msg: 'Data Cabang tidak bisa disimpan.',
 							   buttons: Ext.MessageBox.OK,
 							   animEl: 'save',
 							   icon: Ext.MessageBox.WARNING
@@ -136,11 +136,11 @@ Ext.onReady(function(){
 			failure: function(response){
 				var result=response.responseText;
 				Ext.MessageBox.show({
-							   title: 'Error',
-							   msg: 'Could not connect to the database. retry later.',
-							   buttons: Ext.MessageBox.OK,
-							   animEl: 'database',
-							   icon: Ext.MessageBox.ERROR
+				   title: 'Error',
+				   msg: 'Tidak bisa terhubung dengan database server',
+				   buttons: Ext.MessageBox.OK,
+				   animEl: 'database',
+				   icon: Ext.MessageBox.ERROR
 				});	
 			}									    
 		});   
@@ -187,14 +187,14 @@ Ext.onReady(function(){
 					var result=eval(response.responseText);
 					switch(result){
 						case 1:
-							Ext.MessageBox.alert(post2db+' OK','The Cabang was '+msg+' successfully.');
+							Ext.MessageBox.alert(post2db+' OK','Data Cabang berhasil disimpan.');
 							cabang_DataStore.reload();
 							cabang_createWindow.hide();
 							break;
 						default:
 							Ext.MessageBox.show({
 							   title: 'Warning',
-							   msg: 'We could\'t not '+msg+' the Cabang.',
+							   msg: 'Data Cabang tidak bisa disimpan',
 							   buttons: Ext.MessageBox.OK,
 							   animEl: 'save',
 							   icon: Ext.MessageBox.WARNING
@@ -205,18 +205,18 @@ Ext.onReady(function(){
 				failure: function(response){
 					var result=response.responseText;
 					Ext.MessageBox.show({
-								   title: 'Error',
-								   msg: 'Could not connect to the database. retry later.',
-								   buttons: Ext.MessageBox.OK,
-								   animEl: 'database',
-								   icon: Ext.MessageBox.ERROR
+					   title: 'Error',
+					   msg: 'Tidak bisa terhubung dengan database server',
+					   buttons: Ext.MessageBox.OK,
+					   animEl: 'database',
+					   icon: Ext.MessageBox.ERROR
 					});	
 				}                      
 			});
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'Your Form is not valid!.',
+				msg: 'Isian belum sempurna!.',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -249,7 +249,7 @@ Ext.onReady(function(){
 		cabang_keteranganField.reset();
 		cabang_keteranganField.setValue(null);
 		cabang_aktifField.reset();
-		cabang_aktifField.setValue(null);
+		cabang_aktifField.setValue('Aktif');
 	}
  	/* End of Function */
   
@@ -274,9 +274,11 @@ Ext.onReady(function(){
   	/* Function for Displaying  create Window Form */
 	function display_form_window(){
 		if(!cabang_createWindow.isVisible()){
-			cabang_reset_form();
+			
 			post2db='CREATE';
 			msg='created';
+			cabang_reset_form();
+			
 			cabang_createWindow.show();
 		} else {
 			cabang_createWindow.toFront();
@@ -288,13 +290,13 @@ Ext.onReady(function(){
 	function cabang_confirm_delete(){
 		// only one cabang is selected here
 		if(cabangListEditorGrid.selModel.getCount() == 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', cabang_delete);
+			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data berikut?', cabang_delete);
 		} else if(cabangListEditorGrid.selModel.getCount() > 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', cabang_delete);
+			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data-data berikut?', cabang_delete);
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really delete something you haven\'t selected?',
+				msg: 'Tidak ada yang dipilih untuk dihapus',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -307,14 +309,16 @@ Ext.onReady(function(){
 	function cabang_confirm_update(){
 		/* only one record is selected here */
 		if(cabangListEditorGrid.selModel.getCount() == 1) {
-			cabang_set_form();
+			
 			post2db='UPDATE';
 			msg='updated';
+			cabang_set_form();
+			
 			cabang_createWindow.show();
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really update something you haven\'t selected?',
+				msg: 'Tidak ada data yang dipilih untuk diedit',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -345,7 +349,7 @@ Ext.onReady(function(){
 						default:
 							Ext.MessageBox.show({
 								title: 'Warning',
-								msg: 'Could not delete the entire selection',
+								msg: 'Tidak bisa menghapus data yang diplih',
 								buttons: Ext.MessageBox.OK,
 								animEl: 'save',
 								icon: Ext.MessageBox.WARNING
@@ -357,7 +361,7 @@ Ext.onReady(function(){
 					var result=response.responseText;
 					Ext.MessageBox.show({
 					   title: 'Error',
-					   msg: 'Could not connect to the database. retry later.',
+					   msg: 'Tidak bisa terhubung dengan database server',
 					   buttons: Ext.MessageBox.OK,
 					   animEl: 'database',
 					   icon: Ext.MessageBox.ERROR
@@ -381,7 +385,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'cabang_id'
 		},[
-		/* dataIndex => insert intocabang_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'cabang_id', type: 'int', mapping: 'cabang_id'},
 			{name: 'cabang_nama', type: 'string', mapping: 'cabang_nama'},
 			{name: 'cabang_alamat', type: 'string', mapping: 'cabang_alamat'},
@@ -402,7 +405,7 @@ Ext.onReady(function(){
     
   	/* Function for Identify of Window Column Model */
 	cabang_ColumnModel = new Ext.grid.ColumnModel(
-		[/*{
+		[{
 			//index=0
 			header: '#',
 			readOnly: true,
@@ -412,58 +415,73 @@ Ext.onReady(function(){
 				cell.css = "readonlycell"; // Mengambil Value dari Class di dalam CSS 
 				return value;
 				},
-			hidden: false
-		},*/
+			hidden: true
+		},
 		{
 			/*index=1*/
 			header: 'Nama',
 			dataIndex: 'cabang_nama',
 			width: 250,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_CABANG'))){ ?>
+			,
 			editor: new Ext.form.TextField({
 				allowBlank: false,
 				maxLength: 250
           	})
+			<?php } ?>
 		},
 		{
 			/*index=2*/
 			header: 'Alamat',
 			dataIndex: 'cabang_alamat',
 			width: 250,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_CABANG'))){ ?>
+			,
 			editor: new Ext.form.TextField({
 				maxLength: 250
           	})
+			<?php } ?>
 		},
 		{
 			/*index=3*/
 			header: 'Kota',
 			dataIndex: 'cabang_kota',
 			width: 150,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_CABANG'))){ ?>
+			,
 			editor: new Ext.form.TextField({
 				maxLength: 250
           	})
+			<?php } ?>
 		},
 		{
 			/*index=4*/
 			header: 'Kode Pos',
 			dataIndex: 'cabang_kodepos',
 			width: 80,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_CABANG'))){ ?>
+			,
 			editor: new Ext.form.TextField({
 				maxLength: 5
           	})
+			<?php } ?>
 		},
 		{
 			/*index=5*/
 			header: 'Propinsi',
 			dataIndex: 'cabang_propinsi',
 			width: 150,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_CABANG'))){ ?>
+			,
 			editor: new Ext.form.TextField({
 				maxLength: 250
           	})
+			<?php } ?>
 		},
 		{
 			/*index=6*/
@@ -471,17 +489,22 @@ Ext.onReady(function(){
 			dataIndex: 'cabang_keterangan',
 			width: 150,
 			sortable: true,
-			hidden: true,
+			hidden: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_CABANG'))){ ?>
+			,
 			editor: new Ext.form.TextField({
 				maxLength: 250
           	})
+			<?php } ?>
 		},
 		{
 			/*index=7*/
 			header: 'Status',
 			dataIndex: 'cabang_aktif',
 			width: 150,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_CABANG'))){ ?>
+			,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
 				triggerAction: 'all',
@@ -495,6 +518,7 @@ Ext.onReady(function(){
                	lazyRender:true,
                	listClass: 'x-combo-list-small'
             })
+			<?php } ?>
 		},
 		{
 			/*index=8*/
@@ -561,26 +585,34 @@ Ext.onReady(function(){
 			store: cabang_DataStore,
 			displayInfo: true
 		}),
-		/* Add Control on ToolBar */
 		tbar: [
+		<?php if(eregi('C',$this->m_security->get_access_group_by_kode('MENU_CABANG'))){ ?>
 		{
 			text: 'Add',
 			tooltip: 'Add new record',
 			iconCls:'icon-adds',    				// this is defined in our styles.css
 			handler: display_form_window
-		}, '-',{
+		}, '-',
+		<?php } ?>
+		<?php if(eregi('U|R',$this->m_security->get_access_group_by_kode('MENU_CABANG'))){ ?>
+		{
 			text: 'Edit',
 			tooltip: 'Edit selected record',
 			iconCls:'icon-update',
 			handler: cabang_confirm_update   // Confirm before updating
-		}, '-',{
+		}, '-',
+		<?php } ?>
+		<?php if(eregi('D',$this->m_security->get_access_group_by_kode('MENU_CABANG'))){ ?>
+		{
 			text: 'Delete',
 			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
 			disabled:true,
 			handler: cabang_confirm_delete   // Confirm before deleting
-		}, '-', {
-			text: 'Search',
+		}, '-', 
+		<?php } ?>
+		{
+			text: 'Adv Search',
 			tooltip: 'Advanced Search',
 			iconCls:'icon-search',
 			handler: display_form_search_window 
@@ -631,17 +663,21 @@ Ext.onReady(function(){
 	cabang_ContextMenu = new Ext.menu.Menu({
 		id: 'cabang_ListEditorGridContextMenu',
 		items: [
+		<?php if(eregi('U|R',$this->m_security->get_access_group_by_kode('MENU_CABANG'))){ ?>
 		{ 
 			text: 'Edit', tooltip: 'Edit selected record', 
 			iconCls:'icon-update',
 			handler: cabang_confirm_update 
 		},
+		<?php } ?>
+		<?php if(eregi('D',$this->m_security->get_access_group_by_kode('MENU_CABANG'))){ ?>
 		{ 
 			text: 'Delete', 
 			tooltip: 'Delete selected record', 
 			iconCls:'icon-delete',
 			handler: cabang_confirm_delete 
 		},
+		<?php } ?>
 		'-',
 		{ 
 			text: 'Print',
@@ -756,16 +792,21 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [cabang_namaField, cabang_alamatField, cabang_kotaField, cabang_kodeposField, cabang_propinsiField, cabang_keteranganField, cabang_aktifField] 
+				items: [cabang_namaField, cabang_alamatField, cabang_kotaField, cabang_kodeposField, cabang_propinsiField, cabang_keteranganField, 
+						cabang_aktifField] 
 			}
 			]
 		}]
 		,
-		buttons: [{
+		buttons: [
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_CABANG'))){ ?>
+			{
 				text: 'Save and Close',
 				handler: cabang_create
 			}
-			,{
+			,
+			<?php } ?>
+			{
 				text: 'Cancel',
 				handler: function(){
 					cabang_createWindow.hide();
@@ -951,7 +992,8 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [cabang_namaSearchField, cabang_alamatSearchField, cabang_kotaSearchField, cabang_kodeposSearchField, cabang_propinsiSearchField, cabang_keteranganSearchField, cabang_aktifSearchField] 
+				items: [cabang_namaSearchField, cabang_alamatSearchField, cabang_kotaSearchField, cabang_kodeposSearchField, 
+						cabang_propinsiSearchField, cabang_keteranganSearchField, cabang_aktifSearchField] 
 			}
 			]
 		}]
@@ -1023,8 +1065,7 @@ Ext.onReady(function(){
 		url: 'index.php?c=c_cabang&m=get_action',
 		params: {
 			task: "PRINT",
-		  	query: searchquery,                    		// if we are doing a quicksearch, use this
-			//if we are doing advanced search, use this
+		  	query: searchquery,                    		
 			cabang_nama : cabang_nama_print,
 			cabang_alamat : cabang_alamat_print,
 			cabang_kota : cabang_kota_print,
@@ -1039,12 +1080,12 @@ Ext.onReady(function(){
 		  	switch(result){
 		  	case 1:
 				win = window.open('./cabanglist.html','cabanglist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
-				win.print();
+				
 				break;
 		  	default:
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Unable to print the grid!',
+					msg: 'Tidak bisa mencetak data!',
 					buttons: Ext.MessageBox.OK,
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING
@@ -1056,7 +1097,7 @@ Ext.onReady(function(){
 		  	var result=response.responseText;
 			Ext.MessageBox.show({
 			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
+			   msg: 'Tidak bisa terhubung dengan database server',
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR
@@ -1092,8 +1133,7 @@ Ext.onReady(function(){
 		url: 'index.php?c=c_cabang&m=get_action',
 		params: {
 			task: "EXCEL",
-		  	query: searchquery,                    		// if we are doing a quicksearch, use this
-			//if we are doing advanced search, use this
+		  	query: searchquery,                    		
 			cabang_nama : cabang_nama_2excel,
 			cabang_alamat : cabang_alamat_2excel,
 			cabang_kota : cabang_kota_2excel,
@@ -1112,7 +1152,7 @@ Ext.onReady(function(){
 		  	default:
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Unable to convert excel the grid!',
+					msg: 'Tidak bisa meng-export data ke dalam format excel!',
 					buttons: Ext.MessageBox.OK,
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING
@@ -1124,7 +1164,7 @@ Ext.onReady(function(){
 		  	var result=response.responseText;
 			Ext.MessageBox.show({
 			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
+			   msg: 'Tidak bisa terhubung dengan database server',
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR

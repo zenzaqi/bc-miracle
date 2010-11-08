@@ -16,8 +16,9 @@ class C_anamnesa extends Controller {
 	//constructor
 	function C_anamnesa(){
 		parent::Controller();
+		session_start();
 		$this->load->model('m_anamnesa', '', TRUE);
-		$this->load->plugin('to_excel');
+		
 	}
 	
 	//set index
@@ -26,12 +27,21 @@ class C_anamnesa extends Controller {
 		$this->load->view('main/v_anamnesa');
 	}
 	
+	function  get_petugas(){
+		$query = isset($_POST['query']) ? @$_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? @$_POST['start'] : @$_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? @$_POST['limit'] : @$_GET['limit']);
+		
+		$result=$this->m_anamnesa->get_petugas($query,$start,$end);
+		echo $result;
+	}
+	
 	//for detail action
 	//list detail handler action
 	function  detail_anamnesa_problem_list(){
-		$query = isset($_POST['query']) ? $_POST['query'] : "";
-		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
-		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		$query = isset($_POST['query']) ? @$_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? @$_POST['start'] : @$_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? @$_POST['limit'] : @$_GET['limit']);
 		$master_id = (integer) (isset($_POST['master_id']) ? $_POST['master_id'] : $_GET['master_id']);
 		$result=$this->m_anamnesa->detail_anamnesa_problem_list($master_id,$query,$start,$end);
 		echo $result;
@@ -40,17 +50,11 @@ class C_anamnesa extends Controller {
 	
 	//purge all detail
 	function detail_anamnesa_problem_purge(){
-		$master_id = (integer) (isset($_POST['master_id']) ? $_POST['master_id'] : $_GET['master_id']);
+		$master_id = (integer) (isset($_POST['master_id']) ? @$_POST['master_id'] : @$_GET['master_id']);
 		$result=$this->m_anamnesa->detail_anamnesa_problem_purge($master_id);
 	}
 	//eof
 	
-	//get master id, note: not done yet
-	function get_master_id(){
-		$result=$this->m_anamnesa->get_master_id();
-		echo $result;
-	}
-	//
 	
 	//add detail
 	function detail_anamnesa_problem_insert(){
@@ -59,21 +63,24 @@ class C_anamnesa extends Controller {
 		$panam_master=trim(@$_POST["panam_master"]);
 		$panam_problem=trim(@$_POST["panam_problem"]);
 		$panam_problem=str_replace("/(<\/?)(p)([^>]*>)", "",$panam_problem);
-		$panam_problem=str_replace("\\", "",$panam_problem);
-		$panam_problem=str_replace("'", '"',$panam_problem);
 		$panam_lamaproblem=trim(@$_POST["panam_lamaproblem"]);
 		$panam_lamaproblem=str_replace("/(<\/?)(p)([^>]*>)", "",$panam_lamaproblem);
-		$panam_lamaproblem=str_replace("\\", "",$panam_lamaproblem);
-		$panam_lamaproblem=str_replace("'", '"',$panam_lamaproblem);
 		$panam_aksiproblem=trim(@$_POST["panam_aksiproblem"]);
 		$panam_aksiproblem=str_replace("/(<\/?)(p)([^>]*>)", "",$panam_aksiproblem);
-		$panam_aksiproblem=str_replace("\\", "",$panam_aksiproblem);
-		$panam_aksiproblem=str_replace("'", '"',$panam_aksiproblem);
 		$panam_aksiket=trim(@$_POST["panam_aksiket"]);
 		$panam_aksiket=str_replace("/(<\/?)(p)([^>]*>)", "",$panam_aksiket);
-		$panam_aksiket=str_replace("\\", "",$panam_aksiket);
-		$panam_aksiket=str_replace("'", '"',$panam_aksiket);
-		$result=$this->m_anamnesa->detail_anamnesa_problem_insert($panam_id ,$panam_master ,$panam_problem ,$panam_lamaproblem ,$panam_aksiproblem ,$panam_aksiket );
+		
+		$panam_id = json_decode(stripslashes($panam_id));
+		$panam_problem = json_decode(stripslashes($panam_problem));
+		$panam_lamaproblem = json_decode(stripslashes($panam_lamaproblem));
+		$panam_aksiproblem = json_decode(stripslashes($panam_aksiproblem));
+		$panam_aksiket = json_decode(stripslashes($panam_aksiket));
+		
+  		$result=$this->m_anamnesa->detail_anamnesa_problem_insert($panam_id ,$panam_master ,$panam_problem ,$panam_lamaproblem ,$panam_aksiproblem ,
+																  $panam_aksiket );
+		
+		echo $result;
+		
 	}
 	
 	
@@ -127,41 +134,26 @@ class C_anamnesa extends Controller {
 		$anam_petugas=trim(@$_POST["anam_petugas"]);
 		$anam_pengobatan=trim(@$_POST["anam_pengobatan"]);
 		$anam_pengobatan=str_replace("/(<\/?)(p)([^>]*>)", "",$anam_pengobatan);
-		$anam_pengobatan=str_replace(",", ",",$anam_pengobatan);
-		$anam_pengobatan=str_replace("'", '"',$anam_pengobatan);
 		$anam_perawatan=trim(@$_POST["anam_perawatan"]);
 		$anam_perawatan=str_replace("/(<\/?)(p)([^>]*>)", "",$anam_perawatan);
-		$anam_perawatan=str_replace(",", ",",$anam_perawatan);
-		$anam_perawatan=str_replace("'", '"',$anam_perawatan);
 		$anam_terapi=trim(@$_POST["anam_terapi"]);
 		$anam_terapi=str_replace("/(<\/?)(p)([^>]*>)", "",$anam_terapi);
-		$anam_terapi=str_replace(",", ",",$anam_terapi);
-		$anam_terapi=str_replace("'", '"',$anam_terapi);
 		$anam_alergi=trim(@$_POST["anam_alergi"]);
 		$anam_alergi=str_replace("/(<\/?)(p)([^>]*>)", "",$anam_alergi);
-		$anam_alergi=str_replace(",", ",",$anam_alergi);
-		$anam_alergi=str_replace("'", '"',$anam_alergi);
 		$anam_obatalergi=trim(@$_POST["anam_obatalergi"]);
 		$anam_obatalergi=str_replace("/(<\/?)(p)([^>]*>)", "",$anam_obatalergi);
-		$anam_obatalergi=str_replace(",", ",",$anam_obatalergi);
-		$anam_obatalergi=str_replace("'", '"',$anam_obatalergi);
 		$anam_efekobatalergi=trim(@$_POST["anam_efekobatalergi"]);
 		$anam_efekobatalergi=str_replace("/(<\/?)(p)([^>]*>)", "",$anam_efekobatalergi);
-		$anam_efekobatalergi=str_replace(",", ",",$anam_efekobatalergi);
-		$anam_efekobatalergi=str_replace("'", '"',$anam_efekobatalergi);
 		$anam_hamil=trim(@$_POST["anam_hamil"]);
 		$anam_hamil=str_replace("/(<\/?)(p)([^>]*>)", "",$anam_hamil);
-		$anam_hamil=str_replace(",", ",",$anam_hamil);
-		$anam_hamil=str_replace("'", '"',$anam_hamil);
 		$anam_kb=trim(@$_POST["anam_kb"]);
 		$anam_kb=str_replace("/(<\/?)(p)([^>]*>)", "",$anam_kb);
-		$anam_kb=str_replace(",", ",",$anam_kb);
-		$anam_kb=str_replace("'", '"',$anam_kb);
 		$anam_harapan=trim(@$_POST["anam_harapan"]);
 		$anam_harapan=str_replace("/(<\/?)(p)([^>]*>)", "",$anam_harapan);
-		$anam_harapan=str_replace(",", ",",$anam_harapan);
-		$anam_harapan=str_replace("'", '"',$anam_harapan);
-		$result = $this->m_anamnesa->anamnesa_update($anam_id ,$anam_cust ,$anam_tanggal ,$anam_petugas ,$anam_pengobatan ,$anam_perawatan ,$anam_terapi ,$anam_alergi ,$anam_obatalergi ,$anam_efekobatalergi ,$anam_hamil ,$anam_kb ,$anam_harapan      );
+
+		$result = $this->m_anamnesa->anamnesa_update($anam_id ,$anam_cust ,$anam_tanggal ,$anam_petugas ,$anam_pengobatan ,$anam_perawatan ,
+													 $anam_terapi ,$anam_alergi ,$anam_obatalergi ,$anam_efekobatalergi ,$anam_hamil ,$anam_kb ,
+													 $anam_harapan      );
 		echo $result;
 	}
 	
@@ -174,32 +166,25 @@ class C_anamnesa extends Controller {
 		$anam_petugas=trim(@$_POST["anam_petugas"]);
 		$anam_pengobatan=trim(@$_POST["anam_pengobatan"]);
 		$anam_pengobatan=str_replace("/(<\/?)(p)([^>]*>)", "",$anam_pengobatan);
-		$anam_pengobatan=str_replace("'", '"',$anam_pengobatan);
 		$anam_perawatan=trim(@$_POST["anam_perawatan"]);
 		$anam_perawatan=str_replace("/(<\/?)(p)([^>]*>)", "",$anam_perawatan);
-		$anam_perawatan=str_replace("'", '"',$anam_perawatan);
 		$anam_terapi=trim(@$_POST["anam_terapi"]);
 		$anam_terapi=str_replace("/(<\/?)(p)([^>]*>)", "",$anam_terapi);
-		$anam_terapi=str_replace("'", '"',$anam_terapi);
 		$anam_alergi=trim(@$_POST["anam_alergi"]);
 		$anam_alergi=str_replace("/(<\/?)(p)([^>]*>)", "",$anam_alergi);
-		$anam_alergi=str_replace("'", '"',$anam_alergi);
 		$anam_obatalergi=trim(@$_POST["anam_obatalergi"]);
 		$anam_obatalergi=str_replace("/(<\/?)(p)([^>]*>)", "",$anam_obatalergi);
-		$anam_obatalergi=str_replace("'", '"',$anam_obatalergi);
 		$anam_efekobatalergi=trim(@$_POST["anam_efekobatalergi"]);
 		$anam_efekobatalergi=str_replace("/(<\/?)(p)([^>]*>)", "",$anam_efekobatalergi);
-		$anam_efekobatalergi=str_replace("'", '"',$anam_efekobatalergi);
 		$anam_hamil=trim(@$_POST["anam_hamil"]);
 		$anam_hamil=str_replace("/(<\/?)(p)([^>]*>)", "",$anam_hamil);
-		$anam_hamil=str_replace("'", '"',$anam_hamil);
 		$anam_kb=trim(@$_POST["anam_kb"]);
 		$anam_kb=str_replace("/(<\/?)(p)([^>]*>)", "",$anam_kb);
-		$anam_kb=str_replace("'", '"',$anam_kb);
 		$anam_harapan=trim(@$_POST["anam_harapan"]);
 		$anam_harapan=str_replace("/(<\/?)(p)([^>]*>)", "",$anam_harapan);
-		$anam_harapan=str_replace("'", '"',$anam_harapan);
-		$result=$this->m_anamnesa->anamnesa_create($anam_cust ,$anam_tanggal ,$anam_petugas ,$anam_pengobatan ,$anam_perawatan ,$anam_terapi ,$anam_alergi ,$anam_obatalergi ,$anam_efekobatalergi ,$anam_hamil ,$anam_kb ,$anam_harapan );
+		
+		$result=$this->m_anamnesa->anamnesa_create($anam_cust ,$anam_tanggal ,$anam_petugas ,$anam_pengobatan ,$anam_perawatan ,$anam_terapi ,
+												   $anam_alergi ,$anam_obatalergi ,$anam_efekobatalergi ,$anam_hamil ,$anam_kb ,$anam_harapan );
 		echo $result;
 	}
 
@@ -220,35 +205,30 @@ class C_anamnesa extends Controller {
 		$anam_petugas=trim(@$_POST["anam_petugas"]);
 		$anam_pengobatan=trim(@$_POST["anam_pengobatan"]);
 		$anam_pengobatan=str_replace("/(<\/?)(p)([^>]*>)", "",$anam_pengobatan);
-		$anam_pengobatan=str_replace("'", '"',$anam_pengobatan);
 		$anam_perawatan=trim(@$_POST["anam_perawatan"]);
 		$anam_perawatan=str_replace("/(<\/?)(p)([^>]*>)", "",$anam_perawatan);
-		$anam_perawatan=str_replace("'", '"',$anam_perawatan);
 		$anam_terapi=trim(@$_POST["anam_terapi"]);
 		$anam_terapi=str_replace("/(<\/?)(p)([^>]*>)", "",$anam_terapi);
-		$anam_terapi=str_replace("'", '"',$anam_terapi);
 		$anam_alergi=trim(@$_POST["anam_alergi"]);
 		$anam_alergi=str_replace("/(<\/?)(p)([^>]*>)", "",$anam_alergi);
-		$anam_alergi=str_replace("'", '"',$anam_alergi);
 		$anam_obatalergi=trim(@$_POST["anam_obatalergi"]);
 		$anam_obatalergi=str_replace("/(<\/?)(p)([^>]*>)", "",$anam_obatalergi);
-		$anam_obatalergi=str_replace("'", '"',$anam_obatalergi);
 		$anam_efekobatalergi=trim(@$_POST["anam_efekobatalergi"]);
 		$anam_efekobatalergi=str_replace("/(<\/?)(p)([^>]*>)", "",$anam_efekobatalergi);
-		$anam_efekobatalergi=str_replace("'", '"',$anam_efekobatalergi);
 		$anam_hamil=trim(@$_POST["anam_hamil"]);
 		$anam_hamil=str_replace("/(<\/?)(p)([^>]*>)", "",$anam_hamil);
-		$anam_hamil=str_replace("'", '"',$anam_hamil);
 		$anam_kb=trim(@$_POST["anam_kb"]);
 		$anam_kb=str_replace("/(<\/?)(p)([^>]*>)", "",$anam_kb);
-		$anam_kb=str_replace("'", '"',$anam_kb);
 		$anam_harapan=trim(@$_POST["anam_harapan"]);
 		$anam_harapan=str_replace("/(<\/?)(p)([^>]*>)", "",$anam_harapan);
-		$anam_harapan=str_replace("'", '"',$anam_harapan);
+		
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_anamnesa->anamnesa_search($anam_id ,$anam_cust ,$anam_tanggal ,$anam_petugas ,$anam_pengobatan ,$anam_perawatan ,$anam_terapi ,$anam_alergi ,$anam_obatalergi ,$anam_efekobatalergi ,$anam_hamil ,$anam_kb ,$anam_harapan ,$start,$end);
+		
+		$result = $this->m_anamnesa->anamnesa_search($anam_id ,$anam_cust ,$anam_tanggal ,$anam_petugas ,$anam_pengobatan ,$anam_perawatan ,
+													 $anam_terapi ,$anam_alergi ,$anam_obatalergi ,$anam_efekobatalergi ,$anam_hamil ,$anam_kb ,
+													 $anam_harapan ,$start,$end);
 		echo $result;
 	}
 
@@ -261,59 +241,77 @@ class C_anamnesa extends Controller {
 		$anam_petugas=trim(@$_POST["anam_petugas"]);
 		$anam_pengobatan=trim(@$_POST["anam_pengobatan"]);
 		$anam_pengobatan=str_replace("/(<\/?)(p)([^>]*>)", "",$anam_pengobatan);
-		$anam_pengobatan=str_replace("'", '"',$anam_pengobatan);
 		$anam_perawatan=trim(@$_POST["anam_perawatan"]);
 		$anam_perawatan=str_replace("/(<\/?)(p)([^>]*>)", "",$anam_perawatan);
-		$anam_perawatan=str_replace("'", '"',$anam_perawatan);
 		$anam_terapi=trim(@$_POST["anam_terapi"]);
 		$anam_terapi=str_replace("/(<\/?)(p)([^>]*>)", "",$anam_terapi);
-		$anam_terapi=str_replace("'", '"',$anam_terapi);
 		$anam_alergi=trim(@$_POST["anam_alergi"]);
 		$anam_alergi=str_replace("/(<\/?)(p)([^>]*>)", "",$anam_alergi);
-		$anam_alergi=str_replace("'", '"',$anam_alergi);
 		$anam_obatalergi=trim(@$_POST["anam_obatalergi"]);
 		$anam_obatalergi=str_replace("/(<\/?)(p)([^>]*>)", "",$anam_obatalergi);
-		$anam_obatalergi=str_replace("'", '"',$anam_obatalergi);
 		$anam_efekobatalergi=trim(@$_POST["anam_efekobatalergi"]);
 		$anam_efekobatalergi=str_replace("/(<\/?)(p)([^>]*>)", "",$anam_efekobatalergi);
-		$anam_efekobatalergi=str_replace("'", '"',$anam_efekobatalergi);
 		$anam_hamil=trim(@$_POST["anam_hamil"]);
 		$anam_hamil=str_replace("/(<\/?)(p)([^>]*>)", "",$anam_hamil);
-		$anam_hamil=str_replace("'", '"',$anam_hamil);
 		$anam_kb=trim(@$_POST["anam_kb"]);
 		$anam_kb=str_replace("/(<\/?)(p)([^>]*>)", "",$anam_kb);
-		$anam_kb=str_replace("'", '"',$anam_kb);
 		$anam_harapan=trim(@$_POST["anam_harapan"]);
 		$anam_harapan=str_replace("/(<\/?)(p)([^>]*>)", "",$anam_harapan);
-		$anam_harapan=str_replace("'", '"',$anam_harapan);
+		
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$result = $this->m_anamnesa->anamnesa_print($anam_id ,$anam_cust ,$anam_tanggal ,$anam_petugas ,$anam_pengobatan ,$anam_perawatan ,$anam_terapi ,$anam_alergi ,$anam_obatalergi ,$anam_efekobatalergi ,$anam_hamil ,$anam_kb ,$anam_harapan ,$option,$filter);
+		$result = $this->m_anamnesa->anamnesa_print($anam_id ,$anam_cust ,$anam_tanggal ,$anam_petugas ,$anam_pengobatan ,$anam_perawatan ,
+													$anam_terapi ,$anam_alergi ,$anam_obatalergi ,$anam_efekobatalergi ,$anam_hamil ,$anam_kb ,
+													$anam_harapan ,$option,$filter);
 		$nbrows=$result->num_rows();
-		$totcolumn=18;
+		$totcolumn=13;
    		/* We now have our array, let's build our HTML file */
 		$file = fopen("anamnesalist.html",'w');
-		fwrite($file, "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' /><title>Printing the Anamnesa Grid</title><link rel='stylesheet' type='text/css' href='assets/modules/main/css/printstyle.css'/></head>");
-		fwrite($file, "<body><table summary='Anamnesa List'><caption>ANAMNESA</caption><thead><tr><th scope='col'>Anam Id</th><th scope='col'>Anam Cust</th><th scope='col'>Anam Tanggal</th><th scope='col'>Anam Petugas</th><th scope='col'>Anam Pengobatan</th><th scope='col'>Anam Perawatan</th><th scope='col'>Anam Terapi</th><th scope='col'>Anam Alergi</th><th scope='col'>Anam Obatalergi</th><th scope='col'>Anam Efekobatalergi</th><th scope='col'>Anam Hamil</th><th scope='col'>Anam Kb</th><th scope='col'>Anam Harapan</th><th scope='col'>Anam Creator</th><th scope='col'>Anam Date Create</th><th scope='col'>Anam Update</th><th scope='col'>Anam Date Update</th><th scope='col'>Anam Revised</th></tr></thead><tfoot><tr><th scope='row'>Total</th><td colspan='$totcolumn'>");
+		fwrite($file, "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' /><title>Daftar Anamnesa</title><link rel='stylesheet' type='text/css' href='assets/modules/main/css/printstyle.css'/></head>");
+		fwrite($file, "<body onload='window.print()'>
+						<table summary='Anamnesa List'>
+						<caption>Daftar Anamnesa</caption>
+						<thead>
+							<tr>
+								<th scope='col'>No</th>
+								<th scope='col'>No Cust</th>
+								<th scope='col'>Customer</th>
+								<th scope='col'>Tanggal</th>
+								<th scope='col'>Petugas</th>
+								<th scope='col'>Pengobatan</th>
+								<th scope='col'>Perawatan</th>
+								<th scope='col'>Terapi</th>
+								<th scope='col'>Alergi</th>
+								<th scope='col'>Alergi terhadap Obat</th>
+								<th scope='col'>Efek Alergi</th>
+								<th scope='col'>Hamil</th>
+								<th scope='col'>Alat KB yang digunakan</th>
+								<th scope='col'>Harapan</th>
+							</tr>
+						</thead>
+						<tfoot><tr><th scope='row'>Total</th><td colspan='$totcolumn'>");
 		fwrite($file, $nbrows);
 		fwrite($file, " Anamnesa</td></tr></tfoot><tbody>");
 		$i=0;
 		if($nbrows>0){
 			foreach($result->result_array() as $data){
+				$i++;
 				fwrite($file,'<tr');
 				if($i%1==0){
 					fwrite($file," class='odd'");
 				}
 			
-				fwrite($file, "><th scope='row' id='r97'>");
-				fwrite($file, $data['anam_id']);
-				fwrite($file,"</th><td>");
-				fwrite($file, $data['anam_cust']);
+				fwrite($file, "><td>");
+				fwrite($file, $i);
+				fwrite($file,"</td><td>");
+				fwrite($file, $data['cust_no']);
+				fwrite($file,"</td><td>");
+				fwrite($file, $data['cust_nama']);
 				fwrite($file,"</td><td>");
 				fwrite($file, $data['anam_tanggal']);
 				fwrite($file,"</td><td>");
-				fwrite($file, $data['anam_petugas']);
+				fwrite($file, $data['karyawan_nama']);
 				fwrite($file,"</td><td>");
 				fwrite($file, $data['anam_pengobatan']);
 				fwrite($file,"</td><td>");
@@ -332,16 +330,6 @@ class C_anamnesa extends Controller {
 				fwrite($file, $data['anam_kb']);
 				fwrite($file,"</td><td>");
 				fwrite($file, $data['anam_harapan']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['anam_creator']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['anam_date_create']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['anam_update']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['anam_date_update']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['anam_revised']);
 				fwrite($file, "</td></tr>");
 			}
 		}
@@ -388,8 +376,11 @@ class C_anamnesa extends Controller {
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$query = $this->m_anamnesa->anamnesa_export_excel($anam_id ,$anam_cust ,$anam_tanggal ,$anam_petugas ,$anam_pengobatan ,$anam_perawatan ,$anam_terapi ,$anam_alergi ,$anam_obatalergi ,$anam_efekobatalergi ,$anam_hamil ,$anam_kb ,$anam_harapan ,$option,$filter);
+		$query = $this->m_anamnesa->anamnesa_export_excel($anam_id ,$anam_cust ,$anam_tanggal ,$anam_petugas ,$anam_pengobatan ,$anam_perawatan ,
+														  $anam_terapi ,$anam_alergi ,$anam_obatalergi ,$anam_efekobatalergi ,$anam_hamil ,$anam_kb ,
+														  $anam_harapan ,$option,$filter);
 		
+		$this->load->plugin('to_excel');
 		to_excel($query,"anamnesa"); 
 		echo '1';
 			

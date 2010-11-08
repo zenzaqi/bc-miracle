@@ -112,7 +112,7 @@ Ext.onReady(function(){
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really update something you haven\'t selected?',
+				msg: 'Tidak ada data yang dipilih untuk diedit',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -136,7 +136,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'produk_id'
 		},[
-		/* dataIndex => insert intohpp_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'hpp_produk_id', type: 'int', mapping: 'produk_id'}, 
 			{name: 'hpp_produk_nama', type: 'string', mapping: 'produk_nama'}, 
 			{name: 'hpp_produk_kode', type: 'string', mapping: 'produk_kode'}, 
@@ -170,7 +169,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'produk_id'
 		},[
-		/* dataIndex => insert intohpp_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'produk_id', type: 'int', mapping: 'produk_id'}, 
 			{name: 'produk_kode', type: 'string', mapping: 'produk_kode'}, 
 			{name: 'produk_jenis', type: 'string', mapping: 'produk_jenis'}, 
@@ -558,29 +556,14 @@ Ext.onReady(function(){
 			tanggal_end		: hpp_tanggal_end_search
 		};
 		
-		Ext.MessageBox.show({
-		   msg: 'Sedang memproses data, silakan tunggu...',
-		   progressText: 'proses...',
-		   width:350,
-		   wait:true
-		});
-		
 		// Cause the datastore to do another query : 
-		hpp_DataStore.reload({
-			params: {start: 0, limit: pageS},
-			callback: function(r,opt,success){
-				if(success==true){
-					Ext.MessageBox.hide();
-				}					 
-			}
-		});
+		hpp_DataStore.load({params: {start: 0, limit: pageS}});
 	}
 		
 	/* Function for reset search result */
 	function hpp_reset_search(){
 		// reset the store parameters
-		hpp_DataStore.baseParams = { task: 'LIST' };
-		// Cause the datastore to do another query : 
+		hpp_DataStore.baseParams = { task: 'LIST', start: 0, limit: pageS };
 		hpp_DataStore.reload({params: {start: 0, limit: pageS}});
 		hpp_searchWindow.close();
 	};
@@ -747,8 +730,7 @@ Ext.onReady(function(){
 		url: 'index.php?c=c_hpp&m=get_action',
 		params: {
 			task: "PRINT",
-		  	query: searchquery,                    		// if we are doing a quicksearch, use this
-			//if we are doing advanced search, use this
+		  	query: searchquery,                    		
 			hpp_produk_id : hpp_produk_id_print,
 			hpp_produk_nama : hpp_produk_nama_print,
 			satuan_id : satuan_id_print,
@@ -761,12 +743,12 @@ Ext.onReady(function(){
 		  	switch(result){
 		  	case 1:
 				win = window.open('./print/hpp_printlist.html','hpplist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
-				win.print();
+				
 				break;
 		  	default:
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Unable to print the grid!',
+					msg: 'Tidak bisa mencetak data!',
 					buttons: Ext.MessageBox.OK,
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING
@@ -778,7 +760,7 @@ Ext.onReady(function(){
 		  	var result=response.responseText;
 			Ext.MessageBox.show({
 			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
+			   msg: 'Tidak bisa terhubung dengan database server',
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR
@@ -810,8 +792,7 @@ Ext.onReady(function(){
 		url: 'index.php?c=c_hpp&m=get_action',
 		params: {
 			task: "EXCEL",
-		  	query: searchquery,                    		// if we are doing a quicksearch, use this
-			//if we are doing advanced search, use this
+		  	query: searchquery,                    		
 			hpp_produk_id : hpp_produk_id_2excel,
 			hpp_produk_nama : hpp_produk_nama_2excel,
 			satuan_id : satuan_id_2excel,
@@ -828,7 +809,7 @@ Ext.onReady(function(){
 		  	default:
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Unable to convert excel the grid!',
+					msg: 'Tidak bisa meng-export data ke dalam format excel!',
 					buttons: Ext.MessageBox.OK,
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING
@@ -840,7 +821,7 @@ Ext.onReady(function(){
 		  	var result=response.responseText;
 			Ext.MessageBox.show({
 			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
+			   msg: 'Tidak bisa terhubung dengan database server',
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR
@@ -851,6 +832,17 @@ Ext.onReady(function(){
 	/*End of Function */
 	
 	hpp_searchWindow.show();
+	
+	hpp_DataStore.on('beforeload',function(){
+		Ext.MessageBox.show({
+		   msg: 'Sedang memproses data, silakan tunggu...',
+		   progressText: 'proses...',
+		   width:350,
+		   wait:true
+		});
+	});
+	
+	hpp_DataStore.on('load',function(){ Ext.MessageBox.hide(); });
 	
 	//EVENT
 	/*hpp_produk_kode_filterField.on("select", function(){

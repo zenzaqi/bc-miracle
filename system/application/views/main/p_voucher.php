@@ -25,7 +25,7 @@
     	<td colspan="8" nowrap="nowrap">
         	<div style="float:left; margin-left:10px; margin-top:5px;" > 
              <center><b>
-             <h1>History Point</h1></b></center>
+             <h1>History Penukaran Poin</h1></b></center>
             </div>
         </td>
         </tr>
@@ -37,7 +37,7 @@
             <th scope='col'>Poin</th>
             <th scope='col'>Nilai (Rp)</th>
             <th scope='col'>Kadaluarsa</th>
-            <th scope='col'>No Customer</th>
+            <th scope='col'>No Member</th>
             <th scope='col'>Jenis Transaksi</th>
         </tr>
     </thead>

@@ -39,58 +39,91 @@ class M_anamnesa extends Model{
 		}
 		//end of function
 		
-		//get master id, note : not done yet
-		function get_master_id() {
-			$query = "SELECT max(anam_id) as master_id from anamnesa";
-			$result = $this->db->query($query);
-			if($result->num_rows()){
-				$data=$result->row();
-				$master_id=$data->master_id;
-				return $master_id;
-			}else{
-				return '0';
-			}
-		}
-		//eof
-		
-		//purge all detail from master
-		function detail_anamnesa_problem_purge($master_id){
-			$sql="DELETE from anamnesa_problem where panam_master='".$master_id."'";
-			$result=$this->db->query($sql);
-		}
-		//*eof
-		
-		//insert detail record
-		function detail_anamnesa_problem_insert($panam_id ,$panam_master ,$panam_problem ,$panam_lamaproblem ,$panam_aksiproblem ,$panam_aksiket ){
-			//if master id not capture from view then capture it from max pk from master table
-			if($panam_master=="" || $panam_master==NULL){
-				$panam_master=$this->get_master_id();
+		function get_petugas($filter,$start,$end){
+			
+			$query = "SELECT karyawan_id,karyawan_nama,jabatan_nama FROM karyawan,jabatan 
+						WHERE karyawan_jabatan=jabatan_id AND 
+						(jabatan_nama='Dokter' OR jabatan_nama='Suster' OR jabatan_nama='Therapist') ";
+			
+			if ($filter<>""){
+				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
+				$query .= " (karyawan_nama LIKE '%".addslashes($filter)."%' OR 
+							 jabatan_nama LIKE '%".addslashes($filter)."%')";
 			}
 			
-			$data = array(
-				"panam_master"=>$panam_master, 
-				"panam_problem"=>$panam_problem, 
-				"panam_lamaproblem"=>$panam_lamaproblem, 
-				"panam_aksiproblem"=>$panam_aksiproblem, 
-				"panam_aksiket"=>$panam_aksiket 
-			);
-			$this->db->insert('anamnesa_problem', $data); 
-			if($this->db->affected_rows())
-				return '1';
-			else
-				return '0';
+			$result = $this->db->query($query);
+			$nbrows = $result->num_rows();
+			$limit = $query." LIMIT ".$start.",".$end;			
+			$result = $this->db->query($limit);  
+			
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+			
+		}
+		
+				
+		//insert detail record
+		function detail_anamnesa_problem_insert($panam_id ,$panam_master ,$panam_problem ,$panam_lamaproblem ,$panam_aksiproblem ,$panam_aksiket ){
+				
+			$query="";
+		   	for($i = 0; $i < sizeof($panam_id); $i++){
+
+				$data = array(
+					"panam_master"=>$panam_master, 
+					"panam_problem"=>$panam_problem[$i], 
+					"panam_lamaproblem"=>$panam_lamaproblem[$i], 
+					"panam_aksiproblem"=>$panam_aksiproblem[$i], 
+					"panam_aksiket"=>$panam_aksiket[$i]
+				);
+
+				if($panam_id[$i]==0){
+					$this->db->insert('anamnesa_problem', $data); 
+					
+					$query = $query.$this->db->insert_id();
+					if($i<sizeof($panam_id)-1){
+						$query = $query . ",";
+					} 
+					
+				}else{
+					$query = $query.$panam_id[$i];
+					if($i<sizeof($panam_id)-1){
+						$query = $query . ",";
+					} 
+					$this->db->where('panam_id', $panam_id[$i]);
+					$this->db->update('anamnesa_problem', $data);
+				}
+			}
+			
+			if($query<>""){
+				$sql="DELETE FROM anamnesa_problem WHERE  panam_master='".$panam_master."' AND
+						panam_id NOT IN (".$query.")";
+				$this->db->query($sql);
+			}
+			
+			return '1';
 
 		}
 		//end of function
 		
 		//function for get list record
 		function anamnesa_list($filter,$start,$end){
-			$query = "SELECT * FROM anamnesa";
+			$query = "SELECT * FROM anamnesa,customer,karyawan
+						WHERE anam_cust=cust_id AND anam_petugas=karyawan_id";
 			
 			// For simple search
 			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (anam_id LIKE '%".addslashes($filter)."%' OR anam_cust LIKE '%".addslashes($filter)."%' OR anam_tanggal LIKE '%".addslashes($filter)."%' OR anam_petugas LIKE '%".addslashes($filter)."%' OR anam_pengobatan LIKE '%".addslashes($filter)."%' OR anam_perawatan LIKE '%".addslashes($filter)."%' OR anam_terapi LIKE '%".addslashes($filter)."%' OR anam_alergi LIKE '%".addslashes($filter)."%' OR anam_obatalergi LIKE '%".addslashes($filter)."%' OR anam_efekobatalergi LIKE '%".addslashes($filter)."%' OR anam_hamil LIKE '%".addslashes($filter)."%' OR anam_kb LIKE '%".addslashes($filter)."%' OR anam_harapan LIKE '%".addslashes($filter)."%' )";
+				$query .= " (cust_nama LIKE '%".addslashes($filter)."%' OR 
+							 karyawan_nama LIKE '%".addslashes($filter)."%' OR 
+							 anam_alergi LIKE '%".addslashes($filter)."%' OR 
+							 anam_obatalergi LIKE '%".addslashes($filter)."%'  )";
 			}
 			
 			$result = $this->db->query($query);
@@ -110,12 +143,11 @@ class M_anamnesa extends Model{
 		}
 		
 		//function for update record
-		function anamnesa_update($anam_id ,$anam_cust ,$anam_tanggal ,$anam_petugas ,$anam_pengobatan ,$anam_perawatan ,$anam_terapi ,$anam_alergi ,$anam_obatalergi ,$anam_efekobatalergi ,$anam_hamil ,$anam_kb ,$anam_harapan ){
+		function anamnesa_update($anam_id ,$anam_cust ,$anam_tanggal ,$anam_petugas ,$anam_pengobatan ,$anam_perawatan ,$anam_terapi ,$anam_alergi ,
+								 $anam_obatalergi ,$anam_efekobatalergi ,$anam_hamil ,$anam_kb ,$anam_harapan ){
 			$data = array(
 				"anam_id"=>$anam_id, 
-				"anam_cust"=>$anam_cust, 
 				"anam_tanggal"=>$anam_tanggal, 
-				"anam_petugas"=>$anam_petugas, 
 				"anam_pengobatan"=>$anam_pengobatan, 
 				"anam_perawatan"=>$anam_perawatan, 
 				"anam_terapi"=>$anam_terapi, 
@@ -129,11 +161,12 @@ class M_anamnesa extends Model{
 			$this->db->where('anam_id', $anam_id);
 			$this->db->update('anamnesa', $data);
 			
-			return '1';
+			return $anam_id;
 		}
 		
 		//function for create new record
-		function anamnesa_create($anam_cust ,$anam_tanggal ,$anam_petugas ,$anam_pengobatan ,$anam_perawatan ,$anam_terapi ,$anam_alergi ,$anam_obatalergi ,$anam_efekobatalergi ,$anam_hamil ,$anam_kb ,$anam_harapan ){
+		function anamnesa_create($anam_cust ,$anam_tanggal ,$anam_petugas ,$anam_pengobatan ,$anam_perawatan ,$anam_terapi ,$anam_alergi ,
+								 $anam_obatalergi ,$anam_efekobatalergi ,$anam_hamil ,$anam_kb ,$anam_harapan ){
 			$data = array(
 				"anam_cust"=>$anam_cust, 
 				"anam_tanggal"=>$anam_tanggal, 
@@ -150,7 +183,7 @@ class M_anamnesa extends Model{
 			);
 			$this->db->insert('anamnesa', $data); 
 			if($this->db->affected_rows())
-				return '1';
+				return $this->db->insert_id();
 			else
 				return '0';
 		}
@@ -181,14 +214,13 @@ class M_anamnesa extends Model{
 		}
 		
 		//function for advanced search record
-		function anamnesa_search($anam_id ,$anam_cust ,$anam_tanggal ,$anam_petugas ,$anam_pengobatan ,$anam_perawatan ,$anam_terapi ,$anam_alergi ,$anam_obatalergi ,$anam_efekobatalergi ,$anam_hamil ,$anam_kb ,$anam_harapan ,$start,$end){
+		function anamnesa_search($anam_id ,$anam_cust ,$anam_tanggal ,$anam_petugas ,$anam_pengobatan ,$anam_perawatan ,$anam_terapi ,$anam_alergi ,
+								 $anam_obatalergi ,$anam_efekobatalergi ,$anam_hamil ,$anam_kb ,$anam_harapan ,$start,$end){
 			//full query
-			$query="select * from anamnesa";
+			$query = "SELECT * FROM anamnesa,customer,karyawan
+						WHERE anam_cust=cust_id AND anam_petugas=karyawan_id";
 			
-			if($anam_id!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " anam_id LIKE '%".$anam_id."%'";
-			};
+			
 			if($anam_cust!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " anam_cust LIKE '%".$anam_cust."%'";
@@ -255,18 +287,20 @@ class M_anamnesa extends Model{
 		}
 		
 		//function for print record
-		function anamnesa_print($anam_id ,$anam_cust ,$anam_tanggal ,$anam_petugas ,$anam_pengobatan ,$anam_perawatan ,$anam_terapi ,$anam_alergi ,$anam_obatalergi ,$anam_efekobatalergi ,$anam_hamil ,$anam_kb ,$anam_harapan ,$option,$filter){
+		function anamnesa_print($anam_id ,$anam_cust ,$anam_tanggal ,$anam_petugas ,$anam_pengobatan ,$anam_perawatan ,$anam_terapi ,$anam_alergi ,
+								$anam_obatalergi ,$anam_efekobatalergi ,$anam_hamil ,$anam_kb ,$anam_harapan ,$option,$filter){
 			//full query
-			$query="select * from anamnesa";
+			$query = "SELECT * FROM anamnesa,customer,karyawan
+						WHERE anam_cust=cust_id AND anam_petugas=karyawan_id";
+						
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (anam_id LIKE '%".addslashes($filter)."%' OR anam_cust LIKE '%".addslashes($filter)."%' OR anam_tanggal LIKE '%".addslashes($filter)."%' OR anam_petugas LIKE '%".addslashes($filter)."%' OR anam_pengobatan LIKE '%".addslashes($filter)."%' OR anam_perawatan LIKE '%".addslashes($filter)."%' OR anam_terapi LIKE '%".addslashes($filter)."%' OR anam_alergi LIKE '%".addslashes($filter)."%' OR anam_obatalergi LIKE '%".addslashes($filter)."%' OR anam_efekobatalergi LIKE '%".addslashes($filter)."%' OR anam_hamil LIKE '%".addslashes($filter)."%' OR anam_kb LIKE '%".addslashes($filter)."%' OR anam_harapan LIKE '%".addslashes($filter)."%' )";
-				$result = $this->db->query($query);
+				$query .= " (cust_nama LIKE '%".addslashes($filter)."%' OR 
+							 karyawan_nama LIKE '%".addslashes($filter)."%' OR 
+							 anam_alergi LIKE '%".addslashes($filter)."%' OR 
+							 anam_obatalergi LIKE '%".addslashes($filter)."%'  )";
 			} else if($option=='SEARCH'){
-				if($anam_id!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " anam_id LIKE '%".$anam_id."%'";
-				};
+				
 				if($anam_cust!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " anam_cust LIKE '%".$anam_cust."%'";
@@ -315,24 +349,30 @@ class M_anamnesa extends Model{
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " anam_harapan LIKE '%".$anam_harapan."%'";
 				};
-				$result = $this->db->query($query);
+				
 			}
+			$result = $this->db->query($query);
 			return $result;
 		}
 		
 		//function  for export to excel
-		function anamnesa_export_excel($anam_id ,$anam_cust ,$anam_tanggal ,$anam_petugas ,$anam_pengobatan ,$anam_perawatan ,$anam_terapi ,$anam_alergi ,$anam_obatalergi ,$anam_efekobatalergi ,$anam_hamil ,$anam_kb ,$anam_harapan ,$option,$filter){
+		function anamnesa_export_excel($anam_id ,$anam_cust ,$anam_tanggal ,$anam_petugas ,$anam_pengobatan ,$anam_perawatan ,$anam_terapi ,
+									   $anam_alergi ,$anam_obatalergi ,$anam_efekobatalergi ,$anam_hamil ,$anam_kb ,$anam_harapan ,$option,$filter){
 			//full query
-			$query="select * from anamnesa";
+			$query = "SELECT cust_no as 'No Cust', cust_nama 'Customer', anam_tanggal as Tanggal, karyawan_nama as Petugas,
+						anam_pengobatan as Pengobatan, anam_perawatan as Perawatan, anam_terapi as Terapi, anam_alergi as Alergi,
+						anam_obatalergi as 'Alergi terhadap Obat', anam_efekobatalergi as 'Efek Alergi', anam_hamil as Hamil, 
+						anam_kb 'Alat KB yang digunakan', anam_harapan as Harapan FROM anamnesa,customer,karyawan
+						WHERE anam_cust=cust_id AND anam_petugas=karyawan_id";
+						
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (anam_id LIKE '%".addslashes($filter)."%' OR anam_cust LIKE '%".addslashes($filter)."%' OR anam_tanggal LIKE '%".addslashes($filter)."%' OR anam_petugas LIKE '%".addslashes($filter)."%' OR anam_pengobatan LIKE '%".addslashes($filter)."%' OR anam_perawatan LIKE '%".addslashes($filter)."%' OR anam_terapi LIKE '%".addslashes($filter)."%' OR anam_alergi LIKE '%".addslashes($filter)."%' OR anam_obatalergi LIKE '%".addslashes($filter)."%' OR anam_efekobatalergi LIKE '%".addslashes($filter)."%' OR anam_hamil LIKE '%".addslashes($filter)."%' OR anam_kb LIKE '%".addslashes($filter)."%' OR anam_harapan LIKE '%".addslashes($filter)."%' )";
-				$result = $this->db->query($query);
+				$query .= " (cust_nama LIKE '%".addslashes($filter)."%' OR 
+							 karyawan_nama LIKE '%".addslashes($filter)."%' OR 
+							 anam_alergi LIKE '%".addslashes($filter)."%' OR 
+							 anam_obatalergi LIKE '%".addslashes($filter)."%'  )";
 			} else if($option=='SEARCH'){
-				if($anam_id!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " anam_id LIKE '%".$anam_id."%'";
-				};
+				
 				if($anam_cust!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " anam_cust LIKE '%".$anam_cust."%'";
@@ -381,8 +421,9 @@ class M_anamnesa extends Model{
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " anam_harapan LIKE '%".$anam_harapan."%'";
 				};
-				$result = $this->db->query($query);
+				
 			}
+			$result = $this->db->query($query);
 			return $result;
 		}
 		

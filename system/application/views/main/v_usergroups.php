@@ -97,13 +97,12 @@ Ext.onReady(function(){
 			success: function(response){							
 				var result=eval(response.responseText);
 				if(result!==0){
-						Ext.MessageBox.alert(post2db+' OK','Group dan Hak Akses sukses disimpan');
+						Ext.MessageBox.alert(post2db+' OK','Group dan Hak Akses berhasil disimpan');
 						usergroups_DataStore.commitChanges();
 						usergroups_DataStore.reload();
 				}else{
 						Ext.MessageBox.show({
 						   title: 'Warning',
-						   //msg: 'We could\'t not '+msg+' the Master_order_beli.',
 						   msg: 'Group dan Hak Akses tidak bisa disimpan',
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'save',
@@ -114,11 +113,11 @@ Ext.onReady(function(){
 			failure: function(response){
 				var result=response.responseText;
 				Ext.MessageBox.show({
-							   title: 'Error',
-							   msg: 'Could not connect to the database. retry later.',
-							   buttons: Ext.MessageBox.OK,
-							   animEl: 'database',
-							   icon: Ext.MessageBox.ERROR
+					   title: 'Error',
+					   msg: 'Tidak bisa terhubung dengan database server',
+					   buttons: Ext.MessageBox.OK,
+					   animEl: 'database',
+					   icon: Ext.MessageBox.ERROR
 				});	
 			}									    
 		});   
@@ -152,13 +151,10 @@ Ext.onReady(function(){
 				success: function(response){             
 					var result=eval(response.responseText);
 					if(result!==0){
-						permission_purge(result);
-						Ext.MessageBox.alert(post2db+' OK','Group dan Hak Akses sukses disimpan');
-						usergroups_createWindow.hide();
+						permission_insert(result);
 					}else{
 							Ext.MessageBox.show({
 							   title: 'Warning',
-							   //msg: 'We could\'t not '+msg+' the Master_order_beli.',
 							   msg: 'Group dan Hak Akses tidak bisa disimpan',
 							   buttons: Ext.MessageBox.OK,
 							   animEl: 'save',
@@ -170,7 +166,7 @@ Ext.onReady(function(){
 					var result=response.responseText;
 					Ext.MessageBox.show({
 								   title: 'Error',
-								   msg: 'Could not connect to the database. retry later.',
+								   msg: 'Tidak bisa terhubung dengan database server',
 								   buttons: Ext.MessageBox.OK,
 								   animEl: 'database',
 								   icon: Ext.MessageBox.ERROR
@@ -180,7 +176,7 @@ Ext.onReady(function(){
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'Your Form is not valid!.',
+				msg: 'Isian belum sempurna!.',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -208,6 +204,7 @@ Ext.onReady(function(){
 		group_allcreateprivField.setValue(false);
 		group_allupdateprivField.setValue(false);
 		group_alldeleteprivField.setValue(false);
+		group_activeField.setValue('Aktif');
 		
 	}
  	/* End of Function */
@@ -238,7 +235,7 @@ Ext.onReady(function(){
 			post2db='CREATE';
 			msg='created';
 			usergroups_reset_form();
-			group_activeField.setValue('Aktif');
+			
 			usergroups_createWindow.show();
 			permission_DataStore.load({params:{group:0}});
 			//permissionListEditorGrid.reconfigure(permission_DataStore,permission_ColumnModel);
@@ -252,13 +249,13 @@ Ext.onReady(function(){
 	function usergroups_confirm_delete(){
 		// only one usergroups is selected here
 		if(usergroupsListEditorGrid.selModel.getCount() == 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', usergroups_delete);
+			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data berikut?', usergroups_delete);
 		} else if(usergroupsListEditorGrid.selModel.getCount() > 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', usergroups_delete);
+			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data-data berikut?', usergroups_delete);
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really delete something you haven\'t selected?',
+				msg: 'Tidak ada yang dipilih untuk dihapus',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -280,7 +277,7 @@ Ext.onReady(function(){
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really update something you haven\'t selected?',
+				msg: 'Tidak ada data yang dipilih untuk diedit',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -311,7 +308,7 @@ Ext.onReady(function(){
 						default:
 							Ext.MessageBox.show({
 								title: 'Warning',
-								msg: 'Could not delete the entire selection',
+								msg: 'Tidak bisa menghapus data yang diplih',
 								buttons: Ext.MessageBox.OK,
 								animEl: 'save',
 								icon: Ext.MessageBox.WARNING
@@ -323,7 +320,7 @@ Ext.onReady(function(){
 					var result=response.responseText;
 					Ext.MessageBox.show({
 					   title: 'Error',
-					   msg: 'Could not connect to the database. retry later.',
+					   msg: 'Tidak bisa terhubung dengan database server',
 					   buttons: Ext.MessageBox.OK,
 					   animEl: 'database',
 					   icon: Ext.MessageBox.ERROR
@@ -347,7 +344,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'group_id'
 		},[
-		/* dataIndex => insert intousergroups_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'group_id', type: 'int', mapping: 'group_id'},
 			{name: 'group_name', type: 'string', mapping: 'group_name'},
 			{name: 'group_desc', type: 'string', mapping: 'group_desc'},
@@ -374,26 +370,34 @@ Ext.onReady(function(){
 			header: 'Nama Group',
 			dataIndex: 'group_name',
 			width: 150,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_USERGROUP'))){ ?>
+			,
 			editor: new Ext.form.TextField({
 				allowBlank: false,
 				maxLength: 50
           	})
+			<?php } ?>
 		},
 		{
 			header: 'Keterangan',
 			dataIndex: 'group_desc',
 			width: 200,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_USERGROUP'))){ ?>
+			,
 			editor: new Ext.form.TextField({
 				maxLength: 250
           	})
+			<?php } ?>
 		},
 		{
 			header: 'Status',
 			dataIndex: 'group_active',
 			width: 80,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_USERGROUP'))){ ?>
+			,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
 				triggerAction: 'all',
@@ -407,6 +411,7 @@ Ext.onReady(function(){
                	lazyRender:true,
                	listClass: 'x-combo-list-small'
             })
+			<?php } ?>
 		}]
 	);
 	usergroups_ColumnModel.defaultSortable= true;
@@ -431,26 +436,33 @@ Ext.onReady(function(){
 			store: usergroups_DataStore,
 			displayInfo: true
 		}),
-		/* Add Control on ToolBar */
 		tbar: [
+		<?php if(eregi('C',$this->m_security->get_access_group_by_kode('MENU_USERGROUP'))){ ?>
 		{
 			text: 'Add',
 			tooltip: 'Add new record',
 			iconCls:'icon-adds',    				// this is defined in our styles.css
 			handler: display_form_window
-		}, '-',{
+		}, '-',
+		<?php } ?>
+		<?php if(eregi('U|R',$this->m_security->get_access_group_by_kode('MENU_USERGROUP'))){ ?>
+		{
 			text: 'Edit',
 			tooltip: 'Edit selected record',
 			iconCls:'icon-update',
 			handler: usergroups_confirm_update   // Confirm before updating
-		}, '-',{
+		}, '-',
+		<?php } ?>
+		<?php if(eregi('D',$this->m_security->get_access_group_by_kode('MENU_USERGROUP'))){ ?>
+		{
 			text: 'Delete',
 			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
-			disabled: true,
 			handler: usergroups_confirm_delete   // Confirm before deleting
-		}, '-', {
-			text: 'Search',
+		}, '-', 
+		<?php } ?>
+		{
+			text: 'Adv Search',
 			tooltip: 'Advanced Search',
 			iconCls:'icon-search',
 			handler: display_form_search_window 
@@ -484,18 +496,21 @@ Ext.onReady(function(){
 	usergroups_ContextMenu = new Ext.menu.Menu({
 		id: 'usergroups_ListEditorGridContextMenu',
 		items: [
+		<?php if(eregi('U|R',$this->m_security->get_access_group_by_kode('MENU_USERGROUP'))){ ?>
 		{ 
 			text: 'Edit', tooltip: 'Edit selected record', 
 			iconCls:'icon-update',
 			handler: usergroups_confirm_update 
 		},
+		<?php } ?>
+		<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_USERGROUP'))){ ?>
 		{ 
 			text: 'Delete', 
 			tooltip: 'Delete selected record', 
 			iconCls:'icon-delete',
-			disabled: true,
 			handler: usergroups_confirm_delete 
 		},
+		<?php } ?>
 		'-',
 		{ 
 			text: 'Print',
@@ -638,13 +653,12 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'menu_id'
 		},[
-		/* dataIndex => insert intousergroups_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'menu_id', type: 'int', mapping: 'menu_id'},
 			{name: 'menu_parent', type: 'int', mapping: 'menu_parent'},
 			{name: 'menu_position', type: 'int', mapping: 'menu_position'},
 			{name: 'menu_title', type: 'string', mapping: 'menu_title'},
 			{name: 'perm_create', type: 'int', mapping: 'perm_create'},
-			{name: 'perm_update', type: 'int', mapping: 'perm_create'},
+			{name: 'perm_update', type: 'int', mapping: 'perm_update'},
 			{name: 'perm_read', type: 'int', mapping: 'perm_read'},
 			{name: 'perm_delete', type: 'int', mapping: 'perm_delete'},
 		])
@@ -661,7 +675,7 @@ Ext.onReady(function(){
 					return '';
 				else{
 				   params.css += ' x-grid3-check-col-td'; 
-            		return '<div class="x-grid3-check-col'+(v?'-on':'')+' x-grid3-cc-'+this.id+'">&#160;</div>';
+            		return '<div class="x-grid3-check-col'+(v?'-on':'')+' x-grid3-cc-'+record.data.perm_read+'">&#160;</div>';
 				}
 			}
 	});
@@ -675,8 +689,8 @@ Ext.onReady(function(){
 				if(record.data.menu_parent==0)
 					return '';
 				else{
-				   params.css += ' x-grid3-check-col-td'; 
-            		return '<div class="x-grid3-check-col'+(v?'-on':'')+' x-grid3-cc-'+this.id+'">&#160;</div>';
+				   params.css = ' x-grid3-check-col-td'; 
+            		return '<div class="x-grid3-check-col'+(v?'-on':'')+' x-grid3-cc-'+record.data.perm_create+'">&#160;</div>';
 				}
 			}
 	});
@@ -690,8 +704,8 @@ Ext.onReady(function(){
 				if(record.data.menu_parent==0)
 					return '';
 				else{
-				   params.css += ' x-grid3-check-col-td'; 
-            		return '<div class="x-grid3-check-col'+(v?'-on':'')+' x-grid3-cc-'+this.id+'">&#160;</div>';
+				   params.css = ' x-grid3-check-col-td'; 
+            		return '<div class="x-grid3-check-col'+(v?'-on':'')+' x-grid3-cc-'+record.data.perm_update+'">&#160;</div>';
 				}
 			}
 	});
@@ -705,8 +719,8 @@ Ext.onReady(function(){
 				if(record.data.menu_parent==0)
 					return '';
 				else{
-				   	params.css += ' x-grid3-check-col-td'; 
-            		return '<div class="x-grid3-check-col'+(v?'-on':'')+' x-grid3-cc-'+this.id+'">&#160;</div>';
+				   	params.css = ' x-grid3-check-col-td'; 
+            		return '<div class="x-grid3-check-col'+(v?'-on':'')+' x-grid3-cc-'+record.data.perm_delete+'">&#160;</div>';
 				}
 			}
 	});
@@ -745,7 +759,11 @@ Ext.onReady(function(){
 	);
 	
 	
-	function permission_save(pkid){
+	function permission_insert(pkid){
+		
+		 var permission = [];
+		 var menu = [];
+		 
 		for(i=0;i<permission_DataStore.getCount();i++){
 			var perm_priv="";
 			var permission_record=permission_DataStore.getAt(i);
@@ -759,33 +777,42 @@ Ext.onReady(function(){
 				perm_priv=perm_priv+"D";
 			
 			if(perm_priv!==""){
-				Ext.Ajax.request({
-					waitMsg: 'Please wait...',
-					url: 'index.php?c=c_usergroups&m=permission_save',
-					params:{
-						menu_id		: permission_record.data.menu_id,
-						menu_group	: pkid,
-						menu_priv	: perm_priv
-					},
-					timeout: 60000,
-					success: function(response){							
-						var result=eval(response.responseText);
-					},
-					failure: function(response){
-						var result=response.responseText;
-						Ext.MessageBox.show({
-						   title: 'Error',
-						   msg: 'Could not connect to the database. retry later.',
-						   buttons: Ext.MessageBox.OK,
-						   animEl: 'database',
-						   icon: Ext.MessageBox.ERROR
-						});	
-					}		
-				});
+				permission.push(perm_priv);
+				menu.push(permission_record.data.menu_id);
 			}
 		}
 		
-		usergroups_DataStore.reload();
+		var encoded_menu = Ext.encode(menu);
+		var encoded_permission = Ext.encode(permission);
+		
+		
+		Ext.Ajax.request({
+			waitMsg: 'Please wait...',
+			url: 'index.php?c=c_usergroups&m=permission_insert',
+			params:{
+				menu_id		: encoded_menu,
+				menu_group	: pkid,
+				menu_priv	: encoded_permission
+			},
+			timeout: 360000,
+			success: function(response){							
+				var result=eval(response.responseText);
+				Ext.MessageBox.alert(post2db+' OK','Group dan Hak Akses sukses disimpan');
+				usergroups_DataStore.reload();
+				usergroups_createWindow.hide();
+			},
+			failure: function(response){
+				var result=response.responseText;
+				Ext.MessageBox.show({
+				   title: 'Error',
+				   msg: 'Tidak bisa terhubung dengan database server',
+				   buttons: Ext.MessageBox.OK,
+				   animEl: 'database',
+				   icon: Ext.MessageBox.ERROR
+				});	
+			}		
+		});
+
 	}
 	//eof
 	
@@ -797,7 +824,7 @@ Ext.onReady(function(){
 			params:{ menu_group: get_pk_id()},
 			callback: function(opts, success, response){
 				if(success){
-					permission_save(pkid);
+					permission_insert(pkid);
 					usergroups_DataStore.reload();
 				}
 			}
@@ -821,25 +848,7 @@ Ext.onReady(function(){
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true, markDirty: false },
 		autoSave: true,
-	  	width: 590/*,
-		tbar: [
-		{
-			text: 'Add',
-			tooltip: 'Add new record',
-			iconCls:'icon-adds',    				// this is defined in our styles.css
-			handler: ''
-		}, '-',{
-			text: 'Edit',
-			tooltip: 'Edit selected record',
-			iconCls:'icon-update',
-			handler: ''   // Confirm before updating
-		}, '-',{
-			text: 'Delete',
-			tooltip: 'Delete selected record',
-			iconCls:'icon-delete',
-			handler: usergroups_confirm_delete   // Confirm before deleting
-		}
-		]*/
+	  	width: 590
 	});
 	//permissionListEditorGrid.render();
 	/* End of DataStore */
@@ -865,11 +874,15 @@ Ext.onReady(function(){
 			]
 		}]
 		,
-		buttons: [{
+		buttons: [
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_USERGROUP'))){ ?>
+			{
 				text: 'Save and Close',
 				handler: usergroups_create
 			}
-			,{
+			,
+			<?php } ?>
+			{
 				text: 'Cancel',
 				handler: function(){
 					usergroups_createWindow.hide();
@@ -926,7 +939,7 @@ Ext.onReady(function(){
 	/* Function for reset search result */
 	function usergroups_reset_search(){
 		// reset the store parameters
-		usergroups_DataStore.baseParams = { task: 'LIST' };
+		usergroups_DataStore.baseParams = { task: 'LIST', start: 0, limit: pageS };
 		// Cause the datastore to do another query : 
 		usergroups_DataStore.reload({params: {start: 0, limit: pageS}});
 		usergroups_searchWindow.close();
@@ -1054,8 +1067,7 @@ Ext.onReady(function(){
 		url: 'index.php?c=c_usergroups&m=get_action',
 		params: {
 			task: "PRINT",
-		  	query: searchquery,                    		// if we are doing a quicksearch, use this
-			//if we are doing advanced search, use this
+		  	query: searchquery,                    		
 			group_name : group_name_print,
 			group_desc : group_desc_print,
 			group_active : group_active_print,
@@ -1066,12 +1078,11 @@ Ext.onReady(function(){
 		  	switch(result){
 		  	case 1:
 				win = window.open('./usergroupslist.html','usergroupslist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
-				win.print();
 				break;
 		  	default:
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Unable to print the grid!',
+					msg: 'Tidak bisa mencetak data!',
 					buttons: Ext.MessageBox.OK,
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING
@@ -1083,7 +1094,7 @@ Ext.onReady(function(){
 		  	var result=response.responseText;
 			Ext.MessageBox.show({
 			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
+			   msg: 'Tidak bisa terhubung dengan database server',
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR
@@ -1111,8 +1122,7 @@ Ext.onReady(function(){
 		url: 'index.php?c=c_usergroups&m=get_action',
 		params: {
 			task: "EXCEL",
-		  	query: searchquery,                    		// if we are doing a quicksearch, use this
-			//if we are doing advanced search, use this
+		  	query: searchquery,                    		
 			group_name : group_name_2excel,
 			group_desc : group_desc_2excel,
 			group_active : group_active_2excel,
@@ -1127,7 +1137,7 @@ Ext.onReady(function(){
 		  	default:
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Unable to convert excel the grid!',
+					msg: 'Tidak bisa meng-export data ke dalam format excel!',
 					buttons: Ext.MessageBox.OK,
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING
@@ -1139,7 +1149,7 @@ Ext.onReady(function(){
 		  	var result=response.responseText;
 			Ext.MessageBox.show({
 			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
+			   msg: 'Tidak bisa terhubung dengan database server',
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR

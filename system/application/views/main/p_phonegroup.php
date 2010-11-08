@@ -15,18 +15,28 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Phonegroup List</title>
+<title>Daftar Phonegroup</title>
 <link rel='stylesheet' type='text/css' href='../assets/modules/main/css/printstyle.css'/>
 </head>
 <table summary='Phonegroup List'>
-	<caption>Phonegroup List</caption>
-	<thead><tr><th scope='col'>No</th><th scope='col'>Phonegroup Id</th><th scope='col'>Phonegroup Nama</th><th scope='col'>Phonegroup Detail</th><th scope='col'>Phonegroup Creator</th><th scope='col'>Phonegroup Date Create</th><th scope='col'>Phonegroup Update</th><th scope='col'>Phonegroup Date Update</th><th scope='col'>Phonegroup Revised</th></tr></thead>
-	<tfoot><tr><th scope='row'>Total</th><td colspan='8'><?php echo count($data_print); ?></td></tr></tfoot>
+	<caption>Daftar Phonegroup</caption>
+	<thead>
+    	<tr>
+        	<th scope='col'>No</th>
+            <th scope='col'>Nama</th>
+            <th scope='col'>Keterangan</th>
+    	</tr>
+	</thead>
+	<tfoot><tr><th scope='row'>Total</th><td colspan="2" ><?php echo count($data_print); ?></td></tr></tfoot>
 	<tbody>
 		<?php $i=0; foreach($data_print as $print) { $i++; ?>
-		<tr><td><? echo $i; ?></td><td><?php echo $print->phonegroup_id; ?></td><td><?php echo $print->phonegroup_nama; ?></td><td><?php echo $print->phonegroup_detail; ?></td><td><?php echo $print->phonegroup_creator; ?></td><td><?php echo $print->phonegroup_date_create; ?></td><td><?php echo $print->phonegroup_update; ?></td><td><?php echo $print->phonegroup_date_update; ?></td><td><?php echo $print->phonegroup_revised; ?></td></tr>
+		<tr>
+        	<td><? echo $i; ?></td>
+            <td><?php echo $print->phonegroup_nama; ?></td>
+            <td><?php echo $print->phonegroup_detail; ?></td>
+        </tr>
 		<?php } ?>
 	</tbody>
-<body>
+<body onload='window.print()'>
 </body>
 </html>

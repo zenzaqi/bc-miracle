@@ -303,7 +303,7 @@ Ext.onReady(function(){
 								var result=response.responseText;
 								Ext.MessageBox.show({
 								   title: 'Error',
-								   msg: 'Could not connect to the database. retry later.',
+								   msg: 'Tidak bisa terhubung dengan database server',
 								   buttons: Ext.MessageBox.OK,
 								   animEl: 'database',
 								   icon: Ext.MessageBox.ERROR
@@ -435,7 +435,7 @@ Ext.onReady(function(){
 							var result=response.responseText;
 							Ext.MessageBox.show({
 							   title: 'Error',
-							   msg: 'Could not connect to the database. retry later.',
+							   msg: 'Tidak bisa terhubung dengan database server',
 							   buttons: Ext.MessageBox.OK,
 							   animEl: 'database',
 							   icon: Ext.MessageBox.ERROR
@@ -604,7 +604,7 @@ Ext.onReady(function(){
                     var result=response.responseText;
                     Ext.MessageBox.show({
                            title: 'Error',
-                           msg: 'Could not connect to the database. retry later.',
+                           msg: 'Tidak bisa terhubung dengan database server',
                            buttons: Ext.MessageBox.OK,
                            animEl: 'database',
                            icon: Ext.MessageBox.ERROR
@@ -805,7 +805,7 @@ Ext.onReady(function(){
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-//				msg: 'You can\'t really update something you haven\'t selected?',
+//				msg: 'Tidak ada data yang dipilih untuk diedit',
 				msg: 'Anda belum memilih data yang akan diedit',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
@@ -909,7 +909,6 @@ Ext.onReady(function(){
 			root: 'results',
 			totalProperty: 'total'
 		},[
-		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
 			{name: 'dokter_display', type: 'string', mapping: 'karyawan_nama'},
 			{name: 'dokter_username', type: 'string', mapping: 'karyawan_username'},
 			{name: 'dokter_value', type: 'int', mapping: 'karyawan_id'},
@@ -944,7 +943,6 @@ Ext.onReady(function(){
 			root: 'results',
 			totalProperty: 'total'
 		},[
-		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
 			{name: 'terapis_display', type: 'string', mapping: 'karyawan_nama'},
 			{name: 'terapis_username', type: 'string', mapping: 'karyawan_username'},
 			{name: 'terapis_value', type: 'int', mapping: 'karyawan_id'},
@@ -2048,7 +2046,7 @@ Ext.onReady(function(){
 							var result=response.responseText;
 							Ext.MessageBox.show({
 							   title: 'Error',
-							   msg: 'Could not connect to the database. retry later.',
+							   msg: 'Tidak bisa terhubung dengan database server',
 							   buttons: Ext.MessageBox.OK,
 							   animEl: 'database',
 							   icon: Ext.MessageBox.ERROR
@@ -2073,7 +2071,7 @@ Ext.onReady(function(){
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-//				msg: 'You can\'t really delete something you haven\'t selected?',
+//				msg: 'Tidak ada yang dipilih untuk dihapus',
 				msg: 'Anda belum memilih data yang akan dihapus',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
@@ -2536,7 +2534,7 @@ Ext.onReady(function(){
 							var result=response.responseText;
 							Ext.MessageBox.show({
 							   title: 'Error',
-							   msg: 'Could not connect to the database. retry later.',
+							   msg: 'Tidak bisa terhubung dengan database server',
 							   buttons: Ext.MessageBox.OK,
 							   animEl: 'database',
 							   icon: Ext.MessageBox.ERROR
@@ -2559,13 +2557,13 @@ Ext.onReady(function(){
 	function appointment_detail_nonmedis_confirm_delete(){
 		// only one record is selected here
 		if(appointment_detail_nonmedisListEditorGrid.selModel.getCount() == 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', appointment_detail_nonmedis_delete);
+			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data berikut?', appointment_detail_nonmedis_delete);
 		} else if(appointment_detail_nonmedisListEditorGrid.selModel.getCount() > 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', appointment_detail_nonmedis_delete);
+			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data-data berikut?', appointment_detail_nonmedis_delete);
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-//				msg: 'You can\'t really delete something you haven\'t selected?',
+//				msg: 'Tidak ada yang dipilih untuk dihapus',
 				msg: 'Anda belum memilih data yang akan dihapus',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
@@ -3072,12 +3070,12 @@ Ext.onReady(function(){
 		  	switch(result){
 		  	case 1:
 				win = window.open('./print/appointmentlist.html','appointmentlist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
-				//win.print();
+				//
 				break;
 		  	default:
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Unable to print the grid!',
+					msg: 'Tidak bisa mencetak data!',
 					buttons: Ext.MessageBox.OK,
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING
@@ -3089,7 +3087,7 @@ Ext.onReady(function(){
 		  	var result=response.responseText;
 			Ext.MessageBox.show({
 			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
+			   msg: 'Tidak bisa terhubung dengan database server',
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR
@@ -3159,7 +3157,7 @@ Ext.onReady(function(){
 		  	default:
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Unable to convert excel the grid!',
+					msg: 'Tidak bisa meng-export data ke dalam format excel!',
 					buttons: Ext.MessageBox.OK,
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING
@@ -3171,7 +3169,7 @@ Ext.onReady(function(){
 		  	var result=response.responseText;
 			Ext.MessageBox.show({
 			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
+			   msg: 'Tidak bisa terhubung dengan database server',
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR

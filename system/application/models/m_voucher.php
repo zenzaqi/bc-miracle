@@ -169,7 +169,7 @@ class M_voucher extends Model{
 									  $option,$filter){
 			//full query
 			$query="SELECT ifnull(voucher_no,'-') as 'No Voucher', voucher_point as Poin, voucher_cashback as 'Nilai (Rp)',
-					voucher_kadaluarsa as Kadaluarsa, ifnull(voucher_cust,'-') as 'No Customer', voucher_nama as 'Jenis Transaksi' FROM voucher";
+					voucher_kadaluarsa as Kadaluarsa, ifnull(voucher_cust,'-') as 'No Member', voucher_nama as 'Jenis Transaksi' FROM voucher";
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 				$query .= " (voucher_no LIKE '%".addslashes($filter)."%' OR 
