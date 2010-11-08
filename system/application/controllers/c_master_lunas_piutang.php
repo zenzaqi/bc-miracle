@@ -148,48 +148,32 @@ class C_master_lunas_piutang extends Controller {
 	
 	//add bayar
 	function form_bayar_piutang_insert(){
-	//POST variable here
-		$dpiutang_master=trim(@$_POST["dpiutang_master"]);
-		$dpiutang_nilai=trim(@$_POST["dpiutang_nilai"]);
+		//POST variable here
+		$dpiutang_master = $_POST['dpiutang_master']; // Get our array back and translate it :
+		$array_dpiutang_master = json_decode(stripslashes($dpiutang_master));
+		
+		$dpiutang_nilai = $_POST['dpiutang_nilai']; // Get our array back and translate it :
+		$array_dpiutang_nilai = json_decode(stripslashes($dpiutang_nilai));
 		
 		$dpiutang_cara=trim(@$_POST["dpiutang_cara"]);
-		
-		$dpiutang_tunai_nilai=trim(@$_POST["dpiutang_tunai_nilai"]);
 		
 		$dpiutang_card_nama=trim(@$_POST["dpiutang_card_nama"]);
 		$dpiutang_card_edc=trim(@$_POST["dpiutang_card_edc"]);
 		$dpiutang_card_no=trim(@$_POST["dpiutang_card_no"]);
-		$dpiutang_card_nilai=trim(@$_POST["dpiutang_card_nilai"]);
 		
 		$dpiutang_cek_nama=trim(@$_POST["dpiutang_cek_nama"]);
 		$dpiutang_cek_no=trim(@$_POST["dpiutang_cek_no"]);
 		$dpiutang_cek_valid=trim(@$_POST["dpiutang_cek_valid"]);
 		$dpiutang_cek_bank=trim(@$_POST["dpiutang_cek_bank"]);
-		$dpiutang_cek_nilai=trim(@$_POST["dpiutang_cek_nilai"]);
 		
 		$dpiutang_transfer_bank=trim(@$_POST["dpiutang_transfer_bank"]);
 		$dpiutang_transfer_nama=trim(@$_POST["dpiutang_transfer_nama"]);
-		$dpiutang_transfer_nilai=trim(@$_POST["dpiutang_transfer_nilai"]);
 		
 		$dpiutang_nobukti=trim(@$_POST["dpiutang_nobukti"]);
 		
-		$count=trim(@$_POST['count']);
-		$dcount=trim(@$_POST['dcount']);
-		
-		$result=$this->m_master_lunas_piutang->form_bayar_piutang_insert($dpiutang_master ,$dpiutang_nilai ,$dpiutang_cara ,$dpiutang_tunai_nilai ,$dpiutang_card_nama ,$dpiutang_card_edc ,$dpiutang_card_no ,$dpiutang_card_nilai ,$dpiutang_cek_nama ,$dpiutang_cek_no ,$dpiutang_cek_valid ,$dpiutang_cek_bank ,$dpiutang_cek_nilai ,$dpiutang_transfer_bank ,$dpiutang_transfer_nama ,$dpiutang_transfer_nilai ,$dpiutang_nobukti, $count, $dcount);
+		$result=$this->m_master_lunas_piutang->form_bayar_piutang_insert($array_dpiutang_master ,$array_dpiutang_nilai ,$dpiutang_cara ,$dpiutang_card_nama ,$dpiutang_card_edc ,$dpiutang_card_no ,$dpiutang_cek_nama ,$dpiutang_cek_no ,$dpiutang_cek_valid ,$dpiutang_cek_bank ,$dpiutang_transfer_bank ,$dpiutang_transfer_nama ,$dpiutang_nobukti);
 		echo $result;
 	}
-	
-	//add detail
-	function detail_detail_lunas_piutang_insert(){
-	//POST variable here
-		$dpiutang_id=trim(@$_POST["dpiutang_id"]);
-		$dpiutang_master=trim(@$_POST["dpiutang_master"]);
-		$dpiutang_nohutang=trim(@$_POST["dpiutang_nohutang"]);
-		$dpiutang_nilai=trim(@$_POST["dpiutang_nilai"]);
-		$result=$this->m_master_lunas_piutang->detail_detail_lunas_piutang_insert($dpiutang_id ,$dpiutang_master ,$dpiutang_nohutang ,$dpiutang_nilai );
-	}
-	
 	
 	//event handler action
 	function get_action(){
@@ -278,19 +262,22 @@ class C_master_lunas_piutang extends Controller {
 	//function for advanced search
 	function master_lunas_piutang_search(){
 		//POST varibale here
-		$lpiutang_id=trim(@$_POST["lpiutang_id"]);
-		$lpiutang_no=trim(@$_POST["lpiutang_no"]);
-		$lpiutang_no=str_replace("/(<\/?)(p)([^>]*>)", "",$lpiutang_no);
-		$lpiutang_no=str_replace("'", '"',$lpiutang_no);
+		$lpiutang_faktur_jual=trim(@$_POST["lpiutang_faktur_jual"]);
+		$lpiutang_faktur_jual=str_replace("/(<\/?)(p)([^>]*>)", "",$lpiutang_faktur_jual);
+		$lpiutang_faktur_jual=str_replace("'", '"',$lpiutang_faktur_jual);
 		$lpiutang_cust=trim(@$_POST["lpiutang_cust"]);
-		$lpiutang_faktur_tanggal=trim(@$_POST["lpiutang_faktur_tanggal"]);
-		$lpiutang_keterangan=trim(@$_POST["lpiutang_keterangan"]);
-		$lpiutang_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$lpiutang_keterangan);
-		$lpiutang_keterangan=str_replace("'", '"',$lpiutang_keterangan);
+		$lpiutang_faktur_tgl_start=trim(@$_POST["lpiutang_faktur_tgl_start"]);
+		$lpiutang_faktur_tgl_akhir=trim(@$_POST["lpiutang_faktur_tgl_akhir"]);
+		$lpiutang_status=trim(@$_POST["lpiutang_status"]);
+		$lpiutang_status=str_replace("/(<\/?)(p)([^>]*>)", "",$lpiutang_status);
+		$lpiutang_status=str_replace("'", '"',$lpiutang_status);
+		$lpiutang_stat_dok=trim(@$_POST["lpiutang_stat_dok"]);
+		$lpiutang_stat_dok=str_replace("/(<\/?)(p)([^>]*>)", "",$lpiutang_stat_dok);
+		$lpiutang_stat_dok=str_replace("'", '"',$lpiutang_stat_dok);
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_master_lunas_piutang->master_lunas_piutang_search($lpiutang_id ,$lpiutang_no ,$lpiutang_cust ,$lpiutang_faktur_tanggal ,$lpiutang_keterangan ,$start,$end);
+		$result = $this->m_master_lunas_piutang->master_lunas_piutang_search($lpiutang_faktur_jual, $lpiutang_cust ,$lpiutang_faktur_tgl_start ,$lpiutang_faktur_tgl_akhir ,$lpiutang_status ,$lpiutang_stat_dok ,$start,$end);
 		echo $result;
 	}
 

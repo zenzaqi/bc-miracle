@@ -48,14 +48,12 @@ var master_lunas_piutang_DataStore;
 var master_lunas_piutang_ColumnModel;
 var master_lunas_piutangListEditorGrid;
 var multi_lunas_piutang_createForm;
-var multi_lunas_piutang_createWindow;
 var master_lunas_piutang_searchForm;
 var master_lunas_piutang_searchWindow;
 var master_lunas_piutang_SelectedRow;
 var master_lunas_piutang_ContextMenu;
 //for detail data
 var detail_lunas_piutang_DataStor;
-var form_bayar_piutangListEditorGrid;
 var form_bayar_piutang_ColumnModel;
 var detail_lunas_piutang_proxy;
 var form_bayar_piutang_writer;
@@ -73,8 +71,6 @@ var lpiutang_fakturField;
 var lpiutang_custField;
 var lpiutang_tanggalField;
 var lpiutang_keteranganField;
-var lpiutang_idSearchField;
-var lpiutang_noSearchField;
 var lpiutang_custSearchField;
 var lpiutang_tanggalSearchField;
 var lpiutang_keteranganSearchField;
@@ -90,7 +86,6 @@ function piutang_cetak(dpiutang_nobukti){
 			switch(result){
 			case 1:
 				win = window.open('./piutang_paper.html','Cetak Pelunasan Piutang','height=480,width=1340,resizable=1,scrollbars=0, menubar=0');
-				//
 				break;
 			default:
 				Ext.MessageBox.show({
@@ -234,24 +229,6 @@ Ext.onReady(function(){
 					master_lunas_piutang_DataStore.reload();
 					single_lunas_piutang_createWindow.hide();
 				}
-				/*switch(result){
-					case 1:
-						//form_bayar_piutang_purge();
-						form_bayar_piutang_insert();
-						Ext.MessageBox.alert(post2db+' OK','The Master_lunas_piutang was '+msg+' successfully.');
-						master_lunas_piutang_DataStore.reload();
-						single_lunas_piutang_createWindow.hide();
-						break;
-					default:
-						Ext.MessageBox.show({
-						   title: 'Warning',
-						   msg: 'We could\'t not '+msg+' the Master_lunas_piutang.',
-						   buttons: Ext.MessageBox.OK,
-						   animEl: 'save',
-						   icon: Ext.MessageBox.WARNING
-						});
-						break;
-				}        */
 			},
 			failure: function(response){
 				var result=response.responseText;
@@ -365,19 +342,6 @@ Ext.onReady(function(){
 	/* Function for Check if the form is valid */
 	function is_master_lunas_piutang_form_valid(){
 		return (true &&  true &&  true &&  true &&  true &&  true &&  true &&  true &&  true &&  true  );
-	}
-  	/* End of Function */
-  
-  	/* Function for Displaying  create Window Form */
-	function display_form_window(){
-		if(!multi_lunas_piutang_createWindow.isVisible()){
-			master_lunas_piutang_reset_form();
-			post2db='CREATE';
-			msg='created';
-			multi_lunas_piutang_createWindow.show();
-		} else {
-			multi_lunas_piutang_createWindow.toFront();
-		}
 	}
   	/* End of Function */
  
@@ -536,8 +500,8 @@ Ext.onReady(function(){
 	//Template yang akan tampil di ComboBox
 	var customer_tpl = new Ext.XTemplate(
         '<tpl for="."><div class="search-item">',
-            '<span><b>{cust_no} : {cust_nama}</b> | Tgl-Lahir:{cust_tgllahir:date("M j, Y")}<br /></span>',
-            'Alamat: {cust_alamat}&nbsp;&nbsp;&nbsp;[Telp. {cust_telprumah}]',
+            '<span><b>{cust_no} : {cust_nama}</b><br /></span>',
+            '{cust_alamat} | {cust_telprumah}',
         '</div></tpl>'
     );
 	
@@ -681,12 +645,6 @@ Ext.onReady(function(){
 		/* Add Control on ToolBar */
 		tbar: [
 		{
-			text: 'Add',
-			tooltip: 'Add new record',
-			iconCls:'icon-adds',    				// this is defined in our styles.css
-			disabled: true,
-			handler: display_form_window
-		}, '-',{
 			text: 'Bayar',
 			tooltip: 'Edit selected record',
 			iconCls:'icon-update',
@@ -714,7 +672,7 @@ Ext.onReady(function(){
 				},
 				render: function(c){
 				Ext.get(this.id).set({qtitle:'Search By'});
-				Ext.get(this.id).set({qtip:'- No. Faktur Jual<br>- Nama Customer'});
+				Ext.get(this.id).set({qtip:'- No. Faktur Jual<br>- Nama Customer<br>- No. Customer'});
 				}
 			},
 			width: 120
@@ -870,50 +828,24 @@ Ext.onReady(function(){
 	});
 	
 	/* Identify  piutang_total_nilai Field */
-	piutang_total_nilaiField= new Ext.form.NumberField({
+	piutang_total_nilaiField= new Ext.ux.form.CFTextField({
 		id: 'piutang_total_nilaiField',
 		fieldLabel: '<b>Total (Rp)</b>',
-		allowNegatife : false,
-		blankText: '0',
-		allowDecimals: true,
+		valueRenderer: 'numberToCurrency',
 		readOnly: true,
+		itemCls: 'rmoney',
 		anchor: '100%',
 		maskRe: /([0-9]+)$/
 	});
 	/* Identify  piutang_total_bayar Field */
-	piutang_total_bayarField= new Ext.form.NumberField({
+	piutang_total_bayarField= new Ext.ux.form.CFTextField({
 		id: 'piutang_total_bayarField',
 		fieldLabel: 'Total Bayar (Rp)',
-		allowNegatife : false,
-		blankText: '0',
-		allowDecimals: true,
+		valueRenderer: 'numberToCurrency',
 		readOnly: true,
+		itemCls: 'rmoney',
 		anchor: '100%',
 		maskRe: /([0-9]+)$/
-	});
-	
-	
-  	/*Fieldset Master*/
-	multi_lunas_piutang_masterGroup = new Ext.form.FieldSet({
-		title: 'Master',
-		autoHeight: true,
-		collapsible: true,
-		layout:'column',
-		items:[
-			{
-				columnWidth:0.5,
-				layout: 'form',
-				border:false,
-				items: [lpiutang_custField, lpiutang_tanggalField] 
-			},
-			{
-				columnWidth:0.5,
-				layout: 'form',
-				border:false,
-				items: [lpiutang_keteranganField, lpiutang_idField] 
-			}
-			]
-	
 	});
 	
 	single_lunas_piutang_masterGroup = new Ext.form.FieldSet({
@@ -979,7 +911,7 @@ Ext.onReady(function(){
 		displayField: 'piutang_card_display',
 		valueField: 'piutang_card_value',
 		allowBlank: true,
-		anchor: '50%',
+		width: 105,
 		triggerAction: 'all',
 		lazyRenderer: true
 	});
@@ -996,7 +928,7 @@ Ext.onReady(function(){
 		displayField: 'piutang_card_edc_display',
 		valueField: 'piutang_card_edc_value',
 		allowBlank: true,
-		anchor: '50%',
+		width: 105,
 		triggerAction: 'all',
 		lazyRenderer: true
 	});
@@ -1275,6 +1207,37 @@ Ext.onReady(function(){
     });
 	//eof
 	
+	var dbayar_fakturField = new Ext.form.TextField({
+		readOnly: true
+	});
+	
+	var dbayar_sisa_piutangField = new Ext.form.NumberField({
+		allowDecimals: false,
+		allowNegative: false,
+		maxLength: 11,
+		readOnly: true,
+		maskRe: /([0-9]+)$/
+	});
+	
+	var dbayar_piutangField = new Ext.form.NumberField({
+		allowDecimals: false,
+		allowNegative: false,
+		maxLength: 11,
+		enableKeyEvents: true,
+		maskRe: /([0-9]+)$/
+	});
+	dbayar_piutangField.on('specialkey', function(f,e){
+		if(e.getKey() == e.ENTER){
+			var this_value = dbayar_piutangField.getValue();
+			var this_sisa_piutang = dbayar_sisa_piutangField.getValue();
+			if(this_value>this_sisa_piutang){
+				this.setRawValue(this_sisa_piutang);
+			}else{
+				this.setRawValue(this_value);
+			}
+		}
+	});
+	
 	//declaration of detail coloumn model
 	form_bayar_piutang_ColumnModel = new Ext.grid.ColumnModel(
 		[
@@ -1282,30 +1245,30 @@ Ext.onReady(function(){
 			header: 'No.Faktur Jual',
 			dataIndex: 'lpiutang_faktur',
 			width: 150,
-			sortable: true
+			sortable: true,
+			editor: dbayar_fakturField
 		},
 		{
 			header: 'Total Piutang (Rp)',
 			dataIndex: 'lpiutang_sisa',
+			editor: dbayar_sisa_piutangField,
 			renderer: Ext.util.Format.numberRenderer('0,000')
 		},
 		{
 			header: 'Jumlah Pelunasan (Rp)',
 			dataIndex: 'lpiutang_bayar',
-			editor: new Ext.form.NumberField({
-				allowDecimals: true,
-				allowNegative: false,
-				blankText: '0',
-				maxLength: 22,
-				maskRe: /([0-9]+)$/
-			}),
-			renderer: Ext.util.Format.numberRenderer('0,000')
+			editor: dbayar_piutangField,
+			renderer: function(v, params, record){
+				var this_value = record.data.lpiutang_bayar;
+				if(this_value>record.data.lpiutang_sisa){
+					this_value = record.data.lpiutang_sisa;
+				}
+				return Ext.util.Format.number(this_value,'0,000');
+            }
 		}]
 	);
 	form_bayar_piutang_ColumnModel.defaultSortable= true;
 	//eof
-	
-	
 	
 	//declaration of detail list editor grid
 	form_bayar_piutangListEditorGrid =  new Ext.grid.EditorGridPanel({
@@ -1329,53 +1292,28 @@ Ext.onReady(function(){
 			pageSize: pageS,
 			store: form_bayar_piutang_DataStore,
 			displayInfo: true
-		}),
-		/* Add Control on ToolBar */
-		tbar: [
-		{
-			text: 'Add',
-			tooltip: 'Add new detail record',
-			iconCls:'icon-adds',    				// this is defined in our styles.css
-			disabled: true,
-			handler: form_bayar_piutang_add
-		}, '-',{
-			text: 'Delete',
-			tooltip: 'Delete detail selected record',
-			iconCls:'icon-delete',
-			disabled: true,
-			handler: form_bayar_piutang_confirm_delete
-		}
-		]
+		})
 	});
 	//eof
 	
-	
-	//function of detail add
-	function form_bayar_piutang_add(){
-		var edit_form_bayar_piutang= new form_bayar_piutangListEditorGrid.store.recordType({
-			dpiutang_id	:'',		
-			dpiutang_master	:'',		
-			dpiutang_nohutang	:'',		
-			dpiutang_nilai	:''		
-		});
-		editor_form_bayar_piutang.stopEditing();
-		form_bayar_piutang_DataStore.insert(0, edit_form_bayar_piutang);
-		form_bayar_piutangListEditorGrid.getView().refresh();
-		form_bayar_piutangListEditorGrid.getSelectionModel().selectRow(0);
-		editor_form_bayar_piutang.startEditing(0);
-	}
-	
 	//function for refresh detail
 	function refresh_form_bayar_piutang(){
-		//form_bayar_piutang_DataStore.commitChanges();
-		//form_bayar_piutangListEditorGrid.getView().refresh();
 		if(form_bayar_piutang_DataStore.getCount()>0){
 			var total_bayar=0;
 			for(i=0;i<form_bayar_piutang_DataStore.getCount();i++){
-				if(form_bayar_piutang_DataStore.getAt(i).data.lpiutang_bayar==undefined || form_bayar_piutang_DataStore.getAt(i).data.lpiutang_bayar==''){
+				/*if(form_bayar_piutang_DataStore.getAt(i).data.lpiutang_bayar==undefined || form_bayar_piutang_DataStore.getAt(i).data.lpiutang_bayar==''){
 					total_bayar += 0;
 				}else{
 					total_bayar += form_bayar_piutang_DataStore.getAt(i).data.lpiutang_bayar;
+				}*/
+				var lpiutang_bayar = form_bayar_piutang_DataStore.getAt(i).data.lpiutang_bayar;
+				var lpiutang_sisa = form_bayar_piutang_DataStore.getAt(i).data.lpiutang_sisa;
+				if(form_bayar_piutang_DataStore.getAt(i).data.lpiutang_bayar!==undefined){
+					if(lpiutang_bayar > lpiutang_sisa){
+						total_bayar += lpiutang_sisa;
+					}else{
+						total_bayar += lpiutang_bayar;
+					}
 				}
 			}
 			piutang_total_bayarField.setValue(total_bayar);
@@ -1385,107 +1323,109 @@ Ext.onReady(function(){
 	
 	//function for insert detail
 	function form_bayar_piutang_insert(dpiutang_nobukti){
-		var count_detail=form_bayar_piutang_DataStore.getCount();
+		var dpiutang_cara_insert=null;
+		// Bayar Tunai
+		var dpiutang_tunai_nilai_insert=null;
+		// Bayar Card/Kartu Kredit
+		var dpiutang_card_nama_insert=null;
+		var dpiutang_card_edc_insert=null;
+		var dpiutang_card_no_insert="";
+		var dpiutang_card_nilai_insert=null;
+		// Bayar Cek
+		var dpiutang_cek_nama_insert=null;
+		var dpiutang_cek_nomor_insert="";
+		var dpiutang_cek_valid_insert="";
+		var dpiutang_cek_bank_insert=null;
+		var dpiutang_cek_nilai_insert=null;
+		// Bayar Transfer
+		var dpiutang_transfer_bank_insert=null;
+		var dpiutang_transfer_nama_insert=null;
+		var dpiutang_transfer_nilai_insert=null;
+		
+		if(piutang_caraField.getValue()!== null){dpiutang_cara_insert = piutang_caraField.getValue();} 
+		
+		if(piutang_tunai_nilaiField.getValue()!== null){dpiutang_tunai_nilai_insert = piutang_tunai_nilaiField.getValue();}
+		
+		if(piutang_card_namaField.getValue()!== null){dpiutang_card_nama_insert = piutang_card_namaField.getValue();} 
+		if(piutang_card_edcField.getValue()!== null){dpiutang_card_edc_insert = piutang_card_edcField.getValue();} 
+		if(piutang_card_noField.getValue()!==""){dpiutang_card_no_insert = piutang_card_noField.getValue();}
+		if(piutang_card_nilaiField.getValue()!== null){dpiutang_card_nilai_insert = piutang_card_nilaiField.getValue();} 
+		
+		if(piutang_cek_namaField.getValue()!== null){dpiutang_cek_nama_insert = piutang_cek_namaField.getValue();} 
+		if(piutang_cek_noField.getValue()!== ""){dpiutang_cek_nomor_insert = piutang_cek_noField.getValue();} 
+		if(piutang_cek_validField.getValue()!== ""){dpiutang_cek_valid_insert = piutang_cek_validField.getValue().format('Y-m-d');} 
+		if(piutang_cek_bankField.getValue()!== null){dpiutang_cek_bank_insert = piutang_cek_bankField.getValue();} 
+		if(piutang_cek_nilaiField.getValue()!== null){dpiutang_cek_nilai_insert = piutang_cek_nilaiField.getValue();} 
+		
+		if(piutang_transfer_bankField.getValue()!== null){dpiutang_transfer_bank_insert = piutang_transfer_bankField.getValue();} 
+		if(piutang_transfer_namaField.getValue()!== null){dpiutang_transfer_nama_insert = piutang_transfer_namaField.getValue();}
+		if(piutang_transfer_nilaiField.getValue()!== null){dpiutang_transfer_nilai_insert = piutang_transfer_nilaiField.getValue();} 
+		
+		var dpiutang_master=[];
+		var dpiutang_nilai=[];
+		
+		var dcount = form_bayar_piutang_DataStore.getCount() - 1;
+		
 		for(i=0;i<form_bayar_piutang_DataStore.getCount();i++){
-			var count_i = i;
-			form_bayar_piutang_record=form_bayar_piutang_DataStore.getAt(i);
-			
-			var dpiutang_cara_insert=null;
-			// Bayar Tunai
-			var dpiutang_tunai_nilai_insert=null;
-			// Bayar Card/Kartu Kredit
-			var dpiutang_card_nama_insert=null;
-			var dpiutang_card_edc_insert=null;
-			var dpiutang_card_no_insert="";
-			var dpiutang_card_nilai_insert=null;
-			// Bayar Cek
-			var dpiutang_cek_nama_insert=null;
-			var dpiutang_cek_nomor_insert="";
-			var dpiutang_cek_valid_insert="";
-			var dpiutang_cek_bank_insert=null;
-			var dpiutang_cek_nilai_insert=null;
-			// Bayar Transfer
-			var dpiutang_transfer_bank_insert=null;
-			var dpiutang_transfer_nama_insert=null;
-			var dpiutang_transfer_nilai_insert=null;
-			
-			if(piutang_caraField.getValue()!== null){dpiutang_cara_insert = piutang_caraField.getValue();} 
-			
-			if(piutang_tunai_nilaiField.getValue()!== null){dpiutang_tunai_nilai_insert = piutang_tunai_nilaiField.getValue();}
-			
-			if(piutang_card_namaField.getValue()!== null){dpiutang_card_nama_insert = piutang_card_namaField.getValue();} 
-			if(piutang_card_edcField.getValue()!== null){dpiutang_card_edc_insert = piutang_card_edcField.getValue();} 
-			if(piutang_card_noField.getValue()!==""){dpiutang_card_no_insert = piutang_card_noField.getValue();}
-			if(piutang_card_nilaiField.getValue()!== null){dpiutang_card_nilai_insert = piutang_card_nilaiField.getValue();} 
-			
-			if(piutang_cek_namaField.getValue()!== null){dpiutang_cek_nama_insert = piutang_cek_namaField.getValue();} 
-			if(piutang_cek_noField.getValue()!== ""){dpiutang_cek_nomor_insert = piutang_cek_noField.getValue();} 
-			if(piutang_cek_validField.getValue()!== ""){dpiutang_cek_valid_insert = piutang_cek_validField.getValue().format('Y-m-d');} 
-			if(piutang_cek_bankField.getValue()!== null){dpiutang_cek_bank_insert = piutang_cek_bankField.getValue();} 
-			if(piutang_cek_nilaiField.getValue()!== null){dpiutang_cek_nilai_insert = piutang_cek_nilaiField.getValue();} 
-			
-			if(piutang_transfer_bankField.getValue()!== null){dpiutang_transfer_bank_insert = piutang_transfer_bankField.getValue();} 
-			if(piutang_transfer_namaField.getValue()!== null){dpiutang_transfer_nama_insert = piutang_transfer_namaField.getValue();}
-			if(piutang_transfer_nilaiField.getValue()!== null){dpiutang_transfer_nilai_insert = piutang_transfer_nilaiField.getValue();} 
-			
-			Ext.Ajax.request({
-				waitMsg: 'Please wait...',
-				url: 'index.php?c=c_master_lunas_piutang&m=form_bayar_piutang_insert',
-				params:{
-				dpiutang_master	: form_bayar_piutang_record.data.lpiutang_id, 
-				dpiutang_nilai	: form_bayar_piutang_record.data.lpiutang_bayar,
+			if(form_bayar_piutang_DataStore.getAt(i).data.lpiutang_bayar!==undefined
+			   && (form_bayar_piutang_DataStore.getAt(i).data.lpiutang_bayar > 0)){
 				
-				dpiutang_cara	: dpiutang_cara_insert,
-				// Bayar Tunai
-				dpiutang_tunai_nilai	:	dpiutang_tunai_nilai_insert,
-				// Bayar Card/Kartu Kredit
-				dpiutang_card_nama	: 	dpiutang_card_nama_insert,
-				dpiutang_card_edc	:	dpiutang_card_edc_insert,
-				dpiutang_card_no		:	dpiutang_card_no_insert,
-				dpiutang_card_nilai	:	dpiutang_card_nilai_insert,
-				// Bayar Cek/Giro
-				dpiutang_cek_nama	: 	dpiutang_cek_nama_insert,
-				dpiutang_cek_no		:	dpiutang_cek_nomor_insert,
-				dpiutang_cek_valid	: 	dpiutang_cek_valid_insert,
-				dpiutang_cek_bank	:	dpiutang_cek_bank_insert,
-				dpiutang_cek_nilai	:	dpiutang_cek_nilai_insert,
-				// Bayar Transfer
-				dpiutang_transfer_bank	:	dpiutang_transfer_bank_insert,
-				dpiutang_transfer_nama	:	dpiutang_transfer_nama_insert,
-				dpiutang_transfer_nilai	:	dpiutang_transfer_nilai_insert,
-				dpiutang_nobukti	: dpiutang_nobukti,
-				count	: count_i,
-				dcount	: count_detail
-				},
-				success: function(response){
-					var result=eval(response.responseText);
-					if(result==0){
-						master_lunas_piutang_DataStore.baseParams = { task: 'LIST' };
-						master_lunas_piutang_DataStore.reload({params: {start: 0, limit: pageS}});
-					}else if(result==1){
-						piutang_cetak(dpiutang_nobukti);
-						master_lunas_piutang_DataStore.baseParams = { task: 'LIST' };
-						master_lunas_piutang_DataStore.reload({params: {start: 0, limit: pageS}});
-					}else if(result==-1){
-						Ext.MessageBox.show({
-						   title: 'Warning',
-						   //msg: 'We could\'t not '+msg+' the Master_jual_produk.',
-						   msg: 'Data penjualan produk tidak bisa disimpan',
-						   buttons: Ext.MessageBox.OK,
-						   animEl: 'save',
-						   icon: Ext.MessageBox.WARNING
-						});
-						master_lunas_piutang_DataStore.baseParams = { task: 'LIST' };
-						master_lunas_piutang_DataStore.reload({params: {start: 0, limit: pageS}});
+				dpiutang_master.push(form_bayar_piutang_DataStore.getAt(i).data.lpiutang_id);
+				
+				dpiutang_nilai.push(form_bayar_piutang_DataStore.getAt(i).data.lpiutang_bayar);
+			}
+			
+			if(i==dcount){
+				var encoded_array_dpiutang_master = Ext.encode(dpiutang_master);
+				var encoded_array_dpiutang_nilai = Ext.encode(dpiutang_nilai);
+				
+				Ext.Ajax.request({
+					waitMsg: 'Please wait...',
+					url: 'index.php?c=c_master_lunas_piutang&m=form_bayar_piutang_insert',
+					params:{
+					dpiutang_master	: encoded_array_dpiutang_master,
+					dpiutang_nilai	: encoded_array_dpiutang_nilai,
+					
+					dpiutang_cara	: dpiutang_cara_insert,
+					// Bayar Tunai
+					// Bayar Card/Kartu Kredit
+					dpiutang_card_nama	: 	dpiutang_card_nama_insert,
+					dpiutang_card_edc	:	dpiutang_card_edc_insert,
+					dpiutang_card_no		:	dpiutang_card_no_insert,
+					// Bayar Cek/Giro
+					dpiutang_cek_nama	: 	dpiutang_cek_nama_insert,
+					dpiutang_cek_no		:	dpiutang_cek_nomor_insert,
+					dpiutang_cek_valid	: 	dpiutang_cek_valid_insert,
+					dpiutang_cek_bank	:	dpiutang_cek_bank_insert,
+					// Bayar Transfer
+					dpiutang_transfer_bank	:	dpiutang_transfer_bank_insert,
+					dpiutang_transfer_nama	:	dpiutang_transfer_nama_insert,
+					dpiutang_nobukti	: dpiutang_nobukti
+					},
+					success: function(response){
+						var result=eval(response.responseText);
+						if(result==0){
+							master_lunas_piutang_DataStore.baseParams = { task: 'LIST' };
+							master_lunas_piutang_DataStore.reload({params: {start: 0, limit: pageS}});
+						}else if(result==1){
+							piutang_cetak(dpiutang_nobukti);
+							master_lunas_piutang_DataStore.baseParams = { task: 'LIST' };
+							master_lunas_piutang_DataStore.reload({params: {start: 0, limit: pageS}});
+						}else if(result==-1){
+							Ext.MessageBox.show({
+							   title: 'Warning',
+							   //msg: 'We could\'t not '+msg+' the Master_jual_produk.',
+							   msg: 'Data penjualan produk tidak bisa disimpan',
+							   buttons: Ext.MessageBox.OK,
+							   animEl: 'save',
+							   icon: Ext.MessageBox.WARNING
+							});
+							master_lunas_piutang_DataStore.baseParams = { task: 'LIST' };
+							master_lunas_piutang_DataStore.reload({params: {start: 0, limit: pageS}});
+						}
 					}
-				}
-				/*callback: function(opts, success, response){
-					console.log('dpiutang_nobukti'+ dpiutang_nobukti);
-					master_lunas_piutang_DataStore.baseParams = { task: 'LIST' };
-					// Cause the datastore to do another query : 
-					master_lunas_piutang_DataStore.reload({params: {start: 0, limit: pageS}});
-				}*/
-			});
+				});
+			}
 		}
 	}
 	//eof
@@ -1532,46 +1472,6 @@ Ext.onReady(function(){
 	
 	//event on update of detail data store
 	form_bayar_piutang_DataStore.on('update', refresh_form_bayar_piutang);
-	
-	/* Function for retrieve create Window Panel*/ 
-	multi_lunas_piutang_createForm = new Ext.FormPanel({
-		labelAlign: 'left',
-		bodyStyle:'padding:5px',
-		autoHeight:true,
-		width: 700,        
-		items: [multi_lunas_piutang_masterGroup,form_bayar_piutangListEditorGrid]
-		,
-		buttons: [{
-				text: 'Save and Close',
-				handler: master_lunas_piutang_create
-			}
-			,{
-				text: 'Cancel',
-				handler: function(){
-					multi_lunas_piutang_createWindow.hide();
-				}
-			}
-		]
-	});
-	/* End  of Function*/
-	
-	/* Function for retrieve create Window Form */
-	multi_lunas_piutang_createWindow= new Ext.Window({
-		id: 'multi_lunas_piutang_createWindow',
-		title: post2db+'Master_lunas_piutang',
-		closable:true,
-		closeAction: 'hide',
-		autoWidth: true,
-		autoHeight: true,
-		x:0,
-		y:0,
-		plain:true,
-		layout: 'fit',
-		modal: true,
-		renderTo: 'elwindow_master_lunas_piutang_create',
-		items: multi_lunas_piutang_createForm
-	});
-	/* End Window */
 	
 	/* Function for retrieve create Window Panel*/ 
 	single_lunas_piutang_createForm = new Ext.FormPanel({
@@ -1684,26 +1584,29 @@ Ext.onReady(function(){
 	/* Function for action list search */
 	function master_lunas_piutang_list_search(){
 		// render according to a SQL date format.
-		var lpiutang_id_search=null;
-		var lpiutang_no_search=null;
+		var lpiutang_faktur_jual_search='';
 		var lpiutang_cust_search=null;
-		var lpiutang_tanggal_search_date="";
-		var lpiutang_keterangan_search=null;
+		var lpiutang_faktur_jual_start_search_date="";
+		var lpiutang_faktur_jual_akhir_search_date="";
+		var lpiutang_status_search=null;
+		var lpiutang_stat_dok_search=null;
 
-		if(lpiutang_idSearchField.getValue()!==null){lpiutang_id_search=lpiutang_idSearchField.getValue();}
-		if(lpiutang_noSearchField.getValue()!==null){lpiutang_no_search=lpiutang_noSearchField.getValue();}
+		if(lpiutang_faktur_jualSearchField.getValue()!==''){lpiutang_faktur_jual_search=lpiutang_faktur_jualSearchField.getValue();}
 		if(lpiutang_custSearchField.getValue()!==null){lpiutang_cust_search=lpiutang_custSearchField.getValue();}
-		if(lpiutang_tanggalSearchField.getValue()!==""){lpiutang_tanggal_search_date=lpiutang_tanggalSearchField.getValue().format('Y-m-d');}
-		if(lpiutang_keteranganSearchField.getValue()!==null){lpiutang_keterangan_search=lpiutang_keteranganSearchField.getValue();}
+		if(lpiutang_faktur_jual_tglStartSearchField.getValue()!==""){lpiutang_faktur_jual_start_search_date=lpiutang_faktur_jual_tglStartSearchField.getValue().format('Y-m-d');}
+		if(lpiutang_faktur_jual_tglAkhirSearchField.getValue()!==""){lpiutang_faktur_jual_akhir_search_date=lpiutang_faktur_jual_tglAkhirSearchField.getValue().format('Y-m-d');}
+		if(lpiutang_statusSearchField.getValue()!==null){lpiutang_status_search=lpiutang_statusSearchField.getValue();}
+		if(lpiutang_stat_dokSearchField.getValue()!==null){lpiutang_stat_dok_search=lpiutang_stat_dokSearchField.getValue();}
 		// change the store parameters
 		master_lunas_piutang_DataStore.baseParams = {
 			task: 'SEARCH',
 			//variable here
-			lpiutang_id	:	lpiutang_id_search, 
-			lpiutang_no	:	lpiutang_no_search, 
-			lpiutang_cust	:	lpiutang_cust_search, 
-			lpiutang_tanggal	:	lpiutang_tanggal_search_date, 
-			lpiutang_keterangan	:	lpiutang_keterangan_search, 
+			lpiutang_faktur_jual: lpiutang_faktur_jual_search,
+			lpiutang_cust	:	lpiutang_cust_search,
+			lpiutang_faktur_tgl_start	:	lpiutang_faktur_jual_start_search_date,
+			lpiutang_faktur_tgl_akhir	:	lpiutang_faktur_jual_akhir_search_date,
+			lpiutang_status	: lpiutang_status_search,
+			lpiutang_stat_dok	: lpiutang_stat_dok_search
 		};
 		// Cause the datastore to do another query : 
 		master_lunas_piutang_DataStore.reload({params: {start: 0, limit: pageS}});
@@ -1719,59 +1622,96 @@ Ext.onReady(function(){
 	};
 	/* End of Fuction */
 	
+	function master_lunas_piutang_reset_SearchForm(){
+		lpiutang_faktur_jualSearchField.reset();
+		lpiutang_faktur_jualSearchField.setValue(null);
+		lpiutang_custSearchField.reset();
+		lpiutang_custSearchField.setValue(null);
+		lpiutang_faktur_jual_tglStartSearchField.reset();
+		lpiutang_faktur_jual_tglStartSearchField.setValue(null);
+		lpiutang_faktur_jual_tglAkhirSearchField.reset();
+		lpiutang_faktur_jual_tglAkhirSearchField.setValue(null);
+		lpiutang_statusSearchField.reset();
+		lpiutang_statusSearchField.setValue(null);
+		lpiutang_stat_dokSearchField.reset();
+		lpiutang_stat_dokSearchField.setValue(null);
+	}
+	
 	/* Field for search */
-	/* Identify  lpiutang_id Search Field */
-	lpiutang_idSearchField= new Ext.form.NumberField({
-		id: 'lpiutang_idSearchField',
-		fieldLabel: 'Lpiutang Id',
-		allowNegatife : false,
-		blankText: '0',
-		allowDecimals: false,
-		anchor: '95%',
-		maskRe: /([0-9]+)$/
-	
-	});
-	/* Identify  lpiutang_no Search Field */
-	lpiutang_noSearchField= new Ext.form.TextField({
-		id: 'lpiutang_noSearchField',
-		fieldLabel: 'Lpiutang No',
-		maxLength: 50,
-		anchor: '95%'
-	
+	lpiutang_faktur_jualSearchField= new Ext.form.TextField({
+		id: 'lpiutang_faktur_jualSearchField',
+		fieldLabel: 'No. Faktur Jual',
+		width: 140
 	});
 	/* Identify  lpiutang_cust Search Field */
-	lpiutang_custSearchField= new Ext.form.NumberField({
+	lpiutang_custSearchField= new Ext.form.ComboBox({
 		id: 'lpiutang_custSearchField',
-		fieldLabel: 'Lpiutang Cust',
-		allowNegatife : false,
-		blankText: '0',
-		allowDecimals: false,
-		anchor: '95%',
-		maskRe: /([0-9]+)$/
-	
-	});
-	/* Identify  lpiutang_tanggal Search Field */
-	lpiutang_tanggalSearchField= new Ext.form.DateField({
-		id: 'lpiutang_tanggalSearchField',
-		fieldLabel: 'Lpiutang Tanggal',
-		format : 'Y-m-d',
-	
-	});
-	/* Identify  lpiutang_keterangan Search Field */
-	lpiutang_keteranganSearchField= new Ext.form.TextField({
-		id: 'lpiutang_keteranganSearchField',
-		fieldLabel: 'Lpiutang Keterangan',
-		maxLength: 150,
+		fieldLabel: 'Customer',
+		store: cbo_cutomerDataStore,
+		mode: 'remote',
+		displayField:'cust_nama',
+		valueField: 'cust_id',
+        typeAhead: false,
+        loadingText: 'Searching...',
+        pageSize:10,
+        hideTrigger:false,
+        tpl: customer_tpl,
+        //applyTo: 'search',
+        itemSelector: 'div.search-item',
+		triggerAction: 'all',
+		lazyRender:true,
+		listClass: 'x-combo-list-small',
 		anchor: '95%'
+	});
 	
+	/* Identify  lpiutang_tanggal Search Field */
+	lpiutang_faktur_jual_tglStartSearchField= new Ext.form.DateField({
+		id: 'lpiutang_faktur_jual_tglStartSearchField',
+		fieldLabel: 'Tgl Faktur Jual',
+		format : 'd-m-Y'
+	});
+	lpiutang_faktur_jual_tglAkhirSearchField= new Ext.form.DateField({
+		id: 'lpiutang_faktur_jual_tglAkhirSearchField',
+		fieldLabel: 's/d',
+		format : 'd-m-Y'
+	});
+	/* Identify  lpiutang_status Search Field */
+	lpiutang_statusSearchField= new Ext.form.ComboBox({
+		id: 'lpiutang_statusSearchField',
+		fieldLabel: 'Status',
+		store:new Ext.data.SimpleStore({
+			fields:['value', 'lpiutang_status'],
+			data:[['piutang','Piutang'], ['lunas','Lunas']]
+		}),
+		mode: 'local',
+		displayField: 'lpiutang_status',
+		valueField: 'value',
+		editable: false,
+		width: 96,
+		triggerAction: 'all'
+	});
+	/* Identify  lpiutang_status_dokumen Search Field */
+	lpiutang_stat_dokSearchField= new Ext.form.ComboBox({
+		id: 'lpiutang_stat_dokSearchField',
+		fieldLabel: 'Status Dokumen',
+		store:new Ext.data.SimpleStore({
+			fields:['value', 'lpiutang_stat_dok'],
+			data:[['Terbuka','Terbuka'], ['Tertutup','Tertutup'], ['Batal','Batal']]
+		}),
+		mode: 'local',
+		displayField: 'lpiutang_stat_dok',
+		valueField: 'value',
+		editable: false,
+		width: 96,
+		triggerAction: 'all'
 	});
     
 	/* Function for retrieve search Form Panel */
 	master_lunas_piutang_searchForm = new Ext.FormPanel({
-		labelAlign: 'top',
+		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
-		width: 300,        
+		width: 400,        
 		items: [{
 			layout:'column',
 			border:false,
@@ -1780,7 +1720,32 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [lpiutang_noSearchField, lpiutang_custSearchField, lpiutang_tanggalSearchField, lpiutang_keteranganSearchField] 
+				items: [lpiutang_faktur_jualSearchField, lpiutang_custSearchField, 
+					{
+						layout:'column',
+						border:false,
+						items:[
+						{
+							columnWidth:0.55,
+							layout: 'form',
+							border:false,
+							defaultType: 'datefield',
+							items: [						
+								lpiutang_faktur_jual_tglStartSearchField
+							]
+						},
+						{
+							columnWidth:0.45,
+							layout: 'form',
+							border:false,
+							labelWidth:25,
+							defaultType: 'datefield',
+							items: [						
+								lpiutang_faktur_jual_tglAkhirSearchField
+							]
+						}								
+						]
+					}, lpiutang_statusSearchField, lpiutang_stat_dokSearchField] 
 			}
 			]
 		}]
@@ -1818,6 +1783,7 @@ Ext.onReady(function(){
   	/* Function for Displaying  Search Window Form */
 	function display_form_search_window(){
 		if(!master_lunas_piutang_searchWindow.isVisible()){
+			master_lunas_piutang_reset_SearchForm();
 			master_lunas_piutang_searchWindow.show();
 		} else {
 			master_lunas_piutang_searchWindow.toFront();
