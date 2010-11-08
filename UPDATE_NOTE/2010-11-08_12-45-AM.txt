@@ -1,0 +1,4 @@
+[by zaqi.smart@gmail]
+-fix update
+ o User group, lock read only sudah normal kembali
+ o Optimasi cetak jual produk, perawatan dan paket
