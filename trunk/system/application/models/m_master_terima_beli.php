@@ -326,13 +326,6 @@ class M_master_terima_beli extends Model{
 		}
 		//end of function
 		
-		//purge all detail from master
-		function detail_detail_terima_bonus_purge($master_id){
-			$sql="DELETE from detail_terima_bonus where dtbonus_master='".$master_id."'";
-			$result=$this->db->query($sql);
-			return '1';
-		}
-		//*eof
 		
 		//insert detail record
 		function detail_detail_terima_bonus_insert($array_dtbonus_id ,$dtbonus_master ,$array_dtbonus_produk ,
@@ -453,17 +446,13 @@ class M_master_terima_beli extends Model{
 			if($is_done==true){
 				$sql="UPDATE master_order_beli SET order_status='Tertutup' WHERE order_id='".$no_order."'";
 				$this->db->query($sql);
+			}else{
+				$sql="UPDATE master_order_beli SET order_status='Terbuka' WHERE order_id='".$no_order."'";
+				$this->db->query($sql);
 			}
 			
 		}
 		
-		//purge all detail from master
-		function detail_detail_terima_beli_purge($master_id){
-			$sql="DELETE from detail_terima_beli where dterima_master='".$master_id."'";
-			$result=$this->db->query($sql);
-			echo '1';
-		}
-		//*eof
 		
 		//insert detail record
 		function detail_detail_terima_beli_insert($array_dterima_id ,$dterima_master ,$array_dterima_produk ,$array_dterima_satuan ,
@@ -606,16 +595,45 @@ class M_master_terima_beli extends Model{
 		
 		//fcuntion for delete record
 		function master_terima_beli_delete($pkid){
-			// You could do some checkups here and return '0' or other error consts.
-			// Make a single query to delete all of the master_terima_belis at the same time :
+			$no_order=0;
+			
 			if(sizeof($pkid)<1){
 				return '0';
 			} else if (sizeof($pkid) == 1){
+				//mencari no order
+				$sql="SELECT terima_order FROM master_terima_beli WHERE terima_id='".$pkid."'";
+				$result=$this->db->query($sql);
+				if($result->num_rows()){
+					$row=$result->row();
+					$no_order=" order_id = '".$row->terima_order."'";
+				}
+				
 				$query = "DELETE master_terima_beli,detail_terima_beli,detail_terima_bonus 
 							FROM master_terima_beli,detail_terima_beli,detail_terima_bonus  WHERE terima_id = '".$pkid[0]."' 
 							AND (dterima_master=terima_id OR dtbonus_master=terima_id)";
 				$this->db->query($query);
 			} else {
+				//mencari no order
+				$sql="SELECT terima_order FROM master_terima_beli WHERE ";
+				
+				for($i = 0; $i < sizeof($pkid); $i++){
+					$query = $query . "terima_id= ".$pkid[$i];
+					if($i<sizeof($pkid)-1){
+						$query = $query . " OR ";
+					}     
+				}
+				
+				$result=$this->db->query($sql);
+				$i=0;
+				foreach($result->result() as $row){
+					$i++;
+					$no_order.=" order_id='".$row->terima_order;
+					if($i<$result->num_rows()){
+						$no_order.=" OR";
+					}
+				}
+			
+				
 				$query = "DELETE master_terima_beli,detail_terima_beli,detail_terima_bonus 
 							FROM master_terima_beli,detail_terima_beli,detail_terima_bonus 
 							WHERE (";
@@ -630,9 +648,16 @@ class M_master_terima_beli extends Model{
 				$query.=" AND (dterima_master=terima_id OR dtbonus_master=terima_id)";
 				$this->db->query($query);
 			}
-			if($this->db->affected_rows()>0)
+			if($this->db->affected_rows()>0){
+				//PEMBUKAAN ORDER
+				if($no_order<>""){
+					$sql="UPDATE master_order_beli SET order_status='Terbuka'
+							WHERE ".$no_order;
+					$this->db->query($sql);
+				}
+				
 				return '1';
-			else
+			}else
 				return '0';
 		}
 		

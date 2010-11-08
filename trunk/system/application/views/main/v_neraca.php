@@ -582,12 +582,12 @@ Ext.onReady(function(){
 		  	switch(result){
 		  	case 1:
 				win = window.open('./print/lap_neraca.html','neracalist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
-				win.print();
+				
 				break;
 		  	default:
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Unable to print the grid!',
+					msg: 'Tidak bisa mencetak data!',
 					buttons: Ext.MessageBox.OK,
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING
@@ -652,7 +652,7 @@ Ext.onReady(function(){
 		  	default:
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Unable to print the grid!',
+					msg: 'Tidak bisa mencetak data!',
 					buttons: Ext.MessageBox.OK,
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING

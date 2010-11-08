@@ -15,18 +15,18 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Draft List</title>
+<title>Daftar Draft SMS</title>
 <link rel='stylesheet' type='text/css' href='../assets/modules/main/css/printstyle.css'/>
 </head>
 <table summary='Draft List'>
-	<caption>Draft List</caption>
-	<thead><tr><th scope='col'>No</th><th scope='col'>Draft Id</th><th scope='col'>Draft Destination</th><th scope='col'>Draft Message</th><th scope='col'>Draft Date</th><th scope='col'>Draft Creator</th><th scope='col'>Draft Date Create</th><th scope='col'>Draft Update</th><th scope='col'>Draft Date Update</th><th scope='col'>Draft Revised</th></tr></thead>
-	<tfoot><tr><th scope='row'>Total</th><td colspan='9'><?php echo count($data_print); ?></td></tr></tfoot>
+	<caption>Daftar Draft SMS</caption>
+	<thead><tr><th scope='col'>No</th><th scope='col'>Tanggal<th scope='col'>Isi Pesan</th></tr></thead>
+	<tfoot><tr><th scope='row'>Total</th><td colspan="2" ><?php echo count($data_print); ?></td></tr></tfoot>
 	<tbody>
 		<?php $i=0; foreach($data_print as $print) { $i++; ?>
-		<tr><td><? echo $i; ?></td><td><?php echo $print->draft_id; ?></td><td><?php echo $print->draft_destination; ?></td><td><?php echo $print->draft_message; ?></td><td><?php echo $print->draft_date; ?></td><td><?php echo $print->draft_creator; ?></td><td><?php echo $print->draft_date_create; ?></td><td><?php echo $print->draft_update; ?></td><td><?php echo $print->draft_date_update; ?></td><td><?php echo $print->draft_revised; ?></td></tr>
+		<tr><td><? echo $i; ?></td><td><?php echo $print->draft_date; ?></td><td><?php echo $print->draft_message; ?></td></tr>
 		<?php } ?>
 	</tbody>
-<body>
+<body onload='window.print()'>
 </body>
 </html>

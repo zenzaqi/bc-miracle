@@ -168,7 +168,7 @@ Ext.onReady(function(){
 				var result=response.responseText;
 				Ext.MessageBox.show({
 					   title: 'Error',
-					   msg: 'Could not connect to the database. retry later.',
+					   msg: 'Tidak bisa terhubung dengan database server',
 					   buttons: Ext.MessageBox.OK,
 					   animEl: 'database',
 					   icon: Ext.MessageBox.ERROR
@@ -178,7 +178,7 @@ Ext.onReady(function(){
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'Your Form is not valid!.',
+				msg: 'Isian belum sempurna!.',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -307,13 +307,13 @@ Ext.onReady(function(){
 	function master_terima_beli_confirm_delete(){
 		// only one master_terima_beli is selected here
 		if(master_terima_beliListEditorGrid.selModel.getCount() == 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', master_terima_beli_delete);
+			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data berikut?', master_terima_beli_delete);
 		} else if(master_terima_beliListEditorGrid.selModel.getCount() > 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', master_terima_beli_delete);
+			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data-data berikut?', master_terima_beli_delete);
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really delete something you haven\'t selected?',
+				msg: 'Tidak ada yang dipilih untuk dihapus',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -333,7 +333,7 @@ Ext.onReady(function(){
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really update something you haven\'t selected?',
+				msg: 'Tidak ada data yang dipilih untuk diedit',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -364,7 +364,7 @@ Ext.onReady(function(){
 						default:
 							Ext.MessageBox.show({
 								title: 'Warning',
-								msg: 'Could not delete the entire selection',
+								msg: 'Tidak bisa menghapus data yang diplih',
 								buttons: Ext.MessageBox.OK,
 								animEl: 'save',
 								icon: Ext.MessageBox.WARNING
@@ -376,7 +376,7 @@ Ext.onReady(function(){
 					var result=response.responseText;
 					Ext.MessageBox.show({
 					   title: 'Error',
-					   msg: 'Could not connect to the database. retry later.',
+					   msg: 'Tidak bisa terhubung dengan database server',
 					   buttons: Ext.MessageBox.OK,
 					   animEl: 'database',
 					   icon: Ext.MessageBox.ERROR
@@ -653,25 +653,32 @@ Ext.onReady(function(){
 			store: master_terima_beli_DataStore,
 			displayInfo: true
 		}),
-		/* Add Control on ToolBar */
 		tbar: [
+		<?php if(eregi('C',$this->m_security->get_access_group_by_kode('MENU_TERIMA'))){ ?>
 		{
 			text: 'Add',
 			tooltip: 'Add new record',
 			iconCls:'icon-adds',    				// this is defined in our styles.css
 			handler: display_form_window
-		}, '-',{
+		}, '-',
+		<?php } ?>
+		<?php if(eregi('U|R',$this->m_security->get_access_group_by_kode('MENU_TERIMA'))){ ?>
+		{
 			text: 'Edit',
 			tooltip: 'Edit selected record',
 			iconCls:'icon-update',
 			handler: master_terima_beli_confirm_update   // Confirm before updating
-		}, '-',{
+		}, '-',
+		<?php } ?>
+		<?php if(eregi('D',$this->m_security->get_access_group_by_kode('MENU_TERIMA'))){ ?>
+		{
 			text: 'Delete',
 			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
-			disabled: true,
 			handler: master_terima_beli_confirm_delete   // Confirm before deleting
-		}, '-', {
+		}, '-', 
+		<?php } ?>
+		{
 			text: 'Adv Search',
 			tooltip: 'Pencarian detail',
 			iconCls:'icon-search',
@@ -717,11 +724,14 @@ Ext.onReady(function(){
 	master_terima_beli_ContextMenu = new Ext.menu.Menu({
 		id: 'master_terima_beli_ListEditorGridContextMenu',
 		items: [
+		<?php if(eregi('U|R',$this->m_security->get_access_group_by_kode('MENU_TERIMA'))){ ?>
 		{ 
 			text: 'Edit', tooltip: 'Edit selected record', 
 			iconCls:'icon-update',
 			handler: master_terima_beli_confirm_update 
 		},
+		<?php } ?>
+		<?php if(eregi('D',$this->m_security->get_access_group_by_kode('MENU_TERIMA'))){ ?>
 		{ 
 			text: 'Delete', 
 			tooltip: 'Delete selected record', 
@@ -729,6 +739,7 @@ Ext.onReady(function(){
 			disabled: true,
 			handler: master_terima_beli_confirm_delete 
 		},
+		<?php } ?>
 		'-',
 		{ 
 			text: 'Print',
@@ -1185,7 +1196,9 @@ Ext.onReady(function(){
 		frame: true,
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
-		viewConfig: { forceFit:true},
+		viewConfig: { forceFit:true}
+		<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_TERIMA'))){ ?>
+		,
 		tbar: [
 		{
 			text: 'Add',
@@ -1199,6 +1212,7 @@ Ext.onReady(function(){
 			handler: detail_terima_beli_confirm_delete
 		}
 		]
+		<?php } ?>
 	});
 	//eof
 	
@@ -1280,7 +1294,7 @@ Ext.onReady(function(){
 					var result=response.responseText;
 					Ext.MessageBox.show({
 					   title: 'Error',
-					   msg: 'Could not connect to the database. retry later.',
+					   msg: 'Tidak bisa terhubung dengan database server',
 					   buttons: Ext.MessageBox.OK,
 					   animEl: 'database',
 					   icon: Ext.MessageBox.ERROR
@@ -1309,7 +1323,7 @@ Ext.onReady(function(){
 				var result=response.responseText;
 				Ext.MessageBox.show({
 				   title: 'Error',
-				   msg: 'Could not connect to the database. retry later.',
+				   msg: 'Tidak bisa terhubung dengan database server',
 				   buttons: Ext.MessageBox.OK,
 				   animEl: 'database',
 				   icon: Ext.MessageBox.ERROR
@@ -1323,13 +1337,13 @@ Ext.onReady(function(){
 	function detail_terima_beli_confirm_delete(){
 		// only one record is selected here
 		if(detail_terima_beliListEditorGrid.selModel.getCount() == 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', detail_terima_beli_delete);
+			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data berikut?', detail_terima_beli_delete);
 		} else if(detail_terima_beliListEditorGrid.selModel.getCount() > 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', detail_terima_beli_delete);
+			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data-data berikut?', detail_terima_beli_delete);
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really delete something you haven\'t selected?',
+				msg: 'Tidak ada yang dipilih untuk dihapus',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -1522,7 +1536,9 @@ Ext.onReady(function(){
 		frame: true,
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
-		viewConfig: { forceFit:true},
+		viewConfig: { forceFit:true}
+		<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_TERIMA'))){ ?>
+		,
 		tbar: [
 		{
 			text: 'Add',
@@ -1536,6 +1552,7 @@ Ext.onReady(function(){
 			handler: detail_terima_bonus_confirm_delete
 		}
 		]
+		<?php } ?>
 	});
 	//eof
 	
@@ -1628,7 +1645,7 @@ Ext.onReady(function(){
 					var result=response.responseText;
 					Ext.MessageBox.show({
 					   title: 'Error',
-					   msg: 'Could not connect to the database. retry later.',
+					   msg: 'Tidak bisa terhubung dengan database server',
 					   buttons: Ext.MessageBox.OK,
 					   animEl: 'database',
 					   icon: Ext.MessageBox.ERROR
@@ -1679,7 +1696,7 @@ Ext.onReady(function(){
 				var result=response.responseText;
 				Ext.MessageBox.show({
 				   title: 'Error',
-				   msg: 'Could not connect to the database. retry later.',
+				   msg: 'Tidak bisa terhubung dengan database server',
 				   buttons: Ext.MessageBox.OK,
 				   animEl: 'database',
 				   icon: Ext.MessageBox.ERROR
@@ -1693,13 +1710,13 @@ Ext.onReady(function(){
 	function detail_terima_bonus_confirm_delete(){
 		// only one record is selected here
 		if(detail_terima_bonusListEditorGrid.selModel.getCount() == 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', detail_terima_bonus_delete);
+			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data berikut?', detail_terima_bonus_delete);
 		} else if(detail_terima_bonusListEditorGrid.selModel.getCount() > 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', detail_terima_bonus_delete);
+			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data-data berikut?', detail_terima_bonus_delete);
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really delete something you haven\'t selected?',
+				msg: 'Tidak ada yang dipilih untuk dihapus',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -1761,16 +1778,19 @@ Ext.onReady(function(){
 		bodyStyle:'padding:5px',
 		autoHeight:true,
 		width: 700,        
-		items: [master_terima_beli_masterGroup,detail_tab_terima]
-		,
-		buttons: [{
+		items: [master_terima_beli_masterGroup,detail_tab_terima],
+		buttons: [
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_TERIMA'))){ ?>
+			{
 				text: 'Save and Print',
 				handler: function() { master_terima_beli_create('print'); }
 			},{
 				text: 'Save',
 				handler: function() { master_terima_beli_create('close'); }
 			}
-			,{
+			,
+			<?php } ?>
+			{
 				text: 'Cancel',
 				handler: function(){
 					master_terima_beli_createWindow.hide();
@@ -1797,9 +1817,6 @@ Ext.onReady(function(){
 		items: master_terima_beli_createForm
 	});
 	/* End Window */
-	
-	
-	
 	
 	/* Function for action list search */
 	function master_terima_beli_list_search(){
@@ -2073,12 +2090,12 @@ Ext.onReady(function(){
 		  	switch(result){
 		  	case 1:
 				win = window.open('./print/terima_faktur.html','master_terima_faktur','height=800,width=600,resizable=1,scrollbars=1, menubar=1');
-				//win.print();
+				//
 				break;
 		  	default:
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Unable to print the grid!',
+					msg: 'Tidak bisa mencetak data!',
 					buttons: Ext.MessageBox.OK,
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING
@@ -2090,7 +2107,7 @@ Ext.onReady(function(){
 		  	var result=response.responseText;
 			Ext.MessageBox.show({
 			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
+			   msg: 'Tidak bisa terhubung dengan database server',
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR
@@ -2143,12 +2160,12 @@ Ext.onReady(function(){
 		  	switch(result){
 		  	case 1:
 				win = window.open('./print/print_terima_belilist.html','master_terima_belilist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
-				win.print();
+				
 				break;
 		  	default:
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Unable to print the grid!',
+					msg: 'Tidak bisa mencetak data!',
 					buttons: Ext.MessageBox.OK,
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING
@@ -2160,7 +2177,7 @@ Ext.onReady(function(){
 		  	var result=response.responseText;
 			Ext.MessageBox.show({
 			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
+			   msg: 'Tidak bisa terhubung dengan database server',
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR
@@ -2218,7 +2235,7 @@ Ext.onReady(function(){
 		  	default:
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Unable to convert excel the grid!',
+					msg: 'Tidak bisa meng-export data ke dalam format excel!',
 					buttons: Ext.MessageBox.OK,
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING
@@ -2230,7 +2247,7 @@ Ext.onReady(function(){
 		  	var result=response.responseText;
 			Ext.MessageBox.show({
 			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
+			   msg: 'Tidak bisa terhubung dengan database server',
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR

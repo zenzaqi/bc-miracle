@@ -118,7 +118,7 @@ Ext.onReady(function(){
 				var result=response.responseText;
 				Ext.MessageBox.show({
 				   title: 'Error',
-				   msg: 'Could not connect to the database. retry later.',
+				   msg: 'Tidak bisa terhubung dengan database server',
 				   buttons: Ext.MessageBox.OK,
 				   animEl: 'database',
 				   icon: Ext.MessageBox.ERROR
@@ -216,7 +216,7 @@ Ext.onReady(function(){
 						default:
 							Ext.MessageBox.show({
 								title: 'Warning',
-								msg: 'Could not delete the entire selection',
+								msg: 'Tidak bisa menghapus data yang diplih',
 								buttons: Ext.MessageBox.OK,
 								animEl: 'save',
 								icon: Ext.MessageBox.WARNING
@@ -228,7 +228,7 @@ Ext.onReady(function(){
 					var result=response.responseText;
 					Ext.MessageBox.show({
 					   title: 'Error',
-					   msg: 'Could not connect to the database. retry later.',
+					   msg: 'Tidak bisa terhubung dengan database server',
 					   buttons: Ext.MessageBox.OK,
 					   animEl: 'database',
 					   icon: Ext.MessageBox.ERROR
@@ -316,10 +316,13 @@ Ext.onReady(function(){
 			header: '<div align="center">Isi Pesan</div>',
 			dataIndex: 'draft_message',
 			width: 250,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_DRAFT'))){ ?>
+			,
 			editor: new Ext.form.TextArea({
 				height: 5
 			})
+			<?php } ?>
 		}, 
 		{
 			header: 'Creator',
@@ -384,19 +387,25 @@ Ext.onReady(function(){
 			store: draft_DataStore,
 			displayInfo: true
 		}),
-		/* Add Control on ToolBar */
+		
 		tbar: [
+		<?php if(eregi('U|R',$this->m_security->get_access_group_by_kode('MENU_DRAFT'))){ ?>
 		{
 			text: 'Edit',
 			tooltip: 'Edit selected record',
 			iconCls:'icon-update',
 			handler: draft_confirm_update   // Confirm before updating
-		}, '-',{
+		}, '-',
+		<?php } ?>
+		<?php if(eregi('D',$this->m_security->get_access_group_by_kode('MENU_DRAFT'))){ ?>
+		{
 			text: 'Delete',
 			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
 			handler: draft_confirm_delete   // Confirm before deleting
-		}, '-', {
+		}, '-', 
+		<?php } ?>
+		{
 			text: 'Adv Search',
 			tooltip: 'Advanced Search',
 			iconCls:'icon-search',
@@ -431,17 +440,21 @@ Ext.onReady(function(){
 	draft_ContextMenu = new Ext.menu.Menu({
 		id: 'draft_ListEditorGridContextMenu',
 		items: [
+		<?php if(eregi('U|R',$this->m_security->get_access_group_by_kode('MENU_DRAFT'))){ ?>
 		{ 
 			text: 'Edit', tooltip: 'Edit selected record', 
 			iconCls:'icon-update',
 			handler: draft_editContextMenu 
 		},
+		<?php } ?>
+		<?php if(eregi('D',$this->m_security->get_access_group_by_kode('MENU_DRAFT'))){ ?>
 		{ 
 			text: 'Delete', 
 			tooltip: 'Delete selected record', 
 			iconCls:'icon-delete',
 			handler: draft_confirm_delete 
 		},
+		<?php } ?>
 		'-',
 		{ 
 			text: 'Print',
@@ -641,7 +654,7 @@ Ext.onReady(function(){
 					var result=response.responseText;
 					Ext.MessageBox.show({
 						   title: 'Error',
-						   msg: 'Could not connect to the database. retry later.',
+						   msg: 'Tidak bisa terhubung dengan database server',
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'database',
 						   icon: Ext.MessageBox.ERROR
@@ -675,7 +688,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'phonegroup_id'
 		},[
-		/* dataIndex => insert intophonegroup_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'phonegroup_id', type: 'int', mapping: 'phonegroup_id'}, 
 			{name: 'phonegroup_nama', type: 'string', mapping: 'phonegroup_nama'},
 			{name: 'phonegroup_detail', type: 'string', mapping: 'phonegroup_detail'},
@@ -1135,14 +1147,18 @@ Ext.onReady(function(){
 				items: [draft_destinationField, draft_opsiField, draft_detailField, draft_count_isiField] 
 			}
 			],
-		buttons: [{
+		buttons: [
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_DRAFT'))){ ?>
+			{
 				text: 'Send',
 				handler: function(){ draft_save('send'); }
 			},{
 				text: 'Save',
 				handler: function(){ draft_save('draft'); }
 			}
-			,{
+			,
+			<?php } ?>
+			{
 				text: 'Cancel',
 				handler: function(){
 					draft_reset_form();
@@ -1255,11 +1271,10 @@ Ext.onReady(function(){
 		// change the store parameters
 		draft_DataStore.baseParams = {
 			task: 'SEARCH',
-			//variable here
 			draft_id	:	draft_id_search, 
 			draft_destination	:	draft_destination_search, 
 			draft_message	:	draft_message_search, 
-			draft_date	:	draft_date_search_date, 
+			draft_date	:	draft_date_search_date
 		};
 		// Cause the datastore to do another query : 
 		draft_DataStore.reload({params: {start: 0, limit: pageS}});
@@ -1268,8 +1283,7 @@ Ext.onReady(function(){
 	/* Function for reset search result */
 	function draft_reset_search(){
 		// reset the store parameters
-		draft_DataStore.baseParams = { task: 'LIST' };
-		// Cause the datastore to do another query : 
+		draft_DataStore.baseParams = { task: 'LIST', start: 0, limit: pageS };
 		draft_DataStore.reload({params: {start: 0, limit: pageS}});
 		draft_searchWindow.close();
 	};
@@ -1313,7 +1327,7 @@ Ext.onReady(function(){
     
 	/* Function for retrieve search Form Panel */
 	draft_searchForm = new Ext.FormPanel({
-		labelAlign: 'top',
+		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
 		width: 300,        
@@ -1325,7 +1339,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [draft_destinationSearchField, draft_messageSearchField, draft_dateSearchField] 
+				items: [draft_dateSearchField, draft_messageSearchField] 
 			}
 			]
 		}]
@@ -1345,7 +1359,7 @@ Ext.onReady(function(){
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
 	draft_searchWindow = new Ext.Window({
-		title: 'draft Search',
+		title: 'Pencarian Draft SMS',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,
@@ -1388,8 +1402,7 @@ Ext.onReady(function(){
 		url: 'index.php?c=c_draft&m=get_action',
 		params: {
 			task: "PRINT",
-		  	query: searchquery,                    		// if we are doing a quicksearch, use this
-			//if we are doing advanced search, use this
+		  	query: searchquery,                    		
 			draft_destination : draft_destination_print,
 			draft_message : draft_message_print,
 		  	draft_date : draft_date_print_date, 
@@ -1400,12 +1413,12 @@ Ext.onReady(function(){
 		  	switch(result){
 		  	case 1:
 				win = window.open('./print/draft_printlist.html','draftlist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
-				win.print();
+				
 				break;
 		  	default:
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Unable to print the grid!',
+					msg: 'Tidak bisa mencetak data!',
 					buttons: Ext.MessageBox.OK,
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING
@@ -1417,7 +1430,7 @@ Ext.onReady(function(){
 		  	var result=response.responseText;
 			Ext.MessageBox.show({
 			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
+			   msg: 'Tidak bisa terhubung dengan database server',
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR
@@ -1445,8 +1458,7 @@ Ext.onReady(function(){
 		url: 'index.php?c=c_draft&m=get_action',
 		params: {
 			task: "EXCEL",
-		  	query: searchquery,                    		// if we are doing a quicksearch, use this
-			//if we are doing advanced search, use this
+		  	query: searchquery,                    		
 			draft_destination : draft_destination_2excel,
 			draft_message : draft_message_2excel,
 		  	draft_date : draft_date_2excel_date, 
@@ -1461,7 +1473,7 @@ Ext.onReady(function(){
 		  	default:
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Unable to convert excel the grid!',
+					msg: 'Tidak bisa meng-export data ke dalam format excel!',
 					buttons: Ext.MessageBox.OK,
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING
@@ -1473,7 +1485,7 @@ Ext.onReady(function(){
 		  	var result=response.responseText;
 			Ext.MessageBox.show({
 			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
+			   msg: 'Tidak bisa terhubung dengan database server',
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR

@@ -166,7 +166,7 @@ Ext.onReady(function(){
 					default:
 						Ext.MessageBox.show({
 							   title: 'Warning',
-							   msg: 'We could\'t not save the supplier.',
+							   msg: 'Data Supplier tidak bisa disimpan.',
 							   buttons: Ext.MessageBox.OK,
 							   animEl: 'save',
 							   icon: Ext.MessageBox.WARNING
@@ -177,11 +177,11 @@ Ext.onReady(function(){
 			failure: function(response){
 				var result=response.responseText;
 				Ext.MessageBox.show({
-							   title: 'Error',
-							   msg: 'Could not connect to the database. retry later.',
-							   buttons: Ext.MessageBox.OK,
-							   animEl: 'database',
-							   icon: Ext.MessageBox.ERROR
+					   title: 'Error',
+					   msg: 'Tidak bisa terhubung dengan database server',
+					   buttons: Ext.MessageBox.OK,
+					   animEl: 'database',
+					   icon: Ext.MessageBox.ERROR
 				});	
 			}									    
 		});   
@@ -259,14 +259,14 @@ Ext.onReady(function(){
 					var result=eval(response.responseText);
 					switch(result){
 						case 1:
-							Ext.MessageBox.alert(post2db+' OK','The Supplier was '+msg+' successfully.');
+							Ext.MessageBox.alert(post2db+' OK','Data Supplier berhasil disimpan.');
 							supplier_DataStore.reload();
 							supplier_createWindow.hide();
 							break;
 						default:
 							Ext.MessageBox.show({
 							   title: 'Warning',
-							   msg: 'We could\'t not '+msg+' the Supplier.',
+							   msg: 'Data Supplier tidak bisa disimpan!.',
 							   buttons: Ext.MessageBox.OK,
 							   animEl: 'save',
 							   icon: Ext.MessageBox.WARNING
@@ -277,18 +277,18 @@ Ext.onReady(function(){
 				failure: function(response){
 					var result=response.responseText;
 					Ext.MessageBox.show({
-								   title: 'Error',
-								   msg: 'Could not connect to the database. retry later.',
-								   buttons: Ext.MessageBox.OK,
-								   animEl: 'database',
-								   icon: Ext.MessageBox.ERROR
+						   title: 'Error',
+						   msg: 'Tidak bisa terhubung dengan database server',
+						   buttons: Ext.MessageBox.OK,
+						   animEl: 'database',
+						   icon: Ext.MessageBox.ERROR
 					});	
 				}                      
 			});
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'Your Form is not valid!.',
+				msg: 'Isian belum sempurna!.',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -341,7 +341,8 @@ Ext.onReady(function(){
 		supplier_keteranganField.reset();
 		supplier_keteranganField.setValue(null);
 		supplier_aktifField.reset();
-		supplier_aktifField.setValue(null);
+		supplier_aktifField.setValue('Aktif');
+		cbo_supplier_kategoriDataStore.reload();
 	}
  	/* End of Function */
   
@@ -376,10 +377,11 @@ Ext.onReady(function(){
   	/* Function for Displaying  create Window Form */
 	function display_form_window(){
 		if(!supplier_createWindow.isVisible()){
-			supplier_reset_form();
+			
 			post2db='CREATE';
 			msg='created';
-			cbo_supplier_kategoriDataStore.reload();
+			supplier_reset_form();
+			
 			supplier_createWindow.show();
 		} else {
 			supplier_createWindow.toFront();
@@ -391,13 +393,13 @@ Ext.onReady(function(){
 	function supplier_confirm_delete(){
 		// only one supplier is selected here
 		if(supplierListEditorGrid.selModel.getCount() == 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', supplier_delete);
+			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data berikut?', supplier_delete);
 		} else if(supplierListEditorGrid.selModel.getCount() > 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', supplier_delete);
+			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data-data berikut?', supplier_delete);
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really delete something you haven\'t selected?',
+				msg: 'Tidak ada yang dipilih untuk dihapus',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -410,14 +412,16 @@ Ext.onReady(function(){
 	function supplier_confirm_update(){
 		/* only one record is selected here */
 		if(supplierListEditorGrid.selModel.getCount() == 1) {
-			supplier_set_form();
+			
 			post2db='UPDATE';
 			msg='updated';
+			supplier_set_form();
+			
 			supplier_createWindow.show();
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really update something you haven\'t selected?',
+				msg: 'Tidak ada data yang dipilih untuk diedit',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -448,7 +452,7 @@ Ext.onReady(function(){
 						default:
 							Ext.MessageBox.show({
 								title: 'Warning',
-								msg: 'Could not delete the entire selection',
+								msg: 'Tidak bisa menghapus data yang diplih',
 								buttons: Ext.MessageBox.OK,
 								animEl: 'save',
 								icon: Ext.MessageBox.WARNING
@@ -460,7 +464,7 @@ Ext.onReady(function(){
 					var result=response.responseText;
 					Ext.MessageBox.show({
 					   title: 'Error',
-					   msg: 'Could not connect to the database. retry later.',
+					   msg: 'Tidak bisa terhubung dengan database server',
 					   buttons: Ext.MessageBox.OK,
 					   animEl: 'database',
 					   icon: Ext.MessageBox.ERROR
@@ -484,7 +488,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'supplier_id'
 		},[
-		/* dataIndex => insert intosupplier_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'supplier_id', type: 'int', mapping: 'supplier_id'},
 			{name: 'supplier_kategori', type: 'string', mapping: 'supplier_kategori'},
 			{name: 'supplier_nama', type: 'string', mapping: 'supplier_nama'},
@@ -522,7 +525,6 @@ Ext.onReady(function(){
 			root: 'results',
 			totalProperty: 'total'
 		},[
-		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
 			{name: 'supplier_kategori_display', type: 'string', mapping: 'supplier_kategori'}
 		]),
 		sortInfo:{field: 'supplier_kategori_display', direction: "ASC"}
@@ -530,7 +532,7 @@ Ext.onReady(function(){
     
   	/* Function for Identify of Window Column Model */
 	supplier_ColumnModel = new Ext.grid.ColumnModel(
-		[/*{
+		[{
 			header: '#',
 			readOnly: true,
 			dataIndex: 'supplier_id',
@@ -539,146 +541,190 @@ Ext.onReady(function(){
 				cell.css = "readonlycell"; // Mengambil Value dari Class di dalam CSS 
 				return value;
 				},
-			hidden: false
-		},*/
+			hidden: true
+		},
 		{
 			header: 'Kategori',
 			dataIndex: 'supplier_kategori',
 			width: 150,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_SUPPLIER'))){ ?>
+			,
 			editor: new Ext.form.TextField({
 				maxLength: 150
           	})
+			<?php } ?>
 		},
 		{
 			header: 'Nama',
 			dataIndex: 'supplier_nama',
 			width: 250,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_SUPPLIER'))){ ?>
+			,
 			editor: new Ext.form.TextField({
 				maxLength: 250
           	})
+			<?php } ?>
 		},
 		{
 			header: 'Alamat',
 			dataIndex: 'supplier_alamat',
 			width: 250,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_SUPPLIER'))){ ?>
+			,
 			editor: new Ext.form.TextField({
 				maxLength: 250
           	})
+			<?php } ?>
 		},
 		{
 			header: 'Kota',
 			dataIndex: 'supplier_kota',
 			width: 150,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_SUPPLIER'))){ ?>
+			,
 			editor: new Ext.form.TextField({
 				maxLength: 250
           	})
+			<?php } ?>
 		},
 		{
 			header: ' Kode Pos',
 			dataIndex: 'supplier_kodepos',
 			width: 100,
 			sortable: true,
+			hidden: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_SUPPLIER'))){ ?>
+			,
 			editor: new Ext.form.TextField({
 				maxLength: 5
-          	}),
-			hidden: true
+          	})
+			<?php } ?>
 		},
 		{
 			header: 'Propinsi',
 			dataIndex: 'supplier_propinsi',
 			width: 150,
 			sortable: true,
+			hidden: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_SUPPLIER'))){ ?>
+			,
 			editor: new Ext.form.TextField({
 				maxLength: 250
-          	}),
-			hidden: true
+          	})
+			<?php } ?>
 		},
 		{
 			header: 'Negara',
 			dataIndex: 'supplier_negara',
 			width: 150,
 			sortable: true,
+			hidden: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_SUPPLIER'))){ ?>
+			,
 			editor: new Ext.form.TextField({
 				maxLength: 250
-          	}),
-			hidden: true
+          	})
+			<?php } ?>
 		},
 		{
 			header: 'No. Telp',
 			dataIndex: 'supplier_notelp',
 			width: 120,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_SUPPLIER'))){ ?>
+			,
 			editor: new Ext.form.TextField({
 				maxLength: 25
           	})
+			<?php } ?>
 		},
 		{
 			header: 'No. Telp Lain',
 			dataIndex: 'supplier_notelp2',
 			width: 120,
 			sortable: true,
+			hidden: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_SUPPLIER'))){ ?>
+			,
 			editor: new Ext.form.TextField({
 				maxLength: 25
-          	}),
-			hidden: true
+          	})
+			<?php } ?>
 		},
 		{
 			header: 'No. Fax',
 			dataIndex: 'supplier_nofax',
 			width: 150,
 			sortable: true,
+			hidden: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_SUPPLIER'))){ ?>
+			,
 			editor: new Ext.form.TextField({
 				maxLength: 25
-          	}),
-			hidden: true
+          	})
+			<?php } ?>
 		},
 		{
 			header: 'Email',
 			dataIndex: 'supplier_email',
 			width: 150,
 			sortable: true,
+			hidden: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_SUPPLIER'))){ ?>
+			,
 			editor: new Ext.form.TextField({
 				maxLength: 100
-          	}),
-			hidden: true
+          	})
+			<?php } ?>
 		},
 		{
 			header: 'Website',
 			dataIndex: 'supplier_website',
 			width: 150,
 			sortable: true,
+			hidden: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_SUPPLIER'))){ ?>
+			,
 			editor: new Ext.form.TextField({
 				maxLength: 100
-          	}),
-			hidden: true
+          	})
+			<?php } ?>
 		},
 		{
 			header: 'Contact Person',
 			dataIndex: 'supplier_cp',
 			width: 150,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_SUPPLIER'))){ ?>
+			,
 			editor: new Ext.form.TextField({
 				maxLength: 250
           	})
+			<?php } ?>
 		},
 		{
 			header: 'Telp. CP',
 			dataIndex: 'supplier_contact_cp',
 			width: 150,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_SUPPLIER'))){ ?>
+			,
 			editor: new Ext.form.TextField({
 				maxLength: 25
           	})
+			<?php } ?>
 		},
 		{
 			header: 'Status',
 			dataIndex: 'supplier_aktif',
 			width: 150,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_SUPPLIER'))){ ?>
+			,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
 				triggerAction: 'all',
@@ -692,6 +738,7 @@ Ext.onReady(function(){
                	lazyRender:true,
                	listClass: 'x-combo-list-small'
             })
+			<?php } ?>
 		},
 		{
 			header: 'Creator',
@@ -752,26 +799,34 @@ Ext.onReady(function(){
 			store: supplier_DataStore,
 			displayInfo: true
 		}),
-		/* Add Control on ToolBar */
 		tbar: [
+		<?php if(eregi('C',$this->m_security->get_access_group_by_kode('MENU_SUPPLIER'))){ ?>
 		{
 			text: 'Add',
 			tooltip: 'Add new record',
 			iconCls:'icon-adds',    				// this is defined in our styles.css
 			handler: display_form_window
-		}, '-',{
+		}, '-',
+		<?php } ?>
+		<?php if(eregi('U|R',$this->m_security->get_access_group_by_kode('MENU_SUPPLIER'))){ ?>
+		{
 			text: 'Edit',
 			tooltip: 'Edit selected record',
 			iconCls:'icon-update',
 			handler: supplier_confirm_update   // Confirm before updating
-		}, '-',{
+		}, '-',
+		<?php } ?>
+		<?php if(eregi('D',$this->m_security->get_access_group_by_kode('MENU_SUPPLIER'))){ ?>
+		{
 			text: 'Delete',
 			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
 			disabled:true,
 			handler: supplier_confirm_delete   // Confirm before deleting
-		}, '-', {
-			text: 'Search',
+		}, '-', 
+		<?php } ?>
+		{
+			text: 'Adv Search',
 			tooltip: 'Advanced Search',
 			iconCls:'icon-search',
 			handler: display_form_search_window 
@@ -816,11 +871,14 @@ Ext.onReady(function(){
 	supplier_ContextMenu = new Ext.menu.Menu({
 		id: 'supplier_ListEditorGridContextMenu',
 		items: [
+		<?php if(eregi('U|R',$this->m_security->get_access_group_by_kode('MENU_SUPPLIER'))){ ?>
 		{ 
 			text: 'Edit', tooltip: 'Edit selected record', 
 			iconCls:'icon-update',
 			handler: supplier_confirm_update 
 		},
+		<?php } ?>
+		<?php if(eregi('D',$this->m_security->get_access_group_by_kode('MENU_SUPPLIER'))){ ?>
 		{ 
 			text: 'Delete', 
 			tooltip: 'Delete selected record', 
@@ -828,6 +886,7 @@ Ext.onReady(function(){
 			disabled: true,
 			handler: supplier_confirm_delete 
 		},
+		<?php } ?>
 		'-',
 		{ 
 			text: 'Print',
@@ -1028,22 +1087,28 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [supplier_kategoriField, supplier_kategoritxtField, supplier_namaField, supplier_alamatField, supplier_kotaField, supplier_kodeposField, supplier_propinsiField, supplier_negaraField, supplier_websiteField] 
+				items: [supplier_kategoriField, supplier_kategoritxtField, supplier_namaField, supplier_alamatField, supplier_kotaField,
+						supplier_kodeposField, supplier_propinsiField, supplier_negaraField, supplier_websiteField] 
 			}
 			,{
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [supplier_notelpField, supplier_notelp2Field,supplier_nofaxField, supplier_emailField, supplier_cpField, supplier_contact_cpField, supplier_keteranganField, supplier_aktifField]
+				items: [supplier_notelpField, supplier_notelp2Field,supplier_nofaxField, supplier_emailField, supplier_cpField, 
+						supplier_contact_cpField, supplier_keteranganField, supplier_aktifField]
 			}
 			]
 		}]
 		,
-		buttons: [{
+		buttons: [
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_SUPPLIER'))){ ?>
+			{
 				text: 'Save and Close',
 				handler: supplier_create
 			}
-			,{
+			,
+			<?php } ?>
+			{
 				text: 'Cancel',
 				handler: function(){
 					supplier_createWindow.hide();
@@ -1325,13 +1390,15 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [supplier_kategoriSearchField, supplier_namaSearchField, supplier_alamatSearchField, supplier_kotaSearchField, supplier_kodeposSearchField, supplier_propinsiSearchField, supplier_negaraSearchField] 
+				items: [supplier_kategoriSearchField, supplier_namaSearchField, supplier_alamatSearchField, supplier_kotaSearchField,
+						supplier_kodeposSearchField, supplier_propinsiSearchField, supplier_negaraSearchField] 
 			}
 			,{
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [supplier_notelpSearchField, supplier_notelp2SearchField,supplier_nofaxSearchField, supplier_emailSearchField, supplier_websiteSearchField, supplier_cpSearchField, supplier_contact_cpSearchField, supplier_aktifSearchField] 
+				items: [supplier_notelpSearchField, supplier_notelp2SearchField,supplier_nofaxSearchField, supplier_emailSearchField, 
+						supplier_websiteSearchField, supplier_cpSearchField, supplier_contact_cpSearchField, supplier_aktifSearchField] 
 			}
 			]
 		}]
@@ -1444,12 +1511,12 @@ Ext.onReady(function(){
 		  	switch(result){
 		  	case 1:
 				win = window.open('./supplierlist.html','supplierlist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
-				win.print();
+				
 				break;
 		  	default:
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Unable to print the grid!',
+					msg: 'Tidak bisa mencetak data!',
 					buttons: Ext.MessageBox.OK,
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING
@@ -1461,7 +1528,7 @@ Ext.onReady(function(){
 		  	var result=response.responseText;
 			Ext.MessageBox.show({
 			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
+			   msg: 'Tidak bisa terhubung dengan database server',
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR
@@ -1541,7 +1608,7 @@ Ext.onReady(function(){
 		  	default:
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Unable to convert excel the grid!',
+					msg: 'Tidak bisa meng-export data ke dalam format excel!',
 					buttons: Ext.MessageBox.OK,
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING
@@ -1553,7 +1620,7 @@ Ext.onReady(function(){
 		  	var result=response.responseText;
 			Ext.MessageBox.show({
 			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
+			   msg: 'Tidak bisa terhubung dengan database server',
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR

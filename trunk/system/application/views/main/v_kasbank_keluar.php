@@ -156,7 +156,7 @@ Ext.onReady(function(){
 						var rsp_msg=result.replace(rsp_kode+':','');
 						if(rsp_kode=='OK'){
 								kasbank_keluar_detail_insert(eval(rsp_msg));
-								Ext.MessageBox.alert(post2db+' OK','Jurnal Kas/Bank sukses disimpan.');
+								Ext.MessageBox.alert(post2db+' OK','Jurnal Kas/Bank berhasil disimpan.');
 								kasbank_keluar_saveWindow.hide();
 						}else{
 								Ext.MessageBox.show({
@@ -223,7 +223,9 @@ Ext.onReady(function(){
 		cbo_akun_dkasbank_keluarDataStore.setBaseParam('task','all');
 		cbo_akun_dkasbank_keluarDataStore.load();
 		total_kasbank_keluar_debet.setValue(0);
+		<?php if(eregi('C',$this->m_security->get_access_group_by_kode('MENU_KASBANKKELUAR'))){ ?>
 		kasbank_keluar_button.setVisible(true);
+		<?php } ?>
 		
 	}
  	/* End of Function */
@@ -258,11 +260,13 @@ Ext.onReady(function(){
 			}
 		});
 		
+		<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_KASBANKKELUAR'))){ ?>
 		if(kasbankKeluarListEditorGrid.getSelectionModel().getSelected().get('kasbank_keluar_post')=='Y'){
 			kasbank_keluar_button.setVisible(false);
 		}else{
 			kasbank_keluar_button.setVisible(true);
 		}
+		<?php } ?>
 		
 	}
 	/* End setValue to EDIT*/
@@ -439,7 +443,7 @@ Ext.onReady(function(){
 						default:
 							Ext.MessageBox.show({
 								title: 'Warning',
-								msg: 'Could not delete the entire selection',
+								msg: 'Tidak bisa menghapus data yang diplih',
 								buttons: Ext.MessageBox.OK,
 								animEl: 'save',
 								icon: Ext.MessageBox.WARNING
@@ -705,23 +709,32 @@ Ext.onReady(function(){
 			displayInfo: true
 		}),
 		tbar: [
+		<?php if(eregi('C',$this->m_security->get_access_group_by_kode('MENU_KASBANKKELUAR'))){ ?>
 		{
 			text: 'Add',
 			tooltip: 'Add new record',
 			iconCls:'icon-adds',    				// this is defined in our styles.css
 			handler: display_form_window
-		}, '-',{
+		}, '-',
+		<?php } ?>
+		<?php if(eregi('U|R',$this->m_security->get_access_group_by_kode('MENU_KASBANKKELUAR'))){ ?>
+		{
 			text: 'Edit',
 			tooltip: 'Edit selected record',
 			iconCls:'icon-update',
 			handler: kasbank_keluar_confirm_update   // Confirm before updating
-		}, '-',{
+		}, '-',
+		<?php } ?>
+		<?php if(eregi('D',$this->m_security->get_access_group_by_kode('MENU_KASBANKKELUAR'))){ ?>
+		{
 			text: 'Delete',
 			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
 			handler: kasbank_keluar_confirm_delete   // Confirm before deleting
-		}, '-', {
-			text: 'Search',
+		}, '-', 
+		<?php } ?>
+		{
+			text: 'Adv Search',
 			tooltip: 'Advanced Search',
 			iconCls:'icon-search',
 			handler: display_form_search_window 
@@ -753,19 +766,23 @@ Ext.onReady(function(){
 	kasbank_keluar_ContextMenu = new Ext.menu.Menu({
 		id: 'kasbank_keluar_ListEditorGridContextMenu',
 		items: [
+		<?php if(eregi('U|R',$this->m_security->get_access_group_by_kode('MENU_KASBANKKELUAR'))){ ?>
 		{ 
 			text: 'Edit', tooltip: 'Edit selected record', 
 			iconCls:'icon-update',
 			handler: kasbank_keluar_editContextMenu 
 		},
+		<?php } ?>
+		<?php if(eregi('C',$this->m_security->get_access_group_by_kode('MENU_KASBANKKELUAR'))){ ?>
 		{ 
 			text: 'Delete', 
 			tooltip: 'Delete selected record', 
 			iconCls:'icon-delete',
 			handler: kasbank_keluar_confirm_delete 
-		}
+		},
+		<?php } ?>
 		<?php if(ereg('R',$this->m_security->get_access_group_by_kode('MENU_POSTING'))){ ?>
-		,'-',
+		'-',
 		{
 			text: 'Buka Posting',
 			tooltip: 'Buka Posting',
@@ -1071,7 +1088,9 @@ Ext.onReady(function(){
 			pageSize: pageS,
 			store: kasbank_keluar_detail_DataStore,
 			displayInfo: true
-		}),
+		})
+		<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_KASBANKKELUAR'))){ ?>
+		,
 		tbar: [
 		{
 			text: 'Add',
@@ -1085,6 +1104,7 @@ Ext.onReady(function(){
 			handler: kasbank_keluar_detail_confirm_delete
 		}
 		]
+		<?php } ?>
 	});
 	//eof
 	
@@ -1161,7 +1181,7 @@ Ext.onReady(function(){
 					var result=response.responseText;
 					Ext.MessageBox.show({
 					   title: 'Error',
-					   msg: 'Could not connect to the database. retry later.',
+					   msg: 'Tidak bisa terhubung dengan database server',
 					   buttons: Ext.MessageBox.OK,
 					   animEl: 'database',
 					   icon: Ext.MessageBox.ERROR
@@ -1184,7 +1204,7 @@ Ext.onReady(function(){
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really delete something you haven\'t selected?',
+				msg: 'Tidak ada yang dipilih untuk dihapus',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -1258,8 +1278,12 @@ Ext.onReady(function(){
 		autoHeight:true,
 		width: 700,        
 		items: [kasbank_keluar_masterGroup,kasbank_keluar_detailListEditorGrid,jumlah_total_kasbank_keluar],
-		buttons: [kasbank_keluar_button
-			,{
+		buttons: [
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_KASBANKKELUAR'))){ ?>
+			kasbank_keluar_button
+			,
+			<?php } ?>
+			{
 				text: 'Cancel',
 				handler: function(){
 					kasbank_keluar_saveWindow.hide();

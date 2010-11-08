@@ -180,8 +180,7 @@ Ext.onReady(function(){
 					default:
 						Ext.MessageBox.show({
 						   title: 'Warning',
-//						   msg: 'We could\'t not save the produk.',
-						   msg: 'Data produk tidak bisa disimpan',
+						   msg: 'Data Produk tidak bisa disimpan',
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'save',
 						   icon: Ext.MessageBox.WARNING
@@ -193,7 +192,7 @@ Ext.onReady(function(){
 				var result=response.responseText;
 				Ext.MessageBox.show({
 				   title: 'Error',
-				   msg: 'Could not connect to the database. retry later.',
+				   msg: 'Tidak bisa terhubung dengan database server',
 				   buttons: Ext.MessageBox.OK,
 				   animEl: 'database',
 				   icon: Ext.MessageBox.ERROR
@@ -237,7 +236,7 @@ Ext.onReady(function(){
 		if(produk_dmField.getValue()!== null){produk_dm_create = produk_dmField.getValue();} 
 		if(produk_pointField.getValue()!== null){produk_point_create = produk_pointField.getValue();} 
 		if(produk_volumeField.getValue()!== null){produk_volume_create = produk_volumeField.getValue();} 
-		if(produk_hargaField.getValue()!== null){produk_harga_create = produk_hargaField.getValue();} 
+		if(produk_hargaField.getValue()!== null){produk_harga_create = convertToNumber(produk_hargaField.getValue());} 
 		if(produk_keteranganField.getValue()!== null){produk_keterangan_create = produk_keteranganField.getValue();} 
 		if(produk_aktifField.getValue()!== null){produk_aktif_create = produk_aktifField.getValue();} 
 
@@ -289,7 +288,7 @@ Ext.onReady(function(){
 				var result=response.responseText;
 				Ext.MessageBox.show({
 					   title: 'Error',
-					   msg: 'Could not connect to the database. retry later.',
+					   msg: 'Tidak bisa terhubung dengan database server',
 					   buttons: Ext.MessageBox.OK,
 					   animEl: 'database',
 					   icon: Ext.MessageBox.ERROR
@@ -376,7 +375,7 @@ Ext.onReady(function(){
 		produk_dmField.setValue(produkListEditorGrid.getSelectionModel().getSelected().get('produk_dm'));
 		produk_pointField.setValue(produkListEditorGrid.getSelectionModel().getSelected().get('produk_point'));
 		produk_volumeField.setValue(produkListEditorGrid.getSelectionModel().getSelected().get('produk_volume'));
-		produk_hargaField.setValue(produkListEditorGrid.getSelectionModel().getSelected().get('produk_harga'));
+		produk_hargaField.setValue(CurrencyFormatted(produkListEditorGrid.getSelectionModel().getSelected().get('produk_harga')));
 		produk_keteranganField.setValue(produkListEditorGrid.getSelectionModel().getSelected().get('produk_keterangan'));
 		produk_aktifField.setValue(produkListEditorGrid.getSelectionModel().getSelected().get('produk_aktif'));
 	}
@@ -488,7 +487,7 @@ Ext.onReady(function(){
 						default:
 							Ext.MessageBox.show({
 								title: 'Warning',
-								msg: 'Could not delete the entire selection',
+								msg: 'Tidak bisa menghapus data yang diplih',
 								buttons: Ext.MessageBox.OK,
 								animEl: 'save',
 								icon: Ext.MessageBox.WARNING
@@ -500,7 +499,7 @@ Ext.onReady(function(){
 					var result=response.responseText;
 					Ext.MessageBox.show({
 					   title: 'Error',
-					   msg: 'Could not connect to the database. retry later.',
+					   msg: 'Tidak bisa terhubung dengan database server',
 					   buttons: Ext.MessageBox.OK,
 					   animEl: 'database',
 					   icon: Ext.MessageBox.ERROR
@@ -694,36 +693,42 @@ Ext.onReady(function(){
 			header: '<div align="center">' + 'Kode Lama' + '</div>',
 			dataIndex: 'produk_kodelama',
 			width: 120,	//150,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PRODUK'))){ ?>
+			,
 			editor: new Ext.form.TextField({
 				allowBlank: false,
 				maxLength: 20
-          	}),
-			hidden: false
+          	})
+			<?php } ?>
 		},
 		{
 			header: '<div align="center">' + 'Kode Baru' + '</div>',
 			dataIndex: 'produk_kode',
 			width: 120,	//150,
 			sortable: true,
-			editable: false
 			readOnly: true
 		}, 
 		{
 			header: '<div align="center">' + 'Nama' + '</div>',
 			dataIndex: 'produk_nama',
 			width: 260,	//250,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PRODUK'))){ ?>
+			,
 			editor: new Ext.form.TextField({
 				allowBlank: false,
 				maxLength: 250
           	})
+			<?php } ?>
 		}, 
 		{
 			header: '<div align="center">' + 'Group 1' + '</div>',
 			dataIndex: 'produk_group',
 			width: 120, //150,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PRODUK'))){ ?>
+			,
 			editor: new Ext.form.ComboBox({
 				store: cbo_produk_groupDataStore,
 				mode: 'remote',
@@ -731,12 +736,15 @@ Ext.onReady(function(){
 				valueField: 'produk_group_value',
 				triggerAction: 'all'
 			})
+			<?php } ?>
 		},
 		{
 			header: '<div align="center">' + 'Group 2' + '</div>',
 			dataIndex: 'produk_jenis',
 			width: 120,	//150,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PRODUK'))){ ?>
+			,
 			editor: new Ext.form.ComboBox({
 				store: cbo_produk_jenis_DataStore,
 				mode: 'remote',
@@ -744,6 +752,7 @@ Ext.onReady(function(){
 				valueField: 'produk_jenis_value',
 				triggerAction: 'all'
 			})
+			<?php } ?>
 		}, 
 		{
 			header: '<div align="center">' + 'Jenis' + '</div>',
@@ -767,7 +776,9 @@ Ext.onReady(function(){
 			sortable: true,
 			renderer: function(val){
 				return '<span>' + val + '</span>';
-			},
+			}
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PRODUK'))){ ?>
+			,
 			editor: new Ext.form.NumberField({
 				allowBlank: false,
 				allowDecimals: false,
@@ -776,6 +787,7 @@ Ext.onReady(function(){
 				maxLength: 11,
 				maskRe: /([0-9]+)$/
 			})
+			<?php } ?>
 		}, 
 		{
 			header: '<div align="center">' + 'DM (%)' + '</div>',
@@ -785,7 +797,9 @@ Ext.onReady(function(){
 			sortable: true,
 			renderer: function(val){
 				return '<span>' + val + '</span>';
-			},
+			}
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PRODUK'))){ ?>
+			,
 			editor: new Ext.form.NumberField({
 				allowBlank: false,
 				allowDecimals: false,
@@ -794,13 +808,16 @@ Ext.onReady(function(){
 				maxLength: 11,
 				maskRe: /([0-9]+)$/
 			})
+			<?php } ?>
 		}, 
 		{
 			header: '<div align="center">' + 'Poin' + '</div>',
 			align: 'right',
 			dataIndex: 'produk_point',
 			width: 60,	//100,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PRODUK'))){ ?>
+			,
 			editor: new Ext.form.NumberField({
 				allowBlank: false,
 				allowDecimals: false,
@@ -809,17 +826,21 @@ Ext.onReady(function(){
 				maxLength: 11,
 				maskRe: /([0-9]+)$/
 			})
+			<?php } ?>
 		},
 		{
 			header: '<div align="center">' + 'Vol' + '</div>',
 			align: 'right',
 			dataIndex: 'produk_volume',
 			width: 60,	//150,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PRODUK'))){ ?>
+			,
 			editor: new Ext.form.TextField({
 				allowBlank: false,
 				maxLength: 250
 			})
+			<?php } ?>
 		},
 		{
 			header: '<div align="center">' + 'Harga (Rp)' + '</div>',
@@ -829,7 +850,9 @@ Ext.onReady(function(){
 			sortable: true,
 			renderer: function(val){
 				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
-			},
+			}
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PRODUK'))){ ?>
+			,
 			editor: new Ext.form.NumberField({
 				allowBlank: false,
 				allowDecimals: true,
@@ -838,12 +861,15 @@ Ext.onReady(function(){
 				maxLength: 22,
 				maskRe: /([0-9]+)$/
 			})
+			<?php } ?>
 		}, 
 		{
 			header: '<div align="center">' + 'Status' + '</div>',
 			dataIndex: 'produk_aktif',
 			width: 80,	//150,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PRODUK'))){ ?>
+			,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
 				triggerAction: 'all',
@@ -857,6 +883,7 @@ Ext.onReady(function(){
                	lazyRender:true,
                	listClass: 'x-combo-list-small'
             })
+			<?php } ?>
 		}, 
 		{
 			header: 'Creator',
@@ -921,25 +948,32 @@ Ext.onReady(function(){
 			store: produk_DataStore,
 			displayInfo: true
 		}),
-		/* Add Control on ToolBar */
 		tbar: [
+		<?php if(eregi('C',$this->m_security->get_access_group_by_kode('MENU_PRODUK'))){ ?>	   
 		{
 			text: 'Add',
 			tooltip: 'Add new record',
 			iconCls:'icon-adds',    				// this is defined in our styles.css
 			handler: display_form_window
-		}, '-',{
+		}, '-',
+		<?php } ?>
+		<?php if(eregi('U|R',$this->m_security->get_access_group_by_kode('MENU_PRODUK'))){ ?>
+		{
 			text: 'Edit',
 			tooltip: 'Edit selected record',
 			iconCls:'icon-update',
 			handler: produk_confirm_update   // Confirm before updating
-		}, '-',{
+		}, '-',
+		<?php } ?>
+		<?php if(eregi('D',$this->m_security->get_access_group_by_kode('MENU_PRODUK'))){ ?>
+		{
 			text: 'Delete',
 			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
-			disabled:true,
 			handler: produk_confirm_delete   // Confirm before deleting
-		}, '-', {
+		}, '-', 
+		<?php } ?>
+		{
 			text: 'Adv Search',
 			tooltip: 'Advanced Search',
 			iconCls:'icon-search',
@@ -985,17 +1019,21 @@ Ext.onReady(function(){
 	produk_ContextMenu = new Ext.menu.Menu({
 		id: 'produk_ListEditorGridContextMenu',
 		items: [
+		<?php if(eregi('U|R',$this->m_security->get_access_group_by_kode('MENU_PRODUK'))){ ?>
 		{ 
 			text: 'Edit', tooltip: 'Edit selected record', 
 			iconCls:'icon-update',
 			handler: produk_editContextMenu 
 		},
+		<?php } ?>
+		<?php if(eregi('D',$this->m_security->get_access_group_by_kode('MENU_PRODUK'))){ ?>
 		{ 
 			text: 'Delete', 
 			tooltip: 'Delete selected record', 
 			iconCls:'icon-delete',
 			handler: produk_confirm_delete 
 		},
+		<?php } ?>
 		'-',
 		{ 
 			text: 'Print',
@@ -1203,15 +1241,14 @@ Ext.onReady(function(){
 		maxLength: 250
 	});
 	/* Identify  produk_harga Field */
-	produk_hargaField= new Ext.form.NumberField({
+	produk_hargaField= new Ext.form.TextField({
 		id: 'produk_hargaField',
 		name: 'produk_hargaField',
 		fieldLabel: 'Harga (Rp)',
-		allowNegatife : false,
-		emptyText: '0',
+		valueRenderer: 'numberToCurrency',
+		itemCls: 'rmoney',
 		allowBlank: true,
-		allowDecimals: true,
-		width: 60,
+		width: 150,
 		maskRe: /([0-9]+)$/
 	});
 	/* Identify  produk_keterangan Field */
@@ -1532,7 +1569,7 @@ Ext.onReady(function(){
 	satuan_konversiListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'satuan_konversiListEditorGrid',
 		el: 'fp_satuan_konversi',
-		title: 'Detail satuan_konversi',
+		title: 'Satuan Konversi',
 		height: 250,
 		width: 690,
 		autoScroll: true,
@@ -1550,7 +1587,9 @@ Ext.onReady(function(){
 			pageSize: 15,
 			store: satuan_konversi_DataStore,
 			displayInfo: true
-		}),
+		})
+		<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_PRODUK'))){ ?>
+		,
 		/* Add Control on ToolBar */
 		tbar: [
 		{
@@ -1565,6 +1604,7 @@ Ext.onReady(function(){
 			handler: satuan_konversi_confirm_delete
 		}
 		]
+		<?php } ?>
 	});
 	//eof
 	
@@ -1770,7 +1810,7 @@ Ext.onReady(function(){
 				var result=response.responseText;
 				Ext.MessageBox.show({
 					   title: 'Error',
-					   msg: 'Could not connect to the database. retry later.',
+					   msg: 'Tidak bisa terhubung dengan database server',
 					   buttons: Ext.MessageBox.OK,
 					   animEl: 'database',
 					   icon: Ext.MessageBox.ERROR
@@ -1809,7 +1849,7 @@ Ext.onReady(function(){
 				var result=response.responseText;
 				Ext.MessageBox.show({
 					   title: 'Error',
-					   msg: 'Could not connect to the database. retry later.',
+					   msg: 'Tidak bisa terhubung dengan database server',
 					   buttons: Ext.MessageBox.OK,
 					   animEl: 'database',
 					   icon: Ext.MessageBox.ERROR
@@ -1826,13 +1866,13 @@ Ext.onReady(function(){
 	function satuan_konversi_confirm_delete(){
 		// only one record is selected here
 		if(satuan_konversiListEditorGrid.selModel.getCount() == 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', satuan_konversi_delete);
+			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data berikut?', satuan_konversi_delete);
 		} else if(satuan_konversiListEditorGrid.selModel.getCount() > 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', satuan_konversi_delete);
+			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data-data berikut?', satuan_konversi_delete);
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really delete something you haven\'t selected?',
+				msg: 'Tidak ada yang dipilih untuk dihapus',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -1870,12 +1910,16 @@ Ext.onReady(function(){
 		width: 700,        
 		items: [produk_masterGroup,detail_tab_produk]
 		,
-		buttons: [{
+		buttons: [
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_PRODUK'))){ ?>
+			{
 				text: 'Save and Close',
 				handler: check_konversi_default
 				//handler: master_detail_insert
 			}
-			,{
+			,
+			<?php } ?>
+			{
 				text: 'Cancel',
 				handler: function(){
 					produk_createWindow.hide();
@@ -2046,7 +2090,7 @@ Ext.onReady(function(){
 	/* Identify  produk_group Field */
 	produk_groupSearchField= new Ext.form.ComboBox({
 		id: 'produk_groupSearchField',
-		fieldLabel: 'Group 1 <span style="color: #ec0000">*</span>',
+		fieldLabel: 'Group 1',
 		store: cbo_produk_groupDataStore,
 		mode: 'remote',
 		displayField: 'produk_group_display',
@@ -2075,7 +2119,7 @@ Ext.onReady(function(){
 	/* Identify  produk_jenis Field */
 	produk_jenisSearchField= new Ext.form.ComboBox({
 		id: 'produk_jenisSearchField',
-		fieldLabel: 'Group 2 <span style="color: #ec0000">*</span>',
+		fieldLabel: 'Group 2',
 		store: cbo_produk_jenis_DataStore,
 		mode: 'remote',
 		displayField: 'produk_jenis_display',
@@ -2086,7 +2130,7 @@ Ext.onReady(function(){
 	/* Identify  produk_nama Field */
 	produk_namaSearchField= new Ext.form.TextField({
 		id: 'produk_namaSearchField',
-		fieldLabel: 'Nama <span style="color: #ec0000">*</span>',
+		fieldLabel: 'Nama',
 		maxLength: 250,
 		anchor: '95%'
 	});
@@ -2143,12 +2187,9 @@ Ext.onReady(function(){
 	/* Identify  produk_harga Field */
 	produk_hargaSearchField= new Ext.form.NumberField({
 		id: 'produk_hargaSearchField',
-		name: 'produk_hargaField',
-		fieldLabel: 'Harga (Rp) <span style="color: #ec0000">*</span>',
-		allowNegatife : false,
-		emptyText: '0',
-		allowDecimals: true,
-		width: 60,
+		name: 'produk_hargaSearchField',
+		fieldLabel: 'Harga (Rp)',
+		width: 100,
 		maskRe: /([0-9]+)$/
 	});
 	/* Identify  produk_keterangan Field */
@@ -2305,12 +2346,12 @@ Ext.onReady(function(){
 		  	switch(result){
 		  	case 1:
 				win = window.open('./produklist.html','produklist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
-				win.print();
+				
 				break;
 		  	default:
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Unable to print the grid!',
+					msg: 'Tidak bisa mencetak data!',
 					buttons: Ext.MessageBox.OK,
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING
@@ -2322,7 +2363,7 @@ Ext.onReady(function(){
 		  	var result=response.responseText;
 			Ext.MessageBox.show({
 			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
+			   msg: 'Tidak bisa terhubung dengan database server',
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR
@@ -2399,7 +2440,7 @@ Ext.onReady(function(){
 		  	default:
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Unable to convert excel the grid!',
+					msg: 'Tidak bisa meng-export data ke dalam format excel!',
 					buttons: Ext.MessageBox.OK,
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING
@@ -2411,7 +2452,7 @@ Ext.onReady(function(){
 		  	var result=response.responseText;
 			Ext.MessageBox.show({
 			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
+			   msg: 'Tidak bisa terhubung dengan database server',
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR
@@ -2473,8 +2514,8 @@ Ext.onReady(function(){
 	});
 	
 	
-	
-	
+	produk_hargaField.on('focus',function(){ produk_hargaField.setValue(convertToNumber(produk_hargaField.getValue())); });
+	produk_hargaField.on('blur',function(){ produk_hargaField.setValue(CurrencyFormatted(produk_hargaField.getValue())); });
 	
 	combo_satuan_produk_racik.on('focus', function(){
 		cbo_produk_racik_satuanDataStore.setBaseParam('produk_id',combo_rawat_produk.getValue());

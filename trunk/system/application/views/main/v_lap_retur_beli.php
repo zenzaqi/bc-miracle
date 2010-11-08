@@ -336,7 +336,7 @@ Ext.onReady(function(){
 					switch(result){
 					case 1:
 						win = window.open('./print/report_retur_beli.html','report_returbeli','height=400,width=800,resizable=1,scrollbars=1, menubar=1');
-						//win.print();
+						//
 						break;
 					default:
 						Ext.MessageBox.show({
@@ -353,7 +353,7 @@ Ext.onReady(function(){
 					var result=response.responseText;
 					Ext.MessageBox.show({
 					   title: 'Error',
-					   msg: 'Could not connect to the database. retry later.',
+					   msg: 'Tidak bisa terhubung dengan database server',
 					   buttons: Ext.MessageBox.OK,
 					   animEl: 'database',
 					   icon: Ext.MessageBox.ERROR

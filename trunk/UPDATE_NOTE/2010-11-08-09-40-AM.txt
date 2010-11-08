@@ -1,0 +1,44 @@
+[by zaqi.smart@gmail.com]
+o Fix Bug
+----------
+- User Groups, fix detail fungsi permission
+- Setup Member, fix currency mode
+- Penyesuaian Stok, fix notification, satuan reload
+- Master Perawatan, fix search perawatan
+- Master Paket, fix export excel dan print
+- Order Pembelian, fix proses stat dok
+- Akun Map, fix status aktif
+- HPP, fix search
+- Phonegroup, fix databastore
+- Anamnesa, fix add/edit/delete
+- SQL : 2010-10-08_09-40-AM.sql
+
+
+o New Update
+------------
+- Pembatasan permission dengan RCUD, silakan isikan menu_kode
+  seusai dengan tabel excel : menu_permission.xls
+ 
+
+o Clean Code
+-------------
+penghapus file-file berikut karena sudah tidak dipakai:
+- appointment_medis, sudah digabung jadi satu appointment
+- appointment_nonmedis, sudah digabung jadi satu appointment
+- diagnosa, tidak diperlukan
+- jual_uang_muka, diganti cetak_kuitansi
+- jual_bank, digabung di masing2 transaksi penjualan
+- jual_card, digabung di masing2 transaksi penjualan
+- jual_dp, digabung di masing2 transaksi penjualan
+- konsul_rawat, tidak diperlukan
+- konsultansi, tidak diperlukan
+- master_tukar_voucher, diganti voucher
+- member_card, diganti member
+- penerimaan_invoice, diganti master_invoice
+- permissions, digabung dengan usergroup
+- public_function, tidak diperlukan kecuali m_public_function
+- voucher_terima, tidak diperlukan
+- stok, diganti vu_stok_all_saldo
+- tindakan_rawat, diplit jadi tindakan_medis dan tindakan_nonmedis
+- terima_invoice, diganti c_master_invoice
+- satuan_konversi, digabung dengan produk

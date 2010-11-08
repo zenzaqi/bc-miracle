@@ -153,12 +153,12 @@ function cetak_kwitansi_print_paper(cetak_id){
 			switch(result){
 			case 1:
 				win = window.open('./kwitansi_paper.html','Cetak Kwitansi','height=480,width=1240,resizable=1,scrollbars=0, menubar=0');
-				//win.print();
+				//
 				break;
 			default:
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Unable to print the grid!',
+					msg: 'Tidak bisa mencetak data!',
 					buttons: Ext.MessageBox.OK,
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING
@@ -170,7 +170,7 @@ function cetak_kwitansi_print_paper(cetak_id){
 			var result=response.responseText;
 			Ext.MessageBox.show({
 			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
+			   msg: 'Tidak bisa terhubung dengan database server',
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR
@@ -338,7 +338,7 @@ Ext.onReady(function(){
 				var result=response.responseText;
 				Ext.MessageBox.show({
 				   title: 'Error',
-				   msg: 'Could not connect to the database. retry later.',
+				   msg: 'Tidak bisa terhubung dengan database server',
 				   buttons: Ext.MessageBox.OK,
 				   animEl: 'database',
 				   icon: Ext.MessageBox.ERROR
@@ -480,7 +480,7 @@ Ext.onReady(function(){
 						var result=response.responseText;
 						Ext.MessageBox.show({
 							   title: 'Error',
-							   msg: 'Could not connect to the database. retry later.',
+							   msg: 'Tidak bisa terhubung dengan database server',
 							   buttons: Ext.MessageBox.OK,
 							   animEl: 'database',
 							   icon: Ext.MessageBox.ERROR
@@ -541,7 +541,7 @@ Ext.onReady(function(){
 					var result=response.responseText;
 					Ext.MessageBox.show({
 						   title: 'Error',
-						   msg: 'Could not connect to the database. retry later.',
+						   msg: 'Tidak bisa terhubung dengan database server',
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'database',
 						   icon: Ext.MessageBox.ERROR
@@ -621,7 +621,9 @@ Ext.onReady(function(){
 		kwitansi_bayar_tunaiGroup.setDisabled(false);
 		kwitansi_keteranganField.setDisabled(false);
 		kwitansi_statusField.setDisabled(false);
+		<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_KUITANSI'))){ ?>
 		cetak_kwitansi_createForm.kwitansi_savePrint.enable();
+		<?php } ?>
 		
 	}
  	/* End of Function */
@@ -811,57 +813,61 @@ Ext.onReady(function(){
 		
 		
 		kwitansi_statusField.on("select",function(){
-		var status_awal_kwitansi = cetak_kwitansiListEditorGrid.getSelectionModel().getSelected().get('kwitansi_status');
-		if(status_awal_kwitansi =='Terbuka' && kwitansi_statusField.getValue()=='Tertutup')
-		{
-		Ext.MessageBox.show({
-			msg: 'Dokumen tidak bisa ditutup. Gunakan Save & Print untuk menutup dokumen',
-		   //progressText: 'proses...',
-			buttons: Ext.MessageBox.OK,
-			animEl: 'save',
-			icon: Ext.MessageBox.WARNING
-		   });
-		kwitansi_statusField.setValue('Terbuka');
-		}
-		
-		else if(status_awal_kwitansi =='Tertutup' && kwitansi_statusField.getValue()=='Terbuka')
-		{
-		Ext.MessageBox.show({
-			msg: 'Status yang sudah Tertutup tidak dapat diganti Terbuka',
-			buttons: Ext.MessageBox.OK,
-			animEl: 'save',
-			icon: Ext.MessageBox.WARNING
-		   });
-		kwitansi_statusField.setValue('Tertutup');
-		}
-		
-		else if(status_awal_kwitansi =='Batal' && kwitansi_statusField.getValue()=='Terbuka')
-		{
-		Ext.MessageBox.show({
-			msg: 'Status yang sudah Tertutup tidak dapat diganti Terbuka',
-			buttons: Ext.MessageBox.OK,
-			animEl: 'save',
-			icon: Ext.MessageBox.WARNING
-		   });
-		kwitansi_statusField.setValue('Tertutup');
-		}
-		
-		else if(kwitansi_statusField.getValue()=='Batal')
-		{
-		Ext.MessageBox.confirm('Confirmation','Anda yakin untuk membatalkan dokumen ini? Pembatalan dokumen tidak bisa dikembalikan lagi', kwitansi_status_batal);
-		}
-        
-        else if(status_awal_kwitansi =='Tertutup' && kwitansi_statusField.getValue()=='Tertutup'){
-            cetak_kwitansi_createForm.kwitansi_savePrint.enable();
-        }
-		
+			var status_awal_kwitansi = cetak_kwitansiListEditorGrid.getSelectionModel().getSelected().get('kwitansi_status');
+			if(status_awal_kwitansi =='Terbuka' && kwitansi_statusField.getValue()=='Tertutup')
+			{
+			Ext.MessageBox.show({
+				msg: 'Dokumen tidak bisa ditutup. Gunakan Save & Print untuk menutup dokumen',
+			   //progressText: 'proses...',
+				buttons: Ext.MessageBox.OK,
+				animEl: 'save',
+				icon: Ext.MessageBox.WARNING
+			   });
+			kwitansi_statusField.setValue('Terbuka');
+			}
+			
+			else if(status_awal_kwitansi =='Tertutup' && kwitansi_statusField.getValue()=='Terbuka')
+			{
+			Ext.MessageBox.show({
+				msg: 'Status yang sudah Tertutup tidak dapat diganti Terbuka',
+				buttons: Ext.MessageBox.OK,
+				animEl: 'save',
+				icon: Ext.MessageBox.WARNING
+			   });
+			kwitansi_statusField.setValue('Tertutup');
+			}
+			
+			else if(status_awal_kwitansi =='Batal' && kwitansi_statusField.getValue()=='Terbuka')
+			{
+			Ext.MessageBox.show({
+				msg: 'Status yang sudah Tertutup tidak dapat diganti Terbuka',
+				buttons: Ext.MessageBox.OK,
+				animEl: 'save',
+				icon: Ext.MessageBox.WARNING
+			   });
+			kwitansi_statusField.setValue('Tertutup');
+			}
+			
+			else if(kwitansi_statusField.getValue()=='Batal')
+			{
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk membatalkan dokumen ini? Pembatalan dokumen tidak bisa dikembalikan lagi', kwitansi_status_batal);
+			}
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_KUITANSI'))){ ?>
+			else if(status_awal_kwitansi =='Tertutup' && kwitansi_statusField.getValue()=='Tertutup'){
+				
+				cetak_kwitansi_createForm.kwitansi_savePrint.enable();
+			}
+			<?php } ?>
+			
 		});
 		
 		function kwitansi_status_batal(btn){
 			if(btn=='yes')
 			{
-			kwitansi_statusField.setValue('Batal');
-			cetak_kwitansi_createForm.kwitansi_savePrint.disable();
+				kwitansi_statusField.setValue('Batal');
+				<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_KUITANSI'))){ ?>
+				cetak_kwitansi_createForm.kwitansi_savePrint.disable();
+				<?php } ?>
 			}  
 			else
 			kwitansi_statusField.setValue(cetak_kwitansiListEditorGrid.getSelectionModel().getSelected().get('kwitansi_status'));
@@ -879,7 +885,9 @@ Ext.onReady(function(){
 			kwitansi_noField.setDisabled(false);
 			kwitansi_keteranganField.setDisabled(false);
 			kwitansi_statusField.setDisabled(false);
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_KUITANSI'))){ ?>
 			cetak_kwitansi_createForm.kwitansi_savePrint.enable();
+			<?php } ?>
 		}
 		if(kwitansi_post2db=="UPDATE" && cetak_kwitansiListEditorGrid.getSelectionModel().getSelected().get('kwitansi_status')=="Tertutup"){
 			kwitansi_tanggalField.setDisabled(true);
@@ -889,7 +897,9 @@ Ext.onReady(function(){
 			kwitansi_noField.setDisabled(true);
 			kwitansi_keteranganField.setDisabled(true);
 			kwitansi_statusField.setDisabled(false);
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_KUITANSI'))){ ?>
 			cetak_kwitansi_createForm.kwitansi_savePrint.enable();
+			<?php } ?>
 			
 		}
 		if(kwitansi_post2db=="UPDATE" && cetak_kwitansiListEditorGrid.getSelectionModel().getSelected().get('kwitansi_status')=="Batal"){
@@ -900,7 +910,9 @@ Ext.onReady(function(){
 			kwitansi_noField.setDisabled(true);
 			kwitansi_keteranganField.setDisabled(true);
 			kwitansi_statusField.setDisabled(true);
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_KUITANSI'))){ ?>
 			cetak_kwitansi_createForm.kwitansi_savePrint.disable();
+			<?php } ?>
 		
 		}
 		/*
@@ -1022,7 +1034,7 @@ Ext.onReady(function(){
 						default:
 							Ext.MessageBox.show({
 								title: 'Warning',
-								msg: 'Could not delete the entire selection',
+								msg: 'Tidak bisa menghapus data yang diplih',
 								buttons: Ext.MessageBox.OK,
 								animEl: 'save',
 								icon: Ext.MessageBox.WARNING
@@ -1034,7 +1046,7 @@ Ext.onReady(function(){
 					var result=response.responseText;
 					Ext.MessageBox.show({
 					   title: 'Error',
-					   msg: 'Could not connect to the database. retry later.',
+					   msg: 'Tidak bisa terhubung dengan database server',
 					   buttons: Ext.MessageBox.OK,
 					   animEl: 'database',
 					   icon: Ext.MessageBox.ERROR
@@ -1058,7 +1070,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'kwitansi_id'
 		},[
-		/* dataIndex => insert intocetak_kwitansi_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'kwitansi_id', type: 'int', mapping: 'kwitansi_id'}, 
 			{name: 'kwitansi_no', type: 'string', mapping: 'kwitansi_no'}, 
 			{name: 'kwitansi_cust', type: 'int', mapping: 'kwitansi_cust'},
@@ -1094,7 +1105,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'cust_id'
 		},[
-		/* dataIndex => insert intocustomer_note_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'cust_id', type: 'int', mapping: 'cust_id'},
 			{name: 'cust_no', type: 'string', mapping: 'cust_no'},
 			{name: 'cust_nama', type: 'string', mapping: 'cust_nama'},
@@ -1145,7 +1155,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'jcard_id'
 		},[
-		/* dataIndex => insert intomaster_jual_produk_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'jcard_id', type: 'int', mapping: 'jcard_id'}, 
 			{name: 'jcard_no', type: 'string', mapping: 'jcard_no'},
 			{name: 'jcard_nama', type: 'string', mapping: 'jcard_nama'},
@@ -1168,7 +1177,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'jcek_id'
 		},[
-		/* dataIndex => insert intomaster_jual_produk_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'jcek_id', type: 'int', mapping: 'jcek_id'}, 
 			{name: 'jcek_nama', type: 'string', mapping: 'jcek_nama'},
 			{name: 'jcek_no', type: 'string', mapping: 'jcek_no'},
@@ -1192,7 +1200,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'jtransfer_id'
 		},[
-		/* dataIndex => insert intomaster_jual_produk_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'jtransfer_id', type: 'int', mapping: 'jtransfer_id'}, 
 			{name: 'jtransfer_bank', type: 'int', mapping: 'jtransfer_bank'},
 			{name: 'jtransfer_nama', type: 'string', mapping: 'jtransfer_nama'},
@@ -1214,7 +1221,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'jtunai_id'
 		},[
-		/* dataIndex => insert intomaster_jual_produk_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'jtunai_id', type: 'int', mapping: 'jtunai_id'}, 
 			{name: 'jtunai_nilai', type: 'float', mapping: 'jtunai_nilai'}
 		]),
@@ -1246,10 +1252,13 @@ Ext.onReady(function(){
 			header: '<div align="center">' + 'No Kuitansi' + '</div>',
 			dataIndex: 'kwitansi_no',
 			width: 80,	//150,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_KUITANSI'))){ ?>
+			,
 			editor: new Ext.form.TextField({
 				maxLength: 20
           	})
+			<?php } ?>
 		}, 
 		{
 			header: '<div align="center">' + 'No Cust' + '</div>',
@@ -1268,7 +1277,9 @@ Ext.onReady(function(){
 			dataIndex: 'kwitansi_ref',
 			width: 150,
 			sortable: true,
-			hidden: true,
+			hidden: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_KUITANSI'))){ ?>
+			,
 			editor: new Ext.form.NumberField({
 				allowDecimals: false,
 				allowNegative: false,
@@ -1276,6 +1287,7 @@ Ext.onReady(function(){
 				maxLength: 11,
 				maskRe: /([0-9]+)$/
 			})
+			<?php }?>
 		}, 
 		{
 			header: '<div align="center">' + 'Nilai (Rp)' + '</div>',
@@ -1284,14 +1296,7 @@ Ext.onReady(function(){
 			width: 100,
 			sortable: true,
 			renderer: Ext.util.Format.numberRenderer('0,000')			
-/*			editor: new Ext.form.NumberField({
-				allowDecimals: true,
-				allowNegative: false,
-				blankText: '0',
-				maxLength: 22,
-				maskRe: /([0-9]+)$/
-			})
-*/		}, 
+		}, 
 		{
 			header: '<div align="center">' + 'Sisa (Rp)' + '</div>',
 			align: 'right',
@@ -1304,16 +1309,21 @@ Ext.onReady(function(){
 			header: '<div align="center">' + 'Keterangan' + '</div>',
 			dataIndex: 'kwitansi_keterangan',
 			width: 200,	//210,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_KUITANSI'))){ ?>
+			,
 			editor: new Ext.form.TextField({
 				maxLength: 500
           	})
+			<?php } ?>
 		}, 
 		{
 			header: 'Status',
 			dataIndex: 'kwitansi_status',
 			width: 80,	//55,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_KUITANSI'))){ ?>
+			,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
 				triggerAction: 'all',
@@ -1327,6 +1337,7 @@ Ext.onReady(function(){
                	lazyRender:true,
                	listClass: 'x-combo-list-small'
             })
+			<?php } ?>
 		}, 
 		{
 			header: 'Creator',
@@ -1334,31 +1345,31 @@ Ext.onReady(function(){
 			width: 150,
 			sortable: true,
 			hidden: true,
-			readOnly: true,
+			readOnly: true
 		}, 
 		{
-			header: 'Date Create',
+			header: 'Create on',
 			dataIndex: 'kwitansi_date_create',
 			width: 150,
 			sortable: true,
 			hidden: true,
-			readOnly: true,
+			readOnly: true
 		}, 
 		{
-			header: 'Update',
+			header: 'Last Update by',
 			dataIndex: 'kwitansi_update',
 			width: 150,
 			sortable: true,
 			hidden: true,
-			readOnly: true,
+			readOnly: true
 		}, 
 		{
-			header: 'Date Update',
+			header: 'Last Update on',
 			dataIndex: 'kwitansi_date_update',
 			width: 150,
 			sortable: true,
 			hidden: true,
-			readOnly: true,
+			readOnly: true
 		}, 
 		{
 			header: 'Revised',
@@ -1366,7 +1377,7 @@ Ext.onReady(function(){
 			width: 150,
 			sortable: true,
 			hidden: true,
-			readOnly: true,
+			readOnly: true
 		}	]);
 	
 	cetak_kwitansi_ColumnModel.defaultSortable= true;
@@ -1393,23 +1404,31 @@ Ext.onReady(function(){
 		}),
 		/* Add Control on ToolBar */
 		tbar: [
+		<?php if(eregi('C',$this->m_security->get_access_group_by_kode('MENU_KUITANSI'))){ ?>
 		{
 			text: 'Add',
 			tooltip: 'Add new record',
 			iconCls:'icon-adds',    				// this is defined in our styles.css
 			handler: display_form_window
-		}, '-',{
+		}, '-',
+		<?php } ?>
+		<?php if(eregi('U|R',$this->m_security->get_access_group_by_kode('MENU_KUITANSI'))){ ?>
+		{
 			text: 'Edit',
 			tooltip: 'Edit selected record',
 			iconCls:'icon-update',
 			handler: cetak_kwitansi_confirm_update   // Confirm before updating
-		}, '-',{
+		}, '-',
+		<?php } ?>
+		<?php if(eregi('D',$this->m_security->get_access_group_by_kode('MENU_KUITANSI'))){ ?>
+		{
 			text: 'Delete',
 			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
-			disabled: true,
 			handler: cetak_kwitansi_confirm_delete   // Confirm before deleting
-		}, '-', {
+		}, '-', 
+		<?php } ?>
+		{
 			text: 'Adv Search',
 			tooltip: 'Advanced Search',
 			iconCls:'icon-search',
@@ -1462,11 +1481,14 @@ Ext.onReady(function(){
 	cetak_kwitansi_ContextMenu = new Ext.menu.Menu({
 		id: 'cetak_kwitansi_ListEditorGridContextMenu',
 		items: [
+		<?php if(eregi('U|R',$this->m_security->get_access_group_by_kode('MENU_KUITANSI'))){ ?>
 		{ 
 			text: 'Edit', tooltip: 'Edit selected record', 
 			iconCls:'icon-update',
-			handler: cetak_kwitansi_editContextMenu 
+			handler: cetak_kwitansi_confirm_update
 		},
+		<?php } ?>
+		<?php if(eregi('D',$this->m_security->get_access_group_by_kode('MENU_KUITANSI'))){ ?>
 		{ 
 			text: 'Delete', 
 			tooltip: 'Delete selected record', 
@@ -1474,6 +1496,7 @@ Ext.onReady(function(){
 			disabled: true,
 			handler: cetak_kwitansi_confirm_delete 
 		},
+		<?php } ?>
 		'-',
 		{ 
 			text: 'Print',
@@ -2220,7 +2243,6 @@ Ext.onReady(function(){
 		totalProperty: 'total',
 		id: ''
 	},[
-	/* dataIndex => insert intoperawatan_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'jkwitansi_id', type: 'int', mapping: 'jkwitansi_id'}, 
 			{name: 'jkwitansi_master', type: 'int', mapping: 'jkwitansi_master'}, 
 			{name: 'jkwitansi_ref', type: 'string', mapping: 'jkwitansi_ref'}, 
@@ -2374,13 +2396,14 @@ Ext.onReady(function(){
 		frame: true,
 		//clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
-		viewConfig: { forceFit:true},
+		viewConfig: { forceFit:true}/*,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: jual_kwitansi_DataStore,
 			displayInfo: true
-		}),
-		/* Add Control on ToolBar */
+		})*/
+		<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_KUITANSI'))){ ?>
+		,
 		tbar: [
 		{
 			text: 'Add',
@@ -2396,6 +2419,7 @@ Ext.onReady(function(){
 			handler: jual_kwitansi_confirm_delete
 		}
 		]
+		<?php } ?>
 	});
 	//eof
 	
@@ -2467,13 +2491,13 @@ Ext.onReady(function(){
 	function jual_kwitansi_confirm_delete(){
 		// only one record is selected here
 		if(jual_kwitansiListEditorGrid.selModel.getCount() == 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', jual_kwitansi_delete);
+			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data berikut?', jual_kwitansi_delete);
 		} else if(jual_kwitansiListEditorGrid.selModel.getCount() > 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', jual_kwitansi_delete);
+			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data-data berikut?', jual_kwitansi_delete);
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really delete something you haven\'t selected?',
+				msg: 'Tidak ada yang dipilih untuk dihapus',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -2504,7 +2528,9 @@ Ext.onReady(function(){
 		width: 700,        
 		items: [cetak_kwitansi_masterGroup, kwitansi_bayarGroup]
 		,
-		buttons: [{
+		buttons: [
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_KUITANSI'))){ ?>
+			{
 				text: 'Save and Print',
 				ref: '../kwitansi_savePrint',
 				handler: save_and_print
@@ -2513,7 +2539,9 @@ Ext.onReady(function(){
 				text: 'Save and Close',
 				handler: cetak_kwitansi_create
 			}
-			,{
+			,
+			<?php } ?>
+			{
 				text: 'Cancel',
 				handler: function(){
 					cetak_kwitansi_reset_form();
@@ -2677,7 +2705,7 @@ Ext.onReady(function(){
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
 	cetak_kwitansi_searchWindow = new Ext.Window({
-		title: 'cetak_kwitansi Search',
+		title: 'Pencarian Cetak Kuitansi',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,
@@ -2766,7 +2794,7 @@ Ext.onReady(function(){
 		  	default:
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Unable to print the grid!',
+					msg: 'Tidak bisa mencetak data!',
 					buttons: Ext.MessageBox.OK,
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING
@@ -2778,7 +2806,7 @@ Ext.onReady(function(){
 		  	var result=response.responseText;
 			Ext.MessageBox.show({
 			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
+			   msg: 'Tidak bisa terhubung dengan database server',
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR
@@ -2825,7 +2853,7 @@ Ext.onReady(function(){
 		  	default:
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Unable to convert excel the grid!',
+					msg: 'Tidak bisa meng-export data ke dalam format excel!',
 					buttons: Ext.MessageBox.OK,
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING
@@ -2837,7 +2865,7 @@ Ext.onReady(function(){
 		  	var result=response.responseText;
 			Ext.MessageBox.show({
 			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
+			   msg: 'Tidak bisa terhubung dengan database server',
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR

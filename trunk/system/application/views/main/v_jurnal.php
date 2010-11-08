@@ -367,7 +367,7 @@ Ext.onReady(function(){
 						default:
 							Ext.MessageBox.show({
 								title: 'Warning',
-								msg: 'Could not delete the entire selection',
+								msg: 'Tidak bisa menghapus data yang diplih',
 								buttons: Ext.MessageBox.OK,
 								animEl: 'save',
 								icon: Ext.MessageBox.WARNING
@@ -615,23 +615,32 @@ Ext.onReady(function(){
         }),
 		plugins: summary,
 		tbar: [
+		<?php if(eregi('C',$this->m_security->get_access_group_by_kode('MENU_JURNALUMUM'))){ ?>
 		{
 			text: 'Add',
 			tooltip: 'Add new record',
 			iconCls:'icon-adds',    				// this is defined in our styles.css
 			handler: display_form_window
-		}, '-',{
+		}, '-',
+		<?php } ?>
+		<?php if(eregi('U|R',$this->m_security->get_access_group_by_kode('MENU_JURNALUMUM'))){ ?>
+		{
 			text: 'Edit',
 			tooltip: 'Edit selected record',
 			iconCls:'icon-update',
 			handler: jurnal_confirm_update   // Confirm before updating
-		}, '-',{
+		}, '-',
+		<?php } ?>
+		<?php if(eregi('D',$this->m_security->get_access_group_by_kode('MENU_JURNALUMUM'))){ ?>
+		{
 			text: 'Delete',
 			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
 			handler: jurnal_confirm_delete   // Confirm before deleting
-		}, '-', {
-			text: 'Search',
+		}, '-',
+		<?php } ?>
+		{
+			text: 'Adv Search',
 			tooltip: 'Advanced Search',
 			iconCls:'icon-search',
 			handler: display_form_search_window 
@@ -663,18 +672,23 @@ Ext.onReady(function(){
 	jurnal_ContextMenu = new Ext.menu.Menu({
 		id: 'jurnal_ListEditorGridContextMenu',
 		items: [
+		<?php if(eregi('U|R',$this->m_security->get_access_group_by_kode('MENU_JURNALUMUM'))){ ?>
 		{ 
 			text: 'Edit', tooltip: 'Edit selected record', 
 			iconCls:'icon-update',
 			handler: jurnal_editContextMenu 
 		},
+		<?php } ?>
+		<?php if(eregi('D',$this->m_security->get_access_group_by_kode('MENU_JURNALUMUM'))){ ?>
 		{ 
 			text: 'Delete', 
 			tooltip: 'Delete selected record', 
 			iconCls:'icon-delete',
 			handler: jurnal_confirm_delete 
-		}<?php if(ereg('R',$this->m_security->get_access_group_by_kode('MENU_POSTING'))){ ?>
-		,'-',
+		},
+		<?php } ?>
+		<?php if(ereg('R',$this->m_security->get_access_group_by_kode('MENU_POSTING'))){ ?>
+		'-',
 		{
 			text: 'Buka Posting',
 			tooltip: 'Buka Posting',
@@ -1026,7 +1040,9 @@ Ext.onReady(function(){
 		frame: true,
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
-		viewConfig: { forceFit:true},
+		viewConfig: { forceFit:true}
+		<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JURNALUMUM'))){ ?>
+		,
 		tbar: [
 		{
 			text: 'Add',
@@ -1040,6 +1056,7 @@ Ext.onReady(function(){
 			handler: detail_jurnal_confirm_delete
 		}
 		]
+		<?php } ?>
 	});
 	//eof
 	
@@ -1108,13 +1125,13 @@ Ext.onReady(function(){
 	function detail_jurnal_confirm_delete(){
 		// only one record is selected here
 		if(detail_jurnalListEditorGrid.selModel.getCount() == 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', detail_jurnal_delete);
+			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data berikut?', detail_jurnal_delete);
 		} else if(detail_jurnalListEditorGrid.selModel.getCount() > 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', detail_jurnal_delete);
+			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data-data berikut?', detail_jurnal_delete);
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really delete something you haven\'t selected?',
+				msg: 'Tidak ada yang dipilih untuk dihapus',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -1149,12 +1166,16 @@ Ext.onReady(function(){
 				items: [master_Group, detail_jurnalListEditorGrid, balance_Group ] 
 			}
 			],
-		buttons: [{
+		buttons: [
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JURNALUMUM'))){ ?>
+			{
 				text: 'Save and Close',
 				formBind: true,
 				handler: jurnal_save
 			}
-			,{
+			,
+			<?php } ?>
+			{
 				text: 'Cancel',
 				handler: function(){
 					jurnal_saveWindow.hide();
@@ -1208,7 +1229,6 @@ Ext.onReady(function(){
 	function jurnal_reset_search(){
 		// reset the store parameters
 		jurnal_DataStore.baseParams = { task: 'LIST', start:0, limit:pageS };
-		// Cause the datastore to do another query : 
 		jurnal_DataStore.reload({params: {start: 0, limit: pageS}});
 		jurnal_searchWindow.close();
 	};
@@ -1355,7 +1375,7 @@ Ext.onReady(function(){
 		  	default:
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Unable to print the grid!',
+					msg: 'Tidak bisa mencetak data!',
 					buttons: Ext.MessageBox.OK,
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING
@@ -1412,7 +1432,7 @@ Ext.onReady(function(){
 		  	default:
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Unable to convert excel the grid!',
+					msg: 'Tidak bisa meng-export data ke dalam format excel!',
 					buttons: Ext.MessageBox.OK,
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING

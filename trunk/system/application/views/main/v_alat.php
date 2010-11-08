@@ -105,7 +105,7 @@ Ext.onReady(function(){
 					default:
 						Ext.MessageBox.show({
 							   title: 'Warning',
-							   msg: 'We could\'t not save the alat.',
+							   msg: 'Data Peralatan Medis tidak bisa disimpan !',
 							   buttons: Ext.MessageBox.OK,
 							   animEl: 'save',
 							   icon: Ext.MessageBox.WARNING
@@ -117,7 +117,7 @@ Ext.onReady(function(){
 				var result=response.responseText;
 				Ext.MessageBox.show({
 							   title: 'Error',
-							   msg: 'Could not connect to the database. retry later.',
+							   msg: 'Tidak bisa terhubung dengan database server',
 							   buttons: Ext.MessageBox.OK,
 							   animEl: 'database',
 							   icon: Ext.MessageBox.ERROR
@@ -155,14 +155,14 @@ Ext.onReady(function(){
 					var result=eval(response.responseText);
 					switch(result){
 						case 1:
-							Ext.MessageBox.alert(post2db+' OK','The Alat was '+msg+' successfully.');
+							Ext.MessageBox.alert(post2db+' OK','Data Peralatan Medis berhasil disimpan.');
 							alat_DataStore.reload();
 							alat_createWindow.hide();
 							break;
 						default:
 							Ext.MessageBox.show({
 							   title: 'Warning',
-							   msg: 'We could\'t not '+msg+' the Alat.',
+							   msg: 'Data Peralatan Medis tidak bisa disimpan !',
 							   buttons: Ext.MessageBox.OK,
 							   animEl: 'save',
 							   icon: Ext.MessageBox.WARNING
@@ -174,7 +174,7 @@ Ext.onReady(function(){
 					var result=response.responseText;
 					Ext.MessageBox.show({
 								   title: 'Error',
-								   msg: 'Could not connect to the database. retry later.',
+								   msg: 'Tidak bisa terhubung dengan database server',
 								   buttons: Ext.MessageBox.OK,
 								   animEl: 'database',
 								   icon: Ext.MessageBox.ERROR
@@ -184,7 +184,7 @@ Ext.onReady(function(){
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'Your Form is not valid!.',
+				msg: 'Isian belum sempurna!.',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -210,6 +210,7 @@ Ext.onReady(function(){
 		alat_jumlahField.setValue(null);
 		alat_aktifField.reset();
 		alat_aktifField.setValue(null);
+		alat_aktifField.setValue('Aktif');
 	}
  	/* End of Function */
   
@@ -230,10 +231,10 @@ Ext.onReady(function(){
   	/* Function for Displaying  create Window Form */
 	function display_form_window(){
 		if(!alat_createWindow.isVisible()){
-			alat_reset_form();
+			
 			post2db='CREATE';
 			msg='created';
-			alat_aktifField.setValue('Aktif');
+			alat_reset_form();
 			alat_createWindow.show();
 		} else {
 			alat_createWindow.toFront();
@@ -245,13 +246,13 @@ Ext.onReady(function(){
 	function alat_confirm_delete(){
 		// only one alat is selected here
 		if(alatListEditorGrid.selModel.getCount() == 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', alat_delete);
+			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data berikut?', alat_delete);
 		} else if(alatListEditorGrid.selModel.getCount() > 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', alat_delete);
+			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data-data berikut?', alat_delete);
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really delete something you haven\'t selected?',
+				msg: 'Tidak ada yang dipilih untuk dihapus',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -264,14 +265,15 @@ Ext.onReady(function(){
 	function alat_confirm_update(){
 		/* only one record is selected here */
 		if(alatListEditorGrid.selModel.getCount() == 1) {
-			alat_set_form();
+			
 			post2db='UPDATE';
 			msg='updated';
+			alat_set_form();
 			alat_createWindow.show();
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really update something you haven\'t selected?',
+				msg: 'Tidak ada data yang dipilih untuk diedit',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -302,7 +304,7 @@ Ext.onReady(function(){
 						default:
 							Ext.MessageBox.show({
 								title: 'Warning',
-								msg: 'Could not delete the entire selection',
+								msg: 'Tidak bisa menghapus data yang diplih',
 								buttons: Ext.MessageBox.OK,
 								animEl: 'save',
 								icon: Ext.MessageBox.WARNING
@@ -314,7 +316,7 @@ Ext.onReady(function(){
 					var result=response.responseText;
 					Ext.MessageBox.show({
 					   title: 'Error',
-					   msg: 'Could not connect to the database. retry later.',
+					   msg: 'Tidak bisa terhubung dengan database server',
 					   buttons: Ext.MessageBox.OK,
 					   animEl: 'database',
 					   icon: Ext.MessageBox.ERROR
@@ -338,7 +340,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'alat_id'
 		},[
-		/* dataIndex => insert intoalat_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'alat_id', type: 'int', mapping: 'alat_id'},
 			{name: 'alat_nama', type: 'string', mapping: 'alat_nama'},
 			{name: 'alat_jumlah', type: 'int', mapping: 'alat_jumlah'},
@@ -355,7 +356,7 @@ Ext.onReady(function(){
     
   	/* Function for Identify of Window Column Model */
 	alat_ColumnModel = new Ext.grid.ColumnModel(
-		[/*{
+		[{
 			header: '#',
 			readOnly: true,
 			dataIndex: 'alat_id',
@@ -364,22 +365,27 @@ Ext.onReady(function(){
 				cell.css = "readonlycell"; // Mengambil Value dari Class di dalam CSS 
 				return value;
 				},
-			hidden: false
-		},*/
+			hidden: true
+		},
 		{
 			header: 'Nama',
 			dataIndex: 'alat_nama',
 			width: 150,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_ALAT'))){ ?>
+			,
 			editor: new Ext.form.TextField({
 				maxLength: 150
           	})
+			<?php } ?>
 		},
 		{
 			header: 'Jumlah',
 			dataIndex: 'alat_jumlah',
 			width: 150,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_ALAT'))){ ?>
+			,
 			editor: new Ext.form.NumberField({
 				allowDecimals: false,
 				allowNegative: false,
@@ -387,12 +393,15 @@ Ext.onReady(function(){
 				maxLength: 3,
 				maskRe: /([0-9]+)$/
 			})
+			<?php } ?>
 		},
 		{
 			header: 'Status',
 			dataIndex: 'alat_aktif',
 			width: 150,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_ALAT'))){ ?>
+			,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
 				triggerAction: 'all',
@@ -406,6 +415,7 @@ Ext.onReady(function(){
                	lazyRender:true,
                	listClass: 'x-combo-list-small'
             })
+			<?php } ?>
 		},
 		{
 			header: 'Creator',
@@ -471,26 +481,35 @@ Ext.onReady(function(){
 			store: alat_DataStore,
 			displayInfo: true
 		}),
-		/* Add Control on ToolBar */
+		
 		tbar: [
+		<?php if(eregi('C',$this->m_security->get_access_group_by_kode('MENU_ALAT'))){ ?>
 		{
 			text: 'Add',
 			tooltip: 'Add new record',
 			iconCls:'icon-adds',    				// this is defined in our styles.css
 			handler: display_form_window
-		}, '-',{
+		}, '-',
+		<?php } ?>
+		<?php if(eregi('U|R',$this->m_security->get_access_group_by_kode('MENU_ALAT'))){ ?>
+		{
 			text: 'Edit',
 			tooltip: 'Edit selected record',
 			iconCls:'icon-update',
 			handler: alat_confirm_update   // Confirm before updating
-		}, '-',{
+		}, '-',
+		<?php } ?>
+		<?php if(eregi('D',$this->m_security->get_access_group_by_kode('MENU_ALAT'))){ ?>
+		{
 			text: 'Delete',
 			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
 			disabled:true,
 			handler: alat_confirm_delete   // Confirm before deleting
-		}, '-', {
-			text: 'Search',
+		}, '-', 
+		<?php } ?>
+		{
+			text: 'Adv Search',
 			tooltip: 'Advanced Search',
 			iconCls:'icon-search',
 			handler: display_form_search_window 
@@ -535,17 +554,21 @@ Ext.onReady(function(){
 	alat_ContextMenu = new Ext.menu.Menu({
 		id: 'alat_ListEditorGridContextMenu',
 		items: [
+		<?php if(eregi('U|R',$this->m_security->get_access_group_by_kode('MENU_ALAT'))){ ?>
 		{ 
 			text: 'Edit', tooltip: 'Edit selected record', 
 			iconCls:'icon-update',
 			handler: alat_confirm_update 
 		},
+		<?php } ?>
+		<?php if(eregi('D',$this->m_security->get_access_group_by_kode('MENU_ALAT'))){ ?>
 		{ 
 			text: 'Delete', 
 			tooltip: 'Delete selected record', 
 			iconCls:'icon-delete',
 			handler: alat_confirm_delete 
 		},
+		<?php } ?>
 		'-',
 		{ 
 			text: 'Print',
@@ -639,11 +662,15 @@ Ext.onReady(function(){
 			]
 		}]
 		,
-		buttons: [{
+		buttons: [
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_ALAT'))){ ?>
+			{
 				text: 'Save and Close',
 				handler: alat_create
 			}
-			,{
+			,
+			<?php } ?>
+			{
 				text: 'Cancel',
 				handler: function(){
 					alat_createWindow.hide();
@@ -656,7 +683,7 @@ Ext.onReady(function(){
 	/* Function for retrieve create Window Form */
 	alat_createWindow= new Ext.Window({
 		id: 'alat_createWindow',
-		title: post2db+'Alat Medis',
+		title: post2db+'Peralatan Medis',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,
@@ -689,7 +716,6 @@ Ext.onReady(function(){
 			task: 'SEARCH',
 			start: 0,
 			limit: pageS,
-			//variable here
 			alat_id	:	alat_id_search, 
 			alat_nama	:	alat_nama_search, 
 			alat_jumlah	:	alat_jumlah_search, 
@@ -703,7 +729,6 @@ Ext.onReady(function(){
 	function alat_reset_search(){
 		// reset the store parameters
 		alat_DataStore.baseParams = { task: 'LIST', start:0, limit:pageS };
-		// Cause the datastore to do another query : 
 		alat_DataStore.reload({params: {start: 0, limit: pageS}});
 		alat_searchWindow.close();
 	};
@@ -801,7 +826,7 @@ Ext.onReady(function(){
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
 	alat_searchWindow = new Ext.Window({
-		title: 'Pencarian Alat Medis',
+		title: 'Pencarian Peralatan Medis',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,
@@ -846,8 +871,7 @@ Ext.onReady(function(){
 		url: 'index.php?c=c_alat&m=get_action',
 		params: {
 			task: "PRINT",
-		  	query: searchquery,                    		// if we are doing a quicksearch, use this
-			//if we are doing advanced search, use this
+		  	query: searchquery,                    		
 			alat_nama : alat_nama_print,
 			alat_jumlah : alat_jumlah_print,
 			alat_aktif : alat_aktif_print,
@@ -858,12 +882,12 @@ Ext.onReady(function(){
 		  	switch(result){
 		  	case 1:
 				win = window.open('./alatlist.html','alatlist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
-				win.print();
+				
 				break;
 		  	default:
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Unable to print the grid!',
+					msg: 'Tidak bisa mencetak data!',
 					buttons: Ext.MessageBox.OK,
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING
@@ -875,7 +899,7 @@ Ext.onReady(function(){
 		  	var result=response.responseText;
 			Ext.MessageBox.show({
 			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
+			   msg: 'Tidak bisa terhubung dengan database server',
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR
@@ -903,8 +927,7 @@ Ext.onReady(function(){
 		url: 'index.php?c=c_alat&m=get_action',
 		params: {
 			task: "EXCEL",
-		  	query: searchquery,                    		// if we are doing a quicksearch, use this
-			//if we are doing advanced search, use this
+		  	query: searchquery,                    		
 			alat_nama : alat_nama_2excel,
 			alat_jumlah : alat_jumlah_2excel,
 			alat_aktif : alat_aktif_2excel,
@@ -919,7 +942,7 @@ Ext.onReady(function(){
 		  	default:
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Unable to convert excel the grid!',
+					msg: 'Tidak bisa meng-export data ke dalam format excel!',
 					buttons: Ext.MessageBox.OK,
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING
@@ -931,7 +954,7 @@ Ext.onReady(function(){
 		  	var result=response.responseText;
 			Ext.MessageBox.show({
 			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
+			   msg: 'Tidak bisa terhubung dengan database server',
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR

@@ -153,7 +153,7 @@ Ext.onReady(function(){
 				var result=response.responseText;
 				Ext.MessageBox.show({
 				   title: 'Error',
-				   msg: 'Could not connect to the database. retry later.',
+				   msg: 'Tidak bisa terhubung dengan database server',
 				   buttons: Ext.MessageBox.OK,
 				   animEl: 'database',
 				   icon: Ext.MessageBox.ERROR
@@ -208,7 +208,7 @@ Ext.onReady(function(){
 				var result=response.responseText;
 				Ext.MessageBox.show({
 				   title: 'Error',
-				   msg: 'Could not connect to the database. retry later.',
+				   msg: 'Tidak bisa terhubung dengan database server',
 				   buttons: Ext.MessageBox.OK,
 				   animEl: 'database',
 				   icon: Ext.MessageBox.ERROR
@@ -250,7 +250,7 @@ Ext.onReady(function(){
 						ambil_paket_isi_perawatan_insert();
 						//Ext.MessageBox.alert(apaket_post2db+' OK','The Paket was '+msg+' successfully.');
 						
-						ambil_paket_DataStore.baseParams = { task: 'LIST' };
+						ambil_paket_DataStore.baseParams = { task: 'LIST', start: 0, limit: pageS };
 						ambil_paket_DataStore.reload({params: {start: 0, limit: pageS}});
 						
 						//ambil_paket_DataStore.reload();
@@ -272,7 +272,7 @@ Ext.onReady(function(){
 				var result=response.responseText;
 				Ext.MessageBox.show({
 					   title: 'Error',
-					   msg: 'Could not connect to the database. retry later.',
+					   msg: 'Tidak bisa terhubung dengan database server',
 					   buttons: Ext.MessageBox.OK,
 					   animEl: 'database',
 					   icon: Ext.MessageBox.ERROR
@@ -282,7 +282,7 @@ Ext.onReady(function(){
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'Your Form is not valid!.',
+				msg: 'Isian belum sempurna!.',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -350,9 +350,11 @@ Ext.onReady(function(){
   	/* Function for Displaying  create Window Form */
 	function display_form_window(){
 		if(!ambil_paket_createWindow.isVisible()){
-			ambil_paket_reset_form();
+			
 			apaket_post2db='CREATE';
 			msg='created';
+			ambil_paket_reset_form();
+			
 			ambil_paket_createWindow.show();
 		} else {
 			ambil_paket_createWindow.toFront();
@@ -364,13 +366,13 @@ Ext.onReady(function(){
 	function ambil_paket_confirm_delete(){
 		// only one ambil_paket is selected here
 		if(ambil_paketListEditorGrid.selModel.getCount() == 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', ambil_paket_delete);
+			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data berikut?', ambil_paket_delete);
 		} else if(ambil_paketListEditorGrid.selModel.getCount() > 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', ambil_paket_delete);
+			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data-data berikut?', ambil_paket_delete);
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-//				msg: 'You can\'t really delete something you haven\'t selected?',
+//				msg: 'Tidak ada yang dipilih untuk dihapus',
 				msg: 'Anda belum memilih data yang akan diedit',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
@@ -387,19 +389,20 @@ Ext.onReady(function(){
 		//cbo_paket_isi_rawatDataStore.load({params:{master_id:0}});
 		/* only one record is selected here */
 		if(ambil_paketListEditorGrid.selModel.getCount() == 1) {
+			apaket_post2db='UPDATE';
 			ambil_paket_set_form();
 			//cbo_paket_isi_rawatDataStore.load({params:{master_id:ambil_paketListEditorGrid.getSelectionModel().getSelected().get('apaket_id')}});
 			cbo_paket_isi_rawatDataStore.load({params:{dapaket_dpaket:ambil_paketListEditorGrid.getSelectionModel().getSelected().get('dpaket_id'),dapaket_jpaket:ambil_paketListEditorGrid.getSelectionModel().getSelected().get('dpaket_master'),dapaket_paket:ambil_paketListEditorGrid.getSelectionModel().getSelected().get('dpaket_paket')}});
 			cbo_ambil_paket_custDataStore.load({params:{dpaket_master:ambil_paketListEditorGrid.getSelectionModel().getSelected().get('dpaket_master')}});
 			//cbo_paket_isi_rawatDataStore.load({params:{master_id:0}});
-			apaket_post2db='UPDATE';
+			
 			//ambil_paket_isi_perawatan_DataStore.load({params : {master_id : eval(get_pk_id()), start:0, limit:pageS}});
 			msg='updated';
 			ambil_paket_createWindow.show();
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-//				msg: 'You can\'t really update something you haven\'t selected?',
+//				msg: 'Tidak ada data yang dipilih untuk diedit',
 				msg: 'Anda belum memilih data yang akan diedit',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
@@ -431,7 +434,7 @@ Ext.onReady(function(){
 						default:
 							Ext.MessageBox.show({
 								title: 'Warning',
-								msg: 'Could not delete the entire selection',
+								msg: 'Tidak bisa menghapus data yang diplih',
 								buttons: Ext.MessageBox.OK,
 								animEl: 'save',
 								icon: Ext.MessageBox.WARNING
@@ -443,7 +446,7 @@ Ext.onReady(function(){
 					var result=response.responseText;
 					Ext.MessageBox.show({
 					   title: 'Error',
-					   msg: 'Could not connect to the database. retry later.',
+					   msg: 'Tidak bisa terhubung dengan database server',
 					   buttons: Ext.MessageBox.OK,
 					   animEl: 'database',
 					   icon: Ext.MessageBox.ERROR
@@ -729,24 +732,15 @@ Ext.onReady(function(){
 		}),
 		/* Add Control on ToolBar */
 		tbar: [
+		<?php if(eregi('U|R',$this->m_security->get_access_group_by_kode('MENU_AMBILPAKET'))){ ?>
 		{
-			text: 'Add',
-			tooltip: 'Add new record',
-			iconCls:'icon-adds',    				// this is defined in our styles.css
-			disabled:true,
-			handler: display_form_window
-		}, '-',{
 			text: 'Ambil Paket',
 			tooltip: 'Pengambilan Isi Paket',
 			iconCls:'icon-update',
 			handler: ambil_paket_confirm_update   // Confirm before updating
-		}, '-',{
-			text: 'Delete',
-			tooltip: 'Delete selected record',
-			iconCls:'icon-delete',
-			disabled:true,
-			handler: ambil_paket_confirm_delete   // Confirm before deleting
-		}, '-', {
+		}, '-', 
+		<?php } ?>
+		{
 			text: 'Adv Search',
 			tooltip: 'Advanced Search',
 			iconCls:'icon-search',
@@ -802,19 +796,14 @@ Ext.onReady(function(){
 	ambil_paket_ContextMenu = new Ext.menu.Menu({
 		id: 'ambil_paket_ListEditorGridContextMenu',
 		items: [
+		<?php if(eregi('U|R',$this->m_security->get_access_group_by_kode('MENU_AMBILPAKET'))){ ?>
 		{ 
 			text: 'Ambil Paket', tooltip: 'Edit selected record', 
 			iconCls:'icon-update',
 			handler: ambil_paket_editContextMenu 
 		},
-/*		{ 
-			text: 'Delete', 
-			tooltip: 'Delete selected record', 
-			iconCls:'icon-delete',
-			handler: ambil_paket_confirm_delete 
-		},
-		'-',
-*/		{ 
+		<?php } ?>
+		{ 
 			text: 'Print',
 			tooltip: 'Print Document',
 			iconCls:'icon-print',
@@ -1092,12 +1081,14 @@ Ext.onReady(function(){
         autoHeight: true,
 		style: 'margin-top: 10px',
         width: 1220	//940	//800
+		<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_AMBILPAKET'))){ ?>
 		,tbar: [{
 				text: 'Batal',
 				tooltip: 'Membatalkan pengambilan paket',
 				iconCls:'icon-delete',    				// this is defined in our styles.css
 				handler: pengecekan_dokumen
 			}]
+		<?php } ?>
     });
     history_ambil_paketPanel.render('history_ambil_paket');
 	
@@ -1157,7 +1148,7 @@ Ext.onReady(function(){
 								var result=response.responseText;
 								Ext.MessageBox.show({
 								   title: 'Error',
-								   msg: 'Could not connect to the database. retry later.',
+								   msg: 'Tidak bisa terhubung dengan database server',
 								   buttons: Ext.MessageBox.OK,
 								   animEl: 'database',
 								   icon: Ext.MessageBox.ERROR
@@ -1182,7 +1173,6 @@ Ext.onReady(function(){
 		totalProperty: 'total',
 		id: ''
 	},[
-	/* dataIndex => insert intoperawatan_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'rpaket_id', type: 'int', mapping: 'rpaket_id'}, 
 			{name: 'rpaket_perawatan', type: 'int', mapping: 'rpaket_perawatan'}, 
 			{name: 'rpaket_jumlah', type: 'int', mapping: 'rpaket_jumlah'},
@@ -1396,13 +1386,14 @@ Ext.onReady(function(){
 		frame: true,
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
-		viewConfig: { forceFit:true},
+		viewConfig: { forceFit:true}/*,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: ambil_paket_isi_perawatan_DataStore,
 			displayInfo: true
-		}),
-		/* Add Control on ToolBar */
+		})*/
+		<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_AMBILPAKET'))){ ?>
+		,
 		tbar: [
 		{
 			text: 'Add',
@@ -1416,6 +1407,7 @@ Ext.onReady(function(){
 			handler: ambil_paket_isi_perawatan_confirm_delete
 		}
 		]
+		<?php } ?>
 	});
 	//eof
 	
@@ -1499,7 +1491,7 @@ Ext.onReady(function(){
 					var result=response.responseText;
 					Ext.MessageBox.show({
 					   title: 'Error',
-					   msg: 'Could not connect to the database. retry later.',
+					   msg: 'Tidak bisa terhubung dengan database server',
 					   buttons: Ext.MessageBox.OK,
 					   animEl: 'database',
 					   icon: Ext.MessageBox.ERROR
@@ -1543,13 +1535,13 @@ Ext.onReady(function(){
 	function ambil_paket_isi_perawatan_confirm_delete(){
 		// only one record is selected here
 		if(ambil_paket_isi_perawatanListEditorGrid.selModel.getCount() == 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', ambil_paket_isi_perawatan_delete);
+			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data berikut?', ambil_paket_isi_perawatan_delete);
 		} else if(ambil_paket_isi_perawatanListEditorGrid.selModel.getCount() > 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', ambil_paket_isi_perawatan_delete);
+			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data-data berikut?', ambil_paket_isi_perawatan_delete);
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-//				msg: 'You can\'t really delete something you haven\'t selected?',
+//				msg: 'Tidak ada yang dipilih untuk dihapus',
 				msg: 'Anda belum memilih data yang akan dihapus',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
@@ -1667,13 +1659,14 @@ Ext.onReady(function(){
 		frame: true,
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
-		viewConfig: { forceFit:true},
+		viewConfig: { forceFit:true}/*,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: ambil_paket_isi_produk_DataStore,
 			displayInfo: true
-		}),
-		/* Add Control on ToolBar */
+		})*/
+		<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_AMBILPAKET'))){ ?>
+		,
 		tbar: [
 		{
 			text: 'Add',
@@ -1687,6 +1680,7 @@ Ext.onReady(function(){
 			handler: ambil_paket_isi_produk_confirm_delete
 		}
 		]
+		<?php } ?>
 	});
 	//eof
 	
@@ -1746,15 +1740,15 @@ Ext.onReady(function(){
 	function ambil_paket_isi_produk_confirm_delete(){
 		// only one record is selected here
 		if(ambil_paket_isi_produkListEditorGrid.selModel.getCount() == 1){
-//			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', ambil_paket_isi_produk_delete);
+//			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data berikut?', ambil_paket_isi_produk_delete);
 			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', ambil_paket_isi_produk_delete);
 		} else if(ambil_paket_isi_produkListEditorGrid.selModel.getCount() > 1){
-//			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', ambil_paket_isi_produk_delete);
+//			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data-data berikut?', ambil_paket_isi_produk_delete);
 			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', ambil_paket_isi_produk_delete);
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-//				msg: 'You can\'t really delete something you haven\'t selected?',
+//				msg: 'Tidak ada yang dipilih untuk dihapus',
 				msg: 'Anda belum memilih data yang akan dihapus',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
@@ -1792,11 +1786,15 @@ Ext.onReady(function(){
 		width: 1220,	//700,        
 		items: [ambil_paket_fakturGroup,ambil_paket_infoPaketGroup,detail_tab_isi]
 		,
-		buttons: [{
+		buttons: [
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_AMBILPAKET'))){ ?>
+			{
 				text: 'Save and Close',
 				handler: ambil_paket_create
 			}
-			,{
+			,
+			<?php } ?>
+			{
 				text: 'Cancel',
 				handler: function(){
 					ambil_paket_createWindow.hide();
@@ -1847,7 +1845,6 @@ Ext.onReady(function(){
 		// change the store parameters
 		ambil_paket_DataStore.baseParams = {
 			task: 'SEARCH',
-			//variable here
 			apaket_faktur			:	apaket_faktur_search, 
 			apaket_cust				:	apaket_cust_search, 
 			apaket_paket			:	apaket_paket_search, 
@@ -1855,7 +1852,7 @@ Ext.onReady(function(){
 			apaket_kadaluarsa_akhir	:	apaket_kadaluarsa_akhir_search,
 			apaket_tgl_faktur		:	apaket_tgl_faktur_search,
 			apaket_tgl_faktur_akhir	:	apaket_tgl_faktur_akhir_search,
-			apaket_sisa				:	apaket_sisa_search,
+			apaket_sisa				:	apaket_sisa_search
 		};
 		// Cause the datastore to do another query : 
 		ambil_paket_DataStore.reload({params: {start: 0, limit: pageS}});
@@ -1864,7 +1861,7 @@ Ext.onReady(function(){
 	/* Function for reset search result */
 	function ambil_paket_reset_search(){
 		// reset the store parameters
-		ambil_paket_DataStore.baseParams = { task: 'LIST' };
+		ambil_paket_DataStore.baseParams = { task: 'LIST', start: 0, limit: pageS };
 		// Cause the datastore to do another query : 
 		ambil_paket_DataStore.reload({params: {start: 0, limit: pageS}});
 		ambil_paket_searchWindow.close();
@@ -2114,8 +2111,7 @@ Ext.onReady(function(){
 		url: 'index.php?c=c_master_ambil_paket&m=get_action',
 		params: {
 			task: "PRINT",
-		  	query: searchquery,                    		// if we are doing a quicksearch, use this
-			//if we are doing advanced search, use this
+		  	query: searchquery,                    		
 			apaket_faktur			:	apaket_faktur_print, 
 			apaket_cust				:	apaket_cust_print, 
 			apaket_paket			:	apaket_paket_print, 
@@ -2135,7 +2131,7 @@ Ext.onReady(function(){
 		  	default:
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Unable to print the grid!',
+					msg: 'Tidak bisa mencetak data!',
 					buttons: Ext.MessageBox.OK,
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING
@@ -2147,7 +2143,7 @@ Ext.onReady(function(){
 		  	var result=response.responseText;
 			Ext.MessageBox.show({
 			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
+			   msg: 'Tidak bisa terhubung dengan database server',
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR
@@ -2185,8 +2181,7 @@ Ext.onReady(function(){
 		url: 'index.php?c=c_master_ambil_paket&m=get_action',
 		params: {
 			task: "EXCEL",
-		  	query: searchquery,                    		// if we are doing a quick2excel, use this
-			//if we are doing advanced 2excel, use this
+		  	query: searchquery,                    		
 			apaket_faktur			:	apaket_faktur_2excel, 
 			apaket_cust				:	apaket_cust_2excel, 
 			apaket_paket			:	apaket_paket_2excel, 
@@ -2206,7 +2201,7 @@ Ext.onReady(function(){
 		  	default:
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Unable to convert excel the grid!',
+					msg: 'Tidak bisa meng-export data ke dalam format excel!',
 					buttons: Ext.MessageBox.OK,
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING
@@ -2218,7 +2213,7 @@ Ext.onReady(function(){
 		  	var result=response.responseText;
 			Ext.MessageBox.show({
 			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
+			   msg: 'Tidak bisa terhubung dengan database server',
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR

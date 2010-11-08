@@ -20,7 +20,9 @@ class M_paket extends Model{
 	}
 	
 	function get_group_paket_list(){
-		$sql="SELECT group_id,group_nama,group_duproduk,group_dmproduk,group_durawat,group_dmrawat,group_dupaket,group_dmpaket, kategori_nama,kategori_id FROM produk_group,kategori WHERE group_kelompok=kategori_id AND kategori_jenis='paket' AND group_aktif='Aktif' AND kategori_aktif='Aktif'";
+		$sql="SELECT group_id,group_nama,group_duproduk,group_dmproduk,group_durawat,group_dmrawat,group_dupaket,group_dmpaket, 
+				kategori_nama,kategori_id FROM produk_group,kategori WHERE group_kelompok=kategori_id AND kategori_jenis='paket' AND 
+				group_aktif='Aktif' AND kategori_aktif='Aktif'";
 		$query = $this->db->query($sql);
 		$nbrows = $query->num_rows();
 		if($nbrows>0){
@@ -269,17 +271,20 @@ class M_paket extends Model{
 	//function for get list record
 	function paket_list($filter,$start,$end){
 		//$query = "SELECT * FROM paket,produk_group where paket_group=group_id";
-		$query = "SELECT `paket`.*, `produk_group`.`group_id` AS `group_id`, `produk_group`.`group_kode` AS `group_kode`, `produk_group`.`group_nama` AS `group_nama`, `produk_group`.`group_dmpaket` AS `group_dmpaket`,
-`produk_group`.`group_dupaket` AS `group_dupaket`, `produk_group`.`group_kelompok` AS `group_kelompok`, `kategori`.`kategori_id` AS `kategori_id`, `kategori`.`kategori_nama` AS `kategori_nama`, `kategori2`.`kategori2_id` AS `kategori2_id`, `kategori2`.`kategori2_nama` AS `kategori2_nama`
-FROM ((`paket` INNER JOIN `produk_group` ON `paket`.`paket_group`=`produk_group`.`group_id` INNER JOIN `kategori` ON `produk_group`.`group_kelompok`=`kategori`.`kategori_id`) LEFT JOIN `kategori2` ON `paket`.`paket_kontribusi`=`kategori2`.`kategori2_id`)";
+		$query = "SELECT * FROM vu_paket";
 		
 		// For simple search
 		if ($filter<>""){
 			$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-			$query .= " (paket_kode LIKE '%".addslashes($filter)."%' OR paket_kodelama LIKE '%".addslashes($filter)."%' OR paket_nama LIKE '%".addslashes($filter)."%' OR group_nama LIKE '%".addslashes($filter)."%' OR kategori_nama LIKE '%".addslashes($filter)."%')";
+			$query .= " (paket_kode LIKE '%".addslashes($filter)."%' OR 
+						 paket_kodelama LIKE '%".addslashes($filter)."%' OR 
+						 paket_nama LIKE '%".addslashes($filter)."%' OR 
+						 group_nama LIKE '%".addslashes($filter)."%' OR 
+						 kategori_nama LIKE '%".addslashes($filter)."%')";
 			$query .= " AND paket_aktif = 'Aktif'"; // by hendri, simple search khusus aktif only
 		}
 		
+		$query.=" ORDER BY paket_id DESC";
 		$result = $this->db->query($query);
 		$nbrows = $result->num_rows();
 		$limit = $query." LIMIT ".$start.",".$end;		
@@ -467,7 +472,7 @@ FROM ((`paket` INNER JOIN `produk_group` ON `paket`.`paket_group`=`produk_group`
 			$paket_aktif = "Aktif";
 		}
 		//full query
-		$query="select * from paket,produk_group where paket_group=group_id";
+		$query = "SELECT * FROM vu_paket";
 		
 		if($paket_id!=''){
 			$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -517,6 +522,9 @@ FROM ((`paket` INNER JOIN `produk_group` ON `paket`.`paket_group`=`produk_group`
 			$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 			$query.= " paket_aktif = '".$paket_aktif."'";
 		};
+		
+		$query.=" ORDER BY paket_id DESC";
+		
 		$result = $this->db->query($query);
 		$nbrows = $result->num_rows();
 		
@@ -535,8 +543,7 @@ FROM ((`paket` INNER JOIN `produk_group` ON `paket`.`paket_group`=`produk_group`
 	}
 	
 	//function for print record
-	function paket_print($paket_id 
-						,$paket_kode 
+	function paket_print($paket_kode 
 						,$paket_kodelama 
 						,$paket_nama 
 						,$paket_group 
@@ -550,11 +557,15 @@ FROM ((`paket` INNER JOIN `produk_group` ON `paket`.`paket_group`=`produk_group`
 						,$option
 						,$filter){
 		//full query
-		$query="SELECT paket.*, produk_group.group_nama FROM paket Left Join produk_group ON paket.paket_group = produk_group.group_id";
+		$query = "SELECT * FROM vu_paket ";
+		
 		if($option=='LIST'){
 			$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-			$query .= " (paket_id LIKE '%".addslashes($filter)."%' OR paket_kode LIKE '%".addslashes($filter)."%' OR paket_nama LIKE '%".addslashes($filter)."%' OR group_nama LIKE '%".addslashes($filter)."%' OR paket_keterangan LIKE '%".addslashes($filter)."%' OR paket_du LIKE '%".addslashes($filter)."%' OR paket_dm LIKE '%".addslashes($filter)."%' OR paket_point LIKE '%".addslashes($filter)."%' OR paket_harga LIKE '%".addslashes($filter)."%' OR paket_expired LIKE '%".addslashes($filter)."%' OR paket_aktif LIKE '%".addslashes($filter)."%' )";
-			$result = $this->db->query($query);
+			$query .= " (paket_kode LIKE '%".addslashes($filter)."%' OR 
+						 paket_kodelama LIKE '%".addslashes($filter)."%' OR 
+						 paket_nama LIKE '%".addslashes($filter)."%' OR 
+						 group_nama LIKE '%".addslashes($filter)."%' OR 
+						 kategori2_nama LIKE '%".addslashes($filter)."%')";
 		} else if($option=='SEARCH'){
 			if($paket_id!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -600,32 +611,41 @@ FROM ((`paket` INNER JOIN `produk_group` ON `paket`.`paket_group`=`produk_group`
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " paket_aktif LIKE '%".$paket_aktif."%'";
 			};
-			$result = $this->db->query($query);
+			
 		}
+		
+		$query.=" ORDER BY paket_id DESC";
+		
+		//$this->firephp->log($query);
+		
+		$result = $this->db->query($query);
 		return $result;
 	}
 	
 	//function  for export to excel
-	function paket_export_excel($paket_id ,$paket_kode ,$paket_kodelama ,$paket_nama ,$paket_group ,$paket_keterangan ,$paket_du ,$paket_dm ,$paket_point ,$paket_harga ,$paket_expired ,$paket_aktif ,$option,$filter){
+	function paket_export_excel($paket_kode ,$paket_kodelama ,$paket_nama ,$paket_group ,$paket_keterangan ,$paket_du ,$paket_dm ,$paket_point ,$paket_harga ,$paket_expired ,$paket_aktif ,$option,$filter){
 		//full query
 		$query="SELECT
-					if(paket_kodelama='','-',ifnull(paket_kodelama,'-')) AS kode_lama,
-					ifnull(paket_kode,'-') AS kode_baru,
-					ifnull(paket_nama,'-') AS nama,
-					ifnull(produk_group.group_nama,'-') AS group_1,
+					if(paket_kodelama='','-',ifnull(paket_kodelama,'-')) AS 'Kode lama',
+					ifnull(paket_kode,'-') AS 'Kode baru',
+					ifnull(paket_nama,'-') AS 'Nama',
+					ifnull(group_nama,'-') AS 'Group 1',
 					ifnull(paket_du,'-') AS 'DU(%)',
 					ifnull(paket_dm,'-') AS 'DM(%)',
-					ifnull(paket_point,'-') AS point,
+					ifnull(paket_point,'-') AS Poin,
 					ifnull(paket_harga,'-') AS 'Harga(Rp)',
 					ifnull(paket_expired,'-') AS 'Exp.(hari)',
-					paket_aktif AS status
-				FROM paket
-				Inner Join produk_group ON paket_group = produk_group.group_id";
+					paket_aktif AS Status
+				FROM vu_paket";
 				
 		if($option=='LIST'){
-			$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-			$query .= " (paket_id LIKE '%".addslashes($filter)."%' OR paket_kode LIKE '%".addslashes($filter)."%' OR paket_nama LIKE '%".addslashes($filter)."%' OR paket_group LIKE '%".addslashes($filter)."%' OR paket_keterangan LIKE '%".addslashes($filter)."%' OR paket_du LIKE '%".addslashes($filter)."%' OR paket_dm LIKE '%".addslashes($filter)."%' OR paket_point LIKE '%".addslashes($filter)."%' OR paket_harga LIKE '%".addslashes($filter)."%' OR paket_expired LIKE '%".addslashes($filter)."%' OR paket_aktif LIKE '%".addslashes($filter)."%' )";
-			$result = $this->db->query($query);
+			$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+			$query .= " (paket_kode LIKE '%".addslashes($filter)."%' OR 
+						 paket_kodelama LIKE '%".addslashes($filter)."%' OR 
+						 paket_nama LIKE '%".addslashes($filter)."%' OR 
+						 group_nama LIKE '%".addslashes($filter)."%' OR 
+						 kategori2_nama LIKE '%".addslashes($filter)."%')";
+
 		} else if($option=='SEARCH'){
 			if($paket_id!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -671,8 +691,13 @@ FROM ((`paket` INNER JOIN `produk_group` ON `paket`.`paket_group`=`produk_group`
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " paket_aktif LIKE '%".$paket_aktif."%'";
 			};
-			$result = $this->db->query($query);
+			
 		}
+		
+		$query.=" ORDER BY paket_id DESC";
+		//$this->firephp->log($query);
+		
+		$result = $this->db->query($query);
 		return $result;
 	}
 		

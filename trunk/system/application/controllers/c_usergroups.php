@@ -17,10 +17,8 @@ class C_usergroups extends Controller {
 	function C_usergroups(){
 		session_start();
 		parent::Controller();
-				
-		$this->load->plugin('to_excel');
+		
 		$this->load->model('m_usergroups', '', TRUE);
-		//$this->output->enable_profiler(true);
 	}
 	
 	//set index
@@ -29,16 +27,13 @@ class C_usergroups extends Controller {
 		$this->load->view('main/v_usergroups');
 	}
 	
-	function permission_purge(){
-		$menu_group = (integer) (isset($_POST['menu_group']) ? @$_POST['menu_group'] : $_GET['menu_group']);
-		$result=$this->m_usergroups->permission_purge($menu_group);
-		echo $result;
-	}
-	
-	function permission_save(){
-		$menu_group = (integer) (isset($_POST['menu_group']) ? @$_POST['menu_group'] : @$_GET['menu_group']);
-		$menu_id = (integer) (isset($_POST['menu_id']) ? @$_POST['menu_id'] : @$_GET['menu_id']);
-		$menu_priv = (isset($_POST['menu_priv']) ? @$_POST['menu_priv'] : @$_GET['menu_priv']);
+	function permission_insert(){
+		$menu_group = @$_POST['menu_group'];
+		$menu_id = @$_POST['menu_id'];
+		$menu_priv = @$_POST['menu_priv'];
+		
+		$menu_id = json_decode(stripslashes($menu_id));
+		$menu_priv = json_decode(stripslashes($menu_priv));
 		
 		$result=$this->m_usergroups->permission_save($menu_group,$menu_id,$menu_priv);
 		echo $result;
@@ -173,24 +168,36 @@ class C_usergroups extends Controller {
 		
 		$result = $this->m_usergroups->usergroups_print($group_id ,$group_name ,$group_desc ,$group_active ,$option,$filter);
 		$nbrows=$result->num_rows();
-		$totcolumn=4;
+		$totcolumn=3;
    		/* We now have our array, let's build our HTML file */
 		$file = fopen("usergroupslist.html",'w');
 		fwrite($file, "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' /><title>Printing the User Groups s Grid</title><link rel='stylesheet' type='text/css' href='assets/modules/main/css/printstyle.css'/></head>");
-		fwrite($file, "<body><table summary='Usergroups List'><caption>USERGROUPS</caption><thead><tr><th scope='col'>Id</th><th scope='col'>Nama Group</th><th scope='col'>Keterangan</th><th scope='col'>Aktif</th></tr></thead><tfoot><tr><th scope='row'>Total</th><td colspan='$totcolumn'>");
+		fwrite($file, "<body onload='window.print()'>
+			   <table summary='Usergroups List'>
+			   <caption>Daftar User Group</caption>
+			   	<thead>
+					<tr>
+						<th scope='col'>No</th>
+						<th scope='col'>Nama Group</th>
+						<th scope='col'>Keterangan</th>
+						<th scope='col'>Aktif</th>
+					</tr>
+				</thead>
+				<tfoot><tr><th scope='row'>Total</th><td colspan='$totcolumn'>");
 		fwrite($file, $nbrows);
-		fwrite($file, " Usergroups</td></tr></tfoot><tbody>");
+		fwrite($file, " user group</td></tr></tfoot><tbody>");
 		$i=0;
 		if($nbrows>0){
 			foreach($result->result_array() as $data){
+				$i++;
 				fwrite($file,'<tr');
 				if($i%1==0){
 					fwrite($file," class='odd'");
 				}
 			
-				fwrite($file, "><th scope='row' id='r97'>");
-				fwrite($file, $data['group_id']);
-				fwrite($file,"</th><td>");
+				fwrite($file, "><td>");
+				fwrite($file, $i);
+				fwrite($file,"</td><td>");
 				fwrite($file, $data['group_name']);
 				fwrite($file,"</td><td>");
 				fwrite($file, $data['group_desc']);
@@ -222,7 +229,7 @@ class C_usergroups extends Controller {
 		$filter=$_POST["query"];
 		
 		$query = $this->m_usergroups->usergroups_export_excel($group_id ,$group_name ,$group_desc ,$group_active ,$option,$filter);
-		
+		$this->load->plugin('to_excel');
 		to_excel($query,"usergroups"); 
 		echo '1';
 			

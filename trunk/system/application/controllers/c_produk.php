@@ -18,7 +18,6 @@ class C_produk extends Controller {
 		parent::Controller();
 		session_start();
 		$this->load->model('m_produk', '', TRUE);
-		$this->load->plugin('to_excel');
 	}
 	
 	//set index
@@ -341,7 +340,7 @@ class C_produk extends Controller {
    		/* We now have our array, let's build our HTML file */
 		$file = fopen("produklist.html",'w');
 		fwrite($file, "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' /><title>Printing the Produk Grid</title><link rel='stylesheet' type='text/css' href='assets/modules/main/css/printstyle.css'/></head>");
-		fwrite($file, "<body><table summary='Produk List'><caption>DAFTAR PRODUK</caption><thead><tr><th scope='col'>No</th><th scope='col'>Kode</th><th scope='col'>Kode Lama</th><th scope='col'>Group</th><th scope='col'>Kategori</th><th scope='col'>Jenis</th><th scope='col'>Nama</th><th scope='col'>Satuan</th><th scope='col'>DU</th><th scope='col'>DM</th><th scope='col'>Point</th><th scope='col'>Volume</th><th scope='col'>Produk Harga</th><th scope='col'>Keterangan</th><th scope='col'>Aktif</th></tr></thead><tfoot><tr><th scope='row'>Total</th><td colspan='$totcolumn'>");
+		fwrite($file, "<body onload='window.print()'><table summary='Produk List'><caption>DAFTAR PRODUK</caption><thead><tr><th scope='col'>No</th><th scope='col'>Kode</th><th scope='col'>Kode Lama</th><th scope='col'>Group</th><th scope='col'>Kategori</th><th scope='col'>Jenis</th><th scope='col'>Nama</th><th scope='col'>Satuan</th><th scope='col'>DU</th><th scope='col'>DM</th><th scope='col'>Point</th><th scope='col'>Volume</th><th scope='col'>Produk Harga</th><th scope='col'>Keterangan</th><th scope='col'>Aktif</th></tr></thead><tfoot><tr><th scope='row'>Total</th><td colspan='$totcolumn'>");
 		fwrite($file, $nbrows);
 		fwrite($file, " Produk</td></tr></tfoot><tbody>");
 		$i=0;
@@ -378,7 +377,7 @@ class C_produk extends Controller {
 				fwrite($file,"</td><td>");
 				fwrite($file, $data['produk_volume']);
 				fwrite($file,"</td><td>");
-				fwrite($file, $data['produk_harga']);
+				fwrite($file, number_format($data['produk_harga']));
 				fwrite($file,"</td><td>");
 				fwrite($file, $data['produk_keterangan']);
 				fwrite($file,"</td><td>");
@@ -434,7 +433,7 @@ class C_produk extends Controller {
 		$filter=$_POST["query"];
 		
 		$query = $this->m_produk->produk_export_excel($produk_id ,$produk_kode ,$produk_kodelama ,$produk_group ,$produk_kategori ,$produk_jenis ,$produk_nama ,$produk_satuan ,$produk_du ,$produk_dm ,$produk_point ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif ,$option,$filter);
-		
+		$this->load->plugin('to_excel');
 		to_excel($query,"produk"); 
 		echo '1';
 			

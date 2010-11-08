@@ -18,7 +18,7 @@
 <title>Laporan Rekap Penerimaan Tagihan <?php echo $periode; ?> Group By Tanggal</title>
 <link rel='stylesheet' type='text/css' href='../assets/modules/main/css/printstyle.css'/>
 </head>
-<body>
+<body onload='window.print()'>
 <table summary='Rekap Pesanan Pembelian'>
 	<caption>Laporan Penerimaan Tagihan <br/><?php echo $periode; ?><br/>Group By Tanggal</caption>
 	<thead>

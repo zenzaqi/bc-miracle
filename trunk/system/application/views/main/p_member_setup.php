@@ -27,6 +27,6 @@
 		<tr><td><? echo $i; ?></td><td><?php echo $print->setmember_id; ?></td><td><?php echo $print->setmember_transhari; ?></td><td><?php echo $print->setmember_transbulan; ?></td><td><?php echo $print->setmember_periodeaktif; ?></td><td><?php echo $print->setmember_periodetanggang; ?></td><td><?php echo $print->setmember_transharitenggang; ?></td><td><?php echo $print->setmember_author; ?></td><td><?php echo $print->setmember_date_create; ?></td><td><?php echo $print->setmember_update; ?></td><td><?php echo $print->setmember_date_update; ?></td><td><?php echo $print->setmember_revised; ?></td></tr>
 		<?php } ?>
 	</tbody>
-<body>
+<body onload='window.print()'>
 </body>
 </html>

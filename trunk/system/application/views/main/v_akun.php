@@ -107,8 +107,8 @@ Ext.onReady(function(){
 			if(akun_parentField.getValue()!== null){akun_parent_field = akun_parentField.getValue();} 
 			//if(akun_levelField.getValue()!== null){akun_level_field = akun_levelField.getValue();} 
 			if(akun_namaField.getValue()!== null){akun_nama_field = akun_namaField.getValue();} 
-			if(akun_debetField.getValue()!== null){akun_debet_field = akun_debetField.getValue();} 
-			if(akun_kreditField.getValue()!== null){akun_kredit_field = akun_kreditField.getValue();} 
+			if(akun_debetField.getValue()!== null){akun_debet_field = convertToNumber(akun_debetField.getValue());} 
+			if(akun_kreditField.getValue()!== null){akun_kredit_field = convertToNumber(akun_kreditField.getValue());} 
 			if(akun_saldoField.getValue()!== null){akun_saldo_field = akun_saldoField.getValue();} 
 			if(akun_aktifField.getValue()!== null){akun_aktif_field = akun_aktifField.getValue();} 
 
@@ -132,14 +132,14 @@ Ext.onReady(function(){
 					var result=eval(response.responseText);
 					switch(result){
 						case 1:
-							Ext.MessageBox.alert(post2db+' OK','Data Kode Akun sukses disimpan.');
+							Ext.MessageBox.alert(post2db+' OK','Data Kode Akun berhasil disimpan.');
 							akun_DataStore.reload();
 							akun_saveWindow.hide();
 							break;
 						default:
 							Ext.MessageBox.show({
 							   title: 'Warning',
-							   msg: 'Data Kode Akun gagal disimpan !.',
+							   msg: 'Data Kode Akun tidak bisa disimpan !.',
 							   buttons: Ext.MessageBox.OK,
 							   animEl: 'save',
 							   icon: Ext.MessageBox.WARNING
@@ -151,7 +151,7 @@ Ext.onReady(function(){
 					var result=response.responseText;
 					Ext.MessageBox.show({
 						   title: 'Error',
-						   msg: 'Tidak bisa terhubung dengan database, cobalah lain waktu.',
+						   msg: 'Tidak bisa terhubung dengan database server.',
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'database',
 						   icon: Ext.MessageBox.ERROR
@@ -162,7 +162,7 @@ Ext.onReady(function(){
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'Maaf, data yang di kirim tidak valid.',
+				msg: 'Isian belum lengkap !.',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -210,8 +210,8 @@ Ext.onReady(function(){
 		akun_parentField.setValue(akunListEditorGrid.getSelectionModel().getSelected().get('akun_parent'));
 		//akun_levelField.setValue(akunListEditorGrid.getSelectionModel().getSelected().get('akun_level'));
 		akun_namaField.setValue(akunListEditorGrid.getSelectionModel().getSelected().get('akun_nama'));
-		akun_debetField.setValue(akunListEditorGrid.getSelectionModel().getSelected().get('akun_debet'));
-		akun_kreditField.setValue(akunListEditorGrid.getSelectionModel().getSelected().get('akun_kredit'));
+		akun_debetField.setValue(CurrencyFormatted(akunListEditorGrid.getSelectionModel().getSelected().get('akun_debet')));
+		akun_kreditField.setValue(CurrencyFormatted(akunListEditorGrid.getSelectionModel().getSelected().get('akun_kredit')));
 		akun_saldoField.setValue(akunListEditorGrid.getSelectionModel().getSelected().get('akun_saldo'));
 		akun_aktifField.setValue(akunListEditorGrid.getSelectionModel().getSelected().get('akun_aktif'));
 		akun_parentField.setValue(akunListEditorGrid.getSelectionModel().getSelected().get('akun_parent_nama'));
@@ -518,23 +518,32 @@ Ext.onReady(function(){
 			displayInfo: true
 		}),
 		tbar: [
+		<?php if(eregi('C',$this->m_security->get_access_group_by_kode('MENU_AKUN'))){ ?>
 		{
 			text: 'Add',
 			tooltip: 'Add new record',
 			iconCls:'icon-adds',    				// this is defined in our styles.css
 			handler: display_form_window
-		}, '-',{
+		}, '-',
+		<?php } ?>
+		<?php if(eregi('U|R',$this->m_security->get_access_group_by_kode('MENU_AKUN'))){ ?>
+		{
 			text: 'Edit',
 			tooltip: 'Edit selected record',
 			iconCls:'icon-update',
 			handler: akun_confirm_update   // Confirm before updating
-		}, '-',{
+		}, '-',
+		<?php } ?>
+		<?php if(eregi('D',$this->m_security->get_access_group_by_kode('MENU_AKUN'))){ ?>
+		{
 			text: 'Delete',
 			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
 			handler: akun_confirm_delete   // Confirm before deleting
-		}, '-', {
-			text: 'Search',
+		}, '-',
+		<?php } ?>
+		{
+			text: 'Adv Search',
 			tooltip: 'Advanced Search',
 			iconCls:'icon-search',
 			handler: display_form_search_window 
@@ -568,17 +577,21 @@ Ext.onReady(function(){
 	akun_ContextMenu = new Ext.menu.Menu({
 		id: 'akun_ListEditorGridContextMenu',
 		items: [
+		<?php if(eregi('U|R',$this->m_security->get_access_group_by_kode('MENU_AKUN'))){ ?>
 		{ 
 			text: 'Edit', tooltip: 'Edit selected record', 
 			iconCls:'icon-update',
 			handler: akun_editContextMenu 
 		},
+		<?php } ?>
+		<?php if(eregi('D',$this->m_security->get_access_group_by_kode('MENU_AKUN'))){ ?>
 		{ 
 			text: 'Delete', 
 			tooltip: 'Delete selected record', 
 			iconCls:'icon-delete',
 			handler: akun_confirm_delete 
 		},
+		<?php } ?>
 		'-',
 		{ 
 			text: 'Print',
@@ -701,22 +714,20 @@ Ext.onReady(function(){
 		anchor: '95%'
 	});
 	/* Identify  akun_debet Field */
-	akun_debetField= new Ext.form.NumberField({
+	akun_debetField= new Ext.form.TextField({
 		id: 'akun_debetField',
 		fieldLabel: 'Debet',
-		allowNegatife : false,
+		itemCls: 'rmoney',
 		blankText: '0',
-		allowDecimals: true,
 		anchor: '95%',
 		maskRe: /([0-9]+)$/
 	});
 	/* Identify  akun_kredit Field */
-	akun_kreditField= new Ext.form.NumberField({
+	akun_kreditField= new Ext.form.TextField({
 		id: 'akun_kreditField',
 		fieldLabel: 'Kredit',
-		allowNegatife : false,
+		itemCls: 'rmoney',
 		blankText: '0',
-		allowDecimals: true,
 		anchor: '95%',
 		maskRe: /([0-9]+)$/
 	});
@@ -769,11 +780,15 @@ Ext.onReady(function(){
 						akun_debetField, akun_kreditField, akun_saldoField, akun_aktifField] 
 			}
 			],
-		buttons: [{
+		buttons: [
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_AKUN'))){ ?>
+			{
 				text: 'Save and Close',
 				handler: akun_save
 			}
-			,{
+			,
+			<?php } ?>
+			{
 				text: 'Cancel',
 				handler: function(){
 					akun_saveWindow.hide();
@@ -1103,12 +1118,12 @@ Ext.onReady(function(){
 		  	switch(result){
 		  	case 1:
 				win = window.open('./print/akun_printlist.html','akunlist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
-				//win.print();
+				//
 				break;
 		  	default:
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Unable to print the grid!',
+					msg: 'Tidak bisa mencetak data!',
 					buttons: Ext.MessageBox.OK,
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING
@@ -1182,7 +1197,7 @@ Ext.onReady(function(){
 		  	default:
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Unable to convert excel the grid!',
+					msg: 'Tidak bisa meng-export data ke dalam format excel!',
 					buttons: Ext.MessageBox.OK,
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING
@@ -1203,6 +1218,12 @@ Ext.onReady(function(){
 		});
 	}
 	/*End of Function */
+	
+	akun_debetField.on('focus',function(){ akun_debetField.setValue(convertToNumber(akun_debetField.getValue())) });
+	akun_debetField.on('blur',function(){ akun_debetField.setValue(CurrencyFormatted(akun_debetField.getValue())) });
+	
+	akun_kreditField.on('focus',function(){ akun_kreditField.setValue(convertToNumber(akun_kreditField.getValue())) });
+	akun_kreditField.on('blur',function(){ akun_kreditField.setValue(CurrencyFormatted(akun_kreditField.getValue())) });
 	
 	akun_parentField.on("select",function(){
 		var j=combo_akun_DataStore.findExact('akun_id',akun_parentField.getValue());

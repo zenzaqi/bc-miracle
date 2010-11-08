@@ -178,7 +178,7 @@ Ext.onReady(function(){
 					default:
 						Ext.MessageBox.show({
 						   title: 'Warning',
-						   msg: 'We could\'t not save the perawatan.',
+						   msg: 'Data Perawatan tidak bisa disimpan',
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'save',
 						   icon: Ext.MessageBox.WARNING
@@ -190,7 +190,7 @@ Ext.onReady(function(){
 				var result=response.responseText;
 				Ext.MessageBox.show({
 				   title: 'Error',
-				   msg: 'Could not connect to the database. retry later.',
+				   msg: 'Tidak bisa terhubung dengan database server',
 				   buttons: Ext.MessageBox.OK,
 				   animEl: 'database',
 				   icon: Ext.MessageBox.ERROR
@@ -235,7 +235,7 @@ Ext.onReady(function(){
 		if(rawat_dmField.getValue()!== null){rawat_dm_create = rawat_dmField.getValue();} 
 		if(rawat_pointField.getValue()!== null){rawat_point_create = rawat_pointField.getValue();}
 		if(rawat_kreditField.getValue()!== null){rawat_kredit_create = rawat_kreditField.getValue();} 
-		if(rawat_hargaField.getValue()!== null){rawat_harga_create = rawat_hargaField.getValue();}
+		if(rawat_hargaField.getValue()!== null){rawat_harga_create = convertToNumber(rawat_hargaField.getValue());}
 		//if(rawat_jumlah_tindakanField.getValue()!== null){rawat_jumlah_tindakan_create = rawat_jumlah_tindakanField.getValue();} 
 		if(rawat_gudangField.getValue()!== null){rawat_gudang_create = rawat_gudangField.getValue();} 
 		if(rawat_aktifField.getValue()!== null){rawat_aktif_create = rawat_aktifField.getValue();} 
@@ -305,7 +305,7 @@ Ext.onReady(function(){
 				var result=response.responseText;
 				Ext.MessageBox.show({
 					   title: 'Error',
-					   msg: 'Could not connect to the database. retry later.',
+					   msg: 'Tidak bisa terhubung dengan database server',
 					   buttons: Ext.MessageBox.OK,
 					   animEl: 'database',
 					   icon: Ext.MessageBox.ERROR
@@ -370,7 +370,11 @@ Ext.onReady(function(){
 		rawat_gudangField.reset();
 		rawat_gudangField.setValue(null);
 		rawat_aktifField.reset();
-		rawat_aktifField.setValue(null);
+		rawat_aktifField.setValue('Aktif');
+		
+		cbo_satuan_produkDataStore.setBaseParam('master_id',-1);
+		cbo_satuan_produkDataStore.load();
+		
 	}
  	/* End of Function */
   
@@ -390,14 +394,23 @@ Ext.onReady(function(){
 		rawat_dmField.setValue(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_dm'));
 		rawat_pointField.setValue(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_point'));
 		rawat_kreditField.setValue(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_kredit'));
-		rawat_hargaField.setValue(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_harga'));
+		rawat_hargaField.setValue(CurrencyFormatted(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_harga')));
 		//rawat_jumlah_tindakanField.setValue(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_jumlah_tindakan'));
 		rawat_gudangField.setValue(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_gudang'));
 		rawat_aktifField.setValue(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_aktif'));
 		
+		cbo_rawat_produkDataStore.setBaseParam('query',get_pk_id());
+		cbo_rawat_produkDataStore.load();
+		cbo_rawat_alatDataStore.load();
+		
 		cbo_satuan_produkDataStore.setBaseParam('task','detail');
 		cbo_satuan_produkDataStore.setBaseParam('master_id',get_pk_id());
 		cbo_satuan_produkDataStore.load();
+		
+		perawatan_konsumsi_DataStore.setBaseParam('master_id',get_pk_id());
+		perawatan_konsumsi_DataStore.load();
+		perawatan_alat_DataStore.load({params : {master_id : get_pk_id(), start:0, limit:pageS}});
+			
 	}
 	/* End setValue to EDIT*/
   
@@ -414,7 +427,6 @@ Ext.onReady(function(){
 			post2db='CREATE';
 			msg='created';
 			perawatan_reset_form();
-			rawat_aktifField.setValue('Aktif');
 			perawatan_createWindow.show();
 		} else {
 			perawatan_createWindow.toFront();
@@ -426,13 +438,13 @@ Ext.onReady(function(){
 	function perawatan_confirm_delete(){
 		// only one perawatan is selected here
 		if(perawatanListEditorGrid.selModel.getCount() == 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', perawatan_delete);
+			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data berikut?', perawatan_delete);
 		} else if(perawatanListEditorGrid.selModel.getCount() > 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', perawatan_delete);
+			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data-data berikut?', perawatan_delete);
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really delete something you haven\'t selected?',
+				msg: 'Tidak ada yang dipilih untuk dihapus',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -444,17 +456,13 @@ Ext.onReady(function(){
 	/* Function for Update Confirm */
 	function perawatan_confirm_update(){
 		/* only one record is selected here */
-		cbo_rawat_produkDataStore.setBaseParam('query',perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_id'));
-		cbo_rawat_produkDataStore.load({params:{query:perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_id')}});
-		cbo_rawat_alatDataStore.load();
+		
 		//cbo_rawat_gudangDataSore.load();
 		if(perawatanListEditorGrid.selModel.getCount() == 1) {
-			perawatan_set_form();
+			
 			post2db='UPDATE';
-			perawatan_konsumsi_DataStore.setBaseParam('master_id',get_pk_id());
-			perawatan_konsumsi_DataStore.load();
-			perawatan_alat_DataStore.load({params : {master_id : get_pk_id(), start:0, limit:pageS}});
 			msg='updated';
+			perawatan_set_form();
 			perawatan_createWindow.show();
 		} else {
 			Ext.MessageBox.show({
@@ -490,7 +498,7 @@ Ext.onReady(function(){
 						default:
 							Ext.MessageBox.show({
 								title: 'Warning',
-								msg: 'Could not delete the entire selection',
+								msg: 'Tidak bisa menghapus data yang diplih',
 								buttons: Ext.MessageBox.OK,
 								animEl: 'save',
 								icon: Ext.MessageBox.WARNING
@@ -502,7 +510,7 @@ Ext.onReady(function(){
 					var result=response.responseText;
 					Ext.MessageBox.show({
 					   title: 'Error',
-					   msg: 'Could not connect to the database. retry later.',
+					   msg: 'Tidak bisa terhubung dengan database server',
 					   buttons: Ext.MessageBox.OK,
 					   animEl: 'database',
 					   icon: Ext.MessageBox.ERROR
@@ -526,7 +534,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'rawat_id'
 		},[
-		/* dataIndex => insert intoperawatan_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'rawat_id', type: 'int', mapping: 'rawat_id'}, 
 			{name: 'rawat_kode', type: 'string', mapping: 'rawat_kode'}, 
 			{name: 'rawat_kodelama', type: 'string', mapping: 'rawat_kodelama'}, 
@@ -676,37 +683,42 @@ Ext.onReady(function(){
 			header: '<div align="center">' + 'Kode Lama' + '</div>',
 			dataIndex: 'rawat_kodelama',
 			width: 120,	//150,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
+			,
 			editor: new Ext.form.TextField({
 				allowBlank: true,
 				maxLength: 20
           	})
+			<?php } ?>
 		},
 		{
 			header: '<div align="center">' + 'Kode Baru' + '</div>',
 			dataIndex: 'rawat_kode',
 			width: 120,	//150,
 			sortable: true,
-			editor: new Ext.form.TextField({
-				allowBlank: false,
-				maxLength: 20
-          	})
+			readOnly: true
 		},
 		{
 			header: '<div align="center">' + 'Nama Perawatan' + '</div>',
 			dataIndex: 'rawat_nama',
 			width: 300,	//250,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
+			,
 			editor: new Ext.form.TextField({
 				allowBlank: false,
 				maxLength: 250
           	})
+			<?php } ?>
 		}, 
 		{
 			header: '<div align="center">' + 'Group 1' + '</div>',
 			dataIndex: 'rawat_group',
 			width: 150,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
+			,
 			editor: new Ext.form.ComboBox({
 				store: cbo_rawat_groupDataStore,
 				mode: 'remote',
@@ -714,12 +726,15 @@ Ext.onReady(function(){
 				valueField: 'rawat_group_value',
 				triggerAction: 'all'
 			})
+			<?php } ?>
 		},
 		{
 			header: '<div align="center">' + 'Group 2' + '</div>',
 			dataIndex: 'rawat_jenis',
 			width: 150,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
+			,
 			editor: new Ext.form.ComboBox({
 				store: cbo_rawat_jenisDataSore,
 				mode: 'remote',
@@ -727,6 +742,7 @@ Ext.onReady(function(){
 				valueField: 'rawat_jenis_value',
 				triggerAction: 'all'
 			})
+			<?php } ?>
 		}, 
 		{
 			header: '<div align="center">' + 'Jenis' + '</div>',
@@ -742,7 +758,9 @@ Ext.onReady(function(){
 			width: 80,	//100,
 			renderer: function(val){
 				return '<span>' + val + ' </span>' + '</div>';
-			},
+			}
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
+			,
 			sortable: true,
 			editor: new Ext.form.NumberField({
 				allowBlank: false,
@@ -752,6 +770,7 @@ Ext.onReady(function(){
 				maxLength: 11,
 				maskRe: /([0-9]+)$/
 			})
+			<?php } ?>
 		}, 
 		{
 			header: '<div align="center">' + 'DM (%)' + '</div>',
@@ -760,7 +779,9 @@ Ext.onReady(function(){
 			width: 80,	//100,
 			renderer: function(val){
 				return '<span>' + val + '</span>';
-			},
+			}
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
+			,
 			sortable: true,
 			editor: new Ext.form.NumberField({
 				allowBlank: false,
@@ -770,13 +791,16 @@ Ext.onReady(function(){
 				maxLength: 11,
 				maskRe: /([0-9]+)$/
 			})
+			<?php } ?>
 		}, 
 		{
 			header: '<div align="center">' + 'Poin' + '</div>',
 			dataIndex: 'rawat_point',
 			align: 'right',
 			width: 80,	//100,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
+			,
 			editor: new Ext.form.NumberField({
 				allowBlank: false,
 				allowDecimals: false,
@@ -785,6 +809,7 @@ Ext.onReady(function(){
 				maxLength: 11,
 				maskRe: /([0-9]+)$/
 			})
+			<?php } ?>
 		}, 
 		
 		{
@@ -792,7 +817,9 @@ Ext.onReady(function(){
 			dataIndex: 'rawat_kredit',
 			align: 'right',
 			width: 80,	//100,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
+			,
 			editor: new Ext.form.NumberField({
 				allowBlank: false,
 				allowDecimals: false,
@@ -801,6 +828,7 @@ Ext.onReady(function(){
 				maxLength: 11,
 				maskRe: /([0-9]+)$/
 			})
+			<?php } ?>
 		}, 
 		
 		{
@@ -812,7 +840,9 @@ Ext.onReady(function(){
 			hidden : true,
 			renderer: function(val){
 				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
-			},
+			}
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
+			,
 			editor: new Ext.form.NumberField({
 				allowBlank: false,
 				allowDecimals: true,
@@ -821,6 +851,7 @@ Ext.onReady(function(){
 				maxLength: 22,
 				maskRe: /([0-9]+)$/
 			})
+			<?php } ?>
 		}, 
 		
 		{
@@ -831,7 +862,9 @@ Ext.onReady(function(){
 			sortable: true,
 			renderer: function(val){
 				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
-			},
+			}
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
+			,
 			editor: new Ext.form.NumberField({
 				allowBlank: false,
 				allowDecimals: true,
@@ -840,12 +873,15 @@ Ext.onReady(function(){
 				maxLength: 22,
 				maskRe: /([0-9]+)$/
 			})
+			<?php } ?>
 		}, 
 		{
 			header: '<div align="center">' + 'Gudang' + '</div>',
 			dataIndex: 'rawat_gudang',
 			width: 150,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
+			,
 			editor: new Ext.form.ComboBox({
 				store: cbo_rawat_gudangDataSore,
 				mode: 'remote',
@@ -853,13 +889,16 @@ Ext.onReady(function(){
 				valueField: 'rawat_gudang_value',
 				triggerAction: 'all'
 			})
+			<?php } ?>
 		}, 
 		{
 			header: 'Contribution',
 			dataIndex: 'rawat_kontribusi',
 			width: 150,
 			sortable: true,
-			hidden: true,
+			hidden: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
+			,
 			editor: new Ext.form.ComboBox({
 				store: cbo_rawat_kontribusiDataSore,
 				mode: 'remote',
@@ -868,12 +907,15 @@ Ext.onReady(function(){
 				valueField: 'rawat_kontribusi_value',
 				triggerAction: 'all'
 			})
+			<?php } ?>
 		}, 
 		{
 			header: '<div align="center">' + 'Status' + '</div>',
 			dataIndex: 'rawat_aktif',
 			width: 80,	//150,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
+			,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
 				triggerAction: 'all',
@@ -887,6 +929,7 @@ Ext.onReady(function(){
                	lazyRender:true,
                	listClass: 'x-combo-list-small'
             })
+			<?php } ?>
 		}, 
 		{
 			header: 'Creator',
@@ -953,25 +996,32 @@ Ext.onReady(function(){
 			store: perawatan_DataStore,
 			displayInfo: true
 		}),
-		/* Add Control on ToolBar */
 		tbar: [
+		<?php if(eregi('C',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
 		{
 			text: 'Add',
 			tooltip: 'Add new record',
 			iconCls:'icon-adds',    				// this is defined in our styles.css
 			handler: display_form_window
-		}, '-',{
+		}, '-',
+		<?php } ?>
+		<?php if(eregi('U|R',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
+		{
 			text: 'Edit',
 			tooltip: 'Edit selected record',
 			iconCls:'icon-update',
 			handler: perawatan_confirm_update   // Confirm before updating
-		}, '-',{
+		}, '-',
+		<?php } ?>
+		<?php if(eregi('D',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
+		{
 			text: 'Delete',
 			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
-			disabled:true,
 			handler: perawatan_confirm_delete   // Confirm before deleting
-		}, '-', {
+		}, '-', 
+		<?php } ?>
+		{
 			text: 'Adv Search',
 			tooltip: 'Advanced Search',
 			iconCls:'icon-search',
@@ -1017,11 +1067,14 @@ Ext.onReady(function(){
 	perawatan_ContextMenu = new Ext.menu.Menu({
 		id: 'perawatan_ListEditorGridContextMenu',
 		items: [
+		<?php if(eregi('U|R',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
 		{ 
 			text: 'Edit', tooltip: 'Edit selected record', 
 			iconCls:'icon-update',
 			handler: perawatan_confirm_update 
 		},
+		<?php } ?>
+		<?php if(eregi('D',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
 		{ 
 			text: 'Delete', 
 			tooltip: 'Delete selected record', 
@@ -1030,6 +1083,7 @@ Ext.onReady(function(){
 			handler: perawatan_confirm_delete 
 		},
 		'-',
+		<?php } ?>
 		{ 
 			text: 'Print',
 			tooltip: 'Print Document',
@@ -1074,7 +1128,7 @@ Ext.onReady(function(){
 		blankText: '0',
 		allowBlank: false,
 		allowDecimals: false,
-				hidden: true,
+		hidden: true,
 		readOnly: true,
 		anchor: '95%',
 		maskRe: /([0-9]+)$/
@@ -1215,15 +1269,14 @@ Ext.onReady(function(){
 	});*/
 	
 	/* Identify  rawat_harga Field */
-	rawat_hargaField= new Ext.form.NumberField({
+	rawat_hargaField= new Ext.form.TextField({
 		id: 'rawat_hargaField',
 		name: 'rawat_hargaField',
 		fieldLabel: 'Harga (Rp)',
-		allowNegatife : false,
-		emptyText: '0',
+		valueRenderer: 'numberToCurrency',
+		itemCls: 'rmoney',
 		allowBlank: true,
-		allowDecimals: true,
-		width: 60,
+		width: 120,
 		maskRe: /([0-9]+)$/
 	});
 	/* Identify  rawat_gudang Field */
@@ -1609,7 +1662,7 @@ Ext.onReady(function(){
 	perawatan_konsumsiListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'perawatan_konsumsiListEditorGrid',
 		el: 'fp_perawatan_konsumsi',
-		title: 'Detail Standard Bahan',
+		title: 'Detail Standar Bahan',
 		height: 350,
 		width: 690,
 		autoScroll: true,
@@ -1623,12 +1676,7 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true},
-		// bbar: new Ext.PagingToolbar({
-			// pageSize: pageS,
-			// store: perawatan_konsumsi_DataStore,
-			// displayInfo: true
-		// }),
-		/* Add Control on ToolBar */
+		<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
 		tbar: [
 		{
 			text: 'Add',
@@ -1642,6 +1690,7 @@ Ext.onReady(function(){
 			handler: perawatan_konsumsi_confirm_delete
 		}
 		]
+		<?php } ?>
 	});
 	//eof
 	
@@ -1663,12 +1712,7 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true},
-		// bbar: new Ext.PagingToolbar({
-			// pageSize: pageS,
-			// store: perawatan_alat_DataStore,
-			// displayInfo: true
-		// }),
-		/* Add Control on ToolBar */
+		<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
 		tbar: [
 		{
 			text: 'Add',
@@ -1682,6 +1726,7 @@ Ext.onReady(function(){
 			handler: perawatan_alat_confirm_delete
 		}
 		]
+		<?php } ?>
 	});
 	//eof
 	
@@ -1726,23 +1771,6 @@ Ext.onReady(function(){
 	
 	//function for insert detail
 	function perawatan_konsumsi_insert(pkid){
-		/*for(i=0;i<perawatan_konsumsi_DataStore.getCount();i++){
-			perawatan_konsumsi_record=perawatan_konsumsi_DataStore.getAt(i);
-			if(perawatan_konsumsi_record.data.krawat_produk!=="" && perawatan_konsumsi_record.data.krawat_produk!==null){
-				Ext.Ajax.request({
-					waitMsg: 'Please wait...',
-					url: 'index.php?c=c_perawatan&m=detail_perawatan_konsumsi_insert',
-					params:{
-					krawat_id	: perawatan_konsumsi_record.data.krawat_id, 
-					krawat_master	: get_pk_id(), 
-					krawat_produk	: perawatan_konsumsi_record.data.krawat_produk, 
-					krawat_satuan	: perawatan_konsumsi_record.data.krawat_satuan, 
-					krawat_jumlah	: perawatan_konsumsi_record.data.krawat_jumlah 
-					
-					}
-				});
-			}
-		}*/
 		
 		var krawat_id = [];
 		var krawat_produk = [];
@@ -1789,7 +1817,7 @@ Ext.onReady(function(){
 					var result=response.responseText;
 					Ext.MessageBox.show({
 					   title: 'Error',
-					   msg: 'Could not connect to the database. retry later.',
+					   msg: 'Tidak bisa terhubung dengan database server',
 					   buttons: Ext.MessageBox.OK,
 					   animEl: 'database',
 					   icon: Ext.MessageBox.ERROR
@@ -1803,21 +1831,6 @@ Ext.onReady(function(){
 	
 	//function for insert detail
 	function perawatan_alat_insert(pkid){
-		/*for(i=0;i<perawatan_alat_DataStore.getCount();i++){
-			perawatan_alat_record=perawatan_alat_DataStore.getAt(i);
-			if(perawatan_konsumsi_record.data.arawat_alat!=="" && perawatan_konsumsi_record.data.arawat_alat!==null){
-				Ext.Ajax.request({
-					waitMsg: 'Please wait...',
-					url: 'index.php?c=c_perawatan&m=detail_perawatan_alat_insert',
-					params:{
-					arawat_id	: perawatan_alat_record.data.arawat_id, 
-					arawat_master	: get_pk_id(), 
-					arawat_alat	: perawatan_alat_record.data.arawat_alat, 
-					arawat_jumlah	: perawatan_alat_record.data.arawat_jumlah 	
-					}
-				});
-			}
-		}*/
 		
 		var arawat_id = [];
 		var arawat_alat = [];
@@ -1858,7 +1871,7 @@ Ext.onReady(function(){
 					var result=response.responseText;
 					Ext.MessageBox.show({
 					   title: 'Error',
-					   msg: 'Could not connect to the database. retry later.',
+					   msg: 'Tidak bisa terhubung dengan database server',
 					   buttons: Ext.MessageBox.OK,
 					   animEl: 'database',
 					   icon: Ext.MessageBox.ERROR
@@ -1898,7 +1911,7 @@ Ext.onReady(function(){
 				var result=response.responseText;
 				Ext.MessageBox.show({
 					   title: 'Error',
-					   msg: 'Could not connect to the database. retry later.',
+					   msg: 'Tidak bisa terhubung dengan database server',
 					   buttons: Ext.MessageBox.OK,
 					   animEl: 'database',
 					   icon: Ext.MessageBox.ERROR
@@ -1936,7 +1949,7 @@ Ext.onReady(function(){
 				var result=response.responseText;
 				Ext.MessageBox.show({
 					   title: 'Error',
-					   msg: 'Could not connect to the database. retry later.',
+					   msg: 'Tidak bisa terhubung dengan database server',
 					   buttons: Ext.MessageBox.OK,
 					   animEl: 'database',
 					   icon: Ext.MessageBox.ERROR
@@ -1950,13 +1963,13 @@ Ext.onReady(function(){
 	function perawatan_konsumsi_confirm_delete(){
 		// only one record is selected here
 		if(perawatan_konsumsiListEditorGrid.selModel.getCount() == 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', perawatan_konsumsi_delete);
+			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data berikut?', perawatan_konsumsi_delete);
 		} else if(perawatan_konsumsiListEditorGrid.selModel.getCount() > 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', perawatan_konsumsi_delete);
+			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data-data berikut?', perawatan_konsumsi_delete);
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really delete something you haven\'t selected?',
+				msg: 'Tidak ada yang dipilih untuk dihapus',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -1969,13 +1982,13 @@ Ext.onReady(function(){
 	function perawatan_alat_confirm_delete(){
 		// only one record is selected here
 		if(perawatan_alatListEditorGrid.selModel.getCount() == 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', perawatan_alat_delete);
+			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data berikut?', perawatan_alat_delete);
 		} else if(perawatan_alatListEditorGrid.selModel.getCount() > 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', perawatan_alat_delete);
+			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data-data berikut?', perawatan_alat_delete);
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really delete something you haven\'t selected?',
+				msg: 'Tidak ada yang dipilih untuk dihapus',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -2022,14 +2035,17 @@ Ext.onReady(function(){
 		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
-		width: 700,        
-		items: [perawatan_masterGroup,detail_tab_rawat]
-		,
-		buttons: [{
+		width: 700,
+		items: [perawatan_masterGroup,detail_tab_rawat],
+		buttons: [
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
+			{
 				text: 'Save and Close',
 				handler: perawatan_create
 			}
-			,{
+			,
+			<?php } ?>
+			{
 				text: 'Cancel',
 				handler: function(){
 					perawatan_createWindow.hide();
@@ -2483,12 +2499,12 @@ Ext.onReady(function(){
 		  	switch(result){
 		  	case 1:
 				win = window.open('./perawatanlist.html','perawatanlist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
-				win.print();
+				
 				break;
 		  	default:
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Unable to print the grid!',
+					msg: 'Tidak bisa mencetak data!',
 					buttons: Ext.MessageBox.OK,
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING
@@ -2500,7 +2516,7 @@ Ext.onReady(function(){
 		  	var result=response.responseText;
 			Ext.MessageBox.show({
 			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
+			   msg: 'Tidak bisa terhubung dengan database server',
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR
@@ -2574,7 +2590,7 @@ Ext.onReady(function(){
 		  	default:
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Unable to convert excel the grid!',
+					msg: 'Tidak bisa meng-export data ke dalam format excel!',
 					buttons: Ext.MessageBox.OK,
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING
@@ -2586,7 +2602,7 @@ Ext.onReady(function(){
 		  	var result=response.responseText;
 			Ext.MessageBox.show({
 			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
+			   msg: 'Tidak bisa terhubung dengan database server',
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR
@@ -2595,6 +2611,9 @@ Ext.onReady(function(){
 		});
 	}
 	/*End of Function */
+	
+	rawat_hargaField.on('focus',function(){ rawat_hargaField.setValue(convertToNumber(rawat_hargaField.getValue())); });
+	rawat_hargaField.on('blur',function(){ rawat_hargaField.setValue(CurrencyFormatted(rawat_hargaField.getValue())); });
 	
 });
 	</script>

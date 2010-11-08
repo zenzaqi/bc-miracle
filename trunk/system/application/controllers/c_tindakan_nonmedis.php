@@ -16,9 +16,10 @@ class C_tindakan_nonmedis extends Controller {
 	//constructor
 	function C_tindakan_nonmedis(){
 		parent::Controller();
-		$this->load->model('m_tindakan_nonmedis', '', TRUE);
 		session_start();
-		$this->load->plugin('to_excel');
+		$this->load->model('m_tindakan_nonmedis', '', TRUE);
+		
+		
 	}
 	
 	//set index
@@ -412,7 +413,7 @@ class C_tindakan_nonmedis extends Controller {
 																   ,$trawat_status
 																   ,$option
 																   ,$filter);
-		
+		$this->load->plugin('to_excel');
 		to_excel($query,"tindakan_nonmedis"); 
 		echo '1';
 			

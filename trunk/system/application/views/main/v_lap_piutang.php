@@ -350,7 +350,7 @@ Ext.onReady(function(){
 					case 1:
 						Ext.MessageBox.hide(); 
 						win = window.open('./print/report_piutang.html','report_piutang','height=400,width=800,resizable=1,scrollbars=1, menubar=1');
-						//win.print();
+						//
 						break;
 					default:
 						Ext.MessageBox.show({
@@ -367,7 +367,7 @@ Ext.onReady(function(){
 					var result=response.responseText;
 					Ext.MessageBox.show({
 					   title: 'Error',
-					   msg: 'Could not connect to the database. retry later.',
+					   msg: 'Tidak bisa terhubung dengan database server',
 					   buttons: Ext.MessageBox.OK,
 					   animEl: 'database',
 					   icon: Ext.MessageBox.ERROR

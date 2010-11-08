@@ -35,26 +35,21 @@
             <th width="150" scope='col'>Referal</th>
         </tr>
     </thead>
-	<tbody>
-		<?php 	$i=0; 
+	<tbody><?php 	$i=0; 
 				$nobukti=""; 
 				$total_item=0;
-				$j=0;
-				
+				$j=0;	
 		foreach($data_print as $printlist){
 		
 		if($nobukti!==$printlist->no_bukti){
-		?>
-         <tr>
+		?><tr>
                 <td><b><? $j++; echo $j; ?></b></td>
                 <td colspan="8"><b><?php echo $printlist->no_bukti;?></b></td>
-         </tr>
-        <?
+         </tr><?
 				$i=0;
 		foreach($data_print as $print) { 
 				if($print->no_bukti==$printlist->no_bukti){ $i++;
-		?>
-		<tr>
+		?><tr>
         	<td><? echo $i; ?></td>
             <td><?php echo $print->tanggal; ?></td>
             <td ><?php echo $print->cust_nama." (".$print->cust_no.")"; ?></td>
@@ -64,19 +59,9 @@
             <td><?php echo $print->dapaket_jumlah; ?></td>
 			<td class="numeric"><?php echo number_format($print->harga_satuan,0,",",","); ?></td>
             <td><?php echo $print->referal; ?></td>
-       </tr>
-		<?php }
-		}
-		?>
-         <tr>
+       </tr><?php } } ?><tr>
                 <td colspan="9">&nbsp;</td>
-         </tr>
-        <?
-		}
-		$nobukti=$printlist->no_bukti; 
-		}
-		?>
-	</tbody>
+         </tr><?php } $nobukti=$printlist->no_bukti;  }	?></tbody>
     	<tfoot>
     	<tr>
         	<td class="clear">&nbsp;</td>

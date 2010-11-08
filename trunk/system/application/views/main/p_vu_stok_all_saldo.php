@@ -27,6 +27,6 @@
 		<tr><td><? echo $i; ?></td><td><?php echo $print->produk_id; ?></td><td><?php echo $print->produk_nama; ?></td><td><?php echo $print->satuan_id; ?></td><td><?php echo $print->satuan_nama; ?></td><td><?php echo $print->stok_saldo; ?></td></tr>
 		<?php } ?>
 	</tbody>
-<body>
+<body onload='window.print()'>
 </body>
 </html>

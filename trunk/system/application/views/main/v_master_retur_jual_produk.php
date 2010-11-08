@@ -99,12 +99,12 @@ function retur_jproduk_cetak(kwitansi_ref){
 			switch(result){
 			case 1:
 				win = window.open('./kwitansi_paper.html','Cetak Kwitansi Retur Produk','height=480,width=1240,resizable=1,scrollbars=0, menubar=0');
-				//win.print();
+				//
 				break;
 			default:
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Unable to print the grid!',
+					msg: 'Tidak bisa mencetak data!',
 					buttons: Ext.MessageBox.OK,
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING
@@ -116,7 +116,7 @@ function retur_jproduk_cetak(kwitansi_ref){
 			var result=response.responseText;
 			Ext.MessageBox.show({
 			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
+			   msg: 'Tidak bisa terhubung dengan database server',
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR
@@ -162,7 +162,7 @@ Ext.onReady(function(){
 				rproduk_nobuktijual	:rproduk_nobuktijual_update,  
 				rproduk_cust	:rproduk_cust_update,  
 				rproduk_tanggal	: rproduk_tanggal_update_date, 
-				rproduk_keterangan	:rproduk_keterangan_update,  
+				rproduk_keterangan	:rproduk_keterangan_update 
 			}, 
 			success: function(response){							
 				var result=eval(response.responseText);
@@ -186,7 +186,7 @@ Ext.onReady(function(){
 				var result=response.responseText;
 				Ext.MessageBox.show({
 				   title: 'Error',
-				   msg: 'Could not connect to the database. retry later.',
+				   msg: 'Tidak bisa terhubung dengan database server',
 				   buttons: Ext.MessageBox.OK,
 				   animEl: 'database',
 				   icon: Ext.MessageBox.ERROR
@@ -266,7 +266,7 @@ Ext.onReady(function(){
 					var result=response.responseText;
 					Ext.MessageBox.show({
 						   title: 'Error',
-						   msg: 'Could not connect to the database. retry later.',
+						   msg: 'Tidak bisa terhubung dengan database server',
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'database',
 						   icon: Ext.MessageBox.ERROR
@@ -314,7 +314,7 @@ Ext.onReady(function(){
 					var result=response.responseText;
 					Ext.MessageBox.show({
 						   title: 'Error',
-						   msg: 'Could not connect to the database. retry later.',
+						   msg: 'Tidak bisa terhubung dengan database server',
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'database',
 						   icon: Ext.MessageBox.ERROR
@@ -374,8 +374,10 @@ Ext.onReady(function(){
 		}
 		detail_retur_jual_produk_DataStore.load({params: {master_id:0, start:0, limit:pageS}});
 		
+		<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_RETURPRODUK'))){ ?>
 		master_retur_jual_produk_createForm.save_btn.disable();
 		master_retur_jual_produk_createForm.cetak_kuitansi_btn.enable();
+		<?php } ?>
 		
 		cbo_drproduk_produkDataStore.load({params: {query: -1}});
 	}
@@ -406,12 +408,14 @@ Ext.onReady(function(){
 			rproduk_kwitansi_keteranganField.setDisabled(false);
 		}
 		
+		<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_RETURPRODUK'))){ ?>
 		master_retur_jual_produk_createForm.save_btn.enable();
 		if((master_retur_jual_produkListEditorGrid.getSelectionModel().getSelected().get('rproduk_stat_dok')!=='Terbuka')){
 			master_retur_jual_produk_createForm.cetak_kuitansi_btn.disable();
 		}else{
 			master_retur_jual_produk_createForm.cetak_kuitansi_btn.enable();
 		}
+		<?php } ?>
 		
 		rproduk_stat_dokField.on("select",function(){
 		var status_awal = master_retur_jual_produkListEditorGrid.getSelectionModel().getSelected().get('rproduk_stat_dok');
@@ -500,7 +504,7 @@ Ext.onReady(function(){
 
 	/* Function for Check if the form is valid */
 	function is_master_retur_jual_produk_form_valid(){
-		return (true &&  true &&  true &&  true &&  true &&  true &&  true &&  true &&  true &&  true &&  true  );
+		return (true);
 	}
   	/* End of Function */
   
@@ -509,9 +513,10 @@ Ext.onReady(function(){
 		detail_retur_jual_produk_DataStore.load({params : {master_id : 0, start:0, limit:pageS}});
 		cbo_drproduk_satuanDataStore.load();
 		if(!master_retur_jual_produk_createWindow.isVisible()){
-			master_retur_jual_produk_reset_form();
+			
 			rproduk_post2db='CREATE';
 			msg='created';
+			master_retur_jual_produk_reset_form();
 			master_retur_jual_produk_createWindow.show();
 		} else {
 			master_retur_jual_produk_createWindow.toFront();
@@ -523,9 +528,9 @@ Ext.onReady(function(){
 	function master_retur_jual_produk_confirm_delete(){
 		// only one master_retur_jual_produk is selected here
 		if(master_retur_jual_produkListEditorGrid.selModel.getCount() == 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', master_retur_jual_produk_delete);
+			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data berikut?', master_retur_jual_produk_delete);
 		} else if(master_retur_jual_produkListEditorGrid.selModel.getCount() > 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', master_retur_jual_produk_delete);
+			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data-data berikut?', master_retur_jual_produk_delete);
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
@@ -590,7 +595,7 @@ Ext.onReady(function(){
 						default:
 							Ext.MessageBox.show({
 								title: 'Warning',
-								msg: 'Could not delete the entire selection',
+								msg: 'Tidak bisa menghapus data yang diplih',
 								buttons: Ext.MessageBox.OK,
 								animEl: 'save',
 								icon: Ext.MessageBox.WARNING
@@ -602,7 +607,7 @@ Ext.onReady(function(){
 					var result=response.responseText;
 					Ext.MessageBox.show({
 					   title: 'Error',
-					   msg: 'Could not connect to the database. retry later.',
+					   msg: 'Tidak bisa terhubung dengan database server',
 					   buttons: Ext.MessageBox.OK,
 					   animEl: 'database',
 					   icon: Ext.MessageBox.ERROR
@@ -626,7 +631,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'rproduk_id'
 		},[
-		/* dataIndex => insert intomaster_retur_jual_produk_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'rproduk_id', type: 'int', mapping: 'rproduk_id'}, 
 			{name: 'rproduk_nobukti', type: 'string', mapping: 'rproduk_nobukti'}, 
 			{name: 'rproduk_nobuktijual', type: 'string', mapping: 'jproduk_nobukti'}, 
@@ -662,7 +666,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'jproduk_id'
 		},[
-		/* dataIndex => insert intocustomer_note_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'retur_produk_value', type: 'int', mapping: 'jproduk_id'},
 			{name: 'retur_produk_display', type: 'string', mapping: 'jproduk_nobukti'},
 			{name: 'retur_produk_tanggal', type: 'date', dateFormat: 'Y-m-d', mapping: 'jproduk_tanggal'},
@@ -688,7 +691,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'cust_id'
 		},[
-		/* dataIndex => insert intocustomer_note_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'cust_id', type: 'int', mapping: 'cust_id'},
 			{name: 'cust_no', type: 'string', mapping: 'cust_no'},
 			{name: 'cust_nama', type: 'string', mapping: 'cust_nama'},
@@ -706,9 +708,7 @@ Ext.onReady(function(){
         '</div></tpl>'
     );
 	
-	
-	
-  	/* Function for Identify of Window Column Model */
+ 	/* Function for Identify of Window Column Model */
 	master_retur_jual_produk_ColumnModel = new Ext.grid.ColumnModel(
 		[{
 			align : 'Right',
@@ -727,28 +727,31 @@ Ext.onReady(function(){
 			dataIndex: 'rproduk_tanggal',
 			width: 70,	//150,
 			sortable: true,
-			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
+			renderer: Ext.util.Format.dateRenderer('d-m-Y')
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_RETURPRODUK'))){ ?>
+			,
 			editor: new Ext.form.DateField({
 				format: 'd-m-Y'
 			})
+			<?php } ?>
 		}, 
 		{
 			header: '<div align="center">' + 'No Faktur' + '</div>',
 			dataIndex: 'rproduk_nobukti',
 			width: 100, //150,
-			sortable: true,
-			editor: new Ext.form.TextField({
-				maxLength: 100
-          	})
+			sortable: true
 		}, 
 		{
 			header: '<div align="center">' + 'No Faktur Jual' + '</div>' ,
 			dataIndex: 'rproduk_nobuktijual',
 			width: 100, //150,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_RETURPRODUK'))){ ?>
+			,
 			editor: new Ext.form.TextField({
 				maxLength: 100
           	})
+			<?php } ?>
 		}, 
 		{
 			header: '<div align="center">' + 'No Cust' + '</div>',
@@ -779,10 +782,13 @@ Ext.onReady(function(){
 			header: '<div align="center">' + 'Keterangan' + '</div>',
 			dataIndex: 'rproduk_keterangan',
 			width: 200, //150,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_RETURPRODUK'))){ ?>
+			,
 			editor: new Ext.form.TextArea({
 				maxLength: 250
           	})
+			<?php } ?>
 		}, 
 		
 		{
@@ -797,31 +803,31 @@ Ext.onReady(function(){
 			width: 150,
 			sortable: true,
 			hidden: true,
-			readOnly: true,
+			readOnly: true
 		}, 
 		{
-			header: 'Date Create',
+			header: 'Create on',
 			dataIndex: 'rproduk_date_create',
 			width: 150,
 			sortable: true,
 			hidden: true,
-			readOnly: true,
+			readOnly: true
 		}, 
 		{
-			header: 'Update',
+			header: 'Last Update by',
 			dataIndex: 'rproduk_update',
 			width: 150,
 			sortable: true,
 			hidden: true,
-			readOnly: true,
+			readOnly: true
 		}, 
 		{
-			header: 'Date Update',
+			header: 'Last Update on',
 			dataIndex: 'rproduk_date_update',
 			width: 150,
 			sortable: true,
 			hidden: true,
-			readOnly: true,
+			readOnly: true
 		}, 
 		{
 			header: 'Revised',
@@ -829,7 +835,7 @@ Ext.onReady(function(){
 			width: 150,
 			sortable: true,
 			hidden: true,
-			readOnly: true,
+			readOnly: true
 		}	]);
 	
 	master_retur_jual_produk_ColumnModel.defaultSortable= true;
@@ -857,23 +863,31 @@ Ext.onReady(function(){
 		}),
 		/* Add Control on ToolBar */
 		tbar: [
+		<?php if(eregi('C',$this->m_security->get_access_group_by_kode('MENU_RETURPRODUK'))){ ?>
 		{
 			text: 'Add',
 			tooltip: 'Add new record',
 			iconCls:'icon-adds',    				// this is defined in our styles.css
 			handler: display_form_window
-		}, '-',{
+		}, '-',
+		<?php } ?>
+		<?php if(eregi('U|R',$this->m_security->get_access_group_by_kode('MENU_RETURPRODUK'))){ ?>
+		{
 			text: 'Edit',
 			tooltip: 'Edit selected record',
 			iconCls:'icon-update',
 			handler: master_retur_jual_produk_confirm_update   // Confirm before updating
-		}, '-',{
+		}, '-',
+		<?php } ?>
+		<?php if(eregi('D',$this->m_security->get_access_group_by_kode('MENU_RETURPRODUK'))){ ?>
+		{
 			text: 'Delete',
 			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
-			disabled : true,
 			handler: master_retur_jual_produk_confirm_delete   // Confirm before deleting
-		}, '-', {
+		}, '-', 
+		<?php } ?>
+		{
 			text: 'Adv Search',
 			tooltip: 'Advanced Search',
 			iconCls:'icon-search',
@@ -919,11 +933,14 @@ Ext.onReady(function(){
 	master_retur_jual_produk_ContextMenu = new Ext.menu.Menu({
 		id: 'master_retur_jual_produk_ListEditorGridContextMenu',
 		items: [
+		<?php if(eregi('U|R',$this->m_security->get_access_group_by_kode('MENU_RETURPRODUK'))){ ?>
 		{ 
 			text: 'Edit', tooltip: 'Edit selected record', 
 			iconCls:'icon-update',
 			handler: master_retur_jual_produk_confirm_update
 		},
+		<?php } ?>
+		<?php if(eregi('D',$this->m_security->get_access_group_by_kode('MENU_RETURPRODUK'))){ ?>
 		{ 
 			text: 'Delete', 
 			tooltip: 'Delete selected record', 
@@ -931,6 +948,7 @@ Ext.onReady(function(){
 			disabled : true,
 			handler: master_retur_jual_produk_confirm_delete 
 		},
+		<?php } ?>
 		'-',
 		{ 
 			text: 'Print',
@@ -1147,7 +1165,6 @@ Ext.onReady(function(){
 		totalProperty: 'total',
 		id: ''
 	},[
-	/* dataIndex => insert intoperawatan_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'drproduk_id', type: 'int', mapping: 'drproduk_id'}, 
 			{name: 'drproduk_master', type: 'int', mapping: 'drproduk_master'}, 
 			{name: 'drproduk_produk', type: 'int', mapping: 'drproduk_produk'}, 
@@ -1240,7 +1257,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'cust_id'
 		},[
-		/* dataIndex => insert intocustomer_note_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'cust_id', type: 'int', mapping: 'cust_id'},
 			{name: 'cust_no', type: 'string', mapping: 'cust_no'},
 			{name: 'cust_nama', type: 'string', mapping: 'cust_nama'},
@@ -1401,13 +1417,14 @@ Ext.onReady(function(){
 		frame: true,
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
-		viewConfig: { forceFit:true},
+		viewConfig: { forceFit:true}/*,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: detail_retur_jual_produk_DataStore,
 			displayInfo: true
-		}),
-		/* Add Control on ToolBar */
+		})*/
+		<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_RETURPRODUK'))){ ?>
+		,
 		tbar: [
 		{
 			text: 'Add',
@@ -1421,6 +1438,7 @@ Ext.onReady(function(){
 			handler: detail_retur_jual_produk_confirm_delete
 		}
 		]
+		<?php } ?>
 	});
 	//eof
 	
@@ -1507,9 +1525,9 @@ Ext.onReady(function(){
 	function detail_retur_jual_produk_confirm_delete(){
 		// only one record is selected here
 		if(detail_retur_jual_produkListEditorGrid.selModel.getCount() == 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', detail_retur_jual_produk_delete);
+			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data berikut?', detail_retur_jual_produk_delete);
 		} else if(detail_retur_jual_produkListEditorGrid.selModel.getCount() > 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', detail_retur_jual_produk_delete);
+			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data-data berikut?', detail_retur_jual_produk_delete);
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
@@ -1564,9 +1582,10 @@ Ext.onReady(function(){
 		bodyStyle:'padding:5px',
 		autoHeight:true,
 		width: 700,        
-		items: [master_retur_jual_produk_masterGroup,detail_retur_jual_produkListEditorGrid, kwitansi_tercetakGroup]
-		,
-		buttons: [{
+		items: [master_retur_jual_produk_masterGroup,detail_retur_jual_produkListEditorGrid, kwitansi_tercetakGroup],
+		buttons: [
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_RETURPRODUK'))){ ?>
+			{
 				text: 'Cetak Kuitansi',
 				ref: '../cetak_kuitansi_btn',
 				handler: rproduk_save_and_cetak
@@ -1575,8 +1594,9 @@ Ext.onReady(function(){
 				text: 'Save',
 				ref: '../save_btn',
 				handler: rproduk_save
-			}
-			,{
+			},
+			<?php } ?>
+			{
 				text: 'Cancel',
 				handler: function(){
 					master_retur_jual_produk_createWindow.hide();
@@ -1876,7 +1896,7 @@ Ext.onReady(function(){
 		  	default:
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Unable to print the grid!',
+					msg: 'Tidak bisa mencetak data!',
 					buttons: Ext.MessageBox.OK,
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING
@@ -1888,7 +1908,7 @@ Ext.onReady(function(){
 		  	var result=response.responseText;
 			Ext.MessageBox.show({
 			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
+			   msg: 'Tidak bisa terhubung dengan database server',
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR
@@ -1944,7 +1964,7 @@ Ext.onReady(function(){
 		  	default:
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Unable to convert excel the grid!',
+					msg: 'Tidak bisa meng-export data ke dalam format excel!',
 					buttons: Ext.MessageBox.OK,
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING
@@ -1956,7 +1976,7 @@ Ext.onReady(function(){
 		  	var result=response.responseText;
 			Ext.MessageBox.show({
 			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
+			   msg: 'Tidak bisa terhubung dengan database server',
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR

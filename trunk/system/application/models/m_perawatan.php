@@ -205,22 +205,6 @@ class M_perawatan extends Model{
 		//insert detail record
 		function detail_perawatan_konsumsi_insert($array_krawat_id ,$krawat_master ,$array_krawat_produk ,$array_krawat_satuan ,
 												  $array_krawat_jumlah ){
-			//if master id not capture from view then capture it from max pk from master table
-			/*if($krawat_master=="" || $krawat_master==NULL){
-				$krawat_master=$this->get_master_id();
-			}
-			
-			$data = array(
-				"krawat_master"=>$krawat_master, 
-				"krawat_produk"=>$krawat_produk, 
-				"krawat_satuan"=>$krawat_satuan, 
-				"krawat_jumlah"=>$krawat_jumlah 
-			);
-			$this->db->insert('perawatan_konsumsi', $data); 
-			if($this->db->affected_rows())
-				return '1';
-			else
-				return '0';*/
 				
 			$query="";
 		   	for($i = 0; $i < sizeof($array_krawat_id); $i++){
@@ -265,21 +249,6 @@ class M_perawatan extends Model{
 		
 		//insert detail record
 		function detail_perawatan_alat_insert($array_arawat_id ,$arawat_master ,$array_arawat_alat ,$array_arawat_jumlah ){
-			//if master id not capture from view then capture it from max pk from master table
-			/*if($arawat_master=="" || $arawat_master==NULL){
-				$arawat_master=$this->get_master_id();
-			}
-			
-			$data = array(
-				"arawat_master"=>$arawat_master, 
-				"arawat_alat"=>$arawat_alat, 
-				"arawat_jumlah"=>$arawat_jumlah 
-			);
-			$this->db->insert('perawatan_alat', $data); 
-			if($this->db->affected_rows())
-				return '1';
-			else
-				return '0';*/
 			
 			$query="";
 		   	for($i = 0; $i < sizeof($array_arawat_id); $i++){
@@ -352,9 +321,17 @@ class M_perawatan extends Model{
 			// For simple search
 			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (rawat_kode LIKE '%".addslashes($filter)."%' OR rawat_kodelama LIKE '%".addslashes($filter)."%' OR rawat_nama LIKE '%".addslashes($filter)."%' OR group_nama LIKE '%".addslashes($filter)."%' OR jenis_nama LIKE '%".addslashes($filter)."%' OR kategori_nama LIKE '%".addslashes($filter)."%')";
+				$query .= " (rawat_kode LIKE '%".addslashes($filter)."%' OR 
+							 rawat_kodelama LIKE '%".addslashes($filter)."%' OR 
+							 rawat_nama LIKE '%".addslashes($filter)."%' OR 
+							 group_nama LIKE '%".addslashes($filter)."%' OR 
+							 jenis_nama LIKE '%".addslashes($filter)."%' OR 
+							 kategori_nama LIKE '%".addslashes($filter)."%')";
 				$query .= " AND rawat_aktif = 'Aktif'"; // by hendri, simple search khusus aktif only
 			}
+			
+			//$this->firephp->log($query);
+			$query.=" ORDER BY rawat_id DESC";
 			
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
@@ -691,6 +668,8 @@ class M_perawatan extends Model{
 				$query.= " rawat_aktif = '".$rawat_aktif."'";
 			};
 			//echo $query;
+			$query.=" ORDER BY rawat_id DESC";
+			
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
 			
@@ -735,9 +714,12 @@ class M_perawatan extends Model{
 			if($option=='LIST'){
 				//$this->firephp->log('LIST');
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (rawat_id LIKE '%".addslashes($filter)."%' OR rawat_kode LIKE '%".addslashes($filter)."%' OR rawat_kodelama LIKE '%".addslashes($filter)."%' OR rawat_nama LIKE '%".addslashes($filter)."%' OR rawat_group LIKE '%".addslashes($filter)."%' OR rawat_kategori LIKE '%".addslashes($filter)."%' OR rawat_jenis LIKE '%".addslashes($filter)."%' OR rawat_keterangan LIKE '%".addslashes($filter)."%' OR rawat_du LIKE '%".addslashes($filter)."%' OR rawat_dm LIKE '%".addslashes($filter)."%' OR rawat_point LIKE '%".addslashes($filter)."%' OR rawat_harga LIKE '%".addslashes($filter)."%' OR rawat_gudang LIKE '%".addslashes($filter)."%' OR rawat_aktif LIKE '%".addslashes($filter)."%' )";
-				$result = $this->db->query($query);
-				return $result;
+				$query .= " (rawat_kode LIKE '%".addslashes($filter)."%' OR 
+							 rawat_kodelama LIKE '%".addslashes($filter)."%' OR 
+							 rawat_nama LIKE '%".addslashes($filter)."%' OR 
+							 group_nama LIKE '%".addslashes($filter)."%' OR 
+							 jenis_nama LIKE '%".addslashes($filter)."%' OR 
+							 kategori_nama LIKE '%".addslashes($filter)."%')";
 
 			} else if($option=='SEARCH'){
 				//$this->firephp->log('SEARCH');
@@ -797,11 +779,15 @@ class M_perawatan extends Model{
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " rawat_aktif LIKE '%".$rawat_aktif."%'";
 				};
-				$result = $this->db->query($query);
-				return $result;
+				
 				
 			}
-
+			
+			$query.=" ORDER BY rawat_id DESC";
+			
+			$result = $this->db->query($query);
+			return $result;
+				
 		}
 		
 		//function  for export to excel
@@ -827,25 +813,29 @@ class M_perawatan extends Model{
 		){
 			//full query
 			$query="SELECT
-						if(rawat_kodelama='','-',ifnull(rawat_kodelama,'-')) AS kode_lama,
-						ifnull(rawat_kode,'-') AS kode_baru,
-						ifnull(rawat_nama,'-') AS nama_perawatan,
-						ifnull(group_nama,'-') AS group_1,
-						ifnull(jenis_nama,'-') AS group_2,
-						ifnull(kategori_nama,'-') AS jenis,
+						if(rawat_kodelama='','-',ifnull(rawat_kodelama,'-')) AS 'Kode lama',
+						ifnull(rawat_kode,'-') AS 'Kode baru',
+						ifnull(rawat_nama,'-') AS 'Nama Perawatan',
+						ifnull(group_nama,'-') AS 'Group 1',
+						ifnull(jenis_nama,'-') AS  'Group 2',
+						ifnull(kategori_nama,'-') AS Jenis,
 						ifnull(rawat_du,'-') AS 'DU(%)',
 						ifnull(rawat_dm,'-') AS 'DM(%)',
-						ifnull(rawat_point,'-') AS point,
-						ifnull(rawat_kredit,'-') AS kredit,
-						ifnull(rawat_harga,'-') AS 'harga(Rp)',
-						ifnull(gudang_nama,'-') AS gudang,
-						rawat_aktif AS aktif
+						ifnull(rawat_point,'-') AS Poin,
+						ifnull(rawat_kredit,'-') AS Kredit,
+						ifnull(rawat_harga,'-') AS 'Harga (Rp)',
+						ifnull(gudang_nama,'-') AS Gudang,
+						rawat_aktif AS Aktif
 					from vu_perawatan";
 					
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (rawat_id LIKE '%".addslashes($filter)."%' OR rawat_kode LIKE '%".addslashes($filter)."%' OR rawat_kodelama LIKE '%".addslashes($filter)."%' OR rawat_nama LIKE '%".addslashes($filter)."%' OR rawat_group LIKE '%".addslashes($filter)."%' OR rawat_kategori LIKE '%".addslashes($filter)."%' OR rawat_jenis LIKE '%".addslashes($filter)."%' OR rawat_keterangan LIKE '%".addslashes($filter)."%' OR rawat_du LIKE '%".addslashes($filter)."%' OR rawat_dm LIKE '%".addslashes($filter)."%' OR rawat_point LIKE '%".addslashes($filter)."%' OR rawat_harga LIKE '%".addslashes($filter)."%' OR rawat_gudang LIKE '%".addslashes($filter)."%' OR rawat_aktif LIKE '%".addslashes($filter)."%' )";
-				$result = $this->db->query($query);
+				$query .= " (rawat_kode LIKE '%".addslashes($filter)."%' OR 
+							 rawat_kodelama LIKE '%".addslashes($filter)."%' OR 
+							 rawat_nama LIKE '%".addslashes($filter)."%' OR 
+							 group_nama LIKE '%".addslashes($filter)."%' OR 
+							 jenis_nama LIKE '%".addslashes($filter)."%' OR 
+							 kategori_nama LIKE '%".addslashes($filter)."%')";
 			} else if($option=='SEARCH'){
 				if($rawat_id!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -903,8 +893,11 @@ class M_perawatan extends Model{
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " rawat_aktif LIKE '%".$rawat_aktif."%'";
 				};
-				$result = $this->db->query($query);
+				
 			}
+			$query.=" ORDER BY rawat_id DESC";
+			
+			$result = $this->db->query($query);
 			return $result;
 		}
 		

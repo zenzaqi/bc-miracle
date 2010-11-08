@@ -164,7 +164,7 @@ class C_history_harga_jual extends Controller {
    		/* We now have our array, let's build our HTML file */
 		$file = fopen("history_harga_juallist.html",'w');
 		fwrite($file, "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' /><title>Printing the History_harga_jual Grid</title><link rel='stylesheet' type='text/css' href='assets/modules/main/css/printstyle.css'/></head>");
-		fwrite($file, "<body><table summary='History_harga_jual List'><caption>HISTORY_HARGA_JUAL</caption><thead><tr><th scope='col'>Hjual No</th><th scope='col'>Hjual Tanggal</th><th scope='col'>Hjual Harga</th><th scope='col'>Hjual Jenis</th><th scope='col'>Hjual Update</th><th scope='col'>Hjual Date Update</th><th scope='col'>Hjual Revised</th></tr></thead><tfoot><tr><th scope='row'>Total</th><td colspan='$totcolumn'>");
+		fwrite($file, "<body onload='window.print()'><table summary='History_harga_jual List'><caption>HISTORY_HARGA_JUAL</caption><thead><tr><th scope='col'>Hjual No</th><th scope='col'>Hjual Tanggal</th><th scope='col'>Hjual Harga</th><th scope='col'>Hjual Jenis</th><th scope='col'>Hjual Update</th><th scope='col'>Hjual Date Update</th><th scope='col'>Hjual Revised</th></tr></thead><tfoot><tr><th scope='row'>Total</th><td colspan='$totcolumn'>");
 		fwrite($file, $nbrows);
 		fwrite($file, " History_harga_jual</td></tr></tfoot><tbody>");
 		$i=0;

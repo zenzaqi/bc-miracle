@@ -108,7 +108,7 @@ Ext.onReady(function(){
 					default:
 						Ext.MessageBox.show({
 							   title: 'Warning',
-							   msg: 'We could\'t not save the customer_note.',
+							   msg: 'Data Catatan Customer tidak bisa disimpan!.',
 							   buttons: Ext.MessageBox.OK,
 							   animEl: 'save',
 							   icon: Ext.MessageBox.WARNING
@@ -119,11 +119,11 @@ Ext.onReady(function(){
 			failure: function(response){
 				var result=response.responseText;
 				Ext.MessageBox.show({
-							   title: 'Error',
-							   msg: 'Could not connect to the database. retry later.',
-							   buttons: Ext.MessageBox.OK,
-							   animEl: 'database',
-							   icon: Ext.MessageBox.ERROR
+				   title: 'Error',
+				   msg: 'Tidak bisa terhubung dengan database server',
+				   buttons: Ext.MessageBox.OK,
+				   animEl: 'database',
+				   icon: Ext.MessageBox.ERROR
 				});	
 			}									    
 		});   
@@ -158,7 +158,7 @@ Ext.onReady(function(){
 					var result=eval(response.responseText);
 					switch(result){
 						case 1:
-							Ext.MessageBox.alert(post2db+' OK','Penyimpanan Data Catatan Customer sukses');
+							Ext.MessageBox.alert(post2db+' OK','Data Catatan Customer berhasil disimpan');
 							customer_note_DataStore.reload();
 							cbo_note_customer_DataSore.reload();
 							customer_note_createWindow.hide();
@@ -166,7 +166,7 @@ Ext.onReady(function(){
 						default:
 							Ext.MessageBox.show({
 							   title: 'Warning',
-							   msg: 'We could\'t not '+msg+' the Customer_note.',
+							   msg: 'Data Catatan Customer tidak bisa disimpan !',
 							   buttons: Ext.MessageBox.OK,
 							   animEl: 'save',
 							   icon: Ext.MessageBox.WARNING
@@ -177,18 +177,18 @@ Ext.onReady(function(){
 				failure: function(response){
 					var result=response.responseText;
 					Ext.MessageBox.show({
-								   title: 'Error',
-								   msg: 'Could not connect to the database. retry later.',
-								   buttons: Ext.MessageBox.OK,
-								   animEl: 'database',
-								   icon: Ext.MessageBox.ERROR
+						   title: 'Error',
+						   msg: 'Tidak bisa terhubung dengan database server',
+						   buttons: Ext.MessageBox.OK,
+						   animEl: 'database',
+						   icon: Ext.MessageBox.ERROR
 					});	
 				}                      
 			});
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'Your Form is not valid!.',
+				msg: 'Isian belum sempurna!.',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -215,6 +215,7 @@ Ext.onReady(function(){
 		note_detailField.setValue(null);
 		note_customerField.reset();
 		note_customerField.setValue(null);
+		note_customerField.setDisabled(false);
 	}
  	/* End of Function */
   
@@ -223,6 +224,8 @@ Ext.onReady(function(){
 		note_customerField.setValue(customer_noteListEditorGrid.getSelectionModel().getSelected().get('note_customer'));
 		note_tanggalField.setValue(customer_noteListEditorGrid.getSelectionModel().getSelected().get('note_tanggal'));
 		note_detailField.setValue(customer_noteListEditorGrid.getSelectionModel().getSelected().get('note_detail'));
+		note_customerField.setDisabled(true);
+		
 	}
 	/* End setValue to EDIT*/
   
@@ -250,13 +253,13 @@ Ext.onReady(function(){
 	function customer_note_confirm_delete(){
 		// only one customer_note is selected here
 		if(customer_noteListEditorGrid.selModel.getCount() == 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', customer_note_delete);
+			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data berikut?', customer_note_delete);
 		} else if(customer_noteListEditorGrid.selModel.getCount() > 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', customer_note_delete);
+			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data-data berikut?', customer_note_delete);
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really delete something you haven\'t selected?',
+				msg: 'Tidak ada yang dipilih untuk dihapus',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -276,7 +279,7 @@ Ext.onReady(function(){
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really update something you haven\'t selected?',
+				msg: 'Tidak ada data yang dipilih untuk diedit',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -308,7 +311,7 @@ Ext.onReady(function(){
 						default:
 							Ext.MessageBox.show({
 								title: 'Warning',
-								msg: 'Could not delete the entire selection',
+								msg: 'Tidak bisa menghapus data yang diplih',
 								buttons: Ext.MessageBox.OK,
 								animEl: 'save',
 								icon: Ext.MessageBox.WARNING
@@ -320,7 +323,7 @@ Ext.onReady(function(){
 					var result=response.responseText;
 					Ext.MessageBox.show({
 					   title: 'Error',
-					   msg: 'Could not connect to the database. retry later.',
+					   msg: 'Tidak bisa terhubung dengan database server',
 					   buttons: Ext.MessageBox.OK,
 					   animEl: 'database',
 					   icon: Ext.MessageBox.ERROR
@@ -344,7 +347,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'note_id'
 		},[
-		/* dataIndex => insert intocustomer_note_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'note_id', type: 'int', mapping: 'note_id'},
 			{name: 'no_customer', type: 'string', mapping: 'cust_no'},
 			{name: 'note_customer', type: 'string', mapping: 'cust_nama'},
@@ -374,7 +376,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'cust_id'
 		},[
-		/* dataIndex => insert intocustomer_note_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'cust_id', type: 'int', mapping: 'cust_id'},
 			{name: 'cust_nama', type: 'string', mapping: 'cust_nama'},
 			{name: 'cust_no', type: 'string', mapping: 'cust_no'},
@@ -425,10 +426,13 @@ Ext.onReady(function(){
 			header: '<div align="center">' + 'Detail Catatan' + '</div>',
 			dataIndex: 'note_detail',
 			width: 300,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_CUSTCAT'))){ ?>
+			,
 			editor: new Ext.form.TextArea({
 				maxLength: 250
           	})
+			<?php } ?>
 		},
 		{
 			header: 'Creator',
@@ -497,24 +501,32 @@ Ext.onReady(function(){
 		}),
 		/* Add Control on ToolBar */
 		tbar: [
+		<?php if(eregi('C',$this->m_security->get_access_group_by_kode('MENU_CUSTCAT'))){ ?>
 		{
 			text: 'Add',
 			tooltip: 'Add new record',
 			iconCls:'icon-adds',    				// this is defined in our styles.css
 			handler: display_form_window
-		}, '-',{
+		}, '-',
+		<?php } ?>
+		<?php if(eregi('U|R',$this->m_security->get_access_group_by_kode('MENU_CUSTCAT'))){ ?>
+		{
 			text: 'Edit',
-			disabled: true,
 			tooltip: 'Edit selected record',
 			iconCls:'icon-update',
 			handler: customer_note_confirm_update   // Confirm before updating
-		}, '-',{
+		}, '-',
+		<?php } ?>
+		<?php if(eregi('D',$this->m_security->get_access_group_by_kode('MENU_CUSTCAT'))){ ?>
+		{
 			text: 'Delete',
-			disabled: true,
 			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
 			handler: customer_note_confirm_delete   // Confirm before deleting
-		}, '-', {
+		}, 
+		'-', 
+		<?php } ?>
+		{
 			text: 'Adv Search',
 			tooltip: 'Advanced Search',
 			iconCls:'icon-search',
@@ -549,17 +561,21 @@ Ext.onReady(function(){
 	customer_note_ContextMenu = new Ext.menu.Menu({
 		id: 'customer_note_ListEditorGridContextMenu',
 		items: [
+		<?php if(eregi('U|R',$this->m_security->get_access_group_by_kode('MENU_CUSTCAT'))){ ?>
 		{ 
 			text: 'Edit', disabled: true, tooltip: 'Edit selected record', 
 			iconCls:'icon-update',
 			handler: customer_note_confirm_update 
 		},
+		<?php } ?>
+		<?php if(eregi('D',$this->m_security->get_access_group_by_kode('MENU_CUSTCAT'))){ ?>
 		{ 
 			text: 'Delete', disabled: true, 
 			tooltip: 'Delete selected record', 
 			iconCls:'icon-delete',
 			handler: customer_note_confirm_delete 
 		},
+		<?php } ?>
 		'-',
 		{ 
 			text: 'Print',
@@ -603,7 +619,7 @@ Ext.onReady(function(){
     var note_customerTpl = new Ext.XTemplate(
         '<tpl for="."><div class="search-item">',
             '<span><b>{cust_no}</b> | {cust_nama}<br/>',
-			'Tgl-Lahir:{cust_tgllahir:date("M j, Y")}<br />',
+			//'Tgl-Lahir:{cust_tgllahir:date("M j, Y")}<br />',
             'Alamat: {cust_alamat}&nbsp;&nbsp;&nbsp;[Telp. {cust_notelprumah}]</span>',
         '</div></tpl>'
     );
@@ -619,7 +635,7 @@ Ext.onReady(function(){
         typeAhead: false,
         loadingText: 'Searching...',
         pageSize:10,
-        hideTrigger:true,
+        //hideTrigger:true,
         tpl: note_customerTpl,
         //applyTo: 'search',
         itemSelector: 'div.search-item',
@@ -667,11 +683,15 @@ Ext.onReady(function(){
 			]
 		}]
 		,
-		buttons: [{
+		buttons: [
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_CUSTCAT'))){ ?>
+			{
 				text: 'Save and Close',
 				handler: customer_note_create
 			}
-			,{
+			,
+			<?php } ?>
+			{
 				text: 'Cancel',
 				handler: function(){
 					customer_note_createWindow.hide();
@@ -884,12 +904,12 @@ Ext.onReady(function(){
 		  	switch(result){
 		  	case 1:
 				win = window.open('./customer_notelist.html','customer_notelist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
-				win.print();
+				
 				break;
 		  	default:
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Unable to print the grid!',
+					msg: 'Tidak bisa mencetak data!',
 					buttons: Ext.MessageBox.OK,
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING
@@ -901,7 +921,7 @@ Ext.onReady(function(){
 		  	var result=response.responseText;
 			Ext.MessageBox.show({
 			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
+			   msg: 'Tidak bisa terhubung dengan database server',
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR
@@ -946,7 +966,7 @@ Ext.onReady(function(){
 		  	default:
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Unable to convert excel the grid!',
+					msg: 'Tidak bisa meng-export data ke dalam format excel!',
 					buttons: Ext.MessageBox.OK,
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING
@@ -958,7 +978,7 @@ Ext.onReady(function(){
 		  	var result=response.responseText;
 			Ext.MessageBox.show({
 			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
+			   msg: 'Tidak bisa terhubung dengan database server',
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR

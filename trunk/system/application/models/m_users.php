@@ -25,7 +25,9 @@ class M_users extends Model{
 			// For simple search
 			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (user_id LIKE '%".addslashes($filter)."%' OR user_name LIKE '%".addslashes($filter)."%' OR user_karyawan LIKE '%".addslashes($filter)."%' OR user_log LIKE '%".addslashes($filter)."%' OR user_groups LIKE '%".addslashes($filter)."%' OR user_aktif LIKE '%".addslashes($filter)."%' )";
+				$query .= " (user_name LIKE '%".addslashes($filter)."%' OR 
+							 karyawan_nama LIKE '%".addslashes($filter)."%' OR 
+							 group_nama LIKE '%".addslashes($filter)."%' )";
 			}
 			
 			$result = $this->db->query($query);
@@ -123,12 +125,8 @@ class M_users extends Model{
 		//function for advanced search record
 		function users_search($user_id ,$user_name,$user_karyawan ,$user_log ,$user_groups ,$user_aktif ,$start,$end){
 			//full query
-			$query="SELECT * FROM users,karyawan,usergroups WHERE user_karyawan=karyawan_id AND user_groups=group_id";
+			$query = "SELECT * FROM users,karyawan,usergroups WHERE user_karyawan=karyawan_id AND user_groups=group_id";
 			
-			if($user_id!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " user_id LIKE '%".$user_id."%'";
-			};
 			if($user_name!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " user_name LIKE '%".$user_name."%'";
@@ -137,10 +135,7 @@ class M_users extends Model{
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " user_karyawan = '".$user_karyawan."'";
 			};
-			if($user_log!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " user_log LIKE '%".$user_log."%'";
-			};
+			
 			if($user_groups!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " user_groups ='".$user_groups."'";
@@ -169,16 +164,15 @@ class M_users extends Model{
 		//function for print record
 		function users_print($user_id ,$user_name  ,$user_karyawan ,$user_log ,$user_groups ,$user_aktif ,$option,$filter){
 			//full query
-			$query="SELECT * FROM users,karyawan,usergroups WHERE user_karyawan=karyawan_id AND user_groups=group_id";
+			$query = "SELECT * FROM users,karyawan,usergroups WHERE user_karyawan=karyawan_id AND user_groups=group_id";
+			
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (user_id LIKE '%".addslashes($filter)."%' OR user_name LIKE '%".addslashes($filter)."%' OR user_passwd LIKE '%".addslashes($filter)."%' OR user_karyawan LIKE '%".addslashes($filter)."%' OR user_log LIKE '%".addslashes($filter)."%' OR user_groups LIKE '%".addslashes($filter)."%' OR user_aktif LIKE '%".addslashes($filter)."%' )";
-				$result = $this->db->query($query);
+				$query .= " (user_name LIKE '%".addslashes($filter)."%' OR 
+							 karyawan_nama LIKE '%".addslashes($filter)."%' OR 
+							 group_name LIKE '%".addslashes($filter)."%' )";
+				
 			} else if($option=='SEARCH'){
-				if($user_id!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " user_id LIKE '%".$user_id."%'";
-				};
 				if($user_name!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " user_name LIKE '%".$user_name."%'";
@@ -187,10 +181,7 @@ class M_users extends Model{
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " user_karyawan = '".$user_karyawan."'";
 				};
-				if($user_log!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " user_log LIKE '%".$user_log."%'";
-				};
+				
 				if($user_groups!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " user_groups = '".$user_groups."'";
@@ -199,24 +190,24 @@ class M_users extends Model{
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " user_aktif LIKE '%".$user_aktif."%'";
 				};
-				$result = $this->db->query($query);
 			}
+			$result = $this->db->query($query);
 			return $result;
 		}
 		
 		//function  for export to excel
 		function users_export_excel($user_id ,$user_name ,$user_karyawan ,$user_log ,$user_groups ,$user_aktif ,$option,$filter){
 			//full query
-			$query="SELECT * FROM users,karyawan,usergroups WHERE user_karyawan=karyawan_id AND user_groups=group_id";
+			$query="SELECT user_name as Username, karyawan_nama as 'Nama Karyawan',  group_name as 'Group', user_aktif as Aktif
+					FROM users,karyawan,usergroups WHERE user_karyawan=karyawan_id AND user_groups=group_id";
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (user_id LIKE '%".addslashes($filter)."%' OR user_name LIKE '%".addslashes($filter)."%' OR user_passwd LIKE '%".addslashes($filter)."%' OR user_karyawan LIKE '%".addslashes($filter)."%' OR user_log LIKE '%".addslashes($filter)."%' OR user_groups LIKE '%".addslashes($filter)."%' OR user_aktif LIKE '%".addslashes($filter)."%' )";
-				$result = $this->db->query($query);
+				$query .= " (user_name LIKE '%".addslashes($filter)."%' OR 
+							 karyawan_nama LIKE '%".addslashes($filter)."%' OR 
+							 group_name LIKE '%".addslashes($filter)."%' )";
+				
 			} else if($option=='SEARCH'){
-				if($user_id!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " user_id LIKE '%".$user_id."%'";
-				};
+				
 				if($user_name!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " user_name LIKE '%".$user_name."%'";
@@ -225,10 +216,7 @@ class M_users extends Model{
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " user_karyawan = '".$user_karyawan."'";
 				};
-				if($user_log!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " user_log LIKE '%".$user_log."%'";
-				};
+				
 				if($user_groups!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " user_groups = '".$user_groups."'";
@@ -237,8 +225,8 @@ class M_users extends Model{
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " user_aktif LIKE '%".$user_aktif."%'";
 				};
-				$result = $this->db->query($query);
 			}
+			$result = $this->db->query($query);
 			return $result;
 		}
 		

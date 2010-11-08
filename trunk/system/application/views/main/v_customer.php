@@ -273,22 +273,21 @@ var editor_cust_note;
 		cust_negaraField.setValue('Indonesia');
 		cust_priorityField.setValue('Reguler');
 		
-		
 		//cust_unitField.setValue('Miracle Thamrin');
 		cust_aktifField.setValue('Aktif');
 		
 		cbo_cust_cabang_DataStore.load({
 					//params : { cabang_id: cabangField.getValue() },
-					callback: function(opts, success, response)  {
-						 if (success) {
-							if(cbo_cust_cabang_DataStore.getCount()){
-								info_auto_cabang=cbo_cust_cabang_DataStore.getAt(0).data;
-								cust_unitField.setValue(info_auto_cabang.cust_cabang_display);
-								//info_alamatField.setValue(info_auto_nama.cabang_alamat);
-								//info_id_cabangField.setValue(info_auto_nama.cabang_id);
-							}
+				callback: function(opts, success, response)  {
+					 if (success) {
+						if(cbo_cust_cabang_DataStore.getCount()){
+							info_auto_cabang=cbo_cust_cabang_DataStore.getAt(0).data;
+							cust_unitField.setValue(info_auto_cabang.cust_cabang_display);
+							//info_alamatField.setValue(info_auto_nama.cabang_alamat);
+							//info_id_cabangField.setValue(info_auto_nama.cabang_id);
 						}
 					}
+				}
 			}); 
 		
 		
@@ -378,7 +377,9 @@ var editor_cust_note;
 			post2db='CREATE';
 			msg='created';
 			Ext.getCmp('check_update').setVisible(false);
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_CUSTOMER'))){ ?>
 			customer_createForm.saveButton.enable();
+			<?php } ?>
 			//Ext.getCmp('btn_saveclose').setDisabled(false);
 			customer_createWindow.show();
 			customer_createForm.load();
@@ -393,16 +394,16 @@ var editor_cust_note;
 	function customer_confirm_delete(){
 		// only one customer is selected here
 		if(customerListEditorGrid.selModel.getCount() == 1){
-//			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', customer_delete);
-			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', customer_delete);
+			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data berikut?', customer_delete);
+			//Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', customer_delete);
 		} else if(customerListEditorGrid.selModel.getCount() > 1){
-//			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', customer_delete);
-			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', customer_delete);
+			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data-data berikut?', customer_delete);
+			//Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', customer_delete);
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-//				msg: 'You can\'t really delete something you haven\'t selected?',
-				msg: 'Anda belum memilih data yang akan dihapus',
+				msg: 'Tidak ada yang dipilih untuk dihapus',
+//				msg: 'Anda belum memilih data yang akan dihapus',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -416,12 +417,16 @@ var editor_cust_note;
 		//Ext.getCmp('btn_saveclose').setDisabled(true);
 		/* only one record is selected here */
 		if(customerListEditorGrid.selModel.getCount() == 1) {
-			customer_set_form();
+			
 			post2db='UPDATE';
 			msg='updated';
+			customer_set_form();
+			
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_CUSTOMER'))){ ?>
 			cust_update_confirmField.setVisible(true);
 			cust_update_confirmField.setValue(false);
 			customer_createForm.saveButton.disable();
+			<?php } ?>
 			//cbo_cust_profesi_DataStore.reload();
 			//cbo_cust_hobi_DataStore.reload();
 			//cbo_cust_cabang_DataStore.reload();
@@ -429,7 +434,7 @@ var editor_cust_note;
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-//				msg: 'You can\'t really update something you haven\'t selected?',
+//				msg: 'Tidak ada data yang dipilih untuk diedit',
 				msg: 'Anda belum memilih data yang akan diedit',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
@@ -454,7 +459,7 @@ var editor_cust_note;
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-//				msg: 'You can\'t really update something you haven\'t selected?',
+//				msg: 'Tidak ada data yang dipilih untuk diedit',
 				msg: 'Anda belum memilih data yang akan diedit',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
@@ -490,7 +495,7 @@ var editor_cust_note;
 						default:
 							Ext.MessageBox.show({
 								title: 'Warning',
-								msg: 'Could not delete the entire selection',
+								msg: 'Tidak bisa menghapus data yang diplih',
 								buttons: Ext.MessageBox.OK,
 								animEl: 'save',
 								icon: Ext.MessageBox.WARNING
@@ -502,7 +507,7 @@ var editor_cust_note;
 					var result=response.responseText;
 					Ext.MessageBox.show({
 					   title: 'Error',
-					   msg: 'Could not connect to the database. retry later.',
+					   msg: 'Tidak bisa terhubung dengan database server',
 					   buttons: Ext.MessageBox.OK,
 					   animEl: 'database',
 					   icon: Ext.MessageBox.ERROR
@@ -800,8 +805,7 @@ var editor_cust_note;
 		url: 'index.php?c=c_customer&m=get_action',
 		params: {
 			task: "PRINT",
-		  	query: searchquery,                    		// if we are doing a quicksearch, use this
-			//if we are doing advanced search, use this
+		  	query: searchquery,                    		
 			cust_no : cust_no_print,
 			cust_nolama : cust_nolama_print,
 			cust_nama : cust_nama_print,
@@ -841,12 +845,12 @@ var editor_cust_note;
 		  	switch(result){
 		  	case 1:
 				win = window.open('./customerlist.html','customerlist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
-				win.print();
+				
 				break;
 		  	default:
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Unable to print the grid!',
+					msg: 'Tidak bisa mencetak data!',
 					buttons: Ext.MessageBox.OK,
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING
@@ -858,7 +862,7 @@ var editor_cust_note;
 		  	var result=response.responseText;
 			Ext.MessageBox.show({
 			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
+			   msg: 'Tidak bisa terhubung dengan database server',
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR
@@ -948,8 +952,7 @@ var editor_cust_note;
 		url: 'index.php?c=c_customer&m=get_action',
 		params: {
 			task: "PRINT_LABEL",
-		  	query: searchquery,                    		// if we are doing a quicksearch, use this
-			//if we are doing advanced search, use this
+		  	query: searchquery,                    		
 			cust_no : cust_no_print,
 			cust_no_awal : cust_no_awal_print,
 			cust_no_akhir : cust_no_akhir_print,
@@ -991,12 +994,12 @@ var editor_cust_note;
 		  	switch(result){
 		  	case 1:
 				win = window.open('./customerlist.html','customerlist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
-				win.print();
+				
 				break;
 		  	default:
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Unable to print the grid!',
+					msg: 'Tidak bisa mencetak data!',
 					buttons: Ext.MessageBox.OK,
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING
@@ -1008,7 +1011,7 @@ var editor_cust_note;
 		  	var result=response.responseText;
 			Ext.MessageBox.show({
 			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
+			   msg: 'Tidak bisa terhubung dengan database server',
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR
@@ -1136,7 +1139,7 @@ var editor_cust_note;
 		  	default:
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Unable to convert excel the grid!',
+					msg: 'Tidak bisa meng-export data ke dalam format excel!',
 					buttons: Ext.MessageBox.OK,
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING
@@ -1148,7 +1151,7 @@ var editor_cust_note;
 		  	var result=response.responseText;
 			Ext.MessageBox.show({
 			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
+			   msg: 'Tidak bisa terhubung dengan database server',
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR
@@ -1309,7 +1312,7 @@ var editor_cust_note;
 				var result=response.responseText;
 				Ext.MessageBox.show({
 							   title: 'Error',
-							   msg: 'Could not connect to the database. retry later.',
+							   msg: 'Tidak bisa terhubung dengan database server',
 							   buttons: Ext.MessageBox.OK,
 							   animEl: 'database',
 							   icon: Ext.MessageBox.ERROR
@@ -1508,18 +1511,18 @@ var editor_cust_note;
 				failure: function(response){
 					var result=response.responseText;
 					Ext.MessageBox.show({
-								   title: 'Error',
-								   msg: 'Could not connect to the database. retry later.',
-								   buttons: Ext.MessageBox.OK,
-								   animEl: 'database',
-								   icon: Ext.MessageBox.ERROR
+					   title: 'Error',
+					   msg: 'Tidak bisa terhubung dengan database server',
+					   buttons: Ext.MessageBox.OK,
+					   animEl: 'database',
+					   icon: Ext.MessageBox.ERROR
 					});	
 				}                      
 			});
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-//				msg: 'Your Form is not valid!.',
+//				msg: 'Isian belum sempurna!.',
 				msg: 'Form Anda belum lengkap',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
@@ -1532,15 +1535,15 @@ var editor_cust_note;
 	function cust_note_confirm_delete(){
 		// only one record is selected here
 		if(cust_noteListEditorGrid.selModel.getCount() == 1){
-//			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', cust_note_delete);
+//			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data berikut?', cust_note_delete);
 			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', cust_note_delete);
 		} else if(cust_noteListEditorGrid.selModel.getCount() > 1){
-//			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', cust_note_delete);
+//			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data-data berikut?', cust_note_delete);
 			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', cust_note_delete);
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-//				msg: 'You can\'t really delete something you haven\'t selected?',
+//				msg: 'Tidak ada yang dipilih untuk dihapus',
 				msg: 'Anda belum memilih data yang akan dihapus',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
@@ -1591,7 +1594,7 @@ var editor_cust_note;
 				var result=response.responseText;
 				Ext.MessageBox.show({
 				   title: 'Error',
-				   msg: 'Could not connect to the database. retry later.',
+				   msg: 'Tidak bisa terhubung dengan database server',
 				   buttons: Ext.MessageBox.OK,
 				   animEl: 'database',
 				   icon: Ext.MessageBox.ERROR
@@ -1622,7 +1625,7 @@ var editor_cust_note;
 					var result=response.responseText;
 					Ext.MessageBox.show({
 					   title: 'Error',
-					   msg: 'Could not connect to the database. retry later.',
+					   msg: 'Tidak bisa terhubung dengan database server',
 					   buttons: Ext.MessageBox.OK,
 					   animEl: 'database',
 					   icon: Ext.MessageBox.ERROR
@@ -1650,7 +1653,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'cust_id'
 		},[
-		/* dataIndex => insert intocustomer_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'cust_id', type: 'int', mapping: 'cust_id'},
 			{name: 'cust_no', type: 'string', mapping: 'cust_no'},
 			{name: 'cust_nolama', type: 'string', mapping: 'cust_nolama'},
@@ -1724,7 +1726,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'cust_profesi'
 		},[
-		/* dataIndex => insert intocustomer_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'cust_profesi_display', type: 'string', mapping: 'cust_profesi'}
 		]),
 		sortInfo:{field: 'cust_profesi_display', direction: "ASC"}
@@ -1762,7 +1763,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'member_id'
 		},[
-		/* dataIndex => insert intocustomer_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'member_id', type: 'int', mapping: 'member_id'},
 			{name: 'member_cust', type: 'int', mapping: 'member_cust'},
 			{name: 'member_no', type: 'string', mapping: 'member_no'},
@@ -1848,30 +1848,35 @@ Ext.onReady(function(){
 			header: '<div align="center">' + 'No Cust' + '</div>',
 			dataIndex: 'cust_no',
 			width: 50,	//90,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_CUSTOMER'))){ ?>
+			,
 			editor: new Ext.form.TextField({
 				maxLength: 50
           	})
+			<?php } ?>
 		},
 		{
 			header: '<div align="center">' + 'Nama Lengkap' + '</div>',
 			dataIndex: 'cust_nama',
 			width: 160,	//167,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_CUSTOMER'))){ ?>
+			,
 			editor: new Ext.form.TextField({
 				maxLength: 50
           	})
+			<?php } ?>
 		},
 		{
 			header: '<div align="center">' + 'No Member' + '</div>',
 			dataIndex: 'member_no',
 			width: 90,	//150,
 			sortable: true,
-			//hidden: true,
 			readOnly: true,
-				renderer: function(value, cell, record){
-					return value.substring(0,6) + '-' + value.substring(6,12) + '-' + value.substring(12);
-				}
+			renderer: function(value, cell, record){
+				return value.substring(0,6) + '-' + value.substring(6,12) + '-' + value.substring(12);
+			}
 		},
 		
 		{
@@ -1887,7 +1892,9 @@ Ext.onReady(function(){
 			header: '<div align="center">' + 'L/P' + '</div>',
 			dataIndex: 'cust_kelamin',
 			width: 20,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_CUSTOMER'))){ ?>
+			,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
 				triggerAction: 'all',
@@ -1901,15 +1908,19 @@ Ext.onReady(function(){
                	lazyRender:true,
                	listClass: 'x-combo-list-small'
             })
+			<?php } ?>
 		},
 		{
 			header: '<div align="center">' + 'Alamat' + '</div>',
 			dataIndex: 'cust_alamat',
 			width: 160,	//127,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_CUSTOMER'))){ ?>
+			,
 			editor: new Ext.form.TextField({
 				maxLength: 250
           	})
+			<?php } ?>
 		},
 		/*{
 			header: 'Alamat2',
@@ -1925,10 +1936,13 @@ Ext.onReady(function(){
 			header: '<div align="center">' + 'Kota' + '</div>',
 			dataIndex: 'cust_kota',
 			width: 60,	//97,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_CUSTOMER'))){ ?>
+			,
 			editor: new Ext.form.TextField({
 				maxLength: 100
           	})
+			<?php } ?>
 		},
 		/*{
 			header: 'Kode Pos',
@@ -1965,11 +1979,14 @@ Ext.onReady(function(){
 			header: '<div align="center">' + 'Telp Rumah' + '</div>',
 			dataIndex: 'cust_telprumah',
 			width: 55,	//97,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_CUSTOMER'))){ ?>
+			,
 			editor: new Ext.form.TextField({
 				maxLength: 30,
 				maskRe: /([0-9]+)$/
           	})
+			<?php } ?>
 		},
 		/*{
 			header: 'Telp. Rumah 2',
@@ -1997,11 +2014,14 @@ Ext.onReady(function(){
 			header: '<div align="center">' + 'No Ponsel' + '</div>',
 			dataIndex: 'cust_hp',
 			width: 65,	//97,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_CUSTOMER'))){ ?>
+			,
 			editor: new Ext.form.TextField({
 				maxLength: 25,
 				maskRe: /([0-9]+)$/
           	})
+			<?php } ?>
 		},
 		/*{
 			header: 'No. Ponsel 2',
@@ -2099,11 +2119,14 @@ Ext.onReady(function(){
 			width: 60,	//67,
 			sortable: true,
 //			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
-			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
+			renderer: Ext.util.Format.dateRenderer('d-m-Y')
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_CUSTOMER'))){ ?>
+			,
 			editor: new Ext.form.DateField({
 //				format: 'Y-m-d'
 				format: 'd-m-Y'
 			})
+			<?php } ?>
 		},
 		/*{
 			header: 'Hobi',
@@ -2136,7 +2159,9 @@ Ext.onReady(function(){
 			header: '<div align="center">' + 'Stat Nikah' + '</div>',
 			dataIndex: 'cust_statusnikah',
 			width: 60,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_CUSTOMER'))){ ?>
+			,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
 				triggerAction: 'all',
@@ -2150,14 +2175,16 @@ Ext.onReady(function(){
                	lazyRender:true,
                	listClass: 'x-combo-list-small'
             })
+			<?php } ?>
 		},
-		
 		{
 
 			header: '<div align="center">' + 'Priority' + '</div>',
 			dataIndex: 'cust_priority',
 			width: 40,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_CUSTOMER'))){ ?>
+			,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
 				triggerAction: 'all',
@@ -2171,30 +2198,31 @@ Ext.onReady(function(){
                	lazyRender:true,
                	listClass: 'x-combo-list-small'
             })
+			<?php } ?>
 		},
-		
-		
 		{
 
 //			header: 'Aktif',
 			header: '<div align="center">' + 'Status' + '</div>',
 			dataIndex: 'cust_aktif',
 			width: 45,	//150,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_CUSTOMER'))){ ?>
+			,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
 				triggerAction: 'all',
 				store:new Ext.data.SimpleStore({
 					fields:['cust_aktif_value', 'cust_aktif_display'],
-					data: [['Y','Y'],['T','T']]
+					data: [['Aktif','Aktif'],['Tidak Aktif','Tidak Aktif']]
 					}),
 				mode: 'local',
                	displayField: 'cust_aktif_display',
                	valueField: 'cust_aktif_value',
                	lazyRender:true,
                	listClass: 'x-combo-list-small'
-            }),
-//			hidden: true
+            })
+			<?php } ?>
 		},
 /*		
 		{
@@ -2224,10 +2252,14 @@ Ext.onReady(function(){
 			dataIndex: 'cust_keterangan',
 			width: 160,	//150,
 			sortable: true,
+			hidden: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_CUSTOMER'))){ ?>
+			,
 			editor: new Ext.form.TextField({
 				maxLength: 500
-          	}),
-			hidden: true
+          	})
+			<?php } ?>
+			
 		},
 		/*{
 
@@ -2357,7 +2389,7 @@ Ext.onReady(function(){
 			reaOnly: true
 		},
 		{
-			header: 'Point',
+			header: 'Poin',
 			dataIndex: 'member_point',
 			width: 70,
 			sortable: true,
@@ -2378,7 +2410,7 @@ Ext.onReady(function(){
 			reaOnly: true
 		},
 		{
-			header: 'Tgl Serahterima',
+			header: 'Tgl Serah Terima',
 			dataIndex: 'member_tglserahterima',
 			width: 150,
 			sortable: true,
@@ -2421,10 +2453,7 @@ Ext.onReady(function(){
 			dataIndex: 'note_detail',
 			width: 250,
 			sortable: true,
-			readonly: true,
-			//editor: new Ext.form.TextArea({
-			//	maxLength: 500
-			//})
+			readonly: true
 		}		
 		]
 	);
@@ -2434,7 +2463,6 @@ Ext.onReady(function(){
 	customerListEditorGrid =  new Ext.grid.GridPanel({
 		id: 'customerListEditorGrid',
 		el: 'fp_customer',
-//		title: 'List Of Customer',
 		title: 'Daftar Customer',
 		autoHeight: true,
 		store: customer_DataStore, // DataStore
@@ -2451,25 +2479,32 @@ Ext.onReady(function(){
 			store: customer_DataStore,
 			displayInfo: true
 		}),
-		/* Add Control on ToolBar */
 		tbar: [
+		<?php if(eregi('C',$this->m_security->get_access_group_by_kode('MENU_CUSTOMER'))){ ?>
 		{
 			text: 'Add',
 			tooltip: 'Add new record',
 			iconCls:'icon-adds',    				// this is defined in our styles.css
 			handler: display_form_window
-		}, '-',{
+		}, '-',
+		<?php } ?>
+		<?php if(eregi('U|R',$this->m_security->get_access_group_by_kode('MENU_CUSTOMER'))){ ?>
+		{
 			text: 'Edit',
 			tooltip: 'Edit selected record',
 			iconCls:'icon-update',
 			handler: customer_confirm_update   // Confirm before updating
-		}, '-',{
+		}, '-',
+		<?php } ?>
+		<?php if(eregi('D',$this->m_security->get_access_group_by_kode('MENU_CUSTOMER'))){ ?>
+		{
 			text: 'Delete',
 			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
-			disabled: true,
 			handler: customer_confirm_delete   // Confirm before deleting
-		}, '-', {
+		}, '-', 
+		<?php } ?>
+		{
 			text: 'Adv Search',
 			tooltip: 'Advanced Search',
 			iconCls:'icon-search',
@@ -2540,12 +2575,6 @@ Ext.onReady(function(){
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
 	  	width: 900
-		// ,
-		// bbar: new Ext.PagingToolbar({
-			// pageSize: pageS,
-			// store: cust_member_DataStore,
-			// displayInfo: true
-		// })
 	});
 	
 	cust_noteListEditorGrid =  new Ext.grid.EditorGridPanel({
@@ -2562,24 +2591,6 @@ Ext.onReady(function(){
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
 	  	width: 900
-		// ,
-		// bbar: new Ext.PagingToolbar({
-			// pageSize: pageS,
-			// store: cust_note_DataStore,
-			// displayInfo: true
-		// }),tbar: [
-		// {
-			// text: 'Add',
-			// tooltip: 'Add new record',
-			// iconCls:'icon-adds',    				// this is defined in our styles.css
-			// handler: cust_note_add
-		// }, '-',{
-			// text: 'Delete',
-			// tooltip: 'Delete selected record',
-			// disabled : true,
-			// iconCls:'icon-delete',
-			// handler: cust_note_confirm_delete
-		// }]
 	});
 	
 	//cust_memberListEditorGrid.render();
@@ -2588,18 +2599,21 @@ Ext.onReady(function(){
 	customer_ContextMenu = new Ext.menu.Menu({
 		id: 'customer_ListEditorGridContextMenu',
 		items: [
+		<?php if(eregi('U|R',$this->m_security->get_access_group_by_kode('MENU_CUSTOMER'))){ ?>
 		{ 
 			text: 'Edit', tooltip: 'Edit selected record', 
 			iconCls:'icon-update',
 			handler: customer_confirm_update 
 		},
+		<?php } ?>
+		<?php if(eregi('D',$this->m_security->get_access_group_by_kode('MENU_CUSTOMER'))){ ?>
 		{ 
 			text: 'Delete', 
 			tooltip: 'Delete selected record', 
 			iconCls:'icon-delete',
-			disabled: true,
 			handler: customer_confirm_delete 
 		},
+		<?php } ?>
 		'-',
 		{ 
 			text: 'Print',
@@ -2637,7 +2651,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'propinsi_nama'
 		},[
-		/* dataIndex => insert intocustomer_note_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'propinsi_nama', type: 'string', mapping: 'propinsi_nama'},
 		]),
 		sortInfo:{field: 'propinsi_nama', direction: "ASC"}
@@ -2655,7 +2668,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'cust_id'
 		},[
-		/* dataIndex => insert intocustomer_note_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'cust_id', type: 'int', mapping: 'cust_id'},
 			{name: 'cust_no', type: 'string', mapping: 'cust_no'},
 			{name: 'cust_nolama', type: 'string', mapping: 'cust_nolama'},
@@ -2679,7 +2691,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'cust_referensilain'
 		},[
-		// dataIndex => insert intocustomer_note_ColumnModel, Mapping => for initiate table column 
 			{name: 'cust_referensilain', type: 'string', mapping: 'cust_referensilain'},
 		]),
 		sortInfo:{field: 'cust_referensilain', direction: "ASC"}
@@ -3253,6 +3264,7 @@ Ext.onReady(function(){
 		name: 'email_tweeter2'
 	});
 	
+	<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_CUSTOMER'))){ ?>
 	cust_update_confirmField=new Ext.form.Checkbox({
 		id: 'check_update',
 //		boxLabel: 'Update data...',
@@ -3266,11 +3278,9 @@ Ext.onReady(function(){
 			}
 		}
 	});
+	<?php } ?>
 	
-	
-	
-	
-	
+
 	cust_alamat_group = new Ext.form.FieldSet({
 		title: 'Alamat',
 		autoHeight: true,
@@ -3376,7 +3386,14 @@ Ext.onReady(function(){
 							xtype: 'checkboxgroup',
 							fieldLabel:'',
 							items:[cust_fb2Field,cust_tweeter2Field]
-						},cust_kelaminField, cust_tmptlahirField, cust_tgllahirField, cust_umurField, cust_agamaField, cust_pendidikanField,  cust_profesiField, cust_profesitxtField, cust_hobiField, cust_hobitxtField, cust_referensiField, cust_referensilainField,cust_referensilaintxtField, cust_statusnikahField, cust_jmlanakField, cust_terdaftarField, cust_unitField, cust_priorityField, cust_keteranganField, cust_aktifField, cust_update_confirmField] 
+						},cust_kelaminField, cust_tmptlahirField, cust_tgllahirField, cust_umurField, cust_agamaField, cust_pendidikanField, 
+						cust_profesiField, cust_profesitxtField, cust_hobiField, cust_hobitxtField, cust_referensiField, cust_referensilainField,
+						cust_referensilaintxtField, cust_statusnikahField, cust_jmlanakField, cust_terdaftarField, cust_unitField, 
+						cust_priorityField, cust_keteranganField, cust_aktifField
+						<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_CUSTOMER'))){ ?>
+						, cust_update_confirmField
+						<?php } ?>
+						] 
 					}
 				]
 			},{
@@ -3401,24 +3418,6 @@ Ext.onReady(function(){
 					}, 
 					cust_noteListEditorGrid]
 			}
-			
-		
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
 		]
 	});
 	
@@ -3444,14 +3443,18 @@ Ext.onReady(function(){
 		),*/
 
 		items: tab_customer
-		,buttons: [{
+		,buttons: [
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_CUSTOMER'))){ ?>
+			{
 				text: 'Save and Close',
 				//id: 'btn_saveclose',
 				ref: '../saveButton',
 				//disabled: true,
 				handler: customer_create
 			}
-			,{
+			,
+			<?php } ?>
+			{
 				text: 'Cancel',
 				handler: function(){
 					customer_createWindow.hide();

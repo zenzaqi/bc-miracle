@@ -179,7 +179,7 @@ Ext.onReady(function(){
 				var result=response.responseText;
 				Ext.MessageBox.show({
 					   title: 'Error',
-					   msg: 'Could not connect to the database. retry later.',
+					   msg: 'Tidak bisa terhubung dengan database server',
 					   buttons: Ext.MessageBox.OK,
 					   animEl: 'database',
 					   icon: Ext.MessageBox.ERROR
@@ -189,7 +189,7 @@ Ext.onReady(function(){
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'Your Form is not valid!.',
+				msg: 'Isian belum sempurna!.',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -323,7 +323,7 @@ Ext.onReady(function(){
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				//msg: 'You can\'t really delete something you haven\'t selected?',
+				//msg: 'Tidak ada yang dipilih untuk dihapus',
 				msg: 'Anda belum memilih data yang akan dihapus',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
@@ -353,7 +353,7 @@ Ext.onReady(function(){
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				//msg: 'You can\'t really update something you haven\'t selected?',
+				//msg: 'Tidak ada data yang dipilih untuk diedit',
 				msg: 'Anda belum memilih data yang akan diubah',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
@@ -385,7 +385,7 @@ Ext.onReady(function(){
 						default:
 							Ext.MessageBox.show({
 								title: 'Warning',
-								msg: 'Could not delete the entire selection',
+								msg: 'Tidak bisa menghapus data yang diplih',
 								buttons: Ext.MessageBox.OK,
 								animEl: 'save',
 								icon: Ext.MessageBox.WARNING
@@ -397,7 +397,7 @@ Ext.onReady(function(){
 					var result=response.responseText;
 					Ext.MessageBox.show({
 					   title: 'Error',
-					   msg: 'Could not connect to the database. retry later.',
+					   msg: 'Tidak bisa terhubung dengan database server',
 					   buttons: Ext.MessageBox.OK,
 					   animEl: 'database',
 					   icon: Ext.MessageBox.ERROR
@@ -687,23 +687,31 @@ Ext.onReady(function(){
 	  	width: 1220,	//900,
 		bbar: master_order_paging_toolbar,
 		tbar: [
+		<?php if(eregi('C',$this->m_security->get_access_group_by_kode('MENU_ORDER'))){ ?>
 		{
 			text: 'Add',
 			tooltip: 'Add new record',
 			iconCls:'icon-adds',    				// this is defined in our styles.css
 			handler: display_form_window
-		}, '-',{
+		}, '-',
+		<?php } ?>
+		<?php if(eregi('U|R',$this->m_security->get_access_group_by_kode('MENU_ORDER'))){ ?>
+		{
 			text: 'Edit',
 			tooltip: 'Edit selected record',
 			iconCls:'icon-update',
 			handler: master_order_beli_confirm_update   // Confirm before updating
-		}, '-',{
+		}, '-',
+		<?php } ?>
+		<?php if(eregi('D',$this->m_security->get_access_group_by_kode('MENU_ORDER'))){ ?>
+		{
 			text: 'Delete',
 			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
-			disabled: true,
 			handler: master_order_beli_confirm_delete   // Confirm before deleting
-		}, '-', {
+		}, '-', 
+		<?php } ?>
+		{
 			text: 'Adv Search',
 			tooltip: 'Pencarian detail',
 			iconCls:'icon-search',
@@ -749,18 +757,21 @@ Ext.onReady(function(){
 	master_order_beli_ContextMenu = new Ext.menu.Menu({
 		id: 'master_order_beli_ListEditorGridContextMenu',
 		items: [
+		<?php if(eregi('U|R',$this->m_security->get_access_group_by_kode('MENU_ORDER'))){ ?>
 		{ 
 			text: 'Edit', tooltip: 'Edit selected record', 
 			iconCls:'icon-update',
 			handler: master_order_beli_confirm_update 
 		},
+		<?php } ?>
+		<?php if(eregi('D',$this->m_security->get_access_group_by_kode('MENU_ORDER'))){ ?>
 		{ 
 			text: 'Delete', 
 			tooltip: 'Delete selected record', 
 			iconCls:'icon-delete',
-			disabled: true,
 			handler: master_order_beli_confirm_delete 
 		},
+		<?php } ?>
 		'-',
 		{ 
 			text: 'Print',
@@ -893,7 +904,6 @@ Ext.onReady(function(){
 		allowBlank: false,
 		triggerAction: 'all'	
 	});
-	
 	
 	/* Identify  order_diskon Field */
 	order_diskonField= new Ext.form.TextField({
@@ -1048,8 +1058,6 @@ Ext.onReady(function(){
 			]
 	
 	});
-	
-	/*Detail Declaration */
 		
 	// Function for json reader of detail
 	var detail_order_beli_reader=new Ext.data.JsonReader({
@@ -1277,7 +1285,9 @@ Ext.onReady(function(){
 		frame: true,
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
-		viewConfig: { forceFit:true},
+		viewConfig: { forceFit:true}
+		<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_ORDER'))){ ?>
+		,
 		tbar: [detail_order_bAdd
 		, '-',{
 			text: 'Delete',
@@ -1286,6 +1296,7 @@ Ext.onReady(function(){
 			handler: detail_order_beli_confirm_delete
 		}
 		]
+		<?php } ?>
 	});
 	//eof
 	
@@ -1374,7 +1385,7 @@ Ext.onReady(function(){
 					var result=response.responseText;
 					Ext.MessageBox.show({
 					   title: 'Error',
-					   msg: 'Could not connect to the database. retry later.',
+					   msg: 'Tidak bisa terhubung dengan database server',
 					   buttons: Ext.MessageBox.OK,
 					   animEl: 'database',
 					   icon: Ext.MessageBox.ERROR
@@ -1409,13 +1420,13 @@ Ext.onReady(function(){
 	function detail_order_beli_confirm_delete(){
 		// only one record is selected here
 		if(detail_order_beliListEditorGrid.selModel.getCount() == 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', detail_order_beli_delete);
+			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data berikut?', detail_order_beli_delete);
 		} else if(detail_order_beliListEditorGrid.selModel.getCount() > 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', detail_order_beli_delete);
+			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data-data berikut?', detail_order_beli_delete);
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really delete something you haven\'t selected?',
+				msg: 'Tidak ada yang dipilih untuk dihapus',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -1447,14 +1458,18 @@ Ext.onReady(function(){
 		width: 700,
 		monitorValid: true,
 		items: [master_order_beli_masterGroup,detail_order_beliListEditorGrid,master_order_beli_bayarGroup],
-		buttons: [{
+		buttons: [
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_ORDER'))){ ?>
+			{
 				text: 'Save and Print',
 				handler: function() { master_order_beli_create('print'); }
 			},{
 				text: 'Save',
 				handler: function() { master_order_beli_create('close'); }
 			}
-			,{
+			,
+			<?php } ?>
+			{
 				text: 'Cancel',
 				handler: function(){
 					master_order_beli_createWindow.hide();
@@ -1550,7 +1565,7 @@ Ext.onReady(function(){
 		  	default:
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Unable to print the grid!',
+					msg: 'Tidak bisa mencetak data!',
 					buttons: Ext.MessageBox.OK,
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING
@@ -1562,7 +1577,7 @@ Ext.onReady(function(){
 		  	var result=response.responseText;
 			Ext.MessageBox.show({
 			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
+			   msg: 'Tidak bisa terhubung dengan database server',
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR
@@ -1571,7 +1586,6 @@ Ext.onReady(function(){
 		});
 		
 	}
-	
 	
 	function master_order_beli_reset_SearchForm(){
 		order_noSearchField.reset();
@@ -1582,10 +1596,7 @@ Ext.onReady(function(){
 		order_keteranganSearchField.reset();
 		order_statusSearchField.reset();
 		order_status_accSearchField.reset();
-		
 	}
-	
-	
 	/* Field for search */
 	/* Identify  order_id Search Field */
 	order_idSearchField= new Ext.form.NumberField({
@@ -1898,7 +1909,7 @@ Ext.onReady(function(){
 		  	default:
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Unable to print the grid!',
+					msg: 'Tidak bisa mencetak data!',
 					buttons: Ext.MessageBox.OK,
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING
@@ -1910,7 +1921,7 @@ Ext.onReady(function(){
 		  	var result=response.responseText;
 			Ext.MessageBox.show({
 			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
+			   msg: 'Tidak bisa terhubung dengan database server',
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR
@@ -1968,7 +1979,7 @@ Ext.onReady(function(){
 		  	default:
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Unable to convert excel the grid!',
+					msg: 'Tidak bisa meng-export data ke dalam format excel!',
 					buttons: Ext.MessageBox.OK,
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING
@@ -1980,7 +1991,7 @@ Ext.onReady(function(){
 		  	var result=response.responseText;
 			Ext.MessageBox.show({
 			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
+			   msg: 'Tidak bisa terhubung dengan database server',
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR

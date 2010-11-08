@@ -21,7 +21,7 @@ class C_inbox extends Controller {
 	
 	//set index
 	function index(){
-		$this->load->plugin('to_excel');
+		session_start();
 		$this->load->helper('asset');
 		$this->load->view('main/v_inbox');
 	}
@@ -139,7 +139,8 @@ class C_inbox extends Controller {
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_inbox->inbox_search($inbox_id ,$inbox_sender ,$inbox_message ,$inbox_date ,$inbox_creator ,$inbox_date_create ,$inbox_update ,$inbox_date_update ,$inbox_revised ,$start,$end);
+		$result = $this->m_inbox->inbox_search($inbox_id ,$inbox_sender ,$inbox_message ,$inbox_date ,$inbox_creator ,$inbox_date_create ,
+											   $inbox_update ,$inbox_date_update ,$inbox_revised ,$start,$end);
 		echo $result;
 	}
 
@@ -166,7 +167,8 @@ class C_inbox extends Controller {
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$data["data_print"] = $this->m_inbox->inbox_print($inbox_id ,$inbox_sender ,$inbox_message ,$inbox_date ,$inbox_creator ,$inbox_date_create ,$inbox_update ,$inbox_date_update ,$inbox_revised ,$option,$filter);
+		$data["data_print"] = $this->m_inbox->inbox_print($inbox_id ,$inbox_sender ,$inbox_message ,$inbox_date ,$inbox_creator ,$inbox_date_create ,
+														  $inbox_update ,$inbox_date_update ,$inbox_revised ,$option,$filter);
 		$print_view=$this->load->view("main/p_inbox.php",$data,TRUE);
 		if(!file_exists("print")){
 			mkdir("print");
@@ -200,8 +202,10 @@ class C_inbox extends Controller {
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$query = $this->m_inbox->inbox_export_excel($inbox_id ,$inbox_sender ,$inbox_message ,$inbox_date ,$inbox_creator ,$inbox_date_create ,$inbox_update ,$inbox_date_update ,$inbox_revised ,$option,$filter);
+		$query = $this->m_inbox->inbox_export_excel($inbox_id ,$inbox_sender ,$inbox_message ,$inbox_date ,$inbox_creator ,$inbox_date_create ,
+													$inbox_update ,$inbox_date_update ,$inbox_revised ,$option,$filter);
 		
+		$this->load->plugin('to_excel');
 		to_excel($query,"inbox"); 
 		echo '1';
 			

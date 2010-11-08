@@ -107,7 +107,7 @@ Ext.onReady(function(){
 					default:
 						Ext.MessageBox.show({
 							   title: 'Warning',
-							   msg: 'We could\'t not save the satuan.',
+							   msg: 'Data Satuan tidak bisa disimpan.',
 							   buttons: Ext.MessageBox.OK,
 							   animEl: 'save',
 							   icon: Ext.MessageBox.WARNING
@@ -119,7 +119,7 @@ Ext.onReady(function(){
 				var result=response.responseText;
 				Ext.MessageBox.show({
 							   title: 'Error',
-							   msg: 'Could not connect to the database. retry later.',
+							   msg: 'Tidak bisa terhubung dengan database server',
 							   buttons: Ext.MessageBox.OK,
 							   animEl: 'database',
 							   icon: Ext.MessageBox.ERROR
@@ -162,14 +162,14 @@ Ext.onReady(function(){
 					var result=eval(response.responseText);
 					switch(result){
 						case 1:
-							Ext.MessageBox.alert(post2db+' OK','The Satuan was '+msg+' successfully.');
+							Ext.MessageBox.alert(post2db+' OK','Data Satuan berhasil disimpan.');
 							satuan_DataStore.reload();
 							satuan_createWindow.hide();
 							break;
 						default:
 							Ext.MessageBox.show({
 							   title: 'Warning',
-							   msg: 'We could\'t not '+msg+' the Satuan.',
+							   msg: 'Data Satuan tidak bisa disimpan !',
 							   buttons: Ext.MessageBox.OK,
 							   animEl: 'save',
 							   icon: Ext.MessageBox.WARNING
@@ -181,7 +181,7 @@ Ext.onReady(function(){
 					var result=response.responseText;
 					Ext.MessageBox.show({
 								   title: 'Error',
-								   msg: 'Could not connect to the database. retry later.',
+								   msg: 'Tidak bisa terhubung dengan database server',
 								   buttons: Ext.MessageBox.OK,
 								   animEl: 'database',
 								   icon: Ext.MessageBox.ERROR
@@ -191,7 +191,7 @@ Ext.onReady(function(){
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'Your Form is not valid!.',
+				msg: 'Isian belum sempurna!.',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -235,9 +235,11 @@ Ext.onReady(function(){
   	/* Function for Displaying  create Window Form */
 	function display_form_window(){
 		if(!satuan_createWindow.isVisible()){
-			satuan_reset_form();
+			
 			post2db='CREATE';
 			msg='created';
+			satuan_reset_form();
+			
 			satuan_createWindow.show();
 		} else {
 			satuan_createWindow.toFront();
@@ -249,13 +251,13 @@ Ext.onReady(function(){
 	function satuan_confirm_delete(){
 		// only one satuan is selected here
 		if(satuanListEditorGrid.selModel.getCount() == 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', satuan_delete);
+			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data berikut?', satuan_delete);
 		} else if(satuanListEditorGrid.selModel.getCount() > 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', satuan_delete);
+			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data-data berikut?', satuan_delete);
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really delete something you haven\'t selected?',
+				msg: 'Tidak ada yang dipilih untuk dihapus',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -268,14 +270,16 @@ Ext.onReady(function(){
 	function satuan_confirm_update(){
 		/* only one record is selected here */
 		if(satuanListEditorGrid.selModel.getCount() == 1) {
-			satuan_set_form();
+			
 			post2db='UPDATE';
 			msg='updated';
+			satuan_set_form();
+			
 			satuan_createWindow.show();
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really update something you haven\'t selected?',
+				msg: 'Tidak ada data yang dipilih untuk diedit',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -306,7 +310,7 @@ Ext.onReady(function(){
 						default:
 							Ext.MessageBox.show({
 								title: 'Warning',
-								msg: 'Could not delete the entire selection',
+								msg: 'Tidak bisa menghapus data yang diplih',
 								buttons: Ext.MessageBox.OK,
 								animEl: 'save',
 								icon: Ext.MessageBox.WARNING
@@ -318,7 +322,7 @@ Ext.onReady(function(){
 					var result=response.responseText;
 					Ext.MessageBox.show({
 					   title: 'Error',
-					   msg: 'Could not connect to the database. retry later.',
+					   msg: 'Tidak bisa terhubung dengan database server',
 					   buttons: Ext.MessageBox.OK,
 					   animEl: 'database',
 					   icon: Ext.MessageBox.ERROR
@@ -342,7 +346,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'satuan_id'
 		},[
-		/* dataIndex => insert intosatuan_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'satuan_id', type: 'int', mapping: 'satuan_id'},
 			{name: 'satuan_kode', type: 'string', mapping: 'satuan_kode'},
 			{name: 'satuan_nama', type: 'string', mapping: 'satuan_nama'},
@@ -359,7 +362,7 @@ Ext.onReady(function(){
     
   	/* Function for Identify of Window Column Model */
 	satuan_ColumnModel = new Ext.grid.ColumnModel(
-		[/*{
+		[{
 			header: '#',
 			readOnly: true,
 			dataIndex: 'satuan_id',
@@ -368,32 +371,40 @@ Ext.onReady(function(){
 				cell.css = "readonlycell"; // Mengambil Value dari Class di dalam CSS 
 				return value;
 				},
-			hidden: false
-		},*/
+			hidden: true
+		},
 		{
 			header: 'Kode',
 			dataIndex: 'satuan_kode',
 			width: 150,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_SATUAN'))){ ?>
+			,
 			editor: new Ext.form.TextField({
 				allowBlank: false,
 				maxLength: 50
           	})
+			<?php } ?>
 		},
 		{
 			header: 'Nama',
 			dataIndex: 'satuan_nama',
 			width: 150,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_SATUAN'))){ ?>
+			,
 			editor: new Ext.form.TextArea({
 				maxLength: 250
           	})
+			<?php } ?>
 		},
 		{
 			header: 'Status',
 			dataIndex: 'satuan_aktif',
 			width: 150,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_SATUAN'))){ ?>
+			,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
 				triggerAction: 'all',
@@ -407,6 +418,7 @@ Ext.onReady(function(){
                	lazyRender:true,
                	listClass: 'x-combo-list-small'
             })
+			<?php } ?>
 		},
 		{
 			header: 'Creator',
@@ -424,7 +436,6 @@ Ext.onReady(function(){
 			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
 			hidden: true,
 			readOnly: true
-			
 		},
 		{
 			header: 'Last Update by',
@@ -474,26 +485,33 @@ Ext.onReady(function(){
 			store: satuan_DataStore,
 			displayInfo: true
 		}),
-		/* Add Control on ToolBar */
 		tbar: [
+		<?php if(eregi('C',$this->m_security->get_access_group_by_kode('MENU_SATUAN'))){ ?>
 		{
 			text: 'Add',
 			tooltip: 'Add new record',
 			iconCls:'icon-adds',    				// this is defined in our styles.css
 			handler: display_form_window
-		}, '-',{
+		}, '-',
+		<?php } ?>
+		<?php if(eregi('U|R',$this->m_security->get_access_group_by_kode('MENU_SATUAN'))){ ?>
+		{
 			text: 'Edit',
 			tooltip: 'Edit selected record',
 			iconCls:'icon-update',
 			handler: satuan_confirm_update   // Confirm before updating
-		}, '-',{
+		}, '-',
+		<?php } ?>
+		<?php if(eregi('D',$this->m_security->get_access_group_by_kode('MENU_SATUAN'))){ ?>
+		{
 			text: 'Delete',
 			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
-			disabled:true,
 			handler: satuan_confirm_delete   // Confirm before deleting
-		}, '-', {
-			text: 'Search',
+		}, '-', 
+		<?php } ?>
+		{
+			text: 'Adv Search',
 			tooltip: 'Advanced Search',
 			iconCls:'icon-search',
 			handler: display_form_search_window 
@@ -538,17 +556,21 @@ Ext.onReady(function(){
 	satuan_ContextMenu = new Ext.menu.Menu({
 		id: 'satuan_ListEditorGridContextMenu',
 		items: [
+		<?php if(eregi('U|R',$this->m_security->get_access_group_by_kode('MENU_SATUAN'))){ ?>
 		{ 
 			text: 'Edit', tooltip: 'Edit selected record', 
 			iconCls:'icon-update',
 			handler: satuan_confirm_update 
 		},
+		<?php } ?>
+		<?php if(eregi('D',$this->m_security->get_access_group_by_kode('MENU_SATUAN'))){ ?>
 		{ 
 			text: 'Delete', 
 			tooltip: 'Delete selected record', 
 			iconCls:'icon-delete',
 			handler: satuan_confirm_delete 
 		},
+		<?php } ?>
 		'-',
 		{ 
 			text: 'Print',
@@ -640,11 +662,15 @@ Ext.onReady(function(){
 			]
 		}]
 		,
-		buttons: [{
+		buttons: [
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_SATUAN'))){ ?>
+			{
 				text: 'Save and Close',
 				handler: satuan_create
 			}
-			,{
+			,
+			<?php } ?>
+			{
 				text: 'Cancel',
 				handler: function(){
 					satuan_createWindow.hide();
@@ -690,7 +716,6 @@ Ext.onReady(function(){
 			task: 'SEARCH',
 			start: 0,
 			limit: pageS,
-			//variable here
 			satuan_id	:	satuan_id_search, 
 			satuan_kode	:	satuan_kode_search, 
 			satuan_nama	:	satuan_nama_search, 
@@ -704,7 +729,6 @@ Ext.onReady(function(){
 	function satuan_reset_search(){
 		// reset the store parameters
 		satuan_DataStore.baseParams = { task: 'LIST', start:0, limit:pageS };
-		// Cause the datastore to do another query : 
 		satuan_DataStore.reload({params: {start: 0, limit: pageS}});
 		satuan_searchWindow.close();
 	};
@@ -838,8 +862,7 @@ Ext.onReady(function(){
 		url: 'index.php?c=c_satuan&m=get_action',
 		params: {
 			task: "PRINT",
-		  	query: searchquery,                    		// if we are doing a quicksearch, use this
-			//if we are doing advanced search, use this
+		  	query: searchquery,                    		
 			satuan_kode : satuan_kode_print,
 			satuan_nama : satuan_nama_print,
 			satuan_aktif : satuan_aktif_print,
@@ -850,12 +873,12 @@ Ext.onReady(function(){
 		  	switch(result){
 		  	case 1:
 				win = window.open('./satuanlist.html','satuanlist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
-				win.print();
+				
 				break;
 		  	default:
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Unable to print the grid!',
+					msg: 'Tidak bisa mencetak data!',
 					buttons: Ext.MessageBox.OK,
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING
@@ -867,7 +890,7 @@ Ext.onReady(function(){
 		  	var result=response.responseText;
 			Ext.MessageBox.show({
 			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
+			   msg: 'Tidak bisa terhubung dengan database server',
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR
@@ -897,8 +920,6 @@ Ext.onReady(function(){
 		params: {
 			task: "EXCEL",
 		  	query: searchquery,                    		
-			//if we are doing a quicksearch, use this
-			//if we are doing advanced search, use this
 			satuan_kode : satuan_kode_2excel,
 			satuan_nama : satuan_nama_2excel,
 			satuan_aktif : satuan_aktif_2excel,
@@ -913,7 +934,7 @@ Ext.onReady(function(){
 		  	default:
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Unable to convert excel the grid!',
+					msg: 'Tidak bisa meng-export data ke dalam format excel!',
 					buttons: Ext.MessageBox.OK,
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING
@@ -925,7 +946,7 @@ Ext.onReady(function(){
 		  	var result=response.responseText;
 			Ext.MessageBox.show({
 			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
+			   msg: 'Tidak bisa terhubung dengan database server',
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR

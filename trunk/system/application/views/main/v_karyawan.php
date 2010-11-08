@@ -227,11 +227,11 @@ Ext.onReady(function(){
 			failure: function(response){
 				var result=response.responseText;
 				Ext.MessageBox.show({
-							   title: 'Error',
-							   msg: 'Could not connect to the database. retry later.',
-							   buttons: Ext.MessageBox.OK,
-							   animEl: 'database',
-							   icon: Ext.MessageBox.ERROR
+					   title: 'Error',
+					   msg: 'Tidak bisa terhubung dengan database server',
+					   buttons: Ext.MessageBox.OK,
+					   animEl: 'database',
+					   icon: Ext.MessageBox.ERROR
 				});	
 			}									    
 		});   
@@ -368,11 +368,11 @@ Ext.onReady(function(){
 				failure: function(response){
 					var result=response.responseText;
 					Ext.MessageBox.show({
-								   title: 'Error',
-								   msg: 'Could not connect to the database. retry later.',
-								   buttons: Ext.MessageBox.OK,
-								   animEl: 'database',
-								   icon: Ext.MessageBox.ERROR
+						   title: 'Error',
+						   msg: 'Tidak bisa terhubung dengan database server',
+						   buttons: Ext.MessageBox.OK,
+						   animEl: 'database',
+						   icon: Ext.MessageBox.ERROR
 					});	
 				}                      
 			});
@@ -380,7 +380,7 @@ Ext.onReady(function(){
 			Ext.MessageBox.show({
 				title: 'Warning',
 				width: 230,
-				msg: 'Form anda belum lengkap',
+				msg: 'Isian belum sempurna !',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -455,7 +455,9 @@ Ext.onReady(function(){
 		karyawan_atasanField.reset();
 		karyawan_atasanField.setValue(null);
 		karyawan_aktifField.reset();
-		karyawan_aktifField.setValue(null);
+		karyawan_aktifField.setValue('Aktif');
+		cbo_karyawan_atasan_DataStore.load({params: {karyawan_id: -1}});
+		
 	}
  	/* End of Function */
   
@@ -489,12 +491,20 @@ Ext.onReady(function(){
 		karyawan_tglbatasField.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_tgl_batas'));
 		karyawan_atasanField.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_atasan'));
 		karyawan_aktifField.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_aktif'));
+		cbo_karyawan_atasan_DataStore.load({params: {karyawan_id: get_pk_id()}});
+		
 	}
 	/* End setValue to EDIT*/
   
 	/* Function for Check if the form is valid */
 	function is_karyawan_form_valid(){
-		return ( karyawan_namaField.isValid() && karyawan_usernameField.isValid() &&  karyawan_cabangField.isValid() && karyawan_jabatanField.isValid() && karyawan_departemenField.isValid() && karyawan_kelaminField.isValid() && karyawan_marriageField.isValid() );
+		return ( karyawan_namaField.isValid() && 
+				karyawan_usernameField.isValid() &&  
+				karyawan_cabangField.isValid() &&
+				karyawan_jabatanField.isValid() && 
+				karyawan_departemenField.isValid() && 
+				karyawan_kelaminField.isValid() && 
+				karyawan_marriageField.isValid() );
 	}
   	/* End of Function */
   
@@ -507,10 +517,11 @@ Ext.onReady(function(){
 		cbo_karyawan_atasan_DataStore.reload();
 		
 		if(!karyawan_createWindow.isVisible()){
-			karyawan_reset_form();
+			
 			post2db='CREATE';
 			msg='created';
-			karyawan_aktifField.setValue('Aktif');
+			karyawan_reset_form();
+			
 			karyawan_createWindow.show();
 		} else {
 			karyawan_createWindow.toFront();
@@ -522,13 +533,13 @@ Ext.onReady(function(){
 	function karyawan_confirm_delete(){
 		// only one karyawan is selected here
 		if(karyawanListEditorGrid.selModel.getCount() == 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', karyawan_delete);
+			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data berikut?', karyawan_delete);
 		} else if(karyawanListEditorGrid.selModel.getCount() > 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', karyawan_delete);
+			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data-data berikut?', karyawan_delete);
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really delete something you haven\'t selected?',
+				msg: 'Tidak ada yang dipilih untuk dihapus',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -541,10 +552,12 @@ Ext.onReady(function(){
 	function karyawan_confirm_update(){
 		/* only one record is selected here */
 		if(karyawanListEditorGrid.selModel.getCount() == 1) {
-			karyawan_set_form();
+			
 			post2db='UPDATE';
 			msg='updated';
-			cbo_karyawan_atasan_DataStore.load({params: {karyawan_id: get_pk_id()}});
+			karyawan_set_form();
+			
+			
 			karyawan_createWindow.show();
 		} else {
 			Ext.MessageBox.show({
@@ -586,7 +599,7 @@ Ext.onReady(function(){
 						default:
 							Ext.MessageBox.show({
 								title: 'Warning',
-								msg: 'Could not delete the entire selection',
+								msg: 'Tidak bisa menghapus data yang diplih',
 								buttons: Ext.MessageBox.OK,
 								animEl: 'save',
 								icon: Ext.MessageBox.WARNING
@@ -598,7 +611,7 @@ Ext.onReady(function(){
 					var result=response.responseText;
 					Ext.MessageBox.show({
 					   title: 'Error',
-					   msg: 'Could not connect to the database. retry later.',
+					   msg: 'Tidak bisa terhubung dengan database server',
 					   buttons: Ext.MessageBox.OK,
 					   animEl: 'database',
 					   icon: Ext.MessageBox.ERROR
@@ -622,7 +635,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'karyawan_id'
 		},[
-		/* dataIndex => insert intokaryawan_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'karyawan_id', type: 'int', mapping: 'karyawan_id'},
 			{name: 'karyawan_no', type: 'string', mapping: 'karyawan_no'},
 			{name: 'karyawan_sip', type: 'string', mapping: 'karyawan_sip'},
@@ -672,7 +684,6 @@ Ext.onReady(function(){
 			root: 'results',
 			totalProperty: 'total'
 		},[
-		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
 			{name: 'karyawan_atasan_display', type: 'string', mapping: 'karyawan_nama'},
 			{name: 'karyawan_atasan_value', type: 'int', mapping: 'karyawan_id'}
 		]),
@@ -690,7 +701,6 @@ Ext.onReady(function(){
 			root: 'results',
 			totalProperty: 'total'
 		},[
-		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
 			{name: 'karyawan_jabatan_display', type: 'string', mapping: 'jabatan_nama'},
 			{name: 'karyawan_jabatan_value', type: 'int', mapping: 'jabatan_id'}
 		]),
@@ -707,7 +717,6 @@ Ext.onReady(function(){
 			root: 'results',
 			totalProperty: 'total'
 		},[
-		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
 			{name: 'karyawan_cabang_display', type: 'string', mapping: 'cabang_nama'},
 			{name: 'karyawan_cabang_value', type: 'int', mapping: 'cabang_id'}
 		]),
@@ -724,7 +733,6 @@ Ext.onReady(function(){
 			root: 'results',
 			totalProperty: 'total'
 		},[
-		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
 			{name: 'karyawan_departemen_display', type: 'string', mapping: 'departemen_nama'},
 			{name: 'karyawan_departemen_value', type: 'int', mapping: 'departemen_id'}
 		]),
@@ -741,7 +749,6 @@ Ext.onReady(function(){
 			root: 'results',
 			totalProperty: 'total'
 		},[
-		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
 			{name: 'karyawan_golongan_display', type: 'string', mapping: 'nama_golongan'},
 			{name: 'karyawan_golongan_value', type: 'int', mapping: 'id_golongan'}
 		]),
@@ -752,7 +759,7 @@ Ext.onReady(function(){
     
   	/* Function for Identify of Window Column Model */
 	karyawan_ColumnModel = new Ext.grid.ColumnModel(
-		[/*{
+		[{
 			//index=0
 			header: '#',
 			readOnly: true,
@@ -762,17 +769,20 @@ Ext.onReady(function(){
 				cell.css = "readonlycell"; // Mengambil Value dari Class di dalam CSS 
 				return value;
 				},
-			hidden: false
-		},*/
+			hidden: true
+		},
 		{
 			/*index=1*/
 			header: '<div align="center">' + 'NIK' + '</div>',
 			dataIndex: 'karyawan_no',
 			width: 100,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_KARYAWAN'))){ ?>
+			,
 			editor: new Ext.form.TextField({
 				maxLength: 30
           	})
+			<?php } ?>
 		},
 		{
 			/*index=2*/
@@ -780,10 +790,14 @@ Ext.onReady(function(){
 			dataIndex: 'karyawan_npwp',
 			width: 150,
 			sortable: true,
+			hidden: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_KARYAWAN'))){ ?>
+			,
 			editor: new Ext.form.TextField({
 				maxLength: 30
-          	}),
-			hidden: true
+          	})
+			<?php } ?>
+			
 		},
 		{
 			/*index=2*/
@@ -791,37 +805,48 @@ Ext.onReady(function(){
 			dataIndex: 'karyawan_pph21',
 			width: 50,
 			sortable: true,
+			hidden: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_KARYAWAN'))){ ?>
+			,
 			editor: new Ext.form.TextField({
 				maxLength: 30
-          	}),
-			hidden: true
+          	})
+			<?php } ?>
 		},
 		{
 			/*index=3*/
 			header: '<div align="center">' + 'Nickname' + '</div>',
 			dataIndex: 'karyawan_username',
 			width: 80,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_KARYAWAN'))){ ?>
+			,
 			editor: new Ext.form.TextField({
 				maxLength: 15
           	})
+			<?php } ?>
 		},
 		{
 			/*index=4*/
 			header: '<div align="center">' + 'Nama Lengkap' + '</div>',
 			dataIndex: 'karyawan_nama',
 			width: 170,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_KARYAWAN'))){ ?>
+			,
 			editor: new Ext.form.TextField({
 				maxLength: 50
           	})
+			<?php } ?>
 		},
 		{
 			/*index=5*/
 			header: '<div align="center">' + 'L/P' + '</div>',
 			dataIndex: 'karyawan_kelamin',
 			width: 30,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_KARYAWAN'))){ ?>
+			,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
 				triggerAction: 'all',
@@ -835,13 +860,16 @@ Ext.onReady(function(){
                	lazyRender:true,
                	listClass: 'x-combo-list-small'
             })
+			<?php } ?>
 		},
 		{
 			/*index=5*/
 			header: '<div align="center">' + 'Menikah' + '</div>',
 			dataIndex: 'karyawan_marriage',
 			width: 80,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_KARYAWAN'))){ ?>
+			,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
 				triggerAction: 'all',
@@ -855,58 +883,74 @@ Ext.onReady(function(){
                	lazyRender:true,
                	listClass: 'x-combo-list-small'
             })
+			<?php } ?>
 		},
 		{
 			/*index=6*/
 			header: '<div align="center">' + 'Tgl Lahir' + '</div>',
 			dataIndex: 'karyawan_tgllahir',
 			width: 80,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_KARYAWAN'))){ ?>
+			,
 			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
 			editor: new Ext.form.DateField({
 				format: 'd-m-Y'
 			})
+			<?php } ?>
 		},
 		{
 			/*index=7*/
 			header: '<div align="center">' + 'Tmp Lahir' + '</div>',
 			dataIndex: 'karyawan_tmplahir',
 			width: 100,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_KARYAWAN'))){ ?>
+			,
 			editor: new Ext.form.TextField({
 				maxLength: 200
           	})
+			<?php } ?>
 		},
 		{
 			/*index=7*/
 			header: '<div align="center">' + 'Alamat' + '</div>',
 			dataIndex: 'karyawan_alamat',
 			width: 280,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_KARYAWAN'))){ ?>
+			,
 			editor: new Ext.form.TextField({
 				maxLength: 250
           	})
+			<?php } ?>
 		},
 		{
 			/*index=8*/
 			header: '<div align="center">' + 'Kota' + '</div>',
 			dataIndex: 'karyawan_kota',
 			width: 80,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_KARYAWAN'))){ ?>
+			,
 			editor: new Ext.form.TextField({
 				maxLength: 30
           	})
+			<?php } ?>
 		},
 		{
 			/*index=9*/
 			header: 'Kode Pos',
 			dataIndex: 'karyawan_kodepos',
-			width: 150,
-			sortable: true,
+			width: 150, 
+			hidden: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_KARYAWAN'))){ ?>
+			,
 			editor: new Ext.form.TextField({
 				maxLength: 10
-          	}), 
-			hidden: true
+          	})
+			<?php } ?>
 		},
 		{
 			/*index=10*/
@@ -914,10 +958,13 @@ Ext.onReady(function(){
 			dataIndex: 'karyawan_email',
 			width: 150,
 			sortable: true,
+			hidden: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_KARYAWAN'))){ ?>
+			,
 			editor: new Ext.form.TextField({
 				maxLength: 40
-          	}),
-			hidden: true
+          	})
+			<?php } ?>
 		},
 		{
 			/*index=11*/
@@ -925,10 +972,13 @@ Ext.onReady(function(){
 			dataIndex: 'karyawan_emiracle',
 			width: 150,
 			sortable: true,
+			hidden: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_KARYAWAN'))){ ?>
+			,
 			editor: new Ext.form.TextField({
 				maxLength: 40
-          	}),
-			hidden: true
+          	})
+			<?php } ?>
 		},
 		{
 			/*index=12*/
@@ -936,20 +986,26 @@ Ext.onReady(function(){
 			dataIndex: 'karyawan_keterangan',
 			width: 150,
 			sortable: true,
+			hidden: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_KARYAWAN'))){ ?>
+			,
 			editor: new Ext.form.TextField({
 				maxLength: 500
-          	}),
-			hidden: true
+          	})
+			<?php } ?>
 		},
 		{
 			/*index=13*/
 			header: '<div align="center">' + 'No.Telp Rmh' + '</div>',
 			dataIndex: 'karyawan_notelp',
 			width: 90,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_KARYAWAN'))){ ?>
+			,
 			editor: new Ext.form.TextField({
 				maxLength: 25
           	})
+			<?php } ?>
 		},
 		{
 			/*index=14*/
@@ -957,10 +1013,13 @@ Ext.onReady(function(){
 			dataIndex: 'karyawan_notelp2',
 			width: 90,
 			sortable: true,
+			hidden: false
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_KARYAWAN'))){ ?>
+			,
 			editor: new Ext.form.TextField({
 				maxLength: 25
-          	}),
-			hidden: false
+          	})
+			<?php } ?>
 		},
 		{
 			/*index=15*/
@@ -968,10 +1027,13 @@ Ext.onReady(function(){
 			dataIndex: 'karyawan_notelp3',
 			width: 90,
 			sortable: true,
+			hidden: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_KARYAWAN'))){ ?>
+			,
 			editor: new Ext.form.TextField({
 				maxLength: 25
-          	}),
-			hidden: true
+          	})
+			<?php } ?>
 		},
 		{
 			/*index=16*/
@@ -979,9 +1041,13 @@ Ext.onReady(function(){
 			dataIndex: 'karyawan_notelp4',
 			width: 90,
 			sortable: true,
+			hidden: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_KARYAWAN'))){ ?>
+			,
 			editor: new Ext.form.TextField({
 				maxLength: 25
-          	}),hidden: true
+          	})
+			<?php } ?>
 			
 		},
 		{
@@ -990,6 +1056,9 @@ Ext.onReady(function(){
 			dataIndex: 'karyawan_cabang',
 			width: 100,
 			sortable: true,
+			hidden: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_KARYAWAN'))){ ?>
+			,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
 				triggerAction: 'all',
@@ -999,8 +1068,8 @@ Ext.onReady(function(){
                	valueField: 'karyawan_cabang_value',
                	lazyRender:true,
                	listClass: 'x-combo-list-small'
-            }),
-			hidden: true
+            })
+			<?php } ?>
 		},
 		{
 			/*index=18*/
@@ -1008,6 +1077,9 @@ Ext.onReady(function(){
 			dataIndex: 'karyawan_jabatan',
 			width: 150,
 			sortable: true,
+			hidden: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_KARYAWAN'))){ ?>
+			,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
 				triggerAction: 'all',
@@ -1017,8 +1089,8 @@ Ext.onReady(function(){
                	valueField: 'karyawan_jabatan_value',
                	lazyRender:true,
                	listClass: 'x-combo-list-small'
-            }),
-			hidden: true
+            })
+			<?php } ?>
 		},
 		{
 			/*index=19*/
@@ -1026,6 +1098,9 @@ Ext.onReady(function(){
 			dataIndex: 'karyawan_departemen',
 			width: 80,
 			sortable: true,
+			hidden: false
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_KARYAWAN'))){ ?>
+			,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
 				triggerAction: 'all',
@@ -1035,8 +1110,8 @@ Ext.onReady(function(){
                	valueField: 'karyawan_departemen_value',
                	lazyRender:true,
                	listClass: 'x-combo-list-small'
-            }),
-			hidden: false
+            })
+			<?php } ?>
 		},
 		{
 			/*index=20*/
@@ -1044,6 +1119,9 @@ Ext.onReady(function(){
 			dataIndex: 'karyawan_idgolongan',
 			width: 150,
 			sortable: true,
+			hidden: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_KARYAWAN'))){ ?>
+			,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
 				triggerAction: 'all',
@@ -1053,8 +1131,8 @@ Ext.onReady(function(){
                	valueField: 'karyawan_golongan_value',
                	lazyRender:true,
                	listClass: 'x-combo-list-small'
-            }),
-			hidden: true
+            })
+			<?php } ?>
 		},
 		{
 			/*index=21*/
@@ -1062,11 +1140,14 @@ Ext.onReady(function(){
 			dataIndex: 'karyawan_tglmasuk',
 			width: 150,
 			sortable: true,
-			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
+			hidden: true,
+			renderer: Ext.util.Format.dateRenderer('Y-m-d')
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_KARYAWAN'))){ ?>
+			,
 			editor: new Ext.form.DateField({
 				format: 'Y-m-d'
-			}),
-			hidden: true
+			})
+			<?php } ?>
 		},
 		{
 			/*index=6*/
@@ -1074,11 +1155,14 @@ Ext.onReady(function(){
 			dataIndex: 'karyawan_tgl_batas',
 			width: 80,
 			sortable: true,
-			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
+			renderer: Ext.util.Format.dateRenderer('Y-m-d'),	
+			hidden: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_KARYAWAN'))){ ?>
+			,
 			editor: new Ext.form.DateField({
 				format: 'Y-m-d'
-			}),	
-			hidden: true
+			})
+			<?php } ?>
 		},
 		{
 			/*index=22*/
@@ -1086,6 +1170,9 @@ Ext.onReady(function(){
 			dataIndex: 'karyawan_atasan',
 			width: 150,
 			sortable: true,
+			hidden: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_KARYAWAN'))){ ?>
+			,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
 				triggerAction: 'all',
@@ -1095,8 +1182,8 @@ Ext.onReady(function(){
                	valueField: 'karyawan_atasan_value',
                	lazyRender:true,
                	listClass: 'x-combo-list-small'
-            }),
-			hidden: true
+            })
+			<?php } ?>
 		},
 		{
 			/*index=23*/
@@ -1104,6 +1191,9 @@ Ext.onReady(function(){
 			dataIndex: 'karyawan_aktif',
 			width: 70,
 			sortable: true,
+			hidden: false
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_KARYAWAN'))){ ?>
+			,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
 				triggerAction: 'all',
@@ -1116,8 +1206,8 @@ Ext.onReady(function(){
                	valueField: 'karyawan_aktif_value',
                	lazyRender:true,
                	listClass: 'x-combo-list-small'
-            }),
-			hidden: false
+            })
+			<?php } ?>
 		},
 		{
 			/*index=24*/
@@ -1191,24 +1281,32 @@ Ext.onReady(function(){
 		}),
 		/* Add Control on ToolBar */
 		tbar: [
+		<?php if(eregi('C',$this->m_security->get_access_group_by_kode('MENU_KARYAWAN'))){ ?>
 		{
 			text: 'Add',
 			tooltip: 'Add new record',
 			iconCls:'icon-adds',    				// this is defined in our styles.css
 			handler: display_form_window
-		}, '-',{
+		}, '-',
+		<?php } ?>
+		<?php if(eregi('U|R',$this->m_security->get_access_group_by_kode('MENU_KARYAWAN'))){ ?>
+		{
 			text: 'Edit',
 			tooltip: 'Edit selected record',
 			iconCls:'icon-update',
 			handler: karyawan_confirm_update   // Confirm before updating
-		}, '-',{
+		}, '-',
+		<?php } ?>
+		<?php if(eregi('D',$this->m_security->get_access_group_by_kode('MENU_KARYAWAN'))){ ?>
+		{
 			text: 'Delete',
 			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
-			disabled:true,
 			handler: karyawan_confirm_delete   // Confirm before deleting
-		}, '-', {
-			text: 'Search',
+		}, '-', 
+		<?php } ?>
+		{
+			text: 'Adv Search',
 			tooltip: 'Advanced Search',
 			iconCls:'icon-search',
 			handler: display_form_search_window 
@@ -1263,18 +1361,21 @@ Ext.onReady(function(){
 	karyawan_ContextMenu = new Ext.menu.Menu({
 		id: 'karyawan_ListEditorGridContextMenu',
 		items: [
+		<?php if(eregi('U|R',$this->m_security->get_access_group_by_kode('MENU_KARYAWAN'))){ ?>
 		{ 
 			text: 'Edit', tooltip: 'Edit selected record', 
 			iconCls:'icon-update',
 			handler: karyawan_confirm_update 
 		},
+		<?php } ?>
+		<?php if(eregi('D',$this->m_security->get_access_group_by_kode('MENU_KARYAWAN'))){ ?>
 		{ 
 			text: 'Delete', 
 			tooltip: 'Delete selected record', 
 			iconCls:'icon-delete',
-			disabled: true,
 			handler: karyawan_confirm_delete 
 		},
+		<?php } ?>
 		'-',
 		{ 
 			text: 'Print',
@@ -1646,11 +1747,15 @@ Ext.onReady(function(){
 			]
 		}]
 		,
-		buttons: [{
+		buttons: [
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_KARYAWAN'))){ ?>
+			{
 				text: 'Save and Close',
 				handler: karyawan_create
 			}
-			,{
+			,
+			<?php } ?>
+			{
 				text: 'Cancel',
 				handler: function(){
 					karyawan_createWindow.hide();
@@ -1909,7 +2014,7 @@ Ext.onReady(function(){
 	karyawan_tgllahirSearchField= new Ext.form.DateField({
 		id: 'karyawan_tgllahirSearchField',
 		fieldLabel: 'Tgl Lahir',
-		format : 'd-m-Y',
+		format : 'd-m-Y'
 	
 	});
 	/* Identify  karyawan_alamat Search Field */
@@ -2228,8 +2333,7 @@ Ext.onReady(function(){
 		url: 'index.php?c=c_karyawan&m=get_action',
 		params: {
 			task: "PRINT",
-		  	query: searchquery,                    		// if we are doing a quicksearch, use this
-			//if we are doing advanced search, use this
+		  	query: searchquery,                    		
 			karyawan_no : karyawan_no_print,
 			karyawan_npwp : karyawan_npwp_print,
 			karyawan_username : karyawan_username_print,
@@ -2259,12 +2363,12 @@ Ext.onReady(function(){
 		  	switch(result){
 		  	case 1:
 				win = window.open('./karyawanlist.html','karyawanlist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
-				win.print();
+				
 				break;
 		  	default:
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Unable to print the grid!',
+					msg: 'Tidak bisa mencetak data!',
 					buttons: Ext.MessageBox.OK,
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING
@@ -2276,7 +2380,7 @@ Ext.onReady(function(){
 		  	var result=response.responseText;
 			Ext.MessageBox.show({
 			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
+			   msg: 'Tidak bisa terhubung dengan database server',
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR
@@ -2342,8 +2446,7 @@ Ext.onReady(function(){
 		url: 'index.php?c=c_karyawan&m=get_action',
 		params: {
 			task: "EXCEL",
-		  	query: searchquery,                    		// if we are doing a quicksearch, use this
-			//if we are doing advanced search, use this
+		  	query: searchquery,                    		
 			karyawan_no : karyawan_no_2excel,
 			karyawan_npwp : karyawan_npwp_2excel,
 			karyawan_username : karyawan_username_2excel,
@@ -2377,7 +2480,7 @@ Ext.onReady(function(){
 		  	default:
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Unable to convert excel the grid!',
+					msg: 'Tidak bisa meng-export data ke dalam format excel!',
 					buttons: Ext.MessageBox.OK,
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING
@@ -2389,7 +2492,7 @@ Ext.onReady(function(){
 		  	var result=response.responseText;
 			Ext.MessageBox.show({
 			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
+			   msg: 'Tidak bisa terhubung dengan database server',
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR

@@ -16,12 +16,13 @@ class C_outbox extends Controller {
 	//constructor
 	function C_outbox(){
 		parent::Controller();
+		session_start();
 		$this->load->model('m_outbox', '', TRUE);
 	}
 	
 	//set index
 	function index(){
-		$this->load->plugin('to_excel');
+		
 		$this->load->helper('asset');
 		$this->load->view('main/v_outbox');
 	}
@@ -41,12 +42,6 @@ class C_outbox extends Controller {
 				break;
 			case "STATUS_FAILED":
 				$this->outbox_status_failed();
-				break;
-			case "UPDATE":
-				$this->outbox_update();
-				break;
-			case "CREATE":
-				$this->outbox_create();
 				break;
 			case "DELETE":
 				$this->outbox_delete();
@@ -110,47 +105,6 @@ class C_outbox extends Controller {
 	}
 	
 	
-	//function for create new record
-	function outbox_create(){
-		//POST varible here
-		//auto increment, don't accept anything from form values
-		$outbox_destination=trim(@$_POST["outbox_destination"]);
-		$outbox_destination=str_replace("/(<\/?)(p)([^>]*>)", "",$outbox_destination);
-		$outbox_destination=str_replace("'", "''",$outbox_destination);
-		$outbox_message=trim(@$_POST["outbox_message"]);
-		$outbox_message=str_replace("/(<\/?)(p)([^>]*>)", "",$outbox_message);
-		$outbox_message=str_replace("'", "''",$outbox_message);
-		$outbox_date=trim(@$_POST["outbox_date"]);
-		$outbox_creator=@$_SESSION[SESSION_USERID];
-		$outbox_date_create=date('m/d/Y');
-		//$outbox_update=NULL;
-		//$outbox_date_update=NULL;
-		//$outbox_revised=0;
-		$result=$this->m_outbox->outbox_create($outbox_destination ,$outbox_message ,$outbox_date ,$outbox_creator ,$outbox_date_create );
-		echo $result;
-	}
-	
-	
-	//function for update record
-	function outbox_update(){
-		//POST variable here
-		$outbox_id=trim(@$_POST["outbox_id"]);
-		$outbox_destination=trim(@$_POST["outbox_destination"]);
-		$outbox_destination=str_replace("/(<\/?)(p)([^>]*>)", "",$outbox_destination);
-		$outbox_destination=str_replace("'", "''",$outbox_destination);
-		$outbox_message=trim(@$_POST["outbox_message"]);
-		$outbox_message=str_replace("/(<\/?)(p)([^>]*>)", "",$outbox_message);
-		$outbox_message=str_replace("'", "''",$outbox_message);
-		$outbox_date=trim(@$_POST["outbox_date"]);
-		//$outbox_creator="outbox_creator";
-		//$outbox_date_create="outbox_date_create";
-		$outbox_update=@$_SESSION[SESSION_USERID];
-		$outbox_date_update=date('m/d/Y');
-		//$outbox_revised="(revised+1)";
-		$result = $this->m_outbox->outbox_update($outbox_id,$outbox_destination,$outbox_message,$outbox_date,$outbox_update,$outbox_date_update);
-		echo $result;
-	}
-	
 	//function for delete selected record
 	function outbox_delete(){
 		$ids = @$_POST['ids']; // Get our array back and translate it :
@@ -175,19 +129,17 @@ class C_outbox extends Controller {
 		$outbox_message=str_replace("/(<\/?)(p)([^>]*>)", "",$outbox_message);
 		$outbox_message=str_replace("'", "''",$outbox_message);
 		$outbox_date=trim(@$_POST["outbox_date"]);
-		$outbox_creator=trim(@$_POST["outbox_creator"]);
-		$outbox_creator=str_replace("/(<\/?)(p)([^>]*>)", "",$outbox_creator);
-		$outbox_creator=str_replace("'", "''",$outbox_creator);
-		$outbox_date_create=trim(@$_POST["outbox_date_create"]);
-		$outbox_update=trim(@$_POST["outbox_update"]);
-		$outbox_update=str_replace("/(<\/?)(p)([^>]*>)", "",$outbox_update);
-		$outbox_update=str_replace("'", "''",$outbox_update);
-		$outbox_date_update=trim(@$_POST["outbox_date_update"]);
-		$outbox_revised=trim(@$_POST["outbox_revised"]);
+		$outbox_status=trim(@$_POST["outbox_status"]);
+		$outbox_creator=NULL;
+		$outbox_date_create=NULL;
+		$outbox_update=NULL;
+		$outbox_date_update=NULL;
+		$outbox_revised=NULL;
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_outbox->outbox_search($outbox_id ,$outbox_destination ,$outbox_message ,$outbox_date ,$outbox_creator ,$outbox_date_create ,$outbox_update ,$outbox_date_update ,$outbox_revised ,$start,$end);
+		$result = $this->m_outbox->outbox_search($outbox_id ,$outbox_destination ,$outbox_message ,$outbox_date , $outbox_status, $outbox_creator ,
+												 $outbox_date_create ,$outbox_update ,$outbox_date_update ,$outbox_revised ,$start,$end);
 		echo $result;
 	}
 
@@ -197,24 +149,24 @@ class C_outbox extends Controller {
 		$outbox_id=trim(@$_POST["outbox_id"]);
 		$outbox_destination=trim(@$_POST["outbox_destination"]);
 		$outbox_destination=str_replace("/(<\/?)(p)([^>]*>)", "",$outbox_destination);
-		$outbox_destination=str_replace("'", "'",$outbox_destination);
+		$outbox_destination=str_replace("'", "''",$outbox_destination);
 		$outbox_message=trim(@$_POST["outbox_message"]);
 		$outbox_message=str_replace("/(<\/?)(p)([^>]*>)", "",$outbox_message);
-		$outbox_message=str_replace("'", "'",$outbox_message);
+		$outbox_message=str_replace("'", "''",$outbox_message);
 		$outbox_date=trim(@$_POST["outbox_date"]);
-		$outbox_creator=trim(@$_POST["outbox_creator"]);
-		$outbox_creator=str_replace("/(<\/?)(p)([^>]*>)", "",$outbox_creator);
-		$outbox_creator=str_replace("'", "'",$outbox_creator);
-		$outbox_date_create=trim(@$_POST["outbox_date_create"]);
-		$outbox_update=trim(@$_POST["outbox_update"]);
-		$outbox_update=str_replace("/(<\/?)(p)([^>]*>)", "",$outbox_update);
-		$outbox_update=str_replace("'", "'",$outbox_update);
-		$outbox_date_update=trim(@$_POST["outbox_date_update"]);
-		$outbox_revised=trim(@$_POST["outbox_revised"]);
+		$outbox_status=trim(@$_POST["outbox_status"]);
+		$outbox_creator=NULL;
+		$outbox_date_create=NULL;
+		$outbox_update=NULL;
+		$outbox_date_update=NULL;
+		$outbox_revised=NULL;
+		
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$data["data_print"] = $this->m_outbox->outbox_print($outbox_id ,$outbox_destination ,$outbox_message ,$outbox_date ,$outbox_creator ,$outbox_date_create ,$outbox_update ,$outbox_date_update ,$outbox_revised ,$option,$filter);
+		$data["data_print"] = $this->m_outbox->outbox_print($outbox_id ,$outbox_destination ,$outbox_message ,$outbox_date ,$outbox_status,
+															$outbox_creator , $outbox_date_create ,$outbox_update ,$outbox_date_update ,
+															$outbox_revised ,$option, $filter);
 		$print_view=$this->load->view("main/p_outbox.php",$data,TRUE);
 		if(!file_exists("print")){
 			mkdir("print");
@@ -236,20 +188,20 @@ class C_outbox extends Controller {
 		$outbox_message=str_replace("/(<\/?)(p)([^>]*>)", "",$outbox_message);
 		$outbox_message=str_replace("'", "''",$outbox_message);
 		$outbox_date=trim(@$_POST["outbox_date"]);
-		$outbox_creator=trim(@$_POST["outbox_creator"]);
-		$outbox_creator=str_replace("/(<\/?)(p)([^>]*>)", "",$outbox_creator);
-		$outbox_creator=str_replace("'", "''",$outbox_creator);
-		$outbox_date_create=trim(@$_POST["outbox_date_create"]);
-		$outbox_update=trim(@$_POST["outbox_update"]);
-		$outbox_update=str_replace("/(<\/?)(p)([^>]*>)", "",$outbox_update);
-		$outbox_update=str_replace("'", "''",$outbox_update);
-		$outbox_date_update=trim(@$_POST["outbox_date_update"]);
-		$outbox_revised=trim(@$_POST["outbox_revised"]);
+		$outbox_status=trim(@$_POST["outbox_status"]);
+		$outbox_creator=NULL;
+		$outbox_date_create=NULL;
+		$outbox_update=NULL;
+		$outbox_date_update=NULL;
+		$outbox_revised=NULL;
+		
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$query = $this->m_outbox->outbox_export_excel($outbox_id ,$outbox_destination ,$outbox_message ,$outbox_date ,$outbox_creator ,$outbox_date_create ,$outbox_update ,$outbox_date_update ,$outbox_revised ,$option,$filter);
+		$query = $this->m_outbox->outbox_export_excel($outbox_id ,$outbox_destination ,$outbox_message ,$outbox_date,$outbox_status,$outbox_creator ,
+													  $outbox_date_create ,$outbox_update ,$outbox_date_update ,$outbox_revised ,$option,$filter);
 		
+		$this->load->plugin('to_excel');
 		to_excel($query,"outbox"); 
 		echo '1';
 			

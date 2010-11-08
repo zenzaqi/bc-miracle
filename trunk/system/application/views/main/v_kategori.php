@@ -116,7 +116,7 @@ Ext.onReady(function(){
 					default:
 						Ext.MessageBox.show({
 							   title: 'Warning',
-							   msg: 'We could\'t not save the kategori.',
+							   msg: 'Data Group 2 tidak bisa disimpan.',
 							   buttons: Ext.MessageBox.OK,
 							   animEl: 'save',
 							   icon: Ext.MessageBox.WARNING
@@ -127,11 +127,11 @@ Ext.onReady(function(){
 			failure: function(response){
 				var result=response.responseText;
 				Ext.MessageBox.show({
-							   title: 'Error',
-							   msg: 'Could not connect to the database. retry later.',
-							   buttons: Ext.MessageBox.OK,
-							   animEl: 'database',
-							   icon: Ext.MessageBox.ERROR
+				   title: 'Error',
+				   msg: 'Tidak bisa terhubung dengan database server',
+				   buttons: Ext.MessageBox.OK,
+				   animEl: 'database',
+				   icon: Ext.MessageBox.ERROR
 				});	
 			}									    
 		});   
@@ -170,14 +170,14 @@ Ext.onReady(function(){
 					var result=eval(response.responseText);
 					switch(result){
 						case 1:
-							Ext.MessageBox.alert(post2db+' OK','The Kategori was '+msg+' successfully.');
+							Ext.MessageBox.alert(post2db+' OK','Data Group2 berhasil disimpan.');
 							kategori_DataStore.reload();
 							kategori_createWindow.hide();
 							break;
 						default:
 							Ext.MessageBox.show({
 							   title: 'Warning',
-							   msg: 'We could\'t not '+msg+' the Kategori.',
+							   msg: 'Data Group 2 tidak bisa disimpan !',
 							   buttons: Ext.MessageBox.OK,
 							   animEl: 'save',
 							   icon: Ext.MessageBox.WARNING
@@ -188,18 +188,18 @@ Ext.onReady(function(){
 				failure: function(response){
 					var result=response.responseText;
 					Ext.MessageBox.show({
-								   title: 'Error',
-								   msg: 'Could not connect to the database. retry later.',
-								   buttons: Ext.MessageBox.OK,
-								   animEl: 'database',
-								   icon: Ext.MessageBox.ERROR
+						   title: 'Error',
+						   msg: 'Tidak bisa terhubung dengan database server',
+						   buttons: Ext.MessageBox.OK,
+						   animEl: 'database',
+						   icon: Ext.MessageBox.ERROR
 					});	
 				}                      
 			});
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'Your Form is not valid!.',
+				msg: 'Isian belum sempurna !.',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -258,13 +258,13 @@ Ext.onReady(function(){
 	function kategori_confirm_delete(){
 		// only one kategori is selected here
 		if(kategoriListEditorGrid.selModel.getCount() == 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', kategori_delete);
+			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data berikut?', kategori_delete);
 		} else if(kategoriListEditorGrid.selModel.getCount() > 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', kategori_delete);
+			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data-data berikut?', kategori_delete);
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really delete something you haven\'t selected?',
+				msg: 'Tidak ada yang dipilih untuk dihapus',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -284,7 +284,7 @@ Ext.onReady(function(){
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really update something you haven\'t selected?',
+				msg: 'Tidak ada data yang dipilih untuk diedit',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -315,7 +315,7 @@ Ext.onReady(function(){
 						default:
 							Ext.MessageBox.show({
 								title: 'Warning',
-								msg: 'Could not delete the entire selection',
+								msg: 'Tidak bisa menghapus data yang diplih',
 								buttons: Ext.MessageBox.OK,
 								animEl: 'save',
 								icon: Ext.MessageBox.WARNING
@@ -327,7 +327,7 @@ Ext.onReady(function(){
 					var result=response.responseText;
 					Ext.MessageBox.show({
 					   title: 'Error',
-					   msg: 'Could not connect to the database. retry later.',
+					   msg: 'Tidak bisa terhubung dengan database server',
 					   buttons: Ext.MessageBox.OK,
 					   animEl: 'database',
 					   icon: Ext.MessageBox.ERROR
@@ -351,7 +351,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'kategori_id'
 		},[
-		/* dataIndex => insert intokategori_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'kategori_id', type: 'int', mapping: 'kategori_id'},
 			{name: 'kategori_nama', type: 'string', mapping: 'kategori_nama'},
 			{name: 'kategori_jenis', type: 'string', mapping: 'kategori_jenis'},
@@ -369,7 +368,7 @@ Ext.onReady(function(){
     
   	/* Function for Identify of Window Column Model */
 	kategori_ColumnModel = new Ext.grid.ColumnModel(
-		[/*{
+		[{
 			header: '#',
 			readOnly: true,
 			dataIndex: 'kategori_id',
@@ -378,28 +377,33 @@ Ext.onReady(function(){
 				cell.css = "readonlycell"; // Mengambil Value dari Class di dalam CSS 
 				return value;
 				},
-			hidden: false
-		},*/
+			hidden: true
+		},
 		{
 			header: 'Nama',
 			dataIndex: 'kategori_nama',
 			width: 150,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_JENIS'))){ ?>
+			,
 			editor: new Ext.form.TextField({
 				maxLength: 250
           	})
+			<?php } ?>
 		},
 		{
 			header: 'Kelompok',
 			dataIndex: 'kategori_jenis',
 			width: 150,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_JENIS'))){ ?>
+			,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
 				triggerAction: 'all',
 				store:new Ext.data.SimpleStore({
 					fields:['kategori_jenis_value', 'kategori_jenis_display'],
-					data: [['produk','produk'],['perawatan','perawatan'],['paket','paket']]
+					data: [['produk','Produk'],['perawatan','Perawatan'],['paket','Paket']]
 					}),
 				mode: 'local',
                	displayField: 'kategori_jenis_display',
@@ -408,21 +412,27 @@ Ext.onReady(function(){
                	listClass: 'x-combo-list-small',
 				anchor: '60%'
             })
+			<?php } ?>
 		},
 		{
 			header: 'Keterangan',
 			dataIndex: 'kategori_keterangan',
 			width: 150,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_JENIS'))){ ?>
+			,
 			editor: new Ext.form.TextArea({
 				height: 30						  
 			})
+			<?php } ?>
 		},
 		{
 			header: 'Status',
 			dataIndex: 'kategori_aktif',
 			width: 150,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_JENIS'))){ ?>
+			,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
 				triggerAction: 'all',
@@ -437,6 +447,7 @@ Ext.onReady(function(){
                	listClass: 'x-combo-list-small',
 				anchor: '30%'
             })
+			<?php } ?>
 		},
 		{
 			header: 'Creator',
@@ -503,26 +514,33 @@ Ext.onReady(function(){
 			store: kategori_DataStore,
 			displayInfo: true
 		}),
-		/* Add Control on ToolBar */
 		tbar: [
+		<?php if(eregi('C',$this->m_security->get_access_group_by_kode('MENU_JENIS'))){ ?>
 		{
 			text: 'Add',
 			tooltip: 'Add new record',
 			iconCls:'icon-adds',    				// this is defined in our styles.css
 			handler: display_form_window
-		}, '-',{
+		}, '-',
+		<?php } ?>
+		<?php if(eregi('U|R',$this->m_security->get_access_group_by_kode('MENU_JENIS'))){ ?>
+		{
 			text: 'Edit',
 			tooltip: 'Edit selected record',
 			iconCls:'icon-update',
 			handler: kategori_confirm_update   // Confirm before updating
-		}, '-',{
+		}, '-',
+		<?php } ?>
+		<?php if(eregi('D',$this->m_security->get_access_group_by_kode('MENU_JENIS'))){ ?>
+		{
 			text: 'Delete',
 			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
-			disabled: true,
 			handler: kategori_confirm_delete   // Confirm before deleting
-		}, '-', {
-			text: 'Search',
+		}, '-', 
+		<?php } ?>
+		{
+			text: 'Adv Search',
 			tooltip: 'Advanced Search',
 			iconCls:'icon-search',
 			handler: display_form_search_window 
@@ -567,18 +585,21 @@ Ext.onReady(function(){
 	kategori_ContextMenu = new Ext.menu.Menu({
 		id: 'kategori_ListEditorGridContextMenu',
 		items: [
+		<?php if(eregi('U|R',$this->m_security->get_access_group_by_kode('MENU_JENIS'))){ ?>
 		{ 
 			text: 'Edit', tooltip: 'Edit selected record', 
 			iconCls:'icon-update',
 			handler: kategori_confirm_update 
 		},
+		<?php } ?>
+		<?php if(eregi('D',$this->m_security->get_access_group_by_kode('MENU_JENIS'))){ ?>
 		{ 
 			text: 'Delete', 
 			tooltip: 'Delete selected record', 
-			disabled: true,
 			iconCls:'icon-delete',
 			handler: kategori_confirm_delete 
 		},
+		<?php } ?>
 		'-',
 		{ 
 			text: 'Print',
@@ -631,7 +652,7 @@ Ext.onReady(function(){
 		fieldLabel: 'Kelompok <span style="color: #ec0000">*</span>',
 		store:new Ext.data.SimpleStore({
 			fields:['kategori_jenis_value', 'kategori_jenis_display'],
-			data:[['produk','produk'],['perawatan','perawatan'],['paket','paket']]
+			data:[['produk','Produk'],['perawatan','Perawatan'],['paket','Paket']]
 		}),
 		mode: 'local',
 		allowBlank: false,
@@ -685,11 +706,15 @@ Ext.onReady(function(){
 			]
 		}]
 		,
-		buttons: [{
+		buttons: [
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JENIS'))){ ?>
+			{
 				text: 'Save and Close',
 				handler: kategori_create
 			}
-			,{
+			,
+			<?php } ?>
+			{
 				text: 'Cancel',
 				handler: function(){
 					kategori_createWindow.hide();
@@ -794,7 +819,7 @@ Ext.onReady(function(){
 		fieldLabel: 'Kelompok',
 		store:new Ext.data.SimpleStore({
 			fields:['kategori_jenis_value', 'kategori_jenis_display'],
-			data:[['produk','produk'],['perawatan','perawatan'],['paket','paket']]
+			data:[['produk','Produk'],['perawatan','Perawatan'],['paket','Paket']]
 		}),
 		mode: 'local',
 		allowBlank: false,
@@ -908,8 +933,7 @@ Ext.onReady(function(){
 		url: 'index.php?c=c_kategori&m=get_action',
 		params: {
 			task: "PRINT",
-		  	query: searchquery,                    		// if we are doing a quicksearch, use this
-			//if we are doing advanced search, use this
+		  	query: searchquery,                    		
 			kategori_nama : kategori_nama_print,
 			kategori_jenis : kategori_jenis_print,
 			kategori_keterangan : kategori_keterangan_print,
@@ -921,12 +945,12 @@ Ext.onReady(function(){
 		  	switch(result){
 		  	case 1:
 				win = window.open('./kategorilist.html','kategorilist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
-				win.print();
+				
 				break;
 		  	default:
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Unable to print the grid!',
+					msg: 'Tidak bisa mencetak data!',
 					buttons: Ext.MessageBox.OK,
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING
@@ -938,7 +962,7 @@ Ext.onReady(function(){
 		  	var result=response.responseText;
 			Ext.MessageBox.show({
 			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
+			   msg: 'Tidak bisa terhubung dengan database server',
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR
@@ -968,8 +992,7 @@ Ext.onReady(function(){
 		url: 'index.php?c=c_kategori&m=get_action',
 		params: {
 			task: "EXCEL",
-		  	query: searchquery,                    		// if we are doing a quicksearch, use this
-			//if we are doing advanced search, use this
+		  	query: searchquery,                    		
 			kategori_nama : kategori_nama_2excel,
 			kategori_jenis : kategori_jenis_2excel,
 			kategori_keterangan : kategori_keterangan_2excel,
@@ -985,7 +1008,7 @@ Ext.onReady(function(){
 		  	default:
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Unable to convert excel the grid!',
+					msg: 'Tidak bisa meng-export data ke dalam format excel!',
 					buttons: Ext.MessageBox.OK,
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING
@@ -997,7 +1020,7 @@ Ext.onReady(function(){
 		  	var result=response.responseText;
 			Ext.MessageBox.show({
 			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
+			   msg: 'Tidak bisa terhubung dengan database server',
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR

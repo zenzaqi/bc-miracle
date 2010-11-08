@@ -38,6 +38,6 @@
 		<?php } ?>
 	</tbody>
 </table>
-<body>
+<body onload='window.print()'>
 </body>
 </html>

@@ -293,7 +293,6 @@ class C_paket extends Controller {
 
 	function paket_print(){
   		//POST varibale here
-		$paket_id=trim(@$_POST["paket_id"]);
 		$paket_kode=trim(@$_POST["paket_kode"]);
 		$paket_kode=str_replace("/(<\/?)(p)([^>]*>)", "",$paket_kode);
 		$paket_kode=str_replace("'", '"',$paket_kode);
@@ -318,8 +317,7 @@ class C_paket extends Controller {
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$result = $this->m_paket->paket_print($paket_id 
-												,$paket_kode 
+		$result = $this->m_paket->paket_print($paket_kode 
 												,$paket_kodelama 
 												,$paket_nama 
 												,$paket_group 
@@ -337,7 +335,7 @@ class C_paket extends Controller {
    		/* We now have our array, let's build our HTML file */
 		$file = fopen("paketlist.html",'w');
 		fwrite($file, "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' /><title>Printing the Paket Grid</title><link rel='stylesheet' type='text/css' href='assets/modules/main/css/printstyle.css'/></head>");
-		fwrite($file, "<body><table summary='Paket List'><caption>DAFTAR PAKET</caption><thead><tr><th scope='col'>No.</th><th scope='col'>Kode</th><th scope='col'>Kode Lama</th><th scope='col'>Nama</th><th scope='col'>Group</th><th scope='col'>Du</th><th scope='col'>Dm</th><th scope='col'>Point</th><th scope='col'>Harga</th><th scope='col'>Expired</th><th scope='col'>Aktif</th></tr></thead><tfoot><tr><th scope='row'>Total</th><td colspan='$totcolumn'>");
+		fwrite($file, "<body onload='window.print()'><table summary='Paket List'><caption>DAFTAR PAKET</caption><thead><tr><th scope='col'>No.</th><th scope='col'>Kode Lama</th><th scope='col'>Kode Baru</th><th scope='col'>Nama</th><th scope='col'>Group</th><th scope='col'>Du</th><th scope='col'>Dm</th><th scope='col'>Point</th><th scope='col'>Harga</th><th scope='col'>Expired</th><th scope='col'>Aktif</th></tr></thead><tfoot><tr><th scope='row'>Total</th><td colspan='$totcolumn'>");
 		fwrite($file, $nbrows);
 		fwrite($file, " Paket</td></tr></tfoot><tbody>");
 		$i=0;
@@ -352,9 +350,9 @@ class C_paket extends Controller {
 				fwrite($file, "><th scope='row' id='r97'>");
 				fwrite($file, $i);
 				fwrite($file,"</th><td>");
-				fwrite($file, $data['paket_kode']);
-				fwrite($file,"</td><td>");
 				fwrite($file, $data['paket_kodelama']);
+				fwrite($file,"</td><td>");
+				fwrite($file, $data['paket_kode']);
 				fwrite($file,"</td><td>");
 				fwrite($file, $data['paket_nama']);
 				fwrite($file,"</td><td>");
@@ -368,7 +366,7 @@ class C_paket extends Controller {
 				fwrite($file,"</td><td>");
 				fwrite($file, $data['paket_point']);
 				fwrite($file,"</td><td>");
-				fwrite($file, $data['paket_harga']);
+				fwrite($file, number_format($data['paket_harga']));
 				fwrite($file,"</td><td>");
 				fwrite($file, $data['paket_expired']);
 				fwrite($file,"</td><td>");
@@ -395,7 +393,6 @@ class C_paket extends Controller {
 	/* Function to Export Excel document */
 	function paket_export_excel(){
 		//POST varibale here
-		$paket_id=trim(@$_POST["paket_id"]);
 		$paket_kode=trim(@$_POST["paket_kode"]);
 		$paket_kode=str_replace("/(<\/?)(p)([^>]*>)", "",$paket_kode);
 		$paket_kode=str_replace("'", '"',$paket_kode);
@@ -420,7 +417,8 @@ class C_paket extends Controller {
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$query = $this->m_paket->paket_export_excel($paket_id ,$paket_kode ,$paket_kodelama ,$paket_nama ,$paket_group ,$paket_keterangan ,$paket_du ,$paket_dm ,$paket_point ,$paket_harga ,$paket_expired ,$paket_aktif ,$option,$filter);
+		$query = $this->m_paket->paket_export_excel($paket_kode ,$paket_kodelama ,$paket_nama ,$paket_group ,$paket_keterangan ,$paket_du ,
+													$paket_dm ,$paket_point ,$paket_harga ,$paket_expired ,$paket_aktif ,$option,$filter);
 		
 		$this->load->plugin('to_excel');
 		to_excel($query,"paket"); 

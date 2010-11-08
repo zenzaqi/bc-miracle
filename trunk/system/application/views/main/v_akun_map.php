@@ -114,14 +114,14 @@ Ext.onReady(function(){
 					var result=eval(response.responseText);
 					switch(result){
 						case 1:
-							Ext.MessageBox.alert(post2db+' OK','Mapping Kode Akun sukses disimpan.');
+							Ext.MessageBox.alert(post2db+' OK','Mapping Kode Akun berhasil disimpan.');
 							akun_map_DataStore.reload();
 							akun_map_saveWindow.hide();
 							break;
 						default:
 							Ext.MessageBox.show({
 							   title: 'Warning',
-							   msg: 'Mapping Kode Akun gagal disimpan !.',
+							   msg: 'Mapping Kode Akun tidak bisa disimpan !.',
 							   buttons: Ext.MessageBox.OK,
 							   animEl: 'save',
 							   icon: Ext.MessageBox.WARNING
@@ -133,7 +133,7 @@ Ext.onReady(function(){
 					var result=response.responseText;
 					Ext.MessageBox.show({
 						   title: 'Error',
-						   msg: 'Gagal terkoneksi ke database.',
+						   msg: 'Tidak bisa terhubung ke database server.',
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'database',
 						   icon: Ext.MessageBox.ERROR
@@ -500,23 +500,32 @@ Ext.onReady(function(){
         }),
 		plugins: summary,
 		tbar: [
+		<?php if(eregi('C',$this->m_security->get_access_group_by_kode('MENU_AKUNMAP'))){ ?>
 		{
 			text: 'Add',
 			tooltip: 'Add new record',
 			iconCls:'icon-adds',    				// this is defined in our styles.css
 			handler: display_form_window
-		}, '-',{
+		}, '-',
+		<?php } ?>
+		<?php if(eregi('U|R',$this->m_security->get_access_group_by_kode('MENU_AKUNMAP'))){ ?>
+		{
 			text: 'Edit',
 			tooltip: 'Edit selected record',
 			iconCls:'icon-update',
 			handler: akun_map_confirm_update   // Confirm before updating
-		}, '-',{
+		}, '-',
+		<?php } ?>
+		<?php if(eregi('D',$this->m_security->get_access_group_by_kode('MENU_AKUNMAP'))){ ?>
+		{
 			text: 'Delete',
 			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
 			handler: akun_map_confirm_delete   // Confirm before deleting
-		}, '-', {
-			text: 'Search',
+		}, '-', 
+		<?php } ?>
+		{
+			text: 'Adv Search',
 			tooltip: 'Advanced Search',
 			iconCls:'icon-search',
 			handler: display_form_search_window 
@@ -530,16 +539,6 @@ Ext.onReady(function(){
 			tooltip: 'Refresh datagrid',
 			handler: akun_map_reset_search,
 			iconCls:'icon-refresh'
-		},'-',{
-			text: 'Export Excel',
-			tooltip: 'Export to Excel(.xls) Document',
-			iconCls:'icon-xls',
-			handler: akun_map_export_excel
-		}, '-',{
-			text: 'Print',
-			tooltip: 'Print Document',
-			iconCls:'icon-print',
-			handler: akun_map_print  
 		}
 		]
 	});
@@ -550,30 +549,21 @@ Ext.onReady(function(){
 	akun_map_ContextMenu = new Ext.menu.Menu({
 		id: 'akun_map_ListEditorGridContextMenu',
 		items: [
+		<?php if(eregi('U|R',$this->m_security->get_access_group_by_kode('MENU_AKUNMAP'))){ ?>
 		{ 
 			text: 'Edit', tooltip: 'Edit selected record', 
 			iconCls:'icon-update',
 			handler: akun_map_confirm_update
 		},
+		<?php } ?>
+		<?php if(eregi('D',$this->m_security->get_access_group_by_kode('MENU_AKUNMAP'))){ ?>
 		{ 
 			text: 'Delete', 
 			tooltip: 'Delete selected record', 
 			iconCls:'icon-delete',
 			handler: akun_map_confirm_delete 
 		},
-		'-',
-		{ 
-			text: 'Print',
-			tooltip: 'Print Document',
-			iconCls:'icon-print',
-			handler: akun_map_print 
-		},
-		{ 
-			text: 'Export Excel', 
-			tooltip: 'Export to Excel(.xls) Document',
-			iconCls:'icon-xls',
-			handler: akun_map_export_excel 
-		}
+		<?php } ?>
 		]
 	}); 
 	/* End of Declaration */
@@ -688,7 +678,7 @@ Ext.onReady(function(){
 		fieldLabel: 'Aktif',
 		store:new Ext.data.SimpleStore({
 			fields:['map_aktif_value', 'map_aktif_display'],
-			data:[['Tidak','Tidak'],['Ya','Ya']]
+			data:[['Aktif','Aktif'],['Tidak Aktif','Tidak Aktif']]
 		}),
 		mode: 'local',
 		displayField: 'map_aktif_display',
@@ -713,11 +703,15 @@ Ext.onReady(function(){
 				items: [map_kategoriField, map_namaField, map_akunField, map_akun_kodeField,map_jenisField, map_aktifField] 
 			}
 			],
-		buttons: [{
+		buttons: [
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_AKUNMAP'))){ ?>
+			{
 				text: 'Save and Close',
 				handler: akun_map_save
 			}
-			,{
+			,
+			<?php } ?>
+			{
 				text: 'Cancel',
 				handler: function(){
 					akun_map_saveWindow.hide();
@@ -848,7 +842,7 @@ Ext.onReady(function(){
 		fieldLabel: 'Aktif',
 		store:new Ext.data.SimpleStore({
 			fields:['value', 'map_aktif'],
-			data:[['Tidak','Tidak'],['Ya','Ya']]
+			data:[['Aktif','Aktif'],['Tidak Aktif','Tidak Aktif']]
 		}),
 		mode: 'local',
 		displayField: 'map_aktif',
@@ -917,128 +911,7 @@ Ext.onReady(function(){
 	}
   	/* End Function */
 	
-	/* Function for print List Grid */
-	function akun_map_print(){
-		var searchquery = "";
-		var map_kategori_print=null;
-		var map_nama_print=null;
-		var map_akun_print=null;
-		var map_akun_kode_print=null;
-		var map_aktif_print=null;
-		var win;              
-		// check if we do have some search data...
-		if(akun_map_DataStore.baseParams.query!==null){searchquery = akun_map_DataStore.baseParams.query;}
-		if(akun_map_DataStore.baseParams.map_kategori!==null){map_kategori_print = akun_map_DataStore.baseParams.map_kategori;}
-		if(akun_map_DataStore.baseParams.map_nama!==null){map_nama_print = akun_map_DataStore.baseParams.map_nama;}
-		if(akun_map_DataStore.baseParams.map_akun!==null){map_akun_print = akun_map_DataStore.baseParams.map_akun;}
-		if(akun_map_DataStore.baseParams.map_akun_kode!==null){map_akun_kode_print = akun_map_DataStore.baseParams.map_akun_kode;}
-		if(akun_map_DataStore.baseParams.map_aktif!==null){map_aktif_print = akun_map_DataStore.baseParams.map_aktif;}
-
-		Ext.Ajax.request({   
-		waitMsg: 'Please Wait...',
-		url: 'index.php?c=c_akun_map&m=get_action',
-		params: {
-			task			: "PRINT",
-		  	query			: searchquery,                    		
-			map_kategori 	: map_kategori_print,
-			map_nama 		: map_nama_print,
-			map_akun 		: map_akun_print,
-			map_akun_kode 	: map_akun_kode_print,
-			map_aktif 		: map_aktif_print,
-		  	currentlisting	: akun_map_DataStore.baseParams.task // this tells us if we are searching or not
-		}, 
-		success: function(response){              
-		  	var result=eval(response.responseText);
-		  	switch(result){
-		  	case 1:
-				win = window.open('./print/akun_map_printlist.html','akun_maplist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
-				win.print();
-				break;
-		  	default:
-				Ext.MessageBox.show({
-					title: 'Warning',
-					msg: 'Unable to print the grid!',
-					buttons: Ext.MessageBox.OK,
-					animEl: 'save',
-					icon: Ext.MessageBox.WARNING
-				});
-				break;
-		  	}  
-		},
-		failure: function(response){
-		  	var result=response.responseText;
-			Ext.MessageBox.show({
-			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
-			   buttons: Ext.MessageBox.OK,
-			   animEl: 'database',
-			   icon: Ext.MessageBox.ERROR
-			});		
-		} 	                     
-		});
-	}
-	/* Enf Function */
-	
-	/* Function for print Export to Excel Grid */
-	function akun_map_export_excel(){
-		var searchquery = "";
-		var map_kategori_2excel=null;
-		var map_nama_2excel=null;
-		var map_akun_2excel=null;
-		var map_akun_kode_2excel=null;
-		var map_aktif_2excel=null;
-		var win;              
-		// check if we do have some search data...
-		if(akun_map_DataStore.baseParams.query!==null){searchquery = akun_map_DataStore.baseParams.query;}
-		if(akun_map_DataStore.baseParams.map_kategori!==null){map_kategori_2excel = akun_map_DataStore.baseParams.map_kategori;}
-		if(akun_map_DataStore.baseParams.map_nama!==null){map_nama_2excel = akun_map_DataStore.baseParams.map_nama;}
-		if(akun_map_DataStore.baseParams.map_akun!==null){map_akun_2excel = akun_map_DataStore.baseParams.map_akun;}
-		if(akun_map_DataStore.baseParams.map_akun_kode!==null){map_akun_kode_2excel = akun_map_DataStore.baseParams.map_akun_kode;}
-		if(akun_map_DataStore.baseParams.map_aktif!==null){map_aktif_2excel = akun_map_DataStore.baseParams.map_aktif;}
-
-		Ext.Ajax.request({   
-		waitMsg: 'Please Wait...',
-		url: 'index.php?c=c_akun_map&m=get_action',
-		params: {
-			task				: "EXCEL",
-		  	query				: searchquery,                    		
-			map_kategori 		: map_kategori_2excel,
-			map_nama 			: map_nama_2excel,
-			map_akun 			: map_akun_2excel,
-			map_akun_kode 		: map_akun_kode_2excel,
-			map_aktif 			: map_aktif_2excel,
-		  	currentlisting		: akun_map_DataStore.baseParams.task // this tells us if we are searching or not
-		},
-		success: function(response){              
-		  	var result=eval(response.responseText);
-		  	switch(result){
-		  	case 1:
-				win = window.location=('./export2excel.php');
-				break;
-		  	default:
-				Ext.MessageBox.show({
-					title: 'Warning',
-					msg: 'Unable to convert excel the grid!',
-					buttons: Ext.MessageBox.OK,
-					animEl: 'save',
-					icon: Ext.MessageBox.WARNING
-				});
-				break;
-		  	}  
-		},
-		failure: function(response){
-		  	var result=response.responseText;
-			Ext.MessageBox.show({
-			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
-			   buttons: Ext.MessageBox.OK,
-			   animEl: 'database',
-			   icon: Ext.MessageBox.ERROR
-			});    
-		} 	                     
-		});
-	}
-	
+		
 	/*cbo_map_kategoriField.on('select', function(){
 		map_kategoriField.setValue(cbo_map_kategoriField.getValue());
 	});*/

@@ -111,12 +111,12 @@ function voucher_cetak(master_id){
 			switch(result){
 			case 1:
 				win = window.open('./voucher_paper.html','Cetak Voucher','height=480,width=1340,resizable=1,scrollbars=0, menubar=0');
-				//win.print();
+				//
 				break;
 			default:
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Unable to print the grid!',
+					msg: 'Tidak bisa mencetak data!',
 					buttons: Ext.MessageBox.OK,
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING
@@ -128,7 +128,7 @@ function voucher_cetak(master_id){
 			var result=response.responseText;
 			Ext.MessageBox.show({
 			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
+			   msg: 'Tidak bisa terhubung dengan database server',
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR
@@ -157,13 +157,13 @@ Ext.onReady(function(){
 	function voucher_confirm_delete(){
 		// only one voucher is selected here
 		if(voucherListEditorGrid.selModel.getCount() == 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', voucher_delete);
+			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data berikut?', voucher_delete);
 		} else if(voucherListEditorGrid.selModel.getCount() > 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', voucher_delete);
+			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data-data berikut?', voucher_delete);
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really delete something you haven\'t selected?',
+				msg: 'Tidak ada yang dipilih untuk dihapus',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -195,7 +195,7 @@ Ext.onReady(function(){
 						default:
 							Ext.MessageBox.show({
 								title: 'Warning',
-								msg: 'Could not delete the entire selection',
+								msg: 'Tidak bisa menghapus data yang diplih',
 								buttons: Ext.MessageBox.OK,
 								animEl: 'save',
 								icon: Ext.MessageBox.WARNING
@@ -207,7 +207,7 @@ Ext.onReady(function(){
 					var result=response.responseText;
 					Ext.MessageBox.show({
 					   title: 'Error',
-					   msg: 'Could not connect to the database. retry later.',
+					   msg: 'Tidak bisa terhubung dengan database server',
 					   buttons: Ext.MessageBox.OK,
 					   animEl: 'database',
 					   icon: Ext.MessageBox.ERROR
@@ -292,7 +292,7 @@ Ext.onReady(function(){
 			readOnly: true
 		},
 		{
-			header: '<div align="center">' + 'No Customer' + '</div>',
+			header: '<div align="center">' + 'No Member' + '</div>',
 			dataIndex: 'voucher_cust',
 			width: 150,
 			sortable: true,
@@ -314,7 +314,7 @@ Ext.onReady(function(){
 	voucherListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'voucherListEditorGrid',
 		el: 'fp_voucher',
-		title: 'Daftar Voucher Penukaran Poin',
+		title: 'Daftar History Penukaran Poin',
 		autoHeight: true,
 		store: voucher_DataStore, // DataStore
 		cm: voucher_ColumnModel, // Nama-nama Columns
@@ -331,14 +331,16 @@ Ext.onReady(function(){
 		}),
 		/* Add Control on ToolBar */
 		tbar: [
+		<?php if(eregi('D',$this->m_security->get_access_group_by_kode('MENU_POIN'))){ ?>
 		{
 			text: 'Delete',
 			tooltip: 'Delete selected record',
-			disabled: true,
 			iconCls:'icon-delete',
 			handler: voucher_confirm_delete   // Confirm before deleting
-		}, '-', {
-			text: 'Search',
+		}, '-', 
+		<?php } ?>
+		{
+			text: 'Adv Search',
 			tooltip: 'Advanced Search',
 			iconCls:'icon-search',
 			handler: display_form_search_window 
@@ -372,6 +374,7 @@ Ext.onReady(function(){
 	voucher_ContextMenu = new Ext.menu.Menu({
 		id: 'voucher_ListEditorGridContextMenu',
 		items: [
+		<?php if(eregi('D',$this->m_security->get_access_group_by_kode('MENU_POIN'))){ ?>
 		{ 
 			text: 'Delete', 
 			tooltip: 'Delete selected record', 
@@ -379,6 +382,7 @@ Ext.onReady(function(){
 			disabled: true,
 			handler: voucher_confirm_delete 
 		},
+		<?php } ?>
 		'-',
 		{ 
 			text: 'Print',
@@ -473,7 +477,7 @@ Ext.onReady(function(){
 	
 	voucher_custSearchField= new Ext.form.TextField({
 		id: 'voucher_custSearchField',
-		fieldLabel: 'No Customer',
+		fieldLabel: 'No Member',
 		maxLength: 50,
 		anchor: '95%'
 	
@@ -491,11 +495,11 @@ Ext.onReady(function(){
 	/* Identify  voucher_point Search Field */
 	voucher_pointSearchField= new Ext.form.NumberField({
 		id: 'voucher_pointSearchField',
-		fieldLabel: 'Point',
+		fieldLabel: 'Poin',
 		allowNegatife : false,
 		blankText: '0',
 		allowDecimals: false,
-		anchor: '95%',
+		anchor: '50%',
 		maskRe: /([0-9]+)$/
 	
 	});
@@ -542,7 +546,7 @@ Ext.onReady(function(){
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
 	voucher_searchWindow = new Ext.Window({
-		title: 'Pencarian Voucher Point',
+		title: 'Pencarian History Penukaran Poin',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,
@@ -604,12 +608,12 @@ Ext.onReady(function(){
 		  	switch(result){
 		  	case 1:
 				win = window.open('./print/print_voucherlist.html','voucherlist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
-				win.print();
+				
 				break;
 		  	default:
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Unable to print the grid!',
+					msg: 'Tidak bisa mencetak data!',
 					buttons: Ext.MessageBox.OK,
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING
@@ -621,7 +625,7 @@ Ext.onReady(function(){
 		  	var result=response.responseText;
 			Ext.MessageBox.show({
 			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
+			   msg: 'Tidak bisa terhubung dengan database server',
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR
@@ -673,7 +677,7 @@ Ext.onReady(function(){
 		  	default:
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Unable to convert excel the grid!',
+					msg: 'Tidak bisa meng-export data ke dalam format excel!',
 					buttons: Ext.MessageBox.OK,
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING
@@ -685,7 +689,7 @@ Ext.onReady(function(){
 		  	var result=response.responseText;
 			Ext.MessageBox.show({
 			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
+			   msg: 'Tidak bisa terhubung dengan database server',
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR

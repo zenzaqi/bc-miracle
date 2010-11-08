@@ -131,11 +131,11 @@ Ext.onReady(function(){
 			failure: function(response){
 				var result=response.responseText;
 				Ext.MessageBox.show({
-							   title: 'Error',
-							   msg: 'Could not connect to the database. retry later.',
-							   buttons: Ext.MessageBox.OK,
-							   animEl: 'database',
-							   icon: Ext.MessageBox.ERROR
+				   title: 'Error',
+				   msg: 'Tidak bisa terhubung dengan database server',
+				   buttons: Ext.MessageBox.OK,
+				   animEl: 'database',
+				   icon: Ext.MessageBox.ERROR
 				});	
 			}									    
 		});   
@@ -197,7 +197,7 @@ Ext.onReady(function(){
 					var result=response.responseText;
 					Ext.MessageBox.show({
 								   title: 'Error',
-								   msg: 'Could not connect to the database. retry later.',
+								   msg: 'Tidak bisa terhubung dengan database server',
 								   buttons: Ext.MessageBox.OK,
 								   animEl: 'database',
 								   icon: Ext.MessageBox.ERROR
@@ -207,7 +207,7 @@ Ext.onReady(function(){
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				//msg: 'Your Form is not valid!.',
+				//msg: 'Isian belum sempurna!.',
 				msg: 'Form anda belum lengkap',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
@@ -237,7 +237,7 @@ Ext.onReady(function(){
 		user_groupsField.reset();
 		user_groupsField.setValue(null);
 		user_aktifField.reset();
-		user_aktifField.setValue(null);
+		user_aktifField.setValue('Aktif');
 	}
  	/* End of Function */
   
@@ -261,9 +261,11 @@ Ext.onReady(function(){
   	/* Function for Displaying  create Window Form */
 	function display_form_window(){
 		if(!users_createWindow.isVisible()){
-			users_reset_form();
+			
 			post2db='CREATE';
 			msg='created';
+			users_reset_form();
+			
 			users_createWindow.show();
 		} else {
 			users_createWindow.toFront();
@@ -275,16 +277,16 @@ Ext.onReady(function(){
 	function users_confirm_delete(){
 		// only one users is selected here
 		if(usersListEditorGrid.selModel.getCount() == 1){
-//			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', users_delete);
-			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', users_delete);
+			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data berikut?', users_delete);
+			//Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', users_delete);
 		} else if(usersListEditorGrid.selModel.getCount() > 1){
-//			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', users_delete);
-			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', users_delete);
+			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data-data berikut?', users_delete);
+			//Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', users_delete);
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				//msg: 'You can\'t really delete something you haven\'t selected?',
-				msg: 'Anda belum memilih data yang akan dihapus',
+				msg: 'Tidak ada yang dipilih untuk dihapus',
+				//msg: 'Anda belum memilih data yang akan dihapus',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -297,15 +299,17 @@ Ext.onReady(function(){
 	function users_confirm_update(){
 		/* only one record is selected here */
 		if(usersListEditorGrid.selModel.getCount() == 1) {
-			users_set_form();
+			
 			post2db='UPDATE';
 			msg='updated';
+			users_set_form();
+			
 			users_createWindow.show();
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				//msg: 'You can\'t really update something you haven\'t selected?',
-				msg: 'Anda belum memilih data yang akan diubah',
+				msg: 'Tidak ada data yang dipilih untuk diedit',
+				//msg: 'Anda belum memilih data yang akan diubah',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -336,7 +340,7 @@ Ext.onReady(function(){
 						default:
 							Ext.MessageBox.show({
 								title: 'Warning',
-								msg: 'Could not delete the entire selection',
+								msg: 'Tidak bisa menghapus data yang diplih',
 								buttons: Ext.MessageBox.OK,
 								animEl: 'save',
 								icon: Ext.MessageBox.WARNING
@@ -348,7 +352,7 @@ Ext.onReady(function(){
 					var result=response.responseText;
 					Ext.MessageBox.show({
 					   title: 'Error',
-					   msg: 'Could not connect to the database. retry later.',
+					   msg: 'Tidak bisa terhubung dengan database server',
 					   buttons: Ext.MessageBox.OK,
 					   animEl: 'database',
 					   icon: Ext.MessageBox.ERROR
@@ -372,7 +376,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'user_id'
 		},[
-		/* dataIndex => insert intousers_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'user_id', type: 'int', mapping: 'user_id'},
 			{name: 'user_name', type: 'string', mapping: 'user_name'},
 			{name: 'user_passwd', type: 'string', mapping: 'user_passwd'},
@@ -396,7 +399,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'karyawan_id'
 		},[
-		/* dataIndex => insert intocustomer_note_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'karyawan_id', type: 'int', mapping: 'karyawan_id'},
 			{name: 'karyawan_no', type: 'string', mapping: 'karyawan_no'},
 			{name: 'karyawan_nama', type: 'string', mapping: 'karyawan_nama'}
@@ -416,7 +418,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'karyawan_id'
 		},[
-		/* dataIndex => insert intocustomer_note_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'karyawan_id', type: 'int', mapping: 'karyawan_id'},
 			{name: 'karyawan_no', type: 'string', mapping: 'karyawan_no'},
 			{name: 'karyawan_nama', type: 'string', mapping: 'karyawan_nama'}
@@ -443,7 +444,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'group_id'
 		},[
-		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
 			{name: 'user_group_value', type: 'int', mapping: 'group_id'},
 			{name: 'user_group_display', type: 'string', mapping: 'group_name'}
 		]),
@@ -481,7 +481,9 @@ Ext.onReady(function(){
 			header: '<div align="center">' + 'Group' + '</div>',
 			dataIndex: 'user_groups',
 			width: 200,	//150,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_USER'))){ ?>
+			,
 			editor: new Ext.form.ComboBox({
 				fieldLabel: 'Group',
 				typeAhead: true,
@@ -495,12 +497,15 @@ Ext.onReady(function(){
 				width: 120,
 				listClass: 'x-combo-list-small'
 			})
+			<?php } ?>
 		},
 		{
 			header: '<div align="center">' + 'Status' + '</div>',
 			dataIndex: 'user_aktif',
 			width: 80,	//150,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_USER'))){ ?>
+			,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
 				triggerAction: 'all',
@@ -515,6 +520,7 @@ Ext.onReady(function(){
                	lazyRender:true,
                	listClass: 'x-combo-list-small'
             })
+			<?php } ?>
 		}]
 	);
 	users_ColumnModel.defaultSortable= true;
@@ -539,26 +545,33 @@ Ext.onReady(function(){
 			store: users_DataStore,
 			displayInfo: true
 		}),
-		/* Add Control on ToolBar */
 		tbar: [
+		<?php if(eregi('C',$this->m_security->get_access_group_by_kode('MENU_USER'))){ ?>
 		{
 			text: 'Add',
 			tooltip: 'Add new record',
 			iconCls:'icon-adds',    				// this is defined in our styles.css
 			handler: display_form_window
-		}, '-',{
+		}, '-',
+		<?php } ?>
+		<?php if(eregi('U|R',$this->m_security->get_access_group_by_kode('MENU_USER'))){ ?>
+		{
 			text: 'Edit',
 			tooltip: 'Edit selected record',
 			iconCls:'icon-update',
 			handler: users_confirm_update   // Confirm before updating
-		}, '-',{
+		}, '-',
+		<?php } ?>
+		<?php if(eregi('D',$this->m_security->get_access_group_by_kode('MENU_USER'))){ ?>
+		{
 			text: 'Delete',
 			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
-			disabled: true,
 			handler: users_confirm_delete   // Confirm before deleting
-		}, '-', {
-			text: 'Search',
+		}, '-', 
+		<?php } ?>
+		{
+			text: 'Adv Search',
 			tooltip: 'Advanced Search',
 			iconCls:'icon-search',
 			handler: display_form_search_window 
@@ -592,18 +605,21 @@ Ext.onReady(function(){
 	users_ContextMenu = new Ext.menu.Menu({
 		id: 'users_ListEditorGridContextMenu',
 		items: [
+		<?php if(eregi('U|R',$this->m_security->get_access_group_by_kode('MENU_USER'))){ ?>
 		{ 
 			text: 'Edit', tooltip: 'Edit selected record', 
 			iconCls:'icon-update',
 			handler: users_confirm_update 
 		},
+		<?php } ?>
+		<?php if(eregi('D',$this->m_security->get_access_group_by_kode('MENU_USER'))){ ?>
 		{ 
 			text: 'Delete', 
 			tooltip: 'Delete selected record', 
 			iconCls:'icon-delete',
-			disabled: true,
 			handler: users_confirm_delete 
 		},
+		<?php } ?>
 		'-',
 		{ 
 			text: 'Print',
@@ -740,11 +756,15 @@ Ext.onReady(function(){
 			]
 		}]
 		,
-		buttons: [{
+		buttons: [
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_USER'))){ ?>
+			{
 				text: 'Save and Close',
 				handler: users_create
 			}
-			,{
+			,
+			<?php } ?>
+			{
 				text: 'Cancel',
 				handler: function(){
 					users_createWindow.hide();
@@ -757,7 +777,7 @@ Ext.onReady(function(){
 	/* Function for retrieve create Window Form */
 	users_createWindow= new Ext.Window({
 		id: 'users_createWindow',
-		title: post2db+'Users',
+		title: post2db+' User',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,
@@ -808,8 +828,7 @@ Ext.onReady(function(){
 	/* Function for reset search result */
 	function users_reset_search(){
 		// reset the store parameters
-		users_DataStore.baseParams = { task: 'LIST' };
-		// Cause the datastore to do another query : 
+		users_DataStore.baseParams = { task: 'LIST', start: 0, limit: pageS };
 		users_DataStore.reload({params: {start: 0, limit: pageS}});
 		users_searchWindow.close();
 	};
@@ -830,7 +849,7 @@ Ext.onReady(function(){
 	/* Identify  user_name Search Field */
 	user_nameSearchField= new Ext.form.TextField({
 		id: 'user_nameSearchField',
-		fieldLabel: 'User Name',
+		fieldLabel: 'Username',
 		maxLength: 50,
 		anchor: '95%'
 	
@@ -978,8 +997,7 @@ Ext.onReady(function(){
 		url: 'index.php?c=c_users&m=get_action',
 		params: {
 			task: "PRINT",
-		  	query: searchquery,                    		// if we are doing a quicksearch, use this
-			//if we are doing advanced search, use this
+		  	query: searchquery,                    		
 			user_name : user_name_print,
 			user_karyawan : user_karyawan_print,
 		  	user_log : user_log_print_date, 
@@ -992,12 +1010,11 @@ Ext.onReady(function(){
 		  	switch(result){
 		  	case 1:
 				win = window.open('./userslist.html','userslist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
-				win.print();
 				break;
 		  	default:
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Unable to print the grid!',
+					msg: 'Tidak bisa mencetak data!',
 					buttons: Ext.MessageBox.OK,
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING
@@ -1009,7 +1026,7 @@ Ext.onReady(function(){
 		  	var result=response.responseText;
 			Ext.MessageBox.show({
 			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
+			   msg: 'Tidak bisa terhubung dengan database server',
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR
@@ -1041,8 +1058,7 @@ Ext.onReady(function(){
 		url: 'index.php?c=c_users&m=get_action',
 		params: {
 			task: "EXCEL",
-		  	query: searchquery,                    		// if we are doing a quicksearch, use this
-			//if we are doing advanced search, use this
+		  	query: searchquery,                    		
 			user_name : user_name_2excel,
 			user_karyawan : user_karyawan_2excel,
 		  	user_log : user_log_2excel_date, 
@@ -1059,7 +1075,7 @@ Ext.onReady(function(){
 		  	default:
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Unable to convert excel the grid!',
+					msg: 'Tidak bisa meng-export data ke dalam format excel!',
 					buttons: Ext.MessageBox.OK,
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING
@@ -1071,7 +1087,7 @@ Ext.onReady(function(){
 		  	var result=response.responseText;
 			Ext.MessageBox.show({
 			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
+			   msg: 'Tidak bisa terhubung dengan database server',
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR

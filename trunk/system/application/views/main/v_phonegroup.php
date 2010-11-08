@@ -113,7 +113,7 @@ Ext.onReady(function(){
 				var result=response.responseText;
 				Ext.MessageBox.show({
 				   title: 'Error',
-				   msg: 'Could not connect to the database. retry later.',
+				   msg: 'Tidak bisa terhubung dengan database server',
 				   buttons: Ext.MessageBox.OK,
 				   animEl: 'database',
 				   icon: Ext.MessageBox.ERROR
@@ -149,14 +149,14 @@ Ext.onReady(function(){
 					var result=eval(response.responseText);
 					switch(result){
 						case 1:
-							Ext.MessageBox.alert(post2db+' OK','The Phonegroup was '+post2db+' successfully.');
+							Ext.MessageBox.alert(post2db+' OK','Data Phonegroup berhasil disimpan ');
 							phonegroup_DataStore.reload();
 							phonegroup_saveWindow.hide();
 							break;
 						default:
 							Ext.MessageBox.show({
 							   title: 'Warning',
-							   msg: 'We could\'t not '+msg+' the Phonegroup.',
+							   msg: 'Data Phonegroup tidak bisa disimpan ',
 							   buttons: Ext.MessageBox.OK,
 							   animEl: 'save',
 							   icon: Ext.MessageBox.WARNING
@@ -168,7 +168,7 @@ Ext.onReady(function(){
 					var result=response.responseText;
 					Ext.MessageBox.show({
 						   title: 'Error',
-						   msg: 'Could not connect to the database. retry later.',
+						   msg: 'Tidak bisa terhubung dengan database server',
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'database',
 						   icon: Ext.MessageBox.ERROR
@@ -179,7 +179,7 @@ Ext.onReady(function(){
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'Your Form is not valid!.',
+				msg: 'Isian belum sempurna!.',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -222,9 +222,11 @@ Ext.onReady(function(){
   	/* Function for Displaying  create Window Form */
 	function display_form_window(){
 		if(!phonegroup_saveWindow.isVisible()){
-			phonegroup_reset_form();
+			
 			post2db='CREATE';
 			msg='created';
+			phonegroup_reset_form();
+			
 			phonegroup_saveWindow.show();
 		} else {
 			phonegroup_saveWindow.toFront();
@@ -236,13 +238,13 @@ Ext.onReady(function(){
 	function phonegroup_confirm_delete(){
 		// only one phonegroup is selected here
 		if(phonegroupListEditorGrid.selModel.getCount() == 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', phonegroup_delete);
+			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data berikut?', phonegroup_delete);
 		} else if(phonegroupListEditorGrid.selModel.getCount() > 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', phonegroup_delete);
+			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data-data berikut?', phonegroup_delete);
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really delete something you haven\'t selected?',
+				msg: 'Tidak ada yang dipilih untuk dihapus',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -255,14 +257,16 @@ Ext.onReady(function(){
 	function phonegroup_confirm_update(){
 		/* only one record is selected here */
 		if(phonegroupListEditorGrid.selModel.getCount() == 1) {
-			phonegroup_set_form();
+			
 			post2db='UPDATE';
 			msg='updated';
+			phonegroup_set_form();
+			
 			phonegroup_saveWindow.show();
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really update something you haven\'t selected?',
+				msg: 'Tidak ada data yang dipilih untuk diedit',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -293,7 +297,7 @@ Ext.onReady(function(){
 						default:
 							Ext.MessageBox.show({
 								title: 'Warning',
-								msg: 'Could not delete the entire selection',
+								msg: 'Tidak bisa menghapus data yang diplih',
 								buttons: Ext.MessageBox.OK,
 								animEl: 'save',
 								icon: Ext.MessageBox.WARNING
@@ -305,7 +309,7 @@ Ext.onReady(function(){
 					var result=response.responseText;
 					Ext.MessageBox.show({
 					   title: 'Error',
-					   msg: 'Could not connect to the database. retry later.',
+					   msg: 'Tidak bisa terhubung dengan database server',
 					   buttons: Ext.MessageBox.OK,
 					   animEl: 'database',
 					   icon: Ext.MessageBox.ERROR
@@ -359,19 +363,25 @@ Ext.onReady(function(){
 			header: 'Nama Group',
 			dataIndex: 'phonegroup_nama',
 			width: 100,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PHONEGROUP'))){ ?>
+			,
 			editor: new Ext.form.TextField({
 				maxLength: 250
           	})
+			<?php } ?>
 		}, 
 		{
 			header: 'Keterangan',
 			dataIndex: 'phonegroup_detail',
 			width: 300,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PHONEGROUP'))){ ?>
+			,
 			editor: new Ext.form.TextField({
 				maxLength: 500
           	})
+			<?php } ?>
 		}, 
 		{
 			header: 'Creator',
@@ -438,24 +448,33 @@ Ext.onReady(function(){
 		}),
 		/* Add Control on ToolBar */
 		tbar: [
+		<?php if(eregi('C',$this->m_security->get_access_group_by_kode('MENU_PHONEGROUP'))){ ?>
 		{
 			text: 'Add',
 			tooltip: 'Add new record',
 			iconCls:'icon-adds',    				// this is defined in our styles.css
 			handler: display_form_window
-		}, '-',{
+		}, '-',
+		<?php }?>
+		<?php if(eregi('U|R',$this->m_security->get_access_group_by_kode('MENU_PHONEGROUP'))){ ?>
+		{
 			text: 'Edit',
 			tooltip: 'Edit selected record',
 			iconCls:'icon-update',
 			handler: phonegroup_confirm_update   // Confirm before updating
-		}, '-',{
+		}, '-',
+		<?php } ?>
+		<?php if(eregi('D',$this->m_security->get_access_group_by_kode('MENU_PHONEGROUP'))){ ?>
+		{
 			text: 'Delete',
 			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
 			disabled: true,
 			handler: phonegroup_confirm_delete   // Confirm before deleting
-		}, '-', {
-			text: 'Search',
+		}, '-', 
+		<?php } ?>
+		{
+			text: 'Adv Search',
 			tooltip: 'Advanced Search',
 			iconCls:'icon-search',
 			handler: display_form_search_window 
@@ -489,11 +508,14 @@ Ext.onReady(function(){
 	phonegroup_ContextMenu = new Ext.menu.Menu({
 		id: 'phonegroup_ListEditorGridContextMenu',
 		items: [
+		<?php if(eregi('U|R',$this->m_security->get_access_group_by_kode('MENU_PHONEGROUP'))){ ?>
 		{ 
 			text: 'Edit', tooltip: 'Edit selected record', 
 			iconCls:'icon-update',
 			handler: phonegroup_editContextMenu 
 		},
+		<?php } ?>
+		<?php if(eregi('D',$this->m_security->get_access_group_by_kode('MENU_PHONEGROUP'))){ ?>
 		{ 
 			text: 'Delete', 
 			tooltip: 'Delete selected record', 
@@ -501,6 +523,7 @@ Ext.onReady(function(){
 			disabled: true,
 			handler: phonegroup_confirm_delete 
 		},
+		<?php } ?>
 		'-',
 		{ 
 			text: 'Print',
@@ -933,8 +956,8 @@ Ext.onReady(function(){
 		pgcust_priority_SearchField.reset();
 		pgcust_unit_SearchField.reset();
 		pgcust_aktif_SearchField.reset();
-		phonenumber_DataStore.reset();
-		phonegrouped_DataStore.reset();
+		phonenumber_DataStore.removeAll();
+		phonegrouped_DataStore.removeAll();
 	}
 	
 	function phonegroup_cust_list_search(){
@@ -1030,7 +1053,7 @@ Ext.onReady(function(){
 	
 	/* Function for retrieve search Window Form, used for andvaced search */
 	var phonegroup_cust_searchWindow = new Ext.Window({
-		title: 'Customer Search',
+		title: 'Pencarian Customer',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,
@@ -1089,8 +1112,8 @@ Ext.onReady(function(){
 								store: phonenumber_DataStore,
 								displayInfo: false
 							}),{
-								text: 'Search',
-								tooltip: 'Advanced Search',
+								text: 'Adv Search',
+								tooltip: 'Advanced Search u/ Customer',
 								iconCls:'icon-search',
 								handler: display_cust_phonegroup_form_search_window
 							}
@@ -1122,11 +1145,15 @@ Ext.onReady(function(){
 					]
 			}
 			],
-		buttons: [{
+		buttons: [
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_PHONEGROUP'))){ ?>
+			{
 				text: 'Save and Close',
 				handler: phonegroup_save
 			}
-			,{
+			,
+			<?php } ?>
+			{
 				text: 'Cancel',
 				handler: function(){
 					phonegroup_saveWindow.hide();
@@ -1170,7 +1197,7 @@ Ext.onReady(function(){
 			//variable here
 			phonegroup_id	:	phonegroup_id_search, 
 			phonegroup_nama	:	phonegroup_nama_search, 
-			phonegroup_detail	:	phonegroup_detail_search, 
+			phonegroup_detail	:	phonegroup_detail_search
 		};
 		// Cause the datastore to do another query : 
 		phonegroup_DataStore.reload({params: {start: 0, limit: pageS}});
@@ -1179,7 +1206,7 @@ Ext.onReady(function(){
 	/* Function for reset search result */
 	function phonegroup_reset_search(){
 		// reset the store parameters
-		phonegroup_DataStore.baseParams = { task: 'LIST' };
+		phonegroup_DataStore.baseParams = { task: 'LIST', start: 0, limit: pageS };
 		// Cause the datastore to do another query : 
 		phonegroup_DataStore.reload({params: {start: 0, limit: pageS}});
 		phonegroup_searchWindow.close();
@@ -1201,7 +1228,7 @@ Ext.onReady(function(){
 	/* Identify  phonegroup_nama Search Field */
 	phonegroup_namaSearchField= new Ext.form.TextField({
 		id: 'phonegroup_namaSearchField',
-		fieldLabel: 'Nama Grup',
+		fieldLabel: 'Nama',
 		maxLength: 250,
 		anchor: '95%'
 	
@@ -1249,7 +1276,7 @@ Ext.onReady(function(){
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
 	phonegroup_searchWindow = new Ext.Window({
-		title: 'Phonegroup Search',
+		title: 'Pencarian Phonegroup',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,
@@ -1290,8 +1317,7 @@ Ext.onReady(function(){
 		url: 'index.php?c=c_phonegroup&m=get_action',
 		params: {
 			task: "PRINT",
-		  	query: searchquery,                    		// if we are doing a quicksearch, use this
-			//if we are doing advanced search, use this
+		  	query: searchquery,                    		
 			phonegroup_nama : phonegroup_nama_print,
 			phonegroup_detail : phonegroup_detail_print,
 		  	currentlisting: phonegroup_DataStore.baseParams.task // this tells us if we are searching or not
@@ -1301,12 +1327,12 @@ Ext.onReady(function(){
 		  	switch(result){
 		  	case 1:
 				win = window.open('./print/phonegroup_printlist.html','phonegrouplist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
-				win.print();
+				
 				break;
 		  	default:
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Unable to print the grid!',
+					msg: 'Tidak bisa mencetak data!',
 					buttons: Ext.MessageBox.OK,
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING
@@ -1318,7 +1344,7 @@ Ext.onReady(function(){
 		  	var result=response.responseText;
 			Ext.MessageBox.show({
 			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
+			   msg: 'Tidak bisa terhubung dengan database server',
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR
@@ -1344,8 +1370,7 @@ Ext.onReady(function(){
 		url: 'index.php?c=c_phonegroup&m=get_action',
 		params: {
 			task: "EXCEL",
-		  	query: searchquery,                    		// if we are doing a quicksearch, use this
-			//if we are doing advanced search, use this
+		  	query: searchquery,                    		
 			phonegroup_nama : phonegroup_nama_2excel,
 			phonegroup_detail : phonegroup_detail_2excel,
 		  	currentlisting: phonegroup_DataStore.baseParams.task // this tells us if we are searching or not
@@ -1359,7 +1384,7 @@ Ext.onReady(function(){
 		  	default:
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Unable to convert excel the grid!',
+					msg: 'Tidak bisa meng-export data ke dalam format excel!',
 					buttons: Ext.MessageBox.OK,
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING
@@ -1371,7 +1396,7 @@ Ext.onReady(function(){
 		  	var result=response.responseText;
 			Ext.MessageBox.show({
 			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
+			   msg: 'Tidak bisa terhubung dengan database server',
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR

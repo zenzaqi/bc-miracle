@@ -280,7 +280,7 @@ Ext.onReady(function(){
 					var result=response.responseText;
 					Ext.MessageBox.show({
 					   title: 'Error',
-					   msg: 'Could not connect to the database. retry later.',
+					   msg: 'Tidak bisa terhubung dengan database server',
 					   buttons: Ext.MessageBox.OK,
 					   animEl: 'database',
 					   icon: Ext.MessageBox.ERROR
@@ -482,7 +482,7 @@ Ext.onReady(function(){
 								var result=response.responseText;
 								Ext.MessageBox.show({
 									   title: 'Error',
-									   msg: 'Could not connect to the database. retry later.',
+									   msg: 'Tidak bisa terhubung dengan database server',
 									   buttons: Ext.MessageBox.OK,
 									   animEl: 'database',
 									   icon: Ext.MessageBox.ERROR
@@ -496,7 +496,7 @@ Ext.onReady(function(){
 						tindakan_nonmedis_createWindow.setDisabled(false);
 						Ext.MessageBox.show({
 							title: 'Warning',
-							msg: 'Your Form is not valid!.',
+							msg: 'Isian belum sempurna!.',
 							buttons: Ext.MessageBox.OK,
 							animEl: 'save',
 							icon: Ext.MessageBox.WARNING
@@ -541,16 +541,18 @@ Ext.onReady(function(){
   
 	/* Function for Check if the form is valid */
 	function is_tindakan_nonmedis_form_valid(){
-		return (true &&  trawat_nonmedis_custField.isValid() && true &&  true &&  true &&  true &&  true &&  true &&  true &&  true  );
+		return (trawat_nonmedis_custField.isValid() );
 	}
   	/* End of Function */
   
   	/* Function for Displaying  create Window Form */
 	function display_form_window(){
 		if(!tindakan_nonmedis_createWindow.isVisible()){
-			tindakan_nonmedis_reset_form();
+			
 			tnonmedis_post2db='CREATE';
 			msg='created';
+			tindakan_nonmedis_reset_form();
+			
 			tindakan_nonmedis_createWindow.show();
 		} else {
 			tindakan_nonmedis_createWindow.toFront();
@@ -562,13 +564,13 @@ Ext.onReady(function(){
 	function tindakan_nonmedis_confirm_delete(){
 		// only one tindakan_nonmedis is selected here
 		if(tindakan_nonmedisListEditorGrid.selModel.getCount() == 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', tindakan_nonmedis_delete);
+			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data berikut?', tindakan_nonmedis_delete);
 		} else if(tindakan_nonmedisListEditorGrid.selModel.getCount() > 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', tindakan_nonmedis_delete);
+			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data-data berikut?', tindakan_nonmedis_delete);
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really delete something you haven\'t selected?',
+				msg: 'Tidak ada yang dipilih untuk dihapus',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -593,14 +595,15 @@ Ext.onReady(function(){
 				}
 			});
 			//cbo_dtrawat_perawatan_nonmedisDataStore.load();
-			tindakan_nonmedis_set_form();
+			
 			tnonmedis_post2db='UPDATE';
 			msg='updated';
+			tindakan_nonmedis_set_form();
 			tindakan_nonmedis_createWindow.show();
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really update something you haven\'t selected?',
+				msg: 'Tidak ada data yang dipilih untuk diedit',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -631,7 +634,7 @@ Ext.onReady(function(){
 						default:
 							Ext.MessageBox.show({
 								title: 'Warning',
-								msg: 'Could not delete the entire selection',
+								msg: 'Tidak bisa menghapus data yang diplih',
 								buttons: Ext.MessageBox.OK,
 								animEl: 'save',
 								icon: Ext.MessageBox.WARNING
@@ -643,7 +646,7 @@ Ext.onReady(function(){
 					var result=response.responseText;
 					Ext.MessageBox.show({
 					   title: 'Error',
-					   msg: 'Could not connect to the database. retry later.',
+					   msg: 'Tidak bisa terhubung dengan database server',
 					   buttons: Ext.MessageBox.OK,
 					   animEl: 'database',
 					   icon: Ext.MessageBox.ERROR
@@ -675,7 +678,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'dtrawat_id'
 		},[
-		/* dataIndex => insert intotindakan_nonmedis_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'trawat_id', type: 'int', mapping: 'trawat_id'}, 
 			{name: 'trawat_cust_id', type: 'int', mapping: 'trawat_cust'}, 
 			{name: 'trawat_cust', type: 'string', mapping: 'cust_nama'}, 
@@ -725,7 +727,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'cust_id'
 		},[
-		/* dataIndex => insert intocustomer_note_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'cust_id', type: 'int', mapping: 'cust_id'},
 			{name: 'cust_no', type: 'string', mapping: 'cust_no'},
 			{name: 'cust_nama', type: 'string', mapping: 'cust_nama'},
@@ -798,7 +799,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'karyawan_id'
 		},[
-		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
 			{name: 'karyawan_display', type: 'string', mapping: 'karyawan_nama'},
 			{name: 'karyawan_username', type: 'string', mapping: 'karyawan_username'},
 			{name: 'karyawan_value', type: 'int', mapping: 'karyawan_id'},
@@ -832,20 +832,15 @@ Ext.onReady(function(){
 			width: 185,	//210,
 			sortable: true,
 			editable:false,
-			editor: new Ext.form.NumberField({
-				allowBlank: false,
-				allowDecimals: false,
-				allowNegative: false,
-				blankText: '0',
-				maxLength: 11,
-				maskRe: /([0-9]+)$/
-			})
+			readOnly: true
 		}, 
 		{
 			header: '<div align="center">' + 'Perawatan' + '</div>',
 			dataIndex: 'dtrawat_perawatan',
 			width: 185,	//210,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_NONMEDIS'))){ ?>
+			,
 			editor: new Ext.form.ComboBox({
 				store: trawat_nonmedis_perawatanDataStore,
 				mode: 'remote',
@@ -855,6 +850,7 @@ Ext.onReady(function(){
 				triggerAction: 'all',
 				anchor: '95%'
 			})
+			<?php } ?>
 		}, 
 		{
 			xtype: 'booleancolumn',
@@ -863,16 +859,21 @@ Ext.onReady(function(){
 			width: 60,	//65,
 			align: 'center',
 			trueText: 'Yes',
-			falseText: 'No',
+			falseText: 'No'
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_NONMEDIS'))){ ?>
+			,
 			editor: {
                 xtype: 'checkbox'
             }
+			<?php } ?>
 		},
 		{
 			header: '<div align="center">' + 'Therapist' + '</div>',
 			dataIndex: 'dtrawat_petugas2',
 			width: 80,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_NONMEDIS'))){ ?>
+			,
 			editor: new Ext.form.ComboBox({
 				store: dtrawat_karyawanDataStore,
 				mode: 'remote',
@@ -886,6 +887,7 @@ Ext.onReady(function(){
 				anchor: '95%'
 				
 			})
+			<?php } ?>
 		}, 
 		{
 			header: '<div align="center">' + 'Jam App' + '</div>',
@@ -898,6 +900,9 @@ Ext.onReady(function(){
 			dataIndex: 'dtrawat_status',
 			width: 60,
 			sortable: true,
+            renderer: ch_status
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_NONMEDIS'))){ ?>
+			,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
 				triggerAction: 'all',
@@ -911,17 +916,20 @@ Ext.onReady(function(){
                	valueField: 'dtrawat_status_value',
                	lazyRender:true,
                	listClass: 'x-combo-list-small'
-            }),
-            renderer: ch_status
+            })
+			<?php } ?>
 		}, 
 		{
 			header: '<div align="center">' + 'Detail Keterangan' + '</div>',
 			dataIndex: 'dtrawat_keterangan',
 			width: 185,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_NONMEDIS'))){ ?>
+			,
 			editor: new Ext.form.TextField({
 				maxLength: 250
           	})
+			<?php } ?>
 		}, 
 		{
 			header: 'Tgl App',
@@ -953,28 +961,28 @@ Ext.onReady(function(){
 			readOnly: true,
 		}, 
 		{
-			header: 'Date Create',
+			header: 'Create on',
 			dataIndex: 'trawat_date_create',
 			width: 150,
 			sortable: true,
 			hidden: true,
-			readOnly: true,
+			readOnly: true
 		}, 
 		{
-			header: 'Update',
+			header: 'Last Update by',
 			dataIndex: 'trawat_update',
 			width: 150,
 			sortable: true,
 			hidden: true,
-			readOnly: true,
+			readOnly: true
 		}, 
 		{
-			header: 'Date Update',
+			header: 'Last Update on',
 			dataIndex: 'trawat_date_update',
 			width: 150,
 			sortable: true,
 			hidden: true,
-			readOnly: true,
+			readOnly: true
 		}, 
 		{
 			header: 'Revised',
@@ -982,7 +990,7 @@ Ext.onReady(function(){
 			width: 150,
 			sortable: true,
 			hidden: true,
-			readOnly: true,
+			readOnly: true
 		}	]);
 	
 	tindakan_nonmedis_ColumnModel.defaultSortable= true;
@@ -1019,26 +1027,16 @@ Ext.onReady(function(){
 			store: tindakan_nonmedis_DataStore,
 			displayInfo: true
 		}),
-		/* Add Control on ToolBar */
 		tbar: [
+		<?php if(eregi('U|R',$this->m_security->get_access_group_by_kode('MENU_NONMEDIS'))){ ?>
 		{
-			text: 'Add',
-			tooltip: 'Add new record',
-			iconCls:'icon-adds',    				// this is defined in our styles.css
-			disabled:true,
-			handler: display_form_window
-		}, '-',{
 			text: 'Edit',
 			tooltip: 'Edit selected record',
 			iconCls:'icon-update',
 			handler: tindakan_nonmedis_confirm_update   // Confirm before updating
-		}, '-',{
-			text: 'Delete',
-			tooltip: 'Delete selected record',
-			iconCls:'icon-delete',
-			disabled:true,
-			handler: tindakan_nonmedis_confirm_delete   // Confirm before deleting
-		}, '-', {
+		}, '-',
+		<?php } ?>
+		{
 			text: 'Adv Search',
 			tooltip: 'Advanced Search',
 			iconCls:'icon-search',
@@ -1093,18 +1091,13 @@ Ext.onReady(function(){
 	tindakan_nonmedisContextMenu = new Ext.menu.Menu({
 		id: 'tindakan_nonmedis_ListEditorGridContextMenu',
 		items: [
+		<?php if(eregi('U|R',$this->m_security->get_access_group_by_kode('MENU_NONMEDIS'))){ ?>
 		{ 
 			text: 'Edit', tooltip: 'Edit selected record', 
 			iconCls:'icon-update',
 			handler: tindakan_nonmedis_editContextMenu 
 		},
-		{ 
-			text: 'Delete', 
-			tooltip: 'Delete selected record', 
-			iconCls:'icon-delete',
-			disabled:true,
-			handler: tindakan_nonmedis_confirm_delete 
-		},
+		<?php } ?>
 		'-',
 		{ 
 			text: 'Print',
@@ -1216,9 +1209,6 @@ Ext.onReady(function(){
 			]
 	
 	});
-	
-		
-	/*Detail Declaration */
 		
 	// Function for json reader of detail
 	var tindakan_nonmedis_detail_reader=new Ext.data.JsonReader({
@@ -1306,7 +1296,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'karyawan_id'
 		},[
-		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
 			{name: 'dtrawat_karyawan_display', type: 'string', mapping: 'karyawan_nama'},
 			{name: 'dtrawat_karyawan_username', type: 'string', mapping: 'karyawan_username'},
 			{name: 'dtrawat_karyawan_value', type: 'int', mapping: 'karyawan_id'},
@@ -1468,8 +1457,8 @@ Ext.onReady(function(){
 			store: tindakan_nonmedis_detail_DataStore,
 			displayInfo: true
 		}),
-		/* Add Control on ToolBar */
 		tbar: [
+		<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_NONMEDIS'))){ ?>
 		{
 			text: 'Add',
 			tooltip: 'Add new detail record',
@@ -1481,7 +1470,9 @@ Ext.onReady(function(){
 			iconCls:'icon-delete',
 			disabled: true,
 			handler: tindakan_nonmedis_detail_confirm_delete
-		},'-',
+		},
+		<?php } ?>
+		'-',
 		'<span style="color:white;">Warning: <b>Pada form ini user tidak diperkenankan mengubah perawatan yang sudah selesai.</b></span>'
 		]
 	});
@@ -1620,7 +1611,7 @@ Ext.onReady(function(){
 							var result=response.responseText;
 							Ext.MessageBox.show({
 							   title: 'Error',
-							   msg: 'Could not connect to the database. retry later.',
+							   msg: 'Tidak bisa terhubung dengan database server',
 							   buttons: Ext.MessageBox.OK,
 							   animEl: 'database',
 							   icon: Ext.MessageBox.ERROR
@@ -1654,13 +1645,13 @@ Ext.onReady(function(){
 	function tindakan_nonmedis_detail_confirm_delete(){
 		// only one record is selected here
 		if(tindakan_nonmedis_detailListEditorGrid.selModel.getCount() == 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', tindakan_nonmedis_detail_delete);
+			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data berikut?', tindakan_nonmedis_detail_delete);
 		} else if(tindakan_nonmedis_detailListEditorGrid.selModel.getCount() > 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', tindakan_nonmedis_detail_delete);
+			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data-data berikut?', tindakan_nonmedis_detail_delete);
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really delete something you haven\'t selected?',
+				msg: 'Tidak ada yang dipilih untuk dihapus',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -1691,13 +1682,17 @@ Ext.onReady(function(){
 		width: 930,        
 		items: [tindakan_nonmedis_masterGroup,tindakan_nonmedis_detailListEditorGrid]
 		,
-		buttons: [{
+		buttons: [
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_NONMEDIS'))){ ?>
+			{
 				id: 'tnonmedis_saveClose',
 				text: 'Save and Close',
 				ref: '../saveCloseBtn',
 				handler: tindakan_nonmedis_create
 			}
-			,{
+			,
+			<?php } ?>
+			{
 				text: 'Cancel',
 				handler: function(){
 					tindakan_nonmedis_createWindow.hide();
@@ -1706,6 +1701,7 @@ Ext.onReady(function(){
 		]
 	});
 	/* End  of Function*/
+	<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_NONMEDIS'))){ ?>
 	Ext.getCmp('tnonmedis_saveClose').on('click', function(){
 		/*Ext.MessageBox.show({
            title: 'Please wait',
@@ -1718,6 +1714,7 @@ Ext.onReady(function(){
        });*/
 		tindakan_nonmedis_createWindow.setDisabled(true);
 	});
+	<?php } ?>
 	
 	/* Function for retrieve create Window Form */
 	tindakan_nonmedis_createWindow= new Ext.Window({
@@ -2030,7 +2027,7 @@ Ext.onReady(function(){
 		  	default:
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Unable to print the grid!',
+					msg: 'Tidak bisa mencetak data!',
 					buttons: Ext.MessageBox.OK,
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING
@@ -2042,7 +2039,7 @@ Ext.onReady(function(){
 		  	var result=response.responseText;
 			Ext.MessageBox.show({
 			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
+			   msg: 'Tidak bisa terhubung dengan database server',
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR
@@ -2095,7 +2092,7 @@ Ext.onReady(function(){
 		  	default:
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Unable to convert excel the grid!',
+					msg: 'Tidak bisa meng-export data ke dalam format excel!',
 					buttons: Ext.MessageBox.OK,
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING
@@ -2107,7 +2104,7 @@ Ext.onReady(function(){
 		  	var result=response.responseText;
 			Ext.MessageBox.show({
 			   title: 'Error',
-			   msg: 'Could not connect to the database. retry later.',
+			   msg: 'Tidak bisa terhubung dengan database server',
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR

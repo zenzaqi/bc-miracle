@@ -25,7 +25,9 @@ class M_customer_note extends Model{
 			// For simple search
 			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (note_id LIKE '%".addslashes($filter)."%' OR note_customer LIKE '%".addslashes($filter)."%' OR note_tanggal LIKE '%".addslashes($filter)."%' OR note_detail LIKE '%".addslashes($filter)."%' OR note_creator LIKE '%".addslashes($filter)."%' OR note_date_create LIKE '%".addslashes($filter)."%' OR note_update LIKE '%".addslashes($filter)."%' OR note_date_update LIKE '%".addslashes($filter)."%' OR note_revised LIKE '%".addslashes($filter)."%' )";
+				$query .= " (cust_no LIKE '%".addslashes($filter)."%' OR 
+							 cust_nama LIKE '%".addslashes($filter)."%' OR 
+							 note_detail LIKE '%".addslashes($filter)."%')";
 			}
 			
 			$result = $this->db->query($query);
@@ -45,32 +47,35 @@ class M_customer_note extends Model{
 		}
 		
 		//function for update record
-		function customer_note_update($note_id ,$note_customer ,$note_tanggal ,$note_detail ,$note_creator ,$note_date_create ,$note_update ,$note_date_update ,$note_revised ){
+		function customer_note_update($note_id ,$note_customer ,$note_tanggal ,$note_detail ,$note_creator ,$note_date_create ,$note_update ,
+									  $note_date_update ,$note_revised ){
 			$data = array(
-				"note_id"=>$note_id,			
-				"note_detail"=>$note_detail,			
-				"note_update"=>$note_update,			
-				"note_date_update"=>'NOW()',			
-				"note_revised"=>'(note_revised+1)'			
+				"note_id"=>$note_id,
+				"note_detail"=>$note_detail,
+				"note_update"=>$_SESSION[SESSION_USERID],			
+				"note_date_update"=>date('Y-m-d H:i:s')			
 			);
 			$this->db->where('note_id', $note_id);
 			$this->db->update('customer_note', $data);
 			
-			if($this->db->affected_rows())
-				return '1';
-			else
-				return '0';
+			if($this->db->affected_rows()){
+				$sql="UPDATE customer_note set note_revised=(note_revised+1) WHERE note_id='".$departemen_id."'";
+				$this->db->query($sql);
+			}
+				
+			return '1';
 		}
 		
 		//function for create new record
-		function customer_note_create($note_customer ,$note_tanggal ,$note_detail ,$note_creator ,$note_date_create ,$note_update ,$note_date_update ,$note_revised ){
+		function customer_note_create($note_customer ,$note_tanggal ,$note_detail ,$note_creator ,$note_date_create ,$note_update ,
+									  $note_date_update ,$note_revised ){
 			$data = array(
 	
 				"note_customer"=>$note_customer,	
-				"note_tanggal"=>date('Y-m-d H:i:s'),	
+				"note_tanggal"=>$note_tanggal,	
 				"note_detail"=>$note_detail,	
-				"note_creator"=>$note_creator,	
-				"note_date_create"=>'NOW()'
+				"note_creator"=>$_SESSION[SESSION_USERID],	
+				"note_date_create"=>date('Y-m-d H:i:s')
 			);
 			$this->db->insert('customer_note', $data); 
 			if($this->db->affected_rows())
@@ -105,14 +110,12 @@ class M_customer_note extends Model{
 		}
 		
 		//function for advanced search record
-		function customer_note_search($note_id ,$note_customer ,$note_tanggal ,$note_detail ,$note_creator ,$note_date_create ,$note_update ,$note_date_update ,$note_revised ,$start,$end){
+		function customer_note_search($note_id ,$note_customer ,$note_tanggal ,$note_detail ,$note_creator ,$note_date_create ,$note_update ,
+									  $note_date_update ,$note_revised ,$start,$end){
 			//full query
-			$query="select * from customer_note";
+			$query = "SELECT * FROM customer_note,customer where note_customer=cust_id";
 			
-			if($note_id!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " note_id LIKE '%".$note_id."%'";
-			};
+			
 			if($note_customer!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " note_customer LIKE '%".$note_customer."%'";
@@ -125,26 +128,7 @@ class M_customer_note extends Model{
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " note_detail LIKE '%".$note_detail."%'";
 			};
-			if($note_creator!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " note_creator LIKE '%".$note_creator."%'";
-			};
-			if($note_date_create!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " note_date_create LIKE '%".$note_date_create."%'";
-			};
-			if($note_update!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " note_update LIKE '%".$note_update."%'";
-			};
-			if($note_date_update!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " note_date_update LIKE '%".$note_date_update."%'";
-			};
-			if($note_revised!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " note_revised LIKE '%".$note_revised."%'";
-			};
+			
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
 			
@@ -163,18 +147,16 @@ class M_customer_note extends Model{
 		}
 		
 		//function for print record
-		function customer_note_print($note_id ,$note_customer ,$note_tanggal ,$note_detail ,$note_creator ,$note_date_create ,$note_update ,$note_date_update ,$note_revised ,$option,$filter){
+		function customer_note_print($note_id ,$note_customer ,$note_tanggal ,$note_detail ,$note_creator ,$note_date_create ,$note_update ,
+									 $note_date_update ,$note_revised ,$option,$filter){
 			//full query
-			$query="select * from customer_note";
+			$query = "SELECT * FROM customer_note,customer where note_customer=cust_id";
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (note_id LIKE '%".addslashes($filter)."%' OR note_customer LIKE '%".addslashes($filter)."%' OR note_tanggal LIKE '%".addslashes($filter)."%' OR note_detail LIKE '%".addslashes($filter)."%' OR note_creator LIKE '%".addslashes($filter)."%' OR note_date_create LIKE '%".addslashes($filter)."%' OR note_update LIKE '%".addslashes($filter)."%' OR note_date_update LIKE '%".addslashes($filter)."%' OR note_revised LIKE '%".addslashes($filter)."%' )";
-				$result = $this->db->query($query);
+				$query .= " (cust_no LIKE '%".addslashes($filter)."%' OR 
+							 cust_nama LIKE '%".addslashes($filter)."%' OR 
+							 note_detail LIKE '%".addslashes($filter)."%')";
 			} else if($option=='SEARCH'){
-				if($note_id!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " note_id LIKE '%".$note_id."%'";
-				};
 				if($note_customer!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " note_customer LIKE '%".$note_customer."%'";
@@ -187,44 +169,23 @@ class M_customer_note extends Model{
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " note_detail LIKE '%".$note_detail."%'";
 				};
-				if($note_creator!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " note_creator LIKE '%".$note_creator."%'";
-				};
-				if($note_date_create!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " note_date_create LIKE '%".$note_date_create."%'";
-				};
-				if($note_update!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " note_update LIKE '%".$note_update."%'";
-				};
-				if($note_date_update!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " note_date_update LIKE '%".$note_date_update."%'";
-				};
-				if($note_revised!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " note_revised LIKE '%".$note_revised."%'";
-				};
-				$result = $this->db->query($query);
+				
 			}
+			$result = $this->db->query($query);
 			return $result;
 		}
 		
 		//function  for export to excel
 		function customer_note_export_excel($note_id ,$note_customer ,$note_tanggal ,$note_detail ,$note_creator ,$note_date_create ,$note_update ,$note_date_update ,$note_revised ,$option,$filter){
 			//full query
-			$query="select * from customer_note";
+			$query = "SELECT note_tanggal as 'Tanggal dan Jam', cust_no as 'No Cust', cust_nama as Customer, note_detail as 'Detail Catatan'
+						FROM customer_note,customer where note_customer=cust_id";
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (note_id LIKE '%".addslashes($filter)."%' OR note_customer LIKE '%".addslashes($filter)."%' OR note_tanggal LIKE '%".addslashes($filter)."%' OR note_detail LIKE '%".addslashes($filter)."%' OR note_creator LIKE '%".addslashes($filter)."%' OR note_date_create LIKE '%".addslashes($filter)."%' OR note_update LIKE '%".addslashes($filter)."%' OR note_date_update LIKE '%".addslashes($filter)."%' OR note_revised LIKE '%".addslashes($filter)."%' )";
-				$result = $this->db->query($query);
+				$query .= " (cust_no LIKE '%".addslashes($filter)."%' OR 
+							 cust_nama LIKE '%".addslashes($filter)."%' OR 
+							 note_detail LIKE '%".addslashes($filter)."%')";
 			} else if($option=='SEARCH'){
-				if($note_id!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " note_id LIKE '%".$note_id."%'";
-				};
 				if($note_customer!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " note_customer LIKE '%".$note_customer."%'";
@@ -237,28 +198,9 @@ class M_customer_note extends Model{
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " note_detail LIKE '%".$note_detail."%'";
 				};
-				if($note_creator!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " note_creator LIKE '%".$note_creator."%'";
-				};
-				if($note_date_create!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " note_date_create LIKE '%".$note_date_create."%'";
-				};
-				if($note_update!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " note_update LIKE '%".$note_update."%'";
-				};
-				if($note_date_update!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " note_date_update LIKE '%".$note_date_update."%'";
-				};
-				if($note_revised!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " note_revised LIKE '%".$note_revised."%'";
-				};
-				$result = $this->db->query($query);
+				
 			}
+			$result = $this->db->query($query);
 			return $result;
 		}
 		

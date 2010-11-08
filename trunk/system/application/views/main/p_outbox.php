@@ -15,18 +15,36 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Outbox List</title>
+<title>Daftar SMS Outbox</title>
 <link rel='stylesheet' type='text/css' href='../assets/modules/main/css/printstyle.css'/>
 </head>
 <table summary='Outbox List'>
-	<caption>Outbox List</caption>
-	<thead><tr><th scope='col'>No</th><th scope='col'>Outbox Id</th><th scope='col'>Outbox Destination</th><th scope='col'>Outbox Message</th><th scope='col'>Outbox Date</th><th scope='col'>Outbox Creator</th><th scope='col'>Outbox Date Create</th><th scope='col'>Outbox Update</th><th scope='col'>Outbox Date Update</th><th scope='col'>Outbox Revised</th></tr></thead>
-	<tfoot><tr><th scope='row'>Total</th><td colspan='9'><?php echo count($data_print); ?></td></tr></tfoot>
+	<caption>Daftar SMS Outbox</caption>
+	<thead>
+    	<tr>
+        	<th scope='col'>No</th>
+            <th scope='col'>Tanggal Kirim</th>
+            <th scope='col'>Isi Pesan</th>
+            <th scope='col'>No Cust</th>
+            <th scope='col'>Customer</th>
+            <th scope='col'>No HP</th>
+            <th scope='col'>Status</th>
+    	</tr>
+    </thead>
+	<tfoot><tr><th scope='row'>Total</th><td colspan='6'><?php echo count($data_print); ?></td></tr></tfoot>
 	<tbody>
 		<?php $i=0; foreach($data_print as $print) { $i++; ?>
-		<tr><td><? echo $i; ?></td><td><?php echo $print->outbox_id; ?></td><td><?php echo $print->outbox_destination; ?></td><td><?php echo $print->outbox_message; ?></td><td><?php echo $print->outbox_date; ?></td><td><?php echo $print->outbox_creator; ?></td><td><?php echo $print->outbox_date_create; ?></td><td><?php echo $print->outbox_update; ?></td><td><?php echo $print->outbox_date_update; ?></td><td><?php echo $print->outbox_revised; ?></td></tr>
+		<tr>
+        	<td><? echo $i; ?></td>
+            <td><?php echo $print->outbox_date; ?></td>
+            <td><?php echo $print->outbox_message; ?></td>
+            <td><?php echo $print->cust_no; ?></td>
+            <td><?php echo $print->cust_nama; ?></td>
+            <td><?php echo $print->outbox_destination; ?></td>
+            <td><?php echo $print->outbox_status; ?></td>
+       </tr>
 		<?php } ?>
 	</tbody>
-<body>
+<body onload='window.print()'>
 </body>
 </html>

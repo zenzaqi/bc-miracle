@@ -26,7 +26,8 @@ class M_inbox extends Model{
 			// For simple search
 			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (inbox_id LIKE '%".addslashes($filter)."%' OR inbox_sender LIKE '%".addslashes($filter)."%' OR inbox_message LIKE '%".addslashes($filter)."%' OR inbox_date LIKE '%".addslashes($filter)."%' OR inbox_creator LIKE '%".addslashes($filter)."%' OR inbox_date_create LIKE '%".addslashes($filter)."%' OR inbox_update LIKE '%".addslashes($filter)."%' OR inbox_date_update LIKE '%".addslashes($filter)."%' OR inbox_revised LIKE '%".addslashes($filter)."%' )";
+				$query .= " (inbox_sender LIKE '%".addslashes($filter)."%' OR 
+							 inbox_message LIKE '%".addslashes($filter)."%' )";
 			}
 			
 			$query .= " ORDER BY inbox_date DESC ";
@@ -47,39 +48,6 @@ class M_inbox extends Model{
 			}
 		}
 		
-		//function for create new record
-		function inbox_create($inbox_sender ,$inbox_message ,$inbox_date ,$inbox_creator ,$inbox_date_create ){
-			$data = array(
-				"inbox_sender"=>$inbox_sender, 
-				"inbox_message"=>$inbox_message, 
-				"inbox_date"=>$inbox_date, 
-				"inbox_creator"=>$inbox_creator, 
-				"inbox_date_create"=>$inbox_date_create 
-			);
-			$this->db->insert('inbox', $data); 
-			if($this->db->affected_rows())
-				return '1';
-			else
-				return '0';
-		}
-		
-		//function for update record
-		function inbox_update($inbox_id,$inbox_sender,$inbox_message,$inbox_date,$inbox_creator,$inbox_update,$inbox_date_update){
-			$data = array(
-				"inbox_sender"=>$inbox_sender, 
-				"inbox_message"=>$inbox_message, 
-				"inbox_date"=>$inbox_date, 
-				"inbox_creator"=>$inbox_creator, 
-				"inbox_update"=>$inbox_update, 
-				"inbox_date_update"=>$inbox_date_update 
-			);
-			
-			$this->db->where('inbox_id', $inbox_id);
-			$this->db->update('inbox', $data);
-			$sql="UPDATE inbox set inbox_revised=(inbox_revised+1) where inbox_id='".$inbox_id."'";
-			$this->db->query($sql);
-			return '1';
-		}
 		
 		//fcuntion for delete record
 		function inbox_delete($pkid){
@@ -107,14 +75,12 @@ class M_inbox extends Model{
 		}
 		
 		//function for advanced search record
-		function inbox_search($inbox_id ,$inbox_sender ,$inbox_message ,$inbox_date ,$inbox_creator ,$inbox_date_create ,$inbox_update ,$inbox_date_update ,$inbox_revised ,$start,$end){
+		function inbox_search($inbox_id ,$inbox_sender ,$inbox_message ,$inbox_date ,$inbox_creator ,$inbox_date_create ,$inbox_update ,
+							  $inbox_date_update ,$inbox_revised ,$start,$end){
 			//full query
 			$query="select * from inbox";
 			
-			if($inbox_id!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " inbox_id LIKE '%".$inbox_id."%'";
-			};
+			
 			if($inbox_sender!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " inbox_sender LIKE '%".$inbox_sender."%'";
@@ -127,27 +93,7 @@ class M_inbox extends Model{
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " inbox_date LIKE '%".$inbox_date."%'";
 			};
-			if($inbox_creator!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " inbox_creator LIKE '%".$inbox_creator."%'";
-			};
-			if($inbox_date_create!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " inbox_date_create LIKE '%".$inbox_date_create."%'";
-			};
-			if($inbox_update!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " inbox_update LIKE '%".$inbox_update."%'";
-			};
-			if($inbox_date_update!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " inbox_date_update LIKE '%".$inbox_date_update."%'";
-			};
-			if($inbox_revised!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " inbox_revised LIKE '%".$inbox_revised."%'";
-			};
-			
+						
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
 			$limit = $query." LIMIT ".$start.",".$end;		
@@ -165,18 +111,17 @@ class M_inbox extends Model{
 		}
 		
 		//function for print record
-		function inbox_print($inbox_id ,$inbox_sender ,$inbox_message ,$inbox_date ,$inbox_creator ,$inbox_date_create ,$inbox_update ,$inbox_date_update ,$inbox_revised ,$option,$filter){
+		function inbox_print($inbox_id ,$inbox_sender ,$inbox_message ,$inbox_date ,$inbox_creator ,$inbox_date_create ,$inbox_update ,
+							 $inbox_date_update ,$inbox_revised ,$option,$filter){
 			//full query
 			$sql="select * from inbox";
 			if($option=='LIST'){
 				$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
-				$sql .= " (inbox_id LIKE '%".addslashes($filter)."%' OR inbox_sender LIKE '%".addslashes($filter)."%' OR inbox_message LIKE '%".addslashes($filter)."%' OR inbox_date LIKE '%".addslashes($filter)."%' OR inbox_creator LIKE '%".addslashes($filter)."%' OR inbox_date_create LIKE '%".addslashes($filter)."%' OR inbox_update LIKE '%".addslashes($filter)."%' OR inbox_date_update LIKE '%".addslashes($filter)."%' OR inbox_revised LIKE '%".addslashes($filter)."%' )";
-				$query = $this->db->query($sql);
+				$sql .= " (inbox_sender LIKE '%".addslashes($filter)."%' OR 
+						   inbox_message LIKE '%".addslashes($filter)."%'  )";
+			
 			} else if($option=='SEARCH'){
-				if($inbox_id!=''){
-					$sql.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$sql.= " inbox_id LIKE '%".$inbox_id."%'";
-				};
+				
 				if($inbox_sender!=''){
 					$sql.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$sql.= " inbox_sender LIKE '%".$inbox_sender."%'";
@@ -189,78 +134,37 @@ class M_inbox extends Model{
 					$sql.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$sql.= " inbox_date LIKE '%".$inbox_date."%'";
 				};
-				if($inbox_creator!=''){
-					$sql.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$sql.= " inbox_creator LIKE '%".$inbox_creator."%'";
-				};
-				if($inbox_date_create!=''){
-					$sql.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$sql.= " inbox_date_create LIKE '%".$inbox_date_create."%'";
-				};
-				if($inbox_update!=''){
-					$sql.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$sql.= " inbox_update LIKE '%".$inbox_update."%'";
-				};
-				if($inbox_date_update!=''){
-					$sql.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$sql.= " inbox_date_update LIKE '%".$inbox_date_update."%'";
-				};
-				if($inbox_revised!=''){
-					$sql.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$sql.= " inbox_revised LIKE '%".$inbox_revised."%'";
-				};
-				$query = $this->db->query($sql);
 			}
+			$query = $this->db->query($sql);
 			return $query->result();
 		}
 		
 		//function  for export to excel
-		function inbox_export_excel($inbox_id ,$inbox_sender ,$inbox_message ,$inbox_date ,$inbox_creator ,$inbox_date_create ,$inbox_update ,$inbox_date_update ,$inbox_revised ,$option,$filter){
+		function inbox_export_excel($inbox_id ,$inbox_sender ,$inbox_message ,$inbox_date ,$inbox_creator ,$inbox_date_create ,$inbox_update ,
+									$inbox_date_update ,$inbox_revised ,$option,$filter){
 			//full query
-			$sql="select * from inbox";
+			$sql="select inbox_date as Tanggal,inbox_sender as Pengirim, inbox_message as 'Isi Pesan' from inbox";
 			if($option=='LIST'){
 				$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
-				$sql .= " (inbox_id LIKE '%".addslashes($filter)."%' OR inbox_sender LIKE '%".addslashes($filter)."%' OR inbox_message LIKE '%".addslashes($filter)."%' OR inbox_date LIKE '%".addslashes($filter)."%' OR inbox_creator LIKE '%".addslashes($filter)."%' OR inbox_date_create LIKE '%".addslashes($filter)."%' OR inbox_update LIKE '%".addslashes($filter)."%' OR inbox_date_update LIKE '%".addslashes($filter)."%' OR inbox_revised LIKE '%".addslashes($filter)."%' )";
-				$query = $this->db->query($sql);
+				$sql .= " (inbox_sender LIKE '%".addslashes($filter)."%' OR 
+						   inbox_message LIKE '%".addslashes($filter)."%'  )";
+			
 			} else if($option=='SEARCH'){
-				if($inbox_id!=''){
-					$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
-					$sql.= " inbox_id LIKE '%".$inbox_id."%'";
-				};
+				
 				if($inbox_sender!=''){
-					$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+					$sql.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$sql.= " inbox_sender LIKE '%".$inbox_sender."%'";
 				};
 				if($inbox_message!=''){
-					$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+					$sql.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$sql.= " inbox_message LIKE '%".$inbox_message."%'";
 				};
 				if($inbox_date!=''){
-					$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+					$sql.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$sql.= " inbox_date LIKE '%".$inbox_date."%'";
 				};
-				if($inbox_creator!=''){
-					$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
-					$sql.= " inbox_creator LIKE '%".$inbox_creator."%'";
-				};
-				if($inbox_date_create!=''){
-					$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
-					$sql.= " inbox_date_create LIKE '%".$inbox_date_create."%'";
-				};
-				if($inbox_update!=''){
-					$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
-					$sql.= " inbox_update LIKE '%".$inbox_update."%'";
-				};
-				if($inbox_date_update!=''){
-					$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
-					$sql.= " inbox_date_update LIKE '%".$inbox_date_update."%'";
-				};
-				if($inbox_revised!=''){
-					$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
-					$sql.= " inbox_revised LIKE '%".$inbox_revised."%'";
-				};
-				$query = $this->db->query($sql);
 			}
+			$query = $this->db->query($sql);
 			return $query;
 		}
 		

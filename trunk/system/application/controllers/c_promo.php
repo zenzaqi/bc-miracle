@@ -16,6 +16,7 @@ class C_promo extends Controller {
 	//constructor
 	function C_promo(){
 		parent::Controller();
+		session_start();
 		$this->load->model('m_promo', '', TRUE);
 		
 	}

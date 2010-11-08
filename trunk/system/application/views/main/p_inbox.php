@@ -15,18 +15,18 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Inbox List</title>
+<title>Daftar SMS Inbox</title>
 <link rel='stylesheet' type='text/css' href='../assets/modules/main/css/printstyle.css'/>
 </head>
 <table summary='Inbox List'>
-	<caption>Inbox List</caption>
-	<thead><tr><th scope='col'>No</th><th scope='col'>Inbox Id</th><th scope='col'>Inbox Sender</th><th scope='col'>Inbox Message</th><th scope='col'>Inbox Date</th><th scope='col'>Inbox Creator</th><th scope='col'>Inbox Date Create</th><th scope='col'>Inbox Update</th><th scope='col'>Inbox Date Update</th><th scope='col'>Inbox Revised</th></tr></thead>
-	<tfoot><tr><th scope='row'>Total</th><td colspan='9'><?php echo count($data_print); ?></td></tr></tfoot>
+	<caption>Daftar SMS Inbox</caption>
+	<thead><tr><th scope='col'>No</th><th scope='col'>Tanggal</th><th scope='col'>Pengirim</th><th scope='col'>Isi Pesan</th></tr></thead>
+	<tfoot><tr><th scope='row'>Total</th><td colspan='3'><?php echo count($data_print); ?></td></tr></tfoot>
 	<tbody>
 		<?php $i=0; foreach($data_print as $print) { $i++; ?>
-		<tr><td><? echo $i; ?></td><td><?php echo $print->inbox_id; ?></td><td><?php echo $print->inbox_sender; ?></td><td><?php echo $print->inbox_message; ?></td><td><?php echo $print->inbox_date; ?></td><td><?php echo $print->inbox_creator; ?></td><td><?php echo $print->inbox_date_create; ?></td><td><?php echo $print->inbox_update; ?></td><td><?php echo $print->inbox_date_update; ?></td><td><?php echo $print->inbox_revised; ?></td></tr>
+		<tr><td><? echo $i; ?></td><td><?php echo $print->inbox_date; ?></td><td><?php echo $print->inbox_sender; ?></td><td><?php echo $print->inbox_message; ?></td></tr>
 		<?php } ?>
 	</tbody>
-<body>
+<body onload='window.print()'>
 </body>
 </html>
