@@ -350,7 +350,7 @@ class M_perawatan extends Model{
 		}
 		
 		//function for update record
-		function perawatan_update($rawat_id ,$rawat_kode ,$rawat_kodelama ,$rawat_nama ,$rawat_group ,$rawat_kategori,$rawat_kontribusi ,$rawat_jenis ,$rawat_keterangan ,$rawat_du ,$rawat_dm ,$rawat_point , $rawat_kredit, $rawat_jumlah_tindakan, $rawat_harga ,$rawat_gudang ,$rawat_aktif ){
+		function perawatan_update($rawat_id ,$rawat_kode ,$rawat_kodelama ,$rawat_nama, $rawat_highmargin, $rawat_group ,$rawat_kategori,$rawat_kontribusi ,$rawat_jenis ,$rawat_keterangan ,$rawat_du ,$rawat_dm ,$rawat_point , $rawat_kredit, $rawat_jumlah_tindakan, $rawat_harga ,$rawat_gudang ,$rawat_aktif ){
 			if ($rawat_aktif=="")
 				$rawat_aktif = "Aktif";
 			if ($rawat_point=="")
@@ -374,6 +374,12 @@ class M_perawatan extends Model{
 				"rawat_update"=>$_SESSION[SESSION_USERID],			
 				"rawat_date_update"=>date('Y-m-d H:i:s')			
 			);
+			if($rawat_highmargin=='true')
+				$data["rawat_highmargin"]=1;
+			if($rawat_highmargin=='false')
+				$data["rawat_highmargin"]=0;
+			
+			
 			$sql="SELECT group_id,group_durawat,group_dmrawat,group_kelompok FROM produk_group WHERE group_id='".$rawat_group."'";
 			$rs=$this->db->query($sql);
 			if($rs->num_rows()){
@@ -504,7 +510,7 @@ class M_perawatan extends Model{
 		}
 		
 		//function for create new record
-		function perawatan_create($rawat_kode ,$rawat_kodelama ,$rawat_nama ,$rawat_group ,$rawat_kategori, $rawat_kontribusi ,$rawat_jenis ,$rawat_keterangan ,$rawat_du ,$rawat_dm ,$rawat_point , $rawat_kredit, $rawat_jumlah_tindakan, $rawat_harga ,$rawat_gudang ,$rawat_aktif ){
+		function perawatan_create($rawat_kode ,$rawat_kodelama ,$rawat_nama, $rawat_highmargin, $rawat_group ,$rawat_kategori, $rawat_kontribusi ,$rawat_jenis ,$rawat_keterangan ,$rawat_du ,$rawat_dm ,$rawat_point , $rawat_kredit, $rawat_jumlah_tindakan, $rawat_harga ,$rawat_gudang ,$rawat_aktif ){
 		if ($rawat_aktif=="")
 			$rawat_aktif = "Aktif";
 		if ($rawat_point=="")
@@ -529,6 +535,12 @@ class M_perawatan extends Model{
 				"rawat_date_create"=>date('Y-m-d H:i:s'),	
 				"rawat_revised"=>'0'	
 			);
+			
+			if($rawat_highmargin=='true')
+				$data["rawat_highmargin"]=1;
+			if($rawat_highmargin=='false')
+				$data["rawat_highmargin"]=0;
+			
 			
 			/*$sql="SELECT group_id,group_kode FROM produk_group WHERE group_id='".$rawat_group."' ";
 			$rs=$this->db->query($sql);

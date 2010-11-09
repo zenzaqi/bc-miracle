@@ -72,6 +72,7 @@ var rawat_idField;
 var rawat_kodeField;
 var rawat_kodelamaField;
 var rawat_namaField;
+var rawat_highmarginField;
 var rawat_groupField;
 var rawat_jenisField;
 var rawat_kontribusiField;
@@ -249,6 +250,7 @@ Ext.onReady(function(){
 				rawat_kode	: rawat_kode_create, 
 				rawat_kodelama	: rawat_kodelama_create, 
 				rawat_nama	: rawat_nama_create, 
+				rawat_highmargin : rawat_highmarginField.getValue(),
 				rawat_group	: rawat_group_create, 
 				rawat_kategori	: rawat_kategori_create,
 				rawat_kontribusi : rawat_kontribusi_create,
@@ -345,6 +347,8 @@ Ext.onReady(function(){
 		rawat_kodelamaField.setValue(null);
 		rawat_namaField.reset();
 		rawat_namaField.setValue(null);
+		rawat_highmarginField.reset();
+		rawat_highmarginField.setValue(null);
 		rawat_groupField.reset();
 		rawat_groupField.setValue(null);
 		rawat_jenisField.reset();
@@ -384,6 +388,7 @@ Ext.onReady(function(){
 		rawat_kodeField.setValue(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_kode'));
 		rawat_kodelamaField.setValue(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_kodelama'));
 		rawat_namaField.setValue(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_nama'));
+		rawat_highmarginField.setValue(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_highmargin'));
 		rawat_groupField.setValue(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_group'));
 		rawat_jenisField.setValue(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_jenis'));
 		rawat_kontribusiField.setValue(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_kontribusi'));
@@ -538,6 +543,7 @@ Ext.onReady(function(){
 			{name: 'rawat_kode', type: 'string', mapping: 'rawat_kode'}, 
 			{name: 'rawat_kodelama', type: 'string', mapping: 'rawat_kodelama'}, 
 			{name: 'rawat_nama', type: 'string', mapping: 'rawat_nama'}, 
+			{name: 'rawat_highmargin', type: 'int', mapping: 'rawat_highmargin'}, 
 			{name: 'rawat_group', type: 'string', mapping: 'group_nama'}, 
 			{name: 'rawat_kategori_nama', type: 'string', mapping: 'kategori_nama'},
 			{name: 'rawat_kategori_id', type: 'string', mapping: 'rawat_kategori'},
@@ -1158,6 +1164,14 @@ Ext.onReady(function(){
 		allowBlank: false,
 		anchor: '95%'
 	});
+	
+	/* Identify rawat_highmargin Field*/
+	rawat_highmarginField=new Ext.form.Checkbox({
+		id : 'rawat_highmarginField',
+		boxLabel: 'High Margin?',
+		name: 'rawat_highmargin'
+	});
+	
 	/* Identify  rawat_group Field */
 	rawat_groupField= new Ext.form.ComboBox({
 		id: 'rawat_groupField',
@@ -1237,7 +1251,7 @@ Ext.onReady(function(){
 	rawat_pointField= new Ext.form.NumberField({
 		id: 'rawat_pointField',
 		name: 'rawat_pointField',
-		fieldLabel: 'Poin',
+		fieldLabel: 'Poin (x)',
 		allowNegatife : false,
 		emptyText: '1',
 		allowDecimals: false,
@@ -1340,7 +1354,7 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [rawat_kodelamaField, rawat_kodeField, rawat_namaField, rawat_groupField, rawat_jenisField, rawat_kategoritxtField, rawat_duField, rawat_dmField] 
+				items: [rawat_kodelamaField, rawat_kodeField, rawat_namaField, rawat_highmarginField, rawat_groupField, rawat_jenisField, rawat_kategoritxtField, rawat_duField, rawat_dmField] 
 			}
 			,{
 				columnWidth:0.5,
@@ -2285,7 +2299,7 @@ Ext.onReady(function(){
 	/* Identify  rawat_point Search Field */
 	rawat_pointSearchField= new Ext.form.NumberField({
 		id: 'rawat_pointSearchField',
-		fieldLabel: 'Poin',
+		fieldLabel: 'Poin (x)',
 		allowNegatife : false,
 		blankText: '0',
 		allowDecimals: false,
