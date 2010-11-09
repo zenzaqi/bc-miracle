@@ -1418,7 +1418,7 @@ from
 	function lap_kunjungan_search2($lap_kunjungan_id ,$trawat_tglapp_start ,$trawat_tglapp_end ,$trawat_dokter,$start,$end){
 			//full query
 			
-		//jika ada penggantian di query ini, sesuaikan juga query di m_crm_generator, bagian FREQUENCY, SPENDING	
+		//jika ada penggantian di query ini, sesuaikan juga query di m_crm_generator, bagian FREQUENCY, SPENDING, JUMLAH TX UTAMA
 		if($trawat_tglapp_start!='' && $trawat_tglapp_end!=''){
 	
 			$query = "select

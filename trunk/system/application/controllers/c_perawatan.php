@@ -253,6 +253,7 @@ class C_perawatan extends Controller {
 		$rawat_nama=str_replace("/(<\/?)(p)([^>]*>)", "",$rawat_nama);
 		$rawat_nama=str_replace(",", ",",$rawat_nama);
 		$rawat_nama=str_replace("'", '"',$rawat_nama);
+		$rawat_highmargin=trim(@$_POST["rawat_highmargin"]);
 		$rawat_group=trim(@$_POST["rawat_group"]);
 		$rawat_kategori=trim(@$_POST["rawat_kategori"]);
 		$rawat_kontribusi=trim(@$_POST["rawat_kontribusi"]);
@@ -272,7 +273,7 @@ class C_perawatan extends Controller {
 		$rawat_aktif=str_replace("/(<\/?)(p)([^>]*>)", "",$rawat_aktif);
 		$rawat_aktif=str_replace(",", ",",$rawat_aktif);
 		$rawat_aktif=str_replace("'", '"',$rawat_aktif);
-		$result = $this->m_perawatan->perawatan_update($rawat_id ,$rawat_kode ,$rawat_kodelama ,$rawat_nama ,$rawat_group ,$rawat_kategori, $rawat_kontribusi ,$rawat_jenis ,$rawat_keterangan ,$rawat_du ,$rawat_dm ,$rawat_point , $rawat_kredit, $rawat_jumlah_tindakan, $rawat_harga ,$rawat_gudang ,$rawat_aktif      );
+		$result = $this->m_perawatan->perawatan_update($rawat_id ,$rawat_kode ,$rawat_kodelama ,$rawat_nama, $rawat_highmargin, $rawat_group ,$rawat_kategori, $rawat_kontribusi ,$rawat_jenis ,$rawat_keterangan ,$rawat_du ,$rawat_dm ,$rawat_point , $rawat_kredit, $rawat_jumlah_tindakan, $rawat_harga ,$rawat_gudang ,$rawat_aktif      );
 		echo $result;
 	}
 	
@@ -289,6 +290,7 @@ class C_perawatan extends Controller {
 		$rawat_nama=trim(@$_POST["rawat_nama"]);
 		$rawat_nama=str_replace("/(<\/?)(p)([^>]*>)", "",$rawat_nama);
 		$rawat_nama=str_replace("'", '"',$rawat_nama);
+		$rawat_highmargin=trim(@$_POST["rawat_highmargin"]);
 		$rawat_group=trim(@$_POST["rawat_group"]);
 		$rawat_kategori=trim(@$_POST["rawat_kategori"]);
 		$rawat_kontribusi=trim(@$_POST["rawat_kontribusi"]);
@@ -306,7 +308,7 @@ class C_perawatan extends Controller {
 		$rawat_aktif=trim(@$_POST["rawat_aktif"]);
 		$rawat_aktif=str_replace("/(<\/?)(p)([^>]*>)", "",$rawat_aktif);
 		$rawat_aktif=str_replace("'", '"',$rawat_aktif);
-		$result=$this->m_perawatan->perawatan_create($rawat_kode ,$rawat_kodelama ,$rawat_nama ,$rawat_group ,$rawat_kategori, $rawat_kontribusi ,$rawat_jenis ,$rawat_keterangan ,$rawat_du ,$rawat_dm ,$rawat_point, $rawat_kredit, $rawat_jumlah_tindakan, $rawat_harga ,$rawat_gudang ,$rawat_aktif );
+		$result=$this->m_perawatan->perawatan_create($rawat_kode ,$rawat_kodelama ,$rawat_nama , $rawat_highmargin, $rawat_group ,$rawat_kategori, $rawat_kontribusi ,$rawat_jenis ,$rawat_keterangan ,$rawat_du ,$rawat_dm ,$rawat_point, $rawat_kredit, $rawat_jumlah_tindakan, $rawat_harga ,$rawat_gudang ,$rawat_aktif );
 		echo $result;
 	}
 

@@ -89,7 +89,8 @@ class M_crm_generator extends Model{
 					c.setcrm_result_nilai_atas, c.setcrm_result_nilai_bawah,
 					c.setcrm_disiplin_days, c.setcrm_disiplin_persentase_pembatalan, 
 					c.setcrm_disiplin_batal_value_morethan, c.setcrm_disiplin_batal_value_lessthan,
-					c.setcrm_disiplin_persentase_telat, c.setcrm_disiplin_menit_telat, c.setcrm_disiplin_telat_value_morethan, c.setcrm_disiplin_telat_value_lessthan
+					c.setcrm_disiplin_persentase_telat, c.setcrm_disiplin_menit_telat, c.setcrm_disiplin_telat_value_morethan, c.setcrm_disiplin_telat_value_lessthan,
+					c.setcrm_treatment_days, c.setcrm_treatment_nonmedis, c.setcrm_treatment_medis, c.setcrm_treatment_morethan, c.setcrm_treatment_equal, c.setcrm_treatment_lessthan
 				from crm_setup c";
 			
 			$query_parameter				= $this->db->query($sql_parameter);
@@ -128,6 +129,13 @@ class M_crm_generator extends Model{
 			$setcrm_disiplin_menit_telat			= $data_parameter->setcrm_disiplin_menit_telat;
 			$setcrm_disiplin_telat_value_morethan	= $data_parameter->setcrm_disiplin_telat_value_morethan;
 			$setcrm_disiplin_telat_value_lessthan	= $data_parameter->setcrm_disiplin_telat_value_lessthan;
+			
+			$setcrm_treatment_days					= $data_parameter->setcrm_treatment_days; 
+			$setcrm_treatment_nonmedis				= $data_parameter->setcrm_treatment_nonmedis; 
+			$setcrm_treatment_medis					= $data_parameter->setcrm_treatment_medis;
+			$setcrm_treatment_morethan				= $data_parameter->setcrm_treatment_morethan; 
+			$setcrm_treatment_equal					= $data_parameter->setcrm_treatment_equal;
+			$setcrm_treatment_lessthan				= $data_parameter->setcrm_treatment_lessthan;
 			
 			$setcrm_result_nilai_atas		= $data_parameter->setcrm_result_nilai_atas;
 			$setcrm_result_nilai_bawah		= $data_parameter->setcrm_result_nilai_bawah;
@@ -181,8 +189,8 @@ class M_crm_generator extends Model{
 						as table_union2
 						
 					group by tgl_tindakan
-			)
-			as tabel
+					)
+				as tabel
 			";
 			   
 
@@ -596,6 +604,111 @@ class M_crm_generator extends Model{
 				$crmvalue_disiplin_telat = $setcrm_disiplin_telat_value_lessthan;
 			}
 			
+			
+			//UNTUK MENGHITUNG JUMLAH TREATMENT UTAMA
+			//selalu sesuaikan query dengan query di m_lap_kunjungan.php
+			
+			//medis
+			$sql_value_tx_utama_medis =
+			   "select 
+					sum(jum_total) as tot_tx_utama_medis
+				from
+				   (select 
+						count(distinct cust) as jum_total
+					from
+						(
+						select 
+							m.jrawat_cust as cust,
+							m.jrawat_tanggal as tgl_tindakan
+						from detail_jual_rawat d
+						left join master_jual_rawat m on (d.drawat_master = m.jrawat_id)
+						left join perawatan p on (d.drawat_rawat=p.rawat_id)
+						left join produk_group g1 on g1.group_id = p.rawat_group
+						where 
+							m.jrawat_stat_dok <> 'Batal' and m.jrawat_bayar <> 0  and g1.group_treatment_utama = 1 and
+							(p.rawat_kategori = 2 or p.rawat_kategori = 4 or p.rawat_kategori = 16) and
+							date_add(m.jrawat_tanggal, interval '$setcrm_treatment_days' day) >= date_format(now(), '%Y-%m-%d') and m.jrawat_cust = '$crmvalue_cust'
+						
+						union
+												
+						select 
+							d.dapaket_cust as cust,
+							d.dapaket_tgl_ambil as tgl_tindakan
+						from detail_ambil_paket d
+						left join perawatan p on (d.dapaket_item = p.rawat_id)
+						left join produk_group g1 on g1.group_id = p.rawat_group
+						where 
+							d.dapaket_stat_dok <> 'Batal' and g1.group_treatment_utama = 1 and
+							(p.rawat_kategori = 2 or p.rawat_kategori = 4 or p.rawat_kategori = 16) and
+							date_add(d.dapaket_tgl_ambil, interval '$setcrm_treatment_days' day) >= date_format(now(), '%Y-%m-%d') and d.dapaket_cust = '$crmvalue_cust'
+						
+						)
+						as table_union2
+						
+					group by tgl_tindakan
+			)
+			as tabel";
+			
+			$query_tx_utama_medis	= $this->db->query($sql_value_tx_utama_medis);
+			$data_tx_utama_medis	= $query_tx_utama_medis->row();
+			$tot_tx_utama_medis		= $data_tx_utama_medis->tot_tx_utama_medis;
+			
+			//medis
+			$sql_value_tx_utama_non_medis =
+			   "select 
+					sum(jum_total) as tot_tx_utama_non_medis
+				from
+				   (select 
+						count(distinct cust) as jum_total
+					from
+						(
+						select 
+							m.jrawat_cust as cust,
+							m.jrawat_tanggal as tgl_tindakan
+						from detail_jual_rawat d
+						left join master_jual_rawat m on (d.drawat_master = m.jrawat_id)
+						left join perawatan p on (d.drawat_rawat=p.rawat_id)
+						left join produk_group g1 on g1.group_id = p.rawat_group
+						where 
+							m.jrawat_stat_dok <> 'Batal' and m.jrawat_bayar <> 0  and g1.group_treatment_utama = 1 and
+							p.rawat_kategori = 3 and
+							date_add(m.jrawat_tanggal, interval '$setcrm_treatment_days' day) >= date_format(now(), '%Y-%m-%d') and m.jrawat_cust = '$crmvalue_cust'
+						
+						union
+												
+						select 
+							d.dapaket_cust as cust,
+							d.dapaket_tgl_ambil as tgl_tindakan
+						from detail_ambil_paket d
+						left join perawatan p on (d.dapaket_item = p.rawat_id)
+						left join produk_group g1 on g1.group_id = p.rawat_group
+						where 
+							d.dapaket_stat_dok <> 'Batal' and g1.group_treatment_utama = 1 and
+							p.rawat_kategori = 3 and
+							date_add(d.dapaket_tgl_ambil, interval '$setcrm_treatment_days' day) >= date_format(now(), '%Y-%m-%d') and d.dapaket_cust = '$crmvalue_cust'
+						
+						)
+						as table_union2
+						
+					group by tgl_tindakan
+			)
+			as tabel";
+			
+
+			$query_tx_utama_non_medis	= $this->db->query($sql_value_tx_utama_non_medis);
+			$data_tx_utama_non_medis	= $query_tx_utama_non_medis->row();
+			$tot_tx_utama_non_medis		= $data_tx_utama_non_medis->tot_tx_utama_non_medis;
+			
+			if (($tot_tx_utama_non_medis > $setcrm_treatment_nonmedis) and ($tot_tx_utama_medis > $setcrm_treatment_medis)){
+				$crmvalue_treatment = $setcrm_treatment_morethan;
+			}
+			else if (($tot_tx_utama_non_medis == $setcrm_treatment_nonmedis) and ($tot_tx_utama_medis == $setcrm_treatment_medis)){
+				$crmvalue_treatment = $setcrm_treatment_equal;
+			}
+			else {
+				$crmvalue_treatment = $setcrm_treatment_lessthan;
+			}
+			
 
 			
 			//UNTUK MENENTUKAN PRIORITY
@@ -635,6 +748,9 @@ class M_crm_generator extends Model{
 				"crmvalue_disiplin_batal_real"	=> ($total_app_batal / $total_app_all),
 				"crmvalue_disiplin_telat"		=> $crmvalue_disiplin_telat,
 				"crmvalue_disiplin_telat_real"	=> ($total_app_dtg_telat / $total_app_dtg_all),
+				"crmvalue_treatment"				=> $crmvalue_treatment,
+				"crmvalue_treatment_medis_real"		=> $tot_tx_utama_medis,
+				"crmvalue_treatment_non_medis_real"	=> $tot_tx_utama_non_medis,
 				"crmvalue_priority"				=> $crmvalue_priority,
 				"crmvalue_total"				=> $crmvalue_total,
 				"crmvalue_cust"					=> $crmvalue_cust,	
