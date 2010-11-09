@@ -683,8 +683,10 @@ Ext.onReady(function(){
 								master_jual_rawat_DataStore.reload();
 								master_jual_rawat_createWindow.hide();
 							}else if(result==-7){
+								<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALRAWAT'))){ ?>
 								master_jual_rawat_createForm.savePrintButton.disable();
 								master_jual_rawat_createForm.save_btn.disable();
+								<?php } ?>
 								Ext.MessageBox.show({
 								   title: 'Warning',
 								   msg: 'Detail Perawatan lepas tidak cocok dengan database. Silakan klik tombol Cancel terlebih dahulu, kemudian buka kembali data ini.',
@@ -1159,10 +1161,12 @@ Ext.onReady(function(){
 		jrawat_diskonField.setDisabled(false);
 		jrawat_cashback_cfField.setDisabled(false);
 		
+		<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALRAWAT'))){ ?>
 		detail_jual_rawatListEditorGrid.djrawat_add.enable();
         detail_jual_rawatListEditorGrid.djrawat_delete.enable();
 		master_jual_rawat_createForm.savePrintButton.enable();
 		master_jual_rawat_createForm.save_btn.enable();
+		<?php } ?>
 		
 		combo_jual_rawat.setDisabled(false);
 		drawat_jumlahField.setDisabled(false);
@@ -1660,8 +1664,10 @@ Ext.onReady(function(){
 				master_jual_rawat_transfer3Group.setDisabled(false);
 				master_jual_rawat_voucher3Group.setDisabled(false);
 				
+				<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALRAWAT'))){ ?>
 				detail_jual_rawatListEditorGrid.djrawat_add.enable();
 				detail_jual_rawatListEditorGrid.djrawat_delete.enable();
+				<?php } ?>
 				combo_jual_rawat.setDisabled(false);
 				drawat_jumlahField.setDisabled(false);
 				drawat_hargaField.setDisabled(false);
@@ -1707,8 +1713,10 @@ Ext.onReady(function(){
 				master_jual_rawat_transfer3Group.setDisabled(true);
 				master_jual_rawat_voucher3Group.setDisabled(true);
 				
+				<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALRAWAT'))){ ?>
 				detail_jual_rawatListEditorGrid.djrawat_add.disable();
 				detail_jual_rawatListEditorGrid.djrawat_delete.disable();
+				<?php } ?>
 				combo_jual_rawat.setDisabled(true);
 				drawat_jumlahField.setDisabled(true);
 				drawat_hargaField.setDisabled(true);
@@ -1756,8 +1764,10 @@ Ext.onReady(function(){
 				master_jual_rawat_transfer3Group.setDisabled(true);
 				master_jual_rawat_voucher3Group.setDisabled(true);
 				
+				<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALRAWAT'))){ ?>
 				detail_jual_rawatListEditorGrid.djrawat_add.disable();
 				detail_jual_rawatListEditorGrid.djrawat_delete.disable();
+				<?php } ?>
 				combo_jual_rawat.setDisabled(true);
 				drawat_jumlahField.setDisabled(true);
 				drawat_hargaField.setDisabled(true);
@@ -1811,7 +1821,9 @@ Ext.onReady(function(){
 			jrawat_post2db="CREATE";
 			msg='created';
 			master_cara_bayarTabPanel.setActiveTab(0);
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALRAWAT'))){ ?>
 			master_jual_rawat_createForm.savePrintButton.disable();
+			<?php } ?>
             master_cara_bayarTabPanel.setDisabled(false);
 			master_jual_rawat_createWindow.show();
 		} else {
@@ -1895,8 +1907,9 @@ Ext.onReady(function(){
 			}
 			
 			msg='updated';
-			//master_jual_rawat_createWindow.hide();
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALRAWAT'))){ ?>
 			master_jual_rawat_createForm.savePrintButton.enable();
+			<?php } ?>
             master_cara_bayarTabPanel.setDisabled(false);
 			master_jual_rawat_createWindow.show();
 		} else {
@@ -2474,12 +2487,15 @@ Ext.onReady(function(){
 		}),
 		/* Add Control on ToolBar */
 		tbar: [
+		<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALRAWAT'))){ ?>
 		{
 			text: 'Add',
 			tooltip: 'Add new record',
 			iconCls:'icon-adds',    				// this is defined in our styles.css
 			handler: display_form_window
-		}, '-',{
+		}, '-',
+		<?php } ?>
+		{
 			id: 'jrawat_updateBtn',
 			text: 'Edit',
 			tooltip: 'Edit selected record',
@@ -2762,9 +2778,13 @@ Ext.onReady(function(){
 	});
 	jrawat_stat_dokField.on('select', function(){
         if(jrawat_stat_dokField.getValue()=='Batal'){
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALRAWAT'))){ ?>
             master_jual_rawat_createForm.savePrintButton.disable();
+			<?php } ?>
         }else{
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALRAWAT'))){ ?>
             master_jual_rawat_createForm.savePrintButton.enable();
+			<?php } ?>
         }
     });
 	
@@ -4744,15 +4764,19 @@ Ext.onReady(function(){
 		enableColLock:false,
 		region: 'center',
 		margins: '0 5 5 5',
+		<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALRAWAT'))){ ?>
 		plugins: [editor_detail_jual_rawat],
-		frame: true,
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
+		<?php } ?>
+		frame: true,
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:false},
 		bbar: new Ext.PagingToolbar({
 			store: detail_jual_rawat_DataStore,
 			displayInfo: true
-		}),
+		})
+		<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALRAWAT'))){ ?>
+		,
 		/* Add Control on ToolBar */
 		tbar: [
 		{
@@ -4770,6 +4794,7 @@ Ext.onReady(function(){
 			handler: detail_jual_rawat_confirm_delete
 		}
 		]
+		<?php } ?>
 	});
 	//eof
 	detail_jual_rawatListEditorGrid.on('rowclick', function(){
@@ -5810,6 +5835,7 @@ Ext.onReady(function(){
 		items: [master_jual_rawat_masterGroup,detail_jual_rawatListEditorGrid,detail_ambil_paketListGrid,master_jual_rawat_bayarGroup]
 		,
 		buttons: [
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALRAWAT'))){ ?>
 			{
 				text: 'Save and Print',
 				ref: '../savePrintButton',
@@ -5821,6 +5847,7 @@ Ext.onReady(function(){
 				ref: '../save_btn',
 				handler: save_button
 			},
+			<?php } ?>
 			{
 				text: 'Cancel',
 				handler: function(){

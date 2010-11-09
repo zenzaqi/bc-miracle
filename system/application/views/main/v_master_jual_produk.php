@@ -1051,8 +1051,10 @@ Ext.onReady(function(){
 		jproduk_cashback_cfField.setDisabled(false);
 		jproduk_ket_diskField.setDisabled(false);
 		jproduk_stat_dokField.setDisabled(false);
+		<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALPRODUK'))){ ?>
 		detail_jual_produkListEditorGrid.djproduk_add.enable();
         detail_jual_produkListEditorGrid.djproduk_delete.enable();
+		<?php } ?>
 		
 		jproduk_caraField.setDisabled(false);
 		master_jual_produk_tunaiGroup.setDisabled(false);
@@ -1089,7 +1091,9 @@ Ext.onReady(function(){
 		combo_reveral.setDisabled(false);
 		dharga_defaultField.setDisabled(false);
 		
+		<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALPRODUK'))){ ?>
 		master_jual_produk_createForm.jproduk_savePrint.enable();
+		<?php } ?>
 	}
  	/* End of Function */
 	
@@ -1457,11 +1461,15 @@ Ext.onReady(function(){
         
         //Jika jproduk_post2db='UPDATE' dan jproduk_stat_dok='Tertutup' ==> detail_jual_produkListEditorGrid.djproduk_add di-disable
         if(master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_stat_dok')=='Tertutup'){
-            detail_jual_produkListEditorGrid.djproduk_add.disable();
+            <?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALPRODUK'))){ ?>
+			detail_jual_produkListEditorGrid.djproduk_add.disable();
             detail_jual_produkListEditorGrid.djproduk_delete.disable();
+			<?php } ?>
         }else if(master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_stat_dok')=='Terbuka'){
-            detail_jual_produkListEditorGrid.djproduk_add.enable();
+            <?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALPRODUK'))){ ?>
+			detail_jual_produkListEditorGrid.djproduk_add.enable();
             detail_jual_produkListEditorGrid.djproduk_delete.enable();
+			<?php } ?>
         }
 		
 		jproduk_stat_dokField.on("select",function(){
@@ -1506,7 +1514,9 @@ Ext.onReady(function(){
 		}
         
         else if(status_awal =='Tertutup' && jproduk_stat_dokField.getValue()=='Tertutup'){
-            master_jual_produk_createForm.jproduk_savePrint.enable();
+            <?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALPRODUK'))){ ?>
+			master_jual_produk_createForm.jproduk_savePrint.enable();
+			<?php } ?>
         }
 		
 		});		
@@ -1518,7 +1528,9 @@ Ext.onReady(function(){
 	if(btn=='yes')
 	{
 		jproduk_stat_dokField.setValue('Batal');
+		<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALPRODUK'))){ ?>
         master_jual_produk_createForm.jproduk_savePrint.disable();
+		<?php } ?>
 	}  
 	else
 		jproduk_stat_dokField.setValue(master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_stat_dok'));
@@ -1646,9 +1658,10 @@ Ext.onReady(function(){
 			master_jual_produk_kwitansi3Group.setDisabled(true);
 			master_jual_produk_transfer3Group.setDisabled(true);
 			master_jual_produk_voucher3Group.setDisabled(true);
-			
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALPRODUK'))){ ?>
 			detail_jual_produkListEditorGrid.djproduk_add.disable();
 			detail_jual_produkListEditorGrid.djproduk_delete.disable();
+			<?php } ?>
 			combo_jual_produk.setDisabled(true);
 			combo_satuan_produk.setDisabled(true);
 			djumlah_beli_produkField.setDisabled(true);
@@ -1662,7 +1675,9 @@ Ext.onReady(function(){
 			jproduk_diskonField.setDisabled(true);
 			jproduk_cashback_cfField.setDisabled(true);
 			jproduk_ket_diskField.setDisabled(true);
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALPRODUK'))){ ?>
 			master_jual_produk_createForm.jproduk_savePrint.disable();
+			<?php } ?>
 		}
 	}
   
@@ -4596,26 +4611,24 @@ Ext.onReady(function(){
 			dataIndex: 'dproduk_produk',
 			width: 300,
 			sortable: false,
-			allowBlank: false,
+			allowBlank: false
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALPRODUK'))){ ?>
+			,
 			editor: combo_jual_produk,
 			renderer: Ext.util.Format.comboRenderer(combo_jual_produk)
+			<?php } ?>
 		},
 		{
 			align :'Left',
 			header: '<div align="center">' + 'Satuan' + '</div>',
 			dataIndex: 'dproduk_satuan',
 			width: 60,
-			sortable: false,
+			sortable: false
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALPRODUK'))){ ?>
+			,
 			editor: combo_satuan_produk,
 			renderer: Ext.util.Format.comboRenderer(combo_satuan_produk)
-/*
-			renderer: function(v, params, record){
-				j=cbo_dproduk_produkDataStore.findExact('dproduk_produk_value',record.data.dproduk_produk,0);
-				if(j>-1){
-					return cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_satuan;
-				}
-			}			
-*/
+			<?php } ?>
 		},
 		{
 			align : 'Right',
@@ -4623,8 +4636,11 @@ Ext.onReady(function(){
 			dataIndex: 'dproduk_jumlah',
 			width: 60,
 			sortable: false,
-			renderer: Ext.util.Format.numberRenderer('0,000'),
+			renderer: Ext.util.Format.numberRenderer('0,000')
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALPRODUK'))){ ?>
+			,
 			editor: djumlah_beli_produkField
+			<?php } ?>
 		},
 		{
 			align : 'Right',
@@ -4632,7 +4648,9 @@ Ext.onReady(function(){
 			dataIndex: 'dproduk_harga',
 			width: 100,
 			sortable: false,
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALPRODUK'))){ ?>
 			editor: dharga_konversiField,
+			<?php } ?>
 			renderer: Ext.util.Format.numberRenderer('0,000')
 		}
 		,{
@@ -4640,20 +4658,25 @@ Ext.onReady(function(){
 			header: '<div align="center">' + 'Sub Total (Rp)' + '</div>',
 			dataIndex: 'dproduk_subtotal',
 			width: 100,
-			sortable: false,
+			sortable: false
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALPRODUK'))){ ?>
+			,
 			editor: dsub_totalField,
-			//renderer: Ext.util.Format.numberRenderer('0,000')
 			renderer: function(v, params, record){
 				return Ext.util.Format.number(record.data.dproduk_jumlah*record.data.dproduk_harga,'0,000');
             }
+			<?php } ?>
 		},
 		{
 			align : 'Left',
 			header: '<div align="center">' + 'Jns Diskon' + '</div>',
 			dataIndex: 'dproduk_diskon_jenis',
 			width: 80,
-			sortable: false,
+			sortable: false
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALPRODUK'))){ ?>
+			,
 			editor: djenis_diskonField
+			<?php } ?>
 		},
 		{
 			align : 'Right',
@@ -4661,23 +4684,27 @@ Ext.onReady(function(){
 			dataIndex: 'dproduk_diskon',
 			width: 80,
 			sortable: false,
-			renderer: Ext.util.Format.numberRenderer('0,000'),
+			renderer: Ext.util.Format.numberRenderer('0,000')
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALPRODUK'))){ ?>
+			,
 			editor: djumlah_diskonField
+			<?php } ?>
 		},
 		{
 			align :'Right',
 			header: '<div align="center">' + 'Sub Tot Net (Rp)' + '</div>',
 			dataIndex: 'dproduk_subtotal_net',
 			width: 100,
-			sortable: false,
+			sortable: false
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALPRODUK'))){ ?>
+			,
 			editor: dsub_total_netField,
-			//renderer: Ext.util.Format.numberRenderer('0,000')
 			renderer: function(v, params, record){
 				var record_dtotal_net = record.data.dproduk_jumlah*record.data.dproduk_harga*((100-record.data.dproduk_diskon)/100);
 				record_dtotal_net = (record_dtotal_net>0?Math.round(record_dtotal_net):0);
 				return Ext.util.Format.number(record_dtotal_net,'0,000');
             }
-
+			<?php } ?>
 		},
 		{
 			align : 'Left',
@@ -4685,9 +4712,12 @@ Ext.onReady(function(){
 			dataIndex: 'dproduk_karyawan',
 			width: 150,
 			sortable: false,
-			allowBlank: false,
+			allowBlank: false
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALPRODUK'))){ ?>
+			,
 			editor: combo_reveral,
 			renderer: Ext.util.Format.comboRenderer(combo_reveral)
+			<?php } ?>
 		},
 		{
 			//field ini HARUS dimunculkan, utk penghitungan harga
@@ -4697,7 +4727,9 @@ Ext.onReady(function(){
 			width: 100,
 			sortable: false,
 			hidden: false,
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALPRODUK'))){ ?>
 			editor: dharga_defaultField,
+			<?php } ?>
 			renderer: Ext.util.Format.numberRenderer('0,000')
 		}
 		]
@@ -4733,16 +4765,20 @@ Ext.onReady(function(){
 		enableColLock:false,
 		region: 'center',
         margins: '0 5 5 5',
+		<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALPRODUK'))){ ?>
 		plugins: [editor_detail_jual_produk],
-		frame: true,
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
+		<?php } ?>
+		frame: true,
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:false},
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: detail_jual_produk_DataStore,
 			displayInfo: true
-		}),
+		})
+		<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALPRODUK'))){ ?>
+		,
 		/* Add Control on ToolBar */
 		tbar: [
 		{
@@ -4760,6 +4796,7 @@ Ext.onReady(function(){
 			handler: detail_jual_produk_confirm_delete
 		}
 		]
+		<?php } ?>
 	});
 	//eof
 	
@@ -6228,7 +6265,9 @@ Ext.onReady(function(){
 			{
 				xtype:'spacer',
 				width: 800
-			},
+			}
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALPRODUK'))){ ?>
+			,
 			{
 				text: 'Save and Print',
 				ref: '../jproduk_savePrint',
@@ -6242,6 +6281,7 @@ Ext.onReady(function(){
 				text: 'Cancel',
 				handler: jproduk_btn_cancel
 			}
+			<?php } ?>
 		]
 	});
 	/* End  of Function*/
@@ -6439,7 +6479,7 @@ Ext.onReady(function(){
 		valueField: 'value',
 		//anchor: '60%', //'95%',
 		width: 96,
-		triggerAction: 'all'	 	
+		triggerAction: 'all'
 	});
 
 	
