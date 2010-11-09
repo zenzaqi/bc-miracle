@@ -454,68 +454,113 @@ class M_master_lunas_piutang extends Model{
 		}
 		
 		//function for print record
-		function master_lunas_piutang_print($lpiutang_id ,$lpiutang_faktur ,$lpiutang_cust ,$lpiutang_faktur_tanggal ,$lpiutang_keterangan ,$option,$filter){
+		function master_lunas_piutang_print($lpiutang_faktur_jual
+											,$lpiutang_cust
+											,$lpiutang_faktur_tgl_start
+											,$lpiutang_faktur_tgl_akhir
+											,$lpiutang_status
+											,$lpiutang_stat_dok
+											,$option
+											,$filter){
 			//full query
-			$query="select * from master_lunas_piutang";
+			$query="SELECT master_lunas_piutang.lpiutang_faktur
+					,master_lunas_piutang.lpiutang_cust
+					,master_lunas_piutang.lpiutang_faktur_tanggal
+					,master_lunas_piutang.lpiutang_total
+					,master_lunas_piutang.lpiutang_sisa
+					,master_lunas_piutang.lpiutang_keterangan
+					,master_lunas_piutang.lpiutang_status
+					,master_lunas_piutang.lpiutang_stat_dok
+					,customer.cust_nama
+				FROM master_lunas_piutang
+					LEFT JOIN customer ON(lpiutang_cust=cust_id)";
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (lpiutang_id LIKE '%".addslashes($filter)."%' OR lpiutang_faktur LIKE '%".addslashes($filter)."%' OR lpiutang_cust LIKE '%".addslashes($filter)."%' OR lpiutang_faktur_tanggal LIKE '%".addslashes($filter)."%' OR lpiutang_keterangan LIKE '%".addslashes($filter)."%' )";
+				$query .= " (lpiutang_faktur LIKE '%".addslashes($filter)."%' OR cust_nama LIKE '%".addslashes($filter)."%' OR cust_no LIKE '%".addslashes($filter)."%' )";
+				$query .= " ORDER BY customer.cust_nama";
 				$result = $this->db->query($query);
 			} else if($option=='SEARCH'){
-				if($lpiutang_id!=''){
+				if($lpiutang_faktur_jual!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " lpiutang_id LIKE '%".$lpiutang_id."%'";
-				};
-				if($lpiutang_faktur!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " lpiutang_faktur LIKE '%".$lpiutang_faktur."%'";
+					$query.= " lpiutang_faktur LIKE '%".$lpiutang_faktur_jual."%'";
 				};
 				if($lpiutang_cust!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " lpiutang_cust LIKE '%".$lpiutang_cust."%'";
+					$query.= " lpiutang_cust = '".$lpiutang_cust."'";
 				};
-				if($lpiutang_faktur_tanggal!=''){
+				if($lpiutang_faktur_tgl_start<>'' && $lpiutang_faktur_tgl_akhir==''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " lpiutang_faktur_tanggal LIKE '%".$lpiutang_faktur_tanggal."%'";
+					$query.= " lpiutang_faktur_tanggal = '".$lpiutang_faktur_tgl_start."'";
 				};
-				if($lpiutang_keterangan!=''){
+				if($lpiutang_faktur_tgl_start<>'' && $lpiutang_faktur_tgl_akhir<>''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " lpiutang_keterangan LIKE '%".$lpiutang_keterangan."%'";
+					$query.= " lpiutang_faktur_tanggal BETWEEN '".$lpiutang_faktur_tgl_start."' AND '".$lpiutang_faktur_tgl_akhir."'";
 				};
+				if($lpiutang_status!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " lpiutang_status LIKE '%".$lpiutang_status."%'";
+				};
+				if($lpiutang_stat_dok!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " lpiutang_stat_dok LIKE '%".$lpiutang_stat_dok."%'";
+				};
+				$query .= " ORDER BY customer.cust_nama";
 				$result = $this->db->query($query);
 			}
-			return $result;
+			return $result->result();
 		}
 		
 		//function  for export to excel
-		function master_lunas_piutang_export_excel($lpiutang_id ,$lpiutang_faktur ,$lpiutang_cust ,$lpiutang_faktur_tanggal ,$lpiutang_keterangan ,$option,$filter){
+		function master_lunas_piutang_export_excel($lpiutang_faktur_jual
+													,$lpiutang_cust
+													,$lpiutang_faktur_tgl_start
+													,$lpiutang_faktur_tgl_akhir
+													,$lpiutang_status
+													,$lpiutang_stat_dok
+													,$option
+													,$filter){
 			//full query
-			$query="select * from master_lunas_piutang";
+			$query="SELECT customer.cust_nama AS customer
+					,master_lunas_piutang.lpiutang_faktur AS no_faktur_jual
+					,master_lunas_piutang.lpiutang_faktur_tanggal AS tgl_faktur_jual
+					,master_lunas_piutang.lpiutang_total AS total_piutang
+					,master_lunas_piutang.lpiutang_sisa AS sisa_piutang
+					,master_lunas_piutang.lpiutang_keterangan AS keterangan
+					,master_lunas_piutang.lpiutang_status AS status
+					,master_lunas_piutang.lpiutang_stat_dok AS stat_dok
+				FROM master_lunas_piutang
+					LEFT JOIN customer ON(lpiutang_cust=cust_id)";
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (lpiutang_id LIKE '%".addslashes($filter)."%' OR lpiutang_faktur LIKE '%".addslashes($filter)."%' OR lpiutang_cust LIKE '%".addslashes($filter)."%' OR lpiutang_faktur_tanggal LIKE '%".addslashes($filter)."%' OR lpiutang_keterangan LIKE '%".addslashes($filter)."%' )";
+				$query .= " (lpiutang_faktur LIKE '%".addslashes($filter)."%' OR cust_nama LIKE '%".addslashes($filter)."%' OR cust_no LIKE '%".addslashes($filter)."%' )";
+				$query .= " ORDER BY customer.cust_nama";
 				$result = $this->db->query($query);
 			} else if($option=='SEARCH'){
-				if($lpiutang_id!=''){
+				if($lpiutang_faktur_jual!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " lpiutang_id LIKE '%".$lpiutang_id."%'";
-				};
-				if($lpiutang_faktur!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " lpiutang_faktur LIKE '%".$lpiutang_faktur."%'";
+					$query.= " lpiutang_faktur LIKE '%".$lpiutang_faktur_jual."%'";
 				};
 				if($lpiutang_cust!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " lpiutang_cust LIKE '%".$lpiutang_cust."%'";
+					$query.= " lpiutang_cust = '".$lpiutang_cust."'";
 				};
-				if($lpiutang_faktur_tanggal!=''){
+				if($lpiutang_faktur_tgl_start<>'' && $lpiutang_faktur_tgl_akhir==''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " lpiutang_faktur_tanggal LIKE '%".$lpiutang_faktur_tanggal."%'";
+					$query.= " lpiutang_faktur_tanggal = '".$lpiutang_faktur_tgl_start."'";
 				};
-				if($lpiutang_keterangan!=''){
+				if($lpiutang_faktur_tgl_start<>'' && $lpiutang_faktur_tgl_akhir<>''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " lpiutang_keterangan LIKE '%".$lpiutang_keterangan."%'";
+					$query.= " lpiutang_faktur_tanggal BETWEEN '".$lpiutang_faktur_tgl_start."' AND '".$lpiutang_faktur_tgl_akhir."'";
 				};
+				if($lpiutang_status!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " lpiutang_status LIKE '%".$lpiutang_status."%'";
+				};
+				if($lpiutang_stat_dok!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " lpiutang_stat_dok LIKE '%".$lpiutang_stat_dok."%'";
+				};
+				$query .= " ORDER BY customer.cust_nama";
 				$result = $this->db->query($query);
 			}
 			return $result;

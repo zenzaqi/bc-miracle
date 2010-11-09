@@ -18,7 +18,6 @@ class C_master_lunas_piutang extends Controller {
 		parent::Controller();
 		$this->load->model('m_master_lunas_piutang', '', TRUE);
 		session_start();
-		$this->load->plugin('to_excel');
 	}
 	
 	//set index
@@ -284,84 +283,68 @@ class C_master_lunas_piutang extends Controller {
 
 	function master_lunas_piutang_print(){
   		//POST varibale here
-		$lpiutang_id=trim(@$_POST["lpiutang_id"]);
-		$lpiutang_no=trim(@$_POST["lpiutang_no"]);
-		$lpiutang_no=str_replace("/(<\/?)(p)([^>]*>)", "",$lpiutang_no);
-		$lpiutang_no=str_replace("'", '"',$lpiutang_no);
+		$lpiutang_faktur_jual=trim(@$_POST["lpiutang_faktur_jual"]);
+		$lpiutang_faktur_jual=str_replace("/(<\/?)(p)([^>]*>)", "",$lpiutang_faktur_jual);
+		$lpiutang_faktur_jual=str_replace("'", '"',$lpiutang_faktur_jual);
 		$lpiutang_cust=trim(@$_POST["lpiutang_cust"]);
-		$lpiutang_faktur_tanggal=trim(@$_POST["lpiutang_faktur_tanggal"]);
-		$lpiutang_keterangan=trim(@$_POST["lpiutang_keterangan"]);
-		$lpiutang_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$lpiutang_keterangan);
-		$lpiutang_keterangan=str_replace("'", '"',$lpiutang_keterangan);
+		$lpiutang_faktur_tgl_start=trim(@$_POST["lpiutang_faktur_tgl_start"]);
+		$lpiutang_faktur_tgl_akhir=trim(@$_POST["lpiutang_faktur_tgl_akhir"]);
+		$lpiutang_status=trim(@$_POST["lpiutang_status"]);
+		$lpiutang_status=str_replace("/(<\/?)(p)([^>]*>)", "",$lpiutang_status);
+		$lpiutang_status=str_replace("'", '"',$lpiutang_status);
+		$lpiutang_stat_dok=trim(@$_POST["lpiutang_stat_dok"]);
+		$lpiutang_stat_dok=str_replace("/(<\/?)(p)([^>]*>)", "",$lpiutang_stat_dok);
+		$lpiutang_stat_dok=str_replace("'", '"',$lpiutang_stat_dok);
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$result = $this->m_master_lunas_piutang->master_lunas_piutang_print($lpiutang_id ,$lpiutang_no ,$lpiutang_cust ,$lpiutang_faktur_tanggal ,$lpiutang_keterangan ,$option,$filter);
-		$nbrows=$result->num_rows();
-		$totcolumn=10;
-   		/* We now have our array, let's build our HTML file */
-		$file = fopen("master_lunas_piutanglist.html",'w');
-		fwrite($file, "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' /><title>Printing the Master_lunas_piutang Grid</title><link rel='stylesheet' type='text/css' href='assets/modules/main/css/printstyle.css'/></head>");
-		fwrite($file, "<body><table summary='Master_lunas_piutang List'><caption>MASTER_LUNAS_PIUTANG</caption><thead><tr><th scope='col'>Lpiutang Id</th><th scope='col'>Lpiutang No</th><th scope='col'>Lpiutang Cust</th><th scope='col'>Lpiutang Tanggal</th><th scope='col'>Lpiutang Keterangan</th><th scope='col'>Lpiutang Creator</th><th scope='col'>Lpiutang Date Create</th><th scope='col'>Lpiutang Update</th><th scope='col'>Lpiutang Date Update</th><th scope='col'>Lpiutang Revised</th></tr></thead><tfoot><tr><th scope='row'>Total</th><td colspan='$totcolumn'>");
-		fwrite($file, $nbrows);
-		fwrite($file, " Master_lunas_piutang</td></tr></tfoot><tbody>");
-		$i=0;
-		if($nbrows>0){
-			foreach($result->result_array() as $data){
-				fwrite($file,'<tr');
-				if($i%1==0){
-					fwrite($file," class='odd'");
-				}
-			
-				fwrite($file, "><th scope='row' id='r97'>");
-				fwrite($file, $data['lpiutang_id']);
-				fwrite($file,"</th><td>");
-				fwrite($file, $data['lpiutang_no']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['lpiutang_cust']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['lpiutang_faktur_tanggal']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['lpiutang_keterangan']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['lpiutang_creator']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['lpiutang_date_create']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['lpiutang_update']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['lpiutang_date_update']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['lpiutang_revised']);
-				fwrite($file, "</td></tr>");
-			}
+		$data["data_print"] = $this->m_master_lunas_piutang->master_lunas_piutang_print($lpiutang_faktur_jual
+																						,$lpiutang_cust
+																						,$lpiutang_faktur_tgl_start
+																						,$lpiutang_faktur_tgl_akhir
+																						,$lpiutang_status
+																						,$lpiutang_stat_dok
+																						,$option
+																						,$filter);
+		$print_view=$this->load->view("main/p_master_lunas_piutang.php",$data,TRUE);
+		if(!file_exists("print")){
+			mkdir("print");
 		}
-		fwrite($file, "</tbody></table></body></html>");	
-		fclose($file);
-		echo '1';        
+		$print_file=fopen("print/master_lunas_piutanglist.html","w+");
+		fwrite($print_file, $print_view);
+		echo '1';
 	}
 	/* End Of Function */
 
 	/* Function to Export Excel document */
 	function master_lunas_piutang_export_excel(){
 		//POST varibale here
-		$lpiutang_id=trim(@$_POST["lpiutang_id"]);
-		$lpiutang_no=trim(@$_POST["lpiutang_no"]);
-		$lpiutang_no=str_replace("/(<\/?)(p)([^>]*>)", "",$lpiutang_no);
-		$lpiutang_no=str_replace("'", '"',$lpiutang_no);
+		$lpiutang_faktur_jual=trim(@$_POST["lpiutang_faktur_jual"]);
+		$lpiutang_faktur_jual=str_replace("/(<\/?)(p)([^>]*>)", "",$lpiutang_faktur_jual);
+		$lpiutang_faktur_jual=str_replace("'", '"',$lpiutang_faktur_jual);
 		$lpiutang_cust=trim(@$_POST["lpiutang_cust"]);
-		$lpiutang_faktur_tanggal=trim(@$_POST["lpiutang_faktur_tanggal"]);
-		$lpiutang_keterangan=trim(@$_POST["lpiutang_keterangan"]);
-		$lpiutang_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$lpiutang_keterangan);
-		$lpiutang_keterangan=str_replace("'", '"',$lpiutang_keterangan);
+		$lpiutang_faktur_tgl_start=trim(@$_POST["lpiutang_faktur_tgl_start"]);
+		$lpiutang_faktur_tgl_akhir=trim(@$_POST["lpiutang_faktur_tgl_akhir"]);
+		$lpiutang_status=trim(@$_POST["lpiutang_status"]);
+		$lpiutang_status=str_replace("/(<\/?)(p)([^>]*>)", "",$lpiutang_status);
+		$lpiutang_status=str_replace("'", '"',$lpiutang_status);
+		$lpiutang_stat_dok=trim(@$_POST["lpiutang_stat_dok"]);
+		$lpiutang_stat_dok=str_replace("/(<\/?)(p)([^>]*>)", "",$lpiutang_stat_dok);
+		$lpiutang_stat_dok=str_replace("'", '"',$lpiutang_stat_dok);
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$query = $this->m_master_lunas_piutang->master_lunas_piutang_export_excel($lpiutang_id ,$lpiutang_no ,$lpiutang_cust ,$lpiutang_faktur_tanggal ,$lpiutang_keterangan ,$option,$filter);
-		
+		$query = $this->m_master_lunas_piutang->master_lunas_piutang_export_excel($lpiutang_faktur_jual
+																				,$lpiutang_cust
+																				,$lpiutang_faktur_tgl_start
+																				,$lpiutang_faktur_tgl_akhir
+																				,$lpiutang_status
+																				,$lpiutang_stat_dok
+																				,$option
+																				,$filter);
+		$this->load->plugin('to_excel');
 		to_excel($query,"master_lunas_piutang"); 
 		echo '1';
-			
 	}
 	
 	function print_paper(){

@@ -1799,36 +1799,41 @@ Ext.onReady(function(){
 	/* Function for print List Grid */
 	function master_lunas_piutang_print(){
 		var searchquery = "";
-		var lpiutang_no_print=null;
+		var lpiutang_faktur_jual_print='';
 		var lpiutang_cust_print=null;
-		var lpiutang_tanggal_print_date="";
-		var lpiutang_keterangan_print=null;
+		var lpiutang_faktur_jual_start_print_date="";
+		var lpiutang_faktur_jual_akhir_print_date="";
+		var lpiutang_status_print=null;
+		var lpiutang_stat_dok_print=null;
 		var win;              
-		// check if we do have some search data...
+		// check if we do have some print data...
 		if(master_lunas_piutang_DataStore.baseParams.query!==null){searchquery = master_lunas_piutang_DataStore.baseParams.query;}
-		if(master_lunas_piutang_DataStore.baseParams.lpiutang_no!==null){lpiutang_no_print = master_lunas_piutang_DataStore.baseParams.lpiutang_no;}
+		if(master_lunas_piutang_DataStore.baseParams.lpiutang_faktur_jual!==''){lpiutang_faktur_jual_print = master_lunas_piutang_DataStore.baseParams.lpiutang_faktur_jual;}
 		if(master_lunas_piutang_DataStore.baseParams.lpiutang_cust!==null){lpiutang_cust_print = master_lunas_piutang_DataStore.baseParams.lpiutang_cust;}
-		if(master_lunas_piutang_DataStore.baseParams.lpiutang_tanggal!==""){lpiutang_tanggal_print_date = master_lunas_piutang_DataStore.baseParams.lpiutang_tanggal;}
-		if(master_lunas_piutang_DataStore.baseParams.lpiutang_keterangan!==null){lpiutang_keterangan_print = master_lunas_piutang_DataStore.baseParams.lpiutang_keterangan;}
-
+		if(master_lunas_piutang_DataStore.baseParams.lpiutang_faktur_tgl_start!==""){lpiutang_faktur_jual_start_print_date = master_lunas_piutang_DataStore.baseParams.lpiutang_faktur_tgl_start;}
+		if(master_lunas_piutang_DataStore.baseParams.lpiutang_faktur_tgl_akhir!==""){lpiutang_faktur_jual_akhir_print_date = master_lunas_piutang_DataStore.baseParams.lpiutang_faktur_tgl_akhir;}
+		if(master_lunas_piutang_DataStore.baseParams.lpiutang_status!==null){lpiutang_status_print = master_lunas_piutang_DataStore.baseParams.lpiutang_status;}
+		if(master_lunas_piutang_DataStore.baseParams.lpiutang_stat_dok!==null){lpiutang_stat_dok_print = master_lunas_piutang_DataStore.baseParams.lpiutang_stat_dok;}
+		
 		Ext.Ajax.request({   
 		waitMsg: 'Please Wait...',
 		url: 'index.php?c=c_master_lunas_piutang&m=get_action',
 		params: {
 			task: "PRINT",
 		  	query: searchquery,                    		
-			lpiutang_no : lpiutang_no_print,
-			lpiutang_cust : lpiutang_cust_print,
-		  	lpiutang_tanggal : lpiutang_tanggal_print_date, 
-			lpiutang_keterangan : lpiutang_keterangan_print,
+			lpiutang_faktur_jual: lpiutang_faktur_jual_print,
+			lpiutang_cust	:	lpiutang_cust_print,
+			lpiutang_faktur_tgl_start	:	lpiutang_faktur_jual_start_print_date,
+			lpiutang_faktur_tgl_akhir	:	lpiutang_faktur_jual_akhir_print_date,
+			lpiutang_status	: lpiutang_status_print,
+			lpiutang_stat_dok	: lpiutang_stat_dok_print,
 		  	currentlisting: master_lunas_piutang_DataStore.baseParams.task // this tells us if we are searching or not
 		}, 
 		success: function(response){              
 		  	var result=eval(response.responseText);
 		  	switch(result){
 		  	case 1:
-				win = window.open('./master_lunas_piutanglist.html','master_lunas_piutanglist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
-				
+				win = window.open('./print/master_lunas_piutanglist.html','master_lunas_piutanglist','height=400,width=800,resizable=1,scrollbars=1, menubar=1');
 				break;
 		  	default:
 				Ext.MessageBox.show({
@@ -1858,17 +1863,21 @@ Ext.onReady(function(){
 	/* Function for print Export to Excel Grid */
 	function master_lunas_piutang_export_excel(){
 		var searchquery = "";
-		var lpiutang_no_2excel=null;
+		var lpiutang_faktur_jual_2excel='';
 		var lpiutang_cust_2excel=null;
-		var lpiutang_tanggal_2excel_date="";
-		var lpiutang_keterangan_2excel=null;
+		var lpiutang_faktur_jual_start_2excel_date="";
+		var lpiutang_faktur_jual_akhir_2excel_date="";
+		var lpiutang_status_2excel=null;
+		var lpiutang_stat_dok_2excel=null;
 		var win;              
 		// check if we do have some search data...
 		if(master_lunas_piutang_DataStore.baseParams.query!==null){searchquery = master_lunas_piutang_DataStore.baseParams.query;}
-		if(master_lunas_piutang_DataStore.baseParams.lpiutang_no!==null){lpiutang_no_2excel = master_lunas_piutang_DataStore.baseParams.lpiutang_no;}
+		if(master_lunas_piutang_DataStore.baseParams.lpiutang_faktur_jual!==''){lpiutang_faktur_jual_2excel = master_lunas_piutang_DataStore.baseParams.lpiutang_faktur_jual;}
 		if(master_lunas_piutang_DataStore.baseParams.lpiutang_cust!==null){lpiutang_cust_2excel = master_lunas_piutang_DataStore.baseParams.lpiutang_cust;}
-		if(master_lunas_piutang_DataStore.baseParams.lpiutang_tanggal!==""){lpiutang_tanggal_2excel_date = master_lunas_piutang_DataStore.baseParams.lpiutang_tanggal;}
-		if(master_lunas_piutang_DataStore.baseParams.lpiutang_keterangan!==null){lpiutang_keterangan_2excel = master_lunas_piutang_DataStore.baseParams.lpiutang_keterangan;}
+		if(master_lunas_piutang_DataStore.baseParams.lpiutang_faktur_tgl_start!==""){lpiutang_faktur_jual_start_2excel_date = master_lunas_piutang_DataStore.baseParams.lpiutang_faktur_tgl_start;}
+		if(master_lunas_piutang_DataStore.baseParams.lpiutang_faktur_tgl_akhir!==""){lpiutang_faktur_jual_akhir_2excel_date = master_lunas_piutang_DataStore.baseParams.lpiutang_faktur_tgl_akhir;}
+		if(master_lunas_piutang_DataStore.baseParams.lpiutang_status!==null){lpiutang_status_2excel = master_lunas_piutang_DataStore.baseParams.lpiutang_status;}
+		if(master_lunas_piutang_DataStore.baseParams.lpiutang_stat_dok!==null){lpiutang_stat_dok_2excel = master_lunas_piutang_DataStore.baseParams.lpiutang_stat_dok;}
 
 		Ext.Ajax.request({   
 		waitMsg: 'Please Wait...',
@@ -1876,10 +1885,12 @@ Ext.onReady(function(){
 		params: {
 			task: "EXCEL",
 		  	query: searchquery,                    		
-			lpiutang_no : lpiutang_no_2excel,
-			lpiutang_cust : lpiutang_cust_2excel,
-		  	lpiutang_tanggal : lpiutang_tanggal_2excel_date, 
-			lpiutang_keterangan : lpiutang_keterangan_2excel,
+			lpiutang_faktur_jual: lpiutang_faktur_jual_2excel,
+			lpiutang_cust	:	lpiutang_cust_2excel,
+			lpiutang_faktur_tgl_start	:	lpiutang_faktur_jual_start_2excel_date,
+			lpiutang_faktur_tgl_akhir	:	lpiutang_faktur_jual_akhir_2excel_date,
+			lpiutang_status	: lpiutang_status_2excel,
+			lpiutang_stat_dok	: lpiutang_stat_dok_2excel,
 		  	currentlisting: master_lunas_piutang_DataStore.baseParams.task // this tells us if we are searching or not
 		},
 		success: function(response){              

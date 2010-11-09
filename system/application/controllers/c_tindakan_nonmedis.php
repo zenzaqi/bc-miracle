@@ -231,6 +231,7 @@ class C_tindakan_nonmedis extends Controller {
 			$dtrawat_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$dtrawat_keterangan);
 			$dtrawat_ambil_paket=trim(@$_POST["dtrawat_ambil_paket"]);
 			$dtrawat_status=trim(@$_POST["dtrawat_status"]);
+			$dtrawat_jumlah=trim(@$_POST["dtrawat_jumlah"]);
 			
 			$result = $this->m_tindakan_nonmedis->tindakan_update_list($trawat_id
 																  ,$dtrawat_id
@@ -239,7 +240,8 @@ class C_tindakan_nonmedis extends Controller {
 																  ,$dtrawat_jam
 																  ,$dtrawat_keterangan
 																  ,$dtrawat_ambil_paket
-																  ,$dtrawat_status);
+																  ,$dtrawat_status
+																  ,$dtrawat_jumlah);
 			echo $result;
 		}else{
 			//Edit Form
