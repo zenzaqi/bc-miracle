@@ -1,0 +1,1 @@
+UPDATE `miracledb`.`menus` SET `menu_link` = '?c=c_permintaan_it', `menu_cat` = 'window' WHERE `menus`.`menu_id` = 383 LIMIT 1;
