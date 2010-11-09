@@ -152,6 +152,7 @@ Ext.onReady(function(){
 		var dtrawat_jam_update=null;
 		var dtrawat_keterangan_update=null;
 		var dtrawat_ambil_paket_update="";
+		var dtrawat_jumlah_update=1;
 		
 		var dtrawat_status_update=null;
 		
@@ -164,6 +165,7 @@ Ext.onReady(function(){
 		if(oGrid_event.record.data.dtrawat_jam!== null){dtrawat_jam_update = oGrid_event.record.data.dtrawat_jam;}
 		if(oGrid_event.record.data.dtrawat_keterangan!== null){dtrawat_keterangan_update = oGrid_event.record.data.dtrawat_keterangan;}
 		dtrawat_ambil_paket_update = oGrid_event.record.data.dtrawat_ambil_paket;
+		dtrawat_jumlah_update = oGrid_event.record.data.dtrawat_jumlah;
 		
 		dtrawat_status_update = oGrid_event.record.data.dtrawat_status;
 		
@@ -196,7 +198,8 @@ Ext.onReady(function(){
 					dtrawat_jam	: dtrawat_jam_update,
 					dtrawat_keterangan	:dtrawat_keterangan_update,
 					dtrawat_ambil_paket	: dtrawat_ambil_paket_update,
-					dtrawat_status	:dtrawat_status_update
+					dtrawat_status	:dtrawat_status_update,
+					dtrawat_jumlah	:dtrawat_jumlah_update
 				}, 
 				success: function(response){							
 					var result=eval(response.responseText);
@@ -230,8 +233,8 @@ Ext.onReady(function(){
 							tindakan_nonmedisListEditorGrid.setDisabled(false);
 							Ext.MessageBox.show({
 							   title: 'Warning',
-							   width: 330,
-							   msg: 'Customer dengan perawatan yang dipilih, <br/>\"tidak ada\" dalam paket.',
+							   width: 450,
+							   msg: 'Customer dengan perawatan yang dipilih, \"tidak ada\" dalam paket. <br/>Atau Sisa Paket tidak mencukupi untuk diambil.',
 							   buttons: Ext.MessageBox.OK,
 							   animEl: 'save',
 							   icon: Ext.MessageBox.WARNING

@@ -47,7 +47,7 @@ class M_tindakan_nonmedis extends Model{
 	}
 	
 	
-	function global_customer_check_paket($cust_id, $rawat_id){
+	function global_customer_check_paket($cust_id, $rawat_id, $jumlah_ambil){
 		//$return_row_punya_paket = 0;
 		//* Mencari kepemilikan paket berdasarkan customer_id /
 		$sql_punya_paket="SELECT (dpaket_jumlah*rpaket_jumlah) AS rpaket_jumlah
@@ -62,7 +62,7 @@ class M_tindakan_nonmedis extends Model{
 			WHERE ppaket_cust='$cust_id'
 				AND rpaket_perawatan='$rawat_id'
 				AND jpaket_stat_dok<>'Batal'
-				AND dpaket_sisa_paket>0
+				AND dpaket_sisa_paket>='".$jumlah_ambil."'
 			ORDER BY detail_jual_paket.dpaket_id ASC";
 		
 		$rs_punya_paket=$this->db->query($sql_punya_paket);
@@ -102,7 +102,7 @@ class M_tindakan_nonmedis extends Model{
 		}
 	}
 	
-	function customer_check_paket($cust_id, $rawat_id){
+	function customer_check_paket($cust_id, $rawat_id, $jumlah_ambil){
 		//$return_row_punya_paket = 0;
 		//* Mencari kepemilikan paket berdasarkan customer_id /
 		$sql_punya_paket="SELECT (dpaket_jumlah*rpaket_jumlah) AS rpaket_jumlah
@@ -118,7 +118,7 @@ class M_tindakan_nonmedis extends Model{
 				AND rpaket_perawatan='$rawat_id'
 				AND jpaket_cust='$cust_id'
 				AND jpaket_stat_dok<>'Batal'
-				AND dpaket_sisa_paket>0
+				AND dpaket_sisa_paket>='".$jumlah_ambil."'
 			ORDER BY detail_jual_paket.dpaket_id ASC";
 		
 		$rs_punya_paket=$this->db->query($sql_punya_paket);
@@ -156,7 +156,7 @@ class M_tindakan_nonmedis extends Model{
 			}
 			
 		}else{
-			$return_global_customer_check_paket = $this->global_customer_check_paket($cust_id, $rawat_id);
+			$return_global_customer_check_paket = $this->global_customer_check_paket($cust_id, $rawat_id, $jumlah_ambil);
 			return $return_global_customer_check_paket;
 			//return 0;
 		}
@@ -1171,7 +1171,8 @@ class M_tindakan_nonmedis extends Model{
 								,$dtrawat_jam
 								,$dtrawat_keterangan
 								,$dtrawat_ambil_paket
-								,$dtrawat_status){
+								,$dtrawat_status
+								,$dtrawat_jumlah){
 		
 		$datetime_now = date('Y-m-d H:i:s');
 		$bln_now=date('Y-m');
@@ -1258,7 +1259,7 @@ class M_tindakan_nonmedis extends Model{
 						** jika punya paket, maka akan update db.tindakan_detail
 						*/
 						//1. checking kepemilikan paket
-						$sql_check_paket=$this->customer_check_paket($trawat_cust, $dtrawat_perawatan);
+						$sql_check_paket=$this->customer_check_paket($trawat_cust, $dtrawat_perawatan, $dtrawat_jumlah);
 						if(sizeof($sql_check_paket)>0){
 							/* artinya: Customer memiliki paket untuk perawatan yang dipilih
 							** UPDATE db.tindakan_detail
@@ -1366,7 +1367,7 @@ class M_tindakan_nonmedis extends Model{
 						}
 					}else if($dtrawat_ambil_paket_awal=='false' && $dtrawat_ambil_paket=='true'){
 						//1. checking kepemilikan paket, dari $trawat_cust dan $dtrawat_perawatan_awal
-						$sql_check_paket=$this->customer_check_paket($trawat_cust, $dtrawat_perawatan_awal);
+						$sql_check_paket=$this->customer_check_paket($trawat_cust, $dtrawat_perawatan_awal, $dtrawat_jumlah);
 						if(sizeof($sql_check_paket)>0){
 							/* artinya: Customer memiliki paket untuk perawatan yang dipilih
 							** UPDATE db.tindakan_detail
@@ -1422,7 +1423,7 @@ class M_tindakan_nonmedis extends Model{
 						 * >> Jika = Tidak Punya ==> keluar message: "Customer Tidak Memiliki paket dengan perawatan yang dipilih.
 						 * 		Silakan menghilangkan centang Ambil-Paket untuk dimasukkan ke Kasir Penjualan Perawatan."
 						*/
-						$sql_check_paket=$this->customer_check_paket($trawat_cust, $dtrawat_perawatan_awal);
+						$sql_check_paket=$this->customer_check_paket($trawat_cust, $dtrawat_perawatan_awal, $dtrawat_jumlah);
 						if(sizeof($sql_check_paket)>0){
 							/* artinya: Customer memiliki paket untuk perawatan yang dipilih
 							** UPDATE db.tindakan_detail + INSERT to db.detail_ambil_paket
