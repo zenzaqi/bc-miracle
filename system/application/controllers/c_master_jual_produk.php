@@ -99,13 +99,6 @@ class C_master_jual_produk extends Controller {
 		}
 	}
 	
-	function get_konversi_list(){
-		$dproduk_produk_id=trim(@$_POST["dproduk_produk_id"]);
-		$result=$this->m_master_jual_produk->get_konversi_list($dproduk_produk_id);
-		echo $result;
-	}
-	
-	
 	function get_reveral_list(){
 		$query = isset($_POST['query']) ? $_POST['query'] : "";
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
