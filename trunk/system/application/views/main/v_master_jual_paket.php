@@ -1138,9 +1138,11 @@ Ext.onReady(function(){
 		detail_pengguna_paketListEditorGrid.setDisabled(false);
 		jpaket_diskonField.setDisabled(false);
 		jpaket_cashback_cfField.setDisabled(false);
+		<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALPAKET'))){ ?>
 		detail_jual_paketListEditorGrid.djpaket_add.enable();
         detail_jual_paketListEditorGrid.djpaket_delete.enable();
 		master_jual_paket_createForm.jpaketSavePrintButton.enable();
+		<?php } ?>
 		
 		
 		combo_jual_paket.setDisabled(false);
@@ -1152,16 +1154,6 @@ Ext.onReady(function(){
 		dpaket_jumlahdiskonField.setDisabled(false);
 		dpaket_subtotalnetField.setDisabled(false);
 		combo_reveral_paket.setDisabled(false);
-		
-		
-		/*if(jpaket_post2db=='UPDATE' && (get_stat_dok()=='Tertutup' || get_stat_dok()=='Batal')){
-            detail_jual_paketListEditorGrid.djpaket_add.disable();
-            detail_jual_paketListEditorGrid.djpaket_delete.disable();
-        }else{
-            detail_jual_paketListEditorGrid.djpaket_add.enable();
-            detail_jual_paketListEditorGrid.djpaket_delete.enable();
-        }*/
-		
 		
 	}
  	/* End of Function */
@@ -1578,7 +1570,9 @@ Ext.onReady(function(){
 		}
         
         else if(status_awal =='Tertutup' && jpaket_stat_dokField.getValue()=='Tertutup'){
-            master_jual_paket_createForm.jpaketSavePrintButton.enable();
+            <?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALPAKET'))){ ?>
+			master_jual_paket_createForm.jpaketSavePrintButton.enable();
+			<?php } ?>
         }
 		
 		});	
@@ -1590,7 +1584,9 @@ Ext.onReady(function(){
 	if(btn=='yes')
 	{
 		jpaket_stat_dokField.setValue('Batal');
+		<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALPAKET'))){ ?>
         master_jual_paket_createForm.jpaketSavePrintButton.disable();
+		<?php } ?>
 	}  
 	else
 		jpaket_stat_dokField.setValue(master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_stat_dok'));
@@ -1628,8 +1624,10 @@ Ext.onReady(function(){
 			master_jual_paket_transfer3Group.setDisabled(false);
 			master_jual_paket_voucher3Group.setDisabled(false);
 			
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALPAKET'))){ ?>
 			detail_jual_paketListEditorGrid.djpaket_add.enable();
 			detail_jual_paketListEditorGrid.djpaket_delete.enable();
+			<?php } ?>
 			combo_jual_paket.setDisabled(false);
 			dpaket_jumlahField.setDisabled(false);
 			dpaket_kadaluarsaField.setDisabled(false);
@@ -1673,8 +1671,10 @@ Ext.onReady(function(){
 			master_jual_paket_transfer3Group.setDisabled(true);
 			master_jual_paket_voucher3Group.setDisabled(true);
 			
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALPAKET'))){ ?>
 			detail_jual_paketListEditorGrid.djpaket_add.disable();
 			detail_jual_paketListEditorGrid.djpaket_delete.disable();
+			<?php } ?>
 			combo_jual_paket.setDisabled(true);
 			dpaket_jumlahField.setDisabled(true);
 			dpaket_kadaluarsaField.setDisabled(true);
@@ -1717,8 +1717,10 @@ Ext.onReady(function(){
 			master_jual_paket_transfer3Group.setDisabled(true);
 			master_jual_paket_voucher3Group.setDisabled(true);
 			
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALPAKET'))){ ?>
 			detail_jual_paketListEditorGrid.djpaket_add.disable();
 			detail_jual_paketListEditorGrid.djpaket_delete.disable();
+			<?php } ?>
 			combo_jual_paket.setDisabled(true);
 			dpaket_jumlahField.setDisabled(true);
 			dpaket_kadaluarsaField.setDisabled(true);
@@ -1731,7 +1733,9 @@ Ext.onReady(function(){
 			detail_pengguna_paketListEditorGrid.setDisabled(true);
 			jpaket_diskonField.setDisabled(true);
 			jpaket_cashback_cfField.setDisabled(true);
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALPAKET'))){ ?>
 			master_jual_paket_createForm.jpaketSavePrintButton.disable();
+			<?php } ?>
 		}
 	}
 	
@@ -4399,16 +4403,20 @@ Ext.onReady(function(){
 		enableColLock:false,
 		region: 'center',
         margins: '0 0 0 0',
+		<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALPAKET'))){ ?>
 		plugins: [editor_detail_jual_paket],
-		frame: true,
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
+		<?php } ?>
+		frame: true,
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:false},
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: detail_jual_paket_DataStore,
 			displayInfo: true
-		}),
+		})
+		<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALPAKET'))){ ?>
+		,
 		/* Add Control on ToolBar */
 		tbar: [
 		{
@@ -4426,6 +4434,7 @@ Ext.onReady(function(){
 			handler: detail_jual_paket_confirm_delete
 		}
 		]
+		<?php } ?>
 	});
 	//eof
 	
@@ -4762,16 +4771,20 @@ Ext.onReady(function(){
 		enableColLock:false,
 		region: 'center',
         margins: '0 0 0 0',
+		<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALPAKET'))){ ?>
 		plugins: [editor_detail_pengguna_paket],
-		frame: true,
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
+		<?php } ?>
+		frame: true,
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true},
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: detail_pengguna_paket_DataStore,
 			displayInfo: true
-		}),
+		})
+		<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALPAKET'))){ ?>
+		,
 		/* Add Control on ToolBar */
 		tbar: [
 		{
@@ -4786,6 +4799,7 @@ Ext.onReady(function(){
 			handler: detail_pengguna_paket_confirm_delete
 		}
 		]
+		<?php } ?>
 	});
 	//eof
 	
@@ -5780,16 +5794,22 @@ Ext.onReady(function(){
 			{
 				xtype:'spacer',
 				width: 560
-			},
+			}
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALPAKET'))){ ?>
+			,
 			{
 				id: 'jpaket_save_pemakai',
 				text: 'Save Pemakai',
 				handler: detail_pengguna_paket_insert
-			},
+			}
+			<?php } ?>
+			,
 			{
 				xtype:'spacer',
 				width: 50
-			},
+			}
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALPAKET'))){ ?>
+			,
 			{
 				text: 'Save and Print',
 				ref: '../jpaketSavePrintButton',
@@ -5804,7 +5824,7 @@ Ext.onReady(function(){
 				text: 'Cancel',
 				handler: jpaket_btn_cancel
 			}
-			
+			<?php } ?>
 		]
 	});
 	/* End  of Function*/
