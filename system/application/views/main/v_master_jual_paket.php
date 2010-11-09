@@ -1769,9 +1769,9 @@ Ext.onReady(function(){
   
 	/* Function for Update Confirm */
 	function master_jual_paket_confirm_update(){
-		cbo_cust_pengguna_paket_DataStore.load({params:{query:master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_id')}});
 		/* only one record is selected here */
 		if(master_jual_paketListEditorGrid.selModel.getCount() == 1) {
+			cbo_cust_pengguna_paket_DataStore.load({params:{query:master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_id')}});
 			master_cara_bayarTabPanel.setActiveTab(0);
 			jpaket_post2db='UPDATE';
 			cbo_dpaket_paketDataStore.load({
