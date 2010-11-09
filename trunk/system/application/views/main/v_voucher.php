@@ -296,7 +296,13 @@ Ext.onReady(function(){
 			dataIndex: 'voucher_cust',
 			width: 150,
 			sortable: true,
-			readOnly: true
+			readOnly: true,
+			renderer: function(value, cell, record){
+				if(value.length>=16)
+					return value.substring(0,6) + '-' + value.substring(6,12) + '-' + value.substring(12);
+				else
+					return value;
+			}
 		},
 		{
 			header: '<div align="center">' + 'Jenis Transaksi' + '</div>',

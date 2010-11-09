@@ -215,13 +215,13 @@ Ext.onReady(function(){
 				var result=response.responseText;
 				if(result!==''){
 					form_bayar_piutang_insert(result);
-					Ext.MessageBox.alert(post2db+' OK','The Master_lunas_piutang was '+msg+' successfully.');
+					Ext.MessageBox.alert(post2db+' OK','Data Pelunasan Piutang berhasil disimpan.');
 					master_lunas_piutang_DataStore.reload();
 					single_lunas_piutang_createWindow.hide();
 				}else{
 					Ext.MessageBox.show({
 					   title: 'Warning',
-					   msg: 'We could\'t not '+msg+' the Master_lunas_piutang.',
+					   msg: 'Data Pelunasan Piutang tidak bisa disimpan!.',
 					   buttons: Ext.MessageBox.OK,
 					   animEl: 'save',
 					   icon: Ext.MessageBox.WARNING
@@ -341,7 +341,7 @@ Ext.onReady(function(){
   
 	/* Function for Check if the form is valid */
 	function is_master_lunas_piutang_form_valid(){
-		return (true &&  true &&  true &&  true &&  true &&  true &&  true &&  true &&  true &&  true  );
+		return (true);
 	}
   	/* End of Function */
  
@@ -457,7 +457,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'lpiutang_id'
 		},[
-		/* dataIndex => insert intomaster_lunas_piutang_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'lpiutang_id', type: 'int', mapping: 'lpiutang_id'}, 
 			{name: 'lpiutang_faktur', type: 'string', mapping: 'lpiutang_faktur'}, 
 			{name: 'lpiutang_cust', type: 'int', mapping: 'lpiutang_cust'}, 
@@ -487,7 +486,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'cust_id'
 		},[
-		/* dataIndex => insert intocustomer_note_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'cust_id', type: 'int', mapping: 'cust_id'},
 			{name: 'cust_no', type: 'string', mapping: 'cust_no'},
 			{name: 'cust_nama', type: 'string', mapping: 'cust_nama'},
@@ -542,7 +540,6 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'mbank_id'
 		},[
-		/* dataIndex => insert intomaster_jual_produk_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'piutang_bank_value', type: 'int', mapping: 'mbank_id'}, 
 			{name: 'piutang_bank_display', type: 'string', mapping: 'mbank_nama'}
 		]),
@@ -574,7 +571,7 @@ Ext.onReady(function(){
 			dataIndex: 'lpiutang_faktur_tanggal',
 			width: 90,
 			sortable: false,
-			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
+			renderer: Ext.util.Format.dateRenderer('Y-m-d')
 		}, 
 		{
 			header: 'Customer',
@@ -630,7 +627,6 @@ Ext.onReady(function(){
 		enableColLock:false,
 		frame: true,
 		trackMouseOver: false,
-		//clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		view: new Ext.grid.GroupingView({
             forceFit:true,
@@ -642,20 +638,24 @@ Ext.onReady(function(){
 			store: master_lunas_piutang_DataStore,
 			displayInfo: true
 		}),
-		/* Add Control on ToolBar */
 		tbar: [
+		<?php if(eregi('U|R',$this->m_security->get_access_group_by_kode('MENU_LUNASPIUTANG'))){ ?>
 		{
 			text: 'Bayar',
 			tooltip: 'Edit selected record',
 			iconCls:'icon-update',
 			handler: master_lunas_piutang_confirm_update   // Confirm before updating
-		}, '-',{
+		}, '-',
+		<?php } ?>
+		<?php if(eregi('C',$this->m_security->get_access_group_by_kode('MENU_LUNASPIUTANG'))){ ?>
+		{
 			text: 'Delete',
 			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
-			disabled: true,
 			handler: master_lunas_piutang_confirm_delete   // Confirm before deleting
-		}, '-', {
+		}, '-', 
+		<?php } ?>
+		{
 			text: 'Adv Search',
 			tooltip: 'Advanced Search',
 			iconCls:'icon-search',
@@ -701,17 +701,21 @@ Ext.onReady(function(){
 	master_lunas_piutang_ContextMenu = new Ext.menu.Menu({
 		id: 'master_lunas_piutang_ListEditorGridContextMenu',
 		items: [
+		<?php if(eregi('U|R',$this->m_security->get_access_group_by_kode('MENU_LUNASPIUTANG'))){ ?>
 		{ 
 			text: 'Edit', tooltip: 'Edit selected record', 
 			iconCls:'icon-update',
 			handler: master_lunas_piutang_editContextMenu 
 		},
+		<?php } ?>
+		<?php if(eregi('D',$this->m_security->get_access_group_by_kode('MENU_LUNASPIUTANG'))){ ?>
 		{ 
 			text: 'Delete', 
 			tooltip: 'Delete selected record', 
 			iconCls:'icon-delete',
 			handler: master_lunas_piutang_confirm_delete 
 		},
+		<?php } ?>
 		'-',
 		{ 
 			text: 'Print',
@@ -1174,7 +1178,6 @@ Ext.onReady(function(){
 		totalProperty: 'total',
 		id: ''
 	},[
-	/* dataIndex => insert intoperawatan_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'lpiutang_id', type: 'int', mapping: 'lpiutang_id'}, 
 			{name: 'lpiutang_faktur', type: 'string', mapping: 'lpiutang_faktur'}, 
 			{name: 'lpiutang_sisa', type: 'float', mapping: 'lpiutang_sisa'} 
@@ -1287,12 +1290,12 @@ Ext.onReady(function(){
 		frame: true,
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
-		viewConfig: { forceFit:true},
+		viewConfig: { forceFit:true}/*,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: form_bayar_piutang_DataStore,
 			displayInfo: true
-		})
+		})*/
 	});
 	//eof
 	
@@ -1479,13 +1482,16 @@ Ext.onReady(function(){
 		bodyStyle:'padding:5px',
 		autoHeight:true,
 		width: 700,        
-		items: [single_lunas_piutang_masterGroup,form_bayar_piutangListEditorGrid,total_bayarGroup]
-		,
-		buttons: [{
+		items: [single_lunas_piutang_masterGroup,form_bayar_piutangListEditorGrid,total_bayarGroup],
+		buttons: [
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_LUNASPIUTANG'))){ ?>
+			{
 				text: 'Save and Close',
 				handler: master_lunas_piutang_create
 			}
-			,{
+			,
+			<?php } ?>
+			{
 				text: 'Cancel',
 				handler: function(){
 					single_lunas_piutang_createWindow.hide();
@@ -1498,7 +1504,7 @@ Ext.onReady(function(){
 	/* Function for retrieve create Window Form */
 	single_lunas_piutang_createWindow= new Ext.Window({
 		id: 'single_lunas_piutang_createWindow',
-		title: post2db+'Master_lunas_piutang',
+		title: post2db+'Pelunasan Piutang',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,
@@ -1600,7 +1606,6 @@ Ext.onReady(function(){
 		// change the store parameters
 		master_lunas_piutang_DataStore.baseParams = {
 			task: 'SEARCH',
-			//variable here
 			lpiutang_faktur_jual: lpiutang_faktur_jual_search,
 			lpiutang_cust	:	lpiutang_cust_search,
 			lpiutang_faktur_tgl_start	:	lpiutang_faktur_jual_start_search_date,
@@ -1615,7 +1620,7 @@ Ext.onReady(function(){
 	/* Function for reset search result */
 	function master_lunas_piutang_reset_search(){
 		// reset the store parameters
-		master_lunas_piutang_DataStore.baseParams = { task: 'LIST' };
+		master_lunas_piutang_DataStore.baseParams = { task: 'LIST', start: 0, limit: pageS };
 		// Cause the datastore to do another query : 
 		master_lunas_piutang_DataStore.reload({params: {start: 0, limit: pageS}});
 		master_lunas_piutang_searchWindow.close();
@@ -1765,7 +1770,7 @@ Ext.onReady(function(){
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
 	master_lunas_piutang_searchWindow = new Ext.Window({
-		title: 'master_lunas_piutang Search',
+		title: 'Pencarian Pelunasan Piutang',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,
@@ -1811,8 +1816,7 @@ Ext.onReady(function(){
 		url: 'index.php?c=c_master_lunas_piutang&m=get_action',
 		params: {
 			task: "PRINT",
-		  	query: searchquery,                    		// if we are doing a quicksearch, use this
-			//if we are doing advanced search, use this
+		  	query: searchquery,                    		
 			lpiutang_no : lpiutang_no_print,
 			lpiutang_cust : lpiutang_cust_print,
 		  	lpiutang_tanggal : lpiutang_tanggal_print_date, 
@@ -1871,8 +1875,7 @@ Ext.onReady(function(){
 		url: 'index.php?c=c_master_lunas_piutang&m=get_action',
 		params: {
 			task: "EXCEL",
-		  	query: searchquery,                    		// if we are doing a quicksearch, use this
-			//if we are doing advanced search, use this
+		  	query: searchquery,                    		
 			lpiutang_no : lpiutang_no_2excel,
 			lpiutang_cust : lpiutang_cust_2excel,
 		  	lpiutang_tanggal : lpiutang_tanggal_2excel_date, 
