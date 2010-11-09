@@ -16,9 +16,10 @@ class C_master_jual_produk extends Controller {
 	//constructor
 	function C_master_jual_produk(){
 		parent::Controller();
-		$this->load->model('m_master_jual_produk', '', TRUE);
 		session_start();
-		$this->load->plugin('to_excel');
+		$this->load->model('m_master_jual_produk', '', TRUE);
+		
+		
 	}
 	
 	
@@ -714,7 +715,7 @@ class C_master_jual_produk extends Controller {
 																			  ,$jproduk_stat_dok
 																			  ,$option
 																			  ,$filter);
-		
+		$this->load->plugin('to_excel');
 		to_excel($query,"master_jual_produk"); 
 		echo '1';
 			
