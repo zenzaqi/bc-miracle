@@ -1,13 +1,8 @@
-<? /* 	These code was generated using phpCIGen v 0.1.a (21/04/2009)
-	#zaqi 		zaqi.smart@gmail.com,http://zenzaqi.blogspot.com, 
-    #songbee	mukhlisona@gmail.com
-	#CV. Trust Solution, jl. Saronojiwo 19 Surabaya, http://www.ts.co.id
-	
+<? /* 	
 	+ Module  		: resep dokter Model
 	+ Description	: For record model process back-end
 	+ Filename 		: c_resep_dokter.php
- 	+ Author  		: masongbee
- 	+ Created on 27/Oct/2009 14:21:34
+ 	+ Author  		: Fred
 	
 */
 
@@ -17,8 +12,7 @@ class M_resep_dokter extends Model{
 	function M_resep_dokter() {
 		parent::Model();
 	}
-		
-		
+			
 	//get master id, note : not done yet
 	function get_master_id() {
 		$query = "SELECT max(resep_id) as master_id from resep_dokter";
@@ -32,50 +26,7 @@ class M_resep_dokter extends Model{
 		}
 	}
 	//eof
-	
-	/*
-	function get_produk_list($query,$start,$end){
-		$rs_rows=0;
-		if(is_numeric($query)==true){
-			$sql_dproduk="SELECT dresepl_produk FROM detail_resep_dokter_lepasan WHERE dresepl_master='$query'";
-			$rs=$this->db->query($sql_dproduk);
-			$rs_rows=$rs->num_rows();
-		}
-		
-		$sql="select * from vu_produk WHERE produk_aktif='Aktif'";
-		if($query<>"" && is_numeric($query)==false){
-			$sql.=eregi("WHERE",$sql)? " AND ":" WHERE ";
-			$sql.=" (produk_kode like '%".$query."%' or produk_nama like '%".$query."%' or satuan_nama like '%".$query."%' or kategori_nama like '%".$query."%' or group_nama like '%".$query."%') ";
-		}else{
-			if($rs_rows){
-				$filter="";
-				$sql.=eregi("AND",$sql)? " OR ":" AND ";
-				foreach($rs->result() as $row_dproduk){
-					
-					$filter.="OR produk_id='".$row_dproduk->dresepl_produk."' ";
-				}
-				$sql=$sql."(".substr($filter,2,strlen($filter)).")";
-			}
-		}
-		
-		
-		$result = $this->db->query($sql);
-		$nbrows = $result->num_rows();
-		if($end!=0){
-			$limit = $sql." LIMIT ".$start.",".$end;			
-			$result = $this->db->query($limit);
-		}
-		if($nbrows>0){
-			foreach($result->result() as $row){
-				$arr[] = $row;
-			}
-			$jsonresult = json_encode($arr);
-			return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
-		} else {
-			return '({"total":"0", "results":""})';
-		}
-	}*/
-	
+			
 	function get_produk_list($query,$start,$end){
 			
 			$sql="SELECT distinct produk_id,produk_nama,produk_kode,kategori_nama FROM vu_satuan_konversi WHERE produk_aktif='Aktif'";
@@ -124,8 +75,6 @@ class M_resep_dokter extends Model{
 			}
 		}	
 		
-	
-	
 	function get_produk_racikan_list($query,$start,$end){
 		$rs_rows=0;
 		if(is_numeric($query)==true){
@@ -166,8 +115,6 @@ class M_resep_dokter extends Model{
 		}
 	}
 	
-	
-	
 	function get_satuan_bydrl_list($drproduk_id,$produk_id){
 		if($drproduk_id<>0)
 			$sql="SELECT satuan_id,satuan_nama,konversi_nilai,satuan_kode,konversi_default,produk_harga FROM satuan LEFT JOIN satuan_konversi ON(konversi_satuan=satuan_id) LEFT JOIN produk ON(konversi_produk=produk_id) LEFT JOIN detail_resep_dokter_lepasan ON(dresepl_produk=produk_id) LEFT JOIN resep_dokter ON(dresepl_master=resep_id) WHERE resep_id='$drproduk_id'";
@@ -190,76 +137,10 @@ class M_resep_dokter extends Model{
 			return '({"total":"0", "results":""})';
 		}
 	}
-	
-	
 
-	function get_paket_list($query,$start,$end){
-			$rs_rows=0;
-			if(is_numeric($query)==true){
-				$sql_paket="SELECT distinct(dresep_paket) FROM detail_resep_dokter_kombinasi WHERE dresep_master='$query'";
-				$rs=$this->db->query($sql_paket);
-				$rs_rows=$rs->num_rows();
-			}
-			
-//			$sql="SELECT paket_id, paket_harga, paket_kode, group_nama, kategori_nama, paket_du, paket_dm, paket_nama, paket_expired FROM paket INNER JOIN produk_group ON paket.paket_group=produk_group.group_id INNER JOIN kategori ON produk_group.group_kelompok=kategori.kategori_id WHERE kategori.kategori_jenis='paket' AND paket_aktif='Aktif'";
-			$sql=  "SELECT 
-						paket_id, paket_harga, paket_kode, paket_du, paket_dm, paket_nama, paket_expired 
-					FROM paket 
-					WHERE paket_aktif='Aktif'";
-
-			if($query<>"" && is_numeric($query)==false){
-				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
-				$sql.=" (paket_kode LIKE '%".addslashes($query)."%' OR paket_nama LIKE '%".addslashes($query)."%' ) ";
-			}else{
-				if($rs_rows){
-					$filter="";
-					$sql.=eregi("AND",$query)? " OR ":" AND ";
-					foreach($rs->result() as $row_paket){
-						
-						$filter.="OR paket_id='".$row_paket->dresep_paket."' ";
-					}
-					$sql=$sql."(".substr($filter,2,strlen($filter)).")";
-				}
-			}
-			
-			$result = $this->db->query($sql);
-			$nbrows = $result->num_rows();
-			if($end!=0){
-				$limit = $sql." LIMIT ".$start.",".$end;			
-				$result = $this->db->query($limit);
-			}
-			if($nbrows>0){
-				foreach($result->result() as $row){
-					$arr[] = $row;
-				}
-				$jsonresult = json_encode($arr);
-				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
-			} else {
-				return '({"total":"0", "results":""})';
-			}
-			
-		}
-	
-	
-	
-	function having_cust_member_checking($cust_id){
-		$sql="SELECT cust_member FROM customer WHERE cust_id='$cust_id'";
-		$rs=$this->db->query($sql);
-		if($rs->num_rows()){
-			$rs_record=$rs->row_array();
-			$cust_member=$rs_record["cust_member"];
-			return $cust_member;
-		}else{
-			return '';
-		}
-	}
 	
 	function get_satuan_produk_list($selected_id){
-			
-			/*$sql="SELECT satuan_id,satuan_kode,satuan_nama FROM vu_satuan_konversi WHERE produk_aktif='Aktif'
-					AND satuan_id in(SELECT distinct dresepl_satuan FROM detail_resep_dokter_lepasan)";*/
 			$sql="SELECT satuan_id,satuan_kode,satuan_nama FROM vu_satuan_konversi WHERE produk_aktif='Aktif'";
-			
 			
 			if($selected_id!==""){
 				$sql.=(eregi("WHERE",$sql)?" AND ":" WHERE ")." produk_id='".$selected_id."'";
@@ -320,12 +201,8 @@ class M_resep_dokter extends Model{
 			}
 		}
 	
-	
 			
 	function get_detail_racikan_by_produk_id($id_racikan){
-		/*$sql="SELECT dorder_produk,produk_nama,jumlah_order, jumlah_order-sum(dterima_jumlah) as jumlah_sisa, dorder-satuan
-				FROM vu_detail_terima_order WHERE dorder_master='".$orderid."'
-				GROUP BY dorder_produk";*/
 		$sql="select * from produk
 		where produk_id ='".$id_racikan."'";
 				
@@ -341,26 +218,9 @@ class M_resep_dokter extends Model{
 			return '({"total":"0", "results":""})';
 		}
 	}
+
 	
-	
-	
-	/* INSERT ke db.history_ambil_paket */
-	function history_ambil_paket_delete($dtrawat_id, $dtrawat_dapp){
-		$this->db->where('hapaket_dtrawat', $dtrawat_id);
-		$this->db->delete('history_ambil_paket');
-		if($this->db->affected_rows()){
-			/* meng-UNLOCK db.appointment_detail */
-			$dtu_dapp=array(
-			"dapp_locked"=>0
-			);
-			$this->db->where('dapp_id', $dtrawat_dapp);
-			$this->db->update('appointment_detail', $dtu_dapp);
-		}
-	}
-	/* eof history_ambil_paket_insert */
-				
 	function detail_resepdokter_lepasan_list($master_id,$query,$start,$end) {
-			
 			$query = "SELECT detail_resep_dokter_lepasan.* , satuan_id, satuan_nama, produk_id, produk_nama
 			FROM detail_resep_dokter_lepasan
 			LEFT JOIN satuan ON (dresepl_satuan = satuan_id)
@@ -432,7 +292,6 @@ class M_resep_dokter extends Model{
 		}
 		
 	function detail_resepdokter_tambahan_list($master_id,$query,$start,$end) {
-			
 			$query = "SELECT dresept_id, dresept_master, dresept_tambahan, dresept_satuan, dresept_jumlah
 			FROM detail_resep_dokter_tambahan
 			WHERE dresept_master='".$master_id."'";
@@ -537,7 +396,7 @@ class M_resep_dokter extends Model{
 		
 		
 	
-	function resepdokter_master_kombinasi_insert($rkombinasi_id ,$rkombinasi_master ,$rkombinasi_produk, $rkombinasi_keterangan, $cetak, $count, $dcount){
+	function resepdokter_master_kombinasi_insert($rkombinasi_id ,$rkombinasi_master ,$rkombinasi_produk, $rkombinasi_keterangan, $cetak, $cetak_dotmatrix, $count, $dcount){
 			//if master id not capture from view then capture it from max pk from master table
 			$date_now=date('d-m-Y');
 			if($rkombinasi_master=="" || $rkombinasi_master==NULL || $rkombinasi_master==0){
@@ -558,13 +417,16 @@ class M_resep_dokter extends Model{
 				);
 				$this->db->insert('master_resep_kombinasi', $data); 
 				if($this->db->affected_rows()){
-					if($cetak==1 && ($count==($dcount-1))){
+					if(($cetak==1 or $cetak_dotmatrix==1) && ($count==($dcount-1))){
 						return $rkombinasi_master;
 					}else if($cetak!==1 && ($count==($dcount-1))){
 						return '0';
 					}else if($count!==($dcount-1)){
 						return '-3';
 					}
+					/*else if($cetak_dotmatrix==1 && ($count==($dcount-1))){
+						return $rkombinasi_master;
+					}*/
 				}else
 					return '-1';
 			//}
@@ -577,46 +439,6 @@ class M_resep_dokter extends Model{
 			if($dresepk_resepmaster=="" || $dresepk_resepmaster==NULL || $dresepk_resepmaster==0){
 				$dresepk_resepmaster=$this->get_master_id();
 			}
-			
-			/*
-			 $query="";
-			 for($i = 0; $i < sizeof($array_dresepk_produk); $i++){
-
-				$data = array(
-					"dresepk_master"=>$dresepk_master, 
-					"dresepk_resepmaster"=>$dresepk_resepmaster,
-					"dresepk_produk"=>$array_dresepk_produk[$i], 
-					"dresepk_satuan"=>$array_dresepk_satuan[$i], 
-					"dresepk_jumlah"=>$array_dresepk_jumlah[$i]
-				);
-				
-				if($array_dresepk_id[$i]==0){
-					$this->db->insert('detail_resep_dokter_kombinasi', $data); 
-					
-					$query = $query.$this->db->insert_id();
-					if($i<sizeof($array_dresepk_id)-1){
-						$query = $query . ",";
-					}
-					
-				}else{
-					$query = $query.$array_dresepk_id[$i];
-					if($i<sizeof($array_dresepk_id)-1){
-						$query = $query . ",";
-					} 
-					
-					$this->db->where('dresepk_id', $array_dresepk_id[$i]);
-					$this->db->update('detail_resep_dokter_kombinasi', $data);
-				}
-			}
-			
-			//if($query<>""){
-				//$sql="DELETE FROM detail_resep_dokter_kombinasi WHERE  dresepk_master='".$dresepk_master."' AND
-					//	dresepk_id NOT IN (".$query.")";
-			//	$this->db->query($sql);
-			//}
-			
-			return '1';
-			*/
 
 			$date_now=date('d-m-Y');
 		
@@ -646,7 +468,6 @@ class M_resep_dokter extends Model{
 					return '-1';
 			//}
 		}
-		
 		
 	function resepdokter_detail_tambahan_insert($dresept_id ,$dresept_master, $dresept_tambahan, $dresept_satuan, $dresept_jumlah, $cetak_tambahan, $count_tambahan, $dcount_tambahan){
 			//if master id not capture from view then capture it from max pk from master table
@@ -778,216 +599,30 @@ left join karyawan on (karyawan.karyawan_id = resep_dokter.resep_dokterid)";
 		}
 		
 	//function for update record
-	function resep_dokter_update($resep_id, $resep_custid , $resep_tanggal, $resep_dokterid, $mode_edit){
+	function resep_dokter_update($resep_id, $resep_nofaktur, $resep_custid , $resep_cust_manual, $resep_tanggal, $resep_dokterid, $mode_edit){
 		$data=array(
-		"resep_tanggal"=>$resep_tanggal
+		"resep_tanggal"=>$resep_tanggal,
+		"resep_custid"=>$resep_custid,
+		"resep_nofaktur"=>$resep_nofaktur,
+		"resep_cust_manual"=>$resep_cust_manual
 		//"resep_dokterid"=>$resep_dokterid
 		);
 
+		$sql="select karyawan_id from karyawan where karyawan_id='".$resep_dokterid."'";
+		$result=$this->db->query($sql);
+		if($result->num_rows())
+		$data["resep_dokterid"]=$resep_dokterid;
 		
-		//"card_dokter"=>$card_dokter
+		
 		$this->db->where("resep_id", $resep_id);
 		$this->db->update("resep_dokter", $data);
-		
-		if($mode_edit=="update_list"){
-			$sql_check="SELECT resep_id,card_keterangan, card_cust, card_dokter, card_locked FROM rekomendasi_card WHERE resep_id='$resep_id'";
-			$rs_check=$this->db->query($sql_check);
-			if($rs_check->num_rows()){
-				$rs_check_record=$rs_check->row_array();
-				$card_locked=$rs_check_record["card_locked"];
-				$card_dokter_awal=$rs_check_record["card_dokter"];
-				$trawat_keterangan_awal=$rs_check_record["card_keterangan"];
-				
-				$sql="SELECT rawat_id FROM perawatan WHERE rawat_id='$dtrawat_perawatan'";
-				$rs=$this->db->query($sql);
-				if($rs->num_rows())
-					$dtrawat_perawatan=$dtrawat_perawatan;
-				else 
-					$dtrawat_perawatan=$dtrawat_perawatan_id;
-				
-				$sql="SELECT karyawan_id FROM karyawan WHERE karyawan_id='$card_dokter'";
-				$rs=$this->db->query($sql);
-				if($rs->num_rows())
-					$card_dokter=$card_dokter;
-				else 
-					$card_dokter=$card_dokter_id;
-				
-				if($dtrawat_status_awal<>$dtrawat_status && $dtrawat_locked==0){ 
-					$date_now=date('d-m-Y');
-					$data_dtindakan=array(
-					"dtrawat_status"=>$dtrawat_status,
-					);
-			
-					$this->db->where("resep_id", $resep_id);
-					$this->db->update("rekomendasi_card", $data_dtindakan);
-					
-					if($dtrawat_status_awal!='selesai' && $dtrawat_status=='selesai' && $dtrawat_ambil_paket=='true'){
-						$sql="SELECT cust_punya_paket FROM vu_tindakan WHERE dtrawat_id='$dtrawat_id' AND cust_punya_paket='ada'";
-						$rs=$this->db->query($sql);
-						if($rs->num_rows()){
-							$dti_hapaket=array(
-							"hapaket_dpaket"=>$dpaket_id,
-							"hapaket_rawat"=>$rpaket_perawatan,
-							"hapaket_jumlah"=>1,
-							"hapaket_cust"=>$card_cust_id,
-							"hapaket_dtrawat"=>$dtrawat_id
-							);
-							$this->db->insert('history_ambil_paket', $dti_hapaket);
-							if($this->db->affected_rows()){
-								/* me-LOCKED db.appointment_detail */
-								$data_dapp_locked=array(
-								"dapp_locked"=>1
-								);
-								$this->db->where('dapp_id', $dtrawat_dapp);
-								$this->db->update('appointment_detail', $data_dapp_locked);
-								return '1';
-							}else{
-								return '0';
-							}
-						}
-					}elseif($dtrawat_status_awal=='selesai' && $dtrawat_status!='selesai' && $dtrawat_ambil_paket=='true'){
-						$this->db->where('hapaket_dtrawat', $dtrawat_id);
-						$this->db->delete('history_ambil_paket');
-						if($this->db->affected_rows()){
-							/* meng-UNLOCK db.appointment_detail */
-							$data_dapp_locked=array(
-							"dapp_locked"=>0
-							);
-							$this->db->where('dapp_id', $dtrawat_dapp);
-							$this->db->update('appointment_detail', $data_dapp_locked);
-							return '1';
-						}else{
-							return '0';
-						}
-					}elseif($dtrawat_status_awal=='selesai' && $dtrawat_status!='selesai' && $dtrawat_ambil_paket=='false'){
-						$this->detail_jual_rawat_delete($dtrawat_id, $dtrawat_dapp);
-						return '1';
-					}
-					return '1';
-				}elseif($dtrawat_ambil_paket_awal=='false' && $dtrawat_ambil_paket=='true' && $dtrawat_status_awal=='selesai'){
-					$sql="SELECT cust_punya_paket FROM vu_tindakan WHERE dtrawat_id='$dtrawat_id' AND cust_punya_paket='ada'";
-					$rs=$this->db->query($sql);
-					if($rs->num_rows()){
-						$this->detail_jual_rawat_delete($dtrawat_id, $dtrawat_dapp);
-						$this->history_ambil_paket_insert($dpaket_id, $rpaket_perawatan, $card_cust_id, $dtrawat_id, $dtrawat_dapp);
-						return '1';
-					}else{
-						return '0';
-					}
-				}elseif($dtrawat_ambil_paket_awal=='false' && $dtrawat_ambil_paket=='true' && $dtrawat_status_awal!='selesai'){
-					$sql="SELECT cust_punya_paket FROM vu_tindakan WHERE dtrawat_id='$dtrawat_id' AND cust_punya_paket='ada'";
-					$rs=$this->db->query($sql);
-					if($rs->num_rows()){
-						$dtu_dtrawat=array(
-						"dtrawat_ambil_paket"=>'true'
-						);
-						$this->db->where('dtrawat_id', $dtrawat_id);
-						$this->db->update('rekomendasi_card', $dtu_dtrawat);
-						if($this->db->affected_rows()){
-							return '1';
-						}else{
-							return '0';
-						}
-					}else{
-						return '0';
-					}
-				}elseif($dtrawat_ambil_paket_awal=='true' && $dtrawat_ambil_paket=='false' && $dtrawat_status_awal=='selesai'){
-					$dtu_dtrawat=array(
-					"dtrawat_ambil_paket"=>'false'
-					);
-					$this->db->where('dtrawat_id', $dtrawat_id);
-					$this->db->update('rekomendasi_card', $dtu_dtrawat);
-					
-					$this->history_ambil_paket_delete($dtrawat_id, $dtrawat_dapp);
-					return '1';
-					
-				}elseif($dtrawat_ambil_paket_awal=='true' && $dtrawat_ambil_paket=='false' && $dtrawat_status_awal!='selesai'){
-					$dtu_dtrawat=array(
-					"dtrawat_ambil_paket"=>'false'
-					);
-					$this->db->where('resep_id', $resep_id);
-					$this->db->update('rekomendasi_card', $dtu_dtrawat);
-					if($this->db->affected_rows()){
-						return '1';
-					}else{
-						return '0';
-					}
-					
-				}elseif($dtrawat_perawatan_awal<>$dtrawat_perawatan && $dtrawat_locked==0){
-					if($dtrawat_ambil_paket=='true' && $dtrawat_status=='selesai'){
-						$sql="SELECT cust_punya_paket FROM vu_tindakan WHERE dtrawat_id='$dtrawat_id' AND cust_punya_paket='ada'";
-						$rs=$this->db->query($sql);
-						if($rs->num_rows()){
-							/* UPDATE db.tindakan_detail */
-							$dtu_dtrawat=array(
-							"dtrawat_perawatan"=>$dtrawat_perawatan
-							);
-							$this->db->where('dtrawat_id', $dtrawat_id);
-							$this->db->update('rekomendasi_card', $dtu_dtrawat);
-							/* UPDATE db.history_ambil_paket */
-							$dtu_hapaket=array(
-							"hapaket_rawat"=>$dtrawat_perawatan
-							);
-							$this->db->where('hapaket_dtrawat', $dtrawat_id);
-							$this->db->update('history_ambil_paket', $dtu_hapaket);
-							return '1';
-						}else{
-							return '0';
-						}
-					}elseif($dtrawat_ambil_paket=='true' && $dtrawat_status!='selesai'){
-						$dtu_dtrawat=array(
-						"dtrawat_perawatan"=>$dtrawat_perawatan
-						);
-						$this->db->where('dtrawat_id', $dtrawat_id);
-						$this->db->update('rekomendasi_card', $dtu_dtrawat);
-						if($this->db->affected_rows()){
-							return '1';
-						}else{
-							return '0';
-						}
-					}elseif($dtrawat_ambil_paket=='false' && $dtrawat_status=='selesai'){
-						$dtu_dtrawat=array(
-						"dtrawat_perawatan"=>$dtrawat_perawatan
-						);
-						$this->db->where('dtrawat_id', $dtrawat_id);
-						$this->db->update('rekomendasi_card', $dtu_dtrawat);
-						return '1';
-					}elseif($dtrawat_ambil_paket=='false' && $dtrawat_status!='selesai'){
-						$dtu_dtrawat=array(
-						"dtrawat_perawatan"=>$dtrawat_perawatan
-						);
-						$this->db->where('dtrawat_id', $dtrawat_id);
-						$this->db->update('rekomendasi_card', $dtu_dtrawat);
-						if($this->db->affected_rows()){
-							return '1';
-						}else{
-							return '0';
-						}
-					}
-					
-					return '1';
-				}elseif($trawat_keterangan_awal<>$card_keterangan && $card_locked==0){
-					$data_dtindakan=array(
-					"card_keterangan"=>$card_keterangan
-					);
-					$this->db->where('resep_id', $resep_id);
-					$this->db->update('rekomendasi_card',$data_dtindakan);
-					return '1';
-				}elseif($card_locked==1){
-					return '2';
-				}else{
-					return '1';
-				}
-			}else{
-				return '0';
-			}
-		}else{
-			return '1';
-		}
+	
+		return '1';
+	
 	}
 		
 		//function for create new record
-		function resep_dokter_create($resep_custid, $resep_dokterid, $resep_no, $resep_tanggal, $resep_keterangan){
+		function resep_dokter_create($resep_custid, $resep_cust_manual, $resep_dokterid, $resep_no, $resep_nofaktur, $resep_tanggal, $resep_keterangan){
 			
 			$pattern="RS/".date("ym")."-";
 			$resep_no=$this->m_public_function->get_resep_kode('resep_dokter','resep_no',$pattern,12);
@@ -995,12 +630,14 @@ left join karyawan on (karyawan.karyawan_id = resep_dokter.resep_dokterid)";
 			//$date_now=date('d-m-Y');
 			$data = array(
 			"resep_custid"=>$resep_custid,
+			"resep_cust_manual"=>$resep_cust_manual,
 			"resep_dokterid"=>$resep_dokterid,
 			"resep_no"=>$resep_no,
+			"resep_nofaktur"=>$resep_nofaktur,
 			"resep_tanggal"=>$resep_tanggal,
 			"resep_keterangan"=>$resep_keterangan
 			);
-		
+			
 			$this->db->insert('resep_dokter', $data); 
 			if($this->db->affected_rows())
 				return '1';
@@ -1170,7 +807,7 @@ left join karyawan on (karyawan.karyawan_id = resep_dokter.resep_dokterid)";
 		
 		function print_paper($resep_id){
 			//$sql="SELECT resep_tanggal, cust_no, cust_nama, produk_nama, resep_no, karyawan_nama, karyawan_sip FROM detail_jual_produk LEFT JOIN master_jual_produk ON(dresep_master=resep_id) LEFT JOIN customer ON(resep_custid=cust_id) LEFT JOIN produk ON(dresep_produk=produk_id) WHERE dresep_master='$resep_id'";
-			$sql1="SELECT	resep_dokter.resep_tanggal, resep_dokter.resep_no,
+			$sql1="SELECT	resep_dokter.resep_tanggal, resep_dokter.resep_no, resep_dokter.resep_cust_manual,
 							customer.cust_no, customer.cust_nama, customer.cust_alamat, 
 							produk.produk_nama, 
 							karyawan.karyawan_nama, karyawan.karyawan_sip,
@@ -1193,7 +830,7 @@ left join karyawan on (karyawan.karyawan_id = resep_dokter.resep_dokterid)";
 		
 		function print_paper2($resep_id){
 			//$sql="SELECT resep_tanggal, cust_no, cust_nama, produk_nama, resep_no, karyawan_nama, karyawan_sip FROM detail_jual_produk LEFT JOIN master_jual_produk ON(dresep_master=resep_id) LEFT JOIN customer ON(resep_custid=cust_id) LEFT JOIN produk ON(dresep_produk=produk_id) WHERE dresep_master='$resep_id'";
-			$sql1="SELECT	resep_dokter.resep_tanggal, resep_dokter.resep_no,
+			$sql1="SELECT	resep_dokter.resep_tanggal, resep_dokter.resep_no, resep_dokter.resep_cust_manual,
 							customer.cust_no, customer.cust_nama, customer.cust_alamat, 
 							produk.produk_nama, 
 							karyawan.karyawan_nama, karyawan.karyawan_sip,
@@ -1207,7 +844,7 @@ left join karyawan on (karyawan.karyawan_id = resep_dokter.resep_dokterid)";
 						LEFT JOIN satuan ON (dresepl_satuan = satuan_id)
 							WHERE dresepl_master= '$resep_id'";
 
-			$sql2 = "SELECT 	resep_dokter.resep_tanggal, resep_dokter.resep_no,
+			$sql2 = "SELECT 	resep_dokter.resep_tanggal, resep_dokter.resep_no, resep_dokter.resep_cust_manual,
 								customer.cust_no, customer.cust_nama, customer.cust_alamat, 
 								karyawan.karyawan_nama, karyawan.karyawan_sip,
 								detail_resep_dokter_tambahan.dresept_tambahan, detail_resep_dokter_tambahan.dresept_satuan, detail_resep_dokter_tambahan.dresept_jumlah
@@ -1250,8 +887,7 @@ left join karyawan on (karyawan.karyawan_id = resep_dokter.resep_dokterid)";
 		}
 		
 		function print_paper_data($resep_id){
-			//$sql="SELECT resep_tanggal, cust_no, cust_nama, produk_nama, resep_no, karyawan_nama, karyawan_sip FROM detail_jual_produk LEFT JOIN master_jual_produk ON(dresep_master=resep_id) LEFT JOIN customer ON(resep_custid=cust_id) LEFT JOIN produk ON(dresep_produk=produk_id) WHERE dresep_master='$resep_id'";
-			$sql_data="SELECT resep_dokter.resep_tanggal AS resep_tanggal, resep_dokter.resep_no AS resep_no,
+			$sql_data="SELECT resep_dokter.resep_tanggal AS resep_tanggal, resep_dokter.resep_no AS resep_no, resep_dokter.resep_cust_manual AS resep_cust_manual,
 							customer.cust_no AS cust_no, customer.cust_nama AS cust_nama, customer.cust_alamat AS cust_alamat, 
 							karyawan.karyawan_nama AS karyawan_nama, karyawan.karyawan_sip AS karyawan_sip
 					FROM resep_dokter
