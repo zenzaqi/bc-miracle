@@ -248,7 +248,7 @@ Ext.onReady(function(){
 	/* Declare DataStore and  show datagrid list */
 	history_transaksiListEditorGrid =  new Ext.grid.GridPanel({
 		id: 'history_transaksiListEditorGrid',
-		title: 'History Transaksi',
+		title: 'Daftar Detail Transaksi Customer',
 		el: 'fp_vu_history_transaksi',
 		autoHeight: true,
 		store: history_transaksi_DataStore, // DataStore
@@ -487,7 +487,7 @@ Ext.onReady(function(){
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
 	history_transaksi_searchWindow = new Ext.Window({
-		title: 'Pencarian History Transaksi',
+		title: 'Pencarian Detail Transaksi Customer',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,

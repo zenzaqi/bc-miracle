@@ -128,6 +128,14 @@ Ext.onReady(function(){
 	poin_faktur_ColumnModel = new Ext.grid.ColumnModel(
 		[
 		{
+			header: '<div align="center">' + 'Tgl Faktur' + '</div>',
+			dataIndex: 'poin_faktur_tanggal',
+			width: 80,
+			sortable: true,
+			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
+			readOnly: true
+		},
+		{
 			header: '<div align="center">' + 'No Faktur' + '</div>',
 			dataIndex: 'poin_faktur_no',
 			width: 100,
@@ -144,31 +152,23 @@ Ext.onReady(function(){
 			readOnly: true
 		}, 
 		{
-			header: '<div align="center">' + 'Tanggal' + '</div>',
-			dataIndex: 'poin_faktur_tanggal',
-			width: 70,
-			sortable: true,
-			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
-			readOnly: true
-		},
-		{
 			header: '<div align="center">' + 'No Cust' + '</div>',
 			dataIndex: 'poin_faktur_cust_no',
-			width: 150,
+			width: 80,
 			sortable: true,
 			readOnly: true
 		},
 		{
 			header: '<div align="center">' + 'Customer' + '</div>',
 			dataIndex: 'poin_faktur_cust',
-			width: 150,
+			width: 200,
 			sortable: true,
 			readOnly: true
 		},
 		{
 			header: '<div align="center">' + 'Jenis Transaksi' + '</div>',
 			dataIndex: 'poin_faktur_jenis',
-			width: 150,
+			width: 100,
 			sortable: true,
 			readOnly: true
 		}
@@ -181,7 +181,7 @@ Ext.onReady(function(){
 	poin_fakturListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'poin_fakturListEditorGrid',
 		el: 'fp_poin_faktur',
-		title: 'History Poin Faktur',
+		title: 'Daftar Detail Poin Customer per Faktur',
 		autoHeight: true,
 		store: poin_faktur_DataStore, // DataStore
 		cm: poin_faktur_ColumnModel, // Nama-nama Columns
@@ -190,7 +190,7 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 700,	//1220,
+	  	width: 1220,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: poin_faktur_DataStore,
@@ -385,7 +385,7 @@ Ext.onReady(function(){
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
 	poin_faktur_searchWindow = new Ext.Window({
-		title: 'Pencarian History Poin Faktur',
+		title: 'Pencarian Detail Poin Customer per Faktur',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,
