@@ -339,6 +339,16 @@ Ext.onReady(function(){
 			{name: 'crmvalue_disiplin_batal', type: 'float', mapping: 'crmvalue_disiplin_batal'},
 			{name: 'crmvalue_disiplin_telat', type: 'float', mapping: 'crmvalue_disiplin_telat'},
 			{name: 'crmvalue_treatment', type: 'float', mapping: 'crmvalue_treatment'},
+			{name: 'crmvalue_frequency_real', type: 'int', mapping: 'crmvalue_frequency_real'},
+			{name: 'crmvalue_recency_real', type: 'float', mapping: 'crmvalue_recency_real'},
+			{name: 'crmvalue_spending_real_rp', type: 'float', mapping: 'crmvalue_spending_real_rp'},
+			{name: 'crmvalue_spending_real_kunj', type: 'float', mapping: 'crmvalue_spending_real_kunj'},
+			{name: 'crmvalue_highmargin_real', type: 'float', mapping: 'crmvalue_highmargin_real'},
+			{name: 'crmvalue_referal_real', type: 'float', mapping: 'crmvalue_referal_real'},
+			{name: 'crmvalue_kerewelan_real', type: 'string', mapping: 'crmvalue_kerewelan_real'},
+			{name: 'crmvalue_disiplin_batal_real', type: 'float', mapping: 'crmvalue_disiplin_batal_real'},
+			{name: 'crmvalue_disiplin_telat_real', type: 'float', mapping: 'crmvalue_disiplin_telat_real'},
+			{name: 'crmvalue_treatment', type: 'float', mapping: 'crmvalue_treatment'},
 			{name: 'crmvalue_total', type: 'float', mapping: 'crmvalue_total'},
 			{name: 'crmvalue_priority', type: 'string', mapping: 'crmvalue_priority'}
 		]),
@@ -368,73 +378,73 @@ Ext.onReady(function(){
 			sortable: true		
 		}, 
 		{
-			header: '<div align="center">Frequency</div>',
+			header: '<div align="center">Freq</div>',
 			align: 'right',
 			dataIndex: 'crmvalue_frequency',
-			width: 80,
+			width: 60,
 			sortable: true		
 		}, 		
 		{
-			header: '<div align="center">Recency</div>',
+			header: '<div align="center">Rec</div>',
 			align: 'right',
 			dataIndex: 'crmvalue_recency',
-			width: 80,
+			width: 60,
 			sortable: true
 		},		
 		{
-			header: '<div align="center">Spending</div>',
+			header: '<div align="center">Spend</div>',
 			align: 'right',
 			dataIndex: 'crmvalue_spending',
-			width: 80,
+			width: 60,
 			sortable: true
 		}, 		
 		{
-			header: '<div align="center">High Margin</div>',
+			header: '<div align="center">High M</div>',
 			align: 'right',
 			dataIndex: 'crmvalue_highmargin',
-			width: 80,
+			width: 60,
 			sortable: true
 		}, 		
 		{
-			header: '<div align="center">Referal Rate</div>',
+			header: '<div align="center">Ref</div>',
 			align: 'right',
 			dataIndex: 'crmvalue_referal',
-			width: 80,
+			width: 60,
 			sortable: true
 		}, 		
 		{
-			header: '<div align="center">Fretfulness</div>',
+			header: '<div align="center">Fret</div>',
 			align: 'right',
 			dataIndex: 'crmvalue_kerewelan',
-			width: 80,
+			width: 60,
 			sortable: true
 		}, 		
 		{
-			header: '<div align="center">Disiplin I</div>',
+			header: '<div align="center">Batal</div>',
 			align: 'right',
 			dataIndex: 'crmvalue_disiplin_batal',
-			width: 80,
+			width: 60,
 			sortable: true
 		}, 	
 		{
-			header: '<div align="center">Disiplin II</div>',
+			header: '<div align="center">! On Time</div>',
 			align: 'right',
 			dataIndex: 'crmvalue_disiplin_telat',
-			width: 80,
+			width: 60,
 			sortable: true
 		}, 	
 		{
-			header: '<div align="center">Treatment</div>',
+			header: '<div align="center">Tx Utama</div>',
 			align: 'right',
 			dataIndex: 'crmvalue_treatment',
-			width: 80,
+			width: 60,
 			sortable: true
 		},
 		{
 			header: '<div align="center">Total</div>',
 			align: 'right',
 			dataIndex: 'crmvalue_total',
-			width: 80,
+			width: 60,
 			sortable: true
 		},
 		{
@@ -443,6 +453,87 @@ Ext.onReady(function(){
 			width: 80,
 			sortable: true		
 		}, 
+		{
+			header: '<div align="center">Freq Value</div>',
+			align: 'right',
+			dataIndex: 'crmvalue_frequency_real',
+			width: 60,
+			hidden: true,
+			sortable: true		
+		}, 		
+		{
+			header: '<div align="center">Rec Value</div>',
+			align: 'right',
+			dataIndex: 'crmvalue_recency_real',
+			width: 60,
+			hidden: true,
+			sortable: true
+		},		
+		{
+			header: '<div align="center">Spend Rp</div>',
+			align: 'right',
+			dataIndex: 'crmvalue_spending_real_rp',
+			width: 80,
+			hidden: true,
+			sortable: true
+		}, 		
+		{
+			header: '<div align="center">Spend Kunj</div>',
+			align: 'right',
+			dataIndex: 'crmvalue_spending_real_kunj',
+			width: 60,
+			hidden: true,
+			sortable: true
+		}, 		
+		{
+			header: '<div align="center">HM Value</div>',
+			align: 'right',
+			dataIndex: 'crmvalue_highmargin_real',
+			width: 60,
+			hidden: true,
+			sortable: true
+		}, 		
+		{
+			header: '<div align="center">Ref Value</div>',
+			align: 'right',
+			dataIndex: 'crmvalue_referal_real',
+			width: 60,
+			hidden: true,
+			sortable: true
+		}, 		
+		{
+			header: '<div align="center">Fret Value</div>',
+			align: 'right',
+			dataIndex: 'crmvalue_kerewelan_real',
+			width: 80,
+			hidden: true,
+			sortable: true
+		}, 		
+		{
+			header: '<div align="center">Batal Value</div>',
+			align: 'right',
+			dataIndex: 'crmvalue_disiplin_batal_real',
+			width: 60,
+			hidden: true,
+			sortable: true
+		}, 	
+		{
+			header: '<div align="center">!On Time Value</div>',
+			align: 'right',
+			dataIndex: 'crmvalue_disiplin_telat_real',
+			width: 60,
+			hidden: true,
+			sortable: true
+		}, 	
+		{
+			header: '<div align="center">Tx Utama Value</div>',
+			align: 'right',
+			dataIndex: 'crmvalue_treatment_real',
+			width: 60,
+			hidden: true,
+			sortable: true
+		},
+		
 				
 		]
 	);

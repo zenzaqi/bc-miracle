@@ -41,11 +41,13 @@ class M_crm_generator extends Model{
 		
 			$query = 
 			   "SELECT 
-					crmvalue_id, crmvalue_date, c1.cust_nama as crmvalue_cust, c1.cust_no as crmvalue_cust_no ,crmvalue_frequency, crmvalue_recency, 
+					crmvalue_id, crmvalue_date, c1.cust_nama as crmvalue_cust, c1.cust_no as crmvalue_cust_no, crmvalue_frequency, crmvalue_recency, 
 					crmvalue_spending, crmvalue_highmargin, crmvalue_referal, crmvalue_kerewelan, crmvalue_disiplin_batal, crmvalue_disiplin_telat, crmvalue_treatment,
 					(crmvalue_frequency + crmvalue_recency + crmvalue_spending + crmvalue_highmargin + crmvalue_referal + crmvalue_kerewelan +
 					crmvalue_disiplin_batal + crmvalue_disiplin_telat + crmvalue_treatment) as crmvalue_total,
-					crmvalue_priority
+					crmvalue_priority,
+					crmvalue_frequency_real, crmvalue_recency_real, crmvalue_spending_real_rp, crmvalue_spending_real_kunj, crmvalue_highmargin_real, crmvalue_referal_real,
+					crmvalue_kerewelan_real, crmvalue_disiplin_batal_real, crmvalue_disiplin_telat_real, crmvalue_treatment_medis_real, crmvalue_treatment_non_medis_real
 				FROM crm_value
 				left join customer c1 on (c1.cust_id = crm_value.crmvalue_cust)";
 			
@@ -84,6 +86,8 @@ class M_crm_generator extends Model{
 					c.setcrm_frequency_value_morethan, c.setcrm_frequency_value_equal, c.setcrm_frequency_value_lessthan,
 					c.setcrm_recency_days, c.setcrm_recency_value_morethan, c.setcrm_recency_value_lessthan, 
 					c.setcrm_spending_days, c.setcrm_spending_value_lessthan, c.setcrm_spending_value_equal, c.setcrm_spending_value_morethan,
+					c.setcrm_highmargin_treatment, c.setcrm_highmargin_days, 
+					c.setcrm_highmargin_value_morethan, c.setcrm_highmargin_value_equal, c.setcrm_highmargin_value_lessthan,
 					c.setcrm_referal_person, c.setcrm_referal_days, c.setcrm_referal_morethan, c.setcrm_referal_equal, c.setcrm_referal_lessthan,
 					c.setcrm_kerewelan_high, c.setcrm_kerewelan_normal, c.setcrm_kerewelan_low,
 					c.setcrm_result_nilai_atas, c.setcrm_result_nilai_bawah,
@@ -110,6 +114,12 @@ class M_crm_generator extends Model{
 			$setcrm_spending_value_lessthan	= $data_parameter->setcrm_spending_value_lessthan;
 			$setcrm_spending_value_equal 	= $data_parameter->setcrm_spending_value_equal;
 			$setcrm_spending_value_morethan	= $data_parameter->setcrm_spending_value_morethan;
+			
+			$setcrm_highmargin_treatment		= $data_parameter->setcrm_highmargin_treatment;
+			$setcrm_highmargin_days				= $data_parameter->setcrm_highmargin_days;
+			$setcrm_highmargin_value_morethan	= $data_parameter->setcrm_highmargin_value_morethan;
+			$setcrm_highmargin_value_equal		= $data_parameter->setcrm_highmargin_value_equal;
+			$setcrm_highmargin_value_lessthan	= $data_parameter->setcrm_highmargin_value_lessthan;
 			
 			$setcrm_referal_person			= $data_parameter->setcrm_referal_person;
 			$setcrm_referal_days			= $data_parameter->setcrm_referal_days;
@@ -500,6 +510,63 @@ class M_crm_generator extends Model{
 			}
 			
 			
+						//UNTUK MENENTUKAN HIGH MARGIN TX
+			$sql_value_highmargin =
+			   "select 
+					sum(jum_total) as tot_highmargin
+				from
+				   (select 
+						count(distinct cust) as jum_total
+					from
+						(
+						select 
+							m.jrawat_cust as cust,
+							m.jrawat_tanggal as tgl_tindakan
+						from detail_jual_rawat d
+						left join master_jual_rawat m on (d.drawat_master = m.jrawat_id)
+						left join perawatan p on (d.drawat_rawat=p.rawat_id)
+						left join produk_group g1 on g1.group_id = p.rawat_group
+						where 
+							m.jrawat_stat_dok <> 'Batal' and m.jrawat_bayar <> 0 and p.rawat_highmargin = 1 and
+							date_add(m.jrawat_tanggal, interval '$setcrm_highmargin_days' day) >= date_format(now(), '%Y-%m-%d') and m.jrawat_cust = '$crmvalue_cust'
+						
+						union
+												
+						select 
+							d.dapaket_cust as cust,
+							d.dapaket_tgl_ambil as tgl_tindakan
+						from detail_ambil_paket d
+						left join perawatan p on (d.dapaket_item = p.rawat_id)
+						left join produk_group g1 on g1.group_id = p.rawat_group
+						where 
+							d.dapaket_stat_dok <> 'Batal' and p.rawat_highmargin = 1 and
+							date_add(d.dapaket_tgl_ambil, interval '$setcrm_highmargin_days' day) >= date_format(now(), '%Y-%m-%d') and d.dapaket_cust = '$crmvalue_cust'
+						
+						)
+						as table_union2
+						
+					group by tgl_tindakan
+			)
+			as tabel";
+			
+
+			$query_highmargin	= $this->db->query($sql_value_highmargin);
+			$data_highmargin	= $query_highmargin->row();
+			$tot_highmargin		= $data_highmargin->tot_highmargin;
+			
+			if ($tot_highmargin == null) {$tot_highmargin = 0;}
+			
+			if ($tot_highmargin > $setcrm_highmargin_treatment){
+				$crmvalue_highmargin = $setcrm_highmargin_value_morethan;
+			}
+			else if ($tot_highmargin == $setcrm_highmargin_treatment){
+				$crmvalue_highmargin = $setcrm_highmargin_value_equal;
+			}
+			else {
+				$crmvalue_highmargin = $setcrm_highmargin_value_lessthan;
+			}
+			
+			
 			//UNTUK MENGHITUNG REFERAL RATE:
 			
 			$sql_value_referal = 
@@ -710,9 +777,9 @@ class M_crm_generator extends Model{
 			}
 			
 
-			
 			//UNTUK MENENTUKAN PRIORITY
-			$crmvalue_total 	= $crmvalue_frequency + $crmvalue_recency + $crmvalue_spending + $crmvalue_referal + $crmvalue_fretfulness;
+			$crmvalue_total   = $crmvalue_frequency + $crmvalue_recency + $crmvalue_spending + $crmvalue_highmargin + $crmvalue_referal + $crmvalue_fretfulness +
+								$crmvalue_disiplin_batal + $crmvalue_disiplin_telat + $crmvalue_treatment;
 			
 			if ($crmvalue_total > $setcrm_result_nilai_atas){
 				$crmvalue_priority = 'Core';
@@ -739,7 +806,9 @@ class M_crm_generator extends Model{
 				"crmvalue_recency_real"			=> $recency_row,
 				"crmvalue_spending"				=> $crmvalue_spending,	
 				"crmvalue_spending_real_rp"		=> $tot_spending_cust,	
-				"crmvalue_spending_real_kunj"	=> $tot_kunjungan_cust,				
+				"crmvalue_spending_real_kunj"	=> $tot_kunjungan_cust,		
+				"crmvalue_highmargin"			=> $crmvalue_highmargin,
+				"crmvalue_highmargin_real"		=> $tot_highmargin,
 				"crmvalue_referal"				=> $crmvalue_referal,
 				"crmvalue_referal_real"			=> $jum_referal,
 				"crmvalue_kerewelan"			=> $crmvalue_fretfulness,
