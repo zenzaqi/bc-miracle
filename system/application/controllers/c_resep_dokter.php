@@ -1,12 +1,10 @@
 <?php
-/* 	These code was generated using phpCIGen v 0.1.b (21/04/2009)
-	#zaqi 		zaqi.smart@gmail.com,http://zenzaqi.blogspot.com, 
-	
+/* 	
 	+ Module  		: resep dokter Controller
 	+ Description	: For record controller process back-end
 	+ Filename 		: C_resep_dokter.php
- 	+ Author  		: masongbee
- 	+ Created on 27/Oct/2009 14:21:34
+ 	+ Author  		: Fred
+
 	
 */
 
@@ -108,17 +106,6 @@ class C_resep_dokter extends Controller {
 		echo $result;
 	}
 	
-	
-	
-	function get_paket_list(){
-		$query = isset($_POST['query']) ? $_POST['query'] : "";
-		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
-		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_resep_dokter->get_paket_list($query,$start,$end);
-		echo $result;
-	}
-	
-	
 	function get_satuan_bydrl_list(){
 		$query = (integer) (isset($_POST['query']) ? $_POST['query'] : 0);
 		$produk_id = (integer) (isset($_POST['produk_id']) ? $_POST['produk_id'] : 0);
@@ -190,10 +177,11 @@ class C_resep_dokter extends Controller {
 		$rkombinasi_produk=trim(@$_POST["rkombinasi_produk"]);
 		$rkombinasi_keterangan=trim(@$_POST["rkombinasi_keterangan"]);
 		$cetak=trim(@$_POST['cetak']);
+		$cetak_dotmatrix=trim(@$_POST['cetak_dotmatrix']);
 		$count=trim(@$_POST['count']);
 		$dcount=trim(@$_POST['dcount']);
 
-		$result=$this->m_resep_dokter->resepdokter_master_kombinasi_insert($rkombinasi_id ,$rkombinasi_master ,$rkombinasi_produk, $rkombinasi_keterangan, $cetak, $count, $dcount);
+		$result=$this->m_resep_dokter->resepdokter_master_kombinasi_insert($rkombinasi_id ,$rkombinasi_master ,$rkombinasi_produk, $rkombinasi_keterangan, $cetak, $cetak_dotmatrix, $count, $dcount);
 		echo $result;
 	}
 	
@@ -316,11 +304,13 @@ class C_resep_dokter extends Controller {
 	function resep_dokter_update(){
 		//POST variable here
 		$resep_id=trim(@$_POST["resep_id"]);
+		$resep_nofaktur=trim(@$_POST["resep_nofaktur"]);
 		$resep_custid=trim(@$_POST["resep_custid"]);
+		$resep_cust_manual=trim(@$_POST["resep_cust_manual"]);
 		$resep_tanggal=trim(@$_POST["resep_tanggal"]);
 		$resep_dokterid=trim(@$_POST["resep_dokterid"]);
 		$mode_edit=trim(@$_POST["mode_edit"]);
-		$result = $this->m_resep_dokter->resep_dokter_update($resep_id, $resep_custid, $resep_tanggal, $resep_dokterid, $mode_edit);
+		$result = $this->m_resep_dokter->resep_dokter_update($resep_id, $resep_nofaktur, $resep_custid, $resep_cust_manual, $resep_tanggal, $resep_dokterid, $mode_edit);
 		echo $result;
 	}
 	
@@ -329,16 +319,21 @@ class C_resep_dokter extends Controller {
 		//POST varible here
 		//auto increment, don't accept anything from form values
 		$resep_custid=trim(@$_POST["resep_custid"]);
+		$resep_cust_manual=trim(@$_POST["resep_cust_manual"]);
 		$resep_dokterid=trim(@$_POST["resep_dokterid"]);
 		$resep_no=trim(@$_POST["resep_no"]);
 		$resep_no=str_replace("/(<\/?)(p)([^>]*>)", "",$resep_no);
 		$resep_no=str_replace("'", "''",$resep_no);
+		
+		$resep_nofaktur=trim(@$_POST["resep_nofaktur"]);
+		$resep_nofaktur=str_replace("/(<\/?)(p)([^>]*>)", "",$resep_nofaktur);
+		$resep_nofaktur=str_replace("'", "''",$resep_nofaktur);
 		$resep_tanggal=trim(@$_POST["resep_tanggal"]);
 		$resep_keterangan=trim(@$_POST["resep_keterangan"]);
 		$resep_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$resep_keterangan);
 		$resep_keterangan=str_replace("'", "''",$resep_keterangan);
 		
-		$result=$this->m_resep_dokter->resep_dokter_create($resep_custid, $resep_dokterid, $resep_no, $resep_tanggal, $resep_keterangan);
+		$result=$this->m_resep_dokter->resep_dokter_create($resep_custid, $resep_cust_manual, $resep_dokterid, $resep_no, $resep_nofaktur, $resep_tanggal, $resep_keterangan);
 		echo $result;
 	}
 
@@ -466,8 +461,7 @@ class C_resep_dokter extends Controller {
 		$result2 = $this->m_resep_dokter->print_paper2($resep_id);
 		$result_racikan = $this->m_resep_dokter->print_paper_racikan($resep_id);
 		$result_data = $this->m_resep_dokter->print_paper_data($resep_id);
-		
-		//$iklan = $this->m_resep_dokter->iklan();
+
 		$rs_data = $result_data->row();
 		if ($result->row() != null)
 			$rs=$result->row();
@@ -475,8 +469,6 @@ class C_resep_dokter extends Controller {
 			$rs2=$result2->row();
 		if ($result_racikan->row() != null)
 			$rs_racikan = $result_racikan->row();
-
-		//$rsiklan=$iklan->row();
 
 		$detail_resepdokter=$result->result();
 		$detail_resepdokter_tambahan=$result2->result();
@@ -490,6 +482,7 @@ class C_resep_dokter extends Controller {
 		$data['cust_alamat']=$rs_data->cust_alamat;
 		$data['resep_tanggal']=date("d-m-Y",strtotime($rs_data->resep_tanggal));
 		$data['resep_no']=$rs_data->resep_no;
+		$data['resep_cust_manual']=$rs_data->resep_cust_manual;
 		
 		if ($result->row() != null) {
 			$data['produk_nama']=$rs->produk_nama;
@@ -519,6 +512,68 @@ class C_resep_dokter extends Controller {
 		fclose($file);
 		echo '1';        
 	}
+	
+	
+	function print_paper_dotmatrix(){
+  		//POST varibale here
+		$resep_id=trim(@$_POST["resep_id"]);
+
+		$result = $this->m_resep_dokter->print_paper($resep_id);
+		$result2 = $this->m_resep_dokter->print_paper2($resep_id);
+		$result_racikan = $this->m_resep_dokter->print_paper_racikan($resep_id);
+		$result_data = $this->m_resep_dokter->print_paper_data($resep_id);
+
+		$rs_data = $result_data->row();
+		if ($result->row() != null)
+			$rs=$result->row();
+		if ($result2->row() != null)
+			$rs2=$result2->row();
+		if ($result_racikan->row() != null)
+			$rs_racikan = $result_racikan->row();
+
+		$detail_resepdokter=$result->result();
+		$detail_resepdokter_tambahan=$result2->result();
+		$detail_resepdokter_racikan=$result_racikan->result();
+		$detail_resepdokter_data=$result_data->result();
+		
+		$data['karyawan_nama']=$rs_data->karyawan_nama;
+		$data['karyawan_sip']=$rs_data->karyawan_sip;
+		$data['cust_no']=$rs_data->cust_no;
+		$data['cust_nama']=$rs_data->cust_nama;
+		$data['cust_alamat']=$rs_data->cust_alamat;
+		$data['resep_tanggal']=date("d-m-Y",strtotime($rs_data->resep_tanggal));
+		$data['resep_no']=$rs_data->resep_no;
+		$data['resep_cust_manual']=$rs_data->resep_cust_manual;
+		
+		if ($result->row() != null) {
+			$data['produk_nama']=$rs->produk_nama;
+			$data['satuan_nama']=$rs->satuan_nama;
+			$data['dresepl_jumlah']=$rs->dresepl_jumlah;
+		}
+		
+		if ($result2->row() != null) {
+			$data['dresept_tambahan']=$rs2->dresept_tambahan;
+			$data['dresept_satuan']=$rs2->dresept_satuan;
+			$data['dresept_jumlah']=$rs2->dresept_jumlah;
+		}
+		
+		if ($result_racikan->row() != null) {
+			$data['rkombinasi_keterangan']=$rs_racikan->rkombinasi_keterangan;
+		}
+		
+
+		$data['detail_resepdokter']=$detail_resepdokter;
+		$data['detail_resepdokter_tambahan']=$detail_resepdokter_tambahan;
+		$data['detail_resepdokter_racikan']=$detail_resepdokter_racikan;
+		$data['detail_resepdokter_data']=$detail_resepdokter_data;
+		$viewdata=$this->load->view("main/resepdokter_formcetak_dotmatrix",$data,TRUE);
+		
+		$file = fopen("resepdokter_paper.html",'w');
+		fwrite($file, $viewdata);	
+		fclose($file);
+		echo '1';        
+	}
+	
 	
 	
 	// Encodes a SQL array into a JSON formated string
