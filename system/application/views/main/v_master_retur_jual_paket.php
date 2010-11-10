@@ -436,7 +436,7 @@ Ext.onReady(function(){
 			//drpaketListEditorGrid.drpaket_add.enable();
 			//drpaketListEditorGrid.drpaket_delete.enable();
 			//combo_dpaket_byjpaket_retur.setDisabled(false);
-			<?php } ?>
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_RETURPAKET'))){ ?>
 			master_retur_jual_paket_createForm.cetak_kuitansi_btn.enable();
 			<?php } ?>
 		}
