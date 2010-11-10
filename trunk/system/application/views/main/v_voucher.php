@@ -234,10 +234,13 @@ Ext.onReady(function(){
 			{name: 'voucher_id', type: 'int', mapping: 'voucher_id'}, 
 			{name: 'voucher_no', type: 'string', mapping: 'voucher_no'}, 
 			{name: 'voucher_nama', type: 'string', mapping: 'voucher_nama'}, 
+			{name: 'cust_no', type: 'string', mapping: 'cust_no'}, 
+			{name: 'cust_nama', type: 'string', mapping: 'cust_nama'}, 
 			{name: 'voucher_jenis', type: 'string', mapping: 'voucher_jenis'}, 
 			{name: 'voucher_point', type: 'int', mapping: 'voucher_point'}, 
 			{name: 'voucher_jumlah', type: 'int', mapping: 'voucher_jumlah'}, 
 			{name: 'voucher_kadaluarsa', type: 'date', dateFormat: 'Y-m-d', mapping: 'voucher_kadaluarsa'}, 
+			{name: 'voucher_tgl', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'voucher_tgl'}, 
 			{name: 'voucher_cashback', type: 'float', mapping: 'voucher_cashback'}, 
 			{name: 'voucher_cust', type: 'string', mapping: 'voucher_cust'}
 		]),
@@ -259,12 +262,47 @@ Ext.onReady(function(){
 			hidden: true
 		},
 		{
-			header: '<div align="center">' + 'No Voucher' + '</div>',
-			dataIndex: 'voucher_no',
-			width: 100,
+			header: '<div align="center">' + 'Tanggal' + '</div>',
+			dataIndex: 'voucher_tgl',
+			width: 80,
+			sortable: true,
+			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
+			readOnly: true
+		},
+		{
+			header: '<div align="center">' + 'No Cust' + '</div>',
+			dataIndex: 'cust_no',
+			width: 80,
 			sortable: true,
 			readOnly: true
 		},  
+		{
+			header: '<div align="center">' + 'Nama Cust' + '</div>',
+			dataIndex: 'cust_nama',
+			width: 200,
+			sortable: true,
+			readOnly: true
+		},  
+		{
+			header: '<div align="center">' + 'No Member' + '</div>',
+			dataIndex: 'voucher_cust',
+			width: 100,
+			sortable: true,
+			readOnly: true,
+			renderer: function(value, cell, record){
+				if(value.length>=16)
+					return value.substring(0,6) + '-' + value.substring(6,12) + '-' + value.substring(12);
+				else
+					return value;
+			}
+		},
+		{
+			header: '<div align="center">' + 'Jenis Transaksi' + '</div>',
+			dataIndex: 'voucher_nama',
+			width: 100,
+			sortable: true,
+			readOnly: true
+		},
 		{
 			header: '<div align="center">' + 'Poin' + '</div>',
 			dataIndex: 'voucher_point',
@@ -284,31 +322,18 @@ Ext.onReady(function(){
 			readOnly: true
 		},
 		{
+			header: '<div align="center">' + 'No Voucher' + '</div>',
+			dataIndex: 'voucher_no',
+			width: 100,
+			sortable: true,
+			readOnly: true
+		},  
+		{
 			header: '<div align="center">' + 'Kadaluarsa' + '</div>',
 			dataIndex: 'voucher_kadaluarsa',
-			width: 70,
+			width: 80,
 			sortable: true,
 			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
-			readOnly: true
-		},
-		{
-			header: '<div align="center">' + 'No Member' + '</div>',
-			dataIndex: 'voucher_cust',
-			width: 150,
-			sortable: true,
-			readOnly: true,
-			renderer: function(value, cell, record){
-				if(value.length>=16)
-					return value.substring(0,6) + '-' + value.substring(6,12) + '-' + value.substring(12);
-				else
-					return value;
-			}
-		},
-		{
-			header: '<div align="center">' + 'Jenis Transaksi' + '</div>',
-			dataIndex: 'voucher_nama',
-			width: 150,
-			sortable: true,
 			readOnly: true
 		}
 		]);
@@ -320,7 +345,7 @@ Ext.onReady(function(){
 	voucherListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'voucherListEditorGrid',
 		el: 'fp_voucher',
-		title: 'Daftar History Penukaran Poin',
+		title: 'Daftar Penukaran dan Pengisian Poin Customer',
 		autoHeight: true,
 		store: voucher_DataStore, // DataStore
 		cm: voucher_ColumnModel, // Nama-nama Columns
@@ -329,7 +354,7 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 700,	//1220,
+	  	width: 1220,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: voucher_DataStore,
@@ -424,7 +449,7 @@ Ext.onReady(function(){
 	/* End of Function */
   	
 	voucherListEditorGrid.addListener('rowcontextmenu', onvoucher_ListEditGridContextMenu);
-	voucher_DataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
+	//voucher_DataStore.load({params: {start: 0, limit: pageS}});	// supaya tidak auto load DataStore
 	
 	/* Function for action list search */
 	function voucher_list_search(){
@@ -552,7 +577,7 @@ Ext.onReady(function(){
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
 	voucher_searchWindow = new Ext.Window({
-		title: 'Pencarian History Penukaran Poin',
+		title: 'Pencarian Penukaran dan Pengisian Poin Customer',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,

@@ -20,7 +20,10 @@ class M_voucher extends Model{
 		
 		//function for get list record
 		function voucher_list($filter,$start,$end){
-			$query = "SELECT * FROM voucher";
+			$query =   "select c.cust_no, c.cust_nama, v.*
+						from voucher v
+						left join vu_customer c on c.member_no = v.voucher_cust
+						order by v.voucher_tgl desc";
 			
 			// For simple search
 			if ($filter<>""){
