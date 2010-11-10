@@ -267,7 +267,7 @@ Ext.onReady(function(){
 	/* End of Function */
   	
 	poin_fakturListEditorGrid.addListener('rowcontextmenu', onpoin_faktur_ListEditGridContextMenu);
-	poin_faktur_DataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
+	//poin_faktur_DataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
 	
 	/* Function for action list search */
 	function poin_faktur_list_search(){

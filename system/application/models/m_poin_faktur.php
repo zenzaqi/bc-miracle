@@ -20,7 +20,7 @@ class M_poin_faktur extends Model{
 		
 		//function for get list record
 		function poin_faktur_list($filter,$start,$end){
-			$query = "SELECT * FROM vu_history_poin_faktur";
+			$query = "SELECT * FROM vu_history_poin_faktur ";
 			
 			// For simple search
 			if ($filter<>""){
@@ -31,7 +31,7 @@ class M_poin_faktur extends Model{
 							 cust_member LIKE '%".addslashes($filter)."%' OR
 							 jenis LIKE '%".addslashes($filter)."%')";
 			}
-			$query.=" ORDER BY tanggal, no_bukti ASC";
+			$query.=" ORDER BY tanggal desc, no_bukti ASC";
 			
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
