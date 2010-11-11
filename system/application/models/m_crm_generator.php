@@ -43,9 +43,7 @@ class M_crm_generator extends Model{
 			   "SELECT 
 					crmvalue_id, crmvalue_date, c1.cust_nama as crmvalue_cust, c1.cust_no as crmvalue_cust_no, crmvalue_frequency, crmvalue_recency, 
 					crmvalue_spending, crmvalue_highmargin, crmvalue_referal, crmvalue_kerewelan, crmvalue_disiplin_batal, crmvalue_disiplin_telat, crmvalue_treatment,
-					(crmvalue_frequency + crmvalue_recency + crmvalue_spending + crmvalue_highmargin + crmvalue_referal + crmvalue_kerewelan +
-					crmvalue_disiplin_batal + crmvalue_disiplin_telat + crmvalue_treatment) as crmvalue_total,
-					crmvalue_priority,
+					crmvalue_total,	crmvalue_priority,
 					crmvalue_frequency_real, crmvalue_recency_real, crmvalue_spending_real_rp, crmvalue_spending_real_kunj, crmvalue_highmargin_real, crmvalue_referal_real,
 					crmvalue_kerewelan_real, crmvalue_disiplin_batal_real, crmvalue_disiplin_telat_real, crmvalue_treatment_medis_real, crmvalue_treatment_non_medis_real
 				FROM crm_value
@@ -791,13 +789,6 @@ class M_crm_generator extends Model{
 				$crmvalue_priority = 'Low';
 			}
 			
-			//UPDATE PRIORITY KE CUSTOMER
-			$sql_cust_priority = 
-			   "UPDATE customer
-				SET cust_priority = '$crmvalue_priority'
-				WHERE cust_id = '$crmvalue_cust'";
-			$query_cust_priority	= $this->db->query($sql_cust_priority);
-			
 			
 			$data=array(
 				"crmvalue_frequency"			=> $crmvalue_frequency,
@@ -828,11 +819,36 @@ class M_crm_generator extends Model{
 			);
 			$this->db->insert('crm_value',$data);
 			
-			if($this->db->affected_rows())
+			
+			
+			
+			if($this->db->affected_rows()){
+				$sql_cust_priority = 
+				   "UPDATE customer c
+					SET c.cust_crm_value = 
+					   (select max(crm.crmvalue_id)
+						from crm_value crm
+						WHERE crm.crmvalue_cust = '$crmvalue_cust')
+					WHERE cust_id = '$crmvalue_cust'
+					";
+				$query_cust_priority	= $this->db->query($sql_cust_priority);				
 				return '1';
+			}
 			else
 				return '0';
-
+				
+				
+			//UPDATE PRIORITY KE CUSTOMER
+			$sql_cust_priority = 
+			   "UPDATE customer c
+				SET c.cust_crm_value = 
+				   (select max(crm.crmvalue_id)
+					from crm_value crm
+					WHERE crm.crmvalue_cust = '$crmvalue_cust')
+				WHERE cust_id = '$crmvalue_cust'
+				";
+			$query_cust_priority	= $this->db->query($sql_cust_priority);
+			
 		}
 		
 		

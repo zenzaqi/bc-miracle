@@ -182,7 +182,10 @@ class M_customer extends Model{
 		
 		//function for get list record
 		function customer_list($filter,$start,$end){
-			$query =   "SELECT * FROM vu_customer";
+			$query =   "SELECT 
+							v.*, crm.crmvalue_date, crm.crmvalue_total, crm.crmvalue_total
+						FROM vu_customer v
+						LEFT JOIN crm_value crm on crm.crmvalue_id = v.cust_crm_value";
 			
 			// For simple search
 			if ($filter<>""){
