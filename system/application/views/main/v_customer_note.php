@@ -141,7 +141,7 @@ Ext.onReady(function(){
 
 		note_id_create_pk=get_pk_id();
 		if(note_customerField.getValue()!== null){note_customer_create = note_customerField.getValue();}
-		if(note_tanggalField.getValue()!== ""){note_tanggal_create_date = note_tanggalField.getValue().format('Y-m-d');}
+		if(note_tanggalField.getValue()!== ""){note_tanggal_create_date = note_tanggalField.getValue().format('d-m-Y H:i:s');}
 		if(note_detailField.getValue()!== null){note_detail_create = note_detailField.getValue();}
 
 			Ext.Ajax.request({  
