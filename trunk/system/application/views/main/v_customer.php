@@ -1697,6 +1697,9 @@ Ext.onReady(function(){
 			{name: 'cust_unit', type: 'string', mapping: 'cabang_nama'},
 			{name: 'cust_aktif', type: 'string', mapping: 'cust_aktif'},
 			{name: 'cust_fretfulness', type: 'string', mapping: 'cust_fretfulness'},
+			{name: 'crmvalue_date', type: 'date', dateFormat: 'Y-m-d', mapping: 'crmvalue_date'}, 
+			{name: 'crmvalue_total', type: 'string', mapping: 'crmvalue_total'},
+			{name: 'crmvalue_priority', type: 'string', mapping: 'crmvalue_priority'},
 			{name: 'cust_creator', type: 'string', mapping: 'cust_creator'},
 			{name: 'cust_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'cust_date_create'},
 			{name: 'cust_update', type: 'string', mapping: 'cust_update'},
@@ -3157,6 +3160,20 @@ Ext.onReady(function(){
 		triggerAction: 'all'	
 	});
 	
+	/* Identify  CRM value Field */
+	cust_crm_valueField= new Ext.form.NumberField({
+		id: 'cust_crm_valueField',
+		fieldLabel: 'CRM Value',
+		allowNegatife : false,
+		blankText: '0',
+		maxLength: 10,
+		disabled : true,
+		allowDecimals: false,
+		anchor: '20%',
+		maskRe: /([0-9]+)$/
+	});
+	
+	
 	cust_priorityField= new Ext.form.ComboBox({
 		id: 'cust_priorityField',
 		fieldLabel: 'Priority',
@@ -3168,8 +3185,9 @@ Ext.onReady(function(){
 		editable: false,
 		//allowBlank: false,
 		displayField: 'cust_priority_display',
+		disabled : true,
 		valueField: 'cust_priority_value',
-		anchor: '50%',
+		anchor: '30%',
 		triggerAction: 'all'	
 	});
 	
@@ -3243,8 +3261,6 @@ Ext.onReady(function(){
 		anchor: '30%',
 		triggerAction: 'all'	
 	});
-	
-	
 	
 	cust_fbField=new Ext.form.Checkbox({
 		boxLabel: 'facebook',
@@ -3389,7 +3405,7 @@ Ext.onReady(function(){
 						},cust_kelaminField, cust_tmptlahirField, cust_tgllahirField, cust_umurField, cust_agamaField, cust_pendidikanField, 
 						cust_profesiField, cust_profesitxtField, cust_hobiField, cust_hobitxtField, cust_referensiField, cust_referensilainField,
 						cust_referensilaintxtField, cust_statusnikahField, cust_jmlanakField, cust_terdaftarField, cust_unitField, 
-						cust_priorityField, cust_keteranganField, cust_aktifField
+						cust_keteranganField, cust_aktifField
 						<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_CUSTOMER'))){ ?>
 						, cust_update_confirmField
 						<?php } ?>
@@ -3414,7 +3430,7 @@ Ext.onReady(function(){
 						columnWidth:0.5,
 						layout: 'form',
 						border:false,
-						items: [cust_fretfulnessField] 
+						items: [cust_fretfulnessField,cust_crm_valueField,cust_priorityField] 
 					}, 
 					cust_noteListEditorGrid]
 			}
