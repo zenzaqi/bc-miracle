@@ -602,7 +602,7 @@ left join karyawan on (karyawan.karyawan_id = resep_dokter.resep_dokterid)";
 	function resep_dokter_update($resep_id, $resep_nofaktur, $resep_custid , $resep_cust_manual, $resep_tanggal, $resep_dokterid, $mode_edit){
 		$data=array(
 		"resep_tanggal"=>$resep_tanggal,
-		"resep_custid"=>$resep_custid,
+		//"resep_custid"=>$resep_custid,
 		"resep_nofaktur"=>$resep_nofaktur,
 		"resep_cust_manual"=>$resep_cust_manual
 		//"resep_dokterid"=>$resep_dokterid
@@ -612,6 +612,11 @@ left join karyawan on (karyawan.karyawan_id = resep_dokter.resep_dokterid)";
 		$result=$this->db->query($sql);
 		if($result->num_rows())
 		$data["resep_dokterid"]=$resep_dokterid;
+		
+		$sql="select cust_id from customer where cust_id='".$resep_custid."'";
+		$result=$this->db->query($sql);
+		if($result->num_rows())
+		$data["resep_custid"]=$resep_custid;
 		
 		
 		$this->db->where("resep_id", $resep_id);
