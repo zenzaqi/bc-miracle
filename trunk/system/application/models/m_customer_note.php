@@ -1,40 +1,40 @@
 <? /* 	These code was generated using phpCIGen v 0.1.a (21/04/2009)
-	#zaqi 		zaqi.smart@gmail.com,http://zenzaqi.blogspot.com, 
+	#zaqi 		zaqi.smart@gmail.com,http://zenzaqi.blogspot.com,
     #songbee	mukhlisona@gmail.com
 	#CV. Trust Solution, jl. Saronojiwo 19 Surabaya, http://www.ts.co.id
-	
+
 	+ Module  		: customer_note Model
 	+ Description	: For record model process back-end
 	+ Filename 		: c_customer_note.php
  	+ Author  		: zainal. mukhlison
  	+ Created on 12/Aug/2009 11:16:45
-	
+
 */
 
 class M_customer_note extends Model{
-		
+
 		//constructor
 		function M_customer_note() {
 			parent::Model();
 		}
-		
+
 		//function for get list record
 		function customer_note_list($filter,$start,$end){
 			$query = "SELECT * FROM customer_note,customer where note_customer=cust_id";
-			
+
 			// For simple search
 			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (cust_no LIKE '%".addslashes($filter)."%' OR 
-							 cust_nama LIKE '%".addslashes($filter)."%' OR 
+				$query .= " (cust_no LIKE '%".addslashes($filter)."%' OR
+							 cust_nama LIKE '%".addslashes($filter)."%' OR
 							 note_detail LIKE '%".addslashes($filter)."%')";
 			}
-			
+
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
-			$limit = $query." LIMIT ".$start.",".$end;		
-			$result = $this->db->query($limit);  
-			
+			$limit = $query." LIMIT ".$start.",".$end;
+			$result = $this->db->query($limit);
+
 			if($nbrows>0){
 				foreach($result->result() as $row){
 					$arr[] = $row;
@@ -45,45 +45,45 @@ class M_customer_note extends Model{
 				return '({"total":"0", "results":""})';
 			}
 		}
-		
+
 		//function for update record
 		function customer_note_update($note_id ,$note_customer ,$note_tanggal ,$note_detail ,$note_creator ,$note_date_create ,$note_update ,
 									  $note_date_update ,$note_revised ){
 			$data = array(
 				"note_id"=>$note_id,
 				"note_detail"=>$note_detail,
-				"note_update"=>$_SESSION[SESSION_USERID],			
-				"note_date_update"=>date('Y-m-d H:i:s')			
+				"note_update"=>$_SESSION[SESSION_USERID],
+				"note_date_update"=>date('Y-m-d H:i:s')
 			);
 			$this->db->where('note_id', $note_id);
 			$this->db->update('customer_note', $data);
-			
+
 			if($this->db->affected_rows()){
 				$sql="UPDATE customer_note set note_revised=(note_revised+1) WHERE note_id='".$departemen_id."'";
 				$this->db->query($sql);
 			}
-				
+
 			return '1';
 		}
-		
+
 		//function for create new record
 		function customer_note_create($note_customer ,$note_tanggal ,$note_detail ,$note_creator ,$note_date_create ,$note_update ,
 									  $note_date_update ,$note_revised ){
 			$data = array(
-	
-				"note_customer"=>$note_customer,	
-				"note_tanggal"=>$note_tanggal,	
-				"note_detail"=>$note_detail,	
-				"note_creator"=>$_SESSION[SESSION_USERID],	
+
+				"note_customer"=>$note_customer,
+				"note_tanggal"=>date('Y-m-d H:i:s'),
+				"note_detail"=>$note_detail,
+				"note_creator"=>$_SESSION[SESSION_USERID],
 				"note_date_create"=>date('Y-m-d H:i:s')
 			);
-			$this->db->insert('customer_note', $data); 
+			$this->db->insert('customer_note', $data);
 			if($this->db->affected_rows())
 				return '1';
 			else
 				return '0';
 		}
-		
+
 		//fcuntion for delete record
 		function customer_note_delete($pkid){
 			// You could do some checkups here and return '0' or other error consts.
@@ -99,7 +99,7 @@ class M_customer_note extends Model{
 					$query = $query . "note_id= ".$pkid[$i];
 					if($i<sizeof($pkid)-1){
 						$query = $query . " OR ";
-					}     
+					}
 				}
 				$this->db->query($query);
 			}
@@ -108,14 +108,14 @@ class M_customer_note extends Model{
 			else
 				return '0';
 		}
-		
+
 		//function for advanced search record
 		function customer_note_search($note_id ,$note_customer ,$note_tanggal ,$note_detail ,$note_creator ,$note_date_create ,$note_update ,
 									  $note_date_update ,$note_revised ,$start,$end){
 			//full query
 			$query = "SELECT * FROM customer_note,customer where note_customer=cust_id";
-			
-			
+
+
 			if($note_customer!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " note_customer LIKE '%".$note_customer."%'";
@@ -128,13 +128,13 @@ class M_customer_note extends Model{
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " note_detail LIKE '%".$note_detail."%'";
 			};
-			
+
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
-			
-			$limit = $query." LIMIT ".$start.",".$end;		
-			$result = $this->db->query($limit);    
-			
+
+			$limit = $query." LIMIT ".$start.",".$end;
+			$result = $this->db->query($limit);
+
 			if($nbrows>0){
 				foreach($result->result() as $row){
 					$arr[] = $row;
@@ -145,7 +145,7 @@ class M_customer_note extends Model{
 				return '({"total":"0", "results":""})';
 			}
 		}
-		
+
 		//function for print record
 		function customer_note_print($note_id ,$note_customer ,$note_tanggal ,$note_detail ,$note_creator ,$note_date_create ,$note_update ,
 									 $note_date_update ,$note_revised ,$option,$filter){
@@ -153,8 +153,8 @@ class M_customer_note extends Model{
 			$query = "SELECT * FROM customer_note,customer where note_customer=cust_id";
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (cust_no LIKE '%".addslashes($filter)."%' OR 
-							 cust_nama LIKE '%".addslashes($filter)."%' OR 
+				$query .= " (cust_no LIKE '%".addslashes($filter)."%' OR
+							 cust_nama LIKE '%".addslashes($filter)."%' OR
 							 note_detail LIKE '%".addslashes($filter)."%')";
 			} else if($option=='SEARCH'){
 				if($note_customer!=''){
@@ -169,12 +169,12 @@ class M_customer_note extends Model{
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " note_detail LIKE '%".$note_detail."%'";
 				};
-				
+
 			}
 			$result = $this->db->query($query);
 			return $result;
 		}
-		
+
 		//function  for export to excel
 		function customer_note_export_excel($note_id ,$note_customer ,$note_tanggal ,$note_detail ,$note_creator ,$note_date_create ,$note_update ,$note_date_update ,$note_revised ,$option,$filter){
 			//full query
@@ -182,8 +182,8 @@ class M_customer_note extends Model{
 						FROM customer_note,customer where note_customer=cust_id";
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (cust_no LIKE '%".addslashes($filter)."%' OR 
-							 cust_nama LIKE '%".addslashes($filter)."%' OR 
+				$query .= " (cust_no LIKE '%".addslashes($filter)."%' OR
+							 cust_nama LIKE '%".addslashes($filter)."%' OR
 							 note_detail LIKE '%".addslashes($filter)."%')";
 			} else if($option=='SEARCH'){
 				if($note_customer!=''){
@@ -198,12 +198,12 @@ class M_customer_note extends Model{
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " note_detail LIKE '%".$note_detail."%'";
 				};
-				
+
 			}
 			$result = $this->db->query($query);
 			return $result;
 		}
-		
+
 
 }
 ?>
