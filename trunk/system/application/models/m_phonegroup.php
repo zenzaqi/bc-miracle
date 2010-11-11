@@ -370,7 +370,7 @@ class M_phonegroup extends Model{
 				$sql.=" cust_hp like '%".$query."%'";
 			}
 			
-			$this->firephp->log($sql);
+			//$this->firephp->log($sql);
 			
 			$result = $this->db->query($sql);
 			$nbrows = $result->num_rows();
