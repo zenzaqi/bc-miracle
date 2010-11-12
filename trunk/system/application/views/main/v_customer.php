@@ -1290,7 +1290,7 @@ var editor_cust_note;
 				cust_keterangan	:cust_keterangan_update,		
 				cust_terdaftar	: cust_terdaftar_update_date,				
 				cust_statusnikah:cust_statusnikah_update,
-				cust_priority	:cust_priority_update,
+				//cust_priority	:cust_priority_update,
 				cust_jmlanak	:cust_jmlanak_update,			
 				cust_unit		:cust_unit_update,		
 				cust_aktif		:cust_aktif_update	
