@@ -102,6 +102,7 @@ var cust_keteranganField;
 var cust_terdaftarField;
 var cust_statusnikahField;
 var cust_priorityField;
+var cust_crm_dateField;
 var cust_jmlanakField;
 var cust_unitField;
 var cust_aktifField;
@@ -207,6 +208,8 @@ var editor_cust_note;
 		cust_terdaftarField.reset();
 		cust_statusnikahField.reset();
 		cust_priorityField.reset();
+		cust_crm_dateField.reset();
+		cust_crm_valueField.reset();
 		cust_jmlanakField.reset();
 		cust_unitField.reset();
 		cust_aktifField.reset();
@@ -257,6 +260,9 @@ var editor_cust_note;
 		cust_terdaftarField.setValue(null);
 		cust_statusnikahField.setValue(null);
 		cust_priorityField.setValue(null);
+		cust_crm_dateField.setValue(null);
+		//cust_crm_dateField.setValue(null);
+		cust_crm_valueField.setValue(null);
 		cust_jmlanakField.setValue(null);
 		cust_unitField.setValue(null);
 		cust_aktifField.setValue(null);
@@ -331,7 +337,7 @@ var editor_cust_note;
 		cust_keteranganField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_keterangan'));
 		cust_terdaftarField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_terdaftar'));
 		cust_statusnikahField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_statusnikah'));
-		cust_priorityField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_priority'));
+		//cust_priorityField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_priority'));
 		cust_jmlanakField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_jmlanak'));
 		cust_unitField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_unit'));
 		cust_aktifField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_aktif'));
@@ -343,6 +349,9 @@ var editor_cust_note;
 		cust_fb2Field.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_fb2'));
 		cust_tweeter2Field.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_tweeter2'));
 		cust_memberField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('member_no'));
+		cust_priorityField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('crmvalue_priority'));
+		cust_crm_valueField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('crmvalue_total'));
+		cust_crm_dateField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('crmvalue_date'));
 		
 /*		cust_member_DataStore.load({
 			params:{cust_id: customerListEditorGrid.getSelectionModel().getSelected().get('cust_id'), start: 0, limit: pageS },
@@ -1697,9 +1706,9 @@ Ext.onReady(function(){
 			{name: 'cust_unit', type: 'string', mapping: 'cabang_nama'},
 			{name: 'cust_aktif', type: 'string', mapping: 'cust_aktif'},
 			{name: 'cust_fretfulness', type: 'string', mapping: 'cust_fretfulness'},
-			{name: 'crmvalue_date', type: 'date', dateFormat: 'Y-m-d', mapping: 'crmvalue_date'}, 
-			{name: 'crmvalue_total', type: 'string', mapping: 'crmvalue_total'},
-			{name: 'crmvalue_priority', type: 'string', mapping: 'crmvalue_priority'},
+			//{name: 'crmvalue_date', type: 'date', dateFormat: 'Y-m-d', mapping: 'crmvalue_date'}, 
+			//{name: 'crmvalue_total', type: 'string', mapping: 'crmvalue_total'},
+			//{name: 'crmvalue_priority', type: 'string', mapping: 'crmvalue_priority'},
 			{name: 'cust_creator', type: 'string', mapping: 'cust_creator'},
 			{name: 'cust_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'cust_date_create'},
 			{name: 'cust_update', type: 'string', mapping: 'cust_update'},
@@ -1710,7 +1719,10 @@ Ext.onReady(function(){
 			{name: 'cust_fb', type: 'int', mapping: 'cust_fb'},
 			{name: 'cust_tweeter', type: 'int', mapping: 'cust_tweeter'},
 			{name: 'cust_fb2', type: 'int', mapping: 'cust_fb2'},
-			{name: 'cust_tweeter2', type: 'int', mapping: 'cust_tweeter2'}
+			{name: 'cust_tweeter2', type: 'int', mapping: 'cust_tweeter2'},
+			{name: 'crmvalue_date', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'crmvalue_date'},
+			{name: 'crmvalue_total', type: 'float', mapping: 'crmvalue_total'},
+			{name: 'crmvalue_priority', type: 'string', mapping: 'crmvalue_priority'}
 		]),
 		//sortInfo:{field: 'cust_id', direction: "ASC"}
 	});
@@ -2183,7 +2195,7 @@ Ext.onReady(function(){
 		{
 
 			header: '<div align="center">' + 'Priority' + '</div>',
-			dataIndex: 'cust_priority',
+			dataIndex: 'crmvalue_priority',
 			width: 40,
 			sortable: true
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_CUSTOMER'))){ ?>
@@ -3160,6 +3172,19 @@ Ext.onReady(function(){
 		triggerAction: 'all'	
 	});
 	
+	
+	/* Identify  CRM_dateField */
+	cust_crm_dateField= new Ext.form.DateField({
+		id: 'cust_crm_dateField',
+		fieldLabel: 'Last update',
+		format : 'd-m-Y',
+		disabled : true,
+		//emptyText: '<?=date('Y/m/d'); ?>',
+		//allowBlank: false,
+		anchor: '30%'
+	});
+	
+	
 	/* Identify  CRM value Field */
 	cust_crm_valueField= new Ext.form.NumberField({
 		id: 'cust_crm_valueField',
@@ -3172,7 +3197,6 @@ Ext.onReady(function(){
 		anchor: '20%',
 		maskRe: /([0-9]+)$/
 	});
-	
 	
 	cust_priorityField= new Ext.form.ComboBox({
 		id: 'cust_priorityField',
@@ -3369,7 +3393,14 @@ Ext.onReady(function(){
 		]
 	});
 	
-	
+	crm_panel_group = new Ext.form.FieldSet({
+		title: 'CRM Panel',
+		autoHeight: true,
+		defaultType: 'textfield',
+		anchor: '95%',
+		items:[cust_priorityField, cust_crm_valueField, cust_crm_dateField]
+	});
+
 	
 	var tab_customer = new Ext.TabPanel({
 		//el: 'tab_customer',
@@ -3430,7 +3461,7 @@ Ext.onReady(function(){
 						columnWidth:0.5,
 						layout: 'form',
 						border:false,
-						items: [cust_fretfulnessField,cust_crm_valueField,cust_priorityField] 
+						items: [cust_fretfulnessField,crm_panel_group] 
 					}, 
 					cust_noteListEditorGrid]
 			}
