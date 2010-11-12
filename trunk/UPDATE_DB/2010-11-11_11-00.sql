@@ -1,4 +1,4 @@
--- untuk keperluan CRM, join tb customer ke crm_value
+-- untuk keperluan CRM, menambahkan field cust_crm_value ke tb customer & vu_customer
 
 ALTER TABLE `customer`  DROP COLUMN `cust_priority`, ADD COLUMN `cust_crm_value` INT(11) NULL DEFAULT '0' COMMENT 'field ini adalah merujuk ke crm_value.crm_value_id' AFTER `cust_fretfulness`;
 
