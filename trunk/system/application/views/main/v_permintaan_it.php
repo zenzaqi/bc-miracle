@@ -465,7 +465,7 @@ Ext.onReady(function(){
 			{name: 'prioritas', type: 'string', mapping: 'prioritas'},
 			{name: 'status', type: 'string', mapping: 'status'}
 		]),
-		sortInfo:{field: 'tanggal_masalah', direction: "ASC"}
+		sortInfo:{field: 'tanggal_masalah', direction: "DESC"}
 	});
 	/* End of Function */
     
