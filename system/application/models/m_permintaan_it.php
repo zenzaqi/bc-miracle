@@ -35,7 +35,9 @@ class m_permintaan_it extends Model{
 		
 		function get_user_login(){
 			$username = $_SESSION[SESSION_USERID];
-			$sql="SELECT user_karyawan FROM users WHERE user_name ='".$username."'";
+			$sql="SELECT users.user_karyawan AS user_karyawan, karyawan.karyawan_nama AS karyawan_nama FROM users 
+			LEFT JOIN karyawan ON karyawan.karyawan_id = users.user_karyawan
+			WHERE user_name ='".$username."'";
 			$query = $this->db->query($sql);
 			$nbrows = $query->num_rows();
 			if($nbrows>0){
@@ -83,6 +85,7 @@ class m_permintaan_it extends Model{
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 				$query .= " (karyawan.karyawan_nama LIKE '%".addslashes($filter)."%' OR cabang.cabang_nama LIKE '%".addslashes($filter)."%' OR permintaan_it.permintaan_judul LIKE '%".addslashes($filter)."%' )";
 			}
+			$query.=" ORDER BY tanggal_masalah DESC";
 			
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
