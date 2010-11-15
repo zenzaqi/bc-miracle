@@ -63,6 +63,7 @@ var gudang_idField;
 var permintaan_namaField;
 var permintaan_clientField;
 var user_loginField;
+var nama_loginField;
 var permintaan_cabang_idField;
 var permintaan_cabangField;
 var permintaan_tanggalmasalahField;
@@ -305,7 +306,7 @@ Ext.onReady(function(){
   
 	/* Function for Check if the form is valid */
 	function is_permintaan_form_valid(){
-		return (permintaan_judulField.isValid() && permintaan_permintaanField.isValid());
+		return (permintaan_permintaanField.isValid());
 	}
   	/* End of Function */
   
@@ -313,6 +314,10 @@ Ext.onReady(function(){
 	function display_form_window(){
 		permintaan_reset_form();
 		cbo_cabang_DataStore.reload();
+		permintaan_namaField.setValue(nama_loginField.getValue());
+		permintaan_cabangField.setValue('Pilih Satu');
+		permintaan_tipeField.setValue('Pilih Satu');
+		permintaan_prioritasField.setValue('Normal');
 		if(!permintaan_createWindow.isVisible()){
 			//permintaan_reset_form();
 			if (user_loginField.getValue() != 2 || user_loginField.getValue() != 11 || user_loginField.getValue() !=66 || user_loginField.getValue() !=79){
@@ -359,9 +364,18 @@ Ext.onReady(function(){
 		/* only one record is selected here */
 		//cbo_cabang_DataStore.reload();
 		//({params : {permintaan_id : eval(get_pk_id()), start:0, limit:pageS}});
-		
 		if(permintaanEditorGrid.selModel.getCount() == 1) {
 			permintaan_set_form();
+			if (user_loginField.getValue() == 2 || user_loginField.getValue() == 11 || user_loginField.getValue() ==66 || user_loginField.getValue() ==79){
+				permintaan_penyelesaianField.setDisabled(false);
+				permintaan_tanggalselesaiField.setDisabled(false);
+				permintaan_statusField.setDisabled(false);
+				
+			}else {
+				permintaan_penyelesaianField.setDisabled(true);
+				permintaan_tanggalselesaiField.setDisabled(true);
+				permintaan_statusField.setDisabled(true);
+			}
 			post2db='UPDATE';
 			msg='updated';
 			permintaan_createWindow.show();
@@ -451,7 +465,7 @@ Ext.onReady(function(){
 			{name: 'prioritas', type: 'string', mapping: 'prioritas'},
 			{name: 'status', type: 'string', mapping: 'status'}
 		]),
-		sortInfo:{field: 'nama', direction: "ASC"}
+		sortInfo:{field: 'tanggal_masalah', direction: "ASC"}
 	});
 	/* End of Function */
     
@@ -490,6 +504,7 @@ Ext.onReady(function(){
 			//id: 'cabang_id'
 		},[
 			{name: 'user_karyawan', type: 'int', mapping: 'user_karyawan'},
+			{name: 'karyawan_nama', type: 'string', mapping: 'karyawan_nama'},
 		]),
 		sortInfo:{field: 'user_karyawan', direction: "ASC"}
 	});
@@ -535,9 +550,9 @@ Ext.onReady(function(){
 			*/
 		},
 		{
-			header: '<div align="center">' + 'Tgl Masalah' + '</div>',
+			header: '<div align="center">' + 'Tgl Permintaan' + '</div>',
 			dataIndex: 'tanggal_masalah',
-			width: 80,
+			width: 100,
 			sortable: true,
 			readOnly: true,
 			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
@@ -548,7 +563,7 @@ Ext.onReady(function(){
 			*/
 		},
 		{
-			header: '<div align="center">' + 'Tipe Subyek' + '</div>',
+			header: '<div align="center">' + 'Tipe Permintaan' + '</div>',
 			dataIndex: 'tipe',
 			width: 200,
 			sortable: true,
@@ -560,8 +575,8 @@ Ext.onReady(function(){
 			*/
 		},
 		{
-			header: '<div align="center">' + 'Judul Subyek' + '</div>',
-			dataIndex: 'judul',
+			header: '<div align="center">' + 'Permintaan' + '</div>',
+			dataIndex: 'masalah',
 			width: 400,
 			sortable: true,
 			readOnly: true
@@ -788,6 +803,7 @@ Ext.onReady(function(){
 					//var j=cbo_user_login_DataStore.findExact('cust_id',history_transaksi_custField.getValue(),0);
 					//if(j>-1){
 						var cust_record=cbo_user_login_DataStore.getAt(0);
+						nama_loginField.setValue(cust_record.data.karyawan_nama);
 						user_loginField.setValue(cust_record.data.user_karyawan);
 						//history_transaksi_customerField.setValue(cust_record.data.cust_nama);
 						//history_transaksi_custnoField.setValue(cust_record.data.cust_no);
@@ -802,6 +818,10 @@ Ext.onReady(function(){
 		id: 'user_loginField',
 		allowBlank: false,
 	});
+	nama_loginField= new Ext.form.TextField({
+		id: 'nama_loginField',
+		allowBlank: false,
+	});
 	permintaan_clientField= new Ext.form.TextField({
 		id: 'permintaan_clientField',
 		allowBlank: false,
@@ -810,10 +830,12 @@ Ext.onReady(function(){
 		id: 'permintaan_cabang_idField',
 		allowBlank: false,
 	});
+	permintaan_nama_labelField=new Ext.form.Label({ html: '<span style="font-size: 12px">Nama Peminta :</span>'});
 	permintaan_namaField= new Ext.form.TextField({
 		id: 'permintaan_namaField',
-		fieldLabel: 'Nama Peminta <span style="color: #ec0000">*</span>',
+		fieldLabel : 'Nama Peminta',
 		maxLength: 100,
+		//hideLabel : true,
 		width: 10,
 		readOnly: true,
 		allowBlank: false,
@@ -822,25 +844,26 @@ Ext.onReady(function(){
 	});
 	permintaan_cabangField= new Ext.form.ComboBox({
 		id: 'permintaan_cabangField',
-		fieldLabel: 'Cabang <span style="color: #ec0000">*</span>',
+		fieldLabel: 'Cabang',
 		allowBlank: false,
-		anchor: '95%',
+		//anchor: '95%',
+		emptyText: 'Pilih Satu',
 		store: cbo_cabang_DataStore,
 		mode: 'remote',
 		editable: false,
 		displayField: 'permintaan_cabang_display',
 		valueField: 'permintaan_cabang_value',
-		width: 250,
+		width: 200,
 		triggerAction: 'all'
 	});
 	permintaan_tanggalmasalahField= new Ext.form.DateField({
 		id: 'permintaan_tanggalmasalahField',
-		fieldLabel: 'Tanggal Masalah',
+		fieldLabel: 'Tgl Permintaan',
 		format : 'd-m-Y'
 	});
 	permintaan_tipeField= new Ext.form.ComboBox({
 		id: 'permintaan_tipeField',
-		fieldLabel: 'Tipe Subyek <span style="color: #ec0000">*</span>',
+		fieldLabel: 'Tipe Permintaan',
 		store:new Ext.data.SimpleStore({
 			fields:['permintaan_tipe_value', 'permintaan_tipe_display'],
 			data:[['Refill Tinta','Refill Tinta'],['Miracle Information System','Miracle Information System'],['Pengadaan (Hardware)','Pengadaan (Hardware)'],['Kerusakan','Kerusakan'],['Kunjungan','Kunjungan'],['Pengadaan (Software)','Pengadaan (Software)'],['Lain-lain','Lain-lain']]
@@ -851,12 +874,12 @@ Ext.onReady(function(){
 		displayField: 'permintaan_tipe_display',
 		valueField: 'permintaan_tipe_value',
 		emptyText: 'Miracle Information System',
-		width: 250,
+		width: 200,
 		triggerAction: 'all'	
 	});
 	permintaan_judulField= new Ext.form.TextField({
 		id: 'permintaan_judulField',
-		fieldLabel: 'Judul Subyek <span style="color: #ec0000">*</span>',
+		fieldLabel: 'Judul Subyek',
 		allowBlank: false,
 		maxLength: 400,
 		width: 300,
@@ -864,14 +887,14 @@ Ext.onReady(function(){
 	});
 	permintaan_permintaanField= new Ext.form.TextArea({
 		id: 'permintaan_permintaanField',
-		fieldLabel: 'Permintaan <span style="color: #ec0000">*</span>',
+		fieldLabel: 'Permintaan',
 		allowBlank: false,
 		maxLength: 1000,
 		anchor: '95%'
 	});
 	permintaan_prioritasField= new Ext.form.ComboBox({
 		id: 'permintaan_prioritasField',
-		fieldLabel: 'Prioritas <span style="color: #ec0000">*</span>',
+		fieldLabel: 'Prioritas',
 		store:new Ext.data.SimpleStore({
 			fields:['permintaan_prioritas_value', 'permintaan_prioritas_display'],
 			data:[['Low','Low'],['Normal','Normal'],['High','High']]
@@ -882,9 +905,9 @@ Ext.onReady(function(){
 		displayField: 'permintaan_prioritas_display',
 		valueField: 'permintaan_prioritas_value',
 		emptyText: 'Low',
-		width: 100,
+		width: 200,
 		triggerAction: 'all',
-		anchor: '95%'
+		//anchor: '95%'
 	});
 	permintaan_penyelesaianField= new Ext.form.TextArea({
 		id: 'permintaan_penyelesaianField',
@@ -909,8 +932,16 @@ Ext.onReady(function(){
 		displayField: 'permintaan_status_display',
 		valueField: 'permintaan_status_value',
 		emptyText: 'Open',
-		width: 120,
+		width: 200,
 		triggerAction: 'all'	
+	});
+	input_itField=new Ext.form.FieldSet({
+		id:'input_itField',
+		title: 'Diisi oleh IT Dept.',
+		layout: 'form',
+		boduStyle: 'padding: 5px;',
+		frame: false,
+		items:[permintaan_penyelesaianField, permintaan_tanggalselesaiField, permintaan_statusField]
 	});
 	
   	
@@ -929,8 +960,8 @@ Ext.onReady(function(){
 				layout: 'form',
 				border:false,
 				items: [permintaan_namaField, permintaan_cabangField, permintaan_tanggalmasalahField,
-				permintaan_tipeField, permintaan_judulField, permintaan_permintaanField, permintaan_prioritasField,
-				permintaan_penyelesaianField, permintaan_tanggalselesaiField, permintaan_statusField] 
+				permintaan_tipeField, permintaan_permintaanField, permintaan_prioritasField,
+				input_itField] 
 			}
 			]
 		}]
@@ -1093,7 +1124,7 @@ Ext.onReady(function(){
 	});
 	tanggalmasalahSearchField= new Ext.form.DateField({
 		id: 'tanggalmasalahSearchField',
-		fieldLabel: 'Tanggal Masalah',
+		fieldLabel: 'Tgl Permintaan',
 		format : 'd-m-Y',
 	});
 	tipeSearchField= new Ext.form.ComboBox({
@@ -1148,7 +1179,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [permintaan_namaSearchField, tanggalmasalahSearchField, tipeSearchField, cabangSearchField, judulSearchField, prioritasSearchField, tanggalselesaiSearchField, statusSearchField] 
+				items: [permintaan_namaSearchField, tanggalmasalahSearchField, tipeSearchField, cabangSearchField, prioritasSearchField, tanggalselesaiSearchField, statusSearchField] 
 			}
 			]
 		}]
