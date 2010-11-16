@@ -2192,7 +2192,7 @@ Ext.onReady(function(){
             })
 			<?php } ?>
 		},
-		{
+/*		{
 
 			header: '<div align="center">' + 'Priority' + '</div>',
 			dataIndex: 'crmvalue_priority',
@@ -2215,7 +2215,7 @@ Ext.onReady(function(){
             })
 			<?php } ?>
 		},
-		{
+*/		{
 
 //			header: 'Aktif',
 			header: '<div align="center">' + 'Status' + '</div>',
