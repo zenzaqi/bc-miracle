@@ -20,10 +20,10 @@ class M_voucher extends Model{
 		
 		//function for get list record
 		function voucher_list($filter,$start,$end){
-			$query =   "select c.cust_no, c.cust_nama, v.*
+			$query =   "select c.cust_no as cust_no, c.cust_nama as cust_nama, v.*
 						from voucher v
 						left join vu_customer c on c.member_no = v.voucher_cust
-						order by v.voucher_tgl desc";
+						";
 			
 			// For simple search
 			if ($filter<>""){
@@ -32,6 +32,12 @@ class M_voucher extends Model{
 							 voucher_nama LIKE '%".addslashes($filter)."%' OR 
 							 voucher_cust LIKE '%".addslashes($filter)."%' )";
 			}
+			else //default hari ini
+			{
+				$query .= " WHERE (date_format(voucher_tgl, '%Y-%m-%d') = date_format(now(), '%Y-%m-%d'))";
+			}
+			
+			$query .= " order by v.voucher_tgl desc ";
 			
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
@@ -78,7 +84,10 @@ class M_voucher extends Model{
 		//function for advanced search record
 		function voucher_search($voucher_no ,$voucher_nama ,$voucher_cust, $voucher_point ,$voucher_kadaluarsa ,$voucher_cashback ,$start,$end){
 			//full query
-			$query="select * from voucher";
+			$query=    "select c.cust_no as cust_no, c.cust_nama as cust_nama, v.*
+						from voucher v
+						left join vu_customer c on c.member_no = v.voucher_cust
+						";
 			
 			if($voucher_no!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -107,6 +116,8 @@ class M_voucher extends Model{
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " voucher_cashback LIKE '%".$voucher_cashback."%'";
 			};
+			
+			$query.= " order by v.voucher_tgl desc ";
 			
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
