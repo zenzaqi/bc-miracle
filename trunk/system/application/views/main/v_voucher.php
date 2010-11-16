@@ -449,7 +449,7 @@ Ext.onReady(function(){
 	/* End of Function */
   	
 	voucherListEditorGrid.addListener('rowcontextmenu', onvoucher_ListEditGridContextMenu);
-	//voucher_DataStore.load({params: {start: 0, limit: pageS}});	// supaya tidak auto load DataStore
+	voucher_DataStore.load({params: {start: 0, limit: pageS}});
 	
 	/* Function for action list search */
 	function voucher_list_search(){
