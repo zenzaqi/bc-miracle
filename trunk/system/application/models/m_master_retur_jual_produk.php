@@ -462,7 +462,7 @@ class M_master_retur_jual_produk extends Model{
 					"kwitansi_nilai"=>$rproduk_kwitansi_nilai,
 					"kwitansi_sisa"=>$rproduk_kwitansi_nilai,
 					"kwitansi_keterangan"=>$rproduk_kwitansi_keterangan, 
-					"kwitansi_status"=>'Terbuka',
+					"kwitansi_status"=>'Tertutup',
 					"kwitansi_creator"=>@$_SESSION[SESSION_USERID]
 					);
 					$this->db->insert('cetak_kwitansi', $dti_kwitansi);
