@@ -406,28 +406,27 @@ class M_master_jual_produk extends Model{
 					WHERE master_jual_produk.jproduk_id='$jproduk_id'";
 				$this->db->query($sqlu_jkwitansi);
 				if($this->db->affected_rows()>-1){
+					/* UPDATE db.cetak_kwitansi.kwitansi_sisa <== dikembalikan sesuai dengan nilai kwitansi yg diambil di Faktur ini. */
 					$sql = "SELECT jkwitansi_master
 						FROM jual_kwitansi
 						JOIN master_jual_produk ON(jkwitansi_ref=jproduk_nobukti)
 						WHERE jproduk_id='".$jproduk_id."'";
 					$rs = $this->db->query($sql);
 					if($rs->num_rows()){
-						$record = $rs->row_array();
-						$jkwitansi_master = $record['jkwitansi_master'];
-						
-						//updating sisa kwitansi
-						$sqlu = "UPDATE cetak_kwitansi,
-									(SELECT sum(jkwitansi_nilai) AS total_kwitansi
-										,jkwitansi_master 
-									FROM jual_kwitansi
-									WHERE jkwitansi_master<>0
-										AND jkwitansi_stat_dok<>'Batal'
-										AND jkwitansi_master='".$jkwitansi_master."'
-									GROUP BY jkwitansi_master) AS vu_kw
-								SET kwitansi_sisa=(kwitansi_nilai - vu_kw.total_kwitansi)
-								WHERE vu_kw.jkwitansi_master=kwitansi_id
-									AND kwitansi_id='".$jkwitansi_master."'";
-						$this->db->query($sqlu);
+						foreach($rs->result() as $row){
+							//updating sisa kwitansi
+							$sqlu = "UPDATE cetak_kwitansi
+										LEFT JOIN (SELECT sum(jkwitansi_nilai) AS total_kwitansi
+											,jkwitansi_master 
+										FROM jual_kwitansi
+										WHERE jkwitansi_master<>0
+											AND jkwitansi_stat_dok<>'Batal'
+											AND jkwitansi_master='".$row->jkwitansi_master."'
+										GROUP BY jkwitansi_master) AS vu_kw ON(vu_kw.jkwitansi_master=kwitansi_id)
+									SET kwitansi_sisa=(kwitansi_nilai - ifnull(vu_kw.total_kwitansi,0))
+									WHERE kwitansi_id='".$row->jkwitansi_master."'";
+							$this->db->query($sqlu);
+						}
 					}
 					
 					//updating db.jual_transfer ==> pembatalan
