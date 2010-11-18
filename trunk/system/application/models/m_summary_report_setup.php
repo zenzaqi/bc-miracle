@@ -80,8 +80,7 @@ class M_summary_report_setup extends Model{
 			}
 		}
 		
-		function sr_setup_update($setsr_id, $setsr_jan, $setsr_feb, $setsr_mar, $setsr_apr, $setsr_may, $setsr_jun, $setsr_jul, $setsr_aug, $setsr_sep, $setsr_oct, $setsr_nov, $setsr_dec, $setsr_update, $setsr_date_update, $setsr_revised){
-	
+	function sr_setup_update($setsr_id, $setsr_jan, $setsr_feb, $setsr_mar, $setsr_apr, $setsr_may, $setsr_jun, $setsr_jul, $setsr_aug, $setsr_sep, $setsr_oct, $setsr_nov, $setsr_dec, $setsr_update, $setsr_date_update, $setsr_revised){
 		$sql="select * from sr_setup where setsr_id = '$setsr_id'";
 	
 		$rs=$this->db->query($sql);
@@ -100,6 +99,8 @@ class M_summary_report_setup extends Model{
 				"setsr_oct"=>$setsr_oct,
 				"setsr_nov"=>$setsr_nov,
 				"setsr_dec"=>$setsr_dec,
+				"setsr_update"=>$_SESSION[SESSION_USERID],
+				"setsr_date_update"=>date('Y-m-d H:i:s')
 				
 			);
 			$this->db->where('setsr_id', $setsr_id);
