@@ -1,4 +1,4 @@
-<?
+paket<?
 /* 	These code was generated using phpCIGen v 0.1.b (1/08/2009)
 	#zaqi 		zaqi.smart@gmail.com,http://zenzaqi.blogspot.com, 
 	#CV. Trust Solution, jl. Saronojiwo 19 Surabaya, http://www.ts.co.id
@@ -494,6 +494,7 @@ Ext.onReady(function(){
 			//{name: 'apaket_sisa_paket', type: 'int', mapping: 'apaket_sisa_paket'}
 			{name: 'dpaket_id', type: 'int', mapping: 'dpaket_id'},
 			{name: 'dpaket_sisa_paket', type: 'int', mapping: 'dpaket_sisa_paket'},
+			{name: 'dpaket_jumlah', type: 'int', mapping: 'dpaket_jumlah'},
 			{name: 'dpaket_master', type: 'int', mapping: 'dpaket_master'},
 			{name: 'dpaket_paket', type: 'int', mapping: 'dpaket_paket'}
 		])//,
@@ -676,6 +677,15 @@ Ext.onReady(function(){
 				return '<div align="right">' + value + '</div>';
 			}
 		},*/
+		{
+			header: '<div align="center">' + 'Jumlah' + '</div>',
+			dataIndex: 'dpaket_jumlah',
+			width: 60,	//90,
+			renderer: function(value, cell, record){
+				return '<div align="right">' + value + '</div>';
+			}
+		},
+		
 		{
 			header: '<div align="center">' + 'Sisa' + '</div>',
 			dataIndex: 'dpaket_sisa_paket',

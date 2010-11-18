@@ -474,6 +474,7 @@ class M_master_ambil_paket extends Model{
 					,paket_kode
 					,paket_nama
 					,dpaket_id
+					,dpaket_jumlah
 					,dpaket_sisa_paket
 					,dpaket_kadaluarsa 
 				FROM detail_jual_paket 
@@ -677,7 +678,7 @@ class M_master_ambil_paket extends Model{
 							cust_id, cust_no, cust_nama, 
 							jpaket_tanggal, jpaket_nobukti, 
 							paket_kode, paket_nama, 
-							dpaket_id, dpaket_sisa_paket, dpaket_kadaluarsa 
+							dpaket_id, dpaket_jumlah, dpaket_sisa_paket, dpaket_kadaluarsa 
 						FROM detail_jual_paket 
 						LEFT JOIN master_jual_paket ON(dpaket_master=jpaket_id) 
 						LEFT JOIN customer ON(jpaket_cust=cust_id) 
