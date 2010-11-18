@@ -429,7 +429,8 @@ class M_master_retur_jual_produk extends Model{
 		function master_retur_jual_produk_create($rproduk_nobukti ,$rproduk_nobuktijual ,$rproduk_cust ,$rproduk_tanggal ,$rproduk_keterangan , $rproduk_stat_dok, $rproduk_kwitansi_nilai ,$rproduk_kwitansi_keterangan){
 			$sql = "SELECT rproduk_id
 				FROM master_retur_jual_produk
-				WHERE rproduk_nobuktijual='".$rproduk_nobuktijual."'";
+				WHERE rproduk_nobuktijual='".$rproduk_nobuktijual."'
+					AND rproduk_stat_dok<>'Batal'";
 			$this->db->query($sql);
 			if($this->db->affected_rows()){
 				return '-1';
