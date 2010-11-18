@@ -203,6 +203,8 @@ Ext.onReady(function(){
 		phonegroup_namaField.setValue(null);
 		phonegroup_detailField.reset();
 		phonegroup_detailField.setValue(null);
+		phonenumber_DataStore.removeAll();
+		phonegrouped_DataStore.removeAll();
 	}
  	/* End of Function */
   
@@ -512,7 +514,7 @@ Ext.onReady(function(){
 		{ 
 			text: 'Edit', tooltip: 'Edit selected record', 
 			iconCls:'icon-update',
-			handler: phonegroup_editContextMenu 
+			handler: phonegroup_confirm_update 
 		},
 		<?php } ?>
 		<?php if(eregi('D',$this->m_security->get_access_group_by_kode('MENU_PHONEGROUP'))){ ?>
@@ -957,7 +959,7 @@ Ext.onReady(function(){
 		pgcust_unit_SearchField.reset();
 		pgcust_aktif_SearchField.reset();
 		phonenumber_DataStore.removeAll();
-		phonegrouped_DataStore.removeAll();
+		//phonegrouped_DataStore.removeAll();
 	}
 	
 	function phonegroup_cust_list_search(){

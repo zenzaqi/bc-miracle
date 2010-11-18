@@ -369,12 +369,7 @@ Ext.onReady(function(){
 			opsi_produk		: 	opsi_produk_search
 		};
 		// Cause the datastore to do another query : 
-		Ext.MessageBox.show({
-		   msg: 'Sedang memproses data, mohon tunggu...',
-		   progressText: 'proses...',
-		   width:350,
-		   wait:true
-		});
+		
 		
 		stok_mutasi_DataStore.reload({
 			params: {start: 0, limit: pageS, query: null},
@@ -809,6 +804,16 @@ Ext.onReady(function(){
 		});
 	}
 	/*End of Function */
+	stok_mutasi_DataStore.on('beforeload', function(){
+		Ext.MessageBox.show({
+		   msg: 'Sedang memproses data, mohon tunggu...',
+		   progressText: 'proses...',
+		   width:350,
+		   wait:true
+		});												
+	});
+	
+	stok_mutasi_DataStore.on('load', function(){ Ext.MessageBox.hide(); });
 	
 	stok_mutasi_searchWindow.show();
 	
