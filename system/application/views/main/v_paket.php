@@ -209,7 +209,7 @@ Ext.onReady(function(){
 		if(paket_duField.getValue()!== null){paket_du_create = paket_duField.getValue();} 
 		if(paket_dmField.getValue()!== null){paket_dm_create = paket_dmField.getValue();} 
 		if(paket_pointField.getValue()!== null){paket_point_create = paket_pointField.getValue();} 
-		if(paket_hargaField.getValue()!== null){paket_harga_create = convertTonNumber(paket_hargaField.getValue());} 
+		if(paket_hargaField.getValue()!== null){paket_harga_create = convertToNumber(paket_hargaField.getValue());} 
 		if(paket_expiredField.getValue()!== null){paket_expired_create = paket_expiredField.getValue();}
 		if(paket_perpanjanganField.getValue()!== null){paket_perpanjangan_create = paket_perpanjanganField.getValue();} 
 		if(paket_aktifField.getValue()!== null){paket_aktif_create = paket_aktifField.getValue();} 
