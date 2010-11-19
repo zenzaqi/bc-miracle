@@ -1,3 +1,4 @@
+--utk keperluan Summary Report (additional Miracle)
 
 CREATE TABLE IF NOT EXISTS `sr_setup` (
   `setsr_id` int(11) NOT NULL AUTO_INCREMENT,
