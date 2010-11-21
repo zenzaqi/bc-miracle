@@ -1,4 +1,4 @@
-paket<?
+<?
 /* 	These code was generated using phpCIGen v 0.1.b (1/08/2009)
 	#zaqi 		zaqi.smart@gmail.com,http://zenzaqi.blogspot.com, 
 	#CV. Trust Solution, jl. Saronojiwo 19 Surabaya, http://www.ts.co.id
