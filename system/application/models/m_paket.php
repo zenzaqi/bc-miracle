@@ -280,7 +280,7 @@ class M_paket extends Model{
 						 paket_kodelama LIKE '%".addslashes($filter)."%' OR 
 						 paket_nama LIKE '%".addslashes($filter)."%' OR 
 						 group_nama LIKE '%".addslashes($filter)."%' OR 
-						 kategori_nama LIKE '%".addslashes($filter)."%')";
+						 kategori2_nama LIKE '%".addslashes($filter)."%')";
 			$query .= " AND paket_aktif = 'Aktif'"; // by hendri, simple search khusus aktif only
 		}
 		
