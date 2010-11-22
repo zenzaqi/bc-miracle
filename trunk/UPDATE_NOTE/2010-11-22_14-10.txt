@@ -1,4 +1,4 @@
 tambahan untuk menyimpan jam_konfirmasi, jam_batal di App & 
 jam_siap, jam_batal di Tindakan
 
-sql: 2010-11-22_14-10.sql
+sql: 2010-11-22_14-10.sql, 2010-11-22_14-30.sql
