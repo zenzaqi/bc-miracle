@@ -1213,6 +1213,8 @@ class M_appointment extends Model{
 				,terapis_id
 				,dapp_keterangan
 				,kategori_nama
+				,dapp_jambatal
+				,dapp_jamkonfirmasi
 				,dapp_status
 			FROM vu_appointment
 			WHERE dapp_id='".$dapp_id."'";
@@ -1328,7 +1330,7 @@ class M_appointment extends Model{
 					return '-7';
 				}
 				
-			}else if($dapp_status_awal<>$dapp_status && $dapp_status<>'datang'){
+			}else if($dapp_status_awal<>$dapp_status && ($dapp_status=='jadwal ulang' || $dapp_status=='reservasi')){
 				//ada perubahan status yang bukan !='datang'
 				//UPDATE db.appointment_detail.dapp_petugas
 				$sqlu_dapp = "UPDATE appointment_detail
@@ -1344,7 +1346,46 @@ class M_appointment extends Model{
 					return '-10';
 				}
 				
-			}else{
+			}
+			else if($dapp_status_awal<>$dapp_status && $dapp_status=='batal'){
+				//ada perubahan status yang bukan !='datang'
+				//UPDATE db.appointment_detail.dapp_petugas
+				$sqlu_dapp = "UPDATE appointment_detail
+					SET dapp_status='".$dapp_status."'
+						,dapp_update='".$app_user."'
+						,dapp_date_update='".$datetime_now."'
+						,dapp_jambatal='".$datetime_now."'
+						,dapp_revised=(dapp_revised+1)
+					WHERE dapp_id='".$dapp_id."'";
+				$this->db->query($sqlu_dapp);
+				if($this->db->affected_rows()){
+					return '1';
+				}else{
+					return '-10';
+				}
+				
+			}
+			else if($dapp_status_awal<>$dapp_status && $dapp_status=='konfirmasi'){
+				//ada perubahan status yang bukan !='datang'
+				//UPDATE db.appointment_detail.dapp_petugas
+				$sqlu_dapp = "UPDATE appointment_detail
+					SET dapp_status='".$dapp_status."'
+						,dapp_update='".$app_user."'
+						,dapp_date_update='".$datetime_now."'
+						,dapp_jamkonfirmasi='".$datetime_now."'
+						,dapp_revised=(dapp_revised+1)
+					WHERE dapp_id='".$dapp_id."'";
+				$this->db->query($sqlu_dapp);
+				if($this->db->affected_rows()){
+					return '1';
+				}else{
+					return '-10';
+				}
+				
+			}
+			
+			
+			else{
 				//ada perubahan yang tidak sesuai
 				return '-6';
 			}
@@ -1374,6 +1415,8 @@ class M_appointment extends Model{
 				,terapis_id
 				,dapp_jamreservasi
 				,dapp_tglreservasi
+				,dapp_jambatal
+				,dapp_jamkonfirmasi
 				,dapp_keterangan
 				,dapp_locked
 				,dapp_status
@@ -1978,6 +2021,8 @@ left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawa
 					,terapis_username AS terapis
 					,dapp_status AS status
 					,dapp_jamdatang AS jam_dtg
+					,dapp_jambatal as dapp_jambatal
+					,dapp_jamkonfirmasi as dapp_jamkonfirmasi
 					,dapp_keterangan AS keterangan
 				FROM vu_appointment";
 			
@@ -2059,6 +2104,8 @@ left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawa
 					,terapis_username AS terapis
 					,dapp_status AS status
 					,dapp_jamdatang AS jam_dtg
+					,dapp_jambatal as dapp_jambatal
+					,dapp_jamkonfirmasi as dapp_jamkonfirmasi
 					,dapp_keterangan AS keterangan
 				FROM vu_appointment";
 			

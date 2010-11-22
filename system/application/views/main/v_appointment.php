@@ -834,7 +834,9 @@ Ext.onReady(function(){
 			{name: 'cust_no', type: 'string', mapping: 'cust_no'},
 			{name: 'rawat_id', type: 'int', mapping: 'rawat_id'}, 
 			{name: 'rawat_nama', type: 'string', mapping: 'rawat_nama'}, 
-			{name: 'dapp_jamreservasi', type: 'string', mapping: 'dapp_jamreservasi'}, 
+			{name: 'dapp_jamreservasi', type: 'string', mapping: 'dapp_jamreservasi'},
+			{name: 'dapp_jambatal', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'dapp_jambatal'},
+			{name: 'dapp_konfirmasi', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'dapp_konfirmasi'}, 			
 			{name: 'dokter_id', type: 'int', mapping: 'dokter_id'}, 
 			{name: 'dokter_nama', type: 'string', mapping: 'dokter_nama'},
 			{name: 'dokter_username', type: 'string', mapping: 'dokter_username'},
@@ -1129,6 +1131,23 @@ Ext.onReady(function(){
           	})
 			<?php } ?>
 		}, 
+		{
+			header: 'Jam Batal',
+			dataIndex: 'dapp_jambatal',
+			width: 150,
+			sortable: true,
+			hidden: true,
+			readOnly: true
+		}, 
+		{
+			header: 'Jam Konfirmasi',
+			dataIndex: 'dapp_jamkonfirmasi',
+			width: 150,
+			sortable: true,
+			hidden: true,
+			readOnly: true
+		}, 
+		
 		{
 			header: 'Creator',
 			dataIndex: 'app_creator',
