@@ -698,6 +698,7 @@ Ext.onReady(function(){
 			{name: 'dtrawat_petugas2', type: 'string', mapping: 'terapis_username'},
 			{name: 'dtrawat_petugas2_id', type: 'int', mapping: 'terapis_id'},
 			{name: 'dtrawat_jam', type: 'string', mapping: 'dtrawat_jam'},
+			{name: 'dtrawat_jam_datang', type: 'string', mapping: 'dtrawat_jam_datang'},
 			{name: 'dtrawat_tglapp', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'dtrawat_tglapp'},
 			{name: 'dtrawat_status', type: 'string', mapping: 'dtrawat_status'},
 			{name: 'perawatan_harga', type: 'float', mapping: 'rawat_harga'},
@@ -895,6 +896,12 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Jam App' + '</div>',
 			dataIndex: 'dtrawat_jam',
+			width: 55,
+			sortable: true
+		}, 
+		{
+			header: '<div align="center">' + 'Jam Datang' + '</div>',
+			dataIndex: 'dtrawat_jam_datang',
 			width: 55,
 			sortable: true
 		}, 
@@ -1226,6 +1233,7 @@ Ext.onReady(function(){
 			{name: 'dtrawat_petugas1', type: 'int', mapping: 'dtrawat_petugas1'}, 
 			{name: 'dtrawat_petugas2', type: 'int', mapping: 'dtrawat_petugas2'}, 
 			{name: 'dtrawat_jam', type: 'string', mapping: 'dtrawat_jam'}, 
+			{name: 'dtrawat_jam_datang', type: 'string', mapping: 'dtrawat_jam_datang'}, 
 			{name: 'dtrawat_kategori', type: 'string', mapping: 'dtrawat_kategori'}, 
 			{name: 'dtrawat_status', type: 'string', mapping: 'dtrawat_status'},
 			{name: 'dtrawat_keterangan', type: 'string', mapping: 'dtrawat_keterangan'},
@@ -1401,6 +1409,19 @@ Ext.onReady(function(){
 				increment: 30,
 				width: 94
 			})
+		},
+		{
+			header: '<div align="center">' + 'Jam Datang' + '</div>',
+			dataIndex: 'dtrawat_jam_datang',
+			width: 60,	//100,
+			sortable: false
+			/*editor: new Ext.form.TimeField({
+				format: 'H:i:s',
+				minValue: '7:00',
+				maxValue: '21:00',
+				increment: 30,
+				width: 94
+			})*/
 		},
 		{
 			header: '<div align="center">' + 'Status' + '</div>',

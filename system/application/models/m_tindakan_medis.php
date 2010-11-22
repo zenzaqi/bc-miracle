@@ -213,6 +213,7 @@ class M_tindakan_medis extends Model{
                         ,dtrawat_perawatan
                         ,dtrawat_petugas1
                         ,dtrawat_jam
+						,dtrawat_jam_datang
                         ,dtrawat_kategori
                         ,dtrawat_status
                         ,dtrawat_keterangan
@@ -1455,6 +1456,7 @@ class M_tindakan_medis extends Model{
 				,dtrawat_perawatan
 				,dtrawat_petugas1
 				,dtrawat_jam
+				,dtrawat_jam_datang
 				,dtrawat_keterangan
 				,dtrawat_ambil_paket
 				,dtrawat_status
