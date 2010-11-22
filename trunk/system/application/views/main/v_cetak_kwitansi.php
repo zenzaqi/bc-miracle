@@ -179,6 +179,8 @@ function cetak_kwitansi_print_paper(cetak_id){
 	});
 }
 
+
+
 /* on ready fuction */
 Ext.onReady(function(){
   	Ext.QuickTips.init();	/* Initiate quick tips icon */
@@ -200,6 +202,53 @@ Ext.onReady(function(){
   	    }
   	}
 	
+	
+	/*Function for pengecekan _dokumen */
+	function pengecekan_dokumen(){
+		var kwitansi_tanggal_create_date = "";
+	
+		if(kwitansi_tanggalField.getValue()!== ""){kwitansi_tanggal_create_date = kwitansi_tanggalField.getValue().format('Y-m-d');} 
+		Ext.Ajax.request({  
+			waitMsg: 'Please wait...',
+			url: 'index.php?c=c_cetak_kwitansi&m=get_action',
+			params: {
+				task: "CEK",
+				tanggal_pengecekan	: kwitansi_tanggal_create_date
+		
+			}, 
+			success: function(response){							
+				var result=eval(response.responseText);
+				switch(result){
+					case 1:
+							cetak_kwitansi_create();
+						break;
+					default:
+						Ext.MessageBox.show({
+						   title: 'Warning',
+						   msg: 'Data Cetak Kwitansi tidak bisa disimpan, karena telah melebihi batas hari yang diperbolehkan ',
+						   buttons: Ext.MessageBox.OK,
+						   animEl: 'save',
+						   icon: Ext.MessageBox.WARNING
+						});
+						//jproduk_btn_cancel();
+						break;
+				}
+			},
+			failure: function(response){
+				var result=response.responseText;
+				Ext.MessageBox.show({
+				   title: 'Error',
+				   msg: 'Could not connect to the database. retry later.',
+				   buttons: Ext.MessageBox.OK,
+				   animEl: 'database',
+				   icon: Ext.MessageBox.ERROR
+				});	
+			}									    
+		});   
+	}
+
+	
+
 	function terbilang(bilangan) {
 		bilangan    = String(bilangan);
 		var angka   = new Array('0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
@@ -562,7 +611,7 @@ Ext.onReady(function(){
  	
 	function save_and_print(){
 		kwitansi_cetak = 1;
-		cetak_kwitansi_create();
+		pengecekan_dokumen();
 	}
   
   	/* Function for get PK field */
@@ -2537,7 +2586,7 @@ Ext.onReady(function(){
 				
 			},{
 				text: 'Save and Close',
-				handler: cetak_kwitansi_create
+				handler: pengecekan_dokumen
 			}
 			,
 			<?php } ?>

@@ -204,6 +204,9 @@ class C_cetak_kwitansi extends Controller {
 			case "CREATE":
 				$this->cetak_kwitansi_create();
 				break;
+			case "CEK":
+				$this->cetak_kwitansi_pengecekan();
+				break;
 			case "DELETE":
 				$this->cetak_kwitansi_delete();
 				break;
@@ -232,6 +235,17 @@ class C_cetak_kwitansi extends Controller {
 		echo $result;
 	}
 
+	
+	function cetak_kwitansi_pengecekan(){
+	
+		$tanggal_pengecekan=trim(@$_POST["tanggal_pengecekan"]);
+	
+		$result=$this->m_public_function->pengecekan_dokumen($tanggal_pengecekan);
+		echo $result;
+	}
+	
+	
+	
 	//function for update record
 	function cetak_kwitansi_update(){
 		//POST variable here
@@ -244,6 +258,7 @@ class C_cetak_kwitansi extends Controller {
 		$kwitansi_nilai=trim(@$_POST["kwitansi_nilai"]);
 		$kwitansi_keterangan=trim(@$_POST["kwitansi_keterangan"]);
 		$kwitansi_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$kwitansi_keterangan);
+		$kwitansi_keterangan=str_replace("'", "''",$kwitansi_keterangan);
 		$kwitansi_status=trim(@$_POST["kwitansi_status"]);
 		$kwitansi_status=str_replace("/(<\/?)(p)([^>]*>)", "",$kwitansi_status);
 		
