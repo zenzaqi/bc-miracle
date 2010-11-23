@@ -787,7 +787,19 @@ Ext.onReady(function(){
 		pengecekan_dokumen();
 	}
 	
+	
+	
+	//function ini untuk melakukan print saja, tanpa perlu melakukan proses pengecekan dokumen.. 
 	function print_only(){
+		if(jpaket_idField.getValue()==''){
+			Ext.MessageBox.show({
+			msg: 'Faktur tidak dapat dicetak, karena data kosong',
+			buttons: Ext.MessageBox.OK,
+			animEl: 'save',
+			icon: Ext.MessageBox.WARNING
+		   });
+		}
+		else{
 		cetak_jpaket=1;		
 		var jpaket_id_for_cetak = 0;
 		if(jpaket_idField.getValue()!== null){
@@ -797,6 +809,8 @@ Ext.onReady(function(){
 			jpaket_cetak(jpaket_id_for_cetak);
 			cetak_jpaket=0;
 		}
+		}
+		
 		//jproduk_btn_cancel();	
 	}
 	

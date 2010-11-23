@@ -729,7 +729,17 @@ Ext.onReady(function(){
 		jproduk_lunasLabel.setText('');
 	}
 	
+	//function ini untuk melakukan print saja, tanpa perlu melakukan proses pengecekan dokumen.. 
 	function print_only(){
+		if(jproduk_idField.getValue()==''){
+			Ext.MessageBox.show({
+			msg: 'Faktur tidak dapat dicetak, karena data kosong',
+			buttons: Ext.MessageBox.OK,
+			animEl: 'save',
+			icon: Ext.MessageBox.WARNING
+		   });
+		}
+		else{
 		cetak_jproduk=1;		
 		var jproduk_id_for_cetak = 0;
 		if(jproduk_idField.getValue()!== null){
@@ -738,6 +748,7 @@ Ext.onReady(function(){
 		if(cetak_jproduk==1){
 			jproduk_cetak(jproduk_id_for_cetak);
 			cetak_jproduk=0;
+		}
 		}
 		//jproduk_btn_cancel();	
 	}
