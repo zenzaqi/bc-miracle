@@ -786,6 +786,21 @@ Ext.onReady(function(){
 		cetak_jpaket=0;
 		pengecekan_dokumen();
 	}
+	
+	function print_only(){
+		cetak_jpaket=1;		
+		var jpaket_id_for_cetak = 0;
+		if(jpaket_idField.getValue()!== null){
+			jpaket_id_for_cetak = jpaket_idField.getValue();
+		}
+		if(cetak_jpaket==1){
+			jpaket_cetak(jpaket_id_for_cetak);
+			cetak_jpaket=0;
+		}
+		//jproduk_btn_cancel();	
+	}
+	
+	
   
   	/* Function for get PK field */
 	function get_pk_id(){
@@ -5792,8 +5807,12 @@ Ext.onReady(function(){
 				handler: show_windowGrid
 			},
 			{
+				text: 'Print Only',
+				handler: print_only
+			},
+			{
 				xtype:'spacer',
-				width: 560
+				width: 650
 			}
 			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALPAKET'))){ ?>
 			,

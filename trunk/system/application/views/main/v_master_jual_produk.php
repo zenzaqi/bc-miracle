@@ -195,7 +195,7 @@ Ext.onReady(function(){
 	
 	var total_sub_temp=0;
 	
-	function jproduk_cetak(master_id){
+	function jproduk_cetak(master_id){ 
 		Ext.Ajax.request({   
 			waitMsg: 'Mohon tunggu...',
 			url: 'index.php?c=c_master_jual_produk&m=print_paper',
@@ -727,6 +727,19 @@ Ext.onReady(function(){
 		pengecekan_dokumen();
 		jproduk_pesanLabel.setText('');
 		jproduk_lunasLabel.setText('');
+	}
+	
+	function print_only(){
+		cetak_jproduk=1;		
+		var jproduk_id_for_cetak = 0;
+		if(jproduk_idField.getValue()!== null){
+			jproduk_id_for_cetak = jproduk_idField.getValue();
+		}
+		if(cetak_jproduk==1){
+			jproduk_cetak(jproduk_id_for_cetak);
+			cetak_jproduk=0;
+		}
+		//jproduk_btn_cancel();	
 	}
   
   	/* Function for get PK field */
@@ -2482,6 +2495,10 @@ Ext.onReady(function(){
 		fieldLabel: 'No Member',
 		emptyText : '(Auto)',
 		readOnly: true
+		/*
+		renderer: function(value, cell, record){
+				return value.substring(0,6) + '-' + value.substring(6,12) + '-' + value.substring(12);
+			}*/
 	});
 	
 	jproduk_valid_memberField= new Ext.form.DateField({
@@ -5837,8 +5854,12 @@ Ext.onReady(function(){
 				handler: show_windowGrid
 			},
 			{
+				text: 'Print Only',
+				handler: print_only
+			},
+			{
 				xtype:'spacer',
-				width: 800
+				width: 775
 			}
 			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALPRODUK'))){ ?>
 			,

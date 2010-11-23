@@ -842,6 +842,19 @@ Ext.onReady(function(){
 		pengecekan_dokumen();
 	}
   
+	function print_only(){
+		cetak_jrawat=1;		
+		var jrawat_id_for_cetak = 0;
+		if(jrawat_idField.getValue()!== null){
+			jrawat_id_for_cetak = jrawat_idField.getValue();
+		}
+		if(cetak_jrawat==1){
+			jrawat_cetak(jrawat_id_for_cetak);
+			cetak_jrawat=0;
+		}
+		//jproduk_btn_cancel();	
+	}
+	
 	
 	function save_button(){
 		cetak_jrawat=0;
@@ -5836,6 +5849,14 @@ Ext.onReady(function(){
 		,
 		buttons: [
 			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALRAWAT'))){ ?>
+			{
+				text: 'Print Only',
+				handler: print_only
+			},
+			{
+				xtype:'spacer',
+				width: 825
+			},
 			{
 				text: 'Save and Print',
 				ref: '../savePrintButton',
