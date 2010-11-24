@@ -1465,7 +1465,6 @@ Ext.onReady(function(){
 				dapaket_jpaket	: eval(apaket_jpaketField.getValue()),
 				dapaket_paket	: eval(apaket_paketField.getValue()),
 				dapaket_item	: ambil_paket_isi_perawatan_record.data.rpaket_perawatan,
-				//dapaket_sapaket	: ambil_paket_isi_perawatan_record.data.rpaket_perawatan, 
 				dapaket_jumlah	: ambil_paket_isi_perawatan_record.data.rpaket_jumlah,
 				dapaket_cust	: ambil_paket_isi_perawatan_record.data.rpaket_cust,
 				tgl_ambil		: ambil_paket_isi_perawatan_record.data.tgl_ambil.format('Y-m-d'),

@@ -188,9 +188,7 @@ class C_master_ambil_paket extends Controller {
 	
 	//add detail
 	function detail_ambil_paket_isi_perawatan_insert(){
-	//POST variable here
-		/*$dapaket_master=trim(@$_POST["dapaket_master"]);
-		$dapaket_sapaket=trim(@$_POST["dapaket_sapaket"]);*/
+		//POST variable here
 		$dapaket_dpaket=trim(@$_POST["dapaket_dpaket"]);
 		$dapaket_jpaket=trim(@$_POST["dapaket_jpaket"]);
 		$dapaket_paket=trim(@$_POST["dapaket_paket"]);
