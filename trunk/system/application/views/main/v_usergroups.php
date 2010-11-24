@@ -1,14 +1,14 @@
 <?
 /* 	These code was generated using phpCIGen v 0.1.b (24/06/2009)
-	#zaqi 		zaqi.smart@gmail.com,http://zenzaqi.blogspot.com, 
+	#zaqi 		zaqi.smart@gmail.com,http://zenzaqi.blogspot.com,
 	#CV. Trust Solution, jl. Saronojiwo 19 Surabaya, http://www.ts.co.id
-	
+
 	+ Module  		: usergroups View
 	+ Description	: For record view
 	+ Filename 		: v_usergroups.php
  	+ Author  		: zainal, mukhlison
  	+ Created on 17/Jul/2009 11:36:16
-	
+
 */
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -32,7 +32,7 @@
 			font-weight:bold;
 			color:#222;
 		}
-		
+
 		.search-item h3 span {
 			float: right;
 			font-weight:normal;
@@ -43,7 +43,7 @@
 		}
     </style>
 <script>
-/* declare function */		
+/* declare function */
 var usergroups_DataStore;
 var usergroups_ColumnModel;
 var usergroupsListEditorGrid;
@@ -71,7 +71,7 @@ var group_activeSearchField;
 /* on ready fuction */
 Ext.onReady(function(){
   	Ext.QuickTips.init();	/* Initiate quick tips icon */
-  
+
   	/* Function for Saving inLine Editing */
 	function usergroups_update(oGrid_event){
 	var group_id_update_pk="";
@@ -84,17 +84,17 @@ Ext.onReady(function(){
 	if(oGrid_event.record.data.group_desc!== null){group_desc_update = oGrid_event.record.data.group_desc;}
 	if(oGrid_event.record.data.group_active!== null){group_active_update = oGrid_event.record.data.group_active;}
 
-		Ext.Ajax.request({  
+		Ext.Ajax.request({
 			waitMsg: 'Please wait...',
 			url: 'index.php?c=c_usergroups&m=get_action',
 			params: {
 				task			: "UPDATE",
-				group_id		: group_id_update_pk,				
-				group_name		: group_name_update,		
-				group_desc		: group_desc_update,		
-				group_active	: group_active_update		
-			}, 
-			success: function(response){							
+				group_id		: group_id_update_pk,
+				group_name		: group_name_update,
+				group_desc		: group_desc_update,
+				group_active	: group_active_update
+			},
+			success: function(response){
 				var result=eval(response.responseText);
 				if(result!==0){
 						Ext.MessageBox.alert(post2db+' OK','Group dan Hak Akses berhasil disimpan');
@@ -108,7 +108,7 @@ Ext.onReady(function(){
 						   animEl: 'save',
 						   icon: Ext.MessageBox.WARNING
 						});
-				} 
+				}
 			},
 			failure: function(response){
 				var result=response.responseText;
@@ -118,16 +118,16 @@ Ext.onReady(function(){
 					   buttons: Ext.MessageBox.OK,
 					   animEl: 'database',
 					   icon: Ext.MessageBox.ERROR
-				});	
-			}									    
-		});   
+				});
+			}
+		});
 	}
   	/* End of Function */
-  
+
   	/* Function for add data, open window create form */
 	function usergroups_create(){
 		if(is_usergroups_form_valid()){
-		
+
 		var group_id_create_pk=null;
 		var group_name_create=null;
 		var group_desc_create=null;
@@ -138,17 +138,17 @@ Ext.onReady(function(){
 		if(group_descField.getValue()!== null){group_desc_create = group_descField.getValue();}
 		if(group_activeField.getValue()!== null){group_active_create = group_activeField.getValue();}
 
-			Ext.Ajax.request({  
+			Ext.Ajax.request({
 				waitMsg: 'Please wait...',
 				url: 'index.php?c=c_usergroups&m=get_action',
 				params: {
 					task			: post2db,
-					group_id		: group_id_create_pk,	
-					group_name		: group_name_create,	
-					group_desc		: group_desc_create,	
-					group_active	: group_active_create	
-				}, 
-				success: function(response){             
+					group_id		: group_id_create_pk,
+					group_name		: group_name_create,
+					group_desc		: group_desc_create,
+					group_active	: group_active_create
+				},
+				success: function(response){
 					var result=eval(response.responseText);
 					if(result!==0){
 						permission_insert(result);
@@ -160,7 +160,7 @@ Ext.onReady(function(){
 							   animEl: 'save',
 							   icon: Ext.MessageBox.WARNING
 							});
-					} 
+					}
 				},
 				failure: function(response){
 					var result=response.responseText;
@@ -170,8 +170,8 @@ Ext.onReady(function(){
 								   buttons: Ext.MessageBox.OK,
 								   animEl: 'database',
 								   icon: Ext.MessageBox.ERROR
-					});	
-				}                      
+					});
+				}
 			});
 		} else {
 			Ext.MessageBox.show({
@@ -184,16 +184,16 @@ Ext.onReady(function(){
 		}
 	}
  	/* End of Function */
-  
+
   	/* Function for get PK field */
 	function get_pk_id(){
 		if(post2db=='UPDATE')
 			return usergroupsListEditorGrid.getSelectionModel().getSelected().get('group_id');
-		else 
+		else
 			return 0;
 	}
 	/* End of Function  */
-	
+
 	/* Reset form before loading */
 	function usergroups_reset_form(){
 		group_nameField.reset();
@@ -205,10 +205,10 @@ Ext.onReady(function(){
 		group_allupdateprivField.setValue(false);
 		group_alldeleteprivField.setValue(false);
 		group_activeField.setValue('Aktif');
-		
+
 	}
  	/* End of Function */
-  
+
 	/* setValue to EDIT */
 	function usergroups_set_form(){
 		group_nameField.setValue(usergroupsListEditorGrid.getSelectionModel().getSelected().get('group_name'));
@@ -219,23 +219,23 @@ Ext.onReady(function(){
 		group_allcreateprivField.setValue(false);
 		group_allupdateprivField.setValue(false);
 		group_alldeleteprivField.setValue(false);
-		
+
 	}
 	/* End setValue to EDIT*/
-  
+
 	/* Function for Check if the form is valid */
 	function is_usergroups_form_valid(){
 		return (true &&  group_nameField.isValid() && group_activeField.isValid() );
 	}
   	/* End of Function */
-  
+
   	/* Function for Displaying  create Window Form */
 	function display_form_window(){
 		if(!usergroups_createWindow.isVisible()){
 			post2db='CREATE';
 			msg='created';
 			usergroups_reset_form();
-			
+
 			usergroups_createWindow.show();
 			permission_DataStore.load({params:{group:0}});
 			//permissionListEditorGrid.reconfigure(permission_DataStore,permission_ColumnModel);
@@ -244,7 +244,7 @@ Ext.onReady(function(){
 		}
 	}
   	/* End of Function */
- 
+
   	/* Function for Delete Confirm */
 	function usergroups_confirm_delete(){
 		// only one usergroups is selected here
@@ -263,7 +263,7 @@ Ext.onReady(function(){
 		}
 	}
   	/* End of Function */
-  
+
 	/* Function for Update Confirm */
 	function usergroups_confirm_update(){
 		/* only one record is selected here */
@@ -285,7 +285,7 @@ Ext.onReady(function(){
 		}
 	}
   	/* End of Function */
-  
+
   	/* Function for Delete Record */
 	function usergroups_delete(btn){
 		if(btn=='yes'){
@@ -295,10 +295,10 @@ Ext.onReady(function(){
 				prez.push(selections[i].json.group_id);
 			}
 			var encoded_array = Ext.encode(prez);
-			Ext.Ajax.request({ 
+			Ext.Ajax.request({
 				waitMsg: 'Please Wait',
-				url: 'index.php?c=c_usergroups&m=get_action', 
-				params: { task: "DELETE", ids:  encoded_array }, 
+				url: 'index.php?c=c_usergroups&m=get_action',
+				params: { task: "DELETE", ids:  encoded_array },
 				success: function(response){
 					var result=eval(response.responseText);
 					switch(result){
@@ -324,21 +324,21 @@ Ext.onReady(function(){
 					   buttons: Ext.MessageBox.OK,
 					   animEl: 'database',
 					   icon: Ext.MessageBox.ERROR
-					});	
+					});
 				}
 			});
-		}  
+		}
 	}
   	/* End of Function */
-  
+
 	/* Function for Retrieve DataStore */
 	usergroups_DataStore = new Ext.data.Store({
 		id: 'usergroups_DataStore',
 		proxy: new Ext.data.HttpProxy({
-			url: 'index.php?c=c_usergroups&m=get_action', 
+			url: 'index.php?c=c_usergroups&m=get_action',
 			method: 'POST'
 		}),
-		baseParams:{task: "LIST"}, // parameter yang di $_POST ke Controller
+		baseParams:{task: "LIST", start:0, limit: pageS}, // parameter yang di $_POST ke Controller
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
@@ -352,7 +352,7 @@ Ext.onReady(function(){
 		sortInfo:{field: 'group_id', direction: "ASC"}
 	});
 	/* End of Function */
-    
+
   	/* Function for Identify of Window Column Model */
 	usergroups_ColumnModel = new Ext.grid.ColumnModel(
 		[{
@@ -361,7 +361,7 @@ Ext.onReady(function(){
 			dataIndex: 'group_id',
 			width: 40,
 			renderer: function(value, cell){
-				cell.css = "readonlycell"; // Mengambil Value dari Class di dalam CSS 
+				cell.css = "readonlycell"; // Mengambil Value dari Class di dalam CSS
 				return value;
 				},
 			hidden: true
@@ -416,7 +416,7 @@ Ext.onReady(function(){
 	);
 	usergroups_ColumnModel.defaultSortable= true;
 	/* End of Function */
-    
+
 	/* Declare DataStore and  show datagrid list */
 	usergroupsListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'usergroupsListEditorGrid',
@@ -459,14 +459,14 @@ Ext.onReady(function(){
 			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
 			handler: usergroups_confirm_delete   // Confirm before deleting
-		}, '-', 
+		}, '-',
 		<?php } ?>
 		{
 			text: 'Adv Search',
 			tooltip: 'Advanced Search',
 			iconCls:'icon-search',
-			handler: display_form_search_window 
-		}, '-', 
+			handler: display_form_search_window
+		}, '-',
 			new Ext.app.SearchField({
 			store: usergroups_DataStore,
 			params: {start: 0, limit: pageS},
@@ -485,49 +485,49 @@ Ext.onReady(function(){
 			text: 'Print',
 			tooltip: 'Print Document',
 			iconCls:'icon-print',
-			handler: usergroups_print  
+			handler: usergroups_print
 		}
 		]
 	});
 	usergroupsListEditorGrid.render();
 	/* End of DataStore */
-     
+
 	/* Create Context Menu */
 	usergroups_ContextMenu = new Ext.menu.Menu({
 		id: 'usergroups_ListEditorGridContextMenu',
 		items: [
 		<?php if(eregi('U|R',$this->m_security->get_access_group_by_kode('MENU_USERGROUP'))){ ?>
-		{ 
-			text: 'Edit', tooltip: 'Edit selected record', 
+		{
+			text: 'Edit', tooltip: 'Edit selected record',
 			iconCls:'icon-update',
-			handler: usergroups_confirm_update 
+			handler: usergroups_confirm_update
 		},
 		<?php } ?>
 		<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_USERGROUP'))){ ?>
-		{ 
-			text: 'Delete', 
-			tooltip: 'Delete selected record', 
+		{
+			text: 'Delete',
+			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
-			handler: usergroups_confirm_delete 
+			handler: usergroups_confirm_delete
 		},
 		<?php } ?>
 		'-',
-		{ 
+		{
 			text: 'Print',
 			tooltip: 'Print Document',
 			iconCls:'icon-print',
-			handler: usergroups_print 
+			handler: usergroups_print
 		},
-		{ 
-			text: 'Export Excel', 
+		{
+			text: 'Export Excel',
 			tooltip: 'Export to Excel(.xls) Document',
 			iconCls:'icon-xls',
-			handler: usergroups_export_excel 
+			handler: usergroups_export_excel
 		}
 		]
-	}); 
+	});
 	/* End of Declaration */
-	
+
 	/* Event while selected row via context menu */
 	function onusergroups_ListEditGridContextMenu(grid, rowIndex, e) {
 		e.stopEvent();
@@ -538,17 +538,17 @@ Ext.onReady(function(){
 		usergroups_ContextMenu.showAt([coords[0], coords[1]]);
   	}
   	/* End of Function */
-	
+
 	/* function for editing row via context menu */
 	function usergroups_editContextMenu(){
       usergroupsListEditorGrid.startEditing(usergroups_SelectedRow,1);
   	}
 	/* End of Function */
-  	
+
 	usergroupsListEditorGrid.addListener('rowcontextmenu', onusergroups_ListEditGridContextMenu);
 	usergroups_DataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
 	usergroupsListEditorGrid.on('afteredit', usergroups_update); // inLine Editing Record
-	
+
 	/* Identify  group_name Field */
 	group_nameField= new Ext.form.TextField({
 		id: 'group_nameField',
@@ -577,9 +577,9 @@ Ext.onReady(function(){
 		valueField: 'group_active_value',
 		allowBlank: false,
 		width: 80,
-		triggerAction: 'all'	
+		triggerAction: 'all'
 	});
-  	
+
 	/* Identify  group_desc Field */
 	group_allprivField= new Ext.form.Checkbox({
 		id: 'group_allprivField',
@@ -587,35 +587,35 @@ Ext.onReady(function(){
 		maxLength: 250,
 		anchor: '95%'
 	});
-	
+
 	group_allreadprivField= new Ext.form.Checkbox({
 		id: 'group_allreadprivField',
 		fieldLabel: 'All Read?',
 		maxLength: 250,
 		anchor: '95%'
 	});
-	
+
 	group_allcreateprivField= new Ext.form.Checkbox({
 		id: 'group_allcreateprivField',
 		fieldLabel: 'All Create?',
 		maxLength: 250,
 		anchor: '95%'
 	});
-	
+
 	group_allupdateprivField= new Ext.form.Checkbox({
 		id: 'group_allupdateprivField',
 		fieldLabel: 'All Update?',
 		maxLength: 250,
 		anchor: '95%'
 	});
-	
+
 	group_alldeleteprivField= new Ext.form.Checkbox({
 		id: 'group_alldeleteprivField',
 		fieldLabel: 'All Delete ?',
 		maxLength: 250,
 		anchor: '95%'
 	});
-	
+
 	group_permissionField=new Ext.form.FieldSet({
 		fieldLabel:'Permission',
 		layout: 'column',
@@ -639,13 +639,13 @@ Ext.onReady(function(){
 			   }]
 	});
 	//detail permission
-	
-	
+
+
 	/* Function for Retrieve DataStore */
 	permission_DataStore = new Ext.data.Store({
 		id: 'permission_DataStore',
 		proxy: new Ext.data.HttpProxy({
-			url: 'index.php?c=c_usergroups&m=get_permission', 
+			url: 'index.php?c=c_usergroups&m=get_permission',
 			method: 'POST'
 		}),
 		reader: new Ext.data.JsonReader({
@@ -663,68 +663,68 @@ Ext.onReady(function(){
 			{name: 'perm_delete', type: 'int', mapping: 'perm_delete'},
 		])
 	});
-	
-	
+
+
 	var readColumn = new Ext.grid.CheckColumn({
-		header: "Read", 
-		dataIndex: 'perm_read', 
-		width: 80, 
+		header: "Read",
+		dataIndex: 'perm_read',
+		width: 80,
 		sortable: false,
 		renderer: function(v,params,record){
 				if(record.data.menu_parent==0)
 					return '';
 				else{
-				   params.css += ' x-grid3-check-col-td'; 
+				   params.css += ' x-grid3-check-col-td';
             		return '<div class="x-grid3-check-col'+(v?'-on':'')+' x-grid3-cc-'+this.id+'">&#160;</div>';
 				}
 			}
 	});
-	
+
 	var createColumn = new Ext.grid.CheckColumn({
-		header: "Create", 
-		dataIndex: 'perm_create', 
-		width: 80, 
+		header: "Create",
+		dataIndex: 'perm_create',
+		width: 80,
 		sortable: false,
 		renderer: function(v,params,record){
 				if(record.data.menu_parent==0)
 					return '';
 				else{
-				   params.css = ' x-grid3-check-col-td'; 
+				   params.css = ' x-grid3-check-col-td';
             		return '<div class="x-grid3-check-col'+(v?'-on':'')+' x-grid3-cc-'+this.id+'">&#160;</div>';
 				}
 			}
 	});
-	
+
 	var updateColumn = new Ext.grid.CheckColumn({
-		header: "Update", 
-		dataIndex: 'perm_update', 
-		width: 80, 
+		header: "Update",
+		dataIndex: 'perm_update',
+		width: 80,
 		sortable: false,
 		renderer: function(v,params,record){
 				if(record.data.menu_parent==0)
 					return '';
 				else{
-				   params.css = ' x-grid3-check-col-td'; 
+				   params.css = ' x-grid3-check-col-td';
             		return '<div class="x-grid3-check-col'+(v?'-on':'')+' x-grid3-cc-'+this.id+'">&#160;</div>';
 				}
 			}
 	});
-	
+
 	var deleteColumn = new Ext.grid.CheckColumn({
-		header: "Delete", 
-		dataIndex: 'perm_delete', 
-		width: 80, 
+		header: "Delete",
+		dataIndex: 'perm_delete',
+		width: 80,
 		sortable: false,
 		renderer: function(v,params,record){
 				if(record.data.menu_parent==0)
 					return '';
 				else{
-				   	params.css = ' x-grid3-check-col-td'; 
+				   	params.css = ' x-grid3-check-col-td';
             		return '<div class="x-grid3-check-col'+(v?'-on':'')+' x-grid3-cc-'+this.id+'">&#160;</div>';
 				}
 			}
 	});
-	
+
 	//readchk.unlock();
 	/* Function for Identify of Window Column Model */
 	permission_ColumnModel = new Ext.grid.ColumnModel(
@@ -734,7 +734,7 @@ Ext.onReady(function(){
 			dataIndex: 'menu_id',
 			width: 40,
 			renderer: function(value, cell){
-				cell.css = "readonlycell"; // Mengambil Value dari Class di dalam CSS 
+				cell.css = "readonlycell"; // Mengambil Value dari Class di dalam CSS
 				return value;
 				},
 			hidden: false
@@ -757,13 +757,13 @@ Ext.onReady(function(){
 		deleteColumn
 		]
 	);
-	
-	
+
+
 	function permission_insert(pkid){
-		
+
 		 var permission = [];
 		 var menu = [];
-		 
+
 		for(i=0;i<permission_DataStore.getCount();i++){
 			var perm_priv="";
 			var permission_record=permission_DataStore.getAt(i);
@@ -775,17 +775,17 @@ Ext.onReady(function(){
 				perm_priv=perm_priv+"U";
 			if(permission_record.data.perm_delete==1)
 				perm_priv=perm_priv+"D";
-			
+
 			if(perm_priv!==""){
 				permission.push(perm_priv);
 				menu.push(permission_record.data.menu_id);
 			}
 		}
-		
+
 		var encoded_menu = Ext.encode(menu);
 		var encoded_permission = Ext.encode(permission);
-		
-		
+
+
 		Ext.Ajax.request({
 			waitMsg: 'Please wait...',
 			url: 'index.php?c=c_usergroups&m=permission_insert',
@@ -795,7 +795,7 @@ Ext.onReady(function(){
 				menu_priv	: encoded_permission
 			},
 			timeout: 360000,
-			success: function(response){							
+			success: function(response){
 				var result=eval(response.responseText);
 				Ext.MessageBox.alert(post2db+' OK','Group dan Hak Akses sukses disimpan');
 				usergroups_DataStore.reload();
@@ -809,13 +809,13 @@ Ext.onReady(function(){
 				   buttons: Ext.MessageBox.OK,
 				   animEl: 'database',
 				   icon: Ext.MessageBox.ERROR
-				});	
-			}		
+				});
+			}
 		});
 
 	}
 	//eof
-	
+
 	//function for purge detail
 	function permission_purge(pkid){
 		Ext.Ajax.request({
@@ -832,7 +832,7 @@ Ext.onReady(function(){
 	}
 
 
-	
+
 	/* Declare DataStore and  show datagrid list */
 	permissionListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'permissionListEditorGrid',
@@ -852,15 +852,15 @@ Ext.onReady(function(){
 	});
 	//permissionListEditorGrid.render();
 	/* End of DataStore */
-     
-	 
-	
-	/* Function for retrieve create Window Panel*/ 
+
+
+
+	/* Function for retrieve create Window Panel*/
 	usergroups_createForm = new Ext.FormPanel({
 		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
-		width: 600,        
+		width: 600,
 		items: [{
 			layout:'column',
 			border:false,
@@ -869,7 +869,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [group_nameField, group_descField, group_activeField,group_permissionField,permissionListEditorGrid] 
+				items: [group_nameField, group_descField, group_activeField,group_permissionField,permissionListEditorGrid]
 			}
 			]
 		}]
@@ -891,7 +891,7 @@ Ext.onReady(function(){
 		]
 	});
 	/* End  of Function*/
-	
+
 	/* Function for retrieve create Window Form */
 	usergroups_createWindow= new Ext.Window({
 		id: 'usergroups_createWindow',
@@ -909,8 +909,8 @@ Ext.onReady(function(){
 		items: usergroups_createForm
 	});
 	/* End Window */
-	
-	
+
+
 	/* Function for action list search */
 	function usergroups_list_search(){
 		// render according to a SQL date format.
@@ -927,25 +927,25 @@ Ext.onReady(function(){
 		usergroups_DataStore.baseParams = {
 			task: 'SEARCH',
 			//variable here
-			group_id	:	group_id_search, 
-			group_name	:	group_name_search, 
-			group_desc	:	group_desc_search, 
-			group_active	:	group_active_search 
+			group_id	:	group_id_search,
+			group_name	:	group_name_search,
+			group_desc	:	group_desc_search,
+			group_active	:	group_active_search
 		};
-		// Cause the datastore to do another query : 
+		// Cause the datastore to do another query :
 		usergroups_DataStore.reload({params: {start: 0, limit: pageS}});
 	}
-		
+
 	/* Function for reset search result */
 	function usergroups_reset_search(){
 		// reset the store parameters
 		usergroups_DataStore.baseParams = { task: 'LIST', start: 0, limit: pageS };
-		// Cause the datastore to do another query : 
+		// Cause the datastore to do another query :
 		usergroups_DataStore.reload({params: {start: 0, limit: pageS}});
 		usergroups_searchWindow.close();
 	};
 	/* End of Fuction */
-	
+
 	/* Field for search */
 	/* Identify  group_id Search Field */
 	group_idSearchField= new Ext.form.NumberField({
@@ -956,7 +956,7 @@ Ext.onReady(function(){
 		allowDecimals: false,
 		anchor: '95%',
 		maskRe: /([0-9]+)$/
-	
+
 	});
 	/* Identify  group_name Search Field */
 	group_nameSearchField= new Ext.form.TextField({
@@ -964,7 +964,7 @@ Ext.onReady(function(){
 		fieldLabel: 'Nama Group',
 		maxLength: 50,
 		anchor: '95%'
-	
+
 	});
 	/* Identify  group_desc Search Field */
 	group_descSearchField= new Ext.form.TextArea({
@@ -972,7 +972,7 @@ Ext.onReady(function(){
 		fieldLabel: 'Keterangan',
 		maxLength: 250,
 		anchor: '95%'
-	
+
 	});
 	/* Identify  group_active Search Field */
 	group_activeSearchField= new Ext.form.ComboBox({
@@ -986,16 +986,16 @@ Ext.onReady(function(){
 		displayField: 'group_active',
 		valueField: 'value',
 		width: 80,
-		triggerAction: 'all'	 
-	
+		triggerAction: 'all'
+
 	});
-    
+
 	/* Function for retrieve search Form Panel */
 	usergroups_searchForm = new Ext.FormPanel({
 		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
-		width: 300,        
+		width: 300,
 		items: [{
 			layout:'column',
 			border:false,
@@ -1004,7 +1004,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [group_nameSearchField, group_descSearchField, group_activeSearchField] 
+				items: [group_nameSearchField, group_descSearchField, group_activeSearchField]
 			}
 			]
 		}]
@@ -1020,8 +1020,8 @@ Ext.onReady(function(){
 			}
 		]
 	});
-    /* End of Function */ 
-	 
+    /* End of Function */
+
 	/* Function for retrieve search Window Form, used for andvaced search */
 	usergroups_searchWindow = new Ext.Window({
 		title: 'Pencarian Group User',
@@ -1037,8 +1037,8 @@ Ext.onReady(function(){
 		renderTo: 'elwindow_usergroups_search',
 		items: usergroups_searchForm
 	});
-    /* End of Function */ 
-	 
+    /* End of Function */
+
   	/* Function for Displaying  Search Window Form */
 	function display_form_search_window(){
 		if(!usergroups_searchWindow.isVisible()){
@@ -1048,32 +1048,32 @@ Ext.onReady(function(){
 		}
 	}
   	/* End Function */
-	
+
 	/* Function for print List Grid */
 	function usergroups_print(){
 		var searchquery = "";
 		var group_name_print=null;
 		var group_desc_print=null;
 		var group_active_print=null;
-		var win;              
+		var win;
 		// check if we do have some search data...
 		if(usergroups_DataStore.baseParams.query!==null){searchquery = usergroups_DataStore.baseParams.query;}
 		if(usergroups_DataStore.baseParams.group_name!==null){group_name_print = usergroups_DataStore.baseParams.group_name;}
 		if(usergroups_DataStore.baseParams.group_desc!==null){group_desc_print = usergroups_DataStore.baseParams.group_desc;}
 		if(usergroups_DataStore.baseParams.group_active!==null){group_active_print = usergroups_DataStore.baseParams.group_active;}
 
-		Ext.Ajax.request({   
+		Ext.Ajax.request({
 		waitMsg: 'Please Wait...',
 		url: 'index.php?c=c_usergroups&m=get_action',
 		params: {
 			task: "PRINT",
-		  	query: searchquery,                    		
+		  	query: searchquery,
 			group_name : group_name_print,
 			group_desc : group_desc_print,
 			group_active : group_active_print,
 		  	currentlisting: usergroups_DataStore.baseParams.task // this tells us if we are searching or not
-		}, 
-		success: function(response){              
+		},
+		success: function(response){
 		  	var result=eval(response.responseText);
 		  	switch(result){
 		  	case 1:
@@ -1088,7 +1088,7 @@ Ext.onReady(function(){
 					icon: Ext.MessageBox.WARNING
 				});
 				break;
-		  	}  
+		  	}
 		},
 		failure: function(response){
 		  	var result=response.responseText;
@@ -1098,37 +1098,37 @@ Ext.onReady(function(){
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR
-			});		
-		} 	                     
+			});
+		}
 		});
 	}
 	/* Enf Function */
-	
+
 	/* Function for print Export to Excel Grid */
 	function usergroups_export_excel(){
 		var searchquery = "";
 		var group_name_2excel=null;
 		var group_desc_2excel=null;
 		var group_active_2excel=null;
-		var win;              
+		var win;
 		// check if we do have some search data...
 		if(usergroups_DataStore.baseParams.query!==null){searchquery = usergroups_DataStore.baseParams.query;}
 		if(usergroups_DataStore.baseParams.group_name!==null){group_name_2excel = usergroups_DataStore.baseParams.group_name;}
 		if(usergroups_DataStore.baseParams.group_desc!==null){group_desc_2excel = usergroups_DataStore.baseParams.group_desc;}
 		if(usergroups_DataStore.baseParams.group_active!==null){group_active_2excel = usergroups_DataStore.baseParams.group_active;}
 
-		Ext.Ajax.request({   
+		Ext.Ajax.request({
 		waitMsg: 'Please Wait...',
 		url: 'index.php?c=c_usergroups&m=get_action',
 		params: {
 			task: "EXCEL",
-		  	query: searchquery,                    		
+		  	query: searchquery,
 			group_name : group_name_2excel,
 			group_desc : group_desc_2excel,
 			group_active : group_active_2excel,
 		  	currentlisting: usergroups_DataStore.baseParams.task // this tells us if we are searching or not
 		},
-		success: function(response){              
+		success: function(response){
 		  	var result=eval(response.responseText);
 		  	switch(result){
 		  	case 1:
@@ -1143,7 +1143,7 @@ Ext.onReady(function(){
 					icon: Ext.MessageBox.WARNING
 				});
 				break;
-		  	}  
+		  	}
 		},
 		failure: function(response){
 		  	var result=response.responseText;
@@ -1153,12 +1153,12 @@ Ext.onReady(function(){
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR
-			});    
-		} 	                     
+			});
+		}
 		});
 	}
 	/*End of Function */
-	
+
 	group_allprivField.on('check',function(){
 			if(group_allprivField.getValue()==1)
 			{
@@ -1181,7 +1181,7 @@ Ext.onReady(function(){
 			permission_DataStore.commitChanges();
 			permissionListEditorGrid.reconfigure(permission_DataStore,permission_ColumnModel);
 	});
-	
+
 	group_allreadprivField.on('check',function(){
 			if(group_allreadprivField.getValue()==1)
 			{
@@ -1198,7 +1198,7 @@ Ext.onReady(function(){
 			permission_DataStore.commitChanges();
 			permissionListEditorGrid.reconfigure(permission_DataStore,permission_ColumnModel);
 	});
-	
+
 	group_allcreateprivField.on('check',function(){
 			if(group_allcreateprivField.getValue()==1)
 			{
@@ -1215,7 +1215,7 @@ Ext.onReady(function(){
 			permission_DataStore.commitChanges();
 			permissionListEditorGrid.reconfigure(permission_DataStore,permission_ColumnModel);
 	});
-	
+
 	group_allupdateprivField.on('check',function(){
 			if(group_allupdateprivField.getValue()==1)
 			{
@@ -1232,7 +1232,7 @@ Ext.onReady(function(){
 			permission_DataStore.commitChanges();
 			permissionListEditorGrid.reconfigure(permission_DataStore,permission_ColumnModel);
 	});
-	
+
 	group_alldeleteprivField.on('check',function(){
 			if(group_alldeleteprivField.getValue()==1)
 			{
@@ -1249,8 +1249,8 @@ Ext.onReady(function(){
 			permission_DataStore.commitChanges();
 			permissionListEditorGrid.reconfigure(permission_DataStore,permission_ColumnModel);
 	});
-	
-	
+
+
 });
 	</script>
 <body>
