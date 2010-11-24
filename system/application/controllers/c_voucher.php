@@ -82,12 +82,14 @@ class C_voucher extends Controller {
 		$voucher_cust=trim(@$_POST["voucher_cust"]);
 		$voucher_cust=str_replace("/(<\/?)(p)([^>]*>)", "",$voucher_cust);
 		$voucher_point=trim(@$_POST["voucher_point"]);
+		$voucher_tanggal_start =(isset($_POST['voucher_tanggal_start']) ? @$_POST['voucher_tanggal_start'] : @$_GET['voucher_tanggal_start']);
+		$voucher_tanggal_end =(isset($_POST['voucher_tanggal_end']) ? @$_POST['voucher_tanggal_end'] : @$_GET['voucher_tanggal_end']);
 		$voucher_kadaluarsa=trim(@$_POST["voucher_kadaluarsa"]);
 		$voucher_cashback=trim(@$_POST["voucher_cashback"]);
 		
 		$start = (integer) (isset($_POST['start']) ? @$_POST['start'] : @$_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? @$_POST['limit'] : @$_GET['limit']);
-		$result = $this->m_voucher->voucher_search($voucher_no ,$voucher_nama , $voucher_cust, $voucher_point ,$voucher_kadaluarsa ,
+		$result = $this->m_voucher->voucher_search($voucher_no ,$voucher_nama , $voucher_cust, $voucher_point , $voucher_tanggal_start, $voucher_tanggal_end, $voucher_kadaluarsa ,
 												   $voucher_cashback ,$start,$end);
 		echo $result;
 	}
