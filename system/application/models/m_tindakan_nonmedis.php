@@ -103,6 +103,7 @@ class M_tindakan_nonmedis extends Model{
 	}
 	
 	function customer_check_paket($cust_id, $rawat_id, $jumlah_ambil){
+		//$return_row_punya_paket = 0;
 		//* Mencari kepemilikan paket berdasarkan customer_id /
 		$sql_punya_paket="SELECT (dpaket_jumlah*rpaket_jumlah) AS rpaket_jumlah
 				,dpaket_id
@@ -142,8 +143,9 @@ class M_tindakan_nonmedis extends Model{
 						break;
 					}else{
 						if($i==$punya_paket_rows){
-							$return_global_customer_check_paket = $this->global_customer_check_paket($cust_id, $rawat_id, $jumlah_ambil);
+							$return_global_customer_check_paket = $this->global_customer_check_paket($cust_id, $rawat_id);
 							return $return_global_customer_check_paket;
+							//return 0;
 						}
 					}
 					
@@ -156,6 +158,7 @@ class M_tindakan_nonmedis extends Model{
 		}else{
 			$return_global_customer_check_paket = $this->global_customer_check_paket($cust_id, $rawat_id, $jumlah_ambil);
 			return $return_global_customer_check_paket;
+			//return 0;
 		}
 		
 	}
@@ -1173,12 +1176,16 @@ class M_tindakan_nonmedis extends Model{
 		
 		$datetime_now = date('Y-m-d H:i:s');
 		$bln_now=date('Y-m');
+		$time_now = date('H:i:s');
 		
 		//checking db.tindakan_detail.dtrawat_locked = 0 atau = 1 ==> jika = 0, maka bisa di-Edit; jika = 1, maka tidak bisa di-Edit ?
 		$sql_check_locked = "SELECT dtrawat_locked
 				,dtrawat_perawatan
 				,dtrawat_petugas2
 				,dtrawat_jam
+				,dtrawat_jam_datang
+				,dtrawat_jam_selesai
+				,dtrawat_jam_batal
 				,dtrawat_keterangan
 				,dtrawat_ambil_paket
 				,dtrawat_status
@@ -1237,17 +1244,31 @@ class M_tindakan_nonmedis extends Model{
 				** karena jika masih ='selesai' tidak bisa melakukan editing selain mengganti status
 				** sehingga Update yang dilakukan hanya sebatas di db.tindakan_detail
 				*/
-				else if($dtrawat_status_awal<>'selesai' && $dtrawat_status_awal<>$dtrawat_status && $dtrawat_status<>'selesai'){
+				else if($dtrawat_status_awal<>'selesai' && $dtrawat_status_awal<>$dtrawat_status && $dtrawat_status=='batal'){
 					//Edit status Tindakan dari !='selesai' menjadi !='selesai' yg lain
 					$sqlu_dtrawat = "UPDATE tindakan_detail
 						SET dtrawat_status='$dtrawat_status'
 							,dtrawat_update='".@$_SESSION[SESSION_USERID]."'
+							,dtrawat_jam_batal='$time_now'
 							,dtrawat_date_update='$datetime_now'
 							,dtrawat_revised=dtrawat_revised+1
 						WHERE dtrawat_id='$dtrawat_id'";
 					$this->db->query($sqlu_dtrawat);
 					return '1';
-				}else if($dtrawat_status_awal<>'selesai' && is_numeric($dtrawat_perawatan) && $dtrawat_perawatan_awal<>$dtrawat_perawatan){
+				}
+				else if($dtrawat_status_awal<>'selesai' && $dtrawat_status_awal<>$dtrawat_status && $dtrawat_status=='datang'){
+					//Edit status Tindakan dari !='selesai' menjadi !='selesai' yg lain
+					$sqlu_dtrawat = "UPDATE tindakan_detail
+						SET dtrawat_status='$dtrawat_status'
+							,dtrawat_update='".@$_SESSION[SESSION_USERID]."'
+							,dtrawat_jam_datang='$time_now'
+							,dtrawat_date_update='$datetime_now'
+							,dtrawat_revised=dtrawat_revised+1
+						WHERE dtrawat_id='$dtrawat_id'";
+					$this->db->query($sqlu_dtrawat);
+					return '1';
+				}
+				else if($dtrawat_status_awal<>'selesai' && is_numeric($dtrawat_perawatan) && $dtrawat_perawatan_awal<>$dtrawat_perawatan){
 					//Edit perawatan ==> jika is_numeric terpenuhi, ini artinya ada perubahan perawatan
 					if($dtrawat_ambil_paket_awal=='true'){
 						/* Perawatan yg diubah ini harus di check: apakah si Customer memiliki paket u/ perawatan ini atau tidak?
@@ -1401,6 +1422,7 @@ class M_tindakan_nonmedis extends Model{
 							$sql="UPDATE tindakan_detail
 								SET dtrawat_status='$dtrawat_status'
 									,dtrawat_update='".@$_SESSION[SESSION_USERID]."'
+									,dtrawat_jam_selesai='$time_now'
 									,dtrawat_date_update='$datetime_now'
 									,dtrawat_revised=dtrawat_revised+1
 								WHERE dtrawat_id='$dtrawat_id'";
