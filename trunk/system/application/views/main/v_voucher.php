@@ -74,6 +74,7 @@ var editor_voucher_perawatan;
 var post2db = '';
 var msg = '';
 var pageS=15;
+var today=new Date().format('Y-m-d');
 
 /* declare variable here for Field*/
 var voucher_idField;
@@ -449,7 +450,7 @@ Ext.onReady(function(){
 	/* End of Function */
   	
 	voucherListEditorGrid.addListener('rowcontextmenu', onvoucher_ListEditGridContextMenu);
-	voucher_DataStore.load({params: {start: 0, limit: pageS}});
+	//voucher_DataStore.load({params: {start: 0, limit: pageS}});	// supaya tidak auto load DataStore
 	
 	/* Function for action list search */
 	function voucher_list_search(){
@@ -457,6 +458,8 @@ Ext.onReady(function(){
 		var voucher_nama_search=null;
 		var voucher_no_search=null;
 		var voucher_point_search=null;
+		var voucher_tanggal_start_search_date="";
+		var voucher_tanggal_end_search_date="";
 		var voucher_kadaluarsa_search_date="";
 		var voucher_cashback_search=null;
 		var voucher_cust_search=null;
@@ -465,7 +468,9 @@ Ext.onReady(function(){
 		if(voucher_custSearchField.getValue()!==null){voucher_cust_search=voucher_custSearchField.getValue();}
 		if(voucher_noSearchField.getValue()!==null){voucher_no_search=voucher_noSearchField.getValue();}
 		if(voucher_pointSearchField.getValue()!==null){voucher_point_search=voucher_pointSearchField.getValue();}
-		if(voucher_kadaluarsaSearchField.getValue()!==""){voucher_kadaluarsa_search_date=voucher_kadaluarsaSearchField.getValue().format('Y-m-d');}
+		if(voucher_tanggal_startSearchField.getValue()!==""){voucher_tanggal_start_search_date=voucher_tanggal_startSearchField.getValue().format('Y-m-d');}
+		if(voucher_tanggal_endSearchField.getValue()!==""){voucher_tanggal_end_search_date=voucher_tanggal_endSearchField.getValue().format('Y-m-d');}
+		if(voucher_kadaluarsaSearchField.getValue()!==""){voucher_kadaluarsa_search_date=voucher_tanggal_start_search_date.getValue().format('Y-m-d');}
 		if(voucher_cashbackSearchField.getValue()!==null){voucher_cashback_search=voucher_cashbackSearchField.getValue();}
 		voucher_DataStore.baseParams = {
 			task: 'SEARCH',
@@ -473,6 +478,8 @@ Ext.onReady(function(){
 			voucher_cust	:	voucher_cust_search, 
 			voucher_no		:	voucher_no_search, 
 			voucher_point	:	voucher_point_search, 
+			voucher_tanggal_start : voucher_tanggal_start_search_date,
+			voucher_tanggal_end   : voucher_tanggal_end_search_date,
 			voucher_kadaluarsa	:	voucher_kadaluarsa_search_date, 
 			voucher_cashback	:	voucher_cashback_search
 		};
@@ -553,14 +560,42 @@ Ext.onReady(function(){
 		maskRe: /([0-9]+)$/
 	
 	});
-	    
+	
+	
+	
+	voucher_tanggal_startSearchField=new Ext.form.DateField({
+		id: 'voucher_tanggal_startSearchField',
+		fieldLabel: 'Tanggal',
+		format: 'd-m-Y'		
+		//value: firstday
+	});
+    
+	voucher_tanggal_endSearchField=new Ext.form.DateField({
+		id: 'voucher_tanggal_endSearchField',
+		fieldLabel: 's/d',
+		format: 'd-m-Y',
+		value: today
+	});
+
+	voucher_label_tanggalField=new Ext.form.Label({ html: ' &nbsp; s/d  &nbsp;'});
+	
+	voucher_tanggal_opsiSearchField=new Ext.form.FieldSet({
+		id:'voucher_tanggal_opsiSearchField',
+		title: 'Opsi Tanggal',
+		layout: 'column',
+		boduStyle: 'padding: 5px;',
+		frame: false,
+		items:[voucher_tanggal_startSearchField, voucher_label_tanggalField, voucher_tanggal_endSearchField]
+	});
+	
+	   
 	/* Function for retrieve search Form Panel */
 	voucher_searchForm = new Ext.FormPanel({
 		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
 		width: 400,        
-		items: [voucher_noSearchField, voucher_pointSearchField, voucher_kadaluarsaSearchField, voucher_cashbackSearchField, 
+		items: [voucher_noSearchField, voucher_pointSearchField, voucher_tanggal_opsiSearchField, voucher_kadaluarsaSearchField, voucher_cashbackSearchField, 
 				voucher_namaSearchField, voucher_custSearchField],
 		buttons: [{
 				text: 'Search',

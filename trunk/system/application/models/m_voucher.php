@@ -82,7 +82,7 @@ class M_voucher extends Model{
 		}
 		
 		//function for advanced search record
-		function voucher_search($voucher_no ,$voucher_nama ,$voucher_cust, $voucher_point ,$voucher_kadaluarsa ,$voucher_cashback ,$start,$end){
+		function voucher_search($voucher_no ,$voucher_nama ,$voucher_cust, $voucher_point ,$voucher_tanggal_start, $voucher_tanggal_end, $voucher_kadaluarsa ,$voucher_cashback ,$start,$end){
 			//full query
 			$query=    "select c.cust_no as cust_no, c.cust_nama as cust_nama, v.*
 						from voucher v
@@ -116,7 +116,11 @@ class M_voucher extends Model{
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " voucher_cashback LIKE '%".$voucher_cashback."%'";
 			};
-			
+			if($voucher_tanggal_start!='' && $voucher_tanggal_end!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " date_format(v.voucher_tgl, '%Y-%m-%d') BETWEEN '".$voucher_tanggal_start."' AND '".$voucher_tanggal_end."'";
+			}
+	
 			$query.= " order by v.voucher_tgl desc ";
 			
 			$result = $this->db->query($query);
