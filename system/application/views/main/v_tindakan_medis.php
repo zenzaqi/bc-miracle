@@ -156,6 +156,7 @@ Ext.onReady(function(){
 		var dtrawat_jam_update=null;
 		var dtrawat_keterangan_update=null;
 		var dtrawat_ambil_paket_update="";
+		var dtrawat_jumlah_update=1;
 		
 		var dtrawat_status_update='';
 		
@@ -168,25 +169,9 @@ Ext.onReady(function(){
 		if(oGrid_event.record.data.dtrawat_jam!== null){dtrawat_jam_update = oGrid_event.record.data.dtrawat_jam;}
 		if(oGrid_event.record.data.dtrawat_keterangan!== null){dtrawat_keterangan_update = oGrid_event.record.data.dtrawat_keterangan;}
 		dtrawat_ambil_paket_update = oGrid_event.record.data.dtrawat_ambil_paket;
+		dtrawat_jumlah_update = oGrid_event.record.data.dtrawat_jumlah;
 		
 		dtrawat_status_update = oGrid_event.record.data.dtrawat_status;
-		
-		/*if(oGrid_event.record.data.trawat_cust!== null){trawat_cust_update = oGrid_event.record.data.trawat_cust;}
-		if(oGrid_event.record.data.trawat_keterangan!== null){trawat_keterangan_update = oGrid_event.record.data.trawat_keterangan;}
-		
-		trawat_cust_id_update = oGrid_event.record.data.trawat_cust_id;
-		
-		perawatan_harga_update = oGrid_event.record.data.perawatan_harga;
-		perawatan_du_update = oGrid_event.record.data.perawatan_du;
-		perawatan_dm_update = oGrid_event.record.data.perawatan_dm;
-		cust_member_update = oGrid_event.record.data.cust_member;
-		
-		dtrawat_dapp_update = oGrid_event.record.data.dtrawat_dapp;
-		
-		dapaket_dpaket_update = oGrid_event.record.data.dapaket_dpaket;
-		dapaket_jpaket_update = oGrid_event.record.data.dapaket_jpaket;
-		dapaket_paket_update = oGrid_event.record.data.dapaket_paket;
-		dapaket_item_update = oGrid_event.record.data.dapaket_item;*/
 		
 		if(dmedis_status_inline_beforeedit=='selesai' && dtrawat_status_update=='selesai'){
 			//Editing ketika status = 'selesai' ==> tidak diperbolehkan
@@ -217,24 +202,8 @@ Ext.onReady(function(){
 					dtrawat_jam	: dtrawat_jam_update,
 					dtrawat_keterangan	:dtrawat_keterangan_update,
 					dtrawat_ambil_paket	: dtrawat_ambil_paket_update,
-					dtrawat_status	:dtrawat_status_update
-					
-					/*trawat_cust	:trawat_cust_update,  
-					trawat_keterangan	:trawat_keterangan_update,  
-					
-					trawat_cust_id	:trawat_cust_id_update,
-					
-					rawat_harga	:perawatan_harga_update,
-					rawat_du	:perawatan_du_update,
-					rawat_dm	:perawatan_dm_update,
-					cust_member	:cust_member_update,
-					
-					dtrawat_dapp	: dtrawat_dapp_update,
-					
-					dapaket_dpaket	: dapaket_dpaket_update,
-					dapaket_jpaket	: dapaket_jpaket_update,
-					dapaket_paket	: dapaket_paket_update,
-					dapaket_item	: dapaket_item_update*/
+					dtrawat_status	:dtrawat_status_update,
+					dtrawat_jumlah	:dtrawat_jumlah_update
 				}, 
 				success: function(response){
 					var result=eval(response.responseText);
@@ -300,10 +269,8 @@ Ext.onReady(function(){
 							});
 							break;
 						default:
-							//tindakan_medisDataStore.commitChanges();
 							tindakan_medisDataStore.reload();
 							tindakanListEditorGrid.setDisabled(false);
-							//trawat_medis_perawatanDataStore.reload({params:{query:tindakanListEditorGrid.getSelectionModel().getSelected().get('trawat_id')}});
 							Ext.MessageBox.show({
 							   title: 'Warning',
 							   msg: 'We could\'t not save the tindakan.',

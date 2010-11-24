@@ -103,7 +103,6 @@ class M_tindakan_nonmedis extends Model{
 	}
 	
 	function customer_check_paket($cust_id, $rawat_id, $jumlah_ambil){
-		//$return_row_punya_paket = 0;
 		//* Mencari kepemilikan paket berdasarkan customer_id /
 		$sql_punya_paket="SELECT (dpaket_jumlah*rpaket_jumlah) AS rpaket_jumlah
 				,dpaket_id
@@ -143,9 +142,8 @@ class M_tindakan_nonmedis extends Model{
 						break;
 					}else{
 						if($i==$punya_paket_rows){
-							$return_global_customer_check_paket = $this->global_customer_check_paket($cust_id, $rawat_id);
+							$return_global_customer_check_paket = $this->global_customer_check_paket($cust_id, $rawat_id, $jumlah_ambil);
 							return $return_global_customer_check_paket;
-							//return 0;
 						}
 					}
 					
@@ -158,7 +156,6 @@ class M_tindakan_nonmedis extends Model{
 		}else{
 			$return_global_customer_check_paket = $this->global_customer_check_paket($cust_id, $rawat_id, $jumlah_ambil);
 			return $return_global_customer_check_paket;
-			//return 0;
 		}
 		
 	}
