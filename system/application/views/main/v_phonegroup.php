@@ -1,14 +1,14 @@
 <?php
 /* 	These code was generated using phpCIGen v 0.1.b (24/06/2009)
-	#zaqi 		zaqi.smart@gmail.com,http://zenzaqi.blogspot.com, 
+	#zaqi 		zaqi.smart@gmail.com,http://zenzaqi.blogspot.com,
 	#CV. Trust Solution, jl. Saronojiwo 19 Surabaya, http://www.ts.co.id
-	
+
 	+ Module  		: phonegroup View
 	+ Description	: For record view
 	+ Filename 		: v_phonegroup.php
- 	+ creator  		: 
+ 	+ creator  		:
  	+ Created on 01/Feb/2010 14:30:05
-	
+
 */
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -32,7 +32,7 @@
 			font-weight:bold;
 			color:#222;
 		}
-		
+
 		.search-item h3 span {
 			float: right;
 			font-weight:normal;
@@ -43,7 +43,7 @@
 		}
     </style>
 <script>
-/* declare function */		
+/* declare function */
 var phonegroup_DataStore;
 var phonegroup_ColumnModel;
 var phonegroupListEditorGrid;
@@ -71,7 +71,7 @@ var phonegroup_detailSearchField;
 Ext.onReady(function(){
   	Ext.QuickTips.init();	/* Initiate quick tips icon */
   	Ext.form.Field.prototype.msgTarget = 'side';
-	 
+
   	/* Function for Saving inLine Editing */
 	function phonegroup_inline_update(oGrid_event){
 		var phonegroup_id_update_pk="";
@@ -82,16 +82,16 @@ Ext.onReady(function(){
 		if(oGrid_event.record.data.phonegroup_nama!== null){phonegroup_nama_update = oGrid_event.record.data.phonegroup_nama;}
 		if(oGrid_event.record.data.phonegroup_detail!== null){phonegroup_detail_update = oGrid_event.record.data.phonegroup_detail;}
 
-		Ext.Ajax.request({  
+		Ext.Ajax.request({
 			waitMsg: 'Mohon tunggu...',
 			url: 'index.php?c=c_phonegroup&m=get_action',
 			params: {
-				phonegroup_id	: phonegroup_id_update_pk, 
+				phonegroup_id	: phonegroup_id_update_pk,
 				phonegroup_nama	:phonegroup_nama_update,
 				phonegroup_detail	:phonegroup_detail_update,
 				task: "UPDATE"
-			}, 
-			success: function(response){							
+			},
+			success: function(response){
 				var result=eval(response.responseText);
 				switch(result){
 					case 1:
@@ -117,35 +117,35 @@ Ext.onReady(function(){
 				   buttons: Ext.MessageBox.OK,
 				   animEl: 'database',
 				   icon: Ext.MessageBox.ERROR
-				});	
-			}									    
-		});   
+				});
+			}
+		});
 	}
   	/* End of Function */
-  
+
   	/* Function for add and edit data form, open window form */
 	function phonegroup_save(){
-	
-		if(is_phonegroup_form_valid()){	
-			var phonegroup_id_field_pk=null; 
-			var phonegroup_nama_field=null; 
-			var phonegroup_detail_field=null; 
+
+		if(is_phonegroup_form_valid()){
+			var phonegroup_id_field_pk=null;
+			var phonegroup_nama_field=null;
+			var phonegroup_detail_field=null;
 
 			phonegroup_id_field_pk=get_pk_id();
-			if(phonegroup_namaField.getValue()!== null){phonegroup_nama_field = phonegroup_namaField.getValue();} 
-			if(phonegroup_detailField.getValue()!== null){phonegroup_detail_field = phonegroup_detailField.getValue();} 
+			if(phonegroup_namaField.getValue()!== null){phonegroup_nama_field = phonegroup_namaField.getValue();}
+			if(phonegroup_detailField.getValue()!== null){phonegroup_detail_field = phonegroup_detailField.getValue();}
 
-			Ext.Ajax.request({  
+			Ext.Ajax.request({
 				waitMsg: 'Please wait...',
 				url: 'index.php?c=c_phonegroup&m=get_action',
 				params: {
-					phonegroup_id		: phonegroup_id_field_pk, 
-					phonegroup_nama		: phonegroup_nama_field, 
+					phonegroup_id		: phonegroup_id_field_pk,
+					phonegroup_nama		: phonegroup_nama_field,
 					phonegroup_detail	: phonegroup_detail_field,
 					phonegroup_data 	: phonegroup_saveForm.getForm().findField('itemselector').getValue(),
 					task: post2db
-				}, 
-				success: function(response){             
+				},
+				success: function(response){
 					var result=eval(response.responseText);
 					switch(result){
 						case 1:
@@ -162,7 +162,7 @@ Ext.onReady(function(){
 							   icon: Ext.MessageBox.WARNING
 							});
 							break;
-					}        
+					}
 				},
 				failure: function(response){
 					var result=response.responseText;
@@ -172,10 +172,10 @@ Ext.onReady(function(){
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'database',
 						   icon: Ext.MessageBox.ERROR
-					});	
-				}                      
+					});
+				}
 			});
-			
+
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
@@ -187,16 +187,16 @@ Ext.onReady(function(){
 		}
 	}
  	/* End of Function */
-  
+
   	/* Function for get PK field */
 	function get_pk_id(){
 		if(post2db=='UPDATE')
 			return phonegroupListEditorGrid.getSelectionModel().getSelected().get('phonegroup_id');
-		else 
+		else
 			return 0;
 	}
 	/* End of Function  */
-	
+
 	/* Reset form before loading */
 	function phonegroup_reset_form(){
 		phonegroup_namaField.reset();
@@ -207,35 +207,35 @@ Ext.onReady(function(){
 		phonegrouped_DataStore.removeAll();
 	}
  	/* End of Function */
-  
+
 	/* setValue to EDIT */
 	function phonegroup_set_form(){
 		phonegroup_namaField.setValue(phonegroupListEditorGrid.getSelectionModel().getSelected().get('phonegroup_nama'));
 		phonegroup_detailField.setValue(phonegroupListEditorGrid.getSelectionModel().getSelected().get('phonegroup_detail'));
 	}
 	/* End setValue to EDIT*/
-  
+
 	/* Function for Check if the form is valid */
 	function is_phonegroup_form_valid(){
 		return (phonegroup_namaField.isValid());
 	}
   	/* End of Function */
-  
+
   	/* Function for Displaying  create Window Form */
 	function display_form_window(){
 		if(!phonegroup_saveWindow.isVisible()){
-			
+
 			post2db='CREATE';
 			msg='created';
 			phonegroup_reset_form();
-			
+
 			phonegroup_saveWindow.show();
 		} else {
 			phonegroup_saveWindow.toFront();
 		}
 	}
   	/* End of Function */
- 
+
   	/* Function for Delete Confirm */
 	function phonegroup_confirm_delete(){
 		// only one phonegroup is selected here
@@ -254,16 +254,16 @@ Ext.onReady(function(){
 		}
 	}
   	/* End of Function */
-  
+
 	/* Function for Update Confirm */
 	function phonegroup_confirm_update(){
 		/* only one record is selected here */
 		if(phonegroupListEditorGrid.selModel.getCount() == 1) {
-			
+
 			post2db='UPDATE';
 			msg='updated';
 			phonegroup_set_form();
-			
+
 			phonegroup_saveWindow.show();
 		} else {
 			Ext.MessageBox.show({
@@ -276,7 +276,7 @@ Ext.onReady(function(){
 		}
 	}
   	/* End of Function */
-  
+
   	/* Function for Delete Record */
 	function phonegroup_delete(btn){
 		if(btn=='yes'){
@@ -286,10 +286,10 @@ Ext.onReady(function(){
 				prez.push(selections[i].json.phonegroup_id);
 			}
 			var encoded_array = Ext.encode(prez);
-			Ext.Ajax.request({ 
+			Ext.Ajax.request({
 				waitMsg: 'Please Wait',
-				url: 'index.php?c=c_phonegroup&m=get_action', 
-				params: { task: "DELETE", ids:  encoded_array }, 
+				url: 'index.php?c=c_phonegroup&m=get_action',
+				params: { task: "DELETE", ids:  encoded_array },
 				success: function(response){
 					var result=eval(response.responseText);
 					switch(result){
@@ -315,39 +315,39 @@ Ext.onReady(function(){
 					   buttons: Ext.MessageBox.OK,
 					   animEl: 'database',
 					   icon: Ext.MessageBox.ERROR
-					});	
+					});
 				}
 			});
-		}  
+		}
 	}
   	/* End of Function */
-  
+
 	/* Function for Retrieve DataStore */
 	phonegroup_DataStore = new Ext.data.Store({
 		id: 'phonegroup_DataStore',
 		proxy: new Ext.data.HttpProxy({
-			url: 'index.php?c=c_phonegroup&m=get_action', 
+			url: 'index.php?c=c_phonegroup&m=get_action',
 			method: 'POST'
 		}),
-		baseParams:{task: "LIST"}, // parameter yang di $_POST ke Controller
+		baseParams:{task: "LIST", start: 0, limit:pageS}, // parameter yang di $_POST ke Controller
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
 			id: 'phonegroup_id'
 		},[
-			{name: 'phonegroup_id', type: 'int', mapping: 'phonegroup_id'}, 
-			{name: 'phonegroup_nama', type: 'string', mapping: 'phonegroup_nama'}, 
-			{name: 'phonegroup_detail', type: 'string', mapping: 'phonegroup_detail'}, 
-			{name: 'phonegroup_creator', type: 'string', mapping: 'phonegroup_creator'}, 
-			{name: 'phonegroup_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'phonegroup_date_create'}, 
-			{name: 'phonegroup_update', type: 'string', mapping: 'phonegroup_update'}, 
-			{name: 'phonegroup_date_update', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'phonegroup_date_update'}, 
-			{name: 'phonegroup_revised', type: 'int', mapping: 'phonegroup_revised'} 
+			{name: 'phonegroup_id', type: 'int', mapping: 'phonegroup_id'},
+			{name: 'phonegroup_nama', type: 'string', mapping: 'phonegroup_nama'},
+			{name: 'phonegroup_detail', type: 'string', mapping: 'phonegroup_detail'},
+			{name: 'phonegroup_creator', type: 'string', mapping: 'phonegroup_creator'},
+			{name: 'phonegroup_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'phonegroup_date_create'},
+			{name: 'phonegroup_update', type: 'string', mapping: 'phonegroup_update'},
+			{name: 'phonegroup_date_update', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'phonegroup_date_update'},
+			{name: 'phonegroup_revised', type: 'int', mapping: 'phonegroup_revised'}
 		]),
 		sortInfo:{field: 'phonegroup_id', direction: "DESC"}
 	});
 	/* End of Function */
-    
+
   	/* Function for Identify of Window Column Model */
 	phonegroup_ColumnModel = new Ext.grid.ColumnModel(
 		[{
@@ -356,7 +356,7 @@ Ext.onReady(function(){
 			dataIndex: 'phonegroup_id',
 			width: 40,
 			renderer: function(value, cell){
-				cell.css = "readonlycell"; // Mengambil Value dari Class di dalam CSS 
+				cell.css = "readonlycell"; // Mengambil Value dari Class di dalam CSS
 				return value;
 				},
 			hidden: true
@@ -372,7 +372,7 @@ Ext.onReady(function(){
 				maxLength: 250
           	})
 			<?php } ?>
-		}, 
+		},
 		{
 			header: 'Keterangan',
 			dataIndex: 'phonegroup_detail',
@@ -384,7 +384,7 @@ Ext.onReady(function(){
 				maxLength: 500
           	})
 			<?php } ?>
-		}, 
+		},
 		{
 			header: 'Creator',
 			dataIndex: 'phonegroup_creator',
@@ -392,7 +392,7 @@ Ext.onReady(function(){
 			sortable: true,
 			hidden: true,
 			readOnly: true
-		}, 
+		},
 		{
 			header: 'Create on',
 			dataIndex: 'phonegroup_date_create',
@@ -400,7 +400,7 @@ Ext.onReady(function(){
 			sortable: true,
 			hidden: true,
 			readOnly: true
-		}, 
+		},
 		{
 			header: 'Last Update by',
 			dataIndex: 'phonegroup_update',
@@ -408,7 +408,7 @@ Ext.onReady(function(){
 			sortable: true,
 			hidden: true,
 			readOnly: true
-		}, 
+		},
 		{
 			header: 'Last Update on',
 			dataIndex: 'phonegroup_date_update',
@@ -416,7 +416,7 @@ Ext.onReady(function(){
 			sortable: true,
 			hidden: true,
 			readOnly: true
-		}, 
+		},
 		{
 			header: 'Revised',
 			dataIndex: 'phonegroup_revised',
@@ -425,10 +425,10 @@ Ext.onReady(function(){
 			hidden: true,
 			readOnly: true
 		}	]);
-	
+
 	phonegroup_ColumnModel.defaultSortable= true;
 	/* End of Function */
-    
+
 	/* Declare DataStore and  show datagrid list */
 	phonegroupListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'phonegroupListEditorGrid',
@@ -473,14 +473,14 @@ Ext.onReady(function(){
 			iconCls:'icon-delete',
 			disabled: true,
 			handler: phonegroup_confirm_delete   // Confirm before deleting
-		}, '-', 
+		}, '-',
 		<?php } ?>
 		{
 			text: 'Adv Search',
 			tooltip: 'Advanced Search',
 			iconCls:'icon-search',
-			handler: display_form_search_window 
-		}, '-', 
+			handler: display_form_search_window
+		}, '-',
 			new Ext.app.SearchField({
 			store: phonegroup_DataStore,
 			params: {start: 0, limit: pageS},
@@ -499,50 +499,50 @@ Ext.onReady(function(){
 			text: 'Print',
 			tooltip: 'Print Document',
 			iconCls:'icon-print',
-			handler: phonegroup_print  
+			handler: phonegroup_print
 		}
 		]
 	});
 	phonegroupListEditorGrid.render();
 	/* End of DataStore */
-     
+
 	/* Create Context Menu */
 	phonegroup_ContextMenu = new Ext.menu.Menu({
 		id: 'phonegroup_ListEditorGridContextMenu',
 		items: [
 		<?php if(eregi('U|R',$this->m_security->get_access_group_by_kode('MENU_PHONEGROUP'))){ ?>
-		{ 
-			text: 'Edit', tooltip: 'Edit selected record', 
+		{
+			text: 'Edit', tooltip: 'Edit selected record',
 			iconCls:'icon-update',
-			handler: phonegroup_confirm_update 
+			handler: phonegroup_confirm_update
 		},
 		<?php } ?>
 		<?php if(eregi('D',$this->m_security->get_access_group_by_kode('MENU_PHONEGROUP'))){ ?>
-		{ 
-			text: 'Delete', 
-			tooltip: 'Delete selected record', 
+		{
+			text: 'Delete',
+			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
 			disabled: true,
-			handler: phonegroup_confirm_delete 
+			handler: phonegroup_confirm_delete
 		},
 		<?php } ?>
 		'-',
-		{ 
+		{
 			text: 'Print',
 			tooltip: 'Print Document',
 			iconCls:'icon-print',
-			handler: phonegroup_print 
+			handler: phonegroup_print
 		},
-		{ 
-			text: 'Export Excel', 
+		{
+			text: 'Export Excel',
 			tooltip: 'Export to Excel(.xls) Document',
 			iconCls:'icon-xls',
-			handler: phonegroup_export_excel 
+			handler: phonegroup_export_excel
 		}
 		]
-	}); 
+	});
 	/* End of Declaration */
-	
+
 	var customer_tpl = new Ext.XTemplate(
         '<tpl for="."><div class="search-item">',
 //            '<span><b>{cust_no} : {cust_nama}</b> | Tgl-Lahir:{cust_tgllahir:date("M j, Y")}<br /></span>',
@@ -551,9 +551,9 @@ Ext.onReady(function(){
             '{cust_alamat} | {cust_telprumah}',
         '</div></tpl>'
     );
-	
-	
-	
+
+
+
 	/* Event while selected row via context menu */
 	function onphonegroup_ListEditGridContextMenu(grid, rowIndex, e) {
 		e.stopEvent();
@@ -564,23 +564,23 @@ Ext.onReady(function(){
 		phonegroup_ContextMenu.showAt([coords[0], coords[1]]);
   	}
   	/* End of Function */
-	
+
 	/* function for editing row via context menu */
 	function phonegroup_editContextMenu(){
 		//phonegroupListEditorGrid.startEditing(phonegroup_SelectedRow,1);
 		phonegroup_confirm_update();
   	}
 	/* End of Function */
-  	
+
 	phonegroupListEditorGrid.addListener('rowcontextmenu', onphonegroup_ListEditGridContextMenu);
 	phonegroup_DataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
 	phonegroupListEditorGrid.on('afteredit', phonegroup_inline_update); // inLine Editing Record
-	
+
 	/* Function for Retrieve DataStore */
 	phonegrouped_DataStore = new Ext.data.Store({
 		id: 'phonegrouped_DataStore',
 		proxy: new Ext.data.HttpProxy({
-			url: 'index.php?c=c_phonegroup&m=get_phonegrouped', 
+			url: 'index.php?c=c_phonegroup&m=get_phonegrouped',
 			method: 'POST'
 		}),
 		baseParams:{start:0, limit: 15 }, // parameter yang di $_POST ke Controller
@@ -589,20 +589,20 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'phonenumber_number'
 		},[
-			{name: 'phonenumber_number', type: 'string', mapping: 'cust_hp'}, 
+			{name: 'phonenumber_number', type: 'string', mapping: 'cust_hp'},
 			{name: 'phonenumber_nama', type: 'string', mapping: 'cust_nama'},
 			{name: 'phonenumber_id', type: 'int', mapping: 'cust_id'},
 		]),
 		sortInfo:{field: 'phonenumber_nama', direction: "ASC"}
 	});
-	
-	
-	
+
+
+
 	/* Function for Retrieve DataStore */
 	phonenumber_DataStore = new Ext.data.Store({
 		id: 'phonenumer_DataStore',
 		proxy: new Ext.data.HttpProxy({
-			url: 'index.php?c=c_phonegroup&m=get_available', 
+			url: 'index.php?c=c_phonegroup&m=get_available',
 			method: 'POST'
 		}),
 		baseParams:{id: get_pk_id(),start:0, limit: 15, task: 'all'}, // parameter yang di $_POST ke Controller
@@ -611,21 +611,21 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'phonenumber_number'
 		},[
-			{name: 'phonenumber_nama', type: 'string', mapping: 'cust_nama'}, 
+			{name: 'phonenumber_nama', type: 'string', mapping: 'cust_nama'},
 			{name: 'phonenumber_number', type: 'string', mapping: 'cust_hp'},
 			{name: 'phonenumber_no', type: 'string', mapping: 'cust_no'},
 			{name: 'phonenumber_id', type: 'int', mapping: 'cust_id'}
 		]),
 		sortInfo:{field: 'phonenumber_nama', direction: "ASC"}
 	});
-	
+
 	var cust_tpl = new Ext.XTemplate(
         '<tpl for="."><div class="search-item">',
             '<span><b>{phonenumber_nama} ({phonenumber_no})</b><br /></span>',
             'No HP: {phonenumber_member}',
         '</div></tpl>'
     );
-		
+
 	/* Identify  phonegroup_nama Field */
 	phonegroup_namaField= new Ext.form.TextField({
 		id: 'phonegroup_namaField',
@@ -640,13 +640,13 @@ Ext.onReady(function(){
 		maxLength: 500,
 		anchor: '95%'
 	});
-	
-	
+
+
 	//datastore of profesi
 	cbo_pgcust_profesi_DataStore = new Ext.data.Store({
 		id: 'cbo_pgcust_profesi_DataStore',
 		proxy: new Ext.data.HttpProxy({
-			url: 'index.php?c=c_customer&m=get_profesi_list', 
+			url: 'index.php?c=c_customer&m=get_profesi_list',
 			method: 'POST'
 		}),
 		reader: new Ext.data.JsonReader({
@@ -659,12 +659,12 @@ Ext.onReady(function(){
 		sortInfo:{field: 'cust_profesi_display', direction: "ASC"}
 	});
 	/* eof */
-	
+
 	//datastore of hobi
 	cbo_pgcust_hobi_DataStore = new Ext.data.Store({
 		id: 'cbo_pgcust_hobi_DataStore',
 		proxy: new Ext.data.HttpProxy({
-			url: 'index.php?c=c_customer&m=get_hobi_list', 
+			url: 'index.php?c=c_customer&m=get_hobi_list',
 			method: 'POST'
 		}),
 		reader: new Ext.data.JsonReader({
@@ -677,12 +677,12 @@ Ext.onReady(function(){
 		sortInfo:{field: 'cust_hobi_display', direction: "ASC"}
 	});
 	/* eof */
-	
+
 	//datastore of hobi
 	cbo_pgcust_cabang_DataStore = new Ext.data.Store({
 		id: 'cbo_pgcust_cabang_DataStore',
 		proxy: new Ext.data.HttpProxy({
-			url: 'index.php?c=c_customer&m=get_cabang_list', 
+			url: 'index.php?c=c_customer&m=get_cabang_list',
 			method: 'POST'
 		}),
 		reader: new Ext.data.JsonReader({
@@ -696,12 +696,12 @@ Ext.onReady(function(){
 		sortInfo:{field: 'cust_cabang_display', direction: "ASC"}
 	});
 	/* eof */
-	
-	
+
+
 	var cbo_propinsi_DataStore = new Ext.data.Store({
 		id: 'cbo_propinsi_DataStore',
 		proxy: new Ext.data.HttpProxy({
-			url: 'index.php?c=c_customer&m=get_propinsi_list', 
+			url: 'index.php?c=c_customer&m=get_propinsi_list',
 			method: 'POST'
 		}),
 		baseParams:{start: 0, limit: 10 }, // parameter yang di $_POST ke Controller
@@ -714,12 +714,12 @@ Ext.onReady(function(){
 		]),
 		sortInfo:{field: 'propinsi_nama', direction: "ASC"}
 	});
-	
+
 
 	/*cbo_cust_DataStore = new Ext.data.Store({
 		id: 'cbo_cust_DataStore',
 		proxy: new Ext.data.HttpProxy({
-			url: 'index.php?c=c_phonegroup&m=get_customer_list', 
+			url: 'index.php?c=c_phonegroup&m=get_customer_list',
 			method: 'POST'
 		}),
 		baseParams:{start: 0, limit: 10 }, // parameter yang di $_POST ke Controller
@@ -737,29 +737,29 @@ Ext.onReady(function(){
 		]),
 		sortInfo:{field: 'cust_no', direction: "ASC"}
 	});*/
-	
-	
+
+
 	var pgcust_kota_SearchField=new Ext.form.TextField({
 		id: 'pgcust_kota_SearchField',
 		name: 'pgcust_kota_SearchField',
 		fieldLabel: 'Kota',
 		anchor: '98%'
 	});
-	
+
 	var pgcust_no_SearchField=new Ext.form.TextField({
 		id: 'pgcust_no_SearchField',
 		name: 'pgcust_no_SearchField',
 		fieldLabel: 'No Customer',
 		anchor: '98%'
 	});
-	
+
 	var pgcust_nama_SearchField=new Ext.form.TextField({
 		id: 'pgcust_nama_SearchField',
 		name: 'pgcust_nama_SearchField',
 		fieldLabel: 'Nama Customer',
 		anchor: '98%'
 	});
-	
+
 	/* Identify  cust_kelamin Field */
 	var pgcust_kelamin_SearchField= new Ext.form.ComboBox({
 		id: 'pgcust_kelamin_SearchField',
@@ -774,9 +774,9 @@ Ext.onReady(function(){
 		valueField: 'cust_kelamin_value',
 		//allowBlank: false,
 		anchor: '55%',
-		triggerAction: 'all'	
+		triggerAction: 'all'
 	});
-	
+
 	/*var pgcust_custSearchField= new Ext.form.ComboBox({
 		id: 'pgcust_custSearchField',
 		fieldLabel: 'Customer',
@@ -796,9 +796,9 @@ Ext.onReady(function(){
 		listClass: 'x-combo-list-small',
 		anchor: '95%'
 	});*/
-	
-	
-	
+
+
+
 	var pgcust_propinsi_SearchField= new Ext.form.ComboBox({
 		id: 'pgcust_propinsi_SearchField',
 		fieldLabel: 'Propinsi',
@@ -811,7 +811,7 @@ Ext.onReady(function(){
 		anchor: '98%',
 		triggerAction: 'all'
 	});
-	
+
 	/* Identify  cust_agama Field */
 	var pgcust_agama_SearchField= new Ext.form.ComboBox({
 		id: 'pgcust_agama_SearchField',
@@ -826,9 +826,9 @@ Ext.onReady(function(){
 		displayField: 'cust_agama_value_display',
 		valueField: 'cust_agama_value_display',
 		anchor: '60%',
-		triggerAction: 'all'	
+		triggerAction: 'all'
 	});
-	
+
 	/* Identify  cust_pendidikan Field */
 	var pgcust_pendidikan_SearchField= new Ext.form.ComboBox({
 		id: 'pgcust_pendidikan_SearchField',
@@ -846,7 +846,7 @@ Ext.onReady(function(){
 		anchor: '70%',
 		triggerAction: 'all'
 	});
-	
+
 	var pgcust_profesi_SearchField= new Ext.form.ComboBox({
 		id: 'pgcust_profesi_SearchField',
 		fieldLabel: 'Profesi',
@@ -859,13 +859,13 @@ Ext.onReady(function(){
 		pageSize: pageS,
 		triggerAction: 'all'
 	});
-	
+
 	var pgcust_umur_SearchField= new Ext.form.TextField({
 		id: 'pgcust_umur_SearchField',
 		fieldLabel: 'Umur',
 		anchor:'50%'
 	});
-	
+
 	var pgcust_hobi_SearchField= new Ext.form.ComboBox({
 		id: 'pgcust_hobi_SearchField',
 		fieldLabel: 'Hobi',
@@ -878,7 +878,7 @@ Ext.onReady(function(){
 		pageSize: pageS,
 		triggerAction: 'all'
 	});
-	
+
 	var pgcust_stsnikah_SearchField= new Ext.form.ComboBox({
 		id: 'pgcust_stsnikah_SearchField',
 		fieldLabel: 'Status Pernikahan',
@@ -892,9 +892,9 @@ Ext.onReady(function(){
 		displayField: 'cust_statusnikah_display',
 		valueField: 'cust_statusnikah_value',
 		anchor: '70%',
-		triggerAction: 'all'	
+		triggerAction: 'all'
 	});
-	
+
 	var pgcust_priority_SearchField= new Ext.form.ComboBox({
 		id: 'pgcust_priority_SearchField',
 		fieldLabel: 'Priority',
@@ -908,9 +908,9 @@ Ext.onReady(function(){
 		displayField: 'cust_priority_display',
 		valueField: 'cust_priority_value',
 		anchor: '60%',
-		triggerAction: 'all'	
+		triggerAction: 'all'
 	});
-	
+
 	/* Identify  cust_unit Field */
 	var pgcust_unit_SearchField= new Ext.form.ComboBox({
 		id: 'pgcust_unit_SearchField',
@@ -939,10 +939,10 @@ Ext.onReady(function(){
 		displayField: 'cust_aktif_display',
 		valueField: 'cust_aktif_value',
 		anchor: '60%',
-		triggerAction: 'all'	
+		triggerAction: 'all'
 	});
-	
-	
+
+
 	function phonegroup_cust_reset_search(){
 		pgcust_umur_SearchField.reset();
 		pgcust_agama_SearchField.reset();
@@ -961,7 +961,7 @@ Ext.onReady(function(){
 		phonenumber_DataStore.removeAll();
 		//phonegrouped_DataStore.removeAll();
 	}
-	
+
 	function phonegroup_cust_list_search(){
 		var cust_umur_search="";
 		var cust_agama_search="";
@@ -977,7 +977,7 @@ Ext.onReady(function(){
 		var cust_aktif_search="";
 		var cust_no_search="";
 		var cust_nama_search="";
-		
+
 		if( pgcust_umur_SearchField.getValue()!==""){ cust_umur_search=pgcust_umur_SearchField.getValue(); }
 		if( pgcust_agama_SearchField.getValue()!==""){ cust_agama_search=pgcust_agama_SearchField.getValue(); }
 		if( pgcust_kota_SearchField.getValue()!==""){ cust_kota_search=pgcust_kota_SearchField.getValue(); }
@@ -992,12 +992,12 @@ Ext.onReady(function(){
 		if( pgcust_no_SearchField.getValue()!==""){ cust_no_search=pgcust_no_SearchField.getValue(); }
 		if( pgcust_nama_SearchField.getValue()!==""){ cust_nama_search=pgcust_nama_SearchField.getValue(); }
 		//if( pgcust_custSearchField.getValue()!==""){ cust_nama_search=pgcust_custSearchField.getValue(); }
-		
+
 		phonenumber_DataStore.baseParams = {
 			task			: 	'search',
 			group_id		:   get_pk_id(),
-			umur			:	cust_umur_search, 
-			agama			:	cust_agama_search, 
+			umur			:	cust_umur_search,
+			agama			:	cust_agama_search,
 			kota			:	cust_kota_search,
 			propinsi		:	cust_propinsi_search,
 			pendidikan		:	cust_pendidikan_search,
@@ -1011,11 +1011,11 @@ Ext.onReady(function(){
 			no				:	cust_no_search,
 			nama			:	cust_nama_search
 		};
-		// Cause the datastore to do another query : 
+		// Cause the datastore to do another query :
 		phonenumber_DataStore.reload({params: {start: 0, limit: pageS}});
-		
+
 	}
-	
+
 	/* Function for retrieve search Form Panel */
 	var phonegroup_cust_searchForm = new Ext.FormPanel({
 		labelAlign: 'left',
@@ -1030,14 +1030,14 @@ Ext.onReady(function(){
 				columnWidth: 0.5,
 				border: false,
 				items: [pgcust_no_SearchField, pgcust_nama_SearchField, pgcust_umur_SearchField, pgcust_agama_SearchField, pgcust_kota_SearchField,
-						pgcust_propinsi_SearchField, pgcust_kelamin_SearchField, pgcust_pendidikan_SearchField  ]			   			   
+						pgcust_propinsi_SearchField, pgcust_kelamin_SearchField, pgcust_pendidikan_SearchField  ]
 			 },{
 				layout: 'form',
 				columnWidth: 0.5,
 				border: false,
-				items: [pgcust_profesi_SearchField, pgcust_hobi_SearchField, pgcust_stsnikah_SearchField, pgcust_priority_SearchField, 
-						pgcust_unit_SearchField, pgcust_aktif_SearchField ]	
-				   
+				items: [pgcust_profesi_SearchField, pgcust_hobi_SearchField, pgcust_stsnikah_SearchField, pgcust_priority_SearchField,
+						pgcust_unit_SearchField, pgcust_aktif_SearchField ]
+
 			}
 		],
 		buttons: [{
@@ -1051,8 +1051,8 @@ Ext.onReady(function(){
 			}
 		]
 	});
-    /* End of Function */ 
-	
+    /* End of Function */
+
 	/* Function for retrieve search Window Form, used for andvaced search */
 	var phonegroup_cust_searchWindow = new Ext.Window({
 		title: 'Pencarian Customer',
@@ -1068,8 +1068,8 @@ Ext.onReady(function(){
 		renderTo: 'elwindow_phonegroup_cust_search',
 		items: phonegroup_cust_searchForm
 	});
-    /* End of Function */ 
-	
+    /* End of Function */
+
 
 	function display_cust_phonegroup_form_search_window(){
 		phonegroup_cust_reset_search();
@@ -1079,19 +1079,19 @@ Ext.onReady(function(){
 			phonegroup_cust_searchWindow.toFront();
 		}
 	}
-	
-	/* Function for retrieve create Window Panel*/ 
+
+	/* Function for retrieve create Window Panel*/
 	phonegroup_saveForm = new Ext.FormPanel({
 		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
-		width: 750,        
+		width: 750,
 		items:[
 			{
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [phonegroup_namaField, phonegroup_detailField] 
+				items: [phonegroup_namaField, phonegroup_detailField]
 			},{
 				labelAlign: 'top',
 				bodyStyle:'padding:5px',
@@ -1164,7 +1164,7 @@ Ext.onReady(function(){
 		]
 	});
 	/* End  of Function*/
-	
+
 	/* Function for retrieve create Window Form */
 	phonegroup_saveWindow= new Ext.Window({
 		id: 'phonegroup_saveWindow',
@@ -1182,7 +1182,7 @@ Ext.onReady(function(){
 		items: phonegroup_saveForm
 	});
 	/* End Window */
-	
+
 	/* Function for action list search */
 	function phonegroup_list_search(){
 		// render according to a SQL date format.
@@ -1197,24 +1197,24 @@ Ext.onReady(function(){
 		phonegroup_DataStore.baseParams = {
 			task: 'SEARCH',
 			//variable here
-			phonegroup_id	:	phonegroup_id_search, 
-			phonegroup_nama	:	phonegroup_nama_search, 
+			phonegroup_id	:	phonegroup_id_search,
+			phonegroup_nama	:	phonegroup_nama_search,
 			phonegroup_detail	:	phonegroup_detail_search
 		};
-		// Cause the datastore to do another query : 
+		// Cause the datastore to do another query :
 		phonegroup_DataStore.reload({params: {start: 0, limit: pageS}});
 	}
-		
+
 	/* Function for reset search result */
 	function phonegroup_reset_search(){
 		// reset the store parameters
 		phonegroup_DataStore.baseParams = { task: 'LIST', start: 0, limit: pageS };
-		// Cause the datastore to do another query : 
+		// Cause the datastore to do another query :
 		phonegroup_DataStore.reload({params: {start: 0, limit: pageS}});
 		phonegroup_searchWindow.close();
 	};
 	/* End of Fuction */
-	
+
 	/* Field for search */
 	/* Identify  phonegroup_id Search Field */
 	phonegroup_idSearchField= new Ext.form.NumberField({
@@ -1225,7 +1225,7 @@ Ext.onReady(function(){
 		allowDecimals: false,
 		anchor: '95%',
 		maskRe: /([0-9]+)$/
-	
+
 	});
 	/* Identify  phonegroup_nama Search Field */
 	phonegroup_namaSearchField= new Ext.form.TextField({
@@ -1233,7 +1233,7 @@ Ext.onReady(function(){
 		fieldLabel: 'Nama',
 		maxLength: 250,
 		anchor: '95%'
-	
+
 	});
 	/* Identify  phonegroup_detail Search Field */
 	phonegroup_detailSearchField= new Ext.form.TextArea({
@@ -1241,15 +1241,15 @@ Ext.onReady(function(){
 		fieldLabel: 'Keterangan',
 		maxLength: 500,
 		anchor: '95%'
-	
+
 	});
-    
+
 	/* Function for retrieve search Form Panel */
 	phonegroup_searchForm = new Ext.FormPanel({
 		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
-		width: 300,        
+		width: 300,
 		items: [{
 			layout:'column',
 			border:false,
@@ -1258,7 +1258,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [phonegroup_namaSearchField, phonegroup_detailSearchField] 
+				items: [phonegroup_namaSearchField, phonegroup_detailSearchField]
 			}
 			]
 		}]
@@ -1274,8 +1274,8 @@ Ext.onReady(function(){
 			}
 		]
 	});
-    /* End of Function */ 
-	 
+    /* End of Function */
+
 	/* Function for retrieve search Window Form, used for andvaced search */
 	phonegroup_searchWindow = new Ext.Window({
 		title: 'Pencarian Phonegroup',
@@ -1291,8 +1291,8 @@ Ext.onReady(function(){
 		renderTo: 'elwindow_phonegroup_search',
 		items: phonegroup_searchForm
 	});
-    /* End of Function */ 
-	 
+    /* End of Function */
+
   	/* Function for Displaying  Search Window Form */
 	function display_form_search_window(){
 		if(!phonegroup_searchWindow.isVisible()){
@@ -1302,34 +1302,34 @@ Ext.onReady(function(){
 		}
 	}
   	/* End Function */
-	
+
 	/* Function for print List Grid */
 	function phonegroup_print(){
 		var searchquery = "";
 		var phonegroup_nama_print=null;
 		var phonegroup_detail_print=null;
-		var win;              
+		var win;
 		// check if we do have some search data...
 		if(phonegroup_DataStore.baseParams.query!==null){searchquery = phonegroup_DataStore.baseParams.query;}
 		if(phonegroup_DataStore.baseParams.phonegroup_nama!==null){phonegroup_nama_print = phonegroup_DataStore.baseParams.phonegroup_nama;}
 		if(phonegroup_DataStore.baseParams.phonegroup_detail!==null){phonegroup_detail_print = phonegroup_DataStore.baseParams.phonegroup_detail;}
 
-		Ext.Ajax.request({   
+		Ext.Ajax.request({
 		waitMsg: 'Please Wait...',
 		url: 'index.php?c=c_phonegroup&m=get_action',
 		params: {
 			task: "PRINT",
-		  	query: searchquery,                    		
+		  	query: searchquery,
 			phonegroup_nama : phonegroup_nama_print,
 			phonegroup_detail : phonegroup_detail_print,
 		  	currentlisting: phonegroup_DataStore.baseParams.task // this tells us if we are searching or not
-		}, 
-		success: function(response){              
+		},
+		success: function(response){
 		  	var result=eval(response.responseText);
 		  	switch(result){
 		  	case 1:
 				win = window.open('./print/phonegroup_printlist.html','phonegrouplist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
-				
+
 				break;
 		  	default:
 				Ext.MessageBox.show({
@@ -1340,7 +1340,7 @@ Ext.onReady(function(){
 					icon: Ext.MessageBox.WARNING
 				});
 				break;
-		  	}  
+		  	}
 		},
 		failure: function(response){
 		  	var result=response.responseText;
@@ -1350,34 +1350,34 @@ Ext.onReady(function(){
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR
-			});		
-		} 	                     
+			});
+		}
 		});
 	}
 	/* Enf Function */
-	
+
 	/* Function for print Export to Excel Grid */
 	function phonegroup_export_excel(){
 		var searchquery = "";
 		var phonegroup_nama_2excel=null;
 		var phonegroup_detail_2excel=null;
-		var win;              
+		var win;
 		// check if we do have some search data...
 		if(phonegroup_DataStore.baseParams.query!==null){searchquery = phonegroup_DataStore.baseParams.query;}
 		if(phonegroup_DataStore.baseParams.phonegroup_nama!==null){phonegroup_nama_2excel = phonegroup_DataStore.baseParams.phonegroup_nama;}
 		if(phonegroup_DataStore.baseParams.phonegroup_detail!==null){phonegroup_detail_2excel = phonegroup_DataStore.baseParams.phonegroup_detail;}
 
-		Ext.Ajax.request({   
+		Ext.Ajax.request({
 		waitMsg: 'Please Wait...',
 		url: 'index.php?c=c_phonegroup&m=get_action',
 		params: {
 			task: "EXCEL",
-		  	query: searchquery,                    		
+		  	query: searchquery,
 			phonegroup_nama : phonegroup_nama_2excel,
 			phonegroup_detail : phonegroup_detail_2excel,
 		  	currentlisting: phonegroup_DataStore.baseParams.task // this tells us if we are searching or not
 		},
-		success: function(response){              
+		success: function(response){
 		  	var result=eval(response.responseText);
 		  	switch(result){
 		  	case 1:
@@ -1392,7 +1392,7 @@ Ext.onReady(function(){
 					icon: Ext.MessageBox.WARNING
 				});
 				break;
-		  	}  
+		  	}
 		},
 		failure: function(response){
 		  	var result=response.responseText;
@@ -1402,8 +1402,8 @@ Ext.onReady(function(){
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR
-			});    
-		} 	                     
+			});
+		}
 		});
 	}
 	/*End of Function */
@@ -1413,8 +1413,8 @@ Ext.onReady(function(){
 			//phonenumber_DataStore.load();
 			phonegrouped_DataStore.load();
 	});
-	
-		
+
+
 });
 	</script>
 <body>

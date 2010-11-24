@@ -1,14 +1,14 @@
 <?
 /* 	These code was generated using phpCIGen v 0.1.b (1/08/2009)
-	#zaqi 		zaqi.smart@gmail.com,http://zenzaqi.blogspot.com, 
+	#zaqi 		zaqi.smart@gmail.com,http://zenzaqi.blogspot.com,
 	#CV. Trust Solution, jl. Saronojiwo 19 Surabaya, http://www.ts.co.id
-	
+
 	+ Module  		: paket View
 	+ Description	: For record view
 	+ Filename 		: v_paket.php
  	+ Author  		: zainal, mukhlison
  	+ Created on 19/Aug/2009 16:12:06
-	
+
 */
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -32,7 +32,7 @@
 			font-weight:bold;
 			color:#222;
 		}
-		
+
 		.search-item h3 span {
 			float: right;
 			font-weight:normal;
@@ -43,7 +43,7 @@
 		}
     </style>
 <script>
-/* declare function */		
+/* declare function */
 var paket_DataStore;
 var paket_ColumnModel;
 var paketListEditorGrid;
@@ -100,7 +100,7 @@ var paket_aktifSearchField;
 /* on ready fuction */
 Ext.onReady(function(){
   	Ext.QuickTips.init();	/* Initiate quick tips icon */
-  
+
   	/* Function for Saving inLine Editing */
 	function paket_update(oGrid_event){
 		var paket_id_update_pk="";
@@ -131,26 +131,26 @@ Ext.onReady(function(){
 		if(oGrid_event.record.data.paket_perpanjangan!== null){paket_perpanjangan_update = oGrid_event.record.data.paket_perpanjangan;}
 		if(oGrid_event.record.data.paket_aktif!== null){paket_aktif_update = oGrid_event.record.data.paket_aktif;}
 
-		Ext.Ajax.request({  
+		Ext.Ajax.request({
 			waitMsg: 'Mohon tunggu...',
 			url: 'index.php?c=c_paket&m=get_action',
 			params: {
 				task: "UPDATE",
-				paket_id	: paket_id_update_pk, 
-				paket_kode	:paket_kode_update,  
-				paket_kodelama	:paket_kodelama_update,  
-				paket_nama	:paket_nama_update,  
-				paket_group	:paket_group_update,  
-				paket_keterangan	:paket_keterangan_update,  
-				paket_du	:paket_du_update,  
-				paket_dm	:paket_dm_update,  
-				paket_point	:paket_point_update,  
-				paket_harga	:paket_harga_update,  
-				paket_expired	:paket_expired_update, 
+				paket_id	: paket_id_update_pk,
+				paket_kode	:paket_kode_update,
+				paket_kodelama	:paket_kodelama_update,
+				paket_nama	:paket_nama_update,
+				paket_group	:paket_group_update,
+				paket_keterangan	:paket_keterangan_update,
+				paket_du	:paket_du_update,
+				paket_dm	:paket_dm_update,
+				paket_point	:paket_point_update,
+				paket_harga	:paket_harga_update,
+				paket_expired	:paket_expired_update,
 				paket_perpanjangan : paket_perpanjangan_update,
-				paket_aktif	:paket_aktif_update,  
-			}, 
-			success: function(response){							
+				paket_aktif	:paket_aktif_update,
+			},
+			success: function(response){
 				var result=eval(response.responseText);
 				switch(result){
 					case 1:
@@ -176,65 +176,65 @@ Ext.onReady(function(){
 				   buttons: Ext.MessageBox.OK,
 				   animEl: 'database',
 				   icon: Ext.MessageBox.ERROR
-				});	
-			}									    
-		});   
+				});
+			}
+		});
 	}
   	/* End of Function */
-  
+
   	/* Function for add data, open window create form */
 	function paket_create(){
-	
-		if(is_paket_form_valid()){	
-		var paket_id_create_pk=null; 
-		var paket_kode_create=null; 
-		var paket_kodelama_create=null; 
-		var paket_nama_create=null; 
-		var paket_group_create=null; 
-		var paket_keterangan_create=null; 
-		var paket_du_create=null; 
-		var paket_dm_create=null; 
-		var paket_point_create=null; 
-		var paket_harga_create=null; 
-		var paket_expired_create=null; 
+
+		if(is_paket_form_valid()){
+		var paket_id_create_pk=null;
+		var paket_kode_create=null;
+		var paket_kodelama_create=null;
+		var paket_nama_create=null;
+		var paket_group_create=null;
+		var paket_keterangan_create=null;
+		var paket_du_create=null;
+		var paket_dm_create=null;
+		var paket_point_create=null;
+		var paket_harga_create=null;
+		var paket_expired_create=null;
 		var paket_perpanjangan_create=null;
-		var paket_aktif_create=null; 
+		var paket_aktif_create=null;
 
-		if(paket_idField.getValue()!== null){paket_id_create_pk = paket_idField.getValue();}else{paket_id_create_pk=get_pk_id();} 
-		if(paket_kodeField.getValue()!== null){paket_kode_create = paket_kodeField.getValue();} 
-		if(paket_kodelamaField.getValue()!== null){paket_kodelama_create = paket_kodelamaField.getValue();} 
-		if(paket_namaField.getValue()!== null){paket_nama_create = paket_namaField.getValue();} 
-		if(paket_groupField.getValue()!== null){paket_group_create = paket_groupField.getValue();} 
-		if(paket_keteranganField.getValue()!== null){paket_keterangan_create = paket_keteranganField.getValue();} 
-		if(paket_duField.getValue()!== null){paket_du_create = paket_duField.getValue();} 
-		if(paket_dmField.getValue()!== null){paket_dm_create = paket_dmField.getValue();} 
-		if(paket_pointField.getValue()!== null){paket_point_create = paket_pointField.getValue();} 
-		if(paket_hargaField.getValue()!== null){paket_harga_create = convertToNumber(paket_hargaField.getValue());} 
+		if(paket_idField.getValue()!== null){paket_id_create_pk = paket_idField.getValue();}else{paket_id_create_pk=get_pk_id();}
+		if(paket_kodeField.getValue()!== null){paket_kode_create = paket_kodeField.getValue();}
+		if(paket_kodelamaField.getValue()!== null){paket_kodelama_create = paket_kodelamaField.getValue();}
+		if(paket_namaField.getValue()!== null){paket_nama_create = paket_namaField.getValue();}
+		if(paket_groupField.getValue()!== null){paket_group_create = paket_groupField.getValue();}
+		if(paket_keteranganField.getValue()!== null){paket_keterangan_create = paket_keteranganField.getValue();}
+		if(paket_duField.getValue()!== null){paket_du_create = paket_duField.getValue();}
+		if(paket_dmField.getValue()!== null){paket_dm_create = paket_dmField.getValue();}
+		if(paket_pointField.getValue()!== null){paket_point_create = paket_pointField.getValue();}
+		if(paket_hargaField.getValue()!== null){paket_harga_create = convertToNumber(paket_hargaField.getValue());}
 		if(paket_expiredField.getValue()!== null){paket_expired_create = paket_expiredField.getValue();}
-		if(paket_perpanjanganField.getValue()!== null){paket_perpanjangan_create = paket_perpanjanganField.getValue();} 
-		if(paket_aktifField.getValue()!== null){paket_aktif_create = paket_aktifField.getValue();} 
+		if(paket_perpanjanganField.getValue()!== null){paket_perpanjangan_create = paket_perpanjanganField.getValue();}
+		if(paket_aktifField.getValue()!== null){paket_aktif_create = paket_aktifField.getValue();}
 
-		Ext.Ajax.request({  
+		Ext.Ajax.request({
 			waitMsg: 'Mohon tunggu...',
 			url: 'index.php?c=c_paket&m=get_action',
 			params: {
 				task: post2db,
-				paket_id	: paket_id_create_pk, 
-				paket_kode	: paket_kode_create, 
-				paket_kodelama	: paket_kodelama_create, 
+				paket_id	: paket_id_create_pk,
+				paket_kode	: paket_kode_create,
+				paket_kodelama	: paket_kodelama_create,
 				paket_nama	: paket_nama_create,
 				paket_standart_tetap : paket_standart_tetapField.getValue(),
-				paket_group	: paket_group_create, 
-				paket_keterangan	: paket_keterangan_create, 
-				paket_du	: paket_du_create, 
-				paket_dm	: paket_dm_create, 
-				paket_point	: paket_point_create, 
-				paket_harga	: paket_harga_create, 
-				paket_expired	: paket_expired_create, 
+				paket_group	: paket_group_create,
+				paket_keterangan	: paket_keterangan_create,
+				paket_du	: paket_du_create,
+				paket_dm	: paket_dm_create,
+				paket_point	: paket_point_create,
+				paket_harga	: paket_harga_create,
+				paket_expired	: paket_expired_create,
 				paket_perpanjangan : paket_perpanjangan_create,
-				paket_aktif	: paket_aktif_create, 
-			}, 
-			success: function(response){             
+				paket_aktif	: paket_aktif_create,
+			},
+			success: function(response){
 				var result=eval(response.responseText);
 				switch(result){
 					case 1:
@@ -253,7 +253,7 @@ Ext.onReady(function(){
 						   icon: Ext.MessageBox.WARNING
 						});
 						break;
-				}        
+				}
 			},
 			failure: function(response){
 				var result=response.responseText;
@@ -263,8 +263,8 @@ Ext.onReady(function(){
 					   buttons: Ext.MessageBox.OK,
 					   animEl: 'database',
 					   icon: Ext.MessageBox.ERROR
-				});	
-			}                      
+				});
+			}
 		});
 		} else {
 			Ext.MessageBox.show({
@@ -277,18 +277,18 @@ Ext.onReady(function(){
 		}
 	}
  	/* End of Function */
-  
+
   	/* Function for get PK field */
 	function get_pk_id(){
 		if(post2db=='UPDATE')
 			return paketListEditorGrid.getSelectionModel().getSelected().get('paket_id');
 		else if(post2db=='CREATE')
 			return paket_idField.getValue();
-		else 
+		else
 			return 0;
 	}
 	/* End of Function  */
-	
+
 	/* Reset form before loading */
 	function paket_reset_form(){
 		paket_idField.reset();
@@ -321,13 +321,14 @@ Ext.onReady(function(){
 		paket_aktifField.setValue(null);
 		paket_kategoritxtField.reset();
 		paket_kategoritxtField.setValue(null);
+		paket_hargaField.setValue(0);
 		
 		paket_isi_perawatan_DataStore.load({params: { master_id: -1, start:0, limit: pageS}});
 		paket_isi_produk_DataStore.load({params: { master_id: -1, start:0, limit: pageS}});
-			
+
 	}
  	/* End of Function */
-  
+
 	/* setValue to EDIT */
 	function paket_set_form(){
 		paket_idField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('paket_id'));
@@ -346,38 +347,38 @@ Ext.onReady(function(){
 		paket_aktifField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif'));
 		paket_kategoriField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('kategori_id'));
 		paket_kategoritxtField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('kategori_nama'));
-		
+
 		cbo_rawat_listDataStore.load({params: {query: get_pk_id()}});
 		cbo_produk_listDataStore.load({params: {query: get_pk_id()}});
 		paket_isi_produk_DataStore.load({params: { master_id: get_pk_id(), start:0, limit: pageS}});
 		paket_isi_perawatan_DataStore.load({params: { master_id: get_pk_id(), start:0, limit: pageS}});
-			
-			
+
+
 	}
 	/* End setValue to EDIT*/
-  
+
 	/* Function for Check if the form is valid */
 	function is_paket_form_valid(){
 		return (paket_namaField.isValid() && paket_groupField.isValid() );
 	}
   	/* End of Function */
-  
+
   	/* Function for Displaying  create Window Form */
 	function display_form_window(){
 		if(!paket_createWindow.isVisible()){
-			
-			
+
+
 			post2db='CREATE';
 			msg='created';
 			paket_reset_form();
-			
+
 			paket_createWindow.show();
 		} else {
 			paket_createWindow.toFront();
 		}
 	}
   	/* End of Function */
- 
+
   	/* Function for Delete Confirm */
 	function paket_confirm_delete(){
 		// only one paket is selected here
@@ -396,13 +397,13 @@ Ext.onReady(function(){
 		}
 	}
   	/* End of Function */
-  
+
 	/* Function for Update Confirm */
 	function paket_confirm_update(){
 		/* only one record is selected here */
 		if(paketListEditorGrid.selModel.getCount() == 1) {
-			
-			
+
+
 			post2db='UPDATE';
 			msg='updated';
 			paket_set_form();
@@ -418,7 +419,7 @@ Ext.onReady(function(){
 		}
 	}
   	/* End of Function */
-  
+
   	/* Function for Delete Record */
 	function paket_delete(btn){
 		if(btn=='yes'){
@@ -428,10 +429,10 @@ Ext.onReady(function(){
 				prez.push(selections[i].json.paket_id);
 			}
 			var encoded_array = Ext.encode(prez);
-			Ext.Ajax.request({ 
+			Ext.Ajax.request({
 				waitMsg: 'Mohon tunggu...',
-				url: 'index.php?c=c_paket&m=get_action', 
-				params: { task: "DELETE", ids:  encoded_array }, 
+				url: 'index.php?c=c_paket&m=get_action',
+				params: { task: "DELETE", ids:  encoded_array },
 				success: function(response){
 					var result=eval(response.responseText);
 					switch(result){
@@ -457,56 +458,56 @@ Ext.onReady(function(){
 					   buttons: Ext.MessageBox.OK,
 					   animEl: 'database',
 					   icon: Ext.MessageBox.ERROR
-					});	
+					});
 				}
 			});
-		}  
+		}
 	}
   	/* End of Function */
-  
+
 	/* Function for Retrieve DataStore */
 	paket_DataStore = new Ext.data.Store({
 		id: 'paket_DataStore',
 		proxy: new Ext.data.HttpProxy({
-			url: 'index.php?c=c_paket&m=get_action', 
+			url: 'index.php?c=c_paket&m=get_action',
 			method: 'POST'
 		}),
-		baseParams:{task: "LIST",start:0,limit:pageS}, // parameter yang di $_POST ke Controller
+		baseParams:{task: "LIST", start:0, limit:pageS}, // parameter yang di $_POST ke Controller
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
 			id: 'paket_id'
 		},[
-			{name: 'paket_id', type: 'int', mapping: 'paket_id'}, 
-			{name: 'paket_kode', type: 'string', mapping: 'paket_kode'}, 
-			{name: 'paket_kodelama', type: 'string', mapping: 'paket_kodelama'}, 
-			{name: 'paket_nama', type: 'string', mapping: 'paket_nama'}, 
-			{name: 'paket_standart_tetap', type: 'int', mapping: 'paket_standart_tetap'}, 
-			{name: 'paket_group', type: 'string', mapping: 'group_nama'}, 
-			{name: 'paket_keterangan', type: 'string', mapping: 'paket_keterangan'}, 
-			{name: 'paket_du', type: 'int', mapping: 'paket_du'}, 
-			{name: 'paket_dm', type: 'int', mapping: 'paket_dm'}, 
-			{name: 'paket_point', type: 'int', mapping: 'paket_point'}, 
-			{name: 'paket_harga', type: 'float', mapping: 'paket_harga'}, 
+			{name: 'paket_id', type: 'int', mapping: 'paket_id'},
+			{name: 'paket_kode', type: 'string', mapping: 'paket_kode'},
+			{name: 'paket_kodelama', type: 'string', mapping: 'paket_kodelama'},
+			{name: 'paket_nama', type: 'string', mapping: 'paket_nama'},
+			{name: 'paket_standart_tetap', type: 'int', mapping: 'paket_standart_tetap'},
+			{name: 'paket_group', type: 'string', mapping: 'group_nama'},
+			{name: 'paket_keterangan', type: 'string', mapping: 'paket_keterangan'},
+			{name: 'paket_du', type: 'int', mapping: 'paket_du'},
+			{name: 'paket_dm', type: 'int', mapping: 'paket_dm'},
+			{name: 'paket_point', type: 'int', mapping: 'paket_point'},
+			{name: 'paket_harga', type: 'float', mapping: 'paket_harga'},
 			{name: 'paket_expired', type: 'int', mapping: 'paket_expired'},
 			{name: 'paket_perpanjangan', type: 'int', mapping: 'paket_perpanjangan'},
-			{name: 'paket_aktif', type: 'string', mapping: 'paket_aktif'}, 
-			{name: 'kategori_nama', type: 'string', mapping: 'kategori_nama'}, 
-			{name: 'kategori_id', type: 'int', mapping: 'kategori_id'}, 
-			{name: 'paket_creator', type: 'string', mapping: 'paket_creator'}, 
-			{name: 'paket_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'paket_date_create'}, 
-			{name: 'paket_update', type: 'string', mapping: 'paket_update'}, 
-			{name: 'paket_date_update', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'paket_date_update'}, 
-			{name: 'paket_revised', type: 'int', mapping: 'paket_revised'} 
+			{name: 'paket_aktif', type: 'string', mapping: 'paket_aktif'},
+			{name: 'kategori_nama', type: 'string', mapping: 'kategori_nama'},
+			{name: 'kategori_id', type: 'int', mapping: 'kategori_id'},
+			{name: 'paket_creator', type: 'string', mapping: 'paket_creator'},
+			{name: 'paket_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'paket_date_create'},
+			{name: 'paket_update', type: 'string', mapping: 'paket_update'},
+			{name: 'paket_date_update', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'paket_date_update'},
+			{name: 'paket_revised', type: 'int', mapping: 'paket_revised'}
 		]),
 		sortInfo:{field: 'paket_id', direction: "DESC"}
 	});
 	/* End of Function */
-    
+
 	cbo_produk_satuanDataStore = new Ext.data.Store({
 	id: 'cbo_produk_satuanDataStore',
 	proxy: new Ext.data.HttpProxy({
-			url: 'index.php?c=c_paket&m=get_satuan_list', 
+			url: 'index.php?c=c_paket&m=get_satuan_list',
 			method: 'POST'
 		}),
 			reader: new Ext.data.JsonReader({
@@ -519,13 +520,13 @@ Ext.onReady(function(){
 		]),
 	sortInfo:{field: 'produk_satuan_display', direction: "ASC"}
 	});
-	
-	
-	
+
+
+
 	cbo_paket_groupDataStore = new Ext.data.Store({
 	id: 'cbo_paket_groupDataStore',
 	proxy: new Ext.data.HttpProxy({
-			url: 'index.php?c=c_paket&m=get_group_paket_list', 
+			url: 'index.php?c=c_paket&m=get_group_paket_list',
 			method: 'POST'
 		}),
 			reader: new Ext.data.JsonReader({
@@ -546,7 +547,7 @@ Ext.onReady(function(){
 //	cbo_paket_kategori_DataStore = new Ext.data.Store({
 //		id: 'cbo_paket_kategori_DataStore',
 //		proxy: new Ext.data.HttpProxy({
-//			url: 'index.php?c=c_paket&m=get_kategori_paket_list', 
+//			url: 'index.php?c=c_paket&m=get_kategori_paket_list',
 //			method: 'POST'
 //		}),
 //		baseParams:{task: "LIST"}, // parameter yang di $_POST ke Controller
@@ -555,13 +556,13 @@ Ext.onReady(function(){
 //			totalProperty: 'total',
 //			id: 'kategori_id'
 //		},[
-//		/* dataIndex => insert intocustomer_note_ColumnModel, Mapping => for initiate table column */ 
+//		/* dataIndex => insert intocustomer_note_ColumnModel, Mapping => for initiate table column */
 //			{name: 'paket_kategori_value', type: 'int', mapping: 'kategori_id'},
 //			{name: 'paket_kategori_display', type: 'string', mapping: 'kategori_nama'}
 //		]),
 //		sortInfo:{field: 'paket_kategori_display', direction: "ASC"}
 //	});
-	
+
   	/* Function for Identify of Window Column Model */
 	paket_ColumnModel = new Ext.grid.ColumnModel(
 		[{
@@ -570,7 +571,7 @@ Ext.onReady(function(){
 			dataIndex: 'paket_id',
 			width: 70,
 			renderer: function(value, cell){
-				cell.css = "readonlycell"; // Mengambil Value dari Class di dalam CSS 
+				cell.css = "readonlycell"; // Mengambil Value dari Class di dalam CSS
 				return value;
 				},
 			hidden: true
@@ -587,14 +588,14 @@ Ext.onReady(function(){
 				maxLength: 20
           	})
 			<?php } ?>
-		}, 
+		},
 		{
 			header: '<div align="center">' + 'Kode Baru' + '</div>',
 			dataIndex: 'paket_kode',
 			width: 120,	//150,
 			sortable: true,
 			readOnly: true
-		}, 
+		},
 		{
 			header: '<div align="center">' + 'Nama' + '</div>',
 			dataIndex: 'paket_nama',
@@ -607,7 +608,7 @@ Ext.onReady(function(){
 				maxLength: 250
           	})
 			<?php } ?>
-		}, 
+		},
 		{
 			header: '<div align="center">' + 'Group 1' + '</div>',
 			dataIndex: 'paket_group',
@@ -626,7 +627,7 @@ Ext.onReady(function(){
                	listClass: 'x-combo-list-small'
             })
 			<?php } ?>
-		}, 
+		},
 		{
 			header: '<div align="center">' + 'Jenis' + '</div>',
 			dataIndex: 'kategori_nama',
@@ -634,7 +635,7 @@ Ext.onReady(function(){
 			sortable: true,
 			editable: false,
 			hidden: true
-		}, 
+		},
 		{
 			header: '<div align="center">' + 'DU (%)' + '</div>',
 			align: 'right',
@@ -655,7 +656,7 @@ Ext.onReady(function(){
 				maskRe: /([0-9]+)$/
 			})
 			<?php } ?>
-		}, 
+		},
 		{
 			header: '<div align="center">' + 'DM (%)' + '</div>',
 			align: 'right',
@@ -676,7 +677,7 @@ Ext.onReady(function(){
 				maskRe: /([0-9]+)$/
 			})
 			<?php } ?>
-		}, 
+		},
 		{
 			header: '<div align="center">' + 'Poin' + '</div>',
 			align: 'right',
@@ -694,7 +695,7 @@ Ext.onReady(function(){
 				maskRe: /([0-9]+)$/
 			})
 			<?php } ?>
-		}, 
+		},
 		{
 			header: '<div align="center">' + 'Harga (Rp)' + '</div>',
 			align: 'right',
@@ -715,7 +716,7 @@ Ext.onReady(function(){
 				maskRe: /([0-9]+)$/
 			})
 			<?php } ?>
-		}, 
+		},
 		{
 			header: '<div align="center">' + 'Exp. (hari)' + '</div>',
 			align: 'right',
@@ -735,7 +736,7 @@ Ext.onReady(function(){
 				maskRe: /([0-9]+)$/
 			})
 			<?php } ?>
-		}, 
+		},
 		{
 			header: '<div align="center">' + 'Status' + '</div>',
 			dataIndex: 'paket_aktif',
@@ -757,7 +758,7 @@ Ext.onReady(function(){
                	listClass: 'x-combo-list-small'
             })
 			<?php } ?>
-		}, 
+		},
 		{
 			header: 'Creator',
 			dataIndex: 'paket_creator',
@@ -765,7 +766,7 @@ Ext.onReady(function(){
 			sortable: true,
 			hidden: true,
 			readOnly: true,
-		}, 
+		},
 		{
 			header: 'Create on',
 			dataIndex: 'paket_date_create',
@@ -773,7 +774,7 @@ Ext.onReady(function(){
 			sortable: true,
 			hidden: true,
 			readOnly: true,
-		}, 
+		},
 		{
 			header: 'Last Update by',
 			dataIndex: 'paket_update',
@@ -781,7 +782,7 @@ Ext.onReady(function(){
 			sortable: true,
 			hidden: true,
 			readOnly: true,
-		}, 
+		},
 		{
 			header: 'Last Update on',
 			dataIndex: 'paket_date_update',
@@ -789,7 +790,7 @@ Ext.onReady(function(){
 			sortable: true,
 			hidden: true,
 			readOnly: true,
-		}, 
+		},
 		{
 			header: 'Revised',
 			dataIndex: 'paket_revised',
@@ -798,10 +799,10 @@ Ext.onReady(function(){
 			hidden: true,
 			readOnly: true,
 		}	]);
-	
+
 	paket_ColumnModel.defaultSortable= true;
 	/* End of Function */
-    
+
 	/* Declare DataStore and  show datagrid list */
 	paketListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'paketListEditorGrid',
@@ -845,14 +846,14 @@ Ext.onReady(function(){
 			iconCls:'icon-delete',
 			disabled:true,
 			handler: paket_confirm_delete   // Confirm before deleting
-		}, '-', 
+		}, '-',
 		<?php } ?>
 		{
 			text: 'Adv Search',
 			tooltip: 'Advanced Search',
 			iconCls:'icon-search',
-			handler: display_form_search_window 
-		}, '-', 
+			handler: display_form_search_window
+		}, '-',
 			new Ext.app.SearchField({
 			store: paket_DataStore,
 			params: {task: 'LIST',start: 0, limit: pageS},
@@ -882,50 +883,50 @@ Ext.onReady(function(){
 			text: 'Print',
 			tooltip: 'Print Document',
 			iconCls:'icon-print',
-			handler: paket_print  
+			handler: paket_print
 		}
 		]
 	});
 	paketListEditorGrid.render();
 	/* End of DataStore */
-     
+
 	/* Create Context Menu */
 	paket_ContextMenu = new Ext.menu.Menu({
 		id: 'paket_ListEditorGridContextMenu',
 		items: [
 		<?php if(eregi('U|R',$this->m_security->get_access_group_by_kode('MENU_PAKET'))){ ?>
-		{ 
-			text: 'Edit', tooltip: 'Edit selected record', 
+		{
+			text: 'Edit', tooltip: 'Edit selected record',
 			iconCls:'icon-update',
-			handler: paket_editContextMenu 
+			handler: paket_editContextMenu
 		},
 		<?php } ?>
 		<?php if(eregi('D',$this->m_security->get_access_group_by_kode('MENU_PAKET'))){ ?>
-		{ 
-			text: 'Delete', 
-			tooltip: 'Delete selected record', 
+		{
+			text: 'Delete',
+			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
 			disabled: true,
-			handler: paket_confirm_delete 
+			handler: paket_confirm_delete
 		},
 		<?php } ?>
 		'-',
-		{ 
+		{
 			text: 'Print',
 			tooltip: 'Print Document',
 			iconCls:'icon-print',
-			handler: paket_print 
+			handler: paket_print
 		},
-		{ 
-			text: 'Export Excel', 
+		{
+			text: 'Export Excel',
 			tooltip: 'Export to Excel(.xls) Document',
 			iconCls:'icon-xls',
-			handler: paket_export_excel 
+			handler: paket_export_excel
 		}
 		]
-	}); 
+	});
 	/* End of Declaration */
-	
+
 	/* Event while selected row via context menu */
 	function onpaket_ListEditGridContextMenu(grid, rowIndex, e) {
 		e.stopEvent();
@@ -936,18 +937,18 @@ Ext.onReady(function(){
 		paket_ContextMenu.showAt([coords[0], coords[1]]);
   	}
   	/* End of Function */
-	
+
 	/* function for editing row via context menu */
 	function paket_editContextMenu(){
 		//paketListEditorGrid.startEditing(paket_SelectedRow,1);
 		paket_confirm_update();
   	}
 	/* End of Function */
-  	
+
 	paketListEditorGrid.addListener('rowcontextmenu', onpaket_ListEditGridContextMenu);
 	//paket_DataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
 	paketListEditorGrid.on('afteredit', paket_update); // inLine Editing Record
-		
+
 	/* Identify  paket_id Field */
 	paket_idField= new Ext.form.NumberField({
 		id: 'paket_idField',
@@ -985,14 +986,14 @@ Ext.onReady(function(){
 		allowBlank: false,
 		anchor: '95%'
 	});
-	
+
 	/* Identify Paket standart Tetap*/
 	paket_standart_tetapField=new Ext.form.Checkbox({
 		id : 'paket_standart_tetapField',
 		boxLabel: 'Paket Standart Tetap?',
 		name: 'paket_standart_tetap'
 	});
-	
+
 	/* Identify  paket_group Field */
 	paket_groupField= new Ext.form.ComboBox({
 		id: 'paket_groupField',
@@ -1069,7 +1070,7 @@ Ext.onReady(function(){
 		name: 'paket_hargaField',
 		fieldLabel: 'Harga Jual (Rp.)',
 		maxLength: 12,
-		allowBlank: false,
+		valueRenderer: 'numberToCurrency',
 		itemCls: 'rmoney',
 		width: 120,
 		maskRe: /([0-9]+)$/
@@ -1086,7 +1087,7 @@ Ext.onReady(function(){
 		width: 60,
 		maskRe: /([0-9]+)$/
 	});
-	
+
 	/* Identify  paket_perpanjangan Field */
 	paket_perpanjanganField= new Ext.form.NumberField({
 		id: 'paket_perpanjanganField',
@@ -1099,7 +1100,7 @@ Ext.onReady(function(){
 		width: 60,
 		maskRe: /([0-9]+)$/
 	});
-	
+
 	/* Identify  paket_aktif Field */
 	paket_aktifField= new Ext.form.ComboBox({
 		id: 'paket_aktifField',
@@ -1116,9 +1117,9 @@ Ext.onReady(function(){
 		valueField: 'paket_aktif_value',
 		//anchor: '30%',
 		width: 80,
-		triggerAction: 'all'	
+		triggerAction: 'all'
 	});
-	
+
 	paket_groupField.on('select', function(){
 		var record=cbo_paket_groupDataStore.findExact('paket_group_value', paket_groupField.getValue(),0);
 		if(cbo_paket_groupDataStore.getCount()){
@@ -1128,7 +1129,7 @@ Ext.onReady(function(){
 			paket_kategoriField.setValue(cbo_paket_groupDataStore.getAt(record).data.paket_group_kategori_id);
 		}
 	});
-	
+
   	/*Fieldset Master*/
 	paket_masterGroup = new Ext.form.FieldSet({
 		title: 'Master',
@@ -1141,47 +1142,47 @@ Ext.onReady(function(){
 				layout: 'form',
 				labelWidth: 120,
 				border:false,
-				items: [paket_kodelamaField, paket_kodeField, paket_namaField, paket_standart_tetapField, paket_groupField, paket_hargaField, paket_duField, paket_dmField] 
+				items: [paket_kodelamaField, paket_kodeField, paket_namaField, paket_standart_tetapField, paket_groupField, paket_hargaField, paket_duField, paket_dmField]
 			}
 			,{
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [paket_expiredField, paket_perpanjanganField, paket_pointField, paket_keteranganField, paket_aktifField,paket_idField] 
+				items: [paket_expiredField, paket_perpanjanganField, paket_pointField, paket_keteranganField, paket_aktifField,paket_idField]
 			}
 			]
-	
+
 	});
-	
-		
+
+
 	/*Detail Declaration */
-		
+
 	// Function for json reader of detail
 	var paket_isi_perawatan_reader=new Ext.data.JsonReader({
 		root: 'results',
 		totalProperty: 'total',
 		id: 'rpaket_id'
 	},[
-	/* dataIndex => insert intoperawatan_ColumnModel, Mapping => for initiate table column */ 
-			{name: 'rpaket_id', type: 'int', mapping: 'rpaket_id'}, 
-			{name: 'rpaket_master', type: 'int', mapping: 'rpaket_master'}, 
-			{name: 'rpaket_perawatan', type: 'int', mapping: 'rpaket_perawatan'}, 
-			{name: 'rpaket_jumlah', type: 'int', mapping: 'rpaket_jumlah'} 
+	/* dataIndex => insert intoperawatan_ColumnModel, Mapping => for initiate table column */
+			{name: 'rpaket_id', type: 'int', mapping: 'rpaket_id'},
+			{name: 'rpaket_master', type: 'int', mapping: 'rpaket_master'},
+			{name: 'rpaket_perawatan', type: 'int', mapping: 'rpaket_perawatan'},
+			{name: 'rpaket_jumlah', type: 'int', mapping: 'rpaket_jumlah'}
 	]);
 	//eof
-	
+
 	//function for json writer of detail
 	var paket_isi_perawatan_writer = new Ext.data.JsonWriter({
 		encode: true,
 		writeAllFields: false
 	});
 	//eof
-	
+
 	/* Function for Retrieve DataStore of detail*/
 	paket_isi_perawatan_DataStore = new Ext.data.Store({
 		id: 'paket_isi_perawatan_DataStore',
 		proxy: new Ext.data.HttpProxy({
-			url: 'index.php?c=c_paket&m=detail_paket_isi_perawatan_list', 
+			url: 'index.php?c=c_paket&m=detail_paket_isi_perawatan_list',
 			method: 'POST'
 		}),
 		reader: paket_isi_perawatan_reader,
@@ -1190,7 +1191,7 @@ Ext.onReady(function(){
 	});
 	/* End of Function */
 	paket_isi_perawatan_DataStore.load({params: { master_id: get_pk_id(), start:0, limit: pageS}});
-	
+
 	//function for editor of detail
 	var editor_paket_isi_perawatan= new Ext.ux.grid.RowEditor({
         saveText: 'Update',
@@ -1205,7 +1206,7 @@ Ext.onReady(function(){
 	cbo_produk_listDataStore = new Ext.data.Store({
 	id: 'cbo_produk_listDataStore',
 	proxy: new Ext.data.HttpProxy({
-			url: 'index.php?c=c_paket&m=get_produk_list', 
+			url: 'index.php?c=c_paket&m=get_produk_list',
 			method: 'POST'
 		}), baseParams: {start: 0, limit: pageS},
 			reader: new Ext.data.JsonReader({
@@ -1222,11 +1223,11 @@ Ext.onReady(function(){
 		]),
 	sortInfo:{field: 'produk_nama', direction: "ASC"}
 	});*/
-	
+
 	cbo_produk_listDataStore = new Ext.data.Store({
 		id: 'cbo_produk_listDataStore',
 		proxy: new Ext.data.HttpProxy({
-			url: 'index.php?c=c_paket&m=get_produk_list', 
+			url: 'index.php?c=c_paket&m=get_produk_list',
 			method: 'POST'
 		}),baseParams: {start: 0, limit: 15 },
 			reader: new Ext.data.JsonReader({
@@ -1247,11 +1248,11 @@ Ext.onReady(function(){
 		sortInfo:{field: 'dproduk_produk_display', direction: "ASC"}
 	});
 
-	
+
 	cbo_rawat_listDataStore = new Ext.data.Store({
 		id: 'cbo_rawat_listDataStore',
 		proxy: new Ext.data.HttpProxy({
-				url: 'index.php?c=c_paket&m=get_rawat_list', 
+				url: 'index.php?c=c_paket&m=get_rawat_list',
 				method: 'POST'
 			}), baseParams: {start: 0, limit: pageS},
 				reader: new Ext.data.JsonReader({
@@ -1259,27 +1260,27 @@ Ext.onReady(function(){
 				totalProperty: 'total',
 				id: 'rawat_id'
 			},[
-			/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
+			/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */
 				{name: 'rawat_id', type: 'int', mapping: 'rawat_id'},
 				{name: 'rawat_kode', type: 'string', mapping: 'rawat_kode'},
 				{name: 'rawat_nama', type: 'string', mapping: 'rawat_nama'}
 			]),
 		sortInfo:{field: 'rawat_nama', direction: "ASC"}
 	});
-	
-	
+
+
 	var paket_produk_tpl = new Ext.XTemplate(
         '<tpl for="."><div class="search-item">',
             '<span>{dproduk_produk_kode}| <b>{dproduk_produk_display}</b></span>',
 		'</div></tpl>'
     );
-	
+
 	var paket_rawat_tpl = new Ext.XTemplate(
         '<tpl for="."><div class="search-item">',
             '<span>{rawat_kode}| <b>{rawat_nama}</b></span>',
 		'</div></tpl>'
     );
-	
+
 	Ext.util.Format.comboRenderer = function(combo){
 		cbo_rawat_listDataStore.load();
 		cbo_produk_listDataStore.load();
@@ -1288,7 +1289,7 @@ Ext.onReady(function(){
 			return record ? record.get(combo.displayField) : combo.valueNotFoundText;
 		}
 	}
-	
+
 	var combo_paket_produk=new Ext.form.ComboBox({
 			store: cbo_produk_listDataStore,
 			mode: 'remote',
@@ -1308,7 +1309,7 @@ Ext.onReady(function(){
 			anchor: '95%'
 
 	});
-	
+
 	var combo_paket_rawat=new Ext.form.ComboBox({
 			store: cbo_rawat_listDataStore,
 			mode: 'remote',
@@ -1328,14 +1329,14 @@ Ext.onReady(function(){
 			anchor: '95%'
 
 	});
-	
+
 	//function of detail add
 	function paket_isi_perawatan_add(){
 		var edit_paket_isi_perawatan= new paket_isi_perawatanListEditorGrid.store.recordType({
-			rpaket_id		:'',		
-			rpaket_master	:'',		
-			rpaket_perawatan:null,		
-			rpaket_jumlah	:1		
+			rpaket_id		:'',
+			rpaket_master	:'',
+			rpaket_perawatan:null,
+			rpaket_jumlah	:1
 		});
 		editor_paket_isi_perawatan.stopEditing();
 		paket_isi_perawatan_DataStore.insert(0, edit_paket_isi_perawatan);
@@ -1344,7 +1345,7 @@ Ext.onReady(function(){
 		editor_paket_isi_perawatan.startEditing(0);
 	}
 	//eof
-	
+
 	//declaration of detail coloumn model
 	paket_isi_perawatan_ColumnModel = new Ext.grid.ColumnModel(
 		[
@@ -1375,9 +1376,9 @@ Ext.onReady(function(){
 	);
 	paket_isi_perawatan_ColumnModel.defaultSortable= true;
 	//eof
-	
-	
-	
+
+
+
 	//declaration of detail list editor grid
 	paket_isi_perawatanListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'paket_isi_perawatanListEditorGrid',
@@ -1422,17 +1423,17 @@ Ext.onReady(function(){
 					waitMsg: 'Please wait...',
 					url: 'index.php?c=c_paket&m=detail_paket_isi_perawatan_insert',
 					params:{
-					rpaket_id	: paket_isi_perawatan_record.data.rpaket_id, 
-					rpaket_master	: get_pk_id(), 
-					rpaket_perawatan	: paket_isi_perawatan_record.data.rpaket_perawatan, 
-					rpaket_jumlah	: paket_isi_perawatan_record.data.rpaket_jumlah 
-					}	
+					rpaket_id	: paket_isi_perawatan_record.data.rpaket_id,
+					rpaket_master	: get_pk_id(),
+					rpaket_perawatan	: paket_isi_perawatan_record.data.rpaket_perawatan,
+					rpaket_jumlah	: paket_isi_perawatan_record.data.rpaket_jumlah
+					}
 				});
 			}
 		}
 	}
 	//eof
-	
+
 	//function for purge detail
 	function paket_isi_perawatan_purge(){
 		Ext.Ajax.request({
@@ -1440,7 +1441,7 @@ Ext.onReady(function(){
 			url: 'index.php?c=c_paket&m=detail_paket_isi_perawatan_purge',
 			params:{ master_id: get_pk_id() },
 			timeout: 5000,
-			success: function(response){							
+			success: function(response){
 				var result=eval(response.responseText);
 				paket_isi_perawatan_insert();
 			},
@@ -1452,12 +1453,12 @@ Ext.onReady(function(){
 				   buttons: Ext.MessageBox.OK,
 				   animEl: 'database',
 				   icon: Ext.MessageBox.ERROR
-				});	
-			}	
+				});
+			}
 		});
 	}
 	//eof
-	
+
 	/* Function for Delete Confirm of detail */
 	function paket_isi_perawatan_confirm_delete(){
 		// only one record is selected here
@@ -1476,7 +1477,7 @@ Ext.onReady(function(){
 		}
 	}
 	//eof
-	
+
 	//function for Delete of detail
 	function paket_isi_perawatan_delete(btn){
 		if(btn=='yes'){
@@ -1484,12 +1485,12 @@ Ext.onReady(function(){
 			for(var i = 0, r; r = s[i]; i++){
 				paket_isi_perawatan_DataStore.remove(r);
 			}
-		} 
+		}
 		paket_isi_perawatan_DataStore.commitChanges();
 	}
 	//eof
 	// EOF DETAIL
-	
+
 	/*Detail Declaration of detail produk*/
 	// Function for json reader of detail
 	var paket_isi_produk_reader=new Ext.data.JsonReader({
@@ -1497,27 +1498,27 @@ Ext.onReady(function(){
 		totalProperty: 'total',
 		id: ''
 	},[
-			{name: 'ipaket_id', type: 'int', mapping: 'ipaket_id'}, 
-			{name: 'ipaket_master', type: 'int', mapping: 'ipaket_master'}, 
+			{name: 'ipaket_id', type: 'int', mapping: 'ipaket_id'},
+			{name: 'ipaket_master', type: 'int', mapping: 'ipaket_master'},
 			{name: 'ipaket_produk', type: 'int', mapping: 'ipaket_produk'},
-			{name: 'ipaket_satuan', type: 'string', mapping: 'satuan_kode'}, 
-			{name: 'produk_nama', type: 'string', mapping: 'produk_nama'}, 
-			{name: 'ipaket_jumlah', type: 'float', mapping: 'ipaket_jumlah'} 
+			{name: 'ipaket_satuan', type: 'string', mapping: 'satuan_kode'},
+			{name: 'produk_nama', type: 'string', mapping: 'produk_nama'},
+			{name: 'ipaket_jumlah', type: 'float', mapping: 'ipaket_jumlah'}
 	]);
 	//eof
-	
+
 	//function for json writer of detail
 	var paket_isi_produk_writer = new Ext.data.JsonWriter({
 		encode: true,
 		writeAllFields: false
 	});
 	//eof
-	
+
 	/* Function for Retrieve DataStore of detail*/
 	paket_isi_produk_DataStore = new Ext.data.Store({
 		id: 'paket_isi_produk_DataStore',
 		proxy: new Ext.data.HttpProxy({
-			url: 'index.php?c=c_paket&m=detail_paket_isi_produk_list', 
+			url: 'index.php?c=c_paket&m=detail_paket_isi_produk_list',
 			method: 'POST'
 		}),
 		reader: paket_isi_produk_reader,
@@ -1525,7 +1526,7 @@ Ext.onReady(function(){
 		sortInfo:{field: 'ipaket_id', direction: "ASC"}
 	});
 	/* End of Function */
-	
+
 	//function for editor of detail
 	var editor_paket_isi_produk= new Ext.ux.grid.RowEditor({
         saveText: 'Update',
@@ -1536,14 +1537,14 @@ Ext.onReady(function(){
 		}
     });
 	//eof
-	
+
 	//function of detail add
 	function paket_isi_produk_add(){
 		var edit_paket_isi_produk= new paket_isi_produkListEditorGrid.store.recordType({
-			ipaket_id	:'',		
-			ipaket_master	: null,		
-			ipaket_produk	: null,		
-			ipaket_jumlah	: null		
+			ipaket_id	:'',
+			ipaket_master	: null,
+			ipaket_produk	: null,
+			ipaket_jumlah	: null
 		});
 		editor_paket_isi_produk.stopEditing();
 		paket_isi_produk_DataStore.insert(0, edit_paket_isi_produk);
@@ -1551,7 +1552,7 @@ Ext.onReady(function(){
 		paket_isi_produkListEditorGrid.getSelectionModel().selectRow(0);
 		editor_paket_isi_produk.startEditing(0);
 	}
-	
+
 	//declaration of detail coloumn model
 	paket_isi_produk_ColumnModel = new Ext.grid.ColumnModel(
 		[
@@ -1594,7 +1595,7 @@ Ext.onReady(function(){
 	);
 	paket_isi_produk_ColumnModel.defaultSortable= true;
 	//eof
-	
+
 	//declaration of detail list editor grid
 	paket_isi_produkListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'paket_isi_produkListEditorGrid',
@@ -1630,7 +1631,7 @@ Ext.onReady(function(){
 		<?php } ?>
 	});
 	//eof
-	
+
 
 	//function for purge detail
 	function paket_isi_produk_purge(){
@@ -1639,7 +1640,7 @@ Ext.onReady(function(){
 			url: 'index.php?c=c_paket&m=detail_paket_isi_produk_purge',
 			params:{ master_id: get_pk_id() },
 			timeout: 5000,
-			success: function(response){							
+			success: function(response){
 				var result=eval(response.responseText);
 				paket_isi_produk_insert();
 			},
@@ -1651,12 +1652,12 @@ Ext.onReady(function(){
 				   buttons: Ext.MessageBox.OK,
 				   animEl: 'database',
 				   icon: Ext.MessageBox.ERROR
-				});	
+				});
 			}
 		});
 	}
 	//eof
-	
+
 	//function for insert detail
 	function paket_isi_produk_insert(){
 		for(i=0;i<paket_isi_produk_DataStore.getCount();i++){
@@ -1666,17 +1667,17 @@ Ext.onReady(function(){
 					waitMsg: 'Please wait...',
 					url: 'index.php?c=c_paket&m=detail_paket_isi_produk_insert',
 					params:{
-					ipaket_master	: get_pk_id(), 
+					ipaket_master	: get_pk_id(),
 					ipaket_produk	: paket_isi_produk_record.data.ipaket_produk,
 					ipaket_satuan	: paket_isi_produk_record.data.ipaket_satuan,
-					ipaket_jumlah	: paket_isi_produk_record.data.ipaket_jumlah 
-					}		
+					ipaket_jumlah	: paket_isi_produk_record.data.ipaket_jumlah
+					}
 				});
 			}
 		}
 	}
 	//eof
-	
+
 	/* Function for Delete Confirm of detail */
 	function paket_isi_produk_confirm_delete(){
 		// only one record is selected here
@@ -1695,7 +1696,7 @@ Ext.onReady(function(){
 		}
 	}
 	//eof
-	
+
 	//function for Delete of detail
 	function paket_isi_produk_delete(btn){
 		if(btn=='yes'){
@@ -1703,19 +1704,19 @@ Ext.onReady(function(){
 			for(var i = 0, r; r = s[i]; i++){
 				paket_isi_produk_DataStore.remove(r);
 			}
-		}  
+		}
 		paket_isi_produk_DataStore.commitChanges();
 	}
 	//eof
-	
-		
+
+
 	var detail_tab_paket = new Ext.TabPanel({
 		activeTab: 0,
 		items: [paket_isi_perawatanListEditorGrid,paket_isi_produkListEditorGrid]
 	});
-	
-	
-	/* Function for retrieve create Window Panel*/ 
+
+
+	/* Function for retrieve create Window Panel*/
 	paket_createForm = new Ext.FormPanel({
 		labelAlign: 'left',
 		bodyStyle:'padding:5px',
@@ -1739,7 +1740,7 @@ Ext.onReady(function(){
 		]
 	});
 	/* End  of Function*/
-	
+
 	/* Function for retrieve create Window Form */
 	paket_createWindow= new Ext.Window({
 		id: 'paket_createWindow',
@@ -1757,7 +1758,7 @@ Ext.onReady(function(){
 		items: paket_createForm
 	});
 	/* End Window */
-	
+
 	/* Function for action list search */
 	function paket_list_search(){
 		// render according to a SQL date format.
@@ -1792,33 +1793,33 @@ Ext.onReady(function(){
 			start: 0,
 			limit: pageS,
 			//variable here
-			paket_id	:	paket_id_search, 
-			paket_kode	:	paket_kode_search, 
-			paket_kodelama	:	paket_kodelama_search, 
-			paket_nama	:	paket_nama_search, 
-			paket_group	:	paket_group_search, 
-			paket_keterangan	:	paket_keterangan_search, 
-			paket_du	:	paket_du_search, 
-			paket_dm	:	paket_dm_search, 
-			paket_point	:	paket_point_search, 
-			paket_harga	:	paket_harga_search, 
-			paket_expired	:	paket_expired_search, 
-			paket_aktif	:	paket_aktif_search, 
+			paket_id	:	paket_id_search,
+			paket_kode	:	paket_kode_search,
+			paket_kodelama	:	paket_kodelama_search,
+			paket_nama	:	paket_nama_search,
+			paket_group	:	paket_group_search,
+			paket_keterangan	:	paket_keterangan_search,
+			paket_du	:	paket_du_search,
+			paket_dm	:	paket_dm_search,
+			paket_point	:	paket_point_search,
+			paket_harga	:	paket_harga_search,
+			paket_expired	:	paket_expired_search,
+			paket_aktif	:	paket_aktif_search,
 		};
-		// Cause the datastore to do another query : 
+		// Cause the datastore to do another query :
 		paket_DataStore.reload({params: {start: 0, limit: pageS}});
 	}
-		
+
 	/* Function for reset search result */
 	function paket_reset_search(){
 		// reset the store parameters
 		paket_DataStore.baseParams = { task: 'LIST',start:0,limit:pageS };
-		// Cause the datastore to do another query : 
+		// Cause the datastore to do another query :
 		paket_DataStore.reload({params: {start: 0, limit: pageS}});
 		paket_searchWindow.close();
 	};
 	/* End of Fuction */
-	
+
 	function paket_reset_SearchForm(){
 		paket_idSearchField.reset();
 		paket_idSearchField.setValue(null);
@@ -1845,7 +1846,7 @@ Ext.onReady(function(){
 		paket_aktifSearchField.reset();
 		paket_aktifSearchField.setValue(null);
 	}
-	
+
 	/* Field for search */
 	/* Identify  paket_id Field */
 	paket_idSearchField= new Ext.form.NumberField({
@@ -1946,13 +1947,13 @@ Ext.onReady(function(){
 		maskRe: /([0-9]+)$/
 	});
 	/* Identify  paket_harga Field */
-	paket_hargaSearchField= new Ext.form.NumberField({
+	paket_hargaSearchField= new Ext.form.TextField({
 		id: 'paket_hargaSearchField',
 		fieldLabel: 'Harga Jual (Rp.)',
-		allowNegatife : false,
+		valueRenderer: 'numberToCurrency',
+		itemCls: 'rmoney',
 		emptyText: '0',
 		maxLength: 12,
-		allowDecimals: true,
 		width: 60,
 		maskRe: /([0-9]+)$/
 	});
@@ -1981,15 +1982,15 @@ Ext.onReady(function(){
 		valueField: 'paket_aktif_value',
 		//anchor: '30%',
 		width: 80,
-		triggerAction: 'all'	
+		triggerAction: 'all'
 	});
-    
+
 	/* Function for retrieve search Form Panel */
 	paket_searchForm = new Ext.FormPanel({
 		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
-		width: 600,        
+		width: 600,
 		items: [{
 			layout:'column',
 			border:false,
@@ -1998,13 +1999,13 @@ Ext.onReady(function(){
 						columnWidth: 0.5,
 						layout: 'form',
 						border:false,
-						items: [paket_kodelamaSearchField, paket_kodeSearchField, paket_namaSearchField, paket_groupSearchField, paket_hargaSearchField, paket_duSearchField, paket_dmSearchField] 
+						items: [paket_kodelamaSearchField, paket_kodeSearchField, paket_namaSearchField, paket_groupSearchField, paket_hargaSearchField, paket_duSearchField, paket_dmSearchField]
 					}
 					,{
 						columnWidth:0.5,
 						layout: 'form',
 						border:false,
-						items: [paket_expiredSearchField, paket_pointSearchField, paket_keteranganSearchField, paket_aktifSearchField,paket_idSearchField] 
+						items: [paket_expiredSearchField, paket_pointSearchField, paket_keteranganSearchField, paket_aktifSearchField,paket_idSearchField]
 					}
 					]
 		}]
@@ -2020,8 +2021,8 @@ Ext.onReady(function(){
 			}
 		]
 	});
-    /* End of Function */ 
-	 
+    /* End of Function */
+
 	/* Function for retrieve search Window Form, used for andvaced search */
 	paket_searchWindow = new Ext.Window({
 		title: 'Pencarian Paket',
@@ -2037,8 +2038,8 @@ Ext.onReady(function(){
 		renderTo: 'elwindow_paket_search',
 		items: paket_searchForm
 	});
-    /* End of Function */ 
-	 
+    /* End of Function */
+
   	/* Function for Displaying  Search Window Form */
 	function display_form_search_window(){
 		if(!paket_searchWindow.isVisible()){
@@ -2049,7 +2050,7 @@ Ext.onReady(function(){
 		}
 	}
   	/* End Function */
-	
+
 	/* Function for print List Grid */
 	function paket_print(){
 		var searchquery = "";
@@ -2064,7 +2065,7 @@ Ext.onReady(function(){
 		var paket_harga_print=null;
 		var paket_expired_print=null;
 		var paket_aktif_print=null;
-		var win;              
+		var win;
 		// check if we do have some search data...
 		if(paket_DataStore.baseParams.query!==null){searchquery = paket_DataStore.baseParams.query;}
 		if(paket_DataStore.baseParams.paket_kode!==null){paket_kode_print = paket_DataStore.baseParams.paket_kode;}
@@ -2079,7 +2080,7 @@ Ext.onReady(function(){
 		if(paket_DataStore.baseParams.paket_expired!==null){paket_expired_print = paket_DataStore.baseParams.paket_expired;}
 		if(paket_DataStore.baseParams.paket_aktif!==null){paket_aktif_print = paket_DataStore.baseParams.paket_aktif;}
 
-		Ext.Ajax.request({   
+		Ext.Ajax.request({
 		waitMsg: 'Please Wait...',
 		url: 'index.php?c=c_paket&m=get_action',
 		params: {
@@ -2098,13 +2099,13 @@ Ext.onReady(function(){
 			paket_expired : paket_expired_print,
 			paket_aktif : paket_aktif_print,
 		  	currentlisting: paket_DataStore.baseParams.task // this tells us if we are searching or not
-		}, 
-		success: function(response){              
+		},
+		success: function(response){
 		  	var result=eval(response.responseText);
 		  	switch(result){
 		  	case 1:
 				win = window.open('./paketlist.html','paketlist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
-				
+
 				break;
 		  	default:
 				Ext.MessageBox.show({
@@ -2115,7 +2116,7 @@ Ext.onReady(function(){
 					icon: Ext.MessageBox.WARNING
 				});
 				break;
-		  	}  
+		  	}
 		},
 		failure: function(response){
 		  	var result=response.responseText;
@@ -2125,12 +2126,12 @@ Ext.onReady(function(){
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR
-			});		
-		} 	                     
+			});
+		}
 		});
 	}
 	/* Enf Function */
-	
+
 	/* Function for print Export to Excel Grid */
 	function paket_export_excel(){
 		var searchquery = "";
@@ -2145,7 +2146,7 @@ Ext.onReady(function(){
 		var paket_harga_2excel=null;
 		var paket_expired_2excel=null;
 		var paket_aktif_2excel=null;
-		var win;              
+		var win;
 		// check if we do have some search data...
 		if(paket_DataStore.baseParams.query!==null){searchquery = paket_DataStore.baseParams.query;}
 		if(paket_DataStore.baseParams.paket_kode!==null){paket_kode_2excel = paket_DataStore.baseParams.paket_kode;}
@@ -2160,7 +2161,7 @@ Ext.onReady(function(){
 		if(paket_DataStore.baseParams.paket_expired!==null){paket_expired_2excel = paket_DataStore.baseParams.paket_expired;}
 		if(paket_DataStore.baseParams.paket_aktif!==null){paket_aktif_2excel = paket_DataStore.baseParams.paket_aktif;}
 
-		Ext.Ajax.request({   
+		Ext.Ajax.request({
 		waitMsg: 'Please Wait...',
 		url: 'index.php?c=c_paket&m=get_action',
 		params: {
@@ -2180,7 +2181,7 @@ Ext.onReady(function(){
 			paket_aktif : paket_aktif_2excel,
 		  	currentlisting: paket_DataStore.baseParams.task // this tells us if we are searching or not
 		},
-		success: function(response){              
+		success: function(response){
 		  	var result=eval(response.responseText);
 		  	switch(result){
 		  	case 1:
@@ -2195,7 +2196,7 @@ Ext.onReady(function(){
 					icon: Ext.MessageBox.WARNING
 				});
 				break;
-		  	}  
+		  	}
 		},
 		failure: function(response){
 		  	var result=response.responseText;
@@ -2205,15 +2206,15 @@ Ext.onReady(function(){
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR
-			});    
-		} 	                     
+			});
+		}
 		});
 	}
 	/*End of Function */
-	
+
 	paket_hargaField.on('focus',function(){ paket_hargaField.setValue(convertToNumber(paket_hargaField.getValue())); });
 	paket_hargaField.on('blur',function(){ paket_hargaField.setValue(CurrencyFormatted(paket_hargaField.getValue())); });
-	
+
 });
 	</script>
 <body>
