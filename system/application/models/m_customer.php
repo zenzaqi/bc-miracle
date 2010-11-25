@@ -927,15 +927,16 @@ class M_customer extends Model{
 		}
 		
 		//function for print record
-		function customer_print($cust_id,$cust_no,$cust_nama,$cust_kelamin,$cust_alamat,
+		function customer_print($cust_id,$cust_no,$cust_no_awal ,$cust_no_akhir,$cust_nama,$cust_kelamin,$cust_alamat,
 		$cust_alamat2,$cust_kota,$cust_kodepos,$cust_propinsi,$cust_negara,
 		$cust_telprumah,$cust_telprumah2,$cust_telpkantor,$cust_hp,
 		$cust_hp2,$cust_hp3,$cust_email,$cust_agama,$cust_pendidikan,
 		$cust_profesi,$cust_tgllahir,$cust_hobi,$cust_referensi,$cust_keterangan,
-		$cust_member,$cust_terdaftar,$cust_statusnikah,$cust_priority,$cust_jmlanak,
-		$cust_unit,$cust_aktif,$cust_creator,$cust_date_create,$cust_update,
+		$cust_member, $cust_member2, $cust_terdaftar,$cust_statusnikah,$cust_priority,$cust_jmlanak,
+		$cust_unit,$cust_aktif, $sortby, $cust_fretfulness,$cust_creator,$cust_date_create,$cust_update,
 		$cust_date_update,$cust_revised,$option,$filter){
-
+			if ($cust_fretfulness=="")
+				$cust_fretfulness = "Undefined";
 			if ($cust_aktif=="")
 				$cust_aktif = "Aktif";
 			//full query
@@ -1118,7 +1119,9 @@ class M_customer extends Model{
 		}
 		
 		//function  for export to excel
-		function customer_export_excel($cust_id ,$cust_no ,$cust_nama ,$cust_kelamin ,$cust_alamat ,$cust_alamat2 ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tgllahir ,$cust_hobi ,$cust_referensi ,$cust_keterangan ,$cust_member ,$cust_terdaftar ,$cust_statusnikah , $cust_priority , $cust_jmlanak ,$cust_unit ,$cust_aktif ,$cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$option,$filter){
+		function customer_export_excel($cust_id ,$cust_no,$cust_no_awal ,$cust_no_akhir ,$cust_nama ,$cust_kelamin ,$cust_alamat ,$cust_alamat2 ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tgllahir ,$cust_hobi ,$cust_referensi ,$cust_keterangan ,$cust_member, $cust_member2, $cust_terdaftar ,$cust_statusnikah , $cust_priority , $cust_jmlanak ,$cust_unit ,$cust_aktif, $sortby,$cust_fretfulness,$cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$option,$filter){
+			if ($cust_fretfulness=="")
+				$cust_fretfulness = "Undefined";
 			//full query
 			$query="select
 						if(cust_no='','-',ifnull(cust_no,'-')) AS no_cust,
@@ -1142,149 +1145,201 @@ class M_customer extends Model{
 				$result = $this->db->query($query);
 			} else if($option=='SEARCH'){
 				if($cust_id!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " cust_id LIKE '%".$cust_id."%'";
+			};
+			if($cust_no!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " cust_no LIKE '%".$cust_no."%'";
+			};
+			if($cust_no_awal!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " cust_id LIKE '%".$cust_id."%'";
+					$query.= " right(cust_no,6) BETWEEN '".$cust_no_awal."' AND '".$cust_no_akhir."'";
 				};
-				if($cust_no!=''){
+			if($cust_nama!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " cust_nama LIKE '%".$cust_nama."%'";
+			};
+			if($cust_kelamin!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " cust_kelamin LIKE '%".$cust_kelamin."%'";
+			};
+			if($cust_alamat!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " cust_alamat LIKE '%".$cust_alamat."%'";
+			};
+			if($cust_alamat2!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " cust_alamat2 LIKE '%".$cust_alamat2."%'";
+			};
+			if($cust_kota!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " cust_kota LIKE '%".$cust_kota."%'";
+			};
+			if($cust_kodepos!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " cust_kodepos LIKE '%".$cust_kodepos."%'";
+			};
+			if($cust_propinsi!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " cust_propinsi LIKE '%".$cust_propinsi."%'";
+			};
+			if($cust_negara!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " cust_negara LIKE '%".$cust_negara."%'";
+			};
+			if($cust_telprumah!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " cust_telprumah LIKE '%".$cust_telprumah."%'";
+			};
+			if($cust_telprumah2!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " cust_telprumah2 LIKE '%".$cust_telprumah2."%'";
+			};
+			if($cust_telpkantor!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " cust_telpkantor LIKE '%".$cust_telpkantor."%'";
+			};
+			if($cust_hp!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " cust_hp LIKE '%".$cust_hp."%'";
+			};
+			if($cust_hp2!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " cust_hp2 LIKE '%".$cust_hp2."%'";
+			};
+			if($cust_hp3!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " cust_hp3 LIKE '%".$cust_hp3."%'";
+			};
+			if($cust_email!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " cust_email LIKE '%".$cust_email."%'";
+			};
+			if($cust_agama!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " cust_agama LIKE '%".$cust_agama."%'";
+			};
+			if($cust_pendidikan!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " cust_pendidikan LIKE '%".$cust_pendidikan."%'";
+			};
+			if($cust_profesi!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " cust_profesi LIKE '%".$cust_profesi."%'";
+			};
+			if($cust_tgllahir!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " cust_tgllahir LIKE '%".$cust_tgllahir."%'";
+			};
+			if($cust_hobi!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " cust_hobi LIKE '%".$cust_hobi."%'";
+			};
+			if($cust_referensi!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " cust_referensi LIKE '%".$cust_referensi."%'";
+			};
+			if($cust_keterangan!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " cust_keterangan LIKE '%".$cust_keterangan."%'";
+			};
+			if($cust_member!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " cust_member LIKE '%".$cust_member."%'";
+			};
+			if($cust_member2!=''){
+				$date_now = date('Y-m-d');
+				if($cust_member2=='Semua'){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " cust_no LIKE '%".$cust_no."%'";
-				};
-				if($cust_nama!=''){
+					$query.= " cust_member <> ''";
+				} 
+				else if($cust_member2=='Aktif'){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " cust_nama LIKE '%".$cust_nama."%'";
-				};
-				if($cust_kelamin!=''){
+					$query.= " member_valid > '".$date_now."'";
+				}
+				else if($cust_member2=='Tidak Aktif'){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " cust_kelamin LIKE '%".$cust_kelamin."%'";
-				};
-				if($cust_alamat!=''){
+					$query.= " member_valid < '".$date_now."'";
+				}
+				else if($cust_member2=='Non Member'){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " cust_alamat LIKE '%".$cust_alamat."%'";
-				};
-				if($cust_alamat2!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " cust_alamat2 LIKE '%".$cust_alamat2."%'";
-				};
-				if($cust_kota!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " cust_kota LIKE '%".$cust_kota."%'";
-				};
-				if($cust_kodepos!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " cust_kodepos LIKE '%".$cust_kodepos."%'";
-				};
-				if($cust_propinsi!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " cust_propinsi LIKE '%".$cust_propinsi."%'";
-				};
-				if($cust_negara!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " cust_negara LIKE '%".$cust_negara."%'";
-				};
-				if($cust_telprumah!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " cust_telprumah LIKE '%".$cust_telprumah."%'";
-				};
-				if($cust_telprumah2!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " cust_telprumah2 LIKE '%".$cust_telprumah2."%'";
-				};
-				if($cust_telpkantor!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " cust_telpkantor LIKE '%".$cust_telpkantor."%'";
-				};
-				if($cust_hp!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " cust_hp LIKE '%".$cust_hp."%'";
-				};
-				if($cust_hp2!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " cust_hp2 LIKE '%".$cust_hp2."%'";
-				};
-				if($cust_hp3!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " cust_hp3 LIKE '%".$cust_hp3."%'";
-				};
-				if($cust_email!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " cust_email LIKE '%".$cust_email."%'";
-				};
-				if($cust_agama!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " cust_agama LIKE '%".$cust_agama."%'";
-				};
-				if($cust_pendidikan!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " cust_pendidikan LIKE '%".$cust_pendidikan."%'";
-				};
-				if($cust_profesi!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " cust_profesi LIKE '%".$cust_profesi."%'";
-				};
-				if($cust_tgllahir!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " cust_tgllahir LIKE '%".$cust_tgllahir."%'";
-				};
-				if($cust_hobi!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " cust_hobi LIKE '%".$cust_hobi."%'";
-				};
-				if($cust_referensi!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " cust_referensi LIKE '%".$cust_referensi."%'";
-				};
-				if($cust_keterangan!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " cust_keterangan LIKE '%".$cust_keterangan."%'";
-				};
-				if($cust_member!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " cust_member LIKE '%".$cust_member."%'";
-				};
-				if($cust_terdaftar!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " cust_terdaftar LIKE '%".$cust_terdaftar."%'";
-				};
-				if($cust_statusnikah!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " cust_statusnikah LIKE '%".$cust_statusnikah."%'";
-				};
-/*				if($cust_priority!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " cust_priority LIKE '%".$cust_priority."%'";
-				};
-*/				if($cust_jmlanak!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " cust_jmlanak LIKE '%".$cust_jmlanak."%'";
-				};
-				if($cust_unit!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " cust_unit LIKE '%".$cust_unit."%'";
-				};
-				if($cust_aktif!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " cust_aktif LIKE '%".$cust_aktif."%'";
-				};
-				if($cust_creator!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " cust_creator LIKE '%".$cust_creator."%'";
-				};
-				if($cust_date_create!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " cust_date_create LIKE '%".$cust_date_create."%'";
-				};
-				if($cust_update!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " cust_update LIKE '%".$cust_update."%'";
-				};
-				if($cust_date_update!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " cust_date_update LIKE '%".$cust_date_update."%'";
-				};
-				if($cust_revised!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " cust_revised LIKE '%".$cust_revised."%'";
-				};
+					$query.= " cust_member = ''";
+				}
+				
+			};
+			if($cust_terdaftar!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " cust_terdaftar LIKE '%".$cust_terdaftar."%'";
+			};
+			if($cust_statusnikah!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " cust_statusnikah='".$cust_statusnikah."'";
+			};
+			if($cust_priority!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " cust_priority='".$cust_priority."'";
+			};
+			if($cust_jmlanak!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " cust_jmlanak LIKE '%".$cust_jmlanak."%'";
+			};
+			if($cust_unit!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " cust_unit LIKE '%".$cust_unit."%'";
+			};
+			if($cust_aktif!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " cust_aktif LIKE '%".$cust_aktif."%'";
+			};
+			if($cust_fretfulness!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " cust_fretfulness LIKE '%".$cust_fretfulness."%'";
+			};
+			if($sortby=='Nama'){
+				$query.=eregi("WHERE",$query)?" ":" WHERE ";
+				$query.= " ORDER BY cust_nama";
+			};
+			if($sortby=='No Cust'){
+				$query.=eregi("WHERE",$query)?" ":" WHERE ";
+				$query.= " ORDER BY cust_no";
+			};
+			if($sortby=='Alamat'){
+				$query.=eregi("WHERE",$query)?" ":" WHERE ";
+				$query.= " ORDER BY cust_alamat";
+			};
+			if($sortby=='Tgl Lahir'){
+				$query.=eregi("WHERE",$query)?" ":" WHERE ";
+				$query.= " ORDER BY cust_tgllahir";
+			};
+			if($sortby=='Telp Rmh'){
+				$query.=eregi("WHERE",$query)?" ":" WHERE ";
+				$query.= " ORDER BY cust_telprumah";
+			};
+			if($sortby=='Handphone'){
+				$query.=eregi("WHERE",$query)?" ":" WHERE ";
+				$query.= " ORDER BY cust_hp";
+			};
+			if($cust_creator!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " cust_creator LIKE '%".$cust_creator."%'";
+			};
+			if($cust_date_create!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " cust_date_create LIKE '%".$cust_date_create."%'";
+			};
+			if($cust_update!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " cust_update LIKE '%".$cust_update."%'";
+			};
+			if($cust_date_update!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " cust_date_update LIKE '%".$cust_date_update."%'";
+			};
+			if($cust_revised!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " cust_revised LIKE '%".$cust_revised."%'";
+			};
 				$result = $this->db->query($query);
 			}
 			return $result;
