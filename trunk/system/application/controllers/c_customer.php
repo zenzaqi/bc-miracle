@@ -463,11 +463,9 @@ class C_customer extends Controller {
 		$cust_no=trim(@$_POST["cust_no"]);
 		$cust_no=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_no);
 		$cust_no=str_replace("'", '"',$cust_no);
-		
 		$cust_no_awal=trim(@$_POST["cust_no_awal"]);
 		$cust_no_awal=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_no_awal);
 		$cust_no_awal=str_replace("'", '"',$cust_no_awal);
-		
 		$cust_no_akhir=trim(@$_POST["cust_no_akhir"]);
 		$cust_no_akhir=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_no_akhir);
 		$cust_no_akhir=str_replace("'", '"',$cust_no_akhir);
@@ -584,6 +582,12 @@ class C_customer extends Controller {
 		$cust_no=trim(@$_POST["cust_no"]);
 		$cust_no=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_no);
 		$cust_no=str_replace("'", '"',$cust_no);
+		$cust_no_awal=trim(@$_POST["cust_no_awal"]);
+		$cust_no_awal=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_no_awal);
+		$cust_no_awal=str_replace("'", '"',$cust_no_awal);
+		$cust_no_akhir=trim(@$_POST["cust_no_akhir"]);
+		$cust_no_akhir=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_no_akhir);
+		$cust_no_akhir=str_replace("'", '"',$cust_no_akhir);
 		$cust_nama=trim(@$_POST["cust_nama"]);
 		$cust_nama=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_nama);
 		$cust_nama=str_replace("'", '"',$cust_nama);
@@ -651,6 +655,9 @@ class C_customer extends Controller {
 		$cust_member=trim(@$_POST["cust_member"]);
 		$cust_member=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_member);
 		$cust_member=str_replace("'", '"',$cust_member);
+		$cust_member2=trim(@$_POST["cust_member2"]);
+		$cust_member2=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_member2);
+		$cust_member2=str_replace("'", '"',$cust_member2);
 		$cust_terdaftar=trim(@$_POST["cust_terdaftar"]);
 		$cust_statusnikah=trim(@$_POST["cust_statusnikah"]);
 		$cust_statusnikah=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_statusnikah);
@@ -665,6 +672,12 @@ class C_customer extends Controller {
 		$cust_aktif=trim(@$_POST["cust_aktif"]);
 		$cust_aktif=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_aktif);
 		$cust_aktif=str_replace("'", '"',$cust_aktif);
+		$sortby=trim(@$_POST["sortby"]);
+		$sortby=str_replace("/(<\/?)(p)([^>]*>)", "",$sortby);
+		$sortby=str_replace("'", '"',$sortby);
+		$cust_fretfulness=trim(@$_POST["cust_fretfulness"]);
+		$cust_fretfulness=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_fretfulness);
+		$cust_fretfulness=str_replace("'", '"',$cust_fretfulness);
 		$cust_creator=trim(@$_POST["cust_creator"]);
 		$cust_creator=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_creator);
 		$cust_creator=str_replace("'", '"',$cust_creator);
@@ -677,14 +690,48 @@ class C_customer extends Controller {
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$result = $this->m_customer->customer_print($cust_id,$cust_no,$cust_nama,$cust_kelamin,$cust_alamat,$cust_alamat2,$cust_kota,$cust_kodepos,$cust_propinsi,$cust_negara,$cust_telprumah,$cust_telprumah2,$cust_telpkantor,$cust_hp,$cust_hp2,$cust_hp3,$cust_email,$cust_agama,$cust_pendidikan,$cust_profesi,$cust_tgllahir,$cust_hobi,$cust_referensi,$cust_keterangan,$cust_member,$cust_terdaftar,$cust_statusnikah,$cust_priority,$cust_jmlanak,$cust_unit,$cust_aktif,$cust_creator,$cust_date_create,$cust_update,$cust_date_update,$cust_revised,$option,$filter);
+		$result = $this->m_customer->customer_print($cust_id,$cust_no, $cust_no_awal ,$cust_no_akhir,$cust_nama,$cust_kelamin,$cust_alamat,$cust_alamat2,$cust_kota,$cust_kodepos,$cust_propinsi,$cust_negara,$cust_telprumah,$cust_telprumah2,$cust_telpkantor,$cust_hp,$cust_hp2,$cust_hp3,$cust_email,$cust_agama,$cust_pendidikan,$cust_profesi,$cust_tgllahir,$cust_hobi,$cust_referensi,$cust_keterangan,$cust_member, $cust_member2, $cust_terdaftar,$cust_statusnikah,$cust_priority,$cust_jmlanak,$cust_unit,$cust_aktif,$sortby,$cust_fretfulness,$cust_creator,$cust_date_create,$cust_update,$cust_date_update,$cust_revised,$option,$filter);
 		$nbrows=$result->num_rows();
 		$totcolumn=36;
 
    		/* We now have our array, let's build our HTML file */
 		$file = fopen("customerlist.html",'w');
 		fwrite($file, "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' /><title>Printing the Customer Grid</title><link rel='stylesheet' type='text/css' href='assets/modules/main/css/printstyle.css'/></head>");
-		fwrite($file, "<body onload='window.print()'><table summary='Customer List'><caption>CUSTOMER</caption><thead><tr><th scope='col'>Cust Id</th><th scope='col'>Cust No</th><th scope='col'>Cust Nama</th><th scope='col'>Cust Kelamin</th><th scope='col'>Cust Alamat</th><th scope='col'>Cust Alamat2</th><th scope='col'>Cust Kota</th><th scope='col'>Cust Kodepos</th><th scope='col'>Cust Propinsi</th><th scope='col'>Cust Negara</th><th scope='col'>Cust Telprumah</th><th scope='col'>Cust Telprumah2</th><th scope='col'>Cust Telpkantor</th><th scope='col'>Cust Hp</th><th scope='col'>Cust Hp2</th><th scope='col'>Cust Hp3</th><th scope='col'>Cust Email</th><th scope='col'>Cust Agama</th><th scope='col'>Cust Pendidikan</th><th scope='col'>Cust Profesi</th><th scope='col'>Cust Tgllahir</th><th scope='col'>Cust Hobi</th><th scope='col'>Cust Referensi</th><th scope='col'>Cust Keterangan</th><th scope='col'>Cust Member</th><th scope='col'>Cust Terdaftar</th><th scope='col'>Cust Statusnikah</th><th scope='col'>Cust Priority</th><th scope='col'>Cust Jmlanak</th><th scope='col'>Cust Daftar</th><th scope='col'>Cust Unit</th><th scope='col'>Cust Aktif</th><th scope='col'>Cust Creator</th><th scope='col'>Cust Date Create</th><th scope='col'>Cust Update</th><th scope='col'>Cust Date Update</th><th scope='col'>Cust Revised</th></tr></thead><tfoot><tr><th scope='row'>Total</th><td colspan='$totcolumn'>");
+		fwrite($file, "<body onload='window.print()'>
+		<table summary='Customer List'><caption>CUSTOMER</caption>
+		<thead><tr>
+			<th scope='col'>Cust Id</th>
+			<th scope='col'>Cust No</th>
+			<th scope='col'>Cust Nama</th>
+			<th scope='col'>Cust Kelamin</th>
+			<th scope='col'>Cust Alamat</th>
+			<th scope='col'>Cust Alamat2</th>
+			<th scope='col'>Cust Kota</th>
+			<th scope='col'>Cust Kodepos</th>
+			<th scope='col'>Cust Propinsi</th>
+			<th scope='col'>Cust Negara</th>
+			<th scope='col'>Cust Email</th>
+			<th scope='col'>Cust Agama</th>
+			<th scope='col'>Cust Pendidikan</th>
+			<th scope='col'>Cust Profesi</th>
+			<th scope='col'>Cust Tgllahir</th>
+			<th scope='col'>Cust Hobi</th>
+			<th scope='col'>Cust Referensi</th>
+			<th scope='col'>Cust Keterangan</th>
+			<th scope='col'>Cust Member</th>
+			<th scope='col'>Cust Terdaftar</th>
+			<th scope='col'>Cust Statusnikah</th>
+			<th scope='col'>Cust Priority</th>
+			<th scope='col'>Cust Jmlanak</th>
+			<th scope='col'>Cust Daftar</th>
+			<th scope='col'>Cust Unit</th>
+			<th scope='col'>Cust Aktif</th>
+			<th scope='col'>Cust Creator</th>
+			<th scope='col'>Cust Date Create</th>
+			<th scope='col'>Cust Update</th>
+			<th scope='col'>Cust Date Update</th>
+			<th scope='col'>Cust Revised</th></tr>
+			</thead><tfoot><tr><th scope='row'>Total</th><td colspan='$totcolumn'>");
 		fwrite($file, $nbrows);
 		fwrite($file, " Customer</td></tr></tfoot><tbody>");
 		$i=0;
@@ -716,6 +763,7 @@ class C_customer extends Controller {
 				fwrite($file,"</td><td>");
 				fwrite($file, $data['cust_negara']);
 				fwrite($file,"</td><td>");
+				/*
 				fwrite($file, $data['cust_telprumah']);
 				fwrite($file,"</td><td>");
 				fwrite($file, $data['cust_telprumah2']);
@@ -728,6 +776,7 @@ class C_customer extends Controller {
 				fwrite($file,"</td><td>");
 				fwrite($file, $data['cust_hp3']);
 				fwrite($file,"</td><td>");
+				*/
 				fwrite($file, $data['cust_email']);
 				fwrite($file,"</td><td>");
 				fwrite($file, $data['cust_agama']);
@@ -915,6 +964,12 @@ class C_customer extends Controller {
 		$cust_no=trim(@$_POST["cust_no"]);
 		$cust_no=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_no);
 		$cust_no=str_replace("'", '"',$cust_no);
+		$cust_no_awal=trim(@$_POST["cust_no_awal"]);
+		$cust_no_awal=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_no_awal);
+		$cust_no_awal=str_replace("'", '"',$cust_no_awal);
+		$cust_no_akhir=trim(@$_POST["cust_no_akhir"]);
+		$cust_no_akhir=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_no_akhir);
+		$cust_no_akhir=str_replace("'", '"',$cust_no_akhir);
 		$cust_nama=trim(@$_POST["cust_nama"]);
 		$cust_nama=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_nama);
 		$cust_nama=str_replace("'", '"',$cust_nama);
@@ -982,6 +1037,9 @@ class C_customer extends Controller {
 		$cust_member=trim(@$_POST["cust_member"]);
 		$cust_member=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_member);
 		$cust_member=str_replace("'", '"',$cust_member);
+		$cust_member2=trim(@$_POST["cust_member2"]);
+		$cust_member2=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_member2);
+		$cust_member2=str_replace("'", '"',$cust_member2);
 		$cust_terdaftar=trim(@$_POST["cust_terdaftar"]);
 		$cust_statusnikah=trim(@$_POST["cust_statusnikah"]);
 		$cust_statusnikah=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_statusnikah);
@@ -996,6 +1054,12 @@ class C_customer extends Controller {
 		$cust_aktif=trim(@$_POST["cust_aktif"]);
 		$cust_aktif=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_aktif);
 		$cust_aktif=str_replace("'", '"',$cust_aktif);
+		$sortby=trim(@$_POST["sortby"]);
+		$sortby=str_replace("/(<\/?)(p)([^>]*>)", "",$sortby);
+		$sortby=str_replace("'", '"',$sortby);
+		$cust_fretfulness=trim(@$_POST["cust_fretfulness"]);
+		$cust_fretfulness=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_fretfulness);
+		$cust_fretfulness=str_replace("'", '"',$cust_fretfulness);
 		$cust_creator=trim(@$_POST["cust_creator"]);
 		$cust_creator=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_creator);
 		$cust_creator=str_replace("'", '"',$cust_creator);
@@ -1008,7 +1072,7 @@ class C_customer extends Controller {
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$query = $this->m_customer->customer_export_excel($cust_id ,$cust_no ,$cust_nama ,$cust_kelamin ,$cust_alamat ,$cust_alamat2 ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tgllahir ,$cust_hobi ,$cust_referensi ,$cust_keterangan ,$cust_member ,$cust_terdaftar ,$cust_statusnikah , $cust_priority , $cust_jmlanak ,$cust_unit ,$cust_aktif ,$cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$option,$filter);
+		$query = $this->m_customer->customer_export_excel($cust_id ,$cust_no, $cust_no_awal ,$cust_no_akhir ,$cust_nama ,$cust_kelamin ,$cust_alamat ,$cust_alamat2 ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tgllahir ,$cust_hobi ,$cust_referensi ,$cust_keterangan ,$cust_member ,$cust_member2, $cust_terdaftar ,$cust_statusnikah , $cust_priority , $cust_jmlanak ,$cust_unit ,$cust_aktif, $sortby,$cust_fretfulness,$cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$option,$filter);
 		
 		to_excel($query,"customer"); 
 		echo '1';
