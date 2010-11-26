@@ -335,9 +335,10 @@ Ext.onReady(function(){
 		
 		}, 
 		{
-			header: '<div align="center">Jan</div>',
+			header: '<div align="r">Jan</div>',
 			dataIndex: 'setsr_jan',
 			width: 50,
+			align: 'right',
 			sortable: true,
 			editor: new Ext.form.NumberField({
 				allowDecimals: false,
@@ -353,6 +354,7 @@ Ext.onReady(function(){
 			header: '<div align="center">Feb</div>',
 			dataIndex: 'setsr_feb',
 			width: 50,
+			align: 'right',
 			sortable: true,
 			editor: new Ext.form.NumberField({
 				allowDecimals: false,
@@ -367,6 +369,7 @@ Ext.onReady(function(){
 			header: '<div align="center">Mar</div>',
 			dataIndex: 'setsr_mar',
 			width: 50,
+			align: 'right',
 			sortable: true,
 			editor: new Ext.form.NumberField({
 				allowDecimals: false,
@@ -381,6 +384,7 @@ Ext.onReady(function(){
 			header: '<div align="center">Apr</div>',
 			dataIndex: 'setsr_apr',
 			width: 50,
+			align: 'right',
 			sortable: true,
 			editor: new Ext.form.NumberField({
 				allowDecimals: false,
@@ -395,6 +399,7 @@ Ext.onReady(function(){
 			header: '<div align="center">May</div>',
 			dataIndex: 'setsr_may',
 			width: 50,
+			align: 'right',
 			sortable: true,
 			editor: new Ext.form.NumberField({
 				allowDecimals: false,
@@ -409,6 +414,7 @@ Ext.onReady(function(){
 			header: '<div align="center">Jun</div>',
 			dataIndex: 'setsr_jun',
 			width: 50,
+			align: 'right',
 			sortable: true,
 			editor: new Ext.form.NumberField({
 				allowDecimals: false,
@@ -423,6 +429,7 @@ Ext.onReady(function(){
 			header: '<div align="center">Jul</div>',
 			dataIndex: 'setsr_jul',
 			width: 50,
+			align: 'right',
 			sortable: true,
 			editor: new Ext.form.NumberField({
 				allowDecimals: false,
@@ -437,6 +444,7 @@ Ext.onReady(function(){
 			header: '<div align="center">Aug</div>',
 			dataIndex: 'setsr_aug',
 			width: 50,
+			align: 'right',
 			sortable: true,
 			editor: new Ext.form.NumberField({
 				allowDecimals: false,
@@ -451,6 +459,7 @@ Ext.onReady(function(){
 			header: '<div align="center">Sep</div>',
 			dataIndex: 'setsr_sep',
 			width: 50,
+			align: 'right',
 			sortable: true,
 			editor: new Ext.form.NumberField({
 				allowDecimals: false,
@@ -465,6 +474,7 @@ Ext.onReady(function(){
 			header: '<div align="center">Oct</div>',
 			dataIndex: 'setsr_oct',
 			width: 50,
+			align: 'right',
 			sortable: true,
 			editor: new Ext.form.NumberField({
 				allowDecimals: false,
@@ -479,6 +489,7 @@ Ext.onReady(function(){
 			header: '<div align="center">Nov</div>',
 			dataIndex: 'setsr_nov',
 			width: 50,
+			align: 'right',
 			sortable: true,
 			editor: new Ext.form.NumberField({
 				allowDecimals: false,
@@ -493,6 +504,7 @@ Ext.onReady(function(){
 			header: '<div align="center">Dec</div>',
 			dataIndex: 'setsr_dec',
 			width: 50,
+			align: 'right',
 			sortable: true,
 			editor: new Ext.form.NumberField({
 				allowDecimals: false,

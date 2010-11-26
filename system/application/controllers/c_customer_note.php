@@ -87,6 +87,9 @@ class C_customer_note extends Controller {
 		$note_detail=str_replace("/(<\/?)(p)([^>]*>)", "",$note_detail);
 		$note_detail=str_replace(",", ",",$note_detail);
 		$note_detail=str_replace("'", '"',$note_detail);
+		$note_aktif=trim(@$_POST["note_aktif"]);
+		$note_aktif=str_replace("/(<\/?)(p)([^>]*>)", "",$note_aktif);
+		$note_aktif=str_replace("'", '"',$note_aktif);
 		$note_creator=trim(@$_POST["note_creator"]);
 		$note_creator=str_replace("/(<\/?)(p)([^>]*>)", "",$note_creator);
 		$note_creator=str_replace(",", ",",$note_creator);
@@ -98,7 +101,7 @@ class C_customer_note extends Controller {
 		$note_update=str_replace("'", '"',$note_update);
 		$note_date_update=trim(@$_POST["note_date_update"]);
 		$note_revised=trim(@$_POST["note_revised"]);
-		$result = $this->m_customer_note->customer_note_update($note_id ,$note_customer ,$note_tanggal ,$note_detail ,$note_creator ,$note_date_create ,$note_update ,$note_date_update ,$note_revised );
+		$result = $this->m_customer_note->customer_note_update($note_id ,$note_customer ,$note_tanggal ,$note_detail ,$note_aktif, $note_creator ,$note_date_create ,$note_update ,$note_date_update ,$note_revised );
 		echo $result;
 	}
 	
@@ -111,6 +114,9 @@ class C_customer_note extends Controller {
 		$note_detail=trim(@$_POST["note_detail"]);
 		$note_detail=str_replace("/(<\/?)(p)([^>]*>)", "",$note_detail);
 		$note_detail=str_replace("'", '"',$note_detail);
+		$note_aktif=trim(@$_POST["note_aktif"]);
+		$note_aktif=str_replace("/(<\/?)(p)([^>]*>)", "",$note_aktif);
+		$note_aktif=str_replace("'", '"',$note_aktif);
 		$note_creator=trim(@$_POST["note_creator"]);
 		$note_creator=str_replace("/(<\/?)(p)([^>]*>)", "",$note_creator);
 		$note_creator=str_replace("'", '"',$note_creator);
@@ -120,7 +126,7 @@ class C_customer_note extends Controller {
 		$note_update=str_replace("'", '"',$note_update);
 		$note_date_update=trim(@$_POST["note_date_update"]);
 		$note_revised=trim(@$_POST["note_revised"]);
-		$result=$this->m_customer_note->customer_note_create($note_customer ,$note_tanggal ,$note_detail ,$note_creator ,$note_date_create ,$note_update ,$note_date_update ,$note_revised );
+		$result=$this->m_customer_note->customer_note_create($note_customer ,$note_tanggal ,$note_detail ,$note_aktif, $note_creator ,$note_date_create ,$note_update ,$note_date_update ,$note_revised );
 		echo $result;
 	}
 
@@ -141,6 +147,9 @@ class C_customer_note extends Controller {
 		$note_detail=trim(@$_POST["note_detail"]);
 		$note_detail=str_replace("/(<\/?)(p)([^>]*>)", "",$note_detail);
 		$note_detail=str_replace("'", '"',$note_detail);
+		$note_aktif=trim(@$_POST["note_aktif"]);
+		$note_aktif=str_replace("/(<\/?)(p)([^>]*>)", "",$note_aktif);
+		$note_aktif=str_replace("'", '"',$note_aktif);
 		$note_creator=trim(@$_POST["note_creator"]);
 		$note_creator=str_replace("/(<\/?)(p)([^>]*>)", "",$note_creator);
 		$note_creator=str_replace("'", '"',$note_creator);
@@ -153,7 +162,7 @@ class C_customer_note extends Controller {
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_customer_note->customer_note_search($note_id ,$note_customer ,$note_tanggal ,$note_detail ,$note_creator ,$note_date_create ,$note_update ,$note_date_update ,$note_revised ,$start,$end);
+		$result = $this->m_customer_note->customer_note_search($note_id ,$note_customer ,$note_tanggal ,$note_detail ,$note_aktif, $note_creator ,$note_date_create ,$note_update ,$note_date_update ,$note_revised ,$start,$end);
 		echo $result;
 	}
 
