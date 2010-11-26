@@ -63,6 +63,7 @@ var note_idField;
 var note_customerField;
 var note_tanggalField;
 var note_detailField;
+var note_aktifField;
 var dt= new Date();
 
 var note_idSearchField;
@@ -80,12 +81,14 @@ Ext.onReady(function(){
 		var note_customer_update=null;
 		var note_tanggal_update_date="";
 		var note_detail_update=null;
+		var note_aktif_update=null;
 	
 	
 		note_id_update_pk = oGrid_event.record.data.note_id;
 		if(oGrid_event.record.data.note_customer!== null){note_customer_update = oGrid_event.record.data.note_customer;}
 		if(oGrid_event.record.data.note_tanggal!== ""){note_tanggal_update_date = oGrid_event.record.data.note_tanggal.format('Y-m-d');}
 		if(oGrid_event.record.data.note_detail!== null){note_detail_update = oGrid_event.record.data.note_detail;}
+		if(oGrid_event.record.data.note_aktif!== null){note_aktif_update = oGrid_event.record.data.note_aktif;}
 
 		Ext.Ajax.request({  
 			waitMsg: 'Please wait...',
@@ -95,7 +98,8 @@ Ext.onReady(function(){
 				note_id			: note_id_update_pk,				
 				note_customer	: note_customer_update,		
 				note_tanggal	: note_tanggal_update_date,				
-				note_detail		: note_detail_update		
+				note_detail		: note_detail_update,
+				note_aktif		: note_aktif_update
 			}, 
 			success: function(response){							
 				var result=eval(response.responseText);
@@ -138,11 +142,13 @@ Ext.onReady(function(){
 		var note_customer_create=null;
 		var note_tanggal_create_date="";
 		var note_detail_create=null;
+		var note_aktif_create=null;
 
 		note_id_create_pk=get_pk_id();
 		if(note_customerField.getValue()!== null){note_customer_create = note_customerField.getValue();}
 		if(note_tanggalField.getValue()!== ""){note_tanggal_create_date = note_tanggalField.getValue().format('d-m-Y H:i:s');}
 		if(note_detailField.getValue()!== null){note_detail_create = note_detailField.getValue();}
+		if(note_aktifField.getValue()!== null){note_aktif_create = note_aktifField.getValue();}
 
 			Ext.Ajax.request({  
 				waitMsg: 'Please wait...',
@@ -152,7 +158,8 @@ Ext.onReady(function(){
 					note_id			: note_id_create_pk,	
 					note_customer	: note_customer_create,	
 					note_tanggal	: note_tanggal_create_date,					
-					note_detail		: note_detail_create
+					note_detail		: note_detail_create,
+					note_aktif		: note_aktif_create
 				}, 
 				success: function(response){   
 					var result=eval(response.responseText);
@@ -216,6 +223,8 @@ Ext.onReady(function(){
 		note_customerField.reset();
 		note_customerField.setValue(null);
 		note_customerField.setDisabled(false);
+		note_aktifField.reset();
+		note_aktifField.setValue('Aktif');
 	}
  	/* End of Function */
   
@@ -224,6 +233,7 @@ Ext.onReady(function(){
 		note_customerField.setValue(customer_noteListEditorGrid.getSelectionModel().getSelected().get('note_customer'));
 		note_tanggalField.setValue(customer_noteListEditorGrid.getSelectionModel().getSelected().get('note_tanggal'));
 		note_detailField.setValue(customer_noteListEditorGrid.getSelectionModel().getSelected().get('note_detail'));
+		note_aktifField.setValue(customer_noteListEditorGrid.getSelectionModel().getSelected().get('note_aktif'));
 		note_customerField.setDisabled(true);
 		
 	}
@@ -352,6 +362,7 @@ Ext.onReady(function(){
 			{name: 'note_customer', type: 'string', mapping: 'cust_nama'},
 			{name: 'note_tanggal', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'note_tanggal'},
 			{name: 'note_detail', type: 'string', mapping: 'note_detail'},
+			{name: 'note_aktif', type: 'string', mapping: 'note_aktif'},
 			{name: 'note_creator', type: 'string', mapping: 'note_creator'},
 			{name: 'note_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'note_date_create'},
 			{name: 'note_update', type: 'string', mapping: 'note_update'},
@@ -434,6 +445,29 @@ Ext.onReady(function(){
           	})
 			<?php } ?>
 		},
+		{
+			header: '<div align="center">' + 'Status' + '</div>',
+			dataIndex: 'note_aktif',
+			width: 45,	//150,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_CUSTCAT'))){ ?>
+			,
+			editor: new Ext.form.ComboBox({
+				typeAhead: true,
+				triggerAction: 'all',
+				store:new Ext.data.SimpleStore({
+					fields:['note_aktif_value', 'note_aktif_display'],
+					data: [['Aktif','Aktif'],['Tidak Aktif','Tidak Aktif']]
+					}),
+				mode: 'local',
+               	displayField: 'note_aktif_display',
+               	valueField: 'note_aktif_value',
+               	lazyRender:true,
+               	listClass: 'x-combo-list-small'
+            })
+			<?php } ?>
+		},
+		
 		{
 			header: 'Creator',
 			dataIndex: 'note_creator',
@@ -664,6 +698,24 @@ Ext.onReady(function(){
 		anchor: '95%'
 	});
 	
+	/* Identify  note_aktif Field */
+	note_aktifField= new Ext.form.ComboBox({
+		id: 'note_aktifField',
+		fieldLabel: 'Status',
+		store:new Ext.data.SimpleStore({
+			fields:['note_aktif_value', 'note_aktif_display'],
+			data:[['Aktif','Aktif'],['Tidak Aktif','Tidak Aktif']]
+		}),
+		mode: 'local',
+		emptyText: 'Aktif',
+		//allowBlank: true,
+		displayField: 'note_aktif_display',
+		valueField: 'note_aktif_value',
+		anchor: '50%',
+		triggerAction: 'all'	
+	});
+	
+	
 	/* Function for retrieve create Window Panel*/ 
 	customer_note_createForm = new Ext.FormPanel({
 		labelAlign: 'left',
@@ -678,7 +730,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [note_customerField, note_tanggalField, note_detailField] 
+				items: [note_customerField, note_tanggalField, note_detailField, note_aktifField] 
 			}
 			]
 		}]
@@ -727,12 +779,14 @@ Ext.onReady(function(){
 		var note_customer_search=null;
 		var note_tanggal_search_date="";
 		var note_detail_search=null;
+		var note_aktif_search=null;
 
 
 		if(note_idSearchField.getValue()!==null){note_id_search=note_idSearchField.getValue();}
 		if(note_customerSearchField.getValue()!==null){note_customer_search=note_customerSearchField.getValue();}
 		if(note_tanggalSearchField.getValue()!==""){note_tanggal_search_date=note_tanggalSearchField.getValue().format('Y-m-d');}
 		if(note_detailSearchField.getValue()!==null){note_detail_search=note_detailSearchField.getValue();}
+		if(note_aktifSearchField.getValue()!==null){note_aktif_search=note_aktifSearchField.getValue();}
 	
 		// change the store parameters
 		customer_note_DataStore.baseParams = {
@@ -741,7 +795,8 @@ Ext.onReady(function(){
 			note_id	:	note_id_search, 
 			note_customer	:	note_customer_search, 
 			note_tanggal	:	note_tanggal_search_date, 
-			note_detail	:	note_detail_search
+			note_detail	:	note_detail_search,
+			note_aktif	:	note_aktif_search
 		};
 		// Cause the datastore to do another query : 
 		customer_note_DataStore.reload({params: {start: 0, limit: pageS}});
@@ -762,6 +817,8 @@ Ext.onReady(function(){
 		note_customerSearchField.reset();
 		note_tanggalSearchField.reset();
 		note_detailSearchField.reset();
+		note_aktifSearchField.setValue(null);
+		note_aktifSearchField.reset();
 	}
 	
 	/* Field for search */
@@ -797,6 +854,25 @@ Ext.onReady(function(){
 		anchor: '95%'
 	
 	});
+	
+	/* Identify note_aktif Search Field*/
+	note_aktifSearchField= new Ext.form.ComboBox({
+		id: 'note_aktifSearchField',
+		fieldLabel: 'Status',
+		store:new Ext.data.SimpleStore({
+			fields:['note_aktif_value', 'note_aktif_display'],
+			data:[['Aktif','Aktif'],['Tidak Aktif','Tidak Aktif']]
+		}),
+		mode: 'local',
+		//emptyText: 'Aktif',
+		//allowBlank: true,
+		displayField: 'note_aktif_display',
+		valueField: 'note_aktif_value',
+		anchor: '50%',
+		triggerAction: 'all'	
+	});
+	
+
 	/* Identify  note_tanggal Search Field */
 	note_tanggalSearchField= new Ext.form.DateField({
 		id: 'note_tanggalSearchField',
@@ -805,7 +881,7 @@ Ext.onReady(function(){
 	
 	});
 	/* Identify  note_detail Search Field */
-	note_detailSearchField= new Ext.form.TextField({
+	note_detailSearchField= new Ext.form.TextArea({
 		id: 'note_detailSearchField',
 		fieldLabel: 'Detail Catatan',
 		maxLength: 250,
@@ -813,7 +889,6 @@ Ext.onReady(function(){
 	
 	});
 	
-    
 	/* Function for retrieve search Form Panel */
 	customer_note_searchForm = new Ext.FormPanel({
 		labelAlign: 'left',
@@ -828,7 +903,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [note_customerSearchField, note_tanggalSearchField, note_detailSearchField] 
+				items: [note_customerSearchField, note_tanggalSearchField, note_detailSearchField,note_aktifSearchField] 
 			}
 			]
 		}]

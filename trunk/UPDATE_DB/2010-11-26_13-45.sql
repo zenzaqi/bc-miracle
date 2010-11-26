@@ -1,0 +1,1 @@
+ALTER TABLE  `customer_note` ADD  `note_aktif` ENUM(  'Aktif',  'Tidak Aktif' ) NULL DEFAULT NULL AFTER  `note_detail`;

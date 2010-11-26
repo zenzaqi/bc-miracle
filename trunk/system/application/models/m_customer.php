@@ -123,7 +123,7 @@ class M_customer extends Model{
 		}
 		
 		function get_cust_note($cust_id,$start,$end){
-			$sql = "SELECT customer_note.* FROM customer,customer_note where note_customer=cust_id and cust_id='".$cust_id."'";
+			$sql = "SELECT customer_note.* FROM customer,customer_note where note_customer=cust_id and cust_id='".$cust_id."' and note_aktif='Aktif'";
 			
 			$result = $this->db->query($sql);
 			$nbrows = $result->num_rows();

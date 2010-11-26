@@ -47,11 +47,16 @@ class M_customer_note extends Model{
 		}
 
 		//function for update record
-		function customer_note_update($note_id ,$note_customer ,$note_tanggal ,$note_detail ,$note_creator ,$note_date_create ,$note_update ,
+		function customer_note_update($note_id ,$note_customer ,$note_tanggal ,$note_detail ,$note_aktif, $note_creator ,$note_date_create ,$note_update ,
 									  $note_date_update ,$note_revised ){
+			
+			if ($note_aktif=="")
+				$note_aktif = "Aktif";
+									  
 			$data = array(
 				"note_id"=>$note_id,
 				"note_detail"=>$note_detail,
+				"note_aktif"=>$note_aktif,
 				"note_update"=>$_SESSION[SESSION_USERID],
 				"note_date_update"=>date('Y-m-d H:i:s')
 			);
@@ -59,7 +64,7 @@ class M_customer_note extends Model{
 			$this->db->update('customer_note', $data);
 
 			if($this->db->affected_rows()){
-				$sql="UPDATE customer_note set note_revised=(note_revised+1) WHERE note_id='".$departemen_id."'";
+				$sql="UPDATE customer_note set note_revised=(note_revised+1) WHERE note_id='".$note_id."'";
 				$this->db->query($sql);
 			}
 
@@ -67,13 +72,18 @@ class M_customer_note extends Model{
 		}
 
 		//function for create new record
-		function customer_note_create($note_customer ,$note_tanggal ,$note_detail ,$note_creator ,$note_date_create ,$note_update ,
+		function customer_note_create($note_customer ,$note_tanggal ,$note_detail ,$note_aktif, $note_creator ,$note_date_create ,$note_update ,
 									  $note_date_update ,$note_revised ){
+									  
+			if ($note_aktif=="")
+				$note_aktif = "Aktif";
+			
 			$data = array(
 
 				"note_customer"=>$note_customer,
 				"note_tanggal"=>date('Y-m-d H:i:s'),
 				"note_detail"=>$note_detail,
+				"note_aktif"=>$note_aktif,
 				"note_creator"=>$_SESSION[SESSION_USERID],
 				"note_date_create"=>date('Y-m-d H:i:s')
 			);
@@ -110,8 +120,12 @@ class M_customer_note extends Model{
 		}
 
 		//function for advanced search record
-		function customer_note_search($note_id ,$note_customer ,$note_tanggal ,$note_detail ,$note_creator ,$note_date_create ,$note_update ,
+		function customer_note_search($note_id ,$note_customer ,$note_tanggal ,$note_detail ,$note_aktif, $note_creator ,$note_date_create ,$note_update ,
 									  $note_date_update ,$note_revised ,$start,$end){
+			
+			if ($note_aktif=="")
+				$note_aktif = "Aktif";
+			
 			//full query
 			$query = "SELECT * FROM customer_note,customer where note_customer=cust_id";
 
@@ -128,7 +142,11 @@ class M_customer_note extends Model{
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " note_detail LIKE '%".$note_detail."%'";
 			};
-
+			if($note_aktif!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " note_aktif = '".$note_aktif."'";
+			};
+			
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
 
