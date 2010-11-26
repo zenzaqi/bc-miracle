@@ -1338,7 +1338,8 @@ class M_appointment extends Model{
 					return '-7';
 				}
 				
-			}else if($dapp_status_awal<>$dapp_status && ($dapp_status=='jadwal ulang' || $dapp_status=='reservasi')){
+			//}else if($dapp_status_awal<>$dapp_status && ($dapp_status=='jadwal ulang' || $dapp_status=='reservasi')){
+			}else if($dapp_status_awal<>$dapp_status && $dapp_status=='reservasi'){
 				//ada perubahan status yang bukan !='datang'
 				//UPDATE db.appointment_detail.dapp_petugas
 				$sqlu_dapp = "UPDATE appointment_detail
@@ -1355,7 +1356,7 @@ class M_appointment extends Model{
 				}
 				
 			}
-			else if($dapp_status_awal<>$dapp_status && $dapp_status=='batal'){
+			else if($dapp_status_awal<>$dapp_status && ($dapp_status=='batal' || $dapp_status=='jadwal ulang')){
 				//ada perubahan status yang bukan !='datang'
 				//UPDATE db.appointment_detail.dapp_petugas
 				$sqlu_dapp = "UPDATE appointment_detail

@@ -836,7 +836,7 @@ Ext.onReady(function(){
 			{name: 'rawat_nama', type: 'string', mapping: 'rawat_nama'}, 
 			{name: 'dapp_jamreservasi', type: 'string', mapping: 'dapp_jamreservasi'},
 			{name: 'dapp_jambatal', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'dapp_jambatal'},
-			{name: 'dapp_konfirmasi', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'dapp_konfirmasi'}, 			
+			{name: 'dapp_jamkonfirmasi', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'dapp_jamkonfirmasi'}, 			
 			{name: 'dokter_id', type: 'int', mapping: 'dokter_id'}, 
 			{name: 'dokter_nama', type: 'string', mapping: 'dokter_nama'},
 			{name: 'dokter_username', type: 'string', mapping: 'dokter_username'},
@@ -1135,6 +1135,7 @@ Ext.onReady(function(){
 			header: 'Jam Batal',
 			dataIndex: 'dapp_jambatal',
 			width: 150,
+			renderer: Ext.util.Format.dateRenderer('d-m-Y H:i:s'),
 			sortable: true,
 			hidden: true,
 			readOnly: true
@@ -1143,6 +1144,7 @@ Ext.onReady(function(){
 			header: 'Jam Konfirmasi',
 			dataIndex: 'dapp_jamkonfirmasi',
 			width: 150,
+			renderer: Ext.util.Format.dateRenderer('d-m-Y H:i:s'),
 			sortable: true,
 			hidden: true,
 			readOnly: true
