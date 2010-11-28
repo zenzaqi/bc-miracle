@@ -143,7 +143,7 @@ class M_tindakan_nonmedis extends Model{
 						break;
 					}else{
 						if($i==$punya_paket_rows){
-							$return_global_customer_check_paket = $this->global_customer_check_paket($cust_id, $rawat_id);
+							$return_global_customer_check_paket = $this->global_customer_check_paket($cust_id, $rawat_id, $jumlah_ambil);
 							return $return_global_customer_check_paket;
 							//return 0;
 						}
