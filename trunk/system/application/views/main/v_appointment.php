@@ -179,13 +179,23 @@ Ext.util.Format.comboRenderer = function(combo){
 	}
 }
 
+function column_set_editable(){
+	if(tbar_jenis_rawatField.getValue()=='Medis'){
+		appointment_ColumnModel.setEditable(5, true);
+		appointment_ColumnModel.setEditable(6, false);
+	}else if(tbar_jenis_rawatField.getValue()=='Non Medis'){
+		appointment_ColumnModel.setEditable(5, false);
+		appointment_ColumnModel.setEditable(6, true);
+	}
+}
+
 /* on ready fuction */
 Ext.onReady(function(){
   	Ext.QuickTips.init();	/* Initiate quick tips icon */
 	
   	/* Function for Saving inLine Editing */
 	function appointment_update(oGrid_event){
-		appointmentListEditorGrid.setDisabled(true);
+		//appointmentListEditorGrid.setDisabled(true);
 		var date_now = dt.format('Y-m-d');
 		
 		var app_id_update_pk="";
@@ -239,7 +249,7 @@ Ext.onReady(function(){
 		if(dapp_locked_update==0){
 			if(this.dapp_status_inline_beforeedit=='datang' && dapp_status_update=='datang'){
 				appointment_DataStore.reload();
-				appointmentListEditorGrid.setDisabled(false);
+				//appointmentListEditorGrid.setDisabled(false);
 				Ext.MessageBox.show({
 					title: 'Warning',
 					width: 330,
@@ -273,7 +283,7 @@ Ext.onReady(function(){
 										appointment_DataStore.reload({
 											callback: function(opts, success, response){
 												if(success){
-													appointmentListEditorGrid.setDisabled(false);
+													//appointmentListEditorGrid.setDisabled(false);
 												}
 											}
 										});
@@ -287,7 +297,7 @@ Ext.onReady(function(){
 										 });
 										break;
 									default:
-										appointmentListEditorGrid.setDisabled(false);
+										//appointmentListEditorGrid.setDisabled(false);
 										Ext.MessageBox.show({
 										   title: 'Warning',
 										   msg: 'Error:'+result+', Edit List tidak bisa dilakukan.',
@@ -299,7 +309,7 @@ Ext.onReady(function(){
 								}
 							},
 							failure: function(response){
-								appointmentListEditorGrid.setDisabled(false);
+								//appointmentListEditorGrid.setDisabled(false);
 								var result=response.responseText;
 								Ext.MessageBox.show({
 								   title: 'Error',
@@ -312,7 +322,7 @@ Ext.onReady(function(){
 						});
 					}else{
 						appointment_DataStore.reload();
-						appointmentListEditorGrid.setDisabled(false);
+						//appointmentListEditorGrid.setDisabled(false);
 						Ext.MessageBox.show({
 							title: 'Warning',
 							width: 330,
@@ -347,7 +357,7 @@ Ext.onReady(function(){
 									appointment_DataStore.reload({
 										callback: function(opts, success, response){
 											if(success){
-												appointmentListEditorGrid.setDisabled(false);
+												//appointmentListEditorGrid.setDisabled(false);
 											}
 										}
 									});
@@ -365,7 +375,7 @@ Ext.onReady(function(){
 									appointment_DataStore.reload({
 										callback: function(opts, success, response){
 											if(success){
-												appointmentListEditorGrid.setDisabled(false);
+												//appointmentListEditorGrid.setDisabled(false);
 											}
 										}
 									});
@@ -382,7 +392,7 @@ Ext.onReady(function(){
 									appointment_DataStore.reload({
 										callback: function(opts, success, response){
 											if(success){
-												appointmentListEditorGrid.setDisabled(false);
+												//appointmentListEditorGrid.setDisabled(false);
 											}
 										}
 									});
@@ -399,7 +409,7 @@ Ext.onReady(function(){
 									appointment_DataStore.reload({
 										callback: function(opts, success, response){
 											if(success){
-												appointmentListEditorGrid.setDisabled(false);
+												//appointmentListEditorGrid.setDisabled(false);
 											}
 										}
 									});
@@ -416,7 +426,7 @@ Ext.onReady(function(){
 									appointment_DataStore.reload({
 										callback: function(opts, success, response){
 											if(success){
-												appointmentListEditorGrid.setDisabled(false);
+												//appointmentListEditorGrid.setDisabled(false);
 											}
 										}
 									});
@@ -431,7 +441,7 @@ Ext.onReady(function(){
 							}
 						},
 						failure: function(response){
-							appointmentListEditorGrid.setDisabled(false);
+							//appointmentListEditorGrid.setDisabled(false);
 							var result=response.responseText;
 							Ext.MessageBox.show({
 							   title: 'Error',
@@ -446,7 +456,7 @@ Ext.onReady(function(){
 				}else if(dapp_tglreservasi_update_date<date_now){
 					//syarat mengubah data adalah tgl_reservasi tidak boleh di hari kemarin
 					appointment_DataStore.reload();
-					appointmentListEditorGrid.setDisabled(false);
+					//appointmentListEditorGrid.setDisabled(false);
 					Ext.MessageBox.show({
 						title: 'Warning',
 						width: 330,
@@ -459,7 +469,7 @@ Ext.onReady(function(){
 				}else{
 					//kondisi tidak diketahui
 					appointment_DataStore.reload();
-					appointmentListEditorGrid.setDisabled(false);
+					//appointmentListEditorGrid.setDisabled(false);
 					Ext.MessageBox.show({
 						title: 'Warning',
 						width: 330,
@@ -472,7 +482,7 @@ Ext.onReady(function(){
 			}
 		}else{
 			appointment_DataStore.reload();
-			appointmentListEditorGrid.setDisabled(false);
+			//appointmentListEditorGrid.setDisabled(false);
 			Ext.MessageBox.show({
 				title: 'Warning',
 				width: 330,
@@ -1382,6 +1392,7 @@ Ext.onReady(function(){
 	});*/
 	
 	tbar_jenis_rawatField.on('select', function(){
+		column_set_editable();
 		appointment_DataStore.setBaseParam('query','');
 		if(tbar_jenis_rawatField.getValue()=="Medis"){
 			tbar_nonmedis_tglField.reset();
@@ -3245,6 +3256,8 @@ Ext.onReady(function(){
 		trackMouse: true
 		});
 	Ext.QuickTips.init();
+	
+	column_set_editable();
 	
 });
 	</script>
