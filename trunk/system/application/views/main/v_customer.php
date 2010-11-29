@@ -728,7 +728,7 @@ var editor_cust_note;
 		if(!customer_searchWindow.isVisible()){
 			customer_reset_SearchForm();
 			cust_aktifSearchField.setValue('Aktif');
-			fretfulness_SearchField.setValue('Undefined');
+			//fretfulness_SearchField.setValue('Undefined');
 			customer_searchWindow.show();
 		} else {
 			customer_searchWindow.toFront();
@@ -4037,7 +4037,7 @@ Ext.onReady(function(){
 		mode: 'local',
 		displayField: 'fretfulness_display',
 		valueField: 'fretfulness_value',
-		emptyText: 'Undefined',
+		emptyText: '',
 		anchor: '50%',
 		triggerAction: 'all'	
 	});

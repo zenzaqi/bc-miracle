@@ -1,0 +1,3 @@
+- customer: revisi search master customer: set default fretfulness = '', sebelumnya default search = 'undefined'
+
+- app: penggantian teks Search by
