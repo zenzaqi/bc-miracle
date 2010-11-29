@@ -1333,8 +1333,8 @@ Ext.onReady(function(){
 		            }
 				},
 				render: function(c){
-				Ext.get(this.id).set({qtitle:'Search By'});
-				Ext.get(this.id).set({qtip:'- Default Tgl Sekarang<br>- Nomor Customer<br>- Nama Customer<br>- NickName Dokter<br>- NickName Terapis'});
+				Ext.get(this.id).set({qtitle:'Search by (khusus app hari ini)'});
+				Ext.get(this.id).set({qtip:'- No Customer<br>- Nama Cust<br>- Nickname Dokter<br>- Nickname Terapis'});
 				}
 			},
 			width: 120
@@ -1555,7 +1555,7 @@ Ext.onReady(function(){
 			},
 			render: function(c){
 				Ext.get(this.id).set({qtitle:'Search By'});
-				Ext.get(this.id).set({qtip:'- No.Customer<br>- Nama Customer<br>- No.Telp Rumah<br>- No.Telp Kantor<br>- No.HP'});
+				Ext.get(this.id).set({qtip:'- No Cust<br>- Nama Cust<br>- No Telp Rumah<br>- No Telp Kantor<br>- No HP'});
 			}
 		}
 	});
