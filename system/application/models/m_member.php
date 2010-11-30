@@ -20,7 +20,7 @@ class M_member extends Model{
 		
 		function member_cetak(){
 		
-			$query = "SELECT member.*,cust_nama as member_nama FROM member,customer where member_cust=cust_id and member_status='Daftar' ORDER BY member_jenis";
+			$query = "SELECT member.*,cust_nama as cust_nama, cust_no as cust_no FROM member,customer where member_cust=cust_id and member_status='Daftar' ORDER BY member_jenis";
 			$row=$this->db->query($query);
 			
 			//$query = "UPDATE member set member_status='print' where member_status='register'";
