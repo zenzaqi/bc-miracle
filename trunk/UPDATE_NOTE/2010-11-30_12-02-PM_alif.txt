@@ -1,0 +1,4 @@
+UPDATE:
+
+# Kasir Penjualan Produk:
+>> Transaksi yang timbul Piutang, yang sebelumnya diambil dari database db.vu_piutang_jproduk sekarang dihitung langsung dari variable2 yang diterima dari Controller <-- Views.
