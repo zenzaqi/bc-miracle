@@ -223,12 +223,6 @@ class C_master_jual_produk extends Controller {
 	}
 	//
 	
-	function catatan_piutang_update(){
-		$dproduk_master = isset($_POST['dproduk_master']) ? $_POST['dproduk_master'] : "";
-		$result=$this->m_master_jual_produk->catatan_piutang_update($dproduk_master);
-		echo $result;
-	}
-	
 	//add detail
 	function detail_detail_jual_produk_insert(){
 		//POST variable here
@@ -389,8 +383,6 @@ class C_master_jual_produk extends Controller {
 		$jproduk_subtotal=trim($_POST["jproduk_subtotal"]);
 		$jproduk_total=trim($_POST["jproduk_total"]);
 		$jproduk_hutang=trim($_POST["jproduk_hutang"]);
-		//if($jproduk_cara=='tunai')
-			//$jproduk_bayar=$jproduk_subtotal;
 		//card
 		$jproduk_card_nama=trim($_POST["jproduk_card_nama"]);
 		$jproduk_card_edc=trim($_POST["jproduk_card_edc"]);
@@ -455,8 +447,58 @@ class C_master_jual_produk extends Controller {
 		$jproduk_transfer_nama3=trim($_POST["jproduk_transfer_nama3"]);
 		$jproduk_transfer_nilai3=trim($_POST["jproduk_transfer_nilai3"]);
 		
+		//Data Detail Penjualan Produk
+		$dproduk_id = $_POST['dproduk_id']; // Get our array back and translate it :
+		$array_dproduk_id = json_decode(stripslashes($dproduk_id));
 		
-		$result = $this->m_master_jual_produk->master_jual_produk_update($jproduk_id ,$jproduk_nobukti ,$jproduk_cust , $jproduk_tanggal ,$jproduk_stat_dok, $jproduk_diskon ,$jproduk_cara ,$jproduk_cara2 ,$jproduk_cara3 ,$jproduk_keterangan , $jproduk_cashback, $jproduk_tunai_nilai, $jproduk_tunai_nilai2, $jproduk_tunai_nilai3, $jproduk_voucher_no, $jproduk_voucher_cashback, $jproduk_voucher_no2, $jproduk_voucher_cashback2, $jproduk_voucher_no3, $jproduk_voucher_cashback3, $jproduk_bayar, $jproduk_subtotal, $jproduk_total, $jproduk_hutang, $jproduk_kwitansi_no, $jproduk_kwitansi_nama, $jproduk_kwitansi_nilai, $jproduk_kwitansi_no2, $jproduk_kwitansi_nama2, $jproduk_kwitansi_nilai2, $jproduk_kwitansi_no3, $jproduk_kwitansi_nama3, $jproduk_kwitansi_nilai3, $jproduk_card_nama, $jproduk_card_edc, $jproduk_card_no, $jproduk_card_nilai, $jproduk_card_nama2, $jproduk_card_edc2, $jproduk_card_no2, $jproduk_card_nilai2, $jproduk_card_nama3, $jproduk_card_edc3, $jproduk_card_no3, $jproduk_card_nilai3, $jproduk_cek_nama, $jproduk_cek_no, $jproduk_cek_valid, $jproduk_cek_bank, $jproduk_cek_nilai, $jproduk_cek_nama2, $jproduk_cek_no2, $jproduk_cek_valid2, $jproduk_cek_bank2, $jproduk_cek_nilai2, $jproduk_cek_nama3, $jproduk_cek_no3, $jproduk_cek_valid3, $jproduk_cek_bank3, $jproduk_cek_nilai3, $jproduk_transfer_bank, $jproduk_transfer_nama, $jproduk_transfer_nilai, $jproduk_transfer_bank2, $jproduk_transfer_nama2, $jproduk_transfer_nilai2, $jproduk_transfer_bank3, $jproduk_transfer_nama3, $jproduk_transfer_nilai3, $cetak, $jproduk_ket_disk);
+		$dproduk_produk = $_POST['dproduk_produk']; // Get our array back and translate it :
+		$array_dproduk_produk = json_decode(stripslashes($dproduk_produk));
+		
+		$dproduk_satuan = $_POST['dproduk_satuan']; // Get our array back and translate it :
+		$array_dproduk_satuan = json_decode(stripslashes($dproduk_satuan));
+		
+		$dproduk_jumlah = $_POST['dproduk_jumlah']; // Get our array back and translate it :
+		$array_dproduk_jumlah = json_decode(stripslashes($dproduk_jumlah));
+		
+		$dproduk_harga = $_POST['dproduk_harga']; // Get our array back and translate it :
+		$array_dproduk_harga = json_decode(stripslashes($dproduk_harga));
+		
+		$dproduk_diskon_jenis = $_POST['dproduk_diskon_jenis']; // Get our array back and translate it :
+		$array_dproduk_diskon_jenis = json_decode(stripslashes($dproduk_diskon_jenis));
+		
+		$dproduk_diskon = $_POST['dproduk_diskon']; // Get our array back and translate it :
+		$array_dproduk_diskon = json_decode(stripslashes($dproduk_diskon));
+		
+		$dproduk_karyawan = $_POST['dproduk_karyawan']; // Get our array back and translate it :
+		$array_dproduk_karyawan = json_decode(stripslashes($dproduk_karyawan));
+		
+		$result = $this->m_master_jual_produk->master_jual_produk_update($jproduk_id ,$jproduk_nobukti ,$jproduk_cust , $jproduk_tanggal
+																		 ,$jproduk_stat_dok ,$jproduk_diskon ,$jproduk_cara ,$jproduk_cara2
+																		 ,$jproduk_cara3 ,$jproduk_keterangan ,$jproduk_cashback
+																		 ,$jproduk_tunai_nilai ,$jproduk_tunai_nilai2 ,$jproduk_tunai_nilai3
+																		 ,$jproduk_voucher_no ,$jproduk_voucher_cashback ,$jproduk_voucher_no2
+																		 ,$jproduk_voucher_cashback2 ,$jproduk_voucher_no3
+																		 ,$jproduk_voucher_cashback3 ,$jproduk_bayar ,$jproduk_subtotal
+																		 ,$jproduk_total ,$jproduk_hutang ,$jproduk_kwitansi_no
+																		 ,$jproduk_kwitansi_nama ,$jproduk_kwitansi_nilai ,$jproduk_kwitansi_no2
+																		 ,$jproduk_kwitansi_nama2 ,$jproduk_kwitansi_nilai2 ,$jproduk_kwitansi_no3
+																		 ,$jproduk_kwitansi_nama3 ,$jproduk_kwitansi_nilai3 ,$jproduk_card_nama
+																		 ,$jproduk_card_edc ,$jproduk_card_no ,$jproduk_card_nilai
+																		 ,$jproduk_card_nama2 ,$jproduk_card_edc2 ,$jproduk_card_no2
+																		 ,$jproduk_card_nilai2 ,$jproduk_card_nama3 ,$jproduk_card_edc3
+																		 ,$jproduk_card_no3 ,$jproduk_card_nilai3 ,$jproduk_cek_nama
+																		 ,$jproduk_cek_no ,$jproduk_cek_valid ,$jproduk_cek_bank
+																		 ,$jproduk_cek_nilai ,$jproduk_cek_nama2 ,$jproduk_cek_no2
+																		 ,$jproduk_cek_valid2 ,$jproduk_cek_bank2 ,$jproduk_cek_nilai2
+																		 ,$jproduk_cek_nama3 ,$jproduk_cek_no3 ,$jproduk_cek_valid3
+																		 ,$jproduk_cek_bank3 ,$jproduk_cek_nilai3 ,$jproduk_transfer_bank
+																		 ,$jproduk_transfer_nama ,$jproduk_transfer_nilai ,$jproduk_transfer_bank2
+																		 ,$jproduk_transfer_nama2 ,$jproduk_transfer_nilai2
+																		 ,$jproduk_transfer_bank3 ,$jproduk_transfer_nama3 ,$jproduk_transfer_nilai3
+																		 ,$cetak ,$jproduk_ket_disk
+																		 ,$array_dproduk_id ,$array_dproduk_produk ,$array_dproduk_satuan
+																		 ,$array_dproduk_jumlah ,$array_dproduk_harga ,$array_dproduk_diskon_jenis
+																		 ,$array_dproduk_diskon ,$array_dproduk_karyawan);
 		echo $result;
 	}
 	
@@ -517,8 +559,6 @@ class C_master_jual_produk extends Controller {
 		$jproduk_subtotal=trim($_POST["jproduk_subtotal"]);
 		$jproduk_total=trim($_POST["jproduk_total"]);
 		$jproduk_hutang=trim($_POST["jproduk_hutang"]);
-		//if($jproduk_cara=='tunai')
-			//$jproduk_bayar=$jproduk_subtotal;
 		//card
 		$jproduk_card_nama=trim($_POST["jproduk_card_nama"]);
 		$jproduk_card_edc=trim($_POST["jproduk_card_edc"]);
@@ -583,7 +623,58 @@ class C_master_jual_produk extends Controller {
 		$jproduk_transfer_nama3=trim($_POST["jproduk_transfer_nama3"]);
 		$jproduk_transfer_nilai3=trim($_POST["jproduk_transfer_nilai3"]);
 		
-		$result=$this->m_master_jual_produk->master_jual_produk_create($jproduk_nobukti ,$jproduk_cust ,$jproduk_tanggal ,$jproduk_stat_dok, $jproduk_diskon ,$jproduk_cara ,$jproduk_cara2 ,$jproduk_cara3 ,$jproduk_keterangan , $jproduk_cashback, $jproduk_tunai_nilai, $jproduk_tunai_nilai2, $jproduk_tunai_nilai3, $jproduk_voucher_no, $jproduk_voucher_cashback, $jproduk_voucher_no2, $jproduk_voucher_cashback2, $jproduk_voucher_no3, $jproduk_voucher_cashback3, $jproduk_bayar, $jproduk_subtotal, $jproduk_total, $jproduk_hutang, $jproduk_kwitansi_no, $jproduk_kwitansi_nama, $jproduk_kwitansi_nilai, $jproduk_kwitansi_no2, $jproduk_kwitansi_nama2, $jproduk_kwitansi_nilai2, $jproduk_kwitansi_no3, $jproduk_kwitansi_nama3, $jproduk_kwitansi_nilai3, $jproduk_card_nama, $jproduk_card_edc, $jproduk_card_no, $jproduk_card_nilai, $jproduk_card_nama2, $jproduk_card_edc2, $jproduk_card_no2, $jproduk_card_nilai2, $jproduk_card_nama3, $jproduk_card_edc3, $jproduk_card_no3, $jproduk_card_nilai3, $jproduk_cek_nama, $jproduk_cek_no, $jproduk_cek_valid, $jproduk_cek_bank, $jproduk_cek_nilai, $jproduk_cek_nama2, $jproduk_cek_no2, $jproduk_cek_valid2, $jproduk_cek_bank2, $jproduk_cek_nilai2, $jproduk_cek_nama3, $jproduk_cek_no3, $jproduk_cek_valid3, $jproduk_cek_bank3, $jproduk_cek_nilai3, $jproduk_transfer_bank, $jproduk_transfer_nama, $jproduk_transfer_nilai, $jproduk_transfer_bank2, $jproduk_transfer_nama2, $jproduk_transfer_nilai2, $jproduk_transfer_bank3, $jproduk_transfer_nama3, $jproduk_transfer_nilai3, $cetak, $jproduk_ket_disk);
+		//Data Detail Penjualan Produk
+		$dproduk_id = $_POST['dproduk_id']; // Get our array back and translate it :
+		$array_dproduk_id = json_decode(stripslashes($dproduk_id));
+		
+		$dproduk_produk = $_POST['dproduk_produk']; // Get our array back and translate it :
+		$array_dproduk_produk = json_decode(stripslashes($dproduk_produk));
+		
+		$dproduk_satuan = $_POST['dproduk_satuan']; // Get our array back and translate it :
+		$array_dproduk_satuan = json_decode(stripslashes($dproduk_satuan));
+		
+		$dproduk_jumlah = $_POST['dproduk_jumlah']; // Get our array back and translate it :
+		$array_dproduk_jumlah = json_decode(stripslashes($dproduk_jumlah));
+		
+		$dproduk_harga = $_POST['dproduk_harga']; // Get our array back and translate it :
+		$array_dproduk_harga = json_decode(stripslashes($dproduk_harga));
+		
+		$dproduk_diskon_jenis = $_POST['dproduk_diskon_jenis']; // Get our array back and translate it :
+		$array_dproduk_diskon_jenis = json_decode(stripslashes($dproduk_diskon_jenis));
+		
+		$dproduk_diskon = $_POST['dproduk_diskon']; // Get our array back and translate it :
+		$array_dproduk_diskon = json_decode(stripslashes($dproduk_diskon));
+		
+		$dproduk_karyawan = $_POST['dproduk_karyawan']; // Get our array back and translate it :
+		$array_dproduk_karyawan = json_decode(stripslashes($dproduk_karyawan));
+		
+		$result=$this->m_master_jual_produk->master_jual_produk_create($jproduk_nobukti ,$jproduk_cust ,$jproduk_tanggal
+																	   ,$jproduk_stat_dok ,$jproduk_diskon ,$jproduk_cara
+																	   ,$jproduk_cara2 ,$jproduk_cara3 ,$jproduk_keterangan
+																	   ,$jproduk_cashback ,$jproduk_tunai_nilai ,$jproduk_tunai_nilai2
+																	   ,$jproduk_tunai_nilai3 ,$jproduk_voucher_no ,$jproduk_voucher_cashback
+																	   ,$jproduk_voucher_no2 ,$jproduk_voucher_cashback2 ,$jproduk_voucher_no3
+																	   ,$jproduk_voucher_cashback3 ,$jproduk_bayar ,$jproduk_subtotal
+																	   ,$jproduk_total ,$jproduk_hutang ,$jproduk_kwitansi_no
+																	   ,$jproduk_kwitansi_nama ,$jproduk_kwitansi_nilai ,$jproduk_kwitansi_no2
+																	   ,$jproduk_kwitansi_nama2 ,$jproduk_kwitansi_nilai2 ,$jproduk_kwitansi_no3
+																	   ,$jproduk_kwitansi_nama3 ,$jproduk_kwitansi_nilai3 ,$jproduk_card_nama
+																	   ,$jproduk_card_edc ,$jproduk_card_no ,$jproduk_card_nilai
+																	   ,$jproduk_card_nama2 ,$jproduk_card_edc2 ,$jproduk_card_no2
+																	   ,$jproduk_card_nilai2 ,$jproduk_card_nama3 ,$jproduk_card_edc3
+																	   ,$jproduk_card_no3 ,$jproduk_card_nilai3 ,$jproduk_cek_nama
+																	   ,$jproduk_cek_no ,$jproduk_cek_valid ,$jproduk_cek_bank
+																	   ,$jproduk_cek_nilai ,$jproduk_cek_nama2 ,$jproduk_cek_no2
+																	   ,$jproduk_cek_valid2 ,$jproduk_cek_bank2 ,$jproduk_cek_nilai2
+																	   ,$jproduk_cek_nama3 ,$jproduk_cek_no3 ,$jproduk_cek_valid3
+																	   ,$jproduk_cek_bank3 ,$jproduk_cek_nilai3 ,$jproduk_transfer_bank
+																	   ,$jproduk_transfer_nama ,$jproduk_transfer_nilai ,$jproduk_transfer_bank2
+																	   ,$jproduk_transfer_nama2 ,$jproduk_transfer_nilai2 ,$jproduk_transfer_bank3
+																	   ,$jproduk_transfer_nama3 ,$jproduk_transfer_nilai3 ,$cetak
+																	   ,$jproduk_ket_disk
+																	   ,$array_dproduk_id ,$array_dproduk_produk ,$array_dproduk_satuan
+																	   ,$array_dproduk_jumlah ,$array_dproduk_harga ,$array_dproduk_diskon_jenis
+																	   ,$array_dproduk_diskon ,$array_dproduk_karyawan);
 		echo $result;
 	}
 

@@ -258,7 +258,24 @@ class M_master_jual_produk extends Model{
 		}
 	}
 	
-	function catatan_piutang_update($jproduk_id){
+	function catatan_piutang_update($jproduk_nobukti ,$jproduk_cust ,$jproduk_tanggal ,$piutang_total){
+		/* INSERT db.master_lunas_piutang */
+		$dti_lpiutang=array(
+			"lpiutang_faktur"=>$jproduk_nobukti,
+			"lpiutang_cust"=>$jproduk_cust,
+			"lpiutang_faktur_tanggal"=>$jproduk_tanggal,
+			"lpiutang_total"=>$piutang_total,
+			"lpiutang_sisa"=>$piutang_total,
+			"lpiutang_jenis_transaksi"=>'jual_produk',
+			"lpiutang_stat_dok"=>'Terbuka'
+		);
+		$this->db->insert('master_lunas_piutang', $dti_lpiutang);
+		if($this->db->affected_rows()){
+			return 1;
+		}
+	}
+	
+	/*function catatan_piutang_update($jproduk_id){
 		$sql="SELECT * FROM vu_piutang_jproduk WHERE jproduk_id='$jproduk_id'";
 		$rs=$this->db->query($sql);
 		if($rs->num_rows()){
@@ -274,13 +291,13 @@ class M_master_jual_produk extends Model{
 			* JIKA 'ada' ==> Lakukan UPDATE db.master_lunas_piutang
 			* JIKA 'tidak ada' ==> Lakukan INSERT db.master_lunas_piutang
 			*/
-			$sql="SELECT lpiutang_id FROM master_lunas_piutang WHERE lpiutang_faktur='$lpiutang_faktur'";
+/*			$sql="SELECT lpiutang_id FROM master_lunas_piutang WHERE lpiutang_faktur='$lpiutang_faktur'";
 			$rs=$this->db->query($sql);
 			if($rs->num_rows()){
 				/* 1. DELETE db.master_lunas_piutang AND db.detail_jual_piutang
 				 * 2. INSERT to db.master_lunas_piutang
 				*/
-				$sql = "DELETE detail_lunas_piutang, master_lunas_piutang
+/*				$sql = "DELETE detail_lunas_piutang, master_lunas_piutang
 					FROM master_lunas_piutang
 					LEFT JOIN detail_lunas_piutang ON(dpiutang_master=lpiutang_id)
 					WHERE lpiutang_faktur='".$lpiutang_faktur."'";
@@ -303,7 +320,7 @@ class M_master_jual_produk extends Model{
 				}
 			}else{
 				/* INSERT db.master_lunas_piutang */
-				$dti_lpiutang=array(
+/*				$dti_lpiutang=array(
 				"lpiutang_faktur"=>$lpiutang_faktur,
 				"lpiutang_cust"=>$lpiutang_cust,
 				"lpiutang_faktur_tanggal"=>$lpiutang_faktur_tanggal,
@@ -320,7 +337,7 @@ class M_master_jual_produk extends Model{
 		}else{
 			return 1;
 		}
-	}
+	}*/
 	
 	function catatan_piutang_batal($jproduk_id){
 		/* 1. Cari jproduk_nobukti
@@ -678,12 +695,10 @@ class M_master_jual_produk extends Model{
 	}
 	
 	//insert detail record
-	function detail_detail_jual_produk_insert($array_dproduk_id ,$dproduk_master ,$array_dproduk_karyawan, $array_dproduk_produk ,$array_dproduk_satuan ,$array_dproduk_jumlah ,$array_dproduk_harga ,$array_dproduk_subtotal_net ,$array_dproduk_diskon ,$array_dproduk_diskon_jenis ,$array_dproduk_sales ,$cetak){
+	function detail_detail_jual_produk_insert($array_dproduk_id ,$dproduk_master ,$array_dproduk_karyawan ,$array_dproduk_produk
+											  ,$array_dproduk_satuan ,$array_dproduk_jumlah ,$array_dproduk_harga
+											  ,$array_dproduk_diskon ,$array_dproduk_diskon_jenis ,$cetak){
 		$date_now=date('Y-m-d');
-		//if master id not capture from view then capture it from max pk from master table
-		if($dproduk_master=="" || $dproduk_master==NULL || $dproduk_master==0){
-			$dproduk_master=$this->get_master_id();
-		}
 		
 		$size_array = sizeof($array_dproduk_produk) - 1;
 		
@@ -694,12 +709,10 @@ class M_master_jual_produk extends Model{
 			$dproduk_satuan = $array_dproduk_satuan[$i];
 			$dproduk_jumlah = $array_dproduk_jumlah[$i];
 			$dproduk_harga = $array_dproduk_harga[$i];
-			$dproduk_subtotal_net = $array_dproduk_subtotal_net[$i];
 			$dproduk_diskon = $array_dproduk_diskon[$i];
 			$dproduk_diskon_jenis = $array_dproduk_diskon_jenis[$i];
-			$dproduk_sales = $array_dproduk_sales[$i];
 			
-			$sql = "SELECT produk_point
+			$sql = "SELECT produk_point AS produk_point
 				FROM detail_jual_produk
 					JOIN produk ON(dproduk_produk=produk_id)
 				WHERE dproduk_id='".$dproduk_id."'";
@@ -717,36 +730,12 @@ class M_master_jual_produk extends Model{
 					"dproduk_harga"=>$dproduk_harga, 
 					"dproduk_diskon"=>$dproduk_diskon,
 					"dproduk_diskon_jenis"=>$dproduk_diskon_jenis,
-					"dproduk_sales"=>$dproduk_sales,
 					"dproduk_creator"=>@$_SESSION[SESSION_USERID]
 				);
 				$this->db->where('dproduk_id', $dproduk_id);
 				$this->db->update('detail_jual_produk', $dtu_dproduk);
-				/*if($this->db->affected_rows()){
-					if($cetak==1 && $i==$size_array){
-						//*proses cetak/
-						$this->stat_dok_tertutup_update($dproduk_master);
-						$this->member_point_update($dproduk_master);
-						$this->membership_insert($dproduk_master);
-						$this->catatan_piutang_update($dproduk_master);
-						return $dproduk_master;
-					}else if($cetak<>1 && $i==$size_array){
-						return '0';
-					}
-				}else{
-					if($cetak==1 && $i==$size_array){
-						//*proses cetak/
-						$this->stat_dok_tertutup_update($dproduk_master);
-						$this->member_point_update($dproduk_master);
-						$this->membership_insert($dproduk_master);
-						$this->catatan_piutang_update($dproduk_master);
-						return $dproduk_master;
-					}else if($cetak<>1 && $i==$size_array){
-						return '0';
-					}
-				}*/
 			}else{
-				$sql_produk = "SELECT produk_point FROM produk WHERE produk_id='".$dproduk_produk."'";
+				$sql_produk = "SELECT produk_point AS produk_point FROM produk WHERE produk_id='".$dproduk_produk."'";
 				$rs_produk = $this->db->query($sql_produk);
 				$record_produk = $rs_produk->row_array();
 				$produk_point = $record_produk['produk_point'];
@@ -761,52 +750,18 @@ class M_master_jual_produk extends Model{
 					"dproduk_harga"=>$dproduk_harga, 
 					"dproduk_diskon"=>$dproduk_diskon,
 					"dproduk_diskon_jenis"=>$dproduk_diskon_jenis,
-					"dproduk_sales"=>$dproduk_sales,
 					"dproduk_creator"=>@$_SESSION[SESSION_USERID]
 				);
 				$this->db->insert('detail_jual_produk', $dti_jproduk);
-				/*if($this->db->affected_rows()){
-					if($cetak==1 && $i==$size_array){
-						//*proses cetak/
-						$this->stat_dok_tertutup_update($dproduk_master);
-						$this->member_point_update($dproduk_master);
-						$this->membership_insert($dproduk_master);
-						$this->catatan_piutang_update($dproduk_master);
-						return $dproduk_master;
-					}else if($cetak<>1 && $i==$size_array){
-						return '0';
-					}
-				}else{
-					if($cetak==1 && $i==$size_array){
-						//*proses cetak/
-						$this->stat_dok_tertutup_update($dproduk_master);
-						$this->member_point_update($dproduk_master);
-						$this->membership_insert($dproduk_master);
-						$this->catatan_piutang_update($dproduk_master);
-						return $dproduk_master;
-					}else if($cetak<>1 && $i==$size_array){
-						return '0';
-					}
-				}*/
 			}
 			
 			if($cetak==1 && $i==$size_array){
 				/*proses cetak*/
-				$rs_stat_dok = $this->stat_dok_tertutup_update($dproduk_master);
-				if($rs_stat_dok==1){
-					$rs_point_update = $this->member_point_update($dproduk_master);
-					if($rs_point_update==1){
-						$rs_piutang_update = $this->catatan_piutang_update($dproduk_master);
-						if($rs_piutang_update==1){
-							$rs_membership = $this->membership_insert($dproduk_master);
-							if($rs_membership==1){
-								return $dproduk_master;
-							}else{
-								return 0;
-							}
-						}else{
-							return 0;
-						}
+				$rs_point_update = $this->member_point_update($dproduk_master);
+				if($rs_point_update==1){
+					$rs_membership = $this->membership_insert($dproduk_master);
+					if($rs_membership==1){
+						return $dproduk_master;
 					}else{
 						return 0;
 					}
@@ -897,12 +852,30 @@ class M_master_jual_produk extends Model{
 	}
 	
 	//function for update record
-	function master_jual_produk_update($jproduk_id ,$jproduk_nobukti ,$jproduk_cust ,$jproduk_tanggal , $jproduk_stat_dok, $jproduk_diskon ,$jproduk_cara ,$jproduk_cara2 ,$jproduk_cara3 ,$jproduk_keterangan , $jproduk_cashback, $jproduk_tunai_nilai, $jproduk_tunai_nilai2, $jproduk_tunai_nilai3, $jproduk_voucher_no, $jproduk_voucher_cashback, $jproduk_voucher_no2, $jproduk_voucher_cashback2, $jproduk_voucher_no3, $jproduk_voucher_cashback3, $jproduk_bayar, $jproduk_subtotal, $jproduk_total, $jproduk_hutang, $jproduk_kwitansi_no, $jproduk_kwitansi_nama, $jproduk_kwitansi_nilai, $jproduk_kwitansi_no2, $jproduk_kwitansi_nama2, $jproduk_kwitansi_nilai2, $jproduk_kwitansi_no3, $jproduk_kwitansi_nama3, $jproduk_kwitansi_nilai3, $jproduk_card_nama, $jproduk_card_edc, $jproduk_card_no, $jproduk_card_nilai, $jproduk_card_nama2, $jproduk_card_edc2, $jproduk_card_no2, $jproduk_card_nilai2, $jproduk_card_nama3, $jproduk_card_edc3, $jproduk_card_no3, $jproduk_card_nilai3, $jproduk_cek_nama, $jproduk_cek_no, $jproduk_cek_valid, $jproduk_cek_bank, $jproduk_cek_nilai, $jproduk_cek_nama2, $jproduk_cek_no2, $jproduk_cek_valid2, $jproduk_cek_bank2, $jproduk_cek_nilai2, $jproduk_cek_nama3, $jproduk_cek_no3, $jproduk_cek_valid3, $jproduk_cek_bank3, $jproduk_cek_nilai3, $jproduk_transfer_bank, $jproduk_transfer_nama, $jproduk_transfer_nilai, $jproduk_transfer_bank2, $jproduk_transfer_nama2, $jproduk_transfer_nilai2, $jproduk_transfer_bank3, $jproduk_transfer_nama3, $jproduk_transfer_nilai3, $cetak, $jproduk_ket_disk){
+	function master_jual_produk_update($jproduk_id ,$jproduk_nobukti ,$jproduk_cust ,$jproduk_tanggal ,$jproduk_stat_dok ,$jproduk_diskon
+									   ,$jproduk_cara ,$jproduk_cara2 ,$jproduk_cara3 ,$jproduk_keterangan ,$jproduk_cashback
+									   ,$jproduk_tunai_nilai ,$jproduk_tunai_nilai2 ,$jproduk_tunai_nilai3 ,$jproduk_voucher_no
+									   ,$jproduk_voucher_cashback ,$jproduk_voucher_no2 ,$jproduk_voucher_cashback2 ,$jproduk_voucher_no3
+									   ,$jproduk_voucher_cashback3 ,$jproduk_bayar ,$jproduk_subtotal ,$jproduk_total ,$jproduk_hutang
+									   ,$jproduk_kwitansi_no ,$jproduk_kwitansi_nama ,$jproduk_kwitansi_nilai ,$jproduk_kwitansi_no2
+									   ,$jproduk_kwitansi_nama2 ,$jproduk_kwitansi_nilai2 ,$jproduk_kwitansi_no3 ,$jproduk_kwitansi_nama3
+									   ,$jproduk_kwitansi_nilai3 ,$jproduk_card_nama ,$jproduk_card_edc ,$jproduk_card_no ,$jproduk_card_nilai
+									   ,$jproduk_card_nama2 ,$jproduk_card_edc2 ,$jproduk_card_no2 ,$jproduk_card_nilai2 ,$jproduk_card_nama3
+									   ,$jproduk_card_edc3 ,$jproduk_card_no3 ,$jproduk_card_nilai3 ,$jproduk_cek_nama ,$jproduk_cek_no
+									   ,$jproduk_cek_valid ,$jproduk_cek_bank ,$jproduk_cek_nilai ,$jproduk_cek_nama2 ,$jproduk_cek_no2
+									   ,$jproduk_cek_valid2 ,$jproduk_cek_bank2 ,$jproduk_cek_nilai2 ,$jproduk_cek_nama3 ,$jproduk_cek_no3
+									   ,$jproduk_cek_valid3 ,$jproduk_cek_bank3 ,$jproduk_cek_nilai3 ,$jproduk_transfer_bank
+									   ,$jproduk_transfer_nama ,$jproduk_transfer_nilai ,$jproduk_transfer_bank2 ,$jproduk_transfer_nama2
+									   ,$jproduk_transfer_nilai2 ,$jproduk_transfer_bank3 ,$jproduk_transfer_nama3 ,$jproduk_transfer_nilai3
+									   ,$cetak ,$jproduk_ket_disk
+									   ,$array_dproduk_id ,$array_dproduk_produk ,$array_dproduk_satuan
+									   ,$array_dproduk_jumlah ,$array_dproduk_harga ,$array_dproduk_diskon_jenis
+									   ,$array_dproduk_diskon ,$array_dproduk_karyawan){
 		$date_now = date('Y-m-d');
-		
 		$datetime_now=date('Y-m-d H:i:s');
-		if ($jproduk_stat_dok=="")
-			$jproduk_stat_dok = "Terbuka";
+		
+		$piutang_total = $jproduk_total - $jproduk_bayar;
+		
 		$jproduk_revised=0;
 		
 		$jenis_transaksi = 'jual_produk';
@@ -914,17 +887,6 @@ class M_master_jual_produk extends Model{
 			$rs_record=$rs->row_array();
 			$jproduk_revised=$rs_record["jproduk_revised"];
 		}
-		/*$sqlu = "UPDATE master_jual_produk
-			SET jproduk_diskon='".$jproduk_diskon."'
-				,jproduk_bayar='".$jproduk_bayar."'
-				,jproduk_totalbiaya='".$jproduk_total."'
-				,jproduk_cara='".$jproduk_cara."'
-				,jproduk_stat_dok='".$jproduk_stat_dok."'
-				,jproduk_keterangan='".$jproduk_keterangan."'
-				,jproduk_update='".@$_SESSION[SESSION_USERID]."'
-				,jproduk_date_update='".$datetime_now."'
-				,jproduk_revised=(jproduk_revised+1)
-			WHERE jproduk_id='".$jproduk_id."'";*/
 		
 		$data = array(
 			"jproduk_nobukti"=>$jproduk_nobukti, 
@@ -933,21 +895,26 @@ class M_master_jual_produk extends Model{
 			"jproduk_cashback"=>$jproduk_cashback,
 			"jproduk_bayar"=>$jproduk_bayar,
 			"jproduk_totalbiaya"=>$jproduk_total,
-			"jproduk_cara"=>$jproduk_cara, 
-			"jproduk_stat_dok"=>$jproduk_stat_dok,
+			"jproduk_cara"=>$jproduk_cara,
 			"jproduk_keterangan"=>$jproduk_keterangan,
 			"jproduk_ket_disk"=>$jproduk_ket_disk,
 			"jproduk_update"=>@$_SESSION[SESSION_USERID],
 			"jproduk_date_update"=>$datetime_now,
 			"jproduk_revised"=>$jproduk_revised+1
 		);
+		
+		if($cetak==1){
+			$data['jproduk_stat_dok'] = 'Tertutup';
+		}else{
+			$data['jproduk_stat_dok'] = 'Terbuka';
+		}
+		
 		if($jproduk_tanggal<>$date_now){
 			$data["jproduk_date_update"] = $jproduk_tanggal;
-			//$bayar_date_create = $jproduk_tanggal;
 		}else{
 			$data["jproduk_date_update"] = $datetime_now;
-			//$bayar_date_create = $datetime_now;
 		}
+		
 		if($jproduk_cara2!=null){
 			if(($jproduk_kwitansi_nilai2<>'' && $jproduk_kwitansi_nilai2<>0)
 			   || ($jproduk_card_nilai2<>'' && $jproduk_card_nilai2<>0)
@@ -973,14 +940,17 @@ class M_master_jual_produk extends Model{
 			}
 		}
 		
-		/*$sql="select cust_id from customer where cust_id='".$jproduk_cust."'";
-		$query=$this->db->query($sql);
-		if($query->num_rows())
-			$data["jproduk_cust"]=$jproduk_cust;*/
-			
+		$this->db->query('LOCK TABLE master_jual_produk WRITE');
 		$this->db->where('jproduk_id', $jproduk_id);
 		$this->db->update('master_jual_produk', $data);
-		if($this->db->affected_rows()>-1){
+		$rs = $this->db->affected_rows();
+		$this->db->query('UNLOCK TABLES');
+		if($rs>(-1)){
+			
+			if(($cetak==1) && ($piutang_total>0)){
+				$this->catatan_piutang_update($jproduk_nobukti ,$jproduk_cust ,$jproduk_tanggal ,$piutang_total);
+			}
+			
 			$time_now = date('H:i:s');
 			$bayar_date_create_temp = $jproduk_tanggal.' '.$time_now;
 			$bayar_date_create = date('Y-m-d H:i:s', strtotime($bayar_date_create_temp));
@@ -1167,22 +1137,45 @@ class M_master_jual_produk extends Model{
 				}
 			}
 			
-			return '0';
+			$rs_dproduk_insert = $this->detail_detail_jual_produk_insert($array_dproduk_id ,$jproduk_id ,$array_dproduk_karyawan ,$array_dproduk_produk
+																		 ,$array_dproduk_satuan ,$array_dproduk_jumlah ,$array_dproduk_harga
+																		 ,$array_dproduk_diskon ,$array_dproduk_diskon_jenis ,$cetak);
+			
+			return $rs_dproduk_insert;
 		}
 		else
 			return '-1';
 	}
 	
 	//function for create new record
-	function master_jual_produk_create($jproduk_nobukti ,$jproduk_cust ,$jproduk_tanggal ,$jproduk_stat_dok, $jproduk_diskon ,$jproduk_cara ,$jproduk_cara2 ,$jproduk_cara3 ,$jproduk_keterangan , $jproduk_cashback, $jproduk_tunai_nilai, $jproduk_tunai_nilai2, $jproduk_tunai_nilai3, $jproduk_voucher_no, $jproduk_voucher_cashback, $jproduk_voucher_no2, $jproduk_voucher_cashback2, $jproduk_voucher_no3, $jproduk_voucher_cashback3, $jproduk_bayar, $jproduk_subtotal, $jproduk_total, $jproduk_hutang, $jproduk_kwitansi_no, $jproduk_kwitansi_nama, $jproduk_kwitansi_nilai, $jproduk_kwitansi_no2, $jproduk_kwitansi_nama2, $jproduk_kwitansi_nilai2, $jproduk_kwitansi_no3, $jproduk_kwitansi_nama3, $jproduk_kwitansi_nilai3, $jproduk_card_nama, $jproduk_card_edc, $jproduk_card_no, $jproduk_card_nilai, $jproduk_card_nama2, $jproduk_card_edc2, $jproduk_card_no2, $jproduk_card_nilai2, $jproduk_card_nama3, $jproduk_card_edc3, $jproduk_card_no3, $jproduk_card_nilai3, $jproduk_cek_nama, $jproduk_cek_no, $jproduk_cek_valid, $jproduk_cek_bank, $jproduk_cek_nilai, $jproduk_cek_nama2, $jproduk_cek_no2, $jproduk_cek_valid2, $jproduk_cek_bank2, $jproduk_cek_nilai2, $jproduk_cek_nama3, $jproduk_cek_no3, $jproduk_cek_valid3, $jproduk_cek_bank3, $jproduk_cek_nilai3, $jproduk_transfer_bank, $jproduk_transfer_nama, $jproduk_transfer_nilai, $jproduk_transfer_bank2, $jproduk_transfer_nama2, $jproduk_transfer_nilai2, $jproduk_transfer_bank3, $jproduk_transfer_nama3, $jproduk_transfer_nilai3, $cetak, $jproduk_ket_disk){
+	function master_jual_produk_create($jproduk_nobukti ,$jproduk_cust ,$jproduk_tanggal ,$jproduk_stat_dok ,$jproduk_diskon
+									   ,$jproduk_cara ,$jproduk_cara2 ,$jproduk_cara3 ,$jproduk_keterangan ,$jproduk_cashback
+									   ,$jproduk_tunai_nilai ,$jproduk_tunai_nilai2 ,$jproduk_tunai_nilai3 ,$jproduk_voucher_no
+									   ,$jproduk_voucher_cashback ,$jproduk_voucher_no2 ,$jproduk_voucher_cashback2 ,$jproduk_voucher_no3
+									   ,$jproduk_voucher_cashback3 ,$jproduk_bayar ,$jproduk_subtotal ,$jproduk_total ,$jproduk_hutang
+									   ,$jproduk_kwitansi_no ,$jproduk_kwitansi_nama ,$jproduk_kwitansi_nilai ,$jproduk_kwitansi_no2
+									   ,$jproduk_kwitansi_nama2 ,$jproduk_kwitansi_nilai2 ,$jproduk_kwitansi_no3 ,$jproduk_kwitansi_nama3
+									   ,$jproduk_kwitansi_nilai3 ,$jproduk_card_nama ,$jproduk_card_edc ,$jproduk_card_no ,$jproduk_card_nilai
+									   ,$jproduk_card_nama2 ,$jproduk_card_edc2 ,$jproduk_card_no2 ,$jproduk_card_nilai2 ,$jproduk_card_nama3
+									   ,$jproduk_card_edc3 ,$jproduk_card_no3 ,$jproduk_card_nilai3 ,$jproduk_cek_nama ,$jproduk_cek_no
+									   ,$jproduk_cek_valid ,$jproduk_cek_bank ,$jproduk_cek_nilai ,$jproduk_cek_nama2 ,$jproduk_cek_no2
+									   ,$jproduk_cek_valid2 ,$jproduk_cek_bank2 ,$jproduk_cek_nilai2 ,$jproduk_cek_nama3 ,$jproduk_cek_no3
+									   ,$jproduk_cek_valid3 ,$jproduk_cek_bank3 ,$jproduk_cek_nilai3 ,$jproduk_transfer_bank
+									   ,$jproduk_transfer_nama ,$jproduk_transfer_nilai ,$jproduk_transfer_bank2 ,$jproduk_transfer_nama2
+									   ,$jproduk_transfer_nilai2 ,$jproduk_transfer_bank3 ,$jproduk_transfer_nama3 ,$jproduk_transfer_nilai3
+									   ,$cetak ,$jproduk_ket_disk
+									   ,$array_dproduk_id ,$array_dproduk_produk ,$array_dproduk_satuan
+									   ,$array_dproduk_jumlah ,$array_dproduk_harga ,$array_dproduk_diskon_jenis
+									   ,$array_dproduk_diskon ,$array_dproduk_karyawan){
 		$date_now = date('Y-m-d');
+		$datetime_now = date('Y-m-d H:i:s');
+		
+		$piutang_total = $jproduk_total - $jproduk_bayar;
 		
 		$jproduk_tanggal_pattern=strtotime($jproduk_tanggal);
 		$pattern="FT/".date("ym",$jproduk_tanggal_pattern)."-";
 		//$pattern="FT/".date("ym")."-";
 		$jproduk_nobukti=$this->m_public_function->get_kode_1('master_jual_produk','jproduk_nobukti',$pattern,12);
-		if ($jproduk_stat_dok=="")
-			$jproduk_stat_dok = "Terbuka";
 		
 		$jenis_transaksi = 'jual_produk';
 		
@@ -1195,14 +1188,21 @@ class M_master_jual_produk extends Model{
 			"jproduk_bayar"=>$jproduk_bayar,
 			"jproduk_totalbiaya"=>$jproduk_total,
 			"jproduk_cara"=>$jproduk_cara,
-			"jproduk_stat_dok"=>$jproduk_stat_dok,
 			"jproduk_keterangan"=>$jproduk_keterangan,
 			"jproduk_ket_disk"=>$jproduk_ket_disk,
 			"jproduk_creator"=>$_SESSION[SESSION_USERID]
 		);
+		
+		if($cetak==1){
+			$data['jproduk_stat_dok'] = 'Tertutup';
+		}else{
+			$data['jproduk_stat_dok'] = 'Terbuka';
+		}
+		
 		if($jproduk_tanggal<>$date_now){
 			$data["jproduk_date_create"] = $jproduk_tanggal;
 		}
+		
 		if($jproduk_cara2!=null){
 			if(($jproduk_kwitansi_nilai2<>'' && $jproduk_kwitansi_nilai2<>0)
 			   || ($jproduk_card_nilai2<>'' && $jproduk_card_nilai2<>0)
@@ -1227,8 +1227,17 @@ class M_master_jual_produk extends Model{
 				$data["jproduk_cara3"]=NULL;
 			}
 		}
-		$this->db->insert('master_jual_produk', $data); 
-		if($this->db->affected_rows()){
+		$this->db->query('LOCK TABLE master_jual_produk WRITE');
+		$this->db->insert('master_jual_produk', $data);
+		$jproduk_id = $this->db->insert_id();
+		$rs = $this->db->affected_rows();
+		$this->db->query('UNLOCK TABLES');
+		if($rs>0){
+			
+			if(($cetak==1) && ($piutang_total>0)){
+				$this->catatan_piutang_update($jproduk_nobukti ,$jproduk_cust ,$jproduk_tanggal ,$piutang_total);
+			}
+			
 			$time_now = date('H:i:s');
 			$bayar_date_create_temp = $jproduk_tanggal.' '.$time_now;
 			$bayar_date_create = date('Y-m-d H:i:s', strtotime($bayar_date_create_temp));
@@ -1412,7 +1421,11 @@ class M_master_jual_produk extends Model{
 				}
 			}
 			
-			return '0';
+			$rs_dproduk_insert = $this->detail_detail_jual_produk_insert($array_dproduk_id ,$jproduk_id ,$array_dproduk_karyawan ,$array_dproduk_produk
+																		 ,$array_dproduk_satuan ,$array_dproduk_jumlah ,$array_dproduk_harga
+																		 ,$array_dproduk_diskon ,$array_dproduk_diskon_jenis ,$cetak);
+			
+			return $rs_dproduk_insert;
 		}
 		else
 			return '-1';

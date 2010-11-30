@@ -504,139 +504,223 @@ Ext.onReady(function(){
 				
 				var jproduk_cetak_value = this.cetak_jproduk;
 				
-				Ext.Ajax.request({  
-					waitMsg: 'Mohon tunggu...',
-					url: 'index.php?c=c_master_jual_produk&m=get_action',
-					params: {
-						task: jproduk_post2db,
-						cetak: jproduk_cetak_value,
-						jproduk_id			: 	jproduk_id_create_pk, 
-						jproduk_nobukti		: 	jproduk_nobukti_create, 
-						jproduk_cust		: 	jproduk_cust_create, 
-						jproduk_tanggal		: 	jproduk_tanggal_create_date, 
-						jproduk_diskon		: 	jproduk_diskon_create, 
-						jproduk_cara		: 	jproduk_cara_create, 
-						jproduk_cara2		: 	jproduk_cara2_create, 
-						jproduk_cara3		: 	jproduk_cara3_create, 
-						jproduk_stat_dok	:	jproduk_statdok_create,
-						jproduk_keterangan	: 	jproduk_keterangan_create, 
-						jproduk_ket_disk	: 	jproduk_ket_disk_create, 
-						jproduk_cashback	: 	jproduk_cashback_create,
-						//tunai
-						jproduk_tunai_nilai	:	jproduk_tunai_nilai_create,
-						//tunai-2
-						jproduk_tunai_nilai2	:	jproduk_tunai_nilai2_create,
-						//tunai-3
-						jproduk_tunai_nilai3	:	jproduk_tunai_nilai3_create,
-						//voucher
-						jproduk_voucher_no	:	jproduk_voucher_no_create,
-						jproduk_voucher_cashback	:	jproduk_voucher_cashback_create,
-						//voucher-2
-						jproduk_voucher_no2	:	jproduk_voucher_no2_create,
-						jproduk_voucher_cashback2	:	jproduk_voucher_cashback2_create,
-						//voucher-3
-						jproduk_voucher_no3	:	jproduk_voucher_no3_create,
-						jproduk_voucher_cashback3	:	jproduk_voucher_cashback3_create,
-						
-						//bayar
-						jproduk_bayar			: 	jproduk_bayar_create,
-						jproduk_subtotal			: 	jproduk_subtotal_create,
-						jproduk_total			: 	jproduk_total_create,
-						jproduk_hutang		: 	jproduk_hutang_create,
-						//kwitansi posting
-						jproduk_kwitansi_no		:	jproduk_kwitansi_nomor_create,
-						jproduk_kwitansi_nama		:	jproduk_kwitansi_nama_create,
-						jproduk_kwitansi_nilai		:	jproduk_kwitansi_nilai_create,
-						//kwitansi-2 posting
-						jproduk_kwitansi_no2		:	jproduk_kwitansi_nomor2_create,
-						jproduk_kwitansi_nama2		:	jproduk_kwitansi_nama2_create,
-						jproduk_kwitansi_nilai2		:	jproduk_kwitansi_nilai2_create,
-						//kwitansi-3 posting
-						jproduk_kwitansi_no3		:	jproduk_kwitansi_nomor3_create,
-						jproduk_kwitansi_nama3		:	jproduk_kwitansi_nama3_create,
-						jproduk_kwitansi_nilai3		:	jproduk_kwitansi_nilai3_create,
-						//card posting
-						jproduk_card_nama	: 	jproduk_card_nama_create,
-						jproduk_card_edc	:	jproduk_card_edc_create,
-						jproduk_card_no		:	jproduk_card_no_create,
-						jproduk_card_nilai	:	jproduk_card_nilai_create,
-						//card-2 posting
-						jproduk_card_nama2	: 	jproduk_card_nama2_create,
-						jproduk_card_edc2	:	jproduk_card_edc2_create,
-						jproduk_card_no2	:	jproduk_card_no2_create,
-						jproduk_card_nilai2	:	jproduk_card_nilai2_create,
-						//card-3 posting
-						jproduk_card_nama3	: 	jproduk_card_nama3_create,
-						jproduk_card_edc3	:	jproduk_card_edc3_create,
-						jproduk_card_no3	:	jproduk_card_no3_create,
-						jproduk_card_nilai3	:	jproduk_card_nilai3_create,
-						//cek posting
-						jproduk_cek_nama	: 	jproduk_cek_nama_create,
-						jproduk_cek_no		:	jproduk_cek_nomor_create,
-						jproduk_cek_valid	: 	jproduk_cek_valid_create,
-						jproduk_cek_bank	:	jproduk_cek_bank_create,
-						jproduk_cek_nilai	:	jproduk_cek_nilai_create,
-						//cek-2 posting
-						jproduk_cek_nama2	: 	jproduk_cek_nama2_create,
-						jproduk_cek_no2		:	jproduk_cek_nomor2_create,
-						jproduk_cek_valid2	: 	jproduk_cek_valid2_create,
-						jproduk_cek_bank2	:	jproduk_cek_bank2_create,
-						jproduk_cek_nilai2	:	jproduk_cek_nilai2_create,
-						//cek-3 posting
-						jproduk_cek_nama3	: 	jproduk_cek_nama3_create,
-						jproduk_cek_no3		:	jproduk_cek_nomor3_create,
-						jproduk_cek_valid3	: 	jproduk_cek_valid3_create,
-						jproduk_cek_bank3	:	jproduk_cek_bank3_create,
-						jproduk_cek_nilai3	:	jproduk_cek_nilai3_create,
-						//transfer posting
-						jproduk_transfer_bank	:	jproduk_transfer_bank_create,
-						jproduk_transfer_nama	:	jproduk_transfer_nama_create,
-						jproduk_transfer_nilai	:	jproduk_transfer_nilai_create,
-						//transfer-2 posting
-						jproduk_transfer_bank2	:	jproduk_transfer_bank2_create,
-						jproduk_transfer_nama2	:	jproduk_transfer_nama2_create,
-						jproduk_transfer_nilai2	:	jproduk_transfer_nilai2_create,
-						//transfer-3 posting
-						jproduk_transfer_bank3	:	jproduk_transfer_bank3_create,
-						jproduk_transfer_nama3	:	jproduk_transfer_nama3_create,
-						jproduk_transfer_nilai3	:	jproduk_transfer_nilai3_create
-					}, 
-					success: function(response){
-						var result=eval(response.responseText);
-						switch(result){
-							case 0:
-								if(jproduk_post2db=='CREATE'){
-									detail_jual_produk_insert();
-								}else if(jproduk_post2db=='UPDATE'){
-									detail_jual_produk_insert();
-								}
-								master_jual_produk_createWindow.hide();
-								break;
-							default:
-								Ext.MessageBox.show({
-								   title: 'Warning',
-								   //msg: 'We could\'t not '+msg+' the Master_jual_produk.',
-								   msg: 'Data penjualan produk tidak bisa disimpan',
-								   buttons: Ext.MessageBox.OK,
-								   animEl: 'save',
-								   icon: Ext.MessageBox.WARNING
-								});
-								jproduk_btn_cancel();
-								break;
+				var dproduk_id=[];
+				var dproduk_produk=[];
+				var dproduk_karyawan=[];
+				var dproduk_satuan=[];
+				var dproduk_jumlah=[];
+				var dproduk_harga=[];
+				var dproduk_diskon=[];
+				var dproduk_diskon_jenis=[];
+				
+				var dcount = detail_jual_produk_DataStore.getCount() - 1;
+				
+				if(detail_jual_produk_DataStore.getCount()>0){
+					for(i=0; i<detail_jual_produk_DataStore.getCount();i++){
+						if((/^\d+$/.test(detail_jual_produk_DataStore.getAt(i).data.dproduk_produk))
+						   && detail_jual_produk_DataStore.getAt(i).data.dproduk_produk!==undefined
+						   && detail_jual_produk_DataStore.getAt(i).data.dproduk_produk!==''
+						   && detail_jual_produk_DataStore.getAt(i).data.dproduk_produk!==0){
+							
+							dproduk_id.push(detail_jual_produk_DataStore.getAt(i).data.dproduk_id);
+							
+							dproduk_produk.push(detail_jual_produk_DataStore.getAt(i).data.dproduk_produk);
+							
+							if((detail_jual_produk_DataStore.getAt(i).data.dproduk_satuan==undefined)
+							   || (detail_jual_produk_DataStore.getAt(i).data.dproduk_satuan=='')){
+								dproduk_satuan.push(0);
+							}else{
+								dproduk_satuan.push(detail_jual_produk_DataStore.getAt(i).data.dproduk_satuan);
+							}
+							
+							if(detail_jual_produk_DataStore.getAt(i).data.dproduk_jumlah==undefined){
+								dproduk_jumlah.push(0);
+							}else{
+								dproduk_jumlah.push(detail_jual_produk_DataStore.getAt(i).data.dproduk_jumlah);
+							}
+							
+							if(detail_jual_produk_DataStore.getAt(i).data.dproduk_harga==undefined){
+								dproduk_harga.push(0);
+							}else{
+								dproduk_harga.push(detail_jual_produk_DataStore.getAt(i).data.dproduk_harga);
+							}
+							
+							if(detail_jual_produk_DataStore.getAt(i).data.dproduk_diskon_jenis==undefined){
+								dproduk_diskon_jenis.push('');
+							}else{
+								dproduk_diskon_jenis.push(detail_jual_produk_DataStore.getAt(i).data.dproduk_diskon_jenis);
+							}
+							
+							if((detail_jual_produk_DataStore.getAt(i).data.dproduk_diskon==undefined)
+							   || (detail_jual_produk_DataStore.getAt(i).data.dproduk_diskon=='')){
+								dproduk_diskon.push(0);
+							}else{
+								dproduk_diskon.push(detail_jual_produk_DataStore.getAt(i).data.dproduk_diskon);
+							}
+							
+							if((detail_jual_produk_DataStore.getAt(i).data.dproduk_karyawan==undefined)
+							   || (detail_jual_produk_DataStore.getAt(i).data.dproduk_karyawan=='')){
+								dproduk_karyawan.push(0);
+							}else{
+								dproduk_karyawan.push(detail_jual_produk_DataStore.getAt(i).data.dproduk_karyawan);
+							}
+							
 						}
-					},
-					failure: function(response){
-						var result=response.responseText;
-						Ext.MessageBox.show({
-							   title: 'Error',
-							   msg: 'Could not connect to the database. retry later.',
-							   buttons: Ext.MessageBox.OK,
-							   animEl: 'database',
-							   icon: Ext.MessageBox.ERROR
-						});
-						jproduk_btn_cancel();
-					}                      
-				});
+						
+						if(i==dcount){
+							var encoded_array_dproduk_id = Ext.encode(dproduk_id);
+							var encoded_array_dproduk_produk = Ext.encode(dproduk_produk);
+							var encoded_array_dproduk_satuan = Ext.encode(dproduk_satuan);
+							var encoded_array_dproduk_jumlah = Ext.encode(dproduk_jumlah);
+							var encoded_array_dproduk_harga = Ext.encode(dproduk_harga);
+							var encoded_array_dproduk_diskon_jenis = Ext.encode(dproduk_diskon_jenis);
+							var encoded_array_dproduk_diskon = Ext.encode(dproduk_diskon);
+							var encoded_array_dproduk_karyawan = Ext.encode(dproduk_karyawan);
+							
+							Ext.Ajax.request({
+								waitMsg: 'Mohon tunggu...',
+								url: 'index.php?c=c_master_jual_produk&m=get_action',
+								params: {
+									task: jproduk_post2db,
+									cetak: jproduk_cetak_value,
+									jproduk_id			: 	jproduk_id_create_pk, 
+									jproduk_nobukti		: 	jproduk_nobukti_create, 
+									jproduk_cust		: 	jproduk_cust_create, 
+									jproduk_tanggal		: 	jproduk_tanggal_create_date, 
+									jproduk_diskon		: 	jproduk_diskon_create, 
+									jproduk_cara		: 	jproduk_cara_create, 
+									jproduk_cara2		: 	jproduk_cara2_create, 
+									jproduk_cara3		: 	jproduk_cara3_create, 
+									jproduk_stat_dok	:	jproduk_statdok_create,
+									jproduk_keterangan	: 	jproduk_keterangan_create, 
+									jproduk_ket_disk	: 	jproduk_ket_disk_create, 
+									jproduk_cashback	: 	jproduk_cashback_create,
+									//tunai
+									jproduk_tunai_nilai	:	jproduk_tunai_nilai_create,
+									//tunai-2
+									jproduk_tunai_nilai2	:	jproduk_tunai_nilai2_create,
+									//tunai-3
+									jproduk_tunai_nilai3	:	jproduk_tunai_nilai3_create,
+									//voucher
+									jproduk_voucher_no	:	jproduk_voucher_no_create,
+									jproduk_voucher_cashback	:	jproduk_voucher_cashback_create,
+									//voucher-2
+									jproduk_voucher_no2	:	jproduk_voucher_no2_create,
+									jproduk_voucher_cashback2	:	jproduk_voucher_cashback2_create,
+									//voucher-3
+									jproduk_voucher_no3	:	jproduk_voucher_no3_create,
+									jproduk_voucher_cashback3	:	jproduk_voucher_cashback3_create,
+									
+									//bayar
+									jproduk_bayar			: 	jproduk_bayar_create,
+									jproduk_subtotal			: 	jproduk_subtotal_create,
+									jproduk_total			: 	jproduk_total_create,
+									jproduk_hutang		: 	jproduk_hutang_create,
+									//kwitansi posting
+									jproduk_kwitansi_no		:	jproduk_kwitansi_nomor_create,
+									jproduk_kwitansi_nama		:	jproduk_kwitansi_nama_create,
+									jproduk_kwitansi_nilai		:	jproduk_kwitansi_nilai_create,
+									//kwitansi-2 posting
+									jproduk_kwitansi_no2		:	jproduk_kwitansi_nomor2_create,
+									jproduk_kwitansi_nama2		:	jproduk_kwitansi_nama2_create,
+									jproduk_kwitansi_nilai2		:	jproduk_kwitansi_nilai2_create,
+									//kwitansi-3 posting
+									jproduk_kwitansi_no3		:	jproduk_kwitansi_nomor3_create,
+									jproduk_kwitansi_nama3		:	jproduk_kwitansi_nama3_create,
+									jproduk_kwitansi_nilai3		:	jproduk_kwitansi_nilai3_create,
+									//card posting
+									jproduk_card_nama	: 	jproduk_card_nama_create,
+									jproduk_card_edc	:	jproduk_card_edc_create,
+									jproduk_card_no		:	jproduk_card_no_create,
+									jproduk_card_nilai	:	jproduk_card_nilai_create,
+									//card-2 posting
+									jproduk_card_nama2	: 	jproduk_card_nama2_create,
+									jproduk_card_edc2	:	jproduk_card_edc2_create,
+									jproduk_card_no2	:	jproduk_card_no2_create,
+									jproduk_card_nilai2	:	jproduk_card_nilai2_create,
+									//card-3 posting
+									jproduk_card_nama3	: 	jproduk_card_nama3_create,
+									jproduk_card_edc3	:	jproduk_card_edc3_create,
+									jproduk_card_no3	:	jproduk_card_no3_create,
+									jproduk_card_nilai3	:	jproduk_card_nilai3_create,
+									//cek posting
+									jproduk_cek_nama	: 	jproduk_cek_nama_create,
+									jproduk_cek_no		:	jproduk_cek_nomor_create,
+									jproduk_cek_valid	: 	jproduk_cek_valid_create,
+									jproduk_cek_bank	:	jproduk_cek_bank_create,
+									jproduk_cek_nilai	:	jproduk_cek_nilai_create,
+									//cek-2 posting
+									jproduk_cek_nama2	: 	jproduk_cek_nama2_create,
+									jproduk_cek_no2		:	jproduk_cek_nomor2_create,
+									jproduk_cek_valid2	: 	jproduk_cek_valid2_create,
+									jproduk_cek_bank2	:	jproduk_cek_bank2_create,
+									jproduk_cek_nilai2	:	jproduk_cek_nilai2_create,
+									//cek-3 posting
+									jproduk_cek_nama3	: 	jproduk_cek_nama3_create,
+									jproduk_cek_no3		:	jproduk_cek_nomor3_create,
+									jproduk_cek_valid3	: 	jproduk_cek_valid3_create,
+									jproduk_cek_bank3	:	jproduk_cek_bank3_create,
+									jproduk_cek_nilai3	:	jproduk_cek_nilai3_create,
+									//transfer posting
+									jproduk_transfer_bank	:	jproduk_transfer_bank_create,
+									jproduk_transfer_nama	:	jproduk_transfer_nama_create,
+									jproduk_transfer_nilai	:	jproduk_transfer_nilai_create,
+									//transfer-2 posting
+									jproduk_transfer_bank2	:	jproduk_transfer_bank2_create,
+									jproduk_transfer_nama2	:	jproduk_transfer_nama2_create,
+									jproduk_transfer_nilai2	:	jproduk_transfer_nilai2_create,
+									//transfer-3 posting
+									jproduk_transfer_bank3	:	jproduk_transfer_bank3_create,
+									jproduk_transfer_nama3	:	jproduk_transfer_nama3_create,
+									jproduk_transfer_nilai3	:	jproduk_transfer_nilai3_create,
+									
+									//Data Detail Penjualan Produk
+									dproduk_id	: encoded_array_dproduk_id,
+									dproduk_produk	: encoded_array_dproduk_produk,
+									dproduk_satuan	: encoded_array_dproduk_satuan,
+									dproduk_jumlah	: encoded_array_dproduk_jumlah,
+									dproduk_harga	: encoded_array_dproduk_harga,
+									dproduk_diskon_jenis	: encoded_array_dproduk_diskon_jenis,
+									dproduk_diskon	: encoded_array_dproduk_diskon,
+									dproduk_karyawan: encoded_array_dproduk_karyawan
+								}, 
+								success: function(response){
+									var result=eval(response.responseText);
+									if(result==0){
+										jproduk_btn_cancel();
+										Ext.MessageBox.alert(jproduk_post2db+' OK','Data penjualan produk berhasil disimpan');
+										master_jual_produk_createWindow.hide();
+									}else if(result>0){
+										jproduk_cetak(result);
+										cetak_jproduk=0;
+										jproduk_btn_cancel();
+									}else{
+										jproduk_btn_cancel();
+										Ext.MessageBox.show({
+										   title: 'Warning',
+										   msg: 'Data penjualan produk tidak bisa disimpan',
+										   buttons: Ext.MessageBox.OK,
+										   animEl: 'save',
+										   icon: Ext.MessageBox.WARNING
+										});
+									}
+								},
+								failure: function(response){
+									var result=response.responseText;
+									Ext.MessageBox.show({
+										   title: 'Error',
+										   msg: 'Could not connect to the database. retry later.',
+										   buttons: Ext.MessageBox.OK,
+										   animEl: 'database',
+										   icon: Ext.MessageBox.ERROR
+									});
+									jproduk_btn_cancel();
+								}                      
+							});
+						}
+					}
+				}
+				
 			}else if(jproduk_post2db=='UPDATE' && jproduk_stat_dokField.getValue()=='Tertutup'){
 				if(cetak_jproduk==1){
 					jproduk_cetak(jproduk_id_for_cetak);
@@ -1017,12 +1101,18 @@ Ext.onReady(function(){
 
 		jproduk_subTotalField.reset();
 		jproduk_subTotalField.setValue(null);
+		jproduk_subTotal_cfField.reset();
+		jproduk_subTotal_cfField.setValue(null);
 
 		jproduk_totalField.reset();
 		jproduk_totalField.setValue(null);
+		jproduk_total_cfField.reset();
+		jproduk_total_cfField.setValue(null);
 
 		jproduk_hutangField.reset();
 		jproduk_hutangField.setValue(null);
+		jproduk_hutang_cfField.reset();
+		jproduk_hutang_cfField.setValue(null);
 
 		jproduk_jumlahField.reset();
 		jproduk_jumlahField.setValue(null);
@@ -1059,6 +1149,8 @@ Ext.onReady(function(){
 
 		jproduk_bayarField.reset();
 		jproduk_bayarField.setValue(null);
+		jproduk_bayar_cfField.reset();
+		jproduk_bayar_cfField.setValue(null);
 		
 		/* Enable if jpaket_post2db="CREATE" */
 		jproduk_custField.setDisabled(false);
@@ -1149,6 +1241,7 @@ Ext.onReady(function(){
 		jproduk_ket_diskField.setValue(master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_ket_disk'));
 		jproduk_cashback_cfField.setValue(CurrencyFormatted(master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_cashback')));
 		jproduk_bayarField.setValue(master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_bayar'));
+		jproduk_bayar_cfField.setValue(CurrencyFormatted(master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_bayar')));
 		
 		jproduk_keteranganField.setValue(master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_keterangan'));
 		
@@ -1167,11 +1260,14 @@ Ext.onReady(function(){
 		
 		jproduk_jumlahField.setValue(dproduk_jumlah_field);
 		jproduk_subTotalField.setValue(subtotal_field);
+		jproduk_subTotal_cfField.setValue(CurrencyFormatted(subtotal_field));
 		
 		jproduk_totalField.setValue(total_field);
+		jproduk_total_cfField.setValue(CurrencyFormatted(total_field));
 		
 		hutang_temp=total_field-jproduk_bayarField.getValue();
 		jproduk_hutangField.setValue(hutang_temp);
+		jproduk_hutang_cfField.setValue(CurrencyFormatted(hutang_temp));
 		
 		load_membership();
 		update_group_carabayar_jual_produk();
@@ -3943,82 +4039,114 @@ Ext.onReady(function(){
 		maskRe: /([0-9]+)$/
 	});
 	
-	jproduk_subTotalField= new Ext.ux.form.CFTextField({
+	jproduk_subTotal_cfField= new Ext.form.TextField({
+		id: 'jproduk_subTotal_cfField',
+		fieldLabel: 'Sub Total (Rp)',
+		allowNegatife : false,
+		enableKeyEvents: true,
+		itemCls: 'rmoney',
+		width: 120,
+		maskRe: /([0-9]+)$/ 
+	});
+	jproduk_subTotalField= new Ext.form.NumberField({
+		id: 'jproduk_subTotalField',
+		enableKeyEvents: true,
+		fieldLabel: 'Sub Total (Rp)',
+		allowBlank: true,
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
+	});
+	
+	/*jproduk_subTotalField= new Ext.ux.form.CFTextField({
 		id: 'jproduk_subTotalField',
 		fieldLabel: 'Sub Total (Rp)',
 		valueRenderer: 'numberToCurrency',
 		readOnly: true,
 		itemCls: 'rmoney',
 		width: 120
-	});
-	/*jproduk_subTotalField= new Ext.form.NumberField({
-		id: 'jproduk_subTotalField',
-		fieldLabel: 'Sub Total (Rp)',
-		readOnly: true,
-		allowDecimals: false,
-		allowBlank: true,
-		width: 120,
-		maxLength: 50,
-		maskRe: /([0-9]+)$/
 	});*/
+	
+	jproduk_total_cfField= new Ext.form.TextField({
+		id: 'jproduk_total_cfField',
+		fieldLabel: '<span style="font-weight:bold">Total (Rp)</span>',
+		allowNegatife : false,
+		enableKeyEvents: true,
+		itemCls: 'rmoney',
+		width: 120,
+		maskRe: /([0-9]+)$/ 
+	});
+	jproduk_totalField= new Ext.form.NumberField({
+		id: 'jproduk_totalField',
+		enableKeyEvents: true,
+		fieldLabel: '<span style="font-weight:bold">Total (Rp)</span>',
+		allowBlank: true,
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
+	});
 
-	jproduk_totalField= new Ext.ux.form.CFTextField({
+	/*jproduk_totalField= new Ext.ux.form.CFTextField({
 		id: 'jproduk_totalField',
 		fieldLabel: '<span style="font-weight:bold">Total (Rp)</span>',
 		valueRenderer: 'numberToCurrency',
 		readOnly: true,
 		itemCls: 'rmoney_b',
 		width: 120
-	});
-	/*jproduk_totalField= new Ext.form.NumberField({
-		id: 'jproduk_totalField',
-		fieldLabel: '<span style="font-weight:bold">Total (Rp)</span>',
-		readOnly: true,
-		allowDecimals: false,
-		allowBlank: true,
-		width: 120,
-		maxLength: 50,
-		maskRe: /([0-9]+)$/
 	});*/
 	
-	jproduk_bayarField= new Ext.ux.form.CFTextField({
-		id: 'jproduk_bayarField',
+	jproduk_bayar_cfField= new Ext.form.TextField({
+		id: 'jproduk_bayar_cfField',
 		fieldLabel: 'Total Bayar (Rp)',
-		valueRenderer: 'numberToCurrency',
-		readOnly: true,
-		itemCls: 'rmoney',
-		width: 120
-	});
-	/*jproduk_bayarField= new Ext.form.NumberField({
-		id: 'jproduk_bayarField',
-		fieldLabel: 'Total Bayar (Rp)',
-		readOnly: true,
+		allowNegatife : false,
 		enableKeyEvents: true,
-		allowBlank: true,
-		allowDecimals: false,
+		itemCls: 'rmoney',
 		width: 120,
-		maxLength: 50,
+		maskRe: /([0-9]+)$/ 
+	});
+	jproduk_bayarField= new Ext.form.NumberField({
+		id: 'jproduk_bayarField',
+		enableKeyEvents: true,
+		fieldLabel: 'Total Bayar (Rp)',
+		allowBlank: true,
+		anchor: '95%',
 		maskRe: /([0-9]+)$/
+	});
+	
+	/*jproduk_bayarField= new Ext.ux.form.CFTextField({
+		id: 'jproduk_bayarField',
+		fieldLabel: 'Total Bayar (Rp)',
+		valueRenderer: 'numberToCurrency',
+		readOnly: true,
+		itemCls: 'rmoney',
+		width: 120
 	});*/
 	
-	jproduk_hutangField= new Ext.ux.form.CFTextField({
+	jproduk_hutang_cfField= new Ext.form.TextField({
+		id: 'jproduk_hutang_cfField',
+		fieldLabel: 'Hutang (Rp)',
+		allowNegatife : false,
+		enableKeyEvents: true,
+		itemCls: 'rmoney',
+		width: 120,
+		maskRe: /([0-9]+)$/ 
+	});
+	jproduk_hutangField= new Ext.form.NumberField({
+		id: 'jproduk_hutangField',
+		enableKeyEvents: true,
+		fieldLabel: 'Hutang (Rp)',
+		allowBlank: true,
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
+	});
+	
+	/*jproduk_hutangField= new Ext.ux.form.CFTextField({
 		id: 'jproduk_hutangField',
 		fieldLabel: 'Hutang (Rp)',
 		valueRenderer: 'numberToCurrency',
 		readOnly: true,
 		itemCls: 'rmoney',
 		width: 120
-	});
-	/*jproduk_hutangField= new Ext.form.NumberField({
-		id: 'jproduk_hutangField',
-		fieldLabel: 'Hutang (Rp)',
-		readOnly: true,
-		allowBlank: true,
-		allowDecimals: false,
-		width: 120,
-		maxLength: 50,
-		maskRe: /([0-9]+)$/
 	});*/
+	
 	jproduk_pesanLabel= new Ext.form.Label({
 		style: {
 			marginLeft: '100px',
@@ -4091,8 +4219,8 @@ Ext.onReady(function(){
 				baseCls: 'x-plain',
 				border:false,
 				labelAlign: 'left',
-				items: [jproduk_jumlahField, jproduk_subTotalField,jproduk_diskonField,jproduk_cashback_cfField,
-			  jproduk_ket_diskField, {xtype: 'spacer',height:10},jproduk_totalField, jproduk_bayarField,jproduk_hutangField, jproduk_pesanLabel, jproduk_lunasLabel] 
+				items: [jproduk_jumlahField, jproduk_subTotal_cfField,jproduk_diskonField,jproduk_cashback_cfField,
+			  jproduk_ket_diskField, {xtype: 'spacer',height:10},jproduk_total_cfField, jproduk_bayar_cfField,jproduk_hutang_cfField, jproduk_pesanLabel, jproduk_lunasLabel] 
 			}
 			]
 	
@@ -4800,8 +4928,8 @@ Ext.onReady(function(){
 		var edit_detail_jual_produk= new detail_jual_produkListEditorGrid.store.recordType({
 			dproduk_id	:0,
 			dproduk_produk	:'',
-			dproduk_satuan	:'',		
-			dproduk_jumlah	:1,		
+			dproduk_satuan	:'',
+			dproduk_jumlah	:1,
 			dproduk_harga	:0,
 			dproduk_subtotal:0,
 			dproduk_diskon_jenis: '',
@@ -5302,11 +5430,14 @@ Ext.onReady(function(){
 		
 		update_total_field=jproduk_subTotalField.getValue()*((100-jproduk_diskonField.getValue())/100)-jproduk_cashbackField.getValue();
 		jproduk_totalField.setValue(update_total_field);
+		jproduk_total_cfField.setValue(CurrencyFormatted(update_total_field));
 
 		jproduk_bayarField.setValue(total_bayar);
+		jproduk_bayar_cfField.setValue(CurrencyFormatted(total_bayar));
 		
 		update_hutang_field=update_total_field-total_bayar;
 		jproduk_hutangField.setValue(update_hutang_field);
+		jproduk_hutang_cfField.setValue(CurrencyFormatted(update_hutang_field));
 
 		jproduk_diskonField.setValue(jproduk_diskonField.getValue());
 		jproduk_cashbackField.setValue(jproduk_cashbackField.getValue());
@@ -5358,13 +5489,16 @@ Ext.onReady(function(){
 		}
 		jproduk_jumlahField.setValue(jumlah_item);
 		jproduk_subTotalField.setValue(sub_total_field);
+		jproduk_subTotal_cfField.setValue(CurrencyFormatted(sub_total_field));
 		
 		total_biaya_field = sub_total_field * ((100 - disk_tambahan_field)/100) - voucher_rp_field;
 		total_biaya_field = (total_biaya_field>0?Math.round(total_biaya_field):0);
 		jproduk_totalField.setValue(total_biaya_field);
+		jproduk_total_cfField.setValue(CurrencyFormatted(total_biaya_field));
 		
 		total_hutang_field = total_biaya_field - total_bayar_field;
 		jproduk_hutangField.setValue(total_hutang_field);
+		jproduk_hutang_cfField.setValue(CurrencyFormatted(total_hutang_field));
 	}
 	
 	function load_total_biaya(){
@@ -5397,9 +5531,11 @@ Ext.onReady(function(){
 		total_biaya_field += sub_total_biaya_field * ((100 - disk_tambahan_field)/100) - voucher_rp_field;
 		total_biaya_field = (total_biaya_field>0?Math.round(total_biaya_field):0);
 		jproduk_totalField.setValue(total_biaya_field);
+		jproduk_total_cfField.setValue(CurrencyFormatted(total_biaya_field));
 		
 		total_hutang_field = total_biaya_field - total_bayar_field;
 		jproduk_hutangField.setValue(total_hutang_field);
+		jproduk_hutang_cfField.setValue(CurrencyFormatted(total_hutang_field));
 	}
 	
 	function load_total_bayar(){
@@ -5541,10 +5677,12 @@ Ext.onReady(function(){
 		total_bayar_field=transfer_nilai+transfer_nilai2+transfer_nilai3+kwitansi_nilai+kwitansi_nilai2+kwitansi_nilai3+card_nilai+card_nilai2+card_nilai3+cek_nilai+cek_nilai2+cek_nilai3+voucher_nilai+voucher_nilai2+voucher_nilai3+tunai_nilai+tunai_nilai2+tunai_nilai3;
 		total_bayar_field=(total_bayar_field>0?Math.round(total_bayar_field):0);
 		jproduk_bayarField.setValue(total_bayar_field);
+		jproduk_bayar_cfField.setValue(CurrencyFormatted(total_bayar_field));
 
 		total_hutang_field=total_biaya_field-total_bayar_field;
 		total_hutang_field=(total_hutang_field>0?Math.round(total_hutang_field):0);
 		jproduk_hutangField.setValue(total_hutang_field);
+		jproduk_hutang_cfField.setValue(CurrencyFormatted(total_hutang_field));
 		
 		if(total_bayar_field>total_biaya_field){
 			jproduk_pesanLabel.setText("Kelebihan Jumlah Bayar");
