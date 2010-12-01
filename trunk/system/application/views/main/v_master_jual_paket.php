@@ -4334,7 +4334,9 @@ Ext.onReady(function(){
 			dataIndex: 'dpaket_paket',
 			width: 300,
 			sortable: false,
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALPAKET'))){ ?>
 			editor: combo_jual_paket,
+			<?php } ?>
 			renderer: Ext.util.Format.comboRenderer(combo_jual_paket)
 		},
 		{
@@ -4343,8 +4345,11 @@ Ext.onReady(function(){
 			dataIndex: 'dpaket_jumlah',
 			width: 60,
 			sortable: false,
-			renderer: Ext.util.Format.numberRenderer('0,000'),
+			renderer: Ext.util.Format.numberRenderer('0,000')
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALPAKET'))){ ?>
+			,
 			editor: dpaket_jumlahField
+			<?php } ?>
 		},
 		{
 			align : 'Left',
@@ -4352,7 +4357,9 @@ Ext.onReady(function(){
 			dataIndex: 'dpaket_kadaluarsa',
 			width: 80,
 			sortable: false,
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALPAKET'))){ ?>
 			editor: dpaket_kadaluarsaField,
+			<?php } ?>
 			renderer: Ext.util.Format.dateRenderer('d-m-Y')
 		},
 		{
@@ -4361,7 +4368,9 @@ Ext.onReady(function(){
 			dataIndex: 'dpaket_harga',
 			width: 100,
 			sortable: false,
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALPAKET'))){ ?>
 			editor: dpaket_hargaField,
+			<?php } ?>
 			renderer: Ext.util.Format.numberRenderer('0,000')
 		},{
 			align : 'Right',
@@ -4369,7 +4378,9 @@ Ext.onReady(function(){
 			dataIndex: 'dpaket_subtotal',
 			width: 100,
 			sortable: false,
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALPAKET'))){ ?>
 			editor: dpaket_subtotalField,
+			<?php } ?>
 			//renderer: Ext.util.Format.numberRenderer('0,000'),
 			renderer: function(v, params, record){
 				return Ext.util.Format.number(record.data.dpaket_jumlah * record.data.dpaket_harga,'0,000');
@@ -4380,8 +4391,11 @@ Ext.onReady(function(){
 			header: '<div align="center">' + 'Jenis Diskon' + '</div>',
 			dataIndex: 'dpaket_diskon_jenis',
 			width: 80,
-			sortable: false,
+			sortable: false
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALPAKET'))){ ?>
+			,
 			editor: dpaket_jenisdiskonField
+			<?php } ?>
 		},
 		{
 			align : 'Right',
@@ -4389,7 +4403,9 @@ Ext.onReady(function(){
 			dataIndex: 'dpaket_diskon',
 			width: 80,
 			sortable: false,
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALPAKET'))){ ?>
 			editor: dpaket_jumlahdiskonField,
+			<?php } ?>
 			renderer: Ext.util.Format.numberRenderer('0,000')
 		},{
 			align : 'Right',
@@ -4397,7 +4413,9 @@ Ext.onReady(function(){
 			dataIndex: 'dpaket_subtotal_net',
 			width: 100,
 			sortable: false,
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALPAKET'))){ ?>
 			editor: dpaket_subtotalnetField,
+			<?php } ?>
 			//renderer: Ext.util.Format.numberRenderer('0,000')
 			renderer: function(v, params, record){
 				var record_dtotal_net = record.data.dpaket_jumlah*record.data.dpaket_harga*((100-record.data.dpaket_diskon)/100);
@@ -4412,7 +4430,9 @@ Ext.onReady(function(){
 			width: 150,
 			sortable: false,
 			allowBlank: false,
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALPAKET'))){ ?>
 			editor: combo_reveral_paket,
+			<?php } ?>
 			renderer: Ext.util.Format.comboRenderer(combo_reveral_paket)
 		}]
 	);
@@ -4780,7 +4800,9 @@ Ext.onReady(function(){
 			dataIndex: 'ppaket_cust',
 			width: 298,
 			sortable: true,
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALPAKET'))){ ?>
 			editor: combo_pengguna_paket,
+			<?php } ?>
 			renderer: Ext.util.Format.comboRenderer(combo_pengguna_paket)
 		}]
 	);
