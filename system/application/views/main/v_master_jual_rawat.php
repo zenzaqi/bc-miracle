@@ -4683,7 +4683,9 @@ Ext.onReady(function(){
 			width: 300,
 			sortable: true,
 			allowBlank: false,
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALRAWAT'))){ ?>
 			editor: combo_jual_rawat,
+			<?php } ?>
 			renderer: Ext.util.Format.comboRenderer(combo_jual_rawat)
 		},
 		{
@@ -4692,7 +4694,9 @@ Ext.onReady(function(){
 			dataIndex: 'drawat_jumlah',
 			width: 60,
 			sortable: false,
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALRAWAT'))){ ?>
 			editor: drawat_jumlahField,
+			<?php } ?>
 			renderer: Ext.util.Format.numberRenderer('0,000'),
 		},
 		{
@@ -4701,7 +4705,9 @@ Ext.onReady(function(){
 			dataIndex: 'drawat_harga',
 			width: 80,
 			sortable: true,
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALRAWAT'))){ ?>
 			editor: drawat_hargaField,
+			<?php } ?>
 			renderer: Ext.util.Format.numberRenderer('0,000')
 		}
 		,{
@@ -4710,7 +4716,9 @@ Ext.onReady(function(){
 			dataIndex: 'drawat_subtotal',
 			width: 100,
 			sortable: true,
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALRAWAT'))){ ?>
 			editor: drawat_subtotalField,
+			<?php } ?>
 			renderer: function(v, params, record){
 				return Ext.util.Format.number(record.data.drawat_jumlah*record.data.drawat_harga,'0,000');
 			}
@@ -4719,8 +4727,11 @@ Ext.onReady(function(){
 			header: '<div align="center">' + 'Jns Diskon' + '</div>',
 			dataIndex: 'drawat_diskon_jenis',
 			width: 70,
-			sortable: true,
+			sortable: true
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALRAWAT'))){ ?>
+			,
 			editor: drawat_jenis_diskonField
+			<?php } ?>
 		},
 		{
 			align: 'Right',
@@ -4728,7 +4739,9 @@ Ext.onReady(function(){
 			dataIndex: 'drawat_diskon',
 			width: 60,
 			sortable: false,
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALRAWAT'))){ ?>
 			editor: drawat_diskonField,
+			<?php } ?>
 			renderer: Ext.util.Format.numberRenderer('0,000')
 		},
 		{
@@ -4737,7 +4750,9 @@ Ext.onReady(function(){
 			dataIndex: 'drawat_subtotal_net',
 			width: 100,
 			sortable: true,
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALRAWAT'))){ ?>
 			editor: drawat_subtotal_netField,
+			<?php } ?>
 			renderer: function(v, params, record){
 				var record_dtotal_net = record.data.drawat_jumlah*record.data.drawat_harga*((100-record.data.drawat_diskon)/100);
 				record_dtotal_net = (record_dtotal_net>0?Math.round(record_dtotal_net):0);

@@ -4734,24 +4734,22 @@ Ext.onReady(function(){
 			dataIndex: 'dproduk_produk',
 			width: 300,
 			sortable: false,
-			allowBlank: false
+			allowBlank: false,
 			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALPRODUK'))){ ?>
-			,
 			editor: combo_jual_produk,
-			renderer: Ext.util.Format.comboRenderer(combo_jual_produk)
 			<?php } ?>
+			renderer: Ext.util.Format.comboRenderer(combo_jual_produk)
 		},
 		{
 			align :'Left',
 			header: '<div align="center">' + 'Satuan' + '</div>',
 			dataIndex: 'dproduk_satuan',
 			width: 60,
-			sortable: false
+			sortable: false,
 			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALPRODUK'))){ ?>
-			,
 			editor: combo_satuan_produk,
-			renderer: Ext.util.Format.comboRenderer(combo_satuan_produk)
 			<?php } ?>
+			renderer: Ext.util.Format.comboRenderer(combo_satuan_produk)
 		},
 		{
 			align : 'Right',
@@ -4781,14 +4779,13 @@ Ext.onReady(function(){
 			header: '<div align="center">' + 'Sub Total (Rp)' + '</div>',
 			dataIndex: 'dproduk_subtotal',
 			width: 100,
-			sortable: false
+			sortable: false,
 			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALPRODUK'))){ ?>
-			,
 			editor: dsub_totalField,
+			<?php } ?>
 			renderer: function(v, params, record){
 				return Ext.util.Format.number(record.data.dproduk_jumlah*record.data.dproduk_harga,'0,000');
             }
-			<?php } ?>
 		},
 		{
 			align : 'Left',
@@ -4818,16 +4815,15 @@ Ext.onReady(function(){
 			header: '<div align="center">' + 'Sub Tot Net (Rp)' + '</div>',
 			dataIndex: 'dproduk_subtotal_net',
 			width: 100,
-			sortable: false
+			sortable: false,
 			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALPRODUK'))){ ?>
-			,
 			editor: dsub_total_netField,
+			<?php } ?>
 			renderer: function(v, params, record){
 				var record_dtotal_net = record.data.dproduk_jumlah*record.data.dproduk_harga*((100-record.data.dproduk_diskon)/100);
 				record_dtotal_net = (record_dtotal_net>0?Math.round(record_dtotal_net):0);
 				return Ext.util.Format.number(record_dtotal_net,'0,000');
             }
-			<?php } ?>
 		},
 		{
 			align : 'Left',
@@ -4835,12 +4831,11 @@ Ext.onReady(function(){
 			dataIndex: 'dproduk_karyawan',
 			width: 150,
 			sortable: false,
-			allowBlank: false
+			allowBlank: false,
 			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALPRODUK'))){ ?>
-			,
 			editor: combo_reveral,
-			renderer: Ext.util.Format.comboRenderer(combo_reveral)
 			<?php } ?>
+			renderer: Ext.util.Format.comboRenderer(combo_reveral)
 		},
 		{
 			//field ini HARUS dimunculkan, utk penghitungan harga
