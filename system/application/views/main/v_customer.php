@@ -865,7 +865,7 @@ var editor_cust_note;
 		  	var result=eval(response.responseText);
 		  	switch(result){
 		  	case 1:
-				win = window.open('./customerlist.html','customerlist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
+				win = window.open('./print/customerlist.html','customerlist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
 				
 				break;
 		  	default:
