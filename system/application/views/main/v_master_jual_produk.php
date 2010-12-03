@@ -1879,7 +1879,7 @@ Ext.onReady(function(){
 							cbo_dproduk_reveralDataStore.load({
 								callback: function(opts, success, response){
 									detail_jual_produk_DataStore.load({
-										params : {master_id : eval(get_jproduk_pk()), start:0, limit:pageS},
+										params : {master_id : eval(get_jproduk_pk()), start:0, limit:50},
 										callback: function(opts, success, response){
 											if(success){
 												master_jual_produk_set_form();
@@ -4891,7 +4891,6 @@ Ext.onReady(function(){
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:false},
 		bbar: new Ext.PagingToolbar({
-			pageSize: pageS,
 			store: detail_jual_produk_DataStore,
 			displayInfo: true
 		})
