@@ -107,7 +107,7 @@ class M_master_jual_produk extends Model{
 		
 		$result = $this->db->query($sql);
 		$nbrows = $result->num_rows();
-		if($end!=0){
+		if(($end!=0)  && ($aktif<>'yesno')){
 			$limit = $sql." LIMIT ".$start.",".$end;			
 			$result = $this->db->query($limit);
 		}
