@@ -690,11 +690,20 @@ class C_customer extends Controller {
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$result = $this->m_customer->customer_print($cust_id,$cust_no, $cust_no_awal ,$cust_no_akhir,$cust_nama,$cust_kelamin,$cust_alamat,$cust_alamat2,$cust_kota,$cust_kodepos,$cust_propinsi,$cust_negara,$cust_telprumah,$cust_telprumah2,$cust_telpkantor,$cust_hp,$cust_hp2,$cust_hp3,$cust_email,$cust_agama,$cust_pendidikan,$cust_profesi,$cust_tgllahir,$cust_hobi,$cust_referensi,$cust_keterangan,$cust_member, $cust_member2, $cust_terdaftar,$cust_statusnikah,$cust_priority,$cust_jmlanak,$cust_unit,$cust_aktif,$sortby,$cust_fretfulness,$cust_creator,$cust_date_create,$cust_update,$cust_date_update,$cust_revised,$option,$filter);
-		$nbrows=$result->num_rows();
+		$data["data_print"] = $this->m_customer->customer_print($cust_id,$cust_no, $cust_no_awal ,$cust_no_akhir,$cust_nama,$cust_kelamin,$cust_alamat,$cust_alamat2,$cust_kota,$cust_kodepos,$cust_propinsi,$cust_negara,$cust_telprumah,$cust_telprumah2,$cust_telpkantor,$cust_hp,$cust_hp2,$cust_hp3,$cust_email,$cust_agama,$cust_pendidikan,$cust_profesi,$cust_tgllahir,$cust_hobi,$cust_referensi,$cust_keterangan,$cust_member, $cust_member2, $cust_terdaftar,$cust_statusnikah,$cust_priority,$cust_jmlanak,$cust_unit,$cust_aktif,$sortby,$cust_fretfulness,$cust_creator,$cust_date_create,$cust_update,$cust_date_update,$cust_revised,$option,$filter)->result();
+		
+		$print_view=$this->load->view("main/p_customer.php",$data,TRUE);
+		if(!file_exists("print")){
+			mkdir("print");
+		}
+		$print_file=fopen("print/customerlist.html","w+");
+		fwrite($print_file, $print_view);
+		echo '1';  
+		
+		/*$nbrows=$result->num_rows();
 		$totcolumn=36;
 
-   		/* We now have our array, let's build our HTML file */
+   	
 		$file = fopen("customerlist.html",'w');
 		fwrite($file, "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' /><title>Printing the Customer Grid</title><link rel='stylesheet' type='text/css' href='assets/modules/main/css/printstyle.css'/></head>");
 		fwrite($file, "<body onload='window.print()'>
@@ -776,7 +785,7 @@ class C_customer extends Controller {
 				fwrite($file,"</td><td>");
 				fwrite($file, $data['cust_hp3']);
 				fwrite($file,"</td><td>");
-				*/
+				
 				fwrite($file, $data['cust_email']);
 				fwrite($file,"</td><td>");
 				fwrite($file, $data['cust_agama']);
@@ -821,7 +830,7 @@ class C_customer extends Controller {
 		}
 		fwrite($file, "</tbody></table></body></html>");	
 		fclose($file);
-		echo '1';        
+		echo '1';        */
 	}
 	/* End Of Function */
 	

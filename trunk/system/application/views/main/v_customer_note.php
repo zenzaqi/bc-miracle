@@ -730,7 +730,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [note_customerField, note_tanggalField, note_detailField, note_aktifField] 
+				items: [note_customerField, note_tanggalField, note_detailField] 
 			}
 			]
 		}]
