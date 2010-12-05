@@ -2256,6 +2256,7 @@ Ext.onReady(function(){
 		]
 	});
 	/* End  of Function*/
+	<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_MEDIS'))){ ?>
 	Ext.getCmp('tmedis_saveClose').on('click', function(){
 		/*Ext.MessageBox.show({
            title: 'Please wait',
@@ -2268,6 +2269,7 @@ Ext.onReady(function(){
        });*/
 		tindakan_medis_createWindow.setDisabled(true);
 	});
+	<?php } ?>
 	
 	
 	/* Function for retrieve create Window Form */
