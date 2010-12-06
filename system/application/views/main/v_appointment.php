@@ -1255,7 +1255,7 @@ Ext.onReady(function(){
 	
 	tbar_dokter_tglField= new Ext.form.DateField({
 		id: 'tbar_dokter_tglField',
-		fieldLabel: 'Tanggal Reservasi',
+		fieldLabel: 'Tgl Reservasi',
 		format : 'd-m-Y',
 		emptyText: 'Tgl App',
 		ref: '../appDokterTgl'
@@ -1263,7 +1263,7 @@ Ext.onReady(function(){
 	
 	tbar_nonmedis_tglField= new Ext.form.DateField({
 		id: 'tbar_nonmedis_tglField',
-		fieldLabel: 'Tanggal Reservasi',
+		fieldLabel: 'Tgl Reservasi',
 		format : 'd-m-Y',
 		emptyText: 'Tgl App',
 		hidden:true,
@@ -1563,7 +1563,7 @@ Ext.onReady(function(){
 	/* Identify  app_tanggal Field */
 	app_tanggalField= new Ext.form.DateField({
 		id: 'app_tanggalField',
-		fieldLabel: 'Tanggal Reservasi',
+		fieldLabel: 'Tgl Reservasi',
 		format : 'd-m-Y',
 	});
 	/* Identify  app_cara Field */
@@ -1620,7 +1620,7 @@ Ext.onReady(function(){
 
 	app_cust_telpBaruField=new Ext.form.TextField({
 		id: 'app_cust_telpBaruField',
-		fieldLabel: 'No.Telp. Rumah',
+		fieldLabel: 'Telp Rumah',
 		maxLength: 30,
 		anchor: '95%',
 		maskRe: /([0-9]+)$/
@@ -1628,7 +1628,7 @@ Ext.onReady(function(){
 
 	app_cust_hpBaruField=new Ext.form.TextField({
 		id: 'app_cust_hpBaruField',
-		fieldLabel: 'No. HandPhone',
+		fieldLabel: 'HP',
 		maxLength: 30,
 		anchor: '95%',
 		maskRe: /([0-9]+)$/
@@ -3238,7 +3238,7 @@ Ext.onReady(function(){
 		target:Ext.get('help_customer'),
 		title: 'Search-By',
 		dismissDelay: 15000,
-		html: '- No.Customer<br>- Nama Customer<br>- Telp. Rumah<br>- Telp. Kantor<br>- HandPhone',
+		html: '- No Customer<br>- Nama Customer<br>- Telp Rumah<br>- Telp Kantor<br>- HP',
 		trackMouse: true
 		});
 	new Ext.ToolTip({

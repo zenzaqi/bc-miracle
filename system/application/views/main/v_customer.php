@@ -2053,7 +2053,7 @@ Ext.onReady(function(){
 			hidden: true
 		},*/
 		{
-			header: '<div align="center">' + 'No Ponsel' + '</div>',
+			header: '<div align="center">' + 'HP' + '</div>',
 			dataIndex: 'cust_hp',
 			width: 65,	//97,
 			sortable: true
@@ -2922,7 +2922,7 @@ Ext.onReady(function(){
 	/* Identify  cust_hp Field */
 	cust_hpField= new Ext.form.TextField({
 		id: 'cust_hpField',
-		fieldLabel: 'No Ponsel',
+		fieldLabel: 'HP',
 		maxLength: 25,
 		anchor: '95%',
 		maskRe: /([0-9]+)$/
@@ -3737,7 +3737,7 @@ Ext.onReady(function(){
 	/* Identify  cust_hp Field */
 	cust_hpSearchField= new Ext.form.TextField({
 		id: 'cust_hpSearchField',
-		fieldLabel: 'No Ponsel',
+		fieldLabel: 'HP',
 		maxLength: 25,
 		anchor: '95%'
 		//maskRe: /([0-9]+)$/
@@ -4016,7 +4016,7 @@ Ext.onReady(function(){
 		fieldLabel: 'Urutkan',
 		store:new Ext.data.SimpleStore({
 			fields:['sortby_value', 'sortby_display'],
-			data:[['No Cust','No Cust'],['Nama','Nama'],['Alamat','Alamat'],['Tgl Lahir','Tgl Lahir'],['Telp Rmh','Telp Rumah'],['Handphone','No Ponsel']]
+			data:[['No Cust','No Cust'],['Nama','Nama'],['Alamat','Alamat'],['Tgl Lahir','Tgl Lahir'],['Telp Rmh','Telp Rumah'],['Handphone','HP']]
 		}),
 		mode: 'local',
 		displayField: 'sortby_display',
