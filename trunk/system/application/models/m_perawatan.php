@@ -350,7 +350,7 @@ class M_perawatan extends Model{
 		}
 		
 		//function for update record
-		function perawatan_update($rawat_id ,$rawat_kode ,$rawat_kodelama ,$rawat_nama, $rawat_highmargin, $rawat_group ,$rawat_kategori,$rawat_kontribusi ,$rawat_jenis ,$rawat_keterangan ,$rawat_du ,$rawat_dm ,$rawat_point , $rawat_kredit, $rawat_jumlah_tindakan, $rawat_harga ,$rawat_gudang ,$rawat_aktif ){
+		function perawatan_update($rawat_id ,$rawat_kode ,$rawat_kodelama ,$rawat_nama, $rawat_highmargin, $rawat_group ,$rawat_kategori,$rawat_kontribusi ,$rawat_jenis ,$rawat_keterangan ,$rawat_du ,$rawat_dm ,$rawat_point , $rawat_durasi, $rawat_kredit, $rawat_jumlah_tindakan, $rawat_harga ,$rawat_gudang ,$rawat_aktif ){
 			if ($rawat_aktif=="")
 				$rawat_aktif = "Aktif";
 			if ($rawat_point=="")
@@ -366,6 +366,7 @@ class M_perawatan extends Model{
 //				"rawat_du"=>$rawat_du, 
 //				"rawat_dm"=>$rawat_dm, 
 				"rawat_point"=>$rawat_point,
+				"rawat_durasi"=>$rawat_durasi,
 				"rawat_kredit"=>$rawat_kredit,
 				"rawat_jumlah_tindakan"=>$rawat_jumlah_tindakan,
 				"rawat_harga"=>$rawat_harga, 
@@ -510,7 +511,7 @@ class M_perawatan extends Model{
 		}
 		
 		//function for create new record
-		function perawatan_create($rawat_kode ,$rawat_kodelama ,$rawat_nama, $rawat_highmargin, $rawat_group ,$rawat_kategori, $rawat_kontribusi ,$rawat_jenis ,$rawat_keterangan ,$rawat_du ,$rawat_dm ,$rawat_point , $rawat_kredit, $rawat_jumlah_tindakan, $rawat_harga ,$rawat_gudang ,$rawat_aktif ){
+		function perawatan_create($rawat_kode ,$rawat_kodelama ,$rawat_nama, $rawat_highmargin, $rawat_group ,$rawat_kategori, $rawat_kontribusi ,$rawat_jenis ,$rawat_keterangan ,$rawat_du ,$rawat_dm ,$rawat_point , $rawat_durasi, $rawat_kredit, $rawat_jumlah_tindakan, $rawat_harga ,$rawat_gudang ,$rawat_aktif ){
 		if ($rawat_aktif=="")
 			$rawat_aktif = "Aktif";
 		if ($rawat_point=="")
@@ -525,6 +526,7 @@ class M_perawatan extends Model{
 				"rawat_du"=>$rawat_du, 
 				"rawat_dm"=>$rawat_dm, 
 				"rawat_point"=>$rawat_point,
+				"rawat_durasi"=>$rawat_durasi,
 				"rawat_kredit"=>$rawat_kredit,
 				"rawat_jumlah_tindakan"=>$rawat_jumlah_tindakan,
 				"rawat_harga"=>$rawat_harga, 
@@ -616,7 +618,7 @@ class M_perawatan extends Model{
 		}
 		
 		//function for advanced search record
-		function perawatan_search($rawat_id ,$rawat_kode ,$rawat_kodelama ,$rawat_nama ,$rawat_group ,$rawat_kategori ,$rawat_jenis ,$rawat_keterangan ,$rawat_du ,$rawat_dm ,$rawat_point , $rawat_kredit, $rawat_jumlah_tindakan, $rawat_harga ,$rawat_gudang ,$rawat_aktif ,$start,$end){
+		function perawatan_search($rawat_id ,$rawat_kode ,$rawat_kodelama ,$rawat_nama ,$rawat_group ,$rawat_kategori ,$rawat_jenis ,$rawat_keterangan ,$rawat_du ,$rawat_dm ,$rawat_point , $rawat_durasi, $rawat_kredit, $rawat_jumlah_tindakan, $rawat_harga ,$rawat_gudang ,$rawat_aktif ,$start,$end){
 			//full query
 			/*if($rawat_aktif==""){
 				$rawat_aktif="Aktif";
@@ -667,6 +669,10 @@ class M_perawatan extends Model{
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " rawat_point LIKE '%".$rawat_point."%'";
 			};
+			if($rawat_durasi!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " rawat_durasi LIKE '%".$rawat_durasi."%'";
+			};
 			if($rawat_harga!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " rawat_harga LIKE '%".$rawat_harga."%'";
@@ -711,6 +717,7 @@ class M_perawatan extends Model{
 								,$rawat_du 
 								,$rawat_dm 
 								,$rawat_point 
+								,$rawat_durasi
 								,$rawat_kredit
 								,$rawat_jumlah_tindakan
 								,$rawat_harga 
@@ -779,6 +786,10 @@ class M_perawatan extends Model{
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " rawat_point LIKE '%".$rawat_point."%'";
 				};
+				if($rawat_durasi!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " rawat_durasi LIKE '%".$rawat_durasi."%'";
+				};
 				if($rawat_harga!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " rawat_harga LIKE '%".$rawat_harga."%'";
@@ -815,6 +826,7 @@ class M_perawatan extends Model{
 			$rawat_du,
 			$rawat_dm,
 			$rawat_point,
+			$rawat_durasi,
 			$rawat_kredit, 
 			$rawat_jumlah_tindakan, 
 			$rawat_harga,
@@ -834,6 +846,7 @@ class M_perawatan extends Model{
 						ifnull(rawat_du,'-') AS 'DU(%)',
 						ifnull(rawat_dm,'-') AS 'DM(%)',
 						ifnull(rawat_point,'-') AS Poin,
+						ifnull(rawat_durasi,'-') AS Durasi,
 						ifnull(rawat_kredit,'-') AS Kredit,
 						ifnull(rawat_harga,'-') AS 'Harga (Rp)',
 						ifnull(gudang_nama,'-') AS Gudang,
@@ -892,6 +905,10 @@ class M_perawatan extends Model{
 				if($rawat_point!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " rawat_point LIKE '%".$rawat_point."%'";
+				};
+				if($rawat_durasi!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " rawat_durasi LIKE '%".$rawat_durasi."%'";
 				};
 				if($rawat_harga!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
