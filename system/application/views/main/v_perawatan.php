@@ -82,6 +82,7 @@ var rawat_keteranganField;
 var rawat_duField;
 var rawat_dmField;
 var rawat_pointField;
+var rawat_durasiField;
 var rawat_kreditField;
 var rawat_jumlah_tindakanField;
 var rawat_hargaField;
@@ -98,6 +99,7 @@ var rawat_keteranganSearchField;
 var rawat_duSearchField;
 var rawat_dmSearchField;
 var rawat_pointSearchField;
+var rawat_durasiSearchField;
 var rawat_kreditSearchField;
 var rawat_hargaSearchField;
 var rawat_jumlah_tindakanSearchField;
@@ -122,6 +124,7 @@ Ext.onReady(function(){
 		var rawat_du_update=null;
 		var rawat_dm_update=null;
 		var rawat_point_update=null;
+		var rawat_durasi_update=null;
 		var rawat_kredit_update=null;
 		var rawat_jumlah_tindakan_update=null;
 		var rawat_harga_update=null;
@@ -140,6 +143,7 @@ Ext.onReady(function(){
 		if(oGrid_event.record.data.rawat_du!== null){rawat_du_update = oGrid_event.record.data.rawat_du;}
 		if(oGrid_event.record.data.rawat_dm!== null){rawat_dm_update = oGrid_event.record.data.rawat_dm;}
 		if(oGrid_event.record.data.rawat_point!== null){rawat_point_update = oGrid_event.record.data.rawat_point;}
+		if(oGrid_event.record.data.rawat_durasi!== null){rawat_durasi_update = oGrid_event.record.data.rawat_durasi;}
 		if(oGrid_event.record.data.rawat_kredit!== null){rawat_kredit_update = oGrid_event.record.data.rawat_kredit;}
 		if(oGrid_event.record.data.rawat_harga!== null){rawat_harga_update = oGrid_event.record.data.rawat_harga;}
 		if(oGrid_event.record.data.rawat_jumlah_tindakan!== null){rawat_jumlah_tindakan_update = oGrid_event.record.data.rawat_jumlah_tindakan;}
@@ -163,6 +167,7 @@ Ext.onReady(function(){
 				rawat_du	:rawat_du_update,  
 				rawat_dm	:rawat_dm_update,  
 				rawat_point	:rawat_point_update,
+				rawat_durasi:rawat_durasi_update,
 				rawat_kredit :rawat_kredit_update,
 				rawat_jumlah_tindakan : rawat_jumlah_tindakan_update,
 				rawat_harga	:rawat_harga_update,  
@@ -217,6 +222,7 @@ Ext.onReady(function(){
 		var rawat_du_create=null; 
 		var rawat_dm_create=null; 
 		var rawat_point_create=null;
+		var rawat_durasi_create=null;
 		var rawat_kredit_create=null;
 		var rawat_jumlah_tindakan_create=null;
 		var rawat_harga_create=null; 
@@ -235,6 +241,7 @@ Ext.onReady(function(){
 		if(rawat_duField.getValue()!== null){rawat_du_create = rawat_duField.getValue();} 
 		if(rawat_dmField.getValue()!== null){rawat_dm_create = rawat_dmField.getValue();} 
 		if(rawat_pointField.getValue()!== null){rawat_point_create = rawat_pointField.getValue();}
+		if(rawat_durasiField.getValue()!== null){rawat_durasi_create = rawat_durasiField.getValue();}
 		if(rawat_kreditField.getValue()!== null){rawat_kredit_create = rawat_kreditField.getValue();} 
 		if(rawat_hargaField.getValue()!== null){rawat_harga_create = convertToNumber(rawat_hargaField.getValue());}
 		//if(rawat_jumlah_tindakanField.getValue()!== null){rawat_jumlah_tindakan_create = rawat_jumlah_tindakanField.getValue();} 
@@ -259,6 +266,7 @@ Ext.onReady(function(){
 				rawat_du	: rawat_du_create, 
 				rawat_dm	: rawat_dm_create, 
 				rawat_point	: rawat_point_create,
+				rawat_durasi: rawat_durasi_create,
 				rawat_kredit : rawat_kredit_create,
 				rawat_jumlah_tindakan : rawat_jumlah_tindakan_create,
 				rawat_harga	: rawat_harga_create, 
@@ -365,6 +373,8 @@ Ext.onReady(function(){
 		rawat_dmField.setValue(null);
 		rawat_pointField.reset();
 		rawat_pointField.setValue(null);
+		rawat_durasiField.reset();
+		rawat_durasiField.setValue(null);
 		rawat_kreditField.reset();
 		rawat_kreditField.setValue(null);
 		//rawat_jumlah_tindakanField.reset();
@@ -398,6 +408,7 @@ Ext.onReady(function(){
 		rawat_duField.setValue(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_du'));
 		rawat_dmField.setValue(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_dm'));
 		rawat_pointField.setValue(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_point'));
+		rawat_durasiField.setValue(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_durasi'));
 		rawat_kreditField.setValue(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_kredit'));
 		rawat_hargaField.setValue(CurrencyFormatted(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_harga')));
 		//rawat_jumlah_tindakanField.setValue(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_jumlah_tindakan'));
@@ -553,6 +564,7 @@ Ext.onReady(function(){
 			{name: 'rawat_du', type: 'int', mapping: 'rawat_du'}, 
 			{name: 'rawat_dm', type: 'int', mapping: 'rawat_dm'}, 
 			{name: 'rawat_point', type: 'int', mapping: 'rawat_point'},
+			{name: 'rawat_durasi', tupe: 'int', mapping: 'rawat_durasi'},
 			{name: 'rawat_kredit', type: 'int', mapping: 'rawat_kredit'},
 			{name: 'rawat_jumlah_tindakan', type: 'int', mapping: 'rawat_jumlah_tindakan'},			
 			{name: 'rawat_harga', type: 'float', mapping: 'rawat_harga'}, 
@@ -802,6 +814,25 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Poin' + '</div>',
 			dataIndex: 'rawat_point',
+			align: 'right',
+			width: 80,	//100,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
+			,
+			editor: new Ext.form.NumberField({
+				allowBlank: false,
+				allowDecimals: false,
+				allowNegative: false,
+				blankText: '0',
+				maxLength: 11,
+				maskRe: /([0-9]+)$/
+			})
+			<?php } ?>
+		}, 
+		
+		{
+			header: '<div align="center">' + 'Durasi' + '</div>',
+			dataIndex: 'rawat_durasi',
 			align: 'right',
 			width: 80,	//100,
 			sortable: true
@@ -1259,6 +1290,18 @@ Ext.onReady(function(){
 		maskRe: /([0-9]+)$/
 	});
 	
+	/* Identify  rawat_durasi Field */
+	rawat_durasiField= new Ext.form.NumberField({
+		id: 'rawat_durasiField',
+		name: 'rawat_durasiField',
+		fieldLabel: 'Durasi (dalam menit)',
+		allowNegatife : false,
+		//emptyText: '1',
+		allowDecimals: false,
+		width: 60,
+		maskRe: /([0-9]+)$/
+	});
+	
 	rawat_kreditField= new Ext.form.NumberField({
 		id: 'rawat_kreditField',
 		name: 'rawat_kreditField',
@@ -1360,7 +1403,7 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [rawat_pointField, rawat_kreditField, rawat_hargaField, rawat_kontribusiField, rawat_gudangField, rawat_keteranganField, rawat_aktifField, rawat_idField] 
+				items: [rawat_durasiField, rawat_pointField, rawat_kreditField, rawat_hargaField, rawat_kontribusiField, rawat_gudangField, rawat_keteranganField, rawat_aktifField, rawat_idField] 
 			}
 			]
 	
@@ -2101,6 +2144,7 @@ Ext.onReady(function(){
 		var rawat_du_search=null;
 		var rawat_dm_search=null;
 		var rawat_point_search=null;
+		var rawat_durasi_search=null;
 		var rawat_kredit_search=null;
 		var rawat_jumlah_tindakan_search=null;
 		var rawat_harga_search=null;
@@ -2118,6 +2162,7 @@ Ext.onReady(function(){
 		if(rawat_duSearchField.getValue()!==null){rawat_du_search=rawat_duSearchField.getValue();}
 		if(rawat_dmSearchField.getValue()!==null){rawat_dm_search=rawat_dmSearchField.getValue();}
 		if(rawat_pointSearchField.getValue()!==null){rawat_point_search=rawat_pointSearchField.getValue();}
+		if(rawat_durasiSearchField.getValue()!==null){rawat_durasi_search=rawat_durasiSearchField.getValue();}
 		if(rawat_kreditSearchField.getValue()!==null){rawat_kredit_search=rawat_kreditSearchField.getValue();}
 		if(rawat_jumlah_tindakanSearchField.getValue()!==null){rawat_jumlah_tindakan_search=rawat_jumlah_tindakanSearchField.getValue();}
 		if(rawat_hargaSearchField.getValue()!==null){rawat_harga_search=rawat_hargaSearchField.getValue();}
@@ -2184,6 +2229,8 @@ Ext.onReady(function(){
 		rawat_dmSearchField.setValue(null);
 		rawat_pointSearchField.reset();
 		rawat_pointSearchField.setValue(null);
+		rawat_durasiSearchField.reset();
+		rawat_durasiSearchField.setValue(null);
 		rawat_kreditSearchField.reset();
 		rawat_kreditSearchField.setValue(null);
 		rawat_jumlah_tindakanSearchField.reset();
@@ -2308,6 +2355,19 @@ Ext.onReady(function(){
 	
 	});
 	
+	/* Identify  rawat_durasi Search Field */
+	rawat_durasiSearchField= new Ext.form.NumberField({
+		id: 'rawat_durasiSearchField',
+		fieldLabel: 'Durasi (dalam menit)',
+		allowNegatife : false,
+		//blankText: '0',
+		allowDecimals: false,
+		width: 60,
+		maskRe: /([0-9]+)$/
+	
+	});
+	
+	
 	rawat_kreditSearchField= new Ext.form.NumberField({
 		id: 'rawat_kreditSearchField',
 		fieldLabel: 'Kredit',
@@ -2404,7 +2464,7 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [rawat_pointSearchField, rawat_kreditSearchField, rawat_jumlah_tindakanSearchField, rawat_hargaSearchField, rawat_kontribusiSearchField, rawat_gudangSearchField, rawat_keteranganSearchField, rawat_aktifSearchField] 
+				items: [rawat_durasiSearchField, rawat_pointSearchField, rawat_kreditSearchField, rawat_jumlah_tindakanSearchField, rawat_hargaSearchField, rawat_kontribusiSearchField, rawat_gudangSearchField, rawat_keteranganSearchField, rawat_aktifSearchField] 
 			}
 			]
 		}]
