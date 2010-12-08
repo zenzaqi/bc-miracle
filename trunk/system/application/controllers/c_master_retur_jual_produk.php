@@ -183,6 +183,9 @@ class C_master_retur_jual_produk extends Controller {
 			case "CREATE":
 				$this->master_retur_jual_produk_create();
 				break;
+			case "CEK":
+				$this->master_retur_jual_produk_pengecekan();
+				break;
 			case "DELETE":
 				$this->master_retur_jual_produk_delete();
 				break;
@@ -213,6 +216,14 @@ class C_master_retur_jual_produk extends Controller {
 		$result=$this->m_master_retur_jual_produk->master_retur_jual_produk_list($query,$start,$end);
 		echo $result;
 	}
+
+	// function utk melakukan pengecekan tanggal valid dokumen
+	function master_retur_jual_produk_pengecekan(){
+		$tanggal_pengecekan=trim(@$_POST["tanggal_pengecekan"]);
+		$result=$this->m_public_function->pengecekan_dokumen($tanggal_pengecekan);
+		echo $result;
+	}
+	
 
 	//function for update record
 	function master_retur_jual_produk_update(){

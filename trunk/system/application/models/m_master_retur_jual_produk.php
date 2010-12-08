@@ -290,7 +290,7 @@ class M_master_retur_jual_produk extends Model{
 		}
 	
 		function get_jual_produk_list($query,$start,$end){
-			$sql="SELECT jproduk_id,jproduk_nobukti,jproduk_tanggal,cust_nama,cust_alamat,cust_id FROM master_jual_produk,customer WHERE jproduk_cust=cust_id AND jproduk_stat_dok='Tertutup'";
+			$sql="SELECT jproduk_id,jproduk_nobukti,jproduk_tanggal,cust_nama,cust_alamat,cust_id FROM master_jual_produk,customer WHERE jproduk_cust=cust_id AND jproduk_stat_dok='Tertutup' AND date_add(date_format(master_jual_produk.jproduk_tanggal,'%Y-%m-%d'),INTERVAL 7 DAY)>=date_format(now(),'%Y-%m-%d')";
 			if($query<>"")
 				$sql.=" and (jproduk_nobukti like '%".$query."%' or jproduk_tanggal like '%".$query."%' or cust_nama like '%".$query."%' or cust_alamat like '%".$query."%' or jproduk_nobukti like '%".$query."%') "; 
 			$query = $this->db->query($sql);
