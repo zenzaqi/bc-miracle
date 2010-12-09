@@ -172,7 +172,6 @@ Ext.onReady(function(){
 		dtrawat_jumlah_update = oGrid_event.record.data.dtrawat_jumlah;
 		
 		dtrawat_status_update = oGrid_event.record.data.dtrawat_status;
-		
 		if(dmedis_status_inline_beforeedit=='selesai' && dtrawat_status_update=='selesai'){
 			//Editing ketika status = 'selesai' ==> tidak diperbolehkan
 			tindakan_medisDataStore.reload();
@@ -852,7 +851,8 @@ Ext.onReady(function(){
 			{name: 'dapaket_dpaket', type: 'int', mapping: 'dpaket_id'},
 			{name: 'dapaket_jpaket', type: 'int', mapping: 'dpaket_master'},
 			{name: 'dapaket_paket', type: 'int', mapping: 'dpaket_paket'},*/
-			{name: 'dtrawat_edit', type: 'string', mapping: 'dtrawat_edit'}
+			{name: 'dtrawat_edit', type: 'string', mapping: 'dtrawat_edit'},
+			{name: 'dtrawat_jumlah', type: 'int', mapping: 'dtrawat_jumlah'}
 		])/*,
 		sortInfo:{field: 'dtrawat_id', direction: "DESC"}*/
 	});
