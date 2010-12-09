@@ -48,9 +48,8 @@ class M_tindakan_medis extends Model{
 		return $query->result();
 	}
 		
-	function global_customer_check_paket($cust_id, $rawat_id, $jumlah_ambil){
-		//$return_row_punya_paket = 0;
-		//* Mencari kepemilikan paket berdasarkan customer_id /
+	function other_global_customer_check_paket($cust_id, $rawat_id, $jumlah_ambil){
+		//Milik Orang Lain yang perawatan yang diambil ada di dalam paket Orang Lain itu.
 		$sql_punya_paket="SELECT (dpaket_jumlah*rpaket_jumlah) AS rpaket_jumlah
 				,dpaket_id
 				,dpaket_master
@@ -103,9 +102,66 @@ class M_tindakan_medis extends Model{
 		}
 	}
 	
-	function customer_check_paket($cust_id, $rawat_id, $jumlah_ambil){
-		//$return_row_punya_paket = 0;
-		//* Mencari kepemilikan paket berdasarkan customer_id /
+	function global_customer_check_paket($cust_id, $rawat_id, $jumlah_ambil){
+		//Milik Orang Lain yang ada kecocokan antara paket dengan perawatan yang diambil
+		$sql_punya_paket="SELECT (dpaket_jumlah*rpaket_jumlah) AS rpaket_jumlah
+				,dpaket_id
+				,dpaket_master
+				,dpaket_paket
+				,dpaket_sisa_paket
+			FROM paket_isi_perawatan
+			LEFT JOIN detail_jual_paket ON(rpaket_master=dpaket_paket)
+			LEFT JOIN master_jual_paket ON(dpaket_master=jpaket_id)
+			LEFT JOIN pengguna_paket ON(ppaket_master=jpaket_id)
+			WHERE ppaket_cust='$cust_id'
+				AND rpaket_perawatan='$rawat_id'
+				AND jpaket_cust='$cust_id'
+				AND jpaket_stat_dok<>'Batal'
+				AND dpaket_sisa_paket>='".$jumlah_ambil."'
+				AND rpaket_jumlah>0
+			ORDER BY detail_jual_paket.dpaket_id ASC";
+		
+		$rs_punya_paket=$this->db->query($sql_punya_paket);
+		if($rs_punya_paket->num_rows()){
+			$punya_paket_rows = $rs_punya_paket->num_rows();
+			$i=0;
+			foreach($rs_punya_paket->result() as $row_punya_paket){
+				$i++;
+				$sql_check_sisa="SELECT sum(dapaket_jumlah) AS total_item_terpakai
+					FROM detail_ambil_paket
+					WHERE dapaket_dpaket='$row_punya_paket->dpaket_id'
+						AND dapaket_jpaket='$row_punya_paket->dpaket_master'
+						AND dapaket_paket='$row_punya_paket->dpaket_paket'
+						AND dapaket_item='$rawat_id'
+						AND dapaket_stat_dok<>'Batal'
+					GROUP BY dapaket_item";
+				$rs_check_sisa=$this->db->query($sql_check_sisa);
+				if($rs_check_sisa->num_rows()){
+					$record_check_sisa = $rs_check_sisa->row();
+					if(($row_punya_paket->rpaket_jumlah > $record_check_sisa->total_item_terpakai) || (($row_punya_paket->rpaket_jumlah==0) && ($row_punya_paket->dpaket_sisa_paket > 0))){
+						return $row_punya_paket;
+						break;
+					}else{
+						if($i==$punya_paket_rows){
+							$return_other_global_customer_check_paket = $this->other_global_customer_check_paket($cust_id, $rawat_id, $jumlah_ambil);
+							return $return_other_global_customer_check_paket;
+						}
+					}
+					
+				}else{
+					return $row_punya_paket;
+					break;
+				}
+			}
+			
+		}else{
+			$return_other_global_customer_check_paket = $this->other_global_customer_check_paket($cust_id, $rawat_id, $jumlah_ambil);
+			return $return_other_global_customer_check_paket;
+		}
+	}
+	
+	function own_customer_check_paket($cust_id, $rawat_id, $jumlah_ambil){
+		//Milik Sendiri yang perawatan yang diambil ada di dalam paket sendiri.
 		$sql_punya_paket="SELECT (dpaket_jumlah*rpaket_jumlah) AS rpaket_jumlah
 				,dpaket_id
 				,dpaket_master
@@ -146,7 +202,6 @@ class M_tindakan_medis extends Model{
 						if($i==$punya_paket_rows){
 							$return_global_customer_check_paket = $this->global_customer_check_paket($cust_id, $rawat_id, $jumlah_ambil);
 							return $return_global_customer_check_paket;
-							//return 0;
 						}
 					}
 					
@@ -159,7 +214,64 @@ class M_tindakan_medis extends Model{
 		}else{
 			$return_global_customer_check_paket = $this->global_customer_check_paket($cust_id, $rawat_id, $jumlah_ambil);
 			return $return_global_customer_check_paket;
-			//return 0;
+		}
+	}
+	
+	function customer_check_paket($cust_id, $rawat_id, $jumlah_ambil){
+		//Milik Sendiri yang ada kecocokan antara paket dengan perawatan yang diambil
+		$sql_punya_paket="SELECT (dpaket_jumlah*rpaket_jumlah) AS rpaket_jumlah
+				,dpaket_id
+				,dpaket_master
+				,dpaket_paket
+				,dpaket_sisa_paket
+			FROM paket_isi_perawatan
+			LEFT JOIN detail_jual_paket ON(rpaket_master=dpaket_paket)
+			LEFT JOIN master_jual_paket ON(dpaket_master=jpaket_id)
+			LEFT JOIN pengguna_paket ON(ppaket_master=jpaket_id)
+			WHERE ppaket_cust='$cust_id'
+				AND rpaket_perawatan='$rawat_id'
+				AND jpaket_cust='$cust_id'
+				AND jpaket_stat_dok<>'Batal'
+				AND dpaket_sisa_paket>='".$jumlah_ambil."'
+				AND rpaket_jumlah>0
+			ORDER BY detail_jual_paket.dpaket_id ASC";
+		
+		$rs_punya_paket=$this->db->query($sql_punya_paket);
+		if($rs_punya_paket->num_rows()){
+			$punya_paket_rows = $rs_punya_paket->num_rows();
+			$i=0;
+			foreach($rs_punya_paket->result() as $row_punya_paket){
+				$i++;
+				$sql_check_sisa="SELECT sum(dapaket_jumlah) AS total_item_terpakai
+					FROM detail_ambil_paket
+					WHERE dapaket_dpaket='$row_punya_paket->dpaket_id'
+						AND dapaket_jpaket='$row_punya_paket->dpaket_master'
+						AND dapaket_paket='$row_punya_paket->dpaket_paket'
+						AND dapaket_item='$rawat_id'
+						AND dapaket_stat_dok<>'Batal'
+					GROUP BY dapaket_item";
+				$rs_check_sisa=$this->db->query($sql_check_sisa);
+				if($rs_check_sisa->num_rows()){
+					$record_check_sisa = $rs_check_sisa->row();
+					if(($row_punya_paket->rpaket_jumlah > $record_check_sisa->total_item_terpakai) || (($row_punya_paket->rpaket_jumlah==0) && ($row_punya_paket->dpaket_sisa_paket > 0))){
+						return $row_punya_paket;
+						break;
+					}else{
+						if($i==$punya_paket_rows){
+							$return_own_customer_check_paket = $this->own_customer_check_paket($cust_id, $rawat_id, $jumlah_ambil);
+							return $return_own_customer_check_paket;
+						}
+					}
+					
+				}else{
+					return $row_punya_paket;
+					break;
+				}
+			}
+			
+		}else{
+			$return_own_customer_check_paket = $this->own_customer_check_paket($cust_id, $rawat_id, $jumlah_ambil);
+			return $return_own_customer_check_paket;
 		}
 	}
 		
