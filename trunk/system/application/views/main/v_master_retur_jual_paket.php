@@ -144,6 +144,51 @@ Ext.onReady(function(){
 	// utilize custom extension for Group Summary
     var summary = new Ext.ux.grid.GroupSummary();
   
+ 
+	/*Function for pengecekan _dokumen */
+	function pengecekan_dokumen(){
+		var rpaket_tanggal_create_date = "";
+	
+		if(rpaket_tanggalField.getValue()!== ""){rpaket_tanggal_create_date = rpaket_tanggalField.getValue().format('Y-m-d');} 
+		Ext.Ajax.request({  
+			waitMsg: 'Please wait...',
+			url: 'index.php?c=c_master_retur_jual_paket&m=get_action',
+			params: {
+				task: "CEK",
+				tanggal_pengecekan	: rpaket_tanggal_create_date
+		
+			}, 
+			success: function(response){							
+				var result=eval(response.responseText);
+				switch(result){
+					case 1:
+							master_retur_jual_paket_create();
+						break;
+					default:
+						Ext.MessageBox.show({
+						   title: 'Warning',
+						   msg: 'Data Retur Penjualan Paket tidak bisa disimpan, karena telah melebihi batas hari yang diperbolehkan ',
+						   buttons: Ext.MessageBox.OK,
+						   animEl: 'save',
+						   icon: Ext.MessageBox.WARNING
+						});
+						break;
+				}
+			},
+			failure: function(response){
+				var result=response.responseText;
+				Ext.MessageBox.show({
+				   title: 'Error',
+				   msg: 'Could not connect to the database. retry later.',
+				   buttons: Ext.MessageBox.OK,
+				   animEl: 'database',
+				   icon: Ext.MessageBox.ERROR
+				});	
+			}									    
+		});   
+	}
+  
+
   	/* Function for Saving inLine Editing */
 	function master_retur_jual_paket_update(oGrid_event){
 		var rpaket_id_update_pk="";
@@ -1746,7 +1791,7 @@ Ext.onReady(function(){
 	
 	function rpaket_save(){
 		rpaket_cetak_kuitansi = 0;
-		master_retur_jual_paket_create();
+		pengecekan_dokumen();
 	}
 	
 	/* Function for action list search */

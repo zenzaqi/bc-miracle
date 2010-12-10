@@ -65,6 +65,7 @@ var cust_idField;
 //var cust_nolamaField;
 var cust_noField;
 var cust_memberField;
+var cust_titleField;
 var cust_namaField;
 var cust_pangglianField;
 var cust_kelaminField;
@@ -171,6 +172,7 @@ var editor_cust_note;
 		cust_namaField.reset();
 		cust_panggilanField.reset();
 		cust_kelaminField.reset();
+		cust_titleField.reset();
 		cust_alamatField.reset();
 		cust_kotaField.reset();
 		cust_kodeposField.reset();
@@ -223,6 +225,7 @@ var editor_cust_note;
 		cust_namaField.setValue(null);
 		cust_panggilanField.setValue(null);
 		cust_kelaminField.setValue(null);
+		cust_titleField.setValue(null);
 		cust_alamatField.setValue(null);
 		cust_kotaField.setValue(null);
 		cust_kodeposField.setValue(null);
@@ -308,6 +311,7 @@ var editor_cust_note;
 		cust_namaField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_nama'));
 		cust_panggilanField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_panggilan'));
 		cust_kelaminField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_kelamin'));
+		cust_titleField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_title'));
 		cust_alamatField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_alamat'));
 		cust_kotaField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_kota'));
 		cust_kodeposField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_kodepos'));
@@ -1368,6 +1372,7 @@ var editor_cust_note;
 		var cust_nama_create=null;
 		var cust_panggilan_create=null;
 		var cust_kelamin_create=null;
+		var cust_title_create=null;
 		var cust_alamat_create=null;
 		var cust_kota_create=null;
 		var cust_kodepos_create=null;
@@ -1416,6 +1421,7 @@ var editor_cust_note;
 		if(cust_namaField.getValue()!== null){cust_nama_create = cust_namaField.getValue();}
 		if(cust_panggilanField.getValue()!== null){cust_panggilan_create = cust_panggilanField.getValue();}
 		if(cust_kelaminField.getValue()!== null){cust_kelamin_create = cust_kelaminField.getValue();}
+		if(cust_titleField.getValue()!== null){cust_title_create = cust_titleField.getValue();}
 		if(cust_alamatField.getValue()!== null){cust_alamat_create = cust_alamatField.getValue();}
 		if(cust_kotaField.getValue()!== null){cust_kota_create = cust_kotaField.getValue();}
 		if(cust_kodeposField.getValue()!== null){cust_kodepos_create = cust_kodeposField.getValue();}
@@ -1471,7 +1477,8 @@ var editor_cust_note;
 					cust_nolama		:cust_nolama_create,
 					cust_nama		:cust_nama_create,
 					cust_panggilan	:cust_panggilan_create,	
-					cust_kelamin	:cust_kelamin_create,		
+					cust_kelamin	:cust_kelamin_create,
+					cust_title		:cust_title_create,
 					cust_alamat		:cust_alamat_create,		
 					cust_kota		:cust_kota_create,		
 					cust_kodepos	:cust_kodepos_create,		
@@ -1695,6 +1702,7 @@ Ext.onReady(function(){
 			{name: 'cust_nama', type: 'string', mapping: 'cust_nama'},
 			{name: 'cust_panggilan', type: 'string', mapping: 'cust_panggilan'},
 			{name: 'cust_kelamin', type: 'string', mapping: 'cust_kelamin'},
+			{name: 'cust_title', type: 'string', mapping: 'cust_title'},
 			{name: 'cust_alamat', type: 'string', mapping: 'cust_alamat'},
 			{name: 'cust_kota', type: 'string', mapping: 'cust_kota'},
 			{name: 'cust_kodepos', type: 'string', mapping: 'cust_kodepos'},
@@ -1897,6 +1905,13 @@ Ext.onReady(function(){
 				maxLength: 50
           	})
 			<?php } ?>
+		},
+		{
+			header: '<div align="center">' + 'Title' + '</div>',
+			dataIndex: 'cust_title',
+			width: 20,
+			hidden : true,
+			sortable: true
 		},
 		{
 			header: '<div align="center">' + 'Nama Lengkap' + '</div>',
@@ -2778,6 +2793,25 @@ Ext.onReady(function(){
 		maxLength: 50,
 		anchor: '95%'
 	});
+	
+	/* Identify  cust_title Field */
+	cust_titleField= new Ext.form.ComboBox({
+		id: 'cust_titleField',
+		fieldLabel: 'Title',
+		maxLength: 50,
+		store:new Ext.data.SimpleStore({
+			fields:['cust_title_value_display'],
+			data: [['MR.'],['MRS.'],['MS.']]
+		}),
+		mode: 'local',
+		editable: false,
+		displayField: 'cust_title_value_display',
+		valueField: 'cust_title_value_display',
+		anchor: '50%',
+		//allowBlank: false,
+		triggerAction: 'all'	
+	});
+	
 	/* Identify  cust_kelamin Field */
 	cust_kelaminField= new Ext.form.ComboBox({
 		id: 'cust_kelaminField',
@@ -3446,7 +3480,7 @@ Ext.onReady(function(){
 						columnWidth:0.5,
 						layout: 'form',
 						border:false,
-						items: [cust_noField, cust_memberField, cust_namaField, cust_panggilanField, cust_alamat_group, cust_alamat2_group, cust_kontak_group, contact_personGroup] 
+						items: [cust_noField, cust_memberField, cust_titleField, cust_namaField, cust_panggilanField, cust_alamat_group, cust_alamat2_group, cust_kontak_group, contact_personGroup] 
 					}
 					,{
 						columnWidth:0.5,
