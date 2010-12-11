@@ -19,9 +19,9 @@
 <link rel='stylesheet' type='text/css' href='../assets/modules/main/css/printstyle.css'/>
 </head>
 <body onload="window.print();">
-<table border="0">
+<table border="0" width="670">
 <tr><td height="10" colspan="6"></td></tr>
-		<? 
+		<?
 			$i=1;
 			$k=1;
 			foreach($jumlah_result as $list => $row) 
@@ -32,22 +32,43 @@
 					//print "masuk $i";
 					print "<tr>"; 
 				}?> 
-					<td width="30"></td>
-					<? if ($k==5){ ?>
-					<td height="130" width="300"><br><br><b><?=$row->cust_nama;?></b><br><?=$row->cust_alamat;?>.<br> <?=$row->cust_kota;?></td>
-					<? } else {?>
-					<td height="130" width="300"><b><?=$row->cust_nama;?></b><br><?=$row->cust_alamat;?>.<br> <?=$row->cust_kota;?></td>
+					<?//<td width="40"></td>?>
+					<td height="141" width="300">
+					<? if ($k==4 or $k==5)
+					{ ?>
+					<table border="0" width="270">
+						<tr>
+							<td>
+								<b><br><br><br><?=$row->cust_nama;?></b><br><?=$row->cust_alamat;?>.<br> <?=$row->cust_kota;?>
+							</td>
+						</tr>
+					</table>
+
+					<? } else { ?>
+					
+					<table border="0" width="270">
+						<tr>
+							<td>
+								<b><?=$row->cust_nama;?></b><br><?=$row->cust_alamat;?>.<br> <?=$row->cust_kota;?>
+							</td>
+						</tr>
+					</table>
 					<? } ?>
-					<td width="30"></td>
+					</td>
+					<td width="70"></td>
 				<? 
 				if ($j==0)
 				{
 					if ($k!=5)
-						{ print "<tr><td height=10 colspan=6></td></tr>"; 
-						  $k++;
+						{ 
+							print "<tr><td height=10 colspan=6></td></tr>"; 
+							$k++;
 						}
 					else 
-						{ $k=1;}
+						{
+							print "<tr><td height=10 colspan=6></td></tr>";
+							$k=1;
+						}
 					print "</tr>";  
 				} 
 				$i++;

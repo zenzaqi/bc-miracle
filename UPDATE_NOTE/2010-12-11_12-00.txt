@@ -1,0 +1,2 @@
+2010-12-11_12-00.sql --> digunakan untuk keperluan peraturan membership baru, yaitu poin customer jika hanya bisa diisikan pada hari bertransaksi.
+ev_poin_reset bertujuan menghapus setiap poin yg masih ada di tb customer & menyimpannya pada log_poin_reset. Event ini baru akan dijalankan per 1 jan 2011
