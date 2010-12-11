@@ -1909,8 +1909,8 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Title' + '</div>',
 			dataIndex: 'cust_title',
-			width: 20,
-			hidden : true,
+			width: 30,
+			hidden : false,
 			sortable: true
 		},
 		{
@@ -2219,6 +2219,7 @@ Ext.onReady(function(){
 			sortable: true
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_CUSTOMER'))){ ?>
 			,
+			hidden: true,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
 				triggerAction: 'all',
