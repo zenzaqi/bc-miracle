@@ -11,6 +11,7 @@ SET GLOBAL event_scheduler = ON;
 
 --event ini digunakan untuk peraturan membership baru, yaitu poin customer hanya bisa diisikan pada hari transaksi, sehingga setiap awal hari semua poin customer harus direset ke 0
 
+DELIMITER //
 CREATE EVENT `ev_poin_reset` ON SCHEDULE EVERY 1 DAY STARTS '2011-01-01 06:00:00' ON COMPLETION PRESERVE ENABLE DO BEGIN
 	insert into log_poin_reset (log_cust, log_poin)
 		select c.cust_id, c.cust_point
@@ -19,4 +20,5 @@ CREATE EVENT `ev_poin_reset` ON SCHEDULE EVERY 1 DAY STARTS '2011-01-01 06:00:00
 
 	update customer c
 	set c.cust_point = 0;
-END
+END//
+DELIMITER ;

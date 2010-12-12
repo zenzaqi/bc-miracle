@@ -2528,7 +2528,8 @@ Ext.onReady(function(){
     var customer_jual_produk_tpl = new Ext.XTemplate(
         '<tpl for="."><div class="search-item">',
             '<span><b>{cust_no} : {cust_nama}</b><br /></span>',
-            '{cust_alamat} | {cust_telprumah}',
+            '{cust_alamat} | {cust_telprumah}<br>',
+			'Tgl-Lahir:{cust_tgllahir:date("j M Y")}',
         '</div></tpl>'
     );
 	

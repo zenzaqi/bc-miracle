@@ -186,6 +186,7 @@ function jrawat_cetak(cetak_jrawat_id,customer_id,tanggal){
 			switch(result){
 			case 1:
 				win = window.open('./jrawat_paper.html','Cetak Penjualan Perawatan','height=480,width=1240,resizable=1,scrollbars=0, menubar=0');
+				//win.close();
 				//win.print();
 				break;
 			default:
@@ -2069,7 +2070,8 @@ Ext.onReady(function(){
 //            '<span><b>{cust_no} : {cust_nama}</b> | Tgl-Lahir:{cust_tgllahir:date("M j, Y")}<br /></span>',
 //           'Alamat: {cust_alamat}&nbsp;&nbsp;&nbsp;[Telp. {cust_telprumah}]',
             '<span><b>{cust_no} : {cust_nama}</b><br /></span>',
-            '{cust_alamat} | {cust_telprumah}',
+            '{cust_alamat} | {cust_telprumah}<br>',
+			'Tgl-Lahir:{cust_tgllahir:date("j M Y")}',
         '</div></tpl>'
     );
 	
