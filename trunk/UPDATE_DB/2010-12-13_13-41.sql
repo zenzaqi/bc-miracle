@@ -1,0 +1,1 @@
+ALTER TABLE `permintaan_it` ADD `permintaan_mengetahui` INT NOT NULL AFTER `permintaan_prioritas` 
