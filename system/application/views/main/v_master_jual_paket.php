@@ -226,6 +226,43 @@ Ext.onReady(function(){
 			} 	                     
 		});
 	}
+	
+	function jpaket_cetak_print_only(master_id){
+		Ext.Ajax.request({   
+			waitMsg: 'Mohon tunggu...',
+			url: 'index.php?c=c_master_jual_paket&m=print_only',
+			params: { jpaket_id : master_id}, 
+			success: function(response){              
+				var result=eval(response.responseText);
+				switch(result){
+				case 1:
+					win = window.open('./jpaket_paper.html','Cetak Penjualan Paket','height=480,width=1240,resizable=1,scrollbars=0, menubar=0');
+					jpaket_btn_cancel();
+					//win.print();
+					break;
+				default:
+					Ext.MessageBox.show({
+						title: 'Warning',
+						msg: 'Unable to print the grid!',
+						buttons: Ext.MessageBox.OK,
+						animEl: 'save',
+						icon: Ext.MessageBox.WARNING
+					});
+					break;
+				}  
+			},
+			failure: function(response){
+				var result=response.responseText;
+				Ext.MessageBox.show({
+				   title: 'Error',
+				   msg: 'Could not connect to the database. retry later.',
+				   buttons: Ext.MessageBox.OK,
+				   animEl: 'database',
+				   icon: Ext.MessageBox.ERROR
+				});		
+			} 	                     
+		});
+	}
   
   
 	/*Function for pengecekan _dokumen */
@@ -806,7 +843,7 @@ Ext.onReady(function(){
 			jpaket_id_for_cetak = jpaket_idField.getValue();
 		}
 		if(cetak_jpaket==1){
-			jpaket_cetak(jpaket_id_for_cetak);
+			jpaket_cetak_print_only(jpaket_id_for_cetak);
 			cetak_jpaket=0;
 		}
 		}

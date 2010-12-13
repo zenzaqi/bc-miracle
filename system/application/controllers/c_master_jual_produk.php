@@ -900,6 +900,67 @@ class C_master_jual_produk extends Controller {
 		echo '1';        
 	}
 	
+	function print_only(){
+  		//POST varibale here
+		$jproduk_id=trim(@$_POST["jproduk_id"]);
+		
+		$result = $this->m_master_jual_produk->print_paper($jproduk_id);
+		$iklan = $this->m_master_jual_produk->iklan();
+		$rs=$result->row();
+		$rsiklan=$iklan->row();
+		$detail_jproduk=$result->result();
+		
+		$array_cara_bayar = $this->m_master_jual_produk->get_cara_bayar($jproduk_id);
+		
+		$cara_bayar=$this->m_master_jual_produk->cara_bayar($jproduk_id);
+		$cara_bayar2=$this->m_master_jual_produk->cara_bayar2($jproduk_id);
+		$cara_bayar3=$this->m_master_jual_produk->cara_bayar3($jproduk_id);
+		
+		$data['jproduk_nobukti']=$rs->jproduk_nobukti;
+		$data['jproduk_tanggal']=date('d-m-Y', strtotime($rs->jproduk_tanggal));
+		$data['cust_no']=$rs->cust_no;
+		$data['cust_nama']=$rs->cust_nama;
+		$data['iklantoday_keterangan']=$rsiklan->iklantoday_keterangan;
+		$data['cust_alamat']=$rs->cust_alamat;
+		$data['jumlah_subtotal']=ubah_rupiah($rs->jumlah_subtotal);
+		$data['jumlah_bayar']=$rs->jproduk_bayar;
+		$data['jproduk_diskon']=$rs->jproduk_diskon;
+		$data['jproduk_cashback']=$rs->jproduk_cashback;
+		$data['detail_jproduk']=$detail_jproduk;
+		
+		if($cara_bayar!==NULL){
+			$data['cara_bayar1']=$cara_bayar->jproduk_cara;
+			$data['nilai_bayar1']=$cara_bayar->bayar_nilai;
+		}else{
+			$data['cara_bayar1']="";
+			$data['bayar_nilai1']="";
+		}
+		
+		if($cara_bayar2!==NULL){
+			$data['cara_bayar2']=$cara_bayar2->jproduk_cara2;
+			$data['nilai_bayar2']=$cara_bayar2->bayar2_nilai;
+		}else{
+			$data['cara_bayar2']="";
+			$data['nilai_bayar2']="";
+		}
+		
+		if($cara_bayar3!==NULL){
+			$data['cara_bayar3']=$cara_bayar3->jproduk_cara3;
+			$data['nilai_bayar3']=$cara_bayar3->bayar3_nilai;
+		}else{
+			$data['cara_bayar3']="";
+			$data['nilai_bayar3']="";
+		}
+			
+		$viewdata=$this->load->view("main/jproduk_formcetak_printonly",$data,TRUE);
+		$file = fopen("jproduk_paper.html",'w');
+		fwrite($file, $viewdata);	
+		fclose($file);
+		echo '1';        
+	}
+	
+	
+	
 	// Encodes a SQL array into a JSON formated string
 	function JEncode($arr){
 		if (version_compare(PHP_VERSION,"5.2","<"))

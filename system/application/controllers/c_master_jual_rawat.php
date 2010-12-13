@@ -795,6 +795,70 @@ class C_master_jual_rawat extends Controller {
 		echo '1';        
 	}
 	
+	function print_only(){
+  		//POST varibale here
+		$jrawat_id=trim(@$_POST["jrawat_id"]);
+		$jrawat_cust=trim(@$_POST["jrawat_cust"]);
+		$jrawat_tanggal=trim(@$_POST["jrawat_tanggal"]);
+		
+		$result = $this->m_master_jual_rawat->print_paper($jrawat_id);
+		$iklan = $this->m_master_jual_rawat->iklan();
+		$rs=$result->row();
+		$rsiklan=$iklan->row();
+		$detail_jrawat=$result->result();
+		
+		$cara_bayar=$this->m_master_jual_rawat->cara_bayar($jrawat_id);
+		$cara_bayar2=$this->m_master_jual_rawat->cara_bayar2($jrawat_id);
+		$cara_bayar3=$this->m_master_jual_rawat->cara_bayar3($jrawat_id);
+		
+		$result_apaket = $this->m_master_jual_rawat->print_paper_apaket_bycust($jrawat_cust, $jrawat_tanggal);
+		$detail_apaket=$result_apaket->result();
+		
+		$data['jrawat_nobukti']=$rs->jrawat_nobukti;
+		$data['jrawat_tanggal']=date('d-m-Y', strtotime($rs->jrawat_tanggal));
+		$data['cust_no']=$rs->cust_no;
+		$data['cust_nama']=$rs->cust_nama;
+		$data['cust_alamat']=$rs->cust_alamat;
+		$data['jumlah_subtotal']=ubah_rupiah($rs->jumlah_subtotal);
+		$data['jumlah_bayar']=$rs->jrawat_bayar;
+		$data['jrawat_diskon']=$rs->jrawat_diskon;
+		$data['jrawat_cashback']=$rs->jrawat_cashback;
+		$data['detail_jrawat']=$detail_jrawat;
+		$data['detail_apaket']=$detail_apaket;
+		$data['iklantoday_keterangan']=$rsiklan->iklantoday_keterangan;
+		
+		if($cara_bayar!==NULL){
+			$data['cara_bayar']=$cara_bayar->jrawat_cara;
+			$data['bayar_nilai']=$cara_bayar->bayar_nilai;
+		}else{
+			$data['cara_bayar']="";
+			$data['bayar_nilai']="";
+		}
+		
+		if($cara_bayar2!==NULL){
+			$data['cara_bayar2']=$cara_bayar2->jrawat_cara2;
+			$data['bayar2_nilai']=$cara_bayar2->bayar2_nilai;
+		}else{
+			$data['cara_bayar2']="";
+			$data['bayar2_nilai']="";
+		}
+		
+		if($cara_bayar3!==NULL){
+			$data['cara_bayar3']=$cara_bayar3->jrawat_cara3;
+			$data['bayar3_nilai']=$cara_bayar3->bayar3_nilai;
+		}else{
+			$data['cara_bayar3']="";
+			$data['bayar3_nilai']="";
+		}
+		
+		$viewdata=$this->load->view("main/jrawat_formcetak_printonly",$data,TRUE);
+		$file = fopen("jrawat_paper.html",'w');
+		fwrite($file, $viewdata);	
+		fclose($file);
+		echo '1';        
+	}
+	
+	
 	function print_paper_apaket(){
 		//$dapaket_jpaket=trim(@$_POST["jrawat_id"]);
 		//$dapaket_dpaket=trim(@$_POST["dpaket_id"]);

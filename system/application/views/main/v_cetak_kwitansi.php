@@ -180,6 +180,44 @@ function cetak_kwitansi_print_paper(cetak_id){
 }
 
 
+function cetak_kwitansi_print_only(cetak_id){
+	Ext.Ajax.request({   
+		waitMsg: 'Mohon tunggu...',
+		url: 'index.php?c=c_cetak_kwitansi&m=print_only',
+		//params: { kwitansi_id : kwitansi_idField.getValue()	},
+		params: { kwitansi_id : cetak_id },
+		success: function(response){              
+			var result=eval(response.responseText);
+			switch(result){
+			case 1:
+				win = window.open('./kwitansi_paper.html','Cetak Kwitansi','height=480,width=1240,resizable=1,scrollbars=0, menubar=0');
+				//
+				break;
+			default:
+				Ext.MessageBox.show({
+					title: 'Warning',
+					msg: 'Tidak bisa mencetak data!',
+					buttons: Ext.MessageBox.OK,
+					animEl: 'save',
+					icon: Ext.MessageBox.WARNING
+				});
+				break;
+			}  
+		},
+		failure: function(response){
+			var result=response.responseText;
+			Ext.MessageBox.show({
+			   title: 'Error',
+			   msg: 'Tidak bisa terhubung dengan database server',
+			   buttons: Ext.MessageBox.OK,
+			   animEl: 'database',
+			   icon: Ext.MessageBox.ERROR
+			});		
+		} 	                     
+	});
+}
+
+
 
 /* on ready fuction */
 Ext.onReady(function(){
@@ -613,6 +651,33 @@ Ext.onReady(function(){
 		kwitansi_cetak = 1;
 		pengecekan_dokumen();
 	}
+  
+	//function ini untuk melakukan print saja, tanpa perlu melakukan proses pengecekan dokumen.. 
+	function print_only(){
+		if(kwitansi_idField.getValue()==''){
+			Ext.MessageBox.show({
+			msg: 'Faktur tidak dapat dicetak, karena data kosong',
+			buttons: Ext.MessageBox.OK,
+			animEl: 'save',
+			icon: Ext.MessageBox.WARNING
+		   });
+		}
+		else{
+		kwitansi_cetak=1;		
+		var kwitansi_id_for_cetak = 0;
+		if(kwitansi_idField.getValue()!== null){
+			kwitansi_id_for_cetak = kwitansi_idField.getValue();
+		}
+		if(kwitansi_cetak==1){
+			cetak_kwitansi_print_only(kwitansi_id_for_cetak);
+			kwitansi_cetak=0;
+		}
+		}
+		//jproduk_btn_cancel();	
+	}
+	
+  
+  
   
   	/* Function for get PK field */
 	function get_pk_id(){
@@ -2578,6 +2643,12 @@ Ext.onReady(function(){
 		items: [cetak_kwitansi_masterGroup, kwitansi_bayarGroup]
 		,
 		buttons: [
+		
+			{
+				text : 'Print Only',
+				handler : print_only
+			},
+			
 			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_KUITANSI'))){ ?>
 			{
 				text: 'Save and Print',
