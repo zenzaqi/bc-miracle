@@ -74,6 +74,14 @@ class c_permintaan_it extends Controller {
 		echo $result;
 	}
 	
+	function get_karyawan_list(){
+		$query = isset($_POST['query']) ? $_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		$result=$this->m_public_function->get_karyawan_list($query,$start,$end);
+		echo $result;
+	}
+	
 	function get_user_login(){
 		$result=$this->m_permintaan_it->get_user_login();
 		echo $result;
@@ -105,6 +113,9 @@ class c_permintaan_it extends Controller {
 		$permintaan_prioritas=trim(@$_POST["permintaan_prioritas"]);
 		$permintaan_prioritas=str_replace("/(<\/?)(p)([^>]*>)", "",$permintaan_prioritas);
 		$permintaan_prioritas=str_replace("'", '"',$permintaan_prioritas);
+		$permintaan_mengetahui=trim(@$_POST["permintaan_mengetahui"]);
+		$permintaan_mengetahui=str_replace("/(<\/?)(p)([^>]*>)", "",$permintaan_mengetahui);
+		$permintaan_mengetahui=str_replace("'", '"',$permintaan_mengetahui);
 		$permintaan_penyelesaian=trim(@$_POST["permintaan_penyelesaian"]);
 		$permintaan_penyelesaian=str_replace("/(<\/?)(p)([^>]*>)", "",$permintaan_penyelesaian);
 		$permintaan_penyelesaian=str_replace("'", '"',$permintaan_penyelesaian);
@@ -139,7 +150,7 @@ class c_permintaan_it extends Controller {
 		
 		$result = $this->m_gudang->gudang_update($gudang_id ,$gudang_nama ,$gudang_lokasi ,$gudang_keterangan ,$gudang_aktif ,$gudang_creator ,$gudang_date_create ,$gudang_update ,$gudang_date_update ,$gudang_revised );
 		*/
-		$result=$this->m_permintaan_it->permintaan_update($permintaan_id, $permintaan_client, $permintaan_nama ,$permintaan_cabang ,$permintaan_tanggalmasalah ,$permintaan_tipe ,$permintaan_judul ,$permintaan_permintaan ,$permintaan_prioritas ,$permintaan_penyelesaian ,$permintaan_status, $permintaan_tanggalselesai );
+		$result=$this->m_permintaan_it->permintaan_update($permintaan_id, $permintaan_client, $permintaan_nama ,$permintaan_cabang ,$permintaan_tanggalmasalah ,$permintaan_tipe ,$permintaan_judul ,$permintaan_permintaan ,$permintaan_prioritas, $permintaan_mengetahui ,$permintaan_penyelesaian ,$permintaan_status, $permintaan_tanggalselesai );
 		echo $result;
 	}
 	
@@ -166,6 +177,9 @@ class c_permintaan_it extends Controller {
 		$permintaan_prioritas=trim(@$_POST["permintaan_prioritas"]);
 		$permintaan_prioritas=str_replace("/(<\/?)(p)([^>]*>)", "",$permintaan_prioritas);
 		$permintaan_prioritas=str_replace("'", '"',$permintaan_prioritas);
+		$permintaan_mengetahui=trim(@$_POST["permintaan_mengetahui"]);
+		$permintaan_mengetahui=str_replace("/(<\/?)(p)([^>]*>)", "",$permintaan_mengetahui);
+		$permintaan_mengetahui=str_replace("'", '"',$permintaan_mengetahui);
 		$permintaan_penyelesaian=trim(@$_POST["permintaan_penyelesaian"]);
 		$permintaan_penyelesaian=str_replace("/(<\/?)(p)([^>]*>)", "",$permintaan_penyelesaian);
 		$permintaan_penyelesaian=str_replace("'", '"',$permintaan_penyelesaian);
@@ -192,7 +206,7 @@ class c_permintaan_it extends Controller {
 		$gudang_update=str_replace("'", '"',$gudang_update);
 		$gudang_date_update=trim(@$_POST["gudang_date_update"]);
 		$gudang_revised=trim(@$_POST["gudang_revised"]);*/
-		$result=$this->m_permintaan_it->permintaan_create($permintaan_nama ,$permintaan_cabang ,$permintaan_tanggalmasalah ,$permintaan_tipe ,$permintaan_judul ,$permintaan_permintaan ,$permintaan_prioritas ,$permintaan_penyelesaian ,$permintaan_status, $permintaan_tanggalselesai );
+		$result=$this->m_permintaan_it->permintaan_create($permintaan_nama ,$permintaan_cabang ,$permintaan_tanggalmasalah ,$permintaan_tipe ,$permintaan_judul ,$permintaan_permintaan ,$permintaan_prioritas ,$permintaan_mengetahui ,$permintaan_penyelesaian ,$permintaan_status, $permintaan_tanggalselesai );
 		echo $result;
 	}
 

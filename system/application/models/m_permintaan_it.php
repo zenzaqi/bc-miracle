@@ -60,7 +60,8 @@ class m_permintaan_it extends Model{
 			$permintaan_client_id= $data_id_cust->user_karyawan;
 			$query = "
 			SELECT karyawan.karyawan_nama AS nama, 
-				cabang.cabang_nama AS cabang, 
+				cabang.cabang_nama AS cabang,
+				(SELECT karyawan_nama FROM karyawan WHERE karyawan_id = permintaan_it.permintaan_mengetahui) AS mengetahui_nama,
 				permintaan_it.permintaan_cabang AS cabang_id,
 				permintaan_it.permintaan_client AS client,
 				permintaan_it.permintaan_id as permintaan_id,
@@ -69,6 +70,7 @@ class m_permintaan_it extends Model{
 				permintaan_it.permintaan_judul AS judul, 
 				permintaan_it.permintaan_masalah AS masalah,
 				permintaan_it.permintaan_prioritas AS prioritas,
+				permintaan_it.permintaan_mengetahui AS mengetahui,
 				permintaan_it.permintaan_penyelesaian AS penyelesaian, 
 				permintaan_it.permintaan_tanggal_selesai AS tanggal_selesai, 
 				permintaan_it.permintaan_status AS status
@@ -77,8 +79,8 @@ class m_permintaan_it extends Model{
 				LEFT JOIN cabang ON permintaan_it.permintaan_cabang = cabang.cabang_id";
 			
 			if ($permintaan_client_id<>"2" && $permintaan_client_id<>"11" && $permintaan_client_id<>"66" && $permintaan_client_id<>"79"){
-				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (permintaan_it.permintaan_client ='".$permintaan_client_id."')";
+				//$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
+				$query .= " WHERE (permintaan_it.permintaan_client ='".$permintaan_client_id."' OR permintaan_it.permintaan_mengetahui ='".$permintaan_client_id."')";
 			}
 			// For simple search
 			if ($filter<>""){
@@ -104,7 +106,7 @@ class m_permintaan_it extends Model{
 		}
 		
 		//function for update record
-		function permintaan_update($permintaan_id, $permintaan_client, $permintaan_nama ,$permintaan_cabang ,$permintaan_tanggalmasalah ,$permintaan_tipe ,$permintaan_judul ,$permintaan_permintaan ,$permintaan_prioritas ,$permintaan_penyelesaian ,$permintaan_status, $permintaan_tanggalselesai ){
+		function permintaan_update($permintaan_id, $permintaan_client, $permintaan_nama ,$permintaan_cabang ,$permintaan_tanggalmasalah ,$permintaan_tipe ,$permintaan_judul ,$permintaan_permintaan ,$permintaan_prioritas, $permintaan_mengetahui ,$permintaan_penyelesaian ,$permintaan_status, $permintaan_tanggalselesai ){
 			if ($permintaan_tipe=="")
 				$permintaan_tipe = "Miracle Information System";
 			if ($permintaan_prioritas=="")
@@ -120,7 +122,7 @@ class m_permintaan_it extends Model{
 				"permintaan_type"=>$permintaan_tipe,	
 				"permintaan_judul"=>$permintaan_judul,	
 				"permintaan_masalah"=>$permintaan_permintaan,	
-				"permintaan_prioritas"=>$permintaan_prioritas,	
+				"permintaan_prioritas"=>$permintaan_prioritas,				
 				"permintaan_penyelesaian"=>$permintaan_penyelesaian,
 				"permintaan_status"=>$permintaan_status,
 				"permintaan_tanggal_selesai"=>$permintaan_tanggalselesai					
@@ -131,6 +133,11 @@ class m_permintaan_it extends Model{
 			$rs=$this->db->query($sql);
 			if($rs->num_rows())
 				$data["permintaan_cabang"]=$permintaan_cabang;
+				
+			$sql="SELECT karyawan_id FROM karyawan WHERE karyawan_id='".$permintaan_mengetahui."'";
+			$rs=$this->db->query($sql);
+			if($rs->num_rows())
+				$data["permintaan_mengetahui"]=$permintaan_mengetahui;
 
 			$this->db->where('permintaan_id', $permintaan_id);
 			$this->db->update('permintaan_it', $data);
@@ -145,7 +152,7 @@ class m_permintaan_it extends Model{
 		}
 		
 		//function for create new record
-		function permintaan_create($permintaan_nama ,$permintaan_cabang ,$permintaan_tanggalmasalah ,$permintaan_tipe ,$permintaan_judul ,$permintaan_permintaan ,$permintaan_prioritas ,$permintaan_penyelesaian ,$permintaan_status, $permintaan_tanggalselesai ){
+		function permintaan_create($permintaan_nama ,$permintaan_cabang ,$permintaan_tanggalmasalah ,$permintaan_tipe ,$permintaan_judul ,$permintaan_permintaan, $permintaan_prioritas, $permintaan_mengetahui, $permintaan_penyelesaian ,$permintaan_status, $permintaan_tanggalselesai ){
 			if ($permintaan_tipe=="")
 				$permintaan_tipe = "Miracle Information System";
 			if ($permintaan_prioritas=="")
@@ -167,6 +174,7 @@ class m_permintaan_it extends Model{
 				"permintaan_judul"=>$permintaan_judul,	
 				"permintaan_masalah"=>$permintaan_permintaan,	
 				"permintaan_prioritas"=>$permintaan_prioritas,	
+				"permintaan_mengetahui"=>$permintaan_mengetahui,
 				"permintaan_penyelesaian"=>$permintaan_penyelesaian,
 				"permintaan_status"=>$permintaan_status,
 				"permintaan_tanggal_selesai"=>$permintaan_tanggalselesai			
