@@ -213,6 +213,43 @@ function jrawat_cetak(cetak_jrawat_id,customer_id,tanggal){
 	});
 }
 
+function jrawat_cetak_print_only(cetak_jrawat_id,customer_id,tanggal){
+	Ext.Ajax.request({   
+		waitMsg: 'Please Wait...',
+		url: 'index.php?c=c_master_jual_rawat&m=print_only',
+		//params: { jrawat_id : jrawat_idField.getValue(), jrawat_cust : jrawat_cust_idField.getValue(), jrawat_tanggal : jrawat_tanggalField.getValue().format('Y-m-d')	},
+		params: { jrawat_id : cetak_jrawat_id ,jrawat_cust : customer_id ,jrawat_tanggal : tanggal},
+		success: function(response){              
+			var result=eval(response.responseText);
+			switch(result){
+			case 1:
+				win = window.open('./jrawat_paper.html','Cetak Penjualan Perawatan','height=480,width=1240,resizable=1,scrollbars=0, menubar=0');
+				break;
+			default:
+				Ext.MessageBox.show({
+					title: 'Warning',
+					msg: 'Unable to print the grid!',
+					buttons: Ext.MessageBox.OK,
+					animEl: 'save',
+					icon: Ext.MessageBox.WARNING
+				});
+				break;
+			}  
+		},
+		failure: function(response){
+			var result=response.responseText;
+			Ext.MessageBox.show({
+			   title: 'Error',
+			   msg: 'Could not connect to the database. retry later.',
+			   buttons: Ext.MessageBox.OK,
+			   animEl: 'database',
+			   icon: Ext.MessageBox.ERROR
+			});		
+		} 	                     
+	});
+}
+
+
 function apaket_cetak(cust_id ,tanggal_ambil){
 	//mencetak pengambilan paket saja dari customer di tanggal yang dipilih pada LIST
 	Ext.Ajax.request({   
@@ -860,7 +897,7 @@ Ext.onReady(function(){
 			jrawat_id_for_cetak = jrawat_idField.getValue();
 		}
 		if(cetak_jrawat==1){
-			jrawat_cetak(jrawat_id_for_cetak);
+			jrawat_cetak_print_only(jrawat_id_for_cetak);
 			cetak_jrawat=0;
 		}
 		}

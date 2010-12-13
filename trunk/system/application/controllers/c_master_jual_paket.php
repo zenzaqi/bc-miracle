@@ -814,6 +814,66 @@ class C_master_jual_paket extends Controller {
 		echo '1';        
 	}
 	
+	function print_only(){
+  		//POST varibale here
+		$jpaket_id=trim(@$_POST["jpaket_id"]);
+		
+		$result = $this->m_master_jual_paket->print_paper($jpaket_id);
+		$iklan = $this->m_master_jual_paket->iklan();
+		$rs=$result->row();
+		$rsiklan=$iklan->row();
+		$detail_jpaket=$result->result();
+		
+		$array_cara_bayar = $this->m_master_jual_paket->get_cara_bayar($jpaket_id);
+		
+		$cara_bayar=$this->m_master_jual_paket->cara_bayar($jpaket_id);
+		$cara_bayar2=$this->m_master_jual_paket->cara_bayar2($jpaket_id);
+		$cara_bayar3=$this->m_master_jual_paket->cara_bayar3($jpaket_id);
+		
+		$data['jpaket_nobukti']=$rs->jpaket_nobukti;
+		$data['jpaket_tanggal']=date('d-m-Y', strtotime($rs->jpaket_tanggal));
+		$data['cust_no']=$rs->cust_no;
+		$data['cust_nama']=$rs->cust_nama;
+		$data['iklantoday_keterangan']=$rsiklan->iklantoday_keterangan;
+		$data['cust_alamat']=$rs->cust_alamat;
+		$data['jumlah_subtotal']=ubah_rupiah($rs->jumlah_subtotal);
+
+		$data['jpaket_diskon']=$rs->jpaket_diskon;
+		$data['jpaket_cashback']=$rs->jpaket_cashback;
+		$data['detail_jpaket']=$detail_jpaket;
+		
+		if($cara_bayar!==NULL){
+			$data['cara_bayar1']=$cara_bayar->jpaket_cara;
+			$data['nilai_bayar1']=$cara_bayar->bayar_nilai;
+		}else{
+			$data['cara_bayar1']="";
+			$data['nilai_bayar1']="";
+		}
+		
+		if($cara_bayar2!==NULL){
+			$data['cara_bayar2']=$cara_bayar2->jpaket_cara2;
+			$data['nilai_bayar2']=$cara_bayar2->bayar2_nilai;
+		}else{
+			$data['cara_bayar2']="";
+			$data['nilai_bayar2']="";
+		}
+		
+		if($cara_bayar3!==NULL){
+			$data['cara_bayar3']=$cara_bayar3->jpaket_cara3;
+			$data['nilai_bayar3']=$cara_bayar3->bayar3_nilai;
+		}else{
+			$data['cara_bayar3']="";
+			$data['nilai_bayar3']="";
+		}
+		
+		$viewdata=$this->load->view("main/jpaket_formcetak_printonly",$data,TRUE);
+		$file = fopen("jpaket_paper.html",'w');
+		fwrite($file, $viewdata);	
+		fclose($file);
+		echo '1';        
+	}
+	
+	
 	// Encodes a SQL array into a JSON formated string
 	function JEncode($arr){
 		if (version_compare(PHP_VERSION,"5.2","<"))
