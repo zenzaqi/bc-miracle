@@ -56,6 +56,7 @@ class M_customer_note extends Model{
 			$data = array(
 				"note_id"=>$note_id,
 				"note_detail"=>$note_detail,
+				"note_aktif"=>$note_aktif,
 				"note_update"=>$_SESSION[SESSION_USERID],
 				"note_date_update"=>date('Y-m-d H:i:s')
 			);
@@ -82,6 +83,7 @@ class M_customer_note extends Model{
 				"note_customer"=>$note_customer,
 				"note_tanggal"=>date('Y-m-d H:i:s'),
 				"note_detail"=>$note_detail,
+				"note_aktif"=>$note_aktif,
 				"note_creator"=>$_SESSION[SESSION_USERID],
 				"note_date_create"=>date('Y-m-d H:i:s')
 			);
